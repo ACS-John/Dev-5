@@ -1,0 +1,75 @@
+Rem     Drive Q: will be used internally as a virtual drive by ACS as the 
+Rem             Data Folder (set here with the SetEnv Data command)
+Rem             not required - will default to %ProgramData%\ACS\
+Rem             default can be overridden with "SetEnv Data ..." a command below
+Rem     Drive R: will be used internally as a virtual drive by ACS as the 
+Rem             Program Folder
+Rem     Drive S: will be used internally as a virtual drive by ACS as the 
+Rem             launching folder, but ACS works from %temp% and needs read/write access to it.
+
+Drive S,C:\ACS\Dev-5,X,\
+
+Rem SetEnv Data \\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data - Billings
+Rem WBServer :\\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data - Billings
+
+SetEnv Data \\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data
+WBServer :\\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data
+
+
+Rem !* Windows 10 Home 64-bit - 1 User
+Rem !           ACS Programs: C:\Program Files (x86)\ACS
+Rem !           Data:  (default) %ProgramData%\ACS
+Rem     Drive S,%ProgramFiles(x86)%\ACS5~1,X,\
+Rem     WBServer %Temp%
+
+Rem !* Windows 8 64-bit - 1 User
+Rem Drive S,C:\Progra~2\ACS 5\,X,\
+Rem  NOTE: the space in "C:\Progra~2\ACS 5\" is required because there was no short name.
+Rem WBServer :%Temp%
+Rem  NOTE: the colon in WBServer :%Temp% seemed to be required!
+
+Rem ! _________________________________________________________
+Rem !                        Samples
+Rem ! _________________________________________________________
+
+
+
+Rem !* Sample Drive Statements
+
+Rem !       C:\Program Files (x86)\ACS 5
+Rem             Drive S,C:\Progra~2\ACS5~1\,X,\
+Rem !       C:\Program Files\ACS 5
+Rem             Drive S,C:\PROGRA~1\ACS5~1,X,\
+Rem !
+
+Rem !* Sample SetEnv Data Statements
+Rem !       Client 1880
+Rem             SetEnv Data C:\Users\FRENCH~1\AppData\Roaming\ACS\
+
+Rem !* Sample WBServer Statements
+Rem !       Client 1880
+Rem             WBSERVER :C:\Users\FRENCH~1\AppData\Roaming\ACS
+Rem             WBServer C:\Users\FRENCH~1\AppData\Roaming\ACS
+Rem         Ed Horton, Dorothy Salch
+Rem             WBServer %temp%
+
+
+Rem !* Sample WorkPath Statements
+Rem !       Client 1880
+Rem             WorkPath :C:\Users\FRENCH~1\AppData\Roaming\ACS
+Rem             WorkPath C:\Users\FRENCH~1\AppData\Roaming\ACS
+
+
+REM *** TODO:  the following line is used heavily in fntop - consider passing all of program$ and letting fntop parse the current working directory off the beginning.
+REM      program$(4:pos(program$,".",-1)-1)                
+
+Rem Drive statement must map to working directory so that fntop calls properly set the calling program name
+Rem     i.e.   00090  let fntop(program$(4:pos(program$,'.',-1)-1),cap$='Chart of Accounts')
+
+Rem Editor "c:\Program Files (x86)\Notepad++\Notepad++.exe"
+Rem @Celeste Editor "c:\Program Files\Notepad++\Notepad++.exe"
+Rem @Tiger Editor "C:\Program Files\Notepad++\Notepad++.exe"
+Rem @Work Editor "C:\Program Files\Notepad++\Notepad++.exe"
+Rem @Mikhail Editor "C:\Program Files (x86)\Mills Enterprise\MyEditBR\MyEditBR.exe"
+
+Rem @Pharris min_fontsize 12x6

@@ -1,0 +1,94 @@
+Utility Billing ^ ACS System Menu - Utility Billing ^ UB
+File
+>Customer ^ acsUB\ubfm
+>Rates ^ acsUB\ubRate
+>Transactions ^ acsUB\FlexTran
+>Grids ^ core\prtflex\PrtFlex1
+>City State Zip File ^ acsUB\CityStZip
+>Meter Information ^ acsUB\MeterHamster
+>Meter Type ^ acsUB\MeterType
+Billing
+>Enter Readings and Charges ^ acsUB\ubIpChg
+>Print Reports
+>>Unbilled Customer Listing ^ acsUB\ubUnbill
+>>Billing Journal ^ acsUB\ubBilJrn
+>>Usage Report ^ acsUB\ubUsage
+>>Zero Usage Report ^ acsUB\ubNoUsage
+>>Per 1000 Usage ^ acsUB\Per1000
+>>Consumption List ^ acsUB\ConsumptionList
+>Print Bills ^ acsUB\PrintBill
+>Create Bank Draft File ^ acsUB\BkDraft
+Enter Collections ^ acsUB\ubIpColl
+Mid-Month
+>Print
+>>Past Due and Turn Off List ^ acsUB\ubPDTnOf
+>>Past Due Notices ^ acsUB\ubPDNot
+>Penalty Calculation ^acsUB\ubPenCal
+>Second Penalty Calculation ^acsUB\ubPenCa2
+Month-End
+>Transaction Listing ^ acsUB\ubTrList
+>Cash Receipts Journal ^ acsUB\ubColPrn
+>Balance Breakdown (Aged by Month) ^ acsUB\ubOwed
+>Post General Ledger ^ acsub\postgl
+Annual
+>Print
+>>Accumulated Transaction List ^ acsUB\ubAccTr
+>>Annual Usage Report ^ acsUB\ubUsage2
+>Remove Old Transactions ^ acsUB\ubRemove
+>Zero Year To Date Usage ^ acsUB\ubZeroYT
+>Forgot to Zero Year To Date Usage^ acsUB\Forgot
+Print
+>Customer Listings
+>>Name and Number List ^ acsUB\ubNamLst
+>>Labels ^ acsUB\Label
+>>Notes ^ acsUB\ubNotes
+>>Deposit List ^ acsUB\ubCustDp
+>>Deposit Change List ^ acsUB\ubDepChg
+>Rate Analysis ^ acsUB\Analyze
+>Final Billing Report ^ acsUB\BillRpt
+>Past Due Balance Breakdown ^ acsUB\ubDelinq
+>Meter Reading Book ^ acsUB\ubMetrBk
+>Route Book Pages ^ acsUB\ubMetrB2
+>Median Sewer Charge ^ acsUB\Ubmeans
+>Average Sewer Usage Report ^ acsUB\averagesewer
+>Secondary Water Usage Report ^ acsUB\billingrpt
+>Print Postal Permit ^ acsUB\permitbox
+>Bar Graph ^ Acsub\ubbargraph
+Utilities
+>Set Route Numbers ^ acsUB\reRoute
+>Calculate Sewer Average ^ acsUB\Sewer
+>View Total Accounts Receivable ^ acsUB\TotalBal
+>Enter Beginning Balances and Readings ^ acsUB\ubCorAmt
+>Transfer Accounts Between Companies ^ acsUB\ubCoTr
+>Display Last Date Customer File Accessed ^ acsub\accessdate
+Hand Held
+>Create Hand Held File ^ acsUB\hhTo
+>Retreive (Import) from Hand Held to Book ^ acsUB\hhFro
+External Collections Processing
+>Export for External Collections Process ^ acsUB\ECP_Export
+Extras
+>Intelligent Mail for Small Business Mailers (IMSB)
+>>Export File for IMSB ^ acsUB\Export_IMSB
+>>Import File from IMSB ^ acsUB\Import_IMSB
+>Cass
+>>Create Certification File ^ acsUB\ubCass1
+>>Place Certified File Back on PC ^ acsUB\ubCass2
+>Budget
+>>Print
+>>>Budget Worksheet ^ acsUB\BudRpt1
+>>>Budget Customer List ^ acsUB\ubBudLst
+>>Remove Old Budget Transactions ^ acsUB\RmBudget
+>>Calculate Average Charges for Date Range ^ acsUB\AvgChg
+>>Set Sewer Standard Charges from Average Water Usage ^ acsUB\AvgSewChg
+>Error Recovery
+>>Undo Penalty Calculation ^ acsUB\ubUnPen
+>>Change Wrong Calculation Date ^ acsUB\ubDatFix
+>>Recalculate All Current Bills ^ acsub\ubrecalk
+>>Forgot to Zero Year-to-Date ^ acsUB\Forgot
+>>Reassign Deposit Change Addresses ^ acsUB\DepReas
+>>Change Wrong Transaction Dates ^ acsUB\ReDate
+>>Reverse Billing Cycle ^ acsUB\undobilling
+>Export UB Master File ^ acsUB\ExpUBM
+>Pull Service Names for Grids ^ acsub\pulllay
+>Check Balance Breakdown 1^ acsub\checkbalbrk
+>Check Balance Breakdowns 2 ^ acsUB\check_balance_breakdowns

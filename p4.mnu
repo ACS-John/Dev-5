@@ -1,0 +1,58 @@
+Payroll New ^ ACS Payroll
+File
+>Employee ^ acsPR\newprFM
+>Payroll Check History ^ acspr\CheckHistory
+>Design Reports ^ acsPR\newprRpt3
+>W-2 Supplemental Information ^ acsPR\W2Box16
+>Accrued Payroll Tax Information ^ acsPR\NewMGLmstr
+>Grid ^ core\prtflex\prtflex1
+>Time Classifications ^ acspr\hourclassification
+>Breakdown of Hours ^ acspr\hours
+>Employment Status ^ acspr\Empstatus
+>Department Names ^ acspr\DepartmentName
+>Chart of Accounts ^ acspr\chartofaccounts
+Pay Period
+>Enter Time Sheets ^ acsPR\newprInput
+>Payroll Registers ^ acsPR\newprReg1
+>Other Pay and Deductions Register ^ acsPR\newPropDreg
+>Direct Deposits ^ acsPR\newDD
+>Print Payroll Checks ^ acsPR\newprCkPrt
+>YTD and QTD Register ^ acsPR\newprYTDQTD
+>Post to General Ledger ^ acsPR\newprPostGL
+Monthly
+>Payroll Tax Deposit Summary ^ acsPR\newprRegTot
+>Pension Report ^ acspr\newprmers
+>Deferred Compensation Report ^ acspr\newprdefcmp
+Quarterly
+>State UnEmp Report ^ acsPR\newprUC1
+>941 Summary ^ acsPR\newPR941
+>Quarterly Federal Unemployment Worksheet ^ acsPR\newQtrFedUC
+>State UnEmp.-Electronic Submission ^ acsPR\prelecuc
+Annual
+>Annual Federal Unemployment Worksheet ^ acsPR\newprFedUC
+>Deduction Register YTD ^ acsPR\newprYTDMis
+>W-2 Forms ^ acsPR\newprW2a
+>Corrected W-2 ^ acspr\newcorrectedprw2a
+>Electronic W-2 ^ acsPR\newprElecW2
+>Corrected Electronic W-2 ^ acsPR\newprElecW2correction
+>Print 1099 ^ acsPR\newpr1099
+>Electronic 401K ^ acsPR\pr401k
+Print
+>Designed Reports ^ acsPR\newprRpt3
+>Employee Review Register ^ acsPR\newprempRev
+>Workmans Compensation Report ^ acsPR\newprWkMCmp
+>Labels ^ acsPR\newLabel
+>User Designed Reports Proof List ^ acsPR\newprRpt4
+>Input Worksheet ^ acsPR\newprInpWk
+>Active Employee List ^ acsPR\newEmpList
+>Direct Deposit List ^ acspr\newddlist
+Automatic Processing
+>Select Automatic Processing Programs ^ acsPR\newSelAuto
+>Begin Automatic Processing ^ acsPR\newAutoProc
+Utilities
+>Change Payroll Date ^ acspr\newprchangedate
+>Remove Old Payroll Checks ^ acspr\removechecks
+>Reversing Calculation ^ acsPR\newprRevCal
+>Extend Time Card  ^ acsPR\TimeCard
+>Payroll Departmental Register ^ acsPR\newprReg2
+>Fix Wording On Grids ^ acspr\pulllay
