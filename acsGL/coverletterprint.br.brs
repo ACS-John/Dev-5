@@ -1,0 +1,67 @@
+00010 ! Replace R:\acsGL\CoverLetterPrint
+00020 ! -- Print Cover Letter
+00030 ! ______________________________________________________________________
+00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$,fnconsole
+00050   on error goto ERTN
+00060 ! ______________________________________________________________________
+00070   dim tb$*32,cap$*128,ln1$*8800,ln$*8800,dat$*20
+00080 ! ______________________________________________________________________
+00090   let fntop("R:\acsGL\CoverLetterPrint",cap$="Print Cover Leter")
+00100   let fnconsole(off=0)
+00110   let fncno(cno)
+00120   let fndat(dat$)
+00130   open #1: "Name=Q:\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+        read #1,using 'Form POS 195,C 30',rec=1: tb$ !:
+        close #1: !:
+        let tb$="("&trim$(tb$)&")"
+00140   let tempx=val(fnactpd$) conv L180
+00150   if tempx=1 then let actpd$="one" else !:
+          if tempx=2 then let actpd$="two" else !:
+            if tempx=3 then let actpd$="three" else !:
+              if tempx=4 then let actpd$="four" else !:
+                if tempx=5 then let actpd$="five"
+00160   if tempx=6 then let actpd$="six" else !:
+          if tempx=7 then let actpd$="seven" else !:
+            if tempx=8 then let actpd$="eight" else !:
+              if tempx=9 then let actpd$="nine" else !:
+                if tempx=10 then let actpd$="ten"
+00170   if tempx=11 then let actpd$="eleven" else !:
+          if tempx=12 then let actpd$="twelve" else !:
+            if tempx=13 then let actpd$="thirteen" else !:
+              if tempx=14 then let actpd$="fourteen"
+00180 L180: open #1: "Name=Q:\GLmstr\ACGLCovF.h"&str$(cno)&",Shr",display,input ioerr XIT
+00200   on fkey 5 goto DONE
+00210   let fnopenprn
+00220 READ_ACGLCOVF: ! 
+00230   linput #1: ln$ eof DONE ioerr DONE
+00240   for j2=1 to len(rtrm$(ln$))
+00250     if ln$(j2:j2)><"@" then goto L320
+00260     if ln$(j2+1:j2+1)="1" then !:
+            let ln$(j2:j2+1)=fnpedat$&ln$(j2+2:132-len(fnpedat$)) !:
+          else goto L280
+00270     goto L310
+00280 L280: if ln$(j2+1:j2+1)="2" then !:
+            let ln$(j2:j2+1)=rtrm$(dat$)&ln$(j2+2:132-len(rtrm$(dat$))) !:
+          else goto L300
+00290     goto L310
+00300 L300: if ln$(j2+1:j2+1)="3" then !:
+            let ln$(j2:j2+1)=rtrm$(actpd$)&ln$(j2+2:132-len(rtrm$(actpd$))) else goto L320
+00310 L310: ! Let LN$=LN1$
+00320 L320: next j2
+00330   print #255: tab(10);ln$
+00340   goto READ_ACGLCOVF
+00350 ! ______________________________________________________________________
+00360 DONE: close #1: 
+00370   let fncloseprn
+00380   goto XIT
+00390 ! ______________________________________________________________________
+00400 XIT: let fnxit
+00410 ! ______________________________________________________________________
+00420 ! <Updateable Region: ERTN>
+00430 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00440   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
+00450   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
+00460   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00470 ERTN_EXEC_ACT: execute act$ : goto ERTN
+00480 ! /region
+00490 ! ______________________________________________________________________

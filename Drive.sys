@@ -7,7 +7,8 @@ Rem             Program Folder
 Rem     Drive S: will be used internally as a virtual drive by ACS as the 
 Rem             launching folder, but ACS works from %temp% and needs read/write access to it.
 
-Drive S,C:\ACS\Dev-5,X,\
+rem Drive S,C:\ACS\Dev-5,X,\
+Drive S,C:\Users\John\OneDrive\ACS\ACS-5,X,\
 
 Rem SetEnv Data \\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data - Billings
 Rem WBServer :\\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data - Billings

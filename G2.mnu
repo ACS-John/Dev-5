@@ -1,0 +1,21 @@
+   Accountants Add-On ^ ACS General Ledger for Accountants
+General Ledger Accountants Add-On
+>File
+>>Employee ^ acsGL\Employee
+>Monthly
+>>Print Payroll Registers ^ acsGL\ACPRReg
+>>Print Deductions Register ^ acsGL\OtherDeductions
+>>Print Deductions Register-YTD QTD ^ acsGL\OtherDeductionsYTD
+>>Post Payroll Checks ^ acsGL\PRMerge
+>Quarterly
+>>Print State Unemployment Compensation Report ^ acsGL\PRStatUC
+>>Print Texas Unemployment Report ^ acsgl\prtexasuc
+>>State UnEmp.-Electronic Submission ^ acsgl\elecuc
+>>Print 941 Summary ^ acsGL\PR941
+>>Zero QTD Payroll Information ^ acsGL\PRZQTD
+>>Fix YTD - QTD Earnings ^ acsgl\fixytdqtd
+>Annually
+>>W-2 Supplemental Information ^ acsgl\w2box16
+>>Print W-2's ^ acsGL\PRW2
+>>Create Electronic W-2s ^ acsGL\glElecW2
+>>Zero YTD Payroll Information ^ acsGL\PRZYTD
