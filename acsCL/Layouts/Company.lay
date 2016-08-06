@@ -1,0 +1,59 @@
+00010 ! Replace acsCL\Company.lay,Source
+00070 Let H1$="Company Information"
+00080 Let FileType$="Sequential"
+00090 Let FILEName$="Company.H[CNo]"
+00100 Let VOLID$="CLmstr"
+00120 Let RM$(1)="Version=1"
+00130 Let RM$(2)=""
+00140 Let RM$(3)=""
+00150 Let RM$(4)=""
+00160 Data Company Name						^A$(1)		^C 40		^Company
+00170 Data Company Address					^A$(2)		^C 40		^Addr
+00180 Data City,State,Zip Code				^A$(3)		^C 40		^CSZ
+00190 Data Federal ID						^B$(1)		^C 12		^Fed ID
+00200 Data State ID							^B$(2)		^C 12		^State ID
+00210 Data State Unemployment C Rate		^C$			^C 5		^?
+00220 Data Department Number Used			^D(1)		^N 1		^?
+00230 Data Sub-Account Number Used			^D(2)		^N 1		^?
+00242 Data Working Bank Code				^WBC		^N 2		^?
+00244 Data Post Deposits from AR (Yes=1)	^AR1		^N 1		^?
+00250 Data FILLER							^E$			^C 21		^?
+00260 Data Last Balance Sheet Account		^LastACT$	^C 12		^?
+00270 Data State U/C Maximum				^UCM		^PD 7.2		^?
+00280 Data Type of Business					^TB$		^C 30		^?
+00281 Data FILLER							^X$			^C 73		^?
+00290 Data Payroll G/L Numbers				^PRGL(1,1)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(2,1)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(3,1)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(4,1)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(5,1)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(1,2)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(2,2)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(3,2)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(4,2)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(5,2)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(1,3)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(2,3)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(3,3)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(4,3)	^PD 4		^?
+00290 Data Payroll G/L Numbers				^PRGL(5,3)	^PD 4		^?
+00291 Data FILLER							^X			^6*PD 4		^?
+00292 Data FILLER							^X			^C 2		^?
+00300 Data Number OF Accounting Period		^NAP		^N 2		^?
+00310 Data Social Security Rate				^FICARATE	^PD 5.3		^?
+00320 Data Social Security Wage				^FICAWAGE	^PD 5.2		^?
+00330 Data Federal U/C Rate					^FEDUCRAT	^PD 5.3		^?
+00340 Data Federal U/C Wage					^FEDUCWAG	^PD 5.2		^?
+00350 Data PreNumbered Checks (Yes=1)		^PRENUM		^N 1		^?
+00360 Data MediCare RATE					^MCR		^PD 5.3		^?
+00370 Data MediCare Maximum					^MCM		^PD 5.2		^?
+00380 Data Bank Reconciliation Code			^RECCode	^N 1		^?
+00390 Data Miscellaneous Deduction Names	^MISCName$	^10*C 20	^?
+00400 Data Deduct or Add Misc Ded			^DEDCode	^10*N 1		^?
+00410 Data Deduct for Federal WH			^DEDFED		^10*N 1		^?
+00420 Data Deduct for FICA WH				^DEDFICA	^10*N 1		^?
+00430 Data Deduct for STATE WH				^DEDST		^10*N 1		^?
+00440 Data Deduct for STATE UC				^DEDUC		^10*N 1		^?
+00450 Data Miscellaneous G/L NumberS		^MISCGL$	^10*C 12	^?
+00451 Data FILLER							^PORT		^N 1		^?
+00460 Data FILLER							^X$			^C 94		^?

@@ -1,0 +1,10 @@
+00010 ! Replace acsCL\PayeeType.lay,Source
+00020 Let H1$="PayeeType (Version 1)"
+00030 Let FileType$="Keyed"
+00040 Let FILEName$="PayeeType.H[CNo]"
+00050 Let VOLID$="CLmstr"
+00060 Let RM$(1)="Version=1"
+00061 Let RM$(2)="Index (Type)  PayeeType.Idx  KPs= 1 KLn= 2"
+00062 Let RM$(3)=""
+00063 Data Payee Type					^VN$	^N 2		^Type
+00070 Data Type Description				^IV$	^C 25		^Desc

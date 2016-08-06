@@ -1,0 +1,12 @@
+00010 ! Replace acsCL\IVPaid.lay,Source
+00020 Let H1$="Paid Invoice  (Version 0/1)"
+00030 Let FileType$="Keyed"
+00040 Let FileName$="IVPaid.H[CNo]"
+00050 Let VOLID$="CLmstr"
+00060 Let RM$(1)="Version=0/1"
+00061 Let RM$(2)="Index (Type)  IVIndex.h[CNo]  KPs= 1 KLn=20"
+00062 Let RM$(3)=""
+00063 Data Payee Key					^VN$	^C 8		^Type
+00070 Data Invoice Key					^IV$	^C 12		^Desc
+00073 Data Date Paid					^DP		^G 6		^Type
+00083 Data Check Number					^CKN	^G 8		^Type
