@@ -1,0 +1,13 @@
+00010 ! Replace acsCL\BankMstr.lay,Source
+00020 Let H1$="Bank"
+00030 Let FileType$="Keyed"
+00040 Let FILEName$="BankMstr.h[CNO]"
+00050 Let VOLID$="CLmstr"
+00060 Let RM$(1)="KFName=BankIdx1 KPs=1,KLn=2"
+00061 Let RM$(3)="Version=1"
+00070 Data Bank Code			^Bank_Code	^N 2	^BC
+00080 Data Bank Name			^BN$		^C 30	^BName
+00090 Data GL Number			^BGL$		^C 12	^GLN
+00100 Data Bank Balance			^BAL		^PD 6.2	^Bal
+00110 Data UnPaid Invoices		^UPI		^PD 6.2	^UnpdInv
+00120 Data Last Check Number	^LCN$		^C 8	^LastCheck
