@@ -1,0 +1,9 @@
+Payroll New ^ ACS Payroll
+Payroll - Programmer
+>State Withholdings ^ acsPR\StWHFM
+>Department Hamster ^ acsPR\Department
+>RPWork01 (Entered TimeSheet) Hamster ^ acsPR\rpwork01_hamster
+>Update Check Book From Check History ^ acsPR\update_acscl
+>Fix WH Wages in Check History ^ acsPR\Fix_SS_Med_Wages
+Pay Period
+>Import from Time Clock System ^ acsPR\newimporttime
