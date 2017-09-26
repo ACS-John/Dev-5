@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\ACGLINCQ
+00010 ! Replace S:\acsGL\ACGLINCQ
 00020 ! -- INCOME STATEMENT FOR 8 1/2 * 11 PAPER WITHOUT PERCENTAGES
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fncch$,fnpedat$,fnprocess,fngl_number_use_dept,fnps,fnpriorcd,fnfscode,fnactpd$,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fncch$,fnpedat$,fnprocess,fnUseDeptNo,fnps,fnpriorcd,fnfscode,fnactpd$,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,bp(13)
@@ -20,14 +20,14 @@
 00190 ! Print NEWPAGE
 00200   let redir=0: if file$(255)(1:4)<>"PRN:" then let redir=1: goto L210
 00210 L210: if fnps=2 then let mp1=72 else let mp1=69
-00220   let fl1$="Name=Q:\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName=Q:\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
-00230   if fnps=2 then let fl1$="Name=Q:\GLmstr\ACGLFNSJ.H"&str$(cno)&",KFName=Q:\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
+00220   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00230   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
 00240   form c 9,skip 0
 00250 L250: form pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 00260   form c 7,skip 0
 00270   let nametab=int(44-len(rtrm$(cnam$))/2)
 00280   open #1: fl1$,internal,input,keyed 
-00290   if fnprocess=1 or fngl_number_use_dept=0 then goto L390
+00290   if fnprocess=1 or fnUseDeptNo=0 then goto L390
 00300   let fntos(sn$="ACglincq") !:
         let mylen=30: let mypos=mylen+3 : let right=1
 00310   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -41,10 +41,10 @@
 00380   let costcntr=val(resp$(1))
 00390 L390: let fnopenprn
 00400   if fnps=2 then goto L430 ! secondary
-00410   execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
+00410   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
 00420   goto L440
-00430 L430: execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
-00440 L440: open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00430 L430: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
+00440 L440: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
 00450   let report$="STATEMENT OF INCOME AND EXPENSES"
 00460 ! GOSUB BLDPCT1 ! BUILD % BASED ON REF # IN PRIMARY FUND # IN G/L ACCOUNT
 00470 L470: read #1,using L520: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1720
@@ -167,11 +167,11 @@
 01590 ! ______________________________________________________________________
 01600 L1600: let heading=1
 01610   if pt1=0 then let pt1=1 else let pt1=pt1+1
-01620   print #255: "\qc  {\f181 \fs24 \b "&trim$(cnam$)&"}"
+01620   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01630   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01640   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
 01650   print #255: "\qc  {\f181 \fs16 \b For the quarter ended "&rtrm$(fnpedat$)&"}"
-01660   print #255: "\qL "
+01660   print #255: "\ql "
 01670   print #255: 
 01680   print #255,using L1690: lpad$(rtrm$(fncch$),20),"Year To DATE"
 01690 L1690: form pos 43,c 20,pos 69,c 12,skip 2
@@ -215,7 +215,7 @@
 02060 XIT: let fnxit
 02070 ! ______________________________________________________________________
 02080 ! <updateable region: ertn>
-02090 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02090 ERTN: let fnerror(program$,err,line,act$,"xit")
 02100   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02110   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02120   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

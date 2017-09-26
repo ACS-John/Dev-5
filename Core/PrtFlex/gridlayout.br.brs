@@ -1,12 +1,12 @@
-00010 ! Replace R:\Core\PrtFlex\GridLayout
+00010 ! Replace S:\Core\PrtFlex\GridLayout
 00020 ! create layout for grid program
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnacs,fnlbl,fntxt,fntos,fncmdset,fnerror,fntop
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fncmdset,fnerror,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(6)*60,text$*50,outputfile$*60,fieldnam$*30,vn$*20,ft$*11,an$*20
 00080 ! ______________________________________________________________________
-00090   let fntop("R:\Core\PrtFlex\GridLayout","Grid Layout")
+00090   let fntop("S:\Core\PrtFlex\GridLayout","Grid Layout")
 00100 L100: let fntos(sn$="file_layout") !:
         let lablen=15
 00110   let fnlbl(1,1,"File Name:",lablen,1)
@@ -51,7 +51,7 @@
 00420 XIT: stop 
 00430 ! ______________________________________________________________________
 00440 ! <Updateable Region: ERTN>
-00450 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00450 ERTN: let fnerror(program$,err,line,act$,"xit")
 00460   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00470   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00480   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

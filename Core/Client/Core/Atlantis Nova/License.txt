@@ -1,0 +1,22 @@
+Atlantis Word Processor License Agreement
+
+Atlantis Word Processor (the "Software"), is protected by copyright which is vested in Rising Sun Solutions, Inc.
+
+This License Agreement (the "Agreement") is a legal agreement between you ("Licensee"), the end-user, and Rising Sun Solutions, Inc.
+By using the Software or storing it on a computer hard drive (or other media), you are agreeing to be bound by the terms of this Agreement.
+If you do not agree to the terms of this Agreement, you must delete the Software from all storage media.
+
+You may install the Software and create as many copies of the Software on storage media as you wish.
+You may redistribute the Software freely on on-line services, bulletin boards, or other electronic media as long as the files are distributed in their entirety. The Software may not be distributed on CD-ROM, disk, or other physical media for a fee without the permission of Rising Sun Solutions, Inc.
+You may not alter the Software in any way, including changing or removing any messages or windows.
+You may not decompile, reverse engineer, disassemble or otherwise reduce the Software to a human perceivable form. You may not modify, rent or resell for profit the Software.
+You may not create derivative works based upon the Software without the permission of Rising Sun Solutions, Inc.
+You may not publicize or distribute any registration code algorithms, information, or registration codes used by the Software without permission of Rising Sun Solutions, Inc.
+
+THE SOFTWARE IS PROVIDED TO LICENSEE "AS IS". ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS, AND WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY, SATISFACTORY QUALITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT, ARE DISCLAIMED, EXCEPT TO THE EXTENT THAT SUCH DISCLAIMERS ARE HELD TO BE LEGALLY INVALID.
+
+ATLANTIS WORD PROCESSOR WAS DEVELOPED WITH GREAT ACCURACY AND CARE ABOUT END-USER. BUT IN NO EVENT WILL RISING SUN SOLUTIONS, INC. BE LIABLE FOR ANY INDIRECT, PUNITIVE, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGE CAUSED BY THE SOFTWARE (INCLUDING LOSS OF BUSINESS, REVENUE, PROFITS, USE, DATA OR OTHER ECONOMIC ADVANTAGE).
+
+Atlantis Word Processor.
+Copyright © 2000-2002, Rising Sun Solutions, Inc.
+All rights reserved.

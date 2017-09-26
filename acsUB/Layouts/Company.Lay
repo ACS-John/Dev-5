@@ -1,0 +1,18 @@
+00010 ! Replace acsUB\Company.Lay,Source
+00070 LET H1$="Company Information"
+00080 LET FILETYPE$="Sequential"
+00090 LET FILENAME$="Company.H[CNO]"
+00100 LET VOLID$="UBmstr"
+00110 LET RM$(1)="Version=0"
+00120 LET RM$(2)=""
+00130 LET RM$(3)=""
+00140 LET RM$(4)=""
+00160 DATA Company Name									^CNam$		^C 40	^CNam
+00170 DATA Company Address								^cAddr$		^C 40	^CAddr
+00180 DATA Company City, State and Zip Code				^cCSZ$		^C 40	^CCSZ
+00190 DATA Last Billing Date 							^BillDate	^N 6	^BillDate
+00200 DATA Maintain Accumulated Trans.(1=Yes 2=NO)		^MaintAc	^N 1	^mAccTrn
+00200 DATA Require Receipt Number on Collections (T/F)	^x$			^C 1	^?
+00200 DATA Utilize Escrow Features (T/F)				^y$			^C 1	^?
+00200 DATA Unusual Usage Percent						^z			^N 4	^?
+

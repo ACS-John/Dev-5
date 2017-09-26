@@ -1,0 +1,27 @@
+                 Advanced Utility Services
+                   811 North Main Street
+                    Harrison, AR  72601
+                      (870)  555-1212
+
+
+@D4
+
+@3
+@4
+@5
+@1
+
+
+Dear @3;
+	We have not yet received your payment for the @D1 billing.  This payment was due @D2.  If you will not be able to make a payment by @D3, please call Christie at (870) 555-1212 so that other arangements can be made.
+
+	Balance Due	Date Due	Shut Off
+	@47		@D2		@D3
+
+Sincerlly,
+
+
+
+
+Shanna Johnson
+Advanced Utility Services

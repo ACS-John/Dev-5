@@ -1,27 +1,27 @@
-00010 ! Replace R:\acsCL\ChartOfAccounts
-00020 ! Check Book Transaction Allocation File - Hamster !:
+00010 ! Replace S:\acsCL\ChartOfAccounts
+00020 ! Checkbook Transaction Allocation File - Hamster !:
         ! pretty useless to the end user - but quite usefull to the programmer
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4)
 00080 ! ______________________________________________________________________
 00090   let fntop(program$,cap$='Chart of Accounts')
 00100   let fncno(cno)
-00110   open #20: "Name=Q:\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00110   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2) !:
         close #20: 
 00120   gosub BUILD_LAYOUT
 00130   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER
 00135   gosub CLOSE_FILE
-00136   execute "index Q:\CLmstr\GLmstr.H"&str$(cno)&" Q:\GLmstr\glindex.h"&str$(cno)&"1 12,replace,DupKeys" ioerr L140
+00136   execute "Index "&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&' '&env$('Q')&"\GLmstr\glindex.h"&str$(cno)&"1 12,replace,DupKeys" ioerr L140
 00140 L140: goto XIT
 00150 ! ______________________________________________________________________
 00160 OPEN_FILE: ! !:
         let open_file_count=0 ! this value is used in the close_file sub routine
-00170   open #open_file_count+=1: "Name=Q:\CLmstr\GLmstr.H"&str$(cno)&",Version=0,KFName=Q:\CLmstr\GLIndex.h"&str$(cno)&",Use,RecL=62,KPs=1,KLn=12,Shr",internal,outin,keyed 
+00170   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",Version=0,KFName="&env$('Q')&"\CLmstr\GLIndex.h"&str$(cno)&",Use,RecL=62,KPs=1,KLn=12,Shr",internal,outin,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -74,7 +74,7 @@
 00420 XIT: let fnxit
 00430 ! ______________________________________________________________________
 00440 ! <Updateable Region: ERTN>
-00450 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00450 ERTN: let fnerror(program$,err,line,act$,"xit")
 00460   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00470   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00480   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

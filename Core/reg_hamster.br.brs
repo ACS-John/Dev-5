@@ -1,5 +1,5 @@
 20000 ! ______________________________________________________________________
-20200   library 'R:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+20200   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
 20400   on error goto ERTN
 20600 ! ______________________________________________________________________
 20800   dim cap$*128
@@ -14,7 +14,7 @@
 22600 ! ______________________________________________________________________
 22800   def fn_open_file
 23000     let open_file_count=0 ! this value is used in the close_file sub routine
-23200     open #open_file_count+=1: 'Name=Q:\data\reg.dat,Version=1,KFName=Q:\data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed 
+23200     open #open_file_count+=1: 'Name='&env$('Q')&'\Data\reg.dat,Version=1,KFName='&env$('Q')&'\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed 
 23400 ! open #open_file_count+=1: 'Name=data\reg.dat,Version=1,KFName=data\reg.idx,Shr',internal,outin,keyed
 23600 ! open #open_file_count+=1: 'Name=data\reg.dat,Shr',internal,outin,relative
 23800   fnend 
@@ -29,7 +29,7 @@
 25600 XIT: let fnxit
 25800 ! ______________________________________________________________________
 26000 ! <Updateable Region: ERTN>
-26200 ERTN: let fnerror(cap$,err,line,act$,"xit")
+26200 ERTN: let fnerror(program$,err,line,act$,"xit")
 26400   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 26600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 26800   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

@@ -1,7 +1,13 @@
-00010 ! Replace R:\acsCL\PostGL2.br
-00020 ! GL Distribution Report     AND/OR     Post to General Ledger
+00010 ! Replace S:\acsCL\PostGL2.br
+00020 ! GL Distribution Report (fnpostgl2(2)   AND/OR     Post to General Ledger (fnpostgl2(1) - or run directly)
+
+00040   library 'S:\Core\Library': fnpostgl2,fnxit,fnerror,fntop
+00050 ! on error goto ERTN
+00070   let fntop(program$,"Post to General Ledger")
+00080   let fnpostgl2(1)
+00090   let fnxit
 10000   def library fnpostgl2(glt)
-10020     library 'R:\Core\Library': fnopenprn,fncloseprn,fncno,fnerror,fnputcno,fndate_mmddyy_to_ccyymmdd,fnprocess,fnchain,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fnmsgbox
+10020     library 'S:\Core\Library': fnopenprn,fncloseprn,fncno,fnerror,fnputcno,fndate_mmddyy_to_ccyymmdd,fnprocess,fnchain,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fnmsgbox
 10040     on error goto ERTN
 10060 ! ______________________________________________________________________
 10080 ! GLT: 1=Post  2=Print Only
@@ -23,7 +29,7 @@
 10400 ! 
 12000 ! r: determine if cash or accrual by checking for any accounts payable numbers in the general ledger control file
 12160     let up1$="C"
-12180     open #fundmstr=9: "Name=Q:\CLmstr\FundMstr.H"&str$(cno)&",KFName=Q:\CLmstr\FundIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
+12180     open #fundmstr=9: "Name="&env$('Q')&"\CLmstr\FundMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\FundIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 12200 READ_FUNDMSTR: ! 
 12220     read #fundmstr,using 'Form Pos 52,C 12': gw$ eof EO_FUNDMSTR
 12240     let accrual=val(gw$) conv L230
@@ -75,9 +81,9 @@
 16060 !   print fields "13,34,C 12,B,99": "Cancel (Esc)"
 16080 !   on fkey 99 goto XIT
 16100     let fnopenprn
-16120     open #trmstr=1: "Name=Q:\CLmstr\TrMstr.H"&str$(cno)&",KFName=Q:\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-16140     open #tralloc=3: "Name=Q:\CLmstr\TrAlloc.H"&str$(cno)&",KFName=Q:\CLmstr\tralloc-idx.h"&str$(cno)&",Shr",internal,outin,keyed 
-16160     open #bankmstr=4: "Name=Q:\CLmstr\BankMstr.H"&str$(cno)&",KFName=Q:\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
+16120     open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
+16140     open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\tralloc-idx.h"&str$(cno)&",Shr",internal,outin,keyed 
+16160     open #bankmstr=4: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 16180     open #work=5: "Name="&env$('Temp')&"\WORK."&session$&",SIZE=0,RecL=76,Replace",internal,output 
 16200     if ~fn_check_breakdowns_add_up then goto XIT ! gosub CHECK_BREAKDOWNS
 16220     gosub GLBUCKET_STUFF
@@ -306,23 +312,22 @@
 26960 L2300: ! 
 26980     if glt=glt_print_only then goto XIT
 27000     close #20: ioerr ignore
-27020     open #20: "Name=Q:\CLmstr\PostDat.H"&str$(cno)&",Replace,RecL=12",internal,outin,relative 
+27020     open #20: "Name="&env$('Q')&"\CLmstr\PostDat.H"&str$(cno)&",Replace,RecL=12",internal,outin,relative 
 27040     write #20,using 'Form POS 1,2*N 6',rec=1: d1,d2
 27060     close #20: 
 27080     if glb=2 then 
 27100       goto XIT
 27120     else 
 27140       let fnputcno(gl2)
-27160 ! let fnputcnam(empty$)
-27180       let fnchain("R:\acsGL\ACGLMrge")
+27180       let fnchain("S:\acsGL\ACGLMrge")
 27200     end if 
 27220 ! /r
 29000 END1: ! r:
 29010     if scd=4 and pa1+pa2<>0 then gosub COMBINEPR
 29020     if up1$="C" then goto END2
-29040     open #paytrans=6: "Name=Q:\CLmstr\PayTrans.H"&str$(cno)&",KFName=Q:\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-29060     open #unpdaloc=7: "Name=Q:\CLmstr\UnPdAloc.H"&str$(cno)&",KFName=Q:\CLmstr\Uaidx2.H"&str$(cno)&",Shr",internal,outin,keyed 
-29080     open #paymstr=8: "Name=Q:\CLmstr\PayMstr.H"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
+29040     open #paytrans=6: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
+29060     open #unpdaloc=7: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&str$(cno)&",Shr",internal,outin,keyed 
+29080     open #paymstr=8: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 29100 READ_PAYTRANS: ! 
 29120     read #paytrans,using 'Form POS 1,C 8,C 12,N 6,POS 45,C 18,POS 96,N 1,N 6': vn$,iv$,dd,de$,pcde,pdte eof L2610
 29140     if include_prev_posted$="Y" then goto L2450
@@ -373,20 +378,20 @@
 33000 GLBUCKET_STUFF: ! r:
 33020     if glt=glt_print_only then goto L2840
 33040     let d2$=cnvrt$("PIC(######)",d2)
-33060     open #glbucket=20: "Name=Q:\GLmstr\GLBucket.H"&str$(gl2),internal,input,relative ioerr L2830
+33060     open #glbucket=20: "Name="&env$('Q')&"\GLmstr\GLBucket.H"&str$(gl2),internal,input,relative ioerr L2830
 33080     read #glbucket,using 'Form POS 1,N 1',rec=1: glb norec ignore
 33100     close #glbucket: 
 33120 L2830: ! 
 33140     if glb=2 then 
-33160       let glwk$="Q:\GLmstr\GL"&d2$&".H"&str$(gl2)
+33160       let glwk$=env$('Q')&"\GLmstr\GL"&d2$&".H"&str$(gl2)
 33180       open #glwk=11: "Name="&glwk$&",RecL=104,Use",internal,output 
 33200     else 
-33220       let glwk$="Q:\GLmstr\GLWK1"&wsid$&".H"&str$(gl2)
+33220       let glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(gl2)
 33240       open #glwk=11: "Name="&glwk$&",Size=0,RecL=104,Replace",internal,output 
 33260     end if 
 33280 L2840: ! 
 33300     if pr2$<>"N" then 
-33320       open #glwk2wsid=13: "Name=Q:\GLmstr\GLWK2"&wsid$&".H"&str$(gl2)&",RecL=110,Replace",internal,output 
+33320       open #glwk2wsid=13: "Name="&env$('Q')&"\GLmstr\GLWK2"&wsid$&".H"&str$(gl2)&",RecL=110,Replace",internal,output 
 33340     end if 
 33360     return  ! /r
 35000 REGGL: ! r:
@@ -555,7 +560,7 @@
 43520   return  ! /r
 45000 IGNORE: continue 
 45020 ! <Updateable Region: ERTN>
-45040 ERTN: let fnerror(cap$,err,line,act$,"NO")
+45040 ERTN: let fnerror(program$,err,line,act$,"NO")
 45060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 45080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 45100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
@@ -570,9 +575,9 @@
 48000   def fn_cb_unpaid_test ! CHECK_UNPAIDS: !
 48020     let cb_cu_return=1
 48040     restore #trmstr: 
-48060     open #paymstr=8: "Name=Q:\CLmstr\PayMstr.H"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
-48080     open #unpdaloc=7: "Name=Q:\CLmstr\UnPdAloc.H"&str$(cno)&",KFName=Q:\CLmstr\Uaidx2.H"&str$(cno)&",Shr",internal,outin,keyed 
-48100     open #paytrans=6: "Name=Q:\CLmstr\PayTrans.H"&str$(cno)&",KFName=Q:\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
+48060     open #paymstr=8: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
+48080     open #unpdaloc=7: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&str$(cno)&",Shr",internal,outin,keyed 
+48100     open #paytrans=6: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 48120 CB_CU_READ: ! 
 48140     read #paytrans,using 'Form POS 1,C 8,C 12,N 6,POS 45,C 18,POS 96,N 1,N 6,pos 63,g 10.2': vn$,iv$,dd,de$,pcde,pdte,upa eof EO_PAYTRANS_TEST
 48160     let invalloc=0

@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\Conversion\Q:\PRmstr-CNV
+00010 ! Replace S:\acsGL\Conversion\PRmstr-CNV
 00020 ! CONVERT GL PAYROLL MASTER FILE
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnputcno,fnerror
+00040   library 'S:\Core\Library': fntop,fnxit, fnputcno,fnerror
 00050   let fntop(program$,"Convert GL Payroll Master File")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -14,7 +14,7 @@
 00140 L140: input fields "10,43,N 5,UE,N": cno conv L140
 00150   if cmdkey=5 then goto XIT
 00160 ! 
-00170   open #1: "Name=Q:\GLmstr\PRmstr.h"&str$(cno)&"/,KFName=Q:\GLmstr\PRIndex.h"&str$(cno),internal,outin,keyed ioerr L140
+00170   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno),internal,outin,keyed ioerr L140
 00180   open #2: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=280,Replace",internal,output 
 00190 L190: read #1,using L200: pr1$,mat pr1 eof END1
 00200 L200: form pos 1,c 90,18*pd 5.2,2*n 5
@@ -27,15 +27,15 @@
 00270 ! ______________________________________________________________________
 00280 END1: close #1: 
 00290   close #2: 
-00300   execute "COPY "&env$('Temp')&"\Work."&session$&", Q:\GLmstr\PRmstr.h"&str$(cno)&"/ -n"
-00310   execute "INDEX Q:\GLmstr\PRmstr.h"&str$(cno)&",Q:\GLmstr\PRIndex.h"&str$(cno)&",1,4,Replace,DupKeys -n"
+00300   execute "COPY "&env$('Temp')&"\Work."&session$&", "&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&"/ -n"
+00310   execute "Index "&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&","&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",1,4,Replace,DupKeys -n"
 00320   let fnputcno(cno)
-00330   chain "R:\acsGL\Company"
+00330   chain "S:\acsGL\Company"
 00340 ! ______________________________________________________________________
 00350 XIT: stop 
 00360 ! ______________________________________________________________________
 00370 ! <Updateable Region: ERTN>
-00380 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00380 ERTN: let fnerror(program$,err,line,act$,"xit")
 00390   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00400   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00410   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

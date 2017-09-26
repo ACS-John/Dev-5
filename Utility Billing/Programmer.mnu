@@ -1,0 +1,14 @@
+Utility Billing Programmer ^ ACS Utility Billing
+Programmer
+>WorkOrder Hamster                         ^ acsUB\workorderHamster
+>Type Of Service                           ^ acsUB\TypeOfService
+>Type of Services (All Companies)          ^ acsUB\TypeOfServices
+>Customer Hamster                          ^ acsUB\Customer_Hamster
+>Deposit1 HamsterFio                       ^ HamsterFio:Deposit1
+>Deposit2 HamsterFio                       ^ HamsterFio:Deposit2
+>Swap Current and Prior Readings           ^ Utility Billing\swap_cur_prior
+>Reset Readings                            ^ acsUB\Reset_Readings
+>Duplicate Customer List                   ^ acsUB\duplicate_customer_report
+>Duplicate Transaction Report (has issues) ^ acsUB\DupTr
+>Test
+>>UB Customer Search                       ^ Test\CustomerSearch

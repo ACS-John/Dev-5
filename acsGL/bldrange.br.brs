@@ -1,0 +1,138 @@
+00010 ! Replace S:\acsGL\BldRange
+00020 ! Build Range of Accounts
+00030 ! ______________________________________________________________________
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror, fnchain,fntos,fnlbl,fnqgl,fnrgl$,fntxt,fnfra,fncombof,fncmdkey,fnacs,fnagl$,fncmdset,fnconsole
+00050   on error goto ERTN
+00060 ! ______________________________________________________________________
+00070   dim io1$(12),gln(3,3),fin(3),ta(2),ac(18),te$*1
+00080   dim d$*50,bc(13),bp(13),bm(13),rf(6),glk$*12,fsk$*5,resp$(20)*50
+00090 ! ______________________________________________________________________
+00100   ! fnconsole(off=0)
+00110   let fntop(program$,"Duplicate Range of Accounts")
+00130   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00140   read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
+00150   close #company: 
+00160   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00170   let fil$(1)="ACGLFNSB" : let idx$(1)="FNSBINDX"
+00180   let fil$(2)="ACGLFNSI" : let idx$(2)="FNSIINDX"
+00190 ! ______________________________________________________________________
+00210 MAIN: ! 
+00230   let fntos(sn$="Bldrange") 
+00232   let mylen=40: let mypos=mylen+3 : let right=1: let rc=0
+00240   let fnfra(1,1,6,90,"Duplicate Range of Accounts","This option will allow you to quickly duplicate a range of general ledger numbers when setting up multiple departments with similar accounts. ",0)
+00250   let fnlbl(1,50,"Source",0,0,0,1)
+00260   let fnlbl(2,1,"1st G/L Number to Duplicate:",mylen,right,0,1)
+00270   let fnqgl(2,mypos,1,0) 
+00272   let resp$(rc+=1)=fnrgl$(gl1$)
+00280   let fnlbl(3,1,"Last G/L Number to Duplicate:",mylen,right,0,1)
+00290   let fnqgl(3,mypos,1,0) 
+00292   let resp$(rc+=1)=fnrgl$(gl2$)
+00300   let fnlbl(6,1,"First new general ledger # to be used:",mylen,right,0,1)
+00310   let fnlbl(5,44,"Fund #",6,1,0,1)
+00320   let fnlbl(5,58,"Sub #",6,2,0,1)
+00330   if use_dept=1 then let fntxt(6,46,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",1 ) else let fntxt(6,46,3,0,right,"30",1,"Enter the fund portion of the general ledger number.",1 ) ! : Let RESP$(RC+=1)=STR$(DNO)
+00340   let fntxt(6,51,6,0,right,"30",0,"Enter the main part of the general ledger number.",1 ) 
+00342   let resp$(rc+=1)=""
+00350   if use_sub=1 then let fntxt(6,60,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",1 ) else let fntxt(6,60,3,0,right,"30",1,"Enter the sub portion of the general ledger number.",1 ) 
+00352     let resp$(rc+=1)=""
+00360   let fnfra(9,1,8,125,"Duplicating Matching Range of Financial Statement Formats"," ",0)
+00370 ! 
+00380   let fnlbl(1,1,"Beginning                         Ending",90,right,0,2)
+00390   let fnlbl(2,1,"Balance Sheet Refernece Number:",mylen,right,0,2)
+00400   let fncombof("fs-bal",2,43,25,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,pas, "If the accounts you are duplicating are balance sheet accounts, select the beginning balance sheet reference number to match the first new balance sheet account.",2) 
+00402   let resp$(rc+=1)="" ! first balance sheet ref # to be duplicated
+00410   let fncombof("fs-bal2",2,85,25,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,pas, "Select the last balance sheet reference number to be duplicated.",2) 
+00412   let resp$(5)="" ! ending balance sheet ref # to be duplicated
+00420   let fnlbl(4,1,"Beginning                         Ending",90,right,0,2)
+00430   let fnlbl(5,1,"Income Statement Refernece Number:",mylen,right,0,2)
+00440   let fncombof("fs-inc",5,43,25,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,pas, "If you are duplicating income statement accounts, enter the first income statement reference to be duplicated.",2) 
+00442   let resp$(rc+=1)="" ! 1st income statement ref # to be duplicated
+00450   let fncombof("fs-inc-2",5,85,25,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,pas, "If you are duplicating income statement accounts, enter the last income statement reference to be duplicated.",2) 
+00452   let resp$(rc+=1)="" ! last income statement ref # to be duplicated
+00460   let fnlbl(7,1,"First new reference # to be used:",mylen,right,0,2)
+00470   let fntxt(7,mylen+3,5,0,right,"30",0,"Enter the first new financial statement reference number to be matched with the new general ledger numbers.",2 ) 
+00472   let resp$(rc+=1)=""
+00480   let fncmdset(2)
+00490   let fnacs(sn$,0,mat resp$,ckey)
+00500   let pas=0 ! rebuild each time
+00510   if ckey=5 then goto XIT
+00520   let gl$=fnagl$(resp$(1))
+00530   let gln(1,1)=val(gl$(1:3))
+00540   let gln(1,2)=val(gl$(4:9))
+00550   let gln(1,3)=val(gl$(10:12))
+00560   let gl$=fnagl$(resp$(2))
+00570   let gln(2,1)=val(gl$(1:3))
+00580   let gln(2,2)=val(gl$(4:9))
+00590   let gln(2,3)=val(gl$(10:12))
+00600   let gl$=cnvrt$("pic(Zz#)",val(resp$(3)))&cnvrt$("pic(zzzZz#)",val(resp$(4)))&cnvrt$("PIC(ZZ#)",val(resp$(5)))
+00610   let gln(3,1)=val(gl$(1:3))
+00620   let gln(3,2)=val(gl$(4:9))
+00630   let gln(3,3)=val(gl$(10:12))
+00640   if val(resp$(6)(1:6))> 0 then let fin(1)=val(resp$(6)(1:6))
+00650   if val(resp$(7)(1:6))> 0 then let fin(2)=val(resp$(7)(1:6))
+00660   if val(resp$(8)(1:6))> 0 then let fin(1)=val(resp$(8)(1:6))
+00670   if val(resp$(9)(1:6))> 0 then let fin(2)=val(resp$(9)(1:6))
+00680   let fin(3)=val(resp$(10))
+00690   let gl1=val(cnvrt$("PIC(###)",gln(1,1))&cnvrt$("PIC(######)",gln(1,2))&cnvrt$("PIC(###)",gln(1,3)))
+00700   let gl2=val(cnvrt$("PIC(###)",gln(2,1))&cnvrt$("PIC(######)",gln(2,2))&cnvrt$("PIC(###)",gln(2,3)))
+00710   let gl3=val(cnvrt$("PIC(###)",gln(3,1))&cnvrt$("PIC(######)",gln(3,2))&cnvrt$("PIC(###)",gln(3,3)))
+00720   if gl1=0 then goto MAIN
+00730   if gl2=0 then goto MAIN
+00740   if gl3=0 then goto MAIN
+00750   let gf=gl3-gl1
+00760   let glk$=lpad$(str$(gln(1,1)),3)&lpad$(str$(gln(1,2)),6)&lpad$(str$(gln(1,3)),3)
+00770   if fin(1)=0 then goto L990
+00780   if fin(2)=0 then goto MAIN
+00790   if fin(3)=0 then goto MAIN
+00800 ! ______________________________________________________________________
+00810   let ff=fin(3)-fin(1)
+00820   restore #1,key=glk$: nokey MAIN
+00830 L830: read #1,using L1030: dno,ano,sno,d$,mat rf eof MAIN
+00840   let gl=val(cnvrt$("PIC(###)",dno)&cnvrt$("PIC(######)",ano)&cnvrt$("PIC(###)",sno))
+00850   if gl>gl2 then goto MAIN
+00860   if rf(1)>0 then let fln=1: goto L890
+00870   if rf(3)>0 then let fln=2: goto L890
+00880   goto L830
+00890 L890: open #2: "Name="&env$('Q')&"\GLmstr\"&fil$(fln)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\"&idx$(fln)&".h"&env$('cno')&",Shr",internal,outin,keyed 
+00900   restore #2,key=lpad$(str$(fin(1)),5): nokey L970
+00910 L910: read #2,using L920: rno,d$,te$,mat ac eof L980
+00920 L920: form pos 1,n 5,c 50,c 1,2*n 2,15*n 1,n 3
+00930   if rno>fin(2) then goto L980
+00940   let rno=rno+ff
+00950   write #2,using L920: rno,d$,te$,mat ac
+00960   goto L910
+00970 L970: close #2: : goto MAIN
+00980 L980: close #2: 
+00990 L990: restore #1,key=glk$: nokey L1010
+01000   goto L1020
+01010 L1010: goto MAIN
+01020 L1020: read #1,using L1030: dno,ano,sno,d$,mat rf eof END1
+01030 L1030: form pos 1,n 3,n 6,n 3,c 50,6*pd 3,42*pd 6.2,2*pd 3
+01040   let gl=val(cnvrt$("PIC(###)",dno)&cnvrt$("PIC(######)",ano)&cnvrt$("PIC(###)",sno))
+01050   if gl>gl2 then goto END1
+01060   let gl=gl+gf
+01070   let gl$=lpad$(str$(gl),12)
+01080   let dno=val(gl$(1:3))
+01090   let ano=val(gl$(4:9))
+01100   let sno=val(gl$(10:12))
+01110   if fln=1 then let rf(1)=rf(1)+ff
+01120   if fln=2 then let rf(3)=rf(3)+ff
+01130   write #1,using L1030: dno,ano,sno,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta
+01140   goto L1020
+01150 ! ______________________________________________________________________
+01160 END1: !
+01162   close #1: 
+01170   close #2: ioerr ignore
+01180   ! Execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&","&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",1,12,Replace,DupKeys -n"
+01190   if fln>0 then execute "Index "&env$('Q')&"\GLmstr\"&fil$(fln)&".h"&env$('cno')&","&env$('Q')&"\GLmstr\"&idx$(fln)&".h"&env$('cno')&",1,5,Replace,DupKeys -n"
+01200   goto MAIN
+01210 ! ______________________________________________________________________
+01220 XIT: let fnxit
+01230 ! ______________________________________________________________________
+01240 ! <Updateable Region: ERTN>
+01250 ERTN: let fnerror(program$,err,line,act$,"xit")
+01260   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
+01270   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
+01280   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01290 ERTN_EXEC_ACT: execute act$ : goto ERTN
+01300 ! /region

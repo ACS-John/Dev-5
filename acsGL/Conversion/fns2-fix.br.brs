@@ -1,8 +1,8 @@
 00010 ! REPLACE FNS2.FIX/acsGL
-00020   library 'core\library': fntop
+00020   library 'Core\Library': fntop
 00030   dim r$*5,d$*50,te$*1,ac(9),fil$(3),idx$(3)
 00040 L40: print newpage
-00050   let fntop(program$(4:pos(program$,".",-1)-1),"CHANGE_ME")
+00050   let fntop(program$,"FNS2.FIX/acsGL")
 00060   print fields "10,15,C 40": "ENTER COMPANY NUMBER TO FIX:"
 00070 L70: input fields "10,45,N 2,UE,N": cno conv L70
 00080   if cno=0 then stop 
@@ -12,7 +12,7 @@
 00120   data FNSBINDX,FNSIINDX,FNSJINDX
 00130   read mat idx$
 00140   for j=1 to 3
-00150     open #1: "Name=Q:\GLmstr\"&fil$(j)&".h"&str$(cno),internal,input,relative 
+00150     open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno),internal,input,relative 
 00160     open #2: "Name="&env$('Temp')&"\WORK."&wsid$&",RecL=273,REPLACE",internal,output 
 00170     for j1=1 to lrec(1)
 00180       read #1,using L190,rec=j1: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L230,conv NJ1,norec NJ1
@@ -22,7 +22,7 @@
 00220 NJ1: next j1
 00230 L230: close #1: 
 00240     close #2: 
-00250     execute "COPY "&env$('Temp')&"\WORK."&wsid$&" Q:\GLmstr\"&fil$(j)&".h"&str$(cno)
-00260     execute "INDEX Q:\GLmstr\"&fil$(j)&".h"&str$(cno)&" Q:\GLmstr\"&idx$(j)&".h"&str$(cno)&" 1 5 REPLACE DupKeys"
+00250     execute "COPY "&env$('Temp')&"\WORK."&wsid$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)
+00260     execute "Index "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&' '&env$('Q')&"\GLmstr\"&idx$(j)&".h"&str$(cno)&" 1 5 REPLACE DupKeys"
 00270   next j
 00280   goto L40

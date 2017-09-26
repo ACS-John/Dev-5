@@ -1,0 +1,22 @@
+Q:\CLmstr\oPayeeType.dat, otrans_, 0
+Q:\CLmstr\oPayeeType.Idx   ,  acct/tdate/tcode
+recl=27
+===================================================
+Type        , Type             , N     2    , !  SPos=1 Mask=1030
+Description , Description      , C    25    , !  SPos=3
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

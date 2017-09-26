@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\AgedAP
+00010 ! Replace S:\acsCL\AgedAP
 00020 ! Print Aged AP Listing
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnxit,fntop,fntos,fnlbl,fntxt,fncmdset,fnacs, fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnxit,fntop,fntos,fnlbl,fntxt,fncmdset,fnacs, fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,vnam$*30,de$*50,fd$*30,ft(3)
@@ -47,8 +47,8 @@
 00390   if bk(2,2)>0 then let bk(2,1)=bk(1,2)+1
 00400   if bk(3,2)>0 then let bk(3,1)=bk(2,2)+1
 00410   let fnopenprn
-00420   open #paytrans=4: "Name=Q:\CLmstr\PayTrans.H"&str$(cno)&",KFName=Q:\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00430   open #paymstr=2: "Name=Q:\CLmstr\PayMstr.H"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
+00420   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
+00430   open #paymstr=2: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 00440   gosub HDR
 00450 READ_PAYTRANS: ! 
 00460   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1': vn$,iv$,ivd,dd,po$,de$,upa,cde eof END1
@@ -106,7 +106,7 @@
 00950 L950: return 
 00960 ! ______________________________________________________________________
 00970 ! <Updateable Region: ERTN>
-00980 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00980 ERTN: let fnerror(program$,err,line,act$,"xit")
 00990   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01000   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01010   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

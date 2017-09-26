@@ -1,0 +1,13 @@
+00123 Dim em$(3)*30,ss$*11,rs(2),em(16),ta(2),ph$*12,tdt(4),tcd(3),tdet(23),th(4),tcp(32),tdc(10)
+
+del 8010,8040
+08010 Open #1: "Name="&datafolder$&"\rpmstr"&dataext$&", KFName="&datafolder$&"\rpindex"&dataext$&",Shr", Internal, Input,Keyed
+08011 Open #2: "Name="&datafolder$&"\department"&dataext$&", KFName="&datafolder$&"\deptidx"&dataext$&",Shr", Internal, Input,Keyed
+08012 Open #4: "Name="&datafolder$&"\payrollchecks"&dataext$&", KFName="&datafolder$&"\checkidx"&dataext$&",Shr", Internal, Input,Keyed
+del 9010,9060
+
+09014 Read #4,Using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": DENO,TDN,PRD,CKNO,MAT TDC,MAT tCP Eof EOFONREAD
+
+
+09020 ! continue
+

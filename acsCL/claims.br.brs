@@ -1,7 +1,7 @@
 00010 ! 
 00020 ! 
 00030 ! 
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fncno,fntop,fnxit,fnacs,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnwait,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fncno,fntop,fnxit,fnacs,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnwait,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*50,fd$*30,ft(3),aa(2),gl(3),ade$*50
@@ -19,9 +19,9 @@
 00200 ASK_SORT: ! 
 00210   if fund=1 then let ty1$="Vendor Sequence" else let ty1$="Fund Sequence"
 00220   if coded=1 then let ty2$="All Invoices" else let ty2$="Selected Invoices"
-00230   open #paytrans=4: "Name=Q:\CLmstr\PayTrans.H"&str$(cno)&",Shr",internal,input,relative 
-00240   execute "Index Q:\CLmstr\unpdaloc.H"&str$(cno)&" Q:\CLmstr\Uaidx2.H"&str$(cno)&" 1 20 Replace DupKeys -n" ! index in vendor, reference order
-00250   open #unpdaloc=8: "Name=Q:\CLmstr\UnPdAloc.H"&str$(cno)&",KFName=Q:\CLmstr\Uaidx2.H"&str$(cno)&",Shr",internal,input,keyed 
+00230   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",Shr",internal,input,relative 
+00240   execute "Index "&env$('Q')&"\CLmstr\unpdaloc.H"&str$(cno)&' '&env$('Q')&"\CLmstr\Uaidx2.H"&str$(cno)&" 1 20 Replace DupKeys -n" ! index in vendor, reference order
+00250   open #unpdaloc=8: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&str$(cno)&",Shr",internal,input,keyed 
 00260 READ_PAYTRANS: ! 
 00270   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,g 10.2,G 1': vn$,iv$,ivd,dd,po$,de$,upa,cde eof L420
 00280   if coded=2 and cde=0 then goto READ_PAYTRANS
@@ -41,7 +41,7 @@
 00420 L420: close #paytrans: : close #unpdaloc: : close #clwork: 
 00430   let upa=0 ! this sort is ok. it sorts a temporary work file. leave in
 00440   open #tmp=9: "Name="&env$('temp')&"\Control,Size=0,RecL=128,Replace",internal,output 
-00450   write #tmp,using 'Form POS 1,C 128': "File CLWork"&wsid$&".H"&str$(cno)&",Q:\CLmstr,,"&env$('temp')&"\Addr,,,,,A,N"
+00450   write #tmp,using 'Form POS 1,C 128': "File CLWork"&wsid$&".H"&str$(cno)&","&env$('Q')&"\CLmstr,,"&env$('temp')&"\Addr,,,,,A,N"
 00460   if fund=2 then !:
           write #tmp,using 'Form POS 1,C 128': "Mask 74,12,N,A" ! "Mask 74,3,N,A,1,20,C,A,86,4,N,A"
 00470   if fund<>2 then !:
@@ -50,18 +50,18 @@
 00490   execute "Free "&env$('temp')&"\Addr -n" ioerr ignore
 00500   execute "Sort "&env$('temp')&"\Control -n"
 00510   open #addr:=9: "Name="&env$('temp')&"\Addr",internal,input 
-00520   open #paymstr:=13: "Name=Q:\CLmstr\PayMstr.H"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00530   open #rpmstr:=23: "Name=Q:\PRmstr\rpMstr.H"&str$(cno)&",KFName=Q:\PRmstr\rpIndex.H"&str$(cno)&",Shr",internal,input,keyed ioerr L550
+00520   open #paymstr:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
+00530   open #rpmstr:=23: "Name="&env$('Q')&"\PRmstr\rpMstr.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\rpIndex.H"&str$(cno)&",Shr",internal,input,keyed ioerr L550
 00540   let prcode=1
-00550 L550: open #clwork:=10: "Name=Q:\CLmstr\CLWork"&wsid$&".H"&str$(cno)&",Shr",internal,input,relative 
-00560   open #glmstr:=5: "Name=Q:\CLmstr\GLmstr.H"&str$(cno)&",KFName=Q:\CLmstr\GLIndex.H"&str$(cno)&",Shr",internal,outin,keyed 
+00550 L550: open #clwork:=10: "Name="&env$('Q')&"\CLmstr\CLWork"&wsid$&".H"&str$(cno)&",Shr",internal,input,relative 
+00560   open #glmstr:=5: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLIndex.H"&str$(cno)&",Shr",internal,outin,keyed 
 00570   open #work:=6: "Name="&env$('temp')&"\Work,Size=0,RecL=22,Replace",internal,output 
 00580   close #work: 
 00590   execute "Free "&env$('temp')&"\Indx -n" ioerr ignore
 00600   execute "Index "&env$('temp')&"\Work,"&env$('temp')&"\Indx,1,12,Replace,DupKeys -n"
 00610   open #work=6: "Name="&env$('temp')&"\Work,KFName="&env$('temp')&"\Indx",internal,outin,keyed 
-00620   open #fundmstr=7: "Name=Q:\CLmstr\FundMstr.H"&str$(cno)&",KFName=Q:\CLmstr\FundIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
-00630   let notused=1: open #11: "Name=Q:\CLmstr\dptmSTR.H"&str$(cno)&",KFName=Q:\CLmstr\dptidx1.H"&str$(cno),internal,input,keyed ioerr L640 : let notused=0
+00620   open #fundmstr=7: "Name="&env$('Q')&"\CLmstr\FundMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\FundIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
+00630   let notused=1: open #11: "Name="&env$('Q')&"\CLmstr\dptmSTR.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\dptidx1.H"&str$(cno),internal,input,keyed ioerr L640 : let notused=0
 00640 L640: let fnopenprn
 00650   let vn$="": let iv$=""
 00660 L660: read #addr,using 'Form POS 1,PD 3': r4 eof END1
@@ -165,9 +165,9 @@
 01720   return  ! /r
 01730 ! ______________________________________________________________________
 01740 ASK_PP1: ! 
-01750   open #clwork=10: "Name=Q:\CLmstr\CLWork"&wsid$&".H"&str$(cno)&", Size=0, RecL=93, Replace", internal,outin 
-01760   open #trmstr=1: "Name=Q:\CLmstr\TrMstr.H"&str$(cno)&",KFName=Q:\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
-01770   open #tralloc=2: "Name=Q:\CLmstr\TrAlloc.H"&str$(cno)&",KFName=Q:\CLmstr\TrAlloc-Idx.H"&str$(cno)&",Shr",internal,input,keyed 
+01750   open #clwork=10: "Name="&env$('Q')&"\CLmstr\CLWork"&wsid$&".H"&str$(cno)&", Size=0, RecL=93, Replace", internal,outin 
+01760   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
+01770   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.H"&str$(cno)&",Shr",internal,input,keyed 
 01880   if pp1yn$="N" then goto END8
 02070   let ld1=fndate_mmddyy_to_ccyymmdd(ld1) : let hd1=fndate_mmddyy_to_ccyymmdd(hd1)
 02080 READ_TRMSTR: ! 
@@ -270,7 +270,7 @@
 02810   return 
 02850 ! /r
 02860 ! <Updateable Region: ERTN>
-02870 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02870 ERTN: let fnerror(program$,err,line,act$,"xit")
 02880   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02890   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02900   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

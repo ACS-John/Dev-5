@@ -1,0 +1,79 @@
+Account Code 27-Checking 37-Sadc$                    0 0           Account Code
+Alpha Sort Field              ALP$                   0 0           Alpha Sort F
+Alternate Billing Address 6   BRA                    0 0           Alternate Bi
+Average Sewer Usage           extra(18)              0 0           Average Sewe
+Bank Account #                da$                    0 0           Bank Account
+Bank Draft (y)                df$                    0 0           Bank Draft (
+Bulk Sort Code                extra$(6)              0 0           Bulk Sort Co
+Cellphone                     extra$(8)              0 0           Cellphone
+City,state Zip                E$(4)                 30 0C 30       City,ST Zip
+Current Balance               BAL                    0 0           Current Bala
+Current Meter Reading Date    Extra(3)               0 0           Current Mete
+Customer Address              E$(3)                 30 0C 30       Address
+Customer Address 2            Extra$(1)              0 0           Customer Add
+Customer Meter Address        E$(1)                 30 0C 30       Meter Address
+Customer Name                 E$(2)                 30 0C 30       Name
+Customer Number               Z$                    10 0C 10       Customer #
+Date Of Charge                F                      0 0           Date Of Char
+Demand Multiplier             D(14)                  0 0           Demand Multi
+Demand Reading                D(15)                  0 0           Demand Readi
+E-Mail Address                extra$(9)              0 0           E-Mail Addre
+Estimated Date                extra(19)              0 0           Estimated Da
+Extra1                        extra(16)              0 0           Extra1
+Extra4                        extra(20)              0 0           Extra4
+Extra5                        extra(21)              0 0           Extra5
+Extra5$                       extra$(10)             0 0           Extra5$
+Extra6                        extra(22)              0 0           Extra6
+Extra6$                       extra$(11)             0 0           Extra6$
+Final Billing Code            extra(17)              0 0           Final Billin
+Gross Bill                    G(12)                  0 0           Gross Bill
+Lawn Meter Breakdown          GB(3)                  0 0           Lawn Meter Br
+Lawn Meter Charge             G(3)                   0 0           Lawn Meter Ch
+Lawn Meter Kwh Used - Current D(7)                   0 0           Lawn Meter Kw
+Lawn Meter Kwh Used -Ytd      D(8)                   0 0           Lawn Meter Kw
+Lawn Meter Light Count        Extra(7)               0 0           Lawn Meter Li
+Lawn Meter Meter Serial #     Extra$(4)              0 0           Lawn Meter Me
+Lawn Meter Rate Code          A(3)                   0 0           Lawn Meter Ra
+Lawn Meter Security Light     Extra(6)               0 0           Lawn Meter Se
+Lawn Meter Standard Charge    B(3)                   0 0           Lawn Meter St
+Net Bill                      G(11)                  0 0           Net Bill
+Other Charge Breakdown        GB(8)                  0 0           Other Charge Br
+Other Charge Charge           G(8)                   0 0           Other Charge Ch
+Other Charge Rate Code        Extra(12)              0 0           Other Charge Ra
+Phone #                       Extra$(2)              0 0           Phone #
+Prior Meter Reading Date      Extra(4)               0 0           Prior Meter
+Route #                       Extra(1)               0 0           Route #
+Routing #                     dr$                    0 0           Routing #
+S-Penalty 0 Breakdown         GB(10)                 0 0           S-Penalty 0 B
+S-Penalty 0 Charge            G(10)                  0 0           S-Penalty 0 C
+S-Penalty 0 Code              A(7)                   0 0           S-Penalty 0 C
+Sequence #                    Extra(2)               0 0           Sequence #
+Sewer Breakdown               GB(2)                  0 0           Sewer Br
+Sewer Charge                  G(2)                   0 0           Sewer Ch
+Sewer Deposit                 B(9)                   0 0           Sewer De
+Sewer Deposit Date            C(2)                   0 0           Sewer De
+Sewer Rate Code               A(2)                   3 0PD 2       Sewer Cd
+Sewer Reduction               Extra(5)               0 0           Sewer Reduct
+Sewer Standard Charge         B(2)                   0 0           Sewer St
+Sewer Units Per Meter         Extra(13)              0 0           Sewer Un
+Tax Breakdown                 GB(9)                  0 0           Tax Br
+Tax Charge                    G(9)                   0 0           Tax Ch
+Tax Code                      A(6)                   0 0           Tax Co
+Test Cycle Code               extra$(7)              0 0           Test Cycle C
+Units Per Meter               D(13)                  0 0           Units Per Me
+W-Penalty Breakdown           GB(7)                  0 0           W-Penalty Br
+W-Penalty Charge              G(7)                   0 0           W-Penalty Ch
+W-Penalty Rate Code           Extra(12)              0 0           W-Penalty Ra
+W-Penalty Standard Charge     B(7)                   0 0           W-Penalty St
+Water Breakdown               GB(1)                  0 0           Water Br
+Water Charge                  G(1)                   0 0           Water Ch
+Water Deposit                 B(8)                   0 0           Water De
+Water Deposit Date            C(1)                   0 0           Water De
+Water Meter Number            F$(1)                 12 0C 12       Water Meter #
+Water Meter Serial #          Extra$(3)              0 0           Water Me
+Water Rate Code               A(1)                   3 0PD 2       Water Cd
+Water Reading - Current       D(1)                   0 0           Water Re
+Water Reading - Prior         D(2)                   0 0           Water Re
+Water Standard Charge         B(1)                   7 2PD 4.2     Std Chg 1
+Water Used - Current          D(3)                   0 0           Water Us
+Water Used - Ytd              D(4)                   0 0           Water Us

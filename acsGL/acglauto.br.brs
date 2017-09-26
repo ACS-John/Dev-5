@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\acglAuto
+00010 ! Replace S:\acsGL\acglAuto
 00020 ! automatic processing - chain program
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnxit, fnxit,fncno,fnerror,fnputcno,fnprocess,fnprg,fnchain,fnps,fnpgnum,fnkillauto,fnmsgbox
+00040   library 'S:\Core\Library': fnxit, fnxit,fncno,fnerror,fnputcno,fnprocess,fnprg,fnchain,fnps,fnpgnum,fnkillauto,fnmsgbox
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim prg$*35,a$*40,cnam$*40,ml$(3)*80
@@ -10,7 +10,7 @@
 00100 L100: if fnprocess=0 then goto XIT
 00110 ! ______________________________________________________________________
 00120   let pgnum=fnpgnum
-00130   open #20: "Name=Q:\GLmstr\ACGLPGMN.h"&str$(cno)&",Shr",internal,input,relative ioerr MSGBOX1 !:
+00130   open #20: "Name="&env$('Q')&"\GLmstr\ACGLPGMN.h"&str$(cno)&",Shr",internal,input,relative ioerr MSGBOX1 !:
         read #20,using 'Form POS 1,C 35,POS 71,N 3,x 1,2*N 1',rec=pgnum+=1: prg$,pn,ps,srq eof XIT,norec XIT !:
         close #20: 
 00140   if rtrm$(prg$)="" then goto L220
@@ -27,7 +27,7 @@
 00210 ! ______________________________________________________________________
 00220 L220: let fnkillauto : let fnpgnum(-1) !:
         ! ! CHECK FOR ADDITIONAL COMPANIES
-00230   open #glclnt=1: "Name=Q:\GLmstr\glClnt.dat,NoShr",internal,outin,relative ioerr XIT
+00230   open #glclnt=1: "Name="&env$('Q')&"\GLmstr\glClnt.dat,NoShr",internal,outin,relative ioerr XIT
 00240   for j=2 to 20
 00250     read #glclnt,using 'Form POS 1,N 5',rec=j: cno
 00260     if cno<>0 then goto L300
@@ -45,7 +45,7 @@
 00380 CHAIN_PRG: let fnchain(prg$)
 00390 ! ______________________________________________________________________
 00400 ! <Updateable Region: ERTN>
-00410 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00410 ERTN: let fnerror(program$,err,line,act$,"xit")
 00420   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00430   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00440   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

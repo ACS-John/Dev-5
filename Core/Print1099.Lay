@@ -1,0 +1,46 @@
+00010 ! Replace Core\Print1099.Lay,Source
+00070 Let H1$="Print 1099 Data File"
+00080 Let FileType$="Keyed"
+00090 Let FILEName$="Core\Data\Print1099.dat"
+00100 Let VOLID$="Core"
+00110 Let RM$(1)="Core\Data\Print1099.Idx  KPs=241 KLn=40"
+00120 Let RM$(2)="Version=1"
+00130 Let RM$(3)=""
+00140 Let RM$(4)=""
+00160 Data Payer/Company Name              ^ cInfo$(1) ^C 40   ^Company
+00170 Data Payer/Company Address 1         ^ cInfo$(2) ^C 40   ^cAddr1
+00180 Data Payer/Company Address 2         ^ cInfo$(3) ^C 40   ^cAddr2
+00190 Data Payer/Company City, ST Zip      ^ cInfo$(4) ^C 40   ^cCSZ
+00200 Data Payer/Company Phone Number      ^ cInfo$(5) ^C 40   ^cPhone
+00210 Data Payer/Company Federal ID        ^ cInfo$(6) ^C 40   ^cFedID
+00220 Data Employee/Recipient ID/SSN       ^ eInfo$(1) ^C 40   ^Employee
+00230 Data Employee/Recipient Name         ^ eInfo$(2) ^C 40   ^EmpName
+00240 Data Employee/Recipient Address 1    ^ eInfo$(3) ^C 40   ^EmpAddr1
+00250 Data Employee/Recipient Address 2    ^ eInfo$(4) ^C 40   ^EmpAddr2
+00260 Data Employee/Recipient City, ST Zip ^ eInfo$(5) ^C 40   ^EmpCSZ
+00270 Data Employee/Recipient Account Num. ^ eInfo$(6) ^C 40   ^EmpAccount
+00310 Data Box 01                          ^ Box(01)   ^N 15.2 ^Box01
+00320 Data Box 02                          ^ Box(02)   ^N 15.2 ^Box02
+00330 Data Box 03                          ^ Box(03)   ^N 15.2 ^Box03
+00340 Data Box 04                          ^ Box(04)   ^N 15.2 ^Box04
+00350 Data Box 05                          ^ Box(05)   ^N 15.2 ^Box05
+00360 Data Box 06                          ^ Box(06)   ^N 15.2 ^Box06
+00370 Data Box 07                          ^ Box(07)   ^N 15.2 ^Box07
+00380 Data Box 08                          ^ Box(08)   ^N 15.2 ^Box08
+00390 Data Box 09                          ^ Box(09)   ^N 15.2 ^Box09
+00400 Data Box 10                          ^ Box(10)   ^N 15.2 ^Box10
+00410 Data Box 11                          ^ Box(11)   ^N 15.2 ^Box11
+00420 Data Box 12                          ^ Box(12)   ^N 15.2 ^Box12
+00430 Data Box 13                          ^ Box(13)   ^N 15.2 ^Box13
+00440 Data Box 14                          ^ Box(14)   ^N 15.2 ^Box14
+00450 Data Box 15a                         ^ Box(15)   ^N 15.2 ^Box15a
+00460 Data Box 15b                         ^ Box(16)   ^N 15.2 ^Box15b
+00470 Data Box 16 Top                      ^ Box(17)   ^N 15.2 ^Box16Top
+00480 Data Box 16 Bottom                   ^ Box(18)   ^N 15.2 ^Box16Bottom
+00490 Data Box 17 Top                      ^ Box(19)   ^N 15.2 ^Box17Top
+00400 Data Box 17 Bottom                   ^ Box(20)   ^N 15.2 ^Box17Bottom
+00400 Data Box 18 Top                      ^ Box(21)   ^N 15.2 ^Box18Top
+00400 Data Box 18 Bottom                   ^ Box(22)   ^N 15.2 ^Box18Bottom
+
+
+

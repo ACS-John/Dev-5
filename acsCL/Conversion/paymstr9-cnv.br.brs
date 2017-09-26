@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\Conversion\PayMstr9-CNV
+00010 ! Replace S:\acsCL\Conversion\PayMstr9-CNV
 00020 ! converts any length PayMstr file to 189 length and recreateing indexes
 00030 ! ________________________________________________________________
-00040   library 'R:\Core\Library': fnerror,fncno,fnxit
+00040   library 'S:\Core\Library': fnerror,fncno,fnxit
 00050   on error goto ERTN
 00060 ! ________________________________________________________________
 00070   dim gl(3),ta(2)
@@ -19,11 +19,11 @@
 00190   print fields "13,18,Cc 44,R,N": "Do Not Stop"
 00200   pause 
 00210 ! 
-00220   execute "Copy Q:\CLmstr\PayMstr.h"&str$(cno)&",X -D -189"
-00230   execute "Free Q:\CLmstr\PayMstr.h"&str$(cno)
-00240   execute "Copy X Q:\CLmstr\PayMstr.h"&str$(cno)
-00250   execute "Index Q:\CLmstr\PayMstr.h"&str$(cno)&",Q:\CLmstr\PayIndx1.H"&str$(cno)&",1,8,Replace,DupKeys"
-00260   execute "Index Q:\CLmstr\PayMstr.h"&str$(cno)&",Q:\CLmstr\PayIndx2.H"&str$(cno)&",9,28,Replace,DupKeys"
+00220   execute "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",X -D -189"
+00230   execute "Free "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
+00240   execute "Copy X "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
+00250   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx1.H"&str$(cno)&",1,8,Replace,DupKeys"
+00260   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx2.H"&str$(cno)&",9,28,Replace,DupKeys"
 00270 ! ________________________________________________________________
 00280   gosub WIN
 00290   print fields "11,19,Cc 42,N": "Conversion Completed for Company Number "&str$(cno)
@@ -41,7 +41,7 @@
 00410   return 
 00420 ! ________________________________________________________________
 00430 ! <Updateable Region: ERTN>
-00440 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00440 ERTN: let fnerror(program$,err,line,act$,"xit")
 00450   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00460   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00470   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

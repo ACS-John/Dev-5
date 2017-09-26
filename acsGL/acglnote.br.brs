@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\AcGlNote
+00010 ! Replace S:\acsGL\AcGlNote
 00020 ! -- Foot Notes
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnactpd$,fnpedat$,fntos,fncomboa,fncmdkey,fnacs,fnget_wordprocessor_exe
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnactpd$,fnpedat$,fntos,fncomboa,fncmdkey,fnacs,fnget_wordprocessor_exe
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim tb$*32,fl2$(2),sc2$(2)*46,ln$*8000,cnam$*40,dat$*20,cap$*128
@@ -26,7 +26,7 @@
           if tempx=12 then let actpd$="twelve" else !:
             if tempx=13 then let actpd$="thirteen" else !:
               if tempx=14 then let actpd$="fourteen"
-00170 L170: open #1: "Name=Q:\GLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
+00170 L170: open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #1,using 'Form POS 195,C 30': tb$ !:
         close #1: 
 00180   let tb$="("&trim$(tb$)&")"
@@ -43,12 +43,12 @@
 00270   if ckey=5 then goto XIT
 00280   if resp$(1)=option$(1) then let t=1 else let t=2
 00290 L290: on t goto L300,L320 none MENU1
-00300 L300: ! Execute "SY NotePad Q:\GLmstr\ACGLnote.h"&STR$(CNO)
+00300 L300: ! 
 00301   let fnget_wordprocessor_exe(atlantis$) !:
-        execute 'SY -w '&atlantis$&' '&"Q:\GLmstr\ACGLNote.h"&str$(cno)&" -n"
+        execute 'SY -w '&atlantis$&' '&env$('Q')&"\GLmstr\ACGLNote.h"&str$(cno)&" -n"
 00310   goto MENU1
 00320 L320: print newpage
-00330   open #1: "Name=Q:\GLmstr\AcGLNote.h"&str$(cno)&",Shr",display,input ioerr MENU1
+00330   open #1: "Name="&env$('Q')&"\GLmstr\AcGLNote.h"&str$(cno)&",Shr",display,input ioerr MENU1
 00340   print newpage
 00350   print fields "10,20,Cc 25,N": "Foot Notes Printing..." !:
         print fields "12,2,C 11,B,5": "Cancel (F5)" !:
@@ -78,7 +78,7 @@
 00520 XIT: let fnxit
 00530 ! ______________________________________________________________________
 00540 ! <updateable region: ertn>
-00550 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00550 ERTN: let fnerror(program$,err,line,act$,"xit")
 00560 if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00570 if trim$(env$("ACSDeveloper"))<>"" then !:
         execute "list -"&str$(line) : pause : goto ERTN_EXEC_ACT

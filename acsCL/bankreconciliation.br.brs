@@ -1,10 +1,10 @@
-00010 ! Replace R:\acsCL\BankReconciliation
+00010 ! Replace S:\acsCL\BankReconciliation
 00020 ! Bank reconciliation routines
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fncomboa,fncmdset,fnacs,fnchain,fntxt,fnbutton,fnfra,fnopt,fnflexinit1,fnflexadd1,fncmdkey,fnchk,fncombof,fnmsgbox,fncd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fncomboa,fncmdset,fnacs,fnchain,fntxt,fnbutton,fnfra,fnopt,fnflexinit1,fnflexadd1,fncmdkey,fnchk,fncombof,fnmsgbox,fncd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   dim cnam$*40,dat$*20,adr(2)
+00070   dim dat$*20,adr(2)
 00080   dim ck$(22),cap$*128,aa(2)
 00090   dim tr$(5)*35,de$*30,bn$*40,sn$*50
 00100   dim aa(2),line$*132,resp$(10)*35,ml$(4)*60
@@ -14,23 +14,22 @@
 00140 ! ______________________________________________________________________
 00150   let fntop(program$, cap$="Bank Reconciliation")
 00160   let cancel=99 : let right=1
-00170   let fncno(cno,cnam$)
 00172   let fndat(dat$)
 00190 ! let cd1=date("mmddyy")
-00200   open #20: "Name=Q:\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative 
+00200   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
 00202   read #20,using 'Form POS 150,X 2,N 2',rec=1,release: wbc
 00204   close #20: 
-00210   open #bankmstr:=12: "Name=Q:\CLmstr\BankMstr.H"&str$(cno)&",KFName=Q:\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00220   open #paymstr1:=13: "Name=Q:\CLmstr\PayMstr.H"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00230   open #paymstr2:=14: "Name=Q:\CLmstr\PayMstr.H"&str$(cno)&",KFName=Q:\CLmstr\PayIdx2.H"&str$(cno)&",Shr",internal,outin,keyed 
-00240   open #trmstr1:=1: "Name=Q:\CLmstr\TrMstr.H"&str$(cno)&",KFName=Q:\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00250   open #trmstr2:=2: "Name=Q:\CLmstr\TrMstr.H"&str$(cno)&",KFName=Q:\CLmstr\TrIdx2.H"&str$(cno)&",Shr",internal,outin,keyed 
-00260   open #tralloc:=3: "Name=Q:\CLmstr\TrAlloc.H"&str$(cno)&",Shr",internal,outin,relative 
+00210   open #bankmstr:=12: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00220   open #paymstr1:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00230   open #paymstr2:=14: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.H"&env$('cno')&",Shr",internal,outin,keyed 
+00240   open #trmstr1:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00250   open #trmstr2:=2: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.H"&env$('cno')&",Shr",internal,outin,keyed 
+00260   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",Shr",internal,outin,relative 
 00270   read #bankmstr,using 'Form POS 3,C 40',key=cnvrt$("N 2",wbc),release: bn$
 00280   restore #bankmstr: 
 00290 MENU1: ! 
-00300   close #81: ioerr L310
-00310 L310: open #81: "Name=Q:\CLmstr\Bank"&str$(wbc)&".H"&str$(cno)&",Use,RecL=32",internal,outin,relative 
+00300   close #81: ioerr ignore
+00310   open #81: "Name="&env$('Q')&"\CLmstr\Bank"&str$(wbc)&".H"&env$('cno')&",Use,RecL=32",internal,outin,relative 
 00315   if lrec(81)>0 then !:
           read #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt conv L320 : goto BANK_STMT_INFO
 00320 L320: if lrec(81)>0 then !:
@@ -42,7 +41,7 @@
         let respc=0 !:
         let mylen=30 : let mypos=mylen+2
 00350   let fnlbl(1,1,"Bank Code:",mylen,right)
-00360   let fncombof("Bankmstr",1,mypos,35,"Q:\CLmstr\bankmstr.h"&str$(cno),1,2,3,30,"Q:\CLmstr\BankIdx1.h"&str$(cno),0,0, "",0) !:
+00360   let fncombof("Bankmstr",1,mypos,35,env$('Q')&"\CLmstr\bankmstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),0,0, "",0) !:
         let resp$(respc+=1)=str$(wbc)
 00370   let fnlbl(3,1,"Statement Date:",mylen,right)
 00380   let fntxt(3,mypos,10,0,1,"3",0,"We suggest you always use the month end date.") !:
@@ -80,9 +79,9 @@
 00580   for j=1 to 6
 00590     if resp$(6)=item1$(j) then let ti3=j: goto L610
 00600   next j
-00610 L610: if ti3=6 then let fnchain("R:\acsCL\Transaction")
+00610 L610: if ti3=6 then let fnchain("S:\Checkbook\Transaction")
 00620   close #81: ioerr L630
-00630 L630: open #81: "Name=Q:\CLmstr\Bank"&str$(wbc)&".H"&str$(cno)&",Use,RecL=32",internal,outin,relative 
+00630 L630: open #81: "Name="&env$('Q')&"\CLmstr\Bank"&str$(wbc)&".H"&env$('cno')&",Use,RecL=32",internal,outin,relative 
 00640   if lrec(81)=0 then write #81,using "Form POS 1,N 6,2*PD 7.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt : goto L660
 00650   rewrite #81,using "Form POS 1,N 6,2*PD 7.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt
 00660 L660: close #81: ioerr L670
@@ -251,7 +250,7 @@
 02100   goto BANKTOTALSCREEN
 02110 ! ______________________________________________________________________
 02120 L2120: let fnopenprn
-02125   print #255,using L2140: cnam$
+02125   print #255,using L2140: env$('cnam')
 02130   print #255,using L2140: bn$(1:30)
 02140 L2140: form pos 20,cc 40
 02150   print #255,using L2140: "Bank Reconciliation"
@@ -314,7 +313,7 @@
 02650   continue  ! /r
 02670 WP_HEADER: ! r:
 02680 ! 
-02700   print #wp,using L2710: date$('mm/dd/yy'),rtrm$(cnam$)&" - Bank Account # "&str$(wbc),time$," Reconciliation Listing",hdw$(w0),"Page",w(w0),dat$
+02700   print #wp,using L2710: date$('mm/dd/yy'),env$('cnam')&" - Bank Account # "&str$(wbc),time$," Reconciliation Listing",hdw$(w0),"Page",w(w0),dat$
 02710 L2710: form skip 3,pos 1,c 8,cc 70,skip 1,pos 1,c 8,cc 70,skip 1,pos 9,cc 70,skip 1,pos 1,c 4,n 4,cc 70,skip 2
 02720   print #wp: "Check or                                                              Date"
 02730   print #wp: "Ref Numb    Date       Amount   Name or Description                  Cleared"
@@ -410,20 +409,20 @@
 03530 DCSF_FINIS: ! 
 03532   return  ! /r
 03540 FREE_DPAMNTS: ! r:
-03550   execute "Free Q:\CLmstr\DpAmnts.H"&str$(cno)&" -n"
+03550   execute "Free "&env$('Q')&"\CLmstr\DpAmnts.H"&env$('cno')&" -n"
 03560   continue  ! /r
 03570 ! ______________________________________________________________________
 03580 CLEAR_DEPOSITS_BY_AMOUNT: ! clear deposits by amounts
 03590   if cda=1 then goto DPAMENU
-03600 L3600: open #dpamnts=91: "Name=Q:\CLmstr\DpAmnts.H"&str$(cno)&",Use,RecL=20",internal,outin,relative ioerr FREE_DPAMNTS
-03610   open #92: "Name=Q:\CLmstr\DpDates.H"&str$(cno)&",Use,RecL=150",internal,outin,relative 
+03600 L3600: open #dpamnts=91: "Name="&env$('Q')&"\CLmstr\DpAmnts.H"&env$('cno')&",Use,RecL=20",internal,outin,relative ioerr FREE_DPAMNTS
+03610   open #92: "Name="&env$('Q')&"\CLmstr\DpDates.H"&env$('cno')&",Use,RecL=150",internal,outin,relative 
 03620   read #92,using L3630,rec=1: mat dpd norec L3650
 03630 L3630: form pos 1,25*n 6
 03640   goto L3660
 03650 L3650: ! 
 03652   write #92,using L3630,rec=1: mat dpd
 03660 L3660: ! 
-03662   open #93: "Name=Q:\CLmstr\DPTypes.H"&str$(cno)&",Use,RecL=3",internal,outin,relative 
+03662   open #93: "Name="&env$('Q')&"\CLmstr\DPTypes.H"&env$('cno')&",Use,RecL=3",internal,outin,relative 
 03670   read #93,using F_DPTYPES,rec=1: mat dpt norec L3700
 03680 F_DPTYPES: form pos 1,3*n 1
 03690   goto L3710
@@ -680,7 +679,7 @@
 05980 L5980: goto DPAMENU
 05990 ! ______________________________________________________________________
 06000 ! <Updateable Region: ERTN>
-06010 ERTN: let fnerror(cap$,err,line,act$,"xit")
+06010 ERTN: let fnerror(program$,err,line,act$,"xit")
 06020   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 06030   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 06040   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
@@ -693,7 +692,7 @@
 52040   let displayattop$="True"
 52060   if ti3=1 then let type$="Checks" else let type$="Deposits"
 52080   close #clearing: ioerr ignore
-52100   open #clearing=89: "Name=Q:\CLmstr\clearing.H"&wsid$&",replace,RecL=33",internal,outin,relative 
+52100   open #clearing=89: "Name="&env$('Q')&"\CLmstr\clearing.H"&wsid$&",replace,RecL=33",internal,outin,relative 
 52120   if ti3=2 then 
 52140     restore #trmstr1,key>=lpad$(str$(wbc),2)&"2        ": nokey DISPLAY_GRID
 52160   else 

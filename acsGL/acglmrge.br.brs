@@ -1,8 +1,8 @@
-00010 ! Replace R:\acsGL\ACGLMrge
+00010 ! Replace S:\acsGL\ACGLMrge
 00020 ! GL Merge program, chained to from other systems, !:
         ! like Checkbook-post to GL; also used to merge entries entered directly
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnprocess,fnchain,fnprg,fnxit,fntop,fnstyp,fnmsgbox,fnaddglpayee,fntos,fnlbl,fncmdkey,fnacs,fnagl$,fntxt,fncmdset,fnopt,fnqglbig,fnrglbig$
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnprocess,fnchain,fnprg,fnxit,fntop,fnstyp,fnmsgbox,fnaddglpayee,fntos,fnlbl,fncmdkey,fnacs,fnagl$,fntxt,fncmdset,fnopt,fnqglbig,fnrglbig$,fnindex_it
 00050   let fntop(program$,"General Ledger Merge")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -13,28 +13,28 @@
 00120   let fntop(program$,cap$="GL Merge")
 00130   let fncno(cno)
 00140   let fnprg(prg$)
-00150   if fnstyp=99 then goto L210
-00160   if fnstyp=9 then let prg$="R:\acsTM\tmMenu" else let prg$="R:\acsGL\acGLAuto"
-00170   let fnprg(prg$,2)
-00180   open #company=1: "Name=Q:\GLmstr\Company.h"&str$(cno)&",Shr",internal,input 
-00190   read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub !:
-        ! read fund and sub codes from general
-00200   close #company: 
-00210 L210: ! 
-00220   open #1: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName=Q:\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
-00230   open #2: "Name=Q:\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,outin,relative 
-00240   open #3: "Name=Q:\GLmstr\GLWk1"&wsid$&".H"&str$(cno)&",NoShr",internal,outin 
-00250   open #paymstr=4: "Name=Q:\GLmstr\PayMstr.h"&str$(cno)&",Version=1,KFName=Q:\GLmstr\PayIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
-00260   if exists("Q:\GLmstr\bankrec.H"&str$(cno))=0 then goto L270 else goto L300
-00270 L270: open #6: "Name=Q:\GLmstr\bankrec.H"&str$(cno)&",KFName=Q:\GLmstr\bankrec-idx.H"&str$(cno)&",Version=1,RecL=91,use,kps=79/3/4,kln=12/1/8,Shr",internal,outin,keyed 
-00280   close #6: 
-00290   execute "Index Q:\GLmstr\bankrec.H"&str$(cno)&" Q:\GLmstr\bankrec-idx.h"&str$(cno) &" 79/3/4 12/1/8 Replace,DupKeys"
-00300 L300: open #6: "Name=Q:\GLmstr\BankRec.h"&str$(cno)&",KFName=Q:\GLmstr\BankRec-idx.h"&str$(cno)&",Shr",internal,outin,keyed 
-00310   if exists("Q:\GLmstr\gltr1099.h"&str$(cno))=0 then goto L320 else goto L340
-00320 L320: open #trans=5: "Name=Q:\GLmstr\GLTR1099.h"&str$(cno)&",KFName=Q:\GLmstr\gltrIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
-00330   goto L350
-00340 L340: open #trans=5: "Name=Q:\GLmstr\GLTR1099.h"&str$(cno)&",KFName=Q:\GLmstr\gltrIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
-00350 L350: form pos 62,pd 3
+00150   if fnstyp<>99 then 
+00160     if fnstyp=9 then let prg$="S:\acsTM\tmMenu" else let prg$="S:\acsGL\acGLAuto"
+00170     let fnprg(prg$,2)
+00180     open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
+00190     read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
+00200     close #company: 
+00210   end if
+00220   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00230   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+00240   open #3: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')&",NoShr",internal,outin 
+00250   open #paymstr=4: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00260   if ~exists(env$('Q')&"\GLmstr\bankrec.H"&env$('cno')) then 
+00270     open #6: "Name="&env$('Q')&"\GLmstr\bankrec.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\bankrec-idx.H"&env$('cno')&",Version=1,RecL=91,use,kps=79/3/4,kln=12/1/8,Shr",internal,outin,keyed 
+00280     close #6: 
+00290     fnindex_it(env$('Q')&"\GLmstr\bankrec.H"&env$('cno'),env$('Q')&"\GLmstr\bankrec-idx.h"&env$('cno'),"79/3/4 12/1/8")
+00292   end if
+00300   open #6: "Name="&env$('Q')&"\GLmstr\BankRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BankRec-idx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00310   if exists(env$('Q')&"\GLmstr\gltr1099.h"&env$('cno'))=0 then 
+00320     open #trans=5: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00330   else 
+00340     open #trans=5: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00350   end if
 00360 L360: read #3,using "Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8,POS 93,C 12": t$,s,k,mat n,l$,p$,ven$,key$ eof L1450
 00365   let prtrans=0
 00370   if n(1)=4 then let n(1)=1 : let prtrans=1 ! convert payroll transaction types to a regular disbursment
@@ -124,11 +124,13 @@
           let resp$(rc+=1)=str$(dno)
 01090   let fntxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 ) !:
         let resp$(rc+=1)=str$(ano)
-01100   if use_sub=1 then let fntxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) !:
-          let resp$(rc+=1)=str$(sno)
+01100   if use_sub=1 then 
+01102     let fntxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
+01104     let resp$(rc+=1)=str$(sno)
+01106   end if
 01110   let fnlbl(3,1,"Description:",mylen,right)
-01120   let fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 ) !:
-        let resp$(rc+=1)=""
+01120   let fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
+01122   let resp$(rc+=1)=""
 01130 ! 
 01140   let fncmdset(2)
 01150   let fnacs(sn$,0,mat resp$,ckey)
@@ -170,12 +172,10 @@
 01470   let ckgl=0
 01480   for j=1 to 5
 01490     if val(gl$(j)(4:9))=0 then goto L1570 else let gl2=0
-01500     read #1,using L1510,key=gl$(j): gl2 nokey L1520
-01510 L1510: form pos 87,pd 6.2
-01520 L1520: if gl1(j)=gl2 then goto L1570
+01500     read #1,using 'form pos 87,pd 6.2',key=gl$(j): gl2 nokey ignore
+01520     if gl1(j)=gl2 then goto L1570
 01530     if ckgl=0 then print newpage; bell
-01540     print using L1550: "Account #:",gl$(j),"Client Balance:",gl1(j),"GL Balance:",gl2
-01550 L1550: form pos 1,c 11,c 14,c 15,n 12.2,x 4,c 12,n 12.2,skip 1
+01540     print using 'form pos 1,c 11,c 14,c 15,n 12.2,x 4,c 12,n 12.2,skip 1': "Account #:",gl$(j),"Client Balance:",gl1(j),"GL Balance:",gl2
 01560     let ckgl=1
 01570 L1570: next j
 01580   if ckgl=0 then goto L1620
@@ -185,43 +185,26 @@
 01620 L1620: close #1: 
 01630   close #2: 
 01640   close #3: 
-01650   execute "Free Q:\GLmstr\GLPT"&wsid$&".H"&str$(cno) ioerr L1660
+01650   execute "Free "&env$('Q')&"\GLmstr\GLPT"&wsid$&".H"&env$('cno') ioerr L1660
 01660 L1660: ! 
-01670   close #4: ioerr L1680
-01680 L1680: if new1=1 or new2=1 then !:
-          execute "Index Q:\GLmstr\GLBREC.h"&str$(cno)&" Q:\GLmstr\GLRecIdx.h"&str$(cno)&" 1 24 Replace DupKeys -n"
+01670   close #4: ioerr ignore
+01680   if new1=1 or new2=1 then !:
+          let fnindex_it(env$('Q')&"\GLmstr\GLBREC.h"&env$('cno'),env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),"1 24")
 01690   if new1=1 then !:
-          execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" Q:\GLmstr\GLIndex.h"&str$(cno)&" 1 12 Replace DupKeys -n"
+          let fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),"1 12")
 01700   if new2=1 then !:
-          execute "Index Q:\GLmstr\GL1099.h"&str$(cno)&" Q:\GLmstr\GL109IDX.h"&str$(cno)&" 1 8 Replace DupKeys -n"
-01710   open #30: "Name=Q:\GLmstr\Process.h"&str$(cno)&",Shr",internal,outin,relative ioerr L1760
+          let fnindex_it(env$('Q')&"\GLmstr\GL1099.h"&env$('cno'),env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),"1 8")
+01710   open #30: "Name="&env$('Q')&"\GLmstr\Process.h"&env$('cno')&",Shr",internal,outin,relative ioerr L1760
 01720   read #30,using "form pos 1,n 1",rec=1: process norec L1760 ! read post payroll code
 01730   rewrite #30,using "form pos 1,n 1",rec=1: 0 norec L1760 ! clear post payroll code
 01740   close #30: 
-01750   if process=1 or process=4 then let fnchain("R:\acsGL\prMerge")
-01760 L1760: if fnprocess=1 then goto XIT else !:
-          if fnprocess=2 then goto XIT else !:
-            goto XIT
+01750   if process=1 or process=4 then let fnchain("S:\acsGL\prMerge")
+01760 L1760: goto XIT
 01770 ! ______________________________________________________________________
-01780   mat ml$(3) !:
-        let ml$(1)="Vendor # "&ven$&" (Ck # "&l$&") is not" !:
-        let ml$(2)="in the payee file.  Click OK to enter the payee" !:
-        let ml$(3)="information, else Cancel to skip updating this payee's record." !:
-        let fnmsgbox(mat ml$,resp$,cap$,49)
-01790   if uprc$(resp$)="OK" then let fnaddglpayee
-01800   let new2=1
-01810   goto L360
-01820 ! ______________________________________________________________________
 01830 XIT: let fnxit
-01840 ! ______________________________________________________________________
-01850   print newpage
-01860   print fields "10,10,cc 60,n": "Company #"&str$(cno)&" does not exist!"
-01870   print fields "12,10,cc 60,n": "Press Enter to Continue"
-01880   input fields "12,60,c 1,e,n": pause$
-01890   goto XIT
 01900 ! ______________________________________________________________________
 01910 ! <updateable region: ertn>
-01920 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01920 ERTN: let fnerror(program$,err,line,act$,"xit")
 01930   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01940   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01950   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

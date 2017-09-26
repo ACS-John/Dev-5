@@ -102,7 +102,7 @@
 00960 L960: return 
 00970 ! ______________________________________________________________________
 00980 ! <Updateable Region: ERTN>
-00990 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00990 ERTN: let fnerror(program$,err,line,act$,"xit")
 01000   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01010   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01020   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

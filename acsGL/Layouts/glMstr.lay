@@ -1,0 +1,63 @@
+00010 ! REPLACE acsGL\glMstr.lay,Source
+00020 LET H1$="GL Master"
+00030 LET FILETYPE$="Keyed"
+00040 LET FILENAME$="glMstr.H(CNO)"
+00050 LET VOLID$="GLmstr"
+00060 LET RM$(1)="KFName=GLIndex.H(CNO)    KP=1 KL=12"
+00070 LET RM$(2)="KFName=GLIndx2.H(CNO)    KP=13 KL=30"
+00080 LET RM$(3)=""
+00090 LET RM$(4)=""
+00100 Data Department Number				^DNO		^N 3		^Dept
+00110 Data Major Account Number				^ANO		^N 6		^Major
+00120 Data Sub Account Number				^SNO		^N 3		^Sub
+00130 Data Description					^D$		^C 50		^Desc
+00140 Data Balance Sheet Ref Number			^RF(1)		^PD 3		^BalShtRf1
+00150 Data Secondary Balance Sheet Ref Number		^RF(2)		^PD 3		^BalShtRf2
+00160 Data Income Statement Ref Number			^RF(3)		^PD 3		^IncStmtRf1
+00170 Data Secondary Income Statement Ref Number		^RF(4)		^PD 3		^IncStmtRf2
+00180 Data Fund Statement Ref Number			^RF(5)		^PD 3		^FundStmtRf1
+00190 Data Secondary Fund Statement Ref Number		^RF(6)		^PD 3		^FundStmtRf2
+00200 Data Beginning Account Balance			^BB		^PD 6.2	^AccBal-Begin
+00210 Data Current Account Balance				^CB		^PD 6.2	^Bal
+00211 Data Balance Current Year-Month			^BC(01)	^PD 6.2	^Bal-CY-M1
+00212 Data Balance Current Year-Month			^BC(02)	^PD 6.2	^Bal-CY-M2
+00213 Data Balance Current Year-Month			^BC(03)	^PD 6.2	^Bal-CY-M3
+00214 Data Balance Current Year-Month			^BC(04)	^PD 6.2	^Bal-CY-M4
+00215 Data Balance Current Year-Month			^BC(05)	^PD 6.2	^Bal-CY-M5
+00216 Data Balance Current Year-Month			^BC(06)	^PD 6.2	^Bal-CY-M6
+00217 Data Balance Current Year-Month			^BC(07)	^PD 6.2	^Bal-CY-M7
+00218 Data Balance Current Year-Month			^BC(08)	^PD 6.2	^Bal-CY-M8
+00219 Data Balance Current Year-Month			^BC(09)	^PD 6.2	^Bal-CY-M9
+00220 Data Balance Current Year-Month			^BC(10)	^PD 6.2	^Bal-CY-M10
+00221 Data Balance Current Year-Month			^BC(11)	^PD 6.2	^Bal-CY-M11
+00222 Data Balance Current Year-Month			^BC(12)	^PD 6.2	^Bal-CY-M12
+00223 Data Balance Current Year-Month			^BC(13)	^PD 6.2	^Bal-CY-M13
+00224 Data Balance Prior Year-Month			^BP(01)	^PD 6.2	^Bal-PY-M1
+00225 Data Balance Prior Year-Month			^BP(02)	^PD 6.2	^Bal-PY-M2
+00226 Data Balance Prior Year-Month			^BP(03)	^PD 6.2	^Bal-PY-M3
+00227 Data Balance Prior Year-Month			^BP(04)	^PD 6.2	^Bal-PY-M4
+00228 Data Balance Prior Year-Month			^BP(05)	^PD 6.2	^Bal-PY-M5
+00229 Data Balance Prior Year-Month			^BP(06)	^PD 6.2	^Bal-PY-M6
+00230 Data Balance Prior Year-Month			^BP(07)	^PD 6.2	^Bal-PY-M7
+00231 Data Balance Prior Year-Month			^BP(08)	^PD 6.2	^Bal-PY-M8
+00232 Data Balance Prior Year-Month			^BP(09)	^PD 6.2	^Bal-PY-M9
+00233 Data Balance Prior Year-Month			^BP(10)	^PD 6.2	^Bal-PY-M10
+00234 Data Balance Prior Year-Month			^BP(11)	^PD 6.2	^Bal-PY-M11
+00235 Data Balance Prior Year-Month			^BP(12)	^PD 6.2	^Bal-PY-M12
+00236 Data Balance Prior Year-Month			^BP(13)	^PD 6.2	^Bal-PY-M13
+00237 Data Budget - Month					^BM(01)	^PD 6.2	^Budget-M1
+00238 Data Budget - Month					^BM(02)	^PD 6.2	^Budget-M2
+00239 Data Budget - Month					^BM(03)	^PD 6.2	^Budget-M3
+00240 Data Budget - Month					^BM(04)	^PD 6.2	^Budget-M4
+00241 Data Budget - Month					^BM(05)	^PD 6.2	^Budget-M5
+00242 Data Budget - Month					^BM(06)	^PD 6.2	^Budget-M6
+00243 Data Budget - Month					^BM(07)	^PD 6.2	^Budget-M7
+00244 Data Budget - Month					^BM(08)	^PD 6.2	^Budget-M8
+00245 Data Budget - Month					^BM(09)	^PD 6.2	^Budget-M9
+00246 Data Budget - Month					^BM(10)	^PD 6.2	^Budget-M10
+00247 Data Budget - Month					^BM(11)	^PD 6.2	^Budget-M11
+00248 Data Budget - Month					^BM(12)	^PD 6.2	^Budget-M12
+00249 Data Budget - Month					^BM(13)	^PD 6.2	^Budget-M13
+00250 Data EOY Balance 2 Years Ago				^PBP		^PD 6.2	^Bal-EOY-2yr
+00260 Data First Transaction Address			^TA(1)		^PD 3		^FTA
+00270 Data Last Transaction Address			^TA(2)		^PD 3		^LTA

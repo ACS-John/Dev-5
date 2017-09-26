@@ -1,0 +1,32 @@
+S:\Core\ScreenIO\screen\oScreenFld.dat, oSF_, 13
+S:\Core\ScreenIO\screen\oScreenFld.key,SCREENCODE
+S:\Core\ScreenIO\screen\oScreenFld.ky2,SCREENCODE/CONTROLNAME
+recl=2500
+======================================================================
+SCREENCODE$,            Screen Code,                            V   18
+CONTROLNAME$,           Control Name,                           V   50
+FIELDNAME$,             Field Name from File Layout,            V   50
+DESCRIPTION$,           Caption or Caption Field,               V  255
+VPOSITION,              Vertical Position,                      B    1
+HPOSITION,              Horizontal Position,                    BH   2
+FIELDTYPE$,             Field Type Code,                        V    8
+SPECWIDTH,              Spec Width,                             BH   2
+WIDTH,                  Width,                                  BH   2
+HEIGHT,                 Height,                                 B    1
+TRUEVALUE$,             Value if True,                          V   60
+FALSEVALUE$,            Value if False,                         V   60
+FUNCTION$,              Function or Validation,                 V  255
+PICTURE$,               Picture File,                           V  255
+PARENT$,                Parent Control for Listchld,            V   20
+FGCOLOR$,               Foreground Color,                       C    6
+BGCOLOR$,               Background Color,                       C    6
+JUSTIFY$,               L R C U or blank,                       C    1
+ATTR$,                  Field Attributes,                       V  128
+PROTECTED,              Protected Flag,                         B    1
+INVISIBLE,              Invisible Flag,                         B    1
+TOOLTIP$,               Tooltip Text,                           V  255
+CNVRTIN$,               Incoming Conversion,                    V  255
+CNVRTOUT$,              Outgoing Conversion,                    V  255
+MULTISELECT,            MultiSelect,                            B    1
+USERDATA$,              Custom Data,                            V  255
+GRIDLINES,              Gridlines for Listviews,                B    1

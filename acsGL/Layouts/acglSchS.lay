@@ -1,0 +1,95 @@
+00010 ! REPLACE acsGL\Layouts\ACGLSCHS.LAY,SOURCE
+00070 LET H1$="Print Schedule SPECIFICATIONS"
+00080 LET FILETYPE$="KEYED"
+00090 LET FILENAME$="acglSchS.H(CNO)"
+00100 LET VOLID$="GLMSTR"
+00120 LET RM$(1)="KFNAME=SCHINDEX.H(CNO)"
+00130 LET RM$(2)="KP=1 KL=2"
+00140 LET RM$(3)=""
+00150 LET RM$(4)=""
+00160 Data Schedule Number					^SN			^N 2	^X
+00170 Data Schedule Name					^SN$		^C 78	^X
+00180 Data FootNote							^FT$		^C 78	^X
+00190 Data Dollar Sign Printed				^DP			^N 1	^X
+00200 Data Reverse Sign						^RS			^N 1	^X
+00210 Data Current Month Figures Printed	^CM			^N 1	^X
+00220 Data G/L Account Numbers to Print		^GL$(1)		^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(2)		^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(3)		^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(4)		^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(5)		^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(6)		^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(7)		^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(8)		^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(9)		^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(10)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(11)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(12)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(13)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(14)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(15)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(16)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(17)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(18)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(19)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(20)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(21)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(22)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(23)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(24)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(25)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(26)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(27)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(28)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(29)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(30)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(31)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(32)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(33)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(34)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(35)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(36)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(37)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(38)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(39)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(40)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(41)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(42)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(43)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(44)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(45)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(46)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(47)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(48)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(49)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(50)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(51)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(52)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(53)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(54)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(55)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(56)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(57)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(58)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(59)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(60)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(61)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(62)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(63)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(64)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(65)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(66)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(67)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(68)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(69)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(70)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(71)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(72)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(73)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(74)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(75)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(76)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(77)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(78)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(79)	^C 12	^X
+00220 Data G/L Account Numbers to Print		^GL$(80)	^C 12	^X

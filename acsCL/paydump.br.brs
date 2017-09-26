@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\PayDump
+00010 ! Replace S:\acsCL\PayDump
 00020 ! Remove Payee Records
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnopenprn,fncloseprn,fncno,fnerror,fndat,fntop,fnxit,fntos,fnlbl,fntxt,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd,fngethandle
+00040   library 'S:\Core\Library': fnopenprn,fncloseprn,fncno,fnerror,fndat,fntop,fnxit,fntos,fnlbl,fntxt,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd,fngethandle
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim nam$*30,cnam$*40,dat$*20,gl(3),tr$(5)*35,cap$*128
@@ -11,12 +11,12 @@
 00110   let fncno(cno,cnam$) !:
         let fndat(dat$)
 00120 ! ______________________________________________________________________
-00130   open #20: "Name=Q:\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form POS 150,2*N 1',rec=1: mat d !:
+00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form POS 150,2*N 1',rec=1: mat d !:
         close #20: 
-00140   open #trmstr2=22: "Name=Q:\CLmstr\TrMstr.H"&str$(cno)&",KFName=Q:\CLmstr\TrIdx2.H"&str$(cno)&",Shr",internal,input,keyed 
-00150   open #paymstr1=1: "Name=Q:\CLmstr\PayMstr.H"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00160   open #paymstr2=2: "Name=Q:\CLmstr\PayMstr.H"&str$(cno)&",KFName=Q:\CLmstr\PayIdx2.H"&str$(cno)&",Shr",internal,outin,keyed 
-00170   open #payeeglbreakdown:=fngethandle: "Name=Q:\CLmstr\PayeeGLBreakdown.h"&str$(cno)&",KFName=Q:\CLmstr\PayeeGLBkdidx.h"&str$(cno)&",Shr",internal,outin,keyed 
+00140   open #trmstr2=22: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx2.H"&str$(cno)&",Shr",internal,input,keyed 
+00150   open #paymstr1=1: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
+00160   open #paymstr2=2: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx2.H"&str$(cno)&",Shr",internal,outin,keyed 
+00170   open #payeeglbreakdown:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayeeGLBkdidx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00180   let fntos(sn$="PayDump") !:
         let respc=0 : let mylen=21 : let mypos=mylen+2
 00190   let fnlbl(1,1,"Oldest retained Date:",mylen,right)
@@ -75,7 +75,7 @@
 00600   return 
 00610 ! ______________________________________________________________________
 00620 ! <Updateable Region: ERTN>
-00630 ERTN: let fnerror(cap$,err,line,act$,"NOt")
+00630 ERTN: let fnerror(program$,err,line,act$,"NOt")
 00640   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00650   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00660   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

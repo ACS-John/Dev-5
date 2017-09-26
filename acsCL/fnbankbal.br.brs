@@ -1,9 +1,9 @@
-00010 ! Replace R:\acsCL\fnBankBal
-00020 ! Check Book Transaction File Editor
+00010 ! Replace S:\acsCL\fnBankBal
+00020 ! Checkbook Transaction File Editor
 00030   def library fnbankbal(bank_code)
-00040     library 'R:\Core\Library': fncno,fngethandle
+00040     library 'S:\Core\Library': fncno,fngethandle
 00050     let fncno(cno)
-00060     open #bankmstr:=fngethandle: "Name=Q:\CLmstr\BankMstr.h"&str$(cno)&",KFName=Q:\CLmstr\BankIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
+00060     open #bankmstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
 00070     if bank_code=0 then 
 00080       let bankbal=0
 00090       for j=1 to lrec(bankmstr)

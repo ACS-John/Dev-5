@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\acglRest
+00010 ! Replace S:\acsGL\acglRest
 00020 ! Print Retained Earnings Statement
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnwin3,fnopenprn,fncloseprn,fncno,fndat,fnerror,fnprocess,fnpedat$,fnglfs
+00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnopenprn,fncloseprn,fncno,fndat,fnerror,fnprocess,fnpedat$,fnglfs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim ln1$*78,ln$*78,shd$*60,fli$(10),cnam$*40,fli1$(2),hdr$*78,foot$*78
@@ -27,13 +27,13 @@
 00250   on t goto EDIT,L300 none MENU1
 00260 ! ______________________________________________________________________
 00270 EDIT: ! 
-00280   execute "SY NotePad Q:\GLmstr\ACGLSTMT.h"&str$(cno)
+00280   execute 'SY NotePad "'&os_filename$(env$('Q')&"\GLmstr\ACGLSTMT.h"&str$(cno))&'"'
 00290   goto MENU1
 00300 L300: ! ______________________________________________________________________
 00310   if fnglfs=5 then goto MENU1
 00320   let fnopenprn
 00330   print newpage
-00340   open #1: "Name=Q:\GLmstr\AcGLStmt.h"&str$(cno)&",Shr",display,input ioerr EDIT
+00340   open #1: "Name="&env$('Q')&"\GLmstr\AcGLStmt.h"&str$(cno)&",Shr",display,input ioerr EDIT
 00350   print newpage !:
         print fields "10,20,Cc 30,H,N": "R/E Statement Printing..." !:
         print fields "12,34,C 11,B,5": "Cancel (F5)" !:
@@ -61,7 +61,7 @@
 00510   if fnprocess=1 then goto XIT else goto MENU1
 00520 ! ______________________________________________________________________
 00530 ! <Updateable Region: ERTN>
-00540 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00540 ERTN: let fnerror(program$,err,line,act$,"xit")
 00550   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00560   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00570   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

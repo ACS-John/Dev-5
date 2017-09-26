@@ -1,0 +1,54 @@
+Balance Current Year-Month    BC(01)                11 2PD 6.2     Bal-CY-M1
+Balance Current Year-Month    BC(02)                11 2PD 6.2     Bal-CY-M2
+Balance Current Year-Month    BC(03)                11 2PD 6.2     Bal-CY-M3
+Balance Current Year-Month    BC(04)                11 2PD 6.2     Bal-CY-M4
+Balance Current Year-Month    BC(05)                11 2PD 6.2     Bal-CY-M5
+Balance Current Year-Month    BC(06)                11 2PD 6.2     Bal-CY-M6
+Balance Current Year-Month    BC(07)                11 2PD 6.2     Bal-CY-M7
+Balance Current Year-Month    BC(08)                11 2PD 6.2     Bal-CY-M8
+Balance Current Year-Month    BC(09)                11 2PD 6.2     Bal-CY-M9
+Balance Current Year-Month    BC(10)                11 2PD 6.2     Bal-CY-M10
+Balance Current Year-Month    BC(11)                11 2PD 6.2     Bal-CY-M11
+Balance Current Year-Month    BC(12)                11 2PD 6.2     Bal-CY-M12
+Balance Current Year-Month    BC(13)                11 2PD 6.2     Bal-CY-M13
+Balance Prior Year-Month      BP(01)                11 2PD 6.2     Bal-PY-M1
+Balance Prior Year-Month      BP(02)                11 2PD 6.2     Bal-PY-M2
+Balance Prior Year-Month      BP(03)                11 2PD 6.2     Bal-PY-M3
+Balance Prior Year-Month      BP(04)                11 2PD 6.2     Bal-PY-M4
+Balance Prior Year-Month      BP(05)                11 2PD 6.2     Bal-PY-M5
+Balance Prior Year-Month      BP(06)                11 2PD 6.2     Bal-PY-M6
+Balance Prior Year-Month      BP(07)                11 2PD 6.2     Bal-PY-M7
+Balance Prior Year-Month      BP(08)                11 2PD 6.2     Bal-PY-M8
+Balance Prior Year-Month      BP(09)                11 2PD 6.2     Bal-PY-M9
+Balance Prior Year-Month      BP(10)                11 2PD 6.2     Bal-PY-M10
+Balance Prior Year-Month      BP(11)                11 2PD 6.2     Bal-PY-M11
+Balance Prior Year-Month      BP(12)                11 2PD 6.2     Bal-PY-M12
+Balance Prior Year-Month      BP(13)                11 2PD 6.2     Bal-PY-M13
+Balance Sheet Ref Number      RF(1)                  5 0PD 3       BalShtRf1
+Beginning Account Balance     BB                    11 2PD 6.2     AccBal-Begin
+Budget - Month                BM(01)                11 2PD 6.2     Budget-M1
+Budget - Month                BM(02)                11 2PD 6.2     Budget-M2
+Budget - Month                BM(03)                11 2PD 6.2     Budget-M3
+Budget - Month                BM(04)                11 2PD 6.2     Budget-M4
+Budget - Month                BM(05)                11 2PD 6.2     Budget-M5
+Budget - Month                BM(06)                11 2PD 6.2     Budget-M6
+Budget - Month                BM(07)                11 2PD 6.2     Budget-M7
+Budget - Month                BM(08)                11 2PD 6.2     Budget-M8
+Budget - Month                BM(09)                11 2PD 6.2     Budget-M9
+Budget - Month                BM(10)                11 2PD 6.2     Budget-M10
+Budget - Month                BM(11)                11 2PD 6.2     Budget-M11
+Budget - Month                BM(12)                11 2PD 6.2     Budget-M12
+Budget - Month                BM(13)                11 2PD 6.2     Budget-M13
+Current Account Balance       CB                    11 2PD 6.2     Bal
+Department Number             DNO                    3 0N 3        Dept
+Description                   D$                    50 0C 50       Desc
+Eoy Balance 2 Years Ago       PBP                   11 2PD 6.2     Bal-EOY-2yr
+First Transaction Address     TA(1)                  5 0PD 3       FTA
+Fund Statement Ref Number     RF(5)                  5 0PD 3       FundStmtRf1
+Income Statement Ref Number   RF(3)                  5 0PD 3       IncStmtRf1
+Last Transaction Address      TA(2)                  5 0PD 3       LTA
+Major Account Number          ANO                    6 0N 6        Major
+Secondary Balance Sheet Ref NuRF(2)                  5 0PD 3       BalShtRf2
+Secondary Fund Statement Ref NRF(6)                  5 0PD 3       FundStmtRf2
+Secondary Income Statement RefRF(4)                  5 0PD 3       IncStmtRf2
+Sub Account Number            SNO                    3 0N 3        Sub

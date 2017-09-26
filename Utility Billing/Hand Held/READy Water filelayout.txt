@@ -1,0 +1,11 @@
+Account Number
+Customer Name
+Phone Number
+Address 1 - Primary
+Address 2 - Primary
+City
+State
+Zip
+Route Number
+Sequence
+service 1 (water) Meter Number

@@ -1,0 +1,55 @@
+00010 ! REPLACE W2LAZCPS.LAY/ACSGL,SOURCE
+00020 LET H1$="Laser Import"
+00030 LET FILETYPE$="ASCII"
+00040 LET FILENAME$="ASCIIW2.TXT"
+00050 LET VOLID$="CPS"
+00060 LET RM$(1)=""
+00070 LET RM$(2)=""
+00080 LET RM$(3)=""
+00090 LET RM$(4)=""
+00100 DATA FIRST NAME				^string$	^C 13	^X
+00110 DATA LAST NAME				^string$	^C 16	^X
+00120 DATA ADDRESS-1				^string$	^C 30	^X
+00130 DATA ADDRESS-2				^string$	^C 30	^X
+00140 DATA CITY						^string$	^C 15	^X
+00150 DATA STATE					^string$	^C 2	^X
+00160 DATA ZIP						^string$	^C 10	^X
+00170 DATA PHONE					^string$	^C 10	^X
+00180 DATA SS Number				^string$	^C 11	^X
+00190 DATA LOCALITY					^string$	^C 15	^X
+00200 DATA STATE NAME				^string$	^C 2	^X
+00210 DATA ALLOCATED TIPS			^Number		^N 10.2	^X
+00220 DATA EIC						^Number		^N 10.2	^X
+00230 DATA FED WH					^Number		^N 10.2	^X
+00240 DATA GROSS WAGES				^Number		^N 10.2	^X
+00250 DATA SS WH					^Number		^N 10.2	^X
+00260 DATA SS WAGES					^Number		^N 10.2	^X
+00262 DATA SS TIPS					^Number		^N 10.2	^X
+00270 DATA MEDICARE WAGES & TIPS	^Number		^N 10.2	^X
+00280 DATA MEDICARE WH				^Number		^N 10.2	^X
+00290 DATA NON Q PLAN				^Number		^N 10.2	^X
+00300 DATA DEP CARE					^Number		^N 10.2	^X
+00310 DATA FRINGE BENEFITS			^Number		^N 10.2	^X
+00320 DATA AMT-1					^Number		^N 10.2	^X
+00330 DATA CODE 1					^string$	^C 1	^X
+00340 DATA AMT-2					^Number		^N 10.2	^X
+00350 DATA CODE-2					^string$	^C 1	^X
+00360 DATA AMT-3					^Number		^N 10.2	^X
+00370 DATA CODE-3					^string$	^C 1	^X
+00380 DATA AMT-4					^Number		^N 10.2	^X
+00390 DATA CODE-4					^string$	^C 1	^X
+00400 DATA 401K						^Number		^N 10.2	^X
+00410 DATA SEP						^Number		^N 10.2	^X
+00440 DATA OTHER-1					^Number		^N 10.2	^X
+00450 DATA OTHER-2					^Number		^N 10.2	^X
+00460 DATA OTHER-3					^Number		^N 10.2	^X
+00470 DATA STATE-1 WH				^Number		^N 10.2	^X
+00480 DATA STATE-1 WAGES			^Number		^N 10.2	^X
+00490 DATA LOCAL-1 WH				^Number		^N 10.2	^X
+00500 DATA LOCAL-1 WAGES			^Number		^N 10.2	^X
+00510 DATA STATE-2 WH				^Number		^N 10.2	^X
+00520 DATA STATE-2 WAGES			^Number		^N 10.2	^X
+00530 DATA LOCAL-2 WH				^Number		^N 10.2	^X
+00540 DATA LOCAL-2 WAGES			^Number		^N 10.2	^X
+00550 DATA W2 STATE-2				^string$	^C 2	^X
+00560 DATA W2-LOCALITY-2			^string$	^C 15	^X

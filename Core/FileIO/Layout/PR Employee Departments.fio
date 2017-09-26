@@ -1,0 +1,25 @@
+[Q]\PRmstr\DeptName.h[cno]  ,  dptnam_          , 0
+[Q]\PRmstr\DeptNameIdx.h[cno] ,  code
+recl=32
+===================================================
+code    ,  Employee Number                      ,  n    3   , ! Pos=1 
+name$   ,  Name                                 ,  c   25   , ! Pos=4 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

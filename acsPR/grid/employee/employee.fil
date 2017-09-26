@@ -1,0 +1,27 @@
+Address                       EM$(2)                30 0C 30       Address
+Birth Date                    BD                     6 0N 6        Birth Date
+City,state,zip Code           EM$(3)                30 0C 30       City ST Zip
+Date Hired                    EM(16)                 6 0N 6        Date Hired
+Eic Code                      EM(7)                  2 0N 2        Eic Code
+Employee Number               ENO                    8 0N 8        Emp #
+Employment Status             EM(4)                  2 0N 2        Emp Status
+Federal Exemptions            EM(2)                  2 0N 2        Fed Exempt
+Federal Tax Add-On            EM(13)                 7 2PD 4.2     Fed Addon
+Fica Code                     EM(6)                  2 0N 2        Fica Code
+Last Payroll Date             EM(17)                 6 0N 6        Last Pay Date
+Marital Status(o=single 1=marrEM(1)                  2 0N 2        Marital St
+Name                          EM$(1)                30 0C 30       Name
+Pay Code                      EM(5)                  2 0N 2        Pay Code
+Race                          RS(1)                  1 0N 1        Race
+Sex                           RS(2)                  1 0N 1        Sex
+Sick Hours Accrued            EM(10)                 7 2PD 4.2     Sk Hrs Ac
+Sick Pay Code                 EM(8)                  5 3PD 3.3     Sk Pay Code
+Social Security Number        SS$                   11 0C 11       SS #
+Standard Federal W/H          EM(12)                 7 2PD 4.2     Std Fed W/H
+Standard State W/H            EM(14)                 7 2PD 4.2     Std St W/H
+State Exemptions              EM(3)                  2 0N 2        St Exempt
+State Tax Add-On              EM(15)                 7 2PD 4.2     St Addon
+Telephone #                   PH$                   12 0C 12       Telephone #
+Total Gross Pay               TGP                    9 2PD 5.2     Gross Pay
+Vacation Hours Accrued        EM(11)                 7 2PD 4.2     Vac Hr Ac
+Vacation Pay Code             EM(9)                  5 3PD 3.3     Vac Pay Cd

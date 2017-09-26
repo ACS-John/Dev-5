@@ -1,0 +1,47 @@
+[Q]\[cursys]mstr\Contact.h[cno]  ,  contact_  , 1
+[Q]\[cursys]mstr\ContactIndex1.h[cno] ,  table/key
+recl=196
+===================================================
+table$  ,  Dealer Number                        ,  c    8   , ! 
+!            i.e. 'OE Dealer'
+key$    ,  Key                                  ,  c    8   , !     
+name$   ,  Name                                 ,  c   30   , !     
+addr$   ,  Address                              ,  c   30   , !     
+addr$   ,  Address                              ,  c   30   , !     
+csz$    ,  City State Zip Code                  ,  c   30   , !     
+phone$  ,  Phone Number                         ,  c   11   , !     
+fax$    ,  Social Security Number               ,  c   11   , !     
+email$  ,  email                                ,  c   11   , !     
+
+
+#eof#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

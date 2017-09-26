@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\DptMstr
+00010 ! Replace S:\acsCL\DptMstr
 00020 ! ??? department
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim hd$(2)*60,cnam$*40,dat$*20,ots$(5),ins$(22),ink$(22)*42
@@ -23,7 +23,7 @@
 00210   let scr$(3)="Department Name:"
 00220 ! 
 00230   for j=1 to 22 : let ins$(j)=str$(j+1)&",2,C 42,H,N" : next j
-00240 L240: open #1: "Name=Q:\CLmstr\DPTMSTR.h"&str$(cno)&",KFName=Q:\CLmstr\DPTIDX1.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L1800
+00240 L240: open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L1800
 00250   let hd$(1)="     **ENTER FUND & DEPT # AS 0 OR BLANK TO STOP**"
 00260   let hd$(2)="     **ENTER FUND & DEPT  # AS 0 OR BLANK TO DELETE**"
 00270   for j=1 to 6
@@ -64,12 +64,12 @@
 00570   if cmdkey=5 then goto MENU1
 00580   if pas$><"COPY " then goto L620
 00590   close #1: ioerr L600
-00600 L600: execute "COPY A:DPTMSTR.H"&str$(cno)&",Q:\CLmstr\*.*"
+00600 L600: execute "COPY A:DPTMSTR.H"&str$(cno)&","&env$('Q')&"\CLmstr\*.*"
 00610   goto L770
 00620 L620: if ltrm$(rtrm$(pas$))><"BUILD" then goto L730
 00630   close #1: ioerr ignore
 00640   open #2: "Name=DPTMSTR.h"&str$(cno)&"/DPTMSTR,KFName=DPTIDX1.h"&str$(cno)&"/DPTMSTR,Shr",internal,input,keyed 
-00650   open #1: "Name=Q:\CLmstr\DPTMSTR.h"&str$(cno)&",SIZE=0,RecL=35,Replace",internal,output 
+00650   open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&",SIZE=0,RecL=35,Replace",internal,output 
 00660 L660: read #2,using L670: gl$,de$ eof END1
 00670 L670: form pos 1,c 12,c 50
 00680   write #1,using L670: gl$,de$
@@ -79,9 +79,9 @@
 00720   goto L770
 00730 L730: if pas$><"ERASE" then goto L560
 00740 L740: close #1: ioerr ignore
-00750   open #1: "Name=Q:\CLmstr\DPTMSTR.h"&str$(cno)&",SIZE=0,RecL=35,Replace",internal,output 
+00750   open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&",SIZE=0,RecL=35,Replace",internal,output 
 00760   close #1: 
-00770 L770: execute "INDEX Q:\CLmstr\DPTMSTR.h"&str$(cno)&" Q:\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys"
+00770 L770: execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys"
 00780   goto L240
 00790 L790: let new1=1
 00800 L800: print newpage
@@ -176,13 +176,13 @@
 01690 L1690: print #255,using L1700: date$('mm/dd/yy'),time$,cnam$,"Department File Listing",dat$
 01700 L1700: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,pos hp1,c 40,skip 1,pos 18,c 50,skip 1,pos hp2,c 20,skip 2
 01710   return 
-01720 L1720: let fncloseprn(nw)
+01720 L1720: let fncloseprn
 01730   on fkey 5 ignore 
 01740   if process=1 then goto XIT else goto MENU1
 01750   goto XIT
 01760 L1760: close #1: ioerr L1770
 01770 L1770: close #2: ioerr L1780
-01780 L1780: execute "INDEX Q:\CLmstr\DPTMSTR.h"&str$(cno)&" Q:\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys -n"
+01780 L1780: execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys -n"
 01790   goto XIT
 01800 L1800: if err=4152 then goto L740
 01810 L1810: restore #1,search>="": nokey MENU1
@@ -212,14 +212,14 @@
 02050   goto L1820
 02060 ! ______________________________________________________________________
 02070 L2070: close #1: ioerr L2080
-02080 L2080: execute "COPY Q:\CLmstr\DPTMSTR.h"&str$(cno)&" "&env$('Temp')&"\WORK -D -n"
-02090   execute "FREE Q:\CLmstr\DPTMSTR.h"&str$(cno)&" -n"
-02100   execute "RENAME "&env$('Temp')&"\WORK Q:\CLmstr\DPTMSTR.h"&str$(cno)&" -n"
-02110   execute "INDEX Q:\CLmstr\DPTMSTR.h"&str$(cno)&" Q:\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys -n"
+02080 L2080: execute "Copy "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&" "&env$('Temp')&"\WORK -D -n"
+02090   execute "Free "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&" -n"
+02100   execute "RENAME "&env$('Temp')&"\WORK "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&" -n"
+02110   execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys -n"
 02120   goto L240
 02130 ! ______________________________________________________________________
 02140 ! <Updateable Region: ERTN>
-02150 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02150 ERTN: let fnerror(program$,err,line,act$,"xit")
 02160   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02170   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02180   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

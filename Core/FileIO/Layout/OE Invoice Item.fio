@@ -1,0 +1,11 @@
+[Q]\[cursys]mstr\InvoiceItem.h[cno]       ,  invItem_  , 1
+[Q]\[cursys]mstr\InvoiceItemIndex1.h[cno] ,  invoice
+recl=196
+===================================================
+invoice$     ,  Invoice Number                      ,  c    8   , ! 
+! links to the "OE Invoice" table's primary key.
+qty          ,  Quantity of Items                   ,  N   5.2  , ! 
+description$ ,  Item Description                    ,  c   60   , ! 
+amt          ,  Amount Per Item                     ,  N   10.2 , ! 
+
+#eof#

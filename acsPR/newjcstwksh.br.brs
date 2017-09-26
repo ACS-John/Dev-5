@@ -1,0 +1,130 @@
+00010 ! Replace S:\acsPR\newjcStWkSh
+00020 ! Print Job Status Worksheet
+00030 ! ______________________________________________________________________
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fntos,fnlbl,fntxt,fnchk,fncmdset,fnacs,fncmbjob,fnmsgbox,fncmdkey
+00050   on error goto ERTN
+00060 ! ______________________________________________________________________
+00070   dim jn$*6,n$*40,next$*5,cn$*11,cnt$*5,k$*25,cap$*128,resp$(3)*40,cnam$*40
+00080   dim sc1$(3),sd1$(3),se1$(3)*50,prtj$(100)*6,dat$*20
+00090   dim ml$(1)*80
+00100 ! ______________________________________________________________________
+00110   let fntop(program$,cap$="Job Status Worksheet")
+00120   let fncno(cno,cnam$) !:
+        let fndat(dat$)
+00130 ! 
+00140   let prtjob$="N" : let perpag$="N"
+00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
+00160   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
+00170 ! ______________________________________________________________________
+00180   if fnprocess=1 then goto ASKJOB
+00190 MAIN_SCREEN: ! 
+00200   let fntos(sn$="namlst1") !:
+        let mylen=25 : let mypos=mylen+2: let resp=0: let left=1
+00210   let fnlbl(1,1,"Report Heading Date:",23,left)
+00220   let fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
+        let resp$(resp+=1)=dat$
+00230   let fnchk(2,mypos,"Print All Jobs:",left) !:
+        let resp$(resp+=1)="False"
+00240   let fnchk(3,mypos,"Print One Job Per Page:",left) !:
+        let resp$(resp+=1)="False"
+00250   let fncmdset(2)
+00260   let fnacs(sn$,0,mat resp$,ck)
+00270   if ck=5 then goto XIT
+00280   let dat$=resp$(1) ! heading date
+00290   if resp$(2)="True" then let prtjob$="Y" else let prtjob$="N"
+00300   if resp$(3)="True" then let perpag$="Y" else let perpad$="N"
+00310 ! ______________________________________________________________________
+00320   let fndat(dat$,2)
+00330   if prtjob$="N" then goto ASKJOB
+00340   if fnprocess=1 then goto L510
+00350 ! ______________________________________________________________________
+00360   mat ml$(1) !:
+        let ml$(1)="Do you wish to skip all completed jobs?" !:
+        let fnmsgbox(mat ml$,resp$,cap$,4)
+00370   if resp$="Yes" then let skpcom$="Y" else let skpcom$="N"
+00380   goto L510
+00390 ASKJOB: ! 
+00400   for j=1 to 100
+00410     let fntos(sn$="prtdet2") !:
+          let mylen=12 : let mypos=mylen+3: let resp=0: let left=1 !:
+          let fnlbl(1,1,"Job Number:",mylen,1) !:
+          let fncmbjob(1,mypos) !:
+          let resp$(respc+=1)=jn$
+00420     let prtj$(j)=lpad$(rtrm$(prtj$(j)),6)
+00430     let fncmdkey("&Next",1,1,0,"Print this job." ) !:
+          let fncmdkey("&Complete",5,0,1,"No more jobs. Release the print.")
+00440     let fnacs(sn$,0,mat resp$,ck)
+00450     if ck=5 then goto L490
+00460     let prtj$(j)=lpad$(rtrm$(resp$(1)(1:6)),6)
+00470   next j
+00480   goto L510
+00490 L490: let j=j-1
+00500 ! ______________________________________________________________________
+00510 L510: on fkey 5 goto DONE
+00520   let fnopenprn !:
+        if file$(255)(1:3)<>"PRN" then let jbskip=1
+00530   gosub HDR
+00540 L540: if prtjob$="Y" then goto L590
+00550 L550: let j1+=1: if j1>j then goto DONE
+00560   read #1,using L570,key=prtj$(j1): jn$,n$,b4 nokey L550
+00570 L570: form pos 1,c 6,c 40,pos 157,n 2
+00580   goto L600
+00590 L590: read #1,using L570: jn$,n$,b4 eof DONE
+00600 L600: if skpcom$="Y" and b4=9 then goto L540
+00610   gosub L870
+00620   let cnt$="    0"
+00630 L630: read #2,using L640,key>=jn$&cnt$: cn$,k$,l12,l13 eof L540,nokey L540
+00640 L640: form pos 1,c 11,c 25,pos 114,2*pd 2
+00650   if cn$(1:6)><jn$ then goto L540
+00660   gosub L960
+00670   let cnt$=lpad$(rtrm$(str$(val(cn$(7:11))+1)),5)
+00680   goto L630
+00690 ! ______________________________________________________________________
+00700 DONE: close #1: 
+00710   close #2: 
+00720   let fncloseprn
+00730   goto XIT
+00740 ! ______________________________________________________________________
+00750 HDR: ! 
+00760   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+00770   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+00780   print #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
+00790   print #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
+00800   print #255: "\ql   "
+00810   form pos 56,c 20,skip 1,pos 1,cc 132,skip 2
+00820   print #255: "{\b  Job       Job Name                           Category   Description                 Old %   Percent     Units}"
+00830   print #255: "{\b Number                                         Number                               Complete Complete  Complete}"
+00840   print #255: "\ql   "
+00850   return 
+00860 ! ______________________________________________________________________
+00870 L870: if fst=1 then goto L880 else goto L910
+00880 L880: if perpag$="N" then goto L920
+00890   print #255: newpage
+00900   gosub HDR
+00910 L910: let fst=1
+00920 L920: print #255,using L930: jn$,n$
+00930 L930: form pos 1,c 6,pos 8,c 40,skip jbskip
+00940   return 
+00950 ! ______________________________________________________________________
+00960 L960: print #255,using L1000: cn$(7:11),k$,"LABOR",l12,"%","___%","_____.__" pageoflow L980
+00970   goto L1010
+00980 L980: print #255: newpage
+00990   gosub HDR
+01000 L1000: form pos 49,c 5,pos 55,c 25,pos 81,c 5,pos 89,n 3,c 1,pos 97,c 4,pos 107,c 8,skip 1
+01010 L1010: print #255,using L1000: " "," ","OTHER",l13,"%","___%","        " pageoflow L1040
+01020   print #255: pageoflow L1040
+01030   goto L1060
+01040 L1040: print #255: newpage
+01050   gosub HDR
+01060 L1060: return 
+01070 ! ______________________________________________________________________
+01080 XIT: let fnxit
+01090 ! ______________________________________________________________________
+01100 ! <Updateable Region: ERTN>
+01110 ERTN: let fnerror(program$,err,line,act$,"xit")
+01120   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
+01130   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
+01140   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01150 ERTN_EXEC_ACT: execute act$ : goto ERTN
+01160 ! /region
+01170 ! ______________________________________________________________________

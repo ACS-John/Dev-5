@@ -1,0 +1,80 @@
+! *** PR - Payroll ***
+File
+>Employee                                   ^ Payroll\Employee
+>Payroll Check History                      ^ acspr\CheckHistory
+>Design Reports                             ^ acsPR\newprRpt3
+! >W-2 Supplemental Information             ^ acsPR\W2Box16
+>Accrued Payroll Tax Information            ^ acsPR\NewMGLmstr
+>Time Classifications                       ^ acspr\hourclassification
+>Breakdown of Hours                         ^ acspr\hours
+>Employment Status                          ^ acspr\Empstatus
+>Department Names                           ^ Payroll\Department Names
+>Chart of Accounts                          ^ acspr\chartofaccounts
+Pay Period                                  
+>Enter Time Sheets                          ^ Payroll\Enter Time Sheets
+>Payroll Registers                          ^ acsPR\newprReg1
+>Other Pay and Deductions Register          ^ acsPR\newPropDreg
+>Direct Deposits                            ^ acsPR\newDD
+>Print Payroll Checks                       ^ Payroll\Print Payroll Checks
+>YTD and QTD Register                       ^ acsPR\newprYTDQTD
+>Post to General Ledger                     ^ acsPR\newprPostGL              ^ GL
+Monthly                                     
+>Payroll Tax Deposit Summary                ^ acsPR\newprRegTot
+>Pension Report                             ^ acspr\newprmers
+>Deferred Compensation Report               ^ acspr\newprdefcmp
+Quarterly                                   
+>State UnEmp Report                         ^ acsPR\newprUC1
+>941 Summary                                ^ acsPR\newPR941
+>Quarterly Federal Unemployment Worksheet   ^ acsPR\newQtrFedUC
+>State UnEmp.-Electronic Submission         ^ acsPR\prelecuc
+Annual
+>Annual Federal Unemployment Worksheet      ^ acsPR\newprFedUC
+>Deduction Register YTD                     ^ acsPR\newprYTDMis
+>Print W-2 Forms                            ^ Payroll\Print W-2 Forms
+>Corrected W-2                              ^ acspr\newcorrectedprw2a
+>Electronic W-2                             ^ acsPR\newprElecW2
+>Corrected Electronic W-2                   ^ acsPR\newprElecW2correction
+>Print 1099 Forms                           ^ Payroll\Print 1099 Forms
+>Electronic 401K                            ^ acsPR\pr401k
+Print
+>Designed Reports                           ^ acsPR\newprRpt3
+>Employee Review Register                   ^ acsPR\newprempRev
+>Workmans Compensation Report               ^ acsPR\newprWkMCmp
+>Labels                                     ^ acsPR\newLabel
+>User Designed Reports Proof List           ^ acsPR\newprRpt4
+>Input Worksheet                            ^ acsPR\newprInpWk
+>Active Employee List                       ^ acsPR\newEmpList
+>Direct Deposit List                        ^ acspr\newddlist
+Automatic Processing
+>Select Automatic Processing Programs       ^ acsPR\newSelAuto
+>Begin Automatic Processing                 ^ acsPR\newAutoProc
+Utilities
+>Change Payroll Dates                       ^ Payroll\Change Payroll Dates
+>Remove Old Payroll Checks                  ^ acspr\removechecks
+>Reverse Calculation                        ^ Payroll\Reverse Calculation
+>Extend Time Card                           ^ acsPR\TimeCard
+>Payroll Departmental Register              ^ acsPR\newprReg2
+>Fix Wording On Grids                       ^ acspr\pulllay
+
+Payroll Job Cost Add-On                    ^                                 ^ P2
+>File                                      ^                                 ^ P2
+>>Job Cost                                 ^ acsPR\NewJCMaint                ^ P2
+>>Category                                 ^ Payroll\Job Cost\Category       ^ P2
+>>Sub-Category Description                 ^ acsPR\NewJCSCMINT               ^ P2
+>>User Designed Reports - JC               ^ acsPR\NewJCRPTFM                ^ P2
+>>Personnel Burden                         ^ acsPR\Burden                    ^ P2
+>Daily                                     ^                                 ^ P2
+>>Enter Time                               ^ acsPR\NewJcinput                ^ P2
+>>Enter Charges                            ^ acsPR\NewJCINPTC                ^ P2
+>>Enter Billings                           ^ acsPR\NewJCIPBIL                ^ P2
+>>Enter Percent Complete                   ^ acsPR\NewJCPCTCMP               ^ P2
+>Print                                     ^                                 ^ P2
+>>Certified Payroll Register               ^ acsPR\NewJCcpR1                 ^ P2
+>>Job Status Worksheet                     ^ acsPR\NewJCStWksh               ^ P2
+>>Job Cost Report                          ^ acsPR\NewJCPrtDET               ^ P2
+>>User Designed Reports (2)                ^ acsPR\NewPrUsrDR                ^ P2
+>>Name and Number List                     ^ acsPR\NewJCNamLst               ^ P2
+>Current Period                            ^                                 ^ P2
+>>Transfer Job Cost To Payroll             ^ Payroll\Enter Time Sheets       ^ P2
+>>Zero Current Period Info                 ^ acsPR\NewJCZCur                 ^ P2
+>>Remove Completed Jobs                    ^ acsPR\NewJCRemove               ^ P2

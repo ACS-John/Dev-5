@@ -1,8 +1,8 @@
-00010 ! Replace R:\acsCL\Conversion\Bank_Code-Fix
+00010 ! Replace S:\acsCL\Conversion\Bank_Code-Fix
 00020   let cno=1
 00030 ! 
-00040   open #trmstr=1: "Name=Q:\CLmstr\TRMSTR.H"&str$(cno),internal,outin 
-00050   open #3: "Name=Q:\CLmstr\TRALLOC.h"&str$(cno)&",Shr",internal,outin 
+00040   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno),internal,outin 
+00050   open #3: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)&",Shr",internal,outin 
 00060 L60: read #trmstr,using 'Form POS 1,N 2,N 1,C 8': bc,tc,ck$ eof END1
 00070   let ck1=val(ck$) conv L60
 00080   if bc><1 then goto L60
@@ -19,5 +19,5 @@
 00190 END3: ! 
 00200   close #trmstr: 
 00210   close #3: 
-00220   execute "INDEX Q:\CLmstr\TRMSTR.H"&str$(cno)&" Q:\CLmstr\TRIDX1.H"&str$(cno)&" 1 11 REPLACE DupKeys -n"
-00230   execute "INDEX Q:\CLmstr\TRMSTR.H"&str$(cno)&" Q:\CLmstr\TRIDX2.H"&str$(cno)&" 28/1 8/11 REPLACE DupKeys -n"
+00220   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TRIDX1.H"&str$(cno)&" 1 11 REPLACE DupKeys -n"
+00230   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TRIDX2.H"&str$(cno)&" 28/1 8/11 REPLACE DupKeys -n"

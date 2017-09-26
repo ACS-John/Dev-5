@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\ckLstV
+00010 ! Replace S:\acsCL\ckLstV
 00020 ! Check Listing by Vendor (Transaction List: sort by Vendor)
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fntos,fnlbl,fntxt,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fncno,fntos,fnlbl,fntxt,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ________Dim(s) by file________________________________________________
 00070   dim cnam$*40,dat$*20 ! CNO
@@ -12,8 +12,8 @@
 00120   let fncno(cno,cnam$)
 00130   let fntop(program$, cap$="Check Listing by Payee")
 00140   let right=1
-00150   open #trmstr=22: "Name=Q:\CLmstr\TrMstr.h"&str$(cno)&",KFName=Q:\CLmstr\TrIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
-00160   open #paymstr:=1: "Name=Q:\CLmstr\PayMstr.h"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
+00150   open #trmstr=22: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
+00160   open #paymstr:=1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
 00170 ! ______________________________________________________________________
 00180   let fntos(sn$="cklstv") !:
         let respc=0 : let mylen=25 : let mypos=mylen+2
@@ -84,7 +84,7 @@
 00780 XIT: let fnxit
 00790 ! ______________________________________________________________________
 00800 ! <Updateable Region: ERTN>
-00810 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00810 ERTN: let fnerror(program$,err,line,act$,"xit")
 00820   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00830   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00840   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

@@ -1,8 +1,8 @@
 00010 ! Prtflex2 ! DO NOT RENUMBER
-00011 ! Replace R:\Core\PrtFlex\PrtFlex2
+00011 ! Replace S:\Core\PrtFlex\PrtFlex2
 00013 ! ______________________________________________________________________
 00019 ! ______________________________________________________________________
-00020   library 'R:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnerror,fncomboa,fnflexadd1,fnflexinit1,fnbutton,fncombof,fnmsgbox,fncno,fncursys$,fnchain,fnxit,fncmdset,fntop,fnfra,fnopt,fncmbact,fncmdkey
+00020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnerror,fnflexadd1,fnflexinit1,fnbutton,fncombof,fnmsgbox,fnchain,fnxit,fncmdset,fntop,fnfra,fnopt,fncmbact,fncmdkey
 00021   on error goto ERTN
 00022 ! r: dims
 00023   dim programfolder$*60,datafolder$*256,gridname$*40
@@ -10,17 +10,15 @@
 00025   dim response$(87)*80,text$*40, cap$*128,lastgridresponse$*87,resp$(10)*60
 00026   dim options$(300)*87,ln$*132,item$(80)*80,abbrev$*20,open_read$*80,tg(11)
 00027   dim z$*8,rp$*3,py$(8)*25,ss$*11,pb$(10)*2,pl$(5)*13,pf$(7)*6,pa$(8)*1
-00028   dim pm(40),adr(2),udf$*256
+00028   dim pm(40),adr(2)
 00029   dim dg$(6)*6,pc$(5)*5,pcd(5),oc$(5)*2,ocd(5),va$(5)*2,vaa(5)
 00031   dim df$*1,dr$*9,dc$*2,da$*17,extra(23),extra$(11)*30,item$(80)*50
 00032   dim abbrev$*20,open_read$*80,tg(11)
 00039 ! /r
-00040   let fntop("R:\Core\Programs\PrtFlex2",cap$="Print Flex")
-00050   let programfolder$=fncursys$&"mstr"
-00060   let datafolder$='Q:\'&fncursys$&"mstr"
-00070   let fncno(cno)
-00080   let dataext$=".h"&str$(cno)
-00101   let udf$=env$('temp')&'\'
+00040   let fntop(program$,cap$="Print Flex")
+00050   let programfolder$=env$('cursys')&"mstr"
+00060   let datafolder$=env$('Q')&'\'&env$('cursys')&"mstr"
+00062   let dataext$='.h'&env$('cno')
 00122   dim saddr$*40,scity$*20,sstate$*2,szip$*11,msgnum$*12,maddr$*39,mcity$*20,mstate$*2,mzip$*11,atime$*8,crn$*9,dtl$*8,name$(3)*25,ss$*11,race$*18,sex$*1
 00123   dim tg(11),p$*10
 00124   dim ck1$*1,ck2$*1,ck3$*1,ck4$*1,ck5$*1,ck5d$*60,amt(7),amt2(5),cksa$*1,eshome$*1,esstreet$*30,weather$*1,sign$*1,signhelp$*30,witname$*30
@@ -32,10 +30,10 @@
 00209 ! ______________________________________________________________________
 00210   let columns=1
 00300   gosub OPENFILES
-00400   open #11: "Name="&udf$&"Gridname.tmp",internal,input,relative 
+00400   open #11: "Name="&env$('temp')&"\Gridname.tmp",internal,input,relative 
 00402   read #11,using 'Form POS 1,C 40',rec=1: gridname$
 00404   close #11: 
-00500   if fncursys$='UB' and rln(1)=102 then gosub ASKTRANSET
+00500   if env$('cursys')='UB' and rln(1)=102 then gosub ASKTRANSET
 03999 ! __________________ this is 3999 next is 4000 _________________________
 04000 PRINTGRID: ! r: Prints the grid
 04001   mat item$(columns)
@@ -62,13 +60,13 @@
 04144 ! Let FNLBL(15,1,"Export the grid to a fixed width file, for later use.")
 04145   let fncmdset(52): let fnacs(sn$,win,mat response$,ckey) ! CALL items selected
 04146   let lastgridresponse$=response$(1)
-04160   if ckey=5 then chain "R:\Core\prtflex\PRTFLEX1",programfolder$,datafolder$
+04160   if ckey=5 then chain "S:\Core\prtflex\PRTFLEX1",programfolder$,datafolder$
 04170 ! Let FNXIT(CURSYS$)
 04180 ! /r
 07999 ! __________________ this is 7999 next is 8000 _________________________
 08000 OPENFILES: ! r: The following lines will be proc in from a display file                          you have created. They are in the same file as the read                         statements explained above.  Don't forget the del lines to
 08001 !             remove the old reads in case they dont match
-08010   open #1: "name="&datafolder$&"\ubtransvb"&dataext$&",kfname="&datafolder$&"\ubtrindx"&dataext$&",Use,RecL=102,KPs=1,KLn=19",internal,outin,keyed 
+08010   open #1: "name="&datafolder$&"\ubtransvb.h"&env$('cno')&",kfname="&datafolder$&"\ubtrindx.h"&env$('cno')&",Use,RecL=102,KPs=1,KLn=19",internal,outin,keyed 
 08100   return  ! /r
 08999 ! __________________ this is 8999 next is 9000 _________________________
 09000 READDATAFILES: !  r: These read statements will be contained in a display                            file that matches the data base name plus _info
@@ -87,7 +85,7 @@
 11010 XIT: let fnxit
 11020 IGNORE: continue 
 11021 ! <Updateable Region: ERTN>
-11022 ERTN: let fnerror(cap$,err,line,act$,"xit")
+11022 ERTN: let fnerror(program$,err,line,act$,"xit")
 11023   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 11024   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 11025   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

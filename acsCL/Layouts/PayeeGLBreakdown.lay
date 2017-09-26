@@ -1,0 +1,13 @@
+00010 ! Replace acsCL\PayeeGLBreakdown-v1.lay,Source
+00070 Let H1$="PayeeGLBreakdown"
+00080 Let FileType$="Keyed"
+00090 Let FILEName$="PayeeGLBreakdown.H[CNo]"
+00100 Let VOLID$="CLmstr"
+00110 Let RM$(1)="KFName=Payeeglbkdidx.H[CNo]  KPs=1  KLn=8"
+00112 Let RM$(2)=""
+00113 Let RM$(3)="Version=1"
+00150 Data Payee Key							^Payeekey$			^Cr 8	^Payee No.
+00160 Data General Ledger Number					^Payeegl$			^C 12	^G/L Number
+00170 Data Percent Allocation						^Percent			^N 6.2	^Percent
+00180 Data Description						        ^Gldesc$			^C 30	^Description
+      

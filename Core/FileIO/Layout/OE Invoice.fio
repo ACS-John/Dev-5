@@ -1,0 +1,41 @@
+[Q]\[cursys]mstr\Invoice.h[cno]      ,  dealer_  , 2
+[Q]\[cursys]mstr\InvoiceIndex.h[cno] ,  invoice
+recl=196
+===================================================
+invoice$,  Invoice Number                        ,  c   10   , ! 
+dealer$ ,  Dealer Key                            ,  c   30   , ! 
+date$   ,  Invoice Date                          ,  c   30   , ! 
+terms$  ,  Terms                                 ,  c   30   , ! 
+total   ,  Total                                 ,  N   10.2 , ! 
+
+#eof#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

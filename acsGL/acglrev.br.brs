@@ -1,8 +1,8 @@
-00010 ! Replace R:\acsGL\acglRev
+00010 ! Replace S:\acsGL\acglRev
 00020 ! Used to reverse specific entries !:
         ! enter the date and reference under "youref' and 'yourdate'
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnerror
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnerror
 00050   let fntop(program$,"Special Reversing")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -15,9 +15,9 @@
         read #20,using 'form POS 43,C 20,POS 137,N 2,POS 141,N 1',rec=1: prg$,systype,process !:
         close #20: 
 00140 ! 
-00150   open #1: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName=Q:\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
-00160   open #2: "Name=Q:\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,outin,relative 
-00170   open #3: "Name=Q:\GLmstr\GLWk1"&wsid$&".h"&str$(cno)&",NoShr",internal,outin 
+00150   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+00160   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,outin,relative 
+00170   open #3: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(cno)&",NoShr",internal,outin 
 00180   print newpage
 00190   let x=lrec(2)
 00200   for j=1 to x
@@ -66,7 +66,7 @@
 00630 L630: goto L430
 00640 XIT: let fnxit
 00650 ! ______________________________________________________________________
-00660 ERTN: let fnerror(cap$,err,line,act$,"NO")
+00660 ERTN: let fnerror(program$,err,line,act$,"NO")
 00670   if lwrc$(act$)<>"pause" then goto L700
 00680   execute "list -"&str$(line) !:
         pause  !:

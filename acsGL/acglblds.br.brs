@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\acglBldS
-00020 ! this program calls fnacglblds to builds the file    Q:\GLmstr\ACGLScr.h
+00010 ! Replace S:\acsGL\acglBldS
+00020 ! this program calls fnacglblds to builds the file    "&env$('Q')&"\GLmstr\ACGLScr.h
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnacglblds,fntop,fnerror,fnxit
+00040   library 'S:\Core\Library': fnacglblds,fntop,fnerror,fnxit
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim flo$(31),fli$(65),scr$(30)*20,otd$(65)*30,d(2)
@@ -11,7 +11,7 @@
 00110   goto XIT
 00120 ! ______________________________________________________________________
 00130 ERTN: ! <Updateable Region: ERTN>
-00140   let fnerror(cap$,err,line,act$,"xit")
+00140   let fnerror(program$,err,line,act$,"xit")
 00150   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00160   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00170   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

@@ -1,0 +1,6 @@
+emailcfg.dat, conf_, 0
+===================================================
+SERVER$,        Server,                      V  255
+FROMADDR$,      From Address,                V  255
+USERACCOUNT$,   User Account,                V  120
+PASSWORD$,      Password,                    V  120

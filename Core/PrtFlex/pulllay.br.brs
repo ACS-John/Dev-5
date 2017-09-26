@@ -1,6 +1,6 @@
-00010 ! Replace R:\Core\PrtFlex\PullLay
+00010 ! Replace S:\Core\PrtFlex\PullLay
 00020 ! ______________________________________________________________________
-00030   library 'R:\Core\Library': fnerror,fnsetmonth,fncno,fnxit,fnremove
+00030   library 'S:\Core\Library': fnerror,fnsetmonth,fncno,fnxit,fnremove
 00040 ! This program will read a standard ACS layout and pull the data names for use in the user designed grid features of any ACS system
 00050 ! to create your own file instead of using this program, store the description,variable name,field length,# of deciaml points, format (example:  Customer Name,Variable Name,30,0,C)   Form POS 1,C 30,C 20,N 4,N 2,C 11
 00060 ! if you create the display file, as just described, create a folder under your program folder called GRID; a subfolder such as CUSTOMER which will be referred to in the grid program as the data base you are using.  You can have any number of these subfolders (actually one for each file you are allowing them to access with the grid programs.
@@ -16,8 +16,8 @@
 00160   let dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
 00190   let io1$(1)="10,34,c 45,UT,N" !:
         let io1$(2)="12,34,C 45,UT,N"
-00200   let outputfile$="R:\acsPR\grid\checks\checkhistory"
-00210   let ev$="R:\acsPR\Layouts\checkhistory.LAY"
+00200   let outputfile$="S:\acsPR\grid\checks\checkhistory"
+00210   let ev$="S:\acsPR\Layouts\checkhistory.LAY"
 00220   print newpage
 00230   close #101: ioerr L240
 00240 L240: open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outin 
@@ -109,7 +109,7 @@
 01000 L1000: return 
 01010 ! ______________________________________________________________________
 01020 ! <Updateable Region: ERTN>
-01030 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01030 ERTN: let fnerror(program$,err,line,act$,"xit")
 01040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01050   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01060   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

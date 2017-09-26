@@ -1,14 +1,14 @@
-00010 ! Replace R:\Core\Programs\PrintLay1
+00010 ! Replace S:\Core\Programs\PrintLay1
 00020 ! Print Several Layouts
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnerror,fnwin3b,fnxit,fnopenprn,fncloseprn,fnconsole,fntop
+00040   library 'S:\Core\Library': fnerror,fnwin3b,fnxit,fnopenprn,fncloseprn,fnconsole,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim a$(200,3)*80,h1$*55,rm$(4)*100,filename$*50,fil$(50)*80,ln$*120
 00072   dim ev$*50
 00080   dim a(200,6),a$*132,prg$*30,mo$(12),cap$*128
 00090 ! ______________________________________________________________________
-00100   let fntop("R:\Core\PrintLay",cap$="Print Several Layouts")
+00100   let fntop("S:\Core\PrintLay",cap$="Print Several Layouts")
 00110   data January,February,March,April,May,June,July,August,September,October,November,December
 00120   read mat mo$
 00130 ! ______________________________________________________________________
@@ -19,7 +19,7 @@
 00180   print #win,fields "3,2,Cr 41,N": "Ext/VolId to print all (blank to select):"
 00190   let io1$(1)="2,44,N 1,U,N"
 00200   let io1$(2)="3,44,14/c 50,U,N"
-00210   let ev$="lay/R:\acsTM\Layouts"
+00210   let ev$="lay/S:\acsTM\Layouts"
 00220 L220: rinput #win,fields io1$(2): ev$ conv CONV1 ! pp was on io1$(1)
 00230   if ce>0 then let io1$(ce)(ce1:ce2)="U": let ce=0
 00240   if cmdkey>0 then goto L310 else let ce=curfld
@@ -188,7 +188,7 @@
 01830   return 
 01840 ! ______________________________________________________________________
 01850 ! <Updateable Region: ERTN>
-01860 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01860 ERTN: let fnerror(program$,err,line,act$,"xit")
 01870   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01880   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01890   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

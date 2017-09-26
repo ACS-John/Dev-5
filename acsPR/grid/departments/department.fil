@@ -1,0 +1,16 @@
+Amount Of Last Increase       tLI                    7 2PD 4.2     LastIncAmt
+Department Number             TDN                    3 0N 3        Dep#
+Employee Number               TENO                   8 0N 8        Emp#
+G/L Account Number            GL$                   12 0C 12       GL#
+Last Increase Date            TDT(3)                 6 0N 6        LastIncr
+Last Payroll Date             TDT(4)                 6 0N 6        LastPrDate
+Last Review Date              TDT(1)                 6 0N 6        LastRev
+Next Review Date              TDT(2)                 6 0N 6        NextRev
+Overtime Hourly Rate          TDET(3)                7 2PD 4.2     OTRate
+RETIRE                        TDET(5)                7 2PD 4.2     RETIRE
+RETMCH                        TDET(6)                7 2PD 4.2     RETMCH
+Regular Hourly Rate           TDET(2)                7 2PD 4.2     RegRate
+Salary                        TDET(1)                7 2PD 4.2     Salary
+State Code                    TCD(1)                 2 0N 2        StateCd
+Union Code                    TCD(3)                 2 0N 2        UnionCD
+Worknams Comp Code            TCD(2)                 2 0N 2        WC Code

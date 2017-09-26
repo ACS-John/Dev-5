@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\RENUMCK
+00010 ! Replace S:\acsCL\RENUMCK
 00020 ! ReNUMBER A SERIES OF CHECKS
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnerror,fncno,fnacs,fntos,fntxt,fndate_mmddyy_to_ccyymmdd,fncmdset,fnlbl
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnacs,fntos,fntxt,fndate_mmddyy_to_ccyymmdd,fncmdset,fnlbl
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim de$*30,cap$*128,tr$(5)*35
@@ -10,11 +10,11 @@
 00100   let fntop(program$,"Renumber Checks")
 00110   let cancel=99 : let right=1 : let center=2 : let on=1 : let off=0 !:
         let left=0
-00120   open #20: "Name=Q:\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
+00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #20,using 'Form POS 417,N 1': rcn !:
         close #20: 
-00130   open #trmstr:=1: "Name=Q:\CLmstr\TrMstr.H"&str$(cno)&",KFName=Q:\CLmstr\TrIdx1.H"&str$(cno),internal,outin,keyed 
-00140   open #tralloc:=3: "Name=Q:\CLmstr\TrAlloc.H"&str$(cno)&",KFName=Q:\CLmstr\TrAlloc-idx.h"&str$(cno),internal,outin,keyed 
+00130   open #trmstr:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno),internal,outin,keyed 
+00140   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&str$(cno),internal,outin,keyed 
 00150 L150: let fntos(sn$='RmTrans-'&str$(rcn)) !:
         let mylen=30 : let mypos=mylen+3 : let lc=0
 00160   let fnlbl(lc+=1,1,"First Check Number to Renumber:",mylen,right)
@@ -60,16 +60,16 @@
 00470 END1: ! 
 00480   close #trmstr: 
 00490   close #tralloc: 
-00500   execute "Index Q:\CLmstr\TrMstr.H"&str$(cno)&" Q:\CLmstr\TrIdx1.H"&str$(cno)&" 1 11 Replace DupKeys -n"
-00510   execute "Index Q:\CLmstr\TrMstr.H"&str$(cno)&" Q:\CLmstr\TrIdx2.H"&str$(cno)&" 28/1 8/11 Replace DupKeys -n"
-00520   execute "Index Q:\CLmstr\TrMstr.H"&str$(cno)&" Q:\CLmstr\TrIdx3.H"&str$(cno)&" 16/12/4 2/4/8 Replace DupKeys -n"
-00530   execute "Index Q:\CLmstr\TrAlloc.H"&str$(cno)&" Q:\CLmstr\TrAlloc-idx.H"&str$(cno)&" 1 11 Replace DupKeys -n"
+00500   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&" 1 11 Replace DupKeys -n"
+00510   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TrIdx2.H"&str$(cno)&" 28/1 8/11 Replace DupKeys -n"
+00520   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TrIdx3.H"&str$(cno)&" 16/12/4 2/4/8 Replace DupKeys -n"
+00530   execute "Index "&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TrAlloc-idx.H"&str$(cno)&" 1 11 Replace DupKeys -n"
 00540   goto XIT
 00550 ! ______________________________________________________________________
 00560 XIT: let fnxit
 00570 ! ______________________________________________________________________
 00580 ! <Updateable Region: ERTN>
-00590 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00590 ERTN: let fnerror(program$,err,line,act$,"xit")
 00600   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00610   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00620   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

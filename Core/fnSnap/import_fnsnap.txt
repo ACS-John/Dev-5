@@ -1,0 +1,9 @@
+to make fnsnap work in ACS a few changes must be made.
+follow these instructions.
+
+rename *.dll *_dll.br
+
+load vol002\fnsnap_dll.br
+subproc vol002\acs_clean_fnsnap.prc
+replace vol002\fnsnap_dll.br
+list >vol002\fnsnap_dll.br.brs

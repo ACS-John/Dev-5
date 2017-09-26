@@ -1,0 +1,36 @@
+
+
+ 
+                        YOUR CITY NAME
+                         P.O. BOX 99
+                      YOUR CITY, ST 62531
+ 
+
+
+ 
+@D4 
+
+ 
+@3
+@4
+@5
+ 
+
+Dear water customer:
+
+                       RE: BALANCE DUE @D2 :   $@47
+ 
+     Shown is the amount due to the City for utility services
+rendered to you through @D1 billing period (meter reading
+on 15th).  We ask that payment be made in full by @D2.            
+Please be advised that the above figure could include delinquent
+amounts from previous months which could require payment to the
+City before @D2.
+
+Very truly yours,
+
+
+
+Ken Jones 
+Hit man  
+ 

@@ -1,4 +1,4 @@
-00010 !  Replace R:\Core\Search.br
+00010 !  Replace S:\Core\Search.br
 00020 ! ______________________________________________________________________
 00030   def library fnsearch(&cap$,file_num,&heading$,&form$,numeric_format$,&selection$,key_length)
 00040 ! _________________________________________
@@ -11,7 +11,7 @@
 00110 ! key_length - numeric LENGTH of the index used to access the actual            record in the main prgram
 00120 ! you can have one column of numeric information on the search screen - it      must always be the fourth item - fs_info - enter the format that would be        used in a cnvrt$ statement after the open (   such as "pic(zz/zz/zz)"
 00130 ! _________________________________________
-00140     library 'R:\Core\Library': fnerror,fnwait,fncno,fnfkey,fnmsgbox,fnwin3b
+00140     library 'S:\Core\Library': fnerror,fnwait,fncno,fnfkey,fnmsgbox,fnwin3b
 00150 ! _________________________________________
 00160     dim fs_sk$(22)*30,fs_bk$(99)*30,fs_sfl$(22),fs_sw$(22)*70,selection$*70,fs_info$(3)*30,numeric$*40,na1$*30
 00165     let selection$=''

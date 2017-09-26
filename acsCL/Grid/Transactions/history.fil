@@ -1,0 +1,10 @@
+Amount                        TR$(3)                10 2G 10.2     Amount
+Bank Code Code                BCDE                   2 0N 2        Bank Cd
+Check/Reference #             TR$(1)                 8 0C 8        Ck/Ref#
+Date                          TR$(2)                 6 0G 6        Date
+Name/Description              TR$(5)                35 0C 35       Name/Desc
+Payee #                       TR$(4)                 8 0C 8        Payee #
+Posting Code                  PCDE                   1 0N 1        Post Cd
+Source Code                   SCD                    1 0N 1        Source Cd
+Statement Date Cleared        CLR                    6 0N 6        Clr Date
+Transaction Code              TCDE                   1 0N 1        Tr Cd

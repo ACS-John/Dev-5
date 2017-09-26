@@ -1,0 +1,230 @@
+
+
+
+rem MAPP2 12/21/2009 - no html, text tags
+rem   *****  Last Revised 12/21/2009
+rem   *****  MACS lines for Rec_Tab
+rem	*****  Printer Init and Reset for PCL only
+
+rem	*****  Page Control (These must be done first)
+rem	*****  Portrait, Landscape
+PRINTER PDF [PORTRAIT], "\E&l0O"
+PRINTER PDF [LANDSCAPE], "\E&l1O"
+	
+rem	*****  Paper Sizes
+PRINTER PDF [EXECUTIVE], "\E&l1A" ! 7.25 x 10.5
+PRINTER PDF [LETTER], "\E&l2A" ! 8.5 x 11
+PRINTER PDF [LEGAL], "\E&l3A" ! 8.5 x 14
+PRINTER PDF [LEDGER], "\E&l6A" ! 11 x 17
+PRINTER PDF [A4PAPER], "\E&l26A" ! 210mm x 297mm
+PRINTER PDF [A7PAPER], "\E&l27A" ! 297mm x 420mm
+
+rem	*****  Envelopes
+PRINTER PDF [MONARCH], "\E&l80A" ! 3 7/8 x 7.5
+PRINTER PDF [COM-10], "\E&l81A" ! 4 1/8 x 9.5
+PRINTER PDF [INTERNATIONAL DL], "\E&l90A" ! 110mm x 220mm
+PRINTER PDF [INTERNATIONAL C5], "\E&l91A" ! 162mm x 229mm
+PRINTER PDF [INTERNATIONAL B5], "\E&l100A" ! 176mm x 250mm
+
+rem	*****  Paper Source PCL only (These are printer specific, so check with your printer)
+rem PRINTER PDF [PAPERSOURCE AUTO], "\E&l1H" ! Feed from Printer Default
+rem PRINTER PDF [PAPERSOURCE MANUAL], "\E&l2H" ! Feed from manual feeder
+rem PRINTER PDF [PAPERSOURCE MANUALENVELOPE], "\E&l3H" ! Feed Envelope from manual feeder
+rem PRINTER PDF [PAPERSOURCE TRAY2], "\E&l4H" ! Feed from Lower Tray
+rem PRINTER PDF [PAPERSOURCE OPTIONAL], "\E&l5H" ! Feed from Optional Input
+rem PRINTER PDF [PAPERSOURCE OPTIONALENVELOPE], "\E&l6H" ! Feed from Optional Envelope Feeder (Must set to Envelope size first)
+
+
+
+rem	*****  Top Margin
+PRINTER PDF [TOP0], "\E&l0E"
+PRINTER PDF [TOP1], "\E&l1E"
+PRINTER PDF [TOP2], "\E&l2E"
+PRINTER PDF [TOP3], "\E&l3E"
+PRINTER PDF [TOP4], "\E&l4E"
+PRINTER PDF [TOP5], "\E&l5E"
+PRINTER PDF [TOP(XX)], "\E&lXXE"
+
+rem	*****  NWP only Quality Options
+PRINTER PDF [LETTER QUALITY], "\Ex1"
+PRINTER PDF [LQ], "\Ex1"
+PRINTER PDF [DRAFT], "\Ex0"
+PRINTER PDF [EMPHASIZED], "\EE"
+PRINTER PDF [/EMPHASIZED], "\EF"
+PRINTER PDF [EMPH], "\EE"
+PRINTER PDF [/EMPH], "\EF"
+PRINTER PDF [ENHANCED], "\EG"
+PRINTER PDF [/ENHANCED], "\EH"
+
+rem	*****  NWP Only Fonts (This syntax only works for NWP)
+PRINTER PDF [FONT MICR], "\Efont='MICR'"
+PRINTER PDF [FONT TIMES], "\Efont='Times New Roman'"
+PRINTER PDF [FONT ARIAL], "\Efont='Arial'"
+PRINTER PDF [FONT COURIER NEW], "\Efont='Courier New'"
+
+PRINTER PDF [FONT MONACO], "\Efont='Monaco'"  ! MACS Macintosh fixed font
+PRINTER PDF [FONT LINEPRINTER], "\Efont='SV Basic Manual'" ! MACS
+PRINTER PDF [FONT MAPPREPORT], "\Efont='SV Basic Manual'"  ! Macs Rec_Tab
+PRINTER PDF [FONT MAPPREPORT], "\Efont='SV Basic Manual'"  ! Macs Rec_Tab
+PRINTER PDF [FONT], "\Efont=" ! Specify any font such as [FONT]'WingDings'
+PRINTER PDF [SETFONT(FontName)], "\Efont='FontName'" ! This is not enabled yet, but will be very soon
+
+rem	*****  NWP and PCL Fonts (This syntax works for both NWP and PCL)
+
+rem	*****  Font Sizes
+PRINTER PDF [TINY], "\E(s6V"
+PRINTER PDF [SMALL], "\E(s8V"
+PRINTER PDF [LITTLE], "\E(s10V"
+PRINTER PDF [MEDIUM], "\E(s12V"
+PRINTER PDF [ESSAY], "\E(s14V"
+PRINTER PDF [LARGE], "\E(s18V"
+PRINTER PDF [JUMBO], "\E(s36V"
+PRINTER PDF [GARGANTUAN], "\E(s96V"
+PRINTER PDF [155POINT], "\E(s15.5V"
+
+PRINTER PDF [SETSIZE(PointSize)], "\E(sPointSizeV" ! This is not enabled yet, but will be very soon
+
+rem	*****  Lines Per Inch
+PRINTER PDF [4LPI], "\E&l4D"
+PRINTER PDF [6LPI], "\E&l6D"
+PRINTER PDF [8LPI], "\E&l8D"
+PRINTER PDF [10LPI], "\E&l10D"
+
+PRINTER PDF [LPI(xxx)], "\E&lxxxD"
+
+rem	*****  Characters Per Inch
+
+PRINTER PDF [4CPI], "\E(s36v4H"
+PRINTER PDF [6CPI], "\E(s18v6H"
+PRINTER PDF [8CPI], "\E(s14v8H"
+PRINTER PDF [10CPI], "\E(s12v10H"
+PRINTER PDF [12CPI], "\E(s10v12H"
+PRINTER PDF [14CPI], "\E(s8v14H"
+PRINTER PDF [17CPI], "\E(s6v16.67H"
+Printer PDF [18CPI], "\E(s6v17.67H" ! 8/7/12
+PRINTER PDF [20CPI], "\E(s4v20H"
+PRINTER PDF [MAPP132MAC], "\E&l8D\E(s8.7V\E(s12H\E(s7B"
+PRINTER PDF [MAPP132WINDOWS], "\E&l6D\E(s10.5V\E(s16.25H\E(s7B"
+
+
+
+
+PRINTER PDF [CPI(NNN)], "\E(sNNNH"
+
+rem	*****  NWP only Colors
+PRINTER PDF [RED], "\Ecolor='#FF0000'"
+PRINTER PDF [GREEN], "\Ecolor='#00FF00'"
+PRINTER PDF [BLUE], "\Ecolor='#0000FF'"
+PRINTER PDF [MAGENTA], "\Ecolor='#FF00FF'"
+PRINTER PDF [CYAN], "\Ecolor='#00FFFF'"
+PRINTER PDF [YELLOW], "\Ecolor='#FFFF00'"
+PRINTER PDF [ORANGE], "\Ecolor='#FF7700'"
+PRINTER PDF [PURPLE], "\Ecolor='#AA00AA'"
+PRINTER PDF [BLACK], "\Ecolor='#000000'"
+PRINTER PDF [WHITE], "\Ecolor='#FFFFFF'"
+PRINTER PDF [COLOR], "\Ecolor=" ! Specify any html color such as [COLOR]'#0000FF'
+PRINTER PDF [SETCOLOR(CLRCODE)], "\Ecolor='#CLRCODE'"
+
+rem	*****  NWP Only Underline and Overline
+PRINTER PDF [UNDERLINE], "\E-1"
+PRINTER PDF [/UNDERLINE], "\E-0"
+PRINTER PDF [UL], "\E-1"
+PRINTER PDF [/UL], "\E-0"
+PRINTER PDF [OVERLINE], "\E_1"
+PRINTER PDF [/OVERLINE], "\E_0"
+
+
+rem	*****  Bold and Italics
+PRINTER PDF [ITALICS], "\E(s1S"
+PRINTER PDF [/ITALICS], "\E(s0S"
+PRINTER PDF [BOLD], "\E(s1B"
+PRINTER PDF [/BOLD], "\E(s0B"
+
+rem	*****  Stroke Weight (Bold/Line Thickness)
+PRINTER PDF [LIGHTEST], "\E(s-7B"
+PRINTER PDF [LIGHTER], "\E(s-4B"
+PRINTER PDF [LIGHT], "\E(s-1B"
+PRINTER PDF [STROKE NORMAL], "\E(s0B"
+PRINTER PDF [DARK], "\E(s1B"
+PRINTER PDF [DARKER], "\E(s4B"
+PRINTER PDF [DARKEST], "\E(s7B"
+
+rem	*****  Style
+PRINTER PDF [STYLE NORMAL], "\E(s0S"
+PRINTER PDF [CONDENSED], "\E(s4S"
+PRINTER PDF [ITALICS CONDENSED], "\E(s5S"
+PRINTER PDF [EXTRA CONDENSED], "\E(s8S"
+PRINTER PDF [ITALICS EXTRA CONDENSED], "\E(s9S"
+PRINTER PDF [EXPANDED], "\E(s24S"
+PRINTER PDF [ITALICS EXPANDED], "\E(s25S"
+PRINTER PDF [OUTLINE], "\E(s32S"
+PRINTER PDF [ITALICS OUTLINE], "\E(s33S"
+PRINTER PDF [INLINE], "\E(s64S"
+PRINTER PDF [ITALICS INLINE], "\E(s65S"
+PRINTER PDF [SHADOWED], "\E(s128S"
+PRINTER PDF [ITALICS SHADOWED], "\E(s129S"
+PRINTER PDF [OUTLINE SHADOWED], "\E(s160S"
+PRINTER PDF [ITALICS OUTLINE SHADOWED], "\E(s161S"
+
+PRINTER PDF [SETSTYLE(StyleCode)], "\E(sStyleCodeS"
+
+rem	*****  NWP Only Boxes and Shading
+PRINTER PDF [BOX], "\Ebegin_box"
+PRINTER PDF [/BOX], "\Eend_box"
+
+PRINTER PDF [BOXTOP], "\Ebegin_boxtop"
+PRINTER PDF [BOXOVER], "\Ebegin_boxtop"
+
+PRINTER PDF [BOXVERTICALS], "\Ebegin_verticals"
+PRINTER PDF [BOXSIDES], "\Ebegin_verticals"
+
+PRINTER PDF [BOXBOTTOM], "\Ebegin_boxbottom"
+PRINTER PDF [BOXUNDER], "\Ebegin_boxbottom"
+
+PRINTER PDF [SHADE], "\Ebegin_shade"
+PRINTER PDF [/SHADE], "\Eend_shade"
+
+PRINTER PDF [SHADE0], "\E*c0G"
+PRINTER PDF [SHADE20], "\E*c20G"
+PRINTER PDF [SHADE40], "\E*c40G"
+PRINTER PDF [SHADE60], "\E*c60G"
+PRINTER PDF [SHADE80], "\E*c80G"
+PRINTER PDF [SHADE100], "\E*c100G"
+PRINTER PDF [SHADE(Percent)], "\E*cPercentG"
+
+PRINTER PDF [SEPARATOR], 05
+PRINTER PDF [|], 05
+
+rem	*****  NWP only Positioning (This syntax works for NWP only)
+PRINTER PDF [POSITION], "\Eposition="
+PRINTER PDF [POSITION(xx,yy)], "\Eposition='xx,yy'"
+
+rem	*****  Positioning (Both NWP and PCL)
+rem     *****  -parameters indicate vertical and then horizontal positions-
+
+PRINTER PDF [MACFIX], "\E&l-172u-344Z"  ! Mapp2 Macs Rec_Tab; Set Cursor to TRUE top left on a MAC
+PRINTER PDF [W2MAC], "\E&l-172u-282Z"  ! Mapp2 W2 Cursor to TRUE top left on a MAC
+PRINTER PDF [TN99MAC], "\E&l-172u-175Z"  ! Mapp2 TN99 Set Cursor to TRUE top left on a MAC
+PRINTER PDF [W3MAC], "\E&l-172u-175Z"  ! Mapp2 W3 Set Cursor to TRUE top left on a MAC
+PRINTER PDF [1096MAC], "\E&l-172u-175Z" ! Mapp2 1096 Set Cursor to TRUE top left on MAC
+PRINTER PCL [TOPLEFT], "\E&a0v0H" ! Set curser to top left
+PRINTER PDF [TOPLEFT], "\E&a0v0H" ! Set curser to top left
+PRINTER PDF [BOTTOMRIGHT], "\E&a8v11H"  ! Set Cursor to Bottom right
+PRINTER PDF [DECIPOS(XXX,YYY)], "\E&aYYYvXXXH" ! Set Position in Decipoints, Vertical, Horizontal. Use +- for Relative
+PRINTER PDF [ROWCOL(XXX,YYY)], "\E&aYYYrXXXC" ! Set Position in Rows and Columns, Vertical, Horizontal. Use +- for Relative
+PRINTER PDF [POS(XXX,YYY)], "\E&aYYYrXXXC" ! Set Position in Rows and Columns, Vertical, Horizontal. Use +- for Relative
+PRINTER PDF [PCLPOS(HHH,VVV)], "\E*pVVVyHHHX" ! Set Position in PCL units, Vertical, Horizontal. Use +- for Relative
+
+rem	*****  NWP only Pictures
+PRINTER PDF [PICTURE], "\Epicture=" ! Use like [PICTURE]'2,2,logo.jpg'
+PRINTER PDF [PIC(XX,YY,IMGNAME)], "\Epicture='XX,YY,IMGNAME'"
+PRINTER PDF [ISO PIC(XX,YY,IMGNAME)], "\Epicture='XX,YY,IMGNAME: ISOTROPIC'"
+PRINTER PDF [TILE PIC(XX,YY,IMGNAME)], "\Epicture='XX,YY,IMGNAME: TILE'"
+
+rem	*****  Push and Pop
+PRINTER PDF [PUSH], "\E&f0S"
+PRINTER PDF [POP], "\E&f1S"
+
+rem	*****  Other
+PRINTER PDF [E], "\E" ! Basic Escape Sequence for anything you need (easier then chr$(27))
+PRINTER PDF [NON-NEGO], "\epdf='0,[IMG]non-nego.jpg'"

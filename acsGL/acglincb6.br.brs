@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\AcGlIncB6
+00010 ! Replace S:\acsGL\AcGlIncB6
 00020 ! -- INCOME STATEMENT WITH BUDGET (six columns)
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnglfs,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fngl_number_use_dept,fnpriorcd,fntos,fnprocess,fnlbl,fntxt,fncmdkey,fnacs,fnps
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnglfs,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fntos,fnprocess,fnlbl,fntxt,fncmdkey,fnacs,fnps
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,p$(20)*50
@@ -28,13 +28,13 @@
 00270   let pors=1
 00280   let mp1=69
 00290   if fnps=2 then let mp1=mp1+3
-00300   let fl1$="Name=Q:\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName=Q:\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
-00310   if fnps=2 then let fl1$="Name=Q:\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName=Q:\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
+00300   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00310   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
 00320   form c 9,skip 0
 00330   form c 7,skip 0
 00340   let nametab=int(44-len(rtrm$(cnam$))/2)
 00350   open #1: fl1$,internal,input,keyed 
-00360   if fnprocess=1 or fngl_number_use_dept=0 then goto L450
+00360   if fnprocess=1 or fnUseDeptNo=0 then goto L450
 00370   let fntos(sn$="ACglincb") !:
         let mylen=30: let mypos=mylen+3 : let right=1
 00380   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -52,10 +52,10 @@
 00490   let fnopenprn(cp,58,220,process)
 00500   let redir=0: if file$(255)(1:4)<>"PRN:" then let redir=1
 00510   if fnps=2 then goto L540 ! secondary
-00520   execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
+00520   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
 00530   goto L550
-00540 L540: execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
-00550 L550: open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00540 L540: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
+00550 L550: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
 00560 L560: read #1,using L610: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2350
 00570   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L560
 00580   if costcntr=0 then goto L610
@@ -220,11 +220,11 @@
 02180 ! ______________________________________________________________________
 02190 L2190: let heading=1
 02200   let pt1+=1
-02210   print #255: "\qc  {\f181 \fs24 \b "&trim$(cnam$)&"}"
+02210   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 02220   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 02230   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
 02240   print #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(actpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
-02250   print #255: "\qL "
+02250   print #255: "\ql "
 02260   print #255: 
 02270 ! Print #255: TAB(33);"ANNUAL";TAB(40);"<--";FNCCH$;"-->";TAB(66);" <--     YEAR TO DATE      -->";TAB(97);"<--     BUDGET TO DATE    -->"
 02280   print #255,using L2290: "ANNUAL",curmonth$,curmonth$,"BAL YTD","BAL YTD","UNEXPENDED"
@@ -240,12 +240,12 @@
 02380   let fnpriorcd(1)
 02388   let fnfscode(actpd)
 02389   let fnpriorcd(1)
-02390   let fncloseprn(nw)
+02390   let fncloseprn
 02400 ! 
 02410 XIT: let fnxit
 02420 ! ______________________________________________________________________
 02430 ! <updateable region: ertn>
-02440 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02440 ERTN: let fnerror(program$,err,line,act$,"xit")
 02450   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02460   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02470   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

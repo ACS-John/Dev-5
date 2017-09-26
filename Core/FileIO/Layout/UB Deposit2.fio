@@ -1,0 +1,10 @@
+[Q]\[cursys]mstr\Deposit2.h[cno]  ,  dep2_  , 0
+! [Q]\[cursys]mstr\DepIdx.h[cno]   ,  customer
+recl=73
+===================================================
+customer$      ,Account No        ,  C  10   , ! fnhamster_add_combof(1,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1,10,41,30,env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),1)
+dt1            ,Date              ,  C  8    , ! ccyymmdd
+desc$          ,desc              ,  C  32   , ! 
+odp            ,amount before     ,  N  10.2 , ! 
+ndp            ,amount after      ,  N  10.2 , ! 
+nta            ,next trans addr   ,  PD  3   , !

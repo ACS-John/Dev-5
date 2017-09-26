@@ -1,16 +1,16 @@
-00010 ! Replace R:\acsGL\CoverLetterPrint
+00010 ! Replace S:\acsGL\CoverLetterPrint
 00020 ! -- Print Cover Letter
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$,fnconsole
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim tb$*32,cap$*128,ln1$*8800,ln$*8800,dat$*20
 00080 ! ______________________________________________________________________
-00090   let fntop("R:\acsGL\CoverLetterPrint",cap$="Print Cover Leter")
+00090   let fntop("S:\acsGL\CoverLetterPrint",cap$="Print Cover Leter")
 00100   let fnconsole(off=0)
 00110   let fncno(cno)
 00120   let fndat(dat$)
-00130   open #1: "Name=Q:\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00130   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #1,using 'Form POS 195,C 30',rec=1: tb$ !:
         close #1: !:
         let tb$="("&trim$(tb$)&")"
@@ -29,7 +29,7 @@
           if tempx=12 then let actpd$="twelve" else !:
             if tempx=13 then let actpd$="thirteen" else !:
               if tempx=14 then let actpd$="fourteen"
-00180 L180: open #1: "Name=Q:\GLmstr\ACGLCovF.h"&str$(cno)&",Shr",display,input ioerr XIT
+00180 L180: open #1: "Name="&env$('Q')&"\GLmstr\ACGLCovF.h"&str$(cno)&",Shr",display,input ioerr XIT
 00200   on fkey 5 goto DONE
 00210   let fnopenprn
 00220 READ_ACGLCOVF: ! 
@@ -58,7 +58,7 @@
 00400 XIT: let fnxit
 00410 ! ______________________________________________________________________
 00420 ! <Updateable Region: ERTN>
-00430 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00430 ERTN: let fnerror(program$,err,line,act$,"xit")
 00440   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00450   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00460   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

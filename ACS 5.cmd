@@ -2,12 +2,37 @@
 Rem Cls
 @Echo Advanced Computer Services LLC
 
-Set Config=brConfig.sys
+rem Set BR_Version=431ie
+rem Set BR_Date=2015-12-28
 
-Set BR_Version=431ie
-Set BR_Date=2015-12-28
+ver | find "XP" > nul
+if %ERRORLEVEL% == 0 goto WIN_XP
 
+rem Set BR_XP_Mode=False
+rem 
+rem If /I "%ACSDeveloper%" NEQ "" (
+    Set BR_Version=432f
+    Set BR_Date=2017-04-12
+    rem Set BR_Version=432g
+    rem Set BR_Date=2017-04-19
+    Set BRListener_Version=430
+    Set BRListener_Date=2012-10-16
+    Set BRClient_Date=2017-04-19
+rem ) else (
+rem     Set BR_Version=431h
+rem     Set BR_Date=2015-06-29
+rem )
+goto POST_SET_BR
 
+:WIN_XP
+Set BR_XP_Mode=True
+Set BR_Version=431h
+Set BR_Date=2015-06-29
+goto POST_SET_BR
+
+:POST_SET_BR
+set ACSForce32Bit=Yes
+set ACSForceRelease=Yes
 Rem 2016/04/03 - BR does not support PDF printing in 64 bit mode - only 32...  
 Rem so we are stuck with the 32bit architecture until they do (which should be no time soon)
 Rem  see   http://brforum.brulescorp.com/viewtopic.php?p=3296#p3296
@@ -16,7 +41,6 @@ If Exist %SystemRoot%\SysWow64 (
 ) else (
     Set BR_Architecture=Win32
 )
-
 If /I "%ACSForce32Bit%" NEQ "" (
     @Echo      ACSForce32Bit:  Yes - %ACSDeveloper%
     Set BR_Architecture=Win32
@@ -24,41 +48,23 @@ If /I "%ACSForce32Bit%" NEQ "" (
 
 If /I "%ACSDeveloper%" NEQ "" (
     @Echo      ACSDeveloper:  Yes - %ACSDeveloper%
-    Set BR_Model=DebugEfence
+    rem  (changed at 432f)  Set BR_Model=DebugEfence
+    Set BR_Model=Debug
 ) else (
+    Set BR_Model=Release
+)
+If /I "%ACSForceRelease%" NEQ "" (
+    @Echo      ACSForce32Bit:  Yes - %ACSDeveloper%
     Set BR_Model=Release
 )
     @Echo              Mode:          %BR_Model%
 
 Set BR=brserver-%BR_Version%-%BR_Architecture%-%BR_Model%-%BR_Date%.exe
-
-
-If /I "%ACSRunAsAdmin%" NEQ "" (
-    @Echo      ACSRunAsAdmin:  Yes - %ACSRunAsAdmin%
-    :: BatchGotAdmin (Run as Admin code starts)
-    REM --> Check for permissions
-    >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
-    REM --> If error flag set, we do not have admin.
-    if '%errorlevel%' NEQ '0' (
-    echo Requesting administrative privileges...
-    goto UACPrompt
-    ) else ( goto gotAdmin )
-    :UACPrompt
-    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
-    echo UAC.ShellExecute "%~s0", "", "", "runas", 1 >> "%temp%\getadmin.vbs"
-    "%temp%\getadmin.vbs"
-    exit /B
-    :gotAdmin
-    if exist "%temp%\getadmin.vbs" ( del "%temp%\getadmin.vbs" )
-    pushd "%CD%"
-    CD /D "%~dp0"
-    :: BatchGotAdmin (Run as Admin code ends)
-    :: Your codes should start from the following line
-    rem above code from http://www.techgainer.com/create-batch-file-automatically-run-administrator/
-
-    echo     Launch Command:  Start "ACS 5" "%~dp0%BR%"  %*
-
-)
-
-Start "ACS 5" "%~dp0%BR%" %*
-
+Set default=%~dp0ACS 5.exe
+rem echo default is %default%
+rem If Exist "%default%" (
+rem   set executable=%default%
+rem ) else (
+      set executable=%~dp0%BR%
+rem )
+Start "ACS 5" "%executable%" %*

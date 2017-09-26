@@ -1,13 +1,13 @@
-00020 ! Replace R:\Core\Programs\PrintLay2
+00020 ! Replace S:\Core\Programs\PrintLay2
 00040 ! Print Layout(s)
 00060 ! ______________________________________________________________________
-00080   library 'R:\Core\Library': fnerror,fnwin3b,fnxit,fnopenprn,fncloseprn,fnconsole,fntop,fngetdir2
+00080   library 'S:\Core\Library': fnerror,fnwin3b,fnxit,fnopenprn,fncloseprn,fnconsole,fntop,fngetdir2
 00100   on error goto ERTN
 00120 ! ______________________________________________________________________
 00140   dim a$(200,3)*80,h1$*55,rm$(4)*128,filename$*50,ln$*120
 00160   dim a(200,6),a$*132,prg$*20,mo$(12),cap$*128,source_path$*150
 00180 ! ______________________________________________________________________
-00200   let fntop("R:\Core\PrintLay",cap$="Print Layout(s)")
+00200   let fntop("S:\Core\PrintLay",cap$="Print Layout(s)")
 00220   data January,February,March,April,May,June,July,August,September,October,November,December
 00240   read mat mo$
 00260 ! ______________________________________________________________________
@@ -17,10 +17,10 @@
 00340   print #win,fields "2,2,Cr 18,N": "Path and Filename:"
 00360   if wbversion$<'4.20hi' then let io1$(1)="2,21,C 40/150,U" else let io1$(1)="2,21,40/C 150,U"
 00380 ! 
-00400 ! let source_path$="R:\acsPR\Layouts\rptrail.lay"
-00420   let source_path$="R:\acsTM\Layouts\*.lay"
-00440 ! let source_path$="R:\acsUB\Layouts\*.lay"
-00460 ! let source_path$="R:\acsUB\Layouts\Q:\UBmstr-vb.lay"
+00400 ! let source_path$="S:\acsPR\Layouts\rptrail.lay"
+00420   let source_path$="S:\acsTM\Layouts\*.lay"
+00440 ! let source_path$="S:\acsUB\Layouts\*.lay"
+00460 ! let source_path$="S:\acsUB\Layouts\UBmstr-vb.lay"
 00480 L210: ! 
 00500   rinput #win,fields io1$(1): source_path$
 00520   if cmdkey=5 then goto XIT
@@ -147,7 +147,7 @@
 03280   fnend 
 03300 ! ______________________________________________________________________
 03320 ! <Updateable Region: ERTN>
-03340 ERTN: let fnerror(cap$,err,line,act$,"xit")
+03340 ERTN: let fnerror(program$,err,line,act$,"xit")
 03360   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03380   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 03400   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

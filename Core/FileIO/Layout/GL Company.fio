@@ -1,0 +1,246 @@
+[Q]\GLmstr\Company.h[cno], company_, 0
+recl=882
+===================================================
+cnam$           ,Company Name                            ,C      40      , !   Pos=1
+A2$             ,Company Address                         ,C      40      , !   Pos=41
+A3$             ,City State Zip                          ,C      40      , !   Pos=81
+B1$             ,Federal ID                              ,C      12      , !   Pos=121
+B2$             ,State ID                                ,C      12      , !   Pos=133
+C$              ,State U/C Rate                          ,C       5      , !   Pos=145
+D1              ,Department Number Used                  ,N       1      , !   Pos=150
+D2              ,Sub-Account Number Used                 ,N       1      , !   Pos=151
+E1$             ,Beginning Account Number Summarized     ,C      12      , !   Pos=152
+E2$             ,Ending Account Number Summarized        ,C      12      , !   Pos=164
+LASTACT$        ,LAST Balance Sheet Account              ,C      12      , !   Pos=176
+UCM             ,State U/C Maximum                       ,PD      7.2    , !   Pos=188
+TB$             ,Type of Business                        ,C      30      , !   Pos=195
+FSCode          ,Donno (225-226)                         ,N       2      , !   Pos=225
+PriorCD         ,Donno (227-227)                         ,N       1      , !   Pos=227
+DunnoC40$       ,Donno (228-267)                         ,C      40      , !   Pos=228
+ActPD           ,Donno (228-267)                         ,N       2      , !   Pos=268
+ActPD$          ,Donno (228-267)                         ,C       6      , !   Pos=270
+CCH$            ,Donno (228-267)                         ,C      20      , !   Pos=276
+LMU             ,Last Accounting Period                  ,N       2      , !   Pos=296
+PRGL01          ,Payroll G/L Number 01                   ,PD      4      , !   Pos=298
+PRGL02          ,Payroll G/L Number 02                   ,PD      4      , !   Pos=302
+PRGL03          ,Payroll G/L Number 03                   ,PD      4      , !   Pos=306
+PRGL04          ,Payroll G/L Number 04                   ,PD      4      , !   Pos=310
+PRGL05          ,Payroll G/L Number 05                   ,PD      4      , !   Pos=314
+PRGL06          ,Payroll G/L Number 06                   ,PD      4      , !   Pos=318
+PRGL07          ,Payroll G/L Number 07                   ,PD      4      , !   Pos=322
+PRGL08          ,Payroll G/L Number 08                   ,PD      4      , !   Pos=326
+PRGL09          ,Payroll G/L Number 09                   ,PD      4      , !   Pos=330
+PRGL10          ,Payroll G/L Number 10                   ,PD      4      , !   Pos=334
+PRGL11          ,Payroll G/L Number 11                   ,PD      4      , !   Pos=338
+PRGL12          ,Payroll G/L Number 12                   ,PD      4      , !   Pos=342
+PRGL13          ,Payroll G/L Number 13                   ,PD      4      , !   Pos=346
+PRGL14          ,Payroll G/L Number 14                   ,PD      4      , !   Pos=350
+PRGL15          ,Payroll G/L Number 15                   ,PD      4      , !   Pos=354
+PRGL16          ,Payroll G/L Number 16                   ,PD      4      , !   Pos=358
+PRGL17          ,Payroll G/L Number 17                   ,PD      4      , !   Pos=362
+PRGL18          ,Payroll G/L Number 18                   ,PD      4      , !   Pos=366
+PRGL19          ,Payroll G/L Number 19                   ,PD      4      , !   Pos=370
+PRGL20          ,Payroll G/L Number 20                   ,PD      4      , !   Pos=374
+PRGL21          ,Payroll G/L Number 21                   ,PD      4      , !   Pos=378
+JCCode          ,FILLER (N 2  not C 2)                   ,N       2      , !   Pos=382
+NAP             ,Number OF Accounting Periods            ,N       2      , !   Pos=384
+FICARate        ,FICA Rate                               ,PD      5.3    , !   Pos=386
+FICAWAGE        ,FICA WAGE                               ,PD      5.2    , !   Pos=391
+FEDUCRAT        ,Federal U/C Rate                        ,PD      5.3    , !   Pos=396
+FEDUCWAG        ,Federal U/C WAGE                        ,PD      5.2    , !   Pos=401
+ACTR            ,Accumulated Transaction Code (1=Yes)    ,N       1      , !   Pos=406
+MCR             ,MediCare Rate                           ,PD      5.3    , !   Pos=407
+MCM             ,Medicare Maximum Wage                   ,PD      5.2    , !   Pos=412
+RecCode         ,RecCode                                 ,N       1      , !   Pos=417
+MiscName01$     ,MiscName$(01)                           ,C      20      , !   Pos=418
+MiscName02$     ,MiscName$(02)                           ,C      20      , !   Pos=438
+MiscName03$     ,MiscName$(03)                           ,C      20      , !   Pos=458
+MiscName04$     ,MiscName$(04)                           ,C      20      , !   Pos=478
+MiscName05$     ,MiscName$(05)                           ,C      20      , !   Pos=498
+MiscName06$     ,MiscName$(06)                           ,C      20      , !   Pos=518
+MiscName07$     ,MiscName$(07)                           ,C      20      , !   Pos=538
+MiscName08$     ,MiscName$(08)                           ,C      20      , !   Pos=558
+MiscName09$     ,MiscName$(09)                           ,C      20      , !   Pos=578
+MiscName10$     ,MiscName$(10)                           ,C      20      , !   Pos=598
+DEDCODE01       ,DEDCODE(01)                             ,N       1      , !   Pos=618
+DedCode02       ,DedCode(02)                             ,N       1      , !   Pos=619
+DedCode03       ,DedCode(03)                             ,N       1      , !   Pos=620
+DedCode04       ,DedCode(04)                             ,N       1      , !   Pos=621
+DedCode05       ,DedCode(05)                             ,N       1      , !   Pos=622
+DedCode06       ,DedCode(06)                             ,N       1      , !   Pos=623
+DedCode07       ,DedCode(07)                             ,N       1      , !   Pos=624
+DedCode08       ,DedCode(08)                             ,N       1      , !   Pos=625
+DedCode09       ,DedCode(09)                             ,N       1      , !   Pos=626
+DedCode10       ,DedCode(10)                             ,N       1      , !   Pos=627
+DedFed01        ,DedFed(01)                              ,N       1      , !   Pos=628
+DedFed02        ,DedFed(02)                              ,N       1      , !   Pos=629
+DedFed03        ,DedFed(03)                              ,N       1      , !   Pos=630
+DedFed04        ,DedFed(04)                              ,N       1      , !   Pos=631
+DedFed05        ,DedFed(05)                              ,N       1      , !   Pos=632
+DedFed06        ,DedFed(06)                              ,N       1      , !   Pos=633
+DedFed07        ,DedFed(07)                              ,N       1      , !   Pos=634
+DedFed08        ,DedFed(08)                              ,N       1      , !   Pos=635
+DedFed09        ,DedFed(09)                              ,N       1      , !   Pos=636
+DedFed10        ,DedFed(10)                              ,N       1      , !   Pos=637
+DedFICA01       ,DedFICA(01)                             ,N       1      , !   Pos=638
+DedFICA02       ,DedFICA(02)                             ,N       1      , !   Pos=639
+DedFICA03       ,DedFICA(03)                             ,N       1      , !   Pos=640
+DedFICA04       ,DedFICA(04)                             ,N       1      , !   Pos=641
+DedFICA05       ,DedFICA(05)                             ,N       1      , !   Pos=642
+DedFICA06       ,DedFICA(06)                             ,N       1      , !   Pos=643
+DedFICA07       ,DedFICA(07)                             ,N       1      , !   Pos=644
+DedFICA08       ,DedFICA(08)                             ,N       1      , !   Pos=645
+DedFICA09       ,DedFICA(09)                             ,N       1      , !   Pos=646
+DedFICA10       ,DedFICA(10)                             ,N       1      , !   Pos=647
+DedSt01         ,DedSt(01)                               ,N       1      , !   Pos=648
+DedSt02         ,DedSt(02)                               ,N       1      , !   Pos=649
+DedSt03         ,DedSt(03)                               ,N       1      , !   Pos=650
+DedSt04         ,DedSt(04)                               ,N       1      , !   Pos=651
+DedSt05         ,DedSt(05)                               ,N       1      , !   Pos=652
+DedSt06         ,DedSt(06)                               ,N       1      , !   Pos=653
+DedSt07         ,DedSt(07)                               ,N       1      , !   Pos=654
+DedSt08         ,DedSt(08)                               ,N       1      , !   Pos=655
+DedSt09         ,DedSt(09)                               ,N       1      , !   Pos=656
+DedSt10         ,DedSt(10)                               ,N       1      , !   Pos=657
+DedUC01         ,DedUC(01)                               ,N       1      , !   Pos=658
+DedUC02         ,DedUC(02)                               ,N       1      , !   Pos=659
+DedUC03         ,DedUC(03)                               ,N       1      , !   Pos=660
+DedUC04         ,DedUC(04)                               ,N       1      , !   Pos=661
+DedUC05         ,DedUC(05)                               ,N       1      , !   Pos=662
+DedUC06         ,DedUC(06)                               ,N       1      , !   Pos=663
+DedUC07         ,DedUC(07)                               ,N       1      , !   Pos=664
+DedUC08         ,DedUC(08)                               ,N       1      , !   Pos=665
+DedUC09         ,DedUC(09)                               ,N       1      , !   Pos=666
+DedUC10         ,DedUC(10)                               ,N       1      , !   Pos=667
+MiscGL01$       ,MiscGL$(01)                             ,C      12      , !   Pos=668
+MiscGL02$       ,MiscGL$(02)                             ,C      12      , !   Pos=680
+MiscGL03$       ,MiscGL$(03)                             ,C      12      , !   Pos=692
+MiscGL04$       ,MiscGL$(04)                             ,C      12      , !   Pos=704
+MiscGL05$       ,MiscGL$(05)                             ,C      12      , !   Pos=716
+MiscGL06$       ,MiscGL$(06)                             ,C      12      , !   Pos=728
+MiscGL07$       ,MiscGL$(07)                             ,C      12      , !   Pos=740
+MiscGL08$       ,MiscGL$(08)                             ,C      12      , !   Pos=752
+MiscGL09$       ,MiscGL$(09)                             ,C      12      , !   Pos=764
+MiscGL10$       ,MiscGL$(10)                             ,C      12      , !   Pos=776
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
