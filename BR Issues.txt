@@ -1,0 +1,14 @@
+BR Issues
+
+Open BR Issues
+
+combobox issue
+	C:\ACS\Dev-5\ComboTest.br.brs
+	(impossible to pick BMW from list)
+	
+Date Editing Issue
+	C:\ACS\Dev-5\dateTest.br.brs
+	(invisible characters and br crashes during normal process of editing fields)
+
+Line Numbers
+	promised to get rid of the need to use them
