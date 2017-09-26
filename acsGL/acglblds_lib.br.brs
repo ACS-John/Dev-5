@@ -1,14 +1,14 @@
-00010 ! Replace R:\acsGL\acglBldS.br
-00020 ! this -library function- builds the file    Q:\GLmstr\ACGLScr.h
+00010 ! Replace S:\acsGL\acglBldS.br
+00020 ! this -library function- builds the file    "&env$('Q')&"\GLmstr\ACGLScr.h
 00030   def library fnacglblds
-00040     library 'R:\Core\Library': fntop,fnxit,fnerror,fncno, fnacprscr
+00040     library 'S:\Core\Library': fntop,fnxit,fnerror,fncno, fnacprscr
 00050     on error goto ERTN
 00060 ! ______________________________________________________________________
 00070     dim flo$(31),fli$(65),scr$(30)*20,otd$(65)*30,d(2)
 00080 ! ______________________________________________________________________
 00090     let fncno(cno)
 00100     let fntop(program$,"CHANGE_ME")
-00110     open #20: "Name=Q:\GLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
+00110     open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
           read #20,using 'Form POS 150,2*N 1': mat d !:
           close #20: 
 00120 ! ______________________________________________________________________
@@ -89,14 +89,14 @@
 00340     let fli$(2)="3,30,N 6,UT  ,N"
 00350     if d(1)=0 then let fli$(2)(11:11)="C"
 00360     if d(2)=0 then let fli$(2)(12:12)="E"
-00370     execute "Free  Q:\GLmstr\ACGLScr.h"&str$(cno)&" -n" ioerr L380
-00380 L380: open #20: "Name=Q:\GLmstr\ACGLScr.h"&str$(cno)&",Size=0,RecL=4281",internal,output: write #20,using 'Form POS 1,31*C 15,30*C 20,65*C 18,65*C 30': mat flo$,mat scr$,mat fli$,mat otd$ !:
+00370     execute "Free "&env$('Q')&"\GLmstr\ACGLScr.h"&str$(cno)&" -n" ioerr L380
+00380 L380: open #20: "Name="&env$('Q')&"\GLmstr\ACGLScr.h"&str$(cno)&",Size=0,RecL=4281",internal,output: write #20,using 'Form POS 1,31*C 15,30*C 20,65*C 18,65*C 30': mat flo$,mat scr$,mat fli$,mat otd$ !:
           close #20: 
 00390     let fnacprscr
 00400     goto XIT
 00410 ! ______________________________________________________________________
 00420 ERTN: ! <Updateable Region: ERTN>
-00430     let fnerror(cap$,err,line,act$,"xit")
+00430     let fnerror(program$,err,line,act$,"xit")
 00440     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00450     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00460     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

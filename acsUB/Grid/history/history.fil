@@ -1,0 +1,23 @@
+Amount                        tamount                7 2PD 4.2     Amount
+Balance                       tbal                   7 2PD 4.2     Balance
+Customer Number               P$                    10 0C 10       Customer #
+Date (CCYYMMDD)               tdate                  8 0N 8        Date
+Electric Charge               tg(3)                  7 2PD 4.2     Elec Chg
+Electric Reading              er                     9 0pd 5       El Reading
+Electric Usage                eu                     9 0pd 5       El Usage
+Gas Charge                    tg(4)                  7 2PD 4.2     Gas Chg
+Gas Reading                   gr                     9 0pd 5       Gas Reading
+Gas Usage                     gu                     9 0pd 5       Gas Usage
+Net Bill                      tG(11)                 7 2PD 4.2     Net Bill
+Other Charge                  tg(8)                  7 2PD 4.2     Other Chg
+Penalty                       tG(10)                 7 2PD 4.2     Penalty 
+Posting Code                  pcode                  1 0N 1        P Code
+Primacy Fee                   tG(6)                  7 2PD 4.2     Primacy Fee
+Sales tax                     tG(9)                  7 2PD 4.2     Tax
+Sanitation                    tG(5)                  7 2PD 4.2     Sanitation
+Sewer                         tg(2)                  7 2PD 4.2     Sewer
+Sewer Fee                     tG(7)                  7 2PD 4.2     Sewer Fee
+Transaction Code              tcode                  1 0N 1        T Code
+Water                         tg(1)                  7 2PD 4.2     Water
+Water Reading                 wr                     9 0pd 5       Wa Reading
+Water Usage                   wu                     9 0pd 5       Wa Usage

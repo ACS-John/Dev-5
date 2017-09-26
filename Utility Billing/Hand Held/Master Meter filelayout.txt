@@ -1,0 +1,17 @@
+Master Meter format
+Tab and Space Delimited
+Each field is padded to it's length and a tab is placed between each
+
+Length   Name              
+10       Account Number
+30       Customer Name
+30       Meter Address
+3        Route          
+7        Sequence                 
+8        Meter Information - Meter Number      
+20       Meter Information - Transmitter Number
+9        Previous Reading
+17       Longitude
+17       Latitude
+9        Current Reading (for bringing data back in)
+

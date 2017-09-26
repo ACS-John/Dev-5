@@ -1,10 +1,10 @@
-10000 ! Replace R:\Core\Wait.br
+10000 ! Replace S:\Core\Wait.br
 10020 ! ______________________________________________________________________
 10040   def library fnwait(;win,&cap$,message$*40,stopable)
 10060 ! if stopable=1 will display "Cancel (F5)" button
 10080 ! win = window number
 10100 ! ______________________________________________________________________
-10120     library 'R:\Core\Library': fnstatus,fnerror ! ,fncno
+10120     library 'S:\Core\Library': fnstatus,fnerror ! ,fncno
 10140     on error goto ERTN
 10160     if trim$(message$)="" then let message$="Please wait..."
 10180 ! 
@@ -21,7 +21,7 @@
 10400 ! end if
 10420     goto XIT
 10440 ! ______________________________________________________________________
-10460 ERTN: let fnerror(waitcap$="R:\Core\Wait.br",err,line,act$,"xit")
+10460 ERTN: let fnerror(program$,err,line,act$,"xit")
 10480     if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 10500     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 10520     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

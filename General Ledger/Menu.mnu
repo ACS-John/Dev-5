@@ -1,0 +1,110 @@
+! *** GL - General Ledger ***
+File
+>General Ledger Master                              ^ General Ledger\Accounts
+>>Duplicate Range of Accounts                       ^ acsGL\BldRange
+>Financial Statement Design                         ^ acsGL\FinancialStatement
+>Payee                                              ^ General Ledger\Payee
+>>Payee Transaction List                            ^ acsGL\VendorTransList
+>Schedule                                           ^ General Ledger\Schedule
+>Bank Reconciliation                                ^ acsGL\bankrec
+>>Access Bank Rec File                              ^ acsGL\bankreconciliation
+! removed 2/10/2017 - will anyone notice?  >Ratios  ^ acsGL\Ratio
+>Payee Type                                         ^ acsGL\payeetype
+Period Ending Dates                                 ^ General Ledger\Period Ending Dates
+Enter Transactions                                  ^ General Ledger\Enter Transactions
+>Post Transactions                                  ^ acsGL\GLJCMrge
+>Remove Entries Posted by Mistake                   ^ acsGL\UNPost
+! removed 2/10/2017 - will anyone notice?    Automatic Processing
+! removed 2/10/2017 - will anyone notice?    >Select Automatic Processing Programs                              ^ acsGL\SelAuto
+! removed 2/10/2017 - will anyone notice?    >Begin Automatic Processing                              ^ acsGL\AutoProc
+Enter Standard Adjustments                          ^ General Ledger\Enter Standard Adjustments
+>Post Standard Adjustments                          ^ General Ledger\Post Standard Adjustments
+>Prior Period Adjustments                           ^ acsGL\PriorPeriodAdj
+Print
+>Trial Balance Worksheet                            ^ acsGL\ACGLWkSh
+>Trial Balance                                      ^ General Ledger\Trial Balance
+>Budget Worksheet                                   ^ acsGL\BudWkSh
+>Transactions Journal                               ^ acsGL\AcGLTrJr
+>Chart of Accounts                                  ^ acsGL\acGLCHRT
+Financial Statements
+>Print Cover Letter                                 ^ acsGL\CoverLetterPrint
+>>Edit Cover Letter                                 ^ acsGL\CoverLetterEdit
+>Balance Sheet                                      ^ acsGL\BalanceSheet
+>>Comparative Balance Sheet                         ^ General Ledger\Comparative Balance Sheet
+>>Period Comparison Balance Sheet                   ^ General Ledger\Period Comparison Balance Sheet
+>>Fund Comparison Balance Sheet                     ^ acsGL\ACGLbalF
+>Income Statement                                   ^ General Ledger\Income Statement
+>>Quarterly Income Statement                        ^ acsGL\ACGLINCQ
+>>Income Statement with Percents                    ^ acsGL\ACGLINCP
+>>Comparative Income Statement                      ^ acsGL\ACGLINCC
+>>Income Statement with Budget                      ^ acsGL\ACGLINCB
+>>Income Statement with Varience                    ^ acsGL\ACGLINCV
+>>Income Statement showing YTD Only                 ^ acsGL\ACGLINC1
+>>Four Column Budget Income Statement               ^ General Ledger\Four Column Budget Income Statement
+>>Four Column Budget With Percent                   ^ acsGL\ACGLINC4p
+>>Six Column Budget Income Statement                ^ acsGL\ACGLINCb6
+>>Income Statement with GASB Budget                 ^ acsGL\ACGLINCo
+>>Income Statement with Year Comparison             ^ acsGL\ACGLINYY
+>>Income Statement-Month & Year Budgets             ^ acsGL\ACGLINc6b
+>Change in Financial Position                       ^ acsGL\ACGLCHGR
+>>Change Amount (FP)                                ^ acsGL\ACGLCHGS
+>>Comparative (FP)                                  ^ acsGL\acGLChg
+>>Comparative Change Amount (FP)                    ^ acsGL\acGLChgC
+>Cash Flow Statement                                ^ acsGL\ACGLCASH
+>>Cash Flow Statement With Budget                   ^ acsGL\acGLCASB
+>>Cash Flow with Fund Comparison                    ^ acsGL\acGLCasF
+>>Cash Flow with YTD Budget Comparison              ^ acsGL\acGLCasO
+>Retained Earnings Statement
+>>Edit Retained Earnings Statement                  ^ acsGL\ReStEdit
+>>Print Retained Earnings Statement                 ^ acsGL\ReStPrint
+>Print Schedules                                    ^ General Ledger\Print Schedules
+>Financial Statements Notes                         ^ acsGL\acGLNote
+! removed 3/14/17   -  doesnt seem that anyone is using it.   >Print Bar Graph of Earnings                        ^ acsGL\bargraph
+Monthly
+>Post Entries from Holding Files                    ^ acsGL\acGLPost
+>Close Month                                        ^ General Ledger\Close Month
+Annually
+>Print Accumulated Trial Balance                    ^ General Ledger\Print Accumulated Trial Balance
+>Close Books at Year End                            ^ General Ledger\Close Books at Year End
+>Clear Accumulated Transactions                     ^ acsGL\acGLClr
+>Enter Budget Amounts                               ^ acsGL\BudInpt
+>Print 1099 Forms                                   ^ General Ledger\Print 1099 Forms   
+>Create Electronic 1099s                            ^ acsGL\Elec1099
+! no longer necessary, unless files get too large >Dump Old Payee Transactions                              ^ acsGL\Dumppayeetrans
+Error Recovery
+>Generate Reversing Entries                       ^ acsGL\Reverse 
+>Remove Entries Posted by Mistake                 ^ acsGL\Unpost
+>Reassign Transaction Addresses                   ^ acsGL\glreass
+>Fix Current Period Transaction Dates             ^ acsGL\Fix_Trans_Dates
+>Fix Current Balance                              ^ General Ledger\Fix Current Balance
+>Fix Period Accumulators from History             ^ General Ledger\Fix Period Accumulators from History
+Utilities
+>Consolidate Master Files                         ^ acsGL\COMBGL
+>Create ASCII File                                ^ acsGL\ASCIIGLM
+>Create Checkbook System Files                    ^ acsGL\CLBLD
+>Reorganize Company                               ^ acsGL\GlReorganize
+>Period Names                                     ^ HamsterFio:Period Names
+>Test Balance Sheet Design                        ^ acsGL\balancesheettest
+>Test Income Statement Design                     ^ acsGL\acglinct
+>Reprint Year End Trial Balance                   ^ acsGL\yearendtb
+Budget Management                                 ^ acsGL\bgmaint2
+
+General Ledger Accountants Add-On                 ^                                                       ^ G2
+>Employee                                         ^ General Ledger\Accountants\Employee                   ^ G2
+>Monthly                                          ^                                                       ^ G2
+>>Print Payroll Registers                         ^ General Ledger\Accountants\Print Payroll Registers    ^ G2
+>>Print Deductions Register                       ^ acsGL\OtherDeductions                                 ^ G2
+>>Print Deductions Register-YTD QTD               ^ acsGL\OtherDeductionsYTD                              ^ G2
+>>Post Payroll Checks                             ^ acsGL\PRMerge                                         ^ G2
+>Quarterly                                        ^                                                       ^ G2
+>>Print State Unemployment Compensation Report    ^ acsGL\PRStatUC                                        ^ G2
+>>Print Texas Unemployment Report                 ^ acsgl\prtexasuc                                       ^ G2
+>>State UnEmp.-Electronic Submission              ^ acsgl\elecuc                                          ^ G2
+>>Print 941 Summary                               ^ acsGL\PR941                                           ^ G2
+>>Zero QTD Payroll Information                    ^ acsGL\PRZQTD                                          ^ G2
+>>Fix YTD - QTD Earnings                          ^ acsgl\fixytdqtd                                       ^ G2
+>Annually                                                                                                 ^ G2
+! >>W-2 Supplemental Information                  ^ acsgl\w2box16   <-- moved into Employee file          ^ G2
+>>Print W-2 Forms                                 ^ General Ledger\Print W-2 Forms                        ^ G2
+>>Create Electronic W-2s                          ^ acsGL\glElecW2                                        ^ G2
+>>Zero YTD Payroll Information                    ^ acsGL\PRZYTD                                          ^ G2

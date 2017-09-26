@@ -1,14 +1,14 @@
-00010 !  Replace R:\Core\FlexDir
+00010 !  Replace S:\Core\FlexDir
 00020 ! puts a flex grid with a directory inside... kinda a file explorer
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnopenprn,fngetdir,fnerror,fntos,fnflexadd1,fnacs,fnflexinit1,fngetcd,fnremove2,fngetpp,fnlbl,fntxt,fncmdset,fntop
+00040   library 'S:\Core\Library': fnopenprn,fngetdir,fnerror,fntos,fnflexadd1,fnacs,fnflexinit1,fngetcd,fnremove2,fngetpp,fnlbl,fntxt,fncmdset,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*255,cap$*128
 00080   dim path$(2,1000)*255,prog$(2,1000)*100,ext$(2,1000)*100
 00090   dim brfn$(1000)*255,brsfn$(1000)*255,dur$*200,item$(1000)*255
 00100 ! ______________________________________________________________________
-00110   let fntop("R:\Core\FlexDir",cap$="Flex Dir")
+00110   let fntop("S:\Core\FlexDir",cap$="Flex Dir")
 00120   let fngetcd(dur$)
 00130 REFREASH: ! 
 00140   mat brfn$(1000) : mat brfn$=("")
@@ -51,7 +51,7 @@
 00440   stop 
 00450 ! ______________________________________________________________________
 00460 ! <Updateable Region: ERTN>
-00470 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00470 ERTN: let fnerror(program$,err,line,act$,"xit")
 00480   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00490   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00500   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

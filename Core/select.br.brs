@@ -1,9 +1,9 @@
-00010 ! Replace R:\Core\Select.br
+00010 ! Replace S:\Core\Select.br
 00040   def library fnselect(win,&cap$,&q$,mat option$,&response$,display_cnam,button_option,win_align,pr_newpg)
 00050 ! Q$         = Question to ask
 00060 ! option$(x) = any f x different answers
 00070 ! response$  = the number of the answer selected or value "F1"-"F100"
-00090     library 'R:\Core\Library': fnwin3b,fnerror
+00090     library 'S:\Core\Library': fnwin3b,fnerror
 00100     dim fio1$(22)*76,header$*80
 00110     let q$=rtrm$(q$)
 00120     for j=1 to udim(option$)

@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\acglCasO
+00010 ! Replace S:\acsGL\acglCasO
 00020 ! Cash Flow with YTD Budget Comparison
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnxit,fntop, fnwait,fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fngl_number_use_dept,fnpriorcd,fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fnxit,fntop, fnwait,fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim bm(13),bp(13),by(13)
@@ -19,16 +19,16 @@
         let priorcd=fnpriorcd
 00140   let fncno(cno,cnam$)
 00150   let fnopenprn
-00160   open #20: "Name=Q:\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
+00160   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00170   let fscode=fnfscode
 00180   if nap<12 or nap>13 then let nap=12
 00190   let in3$(1)="8,05,N 12.2,UT,N" : let in3$(2)="8,25,N 12.2,UT,N" !:
         let in3$(3)="8,45,N 12.2,UT,N" : let in3$(4)="8,65,N 12.2,UT,N"
 00200   if fnps=2 then let mp1=78 else let mp1=75
-00210   let fl1$="Name=Q:\GLmstr\ACGLFNSF.H"&str$(cno)&",KFName=Q:\GLmstr\FNSFINDX.H"&str$(cno)&",Shr"
-00220   if fnps=2 then let fl1$="Name=Q:\GLmstr\ACGLFNSG.H"&str$(cno)&",KFName=Q:\GLmstr\FNSGINDX.H"&str$(cno)&",Shr"
+00210   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFINDX.H"&str$(cno)&",Shr"
+00220   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&str$(cno)&",Shr"
 00230   open #1: fl1$,internal,input,keyed 
-00240   if fnprocess=1 or fngl_number_use_dept=0 then goto L340
+00240   if fnprocess=1 or fnUseDeptNo=0 then goto L340
 00250   let fntos(sn$="Acglcaso") !:
         let mylen=30: let mypos=mylen+3 : let right=1
 00260   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -40,7 +40,7 @@
 00310   let fnacs(sn$,0,mat resp$,ckey)
 00320   if ckey=5 then goto XIT
 00330   let costcntr=val(resp$(1))
-00340 L340: open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName=Q:\GLmstr\fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00340 L340: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
 00350 L350: read #1,using L390: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof DONE
 00360   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L350
 00370   if costcntr=0 then goto L390
@@ -200,11 +200,11 @@
 01880 ! ______________________________________________________________________
 01890 L1890: let heading=1
 01900   let pt1+=1
-01910   print #255: "\qc  {\f181 \fs24 \b "&trim$(cnam$)&"}"
+01910   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01920   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01930   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
 01940   print #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(fnactpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
-01950   print #255: "\qL "
+01950   print #255: "\ql "
 01960   print #255: ''
 01970   print #255: tab(44);"Year To";tab(60);"Annual";tab(71);"Over/Under"
 01980   print #255: tab(45);"Date";tab(60);"Budget";tab(73);"Budget"
@@ -236,7 +236,7 @@
 02190 XIT: let fnxit
 02200 ! ______________________________________________________________________
 02210 ! <Updateable Region: ERTN>
-02220 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02220 ERTN: let fnerror(program$,err,line,act$,"xit")
 02230   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02240   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02250   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

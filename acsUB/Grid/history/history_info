@@ -1,0 +1,6 @@
+123 dim tg(11),p$*10
+del 8010,8020
+08010 Open #1: "name="&datafolder$&"\ubtransvb"&dataext$&",kfname="&datafolder$&"\ubtrindx"&dataext$&",Use,RecL=102,KPs=1,KLn=19",Internal,Outin,Keyed
+del 9010,9035
+09020 Read #1,using 9010: P$,tdate,tcode,tamount,mat tg,we,wu,er,eu,gr,gu,tbal,pcode eof eofonread
+09010 Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1

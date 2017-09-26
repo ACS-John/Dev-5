@@ -1,9 +1,9 @@
 00010 ! Replace Core\PrtFlex\prtflex1
 00020 ! ______________________________________________________________________
-00030   library 'Core\Library': fnacs,fnlbl,fntxt,fntos,fnerror,fncomboa,fnflexadd1,fnflexinit1,fnxit,fncursys$,fngetdir,fncmdset,fncmdkey,fngetudf,fntop
+00030   library 'Core\Library': fnacs,fnlbl,fntxt,fntos,fnerror,fncomboa,fnflexadd1,fnflexinit1,fnxit,fncursys$,fngetdir,fncmdset,fncmdkey,fntop
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
-00060   dim programfolder$*60,datafolder$*60,udf$*256
+00060   dim programfolder$*60,datafolder$*60
 00070   dim options$(300)*87,gridname$*40,gridindx$*40
 00080   dim resp$(87)*80,txt$*40, cap$*128,message$*40,ln$*132
 00090   dim fullgridname$*60,fullgridindx$*60,gridinfo$(5)*87,item$(80)*30
@@ -12,8 +12,7 @@
 00120 ! ______________________________________________________________________
 00130   let datafolder$=uprc$(trim$(fncursys$))&"mstr" !:
         let programfolder$=uprc$(trim$(fncursys$))&"mstr"
-00140   let udf$=env$('temp')&'\'
-00150   let fntop(program$(4:pos(program$,'.',-1)-1),cap$="Grids")
+00150   let fntop(program$,cap$="Grids")
 00160 SELECTDATABASE: ! !:
         !  allows you to search the grid folder for any subfolders !:
         ! (You must create a sub-folder for each data base you can !:
@@ -65,7 +64,7 @@
         let filter$="*.FIL" !:
         let fngetdir(txt$,optionfile$,empty$,filter$)
 00460 ! Execute "Dir "&PROGRAMFOLDER$&"\grid\"&DATABASE$&"\*.* >flexwork."&WSID$ Ioerr 540
-00470 ! Open #12: "Name="&UDF$&"flexwork2.tmp,RecL=30,Replace",Internal,Outin
+00470 ! Open #12: "Name="&env$('temp')&"\flexwork2.tmp,RecL=30,Replace",Internal,Outin
 00480 ! Open #13: "Name=FlexWork.tmp",Display,Input Ioerr 540
 00490 ! Linput #13: LN$ Eof 540
 00500 ! Let LN$=TRIM$(UPRC$(LN$)) !:
@@ -240,7 +239,7 @@
 01670 L1670: write #15,using L1020: columnnum,name$,vname$,fieldlen,colmask$,abbrev$
 01680   goto DISPLAYGRID
 01690 ! ______________________________________________________________________
-01700 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01700 ERTN: let fnerror(program$,err,line,act$,"xit")
 01710   if uprc$(act$)<>"PAUSE" then goto L1740
 01720   execute "list -"&str$(line) !:
         pause  !:
@@ -274,7 +273,7 @@
 01980 ! This section generates the program lines needed to create the column            headings and column masks
 01990   close #15: ioerr L2000
 02000 L2000: open #15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outin,keyed ioerr SELECTDATABASE
-02010   open #10: "Name="&udf$&"GridSpecs1.tmp,RecL=255,Replace",display,output  ! temporary file to hold generated lines for grid specifications
+02010   open #10: "Name="&env$('temp')&"\GridSpecs1.tmp,RecL=255,Replace",display,output  ! temporary file to hold generated lines for grid specifications
 02020   print #10,using L2090: "procerr return" !:
         ! skip next line if no lines exist
 02030   print #10,using L2090: "del 10010,10480" !:
@@ -296,24 +295,24 @@
 02150   goto L2060
 02160 L2160: close #10: ioerr L2180
 02170   if columns=0 then goto DISPLAYOPTIONS
-02180 L2180: open #10: "Name="&udf$&"GridSpecs2.tmp,RecL=255,Replace",display,output 
+02180 L2180: open #10: "Name="&env$('temp')&"\GridSpecs2.tmp,RecL=255,Replace",display,output 
 02190   print #10,using L2090: "PROC NOECHO"
 02200   print #10,using L2090: "Load Core\PrtFlex\PrtFlex2"
 02210   print #10,using L2090: "Load Core\PrtFlex\PrtFlex2"
-02220   print #10,using L2090: "subproc "&udf$&"gridspecs1.tmp"
+02220   print #10,using L2090: "subproc "&env$('temp')&"\gridspecs1.tmp"
 02230   print #10,using L2090: "SubProc "&open_read$
 02240   print #10,using L2090: "00210 Let columns = "&str$(columns)
 02250   print #10,using L2090: "Replace Core\PrtFlex\PrtFlex2"
 02260   print #10,using L2090: 'chain "Core\PrtFlex\PrtFlex2"'
 02270 ! Print #10,Using 1980: "PROC ECHO"
 02280   close #10: 
-02290   open #11: "Name="&udf$&"Gridname.tmp,RecL=80,Replace",internal,output,relative 
+02290   open #11: "Name="&env$('temp')&"\Gridname.tmp,RecL=80,Replace",internal,output,relative 
 02300   write #11,using L2310: gridname$
 02310 L2310: form pos 1,c 40
 02320   close #11: 
 02330 ! write fullgridname$,fullgridIndex,columns to file for prtflex2
 02340   print newpage
-02350   execute "proc "&udf$&"gridspecs2.tmp"
+02350   execute "proc "&env$('temp')&"\gridspecs2.tmp"
 02360 ! ____________________________________________________________________
 02370 ADDGRIDNAME: !  Allows you to add columns to your grid
 02380   mat resp$=("")

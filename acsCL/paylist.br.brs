@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\PayList
+00010 ! Replace S:\acsCL\PayList
 00020 ! payee listing
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fndat,fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fntos,fnlbl,fncomboa,fntxt,fncmdset,fnacs,fnchk,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fndat,fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fntos,fnlbl,fncomboa,fntxt,fncmdset,fnacs,fnchk,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,holdvn$*8,vcode$*8
@@ -12,10 +12,10 @@
 00120   let fntop(program$,cap$="Payee Listing")
 00130   let fndat(dat$)
 00140   let fncno(cno,cnam$)
-00150   open #1: "Name=Q:\CLmstr\PAYMSTR.h"&str$(cno)&",KFName=Q:\CLmstr\PAYIDX1.h"&str$(cno)&",Shr",internal,outin,keyed 
-00160   open #2: "Name=Q:\CLmstr\PAYMSTR.h"&str$(cno)&",KFName=Q:\CLmstr\PAYIDX2.h"&str$(cno)&",Shr",internal,outin,keyed 
-00170   open #trmstr2=31: "Name=Q:\CLmstr\TRMSTR.h"&str$(cno)&",KFName=Q:\CLmstr\TRIDX2.h"&str$(cno)&",Shr",internal,outin,keyed 
-00180   open #payeegl=3: "Name=Q:\CLmstr\payeeGLBreakdown.h"&str$(cno)&",KFName=Q:\CLmstr\Payeeglbkdidx.h"&str$(cno)&",Shr",internal,outin,keyed 
+00150   open #1: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PAYIDX1.h"&str$(cno)&",Shr",internal,outin,keyed 
+00160   open #2: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PAYIDX2.h"&str$(cno)&",Shr",internal,outin,keyed 
+00170   open #trmstr2=31: "Name="&env$('Q')&"\CLmstr\TRMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TRIDX2.h"&str$(cno)&",Shr",internal,outin,keyed 
+00180   open #payeegl=3: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00190   print newpage
 00200   let fntos("ubnamlst") !:
         let respc=0
@@ -92,7 +92,7 @@
 00820 XIT: let fnxit
 00830 ! ______________________________________________________________________
 00840 ! <Updateable Region: ERTN>
-00850 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00850 ERTN: let fnerror(program$,err,line,act$,"xit")
 00860   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00870   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00880   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

@@ -1,8 +1,8 @@
-00010 ! Replace R:\acsCL\TrAlloc
-00020 ! Check Book Transaction Allocation File - Hamster !:
+00010 ! Replace S:\acsCL\TrAlloc
+00020 ! Checkbook Transaction Allocation File - Hamster !:
         ! pretty useless to the end user - but quite usefull to the programmer
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(9)*38,tln(9),p$(9)*160,fltyp$(9),sln(9),mask(9),sp(9),c$(9,8)*40
@@ -15,7 +15,7 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         let open_file_count=0 ! this value is used in the close_file sub routine
-00150   open #open_file_count+=1: "Name=Q:\CLmstr\TrAlloc.h"&str$(cno)&",Version=2,KFName=Q:\CLmstr\TrAlloc-Idx.h"&str$(cno)&",Use,RecL=80,KPs=1,KLn=11,Shr",internal,outin,keyed 
+00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno)&",Use,RecL=80,KPs=1,KLn=11,Shr",internal,outin,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -103,10 +103,10 @@
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         let limit_to_list$='1'
 00410 ! Let CL=1 : Let C$(CL,1)='ComboF' !:
-        ! Let C$(CL,2)='Q:\CLmstr\PayMstr.h'&STR$(CNO) !:
+        ! Let C$(CL,2)=env$('Q')&'\CLmstr\PayMstr.h'&STR$(CNO) !:
         ! Let C$(CL,3)='1' : Let C$(CL,4)='8' !:
         ! Let C$(CL,5)='9' : Let C$(CL,6)='30' !:
-        ! Let C$(CL,7)='Q:\CLmstr\PayIdx1.h'&STR$(CNO) !:
+        ! Let C$(CL,7)=env$('Q')&'\CLmstr\PayIdx1.h'&STR$(CNO) !:
         ! Let C$(CL,8)=LIMIT_TO_LIST$
 00420   return 
 00430 ! ______________________________________________________________________
@@ -117,7 +117,7 @@
 00480 XIT: let fnxit
 00490 ! ______________________________________________________________________
 00500 ! <Updateable Region: ERTN>
-00510 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00510 ERTN: let fnerror(program$,err,line,act$,"xit")
 00520   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00530   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00540   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

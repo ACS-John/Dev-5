@@ -1,14 +1,14 @@
-00010 ! Replace R:\acsCL\Conversion\GLBld-Cnv
+00010 ! Replace S:\acsCL\Conversion\GLBld-Cnv
 00020 ! ______________________________________________________________________
-00030   library 'R:\Core\Library': fntop,fnxit, fnerror,fncno
+00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim gl$*12,de$*50
 00070 ! ______________________________________________________________________
 00080   let fncno(cno)
 00090 ! 
-00100   open #2: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName=Q:\GLmstr\GLINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
-00110   open #1: "Name=Q:\CLmstr\GLmstr.H"&str$(cno)&",Size=0,RecL=62,Replace",internal,output 
+00100   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
+00110   open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",Size=0,RecL=62,Replace",internal,output 
 00120 READ_GLMSTR: ! 
 00130   read #2,using 'Form POS 1,C 12,C 50': gl$,de$ eof END1
 00140   write #1,using 'Form POS 1,C 12,C 50': gl$,de$
@@ -16,13 +16,13 @@
 00160 ! ______________________________________________________________________
 00170 END1: close #1: 
 00180   close #2: 
-00190   execute "INDEX Q:\CLmstr\GLmstr.H"&str$(cno)&" Q:\CLmstr\GLINDEX.h"&str$(cno)&" 1 12 Replace DupKeys -n"
+00190   execute "Index "&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\GLINDEX.h"&str$(cno)&" 1 12 Replace DupKeys -n"
 00200   goto XIT
 00210 ! ______________________________________________________________________
 00220 XIT: let fnxit
 00230 ! ______________________________________________________________________
 00240 ! <Updateable Region: ERTN>
-00250 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00250 ERTN: let fnerror(program$,err,line,act$,"xit")
 00260   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00270   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00280   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

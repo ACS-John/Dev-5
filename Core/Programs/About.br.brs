@@ -1,4 +1,4 @@
-10040   library 'R:\Core\Library': fntop,fnxit,fnacs_version$,fnclient_has_mat,fnsystem_abbr_2_name$,fnmsgbox,fnacs,fnlbl,fntxt,fngethandle,fntos,fnerror,fncno,fncmdset,fnchk,fncd,fnactpd,fnstatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
+10040   library 'S:\Core\Library': fntop,fnxit,fnacs_version$,fnclient_has_mat,fnSystemName$,fnmsgbox,fnacs,fnlbl,fntxt,fngethandle,fntos,fnerror,fncno,fncmdset,fnchk,fncd,fnactpd,fnstatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
 10060   on error goto ERTN
 10100   dim txt$(1)*256
 10140   let fntop(program$, cap$="About ACS")
@@ -15,7 +15,7 @@
 20160   mat txt$(txt_item+=1) : let txt$(txt_item)='Licensed Systems:'
 20180   for c_has_item=1 to c_has_count
 20200     mat txt$(txt_item+=1) : let txt$(txt_item)
-20220     let txt$(txt_item)=chr$(9)&rpad$(fnsystem_abbr_2_name$(c_has$(c_has_item)),40)
+20220     let txt$(txt_item)=chr$(9)&rpad$(fnSystemName$(c_has$(c_has_item)),40)
 22000 ! r: add support information
 22020     let which=srch(mat system_id$,c_has$(c_has_item))
 22030     mat txt$(txt_item+=1) : let txt$(txt_item)
@@ -46,7 +46,7 @@
 30000   let fnmsgbox(mat txt$, response$, cap$)
 30020   goto XIT
 40000 ! <Updateable Region: ERTN>
-40020 ERTN: let fnerror(cap$,err,line,act$,"xit")
+40020 ERTN: let fnerror(program$,err,line,act$,"xit")
 40040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 40060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 40080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

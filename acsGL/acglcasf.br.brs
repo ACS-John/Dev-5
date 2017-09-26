@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\acglCasF
+00010 ! Replace S:\acsGL\acglCasF
 00020 ! Cash Flow Statement with Fund Comparisons
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fngl_number_use_dept,fnpriorcd, fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnopt
+00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fnactpd$,fnpedat$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd, fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnopt
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim choices$(2)*21,io5$(2),bigul$*140,heading$*140
@@ -22,7 +22,7 @@
         let priorcd=fnpriorcd
 00170   let udf$=env$('temp')&'\'
 00180   let monthly=1 ! default to monthly information
-00190   open #20: "Name=Q:\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
+00190   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00200   let fscode=fnfscode
 00210   let pors=1
 00220   gosub L2370
@@ -30,10 +30,10 @@
 00240   let in3$(1)="8,25,N 12.2,UT,N" : let in3$(2)="8,45,N 12.2,UT,N"
 00250   let mp1=75
 00260   if fnps=2 then let mp1=mp1+3
-00270   let fl1$="Name=Q:\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName=Q:\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
-00280   if fnps=2 then let fl1$="Name=Q:\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName=Q:\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
+00270   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
+00280   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
 00290   open #1: fl1$,internal,input,keyed 
-00300   if fnprocess=1 or fngl_number_use_dept=0 then goto L410
+00300   if fnprocess=1 or fnUseDeptNo=0 then goto L410
 00310   let fntos(sn$="ACglcasf") !:
         let mylen=30: let mypos=mylen+3 : let right=1
 00320   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -49,10 +49,10 @@
 00410 L410: on fkey 5 goto L2250
 00420   if fnps=2 then goto L450 ! secondary
 00425   close #3: ioerr L430
-00430 L430: execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
+00430 L430: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
 00440   goto L460
-00450 L450: execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
-00460 L460: open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00450 L450: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
+00460 L460: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
 00470   let fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00480 L480: read #1,using L520: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2250
@@ -223,7 +223,7 @@
 02120 ! ______________________________________________________________________
 02130 L2130: let heading=1
 02140   let pt1+=1
-02150   print #255: "\qc  {\f181 \fs24 \b "&trim$(cnam$)&"}"
+02150   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 02160   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 02170   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
 02180   if monthly=2 then print #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(actpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
@@ -245,7 +245,7 @@
 02340 ! ______________________________________________________________________
 02350 XIT: let fnxit
 02360 ! ______________________________________________________________________
-02370 L2370: open #5: "Name=Q:\GLmstr\GLfund.h"&str$(cno)&",RecL=230,use",internal,outin,relative 
+02370 L2370: open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&str$(cno)&",RecL=230,use",internal,outin,relative 
 02380   read #5,using L2390: mat fundnum,mat funddesc$ ioerr L2400
 02390 L2390: form pos 1,10*n 3,10*c 20
 02400 L2400: let fntos(sn$="ACglcasf3") !:
@@ -295,7 +295,7 @@
 02750   return 
 02760 ! ______________________________________________________________________
 02770 ! <Updateable Region: ERTN>
-02780 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02780 ERTN: let fnerror(program$,err,line,act$,"xit")
 02790   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02800   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02810   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

@@ -1,0 +1,38 @@
+00010 ! REPLACE PRMSTR.LAY/ACSPR,SOURCE
+00070 LET H1$="PR MASTER FILE"
+00080 LET FILETYPE$="KEYED"
+00090 LET FILENAME$="RPMSTR.H(CNO)"
+00100 LET VOLID$="PRMSTR"
+00110 LET RM$(1)="KFNAME=RPINDEX.H(CNO)  KP=1  KL=8"
+00120 LET RM$(2)="KFNAME=RPINDX2.H(CNO)  KP=9 KL=30"
+00130 LET RM$(3)=""
+00140 LET RM$(4)=""
+00150 DATA Employee Number                       ^ENO          ^N 8
+00160 DATA Name                                  ^EM$(1)       ^C 30
+00170 DATA Address                               ^EM$(2)       ^C 30
+00180 DATA City,State,Zip Code                   ^EM$(3)       ^C 30
+00190 DATA Social Security Number                ^SS$          ^C 11
+00200 DATA Race                                  ^RS(1)        ^N 1
+00210 DATA Sex                                   ^RS(2)        ^N 1
+00220 DATA Marital Status(O=Single 1=Married)    ^EM(1)        ^N 2
+00230 DATA Federal Exemptions                    ^EM(2)        ^N 2
+00240 DATA State Exemptions                      ^EM(3)        ^N 2
+00250 DATA Employment Status                     ^EM(4)        ^N 2
+00260 DATA Pay Code                              ^EM(5)        ^N 2
+00270 DATA Fica Code                             ^EM(6)        ^N 2
+00280 DATA Eic Code                              ^EM(7)        ^N 2
+00290 DATA Sick Pay Code                         ^EM(8)        ^PD 3.3
+00320 DATA Vacation Pay Code                     ^EM(9)        ^PD 3.3
+00330 DATA Sick Hours Accrued                    ^EM(10)       ^PD 4.2
+00340 DATA Vacation Hours Accrued                ^EM(11)       ^PD 4.2
+00350 DATA Standard Federal W/H                  ^EM(12)       ^PD 4.2
+00360 DATA Federal Tax Add-On                    ^EM(13)       ^PD 4.2
+00370 DATA Standard State W/H                    ^EM(14)       ^PD 4.2
+00380 DATA State Tax Add-On                      ^EM(15)       ^PD 4.2
+00390 DATA Date Hired                            ^EM(16)       ^N 6
+00400 DATA Last Payroll Date                     ^EM(17)       ^N 6
+00405 DATA Total Gross Pay                       ^TGP          ^PD 5.2
+00410 DATA First Trailer Address                 ^TA(1)        ^PD 3
+00420 DATA Last Trailer Address                  ^TA(2)        ^PD 3
+00430 DATA Telephone #                           ^PH$          ^C 12
+00440 DATA Birth Date                            ^BD           ^N 6

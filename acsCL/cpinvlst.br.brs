@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\CpInvLst
+00010 ! Replace S:\acsCL\CpInvLst
 00020 ! checkbook Accounts Payable Listing (Any Time)
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fntop,fntos,fnlbl,fntxt,fncomboa,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fntop,fntos,fnlbl,fntxt,fncomboa,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,vnam$*30,de$*30,cap$*128,sq1$*1,item1$(2)*15
@@ -29,11 +29,11 @@
 00250   let fund=val(resp$(3))
 00260 ! ___________________________
 00270 ! ___________________________
-00280   open #paymstr=13: "Name=Q:\CLmstr\PayMstr.h"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
-00290   open #trmstr=1: "Name=Q:\CLmstr\TrMstr.h"&str$(cno)&",KFName=Q:\CLmstr\TrIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
-00300   open #tralloc=3: "Name=Q:\CLmstr\TrAlloc.h"&str$(cno)&",Version=2,KFName=Q:\CLmstr\TrAlloc-Idx.h"&str$(cno)&",Shr",internal,input,keyed 
-00310   open #paytrans=4: "Name=Q:\CLmstr\PayTrans.h"&str$(cno)&",KFName=Q:\CLmstr\UnPdIdx1.h"&str$(cno)&",Shr",internal,input,keyed 
-00320   open #unpdaloc=6: "Name=Q:\CLmstr\UnPdAloc.h"&str$(cno)&",Version=2,KFName=Q:\CLmstr\UAIdx2.h"&str$(cno)&",Shr",internal,input,keyed 
+00280   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
+00290   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
+00300   open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno)&",Shr",internal,input,keyed 
+00310   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&str$(cno)&",Shr",internal,input,keyed 
+00320   open #unpdaloc=6: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&str$(cno)&",Shr",internal,input,keyed 
 00330   open #work=5: "Name="&env$('Temp')&"\Work,Size=0,RecL=66,Replace",internal,output 
 00340 READ_PAYTRANS: ! 
 00350   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6',release: vn$,iv$,ivd,dd eof END1
@@ -131,7 +131,7 @@
 01200 XIT: let fnxit
 01210 ! ______________________________________________________________________
 01220 ! <Updateable Region: ERTN>
-01230 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01230 ERTN: let fnerror(program$,err,line,act$,"xit")
 01240   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01250   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01260   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

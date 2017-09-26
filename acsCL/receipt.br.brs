@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\Receipt
+00010 ! Replace S:\acsCL\Receipt
 00020 ! Standard receipt file
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnaddreceipt,fntop,fncno,fndat,fnxit,fnerror
+00040   library 'S:\Core\Library': fnaddreceipt,fntop,fncno,fndat,fnxit,fnerror
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128
@@ -13,7 +13,7 @@
 00130 XIT: let fnxit
 00140 ! ______________________________________________________________________
 00150 ! <Updateable Region: ERTN>
-00160 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00160 ERTN: let fnerror(program$,err,line,act$,"xit")
 00170   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00180   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00190   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

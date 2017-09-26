@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\UnpaidInvoiceHamster
-00020 ! Check Book UnpaidInvoice File
+00010 ! Replace S:\acsCL\UnpaidInvoiceHamster
+00020 ! Checkbook UnpaidInvoice File
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070 ! Dimension Ony the Arrays you need (this is important for Hamster) !:
@@ -17,8 +17,8 @@
 00160 ! ______________________________________________________________________
 00170 OPEN_FILE: ! !:
         let open_file_count=0 ! this value is used in the close_file sub routine
-00180   open #first_file=open_file_count+=1: "Name=Q:\CLmstr\PayTrans.h"&str$(cno)&",Version=2,KFName=Q:\CLmstr\UnPdIdx1.h"&str$(cno)&",Use,RecL=114,KPs=1,KLn=20,Shr",internal,outin,keyed 
-00190   open #open_file_count+=1: "Name=Q:\CLmstr\PayTrans.h"&str$(cno)&",Version=2,KFName=Q:\CLmstr\UnPdIdx2.h"&str$(cno)&",Use,RecL=114,KPs=31/27/1,KLn=2/4/26,Shr",internal,outin,keyed 
+00180   open #first_file=open_file_count+=1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&str$(cno)&",Use,RecL=114,KPs=1,KLn=20,Shr",internal,outin,keyed 
+00190   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx2.h"&str$(cno)&",Use,RecL=114,KPs=31/27/1,KLn=2/4/26,Shr",internal,outin,keyed 
 00200   return 
 00210 ! ______________________________________________________________________
 00220 BUILD_LAYOUT: ! 
@@ -122,22 +122,22 @@
         let limit_to_list$='1'
 00450   let cl=8 !:
         let c$(cl,1)='ComboF' !:
-        let c$(cl,2)="Q:\CLmstr\PaymentCode.dat" !:
+        let c$(cl,2)=env$('Q')&"\CLmstr\PaymentCode.dat" !:
         let c$(cl,3)='1' : let c$(cl,4)=str$(sln(cl)) !:
         let c$(cl,5)=str$(sln(cl)+1) : let c$(cl,6)='25' !:
-        let c$(cl,7)="Q:\CLmstr\PaymentCode.Idx" : let c$(cl,8)=limit_to_list$
+        let c$(cl,7)=env$('Q')&"\CLmstr\PaymentCode.Idx" : let c$(cl,8)=limit_to_list$
 00460   let cl=9 !:
         let c$(cl,1)='ComboF' !:
-        let c$(cl,2)="Q:\CLmstr\BankMstr.h"&str$(cno) !:
+        let c$(cl,2)=env$('Q')&"\CLmstr\BankMstr.h"&str$(cno) !:
         let c$(cl,3)='1' : let c$(cl,4)=str$(sln(cl)) !:
         let c$(cl,5)=str$(sln(cl)+1) : let c$(cl,6)='30' !:
-        let c$(cl,7)="Q:\CLmstr\BankIdx1.h"&str$(cno) : let c$(cl,8)=limit_to_list$
+        let c$(cl,7)=env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno) : let c$(cl,8)=limit_to_list$
 00470   let cl=12 !:
         let c$(cl,1)='ComboF' !:
-        let c$(cl,2)="R:\acsCL\PostingCode.dat" !:
+        let c$(cl,2)="S:\acsCL\PostingCode.dat" !:
         let c$(cl,3)='1' : let c$(cl,4)=str$(sln(cl)) !:
         let c$(cl,5)=str$(sln(cl)+1) : let c$(cl,6)='25' !:
-        let c$(cl,7)="R:\acsCL\PostingCode.idx" : let c$(cl,8)=limit_to_list$
+        let c$(cl,7)="S:\acsCL\PostingCode.idx" : let c$(cl,8)=limit_to_list$
 00480   return 
 00490 ! ______________________________________________________________________
 00500 OPEN_AND_CALL_HAMSTER: ! 
@@ -153,7 +153,7 @@
 00580 XIT: let fnxit
 00590 ! ______________________________________________________________________
 00600 ! <Updateable Region: ERTN>
-00610 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00610 ERTN: let fnerror(program$,err,line,act$,"xit")
 00620   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00630   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00640   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

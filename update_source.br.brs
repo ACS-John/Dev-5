@@ -1,4 +1,4 @@
-10000   library "R:\Core\library": fnreg_read,fnreg_write
+10000   library "S:\Core\Library": fnreg_read,fnreg_write
 10100   print border: 'Import Source'
 10200   execute 'con gui off'
 10300   let fnupdatesource

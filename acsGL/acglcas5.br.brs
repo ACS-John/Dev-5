@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\acglCas5
+00010 ! Replace S:\acsGL\acglCas5
 00020 ! CASH FLOW STATEMENT  WITH BUDGET
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnerror,fnprocess,fncno,fngl_number_use_dept,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd
+00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnerror,fnprocess,fncno,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20 ,in3$(4),cap$*128,udf$*256
@@ -20,15 +20,15 @@
 00190   let actpd=fnactpd
 00200   let fscode=fnfscode
 00210   let priorcd=fnpriorcd
-00220   open #20: "Name=Q:\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00220   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00230   if nap<12 or nap> 13 then let nap=12
 00240   let in3$(1)="8,5,N 12.2,UT,N" : let in3$(2)="8,25,N 12.2,UT,N" !:
         let in3$(3)="8,45,N 12.2,UT,N" : let in3$(4)="8,65,N 12.2,UT,N"
 00250   let mp1=75
 00260   if ps=2 then let mp1=mp1+3
-00270   let fl1$="Name=Q:\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName=Q:\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
-00280   if ps=2 then let fl1$="Name=Q:\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName=Q:\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
+00270   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
+00280   if ps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
 00290   print newpage
 00300   print fields "10,20,C 30,h,n": "CASH FLOW STATEMENT IN PROCESS"
 00310   on fkey 5 goto L2130
@@ -43,10 +43,10 @@
 00400   print fields "10,1,Cc 80,N": "Printing: please wait..."
 00410   print fields "12,2,c 30,B,5": "Press F5 to stop"
 00420   if fnps=2 then goto L450 ! secondary
-00430   execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
+00430   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
 00440   goto L460
-00450 L450: execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
-00460 L460: open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00450 L450: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
+00460 L460: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
 00470 L470: read #1,using L510: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2130
 00480   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L470
 00490   if costcntr=0 then goto L510
@@ -216,7 +216,7 @@
 02120 ! ______________________________________________________________________
 02130 L2130: let eofcode=1
 02140   gosub L1770
-02150   let fncloseprn(nw)
+02150   let fncloseprn
 02160   goto XIT
 02170 ! ______________________________________________________________________
 02180 L2180: print newpage
@@ -230,7 +230,7 @@
 02260 XIT: let fnxit
 02270 ! ______________________________________________________________________
 02280 ! <Updateable Region: ERTN>
-02290 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02290 ERTN: let fnerror(program$,err,line,act$,"xit")
 02300   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02310   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02320   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

@@ -1,8 +1,8 @@
-00010 ! Replace R:\Core\GLControl
-00020 ! Check Book Transaction Allocation File - Hamster !:
+00010 ! Replace S:\Core\GLControl
+00020 ! Checkbook Transaction Allocation File - Hamster !:
         ! pretty useless to the end user - but quite usefull to the programmer
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(6)*38,tln(6),p$(6)*160,fltyp$(6),sln(6),mask(6),c$(6,8)*40
@@ -15,7 +15,7 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         let open_file_count=0 ! this value is used in the close_file sub routine
-00150   open #open_file_count+=1: "Name=Q:\CLmstr\FundMstr.h"&str$(cno)&",KFName=Q:\CLmstr\FundIdx1.h"&str$(cno)&",Use,RecL=75,KPs=1,KLn=3,Shr",internal,outin,keyed 
+00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\FundMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\FundIdx1.h"&str$(cno)&",Use,RecL=75,KPs=1,KLn=3,Shr",internal,outin,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -76,25 +76,25 @@
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         let limit_to_list$='1'
 00330   let cl=3: let c$(cl,1)='ComboF' !:
-        let c$(cl,2)="Q:\CLmstr\GLmstr.h"&str$(cno) !:
+        let c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
         let c$(cl,3)='4' : let c$(cl,4)='9' !:
         let c$(cl,5)='13' : let c$(cl,6)='50' !:
-        let c$(cl,7)="Q:\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)=limit_to_list$
+        let c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)=limit_to_list$
 00340   let cl=4: let c$(cl,1)='ComboF' !:
-        let c$(cl,2)="Q:\CLmstr\GLmstr.h"&str$(cno) !:
+        let c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
         let c$(cl,3)='4' : let c$(cl,4)='9' !:
         let c$(cl,5)='13' : let c$(cl,6)='50' !:
-        let c$(cl,7)="Q:\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)='1'
+        let c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)='1'
 00350   let cl=5: let c$(cl,1)='ComboF' !:
-        let c$(cl,2)="Q:\CLmstr\GLmstr.h"&str$(cno) !:
+        let c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
         let c$(cl,3)='1' : let c$(cl,4)='12' !:
         let c$(cl,5)='13' : let c$(cl,6)='50' !:
-        let c$(cl,7)="Q:\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)='1'
+        let c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)='1'
 00352   let cl=6: let c$(cl,1)='ComboF' !:
-        let c$(cl,2)="Q:\CLmstr\GLmstr.h"&str$(cno) !:
+        let c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
         let c$(cl,3)='1' : let c$(cl,4)='12' !:
         let c$(cl,5)='13' : let c$(cl,6)='50' !:
-        let c$(cl,7)="Q:\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)='1'
+        let c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)='1'
 00360   return 
 00370 ! ______________________________________________________________________
 00380 HAMSTER: ! 
@@ -104,7 +104,7 @@
 00420 XIT: let fnxit
 00430 ! ______________________________________________________________________
 00440 ! <Updateable Region: ERTN>
-00450 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00450 ERTN: let fnerror(program$,err,line,act$,"xit")
 00460   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00470   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00480   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

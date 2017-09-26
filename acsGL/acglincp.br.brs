@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\ACGLIncP
+00010 ! Replace S:\acsGL\ACGLIncP
 00020 ! -- INCOME STATEMENT FOR 8 1/2 * 11 PAPER WITH PERCENTAGES
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fncch$,fnpedat$,fnactpd$,fnfscode,fngl_number_use_dept,fnpriorcd,fnps,fnglfs,fnactpd,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fncno,fnerror,fnprocess,fncch$,fnpedat$,fnactpd$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnglfs,fnactpd,fntos,fnlbl,fntxt,fncmdkey,fnacs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,tp1(4),by(13),cap$*128
@@ -20,13 +20,13 @@
 00165   let priorcd=fnpriorcd
 00166   let fscode=fnfscode
 00170   if fnps=2 then let mp1=72 else let mp1=69
-00180   if fnps=2 then let fl1$="Name=Q:\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName=Q:\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" else !:
-          let fl1$="Name=Q:\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName=Q:\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00180   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" else !:
+          let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
 00190 L190: form pos mp1,pd 3,pos 81,41*pd 6.2
-00200   let pas=1 : open #4: "Name="&env$('temp')&"\Work."&session$&",KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outin,keyed 
+00200   let pas=1 : open #hwork:=4: "Name="&env$('temp')&"\Work."&session$&",KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outin,keyed 
 00210 L210: let acglfnsi=1 !:
         open #acglfnsi: fl1$,internal,outin,keyed 
-00220   if fnprocess=1 or fngl_number_use_dept=0 then goto L330
+00220   if fnprocess=1 or fnUseDeptNo=0 then goto L330
 00230   if percent=1 then goto L330
 00240   let fntos(sn$="ACGlincp") !:
         let mylen=30: let mypos=mylen+3 : let right=1
@@ -43,10 +43,10 @@
 00340   let fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00350   if fnps=2 then goto L380 ! secondary
-00360   execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
+00360   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
 00370   goto L390
-00380 L380: execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
-00390 L390: open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00380 L380: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
+00390 L390: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
 00400   let report$="Statement of Income and Expenses"
 00410 READ_ACGLFNSI: ! 
 00420 L420: read #acglfnsi,using L470: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp eof L1880,conv L2060
@@ -149,13 +149,19 @@
 01340 L1340: let foot$=rtrm$(foot$)&d$
 01350   goto READ_ACGLFNSI
 01360 ! ______________________________________________________________________
-01370 L1370: for j=1 to 9
-01380     if ac(j)=0 or ac(j)=9 then goto L1390 else !:
-            let accum(j,1)=0 : let accum(j,2)=0
-01390 L1390: next j
-01400   return 
+01370 L1370: ! r:
+01372   for j=1 to 9
+01380     if ac(j)=0 or ac(j)=9 then 
+01382       goto L1390 
+01384     else 
+01386       let accum(j,1)=0 : let accum(j,2)=0
+01388     end if
+01390 L1390: !
+01392     next j
+01400   return ! /r
 01410 ! ______________________________________________________________________
-01420 L1420: if percent=0 then goto L1570
+01420 L1420: !
+01422   if percent=0 then goto L1570
 01430   if ls=0 then goto L1570
 01440   if ls=99 then goto L1480
 01450   print #255,using L1460: " "
@@ -170,7 +176,8 @@
 01540   if eofcode=1 then goto L1570
 01550   print #255: newpage
 01560   gosub L1730
-01570 L1570: return 
+01570 L1570: !
+01572 return 
 01580 ! ______________________________________________________________________
 01590 L1590: gosub L1480: continue 
 01600 L1600: if percent=0 then goto L1710
@@ -188,11 +195,11 @@
 01720 ! ______________________________________________________________________
 01730 L1730: let heading=1
 01740   let pt1+=1
-01750   print #255: "\qc  {\f181 \fs24 \b "&trim$(cnam$)&"}"
+01750   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01760   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01770   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
 01780   print #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(fnactpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
-01790   print #255: "\qL "
+01790   print #255: "\ql "
 01800   print #255: 
 01810   print #255,using L1840: fncch$,"       Year To Date"
 01820   print #255,using L1830: "_________________________","_________________________"
@@ -226,18 +233,18 @@
 02080   goto L420
 02090 ! ______________________________________________________________________
 02100 PAS1: if rnp=0 then goto L2170
-02110   read #4,using L2120,key=r$: k4$,mat tp1 nokey L2160
+02110   read #hwork,using L2120,key=r$: k4$,mat tp1 nokey L2160
 02120 L2120: form pos 1,g 5,4*pd 7.2
 02130   let tp1(1)=tp1 : let tp1(2)=tp2
-02140   rewrite #4,using L2120: k4$,mat tp1
+02140   rewrite #hwork,using L2120: k4$,mat tp1
 02150   goto L2170
-02160 L2160: write #4,using L2120: r$,tp1,tp2,0,0
+02160 L2160: write #hwork,using L2120: r$,tp1,tp2,0,0
 02170 L2170: return 
 02180 ! ______________________________________________________________________
 02190 PAS2: mat tp1=(0)
 02200   if rnp=0 then goto L2250
 02210   let k4$=lpad$(str$(rnp),5)
-02220   read #4,using L2120,key=k4$: k4$,mat tp1 nokey L2230
+02220   read #hwork,using L2120,key=k4$: k4$,mat tp1 nokey L2230
 02230 L2230: let percent1=tp1(1)
 02240   let percent2=tp1(2)
 02250 L2250: return 
@@ -245,7 +252,7 @@
 02270 XIT: let fnxit
 02280 ! ______________________________________________________________________
 02290 ! <updateable region: ertn>
-02300 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02300 ERTN: let fnerror(program$,err,line,act$,"xit")
 02310   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02320   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02330   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

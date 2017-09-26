@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\acglCasB
+00010 ! Replace S:\acsGL\acglCasB
 00020 ! CASH FLOW STATEMENT  WITH BUDGET
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fncch$,fnprocess,fngl_number_use_dept,fnactpd$,fnactpd,fnpedat$,fnfscode,fnpriorcd,fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fnxit,fntop, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fncch$,fnprocess,fnUseDeptNo,fnactpd$,fnactpd,fnpedat$,fnfscode,fnpriorcd,fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim bm(13),bp(13),by(13),sc1$(2)*20,fl1$*256,in3$(4),p$(20)*50,cap$*128
@@ -19,7 +19,7 @@
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00142   let fscode=fnfscode !:
         let priorcd=fnpriorcd
-00150   open #20: "Name=Q:\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00160   let actpd=fnactpd : let fscode=fnfscode
 00170   if nap<12 or nap> 13 then let nap=12
@@ -33,11 +33,11 @@
 00240   let in3$(4)="8,65,N 12.2,UT,N"
 00250   let mp1=75
 00260   if fnps=2 then let mp1=mp1+3
-00270   let fl1$="Name=Q:\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName=Q:\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
-00280   if fnps=2 then let fl1$="Name=Q:\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName=Q:\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
+00270   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
+00280   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
 00290   form c 7,skip 0
 00300   open #1: fl1$,internal,input,keyed 
-00310   if fnprocess=1 or fngl_number_use_dept=0 then goto L410
+00310   if fnprocess=1 or fnUseDeptNo=0 then goto L410
 00320   let fntos(sn$="ACglcasb") !:
         let mylen=30: let mypos=mylen+3 : let right=1
 00330   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -68,11 +68,11 @@
 00570   if ir>=val(r$) and val(r$)><0 then goto L740
 00572   close #3: ioerr ignore
 00574   if fnps=2 then 
-00580     execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
+00580     execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
 00590   else 
-00600     execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
+00600     execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
 00610   end if 
-00620   open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00620   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
 00630 L630: ! read amounts from gl master file
 00640 L640: read #3,using L730: ir,bb,cb,mat by,mat bp,mat bm eof L940
 00650   if ir=0 then goto L640
@@ -220,11 +220,11 @@
 02030 ! ______________________________________________________________________
 02040 L2040: let heading=1
 02050   let pt1+=1
-02060   print #255: "\qc  {\f181 \fs24 \b "&trim$(cnam$)&"}"
+02060   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 02070   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 02080   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
 02090   print #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(fnactpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
-02100   print #255: "\qL "
+02100   print #255: "\ql "
 02110   print #255: 
 02115   let cch$=lpad$(rtrm$(fncch$),15)
 02120   print #255: tab(31);"MONTHLY";tab(38);cch$;tab(61);"YEAR TO";tab(77);"ANNUAL"
@@ -236,7 +236,7 @@
 02180   gosub L1790
 02190   let fnfscode(actpd)
 02192   let fnpriorcd(1)
-02210   let fncloseprn(nw)
+02210   let fncloseprn
 02220   goto XIT
 02230 ! ______________________________________________________________________
 02240 L2240: let fntos(sn$="ACglchgs2") !:
@@ -266,7 +266,7 @@
 02430 XIT: let fnxit
 02440 IGNORE: continue 
 02450 ! <Updateable Region: ERTN>
-02460 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02460 ERTN: let fnerror(program$,err,line,act$,"xit")
 02470   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02480   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02490   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

@@ -1,0 +1,12 @@
+Address (line 1)              AD1$                  30 0C 30       Address1
+Address (line 2)              AD2$                  30 0C 30       Address2
+City State Zip                CSZ$                  30 0C 30       City St Zip
+Contact Name                  Contact$              30 0C 30       Contact
+E-Mail Address                Email$                50 0C 50       E-mail
+Fax Number                    Fax$                  12 0C 12       Fax
+Id Or Social Security Number  SS$                   11 0C 11       FedId/SSN
+My Account Number             MyACT$                20 0c 20       My Acct
+Name                          NAM$                  30 0C 30       Payee Name
+Payee Key                     VN$                    8 0Cr 8       Payee No.
+Payee Type                    TYP                    2 0N 2        PType
+Phone Number                  PH$                   12 0C 12       Phone No

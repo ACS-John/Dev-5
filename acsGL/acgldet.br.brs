@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\AcGlDet
+00010 ! Replace S:\acsGL\AcGlDet
 00020 ! -- Modified Cash Flow Statement (Detailed Transactions, Not Balances)
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnchain, fnprocess,fnps,fnpriorcd,fngl_number_use_dept,fnfscode,fnpedat$,fnactpd$,fnactpd,fncch$,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnglfs
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnchain, fnprocess,fnps,fnpriorcd,fnUseDeptNo,fnfscode,fnpedat$,fnactpd$,fnactpd,fncch$,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnglfs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,in3$(4)
@@ -21,7 +21,7 @@
 00151   let fscode=fnfscode !:
         let priorcd=fnpriorcd
 00160   on fkey 5 goto L1870
-00170   open #20: "Name=Q:\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative  !:
+00170   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative  !:
         read #20,using 'form pos 384,n 2': nap : close #20: 
 00180   let pors=1
 00190   let fnopenprn
@@ -29,14 +29,14 @@
 00210   let in3$(2)="8,45,N 12.2,UT,N"
 00220   let mp1=75
 00230   if fnps=2 then let mp1+=3
-00240   let fl1$="Name=Q:\GLmstr\ACGLFNSF.H"&str$(cno)&",KFName=Q:\GLmstr\FNSFINDX.H"&str$(cno)&",Shr"
+00240   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFINDX.H"&str$(cno)&",Shr"
 00250   if fnps=2 then !:
-          let fl1$="Name=Q:\GLmstr\ACGLFNSG.H"&str$(cno)&",KFName=Q:\GLmstr\FNSGINDX.H"&str$(cno)&",Shr"
+          let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&str$(cno)&",Shr"
 00260   let nametab=int(44-len(rtrm$(cnam$))/2)
 00270   open #1: fl1$,internal,input,keyed 
-00280   open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",Shr",internal,input,relative 
-00300   open #4: "Name=Q:\GLmstr\GLTRANS.H"&str$(cno)&",Shr",internal,outin,relative 
-00310   if fnprocess=1 or fngl_number_use_dept=0 then goto L410
+00280   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",Shr",internal,input,relative 
+00300   open #4: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&str$(cno)&",Shr",internal,outin,relative 
+00310   if fnprocess=1 or fnUseDeptNo=0 then goto L410
 00320   let fntos(sn$="GLInput") !:
         let mylen=30: let mypos=mylen+3 : let right=1
 00330   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
@@ -183,11 +183,11 @@
 01730 ! ______________________________________________________________________
 01740 L1740: let heading=1
 01750   let pt1+=1
-01760   print #255: "\qc  {\f181 \fs18 \b "&trim$(cnam$)&"}"
+01760   print #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 01770   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01780   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs24 \b "&trim$(secondr$)&"}"
 01790   print #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(fnactpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
-01800   print #255: "\qL "
+01800   print #255: "\ql "
 01810   print #255: 
 01820   print #255: tab(50);fncch$
 01830   print #255: tab(56);"       "
@@ -198,7 +198,7 @@
 01880   gosub L1500
 01890   let fnfscode(actpd)
 01900   let fnpriorcd(1)
-01910   let fncloseprn(nw)
+01910   let fncloseprn
 01920 ! 
 01930   goto XIT
 01940 L1940: ! 
@@ -211,7 +211,7 @@
 02010 XIT: let fnxit
 02020 ! ______________________________________________________________________
 02030 ! <updateable region: ertn>
-02040 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02040 ERTN: let fnerror(program$,err,line,act$,"xit")
 02050   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02070   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

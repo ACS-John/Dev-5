@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\Company
+00010 ! Replace S:\acsCL\Company
 00020 ! maintain company information file for checkbook management
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fncno,fnerror,fncursys$,fntos,fnlbl,fnacs,fncmdset,fntxt,fncombof,fnchk,fnbutton,fnfra,fncomboa,fnqgl,fnrgl$,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fncursys$,fntos,fnlbl,fnacs,fncmdset,fntxt,fncombof,fnchk,fnbutton,fnfra,fncomboa,fnqgl,fnrgl$,fnagl$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim a$(3)*40,b$(2)*12,c$*5,d(2),e$(2)*12,lastact$*12,tb$*30,actrcde$*1
@@ -15,8 +15,8 @@
         let ccyymmdd$='3' : let mmddyy$='1' : let on=1 : let off=0 !:
         let cancel=5 : let save=1 : let limit_to_list=1 : let pointtwo$='32' !:
         let pointthree$='33'
-00150   open #glmstr=11: "Name=Q:\CLmstr\GLmstr.H"&str$(cno)&",KFName=Q:\CLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L160
-00160 L160: open #company=1: "Name=Q:\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative ioerr BUILD_COMPANY
+00150   open #glmstr=11: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L160
+00160 L160: open #company=1: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative ioerr BUILD_COMPANY
 00170   goto READ_COMPANY
 00180 ! ______________________________________________________________________
 00190 READ_COMPANY: ! 
@@ -144,7 +144,7 @@
 00820   let fntxt(lc,mypos,30,0,left,number$) !:
         let resp$(7)=str$(nap)
 00830   let fnlbl(lc+=1,1,'Working Bank:',mylen,right)
-00840   let fncombof('bank',lc,mypos,0,"Q:\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,"Q:\CLmstr\BankIdx1.h"&str$(cno),limit_to_list) !:
+00840   let fncombof('bank',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list) !:
         let resp$(8)=str$(wbc)
 00850   let fnchk(lc+=1,mypos,'My Checks are Pre-Numbered',right) !:
         if prenum=1 then let resp$(9)='True' else let resp$(9)='False'
@@ -161,7 +161,7 @@
 00910   let fnchk(lc+=1,mypos,'Utilize Sub Account Number Field',right,frame) !:
         if d(2)=1 then let resp$(2)='True' else let resp$(2)='False'
 00920   let fnlbl(lc+=1,1,'Last Balance Sheet Account Number:',mylen,right,0,frame)
-00930 ! Let FNCOMBOF('Q:\GLmstr',LC,MYPOS,0,'Q:\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,'Q:\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
+00930 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         ! Let RESP$(3)=STR$(WBC)
 00932   let fnqgl(lc,mypos,frame,2) !:
         let resp$(3)=fnrgl$(lastact$)
@@ -172,31 +172,31 @@
 00960   let fnfra(15,1,5,framewidth,'Payroll') !:
         let frame=fc+=1 : let lc=0 : let mylen=32 : let mypos=mylen+2
 00970   let fnlbl(lc+=1,1,'FICA Withholding GL Account:',mylen,right,0,frame)
-00980 ! Let FNCOMBOF('Q:\GLmstr',LC,MYPOS,0,'Q:\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,'Q:\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
+00980 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         ! Let RESP$(5)=CNVRT$('pic(zz#)',PRGL(1,1))&CNVRT$('pic(zzzzz#)',PRGL(1,2))&CNVRT$('pic(zz#)',PRGL(1,3))
 00982   let fnqgl(lc,mypos,frame,2) !:
         let resp$(5)=cnvrt$('pic(zz#)',prgl(1,1))&cnvrt$('pic(zzzzz#)',prgl(1,2))&cnvrt$('pic(zz#)',prgl(1,3)) !:
         let resp$(5)=fnrgl$(resp$(5))
 00990   let fnlbl(lc+=1,1,'Federal Withholding GL Account:',mylen,right,0,frame)
-01000 ! Let FNCOMBOF('Q:\GLmstr',LC,MYPOS,0,'Q:\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,'Q:\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
+01000 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         ! Let RESP$(6)=CNVRT$('pic(zz#)',PRGL(2,1))&CNVRT$('pic(zzzzz#)',PRGL(2,2))&CNVRT$('pic(zz#)',PRGL(2,3))
 01002   let fnqgl(lc,mypos,frame,2) !:
         let resp$(6)=cnvrt$('pic(zz#)',prgl(2,1))&cnvrt$('pic(zzzzz#)',prgl(2,2))&cnvrt$('pic(zz#)',prgl(2,3)) !:
         let resp$(6)=fnrgl$(resp$(6))
 01010   let fnlbl(lc+=1,1,'State Withholding GL Account:',mylen,right,0,frame)
-01020 ! Let FNCOMBOF('Q:\GLmstr',LC,MYPOS,0,'Q:\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,'Q:\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
+01020 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         ! Let RESP$(7)=CNVRT$('pic(zz#)',PRGL(3,1))&CNVRT$('pic(zzzzz#)',PRGL(3,2))&CNVRT$('pic(zz#)',PRGL(3,3))
 01022   let fnqgl(lc,mypos,frame,2) !:
         let resp$(7)=cnvrt$('pic(zz#)',prgl(3,1))&cnvrt$('pic(zzzzz#)',prgl(3,2))&cnvrt$('pic(zz#)',prgl(3,3)) !:
         let resp$(7)=fnrgl$(resp$(7))
 01030   let fnlbl(lc+=1,1,'Local Withholding GL Account:',mylen,right,0,frame)
-01040 !  Let FNCOMBOF('Q:\GLmstr',LC,MYPOS,0,'Q:\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,'Q:\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
+01040 !  Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         !  Let RESP$(8)=CNVRT$('pic(zz#)',PRGL(4,1))&CNVRT$('pic(zzzzz#)',PRGL(4,2))&CNVRT$('pic(zz#)',PRGL(4,3))
 01042   let fnqgl(lc,mypos,frame,2) !:
         let resp$(8)=cnvrt$('pic(zz#)',prgl(4,1))&cnvrt$('pic(zzzzz#)',prgl(4,2))&cnvrt$('pic(zz#)',prgl(4,3)) !:
         let resp$(8)=fnrgl$(resp$(8))
 01050   let fnlbl(lc+=1,1,'Earned Income Credit GL Account:',mylen,right,0,frame)
-01060 ! Let FNCOMBOF('Q:\GLmstr',LC,MYPOS,0,'Q:\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,'Q:\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
+01060 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         ! Let RESP$(9)=CNVRT$('pic(zz#)',PRGL(5,1))&CNVRT$('pic(zzzzz#)',PRGL(5,2))&CNVRT$('pic(zz#)',PRGL(5,3))
 01062   let fnqgl(lc,mypos,frame,2) !:
         let resp$(9)=cnvrt$('pic(zz#)',prgl(5,1))&cnvrt$('pic(zzzzz#)',prgl(5,2))&cnvrt$('pic(zz#)',prgl(5,3)) !:
@@ -267,7 +267,7 @@
           let rc+=1 : if dedst(j)=1 then let resp$(rc)='True' else let resp$(rc)='False'
 01490     let fnchk(j+lc,55,'',right) !:
           let rc+=1 : if deduc(j)=1 then let resp$(rc)='True' else let resp$(rc)='False'
-01500 ! Let FNCOMBOF('Q:\GLmstr',LC+J,62,0,'Q:\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,30,'Q:\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST) !:
+01500 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC+J,62,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,30,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST) !:
           ! Let RESP$(RC+=1)=MISCGL$(J)
 01502     let fnqgl(lc+j,62,0,2) !:
           let resp$(rc+=1)=fnrgl$(miscgl$(j))
@@ -275,7 +275,7 @@
 01520   return 
 01530 ! ______________________________________________________________________
 01540 BUILD_COMPANY: ! 
-01550   open #company=1: "Name=Q:\CLmstr\Company.h"&str$(cno)&",Size=0,RecL=882,Replace",internal,outin,relative 
+01550   open #company=1: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Size=0,RecL=882,Replace",internal,outin,relative 
 01560   write #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,1,0,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
 01570   goto READ_COMPANY
 01580 ! ______________________________________________________________________
@@ -288,7 +288,7 @@
 01650   let fnxit
 01660 ! ______________________________________________________________________
 01670 ! <Updateable Region: ERTN>
-01680 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01680 ERTN: let fnerror(program$,err,line,act$,"xit")
 01690   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01710   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\InitGLCoA
+00010 ! Replace S:\acsCL\InitGLCoA
 00020 ! Import General Ledger Chart of Accounts
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fncno,fndat,fnerror,fntos,fnlbl,fntxt,fncomboa,fncmdset,fnacs,fnmsgbox
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnerror,fntos,fnlbl,fntxt,fncomboa,fncmdset,fnacs,fnmsgbox
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,dat$*20,cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
@@ -10,7 +10,7 @@
 00100   let cancel=99 : let right=1 : let left=0 : let center=2 : let number$='30'
 00110   let fncno(cno,cnam$) !:
         let fndat(dat$)
-00120 L120: open #1: "Name=Q:\CLmstr\GLmstr.H"&str$(cno)&",KFName=Q:\CLmstr\GLINDEX.H"&str$(cno)&",Shr",internal,outin,keyed 
+00120 L120: open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&str$(cno)&",Shr",internal,outin,keyed 
 00130 MENU1: ! 
 00140   let fntos(sn$="InitGLCoA") !:
         let mylen=38 : let mypos=mylen+2 : let lc=0
@@ -30,21 +30,21 @@
 00220   let glcno=val(resp$(2))
 00230   if pas$><"COPY" then goto L270
 00240   close #1: ioerr L250
-00250 L250: execute "COPY A:Q:\GLmstr.H"&str$(glcno)&" Q:\CLmstr\*.*" ioerr MSGBOX2
+00250 L250: execute "COPY A:GLmstr.H"&str$(glcno)&' '&env$('Q')&"\CLmstr\*.*" ioerr MSGBOX2
 00260   goto XIT
 00270 L270: if trim$(pas$)><"BUILD" then goto MENU1
 00280   close #1: ioerr L290
-00290 L290: open #2: "Name=Q:\GLmstr\GLmstr.h"&str$(glcno)&",KFName=Q:\GLmstr\GLINDEX.h"&str$(glcno)&",Shr",internal,input,keyed ioerr MSGBOX1
-00300   open #1: "Name=Q:\CLmstr\GLmstr.H"&str$(cno)&",Size=0,RecL=62,Replace",internal,output 
+00290 L290: open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(glcno)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&str$(glcno)&",Shr",internal,input,keyed ioerr MSGBOX1
+00300   open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",Size=0,RecL=62,Replace",internal,output 
 00310 L310: read #2,using 'Form POS 1,C 12,C 50': gl$,de$ eof END1
 00320   write #1,using 'Form POS 1,C 12,C 50': gl$,de$
 00330   goto L310
 00340 END1: close #1: 
 00350   close #2: 
-00355   execute "INDEX Q:\CLmstr\GLmstr.H"&str$(cno)&" Q:\CLmstr\GLINDEX.H"&str$(cno)&" 1 12 Replace DupKeys"
+00355   execute "Index "&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\GLINDEX.H"&str$(cno)&" 1 12 Replace DupKeys"
 00360   goto XIT
 00370 ! ______________________________________________________________________
-00380   execute "INDEX Q:\CLmstr\GLmstr.H"&str$(cno)&" Q:\CLmstr\GLINDEX.H"&str$(cno)&" 1 12 Replace DupKeys"
+00380   execute "Index "&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\GLINDEX.H"&str$(cno)&" 1 12 Replace DupKeys"
 00390   goto XIT
 00400 ! ______________________________________________________________________
 00410   restore #1,key>="            ": nokey MENU1
@@ -56,14 +56,14 @@
 00470 XIT: let fnxit
 00480 ! ______________________________________________________________________
 00490   close #1: ioerr L500
-00500 L500: execute "COPY Q:\CLmstr\GLmstr.H"&str$(cno)&" "&env$('Temp')&"\WORK -D"
-00510   execute "FREE Q:\CLmstr\GLmstr.h"&str$(cno)
-00520   execute "RENAME "&env$('Temp')&"\WORK Q:\CLmstr\GLmstr.h"&str$(cno)
-00530   execute "INDEX Q:\CLmstr\GLmstr.H"&str$(cno)&" Q:\CLmstr\GLINDEX.H"&str$(cno)&" 1 12 Replace DupKeys"
+00500 L500: execute "Copy "&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&" "&env$('Temp')&"\WORK -D"
+00510   execute "Free "&env$('Q')&"\CLmstr\GLmstr.h"&str$(cno)
+00520   execute "RENAME "&env$('Temp')&"\WORK "&env$('Q')&"\CLmstr\GLmstr.h"&str$(cno)
+00530   execute "Index "&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\GLINDEX.H"&str$(cno)&" 1 12 Replace DupKeys"
 00540   goto L120
 00550 ! ______________________________________________________________________
 00560 ! <Updateable Region: ERTN>
-00570 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00570 ERTN: let fnerror(program$,err,line,act$,"xit")
 00580   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00590   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00600   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

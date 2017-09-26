@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\DueBy
+00010 ! Replace S:\acsCL\DueBy
 00020 ! Print Report of Invoices Due By Selected Dates
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnlbl,fntxt,fntos,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnlbl,fntxt,fntos,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*50,fd$*30,ade$*50
@@ -12,9 +12,9 @@
 00120   let cancel=99
 00130   let fndat(dat$)
 00140   gosub ASK
-00150   execute "Index Q:\CLmstr\PayTrans.h"&str$(cno)&" Q:\CLmstr\Unpdidx2.H"&str$(cno)&" 31/27/1 2/4/26 Replace DupKeys -n" ! index in year,monthday,reference
-00160   open #paymstr:=13: "Name=Q:\CLmstr\PayMstr.H"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
-00170   open #paytrans:=4: "Name=Q:\CLmstr\PayTrans.H"&str$(cno)&",KFName=Q:\CLmstr\Unpdidx2.H"&str$(cno)&",Shr",internal,input,keyed 
+00150   execute "Index "&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&' '&env$('Q')&"\CLmstr\Unpdidx2.H"&str$(cno)&" 31/27/1 2/4/26 Replace DupKeys -n" ! index in year,monthday,reference
+00160   open #paymstr:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
+00170   open #paytrans:=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Unpdidx2.H"&str$(cno)&",Shr",internal,input,keyed 
 00180   let fnopenprn
 00190   gosub HDR
 00200   let vn$=iv$=""
@@ -119,7 +119,7 @@
 01070   return 
 01080 ! ______________________________________________________________________
 01090 ! <Updateable Region: ERTN>
-01100 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01100 ERTN: let fnerror(program$,err,line,act$,"xit")
 01110   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01120   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01130   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

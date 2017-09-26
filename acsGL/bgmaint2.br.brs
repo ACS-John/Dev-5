@@ -1,0 +1,780 @@
+00010 ! Replace S:\acsGL\BgMaint2
+00020 ! Budget File (2nd screen of budget management system; range of gl #)
+00030 ! ______________________________________________________________________
+00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fnopenprn,fncloseprn,fntos,fnlbl,fncmdkey,fnacs,fncmbbud,fncomboa,fntxt,fncmdset,fnrgl$,fnqgl,fnagl$,fnflexinit1,fnflexadd1,fnchk,fnmsgbox,fndat,fndate_mmddyy_to_ccyymmdd
+00050   on error goto ERTN
+00060 ! ______________________________________________________________________
+00070   dim dat$*20,bg(6),bm(13),io1$(3),g1(3),aa(2),gld$*30,ln$*132
+00080   dim chdr$(23)*20,cmask$(23)*20,option2$(6)*18,item$(23)*20,holdcmask$(23)*20
+00090   dim name$*30,ml$(3)*80,maxan2(11)
+00100   dim gd$*50,ex$*50,ios$(22),ins$(22),sc3$(9)*22,io3$(9),fl3$(9),k$(22)
+00110   dim bk$(50)*12,t1(6),t(6),s(6),oldbg(6),type$(6)*20,fkey$(12)*30
+00120   dim iom$(5),scm$(5)*40,io5$(2),options$(50)*100,resp$(100)*100
+00130   dim io4$(25),an1$(11),an2(11),rdate$*40,bud$*50,cap$*128
+00140   dim header$*244,line$*244,uline$*244,dline$*244,dline2$*244,uline2$*244
+00150   dim btnfld01$(6),dosfld01$(6),btnfld03$(3),dosfld03$(3),item$(14)*50
+00160   dim fa$(6),fb$(122),gl$(40)*12,bud$*50,gln(40,3),cap$*128
+00170   dim indexfile$*200
+00180   dim exec$*132,prg$*20,cogl$(3)*12,pedat$*20,cch$*20,cdk$(22)
+00190   dim iom2$(1),scm2$(1)*40,iom3$(2),scm3$(2)*40,btnfld02$(4),dosfld02$(4)
+00200 ! ______________________________________________________________________
+00210   let fntop(program$,cap$="Budget Management")
+00230   let fndat(dat$,1)
+00240   gosub GRID_SPECS
+00280   for j=1 to 22: let ios$(j)=str$(j+1)&",2,C 12,N" : next j
+00290   let type$(1)="Heading" !:
+        let type$(2)="Budget item" !:
+        let type$(3)="Subtotal" !:
+        let type$(4)="Total" !:
+        let type$(5)="Blank line" !:
+        let type$(6)="New page"
+00300   let an2(1)=40
+00310   for j=2 to 7 : let an2(j)=12 : next j ! defaults for column widths
+00320   mat maxan2=an2
+00330   let an2(8)=40 : let an2(9)=12 : let an2(10)=12: let an2(11)=12
+00340   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
+        read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub !:
+        close #1: 
+00350   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outin,keyed 
+00360 ! format:  budget #^bud^n 2,budget name^bud$^c 50,range of g/l #^gl$(40) (1 to 2, 3 to 4, etc)
+00370   open #5: "Name="&env$('Q')&"\GLmstr\BudInfo.H"&env$('cno')&",use,KFName="&env$('Q')&"\GLmstr\BudInfo_Index.H"&env$('cno')&",RecL=532,KPs=1,KLn=2",internal,outin,keyed 
+00380   read #5,using 'Form N 2,C 50,40*C 12': bud,bud$,mat gl$ norec MAINTAIN_RANGE_FILE, eof MAINTAIN_RANGE_FILE
+00390   open #12: "Name="&env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')&",Use,RecL=28,KPs=1,KLn=14,Shr",internal,outin,keyed 
+00400 ! ______________________________________________________________________
+00410   open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".H"&env$('cno')&",Shr",internal,outin,keyed ioerr MENU1
+00420 ! ______________________________________________________________________
+00450   mat ml$(2) !:
+        let ml$(1)="Budget Management is a separately licensed product. " !:
+        let ml$(2)="Contact your representative or ACS to license the product. " !:
+        let fnmsgbox(mat ml$,resp$,cap$,0)
+00460   goto XIT
+00470 L470: gosub DATE_SCREEN
+00480 ! ______________________________________________________________________
+00490 MENU1: ! 
+00500   let fntos(sn$="Budget_File") !:
+        let respc=0
+00510   let fnlbl(1,1,"Budget File #:",14,right)
+00520   execute "Dir "&env$('Q')&"\GLmstr\budget*.H"&env$('cno')&" >"&env$('temp')&"\FlexWork.tmp" ioerr L530
+00530 L530: let j=0
+00540   open #13: "Name="&env$('temp')&"\FlexWork.tmp",display,input ioerr L690
+00550 L550: linput #13: ln$ eof L680
+00560   let ln$=uprc$(ln$)
+00570   let x=pos(ln$,"KILOBYTES",1)
+00580   if x>0 then goto L680
+00590   let x=pos(ln$(1:3),"DIR",1)
+00600   if x>0 or ln$(1:1)="." then goto L550 else goto L610
+00610 L610: let x=pos(ln$,".",1)
+00620   let bud=val(ln$(x-1:x-1)) conv L670
+00630   let bud=val(ln$(x-2:x-1)) conv L640
+00640 L640: let k$=lpad$(str$(bud),2) !:
+        read #5,using L650,key=k$: k$,bud$,mat gl$ nokey L670
+00650 L650: form c 2,c 50,40*c 12
+00660   let options$(j+=1)=str$(bud)&" "&bud$
+00670 L670: goto L550
+00680 L680: close #13: 
+00690 L690: if j<=0 then let j=1
+00700   mat options$(j)
+00710   let fen$="CBud.h"&env$('cno')
+00720   let fncomboa(fen$,1,16,mat options$,"Select from the list of budget files. To add a new budget file, take the Add option.",40,container)
+00730 ! Let FNCMBBUD(INDEXFILE$)
+00740   if hact$="" then !:
+          let resp$(respc+=1)="" else !:
+          let resp$(respc+=1)=hact$
+00750   let fncmdkey("&Display",4,1,0,"Display the budget files for this budget.") !:
+        let fncmdkey("&Add",1,0,0,"Add a new budget file" ) !:
+        let fncmdkey("E&dit",2,0,0,"Edit the highlited record") !:
+        let fncmdkey("E&xit",5,0,1,"Returns to menu")
+00760   let fnacs(sn$,0,mat resp$,ckey) ! ask budget file #
+00770   let ad1=0
+00780   let hg1$=g1$=resp$(1)(1:12)
+00790   let bud=val(resp$(1)(1:2))
+00800   if ckey=1 then let ad1=1 : goto MAINTAIN_RANGE_FILE !:
+        else if ckey=2 then goto MAINTAIN_RANGE_FILE else !:
+          if ckey=4 then goto ASK_BEGINNING_ITEM else !:
+            if ckey=5 then goto XIT !:
+              goto MENU1
+00810 ! ______________________________________________________________________
+00820 DATE_SCREEN: ! 
+00830 let fd1=0101*100+val(date$(1:2))
+00840 let fd2=1231*100+val(date$(1:2))
+00850 let fntos(sn$="bgmaint2") !:
+      let respc=0 : let right=1
+00860 let fnlbl(1,47," ",1,1)
+00870 let fnlbl(1,1,"Beginning Day Of Year:",30,1)
+00880 let fntxt(1,34,12,0,0,"3",0,"") !:
+      let resp$(respc+=1)=str$(fd1)
+00890 let fnlbl(2,1,"Ending Day of Year:",30,1)
+00900 let fntxt(2,34,12,0,0,"3",0,"") !:
+      let resp$(respc+=1)=str$(fd2)
+00910 let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+00920 if ck=5 then goto MENU1
+00930 let fd1=val(resp$(1)) ! beginning of year
+00940 let fd2=val(resp$(2)) ! ending day of year
+00950 return 
+00960 CREATE_NEW_FILE: ! 
+00970 close #2: ioerr L1020
+00980 open #2: "Name="&env$('Q')&"\GLmstr\BUDGET"&str$(bud)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BGINDX"&str$(bud)&".H"&env$('cno')&",Shr",internal,outin,keyed ioerr L1000
+00990 goto L1020
+01000 L1000: mat ml$(2) !:
+      let ml$(1)="You already have a budget file # "&str$(bud) ! " !:
+      let ml$(2)="Take YES to continue, else NO to retain the old file." !:
+      let fnmsgbox(mat ml$,resp$,cap$,52)
+01010 if resp$="Yes" then goto L1020 else goto MENU1
+01020 L1020: open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&",Replace,KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".H"&env$('cno')&",RecL=149,KPS=1/149,KLN=12/1",internal,outin,keyed 
+01030 close #2: ioerr L1040
+01040 L1040: open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&",use,KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".H"&env$('cno')&",RecL=149,KPS=1/149,KLN=12/1",internal,outin,keyed 
+01050 return 
+01060 READD_TOTALS: ! 
+01070 ! from general ledger __________________________________________________
+01080 let g1$=""
+01090 restore #1,search>="": nokey END1
+01100 L1100: read #1,using 'Form POS 1,C 12,C 50,POS 87,PD 6.2,POS 249,13*PD 6.2': g1$,gd$,cb,mat bm eof END1
+01110 for j=1 to 40 step 2
+01120   if g1$>=gl$(j) and g1$<=gl$(j+1) then goto L1150
+01130 next j
+01140 goto L1100
+01150 L1150: mat bg=(0) : let ex$="" : let cd$="B"
+01160 ! If TI1=5 Then Goto 1170
+01170 read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&cd$: g1$,mat bg,gd$,ex$,cd$ nokey L1210
+01180 let bg(1)=sum(bm) : let bg(2)=cb : let bg(3)=0 !:
+      let bg(5)=bg(1)+bg(4) ! NEW BUDGET = BUDGET FROM FILE + CHANGES
+01190 rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&cd$: g1$,mat bg,gd$,ex$,cd$ nokey L1220
+01200 goto L1100
+01210 L1210: let bg(1)=sum(bm) : let bg(2)=cb : let bg(3)=0 !:
+      let bg(5)=bg(1)+bg(4) : let gd$=gd$ : let cd$="B"
+01220 L1220: write #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+01230 goto L1100
+01240 ! ______________________________________________________________________
+01250 END1: ! end on g/l
+01260 let cd$="X": mat bg=(0): let gd$=ex$="" ! write one blank line at end of file
+01270 let g1$="999999999999"
+01280 ! Write #2,Using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': G1$,MAT BG,GD$,EX$,CD$    why was it doing this  ??? kj
+01290 close #2: 
+01300 execute "Index "&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&","&env$('Q')&"\GLmstr\BGINDX"&str$(bud)&".H"&env$('cno')&",1/149,12/1,Replace,DupKeys -n"
+01310 open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".H"&env$('cno')&",Shr",internal,outin,keyed 
+01320 ! holding files in gl___________________________________________________
+01330 execute "DIR "&env$('Q')&"\GLmstr\GL*.H"&env$('cno')&" >"&env$('temp')&"\Work."&session$
+01340 open #3: "Name="&env$('temp')&"\Work."&session$,display,input 
+01350 L1350: linput #3: ln$ eof L1530
+01360 let ln$=uprc$(ln$)
+01370 if ln$(1:2)><"GL" then goto L1350
+01380 let d1=val(ln$(3:8)) conv L1350
+01390 if fndate_mmddyy_to_ccyymmdd(d1)<fd1 or fndate_mmddyy_to_ccyymmdd(d1)>fd2 then goto L1350
+01400 open #4: "Name="&env$('Q')&"\GLmstr\"&ln$(1:8)&".H"&env$('cno'),internal,input 
+01410 L1410: read #4,using L1420: g1$,d1,amt,tcde eof L1500
+01420 L1420: form pos 1,c 12,n 6,pd 6.2,n 2
+01430 if g1$(3:3)=" " then let g1$(3:3)="0"
+01440 if g1$(12:12)=" " then let g1$(12:12)="0"
+01450 read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L1410
+01460 let bg(2)=bg(2)+amt
+01470 rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
+01480 goto L1410
+01490 ! ______________________________________________________________________
+01500 L1500: close #4: 
+01510 goto L1350
+01520 ! from unpaid invoice file _____________________________________________
+01530 L1530: close #3: ioerr L1540
+01540 L1540: close #4: ioerr L1550
+01550 L1550: open #3: "Name="&env$('Q')&"\CLmstr\PAYTRANS.H"&env$('cno')&",Shr",internal,input,relative ioerr L1740
+01560 open #4: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",Shr",internal,outin,keyed 
+01570 for j=1 to lrec(3)
+01580   read #3,using L1590,rec=j: vn$,iv$,d1,gde norec L1720
+01590 L1590: form pos 1,c 8,c 12,pos 27,n 6,pos 96,n 1
+01600   if gde>0 then goto L1720 ! ALREADY POSTED TO GL AS A/P
+01610   if fndate_mmddyy_to_ccyymmdd(d1)<fd1 or fndate_mmddyy_to_ccyymmdd(d1)>fd2 then goto L1720
+01620 ! Read #4,Using 1600,Rec=AA: G1$,AMT,NAA
+01630   restore #4,key>=lpad$(rtrm$(vn$),8)&lpad$(rtrm$(iv$),12): nokey L1720
+01640 L1640: read #4,using 'Form POS 1,C 8,C 12,c 12,PD 5.2,C 30': hvn$,hiv$,g1$,amt,gd$ eof L1720
+01650   if vn$=hvn$ and iv$<>hiv$ then goto L1640
+01660   if vn$<>hvn$ or iv$<>hiv$ then goto L1720
+01670   form pos 21,c 12,pd 5.2,x 30,pd 3
+01680   read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L1710
+01690   let bg(3)=bg(3)+amt
+01700   rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
+01710 L1710: goto L1640
+01720 L1720: next j
+01730 ! from check history (checks not posted)____________________________
+01740 L1740: close #3: ioerr L1750
+01750 L1750: close #4: ioerr L1760
+01760 L1760: open #3: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX1.H"&env$('cno')&",Shr",internal,input,keyed ioerr L1930
+01770 open #4: "Name="&env$('Q')&"\CLmstr\TRALLOC.H"&env$('cno')&",Shr",internal,input,relative 
+01780 L1780: read #3,using L1790: bcde,tcde,iv$,d1,pcde,scd eof L1930
+01790 L1790: form pos 1,n 2,n 1,c 8,pos 12,g 6,pos 71,n 1,x 6,n 1
+01800 if pcde=1 or pcde=3 then goto L1780
+01810 if d1<fd1 or d1>fd2 then goto L1780
+01820 let key$=lpad$(str$(bcde),2)&str$(tcde)&rpad$(iv$,8) !:
+      restore #4,key>=key$: nokey L1780
+01830 L1830: read #4,using 'Form Pos 1,C 11,c 12,pd 5.2,pos 65,pd 3,pos 80,n 1': newkey$,g1$,amt,naa,gde
+01840 if newkey$<>key$ then goto L1780
+01850 read #4,using L1860,rec=aa: g1$,amt,naa,gde norec L1780
+01860 L1860: form pos 12,c 12,pd 5.2,pos 65,pd 3,pos 80,n 1
+01870 if gde>0 then goto L1910
+01880 read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L1910
+01890 if tcde=2 or tcde=3 then let bg(3)=bg(3)-amt else let bg(3)=bg(3)+amt
+01900 rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
+01910 L1910: goto L1830
+01920 ! from purchase order file_________________________________________
+01930 L1930: close #3: ioerr L1940
+01940 L1940: close #4: ioerr L1950
+01950 L1950: open #3: "Name="&env$('Q')&"\POmstr\POmstr.H"&env$('cno')&",KFName="&env$('Q')&"\POmstr\POMSIDX.H"&env$('cno')&",Shr",internal,input,keyed ioerr L2080
+01960 open #4: "Name="&env$('Q')&"\POmstr\POTRANS.H"&env$('cno')&",Shr",internal,input,relative 
+01970 L1970: read #3,using L1980: d1,mat aa eof L2080
+01980 L1980: form pos 10,n 6,pos 161,2*pd 3
+01990 if fndate_mmddyy_to_ccyymmdd(d1)<fd1 or fndate_mmddyy_to_ccyymmdd(d1)>fd2 then goto L1970
+02000 let aa=aa(1)
+02010 L2010: if aa=0 then goto L1970
+02020 read #4,using L2030,rec=aa: pt1,pt2,pt3,g1$,naa
+02030 L2030: form pos 52,pd 3,pd 5.2,pd 3,pos 91,c 12,pos 103,pd 3
+02040 read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$ nokey L2070
+02050 let bg(3)=bg(3)+(pt1-pt3)*pt2
+02060 rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&"B": g1$,mat bg,gd$,ex$,cd$
+02070 L2070: let aa=naa : goto L2010
+02080 L2080: close #3: ioerr L2090
+02090 L2090: close #4: ioerr L2100
+02100 L2100: close #2: ioerr L2110
+02110 L2110: open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".H"&env$('cno')&",Shr",internal,outin,keyed 
+02120 L2120: read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof READD_SUB_TOTALS
+02130 let bg(5)=bg(1)+bg(4) ! update new balance for any changes
+02140 rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+02150 goto L2120
+02160 READD_SUB_TOTALS: ! 
+02170 mat t=(0): mat s=(0)
+02180 restore #2: 
+02190 L2190: read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof L2240
+02200 if cd$="B" then mat t=t+bg: mat s=s+bg
+02210 if cd$="S" then mat bg=s: mat s=(0) !:
+        rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+02220 if cd$="T" then mat bg=t: mat t=(0) !:
+        rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+02230 goto L2190
+02240 L2240: restore #2: 
+02250 goto DISPLAY_GRID ! (end of updating balances)
+02260 ! ______________________________________________________________________
+02270 ASK_BEGINNING_ITEM: ! 
+02280 goto DISPLAY_GRID ! skip this screen
+02290 let fntos(sn$="bgmaint3") !:
+      let respc=0
+02300 let fnlbl(1,1,"Beginning General Ledger #:",30,1)
+02310 let fnqgl(1,33) !:
+      let resp$(1)=fnrgl$(gl$(1))
+02320 let fncmdkey("&Next",1,1,0,"Display budget file starting with this account. ") !:
+      let fncmdkey("&Back",2,0,0,"Takes you back one screen.") !:
+      let fncmdkey("E&xit",5,0,1,"Returns to main menu")
+02330 let fnacs(sn$,0,mat resp$,ckey) ! ask general ledger #
+02340 if ckey=5 then goto MENU1
+02350 let g1$=startgl$=fnagl$(resp$(1))
+02360 restore #2,key>=g1$&"B": nokey L2370
+02370 L2370: if ckey=2 then goto MENU1
+02380 let bk=0
+02390 DISPLAY_GRID: ! 
+02400 restore #2: 
+02410 let x=13
+02420 if trim$(startgl$)<>"" then restore #2,key>=startgl$&"B": nokey L2430
+02430 L2430: let fntos(sn$="Bgmaint4") !:
+      let respc=0
+02440 let fnlbl(1,1,bud$,50,right) ! move cmdkeys down
+02450 let frame=0
+02460 let fnflexinit1('bgmaintgrid',2,1,20,95,mat chdr$,mat cmask$,1,0)
+02470 READ_BUDGET_GRID: ! read budget items
+02480 read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof EO_BUDGET_GRID norec L2650
+02490 if needactual=0 and needbudget=0 then goto L2610
+02500 read #1,using "form pos 13,c 30,pos 237,pd 6.2",key=g1$: name$,prioryear nokey L2610
+02510 restore #12,search>=g1$&"  ": nokey L2610 eof L2610
+02520 L2520: read #12,using "form pos 1,c 12,c 2,2*pd 6.2": acno$,oldyr$,cb,oldbud eof L2610
+02530 if acno$<>g1$ then goto L2610
+02540 for j=1 to 5
+02550   if val(oldyr$)=year(j) and needactual=1 and needbudget=1 then let item$(x+j*2-1)=str$(cb) ! balance side of showing both
+02560   if val(oldyr$)=year(j) and needbudget=1 and needactual=1 then let item$(x+j*2)=str$(oldbud) ! budget side of showing both
+02570   if val(oldyr$)=year(j) and needbudget=1 and needactual=0 then let item$(x+j)=str$(oldbud) ! only budget
+02580   if val(oldyr$)=year(j) and needbudget=0 and needactual=1 then let item$(x+j)=str$(oldbud) ! only actual
+02590 next j
+02600 goto L2520
+02610 L2610: if cd$="A" or cd$="X" then mat cmask$=(""): let cmask$(1)="30": : mat item$=(""): let item$(1)=str$(rec(2)): let item$(2)=gd$: let item$(10)=g1$: goto L2640
+02620 mat cmask$=holdcmask$
+02630 let item$(1)=str$(rec(2)) !:
+      let item$(10)=g1$ !:
+      let item$(3)=str$(bg(1)): let item$(4)=str$(bg(2)) !:
+      let item$(5)=str$(bg(3)) : let item$(6)=str$(bg(4)) : let item$(7)=str$(bg(1)-bg(2)-bg(3)-bg(4)) !:
+      let item$(8)=str$(bg(5)) !:
+      let item$(9)=str$(bg(6)) : let item$(2)=gd$(1:30) : let item$(11)=ex$ !:
+      let item$(12)=cd$ !:
+      let item$(13)=str$(prioryear)
+02640 L2640: let fnflexadd1(mat item$)
+02650 L2650: goto READ_BUDGET_GRID
+02660 EO_BUDGET_GRID: ! 
+02670 let fnlbl(22,40," ",mylen,right) ! move cmdkeys down
+02680 let fncmdkey("&Add",1,0,0,"Allows you to add new lines to the budget file.")
+02690 let fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing budget record.")
+02700 let fncmdkey("&Calculate New Balance",6,0,0,"Will re-calculate new balances if any changes have been made to general ledger or checkbook.")
+02710 let fncmdkey("&Pull More History",9,0,0,"Pull expenditures and budgets from prior years.")
+02720 let fncmdkey("&Listing",3,0,0,"Prints listings of the budget")
+02730 let fncmdkey("&Delete",7,0,0,"Deletes this line item")
+02740 let fncmdkey("&Back",8,0,0,"Reselect starting budget item to display.")
+02750 let fncmdkey("E&xit",5,0,1,"Exits back to main budget screen.")
+02760 let fnacs(sn$,0,mat resp$,ck) ! GRID
+02770 let add=edit=0
+02780 if ck=5 then goto MENU1
+02790 if ck=2 then let edit=1
+02800 if ck=3 then goto PRNT1 ! print listings of unpaid invoice file
+02810 if ck=1 then let add=1: let insrt=1: let jb1=1 !:
+        let g1$=k$(max(1,curfld-1)): mat bg=(0): let gd$=ex$=cd$="" !:
+        mat resp$=(""): goto MAINTAIN_NONB_RECORDS
+02820 if ck=2 then !:
+        let rec2=val(resp$(1)) : read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2,release: g1$,mat bg,gd$,ex$,cd$ !:
+        mat resp$=("") !:
+        let holdkey$=g1$&cd$ else !:
+        let holdkey$=''
+02830 if ck=2 then let resp$(1)=g1$: let resp$(2)=str$(bg(1)): let resp$(3)=str$(bg(2)) !:
+        let resp$(4)=str$(bg(3)): let resp$(5)=str$(bg(4)) : let resp$(6)=str$(bg(5)) !:
+        let resp$(7)=gd$: let resp$(8)=ex$ !:
+        let resp$(9)=cd$ !:
+        goto MAINTAIN_LINE_ITEM
+02840 if ck=6 then goto INCLUDE_CHANGES
+02850 if ck=7 then goto L2860 else goto L2890
+02860 L2860: mat ml$(2) !:
+      let ml$(1)="You have chosen to delete the highlighted budget item." !:
+      let ml$(2)="Take YES to continue, else NO to retain the record." !:
+      let fnmsgbox(mat ml$,resp$,cap$,52)
+02870 if resp$="Yes" then goto L2880 else goto DISPLAY_GRID
+02880 L2880: delete #2,rec=val(resp$(1)): !:
+      restore #2: !:
+      goto DISPLAY_GRID
+02890 L2890: if ck=8 then goto MENU1
+02900 if ck=9 then goto ASK_ABOUT_HISTORY
+02910 goto DISPLAY_GRID
+02920 MAINTAIN_NONB_RECORDS: ! 
+02930 if add=1 then let g1$=gd$=cd$=""
+02940 let fntos(sn$="Add_line_item") !:
+      let mylen=23: let mypos=mylen+3 : let right=1: let rc=0
+02950 if use_dept =1 then let fnlbl(1,26,"Fund #",6,2)
+02960 if use_sub =1 then let fnlbl(1,40,"Sub #",6,2)
+02970 let fnlbl(2,1,"General Ledger Number:",mylen,right)
+02980 if use_dept=1 then let fntxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 ) !:
+        let resp$(rc+=1)=g1$(1:3)
+02990 let fntxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 ) !:
+      let resp$(rc+=1)=g1$(4:9)
+03000 if use_sub=1 then let fntxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) !:
+        let resp$(rc+=1)=g1$(10:12)
+03010 let fnlbl(3,1,"Description:",mylen,right)
+03020 let fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 ) !:
+      let resp$(rc+=1)=gd$
+03030 let fnlbl(4,1,"Type of Entry:",mylen,right)
+03040 let option2$(1)="A "&type$(1) !:
+      let option2$(2)="B "&type$(2) !:
+      let option2$(3)="S "&type$(3) : let option2$(4)="T "&type$(4): !:
+      let option2$(5)="X "&type$(5) : let option2$(6)="Z "&type$(6)
+03050 let fncomboa("Types",4,mypos,mat option2$,"Select the type of entry.",20,container)
+03060 let resp$(rc+=1)=cd$
+03070 let fncmdset(2)
+03080 let fnacs(sn$,0,mat resp$,ckey)
+03090 if ckey=5 then goto DISPLAY_GRID
+03100 let dno=ano=sno=0
+03110 if use_dept=1 then let dno=val(resp$(1)) : let ano=val(resp$(2))
+03120 if use_dept=0 then let ano=val(resp$(1))
+03130 if use_dept=1 and use_sub=1 then let sno=val(resp$(3))
+03140 if use_dept=0 and use_sub=1 then let sno=val(resp$(2))
+03150 if use_dept=1 and use_sub=1 then let gd$=resp$(4): let cd$=resp$(5)(1:1)
+03160 if use_dept=0 and use_sub=1 then let gd$=resp$(3): let cd$=resp$(4)(1:1)
+03170 if use_dept=0 and use_sub=0 then let gd$=resp$(2): let cd$=resp$(3)(1:1)
+03180 if use_dept=1 and use_sub=0 then let gd$=resp$(3): let cd$=resp$(4)(1:1)
+03190 let key$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)&"B"
+03200 read #2,using 'Form POS 1,c 13',key=key$: oldkey$ nokey L3240
+03210 MSGBOX1: ! 
+03220 mat ml$(3) !:
+      let ml$(1)="General ledger account # "&key$&" already " !:
+      let ml$(2)="exists. Take OK to add a different account." !:
+      let ml$(3)="Take Cancel to return to main screen." !:
+      let fnmsgbox(mat ml$,resp$,cap$,49)
+03230 if resp$="OK" then goto MAINTAIN_NONB_RECORDS else goto MENU1
+03240 L3240: if add=1 then goto WRITE_NEW_RECORD else goto REWRITE_EXISTING_RECORD
+03250 WRITE_NEW_RECORD: ! 
+03260 mat bg=(0) : let ex$="": let edit=1 !:
+      let g1$=key$(1:12)
+03270 let write_new_record
+03280 write #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+03290 if cd$="B" then goto MAINTAIN_LINE_ITEM else goto DISPLAY_GRID
+03300 REWRITE_EXISTING_RECORD: ! 
+03310 rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2: g1$,mat bg,gd$,ex$,cd$
+03320 goto DISPLAY_GRID
+03330 MAINTAIN_LINE_ITEM: ! 
+03340 if cd$="B" then goto L3350 else goto MAINTAIN_NONB_RECORDS
+03350 L3350: let holdg1$=g1$: let holdcd$=cd$
+03360 let fntos(sn$="Budget_Edit") !:
+      let respc=0: let mylen=20: let mypos=mylen+3
+03370 let fnlbl(1,1,"Account #:",mylen,right)
+03380 let fnqgl(1,mypos) !:
+      let resp$(respc+=1)=fnrgl$(g1$)
+03390 let fnlbl(2,1,"Budget:",mylen,right)
+03400 let fntxt(2,mypos,12,0,0,"10",0,"Approved budget at the beginning of the year") !:
+      let resp$(respc+=1)=str$(bg(1))
+03410 let fnlbl(3,1,"Actual Amount:",mylen,right)
+03420 let fntxt(3,mypos,12,0,0,"10",0,"Actual expenditures or receiptsfor the year.") !:
+      let resp$(respc+=1)=str$(bg(2))
+03430 let fnlbl(4,1,"Unpaid Expenses:",mylen,right)
+03440 let fntxt(4,mypos,12,0,0,"10",0,"Accounts payable, etc.") !:
+      let resp$(respc+=1)=str$(bg(3))
+03450 let fnlbl(5,1,"Changes:",mylen,right)
+03460 let fntxt(5,mypos,12,0,0,"10",0,"Changes for the year.") !:
+      let resp$(respc+=1)=str$(bg(4))
+03470 ! If TI3=2 Then Let REMAINING= BG(1)-BG(2)-BG(3) Else Let REMAINING=BG(1)-BG(2)-BG(3)+BG(4)
+03480 ! Let FNLBL(6,1,"Remaining:",MYLEN,RIGHT)
+03490 ! Let FNTXT(6,MYPOS,12,0,0,"10",0,"Balance remaining on the budget.") !:
+      ! Let RESP$(RESPC+=1)=STR$(REMAINING)
+03500 let fnlbl(6,1,"New Budget:",mylen,right)
+03510 let fntxt(6,mypos,12,0,0,"10",0,"New Budget for this year.") !:
+      let resp$(respc+=1)=str$(bg(5))
+03520 let fnlbl(8,1,"Description:",mylen,right)
+03530 let fntxt(8,mypos,50,0,0,"",0,"Description of Line Item.") !:
+      let resp$(respc+=1)=gd$
+03540 let fnlbl(10,1,"Reason for Change:",mylen,right)
+03550 let fntxt(10,mypos,50,0,0,"",0,"Brief reason for change in budget.") !:
+      let resp$(respc+=1)=ex$
+03560 let fnlbl(12,1,"Type of Entry:",mylen,right)
+03570 if cd$="A" or trim$(cd$)="" then let option2$(1)="A "&type$(1) !:
+        let option2$(2)="B "&type$(2) !:
+        let option2$(3)="S "&type$(3) : let option2$(4)="T "&type$(4): !:
+        let option2$(5)="X "&type$(5) : let option2$(6)="Z "&type$(6)
+03580 if cd$="B" then let option2$(1)="B "&type$(2) !:
+        let option2$(2)="A "&type$(1) !:
+        let option2$(3)="S "&type$(3) : let option2$(4)="T "&type$(4): !:
+        let option2$(5)="X "&type$(5) : let option2$(6)="Z "&type$(6)
+03590 if cd$="S" then let option2$(1)="S "&type$(3) !:
+        let option2$(2)="A "&type$(1) !:
+        let option2$(3)="B "&type$(2) : let option2$(4)="T "&type$(4): !:
+        let option2$(5)="X "&type$(5) : let option2$(6)="z "&type$(6)
+03600 if cd$="T" then let option2$(4)="T "&type$(4) !:
+        let option2$(2)="A "&type$(1) !:
+        let option2$(3)="B "&type$(2) : let option2$(4)="S "&type$(3): !:
+        let option2$(5)="X "&type$(5) : let option2$(6)="Z "&type$(6)
+03610 if cd$="X" then let option2$(1)="X "&type$(5) !:
+        let option2$(2)="A "&type$(1) !:
+        let option2$(3)="B "&type$(2) : let option2$(4)="S "&type$(3): !:
+        let option2$(5)="T "&type$(4) : let option2$(6)="Z "&type$(6)
+03620 if cd$="Z" then let option2$(1)="Z "&type$(6) : let option2$(2)="A "&type$(1) !:
+        let option2$(3)="B "&type$(2) : let option2$(4)="S "&type$(3): !:
+        let option2$(5)="T "&type$(4) : let option2$(6)="X "&type$(5)
+03630 let resp$(respc+=1)=option2$(1)
+03640 let fncomboa("Types",12,mypos,mat option2$,"Select the type of entry.",20,container)
+03650 let fncmdkey("&Save",1,1,0,"Save any changes." ) !:
+      let fncmdkey("E&xit",5,0,1,"Exit without saving any changes.")
+03660 let fnacs(sn$,0,mat resp$,ck) ! EDIT SCREEN
+03670 if ckey=5 then goto MENU1
+03680 let g1$=fnagl$(resp$(1))
+03690 let bg(1)=val(resp$(2))
+03700 let bg(2)=val(resp$(3))
+03710 let bg(3)=val(resp$(4))
+03720 let bg(4)=val(resp$(5))
+03730 let bg(5)=val(resp$(6))
+03740 let gd$=resp$(7)
+03750 let ex$=resp$(8)
+03760 for j=1 to 6
+03770   if resp$(9)(1:1)=option2$(j)(1:1) then let cd$=option2$(j)(1:1)
+03780 next j
+03790 let remaining=bg(1)-bg(2)-bg(3)-bg(4) ! remaining balance
+03800 let bg(5)=bg(1)+bg(4) ! make new budget equal the old budget plus changes
+03810 if holdg1$<>g1$ then read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&cd$: oldg1$ nokey L3850
+03820 goto L3850
+03830 mat ml$(2) !:
+      let ml$(1)="You are attempting to change the record number to  an existing" !:
+      let ml$(2)="record number.  Take OK to change to a different number. " !:
+      let fnmsgbox(mat ml$,resp$,cap$,0)
+03840 goto MAINTAIN_LINE_ITEM
+03850 L3850: if add=1 then goto L3880
+03860 rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2: g1$,mat bg,gd$,ex$,cd$
+03870 goto L3900
+03880 L3880: write #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
+03890 let add=0
+03900 L3900: restore #2: 
+03910 goto DISPLAY_GRID
+03920 ! ______________________________________________________________________
+03930 PRNT1: ! John's Print Routine ... yeah, i made this mess
+03940 let header$="" : let opr=255 : let ps$="############" !:
+      let screen=cp=page=bob1=bob2=bob3=bob4=lyne=0
+03950 let uline2$=rpt$("_",244) : let dline2$=rpt$("=",244)
+03960 let fntos(sn$="bgprint") !:
+      let respc=0 : let right=1 : let mylen=25 : let mypos=mylen+3
+03970 let fnlbl(lyne+=1,1,"Check the columns your want prirted",38,1)
+03980 let fnchk(lyne+=2,mypos,"GL Description:",1) !:
+      let resp$(respc+=1)="False"
+03990 let fntxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.") !:
+      let resp$(respc+=1)=str$(an2(lyne-2))
+04000 let fnchk(lyne+=1,mypos,"Budget Amount:",1) !:
+      let resp$(respc+=1)="False"
+04010 let fntxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.") !:
+      let resp$(respc+=1)=str$(an2(lyne-2))
+04020 let fnchk(lyne+=1,mypos,"Paid / Received:",1) !:
+      let resp$(respc+=1)="False"
+04030 let fntxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.") !:
+      let resp$(respc+=1)=str$(an2(lyne-2))
+04040 let fnchk(lyne+=1,mypos,"Unpaid Expenses:",1) !:
+      let resp$(respc+=1)="False"
+04050 let fntxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.") !:
+      let resp$(respc+=1)=str$(an2(lyne-2))
+04060 let fnchk(lyne+=1,mypos,"Changed Amount:",1) !:
+      let resp$(respc+=1)="False"
+04070 let fntxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.") !:
+      let resp$(respc+=1)=str$(an2(lyne-2))
+04080 let fnchk(lyne+=1,mypos,"New Budget:",1) !:
+      let resp$(respc+=1)="False"
+04090 let fntxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.") !:
+      let resp$(respc+=1)=str$(an2(lyne-2))
+04100 let fnchk(lyne+=1,mypos,"Next Years Budget:",1) !:
+      let resp$(respc+=1)="False"
+04110 let fntxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.") !:
+      let resp$(respc+=1)=str$(an2(lyne-2))
+04120 let fnchk(lyne+=1,mypos,"Reason for Change:",1) !:
+      let resp$(respc+=1)="False"
+04130 let fntxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.") !:
+      let resp$(respc+=1)=str$(an2(lyne-2))
+04140 let fnchk(lyne+=1,mypos,"Budget Remaining:",1) !:
+      let resp$(respc+=1)="False"
+04150 let fntxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.") !:
+      let resp$(respc+=1)=str$(an2(lyne-2))
+04160 let fnchk(lyne+=1,mypos,"General Ledger Number:",1) !:
+      let resp$(respc+=1)="False"
+04170 let fntxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.") !:
+      let resp$(respc+=1)=str$(an2(lyne-2))
+04180 let fnchk(lyne+=1,mypos,"% of Budget Used:",1) !:
+      let resp$(respc+=1)="False"
+04190 let fntxt(lyne,mypos+5,2,0,0,"30",0,"Maximum column width can not exceed the defaults that are displayed.") !:
+      let resp$(respc+=1)=str$(an2(lyne-2))
+04200 let fnlbl(lyne+=1,1,"Report Heading Date:",mylen,1)
+04210 let fntxt(lyne,mypos,30,0,0,"",0,"Date you want printed in heading of the report.") !:
+      let resp$(respc+=1)=dat$
+04220 let fncmdkey("&Next",1,1,0,"Display ") !:
+      let fncmdkey("E&xit",5,0,1,"Returns to main menu")
+04230 let fnacs(sn$,0,mat resp$,ck) ! print setup
+04240 if ck=5 then goto DISPLAY_GRID
+04250 if resp$(1)="True" then let an1$(1)="Y" !:
+        let an2(1)=val(resp$(2))
+04260 if resp$(3)="True" then let an1$(2)="Y" !:
+        let an2(2)=val(resp$(4))
+04262 if resp$(5)="True" then let an1$(3)="Y" !:
+        let an2(3)=val(resp$(6))
+04264 if resp$(7)="True" then let an1$(4)="Y" !:
+        let an2(4)=val(resp$(8))
+04270 if resp$(9)="True" then let an1$(5)="Y" !:
+        let an2(5)=val(resp$(10))
+04280 if resp$(11)="True" then let an1$(6)="Y" !:
+        let an2(6)=val(resp$(12))
+04290 if resp$(13)="True" then let an1$(7)="Y" !:
+        let an2(7)=val(resp$(14))
+04300 if resp$(15)="True" then let an1$(8)="Y" !:
+        let an2(8)=val(resp$(16))
+04310 if resp$(17)="True" then let an1$(9)="Y" !:
+        let an2(9)=val(resp$(18))
+04320 if resp$(19)="True" then let an1$(10)="Y" !:
+        let an2(10)=val(resp$(20))
+04330 if resp$(21)="True" then let an1$(11)="Y" !:
+        let an2(11)=val(resp$(22))
+04340 let rdate$=resp$(23)
+04350 for j=1 to 11
+04360   if an2(1)>maxan2(j) then goto L4380 else goto L4390
+04370 next j
+04380 L4380: mat ml$(2) !:
+      let ml$(1)="You have selected a column width longer than the maximum allowed." !:
+      let ml$(2)="Select a smaller width." !:
+      let fnmsgbox(mat ml$,resp$,cap$,0) !:
+      goto PRNT1
+04390 L4390: let fnopenprn
+04400 restore #2,search>="": nokey MENU1 ioerr L4420
+04410 goto L4430
+04420 L4420: open #2: "Name="&env$('Q')&"\GLmstr\BUDGET"&str$(bud)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BGINDX"&str$(bud)&".H"&env$('cno')&",Shr",internal,outin,keyed ioerr MENU1
+04430 L4430: if an1$(1)<>"Y" then goto L4470
+04440 let header$="GL Description                            "(1:an2(1))&"  "
+04450 let uline$="                                          "(1:an2(1)+2)
+04460 let dline$="                                          "(1:an2(1)+2)
+04470 L4470: if an1$(2)="Y" then let header$=header$&"  Budget Amt  "(1:an2(2))&"  "
+04480 if an1$(3)="Y" then let header$=header$&" Expenses Pd  "(1:an2(3))&"  "
+04490 if an1$(4)="Y" then let header$=header$&" Exp. Unpaid  "(1:an2(4))&"  "
+04500 if an1$(5)="Y" then let header$=header$&" Changed Amt  "(1:an2(5))&"  "
+04510 if an1$(6)="Y" then let header$=header$&"  New Budget"(1:an2(6))&"  "
+04520 if an1$(7)="Y" then let header$=header$&"Nxt Yrs Bdgt"(1:an2(7))&"  "
+04530 if an1$(8)="Y" then let header$=header$&"Reason for Change                       "(1:an2(8))&"  "
+04540 if an1$(9)="Y" then let header$=header$&" Bdgt Remain  "(1:an2(9))&"  "
+04550 if an1$(10)="Y" then let header$=header$&"   GL Number  "(1:an2(10))&"  "
+04560 if an1$(11)="Y" then let header$=header$&" % of Budget "(1:an2(11))&"  "
+04570 for j=2 to 11
+04580   if j=8 and an1$(8)="Y" then let dline$=dline$&rpt$(" ",42)(1:an2(8)+2) : let uline$=uline$&rpt$(" ",42)(1:an2(8)+2) : goto L4620
+04590   if j=10 and an1$(10)="Y" then let dline$=dline$&"            "(1:an2(10)+2) : let uline$=uline$&"            "(1:an2(10)+2) : goto L4620
+04600   if an1$(j)="Y" then let dline$=dline$&dline2$(1:an2(j))&"  "
+04610   if an1$(j)="Y" then let uline$=uline$&uline2$(1:an2(j))&"  "
+04620 L4620: next j
+04630 let lhdr=len(header$)
+04640 let bob1=lhdr-11
+04650 let bob2=int((lhdr-len(rtrm$(env$('cnam'))))/2)
+04660 let bob3=int((lhdr-len(rtrm$(rdate$)))/2)
+04670 let bob4=int((lhdr-len(rtrm$(bud$)))/2)
+04680 restore #2,search>="": nokey MENU1 ioerr L4420
+04690 gosub HDR
+04700 L4700: read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof L4970
+04710 L4710: form pos 1,c lhdr,skip 1,pos 1,c lhdr,skip 1
+04720 let line$=""
+04730 if an1$(1)="Y" then let line$=line$&gd$(1:an2(1))&"  "
+04740 for j=2 to 7
+04750   if an1$(j)="Y" and len(ltrm$(cnvrt$("N 12.2",(bg(j-1)))))>an2(j) then let line$=line$&ps$(13-an2(j):12)&"  ": goto L4770
+04760   if an1$(j)="Y" then let line$=line$&cnvrt$("N 12.2",bg(j-1))(13-an2(j):12)&"  "
+04770 L4770: next j
+04780 if an1$(8)="Y" then let line$=line$&ex$(1:an2(8))&"  "
+04790 if ti3=2 then goto L4830
+04800 if an1$(9)="Y" and len(ltrm$(cnvrt$("N 12.2",bg(1)-bg(2)-bg(3)+bg(4))))>an2(9) then let line$=line$&ps$(13-an2(9):12)&"  ": goto L4850
+04810 if an1$(9)="Y" then let line$=line$&cnvrt$("N 12.2",bg(1)-bg(2)-bg(3)+bg(4))(13-an2(9):12)&"  "
+04820 goto L4850
+04830 L4830: if an1$(9)="Y" and len(ltrm$(cnvrt$("N 12.2",bg(1)-bg(2)-bg(3))))>an2(9) then let line$=line$&ps$(13-an2(9):12)&"  ": goto L4850
+04840 if an1$(9)="Y" then let line$=line$&cnvrt$("N 12.2",bg(1)-bg(2)-bg(3))(13-an2(9):12)&"  "
+04850 L4850: if an1$(10)="Y" and cd$<>"T" and cd$<>"H" then let line$=line$&g1$(1:an2(10)) ! THIS WONT WORK IF YOU ADD ANYTHING AFTER IT!!!
+04860 if an1$(10)="Y" and cd$="T" then let line$=line$&"                                        "(1:an2(10))
+04870 if bg(1)<>0 then let pused=(bg(2)+bg(3))/bg(1) else let pused=0
+04880 if an1$(11)="Y" then let line$=line$&cnvrt$("N 12",pused*100)(13-an2(11):12)&"  "
+04890 let bobtom=len(line$)
+04900 if cd$="A" and an1$(1)="Y" then print #255,using L5120: gd$ pageoflow NWPGE
+04910 if cd$="B" then print #255,using L5130: line$(1:len(line$)) pageoflow NWPGE
+04920 if cd$="S" then print #255,using L5140: uline$(1:len(line$)),line$,sline$(1:len(line$)) pageoflow NWPGE
+04930 if cd$="T" then print #255,using L5150: uline$(1:len(line$)),line$,dline$(1:len(line$)) pageoflow NWPGE
+04940 if cd$="X" then print #255,using L5120: "" pageoflow NWPGE
+04950 if cd$="Z" then print #255: newpage : gosub HDR
+04960 goto L4700
+04970 L4970: let fncloseprn
+04980 goto DISPLAY_GRID
+04990 ! ______________________________________________________________________
+05000 NWPGE: ! 
+05010 print #255: newpage
+05020 gosub HDR
+05030 continue 
+05040 ! ______________________________________________________________________
+05050 HDR: ! 
+05060 let page=page+1
+05070 print #255,using L5080: "Page: ",page,env$('cnam'),rdate$,bud$
+05080 L5080: form pos bob1,c 6,n 4,skip 1,pos bob2,c 40,skip 1,pos bob3,c 40,skip 1,pos bob4,c 50,skip 2
+05090 print #255,using L4710: header$,uline2$(1:lhdr-2)
+05100 return 
+05110 ! ______________________________________________________________________
+05120 L5120: form pos 1,c 80,skip 1
+05130 L5130: form pos 1,c bobtom,skip 1
+05140 L5140: form pos 1,c bobtom,skip 1,pos 1,c bobtom,skip 1,pos 1,c bobtom,skip 1
+05150 L5150: form pos 1,c bobtom,skip 1,pos 1,c bobtom,skip 1,pos 1,c bobtom,skip 2
+05160 ! ______________________________________________________________________
+05170 MAINTAIN_RANGE_FILE: ! 
+05180 if ad1=1 then let bud=0: let bud$="": mat gl$=("")
+05190 let fntos(sn$="bgmaintrange") !:
+      let respc=0 : let mylen=20 : let mypos=20: let mypos2=60: let lyne=3
+05200 let fnlbl(1,1,"Budget #:",mylen,right)
+05210 let fntxt(1,mylen+3,2,0,0,"30",0,"") !:
+      let resp$(respc+=1)=str$(bud)
+05220 let fnlbl(2,1,"Description:",14,right)
+05230 let fntxt(2,mylen+3,50,0,0,"",0,"Enter your budget file name. Enter the range of general ledger numbers below to be included in this budget.") !:
+      let resp$(respc+=1)=bud$
+05240 let fnlbl(3,30,"Range From:",mylen,0)
+05250 let fnlbl(3,70,"Range To:",mylen,0)
+05260 for j=1 to 40 step 2
+05270   let fnqgl(lyne+=1,mypos,0,2) !:
+        let resp$(respc+=1)=fnrgl$(gl$(j))
+05280   let fnqgl(lyne,mypos2,0,2) !:
+        let resp$(respc+=1)=fnrgl$(gl$(j+1))
+05290 next j
+05300 let fncmdkey("&Complete",1,1,0,"Saves the changes and and builds the new file from the general ledger.") !:
+      !:
+      let fncmdkey("&Delete",6,0,1,"Deletes this complete budget file.") !:
+      let fncmdkey("&Cancel",5,0,1,"Returns to main budget file menu.")
+05310 let fnacs(sn$,0,mat resp$,ck) ! gl breakdown screen
+05320 if ck=5 then goto MENU1
+05330 let bud=val(resp$(1))
+05340 let bud$=resp$(2)
+05350 let k$=lpad$(str$(bud),2)
+05360 for j=1 to 40
+05370   let gl$(j)=fnagl$(resp$(j+2))
+05380 next j
+05390 if add=1 then goto L5470
+05400 if ck=6 then goto L5410 else goto L5450
+05410 L5410: mat ml$(2) !:
+      let ml$(1)="You have chosen to delete the budget file. Click Yes " !:
+      let ml$(2)="to continue, else No to retain the file." !:
+      let fnmsgbox(mat ml$,resp$,cap$,52)
+05420 if resp$="Yes" then goto L5430 else goto L5510
+05430 L5430: delete #5,key=lpad$(str$(bud),2): 
+05440 goto L5510
+05450 L5450: rewrite #5,using L5490,key=k$: bud,bud$,mat gl$ nokey L5470
+05460 goto L5490
+05470 L5470: gosub CREATE_NEW_FILE
+05480 write #5,using L5490: bud,bud$,mat gl$
+05490 L5490: form pos 1,n 2,c 50,40*c 12
+05500 ! mat GL$=("  0     0  0")
+05510 L5510: goto READD_TOTALS
+05520 ! ______________________________________________________________________
+05530 XIT: let fnxit
+05540 ! ______________________________________________________________________
+05550 INCLUDE_CHANGES: ! 
+05560 let fntos(sn$="Include_Changes") !:
+      let respc=0: let mylen=40: let mypos=mylen+3 : let lyne=0
+05570 let fnchk(lyne+=1,mypos,"Include Changes in Remaining Balance:",1) !:
+      let resp$(respc+=1)="True"
+05580 let fncmdkey("&Next",1,1,0,"Continue with re-calculations. ") !:
+      let fncmdkey("E&xit",5,0,1,"Returns to main menu")
+05590 let fnacs(sn$,0,mat resp$,ck) ! include changes if remaining balance
+05600 if ck=5 then goto MENU1
+05610 if resp$(1)="True" then let ti3=1 else let ti3=2
+05620 let chg=1
+05630 goto READD_TOTALS
+05640 ! ______________________________________________________________________
+05650 ASK_ABOUT_HISTORY: ! 
+05660 let fntos(sn$="Ask_about") !:
+      let respc=0: let mylen=40: let mypos=mylen+3 : let lyne=0
+05670 let fnchk(lyne+=1,mypos,"Include Actual Receitps and Expenditures:",1) !:
+      let resp$(respc+=1)="True"
+05680 let fnchk(lyne+=1,mypos,"Include Budget Amounts:",1) !:
+      let resp$(respc+=1)="True"
+05690 let fnlbl(lyne+=1,1,"Years to Review:",mylen,1)
+05700 let fntxt(lyne,mypos,2,0,0,"30",0,"Year code in YY format.") !:
+      let resp$(respc+=1)=""
+05710 for j=1 to 4
+05720   let fntxt(lyne+=1,mypos,2,0,0,"30",0,"Year code in YY format.") !:
+        let resp$(respc+=1)=""
+05730 next j
+05740 let fncmdkey("&Next",1,1,0,"Display ") !:
+      let fncmdkey("E&xit",5,0,1,"Returns to main menu")
+05750 let fnacs(sn$,0,mat resp$,ck) ! ask prior years
+05760 if ck=5 then goto MENU1
+05770 if resp$(1)="True" then let needactual=1 else let needactual=0
+05780 if resp$(2)="True" then let needbudget=1 else let needbudget=0
+05790 let totalextra=0
+05800 for j=1 to 5
+05810   let year(j)=val(resp$(j+2))
+05820   if year(j)>0 and needactual=1 then let totalextra+=1
+05830   if year(j)>0 and needbudget=1 then let totalextra+=1
+05840 next j
+05850 ! Gosub GRID_SPECS
+05860 goto DISPLAY_GRID
+05870 GRID_SPECS: ! 
+05880 mat chdr$(13+totalextra) : mat cmask$(13+totalextra) : mat item$(13+totalextra): mat holdcmask$(13+totalextra) !:
+      let chdr$(1)="Rec" : let chdr$(2)="Description" : let chdr$(3)="Budget" !:
+      let chdr$(4)="Actual" : let chdr$(5)="Unpaid" !:
+      let chdr$(6)="Changes" !:
+      let chdr$(7)="Remaining" : let chdr$(8)="New Budget" !:
+      let chdr$(9)="Next Years Budget" !:
+      let chdr$(10)="GL #"
+05890 let chdr$(11)="Reason" !:
+      let chdr$(12)="TOE" !:
+      let chdr$(13)="Prior Amount"
+05900 let cmask$(1)='' : let cmask$(2)='10' : let cmask$(3)="10" !:
+      let cmask$(4)='10' !:
+      let cmask$(5)='10' : let cmask$(6)='10': let cmask$(7)='10' !:
+      let cmask$(8)='10': let cmask$(9)='10' : let cmask$(10)='' !:
+      let cmask$(11)='': let cmask$(12)='' : let cmask$(13)='10'
+05910 let x=13 ! add extra columns for old history
+05920 for j=1 to 5
+05930   if needactual=1 and year(j)>0 then let chdr$(x+=1)="Amount-"&cnvrt$("pic(##)",year(j)) !:
+          let cmask$(x)="10"
+05940   if needbudget=1 and year(j)>0 then let chdr$(x+=1)="Budget-"&cnvrt$("pic(##)",year(j)) !:
+          let cmask$(x)="10"
+05950 next j
+05960 let x=0
+05970 mat holdcmask$=cmask$
+05980 return 
+05990 ! <Updateable Region: ERTN>
+06000 ERTN: let fnerror(program$,err,line,act$,"xit")
+06010 if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
+06020 execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
+06030 print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+06040 ERTN_EXEC_ACT: execute act$ : goto ERTN
+06050 ! /region
+06060 ! ______________________________________________________________________

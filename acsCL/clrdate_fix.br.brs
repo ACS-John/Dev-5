@@ -4,7 +4,7 @@
 00050   print "FIX DATE CLEARED: ENTER COMPANY NUMBER:"
 00060   input cno
 00070 ! 
-00080   open #5: "Name=Q:\CLmstr\TRMSTR.H"&str$(cno)&",Shr",internal,outin,relative 
+00080   open #5: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&",Shr",internal,outin,relative 
 00090 L90: read #5,using L100: bcde,tcde,ck$,clr eof END1
 00100 L100: form pos 1,n 2,n 1,c 8,pos 72,n 6
 00102   if tcde><1 then goto L90

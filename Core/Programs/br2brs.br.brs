@@ -1,7 +1,7 @@
-00010 ! Replace R:\Core\br2brs
+00010 ! Replace S:\Core\br2brs
 00020 ! creates a brs file for every br file
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fngetdir,fnerror
+00040   library 'S:\Core\Library': fngetdir,fnerror
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dir$*255,filename$(999)*255
@@ -43,7 +43,7 @@
 00350 ! __
 00360 AFT_LOOP1: ! 
 00370   mat filename$(999)
-00380   print #20: "load R:\Core\br2brs"
+00380   print #20: "load S:\Core\br2brs"
 00390   print #20: " ! 'Now all your *.br files have little *.brs parallels'"
 00400   close #20: 
 00410   chain "proc=proc."&wsid$
@@ -51,7 +51,7 @@
 00430 XIT: stop 
 00440 ! ______________________________________________________________________
 00450 ! <Updateable Region: ERTN>
-00460 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00460 ERTN: let fnerror(program$,err,line,act$,"xit")
 00470   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00480   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00490   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

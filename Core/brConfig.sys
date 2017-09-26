@@ -1,0 +1,35 @@
+Application_Name ACS 5
+include Drive.sys
+
+Editor "C:\Program Files (x86)\Notepad++\Notepad++.exe"
+
+WorkPath %Temp%
+
+Console Off
+WorkStack 99999999
+RPNStack 2000
+MaxRecall 99
+Cursor 020A
+
+Style Keyword lower Expressions lower labels upper Indent 2 0
+FileNames Mixed_Case
+Font Courier New
+Substitute Prn:/10 Win:/Select
+Shell Limit -1
+
+Insert On Non_Persistent
+
+Rem Option 26 suppresses the creation of .BAK files. 
+Option 26 
+
+Rem Option 46 Normalizes numpad + and - keys. This removes Field Plus / Minus special processing, which is no longer needed with Datahilite field clearing.
+Option 46
+
+Date never ! disables BR's date picker
+Rem Graphic_LineDraw ThinRaised
+
+
+Rem BaseYear "The default is 1900... If you always use the results from the Days function when comparing dates, your programs should require no changes to continue working into the next century."
+BaseYear 1950
+
+Execute Run Core\Start

@@ -1,0 +1,88 @@
+[Q]\PRmstr\RPMstr.H[cno]  ,  emp_          , 0
+[Q]\PRmstr\RPIndex.H[cno] ,  eno
+[Q]\PRmstr\RPIndx2.H[cno] ,  name$
+recl=196
+===================================================
+eno     ,  Employee Number                      ,  n    8   , ! Pos=1         eno     
+name$   ,  Name                                 ,  c   30   , ! Pos=9         em$(1)  
+addr$   ,  Address                              ,  c   30   , ! Pos=39        em$(2)  
+csz$    ,  City State Zip Code                  ,  c   30   , ! Pos=69        em$(3)  
+ss$     ,  Social Security Number               ,  c   11   , ! Pos=99        ss$     
+rs1     ,  Race                                 ,  n    1   , ! Pos=110       rs(1) 
+!            0 - Unknown
+!            1 - Caucasian
+!            2 - Hispanic
+!            3 - Black
+!            4 - Oriental
+!            5 - AmIndian
+!            6 - Indochines
+rs2     ,  Sex                                  ,  n    1   , ! Pos=111       rs(2)   
+!            0 - Unknown
+!            1 - Male
+!            2 - Female
+em01    ,  Marital Status                       ,  n    2   , ! Pos=112       em(01)  
+!            0=Single
+!            1=Married
+em02    ,  Federal Exemptions                   ,  n    2   , ! Pos=114       em(02)  
+em03    ,  State Exemptions                     ,  n    2   , ! Pos=116       em(03)  
+em04    ,  Employment Status                    ,  n    2   , ! Pos=118       em(04)  
+em05    ,  Pay Code                             ,  n    2   , ! Pos=120       em(05)  
+!            1 - Monthly
+!            2 - Semi-monthly
+!            3 - Bi-weekly
+!            4 - Weekly
+em06    ,  FICA Code                            ,  n    2   , ! Pos=122       em(06)  
+!            0 - Subject to SS and Med WH
+!            1 - SS only
+!            2 - Medicare Only
+!            9 - Neither SS nor Medicare
+em07    ,  EIC Code                             ,  n    2   , ! Pos=124       em(07)  
+!            0 - Not qualified for EIC
+!            1 - Single or Spouse not file
+!            2 - Married both filing
+em08    ,  Sick Pay Code                        ,  pd   3.3 , ! Pos=126       em(08)  
+em09    ,  Vacation Pay Code                    ,  pd   3.3 , ! Pos=129       em(09)  
+em10    ,  Sick Hours Accrued                   ,  pd   4.2 , ! Pos=132       em(10)  
+em11    ,  Vacation Hours Accrued               ,  pd   4.2 , ! Pos=136       em(11)  
+em12    ,  Standard Federal Withholding         ,  pd   4.2 , ! Pos=140       em(12)  
+em13    ,  Federal Tax Add-On                   ,  pd   4.2 , ! Pos=144       em(13)  
+em14    ,  Standard State Withholding           ,  pd   4.2 , ! Pos=148       em(14)  
+em15    ,  State Tax Add-On                     ,  pd   4.2 , ! Pos=152       em(15)  
+em16    ,  Date Hired                           ,  n    6   , ! Pos=156       em(16)  
+lpd     ,  Last Payroll Date                    ,  n    6   , ! Pos=162       lpd     
+tgp     ,  Total Gross Pay                      ,  pd   5.2 , ! Pos=168       tgp     
+ta1     ,  First Trailer Address                ,  pd   3   , ! Pos=173       ta(1)   
+ta2     ,  Last Trailer Address                 ,  pd   3   , ! Pos=176       ta(2)   
+ph$     ,  Telephone Number                     ,  c   12   , ! Pos=179       ph$     
+bd      ,  Birth Date                           ,  n    6   , ! Pos=191       bd      
+#eof#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

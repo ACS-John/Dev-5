@@ -1,6 +1,6 @@
-00010 ! Replace R:\Core\jbLabel.br
+00010 ! Replace S:\Core\jbLabel.br
 00020 ! ______________________________________________________________________
-00030   library 'R:\Core\Library': fncno,fndat,fnwin3b,fnerror,fnwait,fnlabel,fnaddlabel
+00030   library 'S:\Core\Library': fncno,fndat,fnwin3b,fnerror,fnwait,fnlabel,fnaddlabel
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim l$(5)*70,iom$(10),cnam$*40,dat$*20,pt$(5)*3,cap$*128,message$*40
@@ -130,7 +130,7 @@
         let lw(main_curfld)=sw(style)
 01020 L1020: return 
 01030 ! ______________________________________________________________________
-01040 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01040 ERTN: let fnerror(program$,err,line,act$,"xit")
 01050   if uprc$(act$)<>"PAUSE" then goto L1080
 01060   execute "list -"&str$(line) !:
         pause  !:

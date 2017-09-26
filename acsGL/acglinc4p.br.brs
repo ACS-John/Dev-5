@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\AcGlInc4p
+00010 ! Replace S:\acsGL\AcGlInc4p
 00020 ! -- PRINT INCOME STATEMENT WITH BUDGET and percent remaining
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fngl_number_use_dept,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fncno,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fnactpd,fnconsole
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,actpd$*6,cogl$(3)*12,pedat$*20,cch$*20,p$(20)*50
@@ -25,20 +25,20 @@
 00220 ! ______________________________________________________________________
 00230   let pors=1
 00240   if fnps=2 then let mp1=72 !:
-          let fl1$="Name=Q:\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName=Q:\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" else !:
+          let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" else !:
           let mp1=69 !:
-          let fl1$="Name=Q:\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName=Q:\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+          let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
 00250   open #1: fl1$,internal,input,keyed 
 00260   let fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00270   on fkey 5 goto L1670
 00280   let report$="Statement of Income and Expenses"
 00290   if fnps=2 then goto L320 ! secondary
-00300   execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
+00300   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
 00310   goto L340
-00320 L320: execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
+00320 L320: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
 00330   let fnconsole(off=0)
-00340 L340: open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00340 L340: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
 00350 L350: read #1,using L400: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1670
 00360   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L350
 00370   if costcntr=0 then goto L400
@@ -170,11 +170,11 @@
 01520 ! ______________________________________________________________________
 01530 HDR: let heading=1
 01540   let pt1+=1
-01550   print #255: "\qc  {\f181 \fs24 \b "&trim$(cnam$)&"}"
+01550   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01560   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01570   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
 01580   print #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(actpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
-01590   print #255: "\qL "
+01590   print #255: "\ql "
 01600   print #255: 
 01610   print #255,using L1620: "Annual",lpad$(rtrm$(cch$),20),"Year To Date"," Budget","Percent"
 01620 L1620: form pos 29,c 6,pos 35,cc 20,pos 55,c 15,pos 73,c 7,pos 84,c 7,skip 1
@@ -193,7 +193,7 @@
 01730 XIT: let fnxit
 01740 ! ______________________________________________________________________
 01750 ! <updateable region: ertn>
-01760 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01760 ERTN: let fnerror(program$,err,line,act$,"xit")
 01770   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01780   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01790   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

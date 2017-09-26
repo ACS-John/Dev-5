@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\acglChrt
+00010 ! Replace S:\acsGL\acglChrt
 00020 ! General Ledger Chart of Accounts
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnchain,fnprocess,fntos,fnfra,fnopt,fncmdset,fnacs,fnlbl,fnqgl,fnagl$
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnchain,fnprocess,fntos,fnfra,fnopt,fncmdset,fnacs,fnlbl,fnqgl,fnagl$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim gl(2,3),io2$(6),io1$(2),wrd1$(2)*46,cap$*128,p$(20)*50
@@ -35,7 +35,7 @@
 00300   if resp$(1)="True" then let sel=1 else let sel=2
 00310   if trim$(resp$(3))<>"" then let gl1$=fnagl$(resp$(3))
 00320   if trim$(resp$(4))<>"" then let gl2$=fnagl$(resp$(4))
-00330 L330: open #1: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName=Q:\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00330 L330: open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00340 ! ______________________________________________________________________
 00350   print newpage
 00360   let fnopenprn
@@ -68,7 +68,7 @@
 00620   gosub L680
 00630   goto L420
 00640 ! ______________________________________________________________________
-00650 L650: let fncloseprn(nw)
+00650 L650: let fncloseprn
 00660   goto XIT
 00670 ! ______________________________________________________________________
 00680 L680: if sel=2 then goto L730
@@ -90,7 +90,7 @@
 00830 XIT: let fnxit
 00840 ! ______________________________________________________________________
 00850 ! <Updateable Region: ERTN>
-00860 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00860 ERTN: let fnerror(program$,err,line,act$,"xit")
 00870   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00880   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00890   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

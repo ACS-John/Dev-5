@@ -1,0 +1,43 @@
+! *** CL - Checkbook ***
+Transaction                               ^ Checkbook\Transaction
+>Running Bank Balance                     ^ Checkbook\Running Bank Balance
+>Transaction Journals                     ^ acsCL\TrJr
+>Remove Old Transactions                  ^ acsCL\RmTrans
+>Endorse Checks                           ^ acsCL\endorsment
+Unpaid Invoice                            ^ Checkbook\Unpaid Invoice
+>Print Selected Invoice Listing           ^ acsCL\PrintSelectInvoice
+>Unpaid Invoice Listing (Current)         ^ acsCL\UnPdInv
+>Unpaid Invoice Summary                   ^ acsCL\UnPdInv2
+>Report of Invoices Due by Selected Dates ^ acsCL\DueBy
+Paid Invoice                              ^ acsCL\PaidInvoice
+>Remove Paid Invoices                     ^ acsCL\RemovePaidInvoices
+Bank                                      ^ acsCL\Bank
+>Bank Reconciliation                      ^ acsCL\BankReconciliation
+>Select Bank Account                      ^ acsCL\ChgBank
+>Unclear All Entries by Bank              ^ acsCL\UnClBank
+Payee                                     ^ Checkbook\Payee
+>Payee Labels                             ^ acsCL\Label
+>Payee Listing                            ^ acsCL\PayList
+>Remove Payee Records                     ^ acsCL\PayDump
+>Payee Fund Listing                       ^ acsCL\VNFund
+>Check Listing by Payee                   ^ acsCL\CkLstV
+>Payee Type                               ^ HamsterFio:Payee Type
+General Ledger
+>Chart of Accounts                        ^ acsCL\ChartOfAccounts
+>General Ledger Control                   ^ acsCL\GLControl
+Other Files
+>Department Breakdown                     ^ acsCL\department
+Print Checks                              ^ Checkbook\Print Checks
+Print
+>Accounts Payable Listing - Any Time      ^ acsCL\CPInvLst
+>Accounts Payable Listing (Aged)          ^ acsCL\AgedAP
+>Claims or Purchases Report               ^ acsCL\Claims
+>GL Distribution Report                   ^ acsCL\PostGL2b
+>Print 1099 Forms                         ^ Checkbook\Print 1099 Forms
+Export                                    
+>Transfer to Accountant                   ^ acsCL\TrToCPA
+>Post to General Ledger                   ^ acsCL\PostGL2                    ^ GL
+Import                                    
+>Import General Ledger Chart of Accounts  ^ acsCL\InitGLCoA
+>Import Payee Records from General Ledger ^ acsCL\initglpay
+

@@ -1,0 +1,43 @@
+00010 ! REPLACE acspr\(layouts)\Department.LAY,SOURCE
+00070 Let H1$="PR DEPARTMENTAL RECORDS"
+00080 Let FILETYPE$="Keyed"
+00090 Let FILENAME$="Department.H(CNO)"
+00100 Let VOLID$="PRMSTR"
+00110 Let RM$(1)="Kfname=Deptidx.h kps=1 kln=11"
+00120 Let RM$(2)=""
+00130 Let RM$(3)=""
+00140 Let RM$(4)=""
+00160 Data Employee Number                   ^TENO        ^N 8    ^Emp#
+00170 Data Department Number                 ^TDN         ^N 3    ^Dep#
+00180 Data G/L Account Number                ^GL$         ^C 12   ^GL#
+00190 Data Last Review Date                  ^TDT(1)      ^N 6    ^LastRev
+00200 Data Next Review Date                  ^TDT(2)      ^N 6    ^NextRev
+00210 Data Last Increase Date                ^TDT(3)      ^N 6    ^LastIncr
+00220 Data Last Payroll Date                 ^TDT(4)      ^N 6    ^LastPrDate
+00230 Data State Code                        ^TCD(1)      ^N 2    ^StateCd
+00240 Data Worknams Comp Code                ^TCD(2)      ^N 2    ^WC Code
+00250 Data Union Code                        ^TCD(3)      ^N 2    ^UnionCD
+00260 Data Amount of Last Increase           ^tLI         ^PD 4.2 ^LastIncAmt
+00270 Data Salary                            ^TDET(1)     ^PD 4.2 ^Salary
+00280 Data Regular Hourly Rate               ^TDET(2)     ^PD 4.2 ^RegRate
+00290 Data Overtime Hourly Rate              ^TDET(3)     ^PD 4.2 ^OTRate
+00300 Data Misc - 1                          ^TDET(4)     ^PD 4.2 ^Misc1
+00310 Data Misc - 2                          ^TDET(5)     ^PD 4.2 ^Misc2
+00311 Data Misc - 3                          ^TDET(6)     ^PD 4.2 ^Misc3
+00330 Data Misc - 4                          ^TDET(7)     ^PD 4.2 ^Misc4
+00340 Data Misc - 5                          ^TDET(8)     ^PD 4.2 ^Misc5
+00350 Data Misc - 6                          ^TDET(9)     ^PD 4.2 ^Misc6
+00351 Data Misc - 7                          ^TDET(10)    ^PD 4.2 ^Misc7
+00360 Data Misc - 8                          ^TDET(11)    ^PD 4.2 ^Misc8
+00370 Data Misc - 9                          ^TDET(12)    ^PD 4.2 ^Misc9
+00380 Data Misc - 10                         ^TDET(13)    ^PD 4.2 ^Misc10
+00390 Data Misc - 11                         ^TDET(14)    ^PD 4.2 ^Misc11
+00391 Data Misc - 12                         ^TDET(15)    ^PD 4.2 ^Misc12
+00392 Data Misc - 13                         ^TDET(16)    ^PD 4.2 ^Misc13
+00393 Data Misc - 14                         ^TDET(17)    ^PD 4.2 ^Misc14
+00394 Data Misc - 15                         ^TDET(18)    ^PD 4.2 ^Misc15
+00395 Data Misc - 16                         ^TDET(19)    ^PD 4.2 ^Misc16
+00396 Data Misc - 17                         ^TDET(20)    ^PD 4.2 ^Misc17
+00397 Data Misc - 18                         ^TDET(21)    ^PD 4.2 ^Misc18
+00398 Data Misc - 19                         ^TDET(22)    ^PD 4.2 ^Misc19
+00400 Data Misc - 20                         ^TDET(23)    ^PD 4.2 ^Misc20

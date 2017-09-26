@@ -1,6 +1,6 @@
 00020 ! G/L BALANCE SHEET -  STANDARD FOR 8 1/2 * 11 PAPER
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnprocess,fnpedat$,fnfscode,fngl_number_use_dept,fnpriorcd,fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnactpd$,fnactpd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fnprocess,fnpedat$,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnactpd$,fnactpd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim sc1$(2)*20,bigul$*140,heading$*140,cch$*20,by(13),bp(13)
@@ -25,13 +25,13 @@
 00180   if fnprocess=0 then gosub L2010
 00190   let mp1=63 : if fnps=2 then let mp1=mp1+3
 00200   if fnps=2 then !:
-          let fl1$="Name=Q:\GLmstr\AcGLFnSc.h"&str$(cno)&"," !:
-          let fl1$=fl1$&"KFName=Q:\GLmstr\FnScIndx.h"&str$(cno)&",Shr" else !:
-          let fl1$="Name=Q:\GLmstr\ACGLFNSB.h"&str$(cno)&"," !:
-          let fl1$=fl1$&"KFName=Q:\GLmstr\FnSBIndx.h"&str$(cno)&",Shr"
+          let fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&str$(cno)&"," !:
+          let fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&str$(cno)&",Shr" else !:
+          let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&str$(cno)&"," !:
+          let fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnSBIndx.h"&str$(cno)&",Shr"
 00210 L210: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos 87,27*pd 6.2
 00220   open #1: fl1$,internal,input,keyed 
-00230   if fnprocess=1 or fngl_number_use_dept=0 then goto L320
+00230   if fnprocess=1 or fnUseDeptNo=0 then goto L320
 00240   goto L350 ! Print NEWPAGE
 00250   close #101: ioerr L260
 00260 L260: open #101: "SROW=9,SCOL=4,EROW=12,ECOL=75,BORDER=DR,CAPTION=PRINT BALANCE SHEET",display,outin 
@@ -45,10 +45,10 @@
 00340   print fields "12,2,C 18,B,5": " Press F5 to stop"
 00350 L350: let fnopenprn
 00360   if fnps=2 then goto L390 ! secondary
-00370   execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 63 3 Replace DupKeys -N"
+00370   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 63 3 Replace DupKeys -N"
 00380   goto L400
-00390 L390: execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 66 3 Replace DupKeys -N"
-00400 L400: open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00390 L390: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 66 3 Replace DupKeys -N"
+00400 L400: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
 00410   if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00420   on fkey 5 goto L1940
 00430   let report$=cap$
@@ -197,11 +197,11 @@
 01800 L1800: return 
 01810 ! ______________________________________________________________________
 01820 L1820: let heading=1
-01830   print #255: "\qc  {\f181 \fs24 \b "&trim$(cnam$)&"}"
+01830   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01840   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01850   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
 01860   print #255: "\qc  {\f181 \fs16 \b "&trim$(fnpedat$)&"}"
-01870   print #255: "\qL "
+01870   print #255: "\ql "
 01880   print #255: 
 01890   print #255: 
 01900   print #255,using L1910: heading$
@@ -215,7 +215,7 @@
 01980 DONE: ! 
 01982   let fnfscode(actpd)
 01983   let fnpriorcd(1)
-01984   let fncloseprn(nw)
+01984   let fncloseprn
 01990   goto XIT
 02000 ! ______________________________________________________________________
 02010 L2010: print newpage ! determine fund #s
@@ -223,7 +223,7 @@
 02030     let io1$(j*2-1)=str$(j+4)&",22,NZ 3,UT,n" !:
           let io1$(j*2)=str$(j+4)&",28,C 20,UT,N"
 02040   next j
-02050   open #5: "Name=Q:\GLmstr\GLfund.h"&str$(cno)&",RecL=230,use",internal,outin,relative 
+02050   open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&str$(cno)&",RecL=230,use",internal,outin,relative 
 02060   read #5,using L2070: mat fundnum,mat funddesc$ ioerr L2080
 02070 L2070: form pos 1,10*n 3,10*c 20
 02080 L2080: let fntos(sn$="ACglcasf3") !:
@@ -256,7 +256,7 @@
 02300   return 
 02310 ! ______________________________________________________________________
 02320 ! <Updateable Region: ERTN>
-02330 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02330 ERTN: let fnerror(program$,err,line,act$,"xit")
 02340   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02350   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02360   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

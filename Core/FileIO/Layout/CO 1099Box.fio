@@ -1,0 +1,6 @@
+[Q]\Data\1099Box.dat, box_, 0
+[Q]\Data\1099Box.idx, box
+===================================================
+box,       Box Number ,             N  2
+desc$,     Description ,                    C 60
+

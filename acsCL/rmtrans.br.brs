@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\RmTrans
+00010 ! Replace S:\acsCL\RmTrans
 00020 ! Remove Transactions
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnerror,fncno,fnacs,fntos,fntxt,fndate_mmddyy_to_ccyymmdd,fncmdset,fnlbl
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnacs,fntos,fntxt,fndate_mmddyy_to_ccyymmdd,fncmdset,fnlbl
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim de$*30,cap$*128,tr$(5)*35
@@ -10,13 +10,13 @@
 00100   let fntop(program$,"Remove Old Transactions")
 00110   let cancel=99 : let right=1 : let center=2 : let on=1 : let off=0 !:
         let left=0
-00120   open #20: "Name=Q:\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
+00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #20,using 'Form POS 417,N 1': rcn !:
         close #20: 
-00130   open #trmstr:=1: "Name=Q:\CLmstr\TrMstr.H"&str$(cno)&",KFName=Q:\CLmstr\TrIdx1.H"&str$(cno),internal,outin,keyed 
-00140   open #work1:=2: "Name=Q:\CLmstr\Work1."&wsid$&",version=2,Size=0,RecL=84,Replace",internal,outin,relative 
-00150   open #tralloc:=3: "Name=Q:\CLmstr\TrAlloc.H"&str$(cno)&",KFName=Q:\CLmstr\TrAlloc-idx.h"&str$(cno),internal,input,keyed 
-00160   open #work2=4: "Name=Q:\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outin,relative 
+00130   open #trmstr:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno),internal,outin,keyed 
+00140   open #work1:=2: "Name="&env$('Q')&"\CLmstr\Work1."&wsid$&",version=2,Size=0,RecL=84,Replace",internal,outin,relative 
+00150   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&str$(cno),internal,input,keyed 
+00160   open #work2=4: "Name="&env$('Q')&"\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outin,relative 
 00170   let fntos(sn$='RmTrans-'&str$(rcn)) !:
         let mylen=21 : let mypos=mylen+2 : let lc=0
 00180   let fnlbl(lc+=1,1,"Oldest Retained Date:",mylen,right)
@@ -59,18 +59,18 @@
 00490   close #work2: 
 00500   close #trmstr,free: 
 00510   close #tralloc,free: 
-00520   execute "Rename Q:\CLmstr\Work1."&wsid$&" Q:\CLmstr\TRmstr.H"&str$(cno)&" -n"
-00530   execute "ReName Q:\CLmstr\Work2."&wsid$&" Q:\CLmstr\TrAlloc.H"&str$(cno)&" -n"
-00540   execute "Index Q:\CLmstr\TrMstr.H"&str$(cno)&" Q:\CLmstr\TrIdx1.H"&str$(cno)&" 1 11 Replace DupKeys -n"
-00550   execute "Index Q:\CLmstr\TrMstr.H"&str$(cno)&" Q:\CLmstr\TrIdx2.H"&str$(cno)&" 28/1 8/11 Replace DupKeys -n"
-00560   execute "Index Q:\CLmstr\TrMstr.H"&str$(cno)&" Q:\CLmstr\TrIdx3.H"&str$(cno)&" 16/12/4 2/4/8 Replace DupKeys -n"
-00570   execute "Index Q:\CLmstr\TrAlloc.H"&str$(cno)&" Q:\CLmstr\TrAlloc-idx.H"&str$(cno)&" 1 11 Replace DupKeys -n"
+00520   execute "Rename "&env$('Q')&"\CLmstr\Work1."&wsid$&' '&env$('Q')&"\CLmstr\TRmstr.H"&str$(cno)&" -n"
+00530   execute "Rename "&env$('Q')&"\CLmstr\Work2."&wsid$&' '&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&" -n"
+00540   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&" 1 11 Replace DupKeys -n"
+00550   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TrIdx2.H"&str$(cno)&" 28/1 8/11 Replace DupKeys -n"
+00560   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TrIdx3.H"&str$(cno)&" 16/12/4 2/4/8 Replace DupKeys -n"
+00570   execute "Index "&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TrAlloc-idx.H"&str$(cno)&" 1 11 Replace DupKeys -n"
 00580   goto XIT
 00590 ! ______________________________________________________________________
 00600 XIT: let fnxit
 00610 ! ______________________________________________________________________
 00620 ! <Updateable Region: ERTN>
-00630 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00630 ERTN: let fnerror(program$,err,line,act$,"xit")
 00640   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00650   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00660   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

@@ -1,0 +1,8 @@
+Amount                        TR(5)                 11 2PD 6.2     Amount
+Date                          tr$(4)                 6 0n 6        Date
+Description                   TD$                   30 0C 30       Description
+General Ledger Number         trGl$                 12 0c 12       GL #
+Period Code                   PCDE                   2 0N 2        Period
+Posting Code                  TR(7)                  2 0N 2        Post
+Reference Number              TR$                   12 0C 12       Ref
+Transaction Code              TR(6)                  2 0N 2        Code

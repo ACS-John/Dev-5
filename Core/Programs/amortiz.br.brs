@@ -1,9 +1,9 @@
-00010 ! Replace R:\Core\Programs\Amortiz
+00010 ! Replace S:\Core\Programs\Amortiz
 00020 ! Amortization Program
-00030   library 'R:\Core\Library': fnerror,fnxit,fnopenprn,fncloseprn,fntos,fnlbl,fntxt,fnacs,fncmdset
+00030   library 'S:\Core\Library': fnerror,fnxit,fnopenprn,fncloseprn,fntos,fnlbl,fntxt,fnacs,fncmdset
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
-00060   dim e(50,2),io2$(6),io3$(2),io4$(2),wd4$(2),pfm$*200
+00060   dim eX(50,2),io2$(6),io3$(2),io4$(2),wd4$(2),pfm$*200
 00070   dim lor$*30,ln$*12,lee$*30,pfm2$*200,text$*60, mask$*25, dv$*40
 00080   dim response$(20)*40
 00090 ! ______________________________________________________________________
@@ -86,10 +86,10 @@
 00710   print fields "13,26,C 17,N": " Payment Amount: "
 00715   print fields "15,30,Cc 09,B,1": "Next (F1)"
 00720   print fields "15,41,Cc 09,B,5": "Stop (F5)"
-00725   input fields mat io3$: e(j6+1,1),e(j6+1,2)
+00725   input fields mat io3$: eX(j6+1,1),eX(j6+1,2)
 00730   if cmdkey=5 then goto MENU1
-00735   let e(j6+1,1)=val(str$(e(j6+1,1))(5:8)&str$(e(j6+1,1))(1:4))
-00740   if e(j6+1,1)=0 then goto L820
+00735   let eX(j6+1,1)=val(str$(eX(j6+1,1))(5:8)&str$(eX(j6+1,1))(1:4))
+00740   if eX(j6+1,1)=0 then goto L820
 00745   let j6=j6+1
 00750   goto L680
 00820 L820: close #101: ioerr L830
@@ -137,22 +137,22 @@
 01240     let eq=0
 01250     if j6=0 then goto L1440
 01260     for j1=1 to j6+1
-01270       if e(j1,1)=0 then goto L1440
-01280       if e(j1,1)>d4 and e(j1,1)<d5 then goto L1320
-01290       if e(j1,1)=d5 then let eq=j1
-01300       if e(j1,1)=d5 then goto L1440
+01270       if eX(j1,1)=0 then goto L1440
+01280       if eX(j1,1)>d4 and eX(j1,1)<d5 then goto L1320
+01290       if eX(j1,1)=d5 then let eq=j1
+01300       if eX(j1,1)=d5 then goto L1440
 01310     next j1
-01320 L1320: let d9=(e(j1,1)-int(e(j1,1)*.0001)*10000)*10000+int(e(j1,1)*.0001)
+01320 L1320: let d9=(eX(j1,1)-int(eX(j1,1)*.0001)*10000)*10000+int(eX(j1,1)*.0001)
 01330     let d8=val(lpad$(str$(d9),8)(3:4))
 01340     let i1=fna(s*r/365*max(d2-d8,d8-d2))
 01350     let i2=i2+i1
-01360     let p2=p2+e(j1,2)-i1
+01360     let p2=p2+eX(j1,2)-i1
 01370     let i3=i3+i1
-01380     let p3=p3+e(j1,2)-i1
+01380     let p3=p3+eX(j1,2)-i1
 01390     let s=s+i1
-01400     let s=s-e(j1,2)
-01410     let s9=e(j1,2)
-01420     print #255,using pfm2$: "Extra",d9,b1,i1,e(j1,2)-i1,s,i2,p2 pageoflow NPG
+01400     let s=s-eX(j1,2)
+01410     let s9=eX(j1,2)
+01420     print #255,using pfm2$: "Extra",d9,b1,i1,eX(j1,2)-i1,s,i2,p2 pageoflow NPG
 01430     let b1=s
 01440 L1440: let i=fna(s*r/y-i1)
 01450     let d4=d5
@@ -168,11 +168,11 @@
 01550     print #255,using pfm$: j,d1,d2,d3,b1,i,p-i,s,i2,p2 pageoflow NPG
 01560     if eq=0 then goto L1640
 01570     let b1=s
-01580     let d9=(e(eq,1)-int(e(eq,1)*.0001)*10000)*10000+int(e(eq,1)*.0001)
-01590     let s=b1-e(eq,2)
-01600     let p2=p2+e(eq,2)
-01610     let p3=p3+e(eq,2)
-01620     print #255,using pfm2$: "Extra",d9,b1,0,e(eq,2),s,i2,p2 pageoflow NPG
+01580     let d9=(eX(eq,1)-int(eX(eq,1)*.0001)*10000)*10000+int(eX(eq,1)*.0001)
+01590     let s=b1-eX(eq,2)
+01600     let p2=p2+eX(eq,2)
+01610     let p3=p3+eX(eq,2)
+01620     print #255,using pfm2$: "Extra",d9,b1,0,eX(eq,2),s,i2,p2 pageoflow NPG
 01630     let b1=s
 01640 L1640: if y=1 then goto L1720
 01650     let d1=fna(d1+12/y)
@@ -193,7 +193,7 @@
 01800   print #255,using L1790: "Total Interest Paid: ",i2
 01810   print #255,using L1790: "Total Principal Paid: ",p2
 01820   print #255,using L1790: "Balance Remaining: ",s
-01830 L1830: let fncloseprn(nw)
+01830 L1830: let fncloseprn
 01840   on fkey 5 ignore 
 01850   let x9=0
 01860   goto MENU1
@@ -206,7 +206,7 @@
 01930 XIT: end  ! let fnxit("")
 01940 ! ______________________________________________________________________
 01950 ! <Updateable Region: ERTN>
-01960 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01960 ERTN: let fnerror(program$,err,line,act$,"xit")
 01970   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01980   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01990   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

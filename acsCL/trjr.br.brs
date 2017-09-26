@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\TrJr
+00010 ! Replace S:\acsCL\TrJr
 00020 ! Print Transaction Journals
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fnwait,fncombof,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fnwait,fncombof,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,vnam$*30,de$*35,slt(3),ti$(3)*20,tr5$*30,item2$(2)*15
@@ -17,7 +17,7 @@
         let ti$(2)="Deposits" !:
         let ti$(3)="Adjustments"
 00170 ! ______________________________________________________________________
-00180   open #20: "Name=Q:\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
+00180   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #20,using 'form POS 152,N 2': wbc !:
         close #20: 
 00190 ! ______________________________________________________________________
@@ -42,7 +42,7 @@
 00310   let fnchk(9,40,"Print Adjustments Journal:",1) !:
         let resp$(respc+=1)="False"
 00320   let fnlbl(11,1,"Bank Account:",38,1)
-00330   let fncombof("Bankmstr",11,40,20,"Q:\CLmstr\bankmstr.h"&str$(cno),1,2,3,15,"Q:\CLmstr\Bankidx1.h"&str$(cno),1,0, "Select bank account for printing") !:
+00330   let fncombof("Bankmstr",11,40,20,env$('Q')&"\CLmstr\bankmstr.h"&str$(cno),1,2,3,15,env$('Q')&"\CLmstr\Bankidx1.h"&str$(cno),1,0, "Select bank account for printing") !:
         let resp$(respc+=1)=str$(wbc)
 00340   let fncmdset(2) !:
         let fnacs(sn$,0,mat resp$,ck)
@@ -58,12 +58,12 @@
         else let sltyn$(3)="N" ! adj jrn
 00400   let wbc=val(resp$(7)(1:2))
 00410 ! FNWAIT
-00420   open #trmstr=1: "Name=Q:\CLmstr\TrMstr.h"&str$(cno)&",KFName=Q:\CLmstr\TrIdx1.h"&str$(cno)&",Shr",internal,input,keyed 
-00430   open #tralloc=2: "Name=Q:\CLmstr\TrAlloc.h"&str$(cno)&",KFName=Q:\CLmstr\TrAlloc-Idx.h"&str$(cno)&",Shr",internal,input,keyed 
-00440   open #glmstr=4: "Name=Q:\CLmstr\GLmstr.H"&str$(cno)&",KFName=Q:\CLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00420   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&str$(cno)&",Shr",internal,input,keyed 
+00430   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno)&",Shr",internal,input,keyed 
+00440   open #glmstr=4: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00450   open #work=3: "Name="&udf$&"WORK,KFName="&udf$&"ADDR,RecL=40,KPS=1,KLN=12,Replace",internal,outin,keyed  !:
         ! this file is used to total Amounts by General Ledger Number
-00460   open #bankmstr=12: "Name=Q:\CLmstr\BankMstr.h"&str$(cno)&",KFName=Q:\CLmstr\BankIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
+00460   open #bankmstr=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
 00470   read #bankmstr,using 'Form POS 3,C 30,C 12,PD 6.2',key=cnvrt$("N 2",wbc),release: bn$ nokey MAIN
 00480   close #bankmstr: 
 00490   let bn$=rtrm$(bn$)
@@ -198,7 +198,7 @@
 01470   return 
 01480 ! ______________________________________________________________________
 01490 ! <Updateable Region: ERTN>
-01500 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01500 ERTN: let fnerror(program$,err,line,act$,"xit")
 01510   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01520   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01530   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

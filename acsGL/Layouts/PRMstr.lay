@@ -1,0 +1,52 @@
+00010 ! REPLACE PRMSTR.LAY/ACSGL,SOURCE
+00070 LET H1$="GL PR MASTER FILE"
+00080 LET FILETYPE$="RELATIVE"
+00090 LET FILENAME$="PRMSTR.H(CNO)"
+00100 LET VOLID$="GLMSTR"
+00120 LET RM$(1)=""
+00130 LET RM$(2)=""
+00140 LET RM$(3)=""
+00150 LET RM$(4)=""
+00160 DATA EMPLOYEE Number				^ENO		^N 4	^X
+00170 DATA Name (FIRST/MIDDLE/LAST)		^K$(1)		^C 25	^X
+00180 DATA Address						^K$(2)		^C 25	^X
+00190 DATA CITY State ZIP				^K$(3)		^C 25	^X
+00200 DATA SOCIAL SECURITY Number		^SS$		^C 11	^X
+00210 DATA Gross WAGES - YTD			^M(1)		^PD 5.2	^X
+00220 DATA Gross WAGES - QTD			^M(2)		^PD 5.2	^X
+00230 DATA Federal W/H  - YTD			^M(3)		^PD 5.2	^X
+00240 DATA Federal W/H  - QTD			^M(4)		^PD 5.2	^X
+00250 DATA FICA W/H - YTD				^M(5)		^PD 5.2	^X
+00260 DATA FICA W/H - QTD				^M(6)		^PD 5.2	^X
+00270 DATA State W/H  - YTD				^M(7)		^PD 5.2	^X
+00280 DATA State W/H  - QTD				^M(8)		^PD 5.2	^X
+00290 DATA Local W/H  - YTD				^M(9)		^PD 5.2	^X
+00300 DATA Local W/H  - QTD				^M(10)		^PD 5.2	^X
+00310 DATA Misc 1 - YTD					^M(11)		^PD 5.2	^X
+00311 DATA Misc 1 - QTD					^M(12)		^PD 5.2	^X
+00312 DATA Misc 2 - YTD					^M(13)		^PD 5.2	^X
+00313 DATA Misc 2 - QTD					^M(14)		^PD 5.2	^X
+00314 DATA Misc 3 - YTD					^M(15)		^PD 5.2	^X
+00315 DATA Misc 3 - QTD					^M(16)		^PD 5.2	^X
+00316 DATA Misc 4 - YTD					^M(17)		^PD 5.2	^X
+00317 DATA Misc 4 - QTD					^M(18)		^PD 5.2	^X
+00318 DATA Misc 5 - YTD					^M(19)		^PD 5.2	^X
+00319 DATA Misc 5 - QTD					^M(20)		^PD 5.2	^X
+00320 DATA Misc 6 - YTD					^M(21)		^PD 5.2	^X
+00321 DATA Misc 6 - QTD					^M(22)		^PD 5.2	^X
+00322 DATA Misc 7 - YTD					^M(23)		^PD 5.2	^X
+00323 DATA Misc 7 - QTD					^M(24)		^PD 5.2	^X
+00324 DATA Misc 8 - YTD					^M(25)		^PD 5.2	^X
+00325 DATA Misc 8 - QTD					^M(26)		^PD 5.2	^X
+00326 DATA Misc 9 - YTD					^M(27)		^PD 5.2	^X
+00327 DATA Misc 9 - QTD					^M(28)		^PD 5.2	^X
+00328 DATA Misc 10- YTD					^M(29)		^PD 5.2	^X
+00329 DATA Misc 10- QTD					^M(30)		^PD 5.2	^X
+00330 DATA TIPS  - YTD					^M(31)		^PD 5.2	^X
+00340 DATA TIPS  - QTD					^M(32)		^PD 5.2	^X
+00350 DATA EXCESS TIPS  - YTD			^M(33)		^PD 5.2	^X
+00351 DATA EXCESS TIPS  - QTD			^M(34)		^PD 5.2	^X
+00352 DATA EIC  - YTD					^M(35)		^PD 5.2	^X
+00353 DATA EIC  - QTD					^M(36)		^PD 5.2	^X
+00354 DATA FIRST CHECK Address			^ADR(1)		^N 5	^X
+00355 DATA LAST CHECK Address			^ADR(2)		^N 5	^X

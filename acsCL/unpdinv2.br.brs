@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\UnPdInv2
+00010 ! Replace S:\acsCL\UnPdInv2
 00020 ! Unpaid Invoice Summary
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fndat,fnerror,fntop,fnxit,fnwait
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fndat,fnerror,fntop,fnxit,fnwait
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*31,gl(3),ade$*50,cap$*128,udf$*256
@@ -12,11 +12,11 @@
         let fndat(dat$)
 00120   let fnwait
 00130   let udf$=env$('temp')&'\'
-00140   open #paytrans=4: "Name=Q:\CLmstr\PayTrans.h"&str$(cno)&",KFName=Q:\CLmstr\unpdidx1.h"&str$(cno)&",Shr",internal,input,keyed 
-00150   open #glmstr=7: "Name=Q:\CLmstr\GLmstr.H"&str$(cno)&",KFName=Q:\CLmstr\GLINDEX.H"&str$(cno)&",Shr",internal,input,keyed 
-00160   open #unpdaloc=8: "Name=Q:\CLmstr\UnPdAloc.H"&str$(cno)&",KFName=Q:\CLmstr\UAIdx2.h"&str$(cno)&",Shr",internal,input,keyed 
+00140   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\unpdidx1.h"&str$(cno)&",Shr",internal,input,keyed 
+00150   open #glmstr=7: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&str$(cno)&",Shr",internal,input,keyed 
+00160   open #unpdaloc=8: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&str$(cno)&",Shr",internal,input,keyed 
 00170   open #work=9: "Name="&udf$&"WORK.tmp,KFName="&udf$&"ADDR.tmp,KPS=1,KLN=12,RecL=68,Replace",internal,outin,keyed 
-00180   open #paymstr=13: "Name=Q:\CLmstr\PayMstr.H"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
+00180   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00190   gosub HDR
 00200 READ_PAYTRANS: ! 
 00210   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1': vn$,iv$,ivd,dd,po$,de$,upa,cde eof END1
@@ -68,7 +68,7 @@
 00630 XIT: let fnxit
 00640 ! ______________________________________________________________________
 00650 ! <Updateable Region: ERTN>
-00660 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00660 ERTN: let fnerror(program$,err,line,act$,"xit")
 00670   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00680   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00690   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

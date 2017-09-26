@@ -1,6 +1,6 @@
-00010 ! Replace R:\Core\brs2br
+00010 ! Replace S:\Core\brs2br
 00020 ! ______________________________________________________________________
-00030   library 'R:\Core\Library': fngetdir,fnerror
+00030   library 'S:\Core\Library': fngetdir,fnerror
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim dir$*255,filename$(999)*60
@@ -55,7 +55,7 @@
 00470 AFT_LOOP1: ! 
 00480   mat filename$(999)
 00490   print #20: " ! Now you've done it.  You've gone and updated all your"
-00500   print #20: "Load R:\Core\br2brs"
+00500   print #20: "Load S:\Core\br2brs"
 00510   print #20: " ! Now you've done it.  You've gone and updated all your"
 00520   print #20: " ! Now you've done it.  You've gone and updated all your"
 00530   print #20: " ! program files (*.br) from source code files (*.brs)"
@@ -65,7 +65,7 @@
 00570 XIT: stop 
 00580 ! ______________________________________________________________________
 00590 ! <Updateable Region: ERTN>
-00600 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00600 ERTN: let fnerror(program$,err,line,act$,"xit")
 00610   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00620   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00630   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

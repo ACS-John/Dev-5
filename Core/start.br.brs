@@ -1,323 +1,618 @@
-03000 ! Replace R:\Core\Start
-03060   print "Loading ACS System..."
-03080   if env$('ACSDeveloper')='' then execute "config statusline off"
-03100   let fn_env_data_default
-03200   let fn_map_to_virtural_drive(env$('data'),'Q:')
-03300   let fn_map_to_virtural_drive(os_filename$(''),'R:')
-03400 !
-04000   if env$('BR_MODEL')='CLIENT/SERVER' then
-04020    execute 'config shell default client'
-04040    fncs_env
-04060    setenv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
-04080    setenv('at','@:') 
-04100  else
-04120    setenv('local_program_dir',os_filename$('R:'))
-04140    setenv('at','')
-04160   end if
-04400 !
-05000   execute "load R:\Core\start.br,Resident"
-05020   execute "load R:\Core\fnindex_it.br,Resident"
-05040   execute "load R:\Core\acs_component.br,Resident"
-05060   execute "load R:\Core\ace\cursys.br,resident"
-05080   execute "load R:\Core\ace\console.br,resident"
-05100   execute "load R:\Core\ace\getcd.br,resident"
-05120   execute "load R:\Core\ace\cap.br,resident"
-05140   execute "load R:\Core\ace\prg.br,resident"
-10080   let fn_setup
-10140   let cap$='R:\Core\Start'
-10160   if env$('ACSDeveloper')<>'' and env$('BR_MODEL')<>'CLIENT/SERVER' then let fncheckcompiled ! sets the current directory to "R:" if it is not already
-10180   if env$('ACSDeveloper')<>'' and env$('BR_MODEL')<>'CLIENT/SERVER' then let fn_update_version_for_inno
-11000   if env$('BR_MODEL')='CLIENT/SERVER' then
-11010     execute 'config editor'
-11020     if ~exists(env$('programdata')&'\ACS_BR_CS_Temp_s'&session$) then
-11040       execute 'MkDir '&env$('programdata')&'\ACS_BR_CS_Temp_s'&session$
-11060     end if
-11080     setenv('Temp',env$('programdata')&'\ACS_BR_CS_Temp_s'&session$)
-11100   end if
-11120   if ~fn_temp_dir_validate then goto XIT ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto XIT
-11130   if env$('client_temp')='' then let setenv('Client_TEMP',env$('Temp'))
-11140   if ~fn_rights_test('Q:',"Try Run As Administrator.",'Data') then goto XIT
-11160   if ~fn_rights_test(env$('temp'),'Correct your Temp environment varialbe.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
-12000   let setenv("Icon","R:\Core\Icon\ACS-v5-32x32-32bit.ico")
-12020   if ~exists("Q:\Data") then execute "MkDir Q:\Data"
-12040   if ~exists("Q:\INI") then execute "MkDir Q:\INI"
-12060 ! if ~exists("Q:\Share") then execute "MkDir Q:\Share"
-12080   if ~exists('Q:\Report Cache') then execute 'MKDir "Q:\Report Cache"'
-12100   if fn_move_core_data('CityStZip.dat') then let fn_move_core_data('CityStZip.idx',1)
-12120   if fn_move_core_data('1099Box.dat') then let fn_move_core_data('1099Box.idx',1)
-12140   let fn_udf_resolve
-12160 ! if exists(udf$&"Reads_and_Chgs.h1") then
-12180 !   fn_move_data(udf$&"Reads_and_Chgs.h*","Q:\UBmstr\Reads_and_Chgs.h*",1)
-12200 !   fn_move_data(udf$&"Reads_and_Chgs-Key.h*","Q:\UBmstr\Reads_and_Chgs-Key.h*",1)
-12220 !  end if
-12240 ! if env$('ACSDeveloper')<>'' then
-12260   execute 'CD '&env$('temp')(1:2)
-12280   execute 'CD '&env$('temp')(3:len(env$('temp')))
-13000   fncopy('r:\core\ScreenIO\ScreenIO.ini.prc','ScreenIO.ini')
-13020   fncopy('r:\core\FileIO\FileIO.ini.prc','FileIO.ini')
-13040   open #1: 'name=r,replace',d,o
-13060   pr #1: 'rem This R file is just a convinience for developers and is not an intregal part of the system.'
-13080   pr #1: 'stop'
-13100   pr #1: 'clear resi'
-13120   pr #1: 'run '&program$
-13140   close #1:
-14000   let setenv("PD",'R:\') ! for fnsnap compatibility - just in case we implement it later 10/2/2012
-14020   let fnapply_theme
-14040   if ~fn_multisession_test then goto XIT
-15000   let version_prior$=fn_last_version_used$
-15020   let version_current$=fnacs_version$
-15040   if fn_update_needed(version_prior$,version_current$) then 
-15060     let fnchain('R:\Core\Programs\Update.br')
-15080   end if 
-15140   if version_current$>version_prior$ then 
-15160     let fn_last_version_used$(acs_version_running$)
-15180   end if 
-15990   let fnchain('R:\Core\Menu.br')
-18000 XIT: execute "System"
-19000 IGNORE: continue 
-19800 ! <Updateable Region: ERTN>
-19900 ERTN: let fnerror(cap$,err,line,act$,"xit")
-20000   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
-20100   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-20200   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
-20300 ERTN_EXEC_ACT: execute act$ : goto ERTN
-20400 ! /region
-22000   def fn_setup
-22020     if ~setup then 
-22040       let setup=1
-22060       option retain 
-22100       dim cap$*128
-22180       library 'R:\Core\Library': fnerror,fnchain,fncheckcompiled,fnapply_theme,fngetdir2,fncopy,fnshortpath$,fnureg_read,fnacs_version$,fncheckfileversion
-22190       library 'R:\Core\Library': fnreg_read,fnreg_write
-22200     end if 
-22220   fnend 
-27000   def library fnrights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
-27010     if ~setup then let fn_setup
-27020     let fnrights_test=fn_rights_test(rt_folder$,rt_how_to_fix$,folder_name$, additional_text_for_failure$)
-27040   fnend 
-29000   def fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
-29020     let rt_return=1 ! returns 1 if passed test or 0 if failed.
-29040     let rt_folder$=trim$(rt_folder$)
-29060     if rt_folder$<>'' and rt_folder$(len(rt_folder$):len(rt_folder$))<>'\' then let rt_folder$=rt_folder$&'\'
-29080 ! 
-29100     open #h_test:=1: 'Name='&rt_folder$&'tmp_rights_test'&session$&'.dat,Replace,RecL=384',internal,outin,relative ioerr RT_FAIL
-29120     close #h_test: 
-29140     execute 'free "'&rt_folder$&'tmp_rights_test'&session$&'.dat"' ioerr RT_FAIL
-29160     goto RT_PASS
-29180 RT_FAIL: ! 
-29200     let rt_return=0
-29220     if err=4205 then 
-29240       let msgbox("Insufficient rights to access "&folder_name$&" Folder ("&os_filename$(rt_folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
-29260       let rt_return=0
-29280     end if 
-29300 RT_PASS: ! 
-29320     let fn_rights_test=rt_return
-29340   fnend 
-34000   def fn_move_data(file_name$*256,destination_name$*256; ignore_exists)
-34020     let md_return=0
-34040     if ignore_exists or (exists(file_name$) and ~exists(destination_name$)) then 
-34060       execute 'Copy "'&file_name$&'" "'&destination_name$&'"' ioerr MOVE_DATA_XIT
-34080       execute 'Free "'&file_name$&'"' ioerr ignore
-34100       let md_return=1
-34120     end if 
-34130 MOVE_DATA_XIT: ! 
-34140     let fn_move_data=md_return
-34160   fnend 
-34180   def fn_move_core_data(file_name$*256; ignore_exists)
-34200     let fn_move_core_data=fn_move_data('R:\Core\Data\'&file_name$,"Q:\Data\"&file_name$, ignore_exists)
-34220   fnend 
-36000   def fn_map_to_virtural_drive(path_to_map$*256,drive_id$*2)
-36020     execute 'config drive '&drive_id$(1:1)&','&rtrm$(path_to_map$,'\')&',X,\' ioerr ignore
-36040   fnend 
-38000   def fn_temp_dir_validate
-38020     let tdt_return=1
-38040     if lwrc$(env$('temp'))='c:\windows\temp' then 
-38060       if ~exists(env$('USERPROFILE')) then 
-38080         let msgbox('Security Error: User Profile directory ('&env$('USERPROFILE')&') does not exist.')
-38100         let tdt_return=0
-38140       else 
-38160         let tdt_return=fn_change_temp
-38180       end if 
-38200     end if 
-38280     let fn_temp_dir_validate=tdt_return
-38300   fnend 
-40000   def fn_change_temp
-40020     let ct_return=1
-40040     if ~exists(env$('USERPROFILE')&'\AppData') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData"'
-40060     if ~exists(env$('USERPROFILE')&'\AppData\Local') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local"'
-40080     if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local\Temp"'
-40100     if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then 
-40120       let msgbox('Startup Error: Tried to create a new Temp directory ('&env$('USERPROFILE')&'\AppData\Local\Temp) but failed.')
-40140       let ct_return=0
-40160     else 
-40180       let setenv('Tmp',env$('USERPROFILE')&'\AppData\Local\Temp')
-40200       let setenv('Temp',env$('USERPROFILE')&'\AppData\Local\Temp')
-40220     end if 
-40240     let fn_change_temp=ct_return
-40260   fnend 
-42000   def fn_udf_resolve
-42010     dim udf$*1024
-42020     let fn_get_udf(udf$)
-42040 ! pr 'udf$:'&udf$ : pause
-42060     if udf$<>'' and exists(udf$)=1 then ! then it is a directory that exists
-42080       let tmp_dir_count=1
-42100       let tmp_dir$(1)=rtrm$(udf$,'\')
-42120       dim filename$(1)*1024,tmp_dir$(1)*1024
-42140 !   pr mat filename$ ! pause
-42160       execute 'sy -m del "'&os_filename$(udf$)&'\*.scr"'
-42180       execute 'sy -m del "'&os_filename$(udf$)&'\*.tmp"'
-42200       execute 'sy -m xcopy "'&os_filename$(udf$)&'" "'&os_filename$('Q:\')&'" /S /T'
-42220       let fngetdir2(udf$,mat filename$, '/s /b','*.*') ! fngetdir2(udf$&'ini',mat filename$, '/s /b','*.*')
-42240       for f_i=1 to udim(mat filename$)
-42260         if exists(filename$(f_i))=1 then ! it is a directory
-42280           let tmp_dir_count+=1
-42300           mat tmp_dir$(tmp_dir_count)
-42320           let tmp_dir$(tmp_dir_count)=filename$(f_i)
-42340         else ! it is a file.
-42360           dim tmp_to$*1024,tmp_from$*1024
-42380           let tmp_to$='q:\'&filename$(f_i)(len(udf$)+1:len(filename$(f_i)))
-42400           let tmp_from$=lwrc$(filename$(f_i))
-42420 ! pr 'tmp_from$:'&tmp_from$ : pr '  tmp_to$:'&tmp_to$ : pause
-42440           if pos(tmp_from$,lwrc$('Reads_and_Chgs'))>0 then 
-42460             let fncopy(tmp_from$,'Q:\UBmstr\*.*')
-42480             execute 'free "'&tmp_from$&'"' ioerr ignore
-42500           else if ~exists(tmp_to$) then 
-42520             if fncopy(tmp_from$,tmp_to$) then 
-42540               execute 'free "'&tmp_from$&'"' ioerr ignore
-42560             end if 
-42580           else if exists(tmp_to$) then 
-42600             execute 'free "'&tmp_from$&'"' ioerr ignore
-42620           end if 
-42640         end if 
-42660       next f_i
-42680       for d_i=tmp_dir_count to 1, step -1
-42700         execute 'rmdir '&tmp_dir$(d_i) ioerr ignore
-42720       next d_i
-42740     end if 
-42760   fnend 
-43000   def fn_get_udf(&udf$)
-43040     dim oldudf$*256
-43120 ! 
-43140     if oldudf$<>"" then 
-43160       let udf$=oldudf$
-43220     else if env$("ScreenAceTemp")="" then !    NEW - just return blank - we do not need to make anything
-43260 !    dim app_data$*256
-43280 !    let app_data$=fnshortpath$(env$("AppData"))
-43300 !    if ~exists(app_data$&"\ACS") then execute 'mkdir '&app_data$&"\ACS"
-43320 !    if ~exists(app_data$&"\ACS\Temp") then execute 'mkdir '&app_data$&"\ACS\Temp"
-43340       let udf$=oldudf$="" ! app_data$&"\ACS\Temp\"
-43420     else 
-43440       let oldudf$=udf$=fnshortpath$(env$("ScreenAceTemp"))&'\'
-43460     end if 
-43480     let udf$(3:len(udf$))=srep$(udf$(3:len(udf$)),'\\','\')
-43500   fnend 
-44000   def fn_env_data_default
-44020     if env$('data')='' then ! if env$('data') is blank than set it here.
-44040       dim edd_base$*256
-44060       if env$('ProgramData')='' then 
-44070         library 'core\library': fnshortpath$
-44080         let edd_base$=fnshortpath$(env$('appdata'))
-44100       else 
-44120         let edd_base$=env$('ProgramData')
-44140       end if 
-44160       let setenv('data',edd_base$&'\ACS\')
-44180       if ~exists(env$('data')) then 
-44200         execute 'mkdir '&env$('data')
-44220       end if 
-44240     else if env$('data')(len(env$('data')):len(env$('data')))<>'\' then ! if env$('data') does not end with a backslash than add one here.
-44260       let setenv('data',env$('data')&'\')
-44280     end if 
-44300   fnend 
-46000   def fn_update_needed(acs_version_prior$,acs_version_running$)
-46080     let un_return=0
-46100     if acs_version_running$<acs_version_prior$ then 
-46120       let un_return=1
-46140       let msgbox("The ACS Software version ("&acs_version_running$&") of this workstation is less than the last version ("&acs_version_prior$&") used to access ACS Data."&chr$(13)&"You must update this workstation to continue.")
-46200     end if 
-46220     let fn_update_needed=un_return
-46240   fnend 
-48000   def fn_last_version_used$(; setit$*256)
-48020     dim lvu_line$*256
-48040     if setit$<>'' then 
-48060       let lvu_line$=trim$(setit$)
-48080       let fnreg_write('ACS last version used',setit$)
-48100     else 
-48120       let fnreg_read('ACS last version used',lvu_line$)
-48140       if lvu_line$='' then 
-48160         open #1: 'Name=Q:\Data\ACS_Version.txt,RecL=256',display,input ioerr LVU_OLD_FILE_OPEN_IOERR
-48180         linput #1: lvu_line$
-48200         close #1,free: 
-48220         let fnreg_write('ACS last version used',lvu_line$)
-48240       end if 
-48260     end if 
-48280 LVU_OLD_FILE_OPEN_IOERR: ! 
-48300     let fn_last_version_used$=trim$(lvu_line$)
-48320   fnend 
-50000   def fn_multisession_test
-50020     let fnureg_read('Disable_MultiSession',disable_multisession$)
-50040     if val(session$(len(session$):len(session$)))=>2 and disable_multisession$='True' then 
-50060       let msgbox('Multipe sessions have been disabled in user prefrences.')
-50080       let mt_return=0
-50100     else 
-50120       let mt_return=1
-50140     end if 
-50160     let fn_multisession_test=mt_return
-50180   fnend 
-52000   def fn_update_version_for_inno
-52020     library 'r:\core\library': fngethandle
-52040     open #h_tmp:=fngethandle: 'name=:C:\ACS\Setup\ACS 5 - AppVersion.iss,RecL=256,Replace',display,output 
-52060     print #h_tmp: ';This file is dynamically built by '&os_filename$(program$)&' when run by an ACSDeveloper.'
-52080     print #h_tmp: ';Attempts to edit it directly are moot and will be quickly overwritten.'
-52100     print #h_tmp: 'AppVersion='&fnacs_version$
-52120     close #h_tmp: 
-52140   fnend 
+00100 fn_acsSystemInitialize
+00200 fn_setup
+00800 fnchain('S:\Core\Menu.br', 0,1)
+01000 def library fnAcsSystemInitialize(; isScreenIOtest)
+01012    if ~setup then let fn_setup
+01020    fnAcsSystemInitialize=fn_acsSystemInitialize( isScreenIOtest)
+01040 fnend
+02000 def fn_acsSystemInitialize(; isScreenIOtest)
+02010   if ~isScreenIOtest or env$('acsVersion')='' then
+03060     print "Loading ACS System..." 
+03080     if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusline off"
+03082     if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
+03090     execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
+03091     library 's:\Core\Library': fnclient$
+03092     fnclient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
+03100     fn_env_data_default
+03120     if env$('Q')='' then
+03140       if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' then
+03160         setenv('Q',rtrm$(env$('CsServerData'),'\')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
+03170         fn_setQBase(rtrm$(env$('CsServerData'),'\'))
+03180       else 
+03200         setenv('Q',rtrm$(env$('data'),'\')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
+03210         fn_setQBase(rtrm$(env$('data'),'\'))
+03300       end if
+03400     end if
+04000     if env$('BR_MODEL')='CLIENT/SERVER' then
+04020      execute 'config shell default client'
+04030      setenv('at','@:') 
+04040      fncs_env
+04060      setenv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
+04090      setenv('userprofile','@::'&env$('client_userprofile'))
+04100    else
+04120      setenv('local_program_dir',os_filename$('S:'))
+04140      setenv('at','')
+04160     end if
+04200   !
+04220     if env$('acsDeveloper')<>'' then 
+04240       execute 'config substitute [ScreenIO_ScreenFldDrive] S:'
+04260     else
+04280       execute 'config substitute [ScreenIO_ScreenFldDrive] Q:'
+04300     end if
+04400   !
+04502     execute "load S:\Core\Menu.br,Resident" error ignore ! hopefully will decrease the amount of time it takes to load the menu between programs
+04900     execute "load S:\Core\Library.br,Resident" error ignore
+05000     !  fails on windows XP  !  execute "load S:\Core\Start.br,Resident"
+05020     execute "load S:\Core\Index.br,Resident"
+05040     execute "load S:\Core\ACS_Component.br,Resident"
+05080     execute "load S:\Core\fnWindowsStart.br,resident"
+05081     execute 'load "S:\Core\FileIO\fileio.br",Resident'
+05082     !  maybe but not yet ...     execute "load S:\Core\Client.br,resident"
+10080     fn_setup
+10140     cap$='S:\Core\Start'
+10160     if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~isScreenIOtest then let fncheckcompiled ! sets the current directory to "S:" if it is not already 
+10180     if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then let fn_update_version_for_inno
+11000     if env$('BR_MODEL')='CLIENT/SERVER' then
+11020       execute 'config editor'
+11040       if env$('programdata')='' and env$('CsServerTemp')<>'' then
+11060       setenv('programdata',env$('CsServerTemp'))
+11080       end if
+11090       if pos(env$('programdata'),'/')>0 then let slash$='/' else slash$='\'
+11100       if ~exists(env$('programdata')&slash$&'ACS_BR_CS_Temp_s'&session$) then
+11120         execute 'MkDir '&env$('programdata')&slash$&'ACS_BR_CS_Temp_s'&session$
+11140       end if
+11160       setenv('Temp',env$('programdata')&slash$&'ACS_BR_CS_Temp_s'&session$)
+11180     end if
+11200     if ~fn_temp_dir_validate then goto XIT ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto XIT
+11220     if env$('client_temp')='' then let setenv('Client_TEMP',env$('Temp'))
+11240     if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto XIT
+11260     if ~fn_rights_test(env$('temp'),'Correct your Temp environment varialbe.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
+11280     fn_spoolPath$(1)
+12000     setenv("Icon","S:\Core\Icon\ACS-v5-32x32-32bit.ico")
+12020     fnMakeSurepathExists(env$('Q')&"\Data\")
+12040     ! fnMakeSurepathExists(env$('Q')&"\INI\")
+12060     ! fnMakeSurepathExists(env$('Q')&"\INI\Core\")
+12080     ! fnMakeSurepathExists(env$('Q')&"\INI\Core\PrtFlex\")
+12100   ! if ~exists(env$('Q')&"\Share") then execute "MkDir "&env$('Q')&"\Share"
+12120     fnMakeSurepathExists(env$('Q')&'\Report Cache')
+12140     if fn_move_core_data('CityStZip.dat') then let fn_move_core_data('CityStZip.idx',1)
+12160     if fn_move_core_data('1099Box.dat') then let fn_move_core_data('1099Box.idx',1)
+12180   ! fn_udf_resolve
+12200   ! if exists(udf$&"Reads_and_Chgs.h1") then
+12220   !   fn_move_data(udf$&"Reads_and_Chgs.h*",env$('Q')&"\UBmstr\Reads_and_Chgs.h*",1)
+12240   !   fn_move_data(udf$&"Reads_and_Chgs-Key.h*",env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h*",1)
+12260   !  end if
+12280     if env$('temp')(2:2)=':' then
+12300       execute 'CD '&env$('temp')(1:2)
+12320       execute 'CD '&env$('temp')(3:len(env$('temp')))
+13000       fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
+13020       fn_CopySfileIoIniToFileIoIni
+13030     end if
+13040     open #hR:=fn_gethandle: 'name=r,replace',d,o
+13060     pr #hR: 'stop'
+13080     pr #hR: 'clear resi'
+13100     pr #hR: 'run '&program$
+13120     close #hR:
+13140     if env$('ACSDeveloper')<>'' then 
+13160       open #hReload:=fn_gethandle: 'name=reload,replace',d,o
+13180       pr #hReload: 'execute ''load "''&program$&''"'''
+13200       close #hReload:
+13220     end if
+13240     open #hEd:=fn_gethandle: 'name=ed,replace',d,o
+13260     pr #hEd: "exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"'''
+13280     close #hEd:
+14000   ! setenv("PD",os_filename$('S:\Core\ScreenIO\')) ! for (screenio's version) fnsnap compatibility 
+14020     setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
+14040     ! if isScreenIOtest then let disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
+14060     fn_uniqueComputerId_initialize ! called to initialize env$('unique_computer_id')
+14080     if env$('unique_computer_id')='42601D50-D3A4-81E4-29A3-605718581E48' then ! little koi
+14100       setenv('enableClientSelection','Yes')
+14120     end if
+14140     fn_AcsUserId_Initialize ! called to initialize env$('acsUserId')
+14160     fnapply_theme ! ( disableConScreenOpenDflt)
+14180     if ~fn_multisession_test then goto XIT
+14200     let setenv('path_to_7z_exe','"'&os_filename$(env$('local_program_dir')&'\Core\Programs\7zip-'&env$('client_platform.os_bits')&'bit\7z.exe')&'"')
+15000     version_prior$=fn_last_version_used$ 
+15020     version_current$=fnacs_version$       
+15030     setenv('acsVersion',version_current$)
+15040     if fn_update_needed(version_prior$,version_current$) then 
+15042       library 's:\Core\Library': fnclient$ 
+15044       fnclient$ ! this needs to be called to set client environment variables
+15060       fnchain('S:\Core\Programs\Update.br')
+15080     end if 
+15140     if version_current$>version_prior$ or env$('ForceScreenIOUpdate')<>'' then 
+15150       fn_show_release_notes(version_prior$,version_current$)
+15152       fn_FreeVirtualStore
+15154       fn_UpdateQFileIO
+15156       fn_UpdateQScreenIO
+15160       fn_last_version_used$(version_current$)
+15180     end if 
+15200   end if
+15220   !
+15240   ! fn_uniqueComputerId_initialize ! called to initialize env$('unique_computer_id')
+15260   ! fn_AcsUserId_Initialize ! called to initialize env$('acsUserId')
+15280   !
+15990 fnend
+16000 def fn_uniqueComputerId_initialize
+16020   if env$('Unique_Computer_ID')='' then 
+16040     dim uci_tmp_filename$*512,tmp_line$*128,uuid$*36,hdd_serial$*36
+16060     let uci_tmp_filename$='acs_uuid_tmp'&session$&'.txt'
+16080     let hdd_serial$=''
+16100     let uuid$=''
+16120     execute 'sy -m wmic csproduct get UUID |more >"%temp%\'&uci_tmp_filename$&'"'
+16140     open #h_tmp:=fn_gethandle: 'name=@:'&env$('client_temp')&'\'&uci_tmp_filename$&',EoL=None',display,input ! ioerr NO_WMIC
+16160     linput #h_tmp: tmp_line$
+16180     let tmp_line$=srep$(tmp_line$,chr$(10),'~')
+16200     let tmp_line$=srep$(tmp_line$,chr$(13),'~')
+16220     let tmp_line$=srep$(tmp_line$,' ','')
+16240     do while pos(tmp_line$,'~~')>0
+16260       let tmp_line$=srep$(tmp_line$,'~~','~')
+16280     loop 
+16300     if tmp_line$(1:4)<>'UUID' then 
+16320      ! windows server 2003
+16340       let tmp_pos_uuid=pos(tmp_line$,'UUID~')
+16360       if tmp_pos_uuid>0 then 
+16380         let tmp_line$(1:tmp_pos_uuid)=''
+16400       else 
+16420         print 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause 
+16440       end if 
+16460     end if 
+16480 !   if tmp_line$(1:4)<>'UUID' then print 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause
+16500     let uuid$=tmp_line$(6:len(tmp_line$)-1)
+16520     close #h_tmp,free: 
+16540     if uuid$='FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF' then 
+16560       let uuid_valid=0
+16580       execute 'sy -m wmic  DISKDRIVE get SerialNumber |more >'&uci_tmp_filename$ ioerr NO_WMIC
+16600 !  execute 'sy -m wmic /output:"'&uci_tmp_filename$&'" DISKDRIVE get SerialNumber'   <--encoded in something other than ANSI, hard to read
+16620       open #h_tmp:=fn_gethandle: 'name='&uci_tmp_filename$&',EoL=None',display,input ioerr NO_WMIC
+16640       linput #h_tmp: tmp_line$
+16660       let tmp_line$=srep$(tmp_line$,chr$(10),'~')
+16680       let tmp_line$=srep$(tmp_line$,chr$(13),'~')
+16700       let tmp_line$=srep$(tmp_line$,' ','')
+16720       do while pos(tmp_line$,'~~')>0
+16740         let tmp_line$=srep$(tmp_line$,'~~','~')
+16760       loop 
+16780       if tmp_line$(1:12)<>'SerialNumber' then print 'problem in fn_uniqueComputerId_initialize$ - expected to say SerialNumber' : pause 
+16800       let hdd_serial$=tmp_line$(14:len(tmp_line$)-1)
+16820       close #h_tmp,free: 
+16840     else 
+16860       let uuid_valid=1
+16880     end if 
+16900     if uuid_valid then 
+16920       let setenv('Unique_Computer_ID',uuid$)
+16940     else 
+16960       let setenv('Unique_Computer_ID',hdd_serial$)
+16980     end if 
+17000   end if 
+17020   goto UcaFinis
+17040   NO_WMIC: ! r: ! windows XP does not support WMIC
+17060     let setenv('Unique_Computer_ID',wsid$)
+17080   goto UcaFinis ! /r
+17100   UcaFinis: ! 
+17120 fnend 
+18000 def fn_AcsUserId_Initialize
+18020   ! this function returns nothing but is used to initiate env$('acsUserId')
+18040   ! env$('acsUserId') is a replacement for wsid$ which is a filename safe and derived from env$('Unique_Computer_ID')
+18060   if env$('acsUserId')='' then
+18080     ! if env$('Unique_Computer_ID')='' then let fn_uniqueComputerId_initialize
+18100     fnreg_read('ACS UserID:'&env$('Unique_Computer_ID'),acs_userid$)
+18120     if acs_userid$='' then 
+18140       fnreg_read('ACS UserID Number Last Assigned',acs_userid$)
+18160       acs_userid$=str$(val(acs_userid$)+1)
+18180       fnreg_write('ACS UserID Number Last Assigned',acs_userid$)
+18190       fnreg_write('ACS UserID:'&env$('Unique_Computer_ID'),acs_userid$)
+18200     end if
+18220     setenv('acsUserId','u'&acs_userid$)
+18240     execute 'config substitute [acsUserId] u'&acs_userid$
+18260   end if
+18280 fnend
+19000 XIT: execute "System"
+19100 IGNORE: continue 
+19200 ! <Updateable Region: ERTN>
+19220 ERTN: fnerror(program$,err,line,act$,"xit")
+19240   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
+19260   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
+19280   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+19300 ERTN_EXEC_ACT: execute act$ : goto ERTN
+19320 ! /region
+22000 def fn_setup
+22020   if ~setup then 
+22040     setup=1
+22060     option retain 
+22080     dim cap$*128
+22100     library 'S:\Core\Library': fnerror,fnchain,fncheckcompiled,fnapply_theme,fngetdir2,fnCopy,fnshortpath$,fnureg_read,fnacs_version$
+22120     library 'S:\Core\Library': fnreg_read,fnreg_write
+22140     library 'S:\Core\Library': fnAcsInstallationPath$,fnMakeSurepathExists
+22160   end if 
+22180 fnend 
+24000 def library fnSpoolPath$*256(; initialize)
+24020   if ~setup the let fn_setup
+24040   fnSpoolPath$=fn_spoolPath$( initialize)
+24060 fnend
+24080 def fn_spoolPath$*256(; initialize)
+24100   if initialize then
+24120     if ~exists(env$('temp')&'\ACS') then exe 'mkdir '&env$('temp')&'\ACS'
+24140     if ~exists(env$('temp')&'\ACS\Spool') then exe 'mkdir '&env$('temp')&'\ACS\Spool'
+24160     execute 'config spoolpath '&env$('Temp')&'\ACS\Spool' 
+24180     ! execute 'config spoolpath '&env$('Temp') 
+24200     ! doesn't work...  ! execute 'config remotespoolpath @::'&env$('Client_TEMP')
+24220   end if
+24240   fn_spoolPath$=env$('temp')&'\ACS\Spool'
+24260 fnend
+27000 def library fnrights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
+27010   if ~setup then let fn_setup
+27020   let fnrights_test=fn_rights_test(rt_folder$,rt_how_to_fix$,folder_name$, additional_text_for_failure$)
+27040 fnend 
+29000 def fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
+29020   let rt_return=1 ! returns 1 if passed test or 0 if failed.
+29040   let rt_folder$=trim$(rt_folder$)
+29060   if rt_folder$<>'' and rt_folder$(len(rt_folder$):len(rt_folder$))<>'\' then let rt_folder$=rt_folder$&'\'
+29080   ! 
+29100   open #h_test:=fn_gethandle: 'Name='&rt_folder$&'tmp_rights_test'&session$&'.dat,Replace,RecL=384',internal,outin,relative ioerr RT_FAIL
+29120   close #h_test: 
+29140   execute 'free "'&rt_folder$&'tmp_rights_test'&session$&'.dat"' ioerr RT_FAIL
+29160   goto RT_PASS
+29180   RT_FAIL: ! 
+29200   let rt_return=0
+29220   if err=4205 then 
+29240     let msgbox("Insufficient rights to access "&folder_name$&" Folder ("&os_filename$(rt_folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
+29260     let rt_return=0
+29280   else if err then 
+29300     let msgbox("Error "&str$(err)&" in rights test - making/removing a file in "&folder_name$&" Folder ("&os_filename$(rt_folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
+29320     if env$('ACSDeveloper')<>'' then pause
+29340     let rt_return=0
+29360   end if 
+29380   RT_PASS: ! 
+29400   let fn_rights_test=rt_return
+29420 fnend 
+34000 def fn_move_data(file_name$*256,destination_name$*256; ignore_exists)
+34020   let md_return=0
+34040   if ignore_exists or (exists(file_name$) and ~exists(destination_name$)) then 
+34060     execute 'Copy "'&file_name$&'" "'&destination_name$&'"' ioerr MOVE_DATA_XIT
+34080     execute 'Free "'&file_name$&'"' ioerr ignore
+34100     let md_return=1
+34120   end if 
+34130   MOVE_DATA_XIT: ! 
+34140   let fn_move_data=md_return
+34160 fnend 
+34180 def fn_move_core_data(file_name$*256; ignore_exists)
+34200   let fn_move_core_data=fn_move_data('S:\Core\Data\'&file_name$,env$('Q')&"\Data\"&file_name$, ignore_exists)
+34220 fnend 
+36000 def library fnMapToVirturalDrive(path_to_map$*256,drive_id$*2)
+36020   fnMapToVirturalDrive=fn_map_to_virtural_drive(path_to_map$,drive_id$)
+36040 fnend
+36060 def fn_map_to_virtural_drive(path_to_map$*256,drive_id$*2)
+36080   execute 'config drive '&drive_id$(1:1)&','&rtrm$(path_to_map$,'\')&',X,\' ioerr ignore
+36100 fnend 
+38000 def fn_temp_dir_validate
+38020   let tdt_return=1
+38040   if lwrc$(env$('temp'))='c:\windows\temp' then 
+38060     if ~exists(env$('USERPROFILE')) then 
+38080       let msgbox('Security Error: User Profile directory ('&env$('USERPROFILE')&') does not exist.')
+38100       let tdt_return=0
+38140     else 
+38160       let tdt_return=fn_change_temp
+38180     end if 
+38200   end if 
+38280   let fn_temp_dir_validate=tdt_return
+38300 fnend 
+40000 def fn_change_temp
+40020   let ct_return=1
+40040   if ~exists(env$('USERPROFILE')&'\AppData') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData"'
+40060   if ~exists(env$('USERPROFILE')&'\AppData\Local') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local"'
+40080   if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local\Temp"'
+40100   if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then 
+40120     msgbox('Startup Error: Tried to create a new Temp directory ('&env$('USERPROFILE')&'\AppData\Local\Temp) but failed.')
+40140     ct_return=0
+40160   else 
+40180     setenv('Tmp',env$('USERPROFILE')&'\AppData\Local\Temp')
+40200     setenv('Temp',env$('USERPROFILE')&'\AppData\Local\Temp')
+40220   end if 
+40240   fn_change_temp=ct_return
+40260 fnend 
+42000 def fn_udf_resolve ! migration tool no longer used
+42010   dim udf$*1024
+42020   fn_get_udf(udf$)
+42060   if udf$<>'' and exists(udf$)=1 then ! then it is a directory that exists
+42080     tmp_dir_count=1
+42100     tmp_dir$(1)=rtrm$(udf$,'\')
+42120     dim filename$(1)*1024,tmp_dir$(1)*1024
+42160     execute 'sy -m del "'&os_filename$(udf$)&'\*.scr"'
+42180     execute 'sy -m del "'&os_filename$(udf$)&'\*.tmp"'
+42200     execute 'sy -m xcopy "'&os_filename$(udf$)&'" "'&env$('Q')&'\'&'" /S /T'
+42220     fngetdir2(udf$,mat filename$, '/s /b','*.*') ! fngetdir2(udf$&'ini',mat filename$, '/s /b','*.*')
+42240     for f_i=1 to udim(mat filename$)
+42260       if exists(filename$(f_i))=1 then ! it is a directory
+42280         tmp_dir_count+=1
+42300         mat tmp_dir$(tmp_dir_count)
+42320         tmp_dir$(tmp_dir_count)=filename$(f_i)
+42340       else ! it is a file.
+42360         dim tmp_to$*1024,tmp_from$*1024
+42380         tmp_to$=env$('Q')&'\'&filename$(f_i)(len(udf$)+1:len(filename$(f_i)))
+42400         tmp_from$=lwrc$(filename$(f_i))
+42440         if pos(tmp_from$,lwrc$('Reads_and_Chgs'))>0 then 
+42460           fnCopy(tmp_from$,env$('Q')&'\UBmstr\*.*')
+42480           execute 'free "'&tmp_from$&'"' ioerr ignore
+42500         else if ~exists(tmp_to$) then 
+42520           if fnCopy(tmp_from$,tmp_to$) then 
+42540             execute 'free "'&tmp_from$&'"' ioerr ignore
+42560           end if 
+42580         else if exists(tmp_to$) then 
+42600           execute 'free "'&tmp_from$&'"' ioerr ignore
+42620         end if 
+42640       end if 
+42660     next f_i
+42680     for d_i=tmp_dir_count to 1, step -1
+42700       execute 'rmdir '&tmp_dir$(d_i) ioerr ignore
+42720     next d_i
+42740   end if 
+42760 fnend 
+43000 def fn_get_udf(&udf$)
+43040   dim oldudf$*256
+43140   if oldudf$<>"" then 
+43160     udf$=oldudf$
+43220   else if env$("ScreenAceTemp")="" then !    NEW - just return blank - we do not need to make anything
+43340     udf$=oldudf$="" ! app_data$&"\ACS\Temp\"
+43420   else 
+43440     oldudf$=udf$=fnshortpath$(env$("ScreenAceTemp"))&'\'
+43460   end if 
+43480   udf$(3:len(udf$))=srep$(udf$(3:len(udf$)),'\\','\')
+43500 fnend 
+44000 def fn_env_data_default
+44020   if env$('data')='' then ! if env$('data') is blank than set it here.
+44040     dim edd_base$*256
+44060     if env$('ProgramData')='' then 
+44080       library 'S:\Core\Library': fnshortpath$
+44100       edd_base$=fnshortpath$(env$('appdata'))
+44120     else 
+44140       edd_base$=env$('ProgramData')
+44160     end if 
+44180     setenv('data',edd_base$&'\ACS\')
+44200     slash$='\'
+44220     if ~exists(env$('data')) then 
+44240       execute 'mkdir '&env$('data')
+44250       execute 'mkdir '&env$('data')&'\Data'
+44260     end if 
+44280     if env$('data')(len(env$('data')):len(env$('data')))<>'\' and env$('data')(len(env$('data')):len(env$('data')))<>'/' then ! if env$('data') does not end with a backslash nor forward slash than add one.
+44300       if pos (env$('data'),'/') then
+44320         slash$='/'
+44340         ! setenv('data',env$('data')&'/')
+44360       else
+44380         slash$='\'
+44400         ! setenv('data',env$('data')&'\')
+44420       end if
+44440       setenv('data',env$('data')&slash$)
+44460     end if 
+44480     if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' or env$("AcsClient")='Ed Horton' then 
+44500       setenv('enableClientSelection','Yes')
+44520     end if
+44540     if env$('BR_MODEL')='CLIENT/SERVER' then ! 
+44560       if login_name$='niceguywinning@gmail.com' then 
+44580         let setenv('enableDataFolderByClient','Yes')
+44600         pr 'enableDataFolderByClient='&env$('enableDataFolderByClient')
+44620       end if
+44640       let setenv('enableReportCacheOnClient','Yes') 
+44660       ! pr 'enableReportCacheOnClient='&env$('enableReportCacheOnClient') 
+44680       ! pause
+44700     end if
+44720     if env$('enableDataFolderByClient')='Yes' then ! and env$('BR_MODEL')='CLIENT/SERVER' then
+44740       library 's:\Core\Library': fnmakesurepathexists
+44760       fn_setQBase(env$('data'))
+44780       setenv('data',env$('data')&env$('client')&slash$)
+44800       ! fnmakesurepathexists(env$('data'))
+44820       if ~exists(env$('data')) then 
+44840         execute 'mkdir "'&env$('data')&'"'
+44860       end if 
+44880     end if
+44900   end if
+44920 fnend 
+45000 def fn_setQBase(newQBase$*256)
+45020   if env$('QBase')='' then
+45040     setenv('QBase',newQBase$)
+45060     if env$('ACSDeveloper')<>'' then 
+45080       pr 'QBase set to '&env$('QBase')
+45100       pause
+45120     end if
+45140   end if
+45160 fnend
+46000 def fn_update_needed(acs_version_prior$,acs_version_running$)
+46080   un_return=0
+46100   if acs_version_running$<acs_version_prior$ and lwrc$(env$('acsIgnoreDataVersion'))<>'yes' then 
+46120     un_return=1
+46140     msgbox("The ACS Software version ("&acs_version_running$&") of this workstation is less than the last version ("&acs_version_prior$&") used to access ACS Data."&chr$(13)&"You must update this workstation to continue.")
+46200   end if 
+46220   fn_update_needed=un_return
+46240 fnend 
+48000 def fn_last_version_used$(; setit$*256)
+48020   dim lvu_line$*256
+48040   if setit$<>'' then 
+48060     lvu_line$=trim$(setit$)
+48080     fnreg_write('ACS last version used',setit$)
+48100   else 
+48120     fnreg_read('ACS last version used',lvu_line$)
+48140     if lvu_line$='' then 
+48160       open #hAcsVersion:=fn_gethandle: 'Name='&env$('Q')&'\Data\ACS_Version.txt,RecL=256',display,input ioerr LVU_OLD_FILE_OPEN_IOERR
+48180       linput #hAcsVersion: lvu_line$
+48200       close #hAcsVersion,free: 
+48220       fnreg_write('ACS last version used',lvu_line$)
+48240     end if 
+48260   end if 
+48280   LVU_OLD_FILE_OPEN_IOERR: ! 
+48300   fn_last_version_used$=trim$(lvu_line$)
+48320 fnend 
+50000 def fn_multisession_test
+50020   fnureg_read('Disable_MultiSession',disable_multisession$)
+50040   if val(session$(len(session$):len(session$)))=>2 and disable_multisession$='True' then 
+50060     msgbox('Multipe sessions have been disabled in user prefrences.')
+50080     mt_return=0
+50100   else 
+50120     mt_return=1
+50140   end if 
+50160   fn_multisession_test=mt_return
+50180 fnend 
+52000 def fn_update_version_for_inno
+52040   open #h_tmp:=fn_gethandle: 'name=:C:\ACS\Setup\ACS 5 - AppVersion.iss,RecL=256,Replace',display,output 
+52060   print #h_tmp: ';This file is dynamically built by '&os_filename$(program$)&' when run by an ACSDeveloper.'
+52080   print #h_tmp: ';Attempts to edit it directly are moot and will be quickly overwritten.'
+52100   print #h_tmp: 'AppVersion='&fnacs_version$
+52120   close #h_tmp: 
+52140 fnend 
 54000 def fncs_env
 54020   dim ce_line$*2048
 54040   dim ce_prefix$
 54060   ce_prefix$="Client_"
 54080   dim ce_field$*2048
 54100   dim ce_value$*2048
-54120   dim ce_os_temp_file$*1048
-54140   dim ce_br_temp_file$*1048
+54110   dim ce_os_temp_file$*1048
+54120   dim ce_br_temp_file$*1048
+54130   ! if env$('data')='/br/orders/brc_oe/Data' then        !  Gordon's Linux CS Server
+54140   !   setenv('data','\\JAZZ\BR Order Entry\brc_oe\Data')  !  Gordon's Linux CS Server
+54150   ! end if                                                !  Gordon's Linux CS Server
 54160   ce_os_temp_file$=rtrm$(env$('data'),'\')&'\cs-'&session$&'.txt'
-54180   ce_br_temp_file$='Q:\cs-'&session$&'.txt'
+54180   ce_br_temp_file$=env$('Q')&'\cs-'&session$&'.txt'
 54182   ce_retry_4152_count=0
 54190   CE_MAKE_TEMP_FILE: !
 54200   execute '*sys -M set > "'&ce_os_temp_file$&'"'
-54220   open #1: "Name="&ce_br_temp_file$,display,input error CE_DEBUG_OPEN_ERR ! error XIT_FNCS_ENV
+54220   open #hOsSet:=fn_gethandle: "Name="&ce_br_temp_file$,display,input error CE_DEBUG_OPEN_ERR ! error XIT_FNCS_ENV
 54240   do
-54260     linput #1: ce_line$ error XIT_LOOP
-54280     let gw_wholeline=len(rtrm$(ce_line$)) 
-54300     let gw_addlen=1 
-54320     let gw_posfnwp=pos(uprc$(ce_line$),"=")
+54260     linput #hOsSet: ce_line$ error XIT_LOOP
+54280     gw_wholeline=len(rtrm$(ce_line$)) 
+54300     gw_addlen=1 
+54320     gw_posfnwp=pos(uprc$(ce_line$),"=")
 54340     if gw_posfnwp>0 then
-54360       let gw_equal =pos(ce_line$,'=')
-54380       let gw_nextequal =pos(ce_line$,'=',gw_posfnwp+gw_addlen)
+54360       gw_equal =pos(ce_line$,'=')
+54380       gw_nextequal =pos(ce_line$,'=',gw_posfnwp+gw_addlen)
 54400       if gw_equal > 0 then
-54420         let ce_field$ = ce_prefix$&ce_line$(1:gw_posfnwp-1)
-54440         let ce_value$ = ce_line$(gw_posfnwp+1:gw_wholeline)
-54460         let setenv(ce_field$,ce_value$) error ignore
+54420         ce_field$ = ce_prefix$&ce_line$(1:gw_posfnwp-1)
+54440         ce_value$ = ce_line$(gw_posfnwp+1:gw_wholeline)
+54460         setenv(ce_field$,ce_value$) error ignore
 54480 !       pr 'setenv("'&ce_field$&'","'&ce_value$&'")'
 54500 ! Should SETENV FAIL, Ignore it
 54520       end if
 54540     end if
 54560   loop
-56000 CE_DEBUG_OPEN_ERR: ! 
-56010 if err=4152 and (ce_retry_4152_count+=1)<=3 then goto CE_MAKE_TEMP_FILE
-56020 pr 'error '&str$(err)&' on open of ce_br_temp_file$'
-56040 pr '     ce_os_temp_file$='&ce_os_temp_file$
-56060 pr '     ce_br_temp_file$='&ce_br_temp_file$
-56080 pr '          exists=';exists(ce_br_temp_file$)
-56100 pause
-58000 XIT_LOOP: ! End of Startloop
-58020   close #1,free: error ignore
-58040 !
-58060 XIT_FNCS_ENV: !
+56000   CE_DEBUG_OPEN_ERR: ! 
+56020   if err=4152 or err=4203 then
+56040     if (ce_retry_4152_count+=1)<=3 then 
+56060       goto CE_MAKE_TEMP_FILE
+56080     else if (ce_retry_4152_count+=1)<=6 then 
+56100       if ce_br_temp_file$(1:3)<>'@::' then
+56120         ce_br_temp_file$(0:0)='@::'
+56140       end if
+56160       goto CE_MAKE_TEMP_FILE
+56180     else if (ce_retry_4152_count+=1)<=9 then 
+56200       if ~exists('@::C:\ProgramData') then execute 'mkdir @::C:\ProgramData'
+56220       if ~exists('@::C:\ProgramData\ACS') then execute 'mkdir @::C:\ProgramData\ACS'
+56240       ce_os_temp_file$='C:\ProgramData\ACS\cs-'&session$&'.txt'
+56250       ce_br_temp_file$='@::'&ce_os_temp_file$
+56260       goto CE_MAKE_TEMP_FILE
+56280     end if
+56300   end if
+56320   exec 'con gui off'
+56340   pr 'error '&str$(err)&' on open of ce_br_temp_file$'
+56360   pr '     ce_os_temp_file$='&ce_os_temp_file$
+56380   pr '     ce_br_temp_file$='&ce_br_temp_file$
+56400   pr '          exists=';exists(ce_br_temp_file$)
+56420   pr '    Press ENTER to Exit' : kstat$(1)
+56440   goto XIT
+58000   XIT_LOOP: ! End of Startloop
+58020     close #hOsSet,free: error ignore
+58040   !
+58060   ! XIT_FNCS_ENV: !
 58080   execute "*sy -M CD > "&ce_os_temp_file$
-58100   open #1: "Name="&ce_br_temp_file$,display,input error XIT_FNCS_OS_PATH
-58120   linput #1: client_os_path$ error ignore
-58140   close #1,free: error ignore
-58160 setenv('client_os_path',client_os_path$)
-58180 XIT_FNCS_OS_PATH: ! 
-
+58100   open #hOsCd:=fn_gethandle: "Name="&ce_br_temp_file$,display,input error XIT_FNCS_OS_PATH
+58120   linput #hOsCd: client_os_path$ error ignore
+58140   close #hOsCd,free: error ignore
+58160   setenv('client_os_path',client_os_path$)
+58180   XIT_FNCS_OS_PATH: ! 
 58200 fnend 
+60000 def fn_show_release_notes(version_prior$,version_current$)
+60020   dim srnLine$*1024,srnItem$(0)*1024
+60040   open #hSrnOut:=fn_gethandle: 'name=ACS_tmp_Release_Note_Report.txt,recl=1024,replace',d,o
+60060   open #hReleaseNotes:=fn_gethandle: 'name=S:\Core\Release_Notes.txt',d,i
+60080   print #hSrnOut: 'You just updated from '&version_prior$&' to '&version_current$&'.'
+60100   print #hSrnOut: ''
+60120   do
+60140   linput #hReleaseNotes: srnLine$ eof srnReleaseNotesEof
+60160     str2mat(srnLine$,mat srnItem$,chr$(9))
+60180     if udim(mat srnItem$)=>3 then
+60200       srnItem3Value=val(srnItem$(3)) conv ignore
+60220     end if
+60240     if udim(mat srnItem$)=1 then
+60260       print #hSrnOut: chr$(9)&chr$(9)&srnLine$
+60280     else
+60300       print #hSrnOut: srnLine$
+60320     end if
+60340   loop until srnItem3Value<>0 and (udim(srnItem$)=>3 and srnItem$(3)<=version_prior$)
+60360   srnReleaseNotesEof: !
+60380   close #hSrnOut:
+60400   exec 'sy -c -m'&os_filename$('ACS_tmp_Release_Note_Report.txt')&'"'
+60420 fnend
+62000 def library fngethandle
+62020   fngethandle=fn_gethandle
+62040 fnend
+62060 def fn_gethandle
+62080   let hMaybe=189
+62100   ghReturn=0
+62120   do 
+62140     if file(hMaybe)<0 and file$(hMaybe)='' then 
+62160       ghReturn=hMaybe
+62180       goto gethandleFINIS
+62200     end if 
+62220     hMaybe-=1
+62240   loop until hMaybe=-1
+62260   print 'fn_gethandle found no available file handles, so it is returning -1' : pause
+62280   gethandleFINIS: ! 
+62300   fn_gethandle=ghReturn
+62320 fnend 
+64000 def fn_FreeVirtualStore ! does not seem to work.
+64020   dim acsInstallationPath$*256
+64040   acsInstallationPath$=fnAcsInstallationPath$(1)
+64060   if acsInstallationPath$(2:2)=':' then ! it is not a unc
+64080     if exists(env$('LocalAppData')&'\VirtualStore'&acsInstallationPath$(3:len(acsInstallationPath$))) then
+64100       ! pr 'sy Del "'&env$('LocalAppData')&'\VirtualStore'&acsInstallationPath$(3:len(acsInstallationPath$))&'\*.*" /s /y' : pause
+64110       exe 'sy Del "'&env$('LocalAppData')&'\VirtualStore'&acsInstallationPath$(3:len(acsInstallationPath$))&'\*.*" /s /y'
+64112 ! this DEL to the VIRTUALSTORE does not seem to work....  perhaps if it were put inside a batch file???
+64120     end if
+64140   end if
+64160 fnend
+65000 def fn_UpdateQFileIO
+65020   if env$('acsDeveloper')='' then ! because I used symbolic link
+65040     fnMakeSurepathExists(env$('Q')&'\Core\FileIO\Layout\')
+65060     fnMakeSurepathExists(env$('Q')&'\Core\FileIO\Layout\version\')
+65080     fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('Q')&'\Core\FileIO\Layout\*.*'        )
+65100     fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('Q')&'\Core\FileIO\Layout\version\*.*')
+65120   end if
+65140 fnend
+66000 def fn_UpdateQScreenIO
+66020   if env$('acsDeveloper')='' then ! because I used: mklink /J "C:\Users\John\OneDrive\ACS\Dev-5 Data\Core\ScreenIO\Screen" "C:\ACS\Dev-5\Core\ScreenIO\Screen"
+66040     fnMakeSurepathExists(env$('Q')&'\Core\ScreenIO\screen\')
+66060     fnCopy('S:\Core\ScreenIO\screen\*.*'      ,env$('Q')&'\Core\ScreenIO\screen\*.*'      )
+66080   end if
+66100 fnend
+67000 def fn_CopySfileIoIniToFileIoIni
+67010   ! note that destination fileio.ini must be all lowercase as it is case sensitive on some systems
+67020   if env$('acsDeveloper')='' then
+67040     fnCopy('S:\FileIO.ini','fileio.ini')
+67060   else
+67080     open #hIn_fileIoIni:=fn_gethandle: 'name=S:\fileio.ini',d,i
+67100     open #hOut_FileIoIni:=fn_gethandle: 'name=FileIO.ini,recl=256,replace',d,o
+67120     dim line$*256
+67140     do
+67160       linput #hIn_fileIoIni: line$  eof Csf2f_Eof
+67180       posForDev= pos(lwrc$(line$),'<for developer>')
+67200       if posForDev>0 then
+67220         posForDev+=15
+67240         posEndDev=pos(lwrc$(line$),'</for developer>')-1
+67260         print #hOut_FileIoIni: line$(posForDev:posEndDev)
+67280         ! pr line$(posForDev:posEndDev)
+67300         ! pause
+67320       else
+67340         print #hOut_FileIoIni: line$
+67360         ! pr line$
+67380       end if
+67400     loop
+67420     Csf2f_Eof: !
+67440   end if
+67460 fnend
+

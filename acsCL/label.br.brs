@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\Label
+00010 ! Replace S:\acsCL\Label
 00020 ! print labels for payees
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fncno,fnerror,fnaddlabel,fnlabel,fntos,fnlbl,fncomboa,fnchk,fncmdset,fnacs,fntxt,fncombof
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnaddlabel,fnlabel,fntos,fnlbl,fncomboa,fnchk,fncmdset,fnacs,fntxt,fncombof
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,cap$*128,io2$(3),wrd2$(3)
@@ -26,18 +26,18 @@
 00200   let fnchk(2,mypos+2,'Print Payee Number on Label',right) !:
         let resp$(respc+=1)='False'
 00210   let fnlbl(4,1,"Bank:",mylen,right)
-00220   let fncombof('Bank',4,mypos,33,"Q:\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,"Q:\CLmstr\BankIdx1.h"&str$(cno),limit_to_list) !:
+00220   let fncombof('Bank',4,mypos,33,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list) !:
         let resp$(respc+=1)=""
 00230   let fnlbl(5,1,"Starting Check Number:",25,1)
-00240   let fncombof('Check',5,mypos,33,"Q:\CLmstr\TrMstr.h"&str$(cno),4,8,36,35) !:
+00240   let fncombof('Check',5,mypos,33,env$('Q')&"\CLmstr\TrMstr.h"&str$(cno),4,8,36,35) !:
         let resp$(respc+=1)=""
 00250   let fnlbl(6,1,"Ending Check Number:",25,1)
-00260   let fncombof('Check',6,mypos,33,"Q:\CLmstr\TrMstr.h"&str$(cno),4,8,36,35) !:
+00260   let fncombof('Check',6,mypos,33,env$('Q')&"\CLmstr\TrMstr.h"&str$(cno),4,8,36,35) !:
         let resp$(respc+=1)=""
 00270   let fnlbl(8,1,"Starting Payee Number:",25,1)
 00280 ! Let FNTXT(8,27,8,0,1,"",0,'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"')! !:
         ! Let RESP$(RESPC+=1)=""
-00290   let fncombof("Payee",8,27,20,"Q:\CLmstr\Paymstr.h"&str$(cno),1,8,9,20,"Q:\CLmstr\Payidx1.h"&str$(cno),1,0, "Select starting payee record for printing") !:
+00290   let fncombof("Payee",8,27,20,env$('Q')&"\CLmstr\Paymstr.h"&str$(cno),1,8,9,20,env$('Q')&"\CLmstr\Payidx1.h"&str$(cno),1,0, "Select starting payee record for printing") !:
         let resp$(respc+=1)=""
 00300   let fncmdset(2)
 00310   let fnacs(sn$,0,mat resp$,ck) !:
@@ -50,15 +50,15 @@
         let c1=val(resp$(4)(1:8)) ! starting check number !:
         let c2=val(resp$(5)(1:8)) ! ending check number !:
         let vn$=lpad$(rtrm$(resp$(6)(1:8)),8) ! starting vendor number
-00330   open #paymstr=1: "Name=Q:\CLmstr\PayMstr.h"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
-00340   open #trmstr=2: "Name=Q:\CLmstr\TrMstr.h"&str$(cno)&",KFName=Q:\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
+00330   open #paymstr=1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
+00340   open #trmstr=2: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 00350   if prtall=check_range then goto ASK_BANK_ETC else !:
           if prtall=print_all then goto ASK_FIRST_PAYEE
 00360 ASK_VN: ! 
 00370   let fntos(sn$="cllabel-2") !:
         let respc=0 : let mylen=20
 00380   let fnlbl(1,1,"Payee to Print:",mylen,right)
-00390   let fncombof("Payee",1,22,20,"Q:\CLmstr\Paymstr.h"&str$(cno),1,8,9,20,"Q:\CLmstr\Payidx1.h"&str$(cno),1,0, 'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"') !:
+00390   let fncombof("Payee",1,22,20,env$('Q')&"\CLmstr\Paymstr.h"&str$(cno),1,8,9,20,env$('Q')&"\CLmstr\Payidx1.h"&str$(cno),1,0, 'If you wish to start with a specific payee, enter their number.  Only appllicable to printing "All Payees"') !:
         let resp$(respc+=1)=""
 00400   let fncmdset(3)
 00410   let fnacs(sn$,0,mat resp$,ck) !:
@@ -113,7 +113,7 @@
 00790   goto END1
 00800 ! ______________________________________________________________________
 00810 ! <Updateable Region: ERTN>
-00820 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00820 ERTN: let fnerror(program$,err,line,act$,"xit")
 00830   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00840   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00850   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

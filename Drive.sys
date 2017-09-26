@@ -1,20 +1,29 @@
-Rem     Drive Q: will be used internally as a virtual drive by ACS as the 
-Rem             Data Folder (set here with the SetEnv Data command)
-Rem             not required - will default to %ProgramData%\ACS\
-Rem             default can be overridden with "SetEnv Data ..." a command below
-Rem     Drive R: will be used internally as a virtual drive by ACS as the 
-Rem             Program Folder
-Rem     Drive S: will be used internally as a virtual drive by ACS as the 
-Rem             launching folder, but ACS works from %temp% and needs read/write access to it.
+Rem     Data Folder (set here with the SetEnv Data command)
+Rem               not required - will default to %ProgramData%\ACS\
+Rem               default can be overridden with "SetEnv Data ..." a command below
+Rem     Drive S: 1. used internally as a virtual drive by ACS as the 
+Rem                 Program Folder
+Rem              2. used internally as a virtual drive by ACS as the 
+Rem                 launching folder, but ACS works from %temp% and needs read/write access to it.
+Rem              3. used heavily for ScreenIO stuff.
 
-rem Drive S,C:\ACS\Dev-5,X,\
-Drive S,C:\Users\John\OneDrive\ACS\ACS-5,X,\
+Rem WorkPath %temp% is set by brConfig.sys but can be overridden by specifying it here.
 
-Rem SetEnv Data \\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data - Billings
-Rem WBServer :\\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data - Billings
+@"John" SetEnv acsEnableComplier Yes
+@"John" SetEnv enableClientSelection Yes
+@"John" SetEnv enableDataFolderByClient Yes
 
+Drive S,C:\ACS\ACS 5,X,\
+Rem SetEnv Data \\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5D~1
 SetEnv Data \\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data
 WBServer :\\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data
+
+rem *Windows Server 2012 Multi-Client 
+rem      Drive S,%ProgramFiles(x86)%\ACS5~1,X,\
+rem      SetEnv enableDataFolderByClient Yes
+rem      WBServer C:\acsTemp
+rem      WorkPath C:\acsTemp
+
 
 
 Rem !* Windows 10 Home 64-bit - 1 User
@@ -33,8 +42,6 @@ Rem ! _________________________________________________________
 Rem !                        Samples
 Rem ! _________________________________________________________
 
-
-
 Rem !* Sample Drive Statements
 
 Rem !       C:\Program Files (x86)\ACS 5
@@ -43,15 +50,17 @@ Rem !       C:\Program Files\ACS 5
 Rem             Drive S,C:\PROGRA~1\ACS5~1,X,\
 Rem !
 
+
 Rem !* Sample SetEnv Data Statements
 Rem !       Client 1880
 Rem             SetEnv Data C:\Users\FRENCH~1\AppData\Roaming\ACS\
+
 
 Rem !* Sample WBServer Statements
 Rem !       Client 1880
 Rem             WBSERVER :C:\Users\FRENCH~1\AppData\Roaming\ACS
 Rem             WBServer C:\Users\FRENCH~1\AppData\Roaming\ACS
-Rem         Ed Horton, Dorothy Salch
+Rem         Single User Licenses
 Rem             WBServer %temp%
 
 
@@ -60,17 +69,10 @@ Rem !       Client 1880
 Rem             WorkPath :C:\Users\FRENCH~1\AppData\Roaming\ACS
 Rem             WorkPath C:\Users\FRENCH~1\AppData\Roaming\ACS
 
+Rem ! _________________________________________________________
 
-REM *** TODO:  the following line is used heavily in fntop - consider passing all of program$ and letting fntop parse the current working directory off the beginning.
-REM      program$(4:pos(program$,".",-1)-1)                
 
-Rem Drive statement must map to working directory so that fntop calls properly set the calling program name
-Rem     i.e.   00090  let fntop(program$(4:pos(program$,'.',-1)-1),cap$='Chart of Accounts')
-
-Rem Editor "c:\Program Files (x86)\Notepad++\Notepad++.exe"
-Rem @Celeste Editor "c:\Program Files\Notepad++\Notepad++.exe"
-Rem @Tiger Editor "C:\Program Files\Notepad++\Notepad++.exe"
-Rem @Work Editor "C:\Program Files\Notepad++\Notepad++.exe"
+Rem Editor "c:\Program Files\Notepad++\Notepad++.exe"
 Rem @Mikhail Editor "C:\Program Files (x86)\Mills Enterprise\MyEditBR\MyEditBR.exe"
 
 Rem @Pharris min_fontsize 12x6

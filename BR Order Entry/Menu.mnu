@@ -1,0 +1,6 @@
+! *** OE - BR Order Entry ***
+Dealer         ^ HamsterFio:Dealer
+Contact        ^ HamsterFio:Contact
+Invoice        ^ HamsterFio:Invoice
+Invoice Item   ^ HamsterFio:Invoice Item
+State          ^ Core\Programs\State

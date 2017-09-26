@@ -1,0 +1,22 @@
+00010 ! Replace acsCL\PayTrans-v1.lay,Source
+00020 Let H1$="UnPaid Invoice (Version 0 and 1)"
+00030 Let FileType$="Relative"
+00040 Let FILEName$="PayTrans.H[CNo]"
+00050 Let VOLID$="CLmstr"
+00060 Let RM$(1)="KFName=UnPdIdx1 KPs=1  KLn=20"
+00070 Let RM$(2)="Version=0/1"
+00080 Let RM$(3)=""
+00090 Let RM$(4)=""
+00100 Data Vendor Number				^VN$	^C 8	^?
+00110 Data Invoice Number				^IV$	^C 12	^?
+00120 Data Invoice Date					^UP$(1)	^G 6	^?
+00130 Data Due Date						^UP$(2)	^G 6	^?
+00140 Data PO Number					^UP$(3)	^C 12	^?
+00150 Data Description					^UP$(4)	^C 18	^?
+00160 Data Amount						^UPA	^N 10.2	^?
+00170 Data Payment Code					^PCDE	^N 1	^?
+00180 Data Bank Code					^BCDE	^N 2	^?
+00190 Data Check Number					^CKN	^G 8	^?
+00200 Data Date Paid					^DP		^G 6	^?
+00210 Data First Allocation Address		^AA(1)	^PD 3	^?
+00220 Data Last Allocation Address		^AA(2)	^PD 3	^?

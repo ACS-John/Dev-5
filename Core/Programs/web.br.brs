@@ -1,6 +1,6 @@
-00010 ! Replace R:\Core\Programs\Web
+00010 ! Replace S:\Core\Programs\Web
 00020 ! ______________________________________________________________________
-00030   library 'R:\Core\Library': fnmsgbox,fnerror,fnxit
+00030   library 'S:\Core\Library': fnmsgbox,fnerror,fnxit
 00040 ! ______________________________________________________________________
 00050   dim msgline$(3)*60,response$(5)*1,cap$*128
 00060 ! ______________________________________________________________________
@@ -14,7 +14,7 @@
 00140 XIT: let fnxit("")
 00150 ! ______________________________________________________________________
 00160 ! <Updateable Region: ERTN>
-00170 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00170 ERTN: let fnerror(program$,err,line,act$,"xit")
 00180   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00190   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00200   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

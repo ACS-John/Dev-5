@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\acglSchP
+00010 ! Replace S:\acsGL\acglSchP
 00020 ! Print Schedules  (once used to print schedules; now called glschprt)
 00030 ! ________________Needs fncmo and others to run _____________________
-00040   library 'R:\Core\Library': fntop,fnxit,fncno,fnerror,fnopenprn,fncloseprn
+00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnopenprn,fncloseprn
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,dollar$*1,k$*2,by(13),bp(13)
@@ -31,8 +31,8 @@
 00290     if prtsch(j)=0 then goto L310
 00300   next j
 00310 L310: let j=0
-00320 L320: open #1: "Name=Q:\GLmstr\ACGLSCHS.h"&str$(cno)&",KFName=Q:\GLmstr\schindex.h"&str$(cno)&",Shr",internal,input,keyed ioerr DONE
-00330   open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName=Q:\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00320 L320: open #1: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\schindex.h"&str$(cno)&",Shr",internal,input,keyed ioerr DONE
+00330   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00340   print newpage
 00350   print fields "10,20,C 60,N": "PRINT SCHEDULES IN PROCESS"
 00360   print fields "12,2,C 30,B,5": "Press F5 to stop"
@@ -127,7 +127,7 @@
 01250 L1250: return 
 01260 ! ______________________________________________________________________
 01270 DONE: ! 
-01280   let fncloseprn(nw)
+01280   let fncloseprn
 01290   goto XIT
 01300 ! ______________________________________________________________________
 01310 XIT: let fnxit
@@ -138,7 +138,7 @@
 01360 L1360: return 
 01370 ! ______________________________________________________________________
 01380 ! <Updateable Region: ERTN>
-01390 ERTN: let fnerror(cap$,err,line,act$,"xit")
+01390 ERTN: let fnerror(program$,err,line,act$,"xit")
 01400   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01410   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01420   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

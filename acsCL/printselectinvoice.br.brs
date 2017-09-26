@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsCL\PrintSelectInvoice
+00010 ! Replace S:\acsCL\PrintSelectInvoice
 00020 ! unpaid invoice file
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fntop,fnxit, fncno,fndat,fnopenprn,fncloseprn,fnchain,fnerror,fntop,fnxit,fndate_mmddyy_to_ccyymmdd,fngethandle
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fndat,fnopenprn,fncloseprn,fnchain,fnerror,fntop,fnxit,fndate_mmddyy_to_ccyymmdd,fngethandle
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,cnam$*40,newkey$*20
@@ -10,19 +10,19 @@
 00100   let fntop(program$,cap$="Print Selected Invoice Listing")
 00110   let cancel=99
 00120   let fncno(cno,cnam$)
-00130   open #20: "Name=Q:\CLmstr\PostDat.H"&str$(cno)&",Shr,Use,RecL=12",internal,outin,relative 
+00130   open #20: "Name="&env$('Q')&"\CLmstr\PostDat.H"&str$(cno)&",Shr,Use,RecL=12",internal,outin,relative 
 00140   read #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2 norec L150 !:
         goto L160
 00150 L150: write #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2
 00160 L160: close #20: 
-00170   open #20: "Name=Q:\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00170   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form POS 150,2*N 1,C 2',rec=1: mat d,bc$ !:
         close #20: 
 00180   let bankcode=val(bc$)
-00190   open #bankmstr=12: "Name=Q:\CLmstr\BankMstr.H"&str$(cno)&",KFName=Q:\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal, outin, keyed 
-00200   open #paymstr1:=fngethandle: "Name=Q:\CLmstr\PayMstr.H"&str$(cno)&",KFName=Q:\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00210   open #paytrans:=fngethandle: "Name=Q:\CLmstr\PayTrans.H"&str$(cno)&",Version=2,KFName=Q:\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00220   open #unpdaloc=5: "Name=Q:\CLmstr\UnPdAloc.H"&str$(cno)&",KFName=Q:\CLmstr\uaidx2.H"&str$(cno)&",Shr",internal,outin,keyed 
+00190   open #bankmstr=12: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal, outin, keyed 
+00200   open #paymstr1:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
+00210   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
+00220   open #unpdaloc=5: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\uaidx2.H"&str$(cno)&",Shr",internal,outin,keyed 
 00230   let sc3$(2)=" Total Invoices selected for payment-Bank " !:
         let sc3$(2)=sc3$(2)&ltrm$(str$(bankcode))&":" !:
         let sc3$(3)=" Balance after paying selected Invoices:" !:
@@ -115,7 +115,7 @@
 00920   return 
 00930 ! ______________________________________________________________________
 00940 ! <Updateable Region: ERTN>
-00950 ERTN: let fnerror(cap$,err,line,act$,"xit")
+00950 ERTN: let fnerror(program$,err,line,act$,"xit")
 00960   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00970   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00980   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT

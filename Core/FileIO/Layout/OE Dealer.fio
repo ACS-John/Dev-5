@@ -1,0 +1,39 @@
+[Q]\[cursys]mstr\Dealer.h[cno]      ,  dealer_  , 1
+[Q]\[cursys]mstr\DealerIndex.h[cno] ,  dealer
+recl=196
+===================================================
+dealer$ ,  Dealer Number                        ,  c    8   , ! Pos=1         eno     
+name$   ,  Name                                 ,  c   30   , ! Pos=9         em$(1)  
+balance ,  Balance                              ,  c   30   , ! Pos=39        em$(2)  
+
+#eof#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

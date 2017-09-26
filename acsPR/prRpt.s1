@@ -1,0 +1,83 @@
+00010 ! Replace acsPR\prRpt.S1,Source
+00011 ! ______________________________________________________________________
+00012 Library "Core\Library": FNWAIT,FNERROR,FNCNO,FNWIN3B,FNOPENPRN,FNCLOSEPRN,FNPROCESS
+00014 On Error Goto ERTN
+00020 ! ______________________________________________________________________
+00030 Dim EM$(3)*30,SS$*11,RS(2),EM(16),TA(2),TDT(4),TCD(3),TDET(17),TDY(6)
+00031 Dim TDC(6),TY(21),TQM(17),TCP(22),MESSAGE$*40,CAP$*40
+00032 Dim RN$*2,RT$*78,CH$(2)*132,PSC(100),TI(20),INP(20),PP(20),DT(125)
+00033 Dim GT(125),DH$*20,A$*40,CNAM$*40
+00039 ! ______________________________________________________________________
+00040 Let FNCNO(CNO,A$)
+00076 Open #1: "NAME="&env$('Data')&"PRmstr\RPDATE.h"&STR$(CNO)&",shr",Internal,Input  !:
+      Read #1,Using 'Form POS 1,N 6,C 20': D1,DH$ !:
+      Close #1: 
+00080 ! ______________________________________________________________________
+00081 Let RN$=" 1"
+00082 If FNPROCESS=1 Then Goto 130
+00089 ! ______________________________________________________________________
+00090 Print NEWPAGE
+00101 Let FNWIN3B(WIN=101,CAP$,5,44,1,1)
+00110 Print #WIN,Fields "4,2,C 20,N": "Report Heading Date:"
+00120 Rinput #WIN,Fields "4,23,C 20,UT,N": DH$
+00122 If CMDKEY=5 Then Goto XIT
+00124 ! ______________________________________________________________________
+00130 Print NEWPAGE !:
+      Let FNWAIT(102,CAP$,MESSAGE$="Printing: please wait...",1)
+00141 On Fnkey 5 Goto EOF1
+00142 Let FNOPENPRN
+00143 ! ______________________________________________________________________
+00190 Open #1: "NAME="&env$('Data')&"PRmstr\PRREPORT.h"&STR$(CNO)&",KFNAME="&env$('Data')&"PRmstr\PRRPTIDX.h"&STR$(CNO)&",shr",Internal,Input,Keyed 
+00200 Read #1,Using 210,Key=RN$: RT$,MAT CH$,IPS,TDEP,CP,MAT PSC,MAT INP,MAT PP,MAT TI
+00210 Form POS 3,C 78,2*C 132,N 3,2*N 1,100*PD 6.3,40*PD 2,20*N 1
+00220 Close #1: 
+00221 ! ______________________________________________________________________
+00300 Open #1: "NAME="&env$('Data')&"PRmstr\RPMSTR.h"&STR$(CNO)&",KFNAME="&env$('Data')&"PRmstr\RPINDEX.h"&STR$(CNO)&",shr",Internal,Input,Keyed 
+00310 Open #2: "NAME="&env$('Data')&"PRmstr\RPTRAIL.h"&STR$(CNO)&",shr",Internal,Input,Relative 
+00320 Gosub HDR
+00330 Goto PRTRPT
+00331 ! ______________________________________________________________________
+00340 PGOF: Print #255: NEWPAGE
+00350 Gosub HDR
+00360 Continue 
+00361 ! ______________________________________________________________________
+00370 HDR: Print #255: 
+00380 Print #255,Using 390: DATE$,A$,TIME$,RTRM$(RT$),DH$
+00390 Form POS 1,C 8,CC 106,SKIP 1,POS 1,C 8,CC 106,SKIP 1,CC 122,SKIP 2
+00400 Print #255: CH$(1)
+00410 Print #255: CH$(2)
+00420 Return 
+00421 ! ______________________________________________________________________
+00430 EOF1: ! 
+00450 Close #1: Ioerr 460
+00460 Close #2: Ioerr 465
+00465 Let FNCLOSEPRN(NW)
+00469 XIT: Chain "PRRPTS1/ACSPR"
+00470 ! ______________________________________________________________________
+19800 PRTRPT:   Read #1,Using 19810: EM$(1),MAT TA Eof 20100
+19810 Form POS 9,C 30,POS 173,2*PD 3
+19820 Form POS 468,PD 3
+19821 Let ADR=TA(1)
+19830 Read #2,Using 19820,Rec=ADR: NTA Norec 20000
+19899 If TDEP=1 Then Goto 19910
+19900 Print #255, Using 19910: EM$(1) Pageoflow PGOF
+19910 Form POS 1,C 30
+19980 If NTA=0 Then Goto 20000 Else Let ADR=NTA
+19990 Goto 19830
+20000 If TDEP=0 Then Goto 20099
+20001 If IPS=0 OR IPSW=1 Then Goto 20010 Else Goto 20020
+20010 Print #255, Using 19910: EM$(1) Pageoflow PGOF
+20020 Mat DT=(0)
+20099 Goto 19800
+20100 ! CHECK FOR TOTALS TO PRINT
+21200 Goto EOF1
+50000 ! ______________________________________________________________________
+50001 ERTN: Let FNERROR(CAP$,ERR,LINE,ACT$,"xit")
+50010 If UPRC$(ACT$)<>"PAUSE" Then Goto 50040
+50020 if trim$(env$("ACSDeveloper"))<>"" then !:
+      Execute "list "&STR$(LINE) : Pause : Goto 50040
+50030 Print "PROGRAM PAUSE: Type GO and press [Enter] to continue." !:
+      Print "" : Pause 
+50040 Execute ACT$
+50050 Goto ERTN
+50060 ! ______________________________________________________________________

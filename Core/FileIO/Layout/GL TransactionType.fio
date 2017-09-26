@@ -1,0 +1,6 @@
+[Q]\GLmstr\TransactionType.dat  ,  TranType_  , 1
+[Q]\GLmstr\TransactionType.Idx  ,  key
+recl=26
+===================================================
+key     ,    Transaction Type  ,  N  1       , !  Pos=1  Required=True  Mask=1030
+desc$   ,    Type Description  ,  C  25      , !  Pos=2  Required=True

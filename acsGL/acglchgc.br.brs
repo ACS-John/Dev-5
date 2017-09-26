@@ -1,7 +1,7 @@
-00010 ! Replace R:\acsGL\ACGLCHGC
+00010 ! Replace S:\acsGL\ACGLCHGC
 00020 ! STATEMENT OF CHANGES IN FINANCIAL POSITION FOR 8 1/2 * 11 PAPER WITH            COMPARSION
 00030 ! ______________________________________________________________________
-00040   library 'R:\Core\Library': fnxit,fntop, fnerror,fnwait,fncno,fnopenprn,fncloseprn,fnpglen,fnpedat$,fnactpd$,fnactpd,fnfscode,fngl_number_use_dept,fnpriorcd,fnps,fnprocess,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fnxit,fntop, fnerror,fnwait,fncno,fnopenprn,fncloseprn,fnpglen,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl1$*256,cogl$(3)*12,cnam$*40,acct$*12,bp(13),by(13),udf$*256
@@ -12,20 +12,20 @@
 00120   if fnglfs=5 then goto XIT
 00130   let udf$=env$('temp')&'\'
 00140   let fncno(cno,cnam$)
-00150   open #20: "Name=Q:\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20: 
+00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20: 
 00160   let actpd=fnactpd : let fscode=fnfscode : let priorcd=fnpriorcd
 00170   on fkey 5 goto L2060
 00180   let mp1=75
 00190   if fnps=2 then let mp1=mp1+3
-00200   let fl1$="Name=Q:\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName=Q:\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
-00210   if fnps=2 then let fl1$="Name=Q:\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName=Q:\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
+00200   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
+00210   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
 00220   let flo$(1)="8,3,C 50,N" !:
         let flo$(2)="8,55,N 10.2,N" !:
         let flo$(3)="8,69,N 10.2,N"
 00230   let fli$(1)="08,03,C 50,UT,N" !:
         let fli$(2)="08,55,N 10.2,UT,N" !:
         let fli$(3)="08,69,N 10.2,UT,N"
-00240   open #1: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName=Q:\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00240   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00250 L250: read #1,using L260: acct$,cb,mat by,mat bp eof L350
 00260 L260: form pos 1,c 12,pos 87,27*pd 6.2
 00270   if acct$>cogl$(3) then goto L350
@@ -40,7 +40,7 @@
 00340 ! ___________________________
 00350 L350: close #1: 
 00360   open #1: fl1$,internal,input,keyed 
-00370   if fnprocess=1 or fngl_number_use_dept=0 then goto L480
+00370   if fnprocess=1 or fnUseDeptNo=0 then goto L480
 00380 ! ___________________________
 00390   let fntos(sn$="ACglchgc") !:
         let mylen=30: let mypos=mylen+3 : let right=1
@@ -57,10 +57,10 @@
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00490   let report$="Statement of Changes in Financial Position"
 00500   if fnps=2 then goto L530 ! secondary
-00510   execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
+00510   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
 00520   goto L540
-00530 L530: execute "Index Q:\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
-00540 L540: open #3: "Name=Q:\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00530 L530: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
+00540 L540: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
 00550 L550: read #1,using L590: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2060
 00560   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L550
 00570   if costcntr=0 then goto L590
@@ -198,11 +198,11 @@
 01830 ! ______________________________________________________________________
 01840 L1840: let heading=1
 01850   let pt1+=1
-01860   print #255: "\qc  {\f181 \fs24 \b "&trim$(cnam$)&"}"
+01860   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01870   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01880   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
 01890   print #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(fnactpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
-01900   print #255: "\qL "
+01900   print #255: "\ql "
 01910   print #255: ""
 01920   on error goto L2010
 01930   let a=len(rtrm$(fnpedat$))
@@ -229,7 +229,7 @@
 02140 ! ______________________________________________________________________
 02150 XIT: let fnxit
 02160 ! ______________________________________________________________________
-02170 ERTN: let fnerror(cap$,err,line,act$,"xit")
+02170 ERTN: let fnerror(program$,err,line,act$,"xit")
 02180   if lwrc$(act$)<>"pause" then goto L2210
 02190   execute "list -"&str$(line) !:
         pause  !:

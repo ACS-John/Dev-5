@@ -1,0 +1,26 @@
+***  Installation Started 01/31/03 16:30  ***
+Title: Atlantis Nova
+Source: C:\WINDOWS\DESKTOP\ATLANTIS 1.0.0.56\ATLANT10N_EN.EXE
+RegDB Key: Software\Microsoft\Windows\CurrentVersion\Uninstall\Atlantis Nova
+RegDB Val: Atlantis Nova
+RegDB Name: DisplayName
+RegDB Root: 2
+RegDB Key: Software\Microsoft\Windows\CurrentVersion\Uninstall\Atlantis Nova
+RegDB Val: C:\PROGRA~1\Atlantis Nova\UNWISE.EXE C:\PROGRA~1\Atlantis Nova\INSTALL.LOG
+RegDB Name: UninstallString
+RegDB Root: 2
+Made Dir: C:\Program Files\Atlantis Nova
+File Copy: C:\Program Files\Atlantis Nova\Unwise.exe
+File Copy: C:\Program Files\Atlantis Nova\Atlantis.exe
+File Copy: C:\Program Files\Atlantis Nova\License.txt
+File Copy: C:\Program Files\Atlantis Nova\file_id.diz
+File Copy: C:\Program Files\Atlantis Nova\Readme.txt
+File Copy: C:\Program Files\Atlantis Nova\Vendor.txt
+File Copy: C:\Program Files\Atlantis Nova\Atlantis.chm
+Execute Program: C:\Program Files\Atlantis Nova\Atlantis.exe -unassoc
+Made Dir: C:\WINDOWS\Start Menu\Programs\Atlantis Nova
+Shell Link: C:\WINDOWS\Start Menu\Programs\Atlantis Nova\Atlantis.lnk
+Shell Link: C:\WINDOWS\Start Menu\Programs\Atlantis Nova\Atlantis Help.lnk
+Shell Link: C:\WINDOWS\Start Menu\Programs\Atlantis Nova\Uninstall Atlantis.lnk
+Shell Link: C:\WINDOWS\Desktop\Atlantis Nova.lnk
+Shell Link: C:\WINDOWS\Start Menu\Atlantis Nova.lnk

@@ -1,0 +1,17 @@
+00123 Dim em$(3)*30,ss$*11,rs(2),em(16),ta(2),ph$*12,tdt(4),tcd(3),tdet(17),tdy(6),tdc(6),ty(21),tqm(17),tcp(22),th(4)
+
+del 8010,8040
+08010 Open #1: "Name="&datafolder$&"\rpmstr"&dataext$&", KFName="&datafolder$&"\rpindex"&dataext$&",Shr", Internal, Input,Keyed
+08011 Open #2: "Name="&datafolder$&"\rptrail"&dataext$&",Shr", Internal, Input,Relative
+del 9010,9060
+
+09012 Read #1,Using 9010: ENO,MAT EM$,SS$,MAT RS,MAT EM,LPD,TGP,MAT TA,PH$,BD EOF Eofonread
+09010 Form POS 1,N 8,3*C 30,C 11,2*N 1,7*N 2,2*PD 3.3,6*PD 4.2,2*N 6,PD 5.2,2*PD 3,C 12,N 6
+09011 if tadr=0 then 9012 else 9014
+09013 tadr=ta(1)
+09014 if tadr= 0 then 9020
+09015 read #2,using 'Form pos 1,n 8,n 3,n 3,n 6,n 3,4*n 6,3*n 2,24*pd 4.2,5*pd 3.2,pos 471,pd 4.2,pos 165,pd 3.2,60*pd 5.2,pd 3',rec=tadr: teno,tdn,gl1,gl2,gl3,mat tdt,mat tcd,tl1,mat tdet,mat tdy,mat tdc,mcwh,mat ty,mat tqm,mat tcp,nta
+09016 tadr=nta
+9020 ! continue
+
+
