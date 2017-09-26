@@ -3,8 +3,9 @@
 12040     setup=1
 12060     library 'S:\Core\Library': fnAddOneC,fnmsgbox,fnOpenFile,fncreg_read,fncreg_write,fnAddOneN,fntop,fnxit,fnhamster,fngethandle,fnCloseFile,fnerror,fnreg_read,fnreg_write,fnindex_it,fnstatus_close,fnstatus,fnstatus_pause
 12080     dim form$(0)*256
-12100     dim maData$(0)*30,maDataN(0)
-12120     dim mg$(0)*80
+12100     dim maData$(0)*128,maDataN(0)
+12120     dim mg$(0)*128
+12120     dim hfLabel$(0)*128
 12480   end if
 12900 fnend
 22000 def library fnHamsterFio(fileid$*64)

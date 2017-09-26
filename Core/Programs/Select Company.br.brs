@@ -207,7 +207,7 @@
 62240     let e$=uprc$(trim$(resp$(1)))
 62260     if ckey<>5 then 
 62280       if e$="ERASE" then 
-62300         execute 'Free '&env$('Q')&'\'&fncursys$&"mstr"&"\*.h"&str$(cno)&'"'
+62300         fnFree(env$('Q')&'\'&fncursys$&"mstr"&"\*.h"&str$(cno))
 62320         mat mg$(1)
 62340         let mg$(1)='Company Number '&str$(cno)&' has been Deleted!'
 62360         let fnmsgbox(mat mg$,resp$,'',0)
@@ -250,10 +250,10 @@
 72500       let dcno=val(resp$(1))
 72520       let dcnam$=resp$(2)
 72540       if fn_company_already_exists(dcno)=1 then goto CC_SCREEN1
-72560       execute "Copy "&env$('Q')&"\"&fncursys$&"mstr"&"\*.h"&str$(scno)&' '&env$('Q')&"\"&fncursys$&"mstr"&"\*.h"&str$(dcno)&" -n"
-72580       execute "Copy "&"acs"&fncursys$&"\*.h"&str$(scno)&" "&"acs"&fncursys$&"\*.h"&str$(dcno)&" -n" ioerr ignore
-72600       if uprc$(fncursys$)=uprc$("UB") then 
-72620         execute "Copy "&env$('Q')&"\UBmstr\ubData\*.h"&str$(scno)&' '&env$('Q')&"\UBmstr\ubData\*.h"&str$(dcno)&" -n" ioerr ignore
+72560       fnCopy(env$('Q')&"\"&env$('cursys')&"mstr"&"\*.h"&str$(scno),env$('Q')&"\"&env$('cursys')&"mstr"&"\*.h"&str$(dcno))
+72580       ! fnCopy("S:\acs"&env$('cursys')&"\*.h"&str$(scno),"S:\acs"&env$('cursys')&"\*.h"&str$(dcno))
+72600       if uprc$(env$('cursys'))=uprc$("UB") then 
+72620         fnCopy(env$('Q')&"\UBmstr\ubData\*.h"&str$(scno),env$('Q')&"\UBmstr\ubData\*.h"&str$(dcno))
 72640       end if 
 72660       let fn_update_company_name(dcno,dcnam$)
 72680     end if 
@@ -273,11 +273,12 @@
 76080       library 'S:\Core\Library': fncursys$,fnlbl,fncmdset,fntop,fntxt,fncmdkey,fncheckfileversion
 76100       library 'S:\Core\Library': fnmsgbox,fnflexadd1,fnflexinit1,fngethandle,fnclient_is_converting
 76120       library 'S:\Core\Library': fnclient_has_mat,fnreg_read,fnreg_write
-76140       library 'S:\Core\Library': fnbutton,fnfra,fnSystemName$,fnCopy
+76140       library 'S:\Core\Library': fnbutton,fnfra,fnSystemName$
 76160       library 'S:\Core\Library': fnApMstrConversion
 76180       library 'S:\Core\Library': fnbutton_or_disabled
 76190       library 'S:\Core\Library': fnClientSelect
 76192       library 'S:\Core\Library': fnOpenPartial
+76194       library 'S:\Core\Library': fnCopy,fnFree
 76200       on error goto ERTN
 76220 ! ______________________________________________________________________
 76240       dim filename$(999)*40

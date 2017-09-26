@@ -1,6 +1,0 @@
-00123 Dim tr(7),tr$*12,td$*30
-del 8010,8090
-08010 Open #1: "Name="&datafolder$&"\actrans"&dataext$&", KFName="&datafolder$&"\ACTRIDX"&dataext$&",Shr", Internal, Input,Keyed
-del 9010,9050
-09020 Read #1,Using 9010,Release: trgl$,tr(4),tr(4),tr(6),tr(7),TR$,TD$,PC2 eOF EofOnRead
-09010 Form POS 1,c 12,N 6,PD 6.2,2*N 2,C 12,C 30,N 2

@@ -13,9 +13,9 @@ Rem WorkPath %temp% is set by brConfig.sys but can be overridden by specifying i
 @"John" SetEnv enableClientSelection Yes
 @"John" SetEnv enableDataFolderByClient Yes
 
-Drive S,C:\ACS\ACS 5,X,\
-Rem SetEnv Data \\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5D~1
-SetEnv Data \\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data
+Drive S,C:\ACS\Dev-5,X,\
+SetEnv Data C:\Users\John\OneDrive\ACS\Dev-5D~1
+Rem SetEnv Data \\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data
 WBServer :\\LITTLE_KOI\Users\John\OneDrive\ACS\Dev-5 Data
 
 rem *Windows Server 2012 Multi-Client 
