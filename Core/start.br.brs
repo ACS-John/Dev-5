@@ -15,12 +15,20 @@
 03092     fnclient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
 03100     fn_env_data_default
 03120     if env$('Q')='' then
-03140       if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' then
-03160         fn_setQ(env$('CsServerData')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
-03170         fn_setQBase(rtrm$(env$('CsServerData'),'\'))
-03180       else 
+03130       if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' and env$('enableDataFolderByClient')='Yes' then
+03132         if pos(env$('CsServerData'),'/')>0 then let slash$='/' else slash$='\'
+03134         fn_setQ(env$('CsServerData')&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
+03136         fn_setQBase(env$('CsServerData'))
+03150       else if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' then
+03152         fn_setQ(env$('CsServerData')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
+03154         fn_setQBase(env$('CsServerData'))
+03180       else if env$('enableDataFolderByClient')='Yes' then
+03182         if pos(env$('data'),'/')>0 then let slash$='/' else slash$='\'
+03184         fn_setQ(env$('data')&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
+03186         fn_setQBase(env$('data'))
+03198       else 
 03200         fn_setQ(env$('data')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
-03210         fn_setQBase(rtrm$(env$('data'),'\'))
+03210         fn_setQBase(env$('data'))
 03300       end if
 03400     end if
 04000     if env$('BR_MODEL')='CLIENT/SERVER' then
@@ -417,13 +425,14 @@
 45200   end if
 45220   fnmakesurepathexists(env$('Q')&'\Data\')
 45240   fnmakesurepathexists(env$('Q')&'\'&env$('CurSys')&'mstr\')
-45260   if env$('acsDeveloper')<>'' then
-45280     pr 'SetQ to '&env$('Q')
-45300     pause
-45320   end if
+45260   ! if env$('acsDeveloper')<>'' then
+45280   !   pr 'SetQ to '&env$('Q')
+45300   !   pause
+45320   ! end if
 45340 fnend
 46000 def fn_setQBase(newQBase$*256)
 46020   if env$('QBase')='' then
+46030    newQBase$=rtrm$(newQBase$,'\')
 46040     setenv('QBase',newQBase$)
 46060     ! if env$('ACSDeveloper')<>'' then 
 46080     !   pr 'QBase set to '&env$('QBase')
