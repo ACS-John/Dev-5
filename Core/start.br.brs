@@ -11,15 +11,15 @@
 03080     if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusline off"
 03082     if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
 03090     execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
-03091     library 's:\Core\Library': fnclient$
+03091     library 's:\Core\Library': fnclient$,fnmakesurepathexists
 03092     fnclient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
 03100     fn_env_data_default
 03120     if env$('Q')='' then
 03140       if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' then
-03160         setenv('Q',rtrm$(env$('CsServerData'),'\')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
+03160         fn_setQ(env$('CsServerData')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
 03170         fn_setQBase(rtrm$(env$('CsServerData'),'\'))
 03180       else 
-03200         setenv('Q',rtrm$(env$('data'),'\')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
+03200         fn_setQ(env$('data')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
 03210         fn_setQBase(rtrm$(env$('data'),'\'))
 03300       end if
 03400     end if
@@ -36,8 +36,6 @@
 04200   !
 04220     if env$('acsDeveloper')<>'' then 
 04240       execute 'config substitute [ScreenIO_ScreenFldDrive] S:'
-04260     else
-04280       execute 'config substitute [ScreenIO_ScreenFldDrive] Q:'
 04300     end if
 04400   !
 04502     execute "load S:\Core\Menu.br,Resident" error ignore ! hopefully will decrease the amount of time it takes to load the menu between programs
@@ -406,23 +404,41 @@
 44880     end if
 44900   end if
 44920 fnend 
-45000 def fn_setQBase(newQBase$*256)
-45020   if env$('QBase')='' then
-45040     setenv('QBase',newQBase$)
-45060     if env$('ACSDeveloper')<>'' then 
-45080       pr 'QBase set to '&env$('QBase')
-45100       pause
-45120     end if
-45140   end if
-45160 fnend
-46000 def fn_update_needed(acs_version_prior$,acs_version_running$)
-46080   un_return=0
-46100   if acs_version_running$<acs_version_prior$ and lwrc$(env$('acsIgnoreDataVersion'))<>'yes' then 
-46120     un_return=1
-46140     msgbox("The ACS Software version ("&acs_version_running$&") of this workstation is less than the last version ("&acs_version_prior$&") used to access ACS Data."&chr$(13)&"You must update this workstation to continue.")
-46200   end if 
-46220   fn_update_needed=un_return
-46240 fnend 
+45000 def library fnSetQ(setQ$*256)
+45020   if ~setup then let fn_setup
+45040   fnSetQ=fn_setQ(setQ$)
+45060 fnend
+45080 def fn_setQ(setQ$*256)
+45100   setQ$=rtrm$(setQ$,'\')
+45120   setenv('Q',setQ$)
+45140   execute 'config substitute [Q] "'&env$('Q')&'"'
+45160   if env$('acsDeveloper')='' then 
+45180     execute 'config substitute [ScreenIO_ScreenFldDrive] '&env$('Q')
+45200   end if
+45220   fnmakesurepathexists(env$('Q')&'\Data\')
+45240   fnmakesurepathexists(env$('Q')&'\'&env$('CurSys')&'mstr\')
+45260   if env$('acsDeveloper')<>'' then
+45280     pr 'SetQ to '&env$('Q')
+45300     pause
+45320   end if
+45340 fnend
+46000 def fn_setQBase(newQBase$*256)
+46020   if env$('QBase')='' then
+46040     setenv('QBase',newQBase$)
+46060     ! if env$('ACSDeveloper')<>'' then 
+46080     !   pr 'QBase set to '&env$('QBase')
+46100     !   pause
+46120     ! end if
+46300   end if
+46320 fnend
+47000 def fn_update_needed(acs_version_prior$,acs_version_running$)
+47080   un_return=0
+47100   if acs_version_running$<acs_version_prior$ and lwrc$(env$('acsIgnoreDataVersion'))<>'yes' then 
+47120     un_return=1
+47140     msgbox("The ACS Software version ("&acs_version_running$&") of this workstation is less than the last version ("&acs_version_prior$&") used to access ACS Data."&chr$(13)&"You must update this workstation to continue.")
+47200   end if 
+47220   fn_update_needed=un_return
+47240 fnend 
 48000 def fn_last_version_used$(; setit$*256)
 48020   dim lvu_line$*256
 48040   if setit$<>'' then 

@@ -70,10 +70,11 @@
 15180       setenv('data',dataNew$) ! pr 'env$ client set to '&env$('client') : pause
 15190       fnreg_close
 15200       ! fnMapToVirturalDrive(dataNew$,'Q:') 
-15210       setenv('Q',rtrm$(dataNew$,'\'))
-15212       execute 'config substitute [Q] "'&env$('Q')&'"'
-15220       fnmakesurepathexists(env$('Q')&'\Data\')
-15222       fnmakesurepathexists(env$('Q')&'\'&env$('CurSys')&'mstr\')
+15202       fnSetQ(dataNew$)
+15210       ! setenv('Q',rtrm$(dataNew$,'\'))
+15212       ! execute 'config substitute [Q] "'&env$('Q')&'"'
+15220       ! fnmakesurepathexists(env$('Q')&'\Data\')
+15222       ! fnmakesurepathexists(env$('Q')&'\'&env$('CurSys')&'mstr\')
 15280     end if
 15300   end if ! /r 
 15320 fnend
@@ -84,7 +85,7 @@
 16060     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fncmdset,fntop,fnacs
 16070     library 'S:\Core\Library': fnXit
 16072     library 'S:\Core\Library': fnreg_close
-16074     ! library 'S:\Core\Library': fnMapToVirturalDrive
+16074     library 'S:\Core\Library': fnSetQ
 16080   end if 
 16090   fn_setup_client
 16100 fnend 

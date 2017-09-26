@@ -8,6 +8,14 @@
 10120   end if
 10140 fnend
 20000 ! r: S:\Core\Start.br
+20052   def library fnSetQ(setQ$*256)
+20054     library 'S:\Core\Start.br': fnSetQ
+20056     fnSetQ=fnSetQ(setQ$)
+20058   fnend 
+20062   def library fngethandle
+20064     library 'S:\Core\Start.br': fngethandle 
+20066     fngethandle=fngethandle
+20068   fnend 
 20072   def library fnMapToVirturalDrive(path_to_map$*256,drive_id$*2)
 20074     library 'S:\Core\start.br': fnMapToVirturalDrive
 20076     fnMapToVirturalDrive=fnMapToVirturalDrive(path_to_map$,drive_id$)
@@ -282,10 +290,6 @@
 45340     library 'S:\Core\Programs\Preferences.br': fntext_editor
 45350     fntext_editor=fntext_editor(te_text_file$, te_options$)
 45360   fnend 
-45370   def library fngethandle
-45380     library 'S:\Core\Start.br': fngethandle
-45390     fngethandle=fngethandle
-45400   fnend 
 45410   def library fnapply_theme(; disableConScreenOpenDflt)
 45420     library 'S:\Core\Programs\Preferences.br': fnapply_theme
 45430     fnapply_theme=fnapply_theme( disableConScreenOpenDflt)

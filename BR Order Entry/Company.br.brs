@@ -1,5 +1,5 @@
 10040 ! r: setup
-10060   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnerror,fntos,fncmdset,fngethandle,fnopenfile
+10060   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnerror,fntos,fncmdset,fngethandle,fnopenfile,fnFree
 10080   on error goto ERTN
 10100 ! ______________________________________________________________________
 10110   dim Comp$(0)*128,CompN(0),form$(0)*256
@@ -34,15 +34,11 @@
 72020   hCompany=fnopenfile(env$('cursys')&' Company',mat Comp$,mat CompN,mat form$, 0,0,0,unused$,mat unused$,mat unused,mat unused$,supressprompt:=2)
 72040   read #hCompany,using form$(hCompany): mat Comp$,mat CompN ioerr ignore
 72060   close #hCompany: ioerr ignore
-72080   ! open #h_company:=fngethandle: "Name="&env$('Q')&"\"&env$('cursys')&"mstr\Company.h"&env$('cno'),internal,input ioerr ignore
-72100   ! read #h_company,using "Form POS 1,3*C 40": mat comp$ ioerr ignore
-72120   ! close #h_company: ioerr ignore
 72140 return  ! /r
 74000 COMPANY_SAVE: ! r:
-74020   if exists (env$('Q')&'\'&env$('cursys')&'mstr\Company.h'&env$('cno')) then
-74040     execute 'free '&env$('Q')&'\'&env$('cursys')&'mstr\Company.h'&env$('cno')
-74060   end if
-74080   hCompany=fnopenfile(env$('cursys')&' Company',mat Comp$,mat CompN,mat form$, 0,0,0,unused$,mat unused$,mat unused,mat unused$,supressprompt:=2)
+74020   fnFree(env$('Q')&'\'&env$('cursys')&'mstr\Company.h'&env$('cno'))
+74070   dim fileiosubs$(0)*512
+74080   hCompany=fnopenfile(env$('cursys')&' Company',mat Comp$,mat CompN,mat form$, 0,0,0,unused$,mat unused$,mat unused,mat fileiosubs$,supressprompt:=2)
 74100   write #hCompany,using form$(hCompany): mat Comp$,mat CompN 
 74120   close #hCompany: 
 74140 return  ! /r
