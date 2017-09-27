@@ -281,8 +281,8 @@
 21180         else if menu_option$(1:6)='FileIO' then
 21190           if menu_option$='FileIO (update and launch)' then
 21191             msgbox( 'obsolueted by local administrative execution of cmd:   mklink /J "C:\Users\John\OneDrive\ACS\Dev-5 Data\Core\FileIO\Layout" "C:\ACS\Dev-5\Core\FileIO\Layout" ')
-21192             ! fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('Q')&'\Core\FileIO\Layout\*.*'        )
-21194             ! fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('Q')&'\Core\FileIO\Layout\version\*.*')
+21192             ! fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('QBase')&'\Core\FileIO\Layout\*.*'        )
+21194             ! fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('QBase')&'\Core\FileIO\Layout\version\*.*')
 21196           end if
 21200           open  #hProc:=fngethandle: 'name='&env$('temp')&'\fileioproc'&session$&'.$$$,replace',display,output
 21210           print #hProc: 'load S:\Core\FileIO\fileio.br'

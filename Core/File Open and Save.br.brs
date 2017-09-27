@@ -293,6 +293,7 @@
 42200   let resp$(resp_fileSource:=rc+=1)=archiveList$(1)
 42220   let fnlbl(lc+=1,1,"Destination Company Number:",col1_width,1)
 42240   let fntxt(lc,col2_pos,5,5,0,'1030',0,'')
+42250   let fnlbl(lc,col2_pos+7,"(only applies if a specific Source Company is selected)")
 42260   let resp$(resp_cnoDestination:=rc+=1)=str$(destination_company_number)
 42280   ! let fnlbl(lc+=1,1,"System Abbreviation:",col1_width,1)
 42300   ! let fntxt(lc,col2_pos,2,2,0)

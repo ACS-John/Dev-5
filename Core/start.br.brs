@@ -603,16 +603,16 @@
 64160 fnend
 65000 def fn_UpdateQFileIO
 65020   if env$('acsDeveloper')='' then ! because I used symbolic link
-65040     fnMakeSurepathExists(env$('Q')&'\Core\FileIO\Layout\')
-65060     fnMakeSurepathExists(env$('Q')&'\Core\FileIO\Layout\version\')
-65080     fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('Q')&'\Core\FileIO\Layout\*.*'        )
-65100     fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('Q')&'\Core\FileIO\Layout\version\*.*')
+65040     fnMakeSurepathExists(env$('QBase')&'\Core\FileIO\Layout\')
+65060     fnMakeSurepathExists(env$('QBase')&'\Core\FileIO\Layout\version\')
+65080     fnCopy('S:\Core\FileIO\Layout\*.*'        ,env$('QBase')&'\Core\FileIO\Layout\*.*'        )
+65100     fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('QBase')&'\Core\FileIO\Layout\version\*.*')
 65120   end if
 65140 fnend
 66000 def fn_UpdateQScreenIO
 66020   if env$('acsDeveloper')='' then ! because I used: mklink /J "C:\Users\John\OneDrive\ACS\Dev-5 Data\Core\ScreenIO\Screen" "C:\ACS\Dev-5\Core\ScreenIO\Screen"
-66040     fnMakeSurepathExists(env$('Q')&'\Core\ScreenIO\screen\')
-66060     fnCopy('S:\Core\ScreenIO\screen\*.*'      ,env$('Q')&'\Core\ScreenIO\screen\*.*'      )
+66040     fnMakeSurepathExists(env$('QBase')&'\Core\ScreenIO\screen\')
+66060     fnCopy('S:\Core\ScreenIO\screen\*.*'      ,env$('QBase')&'\Core\ScreenIO\screen\*.*'      )
 66080   end if
 66100 fnend
 67000 def fn_CopySfileIoIniToFileIoIni
