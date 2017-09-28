@@ -415,10 +415,10 @@
 45200   end if
 45220   fnmakesurepathexists(env$('Q')&'\Data\')
 45240   fnmakesurepathexists(env$('Q')&'\'&env$('CurSys')&'mstr\')
-45260   if env$('acsDebug')<>'' then
-45280     pr 'SetQ to '&env$('Q')
-45300     pause
-45320   end if
+45260   ! if env$('acsDebug')<>'' then
+45280   !   pr 'SetQ to '&env$('Q')
+45300   !   pause
+45320   ! end if
 45340 fnend
 46000 def fn_setQBase(newQBase$*256)
 46020   if env$('QBase')='' then
