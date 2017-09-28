@@ -38,7 +38,7 @@
 08560   let drive$(10)="N:\"
 08580   let drive$(11)="O:\"
 08600   let drive$(12)="P:\"
-08620   let drive$(13)=env$('Q')&"\"
+08620   let drive$(13)="Q:\"
 08640   let drive$(14)="R:\"
 08660   let drive$(15)="S:\"
 08680   let drive$(16)="T:\"
