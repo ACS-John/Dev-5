@@ -30,14 +30,14 @@
 04100     if env$('Q')='' then
 04120       if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' and env$('enableDataFolderByClient')='Yes' then
 04140         if pos(env$('CsServerData'),'/')>0 then let slash$='/' else slash$='\'
-04160         fn_setQ(env$('CsServerData')&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
+04160         fn_setQ(rtrm$(env$('CsServerData'),slash$)&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
 04180         fn_setQBase(env$('CsServerData'))
 04200       else if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' then
 04220         fn_setQ(env$('CsServerData')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
 04240         fn_setQBase(env$('CsServerData'))
 04260       else if env$('enableDataFolderByClient')='Yes' then
 04280         if pos(env$('data'),'/')>0 then let slash$='/' else slash$='\'
-04300         fn_setQ(env$('data')&env$('client')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
+04300         fn_setQ(rtrm$(env$('data'),slash$)&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
 04320         fn_setQBase(env$('data'))
 04340       else 
 04360         fn_setQ(env$('data')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
