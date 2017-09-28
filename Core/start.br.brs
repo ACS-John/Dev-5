@@ -37,7 +37,7 @@
 04240         fn_setQBase(env$('CsServerData'))
 04260       else if env$('enableDataFolderByClient')='Yes' then
 04280         if pos(env$('data'),'/')>0 then let slash$='/' else slash$='\'
-04300         fn_setQ(env$('data')&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
+04300         fn_setQ(env$('data')&env$('client')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
 04320         fn_setQBase(env$('data'))
 04340       else 
 04360         fn_setQ(env$('data')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 

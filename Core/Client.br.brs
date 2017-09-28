@@ -52,16 +52,10 @@
 14460   fnacs('clientSelect',0,mat resp$,ckey) ! /r
 14480   ! pr mat resp$
 15000   if ckey=1 then 
-15020     dim clientPrior$*256
-15040     dim dataPrior$*256
 15060     dim dataNew$*256
-15080     clientPrior$=env$('client')
 15100     setenv('Client',resp$(1)) ! pr 'env$ client set to '&env$('client') : pause
 15102     if env$('enableDataFolderByClient')='Yes' then
-15110       dataPrior$=rtrm$(env$('data'),'\')
 15120       dataNew$=rtrm$(env$('QBase'),'\')&'\'&env$('client') ! &'\'
-15130       ! pr 'clientPrior$: '&clientPrior$
-15160       ! pr 'dataPrior$: '&dataPrior$
 15170       ! pr '  dataNew$: '&dataNew$
 15171       ! pr '  env Q: '&env$('Q') : pause
 15172       ! pause

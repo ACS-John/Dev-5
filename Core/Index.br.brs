@@ -54,8 +54,6 @@
 27100         let index_parameters$=srep$(index_parameters$,' -n',' ')
 27140         let index_parameters$=trim$(index_parameters$)&' Replace DupKeys Shr' ! -N
 27141 ! 
-27142 !  should not be necessary !! 2015-11-23       let data_file$=srep$(data_file$,env$('data'),env$('Q')&'\')
-27144 !  should not be necessary !! 2015-11-23       let index_statement_or_file$=srep$(index_statement_or_file$,env$('data'),env$('Q')&'\')
 27145 ! 
 27150 !         pr 'index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$ : pause
 27154         let index_execute_text$='index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$
