@@ -88,9 +88,9 @@
 28320   open #h_tmp:=fngethandle: 'Name=@:'&br_filename$(env$('client_temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
 28340   dim tmp7ZipCommand$*512
 28360   if enableBackupReportCache$='True' then
-28380     tmp7zipcommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Data')&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk'
+28380     tmp7zipcommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk'
 28400   else
-28420     tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Data')&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"Report Cache\*"'
+28420     tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"Report Cache\*"'
 28440   end if
 28460   print #h_tmp: '@echo off'
 28480   print #h_tmp: '@echo Advanced Computer Services LLC'
@@ -99,7 +99,7 @@
 28540   print #h_tmp: '@echo.'
 28560   print #h_tmp: '@echo Command: '&tmp7ZipCommand$
 28580   print #h_tmp: '@echo.'
-28600   print #h_tmp: '@echo Save What: '&env$('Data')&save_what$
+28600   print #h_tmp: '@echo Save What: '&env$('Q')&save_what$
 28620   print #h_tmp: '@echo.'
 28640   print #h_tmp: '@echo Relative To: '&os_filename$(env$('Q')&'\')
 28660   print #h_tmp: '@echo.'
