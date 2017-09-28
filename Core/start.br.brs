@@ -401,15 +401,15 @@
 44660       ! pr 'enableReportCacheOnClient='&env$('enableReportCacheOnClient') 
 44680       ! pause
 44700     end if
-44720     if env$('enableDataFolderByClient')='Yes' then ! and env$('BR_MODEL')='CLIENT/SERVER' then
-44740       library 's:\Core\Library': fnmakesurepathexists
-44760       fn_setQBase(env$('data'))
-44780       setenv('data',env$('data')&env$('client')&slash$)
-44800       ! fnmakesurepathexists(env$('data'))
-44820       if ~exists(env$('data')) then 
-44840         execute 'mkdir "'&env$('data')&'"'
-44860       end if 
-44880     end if
+44720     ! if env$('enableDataFolderByClient')='Yes' then ! and env$('BR_MODEL')='CLIENT/SERVER' then
+44740     !   library 's:\Core\Library': fnmakesurepathexists
+44760     !   fn_setQBase(env$('data'))
+44780     !   setenv('data',env$('data')&env$('client')&slash$)
+44800     !   ! fnmakesurepathexists(env$('data'))
+44820     !   if ~exists(env$('data')) then 
+44840     !     execute 'mkdir "'&env$('data')&'"'
+44860     !   end if 
+44880     ! end if
 44900   end if
 44920 fnend 
 45000 def library fnSetQ(setQ$*256)
