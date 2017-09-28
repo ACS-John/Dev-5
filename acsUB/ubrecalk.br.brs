@@ -3,6 +3,7 @@
 00040   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnd1,fncloseprn,fnopenprn,fnxit,fnerror,fntos,fnlbl,fnacs
 00050   library 'S:\Core\Library': fntxt,fnmsgbox,fncmdset,fntop,fnpause,fncd,fnchk,fncreg_read,fncreg_write,fncomboa
 00060   library 'S:\Core\Library': fnget_services,fnapply_default_rates,fnAutomatedSavePoint
+00062   library 'S:\Core\Library': fngethandle
 00070   if env$('client')="Chatom" then 
 00072     library "S:\acsUB\calk_Chatom": fncalk
 00074   else 
@@ -73,7 +74,8 @@
 00600 FORM_UBTRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 00610 ! open #h_work:=2: "Name="&work$,internal,outin,relative
 00620 F_WORK: form pos 1,c 10,pos 11,4*pd 5,pos 31,7*pd 4.2,pos 59,3*pd 5,n 1
-00640   let fn_bud_open
+00630   fn_deposit_open
+00640   fn_bud_open
 00650 ! ______________________________________________________________________
 00660 TOP: ! 
 00670   if r3=>lrec(h_customer) then goto FINIS
@@ -115,7 +117,7 @@
 00990   mat w=(0) ! mat w appears to never be set - never be used, but is passed to fncalk
 01000   gosub CHECK_UNUSUAL_USAGE
 01010   if r9_usage_is_zero=1 then goto TOP
-01020   let fncalk(x$,d1,f,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+01020   let fncalk(x$,d1,f,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,hDeposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 01030   let fn_date_meter_read ! update meter reading date
 01040   if g(11)>99999 or g(12)>99999 then goto BILL_TOO_LARGE
 01050   if g(11)<99999 and g(11)>-99999 then goto LX1230
@@ -308,6 +310,10 @@
 68080     let bud1=1
 68100 BUD1_XIT: ! 
 68120   fnend 
+69000   def fn_deposit_open !
+69020     open #hDeposit1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Deposit1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\DepIdx1.h"&env$('cno')&",Shr,Use,RecL=16,KPs=1,KLn=10",internal,outin,keyed 
+69080     open #hDeposit2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Deposit2Index.h"&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outin,keyed
+69120   fnend 
 70000   def fn_bud2
 70020     let bud2=0
 70040     if bud1=0 then goto L7110
