@@ -6,47 +6,60 @@
 01020    fnAcsSystemInitialize=fn_acsSystemInitialize( isScreenIOtest)
 01040 fnend
 02000 def fn_acsSystemInitialize(; isScreenIOtest)
-02010   if ~isScreenIOtest or env$('acsVersion')='' then
-03060     print "Loading ACS System..." 
-03080     if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusline off"
-03082     if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
-03090     execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
-03091     library 's:\Core\Library': fnclient$,fnmakesurepathexists
-03092     fnclient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
-03100     fn_env_data_default
-03120     if env$('Q')='' then
-03130       if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' and env$('enableDataFolderByClient')='Yes' then
-03132         if pos(env$('CsServerData'),'/')>0 then let slash$='/' else slash$='\'
-03134         fn_setQ(env$('CsServerData')&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
-03136         fn_setQBase(env$('CsServerData'))
-03150       else if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' then
-03152         fn_setQ(env$('CsServerData')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
-03154         fn_setQBase(env$('CsServerData'))
-03180       else if env$('enableDataFolderByClient')='Yes' then
-03182         if pos(env$('data'),'/')>0 then let slash$='/' else slash$='\'
-03184         fn_setQ(env$('data')&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
-03186         fn_setQBase(env$('data'))
-03198       else 
-03200         fn_setQ(env$('data')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
-03210         fn_setQBase(env$('data'))
-03300       end if
-03400     end if
-04000     if env$('BR_MODEL')='CLIENT/SERVER' then
-04020      execute 'config shell default client'
-04030      setenv('at','@:') 
-04040      fncs_env
-04060      setenv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
-04090      setenv('userprofile','@::'&env$('client_userprofile'))
-04100    else
-04120      setenv('local_program_dir',os_filename$('S:'))
-04140      setenv('at','')
-04160     end if
-04200   !
-04220     if env$('acsDeveloper')<>'' then 
-04240       execute 'config substitute [ScreenIO_ScreenFldDrive] S:'
-04300     end if
-04400   !
-04502     execute "load S:\Core\Menu.br,Resident" error ignore ! hopefully will decrease the amount of time it takes to load the menu between programs
+02020   if ~isScreenIOtest or env$('acsVersion')='' then
+02040     print "Loading ACS System..." 
+02060     if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusline off"
+03000     ! r: set envirnoment variables based on login_name$ and/or BR_MODEL
+03020     if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
+03040     if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' or env$("AcsClient")='Ed Horton' then 
+03060       setenv('enableClientSelection','Yes')
+03080     end if
+03100     if env$('BR_MODEL')='CLIENT/SERVER' then ! 
+03120       if login_name$='niceguywinning@gmail.com' then 
+03140         let setenv('enableDataFolderByClient','Yes')
+03160         pr 'enableDataFolderByClient='&env$('enableDataFolderByClient')
+03180       end if
+03200       let setenv('enableReportCacheOnClient','Yes') 
+03220     end if
+03240     ! /r
+04000     execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
+04020     library 's:\Core\Library': fnclient$,fnmakesurepathexists
+04040     fnclient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
+04060     fn_env_data_default
+04080     !
+04100     if env$('Q')='' then
+04120       if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' and env$('enableDataFolderByClient')='Yes' then
+04140         if pos(env$('CsServerData'),'/')>0 then let slash$='/' else slash$='\'
+04160         fn_setQ(env$('CsServerData')&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
+04180         fn_setQBase(env$('CsServerData'))
+04200       else if env$('CsServerData')<>'' and env$('BR_MODEL')='CLIENT/SERVER' then
+04220         fn_setQ(env$('CsServerData')) ! fn_map_to_virtural_drive(env$('CsServerData'),'Q:')
+04240         fn_setQBase(env$('CsServerData'))
+04260       else if env$('enableDataFolderByClient')='Yes' then
+04280         if pos(env$('data'),'/')>0 then let slash$='/' else slash$='\'
+04300         fn_setQ(env$('data')&slash$&env$('client')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
+04320         fn_setQBase(env$('data'))
+04340       else 
+04360         fn_setQ(env$('data')) ! fn_map_to_virtural_drive(env$('data')&clientDataFolderSuffix$,'Q:') 
+04380         fn_setQBase(env$('data'))
+04400       end if
+04420     end if
+04440     if env$('BR_MODEL')='CLIENT/SERVER' then
+04460      execute 'config shell default client'
+04480      setenv('at','@:') 
+04500      fncs_env
+04520      setenv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
+04540      setenv('userprofile','@::'&env$('client_userprofile'))
+04560    else
+04580      setenv('local_program_dir',os_filename$('S:'))
+04600      setenv('at','')
+04620     end if
+04640   !
+04660     if env$('acsDeveloper')<>'' then 
+04680       execute 'config substitute [ScreenIO_ScreenFldDrive] S:'
+04700     end if
+04720   !
+04740     execute "load S:\Core\Menu.br,Resident" error ignore ! hopefully will decrease the amount of time it takes to load the menu between programs
 04900     execute "load S:\Core\Library.br,Resident" error ignore
 05000     !  fails on windows XP  !  execute "load S:\Core\Start.br,Resident"
 05020     execute "load S:\Core\Index.br,Resident"
@@ -380,36 +393,9 @@
 44250       execute 'mkdir '&env$('data')&'\Data'
 44260     end if 
 44280     if env$('data')(len(env$('data')):len(env$('data')))<>'\' and env$('data')(len(env$('data')):len(env$('data')))<>'/' then ! if env$('data') does not end with a backslash nor forward slash than add one.
-44300       if pos (env$('data'),'/') then
-44320         slash$='/'
-44340         ! setenv('data',env$('data')&'/')
-44360       else
-44380         slash$='\'
-44400         ! setenv('data',env$('data')&'\')
-44420       end if
+44300       if pos (env$('data'),'/') then slash$='/' else slash$='\'
 44440       setenv('data',env$('data')&slash$)
 44460     end if 
-44480     if env$('ACSDeveloper')<>'' or login_name$='acsbowman' or login_name$='niceguywinning@gmail.com' or env$("AcsClient")='Ed Horton' then 
-44500       setenv('enableClientSelection','Yes')
-44520     end if
-44540     if env$('BR_MODEL')='CLIENT/SERVER' then ! 
-44560       if login_name$='niceguywinning@gmail.com' then 
-44580         let setenv('enableDataFolderByClient','Yes')
-44600         pr 'enableDataFolderByClient='&env$('enableDataFolderByClient')
-44620       end if
-44640       let setenv('enableReportCacheOnClient','Yes') 
-44660       ! pr 'enableReportCacheOnClient='&env$('enableReportCacheOnClient') 
-44680       ! pause
-44700     end if
-44720     ! if env$('enableDataFolderByClient')='Yes' then ! and env$('BR_MODEL')='CLIENT/SERVER' then
-44740     !   library 's:\Core\Library': fnmakesurepathexists
-44760     !   fn_setQBase(env$('data'))
-44780     !   setenv('data',env$('data')&env$('client')&slash$)
-44800     !   ! fnmakesurepathexists(env$('data'))
-44820     !   if ~exists(env$('data')) then 
-44840     !     execute 'mkdir "'&env$('data')&'"'
-44860     !   end if 
-44880     ! end if
 44900   end if
 44920 fnend 
 45000 def library fnSetQ(setQ$*256)
