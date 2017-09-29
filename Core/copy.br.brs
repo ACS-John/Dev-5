@@ -6,12 +6,17 @@
 50100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
 50120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50140 ! /region
-52000 def library fnCopy(from$*256,to$*256; new_record_length)
-52020   library 'S:\Core\Library': fnerror,fnstatus,fngethandle,fnMakeSurePathExists
-52040   on error goto ERTN
-52060   let from$=trim$(from$,'"')
-52080   let to$=trim$(to$,'"')
-52090   fnMakeSurePathExists(to$)
+52000 def library fnCopy(from$*256,to$*256; new_record_length,options$)
+52020   ! options$ (seperate by space)  supported options$ values inclue
+52040   !           recursive - includes all subdirectories and their files
+52060   library 'S:\Core\Library': fnerror,fnstatus,fngethandle,fnMakeSurePathExists,fngetdir2,fngetpp
+52080   on error goto ERTN
+52100   let from$=trim$(from$,'"')
+52120   let to$=trim$(to$,'"')
+52140   options$=rtrm$(options$)&' ' 
+52160   copyRecursive=0
+52180   if pos(lwrc$(option$),'recursive ') then copyRecursive=1
+52200   fnMakeSurePathExists(to$)
 54000   ! if new_record_length and as_admin then 
 54020   !   pr 'sorry new_record_length and as_admin are exclusive options and you can not use both' 
 54040   !   pause 
@@ -26,41 +31,60 @@
 56140   !   close #h_copy_cmd:
 56160   !   execute 'sy "'&env$('temp')&'\copy_as_admin_'&session$&'.cmd"'
 58000   ! else ! either new_record_length or (neither new_record_length nor as_admin)
-58020     dim parameters$*128
-58040     let parameters$=''
-58060     if new_record_length then 
-58080       let parameters$=parameters$&' -'&str$(abs(new_record_length))
-58100       if new_record_length and uprc$(from$)=uprc$(to$) then 
-58120         execute 'copy "'&from$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
-58140         execute 'copy "'&env$('temp')&'\acs_recl_chg_'&session$&'" "'&to$&'"' ioerr COPY_FAIL
-58160         execute 'free "'&env$('temp')&'\acs_recl_chg_'&session$&'"' ioerr ignore
-58180       end if 
-58200     end if 
-58220     execute 'copy "'&from$&'" "'&to$&'"'&parameters$ ioerr COPY_FAIL
-58240     let copy_return=1
-58260   ! end if
+58020     if copyRecursive then
+58040       fngetpp(from$,fromPath$,fromFile$,fromExt$)
+58060       fngetpp(to$,toPath$,toFile$,toExt$)
+58080       dim fromPathandFile$*256
+58100       dim toPathandFile$*256
+58120       pr 'fromFile$=';fromFile$
+58140       pr 'fromExt$=';fromExt$
+58160       pr 'toFile$=';toFile$
+58180       pr 'toExt$=';toExt$
+58200       pause
+58220       ! execute 'copy "'&toPath$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
+58240       dim copyFolder$(0)*256
+58260       gd2_return=fngetdir2(from$,mat copyFolder$,'/s /d')
+58280       pr 'gd2_return=';gd2_return : pause
+58300       for cfi=1 to udim(mat copyFolder$)
+58320         pr 'fnCopyAllMatchingFilesInFolderIn(',toFile$,toExt$ : pause
+58340       nex cfi
+58360     else
+58380       if new_record_length then 
+58400         dim parameters$*128
+58420         let parameters$=''
+58440         let parameters$=parameters$&' -'&str$(abs(new_record_length))
+58460         if new_record_length and uprc$(from$)=uprc$(to$) then 
+58480           execute 'copy "'&from$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
+58500           execute 'copy "'&env$('temp')&'\acs_recl_chg_'&session$&'" "'&to$&'"' ioerr COPY_FAIL
+58520           execute 'free "'&env$('temp')&'\acs_recl_chg_'&session$&'"' ioerr ignore
+58540         end if 
+58560       end if 
+58580       execute 'copy "'&from$&'" "'&to$&'"' ioerr COPY_FAIL
+58600       let copy_return=1
+58620     end if
+58640   ! end if
 60000   goto COPY_XIT
 64000   COPY_FAIL: ! r:
-64020   let copy_return=min(-1,-err)
-64040   if new_record_length then 
-64060     execute 'Copy "'&from$&'" "'&env$('Temp')&'\tmp_rln_chg_s'&session$&'"' ioerr COPY_RETRY_NEW_RLN_FAILED
-64080     execute 'Copy "'&env$('Temp')&'\tmp_rln_chg_s'&session$&'" "'&to$&'" -'&str$(abs(new_record_length)) ioerr COPY_RETRY_NEW_RLN_FAILED
-64100     execute 'Free "'&env$('Temp')&'\tmp_rln_chg_s'&session$&'"' ioerr ignore
-64120     let copy_return=2
-65000   else if env$("ACSDeveloper")<>"" then 
-65020     print 'first copy failed with error ';err
-65040     pr 'From: "'&from$&'"'
-65060     pr '  To: "'&to$&'"'
-65140     pause 
-65160   end if 
+64020     let copy_return=min(-1,-err)
+64040     if new_record_length then 
+64060       execute 'Copy "'&from$&'" "'&env$('Temp')&'\tmp_rln_chg_s'&session$&'"' ioerr COPY_RETRY_NEW_RLN_FAILED
+64080       execute 'Copy "'&env$('Temp')&'\tmp_rln_chg_s'&session$&'" "'&to$&'" -'&str$(abs(new_record_length)) ioerr COPY_RETRY_NEW_RLN_FAILED
+64100       execute 'Free "'&env$('Temp')&'\tmp_rln_chg_s'&session$&'"' ioerr ignore
+64120       let copy_return=2
+65000     else if env$("ACSDeveloper")<>"" then 
+65020       print 'first copy failed with error ';err
+65040       pr 'From: "'&from$&'"'
+65060       pr '  To: "'&to$&'"'
+65140       pause 
+65160     end if 
 65180   goto COPY_XIT ! /r
 66000   COPY_RETRY_NEW_RLN_FAILED: ! r:
-66020   if env$("ACSDeveloper")<>"" then 
-66040     print 'first copy failed with error ';abs(copy_return)
-66060     print 'second attempt failed with error ';err
-66080     pause 
-66100   end if 
-66120   let copy_return=copy_return*10000-err
+66020     if env$("ACSDeveloper")<>"" then 
+66040       print 'first copy failed with error ';abs(copy_return)
+66060       print 'second attempt failed with error ';err
+66080       pause 
+66100     end if 
+66120     let copy_return=copy_return*10000-err
 66140   goto COPY_XIT ! /r
 68000   COPY_XIT: ! 
 68020   let fnCopy=copy_return
