@@ -18,44 +18,46 @@
 22040   fnFileOpen=fn_fileOpen
 22060 fnend
 24000 def fn_fileOpen(; file_open$*256)
-24020   if file_open$='' then
-24040     execute 'free '&br_filename$(env$('client_temp')&'\Open_Log.txt') ioerr ignore
-24060     open #h_tmp:=fngethandle: "Name=OPEN:"&env$('at')&"ACS Data Set (*.zip) |"&fnsave_as_path$&"\*.zip,RecL=1,Shr",external,input ioerr OPEN_OPEN_ERR
-24080     let file_open$=os_filename$(file$(h_tmp))
-24100     close #h_tmp: 
-24120   end if
-24140   let fnreg_close
-24160   ! r: new way 12/4/2015
-        dim fileOpenDestination$*256
-        if env$('BR_MODEL')='CLIENT/SERVER' then 
-          fileOpenDestination$=os_filename$(env$('Q')&'\')
-          fileOpenDestination$=env$('client_temp')&'\acs\OpenPartial\'
-          fnmakesurepathexists(fileOpenDestination$)
-        end if
-24180   open #h_tmp:=fngethandle: 'Name= '&env$('at')&br_filename$(env$('client_temp')&'\open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
-24200   print #h_tmp: '@echo off'
-24220   print #h_tmp: '@echo Advanced Computer Services LLC'
-24240   print #h_tmp: '@echo Opening: "'&file_open$&'"'
-24260   print #h_tmp: '@echo.'
-24280   print #h_tmp: '@echo.'
-24300   print #h_tmp: '@echo Command: '&env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('temp')&'\Open_Log.txt"'
-24320   print #h_tmp: '@echo.'
-24340   print #h_tmp: '@echo.'
-24360   print #h_tmp: '@echo Relative To: '&fileOpenDestination$
+24010   if file_open$='' then
+24020     execute 'free '&br_filename$(env$('client_temp')&'\Open_Log.txt') ioerr ignore
+24030     open #h_tmp:=fngethandle: "Name=OPEN:"&env$('at')&"ACS Data Set (*.zip) |"&fnsave_as_path$&"\*.zip,RecL=1,Shr",external,input ioerr OPEN_OPEN_ERR
+24040     let file_open$=os_filename$(file$(h_tmp))
+24050     close #h_tmp: 
+24060   end if
+24070   let fnreg_close
+24080   ! r: new way 12/4/2015
+24090   dim fileOpenDestination$*256
+24100   if env$('BR_MODEL')='CLIENT/SERVER' then 
+24110     fileOpenDestination$=env$('client_temp')&'\acs\OpenPartial\'
+24120     fnmakesurepathexists(fileOpenDestination$)
+24130   else
+24140     fileOpenDestination$=os_filename$(env$('Q')&'\')
+24150   end if
+24300   open #h_tmp:=fngethandle: 'Name= '&env$('at')&br_filename$(env$('client_temp')&'\open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+24320   print #h_tmp: '@echo off'
+24340   print #h_tmp: '@echo Advanced Computer Services LLC'
+24360   print #h_tmp: '@echo Opening: "'&file_open$&'"'
 24380   print #h_tmp: '@echo.'
 24400   print #h_tmp: '@echo.'
-24420   print #h_tmp: '@echo Output Log: "'&env$('client_temp')&'\Open_Log.txt"'
+24420   print #h_tmp: '@echo Command: '&env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('temp')&'\Open_Log.txt"'
 24440   print #h_tmp: '@echo.'
 24460   print #h_tmp: '@echo.'
-24480   print #h_tmp: '@echo OPEN PROCESSING...'
-24500   print #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('client_temp')&'\Open_Log.txt"'
-24520   close #h_tmp: 
-24540   execute 'sy '&env$('client_temp')&'\open_as_'&session$&'.cmd'
-24560   ! /r
-24580   if fn_analyze_7zip_compresslog(env$('client_temp')&'\Open_Log.txt','Successfully Opened',file_open$) then 
-24600     let fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
-24620     let fnreg_write('Last Open File',file_open$(pos(file_open$,'\',-1)+1:len(file_open$)))
-24640     let fnreg_write('Last Open Path',file_open$(1:pos(file_open$,'\',-1)))
+24480   print #h_tmp: '@echo Relative To: '&fileOpenDestination$
+24500   print #h_tmp: '@echo.'
+24520   print #h_tmp: '@echo.'
+24540   print #h_tmp: '@echo Output Log: "'&env$('client_temp')&'\Open_Log.txt"'
+24560   print #h_tmp: '@echo.'
+24580   print #h_tmp: '@echo.'
+24600   print #h_tmp: '@echo OPEN PROCESSING...'
+24620   print #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('client_temp')&'\Open_Log.txt"'
+24640   print #h_tmp: 'pause'
+24660   close #h_tmp: 
+24680   execute 'sy '&env$('client_temp')&'\open_as_'&session$&'.cmd'
+24700   ! /r
+24720   if fn_analyze_7zip_compresslog(env$('client_temp')&'\Open_Log.txt','Successfully Opened',file_open$) then 
+24740     let fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
+24760     let fnreg_write('Last Open File',file_open$(pos(file_open$,'\',-1)+1:len(file_open$)))
+24780     let fnreg_write('Last Open Path',file_open$(1:pos(file_open$,'\',-1)))
 25000     if env$('BR_MODEL')='CLIENT/SERVER' then
 25020       if filter$='' then
 25040       else
