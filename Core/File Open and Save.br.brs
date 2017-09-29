@@ -50,7 +50,7 @@
 24580   print #h_tmp: '@echo.'
 24600   print #h_tmp: '@echo OPEN PROCESSING...'
 24620   print #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('client_temp')&'\Open_Log.txt"'
-24640   print #h_tmp: 'pause'
+24640   ! print #h_tmp: 'pause'
 24660   close #h_tmp: 
 24680   execute 'sy '&env$('client_temp')&'\open_as_'&session$&'.cmd'
 24700   ! /r
