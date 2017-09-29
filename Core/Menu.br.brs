@@ -617,10 +617,11 @@
 42020   mat system_name$(0)
 42030   mat system_abbr_list$(0)
 
-42200   if env$('ACSDeveloper')<>'' and exists('S:\Time Management\Menu.mnu') then
-42220     fnAddOneC(mat system_abbr_list$,'TM')
-42240     fnAddOneC(mat system_name$,fnSystemName$('TM'))
-42260   end if
+42200   ! if env$('ACSDeveloper')<>'' and exists('S:\Time Management\Menu.mnu') then
+42220   !   fnAddOneC(mat system_abbr_list$,'TM')
+42240   !   fnAddOneC(mat system_name$,fnSystemName$('TM'))
+42260   ! end if
+42270   fn_add_if_licensed('TM')
 42280   fn_add_if_licensed('OE')
 42300   fn_add_if_licensed('CL')
 42320   fn_add_if_licensed('GL')
