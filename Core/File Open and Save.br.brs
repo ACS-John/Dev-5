@@ -6,7 +6,7 @@
 18032     library 'S:\Core\Library': fnacs,fncmdset,fntos,fnlbl,fntxt,fncomboa
 18034     library 'S:\Core\Library': fnputcno,fncursys$,fncheckfileversion,fnmakesurepathexists
 18036     library 'S:\Core\Library': fnstatus,fnstatus_close,fnstatus_pause,fnCopy,fnindex_sys
-18038     library 'S:\Core\Library': fnaddonec
+18038     library 'S:\Core\Library': fnaddonec,fnFree
 18040     dim company_import_path$*256
 18050     dim resp$(5)*256
 18060     dim ml$(0)*128
@@ -26,23 +26,29 @@
 24120   end if
 24140   let fnreg_close
 24160   ! r: new way 12/4/2015
+        dim fileOpenDestination$*256
+        if env$('BR_MODEL')='CLIENT/SERVER' then 
+          fileOpenDestination$=os_filename$(env$('Q')&'\')
+          fileOpenDestination$=env$('client_temp')&'\acs\OpenPartial\'
+          fnmakesurepathexists(fileOpenDestination$)
+        end if
 24180   open #h_tmp:=fngethandle: 'Name= '&env$('at')&br_filename$(env$('client_temp')&'\open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
 24200   print #h_tmp: '@echo off'
 24220   print #h_tmp: '@echo Advanced Computer Services LLC'
 24240   print #h_tmp: '@echo Opening: "'&file_open$&'"'
 24260   print #h_tmp: '@echo.'
 24280   print #h_tmp: '@echo.'
-24300   print #h_tmp: '@echo Command: '&env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&os_filename$(env$('Q')&'\')&'" > "'&env$('temp')&'\Open_Log.txt"'
+24300   print #h_tmp: '@echo Command: '&env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('temp')&'\Open_Log.txt"'
 24320   print #h_tmp: '@echo.'
 24340   print #h_tmp: '@echo.'
-24360   print #h_tmp: '@echo Relative To: '&os_filename$(env$('Q')&'\')
+24360   print #h_tmp: '@echo Relative To: '&fileOpenDestination$
 24380   print #h_tmp: '@echo.'
 24400   print #h_tmp: '@echo.'
 24420   print #h_tmp: '@echo Output Log: "'&env$('client_temp')&'\Open_Log.txt"'
 24440   print #h_tmp: '@echo.'
 24460   print #h_tmp: '@echo.'
 24480   print #h_tmp: '@echo OPEN PROCESSING...'
-24500   print #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&os_filename$(env$('Q')&'\')&'" > "'&env$('client_temp')&'\Open_Log.txt"'
+24500   print #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('client_temp')&'\Open_Log.txt"'
 24520   close #h_tmp: 
 24540   execute 'sy '&env$('client_temp')&'\open_as_'&session$&'.cmd'
 24560   ! /r
@@ -50,21 +56,35 @@
 24600     let fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
 24620     let fnreg_write('Last Open File',file_open$(pos(file_open$,'\',-1)+1:len(file_open$)))
 24640     let fnreg_write('Last Open Path',file_open$(1:pos(file_open$,'\',-1)))
-24660   end if 
-24680   goto OPEN_XIT
-24700   OPEN_OPEN_ERR: ! 
-24720   if err=622 then ! it was just cancelled
-24740     print 'cancelled' : goto OPEN_XIT
-24760   else 
-24780     mat ml$(2)
-24800     let ml$(1)='Select a different file name.'
-24820     let ml$(2)='Error: '&str$(err)
-24840     let fnmsgbox(mat ml$)
-24860     !     if err=4150 then print "Could not create file:";file$(1) : let fnpause ! file$(1) is blank!
-24880     print "Err:";err;" Line:";line
-24900   end if 
-24920   OPEN_XIT: ! 
-24940 fnend
+25000     if env$('BR_MODEL')='CLIENT/SERVER' then
+25020       if filter$='' then
+25040       else
+25060         for company=1 to udim(mat archiveCNo)
+25080         nex company
+25100       end if
+25120       pause
+25140       fnCopy(env$('at')&env$('client_temp')&'\acs\OpenPartial\*.*',env$('q')&'\*.*',0,'recursive')
+25160       pause : opScreenReturn=1 
+25180       setenv('force_reindex','yes') 
+25200     end if
+25220     fncheckfileversion
+25240     fnindex_sys(cno)
+25260     fnstatus_close
+25280   end if 
+25300   goto OPEN_XIT
+25320   OPEN_OPEN_ERR: ! 
+25340   if err=622 then ! it was just cancelled
+25360     print 'cancelled' : goto OPEN_XIT
+25380   else 
+25400     mat ml$(2)
+25420     let ml$(1)='Select a different file name.'
+25440     let ml$(2)='Error: '&str$(err)
+25460     let fnmsgbox(mat ml$)
+25480     !     if err=4150 then print "Could not create file:";file$(1) : let fnpause ! file$(1) is blank!
+25500     print "Err:";err;" Line:";line
+25520   end if 
+25540   OPEN_XIT: ! 
+25560 fnend
 26000 def library fnFileSaveAs(save_what$)
 26020   if ~setup then let fn_setup
 26040   fnFileSaveAs=fn_FileSaveAs(save_what$)
@@ -341,7 +361,7 @@
 46080         fnreg_write('Last Open Partial System',env$('cursys'))
 46100         fnreg_write('Last Open Partial Company Number',env$('cno'))
 46120         fn_copy_files_in(env$('at')&env$('client_temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),val(env$('cno')))
-46140         pause : opScreenReturn=1 
+46140         opScreenReturn=1 
 46160         setenv('force_reindex','yes') 
 46180         fncheckfileversion
 46200         fnindex_sys(cno)
@@ -389,7 +409,7 @@
 52580     ! if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes..h### should be extracted too' : pause
 52990 fnend
 54000 def fn_copy_files_in(company_import_path$*256,company_import_extension$,destination_company_number)
-54020   execute 'free "'&env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number)&'"' ioerr ignore
+54020   fnFree(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
 54040   let fnstatus('Existing files ('&os_filename$(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
 54060   cfiReturn=fnCopy(company_import_path$&'*'&company_import_extension$,env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
 54080   if cfiReturn>0 then
