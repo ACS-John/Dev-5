@@ -29,7 +29,7 @@
 24090   dim fileOpenDestination$*256
 24100   if env$('BR_MODEL')='CLIENT/SERVER' then 
 24110     fileOpenDestination$=env$('client_temp')&'\acs\OpenPartial\'
-24120     fnmakesurepathexists(fileOpenDestination$)
+24120     fnmakesurepathexists(env$('at')&fileOpenDestination$)
 24130   else
 24140     fileOpenDestination$=os_filename$(env$('Q')&'\')
 24150   end if
