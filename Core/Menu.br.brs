@@ -81,6 +81,7 @@
 12560     if uprc$(resp$)=uprc$("Yes") then
 12580       chain 'S:\Core\Programs\Update'
 12600     else
+12610       if env$('acsDebug')<>'' then pause
 12620       goto XIT
 12640     end if
 12660   end if
