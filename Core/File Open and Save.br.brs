@@ -340,8 +340,8 @@
 46060         fnreg_write('Last Open Partial Path',file_open$(1:pos(file_open$,'\',-1)))
 46080         fnreg_write('Last Open Partial System',env$('cursys'))
 46100         fnreg_write('Last Open Partial Company Number',env$('cno'))
-46120         fn_copy_files_in(env$('client_temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),val(env$('cno')))
-46140         opScreenReturn=1 
+46120         fn_copy_files_in(env$('at')&env$('client_temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),val(env$('cno')))
+46140         pause : opScreenReturn=1 
 46160         setenv('force_reindex','yes') 
 46180         fncheckfileversion
 46200         fnindex_sys(cno)
