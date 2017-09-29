@@ -103,9 +103,9 @@
 40250   library 'S:\Core\OpenWin.br': fnopenwin
 40260   fnopenwin(win,sr,sc,er,ec, cap$)
 40270 fnend 
-40280 def library fnCopy(from$*256,to$*256; new_record_length)
+40280 def library fnCopy(from$*256,to$*256; new_record_length,options$*256)
 40290   library 'S:\Core\copy.br': fnCopy
-40300   fnCopy=fnCopy(from$,to$, new_record_length)
+40300   fnCopy=fnCopy(from$,to$, new_record_length,options$)
 40310 fnend 
 40320 def library fnFree(fileToDelete$*256)
 40330   library 'S:\Core\copy.br': fnFree
