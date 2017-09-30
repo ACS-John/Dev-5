@@ -8,8 +8,8 @@ ______________________	___	_____________________________________________________
 9:53 AM 9/22/2017	CO	Implemented Q environment variable to allow more dynamic data locations     
 21:09 09/17/2017	CO	5.73050      
 20:38 09/17/2017	CO	5.73049       
-8:18 09/17/2017	CO	5.73048        
-7:21 09/17/2017	CO	5.73047         
+08:18 09/17/2017	CO	5.73048        
+07:21 09/17/2017	CO	5.73047         
 7:20 AM 9/13/2017	GL	Check File Versions - corrections to GL ini to reg migration        
 6:03 PM 9/12/2017	CO	revamped client system (not the same thing as company numbers)        
 6:03 PM 9/12/2017	UB	Collections - Fixed a potential 122 error after clicking "post"        
