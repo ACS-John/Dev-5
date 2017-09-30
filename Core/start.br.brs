@@ -7,7 +7,7 @@
 01040 fnend
 02000 def fn_acsSystemInitialize(; isScreenIOtest)
 02020   if ~isScreenIOtest or env$('acsVersion')='' then
-02040     print "Loading ACS System..." 
+02040     pr f '1,1,C':"Loading ACS System..." 
 02060     if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusline off"
 03000     ! r: set envirnoment variables based on login_name$ and/or BR_MODEL
 03020     if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
@@ -16,10 +16,10 @@
 03080     end if
 03100     if env$('BR_MODEL')='CLIENT/SERVER' then ! 
 03120       if login_name$='niceguywinning@gmail.com' then 
-03140         let setenv('enableDataFolderByClient','Yes')
+03140         setenv('enableDataFolderByClient','Yes')
 03160         pr 'enableDataFolderByClient='&env$('enableDataFolderByClient')
 03180       end if
-03200       let setenv('enableReportCacheOnClient','Yes') 
+03200       setenv('enableReportCacheOnClient','Yes') 
 03220     end if
 03240     ! /r
 04000     execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
@@ -134,7 +134,7 @@
 14140     fn_AcsUserId_Initialize ! called to initialize env$('acsUserId')
 14160     fnapply_theme ! ( disableConScreenOpenDflt)
 14180     if ~fn_multisession_test then goto XIT
-14200     let setenv('path_to_7z_exe','"'&os_filename$(env$('local_program_dir')&'\Core\Programs\7zip-'&env$('client_platform.os_bits')&'bit\7z.exe')&'"')
+14200     setenv('path_to_7z_exe','"'&os_filename$(env$('local_program_dir')&'\Core\Programs\7zip-'&env$('client_platform.os_bits')&'bit\7z.exe')&'"')
 15000     version_prior$=fn_last_version_used$ 
 15020     version_current$=fnacs_version$       
 15030     setenv('acsVersion',version_current$)
@@ -159,57 +159,57 @@
 16000 def fn_uniqueComputerId_initialize
 16020   if env$('Unique_Computer_ID')='' then 
 16040     dim uci_tmp_filename$*512,tmp_line$*128,uuid$*36,hdd_serial$*36
-16060     let uci_tmp_filename$='acs_uuid_tmp'&session$&'.txt'
-16080     let hdd_serial$=''
-16100     let uuid$=''
+16060     uci_tmp_filename$='acs_uuid_tmp'&session$&'.txt'
+16080     hdd_serial$=''
+16100     uuid$=''
 16120     execute 'sy -m wmic csproduct get UUID |more >"%temp%\'&uci_tmp_filename$&'"'
 16140     open #h_tmp:=fn_gethandle: 'name=@:'&env$('client_temp')&'\'&uci_tmp_filename$&',EoL=None',display,input ! ioerr NO_WMIC
 16160     linput #h_tmp: tmp_line$
-16180     let tmp_line$=srep$(tmp_line$,chr$(10),'~')
-16200     let tmp_line$=srep$(tmp_line$,chr$(13),'~')
-16220     let tmp_line$=srep$(tmp_line$,' ','')
+16180     tmp_line$=srep$(tmp_line$,chr$(10),'~')
+16200     tmp_line$=srep$(tmp_line$,chr$(13),'~')
+16220     tmp_line$=srep$(tmp_line$,' ','')
 16240     do while pos(tmp_line$,'~~')>0
-16260       let tmp_line$=srep$(tmp_line$,'~~','~')
+16260       tmp_line$=srep$(tmp_line$,'~~','~')
 16280     loop 
 16300     if tmp_line$(1:4)<>'UUID' then 
 16320      ! windows server 2003
-16340       let tmp_pos_uuid=pos(tmp_line$,'UUID~')
+16340       tmp_pos_uuid=pos(tmp_line$,'UUID~')
 16360       if tmp_pos_uuid>0 then 
-16380         let tmp_line$(1:tmp_pos_uuid)=''
+16380         tmp_line$(1:tmp_pos_uuid)=''
 16400       else 
 16420         print 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause 
 16440       end if 
 16460     end if 
 16480 !   if tmp_line$(1:4)<>'UUID' then print 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause
-16500     let uuid$=tmp_line$(6:len(tmp_line$)-1)
+16500     uuid$=tmp_line$(6:len(tmp_line$)-1)
 16520     close #h_tmp,free: 
 16540     if uuid$='FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF' then 
-16560       let uuid_valid=0
+16560       uuid_valid=0
 16580       execute 'sy -m wmic  DISKDRIVE get SerialNumber |more >'&uci_tmp_filename$ ioerr NO_WMIC
 16600 !  execute 'sy -m wmic /output:"'&uci_tmp_filename$&'" DISKDRIVE get SerialNumber'   <--encoded in something other than ANSI, hard to read
 16620       open #h_tmp:=fn_gethandle: 'name='&uci_tmp_filename$&',EoL=None',display,input ioerr NO_WMIC
 16640       linput #h_tmp: tmp_line$
-16660       let tmp_line$=srep$(tmp_line$,chr$(10),'~')
-16680       let tmp_line$=srep$(tmp_line$,chr$(13),'~')
-16700       let tmp_line$=srep$(tmp_line$,' ','')
+16660       tmp_line$=srep$(tmp_line$,chr$(10),'~')
+16680       tmp_line$=srep$(tmp_line$,chr$(13),'~')
+16700       tmp_line$=srep$(tmp_line$,' ','')
 16720       do while pos(tmp_line$,'~~')>0
-16740         let tmp_line$=srep$(tmp_line$,'~~','~')
+16740         tmp_line$=srep$(tmp_line$,'~~','~')
 16760       loop 
 16780       if tmp_line$(1:12)<>'SerialNumber' then print 'problem in fn_uniqueComputerId_initialize$ - expected to say SerialNumber' : pause 
-16800       let hdd_serial$=tmp_line$(14:len(tmp_line$)-1)
+16800       hdd_serial$=tmp_line$(14:len(tmp_line$)-1)
 16820       close #h_tmp,free: 
 16840     else 
-16860       let uuid_valid=1
+16860       uuid_valid=1
 16880     end if 
 16900     if uuid_valid then 
-16920       let setenv('Unique_Computer_ID',uuid$)
+16920       setenv('Unique_Computer_ID',uuid$)
 16940     else 
-16960       let setenv('Unique_Computer_ID',hdd_serial$)
+16960       setenv('Unique_Computer_ID',hdd_serial$)
 16980     end if 
 17000   end if 
 17020   goto UcaFinis
 17040   NO_WMIC: ! r: ! windows XP does not support WMIC
-17060     let setenv('Unique_Computer_ID',wsid$)
+17060     setenv('Unique_Computer_ID',wsid$)
 17080   goto UcaFinis ! /r
 17100   UcaFinis: ! 
 17120 fnend 
@@ -264,11 +264,11 @@
 24260 fnend
 27000 def library fnrights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
 27010   if ~setup then let fn_setup
-27020   let fnrights_test=fn_rights_test(rt_folder$,rt_how_to_fix$,folder_name$, additional_text_for_failure$)
+27020   fnrights_test=fn_rights_test(rt_folder$,rt_how_to_fix$,folder_name$, additional_text_for_failure$)
 27040 fnend 
 29000 def fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
-29020   let rt_return=1 ! returns 1 if passed test or 0 if failed.
-29040   let rt_folder$=trim$(rt_folder$)
+29020   rt_return=1 ! returns 1 if passed test or 0 if failed.
+29040   rt_folder$=trim$(rt_folder$)
 29060   if rt_folder$<>'' and rt_folder$(len(rt_folder$):len(rt_folder$))<>'\' then let rt_folder$=rt_folder$&'\'
 29080   ! 
 29100   open #h_test:=fn_gethandle: 'Name='&rt_folder$&'tmp_rights_test'&session$&'.dat,Replace,RecL=384',internal,outin,relative ioerr RT_FAIL
@@ -276,30 +276,30 @@
 29140   execute 'free "'&rt_folder$&'tmp_rights_test'&session$&'.dat"' ioerr RT_FAIL
 29160   goto RT_PASS
 29180   RT_FAIL: ! 
-29200   let rt_return=0
+29200   rt_return=0
 29220   if err=4205 then 
-29240     let msgbox("Insufficient rights to access "&folder_name$&" Folder ("&os_filename$(rt_folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
-29260     let rt_return=0
+29240     msgbox("Insufficient rights to access "&folder_name$&" Folder ("&os_filename$(rt_folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
+29260     rt_return=0
 29280   else if err then 
-29300     let msgbox("Error "&str$(err)&" in rights test - making/removing a file in "&folder_name$&" Folder ("&os_filename$(rt_folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
+29300     msgbox("Error "&str$(err)&" in rights test - making/removing a file in "&folder_name$&" Folder ("&os_filename$(rt_folder$)&")"&chr$(13)&rt_how_to_fix$&chr$(13)&additional_text_for_failure$)
 29320     if env$('ACSDeveloper')<>'' then pause
-29340     let rt_return=0
+29340     rt_return=0
 29360   end if 
 29380   RT_PASS: ! 
-29400   let fn_rights_test=rt_return
+29400   fn_rights_test=rt_return
 29420 fnend 
 34000 def fn_move_data(file_name$*256,destination_name$*256; ignore_exists)
-34020   let md_return=0
+34020   md_return=0
 34040   if ignore_exists or (exists(file_name$) and ~exists(destination_name$)) then 
 34060     execute 'Copy "'&file_name$&'" "'&destination_name$&'"' ioerr MOVE_DATA_XIT
 34080     execute 'Free "'&file_name$&'"' ioerr ignore
-34100     let md_return=1
+34100     md_return=1
 34120   end if 
 34130   MOVE_DATA_XIT: ! 
-34140   let fn_move_data=md_return
+34140   fn_move_data=md_return
 34160 fnend 
 34180 def fn_move_core_data(file_name$*256; ignore_exists)
-34200   let fn_move_core_data=fn_move_data('S:\Core\Data\'&file_name$,env$('Q')&"\Data\"&file_name$, ignore_exists)
+34200   fn_move_core_data=fn_move_data('S:\Core\Data\'&file_name$,env$('Q')&"\Data\"&file_name$, ignore_exists)
 34220 fnend 
 36000 def library fnMapToVirturalDrive(path_to_map$*256,drive_id$*2)
 36020   fnMapToVirturalDrive=fn_map_to_virtural_drive(path_to_map$,drive_id$)
@@ -308,19 +308,19 @@
 36080   execute 'config drive '&drive_id$(1:1)&','&rtrm$(path_to_map$,'\')&',X,\' ioerr ignore
 36100 fnend 
 38000 def fn_temp_dir_validate
-38020   let tdt_return=1
+38020   tdt_return=1
 38040   if lwrc$(env$('temp'))='c:\windows\temp' then 
 38060     if ~exists(env$('USERPROFILE')) then 
-38080       let msgbox('Security Error: User Profile directory ('&env$('USERPROFILE')&') does not exist.')
-38100       let tdt_return=0
+38080       msgbox('Security Error: User Profile directory ('&env$('USERPROFILE')&') does not exist.')
+38100       tdt_return=0
 38140     else 
-38160       let tdt_return=fn_change_temp
+38160       tdt_return=fn_change_temp
 38180     end if 
 38200   end if 
-38280   let fn_temp_dir_validate=tdt_return
+38280   fn_temp_dir_validate=tdt_return
 38300 fnend 
 40000 def fn_change_temp
-40020   let ct_return=1
+40020   ct_return=1
 40040   if ~exists(env$('USERPROFILE')&'\AppData') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData"'
 40060   if ~exists(env$('USERPROFILE')&'\AppData\Local') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local"'
 40080   if ~exists(env$('USERPROFILE')&'\AppData\Local\Temp') then execute 'sy -m mkdir "'&env$('USERPROFILE')&'\AppData\Local\Temp"'
@@ -567,7 +567,7 @@
 62020   fngethandle=fn_gethandle
 62040 fnend
 62060 def fn_gethandle
-62080   let hMaybe=189
+62080   hMaybe=189
 62100   ghReturn=0
 62120   do 
 62140     if file(hMaybe)<0 and file$(hMaybe)='' then 

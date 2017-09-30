@@ -1,12 +1,3 @@
-
-10000 def fn_setupRetain
-10020   if ~setupRetain then
-10040     setupRetain=1
-10060     ! option retain
-10080     ! execute "load S:\Core\FileIO\fileio.br,Resident"
-10100     ! execute "load S:\Core\ScreenIO\screenio.br,Resident"
-10120   end if
-10140 fnend
 20000 ! r: S:\Core\Start.br
 20052   def library fnSetQ(setQ$*256)
 20054     library 'S:\Core\Start.br': fnSetQ
@@ -35,12 +26,10 @@
 20260 ! /r
 32000 ! r: ScreenIO
 32002 def library fnfm(screenname$; keyval$*255,srow,scol,parent_key$*255,parent_window,display_only,dontRedoListView,recordval,mat passeddata$,usemyf,mat myf$,mat myf,path$*255,selecting,savedontask)
-32003   if ~setupRetain then let fn_setupRetain
 32004   library 'S:\Core\ScreenIO\screenio.br': fnfm
 32006   fnfm=fnfm(screenname$, keyval$,srow,scol,parent_key$,parent_window,display_only,dontredolistview,recordval,mat passeddata$,usemyf,mat myf$,mat myf,path$,selecting,savedontask)
 32008 fnend
 32012 def library fnfm$(screenname$; keyval$*255,srow,scol,parent_key$*255,parent_window,display_only,dontRedoListView,recordval,mat passeddata$,usemyf,mat myf$,mat myf,path$*255,selecting,savedontask)
-32013   if ~setupRetain then let fn_setupRetain
 32014   library 'S:\Core\ScreenIO\screenio.br': fnfm$
 32016   fnfm$=fnfm$(screenname$, keyval$,srow,scol,parent_key$,parent_window,display_only,dontredolistview,recordval,mat passeddata$,usemyf,mat myf$,mat myf,path$,selecting,savedontask)
 32018 fnend
@@ -48,32 +37,25 @@
 33000 ! r: FileIO
 33010 def library fnopenfile(filename$*64,mat f$,mat fn,mat form$; inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
 33011 ! fnopenfile(&filename$,mat f$,mat fn,mat form$;inputonly,keynum,dont_sort_subs,&path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$*255,suppresslog)
-33012   if ~setupRetain then let fn_setupRetain
 33013   library 'S:\Core\FileIO\fileio.br': fnopenfile
 33014   fnopenfile=fnopenfile(filename$,mat f$,mat fn,mat form$, inputonly,keynum,dont_sort_subs,path$,mat description$,mat fieldwidths,mat fileiosubs$,supressprompt,ignoreerrors,callingprogram$,suppresslog)
 33016 fnend
 33020 def library fnMakeSurePathExists(Filename$*255; Path$*255) ! mkdir funciton from fileio.brs - except fileio version is not a library 2/7/2017
-33021   if ~setupRetain then let fn_setupRetain
 33022   library 'S:\Core\fnMakeSurePathExists.br':fnMakeSurePathExists
 33024   fnMakeSurePathExists=fnMakeSurePathExists(Filename$, Path$) 
 33026 fnend
 33032  def library fnBuildKey$*255(layout$*30,mat bkf$,mat bkf; keynum)
-33033   if ~setupRetain then let fn_setupRetain
 33034    library 'S:\Core\FileIO\fileio.br': fnBuildKey$
 33036    fnBuildKey$=fnBuildKey$(layout$,mat bkf$,mat bkf, keynum)
 33038  fnend
 33042  def library fnCloseFile(filenumber, filelay$*255; path$*255,out)
-33043   if ~setupRetain then let fn_setupRetain
 33044    library 'S:\Core\FileIO\fileio.br': fnCloseFile
 33046    fnCloseFile=fnCloseFile(filenumber,filelay$, path$,out)
 33048  fnend
-
 33052  def library fnClearLayoutCache
-33053   if ~setupRetain then let fn_setupRetain
 33054    library 'S:\Core\FileIO\fileio.br': fnClearLayoutCache
 33056    fnClearLayoutCache=fnClearLayoutCache
 33058  fnend
-
 36990 ! /r
 38000 def library Fn_Encodebase64(&Content$)
 38020   library 'S:\Core\base64_l.br': Fn_Encodebase64

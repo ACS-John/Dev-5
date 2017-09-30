@@ -5,12 +5,12 @@
 13000   win_height=20
 14000 ! r: read all the setting here (unless read and set on the fly)
 14010   fnreg_read('Enable Save Company As',enableSaveCompanyAs$, 'False')
-14012   fnreg_read('Enable Open Partial',enableOpenPartial$, 'False')
+14012   ! fnreg_read('Enable Open Partial',enableOpenPartial$, 'False')
 14014   fnreg_read('Enable Backup Report Cache',enableBackupReportCache$, 'False')
 14020   fnreg_read('Report_Cache',report_cache$, 'False')
 14030   fnreg_read('PrintAce.Max Pages',pa_max_pages$)
 14031   fnreg_read('formsFormat',formsFormat$, pdf_or_printace$(1))
-14032 ! fnureg_read('CS Client Report Cache',client_report_cache$) : if client_report_cache$='' then let client_report_cache$=report_cache$
+14032 ! fnureg_read('CS Client Report Cache',client_report_cache$) : if client_report_cache$='' then client_report_cache$=report_cache$
 14040   fnureg_read('Background_Picture',background_picture$,background_picture_default$)
 14042   fnureg_read('Min_FontSize_Height',min_fontsize_height$,default_min_fontsize_height$)
 14044   fnureg_read('Min_FontSize_Width',min_fontsize_width$,default_min_fontsize_width$)
@@ -21,10 +21,10 @@
 14080   fnureg_read('Text_Editor',text_editor$,fn_text_editor_default$)
 14120   background_picture$=os_filename$(background_picture$)
 14140   fnureg_read('Decimal',decimal_assumed$,'False')
-14160   fnureg_read('Disable_MultiSession',disable_multisession$) : if disable_multisession$<>'True' then let disable_multisession$='False'
-14180   fnureg_read('wait_wp_close',wait_wp_close$) : if wait_wp_close$<>'False' then let wait_wp_close$='True'
+14160   fnureg_read('Disable_MultiSession',disable_multisession$) : if disable_multisession$<>'True' then disable_multisession$='False'
+14180   fnureg_read('wait_wp_close',wait_wp_close$) : if wait_wp_close$<>'False' then wait_wp_close$='True'
 14200   save_path$=fn_save_as_path$
-14300   if save_path$(1:2)='@:' then let save_path$(1:2)=''
+14300   if save_path$(1:2)='@:' then save_path$(1:2)=''
 15000 ! 
 15020   dim receipt_printer$*256
 15040   fnureg_read('Printer.Receipt',receipt_printer$)
@@ -74,8 +74,8 @@
 32460     resp$(resp_enableSaveCompanyAs:=rc+=1)=enableSaveCompanyAs$
 32480     fnlbl(lc   ,col2_pos+3,'Saves Only the Current Company Number related files across all ACS systems')
 32500     fnlbl(lc+=1,col2_pos+3,'Does not save settings, reports.')
-32520     fnchk(lc+=1,col2_pos,'Enable Open Partial',1)
-32540     resp$(resp_enableOpenPartial:=rc+=1)=enableOpenPartial$
+32520     ! fnchk(lc+=1,col2_pos,'Enable Open Partial',1)
+32540     ! resp$(resp_enableOpenPartial:=rc+=1)=enableOpenPartial$
 32560     fnlbl(lc   ,col2_pos+3,'Extracts a single company for a single system from a Save')
 32580     fnlbl(lc+=1,col2_pos+3,'Does not restore report cache, global nor system settings.')
 32600     lc+=1
@@ -114,12 +114,12 @@
 33260     if ck=5 then 
 33280       goto XIT
 33300     else 
-33320       if text_editor$<>'' then let text_editor$=os_filename$(env$('at')&resp$(resp_text_editor))
+33320       if text_editor$<>'' then text_editor$=os_filename$(env$('at')&resp$(resp_text_editor))
 33340       decimal_assumed$=resp$(resp_decimal_assumed)
 33360       disable_multisession$=resp$(resp_disable_multisession)
 33380       save_path$=resp$(resp_save_path)
 33400       enableSaveCompanyAs$=resp$(resp_enableSaveCompanyAs)
-33420       enableOpenPartial$=resp$(resp_enableOpenPartial)
+33420       ! enableOpenPartial$=resp$(resp_enableOpenPartial)
 33440       enableBackupReportCache$=resp$(resp_enableBackupReportCache)
 33460     end if 
 33480 ! 
@@ -153,10 +153,10 @@
 38205     fnlbl(lc+=1,1,"Minimum Font Size:",col1_width,1)
 38207     fnlbl(lc,col2_pos+3,"x",1,2)
 38209     fntxt(lc,col2_pos,2,0,0,'30',0,'Height')
-38210     if min_fontsize_height$='' or trim$(min_fontsize_height$)='0' then let min_fontsize_height$=default_min_fontsize_height$
+38210     if min_fontsize_height$='' or trim$(min_fontsize_height$)='0' then min_fontsize_height$=default_min_fontsize_height$
 38211     resp$(resp_min_fontsize_height:=2)=min_fontsize_height$
 38213     fntxt(lc,col2_pos+5,2,0,0,'30',0,'Width')
-38214     if min_fontsize_width$='' or trim$(min_fontsize_width$)='0' then let min_fontsize_width$=default_min_fontsize_width$
+38214     if min_fontsize_width$='' or trim$(min_fontsize_width$)='0' then min_fontsize_width$=default_min_fontsize_width$
 38215     resp$(resp_min_fontsize_width:=3)=min_fontsize_width$
 38217     fnbutton(lc,col2_pos+9,'Default',12) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 38219 ! Min_FontSize 14x6
@@ -185,8 +185,8 @@
 40020       goto XIT
 40040     else 
 40060       background_picture$=resp$(resp_background_picture)
-40070       min_fontsize_height$=resp$(resp_min_fontsize_height) : if min_fontsize_height$='' then let min_fontsize_height$=default_min_fontsize_height$
-40072       min_fontsize_width$=resp$(resp_min_fontsize_width) : if min_fontsize_width$='' then let min_fontsize_width$=default_min_fontsize_width$
+40070       min_fontsize_height$=resp$(resp_min_fontsize_height) : if min_fontsize_height$='' then min_fontsize_height$=default_min_fontsize_height$
+40072       min_fontsize_width$=resp$(resp_min_fontsize_width) : if min_fontsize_width$='' then min_fontsize_width$=default_min_fontsize_width$
 40080       rc_color=rc_color_zero
 40100       fnureg_write('color.[screen].foreground',resp$(rc_color+=1))
 40120       fnureg_write('color.[screen].background',resp$(rc_color+=1))
@@ -221,9 +221,9 @@
 41020   lc+=1
 41040   fnlbl(lc+=1,1,attribute$&":",col1_width,1)
 41060   fntxt(lc,col2_pos,10,7,0,'',0,attribute$&' Foreground: Must be a valid hex color beginning with a #.  i.e. #000000 is black, #FFFFFF is white. Leave blank to restore default.')
-41080   fnureg_read('color.['&lwrc$(attribute$)&'].foreground',resp$(rc_color+=1)) : if resp$(rc_color)='' then let resp$(rc_color)=foreground_default$
+41080   fnureg_read('color.['&lwrc$(attribute$)&'].foreground',resp$(rc_color+=1)) : if resp$(rc_color)='' then resp$(rc_color)=foreground_default$
 41100   fntxt(lc,col3_pos,10,7,0,'',0,attribute$&' Background: Must be a valid hex color beginning with a #.  i.e. #000000 is black, #FFFFFF is white. Leave blank to restore default.')
-41120   fnureg_read('color.['&lwrc$(attribute$)&'].background',resp$(rc_color+=1)) : if resp$(rc_color)='' then let resp$(rc_color)=background_default$
+41120   fnureg_read('color.['&lwrc$(attribute$)&'].background',resp$(rc_color+=1)) : if resp$(rc_color)='' then resp$(rc_color)=background_default$
 41140 fnend 
 50000 DO_SCREEN_PRINTER: ! r:
 50020   do 
@@ -447,7 +447,7 @@
 64300 ! /r
 66000 def fn_save
 66010   fnreg_write('Enable Save Company As',enableSaveCompanyAs$)
-66012   fnreg_write('Enable Open Partial',enableOpenPartial$)
+66012   ! fnreg_write('Enable Open Partial',enableOpenPartial$)
 66014   fnreg_write('Enable Backup Report Cache',enableBackupReportCache$)
 66020   fnreg_write('Report_Cache',report_cache$)
 66040   fnreg_write('PrintAce.Max Pages',pa_max_pages$)
@@ -494,7 +494,7 @@
 68160     screen_ck_low=1001
 68180     screen_ck_high=1006
 68200   end if 
-68220   if screen=0 then let screen=screen_main
+68220   if screen=0 then screen=screen_main
 68240   nb_lc=0 : nb_pos=110 : nb_len=15
 68260   fnlbl(win_height,nb_len,'') ! forces all the windows for each screen to be at least the hight specified by win_height (set toward the top of this program)
 68280   fnbutton_or_disabled(screen<>screen_main,nb_lc+=1,nb_pos,'Main',1001, '',nb_len)
@@ -552,7 +552,7 @@
 78042   fnureg_read('Min_FontSize_Height',min_fontsize_height$)
 78044   fnureg_read('Min_FontSize_Width',min_fontsize_width$)
 78046   execute 'config Min_FontSize '&min_fontsize_height$&'x'&min_fontsize_width$ error ERR_MIN_FONTSIZE
-78060   if background_picture$='' or ~exists(background_picture$) then let background_picture$=background_picture_default$
+78060   if background_picture$='' or ~exists(background_picture$) then background_picture$=background_picture_default$
 78080   setenv('background_picture',background_picture$)
 78100   fn_set_color('[screen]','#000000','#E7EDF5')
 78120   fn_set_color('[screenheader]','#000000','#FFFFFF')
@@ -569,8 +569,8 @@
 78280   execute 'config Min_FontSize '&default_min_fontsize_height$&'x'&default_min_fontsize_width$ ! pr 'ERR_MIN_FONTSIZE' : pause
 78290 continue ! /r
 78320 def fn_set_color(attribute$,foreground_default$,background_default$)
-78340   fnureg_read('color.'&attribute$&'.foreground',foreground$) : if foreground$='' then let foreground$=foreground_default$
-78360   fnureg_read('color.'&attribute$&'.background',background$) : if background$='' then let background$=background_default$
+78340   fnureg_read('color.'&attribute$&'.foreground',foreground$) : if foreground$='' then foreground$=foreground_default$
+78360   fnureg_read('color.'&attribute$&'.background',background$) : if background$='' then background$=background_default$
 78380   execute 'Config Attribute '&attribute$&' /'&foreground$&':'&background$ error ignore ! pr 'config attribute '&attribute$&' /'&foreground$&':'&background$ : pause
 78400 fnend 
 80000 def library fntext_editor(te_text_file$*256; te_options$)
@@ -640,7 +640,7 @@
 86420     atl_check_path$(3)="C:\Program Files (x86)\Atlantis\awp.exe"
 86440     atl_check_path$(4)="C:\Program Files\Atlantis\awp.exe"
 86460     atl_check_path$(5)=env$('local_program_dir')&('\Core\Atlantis Nova\Atlantis.exe')
-86480     if atl_check_path$(5)(1:2)='@:' then let atl_check_path$(5)(1:2)=''
+86480     if atl_check_path$(5)(1:2)='@:' then atl_check_path$(5)(1:2)=''
 86500     atl_which=fn_first_exists_in_list(mat atl_check_path$)
 86520     if atl_which>0 then 
 86540       atlantis_exe$=atl_check_path$(atl_which)
@@ -666,7 +666,7 @@
 88100     feil_item+=1
 88120     dim feil_tmp_test$*1024
 88140     feil_tmp_test$=feil_list$(feil_item)
-88160     if feil_tmp_test$(1:2)<>'@:' then let feil_tmp_test$(0:0)='@:'
+88160     if feil_tmp_test$(1:2)<>'@:' then feil_tmp_test$(0:0)='@:'
 88180     if exists(feil_tmp_test$) then 
 88200       feil_return=feil_item
 88220     end if 
@@ -694,7 +694,7 @@
 94000 def fn_save_as_path$*256
 94020   dim sap_return$*256
 94040   fnureg_read('Save As Path',sap_return$)
-94060   if sap_return$(1:2)='@:' then let sap_return$(1:2)=''
+94060   if sap_return$(1:2)='@:' then sap_return$(1:2)=''
 94080   if sap_return$='' or ~exists(env$('at')&br_filename$(sap_return$)) then 
 94100     sap_return$=os_filename$(env$('userprofile')&'\Desktop')
 94120   end if 
