@@ -54,7 +54,7 @@
 24660   close #h_tmp: 
 24680   execute 'sy '&env$('client_temp')&'\open_as_'&session$&'.cmd'
 24700   ! /r
-24720   if fn_analyze_7zip_compresslog(env$('client_temp')&'\Open_Log.txt','Successfully Opened',file_open$) then 
+24720   if fn_analyze_7zip_compresslog(env$('client_temp')&'\Open_Log.txt','Successfully Opened',file_open$,1) then 
 24740     let fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
 24760     let fnreg_write('Last Open File',file_open$(pos(file_open$,'\',-1)+1:len(file_open$)))
 24780     let fnreg_write('Last Open Path',file_open$(1:pos(file_open$,'\',-1)))
