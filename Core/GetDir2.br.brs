@@ -80,15 +80,15 @@
 13560       fileList$=env$('temp')&'\GetDir'&session$&'.tmp'
 13580     else
 13600       serverOrClient$=' -@' ! client
-13620       fileList$=env$('at')&env$('client_temp')&'\GetDir'&session$&'.tmp'
+13620       fileList$=env$('client_temp')&'\GetDir'&session$&'.tmp'
 13640     end if
 14000 ! r: create temp text file by redirecting a shell called DIR command to it
-14020     fnFree(fileList$)
+14020     fnFree(env$('at')&fileList$)
 14140     tmp$='Sy'&serverOrClient$&' -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&fileList$&'"'
 14160     execute tmp$ ioerr XIT
 14180 ! /r
 16000 ! r: read the temp file into the dynamic-ly sizing array mat filename$
-16040     open #tf1:=fngethandle: "Name="&fileList$,display,input
+16040     open #tf1:=fngethandle: "Name="&env$('at')&fileList$,display,input
 16140     filename_count=line_count=0
 18000     do 
 18020       linput #tf1: tmp$ eof EO_TF1
