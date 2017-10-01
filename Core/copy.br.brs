@@ -44,7 +44,7 @@
 58200       ! pause
 58220       ! execute 'copy "'&toPath$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
 58240       dim copyFolder$(0)*256
-58260       gd2_return=fngetdir2(fromPath$,mat copyFolder$,'/s /d')
+58260       gd2_return=fngetdir2(fromPath$,mat copyFolder$,'/s /b /ad')
             
 58280       pr 'gd2_return=';gd2_return : pause
 58300       for cfi=1 to udim(mat copyFolder$)
