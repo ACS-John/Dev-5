@@ -15,6 +15,8 @@
 52120   to$=trim$(to$,'"')
 52140   options$=rtrm$(options$)&' ' 
 52160   copyRecursive=0
+52170    if from$(1:2)='@:' then let fromAt$='@:' else fromAt$=''
+52172    if to$(1:2)='@:' then let toAt$='@:' else toAt$=''
 52180   if pos(lwrc$(options$),'recursive ') then copyRecursive=1
 52200   fnMakeSurePathExists(to$)
 54000   ! if new_record_length and as_admin then 
@@ -44,14 +46,14 @@
 58220       ! execute 'copy "'&toPath$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
 58240       dim copyFromFolder$(0)*256
 58260       gd2_return=fngetdir2(fromPath$,mat copyFromFolder$,'/s /b /ad')
-58280       ! 
 58300       ! 
 58320       ! pr 'gd2_return=';gd2_return : pause
 58340       for cfi=1 to udim(mat copyFromFolder$)
 58360         dim copyToFolder$*256
-58380         copyToFolder$=toPath$&copyFromFolder$(cfi)(len(toPath$):inf)
+58380         copyToFolder$=toPath$&(copyFromFolder$(cfi)(len(srep$(fromPath$,fromAt$,''))+1:inf))
 58400         fnmakesurepathexists(copyToFolder$)
-58420         exec 'Sy copy "'&fromFile$&fromExt$&'" "'&toPath$&'*.*"' 
+58420         execute 'copy "'&fromat$&copyfromfolder$(cfi)&'\'&fromfile$&fromext$&'" "'&toat$&copyToFolder$&'\*.*"'
+
 58440         if int(cfi/10)=cfi/10 then pause
 58460       nex cfi
 58480         pause
