@@ -41,13 +41,14 @@
 58140       pr 'fromExt$=';fromExt$
 58160       pr 'toFile$=';toFile$
 58180       pr 'toExt$=';toExt$
-58200       pause
+58200       ! pause
 58220       ! execute 'copy "'&toPath$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
 58240       dim copyFolder$(0)*256
-58260       gd2_return=fngetdir2(from$,mat copyFolder$,'/s /d')
+58260       gd2_return=fngetdir2(fromPath$,mat copyFolder$,'/s /d')
+            
 58280       pr 'gd2_return=';gd2_return : pause
 58300       for cfi=1 to udim(mat copyFolder$)
-58320         pr 'fnCopyAllMatchingFilesInFolderIn(',toFile$,toExt$ : pause
+58320         pause ! exec 'Sy copy "'fromFile$&fromExt$&'" "'&toFile$&toExt$&'"' : pause
 58340       nex cfi
 58360     else
 58380       if new_record_length then 
@@ -161,3 +162,4 @@
 84040   to$=trim$(to$,'"')
 84060   execute 'Rename "'&from$&'" "'&to$&'"'
 84080 fnend
+
