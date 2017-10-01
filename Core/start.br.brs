@@ -88,9 +88,9 @@
 11260     if ~fn_rights_test(env$('temp'),'Correct your Temp environment varialbe.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
 11280     fn_spoolPath$(1)
 12000     if env$('BR_MODEL')='CLIENT/SERVER' then
-12010     setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico")
+12010       ! setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico")
 12020     else
-12030     setenv("Icon","S:\Core\Icon\ACS-v5-32x32-32bit.ico")
+12030       setenv("Icon","S:\Core\Icon\ACS-v5-32x32-32bit.ico")
 12040     end if
 12050     fnMakeSurepathExists(env$('Q')&"\Data\")
 12060     ! fnMakeSurepathExists(env$('Q')&"\INI\")
