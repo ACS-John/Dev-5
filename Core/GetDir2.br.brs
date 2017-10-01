@@ -88,8 +88,7 @@
 14160     execute tmp$ ioerr XIT
 14180 ! /r
 16000 ! r: read the temp file into the dynamic-ly sizing array mat filename$
-
-
+16020     open #tf1:=fngethandle: "Name="&env$('at')&fileList$,display,input  ioerr EO_TF1
 16140     filename_count=line_count=0
 18000     do 
 18020       linput #tf1: tmp$ eof EO_TF1
