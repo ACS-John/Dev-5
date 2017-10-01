@@ -64,9 +64,9 @@
 25060         for company=1 to udim(mat archiveCNo)
 25080         nex company
 25100       end if
-25120       ! pr 'before call to fnCopy' : pause
+25120       fnStatus('Copying Files in...')
 25140       fnCopy(env$('at')&env$('client_temp')&'\acs\OpenPartial\*.*',env$('q')&'\*.*',0,'recursive')
-25160       pause : opScreenReturn=1 
+25160       opScreenReturn=1 
 25180       setenv('force_reindex','yes') 
 25200     end if
 25220     fncheckfileversion
