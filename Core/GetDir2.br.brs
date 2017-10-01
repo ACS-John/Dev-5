@@ -52,7 +52,7 @@
 08280 ! /r
 09000   def library fngetdir2(dir$*256,mat filename$; option$,filter$*40,mat gd2_date$,mat gd2_time$,gd2_full_path,mat gd2_size)
 09020 ! r: library, on error, constants, initialize variables
-09040     library 'S:\Core\Library': fngethandle,fnerror
+09040     library 'S:\Core\Library': fngethandle,fnerror,fnFree
 10060     on error goto ERTN
 10220     dim tmp$*512,directory_of$*256
 10230     if pos(lwrc$(option$),'/s')>0 then gd2_full_path=1
@@ -74,18 +74,21 @@
 13120     if udim(mat gd2_time$)>0 then gd2_time_requested=1 else gd2_time_requested=0
 13130     if udim(mat gd2_size)>0 then gd2_size_requested=1 else gd2_size_requested=0
 13140 ! /r
+13500     dim fileList$*256
+13520     if lwrc$(dir$(1:2))=lwrc$('s:') or lwrc$(dir$(1:len(env$('Q'))))=lwrc$(env$('Q')) then
+13540       serverOrClient$=' -s' ! server
+13560       fileList$=env$('temp')&'\GetDir'&session$&'.tmp'
+13580     else
+13600       serverOrClient$=' -@' ! client
+13620       fileList$=env$('at')&env$('client_temp')&'\GetDir'&session$&'.tmp'
+13640     end if
 14000 ! r: create temp text file by redirecting a shell called DIR command to it
-14020     execute 'free "'&env$('at')&env$('client_temp')&'\GetDir'&session$&'.tmp" -n' ioerr ignore
-14040     if lwrc$(dir$(1:2))=lwrc$('s:') or lwrc$(dir$(1:len(env$('Q'))))=lwrc$(env$('Q')) then
-14060       serverOrClient$=' -s' ! server
-14080     else
-14100       serverOrClient$=' -@' ! client
-14120     end if
-14140     tmp$='Sy'&serverOrClient$&' -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&env$('client_temp')&'\GetDir'&session$&'.tmp"'
+14020     fnFree(fileList$)
+14140     tmp$='Sy'&serverOrClient$&' -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&fileList$&'"'
 14160     execute tmp$ ioerr XIT
 14180 ! /r
 16000 ! r: read the temp file into the dynamic-ly sizing array mat filename$
-16040     open #tf1:=fngethandle: "Name="&env$('at')&env$('client_temp')&"\GetDir"&session$&".tmp",display,input
+16040     open #tf1:=fngethandle: "Name="&fileList$,display,input
 16140     filename_count=line_count=0
 18000     do 
 18020       linput #tf1: tmp$ eof EO_TF1
@@ -148,9 +151,14 @@
 32120 !   mat filename$(filename_count)
 32140 ! end if
 40000 XIT: ! 
-40020     close #tf1,free: ioerr ignore
-40060     fngetdir2=gd2_return
-40080   fnend 
+40020     if env$('acsDebug')='Yes' then
+40040       close #tf1: ioerr ignore
+40060     else
+40080       close #tf1,free: ioerr ignore
+40100     end if
+40120      
+40140     fngetdir2=gd2_return
+40160   fnend 
 60000 IGNORE: continue 
 60020 ! <Updateable Region: ERTN>
 60040 ERTN: fnerror(program$,err,line,act$,"xit")
