@@ -76,19 +76,23 @@
 13140 ! /r
 13500     dim fileList$*256
 13520     if lwrc$(dir$(1:2))=lwrc$('s:') or lwrc$(dir$(1:len(env$('Q'))))=lwrc$(env$('Q')) then
-13540       serverOrClient$=' -s' ! server
+13530       clientOrServer$='Server' ! server
+13532       csat$=''
+13540       csExeOption$=' -s' ! server
 13560       fileList$=env$('temp')&'\GetDir'&session$&'.tmp'
 13580     else
-13600       serverOrClient$=' -@' ! client
+13590       clientOrServer$='Client' ! server
+13592       csat$=env$('at')
+13600       csExeOption$=' -@' ! client
 13620       fileList$=env$('client_temp')&'\GetDir'&session$&'.tmp'
 13640     end if
 14000 ! r: create temp text file by redirecting a shell called DIR command to it
-14020     fnFree(env$('at')&fileList$)
-14140     tmp$='Sy'&serverOrClient$&' -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&fileList$&'"'
+14020     fnFree(csat$&fileList$)
+14140     tmp$='Sy'&csExeOption$&' -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&fileList$&'"'
 14160     execute tmp$ ioerr XIT
 14180 ! /r
 16000 ! r: read the temp file into the dynamic-ly sizing array mat filename$
-16020     open #tf1:=fngethandle: "Name="&env$('at')&fileList$,display,input  ioerr EO_TF1
+16020     open #tf1:=fngethandle: "Name="&csat$&fileList$,display,input  ioerr EO_TF1
 16140     filename_count=line_count=0
 18000     do 
 18020       linput #tf1: tmp$ eof EO_TF1
