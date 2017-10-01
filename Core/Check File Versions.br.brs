@@ -1,8 +1,8 @@
-02080 let fn_setup
+02080 fn_setup
 02100 library program$: fncheckfileversion
 02120 fntop(program$)
-02160 let fncheckfileversion
-06000 XIT: let fnxit
+02160 fncheckfileversion
+06000 XIT: fnxit
 06220 IGNORE: continue 
 08000 def fn_setup
 08020   if ~setup then 
@@ -40,83 +40,83 @@
 10420   dim tmpfile$*512,tmpkps(10),tmpkln(10),name$*512,kfname$*512
 10430   dim kfnames$(1)*512
 10440   ! ____________
-10480   let fnstatus('Running fnCheckFileVersion for '&env$('cursys')&' and Company Number '&env$('cno')) ! XXX
-10490   let fn_cfv_add_missing_files
+10480   fnstatus('Running fnCheckFileVersion for '&env$('cursys')&' and Company Number '&env$('cno')) ! XXX
+10490   fn_cfv_add_missing_files
 10500   ! 
 10520   if env$('cursys')='GL' then 
-10540     let fn_cfv_general_ledger
+10540     fn_cfv_general_ledger
 10600   else if env$('cursys')='PR' then 
-10620     let fn_cfv_payroll
+10620     fn_cfv_payroll
 10640     if fnclient_has('P2') then 
-10660       let fn_cfv_job_cost_payroll
+10660       fn_cfv_job_cost_payroll
 10680     end if 
 10740   else if env$('cursys')='UB' then 
-10760     let fn_cfv_utility_billing
+10760     fn_cfv_utility_billing
 10820   else if env$('cursys')='CL' then 
-10840     let fn_cfv_checkbook
+10840     fn_cfv_checkbook
 10850   else if env$('cursys')='TM' then 
-10852     let fn_cfv_time_management
+10852     fn_cfv_time_management
 10860   end if 
-10880   let fnstatus('CheckFileVersion Completed')
+10880   fnstatus('CheckFileVersion Completed')
 19990 fnend 
 24000 def fn_cfv_add_missing_files
 24020   dim camf_filename$(0)*256
 24040   dim camf_path$*256,camf_prog$*256,camf_ext$*128
-24060   let fngetdir2('S:\'&fnSystemName$&'\mstr\',mat camf_filename$, '','*.h99999')
+24060   fngetdir2('S:\'&fnSystemName$&'\mstr\',mat camf_filename$, '','*.h99999')
 24080   for camf_item=1 to udim(mat camf_filename$)
-24100     let fngetpp(camf_filename$(camf_item),camf_path$,camf_prog$,camf_ext$)
+24100     fngetpp(camf_filename$(camf_item),camf_path$,camf_prog$,camf_ext$)
 24102     ! if lwrc$(camf_filename$(camf_item))='department' then pause
 24120     if ~exists(env$('Q')&'\'&env$('cursys')&'mstr\'&camf_prog$&'.h'&env$('cno')) then 
-24140       let fnCopy('S:\'&fnSystemName$&'\mstr\'&camf_filename$(camf_item),env$('Q')&'\'&env$('cursys')&'mstr\'&camf_prog$&'.h'&env$('cno'))
+24140       fnCopy('S:\'&fnSystemName$&'\mstr\'&camf_filename$(camf_item),env$('Q')&'\'&env$('cursys')&'mstr\'&camf_prog$&'.h'&env$('cno'))
 24160     end if 
 24180   next camf_item
 24200 fnend 
 26000 def fn_file_setup_data(fsad_name$*512,fsad_recl,fsad_version_proper)
 26020   dim g_fs_name$*512
-26040   let g_fs_name$=fsad_name$
-26060   let fn_make_data_file_exist(g_fs_name$,fsad_recl,fsad_version_proper)
-26070   let fn_min_rln(fsad_name$,fsad_recl)
+26040   g_fs_name$=fsad_name$
+26060   fn_make_data_file_exist(g_fs_name$,fsad_recl,fsad_version_proper)
+26070   fn_min_rln(fsad_name$,fsad_recl)
 26080 fnend 
 28000 def fn_file_setup_index(fsi_kfname$*512,fsi_kps$,fsi_kln$)
 28020   dim g_fs_kfname$*512
-28040   let g_fs_kfname$=fsi_kfname$
+28040   g_fs_kfname$=fsi_kfname$
 28160   if ~exists(fsi_kfname$) or lwrc$(env$('force_reindex'))='yes' or ~fn_check_indexes(g_fs_name$,fsi_kfname$,fsi_kps$,fsi_kln$) then 
-28180     let fnindex_it(g_fs_name$,fsi_kfname$,fsi_kps$&' '&fsi_kln$)
+28180     fnindex_it(g_fs_name$,fsi_kfname$,fsi_kps$&' '&fsi_kln$)
 28200   end if 
 28220 fnend 
 30000 def fn_make_data_file_exist(name$*512,myrln,version_proper)
 30040   if exists(name$)=0 then 
-30050     let fnstatus('Creating new file: Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(version_proper))
+30050     fnstatus('Creating new file: Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(version_proper))
 30060     open #tmp:=fngethandle: 'Name='&name$&',Shr,Use,RecL='&str$(myrln)&',Version='&str$(version_proper),internal,outin 
 30080     close #tmp: 
 30100   end if 
 30120   ! 
 30140 fnend 
 31000 def fn_check_indexes(name$*512,mat kfnames$,mat kps$,mat kln$)
-31020   let ci_return=1 ! function should return 1 if all indexes tested are fine or 0 if any tested fail
+31020   ci_return=1 ! function should return 1 if all indexes tested are fine or 0 if any tested fail
 31040   for ci_item=1 to udim(mat kfnames$)
-31060     let str2mat(kps$(ci_item),mat ci_kps$,'/')
-31080     let str2mat(kln$(ci_item),mat ci_kln$,'/')
+31060     str2mat(kps$(ci_item),mat ci_kps$,'/')
+31080     str2mat(kln$(ci_item),mat ci_kln$,'/')
 31090     CI_OPEN_IT: ! 
 31100     open #h_ci_tmp:=fngethandle: 'name='&name$&',KFName='&kfnames$(ci_item),internal,input,keyed ioerr CI_OPEN_ERR
 31120     ! 
 31140     for x=1 to udim(mat ci_kps$)
 31160       if kps(h_ci_tmp,x)<>val(ci_kps$(x)) then 
-31180         let fnstatus('Key Position mismatch!') ! should these use fnstatus ??
-31200         let fnstatus(' Data File: '&name$)
-31220         let fnstatus('Index File: '&kfnames$(ci_item))
-31240         let fnstatus('Key Part: '&str$(x))
-31260         let fnstatus('Key Position should be '&ci_kps$(x)&' but it is '&str$(kps(h_ci_tmp,x)))
-31280         let ci_return=0
+31180         fnstatus('Key Position mismatch!') ! should these use fnstatus ??
+31200         fnstatus(' Data File: '&name$)
+31220         fnstatus('Index File: '&kfnames$(ci_item))
+31240         fnstatus('Key Part: '&str$(x))
+31260         fnstatus('Key Position should be '&ci_kps$(x)&' but it is '&str$(kps(h_ci_tmp,x)))
+31280         ci_return=0
 31300       end if 
 31320       ! 
 31340       if kln(h_ci_tmp,x)<>val(ci_kln$(x)) then 
-31360         let fnstatus('Key Length mismatch!')
-31380         let fnstatus(' Data File: '&name$)
-31400         let fnstatus('Index File: '&kfnames$(ci_item))
-31420         let fnstatus('Key Part: '&str$(x))
-31440         let fnstatus('Key Length should be '&ci_kln$(x)&' but it is '&str$(kln(h_ci_tmp,x)))
-31460         let ci_return=0
+31360         fnstatus('Key Length mismatch!')
+31380         fnstatus(' Data File: '&name$)
+31400         fnstatus('Index File: '&kfnames$(ci_item))
+31420         fnstatus('Key Part: '&str$(x))
+31440         fnstatus('Key Length should be '&ci_kln$(x)&' but it is '&str$(kln(h_ci_tmp,x)))
+31460         ci_return=0
 31480       end if 
 31500       ! 
 31520     next x
@@ -124,19 +124,19 @@
 31560   next ci_item
 31580   goto CI_XIT
 31600   CI_OPEN_ERR: ! 
-31620   let fnstatus('error '&str$(err)&' opening Name='&name$&',KFName='&kfnames$(ci_item))
+31620   fnstatus('error '&str$(err)&' opening Name='&name$&',KFName='&kfnames$(ci_item))
 31640   if err=607 or err=632 then 
-31660     let fnstatus('indexing to fix it')
-31680     let fnindex_it(g_fs_name$,fsi_kfname$,fsi_kps$&' '&fsi_kln$)
+31660     fnstatus('indexing to fix it')
+31680     fnindex_it(g_fs_name$,fsi_kfname$,fsi_kps$&' '&fsi_kln$)
 31690     goto CI_OPEN_IT
 31700   else 
-31720     let fnstatus('error unhandled')
+31720     fnstatus('error unhandled')
 31740   end if 
 31760   CI_XIT: ! 
-31780   let fn_check_indexes=ci_return
+31780   fn_check_indexes=ci_return
 31800 fnend 
 32000 ! <Updateable Region: ERTN>
-32020 ERTN: let fnerror(program$,err,line,act$,"NO")
+32020 ERTN: fnerror(program$,err,line,act$,"NO")
 32040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 32060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 32080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
@@ -144,7 +144,7 @@
 32120 ! /region
 33000 def fn_min_rln(mr_filename$*512,mr_rln_minimum)
 33020   open #h_mr_file:=fngethandle: "Name="&mr_filename$&",Shr",internal,input 
-33040   let mr_rln_current=rln(h_mr_file)
+33040   mr_rln_current=rln(h_mr_file)
 33060   close #h_mr_file: 
 33080   if mr_rln_current<mr_rln_minimum then 
 33100     fnCopy(mr_filename$,mr_filename$,mr_rln_minimum)
@@ -152,24 +152,24 @@
 33160   end if  ! 
 33180 fnend  ! fn_min_rln
 34000 def fn_check_version(cv_version_current,cv_version_proper,cv_file$*256)
-34020   let cv_return=1 ! function should return 1 if version tested matches or 0 if versions are different
+34020   cv_return=1 ! function should return 1 if version tested matches or 0 if versions are different
 34040   if cv_version_current<>cv_version_proper then 
-34060     let fnstatus('Version Error of file:'&cv_file$ )
-34080     let fnstatus('     Version Current: '&str$(cv_version_current))
-34100     let fnstatus('     Version  Proper: '&str$(cv_version_proper))
-34120     let cv_return=0
+34060     fnstatus('Version Error of file:'&cv_file$ )
+34080     fnstatus('     Version Current: '&str$(cv_version_current))
+34100     fnstatus('     Version  Proper: '&str$(cv_version_proper))
+34120     cv_return=0
 34140   end if 
-34160   let fn_check_version=cv_return
+34160   fn_check_version=cv_return
 34180 fnend 
 35000 def fn_get_tmp(h_tmp,mat tmpkps,mat tmpkln,&tmpversion,&tmprln,&tmpfile$)
 35020   mat tmpkps=(0)
 35040   mat tmpkln=(0)
-35060   let tmpversion=version(tmp)
-35080   let tmprln=rln(tmp)
-35100   let tmpfile$=file$(tmp)
+35060   tmpversion=version(tmp)
+35080   tmprln=rln(tmp)
+35100   tmpfile$=file$(tmp)
 35120   for j=1 to udim(tmpkps)
-35140     let tmpkps(j)=kps(tmp,j)
-35160     let tmpkln(j)=kln(tmp,j)
+35140     tmpkps(j)=kps(tmp,j)
+35160     tmpkln(j)=kln(tmp,j)
 35180   next j
 35200   close #h_tmp: 
 35220 fnend 
@@ -201,44 +201,44 @@
 43210   ! do company different
 43220   ! - don't make it exist,
 43230   ! - and skip out if it don't exist
-43240   let name$=env$('Q')&"\UBmstr\Company.h"&env$('cno')
-43250   let kfname$=''
-43260   let myrln=133
-43270   let version_proper=0
+43240   name$=env$('Q')&"\UBmstr\Company.h"&env$('cno')
+43250   kfname$=''
+43260   myrln=133
+43270   version_proper=0
 43280   open #tmp:=fngethandle: 'Name='&name$&',Shr',internal,outin,relative ioerr SKIP_UB_COMPANY
-43290   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-43300   let fn_check_version(tmpversion,version_proper,tmpfile$)
+43290   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+43300   fn_check_version(tmpversion,version_proper,tmpfile$)
 43310   if tmprln<>myrln then 
-43320     let fnstatus('Record Length Error in File: '&tmpfile$)
-43330     let fnstatus('         RLn: '&str$(tmprln))
-43340     let fnstatus('Fixing the Record Length of Company')
-43350     let fnCopy(env$('Q')&"\UBmstr\Company.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'),133)
+43320     fnstatus('Record Length Error in File: '&tmpfile$)
+43330     fnstatus('         RLn: '&str$(tmprln))
+43340     fnstatus('Fixing the Record Length of Company')
+43350     fnCopy(env$('Q')&"\UBmstr\Company.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'),133)
 43360   end if 
 43370   SKIP_UB_COMPANY: ! 
 43380   ! 
-43390   let fn_file_setup_data(env$('Q')&"\UBmstr\Customer.h"&env$('cno'),2067,1)
-43400   let fn_file_setup_index(env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),"1","10")
-43410   let fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno'),"354","7")
-43420   let fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno'),"11","25")
-43430   let fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno'),"41","30")
-43440   let fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno'),"1741/1743","2/7")
+43390   fn_file_setup_data(env$('Q')&"\UBmstr\Customer.h"&env$('cno'),2067,1)
+43400   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),"1","10")
+43410   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno'),"354","7")
+43420   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno'),"11","25")
+43430   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno'),"41","30")
+43440   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno'),"1741/1743","2/7")
 43450   ! 
-43460   let fn_file_setup_data(env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno'),130,0)
-43470   let fn_file_setup_index(env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno'),'1','10')
+43460   fn_file_setup_data(env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno'),130,0)
+43470   fn_file_setup_index(env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno'),'1','10')
 43480   ! 
-43490   !     let fn_file_setup_data(env$('Q')&"\UBmstr\Deposit1.h"&env$('cno'),16,0)
-43500   !     let fn_file_setup_index(env$('Q')&"\UBmstr\DepIdx1.h"&env$('cno'),'1','10')
-43510   let fn_file_setup_data(env$('Q')&"\UBmstr\Deposit2.h"&env$('cno'),73,0)
-43520   let fn_file_setup_index(env$('Q')&"\UBmstr\Deposit2Index.h"&env$('cno'),'1','10')
+43490   !     fn_file_setup_data(env$('Q')&"\UBmstr\Deposit1.h"&env$('cno'),16,0)
+43500   !     fn_file_setup_index(env$('Q')&"\UBmstr\DepIdx1.h"&env$('cno'),'1','10')
+43510   fn_file_setup_data(env$('Q')&"\UBmstr\Deposit2.h"&env$('cno'),73,0)
+43520   fn_file_setup_index(env$('Q')&"\UBmstr\Deposit2Index.h"&env$('cno'),'1','10')
 43530   ! 
-43540   let fn_file_setup_data(env$('Q')&"\UBmstr\workOrder.h"&env$('cno'),600,0)
-43550   let fn_file_setup_index(env$('Q')&"\UBmstr\wkIndex.h"&env$('cno'),'1/11','10/8')
+43540   fn_file_setup_data(env$('Q')&"\UBmstr\workOrder.h"&env$('cno'),600,0)
+43550   fn_file_setup_index(env$('Q')&"\UBmstr\wkIndex.h"&env$('cno'),'1/11','10/8')
 43560   ! 
-43570   let fn_file_setup_data(env$('Q')&"\UBmstr\MeterType.h"&env$('cno'),128,1)
-43580   let fn_file_setup_index(env$('Q')&"\UBmstr\MeterTypeIdx.h"&env$('cno'),'1','5')
+43570   fn_file_setup_data(env$('Q')&"\UBmstr\MeterType.h"&env$('cno'),128,1)
+43580   fn_file_setup_index(env$('Q')&"\UBmstr\MeterTypeIdx.h"&env$('cno'),'1','5')
 43590   ! 
-43600   let fn_file_setup_data(env$('Q')&"\UBmstr\Meter.h"&env$('cno'),384,1)
-43610   let fn_file_setup_index(env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno'),'1/11','10/2')
+43600   fn_file_setup_data(env$('Q')&"\UBmstr\Meter.h"&env$('cno'),384,1)
+43610   fn_file_setup_index(env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno'),'1/11','10/2')
 43620   ! 
 43630   if exists(env$('Q')&'\UBmstr\CityStZip.dat') then
 43640     fnstatus('Migrating UB City State Zip records into Core City State Zip table...')
@@ -290,9 +290,9 @@
 44100     fnFree(env$('Q')&'\UBmstr\per1000.h'&env$('cno'))
 44110   end if
 44120   ! 
-44130   let fn_file_setup_data(env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno'),374,0)
-44140   let fn_file_setup_index(env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno'),'1','4')
-44150   let fn_file_setup_index(env$('Q')&"\UBmstr\ubData\RateIdx2.h"&env$('cno'),'5','25')
+44130   fn_file_setup_data(env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno'),374,0)
+44140   fn_file_setup_index(env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno'),'1','4')
+44150   fn_file_setup_index(env$('Q')&"\UBmstr\ubData\RateIdx2.h"&env$('cno'),'5','25')
 44160   ! 
 44170 fnend 
 52000 def fn_cfv_checkbook
@@ -310,41 +310,41 @@
 52096   ! end if
 52098   !
 52100   CL_TRMSTR1: ! Primary Non-Split Index
-52120   let fn_file_setup_data(env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'),78,2)
-52140   let fn_file_setup_index(env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno'),'1','11')
+52120   fn_file_setup_data(env$('Q')&"\CLmstr\TrMstr.h"&env$('cno'),78,2)
+52140   fn_file_setup_index(env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno'),'1','11')
 52180   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outin,keyed 
-52200   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+52200   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 52220   if ~fn_check_version(tmpversion,version_proper:=2,g_fs_name$) then 
 52240     if tmpversion=0 or tmpversion=-1 then 
-52260       let fntrmstr_v0_to_v1
+52260       fntrmstr_v0_to_v1
 52280       goto CL_TRMSTR1
 52300     end if 
 52320     if tmpversion=1 then 
-52340       let fntrmstr_v1_to_v2
+52340       fntrmstr_v1_to_v2
 52360       goto CL_TRMSTR1
 52380     end if 
 52400   end if 
 52420   ! CL_TRMSTR2: ! Secondary Split Index
-52440   let fn_file_setup_index(env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno'),'28/1','8/11')
+52440   fn_file_setup_index(env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno'),'28/1','8/11')
 52460   ! CL_TRMSTR3: ! Secondary 3-Split Index
-52480   let fn_file_setup_index(env$('Q')&"\CLmstr\TrIdx3.h"&env$('cno'),'16/12/4','2/4/8')
+52480   fn_file_setup_index(env$('Q')&"\CLmstr\TrIdx3.h"&env$('cno'),'16/12/4','2/4/8')
 52500   ! 
 53880   CL_TRALLOC: ! 1 file and 1 key
 53900   ! (index file did not exists in previous versions,
 53920   ! so it'll build it if need be here, before it opens it)
-53940   let name$=env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')
-53960   let kfname$=env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')
-53980   let myrln=80
-54000   let version_proper=2
-54020   let fn_make_data_file_exist(name$,myrln,version_proper)
+53940   name$=env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')
+53960   kfname$=env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')
+53980   myrln=80
+54000   version_proper=2
+54020   fn_make_data_file_exist(name$,myrln,version_proper)
 54040   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-54060     let fnindex_it(name$,kfname$,'1 11')
+54060     fnindex_it(name$,kfname$,'1 11')
 54080   end if 
 54100   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
-54120   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-54140   let fn_check_version(tmpversion,version_proper,tmpfile$)
+54120   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+54140   fn_check_version(tmpversion,version_proper,tmpfile$)
 54160   if tmpversion=1 or tmpversion=0 or tmpversion=-1 then 
-54180     let fntralloc_v1_to_v2
+54180     fntralloc_v1_to_v2
 54200     goto CL_TRALLOC
 54220   end if 
 54240   if tmprln<>myrln then 
@@ -364,68 +364,68 @@
 54520   ! it is important that if conversion from version 1 to 2 occur on this
 54540   ! that this file process before PayTrans - the file it is linked to
 54560   ! So that record sequence is maintained.
-54580   let name$=env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')
-54600   let kfname$=env$('Q')&"\CLmstr\UAIdx1.h"&env$('cno')
-54620   let myrln=67
-54640   let version_proper=2
-54660   let fn_make_data_file_exist(name$,myrln,version_proper)
+54580   name$=env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')
+54600   kfname$=env$('Q')&"\CLmstr\UAIdx1.h"&env$('cno')
+54620   myrln=67
+54640   version_proper=2
+54660   fn_make_data_file_exist(name$,myrln,version_proper)
 54680   L1840: ! 
 54700   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-54720     let fnindex_it(name$,kfname$,'9 12')
+54720     fnindex_it(name$,kfname$,'9 12')
 54740   end if 
 54760   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
-54780   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-54800   let fn_check_version(tmpversion,version_proper,tmpfile$)
+54780   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+54800   fn_check_version(tmpversion,version_proper,tmpfile$)
 54820   if tmpversion=1 or tmpversion=0 or tmpversion=-1 then 
-54840     let fnunpdaloc_v1_to_v2
+54840     fnunpdaloc_v1_to_v2
 54860     goto CL_UNPDALOC1
 54880   end if 
 54900   if tmprln<>myrln then 
 54920     print 'Record Length Error in File: '&tmpfile$
 54940     print '         RLn: '&str$(tmprln)
 54960   end if 
-54980   let x=1 : if tmpkps(x)<>9 then 
+54980   x=1 : if tmpkps(x)<>9 then 
 55000     print 'Key Position ('&str$(x)&') Error in '&kfname$
 55020     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 55040     print 'fixing it'
 55060     fnFree(kfname$)
 55080     goto L1840
 55100   end if 
-55120   let x=1 : if tmpkln(x)<>12 then 
+55120   x=1 : if tmpkln(x)<>12 then 
 55140     print 'Key Length ('&str$(x)&') Error in '&kfname$
 55160     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 55180   end if 
 55200   ! 
 55220   ! CL_UNPDALOC2: ! Secondary, Non-Split Index
-55240   let name$=env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')
-55260   let kfname$=env$('Q')&"\CLmstr\UAIdx2.h"&env$('cno')
+55240   name$=env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')
+55260   kfname$=env$('Q')&"\CLmstr\UAIdx2.h"&env$('cno')
 55280   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-55300     let fnindex_it(name$,kfname$,'1 20')
+55300     fnindex_it(name$,kfname$,'1 20')
 55320   end if 
 55340   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
-55360   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-55380   let x=1 : if tmpkps(x)<>1 then 
+55360   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+55380   x=1 : if tmpkps(x)<>1 then 
 55400     print 'Key Position ('&str$(x)&') Error in '&kfname$
 55420     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 55440   end if 
-55460   let x=1 : if tmpkln(x)<>20 then 
+55460   x=1 : if tmpkln(x)<>20 then 
 55480     print 'Key Length ('&str$(x)&') Error in '&kfname$
 55500     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 55520   end if 
 55540   ! 
 55560   CL_PAYTRANS1: ! Primary Non-Split Index
-55580   let name$=env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')
-55600   let kfname$=env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')
-55620   let myrln=114
-55640   let version_proper=2
-55660   let fn_make_data_file_exist(name$,myrln,version_proper)
+55580   name$=env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')
+55600   kfname$=env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')
+55620   myrln=114
+55640   version_proper=2
+55660   fn_make_data_file_exist(name$,myrln,version_proper)
 55680   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-55700     let fnindex_it(name$,kfname$,'1 20')
+55700     fnindex_it(name$,kfname$,'1 20')
 55720   end if 
-55740   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed: let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-55760   let fn_check_version(tmpversion,version_proper,tmpfile$)
+55740   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+55760   fn_check_version(tmpversion,version_proper,tmpfile$)
 55780   if tmpversion=1 or tmpversion=0 or tmpversion=-1 then 
-55800     let fnpaytrans_v1_to_v2 : goto CL_PAYTRANS1
+55800     fnpaytrans_v1_to_v2 : goto CL_PAYTRANS1
 55820   end if 
 55840   if tmprln<>myrln then 
 55860     print 'Record Length Error in File: '&tmpfile$
@@ -435,162 +435,162 @@
 55940     fnFree(env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'))
 55960     fnRename(env$('Q')&"\X."&session$,env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'))
 55980   end if 
-56000   let x=1 : if tmpkps(x)<>1 then 
+56000   x=1 : if tmpkps(x)<>1 then 
 56020     print 'Key Position ('&str$(x)&') Error in '&kfname$
 56040     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 56060   end if 
-56080   let x=1 : if tmpkln(x)<>20 then 
+56080   x=1 : if tmpkln(x)<>20 then 
 56100     print 'Key Length ('&str$(x)&') Error in '&kfname$
 56120     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 56140   end if 
 56160   ! 
 56180   ! CL_PAYTRANS2: ! seconday 3-Split Index
-56200   let name$=env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')
-56220   let kfname$=env$('Q')&"\CLmstr\UnPdIdx2.h"&env$('cno')
+56200   name$=env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')
+56220   kfname$=env$('Q')&"\CLmstr\UnPdIdx2.h"&env$('cno')
 56240   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-56260     let fnindex_it(name$,kfname$,'31/27/1 2/4/26')
+56260     fnindex_it(name$,kfname$,'31/27/1 2/4/26')
 56280   end if 
 56300   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
-56320   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-56340   let x=1 : if tmpkps(x)<>31 then 
+56320   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+56340   x=1 : if tmpkps(x)<>31 then 
 56360     print 'Key Position ('&str$(x)&') Error in '&kfname$
 56380     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 56400   end if 
-56420   let x=2 : if tmpkps(x)<>27 then 
+56420   x=2 : if tmpkps(x)<>27 then 
 56440     print 'Key Position ('&str$(x)&') Error in '&kfname$
 56460     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 56480   end if 
-56500   let x=3 : if tmpkps(x)<>1 then 
+56500   x=3 : if tmpkps(x)<>1 then 
 56520     print 'Key Position ('&str$(x)&') Error in '&kfname$
 56540     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 56560   end if 
-56580   let x=1 : if tmpkln(x)<>2 then 
+56580   x=1 : if tmpkln(x)<>2 then 
 56600     print 'Key Length ('&str$(x)&') Error in '&kfname$
 56620     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 56640   end if 
-56660   let x=2 : if tmpkln(x)<>4 then 
+56660   x=2 : if tmpkln(x)<>4 then 
 56680     print 'Key Length ('&str$(x)&') Error in '&kfname$
 56700     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 56720   end if 
-56740   let x=3 : if tmpkln(x)<>26 then 
+56740   x=3 : if tmpkln(x)<>26 then 
 56760     print 'Key Length ('&str$(x)&') Error in '&kfname$
 56780     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 56800   end if 
 56820   ! 
 56840   CL_PAYMSTR1: ! Primary Non-Split Index
-56860   let name$=env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
-56880   let kfname$=env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')
-56900   let myrln=736
-56920   let version_proper=1
-56940   let fn_make_data_file_exist(name$,myrln,version_proper)
+56860   name$=env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
+56880   kfname$=env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')
+56900   myrln=736
+56920   version_proper=1
+56940   fn_make_data_file_exist(name$,myrln,version_proper)
 56960   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-56980     let fnindex_it(name$,kfname$,'1 8')
+56980     fnindex_it(name$,kfname$,'1 8')
 57000   end if 
 57020   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
-57040   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-57060   let fn_check_version(tmpversion,version_proper,tmpfile$)
+57040   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+57060   fn_check_version(tmpversion,version_proper,tmpfile$)
 57080   if tmpversion=0 or tmpversion=-1 then 
-57100     let fnpaymstr_v0_to_v1 : goto CL_PAYMSTR1
+57100     fnpaymstr_v0_to_v1 : goto CL_PAYMSTR1
 57120   end if 
 57140   if tmprln<>myrln then 
 57160     print 'Record Length Error in File: '&tmpfile$
 57180     print '         RLn: '&str$(tmprln)
 57200   end if 
-57220   let x=1 : if tmpkps(x)<>1 then 
+57220   x=1 : if tmpkps(x)<>1 then 
 57240     print 'Key Position ('&str$(x)&') Error in '&kfname$
 57260     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 57280   end if 
-57300   let x=1 : if tmpkln(x)<>8 then 
+57300   x=1 : if tmpkln(x)<>8 then 
 57320     print 'Key Length ('&str$(x)&') Error in '&kfname$
 57340     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 57360   end if 
 57380   ! CL_RECMSTR1: ! Primary Non-Split Index
-57400   let name$=env$('Q')&"\CLmstr\RecMstr.h"&env$('cno')
-57420   let kfname$=env$('Q')&"\CLmstr\RecIdx1.h"&env$('cno')
-57440   let myrln=38
-57460   let version_proper=1
-57480   let fn_make_data_file_exist(name$,myrln,version_proper)
+57400   name$=env$('Q')&"\CLmstr\RecMstr.h"&env$('cno')
+57420   kfname$=env$('Q')&"\CLmstr\RecIdx1.h"&env$('cno')
+57440   myrln=38
+57460   version_proper=1
+57480   fn_make_data_file_exist(name$,myrln,version_proper)
 57500   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-57520     let fnindex_it(name$,kfname$,'1 8')
+57520     fnindex_it(name$,kfname$,'1 8')
 57540   end if 
 57560   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
-57580   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-57600   let fn_check_version(tmpversion,version_proper,tmpfile$)
+57580   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+57600   fn_check_version(tmpversion,version_proper,tmpfile$)
 57620   if tmpversion=0 or tmpversion=-1 then 
-57640     let fnpaymstr_v0_to_v1
+57640     fnpaymstr_v0_to_v1
 57660     goto CL_PAYMSTR1
 57680   end if 
 57700   if tmprln<>myrln then 
 57720     print 'Record Length Error in File: '&tmpfile$
 57740     print '         RLn: '&str$(tmprln)
 57760   end if 
-57780   let x=1 : if tmpkps(x)<>1 then 
+57780   x=1 : if tmpkps(x)<>1 then 
 57800     print 'Key Position ('&str$(x)&') Error in '&kfname$
 57820     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 57840   end if 
-57860   let x=1 : if tmpkln(x)<>8 then 
+57860   x=1 : if tmpkln(x)<>8 then 
 57880     print 'Key Length ('&str$(x)&') Error in '&kfname$
 57900     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 57920   end if 
 57940   ! 
 57960   ! CL_PAYMSTR2: ! Secondary, Non-Split Index
-57980   let name$=env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
-58000   let kfname$=env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')
+57980   name$=env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
+58000   kfname$=env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')
 58020   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-58040     let fnindex_it(name$,kfname$,'9 30')
+58040     fnindex_it(name$,kfname$,'9 30')
 58060   end if 
 58080   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
-58100   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-58120   let x=1 : if tmpkps(x)<>9 then 
+58100   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+58120   x=1 : if tmpkps(x)<>9 then 
 58140     print 'Key Position ('&str$(x)&') Error in '&kfname$
 58160     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 58180   end if 
-58200   let x=1 : if tmpkln(x)<>28 then 
+58200   x=1 : if tmpkln(x)<>28 then 
 58220     print 'Key Length ('&str$(x)&') Error in '&kfname$
 58240     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 58260   end if 
 58280   ! 
 58300   ! CL_GLMSTR1: ! Primary Non-Split Index
-58310   let name$=env$('Q')&"\CLmstr\GLmstr.h"&env$('cno')
-58320   let kfname$=env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')
-58330   let myrln=62
-58340   !   let version_proper=0
-58350   !   let fn_make_data_file_exist(name$,myrln,version_proper)
+58310   name$=env$('Q')&"\CLmstr\GLmstr.h"&env$('cno')
+58320   kfname$=env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')
+58330   myrln=62
+58340   !   version_proper=0
+58350   !   fn_make_data_file_exist(name$,myrln,version_proper)
 58360   !   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then
 58370   !     fnindex_it(name$,kfname$,'1 12')
 58380   !   end if
-58390   let fn_file_setup_data(env$('Q')&"\CLmstr\GLmstr.h"&env$('cno'),62,1)
-58400   let fn_file_setup_index(env$('Q')&"\CLmstr\GLIndex.h"&env$('cno'),'1','12')
+58390   fn_file_setup_data(env$('Q')&"\CLmstr\GLmstr.h"&env$('cno'),62,1)
+58400   fn_file_setup_index(env$('Q')&"\CLmstr\GLIndex.h"&env$('cno'),'1','12')
 58410   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outin,keyed 
-58420   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-58430   let fn_check_version(tmpversion,version_proper,tmpfile$)
+58420   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+58430   fn_check_version(tmpversion,version_proper,tmpfile$)
 58440   !   if tmprln<>myrln then
 58450   !     print 'Record Length Error in File: '&tmpfile$
 58460   !     print '         RLn: '&str$(tmprln)
 58470   !   end if
 58480   if tmprln=72 or tmprln=80 then let fnglmstrtorecl62
-58490   !   let x=1 : if tmpkps(x)<>1 then
+58490   !   x=1 : if tmpkps(x)<>1 then
 58500   !     print 'Key Position ('&str$(x)&') Error in '&kfname$
 58510   !     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 58520   !   end if
-58530   !   let x=1 : if tmpkln(x)<>12 then
+58530   !   x=1 : if tmpkln(x)<>12 then
 58540   !     print 'Key Length ('&str$(x)&') Error in '&kfname$
 58550   !     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 58560   !   end if
 58570   ! 
 58820   ! CL_PAYEEGLBREAKDOWN: ! Primary Non-Split Index
-58840   let fn_file_setup_data(env$('Q')&"\CLmstr\payeeglbreakdown.h"&env$('cno'),56,1)
-58860   let fn_file_setup_index(env$('Q')&"\CLmstr\payeeglbkdidx.h"&env$('cno'),'1','8')
+58840   fn_file_setup_data(env$('Q')&"\CLmstr\payeeglbreakdown.h"&env$('cno'),56,1)
+58860   fn_file_setup_index(env$('Q')&"\CLmstr\payeeglbkdidx.h"&env$('cno'),'1','8')
 59000   ! CL_GLCONTROL: ! Primary Non-Split Index
-59020   let fn_file_setup_data(env$('Q')&"\CLmstr\fundmstr.h"&env$('cno'),75,0)
-59040   let fn_file_setup_index(env$('Q')&"\CLmstr\fundidx1.h"&env$('cno'),'1','3')
+59020   fn_file_setup_data(env$('Q')&"\CLmstr\fundmstr.h"&env$('cno'),75,0)
+59040   fn_file_setup_index(env$('Q')&"\CLmstr\fundidx1.h"&env$('cno'),'1','3')
 59060   open #tmp:=fngethandle: 'Name='&g_fs_name$&',KFName='&g_fs_kfname$&',Shr',internal,outin,keyed 
-59080   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-59100   let fn_check_version(tmpversion,version_proper,tmpfile$)
+59080   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+59100   fn_check_version(tmpversion,version_proper,tmpfile$)
 59120   if tmprln=63 then let fnglcontrol
 59140   ! 
-59160   let fn_file_setup_data(env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),64,1)
-59180   let fn_file_setup_index(env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),'1','2')
+59160   fn_file_setup_data(env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),64,1)
+59180   fn_file_setup_index(env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),'1','2')
 59200   !
 59220   if ~exists(env$('Q')&'\CLmstr\TransactionType.dat') then
 59240     open #hTransactionType:=fngethandle: "Name="&env$('Q')&"\CLmstr\TransactionType.dat,Version=1,KFName="&env$('Q')&"\CLmstr\TransactionType.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outin,keyed
@@ -615,13 +615,13 @@
 62060   if exists(env$('Q')&'\PRmstr\Checkinfo.h'&env$('cno')) then 
 62080     open #h_pr_checkinfo:=fngethandle: "Name="&env$('Q')&"\PRmstr\Checkinfo.h"&env$('cno')&",USE,RecL=128",internal,outin,relative 
 62100     read #h_pr_checkinfo,using "form pos 1,3*c 1,c 3,c 1,n 3,c 5",rec=1: pre$,acsclcv$,ficam1$,sc1$,accr$,bankcode,compcode$ norec CFVPR_CHECKINFO_NOREC
-62120     let fncreg_write('Prenumbered Checks',pre$)
-62140     let fncreg_write('Post to CL',acsclcv$)
-62160     let fncreg_write('Post Employer Portion of FiCA',ficam1$)
-62180     let fncreg_write('Check Format',sc1$)
-62200     let fncreg_write('Print Vacation and Sick Leave on Check',accr$)
-62220     let fncreg_write('CL Bank Code',str$(bankcode))
-62240     let fncreg_write('Comp Time Code',compcode$)
+62120     fncreg_write('Prenumbered Checks',pre$)
+62140     fncreg_write('Post to CL',acsclcv$)
+62160     fncreg_write('Post Employer Portion of FiCA',ficam1$)
+62180     fncreg_write('Check Format',sc1$)
+62200     fncreg_write('Print Vacation and Sick Leave on Check',accr$)
+62220     fncreg_write('CL Bank Code',str$(bankcode))
+62240     fncreg_write('Comp Time Code',compcode$)
 62260   CFVPR_CHECKINFO_NOREC: ! 
 62280     close #h_pr_checkinfo,free: 
 62300   end if 
@@ -637,16 +637,16 @@
 63160     close #h_pr_rpdate,free: 
 63180   end if 
 63200   ! /r
-64000   let fn_file_setup_data(env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),32,0)
-64020   let fn_file_setup_index(env$('Q')&"\PRmstr\DeptNameIdx-idx.h"&env$('cno'),'1','3')
+64000   fn_file_setup_data(env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),32,0)
+64020   fn_file_setup_index(env$('Q')&"\PRmstr\DeptNameIdx-idx.h"&env$('cno'),'1','3')
 64040   ! 
-64060   let fn_file_setup_data(env$('Q')&"\PRmstr\mglmstr.h"&env$('cno'),135,0)
-64080   let fn_file_setup_index(env$('Q')&"\PRmstr\mglidx1-idx.h"&env$('cno'),'1','3')
+64060   fn_file_setup_data(env$('Q')&"\PRmstr\mglmstr.h"&env$('cno'),135,0)
+64080   fn_file_setup_index(env$('Q')&"\PRmstr\mglidx1-idx.h"&env$('cno'),'1','3')
 64100   ! 
-64120   let fn_file_setup_data(env$('Q')&"\PRmstr\HourBreakdown.h"&env$('cno'),39,0)
-64140   let fn_file_setup_index(env$('Q')&"\PRmstr\HourBreakdown-idx.h"&env$('cno'),'1/9/14','8/5/8')
+64120   fn_file_setup_data(env$('Q')&"\PRmstr\HourBreakdown.h"&env$('cno'),39,0)
+64140   fn_file_setup_index(env$('Q')&"\PRmstr\HourBreakdown-idx.h"&env$('cno'),'1/9/14','8/5/8')
 64160   ! r: Dates.h
-64180   let fn_file_setup_data(env$('Q')&"\PRmstr\Dates.h"&env$('cno'),76,0)
+64180   fn_file_setup_data(env$('Q')&"\PRmstr\Dates.h"&env$('cno'),76,0)
 64200   open #tmp:=fngethandle: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",Use,RecL=76,Shr",internal,outin,relative 
 64220   read #tmp,using "form pos 1,6*n 8",rec=1: beg_date,end_date,qtr1,qtr2,qtr3,qtr4 norec PR_WRITE_BLANK_DATE_REC
 64240   goto PR_CLOSE_DATE
@@ -655,10 +655,10 @@
 64300   PR_CLOSE_DATE: ! 
 64320   close #tmp: 
 64340   ! /r
-64360   let fn_file_setup_data(env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno'),224,0)
-64380   let fn_file_setup_index(env$('Q')&"\PRmstr\CheckIdx.h"&env$('cno'),'1','17')
-64400   let fn_file_setup_index(env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno'),'1/12/9','3/6/8')
-64420   let fn_file_setup_index(env$('Q')&"\PRmstr\checkidx3.h"&env$('cno'),'1/12/9','8/6/3')
+64360   fn_file_setup_data(env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno'),224,0)
+64380   fn_file_setup_index(env$('Q')&"\PRmstr\CheckIdx.h"&env$('cno'),'1','17')
+64400   fn_file_setup_index(env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno'),'1/12/9','3/6/8')
+64420   fn_file_setup_index(env$('Q')&"\PRmstr\checkidx3.h"&env$('cno'),'1/12/9','8/6/3')
 64440   ! 
 65000   ! r: DedNames.h setup
 65020   ! if exists(env$('Q')&"\PRmstr\dednames.h"&env$('cno'))=0 then
@@ -689,7 +689,7 @@
 66900 fnend 
 67000 Check4124OnPrGlindex: ! r:
 67020  if err=4124 and (Check4124OnPrGlindexCount+=1)<=2 then
-67040    let fnindex_it(env$('Q')&'\PRmstr\GLMstr.h'&env$('cno'),env$('Q')&'\PRmstr\GLIndex.h'&env$('cno'),'1 12')
+67040    fnindex_it(env$('Q')&'\PRmstr\GLMstr.h'&env$('cno'),env$('Q')&'\PRmstr\GLIndex.h'&env$('cno'),'1 12')
 67060    goto PrGlindex
 67080  else
 67100     fnstatus('Failure.')
@@ -703,9 +703,9 @@
 68012   ! if ~exists(env$('Q')&'\INI\Payroll\Job Cost') then execute 'mkdir env$('Q')&"\INI\Payroll\Job Cost"'
 68014   fn_ini_move('JC')
 68020   ! r: JCMSTR.h
-68040   let fn_file_setup_data(env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),300,0)
-68060   let fn_file_setup_index(env$('Q')&"\PRmstr\JCINDX.h"&env$('cno'),'1','6')
-68080   let fn_file_setup_index(env$('Q')&"\PRmstr\JCINDX2.h"&env$('cno'),'7','25')
+68040   fn_file_setup_data(env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),300,0)
+68060   fn_file_setup_index(env$('Q')&"\PRmstr\JCINDX.h"&env$('cno'),'1','6')
+68080   fn_file_setup_index(env$('Q')&"\PRmstr\JCINDX2.h"&env$('cno'),'7','25')
 68100   ! /r
 68120 fnend 
 74000 def fn_cfv_general_ledger
@@ -727,102 +727,102 @@
 74280   end if
 74300   !
 74320   ! BudgetInfo: ! Primary Non-Split Index
-74340   let name$=env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')
-74360   let kfname$=env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')
-74380   let myrln=28
-74400   let version_proper=0
-74420   let fn_make_data_file_exist(name$,myrln,version_proper)
+74340   name$=env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')
+74360   kfname$=env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')
+74380   myrln=28
+74400   version_proper=0
+74420   fn_make_data_file_exist(name$,myrln,version_proper)
 74440   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-74460     let fnindex_it(name$,kfname$,'1 14')
+74460     fnindex_it(name$,kfname$,'1 14')
 74480   end if 
 74500   ! GL_GLMSTR1: ! Primary Non-Split Index
-74520   let name$=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')
-74540   let kfname$=env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')
-74560   let myrln=416
-74580   let version_proper=0
-74600   let fn_make_data_file_exist(name$,myrln,version_proper)
+74520   name$=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')
+74540   kfname$=env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')
+74560   myrln=416
+74580   version_proper=0
+74600   fn_make_data_file_exist(name$,myrln,version_proper)
 74620   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-74640     let fnindex_it(name$,kfname$,'1 12')
+74640     fnindex_it(name$,kfname$,'1 12')
 74660   end if 
-74680   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed: let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-74700   let fn_check_version(tmpversion,version_proper,tmpfile$)
+74680   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+74700   fn_check_version(tmpversion,version_proper,tmpfile$)
 74720   if tmprln<>myrln then 
-74740     let fnstatus('Record Length Error in File: '&tmpfile$)
-74760     let fnstatus('         RLn: '&str$(tmprln))
+74740     fnstatus('Record Length Error in File: '&tmpfile$)
+74760     fnstatus('         RLn: '&str$(tmprln))
 74780   end if 
 74800   if tmprln=338 then let fnglmstr_338_416
-74820   let x=1 : if tmpkps(x)<>1 then 
-74840     let fnstatus('Key Position ('&str$(x)&') Error in '&kfname$)
-74860     let fnstatus('      KPs('&str$(x)&'): '&str$(tmpkps(x)))
+74820   x=1 : if tmpkps(x)<>1 then 
+74840     fnstatus('Key Position ('&str$(x)&') Error in '&kfname$)
+74860     fnstatus('      KPs('&str$(x)&'): '&str$(tmpkps(x)))
 74880   end if 
-74900   let x=1 : if tmpkln(x)<>12 then 
-74920     let fnstatus('Key Length ('&str$(x)&') Error in '&kfname$)
-74940     let fnstatus('      KLn('&str$(x)&'): '&str$(tmpkln(x)))
+74900   x=1 : if tmpkln(x)<>12 then 
+74920     fnstatus('Key Length ('&str$(x)&') Error in '&kfname$)
+74940     fnstatus('      KLn('&str$(x)&'): '&str$(tmpkln(x)))
 74960   end if 
 74980   ! 
 75000   ! GL_GLMSTR2: ! Secondary, Non-Split Index
-75020   let name$=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')
-75040   let kfname$=env$('Q')&"\GLmstr\GLIndx2.h"&env$('cno')
+75020   name$=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')
+75040   kfname$=env$('Q')&"\GLmstr\GLIndx2.h"&env$('cno')
 75060   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-75080     let fnindex_it(name$,kfname$,'13 30')
+75080     fnindex_it(name$,kfname$,'13 30')
 75100   end if 
-75120   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed: let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-75140   let x=1 : if tmpkps(x)<>13 then 
+75120   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+75140   x=1 : if tmpkps(x)<>13 then 
 75160     print 'Key Position ('&str$(x)&') Error in '&kfname$
 75180     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 75200   end if 
-75220   let x=1 : if tmpkln(x)<>30 then 
+75220   x=1 : if tmpkln(x)<>30 then 
 75240     print 'Key Length ('&str$(x)&') Error in '&kfname$
 75260     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 75280   end if 
 75300   if tmpkln(x)=50 then 
 75320     fnFree(kfname$)
-75340     let fnindex_it(name$,kfname$,'13 30')
+75340     fnindex_it(name$,kfname$,'13 30')
 75360   end if 
 75380   ! 
 75400   ! GL_ACGLFNSI: ! for One of Six Files, with 1 primary index each
 75420   !         acglfnsj, acglfnsi, acglfnsb, acglfnsc, acglfnsf, acglfnsg
-75440   let name$=env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno')
-75460   let kfname$=env$('Q')&"\GLmstr\fnsiindx.h"&env$('cno')
-75480   let myrln=83
-75500   let version_proper=1
-75520   let fn_make_data_file_exist(name$,myrln,version_proper)
+75440   name$=env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno')
+75460   kfname$=env$('Q')&"\GLmstr\fnsiindx.h"&env$('cno')
+75480   myrln=83
+75500   version_proper=1
+75520   fn_make_data_file_exist(name$,myrln,version_proper)
 75540   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-75560     let fnindex_it(name$,kfname$,'1 5')
+75560     fnindex_it(name$,kfname$,'1 5')
 75580   end if 
-75600   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed: let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-75620   let fn_check_version(tmpversion,version_proper,tmpfile$)
+75600   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+75620   fn_check_version(tmpversion,version_proper,tmpfile$)
 75640   if tmpversion=0 then let fnfinstmt_v0_to_v1
 75660   if tmprln<>myrln then 
 75680     print 'Record Length Error in File: '&tmpfile$
 75700     print '         RLn: '&str$(tmprln)
 75720   end if 
 75740 ! If TMPRLN=81 OR TMPRLN=78 Then Let FNFINSTMT_v0_to_v1
-75760   let x=1 : if tmpkps(x)<>1 then 
+75760   x=1 : if tmpkps(x)<>1 then 
 75780     print 'Key Position ('&str$(x)&') Error in '&kfname$
 75800     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 75820   end if 
-75840   let x=1 : if tmpkln(x)<>5 then 
+75840   x=1 : if tmpkln(x)<>5 then 
 75860     print 'Key Length ('&str$(x)&') Error in '&kfname$
 75880     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 75900   end if 
 75920   ! 
 75940   ! PAYEEGLBREAKDOWN: !
-75960   let name$=env$('Q')&"\GLmstr\payeeglbreakdown.h"&env$('cno')
-75980   let kfname$=env$('Q')&"\GLmstr\Payeeglbkdidx.h"&env$('cno')
-76000   let myrln=56
-76020   let version_proper=1
-76040   let fn_make_data_file_exist(name$,myrln,version_proper)
+75960   name$=env$('Q')&"\GLmstr\payeeglbreakdown.h"&env$('cno')
+75980   kfname$=env$('Q')&"\GLmstr\Payeeglbkdidx.h"&env$('cno')
+76000   myrln=56
+76020   version_proper=1
+76040   fn_make_data_file_exist(name$,myrln,version_proper)
 76060   L3510: ! 
 76080   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-76100     let fnindex_it(name$,kfname$,'1 8')
+76100     fnindex_it(name$,kfname$,'1 8')
 76120   end if 
-76140   let fn_check_version(tmpversion,version_proper,tmpfile$)
+76140   fn_check_version(tmpversion,version_proper,tmpfile$)
 76160   if tmprln<>myrln then 
 76180     print 'Record Length Error in File: '&tmpfile$
 76200     print '         RLn: '&str$(tmprln)
 76220   end if 
-76240   let x=1 : if tmpkps(x)<>1 then 
+76240   x=1 : if tmpkps(x)<>1 then 
 76260     print 'Key Position ('&str$(x)&') Error in '&kfname$
 76280     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 76300     print 'fixing it'
@@ -832,23 +832,23 @@
 76380   ! GLPAYMSTR: ! Primary, Non-Split Index  (Vendor or payee files in g/l)
 76400   if exists(env$('Q')&"\GLmstr\gl1099.h"&env$('cno'))<>0 then let fnglpayee_v0_to_v1
 76420   if exists(env$('Q')&"\GLmstr\gl1099.h"&env$('cno'))<>0 then let fnFree(env$('Q')&"\GLmstr\gl1099.h"&env$('cno'))
-76440   let name$=env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')
-76460   let kfname$=env$('Q')&"\GLmstr\Payidx1.h"&env$('cno')
-76480   let myrln=276
-76500   let version_proper=1
-76520   let fn_make_data_file_exist(name$,myrln,version_proper)
+76440   name$=env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')
+76460   kfname$=env$('Q')&"\GLmstr\Payidx1.h"&env$('cno')
+76480   myrln=276
+76500   version_proper=1
+76520   fn_make_data_file_exist(name$,myrln,version_proper)
 76540   L3600: ! 
 76560   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-76580     let fnindex_it(name$,kfname$,'1 8') : let fnglpayee_v0_to_v1
+76580     fnindex_it(name$,kfname$,'1 8') : fnglpayee_v0_to_v1
 76600   end if 
-76620   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed: let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-76640   let fn_check_version(tmpversion,version_proper,tmpfile$)
+76620   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+76640   fn_check_version(tmpversion,version_proper,tmpfile$)
 76660   if tmprln<>myrln then 
 76680     print 'Record Length Error in File: '&tmpfile$
 76700     print '         RLn: '&str$(tmprln)
-76720     let fnglpayee_v0_to_v1
+76720     fnglpayee_v0_to_v1
 76740   end if 
-76760   let x=1 : if tmpkps(x)<>1 then 
+76760   x=1 : if tmpkps(x)<>1 then 
 76780     print 'Key Position ('&str$(x)&') Error in '&kfname$
 76800     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 76820     print 'fixing it'
@@ -857,23 +857,23 @@
 76880   end if 
 76900     ! 
 76920     ! GLTR1099: ! Primary, Non-Split Index  (Vendor transactions)
-76940   let name$=env$('Q')&"\GLmstr\GlTr1099.h"&env$('cno')
-76960   let kfname$=env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')
-76980   let myrln=64
-77000   let version_proper=1
-77020   let fn_make_data_file_exist(name$,myrln,version_proper)
+76940   name$=env$('Q')&"\GLmstr\GlTr1099.h"&env$('cno')
+76960   kfname$=env$('Q')&"\GLmstr\gltridx1.h"&env$('cno')
+76980   myrln=64
+77000   version_proper=1
+77020   fn_make_data_file_exist(name$,myrln,version_proper)
 77040   L3690: ! 
 77060   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-77080     let fnindex_it(name$,kfname$,'1 8')
+77080     fnindex_it(name$,kfname$,'1 8')
 77100   end if 
 77120   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
-77140   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-77160   let fn_check_version(tmpversion,version_proper,tmpfile$)
+77140   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+77160   fn_check_version(tmpversion,version_proper,tmpfile$)
 77180   if tmprln<>myrln then 
 77200     print 'Record Length Error in File: '&tmpfile$
 77220     print '         RLn: '&str$(tmprln)
 77240   end if 
-77260   let x=1 : if tmpkps(x)<>1 then 
+77260   x=1 : if tmpkps(x)<>1 then 
 77280     print 'Key Position ('&str$(x)&') Error in '&kfname$
 77300     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 77320     print 'fixing it'
@@ -881,23 +881,23 @@
 77360     goto L3690
 77380   end if 
 77400   ! GLBREC: ! Primary, Non-Split Index
-77420   let name$=env$('Q')&"\GLmstr\Glbrec.h"&env$('cno')
-77440   let kfname$=env$('Q')&"\GLmstr\glrecidx.h"&env$('cno')
-77460   let myrln=68
-77480   let version_proper=1
-77500   let fn_make_data_file_exist(name$,myrln,version_proper)
+77420   name$=env$('Q')&"\GLmstr\Glbrec.h"&env$('cno')
+77440   kfname$=env$('Q')&"\GLmstr\glrecidx.h"&env$('cno')
+77460   myrln=68
+77480   version_proper=1
+77500   fn_make_data_file_exist(name$,myrln,version_proper)
 77540   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
 77550   GlBrecIndex: ! 
-77560     let fnindex_it(name$,kfname$,'1 24')
+77560     fnindex_it(name$,kfname$,'1 24')
 77570   end if 
 77580   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed error GlBrecOpenErr
-77590   let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-77600   let fn_check_version(tmpversion,version_proper,tmpfile$)
+77590   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+77600   fn_check_version(tmpversion,version_proper,tmpfile$)
 77610   if tmprln<>myrln then 
 77620     print 'Record Length Error in File: '&tmpfile$
 77630     print '         RLn: '&str$(tmprln)
 77640   end if 
-77650   let x=1 : if tmpkps(x)<>1 then 
+77650   x=1 : if tmpkps(x)<>1 then 
 77660     fnstatus('Key Position ('&str$(x)&') Error in '&kfname$)
 77670     fnstatus('      KPs('&str$(x)&'): '&str$(tmpkps(x)))
 77680     fnstatus('fixing it')
@@ -914,14 +914,14 @@
 77790   ! 
 77880   ! SCHEDULE: ! Primary, Non-Split Index  (General ledger schedules)
 77900   dim sn$*78,ft$*78,gl$(80)*12
-77920   let name$=env$('Q')&"\GLmstr\acglschs.h"&env$('cno')
-77940   let kfname$=env$('Q')&"\GLmstr\schindex.h"&env$('cno')
-77960   let myrln=162
-77980   let version_proper=1
-78000   let fn_make_data_file_exist(name$,myrln,version_proper)
-78020   L3870: let fnindex_it(name$,kfname$,'1 3')
-78040   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed: let fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-78060   let fn_check_version(tmpversion,version_proper,tmpfile$)
+77920   name$=env$('Q')&"\GLmstr\acglschs.h"&env$('cno')
+77940   kfname$=env$('Q')&"\GLmstr\schindex.h"&env$('cno')
+77960   myrln=162
+77980   version_proper=1
+78000   fn_make_data_file_exist(name$,myrln,version_proper)
+78020   L3870: fnindex_it(name$,kfname$,'1 3')
+78040   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+78060   fn_check_version(tmpversion,version_proper,tmpfile$)
 78080   if tmprln<>myrln then 
 78100     print 'Record Length Error in File: '&tmpfile$
 78120     print '         RLn: '&str$(tmprln)
@@ -932,11 +932,11 @@
 78210   L3920: read #tmp, using "Form POS 1,N 2,2*C 78,3*N 1,80*C 12": sn,sn$,ft$,dp,rs,cm,mat gl$ eof EO_TMP conv L9000
 78220   if sn=0 then goto L3920
 78230   rewrite #tmp, using "Form POS 1,N 3,2*C 78,3*N 1": sn,sn$,ft$,dp,rs,cm
-78240   if exists(env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno'))=0 then open #schedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno')&',replace,RecL=12,kps=1,kln=12,Shr',internal,outin,keyed: let version(schedule,1): close #schedule: 
+78240   if exists(env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno'))=0 then open #schedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno')&',replace,RecL=12,kps=1,kln=12,Shr',internal,outin,keyed: version(schedule,1): close #schedule: 
 78250   if exists(env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno'))=0 then 
-78260     let fnindex_it(env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno'),env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno'),"1 12")
+78260     fnindex_it(env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno'),env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno'),"1 12")
 78270   end if 
-78280   open #schedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno')&',use,RecL=12,kps=1,kln=12,Shr',internal,outin,keyed: let version(schedule,1) ! open to update gl breakdowns
+78280   open #schedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&env$('cno')&',use,RecL=12,kps=1,kln=12,Shr',internal,outin,keyed: version(schedule,1) ! open to update gl breakdowns
 78290   for j=1 to 80
 78300     if val(gl$(j))=0 then goto L4010
 78310     write #schedule,using "form pos 1,c 12": gl$(j)
@@ -945,7 +945,7 @@
 78340   goto L3920
 78350   EO_TMP: ! 
 78360   close #tmp:
-78370   let x=1 : if tmpkps(x)<>1 then 
+78370   x=1 : if tmpkps(x)<>1 then 
 78380     print 'Key Position ('&str$(x)&') Error in '&kfname$
 78390     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 78400     print 'fixing it'
@@ -1122,10 +1122,10 @@
 89000 ! <updateable region: fn_open (supressprompt:=2)>  
 89020 def fn_open(filename$*255, mat f$, mat fn, mat form$; inputonly, keynum, dont_sort_subs, path$*255, mat descr$, mat field_widths,dontupdate,___,index)
 89040   dim _fileiosubs$(1)*800, loadedsubs$(1)*32
-89060   let fn_open=fnOpenFile(filename$, mat f$, mat fn, mat form$, inputonly, keynum, dont_sort_subs, path$, mat descr$, mat field_widths, mat _fileiosubs$,supressprompt:=2)
+89060   fn_open=fnOpenFile(filename$, mat f$, mat fn, mat form$, inputonly, keynum, dont_sort_subs, path$, mat descr$, mat field_widths, mat _fileiosubs$,supressprompt:=2)
 89080   if ~max(srch(loadedsubs$,uprc$(filename$)),0) then 
 89100     mat loadedsubs$(udim(loadedsubs$)+1) 
-89120     let loadedsubs$(udim(loadedsubs$))=uprc$(filename$)
+89120     loadedsubs$(udim(loadedsubs$))=uprc$(filename$)
 89140     for index=1 to udim(mat _fileiosubs$) 
 89160       execute (_fileiosubs$(index)) 
 89180     next index
