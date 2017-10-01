@@ -52,11 +52,11 @@
 58360         dim copyToFolder$*256
 58380         copyToFolder$=toPath$&(copyFromFolder$(cfi)(len(srep$(fromPath$,fromAt$,''))+1:inf))
 58400         fnmakesurepathexists(copyToFolder$)
-58420         execute 'copy "'&fromat$&copyfromfolder$(cfi)&'\'&fromfile$&fromext$&'" "'&toat$&copyToFolder$&'\*.*"'
-
-58440         if int(cfi/10)=cfi/10 then pause
+58410         fnStatus ('Copying into "'&toat$&copyToFolder$&'\*.*"')
+58420         execute 'copy "'&fromat$&copyfromfolder$(cfi)&'\'&fromfile$&fromext$&'" "'&toat$&copyToFolder$&'\*.*"' ioerr ignore ! ignore because not all folders have files in them
+58440         ! if int(cfi/10)=cfi/10 then pause
 58460       nex cfi
-58480         pause
+58480       ! pause
 59000     else
 59020       if new_record_length then 
 59040         dim parameters$*128
