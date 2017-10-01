@@ -75,12 +75,17 @@
 13130     if udim(mat gd2_size)>0 then gd2_size_requested=1 else gd2_size_requested=0
 13140 ! /r
 14000 ! r: create temp text file by redirecting a shell called DIR command to it
-14040     execute 'free "'&env$('client_temp')&'\GetDir'&session$&'.tmp" -n' ioerr ignore
-14060     tmp$='Sy -s -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&env$('client_temp')&'\GetDir'&session$&'.tmp"'
-14080     execute tmp$ ioerr XIT
-14200 ! /r
+14020     execute 'free "'&env$('at')&env$('client_temp')&'\GetDir'&session$&'.tmp" -n' ioerr ignore
+14040     if lwrc$(dir$(1:2))=lwrc$('s:') or lwrc$(dir$(1:len(env$('Q'))))=lwrc$(env$('Q')) then
+14060       serverOrClient$=' -s' ! server
+14080     else
+14100       serverOrClient$=' -@' ! client
+14120     end if
+14140     tmp$='Sy'&serverOrClient$&' -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&env$('client_temp')&'\GetDir'&session$&'.tmp"'
+14160     execute tmp$ ioerr XIT
+14180 ! /r
 16000 ! r: read the temp file into the dynamic-ly sizing array mat filename$
-16040     open #tf1:=fngethandle: "Name="&env$('client_temp')&"\GetDir"&session$&".tmp",display,input
+16040     open #tf1:=fngethandle: "Name="&env$('at')&env$('client_temp')&"\GetDir"&session$&".tmp",display,input
 16140     filename_count=line_count=0
 18000     do 
 18020       linput #tf1: tmp$ eof EO_TF1
