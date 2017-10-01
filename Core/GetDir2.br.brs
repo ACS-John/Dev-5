@@ -1,4 +1,4 @@
-00010 ! r: originally test\getdir2
+00010 ! r: test area
 00020   library program$: fngetdir2
 00022   dim tmp_file_list$(1)*256
 00023   fngetdir2('C:\ACS\Dev-5\ACSUB\Grid\',mat tmp_file_list$, '/s /b','*.*')
@@ -75,23 +75,12 @@
 13130     if udim(mat gd2_size)>0 then gd2_size_requested=1 else gd2_size_requested=0
 13140 ! /r
 14000 ! r: create temp text file by redirecting a shell called DIR command to it
-14020 !   if env$('BR_MODEL')='CLIENT/SERVER' then
-14040       execute 'free "GetDir'&session$&'.tmp" -n' ioerr ignore
-14060       tmp$='Sy -s -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"GetDir'&session$&'.tmp"'
-14080       execute tmp$ ioerr XIT
-14100 !   else
-14120 !     execute 'free "'&env$('Temp')&'\GetDir'&session$&'.tmp" -n' ioerr ignore
-14140 !     tmp$='Sy -s -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&os_filename$(env$('Temp')&'\GetDir'&session$&'.tmp"')
-14160 !     execute tmp$ ioerr XIT
-14180 !   end if
+14040     execute 'free "'&env$('client_temp')&'\GetDir'&session$&'.tmp" -n' ioerr ignore
+14060     tmp$='Sy -s -M Dir '&option$&' "'&rtrm$(os_filename$(dir$),'\')&'\'&filter$&'" >"'&env$('client_temp')&'\GetDir'&session$&'.tmp"'
+14080     execute tmp$ ioerr XIT
 14200 ! /r
 16000 ! r: read the temp file into the dynamic-ly sizing array mat filename$
-16020 ! if env$('BR_MODEL')='CLIENT/SERVER' then
-16040     open #tf1:=fngethandle: "Name="&env$('temp')&"\GetDir"&session$&".tmp",display,input
-16060 ! else
-16080 !   open #tf1:=fngethandle: "Name=GetDir"&session$&".tmp",display,input 
-16100 ! end if
-16120 !   open #tf1:=fngethandle: "Name=@::"&env$('Temp')&"\GetDir"&session$&".tmp",display,input 
+16040     open #tf1:=fngethandle: "Name="&env$('client_temp')&"\GetDir"&session$&".tmp",display,input
 16140     filename_count=line_count=0
 18000     do 
 18020       linput #tf1: tmp$ eof EO_TF1
@@ -165,4 +154,4 @@
 60100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
 60120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 60140 ! /region
-90140 ! /r  S:\Core\GetDir2.br
+90140 ! /r
