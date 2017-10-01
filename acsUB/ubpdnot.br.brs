@@ -495,9 +495,8 @@
 35180 ! _____________end_________________
 35200   fnend 
 36000 UBFORM: ! r: PRINT FROM TEXT FILE
-36020   dim file_rtf$(1)*512,data_dir$*256
-36040   let data_dir$=env$('Q')&"\UBmstr"
-36060   let fngetdir2(data_dir$,mat file_rtf$, '/ON','*.rtf')
+36020   dim file_rtf$(1)*512
+36060   let fngetdir2(env$('Q')&"\UBmstr",mat file_rtf$, '/ON','*.rtf')
 36080   let fl1=udim(mat file_rtf$)
 36100   for fl1=1 to udim(mat file_rtf$)
 36120     let file_rtf$(fl1)=file_rtf$(fl1)

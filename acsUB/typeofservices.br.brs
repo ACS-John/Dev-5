@@ -22,9 +22,7 @@
 00220   mat colmask$(60)
 00230   mat colmask$=("")
 00240   fnflexinit1(filename$:='toses',2,1,10,72,mat colhdr$,mat colmask$,1)
-00241   dim data_dir$*256
-00242   data_dir$=env$('Q')&"\UBmstr\ubData\"
-00243   fngetdir2(data_dir$,mat service_file$, '/ON','Service.h*')
+00243   fngetdir2(env$('Q')&"\UBmstr\ubData\",mat service_file$, '/ON','Service.h*')
 00244 ! fnpause
 00250   for service_file_item=1 to udim(service_file$)
 00270     item$(1)=service_file$(service_file_item)(10:len(service_file$(service_file_item)))
