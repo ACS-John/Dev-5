@@ -32,7 +32,6 @@
 56160   !   execute 'sy "'&env$('temp')&'\copy_as_admin_'&session$&'.cmd"'
 58000   ! else ! either new_record_length or (neither new_record_length nor as_admin)
 58020     if copyRecursive then
-        
 58040       fngetpp(from$,fromPath$,fromFile$,fromExt$)
 58060       fngetpp(to$,toPath$,toFile$,toExt$)
 58080       dim fromPath$*256,fromFile$*256,fromExt$*256
@@ -43,28 +42,34 @@
 58180       pr 'toExt$=';toExt$
 58200       ! pause
 58220       ! execute 'copy "'&toPath$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
-58240       dim copyFolder$(0)*256
-58260       gd2_return=fngetdir2(fromPath$,mat copyFolder$,'/s /b /ad')
-            
-58280       pr 'gd2_return=';gd2_return : pause
-58300       for cfi=1 to udim(mat copyFolder$)
-58320         pause ! exec 'Sy copy "'fromFile$&fromExt$&'" "'&toFile$&toExt$&'"' : pause
-58340       nex cfi
-58360     else
-58380       if new_record_length then 
-58400         dim parameters$*128
-58420         parameters$=''
-58440         parameters$=parameters$&' -'&str$(abs(new_record_length))
-58460         if new_record_length and uprc$(from$)=uprc$(to$) then 
-58480           execute 'copy "'&from$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
-58500           execute 'copy "'&env$('temp')&'\acs_recl_chg_'&session$&'" "'&to$&'"' ioerr COPY_FAIL
-58520           execute 'free "'&env$('temp')&'\acs_recl_chg_'&session$&'"' ioerr ignore
-58540         end if 
-58560       end if 
-58580       execute 'copy "'&from$&'" "'&to$&'"' ioerr COPY_FAIL
-58600       copy_return=1
-58620     end if
-58640   ! end if
+58240       dim copyFromFolder$(0)*256
+58260       gd2_return=fngetdir2(fromPath$,mat copyFromFolder$,'/s /b /ad')
+58280       ! 
+58300       ! 
+58320       ! pr 'gd2_return=';gd2_return : pause
+58340       for cfi=1 to udim(mat copyFromFolder$)
+58360         dim copyToFolder$*256
+58380         copyToFolder$=toPath$&copyFromFolder$(cfi)(len(toPath$):inf)
+58400         fnmakesurepathexists(copyToFolder$)
+58420         exec 'Sy copy "'&fromFile$&fromExt$&'" "'&toPath$&'*.*"' 
+58440         if int(cfi/10)=cfi/10 then pause
+58460       nex cfi
+58480         pause
+59000     else
+59020       if new_record_length then 
+59040         dim parameters$*128
+59060         parameters$=''
+59080         parameters$=parameters$&' -'&str$(abs(new_record_length))
+59100         if new_record_length and uprc$(from$)=uprc$(to$) then 
+59120           execute 'copy "'&from$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
+59140           execute 'copy "'&env$('temp')&'\acs_recl_chg_'&session$&'" "'&to$&'"' ioerr COPY_FAIL
+59160           execute 'free "'&env$('temp')&'\acs_recl_chg_'&session$&'"' ioerr ignore
+59180         end if 
+59200       end if 
+59220       execute 'copy "'&from$&'" "'&to$&'"' ioerr COPY_FAIL
+59240       copy_return=1
+59260     end if
+59280   ! end if
 60000   goto COPY_XIT
 64000   COPY_FAIL: ! r:
 64020     copy_return=min(-1,-err)
