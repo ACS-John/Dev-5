@@ -24,7 +24,7 @@
 03220     end if
 03240     ! /r
 04000     execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
-04020     library 's:\Core\Library': fnclient$,fnmakesurepathexists
+04020     library 's:\Core\Library': fnclient$,fnmakesurepathexists,fnshortpath$
 04040     fnclient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
 04060     fn_env_data_default
 04080     !
@@ -427,7 +427,7 @@
 45340 fnend
 46000 def fn_setQBase(newQBase$*256)
 46020   if env$('QBase')='' then
-46022     if pos(QBase,' ')>0 then QBase=fnshortpath$(QBase)
+46022     if pos(newQBase$,' ')>0 then newQBase$=fnshortpath$(newQBase$)
 46030     newQBase$=rtrm$(newQBase$,'\')
 46040     setenv('QBase',newQBase$)
 46060     ! if env$('ACSDeveloper')<>'' then 
