@@ -76,7 +76,7 @@
 01240     rewrite #h_customer_1,using F_CUSTOMER_1,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
 01242     if ad1 then let fn_record_previous_update(z$) ! &' '&e$(2))
 01260     if oldService1DepositAmount<>b(8) then 
-01263       fn_depositChangeLog(z$,oldService1DepositAmount,b(8),date('ccyymmdd'),trim$(srvnam$(1))(1:15)&' Deposit Changed')
+01263       fn_depositChangeLog(z$,oldService1DepositAmount,b(8),date('mmddyy'),trim$(srvnam$(1))(1:15)&' Deposit Changed')
 01264     end if 
 01265     if oldService2DepositAmount<>b(9) then 
 01268       fn_depositChangeLog(z$,oldService2DepositAmount,b(9),date('mmddyy'),trim$(srvnam$(2))(1:15)&' Deposit Changed')
