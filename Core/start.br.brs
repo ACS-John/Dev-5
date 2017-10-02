@@ -86,6 +86,15 @@
 11160       setenv('Temp',env$('programdata')&slash$&'ACS_BR_CS_Temp_s'&session$)
 11180     end if
 11200     if ~fn_temp_dir_validate then goto XIT ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto XIT
+11202     if pos(env$('Q'),' ')>0 then 
+11204       fn_setQ(fnshortpath$(env$('Q')))
+11206     end if
+11208     if pos(env$('Qbase'),' ')>0 then 
+11210       dim New2Qbase$*256
+11212       New2Qbase$=fnshortpath$(env$('Qbase')) 
+11214       setenv('QBase','') 
+11216       fn_setQbase(New2Qbase$)
+11218     end if
 11220     if env$('client_temp')='' then let setenv('Client_TEMP',env$('Temp'))
 11240     if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto XIT
 11260     if ~fn_rights_test(env$('temp'),'Correct your Temp environment varialbe.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
@@ -412,7 +421,6 @@
 45060 fnend
 45080 def fn_setQ(setQ$*256)
 45100   setQ$=rtrm$(setQ$,'\')
-45110   if pos(setQ$,' ')>0 then setQ$=fnshortpath$(setQ$)
 45120   setenv('Q',setQ$)
 45140   execute 'config substitute [Q] "'&env$('Q')&'"'
 45160   if env$('acsDeveloper')='' then 
@@ -427,7 +435,6 @@
 45340 fnend
 46000 def fn_setQBase(newQBase$*256)
 46020   if env$('QBase')='' then
-46022     if pos(newQBase$,' ')>0 then newQBase$=fnshortpath$(newQBase$)
 46030     newQBase$=rtrm$(newQBase$,'\')
 46040     setenv('QBase',newQBase$)
 46060     ! if env$('ACSDeveloper')<>'' then 
