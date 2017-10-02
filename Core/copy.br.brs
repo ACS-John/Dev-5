@@ -38,10 +38,10 @@
 58060       fngetpp(to$,toPath$,toFile$,toExt$)
 58080       dim fromPath$*256,fromFile$*256,fromExt$*256
 58100       dim toPath$*256,toFile$*256,toExt$*256
-58120       pr 'fromFile$=';fromFile$
-58140       pr 'fromExt$=';fromExt$
-58160       pr 'toFile$=';toFile$
-58180       pr 'toExt$=';toExt$
+58120       ! pr 'fromFile$=';fromFile$
+58140       ! pr 'fromExt$=';fromExt$
+58160       ! pr 'toFile$=';toFile$
+58180       ! pr 'toExt$=';toExt$
 58200       ! pause
 58220       ! execute 'copy "'&toPath$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
 58240       dim copyFromFolder$(0)*256
