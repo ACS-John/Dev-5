@@ -79,13 +79,13 @@
 01263       fn_depositChangeLog(z$,oldService1DepositAmount,b(8),date('ccyymmdd'),trim$(srvnam$(1))(1:15)&' Deposit Changed')
 01264     end if 
 01265     if oldService2DepositAmount<>b(9) then 
-01268       fn_depositChangeLog(z$,oldService2DepositAmount,b(9),date('ccyymmdd'),trim$(srvnam$(2))(1:15)&' Deposit Changed')
+01268       fn_depositChangeLog(z$,oldService2DepositAmount,b(9),date('mmddyy'),trim$(srvnam$(2))(1:15)&' Deposit Changed')
 01269     end if 
 01270     if oldService3DepositAmount<>b(10) then 
-01273       fn_depositChangeLog(z$,oldService3DepositAmount,b(10),date('ccyymmdd'),trim$(srvnam$(3))(1:15)&' Deposit Changed')
+01273       fn_depositChangeLog(z$,oldService3DepositAmount,b(10),date('mmddyy'),trim$(srvnam$(3))(1:15)&' Deposit Changed')
 01274     end if 
 01275     if oldService4DepositAmount<>b(11) then 
-01288       fn_depositChangeLog(z$,oldService4DepositAmount,b(11),date('ccyymmdd'),trim$(srvnam$(4))(1:15)&' Deposit Changed')
+01288       fn_depositChangeLog(z$,oldService4DepositAmount,b(11),date('mmddyy'),trim$(srvnam$(4))(1:15)&' Deposit Changed')
 01290     end if 
 01300     if olde3$=e$(3) then goto PAST_CASS_DELETE ! delete bar code if address changes
 01310     if cassopen=0 then goto PAST_CASS_DELETE
