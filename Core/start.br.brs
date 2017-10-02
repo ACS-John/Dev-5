@@ -50,7 +50,7 @@
 04480      setenv('at','@:') 
 04490      fn_startStatus('Collecting local environment variables...')
 04500      fncs_env
-           if env$('client_acsDeveloper')<>'' then let setenv('acsDeveloper',env$('client_acsDeveloper'))
+04510      if env$('client_acsDeveloper')<>'' then let setenv('acsDeveloper',env$('client_acsDeveloper'))
 04520      setenv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
 04540      setenv('userprofile','@::'&env$('client_userprofile'))
 04560    else
