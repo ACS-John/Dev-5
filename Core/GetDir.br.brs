@@ -24,7 +24,7 @@
 20480     let tmp$='Sy -s -M Dir "'&rtrm$(os_filename$(dir$))&'\'&filter$&'" /b '&option$&' >"'&env$('temp')&'\GetDir'&session$&'.tmp"'
 20500     execute tmp$
 20520 ! pr TMP$ : Let FNPAUSE
-20540     open #tf1:=fngethandle: "Name=@::"&env$('temp')&'\'&"GetDir"&session$&".tmp",display,input 
+20540     open #tf1:=fngethandle: "Name="&env$('temp')&'\'&"GetDir"&session$&".tmp",display,input 
 20560     for x=1 to udim(filename$)
 20580       linput #tf1: tmp$ eof XIT
 20600       let filename$(x)=rtrm$(tmp$)
