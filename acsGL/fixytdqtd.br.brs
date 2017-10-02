@@ -34,9 +34,9 @@
 00280   let fnacs(sn$,0,mat resp$,ckey)
 00290   if ckey=5 then goto XIT
 00300 ! 
-00310   let beg_date=val(resp$(1)) !:
+00310   beg_date=val(resp$(1)) !:
         let end_date=val(resp$(2))
-00320   let begytd_date=val(resp$(3)) !:
+00320   begytd_date=val(resp$(3)) !:
         let endytd_date=val(resp$(4))
 00330   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode !:
         close #1: 
@@ -55,7 +55,7 @@
 00460     let m(j)=0
 00470   next j
 00480 L480: if adr(1)=0 then goto REWRITE_MASTER
-00490   let ca=adr(1)
+00490   ca=adr(1)
 00500 L500: read #2,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca norec REWRITE_MASTER
 00510   if fixqtr=0 or (fndate_mmddyy_to_ccyymmdd(d(2))<beg_date or fndate_mmddyy_to_ccyymmdd(d(2))>end_date) then goto L560
 00520   let x=3
@@ -68,7 +68,7 @@
 00590     let m(j)+=d(x+=1)
 00600   next j
 00610 L610: if nca=0 then goto REWRITE_MASTER
-00620   let ca=nca
+00620   ca=nca
 00630   goto L500
 00640 REWRITE_MASTER: ! 
 00650   rewrite #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m
@@ -79,6 +79,6 @@
 00700 ERTN: let fnerror(program$,err,line,act$,"xit")
 00710   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00720   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00730   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00730   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00740 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00750 ! /region

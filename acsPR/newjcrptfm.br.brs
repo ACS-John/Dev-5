@@ -38,7 +38,7 @@
 00350   let hreport$=resp$(1)(1:2) !:
         let rptn=val(resp$(1)(1:2)) !:
         let rptn$=lpad$(str$(rptn),2)
-00360   if ckey=1 then let addone=1: let rptn=0: goto ADD_EDIT
+00360   if ckey=1 then addone=1: let rptn=0: goto ADD_EDIT
 00370   if ckey=2 then let editrec=1: goto ADD_EDIT
 00380 RECREATE_GRID: ! 
 00390 ! ______________________________________________________________________
@@ -73,17 +73,17 @@
 00600   let fntxt(7,1,132,0,0,"",0,"This is the 2nd line of the heading line.") !:
         let resp$(respc+=1)=ch$(2)
 00610   let mylen=50
-00620   let fnlbl(12,1,"Item for Print Selection (blank for all):",mylen,1)
+00620   let fnlbl(12,1,"Item for pr Selection (blank for all):",mylen,1)
 00630   if ips>0 and ips=<udim(ty2$) then let resp$(respc+=1)=ty2$(ips+1) else let resp$(respc+=1)=""
 00640   let fncomboa("DataNames2",12,mylen+3,mat ty2$,"If you want limit the report to a value in a particular field in the report record, Indicate which field it is by locating the ID number.",25,0)
 00650   let resp$(respc+=1)=str$(psc)
 00660   let fnchk(13,mylen+3,"Summarize Category Records:",1)
 00670   if sd= 1 then let resp$(respc+=1)="TRUE" else let resp$(respc+=1)="FALSE"
 00680   let fnlbl(14,1,"Selection Codes:",mylen,1)
-00690   let code1$(1)="1 - Equal to" !:
-        let code1$(2)="2 - Equal to or greater than" !:
-        let code1$(3)="3 - Equal to or less than" !:
-        let code1$(4)="4 - Range of numbers" !:
+00690   code1$(1)="1 - Equal to" !:
+        code1$(2)="2 - Equal to or greater than" !:
+        code1$(3)="3 - Equal to or less than" !:
+        code1$(4)="4 - Range of numbers" !:
         let respc+=1: for j=1 to udim(code1$) !:
           if sc=val(code1$(j)(1:1)) then let resp$(respc)=code1$(j)(1:1) !:
           next j
@@ -92,7 +92,7 @@
         let fncmdkey("&Delete",4,0,0,"Deletes this report from your system.") !:
         let fncmdkey("&Cancel",5,0,1,"Return to selection screen.")
 00720   let fnacs(sn$,0,mat resp$,ckey) ! edit first screen for report format
-00730   let addone=0
+00730   addone=0
 00740   if ckey=5 then goto SCR1
 00745   if ckey=4 then goto DELETEIT : goto SCR3
 00750   let rn=val(resp$(1)(1:2))
@@ -104,8 +104,8 @@
         let fnmsgbox(mat ml$,resp$,cap$,49)
 00780   if resp$="OK" then let holdrn=rn: goto L790 else goto SCR2
 00790 L790: let rt40$=resp$(2)
-00800   let ch$(1)=resp$(3)
-00810   let ch$(2)=resp$(4)
+00800   ch$(1)=resp$(3)
+00810   ch$(2)=resp$(4)
 00820   let ips=0
 00830   for j=1 to udim(ty2$)
 00840     if resp$(5)=trim$(ty2$(j)) then let ips=val(ty2$(j)(1:2)): goto L860
@@ -120,7 +120,7 @@
 00890 L890: if sd$="Y" then let sd=1 else let sd=0
 00900   let rt$=rt40$
 00910   if ckey=1 then rewrite #1,using L1780,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
-00920   if ips>0 then goto SCR5 else : goto SCR3 ! ask criteris for print selection
+00920   if ips>0 then goto SCR5 else : goto SCR3 ! ask criteris for pr selection
 00930   goto SCR3
 00940 ! ______________________________________________________________________
 00950 DELETEIT: ! 
@@ -132,7 +132,7 @@
 00980 L980: delete #1,key=rptn$: 
 00990 L990: goto SCR1
 01000 SCR3: ! ask column # to edit
-01010   if column=0 then let column=1
+01010   if column=0 then column=1
 01020   let fntos(sn$="ask-column") !:
         let respc=0: let mylen=15: let mypos=mylen+3
 01030   let fnlbl(1,1,"Column #:",mylen,1)
@@ -141,7 +141,7 @@
 01050   let fncmdset(2)
 01060   let fnacs(sn$,0,mat resp$,ckey) ! acs column
 01070   if ckey=5 then goto SCR1
-01080   let column=val(resp$(1))
+01080   column=val(resp$(1))
 01090   if column=0 then goto SCR1
 01100   if column<0 or column>20 then goto SCR2
 01110   goto SCR4 ! allow to edit
@@ -151,7 +151,7 @@
 01140   let fnlbl(1,1,"Report #:  "&str$(rn),mylen,left)
 01150   let fnlbl(2,1,"Column #:  "&str$(column),mylen,left)
 01160   let fnlbl(3,1,"Formula for printing:",mylen,left)
-01170   let fntxt(3,mypos,50,50,0,"",0,"See instructions for creating the formula for the information that is to print in this column.") !:
+01170   let fntxt(3,mypos,50,50,0,"",0,"See instructions for creating the formula for the information that is to pr in this column.") !:
         let resp$(respc+=1)=f$(column)
 01180   let fnlbl(4,1,"Starting Position:",mylen,left)
 01190   let fntxt(4,mypos,3,3,0,"30",0,"") !:
@@ -184,7 +184,7 @@
 01390   if resp$(6)='True' then let tcj(column)=1 else let tcj(column)=0
 01400   if resp$(7)='True' then let tcs(column)=1 else let tcs(column)=0
 01410   rewrite #1,using L1780,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
-01420   if ckey=1 then let column=min(column+1,20): goto SCR4
+01420   if ckey=1 then column=min(column+1,20): goto SCR4
 01430   if ckey=4 then let f$(column)="": let pp(column)=0: let ppr(column)=0: let dp(column)=0 !:
           let fc(column)=0: let tcj(column)=0: let tcs(column)=0: rewrite #1,using L1780,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs !:
           goto SCR4
@@ -212,7 +212,7 @@
 01600   let fnacs(sn$,0,mat resp$,ckey)
 01610   if ckey=5 then goto XIT
 01620   let rno=val(resp$(1)(1:2))
-01630   if ckey=1 then let addone=1: let rt$="" : mat ch$=("") : let ips=sd=cp=sc=0 : mat ps=(0) !:
+01630   if ckey=1 then addone=1: let rt$="" : mat ch$=("") : let ips=sd=cp=sc=0 : mat ps=(0) !:
           mat f$=("") : mat pp=(0) : mat ppr=(0) : mat dp=(0) : mat fc=(0) !:
           mat tcj=(0) : mat tcs=(0): goto EDIT_ADD_REPORT
 01640   if ckey=2 then let rptn$=lpad$(str$(rno),2) !:
@@ -247,7 +247,7 @@
 01880   let wrd3$(2)="Select Reports to Print"
 01890   let io3$(1)="4,2,C 23,N"
 01900   let io3$(2)="5,2,C 23,N"
-01910   print fields "16,34,C 11,B,5": "Cancel (F5)"
+01910   pr fields "16,34,C 11,B,5": "Cancel (F5)"
 01920   rinput #win,select mat io3$,attr "H": mat wrd3$
 01930   let prtall=curfld-1
 01940   close #win: ioerr L1950
@@ -255,9 +255,9 @@
 01960   if prtall=0 then goto L2060
 01970   for j=1 to 20
 01980     let fnopenwin(win=103,10,20,15,59,cap$)
-01990     if j>1 then print #win,fields "6,1,Cc 40,R,N": "Last Report Number Entered was "&rno$(j-1)
-02000     print #win,fields "4,2,C 23,N": "Report Number to Print:"
-02010     print fields "16,35,C 09,B,5": "Done (F5)"
+01990     if j>1 then pr #win,fields "6,1,Cc 40,R,N": "Last Report Number Entered was "&rno$(j-1)
+02000     pr #win,fields "4,2,C 23,N": "Report Number to Print:"
+02010     pr fields "16,35,C 09,B,5": "Done (F5)"
 02020 L2020: input #win,fields "4,26,N 2,UET,N": rno(j) conv L2020
 02030     let rno$(j)=lpad$(str$(rno(j)),2)
 02040     if cmdkey=5 or rno(j)=0 then goto L2060
@@ -272,37 +272,37 @@
 02130   goto L2160
 02140 L2140: read #1,using L1780: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs eof L2490
 02150   form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
-02160 L2160: print #255,using L2170: "Job Cost Report File Proof List"
+02160 L2160: pr #255,using L2170: "Job Cost Report File Proof List"
 02170 L2170: form skip 2,pos 50,c 32
-02180   print #255,using L2190: "Report Number",rn
+02180   pr #255,using L2190: "Report Number",rn
 02190 L2190: form pos 1,c 13,pos 20,pic(zz)
-02200   print #255,using L2210: "Report Title",rt$
+02200   pr #255,using L2210: "Report Title",rt$
 02210 L2210: form pos 1,c 12,pos 13,cc 66
-02220   print #255,using L2230: "Column Headings",ch$(1)
+02220   pr #255,using L2230: "Column Headings",ch$(1)
 02230 L2230: form pos 1,c 15,skip 2,c 132
-02240   print #255,using L2250: ch$(2)
+02240   pr #255,using L2250: ch$(2)
 02250 L2250: form pos 1,c 132,skip 2
-02260   print #255,using L2270: "Item # for Selection",ips
+02260   pr #255,using L2270: "Item # for Selection",ips
 02270 L2270: form pos 1,c 20,pos 30,pic(zz#)
-02280   print #255,using L2290: "Summarize Categories",sd
+02280   pr #255,using L2290: "Summarize Categories",sd
 02290 L2290: form pos 1,c 26,pos 32,pic(#)
-02300   print #255,using L2290: "Condense Print",cp
-02310   print #255,using L2290: "Selection Code",sc
-02320   print #255,using L2330: "Print Selection Criteria"
+02300   pr #255,using L2290: "Condense Print",cp
+02310   pr #255,using L2290: "Selection Code",sc
+02320   pr #255,using L2330: "Print Selection Criteria"
 02330 L2330: form skip 1,pos 1,c 30,skip 2
 02340   for j=1 to 20
-02350     print #255,using L2360: psc(j),psc(j+20),psc(j+40),psc(j+60),psc(j+80)
+02350     pr #255,using L2360: psc(j),psc(j+20),psc(j+40),psc(j+60),psc(j+80)
 02360 L2360: form pos 1,5*n 20.3
 02370   next j
-02380   print #255,using L2390: "Formula for Value","Starting","# of Print Positions","# of Decimal","Skip Detail Print","Total Column","Overall Totals"
+02380   pr #255,using L2390: "Formula for Value","Starting","# of pr Positions","# of Decimal","Skip Detail Print","Total Column","Overall Totals"
 02390 L2390: form skip 1,pos 1,c 17,pos 39,c 8,pos 48,c 20,pos 71,c 12,pos 84,c 17,pos 103,c 12,pos 119,c 14
-02400   print #255,using L2410: "to be Printed","Print Position","Required","Positions","by Job","by System"
+02400   pr #255,using L2410: "to be Printed","Print Position","Required","Positions","by Job","by System"
 02410 L2410: form pos 1,c 13,pos 38,c 14,pos 53,c 8,pos 72,c 9,pos 107,c 6,pos 123,c 9,skip 2
 02420   for j=1 to 20
-02430     print #255,using L2440: f$(j),pp(j),ppr(j),dp(j),fc(j),tcj(j),tcs(j)
+02430     pr #255,using L2440: f$(j),pp(j),ppr(j),dp(j),fc(j),tcj(j),tcs(j)
 02440 L2440: form pos 1,c 50,pos 52,n 3,pos 56,n 3,pos 76,n 1,pos 93,n 1,pos 110,n 1,pos 127,n 1
 02450   next j
-02460   print #255: newpage
+02460   pr #255: newpage
 02470   goto L2090
 02480 ! ______________________________________________________________________
 02490 L2490: let fncloseprn
@@ -311,7 +311,7 @@
 02520 ! ______________________________________________________________________
 02530 ! ______________________________________________________________________
 02540 SRCH: ! 
-02550   let bk=0
+02550   bk=0
 02560 ! ______________________________________________________________________
 02570 XIT: let fnxit
 02580 ! ______________________________________________________________________
@@ -319,7 +319,7 @@
 02600 ERTN: let fnerror(program$,err,line,act$,"xit")
 02610   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02620   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02630   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02630   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02640 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02650 ! /region
 02660 ! ______________________________________________________________________

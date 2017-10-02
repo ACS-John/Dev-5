@@ -9,14 +9,14 @@
 20060 dim cap$*80
 20080 fntop(program$,cap$:='ScreenIO Save And Test for '&parentkey$)
 20100 ! r: debug for checking passed variables
-20120 ! print 'parentkey$="'&parentkey$&'"'
+20120 ! pr 'parentkey$="'&parentkey$&'"'
 20140 ! for passedDataItem=1 to udim(mat passedData$)
 20160 !   pr 'passedData$('&str$(passedDataItem)&')="'&passedData$(passedDataItem)&'"'
 20180 ! nex passedDataItem
-20200 ! print 'parentkey$="'&parentkey$&'"'
-20220 ! print 'key$="'&key$&'"'
-20240 ! print 'record='&str$(record)
-20260 ! print 'path$="'&path$&'"'
+20200 ! pr 'parentkey$="'&parentkey$&'"'
+20220 ! pr 'key$="'&key$&'"'
+20240 ! pr 'record='&str$(record)
+20260 ! pr 'path$="'&path$&'"'
 20280 ! pr program$
 20300 ! pause
 20320 ! /r

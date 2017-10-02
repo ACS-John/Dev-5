@@ -2,30 +2,30 @@
 28300   let fnarray_item_insert$=fn_array_item_insert$(mat array$, insert_item$, insert_item_number)
 28400 fnend 
 28500 def fn_array_item_insert$(mat array$, insert_item$*1024, insert_item_number)
-28600   let array_item_count=udim(mat array$)
+28600   array_item_count=udim(mat array$)
 28700   if insert_item_number>array_item_count then 
 28800     mat array$(insert_item_number)
-28900     let array$(insert_item_number)=insert_item$
+28900     array$(insert_item_number)=insert_item$
 29000   else 
-29100     let array_item_count+=1
+29100     array_item_count+=1
 29200     mat array$(array_item_count)
 29300     mat array$(insert_item_number+1:array_item_count)=array$(insert_item_number:array_item_count-1)
-29400     let array$(insert_item_number)=insert_item$
+29400     array$(insert_item_number)=insert_item$
 29500   end if  ! Insert_Item_Number>Array_Item_Count   /   else 
 29600 fnend 
 29700 def library fnarray_item_insert(mat array, insert_item, insert_item_number)
 29800   let fnarray_item_insert=fn_array_item_insert(mat array, insert_item, insert_item_number)
 29900 fnend  ! fnARRAY_ITEM_INSERT
 30000 def fn_array_item_insert(mat array, insert_item, insert_item_number)
-30100   let array_item_count=udim(mat array)
+30100   array_item_count=udim(mat array)
 30200   if insert_item_number>array_item_count then 
 30300     mat array(insert_item_number)
-30400     let array(insert_item_number)=insert_item
+30400     array(insert_item_number)=insert_item
 30500   else 
-30600     let array_item_count+=1
+30600     array_item_count+=1
 30700     mat array(array_item_count)
 30800     mat array(insert_item_number+1:array_item_count)=array(insert_item_number:array_item_count-1)
-30900     let array(insert_item_number)=insert_item
+30900     array(insert_item_number)=insert_item
 31000   end if  ! Insert_Item_Number>Array_Item_Count   /   else 
 31100 fnend 
 31200 def library fnsrch_case_insensitive(mat srch_array$,srch_for$*80; srch_start_ele)
@@ -59,7 +59,7 @@
 34000   !    This function returns the number of items in the array after any add
 34100   if skip_zeros=0 or (skip_zeros and one<>0) then 
 34200     if skip_dupes=0 or (skip_dupes and srch(mat add_to,one)=-1) then 
-34300       add_to_udim=udim(add_to) : mat add_to(add_to_udim+1) : let add_to(add_to_udim+1)=one
+34300       add_to_udim=udim(add_to) : mat add_to(add_to_udim+1) : add_to(add_to_udim+1)=one
 34400     end if 
 34500   end if 
 34600   fn_addOneN=udim(mat add_to)
@@ -76,7 +76,7 @@
 35700   !    This function returns the number of items in the array after any add
 35800   if skip_blanks=0 or (skip_blanks and trim$(one$)<>"") then 
 35900     if skip_dupes=0 or (skip_dupes and srch(mat add_to$,one$)=-1) then 
-36000       add_to_udim=udim(mat add_to$) : mat add_to$(add_to_udim+1) : let add_to$(add_to_udim+1)=one$
+36000       add_to_udim=udim(mat add_to$) : mat add_to$(add_to_udim+1) : add_to$(add_to_udim+1)=one$
 36100     end if 
 36200   end if 
 36300   fn_addOneC=udim(mat add_to$)

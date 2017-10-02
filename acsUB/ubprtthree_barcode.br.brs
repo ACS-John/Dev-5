@@ -15,16 +15,16 @@
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
 00140   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00150   let at$(1)=cnam$ !:
+00150   at$(1)=cnam$ !:
         let z=21 !:
-        let at$(1)=trim$(at$(1))(1:z) !:
+        at$(1)=trim$(at$(1))(1:z) !:
         let x=len(at$(1)) : let y=z-x !:
-        let at$(1)=rpt$(" ",int(y/2))&at$(1)
+        at$(1)=rpt$(" ",int(y/2))&at$(1)
 00160   let z=26 !:
         for j=2 to udim(at$) !:
-          let at$(j)=trim$(at$(j))(1:z) !:
+          at$(j)=trim$(at$(j))(1:z) !:
           let x=len(at$(j)) : let y=z-x !:
-          let at$(j)=rpt$(" ",int(y/2))&at$(j) !:
+          at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00170   let linelength=62
 00180 ! 
@@ -37,7 +37,7 @@
 00250 ! ______________________________________________________________________
 00260   let prebal$="10:00 AM, xxxxxxx  xx"
 00270 SCREEN1: ! 
-00280   let a$="" : let prtbkno=0
+00280   a$="" : let prtbkno=0
 00290   let fntos(sn$="UBPrtBl1-1") !:
         let pf=26 : let ll=24 !:
         let respc=0
@@ -83,14 +83,14 @@
         let mg$(3) = resp$(6) !:
         let d1 = val(resp$(7))
 00500   if resp$(8)="[All]" then !:
-          let a$="" else !:
-          let a$ = lpad$(trim$(resp$(8)(1:9)),9)
+          a$="" else !:
+          a$ = lpad$(trim$(resp$(8)(1:9)),9)
 00510   if resp$(9)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(9))
 00520   if resp$(10)="True" then let sl1=1: let z$="" else let sl1=0
 00530   if trim$(a$)<>"" then read #2,using L540,key=a$: z$,route,sequence nokey SCREEN1 !:
-          let holdz$=z$: let begin=1 !:
+          let holdz$=z$: begin=1 !:
           let st1=1
 00540 L540: form pos 1,c 10,pos 1741,n 2,n 7
 00550   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
@@ -104,7 +104,7 @@
 00630 L630: if sl1=1 then goto SCREEN3
 00640 L640: read #6,using L670: z$ eof RELEASE_PRINT
 00650   if trim$(a$)<>"" and begin=1 and z$<>holdz$ then goto L640 ! start with
-00660   let begin=0 ! cancel starting account
+00660   begin=0 ! cancel starting account
 00670 L670: form pos 22,c 10
 00680   read #1,using L690,key=z$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate nokey L640
 00690 L690: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1942,c 12,pos 1864,c 30,pos 1831,n 9,pos 1821,n 1
@@ -152,8 +152,8 @@
 01090   if c4>0 then let fb$(1)="          Final Bill" : let fb$(2)="": let fb$(3)=""
 01100 ! ______________print bill routine______________________________________
 01110   gosub VBPRINT
-01120 ! _____________end of print routine______________________________________
-01130   let bct(2)=bct(2)+1 !:
+01120 ! _____________end of pr routine______________________________________
+01130   bct(2)=bct(2)+1 !:
         ! accumulate totals
 01140   goto L630
 01150 ! ______________________________________________________________________
@@ -171,7 +171,7 @@
 01210   let fncmbact(1,17) ! !:
         let resp$(1)=a$
 01220   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
-01230   let a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
+01230   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto RELEASE_PRINT
 01240   if ck=5 then goto RELEASE_PRINT
 01250   read #1,using L690,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final nokey SCREEN3
@@ -207,7 +207,7 @@
 01530   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 01540 L1540: return 
 01550 ! ______________________________________________________________________
-01560 ENDSCR: ! print totals screen
+01560 ENDSCR: ! pr totals screen
 01570   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
 01580   let fntos(sn$="Bills-Total") !:
         let mylen=23 : let mypos=mylen+2 !:
@@ -233,53 +233,53 @@
 01720   execute "list -"&str$(line) !:
         pause  !:
         goto L1740
-01730   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+01730   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01740 L1740: execute act$
 01750   goto ERTN
 01760 ! ______________________________________________________________________
 01860 VBPRINT: ! 
 01870 ! -- Printer Program for three per page  Utility Bills
 01880 ! Gosub PRIOR_USAGES
-01890   print #20: 'Call Print.MyFontSize(10)'
+01890   pr #20: 'Call Print.MyFontSize(10)'
 01900   let txt$=trim$(z$) !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(62)&','&str$(lyne+10)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(62)&','&str$(lyne+10)&')'
 01903   let txt$=cnvrt$("pic(-------.##)",g(12)+pb)&"   "&cnvrt$("pic(zzbzzbzz)",d4)&cnvrt$("pic(-----.##)",g(11)+pb)
-01904   print #20: 'Call Print.AddText("'&txt$&'",'&str$(85)&','&str$(lyne+38)&')'
+01904   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(85)&','&str$(lyne+38)&')'
 01905   let fnbarcode(z$,90,lyne+45)
 01906 ! Let FNBARCODE(CNVRT$("pic(------.##",BAL),86,LYNE+18)
 01910   let txt$=trim$(fb$(1)) !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(95)&','&str$(lyne+7)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(95)&','&str$(lyne+7)&')'
 01920   if pb<>0 then let de$="Prv  " else let de$="     "
 01930   let txt$=de$&cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzz)",0)&" "&cnvrt$("pic(-----.--)",pb) !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+25)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+25)&')'
 01940   if g(1)>0 then let de$="WatER" else let de$="     "
 01950   let txt$=de$&cnvrt$("pic(zzzzzzzz)",d(1))&cnvrt$("pic(zzzzzzzz)",d(2))&cnvrt$("pic(zzzzzz)",d(3))&" "&cnvrt$("pic(-----.--)",g(1)) !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+30)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+30)&')'
 01960   if g(2)>0 then let de$="Sewer" else let de$="     "
 01970   let txt$=de$&cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzz)",0)&" "&cnvrt$("pic(-----.##)",g(2))&"     " !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+35)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+35)&')'
 01980   if g(3)>0 then let de$="Fee  " else let de$="     "
 01990   let txt$=de$&cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzz)",0)&" "&cnvrt$("pic(-----.--)",g(3))& "     " !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+40)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+40)&')'
 02000   if g(5)>0 then let de$="P/T" else let de$="   "
 02010   if g(5)>0 then let txt$=cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzz)",0)&" "&de$&cnvrt$("pic(-----.##)",g(5)) !:
-          print #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+45)&')'
-02020   let cd1$="Other Charge"
+          pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+45)&')'
+02020   cd1$="Other Charge"
 02030   read #8,using L2040,key="OC"&lpad$(str$(a4),2): cd1$ nokey L2050
 02040 L2040: form pos 5,c 12
-02050 L2050: if g(8)>0 then let cd1$="Other Charge" else let cd1$=""
+02050 L2050: if g(8)>0 then cd1$="Other Charge" else cd1$=""
 02060   if g(8)>0 then let txt$=cd1$&cnvrt$("pic(-------.##)",g(8)) !:
-          print #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+50)&')'
+          pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+50)&')'
 02070   if g(9)>0 then let de$="Tax" else let de$="   "
 02080   if d2=0 then let d2=d3x
 02090   if d3=0 then let d3=d2x
 02100   let txt$=cnvrt$("pic(zzbzzbbzz)",d3x)&" "&cnvrt$("pic(zzbzzbbzz)",d2x)&cnvrt$("pic(------.##)",g(12)+pb) &cnvrt$("pic(------.##)",g(11)+pb)&"    " !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+76)&')'
-02101   print #20: 'Call Print.AddText("'&pe$(1)&'",'&str$(90)&','&str$(lyne+60)&')'
-02102   print #20: 'Call Print.AddText("'&pe$(2)&'",'&str$(90)&','&str$(lyne+64)&')'
-02103   print #20: 'Call Print.AddText("'&pe$(3)&'",'&str$(90)&','&str$(lyne+68)&')'
-02104   print #20: 'Call Print.AddText("'&pe$(4)&'",'&str$(90)&','&str$(lyne+72)&')'
-02110   let bills+=1
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+76)&')'
+02101   pr #20: 'Call Print.AddText("'&pe$(1)&'",'&str$(90)&','&str$(lyne+60)&')'
+02102   pr #20: 'Call Print.AddText("'&pe$(2)&'",'&str$(90)&','&str$(lyne+64)&')'
+02103   pr #20: 'Call Print.AddText("'&pe$(3)&'",'&str$(90)&','&str$(lyne+68)&')'
+02104   pr #20: 'Call Print.AddText("'&pe$(4)&'",'&str$(90)&','&str$(lyne+72)&')'
+02110   bills+=1
 02120   if int(bills/3)=bills/3 then let fnpa_newpage: let lyne=0: goto L2150
 02130   let lyne=lyne+90
 02150 L2150: return 
@@ -301,8 +301,8 @@
 02310 L2310: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 02320   if p$<>z$ then goto L2380
 02330   if tcode<>1 then goto L2300 ! only charge transactions
-02340   let usage(3)=usage(2): let billdate(3)=billdate(2)
-02350   let usage(2)=usage(1): let billdate(2)=billdate(1)
-02360   let usage(1)=wu: let billdate(1)=tdate
+02340   let usage(3)=usage(2): billdate(3)=billdate(2)
+02350   let usage(2)=usage(1): billdate(2)=billdate(1)
+02360   let usage(1)=wu: billdate(1)=tdate
 02370   goto L2300
 02380 L2380: return 

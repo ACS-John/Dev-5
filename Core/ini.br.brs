@@ -7,14 +7,14 @@
 10400   fnIniSet('core','tom','tomset')
 10500   fnIniSet('acsPR','dave','daveset')
 10600   fnIniWrite
-10700   print fnIniRead$('core','version')
+10700   pr fnIniRead$('core','version')
 10800   pause  ! fnIniOpen('acs.ini')
 10900 ! fnIniSet('core','
 11000   end 
 11100 ! 
 11300 ! ERTN: ! r:
 11400 !   execute 'list -'&str$(line)
-11500 !   print 'Error '&str$(err)&' here';bell
+11500 !   pr 'Error '&str$(err)&' here';bell
 11600 !   pause 
 11700 ! ! ! /r
 11720 ! /r
@@ -145,7 +145,7 @@
 50160   let inir_temp_file$=file$(inir_temp_handle)
 50180   if ini_file$="" then 
 50200     if env$('ACSDeveloper')<>'' then 
-50220       print "INI_File$ is empty.  fn_ini_write will abort.  You must specifying a file via fnIniOpen, before calling this function."
+50220       pr "INI_File$ is empty.  fn_ini_write will abort.  You must specifying a file via fnIniOpen, before calling this function."
 50240       pause 
 50260     end if 
 50280     goto inirXIT
@@ -176,7 +176,7 @@
 50820   ! 
 50840   INIR_WRITE: ! r:
 50860     if trim$(inir_line$)<>'' then 
-50880       print #inir_temp_handle: inir_line$
+50880       pr #inir_temp_handle: inir_line$
 50900     end if 
 50920   return ! /r
 50940   inirXIT: ! 

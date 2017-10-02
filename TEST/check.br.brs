@@ -7,4 +7,4 @@
 00085   let fnchk(6,40,"Check #3 And then some (align=1) this one is longer",myalign:=1,0) : let response$(3)='True'
 00150   let fncmdset(2)
 00152   let fnacs(sn$,win,mat response$,ckey)
-00160   print mat response$
+00160   pr mat response$

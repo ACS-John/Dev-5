@@ -1,4 +1,4 @@
-10000   print border: 'Import Source'
+10000   pr border: 'Import Source'
 10020   execute 'con gui off'
 10040   dim filename$(1)*256,prg_list$(1)*256,dir_destination$*128,dir_source$*128,ext$*128
 10060   let fn_import_source_init
@@ -13,9 +13,9 @@
 10240 ! fn_import_source_init
 10260     let fn_getdir2(dir_source$,mat filename$,'/s') ! option$)
 10280     for file_item=1 to udim(mat filename$)
-10300       print fields '10,10,Cc 60': 'phase 1 of 2: processing '&str$(file_item)&' of '&str$(udim(mat filename$))
+10300       pr fields '10,10,Cc 60': 'phase 1 of 2: processing '&str$(file_item)&' of '&str$(udim(mat filename$))
 10320       let dot_pos=pos(filename$(file_item),'.',-1)
-10340       let backslash_pos=pos(filename$(file_item),'\',-1)
+10340       backslash_pos=pos(filename$(file_item),'\',-1)
 10360       let ext$=''
 10380       if backslash_pos<=0 or dot_pos>backslash_pos then 
 10400         let ext$=filename$(file_item)(dot_pos+1:len(filename$(file_item)))
@@ -39,18 +39,18 @@
 10760     mat prg_list$(prg_list_count+=1)
 10780     let prg_list$(prg_list_count)=msa_item$
 10800     if exists(srep$(msa_item$(1:len(msa_item$)-4),dir_source$,dir_destination$)) then 
-10820       let brs_date_modified=fn_datetime_modified(msa_item$)
-10840       let br_date_modified=fn_datetime_modified(srep$(msa_item$(1:len(msa_item$)-4),dir_source$,dir_destination$))
+10820       brs_date_modified=fn_datetime_modified(msa_item$)
+10840       br_date_modified=fn_datetime_modified(srep$(msa_item$(1:len(msa_item$)-4),dir_source$,dir_destination$))
 10860       if brs_date_modified=>br_date_modified then 
-10880         print #proc_file: 'Load '&msa_item$&',Source'
-10900         print #proc_file: 'renum labels_only'
-10910         print #proc_file: 'Replace '&srep$(msa_item$(1:len(msa_item$)-4),dir_source$,dir_destination$)
+10880         pr #proc_file: 'Load '&msa_item$&',Source'
+10900         pr #proc_file: 'renum labels_only'
+10910         pr #proc_file: 'Replace '&srep$(msa_item$(1:len(msa_item$)-4),dir_source$,dir_destination$)
 10920       end if 
 10940     else 
-10960       print #proc_file: 'Load '&msa_item$&',Source'
-10980       print #proc_file: 'Save '&srep$(msa_item$(1:len(msa_item$)-4),dir_source$,dir_destination$)
+10960       pr #proc_file: 'Load '&msa_item$&',Source'
+10980       pr #proc_file: 'Save '&srep$(msa_item$(1:len(msa_item$)-4),dir_source$,dir_destination$)
 11000     end if 
-11020     print #proc_file: ''
+11020     pr #proc_file: ''
 11040   fnend  ! fn_import_source_add
 11060   def fn_datetime_modified(dm_filename$*256)
 11080     dim dm_line$*256
@@ -77,7 +77,7 @@
 11500   def fn_import_source_run
 11520     let msr_file$=file$(proc_file)
 11540     close #proc_file: 
-11560     print msr_file$ : pause  ! execute 'subproc '&msr_file$
+11560     pr msr_file$ : pause  ! execute 'subproc '&msr_file$
 11580   fnend  ! fn_import_source_run
 11600   def fn_copy_to_destination(cts_item$*256)
 11620     execute 'Copy "'&cts_item$&'" "'&srep$(cts_item$,dir_source$,dir_destination$)&'" -n'

@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsUB\ubpdreminder
-00020 ! print bills for Village of Thomasboro
+00020 ! pr bills for Village of Thomasboro
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_newpage
 00050   on error goto ERTN
@@ -13,16 +13,16 @@
 00120   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
-00130   let at$(1)=cnam$ !:
+00130   at$(1)=cnam$ !:
         let z=21 !:
-        let at$(1)=trim$(at$(1))(1:z) !:
+        at$(1)=trim$(at$(1))(1:z) !:
         let x=len(at$(1)) : let y=z-x !:
-        let at$(1)=rpt$(" ",int(y/2))&at$(1)
+        at$(1)=rpt$(" ",int(y/2))&at$(1)
 00140   let z=26 !:
         for j=2 to udim(at$) !:
-          let at$(j)=trim$(at$(j))(1:z) !:
+          at$(j)=trim$(at$(j))(1:z) !:
           let x=len(at$(j)) : let y=z-x !:
-          let at$(j)=rpt$(" ",int(y/2))&at$(j) !:
+          at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00150   let linelength=62
 00160 ! 
@@ -33,7 +33,7 @@
 00210   def fnc(x)=int(100*(x+sgn(x)*.0001))
 00220 ! ______________________________________________________________________
 00230 SCREEN1: ! 
-00240   let a$="" : let prtbkno=0
+00240   a$="" : let prtbkno=0
 00250   let fntos(sn$="UBPrtBl1-1") !:
         let pf=26 : let ll=24 !:
         let respc=0
@@ -71,14 +71,14 @@
         let mg$(2) = resp$(3) !:
         let mg$(3) = resp$(4)
 00420   if resp$(6)="[All]" then !:
-          let a$="" else !:
-          let a$ = lpad$(trim$(resp$(6)(1:9)),9)
+          a$="" else !:
+          a$ = lpad$(trim$(resp$(6)(1:9)),9)
 00430   if resp$(7)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(7))
 00440   if resp$(8)="True" then let sl1=1: let z$="" else let sl1=0
 00450   if trim$(a$)<>"" then read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1 !:
-          let holdz$=z$: let begin=1 !:
+          let holdz$=z$: begin=1 !:
           let st1=1
 00460 L460: form pos 1,c 10,pos 1741,n 2,n 7
 00470   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
@@ -93,7 +93,7 @@
 00550 L550: if sl1=1 then goto SCREEN3
 00560 L560: read #6,using L590: z$ eof RELEASE_PRINT
 00570   if trim$(a$)<>"" and begin=1 and z$<>holdz$ then goto L560 ! start with
-00580   let begin=0 ! cancel starting account
+00580   begin=0 ! cancel starting account
 00590 L590: form pos 22,c 10
 00600   read #1,using L610,key=z$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate nokey L560
 00610 L610: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1942,c 12,pos 1864,c 30,pos 1831,n 9
@@ -132,8 +132,8 @@
 00940   if bal<=0 then let g(10)=0 ! don't show penalty if balance 0 or less
 00950 ! ______________print bill routine______________________________________
 00960   gosub VBPRINT
-00970 ! _____________end of print routine______________________________________
-00980   let bct(2)=bct(2)+1 !:
+00970 ! _____________end of pr routine______________________________________
+00980   bct(2)=bct(2)+1 !:
         ! accumulate totals
 00990   goto L550
 01000 ! ______________________________________________________________________
@@ -151,7 +151,7 @@
 01060   let fncmbact(1,17) ! !:
         let resp$(1)=a$
 01070   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
-01080   let a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
+01080   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto RELEASE_PRINT
 01090   if ck=5 then goto RELEASE_PRINT
 01100   read #1,using L610,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate nokey SCREEN3
@@ -187,7 +187,7 @@
 01380   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 01390 L1390: return 
 01400 ! ______________________________________________________________________
-01410 ENDSCR: ! print totals screen
+01410 ENDSCR: ! pr totals screen
 01420   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
 01430   let fntos(sn$="Bills-Total") !:
         let mylen=23 : let mypos=mylen+2 !:
@@ -213,50 +213,50 @@
 01570   execute "list -"&str$(line) !:
         pause  !:
         goto L1590
-01580   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+01580   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01590 L1590: execute act$
 01600   goto ERTN
 01610 ! ______________________________________________________________________
 01620 VBOPENPRINT: ! 
 01630   fnpa_open
 01660   let lyne=3
-01670   let character=1.5
+01670   character=1.5
 01680   let spacer=0
 01700   return 
 01710 ! ______________________________________________________________________
 01720 VBPRINT: ! 
-01730   print #20: "Call Print.MyFontBold(True)"
-01740   print #20: 'Call Print.MyFontSize(16)'
-01750   print #20: 'Call Print.MyFont("Courier New")'
-01760   print #20: 'Call Print.AddText("'&at$(1)&'",'&str$(10)&','&str$(lyne*4+spacer)&')'
-01770   print #20: 'Call Print.MyFont("Lucida Console")'
-01780   print #20: 'Call Print.MyFontSize(12)'
-01790   print #20: 'Call Print.MyFontBold(False)'
-01800   print #20: 'Call Print.AddText("'&at$(2)&'",'&str$(10)&','&str$(lyne*6.5+spacer)&')'
-01810   print #20: 'Call Print.AddText("'&at$(3)&'",'&str$(10)&','&str$(lyne*8+spacer)&')'
-01820   print #20: "Call Print.MyFontBold(True)"
-01830   print #20: 'Call Print.MyFontSize(12)'
-01840   print #20: 'Call Print.AddLine('&str$(115)&','&str$(lyne*12+spacer)&',75,'&str$(30)&',True)'
-01850   print #20: 'Call Print.AddText("A Friendly Reminder....",'&str$(100)&','&str$(lyne+spacer)&')'
-01860   print #20: 'Call Print.MyFontSize(10)'
-01870   print #20: 'Call Print.MyFontBold(False)'
-01880   print #20: 'Call Print.AddText("If your check has already been mailed,please ",'&str$(100)&','&str$(lyne*3+spacer)&')'
-01890   print #20: 'Call Print.AddText("disregard this notice.  If not, your remittance by mail ",'&str$(100)&','&str$(lyne*4+spacer)&')'
-01900   print #20: 'Call Print.AddText("will be greatly appreciated.",'&str$(100)&','&str$(lyne*5+spacer)&')'
-01910   print #20: 'Call Print.AddText("Thank You!",'&str$(150)&','&str$(lyne*7+spacer)&')'
-01920   print #20: 'Call Print.AddText("Customer #:  '&z$&'",'&str$(125)&','&str$(lyne*14+spacer)&')'
-01930   print #20: 'Call Print.AddText("Billing Date: '&cnvrt$("PIC(zZZ/ZZ/ZZ)",d1)&'",'&str$(125)&','&str$(lyne*16+spacer)&')'
-01940   print #20: 'Call Print.AddText("Balance Due: '&cnvrt$("pic(---,---.##)",bal)&'",'&str$(125)&","&str$(lyne*18+spacer)&')'
-01950   print #20: 'Call Print.MyFontSize(13)'
-01960   print #20: 'Call Print.AddText("'&pe$(1)&'",'&str$(20)&','&str$(lyne*16+spacer)&')'
-01970   print #20: 'Call Print.AddText("'&pe$(2)&'",'&str$(20)&','&str$(lyne*17.5+spacer)&')'
-01980   print #20: 'Call Print.AddText("'&pe$(3)&'",'&str$(20)&','&str$(lyne*19+spacer)&')'
-01990   print #20: 'Call Print.AddText("'&pe$(4)&'",'&str$(20)&','&str$(lyne*20.5+spacer)&')'
-02000   let checkcounter+=1 !:
+01730   pr #20: "Call Print.MyFontBold(True)"
+01740   pr #20: 'Call Print.MyFontSize(16)'
+01750   pr #20: 'Call Print.MyFont("Courier New")'
+01760   pr #20: 'Call Print.AddText("'&at$(1)&'",'&str$(10)&','&str$(lyne*4+spacer)&')'
+01770   pr #20: 'Call Print.MyFont("Lucida Console")'
+01780   pr #20: 'Call Print.MyFontSize(12)'
+01790   pr #20: 'Call Print.MyFontBold(False)'
+01800   pr #20: 'Call Print.AddText("'&at$(2)&'",'&str$(10)&','&str$(lyne*6.5+spacer)&')'
+01810   pr #20: 'Call Print.AddText("'&at$(3)&'",'&str$(10)&','&str$(lyne*8+spacer)&')'
+01820   pr #20: "Call Print.MyFontBold(True)"
+01830   pr #20: 'Call Print.MyFontSize(12)'
+01840   pr #20: 'Call Print.AddLine('&str$(115)&','&str$(lyne*12+spacer)&',75,'&str$(30)&',True)'
+01850   pr #20: 'Call Print.AddText("A Friendly Reminder....",'&str$(100)&','&str$(lyne+spacer)&')'
+01860   pr #20: 'Call Print.MyFontSize(10)'
+01870   pr #20: 'Call Print.MyFontBold(False)'
+01880   pr #20: 'Call Print.AddText("If your check has already been mailed,please ",'&str$(100)&','&str$(lyne*3+spacer)&')'
+01890   pr #20: 'Call Print.AddText("disregard this notice.  If not, your remittance by mail ",'&str$(100)&','&str$(lyne*4+spacer)&')'
+01900   pr #20: 'Call Print.AddText("will be greatly appreciated.",'&str$(100)&','&str$(lyne*5+spacer)&')'
+01910   pr #20: 'Call Print.AddText("Thank You!",'&str$(150)&','&str$(lyne*7+spacer)&')'
+01920   pr #20: 'Call Print.AddText("Customer #:  '&z$&'",'&str$(125)&','&str$(lyne*14+spacer)&')'
+01930   pr #20: 'Call Print.AddText("Billing Date: '&cnvrt$("PIC(zZZ/ZZ/ZZ)",d1)&'",'&str$(125)&','&str$(lyne*16+spacer)&')'
+01940   pr #20: 'Call Print.AddText("Balance Due: '&cnvrt$("pic(---,---.##)",bal)&'",'&str$(125)&","&str$(lyne*18+spacer)&')'
+01950   pr #20: 'Call Print.MyFontSize(13)'
+01960   pr #20: 'Call Print.AddText("'&pe$(1)&'",'&str$(20)&','&str$(lyne*16+spacer)&')'
+01970   pr #20: 'Call Print.AddText("'&pe$(2)&'",'&str$(20)&','&str$(lyne*17.5+spacer)&')'
+01980   pr #20: 'Call Print.AddText("'&pe$(3)&'",'&str$(20)&','&str$(lyne*19+spacer)&')'
+01990   pr #20: 'Call Print.AddText("'&pe$(4)&'",'&str$(20)&','&str$(lyne*20.5+spacer)&')'
+02000   checkcounter+=1 !:
         let spacer+=90
 02010   if checkcounter=3 then !:
           let fnpa_newpage !:
-          let checkcounter=0 !:
+          checkcounter=0 !:
           let spacer=0
 02020   return 
 02030 ! ______________________________________________________________________

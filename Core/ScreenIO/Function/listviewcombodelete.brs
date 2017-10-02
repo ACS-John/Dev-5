@@ -14,7 +14,7 @@
           read #DataFile, using form$(DataFile), rec=LastReadRecord : mat X$, mat X
           delete #DataFile:
           let RepopulateListviews=1
-          let CurrentRec=-1
+          currentRec=-1
        end if
     else
        ! We're in add. Nothing to delete.

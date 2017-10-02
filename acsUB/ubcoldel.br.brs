@@ -41,7 +41,7 @@
 00330   if ckey=5 then goto XIT
 00340   let ld1=val(resp$(1)) conv ASKDATE !:
         let ld1=fncd2(ld1) !:
-        let cutoff$=str$(ld1)
+        cutoff$=str$(ld1)
 00350   return 
 00360 ! ______________________________________________________________________
 00370 END1: close #7: 
@@ -53,7 +53,7 @@
 00430 ERTN: let fnerror(program$,err,line,act$,"xit")
 00440   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00450   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00460   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00460   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00470 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00480 ! /region
 00490 ! ______________________________________________________________________

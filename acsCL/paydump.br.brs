@@ -7,7 +7,7 @@
 00070   dim nam$*30,cnam$*40,dat$*20,gl(3),tr$(5)*35,cap$*128
 00080 ! ______________________________________________________________________
 00090   let fntop(program$,cap$="Remove Payee Records")
-00100   let cancel=99 : let right=1
+00100   cancel=99 : let right=1
 00110   let fncno(cno,cnam$) !:
         let fndat(dat$)
 00120 ! ______________________________________________________________________
@@ -44,7 +44,7 @@
 00350   goto READ_TRMSTR2
 00360 ! ______________________________________________________________________
 00370 PRINT_IT: ! 
-00380   print #255,using "Form POS 1,C 8,X 3,C 30": vn$,nam$ pageoflow NEWPGE
+00380   pr #255,using "Form POS 1,C 8,X 3,C 30": vn$,nam$ pageoflow NEWPGE
 00390   delete #paymstr1,key=vn$: nokey L410
 00400   gosub REMOVE_FROM_PAYEEGLBREAKDOWN
 00410 L410: goto READ_PAYMSTR1
@@ -66,19 +66,19 @@
 00530 ! ______________________________________________________________________
 00540 XIT: let fnxit
 00550 ! ______________________________________________________________________
-00560 NEWPGE: print #255: newpage : gosub HDR : continue 
+00560 NEWPGE: pr #255: newpage : gosub HDR : continue 
 00570 ! ______________________________________________________________________
 00580 HDR: ! 
-00590   print #255,using 'Form POS 1,Cc 80': cnam$ !:
-        print #255,using 'Form POS 1,Cc 80': cap$ !:
-        print #255,using 'Form POS 1,Cc 80': dat$
+00590   pr #255,using 'Form POS 1,Cc 80': cnam$ !:
+        pr #255,using 'Form POS 1,Cc 80': cap$ !:
+        pr #255,using 'Form POS 1,Cc 80': dat$
 00600   return 
 00610 ! ______________________________________________________________________
 00620 ! <Updateable Region: ERTN>
 00630 ERTN: let fnerror(program$,err,line,act$,"NOt")
 00640   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00650   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00660   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00660   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00670 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00680 ! /region
 00690 ! ______________________________________________________________________

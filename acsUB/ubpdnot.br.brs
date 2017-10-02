@@ -24,14 +24,14 @@
 00240   read #21,using "Form POS 1,3*C 40": at$(1),at$(2),at$(3)
 00250   close #21: 
 00260   let z=21
-00270   let at$(1)=trim$(at$(1))(1:z)
+00270   at$(1)=trim$(at$(1))(1:z)
 00280   let x=len(at$(1)) : let y=z-x
-00290   let at$(1)=rpt$(" ",int(y/2))&at$(1)
+00290   at$(1)=rpt$(" ",int(y/2))&at$(1)
 00300   let z=26
 00310   for j=2 to udim(at$)
-00320     let at$(j)=trim$(at$(j))(1:z)
+00320     at$(j)=trim$(at$(j))(1:z)
 00330     let x=len(at$(j)) : let y=z-x
-00340     let at$(j)=rpt$(" ",int(y/2))&at$(j)
+00340     at$(j)=rpt$(" ",int(y/2))&at$(j)
 00350   next j
 00352 ! 
 00354   let deltype=0 : let fnreg_read('UB - Past Due Notices - Delinquent Type',deltype$) : let deltype=val(deltype$) conv ignore
@@ -87,7 +87,7 @@
 00822   let fnreg_write('UB - Past Due Notices - Delinquent Type',str$(deltype))
 01090   goto UBFORM ! /r
 01100 ! ______________________________________________________________________
-01110 PRINT_NEXT: ! r: the main read it and print it routine
+01110 PRINT_NEXT: ! r: the main read it and pr it routine
 01120   if sel_indv$="Y" then goto ASK_NEXT_ACT
 01130   if bk1>0 then 
 01140     read #customer5,using F_CUSTOMER: z$,meter_address$,mat f$,mat a,mat b,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ eof EO_CUSTOMER
@@ -97,16 +97,16 @@
 01190   end if 
 01200   if deltype<3 and bal<=1 then goto PRINT_NEXT
 01210   if bal<minbal and minbal>0 then goto PRINT_NEXT ! skip if under minimum balance
-01220   let b4$=""
-01230   print fields "1,1,Cc 80,R,N": str$(rec(customer5))&"/"&str$(lrec(customer5))
-01240   if deltype=3 and final=0 then goto READ_ADRBIL ! PRINT ALL ACTIVE CUSTOMERS
-01250   if deltype=4 and final>0 and bal>0 then goto READ_ADRBIL ! PRINT ALL INACTIVE CUSTOMERS WITH BAL
+01220   b4$=""
+01230   pr fields "1,1,Cc 80,R,N": str$(rec(customer5))&"/"&str$(lrec(customer5))
+01240   if deltype=3 and final=0 then goto READ_ADRBIL ! pr ALL ACTIVE CUSTOMERS
+01250   if deltype=4 and final>0 and bal>0 then goto READ_ADRBIL ! pr ALL INACTIVE CUSTOMERS WITH BAL
 01260 ! IF UPRC$(NEWBIL$)="Y" AND F=D1 AND BAL=<G(11) THEN GOTO 440
-01270   if deltype=1 and f=d1 and bal>0 then goto READ_ADRBIL ! PRINT ALL CUSTOMERS WHO HAVE NOT PAID THEIR MOST CURRENT BILL
-01280   if deltype=2 and f=d1 and bal>g(11) then goto READ_ADRBIL ! print all customers who owe more than last times bill
-01290 ! IF DELTYPE=2 AND F<>D1 AND BAL>0 THEN GOTO READ_ADRBIL ! print all customers who owe a prior bill but didn't get billed this time
+01270   if deltype=1 and f=d1 and bal>0 then goto READ_ADRBIL ! pr ALL CUSTOMERS WHO HAVE NOT PAID THEIR MOST CURRENT BILL
+01280   if deltype=2 and f=d1 and bal>g(11) then goto READ_ADRBIL ! pr all customers who owe more than last times bill
+01290 ! IF DELTYPE=2 AND F<>D1 AND BAL>0 THEN GOTO READ_ADRBIL ! pr all customers who owe a prior bill but didn't get billed this time
 01300   if deltype=5 and bal>0 then goto READ_ADRBIL
-01310   if deltype=6 and f=d1 then goto READ_ADRBIL ! print all customers who were billed last billing cycle
+01310   if deltype=6 and f=d1 then goto READ_ADRBIL ! pr all customers who were billed last billing cycle
 01320   goto PRINT_NEXT
 01330 ! ______________________________________________________________________
 01340 READ_ADRBIL: ! r:
@@ -117,7 +117,7 @@
 01360 ! if trim$(altadr$(1)&altadr$(2)&altadr$(3)&altadr$(4))<>"" then 
 01390 !   let e$(2)=altadr$(1)
 01400 !   let e$(3)=altadr$(2)
-01410 !   let b4$=altadr$(3)
+01410 !   b4$=altadr$(3)
 01420 !   let e$(4)=altadr$(4)
 01430 ! end if 
 01455 ! L940: ! /r
@@ -156,7 +156,7 @@
 18160 P1_L2250: read #h_template,using "Form POS 1,C 1",rec=r+=1: ln3$ eof P1_END1 norec P1_END1
 18180     if ln3$=chr$(13) then goto P1_L2310
 18200     let ln$=ln$&ln3$
-18220     if len(rtrm$(ln$))>3900 then print #h_prnt1: ln$ : goto P1_NEXT_LN
+18220     if len(rtrm$(ln$))>3900 then pr #h_prnt1: ln$ : goto P1_NEXT_LN
 18240     goto P1_L2250
 18260 ! ___________________________
 18280 P1_L2310: let p3=len(ln$) : let l2$="" : let p1=0
@@ -166,7 +166,7 @@
 18360     let l2$=l2$&ln$(p1:p2-1) : let p4=pos(ln$," ",p2)
 18380     if p4=0 then let p4=p3 else let p4=p4-1
 18400 P1_L2370: if ln$(p4:p4)="." or ln$(p4:p4)="," or ln$(p4:p4)=":" or ln$(p4:p4)="\" or ln$(p4:p4)=";" then let p4=p4-1 : goto P1_L2370
-18420     if ln$(p2+2:p2+5)="\par" then let p4=p2+1 ! if they don't space after the variable at the end of a line, it doesn't print the variable
+18420     if ln$(p2+2:p2+5)="\par" then let p4=p2+1 ! if they don't space after the variable at the end of a line, it doesn't pr the variable
 18440     if ln$(p2+3:p2+6)="\par" then let p4=p2+2
 18460     if ln$(p2+4:p2+7)="\par" then let p4=p2+3
 18480     if ln$(p2+5:p2+8)="\par" then let p4=p2+3
@@ -178,7 +178,7 @@
 18600 ! ___________________________
 18620 P1_L2480: ! 
 18640 ! if uprc$(ln$(p2+1:p2+2))><"B4" then
-18660 !   if rtrm$(b4$)="" then let b4$=extra$(1) : let r1$(5)=e$(4)
+18660 !   if rtrm$(b4$)="" then b4$=extra$(1) : let r1$(5)=e$(4)
 18680 !   let l2$=l2$&rtrm$(b4$)
 18700 ! end if
 18720     if uprc$(ln$(p2+1:p2+1))><"D" then goto P1_L2550
@@ -188,18 +188,18 @@
 18800 P1_L2550: goto P1_L2450
 18820 ! ___________________________
 18840 P1_L2570: let l2$=l2$&ln$(p1:p3)
-18860     print #h_prnt1: l2$&chr$(13)
+18860     pr #h_prnt1: l2$&chr$(13)
 18880     goto P1_NEXT_LN
 18900 ! ______________________________________________________________________
 18920 P1_END1: ! 
 18940     restore #h_template: 
-18960     print #h_prnt1: "\page"
+18960     pr #h_prnt1: "\page"
 18980   fnend  ! fn_prnt1
-19000   def fn_bldr1 ! BUILD RECORD IN PRINT ARRAY
+19000   def fn_bldr1 ! BUILD RECORD IN pr ARRAY
 19020 ! if trim$(z$)='901246.40' then pr 'the beginning of it' : pause
-19040 !   if trim$(b4$)="" then let b4$=extra$(1)
-19060 !   if trim$(e$(3))="" then let e$(3)=b4$: let b4$=""
-19080 !   if trim$(b4$)="" then let b4$=e$(4) ! : let e$(4)="" ! blanking out of standard CSZ removed 7/25/11 to fix missing CSZ in @5
+19040 !   if trim$(b4$)="" then b4$=extra$(1)
+19060 !   if trim$(e$(3))="" then let e$(3)=b4$: b4$=""
+19080 !   if trim$(b4$)="" then b4$=e$(4) ! : let e$(4)="" ! blanking out of standard CSZ removed 7/25/11 to fix missing CSZ in @5
 19100 !   if trim$(extra$(1))="" then let extra$(1)=e$(4) : let e$(4)='' ! re=added to make @108 the address line 2 or CSZ (if no addr line 2) and thusly @5 be blank.
 19120     mat r1$=("")
 19140     let r1$(1)=ltrm$(z$)
@@ -267,38 +267,38 @@
 30120     let spacer=0
 30160   fnend  ! fn_vbopenprint
 30180   def fn_vbprint
-30200     print #h_vb_pr_out: "Call Print.MyFontBold(True)"
-30220     print #h_vb_pr_out: 'Call Print.MyFontSize(16)'
-30240     print #h_vb_pr_out: 'Call Print.MyFont("Courier New")'
-30260     print #h_vb_pr_out: 'Call Print.AddText("'&at$(1)&'",'&str$(10)&','&str$(lyne*4+spacer)&')'
-30280     print #h_vb_pr_out: 'Call Print.MyFont("Lucida Console")'
-30300     print #h_vb_pr_out: 'Call Print.MyFontSize(12)'
-30320     print #h_vb_pr_out: 'Call Print.MyFontBold(False)'
-30340     print #h_vb_pr_out: 'Call Print.AddText("'&at$(2)&'",'&str$(10)&','&str$(lyne*6.5+spacer)&')'
-30360     print #h_vb_pr_out: 'Call Print.AddText("'&at$(3)&'",'&str$(10)&','&str$(lyne*8+spacer)&')'
-30380     print #h_vb_pr_out: "Call Print.MyFontBold(True)"
-30400     print #h_vb_pr_out: 'Call Print.MyFontSize(12)'
-30420     print #h_vb_pr_out: 'Call Print.AddLine('&str$(115)&','&str$(lyne*12+spacer)&',75,'&str$(30)&',True)'
-30440     print #h_vb_pr_out: 'Call Print.AddText("A Friendly Reminder....",'&str$(100)&','&str$(lyne+spacer)&')'
-30460     print #h_vb_pr_out: 'Call Print.MyFontSize(10)'
-30480     print #h_vb_pr_out: 'Call Print.MyFontBold(False)'
-30500     print #h_vb_pr_out: 'Call Print.AddText("If your check has already been mailed,please ",'&str$(100)&','&str$(lyne*3+spacer)&')'
-30520     print #h_vb_pr_out: 'Call Print.AddText("disregard this notice.  If not, your remittance by mail ",'&str$(100)&','&str$(lyne*4+spacer)&')'
-30540     print #h_vb_pr_out: 'Call Print.AddText("will be greatly appreciated.",'&str$(100)&','&str$(lyne*5+spacer)&')'
-30560     print #h_vb_pr_out: 'Call Print.AddText("Thank You!",'&str$(150)&','&str$(lyne*7+spacer)&')'
-30580     print #h_vb_pr_out: 'Call Print.AddText("Customer #:  '&z$&'",'&str$(125)&','&str$(lyne*14+spacer)&')'
-30600     print #h_vb_pr_out: 'Call Print.AddText("Billing Date: '&cnvrt$("PIC(zZZ/ZZ/ZZ)",d1)&'",'&str$(125)&','&str$(lyne*16+spacer)&')'
-30620     print #h_vb_pr_out: 'Call Print.AddText("Balance Due: '&cnvrt$("pic(---,---.##)",bal)&'",'&str$(125)&","&str$(lyne*18+spacer)&')'
-30640     print #h_vb_pr_out: 'Call Print.MyFontSize(13)'
+30200     pr #h_vb_pr_out: "Call Print.MyFontBold(True)"
+30220     pr #h_vb_pr_out: 'Call Print.MyFontSize(16)'
+30240     pr #h_vb_pr_out: 'Call Print.MyFont("Courier New")'
+30260     pr #h_vb_pr_out: 'Call Print.AddText("'&at$(1)&'",'&str$(10)&','&str$(lyne*4+spacer)&')'
+30280     pr #h_vb_pr_out: 'Call Print.MyFont("Lucida Console")'
+30300     pr #h_vb_pr_out: 'Call Print.MyFontSize(12)'
+30320     pr #h_vb_pr_out: 'Call Print.MyFontBold(False)'
+30340     pr #h_vb_pr_out: 'Call Print.AddText("'&at$(2)&'",'&str$(10)&','&str$(lyne*6.5+spacer)&')'
+30360     pr #h_vb_pr_out: 'Call Print.AddText("'&at$(3)&'",'&str$(10)&','&str$(lyne*8+spacer)&')'
+30380     pr #h_vb_pr_out: "Call Print.MyFontBold(True)"
+30400     pr #h_vb_pr_out: 'Call Print.MyFontSize(12)'
+30420     pr #h_vb_pr_out: 'Call Print.AddLine('&str$(115)&','&str$(lyne*12+spacer)&',75,'&str$(30)&',True)'
+30440     pr #h_vb_pr_out: 'Call Print.AddText("A Friendly Reminder....",'&str$(100)&','&str$(lyne+spacer)&')'
+30460     pr #h_vb_pr_out: 'Call Print.MyFontSize(10)'
+30480     pr #h_vb_pr_out: 'Call Print.MyFontBold(False)'
+30500     pr #h_vb_pr_out: 'Call Print.AddText("If your check has already been mailed,please ",'&str$(100)&','&str$(lyne*3+spacer)&')'
+30520     pr #h_vb_pr_out: 'Call Print.AddText("disregard this notice.  If not, your remittance by mail ",'&str$(100)&','&str$(lyne*4+spacer)&')'
+30540     pr #h_vb_pr_out: 'Call Print.AddText("will be greatly appreciated.",'&str$(100)&','&str$(lyne*5+spacer)&')'
+30560     pr #h_vb_pr_out: 'Call Print.AddText("Thank You!",'&str$(150)&','&str$(lyne*7+spacer)&')'
+30580     pr #h_vb_pr_out: 'Call Print.AddText("Customer #:  '&z$&'",'&str$(125)&','&str$(lyne*14+spacer)&')'
+30600     pr #h_vb_pr_out: 'Call Print.AddText("Billing Date: '&cnvrt$("PIC(zZZ/ZZ/ZZ)",d1)&'",'&str$(125)&','&str$(lyne*16+spacer)&')'
+30620     pr #h_vb_pr_out: 'Call Print.AddText("Balance Due: '&cnvrt$("pic(---,---.##)",bal)&'",'&str$(125)&","&str$(lyne*18+spacer)&')'
+30640     pr #h_vb_pr_out: 'Call Print.MyFontSize(13)'
 30660     fnpa_txt(addr$(2),20,lyne*16+spacer)
 30680     fnpa_txt(addr$(3),20,lyne*17.5+spacer)
 30700     fnpa_txt(addr$(3),20,lyne*19+spacer)
 30720     fnpa_txt(addr$(4),20,lyne*20.5+spacer)
-30740     let checkcounter+=1
+30740     checkcounter+=1
 30760     let spacer+=90
 30780     if checkcounter=3 then 
 30800       let fnpa_newpage
-30820       let checkcounter=0
+30820       checkcounter=0
 30840       let spacer=0
 30860     end if  ! checkcounter=3
 30880     let fn_report_add
@@ -312,7 +312,7 @@
 31040       gosub RC_HDR
 31060       do 
 31080         linput #h_ra: ra_line$ eof RC_DONE
-31100         print #255: rtrm$(ra_line$) pageoflow RC_PGOF ! ,using 'form pos 1,c 256'
+31100         pr #255: rtrm$(ra_line$) pageoflow RC_PGOF ! ,using 'form pos 1,c 256'
 31120       loop 
 31140 RC_DONE: ! 
 31160       let fncloseprn
@@ -321,15 +321,15 @@
 31220     end if  ! h_ra
 31240     goto RC_XIT
 31260 RC_PGOF: ! 
-31280     print #255: newpage
+31280     pr #255: newpage
 31300     gosub RC_HDR
 31320     continue  ! RC_PGOF
 31340 RC_HDR: ! 
 31360     let rc_page+=1
-31380     print #255: "\qc "&cnam$
-31400     print #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
-31420     print #255,using "form pos 1,c 70,cr 14": "\ql "&date$,"Page "&str$(rc_page)
-31440     print #255: "{\ul Account No}  {\ul Customer Name            }  {\ul       Balance}  {\ul  Meter Address  }"
+31380     pr #255: "\qc "&cnam$
+31400     pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
+31420     pr #255,using "form pos 1,c 70,cr 14": "\ql "&date$,"Page "&str$(rc_page)
+31440     pr #255: "{\ul Account No}  {\ul Customer Name            }  {\ul       Balance}  {\ul  Meter Address  }"
 31460     return  ! RC_HDR
 31480 RC_XIT: ! 
 31500   fnend  ! fn_report_close
@@ -338,7 +338,7 @@
 31560       open #h_ra:=fngethandle: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256,replace',display,output 
 31580       let rc_page=0
 31600     end if  ! ~h_ra
-31620     print #h_ra,using 'form pos 1,c 256': z$&'  '&addr$(1)&cnvrt$("pic(---,---.##)",bal)&'  '&meter_address$&'  '
+31620     pr #h_ra,using 'form pos 1,c 256': z$&'  '&addr$(1)&cnvrt$("pic(---,---.##)",bal)&'  '&meter_address$&'  '
 31640 ! 
 31660   fnend  ! fn_report_add
 31666 IGNORE: continue 
@@ -346,91 +346,91 @@
 31720 ERTN: let fnerror(program$,err,line,act$,"xit")
 31740   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 31760   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-31780   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+31780   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 31800 ERTN_EXEC_ACT: execute act$ : goto ERTN
 31820 ! /region
 31860   def fn_print_standard_form
 31880     if a(1)=0 then let water$="     " else let water$="Water"
 31900     if a(4)=0 then let gas$="   " else let gas$="Gas"
 31920     let fnopenprn(cp,33,220,process)
-31940     for j=1 to 4 : print #255: "" : next j
-31960     for j=1 to 3 : print #255,using "Form pos 7,C 40": at$(j) : next j
-31980     for j=1 to 3 : print #255: "" : next j
-32000     print #255,using "Form pos 8,C 80": trim$(at$(1))&" Final Disconnect Notice   "&cnvrt$("pic(zz/zz/zz",d1)&"   "&trim$(z$)
-32020     print #255: ""
-32040     for j=1 to 4 : print #255,using "Form pos 9,C 73": mis$(j) : next j
-32060     print #255: ""
-32080     print #255,using "Form pos 9,C 73": "Service  "&water$&"         "&gas$&"                Reconnection Fee: $"&str$(reconnect_fee)
-32100     print #255,using "Form POS 18,2*C 14,X 5,C 30": f$(1),f$(3),meter_address$
-32120     print #255: ""
-32140     print #255,using "Form pos 13,C 11,N 10.2": "Amount Due:",bal
-32160     for j=1 to 4 : print #255: "" : next j
-32180     for j=1 to 4 : print #255,using "Form pos 50,C 30": addr$(j) : next j
+31940     for j=1 to 4 : pr #255: "" : next j
+31960     for j=1 to 3 : pr #255,using "Form pos 7,C 40": at$(j) : next j
+31980     for j=1 to 3 : pr #255: "" : next j
+32000     pr #255,using "Form pos 8,C 80": trim$(at$(1))&" Final Disconnect Notice   "&cnvrt$("pic(zz/zz/zz",d1)&"   "&trim$(z$)
+32020     pr #255: ""
+32040     for j=1 to 4 : pr #255,using "Form pos 9,C 73": mis$(j) : next j
+32060     pr #255: ""
+32080     pr #255,using "Form pos 9,C 73": "Service  "&water$&"         "&gas$&"                Reconnection Fee: $"&str$(reconnect_fee)
+32100     pr #255,using "Form POS 18,2*C 14,X 5,C 30": f$(1),f$(3),meter_address$
+32120     pr #255: ""
+32140     pr #255,using "Form pos 13,C 11,N 10.2": "Amount Due:",bal
+32160     for j=1 to 4 : pr #255: "" : next j
+32180     for j=1 to 4 : pr #255,using "Form pos 50,C 30": addr$(j) : next j
 32200 ! 4 more lines from this point before next page
-32220     print #255: newpage
+32220     pr #255: newpage
 32240   fnend 
 32260   def fn_print_granby
 32280     let fnopenprn
-32300     print #255,using L3620: e$(1)
+32300     pr #255,using L3620: e$(1)
 32320 L3620: form pos 4,c 47,skip 4
 32340     if gb(1)=0 then 
-32360       print #255,using L3640: "Your Utility Account is Past Due."
+32360       pr #255,using L3640: "Your Utility Account is Past Due."
 32380     else 
-32400       print #255,using L3650: "Your Utility Account is Past Due.","Water",gb(1)
+32400       pr #255,using L3650: "Your Utility Account is Past Due.","Water",gb(1)
 32420     end if 
 32440 L3640: form pos 4,c 47
 32460 L3650: form pos 4,c 47,pos 53,c 10,pos 65,n 10.2
 32480     if gb(4)=0 then 
-32500       print #255,using L3640: "Please pay the amount due by "&ltrm$(d$(2))
+32500       pr #255,using L3640: "Please pay the amount due by "&ltrm$(d$(2))
 32520     else 
-32540       print #255,using L3650: "Please pay the amount due by "&ltrm$(d$(2)),"Gas",gb(4)
+32540       pr #255,using L3650: "Please pay the amount due by "&ltrm$(d$(2)),"Gas",gb(4)
 32560     end if 
 32580     if gb(5)=0 then 
-32600       print #255,using L3640: "to avoid Utility Disconnection."
+32600       pr #255,using L3640: "to avoid Utility Disconnection."
 32620     else 
-32640       print #255,using L3650: "to avoid Utility Disconnection.","Sanitation",gb(5)
+32640       pr #255,using L3650: "to avoid Utility Disconnection.","Sanitation",gb(5)
 32660     end if 
-32680     if gb(2)=0 then print #255: else print #255,using L3700: "Sewer",gb(2)
-32700     if gb(7)=0 then print #255: else print #255,using L3700: "Primacy",gb(7)
-32720     if gb(8)=0 then print #255: else print #255,using L3700: "Other",gb(8)
+32680     if gb(2)=0 then pr #255: else pr #255,using L3700: "Sewer",gb(2)
+32700     if gb(7)=0 then pr #255: else pr #255,using L3700: "Primacy",gb(7)
+32720     if gb(8)=0 then pr #255: else pr #255,using L3700: "Other",gb(8)
 32740 L3700: form pos 53,c 10,pos 65,n 10.2
-32760     if gb(9)=0 then print #255: else print #255,using L3700: "Sales Tax",gb(9)
-32780     if gb(10)=0 then print #255: "" else print #255,using L3740: "Penalty",gb(10)
+32760     if gb(9)=0 then pr #255: else pr #255,using L3700: "Sales Tax",gb(9)
+32780     if gb(10)=0 then pr #255: "" else pr #255,using L3740: "Penalty",gb(10)
 32800 L3740: form pos 53,c 10,pos 65,n 10.2
-32820     print #255: ''
-32840     print #255: ''
-32860     print #255: ''
-32880     print #255,using L3760: e$(2)
+32820     pr #255: ''
+32840     pr #255: ''
+32860     pr #255: ''
+32880     pr #255,using L3760: e$(2)
 32900 L3760: form pos 10,c 30
-32920     print #255,using L3760: e$(3)
-32940     print #255,using L3790: e$(4),z$
+32920     pr #255,using L3760: e$(3)
+32940     pr #255,using L3790: e$(4),z$
 32960 L3790: form pos 10,c 30,pos 52,c 10,skip 2
-32980     print #255,using L3810: bal
+32980     pr #255,using L3810: bal
 33000 L3810: form pos 63,n 10.2
 33020     let granby_print_count+=1
 33040     if granby_print_count/3=int(granby_print_count/3) then 
-33060       print #255: newpage
+33060       pr #255: newpage
 33080     else 
-33100       print #255: '' : print #255: '' : print #255: '' : print #255: '' : print #255: ''
+33100       pr #255: '' : pr #255: '' : pr #255: '' : pr #255: '' : pr #255: ''
 33120     end if 
 33140   fnend  ! fn_print_granby
 33160   def fn_eldorado
 33180     let fnopenprn
-33200     print #255,using 'form skip 8,pos 37,c 30': e$(2)
-33220     print #255,using 'form pos 37,c 30': e$(3)
-33240     print #255,using 'form pos 37,c 30': e$(4)
-33260     print #255: ''
-33280     print #255: ''
-33300     print #255: ''
-33320     print #255,using 'form pos 37,n 10.2,x 2,c 10': bal,z$
-33340     print #255: ''
-33360     print #255,using 'form pos 1,pic(zz/zz/zz),c 10,n 14.2': d2,z$,bal
-33380     let checkcounter+=1
+33200     pr #255,using 'form skip 8,pos 37,c 30': e$(2)
+33220     pr #255,using 'form pos 37,c 30': e$(3)
+33240     pr #255,using 'form pos 37,c 30': e$(4)
+33260     pr #255: ''
+33280     pr #255: ''
+33300     pr #255: ''
+33320     pr #255,using 'form pos 37,n 10.2,x 2,c 10': bal,z$
+33340     pr #255: ''
+33360     pr #255,using 'form pos 1,pic(zz/zz/zz),c 10,n 14.2': d2,z$,bal
+33380     checkcounter+=1
 33400     if checkcounter=3 then 
-33420       print #255: newpage
-33440       let checkcounter=0
+33420       pr #255: newpage
+33440       checkcounter=0
 33460     else 
-33480       print #255,using 'form pos 1,c 1,skip 8': ''
+33480       pr #255,using 'form pos 1,c 1,skip 8': ''
 33500     end if 
 33520   fnend  ! fn_eldorado
 34000   def fn_french_settlement_gas
@@ -459,42 +459,42 @@
 34460 L340: form pos 1,pic(## ## ##),x 1,pic(## ## ##),n 8.2,pos 27,pic(-----.--),pos 40,n 7.2,x 3,pic(## ## ##),pic(-----.--),skip 1
 34480 ! __
 34500 ! 
-34520     print #255,using L391: z$
+34520     pr #255,using L391: z$
 34540 L391: form pos 25,c 10
-34560     print #255,using L411: z$
+34560     pr #255,using L411: z$
 34580 L411: form pos 38,c 10,skip 4
-34600     print #255,using L310: d(9),d(10),d(11),t4$,g(4),e$(1)
-34620     print #255,using L320: t5$,g(5),e$(2)
-34640     print #255,using L320: t6$,g(6),e$(3)
-34660     print #255,using L320: t7$,g(7),e$(4)
-34680 ! Print #255,Using 320: T8$,G(8)
-34700     if budget>0 then let bud$="Budgeted Amount:"&trim$(cnvrt$("Pic($$,$$$.##",budget)) else let bud$=""
-34720     print #255,using L320: t9$,g(9),bud$(1:30)
-34740     print #255,using L320: pb$,bal-g(11)
-34760     print #255: ""
-34780     print #255,using L511: final$
+34600     pr #255,using L310: d(9),d(10),d(11),t4$,g(4),e$(1)
+34620     pr #255,using L320: t5$,g(5),e$(2)
+34640     pr #255,using L320: t6$,g(6),e$(3)
+34660     pr #255,using L320: t7$,g(7),e$(4)
+34680 ! pr #255,Using 320: T8$,G(8)
+34700     if budget>0 then bud$="Budgeted Amount:"&trim$(cnvrt$("Pic($$,$$$.##",budget)) else bud$=""
+34720     pr #255,using L320: t9$,g(9),bud$(1:30)
+34740     pr #255,using L320: pb$,bal-g(11)
+34760     pr #255: ""
+34780     pr #255,using L511: final$
 34800 L511: form pos 22,c 10
-34820     print #255: ""
-34840     print #255: ""
-34860     print #255: ""
-34880     print #255: ""
-34900     print #255: ""
-34920     let count+=1: if count=2 then print #255: ""
-34940     if count=3 then print #255: 
-34960     print #255,using L340: d(6),d(5),gross,bal,gross,d4,bal
-34980     if count=1 then print #255: : print #255: : print #255: : print #255: : print #255: : print #255: ! EXTRA LINE BETWEEN 1ST and 2nd bills
-35000     if count=2 then print #255: : print #255: : print #255: : print #255: : print #255: ! EXTRA LINE BETWEEN 2nd & 3rd bill
-35020     if count=3 then let count=0 : print #255: newpage
-35040 ! Print #255,Using 360: MG$(1)
-35060 ! If BUDGET>0 Then Print #255,Using 360: "Pay Budgeted Amount:"&CNVRT$("Pic($$,$$$.##",BUDGET) : Goto 610
-35080 ! Print #255,Using 360: MG$(2)
-35100 ! Print #255,Using 360: MG$(3)
-35120 ! Print #255:
-35140 ! Print #255:
-35160 ! Print #255:
+34820     pr #255: ""
+34840     pr #255: ""
+34860     pr #255: ""
+34880     pr #255: ""
+34900     pr #255: ""
+34920     count+=1: if count=2 then pr #255: ""
+34940     if count=3 then pr #255: 
+34960     pr #255,using L340: d(6),d(5),gross,bal,gross,d4,bal
+34980     if count=1 then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: : pr #255: ! EXTRA LINE BETWEEN 1ST and 2nd bills
+35000     if count=2 then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: ! EXTRA LINE BETWEEN 2nd & 3rd bill
+35020     if count=3 then count=0 : pr #255: newpage
+35040 ! pr #255,Using 360: MG$(1)
+35060 ! If BUDGET>0 Then pr #255,Using 360: "Pay Budgeted Amount:"&CNVRT$("Pic($$,$$$.##",BUDGET) : Goto 610
+35080 ! pr #255,Using 360: MG$(2)
+35100 ! pr #255,Using 360: MG$(3)
+35120 ! pr #255:
+35140 ! pr #255:
+35160 ! pr #255:
 35180 ! _____________end_________________
 35200   fnend 
-36000 UBFORM: ! r: PRINT FROM TEXT FILE
+36000 UBFORM: ! r: pr FROM TEXT FILE
 36020   dim file_rtf$(1)*512
 36060   let fngetdir2(env$('Q')&"\UBmstr",mat file_rtf$, '/ON','*.rtf')
 36080   let fl1=udim(mat file_rtf$)
@@ -567,10 +567,10 @@
 40740   let flname$=rtrm$(resp$(1))
 40750   let fncreg_write('ubpdnot_file_name',flname$)
 40760   if resp$(2)<>"[All]" then 
-40762     let bk1=val(resp$(2))
+40762     bk1=val(resp$(2))
 40764     let resp$(2)=""
 40766   else 
-40768     let bk1=0
+40768     bk1=0
 40770     let resp$(2)=""
 40772   end if 
 40774   if trim$(resp$(3))<>"[All]" then 
@@ -590,8 +590,8 @@
 40820   if ckey=1 and resp$(1)="(Pre-Printed)" then 
 40840     let do_print_std_form=1
 40860     goto PRINTING_BEGIN
-40880   else if ckey=1 then ! Print the Past Due Notices
-40900     let count=0
+40880   else if ckey=1 then ! pr the Past Due Notices
+40900     count=0
 40920     if resp$(1)="(Reminder)" then 
 40940       let fn_vbopenprint
 40960       let reminder=1
@@ -631,7 +631,7 @@
 41640   end if 
 41660 ! /r  end of SELECT_SCREEN
 44000 PRINTING_BEGIN: ! r:
-44020   let checkcounter=0
+44020   checkcounter=0
 44040   if trim$(sz$)="" and sel_indv$="Y" then goto ASK_NEXT_ACT ! selected to pick specific account but did not have one on screen
 44060   if trim$(sz$)<>"" and sel_indv$="Y" then let z$=sz$: goto READ_CUSTOMER ! selected to pirnt specific account and had an account on screen
 44080 ! if rtrm$(sz$)="" then goto L1330
@@ -672,7 +672,7 @@
 44880 ! ______________________________________________________________________
 44900 READ_CUSTOMER: ! 
 44920   read #customer1,using F_CUSTOMER,key=sz$: z$,meter_address$,mat f$,mat a,mat b,mat c,mat d,bal,f,mat g,bra,mat gb,route,final,mat extra,mat extra$ nokey ASK_NEXT_ACT
-44940   let b4$=""
+44940   b4$=""
 44960   goto READ_ADRBIL ! /r
 46000 EO_CUSTOMER: ! r:
 46020 ! if env$('client')='Merriam Woods' then
@@ -690,7 +690,7 @@
 46260     goto SELECT_SCREEN ! XIT
 46280   end if 
 46300   close #customer1: ioerr ignore
-46320   let customer1=0
+46320   customer1=0
 46340   let fnpa_finis(h_vb_pr_out)
 46360 ! end if
 46380 ! 

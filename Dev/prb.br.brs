@@ -8,7 +8,7 @@
 21800   do 
 22000     read #h_tmsht,using FM_TIME: mat inp,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
 22200 FM_TIME: form pos 1,g 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,x 12,pd 3,c 30
-22400     print #255: inp(1);' had (';b8;') had a time of ';inp(3);' on ';inp(6);' charge=';inp(5)
+22400     pr #255: inp(1);' had (';b8;') had a time of ';inp(3);' on ';inp(6);' charge=';inp(5)
 22600   loop 
 22800 TM_XIT2: ! 
 23000   let fncloseprn

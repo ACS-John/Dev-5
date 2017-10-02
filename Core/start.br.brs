@@ -7,7 +7,8 @@
 01040 fnend
 02000 def fn_acsSystemInitialize(; isScreenIOtest)
 02020   if ~isScreenIOtest or env$('acsVersion')='' then
-02040     pr f '1,1,C':"Loading ACS System..." 
+02040     startStatusLine=0
+02050     fn_startStatus("Loading ACS System..." )
 02060     if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusline off"
 03000     ! r: set envirnoment variables based on login_name$ and/or BR_MODEL
 03020     if env$('ACSDeveloper')<>'' then let setenv('disableAutomatedSavePoints','Yes') else let setenv('disableAutomatedSavePoints','')
@@ -47,7 +48,9 @@
 04440     if env$('BR_MODEL')='CLIENT/SERVER' then
 04460      execute 'config shell default client'
 04480      setenv('at','@:') 
+04490      fn_startStatus('Collecting local environment variables...')
 04500      fncs_env
+           if env$('client_acsDeveloper')<>'' then let setenv('acsDeveloper',env$('client_acsDeveloper'))
 04520      setenv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
 04540      setenv('userprofile','@::'&env$('client_userprofile'))
 04560    else
@@ -127,6 +130,7 @@
 14000   ! setenv("PD",os_filename$('S:\Core\ScreenIO\')) ! for (screenio's version) fnsnap compatibility 
 14020     setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
 14040     ! if isScreenIOtest then let disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
+14050     fn_startStatus('Identifying your system...')
 14060     fn_uniqueComputerId_initialize ! called to initialize env$('unique_computer_id')
 14080     if env$('unique_computer_id')='42601D50-D3A4-81E4-29A3-605718581E48' then ! little koi
 14100       setenv('enableClientSelection','Yes')
@@ -177,10 +181,10 @@
 16360       if tmp_pos_uuid>0 then 
 16380         tmp_line$(1:tmp_pos_uuid)=''
 16400       else 
-16420         print 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause 
+16420         pr 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause 
 16440       end if 
 16460     end if 
-16480 !   if tmp_line$(1:4)<>'UUID' then print 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause
+16480 !   if tmp_line$(1:4)<>'UUID' then pr 'problem in fn_uniqueComputerId_initialize$ - expected to say UUID' : pause
 16500     uuid$=tmp_line$(6:len(tmp_line$)-1)
 16520     close #h_tmp,free: 
 16540     if uuid$='FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF' then 
@@ -195,7 +199,7 @@
 16720       do while pos(tmp_line$,'~~')>0
 16740         tmp_line$=srep$(tmp_line$,'~~','~')
 16760       loop 
-16780       if tmp_line$(1:12)<>'SerialNumber' then print 'problem in fn_uniqueComputerId_initialize$ - expected to say SerialNumber' : pause 
+16780       if tmp_line$(1:12)<>'SerialNumber' then pr 'problem in fn_uniqueComputerId_initialize$ - expected to say SerialNumber' : pause 
 16800       hdd_serial$=tmp_line$(14:len(tmp_line$)-1)
 16820       close #h_tmp,free: 
 16840     else 
@@ -235,7 +239,7 @@
 19220 ERTN: fnerror(program$,err,line,act$,"xit")
 19240   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 19260   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-19280   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+19280   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 19300 ERTN_EXEC_ACT: execute act$ : goto ERTN
 19320 ! /region
 22000 def fn_setup
@@ -408,6 +412,7 @@
 45060 fnend
 45080 def fn_setQ(setQ$*256)
 45100   setQ$=rtrm$(setQ$,'\')
+45110   if pos(setQ$,' ')>0 then setQ$=fnshortpath$(setQ$)
 45120   setenv('Q',setQ$)
 45140   execute 'config substitute [Q] "'&env$('Q')&'"'
 45160   if env$('acsDeveloper')='' then 
@@ -422,7 +427,8 @@
 45340 fnend
 46000 def fn_setQBase(newQBase$*256)
 46020   if env$('QBase')='' then
-46030    newQBase$=rtrm$(newQBase$,'\')
+46022     if pos(QBase,' ')>0 then QBase=fnshortpath$(QBase)
+46030     newQBase$=rtrm$(newQBase$,'\')
 46040     setenv('QBase',newQBase$)
 46060     ! if env$('ACSDeveloper')<>'' then 
 46080     !   pr 'QBase set to '&env$('QBase')
@@ -467,9 +473,9 @@
 50180 fnend 
 52000 def fn_update_version_for_inno
 52040   open #h_tmp:=fn_gethandle: 'name=:C:\ACS\Setup\ACS 5 - AppVersion.iss,RecL=256,Replace',display,output 
-52060   print #h_tmp: ';This file is dynamically built by '&os_filename$(program$)&' when run by an ACSDeveloper.'
-52080   print #h_tmp: ';Attempts to edit it directly are moot and will be quickly overwritten.'
-52100   print #h_tmp: 'AppVersion='&fnacs_version$
+52060   pr #h_tmp: ';This file is dynamically built by '&os_filename$(program$)&' when run by an ACSDeveloper.'
+52080   pr #h_tmp: ';Attempts to edit it directly are moot and will be quickly overwritten.'
+52100   pr #h_tmp: 'AppVersion='&fnacs_version$
 52120   close #h_tmp: 
 52140 fnend 
 54000 def fncs_env
@@ -545,8 +551,8 @@
 60020   dim srnLine$*1024,srnItem$(0)*1024
 60040   open #hSrnOut:=fn_gethandle: 'name=ACS_tmp_Release_Note_Report.txt,recl=1024,replace',d,o
 60060   open #hReleaseNotes:=fn_gethandle: 'name=S:\Core\Release_Notes.txt',d,i
-60080   print #hSrnOut: 'You just updated from '&version_prior$&' to '&version_current$&'.'
-60100   print #hSrnOut: ''
+60080   pr #hSrnOut: 'You just updated from '&version_prior$&' to '&version_current$&'.'
+60100   pr #hSrnOut: ''
 60120   do
 60140   linput #hReleaseNotes: srnLine$ eof srnReleaseNotesEof
 60160     str2mat(srnLine$,mat srnItem$,chr$(9))
@@ -554,9 +560,9 @@
 60200       srnItem3Value=val(srnItem$(3)) conv ignore
 60220     end if
 60240     if udim(mat srnItem$)=1 then
-60260       print #hSrnOut: chr$(9)&chr$(9)&srnLine$
+60260       pr #hSrnOut: chr$(9)&chr$(9)&srnLine$
 60280     else
-60300       print #hSrnOut: srnLine$
+60300       pr #hSrnOut: srnLine$
 60320     end if
 60340   loop until srnItem3Value<>0 and (udim(srnItem$)=>3 and srnItem$(3)<=version_prior$)
 60360   srnReleaseNotesEof: !
@@ -576,7 +582,7 @@
 62200     end if 
 62220     hMaybe-=1
 62240   loop until hMaybe=-1
-62260   print 'fn_gethandle found no available file handles, so it is returning -1' : pause
+62260   pr 'fn_gethandle found no available file handles, so it is returning -1' : pause
 62280   gethandleFINIS: ! 
 62300   fn_gethandle=ghReturn
 62320 fnend 
@@ -619,15 +625,17 @@
 67200       if posForDev>0 then
 67220         posForDev+=15
 67240         posEndDev=pos(lwrc$(line$),'</for developer>')-1
-67260         print #hOut_FileIoIni: line$(posForDev:posEndDev)
+67260         pr #hOut_FileIoIni: line$(posForDev:posEndDev)
 67280         ! pr line$(posForDev:posEndDev)
 67300         ! pause
 67320       else
-67340         print #hOut_FileIoIni: line$
+67340         pr #hOut_FileIoIni: line$
 67360         ! pr line$
 67380       end if
 67400     loop
 67420     Csf2f_Eof: !
 67440   end if
 67460 fnend
-
+68000 def fn_startStatus(text$*128)
+68020   pr f str$(startStatusLine+=1)&',1,C': text$
+68040 fnend

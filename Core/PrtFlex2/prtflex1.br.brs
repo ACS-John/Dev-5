@@ -132,11 +132,11 @@
 00940   let txt$=uprc$(gridname$) !:
         let fnlbl(1,1,txt$,20,2,3)
 00950   mat colhdr$(2) !:
-        let colhdr$(1)="Column #" !:
-        let colhdr$(2)="Description"
+        colhdr$(1)="Column #" !:
+        colhdr$(2)="Description"
 00960   mat colmask$(2) !:
-        let colmask$(1)="30" !:
-        let colmask$(2)=""
+        colmask$(1)="30" !:
+        colmask$(2)=""
 00970   let filename$="flexreview"
 00980   let fnflexinit1(filename$,2,1,10,72,mat colhdr$,mat colmask$,1)
 00990   if lrec(15)=0 then goto DISPLAYOPTIONS
@@ -206,33 +206,33 @@
 01480   if ckey=5 then goto GRIDCOLUMNS
 01490   goto GRIDCOLUMNS
 01500 ADDTOGRID: ! add items to individual grids
-01510   let columnnum=val(gridinfo$(3)(1:3)) !:
+01510   columnnum=val(gridinfo$(3)(1:3)) !:
         let name$=gridinfo$(4)(1:30) !:
         let vname$=gridinfo$(4)(31:50) !:
         let fieldlen=val(gridinfo$(4)(51:54)) !:
         let maskinfo$=gridinfo$(4)(55:67) !:
-        let abbrev$=trim$(gridinfo$(4)(68:87))
+        abbrev$=trim$(gridinfo$(4)(68:87))
 01520   let maskinfo$=uprc$(maskinfo$)
 01530   let maskformat$=maskinfo$(3:4) ! determine if pd,c,n etc format
 01540   let decimalposition=val(maskinfo$(1:2))
 01550   let x=pos(uprc$(name$),"DATE",1) !:
         if x>0 then let itisadate$="Y" else let itisadate$="N"
-01560   if trim$(maskformat$)="N" and fieldlen<8 and itisadate$="Y" then let colmask$="1" !:
+01560   if trim$(maskformat$)="N" and fieldlen<8 and itisadate$="Y" then colmask$="1" !:
           goto L1650 ! DATE IN MMDDYY FORMAT
-01570   if trim$(maskformat$)="N" and fieldlen>7 and itisadate$="Y" then let colmask$="3"
-01580   if trim$(maskformat$)="PD" and fieldlen>7 and itisadate$="Y" then let colmask$="3" !:
+01570   if trim$(maskformat$)="N" and fieldlen>7 and itisadate$="Y" then colmask$="3"
+01580   if trim$(maskformat$)="PD" and fieldlen>7 and itisadate$="Y" then colmask$="3" !:
           goto L1650 ! DATE IN CCYYMMDD FORMAT
-01590   if trim$(maskformat$)="PD" and fieldlen<8 and itisadate$="Y" then let colmask$="1" !:
+01590   if trim$(maskformat$)="PD" and fieldlen<8 and itisadate$="Y" then colmask$="1" !:
           goto L1650 ! DATE IN MMDDYY FORMAT
-01600   if trim$(maskformat$)="N" and decimalposition=2 and itisadate$="N" then let colmask$="10" !:
+01600   if trim$(maskformat$)="N" and decimalposition=2 and itisadate$="N" then colmask$="10" !:
           goto L1650 ! AMERICAN CURRENCY
-01610   if trim$(maskformat$)="N" and decimalposition>0 and itisadate$="N" then let colmask$=str$(30+decimalposition) !:
+01610   if trim$(maskformat$)="N" and decimalposition>0 and itisadate$="N" then colmask$=str$(30+decimalposition) !:
           goto L1650 ! NUMERIC WITH DECIMALS
-01620   if trim$(maskformat$)="PD" and decimalposition>0 and itisadate$="N" then let colmask$="10" !:
+01620   if trim$(maskformat$)="PD" and decimalposition>0 and itisadate$="N" then colmask$="10" !:
           goto L1650 ! NUMERIC WITH DECIMALS
-01630   if (trim$(maskformat$)="N" or trim$(maskformat$)="PD") and decimalposition=0 and itisadate$="N" then let colmask$=str$(30+decimalposition) !:
+01630   if (trim$(maskformat$)="N" or trim$(maskformat$)="PD") and decimalposition=0 and itisadate$="N" then colmask$=str$(30+decimalposition) !:
           goto L1650 ! NUMERIC WITH DECIMALS
-01640   if (trim$(maskformat$)="C" or trim$(maskformat$)="G") then let colmask$="80" !:
+01640   if (trim$(maskformat$)="C" or trim$(maskformat$)="G") then colmask$="80" !:
           goto L1650 ! NORMAL CHARACTER
 01650 L1650: read #15,using L1020,key=cnvrt$("pic(zzz)",val(gridinfo$(3))): oldcolumn nokey L1670 ! CHECK TO SEE IF ALREADY EXITS
 01660   goto INSERTGRIDCOLUMN
@@ -244,7 +244,7 @@
 01720   execute "list -"&str$(line) !:
         pause  !:
         goto L1740
-01730   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+01730   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01740 L1740: execute act$
 01750   goto ERTN
 01760 ! ______________________________________________________________________
@@ -266,7 +266,7 @@
 01920   mat colhdr$=("")
 01930   mat colmask$(80)
 01940   mat colmask$=("")
-01950   let columns=0
+01950   columns=0
 01960   let specline=10010 !:
         let dataline=10510
 01970 ! ____________________________________________________________________
@@ -274,44 +274,44 @@
 01990   close #15: ioerr L2000
 02000 L2000: open #15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outin,keyed ioerr SELECTDATABASE
 02010   open #10: "Name="&env$('temp')&"\GridSpecs1.tmp,RecL=255,Replace",display,output  ! temporary file to hold generated lines for grid specifications
-02020   print #10,using L2090: "procerr return" !:
+02020   pr #10,using L2090: "procerr return" !:
         ! skip next line if no lines exist
-02030   print #10,using L2090: "del 10010,10480" !:
+02030   pr #10,using L2090: "del 10010,10480" !:
         ! delete any lines from previous grid
-02040   print #10,using L2090: "procerr return" !:
+02040   pr #10,using L2090: "procerr return" !:
         ! skip next line if no lines exist
-02050   print #10,using L2090: "del 10510,10980"
+02050   pr #10,using L2090: "del 10510,10980"
 02060 L2060: read #15,using L1020: columnnum,name$,vname$,fieldlen,colmask$,abbrev$ eof L2160
-02070   let columns=columns+1
-02080   print #10,using L2090: str$(specline)& " Let ColHdr$("&str$(columns)&")="&'"'&trim$(abbrev$)&'"'&" !:COLMASK$("&str$(columns)&")="&'"'&trim$(colmask$)&'"'
+02070   columns=columns+1
+02080   pr #10,using L2090: str$(specline)& " colHdr$("&str$(columns)&")="&'"'&trim$(abbrev$)&'"'&" !:COLMASK$("&str$(columns)&")="&'"'&trim$(colmask$)&'"'
 02090 L2090: form pos 1,c 255
 02100   let specline=specline+10
 02110   let x=pos(vname$,"$",1): if x>0 then goto L2120 else goto L2130 !:
           ! determine if numeric or character
-02120 L2120: print #10,using L2090: str$(dataline)& " LET ITEM$("&str$(columns)&")="&trim$(vname$) !:
+02120 L2120: pr #10,using L2090: str$(dataline)& " LET ITEM$("&str$(columns)&")="&trim$(vname$) !:
         goto L2140
-02130 L2130: print #10,using L2090: str$(dataline)& " LET ITEM$("&str$(columns)&")= str$("&trim$(vname$)&")"
+02130 L2130: pr #10,using L2090: str$(dataline)& " LET ITEM$("&str$(columns)&")= str$("&trim$(vname$)&")"
 02140 L2140: let dataline=dataline+10
 02150   goto L2060
 02160 L2160: close #10: ioerr L2180
 02170   if columns=0 then goto DISPLAYOPTIONS
 02180 L2180: open #10: "Name="&env$('temp')&"\GridSpecs2.tmp,RecL=255,Replace",display,output 
-02190   print #10,using L2090: "PROC NOECHO"
-02200   print #10,using L2090: "Load Core\PrtFlex\PrtFlex2"
-02210   print #10,using L2090: "Load Core\PrtFlex\PrtFlex2"
-02220   print #10,using L2090: "subproc "&env$('temp')&"\gridspecs1.tmp"
-02230   print #10,using L2090: "SubProc "&open_read$
-02240   print #10,using L2090: "00210 Let columns = "&str$(columns)
-02250   print #10,using L2090: "Replace Core\PrtFlex\PrtFlex2"
-02260   print #10,using L2090: 'chain "Core\PrtFlex\PrtFlex2"'
-02270 ! Print #10,Using 1980: "PROC ECHO"
+02190   pr #10,using L2090: "PROC NOECHO"
+02200   pr #10,using L2090: "Load Core\PrtFlex\PrtFlex2"
+02210   pr #10,using L2090: "Load Core\PrtFlex\PrtFlex2"
+02220   pr #10,using L2090: "subproc "&env$('temp')&"\gridspecs1.tmp"
+02230   pr #10,using L2090: "SubProc "&open_read$
+02240   pr #10,using L2090: "00210 columns = "&str$(columns)
+02250   pr #10,using L2090: "Replace Core\PrtFlex\PrtFlex2"
+02260   pr #10,using L2090: 'chain "Core\PrtFlex\PrtFlex2"'
+02270 ! pr #10,Using 1980: "PROC ECHO"
 02280   close #10: 
 02290   open #11: "Name="&env$('temp')&"\Gridname.tmp,RecL=80,Replace",internal,output,relative 
 02300   write #11,using L2310: gridname$
 02310 L2310: form pos 1,c 40
 02320   close #11: 
 02330 ! write fullgridname$,fullgridIndex,columns to file for prtflex2
-02340   print newpage
+02340   pr newpage
 02350   execute "proc "&env$('temp')&"\gridspecs2.tmp"
 02360 ! ____________________________________________________________________
 02370 ADDGRIDNAME: !  Allows you to add columns to your grid
@@ -328,7 +328,7 @@
 02440   let resp$(1)=trim$(resp$(1))
 02450   let resp$(1)=trim$(resp$(1))(1:20)
 02460   close #15: ioerr L2470
-02470 L2470: let ckey=1 : goto L780
+02470 L2470: ckey=1 : goto L780
 02480 ! ____________________________________________________________________
 02490 DONE: close #1: ioerr XIT
 02500 XIT: let fnxit

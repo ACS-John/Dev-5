@@ -9,9 +9,9 @@
 10240   loop 
 10260 ERROR_ON_IT: ! 
 10280   let err_count+=1
-10282   print rec(h_trans)
+10282   pr rec(h_trans)
 10290   delete #h_trans: 
 10320   continue 
 10340 FINIS: ! 
-10360   print 'total errors encountered: ';err_count
+10360   pr 'total errors encountered: ';err_count
 10380   end 

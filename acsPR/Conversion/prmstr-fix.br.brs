@@ -20,7 +20,7 @@
 00200   if r10>lrec(10) then goto END1
 00210   read #10,using L220,rec=r10: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd norec L190,conv L190,eof END1
 00220 L220: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,2*pd 3,c 12,n 6
-00230   let adr=ta(1)
+00230   adr=ta(1)
 00240   mat ta=(0)
 00250 L250: if adr=0 then goto L370
 00260   read #12,using L270,rec=adr: tr$,adr,wkm
@@ -51,7 +51,7 @@
 00510 ERTN: let fnerror(program$,err,line,act$,"xit")
 00520   if uprc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00530   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00540   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00540   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00550 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00560 ! /region
 00570 ! ______________________________________________________________________

@@ -19,7 +19,7 @@
 00073 ! Let fnpic(2,1,3,8,TTT$)
 00074 ! Let fntxt(5,10,20,0,0,MYMASK$,0,TTT$)
 00083   let response$(1) = "121283" !:
-        let button_option = 2
+        button_option = 2
 00084   let fncmdkey('asdfasdf',1)
 00085   let fnacs(sn$,win,mat response$,ckey)
-00090 ! Print RESPONSE$(1)
+00090 ! pr RESPONSE$(1)

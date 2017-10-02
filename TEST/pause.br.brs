@@ -7,11 +7,11 @@
 00070   let fntop(prg$="Sample\Flex",cap$="Sample Flex")
 00080 ! -------------------------------------------------------------------
 00090   let fntos("S-Flex")
-00100   let chdr$(1)="Account" : let chdr$(2)="Name" !:
-        let chdr$(3)="Address" : let chdr$(4)="City" !:
-        let chdr$(5)="State" : let chdr$(6)="Zip"
-00110   let cm$(1)="80" : let cm$(2)="80" : let cm$(3)="80" : let cm$(4)="80" !:
-        let cm$(5)="80" : let cm$(6)="80"
+00100   chdr$(1)="Account" : chdr$(2)="Name" !:
+        chdr$(3)="Address" : chdr$(4)="City" !:
+        chdr$(5)="State" : chdr$(6)="Zip"
+00110   cm$(1)="80" : cm$(2)="80" : cm$(3)="80" : cm$(4)="80" !:
+        cm$(5)="80" : cm$(6)="80"
 00120   let fnflexinit1('flex_test',1,1,10,50,mat chdr$,mat cm$,0,repl=1)
 00130   open #1: "Name=Sample\FlexTest,RecL=200,Use",internal,outin 
 00140 READ_1: ! !:
@@ -22,7 +22,7 @@
 00180   let fncmdkey('Ok',1,1,0)
 00190   let fncmdkey('Cancel',99,0,1)
 00200   let fnacs("S-Flex",0,mat resp$,ck)
-00210   print "returned response is "&resp$(1) !:
-        print "Press Enter to continue"
+00210   pr "returned response is "&resp$(1) !:
+        pr "Press Enter to continue"
 00220   let fnpause
 00230   stop 

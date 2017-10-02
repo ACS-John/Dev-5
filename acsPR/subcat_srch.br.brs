@@ -7,14 +7,14 @@
 00070 ! ______________________________________________________________________
 00080     dim item$(2)*40,resp$(30)*80
 00090 ! ______________________________________________________________________
-00100     let cde$=lpad$(rtrm$(cde$),3) ! pass back sub-category #
+00100     cde$=lpad$(rtrm$(cde$),3) ! pass back sub-category #
 00110     let fncno(cno)
 00120     let subcat=1 ! # of subcatergory file in calling program
 00130 ! ______________________________________________________________________
 00140     restore #subcat: 
 00150     let fntos(sn$="SubCatSrch")
-00160     let ch$(1)="Sub-Category #" : !:
-          let ch$(2)="Description" : !:
+00160     ch$(1)="Sub-Category #" : !:
+          ch$(2)="Description" : !:
           mat ch$(2) : mat cm$(2) : mat cm$=("2")
 00170     let usefile=fnflexinit1('SubCat',1,1,20,40,mat ch$,mat cm$,1,usefile)
 00190 READ_FILE: ! 
@@ -24,8 +24,8 @@
 00230 ! ______________________________________________________________________
 00240 ERR_READ: ! 
 00250     if err<>61 then goto ERTN
-00260     print 'Record locked during cat_search flexgrid creation' !:
-          print 'It was skipped' !:
+00260     pr 'Record locked during cat_search flexgrid creation' !:
+          pr 'It was skipped' !:
           read #subcat,release: !:
           goto READ_FILE
 00270 ! ______________________________________________________________________
@@ -37,14 +37,14 @@
 00290     let fnacs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00300     let x$=cde$=lpad$(resp$(1),3)
-00310     if ckey=5 then let cde$="   " ! no one selected
+00310     if ckey=5 then cde$="   " ! no one selected
 00320     goto XIT
 00330 ! ______________________________________________________________________
 00340 ! <Updateable Region: ERTN>
 00350 ERTN: let fnerror(program$,err,line,act$,"xit")
 00360     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00370     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00380     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00380     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00390 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00400 ! /region
 00410 ! ______________________________________________________________________

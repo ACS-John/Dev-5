@@ -20,10 +20,10 @@
 00190 ! ______________________________________________________________________
 00200   open #1: "Name=JCMSTR.X,KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno),internal,outin,keyed 
 00210 ! ______________________________________________________________________
-00220 L220: print newpage
+00220 L220: pr newpage
 00230   let fnopenwin(win=101,10,20,14,59,cap$)
-00240   print #101,fields "4,2,C 21,N": "Job Number to Remove:"
-00250   print fields "15,35,C 09,B,5": "Done (F5)"
+00240   pr #101,fields "4,2,C 21,N": "Job Number to Remove:"
+00250   pr fields "15,35,C 09,B,5": "Done (F5)"
 00260 L260: input #101,fields "4,24,C 6,UT,N": jn$
 00270   let jn$=lpad$(rtrm$(jn$),6)
 00280   if cmdkey=5 then goto L390
@@ -37,7 +37,7 @@
 00360 L360: rewrite #1,using 'Form POS 157,N 2',key=jn$: 9 nokey L220
 00370   goto L220
 00380 ! ______________________________________________________________________
-00390 L390: print newpage
+00390 L390: pr newpage
 00400   let message$="Removeing completed Jobs..."
 00410   let fnwait(102,cap$,message$,0)
 00420   restore #1: 
@@ -58,14 +58,14 @@
 00570 L570: read #1,using L580: jn$,n$,mat a$,mat b eof EOF1
 00580 L580: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2
 00590   if b(4)=9 then goto L570
-00600   let cn$=jn$&"     "
+00600   cn$=jn$&"     "
 00610   read #2,using L620,key>=cn$: cn$,k$,mat l,mat ta nokey L570
 00620 L620: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2,2*pd 3
 00630   goto L650
 00640 L640: read #2,using L620: cn$,k$,mat l,mat ta eof L820
 00650 L650: if jn$><cn$(1:6) then goto L820
 00660   if ta(1)=0 then goto L800
-00670   let adr=ta(1)
+00670   adr=ta(1)
 00680   mat ta=(0)
 00690 L690: read #3,using L560,rec=adr: eno$,jno$,mat tr,pd$,nta
 00700   let ot4=ot4+1
@@ -76,7 +76,7 @@
 00750   if ta(1)=0 then let ta(1)=ot4
 00760   let ta(2)=ot4
 00770   if nta=0 then goto L800
-00780   let adr=nta
+00780   adr=nta
 00790   goto L690
 00800 L800: write #12,using L620: cn$,k$,mat l,mat ta
 00810   goto L640
@@ -99,7 +99,7 @@
 00980 ERTN: let fnerror(program$,err,line,act$,"xit")
 00990   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01000   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01010   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01010   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01020 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01030 ! /region
 01040 ! ______________________________________________________________________

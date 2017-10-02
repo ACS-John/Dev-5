@@ -32,7 +32,7 @@
 16020   dim tmpfield_value$*256,key_compare$*128
 16040   let field_name$=rpad$(lwrc$(trim$(field_name$)),128)
 16060   let tmpfield_value$=field_value$=''
-16080   ! print 'read #reg_h'
+16080   ! pr 'read #reg_h'
 16100   read #sreg_h,using 'form pos 1,C 128,v 256',key=field_name$,release: key_compare$,tmpfield_value$ ioerr SREG_LOAD_IOERR ! XXX
 16120   SREG_LOAD_IOERR: ! 
 16140   if key_compare$=field_name$ then 
@@ -40,19 +40,19 @@
 16180   else 
 16200     let field_value$=default_if_not_read$ ! ''
 16220   end if 
-16240   ! print 'load ';trim$(field_name$);'=';field_value$
+16240   ! pr 'load ';trim$(field_name$);'=';field_value$
 16260 fnend 
 18000 def fn_sreg_write(field_name$*128,field_value$*256)
 18020    if env$('ACSDeveloper')<>'' then
 18040      let field_name$=rpad$(lwrc$(trim$(field_name$)),128)
 18060      rewrite #sreg_h,using 'form pos 1,c 128,c 256',key=field_name$: field_name$,field_value$ nokey SREG_WRITE ! XXX
-18080      ! print 'rewrite #reg_h'
+18080      ! pr 'rewrite #reg_h'
 18100      goto SREG_SAVE_XIT
 18120      SREG_WRITE: ! 
 18140      write #sreg_h,using 'form pos 1,c 128,c 256': field_name$,field_value$
-18160      ! print 'write #reg_h'
+18160      ! pr 'write #reg_h'
 18180      SREG_SAVE_XIT: ! 
-18200      ! print 'save ';trim$(field_name$);'=';field_value$
+18200      ! pr 'save ';trim$(field_name$);'=';field_value$
 18220    end if
 18240 fnend
 19000 def fn_sreg_rename(field_name_old$*128,fieldNameNew$*128)
@@ -79,7 +79,7 @@
 20280   dim rr_tmpfield_value$*256,rr_key_compare$*128
 20300   let rr_field_name$=rpad$(lwrc$(trim$(rr_field_name$)),128)
 20320   let rr_tmpfield_value$=rr_field_value$=''
-20340   ! print 'read #reg_h'
+20340   ! pr 'read #reg_h'
 20360   read #reg_h,using 'form pos 1,C 128,v 256',key=rr_field_name$,release: rr_key_compare$,rr_tmpfield_value$ ioerr REG_LOAD_IOERR ! XXX
 20380   REG_LOAD_IOERR: ! 
 20400   if rr_key_compare$=rr_field_name$ then 
@@ -87,18 +87,18 @@
 20440   else 
 20460     let rr_field_value$=rr_default_if_not_read$ ! ''
 20480   end if 
-20500   ! print 'load ';trim$(rr_field_name$);'=';rr_field_value$
+20500   ! pr 'load ';trim$(rr_field_name$);'=';rr_field_value$
 20520 fnend 
 20540 def fn_reg_write(rw_field_name$*128,rw_field_value$*256)
 20560   let rw_field_name$=rpad$(lwrc$(trim$(rw_field_name$)),128)
 20580   rewrite #reg_h,using 'form pos 1,c 128,c 256',key=rw_field_name$: rw_field_name$,rw_field_value$ nokey REG_WRITE ! XXX
-20600   ! print 'rewrite #reg_h'
+20600   ! pr 'rewrite #reg_h'
 20620   goto REG_SAVE_XIT
 20640   REG_WRITE: ! 
 20660   write #reg_h,using 'form pos 1,c 128,c 256': rw_field_name$,rw_field_value$
-20680   ! print 'write #reg_h'
+20680   ! pr 'write #reg_h'
 20700   REG_SAVE_XIT: ! 
-20720   ! print 'save ';trim$(rw_field_name$);'=';rw_field_value$
+20720   ! pr 'save ';trim$(rw_field_name$);'=';rw_field_value$
 20740 fnend
 20760 def fn_reg_rename(field_name_old$*128,fieldNameNew$*128)
 20780   let field_name_old$=rpad$(lwrc$(trim$(field_name_old$)),128)
@@ -121,14 +121,14 @@
 30140 fnend 
 30160 def fn_creg_close
 30180   close #creg_h: ioerr ignore
-30200   let creg_setup=0
+30200   creg_setup=0
 30220 fnend 
 30240 IGNORE: continue 
 30260 ! <updateable region: ertn>
 30280 ERTN: let fnerror(program$,err,line,act$,"xit")
 30300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 30320   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-30340   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+30340   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 30360   ERTN_EXEC_ACT: execute act$ : goto ERTN
 30380 ! </updateable region: ertn>
 30400 ! /r
@@ -136,29 +136,29 @@
 40020 def library fncreg_read(cr_field_name$*128,&cr_field_value$; cr_default_if_not_read$*128)
 40040   let fn_creg_setup
 40060   dim cr_tmpfield_value$*256,cr_key_compare$*128
-40080   let cr_field_name$=rpad$(lwrc$(trim$(cr_field_name$)),128)
-40100   let cr_tmpfield_value$=cr_field_value$=''
-40120   ! print 'read #creg_h'
+40080   cr_field_name$=rpad$(lwrc$(trim$(cr_field_name$)),128)
+40100   cr_tmpfield_value$=cr_field_value$=''
+40120   ! pr 'read #creg_h'
 40140   read #creg_h,using 'form pos 1,C 128,v 256',key=cr_field_name$,release: cr_key_compare$,cr_tmpfield_value$ ioerr CREG_LOAD_IOERR ! XXX
 40160   CREG_LOAD_IOERR: ! 
 40180   if cr_key_compare$=cr_field_name$ then 
-40200     let cr_field_value$=rtrm$(cr_tmpfield_value$)
+40200     cr_field_value$=rtrm$(cr_tmpfield_value$)
 40220   else 
-40240     let cr_field_value$=cr_default_if_not_read$
+40240     cr_field_value$=cr_default_if_not_read$
 40260   end if 
-40280   ! print 'load ';trim$(cr_field_name$);'=';cr_field_value$
+40280   ! pr 'load ';trim$(cr_field_name$);'=';cr_field_value$
 40300 fnend
 40320 def library fncreg_write(cw_field_name$*128,cw_field_value$*256)
 40340   let fn_creg_setup
-40360   let cw_field_name$=rpad$(lwrc$(trim$(cw_field_name$)),128)
+40360   cw_field_name$=rpad$(lwrc$(trim$(cw_field_name$)),128)
 40380   rewrite #creg_h,using 'form pos 1,c 128,c 256',key=cw_field_name$: cw_field_name$,cw_field_value$ nokey CREG_WRITE ! XXX
-40400   ! print 'rewrite #creg_h'
+40400   ! pr 'rewrite #creg_h'
 40420   goto CREG_SAVE_XIT
 40440   CREG_WRITE: ! 
 40460   write #creg_h,using 'form pos 1,c 128,c 256': cw_field_name$,cw_field_value$ err CReg_PreEtrn
-40480   ! print 'write #creg_h'
+40480   ! pr 'write #creg_h'
 40500   CREG_SAVE_XIT: ! 
-40520   ! print 'save ';trim$(cw_field_name$);'=';cw_field_value$
+40520   ! pr 'save ';trim$(cw_field_name$);'=';cw_field_value$
 40540 fnend 
 40560 CReg_PreEtrn: ! r:
 40580   if err=4126 then
@@ -169,7 +169,7 @@
 40680   fnstatus_close
 40700 retry ! /r
 40720 def fn_creg_setup
-40740   let cno=val(env$('CNo'))
+40740   cno=val(env$('CNo'))
 40760   if creg_setup<>cno then 
 40780     if creg_setup>0 then let fn_creg_close
 40800      ! 
@@ -180,7 +180,7 @@
 40900     cregFileIndex$=env$('Q')&'\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'-idx.h'&env$('CNo')
 40920     open #creg_h:=fngethandle: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed 
 40940     let fn_creg_setup=cno
-40960     let creg_setup=cno
+40960     creg_setup=cno
 40980   end if 
 41000   on error goto ERTN
 41020 fnend 

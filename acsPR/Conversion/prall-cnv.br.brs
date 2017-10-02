@@ -6,9 +6,9 @@
 00020 ! ______________________________________________________________________
 00026 ! ______________________________________________________________________
 00032   let fncno(cno)
-00040 L40: print newpage
-00050   print fields "8,20,C 30,R,N": "  CONVERT PAYROLL FILES"
-00060   print fields "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
+00040 L40: pr newpage
+00050   pr fields "8,20,C 30,R,N": "  CONVERT PAYROLL FILES"
+00060   pr fields "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
 00070 L70: rinput fields "10,55,N 5,UT,N": cno conv L70
 00080   if cno=0 then goto XIT
 00090 ! 
@@ -37,7 +37,7 @@
 01802 ERTN: let fnerror(program$,err,line,act$,"xit")
 01803   if uprc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01804   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01805   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01805   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01806 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01807 ! /region
 01808 ! ______________________________________________________________________

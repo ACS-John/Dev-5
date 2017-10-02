@@ -30,8 +30,8 @@
 00270   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 00280 L280: read #1,using L290: eno,em$,mat em eof L930
 00290 L290: form pos 1,n 8,c 30,pos 112,6*n 2
-00300   let a=pos (rtrm$(em$)," ",1)
-00310   let b=pos (rtrm$(em$)," ",a+1)
+00300   a=pos (rtrm$(em$)," ",1)
+00310   b=pos (rtrm$(em$)," ",a+1)
 00320   ! if env$('client')="West Rest Haven" then goto L370 ! don't turn name around
 00330   let em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
 00340   mat qtr1tcp=(0) : mat qt2tcp=(0): mat qtr3tcp=(0): mat qtr4tcp=(0)
@@ -78,35 +78,35 @@
 00780   goto L280
 00790 L790: mat tot=tot+rptemp
 00800   let tx2=tx2+tx1
-00810 L810: print #255,using L890: eno,em$(1:19),rptemp(1),tx1,rptemp(3),rptemp(2),rptemp(4),rptemp(5),rptemp(7),rptemp(6),rptemp(8) pageoflow PGOF
-00820   print #255,using L900: rptemp(9),rptemp(10) pageoflow PGOF
+00810 L810: pr #255,using L890: eno,em$(1:19),rptemp(1),tx1,rptemp(3),rptemp(2),rptemp(4),rptemp(5),rptemp(7),rptemp(6),rptemp(8) pageoflow PGOF
+00820   pr #255,using L900: rptemp(9),rptemp(10) pageoflow PGOF
 00830   let tx1=0
 00840   return 
 00850 ! ______________________________________________________________________
 00860 PGOF: ! 
-00870   print #255: newpage
+00870   pr #255: newpage
 00880   gosub HDR
 00890 L890: form pos 1,pic(zzzzzzzz),pos 10,c 19,pos 29,n 13.2,n 12.2,n 11.2,n 11.2,n 11.2,n 13.2,n 11.2,n 11.2,n 11.2,skip 1
 00900 L900: form pos 54,n 11.2,x 35,n 11.2,skip 1
 00910   continue 
 00920 ! ______________________________________________________________________
-00930 L930: print #255: 
+00930 L930: pr #255: 
 00940   let eno=0
 00950   let em$="Final Totals"
 00960   mat rptemp=tot
 00970   let tx1=tx2
 00980   gosub L810
-00990   print #255,using L1000: "YTD","QTD"
+00990   pr #255,using L1000: "YTD","QTD"
 01000 L1000: form skip 2,pos 29,c 3,pos 39,c 3,skip 2
 01010   for j=1 to 20
 01020     if trim$(abbrevname$)="" then goto L1050
-01030     print #255,using L1040: abbrevname$(j),rptot(j,1),rptot(j,2)
+01030     pr #255,using L1040: abbrevname$(j),rptot(j,1),rptot(j,2)
 01040 L1040: form pos 1,c 20,pos 22,2*n 12.2,skip 1
 01050 L1050: next j
-01060   print #255,using L1040: "EIC",rptot(j,1),rptot(j,2)
-01070   print #255,using L1040: "Total Soc-Sec. Wages",tfwy,tfq
-01080   print #255,using L1040: "Total Medicare Wages",mcw2,mcw1
-01090   print #255,using L1040: "Total Tips-YTD",ttips
+01060   pr #255,using L1040: "EIC",rptot(j,1),rptot(j,2)
+01070   pr #255,using L1040: "Total Soc-Sec. Wages",tfwy,tfq
+01080   pr #255,using L1040: "Total Medicare Wages",mcw2,mcw1
+01090   pr #255,using L1040: "Total Tips-YTD",ttips
 01100   form pos 1,c 33,2* n 10.2,skip 1
 01110   goto DONE
 01120 ! ______________________________________________________________________
@@ -117,22 +117,22 @@
 01170 L1170: let fnxit
 01180 ! ______________________________________________________________________
 01190 HDR: ! 
-01200   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-01210   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-01220   print #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
-01230 ! Print #255: "\qc  {\f181 \fs16 \b Payroll Date: "&CNVRT$("pic(zz/zz/zz)",PPD)&"}"
-01240   print #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
-01250   print #255: "\ql   "
-01260   print #255: tab(32); "<--------------------Year To Date--------------------->  <-------------Quarter To Date-------------->"
-01270   print #255: "  Number  Name                   Total      Taxable       SS/Med   Fed W/H    St W/H       Total        SS/Med   Fed W/H    St W/H"
-01280   print #255: "________  ___________________  __________ ___________ __________ __________ __________  ___________ __________ __________ __________"
+01200   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+01210   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+01220   pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
+01230 ! pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&CNVRT$("pic(zz/zz/zz)",PPD)&"}"
+01240   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
+01250   pr #255: "\ql   "
+01260   pr #255: tab(32); "<--------------------Year To Date--------------------->  <-------------Quarter To Date-------------->"
+01270   pr #255: "  Number  Name                   Total      Taxable       SS/Med   Fed W/H    St W/H       Total        SS/Med   Fed W/H    St W/H"
+01280   pr #255: "________  ___________________  __________ ___________ __________ __________ __________  ___________ __________ __________ __________"
 01290   return 
 01300 ! ______________________________________________________________________
 01310 ! <Updateable Region: ERTN>
 01320 ERTN: let fnerror(program$,err,line,act$,"xit")
 01330   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01340   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01350   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01350   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01360 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01370 ! /region
 01380 ! ______________________________________________________________________
@@ -188,14 +188,14 @@
 01800   if ckey=5 then goto XIT
 01810   let dat=prdate=d1=val(resp$(1))
 01820   let dat$=resp$(2)
-01830   let beg_date=val(resp$(3)) !:
+01830   beg_date=val(resp$(3)) !:
         let end_date=val(resp$(4)) !:
         let qtr1=val(resp$(5)) !:
         let qtr2=val(resp$(6)) !:
         let qtr3=val(resp$(7)) !:
         let qtr4=val(resp$(8))
 01840   let qtr5=val(resp$(9)(1:4))*10000+1231
-01850   let begin_year=val(resp$(9)(1:4))*10000+0101
+01850   begin_year=val(resp$(9)(1:4))*10000+0101
 01860   let end_year=val(resp$(9)(1:4))*10000+1231
 01870   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno'),internal,outin,relative 
 01880 ! Rewrite #11,Using "form pos 1,6*n 8,n 8,c 20",Rec=1: BEG_DATE,END_DATE,QTR1,QTR2,QTR3,QTR4,D1,DAT$
@@ -207,7 +207,7 @@
         mat qtr4tcp=(0): mat ytdtotal=(0): mat tdc=(0)
 01940   let fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0 !:
         let medqtr=eicyr=eicqtr=wagesqtr=0
-01950   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+01950   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 01960   restore #4,key>=checkkey$: nokey L2290
 01970 L1970: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof STORE_VARIABLES
 01980   if heno<>eno then goto STORE_VARIABLES

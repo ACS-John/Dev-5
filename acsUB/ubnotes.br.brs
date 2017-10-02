@@ -27,7 +27,7 @@
 00310   gosub HEADER
 00320 ! 
 00330   if rt1 then
-00333     let bk$=lpad$(str$(rt1),2)
+00333     bk$=lpad$(str$(rt1),2)
 00340     restore #h_customer,key>=bk$&"       ": nokey SCR1
 00342   end if 
 00350 READ_CUSTOMER: !
@@ -37,11 +37,11 @@
 00390 ! READ_NOTE: ! 
 00400   close #31: ioerr ignore
 00410   open #31: "Name="&env$('Q')&"\UBmstr\notes.h"&env$('cno')&"\"&trim$(z$)&".txt",display,input ioerr READ_CUSTOMER
-00420   print #255: "" 
-00422   print #255: "{\b "&rpad$(trim$(z$),10)&"  Street Adr: "&e$(1)&"  Name: "&e$(2)&"}"
+00420   pr #255: "" 
+00422   pr #255: "{\b "&rpad$(trim$(z$),10)&"  Street Adr: "&e$(1)&"  Name: "&e$(2)&"}"
 00430   do
 00432     linput #31: line$ eof READ_CUSTOMER
-00440     print #255: line$ pageoflow PGOF
+00440     pr #255: line$ pageoflow PGOF
 00450   loop
 00460 ! 
 00470 DONE: ! 
@@ -52,18 +52,18 @@
 00520 ERTN: let fnerror(program$,err,line,act$,"xit")
 00530   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00540   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00550   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00550   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00560 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00570 ! /region
 00590 HEADER: ! r:
 00600   let p2=p2+1
-00610   print #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
-00620   print #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
-00630   print #255: "\qc  {\f181 \fs18 \b "&date$("Month DD, CCYY")&"}"
-00640   print #255,using 'form pos 1,c 82,c 10': "\ql "&date$,"Page "&str$(p2)
+00610   pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
+00620   pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
+00630   pr #255: "\qc  {\f181 \fs18 \b "&date$("Month DD, CCYY")&"}"
+00640   pr #255,using 'form pos 1,c 82,c 10': "\ql "&date$,"Page "&str$(p2)
 00660 return ! /r
 00670 PGOF: ! r:
-00672   print #255: newpage
+00672   pr #255: newpage
 00680   gosub HEADER
 00690 continue ! /r
 00700 ! 

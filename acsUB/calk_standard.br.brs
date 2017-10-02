@@ -198,7 +198,7 @@
 37220 fnend
 38000 def fn_calk_non_metered(j) ! all non-metered charges but penalty and tax
 38002   !  if trim$(x$)='100150.00' then pause
-38010   let calk_non_metered_return=0
+38010   calk_non_metered_return=0
 38020   if j=3 then ! electric fields used for a non         -metered service
 38040     let entered_amt=x(10)
 38060     let standard_amt=b(j)
@@ -245,16 +245,16 @@
 38880   end if 
 38900   ! NM_FINIS: !
 38920   if entered_amt>0 then 
-38940     let calk_non_metered_return=entered_amt
+38940     calk_non_metered_return=entered_amt
 38960   else if standard_amt>0 then 
-38980     let calk_non_metered_return=standard_amt
+38980     calk_non_metered_return=standard_amt
 39000   else 
 39020     read #h_ratemst,using FORM_RATEMSTR,key=service_code$&lpad$(str$(rate_code),2): mc1,mu1,mat rt nokey NM_XIT
-39040     let calk_non_metered_return=max(mc1,rt(1,3)) ! let g(j)=max(mc1,rt(1,3))
-39060     ! if j=6 and env$('client')="Eldorado" then let calk_non_metered_return=g(6)*g(5)
-39080     ! if env$('client')="Sangamon" and cno=1 and service_code$="SF" then let calk_non_metered_return=mc1+max(0,(usage_sewer-mu1))*rt(1,3) ! special for Sangamon to handle rates in sewer facilities rate file
-39100     ! if env$('client')="Sangamon" and cno=2 and service_code$="SF" then let calk_non_metered_return=mc1+max(0,(usage_water-mu1))*rt(1,3) ! special for Sangamon to handle rates in sewer facilities rate file
-39120     ! if env$('client')="Sangamon" and service_code$="WF" then let calk_non_metered_return=mc1+max(0,(usage_water-mu1))*rt(1,3) ! special for Sangamon to handle rates in water facilities rate file
+39040     calk_non_metered_return=max(mc1,rt(1,3)) ! let g(j)=max(mc1,rt(1,3))
+39060     ! if j=6 and env$('client')="Eldorado" then calk_non_metered_return=g(6)*g(5)
+39080     ! if env$('client')="Sangamon" and cno=1 and service_code$="SF" then calk_non_metered_return=mc1+max(0,(usage_sewer-mu1))*rt(1,3) ! special for Sangamon to handle rates in sewer facilities rate file
+39100     ! if env$('client')="Sangamon" and cno=2 and service_code$="SF" then calk_non_metered_return=mc1+max(0,(usage_water-mu1))*rt(1,3) ! special for Sangamon to handle rates in sewer facilities rate file
+39120     ! if env$('client')="Sangamon" and service_code$="WF" then calk_non_metered_return=mc1+max(0,(usage_water-mu1))*rt(1,3) ! special for Sangamon to handle rates in water facilities rate file
 39140     ! if env$('client')="Carrizo" and j=7 then gosub CARRIZO_TRASH_TAX
 39150     if env$('client')="Pennington" and service_code$='SF' then gosub PENNINGTON_SERVICE_FEE
 39160   end if 
@@ -263,11 +263,11 @@
 39220 fnend  ! fn_calk_non_metered(j)
 39300 ! CARRIZO_TRASH_TAX: ! r:  called from fn_calk_non_metered
 39310 !   if extra(12)=0 then 
-39320 !     let calk_non_metered_return=0
+39320 !     calk_non_metered_return=0
 39330 !     goto CARRIZO_TRASH_TAX_XIT
 39340 !   else 
 39350 !     read #h_ratemst,using FORM_RATEMSTR,key="TT"&lpad$(str$(extra(12)),2): mc1,mu1,mat rt nokey CARRIZO_TRASH_TAX_XIT
-39360 !     let calk_non_metered_return=round((g(3)+g(5)+g(6))*rt(1,3),2) ! calculate on canister pickup and trash and canister rental
+39360 !     calk_non_metered_return=round((g(3)+g(5)+g(6))*rt(1,3),2) ! calculate on canister pickup and trash and canister rental
 39370 !   end if 
 39380 !   CARRIZO_TRASH_TAX_XIT: ! 
 39390 ! return  ! /r CARRIZO_TRASH_TAX
@@ -401,15 +401,15 @@
 46280 ! /r fnend  
 48000 def fn_calk_penalty ! penalty calculation
 48020   !   if env$('client')="Divernon" then goto DIVERNON ! Divernon has a unique penalty routine
-48040   if env$('client')="Pennington" and a(7)=0 then let a(7)=1 ! default all penalty codes of 0 to a 1
-48060   if env$('client')="Granby" and a(7)=0 then let a(7)=1 ! default all penalty codes of 0 to a 1
-48080   if env$('client')="Brier Lake" and a(7)=0 then let a(7)=1 ! default all penalty codes of 0 to a 1
+48040   if env$('client')="Pennington" and a(7)=0 then a(7)=1 ! default all penalty codes of 0 to a 1
+48060   if env$('client')="Granby" and a(7)=0 then a(7)=1 ! default all penalty codes of 0 to a 1
+48080   if env$('client')="Brier Lake" and a(7)=0 then a(7)=1 ! default all penalty codes of 0 to a 1
 48100   mat basepenalty=(0)
 48120   for j=1 to 10
 48140     if subjectto(j)>0 then  ! accumulate all charges by the penalty they are subject to
-48150       let basepenalty(subjectto(j))=basepenalty(subjectto(j))+g(j)
+48150       basepenalty(subjectto(j))=basepenalty(subjectto(j))+g(j)
 48160        !     else if env$('client')="Cerro Gordo" and subjectto(j)>0 then 
-48170        !       let basepenalty(subjectto(j))=basepenalty(subjectto(j))+gb(j) ! Cerro Gordo bases penalties on balance
+48170        !       basepenalty(subjectto(j))=basepenalty(subjectto(j))+gb(j) ! Cerro Gordo bases penalties on balance
 48172     end if
 48180   next j
 48200   for j=1 to 10
@@ -429,28 +429,28 @@
 48405       let g(10)=round((g(1)+g(2)+g(3)+g(5)+g(8))*.1+(rt(1,3)*x3),2)
 48410       goto CP_NEXT_J
 48415     else if env$('client')="Colyell" and f=d1 then 
-48420       let basepenalty(10)=bal+sum(mat g(1:9))
+48420       basepenalty(10)=bal+sum(mat g(1:9))
 48425     else if env$('client')="Colyell" and f<>d1 then 
-48430       let basepenalty(10)=bal+sum(mat g(1:9))
+48430       basepenalty(10)=bal+sum(mat g(1:9))
 48435     end if 
 48440     if env$('client')="White Hall" and f=d1 then 
-48445       let basepenalty(10)=g(1)+g(2)+g(4)+g(9)
+48445       basepenalty(10)=g(1)+g(2)+g(4)+g(9)
 48450     else if env$('client')="White Hall" and f<>d1 then 
-48455       let basepenalty(10)=g(1)+g(2)+g(4)+g(9)
+48455       basepenalty(10)=g(1)+g(2)+g(4)+g(9)
 48460     end if 
 48465     ! if env$('client')="Sangamon" and d1=f then 
-48470     !   let basepenalty(10)=basepenalty(10)+bal
+48470     !   basepenalty(10)=basepenalty(10)+bal
 48475     ! end if 
 48480     ! if env$('client')="Sangamon" and d1<>f then 
-48485     !   let basepenalty(10)=basepenalty(10)+bal
+48485     !   basepenalty(10)=basepenalty(10)+bal
 48490     ! end if 
-48520     !    if env$('client')="Cerro Gordo" and d1=f then let basepenalty(10)=basepenalty(10)+bal
-48540     !    if env$('client')="Cerro Gordo" and d1<>f then let basepenalty(10)=basepenalty(10)+bal
-48560     if env$('client')="Brier Lake" and d1=f then let basepenalty(10)=basepenalty(10)+bal-gb(10)
-48580     if env$('client')="Brier Lake" and d1<>f then let basepenalty(10)=basepenalty(10)+bal-gb(10)
-48600     if env$('client')="Granby" and d1=f then let basepenalty(10)=basepenalty(10)+bal-gb(10)
-48620     if env$('client')="Granby" and d1<>f then let basepenalty(10)=basepenalty(10)+bal-gb(10)
-48640     if env$('client')="Kimberling" and g(2)>0 then let basepenalty(10)=basepenalty(10)-g(1) ! no penalty on water if they have sewer
+48520     !    if env$('client')="Cerro Gordo" and d1=f then basepenalty(10)=basepenalty(10)+bal
+48540     !    if env$('client')="Cerro Gordo" and d1<>f then basepenalty(10)=basepenalty(10)+bal
+48560     if env$('client')="Brier Lake" and d1=f then basepenalty(10)=basepenalty(10)+bal-gb(10)
+48580     if env$('client')="Brier Lake" and d1<>f then basepenalty(10)=basepenalty(10)+bal-gb(10)
+48600     if env$('client')="Granby" and d1=f then basepenalty(10)=basepenalty(10)+bal-gb(10)
+48620     if env$('client')="Granby" and d1<>f then basepenalty(10)=basepenalty(10)+bal-gb(10)
+48640     if env$('client')="Kimberling" and g(2)>0 then basepenalty(10)=basepenalty(10)-g(1) ! no penalty on water if they have sewer
 48660     let g(j)=round(basepenalty(j)*rt(1,3),2) ! penalty based on base amount that was accumulated for each penalty field * rate for that penalty code
 48680     if env$('client')="Millry" and g(j)<5 then let g(j)=5
 48700     ! if env$('client')="Sangamon" and cno=1 and g(10)<.20 then let g(10)=0
@@ -498,7 +498,7 @@
 52160   if taxservice=0 then 
 52180     let taxcode=0
 52200   else if taxservice<6 then ! note - No one has a TX code in anything except 9 or 10
-52220     print ' faulty logic here - call ACS' : pause : let taxcode=a(j)
+52220     pr ' faulty logic here - call ACS' : pause : let taxcode=a(j)
 52240   else if taxservice=6 then 
 52260     let taxcode=extra(11)
 52280   else if taxservice=7 then 
@@ -609,7 +609,7 @@
 56300       if b(9)<>0 then let fnDepositChangeLog(x$,b(9),0,d1,trim$(servicename$(2))(1:15)&' Deposit Refunded')
 56320       if b(10)<>0 then let fnDepositChangeLog(x$,b(10),0,d1,trim$(servicename$(3))(1:15)&' Deposit Refunded')
 56340       if b(11)<>0 then let fnDepositChangeLog(x$,b(11),0,d1,trim$(servicename$(4))(1:15)&' Deposit Refunded')
-56360       let b(8)=b(9)=b(10)=b(11)=0
+56360       b(8)=b(9)=b(10)=b(11)=0
 56380     end if
 56400   end if 
 56410   ! if debug_account then pr x$&' has a g('&str$(serviceOther)&') of '&str$(g(serviceOther))&' at the end of fn_calk_for_final_bill' : pause
@@ -666,10 +666,10 @@
 66040   ! returns: g(7)
 66060   let w6=round(-(interest_credit_rate*b(11)),2)
 66080   if c(4)<10100 then goto IC_FINIS
-66100   let cd1=date(days(d1,'mmddyy'),'ccyymmdd')
-66120   let cd2=date(days(c(4),'mmddyy'),'ccyymmdd')
-66140   let cy1=int(cd1*.0001)
-66160   let cy2=int(cd2*.0001)
+66100   cd1=date(days(d1,'mmddyy'),'ccyymmdd')
+66120   cd2=date(days(c(4),'mmddyy'),'ccyymmdd')
+66140   cy1=int(cd1*.0001)
+66160   cy2=int(cd2*.0001)
 66180   let m1=(cy1-cy2)*12
 66200   if m1>12 then goto IC_FINIS
 66220   let m2=int(d1*.0001)-int(c(4)*.0001)

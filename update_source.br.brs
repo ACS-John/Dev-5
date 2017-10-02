@@ -1,5 +1,5 @@
 10000   library "S:\Core\Library": fnreg_read,fnreg_write
-10100   print border: 'Import Source'
+10100   pr border: 'Import Source'
 10200   execute 'con gui off'
 10300   let fnupdatesource
 10400   def fndatetime
@@ -30,7 +30,7 @@
 12900     dim lasttime$*256
 13000     let fnreg_read("LastCompile",lasttime$)
 13100     if lasttime$="" then let lastcompile=190001010800 else let lastcompile=val(lasttime$)
-13200     let curtime=fndatetime
+13200     curtime=fndatetime
 13300     let fnreg_write("LastCompile",str$(curtime))
 13400     let fnreg_write("OldLastCompile", str$(lastcompile))
 13500     if not exists("(import)") then execute "sy -M md (import)"
@@ -43,13 +43,13 @@
 14200     open #dirfile:=20: "Name=(import)\brsfiles",display,input 
 14300     do 
 14400       linput #dirfile: filename$ eof DONE
-14900       print #proc_file: 'Load '&filename$&',Source'
+14900       pr #proc_file: 'Load '&filename$&',Source'
 15000       if exists(filename$(1:len(filename$)-4)) then 
-15100         print #proc_file: 'Replace '&filename$(1:len(filename$)-4)
+15100         pr #proc_file: 'Replace '&filename$(1:len(filename$)-4)
 15200       else 
-15300         print #proc_file: 'Save '&filename$(1:len(filename$)-4)
+15300         pr #proc_file: 'Save '&filename$(1:len(filename$)-4)
 15400       end if 
-15500       print #proc_file: ''
+15500       pr #proc_file: ''
 15700     loop 
 15800     goto DONE
 15900 ROLLBACK: ! 

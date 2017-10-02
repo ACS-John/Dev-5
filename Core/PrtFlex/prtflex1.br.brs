@@ -110,11 +110,11 @@
 22660   let txt$=uprc$(gridname$)
 22680   let fnlbl(1,1,txt$,20,2,3)
 22700   mat colhdr$(2)
-22720   let colhdr$(1)="Column #"
-22740   let colhdr$(2)="Description"
+22720   colhdr$(1)="Column #"
+22740   colhdr$(2)="Description"
 22760   mat colmask$(2)
-22780   let colmask$(1)="30"
-22800   let colmask$(2)=""
+22780   colmask$(1)="30"
+22800   colmask$(2)=""
 22820   let filename$="flexreview"
 22840   let fnflexinit1(filename$,2,1,10,72,mat colhdr$,mat colmask$,1)
 22860   if lrec(hgridfile)=0 then goto DISPLAYOPTIONS
@@ -187,50 +187,50 @@
 24160   if ckey=5 then goto GRIDCOLUMNS
 24180   goto GRIDCOLUMNS
 24200 ADDTOGRID: ! add items to individual grids
-24220   let columnnum=val(gridinfo$(3)(1:3))
+24220   columnnum=val(gridinfo$(3)(1:3))
 24240   let name$=gridinfo$(4)(1:30)
 24260   let vname$=gridinfo$(4)(31:50)
 24280   let fieldlen=val(gridinfo$(4)(51:54))
 24300   let maskinfo$=gridinfo$(4)(55:67)
-24320   let abbrev$=trim$(gridinfo$(4)(68:87))
+24320   abbrev$=trim$(gridinfo$(4)(68:87))
 24340   let maskinfo$=uprc$(maskinfo$)
 24360   let maskformat$=maskinfo$(3:4) ! determine if pd,c,n etc format
 24380   let decimalposition=val(maskinfo$(1:2))
 24400   let x=pos(uprc$(name$),"DATE",1)
 24420   if x>0 then let itisadate$="Y" else let itisadate$="N"
 24440   if trim$(maskformat$)="N" and fieldlen<8 and itisadate$="Y" then 
-24460     let colmask$="1"
+24460     colmask$="1"
 24480     goto L1650 ! DATE IN MMDDYY FORMAT
 24500   end if 
 24520   if trim$(maskformat$)="N" and fieldlen>7 and itisadate$="Y" then 
-24540     let colmask$="3"
+24540     colmask$="3"
 24560   end if 
 24580   if trim$(maskformat$)="PD" and fieldlen>7 and itisadate$="Y" then 
-24600     let colmask$="3"
+24600     colmask$="3"
 24620     goto L1650 ! DATE IN CCYYMMDD FORMAT
 24640   end if 
 24660   if trim$(maskformat$)="PD" and fieldlen<8 and itisadate$="Y" then 
-24680     let colmask$="1"
+24680     colmask$="1"
 24700     goto L1650 ! DATE IN MMDDYY FORMAT
 24720   end if 
 24740   if trim$(maskformat$)="N" and decimalposition=2 and itisadate$="N" then 
-24760     let colmask$="10"
+24760     colmask$="10"
 24780     goto L1650 ! AMERICAN CURRENCY
 24800   end if 
 24820   if trim$(maskformat$)="N" and decimalposition>0 and itisadate$="N" then 
-24840     let colmask$=str$(30+decimalposition)
+24840     colmask$=str$(30+decimalposition)
 24860     goto L1650 ! NUMERIC WITH DECIMALS
 24880   end if 
 24900   if trim$(maskformat$)="PD" and decimalposition>0 and itisadate$="N" then 
-24920     let colmask$="10"
+24920     colmask$="10"
 24940     goto L1650 ! NUMERIC WITH DECIMALS
 24960   end if 
 24980   if (trim$(maskformat$)="N" or trim$(maskformat$)="PD") and decimalposition=0 and itisadate$="N" then 
-25000     let colmask$=str$(30+decimalposition)
+25000     colmask$=str$(30+decimalposition)
 25020     goto L1650 ! NUMERIC WITH DECIMALS
 25040   end if 
 25060   if (trim$(maskformat$)="C" or trim$(maskformat$)="G") then 
-25080     let colmask$="80"
+25080     colmask$="80"
 25100     goto L1650 ! NORMAL CHARACTER
 25120   end if 
 25140 L1650: ! 
@@ -245,7 +245,7 @@
 25300 ERTN: let fnerror(program$,err,line,act$,"xit")
 25320   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 25340   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT 
-25360   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+25360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 25380 ERTN_EXEC_ACT: execute act$ : goto ERTN
 25400 ! </updateable region: ertn>
 25420 INSERTGRIDCOLUMN: ! r: Renumbers the selected grid columns if one is deleted
@@ -269,7 +269,7 @@
 25720   mat colhdr$=("")
 25740   mat colmask$(80)
 25760   mat colmask$=("")
-25780   let columns=0
+25780   columns=0
 25800   let specline=10010
 25820   let dataline=10510
 25840 ! ____________________________________________________________________
@@ -277,21 +277,21 @@
 25880   close #hgridfile: ioerr ignore
 25900   open #hgridfile:=15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outin,keyed ioerr SELECTDATABASE
 25920   open #h_gridspecs1:=10: "Name="&env$('temp')&"\GridSpecs1.tmp,RecL=255,Replace",display,output  ! temporary file to hold generated lines for grid specifications
-25940   print #h_gridspecs1,using F_GRIDSPECS1: "procerr return" ! skip next line if no lines exist
-25960   print #h_gridspecs1,using F_GRIDSPECS1: "del 10010,10480" ! delete any lines from previous grid
-25980   print #h_gridspecs1,using F_GRIDSPECS1: "procerr return" ! skip next line if no lines exist
-26000   print #h_gridspecs1,using F_GRIDSPECS1: "del 10510,10980"
+25940   pr #h_gridspecs1,using F_GRIDSPECS1: "procerr return" ! skip next line if no lines exist
+25960   pr #h_gridspecs1,using F_GRIDSPECS1: "del 10010,10480" ! delete any lines from previous grid
+25980   pr #h_gridspecs1,using F_GRIDSPECS1: "procerr return" ! skip next line if no lines exist
+26000   pr #h_gridspecs1,using F_GRIDSPECS1: "del 10510,10980"
 26020   do
 26040     read #hgridfile,using fGridFile: columnnum,name$,vname$,fieldlen,colmask$,abbrev$ eof L2160
 26050     if vname$(1:1)='(' then let vname$(1:1)=''
-26060     let columns=columns+1
-26080     print #h_gridspecs1,using F_GRIDSPECS1: str$(specline)& " Let ColHdr$("&str$(columns)&")="&'"'&trim$(abbrev$)&'"'&" : ColMask$("&str$(columns)&")="&'"'&trim$(colmask$)&'"'
+26060     columns=columns+1
+26080     pr #h_gridspecs1,using F_GRIDSPECS1: str$(specline)& " colHdr$("&str$(columns)&")="&'"'&trim$(abbrev$)&'"'&" : ColMask$("&str$(columns)&")="&'"'&trim$(colmask$)&'"'
 26100     F_GRIDSPECS1: form pos 1,c 255
 26120     let specline=specline+10
 26140     if pos(vname$,"$",1) then  ! determine if numeric or character
-26180       print #h_gridspecs1,using F_GRIDSPECS1: str$(dataline)& " let item$("&str$(columns)&")="&trim$(vname$)
+26180       pr #h_gridspecs1,using F_GRIDSPECS1: str$(dataline)& " let item$("&str$(columns)&")="&trim$(vname$)
 26200     else 
-26240       print #h_gridspecs1,using F_GRIDSPECS1: str$(dataline)& " let item$("&str$(columns)&")= str$("&trim$(vname$)&")"
+26240       pr #h_gridspecs1,using F_GRIDSPECS1: str$(dataline)& " let item$("&str$(columns)&")= str$("&trim$(vname$)&")"
 26260     end if
 26280     let dataline=dataline+10
 26300   loop
@@ -303,21 +303,21 @@
 26384   let new_prtflex2_name$=env$('temp')&'\PrtFlex2_'&session$&'.br'
 26386   let fnCopy("S:\Core\PrtFlex\PrtFlex2.br",new_prtflex2_name$)
 26400   open #h_gridspecs2:=10: "Name="&env$('temp')&"\GridSpecs2.tmp,RecL=255,Replace",display,output 
-26420   print #h_gridspecs2,using F_GRIDSPECS1: "PROC NOECHO"
-26440   print #h_gridspecs2,using F_GRIDSPECS1: "Load "&new_prtflex2_name$ ! S:\Core\PrtFlex\PrtFlex2"
-26460   print #h_gridspecs2,using F_GRIDSPECS1: "Load "&new_prtflex2_name$ ! S:\Core\PrtFlex\PrtFlex2"
-26480   print #h_gridspecs2,using F_GRIDSPECS1: "subproc "&env$('temp')&"\gridspecs1.tmp"
-26500   print #h_gridspecs2,using F_GRIDSPECS1: "SubProc "&open_read$
-26520   print #h_gridspecs2,using F_GRIDSPECS1: "00210 let columns = "&str$(columns)
-26540   print #h_gridspecs2,using F_GRIDSPECS1: "Replace "&new_prtflex2_name$ ! S:\Core\PrtFlex\PrtFlex2"
-26560   print #h_gridspecs2,using F_GRIDSPECS1: 'chain "'&new_prtflex2_name$&'"' ! S:\Core\PrtFlex\PrtFlex2"'
-26580 ! Print #h_gridspecs2,Using 1980: "PROC ECHO"
+26420   pr #h_gridspecs2,using F_GRIDSPECS1: "PROC NOECHO"
+26440   pr #h_gridspecs2,using F_GRIDSPECS1: "Load "&new_prtflex2_name$ ! S:\Core\PrtFlex\PrtFlex2"
+26460   pr #h_gridspecs2,using F_GRIDSPECS1: "Load "&new_prtflex2_name$ ! S:\Core\PrtFlex\PrtFlex2"
+26480   pr #h_gridspecs2,using F_GRIDSPECS1: "subproc "&env$('temp')&"\gridspecs1.tmp"
+26500   pr #h_gridspecs2,using F_GRIDSPECS1: "SubProc "&open_read$
+26520   pr #h_gridspecs2,using F_GRIDSPECS1: "00210 columns = "&str$(columns)
+26540   pr #h_gridspecs2,using F_GRIDSPECS1: "Replace "&new_prtflex2_name$ ! S:\Core\PrtFlex\PrtFlex2"
+26560   pr #h_gridspecs2,using F_GRIDSPECS1: 'chain "'&new_prtflex2_name$&'"' ! S:\Core\PrtFlex\PrtFlex2"'
+26580 ! pr #h_gridspecs2,Using 1980: "PROC ECHO"
 26600   close #h_gridspecs2: 
 26620   open #h_gridname:=11: "Name="&env$('temp')&"\Gridname.tmp,RecL=80,Replace",internal,output,relative 
 26640   write #h_gridname,using 'form pos 1,c 40': gridname$
 26680   close #h_gridname: 
 26700 ! write fullgridname$,fullgridIndex,columns to file for prtflex2
-26720 ! Print NEWPAGE
+26720 ! pr NEWPAGE
 26740   execute "proc "&env$('temp')&"\gridspecs2.tmp"
 26760 ! /r
 26780 ADDGRIDNAME: ! r: Allows you to add columns to your grid
@@ -333,7 +333,7 @@
 27000   let resp$(1)=trim$(resp$(1))
 27020   let resp$(1)=trim$(resp$(1))(1:20)
 27040   close #hgridfile: ioerr ignore
-27060   let ckey=1 : goto L780
+27060   ckey=1 : goto L780
 27080 ! /r
 27100 DONE: close #1: ioerr ignore
 27120 XIT: let fnxit

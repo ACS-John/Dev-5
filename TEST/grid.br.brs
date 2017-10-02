@@ -2,19 +2,19 @@
 10040   library 'S:\Core\Library': fncmdkey,fnacs,fnflexinit1,fntos,fnflexadd1
 10060   let test_date= 20082214 ! 20070713  ! date('ccyymmdd')
 10180   mat colhdr$(6)
-10200   let colhdr$(1)="ccyymmdd"
-10220   let colhdr$(2)="mm/dd/ccyy"
-10240   let colhdr$(3)="dd/mm/ccyy"
-10260   let colhdr$(4)="dd/mm/ccyy"
-10280   let colhdr$(5)="dd/mm/yy"
-10282   let colhdr$(5)="source format"
+10200   colhdr$(1)="ccyymmdd"
+10220   colhdr$(2)="mm/dd/ccyy"
+10240   colhdr$(3)="dd/mm/ccyy"
+10260   colhdr$(4)="dd/mm/ccyy"
+10280   colhdr$(5)="dd/mm/yy"
+10282   colhdr$(5)="source format"
 10300   mat colmask(6)
-10320   let colmask$(1)="1"
-10340   let colmask$(2)="2"
-10360   let colmask$(3)="3"
-10380   let colmask$(4)="4"
-10400   let colmask$(5)="5"
-10402   let colmask$(6)=""
+10320   colmask$(1)="1"
+10340   colmask$(2)="2"
+10360   colmask$(3)="3"
+10380   colmask$(4)="4"
+10400   colmask$(5)="5"
+10402   colmask$(6)=""
 20000   let fntos(sn$="testflex")
 20020   let fnflexinit1("ubrate",1,1,10,50,mat colhdr$,mat colmask$,1)
 20040   dim source_format$(6)

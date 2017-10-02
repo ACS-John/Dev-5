@@ -31,7 +31,7 @@
 00250   open #2: "Name="&udf$&"Work1.dat,Size=0,RecL=149,Replace",internal,outin,relative 
 00260 L260: read #81,using L270: z$,mat ba,mat tr eof END1
 00270 L270: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-00280   let adr=tr(1)
+00280   adr=tr(1)
 00290   mat tr=(0)
 00300 L300: if adr=0 then goto L450
 00310   read #82,using L370,rec=adr,release: z$,mat bt1,nba norec L450
@@ -49,7 +49,7 @@
 00410 L410: form pos 147,pd 3
 00420   if tr(1)=0 then let tr(1)=lr2
 00430   let tr(2)=lr2
-00440 L440: let adr=nba: goto L300
+00440 L440: adr=nba: goto L300
 00450 L450: rewrite #81,using L460: mat tr
 00460 L460: form pos 75,2*pd 3
 00470   goto L260
@@ -64,16 +64,16 @@
 00560 ! ______________________________________________________________________
 00570 XIT: let fnxit
 00580 ! ______________________________________________________________________
-00590 BUD1: let bud1=0
+00590 BUD1: bud1=0
 00600   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L630
 00610   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&str$(cno)&",Shr",internal,outin,relative 
-00620   let bud1=1
+00620   bud1=1
 00630 L630: return 
 00640 ! ______________________________________________________________________
 00650 ! <Updateable Region: ERTN>
 00660 ERTN: let fnerror(program$,err,line,act$,"xit")
 00670   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00680   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00690   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00690   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00700 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00710 ! /region

@@ -1,5 +1,5 @@
 00010   execute 'con gui off'
-00020   print border: 'Make Source'
+00020   pr border: 'Make Source'
 00030   library 'S:\Core\Library': fngetdir2
 00040   dim filename$(1)*256,prg_list$(1)*256,dir_destination$*128,dir_source$*128,ext$*128
 00050   let fn_make_source_init
@@ -14,7 +14,7 @@
 00140     let fngetdir2(dir_source$,mat filename$,'/s') ! option$)
 00150     for file_item=1 to udim(mat filename$)
 00160       let dot_pos=pos(filename$(file_item),'.',-1)
-00170       let backslash_pos=pos(filename$(file_item),'\',-1)
+00170       backslash_pos=pos(filename$(file_item),'\',-1)
 00180       let ext$=''
 00190       if backslash_pos<=0 or dot_pos>backslash_pos then 
 00200         let ext$=filename$(file_item)(dot_pos+1:len(filename$(file_item)))
@@ -34,16 +34,16 @@
 00340   def fn_make_source_add(msa_item$*256,dir_source$*128,dir_destination$*128)
 00350     mat prg_list$(prg_list_count+=1)
 00360     let prg_list$(prg_list_count)=msa_item$
-00370 ! print #proc_file: 'SKIP 2 IF ERR '&msa_item$
-00380     print #proc_file: 'List <"'&msa_item$&'" >"'&srep$(lwrc$(msa_item$&'.brs'),lwrc$(dir_source$),dir_destination$)&'"'
-00390 ! print #proc_file: 'clear' ! or del 1,99999
-00392 ! print #proc_file: '' ! or del 1,99999
+00370 ! pr #proc_file: 'SKIP 2 IF ERR '&msa_item$
+00380     pr #proc_file: 'List <"'&msa_item$&'" >"'&srep$(lwrc$(msa_item$&'.brs'),lwrc$(dir_source$),dir_destination$)&'"'
+00390 ! pr #proc_file: 'clear' ! or del 1,99999
+00392 ! pr #proc_file: '' ! or del 1,99999
 00400   fnend  ! fn_make_source_add
 00410   def fn_make_source_run
 00420     dim msr_file$*256
 00430     let msr_file$=file$(proc_file)
 00440     close #proc_file: 
-00450     print os_filename$(msr_file$)
+00450     pr os_filename$(msr_file$)
 00460 ! execute 'subproc '&msr_file$
 00470   fnend  ! fn_make_source_run
 00480   def fn_copy_to_source(cts_item$*256)

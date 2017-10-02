@@ -41,7 +41,7 @@
 02800   end if
 02820   close #20: 
 02840 !
-02860   let bankcode=val(bc$)
+02860   bankcode=val(bc$)
 02880   open #bankmstr=fngethandle: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal, outin, keyed 
 02900   read #bankmstr,using 'Form POS 45,PD 6.2,PD 6.2',key=bc$,release: bal,upi nokey ignore
 02920   close #bankmstr:
@@ -56,21 +56,21 @@
 03100 goto MENU1 ! /r
 06000 MENU1: ! r:
 06020   mat chdr$(16) : mat cmask$(16) : mat item$(16)
-06040   let chdr$(1)='Ref': let chdr$(2)='Payee': let chdr$(3)='Invoice'
-06060   let chdr$(4)='Date'
-06080   let chdr$(5)='Due Date' : let chdr$(6)='P O #'
-06100   let chdr$(7)='Description' : let chdr$(8)='Amount'
-06120   let chdr$(9)='Disc Amt' : let chdr$(10)='Disc Date'
-06140   let chdr$(11)='Pay Code' : let chdr$(12)='Bank'
-06160   let chdr$(13)='Ck Num' : let chdr$(14)='Date Paid'
-06180   let chdr$(15)='Post Code' : let chdr$(16)='Post Date'
-06200   let cmask$(1)="30"
-06220   let cmask$(2)="": let cmask$(3)="" : let cmask$(4)='1'
-06240   let cmask$(5)='1' : let cmask$(6)='': let cmask$(7)=''
-06260   let cmask$(8)='10' : let cmask$(9)='10' : let cmask$(10)='1'
-06280   let cmask$(11)='30': let cmask$(12)='30'
-06300   let cmask$(13)='30': let cmask$(14)='3'
-06320   let cmask$(15)='30': let cmask$(16)='1'
+06040   chdr$(1)='Ref': chdr$(2)='Payee': chdr$(3)='Invoice'
+06060   chdr$(4)='Date'
+06080   chdr$(5)='Due Date' : chdr$(6)='P O #'
+06100   chdr$(7)='Description' : chdr$(8)='Amount'
+06120   chdr$(9)='Disc Amt' : chdr$(10)='Disc Date'
+06140   chdr$(11)='Pay Code' : chdr$(12)='Bank'
+06160   chdr$(13)='Ck Num' : chdr$(14)='Date Paid'
+06180   chdr$(15)='Post Code' : chdr$(16)='Post Date'
+06200   cmask$(1)="30"
+06220   cmask$(2)="": cmask$(3)="" : cmask$(4)='1'
+06240   cmask$(5)='1' : cmask$(6)='': cmask$(7)=''
+06260   cmask$(8)='10' : cmask$(9)='10' : cmask$(10)='1'
+06280   cmask$(11)='30': cmask$(12)='30'
+06300   cmask$(13)='30': cmask$(14)='3'
+06320   cmask$(15)='30': cmask$(16)='1'
 06340 DISPLAY_INVOICE_GRID: ! 
 06360   let fntos(sn$="unpaid1")
 06380   let respc=0
@@ -105,20 +105,20 @@
 06960   ! let screen=0
 06980   if ck=2 then let edit=1 : RecordNumberToEdit=val(resp$(1)) else let edit=0 : RecordNumberToEdit=0
 07000   if (ck=1 or ck=2) then let fn_addInvoice(vn$,iv$,RecordNumberToEdit) : goto menu1
-07020   if ck=3 then gosub PRINTLISTING : goto DISPLAY_INVOICE_GRID ! print listings of unpaid invoice file
+07020   if ck=3 then gosub PRINTLISTING : goto DISPLAY_INVOICE_GRID ! pr listings of unpaid invoice file
 07040   if ck=8 then goto CODE_FOR_PAYMENT ! select invoices to payment
 07060   if ck=9 then 
 07080     let displayalljobs=1
 07100     let jn$="" : let iv$="" : let vn$=""
-07120     let subcat=0 : let cat=0
+07120     let subcat=0 : cat=0
 07140     gosub JOBCOST
 07160     goto DISPLAY_INVOICE_GRID
 07180   end if 
 07200   pause
 07960 ! ! /r
-08000 PRINTLISTING: ! r: print listings
+08000 PRINTLISTING: ! r: pr listings
 08020 ! need screen here asking paid/unpaid/all,starting inv #,1st inv to print,show breakdowns(y/n),display last ref in file, 1st ref # used this time
-08040 ! need ref # to begin print (blank for all)   rf2    show last ref  lrec(4)
+08040 ! need ref # to begin pr (blank for all)   rf2    show last ref  lrec(4)
 08060   let fnopenprn
 08080   let pg=0
 08100   if rf2=0 then let rf2=1
@@ -130,38 +130,38 @@
 08220     let t0=val(in1$(7)) conv L1440
 08240     let t1=t1+t0
 08260 L1440: ! 
-08280     print #255,using 'Form POS 1,N 4,X 2,C 10,C 14,2*C 8,C 14,C 20,C 12,C 6,G 4,N 10,N 8': j,mat in1$,ckn,dp pageoflow NEWPGE
-08300     let aa2=0
+08280     pr #255,using 'Form POS 1,N 4,X 2,C 10,C 14,2*C 8,C 14,C 20,C 12,C 6,G 4,N 10,N 8': j,mat in1$,ckn,dp pageoflow NEWPGE
+08300     aa2=0
 08320 !   let r5=aa(1)
 08340     restore #unpdaloc,key>=in1$(1)&"            ": nokey NEXTRECORD
 08360 L1480: ! 
 08380     read #unpdaloc,using 'Form POS 1,c 8,c 12,c 12,PD 5.2,C 30',release: vnkey$,vniv$,gl$,aa,de$ eof NEXTRECORD
 08400     if in1$(1)<>vnkey$ then goto NEXTRECORD ! not same vendor
 08420     if in1$(2)<>vniv$ then goto L1480 ! not same invoice
-08440     let aa2=aa2+aa
-08460     print #255,using 'Form POS 47,c 12,X 2,C 20,N 10.2': gl$,de$(1:20),aa pageoflow NEWPGE
+08440     aa2=aa2+aa
+08460     pr #255,using 'Form POS 47,c 12,X 2,C 20,N 10.2': gl$,de$(1:20),aa pageoflow NEWPGE
 08480     goto L1480
-08500     print #255: 
+08500     pr #255: 
 08520 NEXTRECORD: ! 
 08540   next j
-08560   print #255,using 'Form POS 81,C 10,SKIP 1,POS 81,N 10.2,SKIP 1,POS 81,C 10,SKIP 1': "__________",t1,"=========="
+08560   pr #255,using 'Form POS 81,C 10,SKIP 1,POS 81,N 10.2,SKIP 1,POS 81,C 10,SKIP 1': "__________",t1,"=========="
 08580 ! 
 08600   let fncloseprn
 08620   on fkey 99 ignore 
 08640   return ! /r
 10000 NEWPGE: ! r:
-10010   print #255: newpage
+10010   pr #255: newpage
 10020   gosub HDR 
 10030 continue ! /r
 12000 HDR: ! r:
 12010   let pg=pg+1
 12020   let fnopenprn
-12030   print #255,using 'Form POS 1,C 8,Cc 82': date$,env$('cnam')
-12040   print #255,using 'Form POS 1,C 4,N 4,POS 36,C 40': "Page",pg,"Unpaid Invoice File Listing"
-12050   print #255: ""
-12060   print #255: "                             Invoice    Due     PO Number                                   Pay   Bank   Check     Date "
-12070   print #255: "Ref#  Payee #   Invoice Numb   Date    Date     GL Number   Description            Amount   Code  Code   Number    Paid "
-12080   print #255: "____  ________  ____________  ______  ______  ____________  __________________  __________  ____  ____  ________  ______"
+12030   pr #255,using 'Form POS 1,C 8,Cc 82': date$,env$('cnam')
+12040   pr #255,using 'Form POS 1,C 4,N 4,POS 36,C 40': "Page",pg,"Unpaid Invoice File Listing"
+12050   pr #255: ""
+12060   pr #255: "                             Invoice    Due     PO Number                                   Pay   Bank   Check     Date "
+12070   pr #255: "Ref#  Payee #   Invoice Numb   Date    Date     GL Number   Description            Amount   Code  Code   Number    Paid "
+12080   pr #255: "____  ________  ____________  ______  ______  ____________  __________________  __________  ____  ____  ________  ______"
 12090   return  ! /r
 12100 ! ______________________________________________________________________
 14000 FINIS: ! r:
@@ -178,13 +178,13 @@
 14110 ! ______________________________________________________________________
 16000 JCBLD: ! r: Open JC Files
 16010   mat chdr3$(6) : mat cmask3$(6) : mat jobitem$(6)
-16020   let chdr3$(1)='Refenence'
-16030   let chdr3$(2)='Job #'
-16040   let chdr3$(3)='Cat #'
-16050   let chdr3$(4)='Sub-Cat #'
-16060   let chdr3$(5)='Amount'
-16070   let chdr3$(6)='Description'
-16080   let cmask3$(5)='10' : let cmask3$(1)=cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(6)=''
+16020   chdr3$(1)='Refenence'
+16030   chdr3$(2)='Job #'
+16040   chdr3$(3)='Cat #'
+16050   chdr3$(4)='Sub-Cat #'
+16060   chdr3$(5)='Amount'
+16070   chdr3$(6)='Description'
+16080   cmask3$(5)='10' : cmask3$(1)=cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(6)=''
 16090   open #41: "Name="&env$('Q')&"\PRmstr\JCMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.H"&str$(cno)&",Shr",internal,outin,keyed ioerr JCBLD_FINIS
 16100   open #category:=2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&", KFName="&env$('Q')&"\PRmstr\CATIndx.H"&str$(cno)&",Shr", internal,outin,keyed 
 16110   open #43: "Name="&env$('Q')&"\PRmstr\SCMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.H"&str$(cno)&",Shr",internal,outin,keyed 
@@ -197,7 +197,7 @@
 18010 ERTN: let fnerror(program$,err,line,act$,"xit")
 18020   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 18030   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-18040   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+18040   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 18050 ERTN_EXEC_ACT: execute act$ : goto ERTN
 18060 ! /region
 18070 IGNORE: continue 
@@ -228,20 +228,20 @@
 21230   goto L4700
 21240 DISPLAY_GRID: ! 
 21250   mat chdr$(16) : mat cmask$(16) : mat flxitm$(16)
-21260   let chdr$(1)="Rec" : let chdr$(2)="Bank" : let chdr$(3)="Pay"
-21270   let chdr$(4)="Payee #" : let chdr$(5)="Invoice #"
-21280   let chdr$(6)="Inv Date" : let chdr$(7)="Due Date"
-21290   let chdr$(8)="Description": let chdr$(9)="Amount"
-21300   let chdr$(10)="Dis Amt" : let chdr$(11)="Dis Date"
-21310   let chdr$(12)="BK Code"
-21320   let chdr$(13)="Ck #" : let chdr$(14)="D Paid"
-21330   let chdr$(15)="P C" : let chdr$(16)="P Date"
-21340   let cmask$(1)='30' : let cmask$(2)='30' : let cmask$(3)=""
-21350   let cmask$(4)=''
-21360   let cmask$(5)='' : let cmask$(6)='1': let cmask$(7)='1'
-21370   let cmask$(8)='': let cmask$(9)='10' : let cmask$(10)='10'
-21380   let cmask$(11)='3' : let cmask$(12)='30' : let cmask$(13)='30'
-21390   let cmask$(14)='1' : let cmask$(15)='30' : let cmask$(16)="1"
+21260   chdr$(1)="Rec" : chdr$(2)="Bank" : chdr$(3)="Pay"
+21270   chdr$(4)="Payee #" : chdr$(5)="Invoice #"
+21280   chdr$(6)="Inv Date" : chdr$(7)="Due Date"
+21290   chdr$(8)="Description": chdr$(9)="Amount"
+21300   chdr$(10)="Dis Amt" : chdr$(11)="Dis Date"
+21310   chdr$(12)="BK Code"
+21320   chdr$(13)="Ck #" : chdr$(14)="D Paid"
+21330   chdr$(15)="P C" : chdr$(16)="P Date"
+21340   cmask$(1)='30' : cmask$(2)='30' : cmask$(3)=""
+21350   cmask$(4)=''
+21360   cmask$(5)='' : cmask$(6)='1': cmask$(7)='1'
+21370   cmask$(8)='': cmask$(9)='10' : cmask$(10)='10'
+21380   cmask$(11)='3' : cmask$(12)='30' : cmask$(13)='30'
+21390   cmask$(14)='1' : cmask$(15)='30' : cmask$(16)="1"
 21400 RE_DISPLAY_GRID: ! save a little time
 21410   let fntos(sn$="paidinv")
 21420   let respc=0 : mat resp$=('')
@@ -345,7 +345,7 @@
 23050 if pcde=1 and dp>0 then let pcde=1 : let newbcde=bcde: goto L5540 ! don't change previously paid
 23060 L5540: ! 
 23070 if pcde=1 then let flxitm$(3)="Yes" else if pcde=0 then let flxitm$(3)="No" else if pcde=1 and dp>0 then let flxitm$(3)="Paid"
-23080 ! Print PCDE,BCDE
+23080 ! pr PCDE,BCDE
 23090 rewrite #clearing,using 'Form POS 73,n 1,n 2',rec=selectedrec: pcde,newbcde
 23100 rewrite #paytrans,using 'Form POS 73,n 1,n 2',key=vn$ & iv$: pcde,newbcde ! update the transaction history
 23110 let lastrec=selectedrec
@@ -367,7 +367,7 @@
 26010 restore #paytrans: 
 26020 L5710: ! 
 26030 read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5760
-26040 if bcde=0 then let bcde=bankcode
+26040 if bcde=0 then bcde=bankcode
 26050 if pcde=0 then let pcde=1: goto L5740
 26060 goto L5710
 26070 L5740: ! 
@@ -380,7 +380,7 @@
 27020   read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5860 norec L5860
 27030   if pcde>0 then goto L5850 ! already coded
 27040   if pcde=0 then let pcde=1
-27050   if bcde=0 then let bcde=bankcode ! don't change bank # if one                                                      previously entered
+27050   if bcde=0 then bcde=bankcode ! don't change bank # if one                                                      previously entered
 27060   rewrite #paytrans,using 'Form POS 73,n 1,n 2',key=vn$ & iv$: pcde,bcde ! update the transaction history
 27070   rewrite #clearing,using 'Form POS 73,n 1,n 2',rec=j: pcde,bcde ! update the transaction history
 27080 L5850: ! 
@@ -394,7 +394,7 @@
 28040 L5910: ! 
 28050   if pcde>0 then goto L5960 ! already coded
 28060   if pcde=0 then let pcde=1
-28070   if bcde=0 then let bcde=bankcode ! don't change bank # if one previously entered
+28070   if bcde=0 then bcde=bankcode ! don't change bank # if one previously entered
 28080   rewrite #paytrans,using 'Form POS 73,n 1,n 2',key=vn$ & iv$: pcde,bcde ! update the transaction history
 28090   rewrite #clearing,using 'Form POS 73,n 1,n 2',rec=j: pcde,bcde ! update the transaction history
 28100 L5960: ! 
@@ -406,7 +406,7 @@
 29020 L6000: read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L6060 : let lastrec=rec(paytrans)
 29030 if uprc$(lpad$(rtrm$(payeevn$),8))<>uprc$(vn$) then goto L6000
 29040 if pcde<>1 then let pcde=1
-29050 if bcde=0 then let bcde=bankcode ! don't change bank # if one                                                      previously entered
+29050 if bcde=0 then bcde=bankcode ! don't change bank # if one                                                      previously entered
 29060 rewrite #paytrans,using 'Form POS 73,n 1,n 2',rec=lastrec: pcde,bcde ! update the transaction history
 29070 goto L6000
 29080 L6060: goto CODE_FOR_PAYMENT ! /r
@@ -462,8 +462,8 @@
 30490 let fncmdkey("&Cancel",5,0,1,"Cancels without posting to jub cost)")
 30500 let fnacs(sn$,0,mat resp$,ck)
 30510 if ck=4 then gosub PRINT_JOB_COST_ENTRIES: goto ENTRY_SCREEN
-30520 if val(resp$(4))=0 and ck<>65 then let ck=5 ! exit if no amount on next
-30530 if ck=5 then let amt=0: let totalcost=0 : goto L6930 ! Let SCREEN=0: Goto MENU1
+30520 if val(resp$(4))=0 and ck<>65 then ck=5 ! exit if no amount on next
+30530 if ck=5 then amt=0: let totalcost=0 : goto L6930 ! Let SCREEN=0: Goto MENU1
 30540 if ck=3 then gosub POST_TO_JOB : goto ENTRY_SCREEN
 30550 if ck=65 then goto L6520 else goto L6530
 30560 L6520: ! 
@@ -485,18 +485,18 @@
 30720 let fnmsgbox(mat ml$,resp$,cap$,0)
 30730 goto ENTRY_SCREEN
 30740 L6600: if ck=69 then goto L6610 else goto L6620
-30750 L6610: let cn$="": let fncategory_srch(cn$,1) : let cat=val(cn$): goto ENTRY_SCREEN
-30760 L6620: let cat=val(resp$(2)(1:5))
+30750 L6610: cn$="": let fncategory_srch(cn$,1) : cat=val(cn$): goto ENTRY_SCREEN
+30760 L6620: cat=val(resp$(2)(1:5))
 30770 let subcat=val(resp$(3)(1:3))
-30780 let amt=val(resp$(4))
+30780 amt=val(resp$(4))
 30790 let jobdesc$=resp$(5)
 30800 write #jcbreakdown,using "form pos 1,c 6,pd 3,pd 3,pd 5.2,c 30,c 8,c 12": jn$,cat,subcat,amt,jobdesc$,vn$,iv$
-30810 let amt=0: goto ENTRY_SCREEN
+30810 amt=0: goto ENTRY_SCREEN
 30820 POST_TO_JOB: ! 
 30830 restore #jcbreakdown: 
 30840 L6700: read #jcbreakdown,using "form pos 1,c 6,pd 3,pd 3,pd 5.2,c 30,c 8,c 12": jn$,cat,subcat,amt,jobdesc$,vn$,iv$ eof L6900
 30850 if ltrm$(jn$)="" or rtrm$(ltrm$(jn$))="0" then goto L6700
-30860 let cn$=jn$&lpad$(str$(cat),5)
+30860 cn$=jn$&lpad$(str$(cat),5)
 30870 read #2,using L6740,key=cn$: mat l,mat ta nokey L6780
 30880 L6740: form pos 37,11*pd 7.2,2*pd 2,2*pd 3
 30890 let l(6)=l(6)+amt
@@ -515,7 +515,7 @@
 31020 let ta(2)=ot5
 31030 rewrite #2,using L6740,key=cn$: mat l,mat ta
 31040 goto L6700
-31050 L6900: let jn$="": let jobdesc$="": let amt=0: let cat=subcat=0
+31050 L6900: let jn$="": let jobdesc$="": amt=0: cat=subcat=0
 31060 close #jcbreakdown: 
 31070 execute "Drop "&env$('Q')&"\CLmstr\jcbreakdowns"&wsid$&".h"&str$(cno)
 31080 L6930: !
@@ -527,11 +527,11 @@
 31580 return ! /r
 32000 HDR2: ! r: header for jub cost listing
 32020 let fnopenprn
-32040 print #255,using 'Form POS 1,C 8,Cc 82': date$,env$('cnam')
-32060 print #255,using 'Form POS 1,C 4,N 4,POS 36,C 40': "Page",pg,"Job Cost Entry Listing"
-32080 print #255: ""
-32100 print #255: " Payee #    Invoice #    Job #    Cat #  Sub-Cat   Amount  Descripton"
-32120 print #255: " _______    _________    _____    _____  _______   ______  __________"
+32040 pr #255,using 'Form POS 1,C 8,Cc 82': date$,env$('cnam')
+32060 pr #255,using 'Form POS 1,C 4,N 4,POS 36,C 40': "Page",pg,"Job Cost Entry Listing"
+32080 pr #255: ""
+32100 pr #255: " Payee #    Invoice #    Job #    Cat #  Sub-Cat   Amount  Descripton"
+32120 pr #255: " _______    _________    _____    _____  _______   ______  __________"
 32140 return ! /r
 32160 ! ______________________________________________________________________
 33000 PRINT_JOB_COST_ENTRIES: ! r:
@@ -541,15 +541,15 @@
 33080   do
 33100     read #jcbreakdown,using "form pos 1,c 6,pd 3,pd 3,pd 5.2,c 30,c 8,c 12": jn$,cat,subcat,amt,jobdesc$,vn$,iv$ eof L7140
 33120     total_allocations+=amt
-33140     print #255,using "form pos 1,c 8,x 2,c 12,x 2,c 6,x 2,n 5,x 2,n 6,x 2,pic(zzz,zzz.##cr),c 30,skip 1": vn$,iv$,jn$,cat,subcat,amt,jobdesc$ pageoflow PGOF2
+33140     pr #255,using "form pos 1,c 8,x 2,c 12,x 2,c 6,x 2,n 5,x 2,n 6,x 2,pic(zzz,zzz.##cr),c 30,skip 1": vn$,iv$,jn$,cat,subcat,amt,jobdesc$ pageoflow PGOF2
 33160   loop
 33180   L7140: !
-33200   print #255,using "form pos 48,c 10,skip 1,pos 48,pic(zzz,zzz.zzcr),skip 1,pos 48,c 10": "__________",total_allocations,"=========="
+33200   pr #255,using "form pos 48,c 10,skip 1,pos 48,pic(zzz,zzz.zzcr),skip 1,pos 48,c 10": "__________",total_allocations,"=========="
 33220   fncloseprn
 33240   jn$=jobdesc$="" : cat=subcat=amt=0
 33260 return ! /r
 34000 PGOF2: ! r:
-34020 print #255: newpage
+34020 pr #255: newpage
 34040 gosub HDR2
 34060 continue ! /r
 35000 def fntest_key(holdkey$*20,vn$,iv$,cap$*128)
@@ -589,12 +589,12 @@
 35680   goto TEST_KEY_FAIL
 35700 ! ___________
 35720 TEST_KEY_OK: ! 
-35740 ! Print 'fnTest Key PASSED'
+35740 ! pr 'fnTest Key PASSED'
 35760   let fntest_key=1
 35780   goto EO_TEST_KEY
 35800 ! ___________
 35820 TEST_KEY_FAIL: ! 
-35840 ! Print 'fnTest Key FAILED'
+35840 ! pr 'fnTest Key FAILED'
 35860   let fntest_key=2
 35880   goto EO_TEST_KEY
 35900 ! ___________
@@ -733,7 +733,7 @@
 52280   if resp$(10)=item1$(1) then let pcde=0 ! pay later
 52300   if resp$(10)=item1$(2) then let pcde=1 ! pay now
 52320   if resp$(10)=item1$(3) then let pcde=2 ! paid  
-52340   let bcde=val(resp$(11)(1:3))
+52340   bcde=val(resp$(11)(1:3))
 52360   selected_alloc$=fnagl$(resp$(12))
 52380   if ck=3 then ! delete invoice and breakdowns
 52400     let fn_InvoiceDelete(holdkey$)
@@ -826,7 +826,7 @@
 74300 fnend
 76000 def fn_InvoiceAllocateFromPayee(mat alloc2d$,vn$,upa,paymstr1,payeegl) ! ai_READ_STANDARD_BREAKDOWNS: !  pull standard gl breakdowns from payee file
 76020   read #paymstr1,using "form pos 1,c 8,4*c 30,pd 5.2,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20",key=lpad$(rtrm$(vn$),8),release: vn$,mat pr$,ytdp,typ,ss$,ph$,contact$,email$,fax$,myact$ nokey ai_XIT
-76040   let ai_totalalloc=0
+76040   ai_totalalloc=0
 76060   restore #payeegl,key>=vn$: nokey ai_XIT
 76080   iafp_count=0
 76100   do
@@ -842,7 +842,7 @@
 76300     ai_NEXT: !
 76320   loop
 76340   ai_EO_READSTGL: !
-76360   if ai_totalalloc<>upa and iafp_count>0 then let alloc2d$(iafp_count,2)=str$(val(alloc2d$(iafp_count,2))+upa-ai_totalalloc)
+76360   if ai_totalalloc<>upa and iafp_count>0 then alloc2d$(iafp_count,2)=str$(val(alloc2d$(iafp_count,2))+upa-ai_totalalloc)
 76380   ai_XIT: !
 76400 fnend
 78000 def fn_InvoiceDelete(holdkey$*20)

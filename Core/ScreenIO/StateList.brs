@@ -17,7 +17,7 @@
 01010    library "S:\Core\ScreenIO" : fnfm$
 01020    let Ret$=fnfm$("statelist","",0,0,"",0,0,0,0,mat PassedData$)
 01030    if len(trim$(Ret$)) then
-01040       print Ret$
+01040       pr Ret$
 01050    end if
 01060    if fkey=93 then execute "system"
 01070    stop
@@ -67,7 +67,7 @@
 85002       let fnCheckStringFunction = 0
 85003       else
 85004          if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
-85005             print "Function ("&function$&") Not Supported: The library is out of date or fn not found."
+85005             pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
 85006          end if
 85007       end if
 85008    fnend
@@ -153,7 +153,7 @@
 92016       let ReturnValue = fndeletelistviewrecord(ExitMode,DataFile,mat f$,RepopulateListview)
 92017    else
 92018       if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
-92019          print "Function ("&function$&") Not Supported: The library is out of date or fn not found."
+92019          pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
 92020       end if
 92021    end if
 92022 !

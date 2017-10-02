@@ -25,10 +25,10 @@
 00220 !  goto L320 ! for utility billing automatically from menu
 00230 !   close #101: ioerr ignore
 00240 !   open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outin
-00250 !   print #101: newpage
-00260 !   print fields "10,2,Cr 32": "File name to create (no ext):"
-00270 !   print fields "12,2,Cr 32": "Layout file name (with exts):"
-00280 !   print fields "14,35,c 9,B,1": "Next (F1)"
+00250 !   pr #101: newpage
+00260 !   pr fields "10,2,Cr 32": "File name to create (no ext):"
+00270 !   pr fields "12,2,Cr 32": "Layout file name (with exts):"
+00280 !   pr fields "14,35,c 9,B,1": "Next (F1)"
 00290 ! L290: rinput fields mat io1$: outputfile$,ev$ conv L290
 00300 !   let ev$=trim$(trim$(ev$,chr$(0)))
 00310 !   let outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
@@ -48,14 +48,14 @@
 00400     let p3=pos(ln$,"~",p2+1)
 00410     let p4=pos(ln$,"~",p3+1)
 00420     let p5=len(rtrm$(ln$))
-00430     let a$(j3,1)=ln$(p1+1:p2-1) ! print 'line:'&ln$ : print 'a$(j3,1)='&a$(j3,1) : pause
-00440     let a$(j3,1)=fnbooktitle$(a$(j3,1))
-00450     let a$(j3,2)=ln$(p2+1:p3-1)
-00460     let a$(j3,3)=ln$(p3+1:p4-1) ! P3+1:P4-1) ! MAX(P4-1,P3+8))  this was modified for ea
+00430     a$(j3,1)=ln$(p1+1:p2-1) ! pr 'line:'&ln$ : pr 'a$(j3,1)='&a$(j3,1) : pause
+00440     a$(j3,1)=fnbooktitle$(a$(j3,1))
+00450     a$(j3,2)=ln$(p2+1:p3-1)
+00460     a$(j3,3)=ln$(p3+1:p4-1) ! P3+1:P4-1) ! MAX(P4-1,P3+8))  this was modified for ea
 00470     if p4=0 then ! if layout does not contail abbreviated name, then use first 12 characters of real name
-00472       let abbrev$=a$(j3,1)(1:12)
+00472       abbrev$=a$(j3,1)(1:12)
 00474     else 
-00476       let abbrev$=ln$(p4+1:len(ln$))(1:20)
+00476       abbrev$=ln$(p4+1:len(ln$))(1:20)
 00478     end if 
 00490 ! If RTRM$(A$(J3,3))="" Then Goto 850
 00500     let p1=pos(a$(j3,3)," ",1)+1
@@ -66,27 +66,27 @@
 00550     if p4=0 then let m1=1 else let m1=val(a$(j3,3)(1:p4-1))
 00560     let l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
 00570     if p2>1 then let dp=val(a$(j3,3)(p2:p3)) else let dp=0 ! DECIMAL POSITIONS
-00580     if uprc$(a$(j3,3)(1:p1-2))="PD" then let al=l*2-1 else let al=l !   ACTUAL FIELD LENGTH
+00580     if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !   ACTUAL FIELD LENGTH
 00590     if uprc$(a$(j3,3)(1:1))="X" then goto READ_TEMP ! skip any formats of "x"
 00600     let l=l*m1 ! TOTAL STORAGE LENGTH
-00610     let b=a+l
-00620     let a=a+1
+00610     b=a+l
+00620     a=a+1
 00630     let ino=ino+1
 00640     let j3=1
-00650     let a(j3,1)=ino
-00660     let a(j3,2)=al
-00670     let a(j3,3)=dp
-00680     let a(j3,4)=l
-00690     let a(j3,5)=a
-00700     let a(j3,6)=b
-00710     let a=b
+00650     a(j3,1)=ino
+00660     a(j3,2)=al
+00670     a(j3,3)=dp
+00680     a(j3,4)=l
+00690     a(j3,5)=a
+00700     a(j3,6)=b
+00710     a=b
 00720     let rl=rl+int(val(a$(j3,3)(p1:p3)))*m1
 00725 ! pr ln$ : pause
 00730 ! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAMEON EACH SERVICE IN UTILITY BILLING
 00740     if uprc$(a$(j3,1)(1:7))<>"SERVICE" then goto L850
 00750     let x=val(a$(j3,1)(9:10)) conv L850
 00760     if trim$(servicename$(x))="" then goto READ_TEMP ! SERVICE NOT USED
-00770     let a$(j3,1)(1:9)=""
+00770     a$(j3,1)(1:9)=""
 00780     if x=3 and trim$(servicename$(x))<>"Electric" and srv$(3)="EL" then goto L840
 00790     if x=4 and trim$(servicename$(x))<>"Gas" and srv$(4)="GA" then goto L840 ! gas or electric used for some some reading other that gas or electric (code must be GA or EL for this to work
 00800     if x=3 and trim$(servicename$(x))<>"Electric" and a$(j3,1)(2:6)="Prior" then goto READ_TEMP
@@ -94,12 +94,12 @@
 00820     if x=4 and trim$(servicename$(x))<>"Gas" and (a$(j3,1)(2:6)="Multi" or a$(j3,1)(2:6)="Elect" or a$(j3,1)(2:6)="Depos" or a$(j3,1)(2:6)="Readi" or a$(j3,1)(2:6)="Used-" or a$(j3,1)(2:6)="Kwh  " or a$(j3,1)(2:6)="Deman" or a$(j3,1)(2:6)="Units" or a$(j3,1)(2:6)="Meter") then goto READ_TEMP
 00830     if x=4 and trim$(servicename$(x))<>"Gas" and a$(j3,1)(2:6)="Prior" then goto READ_TEMP
 00840 L840: ! 
-00842     let a$(j3,1)=trim$(servicename$(x))&" "&trim$(a$(j3,1))
+00842     a$(j3,1)=trim$(servicename$(x))&" "&trim$(a$(j3,1))
 00850 L850: ! 
 00852     if uprc$(abbrev$)(1:7)<>"SERVICE" then goto L890
 00860     let x=val(abbrev$(9:10)) conv L890
-00870     let abbrev$(1:9)=""
-00880     let abbrev$=trim$(servicename$(x))&" "&trim$(abbrev$)
+00870     abbrev$(1:9)=""
+00880     abbrev$=trim$(servicename$(x))&" "&trim$(abbrev$)
 00890 L890: ! 
 00892     if rtrm$(a$(j3,1))="" or rtrm$(uprc$(a$(j3,1)))='UNUSED' or rtrm$(uprc$(a$(j3,1)))(2:6)='EXTRA' or trim$(abbrev$)="" then goto READ_TEMP
 00900 ! store as description,variable name,field length,# of deciaml points, format
@@ -116,7 +116,7 @@
 20020 ERTN: let fnerror(program$,err,line,act$,"xit")
 20040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-20080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+20080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 20100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 20120 ! /region
 22000 MOVEITTOTEXT: ! r:
@@ -124,7 +124,7 @@
 22040   open #h_temp:=15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outin,keyed 
 22060   do 
 22080     read #h_temp,using 'form pos 1,c 87': textfile$ eof L1080
-22100     print #10,using 'form pos 1,c 87': textfile$
+22100     pr #10,using 'form pos 1,c 87': textfile$
 22120   loop 
 22140 L1080: ! 
 22160   return  ! /r

@@ -28,16 +28,16 @@
 00280     if app(j)=0 then goto L570
 00290     if ma(j)=0 then goto L570 ! if no maintenance skip
 00300     let supportid$=z$&cnvrt$("PIC(#####)",j)
-00310     let clientid=val(z$) ! CLIENT ID TO CUSTOMER NUMBER
+00310     clientid=val(z$) ! CLIENT ID TO CUSTOMER NUMBER
 00320     let systemid$=cd$(j) ! SET SYSTEM ID TO "ub" ETC
 00330     let stardingdate=0
 00340     if ma(j)>1.00 then let timeframe$="Mo"
 00350     if ma(j)=-.01 then let timeframe$="An"
 00360     if ma(j)=0 then let timeframe$="Na"
 00370     let endingdate=0
-00380     let cost=ma(j)
-00390     let contact$(1)=a$(1) ! name
-00400     let contact$(2)=a$(4) ! contact
+00380     cost=ma(j)
+00390     contact$(1)=a$(1) ! name
+00400     contact$(2)=a$(4) ! contact
 00410     gosub WRITE_RECORDS ! WRITE THE RECORD AND SET SYSTEM ID
 00420     goto L570
 00430 SECOND_TWENTY: ! 
@@ -50,9 +50,9 @@
 00500     if ma2(j-20)=-.01 then let timeframe$="An"
 00510     if ma2(j-20)=0 then let timeframe$="NA"
 00520     let endingdate=0
-00530     let cost=ma(j-20)
-00540     let contact$(1)=a$(1) ! name
-00550     let contact$(2)=a$(4) ! contact
+00530     cost=ma(j-20)
+00540     contact$(1)=a$(1) ! name
+00550     contact$(2)=a$(4) ! contact
 00560     gosub WRITE_RECORDS ! WRITE THE RECORD AND SET SYSTEM ID
 00570 L570: next j
 00580   gosub WRITE_X
@@ -62,7 +62,7 @@
 00620   return 
 00630 WRITE_X: ! 
 00640   write #client,using "form pos 1,n 6,8*c 50": val(z$),a$(1),a$(2),"",a$(3),e_mail$,a$(4),ph$,""
-00641   print z$
+00641   pr z$
 00650   return 
 00660 XIT: let fnxit
 00670 READ_NAMES: ! 
@@ -153,7 +153,7 @@
 01520 ERTN: let fnerror(program$,err,line,act$,"xit")
 01530   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01540   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01550   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01550   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01560 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01570 ! /region
-01580   let cost=ma2(j)
+01580   cost=ma2(j)

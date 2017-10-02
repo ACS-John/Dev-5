@@ -14,6 +14,6 @@
 00730 L730: read #1,using L740: z$,mat a$,ph$,ss$,pno,mye,mat dd,mat sc,mat ca,ph2$,ss2$,mat ar,mat arta,cm$,mat app,mat ma,mat ap2,mat ma2 eof END1
 00740 L740: form pos 1,c 5,5*c 30,c 12,c 11,n 9,n 2,10*pd 3,10*n 1,10*pd 3,c 12,c 11,2*pd 5.2,pd 4.3,2*n 1,2*pd 3,c 70,20*n 1,20*pd 3.2,20*n 1,20*pd 3.2
 00750   if app(4)=0 then goto L730
-00760   print #255: z$;" ";a$(1),ph$
+00760   pr #255: z$;" ";a$(1),ph$
 00770   goto L730
 00780 END1: stop 

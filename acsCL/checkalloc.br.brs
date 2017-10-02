@@ -8,10 +8,10 @@
 00080   dim apc(99,3),td$*30,prd(23),cap$*128,glwk$*20,item1$(2)*12
 00090 ! ______________________________________________________________________
 00100   if glt=2 then !:
-          let cap$="GL Distribution Report" else !:
-          let cap$="Post to General Ledger"
+          cap$="GL Distribution Report" else !:
+          cap$="Post to General Ledger"
 00110   let fncno(cno,cnam$)
-00120   let cancel=99
+00120   cancel=99
 00130 ! ______________________________________________________________________
 00140 ! determine if cash or accrual by checking for any !:
         ! accounts payable numbers in the general ledger control file
@@ -28,11 +28,11 @@
 00230   let totalalloc=0
 00240 READ_TRALLOC: ! 
 00250 L250: read #tralloc,using 'Form POS 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,N 6,POS 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd,gde eof READ_TRMSTR
-00254 ! Print TRBANK_CODE,BANK_CODE,TCDE,TRTCDE,CK$,TRCK$
+00254 ! pr TRBANK_CODE,BANK_CODE,TCDE,TRTCDE,CK$,TRCK$
 00260   if trbank_code=bank_code and tcde=trtcde and ck$=trck$ then goto L270 else goto L290
 00270 L270: let totalalloc+=amt
 00280   goto L250
-00290 L290: if totalalloc<>ca1 then print #255: "Check # "&ck$ &"  total check="&str$(ca1)&" total allocations ="&str$(totalalloc)&" date: "&str$(pd)
+00290 L290: if totalalloc<>ca1 then pr #255: "Check # "&ck$ &"  total check="&str$(ca1)&" total allocations ="&str$(totalalloc)&" date: "&str$(pd)
 00300   goto L210
 00310 END1: ! 
 00320   let fncloseprn

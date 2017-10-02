@@ -42,8 +42,8 @@
 00400 L400: form pos 108,pd 3
 00410   let nca=r9
 00420   rewrite #3,using L400,rec=adr(2),reserve: nca
-00430 L430: if adr(1)=0 then let adr(1)=r9
-00440   let adr(2)=r9
+00430 L430: if adr(1)=0 then adr(1)=r9
+00440   adr(2)=r9
 00450   if trim$(olden$)="" then goto L480
 00460   rewrite #1,using L230,key=olden$: eno,mat m,mat adr nokey L460
 00465 L460: rewrite #2,using L470: tr(7)+7 ! add to posting code of 9 from gl merge
@@ -59,21 +59,21 @@
 00560   goto XIT
 00570 ! ______________________________________________________________________
 00580   if fnprocess=1 then goto L800
-00590   print newpage
-00600   print fields "4,10,c 60": "The Following Employee is not on File."
-00610   print fields "7,2,c 60": "    Emp Number    Check Number    Date   Gross-Pay"
-00620   print fields "9,1,PIC(ZZZZZZZZZZ#),N": d(1)
-00630   print fields "9,20,PIC(ZZZZZZ#),N": d(3)
-00640   print fields "9,32,PIC(ZZ/ZZ/ZZ),N": d(2)
-00650   print fields "9,40,PIC(--------.##),N": d(4)
-00660   print fields "20,1,C 66,N": "Enter 0 to Add this Employee or Enter Correct Employee Number"
+00590   pr newpage
+00600   pr fields "4,10,c 60": "The Following Employee is not on File."
+00610   pr fields "7,2,c 60": "    Emp Number    Check Number    Date   Gross-Pay"
+00620   pr fields "9,1,PIC(ZZZZZZZZZZ#),N": d(1)
+00630   pr fields "9,20,PIC(ZZZZZZ#),N": d(3)
+00640   pr fields "9,32,PIC(ZZ/ZZ/ZZ),N": d(2)
+00650   pr fields "9,40,PIC(--------.##),N": d(4)
+00660   pr fields "20,1,C 66,N": "Enter 0 to Add this Employee or Enter Correct Employee Number"
 00670 L670: input fields "20,70,N 4,UE,N": numb conv L670
 00680   if numb>0 then let d(1)=numb: goto L220
-00690   print newpage
-00700   print fields "5,10,c 25": "Employee Name" !:
-        print fields "7,10,c 25": "Address" !:
-        print fields "9,10,c 25": "City, State, Zip Code" !:
-        print fields "11,10,c 25": "Social Security Number"
+00690   pr newpage
+00700   pr fields "5,10,c 25": "Employee Name" !:
+        pr fields "7,10,c 25": "Address" !:
+        pr fields "9,10,c 25": "City, State, Zip Code" !:
+        pr fields "11,10,c 25": "Social Security Number"
 00710   let fb$(1)="5,40,C 25,UT,N" !:
         let fb$(2)="7,40,C 25,UT,N" !:
         let fb$(3)="9,40,C 25,UT,N" !:
@@ -87,11 +87,11 @@
 00780 ! ______________________________________________________________________
 00790 ! ______________________________________________________________________
 00800 L800: let fnopenprn
-00810   if print1=0 then print #255: "The Employees listed here were not previously on file." !:
-          print #255: "Use Payroll Employee File maintenance to enter" !:
-          print #255: "their Name and Address" !:
-          print #255: "_______________________________________________________________________________"
-00820   print #255: d(1)
+00810   if print1=0 then pr #255: "The Employees listed here were not previously on file." !:
+          pr #255: "Use Payroll Employee File maintenance to enter" !:
+          pr #255: "their Name and Address" !:
+          pr #255: "_______________________________________________________________________________"
+00820   pr #255: d(1)
 00830   let print1=1
 00840   mat k$=(" ")
 00850   let ss$=" "
@@ -159,7 +159,7 @@
 01340 ERTN: let fnerror(program$,err,line,act$,"xit")
 01350   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01360   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01370   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01370   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01380 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01390 ! /region
 01400 ! ______________________________________________________________________

@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsUB\ubPrtthree_ash
-00020 ! print bills (new format)
+00020 ! pr bills (new format)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fnformnumb$,fnpause,fnopenprn,fncloseprn
 00050   on error goto ERTN
@@ -23,16 +23,16 @@
 00200   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto !:
         close #20: 
-00210   let at$(1)=cnam$ !:
+00210   at$(1)=cnam$ !:
         let z=21 !:
-        let at$(1)=trim$(at$(1))(1:z) !:
+        at$(1)=trim$(at$(1))(1:z) !:
         let x=len(at$(1)) : let y=z-x !:
-        let at$(1)=rpt$(" ",int(y/2))&at$(1)
+        at$(1)=rpt$(" ",int(y/2))&at$(1)
 00220   let z=26 !:
         for j=2 to udim(at$) !:
-          let at$(j)=trim$(at$(j))(1:z) !:
+          at$(j)=trim$(at$(j))(1:z) !:
           let x=len(at$(j)) : let y=z-x !:
-          let at$(j)=rpt$(" ",int(y/2))&at$(j) !:
+          at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00230   let linelength=62
 00240   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
@@ -41,11 +41,11 @@
 00270   def fnc(x)=int(100*(x+sgn(x)*.0001))
 00280 ! ______________________________________________________________________
 00290 SCREEN1: ! 
-00300   let a$="" : let prtbkno=0
+00300   a$="" : let prtbkno=0
 00310   let fntos(sn$="UBPrtBl1-1") !:
         let pf=26 : let ll=24 !:
         let respc=0
-00320   let a$="" : let prtbkno=0
+00320   a$="" : let prtbkno=0
 00330   let fntos(sn$="UBPrtBl1-1") !:
         let pf=26 : let ll=24 !:
         let respc=0
@@ -91,8 +91,8 @@
         let mg$(2) = resp$(5) !:
         let mg$(3) = resp$(6)
 00540   if resp$(8)="[All]" then !:
-          let a$="" else !:
-          let a$ = lpad$(trim$(resp$(8)(1:10)),10)
+          a$="" else !:
+          a$ = lpad$(trim$(resp$(8)(1:10)),10)
 00550   if resp$(9)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(9))
@@ -119,10 +119,10 @@
 00750 L750: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1859,pd 5.2,pos 1750,2*n 6,pos 1831,n 9
 00760   if d2=0 and d2x>0 then let d2=d2x ! set date to screen if no date in record
 00770   if d3=0 and d3x>0 then let d3=d3x ! set date to screen if no date in record
-00780   mat ba=(0): let budget=0
+00780   mat ba=(0): budget=0
 00790   read #81,using L800,key=z$: x$,mat ba nokey L820
 00800 L800: form pos 1,c 10,pd 4,12*pd 5.2
-00810   for j=2 to 12: let budget=budget+ba(j): next j ! get total budget amount
+00810   for j=2 to 12: budget=budget+ba(j): next j ! get total budget amount
 00820 L820: if prtbkno=0 then goto L840
 00830   if prtbkno><route then goto F5_CANCEL
 00840 L840: if f><d1 then goto L680
@@ -156,8 +156,8 @@
 01100   let pb=bal-g(11)
 01110 ! ______________print bill routine______________________________________
 01120   gosub PRINTBILL
-01130 ! _____________end of print routine______________________________________
-01140   let bct(2)=bct(2)+1
+01130 ! _____________end of pr routine______________________________________
+01140   bct(2)=bct(2)+1
 01150   goto L680
 01160 ! ______________________________________________________________________
 01170 SCREEN3: ! 
@@ -174,7 +174,7 @@
 01220 L1220: let fncmbact(1,17) ! !:
         let resp$(1)=a$
 01230   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
-01240   let a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
+01240   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" or ck=5 then goto F5_CANCEL
 01250   read #1,using L750,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,escrow,d2,d3,est nokey SCREEN3
 01260   goto HERE
@@ -191,7 +191,7 @@
 01370   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 01380   return 
 01390 ! ______________________________________________________________________
-01400 ENDSCR: ! print totals screen
+01400 ENDSCR: ! pr totals screen
 01410   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
 01420   let fntos(sn$="Bills-Total") !:
         let mylen=23 : let mypos=mylen+2 !:
@@ -205,62 +205,62 @@
 01470 ! ______________________________________________________________________
 01480 PRINTBILL: ! 
 01490   if final=2 then !:
-          let g(8)-=b(8): let g(11)=g(12)+g(8): let bal+=g(8)
+          let g(8)-=b(8): let g(11)=g(12)+g(8): bal+=g(8)
 01500   let penalty=0
 01510   for j=1 to 10
 01520     if penalty$(j)="Y" then let penalty+=g(j) !:
             let g(j)=0 ! accumulate all penalties and set charge to zero
 01530   next j
 01540   let pb=bal-g(11)
-01550   print #255: "" !:
-        print #255,using L1560: "FROM",int(d2x*.01),"TO",int(d3x*.01),d1
+01550   pr #255: "" !:
+        pr #255,using L1560: "FROM",int(d2x*.01),"TO",int(d3x*.01),d1
 01560 L1560: form pos 1,c 5,pic(##/##),x 2,c 3,pic(##/##),pos 22,pic(##/##/##),skip 4
 01570   if pb<>0 then let pb$="   PRIOR BALANCE" else let pb$=""
-01580   print #255: ""
+01580   pr #255: ""
 01590 L1590: form pos 3,c 17,nz 10.2,pos 38,c 10,skip 1
 01600   if g(1)=0 then let t$="" else let t$=service$(1)
-01610   print #255,using L1620: t$,0,d(1),d(3),g(1)
+01610   pr #255,using L1620: t$,0,d(1),d(3),g(1)
 01620 L1620: form pos 1,c 3,nz 1,nz 8,nz 8,nz 9.2,x 3,nz 10.2,nz 12.2,skip 1
 01630 L1630: form pos 1,c 3,nz 1,nz 8,nz 8,nz 9.2,x 5,pic(zz/zz/zz),skip 1
 01640   if g(2)=0 then let t$="" else let t$=service$(2)
-01650   if bal<=0 then print #255,using L1620: t$,0,0,0,g(2),0,bal : goto L1670
-01660   print #255,using L1620: t$,0,0,0,g(2),bal+penalty,bal
+01650   if bal<=0 then pr #255,using L1620: t$,0,0,0,g(2),0,bal : goto L1670
+01660   pr #255,using L1620: t$,0,0,0,g(2),bal+penalty,bal
 01670 L1670: if g(4)=0 then let t$="" else let t$=service$(4)
-01680   print #255,using L1630: t$,0,0,0,g(4),d4
+01680   pr #255,using L1630: t$,0,0,0,g(4),d4
 01690   if g(5)=0 then let t$="" else let t$=service$(5)
-01700   print #255,using L1620: t$,0,0,0,g(5)
+01700   pr #255,using L1620: t$,0,0,0,g(5)
 01710   if g(6)=0 then let t$="" else let t$=service$(6)
-01720   print #255,using L1620: t$,0,0,0,g(6)
+01720   pr #255,using L1620: t$,0,0,0,g(6)
 01730   if g(8)=0 then let t$="" else let t$=service$(8)
-01740   print #255,using L1620: t$,0,0,0,g(8)
+01740   pr #255,using L1620: t$,0,0,0,g(8)
 01750   if g(9)=0 then let t$="" else let t$=service$(9)
-01760   print #255,using L1620: t$,0,0,0,g(9)
-01770   print #255,using L1590: pb$,pb,z$
+01760   pr #255,using L1620: t$,0,0,0,g(9)
+01770   pr #255,using L1590: pb$,pb,z$
 01780   form pos 1,c 3,2*nz 6,nz 5,nz 10.2,x 1,c 10,skip 1
 01790   if est=1 then let est$="BILL ESTIMATED" else let est$=""
 01800   if c4>0 then let final$="FINAL BILL" else let final$=""
 01810   if df$="Y" then let final$="DRAFTED"
 01820   if bal<=0 then let penalty=0
-01840   print #255: ""
-01850   print #255,using 'Form POS 7,C 20,POS 38,C 25': est$,pe$(1)(1:25)
-01860   print #255,using 'Form POS 1,CR 7,X 1,PIC(ZZ/ZZ/ZZ),NZ 13.2,POS 38,C 25': 'DUE BY:',d4,bal,pe$(2)(1:25)
-01870   print #255,using 'Form POS 13,C 18,POS 38,C 25': e$(1)(1:18),pe$(3)(1:25)
-01880   print #255,using 'Form POS 2,C 10,X 5,C 10,POS 38,C 25': z$,final$,pe$(4)(1:25)
-01890   let bills+=1
-01900   print #255,using L1930: mg$(1)
-01910   print #255,using L1930: mg$(2)
-01920   print #255,using L1930: mg$(3)
+01840   pr #255: ""
+01850   pr #255,using 'Form POS 7,C 20,POS 38,C 25': est$,pe$(1)(1:25)
+01860   pr #255,using 'Form POS 1,CR 7,X 1,PIC(ZZ/ZZ/ZZ),NZ 13.2,POS 38,C 25': 'DUE BY:',d4,bal,pe$(2)(1:25)
+01870   pr #255,using 'Form POS 13,C 18,POS 38,C 25': e$(1)(1:18),pe$(3)(1:25)
+01880   pr #255,using 'Form POS 2,C 10,X 5,C 10,POS 38,C 25': z$,final$,pe$(4)(1:25)
+01890   bills+=1
+01900   pr #255,using L1930: mg$(1)
+01910   pr #255,using L1930: mg$(2)
+01920   pr #255,using L1930: mg$(3)
 01930 L1930: form pos 2,c 30,skip 1
-01940   if int(bills/3)<>bills/3 then print #255,using L1930: " "," " !:
+01940   if int(bills/3)<>bills/3 then pr #255,using L1930: " "," " !:
           ! space extra if 1st or 2nd bill
-01950   if int(bills/3)=bills/3 then print #255: newpage ! BOTTOM OF PAGE
+01950   if int(bills/3)=bills/3 then pr #255: newpage ! BOTTOM OF PAGE
 01960   return 
 01970 ! ______________________________________________________________________
 01980 ! <Updateable Region: ERTN>
 01990 ERTN: let fnerror(program$,err,line,act$,"xit")
 02000   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02010   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02020   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02020   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02030 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02040 ! /region
 02050 ! ______________________________________________________________________

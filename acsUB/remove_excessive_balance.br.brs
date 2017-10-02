@@ -28,7 +28,7 @@
 01330       let fn_options=0
 01340     else 
 01360       if resp$(1)="[All]" then let route=0 else let route=val(resp$(1))
-01370       let billingdate$=resp$(2)
+01370       billingdate$=resp$(2)
 01390 ! 
 01400       let fn_options=1
 01410     end if 
@@ -39,19 +39,19 @@
 01460   fnend 
 01770   def fn_printheader
 01780     let pg+=1
-01790     print #255: cap$
-01800     print #255: "Page "&str$(pg)
-01810     print #255: ""
-01820     print #255: "All accounts listed have been modified."
-01830     print #255: ""
-01840     print #255: "Account           Billing Date"
-01850     print #255: "_______________   ____________"
+01790     pr #255: cap$
+01800     pr #255: "Page "&str$(pg)
+01810     pr #255: ""
+01820     pr #255: "All accounts listed have been modified."
+01830     pr #255: ""
+01840     pr #255: "Account           Billing Date"
+01850     pr #255: "_______________   ____________"
 01860   fnend 
 01880 ! <Updateable Region: ERTN>
 01890 ERTN: let fnerror(program$,err,line,act$,"NO")
 01900   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01910   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01920   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01920   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01930 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01940 ! </Updateable Region: ERTN>
 10000   def fn_main_loop ! main
@@ -59,7 +59,7 @@
 10040     let fntop(program$,cap$="Remove Excessive Balance")
 10060     let remove_total=2
 10080     do 
-10100       let cont=fn_options(route,billingdate$) ! collect user options
+10100       cont=fn_options(route,billingdate$) ! collect user options
 10120       if trim$(billingdate$)="0" then let valid=0 else let valid=1
 10140       mat msgtext$(1:1)=("You must enter a billing date")
 10160       if valid=0 then let fnmsgbox(mat msgtext$,answer$,"Invalid Entry",0)
@@ -73,7 +73,7 @@
 10320     let msgtext$(4) = "This action is irreversible and should only be performed by an ACS Technician."
 10340     let msgtext$(5) = "Do you want to continue?"
 10360     let fnmsgbox(mat msgtext$,answer$,"Confirm Action",4)
-10380     if (answer$<>"Yes") then let cont=0
+10380     if (answer$<>"Yes") then cont=0
 10400 ! 
 10420     let undocount=0
 10440     if cont then 
@@ -93,22 +93,22 @@
 10640             if fn_get_trans then ! get latest and 2 prior charge transactions for this customer
 10680               let undocount+=1
 10700               for remove_item=1 to remove_total
-10720                 let balance=balance-tamt
+10720                 balance=balance-tamt
 10740                 for item=1 to 9 ! assuming 10 is the penalty
-10760                   let breakdown(item)=breakdown(item)-tg(item)
+10760                   breakdown(item)=breakdown(item)-tg(item)
 10780                 next item
 10800               next remove_item
 10820               rewrite #f_custacct,using CUSTFORM: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
-10840               print #255,using "form pos 5,c 10,x 5,pic(zz/zz/zz),X 5,N 10.2": acct$,str$(chargedate),balance pageoflow PRINTPAGEOVERFLOW
+10840               pr #255,using "form pos 5,c 10,x 5,pic(zz/zz/zz),X 5,N 10.2": acct$,str$(chargedate),balance pageoflow PRINTPAGEOVERFLOW
 10860             else 
-10880               print #255: "Could not find transaction for account "&acct$
+10880               pr #255: "Could not find transaction for account "&acct$
 10900             end if 
 10920           end if 
 10930         end if 
 10940       loop 
 10960       goto CUSTDONE
 10980 PRINTPAGEOVERFLOW: ! 
-11000       print #255: newpage
+11000       pr #255: newpage
 11020       let fn_printheader
 11040       continue 
 11060 CUSTDONE: ! 

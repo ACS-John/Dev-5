@@ -58,8 +58,8 @@
 00585   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&str$(cno)&",Shr",internal,input,keyed ioerr L2290
 00590 L590: let hd$(1)="A/R Input Selection Menu"
 00600   let hd$(2)="ENTER SELECTION"
-00610 L610: print newpage
-00620   print fields mat fl1$: mat sc1$,mat hd$
+00610 L610: pr newpage
+00620   pr fields mat fl1$: mat sc1$,mat hd$
 00630 L630: input fields "13,29,n 1,eu,n": tr5 conv L630
 00640   if tr5=0 then goto L1690
 00650   if tr5<1 or tr5>4 then goto L630
@@ -68,32 +68,32 @@
 00680 L680: if tr5=4 or tr5=3 then let sc2$(7)="G/L # TO CREDIT" else let sc2$(7)="G/L # TO Debit"
 00690   if tr5=3 then let sc2$(6)="DISCOUNT AMOUNT" else let sc2$(6)=""
 00700   if gx=0 then let sc2$(7)=" "
-00710 L710: print newpage
-00720   print fields mat flo1$: mat sc2$,mat hd$
+00710 L710: pr newpage
+00720   pr fields mat flo1$: mat sc2$,mat hd$
 00730   let ps1=0
 00740   if vf=0 then goto L790
 00750   if gx><0 then goto L780
-00760 L760: print fields mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2)
+00760 L760: pr fields mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2)
 00770   goto L790
-00780 L780: print fields mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
-00790 L790: print fields "5,30,pic(zzzzzz)": tr(1)
-00800   print fields "24,20,C 50,N": "F1 Continue   F2 verify name    F4 Search"
+00780 L780: pr fields mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
+00790 L790: pr fields "5,30,pic(zzzzzz)": tr(1)
+00800   pr fields "24,20,C 50,N": "F1 Continue   F2 verify name    F4 Search"
 00810   if gx><0 then goto L910
 00820 L820: input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2) conv L870
 00825   if cmdkey=4 then gosub TMSRCH : goto L760
 00830   let p$=uprc$(lpad$(rtrm$(p$),5))
 00840   if ce>0 then let fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
-00850   let ce=0
+00850   ce=0
 00860   goto L1280
 00870 L870: if ce>0 then let fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
-00880   let ce=cnt+1
+00880   ce=cnt+1
 00890   let fli1$(ce)=srep$(uprc$(rtrm$(fli1$(ce))),1,"U","RC")
 00900   goto L820
 00910 L910: if ps1=1 or vf=1 then goto L1060
 00920 L920: rinput fields "3,30,C 5,EU,n": p$ conv L920
 00922   if cmdkey=4 then gosub TMSRCH : goto L920
 00930   let p$=uprc$(lpad$(rtrm$(p$),5))
-00940   if ltrm$(p$)="-1" then print fields mat otgl$: mat gln1 else print fields mat otgl$: mat gln2
+00940   if ltrm$(p$)="-1" then pr fields mat otgl$: mat gln1 else pr fields mat otgl$: mat gln2
 00950   if ltrm$(p$)="0" or ltrm$(p$)="" and vf=0 then goto L590
 00960   if ltrm$(p$)="0" or ltrm$(p$)="" and vf=1 then goto L1630
 00970   if ltrm$(p$)="-1" then let name$="CASH SALE" else goto L990
@@ -102,9 +102,9 @@
 01000 L1000: form pos 6,c 25
 01010   goto L1050
 01020 L1020: let name$="INVALID CLIENT NUMBER"
-01030   print fields "3,40,C 25,R,N": name$
+01030   pr fields "3,40,C 25,R,N": name$
 01040   goto L920
-01050 L1050: print fields "3,40,C 25,N": name$
+01050 L1050: pr fields "3,40,C 25,N": name$
 01060 L1060: let fli1$(4)="6,30,n 11.2,ut,n"
 01070   if r1>0 then goto L1170
 01080   if tr5=3 then let fli1$(4)="6,30,n 11.2,ue,n"
@@ -116,30 +116,30 @@
 01140   if sz=3 then let gl(1,1)=gln1(2): let gl(1,2)=gln1(3): let gl(1,3)=tr(3)
 01150   if sz=2 then let gl(1,2)=gln1(2): let gl(1,1)=gln1(1): let gl(1,3)=gln1(3): let gl(1,4)=tr(3)
 01160   if sz=5 then let gl(1,1)=gln1(2): let gl(1,2)=tr(3)
-01170 L1170: print fields mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
+01170 L1170: pr fields mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
 01180 L1180: input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
 01190   if cmdkey=2 then goto L920
 01200 L1200: let p$=uprc$(lpad$(rtrm$(p$),5))
 01210   if ce>0 then let fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
-01220   let ce=0
+01220   ce=0
 01230   goto L1280
 01240 L1240: if ce>0 then let fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
-01250   let ce=cnt+1
+01250   ce=cnt+1
 01260   let fli1$(ce)=srep$(uprc$(rtrm$(fli1$(ce))),1,"U","RC")
 01270   if cnt<=4 then goto L1060 else goto L1180
 01280 L1280: if ltrm$(p$)="0" or ltrm$(p$)="" and vf=0 then goto L590
 01290   if ltrm$(p$)="0" or ltrm$(p$)="" and vf=1 then goto L1630
 01300   let ps1=1
 01310   if tr(1)<10100 or tr(1)>123199 then 
-01320     print fields "5,48,c 20": "Invalid Date"
+01320     pr fields "5,48,c 20": "Invalid Date"
 01330     goto L790
 01332   end if 
 01340 L1340: if tr(3)><0 then goto L1370
-01350   print fields "6,48,c 20": "NO AMOUNT ENTERED"
+01350   pr fields "6,48,c 20": "NO AMOUNT ENTERED"
 01360   goto L790
 01370 L1370: if gx=0 then goto L1520
 01380   if pgl(gpx)>0 then goto L1410
-01390   print fields "9,45,c 30": "G/L # REQUIRED"
+01390   pr fields "9,45,c 30": "G/L # REQUIRED"
 01400   goto L790
 01410 L1410: let gla=0
 01420   for j=1 to 10
@@ -148,9 +148,9 @@
 01450   next j
 01460 L1460: if tr5=3 then let gla=gla-tr(2)
 01470   if gla=tr(3) then goto L1520
-01480   print fields "11,2,c 75,h,n": " G/L allocations do not agree with total amount.  Press enter to continue."
+01480   pr fields "11,2,c 75,h,n": " G/L allocations do not agree with total amount.  Press enter to continue."
 01490   input fields "11,78,c 1,EU,n": pause$
-01500   print fields "11,2,c 75,n,n": " "
+01500   pr fields "11,2,c 75,n,n": " "
 01510   goto L790
 01520 L1520: if ltrm$(p$)="-1" then goto L1540
 01530   let pt(1)=pt(1)+val(p$) conv L1540
@@ -172,45 +172,45 @@
 01675   let p$=""
 01680   goto L2060
 01690 L1690: let vf=1
-01700 L1700: print newpage
+01700 L1700: pr newpage
 01710   let hd$(1)="A/R Input Proof Totals"
 01720   let hd$(2)=""
-01730   print fields mat fl1$: mat sc3$,mat hd$
-01740   print fields "11,5,C 20": "TOTAL CASH SALES"
-01750   print fields "12,5,C 22": "TOTAL DISCOUNTS TAKEN"
-01760   print fields mat flo3$: mat pt
-01770   print fields "12,26,n 11.2": tdt
-01780   print fields "18,1,C 70,H,N": "ENTER 1 TO MERGE; 2 FOR CORRECTIONS: 5 STOP WITHOUT POSTING"
+01730   pr fields mat fl1$: mat sc3$,mat hd$
+01740   pr fields "11,5,C 20": "TOTAL CASH SALES"
+01750   pr fields "12,5,C 22": "TOTAL DISCOUNTS TAKEN"
+01760   pr fields mat flo3$: mat pt
+01770   pr fields "12,26,n 11.2": tdt
+01780   pr fields "18,1,C 70,H,N": "ENTER 1 TO MERGE; 2 FOR CORRECTIONS: 5 STOP WITHOUT POSTING"
 01790 L1790: input fields "18,61,n 1,eu,n": j conv L1790
 01795   if j=5 then goto XIT
 01800   on j goto L2270,L1810 none L1790
-01810 L1810: print newpage
-01820   print fields "10,5,c 60": "ENTER 1 FOR A LISTING OF ENTRIES; ELSE ENTER 2"
+01810 L1810: pr newpage
+01820   pr fields "10,5,c 60": "ENTER 1 FOR A LISTING OF ENTRIES; ELSE ENTER 2"
 01830 L1830: input fields "10,60,n 1,eu,n": j conv L1830
 01840   on j goto L1850,L2060 none L1830
 01850 L1850: let r=0
 01860   let fnopenprn
-01870   print newpage
+01870   pr newpage
 01880   on fkey 5 goto L2040
-01890   print newpage
-01900   print #255,using L1910: date$,cnam$,time$,"INPUT EDIT LIST"
+01890   pr newpage
+01900   pr #255,using L1910: date$,cnam$,time$,"INPUT EDIT LIST"
 01910 L1910: form pos 1,c 8,pos namtab,c 50,skip 1,pos 1,c 8,pos 58,c 50,skip 1
-01920   print fields "10,20,c 40,n": "INPUT EDIT LISTING IN PROCESS"
-01930   print fields "23,2,C 30,N": "Press F5 to stop"
-01940   print #255: "REF #  CL #  INVOICE #";
-01950   print #255: tab(34);"Date     Amount             Description           Discount          Tr Code"
+01920   pr fields "10,20,c 40,n": "INPUT EDIT LISTING IN PROCESS"
+01930   pr fields "23,2,C 30,N": "Press F5 to stop"
+01940   pr #255: "REF #  CL #  INVOICE #";
+01950   pr #255: tab(34);"Date     Amount             Description           Discount          Tr Code"
 01960 L1960: let r=r+1
 01970   read #h_addr,using L2110,rec=r: p$,iv$,mat tr,id$ eof L2040,norec L2040 ioerr L2290
 01980   if ltrm$(p$)="0" or ltrm$(p$)="" then goto L1960
 01990   let name$=""
 02000   read #9,using L1000,key=p$,release: name$ nokey L2010
-02010 L2010: print #255,using L2020: r,p$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
+02010 L2010: pr #255,using L2020: r,p$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
 02020 L2020: form pos 1,n 4,x 2,c 5,x 2,c 18,n 6,n 11.2,pic(zzzzzz),x 7,c 22,n 12.2,n 12,skip 1
 02030   goto L1960
 02040 L2040: let fncloseprn
 02050   on fkey 5 ignore 
-02060 L2060: print newpage
-02070   print fields "10,10,c 60": "ENTER REF # TO CORRECT; ENTER 0 WHEN COMPLETED"
+02060 L2060: pr newpage
+02070   pr fields "10,10,c 60": "ENTER REF # TO CORRECT; ENTER 0 WHEN COMPLETED"
 02080 L2080: input fields "10,61,n 4,eu,n": r1 conv L2080
 02090   if r1=0 then goto L2220
 02100   read #h_addr,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl norec L2060 ioerr L2290
@@ -225,24 +225,24 @@
 02190   let hd$(2)="ENTER CLIENT # AS 0 TO DELETE THIS ENTRY"
 02200   let vf=1
 02210   goto L680
-02220 L2220: print newpage
+02220 L2220: pr newpage
 02230   let vf=0
-02240   print fields "10,10,c 50": "ENTER 1 TO MAKE ADDITIONAL ENTRIES; ELSE ENTER 2"
+02240   pr fields "10,10,c 50": "ENTER 1 TO MAKE ADDITIONAL ENTRIES; ELSE ENTER 2"
 02250 L2250: input fields "10,61,N 1,EU,N": j conv L2250
 02260   on j goto L590,L1700 none L2250
 02270 L2270: chain "S:\acsTM\ARMerge"
-02280 XIT: print newpage: let fnxit
-02290 L2290: if err=61 then print fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2310
+02280 XIT: pr newpage: let fnxit
+02290 L2290: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2310
 02300   goto L2350
-02310 L2310: print newpage
-02320   if err=4148 then print fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2340
+02310 L2310: pr newpage
+02320   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2340
 02330   goto L2350
-02340 L2340: print fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-02350 L2350: print fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+02340 L2340: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+02350 L2350: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 02360   input fields "24,60,C 1,N": quitcode$
 02370   if err=61 and rtrm$(uprc$(quitcode$))="Q" then goto L610 else goto L2410
-02380   print fields "23,3,C 78,N": ""
-02390   print fields "24,3,C 78,N": ""
+02380   pr fields "23,3,C 78,N": ""
+02390   pr fields "24,3,C 78,N": ""
 02400   retry 
 02410 L2410: goto XIT
 04800 TMSRCH: ! search for customer #
@@ -254,6 +254,6 @@
 04860   let heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"
 04870   let fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
 04880   let p$=selection$ ! pull key from first field in search line
-04890   let ano=0
-04900   let ano=val(selection$) conv L4910
+04890   ano=0
+04900   ano=val(selection$) conv L4910
 04910 L4910: return 

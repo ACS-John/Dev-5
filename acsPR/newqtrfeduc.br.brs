@@ -57,10 +57,10 @@
 00520 L520: for j=1 to 4
 00530     if resp$(2)=option1$(j) then let qtr=j: let m$=option1$(j): goto L550 ! quarter ending date
 00540   next j
-00550 L550: if qtr=1 then let begdate=taxyear*10000+0312: let enddate=val(taxyear$)*10000+0318
-00560   if qtr=2 then let begdate=taxyear*10000+0612: let enddate=val(taxyear$)*10000+0618
-00570   if qtr=3 then let begdate=taxyear*10000+0912: let enddate=val(taxyear$)*10000+0918
-00580   if qtr=4 then let begdate=taxyear*10000+1212: let enddate=val(taxyear$)*10000+1218
+00550 L550: if qtr=1 then begdate=taxyear*10000+0312: let enddate=val(taxyear$)*10000+0318
+00560   if qtr=2 then begdate=taxyear*10000+0612: let enddate=val(taxyear$)*10000+0618
+00570   if qtr=3 then begdate=taxyear*10000+0912: let enddate=val(taxyear$)*10000+0918
+00580   if qtr=4 then begdate=taxyear*10000+1212: let enddate=val(taxyear$)*10000+1218
 00590 ! ______________________________________________________________________
 00600   on pageoflow goto PGOF
 00610   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -73,15 +73,15 @@
 00680   mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0): mat qtr4tcp=(0)
 00690   mat ytdtotal=(0)
 00700 ! 
-00710   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+00710   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 00720   restore #4,key>=checkkey$: nokey ANALYZE_WAGES
 00730 L730: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof ANALYZE_WAGES
 00740   if heno<>eno then goto ANALYZE_WAGES
 00750   if prd<beg_date or prd>end_date then goto L730 ! not this year
-00760   if em5=1 then let pedate=begdate+19: let box1+=1 ! monthly pay period
-00770   if em5=2 then let pedate=begdate+15 : let box1+=1 ! semi-monthly
-00780   if em5=3 then let pedate=begdate+14 : let box1+=1 ! bi-weekly
-00790   if em5=4 then let pedate=begdate+7: let box1+=1 ! weekly
+00760   if em5=1 then let pedate=begdate+19: box1+=1 ! monthly pay period
+00770   if em5=2 then let pedate=begdate+15 : box1+=1 ! semi-monthly
+00780   if em5=3 then let pedate=begdate+14 : box1+=1 ! bi-weekly
+00790   if em5=4 then let pedate=begdate+7: box1+=1 ! weekly
 00800 ! let deptkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn)
 00810   if prd>=qtr1 and prd<qtr2 then mat qtr1tcp=qtr1tcp+tcp: mat tpt=tpt+tcp ! 1st qtr earnings
 00820   if prd>=qtr2 and prd<qtr3 then mat qtr2tcp=qtr2tcp+tcp : mat tpt=tpt+tcp
@@ -105,27 +105,27 @@
 01020 ! ______________________________________________________________________
 01030 HDR: ! 
 01040   let p2=p2+1
-01050   print #255,using L1060: "Page ",p2
+01050   pr #255,using L1060: "Page ",p2
 01060 L1060: form pos 70,c 5,pic(zzz),skip 1
-01070   print #255: 
-01080   print #255,using L1090: cap$
+01070   pr #255: 
+01080   pr #255,using L1090: cap$
 01090 L1090: form pos 20,c 40,skip 1
-01100   print #255,using L1110: "For quarter ended "&m$
+01100   pr #255,using L1110: "For quarter ended "&m$
 01110 L1110: form pos 20,cc 40,skip 1
-01120   print #255: 
-01130   print #255,using L1140: "     Rate",a$(1),"Fed ID",b$(1)
+01120   pr #255: 
+01130   pr #255,using L1140: "     Rate",a$(1),"Fed ID",b$(1)
 01140 L1140: form pos 1,c 9,pos 17,c 40,pos 59,c 6,pos 69,c 40,skip 1
-01150   print #255,using L1160: feducrat,a$(2)
+01150   pr #255,using L1160: feducrat,a$(2)
 01160 L1160: form pos 3,pic(zzzz.##),pos 17,c 40,skip 1
-01170   print #255,using L1180: a$(3)
+01170   pr #255,using L1180: a$(3)
 01180 L1180: form pos 17,c 40,skip 1
-01190   print #255: 
-01200   print #255: tab(44);"Total Wages   Excess Wages    Taxable"
-01210   print #255: " SS Number             Name";
-01220   print #255,using L1230: "For Quarter   Over $",feducmax,"Wages"
+01190   pr #255: 
+01200   pr #255: tab(44);"Total Wages   Excess Wages    Taxable"
+01210   pr #255: " SS Number             Name";
+01220   pr #255,using L1230: "For Quarter   Over $",feducmax,"Wages"
 01230 L1230: form pos 44,c 20,pic(zzzzz.##),pos 75,c 5,skip 1
-01240   print #255: "___________  __________________________";
-01250   print #255: tab(44);"___________   ____________    _______"
+01240   pr #255: "___________  __________________________";
+01250   pr #255: tab(44);"___________   ____________    _______"
 01260   return 
 01270 ! ______________________________________________________________________
 01280 DONE: ! 
@@ -146,28 +146,28 @@
 01430   goto L1450
 01440 L1440: let h2=m1
 01450 L1450: let h3=m1-h2
-01460   print #255,using L1470: ss$,em$(1)(1:28),m1,h3,h2
+01460   pr #255,using L1470: ss$,em$(1)(1:28),m1,h3,h2
 01470 L1470: form pos 1,c 11,pos 14,c 28,pos 42,pic(--,---,---.##),pos 57,pic(--,---,---.##),pos 70,pic(----,---.##),skip 1
 01480   let t1+=m1 : let t2+=h3 : let t3+=h2
-01490   print #255: pageoflow PGOF
+01490   pr #255: pageoflow PGOF
 01500   let p1=p1+2
 01510 L1510: return 
 01520 ! ______________________________________________________________________
 01530 PAGETOTALS: ! 
-01540   print #255,using L1550: "___________    ___________  _________" pageoflow L1640
+01540   pr #255,using L1550: "___________    ___________  _________" pageoflow L1640
 01550 L1550: form pos 44,c 37,skip 1
-01560   print #255: "Employees on this page:";p3;"    Page Totals";
-01570   print #255,using L1580: t1,t2,t3
+01560   pr #255: "Employees on this page:";p3;"    Page Totals";
+01570   pr #255,using L1580: t1,t2,t3
 01580 L1580: form pos 42,pic(--,---,---.##),pos 57,pic(--,---,---.##),pos 70,pic(----,---.##),skip 1
 01590   if nw=1 and eofcode=1 then goto L1610
-01600   print #255: newpage
+01600   pr #255: newpage
 01610 L1610: let p3=t1=t2=t3=0
 01620   return 
 01630 ! ______________________________________________________________________
-01640 L1640: print #255: newpage
+01640 L1640: pr #255: newpage
 01650 PGOF: ! 
 01660   gosub PAGETOTALS
-01670   print #255: newpage
+01670   pr #255: newpage
 01680   gosub HDR
 01690   continue 
 01700 ! ______________________________________________________________________
@@ -175,7 +175,7 @@
 01720 ERTN: pause : let fnerror(program$,err,line,act$,"xit")
 01730   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01740   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01750   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01750   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01760 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01770 ! /region
 01780 ! ______________________________________________________________________

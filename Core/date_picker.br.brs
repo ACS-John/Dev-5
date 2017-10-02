@@ -1,6 +1,6 @@
 00300   def library fndate_picker$ (;_date$,format$,row,column,___, window,days_in_week,gridspec$*255,usermonth,save_date$*8,baseyear)
 00400     let save_date$=_date$
-00500     let baseyear=val(env$('status.config.baseyear'))
+00500     baseyear=val(env$('status.config.baseyear'))
 00600     if baseyear <= 1900 then execute 'config baseyear 1930'
 00700 ! 
 00800     let format$=lwrc$(format$)
@@ -23,18 +23,18 @@
 02500     end if 
 02600 ! 
 02700     if not row then let row=1
-02800     if not column then let column=1
+02800     if not column then column=1
 02900     dim forms$(1)*255
 03000     let days_in_week=7
 03100     let rows_on_grid=6
 03200     open #window:=fngetfilenumber: "parent=none,srow="&str$(row)&",scol="&str$(column)&",rows=10,cols=25,caption=Please select a date,N=/#000066:#B0C4DE",display,outin 
-03300     print #window, fields "1,1,C 1,,B2500;1,6,C 1,,B2501;1,8,C 1,,B2502;1,15,C 1,,B2503": "<", ">", "<", ">"
-03400     print #window, fields "10,1,C 7,,B2504;10,18,C 7,,B2505": "OK", "Cancel"
-03500     print #window, fields "9,1,C 25": "Today: "&date$("d3 m3 dd, ccyy")
+03300     pr #window, fields "1,1,C 1,,B2500;1,6,C 1,,B2501;1,8,C 1,,B2502;1,15,C 1,,B2503": "<", ">", "<", ">"
+03400     pr #window, fields "10,1,C 7,,B2504;10,18,C 7,,B2505": "OK", "Cancel"
+03500     pr #window, fields "9,1,C 25": "Today: "&date$("d3 m3 dd, ccyy")
 03600     let month=val(_date$(1:2)) : let year=val(_date$(5:8))
 03700     let fngridform(mat headers$,mat widths,mat forms$,days_in_week)
 03800     let gridspec$="2,1,grid "&str$(rows_on_grid+1)&"/27"
-03900     print #window, fields gridspec$&",headers,/W:#B0C4DE" : (mat headers$,mat widths,mat forms$)
+03900     pr #window, fields gridspec$&",headers,/W:#B0C4DE" : (mat headers$,mat widths,mat forms$)
 04000     do 
 04100       let fnprintdays (_date$,window,gridspec$,days_in_week,rows_on_grid)
 04200       let usermonth=month
@@ -94,7 +94,7 @@
 09800     for rowindex_=1 + offset to days_this_month + offset
 09900       let days$(rowindex_)=lpad$(str$(idx:=idx+1),2,'0')
 10000     next rowindex_
-10100     print #window, fields gridspec$&",=": mat days$
+10100     pr #window, fields gridspec$&",=": mat days$
 10200   fnend 
 10400   def fngridform(mat headers$,mat widths,mat forms$,days_in_week;___,index_)
 10500     mat headers$(days_in_week)=("")

@@ -6,10 +6,10 @@
 00060 ! ______________________________________________________________________
 00070   dim de$*30,fgl$(3)
 00080 ! ______________________________________________________________________
-00090 L90: print newpage
+00090 L90: pr newpage
 00100   close #101: ioerr L110
 00110 L110: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=Convert Fund Master File",display,outin 
-00120   print fields "10,5,C 60": "COMPANY NUMBER (0 TO STOP):"
+00120   pr fields "10,5,C 60": "COMPANY NUMBER (0 TO STOP):"
 00130   input fields "10,51,N 5,UE,N": cno
 00140   if cno=0 then goto XIT
 00160   open #1: "Name="&env$('Q')&"\CLmstr\FUNDMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\FundIdx1.h"&str$(cno),internal,outin,keyed ioerr NF1
@@ -25,8 +25,8 @@
 00260   execute "COPY X,"&env$('Q')&"\CLmstr\FUNDMSTR.h"&str$(cno)&" -n"
 00270   execute "Index "&env$('Q')&"\CLmstr\FUNDMSTR.h"&str$(cno)&","&env$('Q')&"\CLmstr\FundIdx1.h"&str$(cno)&",1,3,Replace,DupKeys -n"
 00280   execute "Index "&env$('Q')&"\CLmstr\FUNDMSTR.h"&str$(cno)&","&env$('Q')&"\CLmstr\FundIdx2.h"&str$(cno)&",4,28,Replace,DupKeys -n"
-00290   print fields "12,5,C 60": "Completed Converting FundMstr File for Company: "&str$(cno)
-00300   print fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
+00290   pr fields "12,5,C 60": "Completed Converting FundMstr File for Company: "&str$(cno)
+00300   pr fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00310   input fields "13,40,C 1,IAE,N": pause$
 00320   goto L90
 00330 ! ______________________________________________________________________
@@ -38,7 +38,7 @@
 00390 ERTN: let fnerror(program$,err,line,act$,"xit")
 00400   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00410   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00420   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00420   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00430 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00440 ! /region
 00450 ! ______________________________________________________________________

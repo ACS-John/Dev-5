@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsCL\Conversion\cxdep-cnv
-00020   let cno=3
+00020   cno=3
 00030 ! 
 00040   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
 00050   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno),internal,outin 

@@ -42,7 +42,7 @@
 00330     if x>0 then let resp$(j)(x:x)="": goto L320
 00340   next j
 00350   for j=1 to 8 !:
-          let cd1(j)=val(resp$(j)) conv SCR1 !:
+          cd1(j)=val(resp$(j)) conv SCR1 !:
         next j
 00360   if cd1(1)=0 then !:
           mat message$(1): let mytype=0 !:
@@ -96,7 +96,7 @@
 00730 ERTN: let fnerror(program$,err,line,act$,"NO")
 00740   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00750   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00760   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00760   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00770 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00780 ! /region
 00790 ! ______________________________________________________________________
@@ -110,15 +110,15 @@
 00870   let means=int(lrec(5)/2)
 00880 L880: read #5,using "Form POS 1,C 10,N 12.2": z$,t3 eof L940
 00890   let x=x+1
-00900   print #255,using L910: z$,t3 pageoflow L950
+00900   pr #255,using L910: z$,t3 pageoflow L950
 00910 L910: form pos 11,c 10,x 3,n 12.2,skip 1
-00920   if means=x then print #255: "This should be the halfway point"
+00920   if means=x then pr #255: "This should be the halfway point"
 00930   goto L880
 00940 L940: return 
-00950 L950: print #255: newpage
+00950 L950: pr #255: newpage
 00960   gosub HEADER
 00970   continue 
 00980 HEADER: ! 
-00990   print #255,using L1000: date$,cnam$,time$,"Median Sewer Charge"
+00990   pr #255,using L1000: date$,cnam$,time$,"Median Sewer Charge"
 01000 L1000: form skip 2,pos 1,c 10,pos 20,cc 40,skip 1,pos 1,c 10,pos 20,cc 40,skip 2
 01010   return 

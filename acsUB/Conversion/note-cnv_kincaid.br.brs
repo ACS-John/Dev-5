@@ -9,10 +9,10 @@
 00080 ! ______________________________________________________________________
 00090   let fncno(cno)
 00100 ! 
-00110   print newpage
+00110   pr newpage
 00120   goto L190
-00130   print fields "8,20,Cc 30,R,N": "Convert Notes "
-00140   print fields "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
+00130   pr fields "8,20,Cc 30,R,N": "Convert Notes "
+00140   pr fields "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
 00150 ! 
 00160   let io1$(1)="10,40,N 2,UT,N"
 00170 L170: rinput fields mat io1$: cno conv L170
@@ -26,16 +26,16 @@
 00245 L245: if exists(env$('Q')&"\UBmstr\notes.h"&str$(cno)) = 0 then !:
           execute "mkdir "&env$('Q')&"\UBmstr\notes.h"&str$(cno)
 00250   open #33: "Name="&env$('Q')&"\UBmstr\notes.h"&str$(cno)&"\"&trim$(z$)&".txt,RecL=128,use",display,output 
-00260   let adr=ra(1)
+00260   adr=ra(1)
 00270 L270: if adr=0 then goto L220
 00280   read #32,using L300,rec=adr: k32$,rm$,adr
-00290   print #33: rm$
+00290   pr #33: rm$
 00300 L300: form pos 1,c 10,c 60,pd 3
 00310   goto L270
 00320 L320: goto DONE
 00330 ! ______________________________________________________________________
 00340 DONE: ! 
-00350   print "company number "&str$(cno)&" completed successfully"
+00350   pr "company number "&str$(cno)&" completed successfully"
 00360 ! Goto 110
 00370 XIT: chain "S:\acsUB\conversion\ubadrbil-cnv"
 00380 ! ______________________________________________________________________
@@ -44,7 +44,7 @@
 00410   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00420   goto L270
 00430   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00440   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00440   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00450 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00460 ! /region
 00470 ! ______________________________________________________________________

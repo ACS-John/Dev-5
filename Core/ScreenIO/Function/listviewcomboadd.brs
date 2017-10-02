@@ -8,6 +8,6 @@
  def fnListviewComboAdd
     mat f$=("")
     mat f=(0)
-    let CurrentField$="FirstField"
+    currentField$="FirstField"
     let LastReadRecord=0
  fnend

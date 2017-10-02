@@ -36,7 +36,7 @@
 00410   if prtall=2 and fndate_mmddyy_to_ccyymmdd(em(17))=d1 then goto JUST_AFTER_READ
 00420   if prtall=2 and fndate_mmddyy_to_ccyymmdd(em(17))<>d1 then goto READ_SEQUENTIAL
 00430   if date_to_select>0 and date_to_select<>d1 then gosub CHECK_FOR_OLD_DATE
-00440   if date_to_select >0 and em(17)=0 then goto L400 ! print new people also
+00440   if date_to_select >0 and em(17)=0 then goto L400 ! pr new people also
 00450   if foundone=1 then goto L470 ! found an old matching date
 00460   if date_to_select >0 and fndate_mmddyy_to_ccyymmdd(em(17))<>date_to_select then goto L400 ! only last payroll date
 00470 L470: if empstatuse>0 and em(4)<>empstatuse then goto L400 ! based on employment status
@@ -57,7 +57,7 @@
 00600 ! /r
 00610 CHECK_FOR_OLD_DATE: ! r:
 00620   let foundone=0
-00630   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+00630   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 00640   restore #4,key>=checkkey$: nokey L690
 00650 L650: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L690
 00660   if heno<>eno then goto L690
@@ -90,7 +90,7 @@
 00950   let respc=0 : let mylen=50 : let mypos=mylen+3 : let right=1
 00960   let fnlbl(1,1,"Print Labels For:",mylen,right)
 00970   let fi$="cllabels" !:
-        let item1$(print_all=1)="[All]" : let all=1 !:
+        let item1$(print_all=1)="[All]" : all=1 !:
         let item1$(2)="Employees from last payroll only": let last_payroll=2 !:
         let item1$(3)="Select employees to print": let select_employee=3 !:
         let item1$(4)="Select employment status to print": let emp_status=4 !:
@@ -103,12 +103,12 @@
 01000   let fnchk(7,mypos+2,'Print Employee Address on Label:',right) !:
         let resp$(respc+=1)='True'
 01010   let fnlbl(9,1,"Payroll Date to Use (if applicable):",mylen,1)
-01020   let fntxt(9,mypos,12,0,1,"3",0,'You can print labels for any payroll period. Only applicable if printing labels for those employees who got paid."') ! !:
+01020   let fntxt(9,mypos,12,0,1,"3",0,'You can pr labels for any payroll period. Only applicable if printing labels for those employees who got paid."') ! !:
         let resp$(respc+=1)=""
-01030   let fnlbl(10,1,"Payroll Date to Print on Label:",mylen,1)
+01030   let fnlbl(10,1,"Payroll Date to pr on Label:",mylen,1)
 01040   let fntxt(10,mypos,12,0,1,"1",0,'Used for placing a date on the label. Leave blank if not applilcable."') ! !:
         let resp$(respc+=1)=""
-01050   let fnlbl(11,1,"Employment Status to Print (if applicable):",mylen,1)
+01050   let fnlbl(11,1,"Employment Status to pr (if applicable):",mylen,1)
 01060   let fntxt(11,mypos,2,0,1,"30",0,'Used for selectiing a specific employment status code. Leave blank if not applilcable."') ! !:
         let resp$(respc+=1)=""
 01070   let fnlbl(13,1,"Starting Employee Number (if applicable):",mylen,1)
@@ -125,7 +125,7 @@
 01120   if resp$(3) ="True" then let ssyn$="Y" else let ssn$="N"
 01130   if resp$(4) ="True" then let empadryn$="Y" else let empadryn$="N"
 01140   let date_to_select=val(resp$(5)) ! payroll date to use in selecting employees
-01150   let date_to_print=val(resp$(6)) ! payroll date to print on label
+01150   let date_to_print=val(resp$(6)) ! payroll date to pr on label
 01160   let empstatuse=val(resp$(7)) ! employment status used as criteria
 01170   let starting_employee=val(resp$(8)(1:8)) ! starting employee #
 01180   if prtall=3 then let sey$="Y" else let sey$="N" !:
@@ -145,6 +145,6 @@
 01330 ERTN: let fnerror(program$,err,line,act$,"xit")
 01340   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01350   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01360   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01370 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01380 ! /region

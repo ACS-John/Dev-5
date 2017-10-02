@@ -45,17 +45,17 @@
 00320   gosub HDR
 00322   goto PRTRPT
 00324 ! ______________________________________________________________________
-00326 PGOF: print #255: newpage : gosub HDR : continue 
+00326 PGOF: pr #255: newpage : gosub HDR : continue 
 00328 ! ______________________________________________________________________
 00330 HDR: ! 
-00332   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-00334   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-00336   print #255: "\qc  {\f201 \fs20 \b "&trim$(rt$)&"}"
-00338   print #255: "\qc  {\f181 \fs16 \b "&trim$(dh$)&"}"
-00340 ! Print #255: "\qc  {\f181 \fs16 \b "&TRIM$(D$)&"}"
-00342   print #255: "\ql   "
-00344   print #255: ch$(1)
-00346   print #255: ch$(2)
+00332   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+00334   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+00336   pr #255: "\qc  {\f201 \fs20 \b "&trim$(rt$)&"}"
+00338   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dh$)&"}"
+00340 ! pr #255: "\qc  {\f181 \fs16 \b "&TRIM$(D$)&"}"
+00342   pr #255: "\ql   "
+00344   pr #255: ch$(1)
+00346   pr #255: ch$(2)
 00348   return 
 00350 ! ______________________________________________________________________
 00352 EOF1: ! 
@@ -75,36 +75,36 @@
 19845 L19831: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2
 19850   goto L19834
 19852 L19833: read #2,using L19831: cn$,k$,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24 eof L25050
-19854 L19834: let cn=val(cn$(7:11))
+19854 L19834: cn=val(cn$(7:11))
 19856   if cn$(1:6)><jn1$ and sd=1 then goto L19900
 19858   if cn$(1:6)><jn1$ and sd=0 then goto L20000
 19860 ! ______________________________________________________________________
 19862   on zdiv goto L25000
 19864   on uflow goto L25000
 19866   on oflow goto L25000
-19868   let c(1)=c(1)+x1
-19870   let c(2)=c(2)+x2
-19872   let c(3)=c(3)+x10
-19874   let c(4)=c(4)+x11
-19876   let c(5)=c(5)+x22
-19878   let c(6)=c(6)+x21
-19880   let c(7)=c(7)+x23
-19882   let c(8)=c(8)+x12
-19884   let c(9)=c(9)+x13
-19886   let c(10)=c(10)+x15
-19888   let c(11)=c(11)+x16
-19890   let c(12)=c(12)+x12*x23/100
-19892   let c(13)=c(13)+x13*x23/100
-19894   let c(14)=c(14)+max((x12-x15),((x15/x23/100)-x15))
-19896   let c(15)=c(15)+max((x13-x16),((x16/x23/100)-x16))
+19868   c(1)=c(1)+x1
+19870   c(2)=c(2)+x2
+19872   c(3)=c(3)+x10
+19874   c(4)=c(4)+x11
+19876   c(5)=c(5)+x22
+19878   c(6)=c(6)+x21
+19880   c(7)=c(7)+x23
+19882   c(8)=c(8)+x12
+19884   c(9)=c(9)+x13
+19886   c(10)=c(10)+x15
+19888   c(11)=c(11)+x16
+19890   c(12)=c(12)+x12*x23/100
+19892   c(13)=c(13)+x13*x23/100
+19894   c(14)=c(14)+max((x12-x15),((x15/x23/100)-x15))
+19896   c(15)=c(15)+max((x13-x16),((x16/x23/100)-x16))
 19898   let x6=0
 19900   let x7=0
 19902   let x8=0
 19904   let x9=0
 19906   if sd = 1 then goto L19833
-19908 L19900: print #255, using L19910: jn$(1:6),n$(1:40),cn$(7:11),k$(1:19),c(5),c(6),c(7),c(8),c(9),c(10),c(11),c(12),c(13),c(14),c(15) pageoflow PGOF
+19908 L19900: pr #255, using L19910: jn$(1:6),n$(1:40),cn$(7:11),k$(1:19),c(5),c(6),c(7),c(8),c(9),c(10),c(11),c(12),c(13),c(14),c(15) pageoflow PGOF
 19910 L19910: form skip 1,pos 5,c 6,pos 16,c 40,skip 1,pos 1,c 5,pos 11,c 19,pos 31,n 7,pos 43,n 7,pos 53,n 3,pos 58,n 7,pos 66,n 7,pos 74,n 7,pos 82,n 7,pos 93,n 5,pos 101,n 5,pos 107,n 7,pos 115,n 7,skip 0
-19920   if file$(255)(1:4)<>"PRN:" then print #255: 
+19920   if file$(255)(1:4)<>"PRN:" then pr #255: 
 19930   mat t=t+c
 19940   mat s=s+c
 19950   mat c=(0)
@@ -112,25 +112,25 @@
 19970   let n$=""
 19980   if sd><0 then goto PRTRPT
 19990   if cn$(1:6)=jn1$ and sd=0 then goto L19833
-20000 L20000: print #255,using L20020: "_______","_______","_______","_______","_______","_______","_____","_____","_______","_______"
+20000 L20000: pr #255,using L20020: "_______","_______","_______","_______","_______","_______","_____","_____","_______","_______"
 20020 L20020: form skip 0,pos 31,c 7,pos 43,c 7,pos 58,c 7,pos 66,c 7,pos 74,c 7,pos 82,c 7,pos 93,c 5,pos 101,c 5,pos 107,c 7,pos 115,c 7,skip 0
-20030   print #255, using L20026: s(5),s(6),s(8),s(9),s(10),s(11),s(12),s(13),s(14),s(15)
+20030   pr #255, using L20026: s(5),s(6),s(8),s(9),s(10),s(11),s(12),s(13),s(14),s(15)
 20035 L20026: form skip 1,"Job Totals",pos 31,n 7,pos 43,n 7,pos 58,n 7,pos 66,n 7,pos 74,n 7,pos 82,n 7,pos 93,n 5,pos 101,n 5,pos 107,n 7,pos 115,n 7,skip 1
 20040   mat s=(0)
 20045   goto PRTRPT
 20050 SND: ! 
-20055   print #255: newpage
+20055   pr #255: newpage
 20060   gosub HDR
-20065   print #255, using L20150: t(5),t(6),t(8),t(9),t(10),t(11),t(12),t(13),t(14),t(15)
+20065   pr #255, using L20150: t(5),t(6),t(8),t(9),t(10),t(11),t(12),t(13),t(14),t(15)
 20150 L20150: form skip 2,"Grand Totals",pos 31,n 7,pos 43,n 7,pos 58,n 7,pos 66,n 7,pos 74,n 7,pos 82,n 7,pos 93,n 5,pos 101,n 5,pos 107,n 7,pos 115,n 7,skip 1
 20160   goto EOF1
 25000 L25000: continue 
 25010 ! ______________________________________________________________________
 25015 L25010: let jn=0
-25020   let cn=0
+25020   cn=0
 25025   continue 
 25030 ! ______________________________________________________________________
-25050 L25050: let cn$=""
+25050 L25050: cn$=""
 25060   continue 
 25070 ! ______________________________________________________________________
 25080 ! ______________________________________________________________________
@@ -138,7 +138,7 @@
 25100 ERTN: let fnerror(program$,err,line,act$,"xit")
 25110   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 25120   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-25130   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+25130   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 25140 ERTN_EXEC_ACT: execute act$ : goto ERTN
 25150 ! /region
 25160 ! ______________________________________________________________________

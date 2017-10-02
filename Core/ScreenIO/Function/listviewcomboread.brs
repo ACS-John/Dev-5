@@ -16,6 +16,6 @@
     let TT=ChangedRead
     if LastReadRecord><rec(DataFile) then
        let LastReadRecord=rec(Datafile)
-       let ChangedRead=1
+       changedRead=1
     end if
  fnend

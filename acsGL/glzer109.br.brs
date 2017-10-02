@@ -11,10 +11,10 @@
 00110 ! 
 00120   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L440
 00130   open #2: "Name="&env$('Q')&"\GLmstr\gltr1099.h"&str$(cno),internal,outin,relative 
-00140   print newpage
+00140   pr newpage
 00150 SCR1: ! 
 00160   let fntos(sn$="Glzer109") !:
-        let lc=0 : let mylen=55 : let mypos=mylen+3 : let center=2 : let right=1
+        let lc=0 : let mylen=55 : let mypos=mylen+3 : center=2 : let right=1
 00170   let fnlbl(lc+=1,1,"* * *   Warning   * * *",60,center)
 00180   let fnlbl(lc+=1,1,"This selection will dump all old purchase transactions from each",width,0)
 00190   let fnlbl(lc+=1,1,"vendor (payee) record. This selection should only be run at year end",width,0)
@@ -53,6 +53,6 @@
 00480 ERTN: let fnerror(program$,err,line,act$,"xit")
 00490   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00500   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00510   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00510   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00520 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00530 ! /region

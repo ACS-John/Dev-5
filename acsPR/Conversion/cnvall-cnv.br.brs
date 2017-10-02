@@ -6,10 +6,10 @@
 00060 ! ______________________________________________________________________
 00070   dim gl(3),ta(2),k$*20,de$*30,fgl$(3)
 00080 ! ______________________________________________________________________
-00090 L90: print newpage
+00090 L90: pr newpage
 00100   close #101: ioerr L110
 00110 L110: open #101: "SROW=9,SCOL=9,EROW=11,ECOL=59,BORDER=DR,CAPTION=CONVERT MASTER FILES",display,outin 
-00120   print fields "10,10,C 45": "COMPANY NUMBER TO CONVERT (0 TO STOP):"
+00120   pr fields "10,10,C 45": "COMPANY NUMBER TO CONVERT (0 TO STOP):"
 00130   input fields "10,56,N 5,UE,N": cno
 00140   if cno=0 then goto XIT
 00160   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno),internal,outin,keyed 
@@ -59,9 +59,9 @@
 00600   execute "Index "&env$('Q')&"\CLmstr\FUNDMSTR.h"&str$(cno)&","&env$('Q')&"\CLmstr\FundIdx2.h"&str$(cno)&",4,28,Replace,DupKeys -n"
 00610   goto L730
 00620 ! ______________________________________________________________________
-00630 L630: print newpage
-00640   print fields "12,5,C 60": "COMPLETED CONVERTING FILES FOR COMPANY #: "&str$(cno)
-00650   print fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
+00630 L630: pr newpage
+00640   pr fields "12,5,C 60": "COMPLETED CONVERTING FILES FOR COMPANY #: "&str$(cno)
+00650   pr fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00660   input fields "13,40,C 1,IAE,N": pause$
 00670   goto L90
 00680 ! ______________________________________________________________________
@@ -79,7 +79,7 @@
 00800 ERTN: let fnerror(program$,err,line,act$,"xit")
 00810   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00820   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00830   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00830   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00840 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00850 ! /region
 00860 ! ______________________________________________________________________

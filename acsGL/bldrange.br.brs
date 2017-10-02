@@ -113,7 +113,7 @@
 01060   let gl=gl+gf
 01070   let gl$=lpad$(str$(gl),12)
 01080   let dno=val(gl$(1:3))
-01090   let ano=val(gl$(4:9))
+01090   ano=val(gl$(4:9))
 01100   let sno=val(gl$(10:12))
 01110   if fln=1 then let rf(1)=rf(1)+ff
 01120   if fln=2 then let rf(3)=rf(3)+ff
@@ -133,6 +133,6 @@
 01250 ERTN: let fnerror(program$,err,line,act$,"xit")
 01260   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01270   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01280   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01280   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01290 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01300 ! /region

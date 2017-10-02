@@ -12,8 +12,8 @@
 00110   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #1,using 'Form POS 382,N 2',rec=1: jccode !:
         close #1: 
 00120   if jccode<>1 then goto L460
-00130   print newpage
-00140   print fields "10,15,Cc 60,N": "GENERAL LEDGER JOB COST MERGE CHARGES IN PROCESS"
+00130   pr newpage
+00140   pr fields "10,15,Cc 60,N": "GENERAL LEDGER JOB COST MERGE CHARGES IN PROCESS"
 00150   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00160   open #3: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(cno),internal,input 
 00170   open #5: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",Shr",internal,outin,relative 
@@ -22,7 +22,7 @@
 00200   if postc=9 or rn$="999999999999" then goto L180
 00210   if ltrm$(rtrm$(rn$))="-1" or ji2(3)=0 then goto L180
 00220   let jn$=lpad$(rtrm$(jn$),6)
-00230   let cn$=jn$&lpad$(str$(ji2(1)),5)
+00230   cn$=jn$&lpad$(str$(ji2(1)),5)
 00240   read #2,using L250,key=cn$: mat l,mat ta nokey L180
 00250 L250: form pos 37,11*pd 5.2,2*pd 2,2*pd 3
 00260   let nc1=0
@@ -53,6 +53,6 @@
 00510 ERTN: let fnerror(program$,err,line,act$,"xit")
 00520   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00530   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00540   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00540   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00550 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00560 ! /region

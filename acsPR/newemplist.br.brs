@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsPR\newEmpList
-00020 ! print Employee List
+00020 ! pr Employee List
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn,fncloseprn,fnerror,fnxit,fntop,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fntxt,fncmdkey,fnacs,fncomboa,fncombof,fnGetPayrollDates
 00050   on error goto ERTN
@@ -35,22 +35,22 @@
 00370   execute "INDEX "&env$('Temp')&"\Temp1."&session$&" "&env$('Temp')&"\TempIdx."&session$&" 9 50 Replace DupKeys"
 00380   open #5: "Name="&env$('Temp')&"\Temp1."&session$&",KFName="&env$('Temp')&"\TempIdx."&session$,internal,outin,keyed 
 00390 L390: read #5,using L320: eno,last$,first$,mid$,lpd,em4 eof DONE
-00400   print #255,using L410: eno,trim$(first$)&" "&trim$(mid$)&" "&trim$(last$),lpd,em4 pageoflow PGOF
+00400   pr #255,using L410: eno,trim$(first$)&" "&trim$(mid$)&" "&trim$(last$),lpd,em4 pageoflow PGOF
 00410 L410: form pos 1,n 8,x 3,c 30,x 3,pic(zz/zz/zz),x 9,n 2,skip 1
 00420   goto L390
 00430 ! ______________________________________________________________________
 00440 PGOF: ! 
-00450   print #255: newpage
+00450   pr #255: newpage
 00460   gosub HDR
 00470   continue 
 00480 ! ______________________________________________________________________
 00490 HDR: ! 
-00500   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-00510   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-00520   print #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
-00530   print #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
-00540   print #255: "\ql   "
-00545   print #255,using "form pos 1,c 80": "Employee #  Name                      Last Payroll Date   Status"
+00500   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+00510   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+00520   pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
+00530   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
+00540   pr #255: "\ql   "
+00545   pr #255,using "form pos 1,c 80": "Employee #  Name                      Last Payroll Date   Status"
 00550   return 
 00560 DONE: ! 
 00570   close #5: ioerr L580
@@ -58,17 +58,17 @@
 00590   goto XIT
 00600 ! ______________________________________________________________________
 00610 ERTN: ! 
-00620   if err=61 then print fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L640
+00620   if err=61 then pr fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L640
 00630   goto L680
-00640 L640: print newpage
-00650   if err=4148 then print fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L670
+00640 L640: pr newpage
+00650   if err=4148 then pr fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L670
 00660   goto L680
-00670 L670: print fields "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00680 L680: print fields "24,1,C 80,N": "Press Enter to Retry or Q to Quit:"
+00670 L670: pr fields "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00680 L680: pr fields "24,1,C 80,N": "Press Enter to Retry or Q to Quit:"
 00690   input fields "24,60,C 1,N": quitcode$
 00700   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-00710   print fields "23,1,C 80,N": ""
-00720   print fields "24,1,C 80,N": ""
+00710   pr fields "23,1,C 80,N": ""
+00720   pr fields "24,1,C 80,N": ""
 00730   retry 
 00740 ! ______________________________________________________________________
 00750 XIT: let fnxit
@@ -87,7 +87,7 @@
 00880   if x1>0 and em$(1)(x1-1:x1-1)="," then let last$=trim$(em$(1)(1:x1-2)) else let last$=trim$(em$(1)(1:max(x1-1,1)))
 00890   if x2>0 then let first$=trim$(em$(1)(x1+1:x2-1)): let mid$=trim$(em$(1)(x2+1:len(em$(1))))
 00900   if x2=0 then let first$=trim$(em$(1)(x1+1:len(em$(1)))): let mid$=""
-00910 L910: ! PRINT FIRST$,MID$,LAST$
+00910 L910: ! pr FIRST$,MID$,LAST$
 00920   return 
 00930 ASKFORMAT: ! 
 00940   let fntos(sn$="Emplist") !:

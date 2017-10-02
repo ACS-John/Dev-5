@@ -43,7 +43,7 @@
         let d(1)=val(resp$(2)) !:
         let d(2)=val(resp$(3))
 00290   let svce$=resp$(4)(1:4) !:
-        let cde=val(resp$(4)(3:4))
+        cde=val(resp$(4)(3:4))
 00300   pause 
 00310   if d(1)<>0 then let d(1)=fndate_mmddyy_to_ccyymmdd(d(1))
 00320   if d(2)<>0 then let d(2)=fndate_mmddyy_to_ccyymmdd(d(2))
@@ -78,15 +78,15 @@
 00600 ! ______________________________________________________________________
 00610 HDR: ! 
 00620   let p2=p2+1
-00630   print #255: "\qc {\b "&cnam$ !:
-        print #255: cap$ !:
-        print #255: dat$
+00630   pr #255: "\qc {\b "&cnam$ !:
+        pr #255: cap$ !:
+        pr #255: dat$
 00640   if d(1)<>0 then !:
-          print #255: "Starting Date: "&cnvrt$("pic(zzzz/zz/zz)",d(1))
+          pr #255: "Starting Date: "&cnvrt$("pic(zzzz/zz/zz)",d(1))
 00650   if d(2)<>0 then !:
-          print #255: "Ending Date: "&cnvrt$("pic(zzzz/zz/zz)",d(2))
-00660   print #255: "\qr Page "&str$(p2)
-00670   print #255: "\qc {\ul Act.Number} {\ul Account Name                } {\ul Trans. Type} {\ul   Date  } {\ul       Amount} {\ul       Balance}}"
+          pr #255: "Ending Date: "&cnvrt$("pic(zzzz/zz/zz)",d(2))
+00660   pr #255: "\qr Page "&str$(p2)
+00670   pr #255: "\qc {\ul Act.Number} {\ul Account Name                } {\ul Trans. Type} {\ul   Date  } {\ul       Amount} {\ul       Balance}}"
 00680   return 
 00690 ! ______________________________________________________________________
 00700 PRINT_TRANS: ! 
@@ -94,12 +94,12 @@
 00720   if first_trans_per_act=1 then !:
           let pz$=z$ : let pe2$=e2$ else !:
           let pz$="" : let pe2$=""
-00730   print #255,using L740: pz$,pe2$,code$(tcode),tdate,tamount,tbal pageoflow PGOF
+00730   pr #255,using L740: pz$,pe2$,code$(tcode),tdate,tamount,tbal pageoflow PGOF
 00740 L740: form pos 1,c 10,x 1,c 30,cr 11,nz 9,n 13.2,n 14.2
 00750   return 
 00760 ! ______________________________________________________________________
 00770 PGOF: ! !:
-        print #255: newpage !:
+        pr #255: newpage !:
         gosub HDR !:
         continue 
 00780 ! ______________________________________________________________________
@@ -109,7 +109,7 @@
 00820 ERTN: let fnerror(program$,err,line,act$,"xit")
 00830   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00840   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00850   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00850   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00860 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00870 ! /region
 00880 ! ______________________________________________________________________

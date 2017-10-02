@@ -45,17 +45,17 @@
 00320   gosub HDR
 00322   goto PRTRPT
 00324 ! ______________________________________________________________________
-00326 PGOF: print #255: newpage : gosub HDR : continue 
+00326 PGOF: pr #255: newpage : gosub HDR : continue 
 00328 ! ______________________________________________________________________
 00330 HDR: ! 
-00332   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-00334   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-00336   print #255: "\qc  {\f201 \fs20 \b "&trim$(rt$)&"}"
-00338   print #255: "\qc  {\f181 \fs16 \b "&trim$(dh$)&"}"
-00340 ! Print #255: "\qc  {\f181 \fs16 \b "&TRIM$(D$)&"}"
-00342   print #255: "\ql   "
-00344   print #255: ch$(1)
-00346   print #255: ch$(2)
+00332   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+00334   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+00336   pr #255: "\qc  {\f201 \fs20 \b "&trim$(rt$)&"}"
+00338   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dh$)&"}"
+00340 ! pr #255: "\qc  {\f181 \fs16 \b "&TRIM$(D$)&"}"
+00342   pr #255: "\ql   "
+00344   pr #255: ch$(1)
+00346   pr #255: ch$(2)
 00348   return 
 00350 ! ______________________________________________________________________
 00352 EOF1: ! 
@@ -75,30 +75,30 @@
 19845 L19831: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2
 19850   goto L19834
 19852 L19833: read #2,using L19831: cn$,k$,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24 eof L25050
-19854 L19834: let cn=val(cn$(7:11))
+19854 L19834: cn=val(cn$(7:11))
 19856   if cn$(1:6)><jn1$ and sd=1 then goto L19900
 19858   if cn$(1:6)><jn1$ and sd=0 then goto L20000
 19860 ! ______________________________________________________________________
 19862   on zdiv goto L25000
 19864   on uflow goto L25000
 19866   on oflow goto L25000
-19868   let c(1)=c(1)+x1
-19870   let c(2)=c(2)+x2
-19872   let c(3)=c(3)+x12+x14
-19874   let c(4)=c(4)+((x12*x23)+(x14*x24))/100
-19876   let c(5)=(c(4)/c(3))*100
-19878   let c(6)=c(6)+x15+x17
-19880   let c(7)=c(7)+x15
-19882   let c(8)=c(8)+x17
-19884   let c(9)=((c(6)/c(5))*100)
+19868   c(1)=c(1)+x1
+19870   c(2)=c(2)+x2
+19872   c(3)=c(3)+x12+x14
+19874   c(4)=c(4)+((x12*x23)+(x14*x24))/100
+19876   c(5)=(c(4)/c(3))*100
+19878   c(6)=c(6)+x15+x17
+19880   c(7)=c(7)+x15
+19882   c(8)=c(8)+x17
+19884   c(9)=((c(6)/c(5))*100)
 19886   let x6=0
 19888   let x7=0
 19890   let x8=0
 19892   let x9=0
 19894   if sd = 1 then goto L19833
-19900 L19900: print #255, using L19910: jn$(1:6),n$(1:25),c(3),c(4),c(5),c(6),c(7),c(8),c(9) pageoflow PGOF
+19900 L19900: pr #255, using L19910: jn$(1:6),n$(1:25),c(3),c(4),c(5),c(6),c(7),c(8),c(9) pageoflow PGOF
 19910 L19910: form skip 1,pos 1,c 6,pos 9,c 25,pos 35,n 11.2,pos 50,n 10.2,pos 63,n 3,pos 67,n 11.2,pos 80,n 11.2,pos 92,n 11.2,pos 110,n 11.2,skip 0
-19920   if file$(255)(1:4)<>"PRN:" then print #255: 
+19920   if file$(255)(1:4)<>"PRN:" then pr #255: 
 19930   mat t=t+c
 19940   mat s=s+c
 19950   mat c=(0)
@@ -108,18 +108,18 @@
 19990   if cn$(1:6)=jn1$ and sd=0 then goto L19833
 20000 L20000: goto PRTRPT
 20010 SND: ! 
-20020   print #255: newpage
+20020   pr #255: newpage
 20030   gosub HDR
-20040   print #255, using L20150: t(3),t(4),t(6),t(7),t(8),t(9)
+20040   pr #255, using L20150: t(3),t(4),t(6),t(7),t(8),t(9)
 20150 L20150: form skip 2,"Grand Totals",pos 35,n 11.2,pos 50,n 10.2,pos 67,n 11.2,pos 80,n 11.2,pos 92,n 11.2,pos 110,n 11.2,skip 1
 20160   goto EOF1
 25000 L25000: continue 
 25010 ! ______________________________________________________________________
 25015 L25010: let jn=0
-25020   let cn=0
+25020   cn=0
 25025   continue 
 25030 ! ______________________________________________________________________
-25050 L25050: let cn$=""
+25050 L25050: cn$=""
 25060   continue 
 25070 ! ______________________________________________________________________
 25080 ! ______________________________________________________________________
@@ -127,7 +127,7 @@
 25100 ERTN: let fnerror(program$,err,line,act$,"xit")
 25110   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 25120   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-25130   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+25130   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 25140 ERTN_EXEC_ACT: execute act$ : goto ERTN
 25150 ! /region
 25160 ! ______________________________________________________________________

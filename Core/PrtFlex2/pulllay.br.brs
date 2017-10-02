@@ -13,7 +13,7 @@
 00130   let fncno(cno)
 00140 ! 
 00150   let dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
-00160   let cvp$=".h"&str$(cno)&"/acspb,Shr"
+00160   cvp$=".h"&str$(cno)&"/acspb,Shr"
 00170   open #20: "Name=UBData\Service.h"&str$(cno)&",Shr",internal,input,relative ioerr L180 !:
         read #20,using "Form POS 1,10*C 20",rec=1: mat servicename$ !:
         close #20: 
@@ -21,13 +21,13 @@
         let io1$(2)="12,34,C 45,UT,N"
 00190   let outputfile$="acspb\grid\patient\patient"
 00200   let ev$="ACSpb\Layouts\pbMSTR-VB.LAY"
-00210   print newpage
+00210   pr newpage
 00220   close #101: ioerr L230
 00230 L230: open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outin 
-00240   print #101: newpage
-00250   print fields "10,2,Cr 32": "File name to create (no ext):"
-00260   print fields "12,2,Cr 32": "Layout file name (with exts):"
-00270   print fields "14,35,c 9,B,1": "Next (F1)"
+00240   pr #101: newpage
+00250   pr fields "10,2,Cr 32": "File name to create (no ext):"
+00260   pr fields "12,2,Cr 32": "Layout file name (with exts):"
+00270   pr fields "14,35,c 9,B,1": "Next (F1)"
 00280 L280: rinput fields mat io1$: outputfile$,ev$ conv L280
 00290   let ev$=trim$(trim$(ev$,chr$(0)))
 00300   let outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
@@ -41,10 +41,10 @@
 00380   let p3=pos(ln$,"^",p2+1)
 00390   let p4=pos(ln$,"^",p3+1)
 00400   let p5=len(rtrm$(ln$))
-00410   let a$(j3,1)=ln$(p1+1:p2-1)
-00420   let a$(j3,2)=ln$(p2+1:p3-1)
-00430   let a$(j3,3)=ln$(p3+1:p4-1)
-00440   let abbrev$=ln$(p4+1:len(ln$))(1:20)
+00410   a$(j3,1)=ln$(p1+1:p2-1)
+00420   a$(j3,2)=ln$(p2+1:p3-1)
+00430   a$(j3,3)=ln$(p3+1:p4-1)
+00440   abbrev$=ln$(p4+1:len(ln$))(1:20)
 00450   if rtrm$(a$(j3,3))="" then goto L810
 00460   let p1=pos(a$(j3,3)," ",1)+1
 00470   let p2=pos(a$(j3,3),".",1)+1
@@ -54,32 +54,32 @@
 00510   let l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
 00520   if p2>1 then let dp=val(a$(j3,3)(p2:p3)) else let dp=0 !:
           ! DECIMAL POSITIONS
-00530   if uprc$(a$(j3,3)(1:p1-2))="PD" then let al=l*2-1 else let al=l !:
+00530   if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !:
           !   ACTUAL FIELD LENGTH
 00540   let l=l*m1 ! TOTAL STORAGE LENGTH
-00550   let b=a+l
-00560   let a=a+1
+00550   b=a+l
+00560   a=a+1
 00570   let ino=ino+1
 00580   let j3=1
-00590   let a(j3,1)=ino
-00600   let a(j3,2)=al
-00610   let a(j3,3)=dp
-00620   let a(j3,4)=l
-00630   let a(j3,5)=a
-00640   let a(j3,6)=b
-00650   let a=b
+00590   a(j3,1)=ino
+00600   a(j3,2)=al
+00610   a(j3,3)=dp
+00620   a(j3,4)=l
+00630   a(j3,5)=a
+00640   a(j3,6)=b
+00650   a=b
 00660   let rl=rl+int(val(a$(j3,3)(p1:p3)))*m1
 00670 ! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAME !:
         ! ON EACH SERVICE IN UTILITY BILLING
 00680   if uprc$(a$(j3,1)(1:7))<>"SERVICE" then goto L730
 00690   let x=val(a$(j3,1)(9:10)) conv L730
 00700   if trim$(servicename$(x))="" then goto L810 ! SERVICE NOT USED
-00710   let a$(j3,1)(1:9)=""
-00720   let a$(j3,1)=trim$(servicename$(x))&" "&trim$(a$(j3,1))
+00710   a$(j3,1)(1:9)=""
+00720   a$(j3,1)=trim$(servicename$(x))&" "&trim$(a$(j3,1))
 00730 L730: if uprc$(abbrev$)(1:7)<>"SERVICE" then goto L770
 00740   let x=val(abbrev$(9:10)) conv L770
-00750   let abbrev$(1:9)=""
-00760   let abbrev$=trim$(servicename$(x))&" "&trim$(abbrev$)
+00750   abbrev$(1:9)=""
+00760   abbrev$=trim$(servicename$(x))&" "&trim$(abbrev$)
 00770 L770: if rtrm$(a$(j3,1))="" or rtrm$(uprc$(a$(j3,1)))='UNUSED' or rtrm$(uprc$(a$(j3,1)))(1:5)='EXTRA' or trim$(abbrev$)="" then goto L810
 00780 ! store as description,variable name,field length,# of deciaml points, format
 00790   write #15,using L800: trim$(a$(j3,1)(1:30)),a$(j3,2),a(j3,2),a(j3,3),a$(j3,3),abbrev$(1:20)
@@ -89,7 +89,7 @@
 00830 L830: close #2: ioerr L840
 00840 L840: close #15: ioerr L850
 00850 L850: gosub MOVEITTOTEXT
-00860   print fields "24,1,C 7,UT,N": "Done..."
+00860   pr fields "24,1,C 7,UT,N": "Done..."
 00870   stop 
 00880 ! ______________________________________________________________________
 00890 MOVEITTOTEXT: ! 
@@ -97,7 +97,7 @@
 00910   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outin,keyed 
 00920 L920: read #15,using L930: textfile$ eof L960
 00930 L930: form pos 1,c 87
-00940   print #10,using L930: textfile$
+00940   pr #10,using L930: textfile$
 00950   goto L920
 00960 L960: return 
 00970 ! ______________________________________________________________________
@@ -105,6 +105,6 @@
 00990 ERTN: let fnerror(program$,err,line,act$,"xit")
 01000   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01010   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01020   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01020   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01030 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01040 ! /region

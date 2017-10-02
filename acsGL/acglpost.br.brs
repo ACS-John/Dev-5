@@ -9,12 +9,12 @@
 00100   dim k(10,8),filename$(0)*132 ,dir(200),ml$(4)*80,item$(3)
 00101   !
 00102   mat chdr$(3) : mat cmask$(3)
-00103   let chdr$(1)="Date" 
-00104   let chdr$(2)="Creation Date" 
-00105   let chdr$(3)="Creation Time" 
-00106   let cmask$(1)='30'
-00107   let cmask$(2)=''
-00108   let cmask$(3)=''
+00103   chdr$(1)="Date" 
+00104   chdr$(2)="Creation Date" 
+00105   chdr$(3)="Creation Time" 
+00106   cmask$(1)='30'
+00107   cmask$(2)=''
+00108   cmask$(3)=''
 00118 ! ______________________________________________________________________
 00120   let fntop(program$,cap$="Post Entries from Holding File")
 00140   open #4: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&",Shr,KFName="&env$('Q')&"\GLmstr\GLINDEX.H"&env$('cno')&",Shr",internal,outin,keyed 
@@ -75,7 +75,7 @@
 00632       close #3: ioerr ignore
 00640       open #3: "Name="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dir(j3))&".H"&env$('cno')&",RecL=104,USE",internal,outin,relative 
 00650       if listing=1 then 
-00660         print #255,using 'form pos 1,c 11,pic(zz/zz/zz),skip 2': "File Date: ",dir(j3)
+00660         pr #255,using 'form pos 1,c 11,pic(zz/zz/zz),skip 2': "File Date: ",dir(j3)
 00664       end if
 00668       do
 00670         L670: !
@@ -93,13 +93,13 @@
 00770         let lr2=lrec(2)+1
 00780         write #2,using L880,rec=lr2,reserve: t$,s,k,mat n,l$,p$,0 duprec L760
 00790         if k>0 then let x=25 else let x=40
-00800         if listing=1 then print #255,using L810: t$,s,k,l$,p$,n(1) pageoflow L1290
+00800         if listing=1 then pr #255,using L810: t$,s,k,l$,p$,n(1) pageoflow L1290
 00810         L810: form pos 1,c 12,x 3,pic(zz/zz/zz),pos x,pic(---,---,---.##),pos 56,c 15,c 33,n 1,skip 1
 00820         if k<0 then let totalcr=totalcr+k else let totaldr=totaldr+k
 00830         if ta(1)=0 then let ta(1)=lr2
 00840         if ta(2)>0 then rewrite #2,using L900,rec=ta(2),reserve: lr2
 00850         let ta(2)=lr2
-00860         let cb=cb+k
+00860         cb=cb+k
 00870         rewrite #4,using L750,key=t$: cb,mat ta
 00880         L880: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
 00890         rewrite #2,using L900,rec=1,release: lr2
@@ -118,13 +118,13 @@
 00980       if resp$="Yes" then gosub ADD
 00982       if resp$="No" then gosub CHANGE_ACCOUNT
 00990       mat ta=(0)
-01000       let cb=0
+01000       cb=0
 01010       write #4,using L1020: t$,d$,mat zo
 01020       L1020: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3
 01040       goto L760 ! /r
 01050     L1050: !
 01052       close #3: 
-01060       if listing =1 then print #255,using L1070: "------------","------------","DAILY TOTALS",totaldr,totalcr,"------------","------------"
+01060       if listing =1 then pr #255,using L1070: "------------","------------","DAILY TOTALS",totaldr,totalcr,"------------","------------"
 01070       L1070: form pos 27,c 12,x 3,c 12,skip 1,pos 5,c 20,pos 24,2*pic(----,---,---.##),skip 1,pos 27,c 12,x 3,c 12,skip 1
 01080       let gtdr=gtdr+totaldr: let gtcr=gtcr+totalcr
 01090       let totaldr=totalcr=0
@@ -133,7 +133,7 @@
 01110   close #1: ioerr ignore
 01120   close #2: ioerr ignore
 01130   close #3: ioerr ignore
-01140   if listing=1 then print #255,using L1070: "            ","            ","GRAND TOTALS",gtdr,gtcr,"============","============" else goto L1170
+01140   if listing=1 then pr #255,using L1070: "            ","            ","GRAND TOTALS",gtdr,gtcr,"============","============" else goto L1170
 01150   let fncloseprn
 01160   if listing=1 then goto MAIN
 01170 L1170: !
@@ -145,12 +145,12 @@
 01210 XIT: let fnxit
 01220 ! ______________________________________________________________________
 01230 L1230: let fnopenprn
-01240   print #255,using L1250: env$('cnam'),"General Ledger Posting","From: "&from$&"   To: "&to$
+01240   pr #255,using L1250: env$('cnam'),"General Ledger Posting","From: "&from$&"   To: "&to$
 01250 L1250: form pos 1,cc 80,skip 1,pos 30,c 30,skip 1,pos 28,c 40,skip 1
-01260   print #255,using L1270: "  ACCOUNT #       DATE          DEBITS        CREDITS   REFERENCE #   DESCRIPTION                   SOURCE"
+01260   pr #255,using L1270: "  ACCOUNT #       DATE          DEBITS        CREDITS   REFERENCE #   DESCRIPTION                   SOURCE"
 01270 L1270: form pos 1,c 132,skip 1
 01280   return 
-01290 L1290: print #255: newpage
+01290 L1290: pr #255: newpage
 01300   gosub L1230
 01310   continue 
 01350 ! ______________________________________________________________________
@@ -221,8 +221,8 @@
 02120   let pas=0
 02130   if ckey=5 then goto MAIN
 02150   let dno=ano=sno=0
-02160   if use_dept=1 then let dno=val(resp$(1)) : let ano=val(resp$(2))
-02170   if use_dept=0 then let ano=val(resp$(1))
+02160   if use_dept=1 then let dno=val(resp$(1)) : ano=val(resp$(2))
+02170   if use_dept=0 then ano=val(resp$(1))
 02180   if use_dept=1 and use_sub=1 then let sno=val(resp$(3))
 02190   if use_dept=0 and use_sub=1 then let sno=val(resp$(2))
 02200 ! 
@@ -256,7 +256,7 @@
 18420 ERTN: let fnerror(program$,err,line,act$,"xit")
 18430   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 18440   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-18450   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+18450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 18460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 18470 ! /region
 20000 BUILD_LAYOUT: ! r:
@@ -273,7 +273,7 @@
 20240 ! ** Text Box / Field Display   Lengths   **
 20260   let ic=0 ! temporary Item Counter
 20280   let mmddyy=8
-20300   let ccyymmdd=10
+20300   ccyymmdd=10
 20320   let tln(ic+=1)=12
 20340   let tln(ic+=1)=6
 20360   let tln(ic+=1)=12
@@ -294,7 +294,7 @@
 20660   let fltyp$(ic+=1)='C'
 20680 ! ** Field Storage Lengths **
 20700   let ic=0
-20720   let mmddyy=6 : let ccyymmdd=8
+20720   let mmddyy=6 : ccyymmdd=8
 20740   let sln(ic+=1)=12
 20760   let sln(ic+=1)=6
 20780   let sln(ic+=1)=6.2
@@ -306,7 +306,7 @@
 20900 ! ** Field Masks **
 20920   let ic=0
 20940   let pointtwo=32 : let number=30
-20960   let ccyymmdd=3 : let mmddyy=1 : let glnumber=53
+20960   ccyymmdd=3 : let mmddyy=1 : let glnumber=53
 20980   let mask(ic+=1)=0
 21000   let mask(ic+=1)=1
 21020   let mask(ic+=1)=10 ! mask 10 is 2 decimals and commas
@@ -327,11 +327,11 @@
 21320   let sp(ic+=1)=41
 21340   let sp(ic+=1)=71
 21360 ! ** Combo Boxes **
-21380   let cl=1 : let c$(cl,1)='ComboF'
-21400   let c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')
-21420   let c$(cl,3)="1" : let c$(cl,4)="12"
-21440   let c$(cl,5)="13": let c$(cl,6)="40"
-21460   let c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&env$('cno')
+21380   cl=1 : c$(cl,1)='ComboF'
+21400   c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')
+21420   c$(cl,3)="1" : c$(cl,4)="12"
+21440   c$(cl,5)="13": c$(cl,6)="40"
+21460   c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&env$('cno')
 21480 ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 21500   let limit_to_list$='1'
 21520   return  ! /r

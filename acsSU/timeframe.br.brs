@@ -29,7 +29,7 @@
 00250 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
-        let ccyymmdd=10
+        ccyymmdd=10
 00260   let tln(ic+=1)=2 !:
         let tln(ic+=1)=50
 00280 ! ** Field Types ** !:
@@ -38,7 +38,7 @@
         let fltyp$(ic+=1)='C'
 00310 ! ** Field Storage Lengths ** !:
         let ic=0 !:
-        let mmddyy=6 : let ccyymmdd=8
+        let mmddyy=6 : ccyymmdd=8
 00320   let sln(ic+=1)=2 !:
         let sln(ic+=1)=50
 00420   return 
@@ -53,7 +53,7 @@
 00510 ERTN: let fnerror(program$,err,line,act$,"xit")
 00520   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00530   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00540   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00540   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00550 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00560 ! /region
 00570 ! ______________________________________________________________________

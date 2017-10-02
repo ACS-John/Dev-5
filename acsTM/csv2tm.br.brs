@@ -6,14 +6,14 @@
 11000   dim cnam$*40
 11020   dim sage_code$*128
 11400 ! constants
-11600   let cr$=chr$(13) : let lf$=chr$(10) : let tab$=chr$(9)
-11800   let crlf$=cr$&lf$
+11600   cr$=chr$(13) : let lf$=chr$(10) : let tab$=chr$(9)
+11800   crlf$=cr$&lf$
 12000   let fncno(cno,cnam$)
 12400 ! 
 12600   let fntop(program$,cap$="Import CSV to Time Sheets")
-12800   if wbversion$(1:4)<"4.30" then print "WBVersion is "&wbversion$&" and it must be 4.30 or higher for this program to run" : let fnpause
-12820   let client_id_sage_ax=3811
-12822   let client_id_brc=90
+12800   if wbversion$(1:4)<"4.30" then pr "WBVersion is "&wbversion$&" and it must be 4.30 or higher for this program to run" : let fnpause
+12820   client_id_sage_ax=3811
+12822   client_id_brc=90
 13000 ! ______________________________________________________________________
 13200   let filter_date(1)=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)
 13400   let filter_date(2)=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
@@ -28,7 +28,7 @@
 15200   open #h_support:=fngethandle: "Name="&env$('Q')&"\TMmstr\SUPPORT.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\support-idx.h"&str$(cno)&",Shr",internal,input,keyed 
 15400 FMSUPPORT: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
 15600   let fnopenprn
-15800   print #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
+15800   pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
 16000 FORM_OUT: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
 16200 FORM_PRN: form pos 1,c 8,x 1,n 6,n 10.2,n 10,n 10,x 1,c 15,n 7.2
 16400 FORM_PRN_HEAD: form pos 1,cc 8,x 1,c 6,x 1,5*cr 10,x 1,c 30,cr 7
@@ -39,11 +39,11 @@
 17200     if line$<>'' and line$<>chr$(13) then 
 17400       let str2mat(line$,mat item$,',',"QUOTES:TRIM")
 17600       if item$(1)<>'' then let the_date=fn_get_the_date(item$(1))
-17602       if the_date<the_date_prior and the_date_prior>20151218 then print 'the_date('&str$(the_date)&')<the_date_prior('&str$(the_date_prior)&') - that indicates a problem on line '&str$(line_count) : pause 
+17602       if the_date<the_date_prior and the_date_prior>20151218 then pr 'the_date('&str$(the_date)&')<the_date_prior('&str$(the_date_prior)&') - that indicates a problem on line '&str$(line_count) : pause 
 17800       if the_date=>filter_date(1) and the_date<=filter_date(2) then 
 18000         if udim(mat item$)>9 and item$(4)<>'#N/A' and val(item$(7))>0 then ! entry
-18020 !       print the_date;item$(4);' ';item$(7);' ';item$(9);' ';item$(10)
-18040           let client_id=val(item$(4))
+18020 !       pr the_date;item$(4);' ';item$(7);' ';item$(9);' ';item$(10)
+18040           client_id=val(item$(4))
 18042 ! if client_id=970 then pause
 18060           let hours=val(item$(7))
 18080           if rtrm$(item$(13),cr$)<>'' then let sage_code$=rtrm$(item$(13),cr$)
@@ -53,9 +53,9 @@
 18140           let fn_acs_write_out(the_date,client_id,hours,val(item$(9)),val(item$(10)),item$(11)(1:30),sage_code$)
 18160           if client_id=client_id_sage_ax then 
 18180             let fn_sage_write_out(the_date,hours,sage_code$,description$)
-18182 !           print the_date,hours,description$ : pause
+18182 !           pr the_date,hours,description$ : pause
 18200           end if 
-18220           print #255,using FORM_PRN: date$(days(the_date,'ccyymmdd'),'mm/dd/yy'),client_id,hours,val(item$(9)),val(item$(10)),item$(11)(1:15),inp(4)
+18220           pr #255,using FORM_PRN: date$(days(the_date,'ccyymmdd'),'mm/dd/yy'),client_id,hours,val(item$(9)),val(item$(10)),item$(11)(1:15),inp(4)
 18240         end if  ! item$(4)<>'#N/A' and  val(item$(7))>0
 19000       end if  ! the_date=>filter_date(1) and <=filter_date(2)
 19200     end if  ! line$<>''
@@ -74,8 +74,8 @@
 21600     let inp(5)=wo_time*inp(4)
 21800     let inp(6)=date(days(wo_date,'ccyymmdd'),'mmddyy') ! mmddyy
 22000     let inp(7)=wo_cat
-22200     let b6=0 ! ???
-22400     let b7=1 ! ???
+22200     b6=0 ! ???
+22400     b7=1 ! ???
 22800     if wo_cat=6 then 
 23000       let sc=601
 23200     else if wo_cat=2 then 
@@ -85,8 +85,8 @@
 24000     else if wo_cat=23 then 
 24200       let sc=2300
 24400     else 
-24600       print #255: '!!! wo_cat ('&str$(wo_cat)&') is unrecognized - enhance code'
-24800 !   print 'wo_cat (';wo_cat;') is unrecognized - enhance code' : pause
+24600       pr #255: '!!! wo_cat ('&str$(wo_cat)&') is unrecognized - enhance code'
+24800 !   pr 'wo_cat (';wo_cat;') is unrecognized - enhance code' : pause
 25000     end if 
 25200     write #h_out,using FORM_OUT: mat inp,b6,b7,wo_month,sc,'',0,wo_desc$
 25400   fnend  ! fn_acs_write_out
@@ -102,7 +102,7 @@
 29400     let line$=gnl_buffer$(1:pos_crlf)
 29600     let gnl_buffer$(1:pos_crlf+1)=''
 29800 ! line$=srep$(line$,cr$,'^') : line$=srep$(line$,lf$,'~')
-30000 ! print 'line='&line$ : pause
+30000 ! pr 'line='&line$ : pause
 30200     goto GNL_XIT
 30400 GNL_H_IN_READ_IOERR: ! 
 30600     let gnl_block$=gnl_block$&crlf$
@@ -113,7 +113,7 @@
 31600   def fn_get_the_date(gtd_source$*256)
 31800     let gtd_return=0
 32000     if gtd_source$<>'' then 
-32200 !   print 'set the_date from '&gtd_source$
+32200 !   pr 'set the_date from '&gtd_source$
 32400       let gtd_source$=srep$(gtd_source$,'Mon, ','')
 32600       let gtd_source$=srep$(gtd_source$,'Tue, ','')
 32800       let gtd_source$=srep$(gtd_source$,'Wed, ','')
@@ -122,17 +122,17 @@
 33040       let gtd_source$=srep$(gtd_source$,'Sat, ','')
 33060       let gtd_source$=srep$(gtd_source$,'Sun, ','')
 33080       let gtd_source$=srep$(gtd_source$,'Sun, ','')
-33100       let cc12_pos=pos(gtd_source$,', 12')
-33120       let cc13_pos=pos(gtd_source$,', 13')
-33140       let cc14_pos=pos(gtd_source$,', 14')
-33160       let cc15_pos=pos(gtd_source$,', 15')
-33180       let cc16_pos=pos(gtd_source$,', 16')
-33200       let cc17_pos=pos(gtd_source$,', 17')
-33220       if cc13_pos<=0 then let cc13_pos=pos(gtd_source$,', 2013')
-33240       if cc14_pos<=0 then let cc14_pos=pos(gtd_source$,', 2014')
-33260       if cc15_pos<=0 then let cc15_pos=pos(gtd_source$,', 2015')
-33280       if cc16_pos<=0 then let cc16_pos=pos(gtd_source$,', 2016')
-33300       if cc17_pos<=0 then let cc17_pos=pos(gtd_source$,', 2017')
+33100       cc12_pos=pos(gtd_source$,', 12')
+33120       cc13_pos=pos(gtd_source$,', 13')
+33140       cc14_pos=pos(gtd_source$,', 14')
+33160       cc15_pos=pos(gtd_source$,', 15')
+33180       cc16_pos=pos(gtd_source$,', 16')
+33200       cc17_pos=pos(gtd_source$,', 17')
+33220       if cc13_pos<=0 then cc13_pos=pos(gtd_source$,', 2013')
+33240       if cc14_pos<=0 then cc14_pos=pos(gtd_source$,', 2014')
+33260       if cc15_pos<=0 then cc15_pos=pos(gtd_source$,', 2015')
+33280       if cc16_pos<=0 then cc16_pos=pos(gtd_source$,', 2016')
+33300       if cc17_pos<=0 then cc17_pos=pos(gtd_source$,', 2017')
 33320       if cc12_pos>0 then 
 33340         let gtd_source$(cc12_pos:len(gtd_source$))=''
 33360         let gtd_date_ccyy=2012
@@ -152,7 +152,7 @@
 33640         let gtd_source$(cc17_pos:len(gtd_source$))=''
 33660         let gtd_date_ccyy=2017
 33680       else 
-33700         print 'unrecognized year - enhance code ('&gtd_source$&')' : pause 
+33700         pr 'unrecognized year - enhance code ('&gtd_source$&')' : pause 
 36000       end if  ! 
 36200       if pos(gtd_source$,'Jan ')>0 then 
 36400         let gtd_source$=srep$(gtd_source$,'Jan ','')
@@ -194,7 +194,7 @@
 43000         let gtd_source$=srep$(gtd_source$,'Dec ','')
 43200         let gtd_date_mm=12
 43400       else 
-43600         print 'unrecognized month - enhance code' : pause 
+43600         pr 'unrecognized month - enhance code' : pause 
 43800       end if 
 44000       let gtd_date_dd=val(gtd_source$)
 44200       let gtd_return=val(str$(gtd_date_ccyy)&cnvrt$('pic(##)',gtd_date_mm)&cnvrt$('pic(##)',gtd_date_dd))
@@ -205,7 +205,7 @@
 45200 ERTN: let fnerror(program$,err,line,act$,"xit")
 45400   if uprc$(act$)<>"PAUSE" then goto L1710
 45600   if env$("ACSDeveloper")<>"" then execute "list -"&str$(line) : pause : goto L1710
-45800   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+45800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 46000 L1710: execute act$
 46200   goto ERTN
 46400 ! /region
@@ -277,7 +277,7 @@
 56080       open #sawo_h_out:=fngethandle: 'Name='&env$('Q')&'\Sage_AX_'&str$(filter_date(1))&'-'&str$(filter_date(2))&'.csv,RecL=512,eol=crlf,Replace',display,output 
 56100     end if 
 56120     if wo_sage_code_prior$='' and wo_sage_code$='' then 
-56140       print #255: '!!! Sage Code is blank !!!'
+56140       pr #255: '!!! Sage Code is blank !!!'
 56160     end if 
 56180     if wo_sage_code$='' then 
 56200       let wo_sage_code$=wo_sage_code_prior$
@@ -298,7 +298,7 @@
 56460     else if lwrc$(wo_sage_code$)='offsite' then 
 56480       let wo_sage_code$='004X'
 56500     else 
-56520       print #255: '!!! Sage AX Project Code ('&wo_sage_code$&') is unrecognized - enhance table in csv2tm !!!'
+56520       pr #255: '!!! Sage AX Project Code ('&wo_sage_code$&') is unrecognized - enhance table in csv2tm !!!'
 56540     end if 
 56560     let wo_sage_code_prior$=wo_sage_code$
 56580     dim sawo_line$*512
@@ -307,5 +307,5 @@
 56640     let sawo_line$(inf:inf)=str$(wo_time)&tab$
 56660     let sawo_line$(inf:inf)=wo_sage_code$&tab$
 56680     let sawo_line$(inf:inf)=wo_desc$
-56700     print #sawo_h_out: sawo_line$
+56700     pr #sawo_h_out: sawo_line$
 56720   fnend  ! fn_acs_write_out

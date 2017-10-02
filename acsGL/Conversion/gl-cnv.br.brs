@@ -11,13 +11,13 @@
 00110   dim dat$*20,ch$*20,prgl(21),co(7),acctmo$*6,vn$*8,nam$*35,ad1$*20
 00120   dim ad2$*20,csz$*20,ss$*11,adr(2),revb(13)
 00130 ! ______________________________________________________________________
-00140   print newpage
-00150   print fields "8,5,C 70,HRB,N": "   WARNING THIS PROGRAM CAN ONLY BE RUN ONE TIME FOR EACH COMPANY #"
-00160   print fields "10,9,C 60": "ENTER THE COMPANY # TO BE CONVERTED OR 0 TO STOP:"
+00140   pr newpage
+00150   pr fields "8,5,C 70,HRB,N": "   WARNING THIS PROGRAM CAN ONLY BE RUN ONE TIME FOR EACH COMPANY #"
+00160   pr fields "10,9,C 60": "ENTER THE COMPANY # TO BE CONVERTED OR 0 TO STOP:"
 00170 L170: input fields "10,60,N 5,UE,N": cno conv L170
 00180   if cno=0 then goto XIT
-00190   print newpage
-00200   print fields "10,5,C 60": "CONVERSION FOR COMPANY #"&str$(cno)&" IN PROCESS"
+00190   pr newpage
+00200   pr fields "10,5,C 60": "CONVERSION FOR COMPANY #"&str$(cno)&" IN PROCESS"
 00210 ! 
 00220   let fnputcno(cno)
 00230   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,outin,keyed 
@@ -117,8 +117,8 @@
 01170 L1170: ! REASS.CNV
 01180   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,outin,keyed 
 01190   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno),internal,outin,relative 
-01200   print newpage
-01210   print fields "10,15,c 60,h,n": "REASSIGN GL ADDRESSES IN PROCESS"
+01200   pr newpage
+01210   pr fields "10,15,c 60,h,n": "REASSIGN GL ADDRESSES IN PROCESS"
 01220 L1220: form pos 333,2*pd 3
 01230   let lr2=lrec(2)
 01240   rewrite #2,using L1340,rec=1: lr2
@@ -137,8 +137,8 @@
 01370   close #2: 
 01380   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno),internal,outin,keyed ioerr L1580
 01390   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno),internal,outin,relative ioerr L1580
-01400   print newpage
-01410   print fields "10,15,c 60,h,n": "REASSIGN PR ADDRESSES IN PROCESS"
+01400   pr newpage
+01410   pr fields "10,15,c 60,h,n": "REASSIGN PR ADDRESSES IN PROCESS"
 01420 L1420: form pos 181,2*n 5
 01430   let lr2=lrec(2)
 01440   rewrite #2,using L1540,rec=1: lr2
@@ -157,12 +157,12 @@
 01570   close #2: 
 01580 L1580: ! 
 01590   open #1: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno),internal,input,relative ioerr L1740
-01600   print fields "14,32,C 16,BR,N": "   IN PROCESS"
+01600   pr fields "14,32,C 16,BR,N": "   IN PROCESS"
 01610   open #2: "Name=X,RecL=72,Replace",internal,output 
 01620   for j=1 to lrec(1)
 01630     read #1,using L1660,rec=j: mat tr,tr$,td$ conv L1680
 01640     if tr(1)+tr(2)+tr(3)=0 then goto L1680
-01650     let actpd=int(tr(4)*.0001)
+01650     actpd=int(tr(4)*.0001)
 01660 L1660: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 01670     write #2,using L1660: mat tr,tr$,td$,actpd
 01680 L1680: next j
@@ -242,7 +242,7 @@
 02420 ERTN: let fnerror(program$,err,line,act$,"xit")
 02430   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02440   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02450   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02470 ! /region
 02480 ! ______________________________________________________________________

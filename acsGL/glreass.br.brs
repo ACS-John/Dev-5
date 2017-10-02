@@ -10,7 +10,7 @@
 00100 ! ______________________________________________________________________
 00110   let fncno(cno)
 00120 ! 
-00130   let cap$="Backup Restore or Reorganize"
+00130   cap$="Backup Restore or Reorganize"
 00140   let h$=".H"&str$(cno)
 00150 ! ______________________________________________________________________
 00160 MENU1: ! 
@@ -55,5 +55,5 @@
 00540 ERTN: let fnerror(program$,err,line,act$,er_out$)
 00550   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00560   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00570   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00570   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00580 ERTN_EXEC_ACT: execute act$ : goto ERTN

@@ -16,53 +16,53 @@
 00150   gosub BUILDSCREEN
 00160 ! ______________________________________________________________________
 00170 SCR1: ! 
-00180   print newpage
+00180   pr newpage
 00190   let fnopenwin(win=101,10,24,15,55,cap$)
-00200   print #win,fields "4,2,Cr 23,N": "Payroll Date to change:"
-00210   print #win,fields "5,2,Cr 23,N": "Department to change:"
+00200   pr #win,fields "4,2,Cr 23,N": "Payroll Date to change:"
+00210   pr #win,fields "5,2,Cr 23,N": "Department to change:"
 00220   let io1$(1)="4,26,Nz 6,UT,N"
 00230   let io1$(2)="5,26,Nz 3,UT,N"
-00240   print fields "16,30,C 09,B,1": "Next (F1)"
-00250   print fields "16,41,C 09,B,5": "Done (F5)"
+00240   pr fields "16,30,C 09,B,1": "Next (F1)"
+00250   pr fields "16,41,C 09,B,5": "Done (F5)"
 00260 L260: input #win,fields mat io1$: idat,idep conv CONV2
-00270   if ce>0 then let io1$(ce)(ce1:ce2)="U": let ce=0
-00280   if cmdkey>0 then goto L350 else let ce=curfld
-00290 L290: let ce=ce+1: if ce>udim(io1$) then let ce=1
-00300 L300: let io1$(ce)=rtrm$(io1$(ce)) : let ce1=pos(io1$(ce),"U",1) : if ce1=0 then goto L290
-00310   let ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L260
+00270   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+00280   if cmdkey>0 then goto L350 else ce=curfld
+00290 L290: ce=ce+1: if ce>udim(io1$) then ce=1
+00300 L300: let io1$(ce)=rtrm$(io1$(ce)) : ce1=pos(io1$(ce),"U",1) : if ce1=0 then goto L290
+00310   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L260
 00320 CONV2: if ce>0 then let io1$(ce)(ce1:ce2)="U"
-00330   let ce=cnt+1
-00340 ERR2: print fields "24,78,C 1": bell : goto L300
+00330   ce=cnt+1
+00340 ERR2: pr fields "24,78,C 1": bell : goto L300
 00350 L350: if cmdkey=5 then goto L790
 00360   if idat=0 then goto L790
 00370   read #1,using L380, key=lpad$(str$(idat),6)&lpad$(str$(idep),3): dat,dep,mat pt nokey ADDOPTION
 00380 L380: form pos 1,n 6,n 3,25*pd 5.2,n 4
-00390 L390: print newpage
+00390 L390: pr newpage
 00400   let win=101
 00410   let fnopenwin(win,2,2,23,75,cap$)
-00420   print #win: newpage
-00430   print #win,fields mat sc$: mat a$
-00440   print fields "24,22,c 11,B,1": "Save   (F1)"
-00450   print fields "24,34,c 11,B,4": "Delete (F4)"
-00460   print fields "24,46,c 11,B,5": "Cancel (F5)"
+00420   pr #win: newpage
+00430   pr #win,fields mat sc$: mat a$
+00440   pr fields "24,22,c 11,B,1": "Save   (F1)"
+00450   pr fields "24,34,c 11,B,4": "Delete (F4)"
+00460   pr fields "24,46,c 11,B,5": "Cancel (F5)"
 00470   let dat=idat
 00480   let dep=idep
 00490 L490: rinput #win,fields mat in1$: dat,dep,mat pt conv CONV1
-00500   if ce>0 then let in1$(ce)(ce1:ce2)="U": let ce=0
-00510   if cmdkey>0 then goto L580 else let ce=curfld+1
-00520   if ce>udim(in1$) then let ce=1
-00530 L530: let in1$(ce)=rtrm$(uprc$(in1$(ce))) : let ce1=pos(in1$(ce),"U",1)
-00540   let ce2=ce1+1 : let in1$(ce)(ce1:ce1)="UC" : goto L490
+00500   if ce>0 then let in1$(ce)(ce1:ce2)="U": ce=0
+00510   if cmdkey>0 then goto L580 else ce=curfld+1
+00520   if ce>udim(in1$) then ce=1
+00530 L530: let in1$(ce)=rtrm$(uprc$(in1$(ce))) : ce1=pos(in1$(ce),"U",1)
+00540   ce2=ce1+1 : let in1$(ce)(ce1:ce1)="UC" : goto L490
 00550 CONV1: if ce>0 then let in1$(ce)(ce1:ce2)="U"
-00560   let ce=cnt+1
-00570 ERR1: print fields "24,78,C 1": bell : goto L530
+00560   ce=cnt+1
+00570 ERR1: pr fields "24,78,C 1": bell : goto L530
 00580 L580: for ce=3 to udim(pt$)+2: let pt(ce-2)=val(pt$(ce-2)) conv ERR1: next ce
-00590   let ce=0
+00590   ce=0
 00600   if cmdkey=5 then goto SCR1
 00610   if add$="Y" and dat=0 then goto SCR1
 00620   if cmdkey=4 or dat=0 then goto L660
-00630   if dat<10100 or dat>123199 then let ce=1: goto ERR1
-00640   if dep<1 or dep>999 then let ce=2: goto ERR1
+00630   if dat<10100 or dat>123199 then ce=1: goto ERR1
+00640   if dep<1 or dep>999 then ce=2: goto ERR1
 00650   goto L680
 00660 L660: delete #1,key=lpad$(str$(idat),6)&lpad$(str$(idep),3): nokey L670
 00670 L670: goto SCR1
@@ -72,13 +72,13 @@
 00710   goto SCR1
 00720 L720: delete #1,key=lpad$(str$(idat),6)&lpad$(str$(idep),3): 
 00730 L730: write #1,using L380: dat,dep,mat pt
-00740   let add$=""
+00740   add$=""
 00750   let indxcode=1
 00760   goto SCR1
 00770 L770: if add$="Y" then goto L730 else rewrite #1,using L380,key=lpad$(str$(idat),6)&lpad$(str$(idep),3): dat,dep,mat pt
 00780   goto SCR1
 00790 L790: close #1: 
-00800   if indxcode=1 then print 'supposta recreate index here - seems to be a loss of logic, better rewrite it.' : print 'press enter to continue anyway' : input fields "1,1,C 1,N": pause$
+00800   if indxcode=1 then pr 'supposta recreate index here - seems to be a loss of logic, better rewrite it.' : pr 'press enter to continue anyway' : input fields "1,1,C 1,N": pause$
 00810   goto XIT
 00820 ! ______________________________________________________________________
 00830 BUILDSCREEN: ! 
@@ -104,7 +104,7 @@
 01030   read mat a$
 01040   for j=1 to 28
 01050     if j>10 then goto L1070
-01060     let a$(j+5)=rpnames$(j)&":"
+01060     a$(j+5)=rpnames$(j)&":"
 01070 L1070: if j>21 then goto L1100
 01080     let sc$(j)=str$(j)&",3,Cr 20,N"
 01090     goto L1110
@@ -129,7 +129,7 @@
 01280   let msgline$(1)="A record for this Date and Department Number does not exist."
 01290   let msgline$(2)="Do you wish to add this record? (Y/N)"
 01300   let fnoldmsgbox(mat response$,cap$,mat msgline$,2)
-01310   let add$=response$(1)
+01310   add$=response$(1)
 01320   if add$="Y" then goto L390
 01330   if add$="N" then goto SCR1
 01340 ! ______________________________________________________________________
@@ -137,7 +137,7 @@
 01360 ERTN: let fnerror(program$,err,line,act$,"xit")
 01370   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01380   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01390   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01390   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01400 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01410 ! /region
 01420 ! ______________________________________________________________________

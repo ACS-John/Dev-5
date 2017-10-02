@@ -83,14 +83,14 @@ for locItem=1 to udim(mat locList$)
   do
     read #hInt,using 'form pos 1,v 18,v 10,v 10,v 374': emp$,hire$,term$,lineNew$ eof ReportFinis
     if lineNew$<>lineOld$ then
-      ! print #hDiff: lineNew$
-      print #hDiff:'<employee>'
-      print #hDiff: '<employeeId>'&emp$&'</employeeId>'
-      print #hDiff: '<hireDate>'&hire$&'</hireDate>'
+      ! pr #hDiff: lineNew$
+      pr #hDiff:'<employee>'
+      pr #hDiff: '<employeeId>'&emp$&'</employeeId>'
+      pr #hDiff: '<hireDate>'&hire$&'</hireDate>'
       if trim$(term$)<>'' then
-        print #hDiff: '<terminationDate>'&term$&'</terminationDate>'
+        pr #hDiff: '<terminationDate>'&term$&'</terminationDate>'
       end if
-      print #hDiff:'</employee>'
+      pr #hDiff:'</employee>'
       lineOld$=lineNew$
     end if
   loop

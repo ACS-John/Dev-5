@@ -44,7 +44,7 @@
 10450     let fncmdset(2)
 10460     let fnacs(sn$,0,mat resp$,ckey)
 10470     if ckey=5 then goto XIT
-10480     let bk$=resp$(1)
+10480     bk$=resp$(1)
 10490 ! let device$=ctext_default$ ! resp$(0)
 10500     let path$=resp$(2)
 10510     if ~exists(path$) then 
@@ -179,7 +179,7 @@
 44060     open #h_readings:=fngethandle: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output 
 44080     do 
 44100       read #h_sensus,using "form pos 1,c 22": ln$ eof SENSUS_IN_XIT ioerr SENSUS_IN_XIT
-44120       print #h_readings,using "form pos 1,c 132": ln$
+44120       pr #h_readings,using "form pos 1,c 132": ln$
 44140     loop 
 44160 SENSUS_IN_XIT: ! 
 44180     close #h_sensus: ioerr ignore
@@ -212,7 +212,7 @@
 48180       linput #2: amr$ eof ACSMR_XIT
 48210       let z$=amr$(1:10)
 48240       let reading=val(amr$(133:142))
-48270       print #3,using "form pos 1,c 10,n 10": z$,reading
+48270       pr #3,using "form pos 1,c 10,n 10": z$,reading
 48300     loop 
 48330 ACSMR_XIT: ! 
 48360   fnend 
@@ -220,7 +220,7 @@
 50010     dim line$*128
 50050     open #h_itron:=fngethandle: "Name="&fn_hh_input_filename$,display,input 
 50070     open #h_itron_out:=fngethandle: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=512,replace",display,output 
-50120     print #h_itron_out: '[ACS Hand Held File Generic Version 2]'
+50120     pr #h_itron_out: '[ACS Hand Held File Generic Version 2]'
 50150     let z$=''
 50180     do 
 50210       linput #h_itron: line$ eof EO_ITRON
@@ -259,18 +259,18 @@
 51200     close #h_itron_out: 
 51230   fnend 
 52000   def fn_itron_write
-52030 ! print #h_itron_out,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
+52030 ! pr #h_itron_out,using "form pos 1,c 10,3*n 10,3*n 1": z$,reading_water,reading_electric,reading_gas,meterroll_water,meterroll_electric,meterroll_gas
 52060     if reading_water+reading_electric+reading_gas+meterroll_wate+meterroll_electric+meterroll_gas<>0 then 
-52090       print #h_itron_out: 'Customer.Number='&z$
-52120       if reading_water<>0 then print #h_itron_out: 'Reading.Water='&str$(reading_water)
-52150       if reading_electric<>0 then print #h_itron_out: 'Reading.Electric='&str$(reading_electric)
-52180       if reading_gas<>0 then print #h_itron_out: 'Reading.Gas='&str$(reading_gas)
-52210       if meterroll_water<>0 then print #h_itron_out: 'MeterRoll.Water='&str$(meterroll_water)
-52240       if meterroll_electric<>0 then print #h_itron_out: 'MeterRoll.Electric='&str$(meterroll_electric)
-52270       if meterroll_gas<>0 then print #h_itron_out: 'MeterRoll.Gas='&str$(meterroll_gas)
-52300       print #h_itron_out: 'Meter.Tamper='&str$(val(tmpr$))
+52090       pr #h_itron_out: 'Customer.Number='&z$
+52120       if reading_water<>0 then pr #h_itron_out: 'Reading.Water='&str$(reading_water)
+52150       if reading_electric<>0 then pr #h_itron_out: 'Reading.Electric='&str$(reading_electric)
+52180       if reading_gas<>0 then pr #h_itron_out: 'Reading.Gas='&str$(reading_gas)
+52210       if meterroll_water<>0 then pr #h_itron_out: 'MeterRoll.Water='&str$(meterroll_water)
+52240       if meterroll_electric<>0 then pr #h_itron_out: 'MeterRoll.Electric='&str$(meterroll_electric)
+52270       if meterroll_gas<>0 then pr #h_itron_out: 'MeterRoll.Gas='&str$(meterroll_gas)
+52300       pr #h_itron_out: 'Meter.Tamper='&str$(val(tmpr$))
 52302     else 
-52303       print #h_itron_out: '! customer number '&z$&' has all zero readings.'
+52303       pr #h_itron_out: '! customer number '&z$&' has all zero readings.'
 52330     end if 
 52360   fnend 
 54000   def fn_amr
@@ -283,7 +283,7 @@
 54180       linput #2: amr$ eof AMR_XIT
 54210       let z$=lpad$(trim$(amr$(3:22)),10)
 54240       let reading=val(amr$(47:56))
-54330       print #3,using "form pos 1,c 10,n 10": z$,reading
+54330       pr #3,using "form pos 1,c 10,n 10": z$,reading
 54360     loop 
 54390     goto AMR_XIT !  AMR_NOTHING_TO_READ
 54420 AMR_NOTHING_TO_READ: ! 
@@ -304,7 +304,7 @@
 56120       linput #2: hersey$ eof HERSEY_EOF
 56150       let z$=lpad$(trim$(hersey$(1:10)),10)
 56180       let reading=val(hersey$(229:238))
-56210       print #h_out,using "form pos 1,c 10,n 10": z$,reading
+56210       pr #h_out,using "form pos 1,c 10,n 10": z$,reading
 56240     loop 
 56250 HERSEY_EOF: ! 
 56270     close #2: ioerr ignore
@@ -319,7 +319,7 @@
 58150       linput #2: easy$ eof EXREADER_XIT
 58180       let z$=lpad$(trim$(easy$(209:228)),10)
 58210       let reading=val(easy$(309:318))
-58240       print #h_out,using "form pos 1,c 10,n 10": z$,reading
+58240       pr #h_out,using "form pos 1,c 10,n 10": z$,reading
 58270     loop 
 58300 EXREADER_XIT: ! 
 58330     close #2: ioerr ignore
@@ -329,7 +329,7 @@
 60060 ERTN: let fnerror(program$,err,line,act$,"xit")
 60090   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 60120   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-60150   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+60150   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 60180 ERTN_EXEC_ACT: execute act$ : goto ERTN
 60210 ! /region
 62000   def fn_readings_backup(bk$)
@@ -356,7 +356,7 @@
 64240       pause
 64260     end if
 64280     if parseResponse then
-64300       print #hReadingsOut,using "form pos 1,c 10,c 9": z$,trim$(reading$)
+64300       pr #hReadingsOut,using "form pos 1,c 10,c 9": z$,trim$(reading$)
 64320     end if
 64340   loop
 64360   ilrt_EO_L_READINGS_TXT: ! 

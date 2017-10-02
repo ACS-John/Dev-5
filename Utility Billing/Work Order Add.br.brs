@@ -152,41 +152,41 @@
 43080   ! /r
 44000   ! r: append to note file
 44020     open #h_notefile:=fngethandle: "Name="&fnNoteDir$&"\"&trim$(z$)&".txt,Use",display,output
-44040     print #h_notefile: '** Work Order added '&date$('mm/dd/ccyy')&' at '&time$&' **'
-44060     print #h_notefile:   '              Account: '&z$&'  '&customer_name$
+44040     pr #h_notefile: '** Work Order added '&date$('mm/dd/ccyy')&' at '&time$&' **'
+44060     pr #h_notefile:   '              Account: '&z$&'  '&customer_name$
 44080     if fn_not_blank(i$(5)) then
-44100       print #h_notefile: "      Request made by: "&fn_clean_ul$(i$(5))
+44100       pr #h_notefile: "      Request made by: "&fn_clean_ul$(i$(5))
 44120     end if
 44140     if fn_not_blank(i$(2)) then
-44160       print #h_notefile: "             Taken by: "&fn_clean_ul$(i$(2))
+44160       pr #h_notefile: "             Taken by: "&fn_clean_ul$(i$(2))
 44180     end if
 44200     if fn_not_blank(i$(7)) then
-44220       print #h_notefile: "              Name In: "&fn_clean_ul$(i$(7))
+44220       pr #h_notefile: "              Name In: "&fn_clean_ul$(i$(7))
 44240     end if
 44260     if fn_not_blank(i$(3)) then
-44280       print #h_notefile: "    Date Last Reading: "&fn_clean_ul$(i$(3))
+44280       pr #h_notefile: "    Date Last Reading: "&fn_clean_ul$(i$(3))
 44300     end if
 44320     if fn_not_blank(i$(4)) then
-44340       print #h_notefile: " Date to be Completed: "&fn_clean_ul$(i$(4))
+44340       pr #h_notefile: " Date to be Completed: "&fn_clean_ul$(i$(4))
 44360     end if
 44380     if fn_not_blank(i$(8)) then
-44400       print #h_notefile: "              Turn On: "&date$(days(fn_clean_ul$(i$(8),1008),'mmddyy'),'mm/dd/ccyy') ! fn_clean_ul$(i$(8)) : pause
+44400       pr #h_notefile: "              Turn On: "&date$(days(fn_clean_ul$(i$(8),1008),'mmddyy'),'mm/dd/ccyy') ! fn_clean_ul$(i$(8)) : pause
 44420     end if
 44440     if fn_not_blank(i$(9)) then
-44460       print #h_notefile: "             Turn Off: "&date$(days(fn_clean_ul$(i$(9),1008),'mmddyy'),'mm/dd/ccyy')
+44460       pr #h_notefile: "             Turn Off: "&date$(days(fn_clean_ul$(i$(9),1008),'mmddyy'),'mm/dd/ccyy')
 44480     end if
 44500     if fn_not_blank(i$(10)) then
-44520       print #h_notefile: "             Leave On: "&fn_clean_ul$(i$(10))
+44520       pr #h_notefile: "             Leave On: "&fn_clean_ul$(i$(10))
 44540     end if
 44560     if fn_not_blank(i$(11)&i$(12)) then
-44580       print #h_notefile: "   Forwarding Address: "&fn_clean_ul$(i$(11))&"  "&fn_clean_ul$(i$(12))
+44580       pr #h_notefile: "   Forwarding Address: "&fn_clean_ul$(i$(11))&"  "&fn_clean_ul$(i$(12))
 44600     end if
 44620     for lineItem=1 to udim(mat line$)
 44640       if trim$(line$(lineItem))<>'' then
 44660         pr #h_notefile: '  '&line$(lineItem)
 44680       end if
 44700     nex lineItem
-44720     print #h_notefile: '**'
+44720     pr #h_notefile: '**'
 44740     close #h_notefile: 
 44760   ! /r
 48000   woaXIT: !
@@ -208,7 +208,7 @@
 73020   let fnerror(program$,err,line,act$,"xit")
 73040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 73060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-73080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+73080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 73100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 73120 ! /r
 77000 def fn_workorder_print_legacy
@@ -216,87 +216,87 @@
 77030 ! if exists(env$('Q')&"\WorkOrder")=0 then execute "mkdir "&env$('Q')&"\WorkOrder -n"
 77032   let fnsavetoasstart(env$('Q')&"\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
 77034   let fnopenprn
-77040   print #255: "\qc {\f181 {\fs32 {\b Utility Work Order}"
-77050   print #255: "{\fs24 "&env$('cnam')&"}}}"
-77060   print #255: "\qc {\fs20 "&trim$(i$(1))&"}"
+77040   pr #255: "\qc {\f181 {\fs32 {\b Utility Work Order}"
+77050   pr #255: "{\fs24 "&env$('cnam')&"}}}"
+77060   pr #255: "\qc {\fs20 "&trim$(i$(1))&"}"
 77070   if trim$(srvnam$(3))<>"Electric" or trim$(srvnam$(3))<>"Lawn Meter" or trim$(srvnam$(4))<>"Gas" then 
-77080     print #255,using "Form POS 1,C 1,SKIP 3": " " ! extra lines at top if either gas or electric not used
+77080     pr #255,using "Form POS 1,C 1,SKIP 3": " " ! extra lines at top if either gas or electric not used
 77090   end if 
-77100   print #255: "\ql "
-77110   print #255: "{\b "&ws$(3)&"}"&i$(3)&"       {\b "&ws$(2)&"}"&i$(2)
-77120   print #255: ""
-77130   print #255: "{\b "&ws$(4)&"}"&i$(4)
-77140   print #255: ""
-77150   print #255: "         {\b "&ws$(5)&"}"&i$(5)&"     {\b "&ws$(6)&"}"&i$(6)
-77160   print #255: ""
+77100   pr #255: "\ql "
+77110   pr #255: "{\b "&ws$(3)&"}"&i$(3)&"       {\b "&ws$(2)&"}"&i$(2)
+77120   pr #255: ""
+77130   pr #255: "{\b "&ws$(4)&"}"&i$(4)
+77140   pr #255: ""
+77150   pr #255: "         {\b "&ws$(5)&"}"&i$(5)&"     {\b "&ws$(6)&"}"&i$(6)
+77160   pr #255: ""
 77170 L10730: form pos 10,c 132,skip 2
-77180   print #255,using L10730: "{\b Service Address: }{\ul "&e$(1)&"}"
-77190   print #255,using L10730: "{\b    Meter number: }"&i$(7)
-77200   print #255,using L10730: "{\b        Name Out: }{\ul "&customer_name$&"}{\b           Account :}{\ul "&z$&"}"
-77210   print #255,using "Form pos 10,C 132": "{\b         Name In: }"&i$(7)
-77220   print #255: ""
-77230   print #255,using "Form pos 10,C 132": "{\b         "&ws$(8)&"}"&i$(8)(1:12)&"    {\b "&ws$(9)&"}"&i$(9)(1:12)&"    {\b "&ws$(10)&"}"&i$(10)(1:12)
-77240   print #255: ""
-77250   print #255,using "Form pos 10,C 132": "{\b "&ws$(11)&"}"&i$(11)&"  "&i$(12)(1:23)
-77260   print #255: ""
+77180   pr #255,using L10730: "{\b Service Address: }{\ul "&e$(1)&"}"
+77190   pr #255,using L10730: "{\b    Meter number: }"&i$(7)
+77200   pr #255,using L10730: "{\b        Name Out: }{\ul "&customer_name$&"}{\b           Account :}{\ul "&z$&"}"
+77210   pr #255,using "Form pos 10,C 132": "{\b         Name In: }"&i$(7)
+77220   pr #255: ""
+77230   pr #255,using "Form pos 10,C 132": "{\b         "&ws$(8)&"}"&i$(8)(1:12)&"    {\b "&ws$(9)&"}"&i$(9)(1:12)&"    {\b "&ws$(10)&"}"&i$(10)(1:12)
+77240   pr #255: ""
+77250   pr #255,using "Form pos 10,C 132": "{\b "&ws$(11)&"}"&i$(11)&"  "&i$(12)(1:23)
+77260   pr #255: ""
 77270   let fn_pwo_service_data(srvnam$(1),d(1),f$(1),extra$(3)) ! Water
 77280   let fn_pwo_service_data(srvnam$(3),d(5),f$(2),extra$(4)) ! Electric or Lawn Meter
 77290   let fn_pwo_service_data(srvnam$(4),d(9),f$(3),extra$(5)) ! Gas
-77300   print #255: "\qc ";"{\b Comments:}"
-77310   print #255: ""
-77320   print #255: "\ql "
+77300   pr #255: "\qc ";"{\b Comments:}"
+77310   pr #255: ""
+77320   pr #255: "\ql "
 77330   for j=1 to 5
 77340     if trim$(line$(j))<>"" then 
-77350       print #255,using "Form pos 10,C 132": line$(j)
+77350       pr #255,using "Form pos 10,C 132": line$(j)
 77360     else 
-77370       print #255,using "Form pos 10,C 132": rpt$("_",80)
+77370       pr #255,using "Form pos 10,C 132": rpt$("_",80)
 77380     end if 
-77390     print #255: ""
+77390     pr #255: ""
 77400   next j
 77410   for j=1 to 2
-77420     print #255,using "Form pos 10,C 132": rpt$("_",80)
-77430     print #255: ""
+77420     pr #255,using "Form pos 10,C 132": rpt$("_",80)
+77430     pr #255: ""
 77440   next j
 77450   if trim$(srvnam$(1))<>"" then 
-77460     print #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Water Deposit:}",b(8),"{\b Water Code: }"&str$(a(1))
+77460     pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Water Deposit:}",b(8),"{\b Water Code: }"&str$(a(1))
 77470   end if 
 77480   if trim$(srvnam$(2))<>"" then 
-77490     print #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Sewer Deposit:}",b(9),"{\b Sewer Code: }"&str$(a(2))
+77490     pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Sewer Deposit:}",b(9),"{\b Sewer Code: }"&str$(a(2))
 77500   end if 
 77510   if trim$(srvnam$(3))="Electric" then 
-77520     print #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Electric Deposit:}",b(10),"{\b Electric Code:}"&str$(a(3))
+77520     pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Electric Deposit:}",b(10),"{\b Electric Code:}"&str$(a(3))
 77530   end if 
 77540   if trim$(srvnam$(3))="Lawn Meter" then 
-77550     print #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Lawn Meter Deposit:}",b(10),"{\b  }"&str$(a(3))
+77550     pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Lawn Meter Deposit:}",b(10),"{\b  }"&str$(a(3))
 77560   end if 
 77570   if trim$(srvnam$(3))="Lawn Meter" then 
-77580     print #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Lawn Meter Deposit:}",b(10),"{\b }"&str$(a(3))
+77580     pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Lawn Meter Deposit:}",b(10),"{\b }"&str$(a(3))
 77590   end if 
 77600   if trim$(srvnam$(4))="Gas" then 
-77610     print #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Gas Deposit:}",b(11), "{\b Gas Code:}"&str$(a(4))
+77610     pr #255,using 'form pos 1,cr 25,n 7.2,x 2,c 45': "{\b Gas Deposit:}",b(11), "{\b Gas Code:}"&str$(a(4))
 77620   end if 
-77630   print #255: ""
-77640   print #255,using 'form pos 47,c 51': "{\b Date Order Completed: _____________________}"
-77650   print #255: ""
-77660   print #255,using 'form pos 47,c 51': "{\b By: _______________________________________}"
+77630   pr #255: ""
+77640   pr #255,using 'form pos 47,c 51': "{\b Date Order Completed: _____________________}"
+77650   pr #255: ""
+77660   pr #255,using 'form pos 47,c 51': "{\b By: _______________________________________}"
 77670   let fncloseprn
 77680 fnend 
 77690 def fn_pwo_service_data(service_name$*80,reading_prior,meter_number$,serial_number$)
 77700   if trim$(service_name$)<>"" and reading_prior>0 then 
-77710     print #255: "{\b <-------------"&trim$(service_name$)&"--------------->}"
-77720     print #255: ""
-77730     print #255,using 'form pos 1,c 25,g 20': "{\b Previous Reading:}",str$(reading_prior)
-77740     print #255: ""
+77710     pr #255: "{\b <-------------"&trim$(service_name$)&"--------------->}"
+77720     pr #255: ""
+77730     pr #255,using 'form pos 1,c 25,g 20': "{\b Previous Reading:}",str$(reading_prior)
+77740     pr #255: ""
 77750     if trim$(meter_number$)<>'' then 
-77760       print #255,using 'form pos 1,c 25,g 20': "{\b Meter Number:}","{\ul "&meter_number$&"}"
-77770       print #255: ""
+77760       pr #255,using 'form pos 1,c 25,g 20': "{\b Meter Number:}","{\ul "&meter_number$&"}"
+77770       pr #255: ""
 77780     end if 
 77790     if trim$(serial_number$)<>'' then 
-77800       print #255,using 'form pos 1,c 25,g 20': "{\b Serial Number:}","{\ul "&serial_number$&"}"
-77810       print #255: ""
+77800       pr #255,using 'form pos 1,c 25,g 20': "{\b Serial Number:}","{\ul "&serial_number$&"}"
+77810       pr #255: ""
 77820     end if 
-77830     print #255,using 'form pos 1,c 25,g 20': "{\b Current Reading:}","______________"
-77840     print #255: ""
+77830     pr #255,using 'form pos 1,c 25,g 20': "{\b Current Reading:}","______________"
+77840     pr #255: ""
 77850   end if 
 77860 fnend 
 82000 def fn_not_blank(nbTestText$*256)

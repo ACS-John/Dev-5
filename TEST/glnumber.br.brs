@@ -8,18 +8,18 @@
 00080   dim cap$*128,resp$(10)*50
 00090 ! ______________________________________________________________________
 00100   let fntop(program$,cap$="General Ledger Number")
-00110   let right=1 : let center=2
+00110   let right=1 : center=2
 00120   let fntos(sn$="GLNumber") !:
         let lc=0 : let mylen=30 : let mypos=mylen+2
 00130   let fnlbl(lc+=1,1,"General Ledger Account Number:",mylen,right)
 00140   let fnqgl(lc,mypos) !:
         let resp$(1)=fnrgl$('  0   700  0')
-00150 ! Print RESP$(1) : Let FNPAUSE ! XXX
+00150 ! pr RESP$(1) : Let FNPAUSE ! XXX
 00160   let fncmdset(2)
 00170   let fnacs(sn$,0,mat resp$,ckey)
 00180   if ckey=5 then goto XIT
 00185   let x$=fnagl$(resp$(1))
-00190   print 'This is your returned value"'&x$&'".'
+00190   pr 'This is your returned value"'&x$&'".'
 00200   goto XIT
 00210 ! ______________________________________________________________________
 00220 XIT: let fnxit
@@ -28,7 +28,7 @@
 00250 ERTN: let fnerror(program$,err,line,act$,"xit")
 00260   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00270   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00280   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00280   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00290 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00300 ! /region
 00310 ! ______________________________________________________________________

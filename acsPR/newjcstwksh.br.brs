@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsPR\newjcStWkSh
-00020 ! Print Job Status Worksheet
+00020 ! pr Job Status Worksheet
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fntos,fnlbl,fntxt,fnchk,fncmdset,fnacs,fncmbjob,fnmsgbox,fncmdkey
 00050   on error goto ERTN
@@ -72,12 +72,12 @@
 00590 L590: read #1,using L570: jn$,n$,b4 eof DONE
 00600 L600: if skpcom$="Y" and b4=9 then goto L540
 00610   gosub L870
-00620   let cnt$="    0"
+00620   cnt$="    0"
 00630 L630: read #2,using L640,key>=jn$&cnt$: cn$,k$,l12,l13 eof L540,nokey L540
 00640 L640: form pos 1,c 11,c 25,pos 114,2*pd 2
 00650   if cn$(1:6)><jn$ then goto L540
 00660   gosub L960
-00670   let cnt$=lpad$(rtrm$(str$(val(cn$(7:11))+1)),5)
+00670   cnt$=lpad$(rtrm$(str$(val(cn$(7:11))+1)),5)
 00680   goto L630
 00690 ! ______________________________________________________________________
 00700 DONE: close #1: 
@@ -86,35 +86,35 @@
 00730   goto XIT
 00740 ! ______________________________________________________________________
 00750 HDR: ! 
-00760   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-00770   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-00780   print #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
-00790   print #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
-00800   print #255: "\ql   "
+00760   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+00770   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+00780   pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
+00790   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
+00800   pr #255: "\ql   "
 00810   form pos 56,c 20,skip 1,pos 1,cc 132,skip 2
-00820   print #255: "{\b  Job       Job Name                           Category   Description                 Old %   Percent     Units}"
-00830   print #255: "{\b Number                                         Number                               Complete Complete  Complete}"
-00840   print #255: "\ql   "
+00820   pr #255: "{\b  Job       Job Name                           Category   Description                 Old %   Percent     Units}"
+00830   pr #255: "{\b Number                                         Number                               Complete Complete  Complete}"
+00840   pr #255: "\ql   "
 00850   return 
 00860 ! ______________________________________________________________________
 00870 L870: if fst=1 then goto L880 else goto L910
 00880 L880: if perpag$="N" then goto L920
-00890   print #255: newpage
+00890   pr #255: newpage
 00900   gosub HDR
 00910 L910: let fst=1
-00920 L920: print #255,using L930: jn$,n$
+00920 L920: pr #255,using L930: jn$,n$
 00930 L930: form pos 1,c 6,pos 8,c 40,skip jbskip
 00940   return 
 00950 ! ______________________________________________________________________
-00960 L960: print #255,using L1000: cn$(7:11),k$,"LABOR",l12,"%","___%","_____.__" pageoflow L980
+00960 L960: pr #255,using L1000: cn$(7:11),k$,"LABOR",l12,"%","___%","_____.__" pageoflow L980
 00970   goto L1010
-00980 L980: print #255: newpage
+00980 L980: pr #255: newpage
 00990   gosub HDR
 01000 L1000: form pos 49,c 5,pos 55,c 25,pos 81,c 5,pos 89,n 3,c 1,pos 97,c 4,pos 107,c 8,skip 1
-01010 L1010: print #255,using L1000: " "," ","OTHER",l13,"%","___%","        " pageoflow L1040
-01020   print #255: pageoflow L1040
+01010 L1010: pr #255,using L1000: " "," ","OTHER",l13,"%","___%","        " pageoflow L1040
+01020   pr #255: pageoflow L1040
 01030   goto L1060
-01040 L1040: print #255: newpage
+01040 L1040: pr #255: newpage
 01050   gosub HDR
 01060 L1060: return 
 01070 ! ______________________________________________________________________
@@ -124,7 +124,7 @@
 01110 ERTN: let fnerror(program$,err,line,act$,"xit")
 01120   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01130   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01140   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01140   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01150 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01160 ! /region
 01170 ! ______________________________________________________________________

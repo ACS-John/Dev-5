@@ -36,37 +36,37 @@
 23700 ! C$(c_x,8)=limit to list option ('1'=Yes; '0'=No)
 23800     let limit_to_list$='1'
 23900 ! 
-24000 ! let cl=1 : let c$(cl,1)='ComboF'
-24100 ! let c$(cl,2)=env$('Q')&'\TMmstr\Client.h420'
-24200 ! let c$(cl,3)='1' : let c$(cl,4)='6'
-24300 ! let c$(cl,5)='7' : let c$(cl,6)='50'
-24400 ! let c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h420'
-24500 ! let c$(cl,8)=limit_to_list$
-24600 ! let cl=3 : let c$(cl,1)='ComboF'
-24700 ! let c$(cl,2)=env$('Q')&'\TMmstr\Systems.h420'
-24800 ! let c$(cl,3)='1' : let c$(cl,4)='2'
-24900 ! let c$(cl,5)='3' : let c$(cl,6)='50'
-25000 ! let c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h420'
-25100 ! let c$(cl,8)=limit_to_list$
-25200 ! let cl=5 : let c$(cl,1)='ComboF'
-25300 ! let c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h420'
-25400 ! let c$(cl,3)='1' : let c$(cl,4)='2'
-25500 ! let c$(cl,5)='3' : let c$(cl,6)='50'
-25600 ! let c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h420'
-25700 ! let c$(cl,8)=limit_to_list$
+24000 ! cl=1 : c$(cl,1)='ComboF'
+24100 ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h420'
+24200 ! c$(cl,3)='1' : c$(cl,4)='6'
+24300 ! c$(cl,5)='7' : c$(cl,6)='50'
+24400 ! c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h420'
+24500 ! c$(cl,8)=limit_to_list$
+24600 ! cl=3 : c$(cl,1)='ComboF'
+24700 ! c$(cl,2)=env$('Q')&'\TMmstr\Systems.h420'
+24800 ! c$(cl,3)='1' : c$(cl,4)='2'
+24900 ! c$(cl,5)='3' : c$(cl,6)='50'
+25000 ! c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h420'
+25100 ! c$(cl,8)=limit_to_list$
+25200 ! cl=5 : c$(cl,1)='ComboF'
+25300 ! c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h420'
+25400 ! c$(cl,3)='1' : c$(cl,4)='2'
+25500 ! c$(cl,5)='3' : c$(cl,6)='50'
+25600 ! c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h420'
+25700 ! c$(cl,8)=limit_to_list$
 25800 ! 
-25900 ! let c_x=1 : let c$(c_x,1)='ComboF'
-26000 ! let c$(c_x,2)=env$('Q')&"\UBmstr\Customer.h420"
-26100 ! let c$(c_x,3)='1' : let c$(c_x,4)='10' ! Key
-26200 ! let c$(c_x,5)='41' : let c$(c_x,6)='30' ! Description
-26300 ! let c$(c_x,7)=env$('Q')&"\UBmstr\ubIndex.h420"
-26400 ! let c$(c_x,8)='1'
+25900 ! c_x=1 : c$(c_x,1)='ComboF'
+26000 ! c$(c_x,2)=env$('Q')&"\UBmstr\Customer.h420"
+26100 ! c$(c_x,3)='1' : c$(c_x,4)='10' ! Key
+26200 ! c$(c_x,5)='41' : c$(c_x,6)='30' ! Description
+26300 ! c$(c_x,7)=env$('Q')&"\UBmstr\ubIndex.h420"
+26400 ! c$(c_x,8)='1'
 26500 ! 
-26600 ! let c_x=2 : let c_y=1
-26700 ! let c$(c_x,c_y)='ComboA'
+26600 ! c_x=2 : c_y=1
+26700 ! c$(c_x,c_y)='ComboA'
 26800 ! for srv_item=1 to 10
 26900 !  if (srv_item=1 and trim$(srv$(srv_item))<>'') or (srvnam$(srv_item)="GAS" or srv$(srv_item)="GA") or srv$(srv_item)='EL' or srvnam$(srv_item)="Lawn Meter" then ! if it is a metered service
-27000 !   let c$(c_x,c_y+=1)=srv$(srv_item)
+27000 !   c$(c_x,c_y+=1)=srv$(srv_item)
 27100 !  end if
 27200 ! next srv_item
 27300   fnend 
@@ -81,7 +81,7 @@
 28200 ERTN: let fnerror(program$,err,line,act$,"xit")
 28300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 28400   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-28500   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+28500   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 28600 ERTN_EXEC_ACT: execute act$ : goto ERTN
 28700 ! /region
 28800 ! ______________________________________________________________________
@@ -234,7 +234,7 @@
 43400   def fn_hamster_field_add(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position) ! ,disable) <- didn't quite work as easily as i was hoping for it to.
 43500     if field_type$='' then let field_type$='C'
 43600     if storage_length=0 then let storage_length=textbox_len
-43700     let add_rec_item=udim(mat lbl$)+1
+43700     add_rec_item=udim(mat lbl$)+1
 43800     mat lbl$(add_rec_item) : let lbl$(add_rec_item)=label$
 43900     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
 44000     mat p$(add_rec_item)
@@ -245,7 +245,7 @@
 44500     if storage_position=0 then 
 44600       if add_rec_item=1 then 
 44700         let sp(add_rec_item)=1
-44800         let auto_storage_position=1
+44800         auto_storage_position=1
 44900       else 
 45000         let sp(add_rec_item)=sp(add_rec_item-1)+sln(add_rec_item-1)
 45100       end if 

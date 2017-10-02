@@ -53,7 +53,7 @@
         open #glmstr: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00450   let gltrans=2 !:
         open #gltrans: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,outin,relative 
-00460   let actrans=3 !:
+00460   actrans=3 !:
         open #actrans: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00470   let x=lrec(2)
 00480 ! ____
@@ -71,7 +71,7 @@
 00600     if ta(2)>0 then !:
             rewrite #gltrans,using L640,rec=ta(2): lr2
 00610     let ta(2)=lr2
-00620     let cb=cb+k
+00620     cb=cb+k
 00630     rewrite #glmstr,using L560,key=t$: cb,mat ta
 00640 L640: form pos 71,pd 3
 00650 NEXT_GLTRANS: next j
@@ -86,7 +86,7 @@
 00740   if ta(1)=0 then let ta(1)=lr2
 00750   if ta(2)>0 then rewrite #gltrans,using L640,rec=ta(2): lr2
 00760   let ta(2)=lr2
-00770   let cb=cb+k
+00770   cb=cb+k
 00780   rewrite #glmstr,using L560,key=t$: cb,mat ta
 00790 NXT_HIST: goto READ_ACTRANS
 00800 ! ______________________________________________________________________
@@ -100,7 +100,7 @@
 00880 ERTN: let fnerror(program$,err,line,act$,"xit")
 00890   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00900   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00910   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00910   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00920 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00930 ! /region
 00940 ! ______________________________________________________________________

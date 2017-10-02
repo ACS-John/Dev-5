@@ -15,18 +15,18 @@
 00150 ! ______________________________________________________________________
 00160   let fntop("S:\acsSU\Company",cap$="Company Information")
 00170   let fncno(cno)
-00180   let cancel=99 : let right=1 : let center=2 : let left=0 !:
-        let ccyymmdd$='3' : let mmddyy$='1' : let on=1 : let off=0 !:
-        let cancel=5 : let save=1 : let limit_to_list=1 : let pointtwo$='32' !:
+00180   cancel=99 : let right=1 : center=2 : let left=0 !:
+        ccyymmdd$='3' : let mmddyy$='1' : let on=1 : let off=0 !:
+        cancel=5 : let save=1 : let limit_to_list=1 : let pointtwo$='32' !:
         let pointthree$='33'
 00190   open #company=1: "Name="&env$('Q')&"\"&fncursys$&"mstr\Company.h"&str$(cno)&",Shr",internal,outin,relative ioerr BUILD_COMPANY
 00200   goto READ_COMPANY
 00210 ! ______________________________________________________________________
 00220 READ_COMPANY: ! 
 00230   read #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,wbc,ar1,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
-00240   if actr$="0" or actr$="1" then let actr=val(actr$)
-00250   if uprc$(actr$)="Y" then let actr=1 else !:
-          if uprc$(actr$)="N" then let actr=0
+00240   if actr$="0" or actr$="1" then actr=val(actr$)
+00250   if uprc$(actr$)="Y" then actr=1 else !:
+          if uprc$(actr$)="N" then actr=0
 00260   gosub NEWSCREEN !:
         if ckey=save then gosub SAVE : goto XIT else !:
           if ckey=cancel then goto XIT !:
@@ -47,11 +47,11 @@
 00330   let fncmdset(4) ! Save and Cancel
 00340   let fnacs(sn$,0,mat resp$,ckey)
 00350   if page=1 then 
-00360     let a$(1)=resp$(1) !:
-          let a$(2)=resp$(2) !:
-          let a$(3)=resp$(3) !:
-          let b$(1)=resp$(4) !:
-          let b$(2)=resp$(5) !:
+00360     a$(1)=resp$(1) !:
+          a$(2)=resp$(2) !:
+          a$(3)=resp$(3) !:
+          b$(1)=resp$(4) !:
+          b$(2)=resp$(5) !:
           let tb$=resp$(6) !:
           let nap=val(resp$(7)) !:
           let wbc=val(resp$(8)(1:2))
@@ -103,7 +103,7 @@
 00730 ERTN: let fnerror(program$,err,line,act$,"xit")
 00740   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00750   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00760   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00760   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00770 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00780 ! /region
 00790 ! ______________________________________________________________________

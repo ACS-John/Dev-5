@@ -5,7 +5,7 @@
 00050 ! __________________
 00051   dim prg$*256,cap$*128,ln$*900
 00052 ! ___________________
-00060   let cancel=5
+00060   cancel=5
 00070   let fntop(prg$='S:\Core\Programs\PrintTest',cap$='Print Test')
 00080 ! ___________________
 00090   let fntos(sn$='PrintTest') !:
@@ -23,7 +23,7 @@
 00165 ! add fnWAIT here when it been rewritten
 00170   let fnopenprn
 00180   let ln$=rpt$("X",val(resp$(1)))
-00190   for j=1 to val(resp$(2)) : print #255: ln$ : next j
+00190   for j=1 to val(resp$(2)) : pr #255: ln$ : next j
 00200   let fncloseprn
 00210   goto XIT
 00220 ! ______________________________________________________________________
@@ -34,7 +34,7 @@
 00270 ERTN: let fnerror(program$,err,line,act$,"xit")
 00280   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00290   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00300   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00310 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00320 ! /region
 00330 ! ______________________________________________________________________

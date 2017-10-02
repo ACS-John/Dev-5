@@ -11,11 +11,11 @@
 00110   dim cnam$*40,temp_desc$*35,msgline$(2)*60
 00120   dim cap$*128,fkey$(12)*20,temp$(20)*80
 00130 ! ______________________________________________________________________
-00140   let cap$="Select Automatic Processing Programs"
+00140   cap$="Select Automatic Processing Programs"
 00150   let fncno(cno,cnam$)
 00155   let fnconsole(1)
 00160 ! ______________________________________________________________________
-00170   data "    Print Payroll Worksheet","S:\acsPR\PRWKSHT"
+00170   data "    pr Payroll Worksheet","S:\acsPR\PRWKSHT"
 00180   data "    Employee Proof List","S:\acsPR\PRPROOF"
 00190   data "    Reassign Department Addresses","S:\acsPR\PRFIXADR"
 00200   data "    Enter Time Sheets","S:\acsPR\PRINPUT"
@@ -36,10 +36,10 @@
 00350   data "      Enter W-2 Box 14 Info","S:\acsPR\W2BOX16"
 00360   data "      W-2 Forms","S:\acsPR\PRW2A"
 00370   data "      Electronic W2 Program","S:\acsPR\PRELECW2"
-00380   data "      Print 1099","S:\acsPR\PR1099"
+00380   data "      pr 1099","S:\acsPR\PR1099"
 00390   data "      Electronic 401K","S:\acsPR\PR401K"
 00400   data "      Zero Yearly","S:\acsPR\PRZYTD"
-00410   data "      Print Reports In Report File","S:\acsPR\PRRPTs1"
+00410   data "      pr Reports In Report File","S:\acsPR\PRRPTs1"
 00420   data "      Employee Review Register","S:\acsPR\PREMPREV"
 00430   data "      Workmans Comp. Report","S:\acsPR\PRWKMCMP"
 00440   data "      Labels","S:\acsPR\PRLABEL"
@@ -47,7 +47,7 @@
 00460   data "      Change Pay Period Ending Date","S:\acsPR\CHGDATE"
 00470   data "      Maintain Tax Deposit File","S:\acsPR\PRREGFM"
 00480   data "      Extend Time Card ","S:\acsPR\TIMECARD"
-00490   data "      Print Input Worksheet","S:\acsPR\PRINPWK"
+00490   data "      pr Input Worksheet","S:\acsPR\PRINPWK"
 00500   data "    Job File Menu","S:\acsPR\JCMAINT"
 00510   data "    Sub-Category File Menu","S:\acsPR\JCSCMINT"
 00520   data "    User-Designed Reports File Menu","S:\acsPR\JCRPTFM"
@@ -56,13 +56,13 @@
 00550   data "    Enter Billings","S:\acsPR\JCIPBIL"
 00560   data "    Transfer J/C To P/R","S:\acsPR\JCPRINPT"
 00570   data "    Certified Payroll Register","S:\acsPR\JCCPR1"
-00580   data "    Print Job Status Worksheet","S:\acsPR\JCSTWKSH"
+00580   data "    pr Job Status Worksheet","S:\acsPR\JCSTWKSH"
 00590   data "    Enter Percent Complete  ","S:\acsPR\JCPCTCMP"
-00600   data "    Print Job Cost Report   ","S:\acsPR\JCPRTDET"
-00610   data "    Print User-Designed Reports",""
+00600   data "    pr Job Cost Report   ","S:\acsPR\JCPRTDET"
+00610   data "    pr User-Designed Reports",""
 00620   data "    Zero Current Period Info","S:\acsPR\JCZCUR"
 00630   data "    Remove Completed Jobs   ","S:\acsPR\JCREMOVE"
-00640   data "    Print Name and Number List","S:\acsPR\JCNAMLST"
+00640   data "    pr Name and Number List","S:\acsPR\JCNAMLST"
 00650 L650: read m$(i+=1),pgm$(i) eof OPEN_FILES : goto L650
 00660 ! ______________________________________________________________________
 00670 OPEN_FILES: ! 
@@ -71,7 +71,7 @@
 00700 ! ______________________________________________________________________
 00710 MENU1: ! 
 00720   let fnwin3b(win=101,cap$,21,75,0,4)
-00730   print #win,fields "1,1,C 75,R,N": "Line   Program                              Weekly    Monthly  Quarterly"
+00730   pr #win,fields "1,1,C 75,R,N": "Line   Program                              Weekly    Monthly  Quarterly"
 00740   for l1=1 to 20
 00750     let io1$(l1)=str$(l1+1)&",3,C 71,N"
 00760     read #prpgmn,using 'Form POS 1,C 20,C 35 ,3*N 1',rec=l1: nxtpgm$(l1),nxtdesc$(l1),wk(l1),mo(l1),qt(l1) norec L780
@@ -92,26 +92,26 @@
 00890   let fnxit
 00900 ! ______________________________________________________________________
 00910 PRINT_LINE_L1: ! 
-00920   print #win,fields str$(l1+1)&",3,N 2,N": l1 !:
-        print #win,fields str$(l1+1)&",8,C 35,N": nxtdesc$(l1)
+00920   pr #win,fields str$(l1+1)&",3,N 2,N": l1 !:
+        pr #win,fields str$(l1+1)&",8,C 35,N": nxtdesc$(l1)
 00930   if wk(l1)=1 then let tmpyn$="Y" else let tmpyn$="N"
-00940   print #win,fields str$(l1+1)&",50,C 1,N": tmpyn$
+00940   pr #win,fields str$(l1+1)&",50,C 1,N": tmpyn$
 00950   if mo(l1)=1 then let tmpyn$="Y" else let tmpyn$="N"
-00960   print #win,fields str$(l1+1)&",61,C 1,N": tmpyn$
+00960   pr #win,fields str$(l1+1)&",61,C 1,N": tmpyn$
 00970   if qt(l1)=1 then let tmpyn$="Y" else let tmpyn$="N"
-00980   print #win,fields str$(l1+1)&",72,C 1,N": tmpyn$
+00980   pr #win,fields str$(l1+1)&",72,C 1,N": tmpyn$
 00990   return 
 01000 ! ______________________________________________________________________
 01010 CHANGE_PROGRAM: ! 
 01020   let j1=j3=0 : mat sd$(20)
 01030   let fnwin3b(win=102,cap$,22,38,0,0) !:
-        print #win: newpage
+        pr #win: newpage
 01040   mat fkey$=("") : let fkey$(1)="Next" : let fkey$(2)="Top" !:
         let fnfkey(24,mat fkey$,mat disfk,empty$,es=0)
 01050   for j=1 to udim(m$)
 01060     if pos(pgm$(j),"\",1)=0 then goto L1210
 01070     let pgm(j1+=1)=j : let sf$(j1)=str$(j1+1)&",2,C 35,N"
-01080     print #win,fields sf$(j1): ltrm$(m$(j))(1:35)
+01080     pr #win,fields sf$(j1): ltrm$(m$(j))(1:35)
 01090     if j1<20 then goto L1210
 01100 L1100: input #win,select mat sf$,attr "H": mat sd$
 01110     if cmdkey=5 then goto L1280
@@ -125,24 +125,24 @@
 01170     goto L1260
 01180 L1180: if j3=1 then goto CHANGE_PROGRAM
 01190     let j1=0
-01200     print #win: newpage
+01200     pr #win: newpage
 01210 L1210: next j
 01220   if j1<1 then goto CHANGE_PROGRAM
 01230   mat sd$(j1)
 01240   let j3=1
 01250   goto L1100
 01260 L1260: close #win: 
-01270   let ce+=1
+01270   ce+=1
 01280 L1280: goto ASK_LINE_DATA
 01290 ! ______________________________________________________________________
 01300 ASK_LINE_DATA: ! 
 01310   let fnwin3b(win=103,cap$,7,55,0,0)
-01320   print #win,fields "2,2,Cr 12,N": "Line Number:" !:
-        print #win,fields "2,15,N 2,N": l1
-01330   print #win,fields "3,2,Cr 12,N": "Program:" !:
-        print #win,fields "4,2,Cr 12,N": "Weekly:" !:
-        print #win,fields "5,2,Cr 12,N": "Monthly:" !:
-        print #win,fields "6,2,Cr 12,N": "Quarterly:"
+01320   pr #win,fields "2,2,Cr 12,N": "Line Number:" !:
+        pr #win,fields "2,15,N 2,N": l1
+01330   pr #win,fields "3,2,Cr 12,N": "Program:" !:
+        pr #win,fields "4,2,Cr 12,N": "Weekly:" !:
+        pr #win,fields "5,2,Cr 12,N": "Monthly:" !:
+        pr #win,fields "6,2,Cr 12,N": "Quarterly:"
 01340   let io3$(1)="3,15,C 35,PU,N" : let io3$(2)="4,15,Cu 1,CUT,N" !:
         let io3$(3)="5,15,Cu 1,UT,N" : let io3$(4)="6,15,Cu 1,UT,N"
 01350   mat fkey$=("") !:
@@ -155,15 +155,15 @@
 01390   let temp_desc$=nxtdesc$(l1)
 01400   if rtrm$(temp_desc$)="" then goto CHANGE_PROGRAM
 01410 L1410: rinput #win,fields mat io3$: temp_desc$,temp_wk$,temp_mo$,temp_qt$
-01420   if ce>0 then let io3$(ce)(ce1:ce2)="U": let ce=0
-01430   if cmdkey>0 then goto L1500 else let ce=curfld
-01440 L1440: let ce=ce+1: if ce>udim(io3$) then let ce=1
-01450 L1450: let io3$(ce)=rtrm$(io3$(ce)) : let ce1=pos(io3$(ce),"U",9) !:
+01420   if ce>0 then let io3$(ce)(ce1:ce2)="U": ce=0
+01430   if cmdkey>0 then goto L1500 else ce=curfld
+01440 L1440: ce=ce+1: if ce>udim(io3$) then ce=1
+01450 L1450: let io3$(ce)=rtrm$(io3$(ce)) : ce1=pos(io3$(ce),"U",9) !:
         if ce1=0 then goto L1440
-01460   let ce2=ce1+1 : let io3$(ce)(ce1:ce1)="UC" : goto L1410
+01460   ce2=ce1+1 : let io3$(ce)(ce1:ce1)="UC" : goto L1410
 01470 CONV3: if ce>0 then let io3$(ce)(ce1:ce2)="U"
-01480   let ce=cnt+1
-01490 ERR3: print fields "24,78,C 1": bell : goto L1450
+01480   ce=cnt+1
+01490 ERR3: pr fields "24,78,C 1": bell : goto L1450
 01500 L1500: if cmdkey=5 then goto DONE_ASK_LINE_DATA
 01510   if cmdkey=7 then goto CHANGE_PROGRAM
 01520   if cmdkey=4 then let nxtdesc$(l1)="" : let nxtpgm$(l1)="" !:
@@ -195,7 +195,7 @@
 01730 ERTN: let fnerror(program$,err,line,act$,"xit")
 01740   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01750   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01760   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01760   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01770 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01780 ! /region
 01790 ! ______________________________________________________________________

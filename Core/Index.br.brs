@@ -33,7 +33,7 @@
 22100     dim cap$*128
 22120     dim index_execute_text$*512
 22140     let data_file$=trim$(data_file$)
-22160     let cap$='fnindex_it for '&data_file$(1:128) ! data_file$(len(data_file$)-80:len(data_file$)) ! cap$ is just for the error routine anyway
+22160     cap$='fnindex_it for '&data_file$(1:128) ! data_file$(len(data_file$)-80:len(data_file$)) ! cap$ is just for the error routine anyway
 22180     let is_index_statement=1
 22200     let is_index_file=2
 22220 !   /r
@@ -55,7 +55,7 @@
 27140         let index_parameters$=trim$(index_parameters$)&' Replace DupKeys Shr' ! -N
 27141 ! 
 27145 ! 
-27150 !         pr 'index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$ : pause
+27150 !       pr 'index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$ : pause
 27154         let index_execute_text$='index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$
 27156 !       if env$('ACSDeveloper')='' then execute 'CD '&env$('temp')(1:2)
 27158 !       if env$('ACSDeveloper')='' then execute 'CD '&env$('temp')(3:len(env$('temp')))
@@ -77,7 +77,9 @@
 30120       open #h_tmp:=fngethandle: 'name='&data_file$,internal,input error EIE_7600_XIT
 30140       let fnstatus('     (Record Length is '&str$(rln(h_tmp))&')')
 30160       close #h_tmp: 
-30180 EIE_7600_XIT: ! 
+30180       EIE_7600_XIT: ! 
+30182     else if err=7605 then 
+30184       if env$('acsDeveloper')<>'' then pause
 30200     end if 
 32000 INDEX_XIT: ! 
 32020     if fail then 
@@ -95,7 +97,7 @@
 44060   let fnerror(program$,err,line,act$,"xit")
 44080   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 44100   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-44120   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+44120   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 44140 ERTN_EXEC_ACT: execute act$ : goto ERTN
 44160 ! /region
 50000   def library fnindex_sys(; only_cno,system_id$*2)
@@ -280,7 +282,7 @@
 55340   fnend 
 62000   def library fnub_index_customer(; cno)
 62020     let fn_index_it_setup
-62040     if cno=0 then let cno=val(env$('cno'))
+62040     if cno=0 then cno=val(env$('cno'))
 62060     let fnub_index_customer=fn_ub_index_customer(cno)
 62080   fnend 
 62100   def fn_ub_index_customer(cno)

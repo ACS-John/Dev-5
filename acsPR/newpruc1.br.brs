@@ -26,10 +26,10 @@
 24040   dim ptotal(4)
 24060   dim grand_total(4)
 24080   dim col_amt_form$(4)*80
-24100   let col_amt_form$(1)='pic(--,---,---.zz)  '
-24120   let col_amt_form$(2)='pic(---,---,---.zz) '
-24140   let col_amt_form$(3)='pic(-,---,---.zz) '
-24160   let col_amt_form$(4)='pic(--,---,---.zz)'
+24100   col_amt_form$(1)='pic(--,---,---.zz)  '
+24120   col_amt_form$(2)='pic(---,---,---.zz) '
+24140   col_amt_form$(3)='pic(-,---,---.zz) '
+24160   col_amt_form$(4)='pic(--,---,---.zz)'
 24180   let total_underline$(1)="___________   "
 24200   let total_underline$(2)=" ___________ "
 24220   let total_underline$(3)="__________   "
@@ -66,10 +66,10 @@
 32460   next j
 32480   mat option1$(max(1,x))
 32500   let fncreg_read('uc1 - quarter',quarter$) : if quarter$='' then let quarter$='1'
-32520   let fncreg_read('uc1 - show total wage',column$(1)) : if column$(1)='' then let column$(1)='True'
-32540   let fncreg_read('uc1 - show excess wage',column$(2)) : if column$(2)='' then let column$(2)='True'
-32560   let fncreg_read('uc1 - show taxable wage',column$(3)) : if column$(3)='' then let column$(3)='True'
-32580   let fncreg_read('uc1 - show state tax withheld',column$(4)) : if column$(4)='' then let column$(1)='True'
+32520   let fncreg_read('uc1 - show total wage',column$(1)) : if column$(1)='' then column$(1)='True'
+32540   let fncreg_read('uc1 - show excess wage',column$(2)) : if column$(2)='' then column$(2)='True'
+32560   let fncreg_read('uc1 - show taxable wage',column$(3)) : if column$(3)='' then column$(3)='True'
+32580   let fncreg_read('uc1 - show state tax withheld',column$(4)) : if column$(4)='' then column$(1)='True'
 32590 ! /r
 32600 ! r: main screen (falls through to next section)
 34000   let fntos(sn$="pruc1b")
@@ -105,10 +105,10 @@
 36060   let quarter_code=val(resp$(3)) ! quarter to analyze earnings
 36080   let fncreg_write('uc1 - quarter',resp$(3))
 36100   if resp$(4)(1:1)="T" then let round$="Y"
-36120   let column$(1)=resp$(5) ! want total wage column
-36140   let column$(2)=resp$(6) ! want excess wage column
-36160   let column$(3)=resp$(7) ! want taxable wage column
-36180   let column$(4)=resp$(8) ! True=want state tax withheld column
+36120   column$(1)=resp$(5) ! want total wage column
+36140   column$(2)=resp$(6) ! want excess wage column
+36160   column$(3)=resp$(7) ! want taxable wage column
+36180   column$(4)=resp$(8) ! True=want state tax withheld column
 36200   let fncreg_write('uc1 - show total wage',column$(1))
 36220   let fncreg_write('uc1 - show excess wage',column$(2))
 36240   let fncreg_write('uc1 - show taxable wage',column$(3))
@@ -133,7 +133,7 @@
 42040   let m1=m2=h2=h3=dcq=dcy=0 : mat ytdtotal=(0)
 42060   mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0): mat qtr4tcp=(0)
 42080   mat ytdtota(0)
-42100   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+42100   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 42120   restore #h_payrollchecks,key>=checkkey$: nokey ANALYZE_WAGES
 46000 MAIN_LOOP: ! r:
 46020   read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof ANALYZE_WAGES
@@ -183,9 +183,9 @@
 52020   let eofcode=1
 52040   gosub PAGE_TOTALS
 52060   gosub HDR
-52080   print #255,using L1460: "Grand Totals:",grand_total(1),grand_total(2),grand_total(3)
+52080   pr #255,using L1460: "Grand Totals:",grand_total(1),grand_total(2),grand_total(3)
 52100 L1460: form pos 5,c 15,pos 42,pic(--,---,---.zz),pos 57,pic(--,---,---.zz),pos 70,pic(----,---.zz),skip redir
-52120   print #255,using L1480: "U/C Tax Due:",round(grand_total(3)*r(stcode)*.01,2)
+52120   pr #255,using L1480: "U/C Tax Due:",round(grand_total(3)*r(stcode)*.01,2)
 52140 L1480: form pos 5,c 15,pic(--,---,---.zz)
 52160 FINIS: close #2: ioerr ignore
 52180   close #h_department: ioerr ignore
@@ -212,29 +212,29 @@
 54360   if column$(2)<>"True" then let h3=0 ! no excess column
 54380   if column$(3)<>"True" then let h2=0 ! no taxable column
 54400   if column$(4)<>"True" then let state_wh=0 ! no state withholding column
-54420 ! print #255,using L1710: ss$,em$(1)(1:28),m1,h3,h2,state_wh
+54420 ! pr #255,using L1710: ss$,em$(1)(1:28),m1,h3,h2,state_wh
 54440 ! L1710: form pos 1,c 11,pos 14,c 28,pos 42,pic(--,---,---.zz),pos 57,pic(--,---,---.zz),pos 70,pic(----,---.zz),pos 83,pic(----,---.zz),skip 1
-54460   print #255: rpad$(ss$,11)&'   '&em$(1)(1:28);
-54480   let col_amt(1)=m1
-54500   let col_amt(2)=h3
-54520   let col_amt(3)=h2
-54540   let col_amt(4)=state_wh
+54460   pr #255: rpad$(ss$,11)&'   '&em$(1)(1:28);
+54480   col_amt(1)=m1
+54500   col_amt(2)=h3
+54520   col_amt(3)=h2
+54540   col_amt(4)=state_wh
 54560   let fn_print_line_amt(mat col_amt,mat col_amt_form$)
 54580   for col_item=1 to udim(mat column$)
 54600     let ptotal(col_item)+=col_amt(col_item)
 54620     let grand_total(col_item)+=col_amt(col_item) ! grand totals
 54640   next col_item
-54660   print #255: pageoflow PGOF
+54660   pr #255: pageoflow PGOF
 54680   let p1=p1+2
 54700 L1780: ! 
 54720   return  ! /r
 56000 PAGE_TOTALS: ! r:
 56180   let fn_print_line_str(mat total_underline$,44)
-56200   print #255: "Employees on this page:";p3;"    Page Totals";
-56220 ! print #255,using L1880: ptotal(1),ptotal(2),ptotal(3),ptotal(4)
+56200   pr #255: "Employees on this page:";p3;"    Page Totals";
+56220 ! pr #255,using L1880: ptotal(1),ptotal(2),ptotal(3),ptotal(4)
 56260   let fn_print_line_amt(mat ptotal,mat col_amt_form$)
 56360   if nw=1 and eofcode=1 then goto L1910
-56380   print #255: newpage
+56380   pr #255: newpage
 56400 L1910: let p3=0
 56420   mat ptotal=(0)
 56440   return  ! /r
@@ -246,7 +246,7 @@
 61040 ERTN: let fnerror(program$,err,line,act$,"xit")
 61060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 61080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-61100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+61100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 61120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 61140 ! /region
 61160 ! ______________________________________________________________________
@@ -254,29 +254,29 @@
 61190 IGNORE: continue 
 64000 HDR: ! r:
 64020 ! r: page heading
-64040   print #255,using L1090: "Page ",p2+=1
+64040   pr #255,using L1090: "Page ",p2+=1
 64060 L1090: form pos 70,c 5,pic(zzz)
-64080   print #255: ''
-64100   print #255: "\qc  {\f201 \fs24 \b Schedule A - Employer's Report of Wages Paid to Each Employee}"
-64120   print #255: "\ql   "
-64140   print #255,using L1150: "For quarter ended "&quarter_ending_date$
-64160   if department$<>'[All]' then print #255,using L1150: "Department "&department$
+64080   pr #255: ''
+64100   pr #255: "\qc  {\f201 \fs24 \b Schedule A - Employer's Report of Wages Paid to Each Employee}"
+64120   pr #255: "\ql   "
+64140   pr #255,using L1150: "For quarter ended "&quarter_ending_date$
+64160   if department$<>'[All]' then pr #255,using L1150: "Department "&department$
 64180 L1150: form pos 20,cc 40
-64200   print #255: 
-64220   print #255,using L1180: "     Rate",a$(1),"Fed ID",b$(1)
+64200   pr #255: 
+64220   pr #255,using L1180: "     Rate",a$(1),"Fed ID",b$(1)
 64240 L1180: form pos 1,c 9,pos 17,c 40,pos 59,c 6,pos 69,c 40,skip 1
 64260   if stcode=0 then let stcode=1
-64280   print #255,using L1210: r(stcode),a$(2),"State ID",e$(stcode)
+64280   pr #255,using L1210: r(stcode),a$(2),"State ID",e$(stcode)
 64300 L1210: form pos 3,pic(zzzz.##),pos 17,c 40,pos 59,c 8,pos 69,c 12,skip 1
-64320   print #255,using L1230: a$(3),"STATE",d$(stcode)
+64320   pr #255,using L1230: a$(3),"STATE",d$(stcode)
 64340 L1230: form pos 17,c 40,pos 59,c 5,pos 69,c 8,skip 1
-64360   print #255: 
+64360   pr #255: 
 64380 ! /r
 65000 ! r: column headings
 65320   let fn_print_line_str(mat heading_1$, 44)
-65340   print #255: " SS Number             Name              ";
+65340   pr #255: " SS Number             Name              ";
 65360   let fn_print_line_str(mat heading_2$, 44)
-65380   print #255: "___________  __________________________";
+65380   pr #255: "___________  __________________________";
 65400   let fn_print_line_str(mat heading_3$, 44) ! underlines
 65420 ! /r
 65440   return  ! /r
@@ -289,7 +289,7 @@
 68080         let pl_line$=pl_line$&pl_str$(pl_item)
 68100       end if 
 68120     next pl_item
-68140     print #255,using 'form pos pl_pos,c': pl_line$
+68140     pr #255,using 'form pos pl_pos,c': pl_line$
 68180   fnend 
 68200   def fn_print_line_amt(mat pl_amt,mat pl_form$; pl_pos)
 68210     let pl_line$=''
@@ -299,5 +299,5 @@
 68280         let pl_line$=pl_line$&cnvrt$(pl_form$(pl_item),pl_amt(pl_item))
 68300       end if 
 68320     next pl_item
-68340     print #255,using 'form pos pl_pos,c': pl_line$
+68340     pr #255,using 'form pos pl_pos,c': pl_line$
 68360   fnend 

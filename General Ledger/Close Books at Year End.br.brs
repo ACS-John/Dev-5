@@ -28,9 +28,9 @@
 
 31000   if fnUseDeptNo then
 
-32000     ! let lc+=1 : let col3_pos=1 ! mypos+20
+32000     ! let lc+=1 : col3_pos=1 ! mypos+20
 32020     ! let resp_lrea_fund_1=rc+1
-32060     ! let col4_pos=mypos ! col3_pos+10
+32060     ! col4_pos=mypos ! col3_pos+10
 32080     ! let fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account(s)')
 32100     ! for fund_item=1 to udim(mat fund_list)
 32120     !   let fnlbl(lc+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",mylen,1)
@@ -49,7 +49,7 @@
 34140       fncreg_read('Close all departments to one retained earnings (equity) account',resp$(rc_close2:=rc+=1),'False')
 
 35500   ! else 
-35520   !   let col4_pos=col3_pos+32
+35520   !   col4_pos=col3_pos+32
 35540   !   let fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account:',31,1)
 35560   !   let fnqgl(lc,col4_pos)
 35580   !   let rc+=1
@@ -121,7 +121,7 @@
 44580     let fncreg_write("last retained earnings account - no fund",resp$(1))
 44600   end if 
 44620   read #hGlMstr1,using 'form pos 1,c 3,c 6,c 3',key=glnumber$: dno$,ano$,sno$ nokey SCR2
-44640   let acno$=glnumber$(1:3)&"         "
+44640   acno$=glnumber$(1:3)&"         "
 44660 ! 
 44680 read #hGlMstr1,using fGlMstr1,key>=acno$: acno$,bb,cb,mat bc,mat bp,mat bud nokey SCR2
 44700 goto L770
@@ -132,18 +132,18 @@
 48080   if glnumber$(1:3)><acno$(1:3) then let dno=ano=sno=0: goto SCR2
 48100   L790: !
 48120   if acno$=glnumber$ then 
-48140     let cb=-t5
-48160     ! LET BC(NAP)=CB   ! SET RETAINED BALANCE IN HISTORY AFTER CLOSING
+48140     cb=-t5
+48160     ! bC(NAP)=CB   ! SET RETAINED BALANCE IN HISTORY AFTER CLOSING
 48180     if nap=0 or nap>13 then let nap=12
 48200   end if
 48220   let pbp=bp(nap)
 48240   mat bp=bc
 48260   mat bc=(0)
-48280   let bb=cb
+48280   bb=cb
 48300   let t5=t5+cb
 48320   if acno$>glnumber$ then  ! create a budget history record
 48340     write #hBudgetInfo,using "form pos 1,c 12,c 2,2*pd 6.2": acno$,yr$,cb,sum(bud)
-48360     let cb=bb=0
+48360     cb=bb=0
 48380   end if
 48400   rewrite #hGlMstr1,using 'form pos 1,c 12,pos 81,41*pd 6.2,pos 327,pd 6.2': acno$,bb,cb,mat bc,mat bp,mat bud,pbp
 48420 loop
@@ -165,7 +165,7 @@
 61020 ERTN: let fnerror(program$,err,line,act$,"xit")
 61030   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 61040   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-61050   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+61050   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 61060 ERTN_EXEC_ACT: execute act$ : goto ERTN
 61070 ! /region
 61080 ! ______________________________________________________________________

@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsUB\ubMetrBk
-00020 ! Print Meter Reading Routes
+00020 ! pr Meter Reading Routes
 02000 ! ______________________________________________________________________
 02020   library "S:\Core\Library": fnacs,fnlbl,fnwait,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fnxit,fndat,fncmdset,fntop,fncomboa,fnpause,fnchk,fntxt,fnfra,fnopt,fnreg_write,fnreg_read,fnpa_finis,fnget_services,fngethandle
 02040   on error goto ERTN
@@ -81,8 +81,8 @@
 10100   if resp$(4)(1:1)="T" then let double=1 ! yes want to double space
 10120   if resp$(5)(1:1)="T" then let usedcolumn=1 ! yes want a gallons used column
 10140   if resp$(6)(1:1)="T" then let skipdisconnects=1 ! yes want show disconnects
-10160   if resp$(7)(1:1)="T" then let printprior=1 ! print prior months usage
-10180   if resp$(8)(1:1)="T" then let skipmeter=1 ! don't print meter number
+10160   if resp$(7)(1:1)="T" then let printprior=1 ! pr prior months usage
+10180   if resp$(8)(1:1)="T" then let skipmeter=1 ! don't pr meter number
 10200   let extralines=val(resp$(9))
 10220   if resp$(10)="True" then let seq=1
 10240   if resp$(11)="True" then let seq=2
@@ -174,39 +174,39 @@
 18000 L940: ! If env$('client')="Thomasboro" AND FBC<>0 Then Goto 500
 18020   if fbc><0 then let e$(2)="Disconnect"
 18040   if env$('client')="Thomasboro" then 
-18120     print #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
+18120     pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
 18140     goto L1050
 18160   end if 
 18180   if skipmeter=0 then 
 18200     if printprior=1 then 
-18220       print #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 35,n 9': z$,e$(2)(1:18),f$(1),e$(1)(1:20),mat x_service$
+18220       pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 35,n 9': z$,e$(2)(1:18),f$(1),e$(1)(1:20),mat x_service$
 18240     else if usedcolumn=0 then 
-18260       print #255,using L1032: z$,e$(2)(1:18),f$(1),e$(1)(1:20),mat x_service$
+18260       pr #255,using L1032: z$,e$(2)(1:18),f$(1),e$(1)(1:20),mat x_service$
 18280 L1032: form pos 1,c 10,x 1,c 18,x 1,c 12,x 1,c 20,x 1,x_service*c 26
 18300     else if usedcolumn=1 then 
-18320       print #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 43,x 3': z$,e$(2)(1:18),f$(1),e$(1)(1:20),mat x_service$
+18320       pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 12,X 1,C 20,X 1,X_service*c 43,x 3': z$,e$(2)(1:18),f$(1),e$(1)(1:20),mat x_service$
 18340     end if 
 18360   else if printprior=1 then 
-18380     print #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 35,n 9': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
+18380     pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 35,n 9': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
 18400   else if usedcolumn=0 then 
-18420     print #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 26': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
+18420     pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 26': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
 18440   else if usedcolumn=1 then 
-18460     print #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43,x 3': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
+18460     pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43,x 3': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
 18480   end if 
 18500 L1050: ! 
 18520   if remark=1 then 
 18540     gosub REMARK
-18560     print #255,using "form pos 1,c 60": ft$
+18560     pr #255,using "form pos 1,c 60": ft$
 18580   end if 
-18600   if double=1 then print #255: 
+18600   if double=1 then pr #255: 
 18620   if extralines>0 then 
 18640     for j=1 to extralines
-18660       print #255: 
+18660       pr #255: 
 18680     next j
 18700   end if 
 18720   goto LOOP_TOP
 18740 ! /r
-21000 PGOF: print #255: newpage : gosub HEADER : continue 
+21000 PGOF: pr #255: newpage : gosub HEADER : continue 
 22000 DONE: ! r:
 22020   close #h_customer: ioerr ignore
 22040   let fncloseprn ! /r
@@ -220,44 +220,44 @@
 24100   fnend  ! fn_reg_try$
 26000 HEADER: ! r:
 26020   if env$('client')="Thomasboro" then 
-26040     print #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
-26060     print #255: "\qc  {\f181 \fs18 \b "&trim$(dat$)&"}"
-26080     print #255: ""
-26100     print #255: "\ql {\ul Account No} {\ul Name              } ";
-26120     print #255: "{\ul Meter Address          } ";
+26040     pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
+26060     pr #255: "\qc  {\f181 \fs18 \b "&trim$(dat$)&"}"
+26080     pr #255: ""
+26100     pr #255: "\ql {\ul Account No} {\ul Name              } ";
+26120     pr #255: "{\ul Meter Address          } ";
 26140     goto L1190
 26160   end if 
-26180   print #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
-26200   print #255: "\qc  {\f181 \fs18 \b "&trim$(dat$)&"}"
-26210   print #255: "\qc  {\f181 \fs18 \b Page "&str$(page_count+=1)&"}"
-26220   print #255: ""
+26180   pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
+26200   pr #255: "\qc  {\f181 \fs18 \b "&trim$(dat$)&"}"
+26210   pr #255: "\qc  {\f181 \fs18 \b Page "&str$(page_count+=1)&"}"
+26220   pr #255: ""
 26240   if route<>0 then 
-26260     print #255: " Route: "&str$(route)
-26280     print #255: ""
+26260     pr #255: " Route: "&str$(route)
+26280     pr #255: ""
 26300   end if 
-26460   print #255: "\ql {\ul Account No} {\ul Name              } ";
+26460   pr #255: "\ql {\ul Account No} {\ul Name              } ";
 26480   if skipmeter=1 then 
-26500     print #255: "{\ul Meter Address          } ";
+26500     pr #255: "{\ul Meter Address          } ";
 26520   else 
-26540     print #255: "{\ul Meter Number} {\ul Meter Address          } ";
+26540     pr #255: "{\ul Meter Number} {\ul Meter Address          } ";
 26560   end if 
 26580 L1190: ! 
 26600   for j=1 to x_service
 26700     if printprior=1 then 
-26720       print #255: " {\ul Prior}    {\ul Current}    {\ul Usage}   ";
+26720       pr #255: " {\ul Prior}    {\ul Current}    {\ul Usage}   ";
 26740       goto L1230
 26760     end if 
 26780     if usedcolumn=0 then 
-26800       print #255: " {\ul Prior}    {\ul Current}   ";
+26800       pr #255: " {\ul Prior}    {\ul Current}   ";
 26820     end if 
 26840     if usedcolumn=1 then 
-26860       print #255: " {\ul Prior}    {\ul Current}      {\ul Used}   ";
+26860       pr #255: " {\ul Prior}    {\ul Current}      {\ul Used}   ";
 26880     end if 
 26900 L1230: ! 
 26920   next j
-26940   print #255: " "
+26940   pr #255: " "
 26960   if double=1 then 
-26980     print #255: ""
+26980     pr #255: ""
 27000   end if 
 27020   return  ! /r
 32000 REMARK: ! r: ! read the footnote from the note file  (any note with * as first character
@@ -278,13 +278,13 @@
 34020 ERTN: let fnerror(program$,err,line,act$,"xit")
 34040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 34060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-34080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+34080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 34100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 34120 ! /region
 34140 IGNORE: continue 
 36000 def fn_campbell_meter_book ! Campbell Special Routine (printed once a year, one customer per page)
 36020 dim z$*10,e$(4)*30,x$*10,f$(1)*12,f$(3)*12,message$*40,cap$*40,g(12),d(15)
-36040 let cap$="Print Meter Reading Books"
+36040 cap$="Print Meter Reading Books"
 36060 fntos(sn$='umbc')
 36080 let mylen=22 : let mypos=mylen+2 : let respc=lc=0
 36100 let fnlbl(lc+=1,1,"Route Number:",mylen,1)
@@ -320,18 +320,18 @@
 40000 CAMPBELL_EO_LOOP: ! 
 40020 !  if uprc$(service$)="W" then  ! WATER
 40040   for j=1 to 39
-40060     print #255:''
+40060     pr #255:''
 40080   nex j
-40100   print #255,using F_CAMPBELL_OUT_W_1: D(1),D(3),G(1),G(2),G(5)
+40100   pr #255,using F_CAMPBELL_OUT_W_1: D(1),D(3),G(1),G(2),G(5)
 40120   F_CAMPBELL_OUT_W_1: form pos 8,n 9,x 2,n 8,n 8.2,n 6.2,n 6.2
-40140   print #255:''
-40160   print #255,using 'form pos 6,c 30': E$(1)
-40180   print #255:''
-40200   print #255,using 'form pos 6,c 10': Z$
-40220   print #255,using 'form pos 6,c 30': E$(2)
-40240   print #255,using 'form pos 6,c 30': E$(3) 
-40260   print #255,using 'form pos 6,c 30': E$(4) 
-40280   print #255: newpage
+40140   pr #255:''
+40160   pr #255,using 'form pos 6,c 30': E$(1)
+40180   pr #255:''
+40200   pr #255,using 'form pos 6,c 10': Z$
+40220   pr #255,using 'form pos 6,c 30': E$(2)
+40240   pr #255,using 'form pos 6,c 30': E$(3) 
+40260   pr #255,using 'form pos 6,c 30': E$(4) 
+40280   pr #255: newpage
 40300   goto CAMPBELL_LOOP_TOP
 40320   CAMPBELL_DONE: ! 
 40340   close #h_customer: Ioerr ignore

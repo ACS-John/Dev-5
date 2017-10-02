@@ -34,19 +34,19 @@
 00240   open #3: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00250   open #4: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&str$(cno)&",Shr",internal,outin,relative 
 00260   let fnopenprn(cp,0,0,process)
-00270   print #255: "\qc {\b "&cap$ !:
-        print #255: "Listing of Customer Addresses that could not be certified" !:
-        print #255: date$("mm/dd/ccyy")&"}" !:
-        print #255: "\ql "
+00270   pr #255: "\qc {\b "&cap$ !:
+        pr #255: "Listing of Customer Addresses that could not be certified" !:
+        pr #255: date$("mm/dd/ccyy")&"}" !:
+        pr #255: "\ql "
 00280 READ_A: ! 
 00290 ! Read #1,Using 300: Z$,NAM$,STA$,CITY$,STATE$,A$,B$,C$,CR$ Eof END1
 00291   read #1,using L301: z$,nam$,sta$,city$,state$,a$,b$,d$,cr$ eof END1
-00292 ! Let BC$=A$&B$&C$  when return batch total
-00293   let bc$=a$&b$&d$ ! when have to generate barcode
+00292 ! bC$=A$&B$&C$  when return batch total
+00293   bc$=a$&b$&d$ ! when have to generate barcode
 00300   form pos 1,c 10,pos 12,c 30,pos 41,c 30,pos 106,c 23,pos 151,c 2,pos 166,c 5,pos 172,c 4,pos 192,c 3,pos 202,c 4
 00301 L301: form pos 1,c 10,pos 12,c 30,pos 41,c 30,pos 71,c 23,pos 94,c 2,pos 96,c 5,c 4,c 2,pos 107,c 4
 00310   if rtrm$(bc$(6:9))="" then !:
-          print #255,using L320: z$,nam$,sta$,city$,state$,bc$ : goto READ_A
+          pr #255,using L320: z$,nam$,sta$,city$,state$,bc$ : goto READ_A
 00320 L320: form pos 1,c 12,2*c 32,c 25,c 4,c 12
 00330 ! Gosub CREATE_CHECK_DIGIT  ! already done by melissa read bc$ as c 12 instead of c 11
 00331   gosub CREATE_CHECK_DIGIT ! melissa returned only 11 digits
@@ -63,20 +63,20 @@
 00440 XIT: let fnxit
 00450 ! ______________________________________________________________________
 00460 CREATE_CHECK_DIGIT: ! 
-00470   let bc$=rtrm$(bc$)
+00470   bc$=rtrm$(bc$)
 00480   if bc$="" then goto L560
-00490   let c1=0
+00490   c1=0
 00500   for j=1 to len(bc$)
-00510     let c1=c1+val(bc$(j:j)) conv L520
+00510     c1=c1+val(bc$(j:j)) conv L520
 00520 L520: next j
-00530   let c1$=str$(c1) !:
+00530   c1$=str$(c1) !:
         let l1=len(c1$) !:
-        let c2=val(c1$(l1:l1))
-00540   if c2=0 then let cd$="0" else let cd$=str$(10-c2)
-00550   let bc$=bc$&cd$
+        c2=val(c1$(l1:l1))
+00540   if c2=0 then cd$="0" else cd$=str$(10-c2)
+00550   bc$=bc$&cd$
 00560 L560: return 
 00570 ! ______________________________________________________________________
-00580 L580: let csz$=rtrm$(city$)&", "&state$&" "&bc$(1:5)
+00580 L580: csz$=rtrm$(city$)&", "&state$&" "&bc$(1:5)
 00585   goto L640 ! don't update any addresses
 00590   read #3,using "Form POS 385,PD 3",key=z$: aba nokey L640
 00600   if aba=0 then goto L630
@@ -89,6 +89,6 @@
 00670 ERTN: let fnerror(program$,err,line,act$,"xit")
 00680   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00690   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00700   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00700   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00710 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00720 ! /region

@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsPR\newjcPrtDET
-00020 ! Print Job Cost Report
+00020 ! pr Job Cost Report
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fncno,fnerror,fnopenprn,fncloseprn,fnprocess,fntos,fnlbl,fntxt,fnchk,fnfra,fnopt,fncmdset,fnacs,fncmbjob
 00050   on error goto ERTN
@@ -99,14 +99,14 @@
 00860   goto L960
 00870 ! ______________________________________________________________________
 00880 L880: if prtpag$="N" then goto L950
-00890   print #255: newpage
+00890   pr #255: newpage
 00900   let hd=0
 00910   gosub HDR
 00920   let hd=1
 00930   goto L960
 00940 ! ______________________________________________________________________
 00950 L950: gosub HDR
-00960 L960: let cnt$="    0"
+00960 L960: cnt$="    0"
 00970 L970: read #2,using L990,key>=jn$&cnt$: cn$,k$,mat l,mat ta nokey L1730
 00980   let detcd=0
 00990 L990: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2,2*pd 3
@@ -141,14 +141,14 @@
 01280 ! ______________________________________________________________________
 01290 L1290: if prtdet$="N" then goto L1400
 01300   if tr8+tr9+tr89=l(4)+l(6) and tr56=l(5) then goto L1330
-01310   print #255,using L1320: "Previous Balance",l(5)-tr56,l(4)-tr9,l(6)-(tr8+tr89)
+01310   pr #255,using L1320: "Previous Balance",l(5)-tr56,l(4)-tr9,l(6)-(tr8+tr89)
 01320 L1320: form skip 1,pos 20,c 16,pos 36,n 9.2,2*n 14.2,skip 1
-01330 L1330: print #255,using L1340: "________","____________","____________"
+01330 L1330: pr #255,using L1340: "________","____________","____________"
 01340 L1340: form pos 37,c 10,2*c 14,skip 1
-01350   print #255,using L1360: "Total "&k$(1:20),l(5),l(4),l(6),l(1),l(3),l(1)-l(4),l(3)-l(6) pageoflow NWPGE
+01350   pr #255,using L1360: "Total "&k$(1:20),l(5),l(4),l(6),l(1),l(3),l(1)-l(4),l(3)-l(6) pageoflow NWPGE
 01360 L1360: form pos 10,c 26,pos 36,n 9.2,2*n 14.2,pos 82,4*n 14.2,skip 2
 01370   goto L1400
-01380   print #255,using L1390: cn$(7:11)&"   "&k$(1:20),l(5),l(4),l(6),l(1),l(3),l(1)-l(4),l(3)-l(6) pageoflow NWPGE
+01380   pr #255,using L1390: cn$(7:11)&"   "&k$(1:20),l(5),l(4),l(6),l(1),l(3),l(1)-l(4),l(3)-l(6) pageoflow NWPGE
 01390 L1390: form pos 1,c 28,pos 36,n 9.2,2*n 14.2,pos 82,4*n 14.2,skip 2
 01400 L1400: let totjob(1)=totjob(1)+l(5)
 01410   let totjob(2)=totjob(2)+l(4)
@@ -161,21 +161,21 @@
 01480   form pos 9,c 26,pos 36,n 9.2,2*n 14.2,pos 82,4*n 14,skip 2
 01490   if ta(1)=0 and ta(2)=0 then goto L1510
 01500   gosub PRINTCATEGORYSUMMARY
-01510 L1510: let cnt$=lpad$(rtrm$(str$(val(cn$(7:11))+1)),5)
+01510 L1510: cnt$=lpad$(rtrm$(str$(val(cn$(7:11))+1)),5)
 01520   goto L970
 01530 ! ______________________________________________________________________
 01540 L1540: if eofc=2 then goto L1560
 01550   goto L1590
-01560 L1560: print #255: newpage
+01560 L1560: pr #255: newpage
 01570   let hd=0
 01580   gosub HDR
-01590 L1590: print #255,using L1660: "---------","-----------","-----------","------------","------------","------------","------------"
+01590 L1590: pr #255,using L1660: "---------","-----------","-----------","------------","------------","------------","------------"
 01600   if eofc=2 then goto L1630
-01610   print #255,using L1640: "Total by Job",mat totjob
+01610   pr #255,using L1640: "Total by Job",mat totjob
 01620   goto L1640
-01630 L1630: print #255,using L1640: "Totals For All Jobs",mat totjob
+01630 L1630: pr #255,using L1640: "Totals For All Jobs",mat totjob
 01640 L1640: form pos 9,c 26,pos 36,n 9.2,2*n 14.2,pos 82,4*n 14.2
-01650   print #255,using L1660: "=========","===========","===========","============","============","============","============" pageoflow NWPGE
+01650   pr #255,using L1660: "=========","===========","===========","============","============","============","============" pageoflow NWPGE
 01660 L1660: form pos 35,c 13,2*c 14,pos 84,4*c 14,skip 2
 01670   if eofc=2 then goto L1820
 01680   mat totall=totall+totjob
@@ -203,45 +203,45 @@
 01900 ! ______________________________________________________________________
 01910 HDR: ! 
 01920   if hd=1 then goto L1980
-01930   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-01940   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-01950   print #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
-01960   print #255: "\qc  {\f181 \fs16 \b As of "&cnvrt$("pic(zz/zz/zz)",dat1)&"}"
-01970   print #255: "\ql   "
-01980 L1980: if eofc=0 then print #255,using L1990: "Job Number "&jn$,n$ !:
-          ! PRINT SUB-HEADING
+01930   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+01940   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+01950   pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
+01960   pr #255: "\qc  {\f181 \fs16 \b As of "&cnvrt$("pic(zz/zz/zz)",dat1)&"}"
+01970   pr #255: "\ql   "
+01980 L1980: if eofc=0 then pr #255,using L1990: "Job Number "&jn$,n$ !:
+          ! pr SUB-HEADING
 01990 L1990: form skip 1,pos 30,c 17,pos 65,c 40,skip 2
-02000   print #255,using L2010: "Category","Category","Reference","Labor","Other","Estimated Cost","Over/Under"
+02000   pr #255,using L2010: "Category","Category","Reference","Labor","Other","Estimated Cost","Over/Under"
 02010 L2010: form pos 1,c 8,pos 11,c 8,pos 21,c 9,pos 54,c 5,pos 68,c 5,pos 92,c 14,pos 124,c 10,skip 1
-02020   print #255,using L2030: "Number","Description","Number","Date","Hours","Cost","Cost","Sub-Category","Labor","Other","Labor","Other" pageoflow NWPGE
+02020   pr #255,using L2030: "Number","Description","Number","Date","Hours","Cost","Cost","Sub-Category","Labor","Other","Labor","Other" pageoflow NWPGE
 02030 L2030: form pos 1,c 6,pos 9,c 11,pos 22,c 6,pos 30,c 4,pos 40,c 5,pos 55,c 4,pos 69,c 4,pos 76,c 12,pos 91,c 5,pos 105,c 5,pos 119,c 5,pos 133,c 5,skip 2
 02040   return 
 02050 ! ______________________________________________________________________
 02060 PRINTDETAILLINE: ! 
 02070   if fstdet=1 then goto L2110
 02080   let fstdet=1
-02090   print #255,using L2100: tr(1),k$(1:20)
+02090   pr #255,using L2100: tr(1),k$(1:20)
 02100 L2100: form pos 1,n 5,pos 9,c 20,skip 1
 02110 L2110: if tr(5)+tr(6)><0 then goto L2190
 02120   if rtrm$(pd$)="" then goto L2150
-02130   print #255,using L2160: eno$,tr(4),0,0,tr(8)+tr(9),tr(2)," - "&pd$(1:25) pageoflow NWPGE
+02130   pr #255,using L2160: eno$,tr(4),0,0,tr(8)+tr(9),tr(2)," - "&pd$(1:25) pageoflow NWPGE
 02140   goto L2160
-02150 L2150: print #255,using L2160: eno$,tr(4),0,0,tr(8)+tr(9),tr(2)," - "&desc$(tr(2))(1:25) pageoflow NWPGE
+02150 L2150: pr #255,using L2160: eno$,tr(4),0,0,tr(8)+tr(9),tr(2)," - "&desc$(tr(2))(1:25) pageoflow NWPGE
 02160 L2160: form skip 1,pos 15,c 12,pos 28,pic(zz/zz/zz),pos 36,n 9.2,2*n 14.2,pos 74,n 4,c 28,skip 1
 02170   let tr89=tr89+tr(8)+tr(9)
 02180   goto L2260
 02190 L2190: if rtrm$(pd$)="" then goto L2220
-02200   print #255,using L2160: eno$,tr(4),tr(5)+tr(6),tr(9),tr(8),tr(2)," - "&pd$(1:25) pageoflow NWPGE
+02200   pr #255,using L2160: eno$,tr(4),tr(5)+tr(6),tr(9),tr(8),tr(2)," - "&pd$(1:25) pageoflow NWPGE
 02210   goto L2230
-02220 L2220: print #255,using L2160: eno$,tr(4),tr(5)+tr(6),tr(9),tr(8),tr(2)," - "&desc$(tr(2))(1:25) pageoflow NWPGE
+02220 L2220: pr #255,using L2160: eno$,tr(4),tr(5)+tr(6),tr(9),tr(8),tr(2)," - "&desc$(tr(2))(1:25) pageoflow NWPGE
 02230 L2230: let tr56=tr56+tr(5)+tr(6)
 02240   let tr9=tr9+tr(9)
 02250   let tr8=tr8+tr(8)
 02260 L2260: return 
 02270 ! ______________________________________________________________________
 02280 ACCUMULATEFORCATEGORYSUMMARY: ! 
-02290   let cattot(tr(2))=cattot(tr(2))+tr(8)+tr(9)
-02300   let cdesc$(tr(2))=desc$(tr(2))
+02290   cattot(tr(2))=cattot(tr(2))+tr(8)+tr(9)
+02300   cdesc$(tr(2))=desc$(tr(2))
 02310   if lcat=0 and hcat=0 then goto L2320 else goto L2350
 02320 L2320: let lcat=tr(2)
 02330   let hcat=lcat
@@ -251,15 +251,15 @@
 02370 L2370: return 
 02380 ! ______________________________________________________________________
 02390 PRINTCATEGORYSUMMARY: ! 
-02400   if sumcat$="N" then goto L2490 else print #255,using L2410: "************** Summary by Category *************"
+02400   if sumcat$="N" then goto L2490 else pr #255,using L2410: "************** Summary by Category *************"
 02410 L2410: form pos 90,cc 50,skip 1
 02420 L2420: form pos 90,c 50,skip 2
 02430   for j=lcat to hcat
 02440     if cattot(j)=0 then goto L2470
-02450     print #255,using L2460: cdesc$(j),cattot(j) pageoflow NWPGE
+02450     pr #255,using L2460: cdesc$(j),cattot(j) pageoflow NWPGE
 02460 L2460: form pos 90,c 30,pos 124,n 14.2,skip 1
 02470 L2470: next j
-02480   print #255,using L2420: "************************************************"
+02480   pr #255,using L2420: "************************************************"
 02490 L2490: mat jobtot=jobtot+cattot
 02500   for j=lcat to hcat
 02510     if rtrm$(cdesc$(j))="" then goto L2530
@@ -272,14 +272,14 @@
 02580 ! ______________________________________________________________________
 02590 PRINTSUMMARYBYJOB: ! 
 02600   if sumjob$="N" then goto L2690
-02610   print #255,using L2410: "***************** SUMMARY BY JOB ***************"
+02610   pr #255,using L2410: "***************** SUMMARY BY JOB ***************"
 02620   form skip 1,pos 90,c 27,skip 2
 02630   for j=1 to 100
 02640     if jobtot(j)=0 then goto L2670
-02650     print #255,using L2660: jtot$(j),jobtot(j) pageoflow NWPGE
+02650     pr #255,using L2660: jtot$(j),jobtot(j) pageoflow NWPGE
 02660 L2660: form pos 90,c 30,pos 124,n 14.2,skip 1
 02670 L2670: next j
-02680   print #255,using L2420: "************************************************"
+02680   pr #255,using L2420: "************************************************"
 02690 L2690: mat tottot=tottot+jobtot
 02700   for j=1 to 100
 02710     if rtrm$(jtot$(j))="" then goto L2730
@@ -289,24 +289,24 @@
 02750   return 
 02760 ! ______________________________________________________________________
 02770 TOTALLINEWITHOUTDETAILS: ! 
-02780   print #255,using L2790: val(cn$(7:11)),k$(1:20),l(5),l(4),l(6),l(1),l(3),l(1)-l(4),l(3)-l(6) pageoflow NWPGE
+02780   pr #255,using L2790: val(cn$(7:11)),k$(1:20),l(5),l(4),l(6),l(1),l(3),l(1)-l(4),l(3)-l(6) pageoflow NWPGE
 02790 L2790: form pos 1,n 5,pos 9,c 20,pos 36,n 9.2,2*n 14.2,pos 82,4*n 14.2,skip 2
 02800   return 
 02810 ! ______________________________________________________________________
 02820 PRINTSUMMARYOFALLJOBS: ! 
 02830   if sumcat$="N" and sumjob$="N" then goto L2920
-02840   print #255,using L2410: "*************** Summary of All Jobs ************"
+02840   pr #255,using L2410: "*************** Summary of All Jobs ************"
 02850   form skip 1,pos 90,c 27,skip 2
 02860   for j=1 to 100
 02870     if tottot(j)=0 then goto L2900
-02880     print #255,using L2890: tottot$(j),tottot(j) pageoflow NWPGE
+02880     pr #255,using L2890: tottot$(j),tottot(j) pageoflow NWPGE
 02890 L2890: form pos 90,c 30,pos 124,n 14.2,skip 1
 02900 L2900: next j
-02910   print #255,using L2420: "************************************************"
+02910   pr #255,using L2420: "************************************************"
 02920 L2920: return 
 02930 ! ______________________________________________________________________
 02940 NWPGE: ! 
-02950   print #255: newpage
+02950   pr #255: newpage
 02960   let hd=0
 02970   gosub HDR
 02980   let hd=1
@@ -318,7 +318,7 @@
 03040 ERTN: let fnerror(program$,err,line,act$,"xit")
 03050   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-03070   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+03070   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03080 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03090 ! /region
 03100 ! ______________________________________________________________________

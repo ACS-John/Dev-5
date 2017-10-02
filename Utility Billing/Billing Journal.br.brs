@@ -1,5 +1,5 @@
 00010 ! formerly S:\acsUB\ubBilJrn
-00020 ! -- Print Billing Journal
+00020 ! -- pr Billing Journal
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fnerror,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnd1,fncmdset,fnchk,fnfra,fnopt,fnpause,fncreg_read,fncreg_write,fnget_services,fnindex_it,fnstatus_pause
 00050   on error goto ERTN
@@ -61,7 +61,7 @@
 00620   let fncmdset(3)
 00630   let fnacs(sn$,0,mat resp$,ckey)
 00650   if ckey=5 then goto XIT
-00670   let billing_date=val(resp$(1))
+00670   billing_date=val(resp$(1))
 00680   if resp$(2)="True" then let seq=1 ! route sequence
 00690   if resp$(3)="True" then let seq=2 ! account sequence
 00700   if resp$(4)="True" then let seq=3 ! Alpha Sort Sequence
@@ -122,7 +122,7 @@
 01026     end if
 01029     if (route_number>0 and route_number<prtbkno) or route_number=route then goto L790
 01030     gosub TOTAL_BOOK
-01032     print #255: newpage : gosub HDR
+01032     pr #255: newpage : gosub HDR
 01033     L790: !
 01034     let route_number=route
 01036   end if
@@ -130,13 +130,13 @@
 01038   let tbp=tbp+1
 01040   goto READ_CUSTOMER
 01044 HDR: ! r:
-01046   print #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
-01048   print #255: "\qc  {\f181 \fs24 \b "&env$('cap')&"}"
-01050   print #255: "\qc  {\f181 \fs16 \b Billing Date "&cnvrt$("pic(zz/zz/zz)",billing_date)&"  Page "&str$(pge+=1)&"}"
-01052   print #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
-01054   print #255: "\ql   "
-01056   print #255: hd1$
-01058   print #255: hd2$
+01046   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
+01048   pr #255: "\qc  {\f181 \fs24 \b "&env$('cap')&"}"
+01050   pr #255: "\qc  {\f181 \fs16 \b Billing Date "&cnvrt$("pic(zz/zz/zz)",billing_date)&"  Page "&str$(pge+=1)&"}"
+01052   pr #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
+01054   pr #255: "\ql   "
+01056   pr #255: hd1$
+01058   pr #255: hd2$
 01060   return  ! /r
 01064 L910: ! r:
 01066   let e=bal-g(11) : let j1=0
@@ -150,24 +150,24 @@
 01083   if reduc=1 then let x=x+1 : let usages(x)=d(3)-d(7)
 01084   if gas=1 then let x=x+1 : let usages(x)=d(11)
 01086   if estimatedate=billing_date then let est$="E" else let est$=""
-01088   if prtusage$="T" then print #255,using L1020: z$,e$(2)(1:23),mat px,est$,mat usages,e$(1)(1:25) pageoflow PGOF else print #255,using L1020: z$,e$(2)(1:23),mat px,est$ pageoflow PGOF
+01088   if prtusage$="T" then pr #255,using L1020: z$,e$(2)(1:23),mat px,est$,mat usages,e$(1)(1:25) pageoflow PGOF else pr #255,using L1020: z$,e$(2)(1:23),mat px,est$ pageoflow PGOF
 01090 L1020: form pos 1,c 10,x 2,c 23,sz1*n 9.2,x 1,c 1,services*n 9,x 1,c 25
 01092   gosub TOT1
 01094 ! If CODEMIS=1 Then
-01096 ! Print #255: " * The Previous Record has a charge, but does not have a matching code!"
+01096 ! pr #255: " * The Previous Record has a charge, but does not have a matching code!"
 01098 ! end if
-01100   let codemis=0
+01100   codemis=0
 01102   return  ! /r
 01106 PGOF: ! r:
-01108   print #255: newpage
+01108   pr #255: newpage
 01110   gosub HDR
 01112   continue  ! /r
 01116 TOTAL_BOOK: ! r:
-01118   print #255: ""
-01120   print #255: tab(27);"{\ul Totals for Route Number "&str$(route_number)&"}"
+01118   pr #255: ""
+01120   pr #255: tab(27);"{\ul Totals for Route Number "&str$(route_number)&"}"
 01122   for j=1 to sz1
 01124 !   if trim$(px$(j))<>"Penalty" then ! don't allow any penalties go thur totals
-01126     print #255,using "Form POS 1,C 30,N 15.2": px$(j),tx(j)
+01126     pr #255,using "Form POS 1,C 30,N 15.2": px$(j),tx(j)
 01128 !   end if  ! trim$(px$(j))<>"Penalty"
 01130   next j
 01132   mat tx=(0)
@@ -175,17 +175,17 @@
 01138 TOTAL_GRAND: ! r:
 01140   close #1: ioerr L1220
 01142   if seq<>1 then 
-01144     print #255: ""
-01146     print #255: tab(27);"{\ul Totals for All Routes }       {\ul Grand Totals}"
+01144     pr #255: ""
+01146     pr #255: tab(27);"{\ul Totals for All Routes }       {\ul Grand Totals}"
 01148     goto L1230
 01150   end if 
 01220 L1220: ! 
-01230   print #255: ""
-01240   print #255: tab(27);"{\ul Totals for Route Number "&str$(route_number)&"}       {\ul Grand Totals}"
+01230   pr #255: ""
+01240   pr #255: tab(27);"{\ul Totals for Route Number "&str$(route_number)&"}       {\ul Grand Totals}"
 01245 L1230: !
 01246   for j=1 to sz1
 01250 ! if trim$(px$(j))<>"Penalty" then ! don't allow any penalties go thur totals
-01255     print #255,using "Form POS 1,C 30,N 15.2,X 6,N 15.2": px$(j),tx(j),gx(j)
+01255     pr #255,using "Form POS 1,C 30,N 15.2,X 6,N 15.2": px$(j),tx(j),gx(j)
 01260 ! end if  ! trim$(px$(j))<>"Penalty" then
 01265   next j
 01270   gosub PRINT1
@@ -246,7 +246,7 @@
 01682     next j3
 01684 ! /r
 01690 L1690: ! 
-01692     if g(j)><0 and x2=0 then let x2=200: let codemis=1
+01692     if g(j)><0 and x2=0 then let x2=200: codemis=1
 01700     if x2>200 then let x2=200
 01702     if env$('client')="Billings" and j>5 and j<9 then goto L1720
 01704     if x2<>0 then 
@@ -257,12 +257,12 @@
 01714 L1720: ! 
 01716   next j
 01730   return  ! /r
-01732 PRINT1: ! r: PRINT TOTALS BY CODE
+01732 PRINT1: ! r: pr TOTALS BY CODE
 01734   for st_item=1 to 10
 01736     let st$(st_item)=service$(st_item)
 01738   next st_item
-01754   print #255: ""
-01756   print #255: "{\ul Service             }  {\ul Code}  {\ul Description                             }  {\ul Billed}  {\ul     Amount}  {\ul     Tax Base}  {\ul          Usage}"
+01754   pr #255: ""
+01756   pr #255: "{\ul Service             }  {\ul Code}  {\ul Description                             }  {\ul Billed}  {\ul     Amount}  {\ul     Tax Base}  {\ul          Usage}"
 01760   for j1=1 to 9
 01765     for j2=1 to 200
 01770       if t1(j1,j2,1)=0 and t1(j1,j2,3)=0 then goto L1960
@@ -273,13 +273,13 @@
 01795       read #8,using "Form POS 5,C 40",key=k$,release: de$ nokey L1890,ioerr L1890
 01800       if env$('client')="Carrizo" and j1=3 then goto L1930
 01805       if j1>4 then goto L1930
-01890 L1890: ! print #255,using L1950: st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
-01892       print #255,using L1950: servicename$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
+01890 L1890: ! pr #255,using L1950: st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
+01892       pr #255,using L1950: servicename$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
 01900       if env$('client')="Sangamon" and st$(j1)="WA" then let waterdollars+=t1(j1,j2,2) : let waterusage+=t1(j1,j2,3)
 01910       if env$('client')="Sangamon" and st$(j1)="SW" then let sewerdollars+=t1(j1,j2,2) : let sewerusage+=t1(j1,j2,3)
 01920       goto L1960
 01930 L1930: ! 
-01932       print #255,using L1940: st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
+01932       pr #255,using L1940: st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
 01940 L1940: form pos 1,c 21,n 4,x 3,c 40,n 8,n 12.2,pic(---,---,---.--)
 01950 L1950: form pos 1,c 21,n 4,x 3,c 40,n 8,n 12.2,x 14,pic(----,---,---,---)
 01960 L1960: ! 
@@ -287,17 +287,17 @@
 01970   next j1
 01980   for j=1 to 10
 01990     if t1(j,200,1)>0 or t1(j1,200,2)>0 then 
-01992       print #255: "   * All charges billed without a service code are summarized as Code 200"
+01992       pr #255: "   * All charges billed without a service code are summarized as Code 200"
 01994       goto L2010
 01998     end if 
 02000   next j
 02010 L2010: ! 
-02012   if env$('client')="Sangamon" then print #255,using "form pos 1,c 13,pos 69,n 12.2,x 14,pic(----,---,---,---)": "Water Totals",waterdollars,waterusage
-02020   if env$('client')="Sangamon" then print #255,using "form pos 1,c 13,pos 69,n 12.2,x 14,pic(----,---,---,---)": "Sewer Totals",sewerdollars,sewerusage
-02030   print #255: " ": print #255: "    Total # of Bills To Be Printed: "&str$(tbp)
+02012   if env$('client')="Sangamon" then pr #255,using "form pos 1,c 13,pos 69,n 12.2,x 14,pic(----,---,---,---)": "Water Totals",waterdollars,waterusage
+02020   if env$('client')="Sangamon" then pr #255,using "form pos 1,c 13,pos 69,n 12.2,x 14,pic(----,---,---,---)": "Sewer Totals",sewerdollars,sewerusage
+02030   pr #255: " ": pr #255: "    Total # of Bills To Be Printed: "&str$(tbp)
 02040   return  ! /r
 02060 def fn_pull_from_history
-02070   mat g=(0) : mat d=(0) : let bal=0
+02070   mat g=(0) : mat d=(0) : bal=0
 02072   let pfh_return=0
 02080   restore #h_trans,key>=z$&"         ": nokey PFH_XIT
 02085   do
@@ -312,7 +312,7 @@
 02152   let pfh_return=1
 02160   let d(1)=wr : let d(3)=wu : let d(5)=er
 02162   let d(7)=eu : let d(9)=gr : let d(11)=gu 
-02164   let bal=tbal
+02164   bal=tbal
 02170   for j=1 to 11 : let g(j)=tg(j) : next j
 02180 PFH_XIT: !
 02182   fn_pull_from_history=pfh_return
@@ -321,6 +321,6 @@
 02210 ERTN: let fnerror(program$,err,line,act$,"xit")
 02220   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02230   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02240   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02240   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02250 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02260 ! /region

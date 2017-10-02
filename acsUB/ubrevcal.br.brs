@@ -81,10 +81,10 @@
 00540   if reqf<>0 and f<>reqf then goto CUSTOMER_READ
 00550 L550: ! 
 00551   if sr$="Y" then 
-00552     print #255,using L470: z$,f pageoflow SRPGOF
+00552     pr #255,using L470: z$,f pageoflow SRPGOF
 00554   end if 
-00560   for j=1 to 9 : let gb(j)=gb(j)-g(j): let bal=bal-g(j): next j ! subtract out current bill from breakdown
-00570 ! let bal=bal-g(11)  moved above 06/01/12
+00560   for j=1 to 9 : let gb(j)=gb(j)-g(j): bal=bal-g(j): next j ! subtract out current bill from breakdown
+00570 ! bal=bal-g(11)  moved above 06/01/12
 00580   let x=fndate_mmddyy_to_ccyymmdd(olddat)
 00590   let key$=z$&cnvrt$("n 8",x)&"1"
 00600   let wr=wu=er=eu=gr=gu=0 ! set all previous readings to zero
@@ -129,29 +129,29 @@
 00920 ! ______________________________________________________________________
 00930   def fn_srhdr
 00940     let pg+=1
-00950     print #255: "Reverse Calculation Status Report"
-00960     print #255: "Page "&str$(pg)
-00970     print #255: ""
-00980     print #255: "All accounts listed have been reversed."
-00990     print #255: ""
-01000     print #255: "Account           Billing Date"
-01010     print #255: "_______________   ____________"
+00950     pr #255: "Reverse Calculation Status Report"
+00960     pr #255: "Page "&str$(pg)
+00970     pr #255: ""
+00980     pr #255: "All accounts listed have been reversed."
+00990     pr #255: ""
+01000     pr #255: "Account           Billing Date"
+01010     pr #255: "_______________   ____________"
 01020   fnend 
 01030 ! ______________________________________________________________________
 01040 SRPGOF: ! 
-01050   print #255: newpage
+01050   pr #255: newpage
 01060   let fn_srhdr
 01070   continue 
 01080   def fn_bud1
-01082     let bud1=0
+01082     bud1=0
 01090     open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L1120
 01100     open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&str$(cno)&",Shr",internal,outin,relative 
-01110     let bud1=1
+01110     bud1=1
 01120 L1120: ! 
 01122   fnend 
 01130 ! ______________________________________________________________________
 01140   def fn_bud2
-01150     let bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
+01150     bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
 01160     if bud1=0 then goto L1260
 01170     read #81,using L1180,key=z$: x$,mat ba,mat badr nokey L1260
 01180 L1180: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
@@ -172,6 +172,6 @@
 01290 ERTN: let fnerror(program$,err,line,act$,"NO")
 01300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01310   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01320   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01320   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01330 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01340 ! /region

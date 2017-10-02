@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsPR\newjcNamLst
-00020 ! Print Name and Number List
+00020 ! pr Name and Number List
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fncloseprn,fnopenprn,fncno,fnerror,fndat,fnprocess,fntos,fnlbl,fntxt,fncmdset,fnacs,fnchk
 00050   on error goto ERTN
@@ -41,10 +41,10 @@
 00370 L370: form pos 1,c 6,c 40
 00380   let first=0
 00390   goto L420
-00400   print #255: newpage
+00400   pr #255: newpage
 00410   gosub HDR
 00420 L420: if prtcat$="N" then goto L360
-00430   let cnt$="    0"
+00430   cnt$="    0"
 00440   read #2,using L470,key>=jn$&cnt$: cn$,k$ exit L510
 00450   goto L480
 00460 L460: read #2,using L470: cn$,k$ exit L510
@@ -59,24 +59,24 @@
 00550   let fnxit
 00560 ! ______________________________________________________________________
 00570 HDR: ! 
-00580   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-00590   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-00600   print #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
-00610   print #255: "\qc  {\f201 \fs20 \b "&trim$(dat$)&"}"
-00620   print #255: "\ql   "
-00630   if prtcat$="N" then print #255,using L640: "  Job #   Job Name"
+00580   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+00590   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+00600   pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
+00610   pr #255: "\qc  {\f201 \fs20 \b "&trim$(dat$)&"}"
+00620   pr #255: "\ql   "
+00630   if prtcat$="N" then pr #255,using L640: "  Job #   Job Name"
 00640 L640: form pos 1,c 50,skip 0
-00650   if prtcat$<>"N" then print #255,using L660: "  Job #   Job Name","Category #   Category Name"
+00650   if prtcat$<>"N" then pr #255,using L660: "  Job #   Job Name","Category #   Category Name"
 00660 L660: form pos 1,c 50,pos 47,c 50,skip skh
 00670   let skh=1
 00680   return 
 00690 ! ______________________________________________________________________
-00700 L700: if first=0 then print #255,using L710: jn$,n$,cn$(7:11),k$ pageoflow L750: let first =1: goto L740
+00700 L700: if first=0 then pr #255,using L710: jn$,n$,cn$(7:11),k$ pageoflow L750: let first =1: goto L740
 00710 L710: form skip 2,pos 1,c 6,pos 10,c 40,x 1,c 5,pos 60,c 25,skip 1
-00720   print #255,using L730: cn$(7:11),k$ pageoflow L750
+00720   pr #255,using L730: cn$(7:11),k$ pageoflow L750
 00730 L730: form pos 51,c 5,pos 60,c 25
 00740 L740: goto L770
-00750 L750: print #255: newpage
+00750 L750: pr #255: newpage
 00760   gosub HDR
 00770 L770: return 
 00780 ! ______________________________________________________________________
@@ -86,7 +86,7 @@
 00820 ERTN: let fnerror(program$,err,line,act$,"xit")
 00830   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00840   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00850   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00850   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00860 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00870 ! /region
 00880 ! ______________________________________________________________________

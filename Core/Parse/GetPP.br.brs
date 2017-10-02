@@ -20,7 +20,7 @@
 20360   ! The -1 in pos(x,y,-1) causes search to run backwards from end to front
 20380   ! ______________________________________________________________________
 20400   let input$=trim$(input$) : let path$=prog$=ext$=""
-20420   let fslash_pos=pos(input$,"/",1) : let bslash_pos=pos(input$,"\",-1)
+20420   let fslash_pos=pos(input$,"/",1) : bslash_pos=pos(input$,"\",-1)
 20440   if fslash_pos>0 then gosub FSLASH_PARSE
 20460   if bslash_pos>0 then gosub BSLASH_PARSE
 20480   if fslash_pos<=0 and bslash_pos<=0 then gosub NOSLASH_PARSE
@@ -52,6 +52,6 @@
 20920   ERTN: fnerror(program$,err,line,act$,"xit")
 20940     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 20960     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-20980     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+20980     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 21000   ERTN_EXEC_ACT: execute act$ : goto ERTN
 21020   ! /region

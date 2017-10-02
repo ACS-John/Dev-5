@@ -6,9 +6,9 @@
 00060     let line_count+=1
 00070     mat acct$(line_count)
 00080     mat other_charge(line_count)
-00090     let acct$(line_count)=line$(1:pos(line$,',')-1)
-00100     if pos(acct$(line_count),'.')<=0 then let acct$(line_count)=trim$(acct$(line_count))&'.00'
-00110     let acct$(line_count)=trim$(acct$(line_count))
+00090     acct$(line_count)=line$(1:pos(line$,',')-1)
+00100     if pos(acct$(line_count),'.')<=0 then acct$(line_count)=trim$(acct$(line_count))&'.00'
+00110     acct$(line_count)=trim$(acct$(line_count))
 00120     let other_charge(line_count)=val(line$(pos(line$,',')+1:len(line$)))
 00130   loop 
 00140 CSV_EOF: ! 

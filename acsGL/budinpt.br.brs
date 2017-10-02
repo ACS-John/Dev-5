@@ -41,8 +41,8 @@
 00340   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00350   let fnopenprn
 00370 ! 
-00380   print #255: "   GL Number    New Budget  Old Budget"
-00390   print #255: "--------------  ----------  ----------"
+00380   pr #255: "   GL Number    New Budget  Old Budget"
+00390   pr #255: "--------------  ----------  ----------"
 00400 ENTER_BUDGET: ! 
 00410   if method=2 then goto L1090
 00420   let fntos(sn$="BudgetAmount2") 
@@ -59,20 +59,20 @@
 00500   let fnacs(sn$,0,mat resp$,ckey)
 00510   if ckey=5 then goto XIT
 00520   let k$=fnagl$(resp$(1))
-00530   let budgetamt=val(resp$(2)) ! new budget amount
+00530   budgetamt=val(resp$(2)) ! new budget amount
 00540   read #1,using L550,key=k$: mat bm,mat revb
 00550 L550: form pos 249,13*pd 6.2,pos 339,13*pd 6.2
 00560 L560: let o1=sum(bm)
 00570   mat bm=(0)
-00580   if method_to_allocate=2 then let bm(12)=budgetamt: goto L650 ! allocate all to month 12
-00590   if method_to_allocate=3 then let bm(1)=budgetamt: goto L650 ! allocate all to month 1
+00580   if method_to_allocate=2 then bm(12)=budgetamt: goto L650 ! allocate all to month 12
+00590   if method_to_allocate=3 then bm(1)=budgetamt: goto L650 ! allocate all to month 1
 00600   let m1=round(budgetamt/nap,2)
 00610   for j=1 to nap-1
-00620     let bm(j)=m1
+00620     bm(j)=m1
 00630   next j
-00640   let bm(j)=budgetamt-sum(bm)
+00640   bm(j)=budgetamt-sum(bm)
 00650 L650: mat revb=bm
-00660   print #255,using L670: mat in1,o1
+00660   pr #255,using L670: mat in1,o1
 00670 L670: form pos 1,pic(zzz),n 7,pic(zzzz),2*n 12.2,skip 1
 00680   if budyear=1 then rewrite #1,using L690,key=k$: mat revb: goto L710 ! only rewrite the revised budget figures if record only changes
 00690 L690: form pos 339,13*pd 6.2
@@ -90,7 +90,7 @@
 00830   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  
 00832   read #1,using 'Form Pos 384,N 2',rec=1: nap 
 00834   close #1: 
-00840   print newpage
+00840   pr newpage
 00850   let fntos(sn$="BudgetAmount3") 
 00852   let mylen=50: let mypos=mylen+3 : let right=1
 00860   let fnfra(1,1,2,55,"Update Current Budget or New Budget"," ",0)
@@ -103,7 +103,7 @@
 00910 ! 
 00920   let fnacs(sn$,0,mat resp$,ckey)
 00930   if ckey=5 then goto XIT
-00940   if resp$(1)="True" then let budyear=1 else let budyear=2
+00940   if resp$(1)="True" then budyear=1 else budyear=2
 00950   if budyear=1 then let p1=37 else let p1=43 ! CURRENT YEARS BUDGET OR NEXT YEARS BUDGET
 00960   return 
 00970 ! ______________________________________________________________________
@@ -116,7 +116,7 @@
 01020   let fncmdset(2)
 01030   let fnacs(sn$,0,mat resp$,ckey)
 01040   if ckey=5 then goto XIT
-01050   let bud=val(resp$(1)) ! budget file number to pull
+01050   bud=val(resp$(1)) ! budget file number to pull
 01060   open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".h"&env$('cno')&",Shr",internal,outin,keyed ioerr BUDGET_FILE_NUM
 01070 return ! /r
 01080 ! ______________________________________________________________________
@@ -134,6 +134,6 @@
 01200 ERTN: let fnerror(program$,err,line,act$,"xit")
 01210   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01220   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01230   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01240 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01250 ! /region

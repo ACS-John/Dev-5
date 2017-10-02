@@ -29,30 +29,30 @@
 00270   goto L240
 00280 ! ______________________________________________________________________
 00290 HEADER: ! 
-00300   print #255,using L310: date$('mm/dd/yy'),time$,cnam$
+00300   pr #255,using L310: date$('mm/dd/yy'),time$,cnam$
 00310 L310: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,pos nametab,c 40,skip 1
 00320   let p1=66-int(len(rtrm$(report$))/2)
-00330   print #255,using L340: rtrm$(report$)
+00330   pr #255,using L340: rtrm$(report$)
 00340 L340: form pos p1,c 50
 00350   let p1=66-int(len(rtrm$(dat$))/2)
-00360   print #255,using L340: rtrm$(fnpedat$)
+00360   pr #255,using L340: rtrm$(fnpedat$)
 00370   return 
 00380 ! ______________________________________________________________________
 00390 L390: gosub HEADER
-00400   print #255: 
-00410   print #255,using L420: "Emp #","Name",miscname$(1)(1:9) ,miscname$(2)(1:9),miscname$(3)(1:9),miscname$(4)(1:9),miscname$(5)(1:9),miscname$(6)(1:9),miscname$(7)(1:9),miscname$(8)(1:9),miscname$(9)(1:9),miscname$(10)(1:9)
+00400   pr #255: 
+00410   pr #255,using L420: "Emp #","Name",miscname$(1)(1:9) ,miscname$(2)(1:9),miscname$(3)(1:9),miscname$(4)(1:9),miscname$(5)(1:9),miscname$(6)(1:9),miscname$(7)(1:9),miscname$(8)(1:9),miscname$(9)(1:9),miscname$(10)(1:9)
 00420 L420: form pos 1,c 6,c 21,10*c 10
 00430   return 
-00440 L440: ! print details
-00450   print #255,using L470: eno,k$(1)(1:16)&"YTD",m(11),m(13),m(15),m(17),m(19),m(21),m(23),m(25),m(27),m(29)
-00460   print #255,using L470: eno,"                QTD ",m(12),m(14),m(16),m(18),m(20),m(22),m(24),m(26),m(28),m(30)
+00440 L440: ! pr details
+00450   pr #255,using L470: eno,k$(1)(1:16)&"YTD",m(11),m(13),m(15),m(17),m(19),m(21),m(23),m(25),m(27),m(29)
+00460   pr #255,using L470: eno,"                QTD ",m(12),m(14),m(16),m(18),m(20),m(22),m(24),m(26),m(28),m(30)
 00470 L470: form pos 1,n 5,x 1,c 20,10*n 10.2
 00480   return 
-00490 L490: ! PRINT TOTALS
-00500   print #255,using L510: "---------","---------","---------","---------","---------","---------","---------","---------","---------","---------"
+00490 L490: ! pr TOTALS
+00500   pr #255,using L510: "---------","---------","---------","---------","---------","---------","---------","---------","---------","---------"
 00510 L510: form pos 28,10 *c 10
-00520   print #255,using L550: "","Totals-YTD",mat totalytd
-00530   print #255,using L550: "","Totals-QTD",mat totalqtd
+00520   pr #255,using L550: "","Totals-YTD",mat totalytd
+00530   pr #255,using L550: "","Totals-QTD",mat totalqtd
 00540   form pos 1,c 6,c 20,10*n 10.2
 00550 L550: form pos 1,c 6,c 20,10*n 10.2
 00560   let fncloseprn : goto XIT
@@ -62,7 +62,7 @@
 00600     let totalqtd(j)+=m(j*2+10)
 00610   next j
 00620   return 
-00630   print #255: newpage
+00630   pr #255: newpage
 00640   gosub L390
 00650   continue 
 00660 XIT: let fnxit
@@ -71,6 +71,6 @@
 00690 ERTN: let fnerror(program$,err,line,act$,"xit")
 00700   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00710   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00720   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00720   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00730 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00740 ! /region

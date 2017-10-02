@@ -33,7 +33,7 @@
 00280   let editrec=addone=0
 00292   let rptn=val(resp$(1)(1:2))
 00294   if ckey=1 then 
-00296     let addone=1
+00296     addone=1
 00298     let rptn=0
 00302     goto CONTINUE_FOR_ADD_AND_EDIT
 00304   else if ckey=2 then 
@@ -90,7 +90,7 @@
 00530   let fntxt(7,1,132,0,0,"",0,"This is the 2nd line of the heading line.")
 00532   let resp$(respc+=1)=ch$(2)
 00540   let mylen=50
-00550   let fnlbl(12,1,"Item for Print Selection (blank for all):",mylen,1)
+00550   let fnlbl(12,1,"Item for pr Selection (blank for all):",mylen,1)
 00560   if ips>0 and ips=<udim(code$) then let resp$(respc+=1)=code$(ips+1) else let resp$(respc+=1)=""
 00570   let fncomboa("DataNames2",12,mylen+3,mat code$,"If you want limit the report to a value in a particular field in the employee record, Indicate which field it is by locatiing the ID number of the field using Help button.",25,0)
 00580 !  Let FNTXT(12,MYLEN+3,3,0,0,"30",0,"If you want limit the report to a value in a particular field in the employee record, Indicate which field it is by locatiing the ID number of the field using Help button.")
@@ -101,7 +101,7 @@
 00612   let fncmdkey("&Delete",4,0,0,"Deletes this report from your system.")
 00614   let fncmdkey("&Cancel",5,0,1,"Return to selection screen.")
 00620   let fnacs(sn$,0,mat resp$,ckey) ! ask report #
-00630   let addone=0
+00630   addone=0
 00640   if ckey=5 then goto SCR1
 00650   let rn=val(resp$(1)(1:2))
 00660   if holdrn>0 and rn<>holdrn then 
@@ -118,8 +118,8 @@
 00686     end if  ! /r
 00690   end if 
 00692   let rt40$=resp$(2)(1:40)
-00700   let ch$(1)=resp$(3)
-00710   let ch$(2)=resp$(4)
+00700   ch$(1)=resp$(3)
+00710   ch$(2)=resp$(4)
 00720   let ips=0
 00730   for j=1 to udim(code$)
 00740     if resp$(5)=code$(j) then let ips=j-1: goto L760
@@ -178,7 +178,7 @@
         let respc=0: let mylen=15: let mypos=mylen+3
 01120   let fnfra(1,1,23,90,"Selection of Column Information","Select the informatin that should be printed in each column of your report.")
 01130   let fnlbl(1,1,"Print       Want ",50,1,0,1)
-01140   let fnlbl(2,1,"Item to Print                 Position    A Total",52,1,0,1)
+01140   let fnlbl(2,1,"Item to pr                 Position    A Total",52,1,0,1)
 01150   for j=1 to 20
 01160     if inp(j)>0 and inp(j)=<udim(code$) then let resp$(respc+=1)=code$(inp(j)+1) else let resp$(respc+=1)=" "
 01170 ! If INP(J)>0 AND INP(J)=<UDIM(CODE$) Then Let RESP$(RESPC+=1)=CODE$(INP(J)) Else Let RESP$(RESPC+=1)=" "
@@ -220,18 +220,18 @@
 01500 XIT: close #h_prreport: ioerr ignore
 01510   let fnxit
 01520 ! ______________________________________________________________________
-01530 ! L1530: print newpage ! r:
+01530 ! L1530: pr newpage ! r:
 01532 !   dim io5$(2),wrd5$(2)*38
 01540 !   close #105: ioerr ignore
 01550 !   open #105: "SRow=8,Scol=20,ERow=15,ECol=59,Border=Sr,Caption=<"&cap$,display,outin
-01560 !   print #105: newpage
-01580 !   print #105,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
-01590 !   print #105,fields "4,2,Cc 38,N": "Report Number "&str$(rptn)&" does not exist."
+01560 !   pr #105: newpage
+01580 !   pr #105,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
+01590 !   pr #105,fields "4,2,Cc 38,N": "Report Number "&str$(rptn)&" does not exist."
 01600 !   let io5$(1)="6,2,Cc 38,N"
 01610 !   let io5$(2)="7,2,Cc 38,N"
 01620 !   let wrd5$(1)="Reselect Report Number"
 01630 !   let wrd5$(2)="Add Reports"
-01640 !   print fields "16,35,C 09,B,5": "Exit (F5)"
+01640 !   pr fields "16,35,C 09,B,5": "Exit (F5)"
 01650 !   rinput #105,select mat io5$,attr "H": mat wrd5$
 01660 !   if cmdkey=5 or cmdkey=99 then goto XIT
 01670 !   if curfld=2 then goto L1770 else goto SCR1 ! /r
@@ -240,7 +240,7 @@
 01700 ERTN: let fnerror(program$,err,line,act$,"xit")
 01710   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01720   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01730   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01730   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01740 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01750 ! /region
 01760 IGNORE: continue 
@@ -370,17 +370,17 @@
 66180   fnDedNames(mat fullname$)
 66240 ! 
 66260   dim code$(105)*30
-66280   let code$(1)=""
+66280   code$(1)=""
 66300   for j=1 to udim(datanames$)
-66320     let code$(j+1)=datanames$(j,1)
+66320     code$(j+1)=datanames$(j,1)
 66340     if j>39 and j<60 and trim$(fullname$(j-39))<>"" then 
-66360       let code$(j+1)=trim$(fullname$(j-39))(1:22)
+66360       code$(j+1)=trim$(fullname$(j-39))(1:22)
 66380     else if j>39 and j<60 and trim$(fullname$(j-39))="" then 
-66400       let code$(j+1)="Misc -"&str$(j-39)&"-Std Ded"
+66400       code$(j+1)="Misc -"&str$(j-39)&"-Std Ded"
 66420     else if j>76 and j<95 and trim$(fullname$(j-76))<>"" then ! miscellaneous withholding amounts
-66440       let code$(j+1)=trim$(fullname$(j-76))(1:27)&"-Wh"
+66440       code$(j+1)=trim$(fullname$(j-76))(1:27)&"-Wh"
 66460     else if j>76 and j<94 and trim$(fullname$(j-76))="" then ! plug names if none
-66480       let code$(j+1)="Misc - "&str$(j-76)
+66480       code$(j+1)="Misc - "&str$(j-76)
 66500     end if 
 66520   next j
 66540   return  ! /r

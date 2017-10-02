@@ -24,7 +24,7 @@
 00190   reread #tmpfile,using 'form pos 1,C 2,C 2,c 40',reserve: a$,b$,c$
 00200   reread #tmpfile,using 'form pos 1,C 2,C 2,c 40',reserve: a$,b$,c$
 00210   reread #tmpfile,using 'form pos 1,C 2,C 2,c 40',reserve: a$,b$,c$
-00220   print a$,b$,c$
+00220   pr a$,b$,c$
 00230   close #tmpfile: ! ,free doesn't work any more
 00240 ! free off the test files
 00250 ! Execute 'Free Temp.dat -n' !:

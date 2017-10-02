@@ -8,7 +8,7 @@
 00080 ! ______________________________________________________________________
 00090   let fncno(cno)
 00100   let fntop(program$,"Renumber Checks")
-00110   let cancel=99 : let right=1 : let center=2 : let on=1 : let off=0 !:
+00110   cancel=99 : let right=1 : center=2 : let on=1 : let off=0 !:
         let left=0
 00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #20,using 'Form POS 417,N 1': rcn !:
@@ -35,7 +35,7 @@
           let firstold=val(resp$(1)) !:
           let lastold=val(resp$(2)) !:
           let newnumber=firstnew=val(resp$(3)) !:
-          let bankaccount=val(resp$(4))
+          bankaccount=val(resp$(4))
 00270   if firstold=0 or lastold=0 or newnumber=0 or bankaccount=0 then goto L150
 00280 READ_TRMSTR: ! 
 00290   restore #trmstr,key>=cnvrt$("pic(zz)",bankaccount)&"1"&cnvrt$("pic(zzzzzzzz",firstold): nokey L150
@@ -72,7 +72,7 @@
 00590 ERTN: let fnerror(program$,err,line,act$,"xit")
 00600   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00610   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00620   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00620   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00630 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00640 ! /region
 00650 ! ______________________________________________________________________

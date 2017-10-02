@@ -8,7 +8,7 @@
 00080 ! ______________________________________________________________________
 00090   let fncno(cno)
 00100   let fntop(program$,"Remove Old Transactions")
-00110   let cancel=99 : let right=1 : let center=2 : let on=1 : let off=0 !:
+00110   cancel=99 : let right=1 : center=2 : let on=1 : let off=0 !:
         let left=0
 00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #20,using 'Form POS 417,N 1': rcn !:
@@ -73,7 +73,7 @@
 00630 ERTN: let fnerror(program$,err,line,act$,"xit")
 00640   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00650   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00660   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00660   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00670 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00680 ! /region
 00690 ! ______________________________________________________________________

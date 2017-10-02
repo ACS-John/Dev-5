@@ -23,4 +23,4 @@
 20300 ! 
 20320   let fnacs("ComboA",0,mat resp$,ckey)
 20340 ! 
-20360   print resp$(1) : let key$ = resp$(1)(32:41) : print key$
+20360   pr resp$(1) : let key$ = resp$(1)(32:41) : pr key$

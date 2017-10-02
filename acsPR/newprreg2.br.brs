@@ -59,20 +59,20 @@
 18540     ! Read #2,Using 370,Rec=ADR: ENO, DEP1,LPD,TCD(1),MAT TDET,MAT HC,MCWH,MAT CP
 22000     READ_CHECKS: ! 
 22010     read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,dep1,prdate,ckno,mat tdc,mat cp eof L1990
-22012     !  if eno=307 then print 'eno '&str$(eno) : exe 'break other_wh' : break_is_on=1 else if break_is_on then exe 'break other_wh off' : break_is_on=0
+22012     !  if eno=307 then pr 'eno '&str$(eno) : exe 'break other_wh' : break_is_on=1 else if break_is_on then exe 'break other_wh off' : break_is_on=0
 22020     ! mcwh now in cp(3)
 22040     if eno=0 and dep1=0 then goto READ_CHECKS
 22060     if prdate><fndate_mmddyy_to_ccyymmdd(ppd) then goto READ_CHECKS
 22080     read #2,using 'form pos 48,n 2',key=cnvrt$("pic(ZZZZZZZ#)",eno)&cnvrt$("pic(ZZ#)",dep1): statecode
 22140     read #1,using 'form pos 9,c 30',key=lpad$(str$(eno),8): em$
 22160     if det=2 then goto L580
-22200     let a=pos (rtrm$(em$)," ",1)
-22220     let b=pos (rtrm$(em$)," ",a+1)
+22200     a=pos (rtrm$(em$)," ",1)
+22220     b=pos (rtrm$(em$)," ",a+1)
 22240     let em$=rtrm$(em$(max(a,b):30))&" "&em$(1:a)  error ignore
 22260     if dep2=0 then goto L550
 22280     if dep1=dep2 then goto L580
 22300     gosub PRINTDEPARTMENTTOTALS
-22320     print #255: newpage
+22320     pr #255: newpage
 22340     L550: ! 
 22360     let deptname$=""
 22380     if founddept=1 then 
@@ -112,7 +112,7 @@
 22960     next j
 22980     let ntc=ntc+1
 23000     if det=1 or det=2 then goto L760
-23020     print #255,using F_PR_LINE: dep1,eno,em$(1:11),mat hc,tothc,cp(31),cp(3),cp(2),cp(1),cp(4),other_wh,cp(32) pageoflow NWPG
+23020     pr #255,using F_PR_LINE: dep1,eno,em$(1:11),mat hc,tothc,cp(31),cp(3),cp(2),cp(1),cp(4),other_wh,cp(32) pageoflow NWPG
 23040 F_PR_LINE: form pos 1,n 4,n 8,x 2,c 12,6*n 7.2,7*n 9.2,skip 1
 23060 L760: ! 
 23070     let sswg=ficawag=tdet(1)
@@ -158,33 +158,33 @@
 26120 L1030: ! 
 26140     next j
 26160     let other_wh=other_wh-tcp(25)
-26180     print #255: "                   ________________________________________________________________________________________________________________" pageoflow NWPG
-26200     print #255,using F_PR_DTOTALS_1: " Department Totals:",thc(2),thc(4),tothrs,tcp(3),tcp(1),other_wh pageoflow NWPG
+26180     pr #255: "                   ________________________________________________________________________________________________________________" pageoflow NWPG
+26200     pr #255,using F_PR_DTOTALS_1: " Department Totals:",thc(2),thc(4),tothrs,tcp(3),tcp(1),other_wh pageoflow NWPG
 26220     let tothrs=0
-26240     print #255,using F_PR_DTOTALS_2: thc(1),thc(3),thc(5),tcp(31),tcp(2),tcp(4),tcp(32) pageoflow NWPG
-26260     print #255: "                   ================================================================================================================" pageoflow NWPG
+26240     pr #255,using F_PR_DTOTALS_2: thc(1),thc(3),thc(5),tcp(31),tcp(2),tcp(4),tcp(32) pageoflow NWPG
+26260     pr #255: "                   ================================================================================================================" pageoflow NWPG
 26280 F_PR_DTOTALS_1: form pos 1,c 26,n 14.2,n 14.2,n 14.2,n 18.2,n 18.2,n 18.2,n 10.2,skip 1
 26300 F_PR_DTOTALS_2: form pos 1,n 33.2,n 14.2,n 14.2,n 16.2,n 18.2,n 18.2,n 18.2,skip 1
-26320     if 66-lp<26 then print #255: newpage
-26330     print #255: ""
-26332     print #255: ""
-26334     print #255,using 'form pos 10,c 50': "Department Totals"
-26340     print #255: ""
-26350     print #255,using 'form pos 12,c 30': "Tax Expense"
-26420     print #255,using F_PR_DTOTALS_3: "Medicare ",tcp(3)
+26320     if 66-lp<26 then pr #255: newpage
+26330     pr #255: ""
+26332     pr #255: ""
+26334     pr #255,using 'form pos 10,c 50': "Department Totals"
+26340     pr #255: ""
+26350     pr #255,using 'form pos 12,c 30': "Tax Expense"
+26420     pr #255,using F_PR_DTOTALS_3: "Medicare ",tcp(3)
 26440     if env$('client')="Thomas Richardson" or env$('client')="Kincaid" then 
-26460       print #255,using F_PR_DTOTALS_3: "SS  ",round(tcp(2)/ssr1*ssr2,2) ! show only employeer expense here
+26460       pr #255,using F_PR_DTOTALS_3: "SS  ",round(tcp(2)/ssr1*ssr2,2) ! show only employeer expense here
 26480     else 
-26500       print #255,using F_PR_DTOTALS_3: "SS  ",tcp(2)+round(tcp(2)/ssr1*ssr2,2) ! show total AND employeer matching
+26500       pr #255,using F_PR_DTOTALS_3: "SS  ",tcp(2)+round(tcp(2)/ssr1*ssr2,2) ! show total AND employeer matching
 26520     end if 
 26540 F_PR_DTOTALS_3: form pos 20,c 10,pic(-------.##),skip 1
-26560     print #255,using F_PR_DTOTALS_3: "Fed U/C",feduc
-26580     print #255,using F_PR_DTOTALS_3: "State U/C",stateuc
-26600     print #255,using F_PR_DTOTALS_3: "     Total",round(tcp(2)/ssr1*ssr2,2)+feduc+stateuc+tcp(3) ! 2013
-26620     print #255: ""
-26640     print #255,using F_PR_DTOTALS_4: "Net Pay",tcp(32)
-26660     print #255: ""
-26680     print #255,using F_PR_DTOTALS_4: "Taxable Wages",taxwg1
+26560     pr #255,using F_PR_DTOTALS_3: "Fed U/C",feduc
+26580     pr #255,using F_PR_DTOTALS_3: "State U/C",stateuc
+26600     pr #255,using F_PR_DTOTALS_3: "     Total",round(tcp(2)/ssr1*ssr2,2)+feduc+stateuc+tcp(3) ! 2013
+26620     pr #255: ""
+26640     pr #255,using F_PR_DTOTALS_4: "Net Pay",tcp(32)
+26660     pr #255: ""
+26680     pr #255,using F_PR_DTOTALS_4: "Taxable Wages",taxwg1
 26700 F_PR_DTOTALS_4: form pos 10,c 20,n 10.2,skip 1
 26720     let tfw=ficawage
 26740     if tfw>=tcp(31)-tt3-.1 and tfw<=tcp(31)-tt3+.1 then goto L1310
@@ -192,40 +192,40 @@
 26780 L1310: ! 
 26800     let tfw=tcp(31)
 26820 L1320: ! 
-26840 ! print #255,using 1100: "FICA Wages",tfw ! use same form as "Taxable wages"
+26840 ! pr #255,using 1100: "FICA Wages",tfw ! use same form as "Taxable wages"
 26860     let tucw=fedwages
 26880     if tucw>=tcp(31)-tt3-.1 and tucw<=tcp(31)-tt3+.1 then goto L1350 else goto L1360
 26900 L1350: ! 
 26920     let tucw=tcp(31)-tt3
 26940 L1360: ! 
-26960     print #255,using F_PR_DTOTALS_4: "SS Wages",sswg1
-26980     print #255,using F_PR_DTOTALS_4: "MC Wages",mcwg1
-27000     print #255,using F_PR_DTOTALS_4: "Fed U/C Wages",tucw
+26960     pr #255,using F_PR_DTOTALS_4: "SS Wages",sswg1
+26980     pr #255,using F_PR_DTOTALS_4: "MC Wages",mcwg1
+27000     pr #255,using F_PR_DTOTALS_4: "Fed U/C Wages",tucw
 27020     for j=1 to 10
 27040       if stuc1(j)=0 then goto L1420
-27060       print #255,using F_PR_DTOTALS_4: statname$(j)&" UC Wages",stuc1(j)
+27060       pr #255,using F_PR_DTOTALS_4: statname$(j)&" UC Wages",stuc1(j)
 27080 L1420: ! 
 27100     next j
-27120     print #255,using F_PR_DTOTALS_4: "Payroll Tax Deposit",tcp(1)+tcp(2)+round(tcp(2)/ssr1*ssr2,2)-tcp(25)+tcp(3)*2 ! 2013
-27140     print #255,using 'form skip 1,pos 12,c 30': "Payroll Deductions"
-27160     print #255,using F_PR_DTOTALS_3: "SS-Wh",sswh1
-27180     print #255,using F_PR_DTOTALS_3: "MC-Wh",mcwh1
-27200     print #255,using F_PR_DTOTALS_3: "Fed",tcp(1)
-27220     print #255,using F_PR_DTOTALS_3: "State",tcp(4)
+27120     pr #255,using F_PR_DTOTALS_4: "Payroll Tax Deposit",tcp(1)+tcp(2)+round(tcp(2)/ssr1*ssr2,2)-tcp(25)+tcp(3)*2 ! 2013
+27140     pr #255,using 'form skip 1,pos 12,c 30': "Payroll Deductions"
+27160     pr #255,using F_PR_DTOTALS_3: "SS-Wh",sswh1
+27180     pr #255,using F_PR_DTOTALS_3: "MC-Wh",mcwh1
+27200     pr #255,using F_PR_DTOTALS_3: "Fed",tcp(1)
+27220     pr #255,using F_PR_DTOTALS_3: "State",tcp(4)
 27240     for j=1 to 20
 27260       if tcp(j+4)=0 then goto L1530
 27280       if newdedcode(j)<>1 then goto L1530
-27300       print #255,using F_PR_DTOTALS_3: abbrevname$(j),tcp(j+4)
+27300       pr #255,using F_PR_DTOTALS_3: abbrevname$(j),tcp(j+4)
 27320 L1530: ! 
 27340     next j
-27360     print #255,using 'form skip 1,pos 12,c 30': "Additions to Net"
+27360     pr #255,using 'form skip 1,pos 12,c 30': "Additions to Net"
 27380     for j=1 to 20
 27400       if tcp(j+4)=0 or newdedcode(j)<>2 then goto L1580
-27420       print #255,using F_PR_DTOTALS_3: abbrevname$(j),tcp(j+4)
+27420       pr #255,using F_PR_DTOTALS_3: abbrevname$(j),tcp(j+4)
 27440 L1580: ! 
 27460     next j
 27480     if tcp(25)=0 then goto L1610
-27500     print #255,using F_PR_DTOTALS_3: "EIC",tcp(25)
+27500     pr #255,using F_PR_DTOTALS_3: "EIC",tcp(25)
 27520 L1610: ! 
 27540     if final=1 then goto PRINTDEPARTMENTTOTALS_XIT
 27560     let other_wh=0
@@ -246,30 +246,30 @@
 27860     return  ! /r
 27880 ! ______________________________________________________________________
 30000 NWPG: ! r:
-30020     print #255: newpage
-30040     let ct1=ct1+1: print fields "12,45,CL 5,N": str$(ct1)
+30020     pr #255: newpage
+30040     ct1=ct1+1: pr fields "12,45,CL 5,N": str$(ct1)
 30060     gosub HDR
 30080     continue  ! /r
 30100 ! ______________________________________________________________________
 32000 HDR: ! r:
-32020     print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-32040     print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-32060     print #255: "\qc  {\f201 \fs20 \b Payroll Departmental Register}"
-32080     print #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zz/zz/zz)",ppd)&"}"
-32100     print #255: "\qc  {\f181 \fs16 \b "&trim$(deptname$)&"}"
-32120     print #255: "\ql   "
-32140 ! Print #255,Using 1860: A$,"Payroll Register",D$,TRIM$(DEPTNAME$)
+32020     pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+32040     pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+32060     pr #255: "\qc  {\f201 \fs20 \b Payroll Departmental Register}"
+32080     pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zz/zz/zz)",ppd)&"}"
+32100     pr #255: "\qc  {\f181 \fs16 \b "&trim$(deptname$)&"}"
+32120     pr #255: "\ql   "
+32140 ! pr #255,Using 1860: A$,"Payroll Register",D$,TRIM$(DEPTNAME$)
 32160 ! Form SKIP 2,POS 1,CC 132,SKIP 1,POS 58,C 18,SKIP 1,POS 1,CC 132,SKIP 1,POS 1,CC 132,SKIP 2
-32180 L1860: print #255: tab(29);"<----------------Hours----------------->";
-32200     print #255: tab(71);"<-Pay->";
-32220     print #255: tab(79);"<-----------------Deductions---------------->";
-32240     print #255: tab(129);"Net"
+32180 L1860: pr #255: tab(29);"<----------------Hours----------------->";
+32200     pr #255: tab(71);"<-Pay->";
+32220     pr #255: tab(79);"<-----------------Deductions---------------->";
+32240     pr #255: tab(129);"Net"
 32260     if eofcode=1 then goto L1940
-32280     print #255: "Dept";
+32280     pr #255: "Dept";
 32300     if det=1 or det=2 then goto L1940
-32320     print #255: tab(8);"Emp #  Name";
-32340 L1940: print #255: tab(29);" Reg    O/T   Sick    Vac    Hol   Total";
-32360     print #255: tab(71);"  Total   Med WH    SS WH  Federal    State    Other      Pay"
+32320     pr #255: tab(8);"Emp #  Name";
+32340 L1940: pr #255: tab(29);" Reg    O/T   Sick    Vac    Hol   Total";
+32360     pr #255: tab(71);"  Total   Med WH    SS WH  Federal    State    Other      Pay"
 32380     let lp=6
 32400     return  ! /r
 32420 ! ______________________________________________________________________
@@ -278,25 +278,25 @@
 34040     if det=2 then goto L2040
 34060     gosub PRINTDEPARTMENTTOTALS
 34080     if dep=1 then goto L2200 ! only 1 dept printed-no summary
-34100     print #255: newpage ! print final departmental summary
-34120 L2040: ! Print #255,Using 1840: A$,"Payroll Register",D$
-34140     print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-34160     print #255: "\qc  {\f201 \fs20 \b Payroll Register - Departmental Totals}"
-34180     print #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zz/zz/zz)",ppd)&"}"
-34200     print #255: "\ql   "
+34100     pr #255: newpage ! pr final departmental summary
+34120 L2040: ! pr #255,Using 1840: A$,"Payroll Register",D$
+34140     pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+34160     pr #255: "\qc  {\f201 \fs20 \b Payroll Register - Departmental Totals}"
+34180     pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zz/zz/zz)",ppd)&"}"
+34200     pr #255: "\ql   "
 34220     mat tcp=totaltcp : mat thc=totalthc : let tt3=gtt3
 34240     let ficawage=totalfi : let fedwages=totalfuc : mat stuc1=stuc2
 34260     let sswh1=sswh2 : let mcwh1=mcwh2 : let sswg1=sswg2
 34280     let mcwg1=mcwg2 : let taxwg1=taxwg2 : let tothrs=grandtothrs
-34300     print #255: ""
-34320     print #255,using 'form pos 52,c 40': "Summary for all Departments"
+34300     pr #255: ""
+34320     pr #255,using 'form pos 52,c 40': "Summary for all Departments"
 34340     gosub L1860
 34360     let final=1
 34380     gosub PRINTDEPARTMENTTOTALS
-34400     print #255,using 'form skip 1,pos 12,c 30': "State W/H Breakdown"
+34400     pr #255,using 'form skip 1,pos 12,c 30': "State W/H Breakdown"
 34420     for j=1 to 10
 34440       if statewh(j)=0 then goto L2190
-34460       print #255,using F_PR_DTOTALS_4: statname$(j),statewh(j)
+34460       pr #255,using F_PR_DTOTALS_4: statname$(j),statewh(j)
 34480 L2190: ! 
 34500     next j
 36000 L2200: ! 
@@ -313,6 +313,6 @@
 40020 ERTN: let fnerror(program$,err,line,act$,"xit")
 40040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 40060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-40080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+40080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 40100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 40120 ! /region

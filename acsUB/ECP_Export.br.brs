@@ -56,168 +56,168 @@
 20980     read #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,mat extra$ eof FINIS
 21000 F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,pos 1864,c 30,7*c 12,3*c 30
 21020     gosub ALT_BILL_ADR
-21040     print #h_ecp: z$&delim$; !    1
-21060     print #h_ecp: e$(1)&delim$; !    1.5         Meter Address
-21080     print #h_ecp: e$(2)&delim$; !    2         Name
-21100     print #h_ecp: e$(3)&delim$; !    3          addr 1
-21120     print #h_ecp: extra$(1)&delim$; !    4          addr 2
-21140     print #h_ecp: e$(4)&delim$; !    5
-21160     print #h_ecp: f$(1)&delim$; !    6
-21180     print #h_ecp: str$(a(1))&delim$; !   7
-21200     print #h_ecp: str$(a(2))&delim$; !   8
-21220     print #h_ecp: str$(a(3))&delim$; !   9
-21240     print #h_ecp: str$(a(4))&delim$; !   10
-21260     print #h_ecp: str$(a(5))&delim$; !   11
-21280     print #h_ecp: str$(a(6))&delim$; !   12
-21300     print #h_ecp: str$(a(7))&delim$; !   13
-21320     print #h_ecp: str$(b(1))&delim$; !   14
-21340     print #h_ecp: str$(b(2))&delim$; !   15
-21360     print #h_ecp: str$(b(3))&delim$; !   16
-21380     print #h_ecp: str$(b(4))&delim$; !   17
-21400     print #h_ecp: str$(b(5))&delim$; !   18
-21420     print #h_ecp: str$(b(6))&delim$; !   19
-21440     print #h_ecp: str$(b(7))&delim$; !   20
-21460     print #h_ecp: str$(b(8))&delim$; !   21
-21480     print #h_ecp: str$(b(9))&delim$; !   22
-21500     print #h_ecp: str$(b(10))&delim$; !   23
-21520     print #h_ecp: str$(b(11))&delim$; !   24
-21540     print #h_ecp: str$(c(1))&delim$; !   25
-21560     print #h_ecp: str$(c(2))&delim$; !   26
-21580     print #h_ecp: str$(c(3))&delim$; !   27
-21600     print #h_ecp: str$(c(4))&delim$; !   28
-21620     print #h_ecp: str$(d(1))&delim$; !   29
-21640     print #h_ecp: str$(d(2))&delim$; !   30
-21660     print #h_ecp: str$(d(3))&delim$; !   31
-21680     print #h_ecp: str$(d(4))&delim$; !   32
-21700     print #h_ecp: str$(d(5))&delim$; !   33
-21720     print #h_ecp: str$(d(6))&delim$; !   34
-21740     print #h_ecp: str$(d(7))&delim$; !   35
-21760     print #h_ecp: str$(d(8))&delim$; !   36
-21780     print #h_ecp: str$(d(9))&delim$; !   37
-21800     print #h_ecp: str$(d(10))&delim$; !    38
-21820     print #h_ecp: str$(d(11))&delim$; !   39
-21840     print #h_ecp: str$(d(12))&delim$; !   40
-21860     print #h_ecp: str$(d(13))&delim$; !   41
-21880     print #h_ecp: str$(d(14))&delim$; !   42
-21900     print #h_ecp: str$(d(15))&delim$; !   43
-21920     print #h_ecp: str$(bal)&delim$; !    44
-21940     print #h_ecp: str$(f)&delim$; !    45
-21960     print #h_ecp: str$(g(1))&delim$; !   46
-21980     print #h_ecp: str$(g(2))&delim$; !   47
-22000     print #h_ecp: str$(g(3))&delim$; !   48
-22020     print #h_ecp: str$(g(4))&delim$; !   49
-22040     print #h_ecp: str$(g(5))&delim$; !   50
-22060     print #h_ecp: str$(g(6))&delim$; !   51
-22080     print #h_ecp: str$(g(7))&delim$; !   52
-22100     print #h_ecp: str$(g(8))&delim$; !   53
-22120     print #h_ecp: str$(g(9))&delim$; !   54
-22140     print #h_ecp: str$(g(10))&delim$; !   55
-22160     print #h_ecp: str$(g(11))&delim$; !   56
-22180     print #h_ecp: str$(g(12))&delim$; !   57
-22200     print #h_ecp: alp$&delim$; !    58
-22220     print #h_ecp: f$(2)&delim$; !    59
-22240     print #h_ecp: f$(3)&delim$; !    60
-22260     print #h_ecp: str$(bra)&delim$; !    61
-22280     print #h_ecp: str$(gb(1))&delim$; !   62
-22300     print #h_ecp: str$(gb(2))&delim$; !   63
-22320     print #h_ecp: str$(gb(3))&delim$; !   64
-22340     print #h_ecp: str$(gb(4))&delim$; !   65
-22360     print #h_ecp: str$(gb(5))&delim$; !   66
-22380     print #h_ecp: str$(gb(6))&delim$; !   67
-22400     print #h_ecp: str$(gb(7))&delim$; !   68
-22420     print #h_ecp: str$(gb(8))&delim$; !   69
-22440     print #h_ecp: str$(gb(9))&delim$; !   70
-22460     print #h_ecp: str$(gb(10))&delim$; !   71
-22480     print #h_ecp: ab$(1)&delim$; !    72
-22500     print #h_ecp: ab$(2)&delim$; !    73
-22520     print #h_ecp: ab$(3) !   74
+21040     pr #h_ecp: z$&delim$; !    1
+21060     pr #h_ecp: e$(1)&delim$; !    1.5         Meter Address
+21080     pr #h_ecp: e$(2)&delim$; !    2         Name
+21100     pr #h_ecp: e$(3)&delim$; !    3          addr 1
+21120     pr #h_ecp: extra$(1)&delim$; !    4          addr 2
+21140     pr #h_ecp: e$(4)&delim$; !    5
+21160     pr #h_ecp: f$(1)&delim$; !    6
+21180     pr #h_ecp: str$(a(1))&delim$; !   7
+21200     pr #h_ecp: str$(a(2))&delim$; !   8
+21220     pr #h_ecp: str$(a(3))&delim$; !   9
+21240     pr #h_ecp: str$(a(4))&delim$; !   10
+21260     pr #h_ecp: str$(a(5))&delim$; !   11
+21280     pr #h_ecp: str$(a(6))&delim$; !   12
+21300     pr #h_ecp: str$(a(7))&delim$; !   13
+21320     pr #h_ecp: str$(b(1))&delim$; !   14
+21340     pr #h_ecp: str$(b(2))&delim$; !   15
+21360     pr #h_ecp: str$(b(3))&delim$; !   16
+21380     pr #h_ecp: str$(b(4))&delim$; !   17
+21400     pr #h_ecp: str$(b(5))&delim$; !   18
+21420     pr #h_ecp: str$(b(6))&delim$; !   19
+21440     pr #h_ecp: str$(b(7))&delim$; !   20
+21460     pr #h_ecp: str$(b(8))&delim$; !   21
+21480     pr #h_ecp: str$(b(9))&delim$; !   22
+21500     pr #h_ecp: str$(b(10))&delim$; !   23
+21520     pr #h_ecp: str$(b(11))&delim$; !   24
+21540     pr #h_ecp: str$(c(1))&delim$; !   25
+21560     pr #h_ecp: str$(c(2))&delim$; !   26
+21580     pr #h_ecp: str$(c(3))&delim$; !   27
+21600     pr #h_ecp: str$(c(4))&delim$; !   28
+21620     pr #h_ecp: str$(d(1))&delim$; !   29
+21640     pr #h_ecp: str$(d(2))&delim$; !   30
+21660     pr #h_ecp: str$(d(3))&delim$; !   31
+21680     pr #h_ecp: str$(d(4))&delim$; !   32
+21700     pr #h_ecp: str$(d(5))&delim$; !   33
+21720     pr #h_ecp: str$(d(6))&delim$; !   34
+21740     pr #h_ecp: str$(d(7))&delim$; !   35
+21760     pr #h_ecp: str$(d(8))&delim$; !   36
+21780     pr #h_ecp: str$(d(9))&delim$; !   37
+21800     pr #h_ecp: str$(d(10))&delim$; !    38
+21820     pr #h_ecp: str$(d(11))&delim$; !   39
+21840     pr #h_ecp: str$(d(12))&delim$; !   40
+21860     pr #h_ecp: str$(d(13))&delim$; !   41
+21880     pr #h_ecp: str$(d(14))&delim$; !   42
+21900     pr #h_ecp: str$(d(15))&delim$; !   43
+21920     pr #h_ecp: str$(bal)&delim$; !    44
+21940     pr #h_ecp: str$(f)&delim$; !    45
+21960     pr #h_ecp: str$(g(1))&delim$; !   46
+21980     pr #h_ecp: str$(g(2))&delim$; !   47
+22000     pr #h_ecp: str$(g(3))&delim$; !   48
+22020     pr #h_ecp: str$(g(4))&delim$; !   49
+22040     pr #h_ecp: str$(g(5))&delim$; !   50
+22060     pr #h_ecp: str$(g(6))&delim$; !   51
+22080     pr #h_ecp: str$(g(7))&delim$; !   52
+22100     pr #h_ecp: str$(g(8))&delim$; !   53
+22120     pr #h_ecp: str$(g(9))&delim$; !   54
+22140     pr #h_ecp: str$(g(10))&delim$; !   55
+22160     pr #h_ecp: str$(g(11))&delim$; !   56
+22180     pr #h_ecp: str$(g(12))&delim$; !   57
+22200     pr #h_ecp: alp$&delim$; !    58
+22220     pr #h_ecp: f$(2)&delim$; !    59
+22240     pr #h_ecp: f$(3)&delim$; !    60
+22260     pr #h_ecp: str$(bra)&delim$; !    61
+22280     pr #h_ecp: str$(gb(1))&delim$; !   62
+22300     pr #h_ecp: str$(gb(2))&delim$; !   63
+22320     pr #h_ecp: str$(gb(3))&delim$; !   64
+22340     pr #h_ecp: str$(gb(4))&delim$; !   65
+22360     pr #h_ecp: str$(gb(5))&delim$; !   66
+22380     pr #h_ecp: str$(gb(6))&delim$; !   67
+22400     pr #h_ecp: str$(gb(7))&delim$; !   68
+22420     pr #h_ecp: str$(gb(8))&delim$; !   69
+22440     pr #h_ecp: str$(gb(9))&delim$; !   70
+22460     pr #h_ecp: str$(gb(10))&delim$; !   71
+22480     pr #h_ecp: ab$(1)&delim$; !    72
+22500     pr #h_ecp: ab$(2)&delim$; !    73
+22520     pr #h_ecp: ab$(3) !   74
 22540   loop  ! /r
 26000 ALT_BILL_ADR: ! r:
 26020   mat ab$=("")
 26040   read #h_alt_bill,using 'Form POS 11,3*C 30',key=z$: mat ab$ nokey ignore
 26060   return  ! /r
 32000 HEADER: ! r:
-32020   print #h_ecp: 'Account Key'&delim$;
-32030   print #h_ecp: 'Meter Address'&delim$;
-32040   print #h_ecp: 'Name'&delim$;
-32060   print #h_ecp: 'Address 1 - Primary'&delim$;
-32080   print #h_ecp: 'Address 2 - Primary'&delim$;
-32100   print #h_ecp: 'CSZ - Primary'&delim$;
-32120   print #h_ecp: servicename$(1)&' Meter Number'&delim$; ! f$(1)&delim$;
-32140   print #h_ecp: servicename$(1)&' Rate Code'&delim$; ! str$(a(1))&delim$;
-32160   print #h_ecp: servicename$(2)&' Rate Code'&delim$; ! str$(a(2))&delim$;
-32180   print #h_ecp: servicename$(3)&' Rate Code'&delim$; ! str$(a(3))&delim$;
-32200   print #h_ecp: servicename$(4)&' Rate Code'&delim$; ! str$(a(4))&delim$;
-32220   print #h_ecp: servicename$(5)&' Rate Code'&delim$; ! str$(a(5))&delim$;
-32240   print #h_ecp: servicename$(9)&' Rate Code'&delim$; ! str$(a(6))&delim$;
-32260   print #h_ecp: servicename$(10)&' Rate Code'&delim$; ! str$(a(7))&delim$;
-32280   print #h_ecp: ''&delim$; ! str$(b(1))&delim$;
-32300   print #h_ecp: ''&delim$; ! str$(b(2))&delim$;
-32320   print #h_ecp: ''&delim$; ! str$(b(3))&delim$;
-32340   print #h_ecp: servicename$(4)&' Standard Charge'&delim$; ! str$(b(4))&delim$;
-32360   print #h_ecp: ''&delim$; ! str$(b(5))&delim$;
-32380   print #h_ecp: ''&delim$; ! str$(b(6))&delim$;
-32400   print #h_ecp: ''&delim$; ! str$(b(7))&delim$;
-32420   print #h_ecp: servicename$(1)&' Deposit'&delim$; ! str$(b(8))&delim$;
-32440   print #h_ecp: servicename$(2)&' Deposit'&delim$; ! str$(b(9))&delim$;
-32460   print #h_ecp: servicename$(3)&' Deposit'&delim$; ! str$(b(10))&delim$;
-32480   print #h_ecp: servicename$(4)&' Deposit'&delim$; ! str$(b(11))&delim$;
-32500   print #h_ecp: servicename$(1)&' Deposit Date'&delim$; ! str$(c(1))&delim$;
-32520   print #h_ecp: servicename$(2)&' Deposit Date'&delim$; ! str$(c(2))&delim$;
-32540   print #h_ecp: servicename$(3)&' Deposit Date'&delim$; ! str$(c(3))&delim$;
-32560   print #h_ecp: servicename$(4)&' Deposit Date'&delim$; ! str$(c(4))&delim$;
-32580   print #h_ecp: servicename$(1)&' Reading - Current'&delim$; ! str$(d(1))&delim$;
-32600   print #h_ecp: servicename$(1)&' Reading - Prior'&delim$; ! str$(d(2))&delim$;
-32620   print #h_ecp: servicename$(1)&' Used - Current'&delim$; ! str$(d(3))&delim$;
-32640   print #h_ecp: servicename$(1)&' Used - YTD'&delim$; ! str$(d(4))&delim$;
-32660   print #h_ecp: servicename$(3)&' Reading - Current'&delim$; ! str$(d(5))&delim$;
-32680   print #h_ecp: servicename$(3)&' Reading - Prior'&delim$; ! str$(d(6))&delim$;
-32700   print #h_ecp: servicename$(3)&' KWH Used - Current'&delim$; ! str$(d(7))&delim$;
-32720   print #h_ecp: servicename$(3)&' KWH Used -YTD'&delim$; ! str$(d(8))&delim$;
-32740   print #h_ecp: servicename$(4)&' Reading - Current'&delim$; ! str$(d(9))&delim$;
-32760   print #h_ecp: servicename$(4)&' Reading - Prior'&delim$; ! str$(d(10))&delim$;
-32780   print #h_ecp: servicename$(4)&' Used-Current'&delim$; ! str$(d(11))&delim$;
-32800   print #h_ecp: servicename$(4)&' Used-YTD'&delim$; ! str$(d(12))&delim$;
-32820   print #h_ecp: 'Units Per Meter'&delim$; ! str$(d(13))&delim$;
-32840   print #h_ecp: 'Demand Multiplier'&delim$; ! str$(d(14))&delim$;
-32860   print #h_ecp: 'Demand Reading'&delim$; ! str$(d(15))&delim$;
-32880   print #h_ecp: 'Current Balance'&delim$; ! str$(bal)&delim$;
-32900   print #h_ecp: 'Date of Charge'&delim$; ! str$(f)&delim$;
-32920   print #h_ecp: servicename$(1)&' Charge'&delim$; ! str$(g(1))&delim$;
-32940   print #h_ecp: servicename$(2)&' Charge'&delim$; ! str$(g(2))&delim$;
-32960   print #h_ecp: servicename$(3)&' Charge'&delim$; ! str$(g(3))&delim$;
-32980   print #h_ecp: servicename$(4)&' Charge'&delim$; ! str$(g(4))&delim$;
-33000   print #h_ecp: servicename$(5)&' Charge'&delim$; ! str$(g(5))&delim$;
-33020   print #h_ecp: servicename$(6)&' Charge'&delim$; ! str$(g(6))&delim$;
-33040   print #h_ecp: servicename$(7)&' Charge'&delim$; ! str$(g(7))&delim$;
-33060   print #h_ecp: servicename$(8)&' Charge'&delim$; ! str$(g(8))&delim$;
-33080   print #h_ecp: servicename$(9)&' Charge'&delim$; ! str$(g(9))&delim$;
-33100   print #h_ecp: 'Net Bill'&delim$; ! str$(g(10))&delim$;
-33120   print #h_ecp: 'Gross Bill'&delim$; ! str$(g(11))&delim$;
-33140   print #h_ecp: ''&delim$; ! str$(g(12))&delim$;
-33160   print #h_ecp: 'Alpha Sort Field'&delim$; ! alp$&delim$;
-33180   print #h_ecp: servicename$(3)&' Meter Number'&delim$; ! f$(2)&delim$;
-33200   print #h_ecp: servicename$(4)&' Meter Number'&delim$; ! f$(3)&delim$;
-33220   print #h_ecp: 'Alternate Billing Address'&delim$; ! str$(bra)&delim$;
-33240   print #h_ecp: servicename$(1)&' Breakdown'&delim$; ! str$(gb(1))&delim$;
-33260   print #h_ecp: servicename$(2)&' Breakdown'&delim$; ! str$(gb(2))&delim$;
-33280   print #h_ecp: servicename$(3)&' Breakdown'&delim$; ! str$(gb(3))&delim$;
-33300   print #h_ecp: servicename$(4)&' Breakdown'&delim$; ! str$(gb(4))&delim$;
-33320   print #h_ecp: servicename$(5)&' Breakdown'&delim$; ! str$(gb(5))&delim$;
-33340   print #h_ecp: servicename$(6)&' Breakdown'&delim$; ! str$(gb(6))&delim$;
-33360   print #h_ecp: servicename$(7)&' Breakdown'&delim$; ! str$(gb(7))&delim$;
-33380   print #h_ecp: servicename$(8)&' Breakdown'&delim$; ! str$(gb(8))&delim$;
-33400   print #h_ecp: servicename$(9)&' Breakdown'&delim$; ! str$(gb(9))&delim$;
-33420   print #h_ecp: servicename$(10)&' Breakdown'&delim$; ! str$(gb(10))&delim$;
-33440   print #h_ecp: 'Name - Alternate Billing'&delim$; ! ab$(1)&delim$;
-33460   print #h_ecp: 'Address - Alternate Billing'&delim$; ! ab$(2)&delim$;
-33480   print #h_ecp: 'CSZ - Alternate Billing'&delim$ ! ab$(3)
+32020   pr #h_ecp: 'Account Key'&delim$;
+32030   pr #h_ecp: 'Meter Address'&delim$;
+32040   pr #h_ecp: 'Name'&delim$;
+32060   pr #h_ecp: 'Address 1 - Primary'&delim$;
+32080   pr #h_ecp: 'Address 2 - Primary'&delim$;
+32100   pr #h_ecp: 'CSZ - Primary'&delim$;
+32120   pr #h_ecp: servicename$(1)&' Meter Number'&delim$; ! f$(1)&delim$;
+32140   pr #h_ecp: servicename$(1)&' Rate Code'&delim$; ! str$(a(1))&delim$;
+32160   pr #h_ecp: servicename$(2)&' Rate Code'&delim$; ! str$(a(2))&delim$;
+32180   pr #h_ecp: servicename$(3)&' Rate Code'&delim$; ! str$(a(3))&delim$;
+32200   pr #h_ecp: servicename$(4)&' Rate Code'&delim$; ! str$(a(4))&delim$;
+32220   pr #h_ecp: servicename$(5)&' Rate Code'&delim$; ! str$(a(5))&delim$;
+32240   pr #h_ecp: servicename$(9)&' Rate Code'&delim$; ! str$(a(6))&delim$;
+32260   pr #h_ecp: servicename$(10)&' Rate Code'&delim$; ! str$(a(7))&delim$;
+32280   pr #h_ecp: ''&delim$; ! str$(b(1))&delim$;
+32300   pr #h_ecp: ''&delim$; ! str$(b(2))&delim$;
+32320   pr #h_ecp: ''&delim$; ! str$(b(3))&delim$;
+32340   pr #h_ecp: servicename$(4)&' Standard Charge'&delim$; ! str$(b(4))&delim$;
+32360   pr #h_ecp: ''&delim$; ! str$(b(5))&delim$;
+32380   pr #h_ecp: ''&delim$; ! str$(b(6))&delim$;
+32400   pr #h_ecp: ''&delim$; ! str$(b(7))&delim$;
+32420   pr #h_ecp: servicename$(1)&' Deposit'&delim$; ! str$(b(8))&delim$;
+32440   pr #h_ecp: servicename$(2)&' Deposit'&delim$; ! str$(b(9))&delim$;
+32460   pr #h_ecp: servicename$(3)&' Deposit'&delim$; ! str$(b(10))&delim$;
+32480   pr #h_ecp: servicename$(4)&' Deposit'&delim$; ! str$(b(11))&delim$;
+32500   pr #h_ecp: servicename$(1)&' Deposit Date'&delim$; ! str$(c(1))&delim$;
+32520   pr #h_ecp: servicename$(2)&' Deposit Date'&delim$; ! str$(c(2))&delim$;
+32540   pr #h_ecp: servicename$(3)&' Deposit Date'&delim$; ! str$(c(3))&delim$;
+32560   pr #h_ecp: servicename$(4)&' Deposit Date'&delim$; ! str$(c(4))&delim$;
+32580   pr #h_ecp: servicename$(1)&' Reading - Current'&delim$; ! str$(d(1))&delim$;
+32600   pr #h_ecp: servicename$(1)&' Reading - Prior'&delim$; ! str$(d(2))&delim$;
+32620   pr #h_ecp: servicename$(1)&' Used - Current'&delim$; ! str$(d(3))&delim$;
+32640   pr #h_ecp: servicename$(1)&' Used - YTD'&delim$; ! str$(d(4))&delim$;
+32660   pr #h_ecp: servicename$(3)&' Reading - Current'&delim$; ! str$(d(5))&delim$;
+32680   pr #h_ecp: servicename$(3)&' Reading - Prior'&delim$; ! str$(d(6))&delim$;
+32700   pr #h_ecp: servicename$(3)&' KWH Used - Current'&delim$; ! str$(d(7))&delim$;
+32720   pr #h_ecp: servicename$(3)&' KWH Used -YTD'&delim$; ! str$(d(8))&delim$;
+32740   pr #h_ecp: servicename$(4)&' Reading - Current'&delim$; ! str$(d(9))&delim$;
+32760   pr #h_ecp: servicename$(4)&' Reading - Prior'&delim$; ! str$(d(10))&delim$;
+32780   pr #h_ecp: servicename$(4)&' Used-Current'&delim$; ! str$(d(11))&delim$;
+32800   pr #h_ecp: servicename$(4)&' Used-YTD'&delim$; ! str$(d(12))&delim$;
+32820   pr #h_ecp: 'Units Per Meter'&delim$; ! str$(d(13))&delim$;
+32840   pr #h_ecp: 'Demand Multiplier'&delim$; ! str$(d(14))&delim$;
+32860   pr #h_ecp: 'Demand Reading'&delim$; ! str$(d(15))&delim$;
+32880   pr #h_ecp: 'Current Balance'&delim$; ! str$(bal)&delim$;
+32900   pr #h_ecp: 'Date of Charge'&delim$; ! str$(f)&delim$;
+32920   pr #h_ecp: servicename$(1)&' Charge'&delim$; ! str$(g(1))&delim$;
+32940   pr #h_ecp: servicename$(2)&' Charge'&delim$; ! str$(g(2))&delim$;
+32960   pr #h_ecp: servicename$(3)&' Charge'&delim$; ! str$(g(3))&delim$;
+32980   pr #h_ecp: servicename$(4)&' Charge'&delim$; ! str$(g(4))&delim$;
+33000   pr #h_ecp: servicename$(5)&' Charge'&delim$; ! str$(g(5))&delim$;
+33020   pr #h_ecp: servicename$(6)&' Charge'&delim$; ! str$(g(6))&delim$;
+33040   pr #h_ecp: servicename$(7)&' Charge'&delim$; ! str$(g(7))&delim$;
+33060   pr #h_ecp: servicename$(8)&' Charge'&delim$; ! str$(g(8))&delim$;
+33080   pr #h_ecp: servicename$(9)&' Charge'&delim$; ! str$(g(9))&delim$;
+33100   pr #h_ecp: 'Net Bill'&delim$; ! str$(g(10))&delim$;
+33120   pr #h_ecp: 'Gross Bill'&delim$; ! str$(g(11))&delim$;
+33140   pr #h_ecp: ''&delim$; ! str$(g(12))&delim$;
+33160   pr #h_ecp: 'Alpha Sort Field'&delim$; ! alp$&delim$;
+33180   pr #h_ecp: servicename$(3)&' Meter Number'&delim$; ! f$(2)&delim$;
+33200   pr #h_ecp: servicename$(4)&' Meter Number'&delim$; ! f$(3)&delim$;
+33220   pr #h_ecp: 'Alternate Billing Address'&delim$; ! str$(bra)&delim$;
+33240   pr #h_ecp: servicename$(1)&' Breakdown'&delim$; ! str$(gb(1))&delim$;
+33260   pr #h_ecp: servicename$(2)&' Breakdown'&delim$; ! str$(gb(2))&delim$;
+33280   pr #h_ecp: servicename$(3)&' Breakdown'&delim$; ! str$(gb(3))&delim$;
+33300   pr #h_ecp: servicename$(4)&' Breakdown'&delim$; ! str$(gb(4))&delim$;
+33320   pr #h_ecp: servicename$(5)&' Breakdown'&delim$; ! str$(gb(5))&delim$;
+33340   pr #h_ecp: servicename$(6)&' Breakdown'&delim$; ! str$(gb(6))&delim$;
+33360   pr #h_ecp: servicename$(7)&' Breakdown'&delim$; ! str$(gb(7))&delim$;
+33380   pr #h_ecp: servicename$(8)&' Breakdown'&delim$; ! str$(gb(8))&delim$;
+33400   pr #h_ecp: servicename$(9)&' Breakdown'&delim$; ! str$(gb(9))&delim$;
+33420   pr #h_ecp: servicename$(10)&' Breakdown'&delim$; ! str$(gb(10))&delim$;
+33440   pr #h_ecp: 'Name - Alternate Billing'&delim$; ! ab$(1)&delim$;
+33460   pr #h_ecp: 'Address - Alternate Billing'&delim$; ! ab$(2)&delim$;
+33480   pr #h_ecp: 'CSZ - Alternate Billing'&delim$ ! ab$(3)
 33500   return  ! /r
 50000 ! <Updateable Region: ERTN>
 50020 ERTN: let fnerror(program$,err,line,act$,"xit")
 50040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 50060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+50080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50120 ! /region
 56120 ! 

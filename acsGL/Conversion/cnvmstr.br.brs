@@ -7,8 +7,8 @@
 00070 ! ______________________________________________________________________
 00080   dim k$*12,d$*50,rf(6),bc(12),bm(12),bp(12),ta(2)
 00090 ! ______________________________________________________________________
-00100   print newpage
-00110   print fields "10,5,C 60": "COMPANY NUMBER TO CONVERT:"
+00100   pr newpage
+00110   pr fields "10,5,C 60": "COMPANY NUMBER TO CONVERT:"
 00120 L120: input fields "10,55,N 2,UE,N": cno conv L120
 00130   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,outin,keyed ioerr L120
 00140   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),internal,output ioerr L160
@@ -29,7 +29,7 @@
 00290 ERTN: let fnerror(program$,err,line,act$,"xit")
 00300   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00310   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00320   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00320   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00330 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00340 ! /region
 00350 ! ______________________________________________________________________

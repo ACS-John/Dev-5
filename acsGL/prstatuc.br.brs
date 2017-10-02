@@ -39,7 +39,7 @@
 00430   let m(2)=m(2)-deducq
 00440   if p1<57 then goto L480
 00450   gosub L920
-00460   print #255: newpage
+00460   pr #255: newpage
 00470   gosub HDR
 00480 L480: gosub L790
 00490   let t1=t1+m(2)
@@ -49,18 +49,18 @@
 00530 L530: goto L340
 00540 ! ______________________________________________________________________
 00550 HDR: ! 
-00560   print #255,using L570: "PAGE ",p2+=1
+00560   pr #255,using L570: "PAGE ",p2+=1
 00570 L570: form pos 70,c 5,pic(zzz),skip 2
-00580   print #255,using L590: "SCHEDULE A - EMPLOYER'S REPORT OF WAGE'S PAID TO EACH EMPLOYEE"
+00580   pr #255,using L590: "SCHEDULE A - EMPLOYER'S REPORT OF WAGE'S PAID TO EACH EMPLOYEE"
 00590 L590: form pos 10,c 63
-00600   print #255,using L610: "AS OF ",fnpedat$,"FED ID",b$(1)
+00600   pr #255,using L610: "AS OF ",fnpedat$,"FED ID",b$(1)
 00610 L610: form pos 26,c 6,c 20,pos 65,c 6,pos 75,c 40
-00620   print #255,using L630: "RATE",a$(1),"STATE ID",b$(2)
+00620   pr #255,using L630: "RATE",a$(1),"STATE ID",b$(2)
 00630 L630: form pos 6,c 9,pos 22,c 40,pos 65,c 8,pos 75,c 12
-00640   print #255,using L650: c$,a$(2),a$(3)
+00640   pr #255,using L650: c$,a$(2),a$(3)
 00650 L650: form pos 6,c 5,pos 22,c 40,skip 1,pos 22,c 40,skip 2
-00660   print #255: tab(39);"TOTAL WAGES  EXCESS WAGES    TAXABLE   WEEKS"
-00670   print #255,using L680: "SS NUMBER   NAME                      FOR QUARTER   OVER  $"&ltrm$(str$(ucm)),"WAGES   WORKED"
+00660   pr #255: tab(39);"TOTAL WAGES  EXCESS WAGES    TAXABLE   WEEKS"
+00670   pr #255,using L680: "SS NUMBER   NAME                      FOR QUARTER   OVER  $"&ltrm$(str$(ucm)),"WAGES   WORKED"
 00680 L680: form pos 1,c 68,pos 69,c 18
 00690   let p1=16
 00700   return 
@@ -81,14 +81,14 @@
 00850   goto L870
 00860 L860: let h2=m(2)
 00870 L870: let h3=m(2)-h2
-00880   print #255,using L890: l$(1),k$(1),m(2),h3,h2,m(34)
+00880   pr #255,using L890: l$(1),k$(1),m(2),h3,h2,m(34)
 00890 L890: form pos 1,c 11,pos 13,c 25,pos 39,n 11.2,pos 53,n 11.2,n 11.2,n 8,skip 2
 00900   let p1=p1+2
 00910   return 
 00920 L920: let j1=58-p1
-00930   print #255,using L940: "----------   -----------  ---------  ------"
+00930   pr #255,using L940: "----------   -----------  ---------  ------"
 00940 L940: form skip j1,pos 40,c 48
-00950   print #255,using L960: "EMPLOYEES ON THIS PAGE "&ltrm$(str$(p3))&"    PAGE TOTALS",t1,t2,t3,t4
+00950   pr #255,using L960: "EMPLOYEES ON THIS PAGE "&ltrm$(str$(p3))&"    PAGE TOTALS",t1,t2,t3,t4
 00960 L960: form pos 1,c 42,pos 39,n 11.2,pos 53,n 11.2,n 11.2,n 8.2
 00970   let p3=0
 00980   let t1=0
@@ -101,7 +101,7 @@
 01050 ERTN: let fnerror(program$,err,line,act$,"xit")
 01060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01070   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01090 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01100 ! /region
 01110 ! ______________________________________________________________________

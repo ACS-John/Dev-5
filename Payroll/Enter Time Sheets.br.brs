@@ -54,18 +54,18 @@
 00520   let fntos(sn$="Prinput-1")
 00522   let rc=cf=0
 00530   let fnfra(1,1,3,50,"Payroll Time Sheet Entry","You would only add to previous entries if the last batch was not calculated.",0)
-00532   let cf+=1 : let franum=cf
+00532   cf+=1 : let franum=cf
 00540   let fnopt(1,3,"Regular Time Sheet Entry",0,franum)
 00542   let resp$(rc+=1)="True"
 00550   let fnopt(2,3,"Additions to Previous Input",0,franum)
 00552   let resp$(rc+=1)="False"
 00560   let fnfra(6,1,2,50,"Pay Period Ending Date","You must enter the pay perod ending date.  You can not have more than one payroll with the same date.")
-00562   let cf+=1 : let franum=cf : let mylen=26 : let mypos=mylen+2
+00562   cf+=1 : let franum=cf : let mylen=26 : let mypos=mylen+2
 00570   let fnlbl(1,1,"Pay Period Ending Date:",mylen,1,0,franum)
 00580   let fntxt(1,mypos,10,0,1,"1",0,"Use mmddyy.",franum)
 00582   let resp$(rc+=1)=str$(prd)
 00590   let fnfra(10,1,6,60,"Method of Entry","You can select specific employees to pay; you can automatically calculate salaried persons; or you can pull from a another system.")
-00592   let cf+=1 : let franum=cf
+00592   cf+=1 : let franum=cf
 00600   let fnopt(1,3,"Select employees to pay",0,franum)
 00602   let resp$(rc+=1)="True"
 00610   let fnopt(2,3,"Automatically pay salaried employees",0,franum)
@@ -83,10 +83,10 @@
 00682   if ckey=5 then goto XIT
 00690   if resp$(1)="True" then ! Regular Time Sheet Entry
 00691     let noauto=ti1=1
-00692     let additional=1
+00692     additional=1
 00693   else if resp$(2)="True" then ! Additions to Previous Input
 00694     let noauto=ti1=2
-00695     let additional=2
+00695     additional=2
 00696   end if 
 00700   let prd=val(resp$(3))
 00710   if prd=0 then 
@@ -110,7 +110,7 @@
 00760   let fntos(sn$="Prinput-2")
 00762   let rc=cf=linecnt=0
 00770   let fnfra(1,1,10,50,"Skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
-00772   let cf+=1 : let franum=cf
+00772   cf+=1 : let franum=cf
 00780   for j=1 to 19 step 2
 00790     if trim$(dednames$(j))<>"" then let x$=":" else let x$=""
 00800     let fnchk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum)
@@ -276,7 +276,7 @@
 02070   for j=12 to 31
 02080     let inp(j-2)=val(resp$(j))
 02090   next j
-02100   if ckey=8 then let fnhours(eno) : goto ASK_TIME !  let breakdown=1 : goto ASK_TIME
+02100   if ckey=8 then let fnhours(eno) : goto ASK_TIME !  breakdown=1 : goto ASK_TIME
 02110   if ckey=5 and editmode=1 then goto L2290
 02120   if ckey=10 and editmode=1 then goto DELETE_IT
 02130   if ckey=2 then goto L2430
@@ -392,7 +392,7 @@
 02940   let fncmdkey("E&xit",5,0,1,"Exit without calculating")
 02950   let fnacs(sn$,0,mat resp$,ckey) ! proof totals
 02960   let estat=0
-02970   let cor=ckey
+02970   cor=ckey
 02980   if ckey=5 then goto XITWOCAL
 02990   if ckey=1 or ckey=2 or ckey=4 then gosub OFILE
 03000   on ckey goto CORRECTIONS,PRINT_LISTING,GOCALK,ASK_EMPLOYEE none PROOF_TOTALS
@@ -416,13 +416,13 @@
 04002   rewrite #h_rpmstr,using F_RPMSTR_2,key=en$: ped,tgp
 04010   goto READ_NEXT_DEPARTMENT
 04020 ! let rp1=1
-04030   let cor=editmode=0
+04030   cor=editmode=0
 04040   goto READ_NEXT_DEPARTMENT
 04050 ! ______________________________________________________________________
 04930 ! r: unaccessed lines... delete them someday
 04940 !       12/23/2015  these lines seem totally unaccessed     for j=1 to 20
 04950 !       12/23/2015  these lines seem totally unaccessed       if skipit$(j)="Y" then let skipit(j)=1 else let skipit(j)=0
-04960 !       12/23/2015  these lines seem totally unaccessed   ! If SKIPIT$(J)<>"Y" AND SKIPIT$(J)<>"N" Then Let CE=J : Goto ERR4
+04960 !       12/23/2015  these lines seem totally unaccessed   ! If SKIPIT$(J)<>"Y" AND SKIPIT$(J)<>"N" Then cE=J : Goto ERR4
 04970 !       12/23/2015  these lines seem totally unaccessed     next j
 04980 !       12/23/2015  these lines seem totally unaccessed     close #win:
 04990 !       12/23/2015  these lines seem totally unaccessed     return
@@ -454,7 +454,7 @@
 35460 ! If ESTAT=99 AND EM4=1 Then Goto 3590 ! employment status on salaries people must be 1
 35480 ! If EM4><ESTAT Then Goto 3552
 35500   let eno=val(en$)
-35520   print fields "16,20,C 60": en$&"  "&em$
+35520   pr fields "16,20,C 60": en$&"  "&em$
 35540 L4290: ! 
 35560   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": 
 35580 L4300: ! 
@@ -469,7 +469,7 @@
 35780   goto L4400
 35800 L4380: ! 
 35820   if em4=1 and tdet(1)>0 then goto L4400 ! calculate salaries even if no time in time card file; skip any hourly people who do not have any entries from the time card system
-35840   goto L4290 ! If NTA>0 Then Let ADR=NTA: Goto 3870 Else Goto 2010 ! circle if more than one department on hourly people; else skip if no time and no more departments
+35840   goto L4290 ! If NTA>0 Then aDR=NTA: Goto 3870 Else Goto 2010 ! circle if more than one department on hourly people; else skip if no time and no more departments
 35860 L4400: ! 
 35880   let hr(1)=tdet(2)
 35900   let hr(2)=tdet(3)
@@ -562,7 +562,7 @@
 46020 ERTN: let fnerror(program$,err,line,act$,"xit")
 46040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 46060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-46080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+46080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 46100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 46120 ! /region
 47000 XIT: let fnxit
@@ -714,19 +714,19 @@
 62480 ! /r
 64000   def fn_add_proof_totals(&apt_total_employee_numbers,&apt_count_employees_entered,mat tinp)
 64020     open #apt_h_rpwork:=fngethandle: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),internal,input,keyed ioerr APT_FINIS
-64040     let apt_heno=0 ! temp variable for internal comparison
-64060     let apt_total_employee_numbers=0 ! total of all (unique) employee numbers entered
-64080     let apt_count_employees_entered=0 ! total unique employees entered
+64040     apt_heno=0 ! temp variable for internal comparison
+64060     apt_total_employee_numbers=0 ! total of all (unique) employee numbers entered
+64080     apt_count_employees_entered=0 ! total unique employees entered
 64100     mat tinp=(0)
 64120 ! restore #apt_h_rpwork:
 64140     do 
 64160       read #apt_h_rpwork,using F_RPWORK: eno,dep,mat inp,gpd,mat hr eof APT_FINIS
 64180       if apt_heno<>eno then 
-64200         let apt_total_employee_numbers=apt_total_employee_numbers+eno
-64220         let apt_count_employees_entered+=1
+64200         apt_total_employee_numbers=apt_total_employee_numbers+eno
+64220         apt_count_employees_entered+=1
 64240       end if 
 64260       mat tinp=tinp+inp
-64280       let apt_heno=eno
+64280       apt_heno=eno
 64300     loop 
 64320 APT_FINIS: ! 
 64340     close #apt_h_rpwork: ioerr ignore
@@ -810,24 +810,24 @@
 70010   if pc2=3 then let pc2=0
 70020   let pc2=pc2+1
 70040   if pc2>1 then goto L3590
-70060   print #255: ''
-70080   print #255,using 'form pos 1,c 25,cc 82,skip 1,c 25': date$,env$('cnam'),time$
+70060   pr #255: ''
+70080   pr #255,using 'form pos 1,c 25,cc 82,skip 1,c 25': date$,env$('cnam'),time$
 70100 L3590: ! 
-70120   print #255,using L3610: mat n1$
-70140   print #255,using L3610: mat n2$
+70120   pr #255,using L3610: mat n1$
+70140   pr #255,using L3610: mat n2$
 70160 L3610: form pos 21,9*c 12,skip 1
-70180 ! Print #255,Using F1$: "Record #     ",PR(1,23),PR(2,23),PR(3,23),PR(4,23),PR(5,23),PR(6,23),PR(7,23),PR(8,23),PR(9,23)
-70200   print #255,using f1$: "Employee  ",pr(1,1),pr(2,1),pr(3,1),pr(4,1),pr(5,1),pr(6,1),pr(7,1),pr(8,1),pr(9,1)
-70220   print #255,using f1$: "Department  ",pr(1,2),pr(2,2),pr(3,2),pr(4,2),pr(5,2),pr(6,2),pr(7,2),pr(8,2),pr(9,2)
+70180 ! pr #255,Using F1$: "Record #     ",PR(1,23),PR(2,23),PR(3,23),PR(4,23),PR(5,23),PR(6,23),PR(7,23),PR(8,23),PR(9,23)
+70200   pr #255,using f1$: "Employee  ",pr(1,1),pr(2,1),pr(3,1),pr(4,1),pr(5,1),pr(6,1),pr(7,1),pr(8,1),pr(9,1)
+70220   pr #255,using f1$: "Department  ",pr(1,2),pr(2,2),pr(3,2),pr(4,2),pr(5,2),pr(6,2),pr(7,2),pr(8,2),pr(9,2)
 70240   for j=1 to 29
 70260     if trim$(sc1$(j))<>"" then 
-70280       print #255,using f2$: sc1$(j),pr(1,j+2),pr(2,j+2),pr(3,j+2),pr(4,j+2),pr(5,j+2),pr(6,j+2),pr(7,j+2),pr(8,j+2),pr(9,j+2)
+70280       pr #255,using f2$: sc1$(j),pr(1,j+2),pr(2,j+2),pr(3,j+2),pr(4,j+2),pr(5,j+2),pr(6,j+2),pr(7,j+2),pr(8,j+2),pr(9,j+2)
 70300     end if 
 70320   next j
-70340   print #255,using f2$: "Dept Gross Pay ",pr(1,32),pr(2,32),pr(3,32),pr(4,32),pr(5,32),pr(6,32),pr(7,32),pr(8,32),pr(9,32)
-70360   print #255,using f2$: "Reg Hourly Rate",pr(1,34),pr(2,34),pr(3,34),pr(4,34),pr(5,34),pr(6,34),pr(7,34),pr(8,34),pr(9,34)
-70380 ! Print #255,Using F2$: "O/T Hourly Rate",PR(1,35),PR(2,35),PR(3,35),PR(4,35),PR(5,35),PR(6,35),PR(7,35),PR(8,35),PR(9,35)
-70400   if pc2=2 then print #255: newpage else print #255,using L3730: " "
+70340   pr #255,using f2$: "Dept Gross Pay ",pr(1,32),pr(2,32),pr(3,32),pr(4,32),pr(5,32),pr(6,32),pr(7,32),pr(8,32),pr(9,32)
+70360   pr #255,using f2$: "Reg Hourly Rate",pr(1,34),pr(2,34),pr(3,34),pr(4,34),pr(5,34),pr(6,34),pr(7,34),pr(8,34),pr(9,34)
+70380 ! pr #255,Using F2$: "O/T Hourly Rate",PR(1,35),PR(2,35),PR(3,35),PR(4,35),PR(5,35),PR(6,35),PR(7,35),PR(8,35),PR(9,35)
+70400   if pc2=2 then pr #255: newpage else pr #255,using L3730: " "
 70420 L3730: form c 1,skip 2
 70440   if pc2>1 then let pc2=0
 70460   mat pr=(0)
@@ -838,7 +838,7 @@
 70900 ! ______________________________________________________________________
 72000 PL_FINIS: ! r:
 72020   if additional=2 then 
-72040     let additional=1
+72040     additional=1
 72060     close #h_rpwork: 
 72080   else 
 72100     gosub PL_PRINT_EMP_BLOCK

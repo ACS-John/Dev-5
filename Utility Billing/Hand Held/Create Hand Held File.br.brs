@@ -48,7 +48,7 @@
 08760   let drive$(20)="X:\"
 08780   let drive$(21)="Y:\"
 08800   let drive$(22)="Z:\"
-08860   let crlf$=chr$(13)&chr$(10)
+08860   crlf$=chr$(13)&chr$(10)
 08880 fnend  ! fn_constants_setup
 10370 SEL_ACT: ! r:
 10380   let fn_scr_selact
@@ -81,8 +81,8 @@
 10590   let fncmdkey("&Finish",2,0,1,"Completed with all routes")
 10595   let fncmdkey("&Cancel",5,0,0,"Don't sent to Hand Held")
 10600   let fnacs(sn$,0,mat resp$, ckey)
-10605   if resp$(1)="[All]" and ckey=1 then let selection_method=1 : goto SELECT_ALL ! if they select all on the route screen, handle same as print all option from 1st menu
-10610   let bk1=val(resp$(1)) conv L850
+10605   if resp$(1)="[All]" and ckey=1 then let selection_method=1 : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
+10610   bk1=val(resp$(1)) conv L850
 10615   let resp$(1)=""
 10620 L850: ! 
 10625   if ckey=1 then 
@@ -98,7 +98,7 @@
 10675 ! /r
 10750 SELECT_ALL: ! r:
 10760   ! if env$('client')="Gilbertown" then goto GILBERTOWN
-10770   if bk1=0 then let bk1=1
+10770   if bk1=0 then bk1=1
 10780   restore #h_customer_i5,key>=cnvrt$("pic(zz)",bk1)&"       ": nokey ASK_BOOK
 10790 SELECT_ALL_READ: ! 
 10800   if fn_customerRead=-54 then goto END1
@@ -165,17 +165,17 @@
 11540     WORKABOUT_WATER: ! 
 11550       if a(1)=0 then goto WORKABOUT_NEXT_SEQUENCE
 11560       let m$=ltrm$(f$(1))(1:10)
-11570       print #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (W)",e$(1)(1:20),d(1),d(3),1,m$,ft$
+11570       pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (W)",e$(1)(1:20),d(1),d(3),1,m$,ft$
 11580     goto WORKABOUT_NEXT_SEQUENCE
 11590     ! ___________________________
 11600     WORKABOUT_ELECTRIC: ! 
 11610       if a(3)=0 or trim$(servicename$(3))<>"Electric" then goto WORKABOUT_LAWNMETER
 11620       let m$=ltrm$(f$(2))(1:10)
-11630       print #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (E)",e$(1)(1:20),d(5),d(7),3,m$,ft$
+11630       pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (E)",e$(1)(1:20),d(5),d(7),3,m$,ft$
 11640       WORKABOUT_LAWNMETER: ! 
 11650       if a(3)=0 or trim$(servicename$(3))<>"Lawn Meter" then goto WORKABOUT_NEXT_SEQUENCE
 11660       let m$=ltrm$(f$(2))(1:10)
-11670       print #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (L)",e$(1)(1:20),d(5),d(7),3,m$,ft$
+11670       pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (L)",e$(1)(1:20),d(5),d(7),3,m$,ft$
 11680     goto WORKABOUT_NEXT_SEQUENCE
 11690     ! ___________________________
 11700     WORKABOUT_DEMAND: ! 
@@ -184,7 +184,7 @@
 11760     WORKABOUT_GAS: ! 
 11770       if a(4)=0 or trim$(servicename$(4))<>"Gas" then goto WORKABOUT_NEXT_SEQUENCE
 11780       let m$=ltrm$(f$(3))(1:10)
-11790       print #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (G)",e$(1)(1:20),d(9),d(11),2,m$,ft$
+11790       pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (G)",e$(1)(1:20),d(9),d(11),2,m$,ft$
 11800     goto WORKABOUT_NEXT_SEQUENCE
 11810     ! ___________________________
 11820     WORKABOUT_NEXT_SEQUENCE: ! 
@@ -216,7 +216,7 @@
 12080     let rt$=cnvrt$("pic(##)",extra(1))&"  "
 12081     if env$('client')='Raymond' then let manual_or_dialog$="N"
 12082     if env$('client')='Raymond' and trim$(extra$(7))='' then let extra$(7)='54'
-12090     print #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': "",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9),"","A","","1 ","  ","        "," ",d(1)+(d(3)*2),d(1),0,"        ","  ","  ",rt$,z$,"        ",manual_or_dialog$(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+12090     pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': "",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9),"","A","","1 ","  ","        "," ",d(1)+(d(3)*2),d(1),0,"        ","  ","  ",rt$,z$,"        ",manual_or_dialog$(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 12100     ! serial # can be extra$(3) rather than f$(1)
 12110     ! replaced UPRC$(TRIM$(F$(1)))(1:1) with manual_or_dialog$
 12120     goto BADGER_NEXT_SEQUENCE
@@ -224,57 +224,57 @@
 12140     BADGER_ELECTRIC: ! 
 12150     if a(3)=0 or trim$(servicename$(3))<>"Electric" then goto BADGER_NEXT_SEQUENCE
 12160     let m$=ltrm$(f$(2))(1:10)
-12170     print #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","3 "," ",f$(2)(1:9)," ",d(5)+(d(7)*1.5),d(5),0," "," "," "," ",z$," ",uprc$(trim$(f1$))(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+12170     pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","3 "," ",f$(2)(1:9)," ",d(5)+(d(7)*1.5),d(5),0," "," "," "," ",z$," ",uprc$(trim$(f1$))(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 12180     L2010: form pos 1,c 8,2*c 20,c 9,c 4,c 1,c 1,c 2,c 2,c 9,c 1,3*pic(#########),c 8,c 2,c 2,c 4,c 15,c 8,c 1,3*c 6,c 2,pic(######),c 20,c 30,c 3,c 2,c 2,c 2,c 6,c 18,c 1
 12190     goto BADGER_NEXT_SEQUENCE
 12200     ! ___________________________
 12210     BADGER_DEMAND: ! 
 12220     goto BADGER_NEXT_SEQUENCE
 12230     let m$=""
-12240     print #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","4 "," ",f$(2)(1:9)," ",d(15)+(d(15)*.5),d(15)-(d(15)*.5),0," "," "," "," ",z$," ",manual_or_dialog$," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+12240     pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","4 "," ",f$(2)(1:9)," ",d(15)+(d(15)*.5),d(15)-(d(15)*.5),0," "," "," "," ",z$," ",manual_or_dialog$," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 12250     goto BADGER_NEXT_SEQUENCE
 12260     ! ___________________________
 12270     BADGER_GAS: ! 
 12280     if a(4)=0 or trim$(servicename$(4))<>"Gas" then goto BADGER_NEXT_SEQUENCE
 12290     let m$=ltrm$(f$(3))(1:10)
-12300     print #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","2 "," ",f$(2)(1:9)," ",d(9)+(d(11)*1.5),d(9),0," "," "," "," ",z$," ","D"," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
+12300     pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","2 "," ",f$(2)(1:9)," ",d(9)+(d(11)*1.5),d(9),0," "," "," "," ",z$," ","D"," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 12310     goto BADGER_NEXT_SEQUENCE
 12320     ! ___________________________
 12330     BADGER_NEXT_SEQUENCE: ! 
 12340   next j
 12350 fnend 
 12870 def fn_sensus
-12880   if (env$('client')="Oakland" or env$('client')="Lovington") and trim$(extra$(7))="1" then let cd$="B" else let cd$="M"
+12880   if (env$('client')="Oakland" or env$('client')="Lovington") and trim$(extra$(7))="1" then cd$="B" else cd$="M"
 12890   L2520: form pos 1,c 10,2*c 20,2*n 9,n 1,c 10,c 1,n 9
 12900   if final><0 then goto L2710
-12910   let c$=""
-12920   ! Let CD$="" ! TYPE OF METER
-12930   if a(1)>0 then let c$="1"
-12940   if a(3)=5 then let c$=c$&"5": goto L2590
-12950   if a(3)>0 then let c$=c$&"3"
-12960   L2590: if a(4)>0 then let c$=c$&"4"
+12910   c$=""
+12920   ! cD$="" ! TYPE OF METER
+12930   if a(1)>0 then c$="1"
+12940   if a(3)=5 then c$=c$&"5": goto L2590
+12950   if a(3)>0 then c$=c$&"3"
+12960   L2590: if a(4)>0 then c$=c$&"4"
 12970   goto L2610
 12980   L2610: let j=0
 12990   if rtrm$(f$)="" then let f$=z$
 13000   L2630: let j=j+1
 13010   if j>len(c$) then goto L2710
 13020   on val(c$(j:j)) goto SENSUSWATER,L2630,SENSUSELECTRIC,SENSUSGAS,SENSUSDEMAND none L2630
-13030   SENSUSWATER: print #h_out,using L2520: z$,e$(2)(1:18)&"-W",e$(1)(1:20),d(1),d(3),1,extra$(3)(1:10),cd$: goto L2630
+13030   SENSUSWATER: pr #h_out,using L2520: z$,e$(2)(1:18)&"-W",e$(1)(1:20),d(1),d(3),1,extra$(3)(1:10),cd$: goto L2630
 13040   SENSUSELECTRIC: if d(14)<>0 then let d(7)=d(7)/(d(14)*.01) ! COMPARE USAGE BEFORE MULTIPLIER
-13050   print #h_out,using L2520: z$,e$(2)(1:18)&"-E",e$(1)(1:20),d(5),d(7),3,extra$(3)(1:10),cd$ : goto L2630
-13060   SENSUSGAS: goto L2630 ! print #h_out,USING 470: Z$,E$(2)(1:18)&"-G",E$(1)(1:20),D(9),D(11),2 : GOTO 760
-13070   SENSUSDEMAND: print #h_out,using L2520: z$,e$(2)(1:18)&"-D",e$(1)(1:20),d(15),d(7),4,extra$(3)(1:9)&"D",cd$ : goto L2630
+13050   pr #h_out,using L2520: z$,e$(2)(1:18)&"-E",e$(1)(1:20),d(5),d(7),3,extra$(3)(1:10),cd$ : goto L2630
+13060   SENSUSGAS: goto L2630 ! pr #h_out,USING 470: Z$,E$(2)(1:18)&"-G",E$(1)(1:20),D(9),D(11),2 : GOTO 760
+13070   SENSUSDEMAND: pr #h_out,using L2520: z$,e$(2)(1:18)&"-D",e$(1)(1:20),d(15),d(7),4,extra$(3)(1:9)&"D",cd$ : goto L2630
 13080   L2710: ! 
 13090 fnend 
 13100 def fn_greentree
-13110   let cd$="M" ! if env$('client')="Gilbertown" and trim$(extra$(7))="1" then let cd$="B" else let cd$="M"
+13110   cd$="M" ! if env$('client')="Gilbertown" and trim$(extra$(7))="1" then cd$="B" else cd$="M"
 13120   if final><0 then goto L2920
-13130   let c$=""
-13140   ! Let CD$="" ! TYPE OF METER
-13150   if a(1)>0 then let c$="1"
-13160   if a(3)=5 then let c$=c$&"5": goto L2820
-13170   if a(3)>0 then let c$=c$&"3"
-13180   L2820: if a(4)>0 then let c$=c$&"4"
+13130   c$=""
+13140   ! cD$="" ! TYPE OF METER
+13150   if a(1)>0 then c$="1"
+13160   if a(3)=5 then c$=c$&"5": goto L2820
+13170   if a(3)>0 then c$=c$&"3"
+13180   L2820: if a(4)>0 then c$=c$&"4"
 13190   ! 
 13200   goto L2850
 13210   L2850: let j=0
@@ -282,19 +282,19 @@
 13230   let j=j+1
 13240   if j>len(c$) then goto L2920
 13250   on val(c$(j:j)) goto GREENTREEWATER none L2920 ! only water
-13260   GREENTREEWATER: print #h_out,using L2910: z$,e$(2)(1:18)&"-W",e$(1)(1:20),d(1),d(3),1,extra$(3)(1:10),cd$
+13260   GREENTREEWATER: pr #h_out,using L2910: z$,e$(2)(1:18)&"-W",e$(1)(1:20),d(1),d(3),1,extra$(3)(1:10),cd$
 13270   L2910: form pos 1,c 10,2*c 20,2*n 9,n 1,c 10,c 1
 13280   L2920: ! 
 13290 fnend 
 13300 def fn_hersey
-13310   let cd$="M" ! if env$('client')="Gilbertown" and trim$(extra$(7))="1" then let cd$="B" else let cd$="M"
+13310   cd$="M" ! if env$('client')="Gilbertown" and trim$(extra$(7))="1" then cd$="B" else cd$="M"
 13320   if final><0 then goto L3140
-13330   let c$=""
-13340   ! Let CD$="" ! TYPE OF METER
-13350   if a(1)>0 then let c$="1"
-13360   if a(3)=5 then let c$=c$&"5": goto L3020
-13370   if a(3)>0 then let c$=c$&"3"
-13380   L3020: if a(4)>0 then let c$=c$&"4"
+13330   c$=""
+13340   ! cD$="" ! TYPE OF METER
+13350   if a(1)>0 then c$="1"
+13360   if a(3)=5 then c$=c$&"5": goto L3020
+13370   if a(3)>0 then c$=c$&"3"
+13380   L3020: if a(4)>0 then c$=c$&"4"
 13390   ! 
 13400   ! 
 13410   goto L3060
@@ -305,7 +305,7 @@
 13460   on val(c$(j:j)) goto HERSEYWATER none L3140 ! only water
 13470   HERSEYWATER: ! 
 13480   !  GreenCo #6 , Hot Rod version,  compatible with Easy Reader
-13490   print #h_out,using L3130: z$," "," ","W",e$(2)(1:25),e$(1)(1:21),f$(1),"V",d(1)+(d(3)*2),d(1)," "," "," "," ",z$," ",chr$(13)&chr$(10)
+13490   pr #h_out,using L3130: z$," "," ","W",e$(2)(1:25),e$(1)(1:21),f$(1),"V",d(1)+(d(3)*2),d(1)," "," "," "," ",z$," ",chr$(13)&chr$(10)
 13500   L3130: form pos 1,c 10,c 4,c 6,c 1,c 25,c 21,c 20,c 1,n 10,n 10,c 100,c 2,c 1,c 5,c 12,c 52,pos 281,c 2
 13510   L3140: ! 
 13520 fnend 
@@ -313,31 +313,31 @@
 13540   if header=0 then 
 13550     if alp$(1:1)<>"*" then 
 13560       if bk1>0 then let route=bk1 else let route=1 ! if they selected all for route number, make route number =1 else use the actual route number
-13570       print #h_out,using "form pos 1,c 2,pic(##),pic(######),c 2": "R1",1,route,crlf$ : let header=1 ! create header record
+13570       pr #h_out,using "form pos 1,c 2,pic(##),pic(######),c 2": "R1",1,route,crlf$ : let header=1 ! create header record
 13580     end if
 13590   else 
 13600     if final=0 then
-13610       let c$="W" ! read type code
+13610       c$="W" ! read type code
 13620       ! AMR Water
-13630       print #h_out,using L3230: "M1", lpad$(rtrm$(z$),20),f$(1)(1:10),extra(2),"W",d(1)+(d(3)*2),d(1)+(d(3)*.50),"    ","    ","    ",e$(1),e$(2)(1:20),d(1),extra(8),0,0,0,0,0,0,0,0,0,0,0,0,crlf$
+13630       pr #h_out,using L3230: "M1", lpad$(rtrm$(z$),20),f$(1)(1:10),extra(2),"W",d(1)+(d(3)*2),d(1)+(d(3)*.50),"    ","    ","    ",e$(1),e$(2)(1:20),d(1),extra(8),0,0,0,0,0,0,0,0,0,0,0,0,crlf$
 13640       L3230: form pos 1,c 2,c 20,c 10,pic(######),c 4,2*pic(##########),3*c 4,c 40,c 20,pic(##########),n 4,pic(##),pic(#),2*pic(##########),2*pic(############),5*pic(##########),pic(########),c 2
 13650     end if
 13660   end if
 13662 fnend 
 13670 def fn_ezreader
 13680   if final><0 then goto L3430
-13690   let c$=""
-13700   ! Let CD$="" ! TYPE OF METER
-13710   if a(1)>0 then let c$="1"
-13720   if a(3)>0 then let c$=c$&"3"
-13730   if a(4)>0 then let c$=c$&"4"
+13690   c$=""
+13700   ! cD$="" ! TYPE OF METER
+13710   if a(1)>0 then c$="1"
+13720   if a(3)>0 then c$=c$&"3"
+13730   if a(4)>0 then c$=c$&"4"
 13740   let j=0
 13750   if rtrm$(f$)="" then let f$=z$
 13760   let j=j+1
 13770   if j>len(c$) then goto L3430
 13780   on val(c$(j:j)) goto L3400 none L3430 ! only water
 13790   L3400: ! EZReaderWater
-13800   print #h_out,using L3420: cnvrt$("pic(##)",route)&cnvrt$("pic(#######)",sequence),"  ","W",e$(2),e$(1),f$(1),extra$(3)(1:1),d(1)+(d(3)*2),d(1),0," "," "," ",z$," "," ","X",chr$(13)&chr$(10)
+13800   pr #h_out,using L3420: cnvrt$("pic(##)",route)&cnvrt$("pic(#######)",sequence),"  ","W",e$(2),e$(1),f$(1),extra$(3)(1:1),d(1)+(d(3)*2),d(1),0," "," "," ",z$," "," ","X",chr$(13)&chr$(10)
 13810   L3420: form pos 1,c 12,c 2,c 1,c 66,c 64,c 14,c 1,2*pic(##########),pic(##),c 120,c 24,c 24,c 20,c 80,c 125,c 1,c 2
 13820   L3430: ! 
 13830 fnend 
@@ -361,8 +361,8 @@
 14400   let fncmdkey("&Finish",2,1,0,"Completed with all routes")
 14410   let fncmdset(2)
 14420   let fnacs(sn$,0,mat resp$,ckey)
-14430   let bk1$=lpad$(trim$(resp$(1)(1:10)), 10)
-14440   let bk2$=lpad$(trim$(resp$(2)(1:10)), 10)
+14430   bk1$=lpad$(trim$(resp$(1)(1:10)), 10)
+14440   bk2$=lpad$(trim$(resp$(2)(1:10)), 10)
 14450   if ckey=2 then goto TRANSFER
 14460   if ckey=99 or ckey=5 then mat resp$=(""): goto SEL_ACT
 14470   if ckey=6 then 
@@ -388,7 +388,7 @@
 14730 ERTN: let fnerror(program$,err,line,act$,"xit")
 14740   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 14750   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-14760   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+14760   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 14770 ERTN_EXEC_ACT: execute act$ : goto ERTN
 14780 ! /region
 14810 def fn_rmk1
@@ -477,11 +477,11 @@
 16160           let usage_current=d(11) ! Gas usage - curent
 16170           let reading_current=d(9)
 16180         else ! if servicecode$(a_item)='EL' then
-16190           print 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : let fnpause
+16190           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : let fnpause
 16200         end if 
 16210         let unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
 16220         let unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
-16230         print #h_out,using FORM_UH_OUT: z$,route*100000000+sequence,servicename$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high
+16230         pr #h_out,using FORM_UH_OUT: z$,route*100000000+sequence,servicename$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high
 16240         FORM_UH_OUT: form pos 1,c 10,n 12,c 10,2*c 40,2*n 10
 16250       end if  ! a(a_item)>0
 16260     end if  ! it is a metered service
@@ -508,11 +508,11 @@
 16470           let usage_current=d(11) ! Gas usage - curent
 16480           let reading_current=d(9)
 16490         else ! if servicecode$(a_item)='EL' then
-16500           print 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : let fnpause
+16500           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : let fnpause
 16510         end if 
 16520         let unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
 16530         let unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
-16540         print #h_out,using FORM_ACSMR: z$,route*100000000+sequence,servicename$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high,0
+16540         pr #h_out,using FORM_ACSMR: z$,route*100000000+sequence,servicename$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high,0
 16550         FORM_ACSMR: form pos 1,c 10,n 12,c 10,2*c 40,2*n 10,n 10
 16560       end if  ! a(a_item)>0
 16570     end if  ! it is a metered service
@@ -601,7 +601,7 @@
 18350   restore #h_out: 
 18360   do 
 18370     read #h_out,using 'form pos 1,C 126': rec_line$ eof IC_EOF_2
-18380     print #h_out2,using 'form pos 1,C 126,c 2': rec_line$,crlf$
+18380     pr #h_out2,using 'form pos 1,C 126,c 2': rec_line$,crlf$
 18390   loop 
 18400   IC_EOF_2: ! 
 18405   close #h_out2: 
@@ -622,9 +622,9 @@
 18470   !   if exists ("C:\MVRS\MVRSWin5.exe") then
 18480   !     if ~exists ("C:\MVRS\MVRSWin5.cmd") then
 18490   !       open #h_tmp:=fngethandle: 'Name=C:\MVRS\MVRSWin5.cmd,RecL=256,replace',display,output
-18500   !       print #h_tmp: 'c:'
-18510   !       print #h_tmp: 'cd \MVRS'
-18520   !       print #h_tmp: 'C:\MVRS\MVRSWin5.exe'
+18500   !       pr #h_tmp: 'c:'
+18510   !       pr #h_tmp: 'cd \MVRS'
+18520   !       pr #h_tmp: 'C:\MVRS\MVRSWin5.exe'
 18530   !       close #h_tmp:
 18540   !     end if
 18550   !     execute 'Sy -c C:\MVRS\MVRSWin5.cmd'
@@ -649,7 +649,7 @@
 18740           let usage_current=d(7) ! KWH usage - curent
 18750           let reading_current=d(5)
 18760         else ! if servicecode$(a_item)='EL' then
-18770           print 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : let fnpause
+18770           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : let fnpause
 18780         end if 
 18790         let unusual_usage_low=int(usage_current-usage_current*fn_pcent) : if unusual_usage_low<0 then let unusual_usage_low=0
 18800         let unusual_usage_high=int(usage_current+usage_current*fn_pcent)
@@ -1057,7 +1057,7 @@
 28140     else if val(seq$(j:j))=4 then 
 28160       let svc_flag$="G"
 28180     end if 
-28280     let custname$=e$(2)
+28280     custname$=e$(2)
 28320     let z_out$=trim$(z$)&svc_flag$
 28340     on val(seq$(j:j)) goto WATER_BOSON,ELECTRIC_BOSON,DEMAND_BOSON,GAS_BOSON none BOSON_NEXT_SEQUENCE
 28360     WATER_BOSON: if a(1)=0 or final<>0 then goto BOSON_NEXT_SEQUENCE
@@ -1086,14 +1086,14 @@
 28820     if env$('client')="Monticello" and trim$(extra$(7))="66" then let d(1)=d(1)*100: let d(2)=d(2)*100: let d(3)=d(3)*100
 28840     let meterdials=0 ! if env$('client')="Purdy" or env$('client')="Billings" then let meterdials=0 else let meterdials=7
 28860     if trim$(z_out$)='200670' then pause 
-28880     print #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,route,"",sequence,meterdials,d(1),readingt$,metertag
-28900     !     print #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,val(z$(1:2)),"",val(z$(3:7)),meterdials,d(1),readingt$,metertag
+28880     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,route,"",sequence,meterdials,d(1),readingt$,metertag
+28900     !     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,val(z$(1:2)),"",val(z$(3:7)),meterdials,d(1),readingt$,metertag
 28920     F_BOSON_OUT: form pos 1,c 14,c 3,3*c 30,2*c 1,c 20,c 5,3*pic(#########),pic(########),pic(####),c 1,pic(######),pic(##),pic(#########),c 1,pic(############)
 28940     goto BOSON_NEXT_SEQUENCE
 28960     ! ___________________________
 28980     ELECTRIC_BOSON: if a(3)=0 or trim$(servicename$(3))<>"Electric" then goto BOSON_NEXT_SEQUENCE
-29000     print #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),route,"",sequence,0,d(5),"R",f$(2)
-29020     !     print #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),val(z$(1:2)),"",val(z$(3:7)),0,d(5),"R",f$(2)
+29000     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),route,"",sequence,0,d(5),"R",f$(2)
+29020     !     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),val(z$(1:2)),"",val(z$(3:7)),0,d(5),"R",f$(2)
 29040     goto BOSON_NEXT_SEQUENCE
 29060     ! ___________________________
 29080     DEMAND_BOSON: goto BOSON_NEXT_SEQUENCE
@@ -1101,8 +1101,8 @@
 29120     ! ___________________________
 29140     GAS_BOSON: if a(4)=0 or trim$(servicename$(4))<>"Gas" then goto BOSON_NEXT_SEQUENCE
 29160     let readingt$="R"
-29180     print #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),route,"",sequence,0,d(9),readingt$,f$(2)
-29200     !     print #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),val(z$(1:2)),"",val(z$(3:7)),0,d(9),readingt$,f$(2)
+29180     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),route,"",sequence,0,d(9),readingt$,f$(2)
+29200     !     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),val(z$(1:2)),"",val(z$(3:7)),0,d(9),readingt$,f$(2)
 29220     goto BOSON_NEXT_SEQUENCE
 29240     ! ___________________________
 29260     BOSON_NEXT_SEQUENCE: ! 

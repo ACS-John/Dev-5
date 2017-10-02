@@ -58,7 +58,7 @@
 00460 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
-        let ccyymmdd=10
+        ccyymmdd=10
 00470   let tln(ic+=1)=12 !:
         let tln(ic+=1)=1 !:
         let tln(ic+=1)=8 !:
@@ -83,7 +83,7 @@
         let fltyp$(ic+=1)='N'
 00530 ! ** Field Storage Lengths ** !:
         let ic=0 !:
-        let mmddyy=6 : let ccyymmdd=8
+        let mmddyy=6 : ccyymmdd=8
 00540   let sln(ic+=1)=12 !:
         let sln(ic+=1)=1 !:
         let sln(ic+=1)=8 !:
@@ -97,7 +97,7 @@
 00570 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:
-        let ccyymmdd=3 : let mmddyy=1 : let glnumber=53
+        ccyymmdd=3 : let mmddyy=1 : let glnumber=53
 00580   let mask(ic+=1)=0 !:
         let mask(ic+=1)=30 !:
         let mask(ic+=1)=0 !:
@@ -122,19 +122,19 @@
 00624   let sp(ic+=1)=72 !:
         let sp(ic+=1)=78
 00650 ! ** Combo Boxes **                                                   !:
-        let cl=1 : let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&str$(cno) !:
-        let c$(cl,3)="1" : let c$(cl,4)="12" !:
-        let c$(cl,5)="13" : let c$(cl,6)="30" !:
-        let c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&str$(cno) !:
+        cl=1 : c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,3)="1" : c$(cl,4)="12" !:
+        c$(cl,5)="13" : c$(cl,6)="30" !:
+        c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&str$(cno) !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         let limit_to_list$='1'
 00652 ! ** Combo Boxes **                                                   !:
-        let cl=2 : let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\GLmstr\transcode.h"&str$(cno) !:
-        let c$(cl,3)="1" : let c$(cl,4)="2" !:
-        let c$(cl,5)="3" : let c$(cl,6)="30" !:
-        let c$(cl,7)=env$('Q')&"\GLmstr\transcode-idx.h"&str$(cno) !:
+        cl=2 : c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\GLmstr\transcode.h"&str$(cno) !:
+        c$(cl,3)="1" : c$(cl,4)="2" !:
+        c$(cl,5)="3" : c$(cl,6)="30" !:
+        c$(cl,7)=env$('Q')&"\GLmstr\transcode-idx.h"&str$(cno) !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         let limit_to_list$='1'
 00670   return 
@@ -149,7 +149,7 @@
 00760 ERTN: let fnerror(program$,err,line,act$,"xit")
 00770   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00780   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00790   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00800 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00810 ! /region
 00820 ! ______________________________________________________________________

@@ -27,7 +27,7 @@
 15600 ERTN: let fnerror(program$,err,line,act$,"xit")
 15800   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 16000   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-16200   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+16200   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 16400 ERTN_EXEC_ACT: execute act$ : goto ERTN
 16600 ! /region
 16800 ! ______________________________________________________________________
@@ -52,7 +52,7 @@
 20600   def fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,ar_mask,storage_position)
 20800     if storage_length=0 then let storage_length=textbox_len
 21000 ! storage_length_prior=storage_length
-21200     let add_rec_item=udim(mat lbl$)+1
+21200     add_rec_item=udim(mat lbl$)+1
 21400     mat lbl$(add_rec_item) : let lbl$(add_rec_item)=label$
 21600     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
 21800     mat p$(add_rec_item)

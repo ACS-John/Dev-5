@@ -12,13 +12,13 @@
 00130 ! ______________________________________________________________________
 00140   on fkey 5 goto SCR_MAIN
 00150 SCR_MAIN: ! 
-00160   let cap$="Print Custom Labels"
+00160   cap$="Print Custom Labels"
 00170   let win=101
-00180   let ce=0
+00180   ce=0
 00190   for j=1 to 5
 00200     if lw(j)=0 then let lw(j)=34
 00210     if pt$(j)="" then let pt$(j)="S"
-00220     if align(j)<1 or align>3 then let align(j)=1
+00220     if align(j)<1 or align>3 then align(j)=1
 00230     let iomc$(j)=str$(j+3)&",2,Cc "&str$(lw(j))&",U,AE,N" !:
           let iomr$(j)=str$(j+3)&",2,Cr "&str$(lw(j))&",U,AE,N" !:
           let ioml$(j)=str$(j+3)&",2,C "&str$(lw(j))&",U,AE,N"
@@ -33,28 +33,28 @@
         next j !:
         let win_width=win_width+4
 00300   let fnwin3b(win,cap$,12,win_width,0,0,5,0)
-00310   print #win,fields "3,2,C 20,N": "Enter your label:"
-00320   print #win,fields "10,2,C "&str$(win_width-2)&",B,8": "(F8) "&cnam$(1:win_width-2)
-00330   print #win,fields "11,2,C 25,B,9": "(F9) "&dat$
-00340   print fields "19,14,C 10,B,1": "Print (F1)"
-00350   print fields "19,25,C 16,B,2": "Align  Line (F2)"
-00360   print fields "19,42,C 15,B,3": "Line Style (F3)"
-00370   print fields "19,58,C 10,B,99": "Exit (Esc)"
+00310   pr #win,fields "3,2,C 20,N": "Enter your label:"
+00320   pr #win,fields "10,2,C "&str$(win_width-2)&",B,8": "(F8) "&cnam$(1:win_width-2)
+00330   pr #win,fields "11,2,C 25,B,9": "(F9) "&dat$
+00340   pr fields "19,14,C 10,B,1": "Print (F1)"
+00350   pr fields "19,25,C 16,B,2": "Align  Line (F2)"
+00360   pr fields "19,42,C 15,B,3": "Line Style (F3)"
+00370   pr fields "19,58,C 10,B,99": "Exit (Esc)"
 00380 L380: rinput #win,fields mat iom$: mat l$
 00390   let main_curfld=curfld
-00400   if ce>0 then let iom$(ce)(ce1:ce2)="U": let ce=0
-00410   if cmdkey>0 then goto L480 else let ce=curfld
-00420 L420: let ce=ce+1: if ce>udim(iom$) then let ce=1
-00430 L430: let iom$(ce)=rtrm$(iom$(ce)) : let ce1=pos(iom$(ce),"U",1) : if ce1=0 then goto L420
-00440   let ce2=ce1+1 : let iom$(ce)(ce1:ce1)="UC" : goto L380
+00400   if ce>0 then let iom$(ce)(ce1:ce2)="U": ce=0
+00410   if cmdkey>0 then goto L480 else ce=curfld
+00420 L420: ce=ce+1: if ce>udim(iom$) then ce=1
+00430 L430: let iom$(ce)=rtrm$(iom$(ce)) : ce1=pos(iom$(ce),"U",1) : if ce1=0 then goto L420
+00440   ce2=ce1+1 : let iom$(ce)(ce1:ce1)="UC" : goto L380
 00450 CONV1: if ce>0 then let iom$(ce)(ce1:ce2)="U"
-00460   let ce=cnt+1
-00470 ERR1: print fields "24,78,C 1": bell : goto L430
+00460   ce=cnt+1
+00470 ERR1: pr fields "24,78,C 1": bell : goto L430
 00480 L480: if cmdkey=1 then goto SCR_HOW_MANY
 00490   if cmdkey=2 and main_curfld<6 then gosub ALIGNMENT !:
-          let ce=main_curfld : goto SCR_MAIN
+          ce=main_curfld : goto SCR_MAIN
 00500   if cmdkey=3 then gosub LINE_STYLE !:
-          let ce=main_curfld : goto SCR_MAIN
+          ce=main_curfld : goto SCR_MAIN
 00510   if cmdkey=8 then !:
           let l$(main_curfld)=cnam$(1:lw(main_curfld)) : goto L380
 00520   if cmdkey=9 then !:
@@ -65,7 +65,7 @@
 00560 SCR_HOW_MANY: ! 
 00570   let win=103
 00580   let fnwin3b(win,cap$,3,33,0,3,5,0)
-00590   print #win,fields "2,2,C 26,N": "Number of Labels to print:"
+00590   pr #win,fields "2,2,C 26,N": "Number of Labels to print:"
 00600   if h=0 then let h=1
 00610   rinput #win,fields "2,29,Nz 3,UT,N" : h
 00620   close #win: 
@@ -97,10 +97,10 @@
 00780   if iom$(main_curfld)=iomr$(main_curfld) then !:
           let iowa$(3)="4,26,C 6,CN" else !:
           let iowa$(3)="4,26,C 6,N"
-00790   print #win2,fields "2,2,C 23,N": "Current Line Alignment:"
+00790   pr #win2,fields "2,2,C 23,N": "Current Line Alignment:"
 00800   rinput #win2,select mat iowa$,attr "H": mat wrd_align$
 00810   close #win2: 
-00820   let align(main_curfld)=curfld
+00820   align(main_curfld)=curfld
 00830   if cmdkey=5 then goto L870
 00840 ! If ALIGN(MAIN_CURFLD)=1 Then Let LA$(MAIN_CURFLD)=IOML$(MAIN_CURFLD)
 00850 ! If ALIGN(MAIN_CURFLD)=2 Then Let LA$(MAIN_CURFLD)=IOMC$(MAIN_CURFLD)
@@ -121,7 +121,7 @@
             let iows$(j)=str$(j+1)&",23,C 9,CN" else !:
             let iows$(j)=str$(j+1)&",23,C 9,N"
 00950   next j
-00960   print #win2,fields "2,2,C 19,N": "Current Line Style:"
+00960   pr #win2,fields "2,2,C 19,N": "Current Line Style:"
 00970   rinput #win2,select mat iows$,attr "H": mat wrd_style$
 00980   close #win2: 
 00990   let style=curfld
@@ -135,6 +135,6 @@
 01060   execute "list -"&str$(line) !:
         pause  !:
         goto L1080
-01070   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+01070   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01080 L1080: execute act$
 01090   goto ERTN

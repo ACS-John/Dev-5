@@ -22,10 +22,10 @@
         let resp$(1)=str$(bdate)
 00190   let text$="Type of Service:" !:
         let fnlbl(2,1,text$,mylen,1)
-00200   let code$(1)="Water" !:
-        let code$(2)="Sewer" !:
-        let code$(3)="Electric" !:
-        let code$(4)="Gas" !:
+00200   code$(1)="Water" !:
+        code$(2)="Sewer" !:
+        code$(3)="Electric" !:
+        code$(4)="Gas" !:
         let fncomboa("Service",2,mylen+3,mat code$,"",16)
 00204   let text$="Rate Code" !:
         let fnlbl(2,1,text$,mylen,1)
@@ -33,7 +33,7 @@
         let resp$(3)=""
 00210   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
 00220   if ck=5 then goto XIT
-00230   let bdate= val(resp$(1))
+00230   bdate= val(resp$(1))
 00240   if resp$(2)="Water" then !:
           let svce=1
 00241   if resp$(2)="Sewer" then !:
@@ -46,10 +46,10 @@
 00350   open #1: "Name="&env$('Q')&"\UBmstr\ubMaster.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00510 L510: ! 
 00540   for k9=1 to 20
-00550     print fields "20,13,C 11,N": "Rate Code:"
-00560     print fields "22,11,C 22,N": "(Blank when complete)"
-00570     print fields "24,8,C 13,B,4;24,23,c 9,B,5": "Complete (F4)","Exit (F5)"
-00580     let cde(k9)=0
+00550     pr fields "20,13,C 11,N": "Rate Code:"
+00560     pr fields "22,11,C 22,N": "(Blank when complete)"
+00570     pr fields "24,8,C 13,B,4;24,23,c 9,B,5": "Complete (F4)","Exit (F5)"
+00580     cde(k9)=0
 00590     rinput fields "20,24,Nz 2,UT,N": cde(k9)
 00600     if cmdkey=4 then goto L620
 00610     if cmdkey=5 then goto XIT
@@ -58,25 +58,25 @@
 00640 L640: if cde(k9)<1 or cde(k9)>20 then goto L510
 00650     close #105: ioerr L660
 00660 L660: open #105: "SROW=2,SCOL=42,EROW=23,ECOL=77,BORDER=SR,CAPTION=<Print Analysis Report",display,outin 
-00670     print #105: newpage
-00680     print fields "3,47,C 27,H,N": "  Beginning Usage   Rate"
+00670     pr #105: newpage
+00680     pr fields "3,47,C 27,H,N": "  Beginning Usage   Rate"
 00690     for j=1 to 18
-00700       print fields str$(j+4)&",47,C 4,N": str$(j)&"."
+00700       pr fields str$(j+4)&",47,C 4,N": str$(j)&"."
 00710       let io2$(j*2-1)=str$(j+4)&",53,N 6,UT,N"
 00720       let io2$(j*2)=str$(j+4)&",65,N 9.5,UT,N"
 00730     next j
-00740     print fields "24,43,C 09,B,1": "Next (F1)"
-00750     print fields "24,53,C 09,B,5": "Exit (F5)"
+00740     pr fields "24,43,C 09,B,1": "Next (F1)"
+00750     pr fields "24,53,C 09,B,5": "Exit (F5)"
 00760 L760: input fields mat io2$: mat t conv CONV2
-00770     if ce>0 then let io2$(ce)(ce1:ce2)="U": let ce=0
-00780     if cmdkey>0 or curfld>36 then goto L850 else let ce=curfld
-00790 L790: let ce=ce+1: if ce>udim(io2$) then let ce=1
-00800 L800: let io2$(ce)=rtrm$(uprc$(io2$(ce))) : let ce1=pos(io2$(ce),"U",1) !:
+00770     if ce>0 then let io2$(ce)(ce1:ce2)="U": ce=0
+00780     if cmdkey>0 or curfld>36 then goto L850 else ce=curfld
+00790 L790: ce=ce+1: if ce>udim(io2$) then ce=1
+00800 L800: let io2$(ce)=rtrm$(uprc$(io2$(ce))) : ce1=pos(io2$(ce),"U",1) !:
           if ce1=0 then goto L790
-00810     let ce2=ce1+1 : let io2$(ce)(ce1:ce1)="UC" : goto L760
+00810     ce2=ce1+1 : let io2$(ce)(ce1:ce1)="UC" : goto L760
 00820 CONV2: if ce>0 then let io2$(ce)(ce1:ce2)="U"
-00830     let ce=cnt+1
-00840 ERR2: print fields "24,78,C 1": bell : goto L800
+00830     ce=cnt+1
+00840 ERR2: pr fields "24,78,C 1": bell : goto L800
 00850 L850: if cmdkey=5 then goto XIT
 00860     close #105: ioerr L870
 00870 L870: for k8=1 to 18
@@ -115,7 +115,7 @@
 01190     let ds9=ds9-(usage(j7+1,k9)-usage(j7,k9))
 01200   next j7
 01210   let usagtot(k7,k9)=usagtot(k7,k9)+ds9
-01220 L1220: let customer(k7,k9)=customer(k7,k9)+1
+01220 L1220: customer(k7,k9)=customer(k7,k9)+1
 01230   goto L960
 01240 ! ______________________________________________________________________
 01250 L1250: for k5=1 to 18
@@ -125,7 +125,7 @@
 01290   next k5
 01300   for k2=1 to 20
 01310     if cde(k2)=0 then goto L1540
-01320     print #255,using L1330: "Utility Billing Rare and Usage Analyzer"
+01320     pr #255,using L1330: "Utility Billing Rare and Usage Analyzer"
 01330 L1330: form skip 3,pos 47,c 39,skip 2
 01340     on svce goto L1360,L1370,L1380,L1390 none L1400
 01350 ! ___________________________
@@ -142,22 +142,22 @@
           goto L1410 !:
           ! ___________________________
 01400 L1400: let svce$=" "
-01410 L1410: print #255,using L1420: "Service Analyzed - ",svce$
+01410 L1410: pr #255,using L1420: "Service Analyzed - ",svce$
 01420 L1420: form pos 51,c 19,c 11,skip 2
-01430     print #255,using L1440: "Rate Code",cde(k2)
+01430     pr #255,using L1440: "Rate Code",cde(k2)
 01440 L1440: form pos 60,c 9,pos 73,pic(zz)
-01450     print #255,using L1460: "Beginning Usage","Rate","Dollars Generated","# of Customers"
+01450     pr #255,using L1460: "Beginning Usage","Rate","Dollars Generated","# of Customers"
 01460 L1460: form pos 25,c 15,pos 45,c 4,pos 65,c 17,x 3,c 15,skip 2
 01470     for k1=1 to 18
 01480       if usage(k1,k2)=0 and rate(k1,k2)=0 then goto L1510
-01490       print #255,using L1500: usage(k1,k2),rate(k1,k2),ratetot(k1,k2),customer(k1,k2)
+01490       pr #255,using L1500: usage(k1,k2),rate(k1,k2),ratetot(k1,k2),customer(k1,k2)
 01500 L1500: form pos 25,pic(zzz,zzz,zz#),pos 43,pic(zz.#####),pos 65,pic(zzz,zzz,zzz.##),x 7,pic(zzzzzzzzzzzzz),skip 1
 01510 L1510: next k1
-01520     print #255: newpage
+01520     pr #255: newpage
 01530   next k2
-01540 L1540: print #255,using L1550: "Number of Customers ",numbcust
+01540 L1540: pr #255,using L1550: "Number of Customers ",numbcust
 01550 L1550: form skip 1,c 20,pos 45,pic(zzz,zzz,zzz),skip 1
-01560   print #255,using L1570: "Number of Customers under Minumum Usage",mincust
+01560   pr #255,using L1570: "Number of Customers under Minumum Usage",mincust
 01570 L1570: form skip 1,c 40,pos 45,pic(zzz,zzz,zzz),skip 1
 01580 DONE: close #1: ioerr L1590
 01590 L1590: let fncloseprn
@@ -168,7 +168,7 @@
 01640   execute "list -"&str$(line) !:
         pause  !:
         goto L1660
-01650   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+01650   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01660 L1660: execute act$
 01670   goto ERTN
 01680 ! ______________________________________________________________________

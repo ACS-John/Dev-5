@@ -54,28 +54,28 @@
 00490   if bal<0 then mat month=(0): let month(1)=bal: goto L510
 00500   gosub READ_TRANS
 00510 L510: if sum(month)=(0) and bal<>0 then let month(4)=bal
-00520   print #255,using 'Form POS 1,C 12,C 20,5*N 11.2': z$,e$(1:20),month(1),month(2),month(3),month(4),bal pageoflow PGOF
+00520   pr #255,using 'Form POS 1,C 12,C 20,5*N 11.2': z$,e$(1:20),month(1),month(2),month(3),month(4),bal pageoflow PGOF
 00530   let totcolumn1+=month(1) : let totcolumn2+=month(2) !:
         let totcolumn3+=month(3) : let totcolumn4+=month(4) : let totbal+=bal
 00540   goto READ_CUSTOMER
 00550 ! ______________________________________________________________________
 00560 HEADER: ! 
-00570   print #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
-00580   print #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
-00590   print #255: "\qc  {\f181 \fs22 \b "&trim$(dat$)&"}"
-00600   print #255,using 'Form POS 1,C 82,C 9': "\ql "&date$,"Page "&str$(p2+=1)
-00610   print #255: "{\ul Account No}  {\ul Customer Name}        {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(1)))(1:10)&"} {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(2)))(1:10)&"} {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(3)))(1:10)&"} {\ul      Older} {\ul    Balance}"
+00570   pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
+00580   pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
+00590   pr #255: "\qc  {\f181 \fs22 \b "&trim$(dat$)&"}"
+00600   pr #255,using 'Form POS 1,C 82,C 9': "\ql "&date$,"Page "&str$(p2+=1)
+00610   pr #255: "{\ul Account No}  {\ul Customer Name}        {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(1)))(1:10)&"} {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(2)))(1:10)&"} {\ul "&(cnvrt$("PIC(zzZZ/ZZ/ZZ)",lastday(3)))(1:10)&"} {\ul      Older} {\ul    Balance}"
 00620   return 
 00630 ! ______________________________________________________________________
-00640 L640: print #255: "                                 __________ __________ __________ __________ __________"
-00650   print #255,using 'Form POS 1,C 12,C 20,5*N 11.2': "","",totcolumn1,totcolumn2,totcolumn3,totcolumn4,totbal pageoflow PGOF
-00660   print #255: "                                 {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           }"
+00640 L640: pr #255: "                                 __________ __________ __________ __________ __________"
+00650   pr #255,using 'Form POS 1,C 12,C 20,5*N 11.2': "","",totcolumn1,totcolumn2,totcolumn3,totcolumn4,totbal pageoflow PGOF
+00660   pr #255: "                                 {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           } {\ul \strike           }"
 00670 DONE: close #1: ioerr L680
 00680 L680: close #2: ioerr L690
 00690 L690: let fncloseprn
 00700 XIT: let fnxit
 00710 ! ______________________________________________________________________
-00720 PGOF: print #255: newpage
+00720 PGOF: pr #255: newpage
 00730   gosub HEADER
 00740   continue 
 00750 ! ______________________________________________________________________
@@ -112,7 +112,7 @@
 01020 ERTN: let fnerror(program$,err,line,act$,"xit")
 01030   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01040   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01050   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01050   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01060 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01070 ! /region
 01080 ! ______________________________________________________________________

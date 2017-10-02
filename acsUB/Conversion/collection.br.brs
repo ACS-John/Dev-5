@@ -9,7 +9,7 @@
 00090 ! ______________________________________________________________________
 00100   let fncno(cno,cnam$)
 00110 ! 
-00120   let cap$="Convert Collections"
+00120   cap$="Convert Collections"
 00130 ! ______________________________________________________________________
 00140   def fndate_mmddyy_to_ccyymmdd(x)
 00150     let x2=(x-int(x*.01)*100)*10000+int(x*.01)
@@ -22,7 +22,7 @@
 00230 L230: ! 
 00240 L240: read #6,using L280: x$,m,n,mat o,adrnxt,rcpt$,mat alloc eof L440
 00250   for j=1 to udim(alloc)
-00260     if alloc(j)<-20202 then let alloc(j)=0
+00260     if alloc(j)<-20202 then alloc(j)=0
 00270   next j
 00280 L280: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pd 3,c 9,10*pd 4.2
 00310   if m=0 then goto L230

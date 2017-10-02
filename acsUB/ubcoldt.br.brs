@@ -36,12 +36,12 @@
 00310 ! ______________________________________________________________________
 00320 HDR: ! 
 00330 ! need date$,time$
-00340   print #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
-00350   print #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
+00340   pr #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
+00350   pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
 00360   if ld1<>0 and hd1<>0 then !:
-          print #255: "\qc  {\f181 \fs18 \b From "&cnvrt$("pic(zzzz/zz/zz)",ld1)& "  To "&cnvrt$("pic(zzzz/zz/zz)",hd1)&"}"
-00370   print #255: ""
-00380   print #255: "\ql "&hd1$
+          pr #255: "\qc  {\f181 \fs18 \b From "&cnvrt$("pic(zzzz/zz/zz)",ld1)& "  To "&cnvrt$("pic(zzzz/zz/zz)",hd1)&"}"
+00370   pr #255: ""
+00380   pr #255: "\ql "&hd1$
 00390   return 
 00400 ! ______________________________________________________________________
 00430 L430: read #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PRTOTALS
@@ -49,7 +49,7 @@
 00460   if hd1<>0 and tdate>hd1 then goto L430
 00470   if tamount=0 then goto L430
 00480   if tcode<3 or tcode>5 then goto L430 !:
-          ! don't print charges or penalties
+          ! don't pr charges or penalties
 00490   if tcode=3 then let ti2=1 ! REG.COLLECTION
 00500   if tcode=4 then let ti2=2 ! CREDIT MEMO
 00510   if tcode=5 then let ti2=3 ! DEBIT MEMO
@@ -58,15 +58,15 @@
 00540   let x=0
 00550   for j=1 to 10
 00560     if trim$(servicename$(j))="" then goto L600
-00570     let alloc(x+=1)=tg(j)
+00570     alloc(x+=1)=tg(j)
 00580     if ti2=3 then let r(x+3,1)-=tg(j) else let r(x+3,1)+=tg(j)
 00590     let r(x+3,ti2+1)+=tg(j)
 00600 L600: next j
-00610   let c$=" "
-00620   if tcode=4 then let c$="CM" else !:
-          if tcode=5 then let c$="DM"
+00610   c$=" "
+00620   if tcode=4 then c$="CM" else !:
+          if tcode=5 then c$="DM"
 00630   if ti1$="True" then !:
-          print #255,using 'Form POS 1,C 10,N 10.2,C 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 9.2': p$,tamount,c$,tdate,mat alloc pageoflow PGOF
+          pr #255,using 'Form POS 1,C 10,N 10.2,C 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 9.2': p$,tamount,c$,tdate,mat alloc pageoflow PGOF
 00641   if sum(alloc)<>tamount then goto L642 else goto L655
 00642 L642: mat ml$(3) !:
         let ml$(1)="The breakdown on a collection transation dated "&str$(tdate)& " for customer # "&p$ !:
@@ -75,19 +75,19 @@
 00655 L655: if resp$="Cancel" then goto XIT
 00660   goto L430
 00670 ! ______________________________________________________________________
-00680 PGOF: print #255: newpage
+00680 PGOF: pr #255: newpage
 00690   gosub HDR
 00700   continue 
 00710 ! ______________________________________________________________________
 00720 PRTOTALS: ! !:
-        print #255: "" !:
-        print #255: "    ************ Totals ************"
-00730   print #255: tab(34);"{\ul       Total}  {\ul    Reg.Col}  {\ul   Cr.Memos}  {\ul   Db.Memos}"
+        pr #255: "" !:
+        pr #255: "    ************ Totals ************"
+00730   pr #255: tab(34);"{\ul       Total}  {\ul    Reg.Col}  {\ul   Cr.Memos}  {\ul   Db.Memos}"
 00740   for j=1 to sz1
-00750     print #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': scr1$(j),r(j+3,1),r(j+3,2),r(j+3,3),r(j+3,4) pageoflow PGOF
+00750     pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': scr1$(j),r(j+3,1),r(j+3,2),r(j+3,3),r(j+3,4) pageoflow PGOF
 00760   next j
-00770   print #255: ""
-00780   print #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': "Total      ",r(1,1),r(1,2),r(1,3),r(1,4)
+00770   pr #255: ""
+00780   pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': "Total      ",r(1,1),r(1,2),r(1,3),r(1,4)
 00850   let fncloseprn
 00860 XIT: let fnxit
 00870 ! ______________________________________________________________________
@@ -119,7 +119,7 @@
 01070 ERTN: let fnerror(program$,err,line,act$,"xit")
 01080   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01090   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01110 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01120 ! /region
 01130 ! ______________________________________________________________________

@@ -96,7 +96,7 @@
 28000 def library fnopen_cash_drawer
 28020   let fn_setup
 28040   if fn_open_receipt_printer(1) then
-28060     print #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore
+28060     pr #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore
 28080     let fn_close_receipt_printer
 28100   end if
 28120 fnend 
@@ -119,9 +119,9 @@
 30220   open #255: 'Name='&env$('Q')&'\tmp_'&session$&'.prn,PageOFlow='&lpp$&',RecL=512,Replace',display,output 
 30240   goto XIT
 30260   SET_DEFAULTS: ! r:
-30280     print "Lines settings for this program were not found."
-30300     print "Default Settings will be used."
-30320     print "  Lines: 54"
+30280     pr "Lines settings for this program were not found."
+30300     pr "Default Settings will be used."
+30320     pr "  Lines: 54"
 30340     let lpp$='54'
 30360   return  ! /r
 30400 XIT: fnend 
@@ -129,12 +129,12 @@
 38020     let fn_setup
 38030     dim cp_destinationFileName$*1024
 38040     if file(255)<>-1 then ! if the printer file is open.
-38060       let cp_destinationFileName$=g_prn_destination_name$ ! trim$(file$(255)(1:1024))
+38060       cp_destinationFileName$=g_prn_destination_name$ ! trim$(file$(255)(1:1024))
 38080       close #255: 
 38100       if fnCopy(env$('Q')&'\tmp_'&session$&'.prn',g_prn_destination_name$) then 
 38110         execute '*free '&env$('Q')&'\tmp_'&session$&'.prn' ! pr g_prn_destination_name$ : pause
 38120       else
-38130         print 'copy failed.'
+38130         pr 'copy failed.'
 38140         pause 
 38160       end if 
 38180       let fnstatus_close
@@ -176,7 +176,7 @@
 42680     let fnerror(program$,err,line,act$,"start_xit")
 42700     if lwrc$(act$)<>"pause" then goto START_ERTN_EXEC_ACT
 42720     execute "List -"&str$(line) : pause : goto START_ERTN_EXEC_ACT
-42740     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto START_ERTN_EXEC_ACT
+42740     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto START_ERTN_EXEC_ACT
 42760 START_ERTN_EXEC_ACT: execute act$ : goto START_ERTN
 42780 ! ______________________________________________________________________
 42800 START_XIT: ! 
@@ -197,40 +197,40 @@
 46180     let lrec20=lrec(20)
 46200     let y=0
 46220     open #21: "Name="&env$('temp')&"\acs_print_tmp"&session$&".rtf,Size=0,RecL=800,Replace",display,output 
-46240     print #21: "{\rtf1\ansi\deflang1033";
-46260     print #21: "{\fonttbl";
-46280     print #21: "{\f8\fswiss\fcharset0\fprq2 Lucida Console;}";
-46300     print #21: "{\f181\froman\fcharset0\fprq2 Times New Roman;}";
-46320     print #21: "{\f128\fnil\fcharset0\fprq2 iQs Code 128;}";
-46340     print #21: "}"
-46360     print #21: "{\stylesheet";
-46380     print #21: "{\snext0\f8\fs22\fi0\li0\ri0\ql";
-46400     print #21: "{\*\stloverrides\f8\fs22\widctlpar} Normal;}"
-46420     print #21: "{\s1\sbasedon0\snext0\f8\fs28\b\kerning28\fi0\li0\ri0";
-46440     print #21: "\ql\keepn\sb240\sa60{\*\stloverrides\fs28\b\kerning28";
-46460     print #21: "\keepn\sb240\sa60} heading 1;}" ! ;
-46480     print #21: "{\s2\sbasedon0\snext0\f8\fs24\b\i\fi0\li0\ri0\ql\keepn";
-46500     print #21: "\sb240\sa60{\*\stloverrides\fs24\b\i\keepn\sb240\sa60}";
-46520     print #21: " heading 2;}" ! ;
-46540     print #21: "{\s3\sbasedon0\snext0\f8\fs22\b\fi0\li0\ri0\ql\keepn";
-46560     print #21: "\sb240\sa60{\*\stloverrides\b\keepn\sb240\sa60} ";
-46580     print #21: "heading 3;}" ;
-46600     print #21: "}"
-46620     print #21: "{\info";
-46640     print #21: "{\creatim\yr"&date$("ccyy")&"\mo"&date$("mm");
-46660     print #21: "\dy"&date$("dd")&"\hr"&time$(1:2)&"\min"&time$(4:5);
-46680     print #21: "\sec"&time$(7:8)&"}";
-46700     print #21: "{\author ACS 5 - "&login_name$&"}";
-46720     print #21: "}"
+46240     pr #21: "{\rtf1\ansi\deflang1033";
+46260     pr #21: "{\fonttbl";
+46280     pr #21: "{\f8\fswiss\fcharset0\fprq2 Lucida Console;}";
+46300     pr #21: "{\f181\froman\fcharset0\fprq2 Times New Roman;}";
+46320     pr #21: "{\f128\fnil\fcharset0\fprq2 iQs Code 128;}";
+46340     pr #21: "}"
+46360     pr #21: "{\stylesheet";
+46380     pr #21: "{\snext0\f8\fs22\fi0\li0\ri0\ql";
+46400     pr #21: "{\*\stloverrides\f8\fs22\widctlpar} Normal;}"
+46420     pr #21: "{\s1\sbasedon0\snext0\f8\fs28\b\kerning28\fi0\li0\ri0";
+46440     pr #21: "\ql\keepn\sb240\sa60{\*\stloverrides\fs28\b\kerning28";
+46460     pr #21: "\keepn\sb240\sa60} heading 1;}" ! ;
+46480     pr #21: "{\s2\sbasedon0\snext0\f8\fs24\b\i\fi0\li0\ri0\ql\keepn";
+46500     pr #21: "\sb240\sa60{\*\stloverrides\fs24\b\i\keepn\sb240\sa60}";
+46520     pr #21: " heading 2;}" ! ;
+46540     pr #21: "{\s3\sbasedon0\snext0\f8\fs22\b\fi0\li0\ri0\ql\keepn";
+46560     pr #21: "\sb240\sa60{\*\stloverrides\b\keepn\sb240\sa60} ";
+46580     pr #21: "heading 3;}" ;
+46600     pr #21: "}"
+46620     pr #21: "{\info";
+46640     pr #21: "{\creatim\yr"&date$("ccyy")&"\mo"&date$("mm");
+46660     pr #21: "\dy"&date$("dd")&"\hr"&time$(1:2)&"\min"&time$(4:5);
+46680     pr #21: "\sec"&time$(7:8)&"}";
+46700     pr #21: "{\author ACS 5 - "&login_name$&"}";
+46720     pr #21: "}"
 46740 ! _______
-46760     print #21: "\paperw"&str$(pgw)&"\paperh"&str$(pgh);
-46780     print #21: "\margl"&str$(marg(3))&"\margr"&str$(marg(4));
-46800     print #21: "\margt"&str$(marg(1))&"\margb"&str$(marg(2));
+46760     pr #21: "\paperw"&str$(pgw)&"\paperh"&str$(pgh);
+46780     pr #21: "\margl"&str$(marg(3))&"\margr"&str$(marg(4));
+46800     pr #21: "\margt"&str$(marg(1))&"\margb"&str$(marg(2));
 46820     if uprc$(landscape$)=uprc$("Y") then 
-46840       print #21: "\lndscpsxn";
+46840       pr #21: "\lndscpsxn";
 46860     end if 
-46880     print #21: "\widowctrl\useltbaln\plain"
-46900     print #21: "\f181\fs24\pard\f8\fs"&str$(fsize*2)&" "
+46880     pr #21: "\widowctrl\useltbaln\plain"
+46900     pr #21: "\f181\fs24\pard\f8\fs"&str$(fsize*2)&" "
 46920 L640: linput #20: line$ eof END_OF_FILE
 46940     if uprc$(line$(1:13))=uprc$("*INSERT FILE:") then 
 46960       let line$=line$(14:len(line$))
@@ -270,15 +270,15 @@
 47620     let y=y+len(line$)+2
 47640     if line$(1:1)=chr$(12) then ! and y<lrec20 then   !  shifted this on 1/13/2017 due to strange _ showing up in ms word
 47660       if y<lrec20 then  
-47680         print #21: "\page"
+47680         pr #21: "\page"
 47700       end if
 47720       let line$(1:1)=''
 47740     end if 
-47760     print #21: line$&"\par"
+47760     pr #21: line$&"\par"
 47780     goto L640
 47800     ! ______________________________________________________________________
 49000     END_OF_FILE: ! 
-49020     print #21: "}"
+49020     pr #21: "}"
 49040     close #21: 
 49060     close #20: 
 49080     ! /r
@@ -306,10 +306,10 @@
 50060     else if print_report_nowait or fnprocess=1 then 
 50080       execute 'Sy -w -C '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
 50100     else 
-50120       let acs_win_rows=val(env$('acs_win_rows'))
-50140       let acs_win_cols=val(env$('acs_win_cols'))
+50120       acs_win_rows=val(env$('acs_win_rows'))
+50140       acs_win_cols=val(env$('acs_win_cols'))
 50160       open #h_win_wait=fngethandle: "srow=1,scol=1,rows="&str$(acs_win_rows)&",cols="&str$(acs_win_cols)&",border=none,picture=S:\Core\disable.png:TILE",display,output 
-50180       print #h_win_wait,fields str$(acs_win_rows/2)&',1,Cc '&str$(acs_win_cols)&',[Screen]': 'Close your word processor to continue.'
+50180       pr #h_win_wait,fields str$(acs_win_rows/2)&',1,Cc '&str$(acs_win_cols)&',[Screen]': 'Close your word processor to continue.'
 50200       execute 'Sy -w '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
 50220       close #h_win_wait: 
 50240     end if 
@@ -335,8 +335,8 @@
 52340     let fnread_program_print_property('FontSize',temp$, g_prgCapForSettingsOverride$) : let fsize=val(temp$)
 52360   fnend 
 54000   def fn_start_workaround_4591
-54020     print newpage
-54040     print fields "10,10,Cc 60,N": "Press ENTER to continue"
+54020     pr newpage
+54040     pr fields "10,10,Cc 60,N": "Press ENTER to continue"
 54060     input fields "11,10,C 1,N": pause$
 54080   fnend 
 58000 def fn_start_winxp
@@ -348,7 +348,7 @@
 60040 ERTN: let fnerror(program$,err,line,act$,"xit")
 60060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 60080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-60100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
+60100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 60120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 60140 ! /region
 61000 def library fnsafe_filename$*256(sf_in$*256)

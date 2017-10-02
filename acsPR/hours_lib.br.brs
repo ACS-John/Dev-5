@@ -18,7 +18,7 @@
 00180     open #classification=32: "Name="&env$('Q')&"\PRmstr\HourClass.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\HourClass-idx.H"&str$(cno)&",Shr",internal,outin,keyed ioerr MSGBOX3
 00190     open #prmstr=33: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00200 MAIN: ! 
-00210     let addhours=edithours=0
+00210     addhours=edithours=0
 00220     let fntos(sn$="Main") !:
           let respc=0 : let lc=0 : mat resp$=('') !:
           let mylen=20 : let mypos=mylen+2
@@ -32,27 +32,27 @@
           !   let fnbutton(lc,52,"&Delete",44) !:
           !   let fnbutton(lc,60,"&Cancel",5)
 00250     mat chdr$(8) : mat cmask$(8) : mat flxitm$(8) !:
-          let chdr$(1)="Ref #" : let chdr$(2)="Emp #" : let chdr$(3)="Name" : let chdr$(4)="Classification" !:
-          let chdr$(5)="Date" : let chdr$(6)="Increase" !:
-          let chdr$(7)="Decrease" : let chdr$(8)="Balance" !:
-          let cmask$(5)='3' : let cmask$(6)='10' : let cmask$(7)="10" !:
-          let cmask$(8)="10" !:
+          chdr$(1)="Ref #" : chdr$(2)="Emp #" : chdr$(3)="Name" : chdr$(4)="Classification" !:
+          chdr$(5)="Date" : chdr$(6)="Increase" !:
+          chdr$(7)="Decrease" : chdr$(8)="Balance" !:
+          cmask$(5)='3' : cmask$(6)='10' : cmask$(7)="10" !:
+          cmask$(8)="10" !:
           let fnflexinit1('Hours',lc+2,1,15,66,mat chdr$,mat cmask$,1) !:
           let lc+=18
 00255     if hact$="[All]" then restore #breakdown: nokey EOBREAKDOWN !:
-            let balance=0 : let oldclass$="" : goto READHOURBREAKDOWN
+            balance=0 : let oldclass$="" : goto READHOURBREAKDOWN
 00260     let key$=lpad$(str$(eno),8)&"             " !:
           restore #breakdown,key>=key$: nokey EOBREAKDOWN !:
-          let balance=0 : let oldclass$=""
+          balance=0 : let oldclass$=""
 00270 READHOURBREAKDOWN: let holdempno=empno: let oldclass$=class$: read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",release: empno,class$,tdate,increase,decrease eof EOBREAKDOWN
 00275     if hact$="[All]" then let empkey$=lpad$(str$(empno),8): goto L310
 00290     if empno<>eno then goto EOBREAKDOWN
 00300     let empkey$=lpad$(str$(eno),8)
 00310 L310: let empname$="": read #prmstr,using "form pos 9,c 30",key=empkey$,release: empname$ nokey L320
-00320 L320: if trim$(oldclass$)<>"" and oldclass$<>class$ then mat flxitm$=(""): let balance=0: let fnflexadd1(mat flxitm$)
-00321     if hact$="[All]" and holdempno<>empno then mat flxitm$=(""): let balance=0: let fnflexadd1(mat flxitm$)
-00330     let balance+=increase-decrease
-00340     let classification$="": read #classification,using "form pos 6,c 30",key=class$,release: classification$ nokey L350
+00320 L320: if trim$(oldclass$)<>"" and oldclass$<>class$ then mat flxitm$=(""): balance=0: let fnflexadd1(mat flxitm$)
+00321     if hact$="[All]" and holdempno<>empno then mat flxitm$=(""): balance=0: let fnflexadd1(mat flxitm$)
+00330     balance+=increase-decrease
+00340     classification$="": read #classification,using "form pos 6,c 30",key=class$,release: classification$ nokey L350
 00350 L350: let flxitm$(1)=str$(rec(breakdown))
 00360     let flxitm$(2)=str$(empno): let flxitm$(3)=empname$ !:
           let flxitm$(4)=classification$ : let flxitm$(5)=str$(tdate) !:
@@ -80,7 +80,7 @@
 00450     let empno=eno=val(resp$(1)(1:8))
 00460     let editrec=val(resp$(2)) ! record # if edit
 00470     if ck=45 then let edithours=1 else let edithours=0
-00480     if ck=43 then let addhours=1 else let addhours=0
+00480     if ck=43 then addhours=1 else addhours=0
 00490     if ck=44 then goto MSGBOX1 ! delete a record
 00500     if ck=46 then goto MAIN ! refresh grid
 00510 ADDFM: ! add hours
@@ -88,7 +88,7 @@
 00530     if empno=0 then let empno=eno ! assign to default employee if adding
 00540     let empkey$=lpad$(str$(eno),8)
 00550     let empname$="": read #prmstr,using "form pos 9,c 30",key=empkey$,release: empname$ nokey L560
-00560 L560: if addhours=1 then let class$="": let increase=decrease=0
+00560 L560: if addhours=1 then class$="": let increase=decrease=0
 00570     if edithours=1 then !:
             read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease norec ADD_FM_DONE
 00580     let fntos(sn$="Addfm") !:
@@ -114,7 +114,7 @@
 00710     let fnacs(sn$,0,mat resp$,ck) !:
           if ck=5 then goto MAIN
 00720     let empno=val(resp$(1)(1:8)) !:
-          let class$=resp$(2)(1:5) !:
+          class$=resp$(2)(1:5) !:
           let tdate=val(resp$(3)) !:
           let increase=val(resp$(4)) !:
           let decrease=val(resp$(5))
@@ -156,7 +156,7 @@
 00910 ERTN: let fnerror(program$,err,line,act$,"xit")
 00920     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00930     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00940     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00940     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00950 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00960 ! /region
 00970 ! ______________________________________________________________________

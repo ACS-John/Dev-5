@@ -86,24 +86,24 @@
 00760     mat flxhdr$(itemcount+1) : let fhc=0 : let flxhdr$(fhc+=1)='Rec'
 00770     for j=2 to itemcount+1
 00780       if mask2(j-1)<20000 then let flxhdr$(fhc+=1)=lbl$(j-1)
-00790       let controlx=j-1
+00790       controlx=j-1
 00800       let testmask=mask2(controlx)
 00810       if testmask=>1000 and testmask<2000 then let testmask-=1000
 00812       if lwrc$(control$(controlx,1))='combof' and control$(controlx,7)<>'' then 
 00820       else if testmask=>1 and testmask<=29 then 
-00830         let cmask$(fhc)=str$(testmask)
+00830         cmask$(fhc)=str$(testmask)
 00840       else if testmask=>30 and testmask<=31 then 
-00850         let cmask$(fhc)=str$(testmask)
+00850         cmask$(fhc)=str$(testmask)
 00860       else if testmask=32 then 
-00870         let cmask$(fhc)=str$(10)
+00870         cmask$(fhc)=str$(10)
 00880       else if testmask=>33 and testmask<=39 then 
-00890         let cmask$(fhc)=str$(testmask)
+00890         cmask$(fhc)=str$(testmask)
 00900       else if testmask=>40 and testmask<=49 then 
-00910         let cmask$(fhc)=str$(testmask)
+00910         cmask$(fhc)=str$(testmask)
 00920       else if testmask=>50 and testmask<=53 then 
-00930         let cmask$(fhc)=str$(testmask)
+00930         cmask$(fhc)=str$(testmask)
 00940       else 
-00950         let cmask$(fhc)='80'
+00950         cmask$(fhc)='80'
 00960       end if 
 00970 ! 
 00980     next j
@@ -117,7 +117,7 @@
 01060 ! this section is not used currently
 01070 ! if later we want to add an option to force keys to be unique,
 01080 ! than I'll probably want to resurect and test this section
-01090     let j=0 : mat keyorder=(0) : let bowman=0
+01090     let j=0 : mat keyorder=(0) : bowman=0
 01100     do while kps(fin,j+=1)>0
 01110       for j=1 to udim(startpos2)
 01120         if startpos2=kps(fin,j) then let keyorder(j)=bowman+=1
@@ -134,7 +134,7 @@
 01220       if pnorec<>1 then 
 01230         let fic=0 : let flxitm$(fic+=1)=str$(rec(fin))
 01240         for j2=2 to itemcount+1
-01242           let controlx=j2-1
+01242           controlx=j2-1
 01244           if mask2(controlx)<20000 then 
 01246             dim hcfdesc$*128,hcfkey$*128
 01248             let hcfdesc$='' ! p$(controlx)
@@ -197,10 +197,10 @@
 01470     next j
 01475     mat p2$(alana=udim(p$)+1) : mat p2$(1:udim(p$))=p$(1:udim(p$))
 01480     let fntos(sn$=uw$&"3")
-01485     let mypos=mylen+3 : let lc=ic=0 : let col=1 : let colpos=1
+01485     let mypos=mylen+3 : let lc=ic=0 : col=1 : colpos=1
 01490     for j=1 to itemcount
 01495       if itemcount>30 and j>(itemcount/2) and col=1 then 
-01500         let lc=0 : let colpos=mypos+myflen+4 : let col+=1
+01500         let lc=0 : colpos=mypos+myflen+4 : col+=1
 01505         let mypos=colpos+mylen+2
 01510       end if 
 01515       if mask2(ic+1)=>20000 then let ic+=1 : goto SKIP_LABEL_AND_CONTROL
@@ -219,7 +219,7 @@
 01580       if lwrc$(control$(j,1))<>"comboa" then goto NOT_A_COMBOA
 01585       mat option$(999)
 01587 L1160: ! 
-01589       let cj+=1
+01589       cj+=1
 01591       if cj<udim(control$,2)-1 and trim$(control$(j,cj))<>"" then 
 01593         let option$(cj)=control$(j,cj+1)
 01595         goto L1160
@@ -247,14 +247,14 @@
 01639     let fnacs(sn$,0,mat p2$,ck)
 01641     mat p$(1:udim(p$))=p2$(1:udim(p$))
 01643     if ck<>opt_cancel then gosub REWR_P
-01645     let addloop$=p2$(alana)
+01645     addloop$=p2$(alana)
 01647     if lwrc$(addloop$)=lwrc$('True') then goto TO_ADD else goto MENU1
 01649 ! /r
 01651 ! <Updateable Region: ERTN>
 01653 ERTN: let fnerror(program$,err,line,act$,"xit")
 01655     if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01657     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01659     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01659     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01661 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01663 ! /region
 01665 ! _________________________________________
@@ -321,12 +321,12 @@
 01793     do while kps(fin,j+=1)>0
 01795       let keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
 01797       let keyform$=keyform$&'C '&str$(kln(fin,j))&','
-01799       let blank$(j)=rpt$(chr$(48),kln(fin,j))
+01799       blank$(j)=rpt$(chr$(48),kln(fin,j))
 01801       let key$=key$&blank$(j)
 01803     loop 
 01805     let keyform$=keyform$(1:len(keyform$)-1) ! remove the trailing comma
 01807     mat blank$(j-1)
-01809 ! Print 'KeyForm$='&KEYFORM$ ! XXX
+01809 ! pr 'KeyForm$='&KEYFORM$ ! XXX
 01811     return 
 01813 ! /r
 01815 RIGHT_KEY_WRONG_RECORD: ! r:
@@ -336,7 +336,7 @@
 01821     return 
 01823 ! /r
 01825 SPECIAL_NOKEY: ! r:
-01827 ! Print 'Special Nokey routine' ! XXX
+01827 ! pr 'Special Nokey routine' ! XXX
 01829     let key$=""
 01831     read #fin,using keyform$,rec=prec: mat blank$
 01833     for j=1 to udim(blank$) : let key$=key$&blank$(j) : next j
@@ -348,7 +348,7 @@
 01845       let prec=lrec(fin)+1
 01847       gosub SET_KEY_FORM
 01849       write #fin,using keyform$,reserve: mat blank$
-01851 ! .! Print 'write using KeyFormS,Reserve: Mat Blank$   - keyform$='&KEYFORM$
+01851 ! .! pr 'write using KeyFormS,Reserve: Mat Blank$   - keyform$='&KEYFORM$
 01853       read #fin,key=key$: nokey SPECIAL_NOKEY
 01855     else 
 01857       gosub SET_KEY_FORM
@@ -366,20 +366,20 @@
 01881       if j<=udim(control$,1) and lwrc$(control$(j,1))="combof" then 
 01883         let p$(j)=p$(j)(1:val(control$(j,4)))
 01885       end if 
-01887       let crflag=0
+01887       crflag=0
 01889       if fltyp2$(j)="cr" then 
 01891         let p$(j)=lpad$(trim$(p$(j)),sln2(j))
 01893         let fltyp2$(j)="c"
-01895         let crflag=1
+01895         crflag=1
 01897       end if 
 01899       if lwrc$(fltyp2$(j))<>"pd" then let p$(j)=p$(j)(1:sln2(j))
 01901       if fltyp2$(j)="c" or fltyp2$(j)="g" or fltyp2$(j)="cr" then 
 01903         let tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "
 01905         let tmp$=tmp$&str$(sln2(j))
 01907         rewrite #fin,using tmp$,same,reserve: p$(j)
-01909 ! .! Print 'Rewr$ - '&TMP$&"   P$("&STR$(J)&")="&P$(J)
+01909 ! .! pr 'Rewr$ - '&TMP$&"   P$("&STR$(J)&")="&P$(J)
 01911       end if 
-01913       if crflag=1 then let fltyp2$(j)="cr" : let crflag=0
+01913       if crflag=1 then let fltyp2$(j)="cr" : crflag=0
 01915       if fltyp2$(j)="n" or fltyp2$(j)="pd" then 
 01917         let tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "
 01919         let tmp$=tmp$&str$(sln2(j)) : let t=val(p$(j))

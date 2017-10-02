@@ -1,7 +1,7 @@
 10000   let fn_setup
 10200   let fntop(program$,cap$="Check Balance Breakdowns 2")
 10600 MENU1: ! r:
-10800   let fntos(sn$="bldtrans") : let chk_align=0
+10800   let fntos(sn$="bldtrans") : chk_align=0
 11000   let fnlbl(1,1,"Scan:")
 11200   let fnchk(2,5,"Scan Customer Balance Breakdowns",chk_align) : let resp$(1)="True"
 11400   let fnchk(3,5,"Scan Transaction Breakdowns",chk_align)      : let resp$(2)="True"
@@ -44,7 +44,7 @@
 18200 ERTN: let fnerror(program$,err,line,act$,"xit")
 18400   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 18600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-18800   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+18800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 19000 ERTN_EXEC_ACT: execute act$ : goto ERTN
 19200 ! /region
 19400 def fn_report_it(mat report_g,bal_breakdown; heading$*80,col_2_heading$*12)
@@ -52,21 +52,21 @@
 19800     if ~setup_report_it then 
 20000       let setup_report_it=1
 20200       let fnopenprn
-20400       print #255,using F_HDR1: heading$
-20500       print #255,using F_HDR2: 'Account',col_2_heading$,servicename$(1)(1:12),servicename$(2)(1:12),servicename$(3)(1:12),servicename$(4)(1:12),servicename$(5)(1:12),servicename$(6)(1:12),servicename$(7)(1:12),servicename$(8)(1:12),servicename$(9)(1:12),servicename$(10)(1:12),'*Calculated*'
+20400       pr #255,using F_HDR1: heading$
+20500       pr #255,using F_HDR2: 'Account',col_2_heading$,servicename$(1)(1:12),servicename$(2)(1:12),servicename$(3)(1:12),servicename$(4)(1:12),servicename$(5)(1:12),servicename$(6)(1:12),servicename$(7)(1:12),servicename$(8)(1:12),servicename$(9)(1:12),servicename$(10)(1:12),'*Calculated*'
 20600       F_HDR1: form pos 1,cc 156
 20700       F_HDR2: form pos 1,13*(cc 12,',')
 20800       F_BODY: form pos 1,c 12,',',12*(n 12.2,',')
 21000     end if  ! ~setup_report_it
 21200     let print_count+=1
-21400     print #255,using F_BODY: z$,bal,report_g(1),report_g(2),report_g(3),report_g(4),report_g(5),report_g(6),report_g(7),report_g(8),report_g(9),report_g(10),bal_breakdown
-21600     ! print #255: z$&' has a balance of '&str$(gb(10))&' but the breakdowns add up to '&str$(bal_breakdown)
+21400     pr #255,using F_BODY: z$,bal,report_g(1),report_g(2),report_g(3),report_g(4),report_g(5),report_g(6),report_g(7),report_g(8),report_g(9),report_g(10),bal_breakdown
+21600     ! pr #255: z$&' has a balance of '&str$(gb(10))&' but the breakdowns add up to '&str$(bal_breakdown)
 21800   end if 
 22000 fnend 
 22200 def fn_any_gb_negative
-22400   let agn_return=0
+22400   agn_return=0
 22600   for agn_item=1 to 10
-22800     if gb(agn_item)<0 then let agn_return=1
+22800     if gb(agn_item)<0 then agn_return=1
 23000   next agn_item
 23200   let fn_any_gb_negative=agn_return
 23400 fnend  ! fn_any_gb_negative
@@ -88,7 +88,7 @@
 25800     for gb_item=1 to udim(mat servicename$) ! udim(mat gb)
 26000       if trim$(servicename$(gb_item))='' then let gb(gb_item)=0
 26200     next gb_item
-26400     let bal_breakdown=sum(gb)
+26400     bal_breakdown=sum(gb)
 26600     if bal<>bal_breakdown then 
 26800       let fn_report_it(mat customer_g,bal_breakdown,"Customer Balance Breakdowns",'Balance')
 27000       if do_fix then 
@@ -100,7 +100,7 @@
 28200   CUSTOMER_EOF: ! 
 28220 close #h_customer: ioerr ignore
 28400   if print_count>0 then let fncloseprn
-28600   print 'print_count=';print_count
+28600   pr 'print_count=';print_count
 28800   let setup_report_it=0
 29200 fnend 
 29400   def library fnservice_other
@@ -117,8 +117,8 @@
 31700     if so_return<=0 then let so_return=srch(mat servicename$,'Other') ! Other Charge
 31800     if so_return<=0 then let so_return=srch(mat servicename$,rpad$('Other',20)) ! Other Charge
 32000     if so_return<=0 then 
-32200       print "OT (Other) nor OC (Other Charge) not found in Service Code abbreviations"
-32400       print "(nor was Other found in Service Code names"
+32200       pr "OT (Other) nor OC (Other Charge) not found in Service Code abbreviations"
+32400       pr "(nor was Other found in Service Code names"
 32600       let so_return=0
 32800       pause 
 33000     end if 
@@ -153,11 +153,11 @@
 36200         if trim$(servicename$(g_item))='' then let trans_g(g_item)=0
 36400       next g_item
 36500 ! r: get bal_breakdown (requires sz1)
-36520       let bal_breakdown=0
+36520       bal_breakdown=0
 36540       for sz1_item=1 to 9 ! sz1
-36560         let bal_breakdown+=trans_g(sz1_item)
+36560         bal_breakdown+=trans_g(sz1_item)
 36580       next sz1_item
-36600 !      let bal_breakdown=sum(trans_g)
+36600 !      bal_breakdown=sum(trans_g)
 36620 ! /r
 36800       if tamt<>bal_breakdown then 
 37000         let fn_report_it(mat trans_g,bal_breakdown,"Transaction Breakdowns",'T Amount')
@@ -169,7 +169,7 @@
 38200     loop 
 38400 TRANS_EOF: ! 
 38600     if print_count>0 then let fncloseprn
-38800     print 'print_count=';print_count
+38800     pr 'print_count=';print_count
 39000     let setup_report_it=0
 39200     close #h_trans: 
 39400   fnend  ! fn_fix_balance_breakdowns

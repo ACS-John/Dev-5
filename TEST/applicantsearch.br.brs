@@ -8,6 +8,6 @@
 00080 ! third paramater - 0=don't rebuild, use if possible !:
         !                   1=rebuild !:
         !                   99=rebuild it, but don't show it
-00090   print x$
+00090   pr x$
 00100 ! 
 00110   stop 

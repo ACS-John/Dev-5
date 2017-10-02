@@ -64,14 +64,14 @@
 34000 XIT: ! r:
 34060 let fnxit ! /r
 36000 BUD1: ! r:
-36020   let bud1=0
+36020   bud1=0
 36040   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L490
 36060   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
-36080   let bud1=1
+36080   bud1=1
 36100   L490:  !
 36120 return ! /r
 38000 BUD2: ! r:
-38020   let bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
+38020   bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
 38040   if bud1=0 then goto XIT_BUD2
 38060   read #81,using L550,key=p$: x$,mat ba,mat badr nokey XIT_BUD2
 38080   L550: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
@@ -80,7 +80,7 @@
 38140     read #82,using L590,rec=ta1: x$,mat bt1,nba norec XIT_BUD2
 38160     L590: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 38180     if bt1(1,1)=d1 then 
-38200       let bt1(1,1)=bt1(1,2)=d2 
+38200       bt1(1,1)=bt1(1,2)=d2 
 38220       rewrite #82,using L610,rec=ta1: mat bt1 
 38240       L610: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
 38260       goto XIT_BUD2
@@ -93,6 +93,6 @@
 42020 ERTN: let fnerror(program$,err,line,act$,"xit")
 42040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 42060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-42080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+42080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 42100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 42120 ! /region

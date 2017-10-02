@@ -3,7 +3,7 @@
 50040 ERTN: fnerror(program$,err,line,act$,"xit")
 50060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 50080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+50100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50140 ! /region
 52000 def library fnCopy(from$*256,to$*256; new_record_length,options$)
@@ -28,8 +28,8 @@
 56030   !   ! copy_return does not yet work for as_admin.....  perhaps check errorlevel or something.
 56040   !   exec 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\copy_as_admin_'&session$&'.cmd"'
 56060   !   open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\copy_as_admin_'&session$&'.cmd',d,o
-56080   !   print #h_copy_cmd:     'echo copy "'&os_filename$(from$)&'" "'&os_filename$(to$)&'"'
-56100   !   print #h_copy_cmd:     'copy "'&os_filename$(from$)&'" "'&os_filename$(to$)&'"'
+56080   !   pr #h_copy_cmd:     'echo copy "'&os_filename$(from$)&'" "'&os_filename$(to$)&'"'
+56100   !   pr #h_copy_cmd:     'copy "'&os_filename$(from$)&'" "'&os_filename$(to$)&'"'
 56140   !   close #h_copy_cmd:
 56160   !   execute 'sy "'&env$('temp')&'\copy_as_admin_'&session$&'.cmd"'
 58000   ! else ! either new_record_length or (neither new_record_length nor as_admin)
@@ -82,7 +82,7 @@
 64100       execute 'Free "'&env$('Temp')&'\tmp_rln_chg_s'&session$&'"' ioerr ignore
 64120       copy_return=2
 65000     else if env$("ACSDeveloper")<>"" then 
-65020       print 'first copy failed with error ';err
+65020       pr 'first copy failed with error ';err
 65040       pr 'From: "'&from$&'"'
 65060       pr '  To: "'&to$&'"'
 65140       pause 
@@ -90,8 +90,8 @@
 65180   goto COPY_XIT ! /r
 66000   COPY_RETRY_NEW_RLN_FAILED: ! r:
 66020     if env$("ACSDeveloper")<>"" then 
-66040       print 'first copy failed with error ';abs(copy_return)
-66060       print 'second attempt failed with error ';err
+66040       pr 'first copy failed with error ';abs(copy_return)
+66060       pr 'second attempt failed with error ';err
 66080       pause 
 66100     end if 
 66120     copy_return=copy_return*10000-err
@@ -138,15 +138,15 @@
 80190   ! ______________________________________________________________________
 80200   COPY_FROM_CLIENT_TO_SERVER: ! 
 80210   open #20: "Name=ftp"&wsid$&".tmp,Size=0,RecL=255,Replace",display,output 
-80220   ! Print #20: "open "&RTRM$(SERVERIP$)
-80230   print #20: "WO"&str$(val(wsid$)-50) ! env$("LOGIN_NAME")
-80240   print #20: "WOCS"&str$(val(wsid$)-50)
-80250   print #20: "put "&rtrm$(source$)&" "&rtrm$(destination$)
-80260   print #20: "bye"
+80220   ! pr #20: "open "&RTRM$(SERVERIP$)
+80230   pr #20: "WO"&str$(val(wsid$)-50) ! env$("LOGIN_NAME")
+80240   pr #20: "WOCS"&str$(val(wsid$)-50)
+80250   pr #20: "put "&rtrm$(source$)&" "&rtrm$(destination$)
+80260   pr #20: "bye"
 80270   close #20: 
 80280   open #20: "Name=csCopy"&wsid$&".bat,Size=0,RecL=255,Replace",display,output 
-80290   print #20: "ftp -s:ftp"&wsid$&".tmp "&rtrm$(serverip$)
-80300   print #20: "pause"
+80290   pr #20: "ftp -s:ftp"&wsid$&".tmp "&rtrm$(serverip$)
+80300   pr #20: "pause"
 80310   close #20: 
 80320   execute "Sy csCopy"&wsid$&".bat"
 80330   return 

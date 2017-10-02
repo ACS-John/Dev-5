@@ -12,7 +12,7 @@
 00120   let fnconsole(off=0)
 00130   let fncno(cno,cnam$)
 00140   let fndat(dat$)
-00150   let right=1 : let center=2 : let pointtwo$="32"
+00150   let right=1 : center=2 : let pointtwo$="32"
 00160   let fntos(sn$="glCkRec") !:
         let lc=0 : let mylen=40 : let mypos=mylen+2
 00170   let fnlbl(lc+=1,1,"General Ledger Bank Account Number:",mylen,right)
@@ -21,8 +21,8 @@
 00190 ! Let IO1$(1)="2,43,Nz 3,UT,N" : Let IO1$(2)="2,47,Nz 6,UT,N" !:
         ! Let IO1$(3)="2,54,Nz 3,UT,N" : Let IO1$(4)="3,43,c 20,UT,N" !:
         ! Let IO1$(5)="4,43,Nz 12.2,UT,N" : Let IO1$(6)="5,43,Nz 6,UT,N"
-00200 ! Print Fields "15,29,C 10,B,1": "Print (F1)" !:
-        ! Print Fields "15,41,C 09,B,5": "Exit (F5)"
+00200 ! pr Fields "15,29,C 10,B,1": "Print (F1)" !:
+        ! pr Fields "15,41,C 09,B,5": "Exit (F5)"
 00210   let fnlbl(lc+=1,1,"Report Heading Date:",mylen,right)
 00220   let fntxt(lc,mypos,20) !:
         let resp$(2)=dat$
@@ -41,9 +41,9 @@
         let gl2=val(resp$(1)(4:9)) !:
         let gl3=val(resp$(1)(10:12)) !:
         let dat$=resp$(2) !:
-        let bankbal=val(resp$(3)) !:
+        bankbal=val(resp$(3)) !:
         let lcd=val(resp$(4))
-00310   let currgl$=resp$(1)
+00310   currgl$=resp$(1)
 00320   let fnwait(0,cap$,"Printing: Please wait...",1) !:
         on fkey 5 goto DONE
 00330   open #glbrec=1: "Name="&env$('Q')&"\GLmstr\glbrec.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\glrecidx.h"&str$(cno)&",Shr",internal,input,keyed ioerr XIT
@@ -51,8 +51,8 @@
 00350   let fnopenprn
 00360   if currgl$<>gl$ then goto DONE
 00370   gosub HDR !:
-        print #255,using 'Form POS 20,C 35,N 16.2': "* Balance Per Bank Statement *",bankbal !:
-        print #255: ""
+        pr #255,using 'Form POS 20,C 35,N 16.2': "* Balance Per Bank Statement *",bankbal !:
+        pr #255: ""
 00380   goto RD_NXT
 00390 ! ______________________________________________________________________
 00400 READ_GLBREC: ! 
@@ -61,28 +61,28 @@
 00430   if fndate_mmddyy_to_ccyymmdd(a(1))>lcd then goto READ_GLBREC
 00440 RD_NXT: ! 
 00450   if a(3)<>0 then goto READ_GLBREC
-00460   print #255,using 'Form POS 1,C 12,POS 15,C 30,POS 48,PIC(ZZ/ZZ/ZZ),POS 58,N 13.2': c$,p$,a(1),a(2) pageoflow PGOF
+00460   pr #255,using 'Form POS 1,C 12,POS 15,C 30,POS 48,PIC(ZZ/ZZ/ZZ),POS 58,N 13.2': c$,p$,a(1),a(2) pageoflow PGOF
 00470   let tot+=a(2)
 00480   goto READ_GLBREC
 00490 ! ______________________________________________________________________
-00500 PGOF: print #255: newpage !:
+00500 PGOF: pr #255: newpage !:
         gosub HDR !:
         continue 
 00510 ! ______________________________________________________________________
 00520 TOTAL: ! 
-00530   print #255,using 'Form POS 59,C 12': "------------" !:
-        print #255,using 'Form POS 57,N 14.2': bankbal-tot !:
-        print #255,using 'Form POS 59,C 12': "============"
+00530   pr #255,using 'Form POS 59,C 12': "------------" !:
+        pr #255,using 'Form POS 57,N 14.2': bankbal-tot !:
+        pr #255,using 'Form POS 59,C 12': "============"
 00540   goto DONE
 00550 ! ______________________________________________________________________
 00560 HDR: ! 
-00570   print #255,using 'Form POS 1,C 8,Cc 56': date$('mm/dd/yy'),cnam$
-00580   print #255,using 'Form POS 1,C 8,Cc 56': time$,cap$
-00590   print #255,using 'Form POS 29,C 3,X 1,C 6,X 1,C 3': currgl$(1:3),currgl$(4:9),currgl$(10:12)
-00600   print #255,using 'Form POS 1,Cc 72': dat$
-00610   print #255: ""
-00620   print #255,using 'Form POS 1,C 12,POS 15,C 5,POS 50,C 4,POS 65,C 6': "Check Number","Payee","Date","Amount"
-00630   print #255: ""
+00570   pr #255,using 'Form POS 1,C 8,Cc 56': date$('mm/dd/yy'),cnam$
+00580   pr #255,using 'Form POS 1,C 8,Cc 56': time$,cap$
+00590   pr #255,using 'Form POS 29,C 3,X 1,C 6,X 1,C 3': currgl$(1:3),currgl$(4:9),currgl$(10:12)
+00600   pr #255,using 'Form POS 1,Cc 72': dat$
+00610   pr #255: ""
+00620   pr #255,using 'Form POS 1,C 12,POS 15,C 5,POS 50,C 4,POS 65,C 6': "Check Number","Payee","Date","Amount"
+00630   pr #255: ""
 00640   return 
 00650 ! ______________________________________________________________________
 00660 DONE: let fncloseprn
@@ -93,7 +93,7 @@
 00710 ERTN: let fnerror(program$,err,line,act$,"xit")
 00720   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00730   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00740   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00740   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00750 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00760 ! /region
 00770 ! ______________________________________________________________________

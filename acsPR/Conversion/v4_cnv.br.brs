@@ -9,7 +9,7 @@
 12060   for filename_item=1 to udim(mat filename$)
 12080     let tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
 12100     if tmp_cno<>99999 and filename$(filename_item)<>'' then ! don't display company 99999
-12120       let cno=tmp_cno
+12120       cno=tmp_cno
 12140 ! 
 12160 ! let fncno(cno)
 12180 ! 
@@ -88,11 +88,11 @@
 32640 ! ______________________________________________________________________
 34000 TOPOFLOOP: ! 
 34020     read #h_rpmstr,using 'form pos 1,n 8,c 30,pos 122,n 2,pos 162,n 6,pos 173,2*pd 3': eno,em$,em6,lpd,mat ta eof DONE
-34060     let adr=ta(1)
+34060     adr=ta(1)
 34070     do 
 34080       read #h_rptrail,using 'Form POS 1,N 8,N 3,N 3,N 6,N 3,4*N 6,3*N 2,24*PD 4.2,5*PD 3.2,POS 471,PD 4.2,POS 165,PD 3.2,60*PD 5.2,PD 3',rec=adr: teno,tdn,gl1,gl2,gl3,mat tdt,mat tcd,tli,mat tdet,mat tdy,mat tdc,mcwh,mat ty,mat tqm,mat tcp,nta
 34120       gosub CONVERSION
-34140       if nta<>0 then let adr=nta
+34140       if nta<>0 then adr=nta
 34150     loop until nta=0
 34160     if foundhistory=1 then goto PULLFROMHISTORY
 34180     goto TOPOFLOOP
@@ -116,22 +116,22 @@
 46320     let newtdc(8)=ty(21) ! medicaid
 46340     let newtdc(9)=ty(21) ! federal uc
 46360     let newtdc(10)=ty(21) ! state uc wage
-46380     let cp(1)=ty(1) ! fed wh year to date
-46400     let cp(2)=ty(2) ! ss wh year to date
-46420     let cp(3)=ty(15) ! medicaid ytd
+46380     cp(1)=ty(1) ! fed wh year to date
+46400     cp(2)=ty(2) ! ss wh year to date
+46420     cp(3)=ty(15) ! medicaid ytd
 46440     if medicare_is_seperated then gosub FICA_COMBINED
-46460     let cp(4)=ty(3) ! state wh ytd
+46460     cp(4)=ty(3) ! state wh ytd
 46480     for j=1 to 10
-46500       let cp(j+4)=ty(j+3) ! 10 miscellaneous deductions'
+46500       cp(j+4)=ty(j+3) ! 10 miscellaneous deductions'
 46520     next j
-46540     let cp(25)=ty(14) ! eic
-46560     let cp(26)=ty(16) ! reg pay
-46580     let cp(27)=ty(17) ! ot pay
-46600     let cp(28)=ty(18) ! other comp
-46620     let cp(29)=ty(19) ! meals
-46640     let cp(30)=ty(20) ! tips
-46660     let cp(31)=ty(21) ! total wage
-46680     let cp(32)=0 ! don't have net
+46540     cp(25)=ty(14) ! eic
+46560     cp(26)=ty(16) ! reg pay
+46580     cp(27)=ty(17) ! ot pay
+46600     cp(28)=ty(18) ! other comp
+46620     cp(29)=ty(19) ! meals
+46640     cp(30)=ty(20) ! tips
+46660     cp(31)=ty(21) ! total wage
+46680     cp(32)=0 ! don't have net
 46700     let gl$=cnvrt$("pic(zz#)",gl1)&cnvrt$("pic(zzzzz#)",gl2)&cnvrt$("pic(zz#)",gl3)
 46720     write #12,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': eno,tdn,gl$,mat tdt,mat tcd,tli,mat newtdet ! department record
 46740     if ~foundhistory then ! else  write check file later
@@ -151,28 +151,28 @@
 50180     if heno<>eno then goto TOPOFLOOP
 50200     if prd<20000101 then goto PFH_READ_PRCKHIST ! don't allow any checks before 2000
 50220     let tdn=tdn ! use last department since old check history is not by dept
-50240     let ckno=ckno
+50240     ckno=ckno
 50260     for j=1 to 5
 50280       let newtdc(j)=tdc(j) ! hours etc
 50300     next j
 50320     let newtdc(6)=newtdc(7)=newtdc(8)=newtdc(9)=newtdc(10)=0 ! set these wage figures to zero
-50340     let cp(1)=tcp(1) ! fed wh year to date
-50360     let cp(2)=tcp(2) ! ss wh year to date
-50380     let cp(3)=tcp(15) ! medicaid ytd
+50340     cp(1)=tcp(1) ! fed wh year to date
+50360     cp(2)=tcp(2) ! ss wh year to date
+50380     cp(3)=tcp(15) ! medicaid ytd
 50400     if medicare_is_seperated then gosub FICA_COMBINED
-50420     let cp(4)=tcp(3) ! state wh ytd
+50420     cp(4)=tcp(3) ! state wh ytd
 50440     for j=1 to 10
-50460       let cp(j+4)=tcp(j+3) ! 10 miscellaneous deductions'
+50460       cp(j+4)=tcp(j+3) ! 10 miscellaneous deductions'
 50480     next j
-50500     let cp(25)=tcp(14) ! eic
-50520     let cp(26)=tcp(16) ! reg pay
-50540     let cp(27)=tcp(17) ! ot pay
+50500     cp(25)=tcp(14) ! eic
+50520     cp(26)=tcp(16) ! reg pay
+50540     cp(27)=tcp(17) ! ot pay
 50560 ! 
-50580     let cp(28)=tcp(18) ! other comp
-50600     let cp(29)=tcp(19) ! meals
-50620     let cp(30)=tcp(20) ! tips
-50640     let cp(31)=tcp(21) ! total wage
-50660     let cp(32)=tcp(22) ! net
+50580     cp(28)=tcp(18) ! other comp
+50600     cp(29)=tcp(19) ! meals
+50620     cp(30)=tcp(20) ! tips
+50640     cp(31)=tcp(21) ! total wage
+50660     cp(32)=tcp(22) ! net
 50680     let fn_payrollchecks_write
 50700     goto PFH_READ_PRCKHIST
 50720 ! ______________________________________________________________________
@@ -199,7 +199,7 @@
 56020 ERTN: let fnerror(program$,err,line,act$,"xit")
 56040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 56060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-56080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+56080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 56100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 56120 ! /region
 56140 IGNORE: continue 
@@ -220,7 +220,7 @@
 58240     if dedfed(j)>0 then let newdedfed(j)=1
 58260     let newcalcode(j)=calcode(j)
 58280     let fullname$(j)=rpnames2$(j)
-58300     let abrevname$(j)=fullname$(j)(1:6)
+58300     abrevname$(j)=fullname$(j)(1:6)
 58320     if dedfed(j)=1 then let dedst(j)=1 ! if pension type code make deductible for state
 58340     if dedfed(j)=2 then let dedfica(j)=1 ! if pension type code =2 then cafiteria
 58360     let gl$(j)=gln$(j+3)
@@ -238,10 +238,10 @@
 62140   goto PFH_READ_PRCKHIST ! /r
 63000 FICA_COMBINED: ! r:
 63020   let med$="N": let ss=cp(2)
-63040   let cp(2)=ss*.810458: let cp(3)=ss-cp(2) ! just use a ratio to calculate breakdwon
-63060   if uprc$(med$)="N" and em6=1 then let cp(3)=0 : let cp(2)=ss ! NO MC ALL SS ! change to seperate medicare
-63080   if uprc$(med$)="N" and em6=2 then let cp(2)=0 : let cp(3)=ss ! NO SS ALL MC ! change to seperate medicare
-63100   if em6=9 then let cp(2)=cp(3)=0 ! NO SS OR MC
+63040   cp(2)=ss*.810458: cp(3)=ss-cp(2) ! just use a ratio to calculate breakdwon
+63060   if uprc$(med$)="N" and em6=1 then cp(3)=0 : cp(2)=ss ! NO MC ALL SS ! change to seperate medicare
+63080   if uprc$(med$)="N" and em6=2 then cp(2)=0 : cp(3)=ss ! NO SS ALL MC ! change to seperate medicare
+63100   if em6=9 then cp(2)=cp(3)=0 ! NO SS OR MC
 63120   return  ! /r
 64000   def fn_prcode_validate !  PRCODE - verify it exist, if not create it with one blank record
 64020     open #20: "Name="&env$('Q')&"\PRmstr\prCode.h"&str$(cno),internal,output ioerr PRCODE_CREATE_NEW

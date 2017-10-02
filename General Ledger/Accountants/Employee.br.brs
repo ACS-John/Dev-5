@@ -78,7 +78,7 @@
 00600   let fnacs(sn$,0,mat resp$,ckey)
 00610   let holden1=en1=val(resp$(1))
 00620   if en1=0 then goto MAIN
-00630   let addemployee=1 ! code for adding new employee
+00630   addemployee=1 ! code for adding new employee
 00640 DISPLAY_RECORD: ! 
 00650   let en$=lpad$(str$(en1),4)
 00660   read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey DISPLAY_EMPLOYEE
@@ -122,10 +122,10 @@
 00940   if ckey=5 then goto MAIN
 00942   if ckey=2 then let fnW2supEdit(resp$(1)) : goto DISPLAY_EMPLOYEE
 00950   if ckey=6 then goto DELETEIT
-00960   if ckey=3 then let add=0: goto REVIEW_CHECKS
+00960   if ckey=3 then add=0: goto REVIEW_CHECKS
 00970   if ckey=7 then let disable=0: goto DISPLAY_EMPLOYEE
 00980   let en1=eno=val(resp$(1))
-00985   if ckey=8 then let add=1: mat prd=(0): goto L2340
+00985   if ckey=8 then add=1: mat prd=(0): goto L2340
 00990   let k$(1)=resp$(2)
 01000   let k$(2)=resp$(3)
 01010   let k$(3)=resp$(4)
@@ -152,16 +152,16 @@
 01140   if resp$="OK" then goto L1170 else goto MAIN
 01150 L1150: delete #1,key=lpad$(str$(en1),4): nokey MAIN
 01160 ! delete or change numbers
-01170 L1170: let adr=ta(1)
+01170 L1170: adr=ta(1)
 01180 L1180: if adr=0 then goto L1240
 01190   read #2,using L1200,rec=adr: en1,nta
 01200 L1200: form pos 1,n 4,pos 108,pd 3
 01210   if ckey=6 then delete #2,rec=adr: else rewrite #2,using L1200,rec=adr: eno,nta
-01220   let adr=nta
+01220   adr=nta
 01230   goto L1180
 01240 L1240: if ckey=6 then let eno=0: mat k$=(""): let ss$="": mat m=(0): mat ta=(0) !:
           goto MAIN
-01250 L1250: if ckey=1 and addemployee=1 then mat ta=(0): write #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat ta: let addemployee=0 else goto L1280
+01250 L1250: if ckey=1 and addemployee=1 then mat ta=(0): write #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat ta: addemployee=0 else goto L1280
 01260   let new1=1
 01270   let eno=0: mat k$=(""): let ss$="": mat m=(0): mat ta=(0): goto MAIN
 01280 L1280: if ckey=1 then rewrite #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey L1290
@@ -202,17 +202,17 @@
 01630   let fncloseprn
 01640   if fnprocess=1 then goto XIT else goto MAIN
 01650 ! ______________________________________________________________________
-01660 L1660: print #255,using L1670: sc1$(4),mat l1
+01660 L1660: pr #255,using L1670: sc1$(4),mat l1
 01670 L1670: form pos 1,c 21,x 7,pic(zzzz),x 24,pic(zzzz),x 24,pic(zzzz),x 24,pic(zzzz),skip 1
-01680   print #255,using L1690: sc1$(5),mat l2$
+01680   pr #255,using L1690: sc1$(5),mat l2$
 01690 L1690: form pos 1,c 21,3*c 28,c 25,skip 1
-01700   print #255,using L1690: sc1$(6),mat l3$
-01710   print #255,using L1690: sc1$(7),mat l4$
-01720   print #255,using L1690: sc1$(8),mat l5$
+01700   pr #255,using L1690: sc1$(6),mat l3$
+01710   pr #255,using L1690: sc1$(7),mat l4$
+01720   pr #255,using L1690: sc1$(8),mat l5$
 01730   for j1=1 to 36
 01740     let j2=int((j1-1)/2)+9
 01750     if fp(j1/2)=0 then let sc1$=sc1$(j2)&"QTD" else let sc1$=sc1$(j2)&"YTD"
-01760     print #255,using L1770: sc1$,mp(1,j1),mp(2,j1),mp(3,j1),mp(4,j1)
+01760     pr #255,using L1770: sc1$,mp(1,j1),mp(2,j1),mp(3,j1),mp(4,j1)
 01770 L1770: form pos 1,c 21,pic(---------.##),pic(-------------------------.##),pic(-------------------------.##),pic(------------------------.##),skip 1
 01780   next j1
 01790   mat l1=(0)
@@ -223,25 +223,25 @@
 01840   mat mp=(0)
 01850   let pl1=pl1+1
 01860   if pl1=2 then goto L1900
-01870   print #255,using L1880: " "
+01870   pr #255,using L1880: " "
 01880 L1880: form c 1,skip 4
 01890   goto L1940
 01900 L1900: let pl1=0
-01910   print #255: newpage
+01910   pr #255: newpage
 01920   if pl><4 then goto L1940
 01930   gosub HDR
 01940 L1940: let pl=0
 01950   return 
 01960 ! ______________________________________________________________________
 01970 HDR: ! 
-01980   print #255,using L1990: date$('mm/dd/yy'),env$('cnam')
+01980   pr #255,using L1990: date$('mm/dd/yy'),env$('cnam')
 01990 L1990: form skip 2,pos 1,c 8,pos 1,cc 108,skip 1
-02000   print #255,using L2010: time$,"Payroll Proof List",dat$
+02000   pr #255,using L2010: time$,"Payroll Proof List",dat$
 02010 L2010: form pos 1,c 8,pos 45,c 20,skip 1,pos 1,cc 108,skip 2
 02020   return 
 02030 ! ______________________________________________________________________
-02040 ! Print NEWPAGE
-02050 ! Print Fields "10,15,Cc 43,N": "Reassigning Transaction Addresses..."
+02040 ! pr NEWPAGE
+02050 ! pr Fields "10,15,Cc 43,N": "Reassigning Transaction Addresses..."
 02060   restore #1,key>="    ": eof L2070
 02070 L2070: read #1,using 'Form POS 271,2*N 5': mat ta eof L2100
 02080   rewrite #1,using 'Form POS 271,2*N 5': 0,0
@@ -267,8 +267,8 @@
         let ml$(1)="There are no checks on employee # "&str$(eno)&"." !:
         let ml$(2)="Do you wish to add checks?" !:
         let fnmsgbox(mat ml$,resp$,cap$,35)
-02280   if resp$="Yes" then let add=1: goto L2340 else goto MAIN
-02290 L2290: let adr=ta(1)
+02280   if resp$="Yes" then add=1: goto L2340 else goto MAIN
+02290 L2290: adr=ta(1)
 02300 L2300: if adr=0 then goto MAIN
 02310   read #2,using L2320,rec=adr: en2,mat prd,nca norec L480
 02320 L2320: form pos 1,n 4,2*pd 4,19*pd 5.2,pd 3
@@ -295,7 +295,7 @@
 02470   let fncmdkey("&Next",1,1,0,"")
 02490   let fncmdkey("&Cancel",5,0,1,"")
 02500   let fnacs(sn$,0,mat resp$,ckey)
-02510   if ckey=5 then let add=0: goto MAIN
+02510   if ckey=5 then add=0: goto MAIN
 02530   for j=1 to 21
 02540     let prd(j)=val(resp$(j))
 02550   next j
@@ -335,7 +335,7 @@
 02840     let m(m1+1)=m(m1+1)+prd(j)
 02850   next j
 02860   rewrite #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta
-02870   let adr=nca
+02870   adr=nca
 02875   if add=1 then mat pr1=(0): mat prd=(0): goto L2330
 02880   if add=0 then goto L2300
 02890 ! ______________________________________________________________________
@@ -347,6 +347,6 @@
 02950 ERTN: let fnerror(program$,err,line,act$,"xit")
 02960   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02970   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02980   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02980   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02990 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03000 ! /region

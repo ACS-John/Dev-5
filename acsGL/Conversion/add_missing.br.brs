@@ -8,14 +8,14 @@
 00130   let fncno(cno,cnam$)
 00140 ! 
 00170 ! r: main loop
-02000   let cno_origional=cno
+02000   cno_origional=cno
 02020   dim company_file$(1)*128
 02040   let tmp$=env$('Q')&"\GLmstr"
 02060   let fngetdir2(tmp$,mat company_file$, option$,'Company.h*')
 02080   for company_item=1 to udim(mat company_file$)
-02100     let cno_current=val(company_file$(company_item)(10:len(company_file$(company_item))))
+02100     cno_current=val(company_file$(company_item)(10:len(company_file$(company_item))))
 02120     if cno_current<>0 then 
-02140       let fnputcno(cno_current) : let cno=cno_current : ! 
+02140       let fnputcno(cno_current) : cno=cno_current : ! 
 02160 ! 
 02180       open #paymstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&str$(cno)&",RecL=276,kln=8,kps=1,replace",internal,outin,keyed 
 02200       close #paymstr: 
@@ -37,7 +37,7 @@
 03420 ERTN: let fnerror(program$,err,line,act$,"xit")
 03430   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03440   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-03450   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+03450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03470 ! /region
 03490 XIT: let fnxit

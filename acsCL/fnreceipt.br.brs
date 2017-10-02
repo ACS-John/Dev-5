@@ -25,10 +25,10 @@
 00240     let fntos(sn$="Receipt1") !:
           let respc=0
 00250     mat chdr$(3) : mat cmask$(3) : mat item$(3) !:
-          let chdr$(1)='Rec' !:
-          let chdr$(2)='Receipt Type' : let chdr$(3)='Description'
-00260     let cmask$(1)=cmask$(2)='' !:
-          let cmask$(3)="80" !:
+          chdr$(1)='Rec' !:
+          chdr$(2)='Receipt Type' : chdr$(3)='Description'
+00260     cmask$(1)=cmask$(2)='' !:
+          cmask$(3)="80" !:
           let fnflexinit1('Receipt1',1,1,10,35,mat chdr$,mat cmask$,1,0,frame) !:
           let editrec=0
 00270     restore #receipt: 
@@ -44,9 +44,9 @@
           let fncmdkey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing receipt record.") !:
           let fncmdkey("E&xit",5,0,1,"Exit to menu")
 00340     let fnacs(sn$,0,mat resp$,ck)
-00350     let add=edit=0
+00350     add=edit=0
 00360     if ck=5 then goto XIT !:
-          else if ck=1 then let add=1: goto ADD_NEW_RECEIPT
+          else if ck=1 then add=1: goto ADD_NEW_RECEIPT
 00370   if ck=2 or ck=3 then let editrec=val(resp$(1))
 00380   if editrec=0 then goto MENU1
 00390   if ck=2 or ck=3 then !:
@@ -105,14 +105,14 @@
 46240   let fnlbl(15,20,"Standard General Ledger Breakdowns",40,2,0,0)
 46260 ! General Ledger Breakdown GridPE)
 46280   mat chdr$(5)
-46300   let chdr$(1)='Refenence'
-46320   let chdr$(2)='Receipt Type'
-46340   let chdr$(3)='GL Number'
-46360   let chdr$(4)='Percent'
-46380   let chdr$(5)='Description'
+46300   chdr$(1)='Refenence'
+46320   chdr$(2)='Receipt Type'
+46340   chdr$(3)='GL Number'
+46360   chdr$(4)='Percent'
+46380   chdr$(5)='Description'
 46400   mat cmask$(5)
-46420   let cmask$(1)=cmask$(2)=cmask$(3)=cmask$(5)=''
-46440   let cmask$(4)='32'
+46420   cmask$(1)=cmask$(2)=cmask$(3)=cmask$(5)=''
+46440   cmask$(4)='32'
 46460   mat glitem$(5)
 46480   let fnflexinit1('ReceiptGl',17,1,5,70,mat chdr$,mat cmask$,1,0,0)
 46500   if trim$(rec$)="" then goto EO_FLEX3
@@ -230,7 +230,7 @@
 62020 ERTN: let fnerror(program$,err,line,act$,"xit")
 62040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 62060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-62080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+62080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 62100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 62120 ! /region
 64000 GL_BREAKDOWNS: ! r:

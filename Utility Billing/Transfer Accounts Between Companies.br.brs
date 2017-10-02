@@ -10,7 +10,7 @@
 00100   dim df$*256
 00110   dim rm$*60,rm$(20)*60,ra(2),resp$(10)*50,tg(11)
 00120 ! ______________________________________________________________________
-20000   let cno=val(env$('cno'))
+20000   cno=val(env$('cno'))
 20040   let fntop(program$)
 20060   let ubstd$="Form Pos 1,C 10,4*C 30,C 12,7*PD 2,11*PD 4.2,4*PD 4,15*PD 5,PD 4.2,PD 4,12*PD 4.2,2*PD 3,C 7,2*C 12,PD 3,10*PD 5.2,78*PD 5,13*PD 4.2,13*N 6,156*PD 4.2,13*N 6,13*PD 4.2,C 1,C 9,C 2,C 17"
 20080   let ubextra$=",n 2,n 7,n 6,n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30"
@@ -28,8 +28,8 @@
 30200   let fncmdset(2)
 30220   let fnacs(sn$,0,mat resp$,ck)
 32000   if ck=5 then goto XIT
-32040   let co1=cno ! val(resp$(1)(43:47))
-32060   let co2=val(resp$(2)(43:47))
+32040   co1=cno ! val(resp$(1)(43:47))
+32060   co2=val(resp$(2)(43:47))
 32080   if co1=0 or co2=0 then goto MENU1
 32100   close #1: ioerr ignore
 32120   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co1)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndex.h"&str$(co1)&",Shr",internal,outin,keyed  ! Ioerr MENU1
@@ -136,23 +136,23 @@
 50340   fnindex_sys(co2)
 61770 XIT: let fnxit ! /r
 61790 HDR: ! r:
-61800   print #255,using "Form POS 1,Cc 80": "Accounts Transferred from Company Number "&str$(co1)&" to Company Number "&str$(co2)
-61810   print #255,using "Form POS 5,CC 70": date$
-61812   print #255: ""
-61820   print #255,using "Form POS 2,C 9,POS 15,C 4,POS 53,C 7": "Act. Num.","Name","Balance"
+61800   pr #255,using "Form POS 1,Cc 80": "Accounts Transferred from Company Number "&str$(co1)&" to Company Number "&str$(co2)
+61810   pr #255,using "Form POS 5,CC 70": date$
+61812   pr #255: ""
+61820   pr #255,using "Form POS 2,C 9,POS 15,C 4,POS 53,C 7": "Act. Num.","Name","Balance"
 61830 return  ! /r
-61850 PRNT1: ! r: PRINT TRANSFERS
-61860   print #255,using 'form pos 1,c 10,pos 15,c 30,pos 50,n 10.2': z$,e$(2),bal pageoflow PGOF
+61850 PRNT1: ! r: pr TRANSFERS
+61860   pr #255,using 'form pos 1,c 10,pos 15,c 30,pos 50,n 10.2': z$,e$(2),bal pageoflow PGOF
 61880 return  ! /r
 61890 IGNORE: continue 
 61900 PGOF: ! r:
-61910   print #255: newpage
+61910   pr #255: newpage
 61920   gosub HDR
 61930 continue  ! /r
 71950 ! <Updateable Region: ERTN>
 71960 ERTN: let fnerror(program$,err,line,act$,"xit")
 71970   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 71980   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-71990   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+71990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 72000 ERTN_EXEC_ACT: execute act$ : goto ERTN
 72010 ! /region

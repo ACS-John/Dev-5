@@ -20,8 +20,8 @@
 18120   for j=1 to 10
 18140     if uprc$(penalty$(j))="Y" then 
 18160       let pencount=pencount+1 ! count number of penalty columns needed
-18180       let column(pencount)=j
-18200       let columnhead$(pencount)=lpad$(rtrm$(servicename$(j)(1:10)),10)
+18180       column(pencount)=j
+18200       columnhead$(pencount)=lpad$(rtrm$(servicename$(j)(1:10)),10)
 18220     end if 
 18240   next j
 18260   if pencount<1 then let pencount=1
@@ -66,7 +66,7 @@
 28500   let fnacs(sn$,0,mat resp$,ck)
 32000   if ck=5 then goto XIT
 32020   let pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
-32040   let bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))
+32040   bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))
 32060   let dat$=resp$(3)
 32080   if resp$(4)="True" then let printadr=1 ! wants meter address printed
 32100   if resp$(5)="True" then let printmail=1 ! wants meter mailing address
@@ -117,16 +117,16 @@
 42320 ! ______________________________________________________________________
 46000 PENCAL: ! r: penalty calculation
 46020   mat tg=(0)
-46040   let column=0
+46040   column=0
 46060   for j=1 to 10
 46080     if uprc$(penalty$(j))="Y" then ! place first penalty in first column, column totals, etc
 46100       let tg(j)=penaltyamt
-46120       let column+=1
+46120       column+=1
 46140       let pencolumn(column)=tg(j)
-46160       let coltot(column)=coltot(column)+tg(j)
+46160       coltot(column)=coltot(column)+tg(j)
 46200     end if 
 46220   next j
-46240   let bal+=sum(tg)
+46240   bal+=sum(tg)
 46260 ! let tot+=sum(tg)
 46280   let tcode=2 ! penalty trans code
 46300   for j=1 to 10
@@ -136,7 +136,7 @@
 46380   let tamount=sum(tg)
 46400 ! add all penalties into total transaction amount
 46420   read #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=transkey$: y$,olddate,oldcode,oldamount,mat oldtg nokey L990 ! check for recalk
-46440   let bal=bal-oldamount
+46440   bal=bal-oldamount
 46460   for j=1 to 10
 46480     let gb(j)=gb(j)-tg(j) ! take off of balance breakdown
 46500   next j
@@ -150,16 +150,16 @@
 46660   rewrite #customer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2': bal,mat gb
 46680   if extra(1)<0 or extra(1)>99 then let extra(1)=99
 46700   let route(extra(1))+=sum(pencolumn)
-46720 ! print extra(1)
+46720 ! pr extra(1)
 46740   if printadr<>1 then 
-46760     print #255,using F_PRINT_LINE: z$,e$(2),mat pencolumn,bal pageoflow PGOF
+46760     pr #255,using F_PRINT_LINE: z$,e$(2),mat pencolumn,bal pageoflow PGOF
 46780   end if 
 46800   if printadr=1 then 
-46820     print #255,using F_PRINT_LINE: z$,e$(2),mat pencolumn,bal,e$(1)(1:25) pageoflow PGOF
+46820     pr #255,using F_PRINT_LINE: z$,e$(2),mat pencolumn,bal,e$(1)(1:25) pageoflow PGOF
 46840   end if 
 46860   if printmail=1 then 
-46880     print #255,using "Form POS 15,C 30": e$(3) pageoflow PGOF
-46900     print #255,using "Form POS 15,C 30": e$(4) pageoflow PGOF
+46880     pr #255,using "Form POS 15,C 30": e$(3) pageoflow PGOF
+46900     pr #255,using "Form POS 15,C 30": e$(4) pageoflow PGOF
 46920   end if 
 46940 F_PRINT_LINE: form pos 1,c 10,x 4,c 30,pos 52,pencount*pic(---------.##),x 2,pic(-------.##),x 2,c 25
 46960   goto READ_CUSTOMER
@@ -169,17 +169,17 @@
 48040   for j=1 to udim(columnhead$)
 48060     let tmp$=tmp$&" {\ul"&rpt$(" ",12)&"}"
 48080   next j
-48100   print #255: tmp$
-48120   print #255,using "Form POS 17,C 30,x 5,pencount*N 12.2,N 12.2": "Overall Totals",mat coltot,totb
+48100   pr #255: tmp$
+48120   pr #255,using "Form POS 17,C 30,x 5,pencount*N 12.2,N 12.2": "Overall Totals",mat coltot,totb
 48140   let tmp$= rpt$(" ",52)&"{\ul \strike"&rpt$(" ",12)&"}"
 48160   for j=1 to udim(columnhead$)
 48180     let tmp$=tmp$&" {\ul \strike"&rpt$(" ",12)&"}"
 48200   next j
-48220   print #255: tmp$
-48240   print #255,using 'form skip 2,c 20': "Totals by Route"
+48220   pr #255: tmp$
+48240   pr #255,using 'form skip 2,c 20': "Totals by Route"
 48260   for j=1 to 99
 48280     if route(j)<>0 then 
-48300       print #255,using "form pos 1,c 10,pic(zzz,zzz.zz)": "Route "&cnvrt$("pic(zz)",j),route(j) pageoflow PGOF_NO_HDR
+48300       pr #255,using "form pos 1,c 10,pic(zzz,zzz.zz)": "Route "&cnvrt$("pic(zz)",j),route(j) pageoflow PGOF_NO_HDR
 48320     end if 
 48330   next j
 48340   close #customer: ioerr ignore
@@ -187,33 +187,33 @@
 48380   let fncloseprn
 48400   goto XIT ! /r
 50000 PGOF: ! r:
-50020   print #255: newpage
+50020   pr #255: newpage
 50040   gosub HDR
 50060   continue  ! /r
 51000 PGOF_NO_HDR: ! r:
-51020   print #255: newpage
+51020   pr #255: newpage
 51060   continue  ! /r
 52000 HDR: ! r:
 52020 ! let p+=1
-52040   print #255: "\qc "&cnam$
-52060   print #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&" - Listing}"
-52080   print #255: dat$
-52100   print #255: "\ql   "
+52040   pr #255: "\qc "&cnam$
+52060   pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&" - Listing}"
+52080   pr #255: dat$
+52100   pr #255: "\ql   "
 52120   let tmp$="{\ul Account No  } {\ul Customer Name and Address      }         {\ul "
 52140   for j=1 to udim(columnhead$)
 52160     let tmp$=tmp$&columnhead$(j)&"} { \ul "
 52180   next j
 52200   if printadr=1 then let tmp$=tmp$&"} {\ul   Balance}  {\ul  Meter Address}" else let tmp$=tmp$&"} {\ul   Balance}"
-52220   print #255: tmp$
-52240   print #255: ""
+52220   pr #255: tmp$
+52240   pr #255: ""
 52260   return  ! /r
 54000 IGNORE: continue 
 56000 XIT: let fnxit
 58000 BUD1: ! r:
-58020   let bud1=0
+58020   bud1=0
 58040   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&str$(cno)&",Shr",internal,outin,keyed ioerr EO_BUD1
 58060   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&str$(cno)&",Shr",internal,outin,relative 
-58080   let bud1=1
+58080   bud1=1
 58100 EO_BUD1: ! 
 58120   return  ! /r
 60000 BUD2: ! r:
@@ -229,7 +229,7 @@
 60200 L1560: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 60220   if bt1(14,1)>0 then goto L1610
 60240   if bt1(12,1)=0 then goto L1600 ! don't allow blank records to go thru routine
-60260   let bd1=bd1+1
+60260   bd1=bd1+1
 60280 L1600: if bd1>5 then goto EO_BUD2
 60300 L1610: let ta1=nba : goto L1540
 60320 EO_BUD2: ! 
@@ -238,7 +238,7 @@
 62020 ERTN: let fnerror(program$,err,line,act$,"xit")
 62040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 62060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-62080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+62080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 62100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 62120 ! /region
 64000 ! r: Sangamon's second screen
@@ -260,18 +260,18 @@
 66020 !   if sum(basepenalty)<>0 then
 66040 !     let negativepercent=round((sum(basepenalty)+negatives)/sum(basepenalty),2)
 66060 !     for j=1 to 10
-66080 !       let basepenalty(j)=round(basepenalty(j)*negativepercent,2)
+66080 !       basepenalty(j)=round(basepenalty(j)*negativepercent,2)
 66100 !     next j
 66120 !   end if
 66140 !   return  ! /r
 68000 ! CHECK_ROUNDING: ! r:  make sure (if they are basing on balance due) that the individual calculations add to the same amount as the rate * the balance
 68010 !   dim rt(10,3)
 68020 !   if round(bal*rt(1,3),2) = sum(tg) then goto EO_CHECK_ROUNDING
-68040 !   let adjustment=0
+68040 !   adjustment=0
 68060 !   if round(bal*rt(1,3),2)-.01 =sum(tg) then
-68080 !     let adjustment=.01 ! add one cent to a penalty breakdown amount
+68080 !     adjustment=.01 ! add one cent to a penalty breakdown amount
 68100 !   else if round(bal*rt(1,3),2)+.01 =sum(tg) then
-68120 !     let adjustment=-.01 ! subtract one cent from a penalty breakdown amount
+68120 !     adjustment=-.01 ! subtract one cent from a penalty breakdown amount
 68140 !   else 
 68160 !     goto EO_CHECK_ROUNDING
 68180 !   end if
@@ -280,7 +280,7 @@
 68240 !     if basepenalty(j)>0 then
 68260 !       let tg(j)=tg(j)+adjustment
 68280 !       let penx+=1
-68300 !       let coltot(penx)=coltot(penx)+adjustment
+68300 !       coltot(penx)=coltot(penx)+adjustment
 68320 !       goto EO_CHECK_ROUNDING
 68340 !     end if
 68360 !   next j

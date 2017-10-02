@@ -109,9 +109,9 @@
 40020   let fnacs(sn$,0,mat resp$,ck)
 42000   if ck=5 then goto XIT
 42020 ! r: RESP$ to Company Information variables
-42040   let at$(1)=resp$(1)
-42060   let at$(2)=resp$(2)
-42080   let at$(3)=resp$(3)
+42040   at$(1)=resp$(1)
+42060   at$(2)=resp$(2)
+42080   at$(3)=resp$(3)
 42100   let d1=val(resp$(resp_d1))
 42120   let rcpt$=resp$(resp_require_receipt)
 42140   let pcent=val(resp$(resp_pcent))
@@ -152,7 +152,7 @@
 60660 ERTN: let fnerror(program$,err,line,act$,"xit")
 60680   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 60700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-60720   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+60720   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 60740 ERTN_EXEC_ACT: execute act$ : goto ERTN
 60760 ! /region
 72020 SERVICE_LOAD: ! r: Type Of Service Open
@@ -191,15 +191,15 @@
 82140   fncreg_read('unusual usage minimum water',uum_water$)
 82160   fncreg_read('unusual usage minimum gas',uum_gas$)
 82180   fncreg_read('unusual usage minimum electric',uum_electric$)
-82200   fncreg_read('Route Low',bkno1$) : bkno1=val(bkno1$) : if bkno1=0 then let bkno1=1
-82220   fncreg_read('Route High',bkno2$) : bkno2=val(bkno2$) : if bkno2=0 then let bkno2=99
+82200   fncreg_read('Route Low',bkno1$) : bkno1=val(bkno1$) : if bkno1=0 then bkno1=1
+82220   fncreg_read('Route High',bkno2$) : bkno2=val(bkno2$) : if bkno2=0 then bkno2=99
 82240 return  ! /r
 83000 COMPANY_READ_ERR: ! r:
 83020   if err<>714 then goto ERTN
-83040   let company_rln=rln(h_company)
+83040   company_rln=rln(h_company)
 83060   if company_rln=133 then goto ERTN
-83080   print "Converting UB Company Information"
-83100   print "From Record Length "&str$(company_rln)&" to 133"
+83080   pr "Converting UB Company Information"
+83100   pr "From Record Length "&str$(company_rln)&" to 133"
 83120   close #h_company: ioerr ignore
 83140   let fnCopy(env$('Q')&"\UBmstr\Company.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'), 133)
 83160 goto COMPANY_LOAD ! /r
@@ -224,14 +224,14 @@
 86060   dim rates$(50)*30,rt$*54
 86080   open #h_rate1:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 86100   restore #h_rate1: 
-86120   let cr_rate_item=1: mat rates$=("")
+86120   cr_rate_item=1: mat rates$=("")
 86140   mat rates$(50)
 86160   let rates$(1)=" 0=Not applicable"
 86180   do 
 86200     CR_READ_RATE: ! 
 86220     read #h_rate1,using "Form POS 1,C 54",release: rt$ eof CR_EO_RATE
 86240     if trim$(rt$(1:2))<>searchcode$ then goto CR_READ_RATE
-86260     let cr_rate_item+=1
+86260     cr_rate_item+=1
 86280     let rates$(cr_rate_item)=rt$(3:4)&"="&rt$(5:25)
 86300     if ratecode=val(rt$(3:4)) then let rateinfo$(3)=rt$(3:4)&"="&rt$(5:25)
 86320   loop 

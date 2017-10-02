@@ -8,7 +8,7 @@
 00075   let fncmbact(1,1)
 00100   let fncmdset(2) !:
         let fnacs(sn$,0,mat response$,ckey)
-00110   print response$(1)
+00110   pr response$(1)
 00111 ! 
 00120   let key$=response$(1)(32:41) !:
-        print "the key is "&key$
+        pr "the key is "&key$

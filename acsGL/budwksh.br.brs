@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsGL\BudWksh
-00020 ! Print Budget Worksheet
+00020 ! pr Budget Worksheet
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnqgl,fnchk,fncmdset,fnacs,fnagl$,fnrgl$,fnconsole
 00050   on error goto ERTN
@@ -7,7 +7,7 @@
 00070   dim cnam$*40,d$*50,n$*12,bp(13),bm(13),name$*30,gln1$*12,gln2$*12
 00080   dim cap$*128,resp$(10)*80,revb(13)
 00090 ! ______________________________________________________________________
-00100   let right=1 : let center=2 : let left=0
+00100   let right=1 : center=2 : let left=0
 00110   let fntop(program$,cap$="Budget Worksheet")
 00120   let fnconsole(off=0)
 00130   let fncno(cno,cnam$)
@@ -17,7 +17,7 @@
 00170   open #12: "Name="&env$('Q')&"\GLmstr\BudgetInfo.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\BudIndx.h"&str$(cno)&",Use,RecL=28,KPs=1,KLn=14,Shr",internal,outin,keyed 
 00180   if fnprocess=1 then goto L440
 00190 ! defaults !:
-        let pba$='False' : let bud$="False"
+        let pba$='False' : bud$="False"
 00200 SCREEN1: ! 
 00210   let fntos(sn$='BudgetWksht') !:
         let lc=0 : let mylen=40 : let mypos=mylen+2
@@ -49,7 +49,7 @@
         let gln1$=fnagl$(resp$(2)) !:
         let gln2$=fnagl$(resp$(3)) !:
         let pba$=resp$(4) !:
-        let bud$=resp$(5)
+        bud$=resp$(5)
 00400   let priordate=val(resp$(6)) !:
         let priorpriordate=val(resp$(7))
 00410   if resp$(8)="True" then let yearclosed=1
@@ -67,11 +67,11 @@
 00520   if n$>gln2$ then goto L760
 00530 L530: form pos 1,c 12,c 50,pos 87,pd 6.2,pos 171,26*pd 6.2,pos 339,13*pd 6.2
 00540 L540: let dno=val(n$(1:3))
-00550   let ano=val(n$(4:9))
+00550   ano=val(n$(4:9))
 00560   let sno=val(n$(10:12))
-00570   if yearclosed=1 then let cb=bp(12) ! use last year end balance if year already closed.
+00570   if yearclosed=1 then cb=bp(12) ! use last year end balance if year already closed.
 00580   if uprc$(bud$)="R" then mat bm=revb
-00590   let cyb=bm(1)+bm(2)+bm(3)+bm(4)+bm(5)+bm(6)+bm(7)+bm(8)+bm(9)+bm(10)+bm(11)+bm(12)
+00590   cyb=bm(1)+bm(2)+bm(3)+bm(4)+bm(5)+bm(6)+bm(7)+bm(8)+bm(9)+bm(10)+bm(11)+bm(12)
 00600   let tpriorcb+=priorcb
 00610   let tpriorbud+=priorbud
 00620   let toldcb+=oldcb
@@ -80,8 +80,8 @@
 00650   let tcb=tcb+cb
 00660   let tcyb=tcyb+cyb
 00670   if yr1$="" then goto L710
-00680   let budkey$=n$&yr1$ ! gl number plus year for last year
-00690   let budacno$="": let yr$="": let oldcb=oldbud=0
+00680   budkey$=n$&yr1$ ! gl number plus year for last year
+00690   budacno$="": let yr$="": let oldcb=oldbud=0
 00700   read #12,using "form pos 1,c 12,c 2,2*pd 6.2",key=budkey$: budacno$,yr$,oldcb,oldbud nokey L720 ! read old budget history record
 00710 L710: if yr2$="" then goto L740
 00720 L720: let priorbudkey$=n$&yr2$ ! get two years ago
@@ -89,10 +89,10 @@
 00740 L740: gosub PRINT_MASTER_RECORD
 00750   goto L480
 00760 L760: ! EOF OR EOJ ON MASTER FILE
-00770   print #255: 
-00780   if priordate=0 and priorpriordate=0 then print #255,using L810: "Totals",tpyb,tcb,tcyb,tbud
-00790   if priordate>0 and priorpriordate=0 then print #255,using L820: "Totals",toldcb,toldbud,tcb,tcyb,tbud
-00800   if priordate>0 and priorpriordate>0 then print #255,using L820: "Totals",tpriorcb,tpriorbud,toldcb,toldbud,tcb,tcyb,tbud
+00770   pr #255: 
+00780   if priordate=0 and priorpriordate=0 then pr #255,using L810: "Totals",tpyb,tcb,tcyb,tbud
+00790   if priordate>0 and priorpriordate=0 then pr #255,using L820: "Totals",toldcb,toldbud,tcb,tcyb,tbud
+00800   if priordate>0 and priorpriordate>0 then pr #255,using L820: "Totals",tpriorcb,tpriorbud,toldcb,toldbud,tcb,tcyb,tbud
 00810 L810: form pos 38,c 6,pos 45,pic(---,---,---.##),pos 73,pic(---,---,---.##),pos 102,pic(---,---,---.##),pos 123,pic(----,---,---.zz),skip 2
 00820 L820: form pos 25,c 6,pos 34,7*pic(----,---,---.##),skip 1
 00830   let tpyb=0
@@ -104,32 +104,32 @@
 00890   goto SCREEN1
 00900   goto XIT
 00910 ! ______________________________________________________________________
-00920 HEADING: ! PRINT PAGE HEADING
-00930   print #255: 
-00940   print #255,using L950: rtrm$(cnam$)
+00920 HEADING: ! pr PAGE HEADING
+00930   pr #255: 
+00940   pr #255,using L950: rtrm$(cnam$)
 00950 L950: form pos 20,cc 40
-00960   print #255,using L950: "Budget Worksheet"
-00970   if trim$(name$)<>"" then print #255,using L950: rtrm$(name$)
-00980   print #255,using L950: rtrm$(fnpedat$)
-00990   print #255: ""
+00960   pr #255,using L950: "Budget Worksheet"
+00970   if trim$(name$)<>"" then pr #255,using L950: rtrm$(name$)
+00980   pr #255,using L950: rtrm$(fnpedat$)
+00990   pr #255: ""
 01000   if priordate=0 and priorpriordate=0 then goto L1010 else goto L1030
-01010 L1010: print #255,using L1080: "Account"
+01010 L1010: pr #255,using L1080: "Account"
 01020   goto L1090
 01030 L1030: if priordate>0 and priorpriordate=0 then goto L1040 else goto L1060
-01040 L1040: print #255,using L1080: "Account","         "&str$(priordate),"         "&str$(priordate),"        Current","        Current","       Proposed"
+01040 L1040: pr #255,using L1080: "Account","         "&str$(priordate),"         "&str$(priordate),"        Current","        Current","       Proposed"
 01050   goto L1090
 01060 L1060: if priordate>0 and priorpriordate>0 then goto L1070 else goto L1090
-01070 L1070: print #255,using L1080: "Account","         "&str$(priorpriordate),"         "&str$(priorpriordate),"         "&str$(priordate),"         "&str$(priordate),"        Current","        Current","       Proposed"
+01070 L1070: pr #255,using L1080: "Account","         "&str$(priorpriordate),"         "&str$(priorpriordate),"         "&str$(priordate),"         "&str$(priordate),"        Current","        Current","       Proposed"
 01080 L1080: form pos 3,c 8,pos 34,7*c 15
 01090 L1090: if priordate=0 and priorpriordate=0 then goto L1100 else goto L1120
-01100 L1100: print #255,using L1190: "Number","Description","Prior Year Balance","Current Balance","Current Budget","Proposed Budget"
+01100 L1100: pr #255,using L1190: "Number","Description","Prior Year Balance","Current Balance","Current Budget","Proposed Budget"
 01110   goto L1200
 01120 L1120: if priordate>0 and priorpriordate=0 then goto L1130 else goto L1160
-01130 L1130: print #255,using L1180: "Number","Description","        Balance","         Budget","        Balance","         Budget","         Budget"
+01130 L1130: pr #255,using L1180: "Number","Description","        Balance","         Budget","        Balance","         Budget","         Budget"
 01140   form pos 4,c 6,pos 22,c 11,pos 34,5* c 15
 01150   goto L1200
 01160 L1160: if priordate>0 and priorpriordate>0 then goto L1170 else goto L1200
-01170 L1170: print #255,using L1180: "Number","Description","        Balance","         Budget","        Balance","         Budget","        Balance","         Budget","         Budget"
+01170 L1170: pr #255,using L1180: "Number","Description","        Balance","         Budget","        Balance","         Budget","        Balance","         Budget","         Budget"
 01180 L1180: form pos 4,c 6,pos 22,c 11,pos 34,7*c 15
 01190 L1190: form pos 4,c 6,pos 22,c 11,pos 44,c 18,pos 74,c 15,pos 101,c 19,pos 123,c 15
 01200 L1200: return 
@@ -147,35 +147,35 @@
 01300     let fncmdset(3)
 01310     let fnacs(sn$,0,mat resp$,ckey)
 01320     if ckey=5 then goto XIT
-01330     let bud=val(resp$(1)) : let tbud+=bud
+01330     bud=val(resp$(1)) : let tbud+=bud
 01340   end if 
 01350   if priordate=0 and priorpriordate=0 then goto L1360 else goto L1430
 01360 L1360: if pba$="True" then goto L1400
-01370   print #255,using L1380: dno,ano,sno,d$(1:22),bp(12),cb,cyb," ______________" pageoflow NWPGE
+01370   pr #255,using L1380: dno,ano,sno,d$(1:22),bp(12),cb,cyb," ______________" pageoflow NWPGE
 01380 L1380: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 47,pic(-----,---.##),pos 75,pic(-----,---.##),pos 104,pic(-----,---.##),pos 122,c 15,skip 1
 01390   goto L1410
-01400 L1400: print #255,using L1410: dno,ano,sno,d$(1:22),bp(12),cb,cyb,cnvrt$("PIC(----,---,---.##)",bud) pageoflow NWPGE
+01400 L1400: pr #255,using L1410: dno,ano,sno,d$(1:22),bp(12),cb,cyb,cnvrt$("PIC(----,---,---.##)",bud) pageoflow NWPGE
 01410 L1410: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 47,pic(-----,---.##),pos 75,pic(-----,---.##),pos 104,pic(-----,---.##),pos 122,c 15,skip 1
 01420   goto L1580
 01430 L1430: if priordate>0 and priorpriordate=0 then goto L1440 else goto L1510
 01440 L1440: if pba$="True" then goto L1450 else goto L1480
-01450 L1450: print #255,using L1460: dno,ano,sno,d$(1:22),oldcb,oldbud,cb,cyb,cnvrt$("PIC(----,---,---.zz)",bud) pageoflow NWPGE
+01450 L1450: pr #255,using L1460: dno,ano,sno,d$(1:22),oldcb,oldbud,cb,cyb,cnvrt$("PIC(----,---,---.zz)",bud) pageoflow NWPGE
 01460 L1460: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 34,4*pic(----,---,---.##),c 15,skip 2
 01470   goto L1580
-01480 L1480: print #255,using L1490: dno,ano,sno,d$(1:22),oldcb,oldbud,cb,cyb," _____________" pageoflow NWPGE
+01480 L1480: pr #255,using L1490: dno,ano,sno,d$(1:22),oldcb,oldbud,cb,cyb," _____________" pageoflow NWPGE
 01490 L1490: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 34,4*pic(----,---,---.##),c 15,skip 2
 01500   goto L1580
 01510 L1510: if priordate>0 and priorpriordate>0 then goto L1520 else goto L1580
 01520 L1520: if pba$="True" then goto L1530 else goto L1560
-01530 L1530: print #255,using L1540: dno,ano,sno,d$(1:22),priorcb,priorbud,oldcb,oldbud,cb,cyb,cnvrt$("PIC(----,---,---.zz)",bud) pageoflow NWPGE
+01530 L1530: pr #255,using L1540: dno,ano,sno,d$(1:22),priorcb,priorbud,oldcb,oldbud,cb,cyb,cnvrt$("PIC(----,---,---.zz)",bud) pageoflow NWPGE
 01540 L1540: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 34,6*pic(----,---,---.##),c 15,skip 2
 01550   goto L1580
-01560 L1560: print #255,using L1570: dno,ano,sno,d$(1:22),priorcb,priorbud,oldcb,oldbud,cb,cyb," ______________" pageoflow NWPGE
+01560 L1560: pr #255,using L1570: dno,ano,sno,d$(1:22),priorcb,priorbud,oldcb,oldbud,cb,cyb," ______________" pageoflow NWPGE
 01570 L1570: form pos 1,pic(zzz),x 1,pic(zzzzzz),x 1,pic(zzz),x 2,c 22,pos 34,6*pic(----,---,---.##),c 15,skip 2
 01580 L1580: return 
 01590 ! ______________________________________________________________________
 01600 NWPGE: ! SPACE TO NEWPAGE
-01610   print #255: newpage
+01610   pr #255: newpage
 01620   gosub HEADING
 01630   continue 
 01640 ! ______________________________________________________________________
@@ -185,7 +185,7 @@
 01680 ERTN: let fnerror(program$,err,line,act$,"xit")
 01690   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01710   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01710   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01720 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01730 ! /region
 01740 ! ______________________________________________________________________

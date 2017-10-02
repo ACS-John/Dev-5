@@ -19,7 +19,7 @@
 00170   let fncmdset(2)
 00180   let fnacs(sn$,0,mat resp$,ckey)
 00190   if ckey=5 then goto XIT
-00200   let actpd=val(resp$(1))
+00200   actpd=val(resp$(1))
 00210   if actpd<1 or actpd>13 then goto SCREEN1
 00220 ! ______________________________________________________________________
 00230 GET_GOING: ! 
@@ -33,15 +33,15 @@
 02140 ! fnwait - "Closing Month..."
 02160   do 
 02180     read #h_glmstr,using 'Form POS 87,14*PD 6.2': cb,mat bc eof EO_GLMSTR
-02200     let bc(actpd)=cb
-02220     let bb=cb
+02200     bc(actpd)=cb
+02220     bb=cb
 02240     rewrite #h_glmstr,using 'Form POS 81,PD 6.2,POS 93,13*PD 6.2,POS 333,2*PD 3': bb,mat bc,0,0
 02260   loop 
 02280 EO_GLMSTR: ! 
 02300   close #h_glmstr: 
 02322   let lmu=actpd
-02324   let actpd=actpd+1
-02326   if actpd>nap then let actpd=1
+02324   actpd=actpd+1
+02326   if actpd>nap then actpd=1
 02340   let fnactpd(actpd)
 02343   open #21: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative 
 02344   rewrite #21,using 'Form pos 296,n 2',rec=1: lmu
@@ -95,7 +95,7 @@
 50860 ERTN: let fnerror(program$,err,line,act$,"NO")
 50870   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 50880   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50890   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+50890   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50900 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50910 ! /region
 50920 ! ______________________________________________________________________

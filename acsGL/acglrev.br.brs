@@ -18,7 +18,7 @@
 00150   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00160   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,outin,relative 
 00170   open #3: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(cno)&",NoShr",internal,outin 
-00180   print newpage
+00180   pr newpage
 00190   let x=lrec(2)
 00200   for j=1 to x
 00210 L210: read #2,using L220,rec=j: t$,s,k,mat n,l$,p$,ven$ eof L420 norec L410
@@ -37,7 +37,7 @@
 00340     if ta(1)=0 then let ta(1)=lr2
 00350     if ta(2)>0 then rewrite #2,using L400,rec=ta(2): lr2
 00360     let ta(2)=lr2
-00370     let cb=cb+k
+00370     cb=cb+k
 00380     rewrite #1,using L310,key=t$: cb,mat ta
 00390 L390: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
 00400 L400: form pos 71,pd 3
@@ -59,7 +59,7 @@
 00560   if ta(1)=0 then let ta(1)=lr2
 00570   if ta(2)>0 then rewrite #2,using L620,rec=ta(2): lr2
 00580   let ta(2)=lr2
-00590   let cb=cb+k
+00590   cb=cb+k
 00600   rewrite #1,using L530,key=t$: cb,mat ta
 00610 L610: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
 00620 L620: form pos 71,pd 3
@@ -71,7 +71,7 @@
 00680   execute "list -"&str$(line) !:
         pause  !:
         goto L700
-00690   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+00690   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 00700 L700: execute act$
 00710   goto ERTN
 00720 ! ______________________________________________________________________

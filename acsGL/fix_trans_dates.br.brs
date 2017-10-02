@@ -1,5 +1,5 @@
 10000 ! Replace S:\acsGL\acglTrJr
-10020 ! Print Disbursements, Receipts, General adj/ap/pr/ar, Sales,
+10020 ! pr Disbursements, Receipts, General adj/ap/pr/ar, Sales,
 10040 ! and Purchases Journals a.k.a. Transaction Journals
 10060 ! ______________________________________________________________________
 10080   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fntos,fncmdset,fnacs,fnlbl,fntxt,fnconsole
@@ -10,14 +10,14 @@
 10180   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*21,tgl(200,4)
 10200   let period_current=1
 10220   let period_prior=2
-10240   let a$(1)="Disbursements Journal"
-10260   let a$(2)="Receipts Journal"
-10280   let a$(3)="General Journal      (Adj)"
-10300   let a$(4)="General Journal      (A/P)"
-10320   let a$(5)="General Journal      (Payroll)"
-10340   let a$(6)="General Journal      (A/R)"
-10360   let a$(7)="Sales Journal"
-10380   let a$(8)="Purchases Journal"
+10240   a$(1)="Disbursements Journal"
+10260   a$(2)="Receipts Journal"
+10280   a$(3)="General Journal      (Adj)"
+10300   a$(4)="General Journal      (A/P)"
+10320   a$(5)="General Journal      (Payroll)"
+10340   a$(6)="General Journal      (A/R)"
+10360   a$(7)="Sales Journal"
+10380   a$(8)="Purchases Journal"
 12000 ! /r
 12020   let fntop(program$,cap$="Fix Current Period Transactions Dates")
 12040   let fncno(cno,cnam$)
@@ -41,18 +41,18 @@
 22000 PJ_PRINT_REC: ! 
 22020     if tr$="999999999999" then let tr$=" "
 22040     if tr(5)>0 then 
-22060       print #255,using L550: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
+22060       pr #255,using L550: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
 22080     else 
-22100       print #255,using L560: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
+22100       pr #255,using L560: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
 22120     end if 
 22140 L550: form pos 3,cc 12,pos 16,pic(zz/zz/zz),pos 26,c 30,pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 69,pic(------,---,---.##)
 22160 L560: form pos 3,cc 12,pos 16,pic(zz/zz/zz),pos 26,c 30,pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 82,pic(------,---,---.##)
 22180     goto L620
-22200 ! Print #255: ""
+22200 ! pr #255: ""
 22220     if tr(5)>=0 then 
-22240       print #255,using L600: tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
+22240       pr #255,using L600: tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
 22260     else 
-22280       print #255,using L610: tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
+22280       pr #255,using L610: tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
 22300     end if 
 22320 L600: form pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 69,pic(------,---,---.##)
 22340 L610: form pos 57,pic(zzz),pic(zzzzzz),pic(zzz),pos 85,pic(--,---,---.##)
@@ -85,42 +85,42 @@
 28020   if tr(6)><1 and uprc$(oldtrans$(1:21))><"DISBURSEMENTS JOURNAL" then 
 28040     goto L810
 28060   end if 
-28080   print #255,using L800: net pageoflow PGOF
+28080   pr #255,using L800: net pageoflow PGOF
 28100 L800: form pos 100,pic(---,---,---.##)
 28120 L810: ! 
 28140   if uprc$(a$(tr(6))(1:21))><uprc$(oldtrans$) or t9=9 then goto L830
-28160   print #255: pageoflow PGOF
+28160   pr #255: pageoflow PGOF
 28180 L830: ! 
 28200   let net=0
 28220   return  ! /r
 30000 HDR: ! r:
-30020   print #255,using F_HDR_1: date$('mm/dd/yy'),cnam$
+30020   pr #255,using F_HDR_1: date$('mm/dd/yy'),cnam$
 30040   if tr(6)<>0 then 
-30060     print #255,using F_HDR_1: time$,rtrm$(a$(tr(6))(1:21))
+30060     pr #255,using F_HDR_1: time$,rtrm$(a$(tr(6))(1:21))
 30080   end if 
 30100 F_HDR_1: form pos 1,c 8,pos 15,cc 50
-30120   print #255,using F_HDR_1: "",fnpedat$
-30140   print #255: tab(115);"Page "&str$(p1+=1)
-30160   print #255: " Reference               Transaction";tab(79);"Debit";tab(92);"Credit"
-30180   print #255: "  Number         Date    Description";tab(61);"Account";
-30200   if tr(6)=1 then let b$="NET" else let b$=" "
-30220   print #255,using 'form pos 79,c 19,pos 111,c 3': "Amount       Amount",b$
-30260   print #255: " ________      ________  ____________________";tab(59);"___________";tab(79);"______       ______";
+30120   pr #255,using F_HDR_1: "",fnpedat$
+30140   pr #255: tab(115);"Page "&str$(p1+=1)
+30160   pr #255: " Reference               Transaction";tab(79);"Debit";tab(92);"Credit"
+30180   pr #255: "  Number         Date    Description";tab(61);"Account";
+30200   if tr(6)=1 then b$="NET" else b$=" "
+30220   pr #255,using 'form pos 79,c 19,pos 111,c 3': "Amount       Amount",b$
+30260   pr #255: " ________      ________  ____________________";tab(59);"___________";tab(79);"______       ______";
 30280   if tr(6)=1 then 
-30300     print #255,using 'form pos 111,c 3': "___"
+30300     pr #255,using 'form pos 111,c 3': "___"
 30320   else 
-30340     print #255,using 'form pos 111,c 3': "   "
+30340     pr #255,using 'form pos 111,c 3': "   "
 30360   end if 
 30400   return  ! /r
 32000 JOURNAL_TOTALS: ! r:
 32020   gosub PJ_SOME_TOTAL
-32040   print #255: tab(72);"_____________";tab(86);"______________"
-32060   print #255,using 'form pos 55,c 14,pos 70,pic(----,---,---.##),pic(----,---,---.##)': "Journal Totals",total1,total2
-32100   print #255: tab(72);"=============";tab(86);"=============="
+32040   pr #255: tab(72);"_____________";tab(86);"______________"
+32060   pr #255,using 'form pos 55,c 14,pos 70,pic(----,---,---.##),pic(----,---,---.##)': "Journal Totals",total1,total2
+32100   pr #255: tab(72);"=============";tab(86);"=============="
 32120 ! IF TR6=1 THEN GOSUB 1230
 32140   let total1=total2=net=0
 32160   if t9=9 then goto L1150
-32180   print #255: newpage
+32180   pr #255: newpage
 32200   gosub HDR
 32220   if tr(6)=0 then let oldtrans$=" " else let oldtrans$=a$(tr(6))(1:21)
 32240   let oldtr$=" "
@@ -133,7 +133,7 @@
 34100 L1210: let fncloseprn
 34120   goto XIT ! /r
 36000 PGOF: ! r:
-36020   print #255: newpage
+36020   pr #255: newpage
 36040   gosub HDR
 36060   continue  ! /r
 38300 ! ______________________________________________________________________
@@ -141,14 +141,14 @@
 38340 ERTN: let fnerror(program$,err,line,act$,"xit")
 38360   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 38380   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-38400   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+38400   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 38420 ERTN_EXEC_ACT: execute act$ : goto ERTN
 38440 ! /region
 38460 ! ______________________________________________________________________
 38480 XIT: let fnxit
 38500 ! ______________________________________________________________________
 40000 ASK_PERIOD: ! r:
-40020 ! print newpage
+40020 ! pr newpage
 40040   let fntos(sn$="fix_trans_dates")
 40060   let respc=0
 40080 ! let fnfra(1,1,5,50,"Print from current month files or history"," ")

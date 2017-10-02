@@ -19,7 +19,7 @@
 24800     read #1,using FORM_CUSTOMER: z$,mat e$,mat a,final,bal,route,sequence,extra$(1) eof DONE
 25000 FORM_CUSTOMER: form pos 1,c 10,pos 11,4*c 30,pos 143,5*pd 2,pos 1806,3*n 2,pos 153,2*pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 1741,n 2,n 7,pos 1864,c 30
 25200     if fn_has_dupe(z$) then 
-25400       print #255,using FORM_OUT: rec(1),z$,e$(2),e$(1),bal,mat a2 pageoflow PGOF
+25400       pr #255,using FORM_OUT: rec(1),z$,e$(2),e$(1),bal,mat a2 pageoflow PGOF
 25600 FORM_OUT: form n 4,x 1,c 10,x 5,c 30,x 7,c 30,n 11.2,x 1,10*nz 3
 25800     end if  ! fn_has_dupe(z$)
 26000   loop 
@@ -29,7 +29,7 @@
 26800   let fnxit
 27000 ! ______________________________________________________________________
 27200 PGOF: ! 
-27400   print #255: newpage
+27400   pr #255: newpage
 27600   let fn_header
 27800   continue 
 28000 ! ______________________________________________________________________
@@ -44,19 +44,19 @@
 29600     let fn_has_dupe=hd_return
 29800   fnend  ! fn_has_dupe
 30000   def fn_header
-30200     print #255: "\qc {\b "&env$('cnam')&"}"
-30400     print #255: "\qc {\fs28 {\b Duplicate Customer List}}"
-30600     print #255: "\qc {\b "&trim$(item1$(1))&" Order}"
-30800     print #255,using 'form pos 21,cc 40,pos 71,c 5,pic(zzz)': dat$,"Page ",p2+=1
-31000     print #255: ""
-31200     print #255: "\ql {\ul     Customer No}     {\ul Name                             }    {\ul Meter Address                }   {\ul   Balance} {\ul}"
+30200     pr #255: "\qc {\b "&env$('cnam')&"}"
+30400     pr #255: "\qc {\fs28 {\b Duplicate Customer List}}"
+30600     pr #255: "\qc {\b "&trim$(item1$(1))&" Order}"
+30800     pr #255,using 'form pos 21,cc 40,pos 71,c 5,pic(zzz)': dat$,"Page ",p2+=1
+31000     pr #255: ""
+31200     pr #255: "\ql {\ul     Customer No}     {\ul Name                             }    {\ul Meter Address                }   {\ul   Balance} {\ul}"
 31400   fnend 
 50970 ! ______________________________________________________________________
 50980 ! <Updateable Region: ERTN>
 50990 ERTN: let fnerror(program$,err,line,act$,"xit")
 51000   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 51010   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-51020   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+51020   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 51030 ERTN_EXEC_ACT: execute act$ : goto ERTN
 51040 ! /region
 51050 ! ______________________________________________________________________

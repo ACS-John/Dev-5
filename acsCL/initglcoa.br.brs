@@ -7,7 +7,7 @@
 00070   dim cnam$*40,dat$*20,cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
 00080 ! ______________________________________________________________________
 00090   let fntop(program$,cap$="Import GL Chart of Accounts")
-00100   let cancel=99 : let right=1 : let left=0 : let center=2 : let number$='30'
+00100   cancel=99 : let right=1 : let left=0 : center=2 : let number$='30'
 00110   let fncno(cno,cnam$) !:
         let fndat(dat$)
 00120 L120: open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&str$(cno)&",Shr",internal,outin,keyed 
@@ -49,7 +49,7 @@
 00400 ! ______________________________________________________________________
 00410   restore #1,key>="            ": nokey MENU1
 00420 L420: let ln=eof1=0
-00430   print newpage
+00430   pr newpage
 00440   if ck=5 or eof1=1 then goto MENU1
 00450   goto L420
 00460 ! ______________________________________________________________________
@@ -66,7 +66,7 @@
 00570 ERTN: let fnerror(program$,err,line,act$,"xit")
 00580   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00590   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00600   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00600   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00610 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00620 ! /region
 00630 ! ______________________________________________________________________

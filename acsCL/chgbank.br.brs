@@ -8,7 +8,7 @@
 00080 ! ______________________________________________________________________
 00090   let fncno(cno)
 00100   let fntop(program$, cap$="Select Bank Account")
-00110   let cancel=99 : let right=1 : let left=0 : let center=2 !:
+00110   cancel=99 : let right=1 : let left=0 : center=2 !:
         let limit_to_list=1
 00120 ! ______________________________________________________________________
 00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative: read #20,using 'Form POS 152,N 2',rec=1,release: wbc : close #20: 
@@ -34,7 +34,7 @@
 00270 ERTN: let fnerror(program$,err,line,act$,"xit")
 00280   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00290   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00300   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00310 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00320 ! /region
 00330 ! ______________________________________________________________________

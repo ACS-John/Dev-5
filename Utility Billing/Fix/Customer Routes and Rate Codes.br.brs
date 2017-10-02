@@ -24,14 +24,14 @@
 14180     end if
 14200   loop ! /r
 16000   PrimaryFinis: !
-16020     print 'read_count=';read_count
-16040     print 'write_count=';write_count : pause
+16020     pr 'read_count=';read_count
+16040     pr 'write_count=';write_count : pause
 18000   xit: fnxit
 28000 ! <Updateable Region: ERTN>
 28060 ERTN: let fnerror(program$,err,line,act$,"xit")
 28080   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 28100   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-28120   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+28120   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 28140 ERTN_EXEC_ACT: execute act$ : goto ERTN
 28160 ! /region
 32000 OldWorkFromFixedWidthList: ! r: change route and sequence numbers from a text file
@@ -52,7 +52,7 @@
 32300   goto READ_CUSTOMER
 32320   ! 
 32340   L250: !
-32360   print #255,using "form pos 1,c 50": "Account "&z$&" not found"
+32360   pr #255,using "form pos 1,c 50": "Account "&z$&" not found"
 32380   goto READ_CUSTOMER
 32400   OWFFL_Finis: !
 32420   let fncloseprn
@@ -76,7 +76,7 @@
 38000 def fnServicesRateCodeAdjust
 38020   srcaReturn=0
 38040   ! r: Sanitation Standard Charge - they should all be ZERO
-38060   !   let b(5)=0
+38060   !   b(5)=0
 38080   !   srcaReturn=1
 38100   ! /r
 38120   ! r: super dynamic - just change the code LOL

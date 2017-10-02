@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsGL\RestPrint
-00020 ! -- Print Retained Earnings Statement
+00020 ! -- pr Retained Earnings Statement
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$
 20000   on error goto ERTN
@@ -10,33 +10,33 @@
 20100   let fndat(dat$)
 20120   let tempx=val(fnactpd$) conv L180
 20140   if tempx=1 then 
-20160     let actpd$="one" 
+20160     actpd$="one" 
 20180   else if tempx=2 then 
-20200     let actpd$="two" 
+20200     actpd$="two" 
 20220   else if tempx=3 then 
-20240     let actpd$="three" 
+20240     actpd$="three" 
 20260   else if tempx=4 then 
-20280     let actpd$="four" 
+20280     actpd$="four" 
 20300   else if tempx=5 then 
-20320     let actpd$="five"
+20320     actpd$="five"
 20340   else if tempx=6 then 
-20360     let actpd$="six" 
+20360     actpd$="six" 
 20380   else if tempx=7 then 
-20400     let actpd$="seven"
+20400     actpd$="seven"
 20420   else if tempx=8 then 
-20440     let actpd$="eight" 
+20440     actpd$="eight" 
 20460   else if tempx=9 then 
-20480     let actpd$="nine"
+20480     actpd$="nine"
 20500   else if tempx=10 then 
-20520     let actpd$="ten"
+20520     actpd$="ten"
 20540   else if tempx=11 then 
-20560     let actpd$="eleven" 
+20560     actpd$="eleven" 
 20580   else if tempx=12 then 
-20600     let actpd$="twelve" 
+20600     actpd$="twelve" 
 20620   else if tempx=13 then 
-20640     let actpd$="thirteen" 
+20640     actpd$="thirteen" 
 20660   else if tempx=14 then 
-20680     let actpd$="fourteen"
+20680     actpd$="fourteen"
 20700   end if
 20720 L180: open #1: "Name="&env$('Q')&"\GLmstr\acglstmt.h"&env$('cno')&",Shr",display,input ioerr XIT
 20740   let fnopenprn
@@ -66,7 +66,7 @@
 21220 L310: ! Let LN$=LN1$
 21240 L320: !
 21260   next j2
-21280   print #255: tab(10);ln$
+21280   pr #255: tab(10);ln$
 21300   goto READ_ACGLREST
 21320 ! ______________________________________________________________________
 21340 DONE: !
@@ -80,7 +80,7 @@
 21500 ERTN: let fnerror(program$,err,line,act$,"xit")
 21520   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 21540   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-21560   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+21560   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 21580 ERTN_EXEC_ACT: execute act$ : goto ERTN
 21600 ! /region
 21620 ! ______________________________________________________________________

@@ -15,21 +15,21 @@
 20240   end if
 20260   open #h_log:=fngethandle: "Name="&env$('Temp')&"\acs\Log.txt,RecL=1024,EOL=CRLF,Use",display,output ioerr XIT
 20280   if needsHeader then
-20300     print #h_log: 'acsUserId/Session'&delim$;
-20320     print #h_log: 'logType'&delim$;
-20340     print #h_log: 'Program_Caption'&delim$;
-20360     print #h_log: 'Core_Program_Current'&delim$;
-20380     print #h_log: 'Date'&delim$;
-20400     print #h_log: 'Time'&delim$;
-20420     print #h_log: 'Comment'
+20300     pr #h_log: 'acsUserId/Session'&delim$;
+20320     pr #h_log: 'logType'&delim$;
+20340     pr #h_log: 'Program_Caption'&delim$;
+20360     pr #h_log: 'Core_Program_Current'&delim$;
+20380     pr #h_log: 'Date'&delim$;
+20400     pr #h_log: 'Time'&delim$;
+20420     pr #h_log: 'Comment'
 20440   end if
-20460   print #h_log: env$('acsUserId')&'/'&session$&delim$;
-20480   print #h_log: str$(log_type)&delim$;
-20500   print #h_log: env$('Program_Caption')&delim$;
-20520   print #h_log: env$('Core_Program_Current')&delim$;
-20540   print #h_log: date$("mm/dd/ccyy")&delim$;
-20560   print #h_log: time$&delim$;
-20580   print #h_log: log$ 
+20460   pr #h_log: env$('acsUserId')&'/'&session$&delim$;
+20480   pr #h_log: str$(log_type)&delim$;
+20500   pr #h_log: env$('Program_Caption')&delim$;
+20520   pr #h_log: env$('Core_Program_Current')&delim$;
+20540   pr #h_log: date$("mm/dd/ccyy")&delim$;
+20560   pr #h_log: time$&delim$;
+20580   pr #h_log: log$ 
 20600   FINIS: ! 
 20620   close #h_log: ioerr ignore
 20640   XIT: ! 

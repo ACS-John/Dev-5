@@ -623,7 +623,7 @@
 56550     fnbarcodewide=fnbarcodewide(barcode$,rightleft,updown)
 56560   fnend 
 56570 ! /r
-58000 ! r: print   S:\Core\Print.br and S:\Core\Print\*
+58000 ! r: pr   S:\Core\Print.br and S:\Core\Print\*
 58012   def library fnsafe_filename$*256(sf_in$*256)
 58014     library 'S:\Core\Print.br': fnsafe_filename$
 58016     fnsafe_filename$=fnsafe_filename$(sf_in$)

@@ -6,8 +6,8 @@
  !
  !
  def fnReturnSelection(&CurrentKey$,DataFile;___,Index)
-    let CurrentKey$=""
+    currentKey$=""
     for Index=1 to udim(mat MarkedRecords$)
-       let CurrentKey$=CurrentKey$&fnKey$(DataFile,MarkedRecords$(Index))
+       currentKey$=CurrentKey$&fnKey$(DataFile,MarkedRecords$(Index))
     next Index
  fnend

@@ -73,7 +73,7 @@
 
     if udim(mat Keys$) then
        for Index=1 to udim(mat Keys$)
-          let Additor=Index-1
+          additor=Index-1
           if Additor then
              let fnReturnCode(' open #'&FileLay$&'+'&str$(Additor)&': "name='&FileName$&',kfname='&Keys$(Index)&'",internal,outin,keyed')
           else
@@ -245,26 +245,26 @@
        let fnReturnCode(' ! Variables Used')
        let fnReturnCode(' dim KeyNumber')
 
-       let CodeLine$=" dim "
+       codeLine$=" dim "
        let KeyLength=0
 
        for Index=1 to udim(Mat KeyFields$)
           let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              let Length=fnLength(SSpec$(Sub))
-             let CodeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
+             codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
              let KeyLength+=Length
           else
              let Sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
                 let Length=fnLength(NSpec$(Sub))
-                let CodeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
+                codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
                 let KeyLength+=Length
              end if
           end if
        next Index
        if len(CodeLine$)>6 then
-          let CodeLine$=CodeLine$(1:len(CodeLine$)-2)
+          codeLine$=CodeLine$(1:len(CodeLine$)-2)
           let fnReturnCode(CodeLine$)
        end if
 
@@ -362,26 +362,26 @@
        let fnReturnCode(' ! Variables Used')
        let fnReturnCode(' dim KeyNumber')
 
-       let CodeLine$=" dim "
+       codeLine$=" dim "
        let KeyLength=0
 
        for Index=1 to udim(Mat KeyFields$)
           let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              let Length=fnLength(SSpec$(Sub))
-             let CodeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
+             codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
              let KeyLength+=Length
           else
              let Sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
                 let Length=fnLength(NSpec$(Sub))
-                let CodeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
+                codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
                 let KeyLength+=Length
              end if
           end if
        next Index
        if len(CodeLine$)>6 then
-          let CodeLine$=CodeLine$(1:len(CodeLine$)-2)
+          codeLine$=CodeLine$(1:len(CodeLine$)-2)
           let fnReturnCode(CodeLine$)
        end if
 
@@ -473,25 +473,25 @@
        let fnReturnCode(' ! Variables Used')
        let fnReturnCode(' dim KeyNumber')
 
-       let CodeLine$=" dim "
+       codeLine$=" dim "
        let KeyLength=0
        for Index=1 to udim(Mat KeyFields$)
           let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              let Length=fnLength(SSpec$(Sub))
-             let CodeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
+             codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
              let KeyLength+=Length
           else
              let Sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
                 let Length=fnLength(NSpec$(Sub))
-                let CodeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
+                codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
                 let KeyLength+=Length
              end if
           end if
        next Index
        if len(CodeLine$)>6 then
-          let CodeLine$=CodeLine$(1:len(CodeLine$)-2)
+          codeLine$=CodeLine$(1:len(CodeLine$)-2)
           let fnReturnCode(CodeLine$)
        end if
 
@@ -604,26 +604,26 @@
        let fnReturnCode(' ! Variables Used')
        let fnReturnCode(' dim KeyNumber')
 
-       let CodeLine$=" dim "
+       codeLine$=" dim "
        let KeyLength=0
 
        for Index=1 to udim(Mat KeyFields$)
           let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              let Length=fnLength(SSpec$(Sub))
-             let CodeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
+             codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
              let KeyLength+=Length
           else
              let Sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
                 let Length=fnLength(NSpec$(Sub))
-                let CodeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
+                codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
                 let KeyLength+=Length
              end if
           end if
        next Index
        if len(CodeLine$)>6 then
-          let CodeLine$=CodeLine$(1:len(CodeLine$)-2)
+          codeLine$=CodeLine$(1:len(CodeLine$)-2)
           let fnReturnCode(CodeLine$)
        end if
 

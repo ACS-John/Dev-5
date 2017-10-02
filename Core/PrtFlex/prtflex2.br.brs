@@ -28,7 +28,7 @@
 00128   dim chk4d5$*1,chk4d6$*1,chk4d7$*1,chk4d8$*1,otherspec$*40,chk4d9$*1
 00129   dim heap$*1,chk4d21$*1,comment2$*150,votime$*8,holdname$(3)*30
 00209 ! ______________________________________________________________________
-00210   let columns=1
+00210   columns=1
 00300   gosub OPENFILES
 00400   open #11: "Name="&env$('temp')&"\Gridname.tmp",internal,input,relative 
 00402   read #11,using 'Form POS 1,C 40',rec=1: gridname$
@@ -75,7 +75,7 @@
 09100   return  ! /r
 09999 ! __________________ this is 9999 next is 10000 ________________________
 10000 GRIDHEADING: ! r: The following lines will be generated each time a grid is                        printed.  Don't ever renumber this program unless you are                       prepared to spend some time figuring out where lines are!
-10010   let colhdr$(1)="Name" : let colmask$(1)="80"
+10010   colhdr$(1)="Name" : colmask$(1)="80"
 10499   return  ! /r
 10500 GRIDDETAILS: ! r: The following lines are generated lines.  They will be                          removed and added back just before each grid is printed
 10510   let item$(1)=e$(2)
@@ -88,7 +88,7 @@
 11022 ERTN: let fnerror(program$,err,line,act$,"xit")
 11023   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 11024   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-11025   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+11025   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 11026 ERTN_EXEC_ACT: execute act$ : goto ERTN
 11027 ! /region
 11028 ! _______________________________________________________________________
@@ -101,7 +101,7 @@
 12030   let fntos(sn$="Gridtrans-1")
 12032   let rc=cf=0
 12040   let fnfra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
-12042   let cf+=1 : let fratype=cf
+12042   cf+=1 : let fratype=cf
 12050   let fnopt(1,3,"[All]",0,fratype)
 12051   if sel_code=1 or sel_code=0 then 
 12052     let resp$(rc+=1)="True"
@@ -139,7 +139,7 @@
 12104     let resp$(rc+=1)="False"
 12105   end if 
 12110   let fnfra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
-12112   let cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
+12112   cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
 12120   let fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
 12130   let fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
 12132   let resp$(rc+=1)=str$(beg_date)
@@ -147,7 +147,7 @@
 12150   let fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
 12152   let resp$(rc+=1)=str$(end_date)
 12160   let fnfra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
-12162   let cf+=1 : let fraaccount=cf
+12162   cf+=1 : let fraaccount=cf
 12170   let fnlbl(1,1,"Account:",8,1,0,fraaccount)
 12180   let fncmbact(1,10,1,fraaccount)
 12182   let rc+=1
@@ -173,7 +173,7 @@
 12234   else if resp$(6)="True" then 
 12235     let sel_code=6
 12236   end if 
-12240   let beg_date=val(resp$(7))
+12240   beg_date=val(resp$(7))
 12242   let end_date=val(resp$(8))
-12244   let c$=resp$(9)(1:10)
+12244   c$=resp$(9)(1:10)
 12250 XIT_ASKTRANSET: return  ! /r

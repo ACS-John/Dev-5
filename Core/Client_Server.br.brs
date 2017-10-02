@@ -14,7 +14,7 @@
 14220 ! 
 14240     let fnlbl(4,2,'Port:',19,1)
 14260     let fntxt(4,22,4,0,0,'number',0,'Default is 8555')
-14280     let fnureg_read('CS Server Port',cs_port$) : if cs_port$='' or cs_port$='0' then let cs_port$='8555'
+14280     let fnureg_read('CS Server Port',cs_port$) : if cs_port$='' or cs_port$='0' then cs_port$='8555'
 14300     let resp$(2)=cs_port$
 14320     let fnlbl(6,2,'Anonymous User:',19,1)
 14340     let fntxt(6,22,20,128,0,'',0,'leave blank to disable')
@@ -30,9 +30,9 @@
 15040     let fncmdkey('&Back',5,0,1)
 15060     let fnacs(sn$,0,mat resp$,ck)
 16000     let server_name$=resp$(1) : let fnureg_write('CS Server Name',server_name$)
-16020     let cs_port$=resp$(2) : let fnureg_write('CS Server Port',cs_port$)
-16040     let anon_user$=resp$(3) : let fnureg_write('CS Anonymous User',anon_user$)
-16060     let anon_pass$=resp$(4) : let fnureg_write('CS Anonymous Password',anon_pass$)
+16020     cs_port$=resp$(2) : let fnureg_write('CS Server Port',cs_port$)
+16040     anon_user$=resp$(3) : let fnureg_write('CS Anonymous User',anon_user$)
+16060     anon_pass$=resp$(4) : let fnureg_write('CS Anonymous Password',anon_pass$)
 16080     if ck=5 then goto XIT
 16100     if ck=2 then let fn_server_install
 16120     if ck=3 then let fn_server_uninstall
@@ -47,45 +47,45 @@
 34036     execute 'sy xcopy "'&os_filename$('S:\Core')&'\Client\*.*" "'&os_filename$(env$('temp')&'\ACS\brCsInstall\ACS 5 Client')&'\*.*" /S'
 34040     let fnstatus('make '&env$('Q')&'\brListener.conf')
 34060     open #h_br_parms_txt:=fngethandle: 'Name='&env$('temp')&'\ACS\brCsInstall\ACS 5 Client\br_parms.txt,RecL=256,replace',display,output 
-34080     print #h_br_parms_txt: 'host='&server_name$
-34100     print #h_br_parms_txt: 'label=ACS_5_CS'
+34080     pr #h_br_parms_txt: 'host='&server_name$
+34100     pr #h_br_parms_txt: 'label=ACS_5_CS'
 34120     close #h_br_parms_txt: 
 34140     open #h_brlistener_conf:=fngethandle: 'Name='&env$('Q')&'\brListener.conf,RecL=256,replace',display,output 
-34160     print #h_brlistener_conf: 'LogFile='&env$('temp')&'\ACS-Log-CS.txt'
-34180     print #h_brlistener_conf: 'LogLevel=10'
-34200     print #h_brlistener_conf: '['
-34220     print #h_brlistener_conf: 'Label=ACS_5_CS'
-34240     print #h_brlistener_conf: 'StartDir='&env$('temp')&'\' ! startdir does not support quotes
-34260     print #h_brlistener_conf: 'Executable="'&env$("STATUS.FILES.EXECUTABLE")&'"' ! br_prog$&br_ext$
-34280     print #h_brlistener_conf: 'Config="'&os_filename$('S:\brconfig.sys')&'"' ! br_prog$&br_ext$
-34300     print #h_brlistener_conf: 'Caption="ACS 5"'
+34160     pr #h_brlistener_conf: 'LogFile='&env$('temp')&'\ACS-Log-CS.txt'
+34180     pr #h_brlistener_conf: 'LogLevel=10'
+34200     pr #h_brlistener_conf: '['
+34220     pr #h_brlistener_conf: 'Label=ACS_5_CS'
+34240     pr #h_brlistener_conf: 'StartDir='&env$('temp')&'\' ! startdir does not support quotes
+34260     pr #h_brlistener_conf: 'Executable="'&env$("STATUS.FILES.EXECUTABLE")&'"' ! br_prog$&br_ext$
+34280     pr #h_brlistener_conf: 'Config="'&os_filename$('S:\brconfig.sys')&'"' ! br_prog$&br_ext$
+34300     pr #h_brlistener_conf: 'Caption="ACS 5"'
 34305     if anon_user$<>'' and anon_pass$<>'' then 
-34310       print #h_brlistener_conf: 'Anonymous="'&anon_user$&'@'&anon_pass$&'"'
+34310       pr #h_brlistener_conf: 'Anonymous="'&anon_user$&'@'&anon_pass$&'"'
 34315     end if 
 34320     if cs_port$<>'8555' and cs_port$<>'0' and cs_port$<>'' then 
-34340       print #h_brlistener_conf: 'Port='&cs_port$
+34340       pr #h_brlistener_conf: 'Port='&cs_port$
 34360     end if 
-34380     print #h_brlistener_conf: 'MultiSession'
-34400     print #h_brlistener_conf: ']'
+34380     pr #h_brlistener_conf: 'MultiSession'
+34400     pr #h_brlistener_conf: ']'
 34420     close #h_brlistener_conf: 
 34440     let fnstatus('  and copy it into windows')
 34460     let fnstatus('  and copy DLL to 32 bit system folder (System32 or SysWOW64)')
 34480 !   execute 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\ACS\brCsInstall\Install_BR_Server_'&session$&'.cmd"'
 34500     open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\ACS\brCsInstall\Install_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
-34520 !     print #h_copy_cmd:     '@echo on'
-34540     print #h_copy_cmd: 'copy "'&os_filename$(env$('Q')&'\brListener.conf')&'" "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
-34560     ! print #h_copy_cmd: 'copy "'&os_filename$(env$('temp')&'\ACS\brCsInstall\ACS 5 Client\br_parms.txt')&'" "'&os_filename$('S:\')&'\*.*"'
-34580     print #h_copy_cmd: 'type "'&os_filename$(env$('windir')&'\brListener.conf')&'"' ! just to see some nice info on the screen.
+34520 !     pr #h_copy_cmd:     '@echo on'
+34540     pr #h_copy_cmd: 'copy "'&os_filename$(env$('Q')&'\brListener.conf')&'" "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
+34560     ! pr #h_copy_cmd: 'copy "'&os_filename$(env$('temp')&'\ACS\brCsInstall\ACS 5 Client\br_parms.txt')&'" "'&os_filename$('S:\')&'\*.*"'
+34580     pr #h_copy_cmd: 'type "'&os_filename$(env$('windir')&'\brListener.conf')&'"' ! just to see some nice info on the screen.
 35000     dim windowsSystem32bitFolder$*256
 35020     if exists(os_filename$(env$('SystemRoot')&'\SysWOW64')) then
 35040       windowsSystem32bitFolder$=os_filename$(env$('SystemRoot')&'\SysWOW64')
 35060     else
 35080       windowsSystem32bitFolder$=os_filename$(env$('SystemRoot')&'\System32')
 35100     end if
-35120     print #h_copy_cmd: 'copy "'&os_filename$('S:\brlistener'&env$('BRListener_Version')&'-'&env$('BR_Architecture')&'-'&env$('BRListener_Date')&'.exe')&'" "'&windowsSystem32bitFolder$&'\brListener.exe'&'"'
-35140     print #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'" /release'
-35160     print #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'"'
-35180 !     print #h_copy_cmd:     'pause'
+35120     pr #h_copy_cmd: 'copy "'&os_filename$('S:\brlistener'&env$('BRListener_Version')&'-'&env$('BR_Architecture')&'-'&env$('BRListener_Date')&'.exe')&'" "'&windowsSystem32bitFolder$&'\brListener.exe'&'"'
+35140     pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'" /release'
+35160     pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'"'
+35180 !     pr #h_copy_cmd:     'pause'
 35200     close #h_copy_cmd: 
 35220     execute 'sy -c explorer "'&env$('temp')&'\ACS\brCsInstall\"' ! Install_BR_Server_'&session$&'.cmd"'
 35240   fnend 
@@ -97,9 +97,9 @@
 38100     let fnstatus('fn_server_uninstall')
 38120     fnmakesurepathexists(env$('temp')&'\ACS\brCsInstall\')
 38140     open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\ACS\brCsInstall\Remove_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
-38160     print #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'" /release'
-38180     print #h_copy_cmd: 'del "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
-38200     print #h_copy_cmd: 'del "'&os_filename$(env$('SystemRoot')&'\System32\brListener.exe')&'"'
+38160     pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'" /release'
+38180     pr #h_copy_cmd: 'del "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
+38200     pr #h_copy_cmd: 'del "'&os_filename$(env$('SystemRoot')&'\System32\brListener.exe')&'"'
 38260     close #h_copy_cmd: 
 38280     ! execute 'sy "'&env$('temp')&'\ACS\brCsInstall\Remove_BR_Server_'&session$&'.cmd"'
 38290     execute 'sy -C explorer "'&env$('temp')&'\ACS\brCsInstall\"' ! Remove_BR_Server_'&session$&'.cmd"'
@@ -134,6 +134,6 @@
 74040 ERTN: let fnerror(program$,err,line,act$,"xit")
 74060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 74080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-74100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+74100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 74120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 74140 ! /region

@@ -63,9 +63,9 @@
             if filter_pass=1 then goto L560 !:
             else goto L540
 00560 L560: let hit_count+=1 !:
-            let choice$(j)=cb_response$(1)
+            choice$(j)=cb_response$(1)
 00570       for k=2 to udim(cb_response$)
-00580         let choice$(j)=rtrm$(choice$(j)&"³"&cb_response$(k))
+00580         choice$(j)=rtrm$(choice$(j)&"³"&cb_response$(k))
 00590       next k
 00600     next j
 00610 PAST_READ_LOOP: ! 
@@ -81,7 +81,7 @@
             let fio1$(j)=str$(j+1)&",1,C "&str$(win_width)&",N" !:
           next j
 00680     let fnwin3b(win,cap$,win_height,win_width,0,6,6,2)
-00690     print #win,fields "1,1,C "&str$(win_width)&",R,N": header$
+00690     pr #win,fields "1,1,C "&str$(win_width)&",R,N": header$
 00700 L700: rinput #win,select mat fio1$,attr "H": mat choice$
 00710     if cmdkey=1 and eofile=0 then goto NXT
 00720     if cmdkey=1 and eofile=1 then goto L700
@@ -93,7 +93,7 @@
 00750     let x=0 !:
           for j=1 to udim(cb_response$) !:
             let x+=1 !:
-            let cb_response$(j)=choice$(curfld)(x:field_len(j)) !:
+            cb_response$(j)=choice$(curfld)(x:field_len(j)) !:
             let x+=field_len(j) !:
           next j
 00760 ! 
@@ -136,7 +136,7 @@
 01120   execute "list -"&str$(line) !:
         pause  !:
         goto L1140
-01130   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+01130   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01140 L1140: execute act$
 01150   goto ERTN
 01160 ! ______________________________________________________________________

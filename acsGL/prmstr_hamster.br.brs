@@ -29,7 +29,7 @@
 15600 ERTN: let fnerror(program$,err,line,act$,"xit")
 15800   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 16000   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-16200   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+16200   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 16400 ERTN_EXEC_ACT: execute act$ : goto ERTN
 16600 ! /region
 16800 ! ______________________________________________________________________
@@ -58,7 +58,7 @@
 21400     if field_type$='' then let field_type$='C'
 21420     if storage_length=0 then let storage_length=textbox_len
 21600 ! storage_length_prior=storage_length
-21800     let add_rec_item=udim(mat lbl$)+1
+21800     add_rec_item=udim(mat lbl$)+1
 22000     mat lbl$(add_rec_item) : let lbl$(add_rec_item)=label$
 22200     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
 22400     mat p$(add_rec_item)
@@ -86,24 +86,24 @@
 26800 ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 27000     let limit_to_list$='1'
 27200 ! 
-27400 ! let cl=1 : let c$(cl,1)='ComboF'
-27600 ! let c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&str$(cno)
-27800 ! let c$(cl,3)='1' : let c$(cl,4)='6'
-28000 ! let c$(cl,5)='7' : let c$(cl,6)='50'
-28200 ! let c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h'&str$(cno)
-28400 ! let c$(cl,8)=limit_to_list$
+27400 ! cl=1 : c$(cl,1)='ComboF'
+27600 ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&str$(cno)
+27800 ! c$(cl,3)='1' : c$(cl,4)='6'
+28000 ! c$(cl,5)='7' : c$(cl,6)='50'
+28200 ! c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h'&str$(cno)
+28400 ! c$(cl,8)=limit_to_list$
 28600 ! 
-28800 ! let cl=3 : let c$(cl,1)='ComboF'
-29000 ! let c$(cl,2)=env$('Q')&'\TMmstr\Systems.h'&str$(cno)
-29200 ! let c$(cl,3)='1' : let c$(cl,4)='2'
-29400 ! let c$(cl,5)='3' : let c$(cl,6)='50'
-29600 ! let c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h'&str$(cno)
-29800 ! let c$(cl,8)=limit_to_list$
+28800 ! cl=3 : c$(cl,1)='ComboF'
+29000 ! c$(cl,2)=env$('Q')&'\TMmstr\Systems.h'&str$(cno)
+29200 ! c$(cl,3)='1' : c$(cl,4)='2'
+29400 ! c$(cl,5)='3' : c$(cl,6)='50'
+29600 ! c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h'&str$(cno)
+29800 ! c$(cl,8)=limit_to_list$
 30000 ! 
-30200 ! let cl=5 : let c$(cl,1)='ComboF'
-30400 ! let c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h'&str$(cno)
-30600 ! let c$(cl,3)='1' : let c$(cl,4)='2'
-30800 ! let c$(cl,5)='3' : let c$(cl,6)='50'
-31000 ! let c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h'&str$(cno)
-31200 ! let c$(cl,8)=limit_to_list$
+30200 ! cl=5 : c$(cl,1)='ComboF'
+30400 ! c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h'&str$(cno)
+30600 ! c$(cl,3)='1' : c$(cl,4)='2'
+30800 ! c$(cl,5)='3' : c$(cl,6)='50'
+31000 ! c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h'&str$(cno)
+31200 ! c$(cl,8)=limit_to_list$
 31400   fnend 

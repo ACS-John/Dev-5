@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsPR\PrUsrDR
-00020 ! Print User-Designed Reports
+00020 ! pr User-Designed Reports
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnerror,fnconsole
 00050 ! ______________________________________________________________________
@@ -12,16 +12,16 @@
           read #1,using 'Form POS 1,N 2,C 74': rn(j),rn$(j) eof L110 !:
         next j
 00110 L110: close #1: 
-00120 L120: print newpage !:
+00120 L120: pr newpage !:
         let fnopenwin(win=101,3,2,22,79,cap$)
-00130   print #win: newpage
+00130   pr #win: newpage
 00140   for j=1 to 20 !:
           let jcs$(j)=str$(j)&",2,Pic(ZZ),N" !:
           let jcs$(j+20)=str$(j)&",5,C 74,N" !:
         next j
-00150   print #win,fields mat jcs$: mat rn,mat rn$
-00160   print fields "23,22,C 09,B,5": "Exit (F5)"
-00170   print fields "23,32,C 23,R,N": "Report Number to Print:"
+00150   pr #win,fields mat jcs$: mat rn,mat rn$
+00160   pr fields "23,22,C 09,B,5": "Exit (F5)"
+00170   pr fields "23,32,C 23,R,N": "Report Number to Print:"
 00180 L180: rinput fields "23,56,Nz 2,UT,N": rno conv L180
 00190   if rno=0 then goto XIT
 00200   for j=1 to 20
@@ -37,7 +37,7 @@
 00300 ERTN: let fnerror(program$,err,line,act$,"xit")
 00310   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00320   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00330   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00330   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00340 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00350 ! /region
 00360 ! ______________________________________________________________________

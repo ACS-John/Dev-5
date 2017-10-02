@@ -10,8 +10,8 @@
 00200   let response$(1)=''
 00220   let fncmdset(2)
 00240   let fnacs(sn$,0,mat response$,ckey)
-00260   print response$(1)
+00260   pr response$(1)
 00280 ! 
-00300   print "response "&response$(1)
+00300   pr "response "&response$(1)
 00320 ! let fnpause
 00340 ! let fnxit

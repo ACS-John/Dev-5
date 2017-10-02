@@ -29,7 +29,7 @@
 00128   dim chk4d5$*1,chk4d6$*1,chk4d7$*1,chk4d8$*1,otherspec$*40,chk4d9$*1
 00129   dim heap$*1,chk4d21$*1,comment2$*150,votime$*8,holdname$(3)*30
 00209 ! ______________________________________________________________________
-00210   let columns = 7
+00210   columns = 7
 00300   gosub OPENFILES
 00400   open #11: "Name="&env$('temp')&"\Gridname.tmp",internal,input,relative  !:
         read #11,using 'Form POS 1,C 40',rec=1: gridname$ !:
@@ -72,20 +72,20 @@
 09100   return 
 09999 ! __________________ this is 9999 next is 10000 ________________________
 10000 GRIDHEADING: ! The followng lines will be generated each time a grid is                        printed.  Don't ever renumber this program unless you are                       prepared to spend some time figuring out where lines are!
-10010   let colhdr$(1)="Dept" !:
-        let colmask$(1)="30"
-10020   let colhdr$(2)="Major" !:
-        let colmask$(2)="30"
-10030   let colhdr$(3)="Date" !:
-        let colmask$(3)="1"
-10040   let colhdr$(4)="Desc" !:
-        let colmask$(4)="80"
-10050   let colhdr$(5)="Amt" !:
-        let colmask$(5)="10"
-10060   let colhdr$(6)="RefNum" !:
-        let colmask$(6)="80"
-10070   let colhdr$(7)="TransCode" !:
-        let colmask$(7)="30"
+10010   colhdr$(1)="Dept" !:
+        colmask$(1)="30"
+10020   colhdr$(2)="Major" !:
+        colmask$(2)="30"
+10030   colhdr$(3)="Date" !:
+        colmask$(3)="1"
+10040   colhdr$(4)="Desc" !:
+        colmask$(4)="80"
+10050   colhdr$(5)="Amt" !:
+        colmask$(5)="10"
+10060   colhdr$(6)="RefNum" !:
+        colmask$(6)="80"
+10070   colhdr$(7)="TransCode" !:
+        colmask$(7)="30"
 10499   return 
 10500 GRIDDETAILS: ! The following lines are generated lines.  They will be                          removed and added back just before each grid is printed
 10510   let item$(1)= str$(tr(1))
@@ -104,7 +104,7 @@
 11022 ERTN: let fnerror(program$,err,line,act$,"xit")
 11023   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 11024   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-11025   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+11025   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 11026 ERTN_EXEC_ACT: execute act$ : goto ERTN
 11027 ! /region
 11028 ! _______________________________________________________________________

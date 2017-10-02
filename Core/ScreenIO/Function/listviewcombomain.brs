@@ -9,5 +9,5 @@
  ! #Include {listviewcomboread}
  !
  def fnListviewComboMain
-    let ChangedRead=0
+    changedRead=0
  fnend

@@ -15,9 +15,9 @@
 00160 ! 
 00170 ! ___________________________
 00180   fnDedNames(mat fullname$)
-00200   for j=1 to 20: let comboname$(j+1)=cnvrt$("pic(zz)",j)&" "&fullname$(j): next j
-00210   let comboname$(1)=" 0 Not Applicable"
-00220   let comboname$(22)="21 Add Amount to Pay"
+00200   for j=1 to 20: comboname$(j+1)=cnvrt$("pic(zz)",j)&" "&fullname$(j): next j
+00210   comboname$(1)=" 0 Not Applicable"
+00220   comboname$(22)="21 Add Amount to Pay"
 00230 ! ______________________________________________________________________
 00240   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 00250   open #5: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -37,7 +37,7 @@
 00350   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00360   open #13: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00370 ! ______________________________________________________________________
-00380   let addone=1 ! set code as adding when first entering
+00380   addone=1 ! set code as adding when first entering
 00390 ! ______________________________________________________________________
 00400 TRANSACTION_ENTRY: ! 
 00410   if addone=1 then let ji1(5)=ji1(6)=ji2(3)=0: let ji1(2)=2
@@ -151,11 +151,11 @@
 01210   goto L1480
 01220 ! ______________________________________________________________________
 01230 PROOF_LIST_HDR: ! 
-01240   print #255,using L1440: env$('cnam')
-01250   print #255,using L1440: "Job Cost Input Proof List"
-01260   print #255,using L1440: "Date: "&date$&"      Time: "&time$
+01240   pr #255,using L1440: env$('cnam')
+01250   pr #255,using L1440: "Job Cost Input Proof List"
+01260   pr #255,using L1440: "Date: "&date$&"      Time: "&time$
 01440 L1440: form pos 1,cc 113,skip 1
-01450   print #255: "Ref #   Emp #  Method-Pay  Date   Dept  Reg-Hrs   OT-Hrs  Job #   Category  Sub-Category   Amount  Ded-Add  Units"
+01450   pr #255: "Ref #   Emp #  Method-Pay  Date   Dept  Reg-Hrs   OT-Hrs  Job #   Category  Sub-Category   Amount  Ded-Add  Units"
 01460   return 
 01470 ! ______________________________________________________________________
 01480 L1480: gosub PROOF_LIST_HDR
@@ -163,13 +163,13 @@
 01500     read #3,using L1140,rec=j: mat ji1,jn$,mat ji2,pt
 01510     if j=1 then goto L1550
 01520     if ji1(1)=en then goto L1590
-01530     print #255,using L1540: " ________"," ________"," ____________",t5,t6,t10 pageoflow PROOF_LIST_NWPG
+01530     pr #255,using L1540: " ________"," ________"," ____________",t5,t6,t10 pageoflow PROOF_LIST_NWPG
 01540 L1540: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Total",pos 38,2*n 9.2,x 29,n 13.2,skip 2
 01550 L1550: let en=ji1(1)
 01560     let t5=0
 01570     let t6=0
 01580     let t10=0
-01590 L1590: print #255,using L1600: j,mat ji1,jn$,mat ji2 pageoflow PROOF_LIST_NWPG
+01590 L1590: pr #255,using L1600: j,mat ji1,jn$,mat ji2 pageoflow PROOF_LIST_NWPG
 01600 L1600: form pos 1,n 5,n 8,n 6,n 13,n 5,2*n 9.2,x 2,c 6,n 11,n 10,n 13.2,n 6,n 10.2,skip 1
 01610     let t5=t5+ji1(5)
 01620     let t6=t6+ji1(6)
@@ -178,8 +178,8 @@
 01650     let gt6=gt6+ji1(6)
 01660     let gt10=tg10+ji2(3)
 01670   next j
-01680   print #255,using L1540: " ________"," ________"," ____________",t5,t6,t10
-01690   print #255,using L1700: " ________"," ________"," ____________",gt5,gt6,gt10
+01680   pr #255,using L1540: " ________"," ________"," ____________",t5,t6,t10
+01690   pr #255,using L1700: " ________"," ________"," ____________",gt5,gt6,gt10
 01700 L1700: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Grand Totals",pos 38,2*n 9.2,x 29,n 13.2,skip 2
 01710 PROOF_LIST_DONE: ! 
 01720   let gt5=gt6=gt10=0
@@ -196,7 +196,7 @@
 01830   let fnchain("S:\acsPR\newJCMerge")
 01840 ! ______________________________________________________________________
 01850 PROOF_LIST_NWPG: ! 
-01860   print #255: newpage
+01860   pr #255: newpage
 01870   gosub PROOF_LIST_HDR
 01880   continue 
 01890 ! ______________________________________________________________________
@@ -204,7 +204,7 @@
 01910 ERTN: let fnerror(program$,err,line,act$,"xit")
 01920   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01930   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01940   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01940   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01950 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01960 ! /region
 01970 ! ______________________________________________________________________
@@ -215,20 +215,20 @@
 02020 ! INPUT FROM DISKETTE FILE    ! took this option out on new system
 02030 ! ______________________________________________________________________
 02040 CORRECTIONS: ! 
-02050   let addone=0: let editone=0
+02050   addone=0: let editone=0
 02060   let fntos(sn$="EntryCorrection")
-02070   let ch2$(1)="Rec #": let ch2$(2)="Employee #": let ch2$(3)="MOP" !:
-        let ch2$(4)="Date" !:
-        let ch2$(5)="Dept #": let ch2$(6)="RegHrs": let ch2$(7)="OTHrs" !:
-        let ch2$(8)="Job #": let ch2$(9)="Cat #": let ch2$(10)="Su-Cat" !:
-        let ch2$(11)="Amount": let ch2$(12)="Ded #": let ch2$(13)="Units" !:
-        let ch2$(14)="Burden" !:
+02070   ch2$(1)="Rec #": ch2$(2)="Employee #": ch2$(3)="MOP" !:
+        ch2$(4)="Date" !:
+        ch2$(5)="Dept #": ch2$(6)="RegHrs": ch2$(7)="OTHrs" !:
+        ch2$(8)="Job #": ch2$(9)="Cat #": ch2$(10)="Su-Cat" !:
+        ch2$(11)="Amount": ch2$(12)="Ded #": ch2$(13)="Units" !:
+        ch2$(14)="Burden" !:
         mat ch2$(14) ! : Mat CM2$(14) : Mat ITEM2$(14)
-02080   let cm2$(1)="30": let cm2$(2)="30": let cm2$(3)="30" !:
-        let cm2$(4)="1" !:
-        let cm2$(5)="30": let cm2$(6)="32": let cm2$(7)="32" !:
-        let cm2$(8)="": let cm2$(9)="30": let cm2$(10)="30" !:
-        let cm2$(11)="10": let cm2$(12)="30": let cm2$(13)="30": let cm2$(14)="10"
+02080   cm2$(1)="30": cm2$(2)="30": cm2$(3)="30" !:
+        cm2$(4)="1" !:
+        cm2$(5)="30": cm2$(6)="32": cm2$(7)="32" !:
+        cm2$(8)="": cm2$(9)="30": cm2$(10)="30" !:
+        cm2$(11)="10": cm2$(12)="30": cm2$(13)="30": cm2$(14)="10"
 02090   let fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 02100   restore #3: 
 02110 READ_FILE: ! 
@@ -250,7 +250,7 @@
 02170   let fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 02180   if ckey=5 then goto TRANSACTION_ENTRY
 02190   let editrec=val(resp$(1))
-02200   if ckey=1 then let addone=1: mat ji1=(0): mat ji2=(0): let jn$="": goto TRANSACTION_ENTRY
+02200   if ckey=1 then addone=1: mat ji1=(0): mat ji2=(0): let jn$="": goto TRANSACTION_ENTRY
 02210   if ckey=2 then read #3,using L1140,rec=editrec: mat ji1, jn$, mat ji2, pt, empnam$, sal: let editone=1 : goto TRANSACTION_ENTRY
 02220   if ckey=4 then delete #3,rec=editrec: : goto CORRECTIONS
 02230   goto CORRECTIONS
@@ -272,7 +272,7 @@
         let ml$(2)="Take OK to correct." !:
         let fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto L420
-02340 L2340: let cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(ji2(1)),5)
+02340 L2340: cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(ji2(1)),5)
 02350 ! Read #12,Using 2360,Key=CN$: KC$ Nokey 2380     ! dont verify this kj
 02360   form pos 1,c 11
 02370   goto L2390

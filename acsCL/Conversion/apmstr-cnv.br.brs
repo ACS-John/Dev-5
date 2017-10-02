@@ -26,7 +26,7 @@
 44260   let fncmdset(5)
 44280   let fnacs(sn$,0,mat resp$,ckey)
 46000   if ckey=5 then goto XIT
-46020   let apcno=val(resp$(2))
+46020   apcno=val(resp$(2))
 46040   if ~exists(env$('Q')&'\tmpAP') then 
 46060     execute 'mkdir '&env$('Q')&'\tmpAP'
 46080   else 
@@ -69,11 +69,11 @@
 58040 XIT: !
 58060 fnend
 60000 UNPDMSTR: ! r: BUILD UNPAID FILE
-60020   let adr=ta(1)
+60020   adr=ta(1)
 60040   READ_APTRANS: ! 
 60060   if adr=0 then goto EO_UNPDMSTR
 60080   read #aptrans,using 'Form POS 1,C 8,C 12,C 20,8*PD 5.2,6*PD 4,3*N 1,N 2,6*C 12,5*C 20,5*PD 5.2,PD 3',rec=adr,reserve: v$,iv$,id$,mat a,mat dt,mat cd,dgl$,mat gl$,mat gld$,mat gla,nta norec EO_UNPDMSTR
-60100   if dt(4)>0 then let adr=nta: goto READ_APTRANS ! only unpaids
+60100   if dt(4)>0 then adr=nta: goto READ_APTRANS ! only unpaids
 60120   if a(2)=0 then goto UNPDMSTR_ATZ
 60140   mat aa=(0)
 60160   for j=1 to 5
@@ -84,11 +84,11 @@
 60260     XB: ! 
 60280     let lr4=lrec(unpdaloc)+1
 60300     write #unpdaloc,using 'Form POS 1,C 8,2*C 12,PD 5.2,C 30,PD 3',rec=lr4: vn$,iv$,gl$(j),gla(j),gld$(j),0
-60320     if aa(1)=0 then let aa(1)=lr4
+60320     if aa(1)=0 then aa(1)=lr4
 60340     if aa(2)>0 then 
 60360       rewrite #unpdaloc,using 'Form POS 68,PD 3',rec=aa(2): lr4
 60380     end if 
-60400     let aa(2)=lr4
+60400     aa(2)=lr4
 60420     NXJ: ! 
 60440   next j
 60460   if cd(2)=1 or cd(2)=4 or cd(2)=0 then 
@@ -97,7 +97,7 @@
 60520     goto XC
 60540   end if 
 60560   XC: ! 
-60580   let a(2)=-a(2)
+60580   a(2)=-a(2)
 60600   XD: ! 
 60620   if dt(1)=0 then let dt(1)=dt(5)
 60640   let vn$=v$
@@ -109,7 +109,7 @@
 60760   let lr3=lrec(paytrans)+1
 60780   write #paytrans,using 'Form POS 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
 60800   UNPDMSTR_ATZ: ! 
-60820   let adr=nta
+60820   adr=nta
 60840   goto READ_APTRANS
 60860   EO_UNPDMSTR: ! 
 60880 return  ! /r
@@ -117,6 +117,6 @@
 70020 ERTN: let fnerror(program$,err,line,act$,"xit")
 70040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 70060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-70080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+70080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 70100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 70120 ! /region

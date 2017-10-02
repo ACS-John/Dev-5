@@ -1,5 +1,5 @@
 00010 ! REPLACE S:\acsCL\Endorsment
-00020 ! print endorsment on back of check
+00020 ! pr endorsment on back of check
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fntos,fnlbl,fnacs,fntxt,fncmdkey
 00050   let fntop(program$,"Endorse Checks")
@@ -17,12 +17,12 @@
 00170   let fnacs(sn$,0,mat resp$,ckey) ! endorse check
 00180   if ckey=5 then goto XIT
 00190   let endorsements=val(resp$(1))
-00200   let bank=val(resp$(2))
+00200   bank=val(resp$(2))
 00210   let fnopenprn
 00220   for j=1 to endorsements
-00230     print #255,using "Form pos 1,cc 30,skip 1,cc 30": "For Deposit Only",env$('cnam')(1:30)
-00240     if bank>0 then print #255,using "Form pos 1,cc 30": "Account: "&str$(bank)
-00250     print #255: newpage
+00230     pr #255,using "Form pos 1,cc 30,skip 1,cc 30": "For Deposit Only",env$('cnam')(1:30)
+00240     if bank>0 then pr #255,using "Form pos 1,cc 30": "Account: "&str$(bank)
+00250     pr #255: newpage
 00260   next j
 00270   let fncloseprn
 00280   goto XIT
@@ -31,6 +31,6 @@
 78020 ERTN: let fnerror(program$,err,line,act$,"xit")
 78040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 78060   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-78080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+78080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 78100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 78120 ! </updateable region: ertn>

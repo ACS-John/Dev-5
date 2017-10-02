@@ -36,16 +36,16 @@
 00360 L360: form pos 1,c 20,cc 40,cr 20,skip 1
 00370   form pos 1,cc 26,cc 26,cc 26,skip 1
 00380 L380: form pos 1,cc 10,x 1,cc 30,x 1,cc 10,x 1,cc 17,x 1,cc 10,skip 1
-00390   print #255,using L360: "",cap$,""
-00400   print #255,using L360: "Company Number "&str$(cno),cnam$,"Page "&str$(pg)
-00410   print #255: ""
-00420   print #255: ""
-00430   print #255,using L380: "Act.Number","Customer Name","Balance","Last Billing Date","Average"
-00440   print #255,using L380: "__________","______________________________","__________","_________________","__________"
+00390   pr #255,using L360: "",cap$,""
+00400   pr #255,using L360: "Company Number "&str$(cno),cnam$,"Page "&str$(pg)
+00410   pr #255: ""
+00420   pr #255: ""
+00430   pr #255,using L380: "Act.Number","Customer Name","Balance","Last Billing Date","Average"
+00440   pr #255,using L380: "__________","______________________________","__________","_________________","__________"
 00450   return 
 00460 ! ______________________________________________________________________
 00470 PGOF: ! 
-00480   print #255: newpage
+00480   pr #255: newpage
 00490   gosub HEADER
 00500   continue 
 00510 ! ______________________________________________________________________
@@ -54,7 +54,7 @@
 00540 L540: form pos 1,c 10,4*c 30,pos 1821,n 1,pos 1822,n 9,pos 292,pd 4.2,pd 4
 00550   if minu=0 and maxu=0 then goto L570
 00560   if (minu>0 and average<minu) or (maxu>0 and average>maxu) then goto L530 else goto L570
-00570 L570: print #255,using L580: z$,e$(2),bal,lastbilldate,average pageoflow PGOF
+00570 L570: pr #255,using L580: z$,e$(2),bal,lastbilldate,average pageoflow PGOF
 00580 L580: form pos 1,c 10,x 1,c 30,x 1,n 10.2,x 1,pic(zz/zz/zz),x 8,n 10
 00590   goto L530
 00600 ! ______________________________________________________________________

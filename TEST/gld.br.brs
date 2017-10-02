@@ -12,7 +12,7 @@
         let resp$(1)=fngld$('0   700  0')
 00110   let fncmdset(1)
 00120   let fnacs(sn$,0,mat resp$,ckey)
-00130   print resp$(1)
-00140   print fngld$('0   375  0')
-00150   print 'first 0 should be in pos 24 - first blank in 22'
+00130   pr resp$(1)
+00140   pr fngld$('0   375  0')
+00150   pr 'first 0 should be in pos 24 - first blank in 22'
 00160   stop 

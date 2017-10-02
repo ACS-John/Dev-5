@@ -18,7 +18,7 @@
 00180   let fil$(6)="ACGLfNSg" : let idx$(6)="FNSGINDX"
 00190 ! ______________________________________________________________________
 00200   on fkey 5 goto XIT
-00210   print newpage
+00210   pr newpage
 00220   close #2: ioerr L230
 00230 L230: open #2: "Name="&env$('Q')&"\GLmstr\"&fil$(6)&"&.h1,KFName="&env$('Q')&"\GLmstr\"&idx$(6)&".h1",internal,outin,keyed 
 00240 L240: read #1,using L250: dno,ano,sno,d$,mat rf eof L350
@@ -41,7 +41,7 @@
 00420 ERTN: let fnerror(program$,err,line,act$,"xit")
 00430   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00440   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00450   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00470 ! /region
 00480 ! ______________________________________________________________________

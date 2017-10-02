@@ -8,7 +8,7 @@
 00160 ERTN: let fnerror(program$,err,line,act$,"xit")
 00170   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00180   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00190   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00190   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00200 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00210 ! /region
 12000 def fn_setup
@@ -44,20 +44,20 @@
 22040   let respc=0
 22050   fnlbl(1,1,'Payee')
 22060   mat chdr$(12) : mat cmask$(12) : mat item$(12) 
-22080   let chdr$(1)='Rec' 
-22100   let chdr$(2)='Payee Number' 
-22120   let chdr$(3)='Payee Name' 
-22140   let chdr$(4)='Address' 
-22160   let chdr$(5)='Address' 
-22180   let chdr$(6)='City, ST Zip' 
-22200   let chdr$(7)='Type' 
-22220   let chdr$(8)='ID Number' 
-22240   let chdr$(9)='Phone Number' 
-22260   let chdr$(10)='Contact Name' 
-22280   let chdr$(11)='E-mail' 
-22300   let chdr$(12)='Fax'
-22320   let cmask$(1)=cmask$(2)='' 
-22340   let cmask$(3)=cmask$(4)=cmask$(5)=cmask$(6)='80' 
+22080   chdr$(1)='Rec' 
+22100   chdr$(2)='Payee Number' 
+22120   chdr$(3)='Payee Name' 
+22140   chdr$(4)='Address' 
+22160   chdr$(5)='Address' 
+22180   chdr$(6)='City, ST Zip' 
+22200   chdr$(7)='Type' 
+22220   chdr$(8)='ID Number' 
+22240   chdr$(9)='Phone Number' 
+22260   chdr$(10)='Contact Name' 
+22280   chdr$(11)='E-mail' 
+22300   chdr$(12)='Fax'
+22320   cmask$(1)=cmask$(2)='' 
+22340   cmask$(3)=cmask$(4)=cmask$(5)=cmask$(6)='80' 
 22360   let fnflexinit1('Payee',2,1,20,100,mat chdr$,mat cmask$,1,0,frame) 
 22380   let editrec=0
 22400   restore #paymstr: 
@@ -83,11 +83,11 @@
 24060   let fncmdkey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing payee record.") 
 24080   let fncmdkey("E&xit",5,0,1,"Exit to menu")
 24100   let fnacs(sn$,0,mat resp$,ck)
-24120   let add=edit=0: let holdvn$=""
+24120   add=edit=0: let holdvn$=""
 24140   if ck=5 then 
 24160     goto PayeeXIT 
 24180   else if ck=1 then 
-24200     let add=1
+24200     add=1
 24220     goto ADD_NEW_PAYEE
 24240   end if
 24260   if ck=2 or ck=3 then let editrec=val(resp$(1))
@@ -183,13 +183,13 @@
 32820   let fnlbl(17,20,"Standard General Ledger Breakdowns",40,2,0,0)
 32840   ! General Ledger Breakdown Grid
 32860   mat chdr$(5) : mat cmask$(5) : mat glitem$(5) 
-32880   let chdr$(1)='Refenence'
-32900   let chdr$(2)='Payee Number' 
-32920   let chdr$(3)='GL Number' 
-32940   let chdr$(4)='Percent' 
-32960   let chdr$(5)='Description'
-32980   let cmask$(1)=cmask$(2)=cmask$(3)=cmask$(5)='' 
-33000   let cmask$(4)='32' 
+32880   chdr$(1)='Refenence'
+32900   chdr$(2)='Payee Number' 
+32920   chdr$(3)='GL Number' 
+32940   chdr$(4)='Percent' 
+32960   chdr$(5)='Description'
+32980   cmask$(1)=cmask$(2)=cmask$(3)=cmask$(5)='' 
+33000   cmask$(4)='32' 
 33020   let fnflexinit1('PayeeGl',17,1,5,70,mat chdr$,mat cmask$,1,0,0)
 33040   if trim$(vn$)="" then goto EO_FLEX3
 33060   restore #payeegl,key>=vn$: nokey EO_FLEX3
@@ -214,9 +214,9 @@
 34180   if ck=5 then goto MENU1
 34200   let vn$=lpad$(trim$(resp$(1)(1:8)),8) 
 34220   let nam$=resp$(2) ! name 
-34240   let ad1$=resp$(3) ! address 
-34260   let ad2$=resp$(4) ! address 
-34280   let csz$=resp$(5) ! city state zip
+34240   ad1$=resp$(3) ! address 
+34260   ad2$=resp$(4) ! address 
+34280   csz$=resp$(5) ! city state zip
 34300   if add=1 then goto L1190
 34320   if edit=1 and holdvn$<>vn$ then goto L1190
 34340   goto L1210
@@ -249,7 +249,7 @@
 42120   let typ=val(resp$(6)(1:2)) ! type 
 42140   let ss$=resp$(7) ! ss or fed id 
 42160   let ph$=resp$(8) ! phone 
-42180   let contact$=resp$(9) ! contact name 
+42180   contact$=resp$(9) ! contact name 
 42200   let email$=resp$(10) ! email address
 42220   let fax$=resp$(11) ! fax number 
 42240   let myact$=resp$(12) ! my account number with this vendor 
@@ -355,21 +355,21 @@
 58240   let wbc=0
 58320   let fnlbl(lc=6,40,'Transaction Grid')
 58340   mat chdr$(11) : mat cmask$(11) : mat item6$(11) 
-58360   let chdr$(1)='Rec' 
-58380   let chdr$(2)='Ck/Rf'
-58390   let chdr$(3)='Date' 
-58400   let chdr$(4)='Amount' 
-58420   let chdr$(5)='Payee' 
-58440   let chdr$(6)='Name/Description' 
-58460   let chdr$(7)='PC' 
-58480   let chdr$(8)='Stmt Clr Date' 
-58500   let chdr$(9)='SC' 
-58520   let chdr$(10)='Bank' 
-58540   let chdr$(11)='Type' 
-58560   let cmask$(1)=cmask$(2)='20' 
-58580   let cmask$(3)='1' 
-58600   let cmask$(4)='10' 
-58620   let cmask$(8)='1' 
+58360   chdr$(1)='Rec' 
+58380   chdr$(2)='Ck/Rf'
+58390   chdr$(3)='Date' 
+58400   chdr$(4)='Amount' 
+58420   chdr$(5)='Payee' 
+58440   chdr$(6)='Name/Description' 
+58460   chdr$(7)='PC' 
+58480   chdr$(8)='Stmt Clr Date' 
+58500   chdr$(9)='SC' 
+58520   chdr$(10)='Bank' 
+58540   chdr$(11)='Type' 
+58560   cmask$(1)=cmask$(2)='20' 
+58580   cmask$(3)='1' 
+58600   cmask$(4)='10' 
+58620   cmask$(8)='1' 
 58640   let fnflexinit1('Gayee-'&str$(wbc)&'-'&str$(wtt),7,1,10,85,mat chdr$,mat cmask$,1,0,frame)
 58660   let key$=vn$&cnvrt$('pic(Z#)',wbc)&cnvrt$("pic(#)",wtt)&rpt$(chr$(0),8) 
 58680   restore #trans,key>=key$: nokey EO_FLEX2 

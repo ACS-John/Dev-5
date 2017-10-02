@@ -10,9 +10,9 @@
         ! 
 00100   let fndat(dat$)
 00110   let fntop("S:\acsUB\ubAccTr",cap$="Accumulated Transaction List")
-00120   let code$(1)="Charge" : let code$(2)="Penalty" !:
-        let code$(3)="Collection" : let code$(4)="Credit Memo" !:
-        let code$(5)="Debit Memo" : let code$(6)="INVALID !?!"
+00120   code$(1)="Charge" : code$(2)="Penalty" !:
+        code$(3)="Collection" : code$(4)="Credit Memo" !:
+        code$(5)="Debit Memo" : code$(6)="INVALID !?!"
 00130 ! ______________________________________________________________________
 00140 SCREEN1: ! 
 00150   let sn$ = "ubAccTr" !:
@@ -72,15 +72,15 @@
 00560 ! ______________________________________________________________________
 00570 HDR: ! 
 00580   let p2=p2+1
-00590   print #255: "\qc {\b "&cnam$ !:
-        print #255: cap$ !:
-        print #255: dat$
+00590   pr #255: "\qc {\b "&cnam$ !:
+        pr #255: cap$ !:
+        pr #255: dat$
 00600   if d(1)<>0 then !:
-          print #255: "Starting Date: "&cnvrt$("pic(zzzz/zz/zz)",d(1))
+          pr #255: "Starting Date: "&cnvrt$("pic(zzzz/zz/zz)",d(1))
 00610   if d(2)<>0 then !:
-          print #255: "Ending Date: "&cnvrt$("pic(zzzz/zz/zz)",d(2))
-00620   print #255: "\qr Page "&str$(p2)
-00630   print #255: "\qc {\ul Act.Number} {\ul Account Name                } {\ul Trans. Type} {\ul   Date  } {\ul       Amount} {\ul       Balance}}"
+          pr #255: "Ending Date: "&cnvrt$("pic(zzzz/zz/zz)",d(2))
+00620   pr #255: "\qr Page "&str$(p2)
+00630   pr #255: "\qc {\ul Act.Number} {\ul Account Name                } {\ul Trans. Type} {\ul   Date  } {\ul       Amount} {\ul       Balance}}"
 00640   return 
 00650 ! ______________________________________________________________________
 00660 PRINT_TRANS: ! 
@@ -88,12 +88,12 @@
 00680   if first_trans_per_act=1 then !:
           let pz$=z$ : let pe2$=e2$ else !:
           let pz$="" : let pe2$=""
-00690   print #255,using L700: pz$,pe2$,code$(tcode),tdate,tamount,tbal pageoflow PGOF
+00690   pr #255,using L700: pz$,pe2$,code$(tcode),tdate,tamount,tbal pageoflow PGOF
 00700 L700: form pos 1,c 10,x 1,c 30,cr 11,nz 9,n 13.2,n 14.2
 00710   return 
 00720 ! ______________________________________________________________________
 00730 PGOF: ! !:
-        print #255: newpage !:
+        pr #255: newpage !:
         gosub HDR !:
         continue 
 00740 ! ______________________________________________________________________
@@ -103,7 +103,7 @@
 00780 ERTN: let fnerror(program$,err,line,act$,"xit")
 00790   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00800   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00810   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00810   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00820 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00830 ! /region
 00840 ! ______________________________________________________________________

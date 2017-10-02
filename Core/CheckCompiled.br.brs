@@ -9,8 +9,8 @@
 32100     if ~exists('S:\(import)') then execute 'mkdir S:\(import)'
 32120     execute 'sy -M '&os_filename$('S:\sortfiles.exe')&' -D . -C ".br.brs|.br"' ioerr DONE
 34000     !     open #htmpcmd:=20: 'name=S:\(import)\Tmp'&session$&'.cmd,RecL=256,replace',display,output 
-34020     !     print #htmpcmd: 'prompt $p$g'
-34042     !     print #htmpcmd: '"'&os_filename$('S:\sortfiles.exe')&'" -D . -C ".br.brs|.br"'
+34020     !     pr #htmpcmd: 'prompt $p$g'
+34042     !     pr #htmpcmd: '"'&os_filename$('S:\sortfiles.exe')&'" -D . -C ".br.brs|.br"'
 34080     !     close #htmpcmd: 
 34200     !     execute 'sy "'&os_filename$('S:\(import)\Tmp'&session$&'.cmd')&'"' ! ioerr DONE
 34300     !        execute 'free S:\(import)\Tmp'&session$&'.cmd'

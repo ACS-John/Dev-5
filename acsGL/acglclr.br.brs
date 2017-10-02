@@ -6,7 +6,7 @@
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,tr(7),tr$*12,td$*30,cap$*128
 00080 ! ______________________________________________________________________
-00090   let right=1 : let center=2 : let left=0
+00090   let right=1 : center=2 : let left=0
 00100   let fntop(program$,cap$="Clear Accumulated Transactions")
 00110   let fnconsole(off=0)
 00120   let fncno(cno,cnam$)
@@ -46,7 +46,7 @@
 00430 ERTN: let fnerror(program$,err,line,act$,"xit")
 00440   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00450   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00460   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00460   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00470 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00480 ! /region
 00490 ! ______________________________________________________________________

@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsUB\ubprtbl1_mow
-00020 ! print bills for Village of Moweaqua
+00020 ! pr bills for Village of Moweaqua
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnpa_txt,fnpa_finis,fnpa_open,fnpa_font,fnpa_fontbold,fnpa_fontsize,fnpa_newpage,fnpa_line
 00050   on error goto ERTN
@@ -13,16 +13,16 @@
 00130   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
 00140   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 00150   close #21: 
-00160   let at$(1)=cnam$
+00160   at$(1)=cnam$
 00170   let z=21
-00180   let at$(1)=trim$(at$(1))(1:z)
+00180   at$(1)=trim$(at$(1))(1:z)
 00190   let x=len(at$(1)) : let y=z-x
-00200   let at$(1)=rpt$(" ",int(y/2))&at$(1)
+00200   at$(1)=rpt$(" ",int(y/2))&at$(1)
 00210   let z=26
 00220   for j=2 to udim(at$)
-00230     let at$(j)=trim$(at$(j))(1:z)
+00230     at$(j)=trim$(at$(j))(1:z)
 00240     let x=len(at$(j)) : let y=z-x
-00250     let at$(j)=rpt$(" ",int(y/2))&at$(j)
+00250     at$(j)=rpt$(" ",int(y/2))&at$(j)
 00260   next j
 00270 ! let linelength=62
 00280 ! 
@@ -32,7 +32,7 @@
 00330   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.H"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence #
 00340 ! ______________________________________________________________________
 00350 SCREEN1: ! 
-00360   let a$="" : let prtbkno=0
+00360   a$="" : let prtbkno=0
 00370   let fntos(sn$="UBPrtBl1-1")
 00380   let pf=26 : let ll=24
 00390   let respc=0
@@ -69,7 +69,7 @@
 00700   let mg$(1)=resp$(2)
 00710   let mg$(2)=resp$(3)
 00720   let mg$(3)=resp$(4)
-00730   if resp$(6)="[All]" then let a$="" else let a$=lpad$(trim$(resp$(6)(1:9)),9)
+00730   if resp$(6)="[All]" then a$="" else a$=lpad$(trim$(resp$(6)(1:9)),9)
 00740   if resp$(7)="[All]" then let prtbkno=0 else let prtbkno=val(resp$(7))
 00750   if resp$(8)="True" then let sl1=1: let z$="" else let sl1=0
 00760   if trim$(a$)<>"" then 
@@ -125,8 +125,8 @@
 00927     if bal<=0 then let g(10)=0 ! don't show penalty if balance 0 or less
 00929 ! ______________print bill routine______________________________________
 00931     let fn_vbprint
-00933 ! _____________end of print routine______________________________________
-00935     let bct(2)=bct(2)+1 ! accumulate totals
+00933 ! _____________end of pr routine______________________________________
+00935     bct(2)=bct(2)+1 ! accumulate totals
 00936   end if 
 00937   goto NEXT_CUSTOMER ! /r
 00939 ! ______________________________________________________________________
@@ -143,12 +143,12 @@
 00969   let resp$(1)=a$
 00971   let fncmdset(3)
 00972   let fnacs(sn$,0,mat resp$,ck)
-00973   let a$=lpad$(trim$(resp$(1)(1:10)),10)
+00973   a$=lpad$(trim$(resp$(1)(1:10)),10)
 00975   if trim$(a$)="" then goto RELEASE_PRINT
 00977   if ck=5 then goto RELEASE_PRINT
 00979   read #1,using F_CUSTOMER,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,sequence nokey SCR_ASK_CUSTOMER
 00981   goto AFTER_CUSTOMER_READ ! /r
-01390 ENDSCR: ! r: print totals screen
+01390 ENDSCR: ! r: pr totals screen
 01400   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
 01410   let fntos(sn$="Bills-Total")
 01420   let mylen=23 : let mypos=mylen+2
@@ -162,11 +162,11 @@
 01600 XIT: let fnxit
 01670   def fn_vbprint
 01675 ! -- Standard 4 Per Page Even Perferated Card Stock Bills
-01680     let checkcounter+=1
+01680     checkcounter+=1
 01685     if checkcounter=1 then let xmargin=0 : let ymargin=0
 01690     if checkcounter=2 then let xmargin=139 : let ymargin=0
 01695     if checkcounter=3 then let xmargin=0 : let ymargin=108
-01700     if checkcounter=4 then let xmargin=139 : let ymargin=108 : let checkcounter=0
+01700     if checkcounter=4 then let xmargin=139 : let ymargin=108 : checkcounter=0
 01710 ! ______________________________________________________________________
 01715     let fnpa_line(xmargin+5,ymargin+2,55,lyne*3+3,1)
 01720     let fnpa_fontbold(1)
@@ -282,11 +282,11 @@
 02760     let fnpa_txt('After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+68,lyne*12+ymargin)
 02770     let fnpa_txt(fnformnumb$(bal+g(10),2,9),xmargin+106,lyne*12+ymargin)
 02780     let fnpa_fontsize(9)
-02790     let addy=14
+02790     addy=14
 02800     let fnpa_txt(mg$(1),xmargin+68,(addy+=1)*lyne+ymargin)
 02810     let fnpa_txt(mg$(2),xmargin+68,(addy+=1)*lyne+ymargin)
 02820     let fnpa_txt(mg$(3),xmargin+68,(addy+=1)*lyne+ymargin)
-02830     let addy+=1
+02830     addy+=1
 02840     let fnpa_fontsize
 02850     if df$="Y" then 
 02860       let fnpa_txt("Drafted",xmargin+1,lyne*(addy+=1)+ymargin)
@@ -303,10 +303,10 @@
 02970     let fnpa_txt(pe$(3),xmargin+68,lyne*(addy+=1)+ymargin)
 02980     let fnpa_txt(pe$(4),xmargin+68,lyne*(addy+=1)+ymargin)
 02982     let fnpa_txt("Address Service Requested",xmargin+68,lyne*(addy+=2)+ymargin)
-02990     if checkcounter=1 then let checkx=1.375 : let checky=3.6875
-03000     if checkcounter=2 then let checkx=6.75 : let checky=3.6875
-03010     if checkcounter=3 then let checkx=1.375 : let checky=7.9375
-03020     if checkcounter=0 then let checkx=6.75 : let checky=7.9375
+02990     if checkcounter=1 then checkx=1.375 : checky=3.6875
+03000     if checkcounter=2 then checkx=6.75 : checky=3.6875
+03010     if checkcounter=3 then checkx=1.375 : checky=7.9375
+03020     if checkcounter=0 then checkx=6.75 : checky=7.9375
 03050     if checkcounter=0 then let fnpa_newpage
 03060   fnend 
 03070 ! ______________________________________________________________________
@@ -327,6 +327,6 @@
 76040 ERTN: let fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-76100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 76120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 76140 ! </updateable region: ertn>

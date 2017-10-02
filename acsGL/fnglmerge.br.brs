@@ -10,9 +10,9 @@
 00100     dim ml$(10)*80 ! for fnMsgBox
 00110     dim resp$(10)*80 ! for Screen Ace
 00120 ! ______________________________________________________________________
-00130     let on=1 : let off=0 : let cancel=5 : let delete=4 : let selbyrow=1 !:
-          let limit_to_list=1 : let add_all=2 : let right=1 : let disable=1 !:
-          let center=2 : let pointtwo$='32' : let mmddyy$='1'
+00130     let on=1 : let off=0 : cancel=5 : let delete=4 : let selbyrow=1 !:
+          let limit_to_list=1 : add_all=2 : let right=1 : let disable=1 !:
+          center=2 : let pointtwo$='32' : let mmddyy$='1'
 00140     let fntop(program$,cap$="GL Merge")
 00150     if fncursys$='GL' then let fncno(cno) else gosub ASK_GLCNO
 00160     let fnprg(prg$)
@@ -43,7 +43,7 @@
 00400     if ta(2)>0 then !:
             rewrite #gltrans,using 'Form POS 71,PD 3',rec=ta(2): lr2
 00410     let ta(2)=lr2
-00420     let cb+=k
+00420     cb+=k
 00430     rewrite #glmstr,using 'Form POS 87,PD 6.2,POS 333,2*PD 3',key=t$: cb,mat ta
 00440 ! REWRITE #gltrans,USING 460,REC=1,RELEASE: LR2
 00450     rewrite #glwk1,using 'Form POS 27,N 2': 9
@@ -53,10 +53,10 @@
 00490 ! READ #GLTR1099,USING 260,REC=1,RESERVE: LR5
 00500 L500: let lr5=lrec(gltr1099)+1 !:
           write #gltr1099,using 'Form POS 1,C 8,N 6,PD 5.2,C 12,C 30,PD 3',rec=lr5,reserve: ven$,s,k,l$,p$,0 duprec L500
-00510     if adr(2)=0 then let adr(1)=lr5 else !:
+00510     if adr(2)=0 then adr(1)=lr5 else !:
             rewrite #gltr1099,using 'Form POS 62,PD 3',rec=adr(2),reserve: lr5
 00520     rewrite #gltr1099,using 'Form POS 62,PD 3',rec=1,release: lr5
-00530     let adr(2)=lr5
+00530     adr(2)=lr5
 00540     rewrite #gl1099,using 'Form POS 104,PD 5.2,POS 122,2*PD 3',key=ven$: ytdp,mat adr
 00550     goto READ_GLWK1
 00560 ! ______________________________________________________________________
@@ -109,7 +109,7 @@
 00900   let fncmdkey('&Okay',1,1,1)
 00910   let fnacs(sn$,0,mat resp$,ckey)
 00920   let d$=resp$(1)
-00930   mat ta=(0) : let cb=0
+00930   mat ta=(0) : cb=0
 00940   write #glmstr,using 'Form POS 1,C 12,C 50,6*PD 3,42*PD 6.2,2*PD 3': t$,d$,mat zo
 00950   let new1=1
 00960   goto READ_GLTRANS
@@ -119,17 +119,17 @@
 01000   open #20: "Name=CNo.H"&wsid$,internal,outin,relative  !:
         read #20,using "Form POS 239,5*C 12,5*N 10.2",rec=1: mat gl$,mat gl1 conv DONE !:
         close #20: 
-01010   let ckgl=0
+01010   ckgl=0
 01020   for j=1 to 5
 01030     if val(gl$(j)(4:9))=0 then goto L1090 else let gl2=0
 01040     read #glmstr,using 'Form POS 87,PD 6.2',key=gl$(j): gl2 nokey L1050
 01050 L1050: if gl1(j)=gl2 then goto L1090
-01060     if ckgl=0 then print newpage; bell
-01070     print using 'Form POS 1,C 11,C 14,C 15,N 12.2,X 4,C 12,N 12.2': "Account #:",gl$(j),"Client Balance:",gl1(j),"GL Balance:",gl2
-01080     let ckgl=1
+01060     if ckgl=0 then pr newpage; bell
+01070     pr using 'Form POS 1,C 11,C 14,C 15,N 12.2,X 4,C 12,N 12.2': "Account #:",gl$(j),"Client Balance:",gl1(j),"GL Balance:",gl2
+01080     ckgl=1
 01090 L1090: next j
 01100   if ckgl=0 then goto DONE
-01110   print fields "24,35,Cc 10,B,1": "Next  (F1)"
+01110   pr fields "24,35,Cc 10,B,1": "Next  (F1)"
 01120 L1120: input fields "24,2,C 1,AE,N": pause$
 01130   if cmdkey=1 then goto DONE else goto L1120
 01139 ! ______________________________________________________________________
@@ -150,51 +150,51 @@
             if fnprocess=4 then let fnchain("S:\acsGL\prMerge") else !:
               goto XIT
 01240 ! ______________________________________________________________________
-01250 L1250: let cap$="GL Account Reject" !:
+01250 L1250: cap$="GL Account Reject" !:
         let fnwin3(win=101,cap$,15,70,1,0,5)
-01260   print #win,fields "4,2,C 50,N": "    Account Number: "&t$ !:
-        print #win,fields "5,2,C 50,N": "              Date: "&str$(s) !:
-        print #win,fields "6,2,C 50,N": "            Amount: "&str$(k) !:
-        print #win,fields "7,2,C 50,N": "  Reference Number: "&l$ !:
-        print #win,fields "8,2,C 50,N": "       Description: "&p$ !:
-        print #win,fields "9,2,C 50,N": "    Vendor Number: "&ven$
-01270   print #win,fields "11,2,Cc 60,N": "Vendor Number "&ven$&" is not on the 1099 Master File"
-01280   print #win,fields "12,13,C 36,N": "Do you want to add the Vendor (Y/N)?"
+01260   pr #win,fields "4,2,C 50,N": "    Account Number: "&t$ !:
+        pr #win,fields "5,2,C 50,N": "              Date: "&str$(s) !:
+        pr #win,fields "6,2,C 50,N": "            Amount: "&str$(k) !:
+        pr #win,fields "7,2,C 50,N": "  Reference Number: "&l$ !:
+        pr #win,fields "8,2,C 50,N": "       Description: "&p$ !:
+        pr #win,fields "9,2,C 50,N": "    Vendor Number: "&ven$
+01270   pr #win,fields "11,2,Cc 60,N": "Vendor Number "&ven$&" is not on the 1099 Master File"
+01280   pr #win,fields "12,13,C 36,N": "Do you want to add the Vendor (Y/N)?"
 01290 L1290: input #win,fields "12,50,Cu 1,UAET,N": in2$ conv L1290
 01300   close #win: 
 01310   if in2$="Y" then goto L1420
 01320   if in2$<>"N" then goto L1250 else goto ASK_CORRECT_VN
 01330 ! ______________________________________________________________________
 01340 ASK_CORRECT_VN: ! 
-01350   let cap$="GL Account Reject" !:
+01350   cap$="GL Account Reject" !:
         let fnwin3(win=101,cap$,5,33,1,0,5)
-01360   print #win,fields "4,2,C 22,N": "Correct Vendor Number:"
+01360   pr #win,fields "4,2,C 22,N": "Correct Vendor Number:"
 01370 L1370: input #win,fields "4,25,Cu 8,UT,N": ven$ conv L1370
 01380   close #win: 
 01390   let ven$=lpad$(trim$(ven$),8)
 01400   goto L460
 01410 ! ______________________________________________________________________
-01420 L1420: let cap$="Vendor Information" !:
+01420 L1420: cap$="Vendor Information" !:
         let fnwin3(win=101,cap$,10,56,1,0,5)
-01430   print #win,fields "4,2,Cr 18,N": "Vendor Name:" !:
-        print #win,fields "5,2,Cr 18,N": "Vendor Address:" !:
-        print #win,fields "6,2,Cr 18,N": "Vendor Address:" !:
-        print #win,fields "7,2,Cr 18,N": "City, State Zip:" !:
-        print #win,fields "8,2,Cr 18,N": "1099 Type:" !:
-        print #win,fields "9,2,Cr 18,N": "Federal ID Number:"
+01430   pr #win,fields "4,2,Cr 18,N": "Vendor Name:" !:
+        pr #win,fields "5,2,Cr 18,N": "Vendor Address:" !:
+        pr #win,fields "6,2,Cr 18,N": "Vendor Address:" !:
+        pr #win,fields "7,2,Cr 18,N": "City, State Zip:" !:
+        pr #win,fields "8,2,Cr 18,N": "1099 Type:" !:
+        pr #win,fields "9,2,Cr 18,N": "Federal ID Number:"
 01440   let fl1$(1)="4,21,C 35,UT,N" : let fl1$(2)="5,21,C 20,UT,N" !:
         let fl1$(3)="6,21,C 20,UT,N" : let fl1$(4)="7,21,C 20,UT,N" !:
         let fl1$(5)="8,21,N 02,UT,N" : let fl1$(6)="9,21,C 11,UT,N"
-01450   print fields "18,35,C 09,B,1": "Next (F1)"
+01450   pr fields "18,35,C 09,B,1": "Next (F1)"
 01460 L1460: input #win,fields mat fl1$: nam$,ad1$,ad2$,csz$,typ,ss$ conv CONV1
-01470   if ce>0 then let fl1$(ce)(ce1:ce2)="U": let ce=0
-01480   if cmdkey>0 then goto L1550 else let ce=curfld+1
-01490   if ce>udim(fl1$) then let ce=1
-01500 L1500: let fl1$(ce)=rtrm$(uprc$(fl1$(ce))) : let ce1=pos(fl1$(ce),"U",1)
-01510   let ce2=ce1+1 : let fl1$(ce)(ce1:ce1)="UC" : goto L1460
+01470   if ce>0 then let fl1$(ce)(ce1:ce2)="U": ce=0
+01480   if cmdkey>0 then goto L1550 else ce=curfld+1
+01490   if ce>udim(fl1$) then ce=1
+01500 L1500: let fl1$(ce)=rtrm$(uprc$(fl1$(ce))) : ce1=pos(fl1$(ce),"U",1)
+01510   ce2=ce1+1 : let fl1$(ce)(ce1:ce1)="UC" : goto L1460
 01520 CONV1: if ce>0 then let fl1$(ce)(ce1:ce2)="U"
-01530   let ce=cnt+1
-01540 ERR1: print fields "24,78,C 1": bell : goto L1500
+01530   ce=cnt+1
+01540 ERR1: pr fields "24,78,C 1": bell : goto L1500
 01550 L1550: ! 
 01560   mat adr=(0)
 01570   if k=0 then goto L1630
@@ -219,7 +219,7 @@
 01730 ERTN: let fnerror(program$,err,line,act$,"xit")
 01740   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01750   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01760   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01760   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01770 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01780 ! /region
 01790 ! ______________________________________________________________________
@@ -230,7 +230,7 @@
 01830   let fncmbcno(lc+=1,5,'GL')
 01840   let fncmdkey('&Okay',1,1,1)
 01850   let fnacs(sn$,0,mat resp$,ckey)
-01860   let cno=val(resp$(1)(43:47))
+01860   cno=val(resp$(1)(43:47))
 01870 ! 
 01880   return 
 01890 ! ______________________________________________________________________

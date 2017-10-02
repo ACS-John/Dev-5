@@ -34,13 +34,13 @@
 44020   let fntos(sn$="Schedule") 
 44040   let respc=0
 44060   mat chdr$(7) : mat cmask$(7) : mat flxitm$(7) 
-44080   let chdr$(1)="Rec" 
-44100   let chdr$(2)="Schedule #" : let chdr$(3)="Schedule Name" 
-44120   let chdr$(4)="Footnote" : let chdr$(5)="Dollar" 
-44140   let chdr$(6)="Reverse Sign" : let chdr$(7)="Choice" 
-44160   let cmask$(2)='30' : let cmask$(3)=cmask$(4)='' 
-44180   let cmask$(5)='30' : let cmask$(6)='30' 
-44200   let cmask$(6)='30'
+44080   chdr$(1)="Rec" 
+44100   chdr$(2)="Schedule #" : chdr$(3)="Schedule Name" 
+44120   chdr$(4)="Footnote" : chdr$(5)="Dollar" 
+44140   chdr$(6)="Reverse Sign" : chdr$(7)="Choice" 
+44160   cmask$(2)='30' : cmask$(3)=cmask$(4)='' 
+44180   cmask$(5)='30' : cmask$(6)='30' 
+44200   cmask$(6)='30'
 44220   let fnflexinit1('schedulegl',lc=1,1,10,70,mat chdr$,mat cmask$,1)
 44240   restore #10:
 44260 READ_SCHEDULE: ! read schedule file
@@ -55,16 +55,16 @@
 44440 ! 
 44460   let fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing schedule.")
 44480   let fncmdkey("&Delete",8,0,0,"Highlight any record and click Delete to remove the schedule.")
-44500 ! Let FNCMDKEY("&Print",3,0,0,"Takes you directly to the Print Schedules option")
+44500 ! Let FNCMDKEY("&Print",3,0,0,"Takes you directly to the pr Schedules option")
 44520   let fncmdkey("E&xit",5,0,1,"Exits to main menu")
 44540   let fnacs(sn$,0,mat resp$,ckey)
 44560   if ckey=5 then goto XIT
-44580   let add=edit=0
+44580   add=edit=0
 44600   let editrec=val(resp$(1))
 44620   if ckey=2 then let edit=1
 44640   if ckey=3 then chain "S:\acsGL\acglschp" ! prints prints a schedule
 44660   if ckey=1 then 
-44670     let add=1 
+44670     add=1 
 44680     let sn=dp=rs=cm=0 
 44700     let schnam$=ft$="" 
 44720     goto ADD_EDIT_SCHEDULES ! add
@@ -102,7 +102,7 @@
 48400   let option$(3)="Print Comparison (Income and Expense Accounts" 
 48420   let option$(4)="Print Comparison (Balance Sheet Accounts"
 48440   let fncomboa("TypeOfPrint",6,mypos,mat option$,"You can choose any of the four types of schedules.",60)
-48460   if cm=0 then let cm=1
+48460   if cm=0 then cm=1
 48480   let resp$(6)=option$(cm)
 48500   let fncmdkey("&Display G/L #'s",1,1,0,"Allows you to review, add, or change the G/L accounts that are contained in this schedule.")
 48520   let fncmdkey("&Cancel",5,0,1,"Returns to list of schedules withouit saving any changes.")
@@ -114,7 +114,7 @@
 48640   if resp$(4)="True" then let dp=1 else let dp=0
 48660   if resp$(5)="True" then let rs=1 else let rs=0
 48680   for j=1 to j
-48700     if resp$(6)=option$(j) then let cm=j
+48700     if resp$(6)=option$(j) then cm=j
 48720   next j
 48740   if edit=1 then goto REWRITE_EXISTING_SCHEDULE
 48760   if add=1 then goto WRITE_NEW_SCHEDULE
@@ -161,35 +161,35 @@
 58120 !   let fnopenprn
 58140 !   do
 58160 !     read #10,using L1010: sn,schnam$,ft$,dp,rs,cm eof L1530
-58180 !     print #255,using L1250: date$('mm/dd/yy'),time$,"Print Schedules File Proof List"
+58180 !     pr #255,using L1250: date$('mm/dd/yy'),time$,"Print Schedules File Proof List"
 58200 !     L1250: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,pos 51,c 31,skip 1
-58220 !     print #255,using L1270: env$('cnam'),dat$
+58220 !     pr #255,using L1270: env$('cnam'),dat$
 58240 !     L1270: form pos 1,cc 122,skip 1,pos 1,cc 122,skip 2
-58260 !     print #255,using L1290: "Schedule Number",sn
+58260 !     pr #255,using L1290: "Schedule Number",sn
 58280 !     L1290: form pos 1,c 15,pos 20,pic(zz),skip 1
-58300 !     print #255,using L1310: "Schedule Name  ",schnam$
+58300 !     pr #255,using L1310: "Schedule Name  ",schnam$
 58320 !     L1310: form pos 1,c 15,pos 20,c 80,skip 1
-58340 !     print #255,using L1310: "FootNote       ",ft$
-58360 !     print #255,using L1360: "Dollar Sign Print",dp
-58380 !     print #255,using L1360: "Reverse Sign",rs
-58400 !     print #255,using L1360: "Print Current Month Figures",cm
+58340 !     pr #255,using L1310: "FootNote       ",ft$
+58360 !     pr #255,using L1360: "Dollar Sign Print",dp
+58380 !     pr #255,using L1360: "Reverse Sign",rs
+58400 !     pr #255,using L1360: "Print Current Month Figures",cm
 58420 !     L1360: form pos 1,c 27,pos 30,pic(#),skip 1
-58440 !     print #255: tab(29);"Dept  Account Sub"
+58440 !     pr #255: tab(29);"Dept  Account Sub"
 58460 !     for j=1 to 80
 58480 !       if gl$(j)="  0     0  0" then goto L1470
 58500 !       if j1><48 then goto L1450
-58520 !       print #255: newpage
-58540 !       print #255,using L1430: "G/L Account Number",gl$(j)(1:3),gl$(j)(4:9),gl$(j)(10:12)
+58520 !       pr #255: newpage
+58540 !       pr #255,using L1430: "G/L Account Number",gl$(j)(1:3),gl$(j)(4:9),gl$(j)(10:12)
 58560 !       L1430: form skip 6,pos 1,c 18,pos 30,c 3,x 2,c 6,x 2,c 3,skip 1
 58580 !       goto L1470
 58600 !       L1450: !
-58620 !       print #255,using L1460: "G/L Account Number",gl$(j)(1:3),gl$(j)(4:9),gl$(j)(10:12)
+58620 !       pr #255,using L1460: "G/L Account Number",gl$(j)(1:3),gl$(j)(4:9),gl$(j)(10:12)
 58640 !       L1460: form pos 1,c 18,pos 30,c 3,x 2,c 6,x 2,c 3,skip 1
 58660 !       L1470: !
 58680 !       let j1=j1+1
 58700 !     next j
 58720 !     let j1=0
-58740 !     print #255: newpage
+58740 !     pr #255: newpage
 58760 !   loop
 58780 ! ! ______________________________________________________________________
 58800 !   L1530: !
@@ -203,7 +203,7 @@
 66020 ERTN: let fnerror(program$,err,line,act$,"xit")
 66040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 66060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-66080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+66080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 66100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 66120 ! /region
 68000 SCHEDULE_BREAKDOWN: ! r:
@@ -250,39 +250,39 @@
 78080 ! ** Text Box / Field Display   Lengths   ** 
 78100   let ic=0 ! temporary Item Counter 
 78120   let mmddyy=8 
-78140   let ccyymmdd=10
+78140   ccyymmdd=10
 78160   let tln(ic+=1)=12
 78180 ! ** Field Types ** 
 78200   let ic=0
 78220   let fltyp$(ic+=1)='C'
 78240 ! ** Field Storage Lengths ** 
 78260   let ic=0 
-78280   let mmddyy=6 : let ccyymmdd=8
+78280   let mmddyy=6 : ccyymmdd=8
 78300   let sln(ic+=1)=12
 78320 ! ** Field Masks ** 
 78340   let ic=0 
 78360   let pointtwo=32 : let number=30 
-78380   let ccyymmdd=3 : let mmddyy=1 : let glnumber=53
+78380   ccyymmdd=3 : let mmddyy=1 : let glnumber=53
 78400   let mask(ic+=1)=0
 78420 ! ** Storage Positions ** 
 78440   ! starting field position - default to the same as order displayed 
 78460   let ic=0
 78480   let sp(ic+=1)=1
 78500 ! ** Combo Boxes **                                                   
-78520   let cl=1 : let c$(cl,1)='ComboF' 
-78540   let c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno') 
-78560   let c$(cl,3)="1" : let c$(cl,4)="12" 
-78580   let c$(cl,5)="13": let c$(cl,6)="40" 
-78600   let c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&env$('cno') 
+78520   cl=1 : c$(cl,1)='ComboF' 
+78540   c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno') 
+78560   c$(cl,3)="1" : c$(cl,4)="12" 
+78580   c$(cl,5)="13": c$(cl,6)="40" 
+78600   c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&env$('cno') 
 78620   ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     
 78640   let limit_to_list$='1'
 78660 ! ** Combo Boxes **                                                   
-78680   ! Let CL=2 : Let C$(CL,1)='ComboF' 
-78700   ! Let C$(CL,2)=env$('Q')&"\GLmstr\transcode.h"&env$('cno') 
-78720   ! Let C$(CL,3)="1" : Let C$(CL,4)="2" 
-78740   ! Let C$(CL,5)="3" : Let C$(CL,6)="30" 
-78760   ! Let C$(CL,7)=env$('Q')&"\GLmstr\transcode-idx.h"&env$('cno') 
-78780   ! Let C$(CL,8)="1" 
+78680   ! cL=2 : c$(CL,1)='ComboF' 
+78700   ! c$(CL,2)=env$('Q')&"\GLmstr\transcode.h"&env$('cno') 
+78720   ! c$(CL,3)="1" : c$(CL,4)="2" 
+78740   ! c$(CL,5)="3" : c$(CL,6)="30" 
+78760   ! c$(CL,7)=env$('Q')&"\GLmstr\transcode-idx.h"&env$('cno') 
+78780   ! c$(CL,8)="1" 
 78800   ! Let LIMIT_TO_LIST$=('1'=yes' ; '0'=NO)
 78820 return ! /r
 82000 DELETEIT: !  r: delete a schedule

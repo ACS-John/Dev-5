@@ -55,15 +55,15 @@
 46020     let fnstatus('converting transactions from History Transactions (ubAccTrn.h'&env$('cno')&')')
 46040     open #h_ubacctrn=1: "Name="&env$('Q')&"\UBmstr\ubAccTrn.h"&env$('cno'),internal,outin 
 46060     if env$('client')='Franklinton' then 
-46080       let acctrn_form$='Form Pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2' ! Franklinton only
+46080       acctrn_form$='Form Pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2' ! Franklinton only
 46100     else if rln(h_ubacctrn)=64 or rln(h_ubacctrn)=72 then 
-46120       let acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2'
+46120       acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2'
 46140     else if rln(h_ubacctrn)=62 or rln(h_ubacctrn)=70 then 
-46160       let acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2'
+46160       acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2'
 46180     else if rln(h_ubacctrn)=68 then 
-46200       let acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2'
+46200       acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2'
 46220     else ! seems to be a problem
-46240       print 'unrecognised ubacctrn record length' : let fnpause
+46240       pr 'unrecognised ubacctrn record length' : let fnpause
 46260     end if 
 46280     let fn_transaction_conv(h_ubacctrn)
 46300 ! /r
@@ -98,7 +98,7 @@
 50460           let ru(4)=rw4(4,month)
 50480           let ru(5)=rw4(5,month)
 50500           let ru(6)=rw4(6,month)
-50520           let bal=rw4(7,month)
+50520           bal=rw4(7,month)
 50540           let postcode=9
 50560           let transcode=1
 50580           let tamt=rw4(19,month) ! <--rw4(19,month) is amount billed that month, rw4(22,month) is the total amount collected that month
@@ -127,7 +127,7 @@
 52000           let fn_fix_trans_breakdown(mat g,tamt)
 52020 !         if sum(g)=tamt then ! SKIP ANY TRANSACTIONS THAT DON'T ADD UP
 52040           write #transvb,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat g,mat ru,bal,postcode
-52060 !         if trim$(p$)='209740.00' and month=1 then pr 'tdate=';tdate; 'tamt=';tamt : for x=1 to udim(mat rw4,1) : print rw4(x,1) : next x :  pause
+52060 !         if trim$(p$)='209740.00' and month=1 then pr 'tdate=';tdate; 'tamt=';tamt : for x=1 to udim(mat rw4,1) : pr rw4(x,1) : next x :  pause
 52080           let write_count+=1
 52100 !         end if
 52120         end if  ! tdate<>0 and tdate<>20000000
@@ -223,6 +223,6 @@
 76240 ERTN: let fnerror(program$,err,line,act$,"xit")
 76260   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76280   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-76300   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+76300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 76320 ERTN_EXEC_ACT: execute act$ : goto ERTN
 76340 ! </updateable region: ertn>

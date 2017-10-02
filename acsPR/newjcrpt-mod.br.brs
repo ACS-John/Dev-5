@@ -44,17 +44,17 @@
 00280   gosub HDR
 00290   goto PRTRPT
 00291 ! ______________________________________________________________________
-00300 PGOF: print #255: newpage : gosub HDR : continue 
+00300 PGOF: pr #255: newpage : gosub HDR : continue 
 00321 ! ______________________________________________________________________
 00330 HDR: ! 
-00331   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-00332   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-00333   print #255: "\qc  {\f201 \fs20 \b "&trim$(rt$)&"}"
-00334   print #255: "\qc  {\f181 \fs16 \b "&trim$(dh$)&"}"
-00335 ! Print #255: "\qc  {\f181 \fs16 \b "&TRIM$(D$)&"}"
-00336   print #255: "\ql   "
-00360   print #255: ch$(1)
-00370   print #255: ch$(2)
+00331   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+00332   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+00333   pr #255: "\qc  {\f201 \fs20 \b "&trim$(rt$)&"}"
+00334   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dh$)&"}"
+00335 ! pr #255: "\qc  {\f181 \fs16 \b "&TRIM$(D$)&"}"
+00336   pr #255: "\ql   "
+00360   pr #255: ch$(1)
+00370   pr #255: ch$(2)
 00380   return 
 00381 ! ______________________________________________________________________
 00390 EOF1: ! 
@@ -74,7 +74,7 @@
 19831 L19831: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2
 19832   goto L19834
 19833   read #2,using L19831: cn$,k$,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24 eof L25050
-19834 L19834: let cn=val(cn$(7:11))
+19834 L19834: cn=val(cn$(7:11))
 19835   if cn$(1:6)><jn1$ and sd=1 then goto L19900
 19836   if cn$(1:6)><jn1$ and sd=0 then goto L20000
 19849 ! ______________________________________________________________________
@@ -89,7 +89,7 @@
 50001 ERTN: let fnerror(program$,err,line,act$,"xit")
 50002   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 50003   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50004   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+50004   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50005 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50006 ! /region
 50007 ! ______________________________________________________________________

@@ -7,7 +7,7 @@
 10600   dim script_name$*256
 10700   dim return_name$*256
 10800   dim line$*256
-10900   let batch_name$=env$('temp')&'\update'&session$&'.cmd'
+10900   batch_name$=env$('temp')&'\update'&session$&'.cmd'
 11000   let script_name$=env$('temp')&'\ftp_script'&session$&'.txt'
 11100   let return_name$=env$('temp')&'\return'&session$&'.txt'
 11110   let grace_days=45
@@ -36,14 +36,14 @@
 26040 ERTN: let fnerror(program$,err,line,act$,"xit")
 26060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 26080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-26100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+26100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 26120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 26140 ! </updateable region: ertn>
 30000 ! def fn_acs_update_date$*40(;setit$*40)
 30020 !   dim aud_return$*40
 30040 !   if setit$='(default)' then let setit$=date$('ccyy/mm/dd')&' - '&time$
 30060 !   if setit$<>'' then
-30080 !     let aud_return$=setit$
+30080 !     aud_return$=setit$
 30100 !     let fnreg_write('ACS.Update.Date',setit$)
 30120 !   else
 30140 !     let fnreg_read('ACS.Update.Date',aud_return$)
@@ -54,7 +54,7 @@
 32020     dim conectivity_test_result$*40
 32040     dim ua_acs_datetime$*40
 32060 !
-32080     let conectivity_test_result$=fn_conectivity_test$
+32080     conectivity_test_result$=fn_conectivity_test$
 32100     if env$('ACSDeveloper')<>'' then
 32120       let fn_status('ACS Developers ('&env$('ACSDeveloper')&') should not update from the web.  It would overwrite all their local programs.')
 32140       let ua_return=0
@@ -75,15 +75,15 @@
 40040     dim wud_return$*40
 40060     let wud_return$=''
 40080     open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
-40100     print #h_script: 'user acs5update'
-40120     print #h_script: 'ACSKen!1'
-40140     print #h_script: 'Dir ACS-5-Update-CO.exe'
-40160     print #h_script: 'quit'
+40100     pr #h_script: 'user acs5update'
+40120     pr #h_script: 'ACSKen!1'
+40140     pr #h_script: 'Dir ACS-5-Update-CO.exe'
+40160     pr #h_script: 'quit'
 40180     close #h_script:
 40190 !
 40200     open #h_batch:=fngethandle: 'Name='&batch_name$&',RecL=256,replace',display,output
-40220     print #h_batch: 'prompt $p$g'
-40260     print #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
+40220     pr #h_batch: 'prompt $p$g'
+40260     pr #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
 40400     close #h_batch:
 40420     let fn_execute('-m',os_filename$(batch_name$))
 40440     open #h_return:=fngethandle: 'Name='&return_name$,display,input
@@ -112,16 +112,16 @@
 41060     dim ul_return$*40
 41080     let ul_return$=''
 41100     open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
-41120     print #h_script: 'user acs5update'
-41140     print #h_script: 'ACSKen!1'
-41160     print #h_script: 'LCD '&env$('Temp')
-41180     print #h_script: 'get ACS_5_Update_Support_Cache.exe'
-41200     print #h_script: 'quit'
+41120     pr #h_script: 'user acs5update'
+41140     pr #h_script: 'ACSKen!1'
+41160     pr #h_script: 'LCD '&env$('Temp')
+41180     pr #h_script: 'get ACS_5_Update_Support_Cache.exe'
+41200     pr #h_script: 'quit'
 41220     close #h_script:
 41240 !
 41260     open #h_batch:=fngethandle: 'Name='&batch_name$&',RecL=256,replace',display,output
-41280     print #h_batch: 'prompt $p$g'
-41300     print #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
+41280     pr #h_batch: 'prompt $p$g'
+41300     pr #h_batch: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
 41320     close #h_batch:
 41340     let fn_execute('-m',os_filename$(batch_name$))
 41360     open #h_return:=fngethandle: 'Name='&return_name$,display,input
@@ -155,7 +155,7 @@
 42130     client_has$(5)='CO'
 42140     client_has_count=5
 42160   else
-42180     let client_has_count=fnclient_has_on_support_list(mat client_has$, grace_days)
+42180     client_has_count=fnclient_has_on_support_list(mat client_has$, grace_days)
 42200   end if
 42220   if client_has_count=0 then
 42240     let fn_status('')
@@ -185,32 +185,32 @@
 44320         let fn_status(chr$(9)&chr$(9)&'      (no support data)')
 44340       end if
 46000     next client_has_item
-46240     ! let client_has_count=udim((mat client_has$))
-46260     if srch(mat client_has$,'G2')>0 then let client_has_count=client_has_count-1
-46280     if srch(mat client_has$,'HH')>0 then let client_has_count=client_has_count-1
-46300     if srch(mat client_has$,'P4')>0 then let client_has_count=client_has_count-1
-46320     if srch(mat client_has$,'U4')>0 then let client_has_count=client_has_count-1
+46240     ! client_has_count=udim((mat client_has$))
+46260     if srch(mat client_has$,'G2')>0 then client_has_count=client_has_count-1
+46280     if srch(mat client_has$,'HH')>0 then client_has_count=client_has_count-1
+46300     if srch(mat client_has$,'P4')>0 then client_has_count=client_has_count-1
+46320     if srch(mat client_has$,'U4')>0 then client_has_count=client_has_count-1
 46340     let fn_status("Downloading Updates for "&str$(client_has_count)&" support licensed systems.")
 46360     let fn_status("This may take up to "&str$(client_has_count*2+11)&" minutes on systems with slow internet connections.")
 46380     let fn_status("Download started at "&time$)
 46400     let fn_status("Please wait...")
 48000     !  fn_download_an_update(system_id$*2)
 48020     open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
-48040     print #h_script: 'user acs5update'
-48060     print #h_script: 'ACSKen!1'
-48080     print #h_script: 'LCD '&env$('Temp')
-48100     print #h_script: 'get ACS-5-Update-CO.exe'
+48040     pr #h_script: 'user acs5update'
+48060     pr #h_script: 'ACSKen!1'
+48080     pr #h_script: 'LCD '&env$('Temp')
+48100     pr #h_script: 'get ACS-5-Update-CO.exe'
 48120     for ch_item=1 to udim(mat client_has$)
 48140       if client_has$(ch_item)<>'CO' and client_has$(ch_item)<>'G2' and client_has$(ch_item)<>'HH' and client_has$(ch_item)<>'P4' and client_has$(ch_item)<>'U4' then
-48160         print #h_script: 'get ACS-5-Update-'&client_has$(ch_item)&'.exe'
+48160         pr #h_script: 'get ACS-5-Update-'&client_has$(ch_item)&'.exe'
 48180       end if
 48200     next ch_item
-48220     print #h_script: 'quit'
+48220     pr #h_script: 'quit'
 48240     close #h_script:
 48260     !
 50000     open #h_batch:=fngethandle: 'Name='&batch_name$&',RecL=256,replace',display,output
-50020     print #h_batch: 'prompt $p$g'
-50040     print #h_script: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
+50020     pr #h_batch: 'prompt $p$g'
+50040     pr #h_script: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
 50060     close #h_batch:
 50080     let fn_execute('-m',os_filename$(batch_name$))
 50100     let u_download_success=0
@@ -252,9 +252,9 @@
 54040 !   if ~setup_acs_installation_path then
 54060 !     let setup_acs_installation_path=1
 54080 !     let fnIniOpen('acs.ini')
-54100 !     let acs_installation_path$=fnIniRead$('Core','InstallPath')
+54100 !     acs_installation_path$=fnIniRead$('Core','InstallPath')
 54120 !     if acs_installation_path$='' then
-54140     let acs_installation_path$=os_filename$('S:\')
+54140     acs_installation_path$=os_filename$('S:\')
 54160 !     end if
 54180 !   end if
 54200     if longFileName then
@@ -268,11 +268,11 @@
 60030       let fn_status('creating missing Drive.sys')
 60040       open #h_drive_sys:=fngethandle: 'Name=S:\Drive.sys,RecL=256,New',display,output
 60060       open #h_brconfig_sys:=fngethandle: 'Name=S:\BRConfig.sys',display,input
-60080       print #h_drive_sys: 'Rem Drive.sys automatically created by update process on '&date$&' at '&time$
+60080       pr #h_drive_sys: 'Rem Drive.sys automatically created by update process on '&date$&' at '&time$
 60100       do
 60120         linput #h_return: line$ eof DSME_BRCONFIG_EOF
 60140         if lwrc$(line$(1:6))='drive ' or line$(1:1)='@' then
-60160           print #h_drive_sys: line$
+60160           pr #h_drive_sys: line$
 60180         end if
 60200       loop
 60220 DSME_BRCONFIG_EOF: !
@@ -305,16 +305,16 @@
 80120       let headings$(1)='Status'
 80140       let widths(1)=80
 80160       let forms$(1)='C 512'
-80180       print fields status_gridspec$&",headers,[gridheaders]": (mat headings$,mat widths, mat forms$)
+80180       pr fields status_gridspec$&",headers,[gridheaders]": (mat headings$,mat widths, mat forms$)
 80200     end if
 80220     if env$('ACSDeveloper')<>'' then
-80240       print fields status_gridspec$&",+": text$(1:512)
+80240       pr fields status_gridspec$&",+": text$(1:512)
 80260     else
-80280       print fields status_gridspec$&",+": text$(1:512) error ignore
+80280       pr fields status_gridspec$&",+": text$(1:512) error ignore
 80300     end if
 80320 !
 80340     input fields status_gridspec$&",rowcnt,all,nowait": grid_rows
-80360     let curfld(1,grid_rows+1)
+80360     curfld(1,grid_rows+1)
 80380 !
 80400   fnend
 81000   def library fnstatus_pause
@@ -327,12 +327,12 @@
 82060   fnend
 86000   def fn_execute(flags$*128,exe_what$*256)
 86020     if env$('ACSDeveloper')<>'' then
-86040       print 'Flags:  '&flags$
+86040       pr 'Flags:  '&flags$
 86060       if exists(exe_what$) then
 86070 !       PAusE
 86080         execute 'sy -c -w notepad '&exe_what$
 86100       else
-86120         print 'HMMM:  sy '&flags$&' '&exe_what$
+86120         pr 'HMMM:  sy '&flags$&' '&exe_what$
 86130       end if
 86140     else
 86160       execute 'sy '&flags$&' '&exe_what$

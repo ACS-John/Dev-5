@@ -15,33 +15,33 @@
         close #1: !:
         let tb$="("&trim$(tb$)&")"
 00150   let tempx=val(fnactpd$) conv L190
-00160   if tempx=1 then let actpd$="one" else !:
-          if tempx=2 then let actpd$="two" else !:
-            if tempx=3 then let actpd$="three" else !:
-              if tempx=4 then let actpd$="four" else !:
-                if tempx=5 then let actpd$="five"
-00170   if tempx=6 then let actpd$="six" else !:
-          if tempx=7 then let actpd$="seven" else !:
-            if tempx=8 then let actpd$="eight" else !:
-              if tempx=9 then let actpd$="nine" else !:
-                if tempx=10 then let actpd$="ten"
-00180   if tempx=11 then let actpd$="eleven" else !:
-          if tempx=12 then let actpd$="twelve" else !:
-            if tempx=13 then let actpd$="thirteen" else !:
-              if tempx=14 then let actpd$="fourteen"
+00160   if tempx=1 then actpd$="one" else !:
+          if tempx=2 then actpd$="two" else !:
+            if tempx=3 then actpd$="three" else !:
+              if tempx=4 then actpd$="four" else !:
+                if tempx=5 then actpd$="five"
+00170   if tempx=6 then actpd$="six" else !:
+          if tempx=7 then actpd$="seven" else !:
+            if tempx=8 then actpd$="eight" else !:
+              if tempx=9 then actpd$="nine" else !:
+                if tempx=10 then actpd$="ten"
+00180   if tempx=11 then actpd$="eleven" else !:
+          if tempx=12 then actpd$="twelve" else !:
+            if tempx=13 then actpd$="thirteen" else !:
+              if tempx=14 then actpd$="fourteen"
 00190 L190: let sh$="1,10,C 60,H,N"
 00200   for j=1 to 20 : let fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
 00210   if fnprocess=1 then let t=2 : goto L320 else goto MENU1
 00220 ! _____________________________________________________________________
-00230 MENU1: print newpage
+00230 MENU1: pr newpage
 00240   close #101: ioerr L250
 00250 L250: open #101: "SROW=3,SCOL=13,EROW=9,ECOL=63,BORDER=DR,CAPTION=<Cover Letter",display,outin 
-00260   print fields "3,13,Cc 51,R,N": cnam$ !:
-        print fields "4,13,Cc 51,R,N": "Company Number "&str$(cno)
+00260   pr fields "3,13,Cc 51,R,N": cnam$ !:
+        pr fields "4,13,Cc 51,R,N": "Company Number "&str$(cno)
 00270   let sc2$(1)=" 1. Edit Cover Letter" !:
-        let sc2$(2)=" 2. Print Cover Letter"
+        let sc2$(2)=" 2. pr Cover Letter"
 00280   for j=1 to 2: let fl2$(j)=str$(j+5)&",15,C 46": next j
-00290   print fields "10,35,Cc 09,B,5": "Exit (F5)"
+00290   pr fields "10,35,Cc 09,B,5": "Exit (F5)"
 00300 L300: rinput select mat fl2$,attr "H": mat sc2$ !:
         let t=curfld
 00310   if cmdkey=5 then goto XIT
@@ -49,13 +49,13 @@
 00330 ! _____________________________________________________________________
 00340   close #101: ioerr L350
 00350 L350: open #101: "SROW=5,SCOL=13,EROW=15,ECOL=64,BORDER=SR,CAPTION=<Initial Build Cover Letter",display,outin 
-00360   print #101,fields "1,1,Cc 52,R,N": cnam$
+00360   pr #101,fields "1,1,Cc 52,R,N": cnam$
 00370 L370: execute "SY -s NotePad "&os_filename$(env$('Q')&"\GLmstr\ACGLCovF.h"&str$(cno))
 00380   goto MENU1
 00390 L390: open #1: "Name="&env$('Q')&"\GLmstr\ACGLCovF.h"&str$(cno)&",Shr",display,input ioerr MENU1
-00400   print newpage !:
-        print fields "10,20,Cc 25,H,N": "Cover Letter Printing..." !:
-        print fields "12,2,C 18,B,5": " Press F5 to stop"
+00400   pr newpage !:
+        pr fields "10,20,Cc 25,H,N": "Cover Letter Printing..." !:
+        pr fields "12,2,C 18,B,5": " Press F5 to stop"
 00410   on fkey 5 goto L550
 00420   let fnopenprn
 00430 L430: linput #1: ln$ eof L550
@@ -73,10 +73,10 @@
             let ln1$=ln$(1:j2-1)&rtrm$(actpd$)&ln$(j2+2:78-len(rtrm$(actpd$)))
 00510 L510: let ln$=ln1$
 00520 L520: next j2
-00530   print #255: tab(10);ln$
+00530   pr #255: tab(10);ln$
 00540   goto L430
 00550 L550: close #1: 
-00555   print newpage
+00555   pr newpage
 00560   let fncloseprn
 00570 XIT: let fnchain("S:\acsGL\acglAuto")
 00580 ! ______________________________________________________________________
@@ -84,6 +84,6 @@
 00600 ERTN: let fnerror(program$,err,line,act$,"xit")
 00610   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00620   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00630   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00630   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00640 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00650 ! /region

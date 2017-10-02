@@ -48,9 +48,9 @@
 12240   fncreg_read('W-2 Company State',st$)
 12260   fncreg_read('W-2 Company Zip',zip$)
 12280   if ct$='' or st$='' or zip$='' then
-12300     let p1=pos(a$(3),",",1): let comma=1
-12320     if p1=0 then let p1=pos(a$(3)," ",1): let comma=0
-12340     let ct$=a$(3)(1:p1-1)
+12300     let p1=pos(a$(3),",",1): comma=1
+12320     if p1=0 then let p1=pos(a$(3)," ",1): comma=0
+12340     ct$=a$(3)(1:p1-1)
 12360     if comma=1 then let st$=a$(3)(p1+2:p1+3) else let st$=a$(3)(p1+1:p1+2)
 12380     let p2=len(rtrm$(a$(3)))
 12400     let p1=p2-4
@@ -273,12 +273,12 @@
 32160   gosub RecRA
 32180   gosub RecRE ! kj 22610  was commented
 34000 NEXT_EMPLOYEE: ! r: main loop
-34020  ! Print Fields "12,32,N 3,UT,N": readCount+=1/LREC(1)*100
+34020  ! pr Fields "12,32,N 3,UT,N": readCount+=1/LREC(1)*100
 34040   read #hEmployee,using fEmployee: eno,mat em$,ss$,em6,ta eof FINIS
 34060   fEmployee: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3
 34080   gosub NameParse
-34100   let p1=pos(em$(3),",",1) : let comma=1
-34120   if p1=0 then let p1=pos(em$(3)," ",1): let comma=0
+34100   let p1=pos(em$(3),",",1) : comma=1
+34120   if p1=0 then let p1=pos(em$(3)," ",1): comma=0
 34140   let emct$=em$(3)(1:p1-1)
 34160   gosub EXTRACT_STATE : let emst$=holdst$ ! If COMMA=1 Then Let EMST$=EM$(3)(P1+2:P1+3) Else Let EMST$=EM$(3)(P1+1:P1+2)
 34180   let p2=len(rtrm$(em$(3)))
@@ -286,7 +286,7 @@
 34220   let emzip$=em$(3)(p1:p2)
 34240 L2070: let p1=pos(ss$,"-",1)
 34260   if p1>0 then let ss$(p1:p1)="": goto L2070 else let ssn=val(ss$)
-34280   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+34280   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 34300   restore #hChecks,key>=checkkey$: nokey NEXT_EMPLOYEE
 34320 L2120: read #hChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L2480
 34340   if heno<>eno then goto L2480
@@ -295,13 +295,13 @@
 34400   if tcd<1 or tcd>10 then let tcd=1
 34420 ! FILE_SHUFFLEh with this employee
 34440   let dedret=0
-34460   let cafded=0
+34460   cafded=0
 34480   for j=1 to 20
 34500     if newdedfed(j)=1 then 
 34520       let dedret=dedret+tcp(j+4)
 34540     end if
 34560     if dedfica(j)=1 then 
-34580       let cafded=cafded+tcp(j+4)
+34580       cafded=cafded+tcp(j+4)
 34600     end if
 34620   next j
 34640   let w2(1)=min(w2(1)+tcp(31)-tcp(30)-cafded,ssmax-tcp(30)) ! TOTAL SOC-SEC WAGES
@@ -351,17 +351,17 @@
 35520 goto NEXT_EMPLOYEE ! /r
 35540 ! ______________________________________________________________________
 38000 RecRA: ! r:
-38020   print #hOut,using fRecRA: "RA",federal_id_val,emppin$(1:8),"",resub$,tlcn$,"98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","","",contact$,contactph$,phoneext$,"",email$,"","","2","L",""
+38020   pr #hOut,using fRecRA: "RA",federal_id_val,emppin$(1:8),"",resub$,tlcn$,"98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","","",contact$,contactph$,phoneext$,"",email$,"","","2","L",""
 38040   fRecRA: form pos 1,c 2,pic(#########),c 8,c 9,c 1,c 6,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 1,c 1,c 12
 38060 return ! /r
 42000 RecRE: ! r:
 42020 ! if client$="PiattCO" then let emptype$="S"
-42040   print #hOut,using fRecRE: "RE",yr,"",federal_id_val,"",terminat$,"","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"",emptype$,"","","","","R","",0,""
+42040   pr #hOut,using fRecRE: "RE",yr,"",federal_id_val,"",terminat$,"","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"",emptype$,"","","","","R","",0,""
 42060   fRecRE: form pos 1,c 2,pic(####),c 1,pic(#########),c 9,c 1,c 4,c 9,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 1,c 4,c 23,c 15,c 2,c 1,c 1,n 1,c 291
 42080 return ! /r
 44000 ! r: unused (2E record type??)
 44020 ! ! form pos 1,c 2,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,18*pic(###########),c 22,2*pic(###########),c 56,n 1,c 1,c 1,n 1,c 23,
-44040 !   print #hOut,using L2710: "2E",ct$,st$,"",zip$,nameFormat_sf$(nameFormat),typemp$(1:1),"","","",""
+44040 !   pr #hOut,using L2710: "2E",ct$,st$,"",zip$,nameFormat_sf$(nameFormat),typemp$(1:1),"","","",""
 44060 ! L2710: form pos 1,c 2,g 25,g 10,2*g 5,2*g 1,g 2,g 4,g 2,c 71
 44080 !   return 
 44100 ! /r
@@ -370,16 +370,16 @@
 46040   for j=1 to 2: let w3(j)=w3(j)*100 : next j
 46060   if pen=0 then let pen$="0" else let pen$="1"
 46080   if dfc=0 then let dfc$="" else let dfc$="D"
-46100   print #hOut,using fRecRW: "RW",ssn,first$,mid$,last$,"","",em$(2)(1:22),emct$,emst$,emzip$,"","","","","",w2(3),w2(5),w2(1),w2(4),w3(1),w3(2),w2(2),w2(8),dca,dc1,0,0,0,0,0,0,0,0,0,"",w2(6),0,0,0,0,"",0,"",pen$,0,""
+46100   pr #hOut,using fRecRW: "RW",ssn,first$,mid$,last$,"","",em$(2)(1:22),emct$,emst$,emzip$,"","","","","",w2(3),w2(5),w2(1),w2(4),w3(1),w3(2),w2(2),w2(8),dca,dc1,0,0,0,0,0,0,0,0,0,"",w2(6),0,0,0,0,"",0,"",pen$,0,""
 46120   fRecRW: form pos 1,c 2,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,19*pic(###########),c 11,5*pic(###########),c 23,n 1,c 1,c 1,n 1,c 23
-46140   ! PRINT #hOut,USING 2270: "RO","",W2(9),W2(7),0,0,0,0,0,"","","",0,0,0,0,0,0,0,"",0,0,""
+46140   ! pr #hOut,USING 2270: "RO","",W2(9),W2(7),0,0,0,0,0,"","","",0,0,0,0,0,0,0,"",0,0,""
 46160   ! form pos 1,c 2,c 9,7*pic(###########),c 176,c 1,c 9,7*pic(###########),c 11,2*pic(###########),c 128
 46180 return ! /r
 48000 RecRS: ! r: STATE RECORD
 48020 ! if sr1=0 then goto 2880 ! NO STATE SELECTED
 48040   if s2(1)<>0 or s2(2)<>0 then ! NO STATE WAGES
 48060     ! let totrsrecs+=1
-48080     print #hOut,using fRecRS: "RS",sr2,"",ssn,first$,mid$,last$,"","",em$(2)(1:22),emct$,emst$,emzip$,"","","","","","","",0,0,0,0,0,"","","",sr2,s2(1),s2(2),"","",0,0,"","","",""
+48080     pr #hOut,using fRecRS: "RS",sr2,"",ssn,first$,mid$,last$,"","",em$(2)(1:22),emct$,emst$,emzip$,"","","","","","","",0,0,0,0,0,"","","",sr2,s2(1),s2(2),"","",0,0,"","","",""
 48100     fRecRS: form pos 1,c 2,g 2,c 5,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 2,c 6,2*pic(###########),pic(##),2*pic(########),c 5,c 20,c 6,g 2,2*pic(###########),c 10,c 1,2*pic(###########),c 7,c 75,c 75,c 25
 48120   end if
 48140   let t1=t1+1: mat t1=t1+w2
@@ -399,20 +399,20 @@
 48420   mat s2=(0)
 48440 return ! /r
 50000 RecRT: ! r:
-50020   print #hOut,using L3050: "RT",tw2,t1(3),t1(5),t1(1),t1(4),t2(1),t2(2),t1(2),t1(8),dca3,dc3,0,0,0,0,0,0,0,0,0,"",t1(6),0,0,0,0,0,""
+50020   pr #hOut,using L3050: "RT",tw2,t1(3),t1(5),t1(1),t1(4),t2(1),t2(2),t1(2),t1(8),dca3,dc3,0,0,0,0,0,0,0,0,0,"",t1(6),0,0,0,0,0,""
 50040   let dc3=0 ! kj 120805
 50060 L3050: form pos 1,c 2,pic(#######),16*pic(###############),3*pic(###############),c 15,6*pic(###############),c 113
-50080 ! PRINT #hOut,USING 2520: "RU",TW2,T1(9),T1(7),0,0,0,0,0,"",0,0,0,0,0,0,0,0,0,""
+50080 ! pr #hOut,USING 2520: "RU",TW2,T1(9),T1(7),0,0,0,0,0,"",0,0,0,0,0,0,0,0,0,""
 50100 ! form pos 1,c 2,pic(#######),7*pic(###############),c 240,9*pic(###############),c 23
 50120   let t1=0: mat t1=(0)
 50140   mat t2=(0)
 50160   return ! /r
 52000 ! RecRV: ! r:
-52020 !   print #hOut,using L3121: "RV",totalpeople,totalstatewages,totalstatewh," "
+52020 !   pr #hOut,using L3121: "RV",totalpeople,totalstatewages,totalstatewh," "
 52040 !   L3121: form pos 1,c 2,pic(#######),2*pic(###############),c 473
 52060 ! return ! /r
 54000 RecRF: ! r:
-54020   print #hOut,using L3130: "RF"," ",tw1,""
+54020   pr #hOut,using L3130: "RF"," ",tw1,""
 54040   L3130: form pos 1,c 2,c 5,pic(#########),c 496
 54060 return ! /r
 58000 FINIS: ! r:
@@ -429,7 +429,7 @@
 62100   open #hOut:=fngethandle: "Name=w2report,RecL=512",display,input 
 62120   do 
 62140     linput #hOut: a$ eof L3320
-62160     if a$(512:512)="X" then let a$(512:512)=""
+62160     if a$(512:512)="X" then a$(512:512)=""
 62180     write #24,using 'form pos 1,c 512,c 1': rpad$(a$,512),chr$(10)
 62200   loop 
 62220 L3320: close #24: 
@@ -453,7 +453,7 @@
 72280     if x2>0 then let mid$=em$(1)(x1+1:x2-1): let last$=em$(1)(x2+1:len(em$(1)))
 72300     if x2=0 then let last$=em$(1)(x1+1:len(em$(1))): let mid$=""
 72320   end if
-72340   ! Print FIRST$,MID$,LAST$
+72340   ! pr FIRST$,MID$,LAST$
 72360 return ! /r
 76000 EXTRACT_STATE: ! r: extract state name
 76020   let holdst$="          "
@@ -486,7 +486,7 @@
 78020 ERTN: let fnerror(program$,err,line,act$,"xit")
 78040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 78060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-78080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+78080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 78100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 78120 ! /region
 80000 ! SCREEN1OLD: ! r:
@@ -509,52 +509,52 @@
 80340 !   let io1$(16)="20,35,C 8,UT,N"
 80360 !   let io1$(17)="21,52,C 1,UT,N"
 80380 !   let io1$(18)="22,38,C 1,UT,N"
-80400 !   print newpage
+80400 !   pr newpage
 80420 !   close #101: ioerr ignore
 80440 !   open #101: "SROW=2,SCOL=3,EROW=23,ECOL=80,BORDER=DR,CAPTION=<Create Electronic W2 for I.R.S.",display,outin 
-80460 ! ! print #101,fields "3,15,C 51,R,N": "  INSERT DISKETTE FOR ELECTRONIC W2'S IN DRIVE A:"
-80480 !   print #101,fields "5,5,C 60": "Company Name:"
-80500 !   print #101,fields "6,5,C 60": "Street Address:"
-80520 !   print #101,fields "7,5,C 60": "City:"
-80540 !   print #101,fields "8,5,C 60": "State:"
-80560 !   print #101,fields "9,5,C 60": "Zip Code:"
-80580 !   print #101,fields "10,5,C 60": "Federal ID #:"
-80600 !   print #101,fields "11,5,C 60": "Payment Year:"
-80620 !   print #101,fields "12,5,C 60": "Soc-Sec Maximum:"
-80640 !   print #101,fields "13,5,C 60": "Soc-Sec Rate:"
-80660 !   print #101,fields "14,5,C 60": "Medicare Maximum:"
-80680 !   print #101,fields "15,5,C 60": "Medicare Rate:"
-80700 !   print #101,fields "16,5,C 70": "Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins:"
-80720 !   print #101,fields "17,5,C 70": "Miscellaneous Deduction Used For Pension:"
-80740 !   print #101,fields "18,5,C 70": "Miscellaneous Deduction Used For Deferred Compensation:"
-80760 !   print #101,fields "19,5,C 70": "Miscellaneous Deduction Used For Dependent Care Assistance:"
-80780 !   print #101,fields "20,5,C 60": "Computer Manufacturer's Name:"
-80800 !   print #101,fields "21,5,C 60,N": "F=First Name First or S=Surname First on File:"
-80820 !   print #101,fields "22,5,C 60": "Type of Business Code R=Regular:"
-80840 !   print fields "24,28,C 9,B,1": "Next (F1)"
-80860 !   print fields "24,39,C 11,B,5": "Cancel (F5)"
-80880 !   print #101,fields mat io1$: a$(1),a$(2),ct$,st$,zip$,federal_id_val,yr,87900,.062,999999,.0145,ins,pen,dfc,dcan,ibm$,nameFormat$,typemp$
+80460 ! ! pr #101,fields "3,15,C 51,R,N": "  INSERT DISKETTE FOR ELECTRONIC W2'S IN DRIVE A:"
+80480 !   pr #101,fields "5,5,C 60": "Company Name:"
+80500 !   pr #101,fields "6,5,C 60": "Street Address:"
+80520 !   pr #101,fields "7,5,C 60": "City:"
+80540 !   pr #101,fields "8,5,C 60": "State:"
+80560 !   pr #101,fields "9,5,C 60": "Zip Code:"
+80580 !   pr #101,fields "10,5,C 60": "Federal ID #:"
+80600 !   pr #101,fields "11,5,C 60": "Payment Year:"
+80620 !   pr #101,fields "12,5,C 60": "Soc-Sec Maximum:"
+80640 !   pr #101,fields "13,5,C 60": "Soc-Sec Rate:"
+80660 !   pr #101,fields "14,5,C 60": "Medicare Maximum:"
+80680 !   pr #101,fields "15,5,C 60": "Medicare Rate:"
+80700 !   pr #101,fields "16,5,C 70": "Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins:"
+80720 !   pr #101,fields "17,5,C 70": "Miscellaneous Deduction Used For Pension:"
+80740 !   pr #101,fields "18,5,C 70": "Miscellaneous Deduction Used For Deferred Compensation:"
+80760 !   pr #101,fields "19,5,C 70": "Miscellaneous Deduction Used For Dependent Care Assistance:"
+80780 !   pr #101,fields "20,5,C 60": "Computer Manufacturer's Name:"
+80800 !   pr #101,fields "21,5,C 60,N": "F=First Name First or S=Surname First on File:"
+80820 !   pr #101,fields "22,5,C 60": "Type of Business Code R=Regular:"
+80840 !   pr fields "24,28,C 9,B,1": "Next (F1)"
+80860 !   pr fields "24,39,C 11,B,5": "Cancel (F5)"
+80880 !   pr #101,fields mat io1$: a$(1),a$(2),ct$,st$,zip$,federal_id_val,yr,87900,.062,999999,.0145,ins,pen,dfc,dcan,ibm$,nameFormat$,typemp$
 80900 ! L1260: rinput #101,fields mat io1$,attr "R": a$(1),a$(2),ct$,st$,zip$,federal_id_val,yr,ssmax,ssrate,mcmax,mcrate,ins,pen,dfc,dcan,ibm$,nameFormat$,typemp$ conv CONV1
-80920 !   if ce>0 then let io1$(ce)(ce1:ce2)="U": let ce=0
-80940 !   if cmdkey>0 then goto L1350 else let ce=curfld+1
-80960 !   if ce>udim(io1$) then let ce=1
-80980 ! L1300: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : let ce1=pos(io1$(ce),"U",1)
-81000 !   let ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L1260
+80920 !   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+80940 !   if cmdkey>0 then goto L1350 else ce=curfld+1
+80960 !   if ce>udim(io1$) then ce=1
+80980 ! L1300: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
+81000 !   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L1260
 81020 ! CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
-81040 !   let ce=cnt+1
-81060 ! ERR1: print fields "24,78,C 1": bell : goto L1300
+81040 !   ce=cnt+1
+81060 ! ERR1: pr fields "24,78,C 1": bell : goto L1300
 81080 ! L1350: ! 
 81100 !   if cmdkey=5 then goto XIT
-81120 !   if rtrm$(a$(1))="" then let ce=1: goto ERR1
-81140 !   if rtrm$(a$(2))="" then let ce=2: goto ERR1
-81160 !   if rtrm$(ct$)="" then let ce=3: goto ERR1
-81180 !   if rtrm$(st$)="" then let ce=4: goto ERR1
-81200 !   if rtrm$(zip$)="" then let ce=5: goto ERR1
-81220 !   if federal_id_val=0 then let ce=6: goto ERR1
-81240 !   if yr<2001 then let ce=7: goto ERR1
+81120 !   if rtrm$(a$(1))="" then ce=1: goto ERR1
+81140 !   if rtrm$(a$(2))="" then ce=2: goto ERR1
+81160 !   if rtrm$(ct$)="" then ce=3: goto ERR1
+81180 !   if rtrm$(st$)="" then ce=4: goto ERR1
+81200 !   if rtrm$(zip$)="" then ce=5: goto ERR1
+81220 !   if federal_id_val=0 then ce=6: goto ERR1
+81240 !   if yr<2001 then ce=7: goto ERR1
 81260 ! ! let ficarate=ssrate+mcrate
-81280 !   if ssmax<53400 then let ce=8: goto ERR1
-81300 !   if ins<0 or ins>10 then let ce=9: goto ERR1
-81320 !   if pen<0 or pen>10 then let ce=10: goto ERR1
-81340 !   if dfc<0 or dfc>10 then let ce=11: goto ERR1
+81280 !   if ssmax<53400 then ce=8: goto ERR1
+81300 !   if ins<0 or ins>10 then ce=9: goto ERR1
+81320 !   if pen<0 or pen>10 then ce=10: goto ERR1
+81340 !   if dfc<0 or dfc>10 then ce=11: goto ERR1
 81360  !goto screen2 ! /r

@@ -5,5 +5,5 @@
  !
  !
  def fnReturnRecord
-    if ExitMode=SelectAndQuit then let CurrentKey$=str$(Rec(Datafile))
+    if ExitMode=SelectAndQuit then currentKey$=str$(Rec(Datafile))
  fnend

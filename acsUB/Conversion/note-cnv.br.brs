@@ -26,11 +26,11 @@
 20500     close #33: ioerr ignore
 20520     if ~exists(env$('Q')&"\UBmstr\notes.h"&str$(cno)) then execute "mkdir "&env$('Q')&"\UBmstr\notes.h"&str$(cno)
 20540     open #33: "Name="&env$('Q')&"\UBmstr\notes.h"&str$(cno)&"\"&trim$(z$)&".txt,RecL=128,replace",display,output 
-20560     let adr=ra(1)
+20560     adr=ra(1)
 20580     do 
 20600       if adr=0 then goto READ_NOTE1
 20620       read #h_note2,using 'form pos 1,c 10,c 60,pd 3',rec=adr: k32$,rm$,adr norec READ_NOTE1
-20640       print #33: rm$
+20640       pr #33: rm$
 20660     loop
 20680     ! 
 20700     DONE: ! 
@@ -43,6 +43,6 @@
 20840 ERTN: let fnerror(program$,err,line,act$,"xit")
 20860   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20880   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-20900   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+20900   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 20920 ERTN_EXEC_ACT: execute act$ : goto ERTN
 20940 ! </updateable region: ertn>

@@ -7,7 +7,7 @@
 00070 ! ______________________________________________________________________
 00080   dim a$*416,n$*40,cap$*128,resp$(2)*80
 00090 ! ______________________________________________________________________
-00100   let cap$="Consolidate Companies"
+00100   cap$="Consolidate Companies"
 00110   let dcno=99
 00120 MAIN: ! 
 00130   let fntos(sn$='Combgl') !:
@@ -34,13 +34,13 @@
 00260 ! 
 00270   if ck=5 then goto XIT
 00280   if ck=2 then goto END1
-00290   let cno=val(resp$(1)(43:47)) !:
+00290   cno=val(resp$(1)(43:47)) !:
         let dcno=val(resp$(2)) !:
         let hcno=cno
 00300   if cno=0 or ckey=5 then goto END1
-00310   let ctr+=1
+00310   ctr+=1
 00320   if ctr>1 then goto L390
-00330   let cno1=cno
+00330   cno1=cno
 00340   execute "Copy "&env$('Q')&"\GLmstr\*.H"&str$(cno1)&' '&env$('Q')&"\GLmstr\*.H"&str$(dcno)&" -n" ioerr MAIN
 00350   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(dcno)&"",internal,outin  !:
         read #1,using ' Form POS 1,C 40': n$ !:
@@ -67,7 +67,7 @@
 00530 ERTN: let fnerror(program$,err,line,act$,"xit")
 00540   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00550   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00560   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00560   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00570 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00580 ! /region
 00590 ! ______________________________________________________________________

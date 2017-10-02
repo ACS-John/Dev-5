@@ -21,9 +21,9 @@
 10240     let opt_cash_or_accrual$(2)="Accrual"
 10260 ! ______________________________________________________________________
 10280     if glt=glt_print_only then 
-10300       let cap$="GL Distribution Report"
+10300       cap$="GL Distribution Report"
 10320     else 
-10340       let cap$="Post to General Ledger"
+10340       cap$="Post to General Ledger"
 10360     end if 
 10380     let fncno(cno,cnam$)
 10400 ! 
@@ -32,7 +32,7 @@
 12180     open #fundmstr=9: "Name="&env$('Q')&"\CLmstr\FundMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\FundIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 12200 READ_FUNDMSTR: ! 
 12220     read #fundmstr,using 'Form Pos 52,C 12': gw$ eof EO_FUNDMSTR
-12240     let accrual=val(gw$) conv L230
+12240     accrual=val(gw$) conv L230
 12260     if accrual>0 then 
 12280       let up1$="A"
 12300       goto EO_FUNDMSTR
@@ -72,13 +72,13 @@
 14100     if resp$(3)(1:1)="T" then let include_prev_posted$="Y" else let include_prev_posted$="N" ! include previously posted entries
 14120     if resp$(4)(1:1)="C" then let up1$="C" else let up1$="A" ! cash or accrual
 14140     if resp$(5)(1:1)="T" then let prc$="Y" else let prc$="N" ! combine payroll entries
-14160     if resp$(6)(1:1)="T" then let pr1$="Y" else let pr1$="N" ! print distribution listing
+14160     if resp$(6)(1:1)="T" then let pr1$="Y" else let pr1$="N" ! pr distribution listing
 14180     if resp$(7)(1:1)="T" then let pr2$="Y" else let pr2$="N" ! update after fact payroll
 14200     let gl2=val(resp$(8)) ! GL company to post
 16000     if pr2$="Y" then let fnprocess(4)
 16020     if glt=glt_print_only then let pr1$="Y"
 16040     let fnputcno(gl2)
-16060 !   print fields "13,34,C 12,B,99": "Cancel (Esc)"
+16060 !   pr fields "13,34,C 12,B,99": "Cancel (Esc)"
 16080 !   on fkey 99 goto XIT
 16100     let fnopenprn
 16120     open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
@@ -169,7 +169,7 @@
 19540     open #work=5: "Name="&env$('Temp')&"\WORK."&session$,internal,input,relative 
 19560     if pr1$="N" then goto L1240
 19580     if f1=0 then gosub HDR
-19600     print #255: "____________  ________  ________  ________  Regular GL Postings___________  __________  __________" pageoflow NEWPGE
+19600     pr #255: "____________  ________  ________  ________  Regular GL Postings___________  __________  __________" pageoflow NEWPGE
 19620 L1240: ! 
 19630     read #1,using 'Form POS 1,PD 3': r5 eof ENDALL
 19640     read #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1',rec=r5: gl$,ivd,ck$,vn$,de$,amt,bank_code,tcde,scd norec L1240
@@ -181,30 +181,30 @@
 19760     if sc2><4 then goto L1350
 19780     gosub PRGL
 19800     if pr1$="Y" then 
-19820       print #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NEWPGE
+19820       pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NEWPGE
 19840     end if 
 19860     let pa1=pa2=sc2=0
 19880 L1350: ! 
 19900     if tc1=0 and tc2=0 then goto L1410
 19920     if pr1$="N" then goto L1400
-19940     print #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
-19960     print #255,using 'Form POS 45,C 30,2*N 12.2': "GL # "&hgl$&" TOTAL",tc1,tc2
-19980     print #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
+19940     pr #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
+19960     pr #255,using 'Form POS 45,C 30,2*N 12.2': "GL # "&hgl$&" TOTAL",tc1,tc2
+19980     pr #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
 20000 L1400: ! 
 20020     let tc1=tc2=0
 20040 L1410: ! 
-20060     let p1=75 : let cl=1
-20080     if tcde=1 and amt<0 then let p1=87 : let cl=2
-20100     if tcde=2 and amt>0 then let p1=87 : let cl=2
-20120     if tcde=3 and amt>0 then let p1=87 : let cl=2
-20140     if tcde=4 and amt<0 then let p1=87 : let cl=2
+20060     let p1=75 : cl=1
+20080     if tcde=1 and amt<0 then let p1=87 : cl=2
+20100     if tcde=2 and amt>0 then let p1=87 : cl=2
+20120     if tcde=3 and amt>0 then let p1=87 : cl=2
+20140     if tcde=4 and amt<0 then let p1=87 : cl=2
 20160     if prc$="N" then goto L1500
 20180     gosub COMBINEPR
-20200 ! LET AMT=ABS(AMT)
+20200 ! aMT=ABS(AMT)
 20220     if scd=4 then goto L1530
-20240 L1500: ! LET AMT=ABS(AMT)
+20240 L1500: ! aMT=ABS(AMT)
 20260     gosub REGGL
-20280     if pr1$="Y" then print #255,using L1530: gl$,ivd,ck$,vn$,de$,abs(amt) pageoflow NEWPGE
+20280     if pr1$="Y" then pr #255,using L1530: gl$,ivd,ck$,vn$,de$,abs(amt) pageoflow NEWPGE
 20300 L1530: form pos 1,c 14,pic(zz/zz/zz),x 2,2*c 10,c 30,pos p1,g 12.2,skip 1
 20320     if cl=2 then 
 20340       let tc2=tc2+abs(amt)
@@ -216,7 +216,7 @@
 20460     if tcde<>3 then goto L1590
 20480     let p1=75
 20500     if pr1$="Y" then 
-20520       print #255,using L1530: bgl$,ivd,ck$,vn$,de$,abs(amt) pageoflow NEWPGE
+20520       pr #255,using L1530: bgl$,ivd,ck$,vn$,de$,abs(amt) pageoflow NEWPGE
 20540     end if 
 20560     if cl<>2 then 
 20580       let tc2=tc2+abs(amt)
@@ -234,43 +234,43 @@
 20820     if tcde=4 then let tbc(bank_code,1)=tbc(bank_code,1)+amt
 20840     goto L1740
 20860 L1660: ! 
-20880     let ap1=val(gl$(1:3))
+20880     ap1=val(gl$(1:3))
 20900     if ap1=0 then let j=99 : goto L1720
 20920     for j=1 to 98
 20940       if apc(j,1)=0 then goto L1720
 20960       if apc(j,1)=ap1 then goto L1720
 20980     next j
 21000 L1720: ! 
-21020     let apc(j,1)=ap1
-21040     let apc(j,2)=apc(j,2)+(amt)
+21020     apc(j,1)=ap1
+21040     apc(j,2)=apc(j,2)+(amt)
 21060 L1740: ! 
 21080     let hgl$=gl$
 21100     goto L1240 ! /r
 22000 NEWPGE: ! r:
-22020     print #255: newpage
+22020     pr #255: newpage
 22040     gosub HDR
 22060     continue  ! /r
 24000 HDR: ! r:
 24020     let pg=pg+1
 24040     let f1=1
-24060     print #255,using 'form pos 1,c 8,cc 76': date$,cnam$
-24080     print #255,using 'form pos 1,c 8,cc 76': time$,"General Ledger Distribution Listing"
-24100     print #255,using 'form pos 1,c 4,n 4,cc 76': "Page",pg,"From: "&cnvrt$("PIC(zz/ZZ/ZZ)",d1)&"   To: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
-24120     print #255: ""
-24140     print #255: "                        Check/Ref                                          "
-24160     print #255: "  GL Number     Date     Number   Vendor #  Description                       Debits      Credits"
-24180     print #255: "____________  ________  ________  ________  ______________________________  __________  __________" pageoflow NEWPGE
+24060     pr #255,using 'form pos 1,c 8,cc 76': date$,cnam$
+24080     pr #255,using 'form pos 1,c 8,cc 76': time$,"General Ledger Distribution Listing"
+24100     pr #255,using 'form pos 1,c 4,n 4,cc 76': "Page",pg,"From: "&cnvrt$("PIC(zz/ZZ/ZZ)",d1)&"   To: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
+24120     pr #255: ""
+24140     pr #255: "                        Check/Ref                                          "
+24160     pr #255: "  GL Number     Date     Number   Vendor #  Description                       Debits      Credits"
+24180     pr #255: "____________  ________  ________  ________  ______________________________  __________  __________" pageoflow NEWPGE
 24200     return  ! /r
 26000 ENDALL: ! r:
-26020     let endall=1 : let pr1$="Y" ! PRINT TOTALS
+26020     let endall=1 : let pr1$="Y" ! pr TOTALS
 26040     if sc2=4 then gosub PRGL
 26060     if pr1$<>"N" then 
 26080       if sc2=4 then 
-26100         print #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd," "," ",pde$,pa1,pa2 pageoflow NEWPGE
+26100         pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd," "," ",pde$,pa1,pa2 pageoflow NEWPGE
 26120       end if 
-26140       print #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
-26160       print #255,using 'Form POS 45,C 30,2*N 12.2': "GL # "&hgl$&" Total",tc1,tc2
-26180       print #255: "                                            ______________________________  __________  __________"
+26140       pr #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
+26160       pr #255,using 'Form POS 45,C 30,2*N 12.2': "GL # "&hgl$&" Total",tc1,tc2
+26180       pr #255: "                                            ______________________________  __________  __________"
 26200     end if 
 26220     for j=1 to 99
 26240       let gl$=""
@@ -281,13 +281,13 @@
 26340 L2100: ! 
 26360       gosub BANKGL
 26380       if pr1$="Y" then 
-26400         print #255,using 'Form POS 45,C 30,2*N 12.2': "Bank   "&gl$,tbc(j,2),tbc(j,1) pageoflow NEWPGE
+26400         pr #255,using 'Form POS 45,C 30,2*N 12.2': "Bank   "&gl$,tbc(j,2),tbc(j,1) pageoflow NEWPGE
 26420       end if 
 26440       let gc1=gc1+tbc(j,2): let gc2=gc2+tbc(j,1)
 26460 L2130: ! 
 26480     next j
 26500     if pr1$="Y" then 
-26520       print #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
+26520       pr #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
 26540     end if 
 26560     for j=1 to 99
 26580       let gl$=""
@@ -298,16 +298,16 @@
 26680 L2210: ! 
 26700       gosub APGL
 26720       if pr1$="Y" then 
-26740         print #255,using 'Form POS 45,C 30,2*N 12.2': "A/P    "&gl$,apc(j,3),apc(j,2) pageoflow NEWPGE
+26740         pr #255,using 'Form POS 45,C 30,2*N 12.2': "A/P    "&gl$,apc(j,3),apc(j,2) pageoflow NEWPGE
 26760       end if 
 26780       let gc1=gc1+apc(j,3)
 26800       let gc2=gc2+apc(j,2)
 26820 L2240: ! 
 26840     next j
 26860     if pr1$="N" then goto L2300
-26880     print #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
-26900     print #255,using 'Form POS 45,C 30,2*N 12.2': "Final Total",gc1,gc2 pageoflow NEWPGE
-26920     print #255: "                                            ======================================================" pageoflow NEWPGE
+26880     pr #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
+26900     pr #255,using 'Form POS 45,C 30,2*N 12.2': "Final Total",gc1,gc2 pageoflow NEWPGE
+26920     pr #255: "                                            ======================================================" pageoflow NEWPGE
 26940     let fncloseprn
 26960 L2300: ! 
 26980     if glt=glt_print_only then goto XIT
@@ -366,7 +366,7 @@
 31060     if sc2><4 then goto L2720
 31080     gosub PRGL
 31100     if pr1$="Y" then 
-31120       print #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NEWPGE
+31120       pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,2*C 10,C 30,2*N 12.2': pgl$,pivd,"  ","  ",pde$,pa1,pa2 pageoflow NEWPGE
 31140     end if 
 31160 L2720: ! 
 31180     let pa1=pa2=0
@@ -473,7 +473,7 @@
 37880   fnend 
 39000 REVERSE_AP: ! r: Reverse AP Entries
 39020   if fndate_mmddyy_to_ccyymmdd(pd)>dt2 then goto L3470
-39040   let ap1=val(gl$(1:3))
+39040   ap1=val(gl$(1:3))
 39060   if ap1=0 then 
 39080     let j=99
 39100     goto L3300
@@ -483,8 +483,8 @@
 39180     if apc(j,1)=ap1 then goto L3300
 39200   next j
 39220 L3300: ! 
-39240   let apc(j,1)=ap1
-39260   let apc(j,3)+=amt
+39240   apc(j,1)=ap1
+39260   apc(j,3)+=amt
 39280   let p1=75 : let gw$=""
 39300   read #fundmstr,using 'Form Pos 52,C 12',key=lpad$(str$(ap1),3): gw$ nokey L3350
 39320   goto L3360
@@ -496,17 +496,17 @@
 39440   if pr1$="N" then goto L3470
 39460   if f1=0 then gosub HDR
 39480   if ap2=0 then 
-39500     print #255: "____________  ________  ________  Reduce Accounts Payable for Previously Posted Invoices  ________"
-39520     let ap2=1
+39500     pr #255: "____________  ________  ________  Reduce Accounts Payable for Previously Posted Invoices  ________"
+39520     ap2=1
 39540   end if 
 39560   let p1=75 : let gw$=""
 39580   read #fundmstr,using 'Form Pos 52,C 12',key=lpad$(str$(ap1),3): gw$ nokey L3430
 39600 L3430: ! 
-39620   print #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,ck$,"","Reverse AP",amt pageoflow NEWPGE
+39620   pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,ck$,"","Reverse AP",amt pageoflow NEWPGE
 39640   let p1=87: let gw$=""
 39660   read #bankmstr,using 'Form POS 33,C 12', key=lpad$(str$(bank_code),2): gw$ nokey L3460
 39680 L3460: ! 
-39700   print #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,ck$,"","Take Out of Bank",amt pageoflow NEWPGE
+39700   pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,ck$,"","Take Out of Bank",amt pageoflow NEWPGE
 39720 L3470: ! 
 39740   return  ! /r
 41000 PRDBLD: ! r:
@@ -554,7 +554,7 @@
 43400   write #glwk,using 'Form Pos 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$(1:3)&gl2$,tr4,tr5,tr6,0,tr$,td$,"","","","",bgl$
 43420 L4040: ! 
 43440   if pr1$="Y" then 
-43460     print #255,using 'Form POS 1,X 14,C 60': "Transferred from "&gw$(1:3)&gl1$&" to "&bgl$(1:3)&gl2$&cnvrt$("N 10.2",tr5) pageoflow NEWPGE
+43460     pr #255,using 'Form POS 1,X 14,C 60': "Transferred from "&gw$(1:3)&gl1$&" to "&bgl$(1:3)&gl2$&cnvrt$("N 10.2",tr5) pageoflow NEWPGE
 43480   end if 
 43500 EO_FUNDTR: ! 
 43520   return  ! /r
@@ -563,17 +563,17 @@
 45040 ERTN: let fnerror(program$,err,line,act$,"NO")
 45060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 45080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-45100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+45100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 45120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 45140 ! /region
 47000   def fn_check_breakdowns_add_up ! 
-47020     let check_breakdowns_add_up_return=1
-47040     if ~fn_cb_trmstr_test then let check_breakdowns_add_up_return=0
-47060     if ~fn_cb_unpaid_test then let check_breakdowns_add_up_return=0
+47020     check_breakdowns_add_up_return=1
+47040     if ~fn_cb_trmstr_test then check_breakdowns_add_up_return=0
+47060     if ~fn_cb_unpaid_test then check_breakdowns_add_up_return=0
 47080     let fn_check_breakdowns_add_up=check_breakdowns_add_up_return
 47100   fnend  ! 
 48000   def fn_cb_unpaid_test ! CHECK_UNPAIDS: !
-48020     let cb_cu_return=1
+48020     cb_cu_return=1
 48040     restore #trmstr: 
 48060     open #paymstr=8: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 48080     open #unpdaloc=7: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Uaidx2.H"&str$(cno)&",Shr",internal,outin,keyed 
@@ -601,7 +601,7 @@
 48520       let ml$(2)="transaction amount ("&trim$(cnvrt$("pic(---,---.##)",upa))&").  You must fix this unpaid "
 48540       let ml$(3)="invoice # "&trim$(x$)&" in the unpaid invoice file before you can continue. "
 48560       let fnmsgbox(mat ml$,ok$,cap$,48)
-48580       let cb_cu_return=0
+48580       cb_cu_return=0
 48600       goto EO_PAYTRANS_TEST
 48620     else 
 48640       goto CB_CU_READ
@@ -613,7 +613,7 @@
 48760     close #unpdaloc: 
 48780   fnend 
 52000   def fn_cb_trmstr_test ! TEST_CHECKHISTORY: !
-52020     let cb_tt_return=1
+52020     cb_tt_return=1
 52040     do 
 52060       let totalloc=0
 52080 CB_TT_READ: ! 
@@ -636,7 +636,7 @@
 52380         let ml$(2)="transaction amount ("&cnvrt$("pic(---,---.##)",ca1)&".  You must fix this "
 52400         let ml$(3)="transaction ("&ck$&") (bank "&str$(trbank_code)&") check history before you can continue. "
 52420         let fnmsgbox(mat ml$,ok$,cap$,48)
-52440         let cb_tt_return=0
+52440         cb_tt_return=0
 52460         goto EO_TRMSTR_TEST
 52480       end if 
 52500     loop 

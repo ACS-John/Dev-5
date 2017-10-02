@@ -7,7 +7,7 @@
 22020 ERTN: let fnerror(program$,err,line,act$,"xit")
 22040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 22060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-22080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+22080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 22100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 22120 ! /region
 24000 def fn_setup
@@ -66,9 +66,9 @@
 40060   ! ___________________________________________________________________
 40080   SCREEN1: ! 
 40100   gosub ASKTRANSET ! Let FNASKTRANSET(CKEY,SEL_CODE,BEG_DATE,END_DATE,Z$,HACT$)
-40120   if ckey=2 and trim$(z$)="" then goto SCREEN1 ! don't allow print to work if no customer selected
+40120   if ckey=2 and trim$(z$)="" then goto SCREEN1 ! don't allow pr to work if no customer selected
 40140   ! If CKEY=2 AND TRIM$(Z$)="[All]" Then Goto SCREEN1
-40160   if ckey=2 then let fn_PRINTTRANS : goto SCREEN1 ! print report of charges
+40160   if ckey=2 then let fn_PRINTTRANS : goto SCREEN1 ! pr report of charges
 40180   if ckey=5 then goto Tf_XIT else goto SCREEN_TRANS_GRID
 40200   ! ___________________________________________________________________
 41000   SCREEN_TRANS_GRID: ! r:
@@ -103,7 +103,7 @@
 42020     let fntos(sn$="Transaction-1")
 42040     let rc=cf=0
 42060     let fnfra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
-42080     let cf+=1 : let fratype=cf
+42080     cf+=1 : let fratype=cf
 42100     let fnopt(1,3,"[All]",0,fratype)
 42120     if sel_code=1 or sel_code=0 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
 42140     let fnopt(2,3,"Charges",0,fratype)
@@ -117,16 +117,16 @@
 42300     let fnopt(6,3,"Debit Memos",0,fratype)
 42320     if sel_code=6 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
 42340     let fnfra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
-42360     let cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
+42360     cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
 42380     let fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
 42400     let fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
-42420     if beg_date=0 then let beg_date=date('mm')*10000+100+date('yy')-1
+42420     if beg_date=0 then beg_date=date('mm')*10000+100+date('yy')-1
 42440     let resp$(rc+=1)=str$(beg_date)
 42460     let fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
 42480     let fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
 42500     let resp$(rc+=1)=str$(end_date)
 42520     let fnfra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
-42540     let cf+=1 : let fraaccount=cf
+42540     cf+=1 : let fraaccount=cf
 42560     let fnlbl(1,1,"Account:",8,1,0,fraaccount)
 42580     if trim$(hact$)='' then 
 42600       let fncmbact(1,10,1,fraaccount)
@@ -155,7 +155,7 @@
 43220     else if resp$(6)="True" then 
 43240       let sel_code=6
 43260     end if 
-43280     let beg_date=val(resp$(7))
+43280     beg_date=val(resp$(7))
 43300     let end_date=val(resp$(8))
 43320     let z$=resp$(9)(1:10)
 43340     L810: !
@@ -286,17 +286,17 @@
 49860       if trim$(servicename$(j))="" then goto L1370
 49880       if j=3 and (trim$(servicename$(j))<>"Electric" or trim$(servicename$(j))<>"Lawn Meter") and srv$(j)="EL" then goto L1370 ! electic being used for reduction meter
 49900       if j=4 and trim$(servicename$(j))<>"Gas" and srv$(j)="GA" then goto L1370 ! gas being used for reduction meter
-49920       let alloc(x+=1)=tg(j)
+49920       alloc(x+=1)=tg(j)
 49940       if ti2=3 then let r(x+3,1)-=tg(j) else let r(x+3,1)+=tg(j)
 49960       let r(x+3,ti2+1)+=tg(j)
 49980       L1370: ! 
 50000     next j
-50020     let c$=" "
-50040     if tcode=1 then let c$="CHG"
-50060     if tcode=2 then let c$="PN"
-50080     if tcode=3 then let c$="COL"
-50100     if tcode=4 then let c$="CM"
-50120     if tcode=5 then let c$="DM"
+50020     c$=" "
+50040     if tcode=1 then c$="CHG"
+50060     if tcode=2 then c$="PN"
+50080     if tcode=3 then c$="COL"
+50100     if tcode=4 then c$="CM"
+50120     if tcode=5 then c$="DM"
 50140     let service=0
 50160     if water=1 then let service+=1: let usage(service)=wu ! water
 50180     if electric=1 then let service+=1: let usage(service)=eu ! Electric
@@ -308,9 +308,9 @@
 50300       let printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 8.2,n 10.2,3*pic(zzzzzzzzzzz),x 1"
 50320     end if 
 50340     if trim$(z$)="[All]" then 
-50360       print #255,using 'Form POS 1,c 10,x 1,'&printlineform$: p$,c$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+50360       pr #255,using 'Form POS 1,c 10,x 1,'&printlineform$: p$,c$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
 50380     else 
-50400       print #255,using 'Form POS 1,'&printlineform$: c$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
+50400       pr #255,using 'Form POS 1,'&printlineform$: c$,tdate,mat alloc,tamount,usage(1),usage(2),usage(3) pageoflow PGOF
 50420     end if  ! trim$(z$)="[All]"   /   else 
 50440     if tcode=1 then mat totalalloc=totalalloc+alloc: let totaltamount+=tamount: mat totalusage=totalusage+usage ! charges
 50460     if tcode=2 then mat totalalloc=totalalloc+alloc: let totaltamount+=tamount ! penalties
@@ -319,36 +319,36 @@
 50520     if tcode=5 then mat totalalloc=totalalloc+alloc: let totaltamount+=tamount ! debit memos
 50540   loop 
 50560   PGOF: ! r:
-50580     print #255: newpage
+50580     pr #255: newpage
 50600     gosub HDR
 50620   continue  ! /r
 50640   HDR: ! r:
 50660   ! need date$,time$
-50670     print #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&" }"
-50680     print #255: "\qc  {\f181 \fs20 \b "&trim$(nam$)&" }"
-50700     print #255: "\qc  {\f181 \fs20 \b "&trim$(metraddr$)&" }"
-50720     print #255: "\qc  {\f181 \fs20 \b "&trim$(z$)&" }"
-50740     print #255: "\qc  {\f181 \fs28 \b Transaction List }"
+50670     pr #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&" }"
+50680     pr #255: "\qc  {\f181 \fs20 \b "&trim$(nam$)&" }"
+50700     pr #255: "\qc  {\f181 \fs20 \b "&trim$(metraddr$)&" }"
+50720     pr #255: "\qc  {\f181 \fs20 \b "&trim$(z$)&" }"
+50740     pr #255: "\qc  {\f181 \fs28 \b Transaction List }"
 50760     if beg_date<>0 and end_date<>0 then 
-50780       print #255: "\qc  {\f181 \fs18 \b From "&cnvrt$("pic(zzzz/zz/zz)",beg_date)& "  To "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
+50780       pr #255: "\qc  {\f181 \fs18 \b From "&cnvrt$("pic(zzzz/zz/zz)",beg_date)& "  To "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
 50800     end if  ! beg_date<>0 and end_date<>0
-50820     print #255: ""
-50840     print #255: "\ql "
-50860     print #255: hd1$
+50820     pr #255: ""
+50840     pr #255: "\ql "
+50860     pr #255: hd1$
 50880   return  ! /r
 50900   PT_FINIS: ! 
-50920   print #255,using "form skip 1,pos 10,c 20": "Totals"
+50920   pr #255,using "form skip 1,pos 10,c 20": "Totals"
 50940   for j=1 to udim(alloc)
-50960     print #255,using "form pos 1,c 20,pic(---,---,---.##)": name$(j),totalalloc(j)
+50960     pr #255,using "form pos 1,c 20,pic(---,---,---.##)": name$(j),totalalloc(j)
 50980   next j
-51000   print #255,using "form pos 1,c 20,pic(---,---,---.##)": "Total Amount",totaltamount
-51020   if water=1 then print #255,using "form pos 1,c 20,pic(---,---,---)": "Water Usage",totalusage(1)
-51040   if electric=1 and water=1 then print #255,using "form pos 1,c 20,pic(---,---,---)": "Electric Usage",totalusage(2) ! electric 2nd metered service
-51060   if electric=1 and water=0 then print #255,using "form pos 1,c 20,pic(---,---,---)": "Electric Usage",totalusage(1) ! electric is 1st metered service
-51080   if gas=1 and electric=1 and water=1 then print #255,using "form pos 1,c 20,pic(---,---,---)": "Gas Usage",totalusage(3) ! gas is third service
-51100   if gas=1 and electric=0 and water=1 then print #255,using "form pos 1,c 20,pic(---,---,---)": "Gas Usage",totalusage(2) ! gas is second metered service
-51120   if gas=1 and electric=0 and water=0 then print #255,using "form pos 1,c 20,pic(---,---,---)": "Gas Usage",totalusage(1) ! gas is first  metered service
-51140   print #255,using "form skip 1,pos 1,cr 18,pic(-,---,---,--#.##)": "Current Balance:",account_balance
+51000   pr #255,using "form pos 1,c 20,pic(---,---,---.##)": "Total Amount",totaltamount
+51020   if water=1 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Water Usage",totalusage(1)
+51040   if electric=1 and water=1 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Electric Usage",totalusage(2) ! electric 2nd metered service
+51060   if electric=1 and water=0 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Electric Usage",totalusage(1) ! electric is 1st metered service
+51080   if gas=1 and electric=1 and water=1 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Gas Usage",totalusage(3) ! gas is third service
+51100   if gas=1 and electric=0 and water=1 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Gas Usage",totalusage(2) ! gas is second metered service
+51120   if gas=1 and electric=0 and water=0 then pr #255,using "form pos 1,c 20,pic(---,---,---)": "Gas Usage",totalusage(1) ! gas is first  metered service
+51140   pr #255,using "form skip 1,pos 1,cr 18,pic(-,---,---,--#.##)": "Current Balance:",account_balance
 51160   PT_NO_CUSTOMER: ! 
 51180   close #h_customer: ioerr ignore
 51200   close #trans: ioerr ignore
@@ -361,7 +361,7 @@
 62100   dim srv$(10)*2,servicename$(10)*20
 62120   ! ______________________________________________________________________
 62200   if hTrans=0 then 
-62220     let close_hTrans=1
+62220     close_hTrans=1
 62260     open #hTrans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 62280   end if 
 62290   let hTrans_lrec_len=len(str$(lrec(hTrans)))
@@ -469,21 +469,21 @@
 68240     let fnflexadd1(mat item$) 
 68260   loop
 68280   FlexTranFinis: ! 
-68300   if close_hTrans=1 then close #hTrans: : let close_hTrans=0
+68300   if close_hTrans=1 then close #hTrans: : close_hTrans=0
 68320 fnend 
 72000 def fn_columnGet(mat colhdr$,mat colmask$,&ftShowElecUsed,&ftShowGasUsed)
 72020   mat colhdr$(30)
 72040   mat colmask$(30)
-72060   let colhdr$(1)="Rec"
-72080   let colhdr$(2)="Account"
-72100   let colhdr$(3)="Date"
-72120   let colhdr$(4)="Type"
-72140   let colhdr$(5)="Amount"
-72160   let colmask$(1)=""
-72180   let colmask$(2)=""
-72200   let colmask$(3)="3"
-72220   let colmask$(4)=""
-72240   let colmask$(5)="10"
+72060   colhdr$(1)="Rec"
+72080   colhdr$(2)="Account"
+72100   colhdr$(3)="Date"
+72120   colhdr$(4)="Type"
+72140   colhdr$(5)="Amount"
+72160   colmask$(1)=""
+72180   colmask$(2)=""
+72200   colmask$(3)="3"
+72220   colmask$(4)=""
+72240   colmask$(5)="10"
 72260   let headerCount=5
 72280   if trim$(servicename$(3))<>"Electric" and srv$(3)="EL" then let ftShowElecUsed=1
 72300   if trim$(servicename$(4))<>"Gas" and srv$(4)="GA" then let ftShowGasUsed=1
@@ -491,50 +491,50 @@
 72340     if j=3 and ftShowElecUsed=1 then goto L220
 72360     if j=4 and ftShowGasUsed=1 then goto L220
 72380     if trim$(servicename$(j))<>"" then 
-72400       let colhdr$(headerCount+=1)=trim$(servicename$(j))(1:min(8,len(trim$(servicename$(j)))))
-72420       let colmask$(headerCount)="10"
+72400       colhdr$(headerCount+=1)=trim$(servicename$(j))(1:min(8,len(trim$(servicename$(j)))))
+72420       colmask$(headerCount)="10"
 72440     end if 
 72460     L220: ! 
 72480   next j
-72500   let colhdr$(headerCount+=1)="Net" : let colmask$(headerCount)="10"
+72500   colhdr$(headerCount+=1)="Net" : colmask$(headerCount)="10"
 72520   for j=1 to 4
 72540     if trim$(servicename$(j))<>"" and j=1 then 
-72560       let colhdr$(headerCount+=1)="Water Reading"
-72580       let colmask$(headerCount)="20"
-72600       let colhdr$(headerCount+=1)="Water Used"
-72620       let colmask$(headerCount)="20"
+72560       colhdr$(headerCount+=1)="Water Reading"
+72580       colmask$(headerCount)="20"
+72600       colhdr$(headerCount+=1)="Water Used"
+72620       colmask$(headerCount)="20"
 72640     end if 
 72660     if trim$(servicename$(j))="Electric" and j=3 then 
-72680       let colhdr$(headerCount+=1)="Elec Reading"
-72700       let colmask$(headerCount)="20"
-72720       let colhdr$(headerCount+=1)="Elec Used"
-72740       let colmask$(headerCount)="20"
+72680       colhdr$(headerCount+=1)="Elec Reading"
+72700       colmask$(headerCount)="20"
+72720       colhdr$(headerCount+=1)="Elec Used"
+72740       colmask$(headerCount)="20"
 72760     else if trim$(srv$(j))="EL" and j=3 then 
-72780       let colhdr$(headerCount+=1)=" 2nd Reading"
-72800       let colmask$(headerCount)="20"
-72820       let colhdr$(headerCount+=1)=" 2nd Used"
-72840       let colmask$(headerCount)="20"
+72780       colhdr$(headerCount+=1)=" 2nd Reading"
+72800       colmask$(headerCount)="20"
+72820       colhdr$(headerCount+=1)=" 2nd Used"
+72840       colmask$(headerCount)="20"
 72860     end if 
 72880     if trim$(servicename$(j))="Lawn Meter" and j=3 then 
-72900       let colhdr$(headerCount+=1)="Lawn Reading"
-72920       let colmask$(headerCount)="20"
-72940       let colhdr$(headerCount+=1)="Lawn Used"
-72960       let colmask$(headerCount)="20"
+72900       colhdr$(headerCount+=1)="Lawn Reading"
+72920       colmask$(headerCount)="20"
+72940       colhdr$(headerCount+=1)="Lawn Used"
+72960       colmask$(headerCount)="20"
 72980     end if 
 73000     if uprc$(trim$(servicename$(j)))="GAS" and j=4 then 
-73020       let colhdr$(headerCount+=1)="Gas Reading"
-73040       let colmask$(headerCount)="20"
-73060       let colhdr$(headerCount+=1)="Gas Used"
-73080       let colmask$(headerCount)="20"
+73020       colhdr$(headerCount+=1)="Gas Reading"
+73040       colmask$(headerCount)="20"
+73060       colhdr$(headerCount+=1)="Gas Used"
+73080       colmask$(headerCount)="20"
 73100     else if uprc$(trim$(srv$(j)))="GA" and j=4 then 
-73120       let colhdr$(headerCount+=1)="3nd Reading"
-73140       let colmask$(headerCount)="20"
-73160       let colhdr$(headerCount+=1)="3rd Used"
-73180       let colmask$(headerCount)="20"
+73120       colhdr$(headerCount+=1)="3nd Reading"
+73140       colmask$(headerCount)="20"
+73160       colhdr$(headerCount+=1)="3rd Used"
+73180       colmask$(headerCount)="20"
 73200     end if 
 73220   next j
-73240   let colhdr$(headerCount+=1)="Balance"
-73260   let colmask$(headerCount)="10"
+73240   colhdr$(headerCount+=1)="Balance"
+73260   colmask$(headerCount)="10"
 73280   mat colhdr$(headerCount)
 73300   mat colmask$(headerCount)
 73320 fnend

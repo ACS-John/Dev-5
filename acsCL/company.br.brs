@@ -11,9 +11,9 @@
 00110 ! ______________________________________________________________________
 00120   let fntop(program$,cap$="Company Information")
 00130   let fncno(cno)
-00140   let cancel=99 : let right=1 : let center=2 : let left=0 !:
-        let ccyymmdd$='3' : let mmddyy$='1' : let on=1 : let off=0 !:
-        let cancel=5 : let save=1 : let limit_to_list=1 : let pointtwo$='32' !:
+00140   cancel=99 : let right=1 : center=2 : let left=0 !:
+        ccyymmdd$='3' : let mmddyy$='1' : let on=1 : let off=0 !:
+        cancel=5 : let save=1 : let limit_to_list=1 : let pointtwo$='32' !:
         let pointthree$='33'
 00150   open #glmstr=11: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L160
 00160 L160: open #company=1: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative ioerr BUILD_COMPANY
@@ -21,9 +21,9 @@
 00180 ! ______________________________________________________________________
 00190 READ_COMPANY: ! 
 00200   read #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,N 2,N 1,C 9,C 12,c 12,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,wbc,ar1,mat e$,lastact$,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,prenum,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
-00210   if actr$="0" or actr$="1" then let actr=val(actr$)
-00220   if uprc$(actr$)="Y" then let actr=1 else !:
-          if uprc$(actr$)="N" then let actr=0
+00210   if actr$="0" or actr$="1" then actr=val(actr$)
+00220   if uprc$(actr$)="Y" then actr=1 else !:
+          if uprc$(actr$)="N" then actr=0
 00230   gosub NEWSCREEN !:
         if ckey=save then gosub SAVE : goto XIT else !:
           if ckey=cancel then goto XIT !:
@@ -52,11 +52,11 @@
 00320   let fncmdset(4) ! Save and Cancel
 00330   let fnacs(sn$,0,mat resp$,ckey)
 00340   if page=1 then 
-00350     let a$(1)=resp$(1) !:
-          let a$(2)=resp$(2) !:
-          let a$(3)=resp$(3) !:
-          let b$(1)=resp$(4) !:
-          let b$(2)=resp$(5) !:
+00350     a$(1)=resp$(1) !:
+          a$(2)=resp$(2) !:
+          a$(3)=resp$(3) !:
+          b$(1)=resp$(4) !:
+          b$(2)=resp$(5) !:
           let tb$=resp$(6) !:
           let nap=val(resp$(7)) !:
           let wbc=val(resp$(8)(1:2))
@@ -67,7 +67,7 @@
 00400     if resp$(1)='True' then let d(1)=1 else let d(1)=0
 00410     if resp$(2)='True' then let d(2)=1 else let d(2)=0
 00420     let lastact$=fnagl$(resp$(3))
-00430     if resp$(4)='True' then let ar1=1 else let ar1=0
+00430     if resp$(4)='True' then ar1=1 else ar1=0
 00440     let resp$(5)=fnagl$(resp$(5)) !:
           let prgl(1,1)=val(resp$(5)(1:3)) !:
           let prgl(1,2)=val(resp$(5)(4:9)) !:
@@ -90,7 +90,7 @@
           let prgl(5,3)=val(resp$(9)(10:12))
 00490   end if 
 00500   if page=3 then 
-00510     let c$=resp$(1) !:
+00510     c$=resp$(1) !:
           let udm=val(resp$(2)) !:
           let ficarate=val(resp$(3)) !:
           let ficawage=val(resp$(4)) !:
@@ -291,7 +291,7 @@
 01680 ERTN: let fnerror(program$,err,line,act$,"xit")
 01690   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01710   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01710   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01720 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01730 ! /region
 01740 ! ______________________________________________________________________

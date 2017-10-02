@@ -4,9 +4,9 @@
 00040 ! library
 00050 ! on error goto ertn
 00060 ! ____________
-00070   let cno=2
+00070   cno=2
 00080   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno),internal,outin 
 00090 L90: read #11,using "Form pos 1,C 10": p$ eof L120
-00100   if p$(1:2)=" 6" then delete #11: : print "deleted one"
+00100   if p$(1:2)=" 6" then delete #11: : pr "deleted one"
 00110   goto L90
-00120 L120: print 'done'
+00120 L120: pr 'done'

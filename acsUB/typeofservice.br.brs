@@ -67,7 +67,7 @@
 32020 ERTN: fnerror(program$,err,line,act$,"xit")
 32040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 32060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-32080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+32080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 32100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 32120 ! /region
 34000   def fn_setup

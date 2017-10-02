@@ -67,8 +67,8 @@
 52010 CUSTOMER_READ: ! 
 52020     let holdroute=route
 52040     read #1,using F_CUSTOMER: z$,mat e$,mat b,mat c,route,sequence,final_billing_code eof PRINT_GRAND_TOTALS
-52060     if c(3)=1 or c(3)=2 then let c(3)=0 ! if deposit date previously used for final billing code, set it to zero
-52080     if c(4)=1 or c(4)=2 then let c(4)=0
+52060     if c(3)=1 or c(3)=2 then c(3)=0 ! if deposit date previously used for final billing code, set it to zero
+52080     if c(4)=1 or c(4)=2 then c(4)=0
 54000     if filter_choice>1 then ! didn't select [All]
 54020       if filter_choice=2 then ! 0 - Active
 54040         if final_billing_code<>0 then goto CUSTOMER_READ
@@ -92,12 +92,12 @@
 58000 HEADER: ! r:
 58020   let p2=p2+1
 58040   let lnpg=0
-58060   print #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
-58080   print #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
-58100   print #255: "\qc  {\f181 \fs18 \b "&trim$(dat$)&"}"
-58120   print #255,using L540: "\ql ","Page "&str$(p2)
+58060   pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
+58080   pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
+58100   pr #255: "\qc  {\f181 \fs18 \b "&trim$(dat$)&"}"
+58120   pr #255,using L540: "\ql ","Page "&str$(p2)
 58140 L540: form pos 1,c 5,pos 110,c 10
-58160   print #255: ""
+58160   pr #255: ""
 58180   let jp=0
 58200   let date_amount$=""
 58220   mat services$=("")
@@ -118,8 +118,8 @@
 58520     let services$(jp)=trim$(servicename$(j))(1:x)
 58540 L730: ! 
 58542   next j
-58560   print #255,using 'form pos 62,4*cc 18': mat services$
-58600   print #255,using 'form pos 60,c 80': date_amount$
+58560   pr #255,using 'form pos 62,4*cc 18': mat services$
+58600   pr #255,using 'form pos 60,c 80': date_amount$
 58640   return  ! /r
 62000 PRINT_DETAILS: ! r:
 62020   let jp=0
@@ -131,29 +131,29 @@
 62140     let jp=jp+1
 62160     let p1=jp*19+40
 62180     let depdate(jp)=c(j)
-62200     let amount(jp)=b(j+7)
+62200     amount(jp)=b(j+7)
 62220     let r(j)=r(j)+b(j+7)
 62240     let s(j)=s(j)+b(j+7)
 62260     let deposit$(jp)=cnvrt$("pic(zzz/zz/zz)",depdate(jp))&" "&cnvrt$("nz 8.2",amount(jp))
 62280 L930: ! 
 62282   next j
 62300   mat deposit$(jp)
-62320   print #255,using L960: z$,e$(2)(1:22),e$(1)(1:22),mat deposit$ pageoflow NEWPGE
+62320   pr #255,using L960: z$,e$(2)(1:22),e$(1)(1:22),mat deposit$ pageoflow NEWPGE
 62340 L960: form c 12,2*c 23,x 2,jp*c 18
 62360   return  ! /r
 64000 PRINT_SUB_TOTALS: ! r:
-64020   print #255: "{\b Sub-totals:}"
+64020   pr #255: "{\b Sub-totals:}"
 64040   for j=1 to 4
-64060     if trim$(servicename$(j))<>"" then print #255,using F_TOTALS: servicename$(j),s(j)
+64060     if trim$(servicename$(j))<>"" then pr #255,using F_TOTALS: servicename$(j),s(j)
 64080     form pos 7,c 30,n 10.2
 64100   next j
 64120   mat s=(0)
 64140   return  ! /r
 64160 ! ______________________________________________________________________
 66000 PRINT_GRAND_TOTALS: ! r:
-66020   print #255: "{\b Totals:}"
+66020   pr #255: "{\b Totals:}"
 66040   for j=1 to 4
-66060     if trim$(servicename$(j))<>"" then print #255,using F_TOTALS: servicename$(j),r(j)
+66060     if trim$(servicename$(j))<>"" then pr #255,using F_TOTALS: servicename$(j),r(j)
 66080 F_TOTALS: form pos 7,c 30,n 10.2
 66100   next j
 66120   close #1: ioerr ignore
@@ -162,7 +162,7 @@
 66180 XIT: let fnxit
 66200 ! ______________________________________________________________________
 68000 NEWPGE: ! r:
-68020   print #255: newpage
+68020   pr #255: newpage
 68040   gosub HEADER
 68060   continue  ! /r
 68080 ! ______________________________________________________________________
@@ -170,7 +170,7 @@
 70020 ERTN: let fnerror(program$,err,line,act$,"xit")
 70040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 70060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-70080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+70080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 70100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 70120 ! /region
 70140 IGNORE: continue 

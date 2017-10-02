@@ -4,9 +4,9 @@
 20000   do 
 20020     linput #h_filelist: program_file$ eof FILELIST_EOF
 20022     if program_file$(1:1)<>'!' then 
-20030 !     print 'File: '&program_file$ : pause
+20030 !     pr 'File: '&program_file$ : pause
 20060       let xcv$=fn_get_variable_value$('cv$',program_file$)
-20100       print xcv$
+20100       pr xcv$
 20120       if xcv$<>'' then 
 20140         let fn_replace_in_file(program_file$,'cv$',xcv$)
 20160         let fn_replace_in_file(program_file$,'let '&xcv$&'='&xcv$,'!')
@@ -24,11 +24,11 @@
 40140     do 
 40160       linput #h_file: line$ eof RIF_EOF
 40180       let line$=srep$(line$,from$,to$)
-40200       print #h_out: line$
+40200       pr #h_out: line$
 40220     loop 
 40240 RIF_EOF: ! 
-40260     print 'from file: '&file$(h_file)
-40280     print ' new file: '&file$(h_out)
+40260     pr 'from file: '&file$(h_file)
+40280     pr ' new file: '&file$(h_out)
 40290     let tmp$='copy '&file$(h_out)&' '&file$(h_file)
 40300     close #h_out: 
 40320     close #h_file: 

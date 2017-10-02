@@ -91,7 +91,7 @@
 48620 goto XIT ! /r
 52000 IGNORE: continue 
 54000 NEWPGE: ! r:
-54020   print #255: newpage
+54020   pr #255: newpage
 54040   gosub HDR
 54060 continue  ! /r
 56000 HDR: ! r:
@@ -124,13 +124,13 @@
 56540     end if 
 56560     ! /r
 56580   end if
-56600   print #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
-56620   print #255: "\qc  {\f181 \fs24 \b "&env$('Program_Caption')&"}"
-56640   print #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
-56660   print #255: "\qc  {\f181 \fs16 \b Billing Date: "&cnvrt$('pic(##/##/##)',filterBillingDate)&"}"
-56680   print #255,using 'form pos 1,Cr reportWidth': "Page "&str$(p2+=1)
-56700   print #255: heading$
-56720   print #255: "{\ul  Account  } {\ul Name                } "&heading2$
+56600   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
+56620   pr #255: "\qc  {\f181 \fs24 \b "&env$('Program_Caption')&"}"
+56640   pr #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
+56660   pr #255: "\qc  {\f181 \fs16 \b Billing Date: "&cnvrt$('pic(##/##/##)',filterBillingDate)&"}"
+56680   pr #255,using 'form pos 1,Cr reportWidth': "Page "&str$(p2+=1)
+56700   pr #255: heading$
+56720   pr #255: "{\ul  Account  } {\ul Name                } "&heading2$
 56740 return  ! /r
 58000 PRINT_DETAILS: ! r:
 58010   if sum(mat d(3:12))<>0 then
@@ -144,7 +144,7 @@
 58340     if service4enabled then 
 58400       let line$=line$&cnvrt$("n 10",d(9))&cnvrt$("n 10",d(11))&cnvrt$("n 10",d(12))
 58420     end if 
-58460     print #255: line$ pageoflow NEWPGE
+58460     pr #255: line$ pageoflow NEWPGE
 58480     let oldroute=route
 58500     let t(1,1)=t(1,1)+d(3)
 58520     let t(1,2)=t(1,2)+d(4)
@@ -160,14 +160,14 @@
 60000 PRINT_ROUTE_TOTALS: ! r:
 60020   mat r=r+t
 60030   if reportSequence=sequenceRoute then 
-60040     print #255: "" ! pageoflow NEWPGE
-60060     print #255: "" ! pageoflow NEWPGE
-60080     print #255: "" ! pageoflow NEWPGE
-60100     print #255: tab(40);"Totals for Route Number ";oldroute;
-60120     if s9=0 then print #255: tab(75);"Grand Totals";
-60140     print #255: ""
-60160     print #255: tab(39);"Current    Year to Date";
-60180     if s9=0 then print #255: tab(69);"Current    Year to Date"
+60040     pr #255: "" ! pageoflow NEWPGE
+60060     pr #255: "" ! pageoflow NEWPGE
+60080     pr #255: "" ! pageoflow NEWPGE
+60100     pr #255: tab(40);"Totals for Route Number ";oldroute;
+60120     if s9=0 then pr #255: tab(75);"Grand Totals";
+60140     pr #255: ""
+60160     pr #255: tab(39);"Current    Year to Date";
+60180     if s9=0 then pr #255: tab(69);"Current    Year to Date"
 60200     let line$=""
 60220     if trim$(serviceName$(1))="" then 
 60240       goto L1180
@@ -177,7 +177,7 @@
 60320     if s9=0 then 
 60340       let line$=line$ & "    "&cnvrt$("n 10",r(1,1))&"      "&cnvrt$("n 10",r(1,2))
 60360     end if 
-60380     print #255,using "Form POS 25,C 120": line$
+60380     pr #255,using "Form POS 25,C 120": line$
 60400     L1180: ! 
 60420     let line$=""
 60440     if service3enabled then 
@@ -186,7 +186,7 @@
 60780     if s9=0 then 
 60800       let line$=line$ & "    "&cnvrt$("n 10",r(2,1))&"      "&cnvrt$("n 10",r(2,2))
 60820     end if 
-60840     print #255,using "Form POS 25,C 120": line$
+60840     pr #255,using "Form POS 25,C 120": line$
 60880     let line$=""
 60900     if service4enabled then 
 60920       let line$=serviceName$(4)(1:11)&line$&cnvrt$("n 10",t(3,1))&"      "&cnvrt$("n 10",t(3,2))
@@ -194,8 +194,8 @@
 61120     if s9=0 then 
 61140       let line$=line$ & "    "&cnvrt$("n 10",r(3,1))&"      "&cnvrt$("n 10",r(3,2))
 61160     end if 
-61180     print #255,using "Form POS 25,C 120": line$
-61240     if s9=1 then let s9=0 : print #255: newpage ! gosub NEWPGE
+61180     pr #255,using "Form POS 25,C 120": line$
+61240     if s9=1 then let s9=0 : pr #255: newpage ! gosub NEWPGE
 61800   end if  ! reportSequence=sequenceRoute
 61820   mat t=(0)
 61860   let s9=0
@@ -205,6 +205,6 @@
 66020 ERTN: let fnerror(program$,err,line,act$,"xit")
 66040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 66060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-66080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+66080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 66100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 66120 ! /region

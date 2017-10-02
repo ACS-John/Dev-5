@@ -52,7 +52,7 @@
 00490   if ta(1)=0 then let ta(1)=lr2
 00500   if ta(2)>0 then rewrite #2,using L550,rec=ta(2): lr2
 00510   let ta(2)=lr2
-00520   let cb=cb+k
+00520   cb=cb+k
 00530   rewrite #1,using L450,key=t$: cb,mat ta
 00540 L540: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
 00550 L550: form pos 71,pd 3
@@ -63,14 +63,14 @@
 00600   if n(1)>2 then goto VENDOR_FILE ! only allow receipts or disbursments to bank rec
 00610   let l$=trim$(l$): let l$=l$(1:8)
 00620   let l$=lpad$(rtrm$(l$),8)
-00630   let bank$=key$&str$(n(1))&l$
+00630   bank$=key$&str$(n(1))&l$
 00640   read #6,using L650,key=bank$: amt nokey WRITE_NEW_BANKREC ioerr VENDOR_FILE
 00650 L650: form pos 18,pd 10.2
-00660   let amt=amt+k
+00660   amt=amt+k
 00670   rewrite #6,using L650: amt
 00680   goto VENDOR_FILE
 00690 WRITE_NEW_BANKREC: ! 
-00700   let bankgl$=key$ !:
+00700   bankgl$=key$ !:
         let tcde=n(1) ! transaction code !:
         let tr$(1)=lpad$(rtrm$(l$),8) ! ref # !:
         let tr$(2)=str$(s) !  check date !:
@@ -78,7 +78,7 @@
         let tr$(4)=ven$ ! payee
 00710   let tr$(5)=p$ ! name or desc !:
         let pcde=0 ! posting code !:
-        let clr=0 ! cleared date !:
+        clr=0 ! cleared date !:
         let scd=0 ! source code
 00720   if tcde=2 then let tx3=-tx3 ! turn sign around on bank rec file for receipts
 00730   write #6,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd
@@ -113,7 +113,7 @@
 00990 ! ______________________________________________________________________
 01000 ADD: ! 
 01010   let dno=val(t$(1:3)) conv L1020
-01020 L1020: let ano=val(t$(4:9)) conv L1030
+01020 L1020: ano=val(t$(4:9)) conv L1030
 01030 L1030: let sno=val(t$(10:12)) conv L1040
 01040 L1040: let fntos(sn$="GLmerge3") !:
         let mylen=23: let mypos=mylen+3 : let right=1: let rc=0
@@ -136,8 +136,8 @@
 01150   let fnacs(sn$,0,mat resp$,ckey)
 01160   let pas=0
 01170   let dno=ano=sno=0
-01180   if use_dept=1 then let dno=val(resp$(1)) : let ano=val(resp$(2))
-01190   if use_dept=0 then let ano=val(resp$(1))
+01180   if use_dept=1 then let dno=val(resp$(1)) : ano=val(resp$(2))
+01190   if use_dept=0 then ano=val(resp$(1))
 01200   if use_dept=1 and use_sub=1 then let sno=val(resp$(3))
 01210   if use_dept=0 and use_sub=1 then let sno=val(resp$(2))
 01220 ! 
@@ -149,7 +149,7 @@
 01280   read #1,using 'Form POS 1,N 3',key=key$: dno nokey L1300
 01290 ! msgbox
 01300 L1300: mat ta=(0)
-01310   let cb=0
+01310   cb=0
 01320   write #1,using L1330: t$,d$,mat zo
 01330 L1330: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3
 01340   goto L460
@@ -169,17 +169,17 @@
 01460   open #20: "Name=CNo.H"&wsid$,internal,outin,relative  !:
         read #20,using "Form POS 239,5*C 12,5*N 10.2",rec=1: mat gl$,mat gl1 conv L1620 !:
         close #20: 
-01470   let ckgl=0
+01470   ckgl=0
 01480   for j=1 to 5
 01490     if val(gl$(j)(4:9))=0 then goto L1570 else let gl2=0
 01500     read #1,using 'form pos 87,pd 6.2',key=gl$(j): gl2 nokey ignore
 01520     if gl1(j)=gl2 then goto L1570
-01530     if ckgl=0 then print newpage; bell
-01540     print using 'form pos 1,c 11,c 14,c 15,n 12.2,x 4,c 12,n 12.2,skip 1': "Account #:",gl$(j),"Client Balance:",gl1(j),"GL Balance:",gl2
-01560     let ckgl=1
+01530     if ckgl=0 then pr newpage; bell
+01540     pr using 'form pos 1,c 11,c 14,c 15,n 12.2,x 4,c 12,n 12.2,skip 1': "Account #:",gl$(j),"Client Balance:",gl1(j),"GL Balance:",gl2
+01560     ckgl=1
 01570 L1570: next j
 01580   if ckgl=0 then goto L1620
-01590   print fields "24,35,Cc 10,B,1": "Next  (F1)"
+01590   pr fields "24,35,Cc 10,B,1": "Next  (F1)"
 01600 L1600: input fields "24,2,C 1,AE,N": pause$
 01610   if cmdkey><1 then goto L1600
 01620 L1620: close #1: 
@@ -207,6 +207,6 @@
 01920 ERTN: let fnerror(program$,err,line,act$,"xit")
 01930   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01940   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01950   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01950   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01960 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01970 ! /region

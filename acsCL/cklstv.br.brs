@@ -34,17 +34,17 @@
 00300   goto BODY
 00310 ! ______________________________________________________________________
 00320 HDR: ! Page Heading
-00330   print #255,using 'Form POS 1,CC 80': cnam$
-00340   print #255,using 'Form POS 1,CC 80': "Company Number "&str$(cno)
-00350   print #255,using 'Form POS 1,CC 80': "Check Listing By Vendor"
-00360   print #255,using 'Form Pos 1,Cc 80': "For the Date Range Starting "&cnvrt$("pic(zzzz/zz/zz)",date1)&" and Ending "&cnvrt$("pic(zzzz/zz/zz)",date2)
-00370   print #255: ""
-00380   print #255,using 'Form Pos 1,C 80': "Chk/Ref# Date   Amount      Payee No Name/Description"
-00390   print #255,using 'Form Pos 1,C 80': "________ ______ ___________ ________ ___________________________________"
+00330   pr #255,using 'Form POS 1,CC 80': cnam$
+00340   pr #255,using 'Form POS 1,CC 80': "Company Number "&str$(cno)
+00350   pr #255,using 'Form POS 1,CC 80': "Check Listing By Vendor"
+00360   pr #255,using 'Form Pos 1,Cc 80': "For the Date Range Starting "&cnvrt$("pic(zzzz/zz/zz)",date1)&" and Ending "&cnvrt$("pic(zzzz/zz/zz)",date2)
+00370   pr #255: ""
+00380   pr #255,using 'Form Pos 1,C 80': "Chk/Ref# Date   Amount      Payee No Name/Description"
+00390   pr #255,using 'Form Pos 1,C 80': "________ ______ ___________ ________ ___________________________________"
 00400   return 
 00410 ! ______________________________________________________________________
 00420 PGOF: ! 
-00430   print #255: newpage
+00430   pr #255: newpage
 00440   gosub HDR
 00450   continue 
 00460 ! ______________________________________________________________________
@@ -56,23 +56,23 @@
 00510   if tcde<>1 then goto BODY ! checks only
 00520   if tr$(4)<>vn$ and vn$<>"" then gosub TOTALS
 00530   if tr$(4)<>vn$ then gosub SUBHEADING
-00540   print #255,using 'Form POS 1,C 8,X 1,C 6,N 12.2,X 1,C 8,X 1,C 35': tr$(1),tr$(2),val(tr$(3)),tr$(4) pageoflow PGOF
+00540   pr #255,using 'Form POS 1,C 8,X 1,C 6,N 12.2,X 1,C 8,X 1,C 35': tr$(1),tr$(2),val(tr$(3)),tr$(4) pageoflow PGOF
 00550   let total1+=val(tr$(3))
 00560   goto BODY
 00570 ! ______________________________________________________________________
 00580 SUBHEADING: ! 
 00590   let ytdp=typ=ta(1)=ta(2)=0 : let vn$=nam$=ad1$=ad2$=csz$=ss$=ph$=""
 00600   read #paymstr,using 'Form POS 1,C 8,4*C 30,PD 5.2,N 2,C 11,2*PD 3,C 12',key=tr$(4): vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat ta,ph$ nokey PR_NOKEY
-00610   print #255,using 'Form POS 1,C 80': "Vendor: "&trim$(vn$)&". "&nam$ pageoflow PGOF : goto PAST_PR_NOKEY
+00610   pr #255,using 'Form POS 1,C 80': "Vendor: "&trim$(vn$)&". "&nam$ pageoflow PGOF : goto PAST_PR_NOKEY
 00620 PR_NOKEY: ! 
-00630   print #255,using 'Form POS 1,C 80': "Vendor: "&trim$(tr$(4))&". (This Vendor has been Deleted)" pageoflow PGOF
+00630   pr #255,using 'Form POS 1,C 80': "Vendor: "&trim$(tr$(4))&". (This Vendor has been Deleted)" pageoflow PGOF
 00640 PAST_PR_NOKEY: ! 
 00650   let total1=0
 00660   return 
 00670 ! ______________________________________________________________________
 00680 TOTALS: ! 
-00690   print #255,using 'Form POS 1,C 10,N 17.2': "Totals:",total1 !:
-        print #255: ""
+00690   pr #255,using 'Form POS 1,C 10,N 17.2': "Totals:",total1 !:
+        pr #255: ""
 00700   let total1=0
 00710   return 
 00720 ! ______________________________________________________________________
@@ -87,7 +87,7 @@
 00810 ERTN: let fnerror(program$,err,line,act$,"xit")
 00820   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00830   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00840   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00840   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00850 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00860 ! /region
 00870 ! ______________________________________________________________________

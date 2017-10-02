@@ -48,8 +48,8 @@
 00350   let fl=val(resp$(3))
 00360   let dp=val(resp$(4))
 00370   let ft$=trim$(resp$(5))
-00380   let an$=trim$(resp$(6))
-00390   print #10,using L400: fieldnam$,vn$,fl,dp,ft$,an$
+00380   an$=trim$(resp$(6))
+00390   pr #10,using L400: fieldnam$,vn$,fl,dp,ft$,an$
 00400 L400: form pos 1,c 30,c 20,n 4,n 2,c 11,c 20
 00410   goto L160
 00420 XIT: stop 
@@ -57,6 +57,6 @@
 00440 ERTN: let fnerror(program$,err,line,act$,"xit")
 00450   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00460   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00470   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00470   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00480 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00490 ! /region

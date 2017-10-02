@@ -24,7 +24,7 @@
 50300     !                5. Next (F1),Cancel(F5),Search(F6) 
 50320     !                6. Next (F1),Back(F2),Cancel(F5) 
 50340     !                7. Save (F1),Delete(F4),Cancel(F5) 
-50360     !                8. Print (F1),Back(F2),Cancel(F5) 
+50360     !                8. pr (F1),Back(F2),Cancel(F5) 
 50380     !                9. (unassigned)
 50400 !               11. Next (F1), Finish (F5)
 50420 !               41. OK 
@@ -41,8 +41,8 @@
 50640     if win<1 then let win=101
 50660
 50680     if pr_newpg=2 then goto L240
-50700     if pr_newpg=0 and exists(":C:\ACS\Local\Settings\No_Print_Newpage.txt") then goto L240 else print newpage
-50720     if pr_newpg=1 then print newpage
+50700     if pr_newpg=0 and exists(":C:\ACS\Local\Settings\No_Print_Newpage.txt") then goto L240 else pr newpage
+50720     if pr_newpg=1 then pr newpage
 50740 L240: let screen_width=80
 50760     let screen_height=24
 50780     let win_width=min(screen_width-2,win_width)
@@ -83,14 +83,14 @@
 51500     write #win,using 'Form POS 1,5*N 4': win,sc,ec,sr,er
 51520     close #win: ioerr ignore
 51540     open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
-51560     print #win: newpage
+51560     pr #win: newpage
 51580     if display_cnam=0 then goto L610
 51600     if display_cnam=1 then 
-51620       print #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width)) 
-51640       print #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+51620       pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width)) 
+51640       pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
 51660     end if
 51680     if display_cnam=2 then 
-51700       print #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
+51700       pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
 51720     end if
 51740 L610: if button_option=0 then goto XIT
 51760     mat fkey$=("") : let em$="" : let es=0
@@ -115,7 +115,7 @@
 52140 ERTN: let fnerror(program$,err,line,act$,"xit")
 52160     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 52180     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-52200     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+52200     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 52220 ERTN_EXEC_ACT: execute act$ : goto ERTN
 52240 ! /region
 52260 ! ______________________________________________________________________
@@ -148,15 +148,15 @@
 60480 NO_TEMP_FILE: !
 60500     let startpos=int((80-totallen)/2)+1
 60520 L270: close #tfn: ioerr L280
-60540 L280: print fields str$(scrline)&","&str$(startpos)&",C "&str$(totallen)&",N": rpt$("Ä",totallen)
+60540 L280: pr fields str$(scrline)&","&str$(startpos)&",C "&str$(totallen)&",N": rpt$("Ä",totallen)
 60560     for j=1 to udim(fkey$)
 60580       if fkey$(j)="" then goto L350
-60600       if disfk(j)=1 then print fields str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",R,"&str$(j): fkey$(j)
+60600       if disfk(j)=1 then pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",R,"&str$(j): fkey$(j)
 60620       if disfk(j)=1 then goto L340
-60640       print fields str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",B,"&str$(j): fkey$(j)
+60640       pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",B,"&str$(j): fkey$(j)
 60660 L340: let startpos+=len(fkey$(j))+1
 60680 L350: next j
 60700     if rtrm$(em$)<>"" then 
-60720       print fields str$(scrline)&","&str$(startpos)&",C "&str$(len(rtrm$(em$))+es)&",R,N": rtrm$(em$)
+60720       pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(rtrm$(em$))+es)&",R,N": rtrm$(em$)
 60740     end if
 60760 fnend 

@@ -66,7 +66,7 @@
 20560 ! ** Combo Boxes **
 20570 ! fnhamster_add_combof(Field Number,Linked File Name,Key Position,Key Length,Description Position,Description LengthIndex File,limit to list (1=Yes; 0=No))
 20580     let fnhamster_add_combof(1,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1,10,41,30,env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),1)
-20590     let c_y=0
+20590     c_y=0
 20600     for srv_item=1 to 10
 20610       if (srv_item=1 and trim$(srv$(srv_item))<>'') or (srvnam$(srv_item)="GAS" or srv$(srv_item)="GA") or srv$(srv_item)='EL' or srvnam$(srv_item)="Lawn Meter" then ! if it is a metered service
 20620         mat option$(c_y+=1)
@@ -80,6 +80,6 @@
 20710 ERTN: let fnerror(program$,err,line,act$,"xit")
 20720   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20730   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-20740   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+20740   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 20750 ERTN_EXEC_ACT: execute act$ : goto ERTN
 20760 ! /region

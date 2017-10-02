@@ -27,14 +27,14 @@
 00200   let fnlbl(3,1,"Enter the location to save employees to CSV for QuickFile",mylen,right)
 00205   let fntxt(3,mypos,60,0,left,"",0,"Enter a CSV file path.",0)
 00210   let fnreg_read("TexasUCFile",csvpath$)
-00215   if trim$(csvpath$)="" then let csvpath$=env$('Q')&"\GLmstr\txuc.csv"
+00215   if trim$(csvpath$)="" then csvpath$=env$('Q')&"\GLmstr\txuc.csv"
 00220   let resp$(3)=csvpath$
 00225   let fncmdset(2)
 00230   let fnacs(sn$,0,mat resp$,ckey)
 00235   if ckey=5 then goto XIT
 00240   let pedat$=resp$(1)
 00245   let namcde$=uprc$(resp$(2))
-00250   let csvpath$=resp$(3)
+00250   csvpath$=resp$(3)
 00255   if trim$(namcde$)="" then goto L170
 00280 L280: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00290   open #(h_csv:=fngethandle): "Name="&csvpath$&",REPLACE",display,output 
@@ -52,7 +52,7 @@
 00400   let m(2)=m(2)-deducq
 00410   if p1<57 then goto L450
 00420   gosub L820
-00430   print #255: newpage
+00430   pr #255: newpage
 00440   gosub HDR
 00450 L450: gosub L670
 00460   let t1=t1+m(2)
@@ -62,9 +62,9 @@
 00500 L500: goto L310
 00510 ! ______________________________________________________________________
 00520 HDR: ! 
-00530   print #255,using L540: b$(2),b$(1),pedat$
+00530   pr #255,using L540: b$(2),b$(1),pedat$
 00540 L540: form skip 5,pos 2,c 12,pos 52,c 12,pos 67,c 6,skip 3
-00550   print #255,using L560: a$(1),a$(2),a$(3)
+00550   pr #255,using L560: a$(1),a$(2),a$(3)
 00560 L560: form pos 22,c 40,skip 1,pos 22,c 40,skip 1,pos 22,c 40,skip 6
 00570   let p1=16
 00580   return 
@@ -89,13 +89,13 @@
 00750 L750: let h3=m(2)-h2
 00760   gosub L1000 ! break name down
 00770   let f$=first$(1:1): let m$=mid$(1:1)
-00790   print #255,using L790: l$(1),f$,m$,last$,m(2)
-00800   print #h_csv: l$(1)&","""&srep$(first$,"""","""""")&""","&m$&","""&srep$(last$,"""","""""")&""","&str$(m(2))
+00790   pr #255,using L790: l$(1),f$,m$,last$,m(2)
+00800   pr #h_csv: l$(1)&","""&srep$(first$,"""","""""")&""","&m$&","""&srep$(last$,"""","""""")&""","&str$(m(2))
 00805 L790: form pos 4,c 11,pos 21,c 1,pos 24,c 1,pos 27,c 16,pos 51,pic(zzz,zzz.##),skip 2
 00810   let p1=p1+2
 00815   return 
 00820 L820: let j1=68-p1
-00830   print #255,using L840: t1
+00830   pr #255,using L840: t1
 00840 L840: form skip j1,pos 47,pic(zzz,zzz,zzz.##)
 00850   let p3=0
 00860   let t1=0
@@ -108,7 +108,7 @@
 00930 ERTN: let fnerror(program$,err,line,act$,"xit")
 00940   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00950   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00960   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00960   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00970 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00980 ! /region
 00990 ! ______________________________________________________________________
@@ -126,5 +126,5 @@
 01110   if x1>0 and k$(1)(x1-1:x1-1)="," then let last$=k$(1)(1:x1-2) else let last$=k$(1)(1:max(x1-1,1))
 01120   if x2>0 then let first$=k$(1)(x1+1:x2-1): let mid$=k$(1)(x2+1:len(k$(1)))
 01130   if x2=0 then let first$=k$(1)(x1+1:len(k$(1))): let mid$=""
-01140 L1140: ! Print FIRST$,MID$,LAST$
+01140 L1140: ! pr FIRST$,MID$,LAST$
 01150   return 

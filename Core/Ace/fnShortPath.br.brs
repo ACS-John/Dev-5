@@ -28,9 +28,9 @@
 40280           let sp_return$=longpath$
 40300         end if  ! getfilepath_ln$='\'   /   else 
 45000       else 
-45020         print 'path returned from shortpath.cmd is longer than 256, but only 256 will fit - origional path is being returned instead.'
-45040         print '  Please call ACS Support     or'
-45060         print '  Type GO and press ENTER to continue.'
+45020         pr 'path returned from shortpath.cmd is longer than 256, but only 256 will fit - origional path is being returned instead.'
+45040         pr '  Please call ACS Support     or'
+45060         pr '  Type GO and press ENTER to continue.'
 45080         pause 
 45100         let sp_return$=rtrm$(getfilepath_ln$)
 45120       end if 
@@ -44,26 +44,26 @@
 62000   def fn_make_shortpath_cmd(msc_path$*256)
 62020     if ~exists(msc_path$&'\ShortPath.cmd') or do_debug then 
 62040       open #msc_tmp:=fngethandle: 'name='&msc_path$&'\ShortPath.cmd,RecL=256,Replace',display,output 
-62060       print #msc_tmp: "echo off"
-62080       print #msc_tmp: "if '%1'=='' goto HELP"
-62100       print #msc_tmp: "if '%2'=='' goto HELP"
-62120       print #msc_tmp: "set homepath=""%~1"""
-62140       print #msc_tmp: "set homedir=%~d1"
-62160       print #msc_tmp: "for %%A in (%HOMEPATH%) do set HOMEPATH=%%~spnxA"
-62180       print #msc_tmp: "echo %homedir%%homepath%"
-62200       print #msc_tmp: "echo %homedir%%homepath% >%2"
-62220       print #msc_tmp: "goto XIT"
-62240       print #msc_tmp: ":HELP"
-62260       print #msc_tmp: "echo Proper Usage is:"
-62280       print #msc_tmp: "echo   %0 [path_input] [outputfile]"
-62300       print #msc_tmp: "echo   [path_input] - a long path to parse.  quote encapsulation is required"
-62320       print #msc_tmp: "echo                  i.e. ""C:\Long Path To Parse\etc"""
-62340       print #msc_tmp: "echo   [outputfile] - file to output resulting short path to."
-62360       print #msc_tmp: ":XIT"
-63000       if do_debug then print #msc_tmp: "echo passed:  %*"
-63020       if do_debug then print #msc_tmp: "echo returning:  %homedir%%homepath%"
-63030       if do_debug then print #msc_tmp: "echo test new method:  %~s1"
-63040       if do_debug then print #msc_tmp: "pause"
+62060       pr #msc_tmp: "echo off"
+62080       pr #msc_tmp: "if '%1'=='' goto HELP"
+62100       pr #msc_tmp: "if '%2'=='' goto HELP"
+62120       pr #msc_tmp: "set homepath=""%~1"""
+62140       pr #msc_tmp: "set homedir=%~d1"
+62160       pr #msc_tmp: "for %%A in (%HOMEPATH%) do set HOMEPATH=%%~spnxA"
+62180       pr #msc_tmp: "echo %homedir%%homepath%"
+62200       pr #msc_tmp: "echo %homedir%%homepath% >%2"
+62220       pr #msc_tmp: "goto XIT"
+62240       pr #msc_tmp: ":HELP"
+62260       pr #msc_tmp: "echo Proper Usage is:"
+62280       pr #msc_tmp: "echo   %0 [path_input] [outputfile]"
+62300       pr #msc_tmp: "echo   [path_input] - a long path to parse.  quote encapsulation is required"
+62320       pr #msc_tmp: "echo                  i.e. ""C:\Long Path To Parse\etc"""
+62340       pr #msc_tmp: "echo   [outputfile] - file to output resulting short path to."
+62360       pr #msc_tmp: ":XIT"
+63000       if do_debug then pr #msc_tmp: "echo passed:  %*"
+63020       if do_debug then pr #msc_tmp: "echo returning:  %homedir%%homepath%"
+63030       if do_debug then pr #msc_tmp: "echo test new method:  %~s1"
+63040       if do_debug then pr #msc_tmp: "pause"
 63060       close #msc_tmp: 
 63080     end if 
 63100   fnend 
@@ -72,6 +72,6 @@
 80120 ERTN: let fnerror(program$,err,line,act$,"xit")
 80140   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 80160   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-80230   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+80230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 80240 ERTN_EXEC_ACT: execute act$ : goto ERTN
 80250 ! /region

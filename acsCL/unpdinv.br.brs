@@ -10,7 +10,7 @@
 00100 ! ______________________________________________________________________
 00110   let fntop(program$,cap$="Unpaid Invoice Listing")
 00120   let udf$=env$('temp')&'\'
-00130   let cancel=99
+00130   cancel=99
 00140   let fncno(cno,cnam$) !:
         let fndat (dat$)
 00150   let fntos(sn$="unpdinv") !:
@@ -76,14 +76,14 @@
 00660   goto L560
 00670 L670: if vn$=hvn$ then goto L730
 00680   if vc<2 then goto L710
-00690   print #255: tab(97);"__________  __________  __________"
-00700   print #255,using 'FORM POS 77,C 18,3*N 12.2': "Vendor Total",v1,v2,v3
+00690   pr #255: tab(97);"__________  __________  __________"
+00700   pr #255,using 'FORM POS 77,C 18,3*N 12.2': "Vendor Total",v1,v2,v3
 00710 L710: let vc=v1=v2=v3=0
-00720   print #255: pageoflow NEWPGE
+00720   pr #255: pageoflow NEWPGE
 00730 L730: let vc+=1
 00740   let hvn$=vn$
 00750   if fund<>2 then goto L770
-00760   if fund$><gl$(1:3) then gosub TOTALS : print #255: newpage : gosub L990
+00760   if fund$><gl$(1:3) then gosub TOTALS : pr #255: newpage : gosub L990
 00770 L770: if cde=1 then let p1=97: let v1=v1+upa: let t1=t1+upa : let ft(1)=ft(1)+upa else let p1=109: let v2=v2+upa : let t2=t2+upa : let ft(2)=ft(2)+upa
 00780   let v3=v3+upa
 00790   let t3=t3+upa : let ft(3)=ft(3)+upa
@@ -92,7 +92,7 @@
 00820 L820: form pos 9,c 30
 00830 L830: let discdate$=cnvrt$("pic(########)",ddate)
 00840   let ddate=val(discdate$(5:8))*100+val(discdate$(3:4))
-00850   print #255,using 'FORM POS 1,C 10,C 22,C 12,3*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS P1,N 10.2,POS 119,N 12.2': vn$,vnam$(1:20),iv$,ivd,dd,ddate,ade$(1:18),upa,upa pageoflow NEWPGE
+00850   pr #255,using 'FORM POS 1,C 10,C 22,C 12,3*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS P1,N 10.2,POS 119,N 12.2': vn$,vnam$(1:20),iv$,ivd,dd,ddate,ade$(1:18),upa,upa pageoflow NEWPGE
 00860   let upa=0
 00870   if endcode=1 then goto L1180
 00880   goto L600
@@ -105,19 +105,19 @@
 00950 L950: write #work,using 'FORM POS 1,C 12,N 10.2': gl$,amt
 00960 L960: return 
 00970 ! ______________________________________________________________________
-00980 NEWPGE: print #255: newpage: gosub HDR : continue 
+00980 NEWPGE: pr #255: newpage: gosub HDR : continue 
 00990 L990: let fd$=""
 01000   let fund$=gl$(1:3)
 01010   read #fundmstr,using 'FORM POS 4,C 25',key=fund$: fd$ nokey HDR
 01020 HDR: let f1=1
-01030   print #255,using 'FORM POS 1,C 8,Cc 86': date$,cnam$
-01040   print #255,using 'FORM POS 1,C 8,cc 86': time$,"Unpaid Invoice Listing"
-01050   print #255,using 'FORM POS 1,C 4,N 4,Cc 86': "Page",pg+=1,dat$
+01030   pr #255,using 'FORM POS 1,C 8,Cc 86': date$,cnam$
+01040   pr #255,using 'FORM POS 1,C 8,cc 86': time$,"Unpaid Invoice Listing"
+01050   pr #255,using 'FORM POS 1,C 4,N 4,Cc 86': "Page",pg+=1,dat$
 01060   if fund<>2 then let fd$=""
-01070   print #255,using 'FORM POS 1,Cc 86': fd$ ! ; pr #255: ""
-01080   print #255: "                                              Invoice     Due     Discount                       Pay Now     Pay Later      Total"
-01090   print #255: "Payee  #  Payee Name            Invoice Numb    Date      Date      Date    Description           Amount      Amount         Due"
-01100   print #255: "________  ____________________  ____________  ________  ________  ________  __________________  __________  __________  __________"
+01070   pr #255,using 'FORM POS 1,Cc 86': fd$ ! ; pr #255: ""
+01080   pr #255: "                                              Invoice     Due     Discount                       Pay Now     Pay Later      Total"
+01090   pr #255: "Payee  #  Payee Name            Invoice Numb    Date      Date      Date    Description           Amount      Amount         Due"
+01100   pr #255: "________  ____________________  ____________  ________  ________  ________  __________________  __________  __________  __________"
 01110   let f1=1
 01120   return 
 01130 ! ______________________________________________________________________
@@ -126,12 +126,12 @@
 01160   let endcode=1
 01170   goto L670
 01180 L1180: if vc<2 then goto L1210
-01190   print #255: tab(97);"__________  __________  __________"
-01200   print #255,using 'FORM POS 77,C 18,3*N 12.2': "Vendor Total",v1,v2,v3
+01190   pr #255: tab(97);"__________  __________  __________"
+01200   pr #255,using 'FORM POS 77,C 18,3*N 12.2': "Vendor Total",v1,v2,v3
 01210 L1210: gosub TOTALS
-01220   print #255: tab(97);"__________  __________  __________"
-01230   print #255,using 'FORM POS 77,C 18,3*N 12.2': "Final Total",t1,t2,t3
-01240   print #255: tab(97);"=================================="
+01220   pr #255: tab(97);"__________  __________  __________"
+01230   pr #255,using 'FORM POS 77,C 18,3*N 12.2': "Final Total",t1,t2,t3
+01240   pr #255: tab(97);"=================================="
 01250   restore #work,key>="            ": nokey EO_WORK
 01260 READ_WORK: ! 
 01270   read #work,using 'FORM POS 1,C 12,N 10.2': gl$,gla eof EO_WORK
@@ -140,13 +140,13 @@
 01300 L1300: let hf$=gl$(1:3)
 01310   let de$=""
 01320   read #glmstr,using 'FORM POS 13,C 50',key=gl$: de$ nokey L1330
-01330 L1330: print #255,using 'FORM POS 12,C 14,C 52,N 10.2': gl$,de$,gla pageoflow NEWPGE
+01330 L1330: pr #255,using 'FORM POS 12,C 14,C 52,N 10.2': gl$,de$,gla pageoflow NEWPGE
 01340   let tf1=tf1+gla
 01350   goto READ_WORK
-01360 TOTF1: print #255: tab(78);"__________"
+01360 TOTF1: pr #255: tab(78);"__________"
 01370   if val(hf$)>0 then let fd$="Total for Fund #: "&ltrm$(hf$) else let fd$="TOTAL"
-01380   print #255,using 'FORM POS 12,C 14,C 52,N 10.2': "",fd$,tf1
-01390   print #255: pageoflow NEWPGE
+01380   pr #255,using 'FORM POS 12,C 14,C 52,N 10.2': "",fd$,tf1
+01390   pr #255: pageoflow NEWPGE
 01400   let tf1=0
 01410   return 
 01420 ! ______________________________________________________________________
@@ -157,8 +157,8 @@
 01470 ! ______________________________________________________________________
 01480 TOTALS: ! 
 01490   if fund=2 then !:
-          print #255: tab(97);"__________  __________  __________" !:
-          print #255,using 'FORM POS 77,C 18,3*N 12.2': "Fund   Total",mat ft
+          pr #255: tab(97);"__________  __________  __________" !:
+          pr #255,using 'FORM POS 77,C 18,3*N 12.2': "Fund   Total",mat ft
 01500   mat ft=(0)
 01510   return 
 01520 ! ______________________________________________________________________
@@ -166,7 +166,7 @@
 01540 ERTN: let fnerror(program$,err,line,act$,"xit")
 01550   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01560   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01570   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01570   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01580 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01590 ! /region
 01600 ! ______________________________________________________________________

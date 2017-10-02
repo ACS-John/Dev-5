@@ -9,7 +9,7 @@
 00090   dim filename$(100)*40,opt$(100)*40,sys$*100,item$(2)*40,resp$(10)*100
 00100   dim wk(20),mo(20),qt(20)
 00110 ! ______________________________________________________________________
-00120   let cap$="Begin Automatic Processing"
+00120   cap$="Begin Automatic Processing"
 00130   let fncno(cno,oldcnam$)
 00170 ! ______________________________________________________________________
 00180 BUILD_PRCLNT: ! 
@@ -36,10 +36,10 @@
 00340 L340: let fncomboa('CmbAuto',2,13,mat opt$,'Select the companies that should be included in this automatic processing run. Highlite and press enter or Next to register your selection.',55) ! Let FNCMBCNO(1, 13)
 00350   let fnlbl(4,30,"Selected Companies:")
 00360   mat chdr$(2) : mat cmask$(2) : mat item$(2) !:
-        let chdr$(1)='Company #' !:
-        let chdr$(2)='Company Name'
-00370   let cmask$(1)='30' !:
-        let cmask$(2)='' !:
+        chdr$(1)='Company #' !:
+        chdr$(2)='Company Name'
+00370   cmask$(1)='30' !:
+        cmask$(2)='' !:
         let fnflexinit1('autoproc',5,25,15,35,mat chdr$,mat cmask$,1,0,frame)
 00380   for j=1 to max(count,1)
 00390     let item$(1)=str$(clnum(j)) !:
@@ -59,8 +59,8 @@
 00460   let fnacs(sn$,0,mat resp$,ckey)
 00470   if ckey=5 then goto XIT
 00480   if ckey=2 and count>0 then goto L550
-00490   let clnam$(count+=1)=resp$(1)(1:30)
-00500   let clnum(count)=val(resp$(1)(33:37))
+00490   clnam$(count+=1)=resp$(1)(1:30)
+00500   clnum(count)=val(resp$(1)(33:37))
 00510   if resp$(3)="True" then let wk(count)=1: let wmq=1
 00520   if resp$(4)="True" then let mo(count)=1: let wmq=2
 00530   if resp$(5)="True" then let qt(count)=1: let wmq=3
@@ -71,9 +71,9 @@
 00580   let dir$=env$('Q')&'\&'&fncursys$&"mstr"
 00582   let filter$="Company.*"
 00584   let fngetdir(dir$,mat filename$,empty$,filter$)
-00590   mat acno(99999): let cav=0
+00590   mat acno(99999): cav=0
 00600 L600: if trim$(filename$(fx+=1))="" then goto L660
-00610   let acno(cav+=1)=val(filename$(fx)(10:14)) conv L600
+00610   acno(cav+=1)=val(filename$(fx)(10:14)) conv L600
 00620   let end=len(filename$(fx))
 00630   let x=115
 00631   open #x: "Name="&sys$&"\Company.h"&filename$(fx)(10:14),internal,input ioerr L650
@@ -102,7 +102,7 @@
 00830 ERTN: let fnerror(program$,err,line,act$,"xit")
 00840   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00850   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00860   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00860   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00870 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00880 ! /region
 00890 ! ______________________________________________________________________

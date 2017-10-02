@@ -36,7 +36,7 @@
 00250 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
-        let ccyymmdd=10
+        ccyymmdd=10
 00260   let tln(ic+=1)=2 !:
         let tln(ic+=1)=1 !:
         let tln(ic+=1)=8 !:
@@ -59,7 +59,7 @@
         let fltyp$(ic+=1)='N'
 00310 ! ** Field Storage Lengths ** !:
         let ic=0 !:
-        let mmddyy=6 : let ccyymmdd=8
+        let mmddyy=6 : ccyymmdd=8
 00320   let sln(ic+=1)=2 !:
         let sln(ic+=1)=1 !:
         let sln(ic+=1)=8 !:
@@ -72,7 +72,7 @@
 00340 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:
-        let ccyymmdd=3 : let mmddyy=1 : let glnumber=53
+        ccyymmdd=3 : let mmddyy=1 : let glnumber=53
 00350   let mask(ic+=1)=number !:
         let mask(ic+=1)=number !:
         let mask(ic+=1)=0 !:
@@ -102,12 +102,12 @@
         ! C$(CL,7)=Index File                                                 !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         let limit_to_list$='1'
-00410 ! Let CL=1 : Let C$(CL,1)='ComboF' !:
-        ! Let C$(CL,2)=env$('Q')&'\CLmstr\PayMstr.h'&STR$(CNO) !:
-        ! Let C$(CL,3)='1' : Let C$(CL,4)='8' !:
-        ! Let C$(CL,5)='9' : Let C$(CL,6)='30' !:
-        ! Let C$(CL,7)=env$('Q')&'\CLmstr\PayIdx1.h'&STR$(CNO) !:
-        ! Let C$(CL,8)=LIMIT_TO_LIST$
+00410 ! cL=1 : c$(CL,1)='ComboF' !:
+        ! c$(CL,2)=env$('Q')&'\CLmstr\PayMstr.h'&STR$(CNO) !:
+        ! c$(CL,3)='1' : c$(CL,4)='8' !:
+        ! c$(CL,5)='9' : c$(CL,6)='30' !:
+        ! c$(CL,7)=env$('Q')&'\CLmstr\PayIdx1.h'&STR$(CNO) !:
+        ! c$(CL,8)=LIMIT_TO_LIST$
 00420   return 
 00430 ! ______________________________________________________________________
 00440 HAMSTER: ! 
@@ -120,7 +120,7 @@
 00510 ERTN: let fnerror(program$,err,line,act$,"xit")
 00520   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00530   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00540   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00540   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00550 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00560 ! /region
 00570 ! ______________________________________________________________________

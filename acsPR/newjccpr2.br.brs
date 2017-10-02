@@ -63,7 +63,7 @@
 00660 L660: if rtrm$(jn$)="" then goto L700
 00670   gosub L1610
 00680   gosub TOTALS
-00690   print #255: newpage
+00690   pr #255: newpage
 00700 L700: let en$=en1$
 00710   let jn$=jn1$
 00720   let n$=""
@@ -116,35 +116,35 @@
 01230   goto L520
 01240 ! ______________________________________________________________________
 01250 PGOF: ! 
-01260   print #255: newpage
+01260   pr #255: newpage
 01270   gosub L1300
 01280   continue 
 01290 ! ______________________________________________________________________
 01300 L1300: let p1=59-int(len(rtrm$(cnam$)))/2
-01310   let a2$="Job # "&ltrm$(jn$)&"  Job Name "&rtrm$(n$)
+01310   a2$="Job # "&ltrm$(jn$)&"  Job Name "&rtrm$(n$)
 01320   let p2=59-int(len(rtrm$(a2$)))/2
-01330   print #255,using L1340: cnam$,a2$
+01330   pr #255,using L1340: cnam$,a2$
 01340 L1340: form skip 2,pos p1,c 70,skip 1,pos p2,c 70,skip 1
-01350   print #255: tab(40);"****  Certified Payroll Register  ****"
-01360   print #255,using L1370: "Period Ending",dt
+01350   pr #255: tab(40);"****  Certified Payroll Register  ****"
+01360   pr #255,using L1370: "Period Ending",dt
 01370 L1370: form pos 48,c 14,pic(zz/zz/zz),skip 1
-01380   print #255: "Name  &  Address"
-01390   print #255: "City, State Zip                <-------- Hours Worked this Job --------> Total  Pay  Pay  <--------------- Summary ---------------->"
-01400   print #255,using L1410: "    Fed-Exempt",mat dr,"Hours  Rate Typ      Gross    FICA Fed W/H   Other      Net"
+01380   pr #255: "Name  &  Address"
+01390   pr #255: "City, State Zip                <-------- Hours Worked this Job --------> Total  Pay  Pay  <--------------- Summary ---------------->"
+01400   pr #255,using L1410: "    Fed-Exempt",mat dr,"Hours  Rate Typ      Gross    FICA Fed W/H   Other      Net"
 01410 L1410: form pos 1,c 30,pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),x 1,c 59,skip jbskip
-01420   print #255: "______________________________ _____ _____ _____ _____ _____ _____ _____ _____  ____ ___    _______  ______  ______   _____  _______"
+01420   pr #255: "______________________________ _____ _____ _____ _____ _____ _____ _____ _____  ____ ___    _______  ______  ______   _____  _______"
 01430   return 
 01440 ! ______________________________________________________________________
 01450 L1450: if tgp=0 then let x3=0 else let x3=(gp1+gp2)/tgp
 01460   if hr1(8)=0 then goto L1510
 01470   let lnp=lnp+1
 01480   if lnp>5 then let lnp=6
-01490   print #255,using L1500: pl1$(lnp),mat hr1,tdet2," REG",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF
+01490   pr #255,using L1500: pl1$(lnp),mat hr1,tdet2," REG",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF
 01500 L1500: form pos 1,c 30,9*n 6.2,c 6,n 9.2,3*n 8.2,n 9.2
 01510 L1510: if hr2(8)=0 then goto L1560
 01520   let lnp=lnp+1
 01530   if lnp>5 then let lnp=6
-01540   if hr1(8)=0 then print #255,using L1500: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF else print #255,using L1550: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PGOF
+01540   if hr1(8)=0 then pr #255,using L1500: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF else pr #255,using L1550: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PGOF
 01550 L1550: form pos 1,c 30,9*n 6.2,c 6
 01560 L1560: let hr8=hr8+hr1(8)+hr2(8)
 01570   mat hr1=(0)
@@ -155,7 +155,7 @@
 01620   let lnp=lnp+1
 01630   if lnp>5 then goto L1680
 01640   for j=lnp to 5
-01650     print #255,using L1660: pl1$(j) pageoflow PGOF
+01650     pr #255,using L1660: pl1$(j) pageoflow PGOF
 01660 L1660: form pos 1,c 30,skip 1
 01670   next j
 01680 L1680: let gded= gded+(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5)))
@@ -174,11 +174,11 @@
 01810   return 
 01820 ! ______________________________________________________________________
 01830 TOTALS: ! 
-01840   print #255,using L1850: "* * * *  Totals for Job # ",jn$,"* * * *" pageoflow PGOF
+01840   pr #255,using L1850: "* * * *  Totals for Job # ",jn$,"* * * *" pageoflow PGOF
 01850 L1850: form pos 10,c 26,c 7,c 8,skip 1
-01860   print #255: tab(6);"Total Hours   Gross Pay     Total        Total" pageoflow PGOF
-01870   print #255: tab(31);"Deductions     Net-Pay" pageoflow PGOF
-01880   print #255,using L1890: thr,jgp,gded,jgp-gded pageoflow PGOF
+01860   pr #255: tab(6);"Total Hours   Gross Pay     Total        Total" pageoflow PGOF
+01870   pr #255: tab(31);"Deductions     Net-Pay" pageoflow PGOF
+01880   pr #255,using L1890: thr,jgp,gded,jgp-gded pageoflow PGOF
 01890 L1890: form pos 5,4*n 12.2,skip 2
 01900   let thr=0
 01910   let jgp=0
@@ -194,7 +194,7 @@
 02030 ERTN: let fnerror(program$,err,line,act$,"xit")
 02040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02050   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02060   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02060   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02070 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02080 ! /region
 02090 ! ______________________________________________________________________
@@ -206,7 +206,7 @@
         mat qtr4tcp=(0): mat ytdtotal=(0): mat tdc=(0): mat tty=(0)
 02150   let fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0 !:
         let medqtr=eicyr=eicqtr=wagesqtr=0
-02160   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+02160   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 02170   restore #7,key>=checkkey$: nokey L2500
 02180 L2180: read #7,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : let lastrec=rec(3)
 02190   if heno<>eno then goto STORE_VARIABLES

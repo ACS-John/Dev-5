@@ -7,7 +7,7 @@
 00070   dim cnam$*40,dat$*20,cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
 00080 ! ______________________________________________________________________
 00090   let fntop(program$,cap$="Import GL Payee Records")
-00100   let cancel=99 : let right=1 : let left=0 : let center=2 : let number$='30'
+00100   cancel=99 : let right=1 : let left=0 : center=2 : let number$='30'
 00110   let fncno(cno,cnam$) !:
         let fndat(dat$)
 00120 MENU1: ! 
@@ -43,7 +43,7 @@
 00290 ERTN: let fnerror(program$,err,line,act$,"xit")
 00300   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00310   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00320   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00320   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00330 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00340 ! /region
 00350 ! ______________________________________________________________________

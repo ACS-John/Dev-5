@@ -37,9 +37,9 @@
 00360 READ_COINFO: ! !:
         read #company,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$ conv COINFO_WRITE, ioerr COINFO_READ_ERR
 00370 ! ______________________________________________________________________
-00380   if actr$="0" or actr$="1" then let actr=val(actr$)
-00390   if uprc$(actr$)="Y" then let actr=1
-00400   if uprc$(actr$)="N" then let actr=0
+00380   if actr$="0" or actr$="1" then actr=val(actr$)
+00390   if uprc$(actr$)="Y" then actr=1
+00400   if uprc$(actr$)="N" then actr=0
 00410   let lastgl$=cnvrt$("pic(zz#)",a1)&cnvrt$("pic(zzzzz#)",a2)&cnvrt$("pic(zz#)",a3)
 00420 SCREEN_1: ! 
 00430   let fntos(sn$="Company-1") !:
@@ -96,23 +96,23 @@
 00810   let fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
 00820   let fnacs(sn$,0,mat resp$,ckey)
 00830   if ckey=5 then goto XIT
-00840   let a$(1)=resp$(1)
-00850   let a$(2)=resp$(2)
-00860   let a$(3)=resp$(3)
-00870   let b$(1)=resp$(4)
-00880   let b$(2)=resp$(5)
-00890   let c$=resp$(6)
+00840   a$(1)=resp$(1)
+00850   a$(2)=resp$(2)
+00860   a$(3)=resp$(3)
+00870   b$(1)=resp$(4)
+00880   b$(2)=resp$(5)
+00890   c$=resp$(6)
 00900   let ucm=val(resp$(7))
 00910   let tb$=resp$(8)
 00920   let nap=val(resp$(9))
 00930   if resp$(10)="True" then let d1$="Y": let d(1)=1 else let d1$="N": let d(1)=0
 00940   if resp$(11)="True" then let d2$="Y": let d(2)=1 else let d2$="N": let d(2)=0
-00950   if resp$(12)="True" then let actr$="Y": let actr=1 else let actr$="N": let actr=0
+00950   if resp$(12)="True" then actr$="Y": actr=1 else actr$="N": actr=0
 00960   if resp$(13)="True" then let recc$="Y": let reccode=1 else let recc$="N": let reccode=0
 00970   let lastgl$=fnagl$(resp$(14)) ! gl number
-00980   let a1=val(lastgl$(1:3)) !:
-        let a2=val(lastgl$(4:9)) !:
-        let a3=val(lastgl$(10:12))
+00980   a1=val(lastgl$(1:3)) !:
+        a2=val(lastgl$(4:9)) !:
+        a3=val(lastgl$(10:12))
 00990   if resp$(15)="True" then let jcc$="Y": let jccode=1 else let jcc$="N": let jccode=0
 01000   if resp$(16)=option$(1) then let glb$="P": let glb=1 else let glb$="R": let glb=2
 01010   if ckey=4 then gosub SAVE : goto XIT !  save and exit
@@ -124,7 +124,7 @@
 01060   let fnlbl(1,1,"   The system will allow you to summarize the Payroll Withholding entries into",85,left)
 01070   let fnlbl(2,1,"one entry for each Withholding Account on your Trial Balance.  If you wish",85,left)
 01080   let fnlbl(3,1,"to utilize this option, enter the Account Numbers, otherwise leave both numbers",85,left)
-01090   let fnlbl(4,1,"as blank to print all details.",85,left)
+01090   let fnlbl(4,1,"as blank to pr all details.",85,left)
 01100 ! BEGCNT,BEGACCT,BEGSUB,ENDCNT,ENDACCT,ENCSUB
 01110   let fnlbl(6,1,"First Account to summarize:",mylen,right)
 01120   let fnqgl(6,mypos,0,2,pas) !:
@@ -261,7 +261,7 @@
 02310 ERTN: let fnerror(program$,err,line,act$,"xit")
 02320   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02330   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02340   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02340   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02350 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02360 ! /region
 02380 SAVE: ! r:

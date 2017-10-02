@@ -34,23 +34,23 @@
 24140     fileOpenDestination$=os_filename$(env$('Q')&'\')
 24150   end if
 24300   open #h_tmp:=fngethandle: 'Name= '&env$('at')&br_filename$(env$('client_temp')&'\open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
-24320   print #h_tmp: '@echo off'
-24340   print #h_tmp: '@echo Advanced Computer Services LLC'
-24360   print #h_tmp: '@echo Opening: "'&file_open$&'"'
-24380   print #h_tmp: '@echo.'
-24400   print #h_tmp: '@echo.'
-24420   print #h_tmp: '@echo Command: '&env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('temp')&'\Open_Log.txt"'
-24440   print #h_tmp: '@echo.'
-24460   print #h_tmp: '@echo.'
-24480   print #h_tmp: '@echo Relative To: '&fileOpenDestination$
-24500   print #h_tmp: '@echo.'
-24520   print #h_tmp: '@echo.'
-24540   print #h_tmp: '@echo Output Log: "'&env$('client_temp')&'\Open_Log.txt"'
-24560   print #h_tmp: '@echo.'
-24580   print #h_tmp: '@echo.'
-24600   print #h_tmp: '@echo OPEN PROCESSING...'
-24620   print #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('client_temp')&'\Open_Log.txt"'
-24640   ! print #h_tmp: 'pause'
+24320   pr #h_tmp: '@echo off'
+24340   pr #h_tmp: '@echo Advanced Computer Services LLC'
+24360   pr #h_tmp: '@echo Opening: "'&file_open$&'"'
+24380   pr #h_tmp: '@echo.'
+24400   pr #h_tmp: '@echo.'
+24420   pr #h_tmp: '@echo Command: '&env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('temp')&'\Open_Log.txt"'
+24440   pr #h_tmp: '@echo.'
+24460   pr #h_tmp: '@echo.'
+24480   pr #h_tmp: '@echo Relative To: '&fileOpenDestination$
+24500   pr #h_tmp: '@echo.'
+24520   pr #h_tmp: '@echo.'
+24540   pr #h_tmp: '@echo Output Log: "'&env$('client_temp')&'\Open_Log.txt"'
+24560   pr #h_tmp: '@echo.'
+24580   pr #h_tmp: '@echo.'
+24600   pr #h_tmp: '@echo OPEN PROCESSING...'
+24620   pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('client_temp')&'\Open_Log.txt"'
+24640   ! pr #h_tmp: 'pause'
 24660   close #h_tmp: 
 24680   execute 'sy '&env$('client_temp')&'\open_as_'&session$&'.cmd'
 24700   ! /r
@@ -79,14 +79,14 @@
 25320   goto OPEN_XIT
 26000   OPEN_OPEN_ERR: ! 
 26010   if err=622 then ! it was just cancelled
-26020     print 'cancelled' : goto OPEN_XIT
+26020     pr 'cancelled' : goto OPEN_XIT
 26030   else 
 26040     mat ml$(2)
 26050     let ml$(1)='Select a different file name.'
 26060     let ml$(2)='Error: '&str$(err)
 26070     let fnmsgbox(mat ml$)
-26080     !     if err=4150 then print "Could not create file:";file$(1) : let fnpause ! file$(1) is blank!
-26090     print "Err:";err;" Line:";line
+26080     !     if err=4150 then pr "Could not create file:";file$(1) : let fnpause ! file$(1) is blank!
+26090     pr "Err:";err;" Line:";line
 26100   end if 
 26110   OPEN_XIT: ! 
 26120 fnend
@@ -117,27 +117,27 @@
 38400   else
 38420     tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"Report Cache\*"'
 38440   end if
-38460   print #h_tmp: '@echo off'
-38480   print #h_tmp: '@echo Advanced Computer Services LLC'
-38500   print #h_tmp: '@echo Saving to: "'&save_name$&'"'
-38520   print #h_tmp: '@echo.'
-38540   print #h_tmp: '@echo.'
-38560   print #h_tmp: '@echo Command: '&tmp7ZipCommand$
-38580   print #h_tmp: '@echo.'
-38600   print #h_tmp: '@echo Save What: '&env$('Q')&save_what$
-38620   print #h_tmp: '@echo.'
-38640   print #h_tmp: '@echo Relative To: '&os_filename$(env$('Q')&'\')
-38660   print #h_tmp: '@echo.'
+38460   pr #h_tmp: '@echo off'
+38480   pr #h_tmp: '@echo Advanced Computer Services LLC'
+38500   pr #h_tmp: '@echo Saving to: "'&save_name$&'"'
+38520   pr #h_tmp: '@echo.'
+38540   pr #h_tmp: '@echo.'
+38560   pr #h_tmp: '@echo Command: '&tmp7ZipCommand$
+38580   pr #h_tmp: '@echo.'
+38600   pr #h_tmp: '@echo Save What: '&env$('Q')&save_what$
+38620   pr #h_tmp: '@echo.'
+38640   pr #h_tmp: '@echo Relative To: '&os_filename$(env$('Q')&'\')
+38660   pr #h_tmp: '@echo.'
 38680   if enableBackupReportCache$<>'True' then
-38700     print #h_tmp: '@echo Excluding Report Cache'
+38700     pr #h_tmp: '@echo Excluding Report Cache'
 38720   end if
-38740   print #h_tmp: '@echo.'
-38760   print #h_tmp: '@echo.'
-38780   print #h_tmp: '@echo Output Log: "'&save_log_filename$&'"'
-38800   print #h_tmp: '@echo.'
-38820   print #h_tmp: '@echo.'
-38840   print #h_tmp: '@echo SAVE PROCESSING...'
-38860   print #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
+38740   pr #h_tmp: '@echo.'
+38760   pr #h_tmp: '@echo.'
+38780   pr #h_tmp: '@echo Output Log: "'&save_log_filename$&'"'
+38800   pr #h_tmp: '@echo.'
+38820   pr #h_tmp: '@echo.'
+38840   pr #h_tmp: '@echo SAVE PROCESSING...'
+38860   pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
 38880   close #h_tmp: 
 38900   execute 'sy '&env$('client_temp')&'\save_as_'&session$&'.cmd'
 38920   if fsa_automatedSaveFileName$<>'' then
@@ -172,7 +172,7 @@
 39500     let ml$(1)='Select a different file name.'
 39520     let ml$(2)='Error: '&str$(err)
 39540     let fnmsgbox(mat ml$)
-39560     print "Err:";err;" Line:";line
+39560     pr "Err:";err;" Line:";line
 39580   end if 
 39600   SAVE_AS_XIT: ! 
 39620   !  let fn_fsa_clean_up
@@ -234,10 +234,10 @@
 46020   dim gflfaTmpFile$*512
 46040   gflfaTmpFile$=env$('client_temp')&'\acs\7zGetFileList'&session$&'.txt'
 46060   open #h_tmp:=fngethandle: 'Name= '&env$('at')&br_filename$(env$('client_temp')&'\open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
-46080   print #h_tmp: '@echo off'
-46100   print #h_tmp: '@echo Advanced Computer Services LLC'
-46120   print #h_tmp: '@echo Reading file list from "'&file_open$&'"'
-46140   print #h_tmp: env$('path_to_7z_exe')&' l "'&file_open$&'" > "'&gflfaTmpFile$&'"'
+46080   pr #h_tmp: '@echo off'
+46100   pr #h_tmp: '@echo Advanced Computer Services LLC'
+46120   pr #h_tmp: '@echo Reading file list from "'&file_open$&'"'
+46140   pr #h_tmp: env$('path_to_7z_exe')&' l "'&file_open$&'" > "'&gflfaTmpFile$&'"'
 46160   close #h_tmp: 
 46180   execute 'sy '&env$('client_temp')&'\open_as_'&session$&'.cmd'
 46200   open #h_tmp:=fngethandle: 'Name=@:'&gflfaTmpFile$,display,input
@@ -294,14 +294,14 @@
 48260   goto OP_XIT
 48280   OP_OP_ERR: ! 
 48300   if err=622 then ! it was just cancelled
-48320     print 'cancelled' : goto OP_XIT
+48320     pr 'cancelled' : goto OP_XIT
 48340   else 
 48360     mat ml$(2)
 48380     ml$(1)='Select a different file name.'
 48400     ml$(2)='Error: '&str$(err)
 48420     fnmsgbox(mat ml$,resp$)
-48440     !     if err=4150 then print "Could not create file:";file$(1) : let fnpause ! file$(1) is blank!
-48460     print "Err:";err;" Line:";line
+48440     !     if err=4150 then pr "Could not create file:";file$(1) : let fnpause ! file$(1) is blank!
+48460     pr "Err:";err;" Line:";line
 48480   end if 
 48500   OP_XIT: ! 
 48520 fnend
@@ -309,7 +309,7 @@
 52020   destination_company_number=val(env$('cno'))
 52040   OpmAskWhichToOpen: ! r: screen
 52060   let fntos(sn$="Open Partial")
-52080   let col1_width=27 : let col2_pos=col1_width+2 : lc=rc=0
+52080   col1_width=27 : col2_pos=col1_width+2 : lc=rc=0
 52100   let fnlbl(lc+=1,1,"Source File:",col1_width,1)
 52120   let fntxt(lc,col2_pos,30,256,0,'',1,'select any data file from the data set to be imported.  i.e. Z:\vol002\CLmstr\BankIdx.h2')
 52140   resp$(rc+=1)=file_open$
@@ -347,7 +347,7 @@
 54160       fnstatus('**')
 54180       fnstatus('Set current system to: '&cursys$&' from '&cursys_origional$)
 54200       cursys$=fncursys$(cursys$)
-54220       fnputcno(destination_company_number) : let cno=destination_company_number
+54220       fnputcno(destination_company_number) : cno=destination_company_number
 54240       fnstatus('Set active Company Number to: '&str$(destination_company_number))
 54260       ! 
 54280       dim omSourceFilter$(0)*64
@@ -388,26 +388,26 @@
 62060   ! pr 'eafDestinationFolder$="'&eafSourceFilter$&'"'
 62080   execute 'Sy RmDir "'&eafDestinationFolder$&'" /s /q'
 62100   open #h_tmp:=fngethandle: 'Name= '&env$('at')&br_filename$(env$('client_temp')&'\acs\openPartial'&session$&'.cmd')&',RecL=512,Replace',display,output 
-62120   print #h_tmp: '@echo off'
-62140   print #h_tmp: '@echo Advanced Computer Services LLC'
-62160   print #h_tmp: '@echo Opening: "'&eafSourceFile$&'"'
-62180   print #h_tmp: '@echo.'
-62200   print #h_tmp: '@echo.'
+62120   pr #h_tmp: '@echo off'
+62140   pr #h_tmp: '@echo Advanced Computer Services LLC'
+62160   pr #h_tmp: '@echo Opening: "'&eafSourceFile$&'"'
+62180   pr #h_tmp: '@echo.'
+62200   pr #h_tmp: '@echo.'
 62220   for eafSourceFilterItem=1 to udim(mat eafSourceFilter$)
-62240     print #h_tmp: '@echo Command('&str$(eafSourceFilterItem)&'): '&env$('path_to_7z_exe')&' x -r -aoa "'&eafSourceFile$&'" -o"'&eafDestinationFolder$&'" '&eafSourceFilter$(eafSourceFilterItem)&' > "'&env$('temp')&'\acs\OpenPartial_Log.txt"'
+62240     pr #h_tmp: '@echo Command('&str$(eafSourceFilterItem)&'): '&env$('path_to_7z_exe')&' x -r -aoa "'&eafSourceFile$&'" -o"'&eafDestinationFolder$&'" '&eafSourceFilter$(eafSourceFilterItem)&' > "'&env$('temp')&'\acs\OpenPartial_Log.txt"'
 62260   nex eafSourceFilterItem
-62280   print #h_tmp: '@echo.'
-62300   print #h_tmp: '@echo.'
-62320   print #h_tmp: '@echo Relative To: '&eafDestinationFolder$
-62340   print #h_tmp: '@echo.'
-62360   print #h_tmp: '@echo.'
-62380   print #h_tmp: '@echo Output Log: "'&env$('client_temp')&'\acs\OpenPartial_Log.txt"'
-62400   print #h_tmp: '@echo.'
-62420   print #h_tmp: '@echo.'
-62440   print #h_tmp: '@echo OPEN PROCESSING...'
+62280   pr #h_tmp: '@echo.'
+62300   pr #h_tmp: '@echo.'
+62320   pr #h_tmp: '@echo Relative To: '&eafDestinationFolder$
+62340   pr #h_tmp: '@echo.'
+62360   pr #h_tmp: '@echo.'
+62380   pr #h_tmp: '@echo Output Log: "'&env$('client_temp')&'\acs\OpenPartial_Log.txt"'
+62400   pr #h_tmp: '@echo.'
+62420   pr #h_tmp: '@echo.'
+62440   pr #h_tmp: '@echo OPEN PROCESSING...'
 62460
 62480   for eafSourceFilterItem=1 to udim(mat eafSourceFilter$)
-62500     print #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&eafSourceFile$&'" -o"'&eafDestinationFolder$&'" '&eafSourceFilter$(eafSourceFilterItem)&' > "'&env$('client_temp')&'\acs\OpenPartial_Log.txt"'
+62500     pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&eafSourceFile$&'" -o"'&eafDestinationFolder$&'" '&eafSourceFilter$(eafSourceFilterItem)&' > "'&env$('client_temp')&'\acs\OpenPartial_Log.txt"'
 62520   nex eafSourceFilterItem
 62540   close #h_tmp: 
 62560   execute 'sy '&env$('client_temp')&'\acs\openPartial'&session$&'.cmd'

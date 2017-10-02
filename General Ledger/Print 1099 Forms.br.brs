@@ -16,7 +16,7 @@
 32120         if seltp=0 or seltp=typ then 
 32140           mat box=(0)
 32160           if typ<1 or typ>8 then let typ=1
-32180           let box(typ)=ytdp
+32180           box(typ)=ytdp
 32200           fn1099print(vn$,nam$,mat ad$,ss$,mat box)
 32220         end if
 32240       end if
@@ -31,7 +31,7 @@
 38020 ERTN: let fnerror(program$,err,line,act$,"xit")
 38040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 38060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-38080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+38080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 38100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 38120 ! /region
 40000 def fn_YearToDapPay(trans,key$; beg_date,end_date)

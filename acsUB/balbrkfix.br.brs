@@ -24,12 +24,12 @@
 00290   let foundone=0
 00300 ! ------------------------------
 00310   if bal=sum(gb) then goto L270
-00320   if bal=0 then mat gb=(0): let cause$="one": goto REW
-00330   if bal<0 and a(1)>0 then mat gb=(0) : let gb(1)=bal : let cause$="two": goto REW
-00340   if bal<0 and a(2)>0 then mat gb=(0) : let gb(2)=bal : let cause$="three": goto REW
-00350   if bal<0 and a(3)>0 then mat gb=(0) : let gb(3)=bal : let cause$="three": goto REW
-00360   if bal<0 and a(4)>0 then mat gb=(0) : let gb(4)=bal : let cause$="three": goto REW
-00370   if bal<0 then mat gb=(0) : let gb(5)=bal : let cause$="three": goto REW ! if credit balance and no water,sewer,elec,or gas then let credit show in gb(5)
+00320   if bal=0 then mat gb=(0): cause$="one": goto REW
+00330   if bal<0 and a(1)>0 then mat gb=(0) : let gb(1)=bal : cause$="two": goto REW
+00340   if bal<0 and a(2)>0 then mat gb=(0) : let gb(2)=bal : cause$="three": goto REW
+00350   if bal<0 and a(3)>0 then mat gb=(0) : let gb(3)=bal : cause$="three": goto REW
+00360   if bal<0 and a(4)>0 then mat gb=(0) : let gb(4)=bal : cause$="three": goto REW
+00370   if bal<0 then mat gb=(0) : let gb(5)=bal : cause$="three": goto REW ! if credit balance and no water,sewer,elec,or gas then credit show in gb(5)
 00380   let runtotal=0
 00390   mat gb=(0)
 00400   for j=1 to 10 ! types of charges  (OWE CURRENT BILL)
@@ -53,7 +53,7 @@
 00570 L570: if sum(gb)= bal then goto REW
 00580     for j2=1 to 10
 00590 ! If PENALTY$(J2)="Y" AND TCODE=1 Then Goto 570 ! SKIP PENALTY RECORDS
-00600       let answer(j2,j)+=tg(j2)
+00600       answer(j2,j)+=tg(j2)
 00610     next j2
 00620     goto L490 ! read next transaction
 00630 L630: next j
@@ -66,26 +66,26 @@
 00700     let runtotal=runtotal+min(answer(k,x),max(0,(bal-runtotal)))
 00710 L710: next k
 00720   if x<3 then let x+=1: goto L660
-00730   let cause$="four"
+00730   cause$="four"
 00740   for z=1 to 10
-00750     if trim$(service$(z))<>"" then let gb(z)+=bal-runtotal: print #255,using "form pos 1,c 50": "Plugging first service by "&str$(bal-runtotal): goto L780 ! plug anything LEFT OVER TO first service  (change <>"" to ="PN" to plug to penalty
+00750     if trim$(service$(z))<>"" then let gb(z)+=bal-runtotal: pr #255,using "form pos 1,c 50": "Plugging first service by "&str$(bal-runtotal): goto L780 ! plug anything LEFT OVER TO first service  (change <>"" to ="PN" to plug to penalty
 00760   next z
 00770 ! Next J
 00780 L780: if foundone=0 then goto L820 ! one of dates does not match the last billing date don't change
 00790   goto REW
-00800 L800: print #255,using L810: z$,bal,sum(gb),mat gb
+00800 L800: pr #255,using L810: z$,bal,sum(gb),mat gb
 00810 L810: form pos 1,c 10,x 1,12*n 9.2
 00820 L820: goto L270
-00830 NWPGE: ! PRINT #255: NEWPAGE
-00840   print #255: "Account    Balance   TotBrk   "&servicename$(1)(1:8)&" "&servicename$(2)(1:8)&" "&servicename$(3)(1:8)&" "&servicename$(4)(1:8)&" "&servicename$(5)(1:8)&" "&servicename$(6)(1:8)&" "&servicename$(7)(1:8)&" "&servicename$(8)(1:8)&" "&servicename$(9)(1:8)&" "&servicename$(10)(1:8)&" "
-00850   print #255: "__________ _________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________"
+00830 NWPGE: ! pr #255: NEWPAGE
+00840   pr #255: "Account    Balance   TotBrk   "&servicename$(1)(1:8)&" "&servicename$(2)(1:8)&" "&servicename$(3)(1:8)&" "&servicename$(4)(1:8)&" "&servicename$(5)(1:8)&" "&servicename$(6)(1:8)&" "&servicename$(7)(1:8)&" "&servicename$(8)(1:8)&" "&servicename$(9)(1:8)&" "&servicename$(10)(1:8)&" "
+00850   pr #255: "__________ _________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________"
 00860   return 
 00870 DONE: let fncloseprn
 00880 XIT: let fnxit
 00890 REW: ! 
 00900   rewrite #1,using L910,key=z$: mat gb
 00910 L910: form pos 388,10*pd 5.2
-00920 ! Print #255: "Rewrote next record "&CAUSE$
+00920 ! pr #255: "Rewrote next record "&CAUSE$
 00930   goto L800
 00940 SCR1: ! 
 00950   let sn$="balbrkfix" !:
@@ -110,7 +110,7 @@
 01040     if x>0 then let resp$(j)(x:x)="": goto L1030
 01050   next j
 01060   for j=1 to 6 !:
-          let cd1(j)=val(resp$(j)) conv SCR1 !:
+          cd1(j)=val(resp$(j)) conv SCR1 !:
         next j
 01070   if cd1(1)=0 then !:
           mat message$(1): let mytype=0 !:

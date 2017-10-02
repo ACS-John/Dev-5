@@ -20,7 +20,7 @@
 00270   read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 00280   close #company: 
 00290   open #8: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L310
-00300   let cl1=1
+00300   cl1=1
 00310 L310: ! 
 00320   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outin,keyed 
 00330   open #11: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glIndx2.H"&env$('cno')&",Shr",internal,outin,keyed ! ioerr L350
@@ -78,7 +78,7 @@
 00642     let resp$(9)=str$(rf(6)) ! 2nd cash flow
 
 00650     let fnlbl(10,1,"EOY Balance - 2 Years Ago:",30,right,0,0)
-00660     let fntxt(10,33,12,0,right,"10",0,"In order to print prior year's cash flow and fund statements, the final balance from two years ago must be retained.",0)
+00660     let fntxt(10,33,12,0,right,"10",0,"In order to pr prior year's cash flow and fund statements, the final balance from two years ago must be retained.",0)
 00662     let resp$(10)=str$(pbp)
 00670     let fnfra(12,1,14,105,"History and Budget Information"," ",0)
 00680     let x=11
@@ -122,17 +122,17 @@
 00960 L960: ! 
 00970 ! let de$=resp$(1)(13:60)
 00972   if edit_mode=1 then 
-00980     let bb=val(resp$(2)) ! beginning bal
-00990     let cb=val(resp$(3)) ! current balance
+00980     bb=val(resp$(2)) ! beginning bal
+00990     cb=val(resp$(3)) ! current balance
 01000     for j=1 to 6
 01010       let rf(j)=val(resp$(j+3)(1:5)) ! incomestatement reference numbers
 01020     next j
 01030     let pbp=val(resp$(10)) ! prior years 2 years ago
 01040     let x=11
 01050     for j=1 to 13
-01060       let bc(j)=val(resp$(x)): let x+=1
-01070       let bp(j)=val(resp$(x)): let x+=1
-01080       let bm(j)=val(resp$(x)): let x+=1
+01060       bc(j)=val(resp$(x)): let x+=1
+01070       bp(j)=val(resp$(x)): let x+=1
+01080       bm(j)=val(resp$(x)): let x+=1
 01090       let revb(j)=val(resp$(x)): let x+=1
 01100     next j
 01102   end if 
@@ -168,8 +168,8 @@
 01360   if ckey=5 then goto MAIN
 01370   let fixgrid=99
 01380   let dno=ano=sno=0
-01390   if use_dept=1 then let dno=val(resp$(1)) : let ano=val(resp$(2))
-01400   if use_dept=0 then let ano=val(resp$(1))
+01390   if use_dept=1 then let dno=val(resp$(1)) : ano=val(resp$(2))
+01400   if use_dept=0 then ano=val(resp$(1))
 01410   if use_dept=1 and use_sub=1 then let sno=val(resp$(3))
 01420   if use_dept=0 and use_sub=1 then let sno=val(resp$(2))
 01430   if use_dept=1 and use_sub=1 then let d$=resp$(4)
@@ -180,7 +180,7 @@
 01480   read #1,using 'Form POS 1,N 3',key=key$: dno nokey ignore
 01530 ! NEW_RECORD: !
 01540 ! L1540: ! 
-01541   let bb=cb=pbp=0
+01541   bb=cb=pbp=0
 01542   mat bc=(0): mat bp=(0): mat bm=(0): mat revb=(0): mat ta=(0): mat rf=(0)
 01543   let edit_mode=1
 01544   let gl$=key$
@@ -192,7 +192,7 @@
 01568   goto MAIN
 01570 ! ______________________________________________________________________
 01580 DO_EDIT: ! r:
-01582   print newpage
+01582   pr newpage
 01590   read #1,using L1740,key=key$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey L1650
 01600   let fnrglbig$(key$)
 01610   for j=1 to 13
@@ -213,7 +213,7 @@
 01694       goto L1780
 01696     end if 
 01698   end if 
-01720 ! !f BB=0 Then Let BB=CB  ! need to make current bal & begbalance same if adding new record
+01720 ! !f BB=0 Then bB=CB  ! need to make current bal & begbalance same if adding new record
 01730   rewrite #1,using L1740,key=key$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
 01740 L1740: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
 01750   if cl1=1 then 
@@ -225,7 +225,7 @@
 01770     gosub CHANGE_CURRENT_TRANS
 01772   end if
 01780 L1780: ! 
-01781   let bb=cb=pbp=0
+01781   bb=cb=pbp=0
 01782   mat bc=(0) : mat bp=(0) : mat bm=(0) : mat revb=(0) : mat ta=(0) : mat rf=(0)
 01784   let edit_mode=0
 01786   let gl$=""
@@ -254,17 +254,17 @@
 01922   goto CHANGE_CURRENT_TRANS ! /r
 01930 CHANGE_CURRENT_TRANS: ! r:
 01940   if ta(1)=0 then goto L2030
-01950   let adr=ta(1)
+01950   adr=ta(1)
 01960 L1960: read #2,using L2800,rec=adr: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
 01970   if delete_it=1 then goto L1980 else goto L2000
 01980 L1980: rewrite #2,using L2800,rec=adr: "",0,0,0,0,"","",0
 01990   goto L2010
 02000 L2000: rewrite #2,using L2800,rec=adr: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
 02010 L2010: if nta=0 then goto L2030
-02020   let adr=nta : goto L1960
+02020   adr=nta : goto L1960
 02030 L2030: let delete_it=0
 02040   return  ! /r
-02050 ! PRINT_PROOF: ! r:  print proof list is currently unused
+02050 ! PRINT_PROOF: ! r:  pr proof list is currently unused
 02060 !   restore #1,key>="            ": eof ignore
 02070 !   let fnwait(101,cap$,"Printing: Please wait...",1)
 02080 ! ! on fkey 5 goto PP_FINIS
@@ -275,40 +275,40 @@
 02120 !   read #1,using L1740: gl2$,de$,mat rf2,d,c,mat e,mat h,mat g,pb eof PP_EOF_1
 02130 !   goto PP_DETAILS ! /r
 02140 ! PP_HEADER: ! r:
-02142 !   print #255,using L2150: date$('mm/dd/yy'),time$,env$('cnam'),"G/L Proof List",date$("Month DD, CCYY")
+02142 !   pr #255,using L2150: date$('mm/dd/yy'),time$,env$('cnam'),"G/L Proof List",date$("Month DD, CCYY")
 02150 ! L2150: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,cc 50,skip 1,pos 59,c 30,skip 1,cc 66,skip 2
 02160 !   return  ! /r
 02162 ! PP_EOF_1: ! r:
-02163 !   let c=d=pb=0
+02163 !   c=d=pb=0
 02164 !   let de$="0"
 02165 !   mat e=(0) : mat h=(0) : mat g=(0)
 02166 !   goto PP_DETAILS ! /r
 02170 ! PP_DETAILS: ! r: some printing stuff
-02180 !   print #255,using L2190: gl$,gl2$
+02180 !   pr #255,using L2190: gl$,gl2$
 02190 ! L2190: form pos 1,c 13,pos 69,c 13,skip 2
-02200 !   print #255,using L2210: "Description",d$,"Description",de$
+02200 !   pr #255,using L2210: "Description",d$,"Description",de$
 02210 ! L2210: form pos 1,c 12,c 50,pos 69,c 12,c 50,skip 2
-02220 !   print #255,using L2230: "Beginning Balance",bb,"Current Balance",cb,"Beginning Balance",d,"Current Balance",c
+02220 !   pr #255,using L2230: "Beginning Balance",bb,"Current Balance",cb,"Beginning Balance",d,"Current Balance",c
 02230 ! L2230: form pos 1,c 18,pic(---------.##),x 4,c 16,pic(---------.##),pos 69,c 18,pic(---------.##),x 4,c 16,pic(---------.##),skip 2
-02240 !   print #255,using L2250: "Balance Sheet #",rf(1),"2nd Balance Sheet #",rf(2),"Balance Sheet",rf2(1),"2nd Balance Sheet #",rf2(2)
+02240 !   pr #255,using L2250: "Balance Sheet #",rf(1),"2nd Balance Sheet #",rf(2),"Balance Sheet",rf2(1),"2nd Balance Sheet #",rf2(2)
 02250 ! L2250: form pos 1,c 20,n 5,x 9,c 23,n 5,pos 69,c 20,n 5,x 9,c 23,n 5,skip 1
-02260 !   print #255,using L2250: "Income Statement",rf(3),"2nd Income Statement",rf(4),"Income Statement",rf2(3),"2ND Income Statement",rf2(4)
-02270 !   print #255,using L2250: "Fund Statement  ",rf(5),"2nd Fund Statement",rf(6),"Fund Statement  ",rf2(5),"2nd Fund Statement",rf2(6)
-02280 !   print #255,using L2290: "EOY Balance 2 Yr Ago",pbp,"EOY Balance 2 Yr Ago",pb
+02260 !   pr #255,using L2250: "Income Statement",rf(3),"2nd Income Statement",rf(4),"Income Statement",rf2(3),"2ND Income Statement",rf2(4)
+02270 !   pr #255,using L2250: "Fund Statement  ",rf(5),"2nd Fund Statement",rf(6),"Fund Statement  ",rf2(5),"2nd Fund Statement",rf2(6)
+02280 !   pr #255,using L2290: "EOY Balance 2 Yr Ago",pbp,"EOY Balance 2 Yr Ago",pb
 02290 ! L2290: form pos 1,c 20,pic(--------.##),pos 69,c 20,pic(--------.##),skip 2
-02300 !   print #255,using L2310: "Current Year","Prior Year","Budget","Current Year","Prior Year","Budget"
+02300 !   pr #255,using L2310: "Current Year","Prior Year","Budget","Current Year","Prior Year","Budget"
 02310 ! L2310: form skip 2,pos 12,c 16,c 19,c 12,pos 80,c 16,c 19,c 12,skip 1
 02320 !   for j=1 to 13
-02330 !     print #255,using L2340: "Period",j,bc(j),bp(j),bm(j),"Period",j,e(j),h(j),g(j)
+02330 !     pr #255,using L2340: "Period",j,bc(j),bp(j),bm(j),"Period",j,e(j),h(j),g(j)
 02340 ! L2340: form pos 1,c 6,n 3,pic(------------.##),pic(-----------.##),pic(------------.##),pos 69,c 6,n 3,pic(------------.##),pic(-----------.##),pic(------------.##),skip 1
 02350 !   next j
-02360 !   print #255,using L2370: ""
+02360 !   pr #255,using L2370: ""
 02370 ! L2370: form c 1,skip 2
-02380 !   let cn=cn+1
+02380 !   cn=cn+1
 02390 !   if cn<>2 then goto PP_READ_1
-02410 !   print #255: ""
-02412 !   print #255: ""
-02420 !   let cn=0
+02410 !   pr #255: ""
+02412 !   pr #255: ""
+02420 !   cn=0
 02430 !   gosub PP_HEADER
 02440 !   goto PP_READ_1
 02450 ! PP_FINIS: ! 
@@ -333,18 +333,18 @@
 02680 ! ______________________________________________________________________
 02690 TRANSACTION_GRID: ! 
 02692   mat chdr$(9) : mat cmask$(9) : mat item$(9) !:
-        let chdr$(1)='Ref': let chdr$(2)='G/L #': let chdr$(3)='Date' !:
-        let chdr$(4)='Amount' !:
-        let chdr$(5)='T Code' : let chdr$(6)='P Code' !:
-        let chdr$(7)='Ck/Rec #' : let chdr$(8)='Description' !:
-        let chdr$(9)='Period'
-02700   let cmask$(1)="30"
-02702   let cmask$(2)="": let cmask$(3)="3" : let cmask$(4)='10' !:
-        let cmask$(5)='30' : let cmask$(6)='30': let cmask$(7)='' !:
-        let cmask$(8)='' : let cmask$(9)='30'
+        chdr$(1)='Ref': chdr$(2)='G/L #': chdr$(3)='Date' !:
+        chdr$(4)='Amount' !:
+        chdr$(5)='T Code' : chdr$(6)='P Code' !:
+        chdr$(7)='Ck/Rec #' : chdr$(8)='Description' !:
+        chdr$(9)='Period'
+02700   cmask$(1)="30"
+02702   cmask$(2)="": cmask$(3)="3" : cmask$(4)='10' !:
+        cmask$(5)='30' : cmask$(6)='30': cmask$(7)='' !:
+        cmask$(8)='' : cmask$(9)='30'
 02710   let fntos(sn$="gltrans")
 02720   let fnflexinit1('Currentfile',1,1,20,85,mat chdr$,mat cmask$,1,0)
-02730   let adr=ta(1): let pc2=0
+02730   adr=ta(1): let pc2=0
 02740 !  read current or history files
 02750   if rv=1 then goto READ_FROM_CURRENT else goto READ_FROM_HISTORY
 02760 READ_FROM_CURRENT: ! 
@@ -352,11 +352,11 @@
 02780 L2780: if adr=0 then goto EO_TRANS_GRID
 02790   read #2,using L2800,rec=adr,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta
 02800 L2800: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,pd 3
-02810   let adr=nta
+02810   adr=nta
 02820   goto DISPLAY_TRANS
 02830 READ_FROM_HISTORY: ! 
 02840   let transfile=3
-02850   let ack$=gl$&cnvrt$("N 2",pc1)&"      "
+02850   ack$=gl$&cnvrt$("N 2",pc1)&"      "
 02860   restore #3,key>=ack$: nokey EO_TRANS_GRID
 02870 L2870: read #3,using L2880,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof EO_TRANS_GRID
 02880 L2880: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
@@ -423,7 +423,7 @@
 03330   let pc2=val(resp$(8)) ! period code from history; blank when returning from current
 03340   if rv=1 then rewrite #2,using L2800,rec=recordnum: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta else rewrite #3,using L3350,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
 03350 L3350: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
-03360   let adr=ta(1): goto TRANSACTION_GRID
+03360   adr=ta(1): goto TRANSACTION_GRID
 03370 ! /r
 03630 SEARCH_GRID: ! r:
 03640   let fnaccount_search(gl$,fixgrid)
@@ -435,12 +435,12 @@
 03700 ERTN: let fnerror(program$,err,line,act$,"xit")
 03710   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03720   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-03730   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+03730   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03740 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03750 ! /region
 03760 ! ______________________________________________________________________
 03770 CHG_GLNO_IN_HISTORY: ! r: change gl # in history
-03780   let ack$=holdgl$&cnvrt$("N 2",0)&"      "
+03780   ack$=holdgl$&cnvrt$("N 2",0)&"      "
 03785   if trim$(ack$)="" then goto L3850
 03790   restore #3,key>=rpad$(ack$,kln(3)): nokey L3850
 03800   do
@@ -453,7 +453,7 @@
 03850 L3850: !
 03860 return ! /r
 03870 CHANGE_ACCT_NUM: ! r:
-03880   let dno=val(gl$(1:3)): let ano=val(gl$(4:9)): let sno=val(gl$(10:12))
+03880   let dno=val(gl$(1:3)): ano=val(gl$(4:9)): let sno=val(gl$(10:12))
 03890   mat resp$=("")
 03900   let fntos(sn$="GLchange")
 03902   let mylen=28: let mypos=mylen+3 : let right=1: let rc=0
@@ -478,8 +478,8 @@
 04020   if ckey=5 then goto MAIN
 04030   let fixgrid=99
 04040   let dno=ano=sno=0
-04050   if use_dept=1 then let dno=val(resp$(1)) : let ano=val(resp$(2))
-04060   if use_dept=0 then let ano=val(resp$(1))
+04050   if use_dept=1 then let dno=val(resp$(1)) : ano=val(resp$(2))
+04060   if use_dept=0 then ano=val(resp$(1))
 04070   if use_dept=1 and use_sub=1 then let sno=val(resp$(3))
 04080   if use_dept=0 and use_sub=1 then let sno=val(resp$(2))
 04090   if use_dept=1 and use_sub=1 then let d$=resp$(4)

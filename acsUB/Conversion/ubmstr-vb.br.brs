@@ -30,8 +30,8 @@
 00330     if extra(2)=0 then let extra(2)=1 ! don't allow zero sequence #
 00340     let extra$(6)=f$(3) : let f$(3)="" ! bulk sort code
 00350     let extra$(3)=f$(2) : let f$(2)="" ! meter module #  (water meter serial)
-00360 ! Let EXTRA(11)=B(6): Let B(6)=0 ! note payable amount
-00370 ! let extra(17)=c(4) : let c(4)=0 ! final billing code
+00360 ! Let EXTRA(11)=B(6): b(6)=0 ! note payable amount
+00370 ! let extra(17)=c(4) : c(4)=0 ! final billing code
 00380 ! let extra(3)=d(5) : let d(5)=0 ! date meter read current
 00390 ! let extra(4)=d(6): let d(6)=0 ! date meter read prior
 00400 ! Let D(7)=0
@@ -46,7 +46,7 @@
 00480 ! Let GB(9)=GB(7): Let GB(7)=0 ! move sfc for service 7 to service 9
 00490 ! Let EXTRA(18)=D(7): Let D(7)=0 ! average sewer usage
 00495 ! If env$('client')="Monticello" AND A(2)>9 Then Let EXTRA(18)=D(7)=0 ! don't average sewer rate codes 10 or greater
-00500 ! Let A(6)=A(7) ! penalty codes (was only 1 code but charges listed seperate
+00500 ! a(6)=A(7) ! penalty codes (was only 1 code but charges listed seperate
 00510 ! If A(2)>0 Then Let EXTRA(14)=D(13) ! make sewer units same as water units if have sewer
 00520     for j=1 to udim(extra)
 00522       if extra(j)<-99999 then let extra(j)=0
@@ -54,7 +54,7 @@
 00528     rewrite #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
 00530 F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 00540     if b(10)=0 then goto L580 ! updating the budget billing file
-00550     mat badr=(0): let ba(12)=b(10)
+00550     mat badr=(0): ba(12)=b(10)
 00560     write #81,using L570: z$,mat ba,mat badr
 00570 L570: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 00580 L580: goto L290
@@ -72,6 +72,6 @@
 76240 ERTN: let fnerror(program$,err,line,act$,"xit")
 76260   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76280   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-76300   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+76300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 76320 ERTN_EXEC_ACT: execute act$ : goto ERTN
 76340 ! </updateable region: ertn>

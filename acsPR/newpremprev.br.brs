@@ -26,7 +26,7 @@
 00252   let resp$(respc+=1)=str$(end_date)
 00260   let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
-00280   let beg_date=val(resp$(1)) ! beginning of year
+00280   beg_date=val(resp$(1)) ! beginning of year
 00300   let end_date=val(resp$(2)) ! ending day of year
 00310 ! ______________________________________________________________________
 00320   on fkey 5 goto DONE
@@ -37,8 +37,8 @@
 00370   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outin,keyed 
 00380   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
 00390 L390: read #1,using L430: eno,em$,em4,mat em eof DONE
-00400   let a=pos (rtrm$(em$)," ",1)
-00410   let b=pos (rtrm$(em$)," ",a+1)
+00400   a=pos (rtrm$(em$)," ",1)
+00410   b=pos (rtrm$(em$)," ",a+1)
 00420   let em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
 00430 L430: form pos 1,n 8,c 30,pos 118,n 2,pos 132,2*pd 4.2,pos 156,n 6,pos 173
 00440   let fsttrl=1
@@ -47,7 +47,7 @@
 00490   if teno<>eno then goto L390
 00500   if tdet(1)> 0 then let payrate=tdet(1) else let payrate=tdet(2) ! set payrate as salary or hourly
 00520   mat ytdtotal=(0) : mat ytdtdc=(0)
-00530   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+00530   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 00540   restore #4,key>=checkkey$: nokey L480
 00550 L550: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,ctdn,prd,ckno,mat tdc,mat tcp eof L610
 00560   if heno<>teno then goto L610 ! read next department
@@ -57,21 +57,21 @@
 00590   mat ytdtotal=ytdtotal+tcp ! earnings, etc
 00600   goto L550
 00610 L610: if fsttrl=1 then goto L640
-00620   gosub L730 ! PRINT TRAILER ONLY
+00620   gosub L730 ! pr TRAILER ONLY
 00630   goto L660
-00640 L640: gosub L670 ! PRINT MASTER AND FIRST TRAILER
+00640 L640: gosub L670 ! pr MASTER AND FIRST TRAILER
 00650   let fsttrl=0
 00660 L660: goto L480
-00670 L670: print #255,using L710: eno,em$(1:23),tdn,em(3),tdt(1),tli,tdt(3),tdt(2),em(2),ytdtdc(4),em(1),ytdtdc(3),ytdtdc(5),payrate pageoflow L690
+00670 L670: pr #255,using L710: eno,em$(1:23),tdn,em(3),tdt(1),tli,tdt(3),tdt(2),em(2),ytdtdc(4),em(1),ytdtdc(3),ytdtdc(5),payrate pageoflow L690
 00680   goto L710
-00690 L690: print #255: newpage
+00690 L690: pr #255: newpage
 00700   gosub HDR
 00710 L710: form pos 1,pic(zzzzzzzz),pos 10,c 23,pos 34,pic(zzz),pos 38,pic(zz/zz/zz),pos 47,pic(zz/zz/zz),pos 55,pic(------.##),pos 66,pic(zz/zz/zz),pos 75,pic(zz/zz/zz),pos 83,6*n 10.2,skip 1
 00720   return 
-00730 L730: print #255,using L740: tdn,tdt(1),tli,tdt(3),tdt(2),tdc(4),tdc(3),tdc(5),payrate pageoflow L760
+00730 L730: pr #255,using L740: tdn,tdt(1),tli,tdt(3),tdt(2),tdc(4),tdc(3),tdc(5),payrate pageoflow L760
 00740 L740: form pos 34,pic(zzz),pos 47,pic(zz/zz/zz),pos 55,pic(------.##),pos 66,pic(zz/zz/zz),pos 75,pic(zz/zz/zz),pos 93,pic(---,---.##),pos 113,3*n 10.2,skip 1
 00750   goto L780
-00760 L760: print #255: newpage
+00760 L760: pr #255: newpage
 00770   gosub HDR
 00780 L780: return 
 00790 ! ______________________________________________________________________
@@ -82,24 +82,24 @@
 00840   goto XIT
 00850 ! ______________________________________________________________________
 00860 HDR: ! 
-00870   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-00880   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-00890   print #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
-00900   print #255: "\qc  {\f181 \fs16 \b As of "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
-00910   print #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
-00920   print #255: "\ql   "
-00930   print #255,using L940: "Employee    Employee Name","Dept   Date   Last Rev", "Last Increase   Next Rev     Vacation Hours","   Sick Hours   Hol Hours"
+00870   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+00880   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+00890   pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
+00900   pr #255: "\qc  {\f181 \fs16 \b As of "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
+00910   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
+00920   pr #255: "\ql   "
+00930   pr #255,using L940: "Employee    Employee Name","Dept   Date   Last Rev", "Last Increase   Next Rev     Vacation Hours","   Sick Hours   Hol Hours"
 00940 L940: form pos 1,c 25,pos 33,c 22,pos 59,c 43,pos 108,c 25
-00950   print #255,using L960: "Number","Hired     Date     Amount      Date","Date     Accrued     Taken   Accrued     Taken     Taken  Pay Rate"
+00950   pr #255,using L960: "Number","Hired     Date     Amount      Date","Date     Accrued     Taken   Accrued     Taken     Taken  Pay Rate"
 00960 L960: form pos 2,c 6,pos 39,c 35,pos 77,c 66
-00970   print #255: ""
+00970   pr #255: ""
 00980   return 
 00990 ! ______________________________________________________________________
 01000 ! <Updateable Region: ERTN>
 01010 ERTN: let fnerror(program$,err,line,act$,"xit")
 01020   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01030   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01040   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01040   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01050 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01060 ! /region
 01070 ! ______________________________________________________________________

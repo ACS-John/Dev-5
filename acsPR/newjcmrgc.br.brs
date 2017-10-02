@@ -16,7 +16,7 @@
 00180 L180: form pos 1,c 12,pd 4,c 6,2*pd 3,pd 5.2,c 30
 00190   if ltrm$(rtrm$(rn$))="-1" or ji2(3)=0 then goto L170
 00200   let jn$=lpad$(rtrm$(jn$),6)
-00210   let cn$=jn$&lpad$(str$(ji2(1)),5)
+00210   cn$=jn$&lpad$(str$(ji2(1)),5)
 00220   read #2,using L230,key=cn$: mat l,mat ta nokey L280
 00230 L230: form pos 37,11*pd 7.2,2*pd 2,2*pd 3
 00240   let nc1=0
@@ -43,6 +43,6 @@
 00450 ERTN: let fnerror(program$,err,line,act$,"NO")
 00460   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00470   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00480   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00480   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00490 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00500 ! ______________________________________________________________________

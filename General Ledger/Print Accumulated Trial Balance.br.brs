@@ -1,5 +1,5 @@
 00010 ! formerly S:\acsGL\AcGLAcTB
-00020 ! Print Accumulated Trial Balance
+00020 ! pr Accumulated Trial Balance
 12000 ! r: setup library, on error, dims, and constants
 12020   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fntos,fnfra,fnopt,fnlbl,fnqgl,fncmdset,fnacs,fnagl$,fnchk,fntxt,fngethandle,fncreg_read,fncreg_write
 12040   on error goto ERTN
@@ -43,8 +43,8 @@
 16100   let resp$(respc_lastCapitalAccount:=rc+=1)=lastCapitalAccount$
 16120   let fnchk(2,mypos,"Print Ending Balance on First Line:",1,0)
 16140   let resp$(respc_prBalFirst:=rc+=1)=petro_opt$
-16160   let fnlbl(3,1,"Period Code to print (blank for all):",mylen,right)
-16180   let fntxt(3,mypos,2,0,1,"30",0,"You can print any month or the entire year.")
+16160   let fnlbl(3,1,"Period Code to pr (blank for all):",mylen,right)
+16180   let fntxt(3,mypos,2,0,1,"30",0,"You can pr any month or the entire year.")
 16200   let resp$(respc_periodCode:=rc+=1)="" ! STR$(LMU)
 16220   let fnfra(5,1,5,90,"Selection Type"," ",0) : frameno=1
 16240   let fnopt(1,3,"Print All GL Accounts",0,frameno)
@@ -84,7 +84,7 @@
 22180   let n2$=fnagl$(resp$(respc_rangeEnd))
 22200   startday=days(resp$(resp_dateStart),'ccyymmdd')
 22220   endday=days(resp$(resp_dateEnd),'ccyymmdd')
-22240   let costCenterFilter=val(resp$(resp_costCenter))
+22240   costCenterFilter=val(resp$(resp_costCenter))
 24000   fncreg_write('Last "Capital" Account',lastCapitalAccount$)
 24020   fncreg_write('Print Ending Balance on First Line',petro_opt$)
 24040   fncreg_write(cap$&': DayStart',str$(startday)) 
@@ -116,7 +116,7 @@
 34100       read #h_glmstr,using F_GLMSTR: n$,d$,bb,cb,mat bp eof TOTALS
 34110       ! m2GlmCbAmtPos=87=current balance
 34120       F_GLMSTR: form pos 1,c 12,c 50,pos m1GlmBbAmtPos,pd 6.2,pos m2GlmCbAmtPos,pd 6.2,pos 171,13*pd 6.2
-34140       let bb=bp(nap)
+34140       bb=bp(nap)
 34150 !     pause ! 
 34160     loop while s1=3 and n$<n1$
 34180     if s1=3 and n$>n2$ then goto TOTALS
@@ -124,20 +124,20 @@
 34220   if costCenterFilter><0 and val(n$(1:3))><costCenterFilter then goto TOTALS
 34240 AfterReadGlmstr: !
 34260   let dno=val(n$(1:3))
-34280   let ano=val(n$(4:9))
+34280   ano=val(n$(4:9))
 34300   let sno=val(n$(10:12))
 34320   if (periodToPrint=0 or periodToPrint=1) and (dno>val(lastCapitalAccount$(1:3)) or ano>val(lastCapitalAccount$(4:9))) then  ! added the dno logic on 2/4/2017
-34322     let bb=0
+34322     bb=0
 34324 ! else
-34326 !   let bb=cb-activity  ! added the activity logic on 2/7/2017, before it was just bb
+34326 !   bb=cb-activity  ! added the activity logic on 2/7/2017, before it was just bb
 34328 !   activity=0
 34329 !   pr str$(dno)&'-'&str$(ano)&'-'&str$(sno) : pause
 34330   end if
 34340   if petro_opt$='True' then 
-34360     print #255,using L1380: dno,ano,sno,d$,bb,cb
+34360     pr #255,using L1380: dno,ano,sno,d$,bb,cb
 34380     L1380: form pos 1,pic(zzz),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(--,---,--z.## cr),pos 110,pic(zz,zzz,zzz.## cr)
 34400   else 
-34420     print #255,using L1390: dno,ano,sno,d$,bb
+34420     pr #255,using L1390: dno,ano,sno,d$,bb
 34440     L1390: form pos 1,pic(zzz),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(--,---,--z.## cr)
 34460   end if 
 34480   restore #h_actrans,key>=n$&cnvrt$("N 2",periodToPrint)&"      ": nokey END_OF_TRANS
@@ -152,8 +152,8 @@
 34660   gosub PRINT_CB_OR_SUMTR
 34680 goto READ_GLMSTR ! /r
 38000 TOTALS: ! r: EOF ON MASTER FILE
-38020   print #255: ""
-38040   print #255,using L1100: "Trial Balance Proof Totals",begbal,trtotal,curbal
+38020   pr #255: ""
+38040   pr #255,using L1100: "Trial Balance Proof Totals",begbal,trtotal,curbal
 38060   L1100: form pos 1,cr 78,pos 80,pic(zz,zzz,zzz.## cr),pic(z,zzz,zzz.## cr),pic(z,zzz,zzz.## cr)
 38080   close #h_glmstr: 
 38100   close #h_actrans: 
@@ -161,21 +161,21 @@
 38140   goto XIT ! /r
 39000 XIT: let fnxit
 41000 PGOF: ! r:
-41020   print #255: newpage
+41020   pr #255: newpage
 41040   gosub HDR
 41060 continue ! /r
 42000 HDR: ! r:
-42020   print #255,using fHeader1: env$('cnam'),date$('mm/dd/yy')
-42040   print #255,using fHeader1: 'Accumulated Trial Balance', time$
-42060   print #255,using fHeader1: fnpedat$,"Page "&str$(p1+=1)
+42020   pr #255,using fHeader1: env$('cnam'),date$('mm/dd/yy')
+42040   pr #255,using fHeader1: 'Accumulated Trial Balance', time$
+42060   pr #255,using fHeader1: fnpedat$,"Page "&str$(p1+=1)
 42080   fHeader1: form pos 21,cc 80,cr 21
-42100   print #255: ""
-42120   print #255: "      Account";
-42140   print #255: tab(70);"Reference";tab(84);"Beginning";tab(99);"Current";
-42160   print #255: tab(115);"Ending"
-42180   print #255,using fHeader2: "Number","Account Name/Transaction Description","Date  Source","Number","Balance","Activity","Balance"
+42100   pr #255: ""
+42120   pr #255: "      Account";
+42140   pr #255: tab(70);"Reference";tab(84);"Beginning";tab(99);"Current";
+42160   pr #255: tab(115);"Ending"
+42180   pr #255,using fHeader2: "Number","Account Name/Transaction Description","Date  Source","Number","Balance","Activity","Balance"
 42200   fHeader2: form pos 6,c 6,pos 17,c 36,pos 54,c 13,pos 71,c 6,pos 85,c 7,pos 99,c 8,pos 115,c 7
-42220   print #255,using fHeader3: "__________","____________________________________","____","______","___________","_________","__________","_________"
+42220   pr #255,using fHeader3: "__________","____________________________________","____","______","___________","_________","__________","_________"
 42240   fHeader3: form pos 4,c 10,pos 17,c 36,pos 54,c 4,pos 60,c 6,pos 69,c 11,pos 84,c 9,pos 98,c 10,pos 114,c 10
 42260 return ! /r
 46000 READ_TR: ! r:
@@ -208,7 +208,7 @@
 48200   if tr$="999999999999" then let tr$=" "
 48220   PRINT_TRANS: ! 
 48240   ! 
-48260   print #255,using L1610: td$,tr(4),x$,lpad$(rtrm$(tr$),12),tr(5)
+48260   pr #255,using L1610: td$,tr(4),x$,lpad$(rtrm$(tr$),12),tr(5)
 48280   L1610: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos 67,c 12,pos 95,pic(zz,zzz,zzz.## cr)
 48300   let trtotal=trtotal+tr(5)
 48320   let u$=t$
@@ -216,21 +216,21 @@
 48360 return ! /r
 52000 PRINT_CB_OR_SUMTR: ! r:
 52020   if u0 and u$=>cogl$(1) and u$<=cogl$(2) then 
-52060     print #255,using L1690: "Summary Transaction",u0
+52060     pr #255,using L1690: "Summary Transaction",u0
 52080     L1690: form pos 21,c 30,pos 95,pic(zz,zzz,zz#.## cr)
 52100     let u0=0
 52120   end if
 52140   if petro_opt$='False' then 
-52160     print #255,using 'form pos 110,pic(zz,zzz,zzz.## cr)': cb
+52160     pr #255,using 'form pos 110,pic(zz,zzz,zzz.## cr)': cb
 52180   end if 
-52200   let curbal=curbal+cb
-52220   let begbal=begbal+bb
+52200   curbal=curbal+cb
+52220   begbal=begbal+bb
 52240 return ! /r
 56000 ! <Updateable Region: ERTN>
 56020 ERTN: let fnerror(program$,err,line,act$,"xit")
 56040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 56060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-56080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+56080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 56100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 56120 ! /region
 58000 SELECT_ACCOUNT: ! r:
@@ -244,5 +244,5 @@
 58160   if ckey=5 then goto TOTALS
 58180   let n$=fnagl$(resp$(1))
 58200   read #h_glmstr,using F_GLMSTR,key=n$: n$,d$,bb,cb,mat bp nokey SELECT_ACCOUNT
-58220   let bb=bp(nap)
+58220   bb=bp(nap)
 58240 return ! /r

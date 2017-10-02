@@ -38,7 +38,7 @@
 00420   if ji2(4)<1 or ji2(4)>10 then let h(6)=ji2(3) else let h(6)=ji2(6)
 00430   let h(7)=ji2(4)
 00440   if ltrm$(jn$)="" or rtrm$(ltrm$(jn$))="0" then goto L220
-00450   let cn$=jn$&lpad$(str$(ji2(1)),5)
+00450   cn$=jn$&lpad$(str$(ji2(1)),5)
 00460   read #2,using L470,key=cn$: mat l,mat ta nokey L600
 00470 L470: form pos 37,11*pd 7.2,2*pd 2,2*pd 3
 00480   if ji1(5)+ji1(6)=0 then goto L560
@@ -73,7 +73,7 @@
 00770 ERTN: let fnerror(program$,err,line,act$,"xit")
 00780   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00790   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00800   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00810 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00820 ! /region
 00830 ! ______________________________________________________________________
