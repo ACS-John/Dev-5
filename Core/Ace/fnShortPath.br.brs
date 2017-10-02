@@ -11,14 +11,23 @@
 30000     let longpath$=trim$(longpath$,'"')
 35000     if trim$(longpath$)='' then 
 35020       let sp_return$=os_filename$('')&'\'
-40000     else 
-40020 !     execute 'sy -M '&os_filename$("S:\Core\shortpath.cmd")&' "'&longpath$&"' '&env$('temp')&"\sp_"&session$&'.txt'
-40040       let fn_make_shortpath_cmd(env$('temp'))
-40060       if do_debug then 
-40080         execute 'sy '&env$('temp')&"\ShortPath.cmd"&' "'&longpath$&'" '&env$('temp')&"\sp_"&session$&'.txt'
-40100       else 
-40120         execute 'sy -M '&env$('temp')&"\ShortPath.cmd"&' "'&longpath$&'" '&env$('temp')&"\sp_"&session$&'.txt'
-40140       end if 
+38000     else 
+38020       csOption$=''
+38040       if env$('BR_Model')='CLIENT/SERVER' then 
+38060         if longpath$(1:2)='@:' then
+38080           longpath$(1:2)=''
+38100           csOption$='-@ '
+38120         else
+38140           csOption$='-s '
+38160         end if
+38180       end if
+38200       if do_debug then
+38220         optHide$=''
+38240       else
+38260         optHide$='-M '
+38280       end if
+40040       fn_make_shortpath_cmd(env$('temp'))
+40120       execute 'sy '&csOption$&optHide$&env$('temp')&"\ShortPath.cmd"&' "'&longpath$&'" '&env$('temp')&"\sp_"&session$&'.txt'
 40160       open #tmp:=fngethandle: 'Name='&env$('temp')&'\sp_'&session$&'.txt',display,input 
 40180       linput #tmp: getfilepath_ln$
 40200       if len(rtrm$(getfilepath_ln$))<256 then 
