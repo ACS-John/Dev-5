@@ -25,8 +25,8 @@
 50060   if trim$(env$("ACSDeveloper"))<>"" then 
 50080     execute "list -"&str$(line) : pause : goto ERTN_EXEC_ACT
 50100   end if 
-50120   print "PROGRAM PAUSE: Type GO and press [Enter] to continue."
-50140   print "" : pause : goto ERTN_EXEC_ACT
+50120   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue."
+50140   pr "" : pause : goto ERTN_EXEC_ACT
 50160 ERTN_EXEC_ACT: execute act$ : goto ERTN ! /r
 56000 def library fnprogram_ini_filename$*256(pif_program$*256; doNotCreate) ! 
 56002   if ~setup_library then let fn_setup

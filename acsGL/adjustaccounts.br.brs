@@ -18,7 +18,7 @@
 10170       let fn_getadjustment
 10180       if gl$<>'' then 
 10190         read #h_glmstr,using GLMSTR,key=gl$: dept,major,sub,startbal,balance,mat ymbal,mat priorym
-10200         let balance=adjustamt
+10200         balance=adjustamt
 10210         read #h_actrans,using ACTRANS,key>=rpad$(gl$,20): trdept,trmajor,trsub,trdate,tramt,pcode eof ACTRANSDONE
 10220         do 
 10230           if trdept<>dept or trmajor<>major or trsub<>sub then goto ACTRANSDONE
@@ -30,7 +30,7 @@
 10290               let startbal=priorym(oldpcode)
 10300             end if 
 10310             let oldpcode=pcode
-10320             let balance+=tramt
+10320             balance+=tramt
 10330             let ymbal(pcode)=balance
 10340           end if 
 10350           read #h_actrans,using ACTRANS,next: trdept,trmajor,trsub,trdate,tramt,pcode eof ACTRANSDONE
@@ -39,7 +39,7 @@
 10380         do 
 10390           read #h_gltrans,using GLTRANS: trdept,trmajor,trsub,trdate,tramt eof GLTRANSDONE
 10400           if date(days(trdate,'mmddyy'),'ccyymmdd')>date(days(adjustdate,'mmddyy'),'ccyymmdd') and trdept=dept and trmajor=major and trsub=sub then 
-10410             let balance+=tramt
+10410             balance+=tramt
 10420           end if 
 10430         loop 
 10440 GLTRANSDONE: if fn_confirmadjustment then rewrite #h_glmstr,using GLMSTR: dept,major,sub,startbal,balance,mat ymbal,mat priorym
@@ -63,7 +63,7 @@
 10620     let fncmdset(11)
 10630     let fnacs("accountadjust",0,mat resp$,ckey)
 10640     if ckey=1 then 
-10650       let gl$=fnagl$(resp$(1)) : let adjustdate=val(resp$(2)) : let adjustamt=val(resp$(3))
+10650       let gl$=fnagl$(resp$(1)) : adjustdate=val(resp$(2)) : adjustamt=val(resp$(3))
 10660     else 
 10670       let gl$=''
 10680     end if 
@@ -88,7 +88,7 @@
 10870     let fncmdkey("&Cancel",5,0,1)
 10880     let fnacs("adjustconfirm",0,mat resp$,ckey)
 10890     if ckey=1 then 
-10900       let balance=val(resp$(1))
+10900       balance=val(resp$(1))
 10910       for period=1 to 13 : let ymbal(period)=val(resp$(period+1)) : let priorym(period)=val(resp$(period+14)) : next period
 10920       let fn_confirmadjustment=1
 10930     else if ckey=2 then 
@@ -109,7 +109,7 @@
 11080 ERTN: let fnerror(program$,err,line,act$,"xit")
 11090   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 11100   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-11110   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+11110   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 11120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 11130 ! /region
 11140 ! ______________________________________________________________________

@@ -19,7 +19,7 @@
 00190 L190: form pos 1,n 8,c 30,3*n 6.3
 00200 ASKEMPLOYEE: ! 
 00205   mat resp$=("")
-00210   let ad1=0 ! add code - used to tell other parts of the program, !:
+00210   ad1=0 ! add code - used to tell other parts of the program, !:
         ! that I am currently adding a service code record.
 00220   let fntos(sn$="Pr-askemployee") !:
         let respc=0
@@ -73,7 +73,7 @@
 00560   if ckey=5 then goto ASKEMPLOYEE
 00562   let eno=val(resp$(1)(1:8)) : let eno$=lpad$(trim$(resp$(1)),8)
 00563   let name$=resp$(2)
-00564   let burden=val(resp$(3))
+00564   burden=val(resp$(3))
 00570   if ckey<>4 then goto L640
 00580   mat ml$(2) !:
         let ml$(1)="You have chosen to delete employee "&trim$(eno$)&" from the burden file!" !:
@@ -90,7 +90,7 @@
         let df$=env$('Q')&"\PRmstr\Burden.h"&str$(cno) : let if$=env$('Q')&"\PRmstr\Burdenidx.h"&str$(cno) !:
         let fncombof("CBurden",lyne,mypos,43,df$,1,8,9,30,if$,1) !:
         let fncombof("CBurdenaLL",lyne,mypos,43,df$,1,8,9,30,if$,2)
-00700   let ad1=0 ! set add code back before returning to main screen
+00700   ad1=0 ! set add code back before returning to main screen
 00710   return 
 00720 ADD_RECORD: ! 
 00730   if reindex>3 then goto ERTN
@@ -112,7 +112,7 @@
         let ml$(2)="Choose to review the record." !:
         let fnmsgbox(mat ml$,resp$,cap$,48) !:
         goto ADD_RECORD
-00870 L870: let burden=burden2=burden3=0
+00870 L870: burden=burden2=burden3=0
 00880   write #1,using L190: eno,name$,burden,burden2,burden3
 00890   let holdeno=eno
 00900   gosub RECREATE_GRID
@@ -131,32 +131,32 @@
 01030   gosub L1140
 01040   restore #1: 
 01050 L1050: read #1,using L190,release: eno,name$,burden,burden2,burden3 eof L1090
-01060   print #255,using L1070: eno,name$,burden pageoflow L1130
+01060   pr #255,using L1070: eno,name$,burden pageoflow L1130
 01070 L1070: form pos 1,n 8,x 6,c 30,n 6.3 ,skip 1
 01080   goto L1050
-01090 L1090: if nw=0 then print #255: newpage
+01090 L1090: if nw=0 then pr #255: newpage
 01100   let fncloseprn
 01110   on fkey 5 ignore 
 01120   goto ASKEMPLOYEE
-01130 L1130: print #255: newpage : gosub L1140 : continue 
-01140 L1140: print #255,using L1150: date$,cnam$
+01130 L1130: pr #255: newpage : gosub L1140 : continue 
+01140 L1140: pr #255,using L1150: date$,cnam$
 01150 L1150: form pos 1,c 10,pos 20,cc 40,skip 1
-01160   print #255,using L1150: time$,"Personnel Burden "
-01170   print #255: 
-01180   print #255: " Employee #  Name                         Burden %"
-01190   print #255: " __________  ____________________         ________"
+01160   pr #255,using L1150: time$,"Personnel Burden "
+01170   pr #255: 
+01180   pr #255: " Employee #  Name                         Burden %"
+01190   pr #255: " __________  ____________________         ________"
 01200   return 
 01210   form pos 1,c 6,c 12,c 30,pd 3
 01220 ! ______________________________________________________________________
-01230 POF1: print #255: newpage
-01240   print #255,using L1300: date$('mm/dd/yy'),cnam$,time$,"SERVICE CODE PROOF LIST",dat$
+01230 POF1: pr #255: newpage
+01240   pr #255,using L1300: date$('mm/dd/yy'),cnam$,time$,"SERVICE CODE PROOF LIST",dat$
 01250   let pcnt=4
 01260   continue 
 01270 ! ______________________________________________________________________
-01280 POF2: print #255: newpage
-01290   print #255,using L1300: date$('mm/dd/yy'),cnam$,time$,"SERVICE CODE PROOF LIST",dat$
+01280 POF2: pr #255: newpage
+01290   pr #255,using L1300: date$('mm/dd/yy'),cnam$,time$,"SERVICE CODE PROOF LIST",dat$
 01300 L1300: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 53,c 30,skip 1,pos dattab,c 20,skip 2
-01310   print #255,using L1320: pl$(9,1),pl$(9,2)
+01310   pr #255,using L1320: pl$(9,1),pl$(9,2)
 01320 L1320: form pos 20,2*c 50,skip 1
 01330   let pcnt=5
 01340   continue 
@@ -169,6 +169,6 @@
           execute "list "&str$(line) !:
           pause  !:
           goto L1420
-01410   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+01410   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01420 L1420: execute act$
 01430   goto ERTN

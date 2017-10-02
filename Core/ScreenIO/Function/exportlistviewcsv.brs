@@ -12,6 +12,6 @@
     if ListviewSubscript then
        let fnExportListviewCSV(Window,fnListSpec$(ControlSpec$(ListviewSubscript)),1)
     else
-       let msgbox("Couldn't find the target listview. Please ensure a valid listview is selected for the Print button, or contact the programmer who worked on your system to fix this error.")
+       let msgbox("Couldn't find the target listview. Please ensure a valid listview is selected for the pr button, or contact the programmer who worked on your system to fix this error.")
     end if
  fnend

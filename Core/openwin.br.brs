@@ -17,16 +17,16 @@
 00160     let win_width=ec-sc+1
 00170     close #win: ioerr L180
 00180 L180: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
-00190     print #win: newpage
-00200     print #win,fields "1,1,Cc "&str$(win_width)&",R,N": cnam$(1:min(40,win_width))
-00210     print #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&str$(cno)(1:min(40,win_width))
+00190     pr #win: newpage
+00200     pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": cnam$(1:min(40,win_width))
+00210     pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&str$(cno)(1:min(40,win_width))
 00220     goto XIT
 00230 ! ______________________________________________________________________
 00240 ! <Updateable Region: ERTN>
 00250 ERTN: let fnerror(program$,err,line,act$,"xit")
 00260     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00270     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00280     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00280     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00290 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00300 ! /region
 00310 ! ______________________________________________________________________

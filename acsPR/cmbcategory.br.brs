@@ -5,7 +5,7 @@
 12040   library 'S:\Core\Library': fncombof
 12060   dim df$*200,if$*200
 12080   ! ____________________________________________________________________
-12100   if addall<>1 then let addall=0
+12100   if addall<>1 then addall=0
 12120   if addall=0 then 
 12140     let fen$="Ccategory.h"&env$('cno') 
 12160   else 

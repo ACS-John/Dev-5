@@ -52,7 +52,7 @@
 00470 PRINT_IT: ! 
 00475   if final=3 then let final$="Final=3" else let final$=""
 00476   if final=4 then let final$="Final=4"
-00480   if printadr=1 then print #255,using L490: z$,e$(2),f,bal,e$(1)(1:25),final$ pageoflow PGOF else print #255,using L491: z$,e$(2),f,bal,final$ pageoflow PGOF
+00480   if printadr=1 then pr #255,using L490: z$,e$(2),f,bal,e$(1)(1:25),final$ pageoflow PGOF else pr #255,using L491: z$,e$(2),f,bal,final$ pageoflow PGOF
 00490 L490: form pos 1,c 10,pos 13,c 30,pos 45,pic(zz/zz/zz),n 15.2,x 2,c 25,x 2,c 8
 00491 L491: form pos 1,c 10,pos 13,c 30,pos 45,pic(zz/zz/zz),n 15.2,x 2,c 8
 00500   let tbal=tbal+bal
@@ -60,24 +60,24 @@
 00520 ! ______________________________________________________________________
 00530 HDR: ! 
 00540   let p2=p2+1
-00550   print #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
-00560   print #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
-00570   print #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
-00580   print #255,using L590: "\ql "&date$,"Page "&str$(p2)
+00550   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
+00560   pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
+00570   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
+00580   pr #255,using L590: "\ql "&date$,"Page "&str$(p2)
 00590 L590: form pos 1,c 82,c 10
-00600   print #255: ""
-00610 ! Print #255: "{\ul Account    }                               {\ul Date of}         Current"
-00620   if printadr<>1 then print #255: " {\ul Number   }  {\ul Name             }             {\ul Last Billing}      {\ul Balance}"
-00630   if printadr=1 then print #255: " {\ul Number   }  {\ul Name             }             {\ul Last Billing}      {\ul Balance}  {\ul Meter Address}"
-00640   print #255: ""
+00600   pr #255: ""
+00610 ! pr #255: "{\ul Account    }                               {\ul Date of}         Current"
+00620   if printadr<>1 then pr #255: " {\ul Number   }  {\ul Name             }             {\ul Last Billing}      {\ul Balance}"
+00630   if printadr=1 then pr #255: " {\ul Number   }  {\ul Name             }             {\ul Last Billing}      {\ul Balance}  {\ul Meter Address}"
+00640   pr #255: ""
 00650   return 
 00660 ! ______________________________________________________________________
-00670 PGOF: print #255: newpage : gosub HDR : continue 
+00670 PGOF: pr #255: newpage : gosub HDR : continue 
 00680 ! ______________________________________________________________________
 00690 TOTALS: ! 
-00700   print #255: rpt$(" ",55)&"{\ul             }" 
-00702   print #255,using "Form POS 56,N 12.2": tbal 
-00704   print #255: rpt$(" ",55)&"{\ul \strike             }"
+00700   pr #255: rpt$(" ",55)&"{\ul             }" 
+00702   pr #255,using "Form POS 56,N 12.2": tbal 
+00704   pr #255: rpt$(" ",55)&"{\ul \strike             }"
 00710 DONE: close #1: ioerr L720
 00720 L720: let fncloseprn
 00730 XIT: let fnxit
@@ -86,6 +86,6 @@
 00760 ERTN: let fnerror(program$,err,line,act$,"xit")
 00770   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00780   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00790   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00800 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00810 ! /region

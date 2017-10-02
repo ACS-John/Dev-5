@@ -10,7 +10,7 @@
 10180 !            = 1 = Put
 10200 ! ______________________________________________________________________
 10220     if get_or_put<>0 and get_or_put<>1 then 
-10240       print "Get_or_Put =0=Get  =1=Put   anything else - not allowed."
+10240       pr "Get_or_Put =0=Get  =1=Put   anything else - not allowed."
 10260       let fnpause
 10280     end if 
 10320     if get_or_put=0 then 
@@ -35,7 +35,7 @@
 10620 ERTN: let fnerror(program$,err,line,act$,"xit")
 10640     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 10660     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-10680     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+10680     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 10700 ERTN_EXEC_ACT: execute act$ : goto ERTN
 10720 ! /region
 10740 ! ______________________________________________________________________

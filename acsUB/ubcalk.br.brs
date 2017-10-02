@@ -49,7 +49,7 @@
 00250   let fnd1(d1)
 00260   let work$=env$('Q')&"\UBmstr\Reads_and_Chgs.h"&env$('cno')
 00264   work_addr$=env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h"&env$('cno')
-00265   if env$('client')="Edinburg" or env$('client')="French Settlement" then let btu_factor_enabled=1 else let btu_factor_enabled=btu=0
+00265   if env$('client')="Edinburg" or env$('client')="French Settlement" then btu_factor_enabled=1 else btu_factor_enabled=btu=0
 00270 ! synchronize this setting with S:\Utility Billing\Enter Readings and Charges (Enter Readings and Charges)
 00280 ! ______________________________________________________________________
 00290 ! get date meter read
@@ -93,16 +93,16 @@
 00790   read #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra nokey NKT9
 00792 ! r: set default rate codes
 00794 ! if env$('client')="Pennington" then let extra(12)=1 ! default to 1
-00796 ! if env$('client')="Albany" and (a(1)=1 or a(1)=3 or a(1)=4 or a(1)=6) then let a(6)=0 ! set residential sales tax code to zero
-00798   if env$('client')="Raymond" and (a(1)<>0 and a(6)=0) then let a(6)=1 ! if any water rate code and no water penalty than default to water penalty of 1.
-00800   if env$('client')="Raymond" and (a(2)<>0 and a(7)=0) then let a(7)=1 ! if any sewer rate code and no sewer penalty than default to sewer penalty of 1.
+00796 ! if env$('client')="Albany" and (a(1)=1 or a(1)=3 or a(1)=4 or a(1)=6) then a(6)=0 ! set residential sales tax code to zero
+00798   if env$('client')="Raymond" and (a(1)<>0 and a(6)=0) then a(6)=1 ! if any water rate code and no water penalty than default to water penalty of 1.
+00800   if env$('client')="Raymond" and (a(2)<>0 and a(7)=0) then a(7)=1 ! if any sewer rate code and no sewer penalty than default to sewer penalty of 1.
 00802   let fnapply_default_rates(mat extra, mat a)
 00812 ! /r
 00814   if date(days(f,'mmddyy'),'ccyymmdd')>date(days(d1,'mmddyy'),'ccyymmdd') then 
-00815     print #255: ""
-00816     print #255: "The Calculation date is less than the last billing date on Account: ";x$
-00818     print #255: "   Billing Date: "&date$(days(f,'mmddyy'),'ccyy/mm/dd')&"  Calculation Date: "&date$(days(d1,'mmddyy'),'ccyy/mm/dd')
-00820     print #255: "   Action: RECORD SKIPPED."
+00815     pr #255: ""
+00816     pr #255: "The Calculation date is less than the last billing date on Account: ";x$
+00818     pr #255: "   Billing Date: "&date$(days(f,'mmddyy'),'ccyy/mm/dd')&"  Calculation Date: "&date$(days(d1,'mmddyy'),'ccyy/mm/dd')
+00820     pr #255: "   Action: RECORD SKIPPED."
 00821     let print_count_skip+=1
 00822     let fn_cuu_report_usage
 00824     goto TOP
@@ -130,10 +130,10 @@
 01040   if g(11)>99999 or g(12)>99999 then goto BILL_TOO_LARGE
 01050   if g(11)<99999 and g(11)>-99999 then goto LX1230
 01060 BILL_TOO_LARGE: ! r:
-01062   print #255: ""
-01070   print #255: "Net or Gross Bill too large on Account: ";x$
-01080   print #255: "   Net Bill: "&str$(g(11))&"  Gross Bill: "&str$(g(12))
-01090   print #255: "   Action: RECORD SKIPPED."
+01062   pr #255: ""
+01070   pr #255: "Net or Gross Bill too large on Account: ";x$
+01080   pr #255: "   Net Bill: "&str$(g(11))&"  Gross Bill: "&str$(g(12))
+01090   pr #255: "   Action: RECORD SKIPPED."
 01092   let print_count_skip+=1
 01100   let fn_cuu_report_usage
 01110   goto TOP ! /r
@@ -150,11 +150,11 @@
 01220   let fn_write_new_trans
 01230   goto TOP ! /r
 30000 CONV_CUSTOMER_REWRITE: ! r:
-30020   print #255: ""
-30040   print #255: "The bill ("&str$(g(12))&") on account "&x$&" is too large for"
-30060   print #255: "the system to handle.  This record is being skipped. "
-30080   print #255: 'You must determine what is wrong and re-enter the reading."'
-30090   print #255: 'ACTION: RECORD SKIPPED'
+30020   pr #255: ""
+30040   pr #255: "The bill ("&str$(g(12))&") on account "&x$&" is too large for"
+30060   pr #255: "the system to handle.  This record is being skipped. "
+30080   pr #255: 'You must determine what is wrong and re-enter the reading."'
+30090   pr #255: 'ACTION: RECORD SKIPPED'
 30100   let print_count_skip+=1
 30120   ! 
 30140   let txt$(1)="The bill ("&str$(g(12))&") on account "&x$&" is too large for"
@@ -187,7 +187,7 @@
 36060   close #h_work,free: ioerr ignore
 36070   execute 'free '&work_addr$ ioerr ignore
 36080   close #h_ubtrans: ioerr ignore
-36090 ! pr 'print_count_unusual=';print_count_unusual : print 'print_count_skip=';print_count_skip
+36090 ! pr 'print_count_unusual=';print_count_unusual : pr 'print_count_skip=';print_count_skip
 36100   if print_count_unusual or print_count_skip then let fncloseprn
 36120 ! /r
 38000 XIT: let fnxit
@@ -202,9 +202,9 @@
 42000   def fn_cuu_report_main(unusual_service$*128)
 42020     if d1<>f then 
 42040       if unusual_usage_report=1 or unusual_usage_report=3 then 
-42060         print #255: ""
-42080         print #255: "Unusual "&unusual_service$&" Usage on Customer "&trim$(x$)&".  Bill was calculated."
-42100         print #255,using 'form pos 1,c 30,x 2,c 30': custname$,meteradr$
+42060         pr #255: ""
+42080         pr #255: "Unusual "&unusual_service$&" Usage on Customer "&trim$(x$)&".  Bill was calculated."
+42100         pr #255,using 'form pos 1,c 30,x 2,c 30': custname$,meteradr$
 42120         let fn_cuu_report_usage
 42130         let print_count_unusual+=1
 42140       end if 
@@ -212,9 +212,9 @@
 42180   fnend 
 44000 NKT9: ! r: NOKEY ROUTINE CODE T9=9
 44020   let t9=9
-44040   print #255: ""
-44060   print #255: "Could not locate an account for Account: "&x$
-44080   print #255: "   Action: RECORD SKIPPED."
+44040   pr #255: ""
+44060   pr #255: "Could not locate an account for Account: "&x$
+44080   pr #255: "   Action: RECORD SKIPPED."
 44100   let print_count_skip+=1
 44120   goto TOP ! /r
 58000 CHECK_UNUSUAL_USAGE: ! r:
@@ -225,9 +225,9 @@
 58100   let unusual_service$=trim$(unusual_service$,'/')
 58120 ! 
 58140   if r9_usage_is_zero=1 then 
-58160     print #255: ""
-58180     print #255: "Negative usage on Account: "&x$
-58200     print #255: "   Action: RECORD SKIPPED."
+58160     pr #255: ""
+58180     pr #255: "Negative usage on Account: "&x$
+58200     pr #255: "   Action: RECORD SKIPPED."
 58210     let print_count_skip+=1
 58220     if d1<>f then 
 58240       let fn_cuu_report_usage
@@ -248,7 +248,7 @@
 60180 L2360: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 60200     if p$<>x$ then goto CUU_REPORT_USAGE_PRINT
 60220     if tcode<>1 then goto CUU_UBTRANS_READ ! only charge transactions
-60240     let billdate=d1
+60240     billdate=d1
 60260     if tdate<fndate_mmddyy_to_ccyymmdd(billdate)-10000 then goto CUU_UBTRANS_READ ! only list last 12 months
 60280     let x=x+1
 60300     if x>12 then goto CUU_REPORT_USAGE_PRINT
@@ -258,22 +258,22 @@
 60380     goto CUU_UBTRANS_READ
 60400 ! 
 60420 CUU_REPORT_USAGE_PRINT: ! 
-60440     print #255: "Type of Service     Old Reading   Current Reading       Calculated Usage"
+60440     pr #255: "Type of Service     Old Reading   Current Reading       Calculated Usage"
 60460 F_PR_SERVICE: form c 22,pic(---------),x 9,pic(---------),x 11,pic(----------),x 2,c 30,x 2,c 30
 60480 F_PR_PRIOR_USAGES: form pos 1,c 13,12*(pic(zzzz/zz/zz),nz 9,x 1)
 60500     if trim$(servicename$(1))<>"" then ! test vs. water
-60520       print #255,using F_PR_SERVICE: "Water",d(1),x(1),usage_srv1
-60540       print #255,using F_PR_PRIOR_USAGES: " Prior Usages",watdat(1),watuse(1),watdat(2),watuse(2),watdat(3),watuse(3),watdat(4),watuse(4),watdat(5),watuse(5),watdat(6),watuse(6),watdat(7),watuse(7),watdat(8),watuse(8),watdat(9),watuse(9),watdat(10),watuse(10),watdat(11),watuse(11),watdat(12),watuse(12)
+60520       pr #255,using F_PR_SERVICE: "Water",d(1),x(1),usage_srv1
+60540       pr #255,using F_PR_PRIOR_USAGES: " Prior Usages",watdat(1),watuse(1),watdat(2),watuse(2),watdat(3),watuse(3),watdat(4),watuse(4),watdat(5),watuse(5),watdat(6),watuse(6),watdat(7),watuse(7),watdat(8),watuse(8),watdat(9),watuse(9),watdat(10),watuse(10),watdat(11),watuse(11),watdat(12),watuse(12)
 60560     end if 
 60580     if trim$(servicename$(3))="Electric" or trim$(servicename$(3))="Lawn Meter" then ! test vs. Electric/lawn meter
-60600       print #255,using F_PR_SERVICE: "Electric",d(5),x(3),usage_srv3
-60620       print #255,using F_PR_PRIOR_USAGES: " Prior Usages",elecdat(1),elecuse(1),elecdat(2),elecuse(2),elecdat(3),elecuse(3),elecdat(4),elecuse(4),elecdat(5),elecuse(5),elecdat(6),elecuse(6),elecdat(7),elecuse(7),elecdat(8),elecuse(8),elecdat(9),elecuse(9),elecdat(10),elecuse(10),elecdat(11),elecuse(11),elecdat(12),elecuse(12)
+60600       pr #255,using F_PR_SERVICE: "Electric",d(5),x(3),usage_srv3
+60620       pr #255,using F_PR_PRIOR_USAGES: " Prior Usages",elecdat(1),elecuse(1),elecdat(2),elecuse(2),elecdat(3),elecuse(3),elecdat(4),elecuse(4),elecdat(5),elecuse(5),elecdat(6),elecuse(6),elecdat(7),elecuse(7),elecdat(8),elecuse(8),elecdat(9),elecuse(9),elecdat(10),elecuse(10),elecdat(11),elecuse(11),elecdat(12),elecuse(12)
 60640     end if 
 60660     if trim$(servicename$(4))="Gas" then ! test vs. Gas
-60680       print #255,using F_PR_SERVICE: "Gas",d(9),x(2),usage_srv4
-60700       print #255,using F_PR_PRIOR_USAGES: " Prior Usages",elecdat(1),gasuse(1),elecdat(2),gasuse(2),elecdat(3),gasuse(3),elecdat(4),gasuse(4),elecdat(5),gasuse(5),elecdat(6),gasuse(6),elecdat(7),gasuse(7),elecdat(8),gasuse(8),elecdat(9),gasuse(9),elecdat(10),gasuse(10),elecdat(11),gasuse(11),elecdat(12),gasuse(12)
+60680       pr #255,using F_PR_SERVICE: "Gas",d(9),x(2),usage_srv4
+60700       pr #255,using F_PR_PRIOR_USAGES: " Prior Usages",elecdat(1),gasuse(1),elecdat(2),gasuse(2),elecdat(3),gasuse(3),elecdat(4),gasuse(4),elecdat(5),gasuse(5),elecdat(6),gasuse(6),elecdat(7),gasuse(7),elecdat(8),gasuse(8),elecdat(9),gasuse(9),elecdat(10),gasuse(10),elecdat(11),gasuse(11),elecdat(12),gasuse(12)
 60720     end if 
-60740     print #255: ""
+60740     pr #255: ""
 60760   fnend 
 61000   def fn_date_meter_read ! update meter reading dates
 61020 ! f =  billing date (from customer record)
@@ -292,7 +292,7 @@
 61280   fnend 
 62000   def fn_updtbal
 62020     let d2=f : let f=d1
-62040     if d1=d2 then let bal=bal+g(11)-w7 else let bal=bal+g(11)
+62040     if d1=d2 then bal=bal+g(11)-w7 else bal=bal+g(11)
 62060   fnend 
 64000   def fn_demand
 64020     if env$('client')="Bethany" then 
@@ -312,10 +312,10 @@
 64300 DEMAND_XIT: ! 
 64320   fnend  ! return
 68000   def fn_bud_open
-68020     let bud1=0
+68020     bud1=0
 68040     open #budmstr:=6: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr BUD1_XIT
 68060     open #budtrans:=7: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
-68080     let bud1=1
+68080     bud1=1
 68100 BUD1_XIT: ! 
 68120   fnend 
 69000   def fn_deposit_open !
@@ -323,7 +323,7 @@
 69080     open #hDeposit2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Deposit2Index.h"&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outin,keyed
 69120   fnend 
 70000   def fn_bud2
-70020     let bud2=0
+70020     bud2=0
 70040     if bud1=0 then goto L7110
 70060     mat bt2=(0)
 70080     read #budmstr,using FORM_BUDMSTR,key=x$: z$,mat ba,mat badr nokey L7110
@@ -334,33 +334,33 @@
 70180 L6840: if ta1=0 then goto UPDATE_BUDGET_FILE
 70200     read #budtrans,using L6860,rec=ta1: z$,mat bt1,nba norec UPDATE_BUDGET_FILE
 70220 L6860: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-70240     if bt1(1,2)=d1 then let bud2=1 : goto UPDATE_BUDGET_FILE
+70240     if bt1(1,2)=d1 then bud2=1 : goto UPDATE_BUDGET_FILE
 70260     let ta1=nba : goto L6840
 70280 ! 
 70300 UPDATE_BUDGET_FILE: ! 
 70320 ! IF BUD2=1 THEN RE-CALCULATION
-70340     let bt2(1,1)=bt2(1,2)=d1
-70360     let bn1=totpen=0
+70340     bt2(1,1)=bt2(1,2)=d1
+70360     bn1=totpen=0
 70380     for j=2 to 13
-70400       let bt2(j,2)=g(j-1)
-70420       if ba(j)=0 then let bt2(j,1)=ba(j)
-70440       if ba(12)>0 then let bn1=ba(12) : goto L7020 ! TOTAL BILL BUDGETED
-70460       if ba(j)=0 then let bt2(j,1)=bt2(j,2) else let bt2(j,1)=ba(j)
+70400       bt2(j,2)=g(j-1)
+70420       if ba(j)=0 then bt2(j,1)=ba(j)
+70440       if ba(12)>0 then bn1=ba(12) : goto L7020 ! TOTAL BILL BUDGETED
+70460       if ba(j)=0 then bt2(j,1)=bt2(j,2) else bt2(j,1)=ba(j)
 70480       if j>11 then goto L7010 ! only 1st 10 can be charges
 70500       if penalty$(j-1)="Y" then let totpen+=bt2(j,1): goto L7020
-70520 L7010: if j<11 then let bn1=bn1+bt2(j,1)
+70520 L7010: if j<11 then bn1=bn1+bt2(j,1)
 70540 L7020: ! 
 70560     next j
-70580     let bt2(12,1)=bn1
-70600     let bt2(13,1)=bt2(12,1)+totpen
+70580     bt2(12,1)=bn1
+70600     bt2(13,1)=bt2(12,1)+totpen
 70620     if bud2=1 then 
 70640       rewrite #budtrans,using L6860,rec=ta1: x$,mat bt2
 70660       goto L7100
 70680     end if 
 70700     write #budtrans,using L6860: x$,mat bt2,badr(1)
 70720     let r82=lrec(budtrans)
-70740     let badr(1)=r82
-70760     if badr(2)=0 then let badr(2)=r82
+70740     badr(1)=r82
+70760     if badr(2)=0 then badr(2)=r82
 70780 L7100: ! 
 70800     rewrite #budmstr,using FORM_BUDMSTR,key=x$: x$,mat ba,mat badr
 70820 L7110: ! 
@@ -369,7 +369,7 @@
 72020 ERTN: let fnerror(program$,err,line,act$,"NO")
 72040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 72060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-72080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+72080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 72100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 72120 ! /region
 74000 IGNORE: continue 
@@ -395,12 +395,12 @@
 74400         let usage_return=x(2)-d(9)
 74420       end if 
 74440     else 
-74460       print 'usage_service_number not recognized.' : pause 
+74460       pr 'usage_service_number not recognized.' : pause 
 74480     end if 
 74500     let fn_usage=usage_return
 74520   fnend 
 76000   def fn_cuu_water
-76020     let cuu_water_return=0
+76020     cuu_water_return=0
 76040     if servicename$(1)="Water" then 
 76060       if a(1)=0 and a(2)=0 then goto CUU_WATER_XIT ! skip if no water code and no sewer code
 76080 ! 
@@ -410,9 +410,9 @@
 76160         if d(3)=0 then goto CUU_WATER_XIT
 76180         if usage_srv1<d(3)-d(3)*pcent or usage_srv1>d(3)+d(3)*pcent then 
 76200           if unusual_usage_report=3 then 
-76220             print #255: '* '&servicename$(1)&' unusual because '&str$(usage_srv1)&'<'&str$(d(3)-d(3)*pcent)&' or '&str$(usage_srv1)&'>'&str$(d(3)+d(3)*pcent)
+76220             pr #255: '* '&servicename$(1)&' unusual because '&str$(usage_srv1)&'<'&str$(d(3)-d(3)*pcent)&' or '&str$(usage_srv1)&'>'&str$(d(3)+d(3)*pcent)
 76240           end if 
-76260           let cuu_water_return=1
+76260           cuu_water_return=1
 76280         end if 
 76300       else 
 76320         if x(12)=0 then let r9_usage_is_zero=1
@@ -422,7 +422,7 @@
 76400     let fn_cuu_water=cuu_water_return
 76420   fnend 
 78000   def fn_cuu_electric
-78020     let cuu_electric_return=0
+78020     cuu_electric_return=0
 78040     if servicename$(3)="Electric" or servicename$(3)="Lawn Meter" or service$(3)="EL" then 
 78060       if x(3)=0 then goto CUU_ELEC_XIT
 78080 ! 
@@ -432,9 +432,9 @@
 78160         if d(7)=0 then goto CUU_ELEC_XIT
 78180         if usage_srv3<d(7)-d(7)*pcent or usage_srv3>d(7)+d(7)*pcent then 
 78200           if unusual_usage_report=3 then 
-78220             print #255: '* '&servicename$(3)&' unusual because '&str$(usage_srv3)&'<'&str$(d(7)-d(7)*pcent)&' or '&str$(usage_srv3)&'>'&str$(d(7)+d(7)*pcent)
+78220             pr #255: '* '&servicename$(3)&' unusual because '&str$(usage_srv3)&'<'&str$(d(7)-d(7)*pcent)&' or '&str$(usage_srv3)&'>'&str$(d(7)+d(7)*pcent)
 78240           end if 
-78260           let cuu_electric_return=1
+78260           cuu_electric_return=1
 78280         end if 
 78300       else 
 78320         if x(13)=0 then let r9_usage_is_zero=1
@@ -444,7 +444,7 @@
 78400     let fn_cuu_electric=cuu_electric_return
 78420   fnend 
 80000   def fn_cuu_gas
-80020     let cuu_gas_return=0
+80020     cuu_gas_return=0
 80040     if service$(4)="GA" or servicename$(4)="Gas" then 
 80060       if x(2)=0 then goto CUU_GAS_XIT
 80080 ! 
@@ -454,9 +454,9 @@
 80160         if d(11)=0 then goto CUU_GAS_XIT
 80180         if usage_srv4<d(11)-d(11)*pcent or usage_srv4>d(11)+d(11)*pcent then 
 80200           if unusual_usage_report=3 then 
-80220             print #255: '* '&servicename$(4)&' unusual because '&str$(usage_srv4)&'<'&str$(d(11)-d(11)*pcent)&' or '&str$(usage_srv4)&'>'&str$(d(11)+d(11)*pcent)
+80220             pr #255: '* '&servicename$(4)&' unusual because '&str$(usage_srv4)&'<'&str$(d(11)-d(11)*pcent)&' or '&str$(usage_srv4)&'>'&str$(d(11)+d(11)*pcent)
 80240           end if 
-80260           let cuu_gas_return=1
+80260           cuu_gas_return=1
 80280         end if 
 80300       else 
 80320         if x(14)=0 then let r9_usage_is_zero=1
@@ -517,14 +517,14 @@
 83480     let fnacs(sn$,0,mat resp$,ck)
 83500     if ck<>5 then 
 83520       let d1=val(resp$(respc_billing_date))
-83540       if btu_factor_enabled then let btu=val(resp$(resp_btu_factor)) ! Edinburg requires a monthly BTU factor for calculating taxes
-83560       if resp_calc_interest_on_deposit and resp$(resp_calc_interest_on_deposit)='True' then let calc_interest_on_deposit=1 else let calc_interest_on_deposit=0
-83580       if resp_charge_inspection_fee and resp$(resp_charge_inspection_fee)='True' then let charge_inspection_fee=1 else let charge_inspection_fee=0
+83540       if btu_factor_enabled then btu=val(resp$(resp_btu_factor)) ! Edinburg requires a monthly BTU factor for calculating taxes
+83560       if resp_calc_interest_on_deposit and resp$(resp_calc_interest_on_deposit)='True' then calc_interest_on_deposit=1 else calc_interest_on_deposit=0
+83580       if resp_charge_inspection_fee and resp$(resp_charge_inspection_fee)='True' then charge_inspection_fee=1 else charge_inspection_fee=0
 83600       if resp_interest_credit_rate then let interest_credit_rate=val(resp$(resp_interest_credit_rate))
 83620       let unusual_usage_report$=resp$(resp_unusual_usage_report)
 83640       let unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
 83660       let fncreg_write('ubcalk-unusal_usage_report',unusual_usage_report$)
-83680       if d1<10101 then print bell; : goto ASK_BILLING_DATE
+83680       if d1<10101 then pr bell; : goto ASK_BILLING_DATE
 83700       let fnd1(d1,1)
 83720       if resp_sewer_cap_date then ! if env$('client')='Campbell'
 83740         let sewer_cap_date$=resp$(resp_sewer_cap_date)

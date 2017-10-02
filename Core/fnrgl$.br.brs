@@ -10,14 +10,14 @@
 28140 ! _______________________________________________________________________
 28160     dim desc$*50
 28180 ! _______________________________________________________________________
-28200     if env$('CurSys')="UB" and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then let cursys$="GL": goto L180
-28220     if env$('CurSys')="UB" and exists(env$('Q')&"\UBmstr\GLmstr.h"&env$('cno')) then let cursys$="UB": goto L180
-28240     if env$('CurSys')="PR" and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then let cursys$="GL": goto L180
-28260     if env$('CurSys')="PR" and exists(env$('Q')&"\CLmstr\Company.h"&env$('cno')) then let cursys$="CL": goto L180
-28280     if env$('CurSys')="PR" and exists(env$('Q')&"\PRmstr\glmstr.h"&env$('cno')) then let cursys$="PR": goto L180
-28300     if env$('CurSys')='CL' then let cursys$='CL' else let cursys$='GL'
-28320     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then let cursys$='GL'
-28340     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno'))=0 then let cursys$='CR'
+28200     if env$('CurSys')="UB" and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then cursys$="GL": goto L180
+28220     if env$('CurSys')="UB" and exists(env$('Q')&"\UBmstr\GLmstr.h"&env$('cno')) then cursys$="UB": goto L180
+28240     if env$('CurSys')="PR" and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then cursys$="GL": goto L180
+28260     if env$('CurSys')="PR" and exists(env$('Q')&"\CLmstr\Company.h"&env$('cno')) then cursys$="CL": goto L180
+28280     if env$('CurSys')="PR" and exists(env$('Q')&"\PRmstr\glmstr.h"&env$('cno')) then cursys$="PR": goto L180
+28300     if env$('CurSys')='CL' then cursys$='CL' else cursys$='GL'
+28320     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then cursys$='GL'
+28340     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno'))=0 then cursys$='CR'
 28360 ! find out if I should use the department number and/or the sub account number
 28380 L180: !
 28400     if cursys$='GL' or cursys$='CL' then 
@@ -46,7 +46,7 @@
 28860       let x$(1:3)=trim$(x$(1:3))&"-"
 28880     end if
 32000 DONE: ! 
-32020 ! Print ' fnRgl$ returned "'&(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)&'"'
+32020 ! pr ' fnRgl$ returned "'&(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)&'"'
 32040     let fnrgl$=(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)
 32060     goto XIT
 32080 ! _______________________________________________________________________
@@ -59,6 +59,6 @@
 62020 ERTN: let fnerror(program$,err,line,act$,"xit")
 62040     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 62060     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-62080     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+62080     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 62100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 62120 ! /region

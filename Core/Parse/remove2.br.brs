@@ -7,7 +7,7 @@
 00050     library 'S:\Core\Library': fnerror
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
-00080     let and$=trim$(and$)
+00080     and$=trim$(and$)
 00090     let x=pos(word$,and$,1)
 00100     if x=1 then let word$=word$(x+len(and$):len(word$))
 00110     if x>1 then let word$=word$(1:x-1)&word$(x+len(and$):len(word$))
@@ -17,7 +17,7 @@
 00150 ERTN: let fnerror(program$,err,line,act$,"xit")
 00160     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00170     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00180     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00180     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00190 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00200 ! /region
 00210 ! ______________________________________________________________________

@@ -28,8 +28,8 @@
 00232   let fnacs(sn$,0,mat resp$,ckey)
 00240   if ckey=5 then goto XIT
 00250   let d1=val(resp$(1))
-00260   let b1=val(resp$(2))
-00270   let bank_code=val(resp$(3))
+00260   b1=val(resp$(2))
+00270   bank_code=val(resp$(3))
 00280 ! ______________________________________________________________________
 00290   open #20: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&", KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr", internal, outin, keyed  
 00292   read #20,using 'Form POS 3,C 30',key=lpad$(str$(bank_code),2),release: bn$ nokey MAIN
@@ -58,25 +58,25 @@
 00470   if fndate_mmddyy_to_ccyymmdd(d2)<d1 then goto READ_2
 00480   if tbank_code<>bank_code then goto READ_2
 00490   if tcde=2 or tcde=3 then let p1=68 else let p1=56
-00500   if tcde=2 or tcde=3 then let b1=b1+amt else let b1=b1-amt
-00510   print #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 12.2,POS 80,N 12.2': ck$,d2,de$,amt,b1 pageoflow NEWPGE
+00500   if tcde=2 or tcde=3 then b1=b1+amt else b1=b1-amt
+00510   pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 12.2,POS 80,N 12.2': ck$,d2,de$,amt,b1 pageoflow NEWPGE
 00520 goto READ_2
 00530 ! ______________________________________________________________________
-00540 NEWPGE: print #255: newpage: gosub HDR : continue 
+00540 NEWPGE: pr #255: newpage: gosub HDR : continue 
 00550 ! ______________________________________________________________________
 00560 HDR: ! r:
-00570   print #255,using 'Form POS 1,C 8,Cc 76': date$,env$('cnam')
-00580   print #255,using 'Form POS 1,C 8,POS 36,C 40': time$,"Running Bank Balance"
+00570   pr #255,using 'Form POS 1,C 8,Cc 76': date$,env$('cnam')
+00580   pr #255,using 'Form POS 1,C 8,POS 36,C 40': time$,"Running Bank Balance"
 00590   let pf2=46-int(len(rtrm$(bn$))/2)
-00600   print #255,using 'Form POS PF2,C 30': bn$
-00610   print #255,using 'Form POS 1,C 4,N 4,Cc 76': "Page",pg+=1,dat$ 
-00612   print #255: ""
-00620   print #255: "Ref-Numb    Date    Payee/Description                      Checks     Deposits    Balance "
-00630   print #255: "________  ________  ___________________________________  __________  __________  __________"
+00600   pr #255,using 'Form POS PF2,C 30': bn$
+00610   pr #255,using 'Form POS 1,C 4,N 4,Cc 76': "Page",pg+=1,dat$ 
+00612   pr #255: ""
+00620   pr #255: "Ref-Numb    Date    Payee/Description                      Checks     Deposits    Balance "
+00630   pr #255: "________  ________  ___________________________________  __________  __________  __________"
 00640   if p1=0 then 
 00642     let d1$=cnvrt$("pic(####/##/##)",d1) 
 00644     let d3=val(d1$(6:7))*10000+val(d1$(9:10))*100+val(d1$(3:4)) 
-00646     print #255,using 'Form POS 1,C 10,pic(zz/zz/zz),X 2,C 35,POS 80,N 12.2': "",d3,"Beginning Balance",b1
+00646     pr #255,using 'Form POS 1,C 10,pic(zz/zz/zz),X 2,C 35,POS 80,N 12.2': "",d3,"Beginning Balance",b1
 00648   end if
 00650 return ! /r
 00670 ENDALL: ! r:
@@ -88,6 +88,6 @@
 00750 ERTN: let fnerror(program$,err,line,act$,"xit")
 00760   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00770   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00780   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00780   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00790 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00800 ! /region

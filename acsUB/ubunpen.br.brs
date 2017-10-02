@@ -30,7 +30,7 @@
 20580   read #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof XIT
 20600   if tdate=ubpendat and tcode=2 then 
 20620     read #1,using 'Form POS 1,C 10,4*C 30,POS 143,7*PD 2,POS 292,PD 4.2,PD 4,12*PD 4.2,POS 388,10*PD 5.2',key=z$: z$,mat e$,mat a,bal,f,mat g,mat gb nokey L280
-20640     let bal=bal-tamount
+20640     bal=bal-tamount
 20660     for j=1 to 10
 20680       if uprc$(penalty$(j))="Y" then let gb(j)=gb(j)-tg(j) ! subtract penalty breakdown from balance breakdown
 20700     next j
@@ -43,6 +43,6 @@
 20840 ERTN: let fnerror(program$,err,line,act$,"NO")
 20860   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20880   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-20900   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+20900   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 20920 ERTN_EXEC_ACT: execute act$ : goto ERTN
 20940 ! /region

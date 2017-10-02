@@ -64,7 +64,7 @@
 00570   if ck=2 then goto PRINT_REPORT
 00580   let jn$=lpad$(trim$(resp$(1)(1:6)),6)
 00590   let rw=0
-00600   let cn$=jn$&"     "
+00600   cn$=jn$&"     "
 00610   read #2,using L620,key>=cn$: cn$,mat ta nokey L640
 00620 L620: form pos 1,c 11,pos 118,2*pd 3
 00630   goto L670
@@ -77,7 +77,7 @@
 00660 L660: read #2,using L620: cn$,mat ta eof L640
 00670 L670: if jn$><cn$(1:6) then goto L640
 00680   if ta(1)=0 then goto L660
-00690   let adr=ta(1)
+00690   adr=ta(1)
 00700 L700: read #3,using L710,rec=adr: en$,tn$,mat tr,nta
 00710 L710: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,x 30,pd 3
 00720   if tr(5)+tr(6)=0 then goto L780
@@ -87,7 +87,7 @@
 00760 L760: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2
 00770   let rw=rw+1
 00780 L780: if nta=0 then goto L660
-00790   let adr=nta
+00790   adr=nta
 00800   goto L700
 00810 PRINT_REPORT: ! 
 00820   if rw=0 then goto XIT
@@ -110,7 +110,7 @@
 00990 ERTN: let fnerror(program$,err,line,act$,"xit")
 01000   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01010   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01020   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01020   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01030 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01040 ! /region
 01050 ! ______________________________________________________________________

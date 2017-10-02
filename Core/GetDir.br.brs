@@ -23,7 +23,7 @@
 20460     execute 'free '&env$('temp')&'\GetDir"&session$&".tmp -n' ioerr ignore
 20480     let tmp$='Sy -s -M Dir "'&rtrm$(os_filename$(dir$))&'\'&filter$&'" /b '&option$&' >"'&env$('temp')&'\GetDir'&session$&'.tmp"'
 20500     execute tmp$
-20520 ! Print TMP$ : Let FNPAUSE
+20520 ! pr TMP$ : Let FNPAUSE
 20540     open #tf1:=fngethandle: "Name=@::"&env$('temp')&'\'&"GetDir"&session$&".tmp",display,input 
 20560     for x=1 to udim(filename$)
 20580       linput #tf1: tmp$ eof XIT
@@ -38,7 +38,7 @@
 20760 ERTN: let fnerror(program$,err,line,act$,"xit")
 20780     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 20800     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-20820     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+20820     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 20840 ERTN_EXEC_ACT: execute act$ : goto ERTN
 20860 ! /region
 20880 IGNORE: continue 

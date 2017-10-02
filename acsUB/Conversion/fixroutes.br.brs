@@ -21,12 +21,12 @@
 00191   let route=val(ln$(81:81))
 00200 ! Let SEQUENCE=VAL(LN$(9:15))
 00201   let sequence=val(ln$(72:79))
-00205   print z$,route,sequence: pause 
+00205   pr z$,route,sequence: pause 
 00210   read #1,using "Form POS 1,c 10,pos 1741,n 2,pos 1743,n 7",key=z$: oldz$,oldroute,oldsequence nokey L250
 00220   rewrite #1,using "Form pos 1741,n 2,pos 1743,n 7": route,sequence
 00230   goto READ_CUSTOMER
 00240 ! ______________________________________________________________________
-00250 L250: print #255,using "form pos 1,c 50": "Account "&z$&" not found"
+00250 L250: pr #255,using "form pos 1,c 50": "Account "&z$&" not found"
 00260   goto L170
 00270 XIT: let fncloseprn
 00280   close #1: 
@@ -37,6 +37,6 @@
 00330 ERTN: let fnerror(program$,err,line,act$,"xit")
 00340   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00350   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00360   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00370 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00380 ! /region

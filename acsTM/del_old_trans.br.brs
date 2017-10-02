@@ -15,7 +15,7 @@
 00160   if yr1><11 then goto L190
 00170   if mo1><4 then goto L190
 00180 L180: let ta1=nta : goto L90
-00190 L190: if tr(5)<4 or tf(5)=5 then let bal=bal-tr(3) else let bal=bal+tr(3)
+00190 L190: if tr(5)<4 or tf(5)=5 then bal=bal-tr(3) else bal=bal+tr(3)
 00200   rewrite #1,using FORM_CLMSTR,key=z$: z$,mat e$,bal,mat ta
 00202   let tr(3)=0
 00204   rewrite #2,using L110,rec=ta1: p$,iv$,mat tr,id$,nta

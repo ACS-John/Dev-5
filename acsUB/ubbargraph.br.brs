@@ -1,12 +1,12 @@
 00010 ! Replace S:\acsUB\ubbargraph
-00020 ! print bar graph of earnings by month for current year of prior year.
+00020 ! pr bar graph of earnings by month for current year of prior year.
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnsearch,fnerror,fncno, fntos,fnlbl,fncmdset,fnacs,fntxt, fnqgl,fnagl$,fnopt,fnfra,fncomboa,fndat,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnpa_finis
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim acno$*12,bc(13),bp(13),wrd2$(2)*54,cap$*128,bud(13)
 00080   dim month(13), month$(24)*25,month$*25,actualdate$(24)
-00090   let right=1 : let center=2
+00090   let right=1 : center=2
 00100   let fntop(program$,cap$="Bar Graph")
 00110   let fncno(cno,cnam$)
 00120   dim cd1(24),rw(8,13),e$*30,u1(24),u2(24),u3(24,13),message$*60
@@ -110,7 +110,7 @@
 00730   for j=1 to 24
 00740 L740: let x=pos(resp$(j),"/",1) !:
           if x>0 then let resp$(j)(x:x)="": goto L740
-00750     let cd1(j)=val(resp$(j)) conv MSGBOX
+00750     cd1(j)=val(resp$(j)) conv MSGBOX
 00760     let y=val(resp$(j)(5:6))
 00770     if y=1 then let month$(j)="Jan"
 00780     if y=2 then let month$(j)="Feb"
@@ -126,12 +126,12 @@
 00880     if y=12 then let month$(j)="Dec"
 00890   next j
 00900   if cd1(1)=0 then goto MSGBOX
-00910   if resp$(25)="Water" then let codepos=143: let service=1: let opt=1
-00920   if resp$(25)=trim$(opt$(2)) then let codepos=147: let service=3: let opt=2
-00930   if resp$(25)=trim$(opt$(3)) then let codepos=149 : let service=4 : let opt=3
-00940   if resp$(26)="True" then let baseon=1 else let baseon =2 ! 1=usage  2=dollars
+00910   if resp$(25)="Water" then codepos=143: let service=1: let opt=1
+00920   if resp$(25)=trim$(opt$(2)) then codepos=147: let service=3: let opt=2
+00930   if resp$(25)=trim$(opt$(3)) then codepos=149 : let service=4 : let opt=3
+00940   if resp$(26)="True" then baseon=1 else baseon =2 ! 1=usage  2=dollars
 00950   for j=1 to 24
-00960     let actualdate$(j)=resp$(j)
+00960     actualdate$(j)=resp$(j)
 00970   next j
 00980 L980: read #1,using L990: z$,e$,servicecode eof STORE_GRAPH_INFO
 00990 L990: form pos 1,c 10,x 30,c 30,pos 296,pd 4
@@ -175,59 +175,59 @@
 01350   let x=top*.10
 01360 DETERMINE_BOTTOM_LINE: ! 
 01370   let spacing=10 : let lyne=30
-01380   let cnam=(len(trim$(cnam$))/2)+110
-01390   print #20: 'Call Print.MyFontsize(14)'
+01380   cnam=(len(trim$(cnam$))/2)+110
+01390   pr #20: 'Call Print.MyFontsize(14)'
 01400   let txt$=cnam$ !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(cnam)&','&str$(10)&')'
-01410   print #20: 'Call Print.MyFontsize(12)'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(cnam)&','&str$(10)&')'
+01410   pr #20: 'Call Print.MyFontsize(12)'
 01420   if baseon=1 then let txt$="Usage By Month"
 01430   if baseon=2 then let txt$="Dollars By Month"
 01440   let servicetype=(len(trim$(txt$))/2)+120
-01450   print #20: 'Call Print.AddText("'&txt$&'",'&str$(servicetype)&','&str$(16)&')'
+01450   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(servicetype)&','&str$(16)&')'
 01460   if baseon=1 then let txt$=trim$(opt$(opt))
 01470   if baseon=2 then let txt$=trim$(opt$(opt))
 01480   let servicetype=(len(trim$(txt$))/2)+140
-01490   print #20: 'Call Print.AddText("'&txt$&'",'&str$(servicetype)&','&str$(20)&')'
-01500   print #20: 'Call Print.MyFontsize(9)'
-01510 ! For J=1 To 24 ! print month names across top
+01490   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(servicetype)&','&str$(20)&')'
+01500   pr #20: 'Call Print.MyFontsize(9)'
+01510 ! For J=1 To 24 ! pr month names across top
 01520 ! Let TXT$=TRIM$(MONTH$(J))(1:3) !:
         ! Let INDENT=8+(10*J) !:
-        ! Print #20: 'Call Print.AddText("'&TXT$&'",'&STR$(INDENT)&','&STR$(25)&')'
+        ! pr #20: 'Call Print.AddText("'&TXT$&'",'&STR$(INDENT)&','&STR$(25)&')'
 01530 ! Next J
 01540   let txt$=cnvrt$("pic(--------)",top) !:
-        print #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-01550   print #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',240,0)' ! left,up/down,lenght of top line on chart
+        pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+01550   pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',240,0)' ! left,up/down,lenght of top line on chart
 01560   for j=1 to 10 ! wording down side
 01570     let txt$=cnvrt$("pic(-------#)",top-((.10*j)*top)) !:
-          print #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
-01580     print #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',240,0)'
+          pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
+01580     pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',240,0)'
 01590   next j
 01600 ! zero line starts right here
 01610   let linezero=(spacing*10)+40
-01620   let column=18 ! spacing sideways
-01630   print #20: 'Call Print.MyFontBold(1)'
+01620   column=18 ! spacing sideways
+01630   pr #20: 'Call Print.MyFontBold(1)'
 01640   for j=1 to 24
 01650     let homedot=140-((dollars(j)/top)*100)
 01660     if homedot<0 then let homedot=0
 01670     if homedot>140 then let homedot=140
-01680     print #20: 'Call Print.AddLine('&str$(column-1)&','&str$(homedot)&','&str$(7)&','&str$(linezero-homedot)&',1)'
+01680     pr #20: 'Call Print.AddLine('&str$(column-1)&','&str$(homedot)&','&str$(7)&','&str$(linezero-homedot)&',1)'
 01690     for q=1 to 6
-01700       print #20: 'Call Print.AddLine('&str$(column-1+q)&','&str$(homedot)&','&str$(7-q)&','&str$(linezero-homedot)&',1)'
+01700       pr #20: 'Call Print.AddLine('&str$(column-1+q)&','&str$(homedot)&','&str$(7-q)&','&str$(linezero-homedot)&',1)'
 01710     next q
-01720     print #20: 'Call Print.MyFontsize(6)'
-01730     if dollars(j)>0 then let txt$=cnvrt$("pic(--------#)",round(dollars(j),0)): print #20: 'Call Print.AddText('&txt$&','&str$(column-2)&','&str$(homedot-2)&')'
-01740     print #20: 'Call Print.MyFontsize(9)'
-01750     let column+=10
+01720     pr #20: 'Call Print.MyFontsize(6)'
+01730     if dollars(j)>0 then let txt$=cnvrt$("pic(--------#)",round(dollars(j),0)): pr #20: 'Call Print.AddText('&txt$&','&str$(column-2)&','&str$(homedot-2)&')'
+01740     pr #20: 'Call Print.MyFontsize(9)'
+01750     column+=10
 01760   next j
-01770   print #20: 'Call Print.MyFontBold(0)'
+01770   pr #20: 'Call Print.MyFontBold(0)'
 01780   for j=1 to 24 ! month wording at bottom of page
 01790     let txt$=trim$(month$(j))(1:3) !:
           let indent=8+(10*j) !:
-          print #20: 'Call Print.AddText("'&txt$&'",'&str$(indent)&','&str$(linezero+5)&')'
+          pr #20: 'Call Print.AddText("'&txt$&'",'&str$(indent)&','&str$(linezero+5)&')'
 01800     let txt$=actualdate$(j)(7:8)
-01810     print #20: 'Call Print.AddText("'&txt$&'",'&str$(indent+1)&','&str$(linezero+8)&')'
+01810     pr #20: 'Call Print.AddText("'&txt$&'",'&str$(indent+1)&','&str$(linezero+8)&')'
 01820     let txt$=actualdate$(j)(3:4)
-01830     print #20: 'Call Print.AddText("'&txt$&'",'&str$(indent+1)&','&str$(linezero+11)&')'
+01830     pr #20: 'Call Print.AddText("'&txt$&'",'&str$(indent+1)&','&str$(linezero+11)&')'
 01840   next j
 01850   gosub RELEASE_PRINT
 01860   close #1: 
@@ -239,18 +239,18 @@
 01920 ERTN: let fnerror(program$,err,line,act$,"xit")
 01930   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01940   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01950   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01950   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01960 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01970 ! /region
 01980 ! ______________________________________________________________________
 01990 VBOPENPRINT: ! 
 02000   if file(20)=-1 then 
 02010     open #20: "Name="&env$('Q')&"\UBmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 
-02020     print #20: 'Call Print.MyOrientation("Landscape")'
+02020     pr #20: 'Call Print.MyOrientation("Landscape")'
 02030     let lyne=margin ! starting of 1st line
-02040     let column1=16 !:
-          let column2=103 !:
-          let column3=153
+02040     column1=16 !:
+          column2=103 !:
+          column3=153
 02050   end if 
 02060   return 
 02070 RELEASE_PRINT: ! 

@@ -8,13 +8,13 @@
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
 00080 ! ______________________________________________________________________
 00090     let fncno(cno,cnam$)
-00100     let cap$="Checkbook update Trans to v1"
+00100     cap$="Checkbook update Trans to v1"
 00110 ! ______________________________________________________________________
 00120     let fnstatus("Updating Transaction file.")
 00160 ! let fnwait(101,cap$,message$="Converting: please wait...",0)
 00170     open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno),internal,outin,relative 
-00180     if version(trmstr)=1 then print "trmstr is already version 1" !:
-            print "press enter to continue" !:
+00180     if version(trmstr)=1 then pr "trmstr is already version 1" !:
+            pr "press enter to continue" !:
             input fields "1,1,C 1,N": pause$ !:
             goto XIT
 00190     let version(trmstr,1)
@@ -29,7 +29,7 @@
 00280 ERTN: let fnerror(program$,err,line,act$,"xit")
 00290     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00300     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00310     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00310     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00320 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00330 ! /region
 00340 ! ______________________________________________________________________

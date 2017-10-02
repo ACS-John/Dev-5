@@ -10,14 +10,14 @@
 00100     let fncno(cno,cnam$)
 00110     close #102: ioerr L120
 00120 L120: open #102: "SRow=5,SCol=13,ERow=14,ECol=64,Border=SR,Caption=<Initial File Preparation",display,outin 
-00130     print #102: newpage !:
-          print #102,fields "1,1,Cc 52,R,N": cnam$ !:
-          print #102,fields "2,1,Cc 52,R,N": "Company Number "&str$(cno)
-00140     print #102,fields "4,1,Cc 52,N": " ******************   WARNING   ******************"
-00150     print #102,fields "6,1,Cc 52,N": " This selection will destroy all existing records"
-00160     print #102,fields "7,1,Cc 52,N": " in the GL Master and Transactions File."
-00170     print #102,fields "9,2,C 26,N": " Enter ERASE to continue:"
-00180     print fields "15,35,C 09,B,5": "Exit (F5)"
+00130     pr #102: newpage !:
+          pr #102,fields "1,1,Cc 52,R,N": cnam$ !:
+          pr #102,fields "2,1,Cc 52,R,N": "Company Number "&str$(cno)
+00140     pr #102,fields "4,1,Cc 52,N": " ******************   WARNING   ******************"
+00150     pr #102,fields "6,1,Cc 52,N": " This selection will destroy all existing records"
+00160     pr #102,fields "7,1,Cc 52,N": " in the GL Master and Transactions File."
+00170     pr #102,fields "9,2,C 26,N": " Enter ERASE to continue:"
+00180     pr fields "15,35,C 09,B,5": "Exit (F5)"
 00190 L190: input #102,fields "9,29,Cu 5,UT,N": pas$
 00200     if cmdkey=5 then goto XIT
 00210     if pas$><"ERASE" then goto L190
@@ -74,7 +74,7 @@
 00700 ERTN: let fnerror(program$,err,line,act$,"xit")
 00710     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00720     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00730     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00730     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00740 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00750 ! /region
 00760 ! ______________________________________________________________________

@@ -2,12 +2,12 @@
 00030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fnd1
 00040   let fntop(program$,cap$="Merge")
 00050   let fncno(cno,cnam$)
-00060   print newpage
+00060   pr newpage
 00070   let fnconsole(1)
 00080   dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4,gl$*12,ivr(6),ca(10)
 00090   dim e(4,30),sc(2),scc(10),des$*30
-00100   print newpage
-00110   print fields "10,20,c 60,h,n": "T/M MERGE INPUT IN PROCESS"
+00100   pr newpage
+00110   pr fields "10,20,c 60,h,n": "T/M MERGE INPUT IN PROCESS"
 00120   open #3: "Name="&env$('Q')&"\TMmstr\TMWK"&wsid$&".H"&str$(cno)&",NoShr",internal,input ioerr L820
 00130   open #2: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&str$(cno)&",Shr",internal,outin,relative ioerr L820
 00140 L140: form pos 54,pd 3
@@ -19,7 +19,7 @@
 00200 L200: read #3,using L280: k$,e$,mat b,sc$,iv$,nta,des$ eof L750 ioerr L820
 00210   if b(7)=0 then goto L200
 00220   let iv$=lpad$(rtrm$(iv$),12)
-00230   if b(8)=0 then let b8=25 else let b8=b(8)
+00230   if b(8)=0 then b8=25 else b8=b(8)
 00240   if rtrm$(des$)="" then read #6,using L250,key=sc$: des$ nokey L260 ioerr L820
 00250 L250: form pos 5,c 30
 00260 L260: let lta=lrec(2)+1
@@ -43,7 +43,7 @@
 00440 L440: let lta4=lrec(4)+1
 00450   mat ta=(0)
 00460   mat fb=(0)
-00470   let ca(b(5))=lta4
+00470   ca(b(5))=lta4
 00480   let ta(b8,1)=lta
 00490   let ta(b8,2)=lta
 00500   if b(7)=-2 then let fb(b8)=2
@@ -69,7 +69,7 @@
 00700   let sc(2)=sc(2)+b(3)
 00710   rewrite #6,using L680,key=sc$: mat sc nokey L730
 00720   goto L200
-00730 L730: print #255: "SERVICE CODE ";sc$;" IS NOT ON FILE"
+00730 L730: pr #255: "SERVICE CODE ";sc$;" IS NOT ON FILE"
 00740   goto L200
 00750 L750: close #1: 
 00760   close #2: 
@@ -78,16 +78,16 @@
 00790   close #5: 
 00800   close #6: 
 00810 XIT: let fnxit
-00820 L820: if err=61 then print fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L840
+00820 L820: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L840
 00830   goto L880
-00840 L840: print newpage
-00850   if err=4148 then print fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L870
+00840 L840: pr newpage
+00850   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L870
 00860   goto L880
-00870 L870: print fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00880 L880: print fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00870 L870: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00880 L880: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00890   input fields "24,60,C 1,N": quitcode$
 00900   if rtrm$(uprc$(quitcode$))="Q" then goto L940
-00910   print fields "23,3,C 78,N": ""
-00920   print fields "24,3,C 78,N": ""
+00910   pr fields "23,3,C 78,N": ""
+00920   pr fields "24,3,C 78,N": ""
 00930   retry 
 00940 L940: goto XIT

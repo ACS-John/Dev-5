@@ -6,11 +6,11 @@
 00060 ! ______________________________________________________________________
 00070   dim jn$*6,n$*40,a$(3)*30,b(4),cn$*11,k$*25,l(13),ta(2)
 00075   dim contact$*30,ph$*12,email$*60
-00080 L80: print newpage
+00080 L80: pr newpage
 00090   close #101: ioerr L100
 00100 L100: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=CONVERT JOB COST AND CATEGORY FILES",display,outin 
-00110   print fields "10,10,C 60": "COMPANY NUMBER (0 to stop):"
-00120   print fields "12,20,C 32,R,N": "PRESS F1 TO CONTINUE; F5 TO STOP"
+00110   pr fields "10,10,C 60": "COMPANY NUMBER (0 to stop):"
+00120   pr fields "12,20,C 32,R,N": "PRESS F1 TO CONTINUE; F5 TO STOP"
 00130   input fields "10,56,Nz 5,U,N": cno
 00140   if cmdkey=5 then goto XIT
 00150 ! 
@@ -39,8 +39,8 @@
 00380   close #1: 
 00390   close #2: 
 00400   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&","&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",1,11,Replace,DupKeys"
-00410   print fields "12,5,C 60": "COMPLETED CONVERTING JOB FILE FOR COMPANY #: "&str$(cno)
-00420   print fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
+00410   pr fields "12,5,C 60": "COMPLETED CONVERTING JOB FILE FOR COMPANY #: "&str$(cno)
+00420   pr fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00430   input fields "13,40,C 1,IAE,N": pause$
 00440   goto L80
 00450 ! ______________________________________________________________________
@@ -48,7 +48,7 @@
 00470 ERTN: let fnerror(program$,err,line,act$,"xit")
 00480   if uprc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00490   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00500   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00500   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00510 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00520 ! /region
 00530 ! ______________________________________________________________________

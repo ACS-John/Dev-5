@@ -7,7 +7,7 @@
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
 00080 ! ______________________________________________________________________
 00090     let fncno(cno,cnam$)
-00100     let cap$="Checkbook update UnPdAloc from v1 to v2"
+00100     cap$="Checkbook update UnPdAloc from v1 to v2"
 00120     let fnstatus("Payment Allocation file until it is updating from v1 to v2")
 00180     open #unpdaloc=1: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UAIdx1.h"&str$(cno),internal,outin,keyed 
 00182 !      close #unpdaloc:
@@ -34,7 +34,7 @@
 00400 ERTN: let fnerror(program$,err,line,act$,"xit")
 00410     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00420     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00430     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00430     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00440 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00450 ! /region
 00460 ! ______________________________________________________________________

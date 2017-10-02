@@ -10,7 +10,7 @@
 00120   let fngetcd(dur$)
 00140   let fntop(program$,'Locate2')
 00150   let filter$="*.br, *.br"
-00160   let cancel=5
+00160   cancel=5
 00170   let report$=env$('temp')&"\LocRpt-"&session$&".txt" !:
         let subprocfile$=env$('temp')&"\loc3-"&session$&".tmp" !:
         let procfile$=env$('temp')&"\Loc0-"&session$&".prc" !:
@@ -54,47 +54,47 @@
         let dur$=trim$(resp$(3)) !:
         let rep$=trim$(resp$(4)) !:
         let filter$=trim$(resp$(5)) !:
-        let app_prev$=resp$(6)
+        app_prev$=resp$(6)
 00430   if lc2$<>"" and rep$<>"" then goto MAIN
 00440 ! 
 00450   let fngetdir(dur$,mat brfn$," /s ",filter$)
 00460   for j=1 to udim(brfn$)
 00470     if trim$(brfn$(j))="" then mat brfn$(j-1) : goto L490
 00480   next j
-00490 L490: print "Found "&str$(j-1)&" files."
+00490 L490: pr "Found "&str$(j-1)&" files."
 00500   open #2: "Name="&procfile$&",Replace",display,output 
 00510   if uprc$(app_prev$)="FALSE" then !:
           execute "free Locate-Report.txt -n" ioerr L520
-00520 L520: print #2: "print border: 'Locating...'"
-00530 ! Print #2: "ProcErr Return" ! quietly continue on error ! XXX
+00520 L520: pr #2: "print border: 'Locating...'"
+00530 ! pr #2: "ProcErr Return" ! quietly continue on error ! XXX
 00540   for j=1 to udim(brfn$)
-00550     print #2: "Load "&brfn$(j) !:
-          print #2: "Load "&brfn$(j) !:
-          print #2: "Load "&brfn$(j) !:
-          print #2: "Load "&brfn$(j)
-00560     print #2: 'List >'&tempfile1$
-00570     print #2: 'Load '&tempfile1$&',Source'
+00550     pr #2: "Load "&brfn$(j) !:
+          pr #2: "Load "&brfn$(j) !:
+          pr #2: "Load "&brfn$(j) !:
+          pr #2: "Load "&brfn$(j)
+00560     pr #2: 'List >'&tempfile1$
+00570     pr #2: 'Load '&tempfile1$&',Source'
 00580 !  record program name !:
-          print #2: 'list 1 >'&tempfile2$ !:
-          print #2: 'type '&tempfile2$&' >>'&report$
+          pr #2: 'list 1 >'&tempfile2$ !:
+          pr #2: 'type '&tempfile2$&' >>'&report$
 00590     if rep$<>"" then !:
-            print #2: "List '"&lc$&"' >>"&report$ !:
-            print #2: "List '"&lc$&"' Replace '"&rep$&"' >>"&report$ !:
-            print #2: "List '"&lc$&"' Replace '"&rep$&"' >"&subprocfile$ !:
-            print #2: "SubProc "&subprocfile$ !:
-            print #2: "Replace "&brfn$(j)
+            pr #2: "List '"&lc$&"' >>"&report$ !:
+            pr #2: "List '"&lc$&"' Replace '"&rep$&"' >>"&report$ !:
+            pr #2: "List '"&lc$&"' Replace '"&rep$&"' >"&subprocfile$ !:
+            pr #2: "SubProc "&subprocfile$ !:
+            pr #2: "Replace "&brfn$(j)
 00600     if rep$="" and lc2$="" then !:
-            print #2: "list '"&lc$&"' >>"&report$
+            pr #2: "list '"&lc$&"' >>"&report$
 00610     if rep$="" and lc2$<>"" then !:
-            print #2: "list '"&lc$&"' '"&lc2$&"' >>"&report$
+            pr #2: "list '"&lc$&"' '"&lc2$&"' >>"&report$
 00620   next j
-00630   print #2: "Print Border: 'Location Complete'"
-00640   print #2: "sy -w -C Notepad "&report$
-00650   print #2: "Load "&prg$ !:
-        print #2: "Load "&prg$ !:
-        print #2: "Load "&prg$ !:
-        print #2: "Load "&prg$ !:
-        print #2: "Run"
+00630   pr #2: "Print Border: 'Location Complete'"
+00640   pr #2: "sy -w -C Notepad "&report$
+00650   pr #2: "Load "&prg$ !:
+        pr #2: "Load "&prg$ !:
+        pr #2: "Load "&prg$ !:
+        pr #2: "Load "&prg$ !:
+        pr #2: "Run"
 00660   close #2: 
 00670   execute "Proc "&procfile$
 00680 ! ______________________________________________________________________
@@ -106,7 +106,7 @@
 00740 ERTN: let fnerror(program$,err,line,act$,"xit")
 00750   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00760   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00770   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00770   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00780 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00790 ! /region
 00800 ! ______________________________________________________________________

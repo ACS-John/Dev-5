@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsCL\Label
-00020 ! print labels for payees
+00020 ! pr labels for payees
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnaddlabel,fnlabel,fntos,fnlbl,fncomboa,fnchk,fncmdset,fnacs,fntxt,fncombof
 00050   on error goto ERTN
@@ -10,8 +10,8 @@
 00100 ! ______________________________________________________________________
 00110   let fncno(cno,cnam$)
 00120   let fntop(program$,cap$="Payee Labels")
-00130   let cancel=99 : let right=1 : let limit_to_list=1 : let on=1 !:
-        let off=0 : let left=0 : let center=2
+00130   cancel=99 : let right=1 : let limit_to_list=1 : let on=1 !:
+        let off=0 : let left=0 : center=2
 00140 ! ______________________________________________________________________
 00150 MAIN: ! 
 00160   let fntos(sn$="cllabel-1")
@@ -47,8 +47,8 @@
               if resp$(1)=item1$(3) then let prtall=specific_payees
 00320   let printpayeenum$=resp$(2) !:
         let wbc=val(resp$(3)(1:2)) ! working bank code !:
-        let c1=val(resp$(4)(1:8)) ! starting check number !:
-        let c2=val(resp$(5)(1:8)) ! ending check number !:
+        c1=val(resp$(4)(1:8)) ! starting check number !:
+        c2=val(resp$(5)(1:8)) ! ending check number !:
         let vn$=lpad$(rtrm$(resp$(6)(1:8)),8) ! starting vendor number
 00330   open #paymstr=1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 00340   open #trmstr=2: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
@@ -116,7 +116,7 @@
 00820 ERTN: let fnerror(program$,err,line,act$,"xit")
 00830   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00840   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00850   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00850   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00860 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00870 ! /region
 00880 ! ______________________________________________________________________

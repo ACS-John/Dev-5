@@ -29,7 +29,7 @@
 15400     read #h_trans,using 'form pos 11,N 8': trans_date eof EO_TRANS
 15500 ! if trans_date=date_bad then pause
 15600     if (rec_low=0 or rec(h_trans)=>rec_low) and trans_date=date_bad then 
-15810       let chg_count+=1
+15810       chg_count+=1
 15820       rewrite #h_trans,using 'form pos 11,N 8': date_good
 16000     end if  ! rec_low>0 and rec(h_trans)<=rec_low and trans_date=date_bad then
 16200   loop 
@@ -45,6 +45,6 @@
 80400 ERTN: let fnerror(program$,err,line,act$,"xit")
 80410   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 80420   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-80430   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+80430   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 80440 ERTN_EXEC_ACT: execute act$ : goto ERTN
 80450 ! /region

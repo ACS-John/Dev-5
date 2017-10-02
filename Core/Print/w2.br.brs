@@ -98,7 +98,7 @@
 17280   fnfra(1,1,fraGeneralHeight,fraWidth,"General","Normally this would the first and last day of the calendar year",0)
 17300   cf+=1 : let franum=cf : lc=0
 17320   fnlbl(lc+=1,1,"Tax Year:",mylen,1,0,franum)
-17340   fntxt(lc,mypos,4,0,1,"",1,"Year to print W-2s for",franum)
+17340   fntxt(lc,mypos,4,0,1,"",1,"Year to pr W-2s for",franum)
 17360   resp$(resc_taxYear:=rc+=1)=taxYear$
 17380   if enableDateRange then
 17400     fnlbl(lc+=1,1,"Starting Date:",mylen,1,0,franum)
@@ -133,7 +133,7 @@
 17980   !
 18000   fra2Height=5 : fra2Y=fraGeneralHeight+3
 18020   let fnfra(fra2Y,1,fra2Height,fraWidth,"Print W-2s","",0)
-18040   let cf+=1 : let franum=cf : lc=0
+18040   cf+=1 : let franum=cf : lc=0
 18060   mylen=46: let mypos=mylen+2
 18080   let fnlbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
 18100   let fntxt(1,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .062.",franum)
@@ -149,8 +149,8 @@
 18300   let resp$(respc_mcmax:=rc+=1)=str$(mcmax)
 18320   !
 18340   fra3Y=fra2Y+fra2Height+2 : fra3Height=6
-18360   let fnfra(fra3Y,1,fra3Height,fraWidth,"Printing or Exporting","You have the option to either print the W-2s or export them to another system for printing.")
-18380   let cf+=1 : let franum=cf : let mylen=26 : let mypos=mylen+2
+18360   let fnfra(fra3Y,1,fra3Height,fraWidth,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.")
+18380   cf+=1 : let franum=cf : let mylen=26 : let mypos=mylen+2
 18400   let fnopt(1,3,"Print W-2",0,franum)
 18420   let resp$(respc_PrintW2:=rc+=1)=w2destinationOpt$(1)
 18440   fnlbl(1,fraWidth-50,"(2 per page is not yet available with Backgrounds)",50,1,0,franum)
@@ -175,7 +175,7 @@
 18840   if enablePayrollDeductions then
 18860     fra4Y=fra3y+fra3Height+2 ! 25
 18880     let fnfra(fra4Y,1,2,fraWidth,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.")
-18900     let cf+=1 : let franum=cf
+18900     cf+=1 : let franum=cf
 18920     let fnlbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
 18940     let fntxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 18960     let resp$(respc_qpenplan:=rc+=1)=str$(pn1)
@@ -185,7 +185,7 @@
 19040   else if enableAskState then
 19060     fra4Y=fra3y+fra3Height+2 ! 25
 19080     let fnfra(fra4Y,1,2,fraWidth,"State","")
-19100     let cf+=1 : let franum=cf
+19100     cf+=1 : let franum=cf
 19120     let fnlbl(1,1,"State Name:",mylen,1,0,franum)
 19140     let fntxt(1,mypos,2,0,1,"",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 19160     let resp$(respc_state:=rc+=1)=state$
@@ -203,10 +203,10 @@
 20100     taxYear$=resp$(resc_taxYear)
 20120     nameFormat$=resp$(resp_namcde)
 20140     if enableDateRange then
-20160       let beg_date=val(resp$(respc_startdate))
+20160       beg_date=val(resp$(respc_startdate))
 20180       let end_date=val(resp$(respc_enddate))
 20200     else
-20220       let beg_date=val(taxYear$&'0101')
+20220       beg_date=val(taxYear$&'0101')
 20240       let end_date=val(taxYear$&'1231')
 20260     end if
 20280 !   pr beg_date,end_date : pause ! 1154
@@ -220,7 +220,7 @@
 20440       end if
 20460       if enableAskCLocality then
 20480         cLocality$=uprc$(rtrm$(resp$(resp_cLocality)))
-20490         if cLocality$='' then let cLocality$='NO'
+20490         if cLocality$='' then cLocality$='NO'
 20500       end if
 20520       if empEnd$<>'[All]' then 
 20540          endnum=val(empEnd$(1:8))
@@ -393,13 +393,13 @@
 39420   end if
 39440   npNsFinis: !
 39460   ! /r
-39480   ! Print nameFirst$,nameMiddle$,nameLast$
+39480   ! pr nameFirst$,nameMiddle$,nameLast$
 39500 fnend
 76000 ! <updateable region: ertn>
 76040 ERTN: let fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-76100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 76120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 76140 ! </updateable region: ertn>
 78000 def library fnw2_text(w2Yoffset,maskSsn,mat a$,empId$*12,ss$,controlNumber$,mat w,dcb$,nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64,retirementPlanX$,mat k$,box12aCode$,box12aAmt$,box12bCode$,box12bAmt$,box12cCode$,box12cAmt$,box12dCode$,box12dAmt$,state$,stcode$,printLocality$*6)
@@ -497,11 +497,11 @@
 88100   if ~fcawbwSetup then
 88120     fcawbwSetup=1
 88140     dim fcawbwText$(0)*128
-88160     fnAddOneC(mat fcawbwText$,'The IRS Warns you should not print Copy A with the background.')
+88160     fnAddOneC(mat fcawbwText$,'The IRS Warns you should not pr Copy A with the background.')
 88180     fnAddOneC(mat fcawbwText$,'This form is provided for informational purposes only. Copy A appears')
 88200     fnAddOneC(mat fcawbwText$,'in red, similar to the official IRS form. The official printed version')
 88220     fnAddOneC(mat fcawbwText$,'of this IRS form is scannable, but the online version of it, printed')
-88240     fnAddOneC(mat fcawbwText$,'from this website, is not. Do not print and file this Copy A.')
+88240     fnAddOneC(mat fcawbwText$,'from this website, is not. Do not pr and file this Copy A.')
 88260     fnAddOneC(mat fcawbwText$,'A penalty may be imposed for filing forms that can’t be scanned.')
 88280     fnAddOneC(mat fcawbwText$,'')
 88300     fnAddOneC(mat fcawbwText$,'To order official IRS information returns such as Forms W-2 and W-3,')

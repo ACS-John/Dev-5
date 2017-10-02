@@ -22,10 +22,10 @@
 00240   goto L340 ! for utility billing automatically from menu
 00250   close #101: ioerr L260
 00260 L260: open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outin 
-00270   print #101: newpage
-00280   print fields "10,2,Cr 32": "File name to create (no ext):"
-00290   print fields "12,2,Cr 32": "Layout file name (with exts):"
-00300   print fields "14,35,c 9,B,1": "Next (F1)"
+00270   pr #101: newpage
+00280   pr fields "10,2,Cr 32": "File name to create (no ext):"
+00290   pr fields "12,2,Cr 32": "Layout file name (with exts):"
+00300   pr fields "14,35,c 9,B,1": "Next (F1)"
 00310 L310: rinput fields mat io1$: outputfile$,ev$ conv L310
 00320   let ev$=trim$(trim$(ev$,chr$(0)))
 00330   let outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
@@ -40,13 +40,13 @@
 00420   let p3=pos(srep$(ln$,'^','~'),'~',p2+1) ! pos(ln$,"^",p2+1)
 00430   let p4=pos(srep$(ln$,'^','~'),'~',p3+1) ! pos(ln$,"^",p3+1)
 00440   let p5=len(rtrm$(ln$))
-00450   let a$(j3,1)=ln$(p1+1:p2-1)
-00460   let a$(j3,1)=fnbooktitle$(a$(j3,1))
-00470   let a$(j3,2)=ln$(p2+1:p3-1)
-00480   let a$(j3,3)=ln$(p3+1:p4-1) ! P3+1:P4-1) ! MAX(P4-1,P3+8))  this was modified for ea
-00490   if p4=0 then let abbrev$=a$(j3,1)(1:12) !:
+00450   a$(j3,1)=ln$(p1+1:p2-1)
+00460   a$(j3,1)=fnbooktitle$(a$(j3,1))
+00470   a$(j3,2)=ln$(p2+1:p3-1)
+00480   a$(j3,3)=ln$(p3+1:p4-1) ! P3+1:P4-1) ! MAX(P4-1,P3+8))  this was modified for ea
+00490   if p4=0 then abbrev$=a$(j3,1)(1:12) !:
           goto L510 ! if layout does not contail abbreviated name, then use first                     12 characters of real name
-00500   let abbrev$=ln$(p4+1:len(ln$))(1:20)
+00500   abbrev$=ln$(p4+1:len(ln$))(1:20)
 00510 L510: ! If RTRM$(A$(J3,3))="" Then Goto 850
 00520   let p1=pos(a$(j3,3)," ",1)+1
 00530   let p2=pos(a$(j3,3),".",1)+1
@@ -57,33 +57,33 @@
 00580   let l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
 00590   if p2>1 then let dp=val(a$(j3,3)(p2:p3)) else let dp=0 !:
           ! DECIMAL POSITIONS
-00600   if uprc$(a$(j3,3)(1:p1-2))="PD" then let al=l*2-1 else let al=l !:
+00600   if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !:
           !   ACTUAL FIELD LENGTH
 00610   if uprc$(a$(j3,3)(1:1))="X" then goto L360 ! skip any formats of "x"
 00620   let l=l*m1 ! TOTAL STORAGE LENGTH
-00630   let b=a+l
-00640   let a=a+1
+00630   b=a+l
+00640   a=a+1
 00650   let ino=ino+1
 00660   let j3=1
-00670   let a(j3,1)=ino
-00680   let a(j3,2)=al
-00690   let a(j3,3)=dp
-00700   let a(j3,4)=l
-00710   let a(j3,5)=a
-00720   let a(j3,6)=b
-00730   let a=b
+00670   a(j3,1)=ino
+00680   a(j3,2)=al
+00690   a(j3,3)=dp
+00700   a(j3,4)=l
+00710   a(j3,5)=a
+00720   a(j3,6)=b
+00730   a=b
 00740   let rl=rl+int(val(a$(j3,3)(p1:p3)))*m1
 00750 ! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAME !:
         ! ON EACH SERVICE IN PAYROLL
 00760   if uprc$(a$(j3,1)(1:4))<>"MISC" then goto L840
 00770   let x=val(a$(j3,1)(8:9)) conv L840
 00780   if trim$(fullname$(x))="" then goto L870 ! SERVICE NOT USED
-00790   let a$(j3,1)=fullname$(x)
+00790   a$(j3,1)=fullname$(x)
 00795 ! If UPRC$(ABBREV$)(1:4)="MISC" Then Pause
 00800   if uprc$(abbrev$)(1:4)<>"MISC" then goto L840
 00810   let x=val(abbrev$(5:6)) conv L840
-00820   let abbrev$=""
-00830   let abbrev$=trim$(abbrevname$(x))(1:9)
+00820   abbrev$=""
+00830   abbrev$=trim$(abbrevname$(x))(1:9)
 00840 L840: ! store as description,variable name,field length,# of deciaml points, format
 00850   write #15,using L860: trim$(a$(j3,1)(1:30)),a$(j3,2),a(j3,2),a(j3,3),a$(j3,3),abbrev$(1:20)
 00860 L860: form pos 1,c 30,c 20,n 4,n 2,c 11,c 20
@@ -92,7 +92,7 @@
 00890 L890: close #2: ioerr L900
 00900 L900: close #15: ioerr L910
 00910 L910: gosub MOVEITTOTEXT
-00920 XIT: let fnxit ! Print Fields "24,1,C 7,UT,N": "Done..."
+00920 XIT: let fnxit ! pr Fields "24,1,C 7,UT,N": "Done..."
 00930   stop 
 00940 ! ______________________________________________________________________
 00950 MOVEITTOTEXT: ! 
@@ -100,7 +100,7 @@
 00970   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,use",internal,outin,keyed 
 00980 L980: read #15,using L990: textfile$ eof L1020
 00990 L990: form pos 1,c 87
-01000   print #10,using L990: textfile$
+01000   pr #10,using L990: textfile$
 01010   goto L980
 01020 L1020: return 
 01030 ! ______________________________________________________________________
@@ -108,7 +108,7 @@
 01050 ERTN: let fnerror(program$,err,line,act$,"xit")
 01060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01070   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01090 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01100 ! /region
 01110 L1110: ! ______________________________________________________________________
@@ -118,25 +118,25 @@
 01150     let x$=lwrc$(trim$(x$)) : let olda=0
 01160     let x$(1:1)=uprc$(x$(1:1))
 01170 ! capitalize anthing after a SPACE
-01180 L1180: let a=pos(x$," ",olda) !:
+01180 L1180: a=pos(x$," ",olda) !:
           if a<>0 then !:
-            let a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1180
-01190     let a=olda=0
-01200 L1200: let a=pos(x$,"-",olda) !:
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1180
+01190     a=olda=0
+01200 L1200: a=pos(x$,"-",olda) !:
           if a<>0 then !:
-            let a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1200
-01210     let a=olda=0
-01220 L1220: let a=pos(x$,"/",olda) !:
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1200
+01210     a=olda=0
+01220 L1220: a=pos(x$,"/",olda) !:
           if a<>0 then !:
-            let a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1220
-01230     let a=olda=0
-01240 L1240: let a=pos(x$,"\",olda) !:
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1220
+01230     a=olda=0
+01240 L1240: a=pos(x$,"\",olda) !:
           if a<>0 then !:
-            let a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1240
-01250     let a=olda=0
-01260 L1260: let a=pos(x$,".",olda) !:
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1240
+01250     a=olda=0
+01260 L1260: a=pos(x$,".",olda) !:
           if a<>0 then !:
-            let a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1260
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1260
 01270     let fnbooktitle$=x$
 01280   fnend 
 01290   return 

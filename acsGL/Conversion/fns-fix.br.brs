@@ -1,9 +1,9 @@
 00010 ! Replace S:\acsGL\Conversion\FNS-Fix
 00020 ! financial statement file
 00030   library 'S:\Core\Library': fntop,fnerror
-00040   print newpage
+00040   pr newpage
 00050   let fntop(program$,"CHANGE_ME")
-00060   print fields "10,10,C 60": "ENTER THE COMPANY NUMBER OR 0 TO STOP:"
+00060   pr fields "10,10,C 60": "ENTER THE COMPANY NUMBER OR 0 TO STOP:"
 00070 L70: input fields "10,50,N 2,UE,N": cno conv L70
 00080   if cno=0 or cmdkey=5 or cmdkey=99 then goto XIT
 00090   dim rno$*5,recno$*5,d$*50,te$*1,fil$(6)*30,idx$(6)*30,ac(9)
@@ -29,7 +29,7 @@
 00290     close #1: 
 00300     close #2: 
 00310     execute "COPY X,"&fil$(f1)
-00320     print #3: "INDEX "&fil$(f1)&" "&idx$(f1)&" 1 5 REPLACE DupKeys"
+00320     pr #3: "INDEX "&fil$(f1)&" "&idx$(f1)&" 1 5 REPLACE DupKeys"
 00330 L330: next f1
 00340   close #3: 
 00350   chain "PROC=PROC."&wsid$

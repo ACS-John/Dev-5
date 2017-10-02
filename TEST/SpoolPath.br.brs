@@ -1,12 +1,12 @@
 20020 Execute "config gui off"
 20040 library 'S:\Core\Library': fnspoolpath$
 20060 on error goto ERTN
-20080 Let A=1
+20080 a=1
 20100 do
 20120   Open #20: "name=pdf:/,recl=512,replace",display,output
-20140   Print #20: STR$(A)
+20140   pr #20: STR$(A)
 20160   Close #20: ioerr ignore
-20180   Print STR$(A)
+20180   pr STR$(A)
 20200   A+=1
 20220 loop while A<500
 20240 XIT: end

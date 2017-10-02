@@ -125,16 +125,16 @@
 01290   write #1,using L850: f1$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$
 01300   close #1: 
 01310   chain "S:\acsTM\TMCOFM"
-01320 L1320: if err=61 then print fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1340
+01320 L1320: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1340
 01330   goto L1380
-01340 L1340: print newpage
-01350   if err=4148 then print fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L1370
+01340 L1340: pr newpage
+01350   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L1370
 01360   goto L1380
-01370 L1370: print fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-01380 L1380: print fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+01370 L1370: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+01380 L1380: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 01390   input fields "24,60,C 1,N": quitcode$
 01400   if rtrm$(uprc$(quitcode$))="Q" then goto L1440
-01410   print fields "23,3,C 78,N": ""
-01420   print fields "24,3,C 78,N": ""
+01410   pr fields "23,3,C 78,N": ""
+01420   pr fields "24,3,C 78,N": ""
 01430   retry 
 01440 L1440: chain "S:\Core\Menu"

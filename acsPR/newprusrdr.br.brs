@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsPR\newPrUsrDR
-00020 ! Print User-Designed Reports
+00020 ! pr User-Designed Reports
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fncombof,fntos,fncmdset,fnacs
 00045   on error goto ERTN
@@ -27,7 +27,7 @@
 00420 ERTN: let fnerror(program$,err,line,act$,"xit")
 00430   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00440   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00450   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00470 ! /region
 00480 ! ______________________________________________________________________

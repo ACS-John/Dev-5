@@ -6,10 +6,10 @@
 00060 ! ______________________________________________________________________
 00070   dim gl(3),ta(2)
 00080 ! ______________________________________________________________________
-00090 L90: print newpage
+00090 L90: pr newpage
 00100   close #101: ioerr L110
 00110 L110: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=CONVERT PAYEE MASTER FILE",display,outin 
-00120   print fields "10,5,C 60": "ENTER COMPANY NUMBER TO CONVERT OR 0 TO STOP:"
+00120   pr fields "10,5,C 60": "ENTER COMPANY NUMBER TO CONVERT OR 0 TO STOP:"
 00130   input fields "10,51,N 2,UE,N": cno
 00140   if cno=0 then goto XIT ! CHAIN "RABLDSCR/CCRA1"
 00150 ! 
@@ -33,8 +33,8 @@
 00330 ! EXECUTE "Rename X "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
 00340 ! EXECUTE "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx1.H"&str$(cno)&",1,8,Replace,DupKeys"
 00350 ! EXECUTE "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx2.H"&str$(cno)&",9,28,Replace,DupKeys"
-00360   print fields "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&str$(cno)
-00370   print fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
+00360   pr fields "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&str$(cno)
+00370   pr fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00380   input fields "13,40,C 1,IAE,N": pause$
 00390   goto L90
 00400 ! ______________________________________________________________________
@@ -42,7 +42,7 @@
 00420 ERTN: let fnerror(program$,err,line,act$,"xit")
 00430   if uprc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00440   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00450   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00470 ! /region
 00480 ! ______________________________________________________________________

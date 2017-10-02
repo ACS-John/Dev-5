@@ -4,11 +4,11 @@
 10200   let fntop("S:\acsPR\conversion\v4_part2",cap$="add missing files and indexes")
 10220 ! r: do every company - loop top
 10240   let fngetdir2(env$('Q')&'\'&fncursys$&"mstr",mat filename$,'/od /ta',"Company.*")
-10260   let company_count=filename_item=0
+10260   company_count=filename_item=0
 10280   for filename_item=1 to udim(mat filename$)
 10300     let tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
 10320     if tmp_cno<>99999 and filename$(filename_item)<>'' then ! don't display company 99999
-10340       let cno=tmp_cno
+10340       cno=tmp_cno
 10360 ! 
 10380 ! let fncno(cno)
 10400 ! 
@@ -62,6 +62,6 @@
 50020 ERTN: let fnerror(program$,err,line,act$,"xit")
 50040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 50060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+50080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50120 ! /region

@@ -8,8 +8,8 @@
 00080 ! ______________________________________________________________________
 00090   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00100 ! ______________________________________________________________________
-00110   print newpage
-00120   print fields "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
+00110   pr newpage
+00120   pr fields "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
 00130 L130: input fields "10,55,N 2,UE,N": cno conv L130
 00140   if cno=0 then goto XIT
 00150 ! 
@@ -39,7 +39,7 @@
 00390 ERTN: let fnerror(program$,err,line,act$,"xit")
 00400   if uprc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00410   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00420   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00420   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00430 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00440 ! /region
 00450 ! ______________________________________________________________________

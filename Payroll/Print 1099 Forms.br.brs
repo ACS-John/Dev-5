@@ -19,14 +19,14 @@
 00900   read #hrpmstr,using 'form pos 1,c 8,3*c 30,c 11': vn$,nam$,ad$(1),ad$(2),ss$ eof FINIS
 00930   let eno=val(vn$) ioerr START
 00940   mat box=(0)
-00950   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+00950   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 00960   restore #hChecks,key>=checkkey$: nokey START
 00970   do
 00972     read #hChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof CALL_1099_LIBRARY
 00980     if heno<>eno then goto CALL_1099_LIBRARY
 00990     if prd=>beg_date and prd<=end_date then 
-01000       let amt1=tcp(seltp+4)
-01010       let box(type)=box(type)+amt1
+01000       amt1=tcp(seltp+4)
+01010       box(type)=box(type)+amt1
 01012     end if
 01020   loop
 01040   CALL_1099_LIBRARY: ! 
@@ -48,6 +48,6 @@
 01750 ERTN: let fnerror(program$,err,line,act$,"xit")
 01760   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01770   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01780   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01780   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01790 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01800 ! /region

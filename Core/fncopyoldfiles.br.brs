@@ -11,7 +11,7 @@
 00090     dim ml$(3)*80 ! fnMsgBox Message Lines
 00091     dim path_source$*250,path_dest$*250 ! 
 00100 ! ______________________________________________________________________
-00110     let right=1 : let left=0 : let center=2
+00110     let right=1 : let left=0 : center=2
 00120     let fngetcd(mcd$) : let fncno(cno)
 00130 ASK_PATHS: ! 
 00140     let fntos(sn$="CopyOldFiles") !:
@@ -37,9 +37,9 @@
 00270     if ckey=5 then let fnCopyoldfiles=5 : goto XIT !:
           else let fnCopyoldfiles=0
 00280     let path_source$=resp$(1)(1:pos(resp$(1),"\",-1)-1) !:
-          let cno_source=val(resp$(2)) !:
+          cno_source=val(resp$(2)) !:
           let path_dest$=resp$(3)(1:pos(resp$(3),"\",-1)-1) !:
-          let cno_dest=val(resp$(4)) !:
+          cno_dest=val(resp$(4)) !:
           let sys_source$=fncursys$ !:
           let sys_dest$=fncursys$
 00290 ! If EXISTS(PATH_DEST$&"\"&SYS_DEST$&"mstr\Company.h"&STR$(CNO_DEST)) Then !:
@@ -48,14 +48,14 @@
           ! Let ML$(2)="Company Number "&STR$(CNO_DEST)&" is currently being used." !:
           ! Let FNMSGBOX(MAT ML$,RESP$,"Error",0) !:
           ! Goto ASK_PATHS
-00300     print "Sy -m Copy "&path_source$&"\"&sys_source$&"mstr\*.h"&str$(cno_source)&" "&path_dest$&"\"&sys_dest$&"mstr\*.h"&str$(cno_dest) ! XXX
+00300     pr "Sy -m Copy "&path_source$&"\"&sys_source$&"mstr\*.h"&str$(cno_source)&" "&path_dest$&"\"&sys_dest$&"mstr\*.h"&str$(cno_dest) ! XXX
 00310     goto XIT
 00320 ! ______________________________________________________________________
 00330 ! <Updateable Region: ERTN>
 00340 ERTN: let fnerror(program$,err,line,act$,"xit")
 00350     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00360     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00370     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00370     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00380 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00390 ! /region
 00400 ! ______________________________________________________________________

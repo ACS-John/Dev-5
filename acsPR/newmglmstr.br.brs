@@ -32,8 +32,8 @@
 00290   if ckey=5 then goto XIT
 00300   let dp$=resp$(1)
 00310   let dp$=lpad$(uprc$(rtrm$(dp$)),3)
-00320   let addrec=editrec=0
-00330   if ckey=1 then let addrec=1 else !:
+00320   addrec=editrec=0
+00330   if ckey=1 then addrec=1 else !:
           if ckey=2 then let editrec=1 else !:
             if ckey=3 then goto DELETE_RECORD
 00340 ! ______________________________________________________________________
@@ -101,23 +101,23 @@
 00880   let fnopenprn (cp,58,230,process)
 00890   gosub HDR4
 00900 L900: read #1,using "Form POS 1,G 3,11*C 12",release: dp$,mat mgl$ eof END4
-00910   print #255,using L920: dp$,mat mgl$ pageoflow NWPG
+00910   pr #255,using L920: dp$,mat mgl$ pageoflow NWPG
 00920 L920: form pos 1,c 6,11*c 14,skip 1
 00930   goto L900
 00940 ! ______________________________________________________________________
-00950 NWPG: print #255: newpage: gosub HDR4: continue 
+00950 NWPG: pr #255: newpage: gosub HDR4: continue 
 00960 ! ______________________________________________________________________
 00970 HDR4: let pg=pg+1
-00980   print #255,using L990: "Page",pg,env$('cnam')
+00980   pr #255,using L990: "Page",pg,env$('cnam')
 00990 L990: form pos 1,c 4,n 4,pos hp1,c 40,skip 1
-01000   print #255: date$;tab(50);"Department GL Number File Listing"
-01010   print #255: 
-01020   print #255,using L920: mat label1p$
-01030   print #255: "____  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________"
+01000   pr #255: date$;tab(50);"Department GL Number File Listing"
+01010   pr #255: 
+01020   pr #255,using L920: mat label1p$
+01030   pr #255: "____  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________"
 01040   return 
 01050 ! ______________________________________________________________________
 01060 END4: on fkey 5 ignore 
-01070   if nw=0 then print #255: newpage
+01070   if nw=0 then pr #255: newpage
 01080   let fncloseprn
 01090   goto MENU1
 01100 ! ______________________________________________________________________
@@ -138,6 +138,6 @@
 01250 ERTN: let fnerror(program$,err,line,act$,"xit")
 01260   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01270   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01280   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01280   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01290 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01300 ! /region

@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsUB\ubprtbl1_Franklinton
-00020 ! print bills for Town of Franklinton
+00020 ! pr bills for Town of Franklinton
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fncmdkey,fnbarcode,fnpa_finis,fnpa_open,fnpa_newpage
 00050   on error goto ERTN
@@ -13,16 +13,16 @@
 00120   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
-00130   let at$(1)=cnam$ !:
+00130   at$(1)=cnam$ !:
         let z=21 !:
-        let at$(1)=trim$(at$(1))(1:z) !:
+        at$(1)=trim$(at$(1))(1:z) !:
         let x=len(at$(1)) : let y=z-x !:
-        let at$(1)=rpt$(" ",int(y/2))&at$(1)
+        at$(1)=rpt$(" ",int(y/2))&at$(1)
 00140   let z=26 !:
         for j=2 to udim(at$) !:
-          let at$(j)=trim$(at$(j))(1:z) !:
+          at$(j)=trim$(at$(j))(1:z) !:
           let x=len(at$(j)) : let y=z-x !:
-          let at$(j)=rpt$(" ",int(y/2))&at$(j) !:
+          at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00150   let linelength=62
 00160 ! 
@@ -33,7 +33,7 @@
 00210   def fnc(x)=int(100*(x+sgn(x)*.0001))
 00220 ! ______________________________________________________________________
 00230 SCREEN1: ! 
-00240   let a$="" : let prtbkno=0
+00240   a$="" : let prtbkno=0
 00250   let fntos(sn$="UBPrtBl1-1") !:
         let pf=33 : let ll=30 !:
         let respc=0
@@ -77,14 +77,14 @@
         let mg$(2) = resp$(3) !:
         let mg$(3) = resp$(4)
 00440   if resp$(6)="[All]" then !:
-          let a$="" else !:
-          let a$ = lpad$(trim$(resp$(6)(1:9)),9)
+          a$="" else !:
+          a$ = lpad$(trim$(resp$(6)(1:9)),9)
 00450   if resp$(7)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(7))
 00460   if resp$(8)="True" then let sl1=1: let z$="" else let sl1=0
 00470   if trim$(a$)<>"" then read #2,using L500,key=a$: z$,route,sequence nokey SCREEN1 !:
-          let holdz$=z$: let begin=1 !:
+          let holdz$=z$: begin=1 !:
           let st1=1
 00480   let newd3=val(resp$(9))
 00490   let newd2=val(resp$(10))
@@ -101,7 +101,7 @@
 00600 L600: if sl1=1 then goto SCREEN3
 00610 L610: ! Read #6,Using 640: Z$ Eof 910
 00620   if trim$(a$)<>"" and begin=1 and z$<>holdz$ then goto L610 ! start with
-00630   let begin=0 ! cancel starting account
+00630   begin=0 ! cancel starting account
 00640   form pos 22,c 10
 00650 ! Read #1,Using 680,Key=Z$: Z$,MAT E$,F$,A3,MAT B,FINAL,MAT D,BAL,F,MAT G,BRA,MAT GB,ROUTE,D3,D2,BULK$,EXTRA1$,ESTIMATEDATE Nokey 610
 00660   read #1,using L690: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate eof RELEASE_PRINT
@@ -144,8 +144,8 @@
 01040 ! If BAL<=0 Then Let G(10)=0 ! don't show penalty if balance 0 or less
 01050 ! ______________print bill routine______________________________________
 01060   gosub VBPRINT
-01070 ! _____________end of print routine______________________________________
-01080   let bct(2)=bct(2)+1 !:
+01070 ! _____________end of pr routine______________________________________
+01080   bct(2)=bct(2)+1 !:
         ! accumulate totals
 01090   goto L600
 01100 ! ______________________________________________________________________
@@ -165,7 +165,7 @@
 01170   let fncmdkey("&Next",1,1,0,"Accept this record for printing") !:
         let fncmdkey("&Complete",5,0,1,"Print all selected records")
 01180   let fnacs(sn$,0,mat resp$,ck)
-01190   let a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
+01190   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto RELEASE_PRINT
 01200   if ck=5 then goto RELEASE_PRINT
 01210   read #1,using L690,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate nokey SCREEN3
@@ -203,7 +203,7 @@
 01510   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 01520 L1520: return 
 01530 ! ______________________________________________________________________
-01540 ENDSCR: ! print totals screen
+01540 ENDSCR: ! pr totals screen
 01550   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
 01560   let fntos(sn$="Bills-Total") !:
         let mylen=23 : let mypos=mylen+2 !:
@@ -229,7 +229,7 @@
 01700   execute "list -"&str$(line) !:
         pause  !:
         goto L1720
-01710   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+01710   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01720 L1720: execute act$
 01730   goto ERTN
 01740 ! ______________________________________________________________________
@@ -240,156 +240,156 @@
 01840 ! ______________________________________________________________________
 01850 VBPRINT: ! 
 01860 ! -- Standard 4 Per Page Even Perferated Card Stock Bills
-01870   let checkcounter+=1
+01870   checkcounter+=1
 01880   if checkcounter=1 then let xmargin=20 : let ymargin=0
 01890   if checkcounter=2 then let xmargin=174 : let ymargin=0
 01900   if checkcounter=3 then let xmargin=20: let ymargin=108
 01910   if checkcounter=4 then let xmargin=174 : let ymargin=108 !:
-          let checkcounter=0
+          checkcounter=0
 01920 ! ______________________________________________________________________
-01930   print #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',57,'&str$(lyne*3+3)&',True)'
-01940   print #20: "Call Print.MyFontBold(True)"
-01950   print #20: 'Call Print.MyFontSize(12)'
-01960   print #20: 'Call Print.MyFont("Courier New")'
-01970   print #20: 'Call Print.AddText("'&at$(1)&'",'&str$(xmargin+8)&','&str$(lyne*1-1+ymargin)&')'
-01980   print #20: 'Call Print.MyFont("Lucida Console")'
-01990   print #20: 'Call Print.MyFontSize(10)'
-02000   print #20: 'Call Print.MyFontBold(False)'
-02010   print #20: 'Call Print.AddText("'&at$(2)&'",'&str$(xmargin+6)&','&str$(lyne*2+1+ymargin-.2)&')'
-02020   print #20: 'Call Print.AddText("'&at$(3)&'",'&str$(xmargin+6)&','&str$(lyne*3+1+ymargin)&')'
-02030   print #20: 'Call Print.AddText("#'&trim$(z$)&'  '&bulk$&'",'&str$(xmargin+4)&','&str$(lyne*5+ymargin)&')'
-02040   print #20: 'Call Print.AddText("'&e$(1)&'",'&str$(xmargin+4)&','&str$(lyne*6+ymargin)&')'
-02050   print #20: 'Call Print.AddText("From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",newd2)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",newd3)&'",'&str$(xmargin+2)&','&str$(lyne*7+ymargin)&')'
-02060   print #20: 'Call Print.AddText("Is due now and payable.",'&str$(xmargin+2)&','&str$(lyne*8+ymargin)&')'
-02070   print #20: 'Call Print.AddText("Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&'",'&str$(xmargin+2)&','&str$(lyne*11+ymargin)&')'
-02080   print #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*12+1+ymargin)&',62,0)'
-02090   print #20: 'Call Print.AddText("Reading",'&str$(xmargin+10)&','&str$(lyne*13+ymargin)&')'
-02100   print #20: 'Call Print.AddText("Usage",'&str$(xmargin+33)&','&str$(lyne*13+ymargin)&')'
-02110   print #20: 'Call Print.AddText("Charge",'&str$(xmargin+50)&','&str$(lyne*13+ymargin)&')'
+01930   pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',57,'&str$(lyne*3+3)&',True)'
+01940   pr #20: "Call Print.MyFontBold(True)"
+01950   pr #20: 'Call Print.MyFontSize(12)'
+01960   pr #20: 'Call Print.MyFont("Courier New")'
+01970   pr #20: 'Call Print.AddText("'&at$(1)&'",'&str$(xmargin+8)&','&str$(lyne*1-1+ymargin)&')'
+01980   pr #20: 'Call Print.MyFont("Lucida Console")'
+01990   pr #20: 'Call Print.MyFontSize(10)'
+02000   pr #20: 'Call Print.MyFontBold(False)'
+02010   pr #20: 'Call Print.AddText("'&at$(2)&'",'&str$(xmargin+6)&','&str$(lyne*2+1+ymargin-.2)&')'
+02020   pr #20: 'Call Print.AddText("'&at$(3)&'",'&str$(xmargin+6)&','&str$(lyne*3+1+ymargin)&')'
+02030   pr #20: 'Call Print.AddText("#'&trim$(z$)&'  '&bulk$&'",'&str$(xmargin+4)&','&str$(lyne*5+ymargin)&')'
+02040   pr #20: 'Call Print.AddText("'&e$(1)&'",'&str$(xmargin+4)&','&str$(lyne*6+ymargin)&')'
+02050   pr #20: 'Call Print.AddText("From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",newd2)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",newd3)&'",'&str$(xmargin+2)&','&str$(lyne*7+ymargin)&')'
+02060   pr #20: 'Call Print.AddText("Is due now and payable.",'&str$(xmargin+2)&','&str$(lyne*8+ymargin)&')'
+02070   pr #20: 'Call Print.AddText("Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&'",'&str$(xmargin+2)&','&str$(lyne*11+ymargin)&')'
+02080   pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*12+1+ymargin)&',62,0)'
+02090   pr #20: 'Call Print.AddText("Reading",'&str$(xmargin+10)&','&str$(lyne*13+ymargin)&')'
+02100   pr #20: 'Call Print.AddText("Usage",'&str$(xmargin+33)&','&str$(lyne*13+ymargin)&')'
+02110   pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+50)&','&str$(lyne*13+ymargin)&')'
 02120 ! ______________________________________________________________________
 02130 PRINTGRID: let meter=14 !:
-        print #20: 'Call Print.MyFontSize(8)'
+        pr #20: 'Call Print.MyFontSize(8)'
 02140   if g(1)=0 then goto L2150 else !:
-          print #20: 'Call Print.AddText("Water",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
+          pr #20: 'Call Print.AddText("Water",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(d(3),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(g(1),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 02150 L2150: if g(2)=0 then goto L2160 else !:
-          print #20: 'Call Print.AddText("Sewer",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(g(2),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
+          pr #20: 'Call Print.AddText("Sewer",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(g(2),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 02160 L2160: ! If A4=1 Then Let GCODE$="RSGS" Else !:
         ! If A4=2 Then Let GCODE$="CMGS" Else !:
         ! If A4=3 Then Let GCODE$="INGS" Else !:
         let gcode$="GAS"
 02170   if g(4)=0 then goto L2180 else !:
-          print #20: 'Call Print.AddText("'&gcode$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(d(11),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
+          pr #20: 'Call Print.AddText("'&gcode$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(d(11),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(g(4),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 02180 L2180: if g(3)=0 then goto L2200 else !:
-          print #20: 'Call Print.AddText("Safe Water Fee",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
-02190   print #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
+          pr #20: 'Call Print.AddText("Safe Water Fee",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
+02190   pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 02200 L2200: if g(5)=0 then goto L2210 else !:
-          print #20: 'Call Print.AddText("Sanitation",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(g(5),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
+          pr #20: 'Call Print.AddText("Sanitation",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(g(5),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 02210 L2210: if g(6)=0 then goto L2220 else !:
-          print #20: 'Call Print.AddText("DEM",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(g(6),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
+          pr #20: 'Call Print.AddText("DEM",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(g(6),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 02220 L2220: if g(7)=0 then goto L2230 else !:
-          print #20: 'Call Print.AddText("Tax-Water",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(g(7),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
+          pr #20: 'Call Print.AddText("Tax-Water",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(g(7),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 02230 L2230: if g(8)=0 then goto L2240 else !:
-          print #20: 'Call Print.AddText("MISC",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
+          pr #20: 'Call Print.AddText("MISC",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(g(8),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 02240 L2240: if g(9)=0 then goto L2250 else !:
-          print #20: 'Call Print.AddText("Tax-Gas",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
-02250 L2250: if pb><0 then print #20: 'Call Print.AddLine('&str$(xmargin+46)&','&str$(lyne*(meter+=1)+ymargin+2)&',15,0)'
-02260   if pb><0 then print #20: 'Call Print.AddText("   Subtotal",'&str$(xmargin+1)&','&str$(lyne*(meter+=.25)+ymargin+2)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)+g(9),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin+2)&')'
+          pr #20: 'Call Print.AddText("Tax-Gas",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(g(9),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
+02250 L2250: if pb><0 then pr #20: 'Call Print.AddLine('&str$(xmargin+46)&','&str$(lyne*(meter+=1)+ymargin+2)&',15,0)'
+02260   if pb><0 then pr #20: 'Call Print.AddText("   Subtotal",'&str$(xmargin+1)&','&str$(lyne*(meter+=.25)+ymargin+2)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)+g(9),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin+2)&')'
 02270 ! If BUDGET>0 Then Let PB=PBUD ! owe old budget payment
 02280   if pb=0 then goto L2290 else !:
-          print #20: 'Call Print.AddText("Previous Balance",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin+2)&')' !:
-          print #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin+2)&')'
-02290 L2290: print #20: 'Call Print.MyFontSize(10)'
+          pr #20: 'Call Print.AddText("Previous Balance",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin+2)&')' !:
+          pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin+2)&')'
+02290 L2290: pr #20: 'Call Print.MyFontSize(10)'
 02300 ! ______________________________________________________________________
-02310   if estimatedate=d1 then print #20: 'Call Print.AddText("Bill estimated!",'&str$(xmargin+1)&','&str$(lyne*21+ymargin)&')'
-02320   print #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*23+1+ymargin+10)&',63,0)'
-02330 ! Print #20: 'Call Print.AddText("Budget Payment",'&STR$(XMARGIN+99)&','&STR$(LYNE*12+YMARGIN)&')'
-02340 ! If BUDGET>0 Then Let BAL=BUDGET+PBUD ! IF BUDGET MAKE NET DUE = BUDGET PLUS ANY OLD BUDGET PAYMENTS NOT MADE
+02310   if estimatedate=d1 then pr #20: 'Call Print.AddText("Bill estimated!",'&str$(xmargin+1)&','&str$(lyne*21+ymargin)&')'
+02320   pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*23+1+ymargin+10)&',63,0)'
+02330 ! pr #20: 'Call Print.AddText("Budget Payment",'&STR$(XMARGIN+99)&','&STR$(LYNE*12+YMARGIN)&')'
+02340 ! If BUDGET>0 Then bAL=BUDGET+PBUD ! IF BUDGET MAKE NET DUE = BUDGET PLUS ANY OLD BUDGET PAYMENTS NOT MADE
 02350   if budget>0 then goto L2360 else goto L2410
-02360 L2360: print #20: 'Call Print.AddText("Actual Balance",'&str$(xmargin+1)&','&str$(lyne*24+ymargin+10)&')'
-02370   print #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*24+ymargin+10)&')'
-02380   print #20: 'Call Print.AddText("Budget Amount",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
-02390   print #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*25+ymargin+10)&')'
+02360 L2360: pr #20: 'Call Print.AddText("Actual Balance",'&str$(xmargin+1)&','&str$(lyne*24+ymargin+10)&')'
+02370   pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*24+ymargin+10)&')'
+02380   pr #20: 'Call Print.AddText("Budget Amount",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
+02390   pr #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*25+ymargin+10)&')'
 02400   goto L2460
-02410 L2410: print #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*24+ymargin+10)&')'
-02420   print #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*24+ymargin+10)&')'
-02430   print #20: 'Call Print.AddText("Pay After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
+02410 L2410: pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*24+ymargin+10)&')'
+02420   pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*24+ymargin+10)&')'
+02430   pr #20: 'Call Print.AddText("Pay After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':",'&str$(xmargin+1)&','&str$(lyne*25+ymargin+10)&')'
 02440   if bal<=0 then let payafter=bal else let payafter=bal+g(10) ! (BAL*.10,2)
-02450   print #20: 'Call Print.AddText("'&fnformnumb$(payafter,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*25+ymargin+10)&')'
-02460 L2460: print #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin+10)&',63,0)'
-02470   print #20: 'Call Print.AddText("Phone: 985-839-3569",'&str$(xmargin+1)&','&str$(lyne*31+ymargin)&')'
-02480 ! Print #20: 'Call Print.AddText("Re-connect fee $??.00",'&STR$(XMARGIN+1)&','&STR$(LYNE*28+YMARGIN)&')'
+02450   pr #20: 'Call Print.AddText("'&fnformnumb$(payafter,2,9)&'",'&str$(xmargin+42)&','&str$(lyne*25+ymargin+10)&')'
+02460 L2460: pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin+10)&',63,0)'
+02470   pr #20: 'Call Print.AddText("Phone: 985-839-3569",'&str$(xmargin+1)&','&str$(lyne*31+ymargin)&')'
+02480 ! pr #20: 'Call Print.AddText("Re-connect fee $??.00",'&STR$(XMARGIN+1)&','&STR$(LYNE*28+YMARGIN)&')'
 02490 ! ______________________________________________________________________
 02500   let special=28
 02510 ! ______________________________________________________________________
-02520   print #20: 'Call Print.MyFontSize(7)'
-02530   print #20: 'Call Print.AddLine('&str$(xmargin+112)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'
-02540   print #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+0)&',7,0)'
-02550   print #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+2.8)&',7,0)'
-02560   print #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+5.6)&',7,0)'
-02570   print #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+8.4)&',7,0)'
-02580   print #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+11.2)&',7,0)'
-02590   print #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+14)&',7,0)'
-02600   print #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+17)&',7,0)'
-02610 ! Print #20: 'Call Print.AddText("   Pre-Sorted",'&STR$(XMARGIN+115)&','&STR$(LYNE*1-1+YMARGIN)&')'
-02620   print #20: 'Call Print.AddText("First Class Mail",'&str$(xmargin+115)&','&str$(lyne*2-1+ymargin)&')'
-02630   print #20: 'Call Print.AddText("  U.S. Postage  ",'&str$(xmargin+115)&','&str$(lyne*3-1+ymargin)&')'
-02640   print #20: 'Call Print.AddText("      Paid",'&str$(xmargin+115)&','&str$(lyne*4-1+ymargin)&')'
-02650   print #20: 'Call Print.AddText("  Permit No 040",'&str$(xmargin+115)&','&str$(lyne*5-1+ymargin)&')'
-02660   print #20: 'Call Print.MyFontSize(9)'
-02670 ! Print #20: 'Call Print.AddText("Address Service Requested",'&STR$(XMARGIN+99)&','&STR$(LYNE*7+YMARGIN-6)&')'
-02680   print #20: 'Call Print.AddText("Please return this",'&str$(xmargin+99)&','&str$(lyne*7+ymargin)&')'
-02690   print #20: 'Call Print.AddText("side with payment to:",'&str$(xmargin+99)&','&str$(lyne*8+ymargin)&')'
-02700   print #20: 'Call Print.AddText("'&cnam$&'",'&str$(xmargin+99)&','&str$(lyne*9+ymargin)&')'
-02710   print #20: 'Call Print.MyFontSize(10)'
+02520   pr #20: 'Call Print.MyFontSize(7)'
+02530   pr #20: 'Call Print.AddLine('&str$(xmargin+112)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'
+02540   pr #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+0)&',7,0)'
+02550   pr #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+2.8)&',7,0)'
+02560   pr #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+5.6)&',7,0)'
+02570   pr #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+8.4)&',7,0)'
+02580   pr #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+11.2)&',7,0)'
+02590   pr #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+14)&',7,0)'
+02600   pr #20: 'Call Print.AddLine('&str$(xmargin+105)&','&str$(ymargin+17)&',7,0)'
+02610 ! pr #20: 'Call Print.AddText("   Pre-Sorted",'&STR$(XMARGIN+115)&','&STR$(LYNE*1-1+YMARGIN)&')'
+02620   pr #20: 'Call Print.AddText("First Class Mail",'&str$(xmargin+115)&','&str$(lyne*2-1+ymargin)&')'
+02630   pr #20: 'Call Print.AddText("  U.S. Postage  ",'&str$(xmargin+115)&','&str$(lyne*3-1+ymargin)&')'
+02640   pr #20: 'Call Print.AddText("      Paid",'&str$(xmargin+115)&','&str$(lyne*4-1+ymargin)&')'
+02650   pr #20: 'Call Print.AddText("  Permit No 040",'&str$(xmargin+115)&','&str$(lyne*5-1+ymargin)&')'
+02660   pr #20: 'Call Print.MyFontSize(9)'
+02670 ! pr #20: 'Call Print.AddText("Address Service Requested",'&STR$(XMARGIN+99)&','&STR$(LYNE*7+YMARGIN-6)&')'
+02680   pr #20: 'Call Print.AddText("Please return this",'&str$(xmargin+99)&','&str$(lyne*7+ymargin)&')'
+02690   pr #20: 'Call Print.AddText("side with payment to:",'&str$(xmargin+99)&','&str$(lyne*8+ymargin)&')'
+02700   pr #20: 'Call Print.AddText("'&cnam$&'",'&str$(xmargin+99)&','&str$(lyne*9+ymargin)&')'
+02710   pr #20: 'Call Print.MyFontSize(10)'
 02720   if budget>0 then goto L2730 else goto L2760
-02730 L2730: print #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ)",d4*.01)&':",'&str$(xmargin+99)&','&str$(lyne*11+ymargin)&')'
-02740   print #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+106)&','&str$(lyne*11+ymargin)&')'
+02730 L2730: pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ)",d4*.01)&':",'&str$(xmargin+99)&','&str$(lyne*11+ymargin)&')'
+02740   pr #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+106)&','&str$(lyne*11+ymargin)&')'
 02750   goto L2810
-02760 L2760: print #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ)",d4*.01)&':",'&str$(xmargin+99)&','&str$(lyne*11+ymargin)&')'
-02770   print #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+126)&','&str$(lyne*11+ymargin)&')'
+02760 L2760: pr #20: 'Call Print.AddText("Pay By '&cnvrt$("PIC(ZZ/ZZ)",d4*.01)&':",'&str$(xmargin+99)&','&str$(lyne*11+ymargin)&')'
+02770   pr #20: 'Call Print.AddText("'&fnformnumb$(bal,2,9)&'",'&str$(xmargin+126)&','&str$(lyne*11+ymargin)&')'
 02780   if bal<=0 then let payafter=bal else let payafter=bal+g(10) ! AL*.10,2)
-02790   print #20: 'Call Print.AddText("After  '&cnvrt$("PIC(ZZ/ZZ)",d4*.01)&':",'&str$(xmargin+99)&','&str$(lyne*12+ymargin)&')'
-02800   print #20: 'Call Print.AddText("'&fnformnumb$(payafter,2,9)&'",'&str$(xmargin+126)&','&str$(lyne*12+ymargin)&')'
-02810 L2810: print #20: 'Call Print.MyFontSize(9)'
-02820   let addy=14
-02830   print #20: 'Call Print.AddText("'&mg$(1)&'",'&str$(xmargin+99)&','&str$((addy+=1)*lyne+ymargin)&')'
-02840   print #20: 'Call Print.AddText("'&mg$(2)&'",'&str$(xmargin+99)&','&str$((addy+=1)*lyne+ymargin)&')'
-02850   print #20: 'Call Print.AddText("'&mg$(3)&'",'&str$(xmargin+99)&','&str$((addy+=1)*lyne+ymargin)&')'
-02860   let addy+=1
-02870   print #20: 'Call Print.MyFontSize(10)'
+02790   pr #20: 'Call Print.AddText("After  '&cnvrt$("PIC(ZZ/ZZ)",d4*.01)&':",'&str$(xmargin+99)&','&str$(lyne*12+ymargin)&')'
+02800   pr #20: 'Call Print.AddText("'&fnformnumb$(payafter,2,9)&'",'&str$(xmargin+126)&','&str$(lyne*12+ymargin)&')'
+02810 L2810: pr #20: 'Call Print.MyFontSize(9)'
+02820   addy=14
+02830   pr #20: 'Call Print.AddText("'&mg$(1)&'",'&str$(xmargin+99)&','&str$((addy+=1)*lyne+ymargin)&')'
+02840   pr #20: 'Call Print.AddText("'&mg$(2)&'",'&str$(xmargin+99)&','&str$((addy+=1)*lyne+ymargin)&')'
+02850   pr #20: 'Call Print.AddText("'&mg$(3)&'",'&str$(xmargin+99)&','&str$((addy+=1)*lyne+ymargin)&')'
+02860   addy+=1
+02870   pr #20: 'Call Print.MyFontSize(10)'
 02880   if df$="Y" then !:
-          print #20: 'Call Print.AddText("Drafted",'&str$(xmargin+1)&','&str$(lyne*(addy+=1)+ymargin)
+          pr #20: 'Call Print.AddText("Drafted",'&str$(xmargin+1)&','&str$(lyne*(addy+=1)+ymargin)
 02890   if c4>0 then !:
-          print #20: 'Call Print.AddText("Final Bill",'&str$(xmargin+1)&','&str$(lyne*(addy+=1)+ymargin)
-02900   print #20: 'Call Print.AddText("#'&trim$(z$)&' '&bulk$&'",'&str$(xmargin+99)&','&str$(lyne*(addy+=1)+ymargin)&')'
+          pr #20: 'Call Print.AddText("Final Bill",'&str$(xmargin+1)&','&str$(lyne*(addy+=1)+ymargin)
+02900   pr #20: 'Call Print.AddText("#'&trim$(z$)&' '&bulk$&'",'&str$(xmargin+99)&','&str$(lyne*(addy+=1)+ymargin)&')'
 02910   if pe$(1)<>"" then !:
-          print #20: 'Call Print.AddText("'&trim$(pe$(1))&'",'&str$(xmargin+99)&','&str$(lyne*(addy+=1)+ymargin)&')'
+          pr #20: 'Call Print.AddText("'&trim$(pe$(1))&'",'&str$(xmargin+99)&','&str$(lyne*(addy+=1)+ymargin)&')'
 02920   if pe$(2)<>"" then !:
-          print #20: 'Call Print.AddText("'&trim$(pe$(2))&'",'&str$(xmargin+99)&','&str$(lyne*(addy+=1)+ymargin)&')'
+          pr #20: 'Call Print.AddText("'&trim$(pe$(2))&'",'&str$(xmargin+99)&','&str$(lyne*(addy+=1)+ymargin)&')'
 02930   if pe$(3)<>"" then !:
-          print #20: 'Call Print.AddText("'&trim$(pe$(3))&'",'&str$(xmargin+99)&','&str$(lyne*(addy+=1)+ymargin)&')'
+          pr #20: 'Call Print.AddText("'&trim$(pe$(3))&'",'&str$(xmargin+99)&','&str$(lyne*(addy+=1)+ymargin)&')'
 02940   if pe$(4)<>"" then !:
-          print #20: 'Call Print.AddText("'&trim$(pe$(4))&'",'&str$(xmargin+99)&','&str$(lyne*(addy+=1)+ymargin)&')'
-02950   if checkcounter=1 then let checkx=1.375 : let checky=3.6875 !:
+          pr #20: 'Call Print.AddText("'&trim$(pe$(4))&'",'&str$(xmargin+99)&','&str$(lyne*(addy+=1)+ymargin)&')'
+02950   if checkcounter=1 then checkx=1.375 : checky=3.6875 !:
           let xbar=119: let ybar=75
-02960   if checkcounter=2 then let checkx=6.75 : let checky=3.6875 !:
+02960   if checkcounter=2 then checkx=6.75 : checky=3.6875 !:
           let xbar=273: let ybar=75
-02970   if checkcounter=3 then let checkx=1.375 : let checky=7.9375 !:
+02970   if checkcounter=3 then checkx=1.375 : checky=7.9375 !:
           let xbar=119: let ybar=185
-02980   if checkcounter=0 then let checkx=6.75 : let checky=7.9375 !:
+02980   if checkcounter=0 then checkx=6.75 : checky=7.9375 !:
           let xbar=273: let ybar=185
 02995   let fnbarcode(z$,xbar,ybar)
 03010   if checkcounter=0 then !:
@@ -407,17 +407,17 @@
 03120 L3120: execute "Index "&env$('Temp')&"\Temp."&wsid$&" "&env$('Temp')&"\TempIdx."&session$&" 1,19,Replace,DupKeys -n" ioerr L3140
 03130   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$,internal,input,keyed 
 03140 L3140: return 
-03150 BUD1: let bud1=0
+03150 BUD1: bud1=0
 03160   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5),bd$(5)*30
 03170   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L3230
 03180   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&str$(cno)&",Shr",internal,outin,relative 
-03190   let bud1=1
+03190   bud1=1
 03200   for j=1 to 5
-03210     let bd$(j)=str$(j+10)&",20,PIC(##/##/##),U,N"
+03210     bd$(j)=str$(j+10)&",20,PIC(##/##/##),U,N"
 03220   next j
 03230 L3230: return 
 03240 BUD2: ! 
-03250   let budget=pbud=bd1=0
+03250   budget=pbud=bd1=0
 03260   mat bd1(5)
 03270   mat bd1=(0)
 03280   mat bd2=(0)
@@ -428,7 +428,7 @@
 03330 L3330: if ta1=0 then goto L3390
 03340   read #82,using L3350,rec=ta1: z$,mat bt1,nba norec L3390
 03350 L3350: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-03360   if bt1(1,1)=d1 then let budget=budget+bt1(12,1): goto L3380 ! budget for current month
+03360   if bt1(1,1)=d1 then budget=budget+bt1(12,1): goto L3380 ! budget for current month
 03370   if bt1(14,1)=0 then let pbud=pbud+bt1(12,1): goto L3380 ! budget for any previous months not paid
 03380 L3380: let ta1=nba : goto L3330
 03390 L3390: return 

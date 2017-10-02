@@ -71,44 +71,44 @@
           read #ScreenIO, using form$(ScreenIO), key=fnBuildKey$("screenio",mat ScreenIO$,mat Screenio) : mat ScreenIO$, mat ScreenIO nokey Ignore
           if file(ScreenIO)=0 then
              ! Also find largest rows and columns and use that for Rows and Cols if they aren't given
-             if ScreenIO(si_hsize)>BigCol then let BigCol=ScreenIO(si_hsize)
-             if ScreenIO(si_vsize)>BigRow then let BigRow=ScreenIO(si_vsize)
+             if ScreenIO(si_hsize)>BigCol then bigCol=ScreenIO(si_hsize)
+             if ScreenIO(si_vsize)>BigRow then bigRow=ScreenIO(si_vsize)
 
              if pos(ScreenIO$(si_attributes),"N=") then
                 let NAttr$=screenIO$(si_attributes)(pos(ScreenIO$(si_attributes),"N="):9999)
                 if pos(NAttr$,",") then
                    let NAttr$=NAttr$(1:pos(NAttr$,",")-1)
                 end if
-                let Attribute$(Index)=","&NAttr$
+                attribute$(Index)=","&NAttr$
              else if len(trim$(ScreenIO$(si_bgcolor))) then
                 if len(ScreenIO$(si_bgcolor))=6 then
                    let ScreenIO$(si_bgcolor)(1:0)="#"
                 end if
-                let Attribute$(Index)=",N=/W:"&screenIO$(si_bgcolor)
+                attribute$(Index)=",N=/W:"&screenIO$(si_bgcolor)
              end if
           end if
        next Index
        close #ScreenIO:
 
        if Rows=0 then let Rows=BigRow
-       if Cols=0 then let Cols=BigCol
+       if Cols=0 then cols=BigCol
 
        for Index=1 to udim(mat Screen$)
           open #(InputWindows(Index):=fnGetFileNumber): "srow=2,scol=2,rows="&str$(Rows)&",cols="&str$(Cols)&Attribute$(Index)&",tab="&Caption$(Index)&ParentWindow$, display, outin
        next Index
 
        if StartScreen then
-          let CurrentScreen=StartScreen
+          currentScreen=StartScreen
           input #InputWindows(CurrentScreen), fields "2,2,C 1,,NOWAIT" : dummy$
-          print #InputWindows(CurrentScreen), fields "2,2,C 1" : ""
+          pr #InputWindows(CurrentScreen), fields "2,2,C 1" : ""
        else
-          let Currentscreen=1
+          currentscreen=1
        end if
 
        if Predraw or DisplayOnly then
           let StartTime=timer
           let PredrawWindows(Currentscreen)=fnfm(Screen$(Currentscreen),Key$,1,1,ParentKey$,InputWindows(Currentscreen),1,1,RecordVal)
-          if Debug then print Screen$(Currentscreen)&": "&str$(timer-StartTime)&" second(s)."
+          if Debug then pr Screen$(Currentscreen)&": "&str$(timer-StartTime)&" second(s)."
 
           if MsgScreen$<>"" then
              let PredrawMessage(Currentscreen)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,PredrawWindows(Currentscreen),1,1,RecordVal)
@@ -126,7 +126,7 @@
              if Predraw or DisplayOnly then
                 let StartTime=timer
                 let PredrawWindows(Index)=fnfm(Screen$(Index),Key$,1,1,ParentKey$,InputWindows(Index),1,1,RecordVal)
-                if Debug then print Screen$(Index)&": "&str$(timer-StartTime)&" second(s)."
+                if Debug then pr Screen$(Index)&": "&str$(timer-StartTime)&" second(s)."
                 if MsgScreen$<>"" then
                    let PredrawMessage(Index)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,PreDrawWindows(Index),1,1,RecordVal)
                 end if
@@ -198,23 +198,23 @@
 
                 if Fkey=92 then ! If A Tab Is Clicked Then Jump To That Tab
                    if Srch(Mat Inputwindows,Curtab(InputWindows(1)))>0 then
-                      let Currentscreen=Srch(Mat Inputwindows,Curtab(InputWindows(1)))
+                      currentscreen=Srch(Mat Inputwindows,Curtab(InputWindows(1)))
                    end if
                 end if
-                let CancelledExit=0
+                cancelledExit=0
                 if (fkey=99 and ~BlockESC) or fkey=93 or (fkey<>92 and ExitOnCancel) then          ! We're about to exit
                    if len(returnvalue$) and len(FileLay$) then                                     ! and they didn't cancel, and they chose to write data at the end
                       if AskSaveTogether then                                                      ! They requested we ask here instead of in the screens
                          if ~Fnsamea(Mat Read_F,Mat F,mat IgnoreNumbers) Or ~Fnsameas(Mat Read_F$,Mat F$,mat IgnoreStrings) then       ! Something has changed
                             ! Ask if they want to save or not.
-                            let Choice=Msgbox("The data has changed. Do you want to accept the changes?","Save?","ynC","QST")
+                            choice=Msgbox("The data has changed. Do you want to accept the changes?","Save?","ynC","QST")
                             if Choice=2 then  ! They said YES
                                ! Leave things alone
                             else if Choice=3 then ! They said NO
                                let ReturnValue$="" ! As if they said NO, don't save
                             else ! They said CANCEL
                                let fkey(0) ! Cancel the exit
-                               let CancelledExit=1
+                               cancelledExit=1
                             end if
                          else                   ! if they haven't changed
                             let ReturnValue$="" ! As if they said NO, don't save
@@ -354,7 +354,7 @@
  !
        for Index=Udim(Mat Array$) to 1 step -1
           if Array$(Index)="[[[loNgsTaCk]]]" then
-             let Array$(Index)=Longstack$(Udim(Mat Longstack$))
+             array$(Index)=Longstack$(Udim(Mat Longstack$))
              mat Longstack$(Udim(Mat Longstack$)-1)
           end if
        next Index
@@ -383,9 +383,9 @@
  !  #AutoNumber# 90000,10
     def fnDisplayLoadMessage(;___,Window)
        open #(Window:=Fngetfilenumber): "SROW=12,SCOL=15,ROWS=3,COLS=50,Border=S",display,outin
-       print #Window, fields "1,1,CC 50" : "Now Reading Record - Requesting Write Permission"
-       print #Window, fields "2,1,CC 50" : "If you see this message for more then a"
-       print #Window, fields "3,1,CC 50" : "few seconds the record is probably in use."
+       pr #Window, fields "1,1,CC 50" : "Now Reading Record - Requesting Write Permission"
+       pr #Window, fields "2,1,CC 50" : "If you see this message for more then a"
+       pr #Window, fields "3,1,CC 50" : "few seconds the record is probably in use."
        let fnDisplayLoadMessage=Window
     fnend
  !
@@ -406,7 +406,7 @@
           close #Lockfile:
           execute "*free ERTMP[SESSION]"
  !
-          let Choice=Msgbox("This record is locked in file #"&Str$(Filenumber)&', "'&File$(Filenumber)&'", by user '&Trim$(LockUser$)&". Do you want to retry?","Record Locked","Okc","Qst")
+          choice=Msgbox("This record is locked in file #"&Str$(Filenumber)&', "'&File$(Filenumber)&'", by user '&Trim$(LockUser$)&". Do you want to retry?","Record Locked","Okc","Qst")
           if Choice=1 then
              let Fnretrylockederror=1
           end if

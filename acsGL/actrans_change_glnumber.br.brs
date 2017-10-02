@@ -55,13 +55,13 @@
 22200       let report_open=1
 22400       let fnopenprn
 22600     end if  ! ~report_open
-22800     print #255: line$ ! if gl$='  6   101  0' then print #255: line$
+22800     pr #255: line$ ! if gl$='  6   101  0' then pr #255: line$
 23000   fnend 
 51670 ! ______________________________________________________________________
 51680 ! <Updateable Region: ERTN>
 51690 ERTN: let fnerror(program$,err,line,act$,"xit")
 51700   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 51710   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-51720   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+51720   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 51730 ERTN_EXEC_ACT: execute act$ : goto ERTN
 51740 ! /region

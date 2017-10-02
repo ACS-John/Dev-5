@@ -15,17 +15,17 @@
 11400 ! /r
 11500   let fntop(program$, cap$="Transaction") ! r:
 11600 ! constants
-11700   let cancel=99 : let right=1 : let limit_to_list=1 : let center=2
-11800   let ccyymmdd$='3' : let mmddyy$='1' : let number$='30'
-11900   let pointtwo$='32' : let disable=1 : let add_all=2 : let false=0
+11700   cancel=99 : let right=1 : let limit_to_list=1 : center=2
+11800   ccyymmdd$='3' : let mmddyy$='1' : let number$='30'
+11900   let pointtwo$='32' : let disable=1 : add_all=2 : let false=0
 12000   let true=1
 12100   let true$='True' : let false$='False'
 12200 ! defaults
-12300   let addloop$='True'
+12300   addloop$='True'
 12400   let fncno(cno)
 12500   let d1=val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
 12600   if d1<19999 then let d1=d1+110000 : let rollback=1 else let d1=d1-10000 : let rollback=0
-12700   let begd=(int(d1/10000)*10000)+100+val(date$('yy'))-rollback
+12700   begd=(int(d1/10000)*10000)+100+val(date$('yy'))-rollback
 12800   let endd=begd+3000
 12900   let transstartdate=date('mm')*10000+100+date('yy') ! changed default to beginning of month as per billing's suggestion on 2/9/12    ! begd
 13000   let transenddate=date('mmddyy') ! val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
@@ -72,10 +72,10 @@
 17100   let fnacs(sn$,0,mat resp$,ckey)
 17200   if ckey=5 or ckey=cancel then goto XIT
 17300   if resp$(1)='[All]' then 
-17400     let wbc=0 : let bn$='[All]'
+17400     let wbc=0 : bn$='[All]'
 17500   else 
 17600     let wbc=val(resp$(1)(1:2))
-17700     let bn$=resp$(1)(4:len(resp$(1)))
+17700     bn$=resp$(1)(4:len(resp$(1)))
 17800   end if 
 17900   if resp$(2)='[All]' then let wtt=0 else let wtt=tcdekey=val(resp$(2)(1:1))
 18000   if wtt=0 then let tcde$='[All]' else let tcde$=resp$(2)(3:len(resp$(2)))
@@ -89,11 +89,11 @@
 18800   if trim$(resp$(9))="" then goto MENU1
 18900   if wbc=0 then let wbc=1
 19000   if trim$(tcde$)="" or trim$(tcde$)="[All]" then let tcde$="1" : let tcdekey=1 ! try defaulting to check
-19100   let check_ref$=cnvrt$("pic(ZZ)",wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
+19100   check_ref$=cnvrt$("pic(ZZ)",wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
 19200   read #h_trmstr(1),using 'Form Pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey TRY_RECEIPT
 19300   let editrec=rec(h_trmstr(1)): goto DO_EDIT
 19400 TRY_RECEIPT: let tcde$="2" ! try as receipt
-19500   let check_ref$=cnvrt$("pic(ZZ)",wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
+19500   check_ref$=cnvrt$("pic(ZZ)",wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
 19600   read #h_trmstr(1),using 'Form Pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey MENU1
 19700   let editrec=rec(h_trmstr(1)): goto DO_EDIT
 19800   goto MENU1 ! /r
@@ -146,22 +146,22 @@
 24200 ! r: Transaction Allocation Grid
 24210   let fnlbl(lc=13,1,'Transaction Grid',20)
 24220   mat chdr$(11) : mat cmask$(11) : mat item$(11)
-24230   let chdr$(1)='Rec'
-24240   let chdr$(2)='Ck/Rf'
-24250   let chdr$(3)='Date'
-24260   let chdr$(4)='Amount'
-24270   let chdr$(5)='Payee'
-24280   let chdr$(6)='Name/Description'
-24290   let chdr$(7)='PC'
-24300   let chdr$(8)='Stmt Clr Date'
-24310   let chdr$(9)='SC'
-24320   let chdr$(10)='Bank'
-24330   let chdr$(11)='Type'
-24340   let cmask$(1)='20'
-24350   let cmask$(2)=''
-24360   let cmask$(3)='1'
-24370   let cmask$(4)='10'
-24380   let cmask$(8)='1'
+24230   chdr$(1)='Rec'
+24240   chdr$(2)='Ck/Rf'
+24250   chdr$(3)='Date'
+24260   chdr$(4)='Amount'
+24270   chdr$(5)='Payee'
+24280   chdr$(6)='Name/Description'
+24290   chdr$(7)='PC'
+24300   chdr$(8)='Stmt Clr Date'
+24310   chdr$(9)='SC'
+24320   chdr$(10)='Bank'
+24330   chdr$(11)='Type'
+24340   cmask$(1)='20'
+24350   cmask$(2)=''
+24360   cmask$(3)='1'
+24370   cmask$(4)='10'
+24380   cmask$(8)='1'
 25120 ! 
 25500   let fnflexinit1('ApTrans',14,1,10,100,mat chdr$,mat cmask$,1,pas)
 25600 ! if pas=1 then goto 1140  ! for pas to work properly, totals need to be adjusted for adds,corrections, and deletions
@@ -201,12 +201,12 @@
 28600   let fncmdkey('E&xit',5,0,1,"Exits the checkbook system.")
 28700   let fnacs(sn$,0,mat resp$,ckey)
 28800   if ckey=5 or ckey=cancel then goto XIT
-28900   if ckey=2 or ckey=8 then let addloopcode=1 else let addloopcode=0
+28900   if ckey=2 or ckey=8 then addloopcode=1 else addloopcode=0
 29000 ! let pas=1
 29100   if ckey=6 then let pas=0: goto SCREEN1
 29200   let wbc=val(resp$(1)(1:2)) ! working bank(s) code
-29300   let bn$=resp$(2) ! bank name
-29400   let bankbalance=val(resp$(3)) ! bank balance
+29300   bn$=resp$(2) ! bank name
+29400   bankbalance=val(resp$(3)) ! bank balance
 29500   let tcde =val(resp$(4)) ! transaction type
 29600   let tcde$=resp$(5) ! transaction description
 29700   let transstartdate=val(resp$(6))
@@ -227,7 +227,7 @@
 31300     goto ADD
 31400   else if ckey=3 then 
 31500     let ti=typeofentry=2
-31600     let allocations_messed_with=false
+31600     allocations_messed_with=false
 31700     let editrec=val(resp$(11))
 31800     goto DO_EDIT
 31900   else if ckey=1 then 
@@ -240,7 +240,7 @@
 32700 ADD: ! r:
 32800   let editrec=hamt=tr3=posting_code=clr=0
 32900   let scd=8 : let tcde=typeofentry
-33000   let bank_code=wbc
+33000   bank_code=wbc
 33100 ! tcde set by add button
 33200   let tr$(1)=tr$(3)=tr$(4)=tr$(5)='' : let tr$(2)=date$("mmddyy")
 33300   goto FM_SCREEN ! /r
@@ -287,7 +287,7 @@
 37500   do until totalamt>=val(tr$(3))
 37600     read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,gldesc$ eof EO_READSTGL
 37700     if vn$<>payeekey$ then goto EO_READSTGL
-37800     let allocamt=round(val(tr$(3))*percent*.01,2)
+37800     allocamt=round(val(tr$(3))*percent*.01,2)
 37900     let totalalloc+=percent
 38000     let totalamt+=allocamt
 38100 ! 
@@ -297,7 +297,7 @@
 38500 ! 
 38600 EO_READSTGL: ! 
 38700   if totalamt<>val(tr$(3)) then 
-38800     let allocamt-=totalamt-val(tr$(3))
+38800     allocamt-=totalamt-val(tr$(3))
 38900     rewrite #h_tralloc,using 'Form Pos 24,Pd 5.2',rec=lastrec: allocamt norec ASSIGN_IF_EMPTY
 39000 ! plug any rounding differences into last allocation
 39100   end if 
@@ -311,14 +311,14 @@
 40000   if editrec=0 then goto MENU1
 40100   read #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',rec=editrec,reserve: bank_code,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),posting_code,clr,scd ! norec MENU1
 40200   let tr$(3)=str$(tx3)
-40300   let ti=3 : let ad1=0
+40300   let ti=3 : ad1=0
 40400 ! if posting_code>0 then gosub crgl1
 40500   let hamt=val(tr$(3)) : let hkey$=key$ : let tr3=val(tr$(3))
 40600   goto FM_SCREEN ! /r
 40800 SAVE: ! r:
 40900   let save_good=false
 41000   if editrec>0 then goto EMPTY_BANK_MSG
-41100   let check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
+41100   check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
 41200   read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey EMPTY_BANK_MSG
 41300   mat ml$(1)
 41400   let ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
@@ -355,7 +355,7 @@
 44500     let ml$(1)='Your allocations have changed on a posted transaction.'
 44600     let ml$(2)='You will need to update your General Ledger!'
 44700     let fnmsgbox(mat ml$,resp$,cap$,0)
-44800     let allocations_messed_with=false
+44800     allocations_messed_with=false
 44900   end if 
 45000 ! 
 45100 ! save - update bank balance for changed amounts
@@ -402,7 +402,7 @@
 49200     rewrite #h_trmstr(1),using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1',same,reserve: bank_code,tcde,tr$(1),tr2,tx3,tr$(4),tr$(5),posting_code,clr,scd
 49300     goto L2260
 49400   end if 
-49500   let check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
+49500   check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
 49600   read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey L2250
 49700   mat ml$(1)
 49800   let ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
@@ -483,7 +483,7 @@
 57500 DELETE_TRANSACTION_DONE: ! 
 57600   return  ! /r
 57800 ADD_ALLOCATION: ! r:
-57900   let adding_allocation=1
+57900   adding_allocation=1
 58000   let trabank_code=bank_code : let tratcde=tcde
 58100   let track$=lpad$(trim$(tr$(1)),8) : let tradesc$=tr$(5)(1:12)
 58200   let tragl$=traivd$=trapo$='' : let traamt=0 : let tragde=posting_code
@@ -498,7 +498,7 @@
 59200   end if 
 59300 L2670: return  ! /r
 59500 FM_ALLOCATION: ! r:
-59600   let allocations_messed_with=true
+59600   allocations_messed_with=true
 59700   let fntos(sn$='Trans-TrAlloc')
 59800   let lc=0 : let mylen=22 : let mypos=mylen+2
 59900   let fnlbl(lc+=1,1,'Bank:',mylen,right)
@@ -555,7 +555,7 @@
 65000   end if 
 65100   goto EO_ALLOC ! /r
 65200 EO_ALLOC: ! 
-65300   let adding_allocation=0
+65300   adding_allocation=0
 65400   return  ! /r
 65600 SAVE_ALLOC: ! r:
 65700   let track$=lpad$(trim$(track$),8)
@@ -566,7 +566,7 @@
 66200   end if 
 66300   return  ! /r
 66500 DEL_ALLOCATION: ! r: uses allocrec
-66600   let allocations_messed_with=true
+66600   allocations_messed_with=true
 66700   delete #h_tralloc,rec=allocrec: norec DEL_ALLOCATION_NOREC
 66800   return  ! /r
 67000 DEL_ALLOCATION_NOREC: ! r:
@@ -630,28 +630,28 @@
 72900   let resp$(9)=str$(clr)
 73000 !  r: the transaction allocation grid
 73300   mat chdr$(7) : mat cmask$(7) : mat item$(7)
-73310   let chdr$(1)='Rec'
-73320   let chdr$(2)='GL Account'
-73330   let chdr$(3)='Amount'
-73340   let chdr$(4)='Description'
-73350   let chdr$(5)='Invoice'
-73360   let chdr$(6)='PO Number'
-73370   let chdr$(7)='PC'
+73310   chdr$(1)='Rec'
+73320   chdr$(2)='GL Account'
+73330   chdr$(3)='Amount'
+73340   chdr$(4)='Description'
+73350   chdr$(5)='Invoice'
+73360   chdr$(6)='PO Number'
+73370   chdr$(7)='PC'
 73372   mat cmask$=("")
-73380   let cmask$(1)='30'
-73390   let cmask$(2)=''
-73400   let cmask$(3)='10'
-73410   let cmask$(5)=''
+73380   cmask$(1)='30'
+73390   cmask$(2)=''
+73400   cmask$(3)='10'
+73410   cmask$(5)=''
 73900   let fnflexinit1('TrAlloc-tran2',16,1,4,90,mat chdr$,mat cmask$,1)
-74000   let allocationstotal=0
+74000   allocationstotal=0
 74100 ! let fnflexinit1('TrAlloc-'&str$(bank_code)&'-'&str$(tcde)&'-'&trim$(tr$(1)),13,1,7,80,mat chdr$,mat cmask$,1)
-74200 ! let allocationstotal=0
+74200 ! allocationstotal=0
 74300   let key$=cnvrt$('pic(ZZ)',bank_code)&str$(tcde)&lpad$(trim$(tr$(1)),8)
 74400   restore #h_tralloc,key>=key$: nokey EO_FLEX2
 74500 READ_TRALLOC_1: ! 
 74600   read #h_tralloc,using 'Form Pos 1,C 11,C 12,pd 5.2,C 30,G 6,X 3,C 12,G 1': newkey$,item$(2),tmp,item$(4),item$(5),item$(6),item$(7) eof EO_FLEX2
 74700   if key$<>newkey$ then goto EO_FLEX2
-74800   let allocationstotal+=tmp
+74800   allocationstotal+=tmp
 74900   let item$(1)=str$(rec(h_tralloc))
 75000   let item$(3)=str$(tmp)
 75100   let fnflexadd1(mat item$)
@@ -680,7 +680,7 @@
 78080   else if ckey=5 or ckey=cancel then 
 78100     goto MENU1
 78120   else if ckey=1 or ckey=4 or ckey=6 or ckey=7 or ckey=8 or ckey=9 then 
-78140     let bank_code=val(resp$(1)(1:2))
+78140     bank_code=val(resp$(1)(1:2))
 78160     let tcde=val(resp$(2)(1:1))
 78180     let tr$(1)=lpad$(resp$(3),8)
 78200     let tr$(2)=resp$(4)
@@ -688,7 +688,7 @@
 78240     let tr$(4)=lpad$(trim$(resp$(6)(1:8)),8)
 78260     let tr$(5)=resp$(7)
 78280     let posting_code=val(resp$(8)(1:1))
-78300     let clr=val(resp$(9))
+78300     clr=val(resp$(9))
 78320   end if 
 78340   if ckey=1 and allocationstotal<>val(resp$(5)) then 
 78360     mat ml$(3)
@@ -705,12 +705,12 @@
 78580     goto FM_SCREEN
 78600   end if 
 78620   if ckey=6 then 
-78640     let allocrec=val(resp$(10))
+78640     allocrec=val(resp$(10))
 78660     gosub DEL_ALLOCATION
 78680     goto FM_SCREEN
 78700   end if 
 80500   if holdtr1$=tr$(1) and editrec>0 then goto L3780 ! r: duplicate transaction?
-80600   let check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
+80600   check_key$=cnvrt$("pic(ZZ)",wbc)&str$(tcde)&lpad$(rtrm$(tr$(1)),8)
 80700   read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey L3780
 80800   mat ml$(1)
 80900   let ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
@@ -723,7 +723,7 @@
 81120     gosub FM_ALLOCATION
 81140     goto FM_SCREEN
 81160   else if ckey=7 then 
-81180     let allocrec=val(resp$(10))
+81180     allocrec=val(resp$(10))
 81200     gosub READ_ALLOCATION
 81220     gosub FM_ALLOCATION
 81240     goto FM_SCREEN
@@ -742,7 +742,7 @@
 81500   if save_good=false then goto FM_SCREEN
 81520   if ckey=9 then gosub STANDARD_BREAKDOWN : goto FM_SCREEN ! the record must be good save first!!!
 81540   if trim$(check_ref$)<>"" then 
-81560     let check_ref$=""
+81560     check_ref$=""
 81580     goto SCREEN1
 81600   else if editrec<>0 then ! return to main screen after edit
 81620     goto MENU1
@@ -765,7 +765,7 @@
 85600 ERTN: let fnerror(program$,err,line,act$,"xit")
 85700   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 85800   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-85900   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+85900   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 86000 ERTN_EXEC_ACT: execute act$ : goto ERTN
 86100 ! </updateable region: ertn>
 86300 XIT: let fnxit

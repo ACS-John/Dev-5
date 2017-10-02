@@ -14,9 +14,9 @@
 00110 ! ______________________________________________________________________
 00120     restore #file_num: 
 00130     let fntos(sn$="CustomerSrch")
-00140     let ch$(1)="Employee" : let ch$(2)="Name" : let ch$(3)="Address" !:
-          let ch$(4)="City, ST Zip" !:
-          let ch$(5)="SS Number" : let ch$(6)="Phone" !:
+00140     ch$(1)="Employee" : ch$(2)="Name" : ch$(3)="Address" !:
+          ch$(4)="City, ST Zip" !:
+          ch$(5)="SS Number" : ch$(6)="Phone" !:
           mat ch$(6) : mat cm$(6)
 00160     let usefile=0 ! if fixgrid=99 then let usefile=0 else let usefile=1 !:
           ! set to rebuild grid file only as you exit prfm and the !:
@@ -30,7 +30,7 @@
 00230 ! ______________________________________________________________________
 00240 ERR_READ: ! 
 00250     if err<>61 then goto ERTN
-00260     print 'Record locked during employee_search flexgrid creation'
+00260     pr 'Record locked during employee_search flexgrid creation'
 00264     read #file_num,release: 
 00266     goto READ_FILE
 00270 ! ______________________________________________________________________
@@ -45,7 +45,7 @@
 00350 ERTN: let fnerror(program$,err,line,act$,"xit")
 00360     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00370     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00380     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00380     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00390 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00400 ! /region
 00410 ! ______________________________________________________________________

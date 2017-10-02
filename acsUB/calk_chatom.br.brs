@@ -96,7 +96,7 @@
 18900 STAX_END: return  ! /r
 19000 PENALTY: ! r:
 19002     if a(7)=9 then goto PENALTY_END ! CALCULATE PENALTY
-19100     let a(7)=1 ! defalt to code 1
+19100     a(7)=1 ! defalt to code 1
 19200     read #ratemst,using FORM_RATEMSTR, key="PN"&lpad$(str$(a(7)),2): mc1,mu1,mat rt nokey PENALTY_END
 19300     let g(10)=mc1 ! standard penalty
 19400 PENALTY_END: return  ! /r

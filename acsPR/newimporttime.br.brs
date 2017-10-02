@@ -52,7 +52,7 @@
 00510   read #1,using L520,key=lpad$(str$(eno),8): prname$ nokey MESSAGE2
 00520 L520: form pos 9,c 30
 00530 L530: form pos 1,n 8,n 3,n 5,6*pd 5.2
-00540   print #255,using L550: eno,name$(1:27),dep,reghrs,othrs,vachrs,sickhrs,holhrs pageoflow PAGE_O_FLOW
+00540   pr #255,using L550: eno,name$(1:27),dep,reghrs,othrs,vachrs,sickhrs,holhrs pageoflow PAGE_O_FLOW
 00550 L550: form pos 1,n 8,x 1,c 27,x 1,n 3,5*n 10.2
 00560   goto L410
 00570 L570: ! thru
@@ -64,7 +64,7 @@
 00630 ERTN: let fnerror(program$,err,line,act$,"xit")
 00640   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00650   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00660   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00660   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00670 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00680 ! /region
 00690 ! ______________________________________________________________________
@@ -86,11 +86,11 @@
         let fnmsgbox(mat ml$,resp$,cap$,48)
 00760   goto L410
 00770 HDR: ! 
-00780   print #255,using L790: time$,env$('cnam'),date$,"Time Card Summary",cnvrt$("pic(zzzz/zz/zz)",endingdate)
+00780   pr #255,using L790: time$,env$('cnam'),date$,"Time Card Summary",cnvrt$("pic(zzzz/zz/zz)",endingdate)
 00790 L790: form skip 2,pos 1,c 20,pos 20,cc 40,skip 1,pos 1,c 20,pos 20,cc 40,skip 1,pos 20,cc 40,skip 2
-00800   print #255: "Employee  Name                        Dep  Regular  Overtime  Vacation      Sick   Holiday"
+00800   pr #255: "Employee  Name                        Dep  Regular  Overtime  Vacation      Sick   Holiday"
 00810   return 
 00820 PAGE_O_FLOW: ! 
-00830   print #255: newpage
+00830   pr #255: newpage
 00840   gosub HDR
 00850   continue 

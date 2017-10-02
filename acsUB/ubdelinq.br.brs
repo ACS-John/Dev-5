@@ -91,25 +91,25 @@
 00720     if trim$(servicename$(j))<>"" then let detail(x+=1)=gb(j)
 00730 L730: next j
 00740   let detail(x+1)=sum(gb)
-00750   print #255,using L760: z$,e$(1:20),mat detail pageoflow L990
+00750   pr #255,using L760: z$,e$(1:20),mat detail pageoflow L990
 00760 L760: form pos 1,c 12,c 21,11*n 10.2
 00770   mat t=t+detail
 00780   goto L570
 00790 ! ______________________________________________________________________
 00800 HEADER: ! 
-00810   print #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
-00820   print #255: "\qc  {\f181 \fs22 \b "&env$('program_caption')&"}"
-00830   print #255: "\qc {\f181 \fs18 \b As of "&cnvrt$("pic(zz/zz/zz)",d1)&"}"
+00810   pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
+00820   pr #255: "\qc  {\f181 \fs22 \b "&env$('program_caption')&"}"
+00830   pr #255: "\qc {\f181 \fs18 \b As of "&cnvrt$("pic(zz/zz/zz)",d1)&"}"
 00840   let pagetab=41+services*10
-00850   print #255,using L860: "\ql "&date$,"Page "&str$(p2+=1)
+00850   pr #255,using L860: "\ql "&date$,"Page "&str$(p2+=1)
 00860 L860: form pos 1,c 20,pos pagetab,c 10
-00870   print #255: hdr$&" {\ul     Total}"
+00870   pr #255: hdr$&" {\ul     Total}"
 00880   return 
 00890 ! ______________________________________________________________________
 00900 PRINT_TOTALS: ! 
-00910   print #255: "" !:
-        print #255: "" !:
-        print #255,using L760: "","****** Grand Totals",mat t
+00910   pr #255: "" !:
+        pr #255: "" !:
+        pr #255,using L760: "","****** Grand Totals",mat t
 00920   return 
 00930 ! ______________________________________________________________________
 00940 DONE: close #1: ioerr L960
@@ -117,7 +117,7 @@
 00960 L960: let fncloseprn
 00970 XIT: let fnxit
 00980 ! ______________________________________________________________________
-00990 L990: print #255: newpage
+00990 L990: pr #255: newpage
 01000   gosub HEADER
 01010   continue 
 01020 ! ______________________________________________________________________
@@ -125,7 +125,7 @@
 01040 ERTN: let fnerror(program$,err,line,act$,"xit")
 01050   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01070   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01070   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01080 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01090 ! /region
 01100 ! ______________________________________________________________________

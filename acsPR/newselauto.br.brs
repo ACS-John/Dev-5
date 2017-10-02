@@ -37,10 +37,10 @@
 00350     if qt(j)=1 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
 00360   next j
 00370   mat chdr$(2) : mat cmask$(2) : mat item$(2) !:
-        let chdr$(1)='Item #' !:
-        let chdr$(2)='Menu option'
-00380   let cmask$(1)='30' !:
-        let cmask$(2)='' !:
+        chdr$(1)='Item #' !:
+        chdr$(2)='Menu option'
+00380   cmask$(1)='30' !:
+        cmask$(2)='' !:
         let fnflexinit1('selauto',2,55,20,35,mat chdr$,mat cmask$,1,0,frame) !:
         let editrec=0
 00390   close #1: ioerr L400
@@ -103,7 +103,7 @@
 00870 ERTN: let fnerror(program$,err,line,act$,"xit")
 00880   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00890   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00900   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00900   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00910 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00920 ! /region
 00930 ! ______________________________________________________________________

@@ -14,13 +14,13 @@
 00130 ! ______________________________________________________________________
 00140     restore #file_num: 
 00150     let fntos(sn$="AccountSrch")
-00160     let ch$(1)="Account" : let ch$(2)="Description" : let ch$(3)="Balance" !:
-          let ch$(4)="B/S Ref" : let ch$(5)="B/S Ref2" !:
-          let ch$(6)="I/C Ref" : let ch$(7)="I/C Ref2" !:
-          let ch$(8)="Fund Ref" : let ch$(9)="Fund Ref2" !:
+00160     ch$(1)="Account" : ch$(2)="Description" : ch$(3)="Balance" !:
+          ch$(4)="B/S Ref" : ch$(5)="B/S Ref2" !:
+          ch$(6)="I/C Ref" : ch$(7)="I/C Ref2" !:
+          ch$(8)="Fund Ref" : ch$(9)="Fund Ref2" !:
           mat ch$(9) : mat cm$(9) : mat cm$(9) !:
-          let cm$(1)=cm$(2)="80": let cm$(3)="10" !:
-          let cm$(4)=cm$(5)=cm$(6)=cm$(7)=cm$(8)=cm$(9)="30"
+          cm$(1)=cm$(2)="80": cm$(3)="10" !:
+          cm$(4)=cm$(5)=cm$(6)=cm$(7)=cm$(8)=cm$(9)="30"
 00170     if fixgrid=99 then let usefile=0 else let usefile=1 !:
             ! set to rebuild grid file only as you exit ubfm and the !:
             ! fixgrid code has been changed to necessary
@@ -37,8 +37,8 @@
 00280 ! ______________________________________________________________________
 00290 ERR_READ: ! 
 00300     if err<>61 then goto ERTN
-00310     print 'Record locked during Account_Search flexgrid creation' !:
-          print 'It was skipped' !:
+00310     pr 'Record locked during Account_Search flexgrid creation' !:
+          pr 'It was skipped' !:
           read #file_num,release: !:
           goto READ_FILE
 00320 ! ______________________________________________________________________
@@ -53,7 +53,7 @@
 00400 ERTN: let fnerror(program$,err,line,act$,"xit")
 00410     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00420     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00430     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00430     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00440 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00450 ! /region
 00460 ! ______________________________________________________________________

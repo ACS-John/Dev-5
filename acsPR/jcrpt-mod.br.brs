@@ -15,12 +15,12 @@
         let fndat(dh$)
 00038 ! 
 00040 ! ______________________________________________________________________
-00050   print newpage
+00050   pr newpage
 00055   if fnprocess=1 then goto L90
 00056 ! ______________________________________________________________________
 00060   let fnopenwin(win=101,10,18,14,61,cap$)
-00062   print #win,fields "4,2,C 20,N": "Report Heading Date:"
-00064   print fields "15,34,C 09,B,5": "Exit (F5)"
+00062   pr #win,fields "4,2,C 20,N": "Report Heading Date:"
+00064   pr fields "15,34,C 09,B,5": "Exit (F5)"
 00066   rinput #win, fields "4,23,C 20,UT,N": dh$
 00068   close #win: ioerr L69
 00069 L69: let fndat(dh$,put=2)
@@ -28,9 +28,9 @@
 00075 ! ______________________________________________________________________
 00080   let fndat(dh$,2)
 00088 ! ______________________________________________________________________
-00090 L90: print newpage !:
+00090 L90: pr newpage !:
         let fnwait(102,cap$,message$="Printing: please wait...",1) !:
-        print fields "15,34,C 09,B,5": "Exit (F5)" !:
+        pr fields "15,34,C 09,B,5": "Exit (F5)" !:
         on fkey 5 goto EOF1
 00103   let fnopenprn !:
         if file$(255)(1:3)<>"PRN" then let jbskip=1
@@ -51,13 +51,13 @@
 00280   gosub HDR
 00290   goto PRTRPT
 00291 ! ______________________________________________________________________
-00300 PGOF: print #255: newpage : gosub HDR : continue 
+00300 PGOF: pr #255: newpage : gosub HDR : continue 
 00321 ! ______________________________________________________________________
-00330 HDR: print #255: 
-00340   print #255,using L350: aa$,rtrm$(rt$),dh$
+00330 HDR: pr #255: 
+00340   pr #255,using L350: aa$,rtrm$(rt$),dh$
 00350 L350: form pos h1,c 40,skip 1,pos h2,c i2,skip 1,pos h3,c 20,skip 2
-00360   print #255: ch$(1)
-00370   print #255: ch$(2)
+00360   pr #255: ch$(1)
+00370   pr #255: ch$(2)
 00380   return 
 00381 ! ______________________________________________________________________
 00390 EOF1: ! 
@@ -77,7 +77,7 @@
 19831 L19831: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2
 19832   goto L19834
 19833   read #2,using L19831: cn$,k$,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24 eof L25050
-19834 L19834: let cn=val(cn$(7:11))
+19834 L19834: cn=val(cn$(7:11))
 19835   if cn$(1:6)><jn1$ and sd=1 then goto L19900
 19836   if cn$(1:6)><jn1$ and sd=0 then goto L20000
 19849 ! ______________________________________________________________________
@@ -92,7 +92,7 @@
 50001 ERTN: let fnerror(program$,err,line,act$,"xit")
 50002   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 50003   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50004   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+50004   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50005 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50006 ! /region
 50007 ! ______________________________________________________________________

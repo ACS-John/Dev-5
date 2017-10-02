@@ -160,10 +160,10 @@
 01610   chain "S:\acsTM\ARINPSCR"
 01620   dim z$*5,a$(5)*30,ph$*12,ss$*11,dd(10),sc(10),ca(10),ar(5)
 01630   dim ph2$*12,ss2$*11,cm$*70
-01640   print newpage
+01640   pr newpage
 01650   let scrid$(1)="  TIME MANAGEMENT KDKDKDKD"
 01660   let scrid$(2)=" FDAS;JFDASKJLFDSKJALFDASKJLFDSKJL"
-01670   print fields mat fl1$: mat scr1$,mat scrid$
+01670   pr fields mat fl1$: mat scr1$,mat scrid$
 01680   input fields mat oi1$: clinum,mat a$,ph$,ss$,pno,mye,ph2$,ss2$,mat ar,cm$,mat dd,mat sc
 01690   pause 
 01700   dim flit$(6)*18,scrt$(6)*20,scrz$(2)*79,desc$(8)*18
@@ -196,16 +196,16 @@
 01970   let flh$(21)="1,25,C 40,H,N"
 01980   let flh$(22)="24,5,C 65,H,N"
 01990   return 
-02000 L2000: if err=61 then print fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2020
+02000 L2000: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2020
 02010   goto L2060
-02020 L2020: print newpage
-02030   if err=4148 then print fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2050
+02020 L2020: pr newpage
+02030   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2050
 02040   goto L2060
-02050 L2050: print fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-02060 L2060: print fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+02050 L2050: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+02060 L2060: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 02070   input fields "24,60,C 1,N": quitcode$
 02080   if rtrm$(uprc$(quitcode$))="Q" then goto L2120
-02090   print fields "23,3,C 78,N": ""
-02100   print fields "24,3,C 78,N": ""
+02090   pr fields "23,3,C 78,N": ""
+02100   pr fields "24,3,C 78,N": ""
 02110   retry 
 02120 L2120: chain "S:\Core\Menu"

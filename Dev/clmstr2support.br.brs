@@ -42,14 +42,14 @@
 26400   let z$=lpad$(str$(ano),5)
 26600   do 
 26800     read #1,using FORM_CLMSTR: z$,mat a$,ph$,ss$,pno,mye,mat dd,mat sc,mat ca,ph2$,ss2$,mat ar,mat arta,cm$,mat app,mat ma,mat ap2,mat ma2 eof EO_CLMSTR
-27000     let client_id=val(z$)
+27000     client_id=val(z$)
 27200 ! IF client_id=1500 then pr client_id : pause
 27400     if sum(ma)>0 then 
 27600       let which_app=fn_first_item_gtr_than_one(mat ma)
 27800       if which_app>0 then 
 28000         let ma(which_app)=ma(which_app)-1
 28200         let ma(19)=1
-28400         let app(19)=1
+28400         app(19)=1
 28600       end if  ! which_app>0
 28800     end if  ! sum(app)>0
 29000     for app_item=1 to udim(mat app)

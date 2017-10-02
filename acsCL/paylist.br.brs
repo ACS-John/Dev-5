@@ -16,7 +16,7 @@
 00160   open #2: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PAYIDX2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00170   open #trmstr2=31: "Name="&env$('Q')&"\CLmstr\TRMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TRIDX2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00180   open #payeegl=3: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&str$(cno)&",Shr",internal,outin,keyed 
-00190   print newpage
+00190   pr newpage
 00200   let fntos("ubnamlst") !:
         let respc=0
 00210   let text$="Report Heading Date:" !:
@@ -43,9 +43,9 @@
 00340   let dat$=resp$(1)
 00350   let seq$=resp$(2)(1:1)
 00360   let fndat(dat$,2)
-00370   if resp$(3)(1:1)="T" then let printgl=1 else let printgl=0 ! print general ledger breakdowns
-00380   if resp$(4)(1:1)="T" then let printtotal=1 else let printtotal=0 ! print total payments
-00390   let begdate=val(resp$(5))
+00370   if resp$(3)(1:1)="T" then let printgl=1 else let printgl=0 ! pr general ledger breakdowns
+00380   if resp$(4)(1:1)="T" then let printtotal=1 else let printtotal=0 ! pr total payments
+00390   begdate=val(resp$(5))
 00400   let enddate=val(resp$(6)) ! ending date for adding purchases for period of time
 00410   let namtab=66-int(len(rtrm$(cnam$))/2)
 00420   let dattab=66-int(len(rtrm$(dat$))/2)
@@ -65,25 +65,25 @@
 00550   let transactionstotal+=tr3
 00560   goto READ_TRMSTR2
 00570 EO_FLEX2: ! 
-00580 L580: if printtotal= 0 then print #255,using L690: vn$,nam$,ad1$,ad2$(1:25),csz$,ph$ else print #255,using L690: vn$,nam$,ad1$,ad2$(1:25),csz$,ph$,transactionstotal pageoflow L710
+00580 L580: if printtotal= 0 then pr #255,using L690: vn$,nam$,ad1$,ad2$(1:25),csz$,ph$ else pr #255,using L690: vn$,nam$,ad1$,ad2$(1:25),csz$,ph$,transactionstotal pageoflow L710
 00590   if printgl<>1 then goto L690
 00600   restore #payeegl,key>=vn$: nokey EO_TEST
 00610 READ_STANDARD_BREAKDOWNS: ! 
 00620   read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,gldesc$ eof EO_TEST
 00630   if vn$<>payeekey$ then goto EO_TEST
 00640   if trim$(payeegl$)="" or payeegl$="  0     0   0" then goto EO_TEST
-00650   print #255,using L660: payeegl$,percent,gldesc$
+00650   pr #255,using L660: payeegl$,percent,gldesc$
 00660 L660: form pos 11,c 12,x 2,pic(----.zz),x 2,c 30,skip 1
 00670   goto READ_STANDARD_BREAKDOWNS
 00680 EO_TEST: ! 
 00690 L690: form pos 1,c 8,x 2,2*c 30,c 25,c 30,c 12,pic($$$$,$$$.## cr),skip 1
 00700   goto L450
-00710 L710: print #255: newpage: gosub L730
+00710 L710: pr #255: newpage: gosub L730
 00720   continue 
-00730 L730: print #255,using L740: date$('mm/dd/yy'),cnam$,time$,"Payee Listing",dat$
+00730 L730: pr #255,using L740: date$('mm/dd/yy'),cnam$,time$,"Payee Listing",dat$
 00740 L740: form pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 60,c 20,skip 1,pos dattab,c 20,skip 2
-00750   print #255: "Payee No  Payee Name                    Address                       Address                  City, State Zip              Phone"
-00760   print #255: "________  __________________________    __________________________    _____________________    ___________________________  ____________"
+00750   pr #255: "Payee No  Payee Name                    Address                       Address                  City, State Zip              Phone"
+00760   pr #255: "________  __________________________    __________________________    _____________________    ___________________________  ____________"
 00770   form pos 1,c 132,skip 1
 00780   return 
 00790 L790: let fncloseprn
@@ -95,6 +95,6 @@
 00850 ERTN: let fnerror(program$,err,line,act$,"xit")
 00860   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00870   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00880   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00880   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00890 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00900 ! /region

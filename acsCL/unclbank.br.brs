@@ -7,7 +7,7 @@
 00070 ! ______________________________________________________________________
 00080   let fntop(program$, cap$="Unclear All Entries by Bank")
 00090   let fncno(cno,cnam$)
-00100   let cancel=99 : let right=1 : let center=2 : let on=1 : let off=0 !:
+00100   cancel=99 : let right=1 : center=2 : let on=1 : let off=0 !:
         let limit_to_list=1
 00110 ! ______________________________________________________________________
 00120   let fntos(sn$='UnClBank1') !:
@@ -20,8 +20,8 @@
 00170   let fncmdset(2)
 00180   let fnacs(sn$,0,mat resp$,ckey)
 00190   if ckey=5 then goto XIT
-00200   let bc1=val(resp$(1)(1:2))
-00210   let clrdate=val(resp$(2))
+00200   bc1=val(resp$(1)(1:2))
+00210   clrdate=val(resp$(2))
 00220 ! ______________________________________________________________________
 00230   open #trmstr=2: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
 00240 READ_2: ! 
@@ -37,7 +37,7 @@
 00330 ERTN: let fnerror(program$,err,line,act$,"xit")
 00340   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00350   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00360   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00370 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00380 ! /region
 00390 ! ______________________________________________________________________

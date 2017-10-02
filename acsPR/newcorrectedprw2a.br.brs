@@ -19,14 +19,14 @@
 00220   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00230   read #1,using L240: mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed
 00240 L240: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 618,10*n 1,pos 638,10*n 1
-00250   for j=1 to 3: let a$(j)=a$(j)(1:30): next j
+00250   for j=1 to 3: a$(j)=a$(j)(1:30): next j
 00260   close #1: 
 00270   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 00280 DATE_SCREEN: ! 
 00290 L290: let fntos(sn$="W2-1") !:
         let rc=cf=0: let mylen=25 : let mypos=mylen+3
 00300   let fnfra(1,1,3,50,"Date Range for W2's","Normally this would the first and last day of the calendar year",0) !:
-        let cf+=1 : let fratype=cf
+        cf+=1 : let fratype=cf
 00310   let fnlbl(1,1,"Starting Date:",mylen,1,0,1)
 00320   let fntxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1) !:
         let resp$(rc+=1)=str$(beg_date)
@@ -37,7 +37,7 @@
 00360   let fncmdkey("Cancel",5,0,1,"Returns to menu")
 00370   let fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
-00380   let beg_date=val(resp$(1))
+00380   beg_date=val(resp$(1))
 00390   let end_date=val(resp$(2))
 00400   let taxyear=val(resp$(2)(1:4))
 00410   if beg_date=0 or end_date=0 then goto L290
@@ -48,13 +48,13 @@
         let w1=4 !:
         let namcde$="F" !:
         let topmargin=13 !:
-        let bottom=141 !:
+        bottom=141 !:
         let posx=130
 00430 ASK_INFO: ! 
 00440   let fntos(sn$="Prw2-2") !:
         let rc=cf=0: let mylen=46: let mypos=mylen+3
 00450   let fnfra(1,1,5,60,"Print W-2s","This W-2 program prints to preprinted W2 forms coded with 22222.",0) !:
-        let cf+=1 : let franum=cf
+        cf+=1 : let franum=cf
 00460   let fnlbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
 00470   let fntxt(1,mypos,10,0,1,"34",0,"Use format such as .062.",franum) !:
         let resp$(rc+=1)=str$(ssrate)
@@ -67,14 +67,14 @@
 00520   let fnlbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
 00530   let fntxt(5,mypos,10,0,1,"10",0,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum) !:
         let resp$(rc+=1)=str$(mcmax)
-00540   let fnfra(8,1,3,60,"Printing or Exporting","You have the option to either print the W-2s or export them to another system for printing.") !:
-        let cf+=1 : let franum=cf : let mylen=26 : let mypos=mylen+2
+00540   let fnfra(8,1,3,60,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.") !:
+        cf+=1 : let franum=cf : let mylen=26 : let mypos=mylen+2
 00550   let fnopt(1,3,"Print W-2",0,franum) !:
         let resp$(rc+=1)="True"
 00560   let fnopt(2,3,"Export to another system",0,franum) !:
         let resp$(rc+=1)="False"
 00570   let fnfra(13,1,3,60,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.") !:
-        let cf+=1 : let franum=cf
+        cf+=1 : let franum=cf
 00580   let fnlbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
 00590   let fntxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum) !:
         let resp$(rc+=1)=str$(pn1)
@@ -84,10 +84,10 @@
 00620   let fnlbl(18,1,"Employee Name Format-(F)irst name 1st; (L)ast name 1st:",57,1,0,0)
 00630   let fntxt(18,60,1,0,1,"",0,"Is the first name shown first in the employee record or is the Last name shoun first. Indicate with an F or an L.",0) !:
         let resp$(rc+=1)=namcde$
-00640   let fnfra(20,1,3,60,"W-2 Alignment","You can move the print up or down on either W-2 by increasing or decreasing the millimeters on the top margin.") !:
-        let cf+=1 : let franum=cf
+00640   let fnfra(20,1,3,60,"W-2 Alignment","You can move the pr up or down on either W-2 by increasing or decreasing the millimeters on the top margin.") !:
+        cf+=1 : let franum=cf
 00650   let fnlbl(1,1,"Top Margin - Top W-2:",mylen,1,0,franum)
-00660   let fntxt(1,mypos,3,0,1,"30",0,"Decrease the top margin to move the print up. Increase the top margin to move the W-2 down.",franum) !:
+00660   let fntxt(1,mypos,3,0,1,"30",0,"Decrease the top margin to move the pr up. Increase the top margin to move the W-2 down.",franum) !:
         let resp$(rc+=1)=str$(topmargin)
 00670   let fnlbl(2,1,"Top Margin - Bottom W-2:",mylen,1,0,franum)
 00680   let fntxt(2,mypos,3,0,1,"30",0,"The spacing on the bottom W-2 is controlled seperate from the top W-2.",franum) !:
@@ -109,7 +109,7 @@
 00810   let dc1=val(resp$(8))
 00820   let namcde$=resp$(9)
 00830   let topmargin=val(resp$(10))
-00840   let bottom=val(resp$(11))
+00840   bottom=val(resp$(11))
 00850   let posx=val(resp$(12))
 00860   let med$="Y"
 00870   gosub L5540
@@ -127,7 +127,7 @@
 00990 L990: form pos 1,n 10.2,2*n 1
 01000   open #14: "Name="&env$('Q')&"\PRmstr\W2Box16.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\W2Index.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1030
 01010   let z$="NO" ! 1/12/90
-01020   let box16=1
+01020   box16=1
 01030 L1030: if loccode=0 then goto ASK_STARTING else goto L2310
 01040 L1040: read #1,using L1130: eno,mat k$,ss$,em6,ta eof L2090
 01050   if endnum>0 and eno>endnum then goto L2090 ! ending employee number entered
@@ -142,7 +142,7 @@
 01140   if numb=0 then goto L1160
 01150   if eno<empno then goto L1040
 01160 L1160: let first=1
-01170   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+01170   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 01180   restore #4,key>=checkkey$: nokey L1040
 01190 L1190: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L1650
 01200   if heno<>eno then goto L1650
@@ -281,7 +281,7 @@
 02490   let fnlbl(2,1,"Ending Employee Number (blank for all):",mylen,1,0,0)
 02500   let fncmbemp(2,mypos) !:
         let resp$(respc+=1)=""
-02510   let fnlbl(4,mypos2,"To print a single W2, use the same starting and ending number.",mylen2,0,0,0)
+02510   let fnlbl(4,mypos2,"To pr a single W2, use the same starting and ending number.",mylen2,0,0,0)
 02560   let fnlbl(9,mypos2," ",mylen2,0,0,0)
 02570   let fncmdkey("&Next",1,1,0,"Proceed to next screen.") !:
         let fncmdkey("&Complete",5,0,1,"Returns to menu")
@@ -323,131 +323,131 @@
 02900 ! ___________________________________________
 02910 TOT1: mat k$=(""): let ss$=stcode$=state$=pf$="": let eno=0: let k$(1)="Total Sheet"
 02920   let x$=" ": let p1=58: let p2=126
-02930 PRINTW2: ! PRINT W2 FORM
+02930 PRINTW2: ! pr W2 FORM
 02940   gosub ASK_OLD_INFO
-02950   let column1=15 !:
-        let column2=60 !:
-        let column3=113 !:
-        let column4=160
+02950   column1=15 !:
+        column2=60 !:
+        column3=113 !:
+        column4=160
 02960   let inc=0
-02970   print #20: 'Call Print.MyFontSize(10)'
+02970   pr #20: 'Call Print.MyFontSize(10)'
 02980   let txt$=ss$
-02990   let lyne+=4.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+02990   let lyne+=4.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03000   let txt$=str$(taxyear)
-03010   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03010   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03020   let txt$=a$(1)
-03030   let lyne=lyne+4.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03030   let lyne=lyne+4.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03040   let txt$=a$(2)
-03050   let lyne=lyne+8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03050   let lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03060   let txt$=a$(3)
-03070   let lyne=lyne+8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03070   let lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03080   if trim$(oldss$)<>trim$(ss$) then goto L3090 else goto L3110
 03090 L3090: let txt$=oldss$
-03100   let lyne+=3: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03100   let lyne+=3: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03110 L3110: let txt$=b$
-03120   let lyne=lyne+8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03120   let lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03130   let txt$= trim$(first$)&" "&trim$(mid$)(1:1)
-03140   let lyne=lyne+8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03140   let lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03150   let txt$=last$
-03160   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03160   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03170   let txt$=k$(2)
-03180   let lyne=lyne+5.3: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03180   let lyne=lyne+5.3: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03190   let txt$=k$(3)
-03200   let lyne=lyne+8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03200   let lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03210   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(2))
-03220   let lyne=lyne+17: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03220   let lyne=lyne+17: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03230   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(2))
-03240   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03240   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03250   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(1))
-03260   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03260   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03270   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(1))
-03280   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03280   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03290   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(5))
-03300   let lyne+=8: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03300   let lyne+=8: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03310   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(5))
-03320   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03320   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03330   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(3))
-03340   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03340   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03350   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(3))
-03360   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03360   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03370   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(11))
-03380   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03380   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03390   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(11))
-03400   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03400   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03410   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(12))
-03420   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03420   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03430   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(12))
-03440   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03440   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03450   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(6))
-03460   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03460   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03470   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(6))
-03480   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03480   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03490   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(4))
-03500   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03500   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03510   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(4))
-03520   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03520   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03530   let txt$=cnvrt$("pic(zz,zzz,zzz.##",dcb)
-03540   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03540   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03550   let txt$=cnvrt$("pic(zz,zzz,zzz.##",olddcb)
-03560   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03560   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03570   let txt$=desc$(1)
-03580   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03580   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03590   let txt$=box1a$&"  "&cnvrt$("pic(zz,zzz,zzz.##",box1)
-03600   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
+03600   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
 03610   let txt$=desc$(3)
-03620   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03620   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03630   let txt$=box2b$&"  "&cnvrt$("pic(zz,zzz,zzz.##",box2)
-03640   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
+03640   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
 03650   let txt$=px$
-03660   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(posx)&','&str$(lyne)&')'
+03660   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(posx)&','&str$(lyne)&')'
 03670   if posx<51 then goto L3700
 03680   let txt$=px$
-03690   print #20: 'Call Print.AddText("'&txt$&'",'&str$(posx-50)&','&str$(lyne)&')'
+03690   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(posx-50)&','&str$(lyne)&')'
 03700 L3700: let txt$=desc$(4)
-03710   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03710   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03720   let txt$=box3c$&"  "&cnvrt$("pic(zz,zzz,zzz.##",box3)
-03730   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
+03730   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
 03740   let txt$=desc$(5)
-03750   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03750   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03760   let txt$=box4d$&"  "&cnvrt$("pic(zz,zzz,zzz.##",box4)
-03770   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
+03770   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
 03780 ! Let TXT$=DESC$(6)
-03790 ! Let LYNE=LYNE+8.5: Print #20: 'Call Print.AddText("'&TXT$&'",'&STR$(COLUMN4)&','&STR$(LYNE)&')'
+03790 ! Let LYNE=LYNE+8.5: pr #20: 'Call Print.AddText("'&TXT$&'",'&STR$(COLUMN4)&','&STR$(LYNE)&')'
 03800   let txt$=state$
-03810   let lyne=lyne+21: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03810   let lyne=lyne+21: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03820   let txt$=state$
-03830   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03830   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03840   let txt$=stcode$
-03850   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03850   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03860   let txt$=stcode$
-03870   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03870   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03880   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(9))
-03890   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03890   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03900   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(9))
-03910   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03910   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03920   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(7))
-03930   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03930   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03940   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(7))
-03950   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03950   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03960   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(10))
-03970   let lyne+=17: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03970   let lyne+=17: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03980   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(10))
-03990   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03990   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 04000   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(8))
-04010   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+04010   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 04020   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(8))
-04030   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+04030   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 04040   let txt$=pf$(1:6)
-04050   let lyne+=8.5: print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+04050   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 04060   let txt$=pf$(1:6)
-04070   print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
-04080   let fnpa_newpage : let lyne=topmargin: let count=0
+04070   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+04080   let fnpa_newpage : let lyne=topmargin: count=0
 04090   goto L4110
 04100 L4100: let x$=""
 04110 L4110: return 
 04120 L4120: read #14,using fm4$,key=kz$: kz$,mat in4$ nokey L4290
 04130   for j=1 to 6
-04140     let amt(j)=val(in4$(j*5-3))
+04140     amt(j)=val(in4$(j*5-3))
 04150     if in4$(j*5-2)="1" then let w(2)=w(2)+amt(j)
 04160     if in4$(j*5-1)="1" then let w(5)=w(5)+amt(j)
 04180     if in4$(j*5-1)="1" then let w(11)=w(11)+amt(j)
@@ -461,34 +461,34 @@
 04270 ! If (J=3 OR J=4) AND (IN4$(J*5-4)(1:1)="D" OR IN4$(J*5-4)(1:1)="E" OR IN4$(J*5-4)(1:1)="F" OR IN4$(J*5-4)(1:1)="H") Then Let W(13)=W(13)+AMT(J) ! SUBTOTAL BOX 17 IF D,E,F,OR H CODES
 04280   next j
 04290 L4290: return 
-04300 L4300: if err=61 then print fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L4320
+04300 L4300: if err=61 then pr fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L4320
 04310   goto L4360
-04320 L4320: print newpage
-04330   if err=4148 then print fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L4350
+04320 L4320: pr newpage
+04330   if err=4148 then pr fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L4350
 04340   goto L4360
-04350 L4350: print fields "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-04360 L4360: print fields "24,1,C 80,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+04350 L4350: pr fields "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+04360 L4360: pr fields "24,1,C 80,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 04370   input fields "24,60,C 1,N": quitcode$
 04380   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-04390   print fields "23,1,C 80,N": ""
-04400   print fields "24,1,C 80,N": ""
+04390   pr fields "23,1,C 80,N": ""
+04400   pr fields "24,1,C 80,N": ""
 04410   retry 
 04420   goto XIT
 04430 L4430: dim fl$*40
-04440 ! Print NEWPAGE
+04440 ! pr NEWPAGE
 04450   close #101: ioerr L4460
 04460 L4460: open #101: "SROW=2,SCOL=2,EROW=07,ECOL=35,BORDER=DR,CAPTION=SELECT LASER W2 SOFTWARE",display,outin 
-04470   print fields "3,5,C 28": "1 = ADVANCED MICRO SOLUTIONS"
-04480   print fields "4,5,C 28": "2 = CENTER PIECE SOFTWARE"
-04490   print fields "6,5,C 25,R,N": " ENTER YOUR SELECTION #: "
-04500   print fields "8,8,C 16,R,N": "PRESS F5 TO STOP"
+04470   pr fields "3,5,C 28": "1 = ADVANCED MICRO SOLUTIONS"
+04480   pr fields "4,5,C 28": "2 = CENTER PIECE SOFTWARE"
+04490   pr fields "6,5,C 25,R,N": " ENTER YOUR SELECTION #: "
+04500   pr fields "8,8,C 16,R,N": "PRESS F5 TO STOP"
 04510 L4510: input fields "6,30,N 1,UET,N": sw1 conv L4510
 04520   if cmdkey=5 then goto XIT
 04530   on sw1 goto L4540,L4550 none L4510
 04540 L4540: let fl$="\1099ETC.W04\W2DATA\W2DAT.PRN" : goto L4560
 04550 L4550: let fl$="\CPS04\ASCIIW2.TXT" : goto L4560
-04560 L4560: print #101: newpage
-04570   print fields "3,5,C 30,R,N": "ENTER OUTPUT PATH & FILE NAME"
+04560 L4560: pr #101: newpage
+04570   pr fields "3,5,C 30,R,N": "ENTER OUTPUT PATH & FILE NAME"
 04580 L4580: rinput fields "5,5,C 30,UT,N": fl$
 04590   if cmdkey=5 then goto XIT
 04600   on sw1 goto L4620,L4640
@@ -506,86 +506,86 @@
 04720     let p1=pos(ss$," ",1)
 04730     if p1>0 then let ss$(p1:p1)=""
 04740   next j
-04750   print #5: "ROAN=";g$
-04760   print #5: "FEIN=";b$
-04770   print #5: "WAGES=";w(2)
-04780   print #5: "FITW=";w(1)
-04790   print #5: "PNAME1=";a$(1)
-04800   print #5: "PNAME2=";" "
-04810   print #5: "SSWAGES=";w(5)
-04820   print #5: "SSWH=";w(3)
-04830   print #5: "PADDR1=";a$(2)
-04840   print #5: "PADDR2=";a$(3)
-04850   print #5: "MCWAGES=";w(11)
-04860   print #5: "MCWH=";w(12)
-04870   print #5: "SSN=";ss$
-04880   print #5: "SSTIPS=";w(6)
-04890   print #5: "ALLOCATIP=";0
-04900   print #5: "RNAME1=";(rtrm$(last$)&","&first$)(1:24)
-04910   print #5: "RNAME2=";k$(2)(1:24)
-04920   print #5: "AEIC=";w(4)
-04930   print #5: "DEPDCARE=";dcb
-04940   print #5: "RADDR1=";" "
-04950   print #5: "RADDR2=";k$(3)(1:24)
-04960   print #5: "LAB14A=";" "
-04970   print #5: "BOX14A=";0
-04980   print #5: "LAB12A=";desc$(3)(1:4)
-04990   print #5: "BOX12A=";desc$(3)(5:15)
-05000   print #5: "CNTRYCODE=";" "
-05010   print #5: "RCOUNTRY=";" "
-05020   print #5: "LAB14B=";" "
-05030   print #5: "BOX14B=";0
-05040   print #5: "LAB12B=";desc$(4)(1:4)
-05050   print #5: "BOX12B=";desc$(4)(5:15)
-05060   print #5: "LAB14C=";" "
-05070   print #5: "BOX14C=";0
-05080   print #5: "LAB12C=";desc$(5)(1:4)
-05090   print #5: "BOX12C=";desc$(5)(5:15)
-05100   print #5: "EESTAT=";"0"
-05110   print #5: "EERETR=";px$
-05120   print #5: "LAB14D=";" "
-05130   print #5: "BOX14D=";0
-05140   print #5: "LAB12D=";desc$(6)(1:4)
-05150   print #5: "BOX12D=";desc$(6)(5:15)
-05160   print #5: "EESICK=";0
-05170   print #5: "BOX11Q=";nqp
-05180   print #5: "NQPLANS=";" "
-05190   print #5: "STATE1=";state$
-05200   print #5: "SEIN1=";stcode$
-05210   print #5: "SWAGES1=";w(9)
-05220   print #5: "SITW1=";w(7)
-05230   print #5: "LWAGES1=";w(10)
-05240   print #5: "LITW1=";w(8)
-05250   print #5: "LOCAL1=";pf$
-05260   print #5: "STATE2=";" "
-05270   print #5: "SEIN2=";" "
-05280   print #5: "SWAGES2=";0
-05290   print #5: "SITW2=";0
-05300   print #5: "LWAGES2=";0
-05310   print #5: "LITW2=";0
-05320   print #5: "LOCAL2=";" "
-05330   print #5: "FName=";first$(1:24)
-05340   print #5: "LName=";last$(1:24)
-05350   print #5: "TAG=";" "
-05360   print #5: "EBAT=";" "
-05370   print #5: "PHONE=";" "
-05380   print #5: "*"
+04750   pr #5: "ROAN=";g$
+04760   pr #5: "FEIN=";b$
+04770   pr #5: "WAGES=";w(2)
+04780   pr #5: "FITW=";w(1)
+04790   pr #5: "PNAME1=";a$(1)
+04800   pr #5: "PNAME2=";" "
+04810   pr #5: "SSWAGES=";w(5)
+04820   pr #5: "SSWH=";w(3)
+04830   pr #5: "PADDR1=";a$(2)
+04840   pr #5: "PADDR2=";a$(3)
+04850   pr #5: "MCWAGES=";w(11)
+04860   pr #5: "MCWH=";w(12)
+04870   pr #5: "SSN=";ss$
+04880   pr #5: "SSTIPS=";w(6)
+04890   pr #5: "ALLOCATIP=";0
+04900   pr #5: "RNAME1=";(rtrm$(last$)&","&first$)(1:24)
+04910   pr #5: "RNAME2=";k$(2)(1:24)
+04920   pr #5: "AEIC=";w(4)
+04930   pr #5: "DEPDCARE=";dcb
+04940   pr #5: "RADDR1=";" "
+04950   pr #5: "RADDR2=";k$(3)(1:24)
+04960   pr #5: "LAB14A=";" "
+04970   pr #5: "BOX14A=";0
+04980   pr #5: "LAB12A=";desc$(3)(1:4)
+04990   pr #5: "BOX12A=";desc$(3)(5:15)
+05000   pr #5: "CNTRYCODE=";" "
+05010   pr #5: "RCOUNTRY=";" "
+05020   pr #5: "LAB14B=";" "
+05030   pr #5: "BOX14B=";0
+05040   pr #5: "LAB12B=";desc$(4)(1:4)
+05050   pr #5: "BOX12B=";desc$(4)(5:15)
+05060   pr #5: "LAB14C=";" "
+05070   pr #5: "BOX14C=";0
+05080   pr #5: "LAB12C=";desc$(5)(1:4)
+05090   pr #5: "BOX12C=";desc$(5)(5:15)
+05100   pr #5: "EESTAT=";"0"
+05110   pr #5: "EERETR=";px$
+05120   pr #5: "LAB14D=";" "
+05130   pr #5: "BOX14D=";0
+05140   pr #5: "LAB12D=";desc$(6)(1:4)
+05150   pr #5: "BOX12D=";desc$(6)(5:15)
+05160   pr #5: "EESICK=";0
+05170   pr #5: "BOX11Q=";nqp
+05180   pr #5: "NQPLANS=";" "
+05190   pr #5: "STATE1=";state$
+05200   pr #5: "SEIN1=";stcode$
+05210   pr #5: "SWAGES1=";w(9)
+05220   pr #5: "SITW1=";w(7)
+05230   pr #5: "LWAGES1=";w(10)
+05240   pr #5: "LITW1=";w(8)
+05250   pr #5: "LOCAL1=";pf$
+05260   pr #5: "STATE2=";" "
+05270   pr #5: "SEIN2=";" "
+05280   pr #5: "SWAGES2=";0
+05290   pr #5: "SITW2=";0
+05300   pr #5: "LWAGES2=";0
+05310   pr #5: "LITW2=";0
+05320   pr #5: "LOCAL2=";" "
+05330   pr #5: "FName=";first$(1:24)
+05340   pr #5: "LName=";last$(1:24)
+05350   pr #5: "TAG=";" "
+05360   pr #5: "EBAT=";" "
+05370   pr #5: "PHONE=";" "
+05380   pr #5: "*"
 05390   goto L4100
 05400 L5400: ! LAZER W2 FOR CENTER PIECE SOFTWARE
 05410   let p1=pos(k$(1)," ",1)
 05420   if p1=0 then let p1=len(k$(1))+1
 05430   let q1$='","'
-05440   let p3=pos(k$(3),",",1) : let a3=2
-05450   if p3=0 then let p3=pos(k$(3)," ",1): let a3=1
-05460   if p3=0 then let p3=len(k$(3))+1: let a3=1
+05440   let p3=pos(k$(3),",",1) : a3=2
+05450   if p3=0 then let p3=pos(k$(3)," ",1): a3=1
+05460   if p3=0 then let p3=len(k$(3))+1: a3=1
 05470   let n1$=k$(1)(1:p1-1)
 05480   let n2$=k$(1)(p1+1:p1+16)
-05490   let c1$=k$(3)(1:p3-1): let c2$=k$(3)(p3+a3:p3+a3+1): let c3$=k$(3)(p3+a3+3:p3+a3+12)
-05500   print #5,using L5510: n1$,n2$,k$(2),"",c1$,c2$,c3$,"",ss$,f$,state$,0,w(4),w(1),w(2),w(3),w(5),w(6),w(11),w(12),nqp,dcb,0,amt(1),"",amt(2),"",amt(3),"",0,"",0,0,0,0,0,w(7),w(9),w(8),w(10),0,0,0,0,"",""
+05490   c1$=k$(3)(1:p3-1): c2$=k$(3)(p3+a3:p3+a3+1): c3$=k$(3)(p3+a3+3:p3+a3+12)
+05500   pr #5,using L5510: n1$,n2$,k$(2),"",c1$,c2$,c3$,"",ss$,f$,state$,0,w(4),w(1),w(2),w(3),w(5),w(6),w(11),w(12),nqp,dcb,0,amt(1),"",amt(2),"",amt(3),"",0,"",0,0,0,0,0,w(7),w(9),w(8),w(10),0,0,0,0,"",""
 05510 L5510: form pos 1,c 13,c 16,2*c 30,c 15,c 2,2*c 10,c 11,c 15,c 2,13*n 10.2,c 1,n 10.2,c 1,n 10.2,c 1,n 10.2,c 1,13*n 10.2,c 2,c 15
-05520   let c$=','
+05520   c$=','
 05530   goto L4100
-05540 L5540: ! ask if any misecllaneous deductions should print in box 12
+05540 L5540: ! ask if any misecllaneous deductions should pr in box 12
 05550 ASK_DEDUCTIONS: ! 
 05560   let fntos(sn$="Prw2-4") !:
         let rc=cf=0: let mylen=20: let mypos=mylen+3
@@ -608,7 +608,7 @@
 05690   let x=0
 05700   for j=1 to 20
 05710     let x+=1: if resp$(x)="True" then let dedyn$(j)="Y"
-05720     let x+=1: let box12(j)=val(resp$(x))
+05720     let x+=1: box12(j)=val(resp$(x))
 05730     let x+=1: let dedcode$(j)=resp$(x)
 05740   next j
 05750   return 
@@ -627,14 +627,14 @@
 05880   if x1>0 and k$(1)(x1-1:x1-1)="," then let last$=k$(1)(1:x1-2) else let last$=k$(1)(1:max(x1-1,1))
 05890   if x2>0 then let first$=k$(1)(x1+1:x2-1): let mid$=k$(1)(x2+1:len(k$(1)))
 05900   if x2=0 then let first$=k$(1)(x1+1:len(k$(1))): let mid$=""
-05910 L5910: ! Print FIRST$,MID$,LAST$
+05910 L5910: ! pr FIRST$,MID$,LAST$
 05920   return 
-05930 L5930: print newpage ! left or right stub
+05930 L5930: pr newpage ! left or right stub
 05940   close #101: ioerr L5950
 05950 L5950: open #101: "SROW=4,SCOL=14,EROW=6,ECOL=60,BORDER=DR,CAPTION=<"&cap$&" - Right or Left Stub",display,outin 
-05960   print fields "5,20,C 40,N": '5 1/2" stub on Left or Right (L/R):'
-05970   print fields "7,28,C 9,B,1": "Next (F1)"
-05980   print fields "7,39,C 11,B,5": "Cancel (F5)"
+05960   pr fields "5,20,C 40,N": '5 1/2" stub on Left or Right (L/R):'
+05970   pr fields "7,28,C 9,B,1": "Next (F1)"
+05980   pr fields "7,39,C 11,B,5": "Cancel (F5)"
 05990   input fields "5,56,Cu 1,UT,N": left$
 06000   if cmdkey=5 then goto XIT
 06010   return 
@@ -642,7 +642,7 @@
 06030   if file(20)=-1 then 
 06040     let fnpa_open ! open #20: "Name="&env$('Q')&"\PRmstr\W2"&wsid$&".txt,Replace,RecL=5000",display,output
 06070     let lyne=topmargin ! starting of 1st line
-06080     let character=1.5
+06080     character=1.5
 06090   end if 
 06100   return 
 06110 RELEASE_PRINT: ! 
@@ -720,12 +720,12 @@
 06640   let oldw(3)=val(resp$(7)) ! ss wh
 06650   let oldw(12)=val(resp$(8)) ! medicare wh
 06660   let oldw(7)=val(resp$(9)) ! state  wh
-06670   let box1a$=resp$(10) ! box 12a code
-06680   let box1=val(resp$(11)) ! box 12a amount
-06690   let box2b$=resp$(12) ! box 12b code
-06700   let box2=val(resp$(13)) ! box 12b amount
-06710   let box3c$=resp$(14) ! box 12c code
-06720   let box3=val(resp$(15)) ! box 12c amount
-06730   let box4d$=resp$(16) ! box 12d code
-06740   let box4=val(resp$(17)) ! box 12d amount
+06670   box1a$=resp$(10) ! box 12a code
+06680   box1=val(resp$(11)) ! box 12a amount
+06690   box2b$=resp$(12) ! box 12b code
+06700   box2=val(resp$(13)) ! box 12b amount
+06710   box3c$=resp$(14) ! box 12c code
+06720   box3=val(resp$(15)) ! box 12c amount
+06730   box4d$=resp$(16) ! box 12d code
+06740   box4=val(resp$(17)) ! box 12d amount
 06750   return 

@@ -23,7 +23,7 @@
 02500 ERTN: let fnerror(program$,err,line,act$,"xit")
 02600   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02800   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02900 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03000 ! /region
 35000   def fn_setup_hamster
@@ -105,7 +105,7 @@
 55700 ! old program !  ! ** Text Box / Field Display   Lengths   **
 55720 ! old program !    let ic=0 ! temporary Item Counter
 55740 ! old program !    let mmddyy=8
-55760 ! old program !    let ccyymmdd=10
+55760 ! old program !    ccyymmdd=10
 55780 ! old program !    let tln(ic+=1)=6
 55800 ! old program !    let tln(ic+=1)=2
 55820 ! old program !    let tln(ic+=1)=2
@@ -132,7 +132,7 @@
 56240 ! old program !    let fltyp$(ic+=1)='C'
 56260 ! old program !  ! ** Field Storage Lengths **
 56280 ! old program !    let ic=0
-56300 ! old program !    let mmddyy=6 : let ccyymmdd=8
+56300 ! old program !    let mmddyy=6 : ccyymmdd=8
 56320 ! old program !    let sln(ic+=1)=6
 56340 ! old program !    let sln(ic+=1)=2
 56360 ! old program !    let sln(ic+=1)=2
@@ -147,7 +147,7 @@
 56540 ! old program !  ! ** Field Masks **
 56560 ! old program !    let ic=0
 56580 ! old program !    let pointtwo=32 : let number=30
-56600 ! old program !    let ccyymmdd=3 : let mmddyy=1 : let glnumber=53
+56600 ! old program !    ccyymmdd=3 : let mmddyy=1 : let glnumber=53
 56620 ! old program !    let mask(ic+=1)=number
 56640 ! old program !    let mask(ic+=1)=number
 56660 ! old program !    let mask(ic+=1)=0
@@ -167,26 +167,26 @@
 56940 ! old program !  ! C$(CL,7)=Index File
 56960 ! old program !  ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 56980 ! old program !    let limit_to_list$='1'
-57000 ! old program !    let cl=1 : let c$(cl,1)='ComboF'
-57020 ! old program !    let c$(cl,2)=env$('Q')&"\TMmstr\Clmstr.h420"
-57040 ! old program !    let c$(cl,3)='1' : let c$(cl,4)='5'
-57060 ! old program !  ! let c$(cl,3)='1' : let c$(cl,4)='6'
-57080 ! old program !    let c$(cl,5)='6' : let c$(cl,6)='30'
-57100 ! old program !  ! let c$(cl,5)='7' : let c$(cl,6)='50'
-57120 ! old program !    let c$(cl,7)=env$('Q')&"\TMmstr\CLIndex.h420"
-57140 ! old program !    let c$(cl,8)=limit_to_list$
-57160 ! old program !    let cl=3 : let c$(cl,1)='ComboF'
-57180 ! old program !    let c$(cl,2)=env$('Q')&"\TMmstr\Systems.h420"
-57200 ! old program !    let c$(cl,3)='1' : let c$(cl,4)='2'
-57220 ! old program !    let c$(cl,5)='3' : let c$(cl,6)='50'
-57240 ! old program !    let c$(cl,7)=env$('Q')&"\TMmstr\Systems-Idx.h420"
-57260 ! old program !    let c$(cl,8)=limit_to_list$
-57280 ! old program !    let cl=5 : let c$(cl,1)='ComboF'
-57300 ! old program !    let c$(cl,2)=env$('Q')&"\TMmstr\TimeFrame.h420"
-57320 ! old program !    let c$(cl,3)='1' : let c$(cl,4)='2'
-57340 ! old program !    let c$(cl,5)='3' : let c$(cl,6)='50'
-57360 ! old program !    let c$(cl,7)=env$('Q')&"\TMmstr\TimeFrame-Idx.h420"
-57380 ! old program !    let c$(cl,8)=limit_to_list$
+57000 ! old program !    cl=1 : c$(cl,1)='ComboF'
+57020 ! old program !    c$(cl,2)=env$('Q')&"\TMmstr\Clmstr.h420"
+57040 ! old program !    c$(cl,3)='1' : c$(cl,4)='5'
+57060 ! old program !  ! c$(cl,3)='1' : c$(cl,4)='6'
+57080 ! old program !    c$(cl,5)='6' : c$(cl,6)='30'
+57100 ! old program !  ! c$(cl,5)='7' : c$(cl,6)='50'
+57120 ! old program !    c$(cl,7)=env$('Q')&"\TMmstr\CLIndex.h420"
+57140 ! old program !    c$(cl,8)=limit_to_list$
+57160 ! old program !    cl=3 : c$(cl,1)='ComboF'
+57180 ! old program !    c$(cl,2)=env$('Q')&"\TMmstr\Systems.h420"
+57200 ! old program !    c$(cl,3)='1' : c$(cl,4)='2'
+57220 ! old program !    c$(cl,5)='3' : c$(cl,6)='50'
+57240 ! old program !    c$(cl,7)=env$('Q')&"\TMmstr\Systems-Idx.h420"
+57260 ! old program !    c$(cl,8)=limit_to_list$
+57280 ! old program !    cl=5 : c$(cl,1)='ComboF'
+57300 ! old program !    c$(cl,2)=env$('Q')&"\TMmstr\TimeFrame.h420"
+57320 ! old program !    c$(cl,3)='1' : c$(cl,4)='2'
+57340 ! old program !    c$(cl,5)='3' : c$(cl,6)='50'
+57360 ! old program !    c$(cl,7)=env$('Q')&"\TMmstr\TimeFrame-Idx.h420"
+57380 ! old program !    c$(cl,8)=limit_to_list$
 57400 ! old program !    return 
 57420 ! old program !  ! ______________________________________________________________________
 57440 ! old program !  HAMSTER: ! 
@@ -199,7 +199,7 @@
 57580 ! old program !  ERTN: let fnerror(program$,err,line,act$,"xit")
 57600 ! old program !    if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 57620 ! old program !    execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-57640 ! old program !    print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+57640 ! old program !    pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 57660 ! old program !  ERTN_EXEC_ACT: execute act$ : goto ERTN
 57680 ! old program !  ! /region
 57700 ! old program !  ! ______________________________________________________________________

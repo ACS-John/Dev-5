@@ -93,11 +93,11 @@
 24180 fnend
 25000 def fn_print(text$*2048; disable_return)
 25020   if text$='[newpage]' then
-25040     print #hPdfOut: newpage
+25040     pr #hPdfOut: newpage
 25060   else if disable_return then
-25080     print #hPdfOut: text$;
+25080     pr #hPdfOut: text$;
 25100   else
-25120     print #hPdfOut: text$
+25120     pr #hPdfOut: text$
 25140   end if
 25160   if debug then
 25180     if ~debugScriptSetup then
@@ -106,9 +106,9 @@
 25240     end if
 25260     text$=srep$(text$,esc$,'\E')
 25280     if disable_return then
-25300       print #hDebugScript: text$;
+25300       pr #hDebugScript: text$;
 25320     else
-25340       print #hDebugScript: text$
+25340       pr #hDebugScript: text$
 25360     end if
 25380   end if
 25400 fnend

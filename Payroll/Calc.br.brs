@@ -170,13 +170,13 @@
 01491   gosub DETERMINE_EARNINGS
 01493   for j=1 to 20
 01495     if newdedfed(j)=2 and newdedcode(j)=1 then 
-01497       let cafy+=caf(j)
-01499       let cafd+=caf(j)
+01497       cafy+=caf(j)
+01499       cafd+=caf(j)
 01501     end if 
 01503   next j
 01505   let twy+=twd : let tfy+=(ytdFICA+tmd) : let ficatfy=tfy
 01507   let oldsswg=twy-cafy : let eicytd+=td14 : let stuc(tcd(1))+=twd-cafd
-01509   let cafd=0
+01509   cafd=0
 01540   L1540: ! 
 01542   read #h_department,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=newdeptkey$: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
 01550   if tgp=0 then let pog=1: goto L1620 ! Allow checks to calculate with no gross pay
@@ -382,7 +382,7 @@
 02462   write #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,tdn,prd,0,mat tdc,mat tcp
 02463 ! fnstatus('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
 02464 ! fnstatus_pause
-02470   let twy+=gpd : let cafy+=ficat3 : let eicytd+=ytdtotal(25)
+02470   let twy+=gpd : cafy+=ficat3 : let eicytd+=ytdtotal(25)
 02480   if tdet(16)<>0 then let stuc(tcd(1))+=tdet(16) ! ??? kj
 02490   goto ReadRpWork
 02500 ! /r
@@ -520,7 +520,7 @@
 03580 ERTN: let fnerror(program$,err,line,act$,"NO") ! r:
 03590   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-03610   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+03610   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03620 ERTN_EXEC_ACT: execute act$ : goto ERTN ! /r
 08000 ILWH: ! r: REPLACE ACSWRK\ILLINOIS.WH,SOURCE ! ILLINOIS   NO TABLE
 08020   ! line 1 allowances = +1 for claiming self, +1 for claiming spouse
@@ -707,7 +707,7 @@
 14620     let prd=d1=val(resp$(1))
 14640     let d1$=resp$(2)
 14660     if resp$(3)(1:1)="T" then let d3$="Y" else let d3$="N"
-14680     let beg_date=val(resp$(4))
+14680     beg_date=val(resp$(4))
 14700     let end_date=val(resp$(5))
 14720     rewrite #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1: beg_date,end_date,d1,d1$
 14740     close #h_dates: 
@@ -717,7 +717,7 @@
 15020   let ytdFICA=tmd=td14=0: mat caf=(0)
 15040   mat tcp=(0)
 15060   mat ytdtotal=(0) : mat tdc=(0)
-15080   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+15080   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 15100   restore #h_payrollchecks,key>=checkkey$: nokey dePrCkNokey
 15120   do
 15140     read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prdate,ckno,mat tdc,mat tcp eof dePrCkEof
@@ -731,7 +731,7 @@
 15320   let td14=ytdtotal(25) ! eic
 15340   let twd=ytdtotal(31) ! total wages
 15360   for j=1 to 20
-15380     let caf(j)=ytdtotal(j+4) ! total miscellaneous deductions for year
+15380     caf(j)=ytdtotal(j+4) ! total miscellaneous deductions for year
 15400   next j
 15420   dePrCkNokey:!
 15440 return  ! /r
@@ -908,9 +908,9 @@
 38360   if x<2 then let m1=12500 : let m2=25000
 38380   if x>=2 then let m1=25000 : let m2=50000
 38400   let n=g_pay_periods_per_year
-38420   if s>0 then let a=(s*.021) else let a=0
-38440   if s>(m1/n) then let b=.0135*(s-(m1/n)) else let b=0
-38460   if s>(m2/n) then let c=.0135*(s-(m2/n)) else let c=0
+38420   if s>0 then a=(s*.021) else a=0
+38440   if s>(m1/n) then b=.0135*(s-(m1/n)) else b=0
+38460   if s>(m2/n) then c=.0135*(s-(m2/n)) else c=0
 38480   let d=.021*(((x*4500)+(y*1000))/n)
 38500   if ((x*4500)+(y*1000))>m1 then 
 38520     let e=.0135*(((x*4500)+(y*1000)-m1)/n)
@@ -1206,7 +1206,7 @@
 66060   let pay_periods_per_year=52
 66080   let wages_taxable_current=399.60
 66100   let fed_wh=7.75
-66120   let allowances=2
+66120   allowances=2
 66140   let is_married=4  ! is_married = 0 - Single
 66180                     ! is_married = 1 - Married
 66200                     ! is_married = 2 - Single - Head of Household
@@ -1221,9 +1221,9 @@
 66340   pr '           allowances: ';allowances
 66360   pr '           is_married: ';is_married
 66380   pr '              eicCode: ';eicCode
-66400   print 'Kentuky Function returns ';fn_wh_kentuky(wages_taxable_current,pay_periods_per_year,allowances)
-66420   print 'Georgia Function returns ';fn_wh_georgia(wages_taxable_current,pay_periods_per_year,allowances,is_married,eicCode)
-66440   print 'Oregon Function returns ';fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married)
+66400   pr 'Kentuky Function returns ';fn_wh_kentuky(wages_taxable_current,pay_periods_per_year,allowances)
+66420   pr 'Georgia Function returns ';fn_wh_georgia(wages_taxable_current,pay_periods_per_year,allowances,is_married,eicCode)
+66440   pr 'Oregon Function returns ';fn_wh_oregon(wages_taxable_current,fed_wh,pay_periods_per_year,allowances,is_married)
 66460   if env$('ACSdeveloper')<>'' then pause 
 66480 fnend 
 68000 def fn_report_stuff

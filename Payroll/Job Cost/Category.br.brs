@@ -17,7 +17,7 @@
 00180 L180: form pos 1,n 5,c 30
 00190 ASKCATEGORY: ! 
 00200   mat resp$=("")
-00210   let ad1=0 ! add code - used to tell other parts of the program, !:
+00210   ad1=0 ! add code - used to tell other parts of the program, !:
         ! that I am currently adding a service code record.
 00220   let fntos(sn$="Pr-askcategory") !:
         let respc=0
@@ -38,10 +38,10 @@
 00290   if ckey=8 then gosub PRINT_PROOF: goto ASKCATEGORY
 00300   if ckey=1 then goto ADD_RECORD
 00310   if ckey=3 then read #1,using L180: category,name$ nokey ASKCATEGORY eof ASKCATEGORY: let holdcategory=category: goto SCREEN_1
-00320   let category=val(resp$(1)(1:5)): let holdcategory=category
-00330   let category$=lpad$(str$(category),5)
+00320   category=val(resp$(1)(1:5)): let holdcategory=category
+00330   category$=lpad$(str$(category),5)
 00340   if ckey=2 then read #1,using L180,key=category$: category,name$ nokey ASKCATEGORY : goto SCREEN_1
-00350   if ckey=6 then let fncategory_srch(category$,fixgrid) : let category$=lpad$(rtrm$(category$),5) : read #1,using L180,key=category$: category,name$ nokey ASKCATEGORY : goto SCREEN_1
+00350   if ckey=6 then let fncategory_srch(category$,fixgrid) : category$=lpad$(rtrm$(category$),5) : read #1,using L180,key=category$: category,name$ nokey ASKCATEGORY : goto SCREEN_1
 00360   if trim$(category$)="" then goto ASKCATEGORY else read #1,using L180,key=catergory$: category,name$ nokey ASKCATEGORY : goto SCREEN_1
 00370   if ckey=7 then gosub RECREATE_GRID: goto ASKCATEGORY
 00380 SCREEN_1: ! maintain category screen
@@ -59,9 +59,9 @@
 00470   let fncmdkey("&Cancel",5,0,1,"Returns to first screen without saving any changes.")
 00480   let fnacs(sn$,0,mat resp$,ckey)
 00490   if ckey=5 then goto ASKCATEGORY
-00500   let category=val(resp$(1)(1:5)) : let category$=lpad$(trim$(resp$(1)),5)
+00500   category=val(resp$(1)(1:5)) : category$=lpad$(trim$(resp$(1)),5)
 00510   let name$=resp$(2)
-00520   let category=val(resp$(1))
+00520   category=val(resp$(1))
 00530   if ckey<>4 then goto L570
 00540   mat ml$(2) !:
         let ml$(1)="You have chosen to delete category "&trim$(category$)&" from the Category file!" !:
@@ -78,7 +78,7 @@
         let df$=env$('Q')&"\PRmstr\category.h"&env$('cno') : let if$=env$('Q')&"\PRmstr\categoryidx.h"&env$('cno') !:
         let fncombof("Ccategory",lyne,mypos,43,df$,1,5,6,30,if$,1) !:
         let fncombof("CcategoryaLL",lyne,mypos,43,df$,1,5,6,30,if$,2)
-00630   let ad1=0 ! set add code back before returning to main screen
+00630   ad1=0 ! set add code back before returning to main screen
 00640   return 
 00650 ADD_RECORD: ! 
 00660   if reindex>3 then goto ERTN
@@ -91,8 +91,8 @@
 00720   let fncmdset(11)
 00730   let fnacs(sn$,0,mat resp$,ckey)
 00740   if ckey=5 then goto ASKCATEGORY
-00750   let category=val(resp$(1)(1:5)) !:
-        let category$=lpad$(trim$(resp$(1)(1:5)),5)
+00750   category=val(resp$(1)(1:5)) !:
+        category$=lpad$(trim$(resp$(1)(1:5)),5)
 00760   let name$=(resp$(1)(10:40))
 00770   if trim$(category$)="" then goto ADD_RECORD
 00780   read #1,using L180,key=category$: z$ nokey L800
@@ -119,28 +119,28 @@
 00950   gosub L1060
 00960   restore #1: 
 00970 L970: read #1,using L180,release: category,name$ eof L1010
-00980   print #255,using L990: category,name$ pageoflow L1050
+00980   pr #255,using L990: category,name$ pageoflow L1050
 00990 L990: form pos 1,n 5,x 8,c 30,skip 1
 01000   goto L970
-01010 L1010: if nw=0 then print #255: newpage
+01010 L1010: if nw=0 then pr #255: newpage
 01020   let fncloseprn
 01030   on fkey 5 ignore 
 01040   goto ASKCATEGORY
-01050 L1050: print #255: newpage : gosub L1060 : continue 
-01060 L1060: print #255,using L1070: date$,env$('cnam')
+01050 L1050: pr #255: newpage : gosub L1060 : continue 
+01060 L1060: pr #255,using L1070: date$,env$('cnam')
 01070 L1070: form pos 1,c 10,pos 20,cc 40,skip 1
-01080   print #255,using L1070: time$,"Category Names "
-01090   print #255: 
-01100   print #255: " Category #  Name          "
-01110   print #255: " __________  ____________________  "
+01080   pr #255,using L1070: time$,"Category Names "
+01090   pr #255: 
+01100   pr #255: " Category #  Name          "
+01110   pr #255: " __________  ____________________  "
 01120   return 
 01130 ! ______________________________________________________________________
-01140 POF1: print #255: newpage
-01150   print #255,using L1200: date$('mm/dd/yy'),env$('cnam'),time$,"CATEGORY LISTING",dat$
+01140 POF1: pr #255: newpage
+01150   pr #255,using L1200: date$('mm/dd/yy'),env$('cnam'),time$,"CATEGORY LISTING",dat$
 01160   continue 
 01170 ! ______________________________________________________________________
-01180 POF2: print #255: newpage
-01190   print #255,using L1200: date$('mm/dd/yy'),env$('cnam'),time$,"CATEGPRU LISTING",dat$
+01180 POF2: pr #255: newpage
+01190   pr #255,using L1200: date$('mm/dd/yy'),env$('cnam'),time$,"CATEGPRU LISTING",dat$
 01200 L1200: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 53,c 30,skip 1,pos dattab,c 20,skip 2
 01210   continue 
 01220 ! ______________________________________________________________________
@@ -152,6 +152,6 @@
           execute "list "&str$(line) !:
           pause  !:
           goto L1290
-01280   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+01280   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01290 L1290: execute act$
 01300   goto ERTN

@@ -6,7 +6,7 @@
  !
  !
  def fnFilterSelection$(mat f$,mat f,mat ScreenIO$;___,CurrentKey$)
-    let CurrentKey$=fnBuildKey$(Trim$(Screenio$(Si_Filelay)),Mat F$,Mat F)
+    currentKey$=fnBuildKey$(Trim$(Screenio$(Si_Filelay)),Mat F$,Mat F)
     if srch(mat MarkedRecords$,CurrentKey$)>0 then
        let fnFilterSelection$="/#000000:#FFFF00"
     else

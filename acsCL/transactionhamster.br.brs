@@ -37,7 +37,7 @@
 00270 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
-        let ccyymmdd=10
+        ccyymmdd=10
 00280   let tln(ic+=1)=2 !:
         let tln(ic+=1)=1 !:
         let tln(ic+=1)=8 !:
@@ -64,7 +64,7 @@
 00340   let fltyp$(ic+=1)='N'
 00350 ! ** Field Storage Lengths ** !:
         let ic=0 !:
-        let mmddyy=6 : let ccyymmdd=8
+        let mmddyy=6 : ccyymmdd=8
 00360   let sln(ic+=1)=2 !:
         let sln(ic+=1)=1 !:
         let sln(ic+=1)=8 !:
@@ -79,7 +79,7 @@
 00390 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:
-        let ccyymmdd=3 : let mmddyy=1
+        ccyymmdd=3 : let mmddyy=1
 00400   let mask(ic+=1)=0 !:
         let mask(ic+=1)=0 !:
         let mask(ic+=1)=0 !:
@@ -102,36 +102,36 @@
         ! C$(CL,7)=Index File                                                 !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         let limit_to_list$='1'
-00450   let cl=1 : let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\CLmstr\BankMstr.h"&str$(cno) !:
-        let c$(cl,3)='1' : let c$(cl,4)='2' !:
-        let c$(cl,5)='3' : let c$(cl,6)='30' !:
-        let c$(cl,7)=env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno) !:
-        let c$(cl,8)=limit_to_list$
-00460   let cl=2 : let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\CLmstr\TransactionType.dat" !:
-        let c$(cl,3)='1' : let c$(cl,4)='1' !:
-        let c$(cl,5)='2' : let c$(cl,6)='25' !:
-        let c$(cl,7)=env$('Q')&"\CLmstr\TransactionType.idx" !:
-        let c$(cl,8)=limit_to_list$
-00470   let cl=6 : let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\CLmstr\PayMstr.h"&str$(cno) !:
-        let c$(cl,3)='1' : let c$(cl,4)='8' !:
-        let c$(cl,5)='9' : let c$(cl,6)='30' !:
-        let c$(cl,7)=env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno) !:
-        let c$(cl,8)=limit_to_list$
-00480   let cl=9 : let c$(cl,1)='ComboF' !:
-        let c$(cl,2)="S:\acsCL\PostingCode.dat" !:
-        let c$(cl,3)='1' : let c$(cl,4)='1' !:
-        let c$(cl,5)='2' : let c$(cl,6)='25' !:
-        let c$(cl,7)="S:\acsCL\PostingCode.idx" !:
-        let c$(cl,8)=limit_to_list$
-00490   let cl=11 : let c$(cl,1)='ComboF' !:
-        let c$(cl,2)="S:\acsCL\SourceCode.dat" !:
-        let c$(cl,3)='1' : let c$(cl,4)='1' !:
-        let c$(cl,5)='2' : let c$(cl,6)='25' !:
-        let c$(cl,7)="S:\acsCL\SourceCode.idx" !:
-        let c$(cl,8)=limit_to_list$
+00450   cl=1 : c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\CLmstr\BankMstr.h"&str$(cno) !:
+        c$(cl,3)='1' : c$(cl,4)='2' !:
+        c$(cl,5)='3' : c$(cl,6)='30' !:
+        c$(cl,7)=env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno) !:
+        c$(cl,8)=limit_to_list$
+00460   cl=2 : c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\CLmstr\TransactionType.dat" !:
+        c$(cl,3)='1' : c$(cl,4)='1' !:
+        c$(cl,5)='2' : c$(cl,6)='25' !:
+        c$(cl,7)=env$('Q')&"\CLmstr\TransactionType.idx" !:
+        c$(cl,8)=limit_to_list$
+00470   cl=6 : c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\CLmstr\PayMstr.h"&str$(cno) !:
+        c$(cl,3)='1' : c$(cl,4)='8' !:
+        c$(cl,5)='9' : c$(cl,6)='30' !:
+        c$(cl,7)=env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno) !:
+        c$(cl,8)=limit_to_list$
+00480   cl=9 : c$(cl,1)='ComboF' !:
+        c$(cl,2)="S:\acsCL\PostingCode.dat" !:
+        c$(cl,3)='1' : c$(cl,4)='1' !:
+        c$(cl,5)='2' : c$(cl,6)='25' !:
+        c$(cl,7)="S:\acsCL\PostingCode.idx" !:
+        c$(cl,8)=limit_to_list$
+00490   cl=11 : c$(cl,1)='ComboF' !:
+        c$(cl,2)="S:\acsCL\SourceCode.dat" !:
+        c$(cl,3)='1' : c$(cl,4)='1' !:
+        c$(cl,5)='2' : c$(cl,6)='25' !:
+        c$(cl,7)="S:\acsCL\SourceCode.idx" !:
+        c$(cl,8)=limit_to_list$
 00500   return 
 00510 ! ______________________________________________________________________
 00520 HAMSTER: ! 
@@ -144,7 +144,7 @@
 00590 ERTN: let fnerror(program$,err,line,act$,"xit")
 00600   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00610   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00620   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00620   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00630 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00640 ! /region
 00650 ! ______________________________________________________________________

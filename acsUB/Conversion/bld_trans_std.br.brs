@@ -18,7 +18,7 @@
 00090 ! ______________________________________________________________________
 00100   let fntop("S:\acsUB\Conversion\Bld_Trans",cap$="Build Transactions")
 00110   let fncno(cno)
-00115   print newpage
+00115   pr newpage
 00120 LOOP_STEP_1: ! 
 00130   gosub MENU1
 00140   gosub CONVERT_CNO !:
@@ -29,7 +29,7 @@
 00170 ERTN: let fnerror(program$,err,line,act$,"xit")
 00180   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00190   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00200   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00200   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00210 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00220 ! /region
 00230 ! ______________________________________________________________________
@@ -46,12 +46,12 @@
 00320   let fnacs(sn$,0,mat resp$,ck)
 00330   let delubtransvb$=resp$(1) !:
         let removebaddates$=resp$(2)
-00340   if ck=5 then let cno=0
+00340   if ck=5 then cno=0
 00350 ! 
 00360   return 
 00370 ! ______________________________________________________________________
 00380 CONVERT_CNO: ! 
-00390   print "conversion of cno="&str$(cno)&" has begun."
+00390   pr "conversion of cno="&str$(cno)&" has begun."
 00400 ! 
 00410 ! 
 00420   if uprc$(delubtransvb$)=uprc$("True") and exists(env$('Q')&"\UBmstr\ubtransvb.h"&str$(cno)) then execute "Free "&env$('Q')&"\UBmstr\ubtransvb.h"&str$(cno)
@@ -61,18 +61,18 @@
 00460 ! open NEW files
 00470   open #transvb=11: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outin,keyed 
 00480 PHASE1: ! 
-00490   print 'moving trans from ubAccTrn to ubTranVB'
+00490   pr 'moving trans from ubAccTrn to ubTranVB'
 00500   open #acctrn=1: "Name="&env$('Q')&"\UBmstr\ubAccTrn.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubAcTIx1.h"&str$(cno)&",Shr",internal,outin,keyed 
 00510   if rln(acctrn)=64 or rln(acctrn)=72 then !:
-          let acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2' !:
+          acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2' !:
         else !:
           if rln(acctrn)=62 or rln(acctrn)=70 then !:
-            let acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2' else !:
+            acctrn_form$='Form Pos 1,C 10,pd 4.2,N 8,n 1,n 1,10*pd 4.2' else !:
             if rln(acctrn)=68 then !:
-              let acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2'
+              acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2'
 00520 READ_ACCTRN: ! 
 00530 L530: read #acctrn,using acctrn_form$: p$,tamt,tdate,transcode,postcode,g(1),g(2),g(3),g(4),g(5),g(6),g(7),g(8),g(9),g(10) eof PHASE2 ioerr R68F
-00540   print fields "1,1,C 20,R,N": str$(accnt+=1)&"/"&str$(lrec(acctrn))
+00540   pr fields "1,1,C 20,R,N": str$(accnt+=1)&"/"&str$(lrec(acctrn))
 00550   read #master,using 'form pos 1,c 10',key=p$: z$ nokey READ_ACCTRN
 00560   gosub TRANSLATE_TRANSCODE
 00570   if len(str$(tdate))<=6 then goto L530
@@ -83,7 +83,7 @@
 00620   close #acctrn: 
 00630 ! 
 00640 ! 
-00650   print 'moving trans from ubTrans to ubTranVB'
+00650   pr 'moving trans from ubTrans to ubTranVB'
 00660   open #trans=2: "Name="&env$('Q')&"\UBmstr\ubTrans.h"&str$(cno),internal,input 
 00670 READ_TRANS: ! 
 00680 L680: read #trans,using 'Form Pos 1,C 10,pd 4.2,pd 4,n 1,n 1,pd 3': p$,tamt,tdate,transcode,postcode,nta eof PHASE3
@@ -99,7 +99,7 @@
 00770   close #trans: 
 00780 ! 
 00790 ! 
-00800   print 'moving trans from ubMaster to ubTranVB'
+00800   pr 'moving trans from ubMaster to ubTranVB'
 00810   restore #master: 
 00820 READ_MASTER: ! 
 00830   read #master,using 'form pos 1,c 10,pos 438,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2': p$,mat rw4 eof PHASE4
@@ -115,7 +115,7 @@
 00880     let ru(1)=rw4(1,month) : let ru(2)=rw4(2,month) !:
           let ru(3)=rw4(3,month) : let ru(4)=rw4(4,month) !:
           let ru(5)=rw4(5,month) : let ru(6)=rw4(6,month) !:
-          let bal=rw4(7,month) : let postcode=9 !:
+          bal=rw4(7,month) : let postcode=9 !:
           let transcode=1 : let tamt=rw4(19,month)
 00890     let key$=p$&lpad$(str$(tdate),8)&str$(transcode) !:
           read #transvb,using 'form pos 1,C 10',key=key$: p$ nokey WRITE_A_RECORD
@@ -130,10 +130,10 @@
 00980 ! 
 00990 ! 
 01000   close #transvb: 
-01010   print "ReIndexing ubTransVB..."
+01010   pr "ReIndexing ubTransVB..."
 01020   let fnindex_it(env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno),env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno),"1 19")
-01030   print "Transactions for company "&str$(cno)&" were built successfully."
-01040   print ""
+01030   pr "Transactions for company "&str$(cno)&" were built successfully."
+01040   pr ""
 01050   if removebaddates$="True" then gosub REMOVEBADDATES
 01060   return 
 01070 ! ______________________________________________________________________
@@ -149,9 +149,9 @@
 01160 R68F: ! 
 01170   if rln(acctrn)<>68 then goto ERTN
 01180   if r68f=0 then !:
-          let acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2' !:
+          acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2' !:
         else !:
-          let acctrn_form$='Form Pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2'
+          acctrn_form$='Form Pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2'
 01190   if r68f=1 then let r68f=0 else let r68f=1
 01200   continue 
 01210 ! ______________________________________________________________________

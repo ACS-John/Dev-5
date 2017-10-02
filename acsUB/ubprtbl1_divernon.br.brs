@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsUB\ubprtbl1_divernon
-00020 ! print bills (new format)
+00020 ! pr bills (new format)
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn
 00050   on error goto ERTN
@@ -16,16 +16,16 @@
 00160   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
-00170   let at$(1)=cnam$ !:
+00170   at$(1)=cnam$ !:
         let z=21 !:
-        let at$(1)=trim$(at$(1))(1:z) !:
+        at$(1)=trim$(at$(1))(1:z) !:
         let x=len(at$(1)) : let y=z-x !:
-        let at$(1)=rpt$(" ",int(y/2))&at$(1)
+        at$(1)=rpt$(" ",int(y/2))&at$(1)
 00180   let z=26 !:
         for j=2 to udim(at$) !:
-          let at$(j)=trim$(at$(j))(1:z) !:
+          at$(j)=trim$(at$(j))(1:z) !:
           let x=len(at$(j)) : let y=z-x !:
-          let at$(j)=rpt$(" ",int(y/2))&at$(j) !:
+          at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00190   let linelength=62
 00200   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
@@ -34,7 +34,7 @@
 00230   def fnc(x)=int(100*(x+sgn(x)*.0001))
 00240 ! ______________________________________________________________________
 00250 SCREEN1: ! 
-00260   let a$="" : let prtbkno=0
+00260   a$="" : let prtbkno=0
 00270   let fntos(sn$="UBPrtBl1-1") !:
         let pf=26 : let ll=24 !:
         let respc=0
@@ -77,8 +77,8 @@
         let mg$(2) = resp$(5) !:
         let mg$(3) = resp$(6)
 00480   if resp$(8)="[All]" then !:
-          let a$="" else !:
-          let a$ = lpad$(trim$(resp$(8)(1:10)),10)
+          a$="" else !:
+          a$ = lpad$(trim$(resp$(8)(1:10)),10)
 00490   if resp$(9)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(9))
@@ -102,10 +102,10 @@
 00660   goto L680
 00670   read #2,using L680: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,escrow,bulk$,extra1$ eof F5_CANCEL
 00680 L680: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1859,pd 5.2,pos 1942,c 12,pos 1864,c 30
-00690   mat ba=(0): let budget=0
+00690   mat ba=(0): budget=0
 00700   read #81,using L710,key=z$: x$,mat ba nokey L730
 00710 L710: form pos 1,c 10,pd 4,12*pd 5.2
-00720   for j=2 to 12: let budget=budget+ba(j): next j ! get total budget amount
+00720   for j=2 to 12: budget=budget+ba(j): next j ! get total budget amount
 00730 L730: if prtbkno=0 then goto L750
 00740   if prtbkno><route then goto F5_CANCEL
 00750 L750: if f><d1 then goto L620
@@ -141,8 +141,8 @@
 01030   let pb=bal-g(11)
 01040 ! ______________print bill routine______________________________________
 01050   gosub PRINTBILL
-01060 ! _____________end of print routine______________________________________
-01070   let bct(2)=bct(2)+1 !:
+01060 ! _____________end of pr routine______________________________________
+01070   bct(2)=bct(2)+1 !:
         ! accumulate totals
 01080   goto L620
 01090 ! ______________________________________________________________________
@@ -161,7 +161,7 @@
         let resp$(1)=a$
 01160   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
 01170   if ck=5 then goto F5_CANCEL
-01180   let a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
+01180   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto ENDSCR
 01190   read #1,using L680,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,escrow,bulk$,extra1$ nokey SCREEN3
 01200   goto HERE
@@ -179,7 +179,7 @@
 01320   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 01330   return 
 01340 ! ______________________________________________________________________
-01350 ENDSCR: ! print totals screen
+01350 ENDSCR: ! pr totals screen
 01360   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
 01370   let fntos(sn$="Bills-Total") !:
         let mylen=23 : let mypos=mylen+2 !:
@@ -195,55 +195,55 @@
 01440 ERTN: let fnerror(program$,err,line,act$,"xit")
 01450   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01460   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01470   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01470   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01480 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01490 ! /region
 01500 ! ______________________________________________________________________
 01510 PRINTBILL: ! 
-01520   if a(1)<1 or a(1)>3 then let a1=1 else let a1=a(1)
-01530   let a2=4 ! SEWER
-01540   if a(4)<1 or a(4)>2 then let a4=5 else let a4=a(4)+4 ! GAS
-01550   let a3=7 ! ADMINISTRATION FEE
-01560   let a6=8 ! TAX
+01520   if a(1)<1 or a(1)>3 then a1=1 else a1=a(1)
+01530   a2=4 ! SEWER
+01540   if a(4)<1 or a(4)>2 then a4=5 else a4=a(4)+4 ! GAS
+01550   a3=7 ! ADMINISTRATION FEE
+01560   a6=8 ! TAX
 01570   let pb=bal-g(11)
 01580   let pn=g(5)+g(6)+g(7)
-01590 ! Print #255,Using 1750: HEX$("2B0205000A1018")
+01590 ! pr #255,Using 1750: HEX$("2B0205000A1018")
 01600   form c 9,skip 0
-01610   print #255,using L1620: d1
+01610   pr #255,using L1620: d1
 01620 L1620: form pos 22,pic(zz/zz/zz),skip 4
-01630   if g(1)>0 then print #255,using L1640: cd$(a1),d(1),d(3),g(1) else print #255: 
+01630   if g(1)>0 then pr #255,using L1640: cd$(a1),d(1),d(3),g(1) else pr #255: 
 01640 L1640: form pos 1,c 3,2*g 8,nz 12.2,pos 35,c 30,skip 1
-01650   if g(2)>0 then print #255,using L1640: cd$(a2),"","",g(2) else print #255: 
-01660   if g(4)>0 then print #255,using L1670: cd$(a4),d(9),d(11),g(4),pb,bal else print #255,using L1680: pb,bal
+01650   if g(2)>0 then pr #255,using L1640: cd$(a2),"","",g(2) else pr #255: 
+01660   if g(4)>0 then pr #255,using L1670: cd$(a4),d(9),d(11),g(4),pb,bal else pr #255,using L1680: pb,bal
 01670 L1670: form pos 1,c 3,2*g 8,n 12.2,pos 33,n 12.2,n 13.2,skip 1
 01680 L1680: form pos 31,n 10.2,n 13.2,skip 1
-01690   if g(9)>0 then let code$="TX" else let code$=""
-01700   print #255,using L1640: code$,"","",g(9)
-01710   if g(3)>0 then let code$="AF" else let code$=""
-01720   print #255,using L1640: code$,"","",g(3)
-01730   let code$="": if g(8)>0 then let code$="OC" else goto L1760
-01740   print #255,using L1750: code$,"","",g(8)+g(10),z$,bulk$: goto L1780 ! IF OTHER CHARGES AND IEPA BOTH JUST ADD TOGETHER AND CALL OTHER
+01690   if g(9)>0 then code$="TX" else code$=""
+01700   pr #255,using L1640: code$,"","",g(9)
+01710   if g(3)>0 then code$="AF" else code$=""
+01720   pr #255,using L1640: code$,"","",g(3)
+01730   code$="": if g(8)>0 then code$="OC" else goto L1760
+01740   pr #255,using L1750: code$,"","",g(8)+g(10),z$,bulk$: goto L1780 ! IF OTHER CHARGES AND IEPA BOTH JUST ADD TOGETHER AND CALL OTHER
 01750 L1750: form pos 1,c 3,2*g 8,nz 12.2,pos 35,c 10,x 2,c 12,skip 1
-01760 L1760: if g(10)>0 then let code$="IEP" else let code$=""
-01770   print #255,using L1750: code$,"","",g(10),z$,bulk$
-01780 L1780: if pn > 0 then let code$="P  " else let code$=""
-01790   print #255,using L1640: code$,"","",pn
-01800   if pb > 0 then let code$="ARR" else let code$=""
-01810   print #255,using L1830: code$,"","",pb,pe$(1)
-01820   if budget>0 then print #255,using L1830: "TT","","",budget,pe$(2) else print #255,using L1830: "TT","","",bal,pe$(2)
+01760 L1760: if g(10)>0 then code$="IEP" else code$=""
+01770   pr #255,using L1750: code$,"","",g(10),z$,bulk$
+01780 L1780: if pn > 0 then code$="P  " else code$=""
+01790   pr #255,using L1640: code$,"","",pn
+01800   if pb > 0 then code$="ARR" else code$=""
+01810   pr #255,using L1830: code$,"","",pb,pe$(1)
+01820   if budget>0 then pr #255,using L1830: "TT","","",budget,pe$(2) else pr #255,using L1830: "TT","","",bal,pe$(2)
 01830 L1830: form pos 1,c 3,2*g 8,nz 12.2,pos 35,c 30,skip 1
-01840   if escrow>0 then print #255,using L1640: "CR","","",escrow,pe$(3) else print #255,using L1900: pe$(3)
-01850   print #255,using L1900: pe$(4)
-01860   print #255: 
-01870   print #255,using L1880: d4,bal
+01840   if escrow>0 then pr #255,using L1640: "CR","","",escrow,pe$(3) else pr #255,using L1900: pe$(3)
+01850   pr #255,using L1900: pe$(4)
+01860   pr #255: 
+01870   pr #255,using L1880: d4,bal
 01880 L1880: form pos 5,pic(zz/zz/zz),x 7,n 12.2,skip 2
-01890   print #255,using L1900: mg$(1)
+01890   pr #255,using L1900: mg$(1)
 01900 L1900: form pos 35,c 30
-01910   print #255,using L1900: mg$(2)
-01920   print #255,using L1930: z$,mg$(3)
+01910   pr #255,using L1900: mg$(2)
+01920   pr #255,using L1930: z$,mg$(3)
 01930 L1930: form pos 3,c 10,pos 35,c 30
-01940   print #255,using L1950: "METER READING DATE",d3
+01940   pr #255,using L1950: "METER READING DATE",d3
 01950 L1950: form pos 1,c 19,pic(zz/zz/zz)
-01960   print #255: newpage
+01960   pr #255: newpage
 01970   return  ! read next record
 01980 ! ______________________________________________________________________

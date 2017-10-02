@@ -8,7 +8,7 @@
 00080 ! ______________________________________________________________________
 00090   let fncno(cno)
 00100   let fntop(program$,"Remove Old Payroll Checks")
-00110   let cancel=99 : let right=1 : let center=2 : let on=1 : let off=0 !:
+00110   cancel=99 : let right=1 : center=2 : let on=1 : let off=0 !:
         let left=0
 00120   open #1: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&str$(cno)&",NoShr",internal,outin,keyed 
 00130   open #work1:=2: "Name="&env$('Q')&"\PRmstr\Work1."&wsid$&",Size=0,RecL=224,replace",internal,outin,relative 
@@ -46,7 +46,7 @@
 00420 ERTN: let fnerror(program$,err,line,act$,"xit")
 00430   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00440   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00450   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00470 ! /region
 00480 ! ______________________________________________________________________

@@ -20,31 +20,31 @@
 00150     let mglinerow=2 !:
           for j=1 to udim(msgline$) !:
             let tmp_fld$=str$(mglinerow+j-1)&",2,Cc "&str$(msgbox_width-1)&",N" !:
-            print #msgbox_win,fields tmp_fld$: msgline$(j) !:
+            pr #msgbox_win,fields tmp_fld$: msgline$(j) !:
           next j
 00160     if mtype=1 then !:
-            print fields mbr$&",38,Cc 4,B,1": "Ok" !:
+            pr fields mbr$&",38,Cc 4,B,1": "Ok" !:
             input fields mbr$&",09,C 1,AE,N": pause$
 00170 L170: if mtype=2 then !:
-            print fields mbr$&",35,Cc 4,B,21": "Yes" !:
-            print fields mbr$&",40,Cc 4,B,22": "No" !:
+            pr fields mbr$&",35,Cc 4,B,21": "Yes" !:
+            pr fields mbr$&",40,Cc 4,B,22": "No" !:
             input fields str$(val(mbr$)-1)&",09,Cu 1,AE,N": response$(1)
 00180     if mtype=2 and cmdkey=22 then let response$(1)="N"
 00190     if mtype=2 and cmdkey=21 then let response$(1)="Y"
 00200     if mtype=2 and response$(1)<>"Y" and response$(1)<>"N" then gosub PRNBELL : goto L170
 00210 L210: if mtype=3 then !:
-            print fields mbr$&",29,Cc 4,B,21": "Yes" !:
-            print fields mbr$&",34,Cc 4,B,22": "No" !:
-            print fields mbr$&",39,C 12,B,99": "Cancel (Esc)" !:
+            pr fields mbr$&",29,Cc 4,B,21": "Yes" !:
+            pr fields mbr$&",34,Cc 4,B,22": "No" !:
+            pr fields mbr$&",39,C 12,B,99": "Cancel (Esc)" !:
             input fields "24,79,Cu 1,AE,N": response$(1)
 00220     if mtype=4 then !:
-            print fields mbr$&",24,Cc 4,B,21": "Yes" !:
-            print fields mbr$&",29,Cc 4,B,22": "No" !:
-            print fields mbr$&",34,C  9,B,02": "Back (F2)" !:
-            print fields mbr$&",44,C 12,B,99": "Cancel (Esc)" !:
+            pr fields mbr$&",24,Cc 4,B,21": "Yes" !:
+            pr fields mbr$&",29,Cc 4,B,22": "No" !:
+            pr fields mbr$&",34,C  9,B,02": "Back (F2)" !:
+            pr fields mbr$&",44,C 12,B,99": "Cancel (Esc)" !:
             input fields "24,79,Cu 1,AE,N": response$(1)
 00230     if mtype=41 then !:
-            print fields mbr$&",36,C  8,B,01": "Ok  (F1)" !:
+            pr fields mbr$&",36,C  8,B,01": "Ok  (F1)" !:
             input fields "24,79,Cu 1,AE,N": response$(1)
 00240     if (mtype=3 or mtype=4) and cmdkey=22 then let response$(1)="N"
 00250     if (mtype=3 or mtype=4) and cmdkey=21 then let response$(1)="Y"
@@ -56,7 +56,7 @@
 00310     close #104: ioerr L320
 00320 L320: fnend 
 00330 ! __________
-00340 PRNBELL: ! print bell
-00350   print fields "24,1,C 7,N": bell$
+00340 PRNBELL: ! pr bell
+00350   pr fields "24,1,C 7,N": bell$
 00360   return 
 00370 ! ______________________________________________________________________

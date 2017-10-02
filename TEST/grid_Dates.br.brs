@@ -1,4 +1,4 @@
-10000   print newpage
+10000   pr newpage
 20000 ! r: set header stuff
 20020   dim gridspec$*256
 20040   let gridspec$='#0,6,3,list 20/70'
@@ -97,16 +97,16 @@
 21900   let long_row$(60)='0'
 21940 ! /r
 21960   dim ace_io$(4)*256
-22000   let ace_io$(1)='#0,6,3,list 20/70,row,selone'
-22040   let ace_io$(2)='#0,5,3,70/filter 71,[textboxes],6,3,1,word'
-22080   let ace_io$(3)='#0,2,49,12/#PIC(--------.--),T[textboxes],300'
-22120   let ace_io$(4)='#0,3,48,check 2,T'
+22000   ace_io$(1)='#0,6,3,list 20/70,row,selone'
+22040   ace_io$(2)='#0,5,3,70/filter 71,[textboxes],6,3,1,word'
+22080   ace_io$(3)='#0,2,49,12/#PIC(--------.--),T[textboxes],300'
+22120   ace_io$(4)='#0,3,48,check 2,T'
 22140   dim ace_resp$(3)*256
-22160   let ace_resp$(1)=''
-22180   let ace_resp$(2)='0'
-22200   let ace_resp$(3)='^'
+22160   ace_resp$(1)=''
+22180   ace_resp$(2)='0'
+22200   ace_resp$(3)='^'
 22220 ! 
-22240   print fields gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
-22260   print fields gridspec$&",=L": mat long_row$ ! (1:(row_count)*udim(_chunks$))
+22240   pr fields gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
+22260   pr fields gridspec$&",=L": mat long_row$ ! (1:(row_count)*udim(_chunks$))
 22280   dim grid_filter$*256,grid_row$(6)*256
 22300   rinput fields mat ace_io$: mat grid_row$, grid_filter$, mat ace_resp$(2:udim(ace_resp$))

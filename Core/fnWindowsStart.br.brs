@@ -10,13 +10,13 @@
 44040     hWsCmdFile$=env$('client_temp')&'\acsWinStart_'&session$&'-'&shortTermUniqueNumber$&'.cmd'
 44060     wsFile$=os_filename$(wsFile$)
 44080     open #hWsCmd:=fngethandle: 'Name='&env$('at')&br_filename$(hWsCmdFile$)&',RecL=512,Replace',display,output 
-44100     print #hWsCmd: '@echo off'
-44120     print #hWsCmd: '@echo Advanced Computer Services LLC'
-44140     print #hWsCmd: '@echo Opening: "'&wsFile$&'"'
-44160     ! print #hWsCmd: '@echo .'
-44180     ! print #hWsCmd: '@echo Relative To: '&os_filename$(env$('Q')&'\')
-44200     print #hWsCmd: '@echo .'
-44220     print #hWsCmd: '"'&wsFile$&'"'
+44100     pr #hWsCmd: '@echo off'
+44120     pr #hWsCmd: '@echo Advanced Computer Services LLC'
+44140     pr #hWsCmd: '@echo Opening: "'&wsFile$&'"'
+44160     ! pr #hWsCmd: '@echo .'
+44180     ! pr #hWsCmd: '@echo Relative To: '&os_filename$(env$('Q')&'\')
+44200     pr #hWsCmd: '@echo .'
+44220     pr #hWsCmd: '"'&wsFile$&'"'
 44240     close #hWsCmd: 
 44260     execute 'sy -M -C '&hWsCmdFile$
 60000   fnend

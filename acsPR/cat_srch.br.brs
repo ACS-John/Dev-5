@@ -13,7 +13,7 @@
 00130 ! ______________________________________________________________________
 00140     restore #category: 
 00150     let fntos(sn$="CatSrch")
-00160     let ch$(1)="Job & Category": let ch$(2)="Category Name" : !:
+00160     ch$(1)="Job & Category": ch$(2)="Category Name" : !:
           mat ch$(2) : mat cm$(2) : mat cm$=("2")
 00170     if fixgrid=99 then let usefile=0 else let usefile=1 !:
             ! set to rebuild grid file only as you exit program and the !:
@@ -29,23 +29,23 @@
 00260 ! ______________________________________________________________________
 00270 ERR_READ: ! 
 00280     if err<>61 then goto ERTN
-00290     print 'Record locked during cat_search flexgrid creation' !:
-          print 'It was skipped' !:
+00290     pr 'Record locked during cat_search flexgrid creation' !:
+          pr 'It was skipped' !:
           read #category,release: !:
           goto READ_FILE
 00300 ! ______________________________________________________________________
 00310 L310: ! If FIXGRID=99 Then Goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
 00320     let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
-00330     let cn$=lpad$(resp$(1),11)
-00340     if ckey=5 then let cn$=cn$(1:6)&"     " ! no one selected
+00330     cn$=lpad$(resp$(1),11)
+00340     if ckey=5 then cn$=cn$(1:6)&"     " ! no one selected
 00350     goto XIT
 00360 ! ______________________________________________________________________
 00370 ! <Updateable Region: ERTN>
 00380 ERTN: let fnerror(program$,err,line,act$,"xit")
 00390     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00400     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00410     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00410     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00420 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00430 ! /region
 00440 ! ______________________________________________________________________

@@ -5,7 +5,7 @@
 00100  ! #Autonumber# 100,20
 00120     on error goto ERR_TRAP
 00140     option base 0
-00160     print "Library Base64_L" : end
+00160     pr "Library Base64_L" : end
 00180     def library Fn_Encodebase64(&Content$)
 00200        if Trim$(Content$)="" then goto RT_ENCODE
 00220        gosub RD_ROUTINE
@@ -14,28 +14,28 @@
 00280        let Line$=Content$
 00300        let L=Len(Line$)
 00320        for I=1 to L
-00340           let Bl$=Bl$&Bt$(Ord(Line$(I:I)))
+00340           bl$=Bl$&Bt$(Ord(Line$(I:I)))
 00360        next I
 00380        let L=Len(Bl$): let Nullcount=Mod(L,3)
 00400        if Nullcount=2 then let L=L+16
 00420        if Nullcount=1 then let L=L+8
-00440        let Bl$=Rpad$(Bl$,L,"0")
+00440        bl$=Rpad$(Bl$,L,"0")
 00460        let L=Len(Bl$)
 00480        let D=Int(L/6): let E=D*6
-00500        let B64=0: for I=1 to E step 6
+00500        b64=0: for I=1 to E step 6
 00520           let F$=Bl$(I:I+5)
-00540           if F$(1:1)="1" then let B64=B64+32
-00560           if F$(2:2)="1" then let B64=B64+16
-00580           if F$(3:3)="1" then let B64=B64+8
-00600           if F$(4:4)="1" then let B64=B64+4
-00620           if F$(5:5)="1" then let B64=B64+2
-00640           if F$(6:6)="1" then let B64=B64+1
-00660           let B64$=B64$&B64t$(B64) : let B64=0
+00540           if F$(1:1)="1" then b64=B64+32
+00560           if F$(2:2)="1" then b64=B64+16
+00580           if F$(3:3)="1" then b64=B64+8
+00600           if F$(4:4)="1" then b64=B64+4
+00620           if F$(5:5)="1" then b64=B64+2
+00640           if F$(6:6)="1" then b64=B64+1
+00660           b64$=B64$&B64t$(B64) : b64=0
 00680        next I
 00700        let X=Len(B64$)
-00720        if Nullcount=2 then let B64$=B64$(1:X-2)&"==" : goto RT_ENCODE
-00740        if Nullcount=1 then let B64$=B64$(1:X-1)&"="
-00760  RT_ENCODE: let Content$=B64$
+00720        if Nullcount=2 then b64$=B64$(1:X-2)&"==" : goto RT_ENCODE
+00740        if Nullcount=1 then b64$=B64$(1:X-1)&"="
+00760  RT_ENCODE: content$=B64$
 00780     fnend
 00800     def library Fn_Decodebase64(&Content$)
 00820        if Trim$(Content$)="" then goto RT_DECODE
@@ -51,14 +51,14 @@
 01020        next I
 01040        for I=1 to L
 01060           let Sav=Id(I)
-01080           if Sav<32 then let Bt$="0" else let Sav=Sav-32 : let Bt$="1"
-01100           if Sav<16 then let Bt$=Bt$&"0" else let Sav=Sav-16: let Bt$=Bt$&"1"
-01120           if Sav<8 then let Bt$=Bt$&"0" else let Sav=Sav-8 : let Bt$=Bt$&"1"
-01140           if Sav<4 then let Bt$=Bt$&"0" else let Sav=Sav-4 : let Bt$=Bt$&"1"
-01160           if Sav<2 then let Bt$=Bt$&"0" else let Sav=Sav-2 : let Bt$=Bt$&"1"
-01180           if Sav<1 then let Bt$=Bt$&"0" else let Sav=Sav-1 : let Bt$=Bt$&"1"
-01200           if Sav<>0 then print "Problem" : pause
-01220           let Bl$=Bl$&Bt$
+01080           if Sav<32 then bt$="0" else let Sav=Sav-32 : bt$="1"
+01100           if Sav<16 then bt$=Bt$&"0" else let Sav=Sav-16: bt$=Bt$&"1"
+01120           if Sav<8 then bt$=Bt$&"0" else let Sav=Sav-8 : bt$=Bt$&"1"
+01140           if Sav<4 then bt$=Bt$&"0" else let Sav=Sav-4 : bt$=Bt$&"1"
+01160           if Sav<2 then bt$=Bt$&"0" else let Sav=Sav-2 : bt$=Bt$&"1"
+01180           if Sav<1 then bt$=Bt$&"0" else let Sav=Sav-1 : bt$=Bt$&"1"
+01200           if Sav<>0 then pr "Problem" : pause
+01220           bl$=Bl$&Bt$
 01240        next I
 01260        let L=Len(Bl$)
 01280        let D=Int(L/8): let E=D*8
@@ -70,7 +70,7 @@
 01400        next I
 01420        let X=Len(Line$) : if Line$(X-1:X)=Chr$(0)&Chr$(0) then let Line$=Line$(1:X-2)
 01440        if Line$(X:X)=Chr$(0) then let Line$=Line$(1:X-1)
-01460  RT_DECODE: let Content$=Trim$(Line$)
+01460  RT_DECODE: content$=Trim$(Line$)
 01480     fnend
 01500  RD_ROUTINE: !
 01520     dim Bt$(255)*8,B64t$(64)*1
@@ -120,5 +120,5 @@
 90000  ! #Autonumber# 90000,10
 90010  ERR_TRAP: !
 90020  CTRL_C: !
-90030     let Content$="ERR"&Str$(Err)
+90030     content$="ERR"&Str$(Err)
 90040     if Decode=1 then goto RT_DECODE else goto RT_ENCODE

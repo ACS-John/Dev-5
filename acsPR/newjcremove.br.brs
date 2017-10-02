@@ -60,14 +60,14 @@
 00540 L540: read #1,using "Form POS 1,C 6,C 40,3*C 30,N 6,2*PD 7.2,N 2,C 30,C 12,C 60": jn$,n$,mat a$,mat b,contact$,ph$,email$ eof EOF1
 00550   form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2
 00560   if b(4)=9 then goto L540
-00570   let cn$=jn$&"     "
+00570   cn$=jn$&"     "
 00580   read #2,using L590,key>=cn$: cn$,k$,mat l,mat ta nokey L540
 00590 L590: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2,2*pd 3
 00600   goto L620
 00610 L610: read #2,using L590: cn$,k$,mat l,mat ta eof L790
 00620 L620: if jn$><cn$(1:6) then goto L790
 00630   if ta(1)=0 then goto L770
-00640   let adr=ta(1)
+00640   adr=ta(1)
 00650   mat ta=(0)
 00660 L660: read #3,using L530,rec=adr: eno$,jno$,mat tr,pd$,nta
 00670   let ot4=ot4+1
@@ -78,7 +78,7 @@
 00720   if ta(1)=0 then let ta(1)=ot4
 00730   let ta(2)=ot4
 00740   if nta=0 then goto L770
-00750   let adr=nta
+00750   adr=nta
 00760   goto L660
 00770 L770: write #12,using L590: cn$,k$,mat l,mat ta
 00780   goto L610
@@ -103,7 +103,7 @@
 00950 ERTN: let fnerror(program$,err,line,act$,"xit")
 00960   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00970   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00980   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00980   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00990 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01000 ! /region
 01010 ! ______________________________________________________________________

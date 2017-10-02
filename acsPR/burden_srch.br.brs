@@ -14,9 +14,9 @@
 00130 ! ______________________________________________________________________
 00140     restore #file_num: 
 00150     let fntos(sn$="BurdenSrch")
-00160     let ch$(1)="Employee" : let ch$(2)="Name" : let ch$(3)="Burden" !:
-          let ch$(4)="Unused" !:
-          let ch$(5)="Unused" !:
+00160     ch$(1)="Employee" : ch$(2)="Name" : ch$(3)="Burden" !:
+          ch$(4)="Unused" !:
+          ch$(5)="Unused" !:
           mat ch$(5) : mat cm$(5)
 00180     let fnflexinit1('BurdenSrch',1,1,10,70,mat ch$,mat cm$,1,usefile)
 00190     if usefile>0 then goto L300 ! file already exists, do not recreate
@@ -28,8 +28,8 @@
 00250 ! ______________________________________________________________________
 00260 ERR_READ: ! 
 00270     if err<>61 then goto ERTN
-00280     print 'Record locked during burden_search flexgrid creation' !:
-          print 'It was skipped' !:
+00280     pr 'Record locked during burden_search flexgrid creation' !:
+          pr 'It was skipped' !:
           read #file_num,release: !:
           goto READ_FILE
 00290 ! ______________________________________________________________________
@@ -46,7 +46,7 @@
 00370 ERTN: let fnerror(program$,err,line,act$,"xit")
 00380     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00390     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00400     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00400     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00410 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00420 ! /region
 00430 ! ______________________________________________________________________

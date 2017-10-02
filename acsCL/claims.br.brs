@@ -10,7 +10,7 @@
 00100   dim tmp$*40,dp(3),dp$*30
 00110 ! ______________________________________________________________________
 00120   let fntop(program$,cap$="Claims or Purchases Report")
-00130   let cancel=99
+00130   cancel=99
 00140   let fncno(cno,cnam$)
 00160   let fndat(dat$)
 00170   gosub ASK_TI1
@@ -77,10 +77,10 @@
 00760 L760: if vn$=hvn$ then goto L810
 00770   if fund=2 then goto L810 ! no vendor totals in fund sequence
 00780   if vc<2 then goto L800
-00790   print #255: tab(87);"__________"
-00800   print #255,using L3070: "Vendor Total",v3
+00790   pr #255: tab(87);"__________"
+00800   pr #255,using L3070: "Vendor Total",v3
 00805 L800: let vc=v1=v2=v3=0
-00810 L810: ! PRINT #255: PAGEOFLOW NEWPGE
+00810 L810: ! pr #255: PAGEOFLOW NEWPGE
 00820   let vc=vc+1
 00830   let hvn$=vn$
 00840   if nofx=0 then gosub HDR
@@ -88,7 +88,7 @@
 00860   if pos1=0 and pos2=0 then goto L880
 00870   if notused =0 and dpt$><gl$(1:3)&cnvrt$("pic(zz)",val(gl$(pos1:pos2))) then gosub TOTAL_DEPARTMENT
 00880 L880: if fund<>2 then goto L930
-00890   if fund$><gl$(1:3) then gosub TOTAL_FUND : print #255: newpage : gosub HDR
+00890   if fund$><gl$(1:3) then gosub TOTAL_FUND : pr #255: newpage : gosub HDR
 00900   let f2=(val(gl$(1:3)))
 00910   if f2=0 then let f2=1000
 00920   let ft2(f2)=ft2(f2)+upa
@@ -101,38 +101,38 @@
 01000 L1000: if prcode=1 then !:
           read #rpmstr,using 'Form POS 9,C 30',key=vn$: vnam$ nokey ignore
 01001 L1010: ! 
-01002   if trim$(vnam$)='CRIS PERRY' then print 'vn$='&vn$ : pause 
-01010   print #255,using 'Form POS 1,C 32,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS 87,N 10.2,POS 99,C 4,C 7,C 3': vnam$,iv$,ivd,dd,ade$(1:18),upa,gl$(1:3),gl$(4:9),gl$(10:12) pageoflow NEWPGE
+01002   if trim$(vnam$)='CRIS PERRY' then pr 'vn$='&vn$ : pause 
+01010   pr #255,using 'Form POS 1,C 32,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS 87,N 10.2,POS 99,C 4,C 7,C 3': vnam$,iv$,ivd,dd,ade$(1:18),upa,gl$(1:3),gl$(4:9),gl$(10:12) pageoflow NEWPGE
 01020   let upa=0
 01030   if endcode=1 then goto L1360
 01040   goto L700
 01050 L1050: if gl$(3:3)=" " then let gl$(3:3)="0"
 01060   if gl$(12:12)=" " then let gl$(12:12)="0"
 01070   read #work,using 'Form POS 13,pd 10.2',key=gl$: gla nokey L1120
-01080   if amt<-20202020 then let amt=0
+01080   if amt<-20202020 then amt=0
 01090   let gla=gla+amt
 01100   rewrite #work,using 'Form POS 13,pd 10.2': gla
 01110   goto L1150
 01120 L1120: ! 
-01122   if amt<-20202020 then let amt=0
+01122   if amt<-20202020 then amt=0
 01130   if amt<>0 then 
 01140     write #work,using 'Form POS 1,C 12,pd 10.2': gl$,amt
 01142   end if 
 01150 L1150: ! 
 01152   return 
-01160 NEWPGE: print #255: newpage: gosub HDR : continue 
+01160 NEWPGE: pr #255: newpage: gosub HDR : continue 
 01330 IGNORE: continue 
 01340 END1: ! 
 01350   if r4=0 then goto XIT
 01360   let endcode=1
 01370   goto L760
 01375 L1360: if vc<2 then goto L1390
-01380 ! Print #255: TAB(87);"__________"
-01385 ! Print #255,Using 1800: "Vendor Total",V3 Pageoflow NEWPGE
+01380 ! pr #255: TAB(87);"__________"
+01385 ! pr #255,Using 1800: "Vendor Total",V3 Pageoflow NEWPGE
 01390 L1390: gosub TOTAL_FUND
-01400   print #255: tab(87);"__________"
-01410   print #255,using 'Form POS 67,C 18,N 12.2': "Final Total",t3 pageoflow NEWPGE
-01420   print #255: tab(87);"=========="
+01400   pr #255: tab(87);"__________"
+01410   pr #255,using 'Form POS 67,C 18,N 12.2': "Final Total",t3 pageoflow NEWPGE
+01420   pr #255: tab(87);"=========="
 01430   restore #work,key>="            ": nokey L1620
 01440 L1440: read #work,using 'Form POS 1,C 12,pd 10.2': gl$,gla eof L1620
 01450   if hf$="" or hf$=gl$(1:3) then goto L1470
@@ -140,15 +140,15 @@
 01470 L1470: let hf$=gl$(1:3)
 01480   let de$=""
 01490   read #glmstr,using 'Form POS 13,C 50',key=gl$: de$ nokey L1500
-01500 L1500: print #255,using 'Form POS 12,C 14,C 50,N 12.2': gl$,de$,gla pageoflow NEWPGE
+01500 L1500: pr #255,using 'Form POS 12,C 14,C 50,N 12.2': gl$,de$,gla pageoflow NEWPGE
 01510   let tnofx+=gla
 01520   goto L1440
 01530 ! ______________________________________________________________________
-01540 TOTNOFX: print #255: tab(78);"__________"
+01540 TOTNOFX: pr #255: tab(78);"__________"
 01550 ! If FUND<>2 Then Goto 1550
 01560   if val(hf$)>0 then let fd$="Total for Fund #: "&ltrm$(hf$) else let fd$="Total"
-01570   print #255,using 'Form POS 12,C 14,C 50,N 12.2': "",fd$,tnofx pageoflow NEWPGE
-01580   print #255: pageoflow NEWPGE
+01570   pr #255,using 'Form POS 12,C 14,C 50,N 12.2': "",fd$,tnofx pageoflow NEWPGE
+01580   pr #255: pageoflow NEWPGE
 01590   let tnofx=0
 01600   return 
 01610 ! ______________________________________________________________________
@@ -159,8 +159,8 @@
 01660 XIT: let fnxit
 01670 ! ______________________________________________________________________
 01680 TOTAL_FUND: ! r:
-01690   print #255: tab(87);"__________"
-01700   print #255,using 'Form POS 67,C 18,N 12.2': "Fund   Total",ft(3) pageoflow NEWPGE
+01690   pr #255: tab(87);"__________"
+01700   pr #255,using 'Form POS 67,C 18,N 12.2': "Fund   Total",ft(3) pageoflow NEWPGE
 01710   mat ft=(0)
 01720   return  ! /r
 01730 ! ______________________________________________________________________
@@ -178,11 +178,11 @@
 02120   let pd1=fndate_mmddyy_to_ccyymmdd(val(tr$(2))) conv READ_TRMSTR
 02130   if ld1=0 and hd1=0 then goto L2150
 02140   if pd1<ld1 or pd1>hd1 then goto READ_TRMSTR
-02150 L2150: let ck1=val(tr$(1)) conv NEXT_IVNUM
+02150 L2150: ck1=val(tr$(1)) conv NEXT_IVNUM
 02160   goto RESTORE_TRALLOC
 02170 ! ______________________________________________________________________
 02180 NEXT_IVNUM: ! 
-02190   let ivnum+=1 : let ck1=ivnum
+02190   let ivnum+=1 : ck1=ivnum
 02200 RESTORE_TRALLOC: ! 
 02210   let key$=cnvrt$("Pic(zz)",bank_code)&str$(tcde)&tr$(1) !:
         restore #tralloc,key=key$: nokey READ_TRMSTR
@@ -206,14 +206,14 @@
 02350   goto ASK_SORT
 02360 ! ______________________________________________________________________
 02370 FT2: let fd$="Total for all Funds"
-02380   print #255: newpage : gosub HDR
-02390   print #255: "Fund   Amount" !:
-        print #255: "____  __________"
+02380   pr #255: newpage : gosub HDR
+02390   pr #255: "Fund   Amount" !:
+        pr #255: "____  __________"
 02400   if ft2(1000)<>0 then !:
-          print #255,using 'Form POS 1,N 4,N 12.2': 0,ft2(1000) pageoflow NEWPGE
+          pr #255,using 'Form POS 1,N 4,N 12.2': 0,ft2(1000) pageoflow NEWPGE
 02410   for j=1 to 999
 02420     if ft2(j)<>0 then !:
-            print #255,using 'Form POS 1,N 4,N 12.2': j,ft2(j) pageoflow NEWPGE
+            pr #255,using 'Form POS 1,N 4,N 12.2': j,ft2(j) pageoflow NEWPGE
 02430   next j
 02440   return 
 02450 ! ______________________________________________________________________
@@ -263,7 +263,7 @@
 02740   let ld1=val(resp$(4))
 02750   let hd1=val(resp$(5))
 02760   if resp$(6)(1:1)="V" then let fund=1 else let fund=2 ! vendor # or fund #
-02770   if resp$(7)(1:1)="A" then let coded=1 else let coded=2 ! all invoices or only coded for payment
+02770   if resp$(7)(1:1)="A" then coded=1 else coded=2 ! all invoices or only coded for payment
 02780   if resp$(8)(1:1)="T" then let pr$="Y" else let pr$="N"
 02790   let pos1=val(resp$(9))
 02800   let pos2=val(resp$(10))
@@ -273,7 +273,7 @@
 02870 ERTN: let fnerror(program$,err,line,act$,"xit")
 02880   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02890   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02900   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02900   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02910 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02920 ! /region
 02930 ! ______________________________________________________________________
@@ -286,14 +286,14 @@
 03000     let dpt$=gl$(1:3)&cnvrt$("pic(zz)",val(gl$(pos1:pos2)))
 03010     read #11,using 'form pos 1,n 3,n 2,c 30',key=dpt$: fund1,dept1,dp$ nokey TD_XIT
 03040     if dept1=0 then goto TD_XIT ! don't do department totals if department file only has fund numbers.
-03050     print #255: tab(87);"----------"
-03060     print #255,using L3070: "DEPT   TOTAL",dp(3) pageoflow NEWPGE
+03050     pr #255: tab(87);"----------"
+03060     pr #255,using L3070: "DEPT   TOTAL",dp(3) pageoflow NEWPGE
 03070 L3070: form pos 67,c 18,n 12.2,skip 1
 03072   end if 
 03080   mat dp=(0)
 03090   if gl$(1:3)><fund$ then goto TD_XIT
 03100   let hp3=51-int(len(rtrm$(dp$))/2)
-03110   print #255,using L3120: dp$ pageoflow NEWPGE
+03110   pr #255,using L3120: dp$ pageoflow NEWPGE
 03120 L3120: form pos hp3,c 30,skip 1
 03130 TD_XIT: ! 
 03132   return  ! /r
@@ -302,16 +302,16 @@
 42020   let fund$=gl$(1:3)
 42040   read #fundmstr,using 'Form POS 4,C 25',key=fund$: fd$ nokey ignore ! changed from "nokey ignore" in an attempt to fix error 201
 42060   let nofx=1 : let pg+=1
-42080   print #255,using 'Form POS 1,C 8,CC 86': date$,cnam$
+42080   pr #255,using 'Form POS 1,C 8,CC 86': date$,cnam$
 42100   if ti1$="C" then let tmp$="Claims" else let tmp$="Purchases"
-42120   print #255,using 'Form POS 1,C 8,POS 30,C 50': time$,tmp$&" Report-"&rtrm$(ty1$)&"-"&rtrm$(ty2$)
-42140   print #255,using 'Form POS 1,C 4,N 4,CC 86': "Page",pg,dat$
+42120   pr #255,using 'Form POS 1,C 8,POS 30,C 50': time$,tmp$&" Report-"&rtrm$(ty1$)&"-"&rtrm$(ty2$)
+42140   pr #255,using 'Form POS 1,C 4,N 4,CC 86': "Page",pg,dat$
 42160   if fund<>2 then let fd$=""
-42180   print #255,using 'Form POS 1,Cc 102': fd$
-42200   print #255: ""
-42220   print #255: "                                              Invoice     Due                           Total          GL    "
-42240   print #255: "Payee Name                      Invoice Numb    Date      Date    Description            Due          Number"
-42260   print #255: "______________________________  ____________  ________  ________  __________________  __________  ______________"
+42180   pr #255,using 'Form POS 1,Cc 102': fd$
+42200   pr #255: ""
+42220   pr #255: "                                              Invoice     Due                           Total          GL    "
+42240   pr #255: "Payee Name                      Invoice Numb    Date      Date    Description            Due          Number"
+42260   pr #255: "______________________________  ____________  ________  ________  __________________  __________  ______________"
 42280   let nofx=1
 42300 !  a nokey on the read #fundmstr line above can cause and err 201 (return without gosub)  the nokey is the last error and the continue goes to the line after the unsuccessful read   Build the general ledger control file and put the fund names in it!!!!!!!!
 42320   return  ! /r

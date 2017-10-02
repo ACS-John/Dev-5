@@ -16,10 +16,10 @@
 21000   ! r: add the system buttons to the screen
 21010   fnbutton_or_disabled(env$('enableClientSelection')=='Yes',2,2,env$('client')(1:37),fkey_client:=5201, 'Client Name is "'&env$('client')&'"',37)
 21020   let fnfra(4,1,udim(mat client_has$)+1,38, 'System','Click a system button to change and view the companies in that system')
-21040   let ch_line=1
+21040   ch_line=1
 21060   for ch_item=2 to udim(mat client_has$) ! starting at 2 to always skip CO = which is always #1
 21080     if client_has$(ch_item)<>'U4' and client_has$(ch_item)<>'P4' and client_has$(ch_item)<>'U5' and client_has$(ch_item)<>'G2' then 
-21100       let ch_line+=1
+21100       ch_line+=1
 21110       fnbutton_or_disabled((~env$('cursys')==client_has$(ch_item)),ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),1000+ch_item, '',37,1)
 21120       ! if env$('cursys')=client_has$(ch_item) then 
 21140       !   let fnlbl(ch_line,1,fnSystemName$(client_has$(ch_item))(1:37),37,2,0,1)
@@ -35,11 +35,11 @@
 34000   ! 
 34020   ! let temp$=env$('Q')&'\'&env$('cursys')&"mstr"
 34040   let fngetdir2(env$('Q')&'\'&env$('cursys')&"mstr",mat filename$,'/od /ta',"Company.*") ! fngetdir(temp$,mat filename$,empty$,"Company.*") ! /oe
-34060   let company_count=filename_item=0
+34060   company_count=filename_item=0
 34080   for filename_item=1 to udim(mat filename$)
 34100     let tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
 34120     if tmp_cno<>99999 and filename$(filename_item)<>'' then ! don't display company 99999
-34140       let company_count+=1
+34140       company_count+=1
 34160       let item$(1)=str$(tmp_cno)
 34180       let item$(2)=fn_cname_of_cno$(tmp_cno)
 34200       let fnflexadd1(mat item$)
@@ -79,7 +79,7 @@
 38120     let fnchain('S:\Core\Company Import.br')
 38140   end if 
 39000   ! 
-39020   let cno_selected=val(resp$(1))
+39020   cno_selected=val(resp$(1))
 39040   ! 
 40000   if ck=3 then ! Copy
 40020     let fn_company_copy(cno_selected)
@@ -94,7 +94,7 @@
 40140     gosub SELECT_COMPANY
 40160     chain program$
 41000   else if ck>1000 and ck<1200 then ! Select System 1001-1199 reserved for system selection
-41020     let cursys$=client_has$(ck-1000)
+41020     cursys$=client_has$(ck-1000)
 41040     let fnreg_write(session$&'.CurSys',cursys$)
 41060     let fncursys$(cursys$)
 41080     let fn_setup_on_cursys_change
@@ -125,7 +125,7 @@
 44140   let fncmdset(2)
 44160   let fnacs(sn$,0,mat resp$,ck)
 44180   if ck=5 then goto MENU1
-44200   let cno_selected=val(resp$(1))
+44200   cno_selected=val(resp$(1))
 44220   if fn_company_already_exists(cno_selected)=1 then goto MENU1
 45000   let fnputcno(cno_selected)
 45020   let fncheckfileversion
@@ -161,20 +161,20 @@
 48020 ERTN: let fnerror(program$,err,line,act$,"xit")
 48040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 48060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-48080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+48080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 48100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 48120 ! /region
 50000 def fn_company_already_exists(cae_cno)
-50020   let cae_return=0
+50020   cae_return=0
 50040   if exists(env$('Q')&'\'&env$('cursys')&"mstr\Company.h"&str$(cae_cno)) then 
-50060     let cae_return=1
+50060     cae_return=1
 50080     ! mat mg$(3)
 50100     mat mg$(2)
 50120     let mg$(1)="Company number "&str$(cae_cno)&". "&rtrm$(fn_cname_of_cno$(cae_cno))&" already exist!"
 50140     mg$(2)="Would you like to erase it first?"
 50160      fnmsgbox(mat mg$,response$,'',32+4+256) ! (i)+(yn)+(secondButtonDefault)
 50180     if response$='Yes' then
-50200       if fn_company_delete(cae_cno) then let cae_return=0
+50200       if fn_company_delete(cae_cno) then cae_return=0
 50220     end if
 50240     !  mg$(2)="Select a different company number"
 50260     !  mg$(3)="or exit and erase the existing company first."
@@ -291,11 +291,11 @@
 76400   ! 
 76420   ! r: constants and variables setup for the company grid
 76440     mat colhdr$(2)
-76460     let colhdr$(1)='Number'
-76480     let colhdr$(2)='Name'
+76460     colhdr$(1)='Number'
+76480     colhdr$(2)='Name'
 76500     mat colmask$(2)
-76520     let colmask$(1)="30"
-76540     let colmask$(2)=""
+76520     colmask$(1)="30"
+76540     colmask$(2)=""
 76560     dim item$(2)*40
 76580   ! /r
 76600   let fn_system_setup
@@ -317,16 +317,16 @@
 78360   end if 
 78380   ! 
 78400   dim cursys$*40
-78420   !  let cursys$=fncursys$
+78420   !  cursys$=fncursys$
 78440   let fnreg_read(session$&'.CurSys',cursys$)
-78480   let cursys$=fncursys$(cursys$)
+78480   cursys$=fncursys$(cursys$)
 78500   let fn_setup_on_cursys_change
 78520 fnend 
 80000 def fn_setup_on_cursys_change
 80020   dim cnam$*80
 80040   let fncno(cno,cnam$)
 80060   if cno=0 then 
-80080     let cno=1
+80080     cno=1
 80100     let fnputcno(cno)
 80120     let fncno(cno,cnam$)
 80140   end if 

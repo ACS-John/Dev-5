@@ -2,6 +2,6 @@
 00020   library 'S:\Core\Library': fntop,fncustomer_search
 00030   let fntop(program$,"test customer search")
 00052   let fncustomer_search(x$,1)
-00060   print x$
+00060   pr x$
 00061 ! 
 00070   stop 

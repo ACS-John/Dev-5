@@ -11,8 +11,8 @@
 00110   let fntop(program$,cap$="Income Statement with Percents")
 00120   let fncno(cno,cnam$)
 00130   let udf$=env$('temp')&'\'
-00140   let actpd=fnactpd
-00150   let actpd$=fnactpd$
+00140   actpd=fnactpd
+00150   actpd$=fnactpd$
 00155   let fscode=fnfscode
 00156   let priorcd=fnpriorcd
 00160   if fnglfs=5 then goto XIT !:
@@ -24,21 +24,21 @@
           let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
 00190 L190: form pos mp1,pd 3,pos 81,41*pd 6.2
 00200   let pas=1 : open #hwork:=4: "Name="&env$('temp')&"\Work."&session$&",KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outin,keyed 
-00210 L210: let acglfnsi=1 !:
+00210 L210: acglfnsi=1 !:
         open #acglfnsi: fl1$,internal,outin,keyed 
 00220   if fnprocess=1 or fnUseDeptNo=0 then goto L330
 00230   if percent=1 then goto L330
 00240   let fntos(sn$="ACGlincp") !:
         let mylen=30: let mypos=mylen+3 : let right=1
 00250   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00260   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to print only one department, else leave blank for all.",0 ) !:
+00260   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
 00270   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
 00280   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
 00290   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
 00300   let fnacs(sn$,0,mat resp$,ckey)
 00310   if ckey=5 then goto XIT
-00320   let costcntr=val(resp$(1))
+00320   costcntr=val(resp$(1))
 00330 L330: on fkey 5 goto L1910
 00340   let fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
@@ -59,7 +59,7 @@
 00490   if heading=0 and te$><"R" then gosub L1730
 00500 L500: on pos ("RFHDTS",te$,1) goto L1250,L1300,L510,L570,L1040,L1250 none READ_ACGLFNSI
 00510 L510: if percent=0 then goto L550
-00520   print #255,using L530: d$(1:40)
+00520   pr #255,using L530: d$(1:40)
 00530 L530: form pos sp,c 40,skip 1
 00540   gosub L1420
 00550 L550: gosub L1370
@@ -71,11 +71,11 @@
 00610   if ir=0 then goto L600
 00620   if fscode=0 or fscode=actpd then goto L690
 00630   if fscode<1 or fscode>13 then let fscode=1
-00640   if priorcd=1 then let cb=by(fscode) else let cb=bp(fscode)
+00640   if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00650   if priorcd=2 then goto L680
-00660   if fscode>1 then let bb=by(fscode-1) else let bb=0
+00660   if fscode>1 then bb=by(fscode-1) else bb=0
 00670   goto L690
-00680 L680: if fscode>1 then let bb=bp(fscode-1) else let bb=0
+00680 L680: if fscode>1 then bb=bp(fscode-1) else bb=0
 00690 L690: if ir=val(r$) then let total=total+(cb-bb) else goto L720
 00700   let total2=total2+cb
 00710   goto L590
@@ -84,8 +84,8 @@
 00740 L740: let notrans=1
 00750 L750: for j=1 to 9
 00760     if ac(j)=9 then goto L790 ! 10/14/87
-00770     let accum(j,1)=accum(j,1)+total
-00780     let accum(j,2)=accum(j,2)+total2
+00770     accum(j,1)=accum(j,1)+total
+00780     accum(j,2)=accum(j,2)+total2
 00790 L790: next j
 00800   if rs=1 then let total=-total else goto L820
 00810   let total2=-total2
@@ -102,8 +102,8 @@
 00920   if monthpct>999.99 then let monthpct=999.99
 00930   if ytdpct<-999.99 then let ytdpct=-999.99
 00940   if ytdpct>999.99 then let ytdpct=999.99
-00945   if ul=1 then print #255,using L961: d$(1:sp2),dollar$,"{\UL ",total,"}",monthpct,percent$,dollar$,"{\UL ",total2,"}",ytdpct,percent$ pageoflow L1590 : goto L960
-00950   print #255,using L960: d$(1:sp2),dollar$,total,monthpct,percent$,dollar$,total2,ytdpct,percent$ pageoflow L1590
+00945   if ul=1 then pr #255,using L961: d$(1:sp2),dollar$,"{\UL ",total,"}",monthpct,percent$,dollar$,"{\UL ",total2,"}",ytdpct,percent$ pageoflow L1590 : goto L960
+00950   pr #255,using L960: d$(1:sp2),dollar$,total,monthpct,percent$,dollar$,total2,ytdpct,percent$ pageoflow L1590
 00960 L960: form pos sp,c sp2,pos 31,c 1,pic(-----,---,---.##),pic(-----.##),c 2,x 3,c 1,pic(-----,---,---.##),pic(-----.##),c 1,skip redir
 00961 L961: form pos sp,c sp2,pos 31,c 1,c 5,pic(-----,---,---.##),c 1,pic(-----.##),c 2,x 3,c 1,c 5,pic(-----,---,---.##),c 1,pic(-----.##),c 1,skip redir
 00970 L970: if pas=1 then let tp1=total : let tp2=total2 : gosub PAS1
@@ -114,9 +114,9 @@
 01010   gosub L1600
 01020 L1020: gosub L1420
 01030   goto READ_ACGLFNSI
-01040 L1040: if ap=0 then let ap=1
-01050   if rs=1 then let accum1=-accum(ap,1) else let accum1=accum(ap,1)
-01060   if rs=1 then let accum2=-accum(ap,2) else let accum2=accum(ap,2)
+01040 L1040: if ap=0 then ap=1
+01050   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
+01060   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
 01070   if ds=1 then let dollar$="$" else let dollar$=" "
 01080   if ds=1 then let percent$="%" else let percent$=" "
 01090   if percent=0 then goto L1180
@@ -127,8 +127,8 @@
 01140   if ytdpct<-999.99 then let ytdpct=-999.99
 01150   if ytdpct>999.99 then let ytdpct=999.99
 01160   let sp2=31-sp-1
-01165   if ul=1 then print #255,using L961: d$(1:sp2),dollar$,"{\UL ",accum1,"}",monthpct,percent$,dollar$,"{\UL ",accum2,"}",ytdpct,percent$ pageoflow L1590 : goto L1180
-01170   print #255,using L960: d$(1:sp2),dollar$,accum1,monthpct,percent$,dollar$,accum2,ytdpct,percent$ pageoflow L1590
+01165   if ul=1 then pr #255,using L961: d$(1:sp2),dollar$,"{\UL ",accum1,"}",monthpct,percent$,dollar$,"{\UL ",accum2,"}",ytdpct,percent$ pageoflow L1590 : goto L1180
+01170   pr #255,using L960: d$(1:sp2),dollar$,accum1,monthpct,percent$,dollar$,accum2,ytdpct,percent$ pageoflow L1590
 01180 L1180: if pas=1 then let tp1=accum1 : let tp2=accum2 : gosub PAS1
 01190   gosub L1370
 01200   if pas=2 then gosub PAS2
@@ -154,7 +154,7 @@
 01380     if ac(j)=0 or ac(j)=9 then 
 01382       goto L1390 
 01384     else 
-01386       let accum(j,1)=0 : let accum(j,2)=0
+01386       accum(j,1)=0 : accum(j,2)=0
 01388     end if
 01390 L1390: !
 01392     next j
@@ -164,17 +164,17 @@
 01422   if percent=0 then goto L1570
 01430   if ls=0 then goto L1570
 01440   if ls=99 then goto L1480
-01450   print #255,using L1460: " "
+01450   pr #255,using L1460: " "
 01460 L1460: form pos 1,c 1,skip ls
 01470   goto L1570
 01480 L1480: let fnpglen(pglen)
 01490 ! If PGLEN<>42 Then Let PGLEN=58
 01500   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
 01510 ! If PGLEN=42 Then Let SK+=1
-01520   print #255,using L1530: rtrm$(foot$),"Page "&str$(pt1)
+01520   pr #255,using L1530: rtrm$(foot$),"Page "&str$(pt1)
 01530 L1530: form skip sk,pos tabnote,c fl,pos 80,c 8
 01540   if eofcode=1 then goto L1570
-01550   print #255: newpage
+01550   pr #255: newpage
 01560   gosub L1730
 01570 L1570: !
 01572 return 
@@ -184,28 +184,28 @@
 01610   if ul=0 then goto L1700
 01620   if ul=1 then goto L1670
 01630   let underlin$="================= ======="
-01640   print #255,using L1650: underlin$,underlin$
+01640   pr #255,using L1650: underlin$,underlin$
 01650 L1650: form pos 31,c 25,pos 61,c 25,skip redir
 01660   goto L1700
 01670 L1670: let underlin$="_________________ _______"
-01680   print #255,using L1690: underlin$,underlin$
+01680   pr #255,using L1690: underlin$,underlin$
 01690 L1690: form skip redir,pos 31,c 25,pos 61,c 25,skip redir
-01700 L1700: if redir=0 then print #255: ""
+01700 L1700: if redir=0 then pr #255: ""
 01710 L1710: return 
 01720 ! ______________________________________________________________________
 01730 L1730: let heading=1
 01740   let pt1+=1
-01750   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
-01760   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
-01770   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
-01780   print #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(fnactpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
-01790   print #255: "\ql "
-01800   print #255: 
-01810   print #255,using L1840: fncch$,"       Year To Date"
-01820   print #255,using L1830: "_________________________","_________________________"
+01750   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
+01760   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
+01770   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
+01780   pr #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(fnactpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
+01790   pr #255: "\ql "
+01800   pr #255: 
+01810   pr #255,using L1840: fncch$,"       Year To Date"
+01820   pr #255,using L1830: "_________________________","_________________________"
 01830 L1830: form pos 31,c 25,pos 61,c 25,skip redir
 01840 L1840: form pos 38,c 20,pos 61,c 25,skip redir
-01850   print #255: 
+01850   pr #255: 
 01860   return 
 01870 ! ______________________________________________________________________
 01880 L1880: if pas=2 then goto L1910
@@ -255,6 +255,6 @@
 02300 ERTN: let fnerror(program$,err,line,act$,"xit")
 02310   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02320   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02330   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02330   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02340 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02350 ! /region

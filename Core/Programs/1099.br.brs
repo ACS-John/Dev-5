@@ -34,7 +34,7 @@
 16020 ERTN: let fnerror(program$,err,line,act$,"xit")
 16040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 16060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-16080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+16080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 16100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 16120 ! /region
 22000 def library fn1099print_close
@@ -88,45 +88,45 @@
 24720   !
 26000   if ten99Export$='True' then 
 26020     ! r: export one
-26040     print #hExport: "01 ";" "
-26060     print #hExport: "02 ";ph$
-26080     print #hExport: "03 ";a$(1)
-26100     print #hExport: "04 ";box(1)
-26120     print #hExport: "05 ";" "
-26140     print #hExport: "06 ";a$(2)
-26160     print #hExport: "07 ";box(2)
-26180     print #hExport: "08 ";a$(3)
-26200     print #hExport: "09 ";box(3)
-26220     print #hExport: "10 ";box(4)
-26240     print #hExport: "11 ";fed$
-26260     print #hExport: "12 ";ss$
-26280     print #hExport: "13 ";box(5)
-26300     print #hExport: "14 ";box(6)
-26320     print #hExport: "15 ";box(7)
-26340     print #hExport: "16 ";box(8)
-26360     print #hExport: "17 ";nam$
-26380     print #hExport: "18 ";" "
-26400     print #hExport: "19 ";" "
-26420     print #hExport: "20 ";box(10)
-26440     print #hExport: "21 ";ad$(1)
-26460     print #hExport: "22 ";ad$(2)
-26480     print #hExport: "23 ";" "
-26500     print #hExport: "24 ";0
-26520     print #hExport: "25 ";vn$
-26540     print #hExport: "26 ";" "
-26560     print #hExport: "27 ";0
-26580     print #hExport: "28 ";" "
-26600     print #hExport: "29 ";0
-26620     print #hExport: "30 ";" " ! 0
-26640     ! Print #hExport: "31 ";" "
-26660     ! Print #hExport: "32 ";0
-26680     print #hExport: "*"
+26040     pr #hExport: "01 ";" "
+26060     pr #hExport: "02 ";ph$
+26080     pr #hExport: "03 ";a$(1)
+26100     pr #hExport: "04 ";box(1)
+26120     pr #hExport: "05 ";" "
+26140     pr #hExport: "06 ";a$(2)
+26160     pr #hExport: "07 ";box(2)
+26180     pr #hExport: "08 ";a$(3)
+26200     pr #hExport: "09 ";box(3)
+26220     pr #hExport: "10 ";box(4)
+26240     pr #hExport: "11 ";fed$
+26260     pr #hExport: "12 ";ss$
+26280     pr #hExport: "13 ";box(5)
+26300     pr #hExport: "14 ";box(6)
+26320     pr #hExport: "15 ";box(7)
+26340     pr #hExport: "16 ";box(8)
+26360     pr #hExport: "17 ";nam$
+26380     pr #hExport: "18 ";" "
+26400     pr #hExport: "19 ";" "
+26420     pr #hExport: "20 ";box(10)
+26440     pr #hExport: "21 ";ad$(1)
+26460     pr #hExport: "22 ";ad$(2)
+26480     pr #hExport: "23 ";" "
+26500     pr #hExport: "24 ";0
+26520     pr #hExport: "25 ";vn$
+26540     pr #hExport: "26 ";" "
+26560     pr #hExport: "27 ";0
+26580     pr #hExport: "28 ";" "
+26600     pr #hExport: "29 ";0
+26620     pr #hExport: "30 ";" " ! 0
+26640     ! pr #hExport: "31 ";" "
+26660     ! pr #hExport: "32 ";0
+26680     pr #hExport: "*"
 26700     ! /r
 26720   else
-27000     ! r: print one
-27020     let column1=15 +left 
-27040     let column2=85+left+17
-27060     let column3=119 +left+18
+27000     ! r: pr one
+27020     column1=15 +left 
+27040     column2=85+left+17
+27060     column3=119 +left+18
 27080     let ten99Count+=1
 27100     if ten99Count=1 then let yOffset=topmargin 
 27120     if ten99Count=2 then let yOffset=bottom
@@ -256,7 +256,7 @@
 44020   let fntos(sn$="pr1099-1")
 44040   let rc=lc=0 : let mylen=40 : let mypos=mylen+3
 44060   fnlbl(lc+=1,1,"Tax Year:",mylen,1)
-44080   fntxt(lc,mypos,4,0,1,"",1,"Year to print 1099s for")
+44080   fntxt(lc,mypos,4,0,1,"",1,"Year to pr 1099s for")
 44100   resp$(resc_taxYear:=rc+=1)=taxYear$
 44120   if env$('cursys')='PR' then
 44140     lc+=1

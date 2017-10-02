@@ -81,7 +81,7 @@
 47600   client$=rpad$(client$,kln(hSupport))
 47620   read #hSupport,using fSupport,key=>client$: clientId$,SysNo,SysId$,dateStart,timeFrame$,dateExpire,cost
 47640   do while rtrm$(client$)=rtrm$(clientId$)
-47660     ! print uCount+=1;rec(hSupport);clientId;SysNo;SysId$;timeFrame$,dateExpire;cost
+47660     ! pr uCount+=1;rec(hSupport);clientId;SysNo;SysId$;timeFrame$,dateExpire;cost
 47680     dateExpireNew=val(str$(date(days(dateExpire,'ccyymmdd'),'ccyy')+1)&date$(days(dateExpire,'ccyymmdd'),'mmdd'))
 47700     ! pr 'dateExpireNew=';dateExpireNew
 47720     dateExpire=dateExpireNew
@@ -115,6 +115,6 @@
 48280 ERTN: let fnerror(program$,err,line,act$,"xit")
 48300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 48320   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-48340   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+48340   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 48360 ERTN_EXEC_ACT: execute act$ : goto ERTN
 48380 ! /region

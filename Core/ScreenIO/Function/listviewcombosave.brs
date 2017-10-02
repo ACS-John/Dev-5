@@ -15,10 +15,10 @@
        mat X(udim(mat F))
        read #DataFile, using form$(DataFile), rec=LastReadRecord : mat X$, mat X
        rewrite #DataFile, using form$(DataFile) : mat F$, mat F
-       let CurrentRec=LastRecordRead
+       currentRec=LastRecordRead
     else
        write #DataFile, using form$(DataFile) : mat F$, mat F
-       let CurrentRec=LastReadRecord=rec(DataFile)
+       currentRec=LastReadRecord=rec(DataFile)
     end if
 
     let RepopulateListviews=1

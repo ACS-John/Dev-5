@@ -20,14 +20,14 @@
 20000 SCREEN_GRID: ! r:
 20020   let fntos(sn$="rateflex")
 20040   let myline=1 : let mypos=1 : let height=10 : let width=50
-20060   let colhdr$(1)="Code"
-20080   let colhdr$(2)="Description"
-20100   let colhdr$(3)="Minimum"
-20120   let colhdr$(4)="1st Rate"
+20060   colhdr$(1)="Code"
+20080   colhdr$(2)="Description"
+20100   colhdr$(3)="Minimum"
+20120   colhdr$(4)="1st Rate"
 20140   mat colhdr$(4)
-20160   let colmask$(1)=colmask$(2)=""
-20180   let colmask$(3)="10"
-20200   let colmask$(4)="36"
+20160   colmask$(1)=colmask$(2)=""
+20180   colmask$(3)="10"
+20200   colmask$(4)="36"
 20220   mat colmask(4)
 20240   let fnflexinit1("ubrate",myline,mypos,height,width,mat colhdr$,mat colmask$,1)
 20260   restore #1: 
@@ -122,7 +122,7 @@
 50000 RATEMAINT: ! r: maintain rate file
 50010   read #1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$ nokey ignore
 50040   let fntos(sn$="ratemaint")
-50060   let c1=20 : let c2=32 : let c3=44
+50060   c1=20 : c2=32 : c3=44
 50080   let fnlbl(1,1,"Service Type:",20,1)
 50100 ! let fncomboa("ubrate3",1,22,mat option$,"All codes must be between 1 and 99",2)
 50120   let fntxt(1,22,2,0,0,"",1)
@@ -217,21 +217,21 @@
 70400   let fncloseprn
 70420   return  ! /r
 70440 PRINT_ONE_RATE: ! r:
-70460   print #255: "Service Code: ";rt$(1);"   Rate Code: ";rt$(2)
-70480   print #255: "Description: ";rt$(3)
-70500   print #255: "Minimum Charge: ";ltrm$(rt$(4));"   Minimum Usage: ";ltrm$(rt$(5))
-70520   print #255: ""
-70540   print #255: "Usage From     Usage To    Rate Per Unit"
-70560   print #255: "__________    __________   _____________"
+70460   pr #255: "Service Code: ";rt$(1);"   Rate Code: ";rt$(2)
+70480   pr #255: "Description: ";rt$(3)
+70500   pr #255: "Minimum Charge: ";ltrm$(rt$(4));"   Minimum Usage: ";ltrm$(rt$(5))
+70520   pr #255: ""
+70540   pr #255: "Usage From     Usage To    Rate Per Unit"
+70560   pr #255: "__________    __________   _____________"
 70580   for j=1 to udim(option$)
 70600     if trim$(rt$(j*3+3))<>"" or trim$(rt$(j*3+4))<>"" or trim$(rt$(j*3+5))<>"" then 
-70620       print #255,using 'Form POS 1,3*C 14': rt$(j*3+3),rt$(j*3+4),rt$(j*3+5)
+70620       pr #255,using 'Form POS 1,3*C 14': rt$(j*3+3),rt$(j*3+4),rt$(j*3+5)
 70640     end if 
 70660   next j
-70680   print #255: ""
-70700   print #255: ""
+70680   pr #255: ""
+70700   pr #255: ""
 70720   if pg+=1<3 then goto P1R_FINIS
-70740   print #255: newpage
+70740   pr #255: newpage
 70760   let pg=0
 70780 P1R_FINIS: ! 
 70800   return  ! /r
@@ -241,6 +241,6 @@
 80060 ERTN: let fnerror(program$,err,line,act$,"xit")
 80080   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 80100   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-80120   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+80120   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 80140 ERTN_EXEC_ACT: execute act$ : goto ERTN
 80160 ! /region

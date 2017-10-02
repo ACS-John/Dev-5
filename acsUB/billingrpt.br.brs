@@ -1,4 +1,4 @@
-00020 ! print utility billing reports based on bills
+00020 ! pr utility billing reports based on bills
 00030   on fkey 5 goto DONE
 00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fndat,fnerror,fnopenprn,fncloseprn,fncno,fnxit,fndate_mmddyy_to_ccyymmdd,fnd1,fncmdset,fntop,fnpause,fnchk,fncmbact,fnopt,fnd1
 00050   dim cap$*128,sendto$*80,z$*10,e2$*30,temp$(3)*26,resp$(10)*50,cnam$*40
@@ -68,23 +68,23 @@
 00670 L670: form pos 1,c 20,x 5,cc 40,cr 20,skip 1
 00680 L680: form pos 1,cc 30,cc 30,cc 30,skip 1
 00690 L690: form pos 1,cc 10,x 1,cc 30,x 1,cc 10
-00700   print #255: ""
-00710   print #255,using L670: "Company Number "&str$(cno),cnam$,"Page "&str$(pg)
-00720   print #255,using L680: temp$(1),cap$,temp$(3)
-00730   print #255,using L740: "Billing Date: "&cnvrt$("pic(zz/zz/zz)",d1)
+00700   pr #255: ""
+00710   pr #255,using L670: "Company Number "&str$(cno),cnam$,"Page "&str$(pg)
+00720   pr #255,using L680: temp$(1),cap$,temp$(3)
+00730   pr #255,using L740: "Billing Date: "&cnvrt$("pic(zz/zz/zz)",d1)
 00740 L740: form pos 30,cc 30,skip 1
-00750   print #255: ""
+00750   pr #255: ""
 00760   gosub HEADER_COLUMN
 00770   return 
 00780 ! ______________________________________________________________________
 00790 HEADER_COLUMN: ! 
 00800   if print_details$="N" then goto L830
-00810   print #255,using L690: "Act.Number","Customer Name","WaterUsage"
-00820   print #255,using L690: "__________","______________________________","__________"
+00810   pr #255,using L690: "Act.Number","Customer Name","WaterUsage"
+00820   pr #255,using L690: "__________","______________________________","__________"
 00830 L830: return 
 00840 ! ______________________________________________________________________
 00850 PGOF: ! 
-00860   print #255: newpage
+00860   pr #255: newpage
 00870   if no_more_header=0 then gosub HEADER_PAGE
 00880   let no_more_header=0
 00890   continue 
@@ -102,21 +102,21 @@
 01010   goto REPORT
 01020 ! ______________________________________________________________________
 01030 DETAILS: ! 
-01040   print #255,using L1050: z$,e2$,d3 pageoflow PGOF
+01040   pr #255,using L1050: z$,e2$,d3 pageoflow PGOF
 01050 L1050: form pos 1,c 10,x 1,c 30,x 1,n 10
 01060   return 
 01070 ! ______________________________________________________________________
 01080   return 
 01090 ! ______________________________________________________________________
 01100 SUBTOTAL: ! 
-01110   if print_details$="N" then print #255,using L1120: "SubTotals (for usage of "&str$(subtotal_break_check)&")","Customer Count: "&str$(subtotal_count),"Water Usage: "&str$(subtotal_d3) pageoflow PGOF: goto L1180
+01110   if print_details$="N" then pr #255,using L1120: "SubTotals (for usage of "&str$(subtotal_break_check)&")","Customer Count: "&str$(subtotal_count),"Water Usage: "&str$(subtotal_d3) pageoflow PGOF: goto L1180
 01120 L1120: form pos 1,c 32,x 3,c 22,x 3,c 26,skip 1
-01130   print #255,using L690: "__________","______________________________","__________" pageoflow PGOF
-01140   print #255,using L1150: "SubTotals (for usage of "&str$(subtotal_break_check)&")" pageoflow PGOF
+01130   pr #255,using L690: "__________","______________________________","__________" pageoflow PGOF
+01140   pr #255,using L1150: "SubTotals (for usage of "&str$(subtotal_break_check)&")" pageoflow PGOF
 01150 L1150: form pos 1,c 80
-01160   print #255,using L1150: "Customer Count: "&str$(subtotal_count) pageoflow PGOF
-01170   print #255,using L1150: "Water Usage: "&str$(subtotal_d3) pageoflow PGOF
-01180 L1180: print #255: "" pageoflow PGOF
+01160   pr #255,using L1150: "Customer Count: "&str$(subtotal_count) pageoflow PGOF
+01170   pr #255,using L1150: "Water Usage: "&str$(subtotal_d3) pageoflow PGOF
+01180 L1180: pr #255: "" pageoflow PGOF
 01190   let grandtotal_count+=subtotal_count
 01200   let grandtotal_d3+=subtotal_d3
 01210   let subtotal_count=subtotal_d3=0
@@ -127,10 +127,10 @@
 01260   let no_more_header=1
 01270   gosub SUBTOTAL
 01280   if print_grand_totals$="N" then goto L1340
-01290   print #255,using L1150: "____________________________________________________" pageoflow PGOF
-01300   print #255,using L1150: "Grand Totals"
-01310   print #255,using L1150: "Customer Count: "&str$(grandtotal_count) pageoflow PGOF
-01320   print #255,using L1150: "Water Usage: "&str$(grandtotal_d3) pageoflow PGOF
-01330   print #255,using L1150: "____________________________________________________" pageoflow PGOF
+01290   pr #255,using L1150: "____________________________________________________" pageoflow PGOF
+01300   pr #255,using L1150: "Grand Totals"
+01310   pr #255,using L1150: "Customer Count: "&str$(grandtotal_count) pageoflow PGOF
+01320   pr #255,using L1150: "Water Usage: "&str$(grandtotal_d3) pageoflow PGOF
+01330   pr #255,using L1150: "____________________________________________________" pageoflow PGOF
 01340 L1340: goto DONE
 01350 ! ______________________________________________________________________

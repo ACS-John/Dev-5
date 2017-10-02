@@ -18,11 +18,11 @@
 00140   let sln(3)=12 : let sln(4)=sln(5)=6.2
 00150   let mask(1)=1030 !:
         let mask(4)=32 : let mask(5)=30 : let mask(6)=30
-00160   let cl=3: let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
-        let c$(cl,3)='1' : let c$(cl,4)='12' !:
-        let c$(cl,5)='13' : let c$(cl,6)='50' !:
-        let c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)='1'
+00160   cl=3: c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,3)='1' : c$(cl,4)='12' !:
+        c$(cl,5)='13' : c$(cl,6)='50' !:
+        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : c$(cl,8)='1'
 00170   open #1: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno)&",Use,RecL=64,KPs=1,KLn=2,Shr",internal,outin,keyed 
 00180   close #1: 
 00190   open #1: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno)&",Use,RecL=64,KPs=1,KLn=2,Shr",internal,outin,keyed 
@@ -36,7 +36,7 @@
 00270 ERTN: let fnerror(program$,err,line,act$,"xit")
 00280   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00290   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00300   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00310 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00320 ! /region
 00330 ! ______________________________________________________________________

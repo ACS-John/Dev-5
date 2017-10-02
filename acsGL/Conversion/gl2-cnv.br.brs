@@ -6,13 +6,13 @@
 00070   dim a$(3)*40,b$(2)*12,c$*5,d(2),e$(2)*12,lastact$*12,tb$*30,procdat$*20
 00080   dim dat$*20,ch$*20,prgl(21),co(7),acctmo$*6,vn$*8,nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,adr(2),revb(13)
 00090   open #1: "Name=CNO.H"&wsid$,internal,outin,relative 
-00100   print newpage
-00110   print fields "8,5,C 70,HRB,N": "   WARNING THIS PROGRAM CAN ONLY BE RUN ONE TIME FOR EACH COMPANY #"
-00120   print fields "10,9,C 60": "ENTER THE COMPANY # TO BE CONVERTED OR 0 TO STOP:"
+00100   pr newpage
+00110   pr fields "8,5,C 70,HRB,N": "   WARNING THIS PROGRAM CAN ONLY BE RUN ONE TIME FOR EACH COMPANY #"
+00120   pr fields "10,9,C 60": "ENTER THE COMPANY # TO BE CONVERTED OR 0 TO STOP:"
 00130 L130: input fields "10,60,N 2,UE,N": cno conv L130
 00140   if cno=0 then stop 
-00150   print newpage
-00160   print fields "10,5,C 60": "CONVERSION FOR COMPANY #"&str$(cno)&" IN PROCESS"
+00150   pr newpage
+00160   pr fields "10,5,C 60": "CONVERSION FOR COMPANY #"&str$(cno)&" IN PROCESS"
 00170 ! 
 00180   rewrite #1,using L190,rec=1: cno
 00190 L190: form pos 1,n 2
@@ -112,8 +112,8 @@
 01130 L1130: ! REASS.CNV
 01140   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,outin,keyed 
 01150   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno),internal,outin,relative 
-01160   print newpage
-01170   print fields "10,15,c 60,h,n": "REASSIGN GL ADDRESSES IN PROCESS"
+01160   pr newpage
+01170   pr fields "10,15,c 60,h,n": "REASSIGN GL ADDRESSES IN PROCESS"
 01180 L1180: form pos 333,2*pd 3
 01190   let lr2=lrec(2)
 01200   rewrite #2,using L1300,rec=1: lr2
@@ -132,8 +132,8 @@
 01330   close #2: 
 01340   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno),internal,outin,keyed ioerr L1540
 01350   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno),internal,outin,relative ioerr L1540
-01360   print newpage
-01370   print fields "10,15,c 60,h,n": "REASSIGN PR ADDRESSES IN PROCESS"
+01360   pr newpage
+01370   pr fields "10,15,c 60,h,n": "REASSIGN PR ADDRESSES IN PROCESS"
 01380 L1380: form pos 181,2*n 5
 01390   let lr2=lrec(2)
 01400   rewrite #2,using L1500,rec=1: lr2
@@ -152,12 +152,12 @@
 01530   close #2: 
 01540 L1540: ! 
 01550   open #1: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno),internal,input,relative ioerr L1690
-01560   print fields "14,32,C 16,BR,N": "   IN PROCESS"
+01560   pr fields "14,32,C 16,BR,N": "   IN PROCESS"
 01570   open #2: "Name=X,RecL=72,REPLACE",internal,output 
 01580   for j=1 to lrec(1)
 01590     read #1,using L1620,rec=j: mat tr,tr$,td$ conv L1640
 01600     if tr(1)+tr(2)+tr(3)=0 then goto L1640
-01610     let actpd=int(tr(4)*.0001)
+01610     actpd=int(tr(4)*.0001)
 01620 L1620: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 01630     write #2,using L1620: mat tr,tr$,td$,actpd
 01640 L1640: next j

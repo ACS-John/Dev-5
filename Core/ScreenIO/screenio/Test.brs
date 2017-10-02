@@ -18,7 +18,7 @@
 01010    library "S:\Core\ScreenIO\Screenio" : fnfm$
 01020    let Ret$=fnfm$("test","",0,0,"",0,0,0,0,mat PassedData$)
 01030    if len(trim$(Ret$)) then
-01040       print Ret$
+01040       pr Ret$
 01050    end if
 01060    if fkey=93 then execute "system"
 01070    stop
@@ -35,12 +35,12 @@
 05009     fncompany_name(0,115)
 05010     for attrItem=1 to udim(mat attr$)
 05011       if lwrc$(attr$(attrItem))=lwrc$('[buttons]') then
-05012         print #0, fields "1,5,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
+05012         pr #0, fields "1,5,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
 05013       else if lwrc$(attr$(attrItem))=lwrc$('[buttoncancel]') then
 05014         if env$('tmp_acs_back_arrow')<>'' then
-05015           print #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
+05015           pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
 05016         else
-05017           print #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\back-icon.png" ioerr ignore
+05017           pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\back-icon.png" ioerr ignore
 05018         end if
 05019       end if
 05020     nex attrItem
@@ -77,7 +77,7 @@
 85006          let fnCheckStringFunction = 0
 85007       else
 85008          if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
-85009             print "Function ("&function$&") Not Supported: The library is out of date or fn not found."
+85009             pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
 85010          end if
 85011       end if
 85012    fnend
@@ -167,7 +167,7 @@
 92020       let ReturnValue = fnExitDefault
 92021    else
 92022       if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
-92023          print "Function ("&function$&") Not Supported: The library is out of date or fn not found."
+92023          pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
 92024       end if
 92025    end if
 92026 !

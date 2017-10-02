@@ -93,8 +93,8 @@
 00810   if resp$(4)="True" then let gli=1 else let gli=0
 00820   if resp$(5)="True" then let printreport=1 else let printreport=0
 00830   if resp$(6)="True" then let showdetails=1
-00840   let basis=0 : if resp$(7)="True" then let basis=cash=1
-00850   if resp$(8)="True" then let basis=accrual=2
+00840   basis=0 : if resp$(7)="True" then basis=cash=1
+00850   if resp$(8)="True" then basis=accrual=2
 00860   if ld1>hd1 and ld1>0 and hd1>0 then !:
           mat msgline$(1): let msgline$(1)="Ending Date Before Starting Date!" !:
           let fnmsgbox(mat msgline$,resp$,cap$,48) : goto SCREEN1
@@ -122,29 +122,29 @@
 01040 L1040: ! 1=charge,2=penalty,3=collection,4=credit memo, 5=debit memo
 01050   for j =1 to 10
 01060     if basis=cash and tcode=1 or tcde=2 or tcode=4 or tcode=5 then goto L990 ! dont record anything but collections on cash basis.
-01070     if basis=cash and tcode=3 then let amount(j,1)=amount(j,1)+tg(j) !:
-            let amount(j,3)=amount(j,3)-tg(j) !:
+01070     if basis=cash and tcode=3 then amount(j,1)=amount(j,1)+tg(j) !:
+            amount(j,3)=amount(j,3)-tg(j) !:
             let glcode=13 !:
             goto L1130 !:
             ! debit bank and credit revenues on collections
-01080     if basis=accrual and tcode=1 then let amount(j,2)=amount(j,2)+tg(j) !:
-            let amount(j,3)=amount(j,3)-tg(j) !:
+01080     if basis=accrual and tcode=1 then amount(j,2)=amount(j,2)+tg(j) !:
+            amount(j,3)=amount(j,3)-tg(j) !:
             let glcode=23 !:
             ! record sales as debit to receivables and credit to  sales
-01090     if basis=accrual and tcode=2 then let amount(j,2)=amount(j,2)+tg(j) !:
-            let amount(j,3)=amount(j,3)-tg(j) !:
+01090     if basis=accrual and tcode=2 then amount(j,2)=amount(j,2)+tg(j) !:
+            amount(j,3)=amount(j,3)-tg(j) !:
             let glcode=23 ! record penalties as debit to receivables and credits to  penalty sales
-01100     if basis=accrual and tcode=3 then let amount(j,1)=amount(j,1)+tg(j) !:
-            let amount(j,2)=amount(j,2)-tg(j) !:
+01100     if basis=accrual and tcode=3 then amount(j,1)=amount(j,1)+tg(j) !:
+            amount(j,2)=amount(j,2)-tg(j) !:
             let glcode=12 ! debit bank, reduce receivables on collections
-01110     if basis=accrual and tcode=4 then let amount(j,2)=amount(j,2)-tg(j) !:
-            let amount(j,3)=amount(j,3)+tg(j) !:
+01110     if basis=accrual and tcode=4 then amount(j,2)=amount(j,2)-tg(j) !:
+            amount(j,3)=amount(j,3)+tg(j) !:
             ! reduce receivables and sales on credit memos
-01120     if basis=accrual and tcode=5 then let amount(j,2)=amount(j,2)+tg(j) !:
-            let amount(j,3)=amount(j,3)-tg(j) !:
+01120     if basis=accrual and tcode=5 then amount(j,2)=amount(j,2)+tg(j) !:
+            amount(j,3)=amount(j,3)-tg(j) !:
             ! increase receivables and increase sales on debit memos
 01130 L1130: next j
-01140   if showdetails=1 then print #255,using "form pos 1,c 10,x 1,pic(zzzz/zz/zz),n 2,10 * n 9.2": p$,tdate,tcode,mat tg pageoflow PAGE_OVER_FLOW
+01140   if showdetails=1 then pr #255,using "form pos 1,c 10,x 1,pic(zzzz/zz/zz),n 2,10 * n 9.2": p$,tdate,tcode,mat tg pageoflow PAGE_OVER_FLOW
 01150   goto L990
 01160 CREATE_ENTRIES: ! 
 01170   for j=1 to 10
@@ -169,36 +169,36 @@
 01360 L1360: goto L1330
 01370 L1370: next j
 01380   let x=0
-01390   print #255,using "form skip 1,pos 1,c 60": "G/L Number                Debits      Credits"
+01390   pr #255,using "form skip 1,pos 1,c 60": "G/L Number                Debits      Credits"
 01400   for j=1 to 10
 01410 L1410: let x+=1: if x>3 then let x=0 : goto L1460
 01420     if amount(j,x)=0 then goto L1450
-01430     if amount(j,x)>0 then print #255,using "form pos 1,c 12,x 7,n 13.2": gln$(j,x),amount(j,x) else print #255,using "form pos 1,c 12,x 20,n 13.2": gln$(j,x),amount(j,x) pageoflow PAGE_OVER_FLOW
+01430     if amount(j,x)>0 then pr #255,using "form pos 1,c 12,x 7,n 13.2": gln$(j,x),amount(j,x) else pr #255,using "form pos 1,c 12,x 20,n 13.2": gln$(j,x),amount(j,x) pageoflow PAGE_OVER_FLOW
 01440     if amount(j,x)>0 then let totaldebits+=amount(j,x) else let totalcredits+=amount(j,x)
 01450 L1450: goto L1410
 01460 L1460: next j
-01470   print #255,using "form pos 20,n 13.2,n 13.2": totaldebits,totalcredits
+01470   pr #255,using "form pos 20,n 13.2,n 13.2": totaldebits,totalcredits
 01480   let fncloseprn
 01490   if gli=1 then let fnchain("S:\acsGL\acglMrge")
 01500 XIT: let fnxit
 01510 HDR: ! 
-01520   print #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
-01530   print #255: "\qc {\f181 \fs24 \b UB Posting Recap}"
-01540   print #255: "\qc {\f181 \fs24 \b "&dat$&"}"
+01520   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
+01530   pr #255: "\qc {\f181 \fs24 \b UB Posting Recap}"
+01540   pr #255: "\qc {\f181 \fs24 \b "&dat$&"}"
 01550   if ld1<>0 and hd1<>0 then !:
-          print #255: "\qc {\f181 \fs18 \b "&trim$("From "&cnvrt$("pic(zzzz/zz/zz)",ld1)&" to "&cnvrt$("pic(zzzz/zz/zz)",hd1))&"}"
-01560   print #255,using 'Form POS 1,C 20,POS 110,C 12': "\ql","Page "&str$(p2+=1)
-01570   print #255: 
+          pr #255: "\qc {\f181 \fs18 \b "&trim$("From "&cnvrt$("pic(zzzz/zz/zz)",ld1)&" to "&cnvrt$("pic(zzzz/zz/zz)",hd1))&"}"
+01560   pr #255,using 'Form POS 1,C 20,POS 110,C 12': "\ql","Page "&str$(p2+=1)
+01570   pr #255: 
 01580   let heading$="Account      Date     Cd"
 01590   for h=1 to 10
 01600     let heading$=heading$&lpad$(servicename$(h)(1:19),9)
-01610     let a=pos(heading$,":",1)
+01610     a=pos(heading$,":",1)
 01620     if a>0 then let heading$(a:a)=" "
 01630   next h
-01640   print #255,using "form pos 1,c 130": heading$
+01640   pr #255,using "form pos 1,c 130": heading$
 01650   return 
 01660 PAGE_OVER_FLOW: ! 
-01670   print #255: newpage
+01670   pr #255: newpage
 01680   gosub HDR
 01690   continue 
 01700 ! ______________________________________________________________________
@@ -206,7 +206,7 @@
 01720 ERTN: let fnerror(program$,err,line,act$,"xit")
 01730   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01740   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01750   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01750   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01760 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01770 ! /region
 01780 ! ______________________________________________________________________
@@ -214,12 +214,12 @@
 01800   let fntos(sn$="Breakdown") !:
         let respc=0
 01810   mat chdr$(6) : mat cmask$(6) : mat item$(6) !:
-        let chdr$(1)='Rec' !:
-        let chdr$(2)='Service Name' : let chdr$(3)='Rate Code' !:
-        let chdr$(4)='GL-Cash' : let chdr$(5)='GL-Receivable' !:
-        let chdr$(6)='GL-Revenue'
-01820   let cmask$(1)=cmask$(2)='' !:
-        let cmask$(3)=cmask$(4)=cmask$(5)=cmask$(6)='' !:
+        chdr$(1)='Rec' !:
+        chdr$(2)='Service Name' : chdr$(3)='Rate Code' !:
+        chdr$(4)='GL-Cash' : chdr$(5)='GL-Receivable' !:
+        chdr$(6)='GL-Revenue'
+01820   cmask$(1)=cmask$(2)='' !:
+        cmask$(3)=cmask$(4)=cmask$(5)=cmask$(6)='' !:
         let fnflexinit1('GlBreak',1,1,20,100,mat chdr$,mat cmask$,1,0,frame) !:
         let editrec=0
 01830   restore #15: 
@@ -238,9 +238,9 @@
         let fncmdkey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing record.") !:
         let fncmdkey("E&xit",5,0,1,"Exit to menu")
 01900   let fnacs(sn$,0,mat resp$,ck)
-01910   let addone=edit=0: let holdvn$=""
+01910   addone=edit=0: let holdvn$=""
 01920   if ck=5 then goto SCREEN1 !:
-        else if ck=1 then let addone=1: let service$="": let ratecode=0: mat gl$=("") !:
+        else if ck=1 then addone=1: let service$="": let ratecode=0: mat gl$=("") !:
           goto MAINTAIN_GLINFO
 01930 if ck=2 or ck=3 then let editrec=val(resp$(1))
 01940 if editrec=0 then goto GL_INFORMATION
@@ -290,7 +290,7 @@
 02290 let gl$(1)=fnagl$(resp$(3))
 02300 let gl$(2)=fnagl$(resp$(4))
 02310 let gl$(3)=fnagl$(resp$(5))
-02320 let breakdownde$=resp$(2)
+02320 breakdownde$=resp$(2)
 02330 if edit=1 then rewrite #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",rec=editrec: service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
 02340 if addone=1 then write #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2": service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
 02350 goto GL_INFORMATION

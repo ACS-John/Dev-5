@@ -33,7 +33,7 @@
 32180     fnpa_txt("Font Times New Roman (fontsize 12)(at 10,24)",10,24)
 32200     fnpa_fontsize(6)
 32220     fnpa_txt("Font Times New Roman (fontsize 6)(at 10,28)",10,28)
-32240     fnpa_font ! print #20: 'Call Print.MyFont("Courier New")'
+32240     fnpa_font ! pr #20: 'Call Print.MyFont("Courier New")'
 32260     fnpa_fontsize
 32280     fnpa_txt("Courier New size 10 (at 10,40)",10,40)
 32300     fnpa_fontbold(1) ! turns bold on
@@ -103,11 +103,11 @@
 46000   if enableRulerV then let fn_pa_rulerv
 46060   if enableRulerH then let fn_pa_rulerh
 47000   if enableCircles then ! r: Circles and Elipses make us Happy!
-47020     print #20: 'Call Print.AddCircle(220,55,45)'
-47040     print #20: 'Call Print.AddCircle(200,30,10)'
-47060     print #20: 'Call Print.AddCircle(240,30,10)'
-47080     print #20: 'Call Print.AddElipse(220,78,15,0.2)'
-47100     print #20: 'Call Print.AddElipse(220,50,15,5)'
+47020     pr #20: 'Call Print.AddCircle(220,55,45)'
+47040     pr #20: 'Call Print.AddCircle(200,30,10)'
+47060     pr #20: 'Call Print.AddCircle(240,30,10)'
+47080     pr #20: 'Call Print.AddElipse(220,78,15,0.2)'
+47100     pr #20: 'Call Print.AddElipse(220,50,15,5)'
 47120   end if ! /r
 48000   if enablePieChart then gosub PIECHARTTEST
 52080   fnpa_finis
@@ -123,20 +123,20 @@
 64140   let z=int(max(x,y)/2)
 64160   if x=z or y=z then goto L690
 64180   if (min(x,y,z))=0 then goto L690
-64200   print #20: 'Call Print.DrawPieSection(0,'&str$(min(x,y,z))&',50,156,40,0,2)'
+64200   pr #20: 'Call Print.DrawPieSection(0,'&str$(min(x,y,z))&',50,156,40,0,2)'
 64220   if x<>max(x,y,z) and x<>min(x,y,z) then 
-64240     print #20: 'Call Print.DrawPieSection('&str$(min(x,y,z))&','&str$(x)&',50,156,40,0,3)'
-64260     print #20: 'Call Print.DrawPieSection('&str$(x)&','&str$(max(x,y,z))&',50,156,40,0,6)'
+64240     pr #20: 'Call Print.DrawPieSection('&str$(min(x,y,z))&','&str$(x)&',50,156,40,0,3)'
+64260     pr #20: 'Call Print.DrawPieSection('&str$(x)&','&str$(max(x,y,z))&',50,156,40,0,6)'
 64280   end if 
 64300   if y<>max(x,y,z) and y<>min(x,y,z) then 
-64320     print #20: 'Call Print.DrawPieSection('&str$(min(x,y,z))&','&str$(y)&',50,156,40,0,3)'
-64340     print #20: 'Call Print.DrawPieSection('&str$(y)&','&str$(max(x,y,z))&',50,156,40,0,6)'
+64320     pr #20: 'Call Print.DrawPieSection('&str$(min(x,y,z))&','&str$(y)&',50,156,40,0,3)'
+64340     pr #20: 'Call Print.DrawPieSection('&str$(y)&','&str$(max(x,y,z))&',50,156,40,0,6)'
 64360   end if 
 64380   if z<>max(x,y,z) and z<>min(x,y,z) then 
-64400     print #20: 'Call Print.DrawPieSection('&str$(min(x,y,z))&','&str$(z)&',50,156,40,0,3)'
-64420     print #20: 'Call Print.DrawPieSection('&str$(z)&','&str$(max(x,y,z))&',50,156,40,0,6)'
+64400     pr #20: 'Call Print.DrawPieSection('&str$(min(x,y,z))&','&str$(z)&',50,156,40,0,3)'
+64420     pr #20: 'Call Print.DrawPieSection('&str$(z)&','&str$(max(x,y,z))&',50,156,40,0,6)'
 64440   end if 
-64460 ! Print #20: 'Call Print.Print.DrawPieSection('&STR$(Z)&','&STR$(MAX(X,Y,Z))&',50,156,40, ,2)'Print "MaxBound="&STR$(MAX(X,Y,Z))
+64460 ! pr #20: 'Call Print.Print.DrawPieSection('&STR$(Z)&','&STR$(MAX(X,Y,Z))&',50,156,40, ,2)'Print "MaxBound="&STR$(MAX(X,Y,Z))
 64480 return ! /r
 66000 def fn_pa_rulerh ! --- (along the bottom of the page)
 66020   x=210
@@ -170,6 +170,6 @@
 70020 ERTN: let fnerror(program$,err,line,act$,"xit")
 70040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 70060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-70080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+70080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 70100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 70120 ! /region

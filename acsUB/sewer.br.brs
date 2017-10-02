@@ -41,7 +41,7 @@
 00844   let fncmdkey("&Cancel",5,0,1)
 00860   let fnacs(sn$,0,mat resp$,ckey)
 00870   if ckey=5 then goto XIT
-00880   if ckey=3 then let clear_averages=1 else let clear_averages=0
+00880   if ckey=3 then clear_averages=1 else clear_averages=0
 00900   for j=1 to 8
 00920 L310: ! 
 00940     let x=pos(resp$(j),"/",1)
@@ -58,7 +58,7 @@
 01160     goto SCR1
 01180   end if 
 01200   for j=1 to 8
-01220     let cd1(j)=val(resp$(j)) conv SCR1
+01220     cd1(j)=val(resp$(j)) conv SCR1
 01240     let fncreg_write(sn$&'.billing date.'&str$(j),resp$(j))
 01260   next j
 01280   let fncreg_write(sn$&'.sewer code to average',resp$(9))
@@ -109,7 +109,7 @@
 02062   end if 
 02070 ! /r
 02080   rewrite #h_customer,using "Form POS 1822,N 9": t3
-02100   print #255,using L660: x$,oldavg,t3,x(1),x(2),x(3),x(4) pageoflow PAGE
+02100   pr #255,using L660: x$,oldavg,t3,x(1),x(2),x(3),x(4) pageoflow PAGE
 02120 L660: form pos 1,c 12,6*nz 9
 02140 L670: ! 
 02160   goto L480
@@ -119,25 +119,25 @@
 02240   let fncloseprn
 02260 XIT: let fnxit
 02280 ! ______________________________________________________________________
-02300 PAGE: print #255: newpage
+02300 PAGE: pr #255: newpage
 02320   gosub HDR
 02340   continue 
 02360 ! ______________________________________________________________________
 02380 HDR: ! 
 02400   let p1=p1+1
-02420   print #255,using "Form POS 20,CC 40,POS 70,C 5,N 4": env$('cnam'),"Page ",p1
-02430   print #255,using "Form POS 20,CC 40": "Calculate Sewer Average"
-02440   print #255,using "Form POS 20,CC 40": "Sewer Averages for Sewer Code "&ltrm$(str$(filter_sewer_code))
-02460   print #255: ""
-02480   print #255: " Acct.Num.    Old Avg  New Avg "&cnvrt$("pic(zzzzz/zz/zz)",cd1(1))&cnvrt$("pic(zzzzz/zz/zz)",cd1(2))&cnvrt$("pic(zzzzz/zz/zz)",cd1(3))&cnvrt$("pic(zzzzz/zz/zz)",cd1(4))
-02490 ! print #255: "__________    _______  _______ ___________ ___________ ___________ ___________"
+02420   pr #255,using "Form POS 20,CC 40,POS 70,C 5,N 4": env$('cnam'),"Page ",p1
+02430   pr #255,using "Form POS 20,CC 40": "Calculate Sewer Average"
+02440   pr #255,using "Form POS 20,CC 40": "Sewer Averages for Sewer Code "&ltrm$(str$(filter_sewer_code))
+02460   pr #255: ""
+02480   pr #255: " Acct.Num.    Old Avg  New Avg "&cnvrt$("pic(zzzzz/zz/zz)",cd1(1))&cnvrt$("pic(zzzzz/zz/zz)",cd1(2))&cnvrt$("pic(zzzzz/zz/zz)",cd1(3))&cnvrt$("pic(zzzzz/zz/zz)",cd1(4))
+02490 ! pr #255: "__________    _______  _______ ___________ ___________ ___________ ___________"
 02500   return 
 02520 ! ______________________________________________________________________
 02540 ! <Updateable Region: ERTN>
 02560 ERTN: let fnerror(program$,err,line,act$,"NO")
 02580   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02620   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02620   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02640 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02660 ! /region
 02680 ! ______________________________________________________________________

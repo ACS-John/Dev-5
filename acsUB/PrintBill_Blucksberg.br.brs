@@ -1,4 +1,4 @@
-00020 ! print bills for Blucksberg Mountain Water (full page)
+00020 ! pr bills for Blucksberg Mountain Water (full page)
 12000 ! ______________________________________________________________________
 12020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fnpa_finis,fnpa_line,fnpa_txt,fnpa_open,fnpa_elipse,fngethandle,fnpa_newpage,fnpa_pic,fnpa_fontsize,fnpa_fontitalic,fnpa_fontbold,fntrans_total_as_of,fnget_services,fncreg_read,fncreg_write
 12040   on error goto ERTN
@@ -13,16 +13,16 @@
 14040   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
 14060   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 14080   close #21: 
-14100   let at$(1)=cnam$
+14100   at$(1)=cnam$
 14120   let z=21
-14140   let at$(1)=trim$(at$(1))(1:z)
+14140   at$(1)=trim$(at$(1))(1:z)
 14160   let x=len(at$(1)) : let y=z-x
-14180   let at$(1)=rpt$(" ",int(y/2))&at$(1)
+14180   at$(1)=rpt$(" ",int(y/2))&at$(1)
 14200   let z=26
 14220   for j=2 to udim(at$)
-14240     let at$(j)=trim$(at$(j))(1:z)
+14240     at$(j)=trim$(at$(j))(1:z)
 14260     let x=len(at$(j)) : let y=z-x
-14280     let at$(j)=rpt$(" ",int(y/2))&at$(j)
+14280     at$(j)=rpt$(" ",int(y/2))&at$(j)
 14300   next j
 14320   dim servicename$(10)*20
 14340   let fnget_services(mat servicename$)
@@ -47,7 +47,7 @@
 14720     let fncreg_read('print bill message board line '&str$(mg_item),mg$(mg_item))
 14740   next mg_item
 16000 SCREEN1: ! r:
-16020   let a$="" : let prtbkno=0
+16020   a$="" : let prtbkno=0
 16040   let fntos(sn$="UBPrtBl1-1")
 16060   let pf=26 : let ll=24
 16080   let respc=0
@@ -107,9 +107,9 @@
 18360     let fncreg_write('print bill message board line '&str$(mg_item),mg$(mg_item))
 18380   next mg_item
 18400 ! 
-18420   let billing_date_prior=val(resp$(resp_billing_date_prior))
-18440   let billing_date_prior=date(days(billing_date_prior,'mmddyy'),'ccyymmdd')
-18460   if resp$(resp_start)="[All]" then let a$="" else let a$=lpad$(trim$(resp$(6)(1:9)),9)
+18420   billing_date_prior=val(resp$(resp_billing_date_prior))
+18440   billing_date_prior=date(days(billing_date_prior,'mmddyy'),'ccyymmdd')
+18460   if resp$(resp_start)="[All]" then a$="" else a$=lpad$(trim$(resp$(6)(1:9)),9)
 18480   if resp$(resp_route)="[All]" then let prtbkno=0 else let prtbkno=val(resp$(7))
 18500   if resp$(resp_select_accounts)="True" then let sl1=1: let z$="" else let sl1=0
 18520   goto GET_STARTED
@@ -118,7 +118,7 @@
 24020   if trim$(a$)<>"" then 
 24040     read #2,using L570,key=a$: z$,route,sequence nokey SCREEN1
 24060     let holdz$=z$
-24080     let begin=1
+24080     begin=1
 24100   end if 
 24120 L570: form pos 1,c 10,pos 1741,n 2,n 7
 24140   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
@@ -135,7 +135,7 @@
 24360 L680: ! 
 24380   read #6,using 'form pos 22,c 10': z$ eof RELEASE_PRINT
 24400   if trim$(a$)<>"" and begin=1 and z$<>holdz$ then goto L680 ! start with
-24420   let begin=0 ! cancel starting account
+24420   begin=0 ! cancel starting account
 24440   read #1,using L730,key=z$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,seweravg nokey L680
 24460 L730: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1942,c 12,pos 1864,c 30,pos 1831,n 9,pos 1821,n 1,pos 1712,c 1,pos 1822,n 9
 24480   if prtbkno<>0 and prtbkno><route then goto RELEASE_PRINT
@@ -144,11 +144,11 @@
 24540   gosub READALTADR
 24560   let pb=bal-g(11)
 24580   if bal<=0 then let g(9)=0 ! don't show penalty if balance 0 or less
-24600   let activity_charge=fntrans_total_as_of(z$,billing_date_prior,1)
-24620   let activity_penalty=fntrans_total_as_of(z$,billing_date_prior,2)
-24640   let activity_payment=fntrans_total_as_of(z$,billing_date_prior,3)
-24660   let activity_credit=fntrans_total_as_of(z$,billing_date_prior,4)
-24680   let activity_debit=fntrans_total_as_of(z$,billing_date_prior,5)
+24600   activity_charge=fntrans_total_as_of(z$,billing_date_prior,1)
+24620   activity_penalty=fntrans_total_as_of(z$,billing_date_prior,2)
+24640   activity_payment=fntrans_total_as_of(z$,billing_date_prior,3)
+24660   activity_credit=fntrans_total_as_of(z$,billing_date_prior,4)
+24680   activity_debit=fntrans_total_as_of(z$,billing_date_prior,5)
 24700   let prior_prior_balance=bal ! -g(11)
 24720   let prior_prior_balance=prior_prior_balance-activity_charge
 24740   let prior_prior_balance=prior_prior_balance-activity_penalty
@@ -157,8 +157,8 @@
 24800   let prior_prior_balance=prior_prior_balance-activity_debit
 24820 ! ______________print bill routine______________________________________
 24840   gosub VBPRINT
-24860 ! _____________end of print routine______________________________________
-24880   let bct(2)=bct(2)+1 ! accumulate totals
+24860 ! _____________end of pr routine______________________________________
+24880   bct(2)=bct(2)+1 ! accumulate totals
 24900   goto NEXT_CUSTOMER
 24920 ! /r
 28000 SCREEN_SELECT_ACCOUNT: ! r: pick individual accounts to print
@@ -171,7 +171,7 @@
 28140   let resp$(1)=z$
 28160   let fncmdset(3)
 28180   let fnacs(sn$,0,mat resp$,ck)
-28200   let a$=lpad$(trim$(resp$(1)(1:10)),10)
+28200   a$=lpad$(trim$(resp$(1)(1:10)),10)
 28220   if trim$(a$)="" or ck=5 then goto RELEASE_PRINT
 28240   read #1,using L730,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,seweravg nokey SCREEN_SELECT_ACCOUNT
 28270   goto AFTER_READ_CUSTOMER
@@ -181,7 +181,7 @@
 32020   close #3: ioerr ignore
 32030   let fnpa_finis
 32040   goto ENDSCR ! /r
-34000 ENDSCR: ! r: print totals screen
+34000 ENDSCR: ! r: pr totals screen
 34020   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
 34040   let fntos(sn$="Bills-Total")
 34060   let mylen=23 : let mypos=mylen+2
@@ -227,7 +227,7 @@
 40050   let fnpa_txt("Billing Questions:   605-720-5013",tmp_box_left_pos+5,tmp_box_top+16)
 40060   if final>0 then let fnpa_txt('Final Bill'&cnvrt$("PIC(ZZzZZzZZ)",0),80,tmp_box_top+15)
 40070 ! 
-40080   let lyne=65 : let adder=4
+40080   let lyne=65 : adder=4
 40090   let fnpa_txt("Meter Location: "&trim$(e$(1)) ,23,lyne+=adder)
 40100   let fnpa_txt("Service From: "&cnvrt$("pic(zz/zz/zz)",d5)&" To: "&cnvrt$("pic(zz/zz/zz)",d6) ,23,lyne+=adder)
 40110 ! 
@@ -238,7 +238,7 @@
 40160   let fnpa_fontbold(1)
 41000 ! 
 41060   let lyne=81
-41080   let adder=4.5
+41080   adder=4.5
 41100   let fnpa_fontbold(1) : let fnpa_fontitalic
 41120   let fnpa_txt("Activity Since "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),80,lyne+=adder)
 41140   let fnpa_fontbold(0)
@@ -258,9 +258,9 @@
 41720   let fnpa_txt("Current Charges",90,lyne+=1)
 41740 ! let fnpa_txt("Current Charges",30,lyne+=8)
 41750   let fnpa_fontbold
-41760 ! let adder=5
+41760 ! adder=5
 41770   let fnpa_fontitalic
-42000   let adder=4
+42000   adder=4
 42020   let lyne+=adder
 42040   let fnpa_txt("Current",83,lyne) ! lyne=100
 42060   let fnpa_txt("Reading",83,lyne+adder)
@@ -268,7 +268,7 @@
 42100   let fnpa_txt("Reading",103,lyne+adder)
 42120   let fnpa_txt("Usage",131,lyne+adder)
 42140   let fnpa_txt("Charge",170,lyne+adder)
-42160   let add=4.5
+42160   add=4.5
 43000   let lyne+=adder ! lyne=105
 43020   if g(1)<>0 then 
 43040     if g(1)>=14 then 
@@ -353,9 +353,9 @@
 44560   let fnpa_fontitalic
 44580   let x=0
 44600   for j=1 to 39
-44620     let fnpa_line(x+=5,234,3,0) ! print #20: 'Call Print.AddLine('&str$(x+=5)&','&str$(234)&',3,0)'
+44620     let fnpa_line(x+=5,234,3,0) ! pr #20: 'Call Print.AddLine('&str$(x+=5)&','&str$(234)&',3,0)'
 44640   next j
-54660   print #20: 'Call Print.MyFontSize(7)'
+54660   pr #20: 'Call Print.MyFontSize(7)'
 54680   let fnpa_txt("Please detach here and return with payment.  Mail to 8077 Blucksberg Dr or deposit in black box at bus stop.",18,236)
 54700   let fnpa_fontsize
 54720   let fnpa_txt("Account: "&lpad$(trim$(z$),16),40,243)
@@ -374,7 +374,7 @@
 54960   let fnpa_newpage
 54980   return  ! /r
 62000   def fn_add_activity_line(aal_text$*80,aal_amt; aal_always_show,aal_desc_left_override)
-62010     if aal_desc_left_override=0 then let aal_desc_left_override=30
+62010     if aal_desc_left_override=0 then aal_desc_left_override=30
 62020     if aal_always_show or aal_amt<>0 then 
 62040       let fnpa_txt(aal_text$,aal_desc_left_override,lyne+=adder)
 62060       let fnpa_txt(cnvrt$("pic($$$$$$$$.## CR)",aal_amt),160,lyne)
@@ -402,9 +402,9 @@
 73170 L3170: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 73180   if p$<>z$ then goto PU_XIT
 73190   if tcode<>1 then goto L3160 ! only charge transactions
-73200   let usage(3)=usage(2): let billdate(3)=billdate(2) : let reads(3)=reads(2)
-73210   let usage(2)=usage(1): let billdate(2)=billdate(1) : let reads(2)=reads(1)
-73220   let usage(1)=wu: let billdate(1)=tdate : let reads(1)=wr
+73200   let usage(3)=usage(2): billdate(3)=billdate(2) : let reads(3)=reads(2)
+73210   let usage(2)=usage(1): billdate(2)=billdate(1) : let reads(2)=reads(1)
+73220   let usage(1)=wu: billdate(1)=tdate : let reads(1)=wr
 73230   goto L3160
 73240 PU_XIT: ! 
 73260   return  ! /r
@@ -412,7 +412,7 @@
 76040 ERTN: let fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-76100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 76120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 76140 ! </updateable region: ertn>
 80000 READALTADR: ! r: read alternate billing address

@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsUB\Bill-Rpt
-00020 ! print utility billing reports based on bills
+00020 ! pr utility billing reports based on bills
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fnchk,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fncno,fnxit,fndat,fnd1,fncmdset,fntop
 00050   on error goto ERTN
@@ -46,18 +46,18 @@
 00400 HEADER: ! 
 00410   if d1<>0 then let temp$(1)="Billing Date: "&cnvrt$("pic(zz/zz/zz)",d1)
 00420   if oob$="Y" then let temp$(2)="Only Outstanding Balances"
-00430   print #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
-00440   print #255: "\qc  {\f181 \fs22 \b "&env$('program_caption')&"}"
-00450   print #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
+00430   pr #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
+00440   pr #255: "\qc  {\f181 \fs22 \b "&env$('program_caption')&"}"
+00450   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
 00460   if d1<>0 or oob$="Y" then !:
-          print #255: "\qc "&trim$(temp$(1))&"   "&temp$(2)
-00470   print #255,using L480: "\ql  ","Page "&str$(pg+=1)
+          pr #255: "\qc "&trim$(temp$(1))&"   "&temp$(2)
+00470   pr #255,using L480: "\ql  ","Page "&str$(pg+=1)
 00480 L480: form pos 1,c 82,c 10,skip 1
-00490   print #255: "{\ul Act.Number} {\ul Customer Name                 } {\ul    Balance} {\ul Billing Date} {\ul  Deposit}"
+00490   pr #255: "{\ul Act.Number} {\ul Customer Name                 } {\ul    Balance} {\ul Billing Date} {\ul  Deposit}"
 00500   return 
 00510 ! ______________________________________________________________________
 00520 PGOF: ! !:
-        print #255: newpage !:
+        pr #255: newpage !:
         gosub HEADER !:
         continue 
 00530 ! ______________________________________________________________________
@@ -68,14 +68,14 @@
 00570 L570: if d1<>0 and d1<>lastbilldate then goto REPORT
 00580   if route>0 and extra(1)<>route then goto REPORT
 00590   if oob$="Y" and bal<=0 then goto REPORT
-00600   print #255,using 'Form POS 1,C 10,X 1,C 30,X 1,N 10.2,X 3,PIC(ZZ/ZZ/ZZ),X 2,N 9.2': z$,e$(2),bal,lastbilldate,deposit pageoflow PGOF
+00600   pr #255,using 'Form POS 1,C 10,X 1,C 30,X 1,N 10.2,X 3,PIC(ZZ/ZZ/ZZ),X 2,N 9.2': z$,e$(2),bal,lastbilldate,deposit pageoflow PGOF
 00610   goto REPORT
 00620 ! ______________________________________________________________________
 00630 ! <Updateable Region: ERTN>
 00640 ERTN: let fnerror(program$,err,line,act$,"xit")
 00650   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00660   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00670   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00670   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00680 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00690 ! /region
 00700 ! ______________________________________________________________________

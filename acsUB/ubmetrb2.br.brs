@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsUB\ubMetRB2
-00020 ! Print Complete Route Sheets
+00020 ! pr Complete Route Sheets
 00030 ! ______________________________________________________________________
 00040   library "S:\Core\Library": fnacs,fnlbl,fnwait,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fncno,fnxit,fndat,fncno,fncmdset,fntop,fncomboa,fnpause,fnfra,fnopt,fnchk,fncmbact,fncmdkey,fnchain,fnpa_finis,fnpa_newpage,fnpa_open
 00050   on error goto ERTN
@@ -73,7 +73,7 @@
 00580   if env$('client')="Franklinton" or env$('client')="Divernon" then let resp$(4)="False": let resp$(6)="True"
 00590   let fnchk(11,28,"Select Accounts to Print:",1) !:
         let resp$(7)="False"
-00600   let fnfra(13,1,2,45,"Option for printing","The system can print the actual form or just fill in the blanks on a pre-printed form.",0)
+00600   let fnfra(13,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
 00610   let fnopt(1,2,"Print complete form",0,2) !:
         let resp$(8)="True"
 00620   let fnopt(2,2,"Fill in the blanks",0,2)
@@ -109,7 +109,7 @@
 00890   if route>0 and book1<>route then goto L870
 00900   if width=1 or width=3 then goto L920
 00910   read #1,using L1060: z2$,mat e2$,f12$,d12,d32,f32$,c42,f22$,d52,d72,d92,d112,book2,mat a2 eof L1060
-00920 L920: if svt$=srv$(1) and width=1 then let previous=d1: let columnonename$=srv$(1): let firstmeter$=f1$: let secondmeter$="": let firstcode$=str$(a(1)): let secondcode$="" ! water only service
+00920 L920: if svt$=srv$(1) and width=1 then let previous=d1: columnonename$=srv$(1): let firstmeter$=f1$: let secondmeter$="": let firstcode$=str$(a(1)): let secondcode$="" ! water only service
 00930   if svt$=srv$(1) and width=2 then let previous=d1: let previous2=d12: let firstmeter$=f1$: let secondmeter$=f12$: let firstcode$=str$(a(1)): let secondcode$=str$(a2(1)) ! two different water customers
 00940   if svt$=srv$(1) and svt2$=srv$(3) and width=3 then let previous=d1: let previous2=d5 : let firstmeter$=f1$: let secondmeter$=f2$: let firstcode$=str$(a(1)): let secondcode$=str$(a(3)) ! water and electric
 00950   if svt$=srv$(1) and svt2$=srv$(4) and width=3 then let previous=d1: let previous2=d9 : let firstmeter$=f1$: let secondmeter$=f3$: let firstcode$=str$(a(1)): let secondcode$=str$(a(4)) ! water and gas
@@ -125,68 +125,68 @@
 01050   let z2$=f12$="" : let d12=d32=d52=d72=d92=d112=c42=0 : mat e2$=("")
 01060 L1060: form pos 1,c 10,4*c 30,c 12,pos 217,pd 5,pos 227,pd 5,pos 373,c 12,pos 213,pd 4,pos 361,c 12,pos 237,pd 5,pos 247,pd 5,pos 257,pd 5,pos 267,pd 5,pos 1741,n 2,pos 143,7*pd 2,pos 277,pd 5,pos 1818,n 3,pos 161,pd 4.2,pos 173,pd 4.2
 01070   if formoption=2 then gosub BLANKS : goto L1700
-01080   if width=2 or width=3 then for j=1 to 2: print #255,using L1320: "|": next j
-01090   if width=1 then for j=1 to 2: print #255,using L1320: "|": next j
-01100   if width=1 then print #255,using L1160: cnam$(1:37),"|"
-01110   if width=2 or width=3 then print #255,using L1160: cnam$(1:37),"|",cnam$(1:37)
-01120   if width=1 then print #255,using L1160: service$
-01130   if width=2 then print #255,using L1160: service$,"|",service$
-01140   if width=3 then print #255,using L1160: service$,"|",service2$
+01080   if width=2 or width=3 then for j=1 to 2: pr #255,using L1320: "|": next j
+01090   if width=1 then for j=1 to 2: pr #255,using L1320: "|": next j
+01100   if width=1 then pr #255,using L1160: cnam$(1:37),"|"
+01110   if width=2 or width=3 then pr #255,using L1160: cnam$(1:37),"|",cnam$(1:37)
+01120   if width=1 then pr #255,using L1160: service$
+01130   if width=2 then pr #255,using L1160: service$,"|",service$
+01140   if width=3 then pr #255,using L1160: service$,"|",service2$
 01150 ! 
 01160 L1160: form pos 2,cc 37,pos 45,c 1,x 1,cc 37,skip 1
-01170   if width=2 or width=3 then for j=1 to 2: print #255,using L1320: "|": next j
-01180   if width=1 then for j=1 to 2: print #255,using L1320: "|": next j
+01170   if width=2 or width=3 then for j=1 to 2: pr #255,using L1320: "|": next j
+01180   if width=1 then for j=1 to 2: pr #255,using L1320: "|": next j
 01190   form pos 14,c 12,pos 45,c 1,pos 54,c 12,skip 1
-01200   if width=1 then print #255,using L1290: e$(1),"|"
-01210   if width=2 then print #255,using L1290: e$(1),"|",e2$(1)
-01220   if width=3 then print #255,using L1290: e$(1),"|"
-01230   if width=1 then print #255,using L1290: "Meter #: "&firstmeter$,"|"
-01240   if width=2 then print #255,using L1290: "Meter #: "&firstmeter$,"|","Meter #: "&firstmeter$
-01250   if width=3 then print #255,using L1290: "Meter #: "&firstmeter$,"|","Meter #: "&secondmeter$
-01260   if width=1 then print #255,using L1290: "Rate Code: "&firstcode$,"|"
-01270   if width=2 then print #255,using L1290: "Rate Code: "&firstcode$,"|","Rate Code: "&firstcode$
-01280   if width=3 then print #255,using L1290: "Rate Code: "&firstcode$,"|","Rate Code: "&secondcode$
+01200   if width=1 then pr #255,using L1290: e$(1),"|"
+01210   if width=2 then pr #255,using L1290: e$(1),"|",e2$(1)
+01220   if width=3 then pr #255,using L1290: e$(1),"|"
+01230   if width=1 then pr #255,using L1290: "Meter #: "&firstmeter$,"|"
+01240   if width=2 then pr #255,using L1290: "Meter #: "&firstmeter$,"|","Meter #: "&firstmeter$
+01250   if width=3 then pr #255,using L1290: "Meter #: "&firstmeter$,"|","Meter #: "&secondmeter$
+01260   if width=1 then pr #255,using L1290: "Rate Code: "&firstcode$,"|"
+01270   if width=2 then pr #255,using L1290: "Rate Code: "&firstcode$,"|","Rate Code: "&firstcode$
+01280   if width=3 then pr #255,using L1290: "Rate Code: "&firstcode$,"|","Rate Code: "&secondcode$
 01290 L1290: form pos 10,c 30,pos 45,c 1,pos 50,c 30,skip 1
-01300   if width=2 or width=3 then for j=1 to 5: print #255,using L1320: "|": next j
-01310   if width=1 then for j=1 to 5: print #255,using L1320: "|": next j
+01300   if width=2 or width=3 then for j=1 to 5: pr #255,using L1320: "|": next j
+01310   if width=1 then for j=1 to 5: pr #255,using L1320: "|": next j
 01320 L1320: form pos 45,c 1,skip 1
-01330   if width=2 or width=3 then print #255,using L1340: year$,"|",year$ else print #255,using L1340: year$,"|"
+01330   if width=2 or width=3 then pr #255,using L1340: year$,"|",year$ else pr #255,using L1340: year$,"|"
 01340 L1340: form pos 2,c 4,pos 45,c 1,x 1,c 4,skip 1
 01350 L1350: form pos 6,c 80
 01360 ! 
-01370   if width=1 then print #255,using L1350: "=======================================|"
-01380   if width=2 or width=3 then print #255,using L1350: "=======================================|======================================="
-01390   if width=1 then print #255,using L1350: "Dat|  READINGS  |CONSUMPTION|  REMARKS |"
-01400   if width=2 or width =3 then print #255,using L1350: "Dat|  READINGS  |CONSUMPTION|  REMARKS |Dat|  READINGS  |CONSUMPTION|  REMARKS "
-01410   if width=1 then print #255,using L1350: "___|____________|___________|__________|"
-01420   if width=2 or width=3 then print #255,using L1350: "___|____________|___________|__________|___|____________|___________|__________"
+01370   if width=1 then pr #255,using L1350: "=======================================|"
+01380   if width=2 or width=3 then pr #255,using L1350: "=======================================|======================================="
+01390   if width=1 then pr #255,using L1350: "Dat|  READINGS  |CONSUMPTION|  REMARKS |"
+01400   if width=2 or width =3 then pr #255,using L1350: "Dat|  READINGS  |CONSUMPTION|  REMARKS |Dat|  READINGS  |CONSUMPTION|  REMARKS "
+01410   if width=1 then pr #255,using L1350: "___|____________|___________|__________|"
+01420   if width=2 or width=3 then pr #255,using L1350: "___|____________|___________|__________|___|____________|___________|__________"
 01430   for j=1 to 12
-01440     if width=2 or width=3 then print #255,using L1350: ms$(j)&"|            |           |          |"&ms$(j)&"|            |           |          "
-01450     if width=1 then print #255,using L1350: ms$(j)&"|            |           |          |"
-01460     if width=2 or width=3 then print #255,using L1350: "___|____________|___________|__________|___|____________|___________|__________"
-01470     if width=1 then print #255,using L1350: "___|____________|___________|__________|"
+01440     if width=2 or width=3 then pr #255,using L1350: ms$(j)&"|            |           |          |"&ms$(j)&"|            |           |          "
+01450     if width=1 then pr #255,using L1350: ms$(j)&"|            |           |          |"
+01460     if width=2 or width=3 then pr #255,using L1350: "___|____________|___________|__________|___|____________|___________|__________"
+01470     if width=1 then pr #255,using L1350: "___|____________|___________|__________|"
 01480   next j
-01490   if width=1 then print #255,using L1510: ms$(13)&"|",previous,"| PREVIOUS  |","|"
-01500   if width=2 or width=3 then print #255,using L1510: ms$(13)&"|",previous,"| PREVIOUS  |","|"&ms$(13)&"|",previous2,"| PREVIOUS  |"
+01490   if width=1 then pr #255,using L1510: ms$(13)&"|",previous,"| PREVIOUS  |","|"
+01500   if width=2 or width=3 then pr #255,using L1510: ms$(13)&"|",previous,"| PREVIOUS  |","|"&ms$(13)&"|",previous2,"| PREVIOUS  |"
 01510 L1510: form pos 6,c 4,pic(zzzzzzzzzzzz),pos 22,c 14,pos 45,c 5,pic(zzzzzzzzzzzz),c 14,skip 1
-01520   if width=1 then print #255,using L1350: "   |            | READING   |          |   | "
-01530   if width=2 or width=3 then print #255,using L1350: "   |            | READING   |          |   |            | READING   |          "
+01520   if width=1 then pr #255,using L1350: "   |            | READING   |          |   | "
+01530   if width=2 or width=3 then pr #255,using L1350: "   |            | READING   |          |   |            | READING   |          "
 01540   if fbc><0 then let e$(2)="Disconnect"
-01550   if width=1 then print #255,using L1350: "=======================================|"
-01560   if width=2 or width=3 then print #255,using L1350: "=======================================|======================================="
-01570   if width=1 then print #255,using L1660: "|","                "," ACCOUNT  ","|"
-01580   if width=2 then print #255,using L1660: "|","                "," ACCOUNT  ","|","                "," ACCOUNT  ","|"
-01590   if width=3 then print #255,using L1660: "|","                "," ACCOUNT  ","|"
-01600   if width=1 or width=3 then print #255,using L1670: e$(2)(1:25),z$,"|"
-01610   if width=2 then print #255,using L1670: e$(2)(1:25),z$,"|",e2$(2)(1:25),z2$
-01620   if width=1 or width=3 then print #255,using L1670: e$(3)(1:25),"","|"
-01630   if width=2 then print #255,using L1670: e$(3)(1:25),"","|",e2$(3)(1:25),""
-01640   if width=1 or width=3 then print #255,using L1670: e$(4)(1:25),"","|"
-01650   if width=2 then print #255,using L1670: e$(4)(1:25),"","|",e2$(4)(1:25),""
+01550   if width=1 then pr #255,using L1350: "=======================================|"
+01560   if width=2 or width=3 then pr #255,using L1350: "=======================================|======================================="
+01570   if width=1 then pr #255,using L1660: "|","                "," ACCOUNT  ","|"
+01580   if width=2 then pr #255,using L1660: "|","                "," ACCOUNT  ","|","                "," ACCOUNT  ","|"
+01590   if width=3 then pr #255,using L1660: "|","                "," ACCOUNT  ","|"
+01600   if width=1 or width=3 then pr #255,using L1670: e$(2)(1:25),z$,"|"
+01610   if width=2 then pr #255,using L1670: e$(2)(1:25),z$,"|",e2$(2)(1:25),z2$
+01620   if width=1 or width=3 then pr #255,using L1670: e$(3)(1:25),"","|"
+01630   if width=2 then pr #255,using L1670: e$(3)(1:25),"","|",e2$(3)(1:25),""
+01640   if width=1 or width=3 then pr #255,using L1670: e$(4)(1:25),"","|"
+01650   if width=2 then pr #255,using L1670: e$(4)(1:25),"","|",e2$(4)(1:25),""
 01660 L1660: form pos 45,c 1,skip 1,pos 6,c 25,c 10,pos 45,c 1,pos 47,c 25,c 10,skip 1,pos 45,c 1,skip 1
 01670 L1670: form pos 6,c 25,c 10,pos 45,c 1,pos 47,c 25,c 10,skip 1
-01680   for j=1 to 3: print #255,using L1320: "|": next j
-01690   print #255: newpage
+01680   for j=1 to 3: pr #255,using L1320: "|": next j
+01690   pr #255: newpage
 01700 L1700: if selectone=1 then goto SELECTONE
 01710   goto LOOP_TOP
 01720 ! ______________________________________________________________________
@@ -206,7 +206,7 @@
 01790   let fncmdkey("&Next",1,1,0,"Accept this record for printing") !:
         let fncmdkey("&Complete",5,0,1,"Print all selected records")
 01800   let fnacs(sn$,0,mat resp$,ck)
-01810   let a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
+01810   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto DONE
 01820   if ck=5 then goto DONE
 01830 ! 
@@ -226,7 +226,7 @@
 01960 ERTN: let fnerror(program$,err,line,act$,"xit")
 01970   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01980   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01990   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02000 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02010 ! /region
 02020 ! ______________________________________________________________________
@@ -237,41 +237,41 @@
 02180   goto XIT
 02190 IGNORE: continue 
 02200 BLANKS: ! fill in blanks using prace
-02210   print #20: 'Call Print.MyFontSize(10)'
-02230   let column1=30 !:
-        let column2=90 !:
-        let column3=150
+02210   pr #20: 'Call Print.MyFontSize(10)'
+02230   column1=30 !:
+        column2=90 !:
+        column3=150
 02240   let lyne=137
 02250   let txt$=f1$ !:
         let lyne+=8.5 !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 02260   let txt$=f3$ !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 02270   let txt$=cnvrt$("pic(ZZZZZZ)",d13) !:
         let lyne+=8.5 !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+11)&','&str$(lyne)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+11)&','&str$(lyne)&')'
 02280   let txt$=cnvrt$("pic(zzz)",extra16) !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 02290   let txt$=cnvrt$("pic(zzzzzzZZZZZZZZZ.zz)",b2) !:
         let lyne+=8.5 !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 02300   let txt$=cnvrt$("pic(zZZZZZZZZZ.zz)",b5) !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
-02305   print #20: 'Call Print.MyFontSize(14)'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+02305   pr #20: 'Call Print.MyFontSize(14)'
 02310   let txt$=e$(2) !:
         let lyne+=52 !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
 02320   let txt$=e$(3) !:
         let lyne+=20 !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
 02330   let txt$=e$(4) !:
         let lyne+=5 !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
 02335   let txt$=e$(1) !:
         let lyne+=14 !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
 02340   let txt$=z$ !:
-        print #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-16)&','&str$(lyne-36)&')'
-02342   print #20: 'Call Print.MyFontSize(10)'
+        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-16)&','&str$(lyne-36)&')'
+02342   pr #20: 'Call Print.MyFontSize(10)'
 02350   let fnpa_newpage
 02360   return 

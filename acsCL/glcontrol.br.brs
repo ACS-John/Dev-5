@@ -33,7 +33,7 @@
 00240 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
-        let ccyymmdd=10
+        ccyymmdd=10
 00250   let tln(ic+=1)=3 !:
         let tln(ic+=1)=30 !:
         let tln(ic+=1)=9 !:
@@ -50,7 +50,7 @@
         let fltyp$(ic+=1)='C'
 00280 ! ** Field Storage Lengths ** !:
         let ic=0 !:
-        let mmddyy=6 : let ccyymmdd=8
+        let mmddyy=6 : ccyymmdd=8
 00290   let sln(ic+=1)=3 !:
         let sln(ic+=1)=30 !:
         let sln(ic+=1)=9 !:
@@ -60,7 +60,7 @@
 00300 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:
-        let ccyymmdd=3 : let mmddyy=1 : let glnumber=53
+        ccyymmdd=3 : let mmddyy=1 : let glnumber=53
 00310   let mask(ic+=1)=1000+number !:
         let mask(ic+=1)=0 !:
         let mask(ic+=1)=0 !:
@@ -75,26 +75,26 @@
         ! C$(CL,7)=Index File                                                 !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         let limit_to_list$='1'
-00330   let cl=3: let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
-        let c$(cl,3)='4' : let c$(cl,4)='9' !:
-        let c$(cl,5)='13' : let c$(cl,6)='50' !:
-        let c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)=limit_to_list$
-00340   let cl=4: let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
-        let c$(cl,3)='4' : let c$(cl,4)='9' !:
-        let c$(cl,5)='13' : let c$(cl,6)='50' !:
-        let c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)='1'
-00350   let cl=5: let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
-        let c$(cl,3)='1' : let c$(cl,4)='12' !:
-        let c$(cl,5)='13' : let c$(cl,6)='50' !:
-        let c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)='1'
-00352   let cl=6: let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
-        let c$(cl,3)='1' : let c$(cl,4)='12' !:
-        let c$(cl,5)='13' : let c$(cl,6)='50' !:
-        let c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : let c$(cl,8)='1'
+00330   cl=3: c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,3)='4' : c$(cl,4)='9' !:
+        c$(cl,5)='13' : c$(cl,6)='50' !:
+        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : c$(cl,8)=limit_to_list$
+00340   cl=4: c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,3)='4' : c$(cl,4)='9' !:
+        c$(cl,5)='13' : c$(cl,6)='50' !:
+        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : c$(cl,8)='1'
+00350   cl=5: c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,3)='1' : c$(cl,4)='12' !:
+        c$(cl,5)='13' : c$(cl,6)='50' !:
+        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : c$(cl,8)='1'
+00352   cl=6: c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,3)='1' : c$(cl,4)='12' !:
+        c$(cl,5)='13' : c$(cl,6)='50' !:
+        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : c$(cl,8)='1'
 00360   return 
 00370 ! ______________________________________________________________________
 00380 HAMSTER: ! 
@@ -107,7 +107,7 @@
 00450 ERTN: let fnerror(program$,err,line,act$,"xit")
 00460   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00470   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00480   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00480   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00490 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00500 ! /region
 00510 ! ______________________________________________________________________

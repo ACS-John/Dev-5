@@ -123,7 +123,7 @@
 44080   for a = 1 to 16
 44100     let range(a) = val(resp$(a+3))
 44120   next a
-48000   if weg$<>"W" and weg$<>"E" and weg$<>"G" and weg$<>"L" then let ce=3 : goto MENU1
+48000   if weg$<>"W" and weg$<>"E" and weg$<>"G" and weg$<>"L" then ce=3 : goto MENU1
 48020   fncreg_write('Per 1000 Usage - Rate Code ',weg$)
 48040   fncreg_write('Per 1000 Usage - Service for Analysis ',str$(wrate))
 48060   for rangeItem=1 to 16
@@ -142,17 +142,17 @@
 52000 USAGE_CHART_ACCUMULATE: ! r:
 52020   for j=1 to 15
 52040     if weg$="W" and d(3)=>range(j) and d(3)<range(j+1) then 
-52060       let cust(j)+=1
+52060       cust(j)+=1
 52080       goto L860 
 52100     else if weg$="E" or weg$="L" and d(7)=>range(j) and d(7)<range(j+1) then 
-52120       let cust(j)=cust(j)+1
+52120       cust(j)=cust(j)+1
 52140       goto L860 
 52160     else if weg$="G" and d(11)=>range(j) and d(11)<range(j+1) then 
-52180       let cust(j)=cust(j)+1
+52180       cust(j)=cust(j)+1
 52200       goto L860
 52220     end if
 52240   next j
-52260   let cust(16)+=1
+52260   cust(16)+=1
 52280   let x+=1 
 52300   let excess(x,1)=val(z$)
 52320   if weg$="W" then 
@@ -165,56 +165,56 @@
 52460   L860: !
 52480 return ! /r
 54000 USAGE_CHART: ! r:
-54020 ! Print #255: "{\ul                                                                                }"
-54040   print #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
-54060   print #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
-54080   print #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
-54100   print #255: "\qc  For the Billing Date of "&cnvrt$("PIC(##/##/##)",d1)
+54020 ! pr #255: "{\ul                                                                                }"
+54040   pr #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
+54060   pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
+54080   pr #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
+54100   pr #255: "\qc  For the Billing Date of "&cnvrt$("PIC(##/##/##)",d1)
 54120   if wrate<>0 then 
-54140     print #255: "\qc For "&rtype$&" Rate Code "&str$(wrate)
+54140     pr #255: "\qc For "&rtype$&" Rate Code "&str$(wrate)
 54160   else 
-54180     print #255: "\qc For "&rtype$
+54180     pr #255: "\qc For "&rtype$
 54200   end if
-54220   print #255: "\ql "
-54240   print #255,using "Form POS 7,C 18,C 30": " Usage In","  Total" 
-54260   print #255,using "Form POS 7,C 18,C 30": " Gallons ","Customers"
+54220   pr #255: "\ql "
+54240   pr #255,using "Form POS 7,C 18,C 30": " Usage In","  Total" 
+54260   pr #255,using "Form POS 7,C 18,C 30": " Gallons ","Customers"
 54280   for j=1 to 16
 54300     if j=1 then 
-54320       print #255,using L990: "Under "&ltrm$(cnvrt$("PIC(ZZZZ,ZZ#)",range(2))),cust(j) 
+54320       pr #255,using L990: "Under "&ltrm$(cnvrt$("PIC(ZZZZ,ZZ#)",range(2))),cust(j) 
 54340       L990: form pos 1,cr 19,x 1,pic(zz,zzz,zz#)
 54360     else if range(j)>10 and j<>16 then 
-54380       print #255,using L1000: cnvrt$("PIC(ZZZZ,ZZ#)",range(j))&" - "&ltrm$(cnvrt$("PIC(ZZZZ,ZZ#)",range(j+1)-1)),cust(j) 
+54380       pr #255,using L1000: cnvrt$("PIC(ZZZZ,ZZ#)",range(j))&" - "&ltrm$(cnvrt$("PIC(ZZZZ,ZZ#)",range(j+1)-1)),cust(j) 
 54400       L1000: form pos 1,cr 19,x 1,pic(zz,zzz,zz#)
 54420     else if j=16 then 
-54440       print #255,using L1000: cnvrt$("PIC(ZZZZ,ZZ#)",range(j))&" or more",cust(j) 
+54440       pr #255,using L1000: cnvrt$("PIC(ZZZZ,ZZ#)",range(j))&" or more",cust(j) 
 54460     else 
-54480       print #255,using L1010: range(j),cust(j)
+54480       pr #255,using L1010: range(j),cust(j)
 54500       L1010: form pos 7,pic(zzzz,zz#),x 6,pic(zz,zzz,zz#)
 54520     end if
 54540   next j
-54560   print #255: "{\ul                                                                                }"
+54560   pr #255: "{\ul                                                                                }"
 54580 return ! /r
 58000 OVER_LIST: ! r:
 58020   if over(1)<>0 then 
-58040     print #255: "Actual usages for customers over "&ltrm$(cnvrt$("PIC(ZZZZ,ZZ#)",range(16)))
+58040     pr #255: "Actual usages for customers over "&ltrm$(cnvrt$("PIC(ZZZZ,ZZ#)",range(16)))
 58060   end if
 58080   for j=1 to 160 step 8
 58100     if over(j)>0 then 
-58120       print #255,using "form pos 1,Nz 9,x 1,Nz 9,x 1,Nz 9,x 1,Nz 9,x 1,Nz 9,x 1,Nz 9,x 1,Nz 9,x 1,Nz 9": over(j),over(j+1),over(j+2),over(j+3),over(j+4),over(j+5),over(j+6),over(j+7) 
+58120       pr #255,using "form pos 1,Nz 9,x 1,Nz 9,x 1,Nz 9,x 1,Nz 9,x 1,Nz 9,x 1,Nz 9,x 1,Nz 9,x 1,Nz 9": over(j),over(j+1),over(j+2),over(j+3),over(j+4),over(j+5),over(j+6),over(j+7) 
 58140     else 
 58160       goto L1110
 58180     end if
 58200   next j
 58220   L1110: !
 58240   if over(1)<>0 then 
-58260     print #255: "{\ul                                                                                }"
+58260     pr #255: "{\ul                                                                                }"
 58280   end if
 58300 return ! /r
-62000 PGOF: print #255: newpage : continue 
+62000 PGOF: pr #255: newpage : continue 
 66000 ! <Updateable Region: ERTN>
 66020 ERTN: let fnerror(program$,err,line,act$,"xit")
 66040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 66060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-66080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+66080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 66100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 66120 ! /region

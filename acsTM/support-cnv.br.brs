@@ -13,8 +13,8 @@
 22500 ! if id_b>20 then pr id_b;'>20' : pause
 22520     let id2=id_b
 22600 ! let id2=fp(id*.01)*100
-22800     print #0,using 'form pos 1,n 6,x 1,n 2,x 1,c 2,x 1,n 8,x 1,c 2,x 1,n 8,x 1,n 10.2': client,id2 ! ,id$,sd,tf$,_ed,c1
-22820     if id2=0 then print 'id2 is zero!' : pause 
+22800     pr #0,using 'form pos 1,n 6,x 1,n 2,x 1,c 2,x 1,n 8,x 1,c 2,x 1,n 8,x 1,n 10.2': client,id2 ! ,id$,sd,tf$,_ed,c1
+22820     if id2=0 then pr 'id2 is zero!' : pause 
 23000     write #2,using FORM_OUT: client,id2,id$,sd,tf$,_ed,c1,mat c$
 23200 FORM_OUT: form pos 1,n 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
 23400     let wctr=wctr+1

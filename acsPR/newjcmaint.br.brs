@@ -27,7 +27,7 @@
 00260 MENU1: ! 
 00270   let ndep=0
 00280 ASKJOB: ! 
-00290   let addjob=0 ! add code - used to tell other parts of the program, !:
+00290   addjob=0 ! add code - used to tell other parts of the program, !:
         ! that I am currently adding an job record.
 00300   let fntos(sn$="job-ask") !:
         let respc=0
@@ -58,8 +58,8 @@
 00410   goto ASKJOB
 00420 ! ______________________________________________________________________
 00430 ADDREC: ! 
-00440   let addjob=1: mat ta=(0): let dup=0: let jn$="": let n$="": mat a$=(''): mat b=(0) !:
-        let contact$="": let ph$="": let email$=""
+00440   addjob=1: mat ta=(0): let dup=0: let jn$="": let n$="": mat a$=(''): mat b=(0) !:
+        contact$="": let ph$="": let email$=""
 00450   let fntos(sn$="jobfm") !:
         let respc=0 : let frac=0 !:
         let mylen=25 : let mypos=mylen+2
@@ -71,7 +71,7 @@
 00500   let fnacs(sn$,0,mat resp$,ckey) ! ASK NEW JOB #
 00510 ! 
 00520   if ckey=5 then goto ASKJOB
-00530   let addjob=1
+00530   addjob=1
 00540   let jn$=lpad$(trim$(resp$(1)(1:6)),6)
 00550   read #1,using L1350,key=jn$: tempjn$ nokey L570
 00560   mat ml$(2) !:
@@ -143,14 +143,14 @@
 00990   let jn$=lpad$(trim$(resp$(1)(1:6)),6)
 01000   if ckey=4 then goto DELETE_ENTIRE_JOB
 01010   let n$=resp$(2) ! name
-01020   let a$(1)=resp$(3) ! address
-01030   let a$(2)=resp$(4) ! address
-01040   let a$(3)=resp$(5) ! city, st zip
-01050   let b(1)=val(resp$(6)) ! est completion date
-01060   let b(2)=val(resp$(7)) ! contrcat amount
-01070   let b(3)=val(resp$(8)) ! Billing date
-01080   let b(4)=val(resp$(9)) ! Billing status
-01090   let contact$=resp$(10)
+01020   a$(1)=resp$(3) ! address
+01030   a$(2)=resp$(4) ! address
+01040   a$(3)=resp$(5) ! city, st zip
+01050   b(1)=val(resp$(6)) ! est completion date
+01060   b(2)=val(resp$(7)) ! contrcat amount
+01070   b(3)=val(resp$(8)) ! Billing date
+01080   b(4)=val(resp$(9)) ! Billing status
+01090   contact$=resp$(10)
 01100   let ph$=resp$(11)
 01110   let email$=resp$(12) ! e-mail address
 01120   if addjob=1 then goto L1150
@@ -159,10 +159,10 @@
 01150 L1150: write #1,using L1350: jn$,n$,mat a$,mat b,contact$,ph$,email$
 01160 L1160: if ckey=10 then goto L1180 else goto L1250
 01170 GET_CATEGORY_LISTING: ! 
-01180 L1180: let cn$=jn$: let fncat_srch2(cn$,ckey,x)
+01180 L1180: cn$=jn$: let fncat_srch2(cn$,ckey,x)
 01190   if ckey=97 then let holdckey=ckey: goto ADDCAT
 01200   if ckey=98 then let holdckey=ckey: goto EDITCATEGORY
-01210   if ckey=95 then let cn$(1:6)=lpad$(rtrm$(jn$),6): gosub REVIEW_DETAILS : goto GET_CATEGORY_LISTING
+01210   if ckey=95 then cn$(1:6)=lpad$(rtrm$(jn$),6): gosub REVIEW_DETAILS : goto GET_CATEGORY_LISTING
 01220   if ckey=96 then gosub DELETE_CATEGORY : goto GET_CATEGORY_LISTING
 01230   if ckey=12 then gosub DUPLICATE_CATEGORIES: goto GET_CATEGORY_LISTING
 01240   if ckey=6 then goto EDITREC
@@ -195,12 +195,12 @@
 01480   if hjn$<>ojn$ then goto L1580
 01490   delete #2,key=cn$: nokey L1460
 01500   gosub L1510: goto L1460
-01510 L1510: let adr=ta(1)
+01510 L1510: adr=ta(1)
 01520 L1520: if adr=0 then goto L1580
 01530   read #3,using L1390,rec=adr: nta norec L1580
 01540   delete #3, rec=adr: 
 01550   form pos 13,c 6
-01560   let adr=nta
+01560   adr=nta
 01570   goto L1520
 01580 L1580: return 
 01590 ! ______________________________________________________________________
@@ -209,7 +209,7 @@
 01620 L1620: open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno),internal,input ioerr L1640
 01630   close #1,free: 
 01640 L1640: open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",SIZE=0,RecL=300",internal,output 
-01650   let cont=1
+01650   cont=1
 01660   close #2: ioerr L1670
 01670 L1670: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno),internal,input ioerr L1690
 01680   close #2,free: 
@@ -237,7 +237,7 @@
 01910   if fst=1 then goto L1940
 01920   let fst=1
 01930   goto L1950
-01940 L1940: print #255: newpage
+01940 L1940: pr #255: newpage
 01950 L1950: let jcp=1
 01960   let x2=0
 01970   gosub L2330
@@ -256,21 +256,21 @@
 02100   goto L2260
 02110 L2110: let x1=0
 02120   for j=1 to 2
-02130     print #255,using L2140: sc2$(j),ln$(j,1),ln$(j,2),ln$(j,3)
+02130     pr #255,using L2140: sc2$(j),ln$(j,1),ln$(j,2),ln$(j,3)
 02140 L2140: form pos 1,c 20,pos 23,3*c 35,skip 1
 02150   next j
 02160   for j=1 to 13
-02170     print #255,using L2180: sc2$(j+2),ln(j,1),ln(j,2),ln(j,3)
+02170     pr #255,using L2180: sc2$(j+2),ln(j,1),ln(j,2),ln(j,3)
 02180 L2180: form pos 1,c 20,pos 23,n 10.2,pos 58,n 10.2,pos 93,n 10.2,skip 1
 02190   next j
-02200   print #255: 
+02200   pr #255: 
 02210   let x2=x2+1
 02220   mat ln$=("")
 02230   mat ln=(0)
 02240   return 
 02250 ! ______________________________________________________________________
 02260 L2260: if x2<3 then goto L2310
-02270   print #255: newpage
+02270   pr #255: newpage
 02280   let x2=0
 02290   let jcp=0
 02300   gosub L2330
@@ -278,20 +278,20 @@
 02320   goto L1900
 02330 L2330: gosub HDR
 02340   if jcp=0 then goto L2490
-02350   print #255,using L2360: sc1$(1),jn$
+02350   pr #255,using L2360: sc1$(1),jn$
 02360 L2360: form pos 1,c 20,pos 23,c 6,skip 1
-02370   print #255,using L2380: sc1$(2),n$
+02370   pr #255,using L2380: sc1$(2),n$
 02380 L2380: form pos 1,c 20,pos 23,c 40,skip 1
 02390   for j=1 to 3
-02400     print #255,using L2410: sc1$(j+2),a$(j)
+02400     pr #255,using L2410: sc1$(j+2),a$(j)
 02410 L2410: form pos 1,c 20,pos 23,c 30,skip 1
 02420   next j
 02430   for j=1 to 4
-02440     print #255,using L2450: sc1$(j+5),b(j)
+02440     pr #255,using L2450: sc1$(j+5),b(j)
 02450 L2450: form pos 1,c 21,pos 23,n 12.2,skip 1
 02460   next j
-02470   print #255: 
-02480   print #255: 
+02470   pr #255: 
+02480   pr #255: 
 02490 L2490: return 
 02500 ! ______________________________________________________________________
 02510 L2510: let fntos(sn$="startprint") !:
@@ -317,14 +317,14 @@
 02650   if fnprocess=1 then goto XIT else goto MENU1
 02660 ! ______________________________________________________________________
 02670 HDR: ! 
-02680   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-02690   print #255: "\qc  {\f201 \fs24 \b "&env$('cnam')&"}"
-02700   print #255: "\qc  {\f221 \fs22 \b Job Cost Proof List}"
-02710   print #255: "\qc  {\f181 \fs16 \b "&cnvrt$("pic(zzzz/zz/zz)",dat)&"}"
-02720   print #255: "\ql   "
+02680   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+02690   pr #255: "\qc  {\f201 \fs24 \b "&env$('cnam')&"}"
+02700   pr #255: "\qc  {\f221 \fs22 \b Job Cost Proof List}"
+02710   pr #255: "\qc  {\f181 \fs16 \b "&cnvrt$("pic(zzzz/zz/zz)",dat)&"}"
+02720   pr #255: "\ql   "
 02730   return 
 02740 ! ______________________________________________________________________
-02750 REASSIGN: ! Print NEWPAGE
+02750 REASSIGN: ! pr NEWPAGE
 02760   restore #2,key>="           ": eof L2770
 02770 L2770: read #2,using L1360: mat ta eof L2800
 02780   rewrite #2,using L1360: 0,0
@@ -362,7 +362,7 @@
 03040   restore #2,key>=dup$: nokey DUPLICATE_CATEGORIES
 03050 L3050: read #2,using L1370,release: dupcn$,k$,mat l,mat ta eof GET_CATEGORY_LISTING
 03060   if dupcn$(1:6)<>djn$ then goto GET_CATEGORY_LISTING
-03070   let cn$=lpad$(jn$&dupcn$(7:11),11)
+03070   cn$=lpad$(jn$&dupcn$(7:11),11)
 03080   mat l=(0): mat ta=(0)
 03090   read #2,using L1370,key=cn$: cn$,k$,mat l,mat ta nokey L3110 ! check for duplicate catergory records
 03100   goto L3120
@@ -370,7 +370,7 @@
 03120 L3120: goto L3050
 03130 ! ______________________________________________________________________
 03140 EDITCAT: ! 
-03150   let addcat=0 ! add code - used to tell other parts of the program, !:
+03150   addcat=0 ! add code - used to tell other parts of the program, !:
         ! that I am currently adding a category record.
 03160   let fntos(sn$="Cat-ask") !:
         let respc=0
@@ -385,16 +385,16 @@
         let fncmdkey("&Complete",6,0,1,"Returns to job screen.")
 03210   let fnacs(sn$,0,mat resp$,ckey) ! ask category #
 03220   let hcat$=lpad$(rtrm$(resp$(1)(1:11)),11) !:
-        let cn$=lpad$(rtrm$(resp$(1)(1:11)),11)
+        cn$=lpad$(rtrm$(resp$(1)(1:11)),11)
 03230   if ckey=1 then goto ADDCAT else !:
-          if ckey=2 then let cn$(1:6)=lpad$(rtrm$(jn$),6): goto EDITCATEGORY else !:
-            if ckey=3 then read #2,using L1370: cn$,k$,mat l,mat ta eof L690: let cn$=lpad$(trim$(cn$),11): let holdcn$=cn$: goto EDITCATEGORY
-03240   if ckey=8 then let fncategory_srch(x$,fixgrid) : let cn$=x$: goto EDITCAT else !:
+          if ckey=2 then cn$(1:6)=lpad$(rtrm$(jn$),6): goto EDITCATEGORY else !:
+            if ckey=3 then read #2,using L1370: cn$,k$,mat l,mat ta eof L690: cn$=lpad$(trim$(cn$),11): let holdcn$=cn$: goto EDITCATEGORY
+03240   if ckey=8 then let fncategory_srch(x$,fixgrid) : cn$=x$: goto EDITCAT else !:
           if ckey=6 then goto ASKJOB else !:
             if ckey=7 then gosub RECREATE_CAT_GRID !:
               goto EDITCAT
 03250 ADDCAT: ! 
-03260   let addcat=1
+03260   addcat=1
 03270   let fntos(sn$="add-cat") !:
         let respc=0
 03280   let fnlbl(1,1,"Category # to Add:",17,right)
@@ -405,7 +405,7 @@
         let fncmdkey("&Cancel",5,0,1,"Stops without adding this category record and returns to category listing.")
 03320   let fnacs(sn$,0,mat resp$,ckey) ! ask new category #
 03330   if ckey=5 then goto GET_CATEGORY_LISTING
-03340   let cn$=jn$&lpad$(trim$(resp$(1)(1:5)),5)
+03340   cn$=jn$&lpad$(trim$(resp$(1)(1:5)),5)
 03350   let k$=resp$(1)(7:36)
 03360   read #2,using L1370,key=cn$: tempcn$ nokey L3380
 03370   mat ml$(2) !:
@@ -419,7 +419,7 @@
 03410 EDITCATEGORY: ! 
 03420   if trim$(cn$)="" or trim$(cn$)="0" then goto EDITCAT
 03430   let tcn$=cn$ : let hcn$=""
-03440   let cnkey$=cn$
+03440   cnkey$=cn$
 03450   read #2,using L1370,key=cnkey$: cn$,k$,mat l,mat ta eof EDITCAT nokey EDITCAT
 03460   let fntos(sn$="catedit") !:
         let respc=0 : let frac=0 !:
@@ -474,7 +474,7 @@
 03790   let fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
 03800   let fnacs(sn$,0,mat resp$,ckey) ! full edit on category  edit_category
 03810   if ckey=5 then goto GET_CATEGORY_LISTING
-03820   let cn$=jn$&lpad$(trim$(resp$(1)(1:5)),5)
+03820   cn$=jn$&lpad$(trim$(resp$(1)(1:5)),5)
 03830   let k$=resp$(2) ! name
 03840   if holdcn$=cn$ then goto L3870
 03850   mat ml$(2) !:
@@ -503,21 +503,21 @@
 04050 ! ______________________________________________________________________
 04060 REVIEW_DETAILS: ! 
 04070   let fntos(sn$="DetailSrch")
-04080   let ch2$(1)="Rec #": let ch2$(2)="Reference #": let ch2$(3)="Job #" !:
-        let ch2$(4)="Cat #" !:
-        let ch2$(5)="Sub #": let ch2$(6)="P/R Dept": let ch2$(7)="Date" !:
-        let ch2$(8)="Reg Hrs": let ch2$(9)="OT Hours": let ch2$(10)="Units" !:
-        let ch2$(11)="Pay Tax": let ch2$(12)="Amount" !:
-        let ch2$(13)="Description" !:
+04080   ch2$(1)="Rec #": ch2$(2)="Reference #": ch2$(3)="Job #" !:
+        ch2$(4)="Cat #" !:
+        ch2$(5)="Sub #": ch2$(6)="P/R Dept": ch2$(7)="Date" !:
+        ch2$(8)="Reg Hrs": ch2$(9)="OT Hours": ch2$(10)="Units" !:
+        ch2$(11)="Pay Tax": ch2$(12)="Amount" !:
+        ch2$(13)="Description" !:
         mat ch2$(13) ! : Mat CM2$(13) : Mat ITEM2$(13)
-04090   let cm2$(1)="30": let cm2$(2)="": let cm2$(3)="30" !:
-        let cm2$(4)="30" !:
-        let cm2$(5)="30": let cm2$(6)="30": let cm2$(7)="3" !:
-        let cm2$(8)="32": let cm2$(9)="32": let cm2$(10)="10" !:
-        let cm2$(11)="10": let cm2$(12)="10": let cm2$(13)=""
+04090   cm2$(1)="30": cm2$(2)="": cm2$(3)="30" !:
+        cm2$(4)="30" !:
+        cm2$(5)="30": cm2$(6)="30": cm2$(7)="3" !:
+        cm2$(8)="32": cm2$(9)="32": cm2$(10)="10" !:
+        cm2$(11)="10": cm2$(12)="10": cm2$(13)=""
 04100   let fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 04110 ! Restore #2,Key>=JN$&CN$: Nokey 4200
-04120   let catkey$=cn$ ! $(TRIM$(JN$),6)&LPAD$(TRIM$(CN$),5)
+04120   catkey$=cn$ ! $(TRIM$(JN$),6)&LPAD$(TRIM$(CN$),5)
 04130 READ_FILE: ! 
 04140   read #2,using L1360,key=catkey$: mat ta nokey L4160
 04150   goto L4170
@@ -546,7 +546,7 @@
 04250   let fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 04260   if ckey=5 then goto GET_CATEGORY_LISTING
 04270   let detaileditrec=val(resp$(1))
-04280   if ckey=1 then let adddetails=1: mat tr=(0): let eno$="": let jno$=jn$: goto EDIT_DETAILS
+04280   if ckey=1 then adddetails=1: mat tr=(0): let eno$="": let jno$=jn$: goto EDIT_DETAILS
 04290   if ckey=2 then read #3,using L1380,rec=detaileditrec: eno$,jno$,mat tr,pd$,nta : let editdetails=1 : goto EDIT_DETAILS
 04300   if ckey=4 then read #3,using L1380,rec=detaileditrec: eno$,jno$,mat tr,pd$,nta !:
           let eno$=jno$=pd$="": mat tr=(0) !:
@@ -620,7 +620,7 @@
 04820   if ta(1)=0 then let ta(1)=ta(2)=lrec3
 04830   if ta(2)=0 then let ta(2)=lrec3
 04840   rewrite #2,using L1360,key=cn$: mat ta
-04850   let adddetails=0: goto REVIEW_DETAILS
+04850   adddetails=0: goto REVIEW_DETAILS
 04860 L4860: ! 
 04870   goto REVIEW_DETAILS
 04880 ! ______________________________________________________________________
@@ -634,7 +634,7 @@
 04960 ERTN: let fnerror(program$,err,line,act$,"xit")
 04970   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 04980   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-04990   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+04990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 05000 ERTN_EXEC_ACT: execute act$ : goto ERTN
 05010 ! /region
 05020 ! ______________________________________________________________________

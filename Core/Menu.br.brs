@@ -286,12 +286,12 @@
 21194             ! fnCopy('S:\Core\FileIO\Layout\version\*.*',env$('QBase')&'\Core\FileIO\Layout\version\*.*')
 21196           end if
 21200           open  #hProc:=fngethandle: 'name='&env$('temp')&'\fileioproc'&session$&'.$$$,replace',display,output
-21210           print #hProc: 'load S:\Core\FileIO\fileio.br'
-21220           print #hProc: 'cd S:'
-21230           print #hProc: 'Run'
-21240           print #hProc: 'cd C:'
-21260           print #hProc: 'load S:\Core\Menu.br'
-21280           print #hProc: 'run'
+21210           pr #hProc: 'load S:\Core\FileIO\fileio.br'
+21220           pr #hProc: 'cd S:'
+21230           pr #hProc: 'Run'
+21240           pr #hProc: 'cd C:'
+21260           pr #hProc: 'load S:\Core\Menu.br'
+21280           pr #hProc: 'run'
 21300           close #hProc:
 21320           execute 'proc '&env$('temp')&'\fileioproc'&session$&'.$$$'
 21340         else
@@ -325,9 +325,9 @@
 21770         fnClearLayoutCache
 21772         setenv('ForceScreenIOUpdate','yes')
 21780         open #h_tmp:=fngethandle: 'Name='&env$('temp')&'\ACS_Restart_'&session$&'.prc,replace',display,output
-21800         print #h_tmp: "Stop"
-21820         print #h_tmp: "clear resident"
-21860         print #h_tmp: "chain 'S:\Core\Start'"
+21800         pr #h_tmp: "Stop"
+21820         pr #h_tmp: "clear resident"
+21860         pr #h_tmp: "chain 'S:\Core\Start'"
 21880         close #h_tmp:
 21900         execute 'proc '&env$('temp')&'\ACS_Restart_'&session$&'.prc'
 21920       else if menu_option$='Index System' then
@@ -343,7 +343,7 @@
 22240         menu_option$=srep$(menu_option$,'%report_cache_folder_current%',fnreport_cache_folder_current$)
 22260         execute 'sy -c -w explorer "'&os_filename$(menu_option$(1:len(menu_option$)-1))&'"'
 22280       else
-22300         print 'menu_option$=';menu_option$
+22300         pr 'menu_option$=';menu_option$
 22320       end if
 22340     !  else if fkey_value=67 then
 22360     !      /r  fkey=98
@@ -352,7 +352,7 @@
 22410       fnprogram_properties(trim$(program_name$(program_selection_id))) ! (program_selection$) ! 1 is the flag to chain back to main menu
 22420       chain program$
 22440     else if fkey_value=209 then
-22460       curfld(curfld,fkey) : print 'fkey 209 encountered (combobox)'
+22460       curfld(curfld,fkey) : pr 'fkey 209 encountered (combobox)'
 22720     else
 23000       ! r: system specific fkey button actions
 23020       fkey_favorite_add=1450
@@ -504,7 +504,7 @@
 26420   fn_dashboard_height=dhReturn
 26440 fnend
 27000 def fn_ddAddButton(buttonText$,btnFkey,btnItem,tmp_btn_width; buttonLine,tooltip$*150) ! buttons are added and counted (btnItem) from right to left
-27010   if buttonLine=0 then let buttonLine=1
+27010   if buttonLine=0 then buttonLine=1
 27020   if btnItem=1 then
 27040     fnbutton(buttonLine,dashboard_width-tmp_btn_width,buttonText$,btnFkey,tooltip$,1,tmp_btn_width,fraDashboard)
 27060   else if btnItem>1 then
@@ -518,7 +518,7 @@
 28040     ! fnfra(program_grid_line,favorite_left,grid_height-1,favorite_width,'Favorites')
 28060     fnfra(dashboard_height+3,favorite_left,favorite_height,favorite_width,'Favorites') :  : frameCount+=1 : fraFavorites=frameCount
 28080     dim favorite$(0)*128
-28100     fnFavoriteList(mat favorite$) ! pr mat favorite$ : pause
+28100     fnFavoriteList(mat favorite$) 
 28120     fnbutton(1,1,'Close',fkey_favorite_close:=1452,'Close Favorites',0,6,fraFavorites)
 28140     fnbutton_or_disabled(favoriteDeleteMode$<>'True',1,15,'Delete',fkey_favorite_del:=1455,'To remove a favorite, click this "Delete" button and then click the favorite.',6,fraFavorites)
 28160     fnbutton_or_disabled(1,1,favorite_width-6,'Add',fkey_favorite_add:=1450,'To add a favorite, highlite a menu option and click this "add" button.',6,fraFavorites)
@@ -726,12 +726,12 @@
 61040         fn_upg_show_it(upg_item)
 61060       else if hiding and program_level(upg_item)<=hide_level then
 61080         hiding=0
-61100         print '  turning off hide at '&program_name$(upg_item)
+61100         pr '  turning off hide at '&program_name$(upg_item)
 61120         hide_level=0
 61140       else if ~hiding and program_plus$(upg_item)='+' then
 61160         hide_level=program_level(upg_item)
 61180         hiding=1
-61200         print '--' : print '  turning ON hide  after '&program_name$(upg_item)
+61200         pr '--' : pr '  turning ON hide  after '&program_name$(upg_item)
 61220         fn_upg_show_it(upg_item)
 61240       end if
 61260       if hiding then
@@ -865,11 +865,11 @@
 73000 def fn_dm_add(a$*256; b$*256,c$*1)
 73020   mat m_a$(udim(mat m_a$)+1) : m_a$(udim(mat m_a$))=a$
 73040   mat m_b$(udim(mat m_b$)+1) : m_b$(udim(mat m_b$))=b$
-73050   if c$='' then let c$='E'
+73050   if c$='' then c$='E'
 73060   mat m_c$(udim(mat m_c$)+1) : m_c$(udim(mat m_c$))=c$
 73080 fnend
 74000 def fn_chain(c_program$*128)
-74020   print newpage
+74020   pr newpage
 74040   fnchain(c_program$)
 74060 fnend
 75000 XIT: execute "System"
@@ -878,7 +878,7 @@
 76040 ERTN: fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-76100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 76120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 76140 ! </updateable region: ertn>
 

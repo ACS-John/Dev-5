@@ -30,19 +30,19 @@
 00330   goto PRTRPT
 00331 ! ______________________________________________________________________
 00340 PGOF: ! r:
-00342   print #255: newpage
+00342   pr #255: newpage
 00350   gosub HDR
 00360   continue  ! /r
 00370 HDR: ! r:
-00371   print #255: 
-00372   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-00373   print #255: "\qc "&" {\f221 \fs22 \b "&env$('cnam')&"}"
-00374   print #255: "\qc "&" {\f201 \fs20 \b "&trim$(rt$)&"}"
-00375   print #255: "\qc "&" {\f181 \fs16 "&"From: "&cnvrt$("pic(zzzz/zz/zz)",beg_date)&" To: "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
-00376   print #255: "\qc "&" {\f181 \fs16 "&trim$(dh$)&"}"
-00377   print #255: "\ql   "
-00400   print #255: ch$(1)
-00410   print #255: ch$(2)
+00371   pr #255: 
+00372   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+00373   pr #255: "\qc "&" {\f221 \fs22 \b "&env$('cnam')&"}"
+00374   pr #255: "\qc "&" {\f201 \fs20 \b "&trim$(rt$)&"}"
+00375   pr #255: "\qc "&" {\f181 \fs16 "&"From: "&cnvrt$("pic(zzzz/zz/zz)",beg_date)&" To: "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
+00376   pr #255: "\qc "&" {\f181 \fs16 "&trim$(dh$)&"}"
+00377   pr #255: "\ql   "
+00400   pr #255: ch$(1)
+00410   pr #255: ch$(2)
 00420   return ! /r
 00430 EOF1: ! r:
 00450   close #1: ioerr ignore
@@ -60,26 +60,26 @@
 19807   gosub ADD_EARNINGS
 19808   if ips=0 then goto L19899
 19899 L19899: if tdep=1 then goto F_PR_OUT
-19900   print #255, using F_PR_OUT: ss$,em$(1),tcp(9),tcp(10),tcp(11) pageoflow PGOF
+19900   pr #255, using F_PR_OUT: ss$,em$(1),tcp(9),tcp(10),tcp(11) pageoflow PGOF
 19910 F_PR_OUT: form pos 1,c 11,pos 15,c 30,pos 30,pic(--,---,---.##),pos 45,pic(--,---,---.##),pos 57,pic(--,---,---.##)
 19989 ! If TDEP=0 Then Mat TCP=(0): Mat TDC=(0)
 19990   goto L19804
 20000 L20000: ! 
 20099   goto PRTRPT ! /r
-20100 L20100: ! r: Check for Totals to print ______________
+20100 L20100: ! r: Check for Totals to pr ______________
 21200   goto EOF1 ! /r
 50000 ERTN: ! r:
 50001   let fnerror(program$,err,line,act$,"xit") 
 50010   if uprc$(act$)<>"PAUSE" then goto L50040
 50020   execute "list "&str$(line) : pause : goto L50040
-50030   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+50030   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 50040 L50040: execute act$
 50050   goto ERTN
 50060 ! /r
 60000 ADD_EARNINGS: ! r:
 60001   mat tcp=(0): mat tdc=(0)
 60004   let ipsw=9
-60005   let checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
+60005   checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 60010   restore #4,key>=checkkey$: nokey L60080
 60020 L60020: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn2,prd,ckno,mat dc,mat cp eof L60080
 60030   if heno<>eno then goto L60080
@@ -105,7 +105,7 @@
 61070   let fncmdkey("Cancel",5,0,1,"Returns to menu")
 61080   let fnacs(sn$,0,mat resp$,ckey) 
 61082   if ckey=5 then goto XIT
-61090   let beg_date=val(resp$(1))
+61090   beg_date=val(resp$(1))
 61100   let end_date=val(resp$(2))
 61110   let dh$=resp$(3)
 61120   return ! /r

@@ -9,9 +9,9 @@
 00090 ! ______________________________________________________________________
 00100   let fncno(cno,cnam$)
 00110 ! 
-00120   let cap$="Certified Payroll Register"
+00120   cap$="Certified Payroll Register"
 00130 ! ______________________________________________________________________
-00140   print newpage
+00140   pr newpage
 00150   on fkey 5 goto L1930
 00160   let message$="Printing: please wait..."
 00170   let fnwait(101,cap$,message$,1)
@@ -60,7 +60,7 @@
 00580 L580: if rtrm$(jn$)="" then goto L620
 00590   gosub L1550
 00600   gosub TOTALS
-00610   print #255: newpage
+00610   pr #255: newpage
 00620 L620: let en$=en1$
 00630   let jn$=jn1$
 00640   let n$=""
@@ -79,7 +79,7 @@
 00770 ! ______________________________________________________________________
 00780 L780: read #1,using L790,key=en$: mat em$,ss$,em2,lpd,tgp,ta1 nokey L1060
 00790 L790: form pos 9,3*c 30,c 11,x 4,n 2,pos 162,n 6,pd 5.2,pd 3
-00800 L800: let adr=ta1
+00800 L800: adr=ta1
 00810   mat ded=(0)
 00820   let tdet2=0
 00830   let tgp=tdet3=0
@@ -119,35 +119,35 @@
 01170   goto L440
 01180 ! ______________________________________________________________________
 01190 PGOF: ! 
-01200   print #255: newpage
+01200   pr #255: newpage
 01210   gosub L1240
 01220   continue 
 01230 ! ______________________________________________________________________
 01240 L1240: let p1=59-int(len(rtrm$(cnam$)))/2
-01250   let a2$="Job # "&ltrm$(jn$)&"  Job Name "&rtrm$(n$)
+01250   a2$="Job # "&ltrm$(jn$)&"  Job Name "&rtrm$(n$)
 01260   let p2=59-int(len(rtrm$(a2$)))/2
-01270   print #255,using L1280: cnam$,a2$
+01270   pr #255,using L1280: cnam$,a2$
 01280 L1280: form skip 2,pos p1,c 70,skip 1,pos p2,c 70,skip 1
-01290   print #255: tab(40);"****  Certified Payroll Register  ****"
-01300   print #255,using L1310: "Period Ending",dt
+01290   pr #255: tab(40);"****  Certified Payroll Register  ****"
+01300   pr #255,using L1310: "Period Ending",dt
 01310 L1310: form pos 48,c 14,pic(zz/zz/zz),skip 1
-01320   print #255: "Name  &  Address"
-01330   print #255: "City, State Zip                <-------- Hours Worked this Job --------> Total  Pay  Pay  <--------------- Summary ---------------->"
-01340   print #255,using L1350: "    Fed-Exempt",mat dr,"Hours  Rate Typ      Gross    FICA Fed W/H   Other      Net"
+01320   pr #255: "Name  &  Address"
+01330   pr #255: "City, State Zip                <-------- Hours Worked this Job --------> Total  Pay  Pay  <--------------- Summary ---------------->"
+01340   pr #255,using L1350: "    Fed-Exempt",mat dr,"Hours  Rate Typ      Gross    FICA Fed W/H   Other      Net"
 01350 L1350: form pos 1,c 30,pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),pic(zzz/zz),x 1,c 59,skip jbskip
-01360   print #255: "______________________________ _____ _____ _____ _____ _____ _____ _____ _____  ____ ___    _______  ______  ______   _____  _______"
+01360   pr #255: "______________________________ _____ _____ _____ _____ _____ _____ _____ _____  ____ ___    _______  ______  ______   _____  _______"
 01370   return 
 01380 ! ______________________________________________________________________
 01390 L1390: if tgp=0 then let x3=0 else let x3=(gp1+gp2)/tgp
 01400   if hr1(8)=0 then goto L1450
 01410   let lnp=lnp+1
 01420   if lnp>5 then let lnp=6
-01430   print #255,using L1440: pl1$(lnp),mat hr1,tdet2," REG",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF
+01430   pr #255,using L1440: pl1$(lnp),mat hr1,tdet2," REG",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF
 01440 L1440: form pos 1,c 30,9*n 6.2,c 6,n 9.2,3*n 8.2,n 9.2
 01450 L1450: if hr2(8)=0 then goto L1500
 01460   let lnp=lnp+1
 01470   if lnp>5 then let lnp=6
-01480   if hr1(8)=0 then print #255,using L1440: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF else print #255,using L1490: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PGOF
+01480   if hr1(8)=0 then pr #255,using L1440: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF else pr #255,using L1490: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PGOF
 01490 L1490: form pos 1,c 30,9*n 6.2,c 6
 01500 L1500: let hr8=hr8+hr1(8)+hr2(8)
 01510   mat hr1=(0)
@@ -158,7 +158,7 @@
 01560   let lnp=lnp+1
 01570   if lnp>5 then goto L1620
 01580   for j=lnp to 5
-01590     print #255,using L1600: pl1$(j) pageoflow PGOF
+01590     pr #255,using L1600: pl1$(j) pageoflow PGOF
 01600 L1600: form pos 1,c 30,skip 1
 01610   next j
 01620 L1620: let gded= gded+(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5)))
@@ -177,11 +177,11 @@
 01750   return 
 01760 ! ______________________________________________________________________
 01770 TOTALS: ! 
-01780   print #255,using L1790: "* * * *  Totals for Job # ",jn$,"* * * *" pageoflow PGOF
+01780   pr #255,using L1790: "* * * *  Totals for Job # ",jn$,"* * * *" pageoflow PGOF
 01790 L1790: form pos 10,c 26,c 7,c 8,skip 1
-01800   print #255: tab(6);"Total Hours   Gross Pay     Total        Total" pageoflow PGOF
-01810   print #255: tab(31);"Deductions     Net-Pay" pageoflow PGOF
-01820   print #255,using L1830: thr,jgp,gded,jgp-gded pageoflow PGOF
+01800   pr #255: tab(6);"Total Hours   Gross Pay     Total        Total" pageoflow PGOF
+01810   pr #255: tab(31);"Deductions     Net-Pay" pageoflow PGOF
+01820   pr #255,using L1830: thr,jgp,gded,jgp-gded pageoflow PGOF
 01830 L1830: form pos 5,4*n 12.2,skip 2
 01840   let thr=0
 01850   let jgp=0
@@ -199,7 +199,7 @@
 01970 ERTN: let fnerror(program$,err,line,act$,"xit")
 01980   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01990   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02000   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02000   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02010 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02020 ! /region
 02030 ! ______________________________________________________________________

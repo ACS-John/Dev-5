@@ -3,5 +3,5 @@
 00052   library 'S:\Core\Library': fnopen_receipt_printer,fnclose_receipt_printer
 00060   let fntop(program$,"receipt printer test")
 01000   let fnopen_receipt_printer
-01020   print #255: 'receipt printer test'
+01020   pr #255: 'receipt printer test'
 01040   let fnclose_receipt_printer

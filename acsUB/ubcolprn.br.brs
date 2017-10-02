@@ -42,7 +42,7 @@
 40120   if ld1<>0 and tdate<ld1 then goto READ_TRANS
 40140   if hd1<>0 and tdate>hd1 then goto READ_TRANS
 40160   if tamount=0 then goto READ_TRANS
-40180   if tcode<3 or tcode>5 then goto READ_TRANS ! don't print charges or penalties
+40180   if tcode<3 or tcode>5 then goto READ_TRANS ! don't pr charges or penalties
 40200   if tcode=3 then let ti2=1 ! REG.COLLECTION
 40220   if tcode=4 then let ti2=2 ! CREDIT MEMO
 40240   if tcode=5 then let ti2=3 ! DEBIT MEMO
@@ -51,19 +51,19 @@
 40300   let x=0
 40320   for j=1 to 10
 40340     if trim$(servicename$(j))<>"" then 
-40360       let alloc(x+=1)=tg(j)
+40360       alloc(x+=1)=tg(j)
 40380       if ti2=3 then let r(x+3,1)-=tg(j) else let r(x+3,1)+=tg(j)
 40400       let r(x+3,ti2+1)+=tg(j)
 40420     end if 
 40440   next j
-40460   let c$=" "
+40460   c$=" "
 40480   if tcode=4 then 
-40500     let c$="CM"
+40500     c$="CM"
 40520   else if tcode=5 then 
-40540     let c$="DM"
+40540     c$="DM"
 40560   end if 
 40580   if ti1$="True" then 
-40600     print #255,using 'Form POS 1,C 10,N 10.2,C 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 9.2,X 3,C 30': z$,tamount,c$,tdate,mat alloc,nam$(1:25) pageoflow PGOF
+40600     pr #255,using 'Form POS 1,C 10,N 10.2,C 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 9.2,X 3,C 30': z$,tamount,c$,tdate,mat alloc,nam$(1:25) pageoflow PGOF
 40620   end if 
 40640   if extra1<0 or extra1>200 then let extra1=200
 40660   if sum(alloc)<>tamount then 
@@ -78,23 +78,23 @@
 40840   goto READ_TRANS
 40860 ! ______________________________________________________________________
 64000 PGOF: ! r:
-64020   print #255: newpage
+64020   pr #255: newpage
 64040   gosub HDR
 64060   continue  ! /r
 66000 PRTOTALS: ! r:
-66020   print #255: ""
-66040   print #255: "    ************ Totals ************"
-66060   print #255: tab(34);"{\ul       Total}  {\ul    Reg.Col}  {\ul   Cr.Memos}  {\ul   Db.Memos}"
+66020   pr #255: ""
+66040   pr #255: "    ************ Totals ************"
+66060   pr #255: tab(34);"{\ul       Total}  {\ul    Reg.Col}  {\ul   Cr.Memos}  {\ul   Db.Memos}"
 66080   for j=1 to sz1
-66100     print #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': scr1$(j),r(j+3,1),r(j+3,2),r(j+3,3),r(j+3,4) pageoflow PGOF
+66100     pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': scr1$(j),r(j+3,1),r(j+3,2),r(j+3,3),r(j+3,4) pageoflow PGOF
 66120   next j
-66140   print #255: ""
-66160   print #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': "Total      ",r(1,1),r(1,2),r(1,3),r(1,4)
+66140   pr #255: ""
+66160   pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': "Total      ",r(1,1),r(1,2),r(1,3),r(1,4)
 66180   if routetotals<>0 then 
-66200     print #255,using "form skip 2,c 20": "Route Totals"
+66200     pr #255,using "form skip 2,c 20": "Route Totals"
 66220     for j=1 to 200
 66240       if route(j)<>0 then 
-66260         print #255,using "form pos 1,c 10,pic(zzz,zzz,zzz.##)": "Route "&cnvrt$("pic(zzz)",j),route(j) pageoflow PGOF
+66260         pr #255,using "form pos 1,c 10,pic(zzz,zzz,zzz.##)": "Route "&cnvrt$("pic(zzz)",j),route(j) pageoflow PGOF
 66280       end if 
 66300     next j
 66320   end if 
@@ -131,19 +131,19 @@
 70000 HDR: ! r:
 70010   if ~skip_header then 
 70020 ! need date$,time$
-70040     print #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
-70060     print #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
+70040     pr #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
+70060     pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
 70080     if ld1<>0 and hd1<>0 then 
-70100       print #255: "\qc  {\f181 \fs18 \b From "&cnvrt$("pic(zzzz/zz/zz)",ld1)& "  To "&cnvrt$("pic(zzzz/zz/zz)",hd1)&"}"
+70100       pr #255: "\qc  {\f181 \fs18 \b From "&cnvrt$("pic(zzzz/zz/zz)",ld1)& "  To "&cnvrt$("pic(zzzz/zz/zz)",hd1)&"}"
 70120     end if 
-70140     print #255: ""
-70160     print #255: "\ql "&hd1$
+70140     pr #255: ""
+70160     pr #255: "\ql "&hd1$
 70162   end if 
 70180   return  ! /r
 72000 ! <Updateable Region: ERTN>
 72020 ERTN: let fnerror(program$,err,line,act$,"xit")
 72040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 72060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-72080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+72080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 72100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 72120 ! /region

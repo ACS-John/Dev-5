@@ -11,7 +11,7 @@
 00230   let fnget_services(mat servicename$,mat servicecode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
 00240   ! 
 06000   ASK_OPTIONS: ! 
-06020   let cont=fn_options(route,billingdate$) ! collect user options
+06020   cont=fn_options(route,billingdate$) ! collect user options
 06040   if ckey=5 then goto XIT_FN_UNDOBILLING
 06060   if trim$(billingdate$)="0" then 
 06080     mat msgtext$(1)
@@ -25,7 +25,7 @@
 08060   let msgtext$(2) = "with a matching billing date by the amount of the billing on that date."
 08080   let msgtext$(3) = "Are you sure?"
 08100   let fnmsgbox(mat msgtext$,answer$,"Confirm Action",4)
-08120   if (answer$<>"Yes") then let cont=0
+08120   if (answer$<>"Yes") then cont=0
 08140   ! 
 08160   let undoCount=0
 12000   if cont then 
@@ -71,39 +71,39 @@
 18260               let readings(10)=srvread3(5)
 18280             end if 
 19000             ! update charge date
-19020             let chargedate=val(date$(days(trdate(2),"ccyymmdd"),"mmddyy"))
+19020             chargedate=val(date$(days(trdate(2),"ccyymmdd"),"mmddyy"))
 20000             ! update charges
 20020             mat charges(1:11)=srvamt2(1:11)
-20040             let charges(12)=srvamt2(11)+srvamt2(10)
+20040             charges(12)=srvamt2(11)+srvamt2(10)
 22000             ! update breakdowns
 22020             !             if trim$(acct$)='100480.01' then pr acct$ : pause
 22040             for breakdown_item=1 to 9
 22060               if penalty$(breakdown_item)<>'Y' then 
-22080                 let breakdown(breakdown_item)=breakdown(breakdown_item)-srvamt1(breakdown_item)
+22080                 breakdown(breakdown_item)=breakdown(breakdown_item)-srvamt1(breakdown_item)
 22100               end if 
 22120             next breakdown_item
 24800             ! mat breakdown(1:9)=breakdown(1:9)-srvamt1(1:9)
 24820             ! update current balance
-24840             let balance-=srvamt1(11)
+24840             balance-=srvamt1(11)
 24860             ! update reading dates; guess at prior reading date
 24880             let readingdates(2)=readingdates(1)
 24900             let readingdates(1)=val(date$(days(priordate2,"ccyymmdd"),"mmddyy"))
 24920             ! update last billing date
 24940             if priordate>lastbilling then let lastbilling=priordate
 24960           else 
-24980             mat readings(1:12)=(0) : mat charges(1:12)=(0) : let balance=0 : let chargedate=0 : mat breakdown(1:10)=(0) : mat readingdates(1:2)=(0)
+24980             mat readings(1:12)=(0) : mat charges(1:12)=(0) : balance=0 : chargedate=0 : mat breakdown(1:10)=(0) : mat readingdates(1:2)=(0)
 25000           end if 
 25020           ! rewrite customer master record
 25040           rewrite #h_customer,using CUSTFORM: acct$,custname$,custroute,mat readings,balance,chargedate,mat charges,mat breakdown,mat readingdates
 25060           ! delete rolled-back transaction
 25080           delete #h_trans: 
-25100           print #255,using "form pos 5,c 10,x 5,pic(zz/zz/zz)": trcust$(1),str$(trdate(1)) pageoflow PRINTPAGEOVERFLOW
+25100           pr #255,using "form pos 5,c 10,x 5,pic(zz/zz/zz)": trcust$(1),str$(trdate(1)) pageoflow PRINTPAGEOVERFLOW
 25120         end if 
 25140       end if 
 25160     loop while filter<>do_individual
 25180     goto CUSTDONE
 26000     PRINTPAGEOVERFLOW: ! r:
-26020      print #255: newpage
+26020      pr #255: newpage
 26040      let fn_printheader
 26060     continue ! /r
 28000     CUSTDONE: ! 
@@ -124,7 +124,7 @@
 44000   def fn_options(&route,&billingdate$) ! show options dialog to user and return selections
 44020     dim screen_name$*100,resp$(20)*255
 44040     let fnd1(lastbilling) ! get last billing date and use it for the default
-44060     let filter=0 : let route=0 : let cust$=''
+44060     let filter=0 : let route=0 : cust$=''
 44080 OPTIONS_TOS: ! 
 44100     let fntos(screen_name$="UndoBillingOptions")
 44120     let rcnt=0 : let lc=0 : let pos_col2=16
@@ -166,19 +166,19 @@
 44840     if ckey=5 then ! if user pressed Cancel
 44860       let fn_options=0
 44880     else 
-44900       let billingdate$=resp$(resp_billing_date)
+44900       billingdate$=resp$(resp_billing_date)
 44920       if resp$(resp_opt_all)='True' then 
 44940         let filter=do_all
 44960       else if resp$(resp_opt_route)='True' then 
 44980         let filter=do_route
 45000         let route=val(resp$(resp_route))
-45020         if route=0 then print bell;'please select a route' : goto OPTIONS_TOS
+45020         if route=0 then pr bell;'please select a route' : goto OPTIONS_TOS
 45040       else if resp$(resp_opt_individual)='True' then 
 45060         let filter=do_individual
-45080         let cust$=trim$(resp$(resp_individual)(1:10))
-45090         if trim$(cust$)='' then print bell;'please select a customer' : goto OPTIONS_TOS
+45080         cust$=trim$(resp$(resp_individual)(1:10))
+45090         if trim$(cust$)='' then pr bell;'please select a customer' : goto OPTIONS_TOS
 45100       end if 
-45120 !     print 'answers retreived' : pause  !
+45120 !     pr 'answers retreived' : pause  !
 45140       let fn_options=1
 45160     end if 
 45180   fnend  ! fn_Options
@@ -224,19 +224,19 @@
 52560 fnend 
 55000   def fn_printheader
 55020     let pg+=1
-55040     print #255: "Reverse Calculation Status Report"
-55060     print #255: "Page "&str$(pg)
-55080     print #255: ""
-55100     print #255: "All accounts listed have been reversed."
-55120     print #255: ""
-55140     print #255: "Account           Billing Date"
-55160     print #255: "_______________   ____________"
+55040     pr #255: "Reverse Calculation Status Report"
+55060     pr #255: "Page "&str$(pg)
+55080     pr #255: ""
+55100     pr #255: "All accounts listed have been reversed."
+55120     pr #255: ""
+55140     pr #255: "Account           Billing Date"
+55160     pr #255: "_______________   ____________"
 55180   fnend 
 59000 IGNORE: continue 
 60000 ! <Updateable Region: ERTN>
 60020 ERTN: let fnerror(program$,err,line,act$,"NO")
 60040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 60060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-60080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+60080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 60100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 60120 ! </Updateable Region: ERTN>

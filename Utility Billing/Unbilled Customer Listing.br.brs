@@ -45,31 +45,31 @@
 34100   if startcd=1 and prtbkno<>route then goto TOTALS
 34120   if final=3 then let final$="Final=3" else let final$=""
 34140   if final=4 then let final$="Final=4"
-34160   if printadr=1 then print #255,using L490: z$,e$(2),f,bal,e$(1)(1:25),final$ pageoflow PGOF else print #255,using L491: z$,e$(2),f,bal,final$ pageoflow PGOF
+34160   if printadr=1 then pr #255,using L490: z$,e$(2),f,bal,e$(1)(1:25),final$ pageoflow PGOF else pr #255,using L491: z$,e$(2),f,bal,final$ pageoflow PGOF
 34180   L490: form pos 1,c 10,pos 13,c 30,pos 45,pic(zz/zz/zz),n 15.2,x 2,c 25,x 2,c 8
 34200   L491: form pos 1,c 10,pos 13,c 30,pos 45,pic(zz/zz/zz),n 15.2,x 2,c 8
 34220   let tbal=tbal+bal
 34240 goto READ_CUSTOMER ! /r
 38000 TOTALS: ! r:
-38020   print #255: rpt$(" ",55)&"{\ul             }" 
-38040   print #255,using "Form POS 56,N 12.2": tbal 
-38060   print #255: rpt$(" ",55)&"{\ul \strike             }"
+38020   pr #255: rpt$(" ",55)&"{\ul             }" 
+38040   pr #255,using "Form POS 56,N 12.2": tbal 
+38060   pr #255: rpt$(" ",55)&"{\ul \strike             }"
 38080 goto DONE ! /r
 44000 HDR: ! r:
 44020   let p2=p2+1
-44040   print #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
-44060   print #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
-44080   print #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
-44100   print #255,using L590: "\ql "&date$,"Page "&str$(p2)
+44040   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
+44060   pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
+44080   pr #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
+44100   pr #255,using L590: "\ql "&date$,"Page "&str$(p2)
 44120   L590: form pos 1,c 82,c 10
-44140   print #255: ""
-44160   ! Print #255: "{\ul Account    }                               {\ul Date of}         Current"
-44180   if printadr<>1 then print #255: " {\ul Number   }  {\ul Name             }             {\ul Last Billing}      {\ul Balance}"
-44200   if printadr=1 then print #255: " {\ul Number   }  {\ul Name             }             {\ul Last Billing}      {\ul Balance}  {\ul Meter Address}"
-44220   print #255: ""
+44140   pr #255: ""
+44160   ! pr #255: "{\ul Account    }                               {\ul Date of}         Current"
+44180   if printadr<>1 then pr #255: " {\ul Number   }  {\ul Name             }             {\ul Last Billing}      {\ul Balance}"
+44200   if printadr=1 then pr #255: " {\ul Number   }  {\ul Name             }             {\ul Last Billing}      {\ul Balance}  {\ul Meter Address}"
+44220   pr #255: ""
 44240 return ! /r
 46000 PGOF: ! r:
-46020   print #255: newpage 
+46020   pr #255: newpage 
 46040   gosub HDR 
 46060 continue ! /r
 54000 DONE: ! r:
@@ -81,6 +81,6 @@
 62020 ERTN: let fnerror(program$,err,line,act$,"xit")
 62040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 62060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-62080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+62080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 62100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 62120 ! /region

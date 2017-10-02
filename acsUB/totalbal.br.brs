@@ -32,7 +32,7 @@
 18010 ERTN: let fnerror(program$,err,line,act$,"xit")
 18020   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 18030   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-18040   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+18040   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 18050 ERTN_EXEC_ACT: execute act$ : goto ERTN
 18060 ! /region
 22000 def library fntotal_ar

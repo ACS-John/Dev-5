@@ -57,19 +57,19 @@
 38160   end if 
 38180 ! gosub FIX_MAT_GB
 38200 ! gosub REW_MAT_GB
-38220   print #255,using L340: z$,bal,sum(gb),mat gb pageoflow PGOF
+38220   pr #255,using L340: z$,bal,sum(gb),mat gb pageoflow PGOF
 38240 L340: form pos 1,c 10,x 1,12*n 9.2
 38260   goto READ_CUSTOMER
-40000 NWPGE: ! PRINT #255: NEWPAGE
-40020   print #255: "Account    Balance   TotBrk   "&servicename$(1)(1:8)&" "&servicename$(2)(1:8)&" "&servicename$(3)(1:8)&" "&servicename$(4)(1:8)&" "&servicename$(5)(1:8)&" "&servicename$(6)(1:8)&" "&servicename$(7)(1:8)&" "&servicename$(8)(1:8)&" "&servicename$(9)(1:8)&" "&servicename$(10)(1:8)&" "
-40040   print #255: "__________ _________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________"
+40000 NWPGE: ! pr #255: NEWPAGE
+40020   pr #255: "Account    Balance   TotBrk   "&servicename$(1)(1:8)&" "&servicename$(2)(1:8)&" "&servicename$(3)(1:8)&" "&servicename$(4)(1:8)&" "&servicename$(5)(1:8)&" "&servicename$(6)(1:8)&" "&servicename$(7)(1:8)&" "&servicename$(8)(1:8)&" "&servicename$(9)(1:8)&" "&servicename$(10)(1:8)&" "
+40040   pr #255: "__________ _________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________"
 40060   return 
 42000 DONE: let fncloseprn
 44000 XIT: let fnxit
 46000 REW_MAT_GB: ! 
 46020   rewrite #1,using L440,key=z$: mat gb
 46040 L440: form pos 388,10*pd 5.2
-46060 ! Print #255: "Rewrote next record "&cause$
+46060 ! pr #255: "Rewrote next record "&cause$
 46080   return  ! 
 48000 SCR_ASK_DATES: ! r:
 48020   let sn$
@@ -94,7 +94,7 @@
 48400     if x>0 then let resp$(j)(x:x)="": goto L560
 48420   next j
 48440   for j=1 to 6
-48460     let cd1(j)=val(resp$(j)) conv SCR_ASK_DATES
+48460     cd1(j)=val(resp$(j)) conv SCR_ASK_DATES
 48480   next j
 48500   if cd1(1)=0 then 
 48520     mat message$(1): let mytype=0
@@ -105,23 +105,23 @@
 48620   return  ! /r
 48640 ! ______________________________________________________________________
 50000 HEADER: ! r:
-50020   print #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
-50040   print #255: "\qc  {\f181 \fs22 \b "&env$('program_caption')&"}"
-50060   print #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
+50020   pr #255: "\qc  {\f181 \fs20 \b "&env$('cnam')&"}"
+50040   pr #255: "\qc  {\f181 \fs22 \b "&env$('program_caption')&"}"
+50060   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
 50080   if d1<>0 or oob$="Y" then 
-50100     print #255: "\qc "&trim$(temp$(1))&"   "&temp$(2)
+50100     pr #255: "\qc "&trim$(temp$(1))&"   "&temp$(2)
 50120   end if 
-50140   print #255,using L690: "\ql  ","Page "&str$(pg+=1)
+50140   pr #255,using L690: "\ql  ","Page "&str$(pg+=1)
 50160 L690: form pos 1,c 82,c 10,skip 1
 50200   return  ! /r
 52000 PGOF: ! r:
-52020   print #255: newpage
+52020   pr #255: newpage
 52040   gosub HEADER
 52060   continue  ! /r
 54000   def fn_any_gb_negative
-54020     let agn_return=0
+54020     agn_return=0
 54040     for agn_item=1 to 10
-54060       if gb(agn_item)<0 then let agn_return=1
+54060       if gb(agn_item)<0 then agn_return=1
 54080     next agn_item
 54100     let fn_any_gb_negative=agn_return
 54120   fnend  ! fn_any_gb_negative

@@ -1,5 +1,5 @@
 06000 ! formerly S:\acsPR\newprCkPrt
-06020 ! Print Payroll Checks ! Nebs 9039t: Standard Check Format (Laser Stub-Check-Stub)
+06020 ! pr Payroll Checks ! Nebs 9039t: Standard Check Format (Laser Stub-Check-Stub)
 06040 ! ______________________________________________________________________
 06060   library 'S:\Core\Library': fntop,fnxit, fnerror,fnGetPayrollDates, fnopenprn,fncloseprn,fnchain,fntos,fnlbl,fncomboa,fntxt,fncombof,fncmdset,fnacs,fnmsgbox,fndate_mmddyy_to_ccyymmdd,fnopt,fnqgl,fnrgl$,fncmdkey,fnagl$,fnbutton,fnss_employee,fnss_employer,fncd,fnclient_has,fnreg_read,fnreg_write,fngethandle,fncreg_read,fncreg_write,fnDedNames
 06080   on error goto ERTN
@@ -96,18 +96,18 @@
 10346   let fncreg_read('Post Employer Portion of FiCA',ficam1$)
 10348   let fncreg_read('Check Format',sc1$)
 10350   let fncreg_read('Print Vacation and Sick Leave on Check',accr$)
-10352   let fncreg_read('CL Bank Code',bankcode$) : let bankcode=val(bankcode$) : if bankcode=0 then let bankcode=1
+10352   let fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
 10354   let fncreg_read('Comp Time Code',compcode$)
 10420   fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 10450   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 10460   read #20,using 'Form POS 1,x 120,POS 150,10*C 8,POS 437,15*C 12,N 1': mat d$,mat gln$,gl_installed
 10470   close #20: 
 10480 ! ___________________________
-10490   mat hnames$=abrevname$ : let bankgl$=gln$(15)
+10490   mat hnames$=abrevname$ : bankgl$=gln$(15)
 10650   if fnclient_has('CL') then let fn_open_acscl
 10660 ! ___________________________
-10680   if bankcode=0 then let bankcode=1
-10690   let check_number=ckno
+10680   if bankcode=0 then bankcode=1
+10690   check_number=ckno
 10710 ! if env$('client')="West Rest Haven" then let sc1$="C"
 10720   if env$('client')="Billings" then let sc1$="CSS"
 10730   if env$('client')="Divernon" or env$('client')="Thomasboro" or env$('client')="Edinburg" or env$('client')="Philo" or env$('client')="Hope Welty" or env$('client')="Monticello" then let ficam1$="Y"
@@ -138,7 +138,7 @@
 10956     if acsclcv$="Y" then let resp$(6)=opt_yn$(1) else let resp$(6)=opt_yn$(2)
 10958   else 
 10960     let fntxt(6,41,3, 0,0,'',1,'ACS Checkbook license not detected.')
-10962     let resp$(6)=opt_yn$(2) : let acsclcv$='N'
+10962     let resp$(6)=opt_yn$(2) : acsclcv$='N'
 10964   end if 
 10980   let fnlbl(7,1,"Post Employer's Portion of FiCA?",38,1)
 10990   let fncomboa("prckprt-4",7,41,mat opt_yn$,"The system can generate and post the employer's portion of FICA at the time the check is being written.",3)
@@ -148,7 +148,7 @@
 11070   whichScc=srch(mat scc$,sc1$)
 11080   if whichScc>0 then let resp$(8)=opt_check_format$(whichScc) else let resp$(8)=opt_check_format$(4)
 11140   let fnlbl(9,1,"Check Type (Regular or Direct Deposit):",38,1)
-11150   let fncomboa("ckprt-5",9,41,mat opt_check_type$,"If you have direct deposits, you can use this option to print check on plain paper to give the employees.",15)
+11150   let fncomboa("ckprt-5",9,41,mat opt_check_type$,"If you have direct deposits, you can use this option to pr check on plain paper to give the employees.",15)
 11160   if ddcode$="R" then let resp$(9)=opt_check_type$(1)
 11170   if ddcode$="D" then let resp$(9)=opt_check_type$(2)
 11180   if ddcode$="A" then let resp$(9)=opt_check_type$(3)
@@ -183,27 +183,27 @@
 11332 ! r: validate answers (and move to local variables from mat resp$)
 11340   let d1=val(resp$(resp_payroll_date)) ! payroll date
 11350   let pre$=uprc$(resp$(2)(1:1)) ! pre-numbered checks Y or N
-11360   let check_number=val(resp$(3)) ! check #
-11370   let ckdat$=resp$(resp_date_of_checks) ! check date
+11360   check_number=val(resp$(3)) ! check #
+11370   ckdat$=resp$(resp_date_of_checks) ! check date
 11380   let dat=val(ckdat$(5:6)&ckdat$(7:8)&ckdat$(3:4))
 11390   let empno=val(resp$(5)) ! beginning employee #
-11400   let acsclcv$=uprc$(resp$(6)(1:1)) ! post Checkbook system
+11400   acsclcv$=uprc$(resp$(6)(1:1)) ! post Checkbook system
 11410   let ficam1$=uprc$(resp$(7)(1:1)) ! post fica match
 11430   let sc1$=scc$(srch(mat opt_check_format$,resp$(8)))
 11460   let ddcode$=uprc$(resp$(9)(1:1)) ! regular check or direct deposit
-11470   let accr$=uprc$(resp$(10)(1:1)) ! print vac and sick
+11470   accr$=uprc$(resp$(10)(1:1)) ! pr vac and sick
 11472   if resp_cl_bankcode then 
-11480     let bankcode=val(resp$(resp_cl_bankcode)(1:3)) ! bank code
+11480     bankcode=val(resp$(resp_cl_bankcode)(1:3)) ! bank code
 11481   end if 
 11482   if resp_combcode then 
-11490     let compcode$=resp$(resp_combcode)(1:5) ! comp time code
+11490     compcode$=resp$(resp_combcode)(1:5) ! comp time code
 11492   end if 
 11496 ! date_of_checks=val(ckdat$)
 11500   let prdmmddyy=val(ckdat$(5:6))*10000+val(ckdat$(7:8))*100+val(ckdat$(3:4)) ! convert date back to mmddyy format
 11506   let skip_alignment$=resp$(resp_skip_align)
-11507   if skip_alignment$='Yes' then let allign=3
+11507   if skip_alignment$='Yes' then allign=3
 11508 ! 
-11510   if acsclcv$="Y" then let cl_installed=1 else let cl_installed=0
+11510   if acsclcv$="Y" then cl_installed=1 else cl_installed=0
 11520   if ficam1$="Y" then let ficam1=1 else let ficam1=0
 11530   if pre$="Y" then let pre=1 else let pre=0
 11532 ! if env$('client')="Washington Parrish" and (prdate<10100 or prdate>123199) then goto MAIN_QUESTIONS
@@ -301,7 +301,7 @@
 12200   let s1=1
 12210 ! If fndate_mmddyy_to_ccyymmdd(LPD)><D1 Then Goto 1360  ! with comment can reprint any payroll
 12220   let fn_determine_earnings
-12230   if print_netzero_checks and ttc(32)=0 and fndate_mmddyy_to_ccyymmdd(lpd)=d1 then goto L1670 ! print zero checks
+12230   if print_netzero_checks and ttc(32)=0 and fndate_mmddyy_to_ccyymmdd(lpd)=d1 then goto L1670 ! pr zero checks
 12240   if ttc(32)=0 then goto L1480 ! no earnings
 12250 L1670: ! 
 12260 ! Mat TCP=(0)
@@ -330,7 +330,7 @@
 12490   end if 
 12500 ! let hsk$=lpad$(str$(eno),8)&cnvrt$("PD 6",hd1)
 12520   if allign=3 or skip_alignment$='Yes' then 
-12530     print #255: chr$(12) ! NEWPAGE
+12530     pr #255: chr$(12) ! NEWPAGE
 12540     goto CHECK_PRINT_TOP
 12550   end if 
 12560   let fncloseprn
@@ -347,16 +347,16 @@
 12670   let resp$(rc+=1)="True"
 12672   if env$('client')='Billings' then let resp$(2)='True' : let resp$(3)='False'
 12680   let fncmdset(2): let fnacs(sn$,0,mat resp$,ck) ! allignment
-12690   if resp$(1)="True" then let allign=1
-12700   if resp$(2)="True" then let allign=2
-12710   if resp$(3)="True" then let allign=3
-12720   if ck=5 then let getout=1: let allign=2: goto CHECK_PRINT_TOP ! write history on last check and quit
+12690   if resp$(1)="True" then allign=1
+12700   if resp$(2)="True" then allign=2
+12710   if resp$(3)="True" then allign=3
+12720   if ck=5 then let getout=1: allign=2: goto CHECK_PRINT_TOP ! write history on last check and quit
 12730   on allign goto REPRINT_SAME_CHECK,CHECK_PRINT_TOP,CHECK_PRINT_TOP none ALLIGNMENT
 12740 ! /r
 12750 REPRINT_SAME_CHECK: ! 
 12760   if pre=0 then goto L3130
 12770   if cl_installed=1 then let fn_build_check_record
-12780   let check_number=check_number+1
+12780   check_number=check_number+1
 12790 L3130: ! 
 12800   goto L2070
 12810 ! ______________________________________________________________________
@@ -384,7 +384,7 @@
 13020 L3320: ! /r
 13030   if getout=1 then goto FINIS
 13040   let ttc(32)=0
-13050   let check_number=check_number+1
+13050   check_number=check_number+1
 13060   goto MAIN_LOOP_TOP
 13070 ENG_DOL_IDK: ! r: ENTER AMOUNT IN DOL, EXIT IN ENG$
 13072   if env$('client')="Merriam Woods" then 
@@ -401,24 +401,24 @@
 13094     goto L3810
 13096   end if 
 13150   let eng$="***"
-13160   let amount(1)=int(dol*100+.500000001)
+13160   amount(1)=int(dol*100+.500000001)
 13170   for a0=2 to 10
-13180     let amount(a0)=int(amount(a0-1)/10+.000000001)
+13180     amount(a0)=int(amount(a0-1)/10+.000000001)
 13190   next a0
 13200   for a0=1 to 10
-13210     let amount(a0)=amount(a0)-amount(a0+1)*10
+13210     amount(a0)=amount(a0)-amount(a0+1)*10
 13220   next a0
 13230   if amount(11)+amount(10)+amount(9)=0 then goto L3530
-13240   let a0=9
+13240   a0=9
 13250   let fn_l3830
 13260   let eng$=rtrm$(eng$)&" Million"
 13270   L3530: ! 
 13280   if amount(8)+amount(7)+amount(6)=0 then goto L3570
-13290   let a0=6
+13290   a0=6
 13300   let fn_l3830
 13310   let eng$=rtrm$(eng$)&" Thousand"
 13320   L3570: if amount(5)+amount(4)+amount(3)=0 then goto L3600
-13330   let a0=3
+13330   a0=3
 13340   let fn_l3830
 13350   L3600: ! 
 13360   if dol>=1 then goto L3620
@@ -431,8 +431,8 @@
 13430   L3660: ! 
 13440   let eng$=rtrm$(eng$)&" and"
 13450   if amount(2)+amount(1)=0 then goto L3720
-13460   let amount(3)=0
-13470   let a0=1
+13460   amount(3)=0
+13470   a0=1
 13480   let fn_l3830
 13490   goto L3730
 13500   L3720: ! 
@@ -458,7 +458,7 @@
 13710   if amount(a0+1)<2 then goto L3910
 13720   let eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)+18)
 13730   if amount(a0)=0 then goto L3920
-13740   let amount(a0+1)=0
+13740   amount(a0+1)=0
 13750   L3910: ! 
 13760   let eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)*10+amount(a0))
 13770   L3920: ! 
@@ -474,7 +474,7 @@
 13870 XIT: let fnxit
 13890 def fn_open_acscl
 13900   open #h_cl_bank:=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L4220
-13910   let cl_installed=1
+13910   cl_installed=1
 13920   open #15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
 13930   open #h_cl_payee:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 13940   open #14: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -487,7 +487,7 @@
 14010   !   end if
 14020   open #h_cl_glmstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
 14050   read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,ckno nokey L4200
-14060   L4200: let ckno=ckno+1
+14060   L4200: ckno=ckno+1
 14070   ! Let DAT=VAL(DATE$(4:5)&DATE$(7:8)&DATE$(1:2))
 14080   L4220: ! 
 14090 fnend 
@@ -525,7 +525,7 @@
 14402   ! pr tr$(1),tr$(5) :  pause
 14410   mat tr=(0)
 14412   ! r: removed existing CL Check (and it's allocations) first
-14420   let clk$=lpad$(str$(bankcode),2)&"1"&tr$(1)
+14420   clk$=lpad$(str$(bankcode),2)&"1"&tr$(1)
 14430   read #h_cl_trans,using 'form pos 79,2*pd 3',key=clk$: nt1 nokey L4610
 14440   delete #h_cl_trans,key=clk$: 
 14450   let key$=lpad$(str$(bankcode),2)&str$(tcde)&rpad$(tr$(1),8)
@@ -560,8 +560,8 @@
 14720   ! REWRITE #h_cl_payee,USING 3720,KEY=LPAD$(RTRM$(TR$(4)),8): YTDP NOKEY 3730
 14740   L4690: ! 
 14750   read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey L4740
-14760   let bn$=rtrm$(bn$)
-14770   let bal=bal-val(tr$(3)) conv ignore
+14760   bn$=rtrm$(bn$)
+14770   bal=bal-val(tr$(3)) conv ignore
 14790   rewrite #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2): bn$,bal,upi,tr$(1) nokey L4740
 14800   F_CLFILE_12: form pos 3,c 30,pos 45,pd 6.2,pd 6.2,g 8
 14810   L4740: ! 
@@ -579,7 +579,7 @@
 14940      if j<6 or j>25 then goto L4870 ! kj 91707
 14950      if dedcode(j-5)=3 then goto L5230 ! kj 91707  don't write entries for benefits
 14960      L4870: ! 
-14970      let alloc=tdep(j1,1)
+14970      alloc=tdep(j1,1)
 14980      let gl$=cnvrt$("N 3",tdep(j1,2))&cnvrt$("N 6",tdep(j1,3))&cnvrt$("N 3",tdep(j1,4))
 14990      let sd5$="Gross Pay"
 15000      goto L4990
@@ -593,22 +593,22 @@
 15080      if j=27 then goto L4990 ! skip tips i think
 15090      ! If J=28 Then Let GL$=GLN$(1): Let SD5$="Meals" : Goto 4890 ! use wages
 15100      L4990: ! 
-15110      let cd1=1
+15110      cd1=1
 15120      read #h_cl_glmstr,using F_CL_GLMSTR,key=rpad$(gl$,kln(h_cl_glmstr)),release: de$ nokey INVALIDGLNUMBER
 15130      F_CL_GLMSTR: form pos 13,c 30
 15140      BCR_GLN_VALIDATED: ! 
-15150      if j>1 then let alloc=val(ded$(j))
+15150      if j>1 then alloc=val(ded$(j))
 15160      if j=29 then let miscode=(alloc*100)+29 else let miscode=j
 15170      ! store # of deduction in the invoice date field;
 15180      ! if weeks worked store weeks worked and code both
-15190      if j>1 then let alloc=-alloc
+15190      if j>1 then alloc=-alloc
 15200      if j<6 or j>25 then goto L5070 ! all tax w/h = negative
-15210      if dedcode(j-5)=2 then let alloc=-alloc ! reverse on additions to net
+15210      if dedcode(j-5)=2 then alloc=-alloc ! reverse on additions to net
 15220      L5070: ! 
-15230      if j=30 then let alloc=0 ! meals
-15240      !       if env$('client')="Washington Parrish" and j=16 then let alloc=0 ! don't allow tips to post on washington parrish
-15250      if j=4 and ficam1=1 then let alloc=alloc-medic3 ! prb 2012
-15260      if j=3 and ficam1=1 then let alloc=alloc-ficam3 ! prb 2012
+15230      if j=30 then alloc=0 ! meals
+15240      !       if env$('client')="Washington Parrish" and j=16 then alloc=0 ! don't allow tips to post on washington parrish
+15250      if j=4 and ficam1=1 then alloc=alloc-medic3 ! prb 2012
+15260      if j=3 and ficam1=1 then alloc=alloc-ficam3 ! prb 2012
 15280      if alloc=0 then goto L5220 ! dont write zero allocation
 15290      let lr3=lrec(23)+1
 15300      if j=3 then let fica1=alloc : let fica_rec=lr3
@@ -656,14 +656,14 @@
 15900   let fnacs(sn$,0,mat resp$,ckey) ! dupllicate check number
 15910   if ckey=5 then goto XIT
 15920   if ckey=3 then goto L5670 ! if delete
-15930   let ckn2=val(resp$(1))
+15930   ckn2=val(resp$(1))
 15940   if ckn2=0 then goto DUPLICATE_CHECK
-15950   let check_number=ckn2
+15950   check_number=ckn2
 15960   let tr$(1)=lpad$(str$(ckn2),8)
 15970   goto L5410
 15980   ! ______________________________________________________________________
 15990   L5670: ! 
-16000   let bal=bal+val(dtr$(3))
+16000   bal=bal+val(dtr$(3))
 16010   delete #h_cl_trans,key=dk$: 
 16020   let key$=lpad$(str$(bankcode),2)&"1"&lpad$(str$(check_number),8)
 16030   restore #h_cl_trans_alloc,key>=key$: nokey L5720
@@ -676,7 +676,7 @@
 16100   L5720: ! 
 16110 fnend 
 16120 def fn_mgl ! WRITE BENEFITS & FICA MATCH
-16130   let cd1=2
+16130   cd1=2
 16140   for j=1 to tdepXcount
 16150     mat mgl$=("            ")
 16160     read #7,using L5790,key=lpad$(str$(tdep(j,5)),3): mat mgl$ nokey L5800
@@ -720,18 +720,18 @@
 16530 ERTN: let fnerror(program$,err,line,act$,"xit")
 16540   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 16550   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-16560   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+16560   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 16570 ERTN_EXEC_ACT: execute act$ : goto ERTN
 16580 ! /region
-16590 ! r: Check Print routines
+16590 ! r: Check pr routines
 17000 def fn_print_check
 17010   if ttc(32)<=0 then 
-17020     let ca$="***VOID***"
+17020     ca$="***VOID***"
 17030   else 
-17040     let ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",ttc(32)))
+17040     ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",ttc(32)))
 17050   end if 
 17060   gosub ENG_DOL_IDK
-17070   if uprc$(ddcode$)="D" then let eng$="Direct Deposit" : let ca$="V O I D"
+17070   if uprc$(ddcode$)="D" then let eng$="Direct Deposit" : ca$="V O I D"
 17080   if env$('client')="ACS" then 
 17090     let fn_check_acs
 17100   else if env$('client')="Ash Grove" then 
@@ -832,370 +832,370 @@
 18100   ! 
 18120   for line_item=1 to length
 18140     if line_item=line_date and line_item=line_amount then 
-18150       print #255,using 'form Pos pos_date,pic(ZZ/ZZ/ZZ),pos pos_amt,c 18': dat,ca$
+18150       pr #255,using 'form Pos pos_date,pic(ZZ/ZZ/ZZ),pos pos_amt,c 18': dat,ca$
 18160     else if line_item=line_date and line_item=line_checkNumber and line_checkNumber<>0 then 
-18170       print #255,using 'form Pos pos_date,pic(ZZ/ZZ/ZZ),pos pos_checkNumber,N 8': dat,checkNumber
+18170       pr #255,using 'form Pos pos_date,pic(ZZ/ZZ/ZZ),pos pos_checkNumber,N 8': dat,checkNumber
 18180     else if line_item=line_date then 
-18200       print #255,using 'form Pos pos_date,pic(ZZ/ZZ/ZZ)': dat
+18200       pr #255,using 'form Pos pos_date,pic(ZZ/ZZ/ZZ)': dat
 18220     else if line_item=line_nameOnly and line_item=line_amount then
-18240       print #255,using "form Pos pos_nameOnly,C 30,pos pos_amt,c 18": em$(1),ca$
+18240       pr #255,using "form Pos pos_nameOnly,C 30,pos pos_amt,c 18": em$(1),ca$
 18260     else if line_item=line_nameOnly then
-18280       print #255,using "form Pos pos_nameOnly,C 30": em$(1)
+18280       pr #255,using "form Pos pos_nameOnly,C 30": em$(1)
 18300     else if line_item=line_amount and line_item=line_name_and_address then
-18320       print #255,using "form Pos 12,C 30,pos pos_amt,c 18": em$(1),ca$
-18340       print #255,using "form Pos 12,C 30": em$(2) : let line_item+=1
-18360       print #255,using "form Pos 12,C 30": em$(3) : let line_item+=1
+18320       pr #255,using "form Pos 12,C 30,pos pos_amt,c 18": em$(1),ca$
+18340       pr #255,using "form Pos 12,C 30": em$(2) : let line_item+=1
+18360       pr #255,using "form Pos 12,C 30": em$(3) : let line_item+=1
 18380     else if line_item=line_amount_english then 
-18400       print #255,using 'form Pos 9,C 62': eng$(1:n)
-18420       print #255,using 'form Pos 9,C 62': eng$(n+1:128) : let line_item+=1
+18400       pr #255,using 'form Pos 9,C 62': eng$(1:n)
+18420       pr #255,using 'form Pos 9,C 62': eng$(n+1:128) : let line_item+=1
 18440     else if line_item=line_name_and_address then 
-18460       print #255,using "form Pos 12,C 30": em$(1)
-18480       print #255,using "form Pos 12,C 30": em$(2) : let line_item+=1
-18500       print #255,using "form Pos 12,C 30": em$(3) : let line_item+=1
+18460       pr #255,using "form Pos 12,C 30": em$(1)
+18480       pr #255,using "form Pos 12,C 30": em$(2) : let line_item+=1
+18500       pr #255,using "form Pos 12,C 30": em$(3) : let line_item+=1
 18520     else if line_item=line_amount then
-18540       print #255,using "form pos pos_amt,c 18": ca$
+18540       pr #255,using "form pos pos_amt,c 18": ca$
 18560     else 
-18580       print #255: ""
+18580       pr #255: ""
 18600     end if 
 18620   next line_item
 18640 fnend 
 19000 def fn_check_legacy(; extra_lines_at_top,extra_lines_at_bottom)
 19020   for j=1 to extra_lines_at_top
-19040     print #255: ""
+19040     pr #255: ""
 19060   next j
 19070   let fn_check_dynamic(21+extra_lines_at_bottom,6,6,7,13)
 19460 fnend 
 20000 def fn_check_acs
-20020   print #255,using 'Form skip 3,POS 80,PIC(ZZ/ZZ/ZZ)': dat
-20040   print #255,using 'Form skip 2,POS 10,c 30,pos 74,c 18': em$(1),ca$
-20060   print #255,using 'Form skip 2,pos 9,C 62': eng$(1:n)
-20080   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
+20020   pr #255,using 'Form skip 3,POS 80,PIC(ZZ/ZZ/ZZ)': dat
+20040   pr #255,using 'Form skip 2,POS 10,c 30,pos 74,c 18': em$(1),ca$
+20060   pr #255,using 'Form skip 2,pos 9,C 62': eng$(1:n)
+20080   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
 20100   for j=1 to 3
-20120     print #255: ""
+20120     pr #255: ""
 20140   next j
 20160   for j=1 to 3
-20180     print #255,using "Form Pos 12,C 60": em$(j)
+20180     pr #255,using "Form Pos 12,C 60": em$(j)
 20200   next j
-20220   print #255,using "form pos 1,c 1,skip 7": ""
+20220   pr #255,using "form pos 1,c 1,skip 7": ""
 20240 fnend 
 22000 def fn_check_bethany
 22020   for j=1 to 5
-22040     print #255: ""
+22040     pr #255: ""
 22060   next j
-22080   if sc1$="C" then print #255: : print #255: : print #255: : print #255: : print #255: 
+22080   if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
 22120   let datepos=65
-22140   print #255: 
-22160   print #255,using 'Form POS 9,C 62': eng$(1:n)
-22180   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
+22140   pr #255: 
+22160   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+22180   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
 22200   for j=1 to 3
-22220     print #255: ""
+22220     pr #255: ""
 22240   next j
-22260   print #255,using 'Form POS 55,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-22280   print #255: 
+22260   pr #255,using 'Form POS 55,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+22280   pr #255: 
 22300   for j=1 to 3
-22320     print #255,using "Form Pos 12,C 60": em$(j)
+22320     pr #255,using "Form Pos 12,C 60": em$(j)
 22340   next j
-22360   print #255,using "form pos 1,c 1,skip 9": "" ! changed skip 6 to skip 9 on 10/17/2016
+22360   pr #255,using "form pos 1,c 1,skip 9": "" ! changed skip 6 to skip 9 on 10/17/2016
 22380 fnend 
 24000 def fn_check_billings
-24040   print #255: ""
-24060   print #255: ""
-24080   print #255,using 'form pos 40,c 38,skip 1': "Void After 60 Days"
-24100   print #255: ""
-24110   print #255: ""
-24140   print #255,using 'Form POS 9,C 62': eng$(1:n)
-24160   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
-24180   print #255,using 'Form POS 63,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-24200   print #255: ""
-24220   print #255: ""
-24240   print #255: ""
-24260   print #255: ""
-24280   print #255,using "Form Pos 12,C 60": em$(1)
-24300   print #255,using "Form Pos 12,C 60": em$(2)
-24320   print #255,using "Form Pos 12,C 60": em$(3)
-24340   print #255: ""
-24360   print #255: ""
-24380   print #255: ""
-24400   print #255: ""
-24420   print #255: ""
-24440   print #255: ""
-24460   print #255: ""
-24480   print #255: ""
-24490   print #255: ""
+24040   pr #255: ""
+24060   pr #255: ""
+24080   pr #255,using 'form pos 40,c 38,skip 1': "Void After 60 Days"
+24100   pr #255: ""
+24110   pr #255: ""
+24140   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+24160   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
+24180   pr #255,using 'Form POS 63,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+24200   pr #255: ""
+24220   pr #255: ""
+24240   pr #255: ""
+24260   pr #255: ""
+24280   pr #255,using "Form Pos 12,C 60": em$(1)
+24300   pr #255,using "Form Pos 12,C 60": em$(2)
+24320   pr #255,using "Form Pos 12,C 60": em$(3)
+24340   pr #255: ""
+24360   pr #255: ""
+24380   pr #255: ""
+24400   pr #255: ""
+24420   pr #255: ""
+24440   pr #255: ""
+24460   pr #255: ""
+24480   pr #255: ""
+24490   pr #255: ""
 24540 fnend 
 28000 def fn_check_cerrogordo
-28020   print #255: "" : print #255: "" : print #255: ""
-28040   print #255: "" : print #255: "" : print #255: ""
-28080   print #255,using 'Form POS 9,C 62': eng$(1:n)
-28100   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
-28120   print #255: ""
-28140   print #255,using 'Form POS 53,PIC(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
-28160   print #255: ""
-28180   print #255: ""
+28020   pr #255: "" : pr #255: "" : pr #255: ""
+28040   pr #255: "" : pr #255: "" : pr #255: ""
+28080   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+28100   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
+28120   pr #255: ""
+28140   pr #255,using 'Form POS 53,PIC(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
+28160   pr #255: ""
+28180   pr #255: ""
 28200   for j=1 to 3
-28220     print #255,using "Form Pos 12,C 60": em$(j)
+28220     pr #255,using "Form Pos 12,C 60": em$(j)
 28240   next j
-28260   print #255: ""
-28280   print #255: ""
-28300   print #255: ""
-28320   print #255: ""
-28340   print #255: ""
-28360   print #255: ""
-28380   print #255: ""
+28260   pr #255: ""
+28280   pr #255: ""
+28300   pr #255: ""
+28320   pr #255: ""
+28340   pr #255: ""
+28360   pr #255: ""
+28380   pr #255: ""
 28400 fnend 
 32000 def fn_check_divernon
-32020   print #255: ""
-32040   print #255: ""
-32060   print #255: ""
-32080   print #255: ""
-32100   print #255: ""
-32120   if sc1$="C" then print #255: : print #255: : print #255: : print #255: : print #255: 
-32140   print #255,using 'Form POS 55,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-32160   print #255,using 'Form POS 9,C 62': eng$(1:n)
-32180   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
-32200   print #255: ""
-32220   print #255: ""
-32240   print #255: ""
-32260   print #255,using "Form Pos 12,C 60": em$(1)
-32280   print #255,using "Form Pos 12,C 60": em$(2)
-32300   print #255,using "Form Pos 12,C 60": em$(3)
-32320   print #255: ""
-32340   print #255: ""
-32360   print #255: ""
-32380   print #255: ""
-32400   print #255: ""
-32420   print #255: ""
+32020   pr #255: ""
+32040   pr #255: ""
+32060   pr #255: ""
+32080   pr #255: ""
+32100   pr #255: ""
+32120   if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
+32140   pr #255,using 'Form POS 55,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+32160   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+32180   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
+32200   pr #255: ""
+32220   pr #255: ""
+32240   pr #255: ""
+32260   pr #255,using "Form Pos 12,C 60": em$(1)
+32280   pr #255,using "Form Pos 12,C 60": em$(2)
+32300   pr #255,using "Form Pos 12,C 60": em$(3)
+32320   pr #255: ""
+32340   pr #255: ""
+32360   pr #255: ""
+32380   pr #255: ""
+32400   pr #255: ""
+32420   pr #255: ""
 32440 fnend 
 34000 def fn_check_edinburg
 34020   for j=1 to 5
-34040     print #255: ""
+34040     pr #255: ""
 34060   next j
-34080   if sc1$="C" then print #255: : print #255: : print #255: : print #255: : print #255: 
+34080   if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
 34120   let datepos=65
-34140   print #255: 
-34160   print #255,using 'Form POS 9,C 62': eng$(1:n)
-34180   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
+34140   pr #255: 
+34160   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+34180   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
 34200   for j=1 to 3
-34220     print #255: ""
+34220     pr #255: ""
 34240   next j
-34260   print #255,using 'Form POS 55,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-34280   print #255: 
+34260   pr #255,using 'Form POS 55,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+34280   pr #255: 
 34300   for j=1 to 3
-34320     print #255,using "Form Pos 12,C 60": em$(j)
+34320     pr #255,using "Form Pos 12,C 60": em$(j)
 34340   next j
-34360   print #255,using "form pos 1,c 1,skip 6": ""
-34380   print #255: : print #255: 
+34360   pr #255,using "form pos 1,c 1,skip 6": ""
+34380   pr #255: : pr #255: 
 34400 fnend 
 36000 def fn_check_hope_welty
-36020   print #255: : print #255: : print #255: : print #255: : print #255: : print #255: 
-36040   print #255: : print #255: 
-36080   print #255,using 'Form POS 9,C 62': eng$(1:n)
-36100   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
-36120   print #255: 
-36140   print #255,using 'Form POS 53,PIC(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
+36020   pr #255: : pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
+36040   pr #255: : pr #255: 
+36080   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+36100   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
+36120   pr #255: 
+36140   pr #255,using 'Form POS 53,PIC(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
 36160   let x=3
 36180   for j=1 to x
-36200     print #255: ""
+36200     pr #255: ""
 36220   next j
 36240   for j=1 to 3
-36260     print #255,using "Form Pos 12,C 60": em$(j)
+36260     pr #255,using "Form Pos 12,C 60": em$(j)
 36280   next j
-36300   print #255: ""
-36320   print #255: ""
-36340   print #255: ""
-36360   print #255: ""
-36380   print #255: ""
-36400   print #255: ""
+36300   pr #255: ""
+36320   pr #255: ""
+36340   pr #255: ""
+36360   pr #255: ""
+36380   pr #255: ""
+36400   pr #255: ""
 36420 fnend 
 38000 def fn_check_lamar
 38020   for j=1 to 9
-38040     print #255: ""
+38040     pr #255: ""
 38060   next j
-38080   if sc1$="C" then print #255: : print #255: : print #255: : print #255: : print #255: 
+38080   if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
 38120   let datepos=65
-38140   print #255,using 'Form POS datepos,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-38160   print #255,using 'Form POS 9,C 62': eng$(1:n)
-38180   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
+38140   pr #255,using 'Form POS datepos,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+38160   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+38180   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
 38200   for j=1 to 3
-38220     print #255: ""
+38220     pr #255: ""
 38240   next j
 38260   for j=1 to 3
-38280     print #255,using "Form Pos 12,C 60": em$(j)
+38280     pr #255,using "Form Pos 12,C 60": em$(j)
 38300   next j
-38320   print #255,using "form pos 1,c 1,skip 6": ""
+38320   pr #255,using "form pos 1,c 1,skip 6": ""
 38340 fnend 
 40000 def fn_check_lovington
-40020   print #255: : print #255: : print #255: : print #255: : print #255: : print #255: 
-40040   print #255,using "form pos 76,n 8,skip 1": check_number
-40060   print #255: : print #255: : print #255: : print #255: : print #255: 
-40070   print #255: ''
-40080   print #255,using 'Form POS 63,PIC(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
-40100   print #255,using 'Form POS 9,C 62': eng$(1:n)
-40120   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
-40180   print #255: ""
-40190   print #255,using "Form Pos 12,C 60": em$(1)
-40200   print #255,using "Form Pos 12,C 60": em$(2)
-40220   print #255,using "Form Pos 12,C 60": em$(3)
-40280   print #255: ""
-40300   print #255: ""
-40320   print #255: ""
-40340   print #255: ""
-40360   print #255: ""
-40380   print #255: ""
-40400   print #255: ""
-40420   print #255: ""
-40440   print #255: ""
-40450   print #255: ""
+40020   pr #255: : pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
+40040   pr #255,using "form pos 76,n 8,skip 1": check_number
+40060   pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
+40070   pr #255: ''
+40080   pr #255,using 'Form POS 63,PIC(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
+40100   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+40120   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
+40180   pr #255: ""
+40190   pr #255,using "Form Pos 12,C 60": em$(1)
+40200   pr #255,using "Form Pos 12,C 60": em$(2)
+40220   pr #255,using "Form Pos 12,C 60": em$(3)
+40280   pr #255: ""
+40300   pr #255: ""
+40320   pr #255: ""
+40340   pr #255: ""
+40360   pr #255: ""
+40380   pr #255: ""
+40400   pr #255: ""
+40420   pr #255: ""
+40440   pr #255: ""
+40450   pr #255: ""
 40460 fnend 
 42000 def fn_check_monticello
-42020   print #255: : print #255: : print #255: : print #255: : print #255: : print #255: 
-42060   print #255,using 'Form POS 9,C 62': eng$(1:n)
-42080   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
-42100   print #255: : print #255: 
-42120   print #255,using 'Form POS 53,PIC(ZZ/ZZ/ZZ),X 2,C 18': dat,ca$
-42140   print #255: ""
+42020   pr #255: : pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
+42060   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+42080   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
+42100   pr #255: : pr #255: 
+42120   pr #255,using 'Form POS 53,PIC(ZZ/ZZ/ZZ),X 2,C 18': dat,ca$
+42140   pr #255: ""
 42160   for j=1 to 3
-42180     print #255,using "Form Pos 12,C 60": em$(j)
+42180     pr #255,using "Form Pos 12,C 60": em$(j)
 42200   next j
-42220   print #255: ""
-42240   print #255: ""
-42260   print #255: ""
-42280   print #255: ""
-42300   print #255: ""
-42320   print #255: ""
-42340   print #255: ""
+42220   pr #255: ""
+42240   pr #255: ""
+42260   pr #255: ""
+42280   pr #255: ""
+42300   pr #255: ""
+42320   pr #255: ""
+42340   pr #255: ""
 42360 fnend 
 44000 def fn_check_merriam_woods
-44020   print #255: ""
-44040   print #255: ""
-44060   print #255: ""
-44080   print #255: ""
-44100   print #255: ""
-44120   print #255: ""
-44140   print #255: ""
-44160   if sc1$="C" then print #255: : print #255: : print #255: : print #255: : print #255: 
-44200   print #255,using 'Form POS 9,C 62': eng$(1:n)
-44220   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
-44240   print #255: ""
-44260   print #255,using 'Form POS 65,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-44280   print #255: ""
-44300   print #255: ""
-44320   print #255,using "Form Pos 12,C 60": em$(1)
-44340   print #255,using "Form Pos 12,C 60": em$(2)
-44360   print #255,using "Form Pos 12,C 60": em$(3)
-44380   print #255: ""
-44400   print #255: ""
-44420   print #255: ""
-44440   print #255: ""
-44460   print #255: ""
-44480   print #255: ""
+44020   pr #255: ""
+44040   pr #255: ""
+44060   pr #255: ""
+44080   pr #255: ""
+44100   pr #255: ""
+44120   pr #255: ""
+44140   pr #255: ""
+44160   if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
+44200   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+44220   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
+44240   pr #255: ""
+44260   pr #255,using 'Form POS 65,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+44280   pr #255: ""
+44300   pr #255: ""
+44320   pr #255,using "Form Pos 12,C 60": em$(1)
+44340   pr #255,using "Form Pos 12,C 60": em$(2)
+44360   pr #255,using "Form Pos 12,C 60": em$(3)
+44380   pr #255: ""
+44400   pr #255: ""
+44420   pr #255: ""
+44440   pr #255: ""
+44460   pr #255: ""
+44480   pr #255: ""
 44500 fnend 
 48000 def fn_check_philo
-48020   print #255: : print #255: : print #255: : print #255: : print #255: 
-48060   print #255,using 'Form POS 9,C 62': eng$(1:n)
-48080   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
-48100   print #255: : print #255: 
-48120   print #255,using 'Form POS 57,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+48020   pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
+48060   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+48080   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
+48100   pr #255: : pr #255: 
+48120   pr #255,using 'Form POS 57,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
 48140   let x=3
 48160   for j=1 to x
-48180     print #255: ""
+48180     pr #255: ""
 48200   next j
 48220   for j=1 to 3
-48240     print #255,using "Form Pos 12,C 60": em$(j)
+48240     pr #255,using "Form Pos 12,C 60": em$(j)
 48260   next j
-48280   print #255: ""
-48300   print #255: ""
-48320   print #255: ""
-48340   print #255: ""
-48360   print #255: ""
+48280   pr #255: ""
+48300   pr #255: ""
+48320   pr #255: ""
+48340   pr #255: ""
+48360   pr #255: ""
 48380 fnend 
 52000 def fn_check_tom_richardson
-52020   !   if sc1$="C" then print #255: : print #255: : print #255: : print #255: : print #255:
-52040   print #255: ""
-52060   print #255: ""
-52080   print #255: ""
-52100   print #255: ""
-52120   print #255: ""
-52140   print #255: ""
-52160   print #255: ""
-52180   print #255: ""
-52200   print #255: ""
-52210   print #255: ""
-52220   print #255: ""
-52240   print #255,using 'Form POS 67,PIC(ZZ/ZZ/ZZ)': dat
-52260   print #255,using 'Form POS 9,C 62,X 4,C 18': eng$(1:n),ca$
-52280   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
-52300   print #255: ""
-52320   print #255,using "Form Pos 12,C 60": em$(1)
-52340   print #255,using "Form Pos 12,C 60": em$(2)
-52360   print #255,using "Form Pos 12,C 60": em$(3)
-52380   print #255: ""
-52400   print #255: ""
-52420   print #255: ""
-52440   print #255: ""
-52460   print #255: ""
-52480   print #255: ""
-52500   print #255: ""
+52020   !   if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255:
+52040   pr #255: ""
+52060   pr #255: ""
+52080   pr #255: ""
+52100   pr #255: ""
+52120   pr #255: ""
+52140   pr #255: ""
+52160   pr #255: ""
+52180   pr #255: ""
+52200   pr #255: ""
+52210   pr #255: ""
+52220   pr #255: ""
+52240   pr #255,using 'Form POS 67,PIC(ZZ/ZZ/ZZ)': dat
+52260   pr #255,using 'Form POS 9,C 62,X 4,C 18': eng$(1:n),ca$
+52280   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
+52300   pr #255: ""
+52320   pr #255,using "Form Pos 12,C 60": em$(1)
+52340   pr #255,using "Form Pos 12,C 60": em$(2)
+52360   pr #255,using "Form Pos 12,C 60": em$(3)
+52380   pr #255: ""
+52400   pr #255: ""
+52420   pr #255: ""
+52440   pr #255: ""
+52460   pr #255: ""
+52480   pr #255: ""
+52500   pr #255: ""
 52520 fnend 
 54000 def fn_check_thomasboro
-54020   print #255: : print #255: : print #255: : print #255: : print #255: : print #255: 
-54060   print #255,using 'Form POS 9,C 62': eng$(1:n)
-54080   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
-54100   print #255: : print #255: : print #255: 
-54120   print #255,using 'Form POS 53,PIC(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
+54020   pr #255: : pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
+54060   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+54080   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
+54100   pr #255: : pr #255: : pr #255: 
+54120   pr #255,using 'Form POS 53,PIC(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
 54140   let x=3
 54160   for j=1 to x
-54180     print #255: ""
+54180     pr #255: ""
 54200   next j
 54220   for j=1 to 3
-54240     print #255,using "Form Pos 12,C 60": em$(j)
+54240     pr #255,using "Form Pos 12,C 60": em$(j)
 54260   next j
-54280   print #255: ""
-54300   print #255: ""
-54320   print #255: ""
-54340   print #255: ""
-54360   print #255: ""
-54380   print #255: ""
+54280   pr #255: ""
+54300   pr #255: ""
+54320   pr #255: ""
+54340   pr #255: ""
+54360   pr #255: ""
+54380   pr #255: ""
 54400 fnend 
 56000 def fn_check_unity
 56020   for j=1 to 5
-56040     print #255: ""
+56040     pr #255: ""
 56060   next j
-56080   if sc1$="C" then print #255: : print #255: : print #255: : print #255: : print #255: 
+56080   if sc1$="C" then pr #255: : pr #255: : pr #255: : pr #255: : pr #255: 
 56120   let datepos=65
-56140   print #255: 
-56160   print #255,using 'Form POS 9,C 62': eng$(1:n)
-56180   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
+56140   pr #255: 
+56160   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+56180   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
 56200   for j=1 to 3
-56220     print #255: ""
+56220     pr #255: ""
 56240   next j
-56260   print #255,using 'Form POS 55,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-56280   print #255: 
+56260   pr #255,using 'Form POS 55,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+56280   pr #255: 
 56300   for j=1 to 3
-56320     print #255,using "Form Pos 12,C 60": em$(j)
+56320     pr #255,using "Form Pos 12,C 60": em$(j)
 56340   next j
-56360   print #255,using "form pos 1,c 1,skip 6": ""
+56360   pr #255,using "form pos 1,c 1,skip 6": ""
 56380 fnend 
 57000 def fn_check_west_accounting
 57020   for j=1 to 8
-57040     print #255: ""
+57040     pr #255: ""
 57060   next j
 57080   let datepos=65
-57100   print #255,using 'Form POS datepos,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-57120   print #255,using 'Form POS 9,C 62': eng$(1:n)
-57140   print #255,using 'Form POS 9,C 62': eng$(n+1:128)
-57160   print #255: ""
-57180   print #255: ""
-57200   print #255: ""
+57100   pr #255,using 'Form POS datepos,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
+57120   pr #255,using 'Form POS 9,C 62': eng$(1:n)
+57140   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
+57160   pr #255: ""
+57180   pr #255: ""
+57200   pr #255: ""
 57220   for j=1 to 3
-57240     print #255,using "Form Pos 12,C 60": em$(j)
+57240     pr #255,using "Form Pos 12,C 60": em$(j)
 57260   next j
 57280   for j=1 to 8
-57300     print #255: ""
+57300     pr #255: ""
 57320   next j
 57340 fnend 
 59000 ! /r
-60000 ! r: Stub Print routines
+60000 ! r: Stub pr routines
 60010 def fn_print_stub
 60020   let tdedcp=tdedytd=0
 60030   for j=1 to 23
@@ -1283,139 +1283,139 @@
 61900 F_STUB_01: form pos 3,c 18,2*pic(-------.--),x 4,c 12,pic(-------.--),pic(-----------.--)
 61920 F_STUB_02: form pos 3,c 9,pic(------.--),2*pic(-------.--),x 4,c 12,pic(-------.--),pic(-----------.--)
 62000 def fn_stub_standard(; stst_show_tips,ststaddlength)
-62020   print #255: ""
-62040   print #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
+62020   pr #255: ""
+62040   pr #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
 62060   for j=1 to 20
-62080     if tty(j+4)=0 then let abrevname$(j)="" else let abrevname$(j)=hnames$(j)
+62080     if tty(j+4)=0 then abrevname$(j)="" else abrevname$(j)=hnames$(j)
 62100   next j
-62120   print #255,using 'form pos 60,c 7,pos 77,c 3': "Current","YTD"
+62120   pr #255,using 'form pos 60,c 7,pos 77,c 3': "Current","YTD"
 62140   if uprc$(accr$)="N" then 
-62160     print #255,using 'form pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Hours","Pay","Med W/H",ttc(3),tty(3)
+62160     pr #255,using 'form pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Hours","Pay","Med W/H",ttc(3),tty(3)
 62180   else 
-62200     print #255,using 'form pos 14,c 7,pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Accrued","Hours","Pay","Med W/H",ttc(3),tty(3)
+62200     pr #255,using 'form pos 14,c 7,pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Accrued","Hours","Pay","Med W/H",ttc(3),tty(3)
 62220   end if 
-62240   print #255,using F_STUB_01: "Regular",tdc1,ttc(26),"Fed W/H",ttc(1),tty(1)
-62260   print #255,using F_STUB_01: "Over Time",tdc2,ttc(27),"FICA W/H",ttc(2),tty(2)
+62240   pr #255,using F_STUB_01: "Regular",tdc1,ttc(26),"Fed W/H",ttc(1),tty(1)
+62260   pr #255,using F_STUB_01: "Over Time",tdc2,ttc(27),"FICA W/H",ttc(2),tty(2)
 62280   if uprc$(accr$)="N" then 
-62300     print #255,using F_STUB_01: "Sick",tdc3,tpd3,"State W/H",ttc(4),tty(4)
-62320     print #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+62300     pr #255,using F_STUB_01: "Sick",tdc3,tpd3,"State W/H",ttc(4),tty(4)
+62320     pr #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
 62340   else 
-62360     print #255,using F_STUB_02: "Sick",em10,tdc3,tpd3,"State W/H",ttc(4),tty(4)
-62380     print #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+62360     pr #255,using F_STUB_02: "Sick",em10,tdc3,tpd3,"State W/H",ttc(4),tty(4)
+62380     pr #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
 62400   end if 
-62420   print #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevname$(2),ttc(6),tty(6)
-62440   print #255,using F_STUB_01: "Other",0,ttc(28),abrevname$(3),ttc(7),tty(7)
-62460   print #255,using F_STUB_01: rt$,0,0,abrevname$(4),ttc(8),tty(8)
+62420   pr #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevname$(2),ttc(6),tty(6)
+62440   pr #255,using F_STUB_01: "Other",0,ttc(28),abrevname$(3),ttc(7),tty(7)
+62460   pr #255,using F_STUB_01: rt$,0,0,abrevname$(4),ttc(8),tty(8)
 62480   if trim$(compcode$)="" then 
-62500     print #255,using F_STUB_01: "",0,0,abrevname$(5),ttc(9),tty(9)
+62500     pr #255,using F_STUB_01: "",0,0,abrevname$(5),ttc(9),tty(9)
 62520   else 
 62540     let fn_extract_comp_time
-62560     print #255,using F_STUB_02: "Comp Time",balance,0,0,abrevname$(5),ttc(9),tty(9)
+62560     pr #255,using F_STUB_02: "Comp Time",balance,0,0,abrevname$(5),ttc(9),tty(9)
 62580   end if 
-62600   print #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevname$(6),ttc(10),tty(10)
-62620   print #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevname$(7),ttc(11),tty(11)
-62640   print #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevname$(8),ttc(12),tty(12)
-62660   print #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevname$(9),ttc(13),tty(13)
-62680   print #255,using F_STUB_01: "Net Pay",0,ttc(32),"Other",ttc(14)+ttc(15)+ttc(16)+ttc(17)+ttc(18)+ttc(19)+ttc(20)+ttc(21)+ttc(22)+ttc(23)+ttc(24),tty(14)+tty(15)+tty(16)+tty(17)+tty(18)+tty(19)+tty(20)+tty(21)+tty(22)+tty(23)+tty(24)
-62700   print #255: ""
+62600   pr #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevname$(6),ttc(10),tty(10)
+62620   pr #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevname$(7),ttc(11),tty(11)
+62640   pr #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevname$(8),ttc(12),tty(12)
+62660   pr #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevname$(9),ttc(13),tty(13)
+62680   pr #255,using F_STUB_01: "Net Pay",0,ttc(32),"Other",ttc(14)+ttc(15)+ttc(16)+ttc(17)+ttc(18)+ttc(19)+ttc(20)+ttc(21)+ttc(22)+ttc(23)+ttc(24),tty(14)+tty(15)+tty(16)+tty(17)+tty(18)+tty(19)+tty(20)+tty(21)+tty(22)+tty(23)+tty(24)
+62700   pr #255: ""
 62720   if stst_show_tips and ttc(28)<>0 then 
-62740     print #255,using F_STUB_02: "Tips",ttc(28)
+62740     pr #255,using F_STUB_02: "Tips",ttc(28)
 62760   else 
-62780     print #255: ""
+62780     pr #255: ""
 62800   end if 
-62820   print #255: ""
+62820   pr #255: ""
 62840   for j=1 to ststaddlength
-62860     print #255: ""
+62860     pr #255: ""
 62880   next j
 62900 fnend 
 63000 def fn_stub_kincaid
-63020   print #255: ""
-63040   print #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
+63020   pr #255: ""
+63040   pr #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
 63060   for j=1 to 20
-63080     if tty(j+4)=0 then let abrevname$(j)="" else let abrevname$(j)=hnames$(j)
+63080     if tty(j+4)=0 then abrevname$(j)="" else abrevname$(j)=hnames$(j)
 63100   next j
-63120   print #255,using 'form pos 60,c 7,pos 77,c 3': "Current","YTD"
+63120   pr #255,using 'form pos 60,c 7,pos 77,c 3': "Current","YTD"
 63140   if uprc$(accr$)="N" then 
-63160     print #255,using 'form pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Hours","Pay","Med W/H",ttc(3),tty(3)
+63160     pr #255,using 'form pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Hours","Pay","Med W/H",ttc(3),tty(3)
 63180   else 
-63200     print #255,using 'form pos 14,c 7,pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Accrued","Hours","Pay","Med W/H",ttc(3),tty(3)
+63200     pr #255,using 'form pos 14,c 7,pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Accrued","Hours","Pay","Med W/H",ttc(3),tty(3)
 63220   end if 
-63240   print #255,using F_STUB_01: "Regular",tdc1,ttc(26),"Fed W/H",ttc(1),tty(1)
-63260   print #255,using F_STUB_01: "Over Time",tdc2,ttc(27),"FICA W/H",ttc(2),tty(2)
+63240   pr #255,using F_STUB_01: "Regular",tdc1,ttc(26),"Fed W/H",ttc(1),tty(1)
+63260   pr #255,using F_STUB_01: "Over Time",tdc2,ttc(27),"FICA W/H",ttc(2),tty(2)
 63280   if uprc$(accr$)="N" then 
-63300     print #255,using F_STUB_01: "Sick",tdc3,tpd3,"State W/H",ttc(4),tty(4)
-63320     print #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+63300     pr #255,using F_STUB_01: "Sick",tdc3,tpd3,"State W/H",ttc(4),tty(4)
+63320     pr #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
 63340   else 
-63360     print #255,using F_STUB_02: "Sick",em10,tdc3,tpd3,"State W/H",ttc(4),tty(4)
-63380     print #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+63360     pr #255,using F_STUB_02: "Sick",em10,tdc3,tpd3,"State W/H",ttc(4),tty(4)
+63380     pr #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
 63400   end if 
-63420   print #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevname$(2),ttc(6),tty(6)
-63440   print #255,using F_STUB_01: "Other",0,ttc(28),abrevname$(3),ttc(7),tty(7)
-63460   print #255,using F_STUB_01: rt$,0,0,abrevname$(4),ttc(8),tty(8)
+63420   pr #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevname$(2),ttc(6),tty(6)
+63440   pr #255,using F_STUB_01: "Other",0,ttc(28),abrevname$(3),ttc(7),tty(7)
+63460   pr #255,using F_STUB_01: rt$,0,0,abrevname$(4),ttc(8),tty(8)
 63480   if trim$(compcode$)="" then 
-63500     print #255,using F_STUB_01: "",0,0,abrevname$(5),ttc(9),tty(9)
+63500     pr #255,using F_STUB_01: "",0,0,abrevname$(5),ttc(9),tty(9)
 63520   else 
 63540     let fn_extract_comp_time
-63560     print #255,using F_STUB_02: "Comp Time",balance,0,0,abrevname$(5),ttc(9),tty(9)
+63560     pr #255,using F_STUB_02: "Comp Time",balance,0,0,abrevname$(5),ttc(9),tty(9)
 63580   end if 
-63600   print #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevname$(6),ttc(10),tty(10)
-63620   print #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevname$(7),ttc(11),tty(11)
-63640   print #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevname$(8),ttc(12),tty(12)
-63660   print #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevname$(9),ttc(13),tty(13)
-63680   print #255,using F_STUB_01: "Net Pay",0,ttc(32),"Other",ttc(14)+ttc(15)+ttc(16)+ttc(17)+ttc(18)+ttc(19)+ttc(20)+ttc(21)+ttc(22)+ttc(23)+ttc(24),tty(14)+tty(15)+tty(16)+tty(17)+tty(18)+tty(19)+tty(20)+tty(21)+tty(22)+tty(23)+tty(24)
-63700   print #255: ""
-63720   print #255: ""
-63740   print #255: ""
-63760   print #255: ""
+63600   pr #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevname$(6),ttc(10),tty(10)
+63620   pr #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevname$(7),ttc(11),tty(11)
+63640   pr #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevname$(8),ttc(12),tty(12)
+63660   pr #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevname$(9),ttc(13),tty(13)
+63680   pr #255,using F_STUB_01: "Net Pay",0,ttc(32),"Other",ttc(14)+ttc(15)+ttc(16)+ttc(17)+ttc(18)+ttc(19)+ttc(20)+ttc(21)+ttc(22)+ttc(23)+ttc(24),tty(14)+tty(15)+tty(16)+tty(17)+tty(18)+tty(19)+tty(20)+tty(21)+tty(22)+tty(23)+tty(24)
+63700   pr #255: ""
+63720   pr #255: ""
+63740   pr #255: ""
+63760   pr #255: ""
 63780 fnend 
 64000 def fn_stub_billings
 64020   let stub_one_or_two+=1
 64040   if stub_one_or_two=3 then let stub_one_or_two=1
 64060   if stub_one_or_two=2 then 
-64070     print #255: ""
-64072     print #255: ""
-64080     print #255: ""
-64100     print #255: ""
+64070     pr #255: ""
+64072     pr #255: ""
+64080     pr #255: ""
+64100     pr #255: ""
 64120   end if 
-64140   print #255: ""
-64160   print #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
+64140   pr #255: ""
+64160   pr #255,using 'form pos 3,c 30,n 8,x 2,c 13,pic(zz/zz/zz),n 10': em$(1),eno,"",prdmmddyy,check_number
 64180   for j=1 to 20
-64200     if tty(j+4)=0 then let abrevname$(j)="" else let abrevname$(j)=hnames$(j)
+64200     if tty(j+4)=0 then abrevname$(j)="" else abrevname$(j)=hnames$(j)
 64220   next j
-64240   print #255,using 'form pos 60,c 7,pos 77,c 3': "Current","YTD"
+64240   pr #255,using 'form pos 60,c 7,pos 77,c 3': "Current","YTD"
 64260   if uprc$(accr$)="N" then 
-64280     print #255,using 'form pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Hours","Pay","Med W/H",ttc(3),tty(3)
+64280     pr #255,using 'form pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Hours","Pay","Med W/H",ttc(3),tty(3)
 64300   else 
-64320     print #255,using 'form pos 14,c 7,pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Accrued","Hours","Pay","Med W/H",ttc(3),tty(3)
+64320     pr #255,using 'form pos 14,c 7,pos 26,c 5,pos 37,c 3,pos 45,c 12,pic(-------.--),pic(-----------.--)': "Accrued","Hours","Pay","Med W/H",ttc(3),tty(3)
 64340   end if 
-64360   print #255,using F_STUB_01: "Regular",tdc1,ttc(26),"Fed W/H",ttc(1),tty(1)
-64380   print #255,using F_STUB_01: "Over Time",tdc2,ttc(27),"FICA W/H",ttc(2),tty(2)
+64360   pr #255,using F_STUB_01: "Regular",tdc1,ttc(26),"Fed W/H",ttc(1),tty(1)
+64380   pr #255,using F_STUB_01: "Over Time",tdc2,ttc(27),"FICA W/H",ttc(2),tty(2)
 64400   if uprc$(accr$)="N" then 
-64420     print #255,using F_STUB_01: "Sick",tdc3,tpd3,"State W/H",ttc(4),tty(4)
-64440     print #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+64420     pr #255,using F_STUB_01: "Sick",tdc3,tpd3,"State W/H",ttc(4),tty(4)
+64440     pr #255,using F_STUB_01: "Vacation",tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
 64460   else 
-64480     print #255,using F_STUB_02: "Sick",em10,tdc3,tpd3,"State W/H",ttc(4),tty(4)
-64500     print #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
+64480     pr #255,using F_STUB_02: "Sick",em10,tdc3,tpd3,"State W/H",ttc(4),tty(4)
+64500     pr #255,using F_STUB_02: "Vacation",em11,tdc4,tpd4,abrevname$(1),ttc(5),tty(5)
 64520   end if 
-64540   print #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevname$(2),ttc(6),tty(6)
-64560   print #255,using F_STUB_01: "",0,ttc(28),abrevname$(3),ttc(7),tty(7)
-64580   print #255,using F_STUB_01: rt$,0,0,abrevname$(4),ttc(8),tty(8)
+64540   pr #255,using F_STUB_01: "Holiday",tdc5,tpd5,abrevname$(2),ttc(6),tty(6)
+64560   pr #255,using F_STUB_01: "",0,ttc(28),abrevname$(3),ttc(7),tty(7)
+64580   pr #255,using F_STUB_01: rt$,0,0,abrevname$(4),ttc(8),tty(8)
 64600   if trim$(compcode$)="" then 
-64620     print #255,using F_STUB_01: "",0,0,abrevname$(5),ttc(9),tty(9)
+64620     pr #255,using F_STUB_01: "",0,0,abrevname$(5),ttc(9),tty(9)
 64640   else 
 64660     let fn_extract_comp_time
-64680     print #255,using F_STUB_02: "Comp Time",balance,0,0,abrevname$(5),ttc(9),tty(9)
+64680     pr #255,using F_STUB_02: "Comp Time",balance,0,0,abrevname$(5),ttc(9),tty(9)
 64700   end if 
-64720   print #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevname$(6),ttc(10),tty(10)
-64740   print #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevname$(7),ttc(11),tty(11)
-64760   print #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevname$(8),ttc(12),tty(12)
-64780   print #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevname$(9),ttc(13),tty(13)
-64800   print #255,using F_STUB_01: "Net Pay",0,ttc(32),"",ttc(14)+ttc(15)+ttc(16)+ttc(17)+ttc(18)+ttc(19)+ttc(20)+ttc(21)+ttc(22)+ttc(23)+ttc(24),tty(14)+tty(15)+tty(16)+tty(17)+tty(18)+tty(19)+tty(20)+tty(21)+tty(22)+tty(23)+tty(24)
-64820   print #255: ""
-64840   print #255: ""
+64720   pr #255,using F_STUB_01: "YTD Pay",0,tty(31),abrevname$(6),ttc(10),tty(10)
+64740   pr #255,using F_STUB_01: "YTD Deductions",0,tdedytd,abrevname$(7),ttc(11),tty(11)
+64760   pr #255,using F_STUB_01: "Current Pay",0,ttc(31),abrevname$(8),ttc(12),tty(12)
+64780   pr #255,using F_STUB_01: "Cur Deductions",0,tdedcp,abrevname$(9),ttc(13),tty(13)
+64800   pr #255,using F_STUB_01: "Net Pay",0,ttc(32),"",ttc(14)+ttc(15)+ttc(16)+ttc(17)+ttc(18)+ttc(19)+ttc(20)+ttc(21)+ttc(22)+ttc(23)+ttc(24),tty(14)+tty(15)+tty(16)+tty(17)+tty(18)+tty(19)+tty(20)+tty(21)+tty(22)+tty(23)+tty(24)
+64820   pr #255: ""
+64840   pr #255: ""
 64850   if stub_one_or_two=1 then 
-64860     print #255: ""
-64880     print #255: ""
+64860     pr #255: ""
+64880     pr #255: ""
 64890   end if
 64900 fnend 
 66000 def fn_stub_hitBoxes(mat ltext$,mat lPos)
@@ -1432,31 +1432,31 @@
 66220   nex hbLine
 66240 fnend
 67000 def fn_stub_energyExcnahger_extra(mat s,mat rpnames2$,mat dept)
-67002   print #255: ''
+67002   pr #255: ''
 67010   for x=1 to 6
 67020     ! if dept(x)=0 then 
-67030       print #255,using ees_L1510: rpnames2$(x+4),s(x,7),s(x,8)
+67030       pr #255,using ees_L1510: rpnames2$(x+4),s(x,7),s(x,8)
 67040       ees_L1510: form pos 54,c 10,pos 64,pic(-------.##),pos 74,pic(-------.##)
 67050     ! else
-67060     !   print #255,using ees_L1480: dept(x),s(x,1),s(x,2),s(x,3),s(x,4),s(x,5),s(x,6),rpnames2$(x+4),s(x,7),s(x,8)
+67060     !   pr #255,using ees_L1480: dept(x),s(x,1),s(x,2),s(x,3),s(x,4),s(x,5),s(x,6),rpnames2$(x+4),s(x,7),s(x,8)
 67070     !   ees_L1480: form pos 2,n 3,pos 6,5*n 7.2,n 11.2,x 2,c 10,2*n 10.2
 67080     ! end if
 67090   next x
 67100   ! if s(7,6)<>0 then 
-67110   !   print #255,using ees_L1550: "OTHER",s(7,1),s(7,2),s(7,3),s(7,4),s(7,5),s(7,6),"TOTAL",s(7,7),s(7,8)
+67110   !   pr #255,using ees_L1550: "OTHER",s(7,1),s(7,2),s(7,3),s(7,4),s(7,5),s(7,6),"TOTAL",s(7,7),s(7,8)
 67120   !   ees_L1550: form pos 1,c 5,pos 6,pic(----.##),pos 14,pic(---.##),pos 21,pic(---.##),pos 28,pic(---.##),pos 35,pic(---.##),pos 42,pic(---,---.##),pos 54,c 5,pos 64,pic(-------.##),pos 74,pic(-------.##),skip 1
 67130   ! end if
 67140 fnend
 70000 ! /r
 72000 def fn_extract_comp_time
-72020   let balance=0
+72020   balance=0
 72040   let key$=lpad$(str$(eno),8)&"             "
 72060   restore #breakdown,key>=key$: nokey EOBREAKDOWN
 72080   READHOURBREAKDOWN: ! 
 72100   read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",release: empno2,class$,tdate,increase,decrease eof EOBREAKDOWN ! kj 4/18/07
 72120   if empno2<>eno then goto EOBREAKDOWN
 72140   if trim$(class$)<>trim$(compcode$) then goto READHOURBREAKDOWN
-72160   let balance+=increase-decrease
+72160   balance+=increase-decrease
 72180   goto READHOURBREAKDOWN
 72200   EOBREAKDOWN: ! 
 72220 fnend 
@@ -1466,7 +1466,7 @@
 74060   mat qtr4tcp=(0): mat ytdtotal=(0): mat tdc=(0): mat tty=(0)
 74080   let fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0
 74100   let medqtr=eicyr=eicqtr=wagesqtr=0
-74120   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! indexed by employee#,department# and payroll date
+74120   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! indexed by employee#,department# and payroll date
 74140   restore #3,key>=checkkey$: nokey L6920
 74160   L6580: ! 
 74180   read #3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : let lastrec=rec(3)
@@ -1584,7 +1584,7 @@
 80020   let fica3=fica0+medi0+fica1+medi1+fica2
 80040   if fica3=0 then goto FICA_END
 80060   read #h_cl_trans_alloc,using L5140,rec=fica_rec: bankcode,a1,tr1,gl$,alloc
-80080   let alloc=alloc-fica3
+80080   alloc=alloc-fica3
 80100   rewrite #h_cl_trans_alloc,using L5140,rec=fica_rec: bankcode,a1,tr1,gl$,alloc
 80120   FICA_END: let fica3=fica0=medi0=fica1=medi1=fica2=0
 80140 fnend 
@@ -1606,53 +1606,53 @@
 84000 def fn_eldorado_check_and_stub
 84020   ! meant for use at top and bottom margin at .5, left and right at .3, font size 9
 84040   !  let fn_accumulate_dept_totals2
-84100   print #255: ""
-84120   print #255: ""
-84140   print #255,using 'form pos 82,pic(zz/zz/zz)': dat
-84160   print #255: ""
-84180   print #255,using 'form pos 82,n 10': check_number
-84200   print #255: ""
-84220   print #255: ""
-84240   print #255: ""
+84100   pr #255: ""
+84120   pr #255: ""
+84140   pr #255,using 'form pos 82,pic(zz/zz/zz)': dat
+84160   pr #255: ""
+84180   pr #255,using 'form pos 82,n 10': check_number
+84200   pr #255: ""
+84220   pr #255: ""
+84240   pr #255: ""
 84280   if ttc(32)<0 then let ttc(32)=0
-84300   print #255,using 'form pos 7,c 62,pos 85,pic($$$$$,$$$.##)': eng$(1:n),ttc(32)
-84340   print #255,using X7660: eng$(n+1:128)
+84300   pr #255,using 'form pos 7,c 62,pos 85,pic($$$$$,$$$.##)': eng$(1:n),ttc(32)
+84340   pr #255,using X7660: eng$(n+1:128)
 84360   X7660: form pos 9,c 70,skip 3
-84380   print #255,using X7700: em$(1)
-84400   print #255,using X7700: em$(2)
-84420   print #255,using X7701: em$(3) : goto PRINTSTUB_ELDORADO
+84380   pr #255,using X7700: em$(1)
+84400   pr #255,using X7700: em$(2)
+84420   pr #255,using X7701: em$(3) : goto PRINTSTUB_ELDORADO
 84440   X7700: form pos 10,c 30
 84460   X7701: form pos 10,c 30,skip 11
-84480   print #255,using X7720: eno,d1,rate,tdc1,tdc(2),tcp(26),tcp(27),tcp(28),dat
-84500   ! print #255,using X7720: eno,d1,rate,tdc1,tdc2,ttc(16),ttc(17),ttc(18),dat
+84480   pr #255,using X7720: eno,d1,rate,tdc1,tdc(2),tcp(26),tcp(27),tcp(28),dat
+84500   ! pr #255,using X7720: eno,d1,rate,tdc1,tdc2,ttc(16),ttc(17),ttc(18),dat
 84520   X7720: form skip 11,pos 1,n 6,x 4,pic(zzzz/zz/zz),2*n 9.2,n 9.2,n 12.2,n 12.2,n 12.2,pos 95,pic(zz/zz/zz)
-84540   print #255: ''
-84560   print #255: ''
-84580   print #255,using X7740: abrevname$(1),abrevname$(2),abrevname$(3),abrevname$(4)
+84540   pr #255: ''
+84560   pr #255: ''
+84580   pr #255,using X7740: abrevname$(1),abrevname$(2),abrevname$(3),abrevname$(4)
 84600   X7740: form pos 44,4*c 9
-84620   print #255: ""
-84640   print #255,using X7760: ttc(31),ttc(1),ttc(3),ttc(2)+ttc(4),ttc(5),ttc(6),ttc(7),ttc(8),0,ttc(32)
+84620   pr #255: ""
+84640   pr #255,using X7760: ttc(31),ttc(1),ttc(3),ttc(2)+ttc(4),ttc(5),ttc(6),ttc(7),ttc(8),0,ttc(32)
 84660   X7760: form pos 1,2*n 9.2,5*n 9.2,n 8.2,n 8.2,pos 93,pic($$$,$$$.##)
-84680   print #255: ""
-84700   print #255,using X7780: ytdtotal(31),ytdtotal(1),ytdtotal(3),ytdtotal(2)+ytdtotal(4),ytdtotal(5),ytdtotal(6),ytdtotal(7),ytdtotal(8),0 ! ,YTDTOTAL(9)
+84680   pr #255: ""
+84700   pr #255,using X7780: ytdtotal(31),ytdtotal(1),ytdtotal(3),ytdtotal(2)+ytdtotal(4),ytdtotal(5),ytdtotal(6),ytdtotal(7),ytdtotal(8),0 ! ,YTDTOTAL(9)
 84720   X7780: form pos 1,7*n 10.2,n 8.2,n 8.2
-84740   print #255: ""
-84760   print #255: ""
-84780   print #255: ""
-84800   print #255: ""
+84740   pr #255: ""
+84760   pr #255: ""
+84780   pr #255: ""
+84800   pr #255: ""
 84820   for x=1 to 6
 84840     if deptsum(x)=0 then 
-84860       print #255,using X7850: abrevname$(x+4),v(x,7),v(x,8)
+84860       pr #255,using X7850: abrevname$(x+4),v(x,7),v(x,8)
 84880       X7850:  form pos 60,c 8,x 2,pic(-----------.##),x 5,pic(-----------.##)
 84900     else 
-84920       print #255,using X7820: deptsum(x),v(x,1),v(x,2),v(x,3),v(x,4),v(x,5),v(x,6),abrevname$(x+4),v(x,7),v(x,8)
+84920       pr #255,using X7820: deptsum(x),v(x,1),v(x,2),v(x,3),v(x,4),v(x,5),v(x,6),abrevname$(x+4),v(x,7),v(x,8)
 84940       X7820:  form pos 1,g 3,x 1,4*n 8.2,n 9.2,n 12.2,x 2,c 8,x 7,n 9.2,x 10,n 9.2
 84960     end if 
 84980   next x
 85000   if v(7,6)=0 then 
-85020     print #255,using X7850: "Total",v(7,7),v(7,8)
+85020     pr #255,using X7850: "Total",v(7,7),v(7,8)
 85040   else 
-85060     print #255,using X7820: "",v(7,1),v(7,2),v(7,3),v(7,4),v(7,5),v(7,6),"Total",v(7,7),v(7,8)
+85060     pr #255,using X7820: "",v(7,1),v(7,2),v(7,3),v(7,4),v(7,5),v(7,6),"Total",v(7,7),v(7,8)
 85080   end if 
 85100   ! Let TDC1=TDC2=0
 85120   let rate=0
@@ -1660,8 +1660,8 @@
 85160   for k=1 to 6
 85180     let deptsum(k)=0
 85200   next k
-85220   if check_number>0 then let check_number=check_number+1
-85240   PRINTSTUB_ELDORADO: print #255: ""
+85220   if check_number>0 then check_number=check_number+1
+85240   PRINTSTUB_ELDORADO: pr #255: ""
 85260   let fn_print_stub
 85280 fnend 
 88000 INVALIDGLNUMBER: ! r:

@@ -43,14 +43,14 @@
 36000   if ckey<>5 then 
 36020     let prd=d1=val(resp$(1))
 36040     let d1$=resp$(2)
-36080     let beg_date=val(resp$(3)) 
+36080     beg_date=val(resp$(3)) 
 36100     let end_date=val(resp$(4)) 
 36120     let qtr1=val(resp$(5)) 
 36140     let qtr2=val(resp$(6)) 
 36160     let qtr3=val(resp$(7)) 
 36180     let qtr4=val(resp$(8))
 36200     let qtr5=val(resp$(8)(1:4))*10000+1231
-36220     let begin_year=val(resp$(8)(1:4))*10000+0101
+36220     begin_year=val(resp$(8)(1:4))*10000+0101
 36240     let end_year=val(resp$(8)(1:4))*10000+1231
 36260     fn_putPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
 36280   end if
@@ -100,11 +100,11 @@
 96040 ERTN: let fnerror(program$,err,line,act$,"xit")
 96060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 96080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-96100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+96100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 96120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 96140 ! </updateable region: ertn>
 96510 ! ERTN: let fnerror(program$,err,line,act$,"NO") ! r:
 96520 !   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 96530 !   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-96540 !   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+96540 !   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 96550 ! ERTN_EXEC_ACT: execute act$ : goto ERTN ! /r

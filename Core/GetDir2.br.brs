@@ -2,11 +2,11 @@
 00020   library program$: fngetdir2
 00022   dim tmp_file_list$(1)*256
 00023   fngetdir2('C:\ACS\Dev-5\ACSUB\Grid\',mat tmp_file_list$, '/s /b','*.*')
-00024   print mat tmp_file_list$(1:10) : pause 
+00024   pr mat tmp_file_list$(1:10) : pause 
 00025 ! 
 00030   dim fl$(1)*99
-00050   print 'function returns ';fngetdir2(env$('userprofile')&"\Desktop", mat fl$,'/s /tc','*.rtf',mat test_date$,mat test_time$,enable_full_path=1)
-00060   for x=1 to udim(mat fl$) : print '| '&test_date$(x)&' | '&test_time$(x)&' | '&fl$(x) : next x
+00050   pr 'function returns ';fngetdir2(env$('userprofile')&"\Desktop", mat fl$,'/s /tc','*.rtf',mat test_date$,mat test_time$,enable_full_path=1)
+00060   for x=1 to udim(mat fl$) : pr '| '&test_date$(x)&' | '&test_time$(x)&' | '&fl$(x) : next x
 00070   end  ! /r
 08010 ! r: originally S:\Core\GetDir2.br
 08020 ! reads a directory into an array
@@ -70,7 +70,7 @@
 13060     else 
 13080       gd2_date_requested=0
 13100     end if 
-13110     if gd2_date_requested and slash_b then print 'DIR /B does not return dates - either enhance fngetdir2 or change your call' : pause 
+13110     if gd2_date_requested and slash_b then pr 'DIR /B does not return dates - either enhance fngetdir2 or change your call' : pause 
 13120     if udim(mat gd2_time$)>0 then gd2_time_requested=1 else gd2_time_requested=0
 13130     if udim(mat gd2_size)>0 then gd2_size_requested=1 else gd2_size_requested=0
 13140 ! /r
@@ -143,7 +143,7 @@
 31100         end if 
 31120         if gd2_full_path then filename$(filename_count)=directory_of$&'\'&filename$(filename_count)
 31500 !  else 
-31520 !     print tmp$ ! pause
+31520 !     pr tmp$ ! pause
 31540       end if 
 31560     loop 
 32000 EO_TF1: ! /r
@@ -168,7 +168,7 @@
 60040 ERTN: fnerror(program$,err,line,act$,"xit")
 60060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 60080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-60100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+60100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 60120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 60140 ! /region
 90140 ! /r

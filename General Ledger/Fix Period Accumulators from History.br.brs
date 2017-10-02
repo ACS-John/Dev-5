@@ -1,7 +1,7 @@
 10000 ! formerly S:\acsGL\FixPA
 10200 let fn_setup
 12000   let fntop(program$, cap$="Fix Period Accumulators from History")
-12020   let current_accounting_period=fnactpd
+12020   current_accounting_period=fnactpd
 12200 ! 
 12400   let process_gltrans=1 ! if =1 than gltrans will be added into the period accumulators as well as actrans
 12600 ! 
@@ -10,7 +10,7 @@
 13020 ! lmu = Last Accounting Period Closed
 13040 ! nap = Number of Accounting Periods
 13200   close #company: 
-13300   let fn_get_fund_list(mat fund_list) ! print 'fund_list:' : print mat fund_list : pause
+13300   let fn_get_fund_list(mat fund_list) ! pr 'fund_list:' : pr mat fund_list : pause
 13320   mat last_retained_earnings_acct$(udim(mat fund_list))
 13400   mat period_accumulator_current(nap)
 13600   mat period_accumulator_prior(nap)
@@ -63,13 +63,13 @@
 21200       if period_accumulator_current(period)<>balance_current_year_month(period) then 
 21400         let gln_period_did_change+=1
 21600         let fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_current_year_month(period))&' to '&str$(period_accumulator_current(period)))
-21800         let balance_current_year_month(period)=period_accumulator_current(period)
+21800         balance_current_year_month(period)=period_accumulator_current(period)
 21820 !  if gl$='  1   405  0' then pr ' about to write period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
 22000       end if 
 22200       if include_prior_periods and period_accumulator_prior(period)<>balance_prior_year_month(period) then 
 22400         let gln_period_did_change+=1
 22600         let fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_prior_year_month(period))&' to '&str$(period_accumulator_prior(period)))
-22800         let balance_prior_year_month(period)=period_accumulator_prior(period)
+22800         balance_prior_year_month(period)=period_accumulator_prior(period)
 23000       end if  ! period_accumulator_prior(period)<>balance_prior_year_month(period) then
 23100     next period
 23120     if current_accounting_period>1 then
@@ -117,10 +117,10 @@
 26340     let fncreg_read("correct prior year",resp$(respc))
 26360     if resp$(respc)='' then let resp$(respc)='False'
 26380 ! 
-26400     let myline=1 : let col3_pos=mypos+20
+26400     let myline=1 : col3_pos=mypos+20
 26410     let resp_lrea_fund_1=respc+1
 26420     if use_dept then 
-26440       let col4_pos=col3_pos+10
+26440       col4_pos=col3_pos+10
 26460       let fnlbl(1,col3_pos,'Last Retained Earnings Account(s)')
 26500       for fund_item=1 to udim(mat fund_list)
 26520         let fnlbl(myline+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",9,1)
@@ -129,7 +129,7 @@
 26580         let fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(respc)) : let resp$(respc)=fnrgl$(resp$(respc))
 26600       next fund_item
 26620     else 
-26630       let col4_pos=col3_pos+32
+26630       col4_pos=col3_pos+32
 26640       let fnlbl(1,col3_pos,'Last Retained Earnings Account:',31,1)
 26660       let fnqgl(myline,col4_pos)
 26680       let respc+=1
@@ -168,7 +168,7 @@
 32120     let fn_date_mmddyy_is_within_range=dmi_return
 32140   fnend  ! fn_date_mmddyy_is_within_range
 33400   def fn_process_trans(h_trans; pt_fix_trans_period_code)
-33600     let actrans_key$=rpad$(gl$,kln(h_trans))
+33600     actrans_key$=rpad$(gl$,kln(h_trans))
 33800     restore #h_trans,key>=actrans_key$: nokey EO_TRANS
 34000     do 
 34200       if pt_fix_trans_period_code then 
@@ -218,7 +218,7 @@
 40800 !     let report_open=1
 41000 !     let fnopenprn
 41200 !   end if  ! ~report_open
-41400 !   print #255: line$
+41400 !   pr #255: line$
 41420     let fnstatus(line$) ! pr line$ ! XXX
 41600   fnend 
 51670 ! ______________________________________________________________________
@@ -226,7 +226,7 @@
 51690 ERTN: let fnerror(program$,err,line,act$,"xit")
 51700   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 51710   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-51720   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+51720   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 51730 ERTN_EXEC_ACT: execute act$ : goto ERTN
 51740 ! /region
 52000   def fn_is_a_retained_earn_account(gl$)

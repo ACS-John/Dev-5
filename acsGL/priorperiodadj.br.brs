@@ -11,8 +11,8 @@
 00110   let fnconsole(off=0)
 00120   let fncno(cno,cnam$) !:
         let fndat(dat$)
-00130   let right=1 : let center=2 : let limit_to_list=1
-00140   let ac1=1
+00130   let right=1 : center=2 : let limit_to_list=1
+00140   ac1=1
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using "Form pos 384,N 2",rec=1: nap !:
         close #20: 
 00160   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -44,7 +44,7 @@
 00370   let fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto L690
 00390   let k$=fnagl$(resp$(1)) !:
-        let am=val(resp$(2)) !:
+        am=val(resp$(2)) !:
         let d1=val(resp$(3)) !:
         let fm(1)=val(resp$(4)(1:2)) !:
         let fm(2)=val(resp$(5)(1:2)) !:
@@ -56,24 +56,24 @@
 00420 ! 
 00440   gosub HDR
 00450   read #1,using 'Form POS 13,C 50,POS 81,41*PD 6.2',key=k$: d$,bb,cb,mat bc,mat bp
-00460   let ce=0
-00470   print #255,using 'Form POS 9,PIC(ZZZ),X 6,PIC(ZZZZZZ),X 9,PIC(ZZZ),X 4,C 35,X 1,N 2,X 1,C 1,X 11,N 2,X 1,C 1,X 4,N 11.2': val(k$(1:3)),val(k$(4:9)),val(k$(10:12)),d$(1:35),fm(1),fm2$,fm(3),fm4$,am pageoflow PGOF
-00480   if am>0 then let am1=am1+am else let am2=am2+am
+00460   ce=0
+00470   pr #255,using 'Form POS 9,PIC(ZZZ),X 6,PIC(ZZZZZZ),X 9,PIC(ZZZ),X 4,C 35,X 1,N 2,X 1,C 1,X 11,N 2,X 1,C 1,X 4,N 11.2': val(k$(1:3)),val(k$(4:9)),val(k$(10:12)),d$(1:35),fm(1),fm2$,fm(3),fm4$,am pageoflow PGOF
+00480   if am>0 then am1=am1+am else am2=am2+am
 00490   goto L500
 00500 L500: if fm(2)=1 then goto L580
 00510   if fm(4)=1 then let last=nap else let last=fm(3)
 00520   for j=fm(1) to last
-00530     let bp(j)=bp(j)+am
+00530     bp(j)=bp(j)+am
 00540   next j
 00550   if fm(4)=2 then goto L640
 00560   let first=1
 00570   goto L590
 00580 L580: let first=fm(1)
 00590 L590: for j=first to fm(3)
-00600     let bc(j)=bc(j)+am
+00600     bc(j)=bc(j)+am
 00610   next j
-00620   let bb=bb+am
-00630   let cb=cb+am
+00620   bb=bb+am
+00630   cb=cb+am
 00640 L640: rewrite #1,using 'Form POS 81,41*PD 6.2',key=k$: bb,cb,mat bc,mat bp
 00650   if ac1=0 then goto L680
 00660   if fm(2)><1 then goto L680 ! CURRENT YEAR ONLY
@@ -81,23 +81,23 @@
 00680 L680: goto MENU1
 00690 L690: close #1: 
 00700   close #2: 
-00710   print #255,using 'Form POS 5,C 18,N 12.2': "Total Debits: ",am1
-00720   print #255,using 'Form POS 5,C 18,N 12.2': "Total Credits: ",am2
-00730   print #255,using 'Form POS 5,C 18,N 12.2': "Net Adjustments: ",am1+am2
+00710   pr #255,using 'Form POS 5,C 18,N 12.2': "Total Debits: ",am1
+00720   pr #255,using 'Form POS 5,C 18,N 12.2': "Total Credits: ",am2
+00730   pr #255,using 'Form POS 5,C 18,N 12.2': "Net Adjustments: ",am1+am2
 00740   let fncloseprn
 00750   execute "Index "&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno)&' '&env$('Q')&"\GLmstr\AcTrIdx.h"&str$(cno)&" 1/71/17/13 12/2/2/4 Replace DupKeys"
 00760   goto XIT
 00770 ! ______________________________________________________________________
 00780 HDR: ! 
-00790   print #255,using 'Form Pos 20,Cc 40': cnam$ !:
-        print #255,using 'Form Pos 20,Cc 40': cap$ !:
-        print #255,using 'Form Pos 20,Cc 40': dat$ !:
-        print #255: ""
-00800   print #255,using 'Form POS 4,C 12,X 2,C 12,C 13,POS 43,C 12,POS 73,C 60': scr$(1),scr$(2),scr$(3),"Description","1st Month/Yr   Last Month/Yr   Amount"
+00790   pr #255,using 'Form Pos 20,Cc 40': cnam$ !:
+        pr #255,using 'Form Pos 20,Cc 40': cap$ !:
+        pr #255,using 'Form Pos 20,Cc 40': dat$ !:
+        pr #255: ""
+00800   pr #255,using 'Form POS 4,C 12,X 2,C 12,C 13,POS 43,C 12,POS 73,C 60': scr$(1),scr$(2),scr$(3),"Description","1st Month/Yr   Last Month/Yr   Amount"
 00810   return 
 00820 ! ______________________________________________________________________
 00830 PGOF: ! 
-00840   print #255: newpage
+00840   pr #255: newpage
 00850   gosub HDR
 00860   continue 
 00870 ! ______________________________________________________________________
@@ -105,7 +105,7 @@
 00890 ERTN: let fnerror(program$,err,line,act$,"xit")
 00900   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00910   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00920   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00920   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00930 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00940 ! /region
 00950 ! ______________________________________________________________________

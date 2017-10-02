@@ -35,43 +35,43 @@
 00158   let typeofentry_option$(5)="5 = Sales"
 00160   let typeofentry_option$(6)="6 = Purchases"
 00162   dim cmask3$(6),chdr_proof_total$(6),glitem3$(6)
-00164   let chdr_proof_total$(1)='G/L Account'
-00166   let chdr_proof_total$(2)='Beg Balance'
-00168   let chdr_proof_total$(3)='Receipts'
-00170   let chdr_proof_total$(4)='Disbursements'
-00172   let chdr_proof_total$(5)='Adjustments'
-00174   let chdr_proof_total$(6)='End Balance'
-00176   let cmask3$(1)=''
-00178   let cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)="10"
-00180   let cmask3$(6)='10'
+00164   chdr_proof_total$(1)='G/L Account'
+00166   chdr_proof_total$(2)='Beg Balance'
+00168   chdr_proof_total$(3)='Receipts'
+00170   chdr_proof_total$(4)='Disbursements'
+00172   chdr_proof_total$(5)='Adjustments'
+00174   chdr_proof_total$(6)='End Balance'
+00176   cmask3$(1)=''
+00178   cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)="10"
+00180   cmask3$(6)='10'
 00182 ! General Ledger Breakdown Grid
 00184   mat chdr$(5)
-00186   let chdr$(1)='Reference'
-00188   let chdr$(2)='Payee Number'
-00190   let chdr$(3)='GL Number'
-00192   let chdr$(4)='Percent'
-00194   let chdr$(5)='Description      '
+00186   chdr$(1)='Reference'
+00188   chdr$(2)='Payee Number'
+00190   chdr$(3)='GL Number'
+00192   chdr$(4)='Percent'
+00194   chdr$(5)='Description      '
 00196   mat cmask$(5)
-00198   let cmask$(1)=cmask$(2)=cmask$(3)=cmask$(5)=''
-00200   let cmask$(4)='32'
+00198   cmask$(1)=cmask$(2)=cmask$(3)=cmask$(5)=''
+00200   cmask$(4)='32'
 00202   mat glitem$(5)
 00204 ! 
 00206   dim chdr2$(7)*25
 00208   mat chdr2$(7)
 00210   mat cmask2$(7)
 00212   mat glitem2$(7)
-00214   let chdr2$(1)='Record '
-00216   let chdr2$(2)='Date'
-00218   let chdr2$(3)='Reference #'
-00220   let chdr2$(4)='Payee/Description'
-00222   let chdr2$(5)='G/L #  '
-00224   let chdr2$(6)='Amount'
-00226   let chdr2$(7)='Allocation Description'
-00228   let cmask2$(2)='3'
-00230   let cmask2$(3)=cmask2$(4)=''
-00232   let cmask2$(5)=''
-00234   let cmask2$(6)='10'
-00236   let cmask2$(7)=""
+00214   chdr2$(1)='Record '
+00216   chdr2$(2)='Date'
+00218   chdr2$(3)='Reference #'
+00220   chdr2$(4)='Payee/Description'
+00222   chdr2$(5)='G/L #  '
+00224   chdr2$(6)='Amount'
+00226   chdr2$(7)='Allocation Description'
+00228   cmask2$(2)='3'
+00230   cmask2$(3)=cmask2$(4)=''
+00232   cmask2$(5)=''
+00234   cmask2$(6)='10'
+00236   cmask2$(7)=""
 00238 ! 
 00240   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00242   read #1,using 'Form POS 150,2*N 1,POS 298,15*PD 4,POS 382,N 2,POS 418,10*C 20,10*N 1,POS 668,10*C 12': mat d,mat pgl,jccode,mat miscname$,mat dedcode,mat miscgl$
@@ -87,7 +87,7 @@
 00364   F_2A: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,c 6,c 5,c 3,c 12
 00365   F_2B: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,c 6,c 5,c 3,c 12
 00370   let pc=1
-00380   let adr=lrec(h_gl_work)
+00380   adr=lrec(h_gl_work)
 00390   if adr<1 then goto L460
 00400 L400: ! 
 00410   read #h_gl_work,using 'form pos 27,n 2',rec=adr: pc norec CHECK_FOR_DELETED conv L460
@@ -141,7 +141,7 @@
 28760 ! If SEL=4 Then Goto SCREEN_1 ! temporary line do not access payroll checks
 28780   let typeofentry$=resp$(4)
 28800   let key$=bankgl$=fnagl$(resp$(respc_bankGl)) ! GL number
-28820   let contra_entry_date=val(resp$(respc_contraDate)) ! contra entry date
+28820   contra_entry_date=val(resp$(respc_contraDate)) ! contra entry date
 28840   if ckey<>18 then  ! check bank account if editing transactions
 28860     if (sel=1 or sel=2) and val(bankgl$)=0 then goto BANK_GL_FAIL ! must have GL bank account on receipts or disbursements
 28880     if (sel=1 or sel=2 or sel=4) then read #h_glmstr,using "form pos 13,c 40",key=bankgl$,release: bankname$ nokey BANK_GL_FAIL
@@ -317,13 +317,13 @@
 42980   let fnlbl(9,53,"Transaction Breakdown")
 43000 ! r: General Ledger Transaction Breakdown Grid
 43020   mat chdr$(4)
-43040   let chdr$(1)='Reference'
-43060   let chdr$(2)='GL Number'
-43080   let chdr$(3)='Amount'
-43100   let chdr$(4)='Description'
+43040   chdr$(1)='Reference'
+43060   chdr$(2)='GL Number'
+43080   chdr$(3)='Amount'
+43100   chdr$(4)='Description'
 43120   mat cmask$(4)
 43140   mat cmask$=('')
-43160   let cmask$(3)='10'
+43160   cmask$(3)='10'
 43180   let fnflexinit1('Glalloc',10,40,6,60,mat chdr$,mat cmask$,1,0,0)
 43200   restore #glallocations: 
 43220   mat glitem$(4)
@@ -358,12 +358,12 @@
 43800   let fncmdkey("&Back",6,0,0,"Return to first screen to change transaction types or bank accounts.")
 43820   if ~edit then let fncmdkey("&Finish",9,0,1,"")
 43840   let fnacs(sn$,0,mat resp$,ckey)
-43860   let allocamt=0
+43860   allocamt=0
 43880 ! Let PAS=1 ! kj 61107
 43900   let message$=""
 43920   if extract=1 and ckey<>1 then let extract=0
-43940   if (ckey=9 or ckey=3) and sel1=3 and val(resp$(2))<>0 then let ckey=1 ! force the last entry to write   ! KJ 50707
-43960   if ckey=30 and sel1=3 and val(resp$(2))<>0 then let ckey=1 ! force the last entry to write   ! KJ 50707
+43940   if (ckey=9 or ckey=3) and sel1=3 and val(resp$(2))<>0 then ckey=1 ! force the last entry to write   ! KJ 50707
+43960   if ckey=30 and sel1=3 and val(resp$(2))<>0 then ckey=1 ! force the last entry to write   ! KJ 50707
 43980   if (ckey=9 or ckey=3 or ckey=6) and lrec(glallocations)>0 and edit=0 then goto AFP_XIT ! 4430 ! unwritten record on screen
 44000   if ckey=9 and val(resp$(2))=0 then 
 44020     goto PROOF_TOTALS
@@ -398,10 +398,10 @@
 44600     let extract=1
 44620     goto EXTRACT ! pull allocation breakdown from payee record
 44640   end if 
-44660   let allocgl$=fnagl$(resp$(5))
-44680   let allocamt=val(resp$(6))
-44700   if sel=3 and ckey<>30 then let allocamt=transactionamt ! create an allocation amount automatically on adjustments
-44720   if allocamt=0 and ckey=1 and lrec(glallocations)=0 then let allocamt=transactionamt ! allows them to press enter if only allocation without haveing to key the amount a second time
+44660   allocgl$=fnagl$(resp$(5))
+44680   allocamt=val(resp$(6))
+44700   if sel=3 and ckey<>30 then allocamt=transactionamt ! create an allocation amount automatically on adjustments
+44720   if allocamt=0 and ckey=1 and lrec(glallocations)=0 then allocamt=transactionamt ! allows them to press enter if only allocation without haveing to key the amount a second time
 44740   if extract=1 then goto AFP_XIT
 44760   if ckey=18 then goto AFP_XIT ! don't require gl # on main screen when editing transaction
 44780   if ckey=30 and edit=1 then goto AFP_XIT ! don't require gl # when editing and take complete
@@ -442,15 +442,15 @@
 46420     goto L4460
 46440   else if ckey=2 and allocamt<>0 then 
 46460     write #glallocations,using "form pos 1,c 12,pd 10.2,c 30": allocgl$,allocamt,td$
-46480     let allocgl$=""
+46480     allocgl$=""
 46500     let totalalloc+=allocamt
-46520     let allocamt=0
+46520     allocamt=0
 46540     goto MAIN
 46560   else if ckey=1 and allocamt<>0 then 
 46580     write #glallocations,using "form pos 1,c 12,pd 10.2,c 30": allocgl$,allocamt,td$
-46600     let allocgl$=""
+46600     allocgl$=""
 46620     let totalalloc+=allocamt
-46640     let allocamt=0
+46640     allocamt=0
 46660   end if 
 46680   if ckey=1 and sel <>3 and transactionamt<>totalalloc then let message$= "Allocations don't add up!" : goto MAIN
 46700 ! If CKEY=1 AND SEL=3 AND TOTALALLOC <>0 Then Let MESSAGE$= "Allocations don't add up!": Goto MAIN
@@ -497,8 +497,8 @@
 52080   read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof L4740
 52100   if payeekey$<>glkey$ then goto L4740
 52120   if percent=0 and lrec(glallocations)=0 then let percent=100
-52140   let allocamt=round(transactionamt*(percent*.01),2)
-52160   write #glallocations,using "form pos 1,c 12,pd 10.2,c 30": payeegl$,allocamt,td$: let allocgl$="": let totalalloc+=allocamt: let allocamt=0
+52140   allocamt=round(transactionamt*(percent*.01),2)
+52160   write #glallocations,using "form pos 1,c 12,pd 10.2,c 30": payeegl$,allocamt,td$: allocgl$="": let totalalloc+=allocamt: allocamt=0
 52180   goto READPAYEEGL
 52200 L4740: ! 
 52202   if totalalloc<>transactionamt then 
@@ -509,7 +509,7 @@
 52220   let lastallocation+=transactionamt-totalalloc
 52240   rewrite #glallocations,using "Form pos 13,pd 10.2",rec=lrec(glallocations): lastallocation
 52260   L4770: !
-52270   let allocamt=0: ! kj  Let EXTRACT=0
+52270   allocamt=0: ! kj  Let EXTRACT=0
 52280   L4780: ! 
 52300 goto MAIN ! /r
 54000 DELETE_TRANS: ! r: deletes entire transaction
@@ -600,8 +600,8 @@
 66000 SCREEN_INSERT_DISKETTE: ! r:
 66020   close #101: ioerr ignore
 66040   open #101: "SROW=10,SCOL=19,EROW=12,ECOL=62,BORDeR=DR,CaPTION=<Choose Input Drive",display,outin 
-66060   print #101: newpage
-66080   print fields "#101,2,1,Cr 40": "Insert Input Diskette in selected drive:"
+66060   pr #101: newpage
+66080   pr fields "#101,2,1,Cr 40": "Insert Input Diskette in selected drive:"
 66100   if dv$="" then let dv$="A"
 66120   rinput fields "#101,2,42,Cu 1,UT,N": dv$
 66140   let dv$=dv$&":" ! if dv$="A" or dv$="B" then let dv$=dv$&":" else goto L5750
@@ -611,7 +611,7 @@
 68020 ERTN: let fnerror(program$,err,line,act$,"NO")
 68040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 68060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-68080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+68080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 68100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 68120 ! /region
 69000 IGNORE: continue 
@@ -621,7 +621,7 @@
 70040   restore #h_gl_work: 
 70060   do 
 70080     read #h_gl_work,using "Form POS 1,c 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8 ,C 6,C 5,C 3,C 12": gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof SCREEN_PROOF_TOTALS
-70082 !   print 'read an entruy from work file:'&gl$&' - '&key$ : pause
+70082 !   pr 'read an entruy from work file:'&gl$&' - '&key$ : pause
 70100 ! 
 70120     for j=1 to 30
 70140       if k_list$(j)<>"" and key$=k_list$(j) then goto L6100 ! found matching contra account
@@ -713,24 +713,24 @@
 72120     next j
 72140 ! 
 72160     let fnopenprn
-72180     print #255: lpad$("Total Debits:",mylen)&' '&cnvrt$("pic(-------,---,---.##)",td)
-72200     print #255: lpad$("Total Credits:",mylen)&' '&cnvrt$("Pic(-------,---,---.##",tc)
-72210     print #255: ""
-72220     print #255: lpad$("Type of Entry:",mylen)&' '&typeofentry$
-72240     print #255: lpad$("Bank Account:",mylen)&' '&fnrgl$(bankgl$)
-72260     print #255: lpad$("Process Ending Date:",mylen)&' '&cnvrt$("pic(zz/zz/zz)",contra_entry_date)
-72280     print #255: ""
-72300     print #255,using F_PPT_LINE: mat chdr_proof_total$
+72180     pr #255: lpad$("Total Debits:",mylen)&' '&cnvrt$("pic(-------,---,---.##)",td)
+72200     pr #255: lpad$("Total Credits:",mylen)&' '&cnvrt$("Pic(-------,---,---.##",tc)
+72210     pr #255: ""
+72220     pr #255: lpad$("Type of Entry:",mylen)&' '&typeofentry$
+72240     pr #255: lpad$("Bank Account:",mylen)&' '&fnrgl$(bankgl$)
+72260     pr #255: lpad$("Process Ending Date:",mylen)&' '&cnvrt$("pic(zz/zz/zz)",contra_entry_date)
+72280     pr #255: ""
+72300     pr #255,using F_PPT_LINE: mat chdr_proof_total$
 72320     mat glitem3$=("")
 72340     for j=1 to 30
 72360       if trim$(k_list$(j))<>"" then ! skip blanks
 72380         let glitem3$(1)=k_list$(j)
-72400         let glitem3$(2)=cnvrt$("Pic(-------,---,---.##)",k(j,4)) ! let cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)="10"
+72400         let glitem3$(2)=cnvrt$("Pic(-------,---,---.##)",k(j,4)) ! cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)="10"
 72420         let glitem3$(3)=cnvrt$("Pic(-------,---,---.##)",-k(j,5))
 72440         let glitem3$(4)=cnvrt$("Pic(-------,---,---.##)",k(j,6))
 72460         let glitem3$(5)=cnvrt$("Pic(-------,---,---.##)",k(j,7))
 72480         let glitem3$(6)=cnvrt$("Pic(-------,---,---.##)",k(j,8)) ! cmask3$(6)='10'
-72500         print #255,using F_PPT_LINE: mat glitem3$
+72500         pr #255,using F_PPT_LINE: mat glitem3$
 72520       end if 
 72540     next j
 72560     let fncloseprn
@@ -864,15 +864,15 @@
 80020   let tr(6)=4 ! payroll transaction type  (was converted back to 1 in old system)
 80040   for j=2 to 19
 80060     let jv$(2)=str$(j-1) ! carry breakdown code for posting employee record
-80080     if j=2 then let allocgl$=gl$: let td$="Gross Pay-"&empname$(1:18)
+80080     if j=2 then allocgl$=gl$: let td$="Gross Pay-"&empname$(1:18)
 80100     if j=3 then let td$="Federal Withholdings"
 80120     if j=4 then let td$="FICA Withholdings"
 80140     if j=5 then let td$="State Withholdings"
 80160     if j=6 then let td$="Local Withholdings"
-80180     if j=3 or j=4 or j=5 or j=6 then let allocgl$=cnvrt$("pic(zz#)",pgl(j-2,1))&cnvrt$("pic(zzzzz#)",pgl(j-2,2))&cnvrt$("pic(zz#)",pgl(j-2,3))
-80200     if j=19 then let allocgl$=cnvrt$("pic(zz#)",pgl(5,1))&cnvrt$("pic(zzzzz#)",pgl(5,2))&cnvrt$("pic(zz#)",pgl(5,3)) ! eic
+80180     if j=3 or j=4 or j=5 or j=6 then allocgl$=cnvrt$("pic(zz#)",pgl(j-2,1))&cnvrt$("pic(zzzzz#)",pgl(j-2,2))&cnvrt$("pic(zz#)",pgl(j-2,3))
+80200     if j=19 then allocgl$=cnvrt$("pic(zz#)",pgl(5,1))&cnvrt$("pic(zzzzz#)",pgl(5,2))&cnvrt$("pic(zz#)",pgl(5,3)) ! eic
 80220     if j>6 and j<17 then 
-80240       let allocgl$=miscgl$(j-6)
+80240       allocgl$=miscgl$(j-6)
 80260       let td$=miscname$(j-6) ! miscellaneous deductions
 80280     end if 
 80300     if j>2 and j<7 then 
@@ -883,7 +883,7 @@
 80400     else if j=17 then 
 80420       let pr(j)=-pr(j)
 80440       let td$="Tips"
-80460       let allocgl$=gl$ ! tips
+80460       allocgl$=gl$ ! tips
 80480     else if j=19 then 
 80500       let pr(j)=pr(j)
 80520       let td$="Eic" ! eic as positive
@@ -906,7 +906,7 @@
 82120   let gl$="": let tr(4)=tr(5)=tr(6)=tr(7)=0: let tr$=""
 82140   return  ! /r
 82160 CHECK_FOR_DELETED: ! r:
-82180   if adr>1 then let adr=adr-1: goto L400
+82180   if adr>1 then adr=adr-1: goto L400
 82200   goto L460 ! /r
 84000   def fn_increment_tr
 84020     let x=0
@@ -955,8 +955,8 @@
 86620     delete #h_gl_work,rec=transadr: ioerr ignore
 86640     let transactionamt+=-holdallocation
 86660   else 
-86680     let allocgl$=fnagl$(resp$(2))
-86700     let allocation=val(resp$(1))
+86680     allocgl$=fnagl$(resp$(2))
+86700     allocation=val(resp$(1))
 86720     let transactionamt+=allocation-holdallocation ! update net amount of transaction
 86740     let td$=resp$(3)
 86760     rewrite #glallocations,using "Form pos 1,c 12,pd 10.2,c 30",rec=editrecord: allocgl$,allocation,td$
@@ -978,26 +978,26 @@
 88120       let holdtr$=tr$
 88140       read #h_gl_work,using F_2B: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof PE_FINIS
 88160       if trim$(holdtr$)<>"" and holdtr$<>tr$ then 
-88180         print #255,using "Form pos 10,c 10,n 14.2,skip 1": "Net",netamount
+88180         pr #255,using "Form pos 10,c 10,n 14.2,skip 1": "Net",netamount
 88200         let netamount=0
 88220       end if 
 88240       if tr(6)=3 then let prntkey$="" else let printkey$=key$
-88260       print #255,using F_PE_LINE: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,printkey$,mat jv$ pageoflow PROOF_LIST_PGOF
+88260       pr #255,using F_PE_LINE: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,printkey$,mat jv$ pageoflow PROOF_LIST_PGOF
 88280 F_PE_LINE: form pos 1,c 12,x 2,pic(zz/zz/zz),n 11.2,x 4,pic(zz),pic(zz),c 13,c 30,c 10,c 12,c 7,c 7,c 41
 88300       let netamount+=tr(5)
 88320     loop 
 88340 PE_FINIS: ! 
-88360     print #255,using "Form pos 10,c 10,n 14.2,skip 1": "Net",netamount : let netamount=0
+88360     pr #255,using "Form pos 10,c 10,n 14.2,skip 1": "Net",netamount : let netamount=0
 88380     let fncloseprn
 88400   fnend 
 90000 PROOF_LIST_PGOF: ! r:
-90020   print #255: newpage
+90020   pr #255: newpage
 90040   gosub PROOF_LIST_HDR
 90060   continue  ! /r
 92000 PROOF_LIST_HDR: ! r:
-92020   print #255: ""
-92040   print #255,using 'form pos 1,c 8,pos 29,Cc 40,skip 1,pos 1,c 8,pos 40,c 40': date$,env$('cnam'),time$,"GL Input Proof List"
-92060   print #255: ""
-92080   print #255: "   Account #    Date       Amount    TC  Reference #  Payee/Description             Vendor";
-92100   if jccode=1 then print #255: "Job #   Cat  S-Cat" else print #255: " "
+92020   pr #255: ""
+92040   pr #255,using 'form pos 1,c 8,pos 29,Cc 40,skip 1,pos 1,c 8,pos 40,c 40': date$,env$('cnam'),time$,"GL Input Proof List"
+92060   pr #255: ""
+92080   pr #255: "   Account #    Date       Amount    TC  Reference #  Payee/Description             Vendor";
+92100   if jccode=1 then pr #255: "Job #   Cat  S-Cat" else pr #255: " "
 92120   return  ! /r

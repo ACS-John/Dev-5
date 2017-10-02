@@ -8,7 +8,7 @@
 00080 ! ______________________________________________________________________
 00090   let fncno(cno,cnam$)
 00100   let fntop(program$,cap$="Payables Listing (Any Time)")
-00120   let cancel=99
+00120   cancel=99
 00130   let fntos("cpinvlst") !:
         let respc=0
 00140   let fnlbl(1,1,"Period Ending Date:",23,1)
@@ -46,7 +46,7 @@
 00420   read #unpdaloc,using 'Form pos 1,c 8,c 12,C 12,PD 5.2': alocvn$,alociv$,gl$,upa norec READ_PAYTRANS eof READ_PAYTRANS
 00430   if alocvn$<>vn$ or alociv$<>iv$ then goto READ_PAYTRANS
 00440   if fund>0 and fund<>val(gl$(1:3)) then goto READ_UNPDALOC
-00450   if upa=0 then goto L470 ! don't print 0 breakdowns
+00450   if upa=0 then goto L470 ! don't pr 0 breakdowns
 00460   write #work,using 'Form POS 1,C 12,N 6,C 8,C 30,N 10.2': gl$,ivd,vn$,ltrm$(rtrm$(iv$))&" "&de$(1:17),upa
 00470 L470: goto READ_UNPDALOC
 00480 ! ______________________________________________________________________
@@ -56,7 +56,7 @@
 00520   if scd=4 then goto READ_TRMSTR
 00530   if tcde>1 then goto READ_TRMSTR
 00540   if ped=>fndate_mmddyy_to_ccyymmdd(pd) then goto READ_TRMSTR
-00550   let adr=ta(1)
+00550   adr=ta(1)
 00560 READ_TRALLOC: ! 
 00570   let key$=cnvrt$("Pic(zz)",bank_code)&str$(tcde)&tr$(1) !:
         restore #tralloc,key=key$: nokey READ_TRMSTR
@@ -91,42 +91,42 @@
 00830   if t1=0 then goto PRINT_LINE
 00840   if sq1$="G" then goto L890
 00850   if vn$=hvn$ then goto PRINT_LINE
-00860   print #255: "                                  ______________________________  __________"
-00870   print #255,using 'Form POS 35,CR 30,N 12.2': "Vendor #: "&ltrm$(hvn$)&" Total",t1
+00860   pr #255: "                                  ______________________________  __________"
+00870   pr #255,using 'Form POS 35,CR 30,N 12.2': "Vendor #: "&ltrm$(hvn$)&" Total",t1
 00880   goto L930
 00890 L890: if hgl$=gl$ then goto PRINT_LINE
 00900   if t1=0 then goto PRINT_LINE
-00910   print #255: "                                  ______________________________  __________"
-00920   print #255,using 'Form POS 35,CR 30,N 12.2': "GL # "&hgl$&" Total",t1
-00930 L930: print #255: "                                  ______________________________  __________" pageoflow NEWPGE
+00910   pr #255: "                                  ______________________________  __________"
+00920   pr #255,using 'Form POS 35,CR 30,N 12.2': "GL # "&hgl$&" Total",t1
+00930 L930: pr #255: "                                  ______________________________  __________" pageoflow NEWPGE
 00940   let t1=0
 00950   if amt=0 then goto READ_ADDR
 00960 PRINT_LINE: ! 
-00970   print #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 10,C 30,N 12.2': gl$,ivd,vn$,de$,amt pageoflow NEWPGE
+00970   pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 10,C 30,N 12.2': gl$,ivd,vn$,de$,amt pageoflow NEWPGE
 00980   let t1+=amt : let t2+=amt : let hgl$=gl$ : let hvn$=vn$
 00990   goto READ_ADDR
 01000 ! ______________________________________________________________________
-01010 NEWPGE: print #255: newpage: gosub HDR : continue 
+01010 NEWPGE: pr #255: newpage: gosub HDR : continue 
 01020 ! ______________________________________________________________________
 01030 HDR: ! 
-01040   print #255,using 'Form POS 1,C 8,CC 78': date$,cnam$
-01050   print #255,using 'Form POS 1,C 8,POS 32,C 40': time$,cap$
-01060   print #255,using 'Form POS 1,C 4,N 4,POS 38,C 40': "Page",pg+=1,"as of "&cnvrt$("PIC(zzZZ/ZZ/ZZ)",ped) !:
-        print #255: ""
-01070   print #255: "               Invoice   Vendor                                            "
-01080   print #255: " G/L Number     Date     Number   Description                         Amount  "
-01090   print #255: "____________  ________  ________  ______________________________  __________"
+01040   pr #255,using 'Form POS 1,C 8,CC 78': date$,cnam$
+01050   pr #255,using 'Form POS 1,C 8,POS 32,C 40': time$,cap$
+01060   pr #255,using 'Form POS 1,C 4,N 4,POS 38,C 40': "Page",pg+=1,"as of "&cnvrt$("PIC(zzZZ/ZZ/ZZ)",ped) !:
+        pr #255: ""
+01070   pr #255: "               Invoice   Vendor                                            "
+01080   pr #255: " G/L Number     Date     Number   Description                         Amount  "
+01090   pr #255: "____________  ________  ________  ______________________________  __________"
 01100   return 
 01110 ! ______________________________________________________________________
 01120 ENDALL: ! 
-01130   print #255: "                                  ______________________________  __________"
+01130   pr #255: "                                  ______________________________  __________"
 01140   if sq1$="G" then !:
-          print #255,using 'Form POS 35,CR 30,N 12.2': "GL # "&hgl$&" Total",t1
+          pr #255,using 'Form POS 35,CR 30,N 12.2': "GL # "&hgl$&" Total",t1
 01150   if sq1$="V" then !:
-          print #255,using 'Form POS 35,CR 30,N 12.2': "  Vendor: "&ltrm$(hvn$)&" Total",t1
-01160   print #255: "                                  ______________________________  __________" pageoflow NEWPGE
-01170   print #255,using 'Form POS 35,CR 30,N 12.2': "Final Total",t2
-01180   print #255: "                                  =========================================="
+          pr #255,using 'Form POS 35,CR 30,N 12.2': "  Vendor: "&ltrm$(hvn$)&" Total",t1
+01160   pr #255: "                                  ______________________________  __________" pageoflow NEWPGE
+01170   pr #255,using 'Form POS 35,CR 30,N 12.2': "Final Total",t2
+01180   pr #255: "                                  =========================================="
 01190   let fncloseprn
 01200 XIT: let fnxit
 01210 ! ______________________________________________________________________
@@ -134,7 +134,7 @@
 01230 ERTN: let fnerror(program$,err,line,act$,"xit")
 01240   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01250   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01260   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01260   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01270 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01280 ! /region
 01290 ! ______________________________________________________________________

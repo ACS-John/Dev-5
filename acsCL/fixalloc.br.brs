@@ -8,9 +8,9 @@
 00080   dim apc(99,3),td$*30,prd(23),cap$*128,glwk$*20,item1$(2)*12
 00090 ! ______________________________________________________________________
 00100   if glt=2 then !:
-          let cap$="Fix check amounts"
+          cap$="Fix check amounts"
 00110   let fncno(cno,cnam$)
-00120   let cancel=99
+00120   cancel=99
 00130 ! ______________________________________________________________________
 00140   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00150   open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\tralloc-idx.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -28,7 +28,7 @@
 00270 L270: let totalalloc+=amt
 00280   if amt=ca1 then let foundone=1
 00290   goto L250
-00300 L300: if totalalloc<>ca1 and foundone=1 then let ca1=totalalloc
+00300 L300: if totalalloc<>ca1 and foundone=1 then ca1=totalalloc
 00310   rewrite #trmstr,using 'Form POS 1,n 2,n 1,C 8,N 6,PD 10.2,POS 28,C 8,C 30,POS 71,N 1,X 6,N 1': trbank_code,trtcde,ck$,pd,ca1,vn$,de$,pcde,scd
 00320   let foundone=0
 00330   goto READ_TRMSTR

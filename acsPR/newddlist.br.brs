@@ -25,8 +25,8 @@
 00260 ERTN: let fnerror(program$,err,line,act$,"XIT")
 00270   if uprc$(act$)<>"PAUSE" then goto L300
 00280   execute "list -"&str$(line) : pause : goto L300
-00290   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." !:
-        print "" : pause 
+00290   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." !:
+        pr "" : pause 
 00300 L300: execute act$ : goto ERTN
 00310 ! ______________________________________________________________________
 00320 SCREEN1: ! 
@@ -44,28 +44,28 @@
 00430   let ppd=val(resp$(1))
 00440   open #ddout=22: "Name=DDout"&wsid$&".txt,RecL=96,EOL=CRLF,Replace",external,output 
 00450   let fnopenprn
-00460   gosub HDR ! print header
+00460   gosub HDR ! pr header
 00470 READ_DD: ! 
 00480 L480: read #dd,using "Form pos 1,C 10,C 1,N 9,N 2,N 17": key$,dd$,rtn,acc,acn eof DONE
 00490   if uprc$(dd$)<>"Y" then goto READ_DD !:
           ! Y means Yes Direct Deposit is active for this person
 00500   let key$=lpad$(rtrm$(ltrm$(key$)),8) !:
         read #mstr,using 'Form pos 9,3*C 30,Pos 162,N 6,Pos 173',key=key$: mat em$,em17 nokey L480
-00510   print #255,using "form pos 1,c 40,n 14,n 4,n 17": key$&" "&em$(1),rtn,acc,acn pageoflow PRINT_NEWPAGE
+00510   pr #255,using "form pos 1,c 40,n 14,n 4,n 17": key$&" "&em$(1),rtn,acc,acn pageoflow PRINT_NEWPAGE
 00520   goto READ_DD
 00530 ! ______________________________________________________________________
 00540 DONE: ! r:
 00550   let fncloseprn
 00570 goto XIT ! /r
 00580 PRINT_NEWPAGE: ! r:
-00590   print #255: newpage
+00590   pr #255: newpage
 00600   gosub HDR
 00610 continue ! /r
 00620 HDR: ! r:
-00630   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-00640   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-00650   print #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
-00660   print #255: "\qc  {\f181 \fs16 \b As of "&cnvrt$("pic(zzzz/zz/zz)",ppd)&"}"
-00670   print #255: "\ql   "
-00680   print #255: "   Emp # Name                                  Routing  C/S      Account"
+00630   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+00640   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+00650   pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
+00660   pr #255: "\qc  {\f181 \fs16 \b As of "&cnvrt$("pic(zzzz/zz/zz)",ppd)&"}"
+00670   pr #255: "\ql   "
+00680   pr #255: "   Emp # Name                                  Routing  C/S      Account"
 00690 return ! /r

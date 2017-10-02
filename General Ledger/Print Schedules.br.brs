@@ -1,5 +1,5 @@
 00010 ! formerly S:\acsGL\glSchPrt
-00020 ! print schedules
+00020 ! pr schedules
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncch$,fnpedat$,fnfscode,fnpriorcd,fnprocess,fnglfs,fntos,fnchk,fnacs,fncmdkey,fnlbl,fnpglen,fnactpd,fngethandle
 00050   on error goto ERTN
@@ -50,37 +50,37 @@
 28040         L400: read #3,using L410: gl2$,d2$,bb2,cb2,mat by2,mat bp2 eof L450
 28060         L410: form pos 1,c 12,pos 13,c 50,pos 81,41*pd 6.2
 28080         if gl2$=gl$(j) then goto L430 else goto L450
-28100         L430: let bb+=bb2 : let cb+=cb2 : mat by=by+by2 : mat bp=bp+bp2
+28100         L430: bb+=bb2 : cb+=cb2 : mat by=by+by2 : mat bp=bp+bp2
 28120         goto L400
 28140         L450: form pos 13,c 50,pos 81,41*pd 6.2
 28160         if fnfscode=0 or (fnfscode=pedat and fnpriorcd=1) then goto L530 ! CURRENT OR PRIOR
 28180         if fnfscode<0 or fnfscode>12 then let fnfscode=1
-28200         if fnpriorcd=1 then let cb=by(fnfscode) else let cb=bp(fnfscode)
+28200         if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 28220         if fnpriorcd=2 then goto L520
-28240         if fnfscode>1 then let bb=by(fnfscode-1) else let bb=0
+28240         if fnfscode>1 then bb=by(fnfscode-1) else bb=0
 28260         goto L530
-28280         L520: if fnfscode>1 then let bb=bp(fnfscode-1) else let bb=0
-28300         L530: let curmo=cb-bb
-28320         if rs=1 then let cb=-cb
-28340         if rs=1 then let curmo=-curmo
+28280         L520: if fnfscode>1 then bb=bp(fnfscode-1) else bb=0
+28300         L530: curmo=cb-bb
+28320         if rs=1 then cb=-cb
+28340         if rs=1 then curmo=-curmo
 28360         if rs><1 then goto L580
-28380         for rv=1 to 13 : let by(rv)=-by(rv) : next rv
+28380         for rv=1 to 13 : by(rv)=-by(rv) : next rv
 28400         L580: ! 
 32000         if cm=1 then
-32020           print #255,using L660: d$,dollar$,curmo,dollar$,cb pageoflow PGOF
+32020           pr #255,using L660: d$,dollar$,curmo,dollar$,cb pageoflow PGOF
 32040           let j1=j1+1
 32060           let dollar$=" "
 32080           L660: form pos 1,c 50,pos 51,c 1,pic(--,---,---.##),pos 67,c 1,pic(--,---,---.##)
 32100         else if cm=2 then
 32120           if lmu<2 or lmu>13 then goto L700
-32140           for l=lmu to 2 step -1 : let by(l)=by(l)-by(l-1) : next l
+32140           for l=lmu to 2 step -1 : by(l)=by(l)-by(l-1) : next l
 32160           L700: !
 32180           if dp=1 then 
 32200             let dol$="FORM POS 1,C 32,14*PIC(---,---,--$.##)" 
 32220           else 
 32240             let dol$="FORM POS 1,C 32,14*PIC(---,---,---.##)"
 32260           end if
-32280           print #255,using dol$: d$(1:30),mat by,cb pageoflow PGOF
+32280           pr #255,using dol$: d$(1:30),mat by,cb pageoflow PGOF
 32300           mat byt=byt+by
 32320         else if cm=3 then
 32340           if dp=1 then 
@@ -88,10 +88,10 @@
 32380           else 
 32400             let dol$="FORM POS 1,C 42,13*PIC(---,---,---.##)"
 32420           end if
-32440           print #255,using dol$: d$(1:40),mat by pageoflow PGOF
+32440           pr #255,using dol$: d$(1:40),mat by pageoflow PGOF
 32460           mat byt=byt+by
 32480         else
-32500           print #255,using L610: d$,dollar$,cb pageoflow PGOF
+32500           pr #255,using L610: d$,dollar$,cb pageoflow PGOF
 32520           L610: form pos 1,c 50,pos 67,c 1,pic(--,---,---.##)
 32540           let dollar$=" "
 32560         end if
@@ -109,49 +109,49 @@
 38000 PrintTotals: ! r: 
 38020   if dp=1 then let dollar$="$" else let dollar$=" "
 38040   if cm=0 then
-38060     print #255,using L610: "    Total",dollar$,ytdtot
-38080     print #255,using 'form pos 67,c 14': "=============="
+38060     pr #255,using L610: "    Total",dollar$,ytdtot
+38080     pr #255,using 'form pos 67,c 14': "=============="
 38100   else if cm=1 then
-38120     print #255,using L920: "______________","______________"
+38120     pr #255,using L920: "______________","______________"
 38140     L920: form pos 51,c 14,pos 67,c 14
-38160     print #255,using L660: "    Total",dollar$,cmtot,dollar$,ytdtot
-38180     print #255,using L920: "==============","=============="
+38160     pr #255,using L660: "    Total",dollar$,cmtot,dollar$,ytdtot
+38180     pr #255,using L920: "==============","=============="
 38200   else if cm=2 then
 38220     let dol$="FORM POS 1,C 32,14*'  ------------'"
-38240     print #255,using dol$: ""
+38240     pr #255,using dol$: ""
 38260     if dp=1 then 
 38280       let dol$="FORM POS 1,C 32,14*PIC(---,---,--$.##)" 
 38300     else
 38320       let dol$="FORM POS 1,C 32,14*PIC(---,---,---.##)"
 38340     end if
-38360     print #255,using dol$: "  Totals",mat byt,ytdtot pageoflow PGOF
+38360     pr #255,using dol$: "  Totals",mat byt,ytdtot pageoflow PGOF
 38380     let dol$="FORM POS 1,C 32,14*'  ============'"
-38400     print #255,using dol$: ""
+38400     pr #255,using dol$: ""
 38420   else if cm=3 then
 38440     let dol$="FORM POS 1,C 42,13*'  ------------'"
-38460     print #255,using dol$: ""
+38460     pr #255,using dol$: ""
 38480     if dp=1 then 
 38500       let dol$="FORM POS 1,C 42,13*PIC(---,---,--$.##)" 
 38520     else 
 38540       let dol$="FORM POS 1,C 42,13*PIC(---,---,---.##)"
 38560     end if
-38580     print #255,using dol$: "  Totals",mat byt pageoflow PGOF
+38580     pr #255,using dol$: "  Totals",mat byt pageoflow PGOF
 38600     let dol$="FORM POS 1,C 42,13*'  ============'"
-38620     print #255,using dol$: ""
+38620     pr #255,using dol$: ""
 38640   else
-38660     print #255,using 'form pos 67,c 14': "______________"
+38660     pr #255,using 'form pos 67,c 14': "______________"
 38680   end if
-38700   let cmtot=0
+38700   cmtot=0
 38720   let ytdtot=0
 38740   mat byt=(0)
 38760 return ! /r
 42000 PrintPageFooter: ! r:
 42020   let fnpglen(pglen)
 42040   let sk=pglen-krec(255): let fl=len(rtrm$(ft$))
-42060   print #255,using L1190: rtrm$(ft$)
+42060   pr #255,using L1190: rtrm$(ft$)
 42080   L1190: form skip sk,pos tabnote,c fl,skip 1
 42100   if eofcode<>1 then 
-42120     print #255: newpage
+42120     pr #255: newpage
 42140   end if
 42160 return ! /r
 44000 PGOF: ! r:
@@ -159,20 +159,20 @@
 44040   gosub PrintHeadings
 44060 continue ! /r
 46000 PrintHeadings: ! r: 
-46020   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
-46040   print #255: "\qc  {\f181 \fs22 \b "&rtrm$("Schedule "&str$(sn))&" - "&trim$(sn$)&"}"
-46060   print #255: "\qc  {\f181 \fs16 \b "&rtrm$(fnpedat$)&"}"
-46080   print #255: "\ql "
-46100   print #255: ""
+46020   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
+46040   pr #255: "\qc  {\f181 \fs22 \b "&rtrm$("Schedule "&str$(sn))&" - "&trim$(sn$)&"}"
+46060   pr #255: "\qc  {\f181 \fs16 \b "&rtrm$(fnpedat$)&"}"
+46080   pr #255: "\ql "
+46100   pr #255: ""
 46120   if cm=1 then
-46140     print #255,using L1380: lpad$(rtrm$(fncch$),20),"Year To Date"
+46140     pr #255,using L1380: lpad$(rtrm$(fncch$),20),"Year To Date"
 46160     L1380: form pos 45,c 20,pos 69,c 12,skip 2
 46180   else if cm=2 then
-46200     print #255: "Description                           Period 1      Period 2      Period 3      Period 4      Period 5      Period 6      Period 7      Period 8      Period 9     Period 10     Period 11     Period 12     Period 13  Year To Date"
-46220     print #255: "______________________________    ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________"
+46200     pr #255: "Description                           Period 1      Period 2      Period 3      Period 4      Period 5      Period 6      Period 7      Period 8      Period 9     Period 10     Period 11     Period 12     Period 13  Year To Date"
+46220     pr #255: "______________________________    ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________"
 46240   else if cm=3 then
-46260     print #255: "Description                                     Period 1      Period 2      Period 3      Period 4      Period 5      Period 6      Period 7      Period 8      Period 9     Period 10     Period 11     Period 12     Period 13"
-46280     print #255: "________________________________________    ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________"
+46260     pr #255: "Description                                     Period 1      Period 2      Period 3      Period 4      Period 5      Period 6      Period 7      Period 8      Period 9     Period 10     Period 11     Period 12     Period 13"
+46280     pr #255: "________________________________________    ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________  ____________"
 46300   end if
 46320 return ! /r
 48000 DONE: ! r:
@@ -183,7 +183,7 @@
 52000 AccumulateTotals: ! r:
 52020   let ytdtot=ytdtot+cb
 52040   if cm=1 then 
-52060     let cmtot+=curmo
+52060     cmtot+=curmo
 52080   end if
 52100 return ! /r
 54000 XIT: let fnxit
@@ -225,7 +225,7 @@
 64020 ERTN: let fnerror(program$,err,line,act$,"xit")
 64040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 64060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-64080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+64080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 64100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 64120 ! /region
 64140 ! ______________________________________________________________________

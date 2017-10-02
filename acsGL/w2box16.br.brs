@@ -157,23 +157,23 @@
 52080   gosub HEADER
 52100   do
 52120     read #hw2box16,using fw2box16$: t$,mat in1$ eof END_OF_PROOF_LIST
-52140     print #255: 
-52160     print #255: "Employee Number: ";t$
-52180     print #255,using L1820: "Box 11",in1$(1),val(in1$(2)),val(in1$(3)),val(in1$(4)),val(in1$(5))
-52200     print #255,using L1820: "Unused",in1$(6),val(in1$(7)),val(in1$(8)),val(in1$(9)),val(in1$(10))
-52220     print #255,using L1820: "Box 12a",in1$(11),val(in1$(12)),val(in1$(13)),val(in1$(14)),val(in1$(15))
-52240     print #255,using L1820: "Box 12b",in1$(16),val(in1$(17)),val(in1$(18)),val(in1$(19)),val(in1$(20))
-52260     print #255,using L1820: "Box 12c",in1$(21),val(in1$(22)),val(in1$(23)),val(in1$(24)),val(in1$(25))
-52280     print #255,using L1820: "Box 12d",in1$(26),val(in1$(27)),val(in1$(28)),val(in1$(29)),val(in1$(30))
+52140     pr #255: 
+52160     pr #255: "Employee Number: ";t$
+52180     pr #255,using L1820: "Box 11",in1$(1),val(in1$(2)),val(in1$(3)),val(in1$(4)),val(in1$(5))
+52200     pr #255,using L1820: "Unused",in1$(6),val(in1$(7)),val(in1$(8)),val(in1$(9)),val(in1$(10))
+52220     pr #255,using L1820: "Box 12a",in1$(11),val(in1$(12)),val(in1$(13)),val(in1$(14)),val(in1$(15))
+52240     pr #255,using L1820: "Box 12b",in1$(16),val(in1$(17)),val(in1$(18)),val(in1$(19)),val(in1$(20))
+52260     pr #255,using L1820: "Box 12c",in1$(21),val(in1$(22)),val(in1$(23)),val(in1$(24)),val(in1$(25))
+52280     pr #255,using L1820: "Box 12d",in1$(26),val(in1$(27)),val(in1$(28)),val(in1$(29)),val(in1$(30))
 52300     L1820: form pos 2,c 9,c 12,n 12.2,3*n 6
 52320   loop
 52340   END_OF_PROOF_LIST: ! 
 52360   let fncloseprn
 52380 goto MENU1 ! /r
 52400 HEADER: ! r:
-52420   print #255,using 'pos 1,c 10,cc 51': date$("mm/dd/ccyy"),env$('cnam')
+52420   pr #255,using 'pos 1,c 10,cc 51': date$("mm/dd/ccyy"),env$('cnam')
 52440   let pg=pg+1
-52460   print #255,using L2040: time$,"W-2 Supplemental Information Proof List","Page",pg,date$("Month DD, CCYY")
+52460   pr #255,using L2040: time$,"W-2 Supplemental Information Proof List","Page",pg,date$("Month DD, CCYY")
 52480   L2040: form pos 1,c 8,cc 52,skip 1,pos 1,c 5,n 3,cc 52,skip 1
 52500 return ! /r
 52520 XIT: let fnxit
@@ -181,6 +181,6 @@
 68020 ERTN: let fnerror(program$,err,line,act$,"xit")
 68040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 68060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-68080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+68080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 68100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 68120 ! /region

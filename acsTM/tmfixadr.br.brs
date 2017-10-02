@@ -3,8 +3,8 @@
 00030   dim exec$*132
 00040   library 'S:\Core\Library': fncno
 00080   let fncno(cno)
-00090   print newpage
-00100   print fields "10,15,c 60,h,n": "TM FIX TRANSACTION ADDRESSES IN PROCESS"
+00090   pr newpage
+00100   pr fields "10,15,c 60,h,n": "TM FIX TRANSACTION ADDRESSES IN PROCESS"
 00110   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&str$(cno)&",NoShr",internal,outin,keyed ioerr L690
 00120   open #2: "Name="&env$('Q')&"\TMmstr\TMTrans.h"&str$(cno)&",NoShr",internal,input,relative ioerr L690
 00130   open #4: "Name="&env$('Q')&"\TMmstr\WORK1.h"&str$(cno),internal,output ioerr L150
@@ -32,7 +32,7 @@
 00350   rewrite #4,using L360,rec=1: r4
 00360 L360: form pos 54,pd 3
 00370   if b(5)>10 then goto L290
-00380   if b(8)=0 then let b8=25 else let b8=b(8)
+00380   if b(8)=0 then b8=25 else b8=b(8)
 00390   if ca(b(5))=0 then goto L490
 00400   let p1=1+(b8-1)*6
 00410   let p2=150+b8
@@ -47,7 +47,7 @@
 00490 L490: let r5=r5+1
 00500   mat ta=(0)
 00510   mat fb=(0)
-00520   let ca(b(5))=r5
+00520   ca(b(5))=r5
 00530   let ta(b8,1)=r4
 00540   let ta(b8,2)=r4
 00550   if b(7)=-2 then let fb(b8)=2
@@ -64,16 +64,16 @@
 00660   let exec$="Rename "&env$('Q')&"\TMmstr\WORK1.H"&str$(cno)&","&env$('Q')&"\TMmstr\TMTrans.h"&str$(cno)
 00670   execute exec$
 00680   chain "S:\Time Management\Client Legacy"
-00690 L690: if err=61 then print fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L710
+00690 L690: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L710
 00700   goto L750
-00710 L710: print newpage
-00720   if err=4148 then print fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L740
+00710 L710: pr newpage
+00720   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L740
 00730   goto L750
-00740 L740: print fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00750 L750: print fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00740 L740: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00750 L750: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00760   input fields "24,60,C 1,N": quitcode$
 00770   if rtrm$(uprc$(quitcode$))="Q" then goto L810
-00780   print fields "23,3,C 78,N": ""
-00790   print fields "24,3,C 78,N": ""
+00780   pr fields "23,3,C 78,N": ""
+00790   pr fields "24,3,C 78,N": ""
 00800   retry 
 00810 L810: chain "S:\Core\Menu"

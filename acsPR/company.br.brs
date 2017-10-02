@@ -96,9 +96,9 @@
 00780   let fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
 00790   let fnacs(sn$,0,mat resp$,ckey)
 00800   if ckey=5 then goto CONFIRMEXIT
-00810   let a$(1)=resp$(1)
-00820   let a$(2)=resp$(2)
-00830   let a$(3)=resp$(3)
+00810   a$(1)=resp$(1)
+00820   a$(2)=resp$(2)
+00830   a$(3)=resp$(3)
 00840   let fid$=resp$(4)
 00850   let feducrat=val(resp$(5))
 00860   let feducmax=val(resp$(6))
@@ -191,7 +191,7 @@
 01400   let resp=0
 01410   for j=1 to 20
 01420     let fullname$(j)=resp$(resp+=1)
-01430     let abrevname$(j)=resp$(resp+=1)
+01430     abrevname$(j)=resp$(resp+=1)
 01440     if resp$(resp+=1)=opt_ded_or_add$(1) then let newdedcode(j)=1 ! deduction
 01450     if resp$(resp)=opt_ded_or_add$(2) then let newdedcode(j)=2 ! addition
 01460     if resp$(resp)=opt_ded_or_add$(3) then let newdedcode(j)=3 ! benefit
@@ -313,14 +313,14 @@
 02450 L2450: if fnstyp=14 then let win6$="SRow=14,SCol=12,ECol=67"
 02460   if fnstyp<>14 then let win6$="SRow=09,SCol=11,ECol=69"
 02470   open #106: win6$&",ERow=22,Border=SR,Caption=<"&cap$,display,outin 
-02480   print #106: newpage
-02490   print #106,fields "2,2,Cr 44,N": "ACS General Ledger Installed (Y/N):"
-02500   print #106,fields "3,2,Cr 44,N": "Days employed before accruing Sick Hours:"
-02510   print #106,fields "4,2,Cr 44,N": "Sick Hours accrued after eligibility period:"
-02520   print #106,fields "5,2,Cr 44,N": "Sick Hours to accrue each time accumulated:"
-02530   print #106,fields "6,2,Cr 44,N": "Maximum Sick Hours:"
-02540   print #106,fields "7,2,Cr 44,N": "Maximum Vacation Hours:"
-02550   print #106,fields "8,2,Cr 44,N": "Minimum Hourly Wage:"
+02480   pr #106: newpage
+02490   pr #106,fields "2,2,Cr 44,N": "ACS General Ledger Installed (Y/N):"
+02500   pr #106,fields "3,2,Cr 44,N": "Days employed before accruing Sick Hours:"
+02510   pr #106,fields "4,2,Cr 44,N": "Sick Hours accrued after eligibility period:"
+02520   pr #106,fields "5,2,Cr 44,N": "Sick Hours to accrue each time accumulated:"
+02530   pr #106,fields "6,2,Cr 44,N": "Maximum Sick Hours:"
+02540   pr #106,fields "7,2,Cr 44,N": "Maximum Vacation Hours:"
+02550   pr #106,fields "8,2,Cr 44,N": "Minimum Hourly Wage:"
 02560   let io6$(1)="2,47,Cu 1,UT,N"
 02570   let io6$(2)="3,47,N 8.3,UT,N"
 02580   let io6$(3)="4,47,N 8.3,UT,N"
@@ -329,35 +329,35 @@
 02610   let io6$(6)="7,47,N 6.2,UT,N"
 02620   let io6$(7)="8,47,N 6.2,UT,N"
 02630   if fnstyp=11 then goto L2640 else goto L2700 ! (skips Job Cost Questions)
-02640 L2640: print #106,fields "10,2,Cr 50,N": "Retain Transactions until Jobs are complete (Y/N):"
-02650   print #106,fields "11,2,Cr 50,N": "Starting of Range for Non-Productive Jobs:"
-02660   print #106,fields "12,2,Cr 50,N": "Ending of Range for Non-Productive Jobs:"
-02670   print #106,fields "13,2,Cr 50,N": "Number of Deduction used for Union Dues (if any):"
+02640 L2640: pr #106,fields "10,2,Cr 50,N": "Retain Transactions until Jobs are complete (Y/N):"
+02650   pr #106,fields "11,2,Cr 50,N": "Starting of Range for Non-Productive Jobs:"
+02660   pr #106,fields "12,2,Cr 50,N": "Ending of Range for Non-Productive Jobs:"
+02670   pr #106,fields "13,2,Cr 50,N": "Number of Deduction used for Union Dues (if any):"
 02680   let io6$(8)="10,53,Cu 1,UT,N" : let io6$(9)="11,53,C 6,UT,N" !:
         let io6$(10)="12,53,C 6,UT,N" : let io6$(11)="13,53,Nz 2,UT,N"
 02690   if tc=1 then let tc$="Y" else let tc$="N"
-02700 L2700: print fields "23,25,C 09,B,1": "Next (F1)"
-02710   print fields "23,35,C 09,B,2": "Back (F2)"
-02720   print fields "23,45,C 09,B,5": "Done (F5)"
+02700 L2700: pr fields "23,25,C 09,B,1": "Next (F1)"
+02710   pr fields "23,35,C 09,B,2": "Back (F2)"
+02720   pr fields "23,45,C 09,B,5": "Done (F5)"
 02730   if gli=1 then let gli$="Y" else let gli$="N"
 02740 L2740: if fnstyp=11 then !:
           rinput #106,fields mat io6$: gli$,mat sck,vacm,mhw,tc$,mat jn$,dc conv CONV7
 02750   if fnstyp<>11 then !:
           rinput #106,fields mat io6$: gli$,mat sck,vacm,mhw conv CONV7
-02760   if ce>0 then let io6$(ce)(ce1:ce2)="U": let ce=0
-02770   if ckey>0 then goto L2840 else let ce=curfld+1
-02780   if ce>udim(io6$) then let ce=1
-02790 L2790: let io6$(ce)=rtrm$(io6$(ce)) : let ce1=pos(io6$(ce),"U",1)
-02800   let ce2=ce1+1 : let io6$(ce)(ce1:ce1)="UC" : goto L2740
+02760   if ce>0 then let io6$(ce)(ce1:ce2)="U": ce=0
+02770   if ckey>0 then goto L2840 else ce=curfld+1
+02780   if ce>udim(io6$) then ce=1
+02790 L2790: let io6$(ce)=rtrm$(io6$(ce)) : ce1=pos(io6$(ce),"U",1)
+02800   ce2=ce1+1 : let io6$(ce)(ce1:ce1)="UC" : goto L2740
 02810 CONV7: if ce>0 then let io6$(ce)(ce1:ce2)="U"
-02820   let ce=cnt+1
-02830 ERR7: print fields "24,78,C 1": bell : goto L2790
-02840 L2840: if gli$<>"Y" and gli$<>"N" then let ce=1 : goto ERR7
+02820   ce=cnt+1
+02830 ERR7: pr fields "24,78,C 1": bell : goto L2790
+02840 L2840: if gli$<>"Y" and gli$<>"N" then ce=1 : goto ERR7
 02850   if gli$="Y" then let gli=1 else let gli=0
 02860   if fnstyp=14 then goto L2900
 02870   if tc$="Y" then let tc=1 else let tc=0
-02880   if fnstyp=11 and tc$<>"Y" and tc$<>"N" then let ce=8 : goto ERR7
-02890   if dc<0 or dc>10 then let ce=11: goto ERR7
+02880   if fnstyp=11 and tc$<>"Y" and tc$<>"N" then ce=8 : goto ERR7
+02890   if dc<0 or dc>10 then ce=11: goto ERR7
 02900 L2900: if ckey=5 or ckey=1 then goto CONFIRMEXIT
 02910   if ckey=2 then goto SCREEN_5
 02920   goto L2740
@@ -382,7 +382,7 @@
 03090 ERTN: let fnerror(program$,err,line,act$,"xit")
 03100   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03110   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-03120   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+03120   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03130 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03140 ! /region
 03150 ! ______________________________________________________________________

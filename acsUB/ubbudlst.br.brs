@@ -61,35 +61,35 @@
 00440   if ti2=3 then goto L470
 00450   if ti2=1 and final><0 then goto READ_CUSTOMER
 00460   if ti2=2 and final=0 then goto READ_CUSTOMER
-00470 L470: print #255,using L480: z$,e$(2),e$(1)(1:25),totba pageoflow PGOF
+00470 L470: pr #255,using L480: z$,e$(2),e$(1)(1:25),totba pageoflow PGOF
 00480 L480: form x 5,c 10,x 5,c 30,x 7,c 25,n 11.2,skip 2
 00490   goto READ_CUSTOMER
 00500 ! ______________________________________________________________________
 00510 PGOF: ! 
-00520   print #255: newpage
+00520   pr #255: newpage
 00530   gosub HEADER
 00540   goto READ_CUSTOMER
 00550 ! ______________________________________________________________________
 00560 HEADER: ! 
 00570   let p2=p2+1
-00580   print #255: "\qc {\fs24 "&env$('cnam')&"}"
-00590 ! Print #255: "\qc {\fs28 {\b "&env$('program_caption')&"}}"
-00600   print #255: "\qc {\fs28 {\b Budget Customer List }}"
-00610   print #255: "\qc {\fs24 "& dat$&"}"
-00620   print #255: "\qc {\fs20 "&date$("mm/dd/yy")&"   "&time$ &"   Page "&str$(p2)&"}"
-00630   print #255: ""
-00640   print #255: tab(7);"Account No";tab(21);"Name";tab(58);"Meter Address";tab(81);"Budget Amount"
+00580   pr #255: "\qc {\fs24 "&env$('cnam')&"}"
+00590 ! pr #255: "\qc {\fs28 {\b "&env$('program_caption')&"}}"
+00600   pr #255: "\qc {\fs28 {\b Budget Customer List }}"
+00610   pr #255: "\qc {\fs24 "& dat$&"}"
+00620   pr #255: "\qc {\fs20 "&date$("mm/dd/yy")&"   "&time$ &"   Page "&str$(p2)&"}"
+00630   pr #255: ""
+00640   pr #255: tab(7);"Account No";tab(21);"Name";tab(58);"Meter Address";tab(81);"Budget Amount"
 00650   return 
 00660 ! ______________________________________________________________________
 00670 DONE: close #1: ioerr L680
 00680 L680: let fncloseprn
 00690 XIT: let fnxit
 00700 ! ______________________________________________________________________
-00710 BUD1: let bud1=0
+00710 BUD1: bud1=0
 00720   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),bd3(5),bd$(5)*30
 00730   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L760
 00740   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
-00750   let bud1=1
+00750   bud1=1
 00760 L760: return 
 00770 ! ______________________________________________________________________
 00780 BUD2: ! 
@@ -106,7 +106,7 @@
 00890 ERTN: let fnerror(program$,err,line,act$,"xit")
 00900   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00910   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00920   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00920   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00930 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00940 ! /region
 00950 ! ______________________________________________________________________

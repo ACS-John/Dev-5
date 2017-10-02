@@ -42,7 +42,7 @@
 14300   let f1=curfld
 14400   let fncmdkey("&Next",1,1,0,"Access the chosen financial statement design.")
 14500   let fncmdkey("&Build D Records",2,0,0,"Allows you to build all type D records automatically without having to rekey all descriptions.")
-14600   let fncmdkey("&Proof List",3,0,0,"Allows you to print a proof list of the financial statement layout.")
+14600   let fncmdkey("&Proof List",3,0,0,"Allows you to pr a proof list of the financial statement layout.")
 14700   let fncmdkey("&Cancel",5,0,1,"Return to main menu.")
 14800   let fnacs(sn$,0,mat resp$,ckey)
 14900   if ckey=5 then goto XIT
@@ -78,14 +78,14 @@
 17900   let fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing financial statement reference number.")
 18000   let fncmdkey("&Add",1,0,0,"Allows you to add new financial statement reference numbers.")
 18100   let fncmdkey("&Delete",8,0,0,"Highlight any record and click Delete to remove the financial statement reference number.")
-18200 ! Let FNCMDKEY("&Print",3,0,0,"Takes you directly to the Print financial statement reference number option")
+18200 ! Let FNCMDKEY("&Print",3,0,0,"Takes you directly to the pr financial statement reference number option")
 18300   let fncmdkey("E&xit",5,0,1,"Exits to main menu")
 18400   let fnacs(sn$,0,mat resp$,ckey)
 18500   if ckey=5 then goto L2350
-18600   let add=edit=0
+18600   add=edit=0
 18700   let editrec=val(resp$(1))
 18800   if ckey=1 then 
-18900     let add=1
+18900     add=1
 19000     let sp=ls=ds=ul=rs=bc=ap=ic=fc=rnp=0
 19100     let rno$=d$=te$=""
 19200     mat ac=(0)
@@ -110,20 +110,20 @@
 21100   let fnlbl(2,1,"Description::",mylen,right)
 21200   let fntxt(2,mypos,50,0,left,"",0,"",0 )
 21300   let resp$(2)=d$
-21400   if trim$(te$)='' or uprc$(te$)="D" then let choice$=option2$(1) : goto L875
-21500   if uprc$(te$)="T" then let choice$=option2$(2) : goto L875
-21600   if uprc$(te$)="R" then let choice$=option2$(3) : goto L875
-21700   if uprc$(te$)="H" then let choice$=option2$(4) : goto L875
-21800   if uprc$(te$)="S" then let choice$=option2$(5) : goto L875
-21900   if uprc$(te$)="E" then let choice$=option2$(6) : goto L875
-22000   if uprc$(te$)="P" then let choice$=option2$(7) : goto L875
-22100   if uprc$(te$)="E" then let choice$=option2$(8) : goto L875
-22200   if uprc$(te$)="B" then let choice$=option2$(9) : goto L875
-22300   if uprc$(te$)="C" then let choice$=option2$(10) : goto L875
+21400   if trim$(te$)='' or uprc$(te$)="D" then choice$=option2$(1) : goto L875
+21500   if uprc$(te$)="T" then choice$=option2$(2) : goto L875
+21600   if uprc$(te$)="R" then choice$=option2$(3) : goto L875
+21700   if uprc$(te$)="H" then choice$=option2$(4) : goto L875
+21800   if uprc$(te$)="S" then choice$=option2$(5) : goto L875
+21900   if uprc$(te$)="E" then choice$=option2$(6) : goto L875
+22000   if uprc$(te$)="P" then choice$=option2$(7) : goto L875
+22100   if uprc$(te$)="E" then choice$=option2$(8) : goto L875
+22200   if uprc$(te$)="B" then choice$=option2$(9) : goto L875
+22300   if uprc$(te$)="C" then choice$=option2$(10) : goto L875
 22400 L875: let fnlbl(3,1,"Type of Entry:",mylen,right)
 22500   let fncomboa("TypeOfEntry",3,mypos,mat option2$,"Each entry must have a type of transaction.",60)
 22600   let resp$(3)=choice$
-22700   let fnlbl(4,1,"Starting Print Position:",mylen,right)
+22700   let fnlbl(4,1,"Starting pr Position:",mylen,right)
 22800   let fntxt(4,mypos,3,0,0,"30",0,"Number of spaces to indent.",0 )
 22900   let resp$(4)=str$(sp)
 23000   let fnlbl(5,1,"Lines to Skip:",mylen,right)
@@ -151,7 +151,7 @@
 25200   let fntxt(20,mypos,5,0,0,"30",0,"Enter the reference # of the line that should be used in calculating this percent.",0 )
 25300   let resp$(20)=str$(rnp)
 25400   let fnlbl(21,1,"Cost Center Code:",mylen,right)
-25500   let fntxt(21,mypos,3,0,0,"30",0,"Enter the fund number for ability to print one fund at a time.",0 )
+25500   let fntxt(21,mypos,3,0,0,"30",0,"Enter the fund number for ability to pr one fund at a time.",0 )
 25600   let resp$(21)=str$(fc)
 25700   let fncmdkey("&Save",1,1,0,"Saves changes.")
 25800   let fncmdkey("&Cancel",5,0,1,"Returns to list of fin_stmts withouit saving any changes.")
@@ -166,10 +166,10 @@
 26700   if resp$(6)="True" then let ds=1 else let ds=0 ! dollar sign
 26800   let ul=val(resp$(7))
 26900   if resp$(8)="True" then let rs=1 else let rs=0 ! reverse sign
-27000   let bc=val(resp$(9))
-27100   let ap=val(resp$(10))
+27000   bc=val(resp$(9))
+27100   ap=val(resp$(10))
 27200   for j=1 to 9
-27300     let ac(j)=val(resp$(j+10))
+27300     ac(j)=val(resp$(j+10))
 27400   next j
 27500   let rnp=val(resp$(20)) ! was ic but ic not big enough; moved down
 27600   let fc=val(resp$(21))
@@ -231,14 +231,14 @@
 33200 L1690: if ds>=0 and ds<=1 then goto L1720
 33300   mat ml$(3)
 33400   let ml$(1)="The Dollar Sign codes must be 0 or 1.  0 is no dollar"
-33500   let ml$(2)="sign.  1 will print a dollar sign beside the entry."
+33500   let ml$(2)="sign.  1 will pr a dollar sign beside the entry."
 33600   let ml$(3)="Click OK to fix."
 33700   let fnmsgbox(mat ml$,resp$,cap$,49)
 33800   goto ADD_EDIT_FIN_STMTS
 33900 L1720: if ul>=0 and ul<=2 then goto L1750
 34000   mat ml$(3)
 34100   let ml$(1)="The Underline Codes must be 0,1 or 2.  0 is no underline."
-34200   let ml$(2)="1 will print 1 underline. 2 will print 2 underlines."
+34200   let ml$(2)="1 will pr 1 underline. 2 will pr 2 underlines."
 34300   let ml$(3)="Click OK to fix."
 34400   let fnmsgbox(mat ml$,resp$,cap$,49)
 34500   goto ADD_EDIT_FIN_STMTS
@@ -259,13 +259,13 @@
 36000 L1810: if te$="E" and (ap<1 or ap>9) then let 1850 else goto L1840
 36100   mat ml$(3)
 36200   let ml$(1)="If the transaction type is an 'E' then you must"
-36300   let ml$(2)="enter a valid accumulator to print of 1 thru 9. "
+36300   let ml$(2)="enter a valid accumulator to pr of 1 thru 9. "
 36400   let ml$(3)="Click OK to fix."
 36500   let fnmsgbox(mat ml$,resp$,cap$,49)
 36600   goto ADD_EDIT_FIN_STMTS
 36700 L1840: if ap>=0 and ap<=9 then goto L1870
 36800   mat ml$(3)
-36900   let ml$(1)="The Accumulator to Print must be no less than 0 or "
+36900   let ml$(1)="The Accumulator to pr must be no less than 0 or "
 37000   let ml$(2)="or no greater than 9. All other codes are invalid, "
 37100   let ml$(3)="Click OK to fix."
 37200   let fnmsgbox(mat ml$,resp$,cap$,49)
@@ -286,25 +286,25 @@
 38700     let fn_print_proof_hdr
 38800     do 
 38900       read #fin_stmt,using "Form POS 1,C 5,C 50,C 1,2*N 2,15*N 1,N 3,N 5": rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp eof PRINT_PROOF_FINIS
-39000       print #255,using L2030: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,ac(1),ac(2),ac(3),ac(4),ac(5),ac(6),ac(7),ac(8),ac(9),rnp,fc pageoflow NEWPGE
+39000       pr #255,using L2030: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,ac(1),ac(2),ac(3),ac(4),ac(5),ac(6),ac(7),ac(8),ac(9),rnp,fc pageoflow NEWPGE
 39100 L2030: form pos 1,c 5,x 1,c 50,c 1,x 2,pic(zzzzz),x 1,pic(zzzzz),x 1,pic(zzzz),x 1,pic(zzzzz),x 1,pic(zzzz),x 1,pic(zzz),x 1,pic(zzzzz),x 1,pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzz),pic(zzzz),x 1,pic(zzzz),skip 1
 39200     loop 
 39300 PRINT_PROOF_FINIS: ! 
 39400     let fncloseprn
 39500 PRINT_PROOF_XIT: ! 
 39600   fnend 
-39700 NEWPGE: print #255: newpage
+39700 NEWPGE: pr #255: newpage
 39800   let fn_print_proof_hdr
 39900   continue 
 40000   return 
 40100   def fn_print_proof_hdr
-40200     print #255,using L2110: date$('mm/dd/yy'),cnam$
+40200     pr #255,using L2110: date$('mm/dd/yy'),cnam$
 40300 L2110: form skip 2,pos 1,c 8,pos hp1,c 40,skip 1
-40400     print #255,using L2130: time$,"Financial Statement Layout Proof List -",id$(f1)(5:32),dat$
+40400     pr #255,using L2130: time$,"Financial Statement Layout Proof List -",id$(f1)(5:32),dat$
 40500 L2130: form pos 1,c 8,pos 38,c 39,c 32,skip 1,pos hp2,c 20,skip 2
-40600     print #255,using L2150: "Type Of","Start","Lines","$","Under","Rev","Bs","# To","*** Clear Accumulator ***","Base","CC"
+40600     pr #255,using L2150: "Type Of","Start","Lines","$","Under","Rev","Bs","# To","*** Clear Accumulator ***","Base","CC"
 40700 L2150: form pos 51,c 7,x 2,c 5,x 1,c 5,x 4,c 1,x 1,c 5,x 2,c 3,x 2,c 2,x 2,c 4,x 2,c 25,x 1,c 4,x 2,c 2,skip 1
-40800     print #255,using L2170: "Ref #","Description","Entry","Print","Skip","Sign","Line","Sign","Col","Print","1","2","3","4","5","6","7","8","9","Item","Code"
+40800     pr #255,using L2170: "Ref #","Description","Entry","Print","Skip","Sign","Line","Sign","Col","Print","1","2","3","4","5","6","7","8","9","Item","Code"
 40900 L2170: form pos 1,c 5,x 19,c 11,x 16,c 5,x 3,c 5,x 2,c 4,x 1,c 4,x 2,c 4,x 1,c 4,x 1,c 3,x 1,c 5,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 2,c 1,x 1,c 4,x 1,c 4,skip 2
 41000   fnend 
 41100 ! ______________________________________________________________________
@@ -314,7 +314,7 @@
 41500 ERTN: let fnerror(program$,err,line,act$,"xit")
 41600   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 41700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-41800   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+41800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 41900 ERTN_EXEC_ACT: execute act$ : goto ERTN
 42000 ! /region
 42100 ! ______________________________________________________________________
@@ -332,56 +332,56 @@
 43300   def fn_field_labels ! ** Field Labels    **
 43400     let ic=0 ! temporary Item Counter
 43500     mat chdr$(24) : mat cmask$(24) : mat flxitm$(24)
-43600     let chdr$(ic+=1)="Ref #"
-43700     let chdr$(ic+=1)="F/S #"
-43800     let chdr$(ic+=1)="Description"
-43900     let chdr$(ic+=1)="Type"
-44000     let chdr$(ic+=1)="SP"
-44100     let chdr$(ic+=1)="LS"
-44200     let chdr$(ic+=1)="$s"
-44300     let chdr$(ic+=1)="UL"
-44400     let chdr$(ic+=1)="RS"
-44500     let chdr$(ic+=1)="B/S"
-44600     let chdr$(ic+=1)="PA"
-44700     let chdr$(ic+=1)="C1"
-44800     let chdr$(ic+=1)="C2"
-44900     let chdr$(ic+=1)="C3"
-45000     let chdr$(ic+=1)="C4"
-45100     let chdr$(ic+=1)="C5"
-45200     let chdr$(ic+=1)="C6"
-45300     let chdr$(ic+=1)="C7"
-45400     let chdr$(ic+=1)="C8"
-45500     let chdr$(ic+=1)="C9"
-45600     let chdr$(ic+=1)="Base%"
-45700     let chdr$(ic+=1)="CC"
-45800     let chdr$(ic+=1)="Abbr Name"
+43600     chdr$(ic+=1)="Ref #"
+43700     chdr$(ic+=1)="F/S #"
+43800     chdr$(ic+=1)="Description"
+43900     chdr$(ic+=1)="Type"
+44000     chdr$(ic+=1)="SP"
+44100     chdr$(ic+=1)="LS"
+44200     chdr$(ic+=1)="$s"
+44300     chdr$(ic+=1)="UL"
+44400     chdr$(ic+=1)="RS"
+44500     chdr$(ic+=1)="B/S"
+44600     chdr$(ic+=1)="PA"
+44700     chdr$(ic+=1)="C1"
+44800     chdr$(ic+=1)="C2"
+44900     chdr$(ic+=1)="C3"
+45000     chdr$(ic+=1)="C4"
+45100     chdr$(ic+=1)="C5"
+45200     chdr$(ic+=1)="C6"
+45300     chdr$(ic+=1)="C7"
+45400     chdr$(ic+=1)="C8"
+45500     chdr$(ic+=1)="C9"
+45600     chdr$(ic+=1)="Base%"
+45700     chdr$(ic+=1)="CC"
+45800     chdr$(ic+=1)="Abbr Name"
 45900 ! ** Field Masks **
 46000     let ic=0
 46100     let number$="30"
-46200     let cmask$(ic+=1)=number$
-46300     let cmask$(ic+=1)=""
-46400     let cmask$(ic+=1)=""
-46500     let cmask$(ic+=1)=number$
-46600     let cmask$(ic+=1)=number$
-46700     let cmask$(ic+=1)=number$
-46800     let cmask$(ic+=1)=number$
-46900     let cmask$(ic+=1)=number$
-47000     let cmask$(ic+=1)=number$
-47100     let cmask$(ic+=1)=number$
-47200     let cmask$(ic+=1)=number$
-47300     let cmask$(ic+=1)=number$
-47400     let cmask$(ic+=1)=number$
-47500     let cmask$(ic+=1)=number$
-47600     let cmask$(ic+=1)=number$
-47700     let cmask$(ic+=1)=number$
-47800     let cmask$(ic+=1)=number$
-47900     let cmask$(ic+=1)=number$
-48000     let cmask$(ic+=1)=number$
-48100     let cmask$(ic+=1)=number$
-48200     let cmask$(ic+=1)=number$
-48300     let cmask$(ic+=1)=""
+46200     cmask$(ic+=1)=number$
+46300     cmask$(ic+=1)=""
+46400     cmask$(ic+=1)=""
+46500     cmask$(ic+=1)=number$
+46600     cmask$(ic+=1)=number$
+46700     cmask$(ic+=1)=number$
+46800     cmask$(ic+=1)=number$
+46900     cmask$(ic+=1)=number$
+47000     cmask$(ic+=1)=number$
+47100     cmask$(ic+=1)=number$
+47200     cmask$(ic+=1)=number$
+47300     cmask$(ic+=1)=number$
+47400     cmask$(ic+=1)=number$
+47500     cmask$(ic+=1)=number$
+47600     cmask$(ic+=1)=number$
+47700     cmask$(ic+=1)=number$
+47800     cmask$(ic+=1)=number$
+47900     cmask$(ic+=1)=number$
+48000     cmask$(ic+=1)=number$
+48100     cmask$(ic+=1)=number$
+48200     cmask$(ic+=1)=number$
+48300     cmask$(ic+=1)=""
 48400     let option2$(1)="D = Detail (Pulls amounts from G/L accounts)"
-48500     let option2$(2)="T = Total  (Used to print totals or subtotals)"
+48500     let option2$(2)="T = Total  (Used to pr totals or subtotals)"
 48600     let option2$(3)="R = Report Heading (Places name of report in heading)"
 48700     let option2$(4)="H = Header (Places headings within the F/S)"
 48800     let option2$(5)="S = Sub Heading (Places sub heading at top of F/S)"

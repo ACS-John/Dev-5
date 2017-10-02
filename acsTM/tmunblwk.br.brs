@@ -49,13 +49,13 @@
 00530 L530: open #6: "Name="&env$('Q')&"\TMmstr\Work2.H"&wsid$,internal,input ioerr L550
 00540   close #6,free: 
 00550 L550: open #6: "Name="&env$('Q')&"\TMmstr\Work2.H"&wsid$&",SIZE=0,RecL=76",internal,output ioerr L2780
-00560 L560: print newpage
+00560 L560: pr newpage
 00570   let in1$(1)="10,46,n 6,ute,n"
 00580   let in1$(2)="11,46,n 6,ute,n"
-00590   print fields "10,10,cR 34,n": "ENTER AGING DATE IN MMDDYY FORMAT:"
-00600   print fields "11,10,cR 34,n": "ENTER OLDEST DATE TO PRINT:"
-00610   print fields mat in1$: dat,olddat
-00620   print fields "12,20,c 40": "Press F1 to Continue; F5 to Cancel"
+00590   pr fields "10,10,cR 34,n": "ENTER AGING DATE IN MMDDYY FORMAT:"
+00600   pr fields "11,10,cR 34,n": "ENTER OLDEST DATE TO PRINT:"
+00610   pr fields mat in1$: dat,olddat
+00620   pr fields "12,20,c 40": "Press F1 to Continue; F5 to Cancel"
 00630 L630: input fields mat in1$: dat,olddat conv L630
 00640   if cmdkey=5 then goto XIT
 00650   if cmdkey<>1 then goto L560
@@ -70,31 +70,31 @@
 00740   goto L560
 00750 L750: if d5>=1 and d5<=31 then goto L770
 00760   goto L560
-00770 L770: print newpage
-00780   print fields "10,10,c 57,n": "ENTER 1 IF ALL TRANSACTIONS SHOULD PRINT, ELSE ENTER 2 IF"
-00790   print fields "11,10,c 56,n": "ONLY THOSE THAT HAVE NOT BEEN FINAL BILLED SHOULD PRINT."
+00770 L770: pr newpage
+00780   pr fields "10,10,c 57,n": "ENTER 1 IF ALL TRANSACTIONS SHOULD PRINT, ELSE ENTER 2 IF"
+00790   pr fields "11,10,c 56,n": "ONLY THOSE THAT HAVE NOT BEEN FINAL BILLED SHOULD PRINT."
 00800 L800: input fields "11,68,n 1,ue,n": prtall conv L800
 00810   if prtall<1 or prtall>2 then goto L770
-00820 L820: print newpage
-00830   print fields "10,10,c 43,n": "ENTER 1 TO PRINT ALL CLIENTS, ELSE ENTER 2"
+00820 L820: pr newpage
+00830   pr fields "10,10,c 43,n": "ENTER 1 TO pr ALL CLIENTS, ELSE ENTER 2"
 00840 L840: input fields "10,55,n 1,ue,n": prtcli conv L840
 00850   if prtcli=1 then goto L990
 00860   if prtcli><2 then goto L820
 00870   open #7: "Name="&env$('Q')&"\TMmstr\Work1.h"&wsid$,internal,input ioerr L890
 00880   close #7,free: 
 00890 L890: open #7: "Name="&env$('Q')&"\TMmstr\Work1.h"&wsid$&",SIZE=0,RecL=5",internal,output ioerr L2780
-00900 L900: print newpage
-00910   print fields "10,10,c 52,n": "ENTER CLIENT NUMBER TO PRINT, ENTER 0 WHEN COMPLETE"
+00900 L900: pr newpage
+00910   pr fields "10,10,c 52,n": "ENTER CLIENT NUMBER TO PRINT, ENTER 0 WHEN COMPLETE"
 00920 L920: input fields "10,65,n 5,ue,n": cliprt conv L920
 00930   if cliprt=0 then goto L980
-00940   let cliprt$=lpad$(rtrm$(str$(cliprt)),5)
+00940   cliprt$=lpad$(rtrm$(str$(cliprt)),5)
 00950   write #7,using L960: cliprt$
 00960 L960: form pos 1,c 5
 00970   goto L900
 00980 L980: close #7: 
-00990 L990: print newpage
-01000   print fields "10,25,c 50,n": "NOW PRINTING UNBILLED WORK IN PROCESS"
-01010   print fields "23,2,c 30,n": "Press F5 to stop"
+00990 L990: pr newpage
+01000   pr fields "10,25,c 50,n": "NOW PRINTING UNBILLED WORK IN PROCESS"
+01010   pr fields "23,2,c 30,n": "Press F5 to stop"
 01020   gosub L2600
 01030   if prtcli=1 then goto L1090
 01040   open #7: "Name="&env$('Q')&"\TMmstr\Work1.h"&wsid$&",NoShr",internal,input ioerr L2780
@@ -116,28 +116,28 @@
 01200     if fb(j2)=2 or fb(j2)=3 then goto L1460
 01210 L1210: if ta(j2,1)=0 and ta(j2,2)=0 then goto L1460
 01220     if p1=0 then goto L1250
-01230     gosub L1740 ! PRINT SECTION HEADING
+01230     gosub L1740 ! pr SECTION HEADING
 01240     gosub L2100 ! CATEGORY HEADING
 01250 L1250: let nta=ta(j2,1)
 01260 L1260: read #3,using L1280,rec=nta: k$,e$,mat b,sc$,iv$,nta,scdesc$ ioerr L2780 ! READ DETAIL TRANS.
 01270     if fndate_mmddyy_to_ccyymmdd(b(4))<fndate_mmddyy_to_ccyymmdd(olddat) then goto L1410
 01280 L1280: form pos 1,c 5,c 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,c 4,c 12,pd 3,c 30
 01290     if b(7)>-1 then goto L1310
-01300     let b(3)=-b(3)
+01300     b(3)=-b(3)
 01310 L1310: if p1><0 then goto L1360
 01320     gosub L1640 ! PAGE HEADING
 01330     gosub L2100 ! CATEGORY HEADING
 01340     goto L1360
-01350     gosub L1740 ! PRINT SECTION HEADING
+01350     gosub L1740 ! pr SECTION HEADING
 01360 L1360: gosub L270 ! READ EMPLOYEE NAME
 01370     gosub L2270 ! ACCUMULATE EMPLOYEE SUMMARY
 01380     gosub L1940 ! DETERMINE OLDEST DATE
 01390     gosub L2380 ! ACCUMULATE WORK TRANSACTION INFORMATION
-01400     gosub L1790 ! PRINT DETAIL LINE
+01400     gosub L1790 ! pr DETAIL LINE
 01410 L1410: if nta=0 then goto L1430
 01420     goto L1260
-01430 L1430: gosub L2010 ! PRINT TOTAL CATEGORY
-01440     gosub L2130 ! PRINT EMPLOYEE SUMMARY
+01430 L1430: gosub L2010 ! pr TOTAL CATEGORY
+01440     gosub L2130 ! pr EMPLOYEE SUMMARY
 01450     gosub L1890 ! WRITE WORK TRANSACTION
 01460 L1460: next j2
 01470   return 
@@ -157,26 +157,26 @@
 01610 L1610: close #6: ioerr L1620
 01620 L1620: close #7: ioerr L1630
 01630 L1630: goto XIT
-01640 L1640: let p1=p1+1 ! PRINT PAGE HEADING
-01650   print #255,using L1660: date$,cnam$
+01640 L1640: let p1=p1+1 ! pr PAGE HEADING
+01650   pr #255,using L1660: date$,cnam$
 01660 L1660: form pos 1,c 8,pos namtab,c 40,skip 1
-01670   print #255,using L1680: time$,"UNBILLED WORK IN PROCESS REGISTER",p1
+01670   pr #255,using L1680: time$,"UNBILLED WORK IN PROCESS REGISTER",p1
 01680 L1680: form pos 1,c 8,pos 49,c 33,pos 120,pic(zzzz),skip 1
-01690   print #255,using L1700: dat
+01690   pr #255,using L1700: dat
 01700 L1700: form pos 62,pic(zz/zz/zz),skip 1
-01710   print #255: 
-01720   print #255,using L1730: "       EMPLOYEE","DATE     RATE","HOURS     CHARGE"," CATEGORY  SERVICE CODE / DESCRIPTION"
+01710   pr #255: 
+01720   pr #255,using L1730: "       EMPLOYEE","DATE     RATE","HOURS     CHARGE"," CATEGORY  SERVICE CODE / DESCRIPTION"
 01730 L1730: form pos 12,c 15,pos 40,c 13,pos 56,c 16,pos 73,c 40,skip 1
 01740 L1740: let numb1=len(rtrm$(cliname$))+at+11
-01750   let clen=len(rtrm$(cliname$))
-01760   print #255,using L1770: z$,rtrm$(cliname$) pageoflow L1830
+01750   clen=len(rtrm$(cliname$))
+01760   pr #255,using L1770: z$,rtrm$(cliname$) pageoflow L1830
 01770 L1770: form skip 1,pos 1,"*** ",c 5,"-",c clen,pos numb1," ***",skip 1
 01780   return 
 01790 L1790: if ltrm$(sc$)="0" or ltrm$(sc$)="" then let sc2$=" " else let sc2$=sc$&" -"
-01800   print #255,using L1810: e$,empname$,b(4),b(2),b(1),b(3),b(5),"-",b(8),sc2$," ",scdesc$ pageoflow L1830 ! PRINT DETAIL LINE
+01800   pr #255,using L1810: e$,empname$,b(4),b(2),b(1),b(3),b(5),"-",b(8),sc2$," ",scdesc$ pageoflow L1830 ! pr DETAIL LINE
 01810 L1810: form pos 2,c 9,pos 12,c 25,pos 38,pic(zz/zz/zz),n 8.2,n 7.2,n 11.2,x 2,n 2,x 1,c 1,n 2,x 2,c 6,c 1,c 30,skip 1
 01820   goto L1860
-01830 L1830: print #255: newpage
+01830 L1830: pr #255: newpage
 01840   gosub L1640
 01850   continue 
 01860 L1860: let g1=g1+b(1)
@@ -194,27 +194,27 @@
 01980 L1980: if d(2)<=d3 then goto L2000
 01990   let d(2)=d3
 02000 L2000: return 
-02010 L2010: print #255,using L2020: "TOTAL ",cat$(j1),g1,g2 pageoflow L2040 ! PRINT TOTAL CATEGORY
+02010 L2010: pr #255,using L2020: "TOTAL ",cat$(j1),g1,g2 pageoflow L2040 ! pr TOTAL CATEGORY
 02020 L2020: form skip 1,pos 12,c 6,c 30,pos 53,n 8.2,pos 61,n 11.2,skip 1
 02030   goto L2070
-02040 L2040: print #255: newpage
+02040 L2040: pr #255: newpage
 02050   gosub L1640
 02060   continue 
 02070 L2070: let g1=0
 02080   let g2=0
 02090   return 
-02100 L2100: print #255,using L2110: cat$(j1) ! PRINT CATEGORY HEADING
+02100 L2100: pr #255,using L2110: cat$(j1) ! pr CATEGORY HEADING
 02110 L2110: form pos 3,c 30,skip 1
 02120   return 
-02130 L2130: if l(1,1)=0 and l(1,2)=0 then goto L2240 ! PRINT EMPLOYEE SUMMARY
-02140   print #255,using L2150: "SUMMARY BY EMPLOYEE:"
+02130 L2130: if l(1,1)=0 and l(1,2)=0 then goto L2240 ! pr EMPLOYEE SUMMARY
+02140   pr #255,using L2150: "SUMMARY BY EMPLOYEE:"
 02150 L2150: form pos 12,c 20,skip 1
 02160   for j=1 to 20
 02170     if l(j,1)=0 and l(j,2)=0 then goto L2240
-02180     print #255,using L2190: l$(j,1)(1:9),l$(j,2),l(j,1),l(j,2) pageoflow L2210
+02180     pr #255,using L2190: l$(j,1)(1:9),l$(j,2),l(j,1),l(j,2) pageoflow L2210
 02190 L2190: form pos 17,c 9,x 1,c 25,pos 53,n 8.2,n 11.2,skip 1
 02200     goto L2230
-02210 L2210: print #255: newpage
+02210 L2210: pr #255: newpage
 02220     gosub L1640
 02230 L2230: next j
 02240 L2240: mat l$=(" ")
@@ -248,15 +248,15 @@
 02520 L2520: let d(8)=d(8)+b(3)
 02530 L2530: let d(4)=d(4)+b(3)
 02540   let d(3)=d(3)+b(1)
-02550   let cno$=z$
-02560   let cna$=cliname$
+02550   cno$=z$
+02560   cna$=cliname$
 02570   let en$=lpad$(rtrm$(str$(pno)),5)
 02580   let d(1)=j1
 02590   return 
 02600 L2600: if int(d8/4)*100=int(d8/4*100) then goto L2630 ! INITIAL AGING PERIOD SETUP
-02610   let at3=0
+02610   at3=0
 02620   goto L2640
-02630 L2630: let at3=1
+02630 L2630: at3=1
 02640 L2640: let s(1)=0
 02650   let s(2)=31
 02660   let s(3)=59+at3
@@ -271,17 +271,17 @@
 02750   let s(12)=334+at3
 02760   let s(13)=365+at3
 02770   return 
-02780 L2780: if err=61 then print fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2800
+02780 L2780: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2800
 02790   goto L2840
-02800 L2800: print newpage
-02810   if err=4148 then print fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2830
+02800 L2800: pr newpage
+02810   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2830
 02820   goto L2840
-02830 L2830: print fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-02840 L2840: print fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+02830 L2830: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+02840 L2840: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 02850   input fields "24,60,C 1,N": quitcode$
 02860   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-02870   print fields "23,3,C 78,N": ""
-02880   print fields "24,3,C 78,N": ""
+02870   pr fields "23,3,C 78,N": ""
+02880   pr fields "24,3,C 78,N": ""
 02890   retry 
 02900 XIT: let fnxit
 02910   def fndate_mmddyy_to_ccyymmdd(x)

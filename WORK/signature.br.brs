@@ -4,19 +4,19 @@
 00040   open #1: "Name=S:\Core\Docnames,KFName=S:\Core\DocIndex,USE,RecL=39,KPS=1,KLN=30",internal,outin,keyed 
 00050 ! read #1,using 60:docname$,docline,docposition,docsigchoice,cddrive$
 00060 L60: form pos 1,c 30,n 3,n 3,n 2,c 1
-00065   print newpage
+00065   pr newpage
 00070 MAINSCREEN: ! 
 00075   let sn$ = "SignatureMain"
 00076   mat comboa$(99)
 00080   let fntos(sn$)
 00082   let mylen = 17: let myalign = 1
 00085   let mytext$ = "Document Name:" : let fnlbl(1,1,mytext$,mylen,myalign)
-00088   let a = 0
+00088   a = 0
 00090   restore #1: 
 00094 L94: read #1,using L60: docname$,docline,docposition,docsigchoice,cddrive$ eof L105
-00096   let a+=1: let comboa$(a) = docname$
+00096   a+=1: comboa$(a) = docname$
 00100   goto L94
-00105 L105: let a=max(1,a)
+00105 L105: a=max(1,a)
 00106   mat comboa$(a) : let filename$="DocNames" !:
         let fncomboa(filename$,1,18,mat comboa$,ttt$,25)
 00110   let mytext$="Number of Copies:": let fnlbl(2,1,mytext$,mylen,myalign)
@@ -24,7 +24,7 @@
         let fntxt(2,18,2)
 00130   let fncmdset(14): let fnacs(sn$,0,mat response$,ckey)
 00140   let docname$=response$(1)
-00150   let copies=max(1,val(response$(2)))
+00150   copies=max(1,val(response$(2)))
 00160   if ckey=5 then goto XIT
 00165   if ckey=10 then goto XIT
 00175   let docline=docposition=0 !:
@@ -73,35 +73,35 @@
 00350   let docline=val(response$(2)) conv BADLINE
 00360   let docposition=val(response$(3)) conv BADPOSITION
 00370   let docsigchoice=val(response$(4)) conv BADSIGCHOICE
-00380   let cddrive$=uprc$(response$(5))
+00380   cddrive$=uprc$(response$(5))
 00390   if cddrive$<"A" or cddrive$>"Z" then mat msgline$(2): let msgline$(1)="The drive designation you used is invalid!" !:
           let msgline$(2) =" Normal designations would be D or E, but can be other letters" !:
-          let cap$="Bad CD Drive designation" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
+          cap$="Bad CD Drive designation" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
 00400   rewrite #1,using L60,key=rpad$(docname$,30): docname$,docline,docposition,docsigchoice,cddrive$ nokey L415
 00410   goto MAINSCREEN
 00415 L415: write #1,using L60: docname$,docline,docposition,docsigchoice,cddrive$
 00420   goto MAINSCREEN
 00500 BADLINE: ! 
 00510   mat msgline$(1): let msgline$(1)="You have entered an invalid line #. Must be a number from 1 to 200!" !:
-        let cap$="Bad line number" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
+        cap$="Bad line number" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
 00520 BADPOSITION: ! 
 00530   mat msgline$(1): let msgline$(1)="You have entered an invalid position. Your answer must be from 1 to 200!" !:
-        let cap$="Bad position" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
+        cap$="Bad position" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
 00535 BADSIGCHOICE: ! 
 00540   mat msgline$(1): let msgline$(1)="You can have up to 10 different signatures.  You may just one.  Choose an answer from 1 to 10" !:
-        let cap$="Bad position" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
+        cap$="Bad position" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
 01000 PRINTSIGNATURE: ! 
 01020   let fnopenprn
 01025   if docline = 0 then let docline = 1
 01026   if docposition = 0 then let docposition = 1
 01030   for j=1 to copies
-01040     print #255,using L1050: " "
+01040     pr #255,using L1050: " "
 01050 L1050: form skip docline,pos docposition,c 50,skip 1
-01060     print #255: "*Insert File:Z:\Signature1.acs"
-01070     print #255: newpage
+01060     pr #255: "*Insert File:Z:\Signature1.acs"
+01070     pr #255: newpage
 01080   next j
 01085   let fncloseprn
-01088   print newpage
+01088   pr newpage
 01090   goto MAINSCREEN
 07000 MSGBOX: ! 
 07010   let fnmsgbox(mat msgline$,response$,cap$,mtype)

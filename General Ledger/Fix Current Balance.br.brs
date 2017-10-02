@@ -113,10 +113,10 @@
 54400   let fntxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
 54420   let resp$(resp_dateEnd=rc+=1)=date$(dayEnd,'ccyymmdd')
 56000 ! 
-56020     let lc+=1 : let col3_pos=mypos+20
+56020     let lc+=1 : col3_pos=mypos+20
 56410     let resp_lrea_fund_1=rc+1
 56420     if use_dept then 
-56440       let col4_pos=col3_pos+10
+56440       col4_pos=col3_pos+10
 56460       let fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account(s)')
 56500       for fund_item=1 to udim(mat fund_list)
 56520         let fnlbl(lc+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",9,1)
@@ -125,7 +125,7 @@
 56580         let fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(rc)) : let resp$(rc)=fnrgl$(resp$(rc))
 56600       next fund_item
 56620     else 
-56630       let col4_pos=col3_pos+32
+56630       col4_pos=col3_pos+32
 56640       let fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account:',31,1)
 56660       let fnqgl(lc,col4_pos)
 56680       let rc+=1
@@ -161,11 +161,11 @@
 65020 ERTN: let fnerror(program$,err,line,act$,"xit")
 65040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 65060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-65080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+65080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 65100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 65120 ! /region
 70000 def fn_currentActivity(hGlTrans,gln$)
-70020   let caReturn=0
+70020   caReturn=0
 70040   restore #hGlTrans:
 71000   do 
 71020     read #hGlTrans,using fTransBoth: trgl$,tr_date,tr_amt eof caFinis
@@ -176,14 +176,14 @@
 73020         if debug and gln$=debug_gl$ then
 73040           pr 'adding $'&str$(tr_amt)&' from '&date$(dayTran,'mm/dd/ccyy')&' from Current Transactions'
 73060         end if
-73080       let caReturn+=tr_amt
+73080       caReturn+=tr_amt
 73100     end if
 73120   loop 
 74000   caFinis: ! 
 74020   let fn_currentActivity=caReturn
 74040 fnend 
 80000 def fn_accumulatedActivity(hAcTrans,gln$*12,dayStart,dayEnd)
-80020   let aaReturn=0
+80020   aaReturn=0
 80040   restore #hAcTrans,search=>gln$: nokey aaFinis
 81000   do 
 81020     read #hAcTrans,using fTransBoth: trgl$,tr_date,tr_amt eof aaFinis
@@ -196,7 +196,7 @@
 83020         if debug and gln$=debug_gl$ then
 83040           pr 'adding $'&str$(tr_amt)&' from '&date$(dayTran,'mm/dd/ccyy')&' from Accumulated Transactions'
 83060         end if
-83080         let aaReturn+=tr_amt
+83080         aaReturn+=tr_amt
 83100       end if
 83120     end if
 83140   loop while gln$=trgl$

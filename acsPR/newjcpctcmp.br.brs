@@ -14,7 +14,7 @@
 00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00160 TRANSACTION_ENTRY: ! 
-00165   let cn=l10=l12=l13=0
+00165   cn=l10=l12=l13=0
 00170   let fntos(sn$="Percentinput") !:
         let respc=0 : let frac=0 !:
         let mylen=28 : let mypos=mylen+3
@@ -43,14 +43,14 @@
         let ml$(1)="You failed to enter a job number. You can not continue" !:
         let ml$(2)="without a job number." !:
         let fnmsgbox(mat ml$,resp$,cap$,0): goto TRANSACTION_ENTRY
-00350 L350: let cn=val(resp$(2)(1:5)) ! category
+00350 L350: cn=val(resp$(2)(1:5)) ! category
 00360   if cn=0 then goto L370 else goto L380
 00370 L370: mat ml$(2) !:
         let ml$(1)="You failed to enter a category number. You cannot continue" !:
         let ml$(2)="without a category number." !:
         let fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto TRANSACTION_ENTRY
-00380 L380: let cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(cn),5)
+00380 L380: cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(cn),5)
 00390   read #2,using L540,key=cn$: k$,rl10,rl12,rl13 nokey L410
 00400   goto L420
 00410 L410: mat ml$(2) !:
@@ -61,7 +61,7 @@
 00420 L420: let l12=val(resp$(3)) ! labor %
 00430   let l13=val(resp$(4)) ! other %
 00440   let l10=val(resp$(5)) ! units
-00450   let cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(cn),5)
+00450   cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(cn),5)
 00460   read #2,using L540,key=cn$: k$,rl10,rl12,rl13
 00470   if l10=0 then goto L480 else goto L490
 00480 L480: let l10=rl10
@@ -81,7 +81,7 @@
 00620 ERTN: let fnerror(program$,err,line,act$,"xit")
 00630   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00640   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00650   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00650   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00660 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00670 ! /region
 00680 ! ______________________________________________________________________

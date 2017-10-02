@@ -52,7 +52,7 @@
 00052  let fnReturnCode('  let fnerror(program$,err,line,act$,"xit")')
 00053  let fnReturnCode('  if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT')
 00054  let fnReturnCode('  if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT')
-00055  let fnReturnCode('  print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT')
+00055  let fnReturnCode('  pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT')
 00056  let fnReturnCode('ERTN_EXEC_ACT: execute act$ : goto ERTN')
 00057  let fnReturnCode('! </updateable region: ertn>')
 00058  return ! /r

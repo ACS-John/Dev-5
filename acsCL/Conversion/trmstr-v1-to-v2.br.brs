@@ -7,7 +7,7 @@
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
 00080 ! ______________________________________________________________________
 00090     let fncno(cno,cnam$)
-00100     let cap$="Checkbook update Trans from v1 to v2"
+00100     cap$="Checkbook update Trans from v1 to v2"
 00110 ! ______________________________________________________________________
 00120     let fnstatus(cap$)
 00180 ! 
@@ -21,7 +21,7 @@
 00260 ERTN: let fnerror(program$,err,line,act$,"NO")
 00270     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00280     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00290     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00290     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00300 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00310 ! /region
 00320 ! ______________________________________________________________________

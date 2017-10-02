@@ -7,7 +7,7 @@
 00070   do while kps(fin,j+=1)>0
 00080     let keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
 00090     let keyform$=keyform$&'C '&str$(kln(fin,j))&','
-00100     let blank$(j)=rpt$(chr$(0),kln(fin,j))
+00100     blank$(j)=rpt$(chr$(0),kln(fin,j))
 00110     let key$=key$&blank$(j)
 00120   loop 
 00130   let keyform$=keyform$(1:len(keyform$)-1) ! remove the trailing comma
@@ -29,7 +29,7 @@
 00235   reread #tmpfile,using 'form pos 1,n 2,n 2,c 40',reserve: a,b,b$
 00236   reread #tmpfile,using 'form pos 1,n 2,n 2,c 40',reserve: a,b,b$
 00237   reread #tmpfile,using 'form pos 1,n 2,n 2,c 40',reserve: a,b,b$
-00240   print a,b,b$
+00240   pr a,b,b$
 00250   close #tmpfile: ! ,free doesn't work any more
 00260 ! free off the test files
 00270   execute 'Free Temp.dat -n' !:

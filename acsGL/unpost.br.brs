@@ -27,11 +27,11 @@
 18260   let fncmdset(2)
 18280   let fnacs(sn$,0,mat resp$,ckey)
 18300   if ckey=5 then goto XIT
-18320   let begdat=val(resp$(1))
+18320   begdat=val(resp$(1))
 18340   let enddat=val(resp$(2))
-18360   if resp$(3)='True' then let code$='H' else let code$='C'
+18360   if resp$(3)='True' then code$='H' else code$='C'
 18380   if resp$(4)='True' then let del_dupe_only=1 else let del_dupe_only=0
-18400   if enddat<begdat or (enddat=0 and begdat=0) then print bell; : goto MENU1
+18400   if enddat<begdat or (enddat=0 and begdat=0) then pr bell; : goto MENU1
 18420 ! /r
 18440 ! r: get ready to run
 24000   let fnstatus('date range: '&str$(begdat)&' - '&str$(enddat))
@@ -65,8 +65,8 @@
 28100   if t$(3:3)=" " then let t$(3:3)="0"
 28120   if t$(12:12)=" " then let t$(12:12)="0"
 28140   read #1,using 'Form POS 81,2*PD 6.2',key=t$: bb,cb nokey DEL_H_TRANS ! delete any transactions without a matching master record.
-28160   let cb=cb-k
-28180   if uprc$(code$)="H" then let bb=bb-k
+28160   cb=cb-k
+28180   if uprc$(code$)="H" then bb=bb-k
 28200   rewrite #1,using 'Form POS 81,2*PD 6.2',key=t$: bb,cb
 28220 DEL_H_TRANS: ! 
 28240 ! rec_to_delete=rec(h_trans)
@@ -108,7 +108,7 @@
 36020 ERTN: let fnerror(program$,err,line,act$,"xit")
 36040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 36060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-36080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+36080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 36100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 36120 ! /region
 38000 IGNORE: continue 

@@ -13,13 +13,13 @@
 00130 ! 
 00135   let fnconsole(1)
 00140 ! ______________________________________________________________________
-00150   print newpage
+00150   pr newpage
 00160   let msgline$(1)="Are you sure you wish to zero all"
 00170   let msgline$(2)="current period information? (Y/N)"
 00180   let fnoldmsgbox(mat response$,cap$,mat msgline$,2)
 00190   if response$(1)="N" then goto XIT
 00200 ! ______________________________________________________________________
-00210   print newpage
+00210   pr newpage
 00220   let fnwait(101,cap$,message$="Zeroing: please wait...",0)
 00230 ! ______________________________________________________________________
 00240   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input,relative 
@@ -54,7 +54,7 @@
 00550 ERTN: let fnerror(program$,err,line,act$,"xit")
 00560   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00570   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00580   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00580   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00590 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00600 ! /region
 00610 ! ______________________________________________________________________

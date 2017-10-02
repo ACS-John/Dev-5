@@ -7,10 +7,10 @@
 00070 ! ______________________________________________________________________
 00080   dim pr1$*90,pr1(18),pr2(36)
 00090 ! ______________________________________________________________________
-00100   print newpage
-00110   print fields "08,08,C 32,R,N": " CONVERT GL PAYROLL MASTER FILE"
-00120   print fields "10,5,C 60": "ENTER COMPANY NUMBER TO BE CONVERTED:"
-00130   print fields "12,15,C 16,B,5": "PRESS F5 TO STOP"
+00100   pr newpage
+00110   pr fields "08,08,C 32,R,N": " CONVERT GL PAYROLL MASTER FILE"
+00120   pr fields "10,5,C 60": "ENTER COMPANY NUMBER TO BE CONVERTED:"
+00130   pr fields "12,15,C 16,B,5": "PRESS F5 TO STOP"
 00140 L140: input fields "10,43,N 5,UE,N": cno conv L140
 00150   if cmdkey=5 then goto XIT
 00160 ! 
@@ -38,7 +38,7 @@
 00380 ERTN: let fnerror(program$,err,line,act$,"xit")
 00390   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00400   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00410   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00410   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00420 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00430 ! /region
 00440 ! ______________________________________________________________________

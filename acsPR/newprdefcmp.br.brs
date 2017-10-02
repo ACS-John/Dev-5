@@ -21,13 +21,13 @@
 00240   gosub HDR
 00250 L250: read #1,using L260: eno,em$,ss$ eof END1
 00260 L260: form pos 1,n 8,c 30,pos 99,c 11
-00270   let a=pos (rtrm$(em$)," ",1)
-00280   let b=pos (rtrm$(em$)," ",a+1)
+00270   a=pos (rtrm$(em$)," ",1)
+00280   b=pos (rtrm$(em$)," ",a+1)
 00290   let em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
 00300   let reg_earnings=deferred_comp_wh=deferred_comp_match=0
 00310   goto L560
 00320 L320: if deferred_comp_wh=0 and deferred_comp_match=0 then goto L360 ! skip if no deferred comp
-00330   print #255,using L340: em$(1:24),ss$,reg_earnings,deferred_comp_wh,deferred_comp_match pageoflow L1020
+00330   pr #255,using L340: em$(1:24),ss$,reg_earnings,deferred_comp_wh,deferred_comp_match pageoflow L1020
 00340 L340: form pos 1,c 24,c 12,4*n 12.2
 00350   let total_salary+=reg_earnings !:
         let total_wh+=deferred_comp_wh !:
@@ -35,10 +35,10 @@
 00360 L360: goto L250
 00370 END1: close #1: ioerr L380
 00380 L380: close #2: ioerr L400
-00390   print #255: "                                      ----------  ----------  ---------- "
-00400 L400: print #255,using L410: " "," ",total_salary,total_wh,total_deferred_comp
+00390   pr #255: "                                      ----------  ----------  ---------- "
+00400 L400: pr #255,using L410: " "," ",total_salary,total_wh,total_deferred_comp
 00410 L410: form pos 1,c 24,c 12,4*n 12.2
-00420   print #255: "                                      =========-  ==========  ========== "
+00420   pr #255: "                                      =========-  ==========  ========== "
 00430   form pos 1,c 1,c 32,n 6,3*n 9,c 14,c 2
 00440   let fncloseprn
 00450   close #25: ioerr XIT
@@ -48,11 +48,11 @@
 00490 ERTN: let fnerror(program$,err,line,act$,"xit")
 00500   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00510   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00520   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00520   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00530 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00540 ! /region
 00550 ! ______________________________________________________________________
-00560 L560: let checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
+00560 L560: checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 00570   form pos 9,c 30
 00580   restore #4,key>=checkkey$: nokey L250
 00590   mat tcp=(0): mat ttdc=(0)
@@ -70,19 +70,19 @@
 00710 L710: let fntos(sn$="Deferred-1") !:
         let rc=cf=0
 00720   let fnfra(1,1,20,23,"Deferred Comp W/H","Mark the Deferred Comp Withholding deduction",0) !:
-        let cf+=1 : let fratype=cf
+        cf+=1 : let fratype=cf
 00730   for j=1 to 20
 00740     let fnchk(j,3,fullname$(j),0,fratype) !:
           let resp$(rc+=1)="False"
 00750   next j
 00760   let fnfra(1,30,20,23,"Deferred Comp Match","Mark the deferred compensation match.",0) !:
-        let cf+=1 : let fratype=cf
+        cf+=1 : let fratype=cf
 00770   for j=1 to 20
 00780     let fnopt(j,3,fullname$(j),0,fratype) !:
           let resp$(rc+=1)="False"
 00790   next j
 00800   let fnfra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.") !:
-        let cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
+        cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
 00810   let fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
 00820   let fntxt(1,mypos,10,0,1,"3",0,empty$,fradate) !:
         let resp$(rc+=1)=str$(beg_date)
@@ -99,16 +99,16 @@
 00910   for j=1 to 20
 00920     if resp$(j+20)="True" then let sel_pen(j)=1
 00930   next j
-00940   let beg_date=val(resp$(41)) !:
+00940   beg_date=val(resp$(41)) !:
         let end_date=val(resp$(42))
 00950   return 
 00960 HDR: ! 
-00970   print #255: "\qc  {\f181 \fs18 \b "&trim$(env$('cnam'))&"}"
-00980   print #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
-00990   print #255: "\qc  {\f181 \fs16 \b From: "&cnvrt$("pic(zzzz/zz/zz)",beg_date)&" To: "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
-01000   print #255: "\ql   " !:
-        print #255: "Name                    SS Number     Total Wage     Comp WH  Comp Match"
+00970   pr #255: "\qc  {\f181 \fs18 \b "&trim$(env$('cnam'))&"}"
+00980   pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
+00990   pr #255: "\qc  {\f181 \fs16 \b From: "&cnvrt$("pic(zzzz/zz/zz)",beg_date)&" To: "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
+01000   pr #255: "\ql   " !:
+        pr #255: "Name                    SS Number     Total Wage     Comp WH  Comp Match"
 01010   return 
-01020 L1020: print #255: newpage
+01020 L1020: pr #255: newpage
 01030   gosub HDR
 01040   continue 

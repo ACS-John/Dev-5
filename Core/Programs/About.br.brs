@@ -2,7 +2,7 @@
 10060   on error goto ERTN
 10100   dim txt$(1)*256
 10140   let fntop(program$, cap$="About ACS")
-10160   let c_has_count=fnclient_has_mat(mat c_has$)
+10160   c_has_count=fnclient_has_mat(mat c_has$)
 10180   let fnclient_support(mat system_id$,mat system_support_end_date,mat on_support)
 20000   let txt_item=0
 20020   mat txt$(txt_item+=1) : let txt$(txt_item)='ACS Version '&fnacs_version$
@@ -49,7 +49,7 @@
 40020 ERTN: let fnerror(program$,err,line,act$,"xit")
 40040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 40060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-40080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+40080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 40100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 40120 ! /region
 40140 XIT: let fnxit

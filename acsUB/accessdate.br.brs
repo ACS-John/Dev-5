@@ -15,7 +15,7 @@
 00150   open #13: "Name="&env$('Q')&"\UBmstr\DATEWork."&session$,display,input ioerr MENU1
 00160   linput #13: ln$ eof MENU1
 00165   linput #13: ln$ eof MENU1
-00170   let access_date$=ln$(26:42)
+00170   access_date$=ln$(26:42)
 00180   goto MENU1
 00190 ! ______________________________________________________________________
 00200 MENU1: ! 
@@ -32,6 +32,6 @@
 00290 ERTN: let fnerror(program$,err,line,act$,"xit")
 00300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00310   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00320   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00320   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00330 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00340 ! /region

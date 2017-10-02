@@ -15,7 +15,7 @@
 00150 ! ______________________________________________________________________
 00160   let fntop(program$,cap$="Reverse Calculation")
 00180 ! 
-00190   let cd1=val(date$(4:5)&date$(7:8)&date$(1:2))
+00190   cd1=val(date$(4:5)&date$(7:8)&date$(1:2))
 00200   fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 00210   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00212   read #1,using 'Form POS 605,C 12,N 1': bankgl$,gli
@@ -39,7 +39,7 @@
 00300   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative ioerr L330
 00310   read #20,using 'Form POS 152,N 2',rec=1: bcde
 00312   close #20: 
-00320   let cli=1
+00320   cli=1
 00330 L330: ! 
 00340   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
 00350   open #hDepartment:=5: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -88,7 +88,7 @@
 00688     goto ASK_EMPLOYEE_NO
 00689   end if 
 00690   let w1=val(resp$(3))
-00700   if resp_cl_bank_code then let bcde=val(resp$(resp_cl_bank_code)(1:2))
+00700   if resp_cl_bank_code then bcde=val(resp$(resp_cl_bank_code)(1:2))
 00710   mat tcp=(0)
 00720   if reverse_all=1 then gosub CREATE_LIST
 00730   L730: ! r: main loop
@@ -99,14 +99,14 @@
 00770   read #1,using L780,key=x$,release: em10,em11 nokey L1190
 00780 L780: form pos 132,2*pd 4.2
 00790   if pgl1=1 then gosub POSTGL2
-00800   let ck=0
+00800   ck=0
 00810 ! DELETE_OLD_PAYROLL_CHECK: !
-00820   let checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
+00820   checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 00830   restore #4,key>=checkkey$: nokey UPDATE_MASTER
 00840 L840: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof UPDATE_MASTER
 00850   if heno<>eno then goto UPDATE_MASTER
 00860   if prd=d1 then mat tcp=tcp+cp : delete #4: 
-00870   let ck=1
+00870   ck=1
 00890   if prd=d1 then let em10=em10+tdc(3) ! add sick hours back
 00900   if prd=d1 then let em11=em11+tdc(4) ! add vacation hours back
 00910   goto L840
@@ -134,7 +134,7 @@
 01100 REVERSE_BANK_REC: ! r:
 01110   let hw1=0
 01120   if gli<>1 then goto L1170
-01130   let bk$=bankgl$&lpad$(str$(w1),12)
+01130   bk$=bankgl$&lpad$(str$(w1),12)
 01140   rewrite #14,using L1150,key=bk$: 0 nokey L1170
 01150 L1150: form pos 63,pd 5.2
 01160   let hw1=w1
@@ -163,23 +163,23 @@
 01306   let fnmsgbox(mat ml$,resp$,cap$,0)
 01310   goto L1510
 01320 L1320: form pos 1,n 2,n 1,c 8,g 6,pd 10.2,c 8,c 35,n 1,n 6,n 1
-01330   let adr=tr(1)
+01330   adr=tr(1)
 01340   read #9,using L1350,key=cnvrt$("N 2",bcde): bal nokey L1390
 01350 L1350: form pos 45,2*pd 6.2
-01360   let bal=bal+tr3
+01360   bal=bal+tr3
 01370   rewrite #9,using L1350,key=cnvrt$("N 2",bcde): bal
 01380   let tr3=0
 01390 L1390: let tr$(3)=tr$(4)=""
 01400   let tr$(5)="VOID"
-01410   let adr=tr(1)
+01410   adr=tr(1)
 01420   mat tr=(0)
-01430   if clr=0 then let clr=cd1
+01430   if clr=0 then clr=cd1
 01440   rewrite #6,using L1320,key=k$: bcde,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd
 01450   if exists(env$('Q')&"\CLmstr\Tralloc-Idx.h"&env$('cno')) then goto DELETE4_02ALLOC
 01460 L1460: if adr=0 then goto L1510
 01470   read #8,using 'form pos 65,pd 3',rec=adr: nta norec L1510
 01480   delete #8,rec=adr: 
-01490   let adr=nta: goto L1460
+01490   adr=nta: goto L1460
 01510 L1510: return ! /r
 01520 DELETE4_02ALLOC: ! r: delete allocations in 4.02 checkbook system
 01530   restore #tralloc,key=k$: nokey L1570
@@ -247,7 +247,7 @@
 02140   let eno$=lpad$(str$(teno),8)
 02150   read #1,using 'form pos 9,c 30',key=eno$,release: em$ nokey L2340
 02160   L2160: !
-02170   print #255,using L2180: teno,em$,mat tgl,-tcp(31)+tcp(29)+tcp(30) pageoflow PGOF
+02170   pr #255,using L2180: teno,em$,mat tgl,-tcp(31)+tcp(29)+tcp(30) pageoflow PGOF
 02180   L2180: form pos 1,pic(zzzzzzzz),pos 15,c 30,pos 50,pic(zzz),x 1,pic(zzzzz#),x 1,pic(zzz),n 12.2,skip 1
 02190   for j=1 to 24 ! ACCUMULATE 24 WITHHOLDINGS
 02200     if j<=4 then goto L2240
@@ -271,26 +271,26 @@
 02380   if diskin=0 then gosub L3340
 02390   let td$="Payroll summary"
 02400   if uprc$(accrue$)<>"Y" then goto L2440
-02410   let accrued=round(subtotal/day*dayslm,2)
+02410   accrued=round(subtotal/day*dayslm,2)
 02420   write #11,using L2450: mat ttgl,d2,accrued,5,0,tr$,"Payroll accrual",prgl$(15)
 02430   let totacc=totacc+accrued
 02440 L2440: write #3,using L2450: mat ttgl,dat,-subtotal+accrued,5,0,tr$,"Reversing "&em$,prgl$(15)
 02450 L2450: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,n 2,n 2,c 12,c 52,c 12
-02460 L2460: print #255,using L2470: "-----------",-subtotal
+02460 L2460: pr #255,using L2470: "-----------",-subtotal
 02470 L2470: form pos 65,c 11,skip 1,pos 64,pic(---------.##),skip 1
-02480   if accrued<>0 then print #255,using L2490: "ACCRUED PORTION",accrued else print #255: 
+02480   if accrued<>0 then pr #255,using L2490: "ACCRUED PORTION",accrued else pr #255: 
 02490 L2490: form pos 45,c 16,pos 64,pic(---------.##),skip 2
 02500   let subtotal=0
 02510   return  ! /r
 02530 glDistHeaders: ! r: headers for General Ledger Distribution for Payroll
 02532   let p1=p1+1
-02540   print #255,using L2550: date$,a$,"PAGE",p1
+02540   pr #255,using L2550: date$,a$,"PAGE",p1
 02550 L2550: form skip 1,pos 1,c 8,pos nametab,c 40,pos 77,c 5,pic(zzz),skip 1
-02560   print #255,using L2570: time$,"General Ledger Distribution for Payroll",dat1
+02560   pr #255,using L2570: time$,"General Ledger Distribution for Payroll",dat1
 02570 L2570: form pos 1,c 8,pos 17,c 40,skip 1,pos 29,pic(zz/zz/zz),skip 2
-02580   print #255: "Employee                                               G/L                 Amount"
-02590   print #255: " Number        Name                                  Account         Debits     Credits"
-02600   print #255: ""
+02580   pr #255: "Employee                                               G/L                 Amount"
+02590   pr #255: " Number        Name                                  Account         Debits     Credits"
+02600   pr #255: ""
 02610   return  ! /r
 02630 POSTGL4: ! r:
 02640   mat ttgl=tgl
@@ -307,7 +307,7 @@
 02740 let fnchain("S:\acsGL\ACGLMRGE") ! /r
 02750 XIT: let fnxit
 02760 PGOF: ! r:
-02762   print #255: newpage
+02762   pr #255: newpage
 02770   gosub glDistHeaders
 02780 continue  ! /r
 02800 POST_WH_AND_NET: ! r: ASSIGN G/L NUMBERS AND POST TO GL WORK FILE
@@ -316,22 +316,22 @@
 02830     if t(j)<0 then goto L2950
 02840     if j<=4 then goto L2850 else goto L2870
 02850     L2850: ! 
-02852     print #255,using L2180: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),-t(j) pageoflow PGOF
+02852     pr #255,using L2180: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),-t(j) pageoflow PGOF
 02860     goto L2930
 02870     L2870: ! 
-02872     print #255,using L2920: 0," ",gl$(j-4),-t(j) pageoflow PGOF
+02872     pr #255,using L2920: 0," ",gl$(j-4),-t(j) pageoflow PGOF
 02880     if j<25 then goto L2890 else goto L2910
 02890     L2890: ! 
-02892     print #255,using L2920: 0," ",gl$(j-4),-t(j) pageoflow PGOF
+02892     pr #255,using L2920: 0," ",gl$(j-4),-t(j) pageoflow PGOF
 02900     goto L2920
 02910     L2910: ! 
-02912     print #255,using L2920: 0," ",gl$(j-11),-t(j) pageoflow PGOF
+02912     pr #255,using L2920: 0," ",gl$(j-11),-t(j) pageoflow PGOF
 02920     L2920: form pos 1,pic(zzzzzzzz),pos 15,c 30,pos 50,c 12,n 12.2,skip 1
 02930     L2930: ! 
 02932     let totaldr=totaldr+t(j)
 02940     goto L2980
 02950     L2950: ! 
-02952     print #255,using L2960: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),-t(j) pageoflow PGOF
+02952     pr #255,using L2960: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),-t(j) pageoflow PGOF
 02960     L2960: form pos 1,pic(zzzzzzzz),pos 15,c 30,pos 50,pic(zzz),x 1,pic(zzzzz#),x 1,pic(zzz),x 12,n 12.2,skip 1
 02970     let totalcr=totalcr+t(j)
 02980     L2980: ! 
@@ -359,10 +359,10 @@
 03160   L3160: if multigl=2 then goto L3330
 03170   ! CREATE DUE TO PAYROLL FUND ENTRIES
 03180   if mastercd=0 then goto L3290 ! FIRST TIME THRU ROUTINE
-03190   print fields "10,2,c 78": "ENTER THE G/L ACCOUNT # FOR YOUR 'DUE TO PAYROLL CLEARING ACCOUNT '"
-03200   print fields "11,2,c 60": "ON FUND # "&tgl$(1:3)
+03190   pr fields "10,2,c 78": "ENTER THE G/L ACCOUNT # FOR YOUR 'DUE TO PAYROLL CLEARING ACCOUNT '"
+03200   pr fields "11,2,c 60": "ON FUND # "&tgl$(1:3)
 03210   L3210: input fields mat fli2$: mat ttgl conv L3210
-03220   print #255,using L2960: 0," ",mat ttgl,-totaldue
+03220   pr #255,using L2960: 0," ",mat ttgl,-totaldue
 03230   let totalcr=totalcr+totaldue
 03240   gosub PRINT_TOTALS
 03250   gosub glDistHeaders
@@ -388,20 +388,20 @@
 03490   L3490: let oldtgl=tgl(1)
 03500 return  ! /r
 03520 L3520: ! r: FINAL PAGE FOR CONTROL SET OF BOOKS  (MULTI-FUNDS ONLY)
-03530   print fields "10,2,c 78": "ENTER THE G/L ACCOUNT # FOR YOUR 'DUE FROM OTHER FUNDS '"
-03540   print fields "11,2,c 60": "ON YOUR CONTROL SET OF BOOKS"
+03530   pr fields "10,2,c 78": "ENTER THE G/L ACCOUNT # FOR YOUR 'DUE FROM OTHER FUNDS '"
+03540   pr fields "11,2,c 60": "ON YOUR CONTROL SET OF BOOKS"
 03550   input fields mat fli2$: mat ttgl conv L3210
-03560   print #255,using L2180: 0," ",mat ttgl,-totalrec
+03560   pr #255,using L2180: 0," ",mat ttgl,-totalrec
 03570   let totaldr=totaldr+totalrec
 03580   if glinstal=0 then goto L3600
 03590   write #3,using L2450: mat ttgl,dat,-totalrec,5,0," ","Reversing Payroll summary",prgl$(15)
 03600 L3600: ! 
 03610   return  ! /r
 03620 PRINT_TOTALS: ! r: AND UNDERLINES
-03630   if totacc<>0 then print #255,using L2180: 0," ",g1,g2,g3,-totacc
-03640   print #255,using L3650: "___________","___________",-totaldr,-totalcr
+03630   if totacc<>0 then pr #255,using L2180: 0," ",g1,g2,g3,-totacc
+03640   pr #255,using L3650: "___________","___________",-totaldr,-totalcr
 03650 L3650: form pos 65,c 11,x 1,c 11,skip 1,pos 64,pic(---------.##),pic(---------.##),skip 1
-03660   print #255,using L3650: "===========","==========="
+03660   pr #255,using L3650: "===========","==========="
 03670   return  ! /r
 03690 L3690: ! r:
 03692   close #101: ioerr ignore
@@ -410,7 +410,7 @@
 03722   let ml$(1)="Did you accrue part of this payroll" 
 03724   let ml$(2)="in the previous month? (Y/N)" 
 03726   let fnmsgbox(mat ml$,resp$,cap$,36)
-03730   let accrue$=resp$(1)(1:1)
+03730   accrue$=resp$(1)(1:1)
 03740   return  ! /r
 03760 ! ACCRUAL: ! r:
 03770 !   let fntos(sn$="Prrevcal3") 
@@ -436,7 +436,7 @@
 03910 !   let key$=fnagl$(resp$(3))
 03920 !   let g1=val(key$(1:3)): let g2=val(key$(4:9)) : let g3=val(key$(10:12))
 03930 !   let d2=val(resp$(4)) ! last day previous month
-03940 !   let acgl$=cnvrt$("N 3",g1)&cnvrt$("N 6",g2)&cnvrt$("N 3",g3)
+03940 !   acgl$=cnvrt$("N 3",g1)&cnvrt$("N 6",g2)&cnvrt$("N 3",g3)
 03950 !   if trim$(acgl$)<>"" then read #12,using L3960,key=acgl$: desc$ nokey L3970
 03960 ! L3960: form pos 13,c 30
 03970 ! L3970: !
@@ -444,7 +444,7 @@
 03985 CREATE_LIST: ! r:
 03990   open #13: "Name="&env$('temp')&"\prreverse"&session$&",size=0,RecL=128,replace",internal,outin 
 04000 L4000: read #1,using "FORM pos 1,n 8,pos 132,2*PD 4.2",release: eno,em10,em11 eof L4100
-04020   let checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
+04020   checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 04030   restore #4,key>=checkkey$: nokey L4000
 04040 L4040: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof L4000
 04050   if heno<>eno then goto L4000
@@ -459,6 +459,6 @@
 04140 ERTN: let fnerror(program$,err,line,act$,"xit")
 04150   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 04160   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-04170   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+04170   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 04180 ERTN_EXEC_ACT: execute act$ : goto ERTN
 04190 ! /region

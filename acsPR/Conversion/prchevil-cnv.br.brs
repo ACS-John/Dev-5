@@ -13,8 +13,8 @@
 00120     let fndate_mmddyy_to_ccyymmdd=x2
 00130   fnend 
 00140 ! ______________________________________________________________________
-00150   print newpage
-00160   print fields "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
+00150   pr newpage
+00160   pr fields "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
 00170 L170: input fields "10,55,N 2,UE,N": cno conv L170
 00180   if cno=0 then goto XIT
 00190 ! 
@@ -24,7 +24,7 @@
 00230 L230: form pos 9,pd 6
 00240   if d1<1000000 then goto L270
 00250   let d1=val(str$(d1)(5:6)&str$(d1)(7:8)&str$(d1)(3:4))
-00260 ! Print D1
+00260 ! pr D1
 00270 L270: ! 
 00280   rewrite #4,using L290: d1
 00290 L290: form pos 9,n 6
@@ -41,7 +41,7 @@
 00400 ERTN: let fnerror(program$,err,line,act$,"xit")
 00410   if uprc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00420   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00430   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00430   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00440 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00450 ! /region
 00460 ! ______________________________________________________________________

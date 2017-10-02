@@ -46,47 +46,47 @@
 42040   L450: form pos 1,c 10,4*c 30,pos 1821,n 1,pos 292,pd 4.2,pd 4,pos 1741,n 2,pos 217,15*pd 5,pos 143,7*pd 2
 42060   if f<>d1 then goto READ_CUSTOMER
 42080   if a(1)>0 and trim$(servicename$(1))="Water" and d(3)=0 then ! if have water and zero usage then list
-42100     let currentread=d(1)
+42100     currentread=d(1)
 42120     let priorread=d(2)
 42140   else if a(3)>0 and trim$(servicename$(3))="Electric" and d(7)=0 then  ! if have electric and zero usage then list
-42160     let currentread=d(5)
+42160     currentread=d(5)
 42180     let priorread=d(6)
 42200   else if a(4)>0 and trim$(servicename$(4))="Gas" and d(11)=0 then ! if have gas and zero usage then list
-42220     let currentread=d(9)
+42220     currentread=d(9)
 42240     let priorread=d(10)
 42260   else
 42280     goto READ_CUSTOMER
 42300   end if
 42320   if startcd=1 and prtbkno<>route then goto TOTALS
 42380   if printadr=1 then 
-42400     print #255,using L550: z$,e$(2),currentread,priorread,e$(1)(1:25) pageoflow PGOF 
+42400     pr #255,using L550: z$,e$(2),currentread,priorread,e$(1)(1:25) pageoflow PGOF 
 42420     L550: form pos 1,c 10,pos 13,c 30,pos 43,n 13,x 4,n 13,x 3,c 25
 42440   else 
-42460     print #255,using L550: z$,e$(2),currentread,priorread pageoflow PGOF
+42460     pr #255,using L550: z$,e$(2),currentread,priorread pageoflow PGOF
 42480   end if
 42500   let tbal=tbal+bal
 42520   goto READ_CUSTOMER
 42540 ! ______________________________________________________________________
 48000 HDR: ! r:
 48020   let p2=p2+1
-48040   print #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
-48060   print #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
-48080   print #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
-48100   print #255,using L650: "\ql "&date$,"Page "&str$(p2)
+48040   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
+48060   pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
+48080   pr #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
+48100   pr #255,using L650: "\ql "&date$,"Page "&str$(p2)
 48120   L650: form pos 1,c 82,c 10
-48140   print #255: ""
-48160   if printadr<>1 then print #255: " {\ul Number   }  {\ul Name             }          {\ul Current Reading}    {\ul Prior Reading}"
-48180   if printadr=1 then print #255: " {\ul Number   }  {\ul Name             }           {\ul Current Reading}    {\ul Prior Reading}  {\ul Meter Address}"
-48200   print #255: ""
+48140   pr #255: ""
+48160   if printadr<>1 then pr #255: " {\ul Number   }  {\ul Name             }          {\ul Current Reading}    {\ul Prior Reading}"
+48180   if printadr=1 then pr #255: " {\ul Number   }  {\ul Name             }           {\ul Current Reading}    {\ul Prior Reading}  {\ul Meter Address}"
+48200   pr #255: ""
 48220 return ! /r
 52000 PGOF: ! r:
-52020   print #255: newpage 
+52020   pr #255: newpage 
 52040   gosub HDR 
 52060 continue ! /r
 56000 TOTALS: ! r:
-56020 ! Print #255: RPT$(" ",55)&"{\ul             }" 
-56040   ! Print #255,Using "Form POS 56,N 12.2": TBAL 
-56060   ! Print #255: RPT$(" ",55)&"{\ul \strike             }"
+56020 ! pr #255: RPT$(" ",55)&"{\ul             }" 
+56040   ! pr #255,Using "Form POS 56,N 12.2": TBAL 
+56060   ! pr #255: RPT$(" ",55)&"{\ul \strike             }"
 56080 goto DONE ! /r
 58000 DONE: ! r:
 58020   close #1: ioerr ignore
@@ -97,6 +97,6 @@
 63020 ERTN: let fnerror(program$,err,line,act$,"xit")
 63040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 63060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-63080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+63080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 63100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 63120 ! /region

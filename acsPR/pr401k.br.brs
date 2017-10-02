@@ -23,12 +23,12 @@
 00230   read #1,using L240,rec=address: eno,mat em$,ss$,em16,lpd,mat ta,bd norec L220
 00240 L240: form pos 1,n 8,3*c 30,c 11,pos 156,2*n 6,pos 173,2*pd 3,pos 191,n 6
 00250   if lpd><ppd then goto L220
-00260   let a=pos (rtrm$(em$(1))," ",1)
-00270   let b=pos (rtrm$(em$(1))," ",a+1)
-00280   let c=a+1
+00260   a=pos (rtrm$(em$(1))," ",1)
+00270   b=pos (rtrm$(em$(1))," ",a+1)
+00280   c=a+1
 00290   let em$=ltrm$(rtrm$(em$(1)(max(a,b):30))&", "&em$(1)(1:a))
 00300   if c<b then let em$=em$&em$(1)(c:c)
-00310   let csz$=em$(3) : gosub CSZ
+00310   csz$=em$(3) : gosub CSZ
 00320   let ss$=ltrm$(rtrm$(ss$))
 00330   for j=1 to len(ss$)
 00340     if ss$(j:j)<"0" or ss$(j:j)>"9" then let ss$(j:j)=""
@@ -36,17 +36,17 @@
 00360   let ss=0
 00370   let ss=val(ss$) conv L380
 00380 L380: let em16=fndate_mmddyy_to_ccyymmdd(em16)
-00390   let bd=fndate_mmddyy_to_ccyymmdd(bd)
+00390   bd=fndate_mmddyy_to_ccyymmdd(bd)
 00400   mat thc=(0)
 00410   mat tcp=(0)
-00420   let adr=ta(1)
+00420   adr=ta(1)
 00430 L430: read #2,using L440,rec=adr: lpd,mat hc,mat cp,nta
 00440 L440: form pos 42,n 6,pos 150,5*pd 3.2,pos 358,22*pd 5.2,pos 468,pd 3
 00450   if lpd><ppd then goto L480
 00460   mat tcp=tcp+cp
 00470   mat thc=thc+hc
 00480 L480: if nta=0 then goto L520
-00490   let adr=nta
+00490   adr=nta
 00500   goto L430
 00510 ! ______________________________________________________________________
 00520 L520: ! 
@@ -69,24 +69,24 @@
 00690   let k$(18)=cnvrt$("PIC(########)",0)
 00700   let k$(19)=cnvrt$("PIC(######.##)",tcp(21))
 00710   let k$(20)=cnvrt$("PIC(########)",0)
-00720   print #4,using L730: mat k$
+00720   pr #4,using L730: mat k$
 00730 L730: form pos 1,c 9,3*c 12,c 2,c 10,c 2,c 10,3*c 30,c 20,c 2,c 5,4*c 8,c 9,c 8
 00740   goto L220
 00750 ! ______________________________________________________________________
 00760 CSZ: ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
 00770   dim csz$*30
-00780   let csz$=uprc$(rtrm$(csz$))
+00780   csz$=uprc$(rtrm$(csz$))
 00790 L790: let p1=pos(csz$,".",1)
-00800   if p1>0 then let csz$(p1:p1)="": goto L790
+00800   if p1>0 then csz$(p1:p1)="": goto L790
 00810 L810: let p1=pos(csz$,"  ",1)
-00820   if p1>0 then let csz$(p1:p1)="": goto L810
+00820   if p1>0 then csz$(p1:p1)="": goto L810
 00830   let p1=pos(csz$,",",1)-1
 00840   if p1=-1 then let p1=pos(csz$," ",1)-1
-00850   if csz$(p1+2:p1+2)><" " then let csz$(p1:p1+1)=csz$(p1:p1+1)&" "
+00850   if csz$(p1+2:p1+2)><" " then csz$(p1:p1+1)=csz$(p1:p1+1)&" "
 00860   let p2=pos(csz$," ",p1+3)
-00870   let city$=uprc$(rtrm$(csz$(1:p1))(1:15))
-00880   if city$(1:3)="FT " then let city$(1:3)="FORT "
-00890   if city$(1:3)="FT. " then let city$(1:3)="FORT "
+00870   city$=uprc$(rtrm$(csz$(1:p1))(1:15))
+00880   if city$(1:3)="FT " then city$(1:3)="FORT "
+00890   if city$(1:3)="FT. " then city$(1:3)="FORT "
 00900   let state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2))
 00910   let l1=len(csz$)
 00920   let zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:l1))))
@@ -102,13 +102,13 @@
 01020   close #2: 
 01030   close #3: 
 01040   close #4: 
-01050 L1050: print newpage ! COPY TO DISKETTE
+01050 L1050: pr newpage ! COPY TO DISKETTE
 01060   let fnopenwin(win=101,7,8,11,44,cap$)
 01070   let io1$(1)="8,42,CU 1,UET,N"
-01080   if driv=1 then print #win,fields "3,2,Cc 30,n": "Drive Not Ready!"
-01090   print #win,fields "4,2,C 30,n": "Insert 401k Diskette in Drive:"
-01100   print fields "12,15,C 9,B,1": "Next (F1)"
-01110   print fields "12,26,C 11,B,5": "Cancel (F5)"
+01080   if driv=1 then pr #win,fields "3,2,Cc 30,n": "Drive Not Ready!"
+01090   pr #win,fields "4,2,C 30,n": "Insert 401k Diskette in Drive:"
+01100   pr fields "12,15,C 9,B,1": "Next (F1)"
+01110   pr fields "12,26,C 11,B,5": "Cancel (F5)"
 01120   if dv$="" then let dv$="A"
 01130 L1130: rinput #win,fields "4,33,Cu 1,UET,N": dv$
 01140   if cmdkey=5 then goto XIT
@@ -122,7 +122,7 @@
 01220 ERTN: let fnerror(program$,err,line,act$,"xit")
 01230   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01240   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01250   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01250   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01260 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01270 ! /region
 01280 ! ______________________________________________________________________

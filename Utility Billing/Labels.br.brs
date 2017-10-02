@@ -1,4 +1,4 @@
-10020 ! -- Print Customer Labels
+10020 ! -- pr Customer Labels
 10040 let fn_setup
 10100   let fntop(program$)
 14000 SCR1: ! r:
@@ -41,24 +41,24 @@
 14840   let fnreg_write('ublabel.line 3',resp$(5))
 14860   let fnreg_write('ublabel.line 4',resp$(6))
 14880   let fnreg_write('ublabel.line 5',resp$(7))
-14900   let annbc=sequence_name ! default to name sequence
+14900   annbc=sequence_name ! default to name sequence
 14920   let pt$(5)=""
 14940   if resp$(1)=sequence_option$(sequence_account) then 
-14960     let annbc=sequence_account
+14960     annbc=sequence_account
 14980   else if resp$(1)=sequence_option$(sequence_name) then 
-15000     let annbc=sequence_name
+15000     annbc=sequence_name
 15020   else if resp$(1)=sequence_option$(sequence_bar_code) then 
-15040     let annbc=sequence_bar_code
+15040     annbc=sequence_bar_code
 15060     let pt$(5)="BAR"
 15080   else if resp$(1)=sequence_option$(sequence_route) then 
-15100     let annbc=sequence_route
+15100     annbc=sequence_route
 15120   else if resp$(1)=sequence_option$(sequence_grid) then 
-15140     let annbc=sequence_grid
+15140     annbc=sequence_grid
 15160   else if resp$(1)=sequence_option$(sequence_bulk_sort) then 
-15180     let annbc=sequence_bulk_sort
+15180     annbc=sequence_bulk_sort
 15200   end if 
 15220 ! 
-15240   let altaddr=srch(mat address_option$,resp$(2))
+15240   altaddr=srch(mat address_option$,resp$(2))
 15340 ! 
 15360   let line_1_print=srch(mat line_x_option$,resp$(3))
 15380   let line_2_print=srch(mat line_x_option$,resp$(4))
@@ -272,7 +272,7 @@
 34200   let fnacs(sn$,0,mat resp$,ckey) ! select labels by route
 34220   if ckey=5 then goto XIT
 34240   if ckey=2 then goto SCR2
-34260   let bk=0 : let bk=val(resp$(1)) conv L1860
+34260   bk=0 : bk=val(resp$(1)) conv L1860
 34280   let seq=val(resp$(2)) conv L1860
 34300   if annbc=sequence_bar_code and filter_selection=6 then goto TOP ! must start at front of file if bar coded and specific route
 34320   L1860: ! 
@@ -314,7 +314,7 @@
 38100   restore #1: 
 38120   do 
 38140     read #customer,using "Form POS 1,C 10,POS 296,PD 4,pos 1864,C 30,pos 1821,n 1": z$,f,extra$(1),final eof END5
-38160     let cr$=bc$=""
+38160     cr$=bc$=""
 38180     read #5,using "Form POS 96,C 12,C 4": bc$,cr$ nokey SORT1_NEXT ioerr SORT1_NEXT
 38200     write #6,using "Form POS 1,C 16,C 10": bc$(1:5)&cr$&bc$(6:12),z$
 38220     SORT1_NEXT: ! 
@@ -391,7 +391,7 @@
 48060     open #h_ca_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&',Shr',internal,input,keyed
 48080     open #adrbil:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 48100   end if
-48120   if ca_address_type=0 then let ca_address_type=ao_billing
+48120   if ca_address_type=0 then ca_address_type=ao_billing
 48140   altaddr=ca_address_type
 48160   mat pe$=('')
 48170   z$=lpad$(trim$(z$),kln(h_ca_customer))
@@ -449,7 +449,7 @@
 56020 ERTN: let fnerror(program$,err,line,act$,"xit")
 56040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 56060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-56080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+56080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 56100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 56120 ! /region
 58000 BULKSORT: ! r: bulk sort order
@@ -513,9 +513,9 @@
 68480   let line_x_option$(line_x_account_meter4_and_seq:=9)="Account, "&trim$(srvnam$(4))&" Meter, and Sequence Numbers"
 68500 ! 
 68520   dim address_option$(3)*30
-68540   let address_option$(ao_primary:=1)="Primary Address"
-68560   let address_option$(ao_alternate:=2)="Alternate Billing Address"
-68580   let address_option$(ao_billing:=3)="Billing Address"
+68540   address_option$(ao_primary:=1)="Primary Address"
+68560   address_option$(ao_alternate:=2)="Alternate Billing Address"
+68580   address_option$(ao_billing:=3)="Billing Address"
 68600 ! 
 68620   dim sequence_option$(6)*22
 68640   let sequence_option$(sequence_account:=1)="Account"

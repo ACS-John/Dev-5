@@ -11,15 +11,15 @@
 20000   let fntop(program$,cap$="Period Ending Dates")
 20020   let pedat$=fnpedat$ 
 20040   let fndat(dat$,1) 
-20060   let actpd=fnactpd 
-20080   let cch$=fncch$
+20060   actpd=fnactpd 
+20080   cch$=fncch$
 20100 ! 
 20120   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative  
 20140   read #20,using 'Form Pos 296,n 2',rec=1: lmu
 20160   close #20: 
 20180 ! ______________________________________________________________________
 20200 PERIOD_ENDING_DATES: ! 
-20220   let cancel=99
+20220   cancel=99
 20240   let fntos("ped") 
 20260   let respc=0
 20280   let fnlbl(1,1,"Period Ending Date:",40,1)
@@ -39,8 +39,8 @@
 20660   if ckey=5 then goto XIT
 20680   let pedat$=resp$(1)
 20700   let dat$=resp$(2)
-20720   let actpd=val(resp$(3))
-20740   let cch$=resp$(4)
+20720   actpd=val(resp$(3))
+20740   cch$=resp$(4)
 20760 ! r: save answers 
 20780   let fnpedat$(pedat$) 
 20800   let fndat(dat$,2) 
@@ -53,7 +53,7 @@
 50020 ERTN: let fnerror(program$,err,line,act$,"xit")
 50040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 50060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+50080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50120 ! /region
 50140 ! ______________________________________________________________________

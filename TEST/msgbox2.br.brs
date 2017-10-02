@@ -9,7 +9,7 @@
 02000   dim mesg$(6)*80
 02150   let mesg$(1)="This is your last chance!" !:
         let mesg$(2)="" !:
-        let mesg$(3)="Do you want to print a" !:
+        let mesg$(3)="Do you want to pr a" !:
         let mesg$(4)="Cash Receipts Journal" !:
         let mesg$(5)="or a " !:
         let mesg$(6)="Deposit List?" !:

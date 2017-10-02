@@ -18,7 +18,7 @@
 01010    library "S:\Core\ScreenIO\Screenio" : fnfm$
 01020    let Ret$=fnfm$("statecombo","",0,0,"",0,0,0,0,mat PassedData$)
 01030    if len(trim$(Ret$)) then
-01040       print Ret$
+01040       pr Ret$
 01050    end if
 01060    if fkey=93 then execute "system"
 01070    stop
@@ -59,10 +59,10 @@
 05033        mat X(udim(mat F))
 05034        read #DataFile, using form$(DataFile), rec=LastReadRecord : mat X$, mat X
 05035        rewrite #DataFile, using form$(DataFile) : mat F$, mat F
-05036        let CurrentRec=LastRecordRead
+05036        currentRec=LastRecordRead
 05037     else
 05038        write #DataFile, using form$(DataFile) : mat F$, mat F
-05039        let CurrentRec=LastReadRecord=rec(DataFile)
+05039        currentRec=LastReadRecord=rec(DataFile)
 05040     end if
 05041  !
 05042     let RepopulateListviews=1
@@ -79,7 +79,7 @@
 05053  def fnListviewComboAdd
 05054     mat f$=("")
 05055     mat f=(0)
-05056     let CurrentField$="FirstField"
+05056     currentField$="FirstField"
 05057     let LastReadRecord=0
 05058  fnend
 05059 !
@@ -100,7 +100,7 @@
 05074           read #DataFile, using form$(DataFile), rec=LastReadRecord : mat X$, mat X
 05075           delete #DataFile:
 05076           let RepopulateListviews=1
-05077           let CurrentRec=-1
+05077           currentRec=-1
 05078        end if
 05079     else
 05080        ! We're in add. Nothing to delete.
@@ -130,7 +130,7 @@
 05104     let TT=ChangedRead
 05105     if LastReadRecord><rec(DataFile) then
 05106        let LastReadRecord=rec(Datafile)
-05107        let ChangedRead=1
+05107        changedRead=1
 05108     end if
 05109  fnend
 05110 !
@@ -146,7 +146,7 @@
 05120  ! #Include {listviewcomboread}
 05121  !
 05122  def fnListviewComboMain
-05123     let ChangedRead=0
+05123     changedRead=0
 05124  fnend
 05125 !
 05126 ! Imported From "S:\Core\ScreenIO\function\defaults\enter.brs"
@@ -159,12 +159,12 @@
 05133     fncompany_name(0,115)
 05134     for attrItem=1 to udim(mat attr$)
 05135       if lwrc$(attr$(attrItem))=lwrc$('[buttons]') then
-05136         print #0, fields "1,5,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
+05136         pr #0, fields "1,5,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
 05137       else if lwrc$(attr$(attrItem))=lwrc$('[buttoncancel]') then
 05138         if env$('tmp_acs_back_arrow')<>'' then
-05139           print #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
+05139           pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
 05140         else
-05141           print #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\back-icon.png" ioerr ignore
+05141           pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\back-icon.png" ioerr ignore
 05142         end if
 05143       end if
 05144     nex attrItem
@@ -217,7 +217,7 @@
 85022          let fnCheckStringFunction = 0
 85023       else
 85024          if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
-85025             print "Function ("&function$&") Not Supported: The library is out of date or fn not found."
+85025             pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
 85026          end if
 85027       end if
 85028    fnend
@@ -323,7 +323,7 @@
 92036       let ReturnValue = fnExitDefault
 92037    else
 92038       if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
-92039          print "Function ("&function$&") Not Supported: The library is out of date or fn not found."
+92039          pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
 92040       end if
 92041    end if
 92042 !

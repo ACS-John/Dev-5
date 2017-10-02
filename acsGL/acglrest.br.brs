@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsGL\acglRest
-00020 ! Print Retained Earnings Statement
+00020 ! pr Retained Earnings Statement
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnopenprn,fncloseprn,fncno,fndat,fnerror,fnprocess,fnpedat$,fnglfs
 00050   on error goto ERTN
@@ -32,11 +32,11 @@
 00300 L300: ! ______________________________________________________________________
 00310   if fnglfs=5 then goto MENU1
 00320   let fnopenprn
-00330   print newpage
+00330   pr newpage
 00340   open #1: "Name="&env$('Q')&"\GLmstr\AcGLStmt.h"&str$(cno)&",Shr",display,input ioerr EDIT
-00350   print newpage !:
-        print fields "10,20,Cc 30,H,N": "R/E Statement Printing..." !:
-        print fields "12,34,C 11,B,5": "Cancel (F5)" !:
+00350   pr newpage !:
+        pr fields "10,20,Cc 30,H,N": "R/E Statement Printing..." !:
+        pr fields "12,34,C 11,B,5": "Cancel (F5)" !:
         on fkey 5 goto L480
 00360 L360: linput #1: ln$ eof L480
 00370   for j2=1 to len(rtrm$(ln$))
@@ -53,7 +53,7 @@
             let ln1$=ln$(1:j2-1)&rtrm$(actpd$)&ln$(j2+2:78-len(rtrm$(actpd$)))
 00440 L440: let ln$=ln1$
 00450 L450: next j2
-00460   print #255: tab(10);ln$
+00460   pr #255: tab(10);ln$
 00470   goto L360
 00480 L480: close #1: 
 00490   let fncloseprn
@@ -64,7 +64,7 @@
 00540 ERTN: let fnerror(program$,err,line,act$,"xit")
 00550   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00560   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00570   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00570   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00580 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00590 ! /region
 00600 ! ______________________________________________________________________

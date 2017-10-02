@@ -4,13 +4,13 @@
 00050   let fntop(program$,cap$="Build Files")
 00070 ! 
 00080   dim ta(25,2),fb(25),tr(6),a$*5
-00090   print newpage
-00100   print fields "8,25,c 30,r,n": "********  WARNING  ********"
-00110   print fields "11,10,c 70": "THIS PROGRAM WILL ERASE ALL CLIENT RECORDS FROM THIS FILE."
-00120   print fields "13,5,C 75": "ENTER PASSWORD TO CONTINUE; ELSE PRESS ENTER TO RETURN TO CLIENT MENU."
+00090   pr newpage
+00100   pr fields "8,25,c 30,r,n": "********  WARNING  ********"
+00110   pr fields "11,10,c 70": "THIS PROGRAM WILL ERASE ALL CLIENT RECORDS FROM THIS FILE."
+00120   pr fields "13,5,C 75": "ENTER PASSWORD TO CONTINUE; ELSE PRESS ENTER TO RETURN TO CLIENT MENU."
 00130 L130: input fields "15,10,C 5,IE,n": a$ conv L130
 00140   if uprc$(a$)="THINK" then goto L150 else goto L610
-00150 L150: print newpage
+00150 L150: pr newpage
 00160   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno'),internal,input ioerr L180
 00170   close #1,free: 
 00180 L180: open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",SIZE=0,RecL=534",internal,output 
@@ -48,25 +48,25 @@
 00500 !   close #7: 
 00510   open #99: "Name=PROC."&wsid$,display,output 
 00520   restore #99: 
-00530   print #99: "CLEAR"
-00540   print #99: "PROCERR RETURN"
-00550   print #99: "Index "&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&' '&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&" 1 5 REPLACE DupKeys"
-00560   print #99: "Index "&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&' '&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&" 6 28 REPLACE DupKeys"
-00570   print #99: "LOAD S:\Time Management\Client Legacy"
-00580   print #99: "RUN"
+00530   pr #99: "CLEAR"
+00540   pr #99: "PROCERR RETURN"
+00550   pr #99: "Index "&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&' '&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&" 1 5 REPLACE DupKeys"
+00560   pr #99: "Index "&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&' '&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&" 6 28 REPLACE DupKeys"
+00570   pr #99: "LOAD S:\Time Management\Client Legacy"
+00580   pr #99: "RUN"
 00590   close #99: 
 00600   chain "PROC=PROC."&wsid$
 00610 L610: chain "S:\Time Management\Client Legacy"
-00620 ERTN: if err=61 then print fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L640
+00620 ERTN: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L640
 00630   goto L680
-00640 L640: print newpage
-00650   if err=4148 then print fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L670
+00640 L640: pr newpage
+00650   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L670
 00660   goto L680
-00670 L670: print fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00680 L680: print fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00670 L670: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00680 L680: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00690   input fields "24,60,C 1,N": quitcode$
 00700   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-00710   print fields "23,3,C 78,N": ""
-00720   print fields "24,3,C 78,N": ""
+00710   pr fields "23,3,C 78,N": ""
+00720   pr fields "24,3,C 78,N": ""
 00730   retry 
 00740 XIT: let fnxit

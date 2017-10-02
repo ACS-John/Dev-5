@@ -5,8 +5,8 @@
 10400   library 'S:\Core\Library': fntransfile
 10500   let fntop(program$,cap$="Import Transactions from Mint CSV to CL")
 10600   dim cr$*1,lf$*1,crlf$*2,line$*2048,item$(1)*1024
-10700   let cr$=chr$(13) : let lf$=chr$(10)
-10800   let crlf$=cr$&lf$
+10700   cr$=chr$(13) : let lf$=chr$(10)
+10800   crlf$=cr$&lf$
 11100   dim fl1$(7),flo1$(11),sc3$(5),pt(6),f3$*255,flo3$(6),name$*25,cap$*128
 11200   dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50
 11300   dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
@@ -26,7 +26,7 @@
 12700   let filter_date(2)=20121231
 12800   let file_import$=env$('userprofile')&'\Downloads\transactions.csv'
 12900   let fntos(sn$="ask_fdd"&str$(udim(mat label$))&'_dates')
-13000   let respc=0 : let ad_line=0 : let col1_len=36 : let col2_pos=col1_len+2
+13000   let respc=0 : ad_line=0 : col1_len=36 : col2_pos=col1_len+2
 13100   let fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right:=1)
 13200   let fntxt(ad_line,col2_pos,8,0,1,"3")
 13300   let resp$(respc+=1)=str$(filter_date(ad_line))
@@ -46,8 +46,8 @@
 14700     let file_import$=resp$(3)
 14800   end if 
 14900   let fn_import_it(file_import$)
-15000   end  ! print newpage
-15100 ! print fields mat fl1$: mat sc1$,"A/R Input Selection Menu","Selection:"
+15000   end  ! pr newpage
+15100 ! pr fields mat fl1$: mat sc1$,"A/R Input Selection Menu","Selection:"
 15200 L630: ! 
 15300 ! 
 15400   input fields "13,29,n 1,eu,n": transaction_type conv L630
@@ -59,30 +59,30 @@
 16000   if transaction_type=3 then let sc2$(6)="Discount Amount" else let sc2$(6)=""
 16100   if gx=0 then let sc2$(7)=" "
 16200 SCREENS_TRANS_ENTRY_B: ! 
-16300   print newpage
-16400   print fields mat flo1$: mat sc2$,"A/R Input "&sc1$(transaction_type+1)(5:18),"Client Number as 0 to stop"
+16300   pr newpage
+16400   pr fields mat flo1$: mat sc2$,"A/R Input "&sc1$(transaction_type+1)(5:18),"Client Number as 0 to stop"
 16500   let ps1=0
 16600   if vf=0 then goto L790
 16700   if gx><0 then goto L780
 16800 L760: ! 
-16900   print fields mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2)
+16900   pr fields mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2)
 17000   goto L790
 17100 L780: ! 
-17200   print fields mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
+17200   pr fields mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
 17300 L790: ! 
-17400   print fields "5,30,pic(zzzzzz)": tr(1)
-17500   print fields "24,20,C 50,N": "F1 Continue   F2 verify name    F4 Search"
+17400   pr fields "5,30,pic(zzzzzz)": tr(1)
+17500   pr fields "24,20,C 50,N": "F1 Continue   F2 verify name    F4 Search"
 17600   if gx><0 then goto L910
 17700 L820: ! 
 17800   input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2) conv L870
 17900   if cmdkey=4 then let fn_tmsrch : goto L760
 18000   let p$=uprc$(lpad$(rtrm$(p$),5))
 18100   if ce>0 then let fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
-18200   let ce=0
+18200   ce=0
 18300   goto L1280
 18400 L870: ! 
 18500   if ce>0 then let fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
-18600   let ce=cnt+1
+18600   ce=cnt+1
 18700   let fli1$(ce)=srep$(uprc$(rtrm$(fli1$(ce))),1,"U","RC")
 18800   goto L820
 18900 L910: ! 
@@ -91,7 +91,7 @@
 19200   rinput fields "3,30,C 5,EU,n": p$ conv L920
 19300   if cmdkey=4 then let fn_tmsrch : goto L920
 19400   let p$=uprc$(lpad$(rtrm$(p$),5))
-19500   if ltrm$(p$)="-1" then print fields mat otgl$: mat gln1 else print fields mat otgl$: mat gln2
+19500   if ltrm$(p$)="-1" then pr fields mat otgl$: mat gln1 else pr fields mat otgl$: mat gln2
 19600   if ltrm$(p$)="0" or ltrm$(p$)="" and vf=0 then goto SCREEN_1
 19700   if ltrm$(p$)="0" or ltrm$(p$)="" and vf=1 then goto L1630
 19800   if ltrm$(p$)="-1" then let name$="CASH SALE" else goto L990
@@ -101,10 +101,10 @@
 20200   goto L1050
 20300 L1020: ! 
 20400   let name$="INVALID CLIENT NUMBER"
-20500   print fields "3,40,C 25,R,N": name$
+20500   pr fields "3,40,C 25,R,N": name$
 20600   goto L920
 20700 L1050: ! 
-20800   print fields "3,40,C 25,N": name$
+20800   pr fields "3,40,C 25,N": name$
 20900 L1060: ! 
 21000   let fli1$(4)="6,30,n 11.2,ut,n"
 21100   if r1>0 then goto L1180
@@ -123,11 +123,11 @@
 22400 L1200: ! 
 22500   let p$=uprc$(lpad$(rtrm$(p$),5))
 22600   if ce>0 then let fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
-22700   let ce=0
+22700   ce=0
 22800   goto L1280
 22900 L1240: ! 
 23000   if ce>0 then let fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
-23100   let ce=cnt+1
+23100   ce=cnt+1
 23200   let fli1$(ce)=srep$(uprc$(rtrm$(fli1$(ce))),1,"U","RC")
 23300   if cnt<=4 then goto L1060 else goto L1180
 23400 L1280: ! 
@@ -136,16 +136,16 @@
 23700   let ps1=1
 23800   if tr(1)<10100 or tr(1)>123199 then goto L1320 else goto L1340
 23900 L1320: ! 
-24000   print fields "5,48,c 20": "INVALID DATE"
+24000   pr fields "5,48,c 20": "INVALID DATE"
 24100   goto L790
 24200 L1340: ! 
 24300   if tr(3)><0 then goto L1370
-24400   print fields "6,48,c 20": "NO AMOUNT ENTERED"
+24400   pr fields "6,48,c 20": "NO AMOUNT ENTERED"
 24500   goto L790
 24600 L1370: ! 
 24700   if gx=0 then goto L1520
 24800   if pgl(gpx)>0 then goto L1410
-24900   print fields "9,45,c 30": "G/L # REQUIRED"
+24900   pr fields "9,45,c 30": "G/L # REQUIRED"
 25000   goto L790
 25100 L1410: ! 
 25200   let gla=0
@@ -156,9 +156,9 @@
 25700 L1460: ! 
 25800   if transaction_type=3 then let gla=gla-tr(2)
 25900   if gla=tr(3) then goto L1520
-26000   print fields "11,2,c 75,h,n": " G/L ALLOCATIONS DO NOT AGREE WITH TOTAL AMOUNT.  PRESS ENTER TO CONTINUE."
+26000   pr fields "11,2,c 75,h,n": " G/L ALLOCATIONS DO NOT AGREE WITH TOTAL AMOUNT.  PRESS ENTER TO CONTINUE."
 26100   input fields "11,78,c 1,EU,n": pause$
-26200   print fields "11,2,c 75,n,n": " "
+26200   pr fields "11,2,c 75,n,n": " "
 26300   goto L790
 26400 L1520: ! 
 26500   if ltrm$(p$)="-1" then goto L1540
@@ -184,13 +184,13 @@
 28500   let p$=""
 28600   goto SCREEN_ASK_REF_TO_FIX ! /r
 28700 SCREEN_PROOF_TOTALS: ! r: old
-28800   print newpage
-28900   print fields mat fl1$: mat sc3$,"A/R Input Proof Totals",""
-29000   print fields "11,5,C 20": "Total Cash Sales"
-29100   print fields "12,5,C 22": "Total Discounts Taken"
-29200   print fields mat flo3$: mat pt
-29300   print fields "12,26,n 11.2": tdt
-29400   print fields "18,1,C 70,H,N": "1=Merge; 2=Corrections; 3=Proof List: 5=Stop Without Posting"
+28800   pr newpage
+28900   pr fields mat fl1$: mat sc3$,"A/R Input Proof Totals",""
+29000   pr fields "11,5,C 20": "Total Cash Sales"
+29100   pr fields "12,5,C 22": "Total Discounts Taken"
+29200   pr fields mat flo3$: mat pt
+29300   pr fields "12,26,n 11.2": tdt
+29400   pr fields "18,1,C 70,H,N": "1=Merge; 2=Corrections; 3=Proof List: 5=Stop Without Posting"
 29500 L1790: ! 
 29600   input fields "18,61,n 1,eu,n": j conv L1790
 29700   if j=3 then let fn_print_proof_list : goto L1790
@@ -201,15 +201,15 @@
 30200   def fn_print_proof_list
 30300     let r=0
 30400     let fnopenprn
-30500     print newpage
+30500     pr newpage
 30600     on fkey 5 goto L2040
-30700     print newpage
-30800     print #255,using L1910: date$,env$('cnam'),time$,"Input Edit List"
+30700     pr newpage
+30800     pr #255,using L1910: date$,env$('cnam'),time$,"Input Edit List"
 30900 L1910: form pos 1,c 8,pos namtab,c 50,skip 1,pos 1,c 8,pos 58,c 50
-31000     print fields "10,20,C 40,N": "Input Edit Listing In Process"
-31100     print fields "23,2,C 30,N": "Press F5 To Stop"
-31200     print #255: "Ref #  Cl #  Invoice #";
-31300     print #255: tab(34);"Date     Amount             Description           Discount          Tr Code"
+31000     pr fields "10,20,C 40,N": "Input Edit Listing In Process"
+31100     pr fields "23,2,C 30,N": "Press F5 To Stop"
+31200     pr #255: "Ref #  Cl #  Invoice #";
+31300     pr #255: tab(34);"Date     Amount             Description           Discount          Tr Code"
 31400 L1960: ! 
 31500     let r=r+1
 31600     read #h_addr,using L2110,rec=r: p$,iv$,mat tr,id$ eof L2040,norec L2040 ioerr ERR_FILE
@@ -218,7 +218,7 @@
 31900     let name$=""
 32000     read #h_clmstr,using 'form pos 6,c 25',key=p$,release: name$ nokey L2010
 32100 L2010: ! 
-32200     print #255,using L2020: r,p$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
+32200     pr #255,using L2020: r,p$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
 32300 L2020: form pos 1,n 4,x 2,c 5,x 2,c 18,n 6,n 11.2,pic(zzzzzz),x 7,c 22,n 12.2,n 12
 32400     goto L1960
 32500 L2040: ! 
@@ -226,8 +226,8 @@
 32700     on fkey 5 ignore 
 32800   fnend 
 32900 SCREEN_ASK_REF_TO_FIX: ! r:
-33000   print newpage
-33100   print fields "10,10,c 60": "Ref Number To Correct; (0 when Completed)"
+33000   pr newpage
+33100   pr fields "10,10,c 60": "Ref Number To Correct; (0 when Completed)"
 33200 L2080: input fields "10,61,n 4,eu,n": r1 conv L2080
 33300   if r1=0 then goto SCREEN_ASK_ADD_MORE
 33400   read #h_addr,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl norec SCREEN_ASK_REF_TO_FIX ioerr ERR_FILE
@@ -243,9 +243,9 @@
 34400   goto SCREENS_TRANS_ENTRY_A
 34500 ! /r
 34600 SCREEN_ASK_ADD_MORE: ! r:
-34700   print newpage
+34700   pr newpage
 34800   let vf=0
-34900   print fields "10,10,c 50": "ENTER 1 TO MAKE ADDITIONAL ENTRIES; ELSE ENTER 2"
+34900   pr fields "10,10,c 50": "ENTER 1 TO MAKE ADDITIONAL ENTRIES; ELSE ENTER 2"
 35000 L2250: ! 
 35100   input fields "10,61,N 1,EU,N": j conv L2250
 35200   on j goto SCREEN_1,SCREEN_PROOF_TOTALS none L2250
@@ -254,17 +254,17 @@
 35500 XIT: ! 
 35600   let fnxit
 35700 ERR_FILE: ! r:
-35800   if err=61 then print fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2310
+35800   if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2310
 35900   goto L2350
-36000 L2310: print newpage
-36100   if err=4148 then print fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2340
+36000 L2310: pr newpage
+36100   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2340
 36200   goto L2350
-36300 L2340: print fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-36400 L2350: print fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+36300 L2340: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+36400 L2350: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 36500   input fields "24,60,C 1,N": quitcode$
 36600   if err=61 and rtrm$(uprc$(quitcode$))="Q" then goto SCREEN_1 else goto L2410
-36700   print fields "23,3,C 78,N": ""
-36800   print fields "24,3,C 78,N": ""
+36700   pr fields "23,3,C 78,N": ""
+36800   pr fields "24,3,C 78,N": ""
 36900   retry 
 37000 L2410: goto XIT
 37100 ! /r
@@ -277,8 +277,8 @@
 37800     let heading$="Acct #-Name--------------------Address--------Balance"
 37900     let fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
 38000     let p$=selection$ ! pull key from first field in search line
-38100     let ano=0
-38200     let ano=val(selection$) conv L4910
+38100     ano=0
+38200     ano=val(selection$) conv L4910
 38300 L4910: ! 
 38400   fnend 
 38500   def fn_get_old_setup
@@ -447,7 +447,7 @@
 54800     let line$=gnl_buffer$(1:pos_crlf)
 54900     let gnl_buffer$(1:pos_crlf+1)=''
 55000 ! line$=srep$(line$,cr$,'^') : line$=srep$(line$,lf$,'~')
-55100 ! print 'line='&line$ : pause
+55100 ! pr 'line='&line$ : pause
 55200     goto GNL_XIT
 55300 GNL_H_IN_READ_IOERR: ! 
 55400     let gnl_block$=gnl_block$&lf$
@@ -458,22 +458,22 @@
 55900   def fn_import_it(file_import$*256)
 56000     open #h_in:=fngethandle: 'Name='&file_import$&',RecL=100,Shr',external,input 
 56100     let fnopenprn
-56200     print #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
+56200     pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
 56300 FORM_OUT: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
 56400 FORM_PRN: form pos 1,pic(####d##d##),x 1,n 10.2,x 2,c 40,6*(skip 1,x 10,c 80)
 56500 FORM_PRN_HEAD: form pos 1,cc 8,x 1,5*cr 10,x 1,c 30,cr 7
 56600 ! r: headings
 56700     let fn_get_next_line(line$) : let line_count+=1
 56800     let str2mat(line$,mat item$,',',"QUOTES:TRIM")
-56900     let csv_date=srch(mat item$,"Date")
-57000     let csv_desc=srch(mat item$,"Description")
-57100     let csv_odesc=srch(mat item$,"Original Description")
-57200     let csv_amt=srch(mat item$,"Amount")
-57300     let csv_type=srch(mat item$,"Transaction Type")
-57400     let csv_cat=srch(mat item$,"Category")
-57500     let csv_acct=srch(mat item$,"Account Name")
-57600     let csv_labels=srch(mat item$,"Labels")
-57700     let csv_notes=srch(mat item$,"Notes"&lf$) ! pr csv_notes : pause
+56900     csv_date=srch(mat item$,"Date")
+57000     csv_desc=srch(mat item$,"Description")
+57100     csv_odesc=srch(mat item$,"Original Description")
+57200     csv_amt=srch(mat item$,"Amount")
+57300     csv_type=srch(mat item$,"Transaction Type")
+57400     csv_cat=srch(mat item$,"Category")
+57500     csv_acct=srch(mat item$,"Account Name")
+57600     csv_labels=srch(mat item$,"Labels")
+57700     csv_notes=srch(mat item$,"Notes"&lf$) ! pr csv_notes : pause
 57800 ! /r
 57900     do 
 58000       let fn_get_next_line(line$) : let line_count+=1
@@ -481,25 +481,25 @@
 58200         let str2mat(line$,mat item$,',',"QUOTES:TRIM")
 58300         if item$(csv_date)<>'' then let the_date=fn_get_the_date(item$(csv_date))
 58400         if the_date=>filter_date(1) and the_date<=filter_date(2) then 
-58500           print the_date,val(item$(csv_amt)),item$(csv_desc),item$(csv_odesc)
+58500           pr the_date,val(item$(csv_amt)),item$(csv_desc),item$(csv_odesc)
 58600 !       r: translate from csv to acs tranaction thing
 58700           if item$(csv_type)='credit' then 
 58800             let transaction_type=2 ! deposit
 58900           else if item$(csv_type)='debit' then 
 59000             let transaction_type=1 ! check
 59100           else 
-59200             print 'unhandled transaction_type!  item$(csv_type)='&item$(csv_type)
+59200             pr 'unhandled transaction_type!  item$(csv_type)='&item$(csv_type)
 59300             pause 
 59400           end if 
 59500           if item$(csv_acct)='Free Business Checking' then 
-59600             let bank_account=1
+59600             bank_account=1
 59700           else 
-59800             print 'unhan bank account!  item$(csv_acct)='&item$(csv_acct)
+59800             pr 'unhan bank account!  item$(csv_acct)='&item$(csv_acct)
 59900             pause 
 60000           end if 
 60300 !       /r
 60400 !    let fn_write_out(the_date,val(item$(4)),val(item$(7)),val(item$(9)),val(item$(10)),item$(11)(1:30))
-60500           print #255,using FORM_PRN: the_date,val(item$(csv_amt)),item$(csv_type),item$(csv_desc),item$(csv_odesc),item$(csv_cat),item$(csv_acct),item$(csv_labels),item$(csv_notes)
+60500           pr #255,using FORM_PRN: the_date,val(item$(csv_amt)),item$(csv_type),item$(csv_desc),item$(csv_odesc),item$(csv_cat),item$(csv_acct),item$(csv_labels),item$(csv_notes)
 60900         end if  ! the_date=>filter_date(1) and <=filter_date(2)
 61000       end if  ! line$<>''
 61100     loop until line$=''
@@ -520,9 +520,9 @@
 62600     let inp(5)=wo_time*inp(4)
 62700     let inp(6)=date(days(wo_date,'ccyymmdd'),'mmddyy') ! mmddyy
 62800     let inp(7)=wo_cat
-62900     let b6=0 ! ???
-63000     let b7=1 ! ???
-63100     let b8=wo_month
+62900     b6=0 ! ???
+63000     b7=1 ! ???
+63100     b8=wo_month
 63200     if wo_cat=6 then 
 63300       let sc=601
 63400     else if wo_cat=2 then 
@@ -532,8 +532,8 @@
 63800     else if wo_cat=23 then 
 63900       let sc=2300
 64000     else 
-64100       print #255: '!!! wo_cat ('&str$(wo_cat)&') is unrecognized - enhance code'
-64200 !   print 'wo_cat (';wo_cat;') is unrecognized - enhance code' : pause
+64100       pr #255: '!!! wo_cat ('&str$(wo_cat)&') is unrecognized - enhance code'
+64200 !   pr 'wo_cat (';wo_cat;') is unrecognized - enhance code' : pause
 64300     end if 
 64400     write #h_out,using FORM_OUT: mat inp,b6,b7,b8,sc,'',0,wo_desc$
 64500   fnend  ! fn_write_out

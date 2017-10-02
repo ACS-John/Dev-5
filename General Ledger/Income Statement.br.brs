@@ -1,5 +1,5 @@
 00010 ! formerly S:\acsGL\acglinc
-00020 ! -- Print Income Statement !:
+00020 ! -- pr Income Statement !:
         ! FOR 8 1/2 * 11 PAPER WITHOUT PERCENTAGES
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fnprocess,fnchain,fnUseDeptNo,fnpedat$,fnps,fnpriorcd,fnfscode,fnactpd$,fncch$,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnactpd
@@ -10,8 +10,8 @@
 00090   dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),sc1$(2)*20
 00100 ! ______________________________________________________________________
 00110   let fntop(program$)
-00140   let actpd$=fnactpd$
-00142   let actpd=fnactpd
+00140   actpd$=fnactpd$
+00142   actpd=fnactpd
 00147   ! fscode=fnfscode
 00148   ! priorcd=fnpriorcd
 00150   if fnglfs=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
@@ -32,14 +32,14 @@
 00230   let fntos(sn$="GLInput")
 00232   let mylen=30: let mypos=mylen+3 : let right=1
 00240   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00250   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to print only one department, else leave blank for all.",0 )
+00250   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
 00252   let resp$(1)=""
 00260   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
 00270   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
 00280   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
 00290   let fnacs(sn$,0,mat resp$,ckey)
 00300   if ckey=5 then goto XIT
-00310   let costcntr=val(resp$(1))
+00310   costcntr=val(resp$(1))
 00320 L320: ! 
 00322   let fnopenprn
 00330   if fnps=2 then ! secondary
@@ -63,7 +63,7 @@
 00460 L460: if te$="S" or te$="F" then goto L480
 00470   if heading=0 and te$><"R" then gosub HDR_REPORT
 00480 L480: on pos ("RFHDTS",te$,1) goto L1070,L1110,L490,L540,L970,L1070 none READ_ACGLFNS
-00490 L490: print #255,using L500: d$(1:40)
+00490 L490: pr #255,using L500: d$(1:40)
 00500 L500: form pos sp,c 40,skip 1
 00510   gosub HDR_COLUMN_A
 00520   gosub RESET_ACCUM_ARRAY
@@ -76,12 +76,12 @@
 00590   if ir=0 then goto L580 ! skip any gl accounts not pointed to ic
 00610   if fscode=0 or (fscode=actpd and priorcd=1) then goto L680
 00620   if fscode<1 or fscode>13 then let fscode=1
-00630   if priorcd=1 then let cb=by(fscode) else let cb=bp(fscode)
+00630   if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00640   if priorcd=2 then goto L670
-00650   if fscode>1 then let bb=by(fscode-1) else let bb=0
+00650   if fscode>1 then bb=by(fscode-1) else bb=0
 00660   goto L680
 00670 L670: ! 
-00672   if fscode>1 then let bb=bp(fscode-1) else let bb=0
+00672   if fscode>1 then bb=bp(fscode-1) else bb=0
 00680 L680: ! 
 00682   if ir=val(r$) then 
 00683 !  if debug_this then pr gl_number$;'  total(';total;')+=(cb(';cb;')-bb(';bb;'))'
@@ -99,8 +99,8 @@
 00750 L750: ! 
 00752   for j=1 to 9
 00760     if ac(j)=9 then goto L790 ! 10/14/87
-00770     let accum(j,1)=accum(j,1)+total
-00780     let accum(j,2)=accum(j,2)+total2
+00770     accum(j,1)=accum(j,1)+total
+00780     accum(j,2)=accum(j,2)+total2
 00790 L790: ! 
 00792   next j
 00800   if rs=1 then 
@@ -121,15 +121,15 @@
 00852 ! If DS=1 Then Let DOLLAR$="": Let FORM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($$$$,$$$,$$$.##),C 1,POS 74,C 1,C 5,PIC($$$$$$,$$$,$$$.##),C 1,skip 1" Else Let FORM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
 00853 ! if debug_this then pr #255: '***'
 00854   if ul=1 then 
-00856     print #255,using L856: d$(1:sp2),dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}" pageoflow PGOF
+00856     pr #255,using L856: d$(1:sp2),dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}" pageoflow PGOF
 00858 L856: form pos sp,c sp2,pos 50,c 1,c 5,pic(----,---,---.##),c 1,pos 74,c 1,c 5,pic(------,---,---.##),c 1,skip 1
 00860   else 
-00862     print #255,using L870: d$(1:sp2),dollar$,total,dollar$,total2 pageoflow PGOF
+00862     pr #255,using L870: d$(1:sp2),dollar$,total,dollar$,total2 pageoflow PGOF
 00864 L870: form pos sp,c sp2,pos 49,c 1,pic(-----,---,---.##),pos 67,c 1,pic(-------,---,---.##),skip 1
 00866   end if 
 00868 ! if debug_this then pr #255: '***'
 00880   if pc0=1 then gosub BLDPCT2
-00890   if pc3>0 or pc4>0 then print #255,using L900: pc3,pc4
+00890   if pc3>0 or pc4>0 then pr #255,using L900: pc3,pc4
 00900 L900: form pos 63,n 4,pos 82,n 4,skip 1
 00910   let total=0
 00920   let total2=0
@@ -139,9 +139,9 @@
 00950 L950: ! 
 00952   gosub HDR_COLUMN_A
 00960   goto READ_ACGLFNS
-00970 L970: if ap=0 then let ap=1
-00980   if rs=1 then let accum1=-accum(ap,1) else let accum1=accum(ap,1)
-00990   if rs=1 then let accum2=-accum(ap,2) else let accum2=accum(ap,2)
+00970 L970: if ap=0 then ap=1
+00980   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
+00990   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
 01000   if ds=1 then let dollar$="$" else let dollar$=" "
 01002   let sp2=49-sp-1
 01004   if ds=1 then 
@@ -150,11 +150,11 @@
 01010   else 
 01012     let form$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
 01014   end if 
-01015 ! print some sub total like thingies
+01015 ! pr some sub total like thingies
 01016   if ul=1 then 
-01018     print #255,using L856: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}" pageoflow PGOF
+01018     pr #255,using L856: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}" pageoflow PGOF
 01026   else 
-01028     print #255,using L870: d$(1:sp2),dollar$,accum1,dollar$,accum2 pageoflow PGOF
+01028     pr #255,using L870: d$(1:sp2),dollar$,accum1,dollar$,accum2 pageoflow PGOF
 01030   end if 
 01032   gosub RESET_ACCUM_ARRAY
 01035   if ul=1 then goto L1050
@@ -179,15 +179,15 @@
 01180 RESET_ACCUM_ARRAY: ! r:
 01182   for j=1 to 9
 01190     if ac(j)=0 or ac(j)=9 then goto L1220 ! 10/14/87
-01200     let accum(j,1)=0
-01210     let accum(j,2)=0
+01200     accum(j,1)=0
+01210     accum(j,2)=0
 01220 L1220: ! 
 01222   next j
 01230   return  ! /r
 01240 HDR_COLUMN_A: ! r:
 01242   if ls=0 then goto HDR_COLUMN_XIT
 01250   if ls=99 then goto HDR_COLUMN_B
-01260   print #255,using L1270: " "
+01260   pr #255,using L1270: " "
 01270 L1270: form pos 1,c 1,skip ls
 01280   goto HDR_COLUMN_XIT
 01290 HDR_COLUMN_B: ! 
@@ -195,10 +195,10 @@
 01300 ! If PGLEN<>42 Then Let PGLEN=58
 01310   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
 01320 ! If PGLEN=42 Then Let SK=SK+1
-01330   print #255,using L1340: rtrm$(foot$),"Page "&str$(pt1)
+01330   pr #255,using L1340: rtrm$(foot$),"Page "&str$(pt1)
 01340 L1340: form skip sk,pos tabnote,c fl,pos 80,c 8,skip 1
 01350   if eofcode=1 then goto HDR_COLUMN_XIT
-01360   print #255: newpage
+01360   pr #255: newpage
 01370   gosub HDR_REPORT
 01380 HDR_COLUMN_XIT: ! 
 01382   return  ! /r
@@ -208,23 +208,23 @@
 01410 L1410: ! r:
 01412   if ul=0 then goto L1500
 01420   if ul=1 then goto L1470
-01440   print #255,using 'form pos 49,c 17,pos 67,c 19': "=================","==================="
+01440   pr #255,using 'form pos 49,c 17,pos 67,c 19': "=================","==================="
 01460   goto L1500
 01470 L1470: ! 
-01480   print #255: ''
-01482   print #255,using 'form pos 49,c 18,pos 67,c 19': "_________________","___________________"
+01480   pr #255: ''
+01482   pr #255,using 'form pos 49,c 18,pos 67,c 19': "_________________","___________________"
 01500 L1500: ! 
 01520   return  ! /r
 01530 HDR_REPORT: ! r:
 01532   let heading=1
 01540   if pt1=0 then let pt1=1 else let pt1=pt1+1
-01550   print #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
-01560   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
-01570   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs24 \b "&trim$(secondr$)&"}"
-01580   print #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(actpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
-01590   print #255: "\ql "
-01600   print #255: 
-01610   print #255,using L1620: lpad$(rtrm$(fncch$),20),"Year To Date"
+01550   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
+01560   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
+01570   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs24 \b "&trim$(secondr$)&"}"
+01580   pr #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(actpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
+01590   pr #255: "\ql "
+01600   pr #255: 
+01610   pr #255,using L1620: lpad$(rtrm$(fncch$),20),"Year To Date"
 01620 L1620: form pos 45,c 20,pos 73,c 12,skip 2
 01630   return  ! /r
 01640 ! ______________________________________________________________________
@@ -271,6 +271,6 @@
 02020 ERTN: let fnerror(program$,err,line,act$,"xit")
 02030   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02040   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02050   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02050   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02060 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02070 ! /region

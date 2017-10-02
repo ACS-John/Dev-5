@@ -67,47 +67,47 @@
 00530 ! let g1(sz1)=ttg(11)/ttg
 00532   let su1=twu/ttg
 00534   gosub SEWER_CALK
-00540   print #255,using L550: x$,e2$(1:24),g1(1),g1(2),su1,swchg pageoflow NEWPGE
+00540   pr #255,using L550: x$,e2$(1:24),g1(1),g1(2),su1,swchg pageoflow NEWPGE
 00550 L550: form pos 1,c 11,c 24,2*n 9.2,n 9,n 9.2,skip 1
 00560   let ttg=0 : mat ttg=(0)
 00562   let twu=0
 00570   let tg2=tg2+1 : mat g2=g2+g1
 00580   goto L340
 00590 DONE: ! 
-00600   print #255: 
+00600   pr #255: 
 00610 L610: form pos 5,c 20,n 9
-00620   print #255,using L610: "Total Customers",tg2
+00620   pr #255,using L610: "Total Customers",tg2
 00630   let j2=0
 00640   for j=1 to 9
 00650     if trim$(servicename$(j))<>"" then 
 00660       let j2=j2+1
-00670       print #255,using L610: servicename$(j),g2(j2)
+00670       pr #255,using L610: servicename$(j),g2(j2)
 00672     end if  ! trim$(servicename$(j))<>""
 00680   next j
-00690 ! print #255,using L610: "Total",g2(sz1)
+00690 ! pr #255,using L610: "Total",g2(sz1)
 00700   close #1: 
 00710   let fncloseprn
 00720 XIT: let fnxit
 00730 ! ______________________________________________________________________
 00740 NEWPGE: ! 
-00742   print #255: newpage
+00742   pr #255: newpage
 00750   gosub HDR
 00760   continue 
 00770 ! ______________________________________________________________________
 00780 HDR: ! 
 00790   let p1=p1+1
-00800   print #255,using "Form POS 20,CC 40,POS 70,C 5,N 4": env$('cnam'),"Page ",p1
-00810   print #255,using "Form POS 20,C 23,pic(####/##/##),c 6,pic(####/##/##)": "Average Charges From:",sd1,"  To:",sd2
-00820   print #255: "                                    <--------AVERAGE--------->    NEW  "
-00830   print #255: "Account    Customer Name             water    sewer    usage    std chg"
-00840   print #255: "__________ ________________________ ________ ________ ________ ________"
+00800   pr #255,using "Form POS 20,CC 40,POS 70,C 5,N 4": env$('cnam'),"Page ",p1
+00810   pr #255,using "Form POS 20,C 23,pic(####/##/##),c 6,pic(####/##/##)": "Average Charges From:",sd1,"  To:",sd2
+00820   pr #255: "                                    <--------AVERAGE--------->    NEW  "
+00830   pr #255: "Account    Customer Name             water    sewer    usage    std chg"
+00840   pr #255: "__________ ________________________ ________ ________ ________ ________"
 00850   return 
 00860 ! ______________________________________________________________________
 00870 ! <Updateable Region: ERTN>
 00880 ERTN: let fnerror(program$,err,line,act$,"NO")
 00890   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00900   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00910   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00910   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00920 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00930 ! /region
 00940 ! ______________________________________________________________________

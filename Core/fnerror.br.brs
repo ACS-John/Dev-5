@@ -1,13 +1,13 @@
 02000   library 'S:\Core\Library': fnxit
 02010   library : fnerror
 02020   on error goto ERTN
-02040   print 1/0
+02040   pr 1/0
 03000 XIT: let fnxit
 08000 ! <updateable region: ertn>
 08040 ERTN: let fnerror(program$,err,line,act$,"xit")
 08060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 08080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-08100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+08100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 08120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 08140 ! </updateable region: ertn>
 10000 ! 
@@ -26,57 +26,57 @@
 10260 ! otherwise it should be the paragraph heading of where to goto on
 10280 ! a selected exit (must be 15 characters or less)
 10300 ! ______________________________________________________________________
-10320 !   print border: "Error "&str$(errornumber)&" on line "&str$(linenumber)
-10340     print fields "1,73,C 7,N": bell$
+10320 !   pr border: "Error "&str$(errornumber)&" on line "&str$(linenumber)
+10340     pr fields "1,73,C 7,N": bell$
 10360     let log$="Error "&str$(errornumber)&" at line "&str$(linenumber)
 10380     let log$=log$&" of "&callingProgram$(1:100)
 10400     let fnlog(log$,2)
-10440     let act$="Go "&str$(linenumber)
-10460     let acshelp$="Help\co\error\br\"
-10480     let acshelp$=acshelp$&"Err"&cnvrt$("Pic(####)",errornumber)&".html"
+10440     act$="Go "&str$(linenumber)
+10460     acshelp$="Help\co\error\br\"
+10480     acshelp$=acshelp$&"Err"&cnvrt$("Pic(####)",errornumber)&".html"
 12000 MENU1: ! 
 12020     open #win:=fngethandle: "SRow=4,SCol=4,Rows=17,Cols=72,Border=S:[screen],N=[screen],Caption=<Error",display,outin  ! ,border=Sr   ...   
 12040     if errornumber=61 then 
-12060       print #win,fields "1,1,Cc 69,N": "A record is needed but is locked by another user."
-12080       print #win,fields "2,1,Cc 69,N": "Please ask other users to return to the Menu and"
-12100       print #win,fields "3,1,Cc 69,N": "then you may select Retry."
+12060       pr #win,fields "1,1,Cc 69,N": "A record is needed but is locked by another user."
+12080       pr #win,fields "2,1,Cc 69,N": "Please ask other users to return to the Menu and"
+12100       pr #win,fields "3,1,Cc 69,N": "then you may select Retry."
 12120     else if errornumber=4148 then 
-12140       print #win,fields "1,1,Cc 69,N": "A file lock is needed but the file is already locked by someone else."
-12160       print #win,fields "2,1,Cc 69,N": "Please ask other users to return to the Menu and"
-12180       print #win,fields "3,1,Cc 69,N": "then you may select Retry."
+12140       pr #win,fields "1,1,Cc 69,N": "A file lock is needed but the file is already locked by someone else."
+12160       pr #win,fields "2,1,Cc 69,N": "Please ask other users to return to the Menu and"
+12180       pr #win,fields "3,1,Cc 69,N": "then you may select Retry."
 12200     else if errornumber=632 then 
-12220       print #win,fields "1,1,Cc 69,N": "Problem with Index File"
+12220       pr #win,fields "1,1,Cc 69,N": "Problem with Index File"
 12240     end if 
 12260 ! 
 12280     let lc=7
-12300     print #win,fields str$(lc)&",2,Cr 13,N": "Program:"
-12320     print #win,fields str$(lc)&",16,C 53,P[textboxes]": env$('Core_Program_Current')(1:53)
-12340     print #win,fields str$(lc+=1)&",2,Cr 13,N": "File:"
-12360     print #win,fields str$(lc)&",16,C 53,P[textboxes]": callingProgram$(1:53)
+12300     pr #win,fields str$(lc)&",2,Cr 13,N": "Program:"
+12320     pr #win,fields str$(lc)&",16,C 53,P[textboxes]": env$('Core_Program_Current')(1:53)
+12340     pr #win,fields str$(lc+=1)&",2,Cr 13,N": "File:"
+12360     pr #win,fields str$(lc)&",16,C 53,P[textboxes]": callingProgram$(1:53)
 12380     let lc+=1
-12400     print #win,fields str$(lc+=1)&",2,Cr 13,[screen]": "Error Number:"
-12420     print #win,fields str$(lc)&",16,C 5,P[textboxes]": str$(errornumber) ! ,r,n
+12400     pr #win,fields str$(lc+=1)&",2,Cr 13,[screen]": "Error Number:"
+12420     pr #win,fields str$(lc)&",16,C 5,P[textboxes]": str$(errornumber) ! ,r,n
 12440     let lc+=1
-12460     print #win,fields str$(lc+=1)&",2,Cr 13,[screen]": "Line Number:"
-12480     print #win,fields str$(lc)&",16,C 5,P[textboxes]": str$(linenumber) ! ,r,n
-12500     print #win,fields str$(lc+=1)&",2,Cr 13,N": "Count+1:"
-12520     print #win,fields str$(lc)&",16,C 5,P[textboxes]": str$(xcnt+1) ! ,r,n
-12540     print #win,fields str$(lc+=1)&",2,Cr 13,N": "Session:"
-12560     print #win,fields str$(lc)&",16,C 5,P[textboxes]": session$ ! ,r,n
-12580     let button_pos$='47'
-12600     print #win,fields "9,"&button_pos$&",Cc 22,,B01": "Retry (Enter)"
-12620     print #win,fields "10,"&button_pos$&",Cc 22,,B99": "Exit (Esc)"
-12640 !   print #win,fields "6,"&button_pos$&",C 22,B,10": "WB Help (F10)"
-12660     print #win,fields "11,"&button_pos$&",Cc 22,,B08": "BRWiki Help (F8)"
+12460     pr #win,fields str$(lc+=1)&",2,Cr 13,[screen]": "Line Number:"
+12480     pr #win,fields str$(lc)&",16,C 5,P[textboxes]": str$(linenumber) ! ,r,n
+12500     pr #win,fields str$(lc+=1)&",2,Cr 13,N": "Count+1:"
+12520     pr #win,fields str$(lc)&",16,C 5,P[textboxes]": str$(xcnt+1) ! ,r,n
+12540     pr #win,fields str$(lc+=1)&",2,Cr 13,N": "Session:"
+12560     pr #win,fields str$(lc)&",16,C 5,P[textboxes]": session$ ! ,r,n
+12580     button_pos$='47'
+12600     pr #win,fields "9,"&button_pos$&",Cc 22,,B01": "Retry (Enter)"
+12620     pr #win,fields "10,"&button_pos$&",Cc 22,,B99": "Exit (Esc)"
+12640 !   pr #win,fields "6,"&button_pos$&",C 22,B,10": "WB Help (F10)"
+12660     pr #win,fields "11,"&button_pos$&",Cc 22,,B08": "BRWiki Help (F8)"
 12680 !   if exists(acshelp$)<>0 then
-12700 !     print #win,fields "12,"&button_pos$&",Cc 22,,B09": "ACS Help (F9)"
+12700 !     pr #win,fields "12,"&button_pos$&",Cc 22,,B09": "ACS Help (F9)"
 12720 !   end if
-12740     print #win,fields "14,"&button_pos$&",Cc 22,,B12": "Developer Pause (F12)" ! 1,19,12/CC 12,,B1000
+12740     pr #win,fields "14,"&button_pos$&",Cc 22,,B12": "Developer Pause (F12)" ! 1,19,12/CC 12,,B1000
 12760 ERR_INP: ! 
 14000     input #0,fields "4,4,C 1,AE,N": pause$
 14020     if cmdkey=0 then 
 14040       let log$="action taken = Retry" : let fnlog(log$,2)
-14060       let act$="Go "&str$(linenumber)
+14060       act$="Go "&str$(linenumber)
 14080       goto ERROR_XIT
 14100     else if cmdkey=5 or cmdkey=99 then 
 14120       let log$="action taken = Quit" : let fnlog(log$,2)
@@ -91,7 +91,7 @@
 14300 !     let log$="action taken = WB Help" : let fnlog(log$,2)
 14320 !     gosub ERR_WBHELP
 14340     else if cmdkey=12 then 
-14360       let act$="PAUSE"
+14360       act$="PAUSE"
 14380       let log$="action taken = Program Pause" : let fnlog(log$,2)
 14400       goto ERROR_XIT
 14420     end if 
@@ -127,12 +127,12 @@
 21200       let response$(1)=response$(1)(1:1)
 21300       goto MENU1
 21400     end if 
-21500     let act$="go "&stopable$
+21500     act$="go "&stopable$
 21600     goto ERROR_XIT ! /r
 21800 NEVER: ! r:
-21900     print "The Error routine had an error!"
-22000     print "error "&str$(err)&" on line "&str$(line)
-22100     print "Please call ACS support."
+21900     pr "The Error routine had an error!"
+22000     pr "error "&str$(err)&" on line "&str$(line)
+22100     pr "Please call ACS support."
 22200     pause  ! input fields "1,1,C 1,AEN": pause$
 22300     retry  ! /r
 22400 ERROR_XIT: ! 

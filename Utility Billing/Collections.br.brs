@@ -4,10 +4,10 @@
 06060   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 06080   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
 06100   open #4: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
-06120   let bud1=0
+06120   bud1=0
 06140   open #h_budmstr:=fngethandle: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L630
 06160   open #h_budTrans:=fngethandle: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
-06180   let bud1=1
+06180   bud1=1
 06200 L630: ! 
 06220   open #h_ubcolinp:=6: "Name="&collections_filename$,internal,outin,relative ioerr L700
 06240   if lrec(h_ubcolinp)<1 then 
@@ -41,7 +41,7 @@
 10402       let m1_item$(6)=str$(postingCodeUnused)            ! 
 10406       fn_increaseMatR(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
 10420       ! let m1_item$(7)=rcpt$
-10440       let cHdrItem=cHdrItemFirstService=6
+10440       cHdrItem=cHdrItemFirstService=6
 10460       for j2=1 to 10
 10480         if trim$(srvname$(j2))="" or trim$(srvname$(j2))(1:5)="Reduc" then 
 10500           goto L1030
@@ -111,7 +111,7 @@
 11480   loop 
 11500 ! /r
 12000 ADD_REC: ! r:
-12020   let b7=transType=ti1
+12020   b7=transType=ti1
 12040   let p$=" "
 12060   let rcpt$=""
 12080   let transType=b7
@@ -120,7 +120,7 @@
 14020   if fnask_account('Collections',z$,h_customer)=5 then 
 14040     goto MENU1B
 14060   end if 
-14080   let coramt=0
+14080   coramt=0
 14100   let x1$=z$
 14120 ! r: read selected account and prepare data for SCREEN_ADD
 14140   read #h_customer,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=x1$,release: nam$,bal,db1,mat gb,escrowbal nokey SCREEN_SELECT_ACCOUNT
@@ -166,7 +166,7 @@
 16620   let fntxt(2,27,10,10,1,"",1,"Account (Press Cancel to Re-Select)")
 16640   if ~do_not_blank_rcpt then let resp$(respc:=5)=z$
 16660 ! 
-16680   let col3_pos=50 : let col4_pos=76
+16680   col3_pos=50 : col4_pos=76
 16700 ! 
 16720   let fnlbl(1,col3_pos,"Name:",25,1)
 16740   let fntxt(1,col4_pos,30,30,0,"",1,"Account Name (Press Cancel to Re-Select)")
@@ -313,9 +313,9 @@
 20860 ! 
 20880 L2020: ! 
 20900   let items=sz1 ! If UPRC$(ESCROW$)="Y" Then Let ITEMS=SZ1-1 Else Let ITEMS = SZ1
-20920   for j=1 to items : let alloc(j)=tgb(j) : next j
+20920   for j=1 to items : alloc(j)=tgb(j) : next j
 20940   L2040: ! 
-20980   let transAmount=x(2) : let transDate=x(3) : let b7=transType
+20980   let transAmount=x(2) : let transDate=x(3) : b7=transType
 21000   let postingCodeUnused=0
 21020 L2060: if sum(tgb)=x(2) then gosub BUD2 ! kj 10/14/09
 21040   if sum(tgb)=x(2) and bud1=1 then gosub BUD3 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
@@ -329,7 +329,7 @@
 22010   mat mesg$(6)
 22020   let mesg$(1)="This is your last chance!"
 22040   let mesg$(2)=""
-22060   let mesg$(3)="Do you want to print a"
+22060   let mesg$(3)="Do you want to pr a"
 22080   let mesg$(4)="Cash Receipts Journal"
 22100   let mesg$(5)="or a "
 22120   let mesg$(6)="Deposit List?"
@@ -431,7 +431,7 @@
 26160   if transType=3 then let tcode=3 ! collection
 26180   if transType=4 then let tcode=4 ! credit memo
 26200   if transType=5 then let tcode=5 ! debit memo
-26220   if transType=5 then let bal+=transAmount else let bal-=transAmount
+26220   if transType=5 then bal+=transAmount else bal-=transAmount
 26240   let tmp=fndate_mmddyy_to_ccyymmdd(transDate)
 26260   mat tg=(0): let x=0
 26280   for j=1 to 10
@@ -463,20 +463,20 @@
 27020 IGNORE: continue 
 28000 BUD2: ! r: requires x1$
 28020   let havebudget=0
-28040   let bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
+28040   bd1=0 : mat bd1(5) : mat bd1=(0) : mat bd2=(0) : mat bd3=(0)
 28060   if bud1=0 then goto L5080
 28080   read #h_budmstr,using 'Form POS 1,C 10,PD 4,12*PD 5.2,2*PD 3',key=x1$: z$,mat ba,mat badr nokey L5080
 28100   let ta1=badr(1)
 28120 L4820: if ta1=0 then goto L4900
 28140   read #h_budTrans,using 'Form POS 1,C 10,2*PD 4,24*PD 5.2,2*PD 4,PD 3',rec=ta1: z$,mat bt1,nba norec L4900
 28160   if bt1(14,1)>0 and bt1(14,1)<>transDate then goto L4890
-28180   if bt1(14,1)=transDate then let bt1(14,1)=bt1(14,2)=0 : rewrite #h_budTrans,using "Form POS 11,2*PD 4,24*PD 5.2,2*PD 4",rec=ta1: mat bt1
-28200   let bd1+=1 ! 7/06/05  KJ
+28180   if bt1(14,1)=transDate then bt1(14,1)=bt1(14,2)=0 : rewrite #h_budTrans,using "Form POS 11,2*PD 4,24*PD 5.2,2*PD 4",rec=ta1: mat bt1
+28200   bd1+=1 ! 7/06/05  KJ
 28220   if bd1=>5 then goto L4900 ! 7/06/05 kj
-28240   let bd1(bd1)=bt1(1,2) : let bd2(bd1)=ta1
+28240   bd1(bd1)=bt1(1,2) : bd2(bd1)=ta1
 28260 L4890: let ta1=nba : goto L4820
 28280 L4900: if bd1=0 then goto L5080
-28300   if bd1(1)>0 and bd1(2)=0 then let bd3(1)=bd1(1): goto L5030
+28300   if bd1(1)>0 and bd1(2)=0 then bd3(1)=bd1(1): goto L5030
 28320   mat bd1(bd1)
 28340 ! MATCH_BUDGET_BILLING: !
 28360   let fntos(sn$="Collections-budget")
@@ -489,8 +489,8 @@
 28500   let fnacs(sn$,0,mat resp$,ck1)
 28520   if ck1=5 then goto L5080 ! 7/06/05  KJ
 28540 L5030: for j=1 to 5
-28560     if uprc$(resp$(j))=uprc$("True") then let bd3(j)=1
-28580     if bd3(j)=0 then let bd2(j)=0
+28560     if uprc$(resp$(j))=uprc$("True") then bd3(j)=1
+28580     if bd3(j)=0 then bd2(j)=0
 28600   next j
 28620   if sum(bd2)=0 then goto BUD2
 28640 L5080: return  ! /r
@@ -530,21 +530,21 @@
 32020 ERTN: let fnerror(program$,err,line,act$,"xit")
 32040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 32060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-32080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+32080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 32100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 32120 ! /region
 34000 CHECK_ESCROW: ! r:
 34020   let escrow=0
-34040   let a2=a1=0
+34040   a2=a1=0
 34060   let tg=0
 34080   for j=1 to 10
 34100     let tg=tg+gb(j)
 34120   next j
-34140   let a2=0
+34140   a2=0
 34160   if transType><3 then goto L5710
 34180   if x(2)=tg then goto L5710
-34200   let a1=tg-x(2)
-34220   if escrowbal>=a1 then let a2=a1 else let a2=escrowbal
+34200   a1=tg-x(2)
+34220   if escrowbal>=a1 then a2=a1 else a2=escrowbal
 34240   let x(2)=x(2)+a2
 34260   let escrow=-a2
 34280   L5710: !
@@ -633,84 +633,84 @@
 44300       if env$('client')="Ash Grove" and transType=3 then let water(wcode)=water(wcode)+alloc(1) ! TOTAL WATER BY WATER CODE
 44320       for j=1 to sz1
 44340         let totalByService(j)+=alloc(j)
-44360         let brk(transType,j)=brk(transType,j)+alloc(j)
+44360         brk(transType,j)=brk(transType,j)+alloc(j)
 44380       next j
-44400       if transType=3 or transAmount=0 then let c$=" "
-44420       if transType=5 then let c$="Dm"
-44440       if transType=4 then let c$="Cm"
+44400       if transType=3 or transAmount=0 then c$=" "
+44420       if transType=5 then c$="Dm"
+44440       if transType=4 then c$="Cm"
 44460       ! 
 44480       if ti1=1 then 
 44500         if uprc$(escrow$)<>"Y" then 
-44520           print #255,using L3130: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,nam$ pageoflow PGOF
+44520           pr #255,using L3130: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,nam$ pageoflow PGOF
 44540           L3130:    form pos 1,n 4,x 2,c 10,n 10.2,c 4,pic(zz/zz/zz),x 2,c 9,sz1*n 8.2,x 3,c 30
 44560         else 
-44580           print #255,using L3090: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,escrow,nam$ pageoflow PGOF
+44580           pr #255,using L3090: r5,x$,transAmount,c$,transDate,rcpt$,mat alloc,escrow,nam$ pageoflow PGOF
 44600           L3090:    form pos 1,n 4,x 2,c 10,n 10.2,c 4,pic(zz/zz/zz),x 2,c 9,sz1*n 8.2,n 8.2,x 3,c 30
 44620           let totescrow=totescrow+escrow
 44640         end if 
 44660       else if ti1=2 then 
-44680         print #255,using 'form pos 1,c 15,n 10.2,x 1,c 15': x$,transAmount,nam$(1:15) pageoflow PGOF
+44680         pr #255,using 'form pos 1,c 15,n 10.2,x 1,c 15': x$,transAmount,nam$(1:15) pageoflow PGOF
 44700       end if
 44720     loop ! goto PS_LOOP_TOP ! /r
 52000   PS_TOTALS: ! r:
 52020   if ti1=2 then 
 52040     ! r: DEPOSIT_LIST_TOTAL
-52060     print #255,using F_PR_TOTALS: "__________","Total Checks",totcheck
-52080     print #255,using F_PR_TOTALS: "          ","Total Cash",totcash
-52100     print #255,using F_PR_TOTALS: "__________","Total Deposit",totcheck+totcash
-52120     print #255,using "form pos 16,c 10": "=========="
+52060     pr #255,using F_PR_TOTALS: "__________","Total Checks",totcheck
+52080     pr #255,using F_PR_TOTALS: "          ","Total Cash",totcash
+52100     pr #255,using F_PR_TOTALS: "__________","Total Deposit",totcheck+totcash
+52120     pr #255,using "form pos 16,c 10": "=========="
 52140     F_PR_TOTALS: form pos 16,c 10,skip 1,pos 1,c 15,n 10.2
 52160     ! /r
 54000   else ! ti1=1
-54020     print #255: ""
-54040     print #255,using " Form POS 24,C 32": "************ Totals ************"
-54060     print #255: ""
-54080     print #255: ""
-54100     print #255,using "Form POS 34,4*C 12": " Collections","         C/M","         D/M","       Total"
-54120     print #255,using F_PR_TOTAL_STUFF: "Totals",totalCollections,totalCreditMemos,totalDebitMemos,totalCollections+totalCreditMemos+totalDebitMemos
-54140     print #255: ""
+54020     pr #255: ""
+54040     pr #255,using " Form POS 24,C 32": "************ Totals ************"
+54060     pr #255: ""
+54080     pr #255: ""
+54100     pr #255,using "Form POS 34,4*C 12": " Collections","         C/M","         D/M","       Total"
+54120     pr #255,using F_PR_TOTAL_STUFF: "Totals",totalCollections,totalCreditMemos,totalDebitMemos,totalCollections+totalCreditMemos+totalDebitMemos
+54140     pr #255: ""
 54160     for j=1 to sz1
-54180       print #255,using F_PR_TOTAL_STUFF: serviceLabel$(j),brk(3,j),brk(4,j),brk(5,j),totalByService(j) pageoflow PGOF
+54180       pr #255,using F_PR_TOTAL_STUFF: serviceLabel$(j),brk(3,j),brk(4,j),brk(5,j),totalByService(j) pageoflow PGOF
 54200     next j
-54220     if uprc$(escrow$)="Y" then print #255,using F_PR_TOTAL_STUFF: "Escrow",totescrow
-54240     print #255: ""
+54220     if uprc$(escrow$)="Y" then pr #255,using F_PR_TOTAL_STUFF: "Escrow",totescrow
+54240     pr #255: ""
 54260     F_PR_TOTAL_STUFF:  form pos 4,c 30,4*n 12.2
 54280     if env$('client')="Ash Grove" then 
-54300       print #255: ''
-54320       print #255: ''
-54340       print #255,using 'form pos 7,c 50': "Water Collection Breakdown by Rate Code"
+54300       pr #255: ''
+54320       pr #255: ''
+54340       pr #255,using 'form pos 7,c 50': "Water Collection Breakdown by Rate Code"
 54360       for j=1 to 10
 54380         if water(j)<>0 then 
-54400           print #255,using 'form pos 21,c 13,n 11.2,skip 1': "WATER CODE "&str$(j),water(j)
+54400           pr #255,using 'form pos 21,c 13,n 11.2,skip 1': "WATER CODE "&str$(j),water(j)
 54420         end if 
 54440       next j
 54460       mat water=(0)
 54480     end if 
 54500    end if ! /r
-54540    if ti1<>ti1_end and env$('acsDeveloper')='' then print #255: newpage
+54540    if ti1<>ti1_end and env$('acsDeveloper')='' then pr #255: newpage
 54560   next ti1
 55000   let fncloseprn
 55020   close #h_addr: ioerr ignore
 55040   h_addr=0
 55600 fnend  ! if l3=1 then goto MERGE else goto MENU1B
 56000 PGOF: ! r:
-56020   print #255: newpage
+56020   pr #255: newpage
 56040   gosub HEADER
 56060 continue  ! /r
 58000 HEADER: ! r:
 58020   if ti1=1 then 
-58040     print #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
-58060     print #255: "\qc  {\f181 \fs22 \b Receipt Listing}"
-58080     print #255: "\qc  {\f181 \fs16 \b "&trim$(reportdate$)&"}"
-58100     print #255,using 'form pos 1,c 82,c 5,n 4': "\ql "&date$,"Page ",p2+=1
-58120     print #255: hd1$
+58040     pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
+58060     pr #255: "\qc  {\f181 \fs22 \b Receipt Listing}"
+58080     pr #255: "\qc  {\f181 \fs16 \b "&trim$(reportdate$)&"}"
+58100     pr #255,using 'form pos 1,c 82,c 5,n 4': "\ql "&date$,"Page ",p2+=1
+58120     pr #255: hd1$
 58140   else if ti1=2 then 
-58160     print #255: "\ql  {\f181 \fs18 \b "&env$('cnam')&"}"
-58180     print #255: "\ql  {\f181 \fs22 \b Deposit Listing}"
-58200     print #255: "\ql  {\f181 \fs16 \b "&trim$(reportdate$)&"}"
-58220     print #255,using 'form pos 1,c 30,c 5,n 4': "\ql "&date$,"Page ",p2+=1
-58240     print #255: ''
-58260     print #255: "{\ul Account   }         {\ul Amount} {\ul Name          }"
+58160     pr #255: "\ql  {\f181 \fs18 \b "&env$('cnam')&"}"
+58180     pr #255: "\ql  {\f181 \fs22 \b Deposit Listing}"
+58200     pr #255: "\ql  {\f181 \fs16 \b "&trim$(reportdate$)&"}"
+58220     pr #255,using 'form pos 1,c 30,c 5,n 4': "\ql "&date$,"Page ",p2+=1
+58240     pr #255: ''
+58260     pr #255: "{\ul Account   }         {\ul Amount} {\ul Name          }"
 58280   end if 
 58300 return  ! /r
 60000 def fn_setup
@@ -737,14 +737,14 @@
 60440     dim ml$(1)*256
 60460   ! 
 60480     dim coll_type_option$(3)
-60500     let coll_type_option$(1)="Regular Collection"
-60520     let coll_type_option$(2)="Credit Memo"
-60540     let coll_type_option$(3)="Debit Memo"
+60500     coll_type_option$(1)="Regular Collection"
+60520     coll_type_option$(2)="Credit Memo"
+60540     coll_type_option$(3)="Debit Memo"
 60560   ! 
 60580     let tab$=chr$(9)
 60600   ! ______________________________________________________________________
 60640   ! 
-60660     let collections_filename$=env$('Q')&"\UBmstr\Collections-"&env$('acsUserId')&".h"&env$('cno')
+60660     collections_filename$=env$('Q')&"\UBmstr\Collections-"&env$('acsUserId')&".h"&env$('cno')
 60680     let fndat(dat$,1)
 60700   ! ______________________________________________________________________
 60720     open #20: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",NoShr",internal,input 
@@ -760,12 +760,12 @@
 60920     ! if trim$(srvname$(4))="Gas" then let havegas=1
 60940     for j=1 to 10
 60960       let original(j)=apply(j)
-60980       if apply(j)>0 then let apply=apply+1: let order(apply)=apply(j) ! set order of applying     collections
+60980       if apply(j)>0 then apply=apply+1: let order(apply)=apply(j) ! set order of applying     collections
 61000       if apply(j)=0 then let noapply=noapply+1 ! let notuse(noapply)=apply(j) ! set non used services
 61020     next j
 61040     for j=1 to 10
 61060       for j1=1 to 10
-61080         if j=original(j1) then let baorder(j)=j1
+61080         if j=original(j1) then baorder(j)=j1
 61100       next j1
 61120     next j
 61140     if env$('client')="Divernon" then mat baorder=original ! may need to be made standard for everyone   !!!
@@ -785,23 +785,23 @@
 61420   ! r: setup column headers (mat chdr$) and column masks (mat cm$) for flex grid on MENU1B
 61440     dim chdr$(20)*30,cm$(20)
 61460     mat chdr$(20)
-61480     let chdr$(1)="Rec" : let chdr$(2)="Account" : let chdr$(3)="Amount"
-61500     let chdr$(4)="Date" : let chdr$(5)="Type" ! let chdr$(6)="PC"
-61520     let chdr$(6)="Receipt Number" : let cHdrItem=6
+61480     chdr$(1)="Rec" : chdr$(2)="Account" : chdr$(3)="Amount"
+61500     chdr$(4)="Date" : chdr$(5)="Type" ! chdr$(6)="PC"
+61520     chdr$(6)="Receipt Number" : cHdrItem=6
 61540     for j2=1 to 10
 61560       if trim$(srvname$(j2))<>"" then 
-61580         let chdr$(cHdrItem+=1)=srvname$(j2)(1:10)
+61580         chdr$(cHdrItem+=1)=srvname$(j2)(1:10)
 61600         let fnremove(":",chdr$(cHdrItem))
 61620       end if 
 61640     next j2
-61660     if uprc$(escrow$)="Y" then let chdr$(cHdrItem+=1)="Escrow"
+61660     if uprc$(escrow$)="Y" then chdr$(cHdrItem+=1)="Escrow"
 61680     mat chdr$(cHdrItem)
 61700   ! 
 61720     mat cm$=("")
-61740     let cm$(2)="32" : let cm$(3)="10" : let cm$(4)="1"
-61760     let cm$(5)="" ! "30" 
-61770     cm$(6)="30" ! let cm$(7)=""
-61780     for j=7 to max(9,udim(chdr$)) : let cm$(j)="10" : next j
+61740     cm$(2)="32" : cm$(3)="10" : cm$(4)="1"
+61760     cm$(5)="" ! "30" 
+61770     cm$(6)="30" ! cm$(7)=""
+61780     for j=7 to max(9,udim(chdr$)) : cm$(j)="10" : next j
 61800     mat cm$(udim(chdr$))
 61820   ! /r
 61840   let ei_item_account=1
@@ -809,7 +809,7 @@
 61880   let ei_item_date_time=3
 61900   let ei_item_collection_type=4
 61920   !
-61940   fnreg_read('Collections Print in Account Order',ub_collPrintInAccountOrder$,'False')
+61940   fnreg_read('Collections pr in Account Order',ub_collPrintInAccountOrder$,'False')
 61960   fnreg_read('Collections Disable Deposit List',ub_collDisableDepositList$,'False')
 61990 fnend 
 62000 def fn_haveMainBudget(h_budmstr,x1$)
@@ -851,30 +851,30 @@
 68500   let fnlbl(6,31,"Allocation",10,2)
 68520   let fnlbl(6,44,"Balance",10,2)
 68540   if bd_re_editmode=1 then 
-68560     let bd_re_editmode=0
+68560     bd_re_editmode=0
 68580   else 
 68600     gosub BD_ALLOC
 68620   end if 
-68640   let bd_line_add=0 : mat bd_real=(0)
+68640   bd_line_add=0 : mat bd_real=(0)
 68660   for j=1 to 10
 68680     if trim$(srvname$(j))<>"" and trim$(srvname$(j)(1:5))<>"Reduc" then 
-68700       let bd_line_add+=1
+68700       bd_line_add+=1
 68720       let fnlbl(bd_line_add+6,1,serviceLabel$(bd_line_add),29,1)
 68740       let resp$(reco+=1)=str$(tgb(bd_line_add))
 68760       let fntxt(bd_line_add+6,44,12,0,1,"10",1)
 68780       let resp$(reco+=1)=str$(alloc(bd_line_add))
 68800       let fntxt(bd_line_add+6,32,12,0,1,"10")
-68820       let bd_real(bd_line_add)=reco
+68820       bd_real(bd_line_add)=reco
 68840     end if 
 68860   next j
 68880   if uprc$(escrow$)="Y" then 
-68900     let bd_line_add=bd_line_add+1
+68900     bd_line_add=bd_line_add+1
 68920     let fnlbl(bd_line_add+6,1,"Escrow:",29,1)
 68940     let resp$(reco+=1)=str$(oldescrowbal)
 68960     let fntxt(bd_line_add+6,44,12,0,1,"10",1)
 68980     let resp$(reco+=1)=str$(escrow)
 69000     let fntxt(bd_line_add+6,32,12,0,1,"10")
-69020     let bd_real(bd_line_add)=reco
+69020     bd_real(bd_line_add)=reco
 69040   end if 
 69060   if csv_import_in_process then 
 69080     let fncmdkey("&Save",1,1) : let fncmdkey("&Skip",5,0,1)
@@ -884,15 +884,15 @@
 69160   let fnacs(sn$,0,mat resp$,ckey)
 69180 ! 
 69200   for j=1 to udim(alloc)
-69220     if bd_real(j)<>0 then let alloc(j)=val(resp$(bd_real(j))) else let alloc(j)=0
+69220     if bd_real(j)<>0 then alloc(j)=val(resp$(bd_real(j))) else alloc(j)=0
 69240   next j
 69260   if uprc$(escrow$)="Y" then let escrow=val(resp$(bd_real(j)))
 69280   if ckey=1 then 
 69300     goto NEXT_AFTER_BREAKDOWN
 69320   else if ckey=2 then 
-69340     let coramt=1 : goto BD_FINIS
+69340     coramt=1 : goto BD_FINIS
 69360   else if ckey=5 then 
-69380     let bd_return=0 : goto BD_FINIS
+69380     bd_return=0 : goto BD_FINIS
 69400   else 
 69420     goto NEXT_AFTER_BREAKDOWN
 69440   end if 
@@ -908,9 +908,9 @@
 69620     let mesg$(5)="___________"
 69640     let mesg$(6)=cnvrt$("pic(-----------#.##)",x(2)-tal)&" (Difference)"
 69660     let fnmsgbox(mat mesg$, resp$,'',48)
-69680     let bd_re_editmode=1 : goto BD_TOS ! (skip re-reading of record) ! goto BREAKDOWN
+69680     bd_re_editmode=1 : goto BD_TOS ! (skip re-reading of record) ! goto BREAKDOWN
 69700   end if 
-69720   let bd_return=1
+69720   bd_return=1
 69740 BD_FINIS: ! 
 69760   let fn_breakdown=bd_return
 69780 fnend 
@@ -930,7 +930,7 @@
 72260   if uprc$(escrow$)="Y" and transType=3 then ! add escrow balance into last allocation if have escrow and processing a collection transaction
 72280     let oldescrowbal=escrowbal
 72300   end if 
-72320   let bd_tgbj=tn=0
+72320   bd_tgbj=tn=0
 72340   mat ba=(0) : mat badr=(0)
 72360   for j=1 to udim(mat alloc)
 72380     if tgb(j)<0 then let tn-=tgb(j) ! Total Negative Breakdowns
@@ -940,79 +940,79 @@
 72460   for j=1 to items
 72480     if ~(havemainbudget=1 and penalty$(baorder(j))="Y") then ! ELSE don't allow penalty budgets amount to go thru routine
 72500       if havemainbudget=1 then 
-72520         let alloc(order(j))=max(0,min(x(2)-bd_tgbj,ba(baorder(j)+1)))
+72520         alloc(order(j))=max(0,min(x(2)-bd_tgbj,ba(baorder(j)+1)))
 72540       else 
-72560         let alloc(order(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(order(j))))
+72560         alloc(order(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(order(j))))
 72580       end if 
-72600       let bd_tgbj=bd_tgbj+alloc(order(j))
+72600       bd_tgbj=bd_tgbj+alloc(order(j))
 72620       if tgb(order(j))<0 then let tn=tn+tgb(order(j))
 72640     end if 
 72660   next j
 72680   if havemainbudget=1 and sum(alloc)<x(2) then 
 72700     for j=1 to items ! if have budget and pay more than budget, how to allocate remainder
 72720       if alloc(order(j))=0 then 
-72740         let alloc(order(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(order(j))))
-72760         let bd_tgbj=bd_tgbj+alloc(order(j))
+72740         alloc(order(j))=max(0,min(x(2)-bd_tgbj+tn,tgb(order(j))))
+72760         bd_tgbj=bd_tgbj+alloc(order(j))
 72780         if tgb(order(j))<0 then let tn=tn+tgb(order(j))
 72800       end if 
 72820     next j
 72840   end if 
 72860   if env$('client')="Findlay" and a(4)>0 then ! excess in gas
-72880     let alloc(3)=alloc(3)+x(2)-bd_tgbj
+72880     alloc(3)=alloc(3)+x(2)-bd_tgbj
 72900     goto BD_ALLOC_FINIS
 72920   end if 
 72940   if env$('client')="Findlay" and a(1)>0 then ! if no gas, put excess in water
-72960     let alloc(1)=alloc(1)+x(2)-bd_tgbj
+72960     alloc(1)=alloc(1)+x(2)-bd_tgbj
 72980     goto BD_ALLOC_FINIS
 73000   end if 
 73020   if alloc(1)>0 or (havewater=1 and a(1)>0) then ! excess in water if it is an active service for this customer
-73040     let alloc(1)=alloc(1)+x(2)-bd_tgbj
+73040     alloc(1)=alloc(1)+x(2)-bd_tgbj
 73060     goto BD_ALLOC_FINIS
 73080   else if alloc(2)>0 or (havesewer=1 and a(2)>0) then ! excess in sewer if it is an active service for this customer
-73100     let alloc(2)=alloc(2)+x(2)-bd_tgbj
+73100     alloc(2)=alloc(2)+x(2)-bd_tgbj
 73120     goto BD_ALLOC_FINIS
 73140   end if 
 73160   if udim(alloc)>=3 then 
 73180     if alloc(3)>0 then ! excess in electric if it is an active service for this customer
-73200       let alloc(3)=alloc(3)+x(2)-bd_tgbj
+73200       alloc(3)=alloc(3)+x(2)-bd_tgbj
 73220       goto BD_ALLOC_FINIS
 73240     end if 
 73260     if udim(alloc)>=4 then 
 73280       if alloc(4)>0 then ! excess in gas if it is an active service for this customer
-73300         let alloc(4)=alloc(4)+x(2)-bd_tgbj
+73300         alloc(4)=alloc(4)+x(2)-bd_tgbj
 73320         goto BD_ALLOC_FINIS
 73340       end if 
-73360       let alloc(1)=alloc(1)+x(2)-bd_tgbj ! if excess not allocated to any other service, allocate it to water
+73360       alloc(1)=alloc(1)+x(2)-bd_tgbj ! if excess not allocated to any other service, allocate it to water
 73380     end if 
 73400   end if 
 73420 BD_ALLOC_FINIS: ! 
 73440   return  ! /r
 73460 def fn_open_cash_drawer
 73500   let fnopen_receipt_printer
-73520   print #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore ! apg cash drawer hooked to epson t 88 thermal receipt printer
+73520   pr #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore ! apg cash drawer hooked to epson t 88 thermal receipt printer
 73540   let fnclose_receipt_printer
 73580 fnend 
 74000 def fn_print_receipt(pr_acct_key$,pr_acct_name$*30,rcpt$,bal,pr_trans_amt,pr_trans_date,coll_type$*30)
 74020   if fnopen_receipt_printer(1) then 
 74040     let receipt_width=32
-74060     print #255,using 'form pos 1,C 2,Cc '&str$(receipt_width-4)&',C 2': '**',env$('cnam')(1:28),'**'
-74080     print #255,using 'form pos 1,Cc '&str$(receipt_width): date$('mm/dd/ccyy')
-74100     print #255,using 'form pos 1,Cc '&str$(receipt_width): time$
+74060     pr #255,using 'form pos 1,C 2,Cc '&str$(receipt_width-4)&',C 2': '**',env$('cnam')(1:28),'**'
+74080     pr #255,using 'form pos 1,Cc '&str$(receipt_width): date$('mm/dd/ccyy')
+74100     pr #255,using 'form pos 1,Cc '&str$(receipt_width): time$
 74120     if rcpt$<>'' then 
-74140       print #255: "Receipt Number: "&rcpt$
-74160       print #255: ''
+74140       pr #255: "Receipt Number: "&rcpt$
+74160       pr #255: ''
 74180     end if 
-74200     print #255: ''
-74220     print #255: 'Account: '&pr_acct_key$
-74240     print #255: '   Name: '&pr_acct_name$
-74260     print #255: ''
-74280     print #255,using 'form pos 1,Cc '&str$(receipt_width): coll_type$
-74300     print #255: ' Amount: '&cnvrt$('G 10.2',pr_trans_amt)
-74320   !   print #255: 'Bal Before Payment: '&cnvrt$('G 10.2',bal)
-74340   !   print #255: '              Date: '&cnvrt$('pic(##/##/##)',pr_trans_date)
-74360     print #255: ''
-74380     print #255: '________________________________' ! 32 characters - perfect max width fit for my POs-58 usb receipt printer
-74400     print #255: ''
+74200     pr #255: ''
+74220     pr #255: 'Account: '&pr_acct_key$
+74240     pr #255: '   Name: '&pr_acct_name$
+74260     pr #255: ''
+74280     pr #255,using 'form pos 1,Cc '&str$(receipt_width): coll_type$
+74300     pr #255: ' Amount: '&cnvrt$('G 10.2',pr_trans_amt)
+74320   !   pr #255: 'Bal Before Payment: '&cnvrt$('G 10.2',bal)
+74340   !   pr #255: '              Date: '&cnvrt$('pic(##/##/##)',pr_trans_date)
+74360     pr #255: ''
+74380     pr #255: '________________________________' ! 32 characters - perfect max width fit for my POs-58 usb receipt printer
+74400     pr #255: ''
 74420     let fnclose_receipt_printer
 74440   end if 
 74460 fnend 
@@ -1035,7 +1035,7 @@
 76320   let ecp_filename$=os_filename$(file$(h_csv))
 76340   let fnureg_write('Collections CSV Import Filename',ecp_filename$)
 76360   let type=fn_csv_type(h_csv)
-76380   let csv_import_in_process=1
+76380   csv_import_in_process=1
 76400   if type=1 then 
 76420     let fn_ecp_import(h_csv)
 76440   else if type=2 then 
@@ -1045,8 +1045,8 @@
 76520     do 
 76540       linput #h_csv: csv_line$ eof CSV_FINIS
 76560       if trim$(srep$(csv_line$,csv_delim$,''))<>'' then ! if not a blank line then
-76580         let csv_line$=fn_remove_quote_encap_commas$(csv_line$)
-76600         let csv_line$=fn_remove_quote_encap_commas$(csv_line$)
+76580         csv_line$=fn_remove_quote_encap_commas$(csv_line$)
+76600         csv_line$=fn_remove_quote_encap_commas$(csv_line$)
 76620         let str2mat(csv_line$,mat csv_item$,csv_delim$)
 76640         let trans_date_mmddyy=date(days(csv_item$(csv_date),'m/d/ccyy'),'mmddyy')
 76642         csv_item$(csv_amount)=srep$(csv_item$(csv_amount),'$','')
@@ -1077,7 +1077,7 @@
 77120     let fnmsgbox(mat ml$, response$, '',64)
 77140   end if 
 77160   close #h_csv: ioerr ignore
-77180   let csv_import_in_process=0
+77180   csv_import_in_process=0
 77200 fnend 
 78000 def fn_csv_type(h_csv)
 78020   ! returns 1 for ECP_IMPORT type CSV File
@@ -1086,37 +1086,37 @@
 78080   dim ct_line$*512
 78100   dim ct_item$(0)*256
 78120   linput #h_csv: ct_line$
-78140   if pos(ct_line$,tab$)>0 then let csv_delim$=tab$ else let csv_delim$=','
+78140   if pos(ct_line$,tab$)>0 then csv_delim$=tab$ else csv_delim$=','
 78160   let str2mat(ct_line$,mat ct_item$,csv_delim$)
-78180   if udim(mat ct_item$)<4 then let ct_return=0 : goto CT_FINIS
-78200   let ct_item_2_val=val(ct_item$(2)) conv CT_ITEM_2_CONV
-78220   let ct_return=1 ! second item on first line has a numeric value - it's ECP_IMPORT type
+78180   if udim(mat ct_item$)<4 then ct_return=0 : goto CT_FINIS
+78200   ct_item_2_val=val(ct_item$(2)) conv CT_ITEM_2_CONV
+78220   ct_return=1 ! second item on first line has a numeric value - it's ECP_IMPORT type
 78240   goto CT_FINIS
 78260   CT_ITEM_2_CONV: ! 
 78280   for ct_item=1 to udim(mat ct_item$)
-78300     let ct_item$(ct_item)=trim$(lwrc$(ct_item$(ct_item)))
+78300     ct_item$(ct_item)=trim$(lwrc$(ct_item$(ct_item)))
 78320   next ct_item
-78340   let csv_date=max(0,srch(mat ct_item$,'date'))
-78360   let csv_account=max(0,srch(mat ct_item$,'acct #'))
+78340   csv_date=max(0,srch(mat ct_item$,'date'))
+78360   csv_account=max(0,srch(mat ct_item$,'acct #'))
 78380   if csv_account<=0 then 
-78400     let csv_account=max(0,srch(mat ct_item$,'acct'))
+78400     csv_account=max(0,srch(mat ct_item$,'acct'))
 78420     if csv_account<=0 then 
-78440       let csv_account=max(0,srch(mat ct_item$,'account'))
+78440       csv_account=max(0,srch(mat ct_item$,'account'))
 78460     end if 
 78480   end if 
-78500   let csv_type=max(0,srch(mat ct_item$,'pmt type'))
+78500   csv_type=max(0,srch(mat ct_item$,'pmt type'))
 78520   if csv_type<=0 then 
-78540     let csv_type=max(0,srch(mat ct_item$,'type'))
+78540     csv_type=max(0,srch(mat ct_item$,'type'))
 78560   end if 
-78580   let csv_amount=max(0,srch(mat ct_item$,'payment'))
+78580   csv_amount=max(0,srch(mat ct_item$,'payment'))
 78600   if csv_amount<=0 then 
-78620     let csv_amount=max(0,srch(mat ct_item$,'amt'))
+78620     csv_amount=max(0,srch(mat ct_item$,'amt'))
 78640     if csv_amount<=0 then 
-78660       let csv_amount=max(0,srch(mat ct_item$,'amount'))
+78660       csv_amount=max(0,srch(mat ct_item$,'amount'))
 78680     end if 
 78700   end if 
 78720   if csv_account and csv_amount and csv_date and csv_type then 
-78740     let ct_return=2
+78740     ct_return=2
 78760   end if 
 78780   CT_FINIS: ! 
 78800   let fn_csv_type=ct_return
@@ -1175,13 +1175,13 @@
 83060   end if  ! exists UBmstr\readings.[bk$]
 83080 fnend 
 84000 def fn_add_trans(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount)
-84040   let b7=transType=ti1
+84040   b7=transType=ti1
 84060   let p$=" "
 84080   let rcpt$=""
 84100   let transType=b7
 84120   AT_READ_CUSTOMER: ! 
-84130   let at_customer$=lpad$(at_customer$,10)
-84160   let coramt=0
+84130   at_customer$=lpad$(at_customer$,10)
+84160   coramt=0
 84180   ! r: read selected account and prepare data for SCREEN_ADD
 84200   read #h_customer,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=at_customer$,release: nam$,bal,db1,mat gb,escrowbal nokey AT_NO_CUSTOMER
 84210   let x1$=at_customer$
@@ -1199,7 +1199,7 @@
 84440   ! 
 84460   let do_not_blank_rcpt=0
 84480   ! let rcpt$=trim$(resp$(3))(1:9)
-84500   let at_customer$=lpad$(trim$(at_customer$),10)
+84500   at_customer$=lpad$(trim$(at_customer$),10)
 84520   ! 
 84540   ! pause !
 84560   ! r: after SCREEN_ADD - actually do the adding stuff
@@ -1251,9 +1251,9 @@
 85400   ! 
 85420   AT_L2020: ! 
 85440   let items=sz1 ! If UPRC$(ESCROW$)="Y" Then Let ITEMS=SZ1-1 Else Let ITEMS = SZ1
-85460   for j=1 to items : let alloc(j)=tgb(j) : next j
+85460   for j=1 to items : alloc(j)=tgb(j) : next j
 85480   AT_L2040: ! 
-85520   let transAmount=x(2) : let transDate=x(3) : let b7=transType
+85520   let transAmount=x(2) : let transDate=x(3) : b7=transType
 85540   let postingCodeUnused=0
 85560   if sum(tgb)=x(2) then gosub BUD2 ! kj 10/14/09
 85580   if sum(tgb)=x(2) and bud1=1 then gosub BUD3 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
@@ -1265,13 +1265,13 @@
 85700   goto AT_FINIS
 85720   ! pr 'completed add' : pause ! goto SCREEN_SELECT_ACCOUNT ! /r
 85740   AT_NO_CUSTOMER: ! 
-85750   let at_customer$=trim$(at_customer$)
+85750   at_customer$=trim$(at_customer$)
 85760   let x1_len=len(at_customer$)
 85780   if x1_len<=9 and at_customer$(len(at_customer$)-1:len(at_customer$)-1)='.' then ! maybe excel messed it up, try adding a 0, because it has something like .1
-85800     let at_customer$=at_customer$&'0'
+85800     at_customer$=at_customer$&'0'
 85820     goto AT_READ_CUSTOMER
 85840   else if x1_len<=7 and pos(at_customer$,'.')<=0 then ! maybe excel messed it up, try adding a .00
-85860     let at_customer$=at_customer$&'.00'
+85860     at_customer$=at_customer$&'.00'
 85880     goto AT_READ_CUSTOMER
 85900   end if 
 85920   mat ml$(6)

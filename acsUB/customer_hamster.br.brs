@@ -36,24 +36,24 @@
 28600 ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
 28800     let limit_to_list$='1'
 29000 ! 
-29200 ! let cl=1 : let c$(cl,1)='ComboF'
-29400 ! let c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&env$('cno')
-29600 ! let c$(cl,3)='1' : let c$(cl,4)='6'
-29800 ! let c$(cl,5)='7' : let c$(cl,6)='50'
-30000 ! let c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h'&env$('cno')
-30200 ! let c$(cl,8)=limit_to_list$
-30400 ! let cl=3 : let c$(cl,1)='ComboF'
-30600 ! let c$(cl,2)=env$('Q')&'\TMmstr\Systems.h'&env$('cno')
-30800 ! let c$(cl,3)='1' : let c$(cl,4)='2'
-31000 ! let c$(cl,5)='3' : let c$(cl,6)='50'
-31200 ! let c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h'&env$('cno')
-31400 ! let c$(cl,8)=limit_to_list$
-31600 ! let cl=5 : let c$(cl,1)='ComboF'
-31800 ! let c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h'&env$('cno')
-32000 ! let c$(cl,3)='1' : let c$(cl,4)='2'
-32200 ! let c$(cl,5)='3' : let c$(cl,6)='50'
-32400 ! let c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h'&env$('cno')
-32600 ! let c$(cl,8)=limit_to_list$
+29200 ! cl=1 : c$(cl,1)='ComboF'
+29400 ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&env$('cno')
+29600 ! c$(cl,3)='1' : c$(cl,4)='6'
+29800 ! c$(cl,5)='7' : c$(cl,6)='50'
+30000 ! c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h'&env$('cno')
+30200 ! c$(cl,8)=limit_to_list$
+30400 ! cl=3 : c$(cl,1)='ComboF'
+30600 ! c$(cl,2)=env$('Q')&'\TMmstr\Systems.h'&env$('cno')
+30800 ! c$(cl,3)='1' : c$(cl,4)='2'
+31000 ! c$(cl,5)='3' : c$(cl,6)='50'
+31200 ! c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h'&env$('cno')
+31400 ! c$(cl,8)=limit_to_list$
+31600 ! cl=5 : c$(cl,1)='ComboF'
+31800 ! c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h'&env$('cno')
+32000 ! c$(cl,3)='1' : c$(cl,4)='2'
+32200 ! c$(cl,5)='3' : c$(cl,6)='50'
+32400 ! c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h'&env$('cno')
+32600 ! c$(cl,8)=limit_to_list$
 32800   fnend 
 33000 ! ______________________________________________________________________
 33200 HAMSTER: ! 
@@ -66,7 +66,7 @@
 34600 ERTN: let fnerror(program$,err,line,act$,"xit")
 34800   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 35000   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-35200   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+35200   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 35400 ERTN_EXEC_ACT: execute act$ : goto ERTN
 35600 ! /region
 35800 ! ______________________________________________________________________
@@ -74,7 +74,7 @@
 36200     if field_type$='' then let field_type$='C'
 36400     if storage_length=0 then let storage_length=textbox_len
 36600 ! storage_length_prior=storage_length
-36800     let add_rec_item=udim(mat lbl$)+1
+36800     add_rec_item=udim(mat lbl$)+1
 37000     mat lbl$(add_rec_item) : let lbl$(add_rec_item)=label$
 37200     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
 37400     mat p$(add_rec_item)

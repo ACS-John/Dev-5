@@ -25,10 +25,10 @@
 20100   let fncmdset(2)
 20110   let fnacs(sn$,0,mat resp$,ckey)
 20120   if ckey=5 then goto XIT 
-20130   let bdate=val(resp$(1)) 
-20140   let bla3$=trim$(resp$(2)) 
+20130   bdate=val(resp$(1)) 
+20140   bla3$=trim$(resp$(2)) 
 20150   let svce$=resp$(2)(1:4) 
-20160   let cde=val(resp$(2)(3:4))
+20160   cde=val(resp$(2)(3:4))
 20170   for j=1 to udim(srv$)
 20180     if uprc$(resp$(2)(1:2))=uprc$(srv$(j)) then let svce=j
 20190   next j
@@ -132,7 +132,7 @@
 34020   let usagtot(1)=usagtot(1)+min(d(s9),use_to(1)) ! add usage for minimun usages
 34030   let ratetot(1)=ratetot(1)+rate(1) ! add minimum charges
 34040   if d(s9)<=use_to(1) then  ! add mimimum customer user to first array item
-34050     let customer(1)=customer(1)+1 
+34050     customer(1)=customer(1)+1 
 34060     goto L810
 34070   end if
 34080   for k7=2 to 11
@@ -149,7 +149,7 @@
 34190   next k7
 34200   L790: ! 
 34210   let ds9+=usagtot(1)
-34220   let customer(k7-1)+=1 ! add customers by rate break
+34220   customer(k7-1)+=1 ! add customers by rate break
 34230   L810: !
 34240   let numbcust+=1
 34250 goto READ_CUSTOMER ! /r
@@ -160,21 +160,21 @@
 44040   next k5
 44050   let totdol=totdol+ratetot(1) ! add minimum bills to total dollars
 44060   if cde=0 then goto L960
-44070   print #255: "\qc {\b Utility Billing  - Rate Analysis}" 
-44080   print #255: "Analysis for Rate Code: "&bla3$ 
-44090   print #255: "\ql "
-44100   print #255: "{\ul    Usage From} {\ul      Rate} {\ul Dollars Gnrtd.} {\ul Num.Customers}"
+44070   pr #255: "\qc {\b Utility Billing  - Rate Analysis}" 
+44080   pr #255: "Analysis for Rate Code: "&bla3$ 
+44090   pr #255: "\ql "
+44100   pr #255: "{\ul    Usage From} {\ul      Rate} {\ul Dollars Gnrtd.} {\ul Num.Customers}"
 44110   for k1=1 to 11
 44120     if use_from(k1)=0 and rate(k1)=0 then goto L930
-44130     print #255,using L920: use_from(k1),rate(k1),ratetot(k1),customer(k1)
+44130     pr #255,using L920: use_from(k1),rate(k1),ratetot(k1),customer(k1)
 44140     L920: form pos 1,pic(z,zzz,zzz,zz#),x 1,pic(zz#.#####),x 1,pic(zzz,zzz,zzz.##),x 1,pic(zzzzzzzzzzzzz)
 44150     L930: !
 44160   next k1
-44170   print #255: "\qc {\ul             Totals            }"
-44180   print #255: "\ql "
+44170   pr #255: "\qc {\ul             Totals            }"
+44180   pr #255: "\ql "
 44190   L960: !
-44200   print #255: "              Total Customers: "&cnvrt$("PIC(ZZZ,ZZZ,ZZZ)",numbcust)
-44210   print #255: "                Total Dollars: "&cnvrt$("PIC(zzZZ,ZZZ.ZZ)",totdol)
+44200   pr #255: "              Total Customers: "&cnvrt$("PIC(ZZZ,ZZZ,ZZZ)",numbcust)
+44210   pr #255: "                Total Dollars: "&cnvrt$("PIC(zzZZ,ZZZ.ZZ)",totdol)
 44600 goto DONE ! /r
 48000 DONE: ! r:
 48010   close #1: ioerr ignore
@@ -185,6 +185,6 @@
 54010 ERTN: let fnerror(program$,err,line,act$,"xit")
 54020   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 54030   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-54040   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+54040   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 54050 ERTN_EXEC_ACT: execute act$ : goto ERTN
 54060 ! /region

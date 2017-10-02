@@ -4,18 +4,18 @@
 02500 !   ! r: sandbox for testing local functions
 03000 !     if env$('ACSDeveloper')<>'' then let setenv('acsclient','BRCorp')
 03020 !     fn_setup
-03400 !     print 'fn_client_has_mat returns ';fn_client_has_mat(mat tmp$)
-03420 !     print mat tmp$
-03500 !     print 'fn_client_support returns ';fn_client_support(mat tmp_system_id$,mat tmp_system_support_end_date,mat tmp_on_support)
+03400 !     pr 'fn_client_has_mat returns ';fn_client_has_mat(mat tmp$)
+03420 !     pr mat tmp$
+03500 !     pr 'fn_client_support returns ';fn_client_support(mat tmp_system_id$,mat tmp_system_support_end_date,mat tmp_on_support)
 03520 !     for x=1 to udim(mat tmp_system_id$)
 03540 !       pr tmp_system_id$(x); tmp_system_support_end_date(x); tmp_on_support(x)
 03560 !     nex x
-04000 !     print 'fn_client_has_on_support_list(mat tmp$,45) returns ';fn_client_has_on_support_list(mat tmp$,45);' with 45 grace days'
-04020 !     print mat tmp$
-04040 !     print 'fn_client_has_on_support_list(mat tmp$,0) returns ';fn_client_has_on_support_list(mat tmp$,0);' with 0 grace days'
-04060 !     print mat tmp$
+04000 !     pr 'fn_client_has_on_support_list(mat tmp$,45) returns ';fn_client_has_on_support_list(mat tmp$,45);' with 45 grace days'
+04020 !     pr mat tmp$
+04040 !     pr 'fn_client_has_on_support_list(mat tmp$,0) returns ';fn_client_has_on_support_list(mat tmp$,0);' with 0 grace days'
+04060 !     pr mat tmp$
 05000 !   end ! /r
-06000 !   !  it is now ...  !!!     print program$&' is not intended to be run directly' : end 
+06000 !   !  it is now ...  !!!     pr program$&' is not intended to be run directly' : end 
 11000 ClientSelect: ! r:
 11020   fntop(program$)
 11040   fn_setup
@@ -50,25 +50,17 @@
 14420   nex clientItem
 14440   fncmdset(2)
 14460   fnacs('clientSelect',0,mat resp$,ckey) ! /r
-14480   ! pr mat resp$
 15000   if ckey=1 then 
 15060     dim dataNew$*256
 15100     setenv('Client',resp$(1)) ! pr 'env$ client set to '&env$('client') : pause
 15102     if env$('enableDataFolderByClient')='Yes' then
 15120       dataNew$=rtrm$(env$('QBase'),'\')&'\'&env$('client') ! &'\'
-15170       ! pr '  dataNew$: '&dataNew$
-15171       ! pr '  env Q: '&env$('Q') : pause
-15172       ! pause
 15174       library 's:\Core\Library': fnmakesurepathexists
 15176       fnmakesurepathexists(dataNew$)
 15180       setenv('data',dataNew$) ! pr 'env$ client set to '&env$('client') : pause
 15190       fnreg_close
 15200       ! fnMapToVirturalDrive(dataNew$,'Q:') 
 15202       fnSetQ(dataNew$)
-15210       ! setenv('Q',rtrm$(dataNew$,'\'))
-15212       ! execute 'config substitute [Q] "'&env$('Q')&'"'
-15220       ! fnmakesurepathexists(env$('Q')&'\Data\')
-15222       ! fnmakesurepathexists(env$('Q')&'\'&env$('CurSys')&'mstr\')
 15280     end if
 15300   end if ! /r 
 15320 fnend
@@ -130,7 +122,7 @@
 24020 ERTN: fnerror(program$,err,line,act$,"NO")
 24040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 24060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-24080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+24080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 24100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 24120 ! /region
 26000 def fn_setup_client ! ** set up for new clients
@@ -544,7 +536,7 @@
 36080 def fn_client_has(ch_sys$*2)
 36093   fn_getClientLicense(mat client_has$)
 36120   ch_return=0
-36140   if srch(mat client_has$,uprc$(ch_sys$))>0 then let ch_return=1
+36140   if srch(mat client_has$,uprc$(ch_sys$))>0 then ch_return=1
 36160   fn_client_has=ch_return
 36180 fnend 
 38000 def fn_user_limit(user_count)
@@ -795,7 +787,7 @@
 72100   if chosi_which>0 then 
 72120     chosi_retun=chosi_on_support(chosi_which)
 72140   else 
-72160     print 'system ('&chosi_item$&') is not owned by client number '&env$('Client_ID')
+72160     pr 'system ('&chosi_item$&') is not owned by client number '&env$('Client_ID')
 72180     if env$('ACSDeveloper')<>'' then pause 
 72200   end if 
 72220   fn_client_has_on_support_item=chosi_retun

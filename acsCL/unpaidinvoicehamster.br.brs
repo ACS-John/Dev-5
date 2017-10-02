@@ -39,7 +39,7 @@
         let lbl$(14)="Discount Amount" !:
         let lbl$(15)="Discount Due Date"
 00270 ! ** Field Display Lengths ** !:
-        let mmddyy=8 : let ccyymmdd=10 !:
+        let mmddyy=8 : ccyymmdd=10 !:
         ! TC=0 ! Text Box Length Item Coutner
 00280   let tln(tc+=1)=8 !:
         let tln(tc+=1)=12 !:
@@ -95,7 +95,7 @@
 00390 ! ** Field Mask ** !:
         let number=30 !:
         let pointtwo=32 ! number with 2 decimal places (no commas)!:
-        let mmddyy=1 : let ccyymmdd=3 !:
+        let mmddyy=1 : ccyymmdd=3 !:
         let mc=0 ! mask item counter
 00400   let mask(mc+=1)=none !:
         let mask(mc+=1)=none !:
@@ -120,24 +120,24 @@
         ! c$(cl,5)=desc pos c$(cl,6)=desc len  C$(cl,7)=Index File !:
         ! C$(cl,8)=limit to list option '1'=yes '0'=no !:
         let limit_to_list$='1'
-00450   let cl=8 !:
-        let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\CLmstr\PaymentCode.dat" !:
-        let c$(cl,3)='1' : let c$(cl,4)=str$(sln(cl)) !:
-        let c$(cl,5)=str$(sln(cl)+1) : let c$(cl,6)='25' !:
-        let c$(cl,7)=env$('Q')&"\CLmstr\PaymentCode.Idx" : let c$(cl,8)=limit_to_list$
-00460   let cl=9 !:
-        let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\CLmstr\BankMstr.h"&str$(cno) !:
-        let c$(cl,3)='1' : let c$(cl,4)=str$(sln(cl)) !:
-        let c$(cl,5)=str$(sln(cl)+1) : let c$(cl,6)='30' !:
-        let c$(cl,7)=env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno) : let c$(cl,8)=limit_to_list$
-00470   let cl=12 !:
-        let c$(cl,1)='ComboF' !:
-        let c$(cl,2)="S:\acsCL\PostingCode.dat" !:
-        let c$(cl,3)='1' : let c$(cl,4)=str$(sln(cl)) !:
-        let c$(cl,5)=str$(sln(cl)+1) : let c$(cl,6)='25' !:
-        let c$(cl,7)="S:\acsCL\PostingCode.idx" : let c$(cl,8)=limit_to_list$
+00450   cl=8 !:
+        c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\CLmstr\PaymentCode.dat" !:
+        c$(cl,3)='1' : c$(cl,4)=str$(sln(cl)) !:
+        c$(cl,5)=str$(sln(cl)+1) : c$(cl,6)='25' !:
+        c$(cl,7)=env$('Q')&"\CLmstr\PaymentCode.Idx" : c$(cl,8)=limit_to_list$
+00460   cl=9 !:
+        c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\CLmstr\BankMstr.h"&str$(cno) !:
+        c$(cl,3)='1' : c$(cl,4)=str$(sln(cl)) !:
+        c$(cl,5)=str$(sln(cl)+1) : c$(cl,6)='30' !:
+        c$(cl,7)=env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno) : c$(cl,8)=limit_to_list$
+00470   cl=12 !:
+        c$(cl,1)='ComboF' !:
+        c$(cl,2)="S:\acsCL\PostingCode.dat" !:
+        c$(cl,3)='1' : c$(cl,4)=str$(sln(cl)) !:
+        c$(cl,5)=str$(sln(cl)+1) : c$(cl,6)='25' !:
+        c$(cl,7)="S:\acsCL\PostingCode.idx" : c$(cl,8)=limit_to_list$
 00480   return 
 00490 ! ______________________________________________________________________
 00500 OPEN_AND_CALL_HAMSTER: ! 
@@ -156,7 +156,7 @@
 00610 ERTN: let fnerror(program$,err,line,act$,"xit")
 00620   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00630   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00640   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00640   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00650 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00660 ! /region
 00670 ! ______________________________________________________________________

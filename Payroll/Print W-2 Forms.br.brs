@@ -26,7 +26,7 @@
 14460   open #hCompany:=fngethandle: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 14480   read #hCompany,using fCompany: mat a$,empId$,mat d$,loccode,mat e$
 14500   fCompany: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12 
-14520   for j=1 to 3: let a$(j)=a$(j)(1:30): next j
+14520   for j=1 to 3: a$(j)=a$(j)(1:30): next j
 14540   close #hCompany: 
 14560   !
 14580   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
@@ -64,7 +64,7 @@
 22160     open #hExport:=fngethandle: "Name="&br_filename$(w2laser_output_filename$)&",REPLACE",display,output ioerr ASK_INFO
 22180   end if 
 22200   ! /r
-24000 ! ASK_DEDUCTIONS: ! r: ! ask if any misecllaneous deductions should print in box 12
+24000 ! ASK_DEDUCTIONS: ! r: ! ask if any misecllaneous deductions should pr in box 12
 24020   let fntos(sn$="Prw2-box12")
 24040   let rc=cf=0 : let mylen=20 : let mypos=mylen+3
 24060   let fnlbl(1,1,"Indicate if any of the miscellaneous deductions",50,1,0,0)
@@ -153,7 +153,7 @@
 30180 !   let tdedret=0 ! REMOVE EXPLANATION  FROM LINE 905 TO LIST RETIREMENT IN BOX 13
 30260     let first=1
 30280     ! Read #hDepartment,Using 1190,Rec=TA: TENO,TCD,MAT TY,TA
-32000     let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+32000     checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 32020     restore #hChecks,key>=checkkey$: nokey READ_EMPLOYEE
 32040     do
 32060       READ_CHECK: !
@@ -262,8 +262,8 @@
 35080       if cLocality$="YES" then gosub ASK_EMP_LOCALITY
 35100       let printLocality$=empLocality$
 35120     end if
-35140     let controlNumber$=str$(eno)
-35160     if w(2)<>0 or w(5)<>0 then ! only print w2 if wages
+35140     controlNumber$=str$(eno)
+35160     if w(2)<>0 or w(5)<>0 then ! only pr w2 if wages
 35180       if exportFormatID=1 then 
 35200         gosub EXPORT_AMS
 35220     ! else if exportFormatID=2 then 
@@ -295,7 +295,7 @@
 37080   close #hW2Box16: 
 37100   if ~exportFormatID then 
 37135     mat w=t 
-37140     let controlNumber$="Final Total" 
+37140     controlNumber$="Final Total" 
 37160     let nameFirst$=nameMiddle$=nameLast$=""
 37180     mat k$=("")
 37190     ! state$=''
@@ -341,7 +341,7 @@
 52220   let fnacs(sn$,0,mat resp$,ckey)
 52240   if ckey=5 then goto XIT
 52260   let empLocality$=resp$(1)
-52280   let controlNumber$=rtrm$(controlNumber$)
+52280   controlNumber$=rtrm$(controlNumber$)
 52300   if controlNumber$="1" then goto L2770
 52320   let empLocality$=controlNumber$
 52340 L2770: ! 
@@ -350,7 +350,7 @@
 64020   ! passed hW2Box16,kz$, mat w, etc
 64040   read #hW2Box16,using fw2box16$,key=kz$: kz$,mat in4$ nokey B16Finis
 64060   for j=1 to 6
-64080     let amt(j)=val(in4$(j*5-3))
+64080     amt(j)=val(in4$(j*5-3))
 64100     if in4$(j*5-2)="1" then let w(2)+=amt(j)
 64120     if in4$(j*5-1)="1" then let w(5)+=amt(j)
 64140     !   if env$('client')="Washington Parrish" then goto L3760
@@ -385,77 +385,77 @@
 64720   B16Finis: ! 
 64740 return  ! /r
 66000 EXPORT_AMS: ! r: LASER W2 FOR ADVANCED MICRO SOLUTIONS
-66120   print #hExport: "ROAN="&controlNumber$
-66140   print #hExport: "FEIN="&empId$
-66160   print #hExport: "WAGES="&str$(w(2))
-66180   print #hExport: "FITW="&str$(w(1))
-66200   print #hExport: "PNAME1="&a$(1)
-66220   print #hExport: "PNAME2="
-66240   print #hExport: "SSWAGES="&str$(w(5))
-66260   print #hExport: "SSWH="&str$(w(3))
-66280   print #hExport: "PADDR1="&a$(2)
-66300   print #hExport: "PADDR2="&a$(3)
-66320   print #hExport: "MCWAGES="&str$(w(11))
-66340   print #hExport: "MCWH="&str$(w(12))
-66360   print #hExport: "SSN="&srep$(ss$,' ','')
-66380   print #hExport: "SSTIPS="&str$(w(6))
-66400   print #hExport: "ALLOCATIP="  ! "ALLOCATIP=";0
-66420   print #hExport: "RNAME1="&(rtrm$(nameLast$)&","&nameFirst$)(1:24)
-66440   print #hExport: "RNAME2="&(k$(2)(1:24))
-66460 ! print #hExport: "AEIC=";w(4)    ! this field is no longer supported 1/4/2017
-66480   print #hExport: "DEPDCARE="&str$(dcb)
-66500   print #hExport: "RADDR1="
-66520   print #hExport: "RADDR2="&(k$(3)(1:24))
-66540   print #hExport: "LAB14A="
-66560   print #hExport: "BOX14A=0"
-66580   print #hExport: "LAB12A="&box12aCode$
-66600   print #hExport: "BOX12A="&box12aAmt$
-66620   print #hExport: "CNTRYCODE="
-66640   print #hExport: "RCOUNTRY="
-66820   print #hExport: "EESTAT=" ! 0"
-66840   print #hExport: "EERETR="&retirementPlanX$
-66940   print #hExport: "EESICK=" ! 0"
-66660   print #hExport: "LAB14B="
-66680   print #hExport: "BOX14B=0"
-66700   print #hExport: "LAB12B="&box12bCode$
-66720   print #hExport: "BOX12B="&box12bAmt$
-66740   print #hExport: "LAB14C="
-66760   print #hExport: "BOX14C=0"
-66780   print #hExport: "LAB12C="&box12cCode$
-66800   print #hExport: "BOX12C="&box12cAmt$
-66860   print #hExport: "LAB14D="
-66880   print #hExport: "BOX14D=0"
-66900   print #hExport: "LAB12D="&box12dCode$
-66920   print #hExport: "BOX12D="&box12dAmt$
-66960   print #hExport: "BOX11Q="&str$(nqp)
-66980   print #hExport: "NQPLANS="
-67000   print #hExport: "STATE1="&state$
-67020   print #hExport: "SEIN1="&stcode$
-67040   print #hExport: "SWAGES1="&str$(w(9))
-67060   print #hExport: "SITW1="&str$(w(7))
-67080   print #hExport: "LWAGES1="&str$(w(10))
-67100   print #hExport: "LITW1="&str$(w(8))
-67120   print #hExport: "LOCAL1="&printLocality$
-67140   print #hExport: "STATE2="
-67160   print #hExport: "SEIN2="
-67180   print #hExport: "SWAGES2=0"
-67200   print #hExport: "SITW2=0"
-67220   print #hExport: "LWAGES2=0"
-67240   print #hExport: "LITW2=0"
-67260   print #hExport: "LOCAL2="
-67280   print #hExport: "FName="&nameFirst$(1:24)
-67300   print #hExport: "LName="&nameLast$(1:24)
-67320   print #hExport: "TAG="
-67340   print #hExport: "EBAT="
-67360   print #hExport: "PHONE="
-67380   print #hExport: "*"
+66120   pr #hExport: "ROAN="&controlNumber$
+66140   pr #hExport: "FEIN="&empId$
+66160   pr #hExport: "WAGES="&str$(w(2))
+66180   pr #hExport: "FITW="&str$(w(1))
+66200   pr #hExport: "PNAME1="&a$(1)
+66220   pr #hExport: "PNAME2="
+66240   pr #hExport: "SSWAGES="&str$(w(5))
+66260   pr #hExport: "SSWH="&str$(w(3))
+66280   pr #hExport: "PADDR1="&a$(2)
+66300   pr #hExport: "PADDR2="&a$(3)
+66320   pr #hExport: "MCWAGES="&str$(w(11))
+66340   pr #hExport: "MCWH="&str$(w(12))
+66360   pr #hExport: "SSN="&srep$(ss$,' ','')
+66380   pr #hExport: "SSTIPS="&str$(w(6))
+66400   pr #hExport: "ALLOCATIP="  ! "ALLOCATIP=";0
+66420   pr #hExport: "RNAME1="&(rtrm$(nameLast$)&","&nameFirst$)(1:24)
+66440   pr #hExport: "RNAME2="&(k$(2)(1:24))
+66460 ! pr #hExport: "AEIC=";w(4)    ! this field is no longer supported 1/4/2017
+66480   pr #hExport: "DEPDCARE="&str$(dcb)
+66500   pr #hExport: "RADDR1="
+66520   pr #hExport: "RADDR2="&(k$(3)(1:24))
+66540   pr #hExport: "LAB14A="
+66560   pr #hExport: "BOX14A=0"
+66580   pr #hExport: "LAB12A="&box12aCode$
+66600   pr #hExport: "BOX12A="&box12aAmt$
+66620   pr #hExport: "CNTRYCODE="
+66640   pr #hExport: "RCOUNTRY="
+66820   pr #hExport: "EESTAT=" ! 0"
+66840   pr #hExport: "EERETR="&retirementPlanX$
+66940   pr #hExport: "EESICK=" ! 0"
+66660   pr #hExport: "LAB14B="
+66680   pr #hExport: "BOX14B=0"
+66700   pr #hExport: "LAB12B="&box12bCode$
+66720   pr #hExport: "BOX12B="&box12bAmt$
+66740   pr #hExport: "LAB14C="
+66760   pr #hExport: "BOX14C=0"
+66780   pr #hExport: "LAB12C="&box12cCode$
+66800   pr #hExport: "BOX12C="&box12cAmt$
+66860   pr #hExport: "LAB14D="
+66880   pr #hExport: "BOX14D=0"
+66900   pr #hExport: "LAB12D="&box12dCode$
+66920   pr #hExport: "BOX12D="&box12dAmt$
+66960   pr #hExport: "BOX11Q="&str$(nqp)
+66980   pr #hExport: "NQPLANS="
+67000   pr #hExport: "STATE1="&state$
+67020   pr #hExport: "SEIN1="&stcode$
+67040   pr #hExport: "SWAGES1="&str$(w(9))
+67060   pr #hExport: "SITW1="&str$(w(7))
+67080   pr #hExport: "LWAGES1="&str$(w(10))
+67100   pr #hExport: "LITW1="&str$(w(8))
+67120   pr #hExport: "LOCAL1="&printLocality$
+67140   pr #hExport: "STATE2="
+67160   pr #hExport: "SEIN2="
+67180   pr #hExport: "SWAGES2=0"
+67200   pr #hExport: "SITW2=0"
+67220   pr #hExport: "LWAGES2=0"
+67240   pr #hExport: "LITW2=0"
+67260   pr #hExport: "LOCAL2="
+67280   pr #hExport: "FName="&nameFirst$(1:24)
+67300   pr #hExport: "LName="&nameLast$(1:24)
+67320   pr #hExport: "TAG="
+67340   pr #hExport: "EBAT="
+67360   pr #hExport: "PHONE="
+67380   pr #hExport: "*"
 67400 return ! /r
 75000 IGNORE: continue 
 76000 ! <updateable region: ertn>
 76040 ERTN: let fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-76100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 76120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 76140 ! </updateable region: ertn>
 77000 PrintW2: ! r:

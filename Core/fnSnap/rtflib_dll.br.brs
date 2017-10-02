@@ -41,7 +41,7 @@
         let esc=99 : let up=102 : let left=103 !:
         let dn=104 : let home=112 !:
         let end=113
-00221   let click=201 : let dblclick=202 !:
+00221   click=201 : let dblclick=202 !:
         let help=100 : let rtclick=100 !:
         let rtdblclick=100
 00222   let upfld=105 : let dnfld=106 : let foflow=107 !:
@@ -59,7 +59,7 @@
 09999 ! ================================================================
 10000   def library fnlistprint(winno,spec$*100;header$*200,footer$*200,title$*200,mat selected,nolines,nosort,nototals$*200,nosubtotal,print) !:
           ! -------------------------------- !:
-          ! ?Extract information from a listbox and print the information !:
+          ! ?Extract information from a listbox and pr the information !:
           ! ?  in an RTF report using Word                                !:
           ! ?WINNO the window number in which the listbox appears         !:
           ! ?SPEC$ the identifier such as "1,1 LIST 5/25" for the list    !:
@@ -70,14 +70,14 @@
           ! ?   elements                                                  !:
           ! ?NOLINES if true suppresses lines around cells                !:
           ! ?NOSORT if true ignores resorted sequence                     !:
-          ! ?NOTOTALS$ string of 0/1/Xs 1 will surpress total print       !:
+          ! ?NOTOTALS$ string of 0/1/Xs 1 will surpress total pr       !:
           ! ?   X will suppress the printing of the column                !:
           ! ?NOSUBTOTAL if true prevents printing of subtotals            !:
           ! --------------------------------
 10001     library 'S:\Core\Library': fnget_wordprocessor_exe
 10002     let fnget_wordprocessor_exe(word_processor_exe$, 'word')
 10004     dim mprint$*50,word_processor_exe$*256
-10005     if print then let mprint$=" /q /n /mFilePrintDefault /mFileCloseOrExit" else let mprint$=""
+10005     if pr then let mprint$=" /q /n /mFilePrintDefault /mFileCloseOrExit" else let mprint$=""
 10010     library env$("PD")&"Core\fnsnap\RTFLIB_dll.br": fnrtf,fnamt$,fntext$
 10020     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnmsexe$,fngethandle,fndelrow,fndelrow$,fn_cs,fnCopyc2s,fnCopys2c,fnwaitwin
 10030     dim theaders$(1)*50,headers$(1)*50,widths(1),forms$(1)*50,aa$(1)*50,ab$(1)*50,ba$(1)*50,bb$(1)*50,cc$(1)*3000,lastcc$(1)*3000,ccs$(1)*3000,ccst$(1)*3000,ccs$*2000,ccb$*2000,headers$*2000,cc$*20000,dorder(1),sorder(1),exclude(1),outfile$*100,dummy$*2000
@@ -150,7 +150,7 @@
           mat col_subtotal(lcols)=(0)
 10260     gosub SET_FORMAT
 10265 ! -------------------------------- !:
-          ! ?nly selected rows are to print                               !:
+          ! ?nly selected rows are to pr                               !:
           ! ?                                                             !:
           ! -------------------------------- !
 10270     if selected or masked then 
@@ -165,25 +165,25 @@
               if asel>1 then mat asel(asel) !:
                 input #winno, fields spec$&",rowsub,sel,nowait": mat asel
 10302         if (masked and not sum(asel)) then 
-10303           let am=0
+10303           am=0
 10304           mat asel(sum(mat mask_array))
 10305           for a=1 to udim(mask_array)
 10306             if mask_array(a)>0 then !:
-                    let am+=1 !:
-                    let asel(am)=a
+                    am+=1 !:
+                    asel(am)=a
 10307           next a
 10309         end if 
 10310       else 
-10320         let asel=sum(selected) !:
+10320         asel=sum(selected) !:
               mat asel(asel) !:
-              let as=0
+              as=0
 10330         for a=1 to x
-10331           if selected(dorder(a))>0 then let as+=1 !:
-                  let asel(as)=dorder(a)
+10331           if selected(dorder(a))>0 then as+=1 !:
+                  asel(as)=dorder(a)
 10332         next a
 10340       end if 
 10350     end if 
-10360     let aa=0
+10360     aa=0
 10365     let waitwin=fnwaitwin("Creating RTF Report - Please wait")
 10370 ! -------------------------------- !:
           ! ?tart writing RTF text file                                   !:
@@ -191,25 +191,25 @@
           ! -------------------------------- !
 10380     open #(textfile:=fngethandle): "name="&env$('temp')&"\text"&session$&".txt,recl=5000,replace",display,output 
 10385     if sort_col>0 then let header$(inf:inf)="[RTFLINE] Sorted by "&headers$(sort_col)
-10390     print #textfile: "H|[SPEC(spec"&session$&".spc)]"&header$&"[BOTLINE]" !:
-          print #textfile: "F|"&footer$&"|Page [PAGE] |[RTFDATE][TOPLINE]" !:
-          print #textfile: "T| "&title$&"[RTFLINE]"
+10390     pr #textfile: "H|[SPEC(spec"&session$&".spc)]"&header$&"[BOTLINE]" !:
+          pr #textfile: "F|"&footer$&"|Page [PAGE] |[RTFDATE][TOPLINE]" !:
+          pr #textfile: "T| "&title$&"[RTFLINE]"
 10393     mat theaders$(udim(headers$)) !:
           mat theaders$=headers$
 10395     if sort_col>0 and nototals$(sort_col:sort_col)="2" then let fndelrow$(mat theaders$,sort_col)
 10400     let mat2str(mat theaders$,headers$," | ")
-10410     print #textfile: "1| "&headers$
+10410     pr #textfile: "1| "&headers$
 10420 !:
           ! -------------------------------- !:
           ! ?rite detail lines to RTF text file                           !:
           ! ?                                                             !:
           ! -------------------------------- !
 10430 START_SELECTED: ! 
-10440     let aa+=1
+10440     aa+=1
 10450     if selected+masked and aa>udim(mat dorder) then mat cc$(0) : goto 10580 else !:
             if not selected+masked and aa>udim(dorder) then mat cc$(0) : goto 10580
 10455 ! -------------------------------- !:
-          ! ?nly selected rows will print                                 !:
+          ! ?nly selected rows will pr                                 !:
           ! ?                                                             !:
           ! -------------------------------- !
 10460     if selected+masked then 
@@ -230,7 +230,7 @@
             input #winno, fields spec$&",row,range,nowait": mat start,mat end,(mat cc$) !:
             mat ccl$(udim(mat cc$))
 10475 ! -------------------------------- !:
-          ! ?ll rows will print                                           !:
+          ! ?ll rows will pr                                           !:
           ! ?                                                             !:
           ! -------------------------------- !
 10480     if exclude then for a=exclude to 1 step -1 : let fndelrow$(mat cc$,exclude(a)) : next a
@@ -253,7 +253,7 @@
               ! ?                                                             !:
               ! -------------------------------- !
 10510         if not col_format(aaa) and trim$(hforms$(aaa))>"" then 
-10512           let cc$(aaa)=cnvrt$(hforms$(aaa),val(srep$(trim$(cc$(aaa)),"$",""))) error ignore
+10512           cc$(aaa)=cnvrt$(hforms$(aaa),val(srep$(trim$(cc$(aaa)),"$",""))) error ignore
 10514         end if 
 10515 ! -------------------------------- !:
               ! ?ormat dates                                                  !:
@@ -264,7 +264,7 @@
               ! ?ouble up \ to \\ so that the RTF reader will not mistake it  !:
               ! ?s an RTF command                                             !:
               ! -------------------------------- !
-10530         let cc$(aaa)=srep$(trim$(cc$(aaa)),"\","\\") ! pause
+10530         cc$(aaa)=srep$(trim$(cc$(aaa)),"\","\\") ! pause
 10535       end if 
 10540     next aaa
 10545 PRINT_DETAIL: !:
@@ -282,22 +282,22 @@
 10555         let sort_count=0 !:
               mat col_subtotal=(0)
 10556         if nototals$(sort_col:sort_col)="2" then !:
-                print #textfile: "5| "&cc$(sort_col) else !:
-                print #textfile: "5| |"
+                pr #textfile: "5| "&cc$(sort_col) else !:
+                pr #textfile: "5| |"
 10558       end if 
 10559     end if 
 10560     for a=1 to lcols
 10561       if not col_format(a) then !:
-              let col_total(a)+=val(srep$(cc$(a),"$","")) !:
-              let col_subtotal(a)+=val(srep$(cc$(a),"$",""))
+              col_total(a)+=val(srep$(cc$(a),"$","")) !:
+              col_subtotal(a)+=val(srep$(cc$(a),"$",""))
 10562     next a
 10563     mat lastcc$(udim(cc$)) : mat lastcc$=cc$
 10564     if nototals$(sort_col:sort_col)="2" then !:
             let fndelrow$(mat cc$,sort_col) !:
             let mat2str(mat cc$,cc$," | ") else !:
             let mat2str(mat cc$,cc$," | ")
-10565     if udim(mat cc$)>0 then print #textfile: "2| "&cc$&"|" !:
-            let cc$="" !:
+10565     if udim(mat cc$)>0 then pr #textfile: "2| "&cc$&"|" !:
+            cc$="" !:
             mat cc$(udim(lastcc$)) !:
             mat cc$=("") !:
             let sort_count+=1
@@ -316,7 +316,7 @@
             gosub PRINT_SUBTOTALS else !:
             if sort_col>0 and not cc$(sort_col)=lastcc$(sort_col) then !:
               let sort_count=0 !:
-              let col_subtotal=0
+              col_subtotal=0
 10596 ! 
 10600     for aa=1 to udim(col_total)
 10605 ! -------------------------------- !:
@@ -324,15 +324,15 @@
             ! ?                                                             !:
             ! -------------------------------- !
 10607       if col_format(aa)>0 or val(nototals$(aa:aa))>0 then 
-10608         let cc$(aa)=""
+10608         cc$(aa)=""
 10609       else 
-10610         let cc$(aa)=str$(col_total(aa))
+10610         cc$(aa)=str$(col_total(aa))
 10615 ! -------------------------------- !:
               ! ?ormat numeric column totals to match data elements           !:
               ! ?                                                             !:
               ! -------------------------------- !
 10620         if trim$(hforms$(aa))>"" then 
-10622           let cc$(aa)=cnvrt$(hforms$(aa),col_total(aa)) error ignore
+10622           cc$(aa)=cnvrt$(hforms$(aa),col_total(aa)) error ignore
 10623         end if 
 10625       end if 
 10630     next aa
@@ -340,7 +340,7 @@
           mat cct$=cc$ !:
           if sort_col>0 and nototals$(sort_col:sort_col)="2" then let fndelrow$(mat cct$,sort_col)
 10640     let mat2str(mat cct$,cc$," | ")
-10650     print #textfile: "3| "&cc$&"|"
+10650     pr #textfile: "3| "&cc$&"|"
 10655     mat col_total=(0) !:
           let sort_count=0
 10660     let textfile$=file$(textfile)
@@ -373,7 +373,7 @@
         ! ?dd 1 to the col_format array to indicate it is NOT a numeric !:
         ! ?rray.  Numeric arrays have a zero col_format number          !:
         ! -------------------------------- !
-10780   let col_format(aaa)+=1
+10780   col_format(aaa)+=1
 10790   continue 
 10798 ! =================================================================
 10800 BUILD_SPEC: ! build an RTF specification file !:
@@ -382,69 +382,69 @@
         ! ?n the number of columns and text of the lIST to print.       !:
         ! -------------------------------- !
 10810   open #(specfile=fngethandle): "name="&env$('temp')&"\spec"&session$&".spc,recl=2000,replace",display,output 
-10820   print #specfile: ""
+10820   pr #specfile: ""
 10825 ! -------------------------------- !:
         ! ?et margins                                                   !:
         ! ?                                                             !:
         ! -------------------------------- !
 10827   let widths=sum(mat widths)
-10830   print #specfile: "let LMARGIN=.50"
-10840   print #specfile: "let RMARGIN=0.75 "
+10830   pr #specfile: "let LMARGIN=.50"
+10840   pr #specfile: "let RMARGIN=0.75 "
 10845 ! -------------------------------- !:
         ! ?et page orientation                                          !:
         ! ?                                                             !:
         ! -------------------------------- !
 10850   if widths>100 then !:
-          print #specfile: "let ORIENTATION$='LANDSCAPE'" : let landscape=1 else !:
-          print #specfile: "let ORIENTATION$='PORTRAIT'" : let landscape=0
+          pr #specfile: "let ORIENTATION$='LANDSCAPE'" : let landscape=1 else !:
+          pr #specfile: "let ORIENTATION$='PORTRAIT'" : let landscape=0
 10855 ! -------------------------------- !:
         ! ?ight add-in to end of line if style code is E and checklist  !:
         ! ?s true                                                       !:
         ! -------------------------------- !
-10860   print #specfile: "let LEFTTEXT$='Y   N   N/A '"
-10870   print #specfile: "let CHECKLIST=1"
-10880   print #specfile: "let PAPER$='LETTER'"
+10860   pr #specfile: "let LEFTTEXT$='Y   N   N/A '"
+10870   pr #specfile: "let CHECKLIST=1"
+10880   pr #specfile: "let PAPER$='LETTER'"
 10885 ! -------------------------------- !:
         ! ?f NUME is true then sequential E styles will automatically   !:
         ! ?e numbered                                                   !:
         ! -------------------------------- !
-10890   print #specfile: "let NUME=0"
+10890   pr #specfile: "let NUME=0"
 10895 ! -------------------------------- !:
         ! ?reate RTF style codes                                        !:
         ! ?                                                             !:
         ! -------------------------------- !
-10900   print #specfile: "MAT TYPES$(11)"
-10910   print #specfile: "LET TYPES$(1)='H'"
-10920   print #specfile: "LET TYPES$(2)='F'"
-10930   print #specfile: "LET TYPES$(3)='D'"
-10940   print #specfile: "LET TYPES$(4)='T'"
-10950   print #specfile: "LET TYPES$(5)='A'"
-10960   print #specfile: "LET TYPES$(6)='B'"
-10970   print #specfile: "LET TYPES$(7)='C'"
-10980   print #specfile: "LET TYPES$(8)='E'"
-10990   print #specfile: "LET TYPES$(9)='G'"
-11000   print #specfile: "LET TYPES$(10)='Y'"
-11010   print #specfile: "LET TYPES$(11)='I'"
+10900   pr #specfile: "MAT TYPES$(11)"
+10910   pr #specfile: "LET TYPES$(1)='H'"
+10920   pr #specfile: "LET TYPES$(2)='F'"
+10930   pr #specfile: "LET TYPES$(3)='D'"
+10940   pr #specfile: "LET TYPES$(4)='T'"
+10950   pr #specfile: "LET TYPES$(5)='A'"
+10960   pr #specfile: "LET TYPES$(6)='B'"
+10970   pr #specfile: "LET TYPES$(7)='C'"
+10980   pr #specfile: "LET TYPES$(8)='E'"
+10990   pr #specfile: "LET TYPES$(9)='G'"
+11000   pr #specfile: "LET TYPES$(10)='Y'"
+11010   pr #specfile: "LET TYPES$(11)='I'"
 11015 ! -------------------------------- !:
         ! ?reate details of RTF styles                                  !:
         ! ?                                                             !:
         ! -------------------------------- !
-11020   print #specfile: "MAT STYLES$(11)"
+11020   pr #specfile: "MAT STYLES$(11)"
 11030   if widths>100 then !:
-          print #specfile: "LET STYLES$(1)='li0|ri0|fARIAL|fs14|cfBlue|tc5.00|Header'" else !:
-          print #specfile: "LET STYLES$(1)='li0|ri0|fARIAL|fs14|cfBlue|tc3.25|Header'"
+          pr #specfile: "LET STYLES$(1)='li0|ri0|fARIAL|fs14|cfBlue|tc5.00|Header'" else !:
+          pr #specfile: "LET STYLES$(1)='li0|ri0|fARIAL|fs14|cfBlue|tc3.25|Header'"
 11040   if widths>100 then !:
-          print #specfile: "LET STYLES$(2)='li0|ri0|fARIAL|fs8|cfBlack|tc5.00|tr10.0|Footer'" else !:
-          print #specfile: "LET STYLES$(2)='li0|ri0|fARIAL|fs8|cfBlack|tc3.25|tr7.5|Footer'"
-11050   print #specfile: "LET STYLES$(3)='li0.5|QJ|fPALATINO|ri0|fs10|tl0.5|tl1.0|tl1.5|td5.4||Data'"
-11060   print #specfile: "LET STYLES$(4)='li0.5|QC|fARIAL|sa1|ri0|B|fs15|tl0.5||tc3.25|Heading 1'"
-11070   print #specfile: "LET STYLES$(5)='li0.25|ri0|fARIAL|B|fs14|tl0.5||tr5.4|Heading 2'"
-11080   print #specfile: "LET STYLES$(6)='li0.25|ri0|fARIAL|B|fs13|tl0.5||tr5.4|Heading 3'"
-11090   print #specfile: "LET STYLES$(7)='li0.25|ri0|fARIAL|B|fs12|tl0.5||td5.4|Heading 4'"
-11100   print #specfile: "LET STYLES$(8)='fi-0.5|td0.75|li1.0|ri0|fPALATINO|fs09|tl0.5|tl1.0|tc7.0|Yes no Lines'"
-11110   print #specfile: "LET STYLES$(9)='fi-0.4|li1.0|ri0|ft61|fs10|fCOURIER|tl0.5|tc4.0|td5.4|Program lines'"
-11120   print #specfile: "LET STYLES$(10)='fi-0.5|td0.75|li1.0|ri0|fPALATINO|fs12|tl0.5|tl1.0|td6.0|Detail steps'"
-11130   print #specfile: "LET STYLES$(11)='fi-1.25|li2.0|ri0|fPALATINO|fs12|tl2.0|Options'"
+          pr #specfile: "LET STYLES$(2)='li0|ri0|fARIAL|fs8|cfBlack|tc5.00|tr10.0|Footer'" else !:
+          pr #specfile: "LET STYLES$(2)='li0|ri0|fARIAL|fs8|cfBlack|tc3.25|tr7.5|Footer'"
+11050   pr #specfile: "LET STYLES$(3)='li0.5|QJ|fPALATINO|ri0|fs10|tl0.5|tl1.0|tl1.5|td5.4||Data'"
+11060   pr #specfile: "LET STYLES$(4)='li0.5|QC|fARIAL|sa1|ri0|B|fs15|tl0.5||tc3.25|Heading 1'"
+11070   pr #specfile: "LET STYLES$(5)='li0.25|ri0|fARIAL|B|fs14|tl0.5||tr5.4|Heading 2'"
+11080   pr #specfile: "LET STYLES$(6)='li0.25|ri0|fARIAL|B|fs13|tl0.5||tr5.4|Heading 3'"
+11090   pr #specfile: "LET STYLES$(7)='li0.25|ri0|fARIAL|B|fs12|tl0.5||td5.4|Heading 4'"
+11100   pr #specfile: "LET STYLES$(8)='fi-0.5|td0.75|li1.0|ri0|fPALATINO|fs09|tl0.5|tl1.0|tc7.0|Yes no Lines'"
+11110   pr #specfile: "LET STYLES$(9)='fi-0.4|li1.0|ri0|ft61|fs10|fCOURIER|tl0.5|tc4.0|td5.4|Program lines'"
+11120   pr #specfile: "LET STYLES$(10)='fi-0.5|td0.75|li1.0|ri0|fPALATINO|fs12|tl0.5|tl1.0|td6.0|Detail steps'"
+11130   pr #specfile: "LET STYLES$(11)='fi-1.25|li2.0|ri0|fPALATINO|fs12|tl2.0|Options'"
 11140 ! -------------------------------- !:
         ! ?repare justification codes                                   !:
         ! ? right justify numeric columns                               !:
@@ -463,7 +463,7 @@
         ! ?eader row                                                    !:
         ! ?                                                             !:
         ! -------------------------------- !
-11160   print #specfile: "mat cells$(5)"
+11160   pr #specfile: "mat cells$(5)"
 11164 ! -------------------------------- !:
         ! ?et smaller font sizes for wider reports                      !:
         ! ?                                                             !:
@@ -476,43 +476,43 @@
         ! ?                                                             !:
         ! -------------------------------- !
 11167   if nolines then !:
-          let br$="br1" : let brt$="brt1|brbd1": let brst$="brt1|brb1" else !:
-          let br$="brltrb1" : let brt$="brltr1|brbd2": let brst$="brltr1|brb1"
+          br$="br1" : brt$="brt1|brbd1": brst$="brt1|brb1" else !:
+          br$="brltrb1" : brt$="brltr1|brbd2": brst$="brltr1|brb1"
 11168   if sort_col>0 and nototals$(sort_col:sort_col)="2" then !:
           let delcol=widths(sort_col) else !:
           let delcol=0
-11170   print #specfile: "LET CELLS$(1)='li0.1|tg0.100|fPALATINO|fs"&fs$&"|trh|'"
+11170   pr #specfile: "LET CELLS$(1)='li0.1|tg0.100|fPALATINO|fs"&fs$&"|trh|'"
 11180   if landscape then let page_width=10 else let page_width=7.5
 11190   for a=1 to udim(mat headers$)
-11200     if not (sort_col=a and nototals$(a:a)="2") then print #specfile: "let cells$(1)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|brtlrb1|vc|hc|sh15|'"
+11200     if not (sort_col=a and nototals$(a:a)="2") then pr #specfile: "let cells$(1)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|brtlrb1|vc|hc|sh15|'"
 11210   next a
 11215 ! -------------------------------- !:
         ! ?etail row                                                    !:
         ! ?                                                             !:
         ! -------------------------------- !
-11220   print #specfile: "let cells$(2)='li0.1|tg0.100|fPALATINO|fs"&fs$&"|'"
+11220   pr #specfile: "let cells$(2)='li0.1|tg0.100|fPALATINO|fs"&fs$&"|'"
 11230   for a=1 to udim(mat headers$)
 11240     if pos(uprc$(forms$(a)),"PIC(")>0 or pos(uprc$(forms$(a)),"FMT(")>0 or uprc$(forms$(a)(1:2))="N " or col_format(a)=0 then !:
             let hj$(a)="hr" !:
           else if pos(uprc$(forms$(a)),"DATE")>0 then let hj$(a)="hc" !:
           else let hj$(a)="hl"
-11250   if not (sort_col=a and nototals$(a:a)="2") then print #specfile: "let cells$(2)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|"&br$&"|vt|"&hj$(a)&"|'"
+11250   if not (sort_col=a and nototals$(a:a)="2") then pr #specfile: "let cells$(2)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|"&br$&"|vt|"&hj$(a)&"|'"
 11260 next a
 11262 ! PAUSE
 11265 ! -------------------------------- !:
       ! ?otal row                                                     !:
       ! ?                                                             !:
       ! -------------------------------- !
-11270 print #specfile: "LET CELLS$(3)='li0.1|tg0.100|fPALATINO|fs"&fs$&"|'"
-11280 let brdr$="br1" !:
-      let brdr$(1)="brtlr1" !:
-      let brdr$(2)="brbd1"
+11270 pr #specfile: "LET CELLS$(3)='li0.1|tg0.100|fPALATINO|fs"&fs$&"|'"
+11280 brdr$="br1" !:
+      brdr$(1)="brtlr1" !:
+      brdr$(2)="brbd1"
 11290 for a=1 to udim(mat headers$)
-11300   rem IF HJ$(A)='hr' AND NOT COL_FORMAT(A) AND NOT NOTOTALS$(A:A)="1" THEN !:                   PRINT #SPECFILE: "let cells$(3)(inf:inf)='c"&STR$((WIDTHS(A)/SUM(MAT WIDTHS)*PAGE_WIDTH))&"|"&BRT$&"|vt|"&HJ$(A)&"|'" !:                                                            ELSE PRINT #SPECFILE: "let cells$(3)(inf:inf)='c"&STR$((WIDTHS(A)/SUM(MAT WIDTHS)*PAGE_WIDTH))&"|"&BRDR$&"|vt|"&HJ$(A)&"|'"
+11300   rem IF HJ$(A)='hr' AND NOT COL_FORMAT(A) AND NOT NOTOTALS$(A:A)="1" THEN !:                   pr #SPECFILE: "let cells$(3)(inf:inf)='c"&STR$((WIDTHS(A)/SUM(MAT WIDTHS)*PAGE_WIDTH))&"|"&BRT$&"|vt|"&HJ$(A)&"|'" !:                                                            ELSE pr #SPECFILE: "let cells$(3)(inf:inf)='c"&STR$((WIDTHS(A)/SUM(MAT WIDTHS)*PAGE_WIDTH))&"|"&BRDR$&"|vt|"&HJ$(A)&"|'"
 11302   if hj$(a)='hr' and not col_format(a) and not pos("12",nototals$(a:a)) then 
-11304     if not (sort_col=a and nototals$(a:a)="2") then print #specfile: "let cells$(3)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|"&brt$&"|vt|"&hj$(a)&"|'"
+11304     if not (sort_col=a and nototals$(a:a)="2") then pr #specfile: "let cells$(3)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|"&brt$&"|vt|"&hj$(a)&"|'"
 11305   else 
-11306     if not (sort_col=a and nototals$(a:a)="2") then print #specfile: "let cells$(3)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|"&brdr$&"|vt|"&hj$(a)&"|'"
+11306     if not (sort_col=a and nototals$(a:a)="2") then pr #specfile: "let cells$(3)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|"&brdr$&"|vt|"&hj$(a)&"|'"
 11308   end if 
 11310 next a
 11320 ! CLOSE #SPECFILE:
@@ -520,15 +520,15 @@
       ! ?ub-total row                                                 !:
       ! ?                                                             !:
       ! -------------------------------- !
-11370 print #specfile: "LET CELLS$(4)='li0.1|tg0.100|fPALATINO|fs"&fs$&"|'"
-11380 let brdr$="br1" !:
-      let brdr$(1)="brtlr1" !:
-      let brdr$(2)="brb1"
+11370 pr #specfile: "LET CELLS$(4)='li0.1|tg0.100|fPALATINO|fs"&fs$&"|'"
+11380 brdr$="br1" !:
+      brdr$(1)="brtlr1" !:
+      brdr$(2)="brb1"
 11390 for a=1 to udim(mat headers$)
 11400   if hj$(a)='hr' and not col_format(a) and not pos("12",nototals$(a:a)) then 
-11402     if not (sort_col=a and nototals$(a:a)="2") then print #specfile: "let cells$(4)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|"&brst$&"|vt|"&hj$(a)&"|'"
+11402     if not (sort_col=a and nototals$(a:a)="2") then pr #specfile: "let cells$(4)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|"&brst$&"|vt|"&hj$(a)&"|'"
 11403   else 
-11404     if not (sort_col=a and nototals$(a:a)="2") then print #specfile: "let cells$(4)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|"&brdr$&"|vt|"&hj$(a)&"|'"
+11404     if not (sort_col=a and nototals$(a:a)="2") then pr #specfile: "let cells$(4)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|"&brdr$&"|vt|"&hj$(a)&"|'"
 11406   end if 
 11410 next a
 11420 ! CLOSE #SPECFILE:
@@ -536,9 +536,9 @@
       ! ?lank spacer row                                              !:
       ! ?                                                             !:
       ! -------------------------------- !
-11470 print #specfile: "LET CELLS$(5)='li0.1|tg0.100|fPALATINO|fs"&fst$&"|'"
-11475 let brdr$="br1"
-11476 print #specfile: "let cells$(5)(inf:inf)='c"&str$(page_width)&"|"&brdr$&"|vt|hl|'"
+11470 pr #specfile: "LET CELLS$(5)='li0.1|tg0.100|fPALATINO|fs"&fst$&"|'"
+11475 brdr$="br1"
+11476 pr #specfile: "let cells$(5)(inf:inf)='c"&str$(page_width)&"|"&brdr$&"|vt|hl|'"
 11495 close #specfile: 
 11500 return 
 11510 ! =================================================================
@@ -560,12 +560,12 @@
 11590   if uprc$(forms$(a))(1:3)="ZD " and pos(forms$(a),",")>0 then !:
           let hforms$(a)=forms$(a)(1:pos(forms$(a),")")) else !:
           if uprc$(forms$(a))(1:3)="ZD " then let hforms$(a)=forms$(a)
-11600 ! IF NOT NOTOTALS$(A:A)="0" THEN LET COL_FORMAT(A)+=1
-11610   if uprc$(forms$(a))(1:1)="C" then let col_format(a)+=1
-11620   if uprc$(forms$(a))(1:1)="V" then let col_format(a)+=1
-11630   if uprc$(forms$(a))(1:1)="G" then let col_format(a)+=1
-11640   if uprc$(forms$(a))(1:1)="L" then let col_format(a)+=1
-11650   if uprc$(forms$(a))(1:4)="DATE" then let col_format(a)+=1 !:
+11600 ! IF NOT NOTOTALS$(A:A)="0" THEN cOL_FORMAT(A)+=1
+11610   if uprc$(forms$(a))(1:1)="C" then col_format(a)+=1
+11620   if uprc$(forms$(a))(1:1)="V" then col_format(a)+=1
+11630   if uprc$(forms$(a))(1:1)="G" then col_format(a)+=1
+11640   if uprc$(forms$(a))(1:1)="L" then col_format(a)+=1
+11650   if uprc$(forms$(a))(1:4)="DATE" then col_format(a)+=1 !:
           let hforms$(a)=uprc$(forms$(a)(1:pos(forms$(a),")")))
 11651   let _p=pos(hforms$(a),")") !:
         let _c=pos(hforms$(a),",",-1)
@@ -592,36 +592,36 @@
           ! ?                                                             !:
           ! -------------------------------- !
 11730     if col_format(aas)>0 or val(nototals$(aas:aas))>0 then 
-11740       let ccs$(aas)=""
+11740       ccs$(aas)=""
 11750     else 
-11760       let ccs$(aas)=str$(col_subtotal(aas))
+11760       ccs$(aas)=str$(col_subtotal(aas))
 11770 ! -------------------------------- !:
             ! ?ormat numeric column totals to match data elements           !:
             ! ?                                                             !:
             ! -------------------------------- !
 11780       if trim$(hforms$(aas))>"" then !:
-              let ccs$(aas)=cnvrt$(hforms$(aas),col_subtotal(aas)) !:
-              let col_subtotal(aas)=0
+              ccs$(aas)=cnvrt$(hforms$(aas),col_subtotal(aas)) !:
+              col_subtotal(aas)=0
 11790     end if 
 11800   next aas
 11802   mat ccst$(udim(ccs$)) !:
         mat ccst$=ccs$ !:
         if sort_col>0 and nototals$(sort_col:sort_col)="2" then let fndelrow$(mat ccst$,sort_col)
 11810   let mat2str(mat ccst$,ccs$," | ")
-11820   print #textfile: "4| "&ccs$
+11820   pr #textfile: "4| "&ccs$
 11825   let sort_count=0 !:
         mat col_subtotal=(0)
 11826   mat bb$(udim(mat cc$))=("") !:
         let mat2str(mat bb$,ccs$," | ")
 11827   if sort_col>0 and nototals$(sort_col:sort_col)="2" then !:
-          print #textfile: "5| "&cc$(sort_col) else !:
-          print #textfile: "5| "&ccs$
+          pr #textfile: "5| "&cc$(sort_col) else !:
+          pr #textfile: "5| "&ccs$
 11828 end if 
 11830 ZPRINT_SUBTOTALS: return 
 11990 ! =================================================================
 12000 def library fnlistfilter(winno,spec$*100,filter$;nosort,delay) !:
         ! -------------------------------- !:
-        ! ?Extract information from a listbox and print the information !:
+        ! ?Extract information from a listbox and pr the information !:
         ! ?a new LIST saving the old list to a single cell              !:
         ! ?The old list can be recalled by ESC                          !:
         ! ?WINNO the window number in which the listbox appears         !:
@@ -666,22 +666,22 @@
         mat col_format(lcols)=(0) !:
         mat col_total(lcols)=(0)
 12120   gosub SET_FORMAT
-12130 BUILD_FILTER: let a$=kstat$(1) !:
+12130 BUILD_FILTER: a$=kstat$(1) !:
         ! -------------------------------- !:
         ! ?Set a filter for processing incoming records                 !:
         ! ?                                                             !:
         ! -------------------------------- !
 12140   if unhex$(a$)="08" then !:
           let filter$=filter$(1:len(filter$)-1) !:
-          print #filterwin,fields "12,2,c 30": "Current filter "&filter$ !:
+          pr #filterwin,fields "12,2,c 30": "Current filter "&filter$ !:
           goto BUILD_FILTER !:
         else !:
           if len(unhex$(a$))<4 and not unhex$(a$)="0D" then let filter$=filter$&a$
 12150   if len(unhex$(a$))>2 then mat cc$(0) : goto END_FILTER
-12160   print #filterwin,fields "12,2,c ": "Current filter "&filter$
+12160   pr #filterwin,fields "12,2,c ": "Current filter "&filter$
 12170   if delay and not unhex$(a$)="0D" then goto BUILD_FILTER
 12180 START_FILTER: ! 
-12190   let aa=udim(dorder)+1 !:
+12190   aa=udim(dorder)+1 !:
         let x=0
 12200   let waitwin=fnwaitwin("      Processing filter           ") ! 
 12210 START_FILTER1: !:
@@ -690,7 +690,7 @@
         ! ?                                                             !:
         ! -------------------------------- !
 12215   let fnwaitbar(udim(dorder),udim(dorder)-aa)
-12220   let aa-=1
+12220   aa-=1
 12230   if aa<=0 then !:
           mat cc$(0) : close #waitwin: : let waitwin=0 : goto BUILD_FILTER
 12240   mat start(1): mat end(1) : mat start=(dorder(aa)) : mat end=(dorder(aa)) !:
@@ -700,14 +700,14 @@
         ! ?ead each row in the input array                              !:
         ! ?                                                             !:
         ! -------------------------------- !
-12250   print mat cc$
+12250   pr mat cc$
 12260 ! -------------------------------- !:
         ! ?ormat cells for each column                                  !:
         ! ?                                                             !:
         ! -------------------------------- !
 12270   for aaa=1 to udim(mat cc$)
 12280     if not col_format(aaa) then !:
-            let col_total(aaa)+=val(srep$(cc$(aaa),"$","")) conv SET_NUM !:
+            col_total(aaa)+=val(srep$(cc$(aaa),"$","")) conv SET_NUM !:
             ! -------------------------------- !:
             ! ?heck numeric columns and add to column total if no conversion!:
             ! ?rror.  If a conversion error occurs mark the colun as string !:
@@ -715,7 +715,7 @@
             ! ?ill be done                                                  !:
             ! -------------------------------- !
 12290     if not col_format(aaa) and trim$(hforms$(aaa))>"" then !:
-            let cc$(aaa)=cnvrt$(hforms$(aaa),val(srep$(cc$(aaa),"$",""))) !:
+            cc$(aaa)=cnvrt$(hforms$(aaa),val(srep$(cc$(aaa),"$",""))) !:
             ! -------------------------------- !:
             ! ?ormat the numeric column if conversion works                 !:
             ! ?                                                             !:
@@ -729,15 +729,15 @@
 12310     if pos(uprc$(cc$(aaa)),uprc$(filter$))>0 then !:
             let x+=1 !:
             mat asel(x) !:
-            let asel(x)=start !:
+            asel(x)=start !:
             goto SHOW_FILTER
 12320   next aaa
 12330   goto END_FILTER
 12340 ! PAUSE
 12350 SHOW_FILTER: ! 
 12360   if x=1 then !:
-          print #filterwin, fields filterspec$&",HEADERS,[H]": (mat headers$,mat widths,mat forms$) !:
-          print #filterwin, fields filterspec$&",RANGE": 1,udim(dorder),mat dd$ !:
+          pr #filterwin, fields filterspec$&",HEADERS,[H]": (mat headers$,mat widths,mat forms$) !:
+          pr #filterwin, fields filterspec$&",RANGE": 1,udim(dorder),mat dd$ !:
           mat dd$=("") !:
           mat cc$=("") !:
           goto START_FILTER1 !:
@@ -745,7 +745,7 @@
           ! ?dd the row to the top of the output array and process the    !:
           ! ?ext row                                                      !:
           ! -------------------------------- !
-12370   if x>1 then print #filterwin, fields filterspec$&",RANGE": 1,0,mat dd$ !:
+12370   if x>1 then pr #filterwin, fields filterspec$&",RANGE": 1,0,mat dd$ !:
           mat dd$=("") !:
           mat cc$=("") !:
           goto START_FILTER1 !:
@@ -777,16 +777,16 @@
         ! -------------------------------- !
 13010   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fndelrow,fndelrow$,fnlistspec$
 13020   dim sh$(1)*50,sw(1),sf$(1)*50,ss$(1)*100,ss$*20000,rdo(1),sdo(1),rso(1),sso(1)
-13030   let copy_count=0
+13030   copy_count=0
 13040   input #readwin, fields readspec$&",HEADERS,,nowait ": (mat sh$,mat sw,mat sf$)
 13050   let x=udim(mat sf$) !:
         for a=1 to x !:
           let sf$(a)=trim$(sf$(a)) !:
         next a
 13060   input #readwin, fields readspec$&",rowsub,all,displayed_order,nowait": mat rdo
-13070   let copy_count=udim(rdo)
+13070   copy_count=udim(rdo)
 13080   input #readwin, fields readspec$&",row,all,nowait": mat ss$
-13090   print #savewin, fields savespec$&",=R": mat ss$ !:
+13090   pr #savewin, fields savespec$&",=R": mat ss$ !:
         ! -------------------------------- !:
         ! ?Erase the contents of the existing SAVE LIST and replace     !:
         ! ?with the new records                                         !:
@@ -815,27 +815,27 @@
           let sf$(a)=trim$(sf$(a)) !:
         next a
 14060   let fnwinrowcol(_swin,lrow,lcol) !:
-        print lrow !:
+        pr lrow !:
         ! -------------------------------- !:
         ! ?et the screen size of the main window                        !:
         ! ?                                                             !:
         ! -------------------------------- !
 14061   if not _srow then let _srow=lrow+1 else let _srow=min(_srow,lrow)
 14062   if not _scol then let _scol=1 else let _scol=min(_scol,lcol)
-14070   print #_swin, fields (sspec$:=str$(_srow)&","&str$(_scol)&",LIST 1/1")&",HEADERS,[H]": (mat sh$,mat sw,mat sf$) !:
+14070   pr #_swin, fields (sspec$:=str$(_srow)&","&str$(_scol)&",LIST 1/1")&",HEADERS,[H]": (mat sh$,mat sw,mat sf$) !:
         ! -------------------------------- !:
         ! ?reate a list header in a single cell in the lower left       !:
         ! ?orner of the main screen                                     !:
         ! -------------------------------- !
 14090 START_SAVE: ! 
 14120   input #savewin, fields savespec$&",row,all,nowait": mat ss$
-14130   print #_swin,fields sspec$&",=R": mat ss$
+14130   pr #_swin,fields sspec$&",=R": mat ss$
 14140 END_SAVE: ! 
 14145   let fnlistsave=_swin
 14150 fnend 
 15000 def library fnlistenter(winno,spec$*100,element) !:
         ! -------------------------------- !:
-        ! ?Extract information from a listbox and print the information !:
+        ! ?Extract information from a listbox and pr the information !:
         ! ?in an RTF report using Word                                  !:
         ! ?WINNO the window number in which the listbox appears         !:
         ! ?SPEC$ the list secifier 1,1,LIST 12/15 for example           !:
@@ -885,7 +885,7 @@
         ! ?ead the selected row from the list ELEMENT                   !:
         ! ?                                                             !:
         ! -------------------------------- !
-15170   print mat cc$
+15170   pr mat cc$
 15180 ! -------------------------------- !:
         ! ?ormat cells for each column                                  !:
         ! ?                                                             !:
@@ -897,13 +897,13 @@
           ! ?o that no total will appear and no further conversion testing!:
           ! ?ill be done                                                  !:
           ! -------------------------------- !
-15210     if not col_format(aaa) then let col_total(aaa)+=val(srep$(cc$(aaa),"$","")) conv SET_NUM !:
+15210     if not col_format(aaa) then col_total(aaa)+=val(srep$(cc$(aaa),"$","")) conv SET_NUM !:
             ! -------------------------------- !:
             ! ?heck to see if conversion works for otherwise numeric column !:
             ! ?                                                             !:
             ! -------------------------------- !
 15220     if not col_format(aaa) and trim$(hforms$(aaa))>"" then !:
-            let cc$(aaa)=cnvrt$(hforms$(aaa),val(srep$(cc$(aaa),"$",""))) !:
+            cc$(aaa)=cnvrt$(hforms$(aaa),val(srep$(cc$(aaa),"$",""))) !:
             ! -------------------------------- !:
             ! ?ormat the numeric column if conversion works                 !:
             ! ?                                                             !:
@@ -917,7 +917,7 @@
 15260 ! OPEN #(ENTERWIN:=FNGETHANDLE): "srow=5,scol=5,rows="&STR$(UDIM(MAT CC$)+1)&",cols="&STR$(50)&",PARENT=NONE",DISPLAY,OUTIN
 15261   open #(enterwin:=fngethandle): "srow=5,scol=5,rows="&str$(udim(mat cc$)+1)&",cols="&str$(hlen+wlen+10)&",PARENT=NONE",display,outin 
 15270   for a=1 to udim(mat headers$)
-15280     print #enterwin,fields str$(a)&",2,c "&str$(hlen)&",N/W:T": trim$(headers$(a))
+15280     pr #enterwin,fields str$(a)&",2,c "&str$(hlen)&",N/W:T": trim$(headers$(a))
 15290     mat inwrk$(a): mat indate(a): mat indate$(a) !:
           if hforms$(a)>"" then !:
             let inwrk$(a)=str$(a)&","&str$(hlen+3)&","&hforms$(a)&",[D]" else !:
@@ -933,14 +933,14 @@
 15300   next a
 15310 ENTER_DATA: ! 
 15320   rinput #enterwin, fields mat inwrk$: mat cc$ !:
-        let af=curfld !:
-        let ak=fkey
-15321   if indate(af) then let cc=val(cc$(af)) conv 15320
+        af=curfld !:
+        ak=fkey
+15321   if indate(af) then cc=val(cc$(af)) conv 15320
 15322   if indate(af) and not cc then !:
-          let curfld(af) !:
+          curfld(af) !:
           let fnwaitwin("Invalid date use MMDDYY","Date Error","OK") !:
           goto 15320
-15323   rem IF INDATE(AF) THEN !:                                                                     PRINT #ENTERWIN, FIELDS INDATE$(AF): " "
+15323   rem IF INDATE(AF) THEN !:                                                                     pr #ENTERWIN, FIELDS INDATE$(AF): " "
 15330   if curfld=udim(mat cc$) then goto 15400
 15340   if not ak then let curfld(af+1,ak) else let curfld(af,ak)
 15350   goto ENTER_DATA
@@ -949,8 +949,8 @@
 15380 ! INPUT #FILTERWIN,FIELDS FILTERSPEC$&",rowsub,all,displayed_order,nowait": MAT DORDER
 15390 ! 
 15400   close #enterwin: 
-15405 ! PRINT #WINNO,FIELDS SPEC$&",CELL_RANGE": (ELEMENT-1)*UDIM(CC$)+1,(ELEMENT)*(UDIM(CC$)),MAT CC$ !:
-        print #winno,fields spec$&",RANGE": element,element,mat cc$
+15405 ! pr #WINNO,FIELDS SPEC$&",CELL_RANGE": (ELEMENT-1)*UDIM(CC$)+1,(ELEMENT)*(UDIM(CC$)),MAT CC$ !:
+        pr #winno,fields spec$&",RANGE": element,element,mat cc$
 15410 fnend 
 50000 ! !:
       ! -------------------------------- !:
@@ -1004,30 +1004,30 @@
 50057   let setspec=0
 50058   if uprc$(trim$(orientation$))="LANDSCAPE" then let landscape=1 else let landscape=0
 50060   let t=udim(mat types$) !:
-        let crlf$=chr$(13)&chr$(10)
+        crlf$=chr$(13)&chr$(10)
 50070   dim s$(1)*2000,se$(1)*1000,colors$(19),data$*32000,bold$(1),fs$*100,fc$*100,sa$*100
 50071   dim types$(1)*2,styles$(1)*2000,cells$(1)*2000,lefttext$*100,papersize$*100
 50072   dim boxmargins$*1000,oldmargins$*1000,boxmarginsn$*1000
 50073   dim subx$(1)*500
-50080   let colors$(1)="[BLACK]" !:
-        let colors$(2)="[BLUE]" !:
-        let colors$(3)="[LTBLUE]" !:
-        let colors$(4)="[LTGREEN]" !:
-        let colors$(5)="[PINK]" !:
-        let colors$(6)="[RED]" !:
-        let colors$(7)="[YELLOW]" !:
-        let colors$(8)="[WHITE]" !:
-        let colors$(9)="[DKBLUE]"
-50081   let colors$(10)="[BLUEGREEN]" !:
-        let colors$(11)="[GREEN]" !:
-        let colors$(12)="[PURPLE]" !:
-        let colors$(13)="[BURGUNDY]" !:
-        let colors$(14)="[LTOLIVE]" !:
-        let colors$(15)="[GRAY]" !:
-        let colors$(16)="[LTGRAY]" !:
-        let colors$(17)="[DKGREEN]" !:
-        let colors$(18)="[OLIVE]"
-50082   let colors$(19)="[SEAGREEN]"
+50080   colors$(1)="[BLACK]" !:
+        colors$(2)="[BLUE]" !:
+        colors$(3)="[LTBLUE]" !:
+        colors$(4)="[LTGREEN]" !:
+        colors$(5)="[PINK]" !:
+        colors$(6)="[RED]" !:
+        colors$(7)="[YELLOW]" !:
+        colors$(8)="[WHITE]" !:
+        colors$(9)="[DKBLUE]"
+50081   colors$(10)="[BLUEGREEN]" !:
+        colors$(11)="[GREEN]" !:
+        colors$(12)="[PURPLE]" !:
+        colors$(13)="[BURGUNDY]" !:
+        colors$(14)="[LTOLIVE]" !:
+        colors$(15)="[GRAY]" !:
+        colors$(16)="[LTGRAY]" !:
+        colors$(17)="[DKGREEN]" !:
+        colors$(18)="[OLIVE]"
+50082   colors$(19)="[SEAGREEN]"
 50090   mat s$(t) !:
         mat se$(t) !:
         mat lin$(t) !:
@@ -1038,20 +1038,20 @@
 50110   gosub SET_STYLES
 50112   if exists(subpath$&"subtext.txt")=2 then execute "proc *"&subpath$&"subtext.txt"
 50120 BUILD_RTF: linput #txtfile: data$ eof ZBUILD_RTF
-50121   if pos(data$,"[SPEC(")>0 then gosub SET_SPECFILE ! Change print specifications
+50121   if pos(data$,"[SPEC(")>0 then gosub SET_SPECFILE ! Change pr specifications
 50122   if pos(data$,"[NEWCELL(")>0 then gosub SET_NEWCELL ! Change cell specifications
 50123   if pos(data$,"[FONT(")>0 then gosub SET_FONT ! Change font
 50124   if pos(data$,"[SUB(")>0 then gosub SET_SUB
 50126   if pos(data$,"[RTFCOL(") then let xs=pos(data$,"[RTFCOL(")+8 !:
           let xe=pos(data$,")",xs)-1 !:
           let x=val(data$(xs:xe)) !:
-          print #rtffile: "\sect \sectd \sbknone\linex0\cols"&str$(x)&"\sectdefaultcl " !:
+          pr #rtffile: "\sect \sectd \sbknone\linex0\cols"&str$(x)&"\sectdefaultcl " !:
           let data$=srep$(data$,"[RTFCOL("&str$(x)&")]","") !:
           ! Start printing in columns with no separator
 50127   if pos(data$,"[RTFCOLL(") then let xs=pos(data$,"[RTFCOLL(")+9 !:
           let xe=pos(data$,")",xs)-1 !:
           let x=val(data$(xs:xe)) !:
-          print #rtffile: "\sect \sectd \sbknone\linex0\cols"&str$(x)&"\linebetcol\sectdefaultcl " !:
+          pr #rtffile: "\sect \sectd \sbknone\linex0\cols"&str$(x)&"\linebetcol\sectdefaultcl " !:
           let data$=srep$(data$,"[RTFCOLL("&str$(x)&")]","") !:
           ! Start printing in columns with a line separating the columns
 50128   if pos(data$,"[WD(") then let xs=pos(data$,"[WD(")+4 !:
@@ -1059,7 +1059,7 @@
           let x=val(data$(xs:xe)) !:
           let data$=srep$(data$,"[WD("&str$(x)&")]",'{{\field{\*\fldinst SYMBOL '&str$(x)&' \\f "Wingdings" \\s 17}{\fldrslt\f14}}}') !:
           ! Insert WingDing symbol
-50130   if trim$(data$)<="" then print #rtffile: "\par " !:
+50130   if trim$(data$)<="" then pr #rtffile: "\par " !:
           goto 50120 !:
           ! Insert a blank line
 50135   let data$=srep$(data$,chr$(9),"|")
@@ -1068,7 +1068,7 @@
           let data$=data$(2:len(data$)) !:
         else !:
           let newdata=0
-50142   if laststyle=1 and pos("0123456789",data$(1:1)) then print #prntfil: "\pard \ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0"&crlf$ !:
+50142   if laststyle=1 and pos("0123456789",data$(1:1)) then pr #prntfil: "\pard \ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0"&crlf$ !:
           ! Start printing cells
 50150   let data$=fnrtfcolor$(data$)
 50160   if data$(1:2)="D|" then 
@@ -1152,11 +1152,11 @@
       ! -------------------------------- !
 50470 if pos(data$,"[BOTLINE]")>0 then !:
         let data$=srep$(data$,"[BOTLINE]","") !:
-        let botline=1 !:
+        botline=1 !:
         let d$=""
 50480 if pos(data$,"[\BOTLINE]")>0 then !:
         let data$=srep$(data$,"[\BOTLINE]","") !:
-        let botline=0 !:
+        botline=0 !:
         let d$=""
 50490 ! -------------------------------- !:
       ! ?Create a line in the middle of a box. Verticle lines are     !:
@@ -1186,60 +1186,60 @@
 50600   goto 50640
 50610 end if 
 50620 if not uprc$(data$(1:1))=d$ then gosub NEW_STYLE
-50630 gosub PICTURE ! PRINT #RTFFILE: "{\par "&SREP$(DATA$(3:LEN(DATA$)),"|","}{\tab}{ ")&"}"
+50630 gosub PICTURE ! pr #RTFFILE: "{\par "&SREP$(DATA$(3:LEN(DATA$)),"|","}{\tab}{ ")&"}"
 50640 let d$=uprc$(data$(1:1))
 50650 goto BUILD_RTF
-50660 ZBUILD_RTF: print #rtffile: "}"
+50660 ZBUILD_RTF: pr #rtffile: "}"
 50665 let header=0
 50670 fnend 
 50680 ! ==========================================================
 50690 HEADER: ! 
 50700 if header then 
-50701   print #rtffile: "\par\sect \sectd \linex0\endnhere\sectlinegrid360\sectdefaultcl"&crlf$
-50702   if lmargin>0 then print #rtffile: "\margl"&fntwips$(lmargin)&"\marglsxn"&fntwips$(lmargin)&crlf$
-50703   if rmargin>0 then print #rtffile: "\margr"&fntwips$(rmargin)&"\margrsxn"&fntwips$(rmargin)&crlf$
-50704   if tmargin>0 then print #rtffile: "\margt"&fntwips$(tmargin)&"\margtsxn"&fntwips$(tmargin)&crlf$
-50705   if bmargin>0 then print #rtffile: "\margb"&fntwips$(bmargin)&"\margbsxn"&fntwips$(bmargin)&crlf$
+50701   pr #rtffile: "\par\sect \sectd \linex0\endnhere\sectlinegrid360\sectdefaultcl"&crlf$
+50702   if lmargin>0 then pr #rtffile: "\margl"&fntwips$(lmargin)&"\marglsxn"&fntwips$(lmargin)&crlf$
+50703   if rmargin>0 then pr #rtffile: "\margr"&fntwips$(rmargin)&"\margrsxn"&fntwips$(rmargin)&crlf$
+50704   if tmargin>0 then pr #rtffile: "\margt"&fntwips$(tmargin)&"\margtsxn"&fntwips$(tmargin)&crlf$
+50705   if bmargin>0 then pr #rtffile: "\margb"&fntwips$(bmargin)&"\margbsxn"&fntwips$(bmargin)&crlf$
 50706 ! \marglsxn1800\margrsxn1440\margtsxn720\margbsxn720
-50707 !  IF THEADER >0 THEN PRINT #RTFFILE: "\linex0\headery"&FNTWIPS$(THEADER)&"\footery"&FNTWIPS$(TFOOTER)&"\endnhere\sectlinegrid"&FNTWIPS$(THEADER)&"\sectdefaultcl"&CRLF$
+50707 !  IF THEADER >0 THEN pr #RTFFILE: "\linex0\headery"&FNTWIPS$(THEADER)&"\footery"&FNTWIPS$(TFOOTER)&"\endnhere\sectlinegrid"&FNTWIPS$(THEADER)&"\sectdefaultcl"&CRLF$
 50708 ! 
 50709 end if 
 50710 if botline then 
 50720 ! 
-50730   print #rtffile: "{\header \pard \plain "&srep$(s$(srch(mat types$,"H")),"\widctlpar","\widctlpar\brdrb\brdrs\brdrw10\brsp20 ")&"{"&srep$(srep$(data$(3:len(data$)),"|","}{\tab}{ "),"[RTFBAR]","|")&"\par }}"&crlf$ ! " {"&DATA$(3:LEN(DATA$))&" \par }}"&CRLF$
-50740   let botline=0
+50730   pr #rtffile: "{\header \pard \plain "&srep$(s$(srch(mat types$,"H")),"\widctlpar","\widctlpar\brdrb\brdrs\brdrw10\brsp20 ")&"{"&srep$(srep$(data$(3:len(data$)),"|","}{\tab}{ "),"[RTFBAR]","|")&"\par }}"&crlf$ ! " {"&DATA$(3:LEN(DATA$))&" \par }}"&CRLF$
+50740   botline=0
 50750 else 
-50760   print #rtffile: "{\header \pard \plain "&s$(srch(mat types$,"H"))&" {"&srep$(srep$(data$(3:len(data$)),"|","}{\tab}{"),"[RTFBAR]","|")&" \par }}"&crlf$
+50760   pr #rtffile: "{\header \pard \plain "&s$(srch(mat types$,"H"))&" {"&srep$(srep$(data$(3:len(data$)),"|","}{\tab}{"),"[RTFBAR]","|")&" \par }}"&crlf$
 50770 end if 
 50780 let header+=1
 50790 return 
 50800 FOOTER: ! 
 50810 if topline then 
-50820   print #rtffile: "{\footer \pard \plain "&srep$(srep$(srep$(s$(srch(mat types$,"F")),"widctlpar","widctlpar\brdrt\brdrs\brdrw10\brsp20 ")&" {"&srep$(data$(3:len(data$)),"[PAGE]","  {{\field{\*\fldinst{\f4  PAGE }}{\fldrslt{\f4 2}}}}"),"|","}{\tab}{ "),"[RTFBAR]","|")&" \par }}"&crlf$
+50820   pr #rtffile: "{\footer \pard \plain "&srep$(srep$(srep$(s$(srch(mat types$,"F")),"widctlpar","widctlpar\brdrt\brdrs\brdrw10\brsp20 ")&" {"&srep$(data$(3:len(data$)),"[PAGE]","  {{\field{\*\fldinst{\f4  PAGE }}{\fldrslt{\f4 2}}}}"),"|","}{\tab}{ "),"[RTFBAR]","|")&" \par }}"&crlf$
 50830   let topline=0
 50840 else 
-50850   print #rtffile: "{\footer \pard \plain "&s$(srch(mat types$,"F"))&" {"&srep$(srep$(srep$(data$(3:len(data$)),"[PAGE]","  {{\field{\*\fldinst{\f4  PAGE }}{\fldrslt{\f4 2}}}}"),"|","}{\tab}{"),"[RTFBAR]","|")&" \par }}"&crlf$
+50850   pr #rtffile: "{\footer \pard \plain "&s$(srch(mat types$,"F"))&" {"&srep$(srep$(srep$(data$(3:len(data$)),"[PAGE]","  {{\field{\*\fldinst{\f4  PAGE }}{\fldrslt{\f4 2}}}}"),"|","}{\tab}{"),"[RTFBAR]","|")&" \par }}"&crlf$
 50860 end if 
 50870 let footer+=1
 50880 return 
 50890 NEW_STYLE: ! 
-50900 ! IF SRCH(MAT TYPES$,UPRC$(DATA$(1:1)))>0 THEN PRINT #RTFFILE: "\pard \plain "&S$(SRCH(MAT TYPES$,UPRC$(DATA$(1:1))))
+50900 ! IF SRCH(MAT TYPES$,UPRC$(DATA$(1:1)))>0 THEN pr #RTFFILE: "\pard \plain "&S$(SRCH(MAT TYPES$,UPRC$(DATA$(1:1))))
 50910 if rtfbox then 
 50911   let xlis=pos(s$(srch(mat types$,uprc$(data$(1:1)))),"\li") !:
         let xlie=pos(s$(srch(mat types$,uprc$(data$(1:1)))),"\",xlis+1)-1
-50912   let boxmargins$="\li"&str$(lmargin*1440)&"\ri"&str$((lmargin+rmargin)*2*1440)
+50912   boxmargins$="\li"&str$(lmargin*1440)&"\ri"&str$((lmargin+rmargin)*2*1440)
 50913   let oldmargins$=s$(srch(mat types$,uprc$(data$(1:1))))(xlis:xlie)
-50914   let boxmarginsn$="\aspalpha\aspnum\faauto\adjustright"&srep$(srep$(boxmargins$,"\ri","\rin"),"\li","lin")&"\itap0"
+50914   boxmarginsn$="\aspalpha\aspnum\faauto\adjustright"&srep$(srep$(boxmargins$,"\ri","\rin"),"\li","lin")&"\itap0"
 50920   if midline then 
-50930     if srch(mat types$,uprc$(data$(1:1)))>0 then print #rtffile: "\pard \plain "&srep$(srep$(s$(srch(mat types$,uprc$(data$(1:1)))),"widctlpar","wictlpar\brdrt\brdrs\brdrw10\brsp20 \brdrl\brdrs\brdrw10\brsp80 \brdrb\brdrs\brdrw10\brsp20 \brdrr\brdrs\brdrw10\brsp80 \brdrbtw\brdrs\brdrw10\brsp20 "),oldmargins$,boxmargins$)&crlf$&boxmarginsn$&crlf$
+50930     if srch(mat types$,uprc$(data$(1:1)))>0 then pr #rtffile: "\pard \plain "&srep$(srep$(s$(srch(mat types$,uprc$(data$(1:1)))),"widctlpar","wictlpar\brdrt\brdrs\brdrw10\brsp20 \brdrl\brdrs\brdrw10\brsp80 \brdrb\brdrs\brdrw10\brsp20 \brdrr\brdrs\brdrw10\brsp80 \brdrbtw\brdrs\brdrw10\brsp20 "),oldmargins$,boxmargins$)&crlf$&boxmarginsn$&crlf$
 50940   else 
-50950     if srch(mat types$,uprc$(data$(1:1)))>0 then print #rtffile: "\pard \plain "&srep$(srep$(s$(srch(mat types$,uprc$(data$(1:1)))),"widctlpar","wictlpar\brdrt\brdrs\brdrw10\brsp20 \brdrl\brdrs\brdrw10\brsp80 \brdrb\brdrs\brdrw10\brsp20 \brdrr\brdrs\brdrw10\brsp80 "),oldmargins$,boxmargins$)&crlf$&boxmarginsn$&crlf$
+50950     if srch(mat types$,uprc$(data$(1:1)))>0 then pr #rtffile: "\pard \plain "&srep$(srep$(s$(srch(mat types$,uprc$(data$(1:1)))),"widctlpar","wictlpar\brdrt\brdrs\brdrw10\brsp20 \brdrl\brdrs\brdrw10\brsp80 \brdrb\brdrs\brdrw10\brsp20 \brdrr\brdrs\brdrw10\brsp80 "),oldmargins$,boxmargins$)&crlf$&boxmarginsn$&crlf$
 50960   end if 
 50970 else 
 50980   if midline then 
-50990     if srch(mat types$,uprc$(data$(1:1)))>0 then print #rtffile: "\pard \plain "&s$(srch(mat types$,uprc$(data$(1:1))))&crlf$
+50990     if srch(mat types$,uprc$(data$(1:1)))>0 then pr #rtffile: "\pard \plain "&s$(srch(mat types$,uprc$(data$(1:1))))&crlf$
 51000   else 
-51010     if srch(mat types$,uprc$(data$(1:1)))>0 then print #rtffile: "\pard \plain "&s$(srch(mat types$,uprc$(data$(1:1))))&crlf$
+51010     if srch(mat types$,uprc$(data$(1:1)))>0 then pr #rtffile: "\pard \plain "&s$(srch(mat types$,uprc$(data$(1:1))))&crlf$
 51020   end if 
 51030 end if 
 51040 let d$=uprc$(data$(1:1))
@@ -1248,14 +1248,14 @@
 51070 let perin=1440
 51080 for a=1 to t
 51090   let text$=trim$(text$)
-51100   let ap=0
+51100   ap=0
 51110 ! LET S$(A)="\s"&STR$(A+10)&"\q1 "
 51120   let s$(a)="\s"&str$(a+10)&"\ql "
 51130 ! ----------------------------------
-51140 SET_STYLES_1: let ap+=1
+51140 SET_STYLES_1: ap+=1
 51150   let tx=pos(styles$(a),"|")
 51160   if tx<0 then let tx=len(styles$(a))+1
-51170   let ap+=1
+51170   ap+=1
 51180 ! -------------------------------- !:
         ! ?First line indent                                            !:
         ! ?                                                             !:
@@ -1264,7 +1264,7 @@
 51200     let s$(a)=s$(a)&"\fi"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51210     goto ZSET_STYLES_1
 51220   end if 
-51230   let ap+=1
+51230   ap+=1
 51240 ! -------------------------------- !:
         ! ?Left indent                                                  !:
         ! ?                                                             !:
@@ -1360,7 +1360,7 @@
       ! ?                                                             !:
       ! -------------------------------- !
 51730 if uprc$(styles$(a)(1:1))="B" then 
-51740   let bold$(a)="\b"
+51740   bold$(a)="\b"
 51750   goto ZSET_STYLES_1
 51760 end if 
 51770 ! -------------------------------- !:
@@ -1386,45 +1386,45 @@
       let se$(a)="\sbasedon"&str$((a-1)+10)&" \snext"&str$(a+10)
 51910 let fc$=fs$=sa$=ff$=""
 51920 next a
-51930 print #rtffile: "{\rtf1\ansi\ansicpg1252\uc1 \deff0\deflang1033\deflangfe1033"&crlf$
-51940 print #rtffile: "{\fonttbl"&crlf$
-51945 print #rtffile: "{\f0\froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}"&crlf$
-51950 print #rtffile: "{\f1\fswiss\fcharset0\fprq2{\*\panose 020b0604020202020204}Arial;}"&crlf$
-51955 print #rtffile: "{\f2\fmodern\fcharset0\fprq1{\*\panose 02070309020205020404}Courier New;}"&crlf$
-51956 print #rtffile: "{\f14\fnil\fcharset2\fprq2{\*\panose 05000000000000000000}Wingdings;}"&crlf$
-51957 print #rtffile: "{\f28\froman\fcharset0\fprq2{\*\panose 02020500000000000000}Fritz-Quad;}"&crlf$
-51958 print #rtffile: "{\f29\froman\fcharset0\fprq2{\*\panose 02040502050505030304}Palatino Linotype;}"&crlf$
-51960 print #rtffile: "{\f42\fbidi \fmodern\fcharset0\fprq2{\*\panose 050b0009000000000000}OCR-A;}"&crlf$
-51962 print #rtffile: "{\f69\fmodern\fcharset0\fprq1{\*\panose 020b0609040504020204}Lucida Console;}"&crlf$
-51970 print #rtffile: "}"&crlf$
-51980 print #rtffile: "{\colortbl;\red0\green0\blue0;\red0\green0\blue255;\red0\green255\blue255;\red0\green255\blue0;\red255\green0\blue255;\red255\green0\blue0;\red255\green255\blue0;\red255\green255\blue255;"&crlf$
-51990 print #rtffile: "\red0\green0\blue128;\red0\green128\blue128;\red0\green128\blue0;\red128\green0\blue128;\red128\green0\blue0;\red128\green128\blue0;\red128\green128\blue128;\red192\green192\blue192;\red255\green255\blue255;\red217\green217\blue217;}"&crlf$
-52000 print #rtffile: "{\stylesheet"&crlf$
-52010 print #rtffile: "{\ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 \fs20\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 \snext0 Normal;}"&crlf$
-52020 print #rtffile: "{\*\cs10 \additive Default Paragraph Font;}"&crlf$
+51930 pr #rtffile: "{\rtf1\ansi\ansicpg1252\uc1 \deff0\deflang1033\deflangfe1033"&crlf$
+51940 pr #rtffile: "{\fonttbl"&crlf$
+51945 pr #rtffile: "{\f0\froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}"&crlf$
+51950 pr #rtffile: "{\f1\fswiss\fcharset0\fprq2{\*\panose 020b0604020202020204}Arial;}"&crlf$
+51955 pr #rtffile: "{\f2\fmodern\fcharset0\fprq1{\*\panose 02070309020205020404}Courier New;}"&crlf$
+51956 pr #rtffile: "{\f14\fnil\fcharset2\fprq2{\*\panose 05000000000000000000}Wingdings;}"&crlf$
+51957 pr #rtffile: "{\f28\froman\fcharset0\fprq2{\*\panose 02020500000000000000}Fritz-Quad;}"&crlf$
+51958 pr #rtffile: "{\f29\froman\fcharset0\fprq2{\*\panose 02040502050505030304}Palatino Linotype;}"&crlf$
+51960 pr #rtffile: "{\f42\fbidi \fmodern\fcharset0\fprq2{\*\panose 050b0009000000000000}OCR-A;}"&crlf$
+51962 pr #rtffile: "{\f69\fmodern\fcharset0\fprq1{\*\panose 020b0609040504020204}Lucida Console;}"&crlf$
+51970 pr #rtffile: "}"&crlf$
+51980 pr #rtffile: "{\colortbl;\red0\green0\blue0;\red0\green0\blue255;\red0\green255\blue255;\red0\green255\blue0;\red255\green0\blue255;\red255\green0\blue0;\red255\green255\blue0;\red255\green255\blue255;"&crlf$
+51990 pr #rtffile: "\red0\green0\blue128;\red0\green128\blue128;\red0\green128\blue0;\red128\green0\blue128;\red128\green0\blue0;\red128\green128\blue0;\red128\green128\blue128;\red192\green192\blue192;\red255\green255\blue255;\red217\green217\blue217;}"&crlf$
+52000 pr #rtffile: "{\stylesheet"&crlf$
+52010 pr #rtffile: "{\ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 \fs20\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 \snext0 Normal;}"&crlf$
+52020 pr #rtffile: "{\*\cs10 \additive Default Paragraph Font;}"&crlf$
 52030 for a=1 to t
-52040   print #rtffile: "{"&s$(a)&se$(a)&" "&styles$(a)&";}"&crlf$
+52040   pr #rtffile: "{"&s$(a)&se$(a)&" "&styles$(a)&";}"&crlf$
 52050 next a
-52060 print #rtffile: "}"&crlf$
-52070 print #rtffile: "{\info"&crlf$
-52080 print #rtffile: "{\title This is the first line}"&crlf$
-52090 print #rtffile: "{\title This is the first line}"&crlf$
-52100 print #rtffile: "{\operator George L. Tisdale}"&crlf$
-52110 print #rtffile: "{\creatim\yr"&date$("ccyy")&"\mo"&date$("mm")&"\dy"&date$("dd")&"\hr"&time$(1:2)&"\min"&time$(4:5)&"}"&crlf$
-52120 print #rtffile: "{\revtim\yr"&date$("ccyy")&"\mo"&date$("mm")&"\dy"&date$("dd")&"\hr"&time$(1:2)&"\min"&time$(4:5)&"}"&crlf$
-52130 print #rtffile: "{\version2}"&crlf$
-52140 print #rtffile: "{\edmins0}"&crlf$
-52150 print #rtffile: "{\nofpages1}"&crlf$
-52160 print #rtffile: "{\nofwords0}"&crlf$
-52170 print #rtffile: "{\nofchars0}"&crlf$
-52180 print #rtffile: "{\*\company Advanced Informonics Corporation}"&crlf$
-52190 print #rtffile: "{\nofcharsws0}"&crlf$
-52200 print #rtffile: "{\vern8247}"&crlf$
-52210 if lmargin>0 then print #rtffile: "\margl"&str$(ip(lmargin*1440))&crlf$
-52220 if rmargin>0 then print #rtffile: "\margr"&str$(ip(rmargin*1440))&crlf$
-52222 if tmargin>0 then print #rtffile: "\margt"&str$(ip(tmargin*1440))&crlf$
-52224 if bmargin>0 then print #rtffile: "\margb"&str$(ip(bmargin*1440))&crlf$
-52230 print #rtffile: "}"&crlf$ !:
+52060 pr #rtffile: "}"&crlf$
+52070 pr #rtffile: "{\info"&crlf$
+52080 pr #rtffile: "{\title This is the first line}"&crlf$
+52090 pr #rtffile: "{\title This is the first line}"&crlf$
+52100 pr #rtffile: "{\operator George L. Tisdale}"&crlf$
+52110 pr #rtffile: "{\creatim\yr"&date$("ccyy")&"\mo"&date$("mm")&"\dy"&date$("dd")&"\hr"&time$(1:2)&"\min"&time$(4:5)&"}"&crlf$
+52120 pr #rtffile: "{\revtim\yr"&date$("ccyy")&"\mo"&date$("mm")&"\dy"&date$("dd")&"\hr"&time$(1:2)&"\min"&time$(4:5)&"}"&crlf$
+52130 pr #rtffile: "{\version2}"&crlf$
+52140 pr #rtffile: "{\edmins0}"&crlf$
+52150 pr #rtffile: "{\nofpages1}"&crlf$
+52160 pr #rtffile: "{\nofwords0}"&crlf$
+52170 pr #rtffile: "{\nofchars0}"&crlf$
+52180 pr #rtffile: "{\*\company Advanced Informonics Corporation}"&crlf$
+52190 pr #rtffile: "{\nofcharsws0}"&crlf$
+52200 pr #rtffile: "{\vern8247}"&crlf$
+52210 if lmargin>0 then pr #rtffile: "\margl"&str$(ip(lmargin*1440))&crlf$
+52220 if rmargin>0 then pr #rtffile: "\margr"&str$(ip(rmargin*1440))&crlf$
+52222 if tmargin>0 then pr #rtffile: "\margt"&str$(ip(tmargin*1440))&crlf$
+52224 if bmargin>0 then pr #rtffile: "\margb"&str$(ip(bmargin*1440))&crlf$
+52230 pr #rtffile: "}"&crlf$ !:
       let papersize$="\paperw12240\paperh15840"
 52231 if uprc$(trim$(paper$))="LETTER" or paper$<="" then 
 52232   if uprc$(trim$(orientation$))="LANDSCAPE" then !:
@@ -1437,17 +1437,17 @@
           let papersize$="\paperw20160\paperh12240" else !:
           let papersize$="\paperw12240\paperh20160"
 52237 end if 
-52238 print #rtffile: papersize$&crlf$
-52239 ! IF UPRC$(TRIM$(ORIENTATION$))="LANDSCAPE" THEN PRINT #RTFFILE: PAPERSIZE$&CRLF$
-52240 print #rtffile: "\widowctrl\ftnbj\aenddoc\noxlattoyen\expshrtn\noultrlspc\dntblnsbdb\nospaceforul\hyphcaps0\formshade\horzdoc\dgmargin\dghspace180\dgvspace180\dghorigin720\dgvorigin720\dghshow1\dgvshow1"&crlf$
+52238 pr #rtffile: papersize$&crlf$
+52239 ! IF UPRC$(TRIM$(ORIENTATION$))="LANDSCAPE" THEN pr #RTFFILE: PAPERSIZE$&CRLF$
+52240 pr #rtffile: "\widowctrl\ftnbj\aenddoc\noxlattoyen\expshrtn\noultrlspc\dntblnsbdb\nospaceforul\hyphcaps0\formshade\horzdoc\dgmargin\dghspace180\dgvspace180\dghorigin720\dgvorigin720\dghshow1\dgvshow1"&crlf$
 52245 dim theader$*100
 52246 if theader>0 and tfooter>0 then !:
         let theader$="\headery"&fntwips$(theader)&"\footery"&fntwips$(tfooter) else if theader>0 then !:
         let theader$="\headery"&fntwips$(theader) else if tfooter>0 then let theader$="\footery"&fntwips$(tfooter) else !:
         let theader$=""
-52250 print #rtffile: "\jexpand\viewkind4\viewscale100\pgbrdrhead\pgbrdrfoot\splytwnine\ftnlytwnine\htmautsp\nolnhtadjtbl\useltbaln\alntblind\lytcalctblwd\lyttblrtgr\lnbrkrule \fet0\sectd \linex0"&theader$&"\endnhere\sectlinegrid360\sectdefaultcl "&crlf$
-52255 ! IF LANDSCAPE=1 THEN PRINT #RTFFILE: "\lndscpsxn\psz1"
-52256 if landscape=1 then print #rtffile: "\landscape"
+52250 pr #rtffile: "\jexpand\viewkind4\viewscale100\pgbrdrhead\pgbrdrfoot\splytwnine\ftnlytwnine\htmautsp\nolnhtadjtbl\useltbaln\alntblind\lytcalctblwd\lyttblrtgr\lnbrkrule \fet0\sectd \linex0"&theader$&"\endnhere\sectlinegrid360\sectdefaultcl "&crlf$
+52255 ! IF LANDSCAPE=1 THEN pr #RTFFILE: "\lndscpsxn\psz1"
+52256 if landscape=1 then pr #rtffile: "\landscape"
 52260 return 
 52270 def library fnamt$*50(value,mask$*20;sign$,underline$,reverse)
 52280   dim av$*30
@@ -1455,13 +1455,13 @@
 52300   let underline$=uprc$(underline$)
 52310   on pos("SD",underline$) goto SINGLE,DOUBLE none NO_UNDERLINE
 52320 NO_UNDERLINE: ! 
-52330   if value*reverse<0 then let av$=sign$&"(\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{)" else let av$=sign$&" \tab "&trim$(cnvrt$(mask$,abs(value)))&"}{ "
+52330   if value*reverse<0 then av$=sign$&"(\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{)" else av$=sign$&" \tab "&trim$(cnvrt$(mask$,abs(value)))&"}{ "
 52340   goto ZAMT
 52350 SINGLE: ! 
-52360   if value*reverse<0 then let av$=sign$&"(\ul\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{)" else let av$=sign$&" \ul\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{ "
+52360   if value*reverse<0 then av$=sign$&"(\ul\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{)" else av$=sign$&" \ul\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{ "
 52370   goto ZAMT
 52380 DOUBLE: ! 
-52390   if value*reverse<0 then let av$=sign$&"(\uldb\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{)" else let av$=sign$&"\uldb\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{ "
+52390   if value*reverse<0 then av$=sign$&"(\uldb\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{)" else av$=sign$&"\uldb\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{ "
 52400   goto ZAMT
 52410 ZAMT: let fnamt$=av$
 52420 fnend 
@@ -1469,12 +1469,12 @@
 52440   dim t$*4000
 52450   let t$=""
 52460   let text$=trim$(text$)
-52461   print text$
+52461   pr text$
 52462   if text$(1:9)="[RTFLINE]" then let text$(1:9)=""
 52463   let xl=min(pos(text$,"[RTFLINE]",9)-1,alen) !:
         if xl<1 then let xl=alen else !:
           if xl>alen then let xl=alen
-52464   print "XL="&str$(xl),"ALEN="&str$(alen)
+52464   pr "XL="&str$(xl),"ALEN="&str$(alen)
 52465 ! PAUSE
 52470   let x=pos(text$&" "," ",xl)
 52480   if x<2 then goto 52520
@@ -1484,15 +1484,15 @@
 52520 ! IF LEN(TEXT$) THEN LET T$=T$&"\line "&TEXT$
 52530   if len(t$)>0 and len(text$) then let t$=t$&"\line "&text$ else if len(text$)>0 then let t$=t$&text$
 52540 let fntext$=t$
-52545 print t$
-52546 print "*********************************************"
+52545 pr t$
+52546 pr "*********************************************"
 52547 ! PAUSE
 52550 fnend 
 52560 def fnrtfcolor$*6000(cd$*6000)
-52561   let acolor=0
+52561   acolor=0
 52562   do while acolor<19
-52563     let acolor+=1
-52564     if pos(cd$,colors$(acolor))>0 then let cd$=srep$(cd$,colors$(acolor),"\cf"&str$(acolor)&" ")
+52563     acolor+=1
+52564     if pos(cd$,colors$(acolor))>0 then cd$=srep$(cd$,colors$(acolor),"\cf"&str$(acolor)&" ")
 52565   loop 
 52568   let fnrtfcolor$=cd$
 52640 fnend 
@@ -1532,11 +1532,11 @@
 52816 return 
 53000 PICTURE: !:
       ! -------------------------------- !:
-      ! ?Merge in RTF picture file and print final DATA line          !:
+      ! ?Merge in RTF picture file and pr final DATA line          !:
       ! ?                                                             !:
       ! -------------------------------- !
 53005 dim pict_name$*100
-53007 if newdata then print #rtffile: "{\cf9 " !:
+53007 if newdata then pr #rtffile: "{\cf9 " !:
         ! -------------------------------- !:
         ! ?Sets text of newlines to BLUE                                !:
         ! ?                                                             !:
@@ -1548,14 +1548,14 @@
         ! -------------------------------- !
 53012   let pict_start=pos(data$,"[PICT(")
 53014   let pict_end=pos(data$,")]",pict_start)
-53016   print #rtffile: "{\par \qc "&srep$(data$(3:pict_start-1),"|","}{\tab}{")
+53016   pr #rtffile: "{\par \qc "&srep$(data$(3:pict_start-1),"|","}{\tab}{")
 53018   if picpath$>"" then !:
           let pict_name$=picpath$&"\"&trim$(data$(pict_start+6:pict_end-1)) else !:
           let pict_name$=trim$(data$(pict_start+6:pict_end-1))
 53020   let fntype(pict_name$,rtffile)
 53022   let x=pos(pict_name$,"\",-1)+1 !:
-        print #rtffile: "{\par \fs16 Figure: "&pict_name$(x:len(pict_name$))&" \par }"
-53024   print #rtffile: srep$(data$(pict_end+2:len(data$)),"|","}{\tab}{")&"}"&crlf$
+        pr #rtffile: "{\par \fs16 Figure: "&pict_name$(x:len(pict_name$))&" \par }"
+53024   pr #rtffile: srep$(data$(pict_end+2:len(data$)),"|","}{\tab}{")&"}"&crlf$
 53040 else if pos(data$,"[SPICT(") >0 then 
 53041 ! -------------------------------- !:
         ! ?SPICT represents a signiture or similar RTF graphic to be    !:
@@ -1563,19 +1563,19 @@
         ! -------------------------------- !
 53042   let pict_start=pos(data$,"[SPICT(")
 53044   let pict_end=pos(data$,")]",pict_start)
-53046   print #rtffile: "{\par \ql "&srep$(data$(3:pict_start-1),"|","}{\tab}{")
+53046   pr #rtffile: "{\par \ql "&srep$(data$(3:pict_start-1),"|","}{\tab}{")
 53048   if picpath$>"" then !:
           let pict_name$=srep$(picpath$&"\"&trim$(data$(pict_start+7:pict_end-1)),"\\","\") else !:
           let pict_name$=trim$(data$(pict_start+7:pict_end-1))
 53050   let fntype(pict_name$,rtffile)
-53052   rem LET X=POS(PICT_NAME$,"\",-1)+1 !:                                                         PRINT #RTFFILE: "{\par \fs16 Figure: "&PICT_NAME$(X:LEN(PICT_NAME$))&" \par }"
-53054   print #rtffile: srep$(data$(pict_end+2:len(data$)),"|","}{\tab}{")&"}"&crlf$
+53052   rem LET X=POS(PICT_NAME$,"\",-1)+1 !:                                                         pr #RTFFILE: "{\par \fs16 Figure: "&PICT_NAME$(X:LEN(PICT_NAME$))&" \par }"
+53054   pr #rtffile: srep$(data$(pict_end+2:len(data$)),"|","}{\tab}{")&"}"&crlf$
 53080 else if pos("1234567890",data$(1:1))>0 then 
 53082   mat ccells$(udim(cells$)) : let fncells(rtffile,data$,mat cells$)
 53085 else 
-53090   print #rtffile: "{"&srep$(srep$(data$(3:len(data$)),"|","}{\tab}{"),"[RTFBAR]","|")&"\par }"&crlf$
+53090   pr #rtffile: "{"&srep$(srep$(data$(3:len(data$)),"|","}{\tab}{"),"[RTFBAR]","|")&"\par }"&crlf$
 53100 end if 
-53103 if newdata then print #rtffile: "}" !:
+53103 if newdata then pr #rtffile: "}" !:
         ! -------------------------------- !:
         ! ? Turns off BLUE newline text                                 !:
         ! ?                                                             !:
@@ -1583,7 +1583,7 @@
 53105 let laststyle=0
 53110 return 
 53999 ! -------------------------------- !:
-      ! ?Create table lines and print to existing print file          !:
+      ! ?Create table lines and pr to existing pr file          !:
       ! ?                                                             !:
       ! -------------------------------- !
 54000 def fncells(prntfil,cdata$*2000,mat ccells$)
@@ -1592,16 +1592,16 @@
         ! mat ccells$ is the matrix of cell definitions received as MAT cells$
 54020 ! INPUT FIELDS "24,64,c 1": PAUSE$
 54030   dim brdr$*500,celldata$(1)*1000,call$*500,csize$(1)*500,celldef$*3000
-54040   let css=cse=0 ! starting position
+54040   css=cse=0 ! starting position
 54050 ! -------------------------------- !:
         ! ?Parse the incoming data line to determine what table         !:
         ! ?format to use                                                !:
         ! -------------------------------- !
-54060 SETCSS: let css=cse+1
-54070   let cse=min(len(cdata$)+1,pos(cdata$&"|","|",css))
+54060 SETCSS: css=cse+1
+54070   cse=min(len(cdata$)+1,pos(cdata$&"|","|",css))
 54080   if css=1 then 
-54090     let cell=val(cdata$(css:cse-1))
-54100     let cnum=0
+54090     cell=val(cdata$(css:cse-1))
+54100     cnum=0
 54110     goto SETCSS
 54120   end if 
 54130 ! -------------------------------- !:
@@ -1609,102 +1609,102 @@
         ! ?                                                             !:
         ! -------------------------------- !
 54140   if css<len(cdata$) then 
-54150     let cnum+=1 !:
+54150     cnum+=1 !:
           mat celldata$(cnum) !:
-          let celldata$(cnum)=cdata$(css:cse-1)
+          celldata$(cnum)=cdata$(css:cse-1)
 54160     goto SETCSS
 54170   end if 
 54175 ! -------------------------------- !:
         ! ?Begin building table definition parameters from CELLS$(cell) !:
         ! ?                                                             !:
         ! -------------------------------- !
-54180   let cnum=css=cse=0 !:
-        let cface$=cfont$="" !:
-        let call$=crlf$&"\trowd \trgaph108\trleft-108"
+54180   cnum=css=cse=0 !:
+        cface$=cfont$="" !:
+        call$=crlf$&"\trowd \trgaph108\trleft-108"
 54190 ! -------------------------------- !:
         ! ? Build the RTF properties for the table line needed          !:
         ! ?                                                             !:
         ! -------------------------------- !
-54200 SETCELL: let css=cse+1
-54210   let cse=pos(ccells$(cell)&"|","|",css)
+54200 SETCELL: css=cse+1
+54210   cse=pos(ccells$(cell)&"|","|",css)
 54220   if cse<=len(ccells$(cell)) then 
 54230 ! -------------------------------- !:
           ! ?Left side indent if any                                      !:
           ! ?                                                             !:
           ! -------------------------------- !
 54240     if pos(ccells$(cell)(css:cse-1),"li")=1 then !:
-            let cindent$=fntwips$(val(ccells$(cell)(css+2:cse-1))) !:
-            let cindent=val(cindent$) !:
-            let call$=call$&"\trleft"&cindent$ !:
+            cindent$=fntwips$(val(ccells$(cell)(css+2:cse-1))) !:
+            cindent=val(cindent$) !:
+            call$=call$&"\trleft"&cindent$ !:
             goto SETCELL
 54250 ! -------------------------------- !:
           ! ?Set the distance between cells.  The number is 1/2 the       !:
           ! ?distance measured in inches converted to twips               !:
           ! -------------------------------- !
-54260     rem IF POS(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           LET X$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    LET CALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
+54260     rem IF POS(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           LET X$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    cALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
 54261     if pos(ccells$(cell)(css:cse-1),"tg")=1 then !:
             let x$=fntwips$(.5*val(ccells$(cell)(css+2:cse-1))) !:
-            let call$=srep$(call$,"\trgaph108\trleft-108","\trgaph"&x$) !:
+            call$=srep$(call$,"\trgaph108\trleft-108","\trgaph"&x$) !:
             goto SETCELL
 54269 ! -------------------------------- !:
           ! ?Designate header rows for repeat on subsequent pages         !:
           ! ?Rows must be the first row(s) in the table and contiguous    !:
           ! -------------------------------- !
 54270     if pos(ccells$(cell)(css:cse-1),"trh")=1 then !:
-            let call$=call$&"\trhdr" !:
+            call$=call$&"\trhdr" !:
             goto SETCELL
 54272 ! -------------------------------- !:
           ! ?Designate row height in postive inches for AT LEAST height   !:
           ! ?use negative inches for absolute height                      !:
           ! -------------------------------- !
 54274     if pos(ccells$(cell)(css:cse-1),"trrh")=1 then !:
-            let call$=call$&"\trrh"&fntwips$(val(ccells$(cell)(css+4:cse-1))) !:
+            call$=call$&"\trrh"&fntwips$(val(ccells$(cell)(css+4:cse-1))) !:
             goto SETCELL
 54280 ! -------------------------------- !:
           ! ?Set font size in points                                      !:
           ! ?                                                             !:
           ! -------------------------------- !
 54290     if pos(ccells$(cell)(css:cse-1),"fs")=1 and cnum=0 then !:
-            let cfont$="\fs"&str$(val(ccells$(cell)(css+2:cse-1))*2)&"" !:
+            cfont$="\fs"&str$(val(ccells$(cell)(css+2:cse-1))*2)&"" !:
             goto SETCELL
 54291 ! -------------------------------- !:
           ! ?Set font type face                                           !:
           ! ?                                                             !:
           ! -------------------------------- !
 54292     if uprc$(ccells$(cell)(css:cse-1))="FTIMES" and cnum=0 then !:
-            let cface$="\f0" !:
+            cface$="\f0" !:
             goto SETCELL
 54293     if uprc$(ccells$(cell)(css:cse-1))="FARIAL" and cnum=0 then !:
-            let cface$="\f1" !:
+            cface$="\f1" !:
             goto SETCELL
 54294     if uprc$(ccells$(cell)(css:cse-1))="FCOURIER" and cnum=0 then !:
-            let cface$="\f2" !:
+            cface$="\f2" !:
             goto SETCELL
 54295     if uprc$(ccells$(cell)(css:cse-1))="FFRITZ" and cnum=0 then !:
-            let cface$="\f28" !:
+            cface$="\f28" !:
             goto SETCELL
 54296     if uprc$(ccells$(cell)(css:cse-1))="FOCR-A" and cnum=0 then !:
-            let cface$="\f42" !:
+            cface$="\f42" !:
             goto SETCELL
 54297     if uprc$(ccells$(cell)(css:cse-1))="FPALATINO" and cnum=0 then !:
-            let cface$="\f29" !:
+            cface$="\f29" !:
             goto SETCELL
 54298     if uprc$(ccells$(cell)(css:cse-1))="FLUCIDA" and cnum=0 then !:
-            let cface$="\f69" !:
+            cface$="\f69" !:
             goto SETCELL
 54300 ! -------------------------------- !:
           ! ?Build formats for each Cell left to right                    !:
           ! ?                                                             !:
           ! -------------------------------- !
 54310     if pos(ccells$(cell)(css:cse-1),"c")=1 then 
-54320       let cnum+=1 !:
+54320       cnum+=1 !:
             mat cfmt$(cnum): mat csize$(cnum) : mat csize(cnum) !:
-            let cfmt$(cnum)="" : mat cface$(cnum) : mat cfont$(cnum) !:
-            let cface$(cnum)=cface$ !:
-            let cfont$(cnum)=cfont$
-54330       let csize(cnum)=val(fntwips$(val(ccells$(cell)(css+1:cse-1))))
-54340       rem LET CSIZE$(CNUM)="\cellx"&STR$(SUM(CSIZE)+CINDENT) !:                                     GOTO SETCELL
-54341       let csize$(cnum)="\cellx"&str$(sum(csize)+cindent) !:
+            cfmt$(cnum)="" : mat cface$(cnum) : mat cfont$(cnum) !:
+            cface$(cnum)=cface$ !:
+            cfont$(cnum)=cfont$
+54330       csize(cnum)=val(fntwips$(val(ccells$(cell)(css+1:cse-1))))
+54340       rem cSIZE$(CNUM)="\cellx"&STR$(SUM(CSIZE)+CINDENT) !:                                     GOTO SETCELL
+54341       csize$(cnum)="\cellx"&str$(sum(csize)+cindent) !:
             goto SETCELL
 54350     end if 
 54360 ! -------------------------------- !:
@@ -1712,22 +1712,22 @@
           ! ?                                                             !:
           ! -------------------------------- !
 54370     if pos(ccells$(cell)(css:cse-1),"br")=1 then 
-54380       let brdr$=""
-54390       if pos(cells$(cell)(css+2:cse),"s")>0 then let brdrtyp$="s" else !:
-              if pos(cells$(cell)(css+2:cse),"o")>0 then let brdrtyp$="o" else !:
-                if pos(cells$(cell)(css+2:cse),"d")>0 then let brdrtyp$="d" else !:
-                  if pos(cells$(cell)(css+2:cse),"a")>0 then let brdrtyp$="a" else !:
-                    let brdrtyp$="s"
-54400       let brdrw=min(5,val(srep$(srep$(srep$(srep$(srep$(srep$(srep$(srep$(srep$(ccells$(cell)(css:cse-1),"b",""),"t",""),"r",""),"l",""),"b",""),"a",""),"s",""),"d",""),"o","")))*15
+54380       brdr$=""
+54390       if pos(cells$(cell)(css+2:cse),"s")>0 then brdrtyp$="s" else !:
+              if pos(cells$(cell)(css+2:cse),"o")>0 then brdrtyp$="o" else !:
+                if pos(cells$(cell)(css+2:cse),"d")>0 then brdrtyp$="d" else !:
+                  if pos(cells$(cell)(css+2:cse),"a")>0 then brdrtyp$="a" else !:
+                    brdrtyp$="s"
+54400       brdrw=min(5,val(srep$(srep$(srep$(srep$(srep$(srep$(srep$(srep$(srep$(ccells$(cell)(css:cse-1),"b",""),"t",""),"r",""),"l",""),"b",""),"a",""),"s",""),"d",""),"o","")))*15
 54410       if (x:=pos(ccells$(cell)(css+2:cse-1),"t"))>0 then !:
-              let brdr$="\clbrdrt"&fnbrdr$(brdrtyp$)&"\brdrw"&str$(brdrw)&" "
+              brdr$="\clbrdrt"&fnbrdr$(brdrtyp$)&"\brdrw"&str$(brdrw)&" "
 54420       if (x:=pos(ccells$(cell)(css+2:cse-1),"r"))>0 then !:
-              let brdr$=brdr$&"\clbrdrr"&fnbrdr$(brdrtyp$)&"\brdrw"&str$(brdrw)&" "
+              brdr$=brdr$&"\clbrdrr"&fnbrdr$(brdrtyp$)&"\brdrw"&str$(brdrw)&" "
 54430       if (x:=pos(ccells$(cell)(css+1:cse-1),"l"))>0 then !:
-              let brdr$=brdr$&"\clbrdrl"&fnbrdr$(brdrtyp$)&"\brdrw"&str$(brdrw)&" "
+              brdr$=brdr$&"\clbrdrl"&fnbrdr$(brdrtyp$)&"\brdrw"&str$(brdrw)&" "
 54440       if (x:=pos(ccells$(cell)(css+1:cse-1),"b"))>0 then !:
-              let brdr$=brdr$&"\clbrdrb"&fnbrdr$(brdrtyp$)&"\brdrw"&str$(brdrw)&" "
-54450       let csize$(cnum)=brdr$&csize$(cnum)
+              brdr$=brdr$&"\clbrdrb"&fnbrdr$(brdrtyp$)&"\brdrw"&str$(brdrw)&" "
+54450       csize$(cnum)=brdr$&csize$(cnum)
 54460       goto SETCELL
 54470     end if 
 54480 ! -------------------------------- !:
@@ -1735,9 +1735,9 @@
           ! ?                                                             !:
           ! -------------------------------- !
 54490     if pos(ccells$(cell)(css:cse-1),"v")=1 then 
-54500       if pos(ccells$(cell)(css+1:cse-1),"t")=1 then let csize$(cnum)=srep$(csize$(cnum),"\cellx","\clvertalt\cellx")
-54510       if pos(ccells$(cell)(css+1:cse-1),"c")=1 then let csize$(cnum)=srep$(csize$(cnum),"\cellx","\clvertalc\cellx")
-54520       if pos(ccells$(cell)(css+1:cse-1),"b")=1 then let csize$(cnum)=srep$(csize$(cnum),"\cellx","\clvertalb\cellx")
+54500       if pos(ccells$(cell)(css+1:cse-1),"t")=1 then csize$(cnum)=srep$(csize$(cnum),"\cellx","\clvertalt\cellx")
+54510       if pos(ccells$(cell)(css+1:cse-1),"c")=1 then csize$(cnum)=srep$(csize$(cnum),"\cellx","\clvertalc\cellx")
+54520       if pos(ccells$(cell)(css+1:cse-1),"b")=1 then csize$(cnum)=srep$(csize$(cnum),"\cellx","\clvertalb\cellx")
 54530       goto SETCELL
 54540     end if 
 54550 ! -------------------------------- !:
@@ -1745,9 +1745,9 @@
           ! ?                                                             !:
           ! -------------------------------- !
 54560     if pos(ccells$(cell)(css:cse-1),"h")=1 then 
-54570       if pos(ccells$(cell)(css+1:cse-1),"r")=1 then let cfmt$(cnum)=cfmt$(cnum)&"\qr"
-54580       if pos(ccells$(cell)(css+1:cse-1),"c")=1 then let cfmt$(cnum)=cfmt$(cnum)&"\qc"
-54590       if pos(ccells$(cell)(css+1:cse-1),"l")=1 then let cfmt$(cnum)=cfmt$(cnum)&"\ql"
+54570       if pos(ccells$(cell)(css+1:cse-1),"r")=1 then cfmt$(cnum)=cfmt$(cnum)&"\qr"
+54580       if pos(ccells$(cell)(css+1:cse-1),"c")=1 then cfmt$(cnum)=cfmt$(cnum)&"\qc"
+54590       if pos(ccells$(cell)(css+1:cse-1),"l")=1 then cfmt$(cnum)=cfmt$(cnum)&"\ql"
 54600       goto SETCELL
 54610     end if 
 54620 ! -------------------------------- !:
@@ -1755,39 +1755,39 @@
           ! ?                                                             !:
           ! -------------------------------- !
 54630     if uprc$(ccells$(cell)(css:cse-1))="FTIMES" then !:
-            let cface$(cnum)="\f0 " !:
+            cface$(cnum)="\f0 " !:
             goto SETCELL
 54640     if uprc$(ccells$(cell)(css:cse-1))="FARIAL" then !:
-            let cface$(cnum)="\f1 " !:
+            cface$(cnum)="\f1 " !:
             goto SETCELL
 54650     if uprc$(ccells$(cell)(css:cse-1))="FCOURIER" then !:
-            let cface$(cnum)="\f2 " !:
+            cface$(cnum)="\f2 " !:
             goto SETCELL
 54660     if uprc$(ccells$(cell)(css:cse-1))="FFRITZ" then !:
-            let cface$(cnum)="\f28 " !:
+            cface$(cnum)="\f28 " !:
             goto SETCELL
 54661     if uprc$(ccells$(cell)(css:cse-1))="FPALATINO" then !:
-            let cface$(cnum)="\f29 " !:
+            cface$(cnum)="\f29 " !:
             goto SETCELL
 54662     if uprc$(ccells$(cell)(css:cse-1))="FOCR-A" then !:
-            let cface$(cnum)="\f42 " !:
+            cface$(cnum)="\f42 " !:
             goto SETCELL
 54665     if uprc$(ccells$(cell)(css:cse-1))="FLUCIDA" then !:
-            let cface$(cnum)="\f69 " !:
+            cface$(cnum)="\f69 " !:
             goto SETCELL
 54670 ! -------------------------------- !:
           ! ?Set the cell font if different than the default              !:
           ! ?                                                             !:
           ! -------------------------------- !
 54680     if pos(ccells$(cell)(css:cse-1),"fs")=1 and cnum>0 then !:
-            let cfont$(cnum)="\fs"&str$(val(ccells$(cell)(css+2:cse-1))*2)&" " !:
+            cfont$(cnum)="\fs"&str$(val(ccells$(cell)(css+2:cse-1))*2)&" " !:
             goto SETCELL
 54690 ! -------------------------------- !:
           ! ?Set the backround shading of each cell                       !:
           ! ?                                                             !:
           ! -------------------------------- !
 54700     if pos(ccells$(cell)(css:cse-1),"sh")=1 then 
-54710       let csize$(cnum)=srep$(csize$(cnum),"\cellx","\clshdng"&str$(val(ccells$(cell)(css+2:cse-1))*100)&" "&"\cellx")
+54710       csize$(cnum)=srep$(csize$(cnum),"\cellx","\clshdng"&str$(val(ccells$(cell)(css+2:cse-1))*100)&" "&"\cellx")
 54720       goto SETCELL
 54730     end if 
 54740     goto SETCELL
@@ -1803,26 +1803,26 @@
         ! ?                                                             !:
         ! -------------------------------- !
 54780 ! INPUT FIELDS "24,64,c 1": PAUSE$
-54790   let celldef$=call$
+54790   celldef$=call$
 54800 ! -------------------------------- !:
         ! ?Define the cell row and number and size of cells             !:
         ! ?                                                             !:
         ! -------------------------------- !
 54810   for a=1 to cnum
-54820     if a=cnum then let celldef$=celldef$&csize$(a)&crlf$ else let celldef$=celldef$&csize$(a)
+54820     if a=cnum then celldef$=celldef$&csize$(a)&crlf$ else celldef$=celldef$&csize$(a)
 54830   next a
 54840 ! -------------------------------- !:
         ! ?Print the cells                                              !:
         ! ?                                                             !:
         ! -------------------------------- !
-54850   print #prntfil: cface$&cfont$&celldef$
+54850   pr #prntfil: cface$&cfont$&celldef$
 54860   for a=1 to cnum
-54870     if a=1 then print #prntfil: "\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0"&crlf$
-54880     print #prntfil: cfmt$(a)&"{"&cface$(a)&cfont$(a)&srep$(srep$(celldata$(a),"|","}{ \tab }{ "),"[RTFBAR]","|")&"\cell }"&crlf$
-54890     if a=cnum then print #prntfil: "\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0"&crlf$
+54870     if a=1 then pr #prntfil: "\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0"&crlf$
+54880     pr #prntfil: cfmt$(a)&"{"&cface$(a)&cfont$(a)&srep$(srep$(celldata$(a),"|","}{ \tab }{ "),"[RTFBAR]","|")&"\cell }"&crlf$
+54890     if a=cnum then pr #prntfil: "\pard \ql \li0\ri0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0"&crlf$
 54900   next a
-54910   print #prntfil: "{"&celldef$&crlf$&"\row }"&crlf$
-54920   print #prntfil: "\pard \ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0"&crlf$
+54910   pr #prntfil: "{"&celldef$&crlf$&"\row }"&crlf$
+54920   pr #prntfil: "\pard \ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0"&crlf$
 54930   let laststyle=1
 54990 fnend 
 55000 def fnbrdr$(btype$)
@@ -1867,7 +1867,7 @@
 60120   if infile_recl=32000 then 
 60130     if infile_rec*infile_recl+infile_recl<=infile_lrec then 
 60140       read #infile,using infile_frm$: inrec$ !:
-            print #outfile: inrec$ !:
+            pr #outfile: inrec$ !:
             let infile_rec+=1
 60150       goto 60130
 60160     else 
@@ -1877,7 +1877,7 @@
 60200     end if 
 60210   end if 
 60220   read #infile,using infile_frm$,pos=infile_rec*infile_recl+1: inrec$ !:
-        print #outfile: inrec$
+        pr #outfile: inrec$
 60230   dim inrec$*32000
 60240 ZTYPE: close #infile: !:
         let infile=0

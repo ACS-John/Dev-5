@@ -7,7 +7,7 @@
 11200 ! ______________________________________________________________________
 11400   dim cap$*128,mask(1),p$(1)*25,lbl$(1)*40
 11600 ! ______________________________________________________________________
-12000   let add_count=0
+12000   add_count=0
 12200   let fn_add('Emp',8, '',0,30)       ! used
 12400   let fn_add('Dept',3)                ! used
 12600   let fn_add('gl no 1',3)
@@ -49,7 +49,7 @@
 19800   execute "Index "&env$('Q')&"\PRmstr\department.h"&env$('cno')&' '&env$('Q')&"\PRmstr\deptidx.h"&env$('cno')&" 1 11,Replace" ioerr XIT
 20000 XIT: let fnxit
 20200   def fn_add(lbl$*40,fln; field_type$,storage_length,mask)
-20400     let add_count+=1
+20400     add_count+=1
 20600     mat lbl$(add_count)
 20800     mat fln(add_count)
 21000     mat p$(add_count)
@@ -67,7 +67,7 @@
 80200 ERTN: let fnerror(program$,err,line,act$,"xit")
 80210   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 80220   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-80230   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+80230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 80240 ERTN_EXEC_ACT: execute act$ : goto ERTN
 80250 ! /region
 80260 ! ______________________________________________________________________

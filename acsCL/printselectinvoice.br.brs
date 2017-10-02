@@ -8,7 +8,7 @@
 00080   dim de$*30,gl(3),t1(5),sc3$(5)*55,up$(4),d(2),nam$*30
 00090 ! ______________________________________________________________________
 00100   let fntop(program$,cap$="Print Selected Invoice Listing")
-00110   let cancel=99
+00110   cancel=99
 00120   let fncno(cno,cnam$)
 00130   open #20: "Name="&env$('Q')&"\CLmstr\PostDat.H"&str$(cno)&",Shr,Use,RecL=12",internal,outin,relative 
 00140   read #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2 norec L150 !:
@@ -18,7 +18,7 @@
 00170   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form POS 150,2*N 1,C 2',rec=1: mat d,bc$ !:
         close #20: 
-00180   let bankcode=val(bc$)
+00180   bankcode=val(bc$)
 00190   open #bankmstr=12: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal, outin, keyed 
 00200   open #paymstr1:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00210   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
@@ -34,29 +34,29 @@
 00260   let t1(1)=bal
 00270   let fnopenprn !:
         ! fnwait !:
-        print fields "13,34,C 12,B,99": "Cancel (Esc)" !:
+        pr fields "13,34,C 12,B,99": "Cancel (Esc)" !:
         on fkey 99 goto EO_PAYTRANS
 00280   restore #paytrans,key>="                    ": nokey EO_PAYTRANS !:
         let hvn$="" : let t1=pg1=0
 00290   gosub HEADER
 00300 READ_PAYTRANS: ! 
 00310   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,N 1': vn$,iv$,mat up$,upa,pcde,bc,ck$,dp,gde eof EO_PAYTRANS !:
-        let bank_code=bc
+        bank_code=bc
 00320   if rtrm$(vn$)="" or pcde><1 or bc<>bankcode then let t1(4)+=upa: goto READ_PAYTRANS ! reject and add invoices not selected or for other bank accounts
 00330   if hvn$<>"" and hvn$><vn$ then gosub READ_AND_PRINT
 00340   gosub BREAKDOWN
 00350   let t1+=upa : let hvn$=vn$ : let t1(2)+=upa
 00360   goto READ_PAYTRANS
 00370 ! ______________________________________________________________________
-00380 NEWPGE: print #255: newpage: gosub HDR : continue 
+00380 NEWPGE: pr #255: newpage: gosub HDR : continue 
 00390 ! ______________________________________________________________________
 00400 HDR: ! 
-00410   print #255,using 'Form POS 1,C 8,Cc 82': date$,cnam$
-00420   print #255,using 'Form POS 1,C 4,N 4,POS 36,C 40': "Page",pg+=1,"Unpaid Invoice File Listing" !:
-        print #255: ""
-00430   print #255: "                             Invoice    Due     PO Number                                   Pay   Bank   Check     Date "
-00440   print #255: "Ref#  Payee #   Invoice Numb   Date    Date     GL Number   Description            Amount   Code  Code   Number    Paid "
-00450   print #255: "____  ________  ____________  ______  ______  ____________  __________________  __________  ____  ____  ________  ______"
+00410   pr #255,using 'Form POS 1,C 8,Cc 82': date$,cnam$
+00420   pr #255,using 'Form POS 1,C 4,N 4,POS 36,C 40': "Page",pg+=1,"Unpaid Invoice File Listing" !:
+        pr #255: ""
+00430   pr #255: "                             Invoice    Due     PO Number                                   Pay   Bank   Check     Date "
+00440   pr #255: "Ref#  Payee #   Invoice Numb   Date    Date     GL Number   Description            Amount   Code  Code   Number    Paid "
+00450   pr #255: "____  ________  ____________  ______  ______  ____________  __________________  __________  ____  ____  ________  ______"
 00460   return 
 00470 ! ______________________________________________________________________
 00480 DONE: ! 
@@ -67,21 +67,21 @@
 00530 ! ______________________________________________________________________
 00540 XIT: let fnxit
 00550 ! ______________________________________________________________________
-00560 PGOF: print #255: newpage : gosub HEADER : continue 
+00560 PGOF: pr #255: newpage : gosub HEADER : continue 
 00570 ! ______________________________________________________________________
 00580 HEADER: ! 
-00590   print #255,using 'Form POS 1,PIC(ZZ/ZZ/ZZ),CC 107': prd,cnam$
-00600   print #255,using 'Form POS 1,C 4,N 4,CC 107,SKIP 1,POS 1,C 8': "Page",pg1+=1,"Selected Invoice Listing for Bank "&ltrm$(str$(bankcode)),date$
-00610   print #255: "  Payee                  Invoice     Due                                                   Line Item                       Item"
-00620   print #255: " Number   Invoice Numb    Date      Date    Inv. Description       Amount     GL Number    Description                    Amount"
-00630   print #255: "________  ____________  ________  ________  __________________  ____________  ____________ ______________________________ __________"
+00590   pr #255,using 'Form POS 1,PIC(ZZ/ZZ/ZZ),CC 107': prd,cnam$
+00600   pr #255,using 'Form POS 1,C 4,N 4,CC 107,SKIP 1,POS 1,C 8': "Page",pg1+=1,"Selected Invoice Listing for Bank "&ltrm$(str$(bankcode)),date$
+00610   pr #255: "  Payee                  Invoice     Due                                                   Line Item                       Item"
+00620   pr #255: " Number   Invoice Numb    Date      Date    Inv. Description       Amount     GL Number    Description                    Amount"
+00630   pr #255: "________  ____________  ________  ________  __________________  ____________  ____________ ______________________________ __________"
 00640   return 
 00650 ! ______________________________________________________________________
 00660 READ_AND_PRINT: ! 
 00670   let nam$="" !:
         read #paymstr1,using 'Form POS 9,C 30',key=hvn$,release: nam$ nokey L680
-00680 L680: print #255,using 'Form POS 65,C 14,SKIP 1,POS 30,C 33,PIC(ZZZ,ZZZ,ZZZ.##CR)': "____________",nam$,t1 pageoflow PGOF !:
-        print #255: "" pageoflow PGOF
+00680 L680: pr #255,using 'Form POS 65,C 14,SKIP 1,POS 30,C 33,PIC(ZZZ,ZZZ,ZZZ.##CR)': "____________",nam$,t1 pageoflow PGOF !:
+        pr #255: "" pageoflow PGOF
 00690   let t1=0
 00700   return 
 00710 ! ______________________________________________________________________
@@ -89,7 +89,7 @@
 00730   if hvn$<>"" then gosub READ_AND_PRINT
 00740   let t1(3)=t1(1)-t1(2): let t1(5)=t1(4)+t1(2)
 00750   for j=1 to 5 !:
-          print #255,using 'Form POS 5,C 55,PIC($$$$,$$$,$$$,$$$.##CR)': sc3$(j),t1(j) !:
+          pr #255,using 'Form POS 5,C 55,PIC($$$$,$$$,$$$,$$$.##CR)': sc3$(j),t1(j) !:
         next j
 00760   let fncloseprn
 00770   on fkey 99 ignore 
@@ -103,14 +103,14 @@
         if newkey$<>vn$ & iv$ then goto EO_UNPDALOC
 00850   if sum(gl)=0 and aa=0 then goto L840 ! don't allow zero allocations to print
 00860   if startxx=0 then !:
-          print #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,PIC(ZZZ,ZZZ,ZZZ.##CR),POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': vn$,iv$,val(up$(1)),val(up$(2)),up$(4),upa,mat gl, de$, aa pageoflow PGOF
+          pr #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,PIC(ZZZ,ZZZ,ZZZ.##CR),POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': vn$,iv$,val(up$(1)),val(up$(2)),up$(4),upa,mat gl, de$, aa pageoflow PGOF
 00870   if startxx>0 then !:
-          print #255,using 'Form POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': mat gl, de$, aa
+          pr #255,using 'Form POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': mat gl, de$, aa
 00880   let startxx+=1
 00890   goto L840
 00900 EO_UNPDALOC: ! 
 00910   if startxx=0 then !:
-          print #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,PIC(ZZZ,ZZZ,ZZZ.##CR),POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': vn$,iv$,val(up$(1)),val(up$(2)),up$(4),upa,mat gl, de$, aa pageoflow PGOF !:
+          pr #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,PIC(ZZZ,ZZZ,ZZZ.##CR),POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': vn$,iv$,val(up$(1)),val(up$(2)),up$(4),upa,mat gl, de$, aa pageoflow PGOF !:
           ! only on norec if startxx=0 (no allocations)
 00920   return 
 00930 ! ______________________________________________________________________
@@ -118,7 +118,7 @@
 00950 ERTN: let fnerror(program$,err,line,act$,"xit")
 00960   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00970   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00980   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00980   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00990 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01000 ! /region
 01010 ! ______________________________________________________________________

@@ -1,6 +1,6 @@
 00010 ! Replace S:\Core\Label\fnLabel
-00020 ! print label library, finds out how to format the labels and then !:
-        ! prints them using PrintAce so bar codes print right
+00020 ! pr label library, finds out how to format the labels and then !:
+        ! prints them using PrintAce so bar codes pr right
 00030   def library fnlabel(win,&cap$,mat linestyle$,cp,nw)
 00040     library 'S:\Core\Library': fnerror,fnwait,fnopenprn,fncloseprn, fnacs,fnlbl,fntos,fnbutton,fnfra,fntxt,fncmdset,fncomboa,fnxit,fnreg_read,fnreg_write,fnpa_finis,fnpa_newpage,fnpa_open
 00050     on error goto ERTN
@@ -13,13 +13,13 @@
 00110 ! win= window number to use for windows !:
           ! cap$= referring programs cap$ (don't modify, just include) !:
           ! LabelText$(x)= each line of label text, 4 lines per label !:
-          ! linestyle$(x) indicates which hex code to use on that line of print !:
+          ! linestyle$(x) indicates which hex code to use on that line of pr !:
           ! (this linestyle feature is not yet written !:
-          ! CP = 1=Condensed Print 2 or 0=Normal Print
+          ! CP = 1=Condensed pr 2 or 0=Normal Print
 00140 ! if uprc$(linestyle$(5))="BAR" then let label_pos1=01 : let label_pos2=75 : let label_pos3=150 else let label_pos1=02 : let label_pos2=30 : let label_pos3=63
 00150 ! let top_marg=2
 00160     let label_hold_cap$=cap$
-00170     let cap$=cap$&" Label Printing"(1:udim(cap$))
+00170     cap$=cap$&" Label Printing"(1:udim(cap$))
 00180 ! _*_*_*_____________________
 00190 L190: gosub ASK_LABEL_FORMAT
 00200     if ckey=5 then goto LABEL_XIT
@@ -83,7 +83,7 @@
 00584     let sn$="labellib3" !:
           let fntos(sn$)
 00590     let fnlbl(1,1,"Top Margin (lines):",24,1)
-00600     let fntxt(1,26,3,3,1,'20',0,"Increase or decrease the top margin to move the print up or down on the labels") !:
+00600     let fntxt(1,26,3,3,1,'20',0,"Increase or decrease the top margin to move the pr up or down on the labels") !:
           let resp$(1)=str$(top_marg)
 00610     let fnlbl(2,1,"Left Column Position:",24,1)
 00620     let fntxt(2,26,3,3,1,'20',0,"Increase or decrease the position to move the left label right or left") !:
@@ -139,7 +139,7 @@
 01170     let fnopenprn
 01180     let fnwait(win,cap$,"Printing: Please wait...",1)
 01190     if top_marg>0 then !:
-            print #255,using "Form POS 1,C 1,SKIP "&str$(top_marg): ""
+            pr #255,using "Form POS 1,C 1,SKIP "&str$(top_marg): ""
 01200     for x=1 to 10
 01210       for z=1 to 5
 01220         for y=1 to 3
@@ -149,41 +149,41 @@
 01240 !     If wabel$(X,Y,Z)<>"" Then Let FNBARCODE(wabel$(X,Y,Z),LABEL_POS(Y))
 01250         next y
 01260 ! 
-01270         if printedabarcode=1 then print #255: "" !:
+01270         if printedabarcode=1 then pr #255: "" !:
                 let printedabarcode=0 !:
                 goto L1310
 01280 !   If LINESTYLE$(Z)<>"" Then Let FNSETLINESTYLE(LINESTYLE$(Z))
-01290         print #255,using L1300: wabel$(x,1,z)(1:25),wabel$(x,2,z)(1:25),wabel$(x,3,z)(1:25)
+01290         pr #255,using L1300: wabel$(x,1,z)(1:25),wabel$(x,2,z)(1:25),wabel$(x,3,z)(1:25)
 01300 L1300:  form pos label_pos1,c 25,pos label_pos2,c 25,pos label_pos3,c 25
 01310 L1310: next z
-01320       if x<10 then print #255: "" : print #255: ""
-01330       if x=10 then print #255: newpage
+01320       if x<10 then pr #255: "" : pr #255: ""
+01330       if x=10 then pr #255: newpage
 01340     next x
 01350     return 
 01360 ! 
 01370 ! 
 01380 ! 
 01390 BARCODE_PRINT: ! 
-01400     let addy=4
+01400     addy=4
 01410     gosub VBOPENPRINT
 01420     if top_marg>0 then !:
-            print #20: 'Call Print.AddText(" ",'&str$(label_pos3)&','&str$(top_marg*(addy)+ymargin)&')'
+            pr #20: 'Call Print.AddText(" ",'&str$(label_pos3)&','&str$(top_marg*(addy)+ymargin)&')'
 01430     for x=1 to 10
 01440       for z=1 to 5
 01450         if z=5 then goto L1460 else goto L1560
 01460 L1460:  let lyne+=addy
 01470         for j=1 to 3
 01480           let v=val(wabel$(x,j,z)) conv L1560
-01490           let bc$=trim$(wabel$(x,j,z))
+01490           bc$=trim$(wabel$(x,j,z))
 01500           if j=1 then let label_pos =0
 01510           if j=2 then let label_pos =2.75
 01520           if j=3 then let label_pos =5.25
-01530           if trim$(bc$)<>"" then print #20: 'Call Print.DisplayBarCode('&str$(label_pos)&','&str$(x+.1)&',"'&bc$&'")'
+01530           if trim$(bc$)<>"" then pr #20: 'Call Print.DisplayBarCode('&str$(label_pos)&','&str$(x+.1)&',"'&bc$&'")'
 01540         next j
 01550         goto L1580
-01560 L1560:  print #20: 'Call Print.AddText("'&trim$(wabel$(x,1,z))&'",'&str$(label_pos1)&','&str$(lyne+=addy+ymargin)&')' !:
-              print #20: 'Call Print.AddText("'&trim$(wabel$(x,2,z))&'",'&str$(label_pos2)&','&str$(lyne+ymargin)&')' !:
-              print #20: 'Call Print.AddText("'&trim$(wabel$(x,3,z))&'",'&str$(label_pos3)&','&str$(lyne+ymargin)&')'
+01560 L1560:  pr #20: 'Call Print.AddText("'&trim$(wabel$(x,1,z))&'",'&str$(label_pos1)&','&str$(lyne+=addy+ymargin)&')' !:
+              pr #20: 'Call Print.AddText("'&trim$(wabel$(x,2,z))&'",'&str$(label_pos2)&','&str$(lyne+ymargin)&')' !:
+              pr #20: 'Call Print.AddText("'&trim$(wabel$(x,3,z))&'",'&str$(label_pos3)&','&str$(lyne+ymargin)&')'
 01570 !      Form POS LABEL_POS1,C 25,POS LABEL_POS2,C 25,POS LABEL_POS3,C 25
 01580 L1580: next z
 01590       if x<10 then let lyne+=addy*1.9
@@ -199,13 +199,13 @@
 01690     read #88,using "Form POS 1,5*C 120": mat labeltext$ eof L1_DONE
 01710     for z=1 to 5
 01720 !   If UPRC$(LINESTYLE$(Z))="BAR" AND LABELTEXT$(Z)<>"" Then !:
-            !   Let FNBARCODE(LABELTEXT$(Z),LABEL_POS1) : Print #255: "" !:
+            !   Let FNBARCODE(LABELTEXT$(Z),LABEL_POS1) : pr #255: "" !:
             !   Goto 1400
 01730 !   If LINESTYLE$(Z)<>"" Then Let FNSETLINESTYLE(LINESTYLE$(Z))
-01740       print #255,using L1750: labeltext$(z)(1:70)
+01740       pr #255,using L1750: labeltext$(z)(1:70)
 01750 L1750: form pos 2,c 70
 01760     next z
-01770     print #255: ""
+01770     pr #255: ""
 01780     goto L1_NEXT
 01860 L1_DONE: ! 
 01870     goto LABEL_DONE
@@ -218,14 +218,14 @@
 01940     close #88: ioerr ignore
 01950     execute "Free "&env$('temp')&"\Label.dat -n" ioerr XNOW
 01960 XNOW: ! 
-01970     let cap$=label_hold_cap$
+01970     cap$=label_hold_cap$
 01980   fnend 
 01990 ! ______________________________________________________________________
 02000 VBOPENPRINT: ! 
 02010   let fnpa_open ! if file(20)=-1 then
 02020 !   open #20: "Name="&env$('Q')&"\UBmstr\label"&wsid$&".txt,Replace,RecL=5000",display,output
-02030 !   print #20: 'Call Print.MyOrientation("Portrait")'
-02032   print #20: 'Call Print.MyFontsize(12)'
+02030 !   pr #20: 'Call Print.MyOrientation("Portrait")'
+02032   pr #20: 'Call Print.MyFontsize(12)'
 02040   let lyne=4
 02050 ! end if
 02060   return 
@@ -245,6 +245,6 @@
 76040 ERTN: let fnerror(program$,err,line,act$,"label_xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-76100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 76120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 76140 ! /r

@@ -29,7 +29,7 @@
 20560 ! let dv$=resp$(1)
 25000 ! /r
 25020   open #h_out:=fngethandle: "Name=SAVE:ubCass1.dat,RecL=112,EOL=None,Replace",external,output ioerr XIT
-25040 !  print file$(h_tmp);" ";lrec(h_tmp)
+25040 !  pr file$(h_tmp);" ";lrec(h_tmp)
 25060 !  let save_name$=os_filename$(file$(h_tmp))
 25080 !  close #h_tmp,free:
 25100 ! 
@@ -43,10 +43,10 @@
 28080     if altcode=2 then goto L350 ! alternate address coded as not being used at this time.
 28100     read #3,using L280,key=z$: nam$,sta$,sta2$,csz$ nokey L300
 28120 L280: form pos 11,4*c 30
-28140     if trim$(csz$)="" then let csz$=sta2$ : let sta2$=""
-28160 L300: let csz$=trim$(csz$)
+28140     if trim$(csz$)="" then csz$=sta2$ : let sta2$=""
+28160 L300: csz$=trim$(csz$)
 28180     if csz$(len(csz$)-5:len(csz$)-5) =" " then goto L330
-28200     if csz$(len(csz$)-5:len(csz$)-5) < "0" or csz$(len(csz$)-5:len(csz$)-5)>"9" then let csz$=csz$(1:len(csz$)-5) &" "&csz$((len(csz$)-4):len(csz$))
+28200     if csz$(len(csz$)-5:len(csz$)-5) < "0" or csz$(len(csz$)-5:len(csz$)-5)>"9" then csz$=csz$(1:len(csz$)-5) &" "&csz$((len(csz$)-4):len(csz$))
 28220 L330: let fncsz(csz$,city$,state$,zip$)
 28240     let zip$=trim$(zip$)(1:5)
 28260 L350: write #h_out,using F_OUT_FIXED: z$,nam$,sta$,city$,state$,zip$,chr$(10)
@@ -58,6 +58,6 @@
 30020 ERTN: let fnerror(program$,err,line,act$,"xit")
 30040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 30060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-30080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+30080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 30100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 30120 ! /region

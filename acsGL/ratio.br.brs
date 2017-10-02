@@ -25,9 +25,9 @@
 00240   let fntos(sn$="Ratiomst") !:
         let respc=0
 00250   mat chdr$(3) : mat cmask$(3) : mat flxitm$(3) !:
-        let chdr$(1)="Rec" !:
-        let chdr$(2)="Ratio #" : let chdr$(3)="Ratio Name" !:
-        let cmask$(1)='30' : let cmask$(2)='': let cmask$(3)=''
+        chdr$(1)="Rec" !:
+        chdr$(2)="Ratio #" : chdr$(3)="Ratio Name" !:
+        cmask$(1)='30' : cmask$(2)='': cmask$(3)=''
 00260   let frame=0
 00270   restore #ratiomst: !:
         let fnflexinit1('Ratiomst1',lc=1,1,10,50,mat chdr$,mat cmask$,1)
@@ -44,16 +44,16 @@
 00360   let fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing Ratio.")
 00370   let fncmdkey("&Review G/L #",4,0,0,"Click to review the general ledger numbers used in this ratio.")
 00380   let fncmdkey("&Delete",8,0,0,"Highlight any record and click Delete to remove the Ratio.")
-00390 ! Let FNCMDKEY("&Print",3,0,0,"Takes you directly to the Print Ratios option")
+00390 ! Let FNCMDKEY("&Print",3,0,0,"Takes you directly to the pr Ratios option")
 00400   let fncmdkey("E&xit",5,0,1,"Exits to main menu")
 00410   let fnacs(sn$,0,mat resp$,ckey)
 00420   if ckey=5 then goto XIT
-00430   let add=edit=0
+00430   add=edit=0
 00440   let editrec=val(resp$(1))
 00450   if ckey=2 then let edit=1
 00460   if ckey=4 then goto GL_NUMBERS
 00470 ! If CKEY=3 Then Chain "S:\acsGL\acglschp" ! prints prints a Ratiomst
-00480   if ckey=1 then let add=1 !:
+00480   if ckey=1 then add=1 !:
           let hac$=na$="" !:
           mat gl$=("") !:
           goto ADD_EDIT_RATIOMST ! add
@@ -124,33 +124,33 @@
 01010 L1010: on fkey 5 goto L1330
 01020   let fnopenprn
 01030 L1030: read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',key=ac$: hac$,na$,mat gl$ eof L1330
-01040   print #255,using L1050: date$('mm/dd/yy'),time$,"Print Ratio File Proof List"
+01040   pr #255,using L1050: date$('mm/dd/yy'),time$,"Print Ratio File Proof List"
 01050 L1050: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,pos 51,c 31,skip 1
-01060   print #255,using L1070: cnam$,dat$
+01060   pr #255,using L1070: cnam$,dat$
 01070 L1070: form pos 1,cc 122,skip 1,pos 1,cc 122,skip 2
-01080   print #255,using L1090: "ratiomst Number",sn
+01080   pr #255,using L1090: "ratiomst Number",sn
 01090 L1090: form pos 1,c 15,pos 20,pic(zz),skip 1
-01100   print #255,using L1110: "ratiomst Name  ",schnam$
+01100   pr #255,using L1110: "ratiomst Name  ",schnam$
 01110 L1110: form pos 1,c 15,pos 20,c 80,skip 1
-01120   print #255,using L1110: "FootNote       ",ft$
-01130   print #255,using L1160: "Dollar Sign Print",dp
-01140   print #255,using L1160: "Reverse Sign",rs
-01150   print #255,using L1160: "Print Current Month Figures",cm
+01120   pr #255,using L1110: "FootNote       ",ft$
+01130   pr #255,using L1160: "Dollar Sign Print",dp
+01140   pr #255,using L1160: "Reverse Sign",rs
+01150   pr #255,using L1160: "Print Current Month Figures",cm
 01160 L1160: form pos 1,c 27,pos 30,pic(#),skip 1
-01170   print #255: tab(29);"Dept  Account Sub"
+01170   pr #255: tab(29);"Dept  Account Sub"
 01180   for j=1 to 80
 01190     if gl$(j)="  0     0  0" then goto L1270
 01200     if j1><48 then goto L1250
-01210     print #255: newpage
-01220     print #255,using L1230: "G/L Account Number",gl$(j)(1:3),gl$(j)(4:9),gl$(j)(10:12)
+01210     pr #255: newpage
+01220     pr #255,using L1230: "G/L Account Number",gl$(j)(1:3),gl$(j)(4:9),gl$(j)(10:12)
 01230 L1230: form skip 6,pos 1,c 18,pos 30,c 3,x 2,c 6,x 2,c 3,skip 1
 01240     goto L1270
-01250 L1250: print #255,using L1260: "G/L Account Number",gl$(j)(1:3),gl$(j)(4:9),gl$(j)(10:12)
+01250 L1250: pr #255,using L1260: "G/L Account Number",gl$(j)(1:3),gl$(j)(4:9),gl$(j)(10:12)
 01260 L1260: form pos 1,c 18,pos 30,c 3,x 2,c 6,x 2,c 3,skip 1
 01270 L1270: let j1=j1+1
 01280   next j
 01290   let j1=0
-01300   print #255: newpage
+01300   pr #255: newpage
 01310   goto L1030
 01320 ! ______________________________________________________________________
 01330 L1330: let fncloseprn
@@ -167,7 +167,7 @@
 01440 ERTN: let fnerror(program$,err,line,act$,"xit")
 01450   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01460   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01470   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01470   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01480 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01490 ! /region
 01500 ! ______________________________________________________________________

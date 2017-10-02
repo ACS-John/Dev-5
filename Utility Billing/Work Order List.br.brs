@@ -23,7 +23,7 @@
 76020   let fnerror(program$,err,line,act$,"xit")
 76040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-76080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+76080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 76100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 76120 ! /r
 80000 def library fnWorkOrderList(; z$*10)
@@ -43,9 +43,9 @@
 80260   let fncmdset(2)
 80270   let fnacs(sn$,0,mat resp$,ck)
 80280   if ck=5 then goto PWL_XIT
-80300   let beg_date=val(resp$(1)) ! beginning of year
+80300   beg_date=val(resp$(1)) ! beginning of year
 80320   let end_date=val(resp$(2)) ! ending day of year
-80340   let askz$=lpad$(trim$(resp$(3)(1:10)),10)
+80340   askz$=lpad$(trim$(resp$(3)(1:10)),10)
 80360   let fnopenprn
 80370   open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outin,keyed
 80380   gosub PWL_HDR
@@ -60,10 +60,10 @@
 80540     if trim$(askz$)="[All]" or trim$(askz$)="" or trim$(askz$)=trim$(wkz$) then 
 80560       if beg_date=0 or wkdat=>beg_date then 
 80580         if end_date=0 or wkdate<=end_date then
-80600           print #255,using "form pos 1,c 10,x 1,pic(zzzz/zz/zz),x 1,c 30": wkz$,wkdat,nam$
+80600           pr #255,using "form pos 1,c 10,x 1,pic(zzzz/zz/zz),x 1,c 30": wkz$,wkdat,nam$
 80620           for j=1 to 5
 80640             if trim$(line$(j))<>"" then 
-80660               print #255,using 'form pos 5,c 100': line$(j) pageoflow PWL_PGOFLOW
+80660               pr #255,using 'form pos 5,c 100': line$(j) pageoflow PWL_PGOFLOW
 80680             end if
 80700           next j
 80720         end if
@@ -77,13 +77,13 @@
 80880   close #h_workorder: 
 80900 fnend
 82000 PWL_HDR: ! r:
-82020   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-82040   print #255: "\qc {\f181 {\fs24 {\b Work Order Listing}"
-82060   print #255: "{\fs20 "&env$('cnam')&"}}}"
-82080   print #255: "\qc {\fs18 From: "&cnvrt$("pic(zzzz/zz/zz)",beg_date)&" To: "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
-82100   print #255: "\ql "
+82020   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+82040   pr #255: "\qc {\f181 {\fs24 {\b Work Order Listing}"
+82060   pr #255: "{\fs20 "&env$('cnam')&"}}}"
+82080   pr #255: "\qc {\fs18 From: "&cnvrt$("pic(zzzz/zz/zz)",beg_date)&" To: "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
+82100   pr #255: "\ql "
 82120   return  ! /r
 84000 PWL_PGOFLOW: ! r:
-84020   print #255: newpage
+84020   pr #255: newpage
 84040   gosub PWL_HDR
 84060 continue  ! /r

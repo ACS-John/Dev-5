@@ -16,27 +16,27 @@
 00150   open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",Shr",internal,input,relative 
 00160   open #4: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=55,Replace",internal,output 
 00170 ! ______________________________________________________________________
-00180   print newpage
+00180   pr newpage
 00190   let fnopenwin(win=101,08,20,13,59,cap$)
-00200   print #win,fields "4,2,Cr 23,N": "Starting Date (mmddyy):"
-00210   print #win,fields "5,2,Cr 23,N": "Ending Date (mmddyy):"
+00200   pr #win,fields "4,2,Cr 23,N": "Starting Date (mmddyy):"
+00210   pr #win,fields "5,2,Cr 23,N": "Ending Date (mmddyy):"
 00220   let io1$(1)="4,26,Nz 6,UT,N"
 00230   let io1$(2)="5,26,Nz 6,UT,N"
-00240   print fields "14,30,C 09,B,1": "Next (F1)"
-00250   print fields "14,41,C 09,B,5": "Exit (F5)"
+00240   pr fields "14,30,C 09,B,1": "Next (F1)"
+00250   pr fields "14,41,C 09,B,5": "Exit (F5)"
 00260 L260: input #win,fields mat io1$: df,dt conv CONV1
-00270   if ce>0 then let io1$(ce)(ce1:ce2)="U": let ce=0
-00280   if cmdkey>0 then goto L350 else let ce=curfld
-00290 L290: let ce=ce+1: if ce>udim(io1$) then let ce=1
-00300 L300: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : let ce1=pos(io1$(ce),"U",1) !:
+00270   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+00280   if cmdkey>0 then goto L350 else ce=curfld
+00290 L290: ce=ce+1: if ce>udim(io1$) then ce=1
+00300 L300: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1) !:
         if ce1=0 then goto L290
-00310   let ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L260
+00310   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L260
 00320 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
-00330   let ce=cnt+1
-00340 ERR1: print fields "24,78,C 1": bell : goto L300
+00330   ce=cnt+1
+00340 ERR1: pr fields "24,78,C 1": bell : goto L300
 00350 L350: if cmdkey=5 then goto XIT
-00360   if df<10100 or df>123199 then let ce=1: goto ERR1
-00370   if dt<10100 or dt>123199 then let ce=2: goto ERR1
+00360   if df<10100 or df>123199 then ce=1: goto ERR1
+00370   if dt<10100 or dt>123199 then ce=2: goto ERR1
 00380 ! ______________________________________________________________________
 00390   mat dr=(0)
 00400   let dr(1)=int(df*.01)
@@ -57,20 +57,20 @@
 00550   next j
 00560 L560: write #4,using L570: df1,dt1,mat dr
 00570 L570: form pos 1,2*n 6,7*pd 3
-00580 L580: print newpage
+00580 L580: pr newpage
 00590   let fnopenwin(win=102,08,20,13,59,cap$)
 00600   if rw>0 then !:
-          print #win,fields "6,1,Cc 40,R,N": "Last Job Number entered was "&ltrm$(jn$)
-00610   print #win,fields "4,2,C 20,N": "Job Number to Print:"
-00620   print fields "14,29,C 10,B,2": "Print (F2)"
-00630   print fields "14,40,C 11,B,5": "Cancel (F5)"
+          pr #win,fields "6,1,Cc 40,R,N": "Last Job Number entered was "&ltrm$(jn$)
+00610   pr #win,fields "4,2,C 20,N": "Job Number to Print:"
+00620   pr fields "14,29,C 10,B,2": "Print (F2)"
+00630   pr fields "14,40,C 11,B,5": "Cancel (F5)"
 00640 L640: input #win,fields "4,23,C 6,UET,N": jn$
 00650   let jn$=lpad$(rtrm$(jn$),6)
 00660   if cmdkey=2 then goto L940
 00670   if cmdkey=5 then goto XIT
 00680   if ltrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto L640
 00690   let rw=0
-00700   let cn$=jn$&"     "
+00700   cn$=jn$&"     "
 00710   read #2,using L720,key>=cn$: cn$,mat ta nokey L740
 00720 L720: form pos 1,c 11,pos 118,2*pd 3
 00730   goto L800
@@ -82,7 +82,7 @@
 00790 L790: read #2,using L720: cn$,mat ta eof L740
 00800 L800: if jn$><cn$(1:6) then goto L740
 00810   if ta(1)=0 then goto L790
-00820   let adr=ta(1)
+00820   adr=ta(1)
 00830 L830: read #3,using L840,rec=adr: en$,tn$,mat tr,nta
 00840 L840: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,x 30,pd 3
 00850   if tr(5)+tr(6)=0 then goto L910
@@ -92,7 +92,7 @@
 00890 L890: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2
 00900   let rw=rw+1
 00910 L910: if nta=0 then goto L790
-00920   let adr=nta
+00920   adr=nta
 00930   goto L830
 00940 L940: if rw=0 then goto XIT
 00950   let message$="Sorting: please wait..."
@@ -116,7 +116,7 @@
 01130 ERTN: let fnerror(program$,err,line,act$,"xit")
 01140   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01150   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01160   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01160   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01170 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01180 ! /region
 01190 ! ______________________________________________________________________

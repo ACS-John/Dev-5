@@ -6,7 +6,7 @@
 20100   dim cap$*128
 20120 ! ______________________________________________________________________
 20140   let fntop("S:\acsUB\ubRemove",cap$="Remove Old Transactions")
-20160   let cancel=5 : let left=0 : let right=1 : let center=2
+20160   cancel=5 : let left=0 : let right=1 : center=2
 20180   let fncno(cno)
 20200 SCREEN1: ! 
 20220   let fntos(sn$="ubRemove")
@@ -42,7 +42,7 @@
 20820 ERTN: let fnerror(program$,err,line,act$,"xit")
 20840   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20860   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-20880   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+20880   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 20900 ERTN_EXEC_ACT: execute act$ : goto ERTN
 20920 ! /region
 20940 ! ______________________________________________________________________

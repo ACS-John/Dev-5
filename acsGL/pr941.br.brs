@@ -84,22 +84,22 @@
 00760   for j=1 to 4
 00770     if resp$(2)=option1$(j) then let qtr=j: let m$=option1$(j): goto L790 ! quarter ending date
 00780   next j
-00790 L790: if qtr=1 then let begdate=val(taxyear$)*10000+0312: let enddate=val(taxyear$)*10000+0318
-00800   if qtr=2 then let begdate=val(taxyear$)*10000+0612: let enddate=val(taxyear$)*10000+0618
-00810   if qtr=3 then let begdate=val(taxyear$)*10000+0912: let enddate=val(taxyear$)*10000+0918
-00820   if qtr=4 then let begdate=val(taxyear$)*10000+1212: let enddate=val(taxyear$)*10000+1218
+00790 L790: if qtr=1 then begdate=val(taxyear$)*10000+0312: let enddate=val(taxyear$)*10000+0318
+00800   if qtr=2 then begdate=val(taxyear$)*10000+0612: let enddate=val(taxyear$)*10000+0618
+00810   if qtr=3 then begdate=val(taxyear$)*10000+0912: let enddate=val(taxyear$)*10000+0918
+00820   if qtr=4 then begdate=val(taxyear$)*10000+1212: let enddate=val(taxyear$)*10000+1218
 00830   if resp$(3)="True" then let frm=2 else let frm=1 ! need a worksheet
-00840   let box15a=val(resp$(4)) ! first month liability
-00850   let box15b=val(resp$(5))
-00860   let box15c=val(resp$(6))
-00870   let box7a=val(resp$(7)) ! fractions
-00880   let box7b=val(resp$(8)) ! sick pay
-00890   let box7c=val(resp$(9)) ! tips
-00900   let box7d=val(resp$(10)) ! tax wh
-00910   let box7e=val(resp$(11)) ! prior qtr
-00920   let box7f=val(resp$(12)) ! special add
-00930   let box7g=val(resp$(13)) ! special add - ss
-00935   let box11=val(resp$(14)) ! total deposits
+00840   box15a=val(resp$(4)) ! first month liability
+00850   box15b=val(resp$(5))
+00860   box15c=val(resp$(6))
+00870   box7a=val(resp$(7)) ! fractions
+00880   box7b=val(resp$(8)) ! sick pay
+00890   box7c=val(resp$(9)) ! tips
+00900   box7d=val(resp$(10)) ! tax wh
+00910   box7e=val(resp$(11)) ! prior qtr
+00920   box7f=val(resp$(12)) ! special add
+00930   box7g=val(resp$(13)) ! special add - ss
+00935   box11=val(resp$(14)) ! total deposits
 00940 ! Gosub GET_MAT_TPT
 00950   gosub START_PRINT
 00960   gosub BUILD_941
@@ -147,33 +147,33 @@
 01370 ! If DEPENO<>ENO Then Goto 1360
 01380 ! If DEPENO=ENO AND PRD<BEGDATE Then Goto 1260 ! search for next check
 01390 ! If DEPENO=ENO AND PRD>PEDATE Then Goto 1360 ! do't count
-01400 ! If DEPENO=ENO Then Let BOX1+=1 ! count employees who worked the twelfth day of the first month of the quarter
+01400 ! If DEPENO=ENO Then bOX1+=1 ! count employees who worked the twelfth day of the first month of the quarter
 01410   gosub PRINT_DETAILS
 01420   goto L1090
 01430 ! ______________________________________________________________________
 01440 WK_HEADER: ! 
 01450   let p2=p2+1
-01460   print #255,using L1480: "Page ",p2
-01470   print #255: ""
+01460   pr #255,using L1480: "Page ",p2
+01470   pr #255: ""
 01480 L1480: form pos 70,c 5,pic(zzz)
-01490   print #255: tab(15);"Employer's Quarterly Federal Tax Return Worksheet"
-01500   print #255,using L1510: "For quarter ended "&m$&", "&taxyear$
+01490   pr #255: tab(15);"Employer's Quarterly Federal Tax Return Worksheet"
+01500   pr #255,using L1510: "For quarter ended "&m$&", "&taxyear$
 01510 L1510: form pos 20,cc 40
-01520   print #255: ""
-01530   print #255: ""
+01520   pr #255: ""
+01530   pr #255: ""
 01540   if eof=1 then goto L1670
-01550   print #255,using L1560: a$(1),"Fed ID",b$(1)
+01550   pr #255,using L1560: a$(1),"Fed ID",b$(1)
 01560 L1560: form pos 17,c 40,pos 59,c 6,pos 69,c 40
-01570   print #255,using L1580: a$(2),"State ID",b$(2)
+01570   pr #255,using L1580: a$(2),"State ID",b$(2)
 01580 L1580: form pos 17,c 40,pos 59,c 8,pos 69,c 12,skip 1
-01590   print #255,using L1600: a$(3),"State",d$(1)
+01590   pr #255,using L1600: a$(3),"State",d$(1)
 01600 L1600: form pos 17,c 40,pos 59,c 5,pos 69,c 8,skip 1
-01610   print #255: ""
-01620   print #255: tab(41);"Total Wages    Social-Sec.      Medicare"
-01630   print #255: " SS Number             Name";
-01640   print #255: tab(41);"For Quarter        Wages";tab(75);"Wages"
-01650   print #255: "___________  __________________________";
-01660   print #255: tab(41);"___________   ____________  ____________"
+01610   pr #255: ""
+01620   pr #255: tab(41);"Total Wages    Social-Sec.      Medicare"
+01630   pr #255: " SS Number             Name";
+01640   pr #255: tab(41);"For Quarter        Wages";tab(75);"Wages"
+01650   pr #255: "___________  __________________________";
+01660   pr #255: tab(41);"___________   ____________  ____________"
 01670 L1670: return 
 01680 ! ______________________________________________________________________
 01690 WK_END: ! 
@@ -202,8 +202,8 @@
 01920   let h3=mcm-(m2-dfy-m1-dfq)
 01930 L1930: ! 
 01940   if frm=1 then goto L1980
-01950   print #255,using L1970: ss$,k$(1)(1:27),m1-dfq,h2,h3
-01960   print #255: ""
+01950   pr #255,using L1970: ss$,k$(1)(1:27),m1-dfq,h2,h3
+01960   pr #255: ""
 01970 L1970: form pos 1,c 11,pos 14,c 27,pos 41,pic(----,---.##),pos 56,pic(----,---.##),pos 67,pic(---,---,---.##),skip 1
 01980 L1980: let t1=t1+m1-dfq
 01990   let t5=t5+m1
@@ -214,10 +214,10 @@
 02040 ! ______________________________________________________________________
 02050 TOTALS: ! 
 02060   if frm=1 then goto L2130
-02070   print #255,using L2080: "___________    ___________  ____________"
+02070   pr #255,using L2080: "___________    ___________  ____________"
 02080 L2080: form pos 41,c 41,skip 1
-02090   print #255: "       Total Employees:";p3;"     Totals";
-02100   print #255,using L2110: t1,t2,t3
+02090   pr #255: "       Total Employees:";p3;"     Totals";
+02100   pr #255,using L2110: t1,t2,t3
 02110 L2110: form pos 41,pic(----,---.##),pos 56,pic(----,---.##),pos 67,pic(---,---,---.##),skip 1
 02120   let fncloseprn
 02130 L2130: let p3=0
@@ -229,7 +229,7 @@
 02200   return 
 02210 ! ______________________________________________________________________
 02220 PGOF: ! 
-02230   print #255: newpage
+02230   pr #255: newpage
 02240   gosub WK_HEADER
 02250   continue 
 02260 ! ______________________________________________________________________
@@ -240,25 +240,25 @@
 02310   let taxfica=fna(m(32)*(ficarate+ficarate+.02)) ! FICARATE*2)  2011
 02320   let tipfica= fna((m(2)-m(32))*ficarate)
 02330   let mcwh=fna((gt3)*mcr*2)
-02340   print #255: ""
-02350   print #255,using L2360: " 2.  Total wages and tips subject to withholding",gt1
+02340   pr #255: ""
+02350   pr #255,using L2360: " 2.  Total wages and tips subject to withholding",gt1
 02360 L2360: form pos 1,c 60,n 10.2
-02370   print #255,using L2360: " 3.  Total income tax withheld",tqm1
-02380   print #255: "" !:
-        print #255: ""
-02390   print #255,using L2400: " 6ab. Taxable social security wages paid",gt2-m(32),wagefica ! 6a. and 6b.
+02370   pr #255,using L2360: " 3.  Total income tax withheld",tqm1
+02380   pr #255: "" !:
+        pr #255: ""
+02390   pr #255,using L2400: " 6ab. Taxable social security wages paid",gt2-m(32),wagefica ! 6a. and 6b.
 02400 L2400: form pos 1,c 40,n 10.2,x 10,n 10.2
-02410   print #255,using L2400: " 6cd. Taxable tips reported",tpt(20),taxfica ! 6c. and 6d.
-02420   print #255,using L2400: " 7ab. Taxable medicare insurance wages",gt3,mcwh ! 7a. and 7b.
-02430   print #255,using L2360: " 8.  Total FICA taxes",wagefica+taxfica+mcwh
+02410   pr #255,using L2400: " 6cd. Taxable tips reported",tpt(20),taxfica ! 6c. and 6d.
+02420   pr #255,using L2400: " 7ab. Taxable medicare insurance wages",gt3,mcwh ! 7a. and 7b.
+02430   pr #255,using L2360: " 8.  Total FICA taxes",wagefica+taxfica+mcwh
 02440   for j=1 to 5 !:
-          print #255: "" !:
+          pr #255: "" !:
         next j
-02450   print #255,using L2360: "11.  Total taxes excluding any adjustments you have made",tqm1+wagefica+taxfica+mcwh
-02460   print #255,using L2360: "12.  Advanced earned income credit",tqm14
-02470   print #255,using L2360: "13.  Net Taxes        ",(tqm1+wagefica+taxfica+mcwh)-tqm14
+02450   pr #255,using L2360: "11.  Total taxes excluding any adjustments you have made",tqm1+wagefica+taxfica+mcwh
+02460   pr #255,using L2360: "12.  Advanced earned income credit",tqm14
+02470   pr #255,using L2360: "13.  Net Taxes        ",(tqm1+wagefica+taxfica+mcwh)-tqm14
 02480   for j=1 to 6 !:
-          print #255: "" !:
+          pr #255: "" !:
         next j
 02490   return 
 02500 ! ______________________________________________________________________
@@ -280,24 +280,24 @@
 02660   let tipfica= fna((tpt(20)-tpt(15))*ficarate)
 02670   let mcwh=fna((gt3)*mcr*2)
 02680 !   BOX1   ! count on 12th of each qtr (analyze history for this in another section)
-02690   let box2=gt1
-02700   let box3=tqm1
-02710   let box4=0 ! ( unused )
-02720   let box5a1=gt2-tpt(20)
-02730   let box5a2=wagefica
-02740   let box5b1=tpt(20)
-02750   let box5b2=taxfica
-02760   let box5c1=gt3
-02770   let box5c2=mcwh
-02780   let box5d=wagefica+taxfica+mcwh
-02790   let box6=box3+box5d ! total taxes before adj
-02800   let box7h=box7a+box7b+box7d+box7e+box7f+box7g ! total adjustments
-02810   let box8=box6-box7h ! total due after adjustments
-02820   let box9=tqm14 ! eic
-02830   let box10=box8-box9 ! total taxes after eic
-02850   let box12=box10-box11 ! blance due
-02860   if box10-box11<0 then let box13=abs(box10-box11) : let box12=0 else let box13=0 ! overpayment if any
-02870   let box15d=box15a+box15b+box15c ! total deposits for quarter
+02690   box2=gt1
+02700   box3=tqm1
+02710   box4=0 ! ( unused )
+02720   box5a1=gt2-tpt(20)
+02730   box5a2=wagefica
+02740   box5b1=tpt(20)
+02750   box5b2=taxfica
+02760   box5c1=gt3
+02770   box5c2=mcwh
+02780   box5d=wagefica+taxfica+mcwh
+02790   box6=box3+box5d ! total taxes before adj
+02800   box7h=box7a+box7b+box7d+box7e+box7f+box7g ! total adjustments
+02810   box8=box6-box7h ! total due after adjustments
+02820   box9=tqm14 ! eic
+02830   box10=box8-box9 ! total taxes after eic
+02850   box12=box10-box11 ! blance due
+02860   if box10-box11<0 then box13=abs(box10-box11) : box12=0 else box13=0 ! overpayment if any
+02870   box15d=box15a+box15b+box15c ! total deposits for quarter
 02880   return 
 02890 ! ______________________________________________________________________
 02900 LASER_941: ! 
@@ -310,86 +310,86 @@
 02970 ERTN: let fnerror(program$,err,line,act$,"xit")
 02980   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02990   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-03000   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+03000   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03010 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03020 ! /region
 03030 ! ______________________________________________________________________
 03040 OPEN_PRINTER: ! 
 03050   if file(20)=-1 then 
 03060     open #20: "Name="&env$('Q')&"\GLmstr\Pr941"&wsid$&".txt,Replace,RecL=5000",display,output 
-03070     print #20: 'Call Print.MyOrientation("Portrait")'
+03070     pr #20: 'Call Print.MyOrientation("Portrait")'
 03080   end if 
 03090   return 
 03100 ! ______________________________________________________________________
 03110 PRINT941: ! 
-03120   print #20: 'Call Print.MyFontSize(12)'
-03130   print #20: 'Call Print.addPicture("S:\acsGL\941.bmp",1,1)'
-03140   print #20: 'Call Print.MyFont("Courier New")'
+03120   pr #20: 'Call Print.MyFontSize(12)'
+03130   pr #20: 'Call Print.addPicture("S:\acsGL\941.bmp",1,1)'
+03140   pr #20: 'Call Print.MyFont("Courier New")'
 03150   for j=1 to 10
 03160     let x=val(b$(1)(j:j)) conv L3180 ! pull any spaces or non-numeric characters out of federal id#
 03170     goto L3190
-03180 L3180: let b$(1)(j:j)=""
-03190 L3190: if b$(1)(j:j)=" " then let b$(1)(j:j)=""
+03180 L3180: b$(1)(j:j)=""
+03190 L3190: if b$(1)(j:j)=" " then b$(1)(j:j)=""
 03200   next j
-03210   print #20: 'Call Print.MyFontSize(16)'
+03210   pr #20: 'Call Print.MyFontSize(16)'
 03220   let lyne=15 ! starting line of fed id
-03230   print #20: 'Call Print.AddText("'&b$(1)(1:1)&'",'&str$(47)&','&str$(lyne)&')'
-03240   print #20: 'Call Print.AddText("'&b$(1)(2:2)&'",'&str$(56)&','&str$(lyne)&')'
-03250   print #20: 'Call Print.AddText("'&b$(1)(3:3)&'",'&str$(70)&','&str$(lyne)&')'
-03260   print #20: 'Call Print.AddText("'&b$(1)(4:4)&'",'&str$(79)&','&str$(lyne)&')'
-03270   print #20: 'Call Print.AddText("'&b$(1)(5:5)&'",'&str$(88)&','&str$(lyne)&')'
-03280   print #20: 'Call Print.AddText("'&b$(1)(6:6)&'",'&str$(97)&','&str$(lyne)&')'
-03290   print #20: 'Call Print.AddText("'&b$(1)(7:7)&'",'&str$(106)&','&str$(lyne)&')'
-03300   print #20: 'Call Print.AddText("'&b$(1)(8:8)&'",'&str$(115)&','&str$(lyne)&')'
-03310   print #20: 'Call Print.AddText("'&b$(1)(9:9)&'",'&str$(124)&','&str$(lyne)&')'
-03320   print #20: 'Call Print.MyFontSize(12)'
-03330   print #20: 'Call Print.AddText("'&trim$(a$(1))&'",'&str$(35)&','&str$(32)&')'
-03340   print #20: 'Call Print.AddText("'&trim$(a$(2))&'",'&str$(35)&','&str$(39)&')'
-03350   let csz$=a$(3): gosub CSZ
-03360   print #20: 'Call Print.AddText("'&trim$(city$)&'",'&str$(35)&','&str$(48)&')'
-03370   print #20: 'Call Print.AddText("'&trim$(state$)&'",'&str$(93)&','&str$(48)&')'
-03380   print #20: 'Call Print.AddText("'&trim$(zip$)&'",'&str$(108)&','&str$(48)&')'
+03230   pr #20: 'Call Print.AddText("'&b$(1)(1:1)&'",'&str$(47)&','&str$(lyne)&')'
+03240   pr #20: 'Call Print.AddText("'&b$(1)(2:2)&'",'&str$(56)&','&str$(lyne)&')'
+03250   pr #20: 'Call Print.AddText("'&b$(1)(3:3)&'",'&str$(70)&','&str$(lyne)&')'
+03260   pr #20: 'Call Print.AddText("'&b$(1)(4:4)&'",'&str$(79)&','&str$(lyne)&')'
+03270   pr #20: 'Call Print.AddText("'&b$(1)(5:5)&'",'&str$(88)&','&str$(lyne)&')'
+03280   pr #20: 'Call Print.AddText("'&b$(1)(6:6)&'",'&str$(97)&','&str$(lyne)&')'
+03290   pr #20: 'Call Print.AddText("'&b$(1)(7:7)&'",'&str$(106)&','&str$(lyne)&')'
+03300   pr #20: 'Call Print.AddText("'&b$(1)(8:8)&'",'&str$(115)&','&str$(lyne)&')'
+03310   pr #20: 'Call Print.AddText("'&b$(1)(9:9)&'",'&str$(124)&','&str$(lyne)&')'
+03320   pr #20: 'Call Print.MyFontSize(12)'
+03330   pr #20: 'Call Print.AddText("'&trim$(a$(1))&'",'&str$(35)&','&str$(32)&')'
+03340   pr #20: 'Call Print.AddText("'&trim$(a$(2))&'",'&str$(35)&','&str$(39)&')'
+03350   csz$=a$(3): gosub CSZ
+03360   pr #20: 'Call Print.AddText("'&trim$(city$)&'",'&str$(35)&','&str$(48)&')'
+03370   pr #20: 'Call Print.AddText("'&trim$(state$)&'",'&str$(93)&','&str$(48)&')'
+03380   pr #20: 'Call Print.AddText("'&trim$(zip$)&'",'&str$(108)&','&str$(48)&')'
 03390   if qtr=1 then let quarter=29 ! 1st quarter
 03400   if qtr=2 then let quarter=35 ! 2nd quarter
 03410   if qtr=3 then let quarter=41 ! 3rd quarter
 03420   if qtr=4 then let quarter=47 ! 4rd quarter
-03430   print #20: 'Call Print.AddText("X",'&str$(143)&','&str$(quarter)&')'
+03430   pr #20: 'Call Print.AddText("X",'&str$(143)&','&str$(quarter)&')'
 03440   let tab1=63: let tab2=113: let tab3=160 ! WAS 62,112,159  ! 76,126,173 WORKED WHEN TO FAR RIGHT
-03450   print #20: 'Call Print.AddText("'&cnvrt$("pic(zzzzzzzzzzzzzz)",box1)&'",'&str$(tab3)&','&str$(72)&')'
-03460   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box2)&'",'&str$(tab3)&','&str$(80)&')'
-03470   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box3)&'",'&str$(tab3)&','&str$(87)&')'
-03480 ! Print #20: 'Call Print.AddText("'&CNVRT$("pic(-,---,---.##)",BOX4)&'",'&STR$(TAB3)&','&STR$(90)&')'
-03490   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5a1)&'",'&str$(tab1)&','&str$(108)&')'
-03500   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5a2)&'",'&str$(tab2)&','&str$(108)&')'
-03510   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5b1)&'",'&str$(tab1)&','&str$(116)&')'
-03520   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5b2)&'",'&str$(tab2)&','&str$(116)&')'
-03530   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5c1)&'",'&str$(tab1)&','&str$(123)&')'
-03540   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5c2)&'",'&str$(tab2)&','&str$(123)&')'
-03550   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5d)&'",'&str$(tab3)&','&str$(131)&')'
-03560   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box6)&'",'&str$(tab3)&','&str$(138)&')'
-03570   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7a)&'",'&str$(tab2)&','&str$(150)&')'
-03580   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7b)&'",'&str$(tab2)&','&str$(158)&')'
-03590   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7c)&'",'&str$(tab2)&','&str$(165)&')'
-03600   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7d)&'",'&str$(tab2)&','&str$(172)&')'
-03610   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7e)&'",'&str$(tab2)&','&str$(180)&')'
-03620   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7f)&'",'&str$(tab2)&','&str$(187)&')'
-03630   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7g)&'",'&str$(tab2)&','&str$(194)&')'
-03640   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7h)&'",'&str$(tab3)&','&str$(202)&')'
-03650   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box8)&'",'&str$(tab3)&','&str$(209)&')'
-03660   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box9)&'",'&str$(tab3)&','&str$(216)&')'
-03670   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box10)&'",'&str$(tab3)&','&str$(224)&')'
-03680   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box11)&'",'&str$(tab3)&','&str$(232)&')'
-03690   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box12)&'",'&str$(tab3)&','&str$(238)&')'
-03700   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box13)&'",'&str$(tab2)&','&str$(247)&')'
+03450   pr #20: 'Call Print.AddText("'&cnvrt$("pic(zzzzzzzzzzzzzz)",box1)&'",'&str$(tab3)&','&str$(72)&')'
+03460   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box2)&'",'&str$(tab3)&','&str$(80)&')'
+03470   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box3)&'",'&str$(tab3)&','&str$(87)&')'
+03480 ! pr #20: 'Call Print.AddText("'&CNVRT$("pic(-,---,---.##)",BOX4)&'",'&STR$(TAB3)&','&STR$(90)&')'
+03490   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5a1)&'",'&str$(tab1)&','&str$(108)&')'
+03500   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5a2)&'",'&str$(tab2)&','&str$(108)&')'
+03510   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5b1)&'",'&str$(tab1)&','&str$(116)&')'
+03520   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5b2)&'",'&str$(tab2)&','&str$(116)&')'
+03530   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5c1)&'",'&str$(tab1)&','&str$(123)&')'
+03540   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5c2)&'",'&str$(tab2)&','&str$(123)&')'
+03550   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box5d)&'",'&str$(tab3)&','&str$(131)&')'
+03560   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box6)&'",'&str$(tab3)&','&str$(138)&')'
+03570   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7a)&'",'&str$(tab2)&','&str$(150)&')'
+03580   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7b)&'",'&str$(tab2)&','&str$(158)&')'
+03590   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7c)&'",'&str$(tab2)&','&str$(165)&')'
+03600   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7d)&'",'&str$(tab2)&','&str$(172)&')'
+03610   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7e)&'",'&str$(tab2)&','&str$(180)&')'
+03620   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7f)&'",'&str$(tab2)&','&str$(187)&')'
+03630   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7g)&'",'&str$(tab2)&','&str$(194)&')'
+03640   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box7h)&'",'&str$(tab3)&','&str$(202)&')'
+03650   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box8)&'",'&str$(tab3)&','&str$(209)&')'
+03660   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box9)&'",'&str$(tab3)&','&str$(216)&')'
+03670   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box10)&'",'&str$(tab3)&','&str$(224)&')'
+03680   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box11)&'",'&str$(tab3)&','&str$(232)&')'
+03690   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box12)&'",'&str$(tab3)&','&str$(238)&')'
+03700   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box13)&'",'&str$(tab2)&','&str$(247)&')'
 03710   let fnpa_newpage 
-03720   print #20: 'Call Print.addPicture("S:\acsGL\941-back.bmp",1,1)'
-03730   print #20: 'Call Print.AddText("'&trim$(state$(1:1))&'",'&str$(15)&','&str$(33)&')'
-03740   print #20: 'Call Print.AddText("'&trim$(state$(2:2))&'",'&str$(21)&','&str$(33)&')'
+03720   pr #20: 'Call Print.addPicture("S:\acsGL\941-back.bmp",1,1)'
+03730   pr #20: 'Call Print.AddText("'&trim$(state$(1:1))&'",'&str$(15)&','&str$(33)&')'
+03740   pr #20: 'Call Print.AddText("'&trim$(state$(2:2))&'",'&str$(21)&','&str$(33)&')'
 03750   let tab4=75
-03760   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box15a)&'",'&str$(tab4)&','&str$(61)&')'
-03770   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box15b)&'",'&str$(tab4)&','&str$(68)&')'
-03780   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box15c)&'",'&str$(tab4)&','&str$(74)&')'
-03790   print #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box15a+box15b+box15c)&'",'&str$(tab4)&','&str$(82)&')'
+03760   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box15a)&'",'&str$(tab4)&','&str$(61)&')'
+03770   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box15b)&'",'&str$(tab4)&','&str$(68)&')'
+03780   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box15c)&'",'&str$(tab4)&','&str$(74)&')'
+03790   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box15a+box15b+box15c)&'",'&str$(tab4)&','&str$(82)&')'
 03800   return 
 03810 RELEASE_PRINT: ! 
 03820   close #2: ioerr L3830
@@ -399,17 +399,17 @@
 03870   return 
 03880 CSZ: ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
 03890 L3890: let p1=pos(csz$,".",1)
-03900   if p1>0 then let csz$(p1:p1)=" ": let p2=p1: goto L3890
-03910 ! IF P2>0 AND CSZ$(P2+1:P2+1)=" " THEN LET CSZ$(P2+1:P2+1)="" ! dump any extra spaces
+03900   if p1>0 then csz$(p1:p1)=" ": let p2=p1: goto L3890
+03910 ! IF P2>0 AND CSZ$(P2+1:P2+1)=" " THEN cSZ$(P2+1:P2+1)="" ! dump any extra spaces
 03920   let p2=0
 03930 L3930: let p1=pos(csz$,",",1)
-03940   if p1>0 then let csz$(p1:p1)=" ": let p2=p1: goto L3930
-03950 ! IF P2>0 AND CSZ$(P2+1:P2+1)=" " THEN LET CSZ$(P2+1:P2+1)="" ! dump any extra spaces
+03940   if p1>0 then csz$(p1:p1)=" ": let p2=p1: goto L3930
+03950 ! IF P2>0 AND CSZ$(P2+1:P2+1)=" " THEN cSZ$(P2+1:P2+1)="" ! dump any extra spaces
 03960 L3960: let p1=pos(rtrm$(csz$),"  ",1)
-03970   if p1>0 then let csz$(p1+1:p1+1)="" : goto L3960
-03980   let csz$=ltrm$(rtrm$(csz$)): let p1=pos(csz$," ",-1)
+03970   if p1>0 then csz$(p1+1:p1+1)="" : goto L3960
+03980   csz$=ltrm$(rtrm$(csz$)): let p1=pos(csz$," ",-1)
 03990   let x$=csz$(p1+1:len(csz$)): let zip$=ltrm$(rtrm$(zip$))
 03992   let zip$=x$(1:5)
 04000   let p2=pos(csz$(1:p1-1)," ",-1) : let state$=csz$(p2+1:p1-1)(1:2) : let state$=ltrm$(rtrm$(state$))
-04010   let city$=csz$(1:p2-1)(1:15): let city$=ltrm$(rtrm$(city$))
+04010   city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 04020   return 

@@ -74,11 +74,11 @@
 00740 L740: let inp(7)=inp(7)+h(6)
 00750   goto L600
 00760 ! ______________________________________________________________________
-00770 L770: print newpage
+00770 L770: pr newpage
 00780   let win=101
 00790   let fnopenwin(win,10,20,14,59,cap$)
-00800   print #win,fields "4,2,C 16,N": "Employee Number:"
-00810   print fields "15,35,c 09,B,5": "Done (F5)"
+00800   pr #win,fields "4,2,C 16,N": "Employee Number:"
+00810   pr fields "15,35,c 09,B,5": "Done (F5)"
 00820 L820: input #win,fields "4,21,N 8,UT,N": eno conv L820
 00830 L830: if cmdkey=5 or eno=0 then goto TOTALSCREEN
 00840 L840: if eno=0 then goto L650
@@ -89,7 +89,7 @@
 00890   if r><0 then goto L910
 00900   if eno=eno2 then goto L920
 00910 L910: let tgp=0
-00920 L920: if s9=0 then let adr=ta(1)
+00920 L920: if s9=0 then adr=ta(1)
 00930 L930: read #2,using L940,rec=adr: dep,mat tdet,nta
 00940 L940: form pos 9,n 3,pos 58,13*pd 4.2,pos 468,pd 3
 00950   if s9=1 or r=1 then goto L970
@@ -108,31 +108,31 @@
 01080   for j=1 to 10
 01090     let inp(j+7)=inp(j+7)+tdet(j+3)
 01100   next j
-01110 L1110: print newpage
+01110 L1110: pr newpage
 01120   let win=101
 01130   let fnopenwin(win,2,7,22,74,cap$)
-01140   print #win,fields "04,02,Cr 21,N": "Employee Number:" !:
-        print #win,fields "04,24,C 08,N": ltrm$(en$)
-01150   print #win,fields "05,02,Cr 21,N": "Employee Name:" !:
-        print #win,fields "05,24,C 30,N": rtrm$(em$)
-01160   print #win,fields "06,02,Cr 21,N": "Department Number:" !:
-        print #win,fields "06,24,C 03,N": str$(dep)
-01170   print #win,fields mat iolabel1$: mat label1$
-01180   print #win,fields "15,36,Cr 29,N": std$
-01190   print #win,fields "16,36,Cr 29,N": "Make Changes Permanent (Y/N):"
-01200   print #win,fields mat io1$: mat inp,tdet(2),tdet(3)
-01210   print fields "23,22,C 09,B,1": "Next (F1)"
-01220   print fields "23,32,C 25,B,5": "Cancel (no transfer) (F5)"
+01140   pr #win,fields "04,02,Cr 21,N": "Employee Number:" !:
+        pr #win,fields "04,24,C 08,N": ltrm$(en$)
+01150   pr #win,fields "05,02,Cr 21,N": "Employee Name:" !:
+        pr #win,fields "05,24,C 30,N": rtrm$(em$)
+01160   pr #win,fields "06,02,Cr 21,N": "Department Number:" !:
+        pr #win,fields "06,24,C 03,N": str$(dep)
+01170   pr #win,fields mat iolabel1$: mat label1$
+01180   pr #win,fields "15,36,Cr 29,N": std$
+01190   pr #win,fields "16,36,Cr 29,N": "Make Changes Permanent (Y/N):"
+01200   pr #win,fields mat io1$: mat inp,tdet(2),tdet(3)
+01210   pr fields "23,22,C 09,B,1": "Next (F1)"
+01220   pr fields "23,32,C 25,B,5": "Cancel (no transfer) (F5)"
 01230 L1230: input #win,fields mat io1$: mat inp,mat hr,mat chg$ conv CONV1
-01240   if ce>0 then let io1$(ce)(ce1:ce2)="U": let ce=0
-01250   if cmdkey>0 then goto L1320 else let ce=curfld
-01260 L1260: let ce=ce+1: if ce>udim(io1$) then let ce=1
+01240   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+01250   if cmdkey>0 then goto L1320 else ce=curfld
+01260 L1260: ce=ce+1: if ce>udim(io1$) then ce=1
 01270 L1270: let io1$(ce)=rtrm$(io1$(ce)) !:
-        let ce1=pos(io1$(ce),"U",1) : if ce1=0 then goto L1260
-01280   let ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L1230
+        ce1=pos(io1$(ce),"U",1) : if ce1=0 then goto L1260
+01280   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L1230
 01290 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
-01300   let ce=cnt+1
-01310 ERR1: print fields "24,78,C 1": bell : goto L1270
+01300   ce=cnt+1
+01310 ERR1: pr fields "24,78,C 1": bell : goto L1270
 01320 L1320: if cmdkey=5 then goto XIT
 01330   if chg$(1)="Y" and s9=1 then goto L2590
 01340   if chg$(1)="Y" then goto L1630
@@ -147,12 +147,12 @@
 01430 L1430: let gpd=0
 01440   if em8><-2 then goto L1490
 01450   if inp(3)=0 then goto L1490
-01460   print fields "5,40,c 38": "Not Eligable for Sick Leave"
+01460   pr fields "5,40,c 38": "Not Eligable for Sick Leave"
 01470   goto L1230
 01480 ! ______________________________________________________________________
 01490 L1490: if em9><-2 then goto L1540
 01500   if inp(4)=0 then goto L1540
-01510   print fields "6,40,c 38": "Not Eligible for Vacation"
+01510   pr fields "6,40,c 38": "Not Eligible for Vacation"
 01520   goto L1230
 01530 ! ______________________________________________________________________
 01540 L1540: for j=1 to 5
@@ -164,7 +164,7 @@
 01600 L1600: form pos 1,n 8,n 3,5*pd 4.2,15*pd 5.2,2*pd 4.2,pd 3
 01610   mat tinp=tinp+inp
 01620   let tgp=tgp+gpd
-01630 L1630: let adr=nta
+01630 L1630: adr=nta
 01640   if adr>0 then goto L930
 01650   rewrite #1,using L1660,key=en$: tgp nokey L1700
 01660 L1660: form pos 168,pd 5.2
@@ -179,29 +179,29 @@
 01750   goto L830
 01760 ! ______________________________________________________________________
 01770 TOTALSCREEN: ! 
-01780   print newpage
+01780   pr newpage
 01790   let win=101
 01800   let fnopenwin(win,2,7,22,74,cap$)
 01810   close #3: 
 01820   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&str$(cno),internal,outin,relative 
 01830   let label1$(20)=" "
 01840   let label1$(21)=" "
-01850   print #win,fields "04,02,Cr 34,N": "Total or Employee Numbers Entered:" !:
-        print #win,fields "04,37,C 10,N": str$(teno)
-01860   print #win,fields "05,02,Cr 34,N": "Number of Employee Entered:" !:
-        print #win,fields "05,37,C 10,N": str$(ent1)
-01870   print #win,fields mat iolabel1$: mat label1$
-01880   print #win,fields mat io1b$: mat tinp
+01850   pr #win,fields "04,02,Cr 34,N": "Total or Employee Numbers Entered:" !:
+        pr #win,fields "04,37,C 10,N": str$(teno)
+01860   pr #win,fields "05,02,Cr 34,N": "Number of Employee Entered:" !:
+        pr #win,fields "05,37,C 10,N": str$(ent1)
+01870   pr #win,fields mat iolabel1$: mat label1$
+01880   pr #win,fields mat io1b$: mat tinp
 01890   let wrd2$(1)="1. Make Corrections"
-01900   let wrd2$(2)="2. Print Proof Listing"
+01900   let wrd2$(2)="2. pr Proof Listing"
 01910   let wrd2$(3)="3. Calculate Pay"
-01920   let wrd2$(4)="4. Print Daily Employee Hours"
+01920   let wrd2$(4)="4. pr Daily Employee Hours"
 01930   for j=1 to udim(wrd2$)
 01940     let io2$(j)=str$(j+14)&",38,C 29,N"
 01950   next j
-01960   print fields "23,27,C 25,B,5": "Cancel (no transfer) (F5)"
+01960   pr fields "23,27,C 25,B,5": "Cancel (no transfer) (F5)"
 01970 L1970: rinput #win,select mat io2$,attr "H": mat wrd2$
-01980   let cor=curfld
+01980   cor=curfld
 01990   if cmdkey=5 then goto XIT
 02000   let label1$(20)="Reg Hourly Rate"
 02010   let label1$(21)="O/T Hourly Rate"
@@ -209,7 +209,7 @@
 02030 ! ______________________________________________________________________
 02040 L2040: let r=0
 02050   let pc=0
-02060   print newpage
+02060   pr newpage
 02070   let fnwait(101,cap$,message$,1)
 02080   let fnopenprn(cp,58,220,process)
 02090 L2090: let r=r+1
@@ -228,20 +228,20 @@
 02220   goto L2090
 02230 ! ______________________________________________________________________
 02240 L2240: let pc2=pc2+1
-02250   if pc2<3 then goto L2270 else print #255: newpage
+02250   if pc2<3 then goto L2270 else pr #255: newpage
 02260   let pc2=1
-02270 L2270: print #255,using L2280: " "
+02270 L2270: pr #255,using L2280: " "
 02280 L2280: form c 1,skip 4
-02290   print #255,using f1$: "Record #     ",pr(1,23),pr(2,23),pr(3,23),pr(4,23),pr(5,23),pr(6,23),pr(7,23),pr(8,23),pr(9,23)
-02300   print #255,using f1$: "Employee #",pr(1,1),pr(2,1),pr(3,1),pr(4,1),pr(5,1),pr(6,1),pr(7,1),pr(8,1),pr(9,1)
-02310   print #255,using f1$: "Department #",pr(1,2),pr(2,2),pr(3,2),pr(4,2),pr(5,2),pr(6,2),pr(7,2),pr(8,2),pr(9,2)
+02290   pr #255,using f1$: "Record #     ",pr(1,23),pr(2,23),pr(3,23),pr(4,23),pr(5,23),pr(6,23),pr(7,23),pr(8,23),pr(9,23)
+02300   pr #255,using f1$: "Employee #",pr(1,1),pr(2,1),pr(3,1),pr(4,1),pr(5,1),pr(6,1),pr(7,1),pr(8,1),pr(9,1)
+02310   pr #255,using f1$: "Department #",pr(1,2),pr(2,2),pr(3,2),pr(4,2),pr(5,2),pr(6,2),pr(7,2),pr(8,2),pr(9,2)
 02320   for j=1 to 19
-02330     print #255,using f2$: label1$(j),pr(1,j+2),pr(2,j+2),pr(3,j+2),pr(4,j+2),pr(5,j+2),pr(6,j+2),pr(7,j+2),pr(8,j+2),pr(9,j+2)
+02330     pr #255,using f2$: label1$(j),pr(1,j+2),pr(2,j+2),pr(3,j+2),pr(4,j+2),pr(5,j+2),pr(6,j+2),pr(7,j+2),pr(8,j+2),pr(9,j+2)
 02340   next j
-02350   print #255,using f2$: "Dept Gross Pay ",pr(1,22),pr(2,22),pr(3,22),pr(4,22),pr(5,22),pr(6,22),pr(7,22),pr(8,22),pr(9,22)
-02360   print #255,using f2$: "Reg Hourly Rate",pr(1,24),pr(2,24),pr(3,24),pr(4,24),pr(5,24),pr(6,24),pr(7,24),pr(8,24),pr(9,24)
-02370   print #255,using f2$: "O/T Hourly Rate",pr(1,25),pr(2,25),pr(3,25),pr(4,25),pr(5,25),pr(6,25),pr(7,25),pr(8,25),pr(9,25)
-02380   print #255,using L2280: " "
+02350   pr #255,using f2$: "Dept Gross Pay ",pr(1,22),pr(2,22),pr(3,22),pr(4,22),pr(5,22),pr(6,22),pr(7,22),pr(8,22),pr(9,22)
+02360   pr #255,using f2$: "Reg Hourly Rate",pr(1,24),pr(2,24),pr(3,24),pr(4,24),pr(5,24),pr(6,24),pr(7,24),pr(8,24),pr(9,24)
+02370   pr #255,using f2$: "O/T Hourly Rate",pr(1,25),pr(2,25),pr(3,25),pr(4,25),pr(5,25),pr(6,25),pr(7,25),pr(8,25),pr(9,25)
+02380   pr #255,using L2280: " "
 02390   mat pr=(0)
 02400   let pc=0
 02410   return 
@@ -250,8 +250,8 @@
 02440 L2440: let fncloseprn
 02450 L2450: let win=101
 02460   let fnopenwin(win,10,20,14,59,cap$)
-02470   print #win,fields "4,2,C 24,N": "Record Number to Change:"
-02480   print fields "15,35,C 09,B,5": "Done (F5)"
+02470   pr #win,fields "4,2,C 24,N": "Record Number to Change:"
+02480   pr fields "15,35,C 09,B,5": "Done (F5)"
 02490 L2490: input #win,fields "4,27,N 5,UT,N": r conv L2490
 02500   close #win: ioerr L2510
 02510 L2510: if cmdkey=5 or r=0 then goto L2700
@@ -273,7 +273,7 @@
 02670   if chg$(1)><"Y" then rewrite #1,using L1660,key=en$: tgp
 02680   goto L2450
 02690 ! ______________________________________________________________________
-02700 L2700: print newpage
+02700 L2700: pr newpage
 02710   let msgline$(1)="Add another Employee? (Y/N)" !:
         let msgline$(2)=""
 02720   let fnoldmsgbox(mat response$,cap$,mat msgline$,2)
@@ -285,7 +285,7 @@
 02780   let eno=dep=gpd=0: mat inp=(0): mat hr=(0)
 02790   goto L770
 02800 ! ______________________________________________________________________
-02810 L2810: print newpage
+02810 L2810: pr newpage
 02820   close #1: 
 02830   close #2: 
 02840   close #3: 
@@ -315,11 +315,11 @@
 03080   execute "SORT Sort"&wsid$&".tmp -n"
 03090   return 
 03100 ! ______________________________________________________________________
-03110 L3110: print newpage
+03110 L3110: pr newpage
 03120   let win=101
 03130   let fnopenwin(win,10,14,14,65,cap$)
-03140   print #win,fields "4,02,C 41,N": "Employee Number to Print (blank for all):"
-03150   print fields "15,34,C 11,B,5": "Cancel (F5)"
+03140   pr #win,fields "4,02,C 41,N": "Employee Number to pr (blank for all):"
+03150   pr fields "15,34,C 11,B,5": "Cancel (F5)"
 03160 L3160: input #win,fields "4,44,Nz 8,UT,N": en1 conv L3160
 03170   if cmdkey=5 then goto TOTALSCREEN
 03180   let fnopenprn(cp,58,220,process)
@@ -339,9 +339,9 @@
 03320 L3320: let en$=lpad$(str$(h(1)),8)
 03330   let em$=""
 03340   read #1,using L870,key=en$: em$ nokey L3370
-03350   print #255,using L3360: em$
+03350   pr #255,using L3360: em$
 03360 L3360: form pos 1,c 40,skip 1
-03370 L3370: print #255,using L3380: h(1),dt1,jn$,h(4),h(5) pageoflow PGOF
+03370 L3370: pr #255,using L3380: h(1),dt1,jn$,h(4),h(5) pageoflow PGOF
 03380 L3380: form pos 1,n 8,pic(zz####/##/##bb),c 6,2*n 8.2,skip 1
 03390   let eno=en2=h(1)
 03400   let dt2=dt1
@@ -357,28 +357,28 @@
 03500 ! ______________________________________________________________________
 03510 T1: ! 
 03520   if eno=0 then goto L3570
-03530   print #255,using L3550: ""," _______" ," _______"
-03540   print #255,using L3550: "Daily Total",t1,t2
+03530   pr #255,using L3550: ""," _______" ," _______"
+03540   pr #255,using L3550: "Daily Total",t1,t2
 03550 L3550: form pos 9,c 20,2*g 8.2,skip 1
-03560   print #255: 
+03560   pr #255: 
 03570 L3570: let t1=t2=0
 03580   return 
 03590 ! ______________________________________________________________________
 03600 T2: ! 
 03610   if eno=0 then goto L3650
-03620   print #255,using L3550: ""," _______" ," _______"
-03630   print #255,using L3550: "Employee Total",t3,t4
-03640   print #255: 
+03620   pr #255,using L3550: ""," _______" ," _______"
+03630   pr #255,using L3550: "Employee Total",t3,t4
+03640   pr #255: 
 03650 L3650: let t3=t4=0
 03660   return 
 03670 ! ______________________________________________________________________
 03680 PGOF: ! 
-03690   print #255: newpage
+03690   pr #255: newpage
 03700   gosub HDR
 03710   continue 
 03720 ! ______________________________________________________________________
 03730 HDR: ! 
-03740   print #255,using L3750: "Employee Time Breakdown"
+03740   pr #255,using L3750: "Employee Time Breakdown"
 03750 L3750: form pos 17,c 50,skip 1
 03760   return 
 03770 ! ______________________________________________________________________
@@ -392,7 +392,7 @@
 03850 ERTN: let fnerror(program$,err,line,act$,"xit")
 03860   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03870   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-03880   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+03880   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03890 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03900 ! /region
 03910 ! ______________________________________________________________________

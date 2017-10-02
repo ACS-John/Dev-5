@@ -21,5 +21,5 @@
 00200   execute "Copy "&env$('Q')&"\CLmstr\X.H"&str$(cno)&' '&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
 00210   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno)&" 1 8 Replace DupKeys"
 00220   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\PayIdx2.H"&str$(cno)&" 9 30 Replace DupKeys"
-00230   print "COMPLETED CONVERTING PAYEE FILE FOR COMPANY #: "&str$(cno)
+00230   pr "COMPLETED CONVERTING PAYEE FILE FOR COMPANY #: "&str$(cno)
 00240 XIT: let fnxit

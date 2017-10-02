@@ -5,16 +5,16 @@
 00040   dim rm$*60,ra(2),newra(2)
 00045   library 'S:\Core\Library': fncno
 00050 ! ______________________________________________________________________
-00060   print newpage
+00060   pr newpage
 00070   let fncno(cno)
 00080 ! 
 00090 ! ** phase 1 **
-00100   print " *** Phase 1 ***" !:
-        print "convert "&env$('Q')&"\UBmstr\Note1.h"&str$(cno)&" to version 1"
+00100   pr " *** Phase 1 ***" !:
+        pr "convert "&env$('Q')&"\UBmstr\Note1.h"&str$(cno)&" to version 1"
 00110   open #note1=1: "Name="&env$('Q')&"\UBmstr\Note1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&str$(cno),internal,outin,keyed 
 00120   if version(note1)=>1 then !:
           close #note1: !:
-          print env$('Q')&"\UBmstr\Note1.h"&str$(cno)&" is already at least version 1" !:
+          pr env$('Q')&"\UBmstr\Note1.h"&str$(cno)&" is already at least version 1" !:
           goto EOPHASE1
 00130   open #work=2: "Name="&env$('Temp')&"\Work."&session$&",Replace,RecL=16",internal,output 
 00140 READ_NOTE1_PHASE1: ! 
@@ -33,18 +33,18 @@
 00270   open #note1=1: "Name="&env$('Q')&"\UBmstr\Note1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&str$(cno),internal,outin,keyed 
 00280   let version(note1,1)
 00290   close #note1: 
-00300   print env$('Q')&"\UBmstr\Note1.h"&str$(cno)&" converted successfully to version 1."
+00300   pr env$('Q')&"\UBmstr\Note1.h"&str$(cno)&" converted successfully to version 1."
 00310   goto EOPHASE1
 00320 ! ______________________________________________________________________
 00330 EOPHASE1: ! 
-00340   print " *** Phase 2 ***" !:
-        print "convert "&env$('Q')&"\UBmstr\Note2.h"&str$(cno)&" to version 1"
+00340   pr " *** Phase 2 ***" !:
+        pr "convert "&env$('Q')&"\UBmstr\Note2.h"&str$(cno)&" to version 1"
 00350   open #note1=3: "Name="&env$('Q')&"\UBmstr\Note1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&str$(cno),internal,outin,keyed 
 00360   open #note2=4: "Name="&env$('Q')&"\UBmstr\Note2.h"&str$(cno),internal,outin,relative 
 00370   if version(note2)=>1 then close #note2: !:
-          print env$('Q')&"\UBmstr\Note2.h"&str$(cno)&" is already at least version 1" !:
+          pr env$('Q')&"\UBmstr\Note2.h"&str$(cno)&" is already at least version 1" !:
           goto EOPHASE2
-00380   print "Initial Record Len of "&file$(note2)&" is "&str$(rln(note2))&"."
+00380   pr "Initial Record Len of "&file$(note2)&" is "&str$(rln(note2))&"."
 00400 READ_NOTE1_PHASE2: ! 
 00410   read #note1,using 'Form POS 1,C 10,2*PD 3': rk$,mat ra eof EO3
 00420   let r32=ra(1)
@@ -60,7 +60,7 @@
 00520   let version(note2,1)
 00530   close #note1: 
 00540   close #note2: 
-00550   print env$('Q')&"\UBmstr\Note2.h"&str$(cno)&" converted successfully to version 1"
+00550   pr env$('Q')&"\UBmstr\Note2.h"&str$(cno)&" converted successfully to version 1"
 00560   goto EOPHASE2
 00570 ! ______________________________________________________________________
 00580 EOPHASE2: ! 

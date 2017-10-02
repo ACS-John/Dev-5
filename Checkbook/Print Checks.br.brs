@@ -1,4 +1,4 @@
-10010 ! print checks
+10010 ! pr checks
 10020 ! ______________________________________________________________________
 10030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fncombof,fnfra,fnmsgbox,fnbutton,fnopt,fncmdkey,fnaddpayee,fnqgl,fnagl$,fnrgl$,fncreg_read,fncreg_write
 10040   on error goto ERTN
@@ -37,32 +37,32 @@
 10390   let t1(1)=bal
 10400   let upi=t1(5)
 10410   let t1(3)=t1(1)-t1(2)
-10420   let ckn=val(lcn$)+1 conv ignore
-10430   let bn$=rtrm$(bn$)
+10420   ckn=val(lcn$)+1 conv ignore
+10430   bn$=rtrm$(bn$)
 10440 MAIN_QUESTIONS: ! 
 10450   if fn_scr_main_questions=5 then goto XIT
 10460 ! 
 10470   let tac=0
 10480   if ti1=3 and pri=1 then let h_vf1=23 else let h_vf1=h_paymstr1
 10490   if ti1=1 then let h_vf1=13
-10500   let allign=0
+10500   allign=0
 10510   if ti1=3 then goto REPRINT_CHECKS
 10520   open #company=15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
 10530   rewrite #company,using 'Form POS 152,N 2',rec=1: bankcode
 10540   close #company: 
 10550   read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey MAIN_QUESTIONS
 10560   mat in3$=("")
-10570   let bn$=rtrm$(bn$)
+10570   bn$=rtrm$(bn$)
 10580   if ti1=1 or ti1=3 then goto CKOPTION1_CHECK_ENTRY
 10590   restore #h_paytrans,key>=lpad$(rtrm$(begvn$),8)&"            ": nokey MENU1
-10600   let amt=arec=x=y=0
+10600   amt=arec=x=y=0
 10610   mat amt=(0) : mat de$=("")
 10620 READ_4: ! 
 10630   read #h_paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,n 1,n 6,n 10.2,n 8',release: vn$,iv$,mat up$,upa,pcde,bc,ck$,dp,gde,pdate,disamt,ddate eof EOF_ROUTINE
 10640   let vn$=lpad$(rtrm$(vn$),8)
 10650   if rtrm$(vn$)="" then goto READ_4
 10660   if pcde=0 then goto READ_4
-10670   if bc=0 then let bc=bankcode ! if coded for payment with no bank code, pay from the  current bank account
+10670   if bc=0 then bc=bankcode ! if coded for payment with no bank code, pay from the  current bank account
 10680   if bc<>bankcode then goto READ_4
 10690   let lr4=rec(h_paytrans) ! what to do
 10700   if holdvn$=vn$ or rtrm$(holdvn$)="" then goto L1130 else gosub SUB_PRINT_CHECK
@@ -76,14 +76,14 @@
 10780     let iv$(x,y)=iv$(1:12)
 10790     let de$(x,y)=up$(4)(1:13) ! this one for printing from unpaid file
 10800   end if 
-10810   let amt(x,y)=amt(x,y)+upa
+10810   amt(x,y)=amt(x,y)+upa
 10820   let ivdate(x,y)=dp
 10830   let disamt(x,y)=disamt
-10840   let arec+=1
-10850   let arec(arec)=lr4
+10840   arec+=1
+10850   arec(arec)=lr4
 10860   let holdvn$=vn$
 10870   let hiv$=iv$
-10880   let amt=sum(amt)
+10880   amt=sum(amt)
 10890   let st1=1
 10900   goto READ_4
 10910 ! ______________________________________________________________________
@@ -91,7 +91,7 @@
 10930   let fn_cknum
 10940 ! if env$('client')="Washington Parrish" then let fnprocess(1) ! skip Atlantis screen
 10950   let fnopenprn(cp,42,220,process)
-10970   let ckn1=ckn
+10970   ckn1=ckn
 10980 !   on ckoption goto L1360,L1360 none L1360 ! L1390
 10990 ! L1360: ! 
 11000   if amt<=0 then goto L2420
@@ -109,12 +109,12 @@
 11150   next j
 11160   let idx=1
 11170   ! allign=3  !  remove allign routine alltogether   <-- that did not work.
-11180   if allign=3 then print #255: newpage : goto ALIGN_COMPLETED
-11190   print #255: newpage
+11180   if allign=3 then pr #255: newpage : goto ALIGN_COMPLETED
+11190   pr #255: newpage
 11200   let fncloseprn
 11210 ! if env$('client')="Washington Parrish" then let fnprocess(0)
 11220   let holdpayee$=""
-11230   if ti1=1 then let ckoption=1 : let allign=2 : goto L2300 ! skip the continue routine when entering and printing checks
+11230   if ti1=1 then ckoption=1 : allign=2 : goto L2300 ! skip the continue routine when entering and printing checks
 11240   if ~allign then 
 11250     if ckoption=1 or ckoption=3 then 
 11260       mat inl$(4)
@@ -126,12 +126,12 @@
 11320     if ckoption=1 or ckoption=3 then 
 11330       let inl$(2)="2. Continue with next check    "
 11340     else 
-11350       let inl$(2)="2. Print next check and Stop   "
+11350       let inl$(2)="2. pr next check and Stop   "
 11360     end if 
 11370     if ckoption=1 or ckoption=3 then 
 11380       let inl$(3)="3. Completed with checks"
 11390     else 
-11400       let inl$(3)="3. Print All remaining checks  "
+11400       let inl$(3)="3. pr All remaining checks  "
 11410     end if 
 11420   end if  ! ~allign
 11430 SCR_CKPRT7: ! 
@@ -158,7 +158,7 @@
 11640   if (ck=5 or ck=99) and ckoption=1 then let fn_write_ck_hist_1 : goto MENU1
 11650   if (ck=5 or cmdkey=99) then goto TRANS_TO_CK_HIST
 11660   for j=1 to 4
-11670     if resp$(j)(1:1)="T" then let allign=j : goto L2300
+11670     if resp$(j)(1:1)="T" then allign=j : goto L2300
 11680   next j
 11690 L2300: ! 
 11700   if ckoption=1 and allign=2 then let fn_write_ck_hist_1 ! write regular check history if not a reprint
@@ -169,7 +169,7 @@
 11750 ALIGN_REPR_SAME: ! 
 11760   if prenum=1 then 
 11770     write #trmstr1,using 'Form POS 1,N 2,N 1,G 8,g 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankcode,1,ckn,prdmmddyy,0,"","VOID",1,dp,1
-11780     let ckn=ckn+1
+11780     ckn=ckn+1
 11790     let tr$(1)=str$(ckn)
 11800   end if 
 11810   goto SUB_PRINT_CHECK
@@ -179,11 +179,11 @@
 11850   if allign=4 and prenum=1 then 
 11860     write #trmstr1,using 'Form POS 1,N 2,N 1,G 8,g 6,PD 10.2,C 8,C 35,N 1,N 6,N 1': bankcode,1,ckn,prdmmddyy,0,"","VOID",0,dp,1
 11870   end if 
-11880   let ckn=ckn+1
+11880   ckn=ckn+1
 11890 L2420: ! 
 11900   mat iv$=("") : mat de$=("")
 11910   mat amt=(0) : mat de$=("")
-11920   let amt=arec=x=y=0
+11920   amt=arec=x=y=0
 11930   let x=y=1
 11940   let st1=0
 11950   let holdvn$=vn$
@@ -210,7 +210,7 @@
 12170   let resp$(respc+=1)=item5$(2)
 12180   let fncmdset(41): let fnacs(sn$,0,mat resp$,ck)
 12190   if resp$(1)=item5$(1) then let ti2=1 else let ti2=2
-12200   let allign=0
+12200   allign=0
 12210   on ti2 goto MENU4,TRANS_TO_CK_HIST none MENU3
 12220 ! /r
 12250 MENU4: ! r: (Reprint Options)
@@ -228,7 +228,7 @@
 12370   let fnacs(sn$,0,mat resp$,ck)
 12380   if ck=5 then goto XIT
 12390   if resp$(1)=item4$(1) then let ti2=1 else let ti2=2
-12400   let begvn$=resp$(2)(1:8) ! beginning payee to start reprint
+12400   begvn$=resp$(2)(1:8) ! beginning payee to start reprint
 12410   on ti2 goto L3430,L3470
 12420 L3430: ! REPRINT ALL
 12430   restore #h_paytrans,key>="                    ": 
@@ -262,7 +262,7 @@
 12730 CKOPTION1_CHECK_ENTRY: ! r:
 12740   mat resp$=("")
 12750 CKOPTION1_CHECK_ENTRY_2: ! 
-12760   let ck=fn_scr_check_entry
+12760   ck=fn_scr_check_entry
 12770   if ck=5 then 
 12780     goto XIT
 12790   else if ck=20 or ck=21 then 
@@ -312,7 +312,7 @@
 13230 ! /r
 13240 PRINT_REGULAR_CHECKS: ! r:
 13250   let fn_cknum
-13260   let amt=arec=x=y=0
+13260   amt=arec=x=y=0
 13270   mat amt=(0) : mat de$=("")
 13280   if tac<>val(tr$(3)) then let fn_msg_allocations_off : goto CKOPTION1_CHECK_ENTRY_2 ! ALLOCATIONS NOT EQUAL
 13290   for j=1 to 30 ! kj was 10
@@ -321,10 +321,10 @@
 13320     if y=1 then let x=x+1
 13330     let de$(x,y)=in3$(j*5)(1:13)
 13340 L5460: ! 
-13350     let amt(x,y)=amt(x,y)+val(in3$(j*5-1))
+13350     amt(x,y)=amt(x,y)+val(in3$(j*5-1))
 13360     let hiv$=in3$(j*5)(1:15)
 13370   next j
-13380   let amt=val(tr$(3)) : let vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
+13380   amt=val(tr$(3)) : let vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
 13390   gosub SUB_PRINT_CHECK
 13400   mat holdresp$=("")
 13410   goto CKOPTION1_CHECK_ENTRY
@@ -332,7 +332,7 @@
 13430 ERTN: ! r:
 13432   let fnerror(program$,err,line,act$,"xit")
 13440   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-13450   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+13450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 13460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 13470 ! /r
 13480 REPRINT_CHECKS: ! r:
@@ -351,14 +351,14 @@
 13610   let lastckn=val(resp$(2)) : if lastckn=0 then let lastckn=firstckn
 13620   if lastckn>0 and lastckn<firstckn then goto REPRINT_CHECKS ! smaller lastckn
 13630 REPRINT_CHECK_LOOP_TOP: ! 
-13640   let check_ref$=cnvrt$("pic(ZZ)",bankcode)&str$(1)&cnvrt$("n 8",reprintckn)
+13640   check_ref$=cnvrt$("pic(ZZ)",bankcode)&str$(1)&cnvrt$("n 8",reprintckn)
 13650   read #trmstr1,using 'Form Pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey L7780
 13660 ! pr 'key=';check_ref$ : pause
 13670   let prdmmddyy=val(tr$(2)) ! use old check date
 13680   let vn$=lpad$(trim$(tr$(4)),8)
-13690   let amt=tr3 ! set amount for check
+13690   amt=tr3 ! set amount for check
 13700   mat amt=(0) : mat de$=("") : mat iv$=("") : let x=1: let y=0
-13710   let st1=0 : let holdvn$="        ": let amt=0
+13710   let st1=0 : let holdvn$="        ": amt=0
 13720   let vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
 13730   goto L7790
 13740 L7780: ! 
@@ -393,19 +393,19 @@
 14030     if x>15 then gosub SUB_PRINT_CHECK
 14040     let iv$(x,y)=cnvrt$("pic(zzzzzz)",allocdate) ! IV$(1:12)
 14050     let de$(x,y)=allocde$(1:13) ! this one for printing from unpaid file
-14060     let amt(x,y)=amt(x,y)+alloc
+14060     amt(x,y)=amt(x,y)+alloc
 14070     let ivdate(x,y)=0
 14080     let disamt(x,y)=0 ! already out of net check
 14090   loop 
 14100 L7910: ! 
 14110   let fnopenprn
-14120   let ckn1=reprintckn: let amt=tr3
+14120   ckn1=reprintckn: amt=tr3
 14130   if scc$="CSS" then let fn_portion_check   : let fn_portion_stub(1) : let fn_portion_stub(2)
 14140   if scc$="CSS" then let fn_portion_check   : let fn_portion_stub(1) : let fn_portion_stub(2)
 14150   if scc$="SCS" then let fn_portion_stub(1) : let fn_portion_check   : let fn_portion_stub(2)
 14160   if scc$="SSC" then let fn_portion_stub(1) : let fn_portion_stub(2) : let fn_portion_check
 14170   if scc$="SCC" then let fn_portion_stub(1) : let fn_portion_check    : let fn_portion_check
-14180   if lastckn>0 and reprintckn<lastckn then let reprintckn+=1 : print #255: newpage : goto REPRINT_CHECK_LOOP_TOP
+14180   if lastckn>0 and reprintckn<lastckn then let reprintckn+=1 : pr #255: newpage : goto REPRINT_CHECK_LOOP_TOP
 14190 L7970: ! 
 14200   let fncloseprn
 14210   if firstckn<>lastckn then goto XIT
@@ -489,9 +489,9 @@
 15450   goto SCE_L4650
 15460   SCE_L4640: ! 
 15470   let tr$(5)=resp$(2)(1:30)
-15480   let vn$=tr$(4)="": let b$(1)=tr$(5) ! payee name without vendor record
+15480   let vn$=tr$(4)="": b$(1)=tr$(5) ! payee name without vendor record
 15490   SCE_L4650: ! 
-15500   let ckn=val(resp$(33)) ! ck number
+15500   ckn=val(resp$(33)) ! ck number
 15510   let holdpayee$=resp$(2)
 15520   let prd=val(resp$(34)): ! date
 15530   let prdmmddyy=val(resp$(34)(5:6))*10000+val(resp$(34)(7:8))*100+val(resp$(34)(3:4)) ! convert date back to mmddyy format
@@ -551,7 +551,7 @@
 16070   if gde=1 then let gde=0 ! dont allow posting code of 1 from unpaid file
 16080   if upa=0 then goto WH_L3910
 16090   if dp=0 and ckpay=0 then goto WH_LOOP_TOP
-16100   if bc=0 then let bc=bankcode ! IF CODED FOR PAYMENT WITH NO BANK CODE, PAY FROM THE CURRENT BANK ACCOUNT
+16100   if bc=0 then bc=bankcode ! IF CODED FOR PAYMENT WITH NO BANK CODE, PAY FROM THE CURRENT BANK ACCOUNT
 16110   if bc<>bankcode then goto WH_LOOP_TOP
 16120   let iv$=rpad$(ltrm$(iv$),12)
 16130   read #ivpaid,using 'form pos 1,c 8,c 12,n 6,n 8',key=vn$&iv$,release: vn$ nokey WH_L3650
@@ -575,7 +575,7 @@
 16320   let hck=ck
 16330   WH_L3770: ! 
 16340   read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey WH_L3800
-16350   let bal=bal-upa
+16350   bal=bal-upa
 16360   rewrite #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2): bn$,bal,upi,ckpay nokey ignore ! WH_L3800
 16370   WH_L3800: ! form pos 1,n 2,n 1,g 8,g 6,g 10.2,c 8,c 35,n 1,n 6,n 1,2*pd 3
 16380   restore #h_unpdaloc,key>=lpad$(rtrm$(vn$),8)&lpad$(rtrm$(iv$),12): nokey WH_EO_UNPDALOC
@@ -615,24 +615,24 @@
 16720   ! ______________________________________________________________________
 16730   L2760: ! 
 16740   let eng$="***"
-16750   let amount(1)=int(dol*100+.500000001)
+16750   amount(1)=int(dol*100+.500000001)
 16760   for a0=2 to 10
-16770     let amount(a0)=int(amount(a0-1)/10+.000000001)
+16770     amount(a0)=int(amount(a0-1)/10+.000000001)
 16780   next a0
 16790   for a0=1 to 10
-16800     let amount(a0)=amount(a0)-amount(a0+1)*10
+16800     amount(a0)=amount(a0)-amount(a0+1)*10
 16810   next a0
 16820   if amount(11)+amount(10)+amount(9)=0 then goto L2880
-16830   let a0=9
+16830   a0=9
 16840   gosub ENGLISHDOLLAR_L3190
 16850   let eng$=rtrm$(eng$)&" Million"
 16860   L2880: if amount(8)+amount(7)+amount(6)=0 then goto L2920
-16870   let a0=6
+16870   a0=6
 16880   gosub ENGLISHDOLLAR_L3190
 16890   let eng$=rtrm$(eng$)&" Thousand"
 16900   L2920: ! 
 16910   if amount(5)+amount(4)+amount(3)=0 then goto L2950
-16920   let a0=3
+16920   a0=3
 16930   gosub ENGLISHDOLLAR_L3190
 16940   L2950: ! 
 16950   if dol>=1 then goto L2970
@@ -645,8 +645,8 @@
 17020   L3010: ! 
 17030   let eng$=rtrm$(eng$)&" and"
 17040   if amount(2)+amount(1)=0 then goto L3080
-17050   let amount(3)=0
-17060   let a0=1
+17050   amount(3)=0
+17060   a0=1
 17070   gosub ENGLISHDOLLAR_L3190
 17080   goto L3090
 17090   ! ______________________________________________________________________
@@ -673,7 +673,7 @@
 17300     if amount(a0+1)<2 then goto L3260
 17310     let eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)+18)
 17320     if amount(a0)=0 then goto ED_L3190_XIT
-17330     let amount(a0+1)=0
+17330     amount(a0+1)=0
 17340     L3260: let eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)*10+amount(a0))
 17350     ED_L3190_XIT: ! 
 17360   return  ! ENGLISHDOLLAR_L3190
@@ -694,7 +694,7 @@
 17510   restore #h_unpdaloc,key>=vn$&iv$: nokey DISCOUNTRETURN ! get the fund # from 1st g/l in the allocation file.
 17520   read #h_unpdaloc,using 'Form pos 1,c 20,N 3,N 6,N 3,PD 5.2,C 30': allockey$,mat agl,aamt,ade$
 17530   if trim$(allockey$(1:8))=trim$(vn$) and trim$(allockey$(9:20))=trim$(iv$) then let fundkey$=cnvrt$("pic(ZZZ)",agl(1)) else let fundkey$="   "
-17540   let apgl$=discountgl$=""
+17540   apgl$=discountgl$=""
 17550   read #glcontrol, using "Form pos 52,c 12,pos 64,c 12",key=fundkey$: apgl$,discountgl$ nokey MSGBOX6
 17560   L6410: ! 
 17570   write #h_unpdaloc,using 'Form pos 1,c 20,c 12,PD 5.2,C 30': vn$&iv$,discountgl$,-disamt,"Discount=$"&str$(disamt)
@@ -721,15 +721,15 @@
 17780   let tr3=val(tr$(3))
 17790   write #trmstr1,using 'Form POS 1,N 2,N 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1': bankcode,1,tr$(1),prdmmddyy,tr3,tr$(4),tr$(5),0,clr,1
 17800   read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey WCH1_AFTER_WRITE
-17810   let bn$=rtrm$(bn$)
-17820   let bal=bal-val(tr$(3)) conv ignore
+17810   bn$=rtrm$(bn$)
+17820   bal=bal-val(tr$(3)) conv ignore
 17830   rewrite #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2): bn$,bal,upi,ckn nokey WCH1_AFTER_WRITE
 17840   WCH1_AFTER_WRITE: ! LET K$=LPAD$(RTRM$(STR$(BANKCODE)),2)&LPAD$(STR$(1),1)&LPAD$(TR$(1),8)
 17850   for j=1 to 30
 17860     if val(in3$(j*5-1))<>0 then 
 17870       let gl$=""
 17880       let gl$=cnvrt$("N 3",val(in3$(j*5-4)))&cnvrt$("N 6",val(in3$(j*5-3)))&cnvrt$("N 3",val(in3$(j*5-2)))
-17890       let alloc=val(in3$(j*5-1))
+17890       alloc=val(in3$(j*5-1))
 17900       let de$=in3$(j*5) ! de$=rtrm$(tr$(5)(1:17))&"-"&in3$(j*5)(1:12)
 17910       let tr$(1)=lpad$(str$(ckn),8)
 17920       write #tralloc,using 'Form POS 1,N 2,N 1,C 8,C 12,PD 5.2,C 30,N 6,x 3,C 12,N 1': bankcode,1,tr$(1),gl$,alloc,de$,0,"",0
@@ -745,7 +745,7 @@
 18030   mat pr$=("")
 18040   mat desc$=("")
 18050   mat gl$=("")
-18060   let contact$=email$=fax$=myact$=ss$=ph$=""
+18060   contact$=email$=fax$=myact$=ss$=ph$=""
 18070   let fnaddpayee
 18080   let pas=0
 18090 fnend 
@@ -768,7 +768,7 @@
 18260   let resp$(respc+=1)=""
 18270   ! ______________________________________________________________________
 18280   let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
-18290   let ckn2=val(resp$(2))
+18290   ckn2=val(resp$(2))
 18300   if resp$(1)(1:1)="T" then goto CKNUM_DEL_PRV ! delete previous check
 18310   if ckn2<=0 then 
 18320     mat ml$(2)
@@ -777,11 +777,11 @@
 18350     let fnmsgbox(mat ml$,resp$,'',16)
 18360     goto SCR_CKPRT6
 18370   end if 
-18380   let ckn=ckn2
+18380   ckn=ckn2
 18390   let tr$(1)=lpad$(str$(ckn2),8)
 18400   goto CKNUM_TOP ! ***********************
 18410   CKNUM_DEL_PRV: ! 
-18420   let bal=bal+val(dtr$(3))
+18420   bal=bal+val(dtr$(3))
 18430   delete #trmstr1,key=dk$: 
 18440   rewrite #bankmstr,using 'Form POS 45,PD 6.2',key=lpad$(str$(bankcode),2): bal nokey ignore
 18460   restore #tralloc,key>=dk$: nokey CKNUM_XIT
@@ -839,77 +839,77 @@
 18950 def fn_portion_stub_generic
 18960   if trim$(holdvn$)<>"" then read #h_vf1,using 'Form POS 9,4*C 30',key=holdvn$,release: mat b$ nokey L10970
 18970   L10970: ! 
-18980   print #255: ""
-18990   print #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
-19000   print #255: ""
-19010   mat b$=(" ") : let b$(1)=tr$(5)(1:30)
+18980   pr #255: ""
+18990   pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
+19000   pr #255: ""
+19010   mat b$=(" ") : b$(1)=tr$(5)(1:30)
 19020   if h_vf1=23 then let vp1=173 else let vp1=147
 19030   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
-19050   print #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
-19060   print #255: "_______________________________________ _______________________________________"
+19050   pr #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
+19060   pr #255: "_______________________________________ _______________________________________"
 19070   for j=1 to 15
-19080     print #255,using 'Form POS 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,POS 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
+19080     pr #255,using 'Form POS 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,POS 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
 19090   next j
 19100 fnend 
 19110 def fn_portion_stub_billings(stubOnCheck)
-19120   print #255: ""
+19120   pr #255: ""
 19130   if trim$(holdvn$)<>"" then read #h_vf1,using 'Form POS 9,4*C 30',key=holdvn$,release: mat b$ nokey ignore
-19140   print #255: ""
-19150   print #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
-19160   mat b$=(" ") : let b$(1)=tr$(5)(1:30)
+19140   pr #255: ""
+19150   pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
+19160   mat b$=(" ") : b$(1)=tr$(5)(1:30)
 19170   if h_vf1=23 then let vp1=173 else let vp1=147
 19180   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
-19190   print #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
-19200   print #255: "_______________________________________ _______________________________________"
+19190   pr #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
+19200   pr #255: "_______________________________________ _______________________________________"
 19210   for j=1 to 15
-19220     print #255,using 'Form POS 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,POS 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
+19220     pr #255,using 'Form POS 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,POS 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
 19230   next j
 19250   if stubOnCheck=1 then ! it is the first stub on the check
-19266     print #255: ""
-19268     print #255: ""
-19270     print #255: ""
+19266     pr #255: ""
+19268     pr #255: ""
+19270     pr #255: ""
 19280   end if 
 19289 fnend 
 19290 def fn_portion_stub_divernon
-19300   print #255: ""
+19300   pr #255: ""
 19310   if trim$(holdvn$)<>"" then read #h_vf1,using 'Form POS 9,4*C 30',key=holdvn$,release: mat b$ nokey ignore
-19320   print #255: ""
-19330   print #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
-19340   print #255: ""
-19350   mat b$=(" ") : let b$(1)=tr$(5)(1:30)
+19320   pr #255: ""
+19330   pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
+19340   pr #255: ""
+19350   mat b$=(" ") : b$(1)=tr$(5)(1:30)
 19360   if h_vf1=23 then let vp1=173 else let vp1=147
 19370   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
-19380   print #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
-19390   print #255: "_______________________________________ _______________________________________"
+19380   pr #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
+19390   pr #255: "_______________________________________ _______________________________________"
 19400   for j=1 to 15
-19410     print #255,using 'Form POS 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,POS 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
+19410     pr #255,using 'Form POS 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,POS 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
 19420   next j
 19430 fnend 
 19440 def fn_portion_stub_eldorado
 19450   if trim$(holdvn$)<>"" then read #h_vf1,using 'Form POS 9,4*C 30',key=holdvn$,release: mat b$ nokey ignore
-19460   mat b$=(" ") : let b$(1)=tr$(5)(1:30)
+19460   mat b$=(" ") : b$(1)=tr$(5)(1:30)
 19470   if h_vf1=23 then let vp1=173 else let vp1=147
 19480   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 19490   if ckn1<>psb_ckn1_prior then ! it's the first stub on a check
 19500     let psb_ckn1_prior=ckn1
-19510     print #255,using 'Form POS 74,N 6': ckn1 : print ckn1
-19520     print #255: ""
-19530     print #255: ""
+19510     pr #255,using 'Form POS 74,N 6': ckn1 : pr ckn1
+19520     pr #255: ""
+19530     pr #255: ""
 19540     F_PSE_ITEM: form pos 1,c 9,c 30,pic(zzzz,zzz.zzcr)
 19550     for j=1 to 15
-19560       print #255,using F_PSE_ITEM: iv$(j,1)(1:9),de$(j,1),amt(j,1)
+19560       pr #255,using F_PSE_ITEM: iv$(j,1)(1:9),de$(j,1),amt(j,1)
 19570     next j
 19580     for j=1 to 3
-19590       print #255,using F_PSE_ITEM: iv$(j,2)(1:9),de$(j,2),amt(j,2)
+19590       pr #255,using F_PSE_ITEM: iv$(j,2)(1:9),de$(j,2),amt(j,2)
 19600     next j
 19610   else ! it's the second stub on a check
-19620     print #255: ""
-19630     print #255: "" ! print #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
-19640     print #255: ""
-19650     print #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
-19660     print #255: "_______________________________________ _______________________________________"
+19620     pr #255: ""
+19630     pr #255: "" ! pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
+19640     pr #255: ""
+19650     pr #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
+19660     pr #255: "_______________________________________ _______________________________________"
 19670     for j=1 to 15
-19680       print #255,using 'Form POS 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,POS 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
+19680       pr #255,using 'Form POS 1,C 12,PIC(ZZZZ,ZZZ.ZZCR),X 1,C 13,POS 41,C 12,PIC(ZZZZ,ZZZ.ZZCR),C 13': iv$(j,1)(1:12),amt(j,1),de$(j,1),iv$(j,2)(1:12),amt(j,2),de$(j,2)
 19690     next j
 19700   end if  ! ckn1<>psb_ckn1_prior   /   else 
 19710 fnend 
@@ -944,40 +944,40 @@
 40680   mat b$=("")
 40700   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 40720   if trim$(b$(2))="" then 
-40740     let b$(2)=b$(3): let b$(3)=b$(4) : let b$(4)=""
+40740     b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""
 40760   else if trim$(b$(3))="" then 
-40780     let b$(3)=b$(4) : let b$(4)=""
+40780     b$(3)=b$(4) : b$(4)=""
 40800   end if 
 40820   let fn_englishdollar(dolamt)
 40840   if dolamt=0 then let eng$='        *** V O I D ***'
-40860   if dolamt<=0 then let ca$="***VOID***" else let ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
+40860   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 40880   ! /r
 40900   if env$('client')="ACS" or env$('client')="Thomasboro" or env$('client')="Hope Welty" or env$('client')="Philo" or env$('client')="Divernon" then goto L1730 ! don't skip
-40920   print #255: "" ! line 1
+40920   pr #255: "" ! line 1
 40940   L1730: !
 40960   skipline=9
 40980   if prenum=2 then 
-41000     print #255,using "form skip 2,pos 74,n 8,skip 1": ckn1 ! line 2,3, 4
+41000     pr #255,using "form skip 2,pos 74,n 8,skip 1": ckn1 ! line 2,3, 4
 41020     skipline-=3
 41040   end if
-41060   print #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
-41080   print #255: "" ! line 13
+41060   pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
+41080   pr #255: "" ! line 13
 41082   let normal4=4
 41084   if posDate then
 41086     a=posDate
 41088   else
-41100     let a=65
-41140     if env$('client')="Bethany" then let a=54
-41160     if env$('client')="Thomasboro" or env$('client')="Unity" then let a=55
-41180     if env$('client')="Hope Welty" or env$('client')="Philo" then let a=55
-41200     if env$('client')="Monticello" or env$('client')="Edinburg" then let a=55
+41100     a=65
+41140     if env$('client')="Bethany" then a=54
+41160     if env$('client')="Thomasboro" or env$('client')="Unity" then a=55
+41180     if env$('client')="Hope Welty" or env$('client')="Philo" then a=55
+41200     if env$('client')="Monticello" or env$('client')="Edinburg" then a=55
 41210   end if
-41220   print #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X normal4,C 18': prdmmddyy,ca$ ! line 14
-41240   print #255: ""
-41260   print #255: "" ! line 16
-41280   if env$('client')="Cerro Gordo T"  then Print #255: ""
+41220   pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X normal4,C 18': prdmmddyy,ca$ ! line 14
+41240   pr #255: ""
+41260   pr #255: "" ! line 16
+41280   if env$('client')="Cerro Gordo T"  then pr #255: ""
 41300   for j=1 to 4
-41320     print #255,using "Form Pos 8,C 30": b$(j) ! lines 17-20
+41320     pr #255,using "Form Pos 8,C 30": b$(j) ! lines 17-20
 41340   next j
 41360   if length=0 then ! do it the old way
 41380     let skipline=6
@@ -987,7 +987,7 @@
 41460     if env$('client')="Philo" or env$('client')="Thomasboro" then let skipline=skipline+2
 41480     ! if env$('client')="PiattCO" then let skipline=skipline+4
 41500     for j=1 to skipline
-41520       print #255: ""
+41520       pr #255: ""
 41540     next j
 41560   else
 41580     for lineItem=21 to length  ! default length is 27, i think
@@ -1001,73 +1001,73 @@
 41740   let fn_englishdollar(dolamt)
 41760   let x=3 ! 1  add three lines after top stub
 41780   for j=1 to x
-41800     print #255: ""
+41800     pr #255: ""
 41820   next j
 41840   if dolamt=0 then let eng$='        *** V O I D ***'
-41860   if dolamt<=0 then let ca$="***VOID***" else let ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
+41860   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 41880   skipline=9
-41900   if prenum=2 then print #255,using "form skip 2,pos 74,n 8,skip 1": ckn1
+41900   if prenum=2 then pr #255,using "form skip 2,pos 74,n 8,skip 1": ckn1
 41920   if prenum=2 then let skipline=max(skipline-3,1)
-41940   print #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
-41980   let a=65
+41940   pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
+41980   a=65
 42000   let normal4=4
-42020   print #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X normal4,C 18': prdmmddyy,ca$
-42060   print #255: ""
+42020   pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X normal4,C 18': prdmmddyy,ca$
+42060   pr #255: ""
 42080   if trim$(b$(2))="" then 
-42100     let b$(2)=b$(3): let b$(3)=b$(4) : let b$(4)=""
+42100     b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""
 42120   else if trim$(b$(3))="" then 
-42140     let b$(3)=b$(4) : let b$(4)=""
+42140     b$(3)=b$(4) : b$(4)=""
 42160   end if 
 42180   for j=1 to 4
-42200     print #255,using "Form Pos 8,C 30": b$(j)
+42200     pr #255,using "Form Pos 8,C 30": b$(j)
 42220   next j
 42240   let skipline=6
 42260   if scc$="SCC" then let skipline=skipline-1 ! don't space as far if stub,check,check
 42280   for j=1 to skipline+3
-42300     print #255: ""
+42300     pr #255: ""
 42320   next j
 42340 fnend 
 43060 def fn_portion_check_eldorado(dolamt)
 43080   mat b$=("")
 43100   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey PCE_L1680
 43120   if trim$(b$(2))="" then 
-43140     let b$(2)=b$(3): let b$(3)=b$(4) : let b$(4)=""
+43140     b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""
 43160   else if trim$(b$(3))="" then 
-43180     let b$(3)=b$(4) : let b$(4)=""
+43180     b$(3)=b$(4) : b$(4)=""
 43200   end if 
 43220   PCE_L1680: ! 
 43240   let fn_englishdollar(dolamt)
 43260   if dolamt=0 then let eng$='        *** V O I D ***'
-43280   if dolamt<=0 then let ca$="***VOID***" else let ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
-43300   print #255: ''
-43320   print #255: ''
-43340   print #255: ''
+43280   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
+43300   pr #255: ''
+43320   pr #255: ''
+43340   pr #255: ''
 43360   if prenum=2 then 
-43380     print #255,using "form pos 74,n 8": ckn1
+43380     pr #255,using "form pos 74,n 8": ckn1
 43400   else 
-43420     print #255: ''
+43420     pr #255: ''
 43440   end if 
-43460   print #255: ''
-43480   print #255: ''
-43500   print #255: ''
-43520   print #255,using 'form pos 68,pic(zz/zz/zz)': prdmmddyy
-43540   print #255: ''
-43560   print #255: ''
-43580   print #255: ''
-43600   print #255,using 'Form Pos 9,C 80': eng$(1:n)
-43620   print #255,using 'Form Pos 9,C 70': eng$(n+1:128)
-43640   print #255,using 'Form POS 65,X 8,X 4,C 18': ca$
-43660   print #255: ''
-43680   print #255: ''
+43460   pr #255: ''
+43480   pr #255: ''
+43500   pr #255: ''
+43520   pr #255,using 'form pos 68,pic(zz/zz/zz)': prdmmddyy
+43540   pr #255: ''
+43560   pr #255: ''
+43580   pr #255: ''
+43600   pr #255,using 'Form Pos 9,C 80': eng$(1:n)
+43620   pr #255,using 'Form Pos 9,C 70': eng$(n+1:128)
+43640   pr #255,using 'Form POS 65,X 8,X 4,C 18': ca$
+43660   pr #255: ''
+43680   pr #255: ''
 43700   for j=1 to 4
-43720     print #255,using "Form Pos 8,C 30": b$(j)
+43720     pr #255,using "Form Pos 8,C 30": b$(j)
 43740   next j
-43760   print #255: ''
-43780   print #255: ''
-43800   print #255: ''
-43820   print #255: ''
-43840   print #255: ''
-43860   print #255: ''
+43760   pr #255: ''
+43780   pr #255: ''
+43800   pr #255: ''
+43820   pr #255: ''
+43840   pr #255: ''
+43860   pr #255: ''
 43880 fnend 
 43900 def fn_portion_check_kimber(dolamt)
 43920   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey L6480
@@ -1076,30 +1076,30 @@
 43980   L6490: let fn_englishdollar(dolamt)
 44000   let x=1
 44020   for j=1 to x
-44040     print #255: ""
+44040     pr #255: ""
 44060   next j
 44080   if dolamt=0 then let eng$='        *** V O I D ***'
-44100   if dolamt<=0 then let ca$="***VOID***" else let ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
+44100   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 44120   let skipline=9
-44140   if prenum=2 then print #255,using "form skip 2,pos 74,n 8,skip 1": ckn1
+44140   if prenum=2 then pr #255,using "form skip 2,pos 74,n 8,skip 1": ckn1
 44160   if prenum=2 then let skipline=max(skipline-3,1)
-44180   print #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
-44200   print #255: ""
-44220   print #255,using 'Form POS 60,PIC(ZZ/ZZ/ZZ),X 7,C 18': prdmmddyy,ca$
-44240   print #255: ""
-44260   print #255: ""
+44180   pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
+44200   pr #255: ""
+44220   pr #255,using 'Form POS 60,PIC(ZZ/ZZ/ZZ),X 7,C 18': prdmmddyy,ca$
+44240   pr #255: ""
+44260   pr #255: ""
 44280   if trim$(b$(2))="" then 
-44300     let b$(2)=b$(3): let b$(3)=b$(4) : let b$(4)=""
+44300     b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""
 44320   else if trim$(b$(3))="" then 
-44340     let b$(3)=b$(4) : let b$(4)=""
+44340     b$(3)=b$(4) : b$(4)=""
 44360   end if 
 44380   for j=1 to 4
-44400     print #255,using "Form Pos 8,C 30": b$(j)
+44400     pr #255,using "Form Pos 8,C 30": b$(j)
 44420   next j
 44440   let skipline=8
 44460   if scc$="SCC" then let skipline=skipline-1 ! don't space as far if stub,check,check
 44480   for j=1 to skipline
-44500     print #255: ""
+44500     pr #255: ""
 44520   next j
 44540 fnend 
 44560 def fn_portion_check_divernon(dolamt)
@@ -1109,58 +1109,58 @@
 44640   L6700: let fn_englishdollar(dolamt)
 44660   let x=1
 44680   for j=1 to x
-44700     print #255: ""
+44700     pr #255: ""
 44720   next j
 44740   if dolamt=0 then let eng$='        *** V O I D ***'
-44760   if dolamt<=0 then let ca$="***VOID***" else let ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
+44760   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 44780   for j=1 to 9
-44800     print #255: " "
+44800     pr #255: " "
 44820   next j
-44840   let a=62
-44860   print #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$
+44840   a=62
+44860   pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$
 44880   let skipline=2
-44900   print #255,using 'Form SKIP SKIPLINE,POS 4,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
+44900   pr #255,using 'Form SKIP SKIPLINE,POS 4,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
 44920   if trim$(b$(2))="" then 
-44940     let b$(2)=b$(3): let b$(3)=b$(4) : let b$(4)=""
+44940     b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""
 44960   else if trim$(b$(3))="" then 
-44980     let b$(3)=b$(4) : let b$(4)=""
+44980     b$(3)=b$(4) : b$(4)=""
 45000   end if 
 45020   for j=1 to 4
-45040     print #255,using "Form Pos 8,C 30": b$(j)
+45040     pr #255,using "Form Pos 8,C 30": b$(j)
 45060   next j
 45080   let skipline=6
 45100   for j=1 to skipline
-45120     print #255: ""
+45120     pr #255: ""
 45140   next j
 45160 fnend 
 47040 def fn_portion_check_acs(dolamt)
 47060   mat b$=("")
 47080   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 47100   if trim$(b$(2))="" then 
-47120     let b$(2)=b$(3) : let b$(3)=b$(4) : let b$(4)=""
+47120     b$(2)=b$(3) : b$(3)=b$(4) : b$(4)=""
 47140   else if trim$(b$(3))="" then 
-47160     let b$(3)=b$(4) : let b$(4)=""
+47160     b$(3)=b$(4) : b$(4)=""
 47180   end if 
 47200   let fn_englishdollar(dolamt)
 47220   if dolamt=0 then let eng$='        *** V O I D ***'
-47240   if dolamt<=0 then let ca$="***VOID***" else let ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
-47260   print #255: ""
+47240   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
+47260   pr #255: ""
 47280   let skipline=9
-47300   if prenum=2 then print #255,using "form skip 2,pos 74,n 8,skip 1": ckn1
+47300   if prenum=2 then pr #255,using "form skip 2,pos 74,n 8,skip 1": ckn1
 47320   if prenum=2 then let skipline=max(skipline-3,1)
-47340   print #255,using "form skip 1, pos 80,pic(zz/zz/zz)": prdmmddyy
-47360   print #255: ""
-47380   print #255,using 'Form skip 1,POS 15,C 30,pos 73,c 18': b$(1),ca$
-47400   print #255: ""
-47420   print #255,using 'Form SKIP 1,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n),eng$(n+1:128)
-47440   print #255: ""
+47340   pr #255,using "form skip 1, pos 80,pic(zz/zz/zz)": prdmmddyy
+47360   pr #255: ""
+47380   pr #255,using 'Form skip 1,POS 15,C 30,pos 73,c 18': b$(1),ca$
+47400   pr #255: ""
+47420   pr #255,using 'Form SKIP 1,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n),eng$(n+1:128)
+47440   pr #255: ""
 47460   for j=1 to 4
-47480     print #255,using "Form Pos 8,C 30": b$(j)
+47480     pr #255,using "Form Pos 8,C 30": b$(j)
 47500   next j
 47520   let skipline=10
 47540   if scc$="SCC" then let skipline=skipline-1 ! don't space as far if stub,check,check
 47560   for j=1 to skipline
-47580     print #255: ""
+47580     pr #255: ""
 47600   next j
 47620 fnend 
 47640 def fn_portion_check_cerrogordo(dolamt)
@@ -1169,121 +1169,121 @@
 47700   let fn_englishdollar(dolamt)
 47720   let x=2
 47740   for j=1 to x
-47760     print #255: ""
+47760     pr #255: ""
 47780   next j
 47800   if dolamt=0 then let eng$='        *** V O I D ***'
-47820   if dolamt<=0 then let ca$="***VOID***" else let ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
+47820   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 47840   let skipline=8
-47880   if prenum=2 then print #255,using "form skip 3,pos 74,n 8,skip 1": ckn1
+47880   if prenum=2 then pr #255,using "form skip 3,pos 74,n 8,skip 1": ckn1
 47900   if prenum=2 then let skipline=max(skipline-3,1)
 47920   let skipline=skipline-2
-47940   print #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70,SKIP 1': eng$(1:n), eng$(n+1:128)
-47960   print #255: ""
-47980   let a=55
-48020   print #255,using 'Form POS 55,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$
-48040   print #255: ""
-48060   print #255: ""
-48080   print #255: ""
-48100   print #255: ""
+47940   pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70,SKIP 1': eng$(1:n), eng$(n+1:128)
+47960   pr #255: ""
+47980   a=55
+48020   pr #255,using 'Form POS 55,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$
+48040   pr #255: ""
+48060   pr #255: ""
+48080   pr #255: ""
+48100   pr #255: ""
 48120   if trim$(b$(2))="" then 
-48140     let b$(2)=b$(3): let b$(3)=b$(4) : let b$(4)=""
+48140     b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""
 48160   else if trim$(b$(3))="" then 
-48180     let b$(3)=b$(4) : let b$(4)=""
+48180     b$(3)=b$(4) : b$(4)=""
 48200   end if 
 48220   for j=1 to 4
-48240     print #255,using "Form Pos 8,C 30": b$(j)
+48240     pr #255,using "Form Pos 8,C 30": b$(j)
 48260   next j
 48280   let skipline=6
 48300   if scc$="SCC" then let skipline=skipline-1 ! don't space as far if stub,check,check
 48320   for j=1 to skipline
-48340     print #255: ""
+48340     pr #255: ""
 48360   next j
 48380 fnend 
 49100 def fn_portion_check_billings(dolamt)
 49120   mat b$=("")
 49140   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 49160   if trim$(b$(2))="" then 
-49180     let b$(2)=b$(3): let b$(3)=b$(4) : let b$(4)=""
+49180     b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""
 49200   else if trim$(b$(3))="" then 
-49220     let b$(3)=b$(4) : let b$(4)=""
+49220     b$(3)=b$(4) : b$(4)=""
 49240   end if 
 49260   let fn_englishdollar(dolamt)
 49280   if dolamt=0 then let eng$='        *** V O I D ***'
-49300   if dolamt<=0 then let ca$="***VOID***" else let ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
+49300   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 49320 ! 
-49340   print #255: ""
-49360   print #255,using 'form pos 42,c 38': "Void After 60 Days"
-49380   print #255: ""
-49400   print #255: ""
-49420   print #255: ""
+49340   pr #255: ""
+49360   pr #255,using 'form pos 42,c 38': "Void After 60 Days"
+49380   pr #255: ""
+49400   pr #255: ""
+49420   pr #255: ""
 49440   if trim$(eng$(n+1:128))='' then 
-49460     print #255: ""
-49480     print #255,using 'Form POS 9,C 80': eng$(1:n)
+49460     pr #255: ""
+49480     pr #255,using 'Form POS 9,C 80': eng$(1:n)
 49500   else 
-49520     print #255,using 'Form POS 9,C 80': eng$(1:n)
-49540     print #255,using 'Form POS 9,C 70': eng$(n+1:128)
+49520     pr #255,using 'Form POS 9,C 80': eng$(1:n)
+49540     pr #255,using 'Form POS 9,C 70': eng$(n+1:128)
 49560   end if 
-49580   print #255,using 'Form POS 59,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$
-49600   print #255: ""
-49620   print #255: ""
-49640   print #255: ""
-49660   print #255,using "Form Pos 8,C 30": b$(1)
-49680   print #255,using "Form Pos 8,C 30": b$(2)
-49700   print #255,using "Form Pos 8,C 30": b$(3)
-49720   print #255,using "Form Pos 8,C 30": b$(4)
-49780     print #255: ""
-49800     print #255: ""
-49820     print #255: ""
-49840     print #255: ""
-49860     print #255: ""
-49880     print #255: ""
-49900     print #255: ""
-49920     print #255: ""
-49940     print #255: ""
-49960     print #255: ""
+49580   pr #255,using 'Form POS 59,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$
+49600   pr #255: ""
+49620   pr #255: ""
+49640   pr #255: ""
+49660   pr #255,using "Form Pos 8,C 30": b$(1)
+49680   pr #255,using "Form Pos 8,C 30": b$(2)
+49700   pr #255,using "Form Pos 8,C 30": b$(3)
+49720   pr #255,using "Form Pos 8,C 30": b$(4)
+49780     pr #255: ""
+49800     pr #255: ""
+49820     pr #255: ""
+49840     pr #255: ""
+49860     pr #255: ""
+49880     pr #255: ""
+49900     pr #255: ""
+49920     pr #255: ""
+49940     pr #255: ""
+49960     pr #255: ""
 49990 fnend 
 50000 def fn_portion_check_edison(dolamt)
 50020   mat b$=("")
 50040   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 50060   if trim$(b$(2))="" then 
-50080     let b$(2)=b$(3): let b$(3)=b$(4) : let b$(4)=""
+50080     b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""
 50100   else if trim$(b$(3))="" then 
-50120     let b$(3)=b$(4) : let b$(4)=""
+50120     b$(3)=b$(4) : b$(4)=""
 50140   end if 
 50160   let fn_englishdollar(dolamt)
 50180   if dolamt=0 then let eng$='        *** V O I D ***'
-50200   if dolamt<=0 then let ca$="***VOID***" else let ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
+50200   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 50220   ! 
-50240   print #255: ''
-50260   print #255: ''
-50280   print #255: ''
-50300   print #255: ''
-50320   print #255: ''
-50340   print #255,using 'Form POS 74,PIC(ZZ/ZZ/ZZ),pos 82,N 8': prdmmddyy,ckn1
-50360   print #255: ''
-50380   print #255: ''
+50240   pr #255: ''
+50260   pr #255: ''
+50280   pr #255: ''
+50300   pr #255: ''
+50320   pr #255: ''
+50340   pr #255,using 'Form POS 74,PIC(ZZ/ZZ/ZZ),pos 82,N 8': prdmmddyy,ckn1
+50360   pr #255: ''
+50380   pr #255: ''
 50400   if trim$(eng$(n+1:128))='' then 
-50420     print #255: ""
-50440     print #255,using 'Form POS 9,C 80': eng$(1:n)
+50420     pr #255: ""
+50440     pr #255,using 'Form POS 9,C 80': eng$(1:n)
 50460   else 
-50480     print #255,using 'Form POS 9,C 80': eng$(1:n)
-50500     print #255,using 'Form POS 9,C 70': eng$(n+1:128)
+50480     pr #255,using 'Form POS 9,C 80': eng$(1:n)
+50500     pr #255,using 'Form POS 9,C 70': eng$(n+1:128)
 50520   end if 
-50540   print #255,using 'Form POS 79,C 18': ca$   ! line 11
-50560   print #255: ""
-50580   print #255,using "Form Pos 8,C 30": b$(1)
-50600   print #255,using "Form Pos 8,C 30": b$(2)
-50620   print #255,using "Form Pos 8,C 30": b$(3)
-50640   print #255,using "Form Pos 8,C 30": b$(4)
-50660   print #255: ''
-50680   print #255: ''
-50700   print #255: ''
-50720   print #255: ''
-50740   print #255: ''
-50760   print #255: ''
-50780   print #255: ''
-50800   print #255: ''
-50820   print #255: ''
+50540   pr #255,using 'Form POS 79,C 18': ca$   ! line 11
+50560   pr #255: ""
+50580   pr #255,using "Form Pos 8,C 30": b$(1)
+50600   pr #255,using "Form Pos 8,C 30": b$(2)
+50620   pr #255,using "Form Pos 8,C 30": b$(3)
+50640   pr #255,using "Form Pos 8,C 30": b$(4)
+50660   pr #255: ''
+50680   pr #255: ''
+50700   pr #255: ''
+50720   pr #255: ''
+50740   pr #255: ''
+50760   pr #255: ''
+50780   pr #255: ''
+50800   pr #255: ''
+50820   pr #255: ''
 50840 fnend 
 64000 def fn_scr_main_questions
 64020   if ~smq_setup then
@@ -1298,7 +1298,7 @@
 64200   let fntos(sn$="ckprt1a")
 64220   let respc=0
 64240   let fnlbl(1,1,"Method of Printing checks:",38,1)
-64260   let fnopt(1,40,"Enter and Print Checks",0)
+64260   let fnopt(1,40,"Enter and pr Checks",0)
 64280   if ckoption<=1 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
 64300   let fnopt(2,40,"Print Checks for Selected Invoices",0)
 64320   if ckoption=2 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
@@ -1323,12 +1323,12 @@
 64700   let fnacs(sn$,0,mat resp$,ck)
 64720   if ck<>5 then 
 64740     for j=1 to 3
-64760       if resp$(j)='True' then let ti1=j : let ckoption=j
+64760       if resp$(j)='True' then let ti1=j : ckoption=j
 64780     next j
 64800     let prd=val(resp$(4)) ! date of checks
 64820     let prdmmddyy=val(resp$(4)(5:6))*10000+val(resp$(4)(7:8))*100+val(resp$(4)(3:4)) ! convert date back to mmddyy format
-64840     let ckn=val(resp$(5)) ! beginning ck number
-64860     let bankcode=val(resp$(6)(1:3))
+64840     ckn=val(resp$(5)) ! beginning ck number
+64860     bankcode=val(resp$(6)(1:3))
 64880     layoutOptionSelected$=resp$(7)
 64900     for j=1 to 4
 64920       if trim$(layoutOptionSelected$)=trim$(layoutOption$(j)) then let scc$=scc$(j)

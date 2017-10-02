@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsPR\newprRptS1
-00020 ! Print User Designed Reports
+00020 ! pr User Designed Reports
 00022   let fn_setup
 00130   let fntop(program$,cap$="Print Designed Reports")
 01220 OPEN3: ! 
@@ -45,11 +45,11 @@
 01410     let fnCopy('S:\acsPR\newPRRpt_s1.brs',env$('Q')&"\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h"&env$('cno'))
 01464 ! 
 01472     open #h_tmp_dr:=fngethandle: "Name="&env$('Q')&"\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h"&env$('cno')&",RecL=255",display,output 
-01474     print #h_tmp_dr,using F_C255: "00081 RN$="""&rn$&""""
-01520     let pf$="19900 print #255, USING F_PR_OUT: "
-01530     let pfd$="20010 print #255, USING F_PR_OUT: "
-01540     let af$="19910 F_PR_OUT: form"
-01550     let gpf$="21000 print #255, using 21010: "
+01474     pr #h_tmp_dr,using F_C255: "00081 RN$="""&rn$&""""
+01520     let pf$="19900 pr #255, USING F_PR_OUT: "
+01530     let pfd$="20010 pr #255, USING F_PR_OUT: "
+01540     af$="19910 F_PR_OUT: form"
+01550     let gpf$="21000 pr #255, using 21010: "
 01560     let gaf$="21010 form skip 2,""Totals"""
 01570     for j=1 to 20
 01580       if a(j)=0 then goto L1770
@@ -59,17 +59,17 @@
 01610       goto L1630
 01620 L1620: let pf$=rtrm$(pf$)&ty$(a(j),1) : let pfd$=rtrm$(pfd$)&ty$(a(j),1)
 01630 L1630: ! 
-01632       let af$=rtrm$(af$)&",POS "&str$(pp(j))&ty$(a(j),3)
+01632       af$=rtrm$(af$)&",POS "&str$(pp(j))&ty$(a(j),3)
 01640       if tdep=1 and a(j)>29 then goto L1660
 01650       if ti(j)><1 then goto L1770
 01660 L1660: ! 
 01662       let lf1=len(rtrm$(ty$(a(j),1)))-1 : let lf2=len(rtrm$(ty$(a(j),4)))
 01670       if ti(j)><1 then goto L1700
 01680       if a(j)=2 or a(j)=3 or a(j)=4 or a(j)=5 or a(j)=6 or a(j)=26 or a(j)=27 or a(j)=62 or a(j)=63 then goto L1720
-01690       print #h_tmp_dr,using F_C255: str$(19910+j)&" "&ty$(a(j),4)&"="&ty$(a(j),4)&"+"&ty$(a(j),1)(1:lf1)
+01690       pr #h_tmp_dr,using F_C255: str$(19910+j)&" "&ty$(a(j),4)&"="&ty$(a(j),4)&"+"&ty$(a(j),1)(1:lf1)
 01700 L1700: ! 
 01702       if a(j)=2 or a(j)=3 or a(j)=4 or a(j)=5 or a(j)=6 or a(j)=26 or a(j)=27 or a(j)=62 or a(j)=63 then goto L1720
-01710       print #h_tmp_dr,using F_C255: str$(19930+j)&" "&ty$(a(j),5)&"="&ty$(a(j),5)&"+"&ty$(a(j),1)(1:lf1)
+01710       pr #h_tmp_dr,using F_C255: str$(19930+j)&" "&ty$(a(j),5)&"="&ty$(a(j),5)&"+"&ty$(a(j),1)(1:lf1)
 01720 L1720: ! 
 01722       if ti(j)><1 then goto L1770
 01730       if a(j)=2 or a(j)=3 or a(j)=4 or a(j)=5 or a(j)=6 or a(j)=26 or a(j)=27 or a(j)=62 or a(j)=63 then goto L1760
@@ -79,7 +79,7 @@
 01762       let ti1=1
 01770 L1770: ! 
 01772     next j
-01780     let af$=srep$(af$,'form,','form ') ! let af$(11:11)=" "
+01780     af$=srep$(af$,'form,','form ') ! af$(11:11)=" "
 01790     let lf1=len(rtrm$(pf$))
 01792     let lf2=len(rtrm$(pfd$))
 01800     let pf$(lf1:lf1)=" "
@@ -89,51 +89,51 @@
 01820     let lf1=len(rtrm$(gpf$))
 01830     let gpf$(lf1:lf1)=" "
 01840     let gpf$=rtrm$(gpf$)&" pageoflow pgof"
-01850     print #h_tmp_dr,using F_C255: rf1$
+01850     pr #h_tmp_dr,using F_C255: rf1$
 01860 F_C255: form pos 1,c 255
-01870 ! Print #h_tmp_dr,Using 2050: AF1$
-01880 ! Print #h_tmp_dr,Using 2050: AF2$
-01890 ! Print #h_tmp_dr,Using 2240: RF2$
-01900     print #h_tmp_dr,using F_C255: pf$
-01910     print #h_tmp_dr,using F_C255: af$
-01920     print #h_tmp_dr,using F_C255: "20099 L20099: GOTO PRTRPT"
-01930     print #h_tmp_dr,using F_C255: "20000 L20000: IF TDEP=0 THEN L20099"
-01940     print #h_tmp_dr,using F_C255: "20010 L20010: "&pfd$(7:255)
-01950     print #h_tmp_dr,using F_C255: "20020 L20020: MAT dt=(0)"
-01960     print #h_tmp_dr,using F_C255: "19990 goto L19804"
+01870 ! pr #h_tmp_dr,Using 2050: AF1$
+01880 ! pr #h_tmp_dr,Using 2050: AF2$
+01890 ! pr #h_tmp_dr,Using 2240: RF2$
+01900     pr #h_tmp_dr,using F_C255: pf$
+01910     pr #h_tmp_dr,using F_C255: af$
+01920     pr #h_tmp_dr,using F_C255: "20099 L20099: GOTO PRTRPT"
+01930     pr #h_tmp_dr,using F_C255: "20000 L20000: IF TDEP=0 THEN L20099"
+01940     pr #h_tmp_dr,using F_C255: "20010 L20010: "&pfd$(7:255)
+01950     pr #h_tmp_dr,using F_C255: "20020 L20020: MAT dt=(0)"
+01960     pr #h_tmp_dr,using F_C255: "19990 goto L19804"
 01970     if ti1 then 
-01980       print #h_tmp_dr,using F_C255: gpf$
-01990       print #h_tmp_dr,using F_C255: gaf$
+01980       pr #h_tmp_dr,using F_C255: gpf$
+01990       pr #h_tmp_dr,using F_C255: gaf$
 02000     end if 
-02002     print #h_tmp_dr,using F_C255: "21200 GOTO EOF1"
-02010     print #h_tmp_dr,using F_C255: "20100 ! Check for Totals to print ______________"
-02020     print #h_tmp_dr,using F_C255: "19899 L19899: if tdep=1 then goto F_PR_OUT"
+02002     pr #h_tmp_dr,using F_C255: "21200 GOTO EOF1"
+02010     pr #h_tmp_dr,using F_C255: "20100 ! Check for Totals to pr ______________"
+02020     pr #h_tmp_dr,using F_C255: "19899 L19899: if tdep=1 then goto F_PR_OUT"
 02030     if ips=0 then goto L2210
 02040     let lf1=len(rtrm$(ty$(ips,1)))-1 : let lf2=len(rtrm$(ty$(ips,4)))-1
-02050 ! print #h_tmp_dr,using F_C255: "19801 let ipsw=0"
+02050 ! pr #h_tmp_dr,using F_C255: "19801 let ipsw=0"
 02060     if ips>24 and ips<104 then goto L2140
-02070     print #h_tmp_dr,using F_C255: "19811 For j=1 to 100"
-02075     print #h_tmp_dr,using F_C255: "19812 if psc(1)=-1 and TY$(IPS,1)(1:LF1)<>'' then L19817"
-02080     print #h_tmp_dr,using F_C255: "19814   if "&ty$(ips,1)(1:lf1)&"=psc(j) then L19817"
-02090     print #h_tmp_dr,using F_C255: "19813   if psc(j)=0 then L19804"
-02100     print #h_tmp_dr,using F_C255: "19815 next j"
-02110     print #h_tmp_dr,using F_C255: "19816 goto L19804"
-02120     print #h_tmp_dr,using F_C255: "19817 L19817: ipsw=1"
+02070     pr #h_tmp_dr,using F_C255: "19811 For j=1 to 100"
+02075     pr #h_tmp_dr,using F_C255: "19812 if psc(1)=-1 and TY$(IPS,1)(1:LF1)<>'' then L19817"
+02080     pr #h_tmp_dr,using F_C255: "19814   if "&ty$(ips,1)(1:lf1)&"=psc(j) then L19817"
+02090     pr #h_tmp_dr,using F_C255: "19813   if psc(j)=0 then L19804"
+02100     pr #h_tmp_dr,using F_C255: "19815 next j"
+02110     pr #h_tmp_dr,using F_C255: "19816 goto L19804"
+02120     pr #h_tmp_dr,using F_C255: "19817 L19817: ipsw=1"
 02130     goto L2210
 02140 L2140: ! 
-02142     print #h_tmp_dr,using F_C255: "19832 for j=1 to 100"
-02150     print #h_tmp_dr,using F_C255: "19833   if psc(j)=0  or (psc(1)=-1 and ty$(ips,1)(1:lf1)<>'') then 19836"
-02160     print #h_tmp_dr,using F_C255: "19834   if "&ty$(ips,1)(1:lf1)&"= psc(j) then 19838"
-02170     print #h_tmp_dr,using F_C255: "19835 next j"
-02180     print #h_tmp_dr,using F_C255: "19836 if ipsw=0 then ipsw=9"
-02190     print #h_tmp_dr,using F_C255: "19837 goto L19804"
-02200     print #h_tmp_dr,using F_C255: "19838 ipsw=1"
+02142     pr #h_tmp_dr,using F_C255: "19832 for j=1 to 100"
+02150     pr #h_tmp_dr,using F_C255: "19833   if psc(j)=0  or (psc(1)=-1 and ty$(ips,1)(1:lf1)<>'') then 19836"
+02160     pr #h_tmp_dr,using F_C255: "19834   if "&ty$(ips,1)(1:lf1)&"= psc(j) then 19838"
+02170     pr #h_tmp_dr,using F_C255: "19835 next j"
+02180     pr #h_tmp_dr,using F_C255: "19836 if ipsw=0 then ipsw=9"
+02190     pr #h_tmp_dr,using F_C255: "19837 goto L19804"
+02200     pr #h_tmp_dr,using F_C255: "19838 ipsw=1"
 02210 L2210: ! 
-02212     print #h_tmp_dr,using F_C255: "20001 if ips=0 or ipsw=1 then L20010 else L20020"
+02212     pr #h_tmp_dr,using F_C255: "20001 if ips=0 or ipsw=1 then L20010 else L20020"
 02220     close #h_tmp_dr: 
 02230     open #h_tmp_proc:=fngethandle: "Name="&env$('temp')&"\PROC."&session$&",Replace",display,output 
-02240     print #h_tmp_proc,using F_C255: "load "&env$('Q')&"\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h"&env$('cno')&",Source"
-02250     print #h_tmp_proc,using F_C255: "RUN"
+02240     pr #h_tmp_proc,using F_C255: "load "&env$('Q')&"\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h"&env$('cno')&",Source"
+02250     pr #h_tmp_proc,using F_C255: "RUN"
 02260     close #h_tmp_proc: 
 02270     chain "PROC="&env$('temp')&"\PROC."&session$
 02272 PDR_XIT: ! 
@@ -155,7 +155,7 @@
 02390 ERTN: let fnerror(program$,err,line,act$,"xit")
 02400   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02410   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02420   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02420   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02430 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02440 ! /region
 02450 ! ______________________________________________________________________

@@ -92,7 +92,7 @@
         let fncmdkey("E&xit",5,0,1,"Returns to menu")
 00580   let fnacs(sn$,0,mat resp$,ckey)
 00590   if ckey=5 then goto XIT
-00600   let bal=val(resp$(2))
+00600   bal=val(resp$(2))
 00610   let respc=2 !:
         for j=1 to 10 ! udIM(SRV$)  kj
 00620     if trim$(srv$(j))<>"" then !:
@@ -150,7 +150,7 @@
 00980 ERTN: let fnerror(program$,err,line,act$,"xit")
 00990   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01000   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01010   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01010   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01020 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01030 ! /region
 01040 ! ______________________________________________________________________

@@ -30,24 +30,24 @@
         ! C$(CL,7)=Index File                                                 !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         let limit_to_list$='1'
-00430 ! let cl=1 : let c$(cl,1)='ComboF' !:
-        ! let c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&env$('cno') !:
-        ! let c$(cl,3)='1' : let c$(cl,4)='6' !:
-        ! let c$(cl,5)='7' : let c$(cl,6)='50' !:
-        ! let c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h'&env$('cno') !:
-        ! let c$(cl,8)=limit_to_list$
-00440 ! let cl=3 : let c$(cl,1)='ComboF' !:
-        ! let c$(cl,2)=env$('Q')&'\TMmstr\Systems.h'&env$('cno') !:
-        ! let c$(cl,3)='1' : let c$(cl,4)='2' !:
-        ! let c$(cl,5)='3' : let c$(cl,6)='50' !:
-        ! let c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h'&env$('cno') !:
-        ! let c$(cl,8)=limit_to_list$
-00450 ! let cl=5 : let c$(cl,1)='ComboF' !:
-        ! let c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h'&env$('cno') !:
-        ! let c$(cl,3)='1' : let c$(cl,4)='2' !:
-        ! let c$(cl,5)='3' : let c$(cl,6)='50' !:
-        ! let c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h'&env$('cno') !:
-        ! let c$(cl,8)=limit_to_list$
+00430 ! cl=1 : c$(cl,1)='ComboF' !:
+        ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&env$('cno') !:
+        ! c$(cl,3)='1' : c$(cl,4)='6' !:
+        ! c$(cl,5)='7' : c$(cl,6)='50' !:
+        ! c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h'&env$('cno') !:
+        ! c$(cl,8)=limit_to_list$
+00440 ! cl=3 : c$(cl,1)='ComboF' !:
+        ! c$(cl,2)=env$('Q')&'\TMmstr\Systems.h'&env$('cno') !:
+        ! c$(cl,3)='1' : c$(cl,4)='2' !:
+        ! c$(cl,5)='3' : c$(cl,6)='50' !:
+        ! c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h'&env$('cno') !:
+        ! c$(cl,8)=limit_to_list$
+00450 ! cl=5 : c$(cl,1)='ComboF' !:
+        ! c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h'&env$('cno') !:
+        ! c$(cl,3)='1' : c$(cl,4)='2' !:
+        ! c$(cl,5)='3' : c$(cl,6)='50' !:
+        ! c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h'&env$('cno') !:
+        ! c$(cl,8)=limit_to_list$
 00460   return 
 00470 ! ______________________________________________________________________
 00480 HAMSTER: ! 
@@ -60,13 +60,13 @@
 00550 ERTN: let fnerror(program$,err,line,act$,"xit")
 00560   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00570   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00580   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00580   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00590 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00600 ! /region
 00610 ! ______________________________________________________________________
 70000   def fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,ar_mask)
 70020     if storage_length=0 then let storage_length=textbox_len
-70040     let add_rec_item=udim(mat lbl$)+1
+70040     add_rec_item=udim(mat lbl$)+1
 70060     mat lbl$(add_rec_item) : let lbl$(add_rec_item)=label$
 70080     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
 70100     mat p$(add_rec_item)

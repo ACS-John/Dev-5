@@ -8,8 +8,8 @@
 00080     dim hf(46) ,hf$(46),gridname$*30,oldgridname$*30
 00090     ! ___________________________________________________________________
 00100     let fntop(program$,cap$="Payroll Check History")
-00120     let cancel=5 : let back=2 : let edit=1 : let save=1 : let disable=1 
-00122     let add=4
+00120     cancel=5 : back=2 : let edit=1 : let save=1 : let disable=1 
+00122     add=4
 00124     let transtype$(1)="Check Only" 
 00126     let transtype$(2)="Departmental Breakdowns" 
 00128     let transtype$(3)="Grand Totals" 
@@ -43,7 +43,7 @@
 00450     mat totaltdc=(0): mat totaltcp=(0) : mat grand2tcp=(0) : : mat grand2tdc=(0)
 00460     goto ASKTRANSET ! Let FNASKTRANSET(CKEY,SEL_CODE,BEG_DATE,END_DATE,Z$,HACT$)
 00470 L470: let printit=0 : if ckey=2 then let printit=1
-00480     if ckey=2 and trim$(z$)="" then goto SCREEN1 ! don't allow print to work if no customer selected
+00480     if ckey=2 and trim$(z$)="" then goto SCREEN1 ! don't allow pr to work if no customer selected
 00490 ! If CKEY=2 AND TRIM$(Z$)="[All]" Then Goto SCREEN1
 00500     if ckey=2 then let fnopenprn: goto READ_CHECKS ! read headings for reports then start reading thru the checks same as a grid
 00510     if ckey=1 then goto SCREEN2 ! READ_CHECKS
@@ -57,7 +57,7 @@
           let fncmdkey('&Add',add,0,0) !:
           let fncmdkey('&Close',cancel,0,1)
 00580     let fnacs(sn$,0,mat resp$,ckey) ! check history building grid
-00590     let addcode=0 : let holdeno=0
+00590     addcode=0 : let holdeno=0
 00600     if ckey=back then goto SCREEN1
 00610     if ckey=cancel then goto SCREEN1
 00615     if ckey=edit and checkonly=1 then goto L616 else goto L620
@@ -71,7 +71,7 @@
 00624 L620: if ckey=edit then let editrec=val(resp$(1)) conv SCREEN2 : mat employeetdc=(0): mat employeetcp=(0): goto SCREEN3
 00630     if ckey=add then 
 00632       if trim$(hact$)<>'[All]' then let eno=val(hact$) else let eno=0
-00634       let tdn=prd=ckno=0 : mat tdc=(0) : mat tcp=(0) : let addcode=1
+00634       let tdn=prd=ckno=0 : mat tdc=(0) : mat tcp=(0) : addcode=1
 00636       goto SCREEN3_ADD
 00638     end if
 00640     goto SCREEN2
@@ -182,7 +182,7 @@
 01360 L1360: let heno=val(resp$(1)) ! employee #
 01370     let tdn=val(resp$(2)) ! dept #
 01380     let prd=val(resp$(3)) ! date
-01390     let ckno=val(resp$(4)) ! check #
+01390     ckno=val(resp$(4)) ! check #
 01400     let tdc(1)=val(resp$(5)) ! reg hrs
 01410     let tdc(2)=val(resp$(6)) ! ot hrs
 01420     let tdc(3)=val(resp$(7)) ! sick hrs
@@ -207,7 +207,7 @@
 01610     for j=1 to 20
 01620       let tcp(j+4)=val(resp$(j+25)) ! std deductions
 01630     next j
-01640     if addcode=1 then write #filnum,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp : let addcode=0 : goto SCREEN2
+01640     if addcode=1 then write #filnum,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp : addcode=0 : goto SCREEN2
 01650     if sum(holdtdc)<>sum(tdc) or sum(holdtcp)<>sum(tcp) then goto L1660 else goto L1680
 01660 L1660: mat mg$(3) !:
           let mg$(1)="You have changed dollar amounts on a real check! " !:
@@ -223,7 +223,7 @@
 01730 ERTN: let fnerror(program$,err,line,act$,"xit")
 01740     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01750     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01760     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01760     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01770 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01780 ! /region
 01790 ! ___________________________________________________________________
@@ -231,14 +231,14 @@
 01810     let fntos(sn$="CHECKhISTORY") !:
           let rc=cf=0
 01820     let fnfra(1,1,3,26,"Informatin to be Shown","You can choose to have the checks listed as one total or have the department breakdowns shown.  You cannot select both!",0) !:
-          let cf+=1 : let fratype=cf
+          cf+=1 : let fratype=cf
 01830     let fnopt(1,3,"Departmental Details",0,fratype)
 01832     if checkonly=1 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
 01840     let fnopt(2,3,"Check only",0,fratype)
 01842     if details=1 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
 01845     if details=0 and checkonly=0 then let resp$(rc)="True"
 01850     let fnfra(6,1,6,26,"Print options","You can get totals by any combination of the following options.",0) !:
-          let cf+=1 : let fratype=cf
+          cf+=1 : let fratype=cf
 01860     let fnchk(1,3,"Grand Totals",0,fratype) !:
           if grand=1 then let resp$(rc+=1)="True" else !:
             let resp$(rc+=1)="False"
@@ -252,7 +252,7 @@
           if employee=1 then let resp$(rc+=1)="True" else !:
             let resp$(rc+=1)="False"
 01900     let fnfra(1,30,6,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.") !:
-          let cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
+          cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
 01910     let fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
 01920     let fntxt(1,mypos,10,0,1,"3",0,empty$,fradate) !:
           let resp$(rc+=1)=str$(beg_date)
@@ -272,7 +272,7 @@
 02020     let fntxt(6,mypos,10,0,1,"3",0,empty$,fradate) !:
           let resp$(rc+=1)=str$(qtr4)
 02030     let fnfra(10,30,2,60,"Employee","You can review check information for all employees or for an individual.") !:
-          let cf+=1 : let fraaccount=cf
+          cf+=1 : let fraaccount=cf
 02040     let fnlbl(1,1,"Employee:",8,1,0,fraaccount)
 02050     let fncmbemp(1,10,1,fraaccount) !:
           let rc+=1 !:
@@ -288,15 +288,15 @@
 02120     let fnacs(sn$,0,mat resp$,ckey) ! dates and options
 02130     let printit=0: let f1=0
 02140     if ckey=cancel then goto DONE
-02150     let checkonly=details=grand=quarterly=annual=employee=0 : let holdnam$=""
+02150     checkonly=details=grand=quarterly=annual=employee=0 : let holdnam$=""
 02160     let eno=holdeno=printeno=holdckno=printckno=0 : mat cp1=(0)
-02170     if resp$(1)="True" then let checkonly=1
+02170     if resp$(1)="True" then checkonly=1
 02180     if resp$(2)="True" then let details=1
 02190     if resp$(3)="True" then let grand=1
 02200     if resp$(4)="True" then let quarterly=1
-02210     if resp$(5)="True" then let annual=1
+02210     if resp$(5)="True" then annual=1
 02220     if resp$(6)="True" then let employee=1
-02230     let beg_date=val(resp$(7)) !:
+02230     beg_date=val(resp$(7)) !:
           let end_date=val(resp$(8)) !:
           let qtr1=val(resp$(9)) !:
           let qtr2=val(resp$(10)) !:
@@ -304,7 +304,7 @@
           let qtr4=val(resp$(12)) !:
           let z$=holdz$=hact$=resp$(13)(1:8) : let z$=holdz$=hact$=lpad$(trim$(z$),8)
 02240     let qtr5=val(resp$(12)(1:4))*10000+1231
-02250     let begin_year=val(resp$(12)(1:4))*10000+0101
+02250     begin_year=val(resp$(12)(1:4))*10000+0101
 02260     let end_year=val(resp$(12)(1:4))*10000+1231
 02270     let gridname$=rpad$(trim$(resp$(14)),30) : rewrite #9,using "form pos 1,c 30",rec=1: gridname$
 02280     if checkonly=1 and details=1 then goto L2290 else goto L2300
@@ -388,8 +388,8 @@
 02840     let fncmdkey("&Cancel",5,0,1,"Cancel without saving the format selections.")
 02850     let fnacs(sn$,0,mat resp$,ckey) !:
           if ckey=5 then goto L3150 ! select columns
-02860     let addone=0
-02870     if ckey=2 then let addone=1: gosub ADD_GRID: goto L2690
+02860     addone=0
+02870     if ckey=2 then addone=1: gosub ADD_GRID: goto L2690
 02880     let gridname$=rpad$(trim$(resp$(1)),30)
 02890     if oldgridname$<>gridname$ then read #29,using "form pos 1,c 30,46*n 1",key=gridname$: gridname$,mat hf nokey L3150 : let oldgridname$=gridname$: goto L2630
 02900     for j=1 to 46
@@ -441,75 +441,75 @@
 03280       if j=1 and eno<>holdeno then let empz$=lpad$(str$(hs1(1)),8): let nam$="": read #1,using "form pos 9,c 25",key=empz$: nam$ nokey L3290
 03290 L3290: if hf(j)=0 then goto L3330
 03300       let hs3=hs3+1
-03310       let cp0(hs3)=hs1(j)
+03310       cp0(hs3)=hs1(j)
 03315       if eofcode=1 and grand=1 and desc$="Grand Total" then goto L3330 ! skip accumulating if finished
 03316       if trim$(desc$)="1st Qtr" or trim$(desc$)="2nd Qtr" or trim$(desc$)="3rd Qtr" or trim$(desc$)="4th Qtr" or trim$(desc$)="YTD" or trim$(desc$)="Grand Total" or trim$(desc$)="Employee Total" then goto L3330
-03320       let cp2(hs3)+=hs1(j) ! accumulate totals
+03320       cp2(hs3)+=hs1(j) ! accumulate totals
 03330 L3330: next j
 03340     if trim$(nam$)<>"" and holdnam$<>nam$ then let desc$=nam$(1:12): let holdnam$=nam$: let nam$=""
-03350     if trim$(desc$)="Total Ck" then goto L3360 ! don't print total check on printout
-03360 L3360: print #255,using hfm$: desc$(1:12),mat cp0
-03361     if desc$(1:12)="Employee Tot" then print #255: 
+03350     if trim$(desc$)="Total Ck" then goto L3360 ! don't pr total check on printout
+03360 L3360: pr #255,using hfm$: desc$(1:12),mat cp0
+03361     if desc$(1:12)="Employee Tot" then pr #255: 
 03362     let desc$=""
 03370     mat cp1=cp1+cp0
 03380 ! Mat CP2=CP2+CP0  kj 1/30/08
 03390     mat cp0=(0)
 03400     return 
-03410 PGOF: print #255: newpage
+03410 PGOF: pr #255: newpage
 03420     gosub HDR
 03430     continue 
 03440 ! ___________________________________________________________________
 03450 HDR: ! 
 03460 ! need date$,time$
-03470     print #255: "\qc  {\f181 \fs20 \b "&trim$(env$('cnam'))&" }"
-03480     print #255: "\qc  {\f181 \fs28 \b "&trim$(gridname$)&" }"
+03470     pr #255: "\qc  {\f181 \fs20 \b "&trim$(env$('cnam'))&" }"
+03480     pr #255: "\qc  {\f181 \fs28 \b "&trim$(gridname$)&" }"
 03490     if beg_date<>0 and end_date<>0 then !:
-            print #255: "\qc  {\f181 \fs18 \b From "&cnvrt$("pic(zzzz/zz/zz)",beg_date)& "  To "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
-03500     print #255: ""
-03510     print #255: "\ql "
-03520     print #255: hd$
-03530     print #255: ul$
+            pr #255: "\qc  {\f181 \fs18 \b From "&cnvrt$("pic(zzzz/zz/zz)",beg_date)& "  To "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
+03500     pr #255: ""
+03510     pr #255: "\ql "
+03520     pr #255: hd$
+03530     pr #255: ul$
 03540     let f1=1
 03550     return 
 03560 ! ___________________________________________________________________
 03570 GRAND_TOTAL: ! 
 03580     if grand=0 then goto L3750
-03590     if printit=1 then print #255: ul$
-03600     if printit=1 then print #255: "     <Grand Totals>"
-03610     if hf(1)=1 then let cp2(1)=0 ! no totals on employee numbers
-03620     if hf(1)=1 and hf(2)=1 then let cp2(2)=0 ! no totals on departments
-03630     if hf(1)=0 and hf(2)=1 then let cp2(1)=0 ! no totals on departments
-03640     if hf(1)=1 and hf(2)=1 and hf(3)=1 then let cp2(3)=0 ! no totals on date
-03650     if hf(1)=0 and hf(2)=1 and hf(3)=1 then let cp2(2)=0 ! no totals on date
-03655     if hf(1)=1 and hf(2)=0 and hf(3)=1 then let cp2(2)=0 ! no totals on date
-03660     if hf(1)=0 and hf(2)=0 and hf(3)=1 then let cp2(1)=0 ! no totals on date
-03670     if hf(1)=1 and hf(2)=1 and hf(3)=1 and hf(4)=1 then let cp2(4)=0 ! no totals on ck num
-03672     if hf(1)=0 and hf(2)=0 and hf(3)=1 and hf(4)=1 then let cp2(2)=0 ! no totals on ck num ! new 11/9/15 could this be right?
-03680     if hf(1)=0 and hf(2)=0 and hf(3)=0 and hf(4)=1 then let cp2(1)=0 ! no totals on cknum
-03682     if hf(1)=1 and hf(2)=0 and hf(3)=1 and hf(4)=1 then let cp2(3)=0 ! no totals on cknum
-03690     if printit=1 then print #255,using hfm$: "",mat cp2
+03590     if printit=1 then pr #255: ul$
+03600     if printit=1 then pr #255: "     <Grand Totals>"
+03610     if hf(1)=1 then cp2(1)=0 ! no totals on employee numbers
+03620     if hf(1)=1 and hf(2)=1 then cp2(2)=0 ! no totals on departments
+03630     if hf(1)=0 and hf(2)=1 then cp2(1)=0 ! no totals on departments
+03640     if hf(1)=1 and hf(2)=1 and hf(3)=1 then cp2(3)=0 ! no totals on date
+03650     if hf(1)=0 and hf(2)=1 and hf(3)=1 then cp2(2)=0 ! no totals on date
+03655     if hf(1)=1 and hf(2)=0 and hf(3)=1 then cp2(2)=0 ! no totals on date
+03660     if hf(1)=0 and hf(2)=0 and hf(3)=1 then cp2(1)=0 ! no totals on date
+03670     if hf(1)=1 and hf(2)=1 and hf(3)=1 and hf(4)=1 then cp2(4)=0 ! no totals on ck num
+03672     if hf(1)=0 and hf(2)=0 and hf(3)=1 and hf(4)=1 then cp2(2)=0 ! no totals on ck num ! new 11/9/15 could this be right?
+03680     if hf(1)=0 and hf(2)=0 and hf(3)=0 and hf(4)=1 then cp2(1)=0 ! no totals on cknum
+03682     if hf(1)=1 and hf(2)=0 and hf(3)=1 and hf(4)=1 then cp2(3)=0 ! no totals on cknum
+03690     if printit=1 then pr #255,using hfm$: "",mat cp2
 03700     if printit=0 then let desc$="Grand Total": mat totaltcp=grand2tcp: mat totaltdc=grand2tdc: gosub PRINT_GRID
 03710     mat grand2tcp=(0) : : mat grand2tdc=(0)
 03720     mat cp2=(0)
 03730     form pos 1,c 29,18*g 10.2,skip 1
-03740     if printit=1 then print #255: ul$
+03740     if printit=1 then pr #255: ul$
 03750 L3750: return 
 03760 ! ___________________________________________________________________
 03770 EMPLOYEE_TOTALS: ! 
-03780     if hf(1)=1 then let cp1(1)=0 ! no totals on employee numbers
-03790     if hf(1)=1 and hf(2)=1 then let cp1(2)=0 ! no totals on departments
-03800     if hf(1)=0 and hf(2)=1 then let cp1(1)=0 ! no totals on departments
-03810     if hf(1)=1 and hf(2)=1 and hf(3)=1 then let cp1(3)=0 ! no totals on date
-03815     if hf(1)=1 and hf(2)=0 and hf(3)=1 then let cp1(2)=0 ! no totals on date
-03820     if hf(1)=0 and hf(2)=1 and hf(3)=1 then let cp1(2)=0 ! no totals on date
-03830     if hf(1)=0 and hf(2)=0 and hf(3)=1 then let cp1(1)=0 ! no totals on date
-03840     if hf(1)=1 and hf(2)=1 and hf(3)=1 and hf(4)=1 then let cp1(4)=0 ! no totals on ck num
-03850     if hf(1)=0 and hf(2)=1 and hf(3)=1 and hf(4)=1 then let cp1(3)=0 ! no totals on cknum
-03860     if hf(1)=0 and hf(2)=0 and hf(3)=1 and hf(4)=1 then let cp1(2)=0 ! no totals on cknum
+03780     if hf(1)=1 then cp1(1)=0 ! no totals on employee numbers
+03790     if hf(1)=1 and hf(2)=1 then cp1(2)=0 ! no totals on departments
+03800     if hf(1)=0 and hf(2)=1 then cp1(1)=0 ! no totals on departments
+03810     if hf(1)=1 and hf(2)=1 and hf(3)=1 then cp1(3)=0 ! no totals on date
+03815     if hf(1)=1 and hf(2)=0 and hf(3)=1 then cp1(2)=0 ! no totals on date
+03820     if hf(1)=0 and hf(2)=1 and hf(3)=1 then cp1(2)=0 ! no totals on date
+03830     if hf(1)=0 and hf(2)=0 and hf(3)=1 then cp1(1)=0 ! no totals on date
+03840     if hf(1)=1 and hf(2)=1 and hf(3)=1 and hf(4)=1 then cp1(4)=0 ! no totals on ck num
+03850     if hf(1)=0 and hf(2)=1 and hf(3)=1 and hf(4)=1 then cp1(3)=0 ! no totals on cknum
+03860     if hf(1)=0 and hf(2)=0 and hf(3)=1 and hf(4)=1 then cp1(2)=0 ! no totals on cknum
 03870 ! 
-03880     print #255,using hfm$: "   Emp Total",mat cp1
+03880     pr #255,using hfm$: "   Emp Total",mat cp1
 03890     mat cp1=(0)
-03900     print #255: "" pageoflow PGOF
+03900     pr #255: "" pageoflow PGOF
 03910     return 
 03920 ! ___________________________________________________________________
 03930 FLEXGRID: ! 
@@ -525,23 +525,23 @@
 04030     if trim$(z$)<>"" then let z$=lpad$(trim$(z$),8)
 04040     mat colhdr$(48) : mat colmask$(48)
 04050     let x=2
-04060     let colhdr$(1)="Rec" : let colhdr$(2)="Desc"
-04070     let colmask$(1)="30": let colmask$(2)=""
-04080     if hf(1)=1 then let colhdr$(x+=1)=name$(1) : let colmask$(x)="30" ! employee #
-04090     if hf(2)=1 then let colhdr$(x+=1)=name$(2) : let colmask$(x)="30" ! dept #
-04100     if hf(3)=1 then let colhdr$(x+=1)=name$(3) : let colmask$(x)="3" ! Payroll Date
-04110     if hf(4)=1 then let colhdr$(x+=1)=name$(4) : let colmask$(x)="30" ! check stop
-04120     if hf(5)=1 then let colhdr$(x+=1)=name$(5) : let colmask$(x)="32"
-04130     if hf(6)=1 then let colhdr$(x+=1)=name$(6) : let colmask$(x)="32" ! ot hours
-04140     if hf(7)=1 then let colhdr$(x+=1)=name$(7) : let colmask$(x)="32"
-04150     if hf(8)=1 then let colhdr$(x+=1)=name$(8) : let colmask$(x)="32"
-04160     if hf(9)=1 then let colhdr$(x+=1)=name$(9) : let colmask$(x)="32"
-04170     if hf(10)=1 then let colhdr$(x+=1)=name$(10) : let colmask$(x)="10"
-04180     if hf(11)=1 then let colhdr$(x+=1)=name$(11) : let colmask$(x)="10"
-04190     if hf(12)=1 then let colhdr$(x+=1)=name$(12) : let colmask$(x)="10"
-04200     if hf(13)=1 then let colhdr$(x+=1)=name$(13) : let colmask$(x)="10"
+04060     colhdr$(1)="Rec" : colhdr$(2)="Desc"
+04070     colmask$(1)="30": colmask$(2)=""
+04080     if hf(1)=1 then colhdr$(x+=1)=name$(1) : colmask$(x)="30" ! employee #
+04090     if hf(2)=1 then colhdr$(x+=1)=name$(2) : colmask$(x)="30" ! dept #
+04100     if hf(3)=1 then colhdr$(x+=1)=name$(3) : colmask$(x)="3" ! Payroll Date
+04110     if hf(4)=1 then colhdr$(x+=1)=name$(4) : colmask$(x)="30" ! check stop
+04120     if hf(5)=1 then colhdr$(x+=1)=name$(5) : colmask$(x)="32"
+04130     if hf(6)=1 then colhdr$(x+=1)=name$(6) : colmask$(x)="32" ! ot hours
+04140     if hf(7)=1 then colhdr$(x+=1)=name$(7) : colmask$(x)="32"
+04150     if hf(8)=1 then colhdr$(x+=1)=name$(8) : colmask$(x)="32"
+04160     if hf(9)=1 then colhdr$(x+=1)=name$(9) : colmask$(x)="32"
+04170     if hf(10)=1 then colhdr$(x+=1)=name$(10) : colmask$(x)="10"
+04180     if hf(11)=1 then colhdr$(x+=1)=name$(11) : colmask$(x)="10"
+04190     if hf(12)=1 then colhdr$(x+=1)=name$(12) : colmask$(x)="10"
+04200     if hf(13)=1 then colhdr$(x+=1)=name$(13) : colmask$(x)="10"
 04210     for j=14 to 46
-04220       if hf(j)=1 then let colhdr$(x+=1)=name$(j) : let colmask$(x)="10"
+04220       if hf(j)=1 then colhdr$(x+=1)=name$(j) : colmask$(x)="10"
 04230     next j
 04240     mat colhdr$(x) : mat colmask$(x) : mat printitem$(x)
 04250     let fnflexinit1("prchecks",1,1,20,100,mat colhdr$,mat colmask$,1)
@@ -594,7 +594,7 @@
             let enoprint=eno !:
             let tdnprint=tdn !:
             let prdprint=prd !:
-            let cknoprint=ckno !:
+            cknoprint=ckno !:
             mat totaltdc=totaltdc+tdc !:
             mat totaltcp=totaltcp+tcp
 04590     if details=1 then gosub PRINT_GRID
@@ -605,9 +605,9 @@
             let enoprint=tdnprint=prdprint=cknoprint=0 !:
             let item$(1)=item$(3)=item$(4)=item$(5)=item$(6)="": let item$(2)=desc$ !:
             let desc$="": goto L4690
-04640     if details=0 then let enoprint=holdeno: let tdnprint=holdtdn: let prdprint=holdprd: let cknoprint=holdckno
-04645     if printit=1 then let employeekey$=cnvrt$("pic(zzzzzzzz)",eno) : goto L4660 ! use different key for print instead of grid
-04650     if printit=1 or details=1 then let employeekey$=cnvrt$("pic(zzzzzzzz)",eno) : goto L4660 ! use different key for print instead of grid
+04640     if details=0 then let enoprint=holdeno: let tdnprint=holdtdn: let prdprint=holdprd: cknoprint=holdckno
+04645     if printit=1 then let employeekey$=cnvrt$("pic(zzzzzzzz)",eno) : goto L4660 ! use different key for pr instead of grid
+04650     if printit=1 or details=1 then let employeekey$=cnvrt$("pic(zzzzzzzz)",eno) : goto L4660 ! use different key for pr instead of grid
 04653     let employeekey$=cnvrt$("pic(zzzzzzzz)",holdeno) ! key for grids
 04660 L4660: if sum(totaltcp)=(0) and sum(totaltdc)=(0) then goto L4920
 04670     read #1,using "form pos 9,c 18",key=employeekey$: desc$ nokey L4680
@@ -676,9 +676,9 @@
             let desc$="4th Qtr": let holdnam$="": gosub PRINT_GRID
 05040     if annual=1 then let enoprint=tdnprint=prdprint=cknoprint=0 !:
             mat totaltdc=annualtdc: mat totaltcp=annualtcp !:
-            let annual_printed=1 : let desc$="YTD": gosub PRINT_GRID !:
+            annual_printed=1 : let desc$="YTD": gosub PRINT_GRID !:
             mat annualtcp=(0) : mat annualtdc=(0)
-05050 ! If PRINTIT=1 Then Goto 4810 ! don't use the totals if print report
+05050 ! If PRINTIT=1 Then Goto 4810 ! don't use the totals if pr report
 05060 ! If PRINTIT=1 Then Gosub EMPLOYEE_TOTALS
 05070     if employee=1 and holdeno<>0 then !:
             mat totaltdc=employeetdc: mat totaltcp=employeetcp !:

@@ -28,7 +28,7 @@
 00250   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00260   open #13: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00270 ! ______________________________________________________________________
-00280   let addone=1 ! set code as adding when first entering
+00280   addone=1 ! set code as adding when first entering
 00290 ! ______________________________________________________________________
 00300 TRANSACTION_ENTRY: ! 
 00310   if addone=1 then let inp(1)=inp(3)=0
@@ -86,11 +86,11 @@
 00710   goto L810
 00720 ! ______________________________________________________________________
 00730 PROOF_LIST_HDR: ! 
-00740   print #255,using L770: cnam$
-00750   print #255,using L770: "Billing Proof List"
-00760   print #255,using L770: "Date: "&date$&"      Time: "&time$
+00740   pr #255,using L770: cnam$
+00750   pr #255,using L770: "Billing Proof List"
+00760   pr #255,using L770: "Date: "&date$&"      Time: "&time$
 00770 L770: form pos 1,cc 113,skip 1
-00780   print #255: "Job #      Amount     Date   Status"
+00780   pr #255: "Job #      Amount     Date   Status"
 00790   return 
 00800 ! ______________________________________________________________________
 00810 L810: gosub PROOF_LIST_HDR
@@ -98,11 +98,11 @@
 00830     read #3,using L640,rec=j: jn$,mat inp
 00840     form pos 10,c 9,skip 1,pos 10,pic(-----,---.##),skip 1
 00850     let t1=0
-00860     print #255,using L870: jn$,mat inp pageoflow PROOF_LIST_NWPG
+00860     pr #255,using L870: jn$,mat inp pageoflow PROOF_LIST_NWPG
 00870 L870: form pos 1,c 6,x 1,pic(----,---.##),x 2,pic(zz/zz/zz),x 2,n 2,skip 1
 00880     let t1=t1+inp(1)
 00890   next j
-00900   print #255,using L910: " __________",t1
+00900   pr #255,using L910: " __________",t1
 00910 L910: form pos 8,c 11,skip 1,pos 7,pic(-----,---.##),skip 1
 00920 PROOF_LIST_DONE: ! 
 00930   let gt1=0
@@ -114,15 +114,15 @@
 00990     read #3,using L640,rec=j: jn$,mat inp norec L1050
 01000     if ltrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto L1050
 01010     read #11,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3,b4 nokey L1050
-01020     let b3=b3+inp(1)
-01030     if inp(3)><0 then let b4=inp(3)
+01020     b3=b3+inp(1)
+01030     if inp(3)><0 then b4=inp(3)
 01040     rewrite #11,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3,b4
 01050 L1050: next j
 01060   close #3,free: 
 01070   goto XIT
 01080 ! ______________________________________________________________________
 01090 PROOF_LIST_NWPG: ! 
-01100   print #255: newpage
+01100   pr #255: newpage
 01110   gosub PROOF_LIST_HDR
 01120   continue 
 01130 ! ______________________________________________________________________
@@ -130,7 +130,7 @@
 01150 ERTN: let fnerror(program$,err,line,act$,"xit")
 01160   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01170   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01180   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01180   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01190 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01200 ! /region
 01210 ! ______________________________________________________________________
@@ -141,15 +141,15 @@
 01260 ! INPUT FROM DISKETTE FILE    ! took this option out on new system
 01270 ! ______________________________________________________________________
 01280 CORRECTIONS: ! 
-01290   let addone=0: let editone=0
+01290   addone=0: let editone=0
 01300   let fntos(sn$="EntryCorrection")
-01310   let ch2$(1)="Rec #": let ch2$(2)="Job #": let ch2$(3)="Amount": let ch2$(4)="Date #" !:
-        let ch2$(5)="Status" !:
+01310   ch2$(1)="Rec #": ch2$(2)="Job #": ch2$(3)="Amount": ch2$(4)="Date #" !:
+        ch2$(5)="Status" !:
         mat ch2$(5) ! : Mat CM2$(5) : Mat ITEM2$(5)
-01320   let cm2$(1)="30": let cm2$(2)="": let cm2$(3)="10" !:
-        let cm2$(4)="1" !:
-        let cm2$(5)="30" !:
-        let cm2$(5): let ch2$(5): let item2$(5)
+01320   cm2$(1)="30": cm2$(2)="": cm2$(3)="10" !:
+        cm2$(4)="1" !:
+        cm2$(5)="30" !:
+        cm2$(5): ch2$(5): let item2$(5)
 01330   let fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 01340   restore #3: 
 01350 READ_FILE: ! 
@@ -167,7 +167,7 @@
 01410   let fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 01420   if ckey=5 then goto TRANSACTION_ENTRY
 01430   let editrec=val(resp$(1))
-01440   if ckey=1 then let addone=1: mat inp=(0): let jn$="": goto TRANSACTION_ENTRY
+01440   if ckey=1 then addone=1: mat inp=(0): let jn$="": goto TRANSACTION_ENTRY
 01450   if ckey=2 then read #3,using L640,rec=editrec: jn$,mat inp: let editone=1 : goto TRANSACTION_ENTRY
 01460   if ckey=4 then delete #3,rec=editrec: : goto CORRECTIONS
 01470   goto CORRECTIONS

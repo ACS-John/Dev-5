@@ -81,7 +81,7 @@
 32360   let fct$=time$(1:2)&time$(4:5) ! FILE CREATION TIME
 32380   let fidm$="A" ! FILE ID MODIFIER
 32400   let rsz$="094" ! RECORD SIZE
-32420   let bf$="10" ! BLOCKING FACTOR
+32420   bf$="10" ! BLOCKING FACTOR
 32440   if env$('client')="Billings" then let ion$="                      " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32460   if env$('client')="Thomasboro" then let ion$="Gifford State Bank    " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32480   ! if env$('client')="Ashland" then let ion$="Merchants & Farmers    " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
@@ -91,21 +91,21 @@
 32560   if env$('client')="Monticello" then let ion$="First State Bank       " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32580   if env$('client')="Franklinton" then let ion$="Parish National Bank  " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32600   let rc$="0000000" ! REFERENCE CODE
-32620   print #22,using L690: 1,pcde,imd$,imo$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,ion$,rc$,"0"
+32620   pr #22,using L690: 1,pcde,imd$,imo$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,ion$,rc$,"0"
 32640   L690: form pos 1,g 1,pic(##),c 10,c 10,g 6,g 4,c 1,c 3,c 2,c 1,c 23,c 23,c 7,c 1
 32660   ! COMPANY/BATCH HEADER RECORD
 32680   let scc=225 ! SERVICE CLASS CODE
-32700   let cdd$="" ! COMPANY DISCRETIONARY DATA
-32720   if env$('client')="Sangamon" and env$('cno')='1' then let cid$="1370902201" ! COMPANY IDENTIFICATION   (code 1 followed by federal id number)
-32740   if env$('client')="Sangamon" and env$('cno')='2' then let cid$="1371337231" ! COMPANY IDENTIFICATION
-32760   if env$('client')="Monticello" then let cid$="1376001815" ! COMPANY IDENTIFICATION
-32780   if env$('client')="Franklinton" then let cid$="Franklinto" ! COMPANY IDENTIFICATION
-32800   if env$('client')="Billings" then let cid$=" 430903099" ! COMPANY IDENTIFICATION
-32820   if env$('client')="Thomasboro" then let cid$=" 376000521" ! COMPANY IDENTIFICATION
-32840   ! if env$('client')="Ashland" then let cid$="1646018046" ! COMPANY IDENTIFICATION
+32700   cdd$="" ! COMPANY DISCRETIONARY DATA
+32720   if env$('client')="Sangamon" and env$('cno')='1' then cid$="1370902201" ! COMPANY IDENTIFICATION   (code 1 followed by federal id number)
+32740   if env$('client')="Sangamon" and env$('cno')='2' then cid$="1371337231" ! COMPANY IDENTIFICATION
+32760   if env$('client')="Monticello" then cid$="1376001815" ! COMPANY IDENTIFICATION
+32780   if env$('client')="Franklinton" then cid$="Franklinto" ! COMPANY IDENTIFICATION
+32800   if env$('client')="Billings" then cid$=" 430903099" ! COMPANY IDENTIFICATION
+32820   if env$('client')="Thomasboro" then cid$=" 376000521" ! COMPANY IDENTIFICATION
+32840   ! if env$('client')="Ashland" then cid$="1646018046" ! COMPANY IDENTIFICATION
 32860   let ecc$="PPD" ! STANDARD ENTRY CLASS CODE
 32880   if env$('client')="Billings" then let ecc$='CCD' ! Corporate
-32900   let ced$="UTILITIES" ! COMPANY ENTRY DESCRIPTIVE
+32900   ced$="UTILITIES" ! COMPANY ENTRY DESCRIPTIVE
 32920   let eed$=date$(1:2)&date$(4:5)&date$(7:8) ! EFFECTIVE ENTRY DATE
 32940   let osc$="1" ! ORIGINATOR STATUS CODE
 32960   if env$('client')="Sangamon" and cno=1 then let odi$="00707945" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
@@ -115,25 +115,25 @@
 33040   if env$('client')="Billings" then let odi$="08150596" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
 33060   if env$('client')="Thomasboro" then let odi$=" 2000412" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
 33080   ! if env$('client')="Ashland" then let odi$="08420167" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
-33100   let bn=1 !  BN=BATCH NUMBER
+33100   bn=1 !  BN=BATCH NUMBER
 33120   if env$('client')="Depoe Bay" then 
-33140     print #22,using L850: 5,scc,env$('cnam')(1:16),cdd$,cid$,ecc$,ced$,fcd$,fcd$,"",osc$,odi$,bn
+33140     pr #22,using L850: 5,scc,env$('cnam')(1:16),cdd$,cid$,ecc$,ced$,fcd$,fcd$,"",osc$,odi$,bn
 33160   else 
-33180     print #22,using L850: 5,scc,env$('cnam')(1:16),cdd$,cid$,ecc$,ced$,fncd(d2),eed$,"",osc$,odi$,bn
+33180     pr #22,using L850: 5,scc,env$('cnam')(1:16),cdd$,cid$,ecc$,ced$,fncd(d2),eed$,"",osc$,odi$,bn
 33200   end if 
 33220   L850: form pos 1,g 1,pic(###),c 16,c 20,c 10,c 3,c 10,pic(######),g 6,g 3,g 1,c 8,pic(#######)
 33240 return  ! /r
 38000 DETAIL1: ! r:
-38020   print #255,using L900: z$,e$(2),d2,bal pageoflow NEWPGE
+38020   pr #255,using L900: z$,e$(2),d2,bal pageoflow NEWPGE
 38040   L900: form pos 1,c 12,c 32,pic(zz/zz/zz),n 13.2,skip 1
 38060   let t1=t1+bal
 38080   let tc=bc ! TRANSACTION CODE
 38100   ! LET L1=LEN(RTRM$(BA$))
-38120   ! LET CD=VAL(BA$(L1:L1)) ! CHECK DIGIT
-38140   let ari=0 ! ADDENDA RECORD INDICATOR
+38120   ! cD=VAL(BA$(L1:L1)) ! CHECK DIGIT
+38140   ari=0 ! ADDENDA RECORD INDICATOR
 38160   let tn1=tn1+1
 38180   let tn$=br$&cnvrt$("PIC(#######)",tn1) ! TRACE NUMBER
-38200   print #22,using L1000: 6,tc,dr$,da$,bal*100,z$,e$(2)(1:22),"",ari,odi$&tn$
+38200   pr #22,using L1000: 6,tc,dr$,da$,bal*100,z$,e$(2)(1:22),"",ari,odi$&tn$
 38220   if postub=1 then gosub WRITE_POSTING_ENTRIES
 38240   L1000: form pos 1,g 1,g 2,c 9,c 17,pic(##########),c 15,c 22,g 2,n 1,c 15
 38260   let td1=td1+bal
@@ -152,30 +152,30 @@
 42180   if env$('client')="Billings" then 
 42200     let tn1-=1
 42220   else 
-42240     print #22,using L1126: 6,22,imo$(2:9),imo$(10:10),trim$(odi$),td1*100,"",env$('cnam')(1:22),"",0,odi$&tn$ ! putting total deposit in city's bank account ! Billings does not offset the withdrawls with a deposit.  The banker does that manually.
+42240     pr #22,using L1126: 6,22,imo$(2:9),imo$(10:10),trim$(odi$),td1*100,"",env$('cnam')(1:22),"",0,odi$&tn$ ! putting total deposit in city's bank account ! Billings does not offset the withdrawls with a deposit.  The banker does that manually.
 42260     L1126: form pos 1,g 1,g 2,c 8,c 1,c 17,pic(##########),c 15,c 22,g 2,n 1,c 15
 42280   end if 
-42300   print #22,using L1140: 8,scc,eac,eh,td1*100,tc1*100,cid$,mac$,"",odi$,bn
+42300   pr #22,using L1140: 8,scc,eac,eh,td1*100,tc1*100,cid$,mac$,"",odi$,bn
 42320   L1140: form pos 1,g 1,pic(###),pic(######),pic(##########),2*pic(############),c 10,c 19,c 6,c 8,pic(#######)
 42340   ! FILE CONTROL RECORD
-42360   let bactr=1 ! BATCH COUNT
+42360   bactr=1 ! BATCH COUNT
 42380   let tn2=tn1+4 ! total # records (all 6 records plus the 1&5 plus 8&9)
-42400   if fp(tn2/10)>0 then let blctr=int(tn2/10)+1: let bkfactor=blctr*10-tn2 ! block counter and block factor
-42420   if fp(tn2/10)=0 then let blctr=int(tn2/10): let bkfactor=0
+42400   if fp(tn2/10)>0 then blctr=int(tn2/10)+1: bkfactor=blctr*10-tn2 ! block counter and block factor
+42420   if fp(tn2/10)=0 then blctr=int(tn2/10): bkfactor=0
 42440   let eac=tn1 ! entry/adgenda count (number of 6 records)
 42460   ! EH=ENTRY HASH
-42480   print #22,using L1230: 9,bactr,blctr,eac,eh,td1*100,tc1*100,"                                      "," "
+42480   pr #22,using L1230: 9,bactr,blctr,eac,eh,td1*100,tc1*100,"                                      "," "
 42500   L1230: form pos 1,g 1,2*pic(######),pic(########),pic(##########),2*pic(############),c 38,c 1
 42520   if bkfactor=0 then goto L1280
 42540   for j=1 to bkfactor
-42560     print #22,using "Form POS 1,C 94": "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+42560     pr #22,using "Form POS 1,C 94": "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
 42580   next j
 42600   L1280: ! 
 42620 return  ! /r
 46000 END1: ! r:
 46020   gosub CTRL1
-46040   print #255: "                                                    {\ul            }"
-46060   print #255,using L900: "  Total","",0,t1
+46040   pr #255: "                                                    {\ul            }"
+46060   pr #255,using L900: "  Total","",0,t1
 46080   let fncloseprn
 46100   gosub L1500
 46120 if postub=1 then goto L1370 else goto XIT
@@ -188,12 +188,12 @@
 48100   let fnmsgbox(mat ml$,resp$,'',1)
 48120 if resp$="OK" then gosub MERGE else goto XIT ! /r
 50000 XIT: let fnxit
-51000 NEWPGE: print #255: newpage : gosub HDRP1: continue 
+51000 NEWPGE: pr #255: newpage : gosub HDRP1: continue 
 52000 HDRP1: ! r:
-52020   print #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
-52040   print #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
-52060   print #255: "\qc  {\f181 \fs22 \b "&date$("Month DD, CCYY")&"}"
-52080   print #255: "{\ul Account No}  {\ul Customer Name                 }  {\ul Pay Date}  {\ul     Amount}"
+52020   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
+52040   pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
+52060   pr #255: "\qc  {\f181 \fs22 \b "&date$("Month DD, CCYY")&"}"
+52080   pr #255: "{\ul Account No}  {\ul Customer Name                 }  {\ul Pay Date}  {\ul     Amount}"
 52100 return  ! /r
 54000 L1500: ! r:
 54020   dim a$*94,srvname$(10)*20,ml$(3)*80,o(2),bd2(5)
@@ -203,7 +203,7 @@
 54100   open #22: "Name="&env$('temp')&"\BkDraft_Tmp_22."&session$&",RecL=94",display,input 
 54120   do 
 54140     linput #22: a$ eof L1590
-54160     if a$(94:94)="X" then let a$(94:94)=""
+54160     if a$(94:94)="X" then a$(94:94)=""
 54180     write #24,using "Form POS 1,C 94,C 1,c 1": rpad$(a$,94),chr$(13),chr$(10)
 54200   loop 
 54220   L1590: ! 
@@ -225,7 +225,7 @@
 60020 ERTN: let fnerror(program$,err,line,act$,"xit")
 60040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 60060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-60080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+60080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 60100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 60120 ! /region
 60140 IGNORE: continue 
@@ -233,7 +233,7 @@
 64020   mat alloc(sz1)
 64040   let x=0
 64060   for j=1 to 10
-64080     if order(j)=1 then let alloc(x+=1)=gb(j)
+64080     if order(j)=1 then alloc(x+=1)=gb(j)
 64100   next j
 64120   let m=bal : let n=d2 : let o(1)=3
 64140   write #6,using "Form POS 1,C 10,PD 4.2,PD 4,2*N 1,POS 24,C 9,SZ1*PD 4.2,5*PD 3,PD 4.2": z$,m,n,mat o,rcpt$,mat alloc,mat bd2
@@ -251,7 +251,7 @@
 68200     if o(1)=3 then let tcode=3 ! collection
 68220     if o(1)=4 then let tcode=4 ! credit memo
 68240     if o(1)=5 then let tcode=5 ! debit memo
-68260     if o(1)=5 then let bal+=m else let bal-=m
+68260     if o(1)=5 then bal+=m else bal-=m
 68280     let tmp=fndate_mmddyy_to_ccyymmdd(n)
 68300     mat tg=(0): let x=0
 68320     for j=1 to 10

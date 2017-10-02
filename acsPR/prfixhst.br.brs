@@ -57,86 +57,86 @@
 00550 XIT: let fnxit
 00560 ! ______________________________________________________________________
 00570 INPSCRN: ! 
-00580   print newpage !:
+00580   pr newpage !:
         let fnopenwin(win=101,10,15,15,62,cap$)
-00590   print #win,fields "4,2,Cr 38,N": "Fix Year-To-Date Information (Y/N):"
-00600   print #win,fields "5,2,Cr 38,N": "Fix Quarter-To-Date Information (Y/N):"
+00590   pr #win,fields "4,2,Cr 38,N": "Fix Year-To-Date Information (Y/N):"
+00600   pr #win,fields "5,2,Cr 38,N": "Fix Quarter-To-Date Information (Y/N):"
 00610   let io5$(1)="4,41,Cu 1,UET,N"
 00620   let io5$(2)="5,41,Cu 1,UET,N"
-00630   print fields "16,30,C 09,B,1": "Next (F1)" !:
-        print fields "16,41,C 09,B,5": "Exit (F5)"
+00630   pr fields "16,30,C 09,B,1": "Next (F1)" !:
+        pr fields "16,41,C 09,B,5": "Exit (F5)"
 00640   let ytd$="N" : let qtd$="N"
 00650 L650: input #win,fields mat io5$: ytd$,qtd$ conv CONV1
-00660   if ce>0 then let io5$(ce)(ce1:ce2)="U": let ce=0
-00670   if cmdkey>0 then goto L740 else let ce=curfld+1
-00680   if ce>udim(io5$) then let ce=1
-00690 L690: let io5$(ce)=rtrm$(io5$(ce)) : let ce1=pos(io5$(ce),"U",1)
-00700   let ce2=ce1+1 : let io5$(ce)(ce1:ce1)="UC" : goto L650
+00660   if ce>0 then let io5$(ce)(ce1:ce2)="U": ce=0
+00670   if cmdkey>0 then goto L740 else ce=curfld+1
+00680   if ce>udim(io5$) then ce=1
+00690 L690: let io5$(ce)=rtrm$(io5$(ce)) : ce1=pos(io5$(ce),"U",1)
+00700   ce2=ce1+1 : let io5$(ce)(ce1:ce1)="UC" : goto L650
 00710 CONV1: if ce>0 then let io5$(ce)(ce1:ce2)="U"
-00720   let ce=cnt+1
-00730 ERR1: print fields "24,78,C 1": bell : goto L690
+00720   ce=cnt+1
+00730 ERR1: pr fields "24,78,C 1": bell : goto L690
 00740 L740: if cmdkey=5 then goto XIT
-00750   if ytd$<>"Y" and ytd$<>"N" then let ce=1 : goto ERR1
-00760   if qtd$<>"Y" and qtd$<>"N" then let ce=2 : goto ERR1
-00770   if ytd$="N" and qtd$="N" then let ce=1 : goto ERR1
+00750   if ytd$<>"Y" and ytd$<>"N" then ce=1 : goto ERR1
+00760   if qtd$<>"Y" and qtd$<>"N" then ce=2 : goto ERR1
+00770   if ytd$="N" and qtd$="N" then ce=1 : goto ERR1
 00780   if ytd$="N" then goto L1020
 00790 ! _______
-00800   print newpage !:
+00800   pr newpage !:
         let fnopenwin(win=101,10,18,15,62,cap$)
-00810   print #win,fields "4,2,Cr 36,N": "Starting Date for the Year (mmddyy):"
-00820   print #win,fields "5,2,Cr 36,N": "Ending Date for the Year (mmddyy):"
+00810   pr #win,fields "4,2,Cr 36,N": "Starting Date for the Year (mmddyy):"
+00820   pr #win,fields "5,2,Cr 36,N": "Ending Date for the Year (mmddyy):"
 00830   let io5$(1)="4,39,Nz 6,UT,N"
 00840   let io5$(2)="5,39,Nz 6,UT,N"
-00850   print fields "16,30,C 09,B,1": "Next (F1)"
-00860   print fields "16,41,C 09,B,5": "Exit (F5)"
+00850   pr fields "16,30,C 09,B,1": "Next (F1)"
+00860   pr fields "16,41,C 09,B,5": "Exit (F5)"
 00870 L870: input #win,fields mat io5$: yd1,yd2 conv CONV2
-00880   if ce>0 then let io5$(ce)(ce1:ce2)="U": let ce=0
-00890   if cmdkey>0 then goto L960 else let ce=curfld+1
-00900   if ce>udim(io5$) then let ce=1
-00910 L910: let io5$(ce)=rtrm$(uprc$(io5$(ce))) : let ce1=pos(io5$(ce),"U",1)
-00920   let ce2=ce1+1 : let io5$(ce)(ce1:ce1)="UC" : goto L870
+00880   if ce>0 then let io5$(ce)(ce1:ce2)="U": ce=0
+00890   if cmdkey>0 then goto L960 else ce=curfld+1
+00900   if ce>udim(io5$) then ce=1
+00910 L910: let io5$(ce)=rtrm$(uprc$(io5$(ce))) : ce1=pos(io5$(ce),"U",1)
+00920   ce2=ce1+1 : let io5$(ce)(ce1:ce1)="UC" : goto L870
 00930 CONV2: if ce>0 then let io5$(ce)(ce1:ce2)="U"
-00940   let ce=cnt+1
-00950 ERR2: print fields "24,78,C 1": bell : goto L910
+00940   ce=cnt+1
+00950 ERR2: pr fields "24,78,C 1": bell : goto L910
 00960 L960: if cmdkey=5 then goto XIT
-00970   if yd1=0 then let ce=1 : goto ERR2
-00980   if yd2=0 then let ce=2 : goto ERR2
+00970   if yd1=0 then ce=1 : goto ERR2
+00980   if yd2=0 then ce=2 : goto ERR2
 00990   let yd1=fndate_mmddyy_to_ccyymmdd(yd1)
 01000   let yd2=fndate_mmddyy_to_ccyymmdd(yd2)
-01010   if yd2<yd1 then let ce=1 : goto ERR2
+01010   if yd2<yd1 then ce=1 : goto ERR2
 01020 L1020: ! UPDATE QTR
 01030   if qtd$="N" then goto L1260
 01040 ! _______
-01050   print newpage !:
+01050   pr newpage !:
         let fnopenwin(win=101,10,16,15,63,cap$)
-01060   print #win,fields "04,2,Cr 39,N": "Starting Date for the Quarter (mmddyy):"
-01070   print #win,fields "05,2,Cr 39,N": "Ending Date for the Quarter (mmddyy):"
-01080   print fields "16,30,C 09,B,1": "Next (F1)" !:
-        print fields "16,41,C 09,B,5": "Exit (F5)"
+01060   pr #win,fields "04,2,Cr 39,N": "Starting Date for the Quarter (mmddyy):"
+01070   pr #win,fields "05,2,Cr 39,N": "Ending Date for the Quarter (mmddyy):"
+01080   pr fields "16,30,C 09,B,1": "Next (F1)" !:
+        pr fields "16,41,C 09,B,5": "Exit (F5)"
 01090   let io5$(1)="4,42,Nz 6,UT,N"
 01100   let io5$(2)="5,42,Nz 6,UT,N"
 01110 L1110: input #win,fields mat io5$: qd1,qd2 conv CONV2
-01120   if ce>0 then let io5$(ce)(ce1:ce2)="U": let ce=0
-01130   if cmdkey>0 then goto L1200 else let ce=curfld+1
-01140   if ce>udim(io5$) then let ce=1
-01150 L1150: let io5$(ce)=rtrm$(uprc$(io5$(ce))) : let ce1=pos(io5$(ce),"U",1)
-01160   let ce2=ce1+1 : let io5$(ce)(ce1:ce1)="UC" : goto L1110
+01120   if ce>0 then let io5$(ce)(ce1:ce2)="U": ce=0
+01130   if cmdkey>0 then goto L1200 else ce=curfld+1
+01140   if ce>udim(io5$) then ce=1
+01150 L1150: let io5$(ce)=rtrm$(uprc$(io5$(ce))) : ce1=pos(io5$(ce),"U",1)
+01160   ce2=ce1+1 : let io5$(ce)(ce1:ce1)="UC" : goto L1110
 01170 CONV3: if ce>0 then let io5$(ce)(ce1:ce2)="U"
-01180   let ce=cnt+1
-01190 ERR3: print fields "24,78,C 1": bell : goto L1150
+01180   ce=cnt+1
+01190 ERR3: pr fields "24,78,C 1": bell : goto L1150
 01200 L1200: if cmdkey=5 then goto XIT
-01210   if qd1=0 then let ce=1 : goto ERR2
-01220   if qd2=0 then let ce=2 : goto ERR2
+01210   if qd1=0 then ce=1 : goto ERR2
+01220   if qd2=0 then ce=2 : goto ERR2
 01230   let qd1=fndate_mmddyy_to_ccyymmdd(qd1)
 01240   let qd2=fndate_mmddyy_to_ccyymmdd(qd2)
-01250   if qd2<qd1 then let ce=1 : goto ERR2
+01250   if qd2<qd1 then ce=1 : goto ERR2
 01260 L1260: return 
 01270 ! ______________________________________________________________________
 01280 ! <Updateable Region: ERTN>
 01290 ERTN: let fnerror(program$,err,line,act$,"xit")
 01300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01310   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01320   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01320   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01330 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01340 ! /region
 01350 ! ______________________________________________________________________

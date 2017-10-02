@@ -14,17 +14,17 @@
 00140 ! ______________________________________________________________________
 00150 ASKSUBCAT: ! 
 00160 L160: let fnsubcat_srch(cde$,ckey,fixgrid)
-00170   let cde$=lpad$(rtrm$(cde$),3)
+00170   cde$=lpad$(rtrm$(cde$),3)
 00180   if ckey=97 then let ti1=addsubcat=1 : goto ADDREC else !:
           if ckey=98 then goto EDITREC else !:
-            if ckey=3 then read #1,using "Form POS 1,C 3,C 25": cde$,des$ eof L160: let cde$=uprc$(lpad$(rtrm$(cde$),3)): let holdcde$=cde$: goto EDITREC
+            if ckey=3 then read #1,using "Form POS 1,C 3,C 25": cde$,des$ eof L160: cde$=uprc$(lpad$(rtrm$(cde$),3)): let holdcde$=cde$: goto EDITREC
 00190   if ckey=96 then goto DELETE_RECORD
 00200   if ckey=94 then gosub SUBCAT_LISTING
 00210   if ckey=5 then goto XIT
 00220   goto ASKSUBCAT
 00230 ! ______________________________________________________________________
 00240 ADDREC: ! 
-00250   let cde$="": let des$=""
+00250   cde$="": let des$=""
 00260   let fntos(sn$="Ask-sub-cat") !:
         let respc=0
 00270   let fnlbl(1,1,"Sub-category #:",16,right)
@@ -34,7 +34,7 @@
         let fncmdkey("E&xit",5,0,1,"Returns to main screen.")
 00300   let fnacs(sn$,0,mat resp$,ckey) ! add sub-category #
 00310   if ckey=5 then goto ASKSUBCAT
-00320   let cde$=lpad$(rtrm$(resp$(1)),3)
+00320   cde$=lpad$(rtrm$(resp$(1)),3)
 00330   read #1,using L760,key=cde$: cde$,des$ nokey L350
 00340   goto EDITREC
 00350 L350: write #1,using L760: cde$,des$: let new1=1
@@ -62,7 +62,7 @@
         let fncmdkey("E&xit",5,0,1,"Returns to main screen.")
 00480   let fnacs(sn$,0,mat resp$,ckey) ! edit sub-category
 00490   if ckey=5 then goto ASKSUBCAT
-00500   let cde$=lpad$(rtrm$(resp$(1)),3)
+00500   cde$=lpad$(rtrm$(resp$(1)),3)
 00510   let des$=resp$(2)
 00520   if ckey=4 then goto DELETE_RECORD
 00530   if holdcde$<>cde$ then goto L540 else goto L560
@@ -99,10 +99,10 @@
 00810   restore #1,key>="   ": nokey ASKSUBCAT
 00820   gosub L950
 00830 L830: read #1,using L760: cde$,des$ eof L910
-00840   print #255,using L850: cde$,des$ pageoflow L870
+00840   pr #255,using L850: cde$,des$ pageoflow L870
 00850 L850: form pos 16,c 5,c 30,skip 1
 00860   goto L830
-00870 L870: print #255: newpage
+00870 L870: pr #255: newpage
 00880   gosub L950
 00890   continue 
 00900 ! ______________________________________________________________________
@@ -110,12 +110,12 @@
 00920   let fncloseprn
 00930   goto ASKSUBCAT
 00940 ! ______________________________________________________________________
-00950 L950: print #255,using L960: date$,cnam$
+00950 L950: pr #255,using L960: date$,cnam$
 00960 L960: form pos 1,c 8,cc 52
-00970   print #255,using L980: time$,"Sub-Category File Listing"
+00970   pr #255,using L980: time$,"Sub-Category File Listing"
 00980 L980: form pos 1,c 8,pos 11,cc 50,skip 2
-00990   print #255: tab(15);"Code  Description"
-01000   print #255: tab(15);"____  ______________________________"
+00990   pr #255: tab(15);"Code  Description"
+01000   pr #255: tab(15);"____  ______________________________"
 01010   return 
 01020 ! ______________________________________________________________________
 01030 XIT: let fnxit
@@ -130,7 +130,7 @@
 01120 ERTN: let fnerror(program$,err,line,act$,"xit")
 01130   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01140   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01150   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01150   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01160 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01170 ! /region
 01180 ! ______________________________________________________________________

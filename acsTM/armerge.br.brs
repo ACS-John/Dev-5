@@ -5,8 +5,8 @@
 00060   let fntop(program$,cap$="AR Merge")
 00070   let fncno(cno,cnam$)
 00080   dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50,ta(2)
-00090   print newpage
-00100   print fields "10,10,c 50,H,N": "A/R Merge Transactions In Process"
+00090   pr newpage
+00100   pr fields "10,10,c 50,H,N": "A/R Merge Transactions In Process"
 00110   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L700
 00120   open #2: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&str$(cno)&",Shr",internal,outin,relative ioerr L700
 00130   open #h_addr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,outin,relative ioerr L700
@@ -21,8 +21,8 @@
 00210 L210: form pos 283,pd 5.2,pos 299,2*pd 3
 00220 L220: let iv$=lpad$(rtrm$(iv$),12)
 00230   if tr(5)><1 then goto L240
-00240 L240: if tr(5)<3 or tr(5)=5 then let am6=am6+tr(3) else let am6=am6-tr(3)
-00250   if tr(5)=3 then let am6=am6-tr(2)
+00240 L240: if tr(5)<3 or tr(5)=5 then am6=am6+tr(3) else am6=am6-tr(3)
+00250   if tr(5)=3 then am6=am6-tr(2)
 00260   let tr2=tr(2)
 00270   if tr(5)=3 then let tr(3)=tr(3)+tr2
 00280   let tr(2)=tr(3)
@@ -48,7 +48,7 @@
 00480   goto LOOP_TOP
 00490 CLSMSTR_NOKEY: if rtrm$(p$)="" or rtrm$(ltrm$(p$))="0" then goto LOOP_TOP
 00500   let t7=9
-00510   print #255: ,"CANNOT LOCATE ACCOUNT # ";p$
+00510   pr #255: ,"CANNOT LOCATE ACCOUNT # ";p$
 00520   let prtcode=1
 00530   goto LOOP_TOP
 00540 L540: close #1: 
@@ -56,27 +56,27 @@
 00560   close #h_addr: 
 00570 ! close #h_armotran: 
 00580   if prtcode=0 then goto L600
-00590   if nw=1 then close #255: else print #255: newpage
+00590   if nw=1 then close #255: else pr #255: newpage
 00600 L600: if t7=9 then goto L620
 00610 XIT: let fnxit
-00620 L620: print newpage,"BE SURE TO SET UP THE A/R ACCOUNTS AS"
-00630   print "INDICATED ON THE PRINT-OUT.  THEN REENTER ANY "
-00640   print "TRANSACTIONS THAT WERE REJECTED."
-00650   print 
-00660   print 
-00670   print fields "22,2,c 40": "Press enter to return to system menu."
+00620 L620: pr newpage,"BE SURE TO SET UP THE A/R ACCOUNTS AS"
+00630   pr "INDICATED ON THE PRINT-OUT.  THEN REENTER ANY "
+00640   pr "TRANSACTIONS THAT WERE REJECTED."
+00650   pr 
+00660   pr 
+00670   pr fields "22,2,c 40": "Press enter to return to system menu."
 00680   input fields "23,2,c 1,ae,n": pause$
 00690   goto XIT
-00700 L700: if err=61 then print fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L720
+00700 L700: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L720
 00710   goto L760
-00720 L720: print newpage
-00730   if err=4148 then print fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L750
+00720 L720: pr newpage
+00730   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L750
 00740   goto L760
-00750 L750: print fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00760 L760: print fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00750 L750: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00760 L760: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00770   input fields "24,60,C 1,N": quitcode$
 00780   if rtrm$(uprc$(quitcode$))="Q" then goto L820
-00790   print fields "23,3,C 78,N": ""
-00800   print fields "24,3,C 78,N": ""
+00790   pr fields "23,3,C 78,N": ""
+00800   pr fields "24,3,C 78,N": ""
 00810   retry 
 00820 L820: goto XIT

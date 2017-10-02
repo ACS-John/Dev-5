@@ -17,7 +17,7 @@
 36080         if seltp=0 or seltp=typ then 
 36100           mat box=(0)
 36120           if typ<1 or typ>8 then let typ=1
-36140           let box(typ)=ytdp
+36140           box(typ)=ytdp
 36145 ! pr mat ad$ : pause
 36160           fn1099print(vn$,nam$,mat ad$,ss$,mat box)
 36180         end if
@@ -34,7 +34,7 @@
 50020 ERTN: let fnerror(program$,err,line,act$,"xit")
 50040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 50060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+50080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50120 ! /region
 54000 READ_TRANSACTIONS: ! r: passed trmstr2,vn$,beg_date,end_date    returns ytdp

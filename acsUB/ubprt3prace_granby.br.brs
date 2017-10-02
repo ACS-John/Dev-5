@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsUB\ubprt3prace_granby
-00020 ! print bills for Carrizo Springs   3 per page prace
+00020 ! pr bills for Carrizo Springs   3 per page prace
 00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnmsgbox,fnbarcode,fnpa_txt,fnpa_open,fnpa_finis,fnpa_line,fnpa_newpage
 00030 ! ______________________________________________________________________
 00050   on error goto ERTN
@@ -16,16 +16,16 @@
 00160   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 00170   close #21: 
 00180   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00190   let at$(1)=cnam$
+00190   at$(1)=cnam$
 00200   let z=23
-00210   let at$(1)=trim$(at$(1))(1:z)
+00210   at$(1)=trim$(at$(1))(1:z)
 00220   let x=len(at$(1)) : let y=z-x
-00230   let at$(1)=rpt$(" ",int(y/2))&at$(1)
+00230   at$(1)=rpt$(" ",int(y/2))&at$(1)
 00240   let z=26
 00250   for j=2 to udim(at$)
-00260     let at$(j)=trim$(at$(j))(1:z)
+00260     at$(j)=trim$(at$(j))(1:z)
 00270     let x=len(at$(j)) : let y=z-x
-00280     let at$(j)=rpt$(" ",int(y/2))&at$(j)
+00280     at$(j)=rpt$(" ",int(y/2))&at$(j)
 00290   next j
 00300   let linelength=62
 00310 !  :  !
@@ -40,7 +40,7 @@
 00400   let mg$(1)="If you smell gas call"
 00410   let mg$(2)="472-6556 or 472-3535."
 00420 SCREEN1: ! 
-00430   let a$="" : let prtbkno=0
+00430   a$="" : let prtbkno=0
 00440   let fntos(sn$="UBPrtBl1-1")
 00450   let pf=26 : let ll=24
 00460   let respc=0
@@ -87,9 +87,9 @@
 00860   let mg$(3)=resp$(6)
 00870   let d1=val(resp$(7))
 00880   if resp$(8)="[All]" then 
-00890     let a$=""
+00890     a$=""
 00900   else 
-00910     let a$=lpad$(trim$(resp$(8)(1:10)),10)
+00910     a$=lpad$(trim$(resp$(8)(1:10)),10)
 00920   end if 
 00930   if resp$(9)="[All]" then 
 00940     let prtbkno=0
@@ -99,7 +99,7 @@
 00980   if resp$(10)="True" then let sl1=1: let z$="" else let sl1=0
 00990   if trim$(a$)<>"" then 
 01000     read #1,using 'form pos 1,c 10,pos 1741,n 2,n 7',key=a$: z$,route,sequence nokey SCREEN1
-01010     let holdz$=z$: let begin=1
+01010     let holdz$=z$: begin=1
 01020     let st1=1
 01030   end if 
 01035 ! 
@@ -115,7 +115,7 @@
 01082 L650: if sl1=1 then goto SCREEN3
 01084 L660: read #h_temp,using L690: bc$,z$ eof RELEASE_PRINT
 01086   if trim$(a$)<>"" and begin=1 and z$<>holdz$ then goto L660 ! start with
-01088   let begin=0 ! cancel starting account
+01088   begin=0 ! cancel starting account
 01090 L690: form pos 1,c 12,c 10
 01092   read #1,using F_CUSTOMER,key=z$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,dr$,bc,da$ nokey L660
 01094 ! if bal<=0 then goto L660 ! skip anyone with a balance less than or equal to zero
@@ -169,8 +169,8 @@
 01190 ! If C4>0 Then Let FB$(1)="          Final Bill" : Let FB$(2)="": Let FB$(3)=""
 01192 ! ______________print bill routine______________________________________
 01194   let fn_vbprint
-01196 ! _____________end of print routine______________________________________
-01198   let bct(2)=bct(2)+1
+01196 ! _____________end of pr routine______________________________________
+01198   bct(2)=bct(2)+1
 01200 ! .   ! accumulate totals
 01202   goto L650
 01204 ! ______________________________________________________________________
@@ -188,7 +188,7 @@
 01228   let fncmbact(1,17)
 01230   let resp$(1)=a$
 01232   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
-01234   let a$=lpad$(trim$(resp$(1)(1:10)),10)
+01234   a$=lpad$(trim$(resp$(1)(1:10)),10)
 01236   if trim$(a$)="" then goto RELEASE_PRINT
 01238   if ck=5 then goto RELEASE_PRINT
 01240   read #1,using F_CUSTOMER,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,dr$,bc,da$ nokey SCREEN3
@@ -201,7 +201,7 @@
 01254 ERTN: let fnerror(program$,err,line,act$,"xit")
 01256   if uprc$(act$)<>"PAUSE" then goto L1780
 01258   execute "List -"&str$(line) : pause : goto L1780
-01260   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause 
+01260   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
 01780 L1780: execute act$
 01790   goto ERTN
 01800 ! ______________________________________________________________________
@@ -232,7 +232,7 @@
 02139     if prtbkno=0 then goto L1420
 02141     if prtbkno><route then goto END5
 02143 L1420: if f><d1 then goto L1380
-02145     let cr$=""
+02145     cr$=""
 02147     read #5,using "Form POS 96,C 12",key=z$: cr$ nokey L1450
 02149 L1450: write #h_temp,using "Form POS 1,C 12,C 10": cr$,z$
 02151     goto L1380
@@ -268,9 +268,9 @@
 03155 L3140: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 03160       if p$<>z$ then goto L3210
 03165       if tcode=1 then ! only charge transactions
-03170         let usage(3)=usage(2): let billdate(3)=billdate(2)
-03175         let usage(2)=usage(1): let billdate(2)=billdate(1)
-03180         let usage(1)=wu: let billdate(1)=tdate
+03170         let usage(3)=usage(2): billdate(3)=billdate(2)
+03175         let usage(2)=usage(1): billdate(2)=billdate(1)
+03180         let usage(1)=wu: billdate(1)=tdate
 03185       end if  ! tcode=1
 03190     loop 
 03210 L3210: ! 
@@ -283,32 +283,32 @@
 03280     let pos_column_column=5 ! 20 !  pos_column_column=remit side position
 03290     let pos_right_column=120 ! pos_right_column=customer side position
 03300     let fnpa_line(pos_right_column+12,factor+0,62,line_height+12,1) ! the box around the company name and address
-03310 ! Print #20: 'Call Print.AddLine('&STR$(4)&','&STR$(factor+2)&',64,'&str$(line_height*3+1)&',True)'
-03320     print #20: "Call Print.MyFontBold(True)"
-03330     print #20: 'Call Print.MyFontSize(12)'
-03340     print #20: 'Call Print.MyFont("Courier New")'
+03310 ! pr #20: 'Call Print.AddLine('&STR$(4)&','&STR$(factor+2)&',64,'&str$(line_height*3+1)&',True)'
+03320     pr #20: "Call Print.MyFontBold(True)"
+03330     pr #20: 'Call Print.MyFontSize(12)'
+03340     pr #20: 'Call Print.MyFont("Courier New")'
 03350     let fnpa_txt(at$(1),pos_right_column+15,factor+line_height*1-1)
-03360     print #20: 'Call Print.MyFont("Lucida Console")'
-03370     print #20: 'Call Print.MyFontSize(10)'
-03380     print #20: 'Call Print.MyFontBold(False)'
+03360     pr #20: 'Call Print.MyFont("Lucida Console")'
+03370     pr #20: 'Call Print.MyFontSize(10)'
+03380     pr #20: 'Call Print.MyFontBold(False)'
 03390     let fnpa_txt(at$(2),pos_right_column+13,factor+line_height*2+1-.2)
 03400     let fnpa_txt(at$(3),pos_right_column+15,factor+line_height*3+1)
 03410 PRESORTED_BOX: ! 
-03420     print #20: 'Call Print.MyFontSize(9)'
+03420     pr #20: 'Call Print.MyFontSize(9)'
 03430     let fnpa_txt("Please return this",pos_column_column+8,factor+line_height*1)
 03440     let fnpa_txt("side with payment to:",pos_column_column+8,factor+line_height*2)
 03450     let fnpa_txt(trim$(cnam$),pos_column_column+8,factor+line_height*3)
 03460     let fnpa_txt(e$(2),pos_right_column+8,factor+line_height*7)
 03470     let fnpa_txt('Billing Date:'&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),pos_right_column+5,factor+line_height*8)
 03480     let fnpa_txt(trim$(z$),pos_right_column+54,factor+line_height*8)
-03490     print #20: 'Call Print.AddLine('&str$(pos_right_column)&','&str$(factor+line_height*9+1)&',79,0)'
-03500     print #20: 'Call Print.MyFontSize(9)'
+03490     pr #20: 'Call Print.AddLine('&str$(pos_right_column)&','&str$(factor+line_height*9+1)&',79,0)'
+03500     pr #20: 'Call Print.MyFontSize(9)'
 03510     let fnpa_txt("Service",pos_right_column,factor+line_height*9+2)
 03520     let fnpa_txt("Prior",pos_right_column+18,factor+line_height*9+2)
 03530     let fnpa_txt("Reading",pos_right_column+31,factor+line_height*9+2)
 03540     let fnpa_txt("Usage",pos_right_column+51,factor+line_height*9+2)
 03550     let fnpa_txt("Charge",pos_right_column+66,factor+line_height*9+2)
-03560     print #20: 'Call Print.MyFontSize(10)'
+03560     pr #20: 'Call Print.MyFontSize(10)'
 03570     let fnpa_txt('Billing Date:',pos_column_column-2,factor+line_height*8)
 03580     let fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),pos_column_column+35,factor+line_height*8)
 03590     let fnpa_txt('Past Due:',pos_column_column-2,factor+line_height*09)
@@ -323,11 +323,11 @@
 03680 ! else 
 03690 !  let fnpa_txt(fnformnumb$(bal,2,9),pos_column_column+30,factor+(line_height*12)+1)
 03700 ! end if  ! bal>0
-03710     print #20: 'Call Print.MyFontsize(10)'
+03710     pr #20: 'Call Print.MyFontsize(10)'
 03720     let fnpa_txt("From:"&cnvrt$("pic(zz/zz/zz)",reading_date_prior)&"  To:"&cnvrt$("pic(zz/zz/zz)",reading_date_cur),pos_column_column+6,factor+line_height+=13)
 03730     let fnpa_txt("From:"&cnvrt$("pic(zz/zz/zz)",reading_date_prior)&"  To:"&cnvrt$("pic(zz/zz/zz)",reading_date_cur),pos_right_column+6,factor+line_height)
 03740     let line_height+=14
-03750     print #20: 'Call Print.MyFontsize(9)'
+03750     pr #20: 'Call Print.MyFontsize(9)'
 03760     let fn_print_serivce_metered(1,d(2),d(1),d(3)) ! Water
 03770     let fn_print_serivce_metered(2) ! Sewer
 03780 ! let fn_print_serivce_metered(3,d(6),d(5),d(7)) ! Electric
@@ -337,7 +337,7 @@
 03820     if g(7)>0 then let fn_print_serivce_metered(7) ! Service 7
 03830     if g(8)>0 then let fn_print_serivce_metered(8) ! Service 8
 03840     if g(9)>0 then let fn_print_serivce_metered(9) ! Service 9
-03850     print #20: 'Call Print.MyFontsize(10)'
+03850     pr #20: 'Call Print.MyFontsize(10)'
 03860 ! allow for three forms
 03870     if line_height<90 then 
 03880       let line_height=62
@@ -360,31 +360,31 @@
 04050     if df$="Y" then let de2$="   DRAFTED     ": goto L2710 else let de2$="               " : goto L2720
 04055 L2710: let txt$=de2$
 04060     let fnpa_txt(txt$,pos_right_column+6,factor+line_height+=7.0)
-04062 L2720: print #20: 'Call Print.MyFontSize(12)'
+04062 L2720: pr #20: 'Call Print.MyFontSize(12)'
 04064     let txt$=pe$(1)
 04066     let fnpa_txt(txt$,pos_column_column,factor+58)
-04068     print #20: 'Call Print.MyFontsize(10)'
-04070     print #20: 'Call Print.AddLine('&str$(pos_right_column)&','&str$(factor+line_height+=3.5)&',79,0)'
+04068     pr #20: 'Call Print.MyFontsize(10)'
+04070     pr #20: 'Call Print.AddLine('&str$(pos_right_column)&','&str$(factor+line_height+=3.5)&',79,0)'
 04072     let fnpa_txt("Due by: "&cnvrt$("pic(zz/zz/zz)",d4),pos_right_column+6,factor+line_height+=2.5)
-04074     print #20: 'Call Print.MyFontSize(12)'
+04074     pr #20: 'Call Print.MyFontSize(12)'
 04076     let fnpa_txt(cnvrt$("pic(---,---.--)",bal),pos_right_column+48,factor+line_height)
 04078     let fnpa_txt(pe$(2)(1:25),pos_column_column,factor+61.50)
-04080     print #20: 'Call Print.MyFontsize(10)'
+04080     pr #20: 'Call Print.MyFontsize(10)'
 04082     let fnpa_txt(e$(1)(1:18),pos_column_column,factor+42)
-04084     print #20: 'Call Print.MyFontSize(12)'
+04084     pr #20: 'Call Print.MyFontSize(12)'
 04086     let fnpa_txt(pe$(3),pos_column_column,factor+65)
-04088 ! print #20: 'Call Print.MyFontsize(10)'
-04090 ! print #20: 'Call Print.MyFontSize(12)'
+04088 ! pr #20: 'Call Print.MyFontsize(10)'
+04090 ! pr #20: 'Call Print.MyFontSize(12)'
 04092     let fnpa_txt(pe$(4)(1:25),pos_column_column,factor+68.50)
-04094     print #20: 'Call Print.MyFontsize(10)'
+04094     pr #20: 'Call Print.MyFontsize(10)'
 04096     let fnpa_txt(mg$(1),pos_right_column+6,factor+line_height+=3.5)
 04098     let fnpa_txt(mg$(2),pos_right_column+6,factor+line_height+=3.5)
 04100     let fnpa_txt(mg$(3),pos_right_column+6,factor+line_height+=3.5)
 04102     if line_height<90 then let updown=3
 04104     if line_height>90 and line_height<180 then let updown=6.5
 04106     if line_height>180 and line_height<270 then let updown=10
-04108 ! if trim$(cr$)<>"" then print #20: 'Call Print.DisplayBarCode('&str$(3)&','&str$(updown)&',"'&cr$&'")'
-04110     let bills+=1
+04108 ! if trim$(cr$)<>"" then pr #20: 'Call Print.DisplayBarCode('&str$(3)&','&str$(updown)&',"'&cr$&'")'
+04110     bills+=1
 04112     if int(bills/3)=bills/3 then let fnpa_newpage: let factore=0: goto L2980
 04114     let factor=factor+94 ! was 96
 04116     if factor>=270 then let factor=0

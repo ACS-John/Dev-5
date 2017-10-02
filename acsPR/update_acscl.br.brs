@@ -47,9 +47,9 @@
 00520   read #3,using FM_DEPT,key=eno$&tdn$: pgl$
 00530 FM_DEPT: form pos 12,c 12
 00540 DELETE_ACSCL: ! delete old check records
-00550   let clk$=lpad$(str$(bankcode),2)&"1"&tr$(1)
+00550   clk$=lpad$(str$(bankcode),2)&"1"&tr$(1)
 00560   read #8,using F_TRMSTR,key=clk$: bc$,tcde$,otr1$,otr2$,otr3 nokey WRITE_ACSCL
-00570   let bal=bal-otr3
+00570   bal=bal-otr3
 00580   delete #8,key=clk$: 
 00590   restore #tralloc,key>=clk$: nokey WRITE_ACSCL
 00600 RD_TRALLOC: read #tralloc,using 'Form Pos 1,C 11': newkey$ eof WRITE_ACSCL
@@ -61,7 +61,7 @@
 00660   let tr$(5)=em$(1)
 00670   write #8,using F_TRMSTR: bankcode,1,tr$(1),tr$(2),tr3,tr$(4),tr$(5),0,0,4
 00680 F_TRMSTR: form pos 1,g 2,g 1,c 8,g 6,pd 10.2,c 8,c 35,n 1,n 6,n 1
-00690   let bal=bal+tr3
+00690   bal=bal+tr3
 00700   let tragl$=pgl$
 00710   let traamt=tcp(31)
 00720   let tradesc$="Gross Pay"
@@ -109,5 +109,5 @@
 01150 ERTN: let fnerror(program$,err,line,act$,"xit")
 01160   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01170   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01180   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01180   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01190 ERTN_EXEC_ACT: execute act$ : goto ERTN

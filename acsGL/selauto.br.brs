@@ -37,10 +37,10 @@
 00350     let resp$(resp+=1)=str$(prim(j))
 00360   next j
 00370   mat chdr$(2) : mat cmask$(2) : mat item$(2) !:
-        let chdr$(1)='Item #' !:
-        let chdr$(2)='Menu option'
-00380   let cmask$(1)='30' !:
-        let cmask$(2)='' !:
+        chdr$(1)='Item #' !:
+        chdr$(2)='Menu option'
+00380   cmask$(1)='30' !:
+        cmask$(2)='' !:
         let fnflexinit1('selauto',2,50,20,35,mat chdr$,mat cmask$,1,0,frame) !:
         let editrec=0
 00390   close #1: ioerr ignore
@@ -107,11 +107,11 @@
 00920   data "  Reverse Posted Transactions","S:\acsGL\UNPost","","E"
 00930   data "  Enter Standard Adjustments","S:\General Ledger\Enter Standard Adjustments","BldStdAj","E"
 00940   data "  Post Standard Adjustments","S:\General Ledger\Post Standard Adjustments","StdAdj","E"
-00950   data "  Print Bank Reconciliation","S:\acsGL\GLCkRec","GLCkRec","E"
-00960   data "  Print Trial Balance Worksheet","S:\acsGL\ACGLWKSH","acglwksh","E"
-00970   data "  Print Budget Worksheet","S:\acsGL\BudWkSh","BudWkSh","E"
-00980   data "  Print Transactions Journal","S:\acsGL\AcGLTrJr","acgltrjr","ES24"
-00990   data "  Print Trial Balance","S:\General Ledger\Trial Balance","acgltb","ES25"
+00950   data "  pr Bank Reconciliation","S:\acsGL\GLCkRec","GLCkRec","E"
+00960   data "  pr Trial Balance Worksheet","S:\acsGL\ACGLWKSH","acglwksh","E"
+00970   data "  pr Budget Worksheet","S:\acsGL\BudWkSh","BudWkSh","E"
+00980   data "  pr Transactions Journal","S:\acsGL\AcGLTrJr","acgltrjr","ES24"
+00990   data "  pr Trial Balance","S:\General Ledger\Trial Balance","acgltb","ES25"
 01000 ! Financial Stmts.
 01010   data "  Cover Letter","S:\acsGL\ACGLCOVL","acglcovl","E"
 01020 ! Balance Sheets
@@ -143,31 +143,31 @@
 01280   data "    Fund Comparison (CF)","S:\acsGL\acGLCasF","acGLCASF","ES88"
 01290   data "    YTD Budget - Over Under (CF)","S:\acsGL\acGLCasO","acGLcaso","ES85"
 01300   data "  Statement of Retained Earnings","S:\acsGL\acGLRest","acGLrest","E"
-01310   data "  Print Schedules","S:\General Ledger\Print Schedules","GLSchPrt","E"
-01320   data "  Calculate or Print Ratios","S:\acsGL\RatioFM","RatioFM","E"
+01310   data "  pr Schedules","S:\General Ledger\Print Schedules","GLSchPrt","E"
+01320   data "  Calculate or pr Ratios","S:\acsGL\RatioFM","RatioFM","E"
 01330   data "  Notes to Financial Statements","S:\acsGL\acGLNote","acGLNote","E"
 01340 ! Monthly
-01350   data "  Print Payroll Registers","S:\acsGL\ACPRReg","ACPRReg","E"
+01350   data "  pr Payroll Registers","S:\acsGL\ACPRReg","ACPRReg","E"
 01360   data "  Post Payroll Checks","S:\acsGL\PRMerge","PRMerge","E"
 01370   data "  Post Entries from Holding Files","S:\acsGL\acGLPost","acGLPost","E"
 01390 ! Quarterly
-01400   data "  Print State Unemployment Compensation Report","S:\acsGL\PRStatUC","prstatuc","E"
-01410   data "  Print 941 Summary","S:\acsGL\PR941","PR941","E"
+01400   data "  pr State Unemployment Compensation Report","S:\acsGL\PRStatUC","prstatuc","E"
+01410   data "  pr 941 Summary","S:\acsGL\PR941","PR941","E"
 01420   data "  Zero QTD Payroll Info","S:\acsGL\PRZQTD","przqtd","E"
 01430 ! Annually
-01440   data "  Print Accumulated Trial Balance","S:\General Ledger\Print Accumulated Trial Balance","acGLAcTb","ES33"
+01440   data "  pr Accumulated Trial Balance","S:\General Ledger\Print Accumulated Trial Balance","acGLAcTb","ES33"
 01450   data "  Clear Accumulated Transactions","S:\acsGL\acGLClr","acGLClr","E"
 01460   data "  Close Books at Year End","S:\General Ledger\Close Books at Year End","acGLClos","E"
 01470   data "  Enter Budget Amounts","S:\acsGL\BudInpt","BudInpt","E"
 01480   data "  Prior Period Adjustments","S:\acsGL\PriorPeriodAdj","PriorPeriodAdj","E"
-01490   data "  Print W-2's","S:\acsGL\PRW2","PRW2","E"
+01490   data "  pr W-2's","S:\acsGL\PRW2","PRW2","E"
 01500   data "  Create Electronic W-2s","S:\acsGL\GLELECW2","GLElecW2","E"
-01510   data "  Print 1099s","S:\acsGL\GLPRT109","GLPrt109","E"
+01510   data "  pr 1099s","S:\acsGL\GLPRT109","GLPrt109","E"
 01520   data "  Create Electronic 1099s","S:\acsGL\ELEC1099","Elec1099","E"
 01530   data "  Zero YTD Payroll Information","S:\acsGL\PRZYTD","PRZYTD","E"
 01540   data "  Zero YTD Vendor Purchases","S:\acsGL\GLZER109","GLZer109","E"
 01550 ! Utilities
-01560   data "  Print Chart of Accounts","S:\acsGL\acGLCHRT","acGLChrt","E"
+01560   data "  pr Chart of Accounts","S:\acsGL\acGLCHRT","acGLChrt","E"
 01570   data "  Generate Reversing Entries","S:\acsGL\Reverse","","E"
 01580   data "  Remove Entries Posted by Mistake","S:\acsGL\Unpost","","E"
 01590   data "  Consolidate Master Files","S:\acsGL\COMBGL","CombGL","E"
@@ -190,7 +190,7 @@
 01750 ERTN: let fnerror(program$,err,line,act$,"xit")
 01760   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01770   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01780   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01780   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01790 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01800 ! /region
 01810 ! ______________________________________________________________________

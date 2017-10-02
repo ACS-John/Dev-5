@@ -21,7 +21,7 @@
 00180   let fnacs(sn$,0,mat resp$,ck)
 00190   if ck=5 then goto XIT
 00200   let fndat(resp$(1),put=2)
-00210   let customer=1 !:
+00210   customer=1 !:
         if resp$(2)=opt$(1) then !:
           open #customer: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed else !:
           if resp$(2)=opt$(2) then !:
@@ -32,24 +32,24 @@
 00250 READ_CUSTOMER: ! 
 00260   read #customer,using 'Form POS 1,C 10,pos 41,C 30,POS 1859,PD 5.2': z$, customer_name$, escrow_bal eof DONE
 00270   if escrow_bal=0 then goto READ_CUSTOMER
-00280   print #255,using 'Form POS 1,C 12,C 30,N 12.2': z$,customer_name$,escrow_bal
+00280   pr #255,using 'Form POS 1,C 12,C 30,N 12.2': z$,customer_name$,escrow_bal
 00290   let total_escrow+=escrow_bal
 00300   goto READ_CUSTOMER
 00310 ! ______________________________________________________________________
-00320 PGOF: print #255: newpage : gosub HDR : continue 
+00320 PGOF: pr #255: newpage : gosub HDR : continue 
 00330 ! ______________________________________________________________________
 00340 HDR: ! 
-00350   print #255,using 'Form POS 20,Cc 40': "",cnam$
-00360   print #255,using 'Form POS 1,C 10,pos 20,Cc 40': "Page "&str$(pg+=1),cap$
-00370   print #255,using 'Form POS 1,C 10,pos 20,Cc 40': date$,resp$(1)
-00380   print #255: ""
-00390   print #255: "Account No  Customer Name                   Escrow Bal"
-00400   print #255: "__________  ______________________________  __________"
+00350   pr #255,using 'Form POS 20,Cc 40': "",cnam$
+00360   pr #255,using 'Form POS 1,C 10,pos 20,Cc 40': "Page "&str$(pg+=1),cap$
+00370   pr #255,using 'Form POS 1,C 10,pos 20,Cc 40': date$,resp$(1)
+00380   pr #255: ""
+00390   pr #255: "Account No  Customer Name                   Escrow Bal"
+00400   pr #255: "__________  ______________________________  __________"
 00410   return 
 00420 ! ______________________________________________________________________
 00430 DONE: ! 
-00440   print #255: tab(43);"  __________"
-00450   print #255,using 'Form POS 43,N 12.2': total_escrow
+00440   pr #255: tab(43);"  __________"
+00450   pr #255,using 'Form POS 43,N 12.2': total_escrow
 00460   let fncloseprn
 00470   goto XIT
 00480 ! ______________________________________________________________________
@@ -59,7 +59,7 @@
 00520 ERTN: let fnerror(program$,err,line,act$,"xit")
 00530   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00540   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00550   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00550   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00560 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00570 ! /region
 00580 ! ______________________________________________________________________

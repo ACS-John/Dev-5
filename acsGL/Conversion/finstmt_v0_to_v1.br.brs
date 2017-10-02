@@ -33,12 +33,12 @@
 20400 READ_1: ! 
 20420         read #1,using 'Form POS 1,G 5,POS 75,N 1': rno,ic eof PHASE1_EOF,conv PHASE1_READ_CONV
 20440         let read_count+=1
-20460         print 'read_1 did'; ! pause
+20460         pr 'read_1 did'; ! pause
 20480         if rno=0 then delete #1: : goto READ_1
-20500         if ic=0 then print ' ic=0, skipped' : goto READ_1
-20520         if ic=1 then print ' let rnp=rno' : let rnp=rno
-20540         if ic=2 then print ' let st2=rno' : let st2=rno : goto PHASE2
-20560         print ' ic=';ic;', skipped'
+20500         if ic=0 then pr ' ic=0, skipped' : goto READ_1
+20520         if ic=1 then pr ' let rnp=rno' : let rnp=rno
+20540         if ic=2 then pr ' let st2=rno' : let st2=rno : goto PHASE2
+20560         pr ' ic=';ic;', skipped'
 20580         goto READ_1
 20600 ! 
 20620 PHASE1_READ_CONV: ! 
@@ -52,14 +52,14 @@
 20780 !   pr 'PHASE1_EOF,read_count=';read_count : pause
 20800         let end1=1
 20820 PHASE2: ! 
-20840         print 'restoring to ';st1
+20840         pr 'restoring to ';st1
 20860 !   pr 'PHASE2,read_count=';read_count : pause
 20880         restore #1,key>=lpad$(str$(st1),5): nokey PHASE2_EOF
 20900         do 
 20920           read #1,using 'Form POS 1,G 5,POS 75,N 1': rno,ic eof PHASE2_EOF
-20940           print 'do read did';
+20940           pr 'do read did';
 20960 !     if end1=1 then pr 'end1=1' : pause ! goto PHASE2_EOF
-20980           if rno<st2 then print 'going back to L390' : goto L390
+20980           if rno<st2 then pr 'going back to L390' : goto L390
 21000           if end1=1 then goto PHASE2_EOF
 21020           let rnp=0
 21040           goto PHASE1
@@ -77,7 +77,7 @@
 50590 ERTN: let fnerror(program$,err,line,act$,"xit")
 50600     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 50610     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50620     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+50620     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50630 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50640 ! /region
 50650 ! ______________________________________________________________________

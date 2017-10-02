@@ -19,7 +19,7 @@
 10320 ! /r
 12000 MENU1: let ndep=0 : goto ASKEMPLOYEE
 14000 ASKEMPLOYEE: ! r:
-14020   let ad1=0 ! add code - used to tell other parts of the program, that I am currently adding an employee record.
+14020   ad1=0 ! add code - used to tell other parts of the program, that I am currently adding an employee record.
 14040   let fntos(sn$="Employee-ask")
 14060   let respc=0
 14080   let fnlbl(1,1,"Employee Number:",16,right)
@@ -73,7 +73,7 @@
 16160   let fncmdkey("&Cancel",5,0,1,"Returns to maintenance screem.")
 16180   let fnacs(sn$,0,mat resp$,ckey)
 16200   if ckey=5 then goto ASKEMPLOYEE
-16220   let add1=1
+16220   add1=1
 16240   let ent=val(resp$(1))
 16260   let ent$=lpad$(str$(ent),8)
 16280   read #1,using F_RPMSTR,key=ent$: tempeno nokey L1020
@@ -85,7 +85,7 @@
 18000 L1020: ! r:
 18020   mat em$=("")
 18040   let ph$=ss$=""
-18060   let bd=0
+18060   bd=0
 18080   mat rs=(0)
 18100   mat em=(0)
 18120   let lpd=tgp=0
@@ -99,8 +99,8 @@
 18280   let dd$="N"
 18300 ! clear bank draft
 18320   let rtn=0
-18340   let acc=0
-18360   let acn=0
+18340   acc=0
+18360   acn=0
 18380   goto SCR_EMPLOYEE ! /r
 20000 EDITREC: ! r:
 20020   if ent=0 then goto ASKEMPLOYEE
@@ -193,7 +193,7 @@
 27500   let fnlbl(19,1,"Standard Federal W/H:",mylen,1)
 27520   let fntxt(19,mylen+3,10,10,0,"32",0,"If you wish for the system to withhold a fixed amount of Federal withholdings, enter that amount here. You can use a negative one dollar (-1.00) to skip Federal withholdings on this employee.")
 27540   let resp$(respc+=1)=str$(em(12))
-27560   let col3_pos=51 : let col3_len=20
+27560   col3_pos=51 : col3_len=20
 27580   let fnlbl(19,col3_pos,"Federal Tax Add-On:",col3_len,1)
 27600   let fntxt(19,73,10,10,0,"32",0,"If you wish for the system to add additional Federal withholdings, enter that amount here.")
 27620   let resp$(respc+=1)=str$(em(13))
@@ -252,7 +252,7 @@
 29440   let em(15)=val(resp$(22)) ! state addon
 29460   let em(16)=val(resp$(23)) ! date hired
 29480   let lpd=val(resp$(24)) ! last payroll date
-29500   let bd=val(resp$(25)) ! birth date
+29500   bd=val(resp$(25)) ! birth date
 29520   let ph$=resp$(26) ! phone
 29540   ! if ckey=6 then goto PICTURE
 29560   if ckey=8 then let fnhours(eno): goto SCR_EMPLOYEE
@@ -409,7 +409,7 @@
 38100   goto L3420
 38120 L3390: ! 
 38140   write #1,using F_RPMSTR: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
-38160   let add1=0
+38160   add1=0
 38200 L3420: ! 
 38220   if ckey=2 then goto REVIEW_DEPARTMENT
 38240   goto MENU1 ! /r
@@ -553,15 +553,15 @@
 48820   let payperiod_option$(4)="4 - Weekly"
 48840   ! 
 48860   dim code6$(4)*28
-48880   let code6$(1)="0 - Subject to SS and Med WH"
-48900   let code6$(2)="1 - SS only"
-48920   let code6$(3)="2 - Medicare Only"
-48940   let code6$(4)="9 - Neither SS nor Medicare"
+48880   code6$(1)="0 - Subject to SS and Med WH"
+48900   code6$(2)="1 - SS only"
+48920   code6$(3)="2 - Medicare Only"
+48940   code6$(4)="9 - Neither SS nor Medicare"
 48960   ! 
 48980   dim code7$(3)*29
-49000   let code7$(1)="0 - Not qualified for EIC"       !  em(7)=1
-49020   let code7$(2)="1 - Single or Spouse not file"   !  em(7)=2
-49040   let code7$(3)="2 - Married both filing"         !  em(7)=3
+49000   code7$(1)="0 - Not qualified for EIC"       !  em(7)=1
+49020   code7$(2)="1 - Single or Spouse not file"   !  em(7)=2
+49040   code7$(3)="2 - Married both filing"         !  em(7)=3
 49060   ! 
 49120   dim statenames$(10)*8
 49140   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno'),internal,outin,relative 
@@ -586,7 +586,7 @@
 56020 ERTN: let fnerror(program$,err,line,act$,"xit")
 56040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 56060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-56080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+56080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 56100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 56120 ! /region
 58000 DDREADNOKEY: ! r:
@@ -607,8 +607,8 @@
 62160   let fntxt(1,mylen+3,8,8,1,"",0,"")
 62180   let resp$(respc+=1)=str$(eno)
 62200   let fnlbl(2,1,"Direct Deposit:",mylen,right)
-62220   let code9$(1)="Y = Activate Direct Deposit"
-62240   let code9$(2)="N = Direct Deposit not activated."
+62220   code9$(1)="Y = Activate Direct Deposit"
+62240   code9$(2)="N = Direct Deposit not activated."
 62260   let respc+=1: for j=1 to udim(code9$)
 62280     if dd$=code9$(j)(1:1) then let resp$(respc)=code9$(j)
 62300   next j
@@ -616,8 +616,8 @@
 62340   let fnlbl(3,1,"Routing Number:",mylen,right)
 62360   let fntxt(3,mylen+3,9,9,1,"",0,"Employee's bank's routing #. The bank account and the routing # can be found at the bottom of the employees personal check.")
 62380   let resp$(respc+=1)=str$(rtn)
-62400   let code8$(1)="27 = Regular Checking"
-62420   let code8$(2)="37 = Savings Account"
+62400   code8$(1)="27 = Regular Checking"
+62420   code8$(2)="37 = Savings Account"
 62440   let respc+=1: for j=1 to udim(code8$)
 62460     if acc=val(code8$(j)(1:2)) then let resp$(respc)=code8$(j)
 62480   next j
@@ -634,8 +634,8 @@
 62700   let key$=resp$(1)
 62720   let dd$=resp$(2)(1:1)
 62740   let rtn=val(resp$(3)) !  banks routing #
-62760   let acc=val(resp$(4)(1:2)) ! checking or savings
-62780   let acn=val(resp$(5)) ! employee bank acct #
+62760   acc=val(resp$(4)(1:2)) ! checking or savings
+62780   acn=val(resp$(5)) ! employee bank acct #
 62800   if ckey=4 then 
 62820     let dd$="N"
 62840     let rtn=acc=acn=0

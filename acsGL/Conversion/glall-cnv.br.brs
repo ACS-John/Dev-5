@@ -1,20 +1,20 @@
 00010 ! REPLACE S:\acsGL\Conversion\glAll-CNV
 00020   dim tr(7),tr$*12,td$*30,cnam$*40
 00030   library 'S:\Core\Library': fntop
-00040   print newpage
+00040   pr newpage
 00050   let fntop(program$,"CHANGE_ME")
 00070 L70: ! 
-00080   print fields "10,24,C 32": "COMPANY NUMBER TO CONVERT:"
-00090   print fields "12,32,C 16,R,N": "PRESS F5 TO STOP"
+00080   pr fields "10,24,C 32": "COMPANY NUMBER TO CONVERT:"
+00090   pr fields "12,32,C 16,R,N": "PRESS F5 TO STOP"
 00100 L100: input fields "10,57,N 5,UE,N",attr "R": cno conv L100
 00110   if cmdkey=5 then stop 
 00120 ! 
 00130   open #1: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno),internal,input ioerr L260
-00140   print fields "14,32,C 16,BR,N": "   IN PROCESS"
+00140   pr fields "14,32,C 16,BR,N": "   IN PROCESS"
 00150   open #2: "Name=X,size=0,RecL=72,REPLACE",internal,output 
 00160 L160: read #1,using L190: mat tr,tr$,td$ eof L220
 00170   if tr(1)+tr(2)+tr(3)=0 then goto L160
-00180   let actpd=int(tr(4)*.0001)
+00180   actpd=int(tr(4)*.0001)
 00190 L190: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 00200   write #2,using L190: mat tr,tr$,td$,actpd
 00210   goto L160
@@ -60,7 +60,7 @@
 00610   let id$(4)=" 4 = SECONDARY BALANCE SHEET FILE": let fil$(4)="ACGLFNSC": let idx$(4)="FNSCINDX"
 00620   let id$(5)=" 5 = SECONDARY INCOME STATEMENT FILE": let fil$(5)="ACGLFNSJ": let idx$(5)="FNSJINDX"
 00630   let id$(6)=" 6 = SECONDARY FUND / CASH FLOW FILE": let fil$(6)="ACGLFNSG": let idx$(6)="FNSGINDX"
-00640   print newpage
+00640   pr newpage
 00650   for j=1 to 6
 00660     execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&" "&env$('Temp')&"\Work."&session$&" -83" ioerr L950
 00670     execute "COPY  "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&""

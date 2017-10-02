@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsGL\CoverLetterPrint
-00020 ! -- Print Cover Letter
+00020 ! -- pr Cover Letter
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$,fnconsole
 00050   on error goto ERTN
@@ -15,20 +15,20 @@
         close #1: !:
         let tb$="("&trim$(tb$)&")"
 00140   let tempx=val(fnactpd$) conv L180
-00150   if tempx=1 then let actpd$="one" else !:
-          if tempx=2 then let actpd$="two" else !:
-            if tempx=3 then let actpd$="three" else !:
-              if tempx=4 then let actpd$="four" else !:
-                if tempx=5 then let actpd$="five"
-00160   if tempx=6 then let actpd$="six" else !:
-          if tempx=7 then let actpd$="seven" else !:
-            if tempx=8 then let actpd$="eight" else !:
-              if tempx=9 then let actpd$="nine" else !:
-                if tempx=10 then let actpd$="ten"
-00170   if tempx=11 then let actpd$="eleven" else !:
-          if tempx=12 then let actpd$="twelve" else !:
-            if tempx=13 then let actpd$="thirteen" else !:
-              if tempx=14 then let actpd$="fourteen"
+00150   if tempx=1 then actpd$="one" else !:
+          if tempx=2 then actpd$="two" else !:
+            if tempx=3 then actpd$="three" else !:
+              if tempx=4 then actpd$="four" else !:
+                if tempx=5 then actpd$="five"
+00160   if tempx=6 then actpd$="six" else !:
+          if tempx=7 then actpd$="seven" else !:
+            if tempx=8 then actpd$="eight" else !:
+              if tempx=9 then actpd$="nine" else !:
+                if tempx=10 then actpd$="ten"
+00170   if tempx=11 then actpd$="eleven" else !:
+          if tempx=12 then actpd$="twelve" else !:
+            if tempx=13 then actpd$="thirteen" else !:
+              if tempx=14 then actpd$="fourteen"
 00180 L180: open #1: "Name="&env$('Q')&"\GLmstr\ACGLCovF.h"&str$(cno)&",Shr",display,input ioerr XIT
 00200   on fkey 5 goto DONE
 00210   let fnopenprn
@@ -48,7 +48,7 @@
             let ln$(j2:j2+1)=rtrm$(actpd$)&ln$(j2+2:132-len(rtrm$(actpd$))) else goto L320
 00310 L310: ! Let LN$=LN1$
 00320 L320: next j2
-00330   print #255: tab(10);ln$
+00330   pr #255: tab(10);ln$
 00340   goto READ_ACGLCOVF
 00350 ! ______________________________________________________________________
 00360 DONE: close #1: 
@@ -61,7 +61,7 @@
 00430 ERTN: let fnerror(program$,err,line,act$,"xit")
 00440   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00450   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00460   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00460   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00470 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00480 ! /region
 00490 ! ______________________________________________________________________

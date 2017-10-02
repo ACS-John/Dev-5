@@ -139,7 +139,7 @@
 32020 ERTN: fnerror(program$,err,line,act$,"NO")
 32040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 32060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-32080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+32080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 32100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 32120 ! /region
 33000 def fn_min_rln(mr_filename$*512,mr_rln_minimum)
@@ -348,16 +348,16 @@
 54200     goto CL_TRALLOC
 54220   end if 
 54240   if tmprln<>myrln then 
-54260     print 'Record Length Error in File: '&tmpfile$
-54280     print '         RLn: '&str$(tmprln)
+54260     pr 'Record Length Error in File: '&tmpfile$
+54280     pr '         RLn: '&str$(tmprln)
 54300   end if 
 54320   if tmpkps(1)<>1 then 
-54340     print 'Key Position Error in '&kfname$
-54360     print '         KPs: '&str$(tmpkps(1))
+54340     pr 'Key Position Error in '&kfname$
+54360     pr '         KPs: '&str$(tmpkps(1))
 54380   end if 
 54400   if tmpkln(1)<>11 then 
-54420     print 'Key Length Error in '&kfname$
-54440     print '         KLn: '&str$(tmpkln(1))
+54420     pr 'Key Length Error in '&kfname$
+54440     pr '         KLn: '&str$(tmpkln(1))
 54460   end if 
 54480   ! 
 54500   CL_UNPDALOC1: ! Primary, Non-Split Index
@@ -381,19 +381,19 @@
 54860     goto CL_UNPDALOC1
 54880   end if 
 54900   if tmprln<>myrln then 
-54920     print 'Record Length Error in File: '&tmpfile$
-54940     print '         RLn: '&str$(tmprln)
+54920     pr 'Record Length Error in File: '&tmpfile$
+54940     pr '         RLn: '&str$(tmprln)
 54960   end if 
 54980   x=1 : if tmpkps(x)<>9 then 
-55000     print 'Key Position ('&str$(x)&') Error in '&kfname$
-55020     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
-55040     print 'fixing it'
+55000     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+55020     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+55040     pr 'fixing it'
 55060     fnFree(kfname$)
 55080     goto L1840
 55100   end if 
 55120   x=1 : if tmpkln(x)<>12 then 
-55140     print 'Key Length ('&str$(x)&') Error in '&kfname$
-55160     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+55140     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+55160     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 55180   end if 
 55200   ! 
 55220   ! CL_UNPDALOC2: ! Secondary, Non-Split Index
@@ -405,12 +405,12 @@
 55340   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
 55360   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 55380   x=1 : if tmpkps(x)<>1 then 
-55400     print 'Key Position ('&str$(x)&') Error in '&kfname$
-55420     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+55400     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+55420     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 55440   end if 
 55460   x=1 : if tmpkln(x)<>20 then 
-55480     print 'Key Length ('&str$(x)&') Error in '&kfname$
-55500     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+55480     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+55500     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 55520   end if 
 55540   ! 
 55560   CL_PAYTRANS1: ! Primary Non-Split Index
@@ -428,20 +428,20 @@
 55800     fnpaytrans_v1_to_v2 : goto CL_PAYTRANS1
 55820   end if 
 55840   if tmprln<>myrln then 
-55860     print 'Record Length Error in File: '&tmpfile$
-55880     print '         RLn: '&str$(tmprln)
-55900     print 'Fixing it'
+55860     pr 'Record Length Error in File: '&tmpfile$
+55880     pr '         RLn: '&str$(tmprln)
+55900     pr 'Fixing it'
 55920     fnCopy(env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'),env$('Q')&"\X."&session$&' -'&str$(myrln))
 55940     fnFree(env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'))
 55960     fnRename(env$('Q')&"\X."&session$,env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'))
 55980   end if 
 56000   x=1 : if tmpkps(x)<>1 then 
-56020     print 'Key Position ('&str$(x)&') Error in '&kfname$
-56040     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+56020     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+56040     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 56060   end if 
 56080   x=1 : if tmpkln(x)<>20 then 
-56100     print 'Key Length ('&str$(x)&') Error in '&kfname$
-56120     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+56100     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+56120     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 56140   end if 
 56160   ! 
 56180   ! CL_PAYTRANS2: ! seconday 3-Split Index
@@ -453,28 +453,28 @@
 56300   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
 56320   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 56340   x=1 : if tmpkps(x)<>31 then 
-56360     print 'Key Position ('&str$(x)&') Error in '&kfname$
-56380     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+56360     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+56380     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 56400   end if 
 56420   x=2 : if tmpkps(x)<>27 then 
-56440     print 'Key Position ('&str$(x)&') Error in '&kfname$
-56460     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+56440     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+56460     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 56480   end if 
 56500   x=3 : if tmpkps(x)<>1 then 
-56520     print 'Key Position ('&str$(x)&') Error in '&kfname$
-56540     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+56520     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+56540     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 56560   end if 
 56580   x=1 : if tmpkln(x)<>2 then 
-56600     print 'Key Length ('&str$(x)&') Error in '&kfname$
-56620     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+56600     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+56620     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 56640   end if 
 56660   x=2 : if tmpkln(x)<>4 then 
-56680     print 'Key Length ('&str$(x)&') Error in '&kfname$
-56700     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+56680     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+56700     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 56720   end if 
 56740   x=3 : if tmpkln(x)<>26 then 
-56760     print 'Key Length ('&str$(x)&') Error in '&kfname$
-56780     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+56760     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+56780     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 56800   end if 
 56820   ! 
 56840   CL_PAYMSTR1: ! Primary Non-Split Index
@@ -493,16 +493,16 @@
 57100     fnpaymstr_v0_to_v1 : goto CL_PAYMSTR1
 57120   end if 
 57140   if tmprln<>myrln then 
-57160     print 'Record Length Error in File: '&tmpfile$
-57180     print '         RLn: '&str$(tmprln)
+57160     pr 'Record Length Error in File: '&tmpfile$
+57180     pr '         RLn: '&str$(tmprln)
 57200   end if 
 57220   x=1 : if tmpkps(x)<>1 then 
-57240     print 'Key Position ('&str$(x)&') Error in '&kfname$
-57260     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+57240     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+57260     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 57280   end if 
 57300   x=1 : if tmpkln(x)<>8 then 
-57320     print 'Key Length ('&str$(x)&') Error in '&kfname$
-57340     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+57320     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+57340     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 57360   end if 
 57380   ! CL_RECMSTR1: ! Primary Non-Split Index
 57400   name$=env$('Q')&"\CLmstr\RecMstr.h"&env$('cno')
@@ -521,16 +521,16 @@
 57660     goto CL_PAYMSTR1
 57680   end if 
 57700   if tmprln<>myrln then 
-57720     print 'Record Length Error in File: '&tmpfile$
-57740     print '         RLn: '&str$(tmprln)
+57720     pr 'Record Length Error in File: '&tmpfile$
+57740     pr '         RLn: '&str$(tmprln)
 57760   end if 
 57780   x=1 : if tmpkps(x)<>1 then 
-57800     print 'Key Position ('&str$(x)&') Error in '&kfname$
-57820     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+57800     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+57820     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 57840   end if 
 57860   x=1 : if tmpkln(x)<>8 then 
-57880     print 'Key Length ('&str$(x)&') Error in '&kfname$
-57900     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+57880     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+57900     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 57920   end if 
 57940   ! 
 57960   ! CL_PAYMSTR2: ! Secondary, Non-Split Index
@@ -542,12 +542,12 @@
 58080   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed 
 58100   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 58120   x=1 : if tmpkps(x)<>9 then 
-58140     print 'Key Position ('&str$(x)&') Error in '&kfname$
-58160     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+58140     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+58160     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 58180   end if 
 58200   x=1 : if tmpkln(x)<>28 then 
-58220     print 'Key Length ('&str$(x)&') Error in '&kfname$
-58240     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+58220     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+58240     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 58260   end if 
 58280   ! 
 58300   ! CL_GLMSTR1: ! Primary Non-Split Index
@@ -565,17 +565,17 @@
 58420   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 58430   fn_check_version(tmpversion,version_proper,tmpfile$)
 58440   !   if tmprln<>myrln then
-58450   !     print 'Record Length Error in File: '&tmpfile$
-58460   !     print '         RLn: '&str$(tmprln)
+58450   !     pr 'Record Length Error in File: '&tmpfile$
+58460   !     pr '         RLn: '&str$(tmprln)
 58470   !   end if
 58480   if tmprln=72 or tmprln=80 then let fnglmstrtorecl62
 58490   !   x=1 : if tmpkps(x)<>1 then
-58500   !     print 'Key Position ('&str$(x)&') Error in '&kfname$
-58510   !     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+58500   !     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+58510   !     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 58520   !   end if
 58530   !   x=1 : if tmpkln(x)<>12 then
-58540   !     print 'Key Length ('&str$(x)&') Error in '&kfname$
-58550   !     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+58540   !     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+58550   !     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 58560   !   end if
 58570   ! 
 58820   ! CL_PAYEEGLBREAKDOWN: ! Primary Non-Split Index
@@ -768,12 +768,12 @@
 75100   end if 
 75120   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 75140   x=1 : if tmpkps(x)<>13 then 
-75160     print 'Key Position ('&str$(x)&') Error in '&kfname$
-75180     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+75160     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+75180     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 75200   end if 
 75220   x=1 : if tmpkln(x)<>30 then 
-75240     print 'Key Length ('&str$(x)&') Error in '&kfname$
-75260     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+75240     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+75260     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 75280   end if 
 75300   if tmpkln(x)=50 then 
 75320     fnFree(kfname$)
@@ -794,17 +794,17 @@
 75620   fn_check_version(tmpversion,version_proper,tmpfile$)
 75640   if tmpversion=0 then let fnfinstmt_v0_to_v1
 75660   if tmprln<>myrln then 
-75680     print 'Record Length Error in File: '&tmpfile$
-75700     print '         RLn: '&str$(tmprln)
+75680     pr 'Record Length Error in File: '&tmpfile$
+75700     pr '         RLn: '&str$(tmprln)
 75720   end if 
 75740 ! If TMPRLN=81 OR TMPRLN=78 Then Let FNFINSTMT_v0_to_v1
 75760   x=1 : if tmpkps(x)<>1 then 
-75780     print 'Key Position ('&str$(x)&') Error in '&kfname$
-75800     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+75780     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+75800     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
 75820   end if 
 75840   x=1 : if tmpkln(x)<>5 then 
-75860     print 'Key Length ('&str$(x)&') Error in '&kfname$
-75880     print '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+75860     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+75880     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
 75900   end if 
 75920   ! 
 75940   ! PAYEEGLBREAKDOWN: !
@@ -819,13 +819,13 @@
 76120   end if 
 76140   fn_check_version(tmpversion,version_proper,tmpfile$)
 76160   if tmprln<>myrln then 
-76180     print 'Record Length Error in File: '&tmpfile$
-76200     print '         RLn: '&str$(tmprln)
+76180     pr 'Record Length Error in File: '&tmpfile$
+76200     pr '         RLn: '&str$(tmprln)
 76220   end if 
 76240   x=1 : if tmpkps(x)<>1 then 
-76260     print 'Key Position ('&str$(x)&') Error in '&kfname$
-76280     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
-76300     print 'fixing it'
+76260     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+76280     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+76300     pr 'fixing it'
 76320     fnFree(kfname$)
 76340     goto L3510
 76360   end if 
@@ -844,14 +844,14 @@
 76620   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 76640   fn_check_version(tmpversion,version_proper,tmpfile$)
 76660   if tmprln<>myrln then 
-76680     print 'Record Length Error in File: '&tmpfile$
-76700     print '         RLn: '&str$(tmprln)
+76680     pr 'Record Length Error in File: '&tmpfile$
+76700     pr '         RLn: '&str$(tmprln)
 76720     fnglpayee_v0_to_v1
 76740   end if 
 76760   x=1 : if tmpkps(x)<>1 then 
-76780     print 'Key Position ('&str$(x)&') Error in '&kfname$
-76800     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
-76820     print 'fixing it'
+76780     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+76800     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+76820     pr 'fixing it'
 76840     fnFree(kfname$)
 76860     goto L3600
 76880   end if 
@@ -870,13 +870,13 @@
 77140   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 77160   fn_check_version(tmpversion,version_proper,tmpfile$)
 77180   if tmprln<>myrln then 
-77200     print 'Record Length Error in File: '&tmpfile$
-77220     print '         RLn: '&str$(tmprln)
+77200     pr 'Record Length Error in File: '&tmpfile$
+77220     pr '         RLn: '&str$(tmprln)
 77240   end if 
 77260   x=1 : if tmpkps(x)<>1 then 
-77280     print 'Key Position ('&str$(x)&') Error in '&kfname$
-77300     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
-77320     print 'fixing it'
+77280     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+77300     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+77320     pr 'fixing it'
 77340     fnFree(kfname$)
 77360     goto L3690
 77380   end if 
@@ -894,8 +894,8 @@
 77590   fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 77600   fn_check_version(tmpversion,version_proper,tmpfile$)
 77610   if tmprln<>myrln then 
-77620     print 'Record Length Error in File: '&tmpfile$
-77630     print '         RLn: '&str$(tmprln)
+77620     pr 'Record Length Error in File: '&tmpfile$
+77630     pr '         RLn: '&str$(tmprln)
 77640   end if 
 77650   x=1 : if tmpkps(x)<>1 then 
 77660     fnstatus('Key Position ('&str$(x)&') Error in '&kfname$)
@@ -923,8 +923,8 @@
 78040   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
 78060   fn_check_version(tmpversion,version_proper,tmpfile$)
 78080   if tmprln<>myrln then 
-78100     print 'Record Length Error in File: '&tmpfile$
-78120     print '         RLn: '&str$(tmprln)
+78100     pr 'Record Length Error in File: '&tmpfile$
+78120     pr '         RLn: '&str$(tmprln)
 78140   else 
 78160     goto L4050
 78180   end if 
@@ -946,9 +946,9 @@
 78350   EO_TMP: ! 
 78360   close #tmp:
 78370   x=1 : if tmpkps(x)<>1 then 
-78380     print 'Key Position ('&str$(x)&') Error in '&kfname$
-78390     print '      KPs('&str$(x)&'): '&str$(tmpkps(x))
-78400     print 'fixing it'
+78380     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+78390     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+78400     pr 'fixing it'
 78410     fnFree(kfname$)
 78420     goto L3870
 78430   end if 

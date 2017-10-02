@@ -3,7 +3,7 @@
 10040   def library fncmbact(myline,mypos; addall,container,indexfile$*256)
 10080     library 'S:\Core\Library': fncombof
 10140     dim if$*256
-20020     if addall<>1 then let addall=0
+20020     if addall<>1 then addall=0
 20060     if addall=0 then 
 20080       let fen$="CAct"
 20100     else 

@@ -44,9 +44,9 @@
 00470     let trans1_rec+=1
 00480     if trans1_rec>trans1_lrec or (rec_end>0 and rec_end<trans1_rec) then goto FINIS
 00490     read #h_trans1,using F_TRANS,rec=trans1_rec: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode norec NEXT_REC
-00500     print trans1_rec
+00500     pr trans1_rec
 00520     if fn_has_dupe then 
-00530       print #255,using FORM_OUT: trans1_rec,p$,tdate,tamount pageoflow PGOF
+00530       pr #255,using FORM_OUT: trans1_rec,p$,tdate,tamount pageoflow PGOF
 00540       FORM_OUT: form n 8,x 1,c 10,x 1,x 1,pic(zzzz/zz/zz),n 11.2
 00550     end if  ! fn_has_dupe(z$)
 00560   loop 
@@ -58,7 +58,7 @@
 00620   let fnxit
 00630 ! ______________________________________________________________________
 00640 PGOF: ! r:
-00650   print #255: newpage
+00650   pr #255: newpage
 00660   let fn_header
 00670 continue ! /r
 00680 def fn_setup_library
@@ -164,17 +164,17 @@
 01680   end if 
 01690   let td_trans_amt=0
 01700   ! .! rewrite #h_td_customer,using F_TB_CUSTOMER,key=td_customer_key$: tb_bal,mat tb_gb
-01710   print #255: 'would delete rec '&str$(td_rec)
+01710   pr #255: 'would delete rec '&str$(td_rec)
 01720   ! .! rewrite #h_td_trans1,using F_TRANS,rec=td_rec: td_customer_key$,td_tdate,td_trans_code,td_trans_amt,mat tdt_tg,td_wr,td_wu,td_er,td_eu,td_gr,td_gu,td_tbal,td_pcode
 01730   TD_XIT: ! 
 01740 fnend 
 01750 def fn_header
-01760   print #255: "\qc {\b "&env$('cnam')&"}"
-01770   print #255: "\qc {\fs28 {\b "&cap$&"}}"
-01780   print #255: "\qc {\b "&trim$(date$("MM/DD/CCYY"))&" }"
-01790   print #255: "\qr Page "&str$(p2+=1)
-01800   print #255: ""
-01810   print #255: "\ql {\ul   Record} {\ul Account   }  {\ul     Date} {\ul       Amount} {\ul}"
+01760   pr #255: "\qc {\b "&env$('cnam')&"}"
+01770   pr #255: "\qc {\fs28 {\b "&cap$&"}}"
+01780   pr #255: "\qc {\b "&trim$(date$("MM/DD/CCYY"))&" }"
+01790   pr #255: "\qr Page "&str$(p2+=1)
+01800   pr #255: ""
+01810   pr #255: "\ql {\ul   Record} {\ul Account   }  {\ul     Date} {\ul       Amount} {\ul}"
 01820 fnend 
 01830 def fn_filter_add_chk(txt$*80,default_answer$; protected)
 01840   let fnchk(lc+=1,1,txt$)
@@ -191,6 +191,6 @@
 01960 ERTN: let fnerror(program$,err,line,act$,"xit")
 01970   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01980   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01990   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02000 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02010 ! /region

@@ -9,7 +9,7 @@
 00090   dim ty$(3)*20
 00100 ! ______________________________________________________________________
 00110   let fntop(program$,cap$="Transfer to Accountant")
-00120   let cancel=99 : let right=1
+00120   cancel=99 : let right=1
 00130   let fncno(cno,cnam$)
 00140   let fndat(dat$,1)
 00150   let ty$(1)=" Check Number:" !:
@@ -75,11 +75,11 @@
 00620   if fndate_mmddyy_to_ccyymmdd(tr4)>fndate_mmddyy_to_ccyymmdd(d2) then goto READ_TRMSTR
 00630   gosub CKALLOC
 00640   if tal=amt then goto L660
-00650   print #255: "Bank Code: "&bk$&ty$(cde)&ltrm$(tr$)&" Total: "&ltrm$(cnvrt$("N 10.2",amt))&" Allocations: "&ltrm$(cnvrt$("N 10.2",tal))&" Entry Skipped"
-00660 L660: let amt=typ=0
+00650   pr #255: "Bank Code: "&bk$&ty$(cde)&ltrm$(tr$)&" Total: "&ltrm$(cnvrt$("N 10.2",amt))&" Allocations: "&ltrm$(cnvrt$("N 10.2",tal))&" Entry Skipped"
+00660 L660: amt=typ=0
 00670   read #paymstr,using 'Form POS 134,N 2',key=ven$: typ nokey L680
 00680 L680: if typ=0 then let ven$=""
-00690   let bgl$=""
+00690   bgl$=""
 00700   read #bankmstr,using 'Form POS 33,C 12',key=bk$: bgl$ nokey L710
 00710 L710: let key$=bk$&str$(cde)&tr$(5:12) !:
         restore #tralloc,key=key$: nokey EO_TRALLOC
@@ -94,7 +94,7 @@
 00790 WRITE_GLWK101: ! 
 00800   write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$,tr4,tr5,tr6,0,tr$,td$,ven$,"","","",bgl$
 00810 AFTER_WRITE_GLWK101: ! 
-00820   let amt+=tr5
+00820   amt+=tr5
 00830   if tr6=3 then !:
           write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$,tr4,-tr5,tr6,0,tr$,td$,ven$,"","","",bgl$
 00840   if pr1=0 then goto L920
@@ -119,36 +119,36 @@
 01030   if cde=3 and amt>0 then let t1+=amt: let t2=t2-amt: goto L1080
 01040   if cde=3 and amt<0 then let t2+=amt: let t1=t1-amt: goto L1110
 01050   if cde=2 then !:
-          let c2+=amt: let t2+=amt else let c1+=amt: let t1+=amt
-01060   print #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE
+          c2+=amt: let t2+=amt else c1+=amt: let t1+=amt
+01060   pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE
 01070   goto THERE
-01080 L1080: print #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE: let p1=68
-01090   print #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,-amt pageoflow NEWPGE
+01080 L1080: pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE: let p1=68
+01090   pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,-amt pageoflow NEWPGE
 01100   goto THERE
-01110 L1110: print #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,-amt pageoflow NEWPGE: let p1=68
-01120   print #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE
+01110 L1110: pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,-amt pageoflow NEWPGE: let p1=68
+01120   pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE
 01130 THERE: ! 
 01140   goto READ_TRMSTR
 01150 ! ______________________________________________________________________
 01160 NEWPGE: ! 
-01170   print #255: newpage
+01170   pr #255: newpage
 01180   gosub HDR
 01190   continue 
 01200 ! ______________________________________________________________________
 01210 HDR: ! 
-01220   print #255,using 'Form POS 1,C 8,CC 76': date$,cnam$
-01230   print #255,using 'Form POS 1,C 8,POS 31,C 40': time$,"Transferred to General Ledger"
-01240   print #255,using 'Form POS 1,C 4,N 4,CC 76': "Page",pg+=1,dat$ !:
-        print #255: ""
-01250   print #255: "Ref-Numb    Date    Payee/Description                      Checks     Deposits"
-01260   print #255: "________  ________  ___________________________________  __________  __________"
+01220   pr #255,using 'Form POS 1,C 8,CC 76': date$,cnam$
+01230   pr #255,using 'Form POS 1,C 8,POS 31,C 40': time$,"Transferred to General Ledger"
+01240   pr #255,using 'Form POS 1,C 4,N 4,CC 76': "Page",pg+=1,dat$ !:
+        pr #255: ""
+01250   pr #255: "Ref-Numb    Date    Payee/Description                      Checks     Deposits"
+01260   pr #255: "________  ________  ___________________________________  __________  __________"
 01270   return 
 01280 ! ______________________________________________________________________
 01290 ENDALL: ! 
 01300   if pri1=1 then gosub PRWRITE
 01310   gosub CONTRA
-01320   print #255: tab(56);"  ____________  ____________"
-01330   print #255,using 'Form POS 56,2*N 14.2': t1,t2
+01320   pr #255: tab(56);"  ____________  ____________"
+01330   pr #255,using 'Form POS 56,2*N 14.2': t1,t2
 01340   let fncloseprn
 01350   close #1: 
 01360   close #tralloc: 
@@ -179,13 +179,13 @@
 01600   let td$="CHECKS   "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&" - "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
 01610   write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$,d2,-c1,1,0,t9$,td$,"","","","",bgl$
 01620   let p1=68: let t2=t2-c1: !:
-        print #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(t9$)(1:10),d2,td$(1:35),-c1 pageoflow NEWPGE
+        pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(t9$)(1:10),d2,td$(1:35),-c1 pageoflow NEWPGE
 01630 L1630: if c2=0 then goto L1670
 01640   let td$="DEPOSITS "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&" - "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
 01650   write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$,d2,-c2,2,0,t9$,td$,"","","","",bgl$
 01660   let p1=56: let t1=t1-c2: !:
-        print #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(t9$)(1:10),d2,td$(1:35),-c2 pageoflow NEWPGE
-01670 L1670: let c1=c2=0
+        pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(t9$)(1:10),d2,td$(1:35),-c2 pageoflow NEWPGE
+01670 L1670: c1=c2=0
 01680   return 
 01690 ! ______________________________________________________________________
 01700 GETPRC: ! 
@@ -194,7 +194,7 @@
         read #7,using 'Form POS 437,15*C 12': mat prgln$ !:
         close #7: 
 01730   let pri1=1
-01740   print newpage
+01740   pr newpage
 01750   close #103: ioerr L1760
 01760 L1760: open #103: "SROW=9,SCOL=09,EROW=14,ECOL=70,BORDER=SR,Caption=<"&cap$,display,outin 
 01770   mat ml$(4) : mat ml$=("")
@@ -247,7 +247,7 @@
 02200 ERTN: let fnerror(program$,err,line,act$,"xit")
 02210   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02220   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02230   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02240 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02250 ! /region
 02260 ! ______________________________________________________________________

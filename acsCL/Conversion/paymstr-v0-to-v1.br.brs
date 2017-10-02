@@ -8,7 +8,7 @@
 00080     dim gl$*12,gl$(10)*12,percent(10),de$*30,desc$(10)*30
 00090 ! ______________________________________________________________________
 00100     let fncno(cno,cnam$)
-00110     let cap$="Checkbook update Payees from v0 to v1"
+00110     cap$="Checkbook update Payees from v0 to v1"
 00120 ! ______________________________________________________________________
 00130     let fnstatus('updating payee file.')
 00180     open #paymstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paymstr.h"&str$(cno),internal,outin,relative 
@@ -46,7 +46,7 @@
 00480 ERTN: let fnerror(program$,err,line,act$,"NO")
 00490     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00500     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00510     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00510     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00520 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00530 ! /region
 00540 ! ______________________________________________________________________

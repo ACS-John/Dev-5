@@ -52,6 +52,6 @@
 76240 ERTN: let fnerror(program$,err,line,act$,"xit")
 76260   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76280   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-76300   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+76300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 76320 ERTN_EXEC_ACT: execute act$ : goto ERTN
 76340 ! </updateable region: ertn>

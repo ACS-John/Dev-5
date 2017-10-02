@@ -12,8 +12,8 @@
 00120 ! ______________________________________________________________________
 00130   let fntop(program$,cap$="Cash Flow with Fund Comparison")
 00131   let report$=cap$
-00132   let actpd$=fnactpd$ !:
-        let actpd=fnactpd !:
+00132   actpd$=fnactpd$ !:
+        actpd=fnactpd !:
         let fnfscode !:
         let fnpriorcd
 00140   if fnglfs=5 then goto XIT
@@ -37,14 +37,14 @@
 00310   let fntos(sn$="ACglcasf") !:
         let mylen=30: let mypos=mylen+3 : let right=1
 00320   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00330   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to print only one department, else leave blank for all.",0 ) !:
+00330   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
 00340   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
 00350   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
 00360   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
 00370   let fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
-00390   let costcntr=val(resp$(1))
+00390   costcntr=val(resp$(1))
 00400   gosub ASK_MONTHLY
 00410 L410: on fkey 5 goto L2250
 00420   if fnps=2 then goto L450 ! secondary
@@ -63,7 +63,7 @@
 00530   if te$="S" or te$="F" then goto L550
 00540   if heading=0 and te$><"R" then gosub L2130
 00550 L550: on pos ("RFHDTSBC",te$,1) goto L1550,L1600,L560,L620,L1390,L1550,L620,L2300 none L480
-00560 L560: print #255,using L570: d$(1:40)
+00560 L560: pr #255,using L570: d$(1:40)
 00570 L570: form pos sp,c 40,skip 1
 00580   gosub L1780
 00590   gosub L1690
@@ -75,14 +75,14 @@
 00650 L650: ! read amounts from gl master file
 00660 L660: read #3,using L760: dno,ano,sno,ir,bb,cb,mat by,mat bp,mat bm eof L1030
 00670   if ir=0 then goto L660
-00680 !  Let CB=5: Let BB=1: Let BP(12)=100.00
+00680 !  cB=5: bB=1: bP(12)=100.00
 00690   if fscode=0 or (fscode=actpd and priorcd=1) then goto L760
 00700   if fscode<1 or fscode>13 then let fscode=1
-00710   if fnpriorcd=1 then let cb=by(fscode) else let cb=bp(fscode)
+00710   if fnpriorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00720   if fnpriorcd=2 then goto L750
-00730   if fscode>1 then let bb=by(fscode-1) else let bb=0
+00730   if fscode>1 then bb=by(fscode-1) else bb=0
 00740   goto L760
-00750 L750: if fscode>1 then let bb=bp(fscode-1) else let bb=0
+00750 L750: if fscode>1 then bb=bp(fscode-1) else bb=0
 00760 L760: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos 81,41*pd 6.2
 00770 L770: if ir=val(r$) then goto L780 else goto L840
 00780 L780: let fund=0
@@ -95,7 +95,7 @@
 00850   if te$="B" then let total(fund)=total(fund)-(cb-bb) : let total(fund)=total(fund) - bb: let total2(fund)=total2(fund)-bp(nap) : goto L870
 00860   let total2(fund)=total2(fund)+cb
 00870 L870: for z=1 to 13
-00880     let annualb=annualb+bm(z)
+00880     annualb=annualb+bm(z)
 00890   next z
 00900   if fscode=0 then let monthb=monthb+bm(fnactpd) else !:
           let monthb=monthb+bm(fscode)
@@ -115,8 +115,8 @@
 01040 L1040: for j=1 to 9
 01050     if ac(j)=9 then goto L1100
 01060     for j2= 1 to 10
-01070       let accum(j2,j,1)=accum(j2,j,1)+total(j2)
-01080       let accum(j2,j,2)=accum(j2,j,2)+total2(j2)
+01070       accum(j2,j,1)=accum(j2,j,1)+total(j2)
+01080       accum(j2,j,2)=accum(j2,j,2)+total2(j2)
 01090     next j2
 01100 L1100: next j
 01110   if rs=1 then goto L1120 else goto L1160
@@ -137,7 +137,7 @@
 01260   for j=1 to totcol
 01270     let dolcol$=dolcol$&" "&dollar$&cnvrt$("PIC(-,---,---.##)",total(j))
 01280   next j
-01290   print #255,using L1300: d$(1:sp2),rtrm$(dolcol$) pageoflow L1940
+01290   pr #255,using L1300: d$(1:sp2),rtrm$(dolcol$) pageoflow L1940
 01300 L1300: form pos sp,c sp2,pos 49,c big,skip redir
 01310   form pos sp,c sp2,pos 52,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),skip redir
 01320   mat total=(0)
@@ -147,17 +147,17 @@
 01360   gosub L1780
 01370   goto L480
 01380 ! ______________________________________________________________________
-01390 L1390: let accumcol$=""
+01390 L1390: accumcol$=""
 01400   for j=1 to totcol
-01410     if ap=0 then let ap=1
-01420     if rs=1 then let accum1=-accum(j,ap,1) else let accum1=accum(j,ap,1)
-01430     if rs=1 then let accum2=-accum(j,ap,2) else let accum2=accum(j,ap,2)
+01410     if ap=0 then ap=1
+01420     if rs=1 then accum1=-accum(j,ap,1) else accum1=accum(j,ap,1)
+01430     if rs=1 then accum2=-accum(j,ap,2) else accum2=accum(j,ap,2)
 01440     if ds=1 then let dollar$="$" else let dollar$=" "
-01450     if monthly=2 then let accum1=accum2
-01460     let accumcol$=accumcol$&" "&dollar$&cnvrt$("pic(-,---,---.##)",accum1)
+01450     if monthly=2 then accum1=accum2
+01460     accumcol$=accumcol$&" "&dollar$&cnvrt$("pic(-,---,---.##)",accum1)
 01470   next j
 01480   let sp2=30-sp-1
-01490   print #255,using L1300: d$(1:sp2),rtrm$(accumcol$) pageoflow L1940
+01490   pr #255,using L1300: d$(1:sp2),rtrm$(accumcol$) pageoflow L1940
 01500   gosub L1690
 01510   gosub L1960
 01520   gosub L1780
@@ -180,25 +180,25 @@
 01690 L1690: for j=1 to 9
 01700     if ac(j)=0 or ac(j)=9 then goto L1750
 01710     for j2=1 to 10
-01720       let accum(j2,j,1)=0
-01730       let accum(j2,j,2)=0
+01720       accum(j2,j,1)=0
+01730       accum(j2,j,2)=0
 01740     next j2
 01750 L1750: next j
 01760   return 
 01770 ! ______________________________________________________________________
 01780 L1780: if ls=0 then goto L1920
 01790   if ls=99 then goto L1830
-01800   print #255,using L1810: " "
+01800   pr #255,using L1810: " "
 01810 L1810: form pos 1,c 1,skip ls
 01820   goto L1920
 01830 L1830: let fnpglen(pglen)
 01840 ! If PGLEN<>42 Then Let PGLEN=58
 01850   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
 01860 ! If PGLEN=42 Then Let SK=SK+1
-01870   print #255,using L1880: rtrm$(foot$),"Page "&str$(pt1)
+01870   pr #255,using L1880: rtrm$(foot$),"Page "&str$(pt1)
 01880 L1880: form skip sk,pos tabnote,c fl,pos 75,c 8,skip 1
 01890   if eofcode=1 then goto L1920
-01900   print #255: newpage
+01900   pr #255: newpage
 01910   gosub L2130
 01920 L1920: return 
 01930 ! ______________________________________________________________________
@@ -209,27 +209,27 @@
 01980   let underlin$="  ============"
 01990   goto L2010
 02000 L2000: let underlin$="  ____________"
-02010 L2010: let bigul$=""
+02010 L2010: bigul$=""
 02020   for j=1 to totcol
-02030     let bigul$=bigul$&underlin$
+02030     bigul$=bigul$&underlin$
 02040   next j
-02050   if ul=1 then print #255,using L2070: bigul$
-02060   if ul=2 then print #255,using L2080: bigul$
+02050   if ul=1 then pr #255,using L2070: bigul$
+02060   if ul=2 then pr #255,using L2080: bigul$
 02070 L2070: form skip redir,pos 49,c big,skip redir
 02080 L2080: form skip 1,pos 49,c big,skip redir
-02090 L2090: if redir=0 then print #255,using L2100: " "
+02090 L2090: if redir=0 then pr #255,using L2100: " "
 02100 L2100: form skip 1,c 1,skip 0
 02110   return 
 02120 ! ______________________________________________________________________
 02130 L2130: let heading=1
 02140   let pt1+=1
-02150   print #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
-02160   print #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
-02170   if trim$(secondr$)<>"" then print #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
-02180   if monthly=2 then print #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(actpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
-02190   if monthly=1 then print #255: "\qc  {\f181 \fs16 \b For the one month period ended "&rtrm$(fnpedat$)&"}"
-02200   print #255: 
-02210   print #255,using L2220: heading$
+02150   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
+02160   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
+02170   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
+02180   if monthly=2 then pr #255: "\qc  {\f181 \fs16 \b For the "&rtrm$(actpd$)&" month period ended "&rtrm$(fnpedat$)&"}"
+02190   if monthly=1 then pr #255: "\qc  {\f181 \fs16 \b For the one month period ended "&rtrm$(fnpedat$)&"}"
+02200   pr #255: 
+02210   pr #255,using L2220: heading$
 02220 L2220: form pos 49,c big,skip 2
 02230   return 
 02240 ! ______________________________________________________________________
@@ -276,7 +276,7 @@
             let heading$=heading$&" "&lpad$(rtrm$(funddesc$(j)(1:13)),13) !:
             let totcol+=1
 02610   next j
-02620   let big=totcol*14
+02620   big=totcol*14
 02630   return 
 02640 ! ______________________________________________________________________
 02650 ASK_MONTHLY: ! ask monthly info or ytd info
@@ -298,6 +298,6 @@
 02780 ERTN: let fnerror(program$,err,line,act$,"xit")
 02790   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02800   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-02810   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+02810   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02820 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02830 ! /region

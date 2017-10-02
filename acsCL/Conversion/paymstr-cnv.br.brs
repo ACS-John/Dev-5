@@ -6,11 +6,11 @@
 00060 ! _____________________________________
 00070 ! fntop
 00080   let fncno(cno)
-00090   print newpage
+00090   pr newpage
 00100   close #101: ioerr L110
 00110 L110: open #101: "SROW=11,SCOL=20,EROW=13,ECOL=63,BORDER=DR,CAPTION=CHANGE PAYEE NUMBERS",display,outin 
-00120   print fields "12,22,C 40": "ENTER COMPANY NUMBER TO BE CHANGE:"
-00130   print fields "14,32,C 16,B,5": "PRESS F5 TO STOP"
+00120   pr fields "12,22,C 40": "ENTER COMPANY NUMBER TO BE CHANGE:"
+00130   pr fields "14,32,C 16,B,5": "PRESS F5 TO STOP"
 00140 L140: rinput fields "12,57,N 2,UE,N": cno conv L140
 00150   if cmdkey=5 then goto XIT
 00160 ! 
@@ -19,19 +19,19 @@
 00190   open #3: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TRIDX2.H"&str$(cno),internal,outin,keyed 
 00200 ! OPEN #4: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno),INTERNAL,OUTIN,RELATIVE
 00210   open #6: "Name="&env$('Q')&"\CLmstr\IvPaid.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\IVINDEX.H"&str$(cno)&"",internal,outin,keyed 
-00220   print fields "14,32,C 16,RB,N": "  IN PROCESS"
+00220   pr fields "14,32,C 16,RB,N": "  IN PROCESS"
 00230   let nk=10
 00240 L240: read #1,using L250: k1$,ad1 eof END1
 00250 L250: form pos 1,c 8,pos 147,pd 3
 00260   let k2$=lpad$(str$(nk),8)
 00270   rewrite #1,using L250: k2$
 00280   let nk=nk+5
-00290   let ad2=ad1
+00290   ad2=ad1
 00300 L300: if ad2=0 then goto END2
 00310   read #2,using L320,rec=ad2: p$,nta
 00320 L320: form pos 1,c 8,pos 54,pd 3
 00330   rewrite #2,using L320,rec=ad2: k2$
-00340   let ad2=nta : goto L300
+00340   ad2=nta : goto L300
 00350 END2: restore #3,search>=k1$: nokey END3
 00360 L360: read #3,using L370: p$ eof END3
 00370 L370: form pos 28,c 8
@@ -60,6 +60,6 @@
 00600 ERTN: let fnerror(program$,err,line,act$,"xit")
 00610   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00620   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00630   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00630   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00640 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00650 ! /region

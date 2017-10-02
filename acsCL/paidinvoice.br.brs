@@ -28,7 +28,7 @@
         let lbl$(3)="Date Paid" !:
         let lbl$(4)="Check Number"
 00250 ! ** Field Display Lengths ** !:
-        let mmddyy=8 : let ccyymmdd=10 !:
+        let mmddyy=8 : ccyymmdd=10 !:
         ! TC=0 ! Text Box Length Item Coutner
 00260   let tln(tc+=1)=8 !:
         let tln(tc+=1)=12 !:
@@ -51,7 +51,7 @@
 00310 ! ** Field Mask ** !:
         let number=30 !:
         let pointtwo=32 ! number with 2 decimal places (no commas)!:
-        let mmddyy=1 : let ccyymmdd=3 !:
+        let mmddyy=1 : ccyymmdd=3 !:
         let mc=0 ! mask item counter
 00320   let mask(mc+=1)=none !:
         let mask(mc+=1)=none !:
@@ -65,24 +65,24 @@
         ! c$(cl,5)=desc pos c$(cl,6)=desc len  C$(cl,7)=Index File !:
         ! C$(cl,8)=limit to list option '1'=yes '0'=no !:
         let limit_to_list$='1'
-00350   let cl=1 !:
-        let c$(cl,1)='ComboF' !:
-        let c$(cl,2)=env$('Q')&"\CLmstr\PayMstr.h"&str$(cno) !:
-        let c$(cl,3)='1' : let c$(cl,4)=str$(sln(cl)) !:
-        let c$(cl,5)=str$(sln(cl)+1) : let c$(cl,6)='30' !:
-        let c$(cl,7)=env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno) : let c$(cl,8)=limit_to_list$
-00360 ! Let CL=2 !:
-        ! Let C$(CL,1)='ComboF' !:
-        ! Let C$(CL,2)=env$('Q')&'\CLmstr\BankMstr.h'&STR$(CNO) !:
-        ! Let C$(CL,3)='1' : Let C$(CL,4)=STR$(SLN(CL)) !:
-        ! Let C$(CL,5)=STR$(SLN(CL)+1) : Let C$(CL,6)='30' !:
-        ! Let C$(CL,7)=env$('Q')&'\CLmstr\BankIdx1.h'&STR$(CNO) : Let C$(CL,8)=LIMIT_TO_LIST$
-00370 ! Let CL=4 !:
-        ! Let C$(CL,1)='ComboF' !:
-        ! Let C$(CL,2)=env$('Q')&'\CLmstr\TrMstr.h'&STR$(CNO) !:
-        ! Let C$(CL,3)='1' : Let C$(CL,4)=STR$(SLN(CL)) !:
-        ! Let C$(CL,5)=STR$(SLN(CL)+1) : Let C$(CL,6)='30' !:
-        ! Let C$(CL,7)=env$('Q')&'\CLmstr\BankIdx1.h'&STR$(CNO) : Let C$(CL,8)=LIMIT_TO_LIST$
+00350   cl=1 !:
+        c$(cl,1)='ComboF' !:
+        c$(cl,2)=env$('Q')&"\CLmstr\PayMstr.h"&str$(cno) !:
+        c$(cl,3)='1' : c$(cl,4)=str$(sln(cl)) !:
+        c$(cl,5)=str$(sln(cl)+1) : c$(cl,6)='30' !:
+        c$(cl,7)=env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno) : c$(cl,8)=limit_to_list$
+00360 ! cL=2 !:
+        ! c$(CL,1)='ComboF' !:
+        ! c$(CL,2)=env$('Q')&'\CLmstr\BankMstr.h'&STR$(CNO) !:
+        ! c$(CL,3)='1' : c$(CL,4)=STR$(SLN(CL)) !:
+        ! c$(CL,5)=STR$(SLN(CL)+1) : c$(CL,6)='30' !:
+        ! c$(CL,7)=env$('Q')&'\CLmstr\BankIdx1.h'&STR$(CNO) : c$(CL,8)=LIMIT_TO_LIST$
+00370 ! cL=4 !:
+        ! c$(CL,1)='ComboF' !:
+        ! c$(CL,2)=env$('Q')&'\CLmstr\TrMstr.h'&STR$(CNO) !:
+        ! c$(CL,3)='1' : c$(CL,4)=STR$(SLN(CL)) !:
+        ! c$(CL,5)=STR$(SLN(CL)+1) : c$(CL,6)='30' !:
+        ! c$(CL,7)=env$('Q')&'\CLmstr\BankIdx1.h'&STR$(CNO) : c$(CL,8)=LIMIT_TO_LIST$
 00380   return 
 00390 ! ______________________________________________________________________
 00400 OPEN_AND_CALL_HAMSTER: ! 
@@ -101,7 +101,7 @@
 00510 ERTN: let fnerror(program$,err,line,act$,"xit")
 00520   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00530   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00540   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00540   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00550 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00560 ! /region
 00570 ! ______________________________________________________________________

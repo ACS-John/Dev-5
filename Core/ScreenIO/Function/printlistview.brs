@@ -2,8 +2,8 @@
  ! Created on 07/03/2014
  !
  ! fnPrintListview - This function prints a listview using Georges functions
- !  To use it, select this function for your Print Button, and set the
- !  print buttons "UserData" field to match the Control Name for the listview
+ !  To use it, select this function for your pr Button, and set the
+ !  pr buttons "UserData" field to match the Control Name for the listview
  !  that you wish to print.
  !
  ! You also may select a title, by specifying it in UserData in the format:
@@ -47,6 +47,6 @@
     if ListviewSubscript then
        let fnListPrint(Window,fnListSpec$(ControlSpec$(ListviewSubscript)),"","","",mat S,1,0,totalsupp$)
     else
-       let msgbox("Couldn't find the target listview. Please ensure a valid listview is selected for the Print button, or contact the programmer who worked on your system to fix this error.")
+       let msgbox("Couldn't find the target listview. Please ensure a valid listview is selected for the pr button, or contact the programmer who worked on your system to fix this error.")
     end if
  fnend

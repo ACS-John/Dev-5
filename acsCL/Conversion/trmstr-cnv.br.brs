@@ -1,8 +1,8 @@
 00010 ! REPLACE S:\acsCL\conversion\trmstr-cnv
 00020   library 'S:\Core\Library': fncd,fncno,fnCopy,fnindex_it ! def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
-00030   let fncno(cno) ! print newpage
-00040 ! print fields "10,5,C 60": "      COMPANY NUMBER:"
-00050 ! print fields "12,12,C 16,B,5": "PRESS F5 TO STOP"
+00030   let fncno(cno) ! pr newpage
+00040 ! pr fields "10,5,C 60": "      COMPANY NUMBER:"
+00050 ! pr fields "12,12,C 16,B,5": "PRESS F5 TO STOP"
 00060 ! L60: input fields "10,30,N 2,UE,N": cno conv L60
 00070 ! 
 00080 !  fnCopy(env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno),env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno),92)

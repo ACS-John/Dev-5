@@ -9,7 +9,7 @@
 00090 ! ______________________________________________________________________
 00100   let fncno(cno,cnam$)
 00110 ! ______________________________________________________________________
-00120   let crlf$=chr$(13)&chr$(10)
+00120   crlf$=chr$(13)&chr$(10)
 00130   let fl$="C:\ASCIIGLM.txt"
 00140   let fntos(sn$="GLascii") !:
         let mylen=30: let mypos=mylen+3 : let right=1
@@ -32,6 +32,6 @@
 00300 ERTN: let fnerror(program$,err,line,act$,"xit")
 00310   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00320   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00330   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00330   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00340 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00350 ! /region

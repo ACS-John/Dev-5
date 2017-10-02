@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsCL\VnFund
-00020 ! Print Vendor Fund Listing
+00020 ! pr Vendor Fund Listing
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fntop,fnxit,fntos,fnlbl,fntxt,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
@@ -9,7 +9,7 @@
 00090 ! ______________________________________________________________________
 00100   let fncno(cno,cnam$)
 00110   let fntop(program$, cap$="Payee Fund Listing")
-00120   let cancel=99
+00120   cancel=99
 00130 ! ______________________________________________________________________
 00140   let fntos(sn$="vnfund") !:
         let respc=0
@@ -58,36 +58,36 @@
           let f1(gl(1))+=amt
 00470   goto READ_TRALLOC
 00480 ! ______________________________________________________________________
-00490 PRINTARRAY: ! PRINT ARRAY
+00490 PRINTARRAY: ! pr ARRAY
 00500   if sum(f1)<in1(3) then goto RESET_F1
 00510   if trim$(vn$)<>'' then !:
           read #paymstr,using 'Form POS 9,C 30',key=vn$: p1$ nokey L520
-00520 L520: print #255,using 'Form POS 1,C 10,C 30': vn$,p1$
+00520 L520: pr #255,using 'Form POS 1,C 10,C 30': vn$,p1$
 00530 PRINTARRAY_2: ! 
 00540   for j=1 to 1000
 00550     if f1(j)<>0 then !:
-            print #255,using 'Form POS 10,C 12,PIC(----,---,---,---.##)': "Fund: "&str$(j),f1(j) pageoflow NEWPGE
+            pr #255,using 'Form POS 10,C 12,PIC(----,---,---,---.##)': "Fund: "&str$(j),f1(j) pageoflow NEWPGE
 00560   next j
-00570   print #255,using 'Form POS 10,C 12,PIC(----,---,---,---.##)': " Total  ",sum(f1)
-00580   print #255: ""
+00570   pr #255,using 'Form POS 10,C 12,PIC(----,---,---,---.##)': " Total  ",sum(f1)
+00580   pr #255: ""
 00590   mat f2=f2+f1
 00600 RESET_F1: mat f1=(0)
 00610   return 
 00620 ! ______________________________________________________________________
 00630 NEWPGE: ! 
-00640   print #255: newpage
+00640   pr #255: newpage
 00650   gosub HDR
 00660   continue 
 00670 ! ______________________________________________________________________
 00680 HDR: ! 
-00690   print #255,using 'Form POS 1,C 4,N 4,Cc 72': "Page",pg+=1,cnam$
-00700   print #255,using 'Form POS 1,c 8,Cc 72': date$,"Date From: "&cnvrt$("pic(zz/zz/zz)",in1(1))&" To: "&cnvrt$("pic(zz/zz/zz)",in1(2))
-00710   print #255,using 'Form POS 9,Cc 72': "Vendor Fund Listing (Minimum Amount: "&ltrm$(cnvrt$("PIC($$$$,$$$,$$$.##BCR)",in1(3)))&")" !:
-        print #255: ""
+00690   pr #255,using 'Form POS 1,C 4,N 4,Cc 72': "Page",pg+=1,cnam$
+00700   pr #255,using 'Form POS 1,c 8,Cc 72': date$,"Date From: "&cnvrt$("pic(zz/zz/zz)",in1(1))&" To: "&cnvrt$("pic(zz/zz/zz)",in1(2))
+00710   pr #255,using 'Form POS 9,Cc 72': "Vendor Fund Listing (Minimum Amount: "&ltrm$(cnvrt$("PIC($$$$,$$$,$$$.##BCR)",in1(3)))&")" !:
+        pr #255: ""
 00720   return 
 00730 ! ______________________________________________________________________
 00740 END1: gosub PRINTARRAY
-00750   print #255,using 'Form POS 1,C 10,C 30': "  Grand","Total"
+00750   pr #255,using 'Form POS 1,C 10,C 30': "  Grand","Total"
 00760   mat f1=f2
 00770   gosub PRINTARRAY_2
 00780   let fncloseprn
@@ -99,7 +99,7 @@
 00840 ERTN: let fnerror(program$,err,line,act$,"xit")
 00850   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00860   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00870   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00870   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00880 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00890 ! /region
 00900 ! ______________________________________________________________________

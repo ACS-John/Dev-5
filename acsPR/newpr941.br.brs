@@ -95,22 +95,22 @@
 00820 L820: for j=1 to 4
 00830     if resp$(2)=option1$(j) then let qtr=j: let m$=option1$(j): goto L850 ! quarter ending date
 00840   next j
-00850 L850: if qtr=1 then let begdate=taxyear*10000+0312: let enddate=val(taxyear$)*10000+0318
-00860   if qtr=2 then let begdate=taxyear*10000+0612: let enddate=val(taxyear$)*10000+0618
-00870   if qtr=3 then let begdate=taxyear*10000+0912: let enddate=val(taxyear$)*10000+0918
-00880   if qtr=4 then let begdate=taxyear*10000+1212: let enddate=val(taxyear$)*10000+1218
+00850 L850: if qtr=1 then begdate=taxyear*10000+0312: let enddate=val(taxyear$)*10000+0318
+00860   if qtr=2 then begdate=taxyear*10000+0612: let enddate=val(taxyear$)*10000+0618
+00870   if qtr=3 then begdate=taxyear*10000+0912: let enddate=val(taxyear$)*10000+0918
+00880   if qtr=4 then begdate=taxyear*10000+1212: let enddate=val(taxyear$)*10000+1218
 00890   if resp$(3)="True" then let frm=2 else let frm=1 ! need a worksheet
-00900   let box15a=val(resp$(4)) ! first month liability
-00910   let box15b=val(resp$(5))
-00920   let box15c=val(resp$(6))
-00930   let box7a=val(resp$(7)) ! fractions
-00940   let box7b=val(resp$(8)) ! sick pay
-00950   let box7c=val(resp$(9)) ! tips
-00960   let box7d=val(resp$(10)) ! tax wh
-00970   let box7e=val(resp$(11)) ! prior qtr
-00980   let box7f=val(resp$(12)) ! special add
-00990   let box7g=val(resp$(13)) ! special add - ss
-01000   let box11=val(resp$(14))
+00900   box15a=val(resp$(4)) ! first month liability
+00910   box15b=val(resp$(5))
+00920   box15c=val(resp$(6))
+00930   box7a=val(resp$(7)) ! fractions
+00940   box7b=val(resp$(8)) ! sick pay
+00950   box7c=val(resp$(9)) ! tips
+00960   box7d=val(resp$(10)) ! tax wh
+00970   box7e=val(resp$(11)) ! prior qtr
+00980   box7f=val(resp$(12)) ! special add
+00990   box7g=val(resp$(13)) ! special add - ss
+01000   box11=val(resp$(14))
 01008   let fnopenprn
 01010   let fn_start_print
 01020   let fn_build_941
@@ -129,15 +129,15 @@
 10160   let m1=m2=h2=h3=dedytdfica=dedqtrfica=dedytdfederal=dedqtrfederal=m4=0
 10180   mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0): mat qtr4tcp=(0)
 10200   mat ytdtotal=(0)
-10220   let checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
+10220   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 10240   restore #4,key>=checkkey$: nokey ANALYZE_WAGES
 10260   L1210: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof ANALYZE_WAGES
 10280   if heno<>eno then goto ANALYZE_WAGES
 10300   if prd<beg_date or prd>end_date then goto L1210 ! not this year
-10320   if em5=1 then let pedate=begdate+19: let box1+=1 ! monthly pay period
-10340   if em5=2 then let pedate=begdate+15 : let box1+=1 ! semi-monthly
-10360   if em5=3 then let pedate=begdate+14 : let box1+=1 ! bi-weekly
-10380   if em5=4 then let pedate=begdate+7: let box1+=1 ! weekly
+10320   if em5=1 then let pedate=begdate+19: box1+=1 ! monthly pay period
+10340   if em5=2 then let pedate=begdate+15 : box1+=1 ! semi-monthly
+10360   if em5=3 then let pedate=begdate+14 : box1+=1 ! bi-weekly
+10380   if em5=4 then let pedate=begdate+7: box1+=1 ! weekly
 10400   !   let deptkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn)
 10420   ! Form POS 48,N 2
 10440   if prd>=qtr1 and prd<qtr2 then mat qtr1tcp=qtr1tcp+tcp: mat tpt=tpt+tcp ! 1st qtr earnings
@@ -168,32 +168,32 @@
 10940   ! ______________________________________________________________________
 10960   WK_HEADER: ! 
 10980   let p2=p2+1
-11000   print #255,using L1600: "Page ",p2
-11020   print #255: ""
+11000   pr #255,using L1600: "Page ",p2
+11020   pr #255: ""
 11040   L1600: form pos 70,c 5,pic(zzz)
-11060   print #255: tab(15);"Employer's Quarterly Federal Tax Return Worksheet"
-11080   print #255,using L1630: "For quarter ended "&m$&", "&str$(taxyear)
+11060   pr #255: tab(15);"Employer's Quarterly Federal Tax Return Worksheet"
+11080   pr #255,using L1630: "For quarter ended "&m$&", "&str$(taxyear)
 11100   L1630: form pos 20,cc 40
-11120   print #255: ""
-11140   print #255: ""
+11120   pr #255: ""
+11140   pr #255: ""
 11160   if eof=1 then goto L1790
-11180   print #255,using L1680: a$(1),"Fed ID",b$(1)
+11180   pr #255,using L1680: a$(1),"Fed ID",b$(1)
 11200   L1680: form pos 17,c 40,pos 59,c 6,pos 69,c 40
-11220   print #255,using L1700: a$(2),"State ID",e$(1)
+11220   pr #255,using L1700: a$(2),"State ID",e$(1)
 11240   L1700: form pos 17,c 40,pos 59,c 8,pos 69,c 12,skip 1
-11260   print #255,using L1720: a$(3),"State",d$(1)
+11260   pr #255,using L1720: a$(3),"State",d$(1)
 11280   L1720: form pos 17,c 40,pos 59,c 5,pos 69,c 8,skip 1
-11300   print #255: ""
-11320   print #255: tab(41);"Total Wages    Social-Sec.      Medicare"
-11340   print #255: " SS Number             Name";
-11360   print #255: tab(41);"For Quarter        Wages";tab(75);"Wages"
-11380   print #255: "___________  __________________________";
-11400   print #255: tab(41);"___________   ____________  ____________"
+11300   pr #255: ""
+11320   pr #255: tab(41);"Total Wages    Social-Sec.      Medicare"
+11340   pr #255: " SS Number             Name";
+11360   pr #255: tab(41);"For Quarter        Wages";tab(75);"Wages"
+11380   pr #255: "___________  __________________________";
+11400   pr #255: tab(41);"___________   ____________  ____________"
 11420   L1790: return 
 11440   ! ______________________________________________________________________
 11460   WK_END: ! 
 11480   let fn_totals
-11530   print #255: newpage
+11530   pr #255: newpage
 11532   on pageoflow ignore 
 11540 fnend 
 11560 FINIS: ! 
@@ -216,8 +216,8 @@
 11920     if m2-m1>mcm then let h3=0 : goto L2050
 11940     let h3=mcm-(m2-m1)
 11960 L2050: if frm=1 then goto L2090
-11980     print #255,using L2080: ss$,em$(1)(1:27),m4,h2,h3
-12000     print #255: ""
+11980     pr #255,using L2080: ss$,em$(1)(1:27),m4,h2,h3
+12000     pr #255: ""
 12020 L2080: form pos 1,c 11,pos 14,c 27,pos 41,pic(----,---.##),pos 56,pic(----,---.##),pos 67,pic(---,---,---.##),skip 1
 12040 L2090: let t1=t1+m4
 12060     let t3=t3+h3
@@ -227,10 +227,10 @@
 12140   fnend 
 12160   def fn_totals
 12180     if frm=1 then goto L2230
-12200     print #255,using L2180: "___________    ___________  ____________"
+12200     pr #255,using L2180: "___________    ___________  ____________"
 12220 L2180: form pos 41,c 41,skip 1
-12240     print #255: "       Total Employees:";p3;"     Totals";
-12260     print #255,using L2210: t1,t2,t3
+12240     pr #255: "       Total Employees:";p3;"     Totals";
+12260     pr #255,using L2210: t1,t2,t3
 12280 L2210: form pos 41,pic(----,---.##),pos 56,pic(----,---.##),pos 67,pic(---,---,---.##),skip 1
 12300 L2230: let p3=0
 12320     let gt1=gt1+t1
@@ -243,7 +243,7 @@
 12460     let t4=0
 12480   fnend 
 12520 PGOF: ! r:
-12540   print #255: newpage
+12540   pr #255: newpage
 12560   gosub WK_HEADER
 12580 continue ! /r
 12620   def fn_build_941
@@ -253,25 +253,25 @@
 12700 !   let tipfica= round((tpt(30))*(ficarate*2),2) ! 2013    FICARATE)
 12720     let mcwh=round((gt3)*mcr*2,2)
 12740 !   BOX1   ! count on 12th of each qtr (analyze history for this in another section)
-12760     let box2=gt1
-12780     let box3=fedwh
-12800     let box4=0 ! ( unused )
-12820     let box5a1=gt2-tpt(30) ! FICA WAGES LESS TIPS
-12840     let box5a2=wagefica
-12860     let box5b1=tpt(30) ! TIPS
-12880     let box5b2=taxfica
-12900     let box5c1=gt3
-12920     let box5c2=mcwh
-12940     let box5d=wagefica+taxfica+mcwh
-12960     let box6=box3+box5d ! total taxes before adj
-12980     let box7h=box7a+box7b+box7d+box7e+box7f+box7g ! total adjustments
-13000     let box8=box6-box7h ! total due after adjustments
-13020     let box9=eicqtr ! eic
-13040     let box10=box8-box9 ! total taxes after eic
-13060     let box11=box11 ! total deposits
-13080     let box12=box10-box11 ! blance due
-13100     if box10-box11<0 then let box13=abs(box10-box11) : let box12=0 else let box13=0 ! overpayment if any
-13120     let box15d=box15a+box15b+box15c ! total deposits for quarter
+12760     box2=gt1
+12780     box3=fedwh
+12800     box4=0 ! ( unused )
+12820     box5a1=gt2-tpt(30) ! FICA WAGES LESS TIPS
+12840     box5a2=wagefica
+12860     box5b1=tpt(30) ! TIPS
+12880     box5b2=taxfica
+12900     box5c1=gt3
+12920     box5c2=mcwh
+12940     box5d=wagefica+taxfica+mcwh
+12960     box6=box3+box5d ! total taxes before adj
+12980     box7h=box7a+box7b+box7d+box7e+box7f+box7g ! total adjustments
+13000     box8=box6-box7h ! total due after adjustments
+13020     box9=eicqtr ! eic
+13040     box10=box8-box9 ! total taxes after eic
+13060     box11=box11 ! total deposits
+13080     box12=box10-box11 ! blance due
+13100     if box10-box11<0 then box13=abs(box10-box11) : box12=0 else box13=0 ! overpayment if any
+13120     box15d=box15a+box15b+box15c ! total deposits for quarter
 13140   fnend 
 13180 ! LASER_941: ! r:
 13200   let fnpa_open
@@ -285,20 +285,20 @@
 13380 ERTN: let fnerror(program$,err,line,act$,"xit")
 13400   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 13420   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-13440   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+13440   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 13460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 13480 ! /region
 13520   def fn_print941_origional
 13540     fnpa_fontsize(12)
 13560     fnpa_pic("S:\acsPR\941.bmp",1,1)
 13580 ! fnpa_pic("S:\acsPR\941_2012_A.bmp",1,1)
-13600     print #20: 'Call Print.MyFont("Courier New")'
+13600     pr #20: 'Call Print.MyFont("Courier New")'
 13620     for j=1 to 10
 13640       let x=val(b$(1)(j:j)) conv L2960 ! pull any spaces or non-numeric characters out of federal id#
 13660       goto L2970
-13680 L2960: let b$(1)(j:j)=""
-13700 L2970: if b$(1)(j:j)=" " then let b$(1)(j:j)=""
-13720       if b$(1)(j:j)="-" then let b$(1)(j:j)=""
+13680 L2960: b$(1)(j:j)=""
+13700 L2970: if b$(1)(j:j)=" " then b$(1)(j:j)=""
+13720       if b$(1)(j:j)="-" then b$(1)(j:j)=""
 13740     next j
 13760     fnpa_fontsize(16)
 13780     let lyne=15 ! starting line of fed id
@@ -314,7 +314,7 @@
 13980     fnpa_fontsize(12)
 14000     fnpa_txt(trim$(a$(1)),35,32)
 14020     fnpa_txt(trim$(a$(2)),35,39)
-14040     let csz$=a$(3): let fn_csz
+14040     csz$=a$(3): let fn_csz
 14060     fnpa_txt(trim$(city$),35,48)
 14080     fnpa_txt(trim$(state$),93,48)
 14100     fnpa_txt(trim$(zip$),108,48)
@@ -362,52 +362,52 @@
 14940   fnend 
 14960   def fn_csz ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
 14980 L3680: let p1=pos(csz$,".",1)
-15000     if p1>0 then let csz$(p1:p1)=" ": let p2=p1: goto L3680
-15020 ! IF P2>0 AND CSZ$(P2+1:P2+1)=" " THEN LET CSZ$(P2+1:P2+1)="" ! dump any extra spaces
+15000     if p1>0 then csz$(p1:p1)=" ": let p2=p1: goto L3680
+15020 ! IF P2>0 AND CSZ$(P2+1:P2+1)=" " THEN cSZ$(P2+1:P2+1)="" ! dump any extra spaces
 15040     let p2=0
 15060 L3720: let p1=pos(csz$,",",1)
-15080     if p1>0 then let csz$(p1:p1)=" ": let p2=p1: goto L3720
-15100 ! IF P2>0 AND CSZ$(P2+1:P2+1)=" " THEN LET CSZ$(P2+1:P2+1)="" ! dump any extra spaces
+15080     if p1>0 then csz$(p1:p1)=" ": let p2=p1: goto L3720
+15100 ! IF P2>0 AND CSZ$(P2+1:P2+1)=" " THEN cSZ$(P2+1:P2+1)="" ! dump any extra spaces
 15120 L3750: let p1=pos(rtrm$(csz$),"  ",1)
-15140     if p1>0 then let csz$(p1+1:p1+1)="" : goto L3750
-15160     let csz$=ltrm$(rtrm$(csz$)): let p1=pos(csz$," ",-1)
+15140     if p1>0 then csz$(p1+1:p1+1)="" : goto L3750
+15160     csz$=ltrm$(rtrm$(csz$)): let p1=pos(csz$," ",-1)
 15180     let zip$=csz$(p1+1:len(csz$)): let zip$=ltrm$(rtrm$(zip$))
 15200     let p2=pos(csz$(1:p1-1)," ",-1) : let state$=csz$(p2+1:p1-1)(1:2) : let state$=ltrm$(rtrm$(state$))
-15220     let city$=csz$(1:p2-1)(1:15): let city$=ltrm$(rtrm$(city$))
+15220     city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 15240   fnend 
-15260   def fn_print941_info ! print 941 information
-15280     print #255: "Employer ID # (EIN): ";b$(1)
-15300     print #255: "Name (not trade name): "
-15320     print #255: "Trade Name: ";a$(1)
-15340     print #255: "Address: ";a$(2)
-15360     print #255: "City, State Zip: ";a$(3)
-15380     print #255: 
-15400     print #255,using "form pos 5, cr 50,pic(zzzzzzzzzzz#)": "Number of Employees receiving pay for Quarter: ",box1
-15420     print #255,using "form pos 5, cr 50,pic(-,---,---.##)": "Wages, Tips & Other Compensation: ",box2
-15440     print #255,using "form pos 5, cr 50,pic(-,---,---.##)": "Income Tax Withheld: ",box3
-15460     print #255: 
-15480     print #255,using "form pos 5,cr 18,x 1,2*pic(---,---,---.##)": "5a",box5a1,box5a2
-15500     print #255,using "form pos 5,cr 18,x 1,2*pic(---,---,---.##)": "5b",box5b1,box5b2
-15520     print #255,using "form pos 5,cr 18,x 1,2*pic(---,---,---.##)": "5c",box5c1,box5c2
-15540     print #255: 
-15560     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "5d",box5d
-15580     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "6",box6
-15600     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7a",box7a
-15620     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7b",box7b
-15640     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7c",box7c
-15660     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7d",box7d
-15680     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7e",box7e
-15700     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7f",box7f
-15720     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7g",box7g
-15740     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7h",box7h
-15760     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "8",box8
-15780     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "9",box9
-15800     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "10",box10
-15820     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "11",box11
-15840     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "12",box12
-15860     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "13",box13
-15880     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "15a",box15a
-15900     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "15b",box15b
-15920     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "15c",box15c
-15940     print #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "15a+15b+15c",box15a+box15b+box15c
+15260   def fn_print941_info ! pr 941 information
+15280     pr #255: "Employer ID # (EIN): ";b$(1)
+15300     pr #255: "Name (not trade name): "
+15320     pr #255: "Trade Name: ";a$(1)
+15340     pr #255: "Address: ";a$(2)
+15360     pr #255: "City, State Zip: ";a$(3)
+15380     pr #255: 
+15400     pr #255,using "form pos 5, cr 50,pic(zzzzzzzzzzz#)": "Number of Employees receiving pay for Quarter: ",box1
+15420     pr #255,using "form pos 5, cr 50,pic(-,---,---.##)": "Wages, Tips & Other Compensation: ",box2
+15440     pr #255,using "form pos 5, cr 50,pic(-,---,---.##)": "Income Tax Withheld: ",box3
+15460     pr #255: 
+15480     pr #255,using "form pos 5,cr 18,x 1,2*pic(---,---,---.##)": "5a",box5a1,box5a2
+15500     pr #255,using "form pos 5,cr 18,x 1,2*pic(---,---,---.##)": "5b",box5b1,box5b2
+15520     pr #255,using "form pos 5,cr 18,x 1,2*pic(---,---,---.##)": "5c",box5c1,box5c2
+15540     pr #255: 
+15560     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "5d",box5d
+15580     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "6",box6
+15600     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7a",box7a
+15620     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7b",box7b
+15640     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7c",box7c
+15660     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7d",box7d
+15680     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7e",box7e
+15700     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7f",box7f
+15720     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7g",box7g
+15740     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "7h",box7h
+15760     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "8",box8
+15780     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "9",box9
+15800     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "10",box10
+15820     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "11",box11
+15840     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "12",box12
+15860     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "13",box13
+15880     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "15a",box15a
+15900     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "15b",box15b
+15920     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "15c",box15c
+15940     pr #255,using "form pos 5,cr 20,x 1,pic(-,---,---.##)": "15a+15b+15c",box15a+box15b+box15c
 15960   fnend  ! fn_Print941_info

@@ -28,7 +28,7 @@
 00250   let fnlbl(2,1,"Directory:",mylen,1)
 00260   let fntxt(2,mypos,40,255) !:
         let resp$(2)=dur$
-00270   let ch$(1)="File Name" : let ch$(2)="Ext" : let ch$(3)="Path" !:
+00270   ch$(1)="File Name" : ch$(2)="Ext" : ch$(3)="Path" !:
         mat item$(3) : mat ch$(3) : mat cm$(3) !:
         let fnflexinit1("loc-br",3,1,15,90,mat ch$,mat cm$,1)
 00280   for j=1 to udim(brfn$)
@@ -54,7 +54,7 @@
 00470 ERTN: let fnerror(program$,err,line,act$,"xit")
 00480   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00490   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00500   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00500   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00510 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00520 ! /region
 00530 ! ______________________________________________________________________

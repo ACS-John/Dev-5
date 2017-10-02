@@ -12,9 +12,9 @@
 00060 ! ______________________________________________________________________
 00065   let fntop(program$,cap$="Payroll Registers")
 00076   fncreg_read('prreg2.include_tips_in_other_wh',include_tips_in_other_wh$) : if include_tips_in_other_wh$='' then let include_tips_in_other_wh$='True'
-00078   fnreg_read('prreg2.append_reg1',append_reg1$) : if append_reg1$='' then let append_reg1$='False'
+00078   fnreg_read('prreg2.append_reg1',append_reg1$) : if append_reg1$='' then append_reg1$='False'
 00080   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-00082   fncreg_read('CL Bank Code',bankcode$) : let bankcode=val(bankcode$) : if bankcode=0 then let bankcode=1
+00082   fncreg_read('CL Bank Code',bankcode$) : bankcode=val(bankcode$) : if bankcode=0 then bankcode=1
 00090 ! 
 00120   open #12: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal,input,keyed ioerr L240
 00130   read #12,using 'Form POS 57,G 8',key=lpad$(str$(bankcode),2),release: cl_bank_last_check$ nokey ignore
@@ -24,12 +24,12 @@
 00155   read #1,using 'Form POS 5,N 8': ckno
 00160   close #1: 
 00165 L270: ! 
-00170   let ckno+=1
+00170   ckno+=1
 00175 ! 
 00180   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d$)
 00195   let d1$=cnvrt$("pic(zzzzzzzz)",d1)
 00200   let ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
-00205 L320: if trim$(cl_bank_last_check$)<>"" then let ckno=val(cl_bank_last_check$)+1 conv ignore
+00205 L320: if trim$(cl_bank_last_check$)<>"" then ckno=val(cl_bank_last_check$)+1 conv ignore
 00210 ! 
 00250 ! 
 00265   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -55,16 +55,16 @@
 46206   else 
 46208     let resp$(resp_include_tips_in_other_wh:=respc+=1)='False'
 46210   end if 
-46240   let fncmdkey("&Next",1,1,0,"Proceed with print the payroll register." )
+46240   let fncmdkey("&Next",1,1,0,"Proceed with pr the payroll register." )
 46260   let fncmdkey("E&xit",5,0,1,"Returns to menu")
 48000   let fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 48020   if ckey=5 then goto XIT
-48040   let ckno=val(resp$(1))
+48040   ckno=val(resp$(1))
 48060   let ppd=val(resp$(2))
-48070   let append_reg1$=resp$(resp_append_reg1)
+48070   append_reg1$=resp$(resp_append_reg1)
 48080   let include_tips_in_other_wh$=resp$(resp_include_tips_in_other_wh)
 48100   let fncreg_write('prreg2.include_tips_in_other_wh',include_tips_in_other_wh$) : if include_tips_in_other_wh$='True' then let include_tips_in_other_wh=1 else let include_tips_in_other_wh=0
-48110   let fnreg_write('prreg2.append_reg1',append_reg1$) : if append_reg1$='True' then let append_reg1=1 else let append_reg1=0
+48110   let fnreg_write('prreg2.append_reg1',append_reg1$) : if append_reg1$='True' then append_reg1=1 else append_reg1=0
 48120   goto START_REPORT ! /r
 51000 START_REPORT: ! r:
 51020   if append_reg1 then 
@@ -77,15 +77,15 @@
 51160 ! ______________________________________________________________________
 52000 LOOP_TOP: ! 
 52020   read #1,using 'form pos 1,n 8,c 30,pos 162,n 6,pos 173,2*pd 3': eno,em$,lpd eof FINIS
-52120 ! if eno=307 then print 'eno '&str$(eno) : exe 'break other_wh' : break_is_on=1 else if break_is_on then exe 'break other_wh off' : break_is_on=0
+52120 ! if eno=307 then pr 'eno '&str$(eno) : exe 'break other_wh' : break_is_on=1 else if break_is_on then exe 'break other_wh off' : break_is_on=0
 52140   if lpd><ppd then goto LOOP_TOP
 52160   mat thc=(0) : mat tcp=(0) : mat ttdc=(0) : let holdrealckno=realckno=0
-52180   let checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
+52180   checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 52200   let dirdep$=rpad$(str$(eno),10)
 52220   let dd$=""
 52240   read #h_dd,using "Form pos 1,C 10,C 1,N 9,N 2,N 17",key=dirdep$: key$,dd$,rtn,acc,acn nokey ignore
 52260 ! if env$('client')="West Rest Haven" then goto L690
-52280   let a=pos(rtrm$(em$)," ",1) : let b=pos(rtrm$(em$)," ",a+1)
+52280   a=pos(rtrm$(em$)," ",1) : b=pos(rtrm$(em$)," ",a+1)
 52300   let em$=rtrm$(em$(max(a,b):30))&" "&em$(1:a) error ignore
 52320 ! L690: !
 52340   restore #h_checks,key>=checkkey$: nokey LOOP_TOP
@@ -116,13 +116,13 @@
 52700     let tothrs=tothrs+ttdc(j)
 52720     let thc(j)=ttdc(j)
 52740   next j
-52760   if holdrealckno=0 then let ckn2=ckno : let ckno+=1 else let ckn2=holdrealckno
+52760   if holdrealckno=0 then ckn2=ckno : ckno+=1 else ckn2=holdrealckno
 52780   if uprc$(dd$)="Y" then goto L915
-52800   print #255,using L900: ckn2,eno,em$(1:11),mat thc,tothrs,tcp(31),tcp(3),tcp(2),tcp(1),tcp(4),other_wh,tcp(32) pageoflow PGOF
+52800   pr #255,using L900: ckn2,eno,em$(1:11),mat thc,tothrs,tcp(31),tcp(3),tcp(2),tcp(1),tcp(4),other_wh,tcp(32) pageoflow PGOF
 52820 L900: form pos 1,n 5,n 8,x 1,c 12,6*n 7.2,7*n 9.2,skip 1
 52840   goto L940
 52860 L915: if tcp(22)=0 then let tcp(22)=tcp(32)
-52880   print #255,using L930: "DD",eno,em$(1:11),mat thc,tothrs,tcp(31),tcp(3),tcp(2),tcp(1),tcp(4),other_wh,tcp(22) pageoflow PGOF
+52880   pr #255,using L930: "DD",eno,em$(1:11),mat thc,tothrs,tcp(31),tcp(3),tcp(2),tcp(1),tcp(4),other_wh,tcp(22) pageoflow PGOF
 52900 L930: form pos 1,c 5,n 8,x 1,c 12,6*n 7.2,7*n 9.2,skip 1
 53000 L940: ! 
 53020   let total_hours+=sum(mat thc)
@@ -132,29 +132,29 @@
 53080   goto LOOP_TOP ! /r
 53100 ! ______________________________________________________________________
 56000 TOTALS: ! r:
-56020   print #255: ''
-56040   print #255: '    Total Hours: '&lpad$(str$(total_hours),26)
-56060   print #255: 'Total Gross Pay: '&cnvrt$('pic(-$$,$$$,$$$,$$$,$$$,$$#.##)',total_gross_pay)
-56080   print #255: '  Total Net Pay: '&rpt$(' ',88)&cnvrt$('pic(-$$,$$$,$$$,$$$,$$$,$$#.##)',total_net_pay)
+56020   pr #255: ''
+56040   pr #255: '    Total Hours: '&lpad$(str$(total_hours),26)
+56060   pr #255: 'Total Gross Pay: '&cnvrt$('pic(-$$,$$$,$$$,$$$,$$$,$$#.##)',total_gross_pay)
+56080   pr #255: '  Total Net Pay: '&rpt$(' ',88)&cnvrt$('pic(-$$,$$$,$$$,$$$,$$$,$$#.##)',total_net_pay)
 56900   return  ! /r
 58000 PGOF: ! r:
-58020   print #255: newpage
+58020   pr #255: newpage
 58040   gosub HDR
 58060   continue  ! /r
 60000 HDR: ! r:
-60020   print #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
-60040   print #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
-60060   print #255: "\qc  {\f201 \fs20 \b Payroll Check Register}" ! print #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
-60080   print #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zz/zz/zz)",ppd)&"}"
-60100 ! Print #255: "\qc  {\f181 \fs16 \b "&TRIM$(D$)&"}"
-60120   print #255: "\ql   "
-60160   print #255: tab(29);"<----------------Hours----------------->";
-60180   print #255: tab(71);"<-Pay->";
-60200   print #255: tab(79);"<-----------------Deductions---------------->";
-60220   print #255: tab(129);"Net"
-60240   print #255: "CK #   Emp #  Name";
-60260   print #255: tab(29);"  Reg    O/T   Sick    Vac    Hol  Total";
-60280   print #255: tab(71);"  Total   Med WH     FICA  Federal    State    Other      Pay"
+60020   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
+60040   pr #255: "\qc  {\f221 \fs22 \b "&env$('cnam')&"}"
+60060   pr #255: "\qc  {\f201 \fs20 \b Payroll Check Register}" ! pr #255: "\qc  {\f201 \fs20 \b "&env$('program_caption')&"}"
+60080   pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zz/zz/zz)",ppd)&"}"
+60100 ! pr #255: "\qc  {\f181 \fs16 \b "&TRIM$(D$)&"}"
+60120   pr #255: "\ql   "
+60160   pr #255: tab(29);"<----------------Hours----------------->";
+60180   pr #255: tab(71);"<-Pay->";
+60200   pr #255: tab(79);"<-----------------Deductions---------------->";
+60220   pr #255: tab(129);"Net"
+60240   pr #255: "CK #   Emp #  Name";
+60260   pr #255: tab(29);"  Reg    O/T   Sick    Vac    Hol  Total";
+60280   pr #255: tab(71);"  Total   Med WH     FICA  Federal    State    Other      Pay"
 60300   return  ! /r
 62000 FINIS: ! r:
 62010   gosub TOTALS
@@ -164,9 +164,9 @@
 62052   close #h_dd: ioerr ignore
 62060   if append_reg1 then 
 62062     if env$('ACSDeveloper')<>'' then 
-62064       print #255: '----newpage (ACSDeveloper Style)----'
+62064       pr #255: '----newpage (ACSDeveloper Style)----'
 62066     else 
-62068       print #255: newpage
+62068       pr #255: newpage
 62070     end if 
 62072   else 
 62074     let fncloseprn
@@ -179,6 +179,6 @@
 68020 ERTN: let fnerror(program$,err,line,act$,"xit")
 68040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 68060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-68080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+68080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 68100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 68120 ! /region

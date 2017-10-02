@@ -10,7 +10,7 @@
 00100     let fngetpp(prg$,path$,prog$,ext$)
 00110     if ext$="" then let ext$=".br"
 00120 ! display menu : "","",""
-00130 ! Print 'fnChain to '&PATH$&PROG$
+00130 ! pr 'fnChain to '&PATH$&PROG$
 00140     let prg$=path$&prog$
 00150     if ~no_fnprg_setting then let fnprg(prg$,put=2)
 00160 TEST: ! 
@@ -33,7 +33,7 @@
 00320 ERTN: let fnerror(program$,err,line,act$,"xit")
 00330   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00340   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00350   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00350   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00360 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00370 ! /region
 00380 ! ______________________________________________________________________

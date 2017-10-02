@@ -18,8 +18,8 @@
 14320     mat periodOption$(nap)
 14340     for j=1 to nap : let periodOption$(j)=str$(j): next j 
 14980   end if ! /r
-16000   let actpd$=fnactpd$ 
-16020   let actpd=fnactpd
+16000   actpd$=fnactpd$ 
+16020   actpd=fnactpd
 16040   if fnprocess=1 then 
 16060     let fnps(1)
 16080     let fnpriorcd(1)
@@ -58,6 +58,6 @@
 87020 ERTN: let fnerror(program$,err,line,act$,"xit")
 87040     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 87060     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-87080     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+87080     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 87100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 87120 ! /region

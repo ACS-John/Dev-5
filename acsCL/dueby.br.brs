@@ -1,5 +1,5 @@
 00010 ! Replace S:\acsCL\DueBy
-00020 ! Print Report of Invoices Due By Selected Dates
+00020 ! pr Report of Invoices Due By Selected Dates
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnlbl,fntxt,fntos,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
 00050   on error goto ERTN
@@ -9,7 +9,7 @@
 00090 ! ______________________________________________________________________
 00100   let fntop(program$,cap$="Report of Invoices Due By Selected Dates")
 00110   let fncno(cno,cnam$)
-00120   let cancel=99
+00120   cancel=99
 00130   let fndat(dat$)
 00140   gosub ASK
 00150   execute "Index "&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&' '&env$('Q')&"\CLmstr\Unpdidx2.H"&str$(cno)&" 31/27/1 2/4/26 Replace DupKeys -n" ! index in year,monthday,reference
@@ -24,37 +24,37 @@
 00240   let vnam$=""
 00250   read #paymstr,using 'Form POS 9,C 30',key=vn$,release: vnam$ nokey PRINT_IT
 00260 PRINT_IT: ! 
-00270   print #255,using 'Form POS 1,C 10,C 32,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS 99,N 10.2': vn$, vnam$,iv$,ivd,dd,ade$(1:18),amt pageoflow NEWPGE
+00270   pr #255,using 'Form POS 1,C 10,C 32,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS 99,N 10.2': vn$, vnam$,iv$,ivd,dd,ade$(1:18),amt pageoflow NEWPGE
 00280   let t1+=amt
 00290   goto READ_INVOICES
 00300 ! ______________________________________________________________________
-00310 NEWPGE: print #255: newpage: gosub HDR : continue 
+00310 NEWPGE: pr #255: newpage: gosub HDR : continue 
 00320 ! ______________________________________________________________________
-00330 TOT1: ! PRINT DATE TOTAL
-00340   print #255,using 'Form POS 99,"----------",SKIP 1,POS 76,C 23,N 10.2': "Total Due by "&cnvrt$("PIC(####/##/##)",d2(wd2)),t1 !:
-        print #255: ""
+00330 TOT1: ! pr DATE TOTAL
+00340   pr #255,using 'Form POS 99,"----------",SKIP 1,POS 76,C 23,N 10.2': "Total Due by "&cnvrt$("PIC(####/##/##)",d2(wd2)),t1 !:
+        pr #255: ""
 00350   let t2(wd2)=t1
 00360   if wd2=d2 or end1=1 then goto END1
 00370   let wd2+=1
 00380   if wd2>d2 or fndate_mmddyy_to_ccyymmdd(dd)>d2(d2) then let wd2=d2 : goto END1
 00390   goto L420 ! DONT SKIP BETWEEN DATES
-00400   print #255: newpage
+00400   pr #255: newpage
 00410   gosub HDR
 00420 L420: goto L230
 00430 ! ______________________________________________________________________
 00440 HDR: let f1=1: let pg=pg+1
-00450   print #255,using L460: date$,cnam$
+00450   pr #255,using L460: date$,cnam$
 00460 L460: form pos 1,c 8,pos 20,cc 40,skip 1
-00470   print #255,using L480: time$,"Invoices Due by Selected Dates"
+00470   pr #255,using L480: time$,"Invoices Due by Selected Dates"
 00480 L480: form pos 1,c 8,pos 20,cc 40,skip 1
-00490   print #255,using L500: "Page",pg,dat$
+00490   pr #255,using L500: "Page",pg,dat$
 00500 L500: form pos 1,c 4,n 4,pos 20,cc 40,skip 1
 00510   let hp3=51-int(len(rtrm$(fd$))/2)
-00520   print #255,using L530: fd$
+00520   pr #255,using L530: fd$
 00530 L530: form pos 20,cc 40,skip 2
-00540   print #255: "                                                        Invoice     Due                           Due By"
-00550   print #255: "Payee  #  Payee Name                      Invoice Numb    Date      Date    Description         "&cnvrt$("PIC(####/##/##)",d2(wd2))
-00560   print #255: "________  ______________________________  ____________  ________  ________  __________________  ____________"
+00540   pr #255: "                                                        Invoice     Due                           Due By"
+00550   pr #255: "Payee  #  Payee Name                      Invoice Numb    Date      Date    Description         "&cnvrt$("PIC(####/##/##)",d2(wd2))
+00560   pr #255: "________  ______________________________  ____________  ________  ________  __________________  ____________"
 00570   let f1=1
 00580   return 
 00590 ! ______________________________________________________________________
@@ -62,12 +62,12 @@
 00610   let end1=1 : goto TOT1
 00620   let t2=0
 00630 L630: for j=1 to d2
-00640     print #255,using L650: "      Due by "&cnvrt$("PIC(####/##/##)",d2(j)),t2(j)
+00640     pr #255,using L650: "      Due by "&cnvrt$("PIC(####/##/##)",d2(j)),t2(j)
 00650 L650: form pos 10,c 23,pic(zzz,zzz,zzz,zzz.##bcr),skip 1
 00660     let t2=t2+t2(j)
 00670   next j
-00680   print #255: tab(37);"______________"
-00690   print #255,using L650: "Total Due by "&cnvrt$("PIC(####/##/##)",d2(d2)),t2
+00680   pr #255: tab(37);"______________"
+00690   pr #255,using L650: "Total Due by "&cnvrt$("PIC(####/##/##)",d2(d2)),t2
 00700   let fncloseprn
 00710 XIT: let fnxit
 00720 ! ______________________________________________________________________
@@ -122,7 +122,7 @@
 01100 ERTN: let fnerror(program$,err,line,act$,"xit")
 01110   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01120   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-01130   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+01130   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01140 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01150 ! /region
 01160 ! ______________________________________________________________________

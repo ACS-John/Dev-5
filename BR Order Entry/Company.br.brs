@@ -27,7 +27,7 @@
 60660 ERTN: let fnerror(program$,err,line,act$,"xit")
 60680   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 60700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-60720   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+60720   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 60740 ERTN_EXEC_ACT: execute act$ : goto ERTN
 60760 ! /region
 72000 COMPANY_LOAD: ! r:

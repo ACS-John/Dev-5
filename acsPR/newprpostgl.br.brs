@@ -96,7 +96,7 @@
 28100     let oldtgl$=tgl$
 28120     mat ttgl=oldtgl
 28140     let oldteno=teno
-28160     let checkkey$=cnvrt$("pic(zzzzzzzz)",teno)&"         "
+28160     checkkey$=cnvrt$("pic(zzzzzzzz)",teno)&"         "
 28180     restore #4,key>=checkkey$: nokey DEPT_READ
 28200     L840: ! 
 28220     read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prdate,ckno,mat tdc,mat tcp eof DEPT_READ
@@ -113,7 +113,7 @@
 28440     let eno$=lpad$(str$(teno),8)
 28460     read #2,using L960,key=eno$: em$ nokey DEPT_READ
 28480     L960: form pos 9,c 30
-28500     print #255,using L980: teno,em$,mat tgl,tcp(31) ! -TCP(29)-TCP(30) Pageoflow PR_HDR kj
+28500     pr #255,using L980: teno,em$,mat tgl,tcp(31) ! -TCP(29)-TCP(30) Pageoflow PR_HDR kj
 28520     L980: form pos 1,pic(zzzzzzzz),pos 15,c 30,pos 50,pic(zzz),x 1,pic(zzzzz#),x 1,pic(zzz),n 12.2,skip 1
 28540     for j=1 to 24 ! ACCUMULATE 20 WITHHOLDINGS plus fed,fica,med,state
 28560       if j<=4 then goto L1040
@@ -154,7 +154,7 @@
 32360   end if
 32380 goto XIT ! /r
 34000 PgOf: !  r:
-34020   print #255: newpage
+34020   pr #255: newpage
 34040   let fn_pr_hdr
 34060 continue ! /r
 36000 def fn_write_gl_trans ! SUBTOTAL ROUTINE AND WRITE GL TRANS
@@ -162,38 +162,38 @@
 36040   if diskin=0 then let fn_L2090
 36060   let td$="Payroll summary"
 36080   if accrue$="Yes" then 
-36100     let accrued=round(subtotal/day*dayslm,2)
+36100     accrued=round(subtotal/day*dayslm,2)
 36120     write #11,using L1220: mat ttgl,date(days(d2,'ccyymmdd'),'mmddyy'),accrued,5,0,tr$,"Payroll Accrual",prgl$(15)
 36140     let totacc=totacc+accrued
 36160   end if
 36180   write #14,using L1220: mat ttgl,dat,subtotal-accrued,5,0,tr$,"Payroll Summary",prgl$(15) ! gross wages for this department
 36200   L1220: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,n 2,n 2,c 12,c 52,c 12
 36220   end if
-36240   print #255,using L1240: "-----------",subtotal
+36240   pr #255,using L1240: "-----------",subtotal
 36260   L1240: form pos 65,c 11,skip 1,pos 64,pic(---------.##),skip 1
-36280   if accrued<>0 then print #255,using L1260: "Accrued Portion",-accrued else print #255: 
+36280   if accrued<>0 then pr #255,using L1260: "Accrued Portion",-accrued else pr #255: 
 36300   L1260: form pos 45,c 16,pos 64,pic(---------.##),skip 2
 36320   let subtotal=0
 36340 fnend 
 38000 def fn_pr_hdr
 38020   let p1=p1+1
-38040   print #255,using L1320: date$,a$,"PAGE",p1
+38040   pr #255,using L1320: date$,a$,"PAGE",p1
 38060   L1320: form skip 1,pos 1,c 8,pos nametab,c 40,pos 77,c 5,pic(zzz),skip 1
-38080   print #255,using L1340: time$, "General Ledger Distribution for Payroll","From "&cnvrt$("PIC(ZZZZ/ZZ/ZZ)",dat1)&"  To "&cnvrt$("PIC(ZZZZ/ZZ/ZZ)",dat2)
+38080   pr #255,using L1340: time$, "General Ledger Distribution for Payroll","From "&cnvrt$("PIC(ZZZZ/ZZ/ZZ)",dat1)&"  To "&cnvrt$("PIC(ZZZZ/ZZ/ZZ)",dat2)
 38100   L1340: form pos 1,c 8,pos 17,c 40,skip 1,pos 17,cc 40,skip 2
-38120   print #255: "Employee                                               G/L                 Amount"
-38140   print #255: " Number        Name                                  Account         Debits     Credits"
-38160   print #255: 
+38120   pr #255: "Employee                                               G/L                 Amount"
+38140   pr #255: " Number        Name                                  Account         Debits     Credits"
+38160   pr #255: 
 38180 fnend 
 42000 def fn_assglnum ! assign g/l numbers and post to gl work file
 42020   for j=1 to 26
 42040     if t(j)=0 then goto L1740
 42060     if t(j)<0 then goto L1690
-42080     print #255,using L980: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),t(j) pageoflow PgOf
+42080     pr #255,using L980: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),t(j) pageoflow PgOf
 42100     let totaldr=totaldr+t(j)
 42120     goto L1720
 42140     L1690: !
-42160     print #255,using L1700: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),t(j) pageoflow PgOf
+42160     pr #255,using L1700: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),t(j) pageoflow PgOf
 42180     L1700: form pos 1,pic(zzzzzzzz),pos 15,c 30,pos 50,pic(zzz),x 1,pic(zzzzz#),x 1,pic(zzz),x 12,n 12.2,skip 1
 42200     let totalcr=totalcr+t(j)
 42220     L1720: !
@@ -233,7 +233,7 @@
 44480   if ckey=5 then goto XIT
 44500   let key$=k$=bankgl$=fnagl$(resp$(1))
 44520   let ttgl(1)=val(key$(1:3)): let ttgl(2)=val(key$(4:9)): let ttgl(3)=val(key$(10:12))
-44540   print #255,using L1700: 0," ",mat ttgl,totaldue
+44540   pr #255,using L1700: 0," ",mat ttgl,totaldue
 44560   let totalcr=totalcr+totaldue
 44580   let fn_printtotalsandunderlines
 44600   let fn_pr_hdr
@@ -278,18 +278,18 @@
 48200   if ckey=5 then goto XIT
 48220   let key$=fnagl$(resp$(1))
 48240   let ttgl(1)=val(key$(1:3)): let ttgl(2)=val(key$(4:9)): let ttgl(3)=val(key$(10:12))
-48260   print #255,using L980: 0," ",mat ttgl,totalrec
+48260   pr #255,using L980: 0," ",mat ttgl,totalrec
 48280   let totaldr+=totalrec
 48300   if glinstal then 
 48320     write #14,using L1220: mat ttgl,dat,totalrec,5,0," ","Payroll Summary",prgl$(15)
 48340   end if
 48360 fnend 
-52000 def fn_printtotalsandunderlines: ! PRINT TOTALS AND UNDERLINES
-52020   if totacc<>0 then print #255,using L980: 0," ",g1,g2,g3,totacc
-52040   print #255,using L2420: "___________","___________",totaldr,totalcr
+52000 def fn_printtotalsandunderlines: ! pr TOTALS AND UNDERLINES
+52020   if totacc<>0 then pr #255,using L980: 0," ",g1,g2,g3,totacc
+52040   pr #255,using L2420: "___________","___________",totaldr,totalcr
 52060   L2420: form pos 65,c 11,x 1,c 11,skip 1,pos 64,pic(---------.##),pic(---------.##)
-52080   print #255,using L2420: "===========","==========="
-52100   print #255: newpage
+52080   pr #255,using L2420: "===========","==========="
+52100   pr #255: newpage
 52120 fnend 
 56000 def fn_askaccrue
 56020   open #12: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLindex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2500
@@ -298,7 +298,7 @@
 56080   let msgline$(1)="Do you wish to accrue part of this Payroll"
 56100   let msgline$(2)="in the previous month?"
 56120   let fnmsgbox(mat msgline$,resp$,cap$,4)
-56140   let accrue$=resp$
+56140   accrue$=resp$
 56160   if accrue$<>"Yes" then goto ASKACCRUE_XIT
 56180   ! ______________________________________________________________________
 56200   ACCRUAL: ! r:
@@ -325,7 +325,7 @@
 56620   let key$=fnagl$(resp$(3))
 56640   let g1=val(key$(1:3)): let g2=val(key$(4:9)) : let g3=val(key$(10:12))
 56660   let d2=val(resp$(4)) ! last day previous month
-56680   let acgl$=cnvrt$("N 3",g1)&cnvrt$("N 6",g2)&cnvrt$("N 3",g3)
+56680   acgl$=cnvrt$("N 3",g1)&cnvrt$("N 6",g2)&cnvrt$("N 3",g3)
 56700   if glthere=1 then 
 56720     read #12,using L2860,key=acgl$: desc$ nokey ASKACCRUE_XIT
 56740   end if 
@@ -351,7 +351,7 @@
 57140     goto ACCRUAL
 57160   end if
 57180   if dayslm>day then goto ACCRUAL
-57200   let acgl$=cnvrt$("N 3",g1)&cnvrt$("N 6",g2)&cnvrt$("N 3",g3)
+57200   acgl$=cnvrt$("N 3",g1)&cnvrt$("N 6",g2)&cnvrt$("N 3",g3)
 57220   if glthere=1 then read #12,using L2860,key=acgl$: desc$ nokey ASKACCRUE_XIT
 57240   L2860: form pos 13,c 50
 57260   ASKACCRUE_XIT: ! ! /r
@@ -361,6 +361,6 @@
 62000 ERTN: let fnerror(program$,err,line,act$,"NO")
 62020   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 62040   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-62060   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+62060   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 62080 ERTN_EXEC_ACT: execute act$ : goto ERTN
 62100 ! ______________________________________________________________________

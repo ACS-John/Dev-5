@@ -39,7 +39,7 @@
 15148     fnreg_read('Meter Address Enable',u4_meterAddress$, 'False')
 15160   end if
 15180   if fnclient_has('UB') then
-15190     fnreg_read('Collections Print in Account Order',ub_collPrintInAccountOrder$,'False')
+15190     fnreg_read('Collections pr in Account Order',ub_collPrintInAccountOrder$,'False')
 15200     fnreg_read('Collections Disable Deposit List',ub_collDisableDepositList$,'False')
 15210     fnureg_read('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$,'False')
 15220   end if
@@ -239,7 +239,7 @@
 50210     fnbutton(lc,30,'Open',12) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 50220     lc+=1
 50230     fnlbl(lc+=1,1,"PrintAce Max Pages:",col1_width,1)
-50240     fntxt(lc,col2_pos,3,3,0,'30',0,'Use to break up large PrintAce type print jobs into smaller batches. 0 disables feature.')
+50240     fntxt(lc,col2_pos,3,3,0,'30',0,'Use to break up large PrintAce type pr jobs into smaller batches. 0 disables feature.')
 50250     resp$(resp_pa_max_pages:=dsp_rc+=1)=pa_max_pages$
 50251     lc+=1
 50252     fnlbl(lc+=1,1,"Forms Format:",col1_width,1)
@@ -253,7 +253,7 @@
 50310 !   resp$(resp_client_report_cache:=dsp_rc+=1)=client_report_cache$
 50320     lc+=1
 50330     fnlbl(lc+=1,1,"Word Executable:",col1_width,1,0,0,0,'Or default word processor')
-50340     fntxt(lc,col2_pos,42,80,0,'70',0,'Select an executable for Word or your default Word Processor to display and print your RTF reports.')
+50340     fntxt(lc,col2_pos,42,80,0,'70',0,'Select an executable for Word or your default Word Processor to display and pr your RTF reports.')
 50350     resp$(resp_word:=dsp_rc+=1)=word_exe$
 50360     fnbutton(lc,col2_pos+42+5,'Default',15) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 50365     fnopt(lc,col2_pos+42+5+7+2,"Use Word as Default") : resp$(resp_use_word:=dsp_rc+=1)=use_word$
@@ -270,7 +270,7 @@
 50460     lc+=1
 50470 ! 
 50480     fnlbl(lc+=1,1,"Receipt Printer:",col1_width,1)
-50490     fncomboa('printer',lc,col2_pos,mat printer_list$,'Select a printer to be used to print receipts.',42) ! 42,80,0,'70',0,'Select a printer to be used when printing receipts.')
+50490     fncomboa('printer',lc,col2_pos,mat printer_list$,'Select a printer to be used to pr receipts.',42) ! 42,80,0,'70',0,'Select a printer to be used when printing receipts.')
 50500     resp$(resp_receipt_printer:=dsp_rc+=1)=receipt_printer$
 50510     fnbutton(lc,col2_pos+42+5,'Test',14)
 50520     fncmdkey("&Save",1,1)
@@ -297,10 +297,10 @@
 50803     else if ck=14 then 
 50804       fnureg_write('Printer.Receipt',receipt_printer$)
 50806       fnopen_receipt_printer
-50808       print #255: 'ACS Receipt Printer Test'
-50810       print #255: ''
-50812       print #255: ''
-50814       print #255: ''
+50808       pr #255: 'ACS Receipt Printer Test'
+50810       pr #255: ''
+50812       pr #255: ''
+50814       pr #255: ''
 50816       fnclose_receipt_printer
 50820     else if ck=13 then 
 50840       fnureg_write('Atlantis Path','')
@@ -474,7 +474,7 @@
 66360     fnureg_write('Hand Held From File',hhfro$)
 66380   end if
 66400   if fnclient_has('UB') then
-66410     fnreg_write('Collections Print in Account Order',ub_collPrintInAccountOrder$)
+66410     fnreg_write('Collections pr in Account Order',ub_collPrintInAccountOrder$)
 66412     fnreg_write('Collections Disable Deposit List',ub_collDisableDepositList$)
 66420     fnureg_write('ub_total_ar_on_dashboard',ub_total_ar_on_dashboard$)
 66440   end if
@@ -538,7 +538,7 @@
 74040 ERTN: fnerror(program$,err,line,act$,"xit")
 74060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 74080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-74100   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+74100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 74120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 74140 ! /region
 74160 XIT: fnxit

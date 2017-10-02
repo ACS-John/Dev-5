@@ -9,7 +9,7 @@
 00090     dim labeltext$(5)*120
 00100 ! ______________________________________________________________________
 00111     if udim(in_labeltext$)<>5 then !:
-            print "fnAddLabel - You should only send 5 array items to fnAddLabel."
+            pr "fnAddLabel - You should only send 5 array items to fnAddLabel."
 00120     for j=1 to min(5,udim(in_labeltext$)) !:
             let labeltext$(j)=in_labeltext$(j)(1:min(len(in_labeltext$(j)),120)) !:
           next j
@@ -23,7 +23,7 @@
 00180 ERTN: let fnerror(program$,err,line,act$,"xit")
 00190     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00200     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00210     print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00210     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00220 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00230 ! /region
 00240 ! ______________________________________________________________________

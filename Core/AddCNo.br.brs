@@ -29,7 +29,7 @@
 20240     let fncmdkey("&Next",1,1,1)
 20280     let fnacs(sn$,0,mat resp$,ckey)
 20300     if ck=5 then goto XIT
-20360     let copytoscno=val(resp$(1)(43:47))
+20360     copytoscno=val(resp$(1)(43:47))
 20622     if copytoscno=0 then
 20624       fnCopy("S:\acsUB\mstr\UBData\*.h99999",env$('Q')&"\UBmstr\UBData\*.h"&env$('cno'))
 20626     else
@@ -98,7 +98,7 @@
 80120 ERTN: let fnerror(program$,err,line,act$,"xit")
 80130   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 80140   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-80150   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+80150   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 80160 ERTN_EXEC_ACT: execute act$ : goto ERTN
 80170 ! /region
 80180 ! ______________________________________________________________________

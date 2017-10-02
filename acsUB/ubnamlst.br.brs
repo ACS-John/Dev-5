@@ -136,7 +136,7 @@
 46140     let j1=1 : mat a2=(0)
 46160     for j=1 to 10
 46180       if a1(j)=1 then 
-46200         let a2(j1)=a(j)
+46200         a2(j1)=a(j)
 46220         let j1=j1+1
 46240       end if 
 46260     next j
@@ -150,49 +150,49 @@
 46400   if ti2=6 and final<>3 then goto L570
 46420 L690: ! 
 46440   if opt=6 then ! route sequence
-46460     print #255,using F_OUT_ROUTE_SEQ: z$,e$(2),e$(1),route,sequence,mat a2 pageoflow PGOF
+46460     pr #255,using F_OUT_ROUTE_SEQ: z$,e$(2),e$(1),route,sequence,mat a2 pageoflow PGOF
 46470     F_OUT_ROUTE_SEQ: form x 5,c 10,x 5,c 30,x 7,c 30,n 2,x 1,n 7,x 1,10*nz 3
 46500   else if print_balance then 
-46510     print #255,using F_OUT_W_BAL: z$,e$(2),e$(1),bal,mat a2 pageoflow PGOF
+46510     pr #255,using F_OUT_W_BAL: z$,e$(2),e$(1),bal,mat a2 pageoflow PGOF
 46520     F_OUT_W_BAL: form x 5,c 10,x 5,c 30,x 7,c 30,n 11.2,x 1,10*nz 3
 46530   else 
-46540     print #255,using F_OUT_NOBAL: z$,e$(2),e$(1),mat a2 pageoflow PGOF
+46540     pr #255,using F_OUT_NOBAL: z$,e$(2),e$(1),mat a2 pageoflow PGOF
 46550     F_OUT_NOBAL: form x 5,c 10,x 5,c 30,x 7,c 30,x 12,10*nz 3
 46560   end if 
 46580   if trim$(e$(3))="" then let e$(3)=extra$(1): let extra$(1)=""
 46600   if trim$(extra$(1))="" then let extra$(1)=e$(4): let e$(4)=""
 46620   if print_address=1 then 
-46640     print #255,using "form pos 21,c 31": e$(3)
-46660     print #255,using "form pos 21,c 31": extra$(1)
-46680     print #255,using "form pos 21,c 30": e$(4)
+46640     pr #255,using "form pos 21,c 31": e$(3)
+46660     pr #255,using "form pos 21,c 31": extra$(1)
+46680     pr #255,using "form pos 21,c 30": e$(4)
 46700   end if 
 46720   if print_phone=1 and trim$(extra$(2))<>'' then 
-46740     print #255,using "form pos 21,c 31": '  Phone: '&extra$(2)
+46740     pr #255,using "form pos 21,c 31": '  Phone: '&extra$(2)
 46760   end if
 46780   if print_cell=1 and trim$(extra$(8))<>'' then 
-46800     print #255,using "form pos 21,c 31": '   Cell: '&extra$(8)
+46800     pr #255,using "form pos 21,c 31": '   Cell: '&extra$(8)
 46820   end if
 46840   goto LOOP_TOP
 46860 ! ______________________________________________________________________
 48000 PGOF: ! 
-48010   print #255: newpage
+48010   pr #255: newpage
 48020   gosub HEADER
 48040   continue 
 48060 ! ______________________________________________________________________
 50000 HEADER: ! r:
-50020   print #255: "\qc {\b "&env$('cnam')&"}"
+50020   pr #255: "\qc {\b "&env$('cnam')&"}"
 50040   let p2=p2+1
-50060   print #255: "\qc {\fs28 {\b Name and Number Listing}}"
-50080   print #255: "\qc {\b "&trim$(item1$(opt))&" Order}"
-50100   print #255: "\qc {\b "&trim$(item2$(ti2))&"}"
-50120   print #255,using 'form pos 21,cc 40,pos 71,c 5,pic(zzz)': dat$,"Page ",p2
-50160   print #255: ""
+50060   pr #255: "\qc {\fs28 {\b Name and Number Listing}}"
+50080   pr #255: "\qc {\b "&trim$(item1$(opt))&" Order}"
+50100   pr #255: "\qc {\b "&trim$(item2$(ti2))&"}"
+50120   pr #255,using 'form pos 21,cc 40,pos 71,c 5,pic(zzz)': dat$,"Page ",p2
+50160   pr #255: ""
 50180   if opt=6 then 
-50190     print #255: "\ql {\ul     Customer No}     {\ul Name                             }    {\ul Meter Address                }  {\ul Rt-Seq   }  {\ul "&hd1$&"}"
+50190     pr #255: "\ql {\ul     Customer No}     {\ul Name                             }    {\ul Meter Address                }  {\ul Rt-Seq   }  {\ul "&hd1$&"}"
 50192   else if print_balance then 
-50200     print #255: "\ql {\ul     Customer No}     {\ul Name                             }    {\ul Meter Address                }   {\ul   Balance} {\ul "&hd1$&"}"
+50200     pr #255: "\ql {\ul     Customer No}     {\ul Name                             }    {\ul Meter Address                }   {\ul   Balance} {\ul "&hd1$&"}"
 50210   else 
-50212     print #255: "\ql {\ul     Customer No}     {\ul Name                             }    {\ul Meter Address                }              {\ul "&hd1$&"}"
+50212     pr #255: "\ql {\ul     Customer No}     {\ul Name                             }    {\ul Meter Address                }              {\ul "&hd1$&"}"
 50220   end if 
 50230   return  ! /r
 50240 ! ______________________________________________________________________
@@ -205,7 +205,7 @@
 54020 ERTN: let fnerror(program$,err,line,act$,"xit")
 54040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 54060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-54080   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+54080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 54100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 54120 ! /region
 56000 GET_AU: ! r:
@@ -214,7 +214,7 @@
 56100   for j=1 to 10
 56120     if trim$(service$(j))<>"" then 
 56140       let hd1$=hd1$&lpad$(service$(j)(1:2),3)
-56160       let a1(j)=1
+56160       a1(j)=1
 56180     end if 
 56200   next j
 56220   return  ! /r
@@ -259,7 +259,7 @@
 62260   return  ! /r
 64000 OPEN_GRID: ! r: select customers from grid
 64020   let sn$="ublabel-7"
-64040   let cap$="Reading from grid"
+64040   cap$="Reading from grid"
 64060   let fntos(sn$)
 64080   let text$="Grid name (including folders):"
 64100   let fnlbl(1,1,text$,70,0)

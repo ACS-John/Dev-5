@@ -4,10 +4,10 @@
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070 L70: print newpage
-00080   print fields "08,08,C 34,R,N": " BUILD PAYROLL CHECK HISTORY FILE"
-00090   print fields "10,5,C 60": "ENTER COMPANY NUMBER TO BE CONVERTED:"
-00100   print fields "12,15,C 16,B,5": "Cancel (F5)"
+00070 L70: pr newpage
+00080   pr fields "08,08,C 34,R,N": " BUILD PAYROLL CHECK HISTORY FILE"
+00090   pr fields "10,5,C 60": "ENTER COMPANY NUMBER TO BE CONVERTED:"
+00100   pr fields "12,15,C 16,B,5": "Cancel (F5)"
 00110 L110: input fields "10,43,N 5,UE,N": cno conv L110
 00120   if cmdkey=5 then goto XIT
 00130 ! 
@@ -20,7 +20,7 @@
 00200 ERTN: let fnerror(program$,err,line,act$,"xit")
 00210   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00220   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-00230   print "PROGRAM PAUSE: Type GO and press [Enter] to continue." : print "" : pause : goto ERTN_EXEC_ACT
+00230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00240 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00250 ! /region
 00260 ! ______________________________________________________________________

@@ -21,13 +21,13 @@
 00090 dim company_file$*256,company_import_path$*256
 00100 dim resp$(5)*256
 00110 ! defaults
-00112 cursys$=fncursys$ : let cursys_origional$=cursys$
+00112 cursys$=fncursys$ : cursys_origional$=cursys$
 00120 fnreg_read(cap$&'.'&cursys$&'.'&env$('cno')&'.company_file',company_file$)
 00130 fnreg_read(cap$&'.'&cursys$&'.'&env$('cno')&'.destination_company_number',destination_company_number$) : let destination_company_number=val(destination_company_number$) conv ignore
 00140 ! /r
 00170 SCREEN1: ! r:
 00180 fntos(sn$="Company_Import_1")
-00190 col1_width=27 : let col2_pos=col1_width+2
+00190 col1_width=27 : col2_pos=col1_width+2
 00200 fnlbl(1,1,"Source Company File:",col1_width,1)
 00210 fntxt(1,col2_pos,30,256,0,'70',0,'select any data file from the data set to be imported.  i.e. Z:\vol002\CLmstr\BankIdx.h2')
 00220 resp$(1)=company_file$
@@ -113,8 +113,8 @@
 19980 XIT: ! 
 19990 fnxit
 20000 def fn_copy_files_in
-20020   let company_import_extension$=company_file$(pos_point_h:len(company_file$))
-20040   let company_import_path$=company_file$(1:pos(company_file$,'\',-1))
+20020   company_import_extension$=company_file$(pos_point_h:len(company_file$))
+20040   company_import_path$=company_file$(1:pos(company_file$,'\',-1))
 20060   fnFree(env$('Q')&'\'&cursys$&'mstr\*.h'&str$(destination_company_number))
 20062   let fnstatus('Existing files ('&os_filename$(env$('Q')&'\'&cursys$&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
 20080   let fnCopy(env$('at')&company_import_path$&'*'&company_import_extension$,env$('Q')&'\'&cursys$&'mstr\*.h'&str$(destination_company_number))
@@ -124,11 +124,11 @@
 20990 fnend 
 21000 def fn_is_converison_detection
 21020   ! r: set cnv_[cursys]
-21040   let cnv_ub=cnv_pr=0
+21040   cnv_ub=cnv_pr=0
 21060   if cursys$='UB' and ~exists(company_import_path$&'Customer'&company_import_extension$) then 
-21080     let cnv_ub=1
+21080     cnv_ub=1
 21100   else if cursys$='PR' and ~exists(company_import_path$&'DEDNames'&company_import_extension$) then 
-21120     let cnv_pr=1
+21120     cnv_pr=1
 21140   end if 
 21160   ! /r
 21180   ! r: set is_[client]
@@ -146,21 +146,21 @@
 21300   end if 
 21320   ! /r
 21340   ! r: set cnv_[cursys]_[client]
-21360   let cnv_ub_french_settlement=cnv_ub_capbell=cnv_ub_merriam_woods=cnv_exeter=0
+21360   cnv_ub_french_settlement=cnv_ub_capbell=cnv_ub_merriam_woods=cnv_exeter=0
 21380   if cnv_ub then 
 21400     if is_french_settlement then 
-21420       let cnv_ub_french_settlement=1
+21420       cnv_ub_french_settlement=1
 21422     else if is_exeter then 
-21424       let cnv_exeter=1
+21424       cnv_exeter=1
 21440     else if is_merriam_woods then 
-21460       let cnv_ub_merriam_woods=1
+21460       cnv_ub_merriam_woods=1
 21462     else if is_campbell then 
-21464       let cnv_ub_capbell=1
+21464       cnv_ub_capbell=1
 21480     end if 
 21500     let fnstatus('Processing as '&env$('client')&' '&cursys$&' Conversion')
 21520   else if cnv_pr then 
 21540     !     if is_merriam_woods or is_west_accounting then
-21560     !       let cnv_pr=1
+21560     !       cnv_pr=1
 21580     !     end if
 21600     let fnstatus('Processing as '&env$('client')&' '&cursys$&' Conversion')
 21620   end if 
@@ -298,7 +298,7 @@
 50201     let extra(17)=c(3) ! in new system   extra(17) = final billing code
 50202     let extra(3)=d(5) ! meter reading date - current
 50203     let extra(4)=d(6) ! meter reading date - prior
-50204     let c(3)=0 ! in new system   c(3) service 3 deposit date
+50204     c(3)=0 ! in new system   c(3) service 3 deposit date
 50206     ! 
 50207     let extra(1)=val(z$(1:2))
 50208     let extra(2)=val(f$(2))*10 ! in new system    extra(2) is the sequence number
