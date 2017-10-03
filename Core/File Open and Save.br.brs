@@ -110,7 +110,7 @@
 38260     fnCopy('S:\brserial.dat',env$('Q')&'\*.*')
 38280   end if
 38300   fnreg_close
-38320   open #h_tmp:=fngethandle: 'Name=@:'&br_filename$(env$('client_temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+38320   open #h_tmp:=fngethandle: 'Name=@:'&br_filename$(env$('temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
 38340   dim tmp7ZipCommand$*512
 38360   if enableBackupReportCache$='True' then
 38380     tmp7zipcommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\*"'
@@ -139,7 +139,7 @@
 38840   pr #h_tmp: '@echo SAVE PROCESSING...'
 38860   pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
 38880   close #h_tmp: 
-38900   execute 'sy '&env$('client_temp')&'\save_as_'&session$&'.cmd'
+38900   execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
 38920   if fsa_automatedSaveFileName$<>'' then
 38940     if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$, 1,suppressErrorLog) then 
 38960       let fnreg_write('Last Automated Save Date',date$('ccyy/mm/dd'))
