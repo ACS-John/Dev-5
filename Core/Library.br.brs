@@ -56,6 +56,10 @@
 33054    library 'S:\Core\FileIO\fileio.br': fnClearLayoutCache
 33056    fnClearLayoutCache=fnClearLayoutCache
 33058  fnend
+33062  def library fnCopyFile(FromFile$*255,ToFile$*255; NoProgressBar)
+33064    library 'S:\Core\FileIO\fileio.br': fnCopyFile
+33066    fnCopyFile=fnCopyFile(FromFile$,ToFile$, NoProgressBar)
+33068  fnend
 36990 ! /r
 38000 def library Fn_Encodebase64(&Content$)
 38020   library 'S:\Core\base64_l.br': Fn_Encodebase64

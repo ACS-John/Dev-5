@@ -6,7 +6,7 @@
 18032     library 'S:\Core\Library': fnacs,fncmdset,fntos,fnlbl,fntxt,fncomboa
 18034     library 'S:\Core\Library': fnputcno,fncursys$,fncheckfileversion,fnmakesurepathexists
 18036     library 'S:\Core\Library': fnstatus,fnstatus_close,fnstatus_pause,fnCopy,fnindex_sys
-18038     library 'S:\Core\Library': fnaddonec,fnFree
+18038     library 'S:\Core\Library': fnaddonec,fnFree,fnCopyFile
 18040     dim company_import_path$*256
 18050     dim resp$(5)*256
 18060     dim ml$(0)*128
@@ -98,7 +98,7 @@
 38020   dim save_name$*256,ln$*512
 38040   dim save_log_filename$*256
 38060   let failure=0
-38080   let save_log_filename$=env$('client_temp')&'\Save_As_Log.txt'
+38080   let save_log_filename$=env$('temp')&'\Save_As_Log.txt'
 38100   execute 'free '&br_filename$(save_log_filename$) ioerr ignore
 38120   if fsa_automatedSaveFileName$<>'' then
 38140     save_name$=fsa_automatedSaveFileName$
@@ -110,20 +110,29 @@
 38260     fnCopy('S:\brserial.dat',env$('Q')&'\*.*')
 38280   end if
 38300   fnreg_close
-38320   open #h_tmp:=fngethandle: 'Name=@:'&br_filename$(env$('temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+38320   open #h_tmp:=fngethandle: 'Name='&br_filename$(env$('temp')&'\save_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
 38340   dim tmp7ZipCommand$*512
 38360   if enableBackupReportCache$='True' then
 38380     tmp7zipcommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\*"'
-38400   else
-38420     tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\* -xr!"Report Cache\*"'
-38440   end if
-38460   pr #h_tmp: '@echo off'
-38480   pr #h_tmp: '@echo Advanced Computer Services LLC'
-38500   pr #h_tmp: '@echo Saving to: "'&save_name$&'"'
-38520   pr #h_tmp: '@echo.'
-38540   pr #h_tmp: '@echo.'
-38560   pr #h_tmp: '@echo Command: '&tmp7ZipCommand$
-38580   pr #h_tmp: '@echo.'
+38410   else
+38420     if env$('BR_MODEL')='CLIENT/SERVER' then
+38430       dim serverTempSaveFile$*256
+38440       serverTempSaveFile$=env$('temp')&'\save_'&session$&'.zip'
+38450       tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\* -xr!"Report Cache\*"'
+38460     else
+38470       tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\* -xr!"Report Cache\*"'
+38480     end if
+38490   end if
+38500   pr #h_tmp: '@echo off'
+38510   pr #h_tmp: '@echo Advanced Computer Services LLC'
+38520   pr #h_tmp: '@echo Saving to: "'&save_name$&'"'
+38530   if env$('BR_MODEL')='CLIENT/SERVER' then
+38540     pr #h_tmp: '@echo temp on server: "'&serverTempSaveFile$&'"'
+38550   end if
+38560   pr #h_tmp: '@echo.'
+38570   pr #h_tmp: '@echo.'
+38580   pr #h_tmp: '@echo Command: '&tmp7ZipCommand$
+38590   pr #h_tmp: '@echo.'
 38600   pr #h_tmp: '@echo Save What: '&env$('Q')&'\'&save_what$
 38620   pr #h_tmp: '@echo.'
 38640   pr #h_tmp: '@echo Relative To: '&os_filename$(env$('Q')&'\')
@@ -139,8 +148,15 @@
 38840   pr #h_tmp: '@echo SAVE PROCESSING...'
 38860   pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
 38880   close #h_tmp: 
-38900   execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
+38090   if env$('BR_MODEL')='CLIENT/SERVER' then
+38900     execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
+38910   else
+38912     execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
+38914   end if
 38920   if fsa_automatedSaveFileName$<>'' then
+          if env$('BR_MODEL')='CLIENT/SERVER' then
+            fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
+          end if
 38940     if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$, 1,suppressErrorLog) then 
 38960       let fnreg_write('Last Automated Save Date',date$('ccyy/mm/dd'))
 38980       let fnreg_write('Last Automated Save Time',time$)
