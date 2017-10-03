@@ -9,7 +9,7 @@
 02368   goto SEL_ACT
 08000 def fn_setup
 08020   library 'S:\Core\Library': fnerror,fntos,fnlbl,fncomboa,fnacs,fncmbrt2,fnxit,fncmbact,fnbutton,fncustomer_search,fnfra,fncmdset,fntop,fncmdkey,fnmsgbox,fntxt,fngethandle,fnpause,fnopt,fnget_services,fnhand_held_device$,fncreg_read,fncreg_write,fnCopy,fnureg_read,fnAddOneC
-08030   library 'S:\Core\Library': fnMeterAddressLocationID,fncsz
+08030   library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists
 08040   on error goto ERTN
 08060 ! ______________________________________________________________________
 08080   dim f$(3)*12,ft$*20,resp$(2)*100,text$*50,cap$*128,e2$*30
@@ -406,57 +406,40 @@
 14930   L4010: ! 
 14940 fnend 
 14950 ! 
-14960 def fn_openwork ! open work areas based on type of Hand Held
-14962   dim out_filename$*256
-14964   let fnureg_read('Hand Held To File',out_filename$)
-14966   if out_filename$<>'' then 
-14968     if device$='Itron FC300' then 
-14970       let fn_itron_open
-14972     else 
-14974       open #h_out:=fngethandle: 'Name='&br_filename$(out_filename$)&',RecL=1024,Replace',display,output 
-14976     end if 
-14980   else if device$="Badger" and env$('client')="Sangamon" then 
-14990     if ~exists("c:\progra~1\CONNECT3") then execute "MkDir c:\progra~1\CONNECT3 -n"
-15000     open #h_out:=2: "Name=c:\progra~1\CONNECT3\CONNECT.IN3,RecL=256,Replace",display,output 
-15010   else if device$="Sensus" and (env$('client')="Oakland" or env$('client')="Lovington") then 
-15020     open #h_out:=2: "Name=c:\vol002\amrs\READINGS.DAT,RecL=80,Replace",display,output 
-15030   else if device$="Green Tree" then 
-15040     open #h_out:=2: "Name=c:\READINGS.DAT,RecL=80,Replace",display,output 
-15050   else if device$="Badger" then 
-15060     if ~exists('C:\connect') then execute "sy md C:\connect -n"
-15070     open #h_out:=fngethandle: "Name=C:\CONNECT\CONNECT.IN3,RecL=256,Replace",display,output 
-15080   else if device$="Boson" then 
-15090     open #h_out:=2: "Name="&env$('Q')&"\UBmstr\intopalm.txt,RecL=204,Replace",display,output 
-15100   else if trim$(device$)="LapTop" then 
-15110     open #h_out:=2: "Name="&env$('Q')&"\UBmstr\Laptop.Out,RecL=200,Replace",internal,output,relative 
-15120   else if trim$(device$)="AMR" then 
-15130     open #h_out:=2: "Name=c:\ezreader\download.dat,RecL=256,Replace",display,output 
-15140   else if trim$(device$)="Hersey" then 
-15150     open #h_out:=2: "Name="&env$('Q')&"\UBmstr\READINGS.DAT,RecL=282,eol=none,Replace",display,output 
-15160   else if trim$(device$)="EZReader" then 
-15170     open #h_out:=2: "Name=c:\ezreader\READINGS.DAT,RecL=578,eol=none,Replace",display,output 
-15180   else if device$='Unitech HT630' then 
-15190     let out_filename$=env$('temp')&'\'&session$&'_uni_ht630.dat'
-15200     let out_recl=256
-15210     open #h_out:=fngethandle: "Name="&out_filename$&",RecL="&str$(out_recl)&",Replace",display,output 
-15220   else if device$='ACS Meter Reader' then 
-15230     let out_filename$=env$('temp')&'\'&session$&'_acs_meter_data.txt'
-15240     let out_recl=256
-15250     open #h_out:=fngethandle: "Name="&out_filename$&",RecL="&str$(out_recl)&",Replace",display,output 
-15252   else if device$='Psion Workabout' and (env$('client')='Findlay' or env$('client')='Ash Grove') then ! maybe other clients too!!! XXX
-15254     if ~exists('UBmstr') then execute 'mkdir UBmstr'
-15256     open #h_out:=fngethandle: "Name="&env$('Q')&"\UBmstr\Readings.dat,RecL=128,Replace",display,output 
-15260   else if device$='Psion Workabout' then ! and (env$('client')='Raymond' or env$('client')='Ash Grove' or env$('client')='Kincaid') then ! maybe other clients too!!! XXX
-15270     open #h_out:=fngethandle: "Name="&env$('Q')&"\UBmstr\Readings.dat,RecL=128,Replace",display,output 
-15280   else if device$='Itron FC300' then 
-15290     let fn_itron_open
-15292   ! else if device$="Master Meter"  then
-15300   else 
-15310     open #h_out:=fngethandle: 'Name='&br_filename$(env$('userprofile')&'\Desktop\ACS Hand Held Out.txt')&',RecL=1048,Replace',display,output
-15312     ! open #h_out:=fngethandle: "Name=Readings.dat,RecL=99,Replace",display,output  ! all others use this for now
-15320   end if 
-15330   let workopen=1
-15340 fnend  ! fn_openwork
+15000 def fn_openwork ! open work areas based on type of Hand Held
+15020   dim out_filename$*256
+15040   let fnureg_read('Hand Held To File',out_filename$)
+15060   if device$='Itron FC300' then 
+15080     let fn_itron_open
+15100   else 
+15120     h_out                  =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT",                      80)
+15140     if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT",                                  80)
+15160     if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3",                          256)
+15180     if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            env$('Q')&"\UBmstr\intopalm.txt",                 204)
+15200     if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           env$('Q')&"\UBmstr\Laptop.Out",                   200)
+15220     if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat",                        256)
+15240     if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           env$('Q')&"\UBmstr\READINGS.DAT",                 282,',eol=none')
+15260     if h_out<=0 then h_out=fn_ifMatchOpenDo("EZReader",         "c:\ezreader\Download.dat",                        578,',eol=none')
+15280     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',       256)
+15300     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',       256, ',eol=none')
+15320     if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt',  256)
+15340     if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  env$('Q')&"\UBmstr\Readings.dat",                  128)
+15360     if h_out<=0 then
+15380       h_out=fn_ifMatchOpenDo('',br_filename$(env$('userprofile')&'\Desktop\ACS Hand Held Out.txt'),1048)
+15400     end if
+15420   end if 
+15440   workopen=1
+15460 fnend  ! fn_openwork
+15500 def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extraParameter$*256)
+15520   ! inherrits device$,out_filename$
+15540   ! returns open file handle
+15560   if deviceTest$='' or device$=deviceTest$ then
+15580     if out_filename$='' then out_filename$=defaultOut_filename$
+15600     fnmakesurepathexists(out_filename$)
+15620     open #hImodoReturn:=fngethandle: 'Name='&env$('at')&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output 
+15640   end if
+15660   fn_ifMatchOpenDo=hImodoReturn
+15680 fnend
 15990 def fn_unitech_ht630
 16000   ! INPUT FILE (from ACS to Hand Held) needs to contain the following fields:
 16010   !   Account - 10 characters

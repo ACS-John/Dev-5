@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                        
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                        
+12:08 PM 10/3/2017	U4	Create Hand Held File got improved open logic - all formats should now respect override selections  from File > Properties
 14:24 10/17/2017	CO	5.73056  
 2:23 PM 10/2/2017	CO	Fix a bug in Save (missing \) caused by env Q implementation 
 2:11 PM 10/2/2017	UB	Fixed Dates not recording in deposit changes 
