@@ -323,6 +323,7 @@
 28890       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
 28900       fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
 28910     else if env$('client')='Cerro Gordo T' then 
+28912       fn_user_limit(1)
 28920       fn_add_ch_sys('GL')
 28930       fn_add_ch_sys('PR')
 28940       fn_add_ch_sys('CL')
@@ -432,6 +433,7 @@
 29980     else if env$('client')='Morrisonville' then 
 29990       fn_user_limit(1)
 30000       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
+30002       fn_add_ch_sys('U4') : u4_device$="EZReader" ! U4 Utility Billing Hand Held Add-On
 30010     else if env$('client')='Moweaqua' then 
 30020       fn_user_limit(1)
 30030       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
