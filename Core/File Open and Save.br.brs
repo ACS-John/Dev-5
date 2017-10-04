@@ -114,87 +114,85 @@
 38340   dim tmp7ZipCommand$*512
 38360   if enableBackupReportCache$='True' then
 38380     tmp7zipcommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\*"'
-38410   else
+38400   else
 38420     if env$('BR_MODEL')='CLIENT/SERVER' then
-38430       dim serverTempSaveFile$*256
-38440       serverTempSaveFile$=env$('temp')&'\save_'&session$&'.zip'
-38450       tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\* -xr!"Report Cache\*"'
-38460     else
-38470       tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\* -xr!"Report Cache\*"'
-38480     end if
-38490   end if
-38500   pr #h_tmp: '@echo off'
-38510   pr #h_tmp: '@echo Advanced Computer Services LLC'
-38520   pr #h_tmp: '@echo Saving to: "'&save_name$&'"'
-38530   if env$('BR_MODEL')='CLIENT/SERVER' then
-38540     pr #h_tmp: '@echo temp on server: "'&serverTempSaveFile$&'"'
-38550   end if
-38560   pr #h_tmp: '@echo.'
-38570   pr #h_tmp: '@echo.'
-38580   pr #h_tmp: '@echo Command: '&tmp7ZipCommand$
-38590   pr #h_tmp: '@echo.'
-38600   pr #h_tmp: '@echo Save What: '&env$('Q')&'\'&save_what$
-38620   pr #h_tmp: '@echo.'
-38640   pr #h_tmp: '@echo Relative To: '&os_filename$(env$('Q')&'\')
-38660   pr #h_tmp: '@echo.'
-38680   if enableBackupReportCache$<>'True' then
-38700     pr #h_tmp: '@echo Excluding Report Cache'
-38720   end if
-38740   pr #h_tmp: '@echo.'
+38440       dim serverTempSaveFile$*256
+38460       serverTempSaveFile$=env$('temp')&'\save_'&session$&'.zip'
+38480       tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\* -xr!"Report Cache\*"'
+38500     else
+38520       tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\* -xr!"Report Cache\*"'
+38540     end if
+38560   end if
+38580   pr #h_tmp: '@echo off'
+38600   pr #h_tmp: '@echo Advanced Computer Services LLC'
+38620   pr #h_tmp: '@echo Saving to: "'&save_name$&'"'
+38640   if env$('BR_MODEL')='CLIENT/SERVER' then
+38660     pr #h_tmp: '@echo temp on server: "'&serverTempSaveFile$&'"'
+38680   end if
+38700   pr #h_tmp: '@echo.'
+38720   pr #h_tmp: '@echo.'
+38740   pr #h_tmp: '@echo Command: '&tmp7ZipCommand$
 38760   pr #h_tmp: '@echo.'
-38780   pr #h_tmp: '@echo Output Log: "'&save_log_filename$&'"'
+38780   pr #h_tmp: '@echo Save What: '&env$('Q')&'\'&save_what$
 38800   pr #h_tmp: '@echo.'
-38820   pr #h_tmp: '@echo.'
-38840   pr #h_tmp: '@echo SAVE PROCESSING...'
-38860   pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
-38880   close #h_tmp: 
-38090   if env$('BR_MODEL')='CLIENT/SERVER' then
-38900     execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
-38910   else
-38912     execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
-38914   end if
-38920   if fsa_automatedSaveFileName$<>'' then
-          if env$('BR_MODEL')='CLIENT/SERVER' then
-            fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
-          end if
-38940     if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$, 1,suppressErrorLog) then 
-38960       let fnreg_write('Last Automated Save Date',date$('ccyy/mm/dd'))
-38980       let fnreg_write('Last Automated Save Time',time$)
-39000       let fnreg_write('Last Automated Save File',save_name$)
-39020       let fnreg_write('Last Automated Save Path',save_name$(1:pos(save_name$,'\',-1)))
-39040     end if 
-39060   else
-39080     if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$,0,suppressErrorLog) then 
-39100       let fnreg_write('Last Save Date',date$('ccyy/mm/dd'))
-39120       let fnreg_write('Last Save Time',time$)
-39140       let fnreg_write('Last Save File',save_name$)
-39160       let fnreg_write('Last Save Path',save_name$(1:pos(save_name$,'\',-1)))
-39180     end if 
-39200   end if
-39220   ! 
-39240   goto SAVE_AS_XIT
-39260   SAVE_AS_OPEN_ERR: ! there was a problem opening the file.
-39280   if fsa_automatedSaveFileName$<>'' then
-39300     mat ml$(3)
-39320     let ml$(1)='Automated save failed'
-39340     let ml$(2)='Error: '&str$(err)
-39360     let ml$(3)='File: '&fsa_automatedSaveFileName$
-39380     let fnmsgbox(mat ml$)
-39400     ! goto SAVE_AS_XIT
-39420   ! else if err=622 then ! it was just cancelled
-39440   !   goto SAVE_AS_XIT
-39460   else if err<>622 then
-39480     mat ml$(2)
-39500     let ml$(1)='Select a different file name.'
-39520     let ml$(2)='Error: '&str$(err)
-39540     let fnmsgbox(mat ml$)
-39560     pr "Err:";err;" Line:";line
-39580   end if 
-39600   SAVE_AS_XIT: ! 
-39620   !  let fn_fsa_clean_up
-39640 fnend 
+38820   pr #h_tmp: '@echo Relative To: '&os_filename$(env$('Q')&'\')
+38840   pr #h_tmp: '@echo.'
+38860   if enableBackupReportCache$<>'True' then
+38880     pr #h_tmp: '@echo Excluding Report Cache'
+38900   end if
+38920   pr #h_tmp: '@echo.'
+38940   pr #h_tmp: '@echo.'
+38960   pr #h_tmp: '@echo Output Log: "'&save_log_filename$&'"'
+38980   pr #h_tmp: '@echo.'
+39000   pr #h_tmp: '@echo.'
+39020   pr #h_tmp: '@echo SAVE PROCESSING...'
+39040   pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
+39060   close #h_tmp: 
+39080   if env$('BR_MODEL')='CLIENT/SERVER' then
+39100     execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
+39120     fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
+39140   else
+39160     execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
+39180   end if
+39200   if fsa_automatedSaveFileName$<>'' then
+39220     if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$, 1,suppressErrorLog) then 
+39240       let fnreg_write('Last Automated Save Date',date$('ccyy/mm/dd'))
+39260       let fnreg_write('Last Automated Save Time',time$)
+39280       let fnreg_write('Last Automated Save File',save_name$)
+39300       let fnreg_write('Last Automated Save Path',save_name$(1:pos(save_name$,'\',-1)))
+39320     end if 
+39340   else
+39360     if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$,0,suppressErrorLog) then 
+39380       let fnreg_write('Last Save Date',date$('ccyy/mm/dd'))
+39400       let fnreg_write('Last Save Time',time$)
+39420       let fnreg_write('Last Save File',save_name$)
+39440       let fnreg_write('Last Save Path',save_name$(1:pos(save_name$,'\',-1)))
+39460     end if 
+39480   end if
+39500   ! 
+39520   goto SAVE_AS_XIT
+39540   SAVE_AS_OPEN_ERR: ! there was a problem opening the file.
+39560   if fsa_automatedSaveFileName$<>'' then
+39580     mat ml$(3)
+39600     let ml$(1)='Automated save failed'
+39620     let ml$(2)='Error: '&str$(err)
+39640     let ml$(3)='File: '&fsa_automatedSaveFileName$
+39660     let fnmsgbox(mat ml$)
+39680     ! goto SAVE_AS_XIT
+39700   ! else if err=622 then ! it was just cancelled
+39720   !   goto SAVE_AS_XIT
+39740   else if err<>622 then
+39760     mat ml$(2)
+39780     let ml$(1)='Select a different file name.'
+39800     let ml$(2)='Error: '&str$(err)
+39820     let fnmsgbox(mat ml$)
+39840     pr "Err:";err;" Line:";line
+39860   end if 
+39880   SAVE_AS_XIT: ! 
+39900   !  let fn_fsa_clean_up
+39920 fnend 
 42000 def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_name$*256; statusInsteadOfMsgBox,suppressErrorLog)
-42020   open #h_compresslog:=fngethandle: 'Name=@:'&arc_filename$,display,input ioerr A7C_OPEN_ERR
+42020   open #h_compresslog:=fngethandle: 'Name='&arc_filename$,display,input ioerr A7C_OPEN_ERR
 42040   let failure=1
 42060   do 
 42080     linput #h_compresslog: ln$ eof ARC_EO_COMPRESSLOG
