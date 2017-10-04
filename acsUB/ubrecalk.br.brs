@@ -10,7 +10,7 @@
 00076     library "S:\acsUB\calk_standard": fncalk
 00078   end if 
 00080   on error goto ERTN
-00090   let fntop(program$,"Calculate Bills")
+00090   fntop(program$,"Calculate Bills")
 00110 ! r: dims
 00112   dim resp$(10)*128
 00114   dim w(5)            ! only dimmed and reset locally - it is used and set in fncalk
@@ -46,24 +46,24 @@
 00174   dim subjectto(10)
 00176   dim extra(23)
 00200 ! /r
-00250   let fnd1(d1)
+00250   fnd1(d1)
 00260   let work$=env$('Q')&"\UBmstr\Reads_and_Chgs.h"&env$('cno')
 00264   work_addr$=env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h"&env$('cno')
 00265   if env$('client')="Edinburg" or env$('client')="French Settlement" then btu_factor_enabled=1 else btu_factor_enabled=btu=0
 00270 ! synchronize this setting with S:\Utility Billing\Enter Readings and Charges (Enter Readings and Charges)
 00280 ! ______________________________________________________________________
 00290 ! get date meter read
-00300   let fncreg_read('Meter Reading Date Current',tmp$) : let dateread=val(tmp$)
+00300   fncreg_read('Meter Reading Date Current',tmp$) : let dateread=val(tmp$)
 00330 ! 
 00340   fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 00380   for j=1 to udim(servicename$)
 00385     let servicename$(j)=trim$(servicename$(j))
 00390   next j
-00400   let fn_ask_billing_date
+00400   fn_ask_billing_date
 00420   if ck=5 then goto XIT
 00462 ! Let FNWAIT(0,'',"Calculating: please wait...",0)
 00480   fnAutomatedSavePoint('before')
-00500   let fnopenprn
+00500   fnopenprn
 00505 ! 
 00510   open #h_ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00550 L550: form pos 55,32*g 10
@@ -96,7 +96,7 @@
 00796 ! if env$('client')="Albany" and (a(1)=1 or a(1)=3 or a(1)=4 or a(1)=6) then a(6)=0 ! set residential sales tax code to zero
 00798   if env$('client')="Raymond" and (a(1)<>0 and a(6)=0) then a(6)=1 ! if any water rate code and no water penalty than default to water penalty of 1.
 00800   if env$('client')="Raymond" and (a(2)<>0 and a(7)=0) then a(7)=1 ! if any sewer rate code and no sewer penalty than default to sewer penalty of 1.
-00802   let fnapply_default_rates(mat extra, mat a)
+00802   fnapply_default_rates(mat extra, mat a)
 00812 ! /r
 00826   if f=d1 then ! else recalculation reduce balances
 00830     for j=1 to 10
@@ -117,8 +117,8 @@
 00990   mat w=(0) ! mat w appears to never be set - never be used, but is passed to fncalk
 01000   gosub CHECK_UNUSUAL_USAGE
 01010   if r9_usage_is_zero=1 then goto TOP
-01020   let fncalk(x$,d1,f,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,hDeposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
-01030   let fn_date_meter_read ! update meter reading date
+01020   fncalk(x$,d1,f,usage_srv1,usage_srv3,usage_srv4,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,hDeposit2,btu, calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
+01030   fn_date_meter_read ! update meter reading date
 01040   if g(11)>99999 or g(12)>99999 then goto BILL_TOO_LARGE
 01050   if g(11)<99999 and g(11)>-99999 then goto LX1230
 01060 BILL_TOO_LARGE: ! r:
@@ -127,19 +127,19 @@
 01080   pr #255: "   Net Bill: "&str$(g(11))&"  Gross Bill: "&str$(g(12))
 01090   pr #255: "   Action: RECORD SKIPPED."
 01092   let print_count_skip+=1
-01100   let fn_cuu_report_usage
+01100   fn_cuu_report_usage
 01110   goto TOP ! /r
 01120 ! ______________________________________________________________________
 01130 LX1230: ! r:
-01140   let fn_bud2
-01150   let fn_updtbal
+01140   fn_bud2
+01150   fn_updtbal
 01160   for j=1 to 10
 01170     if uprc$(penalty$(j))<>"Y" then  ! don't add penalties into mat gb
 01180       let gb(j)=gb(j)+g(j)
 01190     end if
 01200   next j
 01210   rewrite #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra conv CONV_CUSTOMER_REWRITE
-01220   let fn_write_new_trans
+01220   fn_write_new_trans
 01230   goto TOP ! /r
 30000 CONV_CUSTOMER_REWRITE: ! r:
 30020   pr #255: ""
@@ -152,7 +152,7 @@
 30140   let txt$(1)="The bill ("&str$(g(12))&") on account "&x$&" is too large for"
 30160   let txt$(2)="the system to handle.  This record is being skipped. "
 30180   let txt$(3)='You must determine what is wrong and re-enter the reading."'
-30200   let fnmsgbox(mat txt$,resp$(1),'',48)
+30200   fnmsgbox(mat txt$,resp$(1),'',48)
 30220   goto TOP ! /r
 31900 ! /r
 32000 def fn_write_new_trans
@@ -174,7 +174,7 @@
 32320   WNT_XIT: ! 
 32340 fnend 
 36000 FINIS: ! r:
-36020   let fn_t9notification
+36020   fn_t9notification
 36040   close #h_customer: ioerr ignore
 36060   ! close #h_work,free: ioerr ignore
 36070   ! execute 'free '&work_addr$ ioerr ignore
@@ -188,7 +188,7 @@
 40040       let txt$(1)="One or more reading(s) were encounterd for an account(s) that could not be located."
 40050       let txt$(2)="Set up the UB Accounts indicated on the report."
 40060       let txt$(3)='Then re-enter and calculate the readings for those customers.' !  by using "Enter Readings and Charges"'
-40100       let fnmsgbox(mat txt$,resp$(1),'',48)
+40100       fnmsgbox(mat txt$,resp$(1),'',48)
 40120     end if 
 40140   fnend 
 42000   def fn_cuu_report_main(unusual_service$*128)
@@ -197,7 +197,7 @@
 42060         pr #255: ""
 42080         pr #255: "Unusual "&unusual_service$&" Usage on Customer "&trim$(x$)&".  Bill was calculated."
 42100         pr #255,using 'form pos 1,c 30,x 2,c 30': custname$,meteradr$
-42120         let fn_cuu_report_usage
+42120         fn_cuu_report_usage
 42130         let print_count_unusual+=1
 42140       end if 
 42160     end if 
@@ -222,7 +222,7 @@
 58200     pr #255: "   Action: RECORD SKIPPED."
 58210     let print_count_skip+=1
 58220     if d1<>f then 
-58240       let fn_cuu_report_usage
+58240       fn_cuu_report_usage
 58260     end if 
 58280     goto CUU_XIT
 58300   end if 
@@ -389,7 +389,7 @@
 74440     else 
 74460       pr 'usage_service_number not recognized.' : pause 
 74480     end if 
-74500     let fn_usage=usage_return
+74500     fn_usage=usage_return
 74520   fnend 
 76000   def fn_cuu_water
 76020     cuu_water_return=0
@@ -411,7 +411,7 @@
 76340       end if 
 76360     end if 
 76380 CUU_WATER_XIT: ! 
-76400     let fn_cuu_water=cuu_water_return
+76400     fn_cuu_water=cuu_water_return
 76420   fnend 
 78000   def fn_cuu_electric
 78020     cuu_electric_return=0
@@ -433,7 +433,7 @@
 78340       end if 
 78360     end if 
 78380 CUU_ELEC_XIT: ! 
-78400     let fn_cuu_electric=cuu_electric_return
+78400     fn_cuu_electric=cuu_electric_return
 78420   fnend 
 80000   def fn_cuu_gas
 80020     cuu_gas_return=0
@@ -455,42 +455,42 @@
 80340       end if 
 80360     end if 
 80380 CUU_GAS_XIT: ! 
-80400     let fn_cuu_gas=cuu_gas_return
+80400     fn_cuu_gas=cuu_gas_return
 80420   fnend 
 82000   def fn_ask_billing_date
 82020 ! returns ck (if ck=5 upon return then cancel  was selected)
 82040 ASK_BILLING_DATE: ! 
-82060     let fntos(sn$='ubCalk_'&str$(btu_factor_enabled)&'_'&env$('client')(1:1))
+82060     fntos(sn$='ubCalk_'&str$(btu_factor_enabled)&'_'&env$('client')(1:1))
 82080     let mylen=24 : let mypos=mylen+2
 82090     respc=0 : linec=0
-82100     let fnlbl(linec+=1,1,"Billing Date:",mylen,1)
+82100     fnlbl(linec+=1,1,"Billing Date:",mylen,1)
 82120 ! let fnlbl(1,1,"",34,1)
-82140     let fntxt(linec,mypos,8,0,1,"1001")
+82140     fntxt(linec,mypos,8,0,1,"1001")
 82160     let resp$(respc_billing_date:=respc+=1)=str$(d1)
 82180     if env$('client')='Campbell' then
 82190         linec+=1
-82200         let fnlbl(linec+=1,1,"Sewer Cap Date:",mylen,1)
-82220         let fntxt(linec,mypos,8,0,1,"1")
-82260         let fncreg_read('ubcalk-sewer_cap_date',sewer_cap_date$)
+82200         fnlbl(linec+=1,1,"Sewer Cap Date:",mylen,1)
+82220         fntxt(linec,mypos,8,0,1,"1")
+82260         fncreg_read('ubcalk-sewer_cap_date',sewer_cap_date$)
 82280         let resp$(resp_sewer_cap_date:=respc+=1)=sewer_cap_date$
 82300     end if 
 82320     if btu_factor_enabled=1 then ! ask BTU question on Edinburg and French Settlement
 82340       if env$('client')='French Settlement' then 
-82360         let fnlbl(linec+=1,1,"Cost of Gas Adjustment:",mylen,1)
+82360         fnlbl(linec+=1,1,"Cost of Gas Adjustment:",mylen,1)
 82380       else 
-82400         let fnlbl(linec+=1,1,"Current BTU Factor:",mylen,1)
+82400         fnlbl(linec+=1,1,"Current BTU Factor:",mylen,1)
 82420       end if 
-82440       let fntxt(linec,mypos,10,0,1,"1045")
+82440       fntxt(linec,mypos,10,0,1,"1045")
 82460       let resp$(resp_btu_factor:=respc+=1)=str$(btu)
 82480     end if 
 82500     if env$('client')='French Settlement' then 
 82510       linec+=1
-82520       let fnchk(linec+=1,1,"Calculate Interest on Deposit")
+82520       fnchk(linec+=1,1,"Calculate Interest on Deposit")
 82540       let resp$(resp_calc_interest_on_deposit:=respc+=1)='False'
-82560       let fnchk(linec+=1,1,"Charge Inspection Fee")
+82560       fnchk(linec+=1,1,"Charge Inspection Fee")
 82580       let resp$(resp_charge_inspection_fee:=respc+=1)='False'
-82600       let fnlbl(linec-2,35,"Interest Credit Rate:",21,1)
-82620       let fntxt(linec-2,58,10,0,1,"44")
+82600       fnlbl(linec-2,35,"Interest Credit Rate:",21,1)
+82620       fntxt(linec-2,58,10,0,1,"44")
 82640       let resp$(resp_interest_credit_rate:=respc+=1)='.0500' ! str$(.05)
 82660     end if 
 83000 ! r: unusual usage report qusetion
@@ -498,15 +498,15 @@
 83040     let unusual_usage_report_opt$(1)="Unusual and Skipped (Classic)"
 83060     let unusual_usage_report_opt$(2)="Skipped Accounts Only"
 83080     let unusual_usage_report_opt$(3)="Unusual, Skipped and Show Calculations"
-83320     let fnlbl(linec+=1,1,"Unusual Usage Report:",mylen,1)
-83340     let fncomboa('ubcalk-unusal_usage_report',linec,mypos,mat unusual_usage_report_opt$, 'Select the unusual usage report style you prefer') ! ,width,contain,tabcon)
-83360     let fncreg_read('ubcalk-unusal_usage_report',unusual_usage_report$,unusual_usage_report_opt$(2))
+83320     fnlbl(linec+=1,1,"Unusual Usage Report:",mylen,1)
+83340     fncomboa('ubcalk-unusal_usage_report',linec,mypos,mat unusual_usage_report_opt$, 'Select the unusual usage report style you prefer') ! ,width,contain,tabcon)
+83360     fncreg_read('ubcalk-unusal_usage_report',unusual_usage_report$,unusual_usage_report_opt$(2))
 83380     let unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
 83400     if unusual_usage_report=0 then let unusual_usage_report=1 : let unusual_usage_report$=unusual_usage_report_opt$(unusual_usage_report)
 83420     let resp$(resp_unusual_usage_report:=respc+=1)=unusual_usage_report$
 83440 ! /r
-83460     let fncmdset(2)
-83480     let fnacs(sn$,0,mat resp$,ck)
+83460     fncmdset(2)
+83480     fnacs(sn$,0,mat resp$,ck)
 83500     if ck<>5 then 
 83520       let d1=val(resp$(respc_billing_date))
 83540       if btu_factor_enabled then btu=val(resp$(resp_btu_factor)) ! Edinburg requires a monthly BTU factor for calculating taxes
@@ -515,12 +515,12 @@
 83600       if resp_interest_credit_rate then let interest_credit_rate=val(resp$(resp_interest_credit_rate))
 83620       let unusual_usage_report$=resp$(resp_unusual_usage_report)
 83640       let unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
-83660       let fncreg_write('ubcalk-unusal_usage_report',unusual_usage_report$)
+83660       fncreg_write('ubcalk-unusal_usage_report',unusual_usage_report$)
 83680       if d1<10101 then pr bell; : goto ASK_BILLING_DATE
-83700       let fnd1(d1,1)
+83700       fnd1(d1,1)
 83720       if resp_sewer_cap_date then ! if env$('client')='Campbell'
 83740         let sewer_cap_date$=resp$(resp_sewer_cap_date)
-83760         let fncreg_write('ubcalk-sewer_cap_date',sewer_cap_date$)
+83760         fncreg_write('ubcalk-sewer_cap_date',sewer_cap_date$)
 83780       end if 
 83800     end if 
 83820   fnend 

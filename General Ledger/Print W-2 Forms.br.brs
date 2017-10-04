@@ -15,7 +15,7 @@
 14180   dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
 14190   dim k$(3)*30
 14200 ! ______________________________________________________________________
-14220   let fntop(program$,cap$="Print W-2 Forms")
+14220   fntop(program$,cap$="Print W-2 Forms")
 14240   let fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 14260 ! 
 14280 ! ______________________________________________________________________
@@ -146,7 +146,7 @@
 37182     let ss$=stcode$=printLocality$=""
 37190     let x$=" "
 37200     gosub PRINTW2
-37280     let fnpa_finis
+37280     fnpa_finis
 37300   end if
 37320   if enableW3$="True" then let fnw3(empId$,mat a$,mat w,dcb,state$,stcode$)
 37340   if exportFormatID then 
@@ -154,23 +154,23 @@
 37380       let tmpMsgLine$(1)='Export file created:'
 37400       let tmpMsgLine$(2)=os_filename$(file$(hExport))
 37420       close #hExport:
-37440       let fnmsgbox(mat tmpMsgLine$,resp$,cap$) ! ,16+4)
+37440       fnmsgbox(mat tmpMsgLine$,resp$,cap$) ! ,16+4)
 37460     goto XIT
 37500   end if
 37520 goto XIT ! /r
 38000 XIT: let fnxit
 52000 ASK_EMP_LOCALITY: ! r:
-52020   let fntos(sn$="Prw2-5")
+52020   fntos(sn$="Prw2-5")
 52040   let rc=0
 52060   let mylen=30
 52080   let mypos=mylen+3
-52100   let fnlbl(1,1,k$(1),mylen,1,0,0)
-52120   let fnlbl(2,1,"Locality Name:",mylen,1,0,0)
-52140   let fntxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
+52100   fnlbl(1,1,k$(1),mylen,1,0,0)
+52120   fnlbl(2,1,"Locality Name:",mylen,1,0,0)
+52140   fntxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
 52160   let resp$(rc+=1)=empLocality$
-52180   let fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-52200   let fncmdkey("E&xit",5,0,1,"Returns to menu")
-52220   let fnacs(sn$,0,mat resp$,ckey)
+52180   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
+52200   fncmdkey("E&xit",5,0,1,"Returns to menu")
+52220   fnacs(sn$,0,mat resp$,ckey)
 52240   if ckey=5 then goto XIT
 52260   let empLocality$=resp$(1)
 52280   ! controlNumber$=rtrm$(controlNumber$)

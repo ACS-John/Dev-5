@@ -15,47 +15,47 @@
 18240   let filter_option$(5)="3 - Active / but Do Not Bill"
 18260   let filter_option$(6)="4 - Finaled / but Not Billed"
 18280 ! ______________________________________________________________________
-19000   let fntop(program$,cap$="Deposit List")
-19020   let fncno(cno,cnam$)
-19040   let fnget_services(mat servicename$ )
+19000   fntop(program$,cap$="Deposit List")
+19020   fncno(cno,cnam$)
+19040   fnget_services(mat servicename$ )
 19060   for j=1 to 4
 19080     let servicename$(j)=lpad$(rtrm$(servicename$(j)),16)
 19100   next j
-19120   let fndat(dat$,1)
-19140   let fncreg_read('ubcustdp.sequence',seq$) : let seq=val(seq$)
-19160   let fncreg_read('ubcustdp.subtotal by route',subtotal$)
-19180   let fncreg_read('ubcustdp.filter choice',filter_default$)
+19120   fndat(dat$,1)
+19140   fncreg_read('ubcustdp.sequence',seq$) : let seq=val(seq$)
+19160   fncreg_read('ubcustdp.subtotal by route',subtotal$)
+19180   fncreg_read('ubcustdp.filter choice',filter_default$)
 19200   if filter_default$='' then let filter_default$=filter_option$(1)
 19220 ! /r
-32000   let fntos(sn$="ubcustdp_1" )
+32000   fntos(sn$="ubcustdp_1" )
 32020   let rc=0 : let mylen=30 : let mypos=mylen+3
-32040   let fnlbl(1,1,"Report Heading Date:",mylen,1)
-32060   let fntxt(1,mypos,20)
+32040   fnlbl(1,1,"Report Heading Date:",mylen,1)
+32060   fntxt(1,mypos,20)
 32080   let resp$(1)=trim$(dat$)
-32082   let fnlbl(3,1,"Sequence:",mylen,1)
-32100   let fnopt(3,mypos,"Name")
+32082   fnlbl(3,1,"Sequence:",mylen,1)
+32100   fnopt(3,mypos,"Name")
 32120   if seq=1 then let resp$(2)="True" else let resp$(2)="False"
-32140   let fnopt(4,mypos,"Route and Sequence Number")
+32140   fnopt(4,mypos,"Route and Sequence Number")
 32160   if seq<>1 then let resp$(3)="True" else let resp$(3)="False"
-32180   let fnchk(6,mylen+4,"Subtotal By Route:",1)
+32180   fnchk(6,mylen+4,"Subtotal By Route:",1)
 32200   if subtotal$='True' then let resp$(resp_subtotal:=4)='True' else let resp$(resp_subtotal:=4)="False"
-32220   let fnlbl(8,1,"Final Billing Code:",mylen,1)
-32380   let fncomboa("final_bill",8,mypos,mat filter_option$,"",25)
+32220   fnlbl(8,1,"Final Billing Code:",mylen,1)
+32380   fncomboa("final_bill",8,mypos,mat filter_option$,"",25)
 32400   let resp$(resp_filter:=5)=filter_default$
-32420   let fncmdset(3)
-32440   let fnacs(sn$,0,mat resp$,ckey)
+32420   fncmdset(3)
+32440   fnacs(sn$,0,mat resp$,ckey)
 32460   if ckey=5 then goto XIT
 32480   let dat$=resp$(1)
 32520   if resp$(2)="True" then let seq=1 else let seq=2 ! 1=name sequence  2= route sequence
 32540   let subtotal$=resp$(resp_subtotal)
 32560   let filter_choice=srch(mat filter_option$,resp$(resp_filter))
 36000 ! r: save answers
-36020   let fndat(dat$,2)
-36040   let fncreg_write('ubcustdp.sequence',str$(seq))
-36060   let fncreg_write('ubcustdp.subtotal by route',subtotal$)
-36080   let fncreg_write('ubcustdp.filter choice',resp$(resp_filter))
+36020   fndat(dat$,2)
+36040   fncreg_write('ubcustdp.sequence',str$(seq))
+36060   fncreg_write('ubcustdp.subtotal by route',subtotal$)
+36080   fncreg_write('ubcustdp.filter choice',resp$(resp_filter))
 36100 ! /r
-48000   let fnopenprn
+48000   fnopenprn
 48020   gosub HEADER
 48040   if seq=1 then 
 48100     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&str$(cno)&",Shr",internal,input,keyed  ! name sequence
@@ -157,7 +157,7 @@
 66080 F_TOTALS: form pos 7,c 30,n 10.2
 66100   next j
 66120   close #1: ioerr ignore
-66140   let fncloseprn
+66140   fncloseprn
 66160   goto XIT ! /r
 66180 XIT: let fnxit
 66200 ! ______________________________________________________________________

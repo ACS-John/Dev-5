@@ -1,8 +1,8 @@
 00030   on error goto L280
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fnd1
-00050   let fntop(program$,cap$="Client")
-00060   let fncno(cno,cnam$)
-00070   let fnconsole(1)
+00050   fntop(program$,cap$="Client")
+00060   fncno(cno,cnam$)
+00070   fnconsole(1)
 00080   dim eno$*9,cchrs(10),ncchrs(20),ccamt(10),nccamt(20),prg$*20
 00090 L90: pr newpage
 00100   pr fields "8,25,c 30,r,n": "********  Warning  ********"

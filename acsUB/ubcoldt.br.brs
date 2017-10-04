@@ -7,10 +7,10 @@
 00080   dim r(20,4),hd1$*255,cap$*128,servicename$(10)*20,tg(11),resp$(7)*40
 00081   dim ml$(3)*90
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\acsUB\UBColPrn",cap$="Cash Receipts Journal")
-00110   let fncno(cno,cnam$)
+00100   fntop("S:\acsUB\UBColPrn",cap$="Cash Receipts Journal")
+00110   fncno(cno,cnam$)
 00120 ! 
-00130   let fndat(dat$,1)
+00130   fndat(dat$,1)
 00140   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using "Form POS 1,10*C 20",rec=1: mat servicename$ !:
         close #20: 
@@ -30,7 +30,7 @@
 00250   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubtrdt.h"&str$(cno)&",Shr",internal,input,keyed 
 00260 ! ______________________________________________________________________
 00270   on fkey 5 goto XIT
-00280   let fnopenprn
+00280   fnopenprn
 00290   gosub HDR
 00300   goto L430
 00310 ! ______________________________________________________________________
@@ -71,7 +71,7 @@
 00642 L642: mat ml$(3) !:
         let ml$(1)="The breakdown on a collection transation dated "&str$(tdate)& " for customer # "&p$ !:
         let ml$(2)="does not balance.  Your totals will be off by "& trim$(cnvrt$("pic($$$,$$$.## cr)",tamount-sum(alloc)))&"." !:
-        let fnmsgbox(mat ml$,resp$,cap$,49)
+        fnmsgbox(mat ml$,resp$,cap$,49)
 00655 L655: if resp$="Cancel" then goto XIT
 00660   goto L430
 00670 ! ______________________________________________________________________
@@ -88,31 +88,31 @@
 00760   next j
 00770   pr #255: ""
 00780   pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': "Total      ",r(1,1),r(1,2),r(1,3),r(1,4)
-00850   let fncloseprn
+00850   fncloseprn
 00860 XIT: let fnxit
 00870 ! ______________________________________________________________________
 00880 SCREEN1: ! 
-00890   let fntos(sn$="UBColPrn") !:
+00890   fntos(sn$="UBColPrn") !:
         let mylen=33 : let mypos=mylen+2
-00900   let fnlbl(1,1,"Report Heading Date:",mylen,1)
-00910   let fntxt(1,mypos,20) !:
+00900   fnlbl(1,1,"Report Heading Date:",mylen,1)
+00910   fntxt(1,mypos,20) !:
         let resp$(1)=dat$
-00920   let fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
-00930   let fntxt(2,mypos,10,0,1,"3",0,"First day of the period to be printed. (ccyymmdd format)") !:
+00920   fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
+00930   fntxt(2,mypos,10,0,1,"3",0,"First day of the period to be printed. (ccyymmdd format)") !:
         let resp$(2)=str$(ld1)
-00940   let fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
-00950   let fntxt(3,mypos,10,0,1,"3",0,"Last day of the period to be printed. (ccyymmdd format)") !:
+00940   fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
+00950   fntxt(3,mypos,10,0,1,"3",0,"Last day of the period to be printed. (ccyymmdd format)") !:
         let resp$(3)=str$(hd1)
-00960   let fnchk(4,mypos,"Include Details:",1) !:
+00960   fnchk(4,mypos,"Include Details:",1) !:
         let resp$(4)="True"
-00980   let fncmdset(3)
-00990   let fnacs(sn$,win,mat resp$,ck)
+00980   fncmdset(3)
+00990   fnacs(sn$,win,mat resp$,ck)
 00992   if ck=5 then goto XIT
 01000   let dat$=resp$(1) !:
         let ld1=val(resp$(2)) !:
         let hd1=val(resp$(3)) !:
         let ti1$=resp$(4)
-01030   let fndat(dat$,2)
+01030   fndat(dat$,2)
 01040   return 
 01050 ! ______________________________________________________________________
 01060 ! <Updateable Region: ERTN>

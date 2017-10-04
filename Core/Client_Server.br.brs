@@ -1,10 +1,10 @@
 12000   if ~setup then let fn_setup
-12040   let fntop(program$, cap$="Client Server")
+12040   fntop(program$, cap$="Client Server")
 14000   do 
-14020     let fntos(sn$="test-Button")
-14040     let fnlbl(2,2,'Server IP or Name:',19,1)
-14060     let fntxt(2,22,20,128,0,'',0,'localhost for single user, IP Address for internet based access')
-14080     let fnureg_read('CS Server Name',server_name$)
+14020     fntos(sn$="test-Button")
+14040     fnlbl(2,2,'Server IP or Name:',19,1)
+14060     fntxt(2,22,20,128,0,'',0,'localhost for single user, IP Address for internet based access')
+14080     fnureg_read('CS Server Name',server_name$)
 14100     if server_name$='' and env$('user_limit')='1' then 
 14120       let server_name$='localhost'
 14140     else if server_name$='' then 
@@ -12,23 +12,23 @@
 14180     end if 
 14200     let resp$(1)=server_name$
 14220 ! 
-14240     let fnlbl(4,2,'Port:',19,1)
-14260     let fntxt(4,22,4,0,0,'number',0,'Default is 8555')
-14280     let fnureg_read('CS Server Port',cs_port$) : if cs_port$='' or cs_port$='0' then cs_port$='8555'
+14240     fnlbl(4,2,'Port:',19,1)
+14260     fntxt(4,22,4,0,0,'number',0,'Default is 8555')
+14280     fnureg_read('CS Server Port',cs_port$) : if cs_port$='' or cs_port$='0' then cs_port$='8555'
 14300     let resp$(2)=cs_port$
-14320     let fnlbl(6,2,'Anonymous User:',19,1)
-14340     let fntxt(6,22,20,128,0,'',0,'leave blank to disable')
-14360     let fnureg_read('CS Anonymous User',anon_user$)
+14320     fnlbl(6,2,'Anonymous User:',19,1)
+14340     fntxt(6,22,20,128,0,'',0,'leave blank to disable')
+14360     fnureg_read('CS Anonymous User',anon_user$)
 14380     let resp$(3)=anon_user$
-14400     let fnlbl(7,2,'Anonymous Password:',19,1)
-14420     let fntxt(7,22,20,128,0,'',0,'leave blank to disable')
-14440     let fnureg_read('CS Anonymous Password',anon_pass$)
+14400     fnlbl(7,2,'Anonymous Password:',19,1)
+14420     fntxt(7,22,20,128,0,'',0,'leave blank to disable')
+14440     fnureg_read('CS Anonymous Password',anon_pass$)
 14460     let resp$(4)=anon_pass$
 14480 ! 
-15000     let fncmdkey("Install Server",2,1,0)
-15020     let fncmdkey("Uninstall Server",3,0,0)
-15040     let fncmdkey('&Back',5,0,1)
-15060     let fnacs(sn$,0,mat resp$,ck)
+15000     fncmdkey("Install Server",2,1,0)
+15020     fncmdkey("Uninstall Server",3,0,0)
+15040     fncmdkey('&Back',5,0,1)
+15060     fnacs(sn$,0,mat resp$,ck)
 16000     let server_name$=resp$(1) : let fnureg_write('CS Server Name',server_name$)
 16020     cs_port$=resp$(2) : let fnureg_write('CS Server Port',cs_port$)
 16040     anon_user$=resp$(3) : let fnureg_write('CS Anonymous User',anon_user$)
@@ -36,16 +36,16 @@
 16080     if ck=5 then goto XIT
 16100     if ck=2 then let fn_server_install
 16120     if ck=3 then let fn_server_uninstall
-16140     let fnstatus_close
+16140     fnstatus_close
 16160   loop 
 34000   def fn_server_install
-34020     let fnstatus('fn_server_install')
+34020     fnstatus('fn_server_install')
 34030     if ~exists(env$('temp')&'\ACS\brCsInstall') then execute 'mkdir "'&env$('temp')&'\ACS\brCsInstall"'
 34031     if ~exists(env$('temp')&'\ACS\brCsInstall\ACS 5 Client') then exe 'mkdir "'&env$('temp')&'\ACS\brCsInstall\ACS 5 Client"'
 34032     if ~exists(env$('temp')&'\ACS\brCsInstall\ACS 5 Client\Core') then exe 'mkdir "'&env$('temp')&'\ACS\brCsInstall\ACS 5 Client\Core"'
 34034     fnCopy('S:\brclient*.*',env$('temp')&'\ACS\brCsInstall\ACS 5 Client\*.*')
 34036     execute 'sy xcopy "'&os_filename$('S:\Core')&'\Client\*.*" "'&os_filename$(env$('temp')&'\ACS\brCsInstall\ACS 5 Client')&'\*.*" /S'
-34040     let fnstatus('make '&env$('Q')&'\brListener.conf')
+34040     fnstatus('make '&env$('Q')&'\brListener.conf')
 34060     open #h_br_parms_txt:=fngethandle: 'Name='&env$('temp')&'\ACS\brCsInstall\ACS 5 Client\br_parms.txt,RecL=256,replace',display,output 
 34080     pr #h_br_parms_txt: 'host='&server_name$
 34100     pr #h_br_parms_txt: 'label=ACS_5_CS'
@@ -68,8 +68,8 @@
 34380     pr #h_brlistener_conf: 'MultiSession'
 34400     pr #h_brlistener_conf: ']'
 34420     close #h_brlistener_conf: 
-34440     let fnstatus('  and copy it into windows')
-34460     let fnstatus('  and copy DLL to 32 bit system folder (System32 or SysWOW64)')
+34440     fnstatus('  and copy it into windows')
+34460     fnstatus('  and copy DLL to 32 bit system folder (System32 or SysWOW64)')
 34480 !   execute 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\ACS\brCsInstall\Install_BR_Server_'&session$&'.cmd"'
 34500     open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\ACS\brCsInstall\Install_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
 34520 !     pr #h_copy_cmd:     '@echo on'
@@ -94,7 +94,7 @@
 38040 !   fnureg_read('CS Server Activate Executable',sd_br_server_executable$)
 38060 !   if sd_br_server_executable$<>'' then
 38080 !   end if
-38100     let fnstatus('fn_server_uninstall')
+38100     fnstatus('fn_server_uninstall')
 38120     fnmakesurepathexists(env$('temp')&'\ACS\brCsInstall\')
 38140     open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\ACS\brCsInstall\Remove_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
 38160     pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'" /release'
@@ -106,13 +106,13 @@
 38300   fnend 
 42000   def fn_server_is_active
 42020     dim sia_br_server_executable$*1024
-42040     let fnureg_read('CS Server Activate Executable',sia_br_server_executable$)
+42040     fnureg_read('CS Server Activate Executable',sia_br_server_executable$)
 42060     if sia_br_server_executable$<>'' then 
 42080       let sia_return=1
 42100     else 
 42120       let sia_return=0
 42140     end if 
-42160     let fn_server_is_active=sia_return
+42160     fn_server_is_active=sia_return
 42180   fnend 
 53000   execute 'Sy -w '&os_filename$('S:\Core\ACS_PrAce_Support_Install_ocx.exe')
 53020   execute 'Sy '&os_filename$('S:\Core\ACS_PrAce_Reg.cmd')&' /s'

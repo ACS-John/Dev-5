@@ -2,9 +2,9 @@
 00030   on error goto L440
 00040 ! 
 00050   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnd1
-00060   let fntop("S:\acsTM\emaint",cap$="Employee")
-00070   let fncno(cno,cnam$)
-00080   let fnopenprn
+00060   fntop("S:\acsTM\emaint",cap$="Employee")
+00070   fncno(cno,cnam$)
+00080   fnopenprn
 00090   dim eno$*9,e$*25,r(11),cnam$*40,prg$*20
 00100   let namtab=66-int(len(rtrm$(cnam$))/2)
 00110   open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr L440

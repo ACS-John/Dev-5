@@ -9,8 +9,8 @@
 00090   dim a$(200,3)*40,h1$*55,rm$(4)*44,filename$*20,fil$(50)*20,ln$*80
 00100   dim a(200,6),a$*132,prg$*20,mo$(12),outputfile$*50,ev$*50
 00110   dim servicename$(10)*20,servicecode$(10)*2,textfile$*87,abbrev$*30
-00120   let fnsetmonth(mat mo$)
-00130   let fncno(cno)
+00120   fnsetmonth(mat mo$)
+00130   fncno(cno)
 00140 ! 
 00150   gosub L1090
 00160   let dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
@@ -31,7 +31,7 @@
 00320   open #2: "Name="&ev$,display,input 
 00330   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outin,keyed 
 00340 L340: linput #2: ln$ eof L870
-00341   let fnremove(chr$(9),ln$)
+00341   fnremove(chr$(9),ln$)
 00350   pr ln$
 00360   if uprc$(ln$(7:10))<>"DATA" then goto L340
 00370 DATALN: let j3=1
@@ -141,7 +141,7 @@
 01240 L1240: a=pos(x$,".",olda) !:
           if a<>0 then !:
             a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1240
-01250     let fnbooktitle$=x$
+01250     fnbooktitle$=x$
 01260   fnend 
 01270   return 
 01280 ! ______________________________________________________________________

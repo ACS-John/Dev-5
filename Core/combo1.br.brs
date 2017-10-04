@@ -80,7 +80,7 @@
 00670     for j=1 to udim(fio1$) !:
             let fio1$(j)=str$(j+1)&",1,C "&str$(win_width)&",N" !:
           next j
-00680     let fnwin3b(win,cap$,win_height,win_width,0,6,6,2)
+00680     fnwin3b(win,cap$,win_height,win_width,0,6,6,2)
 00690     pr #win,fields "1,1,C "&str$(win_width)&",R,N": header$
 00700 L700: rinput #win,select mat fio1$,attr "H": mat choice$
 00710     if cmdkey=1 and eofile=0 then goto NXT

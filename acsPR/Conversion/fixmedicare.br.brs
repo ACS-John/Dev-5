@@ -12,9 +12,9 @@
 00120   dim e$(10)*12,tpt(32),cap$*128,message$*40,resp$(15)*30
 00130   dim tcp(32),tdc(10),ytdtotal(32),ss$*11,d1$*20
 00140 ! ______________________________________________________________________
-00150   let fntop("S:\acsPR\fixmedicare",cap$="Fix Medicare")
-00160   let fncno(cno,cnam$)
-00170   let fnopenprn
+00150   fntop("S:\acsPR\fixmedicare",cap$="Fix Medicare")
+00160   fncno(cno,cnam$)
+00170   fnopenprn
 00180   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
 00190   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&str$(cno),internal,outin,keyed 
 00200 ! 

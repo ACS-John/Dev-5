@@ -30,7 +30,7 @@
 10340     pr fields "1,73,C 7,N": bell$
 10360     let log$="Error "&str$(errornumber)&" at line "&str$(linenumber)
 10380     let log$=log$&" of "&callingProgram$(1:100)
-10400     let fnlog(log$,2)
+10400     fnlog(log$,2)
 10440     act$="Go "&str$(linenumber)
 10460     acshelp$="Help\co\error\br\"
 10480     acshelp$=acshelp$&"Err"&cnvrt$("Pic(####)",errornumber)&".html"
@@ -105,7 +105,7 @@
 16100 !     mat msgline$(2)
 16120 !     let msgline$(1)="Sorry, No Workstation Basic Help "
 16140 !     let msgline$(2)="is available for this Error Number."
-16160 !     let fnmsgbox(mat msgline$,response$(1),env$('program_caption'),0)
+16160 !     fnmsgbox(mat msgline$,response$(1),env$('program_caption'),0)
 16180 !     let response$(1)=response$(1)(1:1)
 16200 ! ERR_WBHELP_RETURN: !
 16220 !     return  ! /r
@@ -123,7 +123,7 @@
 20800       mat msgline$(2)
 20900       let msgline$(1)="Do not stop the processing of this program."
 21000       let msgline$(2)="Please contact ACS Technical Support."
-21100       let fnmsgbox(mat msgline$,response$(1),env$('program_caption'),0)
+21100       fnmsgbox(mat msgline$,response$(1),env$('program_caption'),0)
 21200       let response$(1)=response$(1)(1:1)
 21300       goto MENU1
 21400     end if 

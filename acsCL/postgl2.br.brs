@@ -3,9 +3,9 @@
 
 00040   library 'S:\Core\Library': fnpostgl2,fnxit,fnerror,fntop
 00050 ! on error goto ERTN
-00070   let fntop(program$,"Post to General Ledger")
-00080   let fnpostgl2(1)
-00090   let fnxit
+00070   fntop(program$,"Post to General Ledger")
+00080   fnpostgl2(1)
+00090   fnxit
 10000   def library fnpostgl2(glt)
 10020     library 'S:\Core\Library': fnopenprn,fncloseprn,fncno,fnerror,fnputcno,fndate_mmddyy_to_ccyymmdd,fnprocess,fnchain,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fnmsgbox
 10040     on error goto ERTN
@@ -25,7 +25,7 @@
 10320     else 
 10340       cap$="Post to General Ledger"
 10360     end if 
-10380     let fncno(cno,cnam$)
+10380     fncno(cno,cnam$)
 10400 ! 
 12000 ! r: determine if cash or accrual by checking for any accounts payable numbers in the general ledger control file
 12160     let up1$="C"
@@ -40,30 +40,30 @@
 12340 L230: ! 
 12360     goto READ_FUNDMSTR
 12380 EO_FUNDMSTR: ! /r
-12400     let fntos(sn$="postgl2")
-12440     let fnlbl(1,60,"",0,1)
-12460     let fnlbl(1,1,"Starting Date:",44,1)
-12480     let fntxt(1,46,10,0,1,"3",0,"Normally this would be the first day of the month.  If you post more often than once a month, it would be the first day of the period you are posting.")
+12400     fntos(sn$="postgl2")
+12440     fnlbl(1,60,"",0,1)
+12460     fnlbl(1,1,"Starting Date:",44,1)
+12480     fntxt(1,46,10,0,1,"3",0,"Normally this would be the first day of the month.  If you post more often than once a month, it would be the first day of the period you are posting.")
 12500     let resp$(1)=""
-12520     let fnlbl(2,1,"Ending Date:",44,1)
-12540     let fntxt(2,46,10,0,1,"3",0,"Normally this would be the last day of the month, unless you post more often than once a month!")
+12520     fnlbl(2,1,"Ending Date:",44,1)
+12540     fntxt(2,46,10,0,1,"3",0,"Normally this would be the last day of the month, unless you post more often than once a month!")
 12560     let resp$(2)=date$('ccyymmdd') ! ""
-12580     let fnchk(4,47,"Include previously posted transactions:",1)
+12580     fnchk(4,47,"Include previously posted transactions:",1)
 12600     let resp$(3)="False"
-12620     let fnlbl(5,1,"Basis for Accounting:",44,1)
-12680     let fncomboa("opt_cash_or_accrual",5,46,mat opt_cash_or_accrual$,"If you record expenses as they are paid, you are on a cash basis.  If you wish to record unpaid invoices (accounts payable) as well as paid expenses, you are on an accrual basis.")
+12620     fnlbl(5,1,"Basis for Accounting:",44,1)
+12680     fncomboa("opt_cash_or_accrual",5,46,mat opt_cash_or_accrual$,"If you record expenses as they are paid, you are on a cash basis.  If you wish to record unpaid invoices (accounts payable) as well as paid expenses, you are on an accrual basis.")
 12700     let resp$(4)=opt_cash_or_accrual$(1)
-12720     let fnchk(6,47,"Combine Payroll Entries:",1)
+12720     fnchk(6,47,"Combine Payroll Entries:",1)
 12740     let resp$(5)="True"
-12760     let fnchk(7,47,"Print General Ledger Distribution Listing:",1)
+12760     fnchk(7,47,"Print General Ledger Distribution Listing:",1)
 12780     let resp$(6)="True"
-12800     let fnchk(8,47,"Update After the Fact Payroll records:",1)
+12800     fnchk(8,47,"Update After the Fact Payroll records:",1)
 12820     let resp$(7)="False"
-12840     let fnlbl(10,1,"Post to General Ledger Company Number:",44,1)
-12860     let fntxt(10,46,5,0,1,"30",0,"Only change this default answer if wish to post to a different company than the one you are assigned to.")
+12840     fnlbl(10,1,"Post to General Ledger Company Number:",44,1)
+12860     fntxt(10,46,5,0,1,"30",0,"Only change this default answer if wish to post to a different company than the one you are assigned to.")
 12880     let resp$(8)=str$(cno)
-12900     let fncmdset(2)
-12920     let fnacs(sn$,0,mat resp$,ck)
+12900     fncmdset(2)
+12920     fnacs(sn$,0,mat resp$,ck)
 14000     if ck=5 then goto XIT
 14020     let dt1=val(resp$(1)) ! beginning date
 14040     let dt2=val(resp$(2)) ! ending date
@@ -77,10 +77,10 @@
 14200     let gl2=val(resp$(8)) ! GL company to post
 16000     if pr2$="Y" then let fnprocess(4)
 16020     if glt=glt_print_only then let pr1$="Y"
-16040     let fnputcno(gl2)
+16040     fnputcno(gl2)
 16060 !   pr fields "13,34,C 12,B,99": "Cancel (Esc)"
 16080 !   on fkey 99 goto XIT
-16100     let fnopenprn
+16100     fnopenprn
 16120     open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 16140     open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\tralloc-idx.h"&str$(cno)&",Shr",internal,outin,keyed 
 16160     open #bankmstr=4: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
@@ -308,7 +308,7 @@
 26880     pr #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
 26900     pr #255,using 'Form POS 45,C 30,2*N 12.2': "Final Total",gc1,gc2 pageoflow NEWPGE
 26920     pr #255: "                                            ======================================================" pageoflow NEWPGE
-26940     let fncloseprn
+26940     fncloseprn
 26960 L2300: ! 
 26980     if glt=glt_print_only then goto XIT
 27000     close #20: ioerr ignore
@@ -318,8 +318,8 @@
 27080     if glb=2 then 
 27100       goto XIT
 27120     else 
-27140       let fnputcno(gl2)
-27180       let fnchain("S:\acsGL\ACGLMrge")
+27140       fnputcno(gl2)
+27180       fnchain("S:\acsGL\ACGLMrge")
 27200     end if 
 27220 ! /r
 29000 END1: ! r:
@@ -570,7 +570,7 @@
 47020     check_breakdowns_add_up_return=1
 47040     if ~fn_cb_trmstr_test then check_breakdowns_add_up_return=0
 47060     if ~fn_cb_unpaid_test then check_breakdowns_add_up_return=0
-47080     let fn_check_breakdowns_add_up=check_breakdowns_add_up_return
+47080     fn_check_breakdowns_add_up=check_breakdowns_add_up_return
 47100   fnend  ! 
 48000   def fn_cb_unpaid_test ! CHECK_UNPAIDS: !
 48020     cb_cu_return=1
@@ -600,14 +600,14 @@
 48500       let ml$(1)="The allocations ("&trim$(cnvrt$("pic(---,---.##)",invalloc))&") does not match the total"
 48520       let ml$(2)="transaction amount ("&trim$(cnvrt$("pic(---,---.##)",upa))&").  You must fix this unpaid "
 48540       let ml$(3)="invoice # "&trim$(x$)&" in the unpaid invoice file before you can continue. "
-48560       let fnmsgbox(mat ml$,ok$,cap$,48)
+48560       fnmsgbox(mat ml$,ok$,cap$,48)
 48580       cb_cu_return=0
 48600       goto EO_PAYTRANS_TEST
 48620     else 
 48640       goto CB_CU_READ
 48660     end if 
 48680 EO_PAYTRANS_TEST: ! 
-48700     let fn_cb_unpaid_test=cb_cu_return
+48700     fn_cb_unpaid_test=cb_cu_return
 48720     close #paymstr: 
 48740     close #paytrans: 
 48760     close #unpdaloc: 
@@ -635,11 +635,11 @@
 52360         let ml$(1)="The allocations ("&cnvrt$("pic(---,---.##)",totalloc)&" does not match the total"
 52380         let ml$(2)="transaction amount ("&cnvrt$("pic(---,---.##)",ca1)&".  You must fix this "
 52400         let ml$(3)="transaction ("&ck$&") (bank "&str$(trbank_code)&") check history before you can continue. "
-52420         let fnmsgbox(mat ml$,ok$,cap$,48)
+52420         fnmsgbox(mat ml$,ok$,cap$,48)
 52440         cb_tt_return=0
 52460         goto EO_TRMSTR_TEST
 52480       end if 
 52500     loop 
 52540 EO_TRMSTR_TEST: ! 
-52560     let fn_cb_trmstr_test=cb_tt_return
+52560     fn_cb_trmstr_test=cb_tt_return
 52580   fnend 

@@ -1,5 +1,5 @@
 12000   if ~setup then let fn_setup
-12040   let fntop(program$, cap$="PrintAce Install Dependencies")
+12040   fntop(program$, cap$="PrintAce Install Dependencies")
 13000   execute 'Sy -w '&os_filename$('S:\Core\ACS_PrAce_Support_Install_ocx.exe')
 13020   execute 'Sy '&os_filename$('S:\Core\ACS_PrAce_Reg.cmd')&' /s'
 60000 XIT: let fnxit

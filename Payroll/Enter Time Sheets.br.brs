@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnDedNames,fnopenprn,fncloseprn,fnchain,fnhours,fntos,fnfra,fnopt,fnlbl,fntxt,fncmdkey,fnacs,fncombof,fnchk,fnmsgbox,fnemployee_srch,fncmbemp,fnerror,fndate_mmddyy_to_ccyymmdd,fngethandle,fnindex_it,fnstatus_close,fncreg_write,fncreg_read
 00050   on error goto ERTN
-00052   let fntop(program$,cap$="Enter Time Sheets")
+00052   fntop(program$,cap$="Enter Time Sheets")
 00060 ! r: dims and constants
 00070   dim cap$*128
 00080   dim inp(29),em$*30,sc1$(31)*20,hr(2)
@@ -51,35 +51,35 @@
 00500 F_RPWORK: form pos 1,n 8,n 3,5*pd 4.2,25*pd 5.2,2*pd 4.2
 00502 ! ______________________________________________________________________
 00510 SCREEN_1: ! 
-00520   let fntos(sn$="Prinput-1")
+00520   fntos(sn$="Prinput-1")
 00522   let rc=cf=0
-00530   let fnfra(1,1,3,50,"Payroll Time Sheet Entry","You would only add to previous entries if the last batch was not calculated.",0)
+00530   fnfra(1,1,3,50,"Payroll Time Sheet Entry","You would only add to previous entries if the last batch was not calculated.",0)
 00532   cf+=1 : let franum=cf
-00540   let fnopt(1,3,"Regular Time Sheet Entry",0,franum)
+00540   fnopt(1,3,"Regular Time Sheet Entry",0,franum)
 00542   let resp$(rc+=1)="True"
-00550   let fnopt(2,3,"Additions to Previous Input",0,franum)
+00550   fnopt(2,3,"Additions to Previous Input",0,franum)
 00552   let resp$(rc+=1)="False"
-00560   let fnfra(6,1,2,50,"Pay Period Ending Date","You must enter the pay perod ending date.  You can not have more than one payroll with the same date.")
+00560   fnfra(6,1,2,50,"Pay Period Ending Date","You must enter the pay perod ending date.  You can not have more than one payroll with the same date.")
 00562   cf+=1 : let franum=cf : let mylen=26 : let mypos=mylen+2
-00570   let fnlbl(1,1,"Pay Period Ending Date:",mylen,1,0,franum)
-00580   let fntxt(1,mypos,10,0,1,"1",0,"Use mmddyy.",franum)
+00570   fnlbl(1,1,"Pay Period Ending Date:",mylen,1,0,franum)
+00580   fntxt(1,mypos,10,0,1,"1",0,"Use mmddyy.",franum)
 00582   let resp$(rc+=1)=str$(prd)
-00590   let fnfra(10,1,6,60,"Method of Entry","You can select specific employees to pay; you can automatically calculate salaried persons; or you can pull from a another system.")
+00590   fnfra(10,1,6,60,"Method of Entry","You can select specific employees to pay; you can automatically calculate salaried persons; or you can pull from a another system.")
 00592   cf+=1 : let franum=cf
-00600   let fnopt(1,3,"Select employees to pay",0,franum)
+00600   fnopt(1,3,"Select employees to pay",0,franum)
 00602   let resp$(rc+=1)="True"
-00610   let fnopt(2,3,"Automatically pay salaried employees",0,franum)
+00610   fnopt(2,3,"Automatically pay salaried employees",0,franum)
 00612   let resp$(rc+=1)="False"
-00620   let fnopt(3,3,"Pull time from time card system",0,franum)
+00620   fnopt(3,3,"Pull time from time card system",0,franum)
 00622   let resp$(rc+=1)="False"
-00630   let fnopt(4,3,"Pull time from job cost system",0,franum)
+00630   fnopt(4,3,"Pull time from job cost system",0,franum)
 00632   let resp$(rc+=1)="False"
-00640   let fnlbl(6,1,"Employment Status:",mylen,1,0,franum)
-00650   let fncombof("EmpStatus",6,mylen+3,25,env$('Q')&"\PRmstr\EmpStatus.dat",1,2,3,25,env$('Q')&"\PRmstr\EmpStatus.idx",0,0, "Only necessary if automatically paying salaried people. ",franum,0)
+00640   fnlbl(6,1,"Employment Status:",mylen,1,0,franum)
+00650   fncombof("EmpStatus",6,mylen+3,25,env$('Q')&"\PRmstr\EmpStatus.dat",1,2,3,25,env$('Q')&"\PRmstr\EmpStatus.idx",0,0, "Only necessary if automatically paying salaried people. ",franum,0)
 00652   let resp$(rc+=1)=""
-00660   let fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-00670   let fncmdkey("&Cancel",5,0,1,"Returns to customer record")
-00680   let fnacs(sn$,0,mat resp$,ckey)
+00660   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
+00670   fncmdkey("&Cancel",5,0,1,"Returns to customer record")
+00680   fnacs(sn$,0,mat resp$,ckey)
 00682   if ckey=5 then goto XIT
 00690   if resp$(1)="True" then ! Regular Time Sheet Entry
 00691     let noauto=ti1=1
@@ -93,7 +93,7 @@
 00712     mat ml$(2)
 00714     let ml$(1)="You must enter a valid payroll date!"
 00716     let ml$(2)="Click OK to return to previous screen. "
-00718     let fnmsgbox(mat ml$,resp$,cap$,0)
+00718     fnmsgbox(mat ml$,resp$,cap$,0)
 00720     goto SCREEN_1
 00722   end if 
 00724   if resp$(4)="True" then 
@@ -107,21 +107,21 @@
 00740   end if 
 00742   let em4=val(resp$(8)(1:2))
 00750 ! SKIPDEDUCTIONS: !
-00760   let fntos(sn$="Prinput-2")
+00760   fntos(sn$="Prinput-2")
 00762   let rc=cf=linecnt=0
-00770   let fnfra(1,1,10,50,"Skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
+00770   fnfra(1,1,10,50,"Skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
 00772   cf+=1 : let franum=cf
 00780   for j=1 to 19 step 2
 00790     if trim$(dednames$(j))<>"" then let x$=":" else let x$=""
-00800     let fnchk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum)
+00800     fnchk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum)
 00802     let resp$(rc+=1)="False"
 00810     if trim$(dednames$(j+1))<>"" then let x$=":" else let x$=""
-00820     let fnchk(linecnt,45,trim$(dednames$(j+1))&x$,1,franum)
+00820     fnchk(linecnt,45,trim$(dednames$(j+1))&x$,1,franum)
 00822     let resp$(rc+=1)="False"
 00830   next j
-00840   let fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-00850   let fncmdkey("&Cancel",5,0,1,"Returns to customer record")
-00860   let fnacs(sn$,0,mat resp$,ckey)
+00840   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
+00850   fncmdkey("&Cancel",5,0,1,"Returns to customer record")
+00860   fnacs(sn$,0,mat resp$,ckey)
 00862   if ckey=5 then goto L900
 00870   for j=1 to 20
 00880     if resp$(j)="True" then let skipit$(j)="Y" else let skipit$(j)="N"
@@ -132,8 +132,8 @@
 00906     open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",RecL=167,Replace",internal,output 
 00907     close #h_rpwork: 
 00908   end if 
-00909   let fnindex_it(env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno'),env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),"1,11")
-00910   let fnstatus_close
+00909   fnindex_it(env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno'),env$('Q')&"\PRmstr\rpwork"&wsid$&"Idx.h"&env$('cno'),"1,11")
+00910   fnstatus_close
 00911   if additional=2 then 
 00912 !   if exists(env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')) then
 00914     gosub OFILE
@@ -210,63 +210,63 @@
 01592   if foundept=1 then 
 01594     read #9,using "form pos 4,c 20",key=rpad$(ltrm$(str$(dep)),3): deptname$ nokey ignore
 01596   end if 
-01602   let fntos(sn$="prinput-4")
+01602   fntos(sn$="prinput-4")
 01604   let respc=0: let mylen=20: let franum=0: let rc=0
-01610   let fnlbl(1,1,"Employee Number: "&str$(eno),60,2,0,franum)
-01620   let fnlbl(2,1,"Employee Name: "&rtrm$(em$),60,2,0,franum)
-01630   let fnlbl(3,1,"Department Number: "&str$(dep)&" "&trim$(deptname$),60,2,0,franum)
-01640   let fnlbl(5,1,"Regular Hours:",mylen,1,0,franum)
-01650   let fntxt(5,mylen+2,12,0,1,"10",0,".",franum)
+01610   fnlbl(1,1,"Employee Number: "&str$(eno),60,2,0,franum)
+01620   fnlbl(2,1,"Employee Name: "&rtrm$(em$),60,2,0,franum)
+01630   fnlbl(3,1,"Department Number: "&str$(dep)&" "&trim$(deptname$),60,2,0,franum)
+01640   fnlbl(5,1,"Regular Hours:",mylen,1,0,franum)
+01650   fntxt(5,mylen+2,12,0,1,"10",0,".",franum)
 01652   let resp$(rc+=1)=str$(inp(1))
-01660   let fnlbl(6,1,"Overtime Hours:",mylen,1,0,franum)
-01670   let fntxt(6,mylen+2,12,0,1,"10",0,".",franum)
+01660   fnlbl(6,1,"Overtime Hours:",mylen,1,0,franum)
+01670   fntxt(6,mylen+2,12,0,1,"10",0,".",franum)
 01672   let resp$(rc+=1)=str$(inp(2))
-01680   let fnlbl(7,1,"Sick Hours:",mylen,1,0,franum)
-01690   let fntxt(7,mylen+2,12,0,1,"10",0,".",franum)
+01680   fnlbl(7,1,"Sick Hours:",mylen,1,0,franum)
+01690   fntxt(7,mylen+2,12,0,1,"10",0,".",franum)
 01692   let resp$(rc+=1)=str$(inp(3))
-01700   let fnlbl(8,1,"Vacation Hours:",mylen,1,0,franum)
-01710   let fntxt(8,mylen+2,12,0,1,"10",0,".",franum)
+01700   fnlbl(8,1,"Vacation Hours:",mylen,1,0,franum)
+01710   fntxt(8,mylen+2,12,0,1,"10",0,".",franum)
 01712   let resp$(rc+=1)=str$(inp(4))
 01720 L1720: ! note: the goto that points to this line just can't be right...
-01722   let fnlbl(9,1,"Holiday Hours:",mylen,1,0,franum)
-01730   let fntxt(9,mylen+2,12,0,1,"10",0,".",franum)
+01722   fnlbl(9,1,"Holiday Hours:",mylen,1,0,franum)
+01730   fntxt(9,mylen+2,12,0,1,"10",0,".",franum)
 01732   let resp$(rc+=1)=str$(inp(5))
-01740   let fnlbl(10,1,"Salary:",mylen,1,0,franum)
-01750   let fntxt(10,mylen+2,12,0,1,"10",0,".",franum)
+01740   fnlbl(10,1,"Salary:",mylen,1,0,franum)
+01750   fntxt(10,mylen+2,12,0,1,"10",0,".",franum)
 01752   let resp$(rc+=1)=str$(inp(6))
-01760   let fnlbl(11,1,"Other Compensation:",mylen,1,0,franum)
-01770   let fntxt(11,mylen+2,12,0,1,"10",0,".",franum)
+01760   fnlbl(11,1,"Other Compensation:",mylen,1,0,franum)
+01770   fntxt(11,mylen+2,12,0,1,"10",0,".",franum)
 01772   let resp$(rc+=1)=str$(inp(7))
-01780   let fnlbl(12,1,"Meals:",mylen,1,0,franum)
-01790   let fntxt(12,mylen+2,12,0,1,"10",0,".",franum)
+01780   fnlbl(12,1,"Meals:",mylen,1,0,franum)
+01790   fntxt(12,mylen+2,12,0,1,"10",0,".",franum)
 01792   let resp$(rc+=1)=str$(inp(8))
-01800   let fnlbl(13,1,"Tips:",mylen,1,0,franum)
-01810   let fntxt(13,mylen+2,12,0,1,"10",0,".",franum)
+01800   fnlbl(13,1,"Tips:",mylen,1,0,franum)
+01810   fntxt(13,mylen+2,12,0,1,"10",0,".",franum)
 01812   let resp$(rc+=1)=str$(inp(9))
-01820   let fnlbl(15,1,"Reg Hourly Rate:",mylen,1,0,franum)
-01830   let fntxt(15,mylen+2,12,0,1,"10",0,".",franum)
+01820   fnlbl(15,1,"Reg Hourly Rate:",mylen,1,0,franum)
+01830   fntxt(15,mylen+2,12,0,1,"10",0,".",franum)
 01832   let resp$(rc+=1)=str$(hr(1))
-01840   let fnlbl(16,1,"O/T Hourly Rate:",mylen,1,0,franum)
-01850   let fntxt(16,mylen+2,12,0,1,"10",0,".",franum)
+01840   fnlbl(16,1,"O/T Hourly Rate:",mylen,1,0,franum)
+01850   fntxt(16,mylen+2,12,0,1,"10",0,".",franum)
 01852   let resp$(rc+=1)=str$(hr(2))
 01860   for j=1 to 20
 01870 ! If TRIM$(DEDNAMES$)="" Then Goto 1450
 01880     if trim$(dednames$(j))="" then let name$(j)="" else let name$(j)=trim$(dednames$(j))&":"
 01890     if skipit$(j)="Y" then let inp(j+9)=0
 01892     let disable_deduction=0 : if trim$(name$(j))='' then let disable_deduction=1
-01900     let fnlbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
-01910     let fntxt(j+4,47,12,0,1,"10",disable_deduction,".",franum)
+01900     fnlbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
+01910     fntxt(j+4,47,12,0,1,"10",disable_deduction,".",franum)
 01912     let resp$(rc+=1)=str$(inp(j+9))
 01920   next j
-01930   let fncmdkey("&Next",1,1,0,"Record this time" )
+01930   fncmdkey("&Next",1,1,0,"Record this time" )
 01940   if editmode=0 then let fncmdkey("&Skip Department F2",2,0,0,"Skips this department.")
 01941   if editmode=0 and semp>=1 then let fncmdkey("&Prev Department",12,0,0,"Go back to last department.")
 01950   if editmode=1 then let fncmdkey("&Delete Department",10,0,0,"Deletes the hours, etc for this department.")
 01960   if editmode=0 then let fncmdkey("&Track Hours",8,0,0,"Track hours other than those entered above.")
-01970   let fncmdkey("&Make Changes Permanent",3,0,0,"Makes any rate changes or other deductions changes permanent in the employee record.")
+01970   fncmdkey("&Make Changes Permanent",3,0,0,"Makes any rate changes or other deductions changes permanent in the employee record.")
 01980   if editmode=0 then let fncmdkey("E&xit",5,0,1,"Returns to menu")
 01990   if editmode=1 then let fncmdkey("&Finish",7,0,1,"Finished making corrections")
-02000   let fnacs(sn$,0,mat resp$,ckey) ! ask time
+02000   fnacs(sn$,0,mat resp$,ckey) ! ask time
 02010   if ckey=5 and editmode=0 then goto FINISH
 02020   for j=1 to 9
 02030     let inp(j)=val(resp$(j))
@@ -295,13 +295,13 @@
 02240   if inp(3)=0 then goto L2260
 02250   mat ml$(2)
 02252   let ml$(1)="This employee is not eligible for Sick Leave!": let ml$(2)="Click OK to return to previous screen. "
-02254   let fnmsgbox(mat ml$,resp$,cap$,0)
+02254   fnmsgbox(mat ml$,resp$,cap$,0)
 02256   goto ASK_TIME
 02260 L2260: if em9><-2 then goto L2290
 02270   if inp(4)=0 then goto L2290
 02280   mat ml$(2)
 02282   let ml$(1)="This employee is not eligible for Vacation!": let ml$(2)="Click OK to return to previous screen. "
-02284   let fnmsgbox(mat ml$,resp$,cap$,0)
+02284   fnmsgbox(mat ml$,resp$,cap$,0)
 02286   goto ASK_TIME
 02290 L2290: ! 
 02292   for j=1 to 5
@@ -340,57 +340,57 @@
 02570   close #109: ioerr ignore
 02580   close #108: ioerr ignore
 02590 PROOF_TOTALS: ! 
-02592   let fn_add_proof_totals(teno,count_employees_entered,mat tinp)
-02595   let fntos(sn$="ProofTotal")
+02592   fn_add_proof_totals(teno,count_employees_entered,mat tinp)
+02595   fntos(sn$="ProofTotal")
 02600   let respc=0 : let mylen=20 : let franum=0 : let rc=0
-02605   let fnlbl(1,1,"P R O O F  T O T A L S",60,2,0,franum)
-02610   let fnlbl(2,1,"Total Employees/Departments Entered: "&str$(count_employees_entered),60,2,0,franum)
-02612   let fnlbl(3,1,"Total Employee Numbers Entered: "&str$(teno),60,2,0,franum)
-02615   let fnlbl(5,1,"Regular Hours:",mylen,1,0,franum)
-02620   let fntxt(5,mylen+2,12,0,1,"10",1,".",franum)
+02605   fnlbl(1,1,"P R O O F  T O T A L S",60,2,0,franum)
+02610   fnlbl(2,1,"Total Employees/Departments Entered: "&str$(count_employees_entered),60,2,0,franum)
+02612   fnlbl(3,1,"Total Employee Numbers Entered: "&str$(teno),60,2,0,franum)
+02615   fnlbl(5,1,"Regular Hours:",mylen,1,0,franum)
+02620   fntxt(5,mylen+2,12,0,1,"10",1,".",franum)
 02625   let resp$(rc+=1)=str$(tinp(1))
-02630   let fnlbl(6,1,"Overtime Hours:",mylen,1,0,franum)
-02635   let fntxt(6,mylen+2,12,0,1,"10",1,".",franum)
+02630   fnlbl(6,1,"Overtime Hours:",mylen,1,0,franum)
+02635   fntxt(6,mylen+2,12,0,1,"10",1,".",franum)
 02640   let resp$(rc+=1)=str$(tinp(2))
-02645   let fnlbl(7,1,"Sick Hours:",mylen,1,0,franum)
-02650   let fntxt(7,mylen+2,12,0,1,"10",1,".",franum)
+02645   fnlbl(7,1,"Sick Hours:",mylen,1,0,franum)
+02650   fntxt(7,mylen+2,12,0,1,"10",1,".",franum)
 02655   let resp$(rc+=1)=str$(tinp(3))
-02660   let fnlbl(8,1,"Vacation Hours:",mylen,1,0,franum)
-02665   let fntxt(8,mylen+2,12,0,1,"10",1,".",franum)
+02660   fnlbl(8,1,"Vacation Hours:",mylen,1,0,franum)
+02665   fntxt(8,mylen+2,12,0,1,"10",1,".",franum)
 02670   let resp$(rc+=1)=str$(tinp(4))
-02675   let fnlbl(9,1,"Holiday Hours:",mylen,1,0,franum)
-02680   let fntxt(9,mylen+2,12,0,1,"10",1,".",franum)
+02675   fnlbl(9,1,"Holiday Hours:",mylen,1,0,franum)
+02680   fntxt(9,mylen+2,12,0,1,"10",1,".",franum)
 02685   let resp$(rc+=1)=str$(tinp(5))
-02690   let fnlbl(10,1,"Salary:",mylen,1,0,franum)
-02695   let fntxt(10,mylen+2,12,0,1,"10",1,".",franum)
+02690   fnlbl(10,1,"Salary:",mylen,1,0,franum)
+02695   fntxt(10,mylen+2,12,0,1,"10",1,".",franum)
 02700   let resp$(rc+=1)=str$(tinp(6))
-02705   let fnlbl(11,1,"Other Compensation:",mylen,1,0,franum)
-02710   let fntxt(11,mylen+2,12,0,1,"10",1,".",franum)
+02705   fnlbl(11,1,"Other Compensation:",mylen,1,0,franum)
+02710   fntxt(11,mylen+2,12,0,1,"10",1,".",franum)
 02715   let resp$(rc+=1)=str$(tinp(7))
-02720   let fnlbl(12,1,"Meals:",mylen,1,0,franum)
-02725   let fntxt(12,mylen+2,12,0,1,"10",1,".",franum)
+02720   fnlbl(12,1,"Meals:",mylen,1,0,franum)
+02725   fntxt(12,mylen+2,12,0,1,"10",1,".",franum)
 02730   let resp$(rc+=1)=str$(tinp(8))
-02735   let fnlbl(13,1,"Tips:",mylen,1,0,franum)
-02740   let fntxt(13,mylen+2,12,0,1,"10",1,".",franum)
+02735   fnlbl(13,1,"Tips:",mylen,1,0,franum)
+02740   fntxt(13,mylen+2,12,0,1,"10",1,".",franum)
 02745   let resp$(rc+=1)=str$(tinp(9))
-02750   let fnlbl(15,1,"Reg Hourly Rate:",mylen,1,0,franum)
-02755   let fntxt(15,mylen+2,12,0,1,"10",1,".",franum)
+02750   fnlbl(15,1,"Reg Hourly Rate:",mylen,1,0,franum)
+02755   fntxt(15,mylen+2,12,0,1,"10",1,".",franum)
 02760   let resp$(rc+=1)=str$(hr(1))
-02765   let fnlbl(16,1,"O/T Hourly Rate:",mylen,1,0,franum)
-02770   let fntxt(16,mylen+2,12,0,1,"10",1,".",franum)
+02765   fnlbl(16,1,"O/T Hourly Rate:",mylen,1,0,franum)
+02770   fntxt(16,mylen+2,12,0,1,"10",1,".",franum)
 02775   let resp$(rc+=1)=str$(hr(2))
 02780   for j=1 to 20
 02785     if trim$(dednames$(j))="" then let name$(j)="" else let name$(j)=trim$(dednames$(j))&":"
-02790     let fnlbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
-02795     let fntxt(j+4,47,12,0,1,"10",1,".",franum)
+02790     fnlbl(j+4,25,trim$(name$(j)),mylen,1,0,franum)
+02795     fntxt(j+4,47,12,0,1,"10",1,".",franum)
 02800     let resp$(rc+=1)=str$(tinp(j+9))
 02805   next j
-02900   let fncmdkey("Co&rrections",1,0,0,"Correct any entries.")
-02910   let fncmdkey("&Listing",2,0,0,"Prints a listing of the entries you have made.")
-02920   let fncmdkey("&Calculate",3,1,0,"Calculates the pay.")
-02930   let fncmdkey("&Add",4,0,0,"Add additional time. (If you missed a department, you should delete the original entries on that employee and completely re-enter the employee time.")
-02940   let fncmdkey("E&xit",5,0,1,"Exit without calculating")
-02950   let fnacs(sn$,0,mat resp$,ckey) ! proof totals
+02900   fncmdkey("Co&rrections",1,0,0,"Correct any entries.")
+02910   fncmdkey("&Listing",2,0,0,"Prints a listing of the entries you have made.")
+02920   fncmdkey("&Calculate",3,1,0,"Calculates the pay.")
+02930   fncmdkey("&Add",4,0,0,"Add additional time. (If you missed a department, you should delete the original entries on that employee and completely re-enter the employee time.")
+02940   fncmdkey("E&xit",5,0,1,"Exit without calculating")
+02950   fnacs(sn$,0,mat resp$,ckey) ! proof totals
 02960   let estat=0
 02970   cor=ckey
 02980   if ckey=5 then goto XITWOCAL
@@ -433,13 +433,13 @@
 35060   rewrite #11,using "form pos 49,n 8,c 20",rec=1: fndate_mmddyy_to_ccyymmdd(prd),d1$ norec ignore
 35080   close #11: 
 35100   if jobcost=1 then close #5,free: 
-35120   let fnchain("S:\Payroll\Calc") ! /r
+35120   fnchain("S:\Payroll\Calc") ! /r
 35140 ! ______________________________________________________________________
 35160 EMP_PREV_ENTERED_WARN: ! r:
 35162   mat ml$(2)
 35180   let ml$(1)="Employee number "&str$(eno)&" has been previously entered."
 35200   let ml$(2)="Do you wish to continue anyway? "
-35220   let fnmsgbox(mat ml$,resp$,cap$,52)
+35220   fnmsgbox(mat ml$,resp$,cap$,52)
 35240   if resp$(1:1)="Y" then goto L1290 ! IN1=2
 35260   if resp$(1:1)="N" then goto L1060 ! in1=1
 35280 ! /r
@@ -488,14 +488,14 @@
 36160   goto L2220
 38000 CORRECTIONS: ! r:
 38020   let editmode=1
-38040   let fntos(sn$="Employee-ask2")
+38040   fntos(sn$="Employee-ask2")
 38060   let respc=0
-38080   let fnlbl(1,1,"Employee to Correct:",22,right)
-38100   let fncmbemp(1,24)
+38080   fnlbl(1,1,"Employee to Correct:",22,right)
+38100   fncmbemp(1,24)
 38120   let resp$(respc+=1)=""
-38140   let fncmdkey("&Next",1,1,0,"Make corrections to this employee's time." )
-38160   let fncmdkey("&Finish",6,0,1,"Finished making corrections")
-38180   let fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+38140   fncmdkey("&Next",1,1,0,"Make corrections to this employee's time." )
+38160   fncmdkey("&Finish",6,0,1,"Finished making corrections")
+38180   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 38200   if ckey=6 then let editmode=0: goto PROOF_TOTALS ! finished corretions
 38220   let eno=ent=val(resp$(1)(1:8))
 38240   read #h_rpwork,using F_RPWORK,key>=cnvrt$("pic(ZZZZZZZZ)",eno)&cnvrt$("pic(ZZZ)",0),release: depeno,dep2,mat inp,gpd,mat hr nokey L4790
@@ -506,7 +506,7 @@
 38330   mat ml$(2)
 38340   let ml$(1)="No time has been entered on employee number "&str$(eno)&'.'
 38360   let ml$(2)="Do you wish to enter new time on this employee? "
-38370   let fnmsgbox(mat ml$,resp$,cap$,52)
+38370   fnmsgbox(mat ml$,resp$,cap$,52)
 38380   if resp$(1:1)="Y" then 
 38390     goto ENTER_TIME ! ASK_EMPLOYEE
 38400   else 
@@ -551,7 +551,7 @@
 44180       let ml$(1)="You have previously calculated pay using this same payroll date on employee # "&x$
 44200       let ml$(2)="You must either use a different date or reverse the previous calculation. "
 44220       let ml$(3)="Click OK to return to previous screen. "
-44240       let fnmsgbox(mat ml$,resp$,cap$,0)
+44240       fnmsgbox(mat ml$,resp$,cap$,0)
 44260       goto L1060
 44280     end if 
 44300   loop 
@@ -571,7 +571,7 @@
 48020   mat ml$(2)
 48040   let ml$(1)="To save your changes, next time you choose to 'Enter Time Sheets'"
 48060   let ml$(2)="you must select 'Additions to Previous Input'"
-48080   let fnmsgbox(mat ml$,resp$,cap$,0)
+48080   fnmsgbox(mat ml$,resp$,cap$,0)
 48100   goto XIT
 48120 ! /r
 50000 ! DUPLICATE_DEPARTMENTS: ! r:
@@ -584,7 +584,7 @@
 50140 !  let ml$(2)="on the same employee. Choose a different department "
 50160 !  let ml$(3)="or choose to make corrections to fix the previous entry. "
 50180 !  let ml$(4)="Click OK to return to previous screen. "
-50200 !  let fnmsgbox(mat ml$,resp$,cap$,0)
+50200 !  fnmsgbox(mat ml$,resp$,cap$,0)
 50220 ! /r goto L1060
 52000 ! WRH_SIMPLE_OFFSET_HOLIDAY: ! r: offset holiday hours for West Rest Haven
 52020 !   if sickhrs>0 then 
@@ -638,7 +638,7 @@
 56840   let ml$(1)="Can't find an employee record for employee # "&trim$(em$)&"!"
 56860   let ml$(2)="Time was entered on "&cnvrt$("pic(zz/zz/zz",dte)
 56880   let ml$(2)="Time for this employee will be skipped."
-56900   let fnmsgbox(mat ml$,resp$,cap$,0)
+56900   fnmsgbox(mat ml$,resp$,cap$,0)
 56920   goto L5520
 56940 L5720: ! 
 56960   if eno=holdeno then goto L5750
@@ -689,21 +689,21 @@
 60160   return  ! /r
 62000 ASK_EMPLOYEE: ! r:
 62020   let editmode=0
-62040   let fntos(sn$="Employee-ask")
+62040   fntos(sn$="Employee-ask")
 62060   let respc=0
-62080   let fnlbl(1,1,"Employee:",11,right)
-62100   let fncmbemp(1,13)
+62080   fnlbl(1,1,"Employee:",11,right)
+62100   fncmbemp(1,13)
 62120   let resp$(respc+=1)=""
-62140   let fncmdkey("&Next",1,1,0,"Enter time on this employee" )
-62160   let fncmdkey("&Search",2,0,0,"Search for employee record")
-62180   let fncmdkey("&Finish",6,0,1,"Finished entering hours")
-62200 !                     Let FNCMDKEY("E&xit",5,0,1,"Returns to menu") !   fix kj
-62220   let fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+62140   fncmdkey("&Next",1,1,0,"Enter time on this employee" )
+62160   fncmdkey("&Search",2,0,0,"Search for employee record")
+62180   fncmdkey("&Finish",6,0,1,"Finished entering hours")
+62200 !                     fnCMDKEY("E&xit",5,0,1,"Returns to menu") !   fix kj
+62220   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 62240   let eno=ent=val(resp$(1)(1:8))
 62260   if ckey=1 then 
 62280     goto ENTER_TIME
 62300   else if ckey=2 then 
-62320     let fnemployee_srch(x$,fixgrid)
+62320     fnemployee_srch(x$,fixgrid)
 62340     let eno=val(x$)
 62360     goto ENTER_TIME
 62380   else if ckey=5 or ckey=6 then 
@@ -736,20 +736,20 @@
 66040   mat tinp=(0)
 66060 ! on fkey 5 goto PL_XIT
 66080   if additional=2 then goto L3160
-66110   let fncreg_read('enter time sheets proof sequence',printorder$) : let printorder=val(printorder$) conv ignore
+66110   fncreg_read('enter time sheets proof sequence',printorder$) : let printorder=val(printorder$) conv ignore
 66120 L3080: ! 
-66140   let fntos(sn$="Print-order")
-66170   let fnlbl(1,1,"Sequence:",11,right)
-66180   let fnopt(1,13,"Account Order",0)
+66140   fntos(sn$="Print-order")
+66170   fnlbl(1,1,"Sequence:",11,right)
+66180   fnopt(1,13,"Account Order",0)
 66200   if printorder<>2 then let resp$(1)="True" else let resp$(1)='False'
-66220   let fnopt(2,13,"Order Entered",0)
+66220   fnopt(2,13,"Order Entered",0)
 66240   if printorder=2 then let resp$(2)='True' else let resp$(2)="False"
-66260   let fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-66280   let fnacs(sn$,0,mat resp$,ckey)
+66260   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
+66280   fnacs(sn$,0,mat resp$,ckey)
 66300   if resp$(1)="False" and resp$(2)="False" then goto L3080
 66320   if resp$(1)="True" then let printorder=1 else let printorder=2
-66330   let fncreg_write('enter time sheets proof sequence',str$(printorder))
-66340   let fnopenprn
+66330   fncreg_write('enter time sheets proof sequence',str$(printorder))
+66340   fnopenprn
 66360 L3160: ! 
 66380   restore #h_rpwork: : let record=0
 66390   let pc2=0
@@ -769,7 +769,7 @@
 66660     let ml$(2)="You must delete this person's time for now and either reverse the previous calculation "
 66680     let ml$(3)="or enter the time using a differen payroll date. "
 66700     let ml$(4)="                         Click OK to continue. "
-66720     let fnmsgbox(mat ml$,resp$,cap$,0)
+66720     fnmsgbox(mat ml$,resp$,cap$,0)
 66740     if additional=2 then 
 66760       delete #h_rpwork,rec=rec(h_rpwork): norec L3270
 66780       goto PL_READ
@@ -842,6 +842,6 @@
 72060     close #h_rpwork: 
 72080   else 
 72100     gosub PL_PRINT_EMP_BLOCK
-72120     let fncloseprn
+72120     fncloseprn
 72140   end if 
 72160   goto PROOF_TOTALS ! /r

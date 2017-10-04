@@ -5,15 +5,15 @@
 10400   on error goto ERTN
 10500 ! ______________________________________________________________________
 10600   dim srv$(3)*1,cap$*128,txt$*80,tg(11)
-10800   let fntop(program$,cap$="Forgot to Zero Year-To-Date")
+10800   fntop(program$,cap$="Forgot to Zero Year-To-Date")
 10900 MAIN: ! 
 11000   let sn$="forgot"
-11100   let fntos(sn$)
+11100   fntos(sn$)
 11200   let txt$="First Billing Date of New Year (MMDDYY):"
-11300   let fnlbl(1,1,txt$,42,1)
-11400   let fntxt(1,44,8,0,0,"1")
+11300   fnlbl(1,1,txt$,42,1)
+11400   fntxt(1,44,8,0,0,"1")
 11500   let resp$(1)=str$(fbd)
-11600   let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+11600   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 11700   let fbd$=lpad$(str$(val(resp$(1))),6)
 11800   let fbd=val(resp$(1)) conv MAIN
 11900   if ckey=5 then goto XIT

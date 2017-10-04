@@ -7,7 +7,7 @@
 10050       close #h_company: 
 10060       if ficarate=0 then let ficarate=6.2
 10070     end if  ! ss_empee_setup<>cno
-10080     let fnss_employee=ficarate
+10080     fnss_employee=ficarate
 10090   fnend  ! fnss_employee
 10100   def library fnss_employer
 10102     cno=val(env$('cno'))
@@ -18,5 +18,5 @@
 10150       close #h_company: 
 10160       if ficarate=0 then let ficarate=6.2
 10170     end if  ! ss_empee_setup<>cno
-10180     let fnss_employer=ficarate
+10180     fnss_employer=ficarate
 10190   fnend  ! fnss_employee

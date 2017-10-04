@@ -2,7 +2,7 @@
 00020 ! ???
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnputcno,fnerror,fnindex_it
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim d$*50,rf(6),bc(12),bp(12),bm(12),ta(2),tr(7),tr$*12,td$*30
@@ -19,7 +19,7 @@
 00190   pr newpage
 00200   pr fields "10,5,C 60": "CONVERSION FOR COMPANY #"&str$(cno)&" IN PROCESS"
 00210 ! 
-00220   let fnputcno(cno)
+00220   fnputcno(cno)
 00230   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,outin,keyed 
 00240   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",Replace,RecL=338",internal,output 
 00250 L250: read #2,using L260: dno,ano,sno,d$,rf(1),rf(3),rf(5),bb,cb,mat bc,mat bp,mat bm,pbp,rf(2),rf(4),rf(6) eof L300
@@ -188,7 +188,7 @@
 01880   close #2: 
 01890   execute "COPY "&env$('Temp')&"\Work."&session$&", "&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&""
 01900   execute "Index "&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&","&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",1,4,Replace,DupKeys"
-01910   let fnputcno(cno)
+01910   fnputcno(cno)
 01920   open #1: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno)&",RecL=110,Replace",internal,output 
 01930   close #1: 
 01940 L1940: open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno),internal,outin,relative ioerr L1990

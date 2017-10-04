@@ -6,12 +6,12 @@
 11000 ! ______________________________________________________________________
 11200   dim cap$*128
 11400 ! ______________________________________________________________________
-11600   let fntop(program$,cap$='AcPrCks Hamster')
-12000   let fn_setup_hamster
-12400   let fn_open_file
+11600   fntop(program$,cap$='AcPrCks Hamster')
+12000   fn_setup_hamster
+12400   fn_open_file
 12600   if sum(mat sp)=0 then mat sp(0)
-12800   let fnhamster("AcPrCks",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
-13000   let fn_close_file
+12800   fnhamster("AcPrCks",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+13000   fn_close_file
 13200   goto XIT
 13400 ! ______________________________________________________________________
 13600   def fn_open_file
@@ -41,13 +41,13 @@
 18400     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
 18600 ! 
 18800 ! fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,ar_mask,storage_position)
-19000     let fn_add_rec("ENo ",12,'N',4,mask_number)
-19200     let fn_add_rec("Date ",12,'PD',4,mask_number)
-19400     let fn_add_rec("Check Number ",12,'PD',4,mask_number)
+19000     fn_add_rec("ENo ",12,'N',4,mask_number)
+19200     fn_add_rec("Date ",12,'PD',4,mask_number)
+19400     fn_add_rec("Check Number ",12,'PD',4,mask_number)
 19600     for x=1 to 19
-19800       let fn_add_rec("D("&str$(x+3)&")",12,'PD',5.2,mask_pointtwo)
+19800       fn_add_rec("D("&str$(x+3)&")",12,'PD',5.2,mask_pointtwo)
 20000     next x
-20200     let fn_add_rec("NTA",12,'PD',3,mask_number)
+20200     fn_add_rec("NTA",12,'PD',3,mask_number)
 20400   fnend  ! fn_setup_hamster
 20600   def fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,ar_mask,storage_position)
 20800     if storage_length=0 then let storage_length=textbox_len

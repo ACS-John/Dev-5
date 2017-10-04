@@ -2,9 +2,9 @@
 00030   on error goto L990
 00040   library 'S:\Core\Library': fncno,fnxit,fntop,fncloseprn,fnopenprn,fnconsole
 00050   dim cde$*6,des$*55,gl(3),cnam$*40,a$*5,cap$*128
-00060   let fntop(program$,cap$="Invoice Description")
-00070   let fncno(cno,cnam$)
-00075   let fnconsole(1)
+00060   fntop(program$,cap$="Invoice Description")
+00070   fncno(cno,cnam$)
+00075   fnconsole(1)
 00080   let hp1=43-int(len(rtrm$(cnam$))/2)
 00090 ! 
 00100   let io1$(1)="14,5,C 55,U,N": let io1$(2)="16,40,N 10.2,U,N"
@@ -66,7 +66,7 @@
 00720 L720: write #1,using L600: cde$,des$,da,mat gl: let new1=1
 00730   goto L510
 00740 L740: pr newpage
-00750   let fnopenprn
+00750   fnopenprn
 00760   pr fields "10,20,C 45": "INVOICE DESCRIPTION PROOF LISTING IN PROCESS"
 00770   pr fields "24,3,C 30,N": "Press F5 to stop!"
 00780   on fkey 5 goto L880

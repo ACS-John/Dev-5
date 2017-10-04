@@ -7,19 +7,19 @@
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
 00080     dim gl$*12,gl$(10)*12,percent(10),de$*30,desc$(10)*30
 00090 ! ______________________________________________________________________
-00100     let fncno(cno,cnam$)
+00100     fncno(cno,cnam$)
 00110     cap$="Checkbook update Payees from v0 to v1"
 00120 ! ______________________________________________________________________
-00130     let fnstatus('updating payee file.')
+00130     fnstatus('updating payee file.')
 00180     open #paymstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paymstr.h"&str$(cno),internal,outin,relative 
 00190     if version(paymstr)=1 then !:
             let msgline$(4)="Paymstr is already version 1" !:
             let msgline$(5)="press enter to continue" : let msgline$(6)="" !:
-            let fnmsgbox(mat msgline$,response$,cap$,1) !:
+            fnmsgbox(mat msgline$,response$,cap$,1) !:
             goto XIT
 00200     close #paymstr: 
-00210     let fnCopy(env$('Q')&"\CLmstr\Paymstr.h"&str$(cno),env$('Q')&"\CLmstr\Paymstr.h"&str$(cno),736)
-00232     let fnindex_it(env$('Q')&"\CLmstr\PayMstr.h"&str$(cno),env$('Q')&"\CLmstr\PayIdx2.h"&str$(cno),"9 30")
+00210     fnCopy(env$('Q')&"\CLmstr\Paymstr.h"&str$(cno),env$('Q')&"\CLmstr\Paymstr.h"&str$(cno),736)
+00232     fnindex_it(env$('Q')&"\CLmstr\PayMstr.h"&str$(cno),env$('Q')&"\CLmstr\PayIdx2.h"&str$(cno),"9 30")
 00240     open #paymstr1:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno),internal,outin,keyed 
 00250     open #paymstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&str$(cno),internal,outin,keyed 
 00261     let version(paymstr1,1)

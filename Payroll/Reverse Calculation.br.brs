@@ -13,7 +13,7 @@
 00130   dim ml$(3)*100,fullname$(20)*20,abrevname$(20)*8,newcalcode(20)
 00140   dim newdedfed(20),dedfica(20),dedst(20),deduc(20),dedcode(20),gl$(20)*12
 00150 ! ______________________________________________________________________
-00160   let fntop(program$,cap$="Reverse Calculation")
+00160   fntop(program$,cap$="Reverse Calculation")
 00180 ! 
 00190   cd1=val(date$(4:5)&date$(7:8)&date$(1:2))
 00200   fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
@@ -53,29 +53,29 @@
 00440 ! ______________________________________________________________________
 00450 ASK_EMPLOYEE_NO: ! 
 00460   if reverse_all=1 then goto L730
-00470   let fntos(sn$="Prrevcal")
+00470   fntos(sn$="Prrevcal")
 00472   let respc=0
-00480   let fnlbl(1,1,"Employee to Reverse:",25,1)
-00490   let fncombof("Employee",1,28,0,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),2,0, "Select the employee to reverse.")
+00480   fnlbl(1,1,"Employee to Reverse:",25,1)
+00490   fncombof("Employee",1,28,0,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),2,0, "Select the employee to reverse.")
 00492   let resp$(respc+=1)="[All]"
-00500   let fnlbl(2,1,"Payroll Date:",25,1)
-00510   let fntxt(2,28,12,0,1,"3",0,"You can reverse a check from any pay period.  Be sure the payroll date is correct.")
+00500   fnlbl(2,1,"Payroll Date:",25,1)
+00510   fntxt(2,28,12,0,1,"3",0,"You can reverse a check from any pay period.  Be sure the payroll date is correct.")
 00520   let resp$(respc+=1)=str$(d1)
-00530   let fnlbl(3,1,"Check Number:",25,1)
-00540   let fntxt(3,28,8,0,1,"30",0,"Only applicable if checks have been printed. ")
+00530   fnlbl(3,1,"Check Number:",25,1)
+00540   fntxt(3,28,8,0,1,"30",0,"Only applicable if checks have been printed. ")
 00550   let resp$(respc+=1)= ""
 00560   if exists(env$('Q')&'\CLmstr\BankMstr.h'&env$('cno')) then 
-00570     let fnlbl(4,1,"Bank Code for Checkbook:",25,1)
-00580     let fncombof('Bank',4,28,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list,0,'',frame)
+00570     fnlbl(4,1,"Bank Code for Checkbook:",25,1)
+00580     fncombof('Bank',4,28,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list,0,'',frame)
 00582     let resp$(resp_cl_bank_code=respc+=1)=str$(bcde)
 00584   end if 
 00590   if success=1 then 
-00592     let fnlbl(6,1,"Employee Number "&str$(eno)&" successfully reversed!",40,1)
+00592     fnlbl(6,1,"Employee Number "&str$(eno)&" successfully reversed!",40,1)
 00594   end if 
-00600   let fncmdkey("&Next",1,1,0,"Proceed with reversing of payroll." )
-00602   let fncmdkey("E&xit",5,0,1,"Returns to menu")
+00600   fncmdkey("&Next",1,1,0,"Proceed with reversing of payroll." )
+00602   fncmdkey("E&xit",5,0,1,"Returns to menu")
 00610 ! 
-00620   let fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+00620   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 00630   if ckey=5 then goto XIT
 00640   let success=0
 00650   if resp$(1)="[All]" then let reverse_all=1 : goto L670
@@ -84,7 +84,7 @@
 00680   if d1=0 then 
 00682     mat ml$(2)
 00684     let ml$(1)="You must enter the payroll date!"
-00686     let fnmsgbox(mat ml$,resp$,cap$,0)
+00686     fnmsgbox(mat ml$,resp$,cap$,0)
 00688     goto ASK_EMPLOYEE_NO
 00689   end if 
 00690   let w1=val(resp$(3))
@@ -143,13 +143,13 @@
 01190 L1190: mat ml$(2) 
 01192   let ml$(1)="Employee Number "&ltrm$(x$)&" does not exist!" 
 01194   let ml$(2)="Please select a different Employee Number." 
-01196   let fnmsgbox(mat ml$,resp$,cap$,0)
+01196   fnmsgbox(mat ml$,resp$,cap$,0)
 01200   goto ASK_EMPLOYEE_NO
 01210 ! ______________________________________________________________________
 01220 L1220: mat ml$(2) 
 01222   let ml$(1)="No information found for Employee Number "&ltrm$(x$) 
 01224   let ml$(2)="Please select a different Employee Number." 
-01226   let fnmsgbox(mat ml$,resp$,cap$,0)
+01226   fnmsgbox(mat ml$,resp$,cap$,0)
 01230   goto ASK_EMPLOYEE_NO
 01240 ! ______________________________________________________________________
 01250 UPDATE_CHECKBOOK: ! r:
@@ -160,7 +160,7 @@
 01300 L1300: mat ml$(2) 
 01302   let ml$(1)="Did not find check # "&str$(w1)&" in the Check " 
 01304   let ml$(2)="Book system. Will proceed without voiding." 
-01306   let fnmsgbox(mat ml$,resp$,cap$,0)
+01306   fnmsgbox(mat ml$,resp$,cap$,0)
 01310   goto L1510
 01320 L1320: form pos 1,n 2,n 1,c 8,g 6,pd 10.2,c 8,c 35,n 1,n 6,n 1
 01330   adr=tr(1)
@@ -192,7 +192,7 @@
 01600   mat ml$(2) 
 01602   let ml$(1)="Do you wish to create reversing" 
 01604   let ml$(2)="General Ledger entries? (Y/N)?" 
-01606   let fnmsgbox(mat ml$,resp$,cap$,292)
+01606   fnmsgbox(mat ml$,resp$,cap$,292)
 01610   if resp$(1:1)="Y" then let pgl1=1 else let pgl1=0
 01620   if pgl1=1 then gosub POSTGL1
 01630   return  ! /r
@@ -207,13 +207,13 @@
 01720   close #1: 
 01730   if glb=2 then gosub L3690
 01740   L1740: !
-01780   let fntos(sn$="Prrevcal2")
+01780   fntos(sn$="Prrevcal2")
 01782   let respc=0
-01790   let fnlbl(1,1,"General Ledger Posting Date:",25,1)
-01800   let fntxt(1,28,12,0,1,"3",0,"If this revesing entry should be posted to the general ledger, what date should be used?")
-01810   let fncmdkey("&Next",1,1,0,"Proceed with reversing entry." )
-01812   let fncmdkey("E&xit",5,0,1,"Don't Post")
-01820   let fnacs(sn$,0,mat resp$,ckey) ! posting date
+01790   fnlbl(1,1,"General Ledger Posting Date:",25,1)
+01800   fntxt(1,28,12,0,1,"3",0,"If this revesing entry should be posted to the general ledger, what date should be used?")
+01810   fncmdkey("&Next",1,1,0,"Proceed with reversing entry." )
+01812   fncmdkey("E&xit",5,0,1,"Don't Post")
+01820   fnacs(sn$,0,mat resp$,ckey) ! posting date
 01830   if ckey<>5 then 
 01840     let dat1=val(resp$(1))
 01850     if glb=2 then let glwk$=env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dat1)&".H"&env$('cno')
@@ -228,7 +228,7 @@
 01950       let prgl(j,3)=val(prgl$(j)(10:12))
 01960     next j
 01970     let nametab=36-len(rtrm$(a$))/2
-01980     let fnopenprn
+01980     fnopenprn
 01990     gosub glDistHeaders
 02000   end if
 02010 return  ! /r
@@ -301,7 +301,7 @@
 02690   end if
 02692   gosub POST_WH_AND_NET
 02700   gosub PRINT_TOTALS
-02710   let fncloseprn
+02710   fncloseprn
 02720   if glinstal=0 then goto XIT
 02730   if glb=2 then goto XIT
 02740 let fnchain("S:\acsGL\ACGLMRGE") ! /r
@@ -353,7 +353,7 @@
 03120   mat ml$(2) 
 03122   let ml$(1)="The G/L accounts you are using indicate you have seperate funds or" 
 03124   let ml$(2)="cost centers on the system.  Enter yes if you have more than one fund." 
-03126   let fnmsgbox(mat ml$,resp$,cap$,4)
+03126   fnmsgbox(mat ml$,resp$,cap$,4)
 03130   if resp$(1:1)="T" then let multigl=1
 03140   if multigl><1 then goto L3160
 03160   L3160: if multigl=2 then goto L3330
@@ -409,27 +409,27 @@
 03720   mat ml$(2) 
 03722   let ml$(1)="Did you accrue part of this payroll" 
 03724   let ml$(2)="in the previous month? (Y/N)" 
-03726   let fnmsgbox(mat ml$,resp$,cap$,36)
+03726   fnmsgbox(mat ml$,resp$,cap$,36)
 03730   accrue$=resp$(1)(1:1)
 03740   return  ! /r
 03760 ! ACCRUAL: ! r:
-03770 !   let fntos(sn$="Prrevcal3") 
+03770 !   fntos(sn$="Prrevcal3") 
 03772   !   let respc=0: let mypos=50
-03780 !   let fnlbl(1,1,"Number of Days in this Pay Period:",mypos,1)
-03790 !   let fntxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.") 
+03780 !   fnlbl(1,1,"Number of Days in this Pay Period:",mypos,1)
+03790 !   fntxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.") 
 03792   !   let resp$(1)=str$(day)
-03800 !   let fnlbl(2,1,"Number of Days to Expense in Last Month:",mypos,1)
-03810 !   let fntxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.") 
+03800 !   fnlbl(2,1,"Number of Days to Expense in Last Month:",mypos,1)
+03810 !   fntxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.") 
 03812   !   let resp$(2)=str$(dayslm)
-03820 !   let fnlbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
-03830 !   let fnqgl(3,mypos+3,0,2,pas) 
+03820 !   fnlbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
+03830 !   fnqgl(3,mypos+3,0,2,pas) 
 03832   !   let resp$(3)=fnrgl$(bankgl$)
-03840 !   let fnlbl(4,1,"Last Day of Previous Month:",mypos,1)
-03850 !   let fntxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.") 
+03840 !   fnlbl(4,1,"Last Day of Previous Month:",mypos,1)
+03850 !   fntxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.") 
 03852   !   let resp$(4)=str$(d2)
-03860 !   let fncmdkey("&Next",1,1,0,"Continue posting." ) 
-03862   !   let fncmdkey("E&xit",5,0,1,"Returns to menu")
-03870 !   let fnacs(sn$,0,mat resp$,ckey) ! ask accrual info
+03860 !   fncmdkey("&Next",1,1,0,"Continue posting." ) 
+03862   !   fncmdkey("E&xit",5,0,1,"Returns to menu")
+03870 !   fnacs(sn$,0,mat resp$,ckey) ! ask accrual info
 03880 !   if ckey=5 then goto XIT
 03890 !   let day=val(resp$(1)) ! days in pay period
 03900 !   let dayslm=val(resp$(2)) ! days last month

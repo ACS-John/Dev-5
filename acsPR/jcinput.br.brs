@@ -10,10 +10,10 @@
 00100   dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,b(4),a$(3)*30,sc$(20)*80
 00110   dim message$*40
 00120 ! ______________________________________________________________________
-00130   let fntop("S:\acsPR\JCInput",cap$="Enter Time")
-00140   let fncno(cno,cnam$)
+00130   fntop("S:\acsPR\JCInput",cap$="Enter Time")
+00140   fncno(cno,cnam$)
 00150 ! 
-00155   let fnconsole(1)
+00155   fnconsole(1)
 00160 ! ___________________________
 00170   for j=1 to 20 : let iosc$(j)=str$(j+1)&",10,C 40,UT,N" : next j
 00180   let label2$(1)="Employee Number:"
@@ -55,7 +55,7 @@
 00540 ! ______________________________________________________________________
 00550 SCR1: ! 
 00560   pr newpage
-00570   let fnopenwin(win=101,09,20,14,59,cap$)
+00570   fnopenwin(win=101,09,20,14,59,cap$)
 00580   let wrd1$(1)="1. Regular input"
 00590   let wrd1$(2)="2. Input from Diskette"
 00600   let io1$(1)="4,2,C 38,N"
@@ -69,7 +69,7 @@
 00680   let shoption=1 ! john did this to remove some other stuff
 00690 SCREENFORINPUT2: ! 
 00700   pr newpage
-00710   let fnopenwin(win=102,5,4,20,75,cap$)
+00710   fnopenwin(win=102,5,4,20,75,cap$)
 00720   let io2$(01)="04,29,G 8,UT,N"
 00730   let io2$(02)="05,29,N 1,UT,N"
 00740   let io2$(03)="06,29,N 6,UT,N"
@@ -186,7 +186,7 @@
 01780 L1780: let shoption=2 ! john did this to remove some other stuff
 01790 L1790: pr newpage
 01800   let win=104
-01810   let fnopenwin(win,10,20,14,59,cap$)
+01810   fnopenwin(win,10,20,14,59,cap$)
 01820   pr #win,fields "04,2,C 28,N": "Reference Number to correct:"
 01830   pr fields "15,35,C 09,B,5": "Done (F5)"
 01840 L1840: input #win,fields "04,31,N 5,UT,N": rr conv L1840
@@ -199,7 +199,7 @@
 01910 WHATNOWSCREEN: ! 
 01920   pr newpage
 01930   let win=103
-01940   let fnopenwin(win,8,20,15,59,cap$)
+01940   fnopenwin(win,8,20,15,59,cap$)
 01950   let wrd3$(1)="1. pr Input Proof List"
 01960   let wrd3$(2)="2. Corrections"
 01970   let wrd3$(3)="3. Additional Entries"
@@ -217,9 +217,9 @@
 02090 PRINTPROOFLIST: ! 
 02100   pr newpage
 02110   let message$="Printing Input Proof List..."
-02120   let fnwait(105,cap$,message$,1)
+02120   fnwait(105,cap$,message$,1)
 02130   on fkey 5 goto PROOF_LIST_DONE
-02140   let fnopenprn(cp,58,220,process)
+02140   fnopenprn(cp,58,220,process)
 02150   goto L2250
 02160 ! ______________________________________________________________________
 02170 PROOF_LIST_HDR: ! 
@@ -255,7 +255,7 @@
 02470 L2470: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Grand Totals",pos 38,2*n 9.2,x 29,n 13.2,skip 2
 02480 PROOF_LIST_DONE: ! 
 02490   let gt5=gt6=gt10=0
-02500   let fncloseprn
+02500   fncloseprn
 02510   goto WHATNOWSCREEN
 02520 ! ______________________________________________________________________
 02530 POSTTOJOBS: ! 
@@ -265,7 +265,7 @@
 02570   close #11: 
 02580   close #12: 
 02590   close #13: 
-02600   let fnchain("S:\acsPR\JCMerge")
+02600   fnchain("S:\acsPR\JCMerge")
 02610 ! ______________________________________________________________________
 02620 PROOF_LIST_NWPG: ! 
 02630   pr #255: newpage
@@ -329,7 +329,7 @@
 03210 ! ______________________________________________________________________
 03220 L3220: pr newpage ! INPUT FROM DISKETTE FILE
 03230   let win=102
-03240   let fnopenwin(win,10,20,15,59,cap$)
+03240   fnopenwin(win,10,20,15,59,cap$)
 03250   let io2b$(1)="8,42,CU 1,UET,N"
 03260   let io2b$(2)="10,43,Nz 6,UET,N"
 03270   pr #win,fields "4,2,Cr 26,N": "Diskette Drive:"

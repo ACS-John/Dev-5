@@ -8,9 +8,9 @@
 00130   dim z$*5,a$(5)*30,ph$*12,ss$*11,dd(10),sc(10)
 00210   dim app(20),ma(20),ap2(20),ma2(20),ca(10)
 20000 ! ______________________________________________________________________
-20200   let fncno(cno,cnam$)
+20200   fncno(cno,cnam$)
 20400 ! 
-20600   let fntop(program$(4:len(program$)-3),cap$=env$('Q')&"\CLmstr to Support")
+20600   fntop(program$(4:len(program$)-3),cap$=env$('Q')&"\CLmstr to Support")
 20800   dim system_id$(20)*2
 21000   let system_id$(01)='GL'
 21200   let system_id$(02)='AR'
@@ -72,5 +72,5 @@
 32400       if fig_array(fig_item)>1 then let fig_found=fig_item : goto FIG_XIT
 32600     next fig_item
 32800 FIG_XIT: ! 
-33000     let fn_first_item_gtr_than_one=fig_found
+33000     fn_first_item_gtr_than_one=fig_found
 33200   fnend  ! fn_first_item_gtr_than_one

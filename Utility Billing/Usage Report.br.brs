@@ -2,13 +2,13 @@
 20000 ! r: setup library, on err, dims, constants, etc
 20020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnxit,fnd1,fncmdset,fntop,fngethandle,fnopt,fnget_services
 20040   on error goto ERTN
-20060   let fntop(program$)
+20060   fntop(program$)
 20080 ! ______________________________________________________________________
 20100   dim z$*10,e$(4)*30,d(15)
 20120   dim t(3,2),r(3,2),line$*212,serviceName$(10)*20,srv$(10)*2
 20140   dim resp$(10)*128
 20160 ! ______________________________________________________________________
-22020   let fnd1(filterBillingDate)
+22020   fnd1(filterBillingDate)
 22040   fnget_services(mat serviceName$,mat srv$)
 22060   if trim$(serviceName$(1))<>"" then service1enabled=1
 22080   if trim$(serviceName$(3))="Electric" or trim$(srv$(3))="EL" or trim$(serviceName$(3))="Lawn Meter" then service3enabled=1
@@ -18,21 +18,21 @@
 24000   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 24020 ! /r
 30000 SCREEN1: ! r:
-30020   let fntos(sn$="UBUsage")
+30020   fntos(sn$="UBUsage")
 30040   let respc=0
-30120   let fnlbl(2,1,"Billing Date:",32,1)
-30140   let fntxt(2,34,8,0,1,"1")
+30120   fnlbl(2,1,"Billing Date:",32,1)
+30140   fntxt(2,34,8,0,1,"1")
 30160   let resp$(resp_billingDate:=respc+=1)=str$(filterBillingDate)
-30180   let fnlbl(3,1,"Route Number:",32,1)
-30200   let fncmbrt2(3,34)
+30180   fnlbl(3,1,"Route Number:",32,1)
+30200   fncmbrt2(3,34)
 30220   let resp$(respc_routeFilter:=respc+=1)="[All]"
-30240   let fnlbl(5,1,"Sequence:",32,1)
-30260   let fnopt(5,34,'Route/Sequence  (includes totals by route)')
+30240   fnlbl(5,1,"Sequence:",32,1)
+30260   fnopt(5,34,'Route/Sequence  (includes totals by route)')
 30280   let resp$(respc_sequenceRoute:=respc+=1)='True'
-30300   let fnopt(6,34,'Account')
+30300   fnopt(6,34,'Account')
 30320   let resp$(respc_sequenceAccount:=respc+=1)='False'
-30340   let fncmdset(3)
-30360   let fnacs(sn$,0,mat resp$,ck)
+30340   fncmdset(3)
+30360   fnacs(sn$,0,mat resp$,ck)
 30380   if ck=5 then goto XIT
 30420   let filterBillingDate=val(resp$(resp_billingDate))
 30440   if trim$(resp$(respc_routeFilter))="[All]" then 
@@ -54,7 +54,7 @@
 36120     let oldroute=filterRoute
 36140   end if
 36780 ! /r
-47000   let fnopenprn(cp,58,320,process)
+47000   fnopenprn(cp,58,320,process)
 47020   gosub HDR
 48000 NextCustomer: ! r: main report loop
 48020   read #hCustomerForReport,using F_Customer: z$,mat e$,mat d,CustomerLastBillingDate,route eof TOTAL_AND_FINISH
@@ -87,7 +87,7 @@
 48540 goto NextCustomer ! /r
 48580 FINIS: ! r:
 48590   close #hCustomerForReport: ioerr ignore
-48600   let fncloseprn
+48600   fncloseprn
 48620 goto XIT ! /r
 52000 IGNORE: continue 
 54000 NEWPGE: ! r:

@@ -14,7 +14,7 @@
 00110   dim w2(9),i1(9),t1(9),ct$*20,st$*2,ibm$*8,namcde$*1,typemp$*1,io1$(15)
 00120   dim terminat$*1,first$*15,mid$*15,last$*20,m(10),r(10),e$(10)*12
 00130 ! ______________________________________________________________________
-00140   let fntop(program$,cap$="Electronic U/C")
+00140   fntop(program$,cap$="Electronic U/C")
 00220   on fkey 5 goto XIT
 00230 ! 
 00250   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",SHR",internal,input 
@@ -191,7 +191,7 @@
 01970 END1: ! 
 01980   pr #255,using "form skip 1,pos 1,c 14,pic(zz,zzz,zzz.##)": "Total wages:",totwage,"Total Taxable:",tottaxable
 01990   pr #255,using "form pos 1,c 16,pic(zz,zzz,zzz)": "Total employees:",totemployees
-02000   let fncloseprn
+02000   fncloseprn
 02010   gosub L2040
 02020 XIT: let fnxit
 02030 ! ______________________________________________________________________

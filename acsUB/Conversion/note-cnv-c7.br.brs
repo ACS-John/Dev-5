@@ -3,7 +3,7 @@
 20040 def library fnub_cnv_note_phase_1
 20060   dim rm$*60,ra(2),newra(2)
 20080   library 'S:\Core\Library': fncno,fnstatus,fnindex_it,fnCopy
-20100   let fncno(cno)
+20100   fncno(cno)
 20120 ! 
 20140 ! r: ** phase 1 **
 20160   open #note1=1: "Name="&env$('Q')&"\UBmstr\Note1.h"&str$(cno),internal,outin,relative 

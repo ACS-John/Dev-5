@@ -6,8 +6,8 @@
 20020 ! ______________________________________________________________________
 20040   dim cap$*128,ln1$*8800,ln$*8800,dat$*20
 20060 ! ______________________________________________________________________
-20080   let fntop(program$,cap$="Print Retained Earnings Statement")
-20100   let fndat(dat$)
+20080   fntop(program$,cap$="Print Retained Earnings Statement")
+20100   fndat(dat$)
 20120   let tempx=val(fnactpd$) conv L180
 20140   if tempx=1 then 
 20160     actpd$="one" 
@@ -39,7 +39,7 @@
 20680     actpd$="fourteen"
 20700   end if
 20720 L180: open #1: "Name="&env$('Q')&"\GLmstr\acglstmt.h"&env$('cno')&",Shr",display,input ioerr XIT
-20740   let fnopenprn
+20740   fnopenprn
 20760 READ_ACGLREST: ! 
 20780   linput #1: ln$ eof DONE ioerr DONE
 20800   for j2=1 to len(rtrm$(ln$))
@@ -71,7 +71,7 @@
 21320 ! ______________________________________________________________________
 21340 DONE: !
 21360   close #1: 
-21380   let fncloseprn
+21380   fncloseprn
 21400   goto XIT
 21420 ! ______________________________________________________________________
 21440 XIT: let fnxit

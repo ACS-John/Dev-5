@@ -1,17 +1,17 @@
 10000   pr border: 'Import Source'
 10020   execute 'con gui off'
 10040   dim filename$(1)*256,prg_list$(1)*256,dir_destination$*128,dir_source$*128,ext$*128
-10060   let fn_import_source_init
-10080   let fn_import_source('','', 1)
+10060   fn_import_source_init
+10080   fn_import_source('','', 1)
 10100 ! let fn_import_source('\\DISKSTATION\public\ACS\Client','\\DISKSTATION\public\ACS\Source\Client')
-10120   let fn_import_source_run
+10120   fn_import_source_run
 10140   end 
 10160   def fn_import_source(dir_source$*128,dir_destination$*128; skip_asci_files)
 10180     let dir_source$=rtrm$(dir_source$,'\')
 10200     let dir_destination$=rtrm$(dir_destination$,'\')
 10220     execute 'sy -M xcopy '&dir_source$&'\*.* '&dir_destination$&'\*.* /t /y'
 10240 ! fn_import_source_init
-10260     let fn_getdir2(dir_source$,mat filename$,'/s') ! option$)
+10260     fn_getdir2(dir_source$,mat filename$,'/s') ! option$)
 10280     for file_item=1 to udim(mat filename$)
 10300       pr fields '10,10,Cc 60': 'phase 1 of 2: processing '&str$(file_item)&' of '&str$(udim(mat filename$))
 10320       let dot_pos=pos(filename$(file_item),'.',-1)
@@ -22,10 +22,10 @@
 10420       end if 
 10440       let ext$=lwrc$(ext$)
 10460       if ext$='brs' or ext$='wbs' or ext$='libs' or ext$='cnvs' then 
-10480         let fn_import_source_add(filename$(file_item))
+10480         fn_import_source_add(filename$(file_item))
 10500       else if ~skip_asci_files and (ext$='mnu' or ext$='txt' or ext$='cmd' or ext$='bat' or ext$='lay' or ext$='ini') then 
 10520 !   IF pos(filename$(file_item),'100082.10')>0 then pause
-10540         let fn_copy_to_destination(filename$(file_item))
+10540         fn_copy_to_destination(filename$(file_item))
 10560       end if  ! ext$=...
 10580     next file_item
 10600 ! fn_import_source_run
@@ -72,7 +72,7 @@
 11400     let dm_dd=dm_dd*10000
 11420     let dm_hh=dm_hh*100
 11440     let dm_nn=dm_nn*1
-11460     let fn_datetime_modified=dm_cc+dm_yy+dm_mm+dm_dd+dm_hh+dm_nn
+11460     fn_datetime_modified=dm_cc+dm_yy+dm_mm+dm_dd+dm_hh+dm_nn
 11480   fnend 
 11500   def fn_import_source_run
 11520     let msr_file$=file$(proc_file)

@@ -7,8 +7,8 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4)
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$='Chart of Accounts')
-00100   let fncno(cno)
+00090   fntop(program$,cap$='Chart of Accounts')
+00100   fncno(cno)
 00110 ! Open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&STR$(CNO)&",Shr",Internal,Input,Relative  !:
         ! Read #20,Using 'Form POS 150,2*N 1',Rec=1: D(1),D(2) !:
         ! Close #20:
@@ -17,7 +17,7 @@
 00130   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER
 00135   gosub CLOSE_FILE
-00136   let fnindex_it(env$('Q')&"\UBmstr\GLmstr.h"&str$(cno), env$('Q')&"\UBmstr\glindex.h"&str$(cno),"1 12")
+00136   fnindex_it(env$('Q')&"\UBmstr\GLmstr.h"&str$(cno), env$('Q')&"\UBmstr\glindex.h"&str$(cno),"1 12")
 00140   goto XIT
 00150 ! ______________________________________________________________________
 00160 OPEN_FILE: ! !:
@@ -28,7 +28,7 @@
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 00210 ! ______________________________________________________________________
 00220 BUILD_LAYOUT: ! 
-00230   let fncno(cno)
+00230   fncno(cno)
 00240 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
 00250   let lbl$(ic+=1)="Department" !:
@@ -69,7 +69,7 @@
 00360   return 
 00370 ! ______________________________________________________________________
 00380 HAMSTER: ! 
-00390   let fnhamster("ChartOfAccounts",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
+00390   fnhamster("ChartOfAccounts",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00400   return 
 00410 ! ______________________________________________________________________
 00420 XIT: chain "S:\acsUB\postgl"

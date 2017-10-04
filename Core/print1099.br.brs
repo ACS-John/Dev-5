@@ -10,9 +10,9 @@
         ! chain to i - or just load and run it.
 00070   library 'S:\Core\Library': fnprint1099,fnxit,fntop
 00080   dim cap$*128
-00090   let fntop("S:\Core\Print1099",cap$="Print 1099s")
-00100   let fnprint1099(lz1$)
-00110   let fnxit
+00090   fntop("S:\Core\Print1099",cap$="Print 1099s")
+00100   fnprint1099(lz1$)
+00110   fnxit
 00120 ! _______________________________________________________________________
 00130 ! _______________________________________________________________________
 00140 ! _______________________________________________________________________
@@ -60,7 +60,7 @@
 00490     open #dave=fngethandle: 'Name=1099-'&session$&'.dat',internal,outin ioerr XIT
 00500     if lz1$='E' then !:
             open #exportfile=fngethandle: 'Name=\1099Etc.Wrk\W2Data\1099Dat.Prn,Replace',display,output else !:
-            let fnopenprn
+            fnopenprn
 00510 READ_DAVE: ! 
 00520     read #dave, using 'Form Pos 1,12*C 40,22*N 15.2': mat cinfo$,mat einfo$,mat box eof EODAVE
 00530     if lz1$='E' then gosub EXPORT1099 else !:
@@ -71,7 +71,7 @@
 00560 EODAVE: ! 
 00570     if lz1$='E' then !:
             close #exportfile: else !:
-            let fncloseprn !:
+            fncloseprn !:
             pr 'closing prn' ! XXX
 00571     pr str$(lrec(dave))&' 1099s should have been printed.'
 00580     close #dave,free: 

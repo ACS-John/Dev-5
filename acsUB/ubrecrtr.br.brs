@@ -5,21 +5,21 @@
 00050 ! ______________________________________________________________________
 00060   dim p$*10,z$*10,o(2),adr(2),cap$*128,txt$*40,gb(10),tg(11),d(15)
 00070 ! ______________________________________________________________________
-00080   let fncno(cno)
+00080   fncno(cno)
 00090 ! 
-00100   let fntop("S:\acsUB\UbRecrTr",cap$="Recreate Transaction File")
+00100   fntop("S:\acsUB\UbRecrTr",cap$="Recreate Transaction File")
 00110   let sn$="ubRecrTr" !:
-        let fntos(sn$) !:
+        fntos(sn$) !:
         let mylen=30 !:
         let mypos=mylen+2
 00120   let txt$="Transaction Date:" !:
-        let fnlbl(1,1,txt$,mylen,1)
-00130   let fntxt(1,mypos,10,0,0,"3") !:
+        fnlbl(1,1,txt$,mylen,1)
+00130   fntxt(1,mypos,10,0,0,"3") !:
         let resp$(1)=date$("ccyymmdd")
-00140   let fnlbl(3,1,"Warning ! Do not continue",mylen,1)
-00150   let fnlbl(4,1,"without consulting ACS",mylen,1)
-00160   let fnlbl(4,15,"",mylen,1)
-00170   let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+00140   fnlbl(3,1,"Warning ! Do not continue",mylen,1)
+00150   fnlbl(4,1,"without consulting ACS",mylen,1)
+00160   fnlbl(4,15,"",mylen,1)
+00170   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 00180 L180: let x=pos(resp$(1),"/",1) !:
         if x>0 then let resp$(1)(x:x)="": goto L180
 00190   let trandate=val(resp$(1))

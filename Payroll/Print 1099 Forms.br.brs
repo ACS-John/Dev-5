@@ -6,7 +6,7 @@
 00080   dim vn$*8,nam$*30,ad$(3)*30,ss$*11,a$(3)*40,b$(2)*12,box(11)
 00100   dim cap$*128
 00110   dim tcp(32),tdc(10)
-00120   let fntop(program$,cap$="Print 1099 Forms")
+00120   fntop(program$,cap$="Print 1099 Forms")
 00130   open #hCompany:=fngethandle: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr", internal,input,relative
 00140   read #hCompany,using "Form POS 1,3*C 40,2*C 12": mat a$,mat b$
 00150   close #hCompany: 
@@ -31,7 +31,7 @@
 01020   loop
 01040   CALL_1099_LIBRARY: ! 
 01050   if box(type)=>min1 then 
-01090     let fn1099print(cnvrt$("n 8",eno),mat a$,nam$(1:18),mat ad$,trim$(ss$),mat box)
+01090     fn1099print(cnvrt$("n 8",eno),mat a$,nam$(1:18),mat ad$,trim$(ss$),mat box)
 01100   end if
 01120   goto START
 01130 ! /r
@@ -41,7 +41,7 @@
 01162   let seltp=type=min1=0 
 01164   let vn$=nam$="" 
 01166   mat a$=(""): mat ad$=(""): mat box=(0) 
-01168   let fn1099print_close
+01168   fn1099print_close
 01170   goto XIT ! /r
 01190 XIT: let fnxit
 01740 ! <Updateable Region: ERTN>

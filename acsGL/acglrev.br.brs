@@ -3,14 +3,14 @@
         ! enter the date and reference under "youref' and 'yourdate'
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnerror
-00050   let fntop(program$,"Special Reversing")
+00050   fntop(program$,"Special Reversing")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim adr(2),ta(2),prg$*20
 00090   dim t$*12,n(2),l$*12,p$*30
 00100   dim cnam$*40
 00110 ! ______________________________________________________________________
-00120   let fncno(cno,cnam$)
+00120   fncno(cno,cnam$)
 00130   open #20: "Name=CNo.H"&wsid$,internal,outin,relative  !:
         read #20,using 'form POS 43,C 20,POS 137,N 2,POS 141,N 1',rec=1: prg$,systype,process !:
         close #20: 

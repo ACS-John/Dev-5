@@ -7,8 +7,8 @@
 00070   dim cap$*128,lbl$(21)*38,tln(21),p$(21)*160,fltyp$(21),sln(21),mask(21),sp(21),c$(21,8)*40
 00080   dim fil$(6)*18,idx$(6)*18,id$(6)*40
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$='Financial Statement Design')
-00110   let fncno(cno)
+00100   fntop(program$,cap$='Financial Statement Design')
+00110   fncno(cno)
 00120   let id$(1)=" 1. Balance Sheet File" !:
         let fil$(1)="ACGLFNSB.H"&str$(cno): let idx$(1)="FNSBINDX.H"&str$(cno)
 00130   let id$(2)=" 2. Income Statement File" !:
@@ -23,24 +23,24 @@
         let fil$(6)="ACGLFNSG.H"&str$(cno): let idx$(6)="FNSGINDX.H"&str$(cno)
 00180   gosub BUILD_LAYOUT
 00190 MAIN: ! 
-00200   let fntos(sn$="FsDesign") !:
+00200   fntos(sn$="FsDesign") !:
         let mylen=20: let mypos=mylen+3 : let right=1
-00210   let fnfra(1,1,6,60,"Financial Statement Choices","Choose the financial statement to work with.")
-00220   let fnopt(1,2,id$(1),0,1) !:
+00210   fnfra(1,1,6,60,"Financial Statement Choices","Choose the financial statement to work with.")
+00220   fnopt(1,2,id$(1),0,1) !:
         let resp$(1)="True"
-00230   let fnopt(2,2,id$(2) ,0,1) !:
+00230   fnopt(2,2,id$(2) ,0,1) !:
         let resp$(2)="False"
-00240   let fnopt(3,2,id$(3),0,1) !:
+00240   fnopt(3,2,id$(3),0,1) !:
         let resp$(3)="False"
-00250   let fnopt(4,2,id$(4),0,1) !:
+00250   fnopt(4,2,id$(4),0,1) !:
         let resp$(4)="False"
-00260   let fnopt(5,2,id$(5),0,1) !:
+00260   fnopt(5,2,id$(5),0,1) !:
         let resp$(5)="False"
-00270   let fnopt(6,2,id$(6),0,1) !:
+00270   fnopt(6,2,id$(6),0,1) !:
         let resp$(6)="False"
-00280   let fncmdkey("&Next",1,1,0,"Access the chosen financial statement design..")
-00290   let fncmdkey("&Cancel",5,1,0,"Return to main menu.")
-00300   let fnacs(sn$,0,mat resp$,ckey)
+00280   fncmdkey("&Next",1,1,0,"Access the chosen financial statement design..")
+00290   fncmdkey("&Cancel",5,1,0,"Return to main menu.")
+00300   fnacs(sn$,0,mat resp$,ckey)
 00310   if ckey=5 then goto XIT
 00320   if resp$(1)="True" then let selection=1
 00330   if resp$(2)="True" then let selection=2
@@ -66,7 +66,7 @@
 00490   return 
 00500 ! ______________________________________________________________________
 00510 BUILD_LAYOUT: ! 
-00520   let fncno(cno)
+00520   fncno(cno)
 00530 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
 00540   let lbl$(ic+=1)="F/S #" !:
@@ -214,7 +214,7 @@
 00950   return 
 00960 ! ______________________________________________________________________
 00970 HAMSTER: ! 
-00980   let fnhamster("Acglfnsb",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00980   fnhamster("Acglfnsb",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00990   return 
 01000 ! ______________________________________________________________________
 01010 XIT: let fnxit

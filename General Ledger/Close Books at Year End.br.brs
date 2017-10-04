@@ -6,24 +6,24 @@
 24060 ! 
 24080   dim acno$*12,bc(13),bp(13),bud(13)
 24100   dim resp$(10)*80
-24120   let fntop(program$,"Close Books at Year End")
+24120   fntop(program$,"Close Books at Year End")
 24140   open #hCompany:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
 24160   read #hCompany,using 'Form Pos 384,N 2',rec=1: nap
 24180   close #hCompany: 
 24200   fnGetFundList(mat fund_list)
 24220 ! /r
 30000 do ! r: the first screen
-30020   let fntos(sn$="CloseYear1") 
+30020   fntos(sn$="CloseYear1") 
 30040   let lc=rc=frame=0 : let mylen=30 : let mypos=mylen+2 : let width=0
-30060   let fnlbl(lc+=1,1,"* * *   Warning   * * *",width,2)
-30080   let fnlbl(lc+=1,1,"This program is to be used only at the end of the",width,2)
-30100   let fnlbl(lc+=1,1,"year, after all reports have been processed.",width,2)
-30120   let fnlbl(lc+=1,1,"Enter CLOSE to continue:",mylen,1)
-30140   let fntxt(lc,mypos,5) 
+30060   fnlbl(lc+=1,1,"* * *   Warning   * * *",width,2)
+30080   fnlbl(lc+=1,1,"This program is to be used only at the end of the",width,2)
+30100   fnlbl(lc+=1,1,"year, after all reports have been processed.",width,2)
+30120   fnlbl(lc+=1,1,"Enter CLOSE to continue:",mylen,1)
+30140   fntxt(lc,mypos,5) 
 30160   let resp$(rc_erase:=rc+=1)=""
 30180   lc+=1
-30200   let fnlbl(lc+=1,1,"Year being closed:",mylen,1)
-30220   let fntxt(lc,mypos,2,0,1,"30",0,"Enter the two digit code for the year you are closing.") 
+30200   fnlbl(lc+=1,1,"Year being closed:",mylen,1)
+30220   fntxt(lc,mypos,2,0,1,"30",0,"Enter the two digit code for the year you are closing.") 
 30240   let resp$(rc_year:=rc+=1)=""
 
 31000   if fnUseDeptNo then
@@ -33,37 +33,37 @@
 32060     ! col4_pos=mypos ! col3_pos+10
 32080     ! let fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account(s)')
 32100     ! for fund_item=1 to udim(mat fund_list)
-32120     !   let fnlbl(lc+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",mylen,1)
-32140     !   let fnqgl(lc,col4_pos)
+32120     !   fnlbl(lc+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",mylen,1)
+32140     !   fnqgl(lc,col4_pos)
 32160     !   let rc+=1
-32180     !   let fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(rc)) : let resp$(rc)=fnrgl$(resp$(rc))
+32180     !   fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(rc)) : let resp$(rc)=fnrgl$(resp$(rc))
 32200     ! next fund_item
 
 34000       lc+=1
 34020       let mylen=30 : let mypos=mylen+3 : let width=0
-34040       let fnfra(lc+=1,1,2,70,"Method of Closing","You must indicate if you will be closing to one equity account or to multiple accounts.",0)
+34040       fnfra(lc+=1,1,2,70,"Method of Closing","You must indicate if you will be closing to one equity account or to multiple accounts.",0)
 34060       frame+=1
-34080       let fnopt(1,3,"Close each fund to a separate account",0,frame) 
+34080       fnopt(1,3,"Close each fund to a separate account",0,frame) 
 34100       fncreg_read('Close each fund to a separate account',resp$(rc_close1:=rc+=1),'False')
-34120       let fnopt(2,3,"Close all departments to one retained earnings (equity) account",0,frame) 
+34120       fnopt(2,3,"Close all departments to one retained earnings (equity) account",0,frame) 
 34140       fncreg_read('Close all departments to one retained earnings (equity) account',resp$(rc_close2:=rc+=1),'False')
 
 35500   ! else 
 35520   !   col4_pos=col3_pos+32
-35540   !   let fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account:',31,1)
-35560   !   let fnqgl(lc,col4_pos)
+35540   !   fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account:',31,1)
+35560   !   fnqgl(lc,col4_pos)
 35580   !   let rc+=1
-35600   !   let fncreg_read("last retained earnings account - no fund ",resp$(rc)) : let resp$(rc)=fnrgl$(resp$(rc))
+35600   !   fncreg_read("last retained earnings account - no fund ",resp$(rc)) : let resp$(rc)=fnrgl$(resp$(rc))
 35900   end if
-36000   let fncmdset(2)
-36020   let fnacs(sn$,0,mat resp$,ckey)
+36000   fncmdset(2)
+36020   fnacs(sn$,0,mat resp$,ckey)
 36040   if ckey=5 then goto XIT
 36060   let pas$=resp$(rc_erase)
 36080   let yr$=cnvrt$("pic(##)",val(resp$(rc_year)))
 36100   if fnUseDeptNo then
 36120     !   for fund_item=1 to udim(mat fund_list)
 36140     !     let last_retained_earnings_acct$(fund_item)=fnagl$(resp$(rc+=1))
-36160     !     let fncreg_write("last retained earnings account - fund "&str$(fund_list(fund_item)),last_retained_earnings_acct$(fund_item))
+36160     !     fncreg_write("last retained earnings account - fund "&str$(fund_list(fund_item)),last_retained_earnings_acct$(fund_item))
 36180     !   next fund_item
 36200     fncreg_write('Close each fund to a separate account',resp$(rc_close1))
 36220     fncreg_write('Close all departments to one retained earnings (equity) account',resp$(rc_close2))
@@ -74,7 +74,7 @@
 36320     end if
 36340   else 
 36360     let last_retained_earnings_acct$(1)=fnagl$(resp$(rc+=1))
-36380     let fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
+36380     fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
 36400   end if
 36420 loop until lwrc$(pas$)=lwrc$("CLOSE") ! /r
 38000 open #hGlMstr1:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -96,29 +96,29 @@
 38320 ! /r
 44000 SCR2: ! 
 44020   let t5=0
-44040   let fntos(sn$='CloseYear3')
+44040   fntos(sn$='CloseYear3')
 44060   let lc=0 : let mylen=30 : let mypos=mylen+2 : let width=80
-44080   let fnlbl(lc+=1,1,"Enter the Last Retained Earnings Account or Equity Account.",width,2)
-44100   let fnlbl(lc+=1,1,"The account that dividend, income, and expenses will be closed to.",width,2)
+44080   fnlbl(lc+=1,1,"Enter the Last Retained Earnings Account or Equity Account.",width,2)
+44100   fnlbl(lc+=1,1,"The account that dividend, income, and expenses will be closed to.",width,2)
 44120   let lc+=1 
 44140   if fnUseDeptNo=0 or closeDeptToRetainedEarnings=1 then 
-44160     let fnlbl(lc+=1,1,"All accounts after this ",width,2)
+44160     fnlbl(lc+=1,1,"All accounts after this ",width,2)
 44180   else 
-44200     let fnlbl(lc+=1,1,"All Accounts for this Cost Center after this ",width,2)
+44200     fnlbl(lc+=1,1,"All Accounts for this Cost Center after this ",width,2)
 44220   end if 
-44240   let fnlbl(lc+=1,1,"be reset with zero balances.",width,2)
-44260   let fnlbl(lc+=1,1,"account will be reset with zero balances.",width,2)
-44280   let fnlbl(lc+=1,1,"Enter Account Number:",mylen,1)
-44300   let fnqgl(lc,mypos)
+44240   fnlbl(lc+=1,1,"be reset with zero balances.",width,2)
+44260   fnlbl(lc+=1,1,"account will be reset with zero balances.",width,2)
+44280   fnlbl(lc+=1,1,"Enter Account Number:",mylen,1)
+44300   fnqgl(lc,mypos)
 44320   let resp$(1)=''
-44440   let fncmdset(11)
-44460   let fnacs(sn$,0,mat resp$,ckey)
+44440   fncmdset(11)
+44460   fnacs(sn$,0,mat resp$,ckey)
 44480   if ckey=5 then goto XIT
 44500   let glnumber$=fnagl$(resp$(1))
 44520   if closeDeptToRetainedEarnings then 
-44540     let fncreg_write("last retained earnings account - fund "&str$(val(glnumber$(1:3))),resp$(1))
+44540     fncreg_write("last retained earnings account - fund "&str$(val(glnumber$(1:3))),resp$(1))
 44560   else 
-44580     let fncreg_write("last retained earnings account - no fund",resp$(1))
+44580     fncreg_write("last retained earnings account - no fund",resp$(1))
 44600   end if 
 44620   read #hGlMstr1,using 'form pos 1,c 3,c 6,c 3',key=glnumber$: dno$,ano$,sno$ nokey SCR2
 44640   acno$=glnumber$(1:3)&"         "

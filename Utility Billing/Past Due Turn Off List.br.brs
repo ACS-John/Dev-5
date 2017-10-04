@@ -7,61 +7,61 @@
 00070   dim z$*10,e$*30,g(12),metradr$*30
 00080   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),cap$*128,month(4),dat$*20
 00090 ! 
-26000   let fntop(program$,cap$="Past Due and Turn Off List")
-26040   let fnd1(lbill)
-26060   let fndat(dat$)
+26000   fntop(program$,cap$="Past Due and Turn Off List")
+26040   fnd1(lbill)
+26060   fndat(dat$)
 26080   dim opt_aai$(3)
 26100   let opt_aai$(1)="[All]"
 26120   let opt_aai$(2)="Active"
 26140   let opt_aai$(3)="Inactive"
-26150   let fncreg_read('ubpdtnof.aai',aai$,opt_aai$(1))
-26160   let fncreg_read('ubpdtnof.printadr',printadr$,'False')
-26180   let fncreg_read('ubpdtnof.excludecurrent',excludecurrent$,'False')
-26200   let fncreg_read('ubpdtnof.excludelast',excludelast$,'False')
-26220   let fncreg_read('ubpdtnof.pastduebalance',pastduebalance$,'False')
-26230   let fncreg_read('ubpdtnof.pr_s4_meter_number',pr_s4_meter_number$,'False')
-26240   let fncreg_read('ubpdtnof.pr_blank_lines_for_notes',pr_blank_lines_for_notes$,'False')
-26260   let fncreg_read('ubpdtnof.accountSequence',accountSequence$,'True')
+26150   fncreg_read('ubpdtnof.aai',aai$,opt_aai$(1))
+26160   fncreg_read('ubpdtnof.printadr',printadr$,'False')
+26180   fncreg_read('ubpdtnof.excludecurrent',excludecurrent$,'False')
+26200   fncreg_read('ubpdtnof.excludelast',excludelast$,'False')
+26220   fncreg_read('ubpdtnof.pastduebalance',pastduebalance$,'False')
+26230   fncreg_read('ubpdtnof.pr_s4_meter_number',pr_s4_meter_number$,'False')
+26240   fncreg_read('ubpdtnof.pr_blank_lines_for_notes',pr_blank_lines_for_notes$,'False')
+26260   fncreg_read('ubpdtnof.accountSequence',accountSequence$,'True')
 27000 ! 
 27020   dim srvnam$(10)*20,srv$(10)*2
 27040   fnget_services(mat srvnam$,mat srv$)
 27100 ! /r
 32000 ! r: SCREEN1
-32020   let fntos(sn$="UBPdTnOf")
+32020   fntos(sn$="UBPdTnOf")
 32040   let mylen=21 : let mypos=mylen+2
-32060   let fnfra(1,1,3,40,"Aging Dates","Use the last day of each month for your aging dates (Use ccyymmdd format).")
+32060   fnfra(1,1,3,40,"Aging Dates","Use the last day of each month for your aging dates (Use ccyymmdd format).")
 32080 ! 
-32100   let fnlbl(1,1,"Current Month:",mylen,1,0,1)
-32120   let fntxt(1,mypos,10,10,1,"3",0,"Use the last day of your current mongh for the best aging results.",1)
+32100   fnlbl(1,1,"Current Month:",mylen,1,0,1)
+32120   fntxt(1,mypos,10,10,1,"3",0,"Use the last day of your current mongh for the best aging results.",1)
 32140   let resp$(1)=""
-32160   let fnlbl(2,1,"Last Month:",mylen,1,0,1)
-32180   let fntxt(2,mypos,10,10,1,"3",0,"Use the last day of last month.",1)
+32160   fnlbl(2,1,"Last Month:",mylen,1,0,1)
+32180   fntxt(2,mypos,10,10,1,"3",0,"Use the last day of last month.",1)
 32200   let resp$(2)=""
-32220   let fnlbl(3,1,"Month Before That:",mylen,1,0,1)
-32240   let fntxt(3,mypos,10,10,1,"3",0,"Equivalent date from two months ago.",1)
+32220   fnlbl(3,1,"Month Before That:",mylen,1,0,1)
+32240   fntxt(3,mypos,10,10,1,"3",0,"Equivalent date from two months ago.",1)
 32260   let resp$(3)=""
-32280   let fnlbl(6,1,"Billing Date:",mylen,1)
-32300   let fntxt(6,mypos,8,8,1,"1")
+32280   fnlbl(6,1,"Billing Date:",mylen,1)
+32300   fntxt(6,mypos,8,8,1,"1")
 32320   let resp$(4)=str$(lbill)
-32340   let fnlbl(7,1,"Final Billing Code:" ,mylen,1)
-32360   let fncomboa("aai",7,mypos,mat opt_aai$)
+32340   fnlbl(7,1,"Final Billing Code:" ,mylen,1)
+32360   fncomboa("aai",7,mypos,mat opt_aai$)
 32380   let resp$(5)=aai$
-32400   let fnchk(9,40,"Print Meter Address:",1)
+32400   fnchk(9,40,"Print Meter Address:",1)
 32420   let resp$(6)=printadr$
-32440   let fnchk(10,40,"Exclude Current Month:",1)
+32440   fnchk(10,40,"Exclude Current Month:",1)
 32460   let resp$(7)=excludecurrent$
-32480   let fnchk(11,40,"Exclude Last Month:",1)
+32480   fnchk(11,40,"Exclude Last Month:",1)
 32500   let resp$(8)=excludelast$
-32520   let fnchk(12,40,"Print Past Due Balance:",1)
+32520   fnchk(12,40,"Print Past Due Balance:",1)
 32540   let resp$(9)=pastduebalance$
-32542   let fnchk(13,40,"Print "&trim$(srvnam$(4))&" Meter Number:",1)
+32542   fnchk(13,40,"Print "&trim$(srvnam$(4))&" Meter Number:",1)
 32544   let resp$(10)=pr_s4_meter_number$
-32546   let fnchk(15,40,"Print blank lines for notes:",1)
+32546   fnchk(15,40,"Print blank lines for notes:",1)
 32548   let resp$(11)=pr_blank_lines_for_notes$
-32550   let fnchk(17,40,"Account Sequence",1)
+32550   fnchk(17,40,"Account Sequence",1)
 32552   let resp$(rc_accountSequence:=12)=accountSequence$
-32560   let fncmdset(3)
-32580   let fnacs(sn$,0,mat resp$,ck)
+32560   fncmdset(3)
+32580   fnacs(sn$,0,mat resp$,ck)
 32600   if ck=5 then goto XIT
 32620   for j=1 to 3
 32640 L400: let x=pos(resp$(j),"/",1)
@@ -82,19 +82,19 @@
 32925   let pr_s4_meter_number$=resp$(10) : if pr_s4_meter_number$="True" then let pr_s4_meter_number=1 ! only show past due amount in balance column
 32926   let pr_blank_lines_for_notes$=resp$(11)
 32928   accountSequence$=resp$(rc_accountSequence)
-32930   let fncreg_write('ubpdtnof.aai',aai$)
-32940   let fncreg_write('ubpdtnof.printadr',printadr$)
-32960   let fncreg_write('ubpdtnof.excludecurrent',excludecurrent$)
-32980   let fncreg_write('ubpdtnof.excludelast',excludelast$)
-33000   let fncreg_write('ubpdtnof.pastduebalance',pastduebalance$)
-33010   let fncreg_write('ubpdtnof.pr_s4_meter_number',pr_s4_meter_number$)
-33020   let fncreg_write('ubpdtnof.pr_blank_lines_for_notes',pr_blank_lines_for_notes$)
-33040   let fncreg_write('ubpdtnof.accountSequence',accountSequence$)
+32930   fncreg_write('ubpdtnof.aai',aai$)
+32940   fncreg_write('ubpdtnof.printadr',printadr$)
+32960   fncreg_write('ubpdtnof.excludecurrent',excludecurrent$)
+32980   fncreg_write('ubpdtnof.excludelast',excludelast$)
+33000   fncreg_write('ubpdtnof.pastduebalance',pastduebalance$)
+33010   fncreg_write('ubpdtnof.pr_s4_meter_number',pr_s4_meter_number$)
+33020   fncreg_write('ubpdtnof.pr_blank_lines_for_notes',pr_blank_lines_for_notes$)
+33040   fncreg_write('ubpdtnof.accountSequence',accountSequence$)
 33880 ! /r
 42000   on fkey 5 goto DONE
 42020 ! r: the report
 42040 ! r: report setup
-42060   let fnopenprn
+42060   fnopenprn
 42080   gosub HDR1
 42100   if accountSequence$='True' then
 42120     open #hCustomer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -212,7 +212,7 @@
 56000 DONE: ! r:
 56020   close #hCustomer: ioerr ignore
 56040   close #hTrans: ioerr ignore
-56060   let fncloseprn
+56060   fncloseprn
 56080   goto XIT ! /r
 56100 PGOF: ! r:
 56120   pr #255: newpage
@@ -311,5 +311,5 @@
 74100   end if 
 74120   return  ! /r
 76000   def fn_s4_meter_number$*12
-76020     let fn_s4_meter_number$=s4_meter_number$
+76020     fn_s4_meter_number$=s4_meter_number$
 76040   fnend 

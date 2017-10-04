@@ -8,7 +8,7 @@
 00080 ! ______________________________________________________________________
 00090   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00100 ! ______________________________________________________________________
-00110   let fncno(cno)
+00110   fncno(cno)
 00120 ! 
 00130   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno)&",Shr",internal,outin,keyed 
 00140   open #3: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno)&",Shr",internal,outin,relative 

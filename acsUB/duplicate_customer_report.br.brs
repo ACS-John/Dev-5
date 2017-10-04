@@ -7,14 +7,14 @@
 21200   dim item1$(6)*22,cap$*128
 21400   dim a2(10),a1(10),a(10),tt$*200,ab$(4)*30,extra$(11)*30
 21600 ! ______________________________________________________________________
-21800   let fntop(program$,cap$="Duplicate Customer List")
-22000   let fncno(cno,cnam$)
-22200   let fndat(dat$,1)
+21800   fntop(program$,cap$="Duplicate Customer List")
+22000   fncno(cno,cnam$)
+22200   fndat(dat$,1)
 23600   on fkey 5 goto DONE
-23800   let fnopenprn
+23800   fnopenprn
 24000   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",Shr",internal,input,relative 
 24200   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-24400   let fn_header
+24400   fn_header
 24600   do 
 24800     read #1,using FORM_CUSTOMER: z$,mat e$,mat a,final,bal,route,sequence,extra$(1) eof DONE
 25000 FORM_CUSTOMER: form pos 1,c 10,pos 11,4*c 30,pos 143,5*pd 2,pos 1806,3*n 2,pos 153,2*pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 1741,n 2,n 7,pos 1864,c 30
@@ -24,13 +24,13 @@
 25800     end if  ! fn_has_dupe(z$)
 26000   loop 
 26200 DONE: ! 
-26400   let fncloseprn
+26400   fncloseprn
 26600 XIT: ! 
-26800   let fnxit
+26800   fnxit
 27000 ! ______________________________________________________________________
 27200 PGOF: ! 
 27400   pr #255: newpage
-27600   let fn_header
+27600   fn_header
 27800   continue 
 28000 ! ______________________________________________________________________
 28200   def fn_has_dupe(z$)
@@ -41,7 +41,7 @@
 29000     read #2,using FORM_CUSTOMER: z_two$ eof HD_EOF
 29200 HD_EOF: ! 
 29400     if z_one$=z_two$ then let hd_return=1
-29600     let fn_has_dupe=hd_return
+29600     fn_has_dupe=hd_return
 29800   fnend  ! fn_has_dupe
 30000   def fn_header
 30200     pr #255: "\qc {\b "&env$('cnam')&"}"

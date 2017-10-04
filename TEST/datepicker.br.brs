@@ -2,7 +2,7 @@
 00012 ! r: SETUP: fntop, dims, open files, etc
 00020   library 'S:\Core\Library': fntop,fnxit, fncno,fnopenprn,fncloseprn,fnerror,fntos,fnfra,fnlbl,fntxt,fncombof,fncomboa,fnbutton,fncmdkey,fnacs,fnmsgbox,fnflexadd1,fnflexinit1,fnchk,fnaddpayee,fnagl$,fnrgl$,fnjob_srch,fncmbjob,fncmbcategory
 00030   library 'S:\Core\Library': fngethandle,fncmbsubcat,fncategory_srch,fnregistered_for_job_cost_pr,fncmdset,fnrglbig$,fnqglbig
-00040   let fntop(program$,cap$="Test DatePicker")
+00040   fntop(program$,cap$="Test DatePicker")
 00060 ! ______________________________________________________________________
 00070   dim cap$*128
 00080   dim jobdesc$*30,jn$*6,l(11),ta(2),jobname$*25,jobitem$(6)*30
@@ -16,10 +16,10 @@
 00180   dim item1$(3)*15,type$*25,holdkey$*20,resp$(256)*50
 08320 ! ______________________________________________________________________
 04815   open #clearing=89: "Name="&env$('Q')&"\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outin,relative  ! kj wrong recl
-04889   let fntos(sn$="paidinv")
+04889   fntos(sn$="paidinv")
 04891   let respc=0 : mat resp$=('')
-04893   let fnlbl(1,1,trim$(env$('cnam')(1:30))&"-"&type$,65,2)
-04895              let fnflexinit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
+04893   fnlbl(1,1,trim$(env$('cnam')(1:30))&"-"&type$,65,2)
+04895              fnflexinit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
 04897              restore #clearing: 
 04899              if nextrec>0 and displayattop$="True" then goto L4890 else goto L5030
 04901            L4890: for j=nextrec to lrec(clearing) ! read starting with next record
@@ -31,7 +31,7 @@
 04913                let flxitm$(16)=str$(pdte)
 04915                let flxitm$(1)=str$(rec(clearing))
 04917                if pcde=1 then let flxitm$(3)="Yes" else if pcde=0 then let flxitm$(3)="No" else if pcde=1 and dp>0 then let flxitm$(3)="Paid"
-04919            let fnflexadd1(mat flxitm$)
+04919            fnflexadd1(mat flxitm$)
 04940            L4940: next j
 04950            if nextrec=1 then goto L5020 ! thinks it rereads the 1st record twice
 04960            for j=1 to max(nextrec-1,1) ! read records previously coded or skipped
@@ -42,7 +42,7 @@
 05010              let flxitm$(14)=str$(dp) : let flxitm$(15)=str$(gde)
 05020              let flxitm$(1)=str$(rec(clearing))
 05030              if pcde=1 then let flxitm$(3)="Yes" else if pcde=0 then let flxitm$(3)="No" else if pcde=1 and dp>0 then let flxitm$(3)="Paid"
-05040            let fnflexadd1(mat flxitm$)
+05040            fnflexadd1(mat flxitm$)
 05050            next j
 05055            L5020: goto L5070
 05057            L5030: ! 
@@ -54,7 +54,7 @@
 05069            let flxitm$(16)=str$(pdte)
 05071            let flxitm$(1)=str$(rec(clearing)) ! assign flxitm$(1) with new record #
 05073            if pcde=1 then let flxitm$(3)="Yes" else if pcde=0 then let flxitm$(3)="No" else if pcde=1 and dp>0 then let flxitm$(3)="Paid"
-05075            let fnflexadd1(mat flxitm$) : goto L5030
+05075            fnflexadd1(mat flxitm$) : goto L5030
 05077 L5070: let fnfra(2,1,13,23,"Approval Options"," ")
 05079 let fnbutton(1,2,"&Approve All",62,"Will select to pay all unpaid invoices",1,18,1)
 05081 let fnbutton(3,2,"&Approve by Range",63,"Enter a range of reference numbers to approve.  The reference # is the number to the left assigned by the computer.",1,18,1)

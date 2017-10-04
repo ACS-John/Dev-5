@@ -10,8 +10,8 @@
 00100   dim f2$*204,pr(9,25),hen$*8,cap$*128,message$*40,hr(2),h(7)
 00110   dim msgline$(2)*60,response$(5)*1
 00120 ! ______________________________________________________________________
-00130   let fntop(program$,cap$="Transfer Job Cost to Payroll")
-00140   let fncno(cno)
+00130   fntop(program$,cap$="Transfer Job Cost to Payroll")
+00140   fncno(cno)
 00150 ! 
 00160 ! ______________________________________________________________________
 00170   open #1: "Name="&env$('Q')&"\PRmstr\RPNAMES.H"&str$(cno)&",Shr",internal,input 
@@ -76,7 +76,7 @@
 00760 ! ______________________________________________________________________
 00770 L770: pr newpage
 00780   let win=101
-00790   let fnopenwin(win,10,20,14,59,cap$)
+00790   fnopenwin(win,10,20,14,59,cap$)
 00800   pr #win,fields "4,2,C 16,N": "Employee Number:"
 00810   pr fields "15,35,c 09,B,5": "Done (F5)"
 00820 L820: input #win,fields "4,21,N 8,UT,N": eno conv L820
@@ -110,7 +110,7 @@
 01100   next j
 01110 L1110: pr newpage
 01120   let win=101
-01130   let fnopenwin(win,2,7,22,74,cap$)
+01130   fnopenwin(win,2,7,22,74,cap$)
 01140   pr #win,fields "04,02,Cr 21,N": "Employee Number:" !:
         pr #win,fields "04,24,C 08,N": ltrm$(en$)
 01150   pr #win,fields "05,02,Cr 21,N": "Employee Name:" !:
@@ -181,7 +181,7 @@
 01770 TOTALSCREEN: ! 
 01780   pr newpage
 01790   let win=101
-01800   let fnopenwin(win,2,7,22,74,cap$)
+01800   fnopenwin(win,2,7,22,74,cap$)
 01810   close #3: 
 01820   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&str$(cno),internal,outin,relative 
 01830   let label1$(20)=" "
@@ -210,8 +210,8 @@
 02040 L2040: let r=0
 02050   let pc=0
 02060   pr newpage
-02070   let fnwait(101,cap$,message$,1)
-02080   let fnopenprn(cp,58,220,process)
+02070   fnwait(101,cap$,message$,1)
+02080   fnopenprn(cp,58,220,process)
 02090 L2090: let r=r+1
 02100   read #3,using L1600,rec=r: eno,dep,mat inp,gpd,mat hr,adr eof L2430,norec L2430
 02110   if pc=9 then gosub L2240
@@ -249,7 +249,7 @@
 02430 L2430: gosub L2240
 02440 L2440: let fncloseprn
 02450 L2450: let win=101
-02460   let fnopenwin(win,10,20,14,59,cap$)
+02460   fnopenwin(win,10,20,14,59,cap$)
 02470   pr #win,fields "4,2,C 24,N": "Record Number to Change:"
 02480   pr fields "15,35,C 09,B,5": "Done (F5)"
 02490 L2490: input #win,fields "4,27,N 5,UT,N": r conv L2490
@@ -276,7 +276,7 @@
 02700 L2700: pr newpage
 02710   let msgline$(1)="Add another Employee? (Y/N)" !:
         let msgline$(2)=""
-02720   let fnoldmsgbox(mat response$,cap$,mat msgline$,2)
+02720   fnoldmsgbox(mat response$,cap$,mat msgline$,2)
 02730   if response$(1)="N" then goto TOTALSCREEN
 02740   let r=0
 02750   close #3: 
@@ -295,7 +295,7 @@
 02880   close #5,free: 
 02890 L2890: open #5: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&str$(cno)&",SIZE=0,RecL=40",internal,output 
 02900   close #5: 
-02910   let fnchain("S:\acsPR\prCalk")
+02910   fnchain("S:\acsPR\prCalk")
 02920 ! ______________________________________________________________________
 02930 XIT: let fnxit
 02940 ! ______________________________________________________________________
@@ -317,12 +317,12 @@
 03100 ! ______________________________________________________________________
 03110 L3110: pr newpage
 03120   let win=101
-03130   let fnopenwin(win,10,14,14,65,cap$)
+03130   fnopenwin(win,10,14,14,65,cap$)
 03140   pr #win,fields "4,02,C 41,N": "Employee Number to pr (blank for all):"
 03150   pr fields "15,34,C 11,B,5": "Cancel (F5)"
 03160 L3160: input #win,fields "4,44,Nz 8,UT,N": en1 conv L3160
 03170   if cmdkey=5 then goto TOTALSCREEN
-03180   let fnopenprn(cp,58,220,process)
+03180   fnopenprn(cp,58,220,process)
 03190   let eno=en2=dt2=t1=t2=t3=t4=0
 03200   restore #6: 
 03210   gosub HDR
@@ -385,7 +385,7 @@
 03780 END_OF_FILE: ! 
 03790   gosub T1
 03800   gosub T2
-03810   let fncloseprn
+03810   fncloseprn
 03820   goto TOTALSCREEN
 03830 ! ______________________________________________________________________
 03840 ! <Updateable Region: ERTN>

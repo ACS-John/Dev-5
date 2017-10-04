@@ -1,7 +1,7 @@
 00020   on error goto L180
 00030   library 'S:\Core\Library': fnxit,fntop
 00040   dim actpd$*6,pedat$*20,tb$*32
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   open #20: "Name=CNO.H"&wsid$,internal,input,relative 
 00070   read #20,using L80,rec=1: cno,cnam$,dat$,cp,nw,process,actpd$,pedat$
 00080 L80: form pos 1,n 2,c 40,pos 63,c 20,pos 89,2*n 1,pos 141,n 1,pos 153,c 6,pos 195,c 20

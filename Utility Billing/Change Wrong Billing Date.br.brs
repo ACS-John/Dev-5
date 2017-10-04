@@ -5,24 +5,24 @@
 00050   on error goto ERTN
 00060 ! 
 00070   dim z$*10,o(2),bt1(14,2),badr(2),ba(13),txt$*40,tg(11),resp$(10)*80
-00090   let fntop(program$)
+00090   fntop(program$)
 00100 ! /r
 24000 SCREEN1: ! r:
-24020   let fntos(sn$:="DatFix2")
-24040   let fnlbl(1,1,'Bad Billing Date:',24,1)
-24060   let fntxt(1,26,8,0,0,"1") 
+24020   fntos(sn$:="DatFix2")
+24040   fnlbl(1,1,'Bad Billing Date:',24,1)
+24060   fntxt(1,26,8,0,0,"1") 
 24080   let resp$(1)=str$(d1)
-24100   let fnlbl(2,1,'Good Billing Date:',24,1)
-24120   let fntxt(2,26,8,0,0,"1") 
+24100   fnlbl(2,1,'Good Billing Date:',24,1)
+24120   fntxt(2,26,8,0,0,"1") 
 24140   let resp$(2)=str$(d2)
-24160   let fnlbl(4,1,"Starting Account:",24,1)
-24180   let fncmbact(4,26)
+24160   fnlbl(4,1,"Starting Account:",24,1)
+24180   fncmbact(4,26)
 24200   let resp$(3)="[All]"
-24220   let fnlbl(5,1,"Ending Account:",24,1)
-24240   let fncmbact(5,26)
+24220   fnlbl(5,1,"Ending Account:",24,1)
+24240   fncmbact(5,26)
 24260   let resp$(4)="[All]"
-24280   let fncmdset(2)
-24300   let fnacs(sn$,0,mat resp$,ckey)
+24280   fncmdset(2)
+24300   fnacs(sn$,0,mat resp$,ckey)
 24320   if ckey=5 then goto XIT
 24340   let d1=val(resp$(1))
 24360   let d2=val(resp$(2))

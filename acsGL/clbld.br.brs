@@ -2,28 +2,28 @@
 00020 ! Create Checkbook System Files
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fntos,fnlbl,fntxt,fncomboa,fnacs,fncmdkey,fngethandle
-00050   let fntop(program$,cap$="Create Checkbook System Files")
+00050   fntop(program$,cap$="Create Checkbook System Files")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim cnam$*40,dat$*20,de$*50,vn$(4)*30 ,ta(2),cap$*128,io2$(2),wrd2$(2)*38
 00090   dim resp$(4)*50,option$(2)*25,contact$*30,email$*50,myact$*20
 00100 ! ______________________________________________________________________
-00110   let fncno(cno,cnam$)
+00110   fncno(cno,cnam$)
 00150 ! ______________________________________________________________________
 00160   let dv$="A"
 00170 MENU1: ! 
-00180   let fntos(sn$="ClBld") !:
+00180   fntos(sn$="ClBld") !:
         let mylen=50: let mypos=mylen+3 : let right=1
-00190   let fnlbl(1,1,"Insert Blank Formatted Diskette In Selected Drive:",mylen,right)
-00200   let fntxt(1,mypos,1,0,right,"",0,"The information needs to be placed on a diskette.  If you do not have a diskette drive, use your C: drive and transfer the information to a CD.",0 ) !:
+00190   fnlbl(1,1,"Insert Blank Formatted Diskette In Selected Drive:",mylen,right)
+00200   fntxt(1,mypos,1,0,right,"",0,"The information needs to be placed on a diskette.  If you do not have a diskette drive, use your C: drive and transfer the information to a CD.",0 ) !:
         let resp$(1)= dv$
 00210   let option$(1)="Build G/L Master File" !:
         let option$(2)="Build Payee File"
-00220   let fncomboa("TypeOfFile",3,25,mat option$,"You must indicate the type of entry you will be entering.",25)
+00220   fncomboa("TypeOfFile",3,25,mat option$,"You must indicate the type of entry you will be entering.",25)
 00230   let resp$(2)=str$(sel)
-00240   let fncmdkey("&Next",1,1,0,"Allows you to enter transactions.")
-00250   let fncmdkey("&Cancel",5,0,1,"Returns to menu without transferring files.")
-00260   let fnacs(sn$,0,mat resp$,ckey)
+00240   fncmdkey("&Next",1,1,0,"Allows you to enter transactions.")
+00250   fncmdkey("&Cancel",5,0,1,"Returns to menu without transferring files.")
+00260   fnacs(sn$,0,mat resp$,ckey)
 00270   if ckey=5 then goto XIT
 00280   let dv$=resp$(1)
 00290   if trim$(resp$(2))="Build G/L Master File" then let ti1=1 else let ti1=2

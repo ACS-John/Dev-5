@@ -1,7 +1,7 @@
 00020   dim tr(7),tr$*12,td$*30,cnam$*40
 00030   library 'S:\Core\Library': fntop
 00040 L40: pr newpage
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   close #101: ioerr ignore
 00070   open #101: "SROW=9,SCOL=23,EROW=11,ECOL=60,BORDER=DR,CAPTION=CONVERT ACCUMULATED TRANSACTIONS FILE",display,outin 
 00080   pr fields "10,24,C 32": "ENTER COMPANY NUMBER TO CONVERT:"

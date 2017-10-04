@@ -27,93 +27,93 @@
 00340 ! goto L400
 00350 ! should be done in checkfileversion, not here ! L350: close #1: ioerr ignore
 00360 ! should be done in checkfileversion, not here !   close #11: ioerr ignore
-00370 ! should be done in checkfileversion, not here !   let fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\glIndx2.H"&env$('cno'),"13 30")
-00380 ! should be done in checkfileversion, not here !   let fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\GLIndex.H"&env$('cno'),"1 12")
+00370 ! should be done in checkfileversion, not here !   fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\glIndx2.H"&env$('cno'),"13 30")
+00380 ! should be done in checkfileversion, not here !   fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\GLIndex.H"&env$('cno'),"1 12")
 00390 ! should be done in checkfileversion, not here !   goto L310
 00400 ! L400: 
 00402   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outin,relative 
 00410   open #3: "Name="&env$('Q')&"\GLmstr\ACTRANS.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ACTRIDX.H"&env$('cno')&",Shr",internal,outin,keyed ioerr MAIN
 00420 MAIN: ! 
-00430   let fntos(sn$="GLProb2-"&str$(edit_mode))
+00430   fntos(sn$="GLProb2-"&str$(edit_mode))
 00432   let mylen=23: let mypos=mylen+3 : let right=1
-00440   let fnlbl(1,1,"General Ledger Number:",mylen,right)
+00440   fnlbl(1,1,"General Ledger Number:",mylen,right)
 00450   if edit_mode=1 then ! attempt to put disabled text box for acct #
-00452     let fntxt(1,mypos,60,0,0,"",1,"",0)
+00452     fntxt(1,mypos,60,0,0,"",1,"",0)
 00454     let resp$(1)=fnrglbig$(gl$) ! lpad$(gl$,12)
-00456 !   let fnlbl(1,40,de$)
+00456 !   fnlbl(1,40,de$)
 00458   else 
-00460     let fnqglbig(1,mypos,0,2)
+00460     fnqglbig(1,mypos,0,2)
 00462     let resp$(1)=fnrglbig$(gl$)
 00464   end if 
 00470   let holdgl$=gl$
 00472   if edit_mode=1 then 
-00480     let fnlbl(2,1,"Beginning Balance:",mylen,right)
-00490     let fntxt(2,mypos,14,0,right,"10",0,"The beginning balance will always be the account balance at the beginning of the period. It gets updated when you close the month.",0 )
+00480     fnlbl(2,1,"Beginning Balance:",mylen,right)
+00490     fntxt(2,mypos,14,0,right,"10",0,"The beginning balance will always be the account balance at the beginning of the period. It gets updated when you close the month.",0 )
 00492     let resp$(2)=str$(bb)
-00500     let fnlbl(2,40,"Current Balance:",mylen,right)
-00510     let fntxt(2,66,14,0,right,"10",0,"The current balance will be updated any time a transaction is posted. The beginning and current balances should both be the same when you begin.",0 )
+00500     fnlbl(2,40,"Current Balance:",mylen,right)
+00510     fntxt(2,66,14,0,right,"10",0,"The current balance will be updated any time a transaction is posted. The beginning and current balances should both be the same when you begin.",0 )
 00512     let resp$(3)=str$(cb)
 00522     f1Col1Len=21 
 00524     f1Col2=1+f1Col1Len+2 : f1Col2Len=36
 00526     f1Col3=f1Col2+f1Col2Len+2 : f1Col3len=21
 00528     f1Col4=f1Col3+f1Col3len+2 : f1Col4Len=36
-00529     let fnfra(4,1,4,f1Col4+f1Col4Len+2,"Financial Statement Information"," ",0)
-00530     let fnlbl(1,1,"Balance Sheet Ref:",f1Col1Len,right,0,1)
-00540     let fncombof("fs-bal",1,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,0, "Select the balance sheet reference number where this account should appear on the balance sheet.",1)
+00529     fnfra(4,1,4,f1Col4+f1Col4Len+2,"Financial Statement Information"," ",0)
+00530     fnlbl(1,1,"Balance Sheet Ref:",f1Col1Len,right,0,1)
+00540     fncombof("fs-bal",1,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,0, "Select the balance sheet reference number where this account should appear on the balance sheet.",1)
 00542     let resp$(4)=str$(rf(1)) ! balance sheet ref #
-00550     let fnlbl(1,f1Col3,"2nd Balance Sheet:",f1Col3len,right,0,1)
-00560     let fncombof("fs-bal2",1,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsc.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnscindx.h"&env$('cno'),0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
+00550     fnlbl(1,f1Col3,"2nd Balance Sheet:",f1Col3len,right,0,1)
+00560     fncombof("fs-bal2",1,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsc.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnscindx.h"&env$('cno'),0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",1)
 00562     let resp$(5)=str$(rf(2)) ! balance sheet ref #
-00570     let fnlbl(2,1,"Income Statement Ref:",f1Col1len,right,0,1)
-00580     let fncombof("fs-inc",2,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,0, "Select the income statement reference number where this account should appear on the income statement.",1)
+00570     fnlbl(2,1,"Income Statement Ref:",f1Col1len,right,0,1)
+00580     fncombof("fs-inc",2,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,0, "Select the income statement reference number where this account should appear on the income statement.",1)
 00582     let resp$(6)=str$(rf(3)) ! income statement ref #
-00590     let fnlbl(2,f1Col3,"2nd Income Statement:",f1Col3len,right,0,1)
-00600     let fncombof("fs-inc2",2,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsj.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsjindx.h"&env$('cno'),0,0, "Select the income statement reference number where this account should appear on the secondary income statement.",1)
+00590     fnlbl(2,f1Col3,"2nd Income Statement:",f1Col3len,right,0,1)
+00600     fncombof("fs-inc2",2,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsj.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsjindx.h"&env$('cno'),0,0, "Select the income statement reference number where this account should appear on the secondary income statement.",1)
 00602     let resp$(7)=str$(rf(4)) ! 2nd income statement
-00610     let fnlbl(3,1,"Cash Flow/Fund Ref:",f1Col1len,right,0,1)
-00620     let fncombof("fs-cash",3,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsf.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsfindx.h"&env$('cno'),0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
+00610     fnlbl(3,1,"Cash Flow/Fund Ref:",f1Col1len,right,0,1)
+00620     fncombof("fs-cash",3,f1Col2,f1Col2Len,env$('Q')&"\GLmstr\acglfnsf.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsfindx.h"&env$('cno'),0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
 00622     let resp$(8)=str$(rf(5)) ! income statement ref #
-00630     let fnlbl(3,f1Col3,"2nd Cash Flow/Fund:",f1Col3len,right,0,1)
-00640     let fncombof("fs-cash2",3,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsg.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsgindx.h"&env$('cno'),0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
+00630     fnlbl(3,f1Col3,"2nd Cash Flow/Fund:",f1Col3len,right,0,1)
+00640     fncombof("fs-cash2",3,f1Col4,f1Col4Len,env$('Q')&"\GLmstr\acglfnsg.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsgindx.h"&env$('cno'),0,0, "Select the cash flow reference number where this account should appear on the cash flow statement.",1)
 00642     let resp$(9)=str$(rf(6)) ! 2nd cash flow
 
-00650     let fnlbl(10,1,"EOY Balance - 2 Years Ago:",30,right,0,0)
-00660     let fntxt(10,33,12,0,right,"10",0,"In order to pr prior year's cash flow and fund statements, the final balance from two years ago must be retained.",0)
+00650     fnlbl(10,1,"EOY Balance - 2 Years Ago:",30,right,0,0)
+00660     fntxt(10,33,12,0,right,"10",0,"In order to pr prior year's cash flow and fund statements, the final balance from two years ago must be retained.",0)
 00662     let resp$(10)=str$(pbp)
-00670     let fnfra(12,1,14,105,"History and Budget Information"," ",0)
+00670     fnfra(12,1,14,105,"History and Budget Information"," ",0)
 00680     let x=11
-00690     let fnlbl(1,14,"Balance This Yr",15,0,0,2)
-00691     let fnlbl(1,34,"Balance Last Yr",15,0,0,2)
-00692     let fnlbl(1,54,"Original Budget",15,0,0,2)
-00693     let fnlbl(1,74,"Revised Budget ",15,0,0,2)
+00690     fnlbl(1,14,"Balance This Yr",15,0,0,2)
+00691     fnlbl(1,34,"Balance Last Yr",15,0,0,2)
+00692     fnlbl(1,54,"Original Budget",15,0,0,2)
+00693     fnlbl(1,74,"Revised Budget ",15,0,0,2)
 00700     for j=1 to 13
-00710       let fnlbl(j+1,1,"Period "&str$(j),90,0,0,2)
-00712       let fntxt(j+1,14,14,0,right,"10",0,"",2 )
+00710       fnlbl(j+1,1,"Period "&str$(j),90,0,0,2)
+00712       fntxt(j+1,14,14,0,right,"10",0,"",2 )
 00714       let resp$(x)=str$(bc(j))
 00716       let x=x+1
-00718       let fntxt(j+1,34,14,0,right,"10",0,"",2 )
+00718       fntxt(j+1,34,14,0,right,"10",0,"",2 )
 00720       let resp$(x)=str$(bp(j))
 00722       let x=x+1
-00724       let fntxt(j+1,54,14,0,right,"10",0,"",2 )
+00724       fntxt(j+1,54,14,0,right,"10",0,"",2 )
 00726       let resp$(x)=str$(bm(j))
 00728       let x=x+1
-00730       let fntxt(j+1,74,14,0,right,"10",0,"",2 )
+00730       fntxt(j+1,74,14,0,right,"10",0,"",2 )
 00732       let resp$(x)=str$(revb(j))
 00734       let x=x+1
 00736     next j
 00740   end if 
 00770   if edit_mode=1 then 
-00772     let fncmdkey("&Save",6,1,0,"")
-00774     let fncmdkey("Review &Transactions",3,0,0,"")
-00776     let fncmdkey("&Delete",7,0,0,"")
-00778     let fnbutton(1,mypos+60+2,"C&hange",9,"Change the Account Number and/or the Description of this General Ledger Account") ! let fncmdkey("C&hange Acct-Desc",9,0,0,"")
+00772     fncmdkey("&Save",6,1,0,"")
+00774     fncmdkey("Review &Transactions",3,0,0,"")
+00776     fncmdkey("&Delete",7,0,0,"")
+00778     fnbutton(1,mypos+60+2,"C&hange",9,"Change the Account Number and/or the Description of this General Ledger Account") ! let fncmdkey("C&hange Acct-Desc",9,0,0,"")
 00780   else 
-00782     let fncmdkey("&Edit",1,1,0,"") ! if edit_mode=1 then let fncmdkey("&Edit",1,0,0,"") else let fncmdkey("&Edit",1,1,0,"")
-00784     let fncmdkey("&Add",2,0,0,"")
-00786     let fncmdkey("Sea&rch",8,0,0,"")
+00782     fncmdkey("&Edit",1,1,0,"") ! if edit_mode=1 then let fncmdkey("&Edit",1,0,0,"") else let fncmdkey("&Edit",1,1,0,"")
+00784     fncmdkey("&Add",2,0,0,"")
+00786     fncmdkey("Sea&rch",8,0,0,"")
 00788   end if 
-00790   let fncmdkey("&Cancel",5,0,1,"")
-00850   let fnacs(sn$,0,mat resp$,ckey)
+00790   fncmdkey("&Cancel",5,0,1,"")
+00850   fnacs(sn$,0,mat resp$,ckey)
 00870   if ckey=5 then goto XIT
 00880 ! If edit_mode=1 Then Let KEY$=GL$=LPAD$(RESP$(1)(1:12),12): Goto 885
 00890   let gl$=fnagl$(resp$(1)) : let key$=gl$
@@ -149,22 +149,22 @@
 01210 XIT: let fnxit
 01220 ! ______________________________________________________________________
 01230 ADD: ! 
-01240   let fntos(sn$="GLAdd")
+01240   fntos(sn$="GLAdd")
 01242   let mylen=23: let mypos=mylen+3 : let right=1: let rc=0
 01250   if use_dept =1 then let fnlbl(1,26,"Fund #",6,2)
 01260   if use_sub =1 then let fnlbl(1,40,"Sub #",6,2)
-01270   let fnlbl(2,1,"General Ledger Number:",mylen,right)
+01270   fnlbl(2,1,"General Ledger Number:",mylen,right)
 01280   if use_dept=1 then let fntxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
 01282   let resp$(rc+=1)=str$(dno)
-01290   let fntxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
+01290   fntxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
 01292   let resp$(rc+=1)=str$(ano)
 01300   if use_sub=1 then let fntxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 )
 01302   let resp$(rc+=1)=str$(sno)
-01310   let fnlbl(3,1,"Description:",mylen,right)
-01320   let fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
+01310   fnlbl(3,1,"Description:",mylen,right)
+01320   fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 01322   let resp$(rc+=1)=""
-01330   let fncmdset(2)
-01340   let fnacs(sn$,0,mat resp$,ckey)
+01330   fncmdset(2)
+01340   fnacs(sn$,0,mat resp$,ckey)
 01360   if ckey=5 then goto MAIN
 01370   let fixgrid=99
 01380   let dno=ano=sno=0
@@ -194,7 +194,7 @@
 01580 DO_EDIT: ! r:
 01582   pr newpage
 01590   read #1,using L1740,key=key$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey L1650
-01600   let fnrglbig$(key$)
+01600   fnrglbig$(key$)
 01610   for j=1 to 13
 01620     if revb(j)=-202020202.02 then let revb(j)=0
 01630   next j
@@ -208,7 +208,7 @@
 01684     let ml$(1)="You are attempting to change account # "&holdgl$&"!"
 01686     let ml$(2)="to "&gl$&".  Take OK to change the account."
 01688     let ml$(3)="Take Cancel to return to main screen."
-01690     let fnmsgbox(mat ml$,resp$,cap$,49)
+01690     fnmsgbox(mat ml$,resp$,cap$,49)
 01692     if resp$<>"OK" then 
 01694       goto L1780
 01696     end if 
@@ -237,7 +237,7 @@
 01840   let ml$(1)="Account # "&gl$&" has a balance. You should not " 
 01850   let ml$(2)="delete an account with a balance." 
 01860   let ml$(3)="Take OK to delete; else Cancel to return to main screen." 
-01870   let fnmsgbox(mat ml$,resp$,cap$,49)
+01870   fnmsgbox(mat ml$,resp$,cap$,49)
 01877   if resp$="OK" then let delete_it=1: goto L1910
 01878   if resp$="Cancel" then goto L2030
 01880 L1880: !
@@ -245,7 +245,7 @@
 01884   let ml$(1)="You have chosen to delete account # "&gl$&"!" 
 01886   let ml$(2)="Take OK to delete the account." 
 01888   let ml$(3)="Take Cancel to return to main screen." 
-01890   let fnmsgbox(mat ml$,resp$,cap$,49)
+01890   fnmsgbox(mat ml$,resp$,cap$,49)
 01892   if resp$="OK" then let delete_it=1: goto L1910
 01900   if resp$="Cancel" then goto L2030
 01910 L1910: !
@@ -266,9 +266,9 @@
 02040   return  ! /r
 02050 ! PRINT_PROOF: ! r:  pr proof list is currently unused
 02060 !   restore #1,key>="            ": eof ignore
-02070 !   let fnwait(101,cap$,"Printing: Please wait...",1)
+02070 !   fnwait(101,cap$,"Printing: Please wait...",1)
 02080 ! ! on fkey 5 goto PP_FINIS
-02090 !   let fnopenprn
+02090 !   fnopenprn
 02100 !   gosub PP_HEADER
 02110 ! PP_READ_1: ! 
 02112 !   read #1,using L1740: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp eof PP_FINIS
@@ -312,21 +312,21 @@
 02430 !   gosub PP_HEADER
 02440 !   goto PP_READ_1
 02450 ! PP_FINIS: ! 
-02452 !   let fncloseprn
+02452 !   fncloseprn
 02460 !   on fkey 5 ignore 
 02470 !   if fnprocess=1 then goto XIT else goto MAIN
 02480 ! ! /r
 02550 IGNORE: continue 
 02560 REVIEW_TRANS: ! r:
-02570   let fntos(sn$="review_trans")
+02570   fntos(sn$="review_trans")
 02572   let mylen=23: let mypos=mylen+3 : let right=1: let rc=0
-02580   let fnfra(1,1,3,50,"Review transactions","Transactions are retained in the current files until the month is closed; then they are transferred to history ",0)
-02590   let fnopt(1,1,"Current transactions",0,1)
+02580   fnfra(1,1,3,50,"Review transactions","Transactions are retained in the current files until the month is closed; then they are transferred to history ",0)
+02590   fnopt(1,1,"Current transactions",0,1)
 02600   let resp$(1)="True"
-02610   let fnopt(2,1,"History transactions",0,1)
+02610   fnopt(2,1,"History transactions",0,1)
 02620   let resp$(2)="False"
-02630   let fncmdset(2)
-02640   let fnacs(sn$,0,mat resp$,ckey)
+02630   fncmdset(2)
+02640   fnacs(sn$,0,mat resp$,ckey)
 02650   if ckey=5 then goto MAIN
 02660   if resp$(1)="True" then let rv=1
 02670   if resp$(2)="True" then let rv=2
@@ -342,8 +342,8 @@
 02702   cmask$(2)="": cmask$(3)="3" : cmask$(4)='10' !:
         cmask$(5)='30' : cmask$(6)='30': cmask$(7)='' !:
         cmask$(8)='' : cmask$(9)='30'
-02710   let fntos(sn$="gltrans")
-02720   let fnflexinit1('Currentfile',1,1,20,85,mat chdr$,mat cmask$,1,0)
+02710   fntos(sn$="gltrans")
+02720   fnflexinit1('Currentfile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 02730   adr=ta(1): let pc2=0
 02740 !  read current or history files
 02750   if rv=1 then goto READ_FROM_CURRENT else goto READ_FROM_HISTORY
@@ -368,12 +368,12 @@
 02932   let item$(2)=trgl$: let item$(3)=str$(tr(4)): let item$(4)=str$(tr(5)) !:
         let item$(5)=str$(tr(6)) : let item$(6)=str$(tr(7)) : let item$(7)=tr$ !:
         let item$(8)=td$: let item$(9)=str$(pc2) !:
-        let fnflexadd1(mat item$)
+        fnflexadd1(mat item$)
 02940   if rv=1 then goto L2780 else goto L2870 ! read from current or history
 02950 EO_TRANS_GRID: ! 
 02960   if rv=1 then let fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any information.")
-02970   let fncmdkey("E&xit",5,0,1,"Exits to main menu")
-02980   let fnacs(sn$,0,mat resp$,ck)
+02970   fncmdkey("E&xit",5,0,1,"Exits to main menu")
+02980   fnacs(sn$,0,mat resp$,ck)
 02990   if ck=5 then goto MAIN
 03000   if ck=2 then let edit_mode=1 else let edit_mode=0
 03010   let recordnum=val(resp$(1))
@@ -383,35 +383,35 @@
 03042   let resp$(4)=str$(tr(5)): let resp$(5)=str$(tr(6)) : let resp$(6)=str$(tr(7)) !:
         let resp$(7)=tr$: let resp$(8)=td$ !:
         let resp$(9)=str$(pc2)
-03050   let fntos(sn$="Tredit")
+03050   fntos(sn$="Tredit")
 03052   let mylen=23: let mypos=mylen+3 : let right=1
-03060   let fnlbl(1,1,"General Ledger Number:",mylen,right)
-03070   let fnqglbig(1,mypos,0,2)
+03060   fnlbl(1,1,"General Ledger Number:",mylen,right)
+03070   fnqglbig(1,mypos,0,2)
 03072   let resp$(1)=fnrglbig$(trgl$)
 03080   let holdgl$=gl$
-03090   let fnlbl(2,1,"Date:",mylen,right)
-03100   let fntxt(2,mypos,10,0,right,"1",0,"",0)
+03090   fnlbl(2,1,"Date:",mylen,right)
+03100   fntxt(2,mypos,10,0,right,"1",0,"",0)
 03102   let resp$(2)=str$(tr(4))
-03110   let fnlbl(3,1,"Amount:",mylen,right)
-03120   let fntxt(3,mypos,10,0,right,"10",0,"",0)
+03110   fnlbl(3,1,"Amount:",mylen,right)
+03120   fntxt(3,mypos,10,0,right,"10",0,"",0)
 03122   let resp$(3)=str$(tr(5))
-03130   let fnlbl(4,1,"Trans Code:",mylen,right)
-03140   let fntxt(4,mypos,2,0,right,"30",0,"Transaction Code - 1=Disbursment  2= Receipt  3= Adjustment",0)
+03130   fnlbl(4,1,"Trans Code:",mylen,right)
+03140   fntxt(4,mypos,2,0,right,"30",0,"Transaction Code - 1=Disbursment  2= Receipt  3= Adjustment",0)
 03142   let resp$(4)=str$(tr(6))
-03150   let fnlbl(5,1,"Post Code:",mylen,right)
-03160   let fntxt(5,mypos,2,0,right,"30",0,"",0)
+03150   fnlbl(5,1,"Post Code:",mylen,right)
+03160   fntxt(5,mypos,2,0,right,"30",0,"",0)
 03162   let resp$(5)=str$(tr(7))
-03170   let fnlbl(6,1,"Ck/Ref:",mylen,right)
-03180   let fntxt(6,mypos,12,0,right,"",0,"",0)
+03170   fnlbl(6,1,"Ck/Ref:",mylen,right)
+03180   fntxt(6,mypos,12,0,right,"",0,"",0)
 03182   let resp$(6)=tr$
-03190   let fnlbl(7,1,"Description:",mylen,right)
-03200   let fntxt(7,mypos,30,0,0,"",0,"",0)
+03190   fnlbl(7,1,"Description:",mylen,right)
+03200   fntxt(7,mypos,30,0,0,"",0,"",0)
 03202   let resp$(7)=td$
-03210   let fnlbl(8,1,"Period:",mylen,right)
-03220   let fntxt(8,mypos,2,0,0,"30",0,"",0)
+03210   fnlbl(8,1,"Period:",mylen,right)
+03220   fntxt(8,mypos,2,0,0,"30",0,"",0)
 03222   let resp$(8)=str$(pc2)
-03230   let fncmdset(2)
-03240   let fnacs(sn$,0,mat resp$,ckey)
+03230   fncmdset(2)
+03240   fnacs(sn$,0,mat resp$,ckey)
 03250   if ckey=5 then goto MAIN
 03260   let trgl$=fnagl$(resp$(1)) ! transaction gl #
 03270   let tr(4)=val(resp$(2)) ! date
@@ -426,7 +426,7 @@
 03360   adr=ta(1): goto TRANSACTION_GRID
 03370 ! /r
 03630 SEARCH_GRID: ! r:
-03640   let fnaccount_search(gl$,fixgrid)
+03640   fnaccount_search(gl$,fixgrid)
 03650   let fixgrid=0
 03660   read #1,using L1740,key=gl$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey MAIN
 03670   goto MAIN ! need search grid here   KJ
@@ -455,26 +455,26 @@
 03870 CHANGE_ACCT_NUM: ! r:
 03880   let dno=val(gl$(1:3)): ano=val(gl$(4:9)): let sno=val(gl$(10:12))
 03890   mat resp$=("")
-03900   let fntos(sn$="GLchange")
+03900   fntos(sn$="GLchange")
 03902   let mylen=28: let mypos=mylen+3 : let right=1: let rc=0
 03910   if use_dept =1 then let fnlbl(1,31,"Fund #",6,2)
 03920   if use_sub =1 then let fnlbl(1,45,"Sub #",6,2)
-03930   let fnlbl(2,1,"New General Ledger Number:",mylen,right)
+03930   fnlbl(2,1,"New General Ledger Number:",mylen,right)
 03940   if use_dept=1 then 
-03941     let fntxt(2,31,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
+03941     fntxt(2,31,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 )
 03942     let resp$(rc+=1)=str$(dno)
 03946   end if
-03950   let fntxt(2,36,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
+03950   fntxt(2,36,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 )
 03952   let resp$(rc+=1)=str$(ano)
 03960   if use_sub=1 then 
-03962     let fntxt(2,45,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
+03962     fntxt(2,45,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
 03964     let resp$(rc+=1)=str$(sno)
 03966   end if
-03970   let fnlbl(3,1,"Description:",mylen,right)
-03980   let fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
+03970   fnlbl(3,1,"Description:",mylen,right)
+03980   fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 03982   let resp$(rc+=1)=d$
-03990   let fncmdset(2)
-04000   let fnacs(sn$,0,mat resp$,ckey)
+03990   fncmdset(2)
+04000   fnacs(sn$,0,mat resp$,ckey)
 04020   if ckey=5 then goto MAIN
 04030   let fixgrid=99
 04040   let dno=ano=sno=0
@@ -494,7 +494,7 @@
 04172   let ml$(1)="General ledger account # "&key$&" already " 
 04174   let ml$(2)="exists. Take OK to review the account." 
 04176   let ml$(3)="Take Cancel to return to main screen." 
-04178   let fnmsgbox(mat ml$,resp$,cap$,49)
+04178   fnmsgbox(mat ml$,resp$,cap$,49)
 04180   if resp$="OK" then goto DO_EDIT else goto MAIN
 04190 L4190: !
 04192   let gl$=key$
@@ -514,6 +514,6 @@
 20060   let ml$(2)="Take the 'Change #' option to change either the"
 20080   let ml$(3)="account number or the description."
 20100   let ml$(4)="Click OK to access the new account; else Cancel to quit."
-20120   let fnmsgbox(mat ml$,resp$,cap$,49)
+20120   fnmsgbox(mat ml$,resp$,cap$,49)
 20140   if resp$='OK' then goto DO_EDIT
 20160   if resp$='Cancel' then let gl$=key$=holdgl$: goto MAIN ! /r

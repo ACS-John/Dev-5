@@ -13,7 +13,7 @@
 00110   let option$="/s /a-d /on" ! widows xp ... /s   - include sub dirs. !:
         ! .                                       /a-d - exclude dir. names !:
         ! .                                       /on  - order by name
-00120   let fngetdir(dir$,mat filename$,option$)
+00120   fngetdir(dir$,mat filename$,option$)
 00130 ! __
 00140   for tmp=1 to udim(filename$)
 00150     if rtrm$(filename$(tmp))="" then goto L170

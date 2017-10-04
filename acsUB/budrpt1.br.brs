@@ -5,7 +5,7 @@
 00050 ! ______________________________________________________________________
 00060   dim ba(13),bt1(14,2),badr(2),n$*25,txt$*40
 00070   dim t1(11),t2(11),t3(11),cap$*128,message$*40,servicename$(10)*20,service$(10)*2,hdr$*255,underline$*255,budget$*255
-00100   let fntop(program$, cap$="Worksheet")
+00100   fntop(program$, cap$="Worksheet")
 00110 ! ______________________________________________________________________
 00120   fnget_services(mat servicename$,mat service$)
 00130   let hdr$="{\ul  Date   }"
@@ -28,25 +28,25 @@
 00240   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
 00250   bud1=1
 00260   let sn$="BudRpt1" !:
-        let fntos(sn$) !:
+        fntos(sn$) !:
         let mylen=32 : let mypos=mylen+2
 00270   let txt$="Starting Date (blank for all):" !:
-        let fnlbl(1,1,txt$,mylen,1)
-00280   let fntxt(1,mypos,8,0,0,"1") !:
+        fnlbl(1,1,txt$,mylen,1)
+00280   fntxt(1,mypos,8,0,0,"1") !:
         let resp$(1)=""
 00290   let txt$="Ending Date (blank for all):" !:
-        let fnlbl(2,1,txt$,mylen,1)
-00300   let fntxt(2,mypos,8,0,0,"1") !:
+        fnlbl(2,1,txt$,mylen,1)
+00300   fntxt(2,mypos,8,0,0,"1") !:
         let resp$(2)=""
-00310   let fncmdset(3)
-00320   let fnacs(sn$,0,mat resp$,ckey)
+00310   fncmdset(3)
+00320   fnacs(sn$,0,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
 00340   let d1=val(resp$(1)) conv L350
 00350 L350: let d2=val(resp$(2)) conv L360
 00360 L360: ! ______________________________________________________________________
 00370   on fkey 5 goto XIT
 00380 ! On Pageoflow Goto NEWPGE
-00390   let fnopenprn
+00390   fnopenprn
 00400   gosub HEADING
 00410   goto READ_BUDMSTR
 00420 ! ______________________________________________________________________
@@ -130,7 +130,7 @@
 01130   return 
 01140 ! ______________________________________________________________________
 01150 DONE: ! 
-01160   let fncloseprn
+01160   fncloseprn
 01170 XIT: let fnxit
 01180 ! ______________________________________________________________________
 01190 ! <Updateable Region: ERTN>

@@ -4,7 +4,7 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$='GLTrans')
+00090   fntop(program$,cap$='GLTrans')
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER : gosub CLOSE_FILE
@@ -18,9 +18,9 @@
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 00190 ! ______________________________________________________________________
 00200 BUILD_LAYOUT: ! 
-00210   let fncno(cno)
+00210   fncno(cno)
 00220 ! 
-00300   let fn_setup_hamster
+00300   fn_setup_hamster
 00400 ! 
 00420 ! ** Combo Boxes **                                                   !:
         ! CL=Field Number  : C$(CL,1)='ComboF'                                !:
@@ -51,7 +51,7 @@
 00460   return 
 00470 ! ______________________________________________________________________
 00480 HAMSTER: ! 
-00490   let fnhamster("GLTrans",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00490   fnhamster("GLTrans",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00500   return 
 00510 ! ______________________________________________________________________
 00520 XIT: let fnxit
@@ -85,14 +85,14 @@
 81400     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
 81600 ! 
 81800 ! fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,ar_mask)
-81900     let fn_add_rec("Dept",3,'N',0,mask_number)
-82000     let fn_add_rec("Acct",6,'N',0,mask_number)
-82100     let fn_add_rec("Sub",3,'N',0,mask_number)
-82200     let fn_add_rec("Date",6,'N',0,mask_mmddyy)
-82400     let fn_add_rec("Amount",12.2,'PD',6.2,mask_pointtwo)
-82600     let fn_add_rec("Trans Code",2,'N',0,mask_pointtwo)
-82800     let fn_add_rec("Posting Code",2,'N',0,mask_pointtwo)
-83000     let fn_add_rec("Reference #",12,'C')
-83200     let fn_add_rec("Description",30,'C')
-83400     let fn_add_rec("Next Tran Addr",5,'PD',3,mask_number)
+81900     fn_add_rec("Dept",3,'N',0,mask_number)
+82000     fn_add_rec("Acct",6,'N',0,mask_number)
+82100     fn_add_rec("Sub",3,'N',0,mask_number)
+82200     fn_add_rec("Date",6,'N',0,mask_mmddyy)
+82400     fn_add_rec("Amount",12.2,'PD',6.2,mask_pointtwo)
+82600     fn_add_rec("Trans Code",2,'N',0,mask_pointtwo)
+82800     fn_add_rec("Posting Code",2,'N',0,mask_pointtwo)
+83000     fn_add_rec("Reference #",12,'C')
+83200     fn_add_rec("Description",30,'C')
+83400     fn_add_rec("Next Tran Addr",5,'PD',3,mask_number)
 84000   fnend  ! fn_setup_hamster

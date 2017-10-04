@@ -8,9 +8,9 @@
 11400 ! constants
 11600   cr$=chr$(13) : let lf$=chr$(10) : let tab$=chr$(9)
 11800   crlf$=cr$&lf$
-12000   let fncno(cno,cnam$)
+12000   fncno(cno,cnam$)
 12400 ! 
-12600   let fntop(program$,cap$="Import CSV to Time Sheets")
+12600   fntop(program$,cap$="Import CSV to Time Sheets")
 12800   if wbversion$(1:4)<"4.30" then pr "WBVersion is "&wbversion$&" and it must be 4.30 or higher for this program to run" : let fnpause
 12820   client_id_sage_ax=3811
 12822   client_id_brc=90
@@ -21,20 +21,20 @@
 13800   dim label$(2)*25,filter_date(2)
 14000   let label$(1)='Starting Date'
 14200   let label$(2)='Ending Date'
-14400   let fn_ask_dates(mat label$,mat filter_date)
+14400   fn_ask_dates(mat label$,mat filter_date)
 14600   if fkey=93 or fkey=99 then goto XIT
 14800   open #h_in:=fngethandle: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input 
 15000   open #h_out:=fngethandle: "Name="&env$('Q')&"\TMmstr\TimeSheet.h"&str$(cno)&",RecL=86,KFName="&env$('Q')&"\TMmstr\TimeSheet-Idx.h"&str$(cno)&",Replace,KPs=1,KLn=5",internal,outin,keyed 
 15200   open #h_support:=fngethandle: "Name="&env$('Q')&"\TMmstr\SUPPORT.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\support-idx.h"&str$(cno)&",Shr",internal,input,keyed 
 15400 FMSUPPORT: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
-15600   let fnopenprn
+15600   fnopenprn
 15800   pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
 16000 FORM_OUT: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
 16200 FORM_PRN: form pos 1,c 8,x 1,n 6,n 10.2,n 10,n 10,x 1,c 15,n 7.2
 16400 FORM_PRN_HEAD: form pos 1,cc 8,x 1,c 6,x 1,5*cr 10,x 1,c 30,cr 7
-16600   let fn_get_next_line(line$) : let line_count+=1 ! consume headings
+16600   fn_get_next_line(line$) : let line_count+=1 ! consume headings
 16800   do 
-17000     let fn_get_next_line(line$) : let line_count+=1
+17000     fn_get_next_line(line$) : let line_count+=1
 17064     let the_date_prior=the_date
 17200     if line$<>'' and line$<>chr$(13) then 
 17400       let str2mat(line$,mat item$,',',"QUOTES:TRIM")
@@ -50,9 +50,9 @@
 18100           dim description$*512
 18120           let description$=item$(12)
 18130 !         if client_id=3811 and the_date=20160716 then pr 'sage_code$='&sage_code$&' date:';the_date : pause
-18140           let fn_acs_write_out(the_date,client_id,hours,val(item$(9)),val(item$(10)),item$(11)(1:30),sage_code$)
+18140           fn_acs_write_out(the_date,client_id,hours,val(item$(9)),val(item$(10)),item$(11)(1:30),sage_code$)
 18160           if client_id=client_id_sage_ax then 
-18180             let fn_sage_write_out(the_date,hours,sage_code$,description$)
+18180             fn_sage_write_out(the_date,hours,sage_code$,description$)
 18182 !           pr the_date,hours,description$ : pause
 18200           end if 
 18220           pr #255,using FORM_PRN: date$(days(the_date,'ccyymmdd'),'mm/dd/yy'),client_id,hours,val(item$(9)),val(item$(10)),item$(11)(1:15),inp(4)
@@ -62,7 +62,7 @@
 19400   loop until line$=''
 19600 ! THE_END: !
 19800   close #h_in: 
-20000   let fncloseprn
+20000   fncloseprn
 20200 XIT: let fnxit
 20400   def fn_acs_write_out(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30; wo_sage_code$*128)
 20600     dim inp(7)
@@ -199,7 +199,7 @@
 44000       let gtd_date_dd=val(gtd_source$)
 44200       let gtd_return=val(str$(gtd_date_ccyy)&cnvrt$('pic(##)',gtd_date_mm)&cnvrt$('pic(##)',gtd_date_dd))
 44400     end if  ! gtd_source$<>''
-44600     let fn_get_the_date=gtd_return
+44600     fn_get_the_date=gtd_return
 44800   fnend  ! fn_get_the_date
 45000 ! region: ertn
 45200 ERTN: let fnerror(program$,err,line,act$,"xit")
@@ -210,15 +210,15 @@
 46200   goto ERTN
 46400 ! /region
 46600   def fn_ask_dates(mat label$,mat filter_date)
-46800     let fntos(sn$="ask_"&str$(udim(mat label$))&'_dates')
+46800     fntos(sn$="ask_"&str$(udim(mat label$))&'_dates')
 47000     let respc=0
 47200     for ad_line=1 to udim(mat label$)
-47400       let fnlbl(ad_line+1,1,label$(ad_line),25,1)
-47600       let fntxt(ad_line+1,27,8,0,1,"3")
+47400       fnlbl(ad_line+1,1,label$(ad_line),25,1)
+47600       fntxt(ad_line+1,27,8,0,1,"3")
 47800       let resp$(respc+=1)=str$(filter_date(ad_line))
 48000     next ad_line
-48200     let fncmdset(3)
-48400     let fnacs(sn$,0,mat resp$,ckey)
+48200     fncmdset(3)
+48400     fnacs(sn$,0,mat resp$,ckey)
 48600     if ckey=5 then let fkey(99)
 48800     for ad_line=1 to udim(mat label$)
 49000       let filter_date(ad_line)=val(srep$(resp$(ad_line),'/',''))
@@ -240,7 +240,7 @@
 51240     else 
 51260       let hr_return=250
 51280     end if 
-51300     let fn_acs_hourly_rate=hr_return
+51300     fn_acs_hourly_rate=hr_return
 51320   fnend 
 53000   def fn_onsupport(wo_client,wo_month,the_date)
 53020     let os_return=0
@@ -258,7 +258,7 @@
 53260     if the_date<=sdt2 then let os_return=1
 53280 ! 
 53300 OS_FINIS: ! 
-53320     let fn_onsupport=os_return
+53320     fn_onsupport=os_return
 53340   fnend 
 54000   def fn_sage_hourly_rate(wo_sage_code$)
 54020     if lwrc$(wo_sage_code$)='glover' then 
@@ -268,7 +268,7 @@
 54140     else 
 54160       let shr_return=48.5
 54180     end if 
-54200     let fn_sage_hourly_rate=shr_return
+54200     fn_sage_hourly_rate=shr_return
 54220   fnend 
 56000   def fn_sage_write_out(wo_date,wo_time,wo_sage_code$*128,wo_desc$*512)
 56020     dim wo_sage_code_prior$*128

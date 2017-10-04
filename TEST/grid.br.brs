@@ -15,8 +15,8 @@
 10380   colmask$(4)="4"
 10400   colmask$(5)="5"
 10402   colmask$(6)=""
-20000   let fntos(sn$="testflex")
-20020   let fnflexinit1("ubrate",1,1,10,50,mat colhdr$,mat colmask$,1)
+20000   fntos(sn$="testflex")
+20020   fnflexinit1("ubrate",1,1,10,50,mat colhdr$,mat colmask$,1)
 20040   dim source_format$(6)
 20060   let source_format$(1)='ccyymmdd'
 20080   let source_format$(2)='mmddccyy'
@@ -32,9 +32,9 @@
 20240     let item$(4)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! )date$("dd/mm/yy")
 20260     let item$(5)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! )date$("dd/mm/yy")
 20280     let item$(6)=source_format$(x) ! )date$("dd/mm/yy")
-20300     let fnflexadd1(mat item$)
+20300     fnflexadd1(mat item$)
 20320   next x
 20340 EO_GRID: ! 
-20360   let fncmdkey("End",5,0,0)
+20360   fncmdkey("End",5,0,0)
 20380 ! ____
-20400   let fnacs(sn$,0,mat resp$,ckey) ! CALL FLEXGRID
+20400   fnacs(sn$,0,mat resp$,ckey) ! CALL FLEXGRID

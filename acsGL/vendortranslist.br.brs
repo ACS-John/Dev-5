@@ -10,10 +10,10 @@
 00100   dim scid$*79
 00110   dim sd$(8),se$(8)*30,pl$(8,2)*35
 00120 ! ______________________________________________________________________
-00130   let fntop("S:\acsGL\VendorTransList",cap$="Payee Transaction List")
-00140   let fnconsole(off=0)
-00150   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00130   fntop("S:\acsGL\VendorTransList",cap$="Payee Transaction List")
+00140   fnconsole(off=0)
+00150   fncno(cno,cnam$) !:
+        fndat(dat$)
 00160   open #payee=1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00170   open #payee2=11: "Name="&env$('Q')&"\GLmstr\paymstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\payidx2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00180   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -23,23 +23,23 @@
 00220 ! _________________________
 00230 MENU1: ! 
 00240 ASKDAT: ! 
-00250   let fntos(sn$="VendorTransList") !:
+00250   fntos(sn$="VendorTransList") !:
         let mylen=28 : let mypos=mylen+2
-00260   let fnlbl(1,1,"Report Heading Date:",mylen,right=1)
-00270   let fntxt(1,mypos,20) !:
+00260   fnlbl(1,1,"Report Heading Date:",mylen,right=1)
+00270   fntxt(1,mypos,20) !:
         let resp$(1)=dat$
-00280   let fnlbl(3,1,"Transaction Starting Date:",mylen,right)
-00290   let fntxt(3,mypos,8,0,left,'CCYYMMDD',0,'(Blank for All)  Normally you would enter the first day of the year, but you can analyze any time frame.') !:
+00280   fnlbl(3,1,"Transaction Starting Date:",mylen,right)
+00290   fntxt(3,mypos,8,0,left,'CCYYMMDD',0,'(Blank for All)  Normally you would enter the first day of the year, but you can analyze any time frame.') !:
         let resp$(1)=str$(transactionstartingdate)
-00300   let fnlbl(4,1,"Transaction Ending Date:",mylen,right)
-00310   let fntxt(4,mypos,8,0,left,'CCYYMMDD',0,'(Blank for All)  Normally you would enter the last day of the year, but you can analyze any time frame.') !:
+00300   fnlbl(4,1,"Transaction Ending Date:",mylen,right)
+00310   fntxt(4,mypos,8,0,left,'CCYYMMDD',0,'(Blank for All)  Normally you would enter the last day of the year, but you can analyze any time frame.') !:
         let resp$(2)=str$(transactionendingdate)
-00320   let fncmdset(2)
-00330   let fnacs(sn$,0,mat resp$,ckey)
+00320   fncmdset(2)
+00330   fnacs(sn$,0,mat resp$,ckey)
 00340   if ckey=5 then goto XIT
 00350   let dat$=resp$(1)
 00360   let dattab=66-int(len(rtrm$(dat$))/2)
-00370   let fndat(dat$,2)
+00370   fndat(dat$,2)
 00380 L380: let fnopenprn
 00390   gosub L630
 00400 L400: read #1,using L420: vn$,nam$,ytdp eof L730

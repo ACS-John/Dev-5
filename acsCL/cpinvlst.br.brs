@@ -6,23 +6,23 @@
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,vnam$*30,de$*30,cap$*128,sq1$*1,item1$(2)*15
 00080 ! ______________________________________________________________________
-00090   let fncno(cno,cnam$)
-00100   let fntop(program$,cap$="Payables Listing (Any Time)")
+00090   fncno(cno,cnam$)
+00100   fntop(program$,cap$="Payables Listing (Any Time)")
 00120   cancel=99
-00130   let fntos("cpinvlst") !:
+00130   fntos("cpinvlst") !:
         let respc=0
-00140   let fnlbl(1,1,"Period Ending Date:",23,1)
-00150   let fntxt(1,25,10,0,1,"3") !:
+00140   fnlbl(1,1,"Period Ending Date:",23,1)
+00150   fntxt(1,25,10,0,1,"3") !:
         let resp$(respc+=1)=str$(ped)
-00160   let fnlbl(2,1,"Print Order:",23,1)
+00160   fnlbl(2,1,"Print Order:",23,1)
 00170   let item1$(1)="General Ledger" !:
         let item1$(2)="Vendor"
-00180   let fncomboa("ubnamlst-srt",2,25,mat item1$,tt$) !:
+00180   fncomboa("ubnamlst-srt",2,25,mat item1$,tt$) !:
         let resp$(respc+=1)=item1$(1)
-00190   let fnlbl(3,1,"Fund Number to Print:",23,1)
-00200   let fntxt(3,25,3,0,1,"30") !:
+00190   fnlbl(3,1,"Fund Number to Print:",23,1)
+00200   fntxt(3,25,3,0,1,"30") !:
         let resp$(respc+=1)=str$(fund)
-00210   let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+00210   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 00220   if ckey=5 then goto XIT
 00230   let ped=val(resp$(1))
 00240   let sq1$=resp$(2)(1:1)
@@ -83,7 +83,7 @@
 00750 L750: execute "Sort "&env$('Temp')&"\Control"
 00760   open #addr=1: "Name="&env$('Temp')&"\ADDR",internal,input ioerr XIT
 00770   open #work=5: "Name="&env$('Temp')&"\WORK",internal,input,relative 
-00780   let fnopenprn
+00780   fnopenprn
 00790   gosub HDR
 00800 READ_ADDR: ! 
 00810   read #addr,using 'Form POS 1,PD 3': r5 eof ENDALL
@@ -127,7 +127,7 @@
 01160   pr #255: "                                  ______________________________  __________" pageoflow NEWPGE
 01170   pr #255,using 'Form POS 35,CR 30,N 12.2': "Final Total",t2
 01180   pr #255: "                                  =========================================="
-01190   let fncloseprn
+01190   fncloseprn
 01200 XIT: let fnxit
 01210 ! ______________________________________________________________________
 01220 ! <Updateable Region: ERTN>

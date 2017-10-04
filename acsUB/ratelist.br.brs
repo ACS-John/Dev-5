@@ -8,26 +8,26 @@
 00090   dim fa$(5),sa$(4),fb$(1),fc$(1),sb$(1)*38,fd$(1),z$(4)*11,srvc$*11
 00100   dim io2$(38),cnam$*40,code$(4),a(7),d(15),g(10),e$(4)*30,f$(3)*12
 00110 ! ______________________________________________________________________
-00120   let fncno(cno,cnam$)
-00130   let fnd1(bdate)
-00140   let fntop(program$,cap$="Analyze Charges")
+00120   fncno(cno,cnam$)
+00130   fnd1(bdate)
+00140   fntop(program$,cap$="Analyze Charges")
 00150 MAIN: ! 
-00160   let fntos(sn$:="UBAnalyze") !:
+00160   fntos(sn$:="UBAnalyze") !:
         let mylen=20 !:
         let mypos=mylen+2
-00170   let fnlbl(1,1,"Billing Date:",mylen,1)
-00180   let fntxt(1,mypos,8,8,0,"1") !:
+00170   fnlbl(1,1,"Billing Date:",mylen,1)
+00180   fntxt(1,mypos,8,8,0,"1") !:
         let resp$(1)=str$(bdate)
-00190   let fnlbl(2,1,"Type of Service:",mylen,1)
+00190   fnlbl(2,1,"Type of Service:",mylen,1)
 00200   code$(1)="Water" !:
         code$(2)="Sewer" !:
         code$(3)="Electric" !:
         code$(4)="Gas" !:
-        let fncomboa("Service",2,mylen+3,mat code$,"",16)
-00210   let fnlbl(3,1,"Rate Code",mylen,1)
-00220   let fntxt(3,mypos,3,3,0,"30") !:
+        fncomboa("Service",2,mylen+3,mat code$,"",16)
+00210   fnlbl(3,1,"Rate Code",mylen,1)
+00220   fntxt(3,mypos,3,3,0,"30") !:
         let resp$(3)=""
-00230   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
+00230   fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
 00240   if ck=5 then goto XIT
 00250   bdate= val(resp$(1))
 00260   if resp$(2)="Water" then !:
@@ -39,11 +39,11 @@
 00290   if resp$(2)="Gas" then !:
           let srvc=4 : let srvc$=resp$(2)
 00300   let rcode=val(resp$(3))
-00310   let fnopenprn
+00310   fnopenprn
 00320   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00330 ! 
 00340   on fkey 5 goto DONE
-00350   let fnopenprn(cp,58,220,process)
+00350   fnopenprn(cp,58,220,process)
 00360 ! Read #1,Using 370: MAT A,MAT D,F Eof 400
 00370 ! Form POS 143,4*PD 2,POS 217,12*PD 5,POS 296,PD 4
 00380 ! If F<>BDATE Then Goto 360

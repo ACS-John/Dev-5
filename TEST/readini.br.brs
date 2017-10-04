@@ -3,8 +3,8 @@
 00030 ! -------------------------------------------------------------------
 00040   library 'S:\Core\Library': fntop,fnread_program_print_property,fnerror
 00050 ! -------------------------------------------------------------------
-00060   let fntop(prg$='S:\Utility Billing\Customer',cap$='Test Read INI')
-00070   let fnread_program_print_property('SaveToAsStart',tf1$)
+00060   fntop(prg$='S:\Utility Billing\Customer',cap$='Test Read INI')
+00070   fnread_program_print_property('SaveToAsStart',tf1$)
 00080   pr "The value read was:"&tf1$
 00081   pr "The length of the value is:"&str$(len(tf1$))
 00090 XIT: stop 

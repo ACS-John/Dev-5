@@ -20,7 +20,7 @@
 00130   next a
 00135   let data$(18)="D|"&fntext$("Description that is longer than the allowed size of the data space and needs to be out on multiple lines",30)&"|"&fnamt$(1000,mask$," ","s")&"|"&fnamt$(2000,mask$," ","s")&"|"&fnamt$(3000,mask$," ","s")&"|"&fnamt$(4000,mask$," ","s")
 00140   let data$(19)="T|Total|"&fnamt$(18000,mask$,"$","d")&"|"&fnamt$(36000,mask$,"$","d")&"|\cfRed "&fnamt$(54000,mask$,"$","d")&"|"&fnamt$(72000,mask$,"$","d")
-00150   let fnrtf(mat types$,mat styles$,mat data$,rtffile)
+00150   fnrtf(mat types$,mat styles$,mat data$,rtffile)
 00157   dim rtffile$*250
 00158   let rtffile$=file$(rtffile)
 00159   close #rtffile: 
@@ -521,7 +521,7 @@
 52563     acolor+=1
 52564     if pos(cd$,colors$(acolor))>0 then cd$=srep$(cd$,colors$(acolor),"\cf"&str$(acolor)&" ")
 52565   loop 
-52568   let fnrtfcolor$=cd$
+52568   fnrtfcolor$=cd$
 52640 fnend 
 52700 ! --------------------------------
 52710 SET_NEWCELL: ! 
@@ -570,12 +570,12 @@
 53050   if picpath$>"" then !:
           let pict_name$=picpath$&"\"&trim$(data$(pict_start+6:pict_end-1)) else !:
           let pict_name$=trim$(data$(pict_start+6:pict_end-1))
-53060   let fntype(pict_name$,rtffile)
+53060   fntype(pict_name$,rtffile)
 53065   let x=pos(pict_name$,"\",-1)+1 !:
         pr #rtffile: "{\par \fs16 Figure: "&pict_name$(x:len(pict_name$))&" \par }"
 53070   pr #rtffile: srep$(data$(pict_end+2:len(data$)),"|","}{\tab}{")&"}"&crlf$
 53080 else if pos("1234567890",data$(1:1))>0 then 
-53082   let fncells(rtffile,data$,mat cells$)
+53082   fncells(rtffile,data$,mat cells$)
 53085 else 
 53090   pr #rtffile: "{"&srep$(srep$(data$(3:len(data$)),"|","}{\tab}{"),"[RTFBAR]","|")&"\par }"&crlf$
 53100 end if 
@@ -778,7 +778,7 @@
 54930   let laststyle=1
 54990 fnend 
 55000 def fnbrdr$(btype$)
-55010   let fnbrdr$=""
+55010   fnbrdr$=""
 55020   if btype$="s" then let fnbrdr$="\brdrs"
 55030   if btype$="o" then let fnbrdr$="\brdrdot"
 55040   if btype$="a" then let fnbrdr$="\brdrdash"
@@ -788,7 +788,7 @@
 55110   if inch>0 then let twips$=str$(round(inch*1440,0))
 55112   if inch<0 then let twips$="-"&str$(round(abs(inch)*1440,0))
 55114   if inch=0 then let twips$=""
-55120   let fntwips$=twips$
+55120   fntwips$=twips$
 55130 fnend 
 55200 ! --------------------------------
 55210 SET_SPECFILE: ! 

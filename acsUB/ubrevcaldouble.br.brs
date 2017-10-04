@@ -9,10 +9,10 @@
 00090   dim bt1(14,2),badr(2),resp$(5)*60
 00100 ! ______________________________________________________________________
 00110   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
-00120   let fncno(cno) !:
+00120   fncno(cno) !:
         ! 
-00130   let fntop("S:\acsUB\UBRevCal",cap$="Reverse Calculation")
-00140   let fnd1(d1)
+00130   fntop("S:\acsUB\UBRevCal",cap$="Reverse Calculation")
+00140   fnd1(d1)
 00150   if d1=0 then let d1=val(date$(4:5)&date$(7:8)&date$(1:2))
 00160 ! ______________________________________________________________________
 00170   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -25,24 +25,24 @@
 00240   close #111: ioerr L250
 00250 L250: let fntos(sn$="ubrevcal") !:
         let respc=0
-00260   let fnlbl(1,1,"You may limit the customers to reverse by changing the options below.",73,2)
-00270   let fnlbl(2,1,"You may only reverse calculations for the most recent Billing Date!",73,2)
-00280   let fnlbl(4,1,"Account:",27,1)
-00290   let fncmbact(4,29,1) !:
+00260   fnlbl(1,1,"You may limit the customers to reverse by changing the options below.",73,2)
+00270   fnlbl(2,1,"You may only reverse calculations for the most recent Billing Date!",73,2)
+00280   fnlbl(4,1,"Account:",27,1)
+00290   fncmbact(4,29,1) !:
         let resp$(respc+=1)=""
-00300   let fnlbl(5,1,"Current Billing Date:",27,1)
-00310   let fntxt(5,29,8,0,0,"1") !:
+00300   fnlbl(5,1,"Current Billing Date:",27,1)
+00310   fntxt(5,29,8,0,0,"1") !:
         let resp$(respc+=1)=str$(d1)
-00320   let fnlbl(6,1,"Previous Billing Date:",27,1)
-00330   let fntxt(6,29,8,0,0,"1") !:
+00320   fnlbl(6,1,"Previous Billing Date:",27,1)
+00330   fntxt(6,29,8,0,0,"1") !:
         let resp$(respc+=1)=""
-00340   let fnlbl(7,1,"Route Number:",27,1)
-00350   let fncmbrt2(7,29) !:
+00340   fnlbl(7,1,"Route Number:",27,1)
+00350   fncmbrt2(7,29) !:
         let resp$(respc+=1)="1"
-00360   let fnchk(8,29,"Print Status Report") !:
+00360   fnchk(8,29,"Print Status Report") !:
         let resp$(respc+=1)="True"
-00370   let fncmdset(2) !:
-        let fnacs(sn$,0,mat resp$,ckey)
+00370   fncmdset(2) !:
+        fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00390   if resp$(1)="[All]" then let resp$(1)=""
 00400   if resp$(4)="[All]" then let resp$(4)=""
@@ -125,7 +125,7 @@
 01010 ! ______________________________________________________________________
 01020 XIT: ! 
 01030   if sr$<>"Y" then goto L1050
-01040   let fncloseprn
+01040   fncloseprn
 01050 L1050: let fnxit
 01060 ! ______________________________________________________________________
 01070 SRHDR: ! 

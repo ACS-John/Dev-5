@@ -9,8 +9,8 @@
 00090   dim tr(9),pd$*30,tn$*6,n$*40,cap$*128,ml$(1)*70
 00100   dim resp$(1)*60
 00110 ! ______________________________________________________________________
-00120   let fntop("S:\acsPR\newjcRemove",cap$="Remove Completed Jobs")
-00130   let fncno(cno)
+00120   fntop("S:\acsPR\newjcRemove",cap$="Remove Completed Jobs")
+00130   fncno(cno)
 00140 ! 
 00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno),internal,outin: close #1: 
 00160 ! ______________________________________________________________________
@@ -21,22 +21,22 @@
 00210   open #1: "Name=JCMSTR.X,KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno),internal,outin,keyed 
 00220 ! ______________________________________________________________________
 00230 ASKJOB: ! 
-00240   let fntos(sn$="jccpr1J") !:
+00240   fntos(sn$="jccpr1J") !:
         let respc=0
-00250   let fnlbl(1,1,"Job #:",8,1)
-00260   let fncmbjob(1,11) !:
+00250   fnlbl(1,1,"Job #:",8,1)
+00260   fncmbjob(1,11) !:
         let resp$(respc+=1)=jn$
 00270   if trim$(jn$)<>"" then let fnlbl(3,1,"Last job processed:"&trim$(jn$),35,1)
-00280   let fncmdkey("&Next",1,1,0,"Process the job" ) !:
-        let fncmdkey("Com&plete",2,0,0,"Finished with all jobs.") !:
-        let fncmdkey("&Cancel",5,0,1,"Cancel without deleting any jobs.")
-00290   let fnacs(sn$,0,mat resp$,ck)
+00280   fncmdkey("&Next",1,1,0,"Process the job" ) !:
+        fncmdkey("Com&plete",2,0,0,"Finished with all jobs.") !:
+        fncmdkey("&Cancel",5,0,1,"Cancel without deleting any jobs.")
+00290   fnacs(sn$,0,mat resp$,ck)
 00300   if ck=5 then goto XIT
 00310   if ck=2 then goto DELETE_THEM
 00320   let jn$=lpad$(trim$(resp$(1)(1:6)),6)
 00330   mat ml$(1) !:
         let ml$(1)="Do you really want to delete job # "&jn$ !:
-        let fnmsgbox(mat ml$,resp$,cap$,36)
+        fnmsgbox(mat ml$,resp$,cap$,36)
 00340   if resp$="Yes" then goto L350 else goto ASKJOB
 00350 L350: rewrite #1,using 'Form POS 157,N 2',key=jn$: 9 nokey ASKJOB
 00360   goto ASKJOB
@@ -94,7 +94,7 @@
 00880   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&","&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",1,6,Replace,DupKeys -n"
 00890   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&","&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",1,11,Replace,DupKeys -n"
 00895   let df$=env$('Q')&"\PRmstr\jcmstr.h"&str$(cno) : let if$=env$('Q')&"\PRmstr\jcindx.h"&str$(cno) !:
-        let fncombof("CJob.h"&str$(cno),lyne,mypos,43,df$,1,6,7,25,if$,1)
+        fncombof("CJob.h"&str$(cno),lyne,mypos,43,df$,1,6,7,25,if$,1)
 00900   goto XIT
 00910 ! ______________________________________________________________________
 00920 XIT: let fnxit

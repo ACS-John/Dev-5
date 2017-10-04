@@ -10,7 +10,7 @@
 32140   dim option$(6)*60,item$(7)*80
 32160   dim resp$(7)*80
 32180 ! ______________________________________________________________________
-32200   let fntop(program$)
+32200   fntop(program$)
 32220   gosub BUILD_LAYOUT
 32240   if exists(env$('Q')&"\GLmstr\acglschs.h"&env$('cno'))=0 then 
 32260     close #10: ioerr ignore
@@ -31,7 +31,7 @@
 32560   execute "Index "&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&' '&env$('Q')&"\GLmstr\SchIndX2.h"&env$('cno')&" 3 30 Replace DupKeys -n"
 32580 goto L210 ! /r
 44000 SCHEDULEGRID: ! r:
-44020   let fntos(sn$="Schedule") 
+44020   fntos(sn$="Schedule") 
 44040   let respc=0
 44060   mat chdr$(7) : mat cmask$(7) : mat flxitm$(7) 
 44080   chdr$(1)="Rec" 
@@ -41,23 +41,23 @@
 44160   cmask$(2)='30' : cmask$(3)=cmask$(4)='' 
 44180   cmask$(5)='30' : cmask$(6)='30' 
 44200   cmask$(6)='30'
-44220   let fnflexinit1('schedulegl',lc=1,1,10,70,mat chdr$,mat cmask$,1)
+44220   fnflexinit1('schedulegl',lc=1,1,10,70,mat chdr$,mat cmask$,1)
 44240   restore #10:
 44260 READ_SCHEDULE: ! read schedule file
 44280   read #schedule,using 'Form POS 1,N 3,2*C 78,3*N 1': sn,schnam$,ft$,dp,rs,cm eof EO_SCHEDULE_GRID norec L350
 44300   let item$(1)=str$(rec(schedule)) 
 44320   let item$(2)=str$(sn): let item$(3)=schnam$: let item$(4)=ft$ 
 44340   let item$(5)=str$(dp) : let item$(6)=str$(rs) : let item$(7)=str$(cm) 
-44360   let fnflexadd1(mat item$)
+44360   fnflexadd1(mat item$)
 44380 L350: goto READ_SCHEDULE
 44400 EO_SCHEDULE_GRID: ! 
-44420   let fncmdkey("&Add",1,0,0,"Allows you to add new schedules.")
+44420   fncmdkey("&Add",1,0,0,"Allows you to add new schedules.")
 44440 ! 
-44460   let fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing schedule.")
-44480   let fncmdkey("&Delete",8,0,0,"Highlight any record and click Delete to remove the schedule.")
+44460   fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing schedule.")
+44480   fncmdkey("&Delete",8,0,0,"Highlight any record and click Delete to remove the schedule.")
 44500 ! Let FNCMDKEY("&Print",3,0,0,"Takes you directly to the pr Schedules option")
-44520   let fncmdkey("E&xit",5,0,1,"Exits to main menu")
-44540   let fnacs(sn$,0,mat resp$,ckey)
+44520   fncmdkey("E&xit",5,0,1,"Exits to main menu")
+44540   fnacs(sn$,0,mat resp$,ckey)
 44560   if ckey=5 then goto XIT
 44580   add=edit=0
 44600   let editrec=val(resp$(1))
@@ -80,33 +80,33 @@
 44920   pause 
 44940 ! /r
 48000 ADD_EDIT_SCHEDULES: ! r:
-48020   let fntos(sn$="Schedule1") 
+48020   fntos(sn$="Schedule1") 
 48040   let mylen=20: let mypos=mylen+3 : let right=1
-48060   let fnlbl(1,1,"Schedule Number:",mylen,right)
-48080   let fncombof('glschedule',1,mypos,0,env$('Q')&"\GLmstr\acglschs.h"&env$('cno'),1,3,4,30,env$('Q')&"\GLmstr\schindex.h"&env$('cno'),add_all)
+48060   fnlbl(1,1,"Schedule Number:",mylen,right)
+48080   fncombof('glschedule',1,mypos,0,env$('Q')&"\GLmstr\acglschs.h"&env$('cno'),1,3,4,30,env$('Q')&"\GLmstr\schindex.h"&env$('cno'),add_all)
 48100   if edit=1 then let resp$(1)=str$(sn)
 48120   if add=1 then let resp$(1)=""
-48140   let fnlbl(2,1,"Schedule Nane::",mylen,right)
-48160   let fntxt(2,mypos,80,0,left,"",0,"",0 ) 
+48140   fnlbl(2,1,"Schedule Nane::",mylen,right)
+48160   fntxt(2,mypos,80,0,left,"",0,"",0 ) 
 48180   let resp$(2)=schnam$
-48200   let fnlbl(3,1,"Footnote:",mylen,right)
-48220   let fntxt(3,mypos,80,0,left,"",0,"",0 ) 
+48200   fnlbl(3,1,"Footnote:",mylen,right)
+48220   fntxt(3,mypos,80,0,left,"",0,"",0 ) 
 48240   let resp$(3)=ft$
-48260   let fnchk(4,mypos,"Print Dollar Signs:",1) 
+48260   fnchk(4,mypos,"Print Dollar Signs:",1) 
 48280   if dp=1 then let resp$(4)="True" else let resp$(4)="False"
-48300   let fnchk(5,mypos,"Reverse Sign:",1) 
+48300   fnchk(5,mypos,"Reverse Sign:",1) 
 48320   if rs=1 then let resp$(5)="True" else let resp$(5)="False"
-48340   let fnlbl(6,1,"Type of Schedule:",mylen,right)
+48340   fnlbl(6,1,"Type of Schedule:",mylen,right)
 48360   let option$(1)="Print Year to Date Only" 
 48380   let option$(2)="Print Current Month and Year to Date" 
 48400   let option$(3)="Print Comparison (Income and Expense Accounts" 
 48420   let option$(4)="Print Comparison (Balance Sheet Accounts"
-48440   let fncomboa("TypeOfPrint",6,mypos,mat option$,"You can choose any of the four types of schedules.",60)
+48440   fncomboa("TypeOfPrint",6,mypos,mat option$,"You can choose any of the four types of schedules.",60)
 48460   if cm=0 then cm=1
 48480   let resp$(6)=option$(cm)
-48500   let fncmdkey("&Display G/L #'s",1,1,0,"Allows you to review, add, or change the G/L accounts that are contained in this schedule.")
-48520   let fncmdkey("&Cancel",5,0,1,"Returns to list of schedules withouit saving any changes.")
-48540   let fnacs(sn$,0,mat resp$,ckey)
+48500   fncmdkey("&Display G/L #'s",1,1,0,"Allows you to review, add, or change the G/L accounts that are contained in this schedule.")
+48520   fncmdkey("&Cancel",5,0,1,"Returns to list of schedules withouit saving any changes.")
+48540   fnacs(sn$,0,mat resp$,ckey)
 48560   if ckey=5 then goto SCHEDULEGRID
 48580   let sn=val(resp$(1)(1:3)) conv ADD_EDIT_SCHEDULES
 48600   let schnam$=resp$(2)
@@ -132,7 +132,7 @@
 52180   let ml$(1)="You are changing schedule # "&str$(holdsn)&" to " 
 52200   let ml$(2)="schedule # "&str$(sn)&".  Click OK to continue, " 
 52220   let ml$(3)="else Cancel to prevent changing the #." 
-52240   let fnmsgbox(mat ml$,resp$,'',49)
+52240   fnmsgbox(mat ml$,resp$,'',49)
 52260   if resp$="OK" then 
 52280     execute "Copy "&env$('Q')&"\GLmstr\schedule"&str$(holdsn)&".h"&env$('cno')&' '&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&" -n" ioerr ignore ! move breakdowns to new schedule #
 52300     L950: !
@@ -158,7 +158,7 @@
 58060 !   ! let message$="Printing: Please wait..." 
 58080 !   ! let fnwait(win,env$('program_caption'),message$,1)
 58100 !   ! on fkey 5 goto L1530
-58120 !   let fnopenprn
+58120 !   fnopenprn
 58140 !   do
 58160 !     read #10,using L1010: sn,schnam$,ft$,dp,rs,cm eof L1530
 58180 !     pr #255,using L1250: date$('mm/dd/yy'),time$,"Print Schedules File Proof List"
@@ -193,7 +193,7 @@
 58760 !   loop
 58780 ! ! ______________________________________________________________________
 58800 !   L1530: !
-58820 !   let fncloseprn
+58820 !   fncloseprn
 58840 !   on fkey 5 ignore 
 58860 !   if fnprocess=1 then goto XIT
 58880 ! goto ADD_EDIT_SCHEDULES ! /r
@@ -290,7 +290,7 @@
 82040   let ml$(1)="You are attempting to delete schedule # "&str$(sn)&"." 
 82060   let ml$(2)="Click OK to continue, " 
 82080   let ml$(3)="else Cancel to prevent deleting the schedule." 
-82100   let fnmsgbox(mat ml$,resp$,'',49)
+82100   fnmsgbox(mat ml$,resp$,'',49)
 82120   if uprc$(resp$)="OK" then goto L2310 else goto ADD_EDIT_SCHEDULES
 82140   L2310: delete #10,rec=editrec: 
 82160   execute "Free "&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&" -n" ! Ioerr 2310

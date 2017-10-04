@@ -7,9 +7,9 @@
 00070   library 'S:\Core\Library': fntop,fnxit, fnopenwin,fnwait,fncloseprn,fnopenprn,fncno,fnerror,fntop,fnxit,fnconsole
 00080   on error goto ERTN
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\acsPR\TimeCard",cap$="Extend Time Card")
-00110   let fncno(cno)
-00115   let fnconsole(1)
+00100   fntop("S:\acsPR\TimeCard",cap$="Extend Time Card")
+00110   fncno(cno)
+00115   fnconsole(1)
 00120 ! 
 00130 ! ______________________________________________________________________
 00140   let sc1$(1)="Employee #:": let fl1$(1)="1,2,C 20,N"
@@ -29,7 +29,7 @@
 00280   next j
 00290   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
 00300   pr newpage !:
-        let fnopenwin(win=101,10,22,15,58,cap$)
+        fnopenwin(win=101,10,22,15,58,cap$)
 00310   let io2$(1)="4,2,C 35,N"
 00320   let io2$(2)="5,2,C 35,N"
 00330   let wrd2$(1)="Use Hours and Minutes"
@@ -86,7 +86,7 @@
 00840   goto L460
 00850 ! ______________________________________________________________________
 00860 L860: let fnopenprn(cp,58,220,process)
-00870   let fnwait(104,cap$,message$,0)
+00870   fnwait(104,cap$,message$,0)
 00880   pr #255,using L890: mat sc1$
 00890 L890: form pos 1,4*c 14,skip 1,pos 29,3*c 14
 00900   let t1=t2=0
@@ -106,7 +106,7 @@
 01040   pr #255,using L1050: "__________",t2,"=========="
 01050 L1050: form pos 53,c 10,skip 1,pos 53,n 10.2,skip 1,pos 53,c 10,skip 2
 01060   pr #255: newpage
-01070   let fncloseprn
+01070   fncloseprn
 01080 L1080: mat hrs=(0)
 01090   mat inp=(0)
 01100   goto L400

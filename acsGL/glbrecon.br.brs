@@ -9,10 +9,10 @@
 00090   dim cnam$*40,dat$*20,cap$*128
 00100   dim gl$*12,c$*12,p$*30,s$*2,a(3),dcode$*24,glc$*24,holdgc$*24,currgl$*12
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Bank Reconciliation")
-00130   let fntop("S:\acsGL\glBRecon",cap$="Bank Reconciliation")
-00140   let fncno(cno,cnam$)
-00150   let fndat(dat$)
+00120   fntop(program$,cap$="Bank Reconciliation")
+00130   fntop("S:\acsGL\glBRecon",cap$="Bank Reconciliation")
+00140   fncno(cno,cnam$)
+00150   fndat(dat$)
 00160   for j=1 to 7: let fl2$(j)=str$(j+3)&",2,C 38": next j
 00170   let sc2$(1)="1. Initial File Preparation"
 00180   let sc2$(2)="2. Add"
@@ -209,7 +209,7 @@
 02090   pr fields "13,34,C 11,B,5": "Cancel (F5)"
 02100   on fkey 5 goto L2250
 02110   restore #1,key>=currgl$&"            ": nokey L2370
-02120   let fnopenprn(cp,58,220,process)
+02120   fnopenprn(cp,58,220,process)
 02130   gosub L2290
 02140 L2140: read #1,using L980: gl$,c$,p$,s$,mat a eof L2250
 02150   if currgl$=gl$ then goto L2160 else goto L2250

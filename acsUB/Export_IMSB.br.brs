@@ -7,8 +7,8 @@
 20120 ! ______________________________________________________________________
 20140   dim z$,nam$*30,sta$*30,sta2$*30,csz$*30,opt1$(7),txt$*80,cap$*128
 20160 ! ______________________________________________________________________
-20180   let fntop(program$,cap$="Export File for IMSB")
-20200   let fncno(cno)
+20180   fntop(program$,cap$="Export File for IMSB")
+20200   fncno(cno)
 20220 ! ______________________________________________________________________
 20240 ! r: a screen
 25000 ! /r
@@ -37,7 +37,7 @@
 28220       csz$=csz$(1:len(csz$)-5) &" "&csz$((len(csz$)-4):len(csz$))
 28240     end if 
 28260 L330: ! 
-28280     let fncsz(csz$,city$,state$,zip$)
+28280     fncsz(csz$,city$,state$,zip$)
 28300     let zip$=trim$(zip$)(1:5)
 28320 L350: ! 
 28340     pr #h_out,using F_OUT_FIXED: z$,nam$,sta$,city$,state$,zip$,chr$(10)

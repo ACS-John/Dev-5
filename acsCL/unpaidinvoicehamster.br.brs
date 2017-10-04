@@ -9,8 +9,8 @@
 00080   dim cap$*128,lbl$(15)*38,tln(15),p$(15)*160,fltyp$(15),mask(15),sln(15)
 00090   dim c$(15,8)*40
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Unpaid Invoice (Hamster)")
-00120   let fncno(cno)
+00110   fntop(program$,cap$="Unpaid Invoice (Hamster)")
+00120   fncno(cno)
 00130   gosub BUILD_LAYOUT
 00140   gosub OPEN_AND_CALL_HAMSTER
 00150   goto XIT
@@ -147,7 +147,7 @@
           close #j: !:
         next j
 00540   gosub OPEN_FILE
-00550   let fnhamster("UnpaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00550   fnhamster("UnpaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00560   return 
 00570 ! ______________________________________________________________________
 00580 XIT: let fnxit

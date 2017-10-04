@@ -16,6 +16,6 @@
 12260   else 
 12280     let if$=indexfile$
 12300   end if
-12320   let fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\category.h"&env$('cno'),1,5,6,30,if$,1+addall,0,"Select from the list of Category records. To add a Category record, take the Add option.",container)
+12320   fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\category.h"&env$('cno'),1,5,6,30,if$,1+addall,0,"Select from the list of Category records. To add a Category record, take the Add option.",container)
 12340   let indexfile$=""
 12360 fnend 

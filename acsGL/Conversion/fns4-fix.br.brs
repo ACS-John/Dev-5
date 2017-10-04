@@ -2,7 +2,7 @@
 00020 ! set all base reference # to 0 in income statement file
 00030   dim r$*5,d$*50,te$*1,ac(9),fil$(3),idx$(3)
 00040 L40: pr newpage
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   pr fields "10,15,C 40": "ENTER COMPANY NUMBER TO FIX:"
 00070 L70: input fields "10,45,N 2,UE,N": cno conv L70
 00080   if cno=0 then stop 

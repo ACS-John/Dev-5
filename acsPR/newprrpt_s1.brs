@@ -16,7 +16,7 @@
 00090   gosub ASK_DATES
 00124 ! ______________________________________________________________________
 00141 L141: ! On Fnkey 5 Goto EOF1
-00142   let fnopenprn
+00142   fnopenprn
 00143 ! ______________________________________________________________________
 00190   open #1: "Name="&env$('Q')&"\PRmstr\PRREPORT.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRRPTIDX.h"&env$('cno')&",shr",internal,input,keyed 
 00200   read #1,using L210,key=rn$: rt$,mat ch$,ips,tdep,cp,mat psc,mat inp,mat pp,mat ti
@@ -47,7 +47,7 @@
 00430 EOF1: ! r:
 00450   close #1: ioerr ignore
 00460   close #2: ioerr ignore
-00465   let fncloseprn ! /r
+00465   fncloseprn ! /r
 00469 XIT: chain "S:\acsPR\newprRpt3"
 00470 ignore: continue
 19800 PRTRPT: ! r:
@@ -69,7 +69,7 @@
 20100 L20100: ! r: Check for Totals to pr ______________
 21200   goto EOF1 ! /r
 50000 ERTN: ! r:
-50001   let fnerror(program$,err,line,act$,"xit") 
+50001   fnerror(program$,err,line,act$,"xit") 
 50010   if uprc$(act$)<>"PAUSE" then goto L50040
 50020   execute "list "&str$(line) : pause : goto L50040
 50030   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
@@ -90,20 +90,20 @@
 60070   goto L60020
 60080 L60080: return ! /r
 61000 ASK_DATES: ! r:
-61005   let fntos(sn$="UserRpt-1")
+61005   fntos(sn$="UserRpt-1")
 61006   let mylen=30: let mypos=mylen+3
-61020   let fnlbl(1,1,"Starting Date (ccyymmdd):",mylen,1,0,fradate)
-61030   let fntxt(1,mypos,10,0,1,"3",0,"The report can be run for any date range.  Enter the first date to be used.",0) 
+61020   fnlbl(1,1,"Starting Date (ccyymmdd):",mylen,1,0,fradate)
+61030   fntxt(1,mypos,10,0,1,"3",0,"The report can be run for any date range.  Enter the first date to be used.",0) 
 61032   let resp$(1)=str$(beg_date)
-61040   let fnlbl(2,1,"Ending Date (ccyymmdd):",mylen,1,0,0)
-61050   let fntxt(2,mypos,10,0,1,"3",0,"Enter the last date to be used.  For a single payroll, use the same beginning and ending dates.",0) 
+61040   fnlbl(2,1,"Ending Date (ccyymmdd):",mylen,1,0,0)
+61050   fntxt(2,mypos,10,0,1,"3",0,"Enter the last date to be used.  For a single payroll, use the same beginning and ending dates.",0) 
 61051   let resp$(2)=str$(end_date)
-61052   let fnlbl(3,1,"Report Heading Date:",mylen,1,0,0)
-61054   let fntxt(3,mypos,20,0,0,"",0,"Enter the date you want shown on the reports.",0)
+61052   fnlbl(3,1,"Report Heading Date:",mylen,1,0,0)
+61054   fntxt(3,mypos,20,0,0,"",0,"Enter the date you want shown on the reports.",0)
 61056   let resp$(3)=d1$
-61060   let fncmdkey("Next",1,1,0,"Prints the report")
-61070   let fncmdkey("Cancel",5,0,1,"Returns to menu")
-61080   let fnacs(sn$,0,mat resp$,ckey) 
+61060   fncmdkey("Next",1,1,0,"Prints the report")
+61070   fncmdkey("Cancel",5,0,1,"Returns to menu")
+61080   fnacs(sn$,0,mat resp$,ckey) 
 61082   if ckey=5 then goto XIT
 61090   beg_date=val(resp$(1))
 61100   let end_date=val(resp$(2))

@@ -30,7 +30,7 @@
 09240     let prg$="(unknown)"
 09260     if env$('acsDeveloper')<>'' then pr 'fnTop called but program was not set.' : pause 
 09280   end if 
-09300   let fnprg(prg$,put=2)
+09300   fnprg(prg$,put=2)
 09320   let setenv('Program_Caption',cap$)
 09330   if env$('acsDeveloper')='' then
 09340     if ~exists('FileIO.ini') then
@@ -51,7 +51,7 @@
 10140   if len(sn$)>100 then : pr "INVALID FILE NAME: Too Long" : input fields "1,1,C 1,N": pause$ : goto XIT
 10160   ! close #119: ioerr ignore
 10180   ! open #119: "Name="&env$('temp')&'\'&sn$&",RecL=1024,Replace",internal,outin,relative  ! recl was 500
-10200   let fn_clear_env
+10200   fn_clear_env
 10220   if env$('GUIMode')='OFF' then execute 'config GUI On'
 10240 fnend 
 11000 def library fnlbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon,lbl_tooltip$*256)
@@ -126,7 +126,7 @@
 13160 fnend 
 13180 def library fncomboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon)
 13182   if ~setup then let fn_setup
-13184   let fncomboa=fn_comboa(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
+13184   fncomboa=fn_comboa(sfn$,lyne,ps,mat opt$, ttt$,width,contain,tabcon)
 13185 fnend 
 13186 def fn_comboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon,comboa_combooptionset$*256)
 13188   if env$('exitnow')='yes' then goto COMBOA_COMPLETE ! special processing to increase speed for exitnow
@@ -145,12 +145,12 @@
 13480       let width=max(width,len(opt$(j)))
 13500     next j
 13520   end if 
-13962   let fn_add_combo_option_list('','',1)
+13962   fn_add_combo_option_list('','',1)
 13980   for rec_count=1 to udim(mat opt$)
-14010     let fn_add_combo_option_list(opt$(rec_count)(1:81),opt$(rec_count)(1:81))
+14010     fn_add_combo_option_list(opt$(rec_count)(1:81),opt$(rec_count)(1:81))
 14020   next rec_count
 14060   let setenv('control'&str$(fn_control_count),"COMBOA|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|0|"&sfn$&"[SESSION].tmp|1|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&comboa_combooptionset$&"|")
-14070   let fn_combooptionsetlist_add(comboa_combooptionset$)
+14070   fn_combooptionsetlist_add(comboa_combooptionset$)
 14080   let width=contain=0
 14100   COMBOA_COMPLETE: ! 
 14120 fnend 
@@ -195,18 +195,18 @@
 15040   else 
 15060     open #df:=fngethandle: "Name="&df$&",KFName="&if$&",Shr",internal,input,keyed ioerr COMBOF_OPEN_IOERR
 15080   end if 
-15122   let fn_add_combo_option_list('','',1)
+15122   fn_add_combo_option_list('','',1)
 15160   if limlis=2 then 
-15190     let fn_add_combo_option_list("[All]","[All]")
+15190     fn_add_combo_option_list("[All]","[All]")
 15200   end if 
 15220   do  ! READ_DF: !
 15240     if nodesc=0 then 
 15260       read #df,using form$: key$,desc$ eof EODF ioerr ERR_READ
-15290       let fn_add_combo_option_list(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk)&" "&desc$)
+15290       fn_add_combo_option_list(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk)&" "&desc$)
 15300     else 
 15320       let desc$=''
 15340       read #df,using form$: key$ eof EODF ioerr ERR_READ
-15370       let fn_add_combo_option_list(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk))
+15370       fn_add_combo_option_list(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk))
 15380     end if 
 15420   loop  ! goto READ_DF
 15430   !     end if
@@ -218,7 +218,7 @@
 15540     mat ml$(2)
 15560     let ml$(1)='Combo Box creation has encountered a locked record'
 15580     let ml$(2)='The locked record ('&str$(rec(df))&'will be skipped.'
-15600     let fnmsgbox(mat ml$, resp$, 'ComboBox Record Lock Error',0)
+15600     fnmsgbox(mat ml$, resp$, 'ComboBox Record Lock Error',0)
 15620   else 
 15640     goto ERTN
 15660   end if 
@@ -238,11 +238,11 @@
 15810   pr '    '&if$
 15820   pr '  err='&str$(err)&' on line '&str$(line)
 15830   ! 
-15840   let fnpause
+15840   fnpause
 15850   goto WRITE_IT ! /r
 15860   WRITE_IT: ! 
 15870   let setenv('control'&str$(fn_control_count),"COMBOF|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(lnk)&"|"&becky$&"|"&str$(limlis)&"|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&combokeycurrent$&"|")
-15872   let fn_combooptionsetlist_add(combokeycurrent$)
+15872   fn_combooptionsetlist_add(combokeycurrent$)
 15880   COMBOF_COMPLETE: ! 
 15890 fnend 
 15892 def fn_combooptionsetlist_add(cosladd$*256)
@@ -308,11 +308,11 @@
 16580   end if 
 16600   USEPREVIOUS: ! 
 16620   if usr>0 and exists(env$('temp')&'\'&optfile$) then 
-16640     let fnflexinit1=1 : goto WRITE_TO_ACE
+16640     fnflexinit1=1 : goto WRITE_TO_ACE
 16660   end if 
 16680   ! _______________________
 16700   ! ***  test validity of some stuff **********
-16720   let fnflexinit1=555
+16720   fnflexinit1=555
 16740   open #filenumber: "Name="&env$('temp')&'\'&hdrfile$&",Size=0,Replace,EoL=CRLF,RecL=8000",display,output 
 16780   for j=1 to udim(cm$)
 16800     if trim$(cm$(j))="" then cm$(j)="80"
@@ -325,10 +325,10 @@
 16940   ! hdrfile name is expected by screen ace to be the same name as
 16960   ! .  ! optfile$ only with the added .hdr extenstion
 16980   if usr>0 and exists(env$('temp')&'\'&optfile$)<>0 then 
-17000     let fnflexinit1=1 : goto WRITE_TO_ACE
+17000     fnflexinit1=1 : goto WRITE_TO_ACE
 17020   end if 
 17040   ! __________________________________________________
-17060   let fnflexinit1=0
+17060   fnflexinit1=0
 17080   if exists(env$('temp')&'\'&optfile$)<>0 then 
 17100     execute "*free "&env$('temp')&'\'&optfile$&" -n" ioerr ignore
 17120   end if 
@@ -380,79 +380,79 @@
 17980 def library fncmdset(bon)
 18000   if ~setup then let fn_setup
 18020   if bon=1 then 
-18040     let fncmdkey("&Cancel",5,1,1)
+18040     fncmdkey("&Cancel",5,1,1)
 18060   else if bon=2 then 
-18080     let fncmdkey("&Next",1,1)
-18100     let fncmdkey("&Cancel",5,0,1)
+18080     fncmdkey("&Next",1,1)
+18100     fncmdkey("&Cancel",5,0,1)
 18120   else if bon=3 then 
-18140     let fncmdkey("&Print",1,1)
-18160     let fncmdkey("&Cancel",5,0,1)
+18140     fncmdkey("&Print",1,1)
+18160     fncmdkey("&Cancel",5,0,1)
 18180   else if bon=4 then 
-18200     let fncmdkey("&Save",1,1)
-18220     let fncmdkey("&Cancel",5,0,1)
+18200     fncmdkey("&Save",1,1)
+18220     fncmdkey("&Cancel",5,0,1)
 18240   else if bon=5 then 
-18260     let fncmdkey("&Next",1,1)
-18280     let fncmdkey("&Cancel",5,0,1)
-18300     let fncmdkey("&Search",6)
+18260     fncmdkey("&Next",1,1)
+18280     fncmdkey("&Cancel",5,0,1)
+18300     fncmdkey("&Search",6)
 18320   else if bon=6 then 
-18340     let fncmdkey("&Next",1,1)
-18360     let fncmdkey("&Back",2)
-18380     let fncmdkey("&Cancel",5,0,1)
+18340     fncmdkey("&Next",1,1)
+18360     fncmdkey("&Back",2)
+18380     fncmdkey("&Cancel",5,0,1)
 18400   else if bon=7 then 
-18420     let fncmdkey("&Save",1,1)
-18440     let fncmdkey("&Delete",4)
-18460     let fncmdkey("&Cancel",5,0,1)
+18420     fncmdkey("&Save",1,1)
+18440     fncmdkey("&Delete",4)
+18460     fncmdkey("&Cancel",5,0,1)
 18480   else if bon=8 then 
-18500     let fncmdkey("&Print",1,1)
-18520     let fncmdkey("&Back", 2)
-18540     let fncmdkey("&Cancel",5,0,1)
+18500     fncmdkey("&Print",1,1)
+18520     fncmdkey("&Back", 2)
+18540     fncmdkey("&Cancel",5,0,1)
 18560   else if bon=11 then 
-18580     let fncmdkey("&Next",1,1)
-18600     let fncmdkey("&Finish",5,0,1)
+18580     fncmdkey("&Next",1,1)
+18600     fncmdkey("&Finish",5,0,1)
 18620   else if bon=13 then 
-18640     let fncmdkey("&Next",1,1)
-18660     let fncmdkey("&Add",2)
-18680     let fncmdkey("&Cancel",5,0,1)
+18640     fncmdkey("&Next",1,1)
+18660     fncmdkey("&Add",2)
+18680     fncmdkey("&Cancel",5,0,1)
 18700   else if bon=14 then 
-18720     let fncmdkey("&Add",1)
-18740     let fncmdkey("E&dit",2,1)
-18760     let fncmdkey("&Print",4)
-18780     let fncmdkey("&Cancel",5,0,1)
+18720     fncmdkey("&Add",1)
+18740     fncmdkey("E&dit",2,1)
+18760     fncmdkey("&Print",4)
+18780     fncmdkey("&Cancel",5,0,1)
 18820   else if bon=15 then 
-18840     let fncmdkey("&Add",1,1)
-18860     let fncmdkey("&Cancel",5,0,1)
+18840     fncmdkey("&Add",1,1)
+18860     fncmdkey("&Cancel",5,0,1)
 18880   else if bon=17 then 
-18900     let fncmdkey("&Next",1,1)
-18920     let fncmdkey("&Skip",2,0,1)
-18940     let fncmdkey("&Finish",3)
+18900     fncmdkey("&Next",1,1)
+18920     fncmdkey("&Skip",2,0,1)
+18940     fncmdkey("&Finish",3)
 18960   else if bon=19 then 
-18980     let fncmdkey("&Next",1,1)
-19000     let fncmdkey("&Finish",2)
-19020     let fncmdkey("&Cancel",5,0,1)
+18980     fncmdkey("&Next",1,1)
+19000     fncmdkey("&Finish",2)
+19020     fncmdkey("&Cancel",5,0,1)
 19040   else if bon=21 then 
-19060     let fncmdkey("&Print",1,1)
-19080     let fncmdkey("&Search", 2)
-19100     let fncmdkey("&Cancel",5,0,1)
+19060     fncmdkey("&Print",1,1)
+19080     fncmdkey("&Search", 2)
+19100     fncmdkey("&Cancel",5,0,1)
 19120   else if bon=22 then 
-19140     let fncmdkey("&Next",1,1)
-19160     let fncmdkey("&Back",2)
-19180     let fncmdkey("&Cancel",5,0,1)
+19140     fncmdkey("&Next",1,1)
+19160     fncmdkey("&Back",2)
+19180     fncmdkey("&Cancel",5,0,1)
 19200   else if bon=23 then 
-19220     let fncmdkey("&Add",1,1)
-19240     let fncmdkey("&Search",2)
-19260     let fncmdkey("&Finish",4)
-19280     let fncmdkey("&Cancel",5,0,1)
+19220     fncmdkey("&Add",1,1)
+19240     fncmdkey("&Search",2)
+19260     fncmdkey("&Finish",4)
+19280     fncmdkey("&Cancel",5,0,1)
 19300   else if bon=41 then 
-19320     let fncmdkey("&Ok",1,1,1)
+19320     fncmdkey("&Ok",1,1,1)
 19340   else if bon=52 then 
-19360     let fncmdkey("&Finish",5,1,1)
+19360     fncmdkey("&Finish",5,1,1)
 19380   else if bon=102 then 
-19400     let fncmdkey("&Print",1,1)
-19420     let fncmdkey("E&dit",3)
-19440     let fncmdkey("&Add",4)
-19460     let fncmdkey("&Delete",7)
-19480     let fncmdkey("&Refresh",6)
-19500     let fncmdkey("&Cancel",5,0,1)
+19400     fncmdkey("&Print",1,1)
+19420     fncmdkey("E&dit",3)
+19440     fncmdkey("&Add",4)
+19460     fncmdkey("&Delete",7)
+19480     fncmdkey("&Refresh",6)
+19500     fncmdkey("&Cancel",5,0,1)
 19520   end if 
 19540 fnend 
 19560 def library fnbutton(lyne,ps,txt$*200,comkey; tt$*200,height,width,container,tabcon,default,cancel)
@@ -483,7 +483,7 @@
 20020   let setenv('control'&str$(fn_control_count),"menu|"&menu_string$(1:len(menu_string$)-3))
 20040 fnend 
 20041 def library fnclear_menu
-20042   let fn_clear_menu
+20042   fn_clear_menu
 20043 fnend 
 20060 def fn_clear_menu
 20080   mat _m$(0): mat _p$(0): mat _s$(0)
@@ -504,16 +504,16 @@
 20380   ! ****************
 20400   for j=1 to udim(mat resp$) : let resp$(j)=rtrm$(resp$(j)) : next j ! was trim$ before 4/25/2017
 20420   cap$=env$('Program_Caption')
-20440   let fn_get_flexhandle(1)
+20440   fn_get_flexhandle(1)
 20460   ! do we even need this line - it screws up other things.
 20480   ! does removing it screw anything up?
 20500   ! yeah it screws things up to take it out - repetative flex grids
-20540   let fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
+20540   fn_ace(sn$,unused,mat resp$,ckey,startfield,close_on_exit,parent_none,disabled_background)
 20560   goto XIT
 20580   ERTN: ! 
 20600   ! execute "Config Console On" ! in ertn
 20620   !   pr fields "15,1,Cc 80,H,N": "Screen Ace 5 encountered an error."
-20660   let fnerror(program$,err,line,act$,"xit")
+20660   fnerror(program$,err,line,act$,"xit")
 20680   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 20720   execute "List -"&str$(line)
 20740   pause 
@@ -557,7 +557,7 @@
 21250   end if 
 21260   pr #0, border: borderText$
 21270     ! 
-21280   let fn_company_name(0,acs_win_cols) ! let fn_company_name(0,acs_win_cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemName$(cursys$))
+21280   fn_company_name(0,acs_win_cols) ! let fn_company_name(0,acs_win_cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemName$(cursys$))
 21290     ! 
 21300   if not grid_present then 
 21310     let row=ceil((acs_win_rows-ace_lyne_max)/2 )
@@ -601,35 +601,35 @@
 22260     let str2mat(env$('control'&str$(index_)),mat control$,"|")
 22280     ace_typ$(index_)=typ$=uprc$(control$(1))
 22300     if typ$="LABEL" then 
-22320       let fn_ace_rd_label
+22320       fn_ace_rd_label
 22340     else if typ$="TEXT" then 
-22360       let fn_ace_rd_text
+22360       fn_ace_rd_text
 22380     else if typ$="COMBOA" then 
-22400       let fn_ace_rd_combo('A')
+22400       fn_ace_rd_combo('A')
 22420     else if typ$="COMBOF" then 
-22440       let fn_ace_rd_combo('F')
+22440       fn_ace_rd_combo('F')
 22460     else if typ$="CHECK" then 
-22480       let fn_ace_rd_check
+22480       fn_ace_rd_check
 22500     else if typ$="OPTION" then 
-22520       let fn_ace_rd_option
+22520       fn_ace_rd_option
 22540     else if typ$="FLEX" then 
-22560       let fn_ace_rd_flex
+22560       fn_ace_rd_flex
 22580     else if typ$="BUTTON" then 
-22600       let fn_ace_rd_button
+22600       fn_ace_rd_button
 22620     else if typ$="PICTURE" then 
-22640       let fn_ace_rd_pic
+22640       fn_ace_rd_pic
 22660     else if typ$="CMDKEY" then 
-22680       let fn_ace_rd_cmdkey
+22680       fn_ace_rd_cmdkey
 22700     else if typ$="PICBUT" then 
-22720       let fn_ace_rd_picbut
+22720       fn_ace_rd_picbut
 22740     else if typ$="MULTILINE" then 
-22760       let fn_ace_rd_multiline
+22760       fn_ace_rd_multiline
 22780     else if typ$="FRAME" then 
-22800       let fn_ace_rd_frame
+22800       fn_ace_rd_frame
 22820     else if typ$="TAB" then 
-22840       let fn_ace_rd_tab
+22840       fn_ace_rd_tab
 22860     else if typ$='MENU' then 
-22880       let fn_ace_rd_menu
+22880       fn_ace_rd_menu
 22900     end if 
 22920   next index_
 22940 fnend 
@@ -660,7 +660,7 @@
 23440       let nonempty=1
 23460     end if 
 23480   next index_
-23500   let fn_string_array_empty=~ nonempty
+23500   fn_string_array_empty=~ nonempty
 23520 fnend 
 23540 def fn_validate_grid_selection
 23560   let grid_selection_valid=1
@@ -681,7 +681,7 @@
 23860       end if 
 23880     end if 
 23900   end if 
-23920   let fn_validate_grid_selection=grid_selection_valid
+23920   fn_validate_grid_selection=grid_selection_valid
 23940 fnend 
 23960 def fn_process_user_input
 23980   let goto_main_input=0
@@ -689,10 +689,10 @@
 24020     let fkey(default_button_fkey) ! activate the default button when enter is pressed
 24040     ckey=fkey
 24060   else if fkey=2501 then 
-24080     let fn_export_grid
+24080     fn_export_grid
 24100     let fkey(-1) : let goto_main_input=1
 24120   else if fkey=2502 then 
-24140     let fn_print_grid
+24140     fn_print_grid
 24160     let fkey(-1) : let goto_main_input=1
 24180     !   else if fkey=2503 then
 24200     !     pr fields gridspec$&",sort": 1
@@ -704,7 +704,7 @@
 24340     ace_resp$(date_fielddata(fkey-date_fkey_base,5))=fndate_picker$ (_date$,'mdy',row,column)
 24360     let fkey(-1) : let goto_main_input=1
 24380   else if fkey > file_select_fkey_base and fkey < file_select_fkey_base+100 then 
-24400     let fn_selectfile( ace_resp$(file_select_data(fkey-file_select_fkey_base,1) ), file_select_data(fkey-file_select_fkey_base,2))
+24400     fn_selectfile( ace_resp$(file_select_data(fkey-file_select_fkey_base,1) ), file_select_data(fkey-file_select_fkey_base,2))
 24420     let fkey(-1) : let goto_main_input=1
 24440   else if fkey=93 then 
 24460     if env$('ACSDeveloper')<>'' then let setenv('ExitNow','yes')
@@ -722,7 +722,7 @@
 24580     execute 'system -M start http://planetacs.net/help/'&help_cursys$&'/'&srep$(trim$(cap$),' ','%20')&'.html'
 24600     let goto_main_input=1
 24620   else if fkey=1505 then 
-24640     let fn_program_properties
+24640     fn_program_properties
 24642     let goto_main_input=1
 24660   else if (fkey=105 or fkey=124 or fkey=106 or fkey=125) and (pos(ace_io$(curfld),"list ") or pos(ace_io$(curfld),"list ")) then 
 24680     let goto_main_input=1
@@ -732,7 +732,7 @@
 24760   else 
 24780     ckey=fkey
 24800   end if 
-24820   let fn_process_user_input=goto_main_input
+24820   fn_process_user_input=goto_main_input
 24840 fnend 
 24860 def fn_reformat_user_input
 24862   !   if udim(resp$)<ace_io_count then mat resp$(ace_io_count)
@@ -783,7 +783,7 @@
 25760       let grid_idx=index_
 25780     end if 
 25800   next index_
-25820   let fn_grid_index=grid_idx
+25820   fn_grid_index=grid_idx
 25840 fnend 
 26000 def fn_main_input
 26010   if grid_present then 
@@ -855,17 +855,17 @@
 26982     goto ACE_COMPLETE
 27000   end if 
 27020   dim ace_io$(1)*255
-27040   let fn_ace_init
-27060   let fn_window_size
-27080   let fn_draw_windows
-27120   let fn_error_redirection
-27140   let fn_set_controls
-27160   let fn_default_cmb_options
-27180   let fn_clear_env
-27200   let fn_equalize_resp_arrays
+27040   fn_ace_init
+27060   fn_window_size
+27080   fn_draw_windows
+27120   fn_error_redirection
+27140   fn_set_controls
+27160   fn_default_cmb_options
+27180   fn_clear_env
+27200   fn_equalize_resp_arrays
 27220   if not dropdown_menu_present then let fn_clear_menu
 27240   MAIN_INPUT: ! 
-27260   let fn_main_input
+27260   fn_main_input
 27280   if fn_process_user_input or not fn_validate_grid_selection then 
 27300     goto MAIN_INPUT
 27320   end if 
@@ -878,14 +878,14 @@
 27440       goto MAIN_INPUT
 27460     end if 
 27480   end if 
-27500   let fn_reformat_user_input
+27500   fn_reformat_user_input
 27520   on soflow system 
 27540   if udim(mat resp$)<resp_size then 
 27560     mat resp$(resp_size)
 27580   end if 
 27600   ACE_COMPLETE: ! 
 27620   let fkey(-1)
-27640   let fn_close_windows ! :display menu:
+27640   fn_close_windows ! :display menu:
 27650   if disabled_background then let fn_backgrounddisable(0)
 27660 fnend 
 27680 def fn_close_windows
@@ -901,8 +901,8 @@
 27880   bad_field=cnt+1
 27900   let message$(1)='You have entered an incorrect value at field number '&str$(bad_field)
 27920   mat temp_io$(udim(ace_io$))=ace_io$
-27940   let fnmsgbox(mat message$, response$, "Error!",0)
-27950   let fnpause
+27940   fnmsgbox(mat message$, response$, "Error!",0)
+27950   fnpause
 27960   mat ace_resp$(udim(resp$))=resp$
 27980   mat ace_io$(udim(temp_io$))=temp_io$
 28000   curfld(bad_field)
@@ -915,7 +915,7 @@
 28140     end if 
 28160   next index_
 28180   DATESEARCH_COMPLETE: ! 
-28200   let fn_is_date=isdate
+28200   fn_is_date=isdate
 28220 fnend 
 28240 def fn_program_properties
 28260   library 'S:\Core\Library': fnprogram_properties
@@ -924,7 +924,7 @@
 28340   mat temp_resp$(udim(resp$))=resp$
 28360   mat temp_ace_resp$(udim(ace_resp$))=ace_resp$
 28380   let temp_io_count=ace_io_count
-28400   let fnprogram_properties
+28400   fnprogram_properties
 28420   mat ace_io$ (udim(temp_io$))=temp_io$
 28440   mat resp$(udim(temp_resp$))=temp_resp$
 28460   mat ace_resp$(udim(temp_ace_resp$))=temp_ace_resp$
@@ -935,7 +935,7 @@
 28560   for index_=1 to udim(mat ace_io$)
 28580     if not pos(ace_io$(index_),',P') then all_fields_protected=0
 28600   next index_
-28620   let fn_all_fields_protected=all_fields_protected
+28620   fn_all_fields_protected=all_fields_protected
 28640 fnend 
 28660 def fn_clear_env
 28670   for index_=1 to control_count
@@ -1014,10 +1014,10 @@
 29892       !       let found_invalid=1
 29900     end if 
 29920   next _idx
-29940   let fn_validate_fields=~ found_invalid
+29940   fn_validate_fields=~ found_invalid
 29960 fnend 
 29980 def fn_validate_mdy (_date$;separator$,___,month,day,year)
-30000   let fn_validate_mdy=1
+30000   fn_validate_mdy=1
 30020   let _date$=lpad$(_date$,6,'0')
 30040   let month=val(_date$(1:2))
 30060   let day=val(_date$(3:4))
@@ -1026,19 +1026,19 @@
 30120  ! FINISHEDVALIDATE_MDY: !
 30140 fnend 
 30160 def fn_validate_month(month)
-30180   let fn_validate_month=1
+30180   fn_validate_month=1
 30200   if month < 1 or month > 12 then let fn_validate_month=0
 30220 fnend 
 30240 def fn_validate_day(day,month,year)
-30260   let fn_validate_day=1
+30260   fn_validate_day=1
 30280   if day<1 or day>fn_days_in_month(month,year) then let fn_validate_day=0
 30300 fnend 
 30320 def fn_validate_year(year)
-30340   let fn_validate_year=1
+30340   fn_validate_year=1
 30360   if year < 0 or year > 99 then let fn_validate_year=0
 30380 fnend 
 30400 def fn_days_in_month (month,year;___,daysinmonth)
-30420   let fn_days_in_month=date(days(date$(days(date$(str$(year)&lpad$(str$(month),2,"0")&"01"),"CCYYMMDD")+32,"CCYYMM01"),"CCYYMMDD")-1,"DD")
+30420   fn_days_in_month=date(days(date$(days(date$(str$(year)&lpad$(str$(month),2,"0")&"01"),"CCYYMMDD")+32,"CCYYMM01"),"CCYYMMDD")-1,"DD")
 30440 fnend 
 30460 def fn_ace_rd_menu (;___,index_,item_count)
 30480   dim menu_items$(1)*1023,menu_sub_items$(1)*255,_menu$(1)*255,_program$(1)*255,_status$(1)*255
@@ -1062,7 +1062,7 @@
 30840   let tt$=control$(6)
 30860   container=val(control$(7))
 30880   let tabcon=val(control$(8))
-30900   let fn_remove_crlf(resp$(respc))
+30900   fn_remove_crlf(resp$(respc))
 30910    !   let resp$(respc)=srep$(resp$(respc),'"','""') ! let fn2quote(resp$(respc))
 30920 fnend 
 30940 def fn_ace_rd_picbut
@@ -1236,7 +1236,7 @@
 34240   ! 
 34260   let scr_thaw
 34280   ! 
-34300   let fn_alpha_mask_indices (mat alpha_mask_indices)
+34300   fn_alpha_mask_indices (mat alpha_mask_indices)
 34340   do while file_nonempty
 34360     linput #grid_data: _line$ eof ignore
 34380     ! remove this line after you figure out how to addtomask$ negative numbers to the #pic spec
@@ -1331,8 +1331,8 @@
 36080   pr fields loading_spec$ : rpt$(" ",30)
 36100   ! 
 36120   close #grid_data: 
-36140   let fn_ace_io_add(gridspec$&",row,selone")
-36160   let fn_ace_io_add(filterspec$)
+36140   fn_ace_io_add(gridspec$&",row,selone")
+36160   fn_ace_io_add(filterspec$)
 36180   !   let filter_index=ace_io_count
 36200   ! 
 36220   if not container and not tabcon then 
@@ -1382,12 +1382,12 @@
 37100   next count
 37120   GRIDFORM_COMPLETE: ! 
 37140   for index_=2 to udim(mat _mask$)+1
-37160     let fn_column_mask(_forms$(index_),_widths(index_),_mask$(index_-1))
+37160     fn_column_mask(_forms$(index_),_widths(index_),_mask$(index_-1))
 37180   next index_
 37200   let _forms$(1)="0/C 500"
 37220   let _widths(1)=0
 37240   close #grid_data: 
-37260   let fn_gridform=data_file_nonempty
+37260   fn_gridform=data_file_nonempty
 37280 fnend 
 37300 def fn_column_mask(&form$,&width,mask$;___,invisible)
 37320   let maxlen=width + 10 ! to deal with bad data
@@ -1486,9 +1486,9 @@
 39720 def fn_print_grid
 39721   ! library 'S:\Core\fnsnap\rtflib_dll.br': fnlistprint
 39722   ! LET FNLISTPRINT(LISTWIN,LISTSPEC$,"Selected Clients","","Selected clients  for "&CLNR$,MAT DUMMY,0,0,"11111",0) : GOTO 5290
-39723   let fnlistprint(0,gridspec$,"","","Grid Print",mat dummy,0,0,"000000",0)
+39723   fnlistprint(0,gridspec$,"","","Grid Print",mat dummy,0,0,"000000",0)
 39724   !   goto PRINT_GRID_XIT
-39740   !   let fnopenprn
+39740   !   fnopenprn
 39750   !   let mat2str(mat _headings$(2:udim(_headings$)),_line$,tab$)
 39752   !   pr #255: _line$
 39760   !   input fields gridspec$&",rowcnt,all,nowait": grid_rows
@@ -1499,7 +1499,7 @@
 39860   !     let mat2str(mat _chunks$,_line$," ")
 39880   !     pr #255: _line$
 39900   !   next rowindex_
-39920   !   let fncloseprn
+39920   !   fncloseprn
 39930   ! PRINT_GRID_XIT: !
 39940 fnend 
 39960 def fn_ace_rd_pic
@@ -1584,11 +1584,11 @@
 40820   let txt$=ltrm$(txt$,'^')
 40840   if trim$(uprc$(resp$(respc)))="TRUE" then let resp$(respc)='^'&trim$(txt$) else let resp$(respc)=trim$(txt$)
 40860   if container then 
-40880     let fn_ace_io_add('#'&str$(frames(container,1))&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
+40880     fn_ace_io_add('#'&str$(frames(container,1))&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
 40900   else if tabcon then 
-40920     let fn_ace_io_add('#'&str$(tabs(tabcon,1))&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
+40920     fn_ace_io_add('#'&str$(tabs(tabcon,1))&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
 40940   else 
-40960     let fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
+40960     fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
 40980   end if 
 41000 fnend 
 41020 def fn_ace_rd_check
@@ -1612,13 +1612,13 @@
 41360   end if 
 41370   if chk_disable then chk_protected$=',P' else chk_protected$=',T' ! either Protect the field or force it to be in the tab order
 41380   if container then 
-41400     let fn_ace_io_add('#'&str$(frames(container,1))&spec$&chk_protected$) ! Tab Order
+41400     fn_ace_io_add('#'&str$(frames(container,1))&spec$&chk_protected$) ! Tab Order
 41420     pr #frames(container,1), fields str$(lyne)&','&str$(ps)&','&align$&str$(len(txt$)): trim$(txt$)
 41440   else if tabcon then 
-41460     let fn_ace_io_add('#'&str$(tabs(tabcon,1))&spec$&chk_protected$) ! Tab Order
+41460     fn_ace_io_add('#'&str$(tabs(tabcon,1))&spec$&chk_protected$) ! Tab Order
 41480     pr #tabs(tabcon,1), fields str$(lyne)&','&str$(ps)&','&align$&str$(len(txt$)): trim$(txt$)
 41500   else 
-41520     let fn_ace_io_add('#'&str$(acs_win)&spec$&chk_protected$) ! Tab Order
+41520     fn_ace_io_add('#'&str$(acs_win)&spec$&chk_protected$) ! Tab Order
 41540     pr #acs_win, fields str$(lyne)&','&str$(ps)&','&align$&str$(len(txt$)): trim$(txt$)
 41560   end if 
 41580 fnend 
@@ -1676,11 +1676,11 @@
 42400   mat text_masks(respc)
 42420   let text_masks(respc)=val(mask$)
 42440   if container then 
-42460     let fn_ace_io_add('#'&str$(frames(container,1))&','&str$(lyne)&','&str$(ps)&','&spec$)
+42460     fn_ace_io_add('#'&str$(frames(container,1))&','&str$(lyne)&','&str$(ps)&','&spec$)
 42480   else if tabcon then 
-42500     let fn_ace_io_add('#'&str$(tabs(tabcon,1))&','&str$(lyne)&','&str$(ps)&','&spec$)
+42500     fn_ace_io_add('#'&str$(tabs(tabcon,1))&','&str$(lyne)&','&str$(ps)&','&spec$)
 42520   else 
-42540     let fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&','&spec$)
+42540     fn_ace_io_add('#'&str$(acs_win)&','&str$(lyne)&','&str$(ps)&','&spec$)
 42560   end if 
 42580 fnend 
 42600 def fn_textmask$*255 (mask$*255,lyne,ps,width,container,maxlen)
@@ -1693,7 +1693,7 @@
 42960   ! 
 42980   if mask>1000 then let mask-=1000
 43000   if mask>=1 and mask<=5 then 
-43020     let fn_datetextbox(mask,lyne,ps,width,container,disable)
+43020     fn_datetextbox(mask,lyne,ps,width,container,disable)
 43040     ! 
 43060     attr$="9/#PIC(--/--/--)" ! attr$="9/DATE(m/d/y)"
 43080     if mask=1 then 
@@ -1803,7 +1803,7 @@
 45120   else if mask=60 then 
 45140     attr$=str$(width)&"/#PIC(---D---D----)" ! ###-###-#### or ####-###-####
 45160   else if mask=70 or mask=71 or mask=72 then 
-45180     let fn_fileselection(mask,lyne,ps,width,container)
+45180     fn_fileselection(mask,lyne,ps,width,container)
 45200   end if 
 45220   if attr$='' then 
 45240     if align=1 then 
@@ -1818,7 +1818,7 @@
 45420   if disable then let protected$='P' else let protected$='T' ! either Protect the field or force it to be in the tab order
 45440   attr$(inf:inf)= ','&protected$&'[textboxes]' &','&str$(txtbox_fkey)
 45450   attr$=srep$(attr$,'PIC(,','PIC(')
-45460   let fn_textmask$=attr$
+45460   fn_textmask$=attr$
 45480 fnend 
 45500 def fn_fileselection(mask,lyne,ps,width,container)
 45520   dim file_select_button_spec$*255
@@ -1933,12 +1933,12 @@
 48560 ! r: test for invalid containter and/or tabcon
 48580   if container>udim(mat frames,1) then 
 48600     pr 'invalid container ('&str$(container)&') specified for combobox (type '&combo$&')'
-48620     let fnpause
+48620     fnpause
 48640     container=0
 48660   end if 
 48680   if tabcon>udim(mat tabs,1) then 
 48700     pr 'invalid tab container (tabcon='&str$(container)&') specified for combobox (type '&combo$&')'
-48720     let fnpause
+48720     fnpause
 48740     let tabcon=0
 48760   end if 
 48780 ! /r
@@ -1984,7 +1984,7 @@
 49460     let spec$=srep$(spec$,',Select',',')
 49480     let spec$=spec$&',Select'
 49500   end if 
-49520   let fn_ace_io_add(spec$)
+49520   fn_ace_io_add(spec$)
 49540 fnend 
 50000 def fn_ace_io_add(aia_in$*255)
 50020   ace_io_count=udim(mat ace_io$)+1
@@ -1994,7 +1994,7 @@
 51000 def fn_control_count
 51020   control_count=val(env$('control_count'))+1
 51040   let setenv('control_count',str$(control_count))
-51060   let fn_control_count=control_count
+51060   fn_control_count=control_count
 51080 fnend 
 54000 def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,use_or_replace,qgllength,qgltabcon)
 54010   if ~setup then let fn_setup
@@ -2097,7 +2097,7 @@
 54980   goto QGLFINIS
 54990 QGLFINIS: ! WRITE_QGL_ACE: ! add it to the screen ace script file
 55000   let qgloptfile$=qgl_cursys$&"GLNumber"
-55010   let fn_comboa(qgloptfile$,myline,mypos,mat qgloption$, "Select from the Chart of Accounts ("&qgl_cursys$&").",qgllength,qglcontainer,qgltabcon,qglsetupkeycurrent$)
+55010   fn_comboa(qgloptfile$,myline,mypos,mat qgloption$, "Select from the Chart of Accounts ("&qgl_cursys$&").",qgllength,qglcontainer,qgltabcon,qglsetupkeycurrent$)
 55020   let myline=mypos=con=0
 55030 fnend 
 56000 def fn_remove_crlf(&txt$)
@@ -2156,7 +2156,7 @@
 60840   mat ml$(2)
 60860   let ml$(1)='Grid successfully exported to:'
 60880   let ml$(2)=os_filename$(filename$)
-60900   let fnmsgbox(mat ml$,resp$,"ACS",0)
+60900   fnmsgbox(mat ml$,resp$,"ACS",0)
 60910 GRID_EXPORT_XIT: ! 
 60920 fnend 
 62000 def fn_get_flexhandle(;forceclose)
@@ -2164,11 +2164,11 @@
 62040     let forceclose=0
 62060     close #118: ioerr ignore
 62080   end if 
-62100   let fn_get_flexhandle=118
+62100   fn_get_flexhandle=118
 62120 fnend 
 64000 def library fnbackgrounddisable(; activate)
 64020   if ~setup_library then let fn_setup
-64040   let fnbackgrounddisable=fn_backgrounddisable( activate)
+64040   fnbackgrounddisable=fn_backgrounddisable( activate)
 64060 fnend 
 64080 def fn_backgrounddisable(; activate)
 64100   if activate then 
@@ -2181,7 +2181,7 @@
 64240 fnend 
 66000 def library fncompany_name(window,win_cols)
 66020   if ~setup_library then let fn_setup
-66040   let fncompany_name=fn_company_name(window,win_cols)
+66040   fncompany_name=fn_company_name(window,win_cols)
 66060 fnend 
 68000 def fn_company_name(window,win_cols)
 68160   pr #window, fields "1,08,CC 18,[screenheader]": date$("Month dd, ccyy")(1:18)

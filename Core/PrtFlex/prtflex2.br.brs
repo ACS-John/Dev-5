@@ -15,7 +15,7 @@
 00031   dim df$*1,dr$*9,dc$*2,da$*17,extra(23),extra$(11)*30,item$(80)*50
 00032   dim abbrev$*20,open_read$*80,tg(11)
 00039 ! /r
-00040   let fntop(program$,cap$="Print Flex")
+00040   fntop(program$,cap$="Print Flex")
 00050   let programfolder$=env$('cursys')&"mstr"
 00060   let datafolder$=env$('Q')&'\'&env$('cursys')&"mstr"
 00062   let dataext$='.h'&env$('cno')
@@ -42,10 +42,10 @@
 04004   mat colhdr$=("")
 04005   mat colmask$(columns)
 04006   mat colmask$=("")
-04010   let fntos(sn$="mstrflex")
-04018   let fnlbl(1,1,uprc$(gridname$),20,2,3)
+04010   fntos(sn$="mstrflex")
+04018   fnlbl(1,1,uprc$(gridname$),20,2,3)
 04075   gosub GRIDHEADING ! reads the headings that were created above
-04090   let fnflexinit1("flexprint",3,1,10,70,mat colhdr$,mat colmask$,1)
+04090   fnflexinit1("flexprint",3,1,10,70,mat colhdr$,mat colmask$,1)
 04095 ! Restore #1:
 04096 READ_NEXT: gosub READDATAFILES ! reads the database for the grid information                                     These read statements and form statements must
 04097 !                     be in a dispaly file in the data base folder with                               a "_read" on the end of the file name.  The file                                name must be the same as the database name + _read
@@ -54,11 +54,11 @@
 04100   if end_date<>0 and end_date<tdate then goto READ_NEXT
 04101   if sel_code=2 and tcode<>1 then goto READ_NEXT
 04112   gosub GRIDDETAILS ! Assign the variable names to                                each column
-04120   let fnflexadd1(mat item$)
+04120   fnflexadd1(mat item$)
 04130   goto READ_NEXT
 04140 EOFONREAD: ! Complete the grid once all data has been read
 04144 ! Let FNLBL(15,1,"Export the grid to a fixed width file, for later use.")
-04145   let fncmdset(52): let fnacs(sn$,win,mat response$,ckey) ! CALL items selected
+04145   fncmdset(52): let fnacs(sn$,win,mat response$,ckey) ! CALL items selected
 04146   let lastgridresponse$=response$(1)
 04160   if ckey=5 then chain "S:\Core\prtflex\PRTFLEX1",programfolder$,datafolder$
 04170 ! Let FNXIT(CURSYS$)
@@ -98,67 +98,67 @@
 12012   let transtype$(3)="Collection"
 12013   let transtype$(4)="Credit Memo"
 12014   let transtype$(5)="Debit Memo"
-12030   let fntos(sn$="Gridtrans-1")
+12030   fntos(sn$="Gridtrans-1")
 12032   let rc=cf=0
-12040   let fnfra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
+12040   fnfra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
 12042   cf+=1 : let fratype=cf
-12050   let fnopt(1,3,"[All]",0,fratype)
+12050   fnopt(1,3,"[All]",0,fratype)
 12051   if sel_code=1 or sel_code=0 then 
 12052     let resp$(rc+=1)="True"
 12053   else 
 12054     let resp$(rc+=1)="False"
 12055   end if 
-12060   let fnopt(2,3,"Charges",0,fratype)
+12060   fnopt(2,3,"Charges",0,fratype)
 12061   if sel_code=2 then 
 12062     let resp$(rc+=1)="True"
 12063   else 
 12064     let resp$(rc+=1)="False"
 12065   end if 
-12070   let fnopt(3,3,"Penalties",0,fratype)
+12070   fnopt(3,3,"Penalties",0,fratype)
 12071   if sel_code=3 then 
 12072     let resp$(rc+=1)="True"
 12073   else 
 12074     let resp$(rc+=1)="False"
 12075   end if 
-12080   let fnopt(4,3,"Collections",0,fratype)
+12080   fnopt(4,3,"Collections",0,fratype)
 12081   if sel_code=4 then 
 12082     let resp$(rc+=1)="True"
 12083   else 
 12084     let resp$(rc+=1)="False"
 12085   end if 
-12090   let fnopt(5,3,"Credit Memos",0,fratype)
+12090   fnopt(5,3,"Credit Memos",0,fratype)
 12091   if sel_code=5 then 
 12092     let resp$(rc+=1)="True"
 12093   else 
 12094     let resp$(rc+=1)="False"
 12095   end if 
-12100   let fnopt(6,3,"Debit Memos",0,fratype)
+12100   fnopt(6,3,"Debit Memos",0,fratype)
 12101   if sel_code=6 then 
 12102     let resp$(rc+=1)="True"
 12103   else 
 12104     let resp$(rc+=1)="False"
 12105   end if 
-12110   let fnfra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
+12110   fnfra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
 12112   cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
-12120   let fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
-12130   let fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
+12120   fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
+12130   fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
 12132   let resp$(rc+=1)=str$(beg_date)
-12140   let fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
-12150   let fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
+12140   fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
+12150   fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
 12152   let resp$(rc+=1)=str$(end_date)
-12160   let fnfra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
+12160   fnfra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
 12162   cf+=1 : let fraaccount=cf
-12170   let fnlbl(1,1,"Account:",8,1,0,fraaccount)
-12180   let fncmbact(1,10,1,fraaccount)
+12170   fnlbl(1,1,"Account:",8,1,0,fraaccount)
+12180   fncmbact(1,10,1,fraaccount)
 12182   let rc+=1
 12183   if trim$(hact$)<>"" then 
 12184     let resp$(rc)=hact$
 12185   else if resp$(rc)="" then 
 12186     let resp$(rc)="[All]"
 12187   end if 
-12190   let fncmdkey("&Display",1,1,0,"Displays a list of transactions on the screen")
-12210   let fncmdkey("&Cancel",5,0,1,"Returns to customer record")
-12220   let fnacs(sn$,0,mat resp$,ckey)
+12190   fncmdkey("&Display",1,1,0,"Displays a list of transactions on the screen")
+12210   fncmdkey("&Cancel",5,0,1,"Returns to customer record")
+12220   fnacs(sn$,0,mat resp$,ckey)
 12222   if ckey=cancel then goto XIT_ASKTRANSET
 12224   if resp$(1)="True" then 
 12225     let sel_code=1

@@ -7,7 +7,7 @@
 00070     dim cnam$*40
 00080 ! ______________________________________________________________________
 00090 ! Let fntop(program$,"CHANGE_ME")
-00100     let fncno(cno,cnam$)
+00100     fncno(cno,cnam$)
 00110     close #102: ioerr L120
 00120 L120: open #102: "SRow=5,SCol=13,ERow=14,ECol=64,Border=SR,Caption=<Initial File Preparation",display,outin 
 00130     pr #102: newpage !:
@@ -66,7 +66,7 @@
 00620     fnindex_it(env$('Q')&"\GLmstr\GLBREC.h"&env$('cno'),env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),"1 24")
 00630     execute "Index "&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&' '&env$('Q')&"\GLmstr\PRINDEX.h"&str$(cno)&" 1 4 Replace DupKeys -n"
 00640     execute "Index "&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno)&' '&env$('Q')&"\GLmstr\AcTrIdx.h"&str$(cno)&" 1/71/17/13 12/2/2/4 Replace DupKeys -n"
-00650     let fnchain("S:\General Ledger\Accounts")
+00650     fnchain("S:\General Ledger\Accounts")
 00660 ! ______________________________________________________________________
 00670     goto XIT
 00680 ! ______________________________________________________________________

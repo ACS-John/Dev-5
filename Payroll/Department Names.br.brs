@@ -2,7 +2,7 @@
 00020 ! Department names for payroll
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnhamster
-00050   let fntop(program$)
+00050   fntop(program$)
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim mask(2),p$(2)*25,lbl$(2)*21
@@ -11,7 +11,7 @@
 00120   let fln(1)=3 : let fln(2)=25
 00130   let mask(1)=30 : let mask(2)=0
 00140   fn_openfiles
-00150   let fnhamster("Deptname",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
+00150   fnhamster("Deptname",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00160   close #1: !:
         execute "Index "&env$('Q')&"\PRmstr\deptname.h"&env$('cno')&' '&env$('Q')&"\PRmstr\Depnameidx.h"&env$('cno')&" 1 3,Replace" ioerr ignore
 00170 XIT: let fnxit

@@ -9,7 +9,7 @@
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132
 00090   dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),sc1$(2)*20
 00100 ! ______________________________________________________________________
-00110   let fntop(program$)
+00110   fntop(program$)
 00140   actpd$=fnactpd$
 00142   actpd=fnactpd
 00147   ! fscode=fnfscode
@@ -29,19 +29,19 @@
 00214   end if 
 00216   open #h_acglfnx:=1: fl1$,internal,input,keyed 
 00220   if fnprocess=1 or fnUseDeptNo=0 then goto L320
-00230   let fntos(sn$="GLInput")
+00230   fntos(sn$="GLInput")
 00232   let mylen=30: let mypos=mylen+3 : let right=1
-00240   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00250   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
+00240   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00250   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
 00252   let resp$(1)=""
-00260   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00270   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00280   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00290   let fnacs(sn$,0,mat resp$,ckey)
+00260   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00270   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00280   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00290   fnacs(sn$,0,mat resp$,ckey)
 00300   if ckey=5 then goto XIT
 00310   costcntr=val(resp$(1))
 00320 L320: ! 
-00322   let fnopenprn
+00322   fnopenprn
 00330   if fnps=2 then ! secondary
 00332     execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&env$('temp')&"\fsindex.H"&env$('cno')&" 72 3 Replace DupKeys -N"
 00334   else 
@@ -191,7 +191,7 @@
 01270 L1270: form pos 1,c 1,skip ls
 01280   goto HDR_COLUMN_XIT
 01290 HDR_COLUMN_B: ! 
-01292   let fnpglen(pglen)
+01292   fnpglen(pglen)
 01300 ! If PGLEN<>42 Then Let PGLEN=58
 01310   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
 01320 ! If PGLEN=42 Then Let SK=SK+1
@@ -231,9 +231,9 @@
 01650 L1650: ! r:
 01652   let eofcode=1
 01660   gosub HDR_COLUMN_B
-01675   let fnfscode(actpd)
-01676   let fnpriorcd(1)
-01680   let fncloseprn
+01675   fnfscode(actpd)
+01676   fnpriorcd(1)
+01680   fncloseprn
 01690   goto XIT ! /r
 01700 ! ______________________________________________________________________
 01710 BLDPCT1: ! r:

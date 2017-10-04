@@ -14,24 +14,24 @@
 00150     let srv$(j)=trim$(srv$(j)) !:
           if srv$(j)<>"" then let srv$(j)=srv$(j)&":" : let services+=1
 00160   next j
-00180   let fntop(program$)
+00180   fntop(program$)
 00190   goto MENU1
 00200 ! ______________________________________________________________________
 00210 MENU1: ! 
-00220   let fntos(sn$:="ubCorAmt-1") !:
+00220   fntos(sn$:="ubCorAmt-1") !:
         let mylen=48 !:
         let mypos=mylen+2
-00230   let fnlbl(1,1,"Starting Account ([All] for first run):",mylen,1)
-00240   let fncmbact(1,mypos,1) !:
+00230   fnlbl(1,1,"Starting Account ([All] for first run):",mylen,1)
+00240   fncmbact(1,mypos,1) !:
         let resp$(1)="[All]"
-00250   let fnlbl(2,1,"Summary Transaction Date (mmddyy):",mylen,1)
-00260   let fntxt(2,mypos,8,0,0,"1") !:
+00250   fnlbl(2,1,"Summary Transaction Date (mmddyy):",mylen,1)
+00260   fntxt(2,mypos,8,0,0,"1") !:
         let resp$(2)=str$(n)
-00270   let fnlbl(4,1,"This program requires exclusive use of the Customer File.",90,2) !:
-        let fnlbl(5,1,"Please make sure no one else is in Utility Billing",90,2) !:
-        let fnlbl(6,1,"while you use this program.",90,2)
-00280   let fncmdset(2)
-00290   let fnacs(sn$,0,mat resp$,ckey)
+00270   fnlbl(4,1,"This program requires exclusive use of the Customer File.",90,2) !:
+        fnlbl(5,1,"Please make sure no one else is in Utility Billing",90,2) !:
+        fnlbl(6,1,"while you use this program.",90,2)
+00280   fncmdset(2)
+00290   fnacs(sn$,0,mat resp$,ckey)
 00300   if ckey=5 then goto XIT
 00310   let n=val(resp$(2))
 00320   let hz$=z$=lpad$(trim$(resp$(1)(1:10)),10)
@@ -49,7 +49,7 @@
 00410 ! ______________________________________________________________________
 00420 SCREEN2: ! 
 00430   let sn$="ubCorAmt-2" !:
-        let fntos(sn$)
+        fntos(sn$)
 00440   let mylen=15 !:
         for j=1 to 10 ! UDIM(SRV$) !:
           let mylen=max(len(trim$(srv$(j))),mylen) !:
@@ -57,12 +57,12 @@
         let mypos=mylen+2 !:
         let mypos2=mypos+12 ! kj
 00450   let txt$="Account:" !:
-        let fnlbl(1,1,txt$,mylen,1)
-00460   let fntxt(1,mypos,10,0,1,"",1) !:
+        fnlbl(1,1,txt$,mylen,1)
+00460   fntxt(1,mypos,10,0,1,"",1) !:
         let resp$(1)=z$
 00470   let txt$="Balance:" !:
-        let fnlbl(2,1,txt$,mylen,1)
-00480   let fntxt(2,mypos,9,0,1,"10") !:
+        fnlbl(2,1,txt$,mylen,1)
+00480   fntxt(2,mypos,9,0,1,"10") !:
         let resp$(2)=str$(bal)
 00490   let txt$="Balance" : let fnlbl(4,mypos,txt$,10,2,1) !:
         let txt$="Reading" : let fnlbl(4,mypos2,txt$,10,2,1)
@@ -72,25 +72,25 @@
 00510     if trim$(srv$(j))<>"" then !:
             let respc+=1 !:
             let resp_line+=1 !:
-            let fnlbl(resp_line,1,srv$(j),mylen,1) !:
-            let fntxt(resp_line,mypos,9,0,1,"10") !:
+            fnlbl(resp_line,1,srv$(j),mylen,1) !:
+            fntxt(resp_line,mypos,9,0,1,"10") !:
             let resp$(respc)=str$(gb(j))
 00520     if trim$(srv$(j))<>"" and (j=1) then !:
-            let fntxt(resp_line,mypos2,11,0,1,"20") !:
+            fntxt(resp_line,mypos2,11,0,1,"20") !:
             let respc+=1 : let resp$(respc)=str$(d(1))
 00530     if (trim$(srv$(j))="Electric:" or trim$(srv$(j))="Lawn Meter:") and (j=3) then !:
-            let fntxt(resp_line,mypos2,11,0,1,"20") !:
+            fntxt(resp_line,mypos2,11,0,1,"20") !:
             let respc+=1 : let resp$(respc)=str$(d(5))
 00540     if trim$(srv$(j))="Gas:" and (j=4) then !:
-            let fntxt(resp_line,mypos2,11,0,1,"20") !:
+            fntxt(resp_line,mypos2,11,0,1,"20") !:
             let respc+=1 : let resp$(respc)=str$(d(9))
 00550   next j
 00560   let respc+=1 : let resp$(respc)=e$ !:
-        let fntxt(1,40,30,0,0,"",1)
-00570   let fncmdkey("&Next",1,1,0,"Save and display next account in account order." ) !:
-        let fncmdkey("&Select Account",2,0,0,"Select another account." ) !:
-        let fncmdkey("E&xit",5,0,1,"Returns to menu")
-00580   let fnacs(sn$,0,mat resp$,ckey)
+        fntxt(1,40,30,0,0,"",1)
+00570   fncmdkey("&Next",1,1,0,"Save and display next account in account order." ) !:
+        fncmdkey("&Select Account",2,0,0,"Select another account." ) !:
+        fncmdkey("E&xit",5,0,1,"Returns to menu")
+00580   fnacs(sn$,0,mat resp$,ckey)
 00590   if ckey=5 then goto XIT
 00600   bal=val(resp$(2))
 00610   let respc=2 !:
@@ -122,7 +122,7 @@
         let txt$(4)=cnvrt$("pic(--------#.##)",t1)&"  Total Allocations" !:
         let txt$(5)="------------" !:
         let txt$(6)=cnvrt$("pic(--------#.##)",bal-t1)&"  Difference"
-00730   let fnmsgbox(mat txt$,resp$,'',48)
+00730   fnmsgbox(mat txt$,resp$,'',48)
 00740   return 
 00750 ! ______________________________________________________________________
 00760 WRITE_TRANS: ! 

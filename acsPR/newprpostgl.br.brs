@@ -11,10 +11,10 @@
 12160   dim fullname$(20)*20,abbrevname$(20)*8,newcalcode(20),newdedfed(20),dedfica(20)
 12180   dim dedst(20),deduc(20),gl$(20)*12,d1$*20
 12200   ! ______________________________________________________________________
-16000   let fntop(program$,cap$="Post to General Ledger")
+16000   fntop(program$,cap$="Post to General Ledger")
 16040   fnIndex_it(env$('Q')&'\PRmstr\Department.h'&env$('cno'),env$('Q')&'\PRmstr\DeptId4.h'&env$('cno'),'12/1/9 12/8/3') ! sort department file in general ledger sequence
 16050   fnstatus_close
-16060   let fnopenprn
+16060   fnopenprn
 16080   ! ______________________________________________________________________
 16100   open #20: "Name="&env$('Q')&"\GLmstr\GLBucket.h"&env$('cno')&",Shr",internal,input,relative ioerr L260
 16120   read #20,using 'Form POS 1,N 1',rec=1: glb norec ignore
@@ -30,25 +30,25 @@
 18100     let ml$(1)="Normally you would not take this menu option to post"
 18120     let ml$(2)="General Ledger if you have the Checkbook system."
 18140     let ml$(3)="Click OK to continue or Cancel to stop."
-18160     let fnmsgbox(mat ml$,resp$,cap$,1)
+18160     fnmsgbox(mat ml$,resp$,cap$,1)
 18180     if resp$="OK" then goto ASK_DATE else goto XIT
 18200   end if
 18220 goto ASK_DATE ! /r
 22000 ASK_DATE: ! 
-22020   let fntos(sn$="PostGl")
+22020   fntos(sn$="PostGl")
 22040   let respc=0
-22060   let fnlbl(1,40,"",1,1) ! bigger screen
-22080   let fnlbl(1,1,"Beginning Payroll Date:",25,1)
-22100   let fntxt(1,28,10,0,1,"3",0,"For current payroll, always use the calculation date.  You can post or re-post older payrolls by using the older payroll date.")
+22060   fnlbl(1,40,"",1,1) ! bigger screen
+22080   fnlbl(1,1,"Beginning Payroll Date:",25,1)
+22100   fntxt(1,28,10,0,1,"3",0,"For current payroll, always use the calculation date.  You can post or re-post older payrolls by using the older payroll date.")
 22120   let resp$(respc+=1)=str$(d1)
-22140   let fnlbl(2,1,"Ending Payroll Date:",25,1)
-22160   let fntxt(2,28,10,0,1,"3",0,"You can post a ranges of payrolls by entering a beginning and ending date.  Use the same date for a single payroll.")
+22140   fnlbl(2,1,"Ending Payroll Date:",25,1)
+22160   fntxt(2,28,10,0,1,"3",0,"You can post a ranges of payrolls by entering a beginning and ending date.  Use the same date for a single payroll.")
 22180   let resp$(respc+=1)=str$(d1)
-22200   let fnchk(3,28,"Print Report Only:",1)
+22200   fnchk(3,28,"Print Report Only:",1)
 22220   let resp$(respc+=1)="False"
-22240   let fncmdkey("&Next",1,1,0,"Proceed with posting." )
-22260   let fncmdkey("E&xit",5,0,1,"Returns to menu")
-22280   let fnacs(sn$,0,mat resp$,ckey) ! ask payroll date
+22240   fncmdkey("&Next",1,1,0,"Proceed with posting." )
+22260   fncmdkey("E&xit",5,0,1,"Returns to menu")
+22280   fnacs(sn$,0,mat resp$,ckey) ! ask payroll date
 24000   if ckey=5 then goto XIT
 24020   let dat1=d1=val(resp$(1))
 24040   let dat2=d2=val(resp$(2))
@@ -87,7 +87,7 @@
 26500   close #1: 
 26520   open #2: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 26540   open #6: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptId4.h"&env$('cno')&",Shr",internal,outin,keyed 
-26560   let fn_pr_hdr
+26560   fn_pr_hdr
 28000   do
 28020     DEPT_READ: ! 
 28040     mat oldtgl=tgl
@@ -106,7 +106,7 @@
 28300     if mastercd=0 then let fn_l1800
 28320     let tgl$=lpad$(str$(tgl(1)),3)&lpad$(str$(tgl(2)),6)&lpad$(str$(tgl(3)),3)
 28340     if oldtgl$=tgl$ or oldtgl$="" then goto L920
-28360     let fn_write_gl_trans
+28360     fn_write_gl_trans
 28380     L920: ! 
 28400     if tgl(1)=0 or tgl(1)=oldtgl then goto L930 else let fn_l1800 ! No Cost Center or same Cost Center
 28420     L930: ! If OLDTENO=TENO Then Goto 830
@@ -137,25 +137,25 @@
 32020   let eofcode=1
 32040   mat ttgl=tgl
 32060   let oldtgl$=tgl$
-32080   let fn_write_gl_trans ! WRITE LAST ENTRY
+32080   fn_write_gl_trans ! WRITE LAST ENTRY
 32100   if multigl=1 then ! ONLY ONE FUND OR COMPANY
-32120     let fn_l1800
-32140     let fn_finalscrctrlbookmulitfunds
+32120     fn_l1800
+32140     fn_finalscrctrlbookmulitfunds
 32160   end if
-32180   let fn_assglnum ! POST WH AND NET
-32200   let fn_printtotalsandunderlines
+32180   fn_assglnum ! POST WH AND NET
+32200   fn_printtotalsandunderlines
 32220   close #1: ioerr ignore
 32240   close #2: ioerr ignore
 32260   close #4: ioerr ignore
 32280   ! 
-32300   let fncloseprn
+32300   fncloseprn
 32320   if ~skipposting=1 and glinstal and glb<>2 then 
 32340     fnchain("S:\acsGL\ACGLMRGE")
 32360   end if
 32380 goto XIT ! /r
 34000 PgOf: !  r:
 34020   pr #255: newpage
-34040   let fn_pr_hdr
+34040   fn_pr_hdr
 34060 continue ! /r
 36000 def fn_write_gl_trans ! SUBTOTAL ROUTINE AND WRITE GL TRANS
 36020   if glinstal then
@@ -214,7 +214,7 @@
 44100   let ml$(2)="cost centers on the system.  Click Yes if you do have more than."
 44120   let ml$(3)="one set of books that are self balancing in your system."
 44140   let ml$(4)="Click NO if you are using the cost center code for other purposes."
-44160   let fnmsgbox(mat ml$,resp$,cap$,52)
+44160   fnmsgbox(mat ml$,resp$,cap$,52)
 44180   if resp$="Yes" then let multigl=1 else let multigl=2
 44200   if multigl><1 then goto L1870
 44220   let mulitidsk=1
@@ -222,21 +222,21 @@
 44260   if multigl=2 then goto L2080
 44280   ! CREATE DUE TO PAYROLL FUND ENTRIES
 44300   if mastercd=0 then goto L2050 ! FIRST TIME THRU ROUTINE
-44320   let fntos(sn$="PostGl3")
+44320   fntos(sn$="PostGl3")
 44340   let respc=0: let mypos=45
-44360   let fnlbl(1,1,"Due to Payroll Clearing Account on Fund # "&oldtgl$(1:3)&":",mypos,1)
-44380   let fnqgl(1,mypos+3,0,2,pas)
+44360   fnlbl(1,1,"Due to Payroll Clearing Account on Fund # "&oldtgl$(1:3)&":",mypos,1)
+44380   fnqgl(1,mypos+3,0,2,pas)
 44400   let resp$(1)=fnrgl$(bankgl$)
-44420   let fncmdkey("&Next",1,1,0,"Continue posting." )
-44440   let fncmdkey("E&xit",5,0,1,"Returns to menu")
-44460   let fnacs(sn$,0,mat resp$,ckey) ! ask clearing
+44420   fncmdkey("&Next",1,1,0,"Continue posting." )
+44440   fncmdkey("E&xit",5,0,1,"Returns to menu")
+44460   fnacs(sn$,0,mat resp$,ckey) ! ask clearing
 44480   if ckey=5 then goto XIT
 44500   let key$=k$=bankgl$=fnagl$(resp$(1))
 44520   let ttgl(1)=val(key$(1:3)): let ttgl(2)=val(key$(4:9)): let ttgl(3)=val(key$(10:12))
 44540   pr #255,using L1700: 0," ",mat ttgl,totaldue
 44560   let totalcr=totalcr+totaldue
-44580   let fn_printtotalsandunderlines
-44600   let fn_pr_hdr
+44580   fn_printtotalsandunderlines
+44600   fn_pr_hdr
 44620   if glinstal=0 then goto L2050
 44640   write #14,using L1220: mat ttgl,dat,totaldue,5,0," ","Payroll Summary",prgl$(15)
 44660   close #14: 
@@ -267,14 +267,14 @@
 46320 fnend 
 48000 def fn_finalscrctrlbookmulitfunds
 48020   ! FINAL PAGE FOR CONTROL SET OF BOOKS  (MULTI-FUNDS ONLY)
-48040   let fntos(sn$="PostGl4")
+48040   fntos(sn$="PostGl4")
 48060   let respc=0: let mypos=45
-48080   let fnlbl(1,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
-48100   let fnqgl(1,mypos+3,0,2,pas)
+48080   fnlbl(1,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
+48100   fnqgl(1,mypos+3,0,2,pas)
 48120   let resp$(1)=fnrgl$(bankgl$)
-48140   let fncmdkey("&Next",1,1,0,"Continue posting." )
-48160   let fncmdkey("E&xit",5,0,1,"Returns to menu")
-48180   let fnacs(sn$,0,mat resp$,ckey) ! ask clearing
+48140   fncmdkey("&Next",1,1,0,"Continue posting." )
+48160   fncmdkey("E&xit",5,0,1,"Returns to menu")
+48180   fnacs(sn$,0,mat resp$,ckey) ! ask clearing
 48200   if ckey=5 then goto XIT
 48220   let key$=fnagl$(resp$(1))
 48240   let ttgl(1)=val(key$(1:3)): let ttgl(2)=val(key$(4:9)): let ttgl(3)=val(key$(10:12))
@@ -297,28 +297,28 @@
 56060   L2500: ! 
 56080   let msgline$(1)="Do you wish to accrue part of this Payroll"
 56100   let msgline$(2)="in the previous month?"
-56120   let fnmsgbox(mat msgline$,resp$,cap$,4)
+56120   fnmsgbox(mat msgline$,resp$,cap$,4)
 56140   accrue$=resp$
 56160   if accrue$<>"Yes" then goto ASKACCRUE_XIT
 56180   ! ______________________________________________________________________
 56200   ACCRUAL: ! r:
-56220   let fntos(sn$="PostGl5")
+56220   fntos(sn$="PostGl5")
 56240   let respc=0: let mypos=50
-56260   let fnlbl(1,1,"Number of Days in this Pay Period:",mypos,1)
-56280   let fntxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
+56260   fnlbl(1,1,"Number of Days in this Pay Period:",mypos,1)
+56280   fntxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
 56300   let resp$(1)=str$(day)
-56320   let fnlbl(2,1,"Number of Days to Expense in Last Month:",mypos,1)
-56340   let fntxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
+56320   fnlbl(2,1,"Number of Days to Expense in Last Month:",mypos,1)
+56340   fntxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.")
 56360   let resp$(2)=str$(dayslm)
-56380   let fnlbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
-56400   let fnqgl(3,mypos+3,0,2,pas)
+56380   fnlbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
+56400   fnqgl(3,mypos+3,0,2,pas)
 56420   let resp$(3)=fnrgl$(bankgl$)
-56440   let fnlbl(4,1,"Last Day of Previous Month:",mypos,1)
-56460   let fntxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.")
+56440   fnlbl(4,1,"Last Day of Previous Month:",mypos,1)
+56460   fntxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.")
 56480   let resp$(4)=str$(d2)
-56500   let fncmdkey("&Next",1,1,0,"Continue posting." )
-56520   let fncmdkey("E&xit",5,0,1,"Returns to menu")
-56540   let fnacs(sn$,0,mat resp$,ckey) ! ask accrual info
+56500   fncmdkey("&Next",1,1,0,"Continue posting." )
+56520   fncmdkey("E&xit",5,0,1,"Returns to menu")
+56540   fnacs(sn$,0,mat resp$,ckey) ! ask accrual info
 56560   if ckey=5 then goto XIT
 56580   let day=val(resp$(1)) ! days in pay period
 56600   let dayslm=val(resp$(2)) ! days last month
@@ -333,21 +333,21 @@
 56780     mat ml$(2)
 56800     let ml$(1)="Invalid number of days in pay period!"
 56820     let ml$(2)="Click OK to fix."
-56840     let fnmsgbox(mat ml$,resp$,cap$,0)
+56840     fnmsgbox(mat ml$,resp$,cap$,0)
 56860     goto ACCRUAL
 56880   end if
 56900   if d2<10100 or d2>123199 then 
 56920     mat ml$(2)
 56940     let ml$(1)="Invalid date for last day of month!"
 56960     let ml$(2)="Click OK to fix."
-56980     let fnmsgbox(mat ml$,resp$,cap$,0)
+56980     fnmsgbox(mat ml$,resp$,cap$,0)
 57000     goto ACCRUAL
 57020   end if
 57040   if dayslm<1 or dayslm>31 then 
 57060     mat ml$(2)
 57080     let ml$(1)="Invalid number of days for last month!"
 57100     let ml$(2)="Click OK to fix."
-57120     let fnmsgbox(mat ml$,resp$,cap$,0)
+57120     fnmsgbox(mat ml$,resp$,cap$,0)
 57140     goto ACCRUAL
 57160   end if
 57180   if dayslm>day then goto ACCRUAL

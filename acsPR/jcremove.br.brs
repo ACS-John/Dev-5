@@ -8,10 +8,10 @@
 00080   dim tr(9),pd$*30,tn$*6,n$*40,cap$*128,message$*40,msgline$(2)*60
 00090   dim response$(5)*1
 00100 ! ______________________________________________________________________
-00110   let fntop("S:\acsPR\jcRemove",cap$="Remove Completed Jobs")
-00120   let fncno(cno)
+00110   fntop("S:\acsPR\jcRemove",cap$="Remove Completed Jobs")
+00120   fncno(cno)
 00130 ! 
-00135   let fnconsole(1)
+00135   fnconsole(1)
 00140   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno),internal,outin: close #1: 
 00150 ! ______________________________________________________________________
 00160   execute "Copy "&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&" JCMSTR.X -n"
@@ -21,7 +21,7 @@
 00200   open #1: "Name=JCMSTR.X,KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno),internal,outin,keyed 
 00210 ! ______________________________________________________________________
 00220 L220: pr newpage
-00230   let fnopenwin(win=101,10,20,14,59,cap$)
+00230   fnopenwin(win=101,10,20,14,59,cap$)
 00240   pr #101,fields "4,2,C 21,N": "Job Number to Remove:"
 00250   pr fields "15,35,C 09,B,5": "Done (F5)"
 00260 L260: input #101,fields "4,24,C 6,UT,N": jn$
@@ -32,14 +32,14 @@
 00310 L310: form pos 7,c 40
 00320   let msgline$(1)="Are you sure you wish to delete Job Number "&ltrm$(jn$)
 00330   let msgline$(2)=n$
-00340   let fnoldmsgbox(mat response$,cap$, mat msgline$,2)
+00340   fnoldmsgbox(mat response$,cap$, mat msgline$,2)
 00350   if response$(1)="Y" then goto L360 else goto L220
 00360 L360: rewrite #1,using 'Form POS 157,N 2',key=jn$: 9 nokey L220
 00370   goto L220
 00380 ! ______________________________________________________________________
 00390 L390: pr newpage
 00400   let message$="Removeing completed Jobs..."
-00410   let fnwait(102,cap$,message$,0)
+00410   fnwait(102,cap$,message$,0)
 00420   restore #1: 
 00430   open #2: "Name=JCCAT.X,KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno),internal,input,keyed 
 00440   open #3: "Name=JCTRANS.X",internal,input,relative 

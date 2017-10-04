@@ -13,8 +13,8 @@
 00130   dim iocr$(3),wrdcr$(3)*23
 00140   dim p$(20)*50,cap$*128,dedcode(10)
 00150 ! ______________________________________________________________________
-00160   let fntop(program$,cap$="Payroll")
-00170   let fncno(cno,cnam$)
+00160   fntop(program$,cap$="Payroll")
+00170   fncno(cno,cnam$)
 00180   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #1,using 'Form POS 418,10*C 20,10*N 1': mat miscname$,mat dedcode !:
         close #1: 
@@ -51,17 +51,17 @@
 00360   goto XIT
 00370 ! ______________________________________________________________________
 00380 MAIN: ! 
-00390   let fntos(sn$="Payroll") !:
+00390   fntos(sn$="Payroll") !:
         let mylen=20: let mypos=mylen+3 : let right=1
-00400   let fnemployee_search(x$,99)
+00400   fnemployee_search(x$,99)
 00410 ! Let FNLBL(1,1,"Employee Number:",MYLEN,RIGHT)
 00420 ! Let FNCOMBOF("PRmstr",1,MYPOS,27,env$('Q')&"\GLmstr\PRmstr.h"&str$(cno),1,4,5,30,'',0,PAS, "Choose from the list of employees.  Click Add Employee to add a new employee not shown on list.",0) !:
         let resp$(1)=str$(eno)
-00430   let fncmdkey("&Next",1,1,0,"")
-00440   let fncmdkey("&Add",2,0,0,"")
-00450   let fncmdkey("&Proof Llist",4,0,0,"")
-00460   let fncmdkey("&Cancel",5,0,1,"")
-00470   let fnacs(sn$,0,mat resp$,ckey)
+00430   fncmdkey("&Next",1,1,0,"")
+00440   fncmdkey("&Add",2,0,0,"")
+00450   fncmdkey("&Proof Llist",4,0,0,"")
+00460   fncmdkey("&Cancel",5,0,1,"")
+00470   fnacs(sn$,0,mat resp$,ckey)
 00480 L480: if ckey=5 then goto XIT
 00490   if ckey=2 then goto ASK_NEW_NUMBER
 00500   if ckey=4 then goto PROOF_LIST
@@ -69,14 +69,14 @@
 00520   goto DISPLAY_RECORD
 00530 ASK_NEW_NUMBER: !  add new employee
 00540   let eno=0: mat k$=(""): let ss$="": mat m=(0): mat ta=(0)
-00550   let fntos(sn$="Payroll2") !:
+00550   fntos(sn$="Payroll2") !:
         let mylen=20: let mypos=mylen+3 : let right=1
-00560   let fnlbl(1,1,"Employee Number:",mylen,right)
-00570   let fntxt(1,mypos,4,0,0,"30",0,"Enter new employee number.",0 ) !:
+00560   fnlbl(1,1,"Employee Number:",mylen,right)
+00570   fntxt(1,mypos,4,0,0,"30",0,"Enter new employee number.",0 ) !:
         let resp$(1)=""
-00580   let fncmdkey("&Next",1,1,0,"")
-00590   let fncmdkey("&Cancel",5,0,1,"")
-00600   let fnacs(sn$,0,mat resp$,ckey)
+00580   fncmdkey("&Next",1,1,0,"")
+00590   fncmdkey("&Cancel",5,0,1,"")
+00600   fnacs(sn$,0,mat resp$,ckey)
 00610   let holden1=en1=val(resp$(1))
 00620   if en1=0 then goto MAIN
 00630   addemployee=1 ! code for adding new employee
@@ -85,39 +85,39 @@
 00660   read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey DISPLAY_EMPLOYEE
 00670   let disable=1: goto DISPLAY_EMPLOYEE
 00680 DISPLAY_EMPLOYEE: ! 
-00690   let fntos(sn$="Payroll3") !:
+00690   fntos(sn$="Payroll3") !:
         let mylen=15: let mypos=mylen+3 : let right=1
-00700   let fnlbl(1,1,"Employee Number:",mylen,right)
-00710   let fntxt(1,mypos,4,0,0,"30",disable,"",0 ) !:
+00700   fnlbl(1,1,"Employee Number:",mylen,right)
+00710   fntxt(1,mypos,4,0,0,"30",disable,"",0 ) !:
         let resp$(1)=str$(en1)
-00720   let fnlbl(2,1,"Employee Name:",mylen,right)
-00730   let fntxt(2,mypos,25,0,0,"",0,"",0 ) !:
+00720   fnlbl(2,1,"Employee Name:",mylen,right)
+00730   fntxt(2,mypos,25,0,0,"",0,"",0 ) !:
         let resp$(2)=k$(1)
-00740   let fnlbl(3,1,"Address:",mylen,right)
-00750   let fntxt(3,mypos,25,0,0,"",0,"",0 ) !:
+00740   fnlbl(3,1,"Address:",mylen,right)
+00750   fntxt(3,mypos,25,0,0,"",0,"",0 ) !:
         let resp$(3)=k$(2)
-00760   let fnlbl(4,1,"City, St Zip:",mylen,right)
-00770   let fntxt(4,mypos,25,0,0,"",0,"",0 ) !:
+00760   fnlbl(4,1,"City, St Zip:",mylen,right)
+00770   fntxt(4,mypos,25,0,0,"",0,"",0 ) !:
         let resp$(4)=k$(3)
-00780   let fnlbl(5,1,"Social Security:",mylen,right)
-00790   let fntxt(5,mypos,11,0,0,"",0,"",0 ) !:
+00780   fnlbl(5,1,"Social Security:",mylen,right)
+00790   fntxt(5,mypos,11,0,0,"",0,"",0 ) !:
         let resp$(5)=ss$
 00800   let mylen2=20 : let mypos=mylen+50
-00810   let fnlbl(1,70,"Y T D         Q T D ",24,0)
+00810   fnlbl(1,70,"Y T D         Q T D ",24,0)
 00820   for j=1 to 18
-00830     let fnlbl(j+1,42,sc1$(j+8),mylen2,right)
-00840     let fntxt(j+1,mypos,12,0,0,"10",0,"",0 ) !:
+00830     fnlbl(j+1,42,sc1$(j+8),mylen2,right)
+00840     fntxt(j+1,mypos,12,0,0,"10",0,"",0 ) !:
           let resp$(j*2-1+5)=str$(m(j*2-1) )
-00850     let fntxt(j+1,mypos+14,12,0,0,"10",0,"",0 ) !:
+00850     fntxt(j+1,mypos+14,12,0,0,"10",0,"",0 ) !:
           let resp$(j*2+5)=str$(m(j*2) )
 00860   next j
-00870   let fncmdkey("&Next",1,1,0,"")
-00880   let fncmdkey("&Review Checks",3,0,0,"")
-00885   let fncmdkey("&Add Check",8,0,0,"")
-00890   let fncmdkey("&Change Number",7,0,0,"")
-00900   let fncmdkey("&Delete",6,0,0,"")
-00910   let fncmdkey("&Cancel",5,0,1,"")
-00920   let fnacs(sn$,0,mat resp$,ckey)
+00870   fncmdkey("&Next",1,1,0,"")
+00880   fncmdkey("&Review Checks",3,0,0,"")
+00885   fncmdkey("&Add Check",8,0,0,"")
+00890   fncmdkey("&Change Number",7,0,0,"")
+00900   fncmdkey("&Delete",6,0,0,"")
+00910   fncmdkey("&Cancel",5,0,1,"")
+00920   fnacs(sn$,0,mat resp$,ckey)
 00930   let disable=1
 00940   if ckey=5 then goto MAIN
 00950   if ckey=6 then goto DELETEIT
@@ -140,14 +140,14 @@
         let ml$(1)="You have chosen to delete employee " !:
         let ml$(2)="number "&str$(eno)&".  Click OK to delete" !:
         let ml$(3)="this record or Cancel to retain the record." !:
-        let fnmsgbox(mat ml$,resp$,cap$,49)
+        fnmsgbox(mat ml$,resp$,cap$,49)
 01110   if resp$="OK" then goto L1150 else goto MAIN
 01120 MSGBOX2: ! 
 01130   mat ml$(3) !:
         let ml$(1)="You are attempting to change the employee" !:
         let ml$(2)="number from "&str$(holden1)&" to "&str$(eno)&".  Click OK to change" !:
         let ml$(3)="the number or Cancel to retain the old number." !:
-        let fnmsgbox(mat ml$,resp$,cap$,49)
+        fnmsgbox(mat ml$,resp$,cap$,49)
 01140   if resp$="OK" then goto L1170 else goto MAIN
 01150 L1150: delete #1,key=lpad$(str$(en1),4): nokey MAIN
 01160 ! delete or change numbers
@@ -198,7 +198,7 @@
 01600   goto L1490
 01610 L1610: if pl>0 then gosub L1660
 01620   on fkey 5 ignore 
-01630   let fncloseprn
+01630   fncloseprn
 01640   if fnprocess=1 then goto XIT else goto MAIN
 01650 ! ______________________________________________________________________
 01660 L1660: pr #255,using L1670: sc1$(4),mat l1
@@ -265,7 +265,7 @@
 02270   mat ml$(3) !:
         let ml$(1)="There are no checks on employee # "&str$(eno)&"." !:
         let ml$(2)="Do you wish to add checks?" !:
-        let fnmsgbox(mat ml$,resp$,cap$,35)
+        fnmsgbox(mat ml$,resp$,cap$,35)
 02280   if resp$="Yes" then add=1: goto L2340 else goto MAIN
 02290 L2290: adr=ta(1)
 02300 L2300: if adr=0 then goto MAIN
@@ -274,26 +274,26 @@
 02330 L2330: mat pr1=prd
 02340 L2340: let fntos(sn$="Payroll4") !:
         let mylen=15: let mypos=mylen+3 : let right=1
-02350   let fnlbl(1,1,"Check Date:",mylen,right)
-02360   let fntxt(1,mypos,1,0,0,"1",0,"Date of check.",0 ) !:
+02350   fnlbl(1,1,"Check Date:",mylen,right)
+02360   fntxt(1,mypos,1,0,0,"1",0,"Date of check.",0 ) !:
         let resp$(1)=str$(prd(1))
-02370   let fnlbl(2,1,"Check Number:",mylen,right)
-02380   let fntxt(2,mypos,8,0,0,"30",0,"",0 ) !:
+02370   fnlbl(2,1,"Check Number:",mylen,right)
+02380   fntxt(2,mypos,8,0,0,"30",0,"",0 ) !:
         let resp$(2)=str$(prd(2))
-02390   let fnlbl(3,1,"Gross Wage:",mylen,right)
-02400   let fntxt(3,mypos,12,0,0,"10",0,"",0 ) !:
+02390   fnlbl(3,1,"Gross Wage:",mylen,right)
+02400   fntxt(3,mypos,12,0,0,"10",0,"",0 ) !:
         let resp$(3)=str$(prd(3))
 02410   for j=1 to 17
-02420     let fnlbl(j+3,1,sc1$(j+9),mylen,right)
-02430     let fntxt(j+3,mypos,12,0,0,"10",0,"",0 ) !:
+02420     fnlbl(j+3,1,sc1$(j+9),mylen,right)
+02430     fntxt(j+3,mypos,12,0,0,"10",0,"",0 ) !:
           let resp$(j+3)=str$(prd(j+3))
 02440   next j
-02450   let fnlbl(21,1,"Net Pay:",mylen,right)
-02460   let fntxt(21,mypos,12,0,0,"10",0,"",0 ) !:
+02450   fnlbl(21,1,"Net Pay:",mylen,right)
+02460   fntxt(21,mypos,12,0,0,"10",0,"",0 ) !:
         let resp$(21)=str$(prd(21))
-02470   let fncmdkey("&Next",1,1,0,"")
-02490   let fncmdkey("&Cancel",5,0,1,"")
-02500   let fnacs(sn$,0,mat resp$,ckey)
+02470   fncmdkey("&Next",1,1,0,"")
+02490   fncmdkey("&Cancel",5,0,1,"")
+02500   fnacs(sn$,0,mat resp$,ckey)
 02510   if ckey=5 then add=0: goto MAIN
 02530   for j=1 to 21
 02540     let prd(j)=val(resp$(j))
@@ -315,7 +315,7 @@
         let ml$(2)="("&trim$(cnvrt$("pic(zzzz,zzz.##)",wh))&") does not equal" !:
         let ml$(3)="the net check ("&trim$(cnvrt$("pic(zzzz,zzz.##)",prd(21)))&")" !:
         let ml$(4)="Click OK to fix the check." !:
-        let fnmsgbox(mat ml$,resp$,cap$,49)
+        fnmsgbox(mat ml$,resp$,cap$,49)
 02690   if resp$="OK" then goto L2340 else goto MAIN
 02700 L2700: let lr2=lrec(2)+1
 02710   if add=1 then write #2,using L2320,rec=lr2: eno,mat prd,0 duprec L2700 else rewrite #2,using L2320,rec=adr: eno,mat prd,nca

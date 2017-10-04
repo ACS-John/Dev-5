@@ -5,25 +5,25 @@
 00070   dim e$(4)*30
 00080   dim cap$*128,resp$(2)*40,txt$*40,a$*1,line$*90
 00090 ! 
-00120   let fntop(program$,cap$="Notes")
-00130   let fnd1(d1)
+00120   fntop(program$,cap$="Notes")
+00130   fnd1(d1)
 00180 SCR1: ! 
-00190   let fntos(sn$="ubnotes") 
+00190   fntos(sn$="ubnotes") 
 00192   let respc=0
-00200   let fnlbl(1,1,"Route Number:",31,1)
-00210   let fncmbrt2(1,33) 
+00200   fnlbl(1,1,"Route Number:",31,1)
+00210   fncmbrt2(1,33) 
 00212   let resp$(respc+=1)="1"
-00220   let fnlbl(2,1,"Billing Date (Blank for all):",31,1)
-00230   let fntxt(2,33,8,0,0,"1") 
+00220   fnlbl(2,1,"Billing Date (Blank for all):",31,1)
+00230   fntxt(2,33,8,0,0,"1") 
 00232   let resp$(respc+=1)=str$(d1)
-00240   let fncmdset(3) 
-00242   let fnacs(sn$,0,mat resp$,ckey)
+00240   fncmdset(3) 
+00242   fnacs(sn$,0,mat resp$,ckey)
 00250   if ckey=5 then goto XIT
 00260   if resp$(1)="[All]" then let rt1=0 else let rt1=val(resp$(1))
 00270   let d1=val(resp$(2))
 00280 ! 
 00290   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
-00300   let fnopenprn
+00300   fnopenprn
 00310   gosub HEADER
 00320 ! 
 00330   if rt1 then
@@ -45,7 +45,7 @@
 00450   loop
 00460 ! 
 00470 DONE: ! 
-00480   let fncloseprn
+00480   fncloseprn
 00490 XIT: let fnxit
 00500 ignore: continue
 00510 ! <Updateable Region: ERTN>

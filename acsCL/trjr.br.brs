@@ -8,11 +8,11 @@
 00080   dim t1(3),glt(3),glts(3),bn$*30,cap$*128,des$*30,sltyn$(3)*1
 00090   dim udf$*256
 00100 ! ______________________________________________________________________
-00110   let fntop(program$, cap$="Transaction Journals")
+00110   fntop(program$, cap$="Transaction Journals")
 00120   let udf$=env$('temp')&'\'
 00130   cancel=99
 00140 ! ______________________________________________________________________
-00150   let fncno(cno,cnam$)
+00150   fncno(cno,cnam$)
 00160   let ti$(1)="Checks" !:
         let ti$(2)="Deposits" !:
         let ti$(3)="Adjustments"
@@ -22,30 +22,30 @@
         close #20: 
 00190 ! ______________________________________________________________________
 00200 MAIN: ! 
-00210   let fntos(sn$="Trjr") !:
+00210   fntos(sn$="Trjr") !:
         let respc=0
-00220   let fnlbl(1,1,"Beginning Date:",38,1)
-00230   let fntxt(1,40,10,0,1,"3",0,"Earliest transation date to be shown on journals!") !:
+00220   fnlbl(1,1,"Beginning Date:",38,1)
+00230   fntxt(1,40,10,0,1,"3",0,"Earliest transation date to be shown on journals!") !:
         let resp$(respc+=1)=""
-00240   let fnlbl(2,1,"Ending Date:",38,1)
-00250   let fntxt(2,40,10,0,1,"3",0,"Last transation date to be shown on journals!") !:
+00240   fnlbl(2,1,"Ending Date:",38,1)
+00250   fntxt(2,40,10,0,1,"3",0,"Last transation date to be shown on journals!") !:
         let resp$(respc+=1)=""
-00260   let fnlbl(4,1,"Information to Print:",38,1)
+00260   fnlbl(4,1,"Information to Print:",38,1)
 00270   let item2$(1)="Details" !:
         let item2$(2)="Totals Only"
-00280   let fncomboa("claims-act",4,40,mat item2$) !:
+00280   fncomboa("claims-act",4,40,mat item2$) !:
         let resp$(respc+=1)=item2$(1)
-00290   let fnchk(7,40,"Print Disbursments Journal:",1) !:
+00290   fnchk(7,40,"Print Disbursments Journal:",1) !:
         let resp$(respc+=1)="True"
-00300   let fnchk(8,40,"Print Receipts Journal:",1) !:
+00300   fnchk(8,40,"Print Receipts Journal:",1) !:
         let resp$(respc+=1)="True"
-00310   let fnchk(9,40,"Print Adjustments Journal:",1) !:
+00310   fnchk(9,40,"Print Adjustments Journal:",1) !:
         let resp$(respc+=1)="False"
-00320   let fnlbl(11,1,"Bank Account:",38,1)
-00330   let fncombof("Bankmstr",11,40,20,env$('Q')&"\CLmstr\bankmstr.h"&str$(cno),1,2,3,15,env$('Q')&"\CLmstr\Bankidx1.h"&str$(cno),1,0, "Select bank account for printing") !:
+00320   fnlbl(11,1,"Bank Account:",38,1)
+00330   fncombof("Bankmstr",11,40,20,env$('Q')&"\CLmstr\bankmstr.h"&str$(cno),1,2,3,15,env$('Q')&"\CLmstr\Bankidx1.h"&str$(cno),1,0, "Select bank account for printing") !:
         let resp$(respc+=1)=str$(wbc)
-00340   let fncmdset(2) !:
-        let fnacs(sn$,0,mat resp$,ck)
+00340   fncmdset(2) !:
+        fnacs(sn$,0,mat resp$,ck)
 00350   if ck=5 then goto XIT
 00360   let dt1=val(resp$(1)) ! beginning date !:
         let dt2=val(resp$(2)) ! ending date !:
@@ -67,7 +67,7 @@
 00470   read #bankmstr,using 'Form POS 3,C 30,C 12,PD 6.2',key=cnvrt$("N 2",wbc),release: bn$ nokey MAIN
 00480   close #bankmstr: 
 00490   bn$=rtrm$(bn$)
-00500   let fnopenprn
+00500   fnopenprn
 00510 END1: ! 
 00520   if wcd=0 or td1yn$="T" then goto HERE
 00530   pr #255,using 'Form POS 52,G 12.2': "  __________"
@@ -155,7 +155,7 @@
           pr #255,using 'Form POS 1,C 60': "______________________________________" !:
           pr #255: ""
 01100   gosub RESTORE_WORK
-01110   let fncloseprn
+01110   fncloseprn
 01120   goto XIT
 01130 ! ______________________________________________________________________
 01140 XIT: let fnxit

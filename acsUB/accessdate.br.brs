@@ -7,9 +7,9 @@
 00070   dim text$*40,cap$*128,txt$*40,filter$*60,optionfile$*20,empty$*10,programfolder$*60
 00071   dim ln$*128,resp$(100)*128
 00080 ! ______________________________________________________________________
-00090   let fncno(cno)
+00090   fncno(cno)
 00100 ! 
-00110   let fntop("S:\acsUB\ACCESSDATE",cap$="Display Last Date Customer File Accessed")
+00110   fntop("S:\acsUB\ACCESSDATE",cap$="Display Last Date Customer File Accessed")
 00130   execute "Dir "&env$('Q')&"\UBmstr\CUSTOMER.H"&str$(cno)&" >"&env$('Q')&"\UBmstr\DATEWork."&session$ ioerr MENU1
 00140   open #12: "Name="&env$('Q')&"\UBmstr\DATEwork2.tmp,RecL=30,Replace",internal,outin 
 00150   open #13: "Name="&env$('Q')&"\UBmstr\DATEWork."&session$,display,input ioerr MENU1
@@ -19,13 +19,13 @@
 00180   goto MENU1
 00190 ! ______________________________________________________________________
 00200 MENU1: ! 
-00210   let fntos(sn$="AccessDate") !:
+00210   fntos(sn$="AccessDate") !:
         let mylen=34 : let mypos=mylen+2
-00220   let fnlbl(1,1,"Last Date Customer Files Accessed:",34,1)
-00230   let fntxt(1,mypos,20,0,0,"",1) !:
+00220   fnlbl(1,1,"Last Date Customer Files Accessed:",34,1)
+00230   fntxt(1,mypos,20,0,0,"",1) !:
         let resp$(1)=access_date$
-00240   let fncmdset(41)
-00250   let fnacs(sn$,0,mat resp$,ck)
+00240   fncmdset(41)
+00250   fnacs(sn$,0,mat resp$,ck)
 00260 XIT: let fnxit
 00270 ! ______________________________________________________________________
 00280 ! <Updateable Region: ERTN>

@@ -2,8 +2,8 @@
 00030   on error goto L700
 00040   dim gl$(10)*12,ga(10),pgl$*12
 00050   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fngethandle
-00060   let fntop(program$,cap$="AR Merge")
-00070   let fncno(cno,cnam$)
+00060   fntop(program$,cap$="AR Merge")
+00070   fncno(cno,cnam$)
 00080   dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50,ta(2)
 00090   pr newpage
 00100   pr fields "10,10,c 50,H,N": "A/R Merge Transactions In Process"

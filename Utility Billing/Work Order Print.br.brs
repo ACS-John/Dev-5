@@ -7,8 +7,8 @@
 20120       if trim$(srvnam$(3))='Association Fee' then let s3_non_metered=1 else s3_non_metered=0
 20140     end if
 24040     !
-26000     let fnsavetoasstart(env$('Q')&"\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
-26020     let fnopenprn( 0,0,0,0,z$,'Work Order Add','Work Order')
+26000     fnsavetoasstart(env$('Q')&"\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
+26020     fnopenprn( 0,0,0,0,z$,'Work Order Add','Work Order')
 26040     !
 28000     pr #255: "\qc {\f181 {\fs32 {\b Utility Work Order}"
 28020     pr #255: "{\fs24 "&env$('cnam')&"}}}"
@@ -81,7 +81,7 @@
 32420     pr #255,using 'form pos 32,c 51': "{\b Date Order Completed: _____________________}"
 32440     pr #255: ""
 32460     pr #255,using 'form pos 32,c 51': "{\b By: _______________________________________}"
-32480     let fncloseprn
+32480     fncloseprn
 32500   fnend 
 
 40000   def fn_pwo_service_data(service_name$*80,reading_prior,meter_number$,serial_number$; deposit_amt,rate_code,is_not_metered)

@@ -5,21 +5,21 @@
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 10000   dim srv$(3)*1,cap$*128,txt$*80,tg(11)
-10600   let fntop(program$,cap$="Change Wrong Transaction Dates")
+10600   fntop(program$,cap$="Change Wrong Transaction Dates")
 10800 MAIN: ! 
 11000   let sn$="redate"
-11200   let fntos(sn$)
-11600   let fnlbl(1,1,"Wrong Date:",22,1)
-11800   let fntxt(1,23,8,0,0,"1")
+11200   fntos(sn$)
+11600   fnlbl(1,1,"Wrong Date:",22,1)
+11800   fntxt(1,23,8,0,0,"1")
 12000   let resp$(1)='' ! '120101' ! '012011'
-12400   let fnlbl(2,1,"Correct Date:",22,1)
-12600   let fntxt(2,23,8,0,0,"1")
+12400   fnlbl(2,1,"Correct Date:",22,1)
+12600   fntxt(2,23,8,0,0,"1")
 12800   let resp$(2)='' ! '120102' ! '012012'
-13200   let fnlbl(4,1,"Lowest Record Number:",22,1)
-13400   let fntxt(4,23,8,0,0,"0")
+13200   fnlbl(4,1,"Lowest Record Number:",22,1)
+13400   fntxt(4,23,8,0,0,"0")
 13600   let resp$(3)='0' ! str$(33430) ! str$(88000)
-13800   let fncmdset(2)
-14000   let fnacs(sn$,0,mat resp$,ckey)
+13800   fncmdset(2)
+14000   fnacs(sn$,0,mat resp$,ckey)
 14200   if ckey=5 then goto XIT
 14400   let date_bad=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
 14600   let date_good=fndate_mmddyy_to_ccyymmdd(val(resp$(2)))
@@ -39,7 +39,7 @@
 17000 ! ______________________________________________________________________
 17200 XIT: ! 
 20000 ! pr 'chg_count=';chg_count : end
-30000   let fnxit
+30000   fnxit
 80380 ! ______________________________________________________________________
 80390 ! <Updateable Region: ERTN>
 80400 ERTN: let fnerror(program$,err,line,act$,"xit")

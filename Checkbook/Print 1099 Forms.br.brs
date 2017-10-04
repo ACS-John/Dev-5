@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsCL\cl1099
 00030 ! r: setup library, fntop, dims, on error
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fngethandle,fn1099print,fn1099print_close,fnask_1099_info
-00050   let fntop(program$,cap$="Print 1099 Forms")
+00050   fntop(program$,cap$="Print 1099 Forms")
 00080   dim vn$*8,nam$*30,ss$*11,box(11),ad$(3)*30
 00100   dim cap$*128,key$*19,tr$(5)*35
 00060   on error goto ERTN

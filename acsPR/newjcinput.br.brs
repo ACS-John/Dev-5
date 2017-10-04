@@ -11,7 +11,7 @@
 00110   dim message$*40,ml$(3)*80,resp$(30)*60,fullname$(20)*20,comboname$(22)*23
 00120   dim item2$(14)*20,tdt(4),tcd(3),tdet(23)
 00130 ! ______________________________________________________________________
-00140   let fntop(program$,cap$="Enter Time")
+00140   fntop(program$,cap$="Enter Time")
 00160 ! 
 00170 ! ___________________________
 00180   fnDedNames(mat fullname$)
@@ -27,7 +27,7 @@
 00285 L280: mat ml$(2) !:
         let ml$(1)="An unposted file appears to exist! " !:
         let ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries." !:
-        let fnmsgbox(mat ml$,resp$,cap$,52)
+        fnmsgbox(mat ml$,resp$,cap$,52)
 00290   if resp$="Yes" then goto L320 else goto L300
 00300 L300: open #3: "Name=jcWork."&session$&",SIZE=0,RecL=84,Replace",internal,outin,relative 
 00310   goto L330
@@ -44,63 +44,63 @@
 00420 L420: let fntos(sn$="jobinput") !:
         let respc=0 : let frac=0 !:
         let mylen=28 : let mypos=mylen+3
-00430   let fnlbl(1,1,"Employee #:",mylen,1)
-00440   let fncmbemp(1,mypos) !:
+00430   fnlbl(1,1,"Employee #:",mylen,1)
+00440   fncmbemp(1,mypos) !:
         let resp$(respc+=1)=str$(ji1(1))
-00450   let fnlbl(2,1,"Method of Payment:",mylen,1)
+00450   fnlbl(2,1,"Method of Payment:",mylen,1)
 00460   let opt$(1)="1 = Salary" : let opt$(2)= "2 = Hourly" !:
         let opt$(3)= "3 = Both" !:
-        let fncomboa("Methods",2,mypos,mat opt$,empty$,13)
+        fncomboa("Methods",2,mypos,mat opt$,empty$,13)
 00470   if ji1(2)=1 then let resp$(respc+=1)=opt$(1)
 00480   if ji1(2)=2 then let resp$(respc+=1)=opt$(2)
 00490   if ji1(2)=3 then let resp$(respc+=1)=opt$(3)
-00500   let fnlbl(3,1,"Date:",mylen,1)
-00510   let fntxt(3,mypos,8,8,0,"1",0,"Date of transaction") !:
+00500   fnlbl(3,1,"Date:",mylen,1)
+00510   fntxt(3,mypos,8,8,0,"1",0,"Date of transaction") !:
         let resp$(respc+=1)=str$(ji1(3))
-00520   let fnlbl(4,1,"Payroll Department:",mylen,1)
-00530   let fncombof("Deptname",4,mypos,25,env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),1,3,4,25,env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno'),0,0, " ",0,0) !:
+00520   fnlbl(4,1,"Payroll Department:",mylen,1)
+00530   fncombof("Deptname",4,mypos,25,env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),1,3,4,25,env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno'),0,0, " ",0,0) !:
         let resp$(respc+=1)=str$(ji1(4))
-00540   let fnlbl(5,1,"Regular Hours:",mylen,1)
-00550   let fntxt(5,mypos,8,8,0,"32",0,"") !:
+00540   fnlbl(5,1,"Regular Hours:",mylen,1)
+00550   fntxt(5,mypos,8,8,0,"32",0,"") !:
         let resp$(respc+=1)=str$(ji1(5))
-00560   let fnlbl(6,1,"Overtime Hours:",mylen,1)
-00570   let fntxt(6,mypos,8,8,0,"32",0,"") !:
+00560   fnlbl(6,1,"Overtime Hours:",mylen,1)
+00570   fntxt(6,mypos,8,8,0,"32",0,"") !:
         let resp$(respc+=1)=str$(ji1(6))
-00580   let fnlbl(7,1,"Job Number:",mylen,1)
-00590   let fncmbjob(7,mypos) !:
+00580   fnlbl(7,1,"Job Number:",mylen,1)
+00590   fncmbjob(7,mypos) !:
         let resp$(respc+=1)=jn$
-00600   let fnlbl(8,1,"Category:",mylen,1)
-00610   let fncmbcategory(8,mypos) !:
+00600   fnlbl(8,1,"Category:",mylen,1)
+00610   fncmbcategory(8,mypos) !:
         let resp$(respc+=1)=str$(ji2(1))
-00620   let fnlbl(9,1,"Sub-Category:",mylen,1)
-00630   let fncmbsubcat(9,mypos) !:
+00620   fnlbl(9,1,"Sub-Category:",mylen,1)
+00630   fncmbsubcat(9,mypos) !:
         let resp$(respc+=1)=str$(ji2(2))
-00640   let fnlbl(10,1,"Amount:",mylen,1)
-00650   let fntxt(10,mypos,10,10,0,"10",0,"Amount to be charged to job. Payroll will be extended as it is posted.") !:
+00640   fnlbl(10,1,"Amount:",mylen,1)
+00650   fntxt(10,mypos,10,10,0,"10",0,"Amount to be charged to job. Payroll will be extended as it is posted.") !:
         let resp$(respc+=1)=str$(ji2(3))
-00660   let fnlbl(11,1,"Deduction/Addition Code:",mylen,1)
-00670   let fncomboa("Deductions",11,mypos,mat comboname$,empty$,23)
+00660   fnlbl(11,1,"Deduction/Addition Code:",mylen,1)
+00670   fncomboa("Deductions",11,mypos,mat comboname$,empty$,23)
 00680   if ji2(4)=0 then let resp$(respc+=1)=comboname$(1): goto L700
 00690   if ji2(4)>0 and ji2(4)<=20 then let resp$(respc+=1)=comboname$(ji2(4)) else let resp$(respc+=1)=""
 00700 L700: let fnlbl(12,1,"Units:",mylen,1)
-00710   let fntxt(12,mypos,6,6,0,"30",0,"Enter units, if applicable.") !:
+00710   fntxt(12,mypos,6,6,0,"30",0,"Enter units, if applicable.") !:
         let resp$(respc+=1)=str$(ji2(5))
-00720   let fnlbl(13,1,"Personnel Burden:",mylen,1)
-00730   let fntxt(13,mypos,10,10,0,"10",0,"Personnel burden will calculated automatically if you have the burden % set up on each employee.") !:
+00720   fnlbl(13,1,"Personnel Burden:",mylen,1)
+00730   fntxt(13,mypos,10,10,0,"10",0,"Personnel burden will calculated automatically if you have the burden % set up on each employee.") !:
         let resp$(respc+=1)=str$(pt)
 00740   let picture=0
-00750   let fncmdkey("&Save",1,1,0,"Saves all changes.")
-00760   let fncmdkey("Co&rrection",7,0,0,"Make a correction to any entry.")
-00770   let fncmdkey("&LIsting",9,0,0,"Print a listing of all entries.")
-00780   let fncmdkey("De&lete",4,0,0,"Deletes this job.")
-00790   let fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
-00800   let fncmdkey("&Post",8,0,1,"Post these entries to the job files.")
-00810   let fnacs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
+00750   fncmdkey("&Save",1,1,0,"Saves all changes.")
+00760   fncmdkey("Co&rrection",7,0,0,"Make a correction to any entry.")
+00770   fncmdkey("&LIsting",9,0,0,"Print a listing of all entries.")
+00780   fncmdkey("De&lete",4,0,0,"Deletes this job.")
+00790   fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
+00800   fncmdkey("&Post",8,0,1,"Post these entries to the job files.")
+00810   fnacs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
 00820   if ckey=5 then goto L830 else goto L850
 00830 L830: mat ml$(2) !:
         let ml$(1)="You have chosen to cancel without postng these entries!  " !:
         let ml$(2)="Take Yes to Exit, else take No to return to the entry screens." !:
-        let fnmsgbox(mat ml$,resp$,cap$,52)
+        fnmsgbox(mat ml$,resp$,cap$,52)
 00840   if resp$="Yes" then goto XIT else goto TRANSACTION_ENTRY
 00850 L850: if ckey=7 then goto CORRECTIONS
 00860   if ckey=8 then goto POSTTOJOBS
@@ -116,21 +116,21 @@
 00960 L960: mat ml$(2) !:
         let ml$(1)="You failed to enter a job number. Take Yes to continue;" !:
         let ml$(2)="else take No to return to previous screen and enter the job number." !:
-        let fnmsgbox(mat ml$,resp$,cap$,52)
+        fnmsgbox(mat ml$,resp$,cap$,52)
 00970   if resp$="Yes" then goto L980 else goto L420
 00980 L980: let ji2(1)=val(resp$(8)(1:3)) ! category
 00990   if ji2(1)=0 and dontwarnsubcat=0 then goto L1000 else goto L1020
 01000 L1000: mat ml$(2) !:
         let ml$(1)="You failed to enter a category number. Take Yes to continue;" !:
         let ml$(2)="else take No to return to previous screen and enter the category number." !:
-        let fnmsgbox(mat ml$,resp$,cap$,52)
+        fnmsgbox(mat ml$,resp$,cap$,52)
 01010   if resp$="Yes" then let dontwarnsubcat=1: goto L1020 else goto L420
 01020 L1020: let ji2(2)=val(resp$(9)(1:3)) ! sub-category
 01030   if ji2(2)=0 and dontwarnsubcat=0 then goto L1040 else goto L1060
 01040 L1040: mat ml$(2) !:
         let ml$(1)="You failed to enter a sub-category number. Take Yes to continue;" !:
         let ml$(2)="else take No to return to previous screen and enter the sub-category number." !:
-        let fnmsgbox(mat ml$,resp$,cap$,52)
+        fnmsgbox(mat ml$,resp$,cap$,52)
 01050   if resp$="Yes" then let dontwarnsubcat=1 : goto L1060 else goto L420
 01060 L1060: let ji2(3)=val(resp$(10)) ! amount
 01070   let ji2(4)=val(resp$(11)(1:2)) ! deduction code
@@ -147,7 +147,7 @@
 01170 ! ______________________________________________________________________
 01180 PRINTPROOFLIST: ! 
 01190   on fkey 5 goto PROOF_LIST_DONE
-01200   let fnopenprn
+01200   fnopenprn
 01210   goto L1480
 01220 ! ______________________________________________________________________
 01230 PROOF_LIST_HDR: ! 
@@ -183,7 +183,7 @@
 01700 L1700: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Grand Totals",pos 38,2*n 9.2,x 29,n 13.2,skip 2
 01710 PROOF_LIST_DONE: ! 
 01720   let gt5=gt6=gt10=0
-01730   let fncloseprn
+01730   fncloseprn
 01740   goto TRANSACTION_ENTRY
 01750 ! ______________________________________________________________________
 01760 POSTTOJOBS: ! 
@@ -193,7 +193,7 @@
 01800   close #11: 
 01810   close #12: 
 01820   close #13: 
-01830   let fnchain("S:\acsPR\newJCMerge")
+01830   fnchain("S:\acsPR\newJCMerge")
 01840 ! ______________________________________________________________________
 01850 PROOF_LIST_NWPG: ! 
 01860   pr #255: newpage
@@ -216,7 +216,7 @@
 02030 ! ______________________________________________________________________
 02040 CORRECTIONS: ! 
 02050   addone=0: let editone=0
-02060   let fntos(sn$="EntryCorrection")
+02060   fntos(sn$="EntryCorrection")
 02070   ch2$(1)="Rec #": ch2$(2)="Employee #": ch2$(3)="MOP" !:
         ch2$(4)="Date" !:
         ch2$(5)="Dept #": ch2$(6)="RegHrs": ch2$(7)="OTHrs" !:
@@ -229,7 +229,7 @@
         cm2$(5)="30": cm2$(6)="32": cm2$(7)="32" !:
         cm2$(8)="": cm2$(9)="30": cm2$(10)="30" !:
         cm2$(11)="10": cm2$(12)="30": cm2$(13)="30": cm2$(14)="10"
-02090   let fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
+02090   fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 02100   restore #3: 
 02110 READ_FILE: ! 
 02120   read #3,using L1140: mat ji1, jn$, mat ji2, pt, empnam$, sal eof L2160
@@ -240,14 +240,14 @@
         let item2$(9)=str$(ji2(1)): let item2$(10)=str$(ji2(2)) !:
         let item2$(11)=str$(ji2(3)) : let item2$(12)=str$(ji2(4)) !:
         let item2$(13)=str$(ji2(5)): let item2$(14)=str$(pt)
-02140   let fnflexadd1(mat item2$)
+02140   fnflexadd1(mat item2$)
 02150   goto READ_FILE
 02160 L2160: let fncmdkey("&Add",1,0,0,"Add a new transaction." ) !:
-        let fncmdkey("E&dit",2,1,0,"Edit the highlited record") !:
-        let fncmdkey("&Delete",4,0,0,"Deletes the highlited record") !:
-        let fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") !:
-        let fncmdkey("E&xit",5,0,1,"Returns to main screen.")
-02170   let fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
+        fncmdkey("E&dit",2,1,0,"Edit the highlited record") !:
+        fncmdkey("&Delete",4,0,0,"Deletes the highlited record") !:
+        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") !:
+        fncmdkey("E&xit",5,0,1,"Returns to main screen.")
+02170   fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 02180   if ckey=5 then goto TRANSACTION_ENTRY
 02190   let editrec=val(resp$(1))
 02200   if ckey=1 then addone=1: mat ji1=(0): mat ji2=(0): let jn$="": goto TRANSACTION_ENTRY
@@ -260,7 +260,7 @@
 02270 L2270: mat ml$(2) !:
         let ml$(1)="There is no department number "&str$(ji1(4))&" on employee number "&str$(ji1(1))&"!" !:
         let ml$(2)="Take OK to correct." !:
-        let fnmsgbox(mat ml$,resp$,cap$,0) !:
+        fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto L420
 02280 L2280: if ji2(3)=0 then let ji2(3)=tdet(2)*ji1(5)+tdet(3)*ji1(6)
 02290   if rtrm$(jn$)="" and ji2(1)=0 then goto L2390
@@ -270,7 +270,7 @@
 02330 L2330: mat ml$(2) !:
         let ml$(1)="The job # number appears to be an incorrect number!  " !:
         let ml$(2)="Take OK to correct." !:
-        let fnmsgbox(mat ml$,resp$,cap$,0) !:
+        fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto L420
 02340 L2340: cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(ji2(1)),5)
 02350 ! Read #12,Using 2360,Key=CN$: KC$ Nokey 2380     ! dont verify this kj
@@ -279,7 +279,7 @@
 02380   mat ml$(2) !:
         let ml$(1)="Category # "&str$(ji2(1))&" has never been used on this job before!  " !:
         let ml$(2)="Do you wish to use this number or select a different one?" !:
-        let fnmsgbox(mat ml$,resp$,cap$,36)
+        fnmsgbox(mat ml$,resp$,cap$,36)
 02390   if resp$="Yes" then goto L2390 else goto L420
 02395 L2390: if ji2(2)=0 then goto L2450
 02400   read #13,using L2420,key=lpad$(str$(ji2(2)),3): sub$ nokey L2440
@@ -288,7 +288,7 @@
 02440 L2440: mat ml$(2) !:
         let ml$(1)="The subcategory # number appears to be an incorrect number!  " !:
         let ml$(2)="Take OK to correct." !:
-        let fnmsgbox(mat ml$,resp$,cap$,0) !:
+        fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto L420
 02450 L2450: if lrec(13)=0 then goto L2480 ! if they are not using subcategory, skip warning
 02460   if ji2(2)=0 then goto L2470
@@ -296,7 +296,7 @@
 02475 L2470: mat ml$(2) !:
         let ml$(1)="The subcategory # number cannot be zero.!  " !:
         let ml$(2)="Take OK to correct." !:
-        let fnmsgbox(mat ml$,resp$,cap$,0) !:
+        fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto L420
 02480 L2480: if ji2(4)<1 or ji2(4)>20 then let pt=ptp/100*ji2(3) else let pt=0
 02490   let eno$=cnvrt$("n 8",ji1(1)) : let ptp=0

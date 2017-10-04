@@ -1,7 +1,7 @@
 00020   library 'S:\Core\Library': fnxit,fntop,fnindex_it
 00030 ! 
 00040   dim d$*50,rf(6),bc(12),bp(12),bm(12),ta(2),tr(7),tr$*12,td$*30
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   dim k$(3)*25,ss$*11,m(18)
 00070   dim a$(3)*40,b$(2)*12,c$*5,d(2),e$(2)*12,lastact$*12,tb$*30,procdat$*20
 00080   dim dat$*20,ch$*20,prgl(21),co(7),acctmo$*6,vn$*8,nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,adr(2),revb(13)

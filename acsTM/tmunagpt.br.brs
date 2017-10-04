@@ -1,12 +1,12 @@
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fncno,fnxit,fntop,fncloseprn,fnopenprn,fnerror
-00040   let fntop("S:\acsTM\tmunblwk",cap$="Unbilled Work In Process")
+00040   fntop("S:\acsTM\tmunblwk",cap$="Unbilled Work In Process")
 00050   on fkey 5 goto L450
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim cno$*5,cna$*30,en$*9,e$*25,l$(50)*9,d(8),l(50,6),t(6)
 00090   dim cat$(30)*30,cnam$*40,cap$*128
-00100   let fncno(cno,cnam$)
+00100   fncno(cno,cnam$)
 00110   let namtab=66-int(len(rtrm$(cnam$))/2)
 00120 ! ______________________________________________________________________
 00130   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&str$(cno)&",Shr",internal,input,relative ioerr ERTN
@@ -19,7 +19,7 @@
 00200   pr newpage
 00210   pr fields "10,10,Cc 60,n": "Printing Unbilled Aging by Partner..."
 00220   pr fields "12,30,Cc 20,B,5": "Cancel (F5)"
-00230   let fnopenprn(cp,58,220,process)
+00230   fnopenprn(cp,58,220,process)
 00240   gosub L520
 00250 L250: read #1,using L260: cno$,cna$,en$,mat d eof L300 ioerr ERTN
 00260 L260: form pos 1,c 5,c 30,c 9,n 2,n 6,pd 4.2,5*pd 4.2

@@ -23,7 +23,7 @@
 00230       end if 
 00240     end if 
 00250     mat c$(add_rec_item,8)
-00252     let fnhamster_field_add=add_rec_item
+00252     fnhamster_field_add=add_rec_item
 00260   fnend  ! fn_hamster_field_add
 00270   def library fnhamster_add_combof(hac_screen_item,hac_data_file$*256,hac_key_pos,hac_key_len,hac_desc_pos,hac_desc_len,hac_index_file$*256,hac_limit_to_list)
 00280     c$(hac_screen_item,1)='ComboF'
@@ -45,7 +45,7 @@
 00440   fnend 
 00450   def library fnhamster_2(h2_name$*20; h2_file)
 00452     if h2_file=0 then let h2_file=1
-00460     let fnhamster(h2_name$,mat lbl$,mat tln,h2_file,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00460     fnhamster(h2_name$,mat lbl$,mat tln,h2_file,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00470 ! fnhamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat fltyp$,mat sln,mat mask,mat startpos,mat incontrol$,mat mxl)
 00480   fnend 
 00490 ! 

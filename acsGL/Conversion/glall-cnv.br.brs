@@ -2,7 +2,7 @@
 00020   dim tr(7),tr$*12,td$*30,cnam$*40
 00030   library 'S:\Core\Library': fntop
 00040   pr newpage
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00070 L70: ! 
 00080   pr fields "10,24,C 32": "COMPANY NUMBER TO CONVERT:"
 00090   pr fields "12,32,C 16,R,N": "PRESS F5 TO STOP"

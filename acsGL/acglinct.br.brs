@@ -9,8 +9,8 @@
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),sc1$(2)*20
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Income Statement")
-00120   let fncno(cno,cnam$)
+00110   fntop(program$,cap$="Income Statement")
+00120   fncno(cno,cnam$)
 00130   let udf$=env$('temp')&'\'
 00140   actpd$=fnactpd$
 00150   if fnglfs=5 then goto XIT !:
@@ -23,15 +23,15 @@
           let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
 00210   open #1: fl1$,internal,input,keyed 
 00220   if fnprocess=1 or fnUseDeptNo=0 then goto L320
-00230   let fntos(sn$="GLInput") !:
+00230   fntos(sn$="GLInput") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00240   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00250   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00240   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00250   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00260   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00270   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00280   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00290   let fnacs(sn$,0,mat resp$,ckey)
+00260   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00270   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00280   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00290   fnacs(sn$,0,mat resp$,ckey)
 00300   if ckey=5 then goto XIT
 00310   costcntr=val(resp$(1))
 00320 L320: let fnopenprn !:
@@ -172,7 +172,7 @@
 01650 L1650: let eofcode=1
 01660   gosub L1290
 01670 ! 
-01680   let fncloseprn
+01680   fncloseprn
 01690   goto XIT
 01700 ! ______________________________________________________________________
 01710 BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outin,keyed 

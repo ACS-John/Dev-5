@@ -2,7 +2,7 @@
 00020 ! some sort of conversion program for "&env$('Q')&"\GLmstr
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim k$*12,d$*50,rf(6),bc(12),bm(12),bp(12),ta(2)

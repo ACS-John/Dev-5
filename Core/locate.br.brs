@@ -9,7 +9,7 @@
 00090   dim insline$*78,filter$*38
 00100 ! ______________________________________________________________________
 00120   dur$=fnAcsInstallationPath$
-00140   let fntop(program$,"Locate 1")
+00140   fntop(program$,"Locate 1")
 00150   let filter$="*.br"
 00160   cancel=5
 00170   let report$=env$('temp')&"\LocRpt-"&session$&".txt" !:
@@ -19,37 +19,37 @@
         let tempfile2$=env$('temp')&"\Loc2-"&session$&".tmp"
 00180 ! ______________________________________________________________________
 00190 MAIN: ! 
-00200   let fntos("Locate") !:
+00200   fntos("Locate") !:
         let lngth=17 : let ps=lngth+2 : let rc=lc=0
-00210   let fnlbl(lc+=1,1,'Find:',lngth,1)
-00220   let fntxt(lc,ps,16,63) !:
+00210   fnlbl(lc+=1,1,'Find:',lngth,1)
+00220   fntxt(lc,ps,16,63) !:
         let resp$(rc+=1)=lc$
-00230   let fnlbl(lc,ps+18,'and',lngth)
-00240   let fntxt(lc,ps+22,16,40) !:
+00230   fnlbl(lc,ps+18,'and',lngth)
+00240   fntxt(lc,ps+22,16,40) !:
         let resp$(rc+=1)=lc2$
-00250   let fnlbl(lc+=1,1,'Path:',lngth,1)
-00260   let fntxt(lc,ps,38,66,0,'72') !:
+00250   fnlbl(lc+=1,1,'Path:',lngth,1)
+00260   fntxt(lc,ps,38,66,0,'72') !:
         let resp$(rc+=1)=dur$
 00270   let lc+=1 ! blank line
-00280   let fnlbl(lc+=1,1,'Replace:',lngth,1)
-00290   let fntxt(lc,ps,38) !:
+00280   fnlbl(lc+=1,1,'Replace:',lngth,1)
+00290   fntxt(lc,ps,38) !:
         let resp$(rc+=1)=rep$
-00300   let fnlbl(lc,ps+40,"Leave Replace blank to locate only" )
-00310   let fnlbl(lc+=1,1,"Filter:",lngth,1)
-00320   let fntxt(lc,ps,38) !:
+00300   fnlbl(lc,ps+40,"Leave Replace blank to locate only" )
+00310   fnlbl(lc+=1,1,"Filter:",lngth,1)
+00320   fntxt(lc,ps,38) !:
         let resp$(rc+=1)=filter$
-00330   let fnchk(lc+=1,ps,'Append Previous Report',0) !:
+00330   fnchk(lc+=1,ps,'Append Previous Report',0) !:
         let resp$(rc+=1)="False"
-00340   let fnchk(lc+=1,ps,'Renumber all Programs',0) !:
+00340   fnchk(lc+=1,ps,'Renumber all Programs',0) !:
         let resp$(rc+=1)="False"
 00350   let lc+=1 ! blank line
-00360   let fnlbl(lc+=1,1,"Insert this Line:",lngth,1)
-00370   let fntxt(lc,ps,40,78,0,"",0,"This will be executed after Renumber, if you choose to, a good example is '45 ! this is a dumb comment'" ) !:
+00360   fnlbl(lc+=1,1,"Insert this Line:",lngth,1)
+00370   fntxt(lc,ps,40,78,0,"",0,"This will be executed after Renumber, if you choose to, a good example is '45 ! this is a dumb comment'" ) !:
         let resp$(rc+=1)=""
 00380   let lc+=1 ! blank line
-00390   let fnlbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
-00400   let fncmdset(2)
-00410   let fnacs("Locate",0,mat resp$,ck)
+00390   fnlbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
+00400   fncmdset(2)
+00410   fnacs("Locate",0,mat resp$,ck)
 00420   if ck=cancel then goto XIT
 00430   let lc$=trim$(resp$(1)) !:
         let lc2$=trim$(resp$(2)) !:
@@ -61,7 +61,7 @@
         let insline$=trim$(resp$(8))
 00440   if lc2$<>"" and rep$<>"" then goto MAIN
 00450 ! 
-00460   let fngetdir(dur$,mat brfn$," /s ",filter$)
+00460   fngetdir(dur$,mat brfn$," /s ",filter$)
 00470   for j=1 to udim(brfn$)
 00480     if trim$(brfn$(j))="" then mat brfn$(j-1) : goto L500
 00490   next j
@@ -111,7 +111,7 @@
 00720   execute "Proc "&procfile$
 00730 ! ______________________________________________________________________
 00740 XIT: ! 
-00760   let fnxit
+00760   fnxit
 00770 ! ______________________________________________________________________
 00780 ! <Updateable Region: ERTN>
 00790 ERTN: let fnerror(program$,err,line,act$,"xit")

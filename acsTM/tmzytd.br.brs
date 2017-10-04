@@ -1,9 +1,9 @@
 00020 ! 
 00030   on error goto L410
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fnd1
-00050   let fntop(program$,cap$="Zero Year to Date")
-00060   let fncno(cno,cnam$)
-00070   let fnconsole(1)
+00050   fntop(program$,cap$="Zero Year to Date")
+00060   fncno(cno,cnam$)
+00070   fnconsole(1)
 00080 ! 
 00090 ! 
 00100   dim eno$*9,cytdhrs(10),ncytdhrs(20),cytdamt(10),ncytdamt(20),prg$*20

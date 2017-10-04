@@ -9,11 +9,11 @@
 00090   dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,cnt$*25,cap$*128
 00100   dim msgline$(2)*60,response$(5)*1,wrd2$(4)*38
 00110 ! ______________________________________________________________________
-00120   let fncno(cno)
+00120   fncno(cno)
 00130 ! 
 00140   cap$="Input (Job Cost) Charges"
-00145   let fntop("S:\acsPR\jcInptC", "Enter Charges")
-00146   let fnconsole(1)
+00145   fntop("S:\acsPR\jcInptC", "Enter Charges")
+00146   fnconsole(1)
 00150 ! ______________________________________________________________________
 00160   data "Reference Number:"
 00170   data "Date (mmddyy):"
@@ -46,7 +46,7 @@
 00440 INPUTSCREEN2: ! 
 00450   pr newpage
 00460   let win=102
-00470   let fnopenwin(win,08,08,18,72,cap$)
+00470   fnopenwin(win,08,08,18,72,cap$)
 00480   pr #win,fields mat iolabel1$: mat label1$
 00490   pr #win,fields io1$(2): dat
 00500   if shoption=1 then pr fields "19,24,C 09,B,1": "Next (F1)"
@@ -66,7 +66,7 @@
         goto L640
 00630 L630: let msgline$(1)="Job Number not on file." !:
         let msgline$(2)="Please select a different Job Number" !:
-        let fnoldmsgbox(mat response$,cap$,mat msgline$,1) !:
+        fnoldmsgbox(mat response$,cap$,mat msgline$,1) !:
         ce=3 !:
         goto ERR1
 00640 L640: if ce<>4 then goto L690
@@ -77,7 +77,7 @@
         goto L690
 00680 L680: let msgline$(1)="Invalid Category Number" !:
         let msgline$(2)="Please select a different Category Number" !:
-        let fnoldmsgbox(mat response$,cap$,mat msgline$,1) !:
+        fnoldmsgbox(mat response$,cap$,mat msgline$,1) !:
         ce=4 !:
         goto ERR1
 00690 L690: if ce<>5 then goto L720
@@ -86,7 +86,7 @@
         goto L720
 00710 L710: let msgline$(1)="Invalid Sub-Category Number" !:
         let msgline$(2)="Please select a different Sub-Category Number" !:
-        let fnoldmsgbox(mat response$,cap$,mat msgline$,1) !:
+        fnoldmsgbox(mat response$,cap$,mat msgline$,1) !:
         ce=5 !:
         goto ERR1
 00720 L720: ce=ce+1: if ce>udim(io1$) then ce=1
@@ -141,7 +141,7 @@
 01190 ADDITIONALENTRIES: ! 
 01200   let shoption=2
 01210 L1210: pr newpage
-01220   let fnopenwin(win=103,10,20,14,59,cap$)
+01220   fnopenwin(win=103,10,20,14,59,cap$)
 01230   pr #win,fields "4,2,C 28,N": "Reference Number to correct:"
 01240   pr fields "15,35,C 09,B,5": "Done (F5)"
 01250 L1250: input #win,fields "4,31,N 5,UT,N": rr conv L1250
@@ -153,7 +153,7 @@
 01310 ! ______________________________________________________________________
 01320 WHATNEXT: ! 
 01330   pr newpage
-01340   let fnopenwin(win=102,09,20,16,59,cap$)
+01340   fnopenwin(win=102,09,20,16,59,cap$)
 01350   let wrd2$(1)="1. pr Input Proof List"
 01360   let wrd2$(2)="2. Corrections"
 01370   let wrd2$(3)="3. Additional Entries"
@@ -169,8 +169,8 @@
 01470 ! ______________________________________________________________________
 01480 PRINTPROOFLIST: ! 
 01490   pr newpage
-01500   let fnwait(104,cap$,message$,1)
-01510   let fnopenprn
+01500   fnwait(104,cap$,message$,1)
+01510   fnopenprn
 01520   pr #255,using L1530: "Job Cost Input Proof List"
 01530 L1530: form pos 1,cc 80,skip 1
 01540   pr #255,using L1530: "Date: "&date$&"     Time: "&time$
@@ -184,7 +184,7 @@
 01620   pr #255,using L1630: " ____________",ta
 01630 L1630: form pos 63,c 13,skip 1,pos 63,n 13.2
 01640   let ta=0
-01650   let fncloseprn
+01650   fncloseprn
 01660   goto WHATNEXT
 01670 ! ______________________________________________________________________
 01680 POSTTOJOB: ! 
@@ -223,7 +223,7 @@
 02010   if cmdkey=5 then goto SRCHEND
 02020 L2020: pr newpage
 02030   let win2=101
-02040   let fnwin3b(win2,wrds$(seq-10),5,41+skl(seq-10),1,1)
+02040   fnwin3b(win2,wrds$(seq-10),5,41+skl(seq-10),1,1)
 02050   let prtall=0
 02060   pr #win2,fields "4,2,C 38,N": "Beginning Search Data (blank for all):"
 02070 L2070: input #win2,fields "4,41,C "&str$(skl(seq-10))&",UT,N": nam$

@@ -10,7 +10,7 @@
 00090   def fndate_mmddyy_to_ccyymmdd(x)
 00100     let x2=(x-int(x*.01)*100)*10000+int(x*.01)
 00110     if int(x2*.0001)<90 then let x2=x2+20000000 else let x2=x2+19000000
-00120     let fndate_mmddyy_to_ccyymmdd=x2
+00120     fndate_mmddyy_to_ccyymmdd=x2
 00130   fnend 
 00140 ! ______________________________________________________________________
 00150   pr newpage

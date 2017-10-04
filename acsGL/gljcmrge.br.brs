@@ -7,8 +7,8 @@
 00060 ! ______________________________________________________________________
 00070   dim rn$*12,jn$*6,ji2(3),cn$*11,l(13),ta(2),tr(9),empnum$*12,empnam$*30
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,"Post Transactions")
-00100   let fncno(cno)
+00090   fntop(program$,"Post Transactions")
+00100   fncno(cno)
 00110   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #1,using 'Form POS 382,N 2',rec=1: jccode !:
         close #1: 
 00120   if jccode<>1 then goto L460

@@ -8,9 +8,9 @@
 22120   dim hd1$*30,a2(10),a1(10),a(10)
 22130   dim ab$(4)*30,extra$(11)*30
 22140 ! ______________________________________________________________________
-24000   let fntop("S:\acsUB\ubNamLst",cap$="Name and Number List")
-24020   let fncno(cno,cnam$)
-24040   let fndat(dat$,1)
+24000   fntop("S:\acsUB\ubNamLst",cap$="Name and Number List")
+24020   fncno(cno,cnam$)
+24040   fndat(dat$,1)
 24060 ! 
 24080   let idx$(1)=env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)
 24100   let idx$(2)=env$('Q')&"\UBmstr\ubIndx2.h"&str$(cno)
@@ -35,30 +35,30 @@
 24460   open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 24480 ! /r
 34000 ! MENU1: ! r:
-34020   let fntos("ubnamlst")
+34020   fntos("ubnamlst")
 34040   let respc=0
-34060   let fnlbl(1,1,"Sequence:",23,1)
-34080   let fncomboa("ubnamlst-srt",1,25,mat item1$,"The auto-reversed option can turn all addresses around so the streets are sorted by name rather than number (ie Adams Streets together instead of 101s")
+34060   fnlbl(1,1,"Sequence:",23,1)
+34080   fncomboa("ubnamlst-srt",1,25,mat item1$,"The auto-reversed option can turn all addresses around so the streets are sorted by name rather than number (ie Adams Streets together instead of 101s")
 34100   let resp$(respc+=1)=item1$(1)
-34120   let fnlbl(2,1,"Report Heading Date:",23,1)
-34140   let fntxt(2,25,20)
+34120   fnlbl(2,1,"Report Heading Date:",23,1)
+34140   fntxt(2,25,20)
 34160   let resp$(respc+=1)=dat$
-34180   let fnlbl(3,1,"Limit by:",23,1)
-34200   let fncomboa("ubnamlst-act",3,25,mat item2$)
+34180   fnlbl(3,1,"Limit by:",23,1)
+34200   fncomboa("ubnamlst-act",3,25,mat item2$)
 34220   let resp$(respc+=1)=item2$(3)
-34240   let fnchk(5,29,"Print Rate Codes")
+34240   fnchk(5,29,"Print Rate Codes")
 34260   let resp$(respc+=1)="False"
-34280   let fnchk(6,29,"Print Address")
+34280   fnchk(6,29,"Print Address")
 34300   let resp$(respc+=1)="False"
-34320   let fnchk(8,29,"Print Balance")
-34340   let fnlbl(8,45,"(Route Sequence never prints Balance)",23,1)
+34320   fnchk(8,29,"Print Balance")
+34340   fnlbl(8,45,"(Route Sequence never prints Balance)",23,1)
 34360   let resp$(resp_print_balance:=respc+=1)="True"
-34380   let fnchk(9,29,"Print Phone")
+34380   fnchk(9,29,"Print Phone")
 34400   let resp$(resp_print_phone:=respc+=1)="False"
-34420   let fnchk(10,29,"Print Cell")
+34420   fnchk(10,29,"Print Cell")
 34440   let resp$(resp_print_cell:=respc+=1)="False"
-34460   let fncmdset(2)
-34480   let fnacs(sn$,0,mat resp$,ck)
+34460   fncmdset(2)
+34480   fnacs(sn$,0,mat resp$,ck)
 38000   if ck=5 then goto XIT
 38020   let q0=2 ! default to name sequence
 38040   if resp$(1)=item1$(1) then 
@@ -75,7 +75,7 @@
 38260     let q0=5 : let opt=6 : let turn$="N"
 38280   end if 
 38300   let dat$=resp$(2)
-38320   let fndat(dat$,2)
+38320   fndat(dat$,2)
 38340   if resp$(4)="True" then let ti3=1 else let ti3=0
 38360   if resp$(5)="True" then let print_address=1 else let print_address=0
 38380   if resp$(resp_print_balance)="True" then let print_balance=1 else let print_balance=0
@@ -106,7 +106,7 @@
 42180   end if 
 42200 F_CUSTOMER: form pos 1,c 10,pos 11,4*c 30,pos 143,5*pd 2,pos 1806,3*n 2,pos 153,2*pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 1741,n 2,n 7,pos 1864,c 30,c 12,pos 1966,c 12
 
-42210   let fnopenprn
+42210   fnopenprn
 42220   gosub HEADER
 42240 LOOP_TOP: ! 
 42260   if q0=4 then 
@@ -198,7 +198,7 @@
 50240 ! ______________________________________________________________________
 52000 DONE: ! 
 52010   close #1: ioerr ignore
-52020   let fncloseprn
+52020   fncloseprn
 52040 XIT: let fnxit
 52060 IGNORE: continue 
 54000 ! <Updateable Region: ERTN>
@@ -210,7 +210,7 @@
 54120 ! /region
 56000 GET_AU: ! r:
 56010   dim servicename$(10)*20,service$(10)*2
-56020   let fnget_services(mat servicename$,mat service$)
+56020   fnget_services(mat servicename$,mat service$)
 56100   for j=1 to 10
 56120     if trim$(service$(j))<>"" then 
 56140       let hd1$=hd1$&lpad$(service$(j)(1:2),3)
@@ -260,13 +260,13 @@
 64000 OPEN_GRID: ! r: select customers from grid
 64020   let sn$="ublabel-7"
 64040   cap$="Reading from grid"
-64060   let fntos(sn$)
+64060   fntos(sn$)
 64080   let text$="Grid name (including folders):"
-64100   let fnlbl(1,1,text$,70,0)
-64120   let fntxt(1,30,70,0,0,"70",0,"You must first export a fixed width file from the gird program (remember the name!)")
+64100   fnlbl(1,1,text$,70,0)
+64120   fntxt(1,30,70,0,0,"70",0,"You must first export a fixed width file from the gird program (remember the name!)")
 64140   let resp$(1)=""
-64160   let fncmdset(3)
-64180   let fnacs(sn$,0,mat resp$,ckey) ! Select starting customer #
+64160   fncmdset(3)
+64180   fnacs(sn$,0,mat resp$,ckey) ! Select starting customer #
 64200   if ckey=5 then goto XIT
 64220   open #6: "Name="&trim$(resp$(1)),display,input ioerr OPEN_GRID
 64240   return  ! /r

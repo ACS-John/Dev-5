@@ -2,7 +2,7 @@
 00020 ! 941 Summary  ( Prints a detail of employees and the complete 941 using priint ace
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnerror,fnoldmsgbox,fnopenprn,fncloseprn,fnprocess,fntop,fnchain,fntos,fnlbl,fntxt,fnchk,fncmdset,fnacs,fncomboa,fnfra,fnconsole,fnpa_finis,fnpa_newpage
-00050   let fntop(program$,cap$="Print 941 Report")
+00050   fntop(program$,cap$="Print 941 Report")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim io1$(2),ss$*11,em$(3)*30,ty(21),tqm(17),frm_wrd$(2)*11
@@ -13,7 +13,7 @@
 00130   dim tb$*30,m(36),k(1),l$(1)*11,k$(3)*30
 00140   dim city$*15,state$*2,zip$*9,csz$*40,x$*40
 00150 ! ______________________________________________________________________
-00170   let fnconsole(off=1)
+00170   fnconsole(off=1)
 00180 ! ______________________________________________________________________
 00190   def fna(r)=int(r*100+.5)/100 ! /r
 00200 ! ______________________________________________________________________
@@ -24,61 +24,61 @@
 00320 ! Close #20:
 00330 ! ______________________________________________________________________
 00340 MENU1: ! 
-00350   let fntos(sn$="pr941") !:
+00350   fntos(sn$="pr941") !:
         let respc=0
 00360   if val(date$(4:5))=1 then let taxyear=val(date$(1:2))+2000-1 else let taxyear =val(date$(1:2))+2000 ! current tax year (if processing in jan, assume last year)
-00370   let fnlbl(1,1,"Tax Year:",26,1)
-00380   let fntxt(1,30,4,0,0,"30",0,"") !:
+00370   fnlbl(1,1,"Tax Year:",26,1)
+00380   fntxt(1,30,4,0,0,"30",0,"") !:
         let resp$(respc+=1)=str$(taxyear)
 00390   let option1$(1)="March 31"
 00400   let option1$(2)="June 30"
 00410   let option1$(3)="September 30"
 00420   let option1$(4)="December 31"
-00430   let fnlbl(2,1,"Quarter Ending Date:",26,1)
-00440   let fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
+00430   fnlbl(2,1,"Quarter Ending Date:",26,1)
+00440   fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
 00450   if val(date$(4:5))=3 or val(date$(4:5))=4 or val(date$(4:5))=5 then let resp$(respc+=1)=option1$(1) ! march filing
 00460   if val(date$(4:5))=6 or val(date$(4:5))=7 or val(date$(4:5))=8 then let resp$(respc+=1)=option1$(2) ! June  filing
 00470   if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then let resp$(respc+=1)=option1$(3) ! September filing
 00480   if val(date$(4:5))=12 or val(date$(4:5))=1 or val(date$(4:5))=2 then let resp$(respc+=1)=option1$(4) ! December
-00490   let fnchk(3,30,"Print Worksheet:",1) !:
+00490   fnchk(3,30,"Print Worksheet:",1) !:
         let resp$(respc+=1)="True"
-00500   let fnfra(5,1,4,30,"Tax Liability","Enter the total tax liability by month")
-00510   let fnlbl(1,1,"Month 1:",10,1,0,1)
-00520   let fntxt(1,13,12,0,1,"10",0,"",1) !:
+00500   fnfra(5,1,4,30,"Tax Liability","Enter the total tax liability by month")
+00510   fnlbl(1,1,"Month 1:",10,1,0,1)
+00520   fntxt(1,13,12,0,1,"10",0,"",1) !:
         let resp$(respc+=1)=""
-00530   let fnlbl(2,1,"Month 2:",10,1,0,1)
-00540   let fntxt(2,13,12,0,1,"10",0,"",1) !:
+00530   fnlbl(2,1,"Month 2:",10,1,0,1)
+00540   fntxt(2,13,12,0,1,"10",0,"",1) !:
         let resp$(respc+=1)=""
-00550   let fnlbl(3,1,"Month 3:",10,1,0,1)
-00560   let fntxt(3,13,12,0,1,"10",0,"",1) !:
+00550   fnlbl(3,1,"Month 3:",10,1,0,1)
+00560   fntxt(3,13,12,0,1,"10",0,"",1) !:
         let resp$(respc+=1)=""
-00570   let fnfra(11,1,7,72,"Adjustments","Enter any applicable adjustments")
+00570   fnfra(11,1,7,72,"Adjustments","Enter any applicable adjustments")
 00580   let mylen=52
-00590   let fnlbl(1,1,"Current quarter's fraction of cents:",mylen,1,0,2)
-00600   let fntxt(1,mylen+3,12,0,1,"10",0,"",2) !:
+00590   fnlbl(1,1,"Current quarter's fraction of cents:",mylen,1,0,2)
+00600   fntxt(1,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00610   let fnlbl(2,1,"Current quarter's sick pay:",mylen,1,0,2)
-00620   let fntxt(2,mylen+3,12,0,1,"10",0,"",2) !:
+00610   fnlbl(2,1,"Current quarter's sick pay:",mylen,1,0,2)
+00620   fntxt(2,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00630   let fnlbl(3,1,"Current quarter's adjustments for tips and ins:",mylen,1,0,2)
-00640   let fntxt(3,mylen+3,12,0,1,"10",0,"",2) !:
+00630   fnlbl(3,1,"Current quarter's adjustments for tips and ins:",mylen,1,0,2)
+00640   fntxt(3,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00650   let fnlbl(4,1,"Current year's income tax withholding:",mylen,1,0,2)
-00660   let fntxt(4,mylen+3,12,0,1,"10",0,"",2) !:
+00650   fnlbl(4,1,"Current year's income tax withholding:",mylen,1,0,2)
+00660   fntxt(4,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00670   let fnlbl(5,1,"Prior quarters' ss and medicare taxes:",mylen,1,0,2)
-00680   let fntxt(5,mylen+3,12,0,1,"10",0,"",2) !:
+00670   fnlbl(5,1,"Prior quarters' ss and medicare taxes:",mylen,1,0,2)
+00680   fntxt(5,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00690   let fnlbl(6,1,"Special Additions to Federal income taxes:",mylen,1,0,2)
-00700   let fntxt(6,mylen+3,12,0,1,"10",0,"",2) !:
+00690   fnlbl(6,1,"Special Additions to Federal income taxes:",mylen,1,0,2)
+00700   fntxt(6,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00710   let fnlbl(7,1,"Special Additions to ss and medicare:",mylen,1,0,2)
-00720   let fntxt(7,mylen+3,12,0,1,"10",0,"",2) !:
+00710   fnlbl(7,1,"Special Additions to ss and medicare:",mylen,1,0,2)
+00720   fntxt(7,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00725   let fnlbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0) !:
-        let fntxt(20,mylen+4,12,0,1,"10",0,"",0) !:
+00725   fnlbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0) !:
+        fntxt(20,mylen+4,12,0,1,"10",0,"",0) !:
         let resp$(respc+=1)=""
-00730   let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+00730   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00740   if ck=5 then goto XIT
 00750   let taxyear$=resp$(1) ! tax year
 00760   for j=1 to 4
@@ -109,9 +109,9 @@
 01000 START_PRINT: ! 
 01010   if frm=1 then goto L1070
 01020   let message$="Printing: please wait..."
-01030   let fnwait(105,cap$,message$,1)
+01030   fnwait(105,cap$,message$,1)
 01040   on fkey 5 goto DONE
-01050   let fnopenprn
+01050   fnopenprn
 01060   on pageoflow goto PGOF
 01070 L1070: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 01080   if frm=2 then gosub WK_HEADER
@@ -179,7 +179,7 @@
 01690 WK_END: ! 
 01700   gosub TOTALS
 01710   if frm=1 then goto L1730
-01720   let fncloseprn
+01720   fncloseprn
 01730 L1730: return 
 01740 DONE: ! 
 01750 XIT: let fnxit
@@ -219,7 +219,7 @@
 02090   pr #255: "       Total Employees:";p3;"     Totals";
 02100   pr #255,using L2110: t1,t2,t3
 02110 L2110: form pos 41,pic(----,---.##),pos 56,pic(----,---.##),pos 67,pic(---,---,---.##),skip 1
-02120   let fncloseprn
+02120   fncloseprn
 02130 L2130: let p3=0
 02140   let gt1=gt1+t5-dwq
 02160   let gt2=gt2+t2
@@ -234,7 +234,7 @@
 02250   continue 
 02260 ! ______________________________________________________________________
 02270 SUMMARY: ! 
-02280   let fnopenprn
+02280   fnopenprn
 02290   let eof=1: gosub WK_HEADER
 02300   let wagefica=fna((gt2-m(32))*(ficarate+ficarate+.02)) ! FICARATE*2) ! pull tips out  2011
 02310   let taxfica=fna(m(32)*(ficarate+ficarate+.02)) ! FICARATE*2)  2011
@@ -381,7 +381,7 @@
 03680   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box11)&'",'&str$(tab3)&','&str$(232)&')'
 03690   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box12)&'",'&str$(tab3)&','&str$(238)&')'
 03700   pr #20: 'Call Print.AddText("'&cnvrt$("pic(-,---,---.##)",box13)&'",'&str$(tab2)&','&str$(247)&')'
-03710   let fnpa_newpage 
+03710   fnpa_newpage 
 03720   pr #20: 'Call Print.addPicture("S:\acsGL\941-back.bmp",1,1)'
 03730   pr #20: 'Call Print.AddText("'&trim$(state$(1:1))&'",'&str$(15)&','&str$(33)&')'
 03740   pr #20: 'Call Print.AddText("'&trim$(state$(2:2))&'",'&str$(21)&','&str$(33)&')'
@@ -395,7 +395,7 @@
 03820   close #2: ioerr L3830
 03830 L3830: close #3: ioerr L3840
 03840 L3840: ! 
-03850   let fnpa_finis
+03850   fnpa_finis
 03870   return 
 03880 CSZ: ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
 03890 L3890: let p1=pos(csz$,".",1)

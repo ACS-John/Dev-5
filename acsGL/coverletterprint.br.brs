@@ -6,10 +6,10 @@
 00060 ! ______________________________________________________________________
 00070   dim tb$*32,cap$*128,ln1$*8800,ln$*8800,dat$*20
 00080 ! ______________________________________________________________________
-00090   let fntop("S:\acsGL\CoverLetterPrint",cap$="Print Cover Leter")
-00100   let fnconsole(off=0)
-00110   let fncno(cno)
-00120   let fndat(dat$)
+00090   fntop("S:\acsGL\CoverLetterPrint",cap$="Print Cover Leter")
+00100   fnconsole(off=0)
+00110   fncno(cno)
+00120   fndat(dat$)
 00130   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #1,using 'Form POS 195,C 30',rec=1: tb$ !:
         close #1: !:
@@ -31,7 +31,7 @@
               if tempx=14 then actpd$="fourteen"
 00180 L180: open #1: "Name="&env$('Q')&"\GLmstr\ACGLCovF.h"&str$(cno)&",Shr",display,input ioerr XIT
 00200   on fkey 5 goto DONE
-00210   let fnopenprn
+00210   fnopenprn
 00220 READ_ACGLCOVF: ! 
 00230   linput #1: ln$ eof DONE ioerr DONE
 00240   for j2=1 to len(rtrm$(ln$))
@@ -52,7 +52,7 @@
 00340   goto READ_ACGLCOVF
 00350 ! ______________________________________________________________________
 00360 DONE: close #1: 
-00370   let fncloseprn
+00370   fncloseprn
 00380   goto XIT
 00390 ! ______________________________________________________________________
 00400 XIT: let fnxit

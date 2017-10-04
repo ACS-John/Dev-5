@@ -3,19 +3,19 @@
         ! like Checkbook-post to GL; also used to merge entries entered directly
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnprocess,fnchain,fnprg,fnxit,fntop,fnstyp,fnmsgbox,fnaddglpayee,fntos,fnlbl,fncmdkey,fnacs,fnagl$,fntxt,fncmdset,fnopt,fnqglbig,fnrglbig$,fnindex_it
-00050   let fntop(program$,"General Ledger Merge")
+00050   fntop(program$,"General Ledger Merge")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim adr(2),ta(2),prg$*256,k(10,8),gl$(5)*12,gl1(5),tr$(5)*35
 00090   dim t$*12,n(2),l$*12,p$*30,ven$*8,zo(50),d$*50,ml$(3)*80,bank$*25
 00100   dim nam$*35,ad1$*20,ad2$*20,csz$*20,ss$*11,fl1$(6),cap$*128,resp$(10)*80
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="GL Merge")
-00130   let fncno(cno)
-00140   let fnprg(prg$)
+00120   fntop(program$,cap$="GL Merge")
+00130   fncno(cno)
+00140   fnprg(prg$)
 00150   if fnstyp<>99 then 
 00160     if fnstyp=9 then let prg$="S:\acsTM\tmMenu" else let prg$="S:\acsGL\acGLAuto"
-00170     let fnprg(prg$,2)
+00170     fnprg(prg$,2)
 00180     open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00190     read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 00200     close #company: 
@@ -93,20 +93,20 @@
 00820   goto L360
 00830 ! ______________________________________________________________________
 00840 L840: ! 
-00850   let fntos(sn$="GLmerge") !:
+00850   fntos(sn$="GLmerge") !:
         let mylen=40: let mypos=mylen+3 : let right=1
-00860   let fnlbl(1,10,"  Account Number: "&t$,mylen,left)
-00870   let fnlbl(2,10,"            Date: "&str$(s),mylen,left)
-00880   let fnlbl(3,10, "          Amount: "&str$(k),mylen,left)
-00890   let fnlbl(4,10, "Reference Number: "&l$ ,mylen,left)
-00900   let fnlbl(5,10, "     Description: "&p$ ,mylen,left)
-00910   let fnlbl(7,5, "This general ledger account does not exist!" ,60,0)
-00920   let fnopt(8,10,"Add this Account",0,0) !:
+00860   fnlbl(1,10,"  Account Number: "&t$,mylen,left)
+00870   fnlbl(2,10,"            Date: "&str$(s),mylen,left)
+00880   fnlbl(3,10, "          Amount: "&str$(k),mylen,left)
+00890   fnlbl(4,10, "Reference Number: "&l$ ,mylen,left)
+00900   fnlbl(5,10, "     Description: "&p$ ,mylen,left)
+00910   fnlbl(7,5, "This general ledger account does not exist!" ,60,0)
+00920   fnopt(8,10,"Add this Account",0,0) !:
         let resp$(1)="True"
-00930   let fnopt(9,10,"Change Account Number",0,0) !:
+00930   fnopt(9,10,"Change Account Number",0,0) !:
         let resp$(1)="False"
-00940   let fncmdkey("&Next",1,1,0,"Allows you to either add the account or change the account #.")
-00950   let fnacs(sn$,0,mat resp$,ckey)
+00940   fncmdkey("&Next",1,1,0,"Allows you to either add the account or change the account #.")
+00950   fnacs(sn$,0,mat resp$,ckey)
 00960   if resp$(1)="True" then goto ADD
 00970   if resp$(2)="True" then goto CHANGE_ACCOUNTS
 00980   goto L840
@@ -119,21 +119,21 @@
         let mylen=23: let mypos=mylen+3 : let right=1: let rc=0
 01050   if use_dept =1 then let fnlbl(1,26,"Fund #",6,2)
 01060   if use_sub =1 then let fnlbl(1,40,"Sub #",6,2)
-01070   let fnlbl(2,1,"General Ledger Number:",mylen,right)
+01070   fnlbl(2,1,"General Ledger Number:",mylen,right)
 01080   if use_dept=1 then let fntxt(2,26,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",0 ) !:
           let resp$(rc+=1)=str$(dno)
-01090   let fntxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 ) !:
+01090   fntxt(2,31,6,0,right,"30",0,"Enter the main part of the general ledger number.",0 ) !:
         let resp$(rc+=1)=str$(ano)
 01100   if use_sub=1 then 
-01102     let fntxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
+01102     fntxt(2,40,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",0 ) 
 01104     let resp$(rc+=1)=str$(sno)
 01106   end if
-01110   let fnlbl(3,1,"Description:",mylen,right)
-01120   let fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
+01110   fnlbl(3,1,"Description:",mylen,right)
+01120   fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 )
 01122   let resp$(rc+=1)=""
 01130 ! 
-01140   let fncmdset(2)
-01150   let fnacs(sn$,0,mat resp$,ckey)
+01140   fncmdset(2)
+01150   fnacs(sn$,0,mat resp$,ckey)
 01160   let pas=0
 01170   let dno=ano=sno=0
 01180   if use_dept=1 then let dno=val(resp$(1)) : ano=val(resp$(2))
@@ -155,13 +155,13 @@
 01340   goto L460
 01350 ! ______________________________________________________________________
 01360 CHANGE_ACCOUNTS: ! 
-01370   let fntos(sn$="GLmerge4") !:
+01370   fntos(sn$="GLmerge4") !:
         let mylen=23: let mypos=mylen+3 : let right=1
-01380   let fnlbl(1,1,"General Ledger Number:",mylen,right)
-01390   let fnqglbig(1,mypos,0,2) !:
+01380   fnlbl(1,1,"General Ledger Number:",mylen,right)
+01390   fnqglbig(1,mypos,0,2) !:
         let resp$(1)=fnrglbig$(gl$)
-01400   let fncmdkey("&Next",1,1,0,"Will change to the selected account.")
-01410   let fnacs(sn$,0,mat resp$,ckey)
+01400   fncmdkey("&Next",1,1,0,"Will change to the selected account.")
+01410   fnacs(sn$,0,mat resp$,ckey)
 01420   if ckey=5 then goto L440
 01430   let gl$=fnagl$(resp$(1)) : let t$=gl$ : goto L440
 01440 ! ______________________________________________________________________
@@ -189,11 +189,11 @@
 01660 L1660: ! 
 01670   close #4: ioerr ignore
 01680   if new1=1 or new2=1 then !:
-          let fnindex_it(env$('Q')&"\GLmstr\GLBREC.h"&env$('cno'),env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),"1 24")
+          fnindex_it(env$('Q')&"\GLmstr\GLBREC.h"&env$('cno'),env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),"1 24")
 01690   if new1=1 then !:
-          let fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),"1 12")
+          fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),"1 12")
 01700   if new2=1 then !:
-          let fnindex_it(env$('Q')&"\GLmstr\GL1099.h"&env$('cno'),env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),"1 8")
+          fnindex_it(env$('Q')&"\GLmstr\GL1099.h"&env$('cno'),env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),"1 8")
 01710   open #30: "Name="&env$('Q')&"\GLmstr\Process.h"&env$('cno')&",Shr",internal,outin,relative ioerr L1760
 01720   read #30,using "form pos 1,n 1",rec=1: process norec L1760 ! read post payroll code
 01730   rewrite #30,using "form pos 1,n 1",rec=1: 0 norec L1760 ! clear post payroll code

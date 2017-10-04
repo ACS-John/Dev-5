@@ -3,7 +3,7 @@
         ! modified for new 750 recl for 1998 (this change not made until 2/26/99          so everybodys will be wrong! must do conversion pgm to change to new            format when disketts returned
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fntxt,fncmdset,fnacs,fncmdkey,fnchk
-00050   let fntop(program$,cap$="Create Electronic 1099s")
+00050   fntop(program$,cap$="Create Electronic 1099s")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,cap$*128
@@ -252,51 +252,51 @@
 02490   let typemp$="R"
 02500   pr newpage
 02510 MAIN: ! 
-02520   let fntos(sn$="Elec1099") !:
+02520   fntos(sn$="Elec1099") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-02530   let fnlbl(1,15,"Insert Diskette for Electronic 1099s in Drive A",55,0)
-02540   let fnlbl(3,1,"Company Namme:",mylen,right)
-02550   let fntxt(3,mypos,40,0,0,"",0,"The filer's company name.",0 ) !:
+02530   fnlbl(1,15,"Insert Diskette for Electronic 1099s in Drive A",55,0)
+02540   fnlbl(3,1,"Company Namme:",mylen,right)
+02550   fntxt(3,mypos,40,0,0,"",0,"The filer's company name.",0 ) !:
         let resp$(1)=a$(1)
-02560   let fnlbl(4,1,"Address:",mylen,right)
-02570   let fntxt(4,mypos,40,0,0,"",0,"The filer's address.",0 ) !:
+02560   fnlbl(4,1,"Address:",mylen,right)
+02570   fntxt(4,mypos,40,0,0,"",0,"The filer's address.",0 ) !:
         let resp$(2)=a$(2)
-02580   let fnlbl(5,1,"City State Zip:",mylen,right)
-02590   let fntxt(5,mypos,40,0,0,"",0,"The filer's city state zip.",0 ) !:
+02580   fnlbl(5,1,"City State Zip:",mylen,right)
+02590   fntxt(5,mypos,40,0,0,"",0,"The filer's city state zip.",0 ) !:
         let resp$(3)=a$(3)
 02600   let mylen=40: let mypos=mylen+3
-02610   let fnlbl(7,1,"Federal ID Number:",mylen,right)
-02620   let fntxt(7,mypos,12,0,0,"",0,"Enter the Federal ID number without slashes,dashes, or spaces.",0 ) !:
+02610   fnlbl(7,1,"Federal ID Number:",mylen,right)
+02620   fntxt(7,mypos,12,0,0,"",0,"Enter the Federal ID number without slashes,dashes, or spaces.",0 ) !:
         let resp$(4)=str$(b1)
-02630   let fnlbl(8,1,"Payment Year:",mylen,right)
-02640   let fntxt(8,mypos,4,0,0,"1030",0,"The payment year must be entered and will be in ccyy format.",0 ) !:
+02630   fnlbl(8,1,"Payment Year:",mylen,right)
+02640   fntxt(8,mypos,4,0,0,"1030",0,"The payment year must be entered and will be in ccyy format.",0 ) !:
         let resp$(5)=str$(yr)
-02650   let fnlbl(9,1,"4 Character Payer Name Control Code:",mylen,right)
-02660   let fntxt(9,mypos,4,0,0,"",0,"The Payer Name Control Code can be obtained from the mail label on the 1099 Package that you received from IRS.",0 ) !:
+02650   fnlbl(9,1,"4 Character Payer Name Control Code:",mylen,right)
+02660   fntxt(9,mypos,4,0,0,"",0,"The Payer Name Control Code can be obtained from the mail label on the 1099 Package that you received from IRS.",0 ) !:
         let resp$(6)=pnc$
-02670   let fnchk(11,mypos,"Combined Federal/State Filer:",1) !:
+02670   fnchk(11,mypos,"Combined Federal/State Filer:",1) !:
         let resp$(7)=cfsy$
-02680   let fnlbl(12,1,"5 Character Transmitter Code:",mylen,right)
-02690   let fntxt(12,mypos,5,0,0,"",0,"When you apply with the IRS to submit by magnetic media, you will be issued a five character transmitter code.",0 ) !:
+02680   fnlbl(12,1,"5 Character Transmitter Code:",mylen,right)
+02690   fntxt(12,mypos,5,0,0,"",0,"When you apply with the IRS to submit by magnetic media, you will be issued a five character transmitter code.",0 ) !:
         let resp$(8)=pnc$
-02700   let fnchk(13,mypos,"Is Payer a Foreign Corporation:",1) !:
+02700   fnchk(13,mypos,"Is Payer a Foreign Corporation:",1) !:
         let resp$(9)=tcc$
-02710   let fnlbl(14,1,"Contact Name:",mylen,right)
-02720   let fntxt(14,mypos,40,0,0,"",0,"",0 ) !:
+02710   fnlbl(14,1,"Contact Name:",mylen,right)
+02720   fntxt(14,mypos,40,0,0,"",0,"",0 ) !:
         let resp$(10)=cn$
-02730   let fnlbl(15,1,"Contact Phone Number:",mylen,right)
-02740   let fntxt(15,mypos,10,0,0,"30",0,"",0 ) !:
+02730   fnlbl(15,1,"Contact Phone Number:",mylen,right)
+02740   fntxt(15,mypos,10,0,0,"30",0,"",0 ) !:
         let resp$(11)=str$(cpn)
 02750   let mylen=60: let mypos=mylen+3
-02760   let fnlbl(17,1,"(O)riginal, (R)eplacdment or (C)orrection file (O/R/C):",mylen,right)
-02770   let fntxt(17,mypos,1,0,0,"",0,"",0 ) !:
+02760   fnlbl(17,1,"(O)riginal, (R)eplacdment or (C)orrection file (O/R/C):",mylen,right)
+02770   fntxt(17,mypos,1,0,0,"",0,"",0 ) !:
         let resp$(12)=orc$
-02780   let fnlbl(18,1,"Payer Phone Number:",mylen,right)
-02790   let fntxt(18,mypos,10,0,0,"30",0,"",0 ) !:
+02780   fnlbl(18,1,"Payer Phone Number:",mylen,right)
+02790   fntxt(18,mypos,10,0,0,"30",0,"",0 ) !:
         let resp$(13)=str$(ppn)
-02800   let fncmdkey("&Next",1,1,0,"Moves to next questions.")
-02810   let fncmdkey("&Cancel",5,0,1,"Returns to menu.")
-02820   let fnacs(sn$,0,mat resp$,ckey)
+02800   fncmdkey("&Next",1,1,0,"Moves to next questions.")
+02810   fncmdkey("&Cancel",5,0,1,"Returns to menu.")
+02820   fnacs(sn$,0,mat resp$,ckey)
 02830   if ckey=5 then goto XIT
 02850 ! Input #101,Fields MAT IO1$: MAT A$,B1,YR,PNC$,CFSYN$,TCC$,FCIYN$,CN$,CPN,ORC$,PPN Conv CONV1
 02860   if cfsyn$="Y" then cfs$="1" else cfs$=" "
@@ -316,18 +316,18 @@
 03000   if cfs$><"1" then goto MAIN
 03010 SELECT_ST: ! 
 03015   let resp=0
-03020   let fntos(sn$="elec10992") !:
+03020   fntos(sn$="elec10992") !:
         let mylen=28 : let mypos=mylen+3
-03035   let fnlbl(1,1,"Place a 1 by each State participating in the combined Federal/State Filer",80,0)
+03035   fnlbl(1,1,"Place a 1 by each State participating in the combined Federal/State Filer",80,0)
 03040   for j=1 to 17
 03060     for x=1 to 3
 03070 ! Let FNCHK(J+1,X*20,ST$(STOP2),1) !:
             ! Let RESP$(RESP+=1)=ST$(J*3-2)
 03080     next x
 03090   next j
-03100   let fncmdkey("&Next",1,1,0,"Moves to next questions.")
-03110   let fncmdkey("&Cancel",5,0,1,"Returns to menu.")
-03120   let fnacs(sn$,0,mat resp$,ckey)
+03100   fncmdkey("&Next",1,1,0,"Moves to next questions.")
+03110   fncmdkey("&Cancel",5,0,1,"Returns to menu.")
+03120   fnacs(sn$,0,mat resp$,ckey)
 03130   for j=1 to 51
 03140     if resp$(j)="True" then let stu(j)=1
 03150   next j
@@ -376,17 +376,17 @@
 03590 L3590: next j
 03600   gosub PROCESS
 03610 ASKDAT: ! 
-03620   let fntos(sn$="VendorTransList") !:
+03620   fntos(sn$="VendorTransList") !:
         let mylen=28 : let mypos=mylen+3
-03630   let fnlbl(1,1,"Transaction Starting Date:",mylen,1)
-03640   let fntxt(1,mypos,8,0,0,'CCYYMMDD',0,'Normally you would enter the first day of the calendar year.') !:
+03630   fnlbl(1,1,"Transaction Starting Date:",mylen,1)
+03640   fntxt(1,mypos,8,0,0,'CCYYMMDD',0,'Normally you would enter the first day of the calendar year.') !:
         let resp$(1)=str$(transactionstartingdate)
-03650   let fnlbl(2,1,"Transaction Ending Date:",mylen,1)
-03660   let fntxt(2,mypos,8,0,0,'CCYYMMDD',0,'You should enter the last day of the calendar year.') !:
+03650   fnlbl(2,1,"Transaction Ending Date:",mylen,1)
+03660   fntxt(2,mypos,8,0,0,'CCYYMMDD',0,'You should enter the last day of the calendar year.') !:
         let resp$(2)=str$(transactionendingdate)
-03670   let fnlbl(2,1,"",45,1)
-03680   let fncmdset(2)
-03690   let fnacs(sn$,0,mat resp$,ckey)
+03670   fnlbl(2,1,"",45,1)
+03680   fncmdset(2)
+03690   fnacs(sn$,0,mat resp$,ckey)
 03700 ! 
 03710   let transactionstartingdate=val(resp$(1))
 03720   let transactionendingdate=val(resp$(2))

@@ -9,9 +9,9 @@
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
 00100   dim pedat$*20,actpd$*6,bm(13),bp(13),by(13),cap$*128,udf$*256
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Six Column Income Statement with Budget")
+00120   fntop(program$,cap$="Six Column Income Statement with Budget")
 00130   on fkey 5 goto L2350
-00140   let fncno(cno,cnam$)
+00140   fncno(cno,cnam$)
 00150   let udf$=env$('temp')&'\'
 00160   actpd=fnactpd
 00170   actpd$=fnactpd$
@@ -35,21 +35,21 @@
 00340   let nametab=int(44-len(rtrm$(cnam$))/2)
 00350   open #1: fl1$,internal,input,keyed 
 00360   if fnprocess=1 or fnUseDeptNo=0 then goto L450
-00370   let fntos(sn$="ACglincb") !:
+00370   fntos(sn$="ACglincb") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00380   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00390   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00380   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00390   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00400   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00410   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00420   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00430   let fnacs(sn$,0,mat resp$,ckey)
+00400   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00410   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00420   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00430   fnacs(sn$,0,mat resp$,ckey)
 00440   if ckey=5 then goto XIT
 00450 L450: costcntr=val(resp$(1))
 00460   cnam$=rtrm$(cnam$)
 00470   let pf1=len(cnam$)+int((43-len(cnam$))/2)
 00480   let report$="STATEMENT OF INCOME AND EXPENSES"
-00490   let fnopenprn(cp,58,220,process)
+00490   fnopenprn(cp,58,220,process)
 00500   let redir=0: if file$(255)(1:4)<>"PRN:" then let redir=1
 00510   if fnps=2 then goto L540 ! secondary
 00520   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
@@ -191,7 +191,7 @@
 01890 L1890: form pos 1,c 1,skip ls
 01900   goto L2020
 01910 L1910: ! If FT1=1 Then Goto 1870
-01920   let fnpglen(pglen)
+01920   fnpglen(pglen)
 01930 ! If PGLEN<>42 Then Let PGLEN=58
 01940   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
 01950 ! If PGLEN=42 Then Let SK=SK+1
@@ -236,11 +236,11 @@
 02340 ! ______________________________________________________________________
 02350 L2350: let eofcode=1
 02360   gosub L1910
-02370   let fnfscode(actpd)
-02380   let fnpriorcd(1)
-02388   let fnfscode(actpd)
-02389   let fnpriorcd(1)
-02390   let fncloseprn
+02370   fnfscode(actpd)
+02380   fnpriorcd(1)
+02388   fnfscode(actpd)
+02389   fnpriorcd(1)
+02390   fncloseprn
 02400 ! 
 02410 XIT: let fnxit
 02420 ! ______________________________________________________________________

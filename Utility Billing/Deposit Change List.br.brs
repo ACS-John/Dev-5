@@ -8,16 +8,16 @@
 00080   dim dp$*70
 00130 ! ______________________________________________________________________
 24000 MENU1: ! r:
-24040   let fntos(sn$:="ubDepChg")
-24060   let fnlbl(1,28," ",1,1)
-24100   let fnlbl(1,1,"Starting Date:",16,1)
-24140   let fntxt(1,18,8,0,0,"1",0,"Use mmddyy format for the oldest date to be listed.")
+24040   fntos(sn$:="ubDepChg")
+24060   fnlbl(1,28," ",1,1)
+24100   fnlbl(1,1,"Starting Date:",16,1)
+24140   fntxt(1,18,8,0,0,"1",0,"Use mmddyy format for the oldest date to be listed.")
 24160   let resp$(1)=str$(bd1)
-24200   let fnlbl(2,1,"Ending Date:",16,1)
-24240   let fntxt(2,18,8,0,0,"1",0,"Use mmddyy format for the latest date to be listed.")
+24200   fnlbl(2,1,"Ending Date:",16,1)
+24240   fntxt(2,18,8,0,0,"1",0,"Use mmddyy format for the latest date to be listed.")
 24260   let resp$(2)=str$(ed1)
-24280   let fncmdset(3)
-24300   let fnacs(sn$,0,mat resp$,ckey)
+24280   fncmdset(3)
+24300   fnacs(sn$,0,mat resp$,ckey)
 26000   if ckey=5 then goto XIT
 26020   bd1=val(resp$(1)) 
 26040   bd1=fndate_mmddyy_to_ccyymmdd(bd1) 
@@ -29,7 +29,7 @@
 32020   if ed1=20000000 then let ed1=0
 32060   open #hDeposit2:=fngethandle: 'Name='&env$('Q')&'\UBmstr\Deposit2.h'&env$('cno')&',KFName='&env$('Q')&'\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outin,keyed ! "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",Shr",internal,outin,relative 
 32080   fDeposit2: form pos 1,c 10,n 8,c 32,2*n 10.2,pd 3
-32120   let fnopenprn
+32120   fnopenprn
 32140   gosub HDR 
 34000   dim da(2)
 34020   ! gosub LegacyWay
@@ -48,7 +48,7 @@
 44000 DONE: ! r:
 44020   pr #255: "" 
 44040   pr #255,using "Form POS 16,C 21,N 12.2": "Net Amount of Change:",t1
-44060   let fncloseprn
+44060   fncloseprn
 44080 goto XIT ! /r
 46000 XIT: let fnxit
 52000 ! <Updateable Region: ERTN>

@@ -10,7 +10,7 @@
 00090     dim fax$*12,myact$*20
 00150 ! 
 00160 ! ______________________________________________________________________
-00171     let fnstatus('updating Payee file format.')
+00171     fnstatus('updating Payee file format.')
 00210     open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),internal,outin,keyed ioerr ignore
 00215     if exists(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'))=0 then open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx1.h"&env$('cno')&",RecL=276,kps=1,kln=8,replace",internal,outin,keyed: let version(2,1): close #2: 
 00220     open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),internal,outin,relative  ! open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx1.h"&env$('cno'),internal,outin,keyed
@@ -28,11 +28,11 @@
 00260     let version(2,1)
 00270     close #1,free: ioerr ignore
 00280     close #2: ioerr ignore
-00290     let fnindex_it(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),env$('Q')&"\GLmstr\payidx1.h"&env$('cno'),"1 8")
-00300     let fnindex_it(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),env$('Q')&"\GLmstr\payidx2.h"&env$('cno'),"9 38")
-00310     let fnindex_it(env$('Q')&"\GLmstr\payeeglbreakdown.h"&env$('cno'),env$('Q')&"\GLmstr\payeeglbkdidx.h"&env$('cno'),"1 8")
+00290     fnindex_it(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),env$('Q')&"\GLmstr\payidx1.h"&env$('cno'),"1 8")
+00300     fnindex_it(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),env$('Q')&"\GLmstr\payidx2.h"&env$('cno'),"9 38")
+00310     fnindex_it(env$('Q')&"\GLmstr\payeeglbreakdown.h"&env$('cno'),env$('Q')&"\GLmstr\payeeglbkdidx.h"&env$('cno'),"1 8")
 00314     if ~exists(env$('Q')&"\GLmstr\gltr1099.h"&env$('cno')) then let fnCopy("S:\General Ledger\mstr\gltr1099.h99999",env$('Q')&"\GLmstr\gltr1099.h"&env$('cno'))
-00316     let fnindex_it(env$('Q')&"\GLmstr\gltr1099.h"&env$('cno'),env$('Q')&"\GLmstr\gltridx.h"&env$('cno'),"1 8")
+00316     fnindex_it(env$('Q')&"\GLmstr\gltr1099.h"&env$('cno'),env$('Q')&"\GLmstr\gltridx.h"&env$('cno'),"1 8")
 00320     goto XIT
 00330 ! ______________________________________________________________________
 00340 ! <Updateable Region: ERTN>

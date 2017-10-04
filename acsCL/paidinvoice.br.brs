@@ -9,8 +9,8 @@
 00080   dim cap$*128,lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),mask(4),sln(4)
 00090   dim c$(4,8)*256
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Paid Invoice")
-00120   let fncno(cno)
+00110   fntop(program$,cap$="Paid Invoice")
+00120   fncno(cno)
 00130   gosub BUILD_LAYOUT
 00140   gosub OPEN_AND_CALL_HAMSTER
 00150   goto XIT
@@ -92,7 +92,7 @@
           close #j: !:
         next j
 00440   gosub OPEN_FILE
-00450   let fnhamster("PaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00450   fnhamster("PaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00460   return 
 00470 ! ______________________________________________________________________
 00480 XIT: let fnxit

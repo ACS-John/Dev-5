@@ -1,9 +1,9 @@
 00020   on fkey 5 goto L690 ! 9/5/86
 00030   on error goto L730
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fndat
-00050   let fntop("S:\acsTM\arpostgl",cap$="Post General Ledger")
-00060   let fncno(cno,cnam$)
-00070   let fndat(dat$)
+00050   fntop("S:\acsTM\arpostgl",cap$="Post General Ledger")
+00060   fncno(cno,cnam$)
+00070   fndat(dat$)
 00080   dim p$*5,iv$*12,gl(3),gh(3),td$*30,tr$*12,a$*40,cap$*128,dat$*20
 00090   let td$="AR SUMMARY"
 00100   let tr6=5

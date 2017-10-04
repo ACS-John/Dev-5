@@ -7,7 +7,7 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(6)*38,tln(6),p$(6)*160,fltyp$(6),sln(6),mask(6),c$(6,8)*40
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$='General Ledger Control File')
+00090   fntop(program$,cap$='General Ledger Control File')
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER
@@ -21,7 +21,7 @@
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 00190 ! ______________________________________________________________________
 00200 BUILD_LAYOUT: ! 
-00210   let fncno(cno)
+00210   fncno(cno)
 00220 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
 00230   let lbl$(ic+=1)="Fund Number" !:
@@ -98,7 +98,7 @@
 00360   return 
 00370 ! ______________________________________________________________________
 00380 HAMSTER: ! 
-00390   let fnhamster("GLControl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00390   fnhamster("GLControl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00400   return 
 00410 ! ______________________________________________________________________
 00420 XIT: let fnxit

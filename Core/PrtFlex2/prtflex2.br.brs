@@ -16,7 +16,7 @@
 00031   dim df$*1,dr$*9,dc$*2,da$*17,extra(23),extra$(11)*30,item$(80)*50
 00032   dim abbrev$*20,open_read$*80,tg(11)
 00039 ! ______________________________________________________________________
-00040   let fntop("Core\Programs\PrtFlex2",cap$="Print Flex")
+00040   fntop("Core\Programs\PrtFlex2",cap$="Print Flex")
 00099   let programfolder$=fncursys$&"mstr" !:
         let datafolder$=env$('Q')&'\'&fncursys$&"mstr" 
 00102 ! 
@@ -42,19 +42,19 @@
 04004   mat colhdr$=("")
 04005   mat colmask$(columns)
 04006   mat colmask$=("")
-04010   let fntos(sn$="mstrflex")
-04018   let fnlbl(1,1,uprc$(gridname$),20,2,3)
+04010   fntos(sn$="mstrflex")
+04018   fnlbl(1,1,uprc$(gridname$),20,2,3)
 04075   gosub GRIDHEADING ! reads the headings that were created above
-04090   let fnflexinit1("flexprint",3,1,10,70,mat colhdr$,mat colmask$,1)
+04090   fnflexinit1("flexprint",3,1,10,70,mat colhdr$,mat colmask$,1)
 04095 ! Restore #1:
 04096 L4096: gosub READDATAFILES ! reads the database for the grid information                                     These read statements and form statements must
 04097 !                     be in a dispaly file in the data base folder with                               a "_read" on the end of the file name.  The file                                name must be the same as the database name + _read
 04112   gosub GRIDDETAILS ! Assign the variable names to                                each column
-04120   let fnflexadd1(mat item$)
+04120   fnflexadd1(mat item$)
 04130   goto L4096
 04140 EOFONREAD: ! Complete the grid once all data has been read
 04144 ! Let FNLBL(15,1,"Export the grid to a fixed width file, for later use.")
-04145   let fncmdset(52): let fnacs(sn$,win,mat response$,ckey) !:
+04145   fncmdset(52): let fnacs(sn$,win,mat response$,ckey) !:
         ! CALL items selected
 04146   let lastgridresponse$=response$(1)
 04160   if ckey=5 then chain "Core\prtflex\PRTFLEX1",programfolder$,datafolder$

@@ -1,9 +1,9 @@
 00020   on error goto L2080
 00030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fnd1,fndat
-00040   let fntop(program$,cap$="Monthly Billing Summary")
-00050   let fncno(cno,cnam$)
-00060   let fnconsole(1)
-00070   let fndat(dat$)
+00040   fntop(program$,cap$="Monthly Billing Summary")
+00050   fncno(cno,cnam$)
+00060   fnconsole(1)
+00070   fndat(dat$)
 00080   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00090   dim cnam$*40,cat$(30)*30,dat$*20,cliname$*30,enam$*25
 00100   dim z$*5,ca(10),ta(25,2),fb(25),dat$*20,cap$*128
@@ -18,7 +18,7 @@
 00190   pr fields "23,2,c 30,n": "Press F5 to stop"
 00200 L200: input fields mat io1$: dat$,od conv L200
 00210   if cmdkey=5 then goto XIT
-00220   let fndat(dat$,put=2)
+00220   fndat(dat$,put=2)
 00230   if od=0 or (od>10111 and od<123200) then goto L240 else goto L200
 00240 L240: let fnopenprn
 00250   pr newpage

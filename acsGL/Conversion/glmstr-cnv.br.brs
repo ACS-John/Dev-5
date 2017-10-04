@@ -1,7 +1,7 @@
 00020   dim cnam$*40,revb(13)
 00030   library 'S:\Core\Library': fnxit,fntop
 00040   close #101: ioerr L60
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060 L60: open #101: "SROW=9,SCOL=23,EROW=11,ECOL=60,BORDER=DR,CAPTION=Convert G/L Master for GASB",display,outin 
 00070   pr fields "10,24,C 32": "ENTER COMPANY NUMBER TO CONVERT:"
 00080   pr fields "12,32,C 16,R,N": "PRESS F5 TO STOP"

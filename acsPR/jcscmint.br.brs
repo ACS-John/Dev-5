@@ -8,14 +8,14 @@
 00070   dim iom$(4),scm$(4)*27
 00080   dim cde$*3,des$*30,cnam$*40,sc$*3,cnt$*25,cap$*128,message$*40
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\acsPR\jcSCMaint",cap$="Sub-Category Description")
-00110   let fncno(cno,cnam$)
-00115   let fnconsole(1)
+00100   fntop("S:\acsPR\jcSCMaint",cap$="Sub-Category Description")
+00110   fncno(cno,cnam$)
+00115   fnconsole(1)
 00120 ! 
 00130   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L1220
 00140 MENU1: ! 
 00150   pr newpage
-00160   let fnopenwin(win=101,08,19,15,60,cap$)
+00160   fnopenwin(win=101,08,19,15,60,cap$)
 00170   let scm$(1)="1. Initial File Preparation"
 00180   let scm$(2)="2. Add or Edit"
 00190   let scm$(3)="3. pr Proof List"
@@ -32,7 +32,7 @@
 00290 ! ______________________________________________________________________
 00300 L300: pr newpage
 00310   let win=102
-00320   let fnopenwin(win,08,20,16,59,cap$)
+00320   fnopenwin(win,08,20,16,59,cap$)
 00330   pr #win,fields "4,1,Cc 40,R,N": "* * * Warning * * *"
 00340   pr #win,fields "5,1,Cc 40,N": "This selection will erase all records"
 00350   pr #win,fields "6,1,Cc 40,N": "in the Sub-Category Description File."
@@ -64,7 +64,7 @@
 00600 L600: if ti=4 then goto SRCH3
 00610 L610: pr newpage
 00620   let win=102
-00630   let fnopenwin(win,10,20,14,59,cap$)
+00630   fnopenwin(win,10,20,14,59,cap$)
 00640   pr #win,fields "4,2,C 17,N": "Description Code:"
 00650   pr fields "15,34,C 11,B,5": "Cancel (F5)"
 00660   if ti=4 then cde$=lpad$(rtrm$(k$),3) : goto L720
@@ -76,7 +76,7 @@
 00720 L720: close #win: ioerr L740
 00730   pr newpage
 00740 L740: let win=103
-00750   let fnopenwin(win,08,18,14,62,cap$)
+00750   fnopenwin(win,08,18,14,62,cap$)
 00760   read #1,using L770,key=cde$: cde$,des$ nokey L800
 00770 L770: form pos 1,c 3,c 30
 00780   pr #win,fields "3,1,Cc 40,R,N": "Modifying"
@@ -97,9 +97,9 @@
 00930   goto L600
 00940 ! ______________________________________________________________________
 00950 L950: pr newpage
-00960   let fnwait(102,cap$,message$="Printing:  please wait...",1)
+00960   fnwait(102,cap$,message$="Printing:  please wait...",1)
 00970   on fkey 5 goto L1090
-00980   let fnopenprn(cp,58,220,process)
+00980   fnopenprn(cp,58,220,process)
 00990   restore #1,key>="   ": nokey MENU1
 01000   gosub L1130
 01010 L1010: read #1,using L770: cde$,des$ eof L1090
@@ -111,7 +111,7 @@
 01070   continue 
 01080 ! ______________________________________________________________________
 01090 L1090: on fkey 5 ignore 
-01100   let fncloseprn
+01100   fncloseprn
 01110   goto MENU1
 01120 ! ______________________________________________________________________
 01130 L1130: pr #255,using L1140: date$,cnam$
@@ -134,7 +134,7 @@
 01300 SRCH3: ! 
 01310   bk=0
 01320   let win=102
-01330   let fnopenwin(win,02,47,23,79,cap$)
+01330   fnopenwin(win,02,47,23,79,cap$)
 01340 ! LET JN$=LPAD$(RTRM$(JCI$(HCE-2)),6)
 01350 ! READ #41,USING 12500,KEY=JN$: JN$,N$,MAT A$,MAT B NOKEY (list 'asdf')
 01360   restore #1,search>="": nokey L1370

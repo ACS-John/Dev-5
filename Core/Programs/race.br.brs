@@ -3,17 +3,17 @@
         ! with dynamic editor 1.0
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
-00050   let fntop(program$,cap$="Race")
+00050   fntop(program$,cap$="Race")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim cap$*128,lbl$(1),fltyp$(1),sln(1),mask(1),fln(1),p$(1)*18
 00090 ! ______________________________________________________________________
-00100   let fncno(cno)
+00100   fncno(cno)
 00110   let lbl$(1)="Race"
 00120   let fln(1)=18
 00130   let mask(1)=2000
 00140   open #1: "Name=S:\Core\Data\Race.dat,RecL=18,Use,Shr",internal,outin,relative 
-00150   let fnhamster("Race",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
+00150   fnhamster("Race",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00160 XIT: let fnxit
 00170 ! ______________________________________________________________________
 00180 ! <Updateable Region: ERTN>

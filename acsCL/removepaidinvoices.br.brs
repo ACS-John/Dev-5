@@ -6,22 +6,22 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$="Remove Paid Invoices")
+00090   fntop(program$,cap$="Remove Paid Invoices")
 00100   cancel=99 : let right=1 : center=2 : let on=1 : let off=0 !:
         let left=0
-00110   let fncno(cno)
+00110   fncno(cno)
 00120 ! ______________________________________________________________________
-00130   let fntos(sn$='RmvPdInv') !:
+00130   fntos(sn$='RmvPdInv') !:
         let lc=0 : let mylen=13 : let mypos=mylen+2 !:
         let mywidth=42
-00140   let fnlbl (lc+=1,1,"Removal Date:",mylen,right)
-00150   let fntxt(lc,mypos,10,0,left,'1003') !:
+00140   fnlbl (lc+=1,1,"Removal Date:",mylen,right)
+00150   fntxt(lc,mypos,10,0,left,'1003') !:
         let resp$(1)=""
 00160   let lc+=1
-00170   let fnlbl(lc+=1,1,"All transactions with a date equal to",mywidth,center)
-00180   let fnlbl(lc+=1,1,"or older than this date will be removed.",mywidth,center)
-00190   let fncmdset(2)
-00200   let fnacs(sn$,0,mat resp$,ckey)
+00170   fnlbl(lc+=1,1,"All transactions with a date equal to",mywidth,center)
+00180   fnlbl(lc+=1,1,"or older than this date will be removed.",mywidth,center)
+00190   fncmdset(2)
+00200   fnacs(sn$,0,mat resp$,ckey)
 00210   if ckey=5 or ckey=cancel then goto XIT else !:
           let rd1=val(resp$(1))
 00220 ! fnwait

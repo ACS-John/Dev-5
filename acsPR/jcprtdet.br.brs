@@ -11,9 +11,9 @@
 00110   dim cn$*11,holdcn$*11,cnt$*5,k$*25,l(13),ta(2),eno$*12,jno$*6,tr(9)
 00120   dim io1$(6)*21,pd$*30,message$*40,cap$*128
 00130 ! ______________________________________________________________________
-00140   let fntop(program$,cap$="Job Cost Report")
-00150   let fncno(cno)
-00155   let fnconsole(1)
+00140   fntop(program$,cap$="Job Cost Report")
+00150   fncno(cno)
+00155   fnconsole(1)
 00160   let dat1=date("mmddyy")
 00170 ! 
 00180   let prtjob$="N" : let prtdet$="N" : let sumcat$="N" : let sumjob$="N" !:
@@ -36,7 +36,7 @@
 00320 ! ______________________________________________________________________
 00330   pr newpage
 00340   if fnprocess=1 then goto L640
-00350   let fnopenwin(win=102,7,15,16,65,cap$)
+00350   fnopenwin(win=102,7,15,16,65,cap$)
 00360   pr #win,fields "4,2,Cr 42,N": "Date for Job Cost Detail Listing (mmddyy):"
 00370   pr #win,fields "5,2,Cr 42,N": "Print all Jobs (Y/N):"
 00380   pr #win,fields "6,2,Cr 42,N": "Print Details (Y/N):"
@@ -70,7 +70,7 @@
 00650 L650: if prtjob$="Y" then goto L810
 00660   for k=1 to 100
 00670     pr newpage
-00680     let fnopenwin(win=102,10,20,15,59,cap$)
+00680     fnopenwin(win=102,10,20,15,59,cap$)
 00690     if k=1 then goto L710
 00700     if k>1 then pr #win,fields "6,1,Cc 40,R,N": "Last Job Number entered was "&prtj$(k-1)
 00710 L710: pr #win,fields "4,2,C 20,N": "Job Number to print:"
@@ -84,9 +84,9 @@
 00790 ! ______________________________________________________________________
 00800 L800: let k=k-1
 00810 L810: pr newpage
-00820   let fnwait(103,cap$,message$="Printing: please wait...",1)
+00820   fnwait(103,cap$,message$="Printing: please wait...",1)
 00830   on fkey 5 goto DONE
-00840   let fnopenprn
+00840   fnopenprn
 00850 L850: if prtjob$="Y" then goto L940
 00860 L860: let j1=j1+1
 00870   if j1<=k then goto L910
@@ -203,7 +203,7 @@
 01980   close #2: 
 01990   close #3: 
 02000 DONE: ! 
-02010   let fncloseprn
+02010   fncloseprn
 02020   goto XIT
 02030 ! ______________________________________________________________________
 02040 HDR: ! 

@@ -6,7 +6,7 @@
 00060 ! ______________________________________________________________________
 00070   dim em$(3)*30,ss$*11,rs(2),em(16),ta(2),tr$*467
 00080 ! ______________________________________________________________________
-00090   let fncno(cno)
+00090   fncno(cno)
 00100 ! 
 00110   open #10: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno),internal,input,relative 
 00120   open #11: "Name=RPMSTR.X,RecL=196,Replace",internal,output 

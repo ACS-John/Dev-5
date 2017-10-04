@@ -9,9 +9,9 @@
 00090   dim k(1),k$(3)*25,l$(1)*11,d(22),m(36),r$*10,n$*5,n(2),dat$*20
 00100   dim fa$(2),sa$(2)*40,fb$(2),ext(2),adr(2),report$*35,deposit(31,2)
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Other Deductions Registers-YTD QTD")
-00130   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00120   fntop(program$,cap$="Other Deductions Registers-YTD QTD")
+00130   fncno(cno,cnam$) !:
+        fndat(dat$)
 00140   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode !:
         close #1: 
 00150   for j=1 to 10
@@ -21,7 +21,7 @@
 00190   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00200   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno)&",Shr",internal,outin,relative 
 00210   let report$="Other Deductions Register-YTD QTD"
-00220   let fnopenprn(cp,58,220,0)
+00220   fnopenprn(cp,58,220,0)
 00230   gosub L390
 00240 L240: read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m eof L490
 00250   gosub L440
@@ -55,7 +55,7 @@
 00530   pr #255,using L550: "","Totals-QTD",mat totalqtd
 00540   form pos 1,c 6,c 20,10*n 10.2
 00550 L550: form pos 1,c 6,c 20,10*n 10.2
-00560   let fncloseprn : goto XIT
+00560   fncloseprn : goto XIT
 00570 L570: ! ACCUMULATE TOTALS
 00580   for j=1 to 10
 00590     let totalytd(j)+=m(j*2+9)

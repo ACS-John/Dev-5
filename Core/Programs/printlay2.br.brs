@@ -7,13 +7,13 @@
 00140   dim a$(200,3)*80,h1$*55,rm$(4)*128,filename$*50,ln$*120
 00160   dim a(200,6),a$*132,prg$*20,mo$(12),cap$*128,source_path$*150
 00180 ! ______________________________________________________________________
-00200   let fntop("S:\Core\PrintLay",cap$="Print Layout(s)")
+00200   fntop("S:\Core\PrintLay",cap$="Print Layout(s)")
 00220   data January,February,March,April,May,June,July,August,September,October,November,December
 00240   read mat mo$
 00260 ! ______________________________________________________________________
-00280   let fnconsole(on=1)
+00280   fnconsole(on=1)
 00300   let dat$=mo$(val(date$("MM")))&" "&date$("DD")&", "&date$("CCYY")
-00320   let fnwin3b(win=101,cap$,4,65,0,2)
+00320   fnwin3b(win=101,cap$,4,65,0,2)
 00340   pr #win,fields "2,2,Cr 18,N": "Path and Filename:"
 00360   if wbversion$<'4.20hi' then let io1$(1)="2,21,C 40/150,U" else let io1$(1)="2,21,40/C 150,U"
 00380 ! 
@@ -26,9 +26,9 @@
 00520   if cmdkey=5 then goto XIT
 00540   let source_path$=rtrm$(source_path$)
 00560   if source_path$="" then goto L210
-00580   let fn_printlay3(source_path$) : goto L210
+00580   fn_printlay3(source_path$) : goto L210
 00600   def fn_old
-00620     let fnopenprn(cp,58,220,process)
+00620     fnopenprn(cp,58,220,process)
 00640     execute "DROP DirFile" ioerr ignore
 00660     execute "DIR "&source_path$&" >DirFile"
 00680     open #2: "Name=DirFile",display,input 
@@ -120,7 +120,7 @@
 02640     close #1: 
 02660     if f2<f1 then goto L330
 02680 L1380: close #2,free: 
-02700     let fncloseprn
+02700     fncloseprn
 02720     goto XIT
 02740 ! ______________________________________________________________________
 02760 XIT: let fnxit
@@ -173,17 +173,17 @@
 03800       let p3_pos_slash_last=pos(source_path$,'\',-1)
 03820       let p3_filter$=source_path$(p3_pos_slash_last+1:len(source_path$))
 03840       let source_path$=source_path$(1:p3_pos_slash_last)
-03860       let fngetdir2(source_path$,mat p3_filename$,'',p3_filter$)
+03860       fngetdir2(source_path$,mat p3_filename$,'',p3_filter$)
 03880     else 
 03900       let p3_filename$(1)=rtrm$(source_path$,'\')
 03910       let source_path$=''
 03920     end if  ! 
 03940     dim p3_line$(1)*256
-03960     let fnopenprn(cp,58,220,process)
+03960     fnopenprn(cp,58,220,process)
 03980 P3_FORM_PRINT: form pos 1,g 4,x 1,c 5,x 1,c 5,x 1,c 30,x 1,c 80
 04000     for p3_file_item=1 to udim(mat p3_filename$)
 04020 !  if trim$(p3_filename$(p3_file_item))=trim$(source_path$) then let source_path$=''
-04040       let fn_file_to_array(source_path$&p3_filename$(p3_file_item),mat p3_line$)
+04040       fn_file_to_array(source_path$&p3_filename$(p3_file_item),mat p3_line$)
 04060       if p3_file_item>1 then pr #255: newpage
 04080       pr #255: os_filename$(source_path$&p3_filename$(p3_file_item))
 04100       let p3_spos=1
@@ -220,5 +220,5 @@
 04720         end if  ! lwrc$(p3_tmp$(1:5))='data '   /   else 
 04740       next p3_line_item
 04760     next p3_file_item
-04780     let fncloseprn
+04780     fncloseprn
 04800   fnend  ! fn_printlay3

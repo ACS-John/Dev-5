@@ -8,8 +8,8 @@
 20060       let xcv$=fn_get_variable_value$('cv$',program_file$)
 20100       pr xcv$
 20120       if xcv$<>'' then 
-20140         let fn_replace_in_file(program_file$,'cv$',xcv$)
-20160         let fn_replace_in_file(program_file$,'let '&xcv$&'='&xcv$,'!')
+20140         fn_replace_in_file(program_file$,'cv$',xcv$)
+20160         fn_replace_in_file(program_file$,'let '&xcv$&'='&xcv$,'!')
 20180       end if 
 20190     end if 
 20200   loop 
@@ -57,6 +57,6 @@
 50380     loop 
 50400 GV_EOF: ! 
 50420     close #h_file: 
-50440     let fn_get_variable_value$=gvv_return$
+50440     fn_get_variable_value$=gvv_return$
 50460   fnend 
 60360 IGNORE: continue 

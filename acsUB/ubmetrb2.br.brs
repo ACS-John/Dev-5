@@ -10,10 +10,10 @@
 00100   dim snm$(10)*20,a(7),option$(5),extra(13),service$(3)*26,ms$(13)*3
 00110   dim txt$*50,resp$(9)*50
 00120 ! ______________________________________________________________________
-00130   let fncno(cno,cnam$) !:
+00130   fncno(cno,cnam$) !:
         ! 
-00140   let fntop("S:\acsUB\ubMetrB2",cap$="Route Book Pages")
-00150   let fndat(dat$,1)
+00140   fntop("S:\acsUB\ubMetrB2",cap$="Route Book Pages")
+00150   fndat(dat$,1)
 00160   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed 
 00170   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00180 ! ______________________________________________________________________
@@ -52,34 +52,34 @@
 00440   let service =udim(service$)
 00450 ! ______________________________________________________________________
 00460 MENU1: ! 
-00470   let fntos(sn$="ubMetrRt") !:
+00470   fntos(sn$="ubMetrRt") !:
         let mylen=35 : let mypos=mylen+3 : let respc=lc=0
-00480   let fnlbl(lc+=1,1,"Route Number:",mylen,1)
-00490   let fncmbrt2(lc,mypos) !:
+00480   fnlbl(lc+=1,1,"Route Number:",mylen,1)
+00490   fncmbrt2(lc,mypos) !:
         let resp$(1)="1"
-00500   let fnlbl(lc+=1,1,"Service Type - 1st Service:",mylen,1)
-00510   let fncomboa("ubrate3",lc,mypos,mat option$) !:
+00500   fnlbl(lc+=1,1,"Service Type - 1st Service:",mylen,1)
+00510   fncomboa("ubrate3",lc,mypos,mat option$) !:
         let resp$(2)=option$(1)
-00520   let fnlbl(lc+=1,1,"Service Type - 2nd Service:",mylen,1)
-00530   let fncomboa("ubrate3",lc,mypos,mat option$) !:
+00520   fnlbl(lc+=1,1,"Service Type - 2nd Service:",mylen,1)
+00530   fncomboa("ubrate3",lc,mypos,mat option$) !:
         let resp$(3)=option$(1)
-00540   let fnfra(5,1,4,45,"Single Wide or Double Wide","Allow one or two customers per page.",0)
-00550   let fnopt(1,2,"Singe Wide",0,1) !:
+00540   fnfra(5,1,4,45,"Single Wide or Double Wide","Allow one or two customers per page.",0)
+00550   fnopt(1,2,"Singe Wide",0,1) !:
         let resp$(4)="True"
-00560   let fnopt(2,2,"Double Wide - Different customers",0,1) !:
+00560   fnopt(2,2,"Double Wide - Different customers",0,1) !:
         let resp$(5)="False"
-00570   let fnopt(3,2,"Double Wide - Different services",0,1) !:
+00570   fnopt(3,2,"Double Wide - Different services",0,1) !:
         let resp$(6)="False"
 00580   if env$('client')="Franklinton" or env$('client')="Divernon" then let resp$(4)="False": let resp$(6)="True"
-00590   let fnchk(11,28,"Select Accounts to Print:",1) !:
+00590   fnchk(11,28,"Select Accounts to Print:",1) !:
         let resp$(7)="False"
-00600   let fnfra(13,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
-00610   let fnopt(1,2,"Print complete form",0,2) !:
+00600   fnfra(13,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
+00610   fnopt(1,2,"Print complete form",0,2) !:
         let resp$(8)="True"
-00620   let fnopt(2,2,"Fill in the blanks",0,2)
+00620   fnopt(2,2,"Fill in the blanks",0,2)
 00625   if env$('client')="Carrizo" then let resp$(9)="True" else let resp$(9)="False"
-00630   let fncmdset(3) !:
-        let fnacs(sn$,0,mat resp$,ck)
+00630   fncmdset(3) !:
+        fnacs(sn$,0,mat resp$,ck)
 00640   if ck=5 then goto XIT
 00650   if uprc$(resp$(1))=uprc$("[All]") then let route=0 else !:
           let route=val(resp$(1))
@@ -99,7 +99,7 @@
 00790 ! ______________________________________________________________________
 00800   on fkey 5 goto DONE
 00810   if formoption=2 then let fnpa_open : goto L830
-00820   let fnopenprn
+00820   fnopenprn
 00830 L830: if selectone=1 then goto SELECTONE
 00840 LOOP_TOP: ! 
 00850   let x=0
@@ -192,20 +192,20 @@
 01720 ! ______________________________________________________________________
 01730 SELECTONE: ! 
 01740   let sn$ = "Selectone" !:
-        let fntos(sn$)
+        fntos(sn$)
 01750   let txt$="Account:" !:
-        let fnlbl(1,1,txt$,16,1)
+        fnlbl(1,1,txt$,16,1)
 01760 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040
 01770   if trim$(z$)<>"" then !:
           let txt$="Last Account entered was "&z$ !:
-          let fnlbl(3,1,txt$,44,1) else !:
+          fnlbl(3,1,txt$,44,1) else !:
           let txt$="" !:
-          let fnlbl(3,1,txt$,44,1)
-01780   let fncmbact(1,18) ! !:
+          fnlbl(3,1,txt$,44,1)
+01780   fncmbact(1,18) ! !:
         let resp$(1)=a$
-01790   let fncmdkey("&Next",1,1,0,"Accept this record for printing") !:
-        let fncmdkey("&Complete",5,0,1,"Print all selected records")
-01800   let fnacs(sn$,0,mat resp$,ck)
+01790   fncmdkey("&Next",1,1,0,"Accept this record for printing") !:
+        fncmdkey("&Complete",5,0,1,"Print all selected records")
+01800   fnacs(sn$,0,mat resp$,ck)
 01810   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto DONE
 01820   if ck=5 then goto DONE
@@ -220,7 +220,7 @@
 01905   if formoption=2 then gosub RELEASE_PRINT: goto XIT
 01910 L1910: let fncloseprn
 01920 XIT: ! 
-01930   let fnxit
+01930   fnxit
 01940 ! ______________________________________________________________________
 01950 ! <Updateable Region: ERTN>
 01960 ERTN: let fnerror(program$,err,line,act$,"xit")
@@ -233,7 +233,7 @@
 02120 RELEASE_PRINT: ! 
 02130   close #1: ioerr ignore
 02140   close #3: ioerr ignore
-02160   let fnpa_finis
+02160   fnpa_finis
 02180   goto XIT
 02190 IGNORE: continue 
 02200 BLANKS: ! fill in blanks using prace
@@ -273,5 +273,5 @@
 02340   let txt$=z$ !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-16)&','&str$(lyne-36)&')'
 02342   pr #20: 'Call Print.MyFontSize(10)'
-02350   let fnpa_newpage
+02350   fnpa_newpage
 02360   return 

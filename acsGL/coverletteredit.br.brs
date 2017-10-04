@@ -3,8 +3,8 @@
 00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fnget_atlantis
 00050   on error goto ERTN
 00070   dim cap$*128,atlantis$*256
-00090   let fntop(program$,cap$="Edit Cover Leter")
-00115   let fnget_atlantis(atlantis$)
+00090   fntop(program$,cap$="Edit Cover Leter")
+00115   fnget_atlantis(atlantis$)
 00121   execute 'SY -w '&atlantis$&' "'&os_filename$(env$('Q')&"\GLmstr\ACGLCovF.h"&env$('cno'))&'" -n'
 00130   goto XIT
 00140 ! ______________________________________________________________________

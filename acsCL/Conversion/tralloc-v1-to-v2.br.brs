@@ -6,12 +6,12 @@
 00060 ! ______________________________________________________________________
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
 00080 ! ______________________________________________________________________
-00090     let fncno(cno,cnam$)
+00090     fncno(cno,cnam$)
 00100     cap$="Checkbook update Trans from v1 to v2"
 00110 ! ______________________________________________________________________
-00120     let fnstatus("Updating Checkbook Transaction Allocation from v1 to v2")
+00120     fnstatus("Updating Checkbook Transaction Allocation from v1 to v2")
 00180 ! let fnwait(101,cap$,message$="Converting: please wait...",0)
-00190     let fnindex_it(env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno),env$('Q')&"\CLmstr\TrAlloc-Idx.H"&str$(cno),"1 11")
+00190     fnindex_it(env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno),env$('Q')&"\CLmstr\TrAlloc-Idx.H"&str$(cno),"1 11")
 00200     open #tralloc=1: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno),internal,outin,keyed 
 00210     close #tralloc: 
 00220     open #tralloc: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno),internal,outin,keyed 
@@ -31,7 +31,7 @@
 00370 ! ______________________________________________________________________
 00380 XIT: ! 
 00390     close #tralloc: 
-00400     let fnCopy(env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno),env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno),80)
-00430     let fnindex_it(env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno),env$('Q')&"\CLmstr\TrAlloc-Idx.H"&str$(cno),"1 11")
+00400     fnCopy(env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno),env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno),80)
+00430     fnindex_it(env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno),env$('Q')&"\CLmstr\TrAlloc-Idx.H"&str$(cno),"1 11")
 00440   fnend 
 00450 ! ______________________________________________________________________

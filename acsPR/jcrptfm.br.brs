@@ -10,15 +10,15 @@
 00100   dim rt$*51,ch$(2)*132,psc(100),f$(20)*50,pp(20),ppr(20),dp(20),fc(20)
 00110   dim tcj(20),tcs(20),rno$(50)*2,em$*40,wrd3$(2)*23,io3$(2)
 00120 ! ______________________________________________________________________
-00130   let fntop("S:\acsPR\JCRptFM",cap$="User Designed Reports")
-00140   let fncno(cno)
-00145   let fnconsole(1)
+00130   fntop("S:\acsPR\JCRptFM",cap$="User Designed Reports")
+00140   fncno(cno)
+00145   fnconsole(1)
 00150   let pg=3
 00160 ! ______________________________________________________________________
 00170   open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx,Shr",internal,outin,keyed 
 00180 ! ______________________________________________________________________
 00190 MENU1: pr newpage
-00200   let fnopenwin(win=101,09,20,15,59,cap$)
+00200   fnopenwin(win=101,09,20,15,59,cap$)
 00210   let scm$(1)="1. Add or Edit" !:
         let scm$(2)="2. pr Proof List" !:
         let scm$(3)="3. Search"
@@ -32,7 +32,7 @@
 00280 ! ______________________________________________________________________
 00290 L290: pr newpage
 00300   let win=102
-00310   let fnopenwin(win,10,20,14,59,cap$)
+00310   fnopenwin(win,10,20,14,59,cap$)
 00320   pr #win,fields "4,02,C 23,N": "Job Cost Report Number:"
 00330   pr fields "15,35,C 09,B,5": "Done (F5)"
 00340 L340: input #win,fields "4,26,Nz 2,UT,N": rptn conv L340
@@ -47,7 +47,7 @@
 00430 ! ______________________________________________________________________
 00440 L440: let msgline$(1)="Report Number "&ltrm$(rptn$)&" was not found."
 00450   let msgline$(2)="Do you wish to add it now? (Y/N)"
-00460   let fnoldmsgbox(mat response$,cap$,mat msgline$,2)
+00460   fnoldmsgbox(mat response$,cap$,mat msgline$,2)
 00470   if response$(1)="Y" then goto L500
 00480   if response$(1)="N" then goto L290
 00490 ! ______________________________________________________________________
@@ -60,7 +60,7 @@
 00540   let tempch$(3)=ch$(2)(1:66)
 00550   let tempch$(4)=ch$(2)(67:132)
 00560 L560: pr newpage
-00570   let fnopenwin(win=103,2,6,22,73,cap$)
+00570   fnopenwin(win=103,2,6,22,73,cap$)
 00580   pr #win: newpage
 00590   pr #win,fields "02,02,Cr 14,N": "Report Number:"
 00600   pr #win,fields "03,02,Cr 14,N": "Report Title:"
@@ -89,7 +89,7 @@
         let fkey$(4)="Delete" !:
         let fkey$(5)="Done" !:
         let em$="" !:
-        let fnfkey(23,mat fkey$,mat disfk,em$,0)
+        fnfkey(23,mat fkey$,mat disfk,em$,0)
 00820   if sd=1 then let sd$="Y" else let sd$="N"
 00830   if cp=1 then cp$="Y" else cp$="N"
 00840 L840: rinput #win,fields mat io1$: rn,rt$,mat tempch$,ips,sd$,cp$,sc conv CONV1
@@ -169,7 +169,7 @@
 01570 L1570: for j=1 to 20
 01580 L1580: pr newpage
 01590     let win=105
-01600     let fnopenwin(win,07,04,19,77,cap$)
+01600     fnopenwin(win,07,04,19,77,cap$)
 01610     pr #win,fields "4,2,Cr 21,N": "Report Number:" !:
           pr #win,fields "4,24,C 2,N": str$(rptn)
 01620     pr #win,fields "5,2,Cr 21,N": "Column Number:" !:
@@ -187,7 +187,7 @@
           let fkey$(3)="Screen 1" !:
           let fkey$(4)="Completed" !:
           let em$="" !:
-          let fnfkey(20,mat fkey$,mat disfk,em$,0)
+          fnfkey(20,mat fkey$,mat disfk,em$,0)
 01710     let io2$(1)="06,24,C 50,UT,N"
 01720     let io2$(2)="07,24,Nz 3,UT,N"
 01730     let io2$(3)="08,24,Nz 3,UT,N"
@@ -233,13 +233,13 @@
 02110   goto L2130
 02120 L2120: rewrite #1,using L410,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
 02130 L2130: close #1: 
-02140   let fnrx(rn)
+02140   fnrx(rn)
 02150   execute "INDEX S:\acsPR\JCREPORT.MST,S:\acsPR\JCREPORT.idx,1,2,Replace,DupKeys -n"
-02160   let fnchain('S:\acsPR\jcRptS1')
+02160   fnchain('S:\acsPR\jcRptS1')
 02170 ! ______________________________________________________________________
 02180 L2180: pr newpage
 02190   restore #1,key>="  ": nokey L2850
-02200   let fnopenwin(win=102,10,28,15,52,cap$)
+02200   fnopenwin(win=102,10,28,15,52,cap$)
 02210   let wrd3$(1)="Print All Report Files"
 02220   let wrd3$(2)="Select Reports to Print"
 02230   let io3$(1)="4,2,C 23,N"
@@ -251,7 +251,7 @@
 02290 L2290: if cmdkey=5 then goto MENU1
 02300   if prtall=0 then goto L2400
 02310   for j=1 to 20
-02320     let fnopenwin(win=103,10,20,15,59,cap$)
+02320     fnopenwin(win=103,10,20,15,59,cap$)
 02330     if j>1 then pr #win,fields "6,1,Cc 40,R,N": "Last Report Number Entered was "&rno$(j-1)
 02340     pr #win,fields "4,2,C 23,N": "Report Number to Print:"
 02350     pr fields "16,35,C 09,B,5": "Done (F5)"
@@ -260,9 +260,9 @@
 02380     if cmdkey=5 or rno(j)=0 then goto L2400
 02390   next j
 02400 L2400: pr newpage
-02410   let fnwait(104,cap$,message$="Printing Proof List...",1)
+02410   fnwait(104,cap$,message$="Printing Proof List...",1)
 02420   on fkey 5 goto L2850
-02430   let fnopenprn(cp,58,220,process)
+02430   fnopenprn(cp,58,220,process)
 02440   let k=0
 02450 L2450: if prtall=0 then goto L2500
 02460 L2460: let k=k+1
@@ -329,7 +329,7 @@
 03070 SRCH: ! 
 03080   bk=0
 03090 L3090: pr newpage
-03100   let fnopenwin(win=102,10,15,14,65,cap$)
+03100   fnopenwin(win=102,10,15,14,65,cap$)
 03110   let prtall=0
 03120   pr #win,fields "4,2,C 39,N": "Starting Report Number (blank for all):"
 03130   pr fields "15,34,C 11,B,5": "Cancel (F5)"
@@ -360,7 +360,7 @@
         let fkey$(5)="Stop" !:
         let em$="or Select Report Number:" !:
         let es=2 !:
-        let fnfkey(24,mat fkey$,mat disfk,em$,es)
+        fnfkey(24,mat fkey$,mat disfk,em$,es)
 03360 L3360: input fields "24,67,C 2,UT,N": k$
 03370   if cmdkey=5 then goto SRCHEND
 03380   if rtrm$(k$)><"" then bl$=k$ : goto SRCHEND

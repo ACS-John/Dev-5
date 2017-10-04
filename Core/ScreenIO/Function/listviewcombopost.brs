@@ -13,5 +13,5 @@
     else
        read #DataFile, using form$(DataFile), first : mat F$, mat F
     end if
-    let fnListviewComboRead
+    fnListviewComboRead
  fnend

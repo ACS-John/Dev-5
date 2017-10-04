@@ -8,12 +8,12 @@
 00080     dim df$*256,if$*256
 00090 ! ______________________________________________________________________
 00100     if addall<>1 then addall=0
-00110     let fncno(cno)
+00110     fncno(cno)
 00120     if addall=0 then let fen$="CRte" else !:
             let fen$="CRteALL"
 00130     if indexfile$="" then let if$=env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno) else !:
             let if$=indexfile$
-00140     let fncombof(fen$,myline,mypos,43,env$('Q')&"\UBmstr\Customer.h"&str$(cno),1,10,41,30,if$,1+addall,1,"Select from the list of accounts, to add an account go to the Customer File.",container)
+00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\UBmstr\Customer.h"&str$(cno),1,10,41,30,if$,1+addall,1,"Select from the list of accounts, to add an account go to the Customer File.",container)
 00150     let indexfile$=""
 00160     goto XIT
 00170 ! ______________________________________________________________________

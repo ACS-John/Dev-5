@@ -126,8 +126,8 @@
 01150     return 
 01160 ! /r
 01170 MENU1: ! r:
-01180     let fntos(sn$=uw$&"1b")
-01190     let fnflexinit1(uw$&"2b",1,1,20,108,mat flxhdr$,mat cmask$,row_select)
+01180     fntos(sn$=uw$&"1b")
+01190     fnflexinit1(uw$&"2b",1,1,20,108,mat flxhdr$,mat cmask$,row_select)
 01200     for j1=1 to lrec(fin)
 01210       let prec=j1
 01212       gosub READ_P ! Read #FIN,Using FRM$,Rec=J1: MAT P$ Norec (just past fnflexadd1)
@@ -147,7 +147,7 @@
 01256 !           if hcfDesc$<>'' then pr 'flxitm$('&str$(fic)&')="'&flxitm$(fic)&'" hcfDesc$="'&hcfDesc$&'"' : pause
 01258           end if 
 01260         next j2
-01270         let fnflexadd1(mat flxitm$)
+01270         fnflexadd1(mat flxitm$)
 01272       end if 
 01273     next j1
 01274     for hcombofitem=1 to hcombofcount
@@ -156,12 +156,12 @@
 01277         let hcombof(hcombofitem)=0
 01278       end if 
 01279     next hcombofitem
-01280     let fnlbl(21,20," ") ! move command buttons down one line so search box ok
-01285     let fncmdkey("Edi&t",opt_edit,1)
-01290     let fncmdkey("&Add",opt_add)
-01295     let fncmdkey("&Delete",opt_delete)
-01300     let fncmdkey("E&xit",opt_cancel,0,1)
-01305     let fnacs(sn$,0,mat resp$,menu1_opt)
+01280     fnlbl(21,20," ") ! move command buttons down one line so search box ok
+01285     fncmdkey("Edi&t",opt_edit,1)
+01290     fncmdkey("&Add",opt_add)
+01295     fncmdkey("&Delete",opt_delete)
+01300     fncmdkey("E&xit",opt_cancel,0,1)
+01305     fnacs(sn$,0,mat resp$,menu1_opt)
 01310     let prec=val(resp$(1)) conv MENU1
 01315     if prec=0 and menu1_opt=opt_edit then let menu1_opt=opt_add
 01320     if menu1_opt=opt_cancel then 
@@ -196,7 +196,7 @@
 01465       let mylen=max(mylen,len(lbl$(j)))
 01470     next j
 01475     mat p2$(alana=udim(p$)+1) : mat p2$(1:udim(p$))=p$(1:udim(p$))
-01480     let fntos(sn$=uw$&"3")
+01480     fntos(sn$=uw$&"3")
 01485     let mypos=mylen+3 : let lc=ic=0 : col=1 : colpos=1
 01490     for j=1 to itemcount
 01495       if itemcount>30 and j>(itemcount/2) and col=1 then 
@@ -204,7 +204,7 @@
 01505         let mypos=colpos+mylen+2
 01510       end if 
 01515       if mask2(ic+1)=>20000 then let ic+=1 : goto SKIP_LABEL_AND_CONTROL
-01520       let fnlbl(lc+=1,colpos,lbl$(ic+=1)&":",mylen,right)
+01520       fnlbl(lc+=1,colpos,lbl$(ic+=1)&":",mylen,right)
 01525       if mask2(ic)>10000 then 
 01530         let disable=1
 01535         let mask2(ic)-=10000
@@ -213,7 +213,7 @@
 01550       end if 
 01555       if j<udim(mxl) then let maxlen=mxl(j) else let maxlen=0
 01560       if j>udim(control$,1) or trim$(control$(j,1))="" or lwrc$(control$(j,1))="txt" then 
-01565         let fntxt(lc,mypos,fln(j),maxlen,0,str$(mask2(ic)),disable) ! p$(j)
+01565         fntxt(lc,mypos,fln(j),maxlen,0,str$(mask2(ic)),disable) ! p$(j)
 01570         goto BROWN
 01575       end if 
 01580       if lwrc$(control$(j,1))<>"comboa" then goto NOT_A_COMBOA
@@ -226,25 +226,25 @@
 01597       else 
 01599         mat option$(cj-1)
 01601       end if 
-01603       let fncomboa(uw$&"A"&str$(j),lc,mypos,mat option$) ! p$(j)
+01603       fncomboa(uw$&"A"&str$(j),lc,mypos,mat option$) ! p$(j)
 01605 NOT_A_COMBOA: ! 
 01607       if lwrc$(control$(j,1))="combof" then 
-01609         let fncombof(uw$&"F"&str$(j),lc,mypos,val(control$(j,4))+val(control$(j,6))+3,control$(j,2),val(control$(j,3)),val(control$(j,4)),val(control$(j,5)),val(control$(j,6)),control$(j,7),val(control$(j,8)))
+01609         fncombof(uw$&"F"&str$(j),lc,mypos,val(control$(j,4))+val(control$(j,6))+3,control$(j,2),val(control$(j,3)),val(control$(j,4)),val(control$(j,5)),val(control$(j,6)),control$(j,7),val(control$(j,8)))
 01611       end if 
 01613 BROWN: ! done adding control and label
 01615       if disable=1 then let mask2(ic)+=10000
 01617 SKIP_LABEL_AND_CONTROL: ! 
 01619     next j
-01621     let fnlbl(lc+1,20," ") ! move command buttons down one line so search box ok
+01621     fnlbl(lc+1,20," ") ! move command buttons down one line so search box ok
 01623     if menu1_opt=opt_add then 
-01625       let fnchk(lc+=1,mypos,'Add Loop',right)
+01625       fnchk(lc+=1,mypos,'Add Loop',right)
 01627       let p2$(alana)='False'
 01629     end if 
 01631     if addloop$='' then let p2$(alana)='False' else let p2$(alana)=addloop$
-01633     let fncmdkey("&Save",1,1)
-01635     let fncmdkey("&Cancel",opt_cancel,0,1)
+01633     fncmdkey("&Save",1,1)
+01635     fncmdkey("&Cancel",opt_cancel,0,1)
 01637 ! 
-01639     let fnacs(sn$,0,mat p2$,ck)
+01639     fnacs(sn$,0,mat p2$,ck)
 01641     mat p$(1:udim(p$))=p2$(1:udim(p$))
 01643     if ck<>opt_cancel then gosub REWR_P
 01645     addloop$=p2$(alana)

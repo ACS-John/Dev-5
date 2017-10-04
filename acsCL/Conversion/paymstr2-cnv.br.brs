@@ -7,7 +7,7 @@
 00070   dim gl(3),ta(2)
 00080 ! ________________________
 00090 ! fntop
-00100   let fncno(cno)
+00100   fncno(cno)
 00110 L110: pr newpage
 00120   close #101: ioerr L130
 00130 L130: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=CONVERT PAYEE MASTER FILE",display,outin 

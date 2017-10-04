@@ -6,46 +6,46 @@
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,cap$*128,resp$(3)*20,pe2$*30,e2$*30,cnam$*40,text$*80
 00080 ! ______________________________________________________________________
-00090   let fncno(cno,cnam$) !:
+00090   fncno(cno,cnam$) !:
         ! 
-00100   let fndat(dat$)
-00110   let fntop("S:\acsUB\ubAccTr",cap$="Accumulated Transaction List")
+00100   fndat(dat$)
+00110   fntop("S:\acsUB\ubAccTr",cap$="Accumulated Transaction List")
 00120   code$(1)="Charge" : code$(2)="Penalty" !:
         code$(3)="Collection" : code$(4)="Credit Memo" !:
         code$(5)="Debit Memo" : code$(6)="INVALID !?!"
 00130 ! ______________________________________________________________________
 00140 SCREEN1: ! 
 00150   let sn$ = "ubAccTr" !:
-        let fntos(sn$) !:
+        fntos(sn$) !:
         let mylen=26 !:
         let mypos=mylen+2
 00160   let text$="Report Heading Date:" !:
-        let fnlbl(1,1,text$,mylen,1)
-00170   let fntxt(1,mypos,20) !:
+        fnlbl(1,1,text$,mylen,1)
+00170   fntxt(1,mypos,20) !:
         let resp$(1)=dat$
 00180   let text$="Starting Date (mmddyy):" !:
-        let fnlbl(2,1,text$,mylen,1)
-00190   let fntxt(2,mypos,8,0,0,"1") !:
+        fnlbl(2,1,text$,mylen,1)
+00190   fntxt(2,mypos,8,0,0,"1") !:
         let resp$(2)=""
 00200   let text$="Ending Date (mmddyy):" !:
-        let fnlbl(3,1,text$,mylen,1)
-00210   let fntxt(3,mypos,8,0,0,"1") !:
+        fnlbl(3,1,text$,mylen,1)
+00210   fntxt(3,mypos,8,0,0,"1") !:
         let resp$(3)=""
 00220   let text$="You may leave Starting Date and/or Ending Date blank to indicate all." !:
-        let fnlbl(5,1,text$,75)
-00230   let fncmdset(3)
-00240   let fnacs(sn$,0,mat resp$,ck)
+        fnlbl(5,1,text$,75)
+00230   fncmdset(3)
+00240   fnacs(sn$,0,mat resp$,ck)
 00250   if ck=5 then goto XIT
 00260   let dat$=resp$(1) !:
         let d(1)=val(resp$(2)) !:
         let d(2)=val(resp$(3))
 00270   if d(1)<>0 then let d(1)=fndate_mmddyy_to_ccyymmdd(d(1))
 00280   if d(2)<>0 then let d(2)=fndate_mmddyy_to_ccyymmdd(d(2))
-00290   let fndat(d$(1),2)
+00290   fndat(d$(1),2)
 00300   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00310   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00320   on fkey 5 goto DONE
-00330   let fnopenprn
+00330   fnopenprn
 00340   gosub HDR
 00350 READ_CUSTOMER: ! 
 00360   read #1,using L370: z$,e2$,bal eof DONE

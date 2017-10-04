@@ -7,8 +7,8 @@
 00070   dim k$(3)*25,ss$*11,d(22),m(36),adr(2),n(2),fb$(4),en$*4,cap$*128,tr(7)
 00080 L80: dim tr$*12,td$*30,jv$(3)*6,resp$(10)*80
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$="Post Payroll Checks")
-00110   let fncno(cno)
+00100   fntop(program$,cap$="Post Payroll Checks")
+00110   fncno(cno)
 00120   if exists(env$('Q')&"\glmstr\PRmstr.h"&str$(cno))=0 then goto XIT
 00130   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00140   open #2: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(cno)&",NoShr",internal,outin,relative 
@@ -98,38 +98,38 @@
 00860   goto L730
 00870 L870: let fntos(sn$="prmerge") !:
         let mylen=40: let mypos=mylen+3 : let right=1
-00880   let fnlbl(1,10,"  Employee Number: "&ven$,mylen,left)
-00890   let fnlbl(2,10,"   Check Number: "&tr$,mylen,left)
-00900   let fnlbl(3,10, "           Date: "&cnvrt$("pic(zz/zz/zz)",tr(4)),mylen,left)
-00910   let fnlbl(4,10, "  Gross Pay: "&cnvrt$("pic(-------.zz)",tr(5)) ,mylen,left)
-00920   let fnlbl(7,5, "This employee number does not exist!" ,60,0)
-00930   let fnopt(8,10,"Add this Employee",0,0) !:
+00880   fnlbl(1,10,"  Employee Number: "&ven$,mylen,left)
+00890   fnlbl(2,10,"   Check Number: "&tr$,mylen,left)
+00900   fnlbl(3,10, "           Date: "&cnvrt$("pic(zz/zz/zz)",tr(4)),mylen,left)
+00910   fnlbl(4,10, "  Gross Pay: "&cnvrt$("pic(-------.zz)",tr(5)) ,mylen,left)
+00920   fnlbl(7,5, "This employee number does not exist!" ,60,0)
+00930   fnopt(8,10,"Add this Employee",0,0) !:
         let resp$(1)="True"
-00940   let fnopt(9,10,"Change Employee Number",0,0) !:
+00940   fnopt(9,10,"Change Employee Number",0,0) !:
         let resp$(2)="False"
-00950   let fncmdkey("&Next",1,1,0,"Allows you to either add the employee or change the employee #.")
-00960   let fnacs(sn$,0,mat resp$,ckey)
+00950   fncmdkey("&Next",1,1,0,"Allows you to either add the employee or change the employee #.")
+00960   fnacs(sn$,0,mat resp$,ckey)
 00970   if resp$(1)="True" then gosub ADD : goto L220
 00980   if resp$(2)="True" then gosub CHANGE_EMPLOYEE_NUMBER : goto L220
 00990   goto L80
 01000 ! ______________________________________________________________________
 01010 ADD: ! 
-01020   let fntos(sn$="prmerge3") !:
+01020   fntos(sn$="prmerge3") !:
         let mylen=15: let mypos=mylen+3 : let right=1: let rc=0
-01030   let fnlbl(1,1,"Name:",mylen,right)
-01040   let fntxt(1,mypos,30,0,left,"",0,"Enter the employee information.",0 ) !:
+01030   fnlbl(1,1,"Name:",mylen,right)
+01040   fntxt(1,mypos,30,0,left,"",0,"Enter the employee information.",0 ) !:
         let resp$(rc+=1)=k$(1)
-01050   let fnlbl(2,1,"Address:",mylen,right)
-01060   let fntxt(2,mypos,30,0,left,"",0,"Enter the employee information.",0 ) !:
+01050   fnlbl(2,1,"Address:",mylen,right)
+01060   fntxt(2,mypos,30,0,left,"",0,"Enter the employee information.",0 ) !:
         let resp$(rc+=1)=k$(2)
-01070   let fnlbl(3,1,"City, St Zip:",mylen,right)
-01080   let fntxt(3,mypos,30,0,left,"",0,"",0 ) !:
+01070   fnlbl(3,1,"City, St Zip:",mylen,right)
+01080   fntxt(3,mypos,30,0,left,"",0,"",0 ) !:
         let resp$(rc+=1)=k$(3)
-01090   let fnlbl(4,1,"SS Number:",mylen,right)
-01100   let fntxt(4,mypos,11,0,left,"",0,"Enter the employee social security number.",0 ) !:
+01090   fnlbl(4,1,"SS Number:",mylen,right)
+01100   fntxt(4,mypos,11,0,left,"",0,"Enter the employee social security number.",0 ) !:
         let resp$(rc+=1)=ss$
-01110   let fncmdset(2)
-01120   let fnacs(sn$,0,mat resp$,ckey)
+01110   fncmdset(2)
+01120   fnacs(sn$,0,mat resp$,ckey)
 01130   if ckey=5 then goto L220
 01140   let k$(1)=resp$(1) !:
         let k$(2)=resp$(2) !:
@@ -142,13 +142,13 @@
 01190   return 
 01200 ! 
 01210 CHANGE_EMPLOYEE_NUMBER: ! 
-01220   let fntos(sn$="Prmerge4") !:
+01220   fntos(sn$="Prmerge4") !:
         let mylen=18: let mypos=mylen+3 : let right=1: let rc=0
-01230   let fnlbl(1,1,"Employee Number:",mylen,right)
-01240   let fncombof("PRmstr",1,mypos,27,env$('Q')&"\GLmstr\PRmstr.h"&str$(cno),1,4,5,30,'',0,pas, "Choose from the list of employees.",0) !:
+01230   fnlbl(1,1,"Employee Number:",mylen,right)
+01240   fncombof("PRmstr",1,mypos,27,env$('Q')&"\GLmstr\PRmstr.h"&str$(cno),1,4,5,30,'',0,pas, "Choose from the list of employees.",0) !:
         let resp$(1)=""
-01250   let fncmdset(2)
-01260   let fnacs(sn$,0,mat resp$,ckey)
+01250   fncmdset(2)
+01260   fnacs(sn$,0,mat resp$,ckey)
 01270   if ckey=5 then goto L220
 01280   let en$=lpad$(rtrm$(resp$(1)(1:4)),4)
 01290   goto L220

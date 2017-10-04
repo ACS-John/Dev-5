@@ -6,10 +6,10 @@
 00060 ! ______________________________________________________________________
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
 00080 ! ______________________________________________________________________
-00090     let fncno(cno,cnam$)
+00090     fncno(cno,cnam$)
 00100     cap$="Checkbook update Trans from v1 to v2"
 00110 ! ______________________________________________________________________
-00120     let fnstatus(cap$)
+00120     fnstatus(cap$)
 00180 ! 
 00190     open #trmstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\TRmstr.h"&str$(cno),internal,outin,relative 
 00200     if version(trmstr)<>1 and version(trmstr)<>2 then let fnstatus("TRmstr is not version 1.  You must update it to version 1 before running this conversion program") : goto XIT
@@ -27,8 +27,8 @@
 00320 ! ______________________________________________________________________
 00330 XIT: ! 
 00340     if file$(trmstr)>'' then close #trmstr: 
-00350     let fnCopy(env$('Q')&"\CLmstr\TRmstr.h"&str$(cno),env$('Q')&"\CLmstr\TRmstr.h"&str$(cno),78)
-00380     let fnindex_it(env$('Q')&"\CLmstr\TrMstr.H"&str$(cno),env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno),"1 11")
-00382     let fnindex_it(env$('Q')&"\CLmstr\TrMstr.H"&str$(cno),env$('Q')&"\CLmstr\TrIdx2.H"&str$(cno),"28/1 8/11")
+00350     fnCopy(env$('Q')&"\CLmstr\TRmstr.h"&str$(cno),env$('Q')&"\CLmstr\TRmstr.h"&str$(cno),78)
+00380     fnindex_it(env$('Q')&"\CLmstr\TrMstr.H"&str$(cno),env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno),"1 11")
+00382     fnindex_it(env$('Q')&"\CLmstr\TrMstr.H"&str$(cno),env$('Q')&"\CLmstr\TrIdx2.H"&str$(cno),"28/1 8/11")
 00390   fnend 
 00400 ! ______________________________________________________________________

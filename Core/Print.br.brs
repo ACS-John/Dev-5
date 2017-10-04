@@ -10,15 +10,15 @@
 12110     library 'S:\Core\Library': fnmakesurepathexists
 12112     ! library 'S:\Core\Library': fntos,fnlbl,fntxt,fnacs,fnopt,fncmdset
 12120     ! 
-12140     let fnreg_read('Report_Cache',report_cache$,'True')
+12140     fnreg_read('Report_Cache',report_cache$,'True')
 12160     if report_cache$='True' then let print_report_caching=1 else let print_report_caching=0
-12180     let fnureg_read('wait_wp_close',wait_wp_close$,'True')
+12180     fnureg_read('wait_wp_close',wait_wp_close$,'True')
 12200     if wait_wp_close$='False' then let print_report_nowait=1 else let print_report_nowait=0
 12260   end if 
 12340 fnend 
 22000 def library fnprint_file_name$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$,programCaptionOverride$*256)
-22020   let fn_setup
-22040   let fnprint_file_name$=fn_print_file_name$( pfn_sendto_base_name_addition$,pfn_extension$,programCaptionOverride$)
+22020   fn_setup
+22040   fnprint_file_name$=fn_print_file_name$( pfn_sendto_base_name_addition$,pfn_extension$,programCaptionOverride$)
 22060 fnend 
 24000 def fn_print_file_name$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$,programCaptionOverride$*256)
 24010   dim pfnReturn$*1024
@@ -36,10 +36,10 @@
 24320   else 
 24340     let pfnReturn$=env$('temp')&'\ACS-'&session$&'.'&pfn_extension$
 24360   end if 
-24380   let fn_print_file_name$=pfnReturn$
+24380   fn_print_file_name$=pfnReturn$
 24400 fnend 
 25000 def library fnreport_cache_folder_current$*512
-25020   let fn_setup
+25020   fn_setup
 25040   fnreport_cache_folder_current$=fn_report_cache_folder_current$
 25060 fnend
 25080 def fn_report_cache_folder_current$*512
@@ -67,16 +67,16 @@
 25520   fn_report_cache_folder_current$=tmp_dir$
 25540 fnend
 26000 def library fnopen_receipt_printer(; orp_only_if_it_is_assigned)
-26020   let fn_setup
+26020   fn_setup
 26040   fnopen_receipt_printer=fn_open_receipt_printer( orp_only_if_it_is_assigned)
 26060 fnend 
 26080 def fn_open_receipt_printer(; orp_only_if_it_is_assigned)
 26100   dim orp_receipt_printer$*256
-26120   let fnureg_read('Printer.Receipt',orp_receipt_printer$)
+26120   fnureg_read('Printer.Receipt',orp_receipt_printer$)
 26140   orp_did_open=0
 26160   if orp_receipt_printer$='' then 
 26180     if ~orp_only_if_it_is_assigned then 
-26200       let fn_openprn
+26200       fn_openprn
 26220       orp_did_open=1
 26240     end if
 26260   else 
@@ -87,23 +87,23 @@
 26340   fn_open_receipt_printer=orp_did_open
 26360 fnend 
 27000 def library fnclose_receipt_printer
-27020   let fn_setup
+27020   fn_setup
 27040   fnclose_receipt_printer=fn_close_receipt_printer
 27060 fnend 
 27080 def fn_close_receipt_printer
 27100   close #255: ioerr ignore
 27120 fnend 
 28000 def library fnopen_cash_drawer
-28020   let fn_setup
+28020   fn_setup
 28040   if fn_open_receipt_printer(1) then
 28060     pr #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore
-28080     let fn_close_receipt_printer
+28080     fn_close_receipt_printer
 28100   end if
 28120 fnend 
 
 29000 def library fnopenprn(;xx,xxxxx,xxxxxxx,process,sendto_base_name_addition$*128,prgCapForSettingsOverride$*256,programCaptionOverride$*256)
-29020   let fn_setup
-29040   let fnopenprn=fn_openprn( process,sendto_base_name_addition$,prgCapForSettingsOverride$,programCaptionOverride$)
+29020   fn_setup
+29040   fnopenprn=fn_openprn( process,sendto_base_name_addition$,prgCapForSettingsOverride$,programCaptionOverride$)
 29060 fnend 
 30000 def fn_openprn(;process, sendto_base_name_addition$*128,prgCapForSettingsOverride$*256,programCaptionOverride$*256)
 30020   if file(255)<>-1 then goto XIT
@@ -112,7 +112,7 @@
 30080   dim op_printFileName$*1024
 30090   let op_printFileName$=fn_print_file_name$( sendto_base_name_addition$,'',programCaptionOverride$) ! ,pfn_extension$)
 30100   ! 
-30120   let fnread_program_print_property("Lines",lpp$, g_prgCapForSettingsOverride$) ! let lpp=val(lpp$)
+30120   fnread_program_print_property("Lines",lpp$, g_prgCapForSettingsOverride$) ! let lpp=val(lpp$)
 30140   if lpp$='' then gosub SET_DEFAULTS
 30180   dim g_prn_destination_name$*1024
 30200   let g_prn_destination_name$=op_printFileName$
@@ -126,7 +126,7 @@
 30360   return  ! /r
 30400 XIT: fnend 
 38000   def library fncloseprn(;forceWordProcessor$)
-38020     let fn_setup
+38020     fn_setup
 38030     dim cp_destinationFileName$*1024
 38040     if file(255)<>-1 then ! if the printer file is open.
 38060       cp_destinationFileName$=g_prn_destination_name$ ! trim$(file$(255)(1:1024))
@@ -137,8 +137,8 @@
 38130         pr 'copy failed.'
 38140         pause 
 38160       end if 
-38180       let fnstatus_close
-38200       let fn_start(cp_destinationFileName$, 0,forceWordProcessor$)
+38180       fnstatus_close
+38200       fn_start(cp_destinationFileName$, 0,forceWordProcessor$)
 38220     end if 
 38400     g_prgCapForSettingsOverride$=''
 38420   fnend 
@@ -156,12 +156,12 @@
 42280     let winxp$="Microsoft Windows XP"
 42300     let win2k$="Microsoft Windows 2000"
 42320     let winnt2kxp$="Microsoft Windows NT/2000/XP"
-42340     let fnosver(osver$,1)
+42340     fnosver(osver$,1)
 42360 ! if  start_destinationFilename$='CANCELED' then goto START_XIT
 42380     if lwrc$(start_destinationFilename$(len(start_destinationFilename$)-3:len(start_destinationFilename$)))=".rtf" then 
-42400       let fn_start_rtf(start_destinationFilename$, forceWordProcessor$)
+42400       fn_start_rtf(start_destinationFilename$, forceWordProcessor$)
 42420     else if osver$=winxp$ or osver$=win2k$ or osver$=winnt2kxp$ then 
-42440       let fn_start_winxp
+42440       fn_start_winxp
 42460     else 
 42480       pr 'win 98 no longer supported.' : pause ! let fn_start_win9x
 42500     end if 
@@ -173,7 +173,7 @@
 42620 ! ______________________________________________________________________
 42640 START_ERTN: ! 
 42660     if err=4591 then let fn_start_workaround_4591 : continue  ! line added for time-outs
-42680     let fnerror(program$,err,line,act$,"start_xit")
+42680     fnerror(program$,err,line,act$,"start_xit")
 42700     if lwrc$(act$)<>"pause" then goto START_ERTN_EXEC_ACT
 42720     execute "List -"&str$(line) : pause : goto START_ERTN_EXEC_ACT
 42740     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto START_ERTN_EXEC_ACT
@@ -184,7 +184,7 @@
 42820   fnend 
 46000   def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$)
 46020     dim line$*32000
-46040     let fn_start_read_properties
+46040     fn_start_read_properties
 46060     ! r:  make the temp rtf file
 46070     dim clientSendto$*1024
 46072     dim serverSendto$*1024
@@ -283,9 +283,9 @@
 49060     close #20: 
 49080     ! /r
 49100     if env$('enableReportCacheOnClient')='Yes' then
-49120       let fnCopy(env$('temp')&"\acs_print_tmp"&session$&".rtf",clientSendto$)
+49120       fnCopy(env$('temp')&"\acs_print_tmp"&session$&".rtf",clientSendto$)
 49130     end if
-49140     let fnCopy(env$('temp')&"\acs_print_tmp"&session$&".rtf",serverSendto$)
+49140     fnCopy(env$('temp')&"\acs_print_tmp"&session$&".rtf",serverSendto$)
 49200     ! pr 'BR copied to: '&clientSendto$ ! 
 49220     if env$('BR_MODEL')='CLIENT/SERVER' then
 49240       if ~setup_cs then
@@ -316,23 +316,23 @@
 50260 ! pause
 50280   fnend 
 52000   def fn_start_read_properties
-52020     let fnread_program_print_property('Orientation',orientation$, g_prgCapForSettingsOverride$)
+52020     fnread_program_print_property('Orientation',orientation$, g_prgCapForSettingsOverride$)
 52040     if orientation$="Landscape" then let landscape$="Y" else let landscape$="N"
-52060     let fnread_program_print_property('Height',pgh$, g_prgCapForSettingsOverride$) : let pgh=val(pgh$)
+52060     fnread_program_print_property('Height',pgh$, g_prgCapForSettingsOverride$) : let pgh=val(pgh$)
 52080     if pgh=0 then let pgh=11
-52100     let fninch2twip(pgh)
-52120     let fnread_program_print_property('Width',pgw$, g_prgCapForSettingsOverride$) : let pgw=val(pgw$)
+52100     fninch2twip(pgh)
+52120     fnread_program_print_property('Width',pgw$, g_prgCapForSettingsOverride$) : let pgw=val(pgw$)
 52140     if pgw=0 then let pgw=8.5
-52160     let fninch2twip(pgw)
-52180     let fnread_program_print_property('TopMargin',temp$, g_prgCapForSettingsOverride$) : let marg(1)=val(temp$)
-52200     let fninch2twip(marg(1))
-52220     let fnread_program_print_property('BottomMargin',temp$, g_prgCapForSettingsOverride$) : let marg(2)=val(temp$)
-52240     let fninch2twip(marg(2))
-52260     let fnread_program_print_property('LeftMargin',temp$, g_prgCapForSettingsOverride$) : let marg(3)=val(temp$)
-52280     let fninch2twip(marg(3))
-52300     let fnread_program_print_property('RightMargin',temp$, g_prgCapForSettingsOverride$) : let marg(4)=val(temp$)
-52320     let fninch2twip(marg(4))
-52340     let fnread_program_print_property('FontSize',temp$, g_prgCapForSettingsOverride$) : let fsize=val(temp$)
+52160     fninch2twip(pgw)
+52180     fnread_program_print_property('TopMargin',temp$, g_prgCapForSettingsOverride$) : let marg(1)=val(temp$)
+52200     fninch2twip(marg(1))
+52220     fnread_program_print_property('BottomMargin',temp$, g_prgCapForSettingsOverride$) : let marg(2)=val(temp$)
+52240     fninch2twip(marg(2))
+52260     fnread_program_print_property('LeftMargin',temp$, g_prgCapForSettingsOverride$) : let marg(3)=val(temp$)
+52280     fninch2twip(marg(3))
+52300     fnread_program_print_property('RightMargin',temp$, g_prgCapForSettingsOverride$) : let marg(4)=val(temp$)
+52320     fninch2twip(marg(4))
+52340     fnread_program_print_property('FontSize',temp$, g_prgCapForSettingsOverride$) : let fsize=val(temp$)
 52360   fnend 
 54000   def fn_start_workaround_4591
 54020     pr newpage
@@ -394,5 +394,5 @@
 62720   do 
 62740     let sf_in$=srep$(sf_in$,'  ',' ')
 62760   loop until pos(sf_in$,'  ')<=0
-62780   let fn_safe_filename$=trim$(sf_in$)
+62780   fn_safe_filename$=trim$(sf_in$)
 62800 fnend 

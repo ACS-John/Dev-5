@@ -11,10 +11,10 @@
 00090   dim t$*8,desc$(2)*12,amt(2),wrd1$(5)*35,cap$*128,message$*40
 00100   dim response$(5)*1,msgline$(2)*60,dat$*20,cnam$*40,k$*8,hk$*8,fm1$*255
 00110 ! ______________________________________________________________________
-00120   let fntop("S:\acsPR\w2Box16",cap$="W-2 Supplemental Information")
-00130   let fncno(cno,cnam$) !:
-        let fndat(dat$)
-00135   let fnconsole(1)
+00120   fntop("S:\acsPR\w2Box16",cap$="W-2 Supplemental Information")
+00130   fncno(cno,cnam$) !:
+        fndat(dat$)
+00135   fnconsole(1)
 00150   let fm1$="Form  Pos 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 00160 ! 
 00170   let io1$(1)="7,20,C 12,UT,N"
@@ -120,7 +120,7 @@
 01150 L1150: if rtrm$(k$)="" or ltrm$(rtrm$(k$))="0" then goto L1160 else goto L1220
 01160 L1160: let mtype=2
 01170   let msgline$(1)="Delete this record (Y/N)"
-01180   let fnoldmsgbox(mat response$,cap$,mat msgline$,mtype)
+01180   fnoldmsgbox(mat response$,cap$,mat msgline$,mtype)
 01190   if uprc$(response$(1))="Y" then let d1=1 else let d1=0
 01200   goto L1280
 01210 ! ______________________________________________________________________
@@ -196,10 +196,10 @@
 01910   let message$=""
 01920   let win =101 ! assign window #
 01930   let stopable=1
-01940   let fnwait(win,cap$,message$,stopable)
+01940   fnwait(win,cap$,message$,stopable)
 01950   on fkey 5 goto L2180
 01960   let pg=eof4=0
-01970   let fnopenprn
+01970   fnopenprn
 01980   gosub L2280
 01990 L1990: read #1,using fm1$: t$,mat in1$ eof L2150
 02000   pr #255: 
@@ -219,7 +219,7 @@
 02140 ! ______________________________________________________________________
 02150 L2150: ! END OF PROOF LIST
 02160 ! pr #255: NEWPAGE
-02170   let fncloseprn
+02170   fncloseprn
 02180 L2180: on fkey 5 ignore 
 02190 ! Close #255:
 02200   if fnprocess=1 then goto L2210 else goto MENU1

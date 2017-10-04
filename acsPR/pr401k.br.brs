@@ -8,9 +8,9 @@
 00080   dim dedcode(10),calcode(10),dedfed(10),k$(20)*30,em$*30,cap$*128
 00090   dim dv$*1,message$*40
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Electronic 401K")
-00120   let fncno(cno)
-00150   let fnwait(101,cap$,message$='',1)
+00110   fntop(program$,cap$="Electronic 401K")
+00120   fncno(cno)
+00150   fnwait(101,cap$,message$='',1)
 00160   fncreg_read('calculation date',tmp$) : ppd=val(tmp$) 
 00162   fncreg_read('calculation date text',d$)
 00170   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
@@ -103,7 +103,7 @@
 01030   close #3: 
 01040   close #4: 
 01050 L1050: pr newpage ! COPY TO DISKETTE
-01060   let fnopenwin(win=101,7,8,11,44,cap$)
+01060   fnopenwin(win=101,7,8,11,44,cap$)
 01070   let io1$(1)="8,42,CU 1,UET,N"
 01080   if driv=1 then pr #win,fields "3,2,Cc 30,n": "Drive Not Ready!"
 01090   pr #win,fields "4,2,C 30,n": "Insert 401k Diskette in Drive:"

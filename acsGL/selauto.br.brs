@@ -12,8 +12,8 @@
 00120   dim nxtpgm$(20)*35,nxtdesc$(20)*35,ff$(3)*18,prim(20),pn(20),cp(20)
 00130   dim ln$*128,ln2$*128,item$(1)*35,resp$(60)*35,prg$(100)*40,nam$(100)*35
 00140 ! ______________________________________________________________________
-00150   let fntop(program$,cap$="Select Programs")
-00160   let fncno(cno)
+00150   fntop(program$,cap$="Select Programs")
+00160   fncno(cno)
 00170   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)&",Use,RecL=76",internal,outin,relative ioerr L190
 00180   goto L210
 00190 L190: if exists(env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)) >0 then execute "Free "&env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)
@@ -28,11 +28,11 @@
 00280 L280: let fntos(sn$="GLInput") !:
         let mylen=20: let mypos=mylen+3 : let right=1
 00290   let item=0: let resp=0
-00300   let fnlbl(1,1,"Selected Items          Primary=1 Secondary=2        Menu Options to Select From",80,0)
+00300   fnlbl(1,1,"Selected Items          Primary=1 Secondary=2        Menu Options to Select From",80,0)
 00310   for j=1 to 20
-00320     let fntxt(j+1,1,35,0,left,"",0,"Items select for automatic processing.",0 ) !:
+00320     fntxt(j+1,1,35,0,left,"",0,"Items select for automatic processing.",0 ) !:
           let resp$(resp+=1)=nxtdesc$(j)
-00330     let fntxt(j+1,39,1,0,right,"",0,"Should the primary or secondary format be used?",0 )
+00330     fntxt(j+1,39,1,0,right,"",0,"Should the primary or secondary format be used?",0 )
 00340     if prim(j)=0 then let prim(j)=1
 00350     let resp$(resp+=1)=str$(prim(j))
 00360   next j
@@ -41,7 +41,7 @@
         chdr$(2)='Menu option'
 00380   cmask$(1)='30' !:
         cmask$(2)='' !:
-        let fnflexinit1('selauto',2,50,20,35,mat chdr$,mat cmask$,1,0,frame) !:
+        fnflexinit1('selauto',2,50,20,35,mat chdr$,mat cmask$,1,0,frame) !:
         let editrec=0
 00390   close #1: ioerr ignore
 00400   open #1: "Name=gL.mnu",display,input 
@@ -58,7 +58,7 @@
 00510   let nam$(item)=ln$(1:x-1)(1:35)
 00520   let item$(1)=str$(item) !:
         let item$(2)=desc$ !:
-        let fnflexadd1(mat item$)
+        fnflexadd1(mat item$)
 00530   goto L410
 00540 L540: close #1: ioerr ignore
 00550   if fnclient_has('G2') then open #1: "Name=S:\General Ledger\Accountants\Menu.mnu",display,input else goto L700
@@ -75,14 +75,14 @@
 00660   let nam$(item)=ln$(1:x-1)(1:35)
 00670   let item$(1)=str$(item) !:
         let item$(2)=desc$ !:
-        let fnflexadd1(mat item$)
+        fnflexadd1(mat item$)
 00680   goto L560
 00690 L690: let fnlbl(22,1," ")
 00700 L700: let fncmdkey("&Next",1,1,0,"Selects the highlited option for automatic processing.")
-00710   let fncmdkey("&Save",2,0,0,"Saves the selections and returns to menu.")
-00720   let fncmdkey("&Delete All",4,0,0,"Deletes all selections.")
-00730   let fncmdkey("&Cancel",5,0,1,"Returns to main menu without saving the selections.")
-00740   let fnacs(sn$,0,mat resp$,ckey)
+00710   fncmdkey("&Save",2,0,0,"Saves the selections and returns to menu.")
+00720   fncmdkey("&Delete All",4,0,0,"Deletes all selections.")
+00730   fncmdkey("&Cancel",5,0,1,"Returns to main menu without saving the selections.")
+00740   fnacs(sn$,0,mat resp$,ckey)
 00750   if ckey=5 then goto XIT
 00760   if ckey=2 then goto L860
 00770   if ckey=4 then mat nxtdesc$=(""): !:

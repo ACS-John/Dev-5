@@ -6,24 +6,24 @@
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,dat$*20,cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$="Import GL Chart of Accounts")
+00090   fntop(program$,cap$="Import GL Chart of Accounts")
 00100   cancel=99 : let right=1 : let left=0 : center=2 : let number$='30'
-00110   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00110   fncno(cno,cnam$) !:
+        fndat(dat$)
 00120 L120: open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&str$(cno)&",Shr",internal,outin,keyed 
 00130 MENU1: ! 
-00140   let fntos(sn$="InitGLCoA") !:
+00140   fntos(sn$="InitGLCoA") !:
         let mylen=38 : let mypos=mylen+2 : let lc=0
-00150   let fnlbl(lc+=1,1,"Extract general ledger accounts from:",38,right)
+00150   fnlbl(lc+=1,1,"Extract general ledger accounts from:",38,right)
 00160   let item1$(1)="ACS G/L system" !:
         let item1$(2)="Accountant's Diskette"
-00170   let fncomboa("claims-srt",lc,mypos,mat item1$,tt$) !:
+00170   fncomboa("claims-srt",lc,mypos,mat item1$,tt$) !:
         let resp$(1)=item1$(1)
-00180   let fnlbl(lc+=1,1,"General Ledger Company Number:",mylen,right)
-00190   let fntxt(lc,mypos,5,0,left,number$) !:
+00180   fnlbl(lc+=1,1,"General Ledger Company Number:",mylen,right)
+00190   fntxt(lc,mypos,5,0,left,number$) !:
         let resp$(2)=str$(cno)
-00200   let fncmdset(2) !:
-        let fnacs(sn$,0,mat resp$,ck)
+00200   fncmdset(2) !:
+        fnacs(sn$,0,mat resp$,ck)
 00210   if ck=5 then goto XIT else !:
           if resp$(1)=item1$(1) then let pas$="BUILD" else !:
             if resp$(1)=item1$(2) then let pas$="COPY"
@@ -74,10 +74,10 @@
 00650   mat ml$(2) !:
         let ml$(1)="A general ledger chart of accounts has not been set up" !:
         let ml$(2)="for this company.  You must choose a different option" !:
-        let fnmsgbox(mat ml$,resp$,cap$,16) !:
+        fnmsgbox(mat ml$,resp$,cap$,16) !:
         goto MENU1
 00660 MSGBOX2: ! 
 00670   mat ml$(1) !:
         let ml$(1)="Be sure the diskette is properly inserted and try again" !:
-        let fnmsgbox(mat ml$,resp$,cap$,16) !:
+        fnmsgbox(mat ml$,resp$,cap$,16) !:
         goto MENU1

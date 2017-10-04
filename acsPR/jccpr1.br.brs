@@ -7,17 +7,17 @@
 00070   dim jn$*6,cn$*11,ta(2),tr(9),io1$(2),n$*40,tn$*6,dr(7),en$*12
 00080   dim cap$*128,message$*40,msgline$(2)*60,response$(5)*1
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\acsPR\jcCPR1",cap$="Certified Payroll Register")
-00110   let fncno(cno)
+00100   fntop("S:\acsPR\jcCPR1",cap$="Certified Payroll Register")
+00110   fncno(cno)
 00120 ! 
-00125   let fnconsole(1)
+00125   fnconsole(1)
 00130   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00150   open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",Shr",internal,input,relative 
 00160   open #4: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=55,Replace",internal,output 
 00170 ! ______________________________________________________________________
 00180   pr newpage
-00190   let fnopenwin(win=101,08,20,13,59,cap$)
+00190   fnopenwin(win=101,08,20,13,59,cap$)
 00200   pr #win,fields "4,2,Cr 23,N": "Starting Date (mmddyy):"
 00210   pr #win,fields "5,2,Cr 23,N": "Ending Date (mmddyy):"
 00220   let io1$(1)="4,26,Nz 6,UT,N"
@@ -58,7 +58,7 @@
 00560 L560: write #4,using L570: df1,dt1,mat dr
 00570 L570: form pos 1,2*n 6,7*pd 3
 00580 L580: pr newpage
-00590   let fnopenwin(win=102,08,20,13,59,cap$)
+00590   fnopenwin(win=102,08,20,13,59,cap$)
 00600   if rw>0 then !:
           pr #win,fields "6,1,Cc 40,R,N": "Last Job Number entered was "&ltrm$(jn$)
 00610   pr #win,fields "4,2,C 20,N": "Job Number to Print:"
@@ -77,7 +77,7 @@
 00740 L740: if rw>0 then goto L580
 00750   let msgline$(1)="No Transactions exist for Job Number "&ltrm$(jn$)
 00760   let msgline$(2)="within the specified date range."
-00770   let fnoldmsgbox(mat response$,cap$,mat msgline$,1)
+00770   fnoldmsgbox(mat response$,cap$,mat msgline$,1)
 00780   goto L580
 00790 L790: read #2,using L720: cn$,mat ta eof L740
 00800 L800: if jn$><cn$(1:6) then goto L740
@@ -96,7 +96,7 @@
 00930   goto L830
 00940 L940: if rw=0 then goto XIT
 00950   let message$="Sorting: please wait..."
-00960   let fnwait(103,cap$,message$,0)
+00960   fnwait(103,cap$,message$,0)
 00970   close #2: 
 00980   close #3: 
 00990   close #4: 
@@ -108,7 +108,7 @@
 01050   close #1: 
 01060   execute "FREE "&env$('Temp')&"\Addr."&session$&" -n"
 01070   execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
-01080   let fnchain("S:\acsPR\JCCPR2")
+01080   fnchain("S:\acsPR\JCCPR2")
 01090 ! ______________________________________________________________________
 01100 XIT: let fnxit
 01110 ! ______________________________________________________________________

@@ -7,10 +7,10 @@
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*31,gl(3),ade$*50,cap$*128,udf$*256
 00080   dim gl$*12,gd$*50
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$="Unpaid Invoice Summary")
-00110   let fncno(cno,cnam$) !:
-        let fndat(dat$)
-00120   let fnwait
+00100   fntop(program$,cap$="Unpaid Invoice Summary")
+00110   fncno(cno,cnam$) !:
+        fndat(dat$)
+00120   fnwait
 00130   let udf$=env$('temp')&'\'
 00140   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\unpdidx1.h"&str$(cno)&",Shr",internal,input,keyed 
 00150   open #glmstr=7: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&str$(cno)&",Shr",internal,input,keyed 
@@ -43,7 +43,7 @@
 00390 ! _______________________________________________________________
 00400 NEWPGE: pr #255: newpage: gosub HDR : continue 
 00410 HDR: ! 
-00420   let fnopenprn
+00420   fnopenprn
 00430   pr #255,using 'FORM POS 1,C 8,CC 86': date$,cnam$
 00440   pr #255,using 'FORM POS 1,C 8,POS 40,C 40': time$,"Unpaid Invoice Summary"
 00450   pr #255,using 'Form POS 1,C 4,N 4,CC 86': "Page",pg+=1,dat$

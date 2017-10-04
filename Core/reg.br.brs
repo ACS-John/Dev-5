@@ -9,7 +9,7 @@
 10160     open #sreg_h:=fngethandle: 'Name=S:\Core\Data\System Registry.dat,Version=1,KFName=S:\Core\Data\System Registry.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed 
 10180     sreg_setup_return=2
 10200   end if
-10220   let fn_sreg_setup=sreg_setup_return
+10220   fn_sreg_setup=sreg_setup_return
 10240   on error goto ERTN
 10260 fnend
 11000 def fn_sreg_close
@@ -18,15 +18,15 @@
 11060 fnend 
 12000 def library fnsreg_read(field_name$*128,&field_value$; default_if_not_read$*128)
 12020   if ~sreg_setup then let sreg_setup=fn_sreg_setup
-12040   let fnsreg_read=fn_sreg_read(field_name$,field_value$, default_if_not_read$)
+12040   fnsreg_read=fn_sreg_read(field_name$,field_value$, default_if_not_read$)
 12060 fnend 
 12200 def library fnsreg_rename(field_name_old$*128,fieldNameNew$*128)
 12220   if ~sreg_setup then let sreg_setup=fn_sreg_setup
-12240   let fnsreg_rename=fn_sreg_rename(field_name_old$,fieldNameNew$)
+12240   fnsreg_rename=fn_sreg_rename(field_name_old$,fieldNameNew$)
 12260 fnend 
 13000 def library fnsreg_write(field_name$*128,field_value$*256)
 13020   if ~sreg_setup then let sreg_setup=fn_sreg_setup
-13040   let fnsreg_write=fn_sreg_write(field_name$,field_value$)
+13040   fnsreg_write=fn_sreg_write(field_name$,field_value$)
 13060 fnend 
 16000 def fn_sreg_read(field_name$*128,&field_value$; default_if_not_read$*128)
 16020   dim tmpfield_value$*256,key_compare$*128
@@ -65,15 +65,15 @@
 20000 ! r: Regurlar Registry - tied to Client only - saves their settings
 20020 def library fnreg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128)
 20040   if ~reg_setup then let reg_setup=fn_reg_setup
-20060   let fnreg_read=fn_reg_read(rr_field_name$,rr_field_value$, rr_default_if_not_read$)
+20060   fnreg_read=fn_reg_read(rr_field_name$,rr_field_value$, rr_default_if_not_read$)
 20080 fnend 
 20100 def library fnreg_write(rw_field_name$*128,rw_field_value$*256)
 20120   if ~reg_setup then let reg_setup=fn_reg_setup
-20140   let fnreg_write=fn_reg_write(rw_field_name$,rw_field_value$)
+20140   fnreg_write=fn_reg_write(rw_field_name$,rw_field_value$)
 20160 fnend 
 20180 def library fnreg_rename(field_name_old$*128,fieldNameNew$*128)
 20200   if ~reg_setup then let reg_setup=fn_reg_setup
-20220   let fnreg_rename=fn_reg_rename(field_name_old$,fieldNameNew$)
+20220   fnreg_rename=fn_reg_rename(field_name_old$,fieldNameNew$)
 20240 fnend 
 20260 def fn_reg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128)
 20280   dim rr_tmpfield_value$*256,rr_key_compare$*128
@@ -107,7 +107,7 @@
 20840 def fn_reg_setup
 20860   library 'S:\Core\Library': fngethandle,fnerror
 20880   open #reg_h:=fngethandle: 'Name='&env$('Q')&'\Data\reg.dat,Version=1,KFName='&env$('Q')&'\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed 
-20900   let fn_reg_setup=1
+20900   fn_reg_setup=1
 20920   on error goto ERTN
 20940 fnend
 20960 ! /r
@@ -115,8 +115,8 @@
 30020 def library fnreg_close ! closes all registries (sreg, creg and reg)
 30040   close #reg_h: ioerr ignore
 30060   let reg_setup=0
-30080   let fn_creg_close
-30100   let fn_sreg_close
+30080   fn_creg_close
+30100   fn_sreg_close
 30120   XIT: ! This XIT label is only for use by ERTN - fnerror - if they try to exit a failed read or write to the registry, let them just skip on past
 30140 fnend 
 30160 def fn_creg_close
@@ -134,7 +134,7 @@
 30400 ! /r
 40000 ! r: Company Registry - tied to Client, System and Company Number
 40020 def library fncreg_read(cr_field_name$*128,&cr_field_value$; cr_default_if_not_read$*128)
-40040   let fn_creg_setup
+40040   fn_creg_setup
 40060   dim cr_tmpfield_value$*256,cr_key_compare$*128
 40080   cr_field_name$=rpad$(lwrc$(trim$(cr_field_name$)),128)
 40100   cr_tmpfield_value$=cr_field_value$=''
@@ -149,7 +149,7 @@
 40280   ! pr 'load ';trim$(cr_field_name$);'=';cr_field_value$
 40300 fnend
 40320 def library fncreg_write(cw_field_name$*128,cw_field_value$*256)
-40340   let fn_creg_setup
+40340   fn_creg_setup
 40360   cw_field_name$=rpad$(lwrc$(trim$(cw_field_name$)),128)
 40380   rewrite #creg_h,using 'form pos 1,c 128,c 256',key=cw_field_name$: cw_field_name$,cw_field_value$ nokey CREG_WRITE ! XXX
 40400   ! pr 'rewrite #creg_h'
@@ -179,7 +179,7 @@
 40880     cregFileData$=env$('Q')&'\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'.h'&env$('CNo')
 40900     cregFileIndex$=env$('Q')&'\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'-idx.h'&env$('CNo')
 40920     open #creg_h:=fngethandle: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed 
-40940     let fn_creg_setup=cno
+40940     fn_creg_setup=cno
 40960     creg_setup=cno
 40980   end if 
 41000   on error goto ERTN
@@ -188,11 +188,11 @@
 50000 ! r: User Registry - tied to Unique_Computer_Id (stored in regurlar registry with key prepended)
 50020 def library fnureg_read(ur_field_name$*128,&ur_field_value$; ur_default_if_not_read$*128)
 50040   if ~reg_setup then let reg_setup=fn_reg_setup
-50060   let fnureg_read=fn_reg_read(env$('Unique_Computer_Id')&'.'&ur_field_name$,ur_field_value$, ur_default_if_not_read$)
+50060   fnureg_read=fn_reg_read(env$('Unique_Computer_Id')&'.'&ur_field_name$,ur_field_value$, ur_default_if_not_read$)
 50080 fnend 
 50100 def library fnureg_write(uw_field_name$*128,uw_field_value$*256)
 50120   if ~reg_setup then let reg_setup=fn_reg_setup
-50140   let fnureg_write=fn_reg_write(env$('Unique_Computer_Id')&'.'&uw_field_name$,uw_field_value$)
+50140   fnureg_write=fn_reg_write(env$('Unique_Computer_Id')&'.'&uw_field_name$,uw_field_value$)
 50160 fnend 
 50180 ! /r
     

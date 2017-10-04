@@ -9,10 +9,10 @@
 00090   dim cogl$*12,pedat$*20,cap$*128
 00100 ! ______________________________________________________________________
 00110   let right=1
-00120   let fntop(program$,cap$="Trial Balance Worksheet")
-00130   let fnconsole(off=0)
+00120   fntop(program$,cap$="Trial Balance Worksheet")
+00130   fnconsole(off=0)
 00140   let first=1
-00150   let fncno(cno,cnam$)
+00150   fncno(cno,cnam$)
 00160   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno),internal,input,relative  !:
         read #20,using 'Form POS 150,2*N 1',rec=1: d(1) !:
         read #20,using 'Form POS 176,C 12',rec=1: cogl$ !:
@@ -25,13 +25,13 @@
 00200   if fnprocess=1 or d(1)=0 then goto START_REPORT !:
           ! Skip Cost Center Question if not applicable or in Automatic Processing
 00210 SCREEN1: ! 
-00220   let fntos(sn$="GLTBwksheet") !:
+00220   fntos(sn$="GLTBwksheet") !:
         let mylen=12 : let mypos=mylen+2
-00230   let fnlbl(1,1,"Cost Center:",mylen,right)
-00240   let fntxt(1,mypos,3,0,0,'number') !:
+00230   fnlbl(1,1,"Cost Center:",mylen,right)
+00240   fntxt(1,mypos,3,0,0,'number') !:
         let resp$(1)=""
-00250   let fncmdset(3)
-00260   let fnacs(sn$,0,mat resp$,ckey)
+00250   fncmdset(3)
+00260   fnacs(sn$,0,mat resp$,ckey)
 00270   if ckey=5 then goto XIT
 00280   costcent=val(resp$(1)) !:
         let n$=lpad$(str$(costcent),3)&"     0  0"
@@ -49,7 +49,7 @@
         ! pr Fields "10,25,C 30,R,N": "G/L WORKSHEET IN PROCESS" !:
         ! pr Fields "12,20,Cc 30,B,5": "Cancel (F5)" !:
         on fkey 5 goto END1
-00400   let fnopenprn
+00400   fnopenprn
 00410   gosub HDR
 00420   if fnprocess=1 or d(1)=0 then goto READ_GLMSTR else goto L500
 00430 ! ______________________________________________________________________
@@ -81,7 +81,7 @@
 00680 END1: let end1=1
 00690   gosub TOTALS
 00700   close #glmstr: 
-00710   let fncloseprn
+00710   fncloseprn
 00720   goto XIT
 00730 ! ______________________________________________________________________
 00740 HDR: ! 

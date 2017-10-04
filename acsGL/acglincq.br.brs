@@ -9,9 +9,9 @@
 00090   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00100   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),by(13)
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Quarterly Income Statement")
+00120   fntop(program$,cap$="Quarterly Income Statement")
 00130   on fkey 5 goto L1720
-00140   let fncno(cno,cnam$)
+00140   fncno(cno,cnam$)
 00150   let udf$=env$('temp')&'\'
 00160   actpd$=fnactpd$
 00170   if fnglfs=5 then goto XIT !:
@@ -28,15 +28,15 @@
 00270   let nametab=int(44-len(rtrm$(cnam$))/2)
 00280   open #1: fl1$,internal,input,keyed 
 00290   if fnprocess=1 or fnUseDeptNo=0 then goto L390
-00300   let fntos(sn$="ACglincq") !:
+00300   fntos(sn$="ACglincq") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00310   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00320   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00310   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00320   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00330   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00340   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00350   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00360   let fnacs(sn$,0,mat resp$,ckey)
+00330   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00340   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00350   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00360   fnacs(sn$,0,mat resp$,ckey)
 00370   if ckey=5 then goto XIT
 00380   costcntr=val(resp$(1))
 00390 L390: let fnopenprn
@@ -179,9 +179,9 @@
 01710 ! ______________________________________________________________________
 01720 L1720: let eofcode=1
 01730   gosub L1350
-01740   let fncloseprn
-01742   let fnfscode(actpd)
-01750   let fnpriorcd(1)
+01740   fncloseprn
+01742   fnfscode(actpd)
+01750   fnpriorcd(1)
 01760   goto XIT
 01770 ! ______________________________________________________________________
 01780 BLDPCT1: open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outin,keyed 

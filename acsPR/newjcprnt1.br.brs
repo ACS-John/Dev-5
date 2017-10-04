@@ -11,23 +11,23 @@
 00110   dim message$*40
 00120 ! ______________________________________________________________________
 00130 ! Let FNTOP("S:\acsPR\jcRpt-MOD",CAP$="User Designed Reports (2)")
-00140   let fndat(dh$)
+00140   fndat(dh$)
 00150 ! 
 00160 ! ______________________________________________________________________
 00170   let rn$=" 1"
 00180   if fnprocess=1 then goto L300
 00190 ! ______________________________________________________________________
 00200 MAIN_SCREEN: ! 
-00210   let fntos(sn$="jcprnt1") !:
+00210   fntos(sn$="jcprnt1") !:
         let mylen=25 : let mypos=mylen+2: let resp=0: let left=1
-00220   let fnlbl(1,1,"Report Heading Date:",23,left)
-00230   let fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
+00220   fnlbl(1,1,"Report Heading Date:",23,left)
+00230   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
         let resp$(resp+=1)=dh$
-00240   let fncmdset(2)
-00250   let fnacs(sn$,0,mat resp$,ck)
+00240   fncmdset(2)
+00250   fnacs(sn$,0,mat resp$,ck)
 00260   if ck=5 then goto XIT
 00270   let dh$=resp$(1) ! heading date
-00280   let fndat(dh$,put=2)
+00280   fndat(dh$,put=2)
 00290 ! ______________________________________________________________________
 00300 L300: let fnopenprn
 00310 ! ______________________________________________________________________
@@ -55,10 +55,10 @@
 00540   return ! /r
 00550 ! ______________________________________________________________________
 00560 EOF1: ! 
-00570   let fncloseprn
+00570   fncloseprn
 00580   close #1: 
 00590   close #2: 
-00600   let fnxit
+00600   fnxit
 00610 ! ______________________________________________________________________
 00620 PRTRPT: read #1,using L660: jn$,n$,mat a$,x6,x7,x8,x9 eof SND
 00630   let jn1$=jn$

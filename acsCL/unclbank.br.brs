@@ -5,20 +5,20 @@
 00050 ! ______________________________________________________________________
 00060   dim cnam$*40,cap$*128,resp$(2)*40
 00070 ! ______________________________________________________________________
-00080   let fntop(program$, cap$="Unclear All Entries by Bank")
-00090   let fncno(cno,cnam$)
+00080   fntop(program$, cap$="Unclear All Entries by Bank")
+00090   fncno(cno,cnam$)
 00100   cancel=99 : let right=1 : center=2 : let on=1 : let off=0 !:
         let limit_to_list=1
 00110 ! ______________________________________________________________________
-00120   let fntos(sn$='UnClBank1') !:
+00120   fntos(sn$='UnClBank1') !:
         let mylen=15 : let mypos=mylen+3
-00130   let fnlbl(1,1,"Bank:",mylen,right)
-00135   let fncombof('Bank',1,mypos,32,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list)
-00140   let fnlbl(2,1,"Cleared Date:",mylen,right)
-00150   let fntxt(2,mypos,10,0,0,"3") !:
+00130   fnlbl(1,1,"Bank:",mylen,right)
+00135   fncombof('Bank',1,mypos,32,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list)
+00140   fnlbl(2,1,"Cleared Date:",mylen,right)
+00150   fntxt(2,mypos,10,0,0,"3") !:
         let resp$(2)=""
-00170   let fncmdset(2)
-00180   let fnacs(sn$,0,mat resp$,ckey)
+00170   fncmdset(2)
+00180   fnacs(sn$,0,mat resp$,ckey)
 00190   if ckey=5 then goto XIT
 00200   bc1=val(resp$(1)(1:2))
 00210   clrdate=val(resp$(2))

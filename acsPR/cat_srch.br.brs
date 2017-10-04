@@ -8,11 +8,11 @@
 00080     dim item$(4)*40,resp$(30)*80
 00090 ! ______________________________________________________________________
 00100     let jn$=lpad$(rtrm$(cn$),6) ! pass job over in category #, but pass back the category
-00110     let fncno(cno)
+00110     fncno(cno)
 00120     open #category:=fngethandle: "Name="&env$('Q')&"\PRmstr\Jccat.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\catindx.h"&str$(cno)&",Shr",internal,input,keyed ioerr ERTN
 00130 ! ______________________________________________________________________
 00140     restore #category: 
-00150     let fntos(sn$="CatSrch")
+00150     fntos(sn$="CatSrch")
 00160     ch$(1)="Job & Category": ch$(2)="Category Name" : !:
           mat ch$(2) : mat cm$(2) : mat cm$=("2")
 00170     if fixgrid=99 then let usefile=0 else let usefile=1 !:
@@ -35,7 +35,7 @@
           goto READ_FILE
 00300 ! ______________________________________________________________________
 00310 L310: ! If FIXGRID=99 Then Goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
-00320     let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey) !:
+00320     fncmdset(2): let fnacs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00330     cn$=lpad$(resp$(1),11)
 00340     if ckey=5 then cn$=cn$(1:6)&"     " ! no one selected

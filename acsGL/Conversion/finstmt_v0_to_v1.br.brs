@@ -7,9 +7,9 @@
 00070 ! ______________________________________________________________________
 00080     dim cap$*128
 00090     dim fil$(6),idx$(6)
-00120     let fncno(cno)
+00120     fncno(cno)
 00130 ! ______________________________________________________________________
-00140     let fnstatus('Converting Financial Statement.')
+00140     fnstatus('Converting Financial Statement.')
 20000 GOON: ! 
 20020     let fil$(1)="acglfnSB": let idx$(1)="fnSBIndx" ! Balance Sheet
 20040     let fil$(2)="acglfnSI": let idx$(2)="fnSIIndx" ! Income Statement
@@ -21,7 +21,7 @@
 20160     for j=1 to 6
 20180       execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&' '&env$('temp')&"\WORK."&session$&" -83 -d -n" ioerr NEXT_J
 20200       execute "Copy  "&env$('temp')&"\WORK."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&" -n"
-20220       let fnindex_it(env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno),"Index "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&' '&env$('Q')&"\GLmstr\"&idx$(j)&".h"&str$(cno)&" 1 5 Replace DupKeys ")
+20220       fnindex_it(env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno),"Index "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&' '&env$('Q')&"\GLmstr\"&idx$(j)&".h"&str$(cno)&" 1 5 Replace DupKeys ")
 20240 ! 
 20260       if j=2 or j=5 then 
 20280         open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\"&idx$(j)&".h"&str$(cno),internal,outin,keyed 

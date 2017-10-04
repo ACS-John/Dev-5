@@ -12,9 +12,9 @@
 00120   dim fundnum(10),funddesc$(10)*20,io1$(20),dolcol$*140,accumcol$*140
 00130   dim choices$(2)*21,io5$(2)
 00140 ! ______________________________________________________________________
-00150   let fntop(program$,cap$="Income Statemet - Fund Comparison")
+00150   fntop(program$,cap$="Income Statemet - Fund Comparison")
 00160   on fkey 5 goto L2170
-00170   let fncno(cno,cnam$)
+00170   fncno(cno,cnam$)
 00180   let udf$=env$('temp')&'\'
 00190   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
@@ -37,19 +37,19 @@
 00360   let nametab=int(44-len(rtrm$(cnam$))/2)
 00370   open #1: fl1$,internal,input,keyed 
 00380   if fnprocess=1 or fnUseDeptNo=0 then goto L480
-00390   let fntos(sn$="ACglincf") !:
+00390   fntos(sn$="ACglincf") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00400   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00410   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00400   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00410   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00420   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00430   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00440   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00450   let fnacs(sn$,0,mat resp$,ckey)
+00420   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00430   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00440   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00450   fnacs(sn$,0,mat resp$,ckey)
 00460   if ckey=5 then goto XIT
 00470   costcntr=val(resp$(1))
 00480 L480: let report$="STATEMENT OF INCOME AND EXPENSES - FUND COMPARISON"
-00490   let fnopenprn
+00490   fnopenprn
 00500   let redir=0: if file$(255)(1:4)<>"PRN:" then let redir=1
 00510   if fnps=2 then goto L540 ! secondary
 00520   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
@@ -221,7 +221,7 @@
 02180   gosub L1690
 02190 ! 
 02200 ! 
-02210   let fncloseprn
+02210   fncloseprn
 02220   goto XIT
 02230 ! ______________________________________________________________________
 02240 XIT: let fnxit
@@ -254,18 +254,18 @@
 02510 L2510: open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&str$(cno)&",RecL=230,use",internal,outin,relative 
 02520   read #5,using L2530: mat fundnum,mat funddesc$ ioerr L2530
 02530 L2530: form pos 1,10*n 3,10*c 20
-02540   let fntos(sn$="ACglcasf3") !:
+02540   fntos(sn$="ACglcasf3") !:
         let mylen=1: let mypos=mylen+3
-02550   let fnlbl(1,4,"Fund                 Description ")
+02550   fnlbl(1,4,"Fund                 Description ")
 02560   for j=1 to 10
-02570     let fntxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") !:
+02570     fntxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") !:
           let resp$(j*2-1)=str$(fundnum(j))
-02580     let fntxt(j+1,mypos+10,20,0,0,"",0,"Enter the fund description.") !:
+02580     fntxt(j+1,mypos+10,20,0,0,"",0,"Enter the fund description.") !:
           let resp$(j*2)=funddesc$(j)
 02590   next j
-02600   let fncmdkey("&Next",1,1,0,"Continues with financial statement.")
-02610   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-02620   let fnacs(sn$,0,mat resp$,ckey)
+02600   fncmdkey("&Next",1,1,0,"Continues with financial statement.")
+02610   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+02620   fnacs(sn$,0,mat resp$,ckey)
 02630   if ckey=5 then goto XIT
 02640   for j=1 to 10
 02650     let fundnum(j)=val(resp$(j*2-1))
@@ -281,15 +281,15 @@
 02750   big=totcol*14
 02760   return 
 02770 ASK_MONTHLY: ! ask monthly info or ytd info
-02780   let fntos(sn$="ACglcasf2") !:
+02780   fntos(sn$="ACglcasf2") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-02790   let fnopt(1,2,"Print Monthly Figures" ,0,0) !:
+02790   fnopt(1,2,"Print Monthly Figures" ,0,0) !:
         let resp$(2)="False"
-02800   let fnopt(2,2,"Print Year to Date Figures" ,0,0) !:
+02800   fnopt(2,2,"Print Year to Date Figures" ,0,0) !:
         let resp$(2)="True"
-02810   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-02820   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-02830   let fnacs(sn$,0,mat resp$,ckey)
+02810   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+02820   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+02830   fnacs(sn$,0,mat resp$,ckey)
 02840   if ckey=5 then goto XIT
 02850   if resp$(1)="True" then let monthly=1
 02860   if resp$(2)="True" then let monthly=2

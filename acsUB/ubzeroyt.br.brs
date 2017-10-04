@@ -5,16 +5,16 @@
 20080 ! ______________________________________________________________________
 20100   dim z$*10,cap$*128
 20120 ! ______________________________________________________________________
-20140   let fncno(cno)
-20160   let fntop(program$,cap$="Zero Year to Date Usage")
+20140   fncno(cno)
+20160   fntop(program$,cap$="Zero Year to Date Usage")
 20180 ! ______________________________________________________________________
 20200 SCREEN1: ! 
-20220   let fntos(sn$:="ubZeroYt")
-20240   let fnlbl(1,1,'Type "ZERO" to Zero all Year To Date Usages:',48,1)
-20260   let fntxt(1,50,5)
+20220   fntos(sn$:="ubZeroYt")
+20240   fnlbl(1,1,'Type "ZERO" to Zero all Year To Date Usages:',48,1)
+20260   fntxt(1,50,5)
 20280   let resp$(1)=""
-20300   let fncmdset(2)
-20320   let fnacs(sn$,0,mat resp$,ck)
+20300   fncmdset(2)
+20320   fnacs(sn$,0,mat resp$,ck)
 20340   if ck=5 then goto XIT
 20360   if rtrm$(uprc$(resp$(1)))<>"ZERO" then goto SCREEN1
 20380   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 

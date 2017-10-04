@@ -12,9 +12,9 @@
 00120   dim prgl(5,3),fl3$(13),sc3$(11)*47,io3$(27),cap$*128,deduc(10)
 00130   dim miscgl$(10)*12,option$(2)*30,gl$(5)*12,option2$(2)
 00140 ! ______________________________________________________________________
-00150   let fntop(program$,cap$="Company Information")
+00150   fntop(program$,cap$="Company Information")
 00160   let gltyp=7
-00180   let fnstyp(0)
+00180   fnstyp(0)
 00190 ! ____________________________________________________
 00200   open #glmstr=11: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L220
 00210 ! ____________________
@@ -42,59 +42,59 @@
 00400   if uprc$(actr$)="N" then actr=0
 00410   let lastgl$=cnvrt$("pic(zz#)",a1)&cnvrt$("pic(zzzzz#)",a2)&cnvrt$("pic(zz#)",a3)
 00420 SCREEN_1: ! 
-00430   let fntos(sn$="Company-1") !:
+00430   fntos(sn$="Company-1") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00440   let fnlbl(1,30,"Company # "&env$('cno'))
-00450   let fnlbl(3,1,"Company Name:",mylen,right)
-00460   let fntxt(3,mypos,40,0,left,"",0,"",0 ) !:
+00440   fnlbl(1,30,"Company # "&env$('cno'))
+00450   fnlbl(3,1,"Company Name:",mylen,right)
+00460   fntxt(3,mypos,40,0,left,"",0,"",0 ) !:
         let resp$(1)=a$(1)
-00470   let fnlbl(4,1,"Company Address:",mylen,right)
-00480   let fntxt(4,mypos,40,0,left,"",0,"",0 ) !:
+00470   fnlbl(4,1,"Company Address:",mylen,right)
+00480   fntxt(4,mypos,40,0,left,"",0,"",0 ) !:
         let resp$(2)=a$(2)
-00490   let fnlbl(5,1,"City, State, Zip:",mylen,right)
-00500   let fntxt(5,mypos,40,0,left,"",0,"",0 ) !:
+00490   fnlbl(5,1,"City, State, Zip:",mylen,right)
+00500   fntxt(5,mypos,40,0,left,"",0,"",0 ) !:
         let resp$(3)=a$(3)
-00510   let fnlbl(6,1,"Federal ID #:",mylen,right)
-00520   let fntxt(6,mypos,12,0,left,"",0,"",0 ) !:
+00510   fnlbl(6,1,"Federal ID #:",mylen,right)
+00520   fntxt(6,mypos,12,0,left,"",0,"",0 ) !:
         let resp$(4)=b$(1)
-00530   let fnlbl(7,1,"State ID #:",mylen,right)
-00540   let fntxt(7,mypos,12,0,left,"",0,"",0 ) !:
+00530   fnlbl(7,1,"State ID #:",mylen,right)
+00540   fntxt(7,mypos,12,0,left,"",0,"",0 ) !:
         let resp$(5)=b$(2)
-00550   let fnlbl(8,1,"State U/C Rate:",mylen,right)
-00560   let fntxt(8,mypos,5,0,left,"",0,"",0 ) !:
+00550   fnlbl(8,1,"State U/C Rate:",mylen,right)
+00560   fntxt(8,mypos,5,0,left,"",0,"",0 ) !:
         let resp$(6)=c$
-00570   let fnlbl(9,1,"State U/C Maximum:",mylen,right)
-00580   let fntxt(9,mypos,10,0,left,"10",0,"",0 ) !:
+00570   fnlbl(9,1,"State U/C Maximum:",mylen,right)
+00580   fntxt(9,mypos,10,0,left,"10",0,"",0 ) !:
         let resp$(7)=str$(ucm)
-00590   let fnlbl(10,1,"Type of Business:",mylen,right)
-00600   let fntxt(10,mypos,30,0,left,"",0,"",0 ) !:
+00590   fnlbl(10,1,"Type of Business:",mylen,right)
+00600   fntxt(10,mypos,30,0,left,"",0,"",0 ) !:
         let resp$(8)=tb$
-00610   let fnlbl(11,1,"Number of Periods:",mylen,right)
-00620   let fntxt(11,mypos,2,0,left,"30",0,"",0 ) !:
+00610   fnlbl(11,1,"Number of Periods:",mylen,right)
+00620   fntxt(11,mypos,2,0,left,"30",0,"",0 ) !:
         let resp$(9)=str$(nap)
-00630   let fnchk(12,60,"Use Department Number Field:",1) !:
+00630   fnchk(12,60,"Use Department Number Field:",1) !:
         let resp$(10)="False"
 00640   if d(1)=1 then let resp$(10)="True" else let resp$(10)="False"
-00650   let fnchk(13,60,"Use Sub Number Field:",1)
+00650   fnchk(13,60,"Use Sub Number Field:",1)
 00660   if d(2)=1 then let resp$(11)="True" else let resp$(11)="False"
-00670   let fnchk(14,60,"Maintain Accumulated Transactions:",1)
+00670   fnchk(14,60,"Maintain Accumulated Transactions:",1)
 00680   if actr$="Y" or actr$="1" then let resp$(12)="True" else let resp$(12)="False"
-00690   let fnchk(15,60,"Utilize Bank Reconciliation:",1)
+00690   fnchk(15,60,"Utilize Bank Reconciliation:",1)
 00700   if recc$="Y" or reccode=1 then let resp$(13)="True" else let resp$(13)="False"
-00710   let fnlbl(16,1,"Last Balance Sheet Account #:",mylen,right)
-00720   let fnqgl(16,mypos,0,2,pas) !:
+00710   fnlbl(16,1,"Last Balance Sheet Account #:",mylen,right)
+00720   fnqgl(16,mypos,0,2,pas) !:
         let resp$(14)=fnrgl$(lastgl$)
-00730   let fnchk(17,60,"Allocate Expenses to Job Cost:",1)
+00730   fnchk(17,60,"Allocate Expenses to Job Cost:",1)
 00740   if jcc$="Y" or jccode=1 then let resp$(15)="True" else let resp$(15)="False"
-00750   let fnlbl(18,1,"Posting Method:",mylen,right)
+00750   fnlbl(18,1,"Posting Method:",mylen,right)
 00760   let option$(1)="Post Immediately" !:
         let option$(2)="Retain in Holding Files"
-00770   let fncomboa("PostMethod",18,mypos,mat option$,"Normally you would post immediately. You would only consider posting to holding files if the general ledger is months behind.",mylen)
+00770   fncomboa("PostMethod",18,mypos,mat option$,"Normally you would post immediately. You would only consider posting to holding files if the general ledger is months behind.",mylen)
 00780   if glb=1 or glb=0 then let resp$(16)=option$(1) else let resp$(16)=option$(2)
-00790   let fncmdkey("&Next",1,1,0,"Moves to 2nd screen of company information.")
-00800   let fncmdkey("&Save",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
-00810   let fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
-00820   let fnacs(sn$,0,mat resp$,ckey)
+00790   fncmdkey("&Next",1,1,0,"Moves to 2nd screen of company information.")
+00800   fncmdkey("&Save",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
+00810   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
+00820   fnacs(sn$,0,mat resp$,ckey)
 00830   if ckey=5 then goto XIT
 00840   a$(1)=resp$(1)
 00850   a$(2)=resp$(2)
@@ -119,24 +119,24 @@
 01020   goto SCREEN_2
 01030 ! ______________________________________________________________________
 01040 SCREEN_2: ! 
-01050   let fntos(sn$="Company-2") !:
+01050   fntos(sn$="Company-2") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-01060   let fnlbl(1,1,"   The system will allow you to summarize the Payroll Withholding entries into",85,left)
-01070   let fnlbl(2,1,"one entry for each Withholding Account on your Trial Balance.  If you wish",85,left)
-01080   let fnlbl(3,1,"to utilize this option, enter the Account Numbers, otherwise leave both numbers",85,left)
-01090   let fnlbl(4,1,"as blank to pr all details.",85,left)
+01060   fnlbl(1,1,"   The system will allow you to summarize the Payroll Withholding entries into",85,left)
+01070   fnlbl(2,1,"one entry for each Withholding Account on your Trial Balance.  If you wish",85,left)
+01080   fnlbl(3,1,"to utilize this option, enter the Account Numbers, otherwise leave both numbers",85,left)
+01090   fnlbl(4,1,"as blank to pr all details.",85,left)
 01100 ! BEGCNT,BEGACCT,BEGSUB,ENDCNT,ENDACCT,ENCSUB
-01110   let fnlbl(6,1,"First Account to summarize:",mylen,right)
-01120   let fnqgl(6,mypos,0,2,pas) !:
+01110   fnlbl(6,1,"First Account to summarize:",mylen,right)
+01120   fnqgl(6,mypos,0,2,pas) !:
         let resp$(1)=fnrgl$(e$(1))
-01130   let fnlbl(7,1,"Last Account to summarize:",mylen,right)
-01140   let fnqgl(7,mypos,0,2,pas) !:
+01130   fnlbl(7,1,"Last Account to summarize:",mylen,right)
+01140   fnqgl(7,mypos,0,2,pas) !:
         let resp$(2)=fnrgl$(e$(2))
-01150   let fncmdkey("&Next",1,1,0,"Moves to 3nd screen of company information.")
-01160   let fncmdkey("&Save",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
-01170   let fncmdkey("&Back",2,0,0,"Returns to previous screen.")
-01180   let fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
-01190   let fnacs(sn$,0,mat resp$,ckey)
+01150   fncmdkey("&Next",1,1,0,"Moves to 3nd screen of company information.")
+01160   fncmdkey("&Save",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
+01170   fncmdkey("&Back",2,0,0,"Returns to previous screen.")
+01180   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
+01190   fnacs(sn$,0,mat resp$,ckey)
 01200   let e$(1)=fnagl$(resp$(1)) ! Summary # 1
 01210   let e$(2)=fnagl$(resp$(2)) ! Summary # 1
 01220   if ckey=4 then gosub SAVE : goto XIT
@@ -148,48 +148,48 @@
 01280     let gl$(j)=cnvrt$("pic(zz#)",prgl(j,1))&cnvrt$("pic(zzzzz#)",prgl(j,2))&cnvrt$("pic(zz#)",prgl(j,3))
 01290   next j
 01300 ! FICARATE,FICAWAGE,FEDUCRAT,FEDUCWAG,MCR,MCM,MAT PRGL
-01310   let fntos(sn$="Company-3") 
+01310   fntos(sn$="Company-3") 
 01312   let mylen=32: let mypos=mylen+3 : let right=1
-01320   let fnlbl(1,25,"After-the Fact Payroll Information")
-01330   let fnlbl(3,1,"Social Security Rate:",mylen,right)
-01340   let fntxt(3,mypos,8,0,left,"34",0,"Format would be 6.2 ",0 ) 
+01320   fnlbl(1,25,"After-the Fact Payroll Information")
+01330   fnlbl(3,1,"Social Security Rate:",mylen,right)
+01340   fntxt(3,mypos,8,0,left,"34",0,"Format would be 6.2 ",0 ) 
 01342   let resp$(1)=str$(ficarate)
-01350   let fnlbl(4,1,"Social Security Maximum Wage:",mylen,right)
-01360   let fntxt(4,mypos,12,0,left,"10",0,"Example would be 90000.00 ",0 ) 
+01350   fnlbl(4,1,"Social Security Maximum Wage:",mylen,right)
+01360   fntxt(4,mypos,12,0,left,"10",0,"Example would be 90000.00 ",0 ) 
 01362   let resp$(2)=str$(ficawage)
-01370   let fnlbl(5,1,"Federal U/C Rate:",mylen,right)
-01380   let fntxt(5,mypos,8,0,left,"34",0,"Example would be .800 ",0 ) 
+01370   fnlbl(5,1,"Federal U/C Rate:",mylen,right)
+01380   fntxt(5,mypos,8,0,left,"34",0,"Example would be .800 ",0 ) 
 01382   let resp$(3)=str$(feducrat)
-01390   let fnlbl(6,1,"Federal U/C Maximum Wage:",mylen,right)
-01400   let fntxt(6,mypos,12,0,left,"10",0,"An example of the Federal unemployment compensation rate would be 9000.00 ",0 ) 
+01390   fnlbl(6,1,"Federal U/C Maximum Wage:",mylen,right)
+01400   fntxt(6,mypos,12,0,left,"10",0,"An example of the Federal unemployment compensation rate would be 9000.00 ",0 ) 
 01402   let resp$(4)=str$(feducwag)
-01410   let fnlbl(7,1,"Medicare Rate:",mylen,right)
-01420   let fntxt(7,mypos,8,0,left,"34",0,"Format would be 1.45",0 ) 
+01410   fnlbl(7,1,"Medicare Rate:",mylen,right)
+01420   fntxt(7,mypos,8,0,left,"34",0,"Format would be 1.45",0 ) 
 01422   let resp$(5)=str$(mcr)
-01430   let fnlbl(8,1,"Medicare Maximum Wage:",mylen,right)
-01440   let fntxt(8,mypos,12,0,left,"10",0,"There is no maximun at this time.  Ener enough 9s to exceed the highest paid employee.  (eg.  9999999.00 ",0 ) 
+01430   fnlbl(8,1,"Medicare Maximum Wage:",mylen,right)
+01440   fntxt(8,mypos,12,0,left,"10",0,"There is no maximun at this time.  Ener enough 9s to exceed the highest paid employee.  (eg.  9999999.00 ",0 ) 
 01442   let resp$(6)=str$(mcm)
-01450   let fnlbl(10,25,"General Ledger Account Numbers")
-01460   let fnlbl(11,1,"Federal Withholding:",mylen,right)
-01470   let fnqgl(11,mypos,0,2,pas) 
+01450   fnlbl(10,25,"General Ledger Account Numbers")
+01460   fnlbl(11,1,"Federal Withholding:",mylen,right)
+01470   fnqgl(11,mypos,0,2,pas) 
 01472   let resp$(7)=fnrgl$(gl$(1))
-01480   let fnlbl(12,1,"FICA Withholding:",mylen,right)
-01490   let fnqgl(12,mypos,0,2,pas) 
+01480   fnlbl(12,1,"FICA Withholding:",mylen,right)
+01490   fnqgl(12,mypos,0,2,pas) 
 01492   let resp$(8)=fnrgl$(gl$(2))
-01500   let fnlbl(13,1,"State Withholding:",mylen,right)
-01510   let fnqgl(13,mypos,0,2,pas) 
+01500   fnlbl(13,1,"State Withholding:",mylen,right)
+01510   fnqgl(13,mypos,0,2,pas) 
 01512   let resp$(9)=fnrgl$(gl$(3))
-01520   let fnlbl(14,1,"Local Withholding:",mylen,right)
-01530   let fnqgl(14,mypos,0,2,pas) !:
+01520   fnlbl(14,1,"Local Withholding:",mylen,right)
+01530   fnqgl(14,mypos,0,2,pas) !:
         let resp$(10)=fnrgl$(gl$(4))
-01540   let fnlbl(15,1,"Earned Income Credit:",mylen,right)
-01550   let fnqgl(15,mypos,0,2,pas) !:
+01540   fnlbl(15,1,"Earned Income Credit:",mylen,right)
+01550   fnqgl(15,mypos,0,2,pas) !:
         let resp$(11)=fnrgl$(gl$(5))
-01560   let fncmdkey("&Next",1,1,0,"Moves to 4th screen of company information.")
-01570   let fncmdkey("&Save",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
-01580   let fncmdkey("&Back",2,0,0,"Returns to previous screen.")
-01590   let fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
-01600   let fnacs(sn$,0,mat resp$,ckey)
+01560   fncmdkey("&Next",1,1,0,"Moves to 4th screen of company information.")
+01570   fncmdkey("&Save",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
+01580   fncmdkey("&Back",2,0,0,"Returns to previous screen.")
+01590   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
+01600   fnacs(sn$,0,mat resp$,ckey)
 01610   if ckey=5 then goto XIT
 01630   if ckey=2 then goto SCREEN_2
 01640   let ficarate=val(resp$(1))
@@ -205,41 +205,41 @@
 01735   if ckey=4 then gosub SAVE : goto XIT
 01740 ! ______________________________________________________________________
 01750 SCREEN_4: ! 
-01760   let fntos(sn$="Company-4") !:
+01760   fntos(sn$="Company-4") !:
         let mylen=32: let mypos=mylen+3 : let right=1
-01770   let fnlbl(1,1,"Enter the names of the 10 Miscellaneous Deductions and indicate",90,left)
-01780   let fnlbl(2,1,"how each deduction is to be handled by the system.  A check",90,left)
-01790   let fnlbl(3,1,"mark will indicate that the miscellaneous deduction should be ",90,left)
-01800   let fnlbl(4,1,"subtracted from gross before calculating federal withholding, ",90,left)
-01810   let fnlbl(5,1,"fica and social security, state withholdings, or state U/C.",80,left)
-01820   let fnlbl(7,29,"Ded         Ded  Ded   Ded    Ded",40,left)
-01830   let fnlbl(8,1,"Deduction Name              Add         Fed  FICA  State  U/C     GL Number",80,left)
+01770   fnlbl(1,1,"Enter the names of the 10 Miscellaneous Deductions and indicate",90,left)
+01780   fnlbl(2,1,"how each deduction is to be handled by the system.  A check",90,left)
+01790   fnlbl(3,1,"mark will indicate that the miscellaneous deduction should be ",90,left)
+01800   fnlbl(4,1,"subtracted from gross before calculating federal withholding, ",90,left)
+01810   fnlbl(5,1,"fica and social security, state withholdings, or state U/C.",80,left)
+01820   fnlbl(7,29,"Ded         Ded  Ded   Ded    Ded",40,left)
+01830   fnlbl(8,1,"Deduction Name              Add         Fed  FICA  State  U/C     GL Number",80,left)
 01840   let resp=0
 01850   for j=1 to 10
-01860     let fntxt(j+8,1,20,0,left,"",0,"Enter you deduction name.",0 ) !:
+01860     fntxt(j+8,1,20,0,left,"",0,"Enter you deduction name.",0 ) !:
           let resp$(resp+=1)=miscname$(j)
 01870     let option2$(1)="Deducttion" !:
           let option2$(2)="Addition"
-01880     let fncomboa("MIscdeduct",j+8,26,mat option2$,"Indicate whether the deduction should be deducted from the check or added to the check.",10)
+01880     fncomboa("MIscdeduct",j+8,26,mat option2$,"Indicate whether the deduction should be deducted from the check or added to the check.",10)
 01890     if dedcode(j)=0 then let dedcode(j)=1
 01900     let resp$(resp+=1)=option2$(dedcode(j))
-01910     let fnchk(j+8,41,"",1)
+01910     fnchk(j+8,41,"",1)
 01920     if dedfed(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
-01930     let fnchk(j+8,47,"",1)
+01930     fnchk(j+8,47,"",1)
 01940     if dedfica(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
-01950     let fnchk(j+8,53,"",1)
+01950     fnchk(j+8,53,"",1)
 01960     if dedst(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
-01970     let fnchk(j+8,59,"",1)
+01970     fnchk(j+8,59,"",1)
 01980     if deduc(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
 01990     let linecount=j+8
-02000     let fnqgl(linecount,64,0,2,pas) !:
+02000     fnqgl(linecount,64,0,2,pas) !:
           let resp$(resp+=1)=fnrgl$(miscgl$(j))
 02010   next j
-02020   let fncmdkey("&Next",1,1,0,"Saves changes and returns to main menu.")
-02030   let fncmdkey("&Save",4,0,0,"Saves any changes and returns to menu.")
-02040   let fncmdkey("&Back",2,0,0,"Returns to previous screen.")
-02050   let fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
-02060   let fnacs(sn$,0,mat resp$,ckey)
+02020   fncmdkey("&Next",1,1,0,"Saves changes and returns to main menu.")
+02030   fncmdkey("&Save",4,0,0,"Saves any changes and returns to menu.")
+02040   fncmdkey("&Back",2,0,0,"Returns to previous screen.")
+02050   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
+02060   fnacs(sn$,0,mat resp$,ckey)
 02070   if ckey=5 then goto XIT
 02080   let resp=0
 02090   for j=1 to 10

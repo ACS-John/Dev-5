@@ -2,8 +2,8 @@
 00030   on error goto L1770
 00040   library 'S:\Core\Library': fnopenprn,fncloseprn,fntop,fnxit,fnsearch
 00050   on fkey 5 goto L1530
-00060   let fntop(program$,"Preprinted Invoices")
-00080   let fnopenprn
+00060   fntop(program$,"Preprinted Invoices")
+00080   fnopenprn
 00090   let namtab=int(66-(len(rtrm$(env$('Program_Caption')))/2))
 00100   dim scr1$(8),fl1$(11),in1$(10),ot1$(10),scrid$(3)*80,inp(9),iv$*12,a1$*30
 00110   dim m$*11,fm$*54,fp$*80,pt(4),fl2$(7),scr2$(4),ot2$(4)
@@ -197,7 +197,7 @@
 04840   let numeric_format$='pic($$$,$$$.##)'
 04850   let key_length=5
 04860   let heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"
-04870   let fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
+04870   fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
 04880   let k$=z$=selection$ ! pull key from first field in search line
 04890   let inp(1)=0
 04900   let inp(1)=val(selection$) conv L4910

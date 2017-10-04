@@ -19,7 +19,7 @@
 00180 ASK_NAS: ! 
 00190     alpha_key_length=kln(file_num)
 00200     let win=104
-00210     let fnwin3b(win,cap$,4,45,0,2,5,2)
+00210     fnwin3b(win,cap$,4,45,0,2,5,2)
 00220     bk1=prtall=0
 00230     pr #win,fields "2,2,Cc 40,N": "Enter Search Criteria (blank for all):"
 00240     let key_position=22-round((alpha_key_length/2),0)
@@ -55,7 +55,7 @@
 00520     mat fkey$=("") !:
           let fkey$(1)="Next" : let fkey$(2)="Back" : let fkey$(5)="Cancel" !:
           let em$="": let es=0 !:
-          let fnfkey(24,mat fkey$,mat disfk,em$,es)
+          fnfkey(24,mat fkey$,mat disfk,em$,es)
 00530     rinput #win,select mat fs_sfl$,attr "H": mat fs_sw$
 00540     if cmdkey=5 then goto ASK_NAS
 00550     if cmdkey=1 then goto L590

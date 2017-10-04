@@ -5,7 +5,7 @@
 10080   on error goto ERTN
 10100   dim ml$(10)*80,resp$(40)*128,cap$*128
 10120 ! ______________________________________________________________________
-10150   let fntop(program$,cap$="Add New "&env$('cursys')&" Company "&env$('cno'))
+10150   fntop(program$,cap$="Add New "&env$('cursys')&" Company "&env$('cno'))
 12000   if exists('S:\'&fnSystemName$&'\mstr\*.h99999') then
 12020     fnCopy('S:\'&fnSystemName$&'\mstr\*.h99999',env$('Q')&'\'&env$('cursys')&'mstr\*.h'&env$('cno'))
 12040   else if exists('S:\acs'&env$('cursys')&'\mstr\*.h99999') then
@@ -17,17 +17,17 @@
 18040     let ml$(1)='Would you like to import data from an old'
 18060     let ml$(2)='ACS Accounts Payable system?'
 18080     let ml$(3)='This is only chance.'
-18100     let fnmsgbox(mat ml$,resp$,cap$,36)
+18100     fnmsgbox(mat ml$,resp$,cap$,36)
 18120     if resp$='Yes' then let fnchain("S:\acsCL\Conversion\APmstr-Cnv")
 18140 ! /r
 20000   else if env$('cursys')='UB' then ! r:
-20020     let fntos(sn$="ub_add_cno")
+20020     fntos(sn$="ub_add_cno")
 20040     let mylen=32 : let mypos=mylen+2 : let lc=0
-20180     let fnlbl(lc+=1,1,"Copy Service Types from Company:",mylen,1)
-20200     let fncmbcno(lc,mypos)
+20180     fnlbl(lc+=1,1,"Copy Service Types from Company:",mylen,1)
+20200     fncmbcno(lc,mypos)
 20220     let resp$(1)=''
-20240     let fncmdkey("&Next",1,1,1)
-20280     let fnacs(sn$,0,mat resp$,ckey)
+20240     fncmdkey("&Next",1,1,1)
+20280     fnacs(sn$,0,mat resp$,ckey)
 20300     if ck=5 then goto XIT
 20360     copytoscno=val(resp$(1)(43:47))
 20622     if copytoscno=0 then
@@ -59,17 +59,17 @@
 21160     fncreg_write('Route Low',str$(bkno1)) ! Route Number Range Low
 21180     fncreg_write('Route High',str$(bkno2)) ! Route Number Range High
 21200 ! ______________________________________________________________________
-21220     let fnindex_sys(val(env$('cno')),'UB')
+21220     fnindex_sys(val(env$('cno')),'UB')
 21240 ! /r
 22000   else if env$('cursys')='GL' then ! r:
 22020     dim zer(57)
 22040 MENU1: ! 
-22060     let fntos(sn$="GLAddCNo")
+22060     fntos(sn$="GLAddCNo")
 22080     let mylen=37 : let mypos=mylen+2
-22100     let fnlbl(1,1,"Copy Chart of Accounts from Company:",mylen,1)
-22120     let fncmbcno(1,mypos)
-22140     let fncmdset(2)
-22160     let fnacs(sn$,0,mat resp$,ckey)
+22100     fnlbl(1,1,"Copy Chart of Accounts from Company:",mylen,1)
+22120     fncmbcno(1,mypos)
+22140     fncmdset(2)
+22160     fnacs(sn$,0,mat resp$,ckey)
 22180     if ckey=5 then let fro_cno=99999: goto L210 ! use company #99999 if no company to copy from
 22200     let fro_cno=val(resp$(1)(43:47))
 22220     if fro_cno=0 then let fro_cno=99999

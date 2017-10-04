@@ -6,7 +6,7 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(2)*38,tln(2),p$(2)*160,fltyp$(2),sln(2),mask(2),sp(2),c$(2,8)*40
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$='Transaction Codes')
+00090   fntop(program$,cap$='Transaction Codes')
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER : gosub CLOSE_FILE: gosub INDEX
@@ -33,7 +33,7 @@
 00310   return 
 00320 ! ______________________________________________________________________
 00330 BUILD_LAYOUT: ! 
-00340   let fncno(cno)
+00340   fncno(cno)
 00350 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
 00360   let lbl$(ic+=1)="Trans Code" !:
@@ -74,7 +74,7 @@
 00490   return 
 00500 ! ______________________________________________________________________
 00510 HAMSTER: ! 
-00520   let fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00520   fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00530   return 
 00540 ! ______________________________________________________________________
 00550 XIT: let fnxit

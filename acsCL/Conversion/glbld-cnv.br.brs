@@ -5,7 +5,7 @@
 00050 ! ______________________________________________________________________
 00060   dim gl$*12,de$*50
 00070 ! ______________________________________________________________________
-00080   let fncno(cno)
+00080   fncno(cno)
 00090 ! 
 00100   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
 00110   open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",Size=0,RecL=62,Replace",internal,output 

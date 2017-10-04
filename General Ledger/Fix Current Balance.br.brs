@@ -87,13 +87,13 @@
 52320       let iarea_return=0
 52340 !     pause
 52360     end if 
-52380     let fn_is_a_retained_earn_account=iarea_return
+52380     fn_is_a_retained_earn_account=iarea_return
 52400   fnend 
 54000 def fn_theScreen ! lots of local variables
 54020   fncreg_read(cap$&': enableProcessAccumulatedTrans',enableProcessAccumulatedTrans$,'False')
 54040   fncreg_read(cap$&': dayStart',tmp$) : dayStart=val(tmp$)
 54060   fncreg_read(cap$&': dayEnd',tmp$) : dayEnd=val(tmp$)
-54080   let fntos(sn$=Cap$)
+54080   fntos(sn$=Cap$)
 54100   rc=0
 54120
 54140   fnlbl(lc+=1,1,'WARNING: This program recalculates all the Current Balance files in General Ledger Accounts.')
@@ -103,36 +103,36 @@
 54220   fnlbl(lc+=1,1,'    If you do process History Transactions the base for the date will be ')
 54240   fnlbl(lc+=1,1,'          Previous Balance Two Years ago instead of Beginning Balance.')
 54260   lc+=1 : mylen=14 : mypos=mylen+2 
-54280   let fnchk(lc+=1,1,'Process History Transactions')
+54280   fnchk(lc+=1,1,'Process History Transactions')
 54300   resp$(resp_enableAcTrans:=rc+=1)=enableProcessAccumulatedTrans$
 54310 lc+=1
-54320   let fnlbl(lc+=1,1,'Starting Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
-54340   let fntxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
+54320   fnlbl(lc+=1,1,'Starting Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
+54340   fntxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
 54360   let resp$(resp_dateStart=rc+=1)=date$(dayStart,'ccyymmdd')
-54380   let fnlbl(lc+=1,1,'Ending Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
-54400   let fntxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
+54380   fnlbl(lc+=1,1,'Ending Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
+54400   fntxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
 54420   let resp$(resp_dateEnd=rc+=1)=date$(dayEnd,'ccyymmdd')
 56000 ! 
 56020     let lc+=1 : col3_pos=mypos+20
 56410     let resp_lrea_fund_1=rc+1
 56420     if use_dept then 
 56440       col4_pos=col3_pos+10
-56460       let fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account(s)')
+56460       fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account(s)')
 56500       for fund_item=1 to udim(mat fund_list)
-56520         let fnlbl(lc+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",9,1)
-56540         let fnqgl(lc,col4_pos)
+56520         fnlbl(lc+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",9,1)
+56540         fnqgl(lc,col4_pos)
 56560         let rc+=1
-56580         let fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(rc)) : let resp$(rc)=fnrgl$(resp$(rc))
+56580         fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(rc)) : let resp$(rc)=fnrgl$(resp$(rc))
 56600       next fund_item
 56620     else 
 56630       col4_pos=col3_pos+32
-56640       let fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account:',31,1)
-56660       let fnqgl(lc,col4_pos)
+56640       fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account:',31,1)
+56660       fnqgl(lc,col4_pos)
 56680       let rc+=1
-56700       let fncreg_read("last retained earnings account - no fund ",resp$(rc)) : let resp$(rc)=fnrgl$(resp$(rc))
+56700       fncreg_read("last retained earnings account - no fund ",resp$(rc)) : let resp$(rc)=fnrgl$(resp$(rc))
 56720     end if 
-58000   let fncmdset(2)
-58020   let fnacs(sn$,0,mat resp$,ckey)
+58000   fncmdset(2)
+58020   fnacs(sn$,0,mat resp$,ckey)
 58040   if ckey=5 then 
 58060     theScreenReturn=0
 58080   else
@@ -148,11 +148,11 @@
 59030       mat last_retained_earnings_acct$(udim(mat fund_list))
 59040       for fund_item=1 to udim(mat fund_list)
 59060         let last_retained_earnings_acct$(fund_item)=fnagl$(resp$(rc+=1))
-59080         let fncreg_write("last retained earnings account - fund "&str$(fund_list(fund_item)),last_retained_earnings_acct$(fund_item))
+59080         fncreg_write("last retained earnings account - fund "&str$(fund_list(fund_item)),last_retained_earnings_acct$(fund_item))
 59100       next fund_item
 59120     else 
 59140       let last_retained_earnings_acct$(1)=fnagl$(resp$(rc+=1))
-59160       let fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
+59160       fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
 59180     end if 
 59200   end if  ! ck<>5
 59220   fn_theScreen=theScreenReturn
@@ -180,7 +180,7 @@
 73100     end if
 73120   loop 
 74000   caFinis: ! 
-74020   let fn_currentActivity=caReturn
+74020   fn_currentActivity=caReturn
 74040 fnend 
 80000 def fn_accumulatedActivity(hAcTrans,gln$*12,dayStart,dayEnd)
 80020   aaReturn=0
@@ -201,6 +201,6 @@
 83120     end if
 83140   loop while gln$=trgl$
 84000   aaFinis: ! 
-84020   let fn_accumulatedActivity=aaReturn
+84020   fn_accumulatedActivity=aaReturn
 84040 fnend 
 

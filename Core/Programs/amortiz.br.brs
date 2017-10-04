@@ -23,21 +23,21 @@
 00230 MENU1: close #101: ioerr L230
 00235 L230: let fntos("Amort1")
 00240   let lc=0: let rc=0
-00245   let fnlbl(lc+=1,1,"Loan Amount:",18,1)
-00250   let fntxt(lc,20,20,0,0,"10"): let response$(rc+=1)=str$(la)
-00255   let fnlbl(lc+=1,1,"Interest Rate (ie: .15):",18,1)
-00260   let fntxt(lc,20,20,0,0,"43") : let response$(rc+=1)=str$(ir)
-00265   let fnlbl(lc+=1,1,"Years Loan is for:",18,1)
-00270   let fntxt(lc,20,2,0,0,"30"): let response$(rc+=1)=str$(n)
-00275   let fnlbl(lc+=1,1,"Payments Per Year:",18,1)
-00280   let fntxt(lc,20,2,0,0,"30"): let response$(rc+=1)=str$(y)
-00285   let fnlbl(lc+=2,1,"Note: An Interest Rate of 15% should be entered as 0.15",57,2)
+00245   fnlbl(lc+=1,1,"Loan Amount:",18,1)
+00250   fntxt(lc,20,20,0,0,"10"): let response$(rc+=1)=str$(la)
+00255   fnlbl(lc+=1,1,"Interest Rate (ie: .15):",18,1)
+00260   fntxt(lc,20,20,0,0,"43") : let response$(rc+=1)=str$(ir)
+00265   fnlbl(lc+=1,1,"Years Loan is for:",18,1)
+00270   fntxt(lc,20,2,0,0,"30"): let response$(rc+=1)=str$(n)
+00275   fnlbl(lc+=1,1,"Payments Per Year:",18,1)
+00280   fntxt(lc,20,2,0,0,"30"): let response$(rc+=1)=str$(y)
+00285   fnlbl(lc+=2,1,"Note: An Interest Rate of 15% should be entered as 0.15",57,2)
 00290 ! Let TEXT$="Payment:"
 00295 ! Let FNPRF(PFX,6,1,22,1,TEXT$)
 00300 ! Let TEXT$=STR$(P)
 00305 ! Let FNPRF(PFX,6,30,20,0,TEXT$)
-00310   let fncmdset(2)
-00315   let fnacs("Amort1",0,mat response$,ckey)
+00310   fncmdset(2)
+00315   fnacs("Amort1",0,mat response$,ckey)
 00320   let rc=0
 00325   let s=la=val(response$(rc+=1))
 00330   let ir=val(response$(rc+=1))
@@ -107,7 +107,7 @@
 00940   pr fields "12,30,C 15,N": "Printing Page: "
 00950   pr fields "14,34,Cc 11,B,5": "Cancel (F5)"
 00960   let pge=0
-00970   let fnopenprn
+00970   fnopenprn
 00980   gosub PR_HDR
 00990   goto L1200
 01000 ! ______________________________________________________________________
@@ -214,5 +214,5 @@
 02010 ! /region
 02020 ! ______________________________________________________________________
 02030   def fna(r)
-02040     let fna=int(r*100+.5)/100
+02040     fna=int(r*100+.5)/100
 02050   fnend 

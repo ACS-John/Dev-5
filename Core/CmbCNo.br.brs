@@ -12,14 +12,14 @@
 00120     dim opt$(9999)*48,filename$(9999)*18,cnam$*40,oldcnam$*40,resp$(10)*80,sys_data_path$*256
 00130 ! 
 00140     mat opt$(9999) : mat filename$(9999)
-00150     let fncno(cno,oldcnam$)
+00150     fncno(cno,oldcnam$)
 00170     if trim$(mysys$)='' then 
 00180       let sys_data_path$=env$('Q')&'\'&fncursys$&"mstr"
 00190     else 
 00200       let sys_data_path$=env$('Q')&'\'&mysys$&"mstr"
 00210     end if 
 00220 ! 
-00230     let fngetdir(sys_data_path$,mat filename$,empty$,temp$="Company.h*")
+00230     fngetdir(sys_data_path$,mat filename$,empty$,temp$="Company.h*")
 00232     let x:=fngethandle
 00240     for a=1 to udim(filename$)
 00250       let filename$=trim$(filename$)
@@ -46,7 +46,7 @@
 00460     next a
 00470 ! _______________________________________________________________________
 00480 EXITFOR: ! 
-00520     let fncomboa('CmbCNo-'&fncursys$,myline,mypos,mat opt$,'Select from currently installed companies for the '&fncursys$&' system.',55)
+00520     fncomboa('CmbCNo-'&fncursys$,myline,mypos,mat opt$,'Select from currently installed companies for the '&fncursys$&' system.',55)
 00530     goto XIT
 00550 ! <Updateable Region: ERTN>
 00560 ERTN: let fnerror(program$,err,line,act$,"xit")

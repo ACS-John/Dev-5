@@ -2,14 +2,14 @@
 00020 ! Payroll Report File - Add Records
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnoldmsgbox,fncno,fnerror
-00045   let fntop("S:\acsPR\prRpt2",cap$="Design Reports")
+00045   fntop("S:\acsPR\prRpt2",cap$="Design Reports")
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim rt$*78,ch$(2)*132,psc(100),inp(20),pp(20),ti(20)
 00080   dim io1$(9),fb$(20),io2$(60),rptemp(20),tempch$(4)*256
 00090   dim temp(20,3),cnam$*40,cap$*128,response$(5)*1,cap$*128,msgline$(2)*60
 00100 ! ______________________________________________________________________
-00120   let fncno(cno,cnam$)
+00120   fncno(cno,cnam$)
 00130   for z=1 to 20
 00140     let z$=str$(z+1)
 00150     c$=str$(z+1)
@@ -59,7 +59,7 @@
 00590 ! pr Fields "2,40,C 35,N": "This Report Number Already Exists"
 00600   let msgline$(1)="Report Number "&str$(rn)&" already exists"
 00610   let msgline$(2)="Please use a different Report Number."
-00620   let fnoldmsgbox(mat resonse$,cap$,mat msgline$,1)
+00620   fnoldmsgbox(mat resonse$,cap$,mat msgline$,1)
 00630   ce=1 : goto ERR1
 00640 L640: if ips<0 or ips>126 then goto L470
 00650   if ips>1 and ips<6 then goto L470

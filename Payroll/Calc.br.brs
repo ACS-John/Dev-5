@@ -13,8 +13,8 @@
 00238 ! g_pay_periods_per_year used to be t6
 00240 ! twy - total wages yearToDate
 00242 ! gdp - gross pay for department
-00244   let fn_setup
-00250   let fntop(program$,cap$="Payroll Calculation")
+00244   fn_setup
+00250   fntop(program$,cap$="Payroll Calculation")
 00525   gosub ASKDATES
 00527   if ckey=5 then goto XIT
 00530   let dat$=lpad$(str$(d1),6)
@@ -80,7 +80,7 @@
 00900   let tcp(32)-=tcp4: let tcp(4)=tcp4
 00920   let rewritekey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)&cnvrt$("pd 6",prd) ! index employee#,department# and payroll date
 00930   rewrite #h_payrollchecks,using 'Form pos 80,pd 5.2,poS 220,pd 5.2',key=rewritekey$: tcp(4),tcp(32)
-00936   let fn_report_stuff
+00936   fn_report_stuff
 00940   rewrite #h_department,using 'Form pos 42,n 6',key=olddeptkey$: tdt(4)
 00952   goto L670
 00960   L960: ! 
@@ -133,7 +133,7 @@
 01250 BAD_PAY_CODE: ! r:
 01252   mat ml$(1)
 01254   let ml$(1)="Incorrect Pay Code "&str$(em(5))&" on Employee Number "&trim$(x$)&". Did not calculate pay on this Employee"
-01256   let fnmsgbox(mat ml$,resp$,cap$,0)
+01256   fnmsgbox(mat ml$,resp$,cap$,0)
 01270 goto ReadRpWork ! /r
 01280 ! ______________________________________________________________________
 01285 PAYCODE_1: let t6=12 : let g_pay_periods_per_year=12 : goto PAST_PAYCODE
@@ -184,7 +184,7 @@
 01570   if tgp<>0 then goto L1610
 01572   mat ml$(1)
 01574   let ml$(1)="Employee Number "&trim$(x$)&" skipped Total Gross Pay = 0, Must be Re-entered"
-01576   let fnmsgbox(mat ml$,resp$,cap$,0)
+01576   fnmsgbox(mat ml$,resp$,cap$,0)
 01600   goto ReadRpWork
 01610   L1610: !
 01612   let pog=gpd/tgp
@@ -390,7 +390,7 @@
 02504   let n$=" "
 02506   mat ml$(1)
 02508   let ml$(1)="Employee Number "&x$&" is not on file. No check calculated."
-02510   let fnmsgbox(mat ml$,resp$,cap$,0)
+02510   fnmsgbox(mat ml$,resp$,cap$,0)
 02514   goto ReadRpWork
 02518 ! /r
 02520 EO_RPWORK: ! r:
@@ -493,22 +493,22 @@
 03350 return  ! /r
 03360 ! ______________________________________________________________________
 03370 ASKSKIPWH: ! r:
-03380   let fntos(sn$="Skipdeductions")
+03380   fntos(sn$="Skipdeductions")
 03382   let rc=cf=0: let mylen=42: let mypos=45
-03390   let fnchk(1,46,"Skip Federal Withholdings:",1)
+03390   fnchk(1,46,"Skip Federal Withholdings:",1)
 03392   let resp$(rc+=1)="False"
-03400   let fnchk(2,46,"Skip State Withholdings:",1)
+03400   fnchk(2,46,"Skip State Withholdings:",1)
 03402   let resp$(rc+=1)="False"
-03410   let fnchk(3,46,"Skip Fica Withholdings:",1)
+03410   fnchk(3,46,"Skip Fica Withholdings:",1)
 03412   let resp$(rc+=1)="False"
-03420   let fnchk(4,46,"Skip Standard Withholdings:",1)
+03420   fnchk(4,46,"Skip Standard Withholdings:",1)
 03422   let resp$(rc+=1)="False"
-03430   let fnlbl(6,1,"Standard Federal % Override:",mylen,1,0)
-03440   let fntxt(6,mypos,4,0,1,"32",0,"Normally zero. The government allows you to use a standard percent on bonuses, etc. See Circular E for allowable %.")
+03430   fnlbl(6,1,"Standard Federal % Override:",mylen,1,0)
+03440   fntxt(6,mypos,4,0,1,"32",0,"Normally zero. The government allows you to use a standard percent on bonuses, etc. See Circular E for allowable %.")
 03442   let resp$(rc+=1)=""
-03450   let fncmdkey("Next",1,1,0,"Proceed with calculations.")
-03460   let fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
-03470   let fnacs(sn$,0,mat resp$,ckey) ! skip deductions & std %
+03450   fncmdkey("Next",1,1,0,"Proceed with calculations.")
+03460   fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
+03470   fnacs(sn$,0,mat resp$,ckey) ! skip deductions & std %
 03480   if ckey<>5 then 
 03490     if resp$(1)(1:1)="T" then let in2$(1)="Y" else let in2$(1)="N"
 03500     if resp$(2)(1:1)="T" then let in2$(2)="Y" else let in2$(2)="N"
@@ -680,29 +680,29 @@
 14080   ASKDATES_WRITE_DATE: ! 
 14100   write #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1: beg_date,end_date,d1,d1$
 14120   ASKDATES_SCREEN: ! 
-14140   let fntos(sn$="Calculation-1")
+14140   fntos(sn$="Calculation-1")
 14160   let rc=cf=0: let mylen=42: let mypos=45: let frameno=1
 14180   gosub GET_ALPHA_DATE ! get alpha date
-14200   let fnfra(1,1,4,66,"Payroll Date","Enter the payroll date.")
-14220   let fnlbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
-14240   let fntxt(1,mypos,10,0,1,"3",0,"Enter the date which you want used for your earnings records. ",frameno)
+14200   fnfra(1,1,4,66,"Payroll Date","Enter the payroll date.")
+14220   fnlbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
+14240   fntxt(1,mypos,10,0,1,"3",0,"Enter the date which you want used for your earnings records. ",frameno)
 14260   let resp$(rc+=1)=str$(d1)
-14280   let fnlbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
-14300   let fntxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report headings, etc." ,frameno)
+14280   fnlbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
+14300   fntxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report headings, etc." ,frameno)
 14320   let resp$(rc+=1)= d1$
-14340   let fnchk(3,46,"Accrue Vacation and Sick Leave this period:",1,frameno)
+14340   fnchk(3,46,"Accrue Vacation and Sick Leave this period:",1,frameno)
 14360   let resp$(rc+=1)="False"
-14380   let fnfra(7,25,2,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.")
+14380   fnfra(7,25,2,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.")
 14400   let frameno=2 : let mylen=26 : let mypos=mylen+2
-14420   let fnlbl(1,1,"Starting Date:",mylen,1,0,frameno)
-14440   let fntxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno)
+14420   fnlbl(1,1,"Starting Date:",mylen,1,0,frameno)
+14440   fntxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno)
 14460   let resp$(rc+=1)=str$(beg_date)
-14480   let fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
-14500   let fntxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno)
+14480   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
+14500   fntxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno)
 14520   let resp$(rc+=1)=str$(end_date)
-14540   let fncmdkey("Next",1,1,0,"Proceed with calculations.")
-14560   let fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
-14580   let fnacs(sn$,0,mat resp$,ckey)
+14540   fncmdkey("Next",1,1,0,"Proceed with calculations.")
+14560   fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
+14580   fnacs(sn$,0,mat resp$,ckey)
 14600   if ckey<>5 then 
 14620     let prd=d1=val(resp$(1))
 14640     let d1$=resp$(2)
@@ -837,7 +837,7 @@
 36100   next tl_item
 36120   let tl_item=udim(mat tl_table,1)
 36140   TL_XIT: ! 
-36160   let fn_table_line=tl_item
+36160   fn_table_line=tl_item
 36180 fnend 
 37000 ST01: ! r:
 37020 ! tcd(1) = state code
@@ -1025,13 +1025,13 @@
 42480     ! WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (195 * allowances)
 42500     ! let wor_return=or2(wor_table_line,2)+(wor_base-or2(wor_table_line,1))*or2(wor_table_line,3)
 42520   let wor_return = wor_pre_base +(( wor_base - wor_remove_prev) * wor_tax_rate) - (195 * wor_allowances_effective)
-42540   let fnstatus('withholding before dividing by pay periods = '&str$(wor_return))
+42540   fnstatus('withholding before dividing by pay periods = '&str$(wor_return))
 42560   let wor_return=wor_return/wor_pay_periods_per_year
 42580   let wor_return=round(wor_return,2)
 42600   if wor_return<.1 then let wor_return=0
-42620   let fnstatus('calculated withholding ='&str$(wor_return))
+42620   fnstatus('calculated withholding ='&str$(wor_return))
 42640   if debug then let fnstatus_pause ! pause
-42660   let fn_wh_oregon=wor_return
+42660   fn_wh_oregon=wor_return
 42680 fnend 
 44000 def fn_or_phase_out(opo_wages,opo_fed_wh,opo_table,opo_is_single,opo_is_married)
 44020   if opo_wages<50000 then 
@@ -1061,7 +1061,7 @@
 44500     end if 
 44520   end if 
 44540   OPO_XIT: ! 
-44560   let fn_or_phase_out=opo_return
+44560   fn_or_phase_out=opo_return
 44580 fnend 
 46000 def fn_wh_kentuky(wky_wages_taxable_current,g_pay_periods_per_year,wky_allowances)
 46020   ! KYWH: ! REPLACE kentucky.wh/acswrk,source ! kentucky:  rec=20  ky(6,3) ! revised 12/31/2005
@@ -1201,7 +1201,7 @@
 65340   fn_statePersonalAllowance=statePersonalAllowance
 65900 fnend
 66000 def fn_test_state_calk
-66020   let fn_setup
+66020   fn_setup
 66040   ! show the state you are assined  to and let you change it if you like.
 66060   let pay_periods_per_year=52
 66080   let wages_taxable_current=399.60

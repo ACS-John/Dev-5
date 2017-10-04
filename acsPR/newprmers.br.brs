@@ -1,7 +1,7 @@
 12000 ! r: setup stuff
 12020   on error goto ERTN
 12040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn, fncloseprn,fnerror,fntos,fnfra,fnopt,fnlbl,fntxt,fncmbact,fncmdkey,fnacs,fnchk,fnDedNames
-12060   let fntop(program$,cap$="Pension Report")
+12060   fntop(program$,cap$="Pension Report")
 12100 ! 
 12120   dim em$*30,tcp(32),tdc(10),cp(32),ttdc(10)
 12140   dim dedcode(20),calcode(20),dedfed(20),fullname$(20)*20,resp$(50)*60
@@ -13,7 +13,7 @@
 12300   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,input,relative 
 12320 ! /r
 18000   gosub SCREEN_PENSION1
-18020   let fnopenprn ! 
+18020   fnopenprn ! 
 18040   gosub HDR
 18060 READ_EMPLOYEE: ! 
 18080   read #1,using 'form pos 1,n 8,c 30,pos 99,c 11': eno,em$,ss$ eof FINIS
@@ -51,7 +51,7 @@
 28040   pr #255: "                                      ----------  ----------  ----------  ---------- "
 28060   pr #255,using F_LINE_OUT: " "," ",total_salary,total_ded,total_pension,total_salary+total_ded
 28080   pr #255: "                                      =========-  ==========  ==========  ========== "
-28120   let fncloseprn
+28120   fncloseprn
 28140   close #25: ioerr ignore
 28160   goto XIT ! /r
 29000 XIT: let fnxit
@@ -75,31 +75,31 @@
 32040   gosub HDR
 32200   continue  ! /r
 60000 SCREEN_PENSION1: ! r:
-60010   let fntos(sn$="Pension-1")
+60010   fntos(sn$="Pension-1")
 60020   let rc=cf=0
-60040   let fnfra(1,1,21,23,"Deductions Effecting Pension Wage","Mark any deduction that either needs to be added to gross wages or deducted from gross wages before calculating the Pension Wage",0)
+60040   fnfra(1,1,21,23,"Deductions Effecting Pension Wage","Mark any deduction that either needs to be added to gross wages or deducted from gross wages before calculating the Pension Wage",0)
 60060   cf+=1 : let fratype=cf
 60080   for j=1 to 20
-60100     let fnchk(j,3,fullname$(j),0,fratype)
+60100     fnchk(j,3,fullname$(j),0,fratype)
 60120     let resp$(rc+=1)="False"
 60140   next j
-60160   let fnfra(1,30,20,23,"Pension Deduction","Mark the pension deduction that you want printed on the report",0)
+60160   fnfra(1,30,20,23,"Pension Deduction","Mark the pension deduction that you want printed on the report",0)
 60180   cf+=1 : let fratype=cf
 60200   for j=1 to 20
-60220     let fnopt(j,3,fullname$(j),0,fratype)
+60220     fnopt(j,3,fullname$(j),0,fratype)
 60240     let resp$(rc+=1)="False"
 60260   next j
-60280   let fnfra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.")
+60280   fnfra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.")
 60300   cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
-60320   let fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
-60340   let fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
+60320   fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
+60340   fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
 60360   let resp$(rc+=1)=str$(beg_date)
-60380   let fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
-60400   let fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
+60380   fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
+60400   fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
 60420   let resp$(rc+=1)=str$(end_date)
-60440   let fncmdkey("Next",1,1,0,"Prints the report")
-60460   let fncmdkey("Cancel",5,0,1,"Returns to menu")
-60480   let fnacs(sn$,0,mat resp$,ckey)
+60440   fncmdkey("Next",1,1,0,"Prints the report")
+60460   fncmdkey("Cancel",5,0,1,"Returns to menu")
+60480   fnacs(sn$,0,mat resp$,ckey)
 60500   if ckey=5 then goto XIT
 60520   for j=1 to 20
 60540     if resp$(j)="True" then let sel_ded(j)=1

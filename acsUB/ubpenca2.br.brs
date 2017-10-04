@@ -11,12 +11,12 @@
 14100   dim penalty$(10)*1,subjectto(10),gb(10),extra(23),a(7)
 14120   dim columnhead$(10)*13,tmp$*220,coltot(10)
 14140 ! ______________________________________________________________________
-18000   let fntop(program$,cap$="Additional Penalty Calculation")
-18020   let fncno(cno,cnam$)
-18040   let fnd1(bildat)
-18060   let fndat(dat$)
+18000   fntop(program$,cap$="Additional Penalty Calculation")
+18020   fncno(cno,cnam$)
+18040   fnd1(bildat)
+18060   fndat(dat$)
 18080 ! 
-18100   let fnget_services(mat servicename$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
+18100   fnget_services(mat servicename$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 18120   for j=1 to 10
 18140     if uprc$(penalty$(j))="Y" then 
 18160       let pencount=pencount+1 ! count number of penalty columns needed
@@ -29,9 +29,9 @@
 18300   mat columnhead$(pencount)
 18320   mat coltot(pencount)
 18340 ! 
-18360   let fncreg_read('Second Penalty Calculation Min Balance',minimumbal$) : let minimumbal=val(minimumbal$) conv ignore
-18380   let fncreg_read('Second Penalty Calculation Penalty Amount',penaltyamt$) : let penaltyamt=val(penaltyamt$) conv ignore
-18400   let fncreg_read('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$) ! : let penaltyamt=val(penaltyamt$) conv ignore
+18360   fncreg_read('Second Penalty Calculation Min Balance',minimumbal$) : let minimumbal=val(minimumbal$) conv ignore
+18380   fncreg_read('Second Penalty Calculation Penalty Amount',penaltyamt$) : let penaltyamt=val(penaltyamt$) conv ignore
+18400   fncreg_read('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$) ! : let penaltyamt=val(penaltyamt$) conv ignore
 18420   if minimumbal=0 then 
 18440     open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&str$(cno)&",Shr",internal,outin,relative ioerr ignore
 18460     read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal ioerr ignore
@@ -39,31 +39,31 @@
 18500   end if 
 18520 ! 
 28000 SCREEN1: ! 
-28020   let fntos(sn$="ubPenCa2")
+28020   fntos(sn$="ubPenCa2")
 28040   let mylen=29 : let mypos=mylen+2
-28060   let fnlbl(1,1,"Penalty Date:",mylen,1)
-28080   let fntxt(1,mypos,10,0,1,"1003")
+28060   fnlbl(1,1,"Penalty Date:",mylen,1)
+28080   fntxt(1,mypos,10,0,1,"1003")
 28100   let resp$(1)=str$(pendat)
-28120   let fnlbl(2,1,"Last Billing Date:",mylen,1)
-28140   let fntxt(2,mypos,10,0,1,"1003")
+28120   fnlbl(2,1,"Last Billing Date:",mylen,1)
+28140   fntxt(2,mypos,10,0,1,"1003")
 28160   let resp$(2)=str$(bildat)
-28180   let fnlbl(3,1,"Report Heading Date:",mylen,1)
-28200   let fntxt(3,mypos,20)
+28180   fnlbl(3,1,"Report Heading Date:",mylen,1)
+28200   fntxt(3,mypos,20)
 28220   let resp$(3)=dat$
-28240   let fnchk(4,31,"Print Meter Address:",1)
+28240   fnchk(4,31,"Print Meter Address:",1)
 28260   let resp$(4)="False"
-28280   let fnchk(5,31,"Print Mailing Address:",1)
+28280   fnchk(5,31,"Print Mailing Address:",1)
 28300   let resp$(5)="False"
-28320   let fnlbl(6,1,"Minimum Balance:",mylen,1)
-28340   let fntxt(6,mypos,8,0,1,"10",0,"The customer's balance must be at least this amount before a penalty will be calculated.")
+28320   fnlbl(6,1,"Minimum Balance:",mylen,1)
+28340   fntxt(6,mypos,8,0,1,"10",0,"The customer's balance must be at least this amount before a penalty will be calculated.")
 28360   let resp$(6)=str$(minimumbal)
-28380   let fnlbl(7,1,"Penalty Amount:",mylen,1)
-28400   let fntxt(7,mypos,8,0,1,"10",0,"Amount of penalty.")
+28380   fnlbl(7,1,"Penalty Amount:",mylen,1)
+28400   fntxt(7,mypos,8,0,1,"10",0,"Amount of penalty.")
 28420   let resp$(7)=str$(penaltyamt)
-28440   let fnchk(9,31,"Skip Customers with a "&trim$(servicename$(10))&" Rate Code of 9",1)
+28440   fnchk(9,31,"Skip Customers with a "&trim$(servicename$(10))&" Rate Code of 9",1)
 28460   let resp$(8)=skip_s10r9$
-28480   let fncmdset(2)
-28500   let fnacs(sn$,0,mat resp$,ck)
+28480   fncmdset(2)
+28500   fnacs(sn$,0,mat resp$,ck)
 32000   if ck=5 then goto XIT
 32020   let pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
 32040   bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))
@@ -76,27 +76,27 @@
 32180 ! 
 34000   if pendat=0 then 
 34020     let msgline$(1)="You must enter a valid Penalty Date"
-34040     let fnmsgbox(mat msgline$,pause$,cap$,48)
+34040     fnmsgbox(mat msgline$,pause$,cap$,48)
 34060     goto SCREEN1
 34080   else 
 34100     let pendat=fndate_mmddyy_to_ccyymmdd(pendat)
 34120   end if 
 34140   if bildat=0 then 
 34160     let msgline$(1)="You must enter a valid Last Billing Date."
-34180     let fnmsgbox(mat msgline$,pause$,cap$,48)
+34180     fnmsgbox(mat msgline$,pause$,cap$,48)
 34200     goto SCREEN1
 34220   end if 
 34240 ! 
-36000   let fncreg_write('Second Penalty Calculation Min Balance',str$(minimumbal))
-36020   let fncreg_write('Second Penalty Calculation Penalty Amount',str$(penaltyamt))
-36040   let fncreg_write('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$)
-36060   let fndat(dat$,2)
+36000   fncreg_write('Second Penalty Calculation Min Balance',str$(minimumbal))
+36020   fncreg_write('Second Penalty Calculation Penalty Amount',str$(penaltyamt))
+36040   fncreg_write('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$)
+36060   fndat(dat$,2)
 36080 ! 
 38100   open #customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 38120   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&str$(cno)&",Shr",internal,outin,keyed 
 38140   gosub BUD1
 38160   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-38180   let fnopenprn
+38180   fnopenprn
 38200   gosub HDR
 42000 READ_CUSTOMER: ! r:
 42020   read #customer,using 'Form POS 1,C 10,4*C 30,POS 143,7*PD 2,POS 292,PD 4.2,PD 4,12*PD 4.2,POS 388,10*PD 5.2,POS 1741,N 2,N 7,2*N 6,N 9,PD 5.2,N 3,3*N 9,3*N 2,3*N 3,N 1,3*N 9,3*PD 5.2,C 30,7*C 12,3*C 30': z$,mat e$,mat a,bal,f,mat g,mat gb,mat extra eof EO_CUSTOMER
@@ -184,7 +184,7 @@
 48330   next j
 48340   close #customer: ioerr ignore
 48360   close #2: ioerr ignore
-48380   let fncloseprn
+48380   fncloseprn
 48400   goto XIT ! /r
 50000 PGOF: ! r:
 50020   pr #255: newpage
@@ -242,15 +242,15 @@
 62100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 62120 ! /region
 64000 ! r: Sangamon's second screen
-64020   let fntos(sn$="ubPenCal22")
-64040   let fnlbl(1,1,"First Route #:",27,1)
-64060   let fntxt(1,29,2,0,1,"30",0,"Enter the first route number that is subject to a penalty on this penalty date")
+64020   fntos(sn$="ubPenCal22")
+64040   fnlbl(1,1,"First Route #:",27,1)
+64060   fntxt(1,29,2,0,1,"30",0,"Enter the first route number that is subject to a penalty on this penalty date")
 64080   let resp$(1)=str$(prtbkno1)
-64100   let fnlbl(2,1,"Last Route #:",27,1)
-64120   let fntxt(2,29,2,0,1,"30")
+64100   fnlbl(2,1,"Last Route #:",27,1)
+64120   fntxt(2,29,2,0,1,"30")
 64140   let resp$(2)=str$(prtbkno2)
-64160   let fncmdset(2)
-64180   let fnacs(sn$,0,mat resp$,ck)
+64160   fncmdset(2)
+64180   fnacs(sn$,0,mat resp$,ck)
 64200   if ck=5 then goto XIT
 64220   let prtbkno1=val(resp$(1))
 64240   let prtbkno2=val(resp$(2))

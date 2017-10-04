@@ -2,13 +2,13 @@
 00020 ! ???
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5
 00090   dim gln(3,3),fin(3),ta(2),ac(18),te$*1
 00100 ! ______________________________________________________________________
-00110   let fncno(cno)
+00110   fncno(cno)
 00120 ! 
 00130   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00140   open #2: "Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno),internal,output 

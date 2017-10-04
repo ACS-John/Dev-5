@@ -7,7 +7,7 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(9)*38,tln(9),p$(9)*160,fltyp$(9),sln(9),mask(9),sp(9),c$(9,8)*40
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$='Transaction Allocation (Hamster)')
+00090   fntop(program$,cap$='Transaction Allocation (Hamster)')
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER
@@ -21,7 +21,7 @@
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 00190 ! ______________________________________________________________________
 00200 BUILD_LAYOUT: ! 
-00210   let fncno(cno)
+00210   fncno(cno)
 00220 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
 00230   let lbl$(ic+=1)="Bank Code" !:
@@ -111,7 +111,7 @@
 00420   return 
 00430 ! ______________________________________________________________________
 00440 HAMSTER: ! 
-00450   let fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00450   fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00460   return 
 00470 ! ______________________________________________________________________
 00480 XIT: let fnxit

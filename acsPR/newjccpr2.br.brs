@@ -12,12 +12,12 @@
 00120   dim fullname$(20)*20,abrevname$(20)*8,ml$(2)*80
 00130   dim dedfica(20),dedst(20),deduc(20),gl$(20)*12,client$*30
 00140 ! ______________________________________________________________________
-00150   let fncno(cno,cnam$)
+00150   fncno(cno,cnam$)
 00160 ! 
-00170   let fntop(program$,cap$="Certified Payroll Register")
+00170   fntop(program$,cap$="Certified Payroll Register")
 00180 ! ______________________________________________________________________
 00190   on fkey 5 goto L1990
-00200   let fnopenprn
+00200   fnopenprn
 00210   if file$(255)(1:3)<>"PRN" then let jbskip=1
 00280 ! ______________________________________________________________________
 00290   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:

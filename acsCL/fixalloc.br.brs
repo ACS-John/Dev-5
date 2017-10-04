@@ -9,7 +9,7 @@
 00090 ! ______________________________________________________________________
 00100   if glt=2 then !:
           cap$="Fix check amounts"
-00110   let fncno(cno,cnam$)
+00110   fncno(cno,cnam$)
 00120   cancel=99
 00130 ! ______________________________________________________________________
 00140   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 

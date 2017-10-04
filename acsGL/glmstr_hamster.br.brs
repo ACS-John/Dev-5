@@ -4,12 +4,12 @@
 00040 ! ______________________________________________________________________
 00050   dim cap$*128
 00060 ! ______________________________________________________________________
-00070   let fntop(program$,cap$='GLMaster')
+00070   fntop(program$,cap$='GLMaster')
 00090   dim srvnam$(10)*20,srv$(10)*2
-00190   let fn_hamster_setup
-00200   let fn_open_file : let fn_close_file : let fn_open_file
-00210   let fnhamster_2("GLmstr")
-00220   let fn_close_file
+00190   fn_hamster_setup
+00200   fn_open_file : let fn_close_file : let fn_open_file
+00210   fnhamster_2("GLmstr")
+00220   fn_close_file
 00230   goto XIT
 00240 ! ______________________________________________________________________
 00250   def fn_open_file
@@ -34,12 +34,12 @@
 00440     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 00450     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
 00460     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
-00470     let fnhamster_field_reset
+00470     fnhamster_field_reset
 00480 !     fn_hamster_field_add(label$*38,textbox_len,field_type$*2; storage_length,ar_mask,storage_position)
-00490     let fnhamster_field_add("Account",12)
-00500     let fnhamster_field_add("Income Stmt Ref",5,"PD",3,mask_number,69)
-00501     let fnhamster_field_add("Beginning Balance",11,"PD",6,mask_pointtwo,81)
-00502     let fnhamster_field_add("Current Balance",11,"PD",6,mask_pointtwo,87)
-00503     let fnhamster_field_add("2-Yr Beginning",11,"PD",6,mask_pointtwo,327)
+00490     fnhamster_field_add("Account",12)
+00500     fnhamster_field_add("Income Stmt Ref",5,"PD",3,mask_number,69)
+00501     fnhamster_field_add("Beginning Balance",11,"PD",6,mask_pointtwo,81)
+00502     fnhamster_field_add("Current Balance",11,"PD",6,mask_pointtwo,87)
+00503     fnhamster_field_add("2-Yr Beginning",11,"PD",6,mask_pointtwo,327)
 00520   fnend 
 00530 ! 

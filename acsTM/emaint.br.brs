@@ -2,10 +2,10 @@
 00020 ! 
 00030   on error goto L2380
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fndat
-00050   let fntop(program$,cap$="Employee")
-00060   let fnconsole(1)
-00070   let fncno(cno,cnam$)
-00075   let fndat(dat$)
+00050   fntop(program$,cap$="Employee")
+00060   fnconsole(1)
+00070   fncno(cno,cnam$)
+00075   fndat(dat$)
 00080 ! 
 00100   dim scr3$(15)*25,fl3$(17),ot3$(15),in3$(15),scrid3$(2)*80
 00110   dim fl4$(23),ot4$(40),in4$(40),scrid4$(3)*80
@@ -170,7 +170,7 @@
 01700   let in6$(cv)(cv1:cv1)="RC"
 01710   goto L1140
 01720 L1720: pr newpage
-01725   let fnopenprn
+01725   fnopenprn
 01730   pr fields "7,15,c 50,h,n": "POSITION PAPER FOR EMPLOYEE PROOF LISTING"
 01740   pr fields "10,10,c 40,n": "ENTER AS OF DATE FOR EMPLOYEE PROOF LIST"
 01750   pr fields "10,52,c 20,n": dat$

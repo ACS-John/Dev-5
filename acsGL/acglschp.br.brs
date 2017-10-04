@@ -9,8 +9,8 @@
 00090   dim sn$*78,ft$*78,gl$(80)*12,prtsch(99),d$*50
 00100   dim cnam$*40,d(2),actpd$*6,pedat$*20,cch$*20,d(2),cap$*128
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Print Schedules")
-00130   let fncno(cno,cnam$)
+00120   fntop(program$,cap$="Print Schedules")
+00130   fncno(cno,cnam$)
 00140   open #20: "Name=CNO.H"&wsid$,internal,input,relative  !:
         read #20,using 'Form POS 141,6*N 1,3*N 2,C 6,POS 195,2*C 20',rec=1: process,ps,filno,priorcd,mat d,fscode,lmu,actpd,actpd$,pedat$,cch$ !:
         close #20: 
@@ -36,7 +36,7 @@
 00340   pr newpage
 00350   pr fields "10,20,C 60,N": "PRINT SCHEDULES IN PROCESS"
 00360   pr fields "12,2,C 30,B,5": "Press F5 to stop"
-00370   let fnopenprn(cp,58,220,process)
+00370   fnopenprn(cp,58,220,process)
 00380 L380: if prtall=1 then goto L440
 00390 L390: let g=g+1
 00400   if prtsch(g)=0 then goto DONE
@@ -127,7 +127,7 @@
 01250 L1250: return 
 01260 ! ______________________________________________________________________
 01270 DONE: ! 
-01280   let fncloseprn
+01280   fncloseprn
 01290   goto XIT
 01300 ! ______________________________________________________________________
 01310 XIT: let fnxit

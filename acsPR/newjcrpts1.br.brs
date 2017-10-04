@@ -10,8 +10,8 @@
 00100   dim ln$*255,pf$*255,af$*255,gpf$*255,gaf$*255,jpf$*255,jaf$*255,upf$*255
 00110   dim uaf$*255
 00120 ! ______________________________________________________________________
-00121   let fntop("S:\acsPR\newjcRptS1",cap$="User Designed Reports (1)")
-00130   let fncno(cno)
+00121   fntop("S:\acsPR\newjcRptS1",cap$="User Designed Reports (1)")
+00130   fncno(cno)
 00150 ! ______________________________________________________________________
 00160   data "JN"
 00170   data "n$"

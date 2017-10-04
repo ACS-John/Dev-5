@@ -2,7 +2,7 @@
 00020 ! reorganize the unpaid file.  For years the allocations on the unpaid invoices have not been cleared from the allocaiton file.  If he same invoice is used again, it will add the old allocation to the check in history.
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fnerror,fnCopy,fnindex_it
-00050   let fntop(program$,cap$="Reorganize Unpaid File")
+00050   fntop(program$,cap$="Reorganize Unpaid File")
 00070   on error goto ERTN
 00080 ! ______________________________________________________________________
 00090   dim cap$*128

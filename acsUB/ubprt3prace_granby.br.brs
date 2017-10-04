@@ -10,8 +10,8 @@
 00100   dim servicename$(10)*20,service$(10)*2
 00110   dim dueby$*30,usage(3),billdate(3),ml$(2)*80,tg(11)
 00120 ! ______________________________________________________________________
-00130   let fncno(cno,cnam$)
-00140   let fnd1(d1)
+00130   fncno(cno,cnam$)
+00140   fnd1(d1)
 00150   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
 00160   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 00170   close #21: 
@@ -29,7 +29,7 @@
 00290   next j
 00300   let linelength=62
 00310 !  :  !
-00320   let fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
+00320   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00330   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
 00340   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence #
 00350   open #ubtransvb=15: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -41,43 +41,43 @@
 00410   let mg$(2)="472-6556 or 472-3535."
 00420 SCREEN1: ! 
 00430   a$="" : let prtbkno=0
-00440   let fntos(sn$="UBPrtBl1-1")
+00440   fntos(sn$="UBPrtBl1-1")
 00450   let pf=26 : let ll=24
 00460   let respc=0
-00470   let fnlbl(1,1,"Current Reading Date:",ll,1)
-00480   let fntxt(1,pf,8,8,1,"1",0,tt$)
+00470   fnlbl(1,1,"Current Reading Date:",ll,1)
+00480   fntxt(1,pf,8,8,1,"1",0,tt$)
 00490   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",reading_date_cur)
-00500   let fnlbl(2,1,"Previous Reading Date:",ll,1)
-00510   let fntxt(2,pf,8,8,1,"1",0,tt$)
+00500   fnlbl(2,1,"Previous Reading Date:",ll,1)
+00510   fntxt(2,pf,8,8,1,"1",0,tt$)
 00520   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",reading_date_prior_s1)
-00530   let fnlbl(3,1,"Penalty Due Date:",ll,1)
-00540   let fntxt(3,pf,8,8,1,"1",0,tt$)
+00530   fnlbl(3,1,"Penalty Due Date:",ll,1)
+00540   fntxt(3,pf,8,8,1,"1",0,tt$)
 00550   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
-00560   let fnlbl(4,1,"Message on Bill:",ll,1)
-00570   let fntxt(4,pf,30,30)
+00560   fnlbl(4,1,"Message on Bill:",ll,1)
+00570   fntxt(4,pf,30,30)
 00580   let resp$(respc+=1)=mg$(1)
-00590   let fntxt(5,pf,30,30)
+00590   fntxt(5,pf,30,30)
 00600   let resp$(respc+=1)=mg$(2)
-00610   let fntxt(6,pf,30,30)
+00610   fntxt(6,pf,30,30)
 00620   let resp$(respc+=1)=mg$(3)
-00630   let fnlbl(7,1,"Date of Billing:",ll,1)
-00640   let fntxt(7,pf,8,8,1,"1")
+00630   fnlbl(7,1,"Date of Billing:",ll,1)
+00640   fntxt(7,pf,8,8,1,"1")
 00650   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
-00660   let fnlbl(8,1,"Starting Account:",ll,1)
+00660   fnlbl(8,1,"Starting Account:",ll,1)
 00670 ! let fe$="ubm-act-nam"
 00680 ! let datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno)
 00690 ! let indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno)
 00700 ! let kp=1741: let kl=9 : let dp=41 : let dl=30
 00710 ! let fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
-00712   let fncmbact(8,pf, 1) ! ,container,indexfile$*200)
+00712   fncmbact(8,pf, 1) ! ,container,indexfile$*200)
 00720   let resp$(respc+=1)="[All]"
-00730   let fnlbl(9,1,"Route Number:",ll,1)
-00740   let fncmbrt2(9,pf)
+00730   fnlbl(9,1,"Route Number:",ll,1)
+00740   fncmbrt2(9,pf)
 00750   let resp$(respc+=1)="[All]"
-00760   let fnchk(10,pf,"Select Accounts to Print",1)
+00760   fnchk(10,pf,"Select Accounts to Print",1)
 00770   let resp$(respc+=1)="False"
-00780   let fncmdset(3)
-00790   let fnacs(sn$,0,mat resp$,ck)
+00780   fncmdset(3)
+00790   fnacs(sn$,0,mat resp$,ck)
 00800   if ck=5 then goto ENDSCR
 00810   let reading_date_cur_s1=val(resp$(1))
 00820   let reading_date_prior_s1=val(resp$(2))
@@ -109,7 +109,7 @@
 01055   if exists(env$('Q')&"\UBmstr\Cass1.h"&str$(cno)) then let fn_sort1 else let fn_bulksort
 01060 ! ______________________________________________________________________
 01065   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-01070   let fnpa_open
+01070   fnpa_open
 01075 ! ______________________________________________________________________
 01080 ! on fkey 5 goto RELEASE_PRINT
 01082 L650: if sl1=1 then goto SCREEN3
@@ -157,7 +157,7 @@
 01166   close #1: ioerr L1010
 01168 L1010: close #3: ioerr L1020
 01170 L1020: ! 
-01172   let fnpa_finis
+01172   fnpa_finis
 01174   goto ENDSCR
 01176 ! ______________________________________________________________________
 01178 L1070: ! 
@@ -168,26 +168,26 @@
 01188   let fb$(3)=mg$(3)
 01190 ! If C4>0 Then Let FB$(1)="          Final Bill" : Let FB$(2)="": Let FB$(3)=""
 01192 ! ______________print bill routine______________________________________
-01194   let fn_vbprint
+01194   fn_vbprint
 01196 ! _____________end of pr routine______________________________________
 01198   bct(2)=bct(2)+1
 01200 ! .   ! accumulate totals
 01202   goto L650
 01204 ! ______________________________________________________________________
 01206 SCREEN3: ! r:
-01208   let fntos(sn$:="UBPrtBl1-2")
+01208   fntos(sn$:="UBPrtBl1-2")
 01210   let txt$="Account (blank to stop)"
-01212   let fnlbl(1,1,txt$,31,1)
+01212   fnlbl(1,1,txt$,31,1)
 01214   if trim$(z$)<>"" then 
 01216     let txt$="Last Account entered was "&z$
-01218     let fnlbl(3,1,txt$,44,1)
+01218     fnlbl(3,1,txt$,44,1)
 01220   else 
 01222     let txt$=""
-01224     let fnlbl(3,1,txt$,44,1)
+01224     fnlbl(3,1,txt$,44,1)
 01226   end if 
-01228   let fncmbact(1,17)
+01228   fncmbact(1,17)
 01230   let resp$(1)=a$
-01232   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
+01232   fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
 01234   a$=lpad$(trim$(resp$(1)(1:10)),10)
 01236   if trim$(a$)="" then goto RELEASE_PRINT
 01238   if ck=5 then goto RELEASE_PRINT
@@ -195,7 +195,7 @@
 01242   goto L760 ! /r
 01244 ! ______________________________________________________________________
 01246 ENDSCR: ! 
-01248   let fn_screen_totals
+01248   fn_screen_totals
 01250   : let fnxit
 01252 ! ______________________________________________________________________
 01254 ERTN: let fnerror(program$,err,line,act$,"xit")
@@ -207,14 +207,14 @@
 01800 ! ______________________________________________________________________
 01810   def fn_screen_totals
 01820     if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
-01830     let fntos(sn$="Bills-Total")
+01830     fntos(sn$="Bills-Total")
 01840     let mylen=23 : let mypos=mylen+2
 01850     let respc=0
-01860     let fnlbl(1,1,"Total Bills Printed:",mylen,1)
-01870     let fntxt(1,mypos,8,0,1,"",1)
+01860     fnlbl(1,1,"Total Bills Printed:",mylen,1)
+01870     fntxt(1,mypos,8,0,1,"",1)
 01880     let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-02000     let fncmdset(52)
-02010     let fnacs(sn$,0,mat resp$,ck)
+02000     fncmdset(52)
+02010     fnacs(sn$,0,mat resp$,ck)
 02020   fnend 
 02030   def fn_sort1 ! SELECT & SORT
 02040     open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -282,56 +282,56 @@
 03270     let line_height=3
 03280     let pos_column_column=5 ! 20 !  pos_column_column=remit side position
 03290     let pos_right_column=120 ! pos_right_column=customer side position
-03300     let fnpa_line(pos_right_column+12,factor+0,62,line_height+12,1) ! the box around the company name and address
+03300     fnpa_line(pos_right_column+12,factor+0,62,line_height+12,1) ! the box around the company name and address
 03310 ! pr #20: 'Call Print.AddLine('&STR$(4)&','&STR$(factor+2)&',64,'&str$(line_height*3+1)&',True)'
 03320     pr #20: "Call Print.MyFontBold(True)"
 03330     pr #20: 'Call Print.MyFontSize(12)'
 03340     pr #20: 'Call Print.MyFont("Courier New")'
-03350     let fnpa_txt(at$(1),pos_right_column+15,factor+line_height*1-1)
+03350     fnpa_txt(at$(1),pos_right_column+15,factor+line_height*1-1)
 03360     pr #20: 'Call Print.MyFont("Lucida Console")'
 03370     pr #20: 'Call Print.MyFontSize(10)'
 03380     pr #20: 'Call Print.MyFontBold(False)'
-03390     let fnpa_txt(at$(2),pos_right_column+13,factor+line_height*2+1-.2)
-03400     let fnpa_txt(at$(3),pos_right_column+15,factor+line_height*3+1)
+03390     fnpa_txt(at$(2),pos_right_column+13,factor+line_height*2+1-.2)
+03400     fnpa_txt(at$(3),pos_right_column+15,factor+line_height*3+1)
 03410 PRESORTED_BOX: ! 
 03420     pr #20: 'Call Print.MyFontSize(9)'
-03430     let fnpa_txt("Please return this",pos_column_column+8,factor+line_height*1)
-03440     let fnpa_txt("side with payment to:",pos_column_column+8,factor+line_height*2)
-03450     let fnpa_txt(trim$(cnam$),pos_column_column+8,factor+line_height*3)
-03460     let fnpa_txt(e$(2),pos_right_column+8,factor+line_height*7)
-03470     let fnpa_txt('Billing Date:'&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),pos_right_column+5,factor+line_height*8)
-03480     let fnpa_txt(trim$(z$),pos_right_column+54,factor+line_height*8)
+03430     fnpa_txt("Please return this",pos_column_column+8,factor+line_height*1)
+03440     fnpa_txt("side with payment to:",pos_column_column+8,factor+line_height*2)
+03450     fnpa_txt(trim$(cnam$),pos_column_column+8,factor+line_height*3)
+03460     fnpa_txt(e$(2),pos_right_column+8,factor+line_height*7)
+03470     fnpa_txt('Billing Date:'&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),pos_right_column+5,factor+line_height*8)
+03480     fnpa_txt(trim$(z$),pos_right_column+54,factor+line_height*8)
 03490     pr #20: 'Call Print.AddLine('&str$(pos_right_column)&','&str$(factor+line_height*9+1)&',79,0)'
 03500     pr #20: 'Call Print.MyFontSize(9)'
-03510     let fnpa_txt("Service",pos_right_column,factor+line_height*9+2)
-03520     let fnpa_txt("Prior",pos_right_column+18,factor+line_height*9+2)
-03530     let fnpa_txt("Reading",pos_right_column+31,factor+line_height*9+2)
-03540     let fnpa_txt("Usage",pos_right_column+51,factor+line_height*9+2)
-03550     let fnpa_txt("Charge",pos_right_column+66,factor+line_height*9+2)
+03510     fnpa_txt("Service",pos_right_column,factor+line_height*9+2)
+03520     fnpa_txt("Prior",pos_right_column+18,factor+line_height*9+2)
+03530     fnpa_txt("Reading",pos_right_column+31,factor+line_height*9+2)
+03540     fnpa_txt("Usage",pos_right_column+51,factor+line_height*9+2)
+03550     fnpa_txt("Charge",pos_right_column+66,factor+line_height*9+2)
 03560     pr #20: 'Call Print.MyFontSize(10)'
-03570     let fnpa_txt('Billing Date:',pos_column_column-2,factor+line_height*8)
-03580     let fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),pos_column_column+35,factor+line_height*8)
-03590     let fnpa_txt('Past Due:',pos_column_column-2,factor+line_height*09)
-03600     let fnpa_txt(fnformnumb$(pb,2,9),pos_column_column+30,factor+line_height*09)
-03610     let fnpa_txt('Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',pos_column_column-2,factor+line_height*11)
-03620     let fnpa_txt(fnformnumb$(bal,2,9),pos_column_column+30,factor+line_height*11)
-03630     let fnpa_txt('After  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',pos_column_column-2,factor+(line_height*12)+1)
-03640     let fnpa_txt(fnformnumb$(bal+g(12)-g(11),2,9),pos_column_column+30,factor+(line_height*12)+1)
+03570     fnpa_txt('Billing Date:',pos_column_column-2,factor+line_height*8)
+03580     fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),pos_column_column+35,factor+line_height*8)
+03590     fnpa_txt('Past Due:',pos_column_column-2,factor+line_height*09)
+03600     fnpa_txt(fnformnumb$(pb,2,9),pos_column_column+30,factor+line_height*09)
+03610     fnpa_txt('Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',pos_column_column-2,factor+line_height*11)
+03620     fnpa_txt(fnformnumb$(bal,2,9),pos_column_column+30,factor+line_height*11)
+03630     fnpa_txt('After  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',pos_column_column-2,factor+(line_height*12)+1)
+03640     fnpa_txt(fnformnumb$(bal+g(12)-g(11),2,9),pos_column_column+30,factor+(line_height*12)+1)
 03650 ! let penbal=bal ! If BAL>0 Then Let PENBAL=BAL+MIN(ROUND(BAL*.10,2),g(10)) Else Let PENBAL=0  ! don't know what the penalty rate is
 03660 ! if bal>0 then
-03670 !  let fnpa_txt(fnformnumb$(penbal,2,9),pos_column_column+30,factor+(line_height*12)+1)
+03670 !  fnpa_txt(fnformnumb$(penbal,2,9),pos_column_column+30,factor+(line_height*12)+1)
 03680 ! else 
-03690 !  let fnpa_txt(fnformnumb$(bal,2,9),pos_column_column+30,factor+(line_height*12)+1)
+03690 !  fnpa_txt(fnformnumb$(bal,2,9),pos_column_column+30,factor+(line_height*12)+1)
 03700 ! end if  ! bal>0
 03710     pr #20: 'Call Print.MyFontsize(10)'
-03720     let fnpa_txt("From:"&cnvrt$("pic(zz/zz/zz)",reading_date_prior)&"  To:"&cnvrt$("pic(zz/zz/zz)",reading_date_cur),pos_column_column+6,factor+line_height+=13)
-03730     let fnpa_txt("From:"&cnvrt$("pic(zz/zz/zz)",reading_date_prior)&"  To:"&cnvrt$("pic(zz/zz/zz)",reading_date_cur),pos_right_column+6,factor+line_height)
+03720     fnpa_txt("From:"&cnvrt$("pic(zz/zz/zz)",reading_date_prior)&"  To:"&cnvrt$("pic(zz/zz/zz)",reading_date_cur),pos_column_column+6,factor+line_height+=13)
+03730     fnpa_txt("From:"&cnvrt$("pic(zz/zz/zz)",reading_date_prior)&"  To:"&cnvrt$("pic(zz/zz/zz)",reading_date_cur),pos_right_column+6,factor+line_height)
 03740     let line_height+=14
 03750     pr #20: 'Call Print.MyFontsize(9)'
-03760     let fn_print_serivce_metered(1,d(2),d(1),d(3)) ! Water
-03770     let fn_print_serivce_metered(2) ! Sewer
+03760     fn_print_serivce_metered(1,d(2),d(1),d(3)) ! Water
+03770     fn_print_serivce_metered(2) ! Sewer
 03780 ! let fn_print_serivce_metered(3,d(6),d(5),d(7)) ! Electric
-03790     let fn_print_serivce_metered(4,d(10),d(9),d(11)) ! Gas
+03790     fn_print_serivce_metered(4,d(10),d(9),d(11)) ! Gas
 03800     if g(5)>0 then let fn_print_serivce_metered(5) ! Service 5
 03810     if g(6)>0 then let fn_print_serivce_metered(6) ! Service 6
 03820     if g(7)>0 then let fn_print_serivce_metered(7) ! Service 7
@@ -346,12 +346,12 @@
 03910     else if line_height>180 then 
 03920       let line_height=242
 03930     end if 
-03940     let fnpa_txt(z$,pos_column_column,factor+52)
+03940     fnpa_txt(z$,pos_column_column,factor+52)
 03950 ! let fnbarcode(z$,103,factor+45)
 03960     if pb><0 then 
 03970       let de2$="Prior Balance"
 03980       let txt$=de2$&"          "&cnvrt$("pic(-----.--)",pb)
-03990       let fnpa_txt(txt$,pos_right_column+6,factor+line_height)
+03990       fnpa_txt(txt$,pos_right_column+6,factor+line_height)
 04000     else 
 04010       let de2$="             "
 04020     end if 
@@ -359,27 +359,27 @@
 04040     if final>0 then let de2$="   Final Bill  " : goto L2710 else let de2$="               "
 04050     if df$="Y" then let de2$="   DRAFTED     ": goto L2710 else let de2$="               " : goto L2720
 04055 L2710: let txt$=de2$
-04060     let fnpa_txt(txt$,pos_right_column+6,factor+line_height+=7.0)
+04060     fnpa_txt(txt$,pos_right_column+6,factor+line_height+=7.0)
 04062 L2720: pr #20: 'Call Print.MyFontSize(12)'
 04064     let txt$=pe$(1)
-04066     let fnpa_txt(txt$,pos_column_column,factor+58)
+04066     fnpa_txt(txt$,pos_column_column,factor+58)
 04068     pr #20: 'Call Print.MyFontsize(10)'
 04070     pr #20: 'Call Print.AddLine('&str$(pos_right_column)&','&str$(factor+line_height+=3.5)&',79,0)'
-04072     let fnpa_txt("Due by: "&cnvrt$("pic(zz/zz/zz)",d4),pos_right_column+6,factor+line_height+=2.5)
+04072     fnpa_txt("Due by: "&cnvrt$("pic(zz/zz/zz)",d4),pos_right_column+6,factor+line_height+=2.5)
 04074     pr #20: 'Call Print.MyFontSize(12)'
-04076     let fnpa_txt(cnvrt$("pic(---,---.--)",bal),pos_right_column+48,factor+line_height)
-04078     let fnpa_txt(pe$(2)(1:25),pos_column_column,factor+61.50)
+04076     fnpa_txt(cnvrt$("pic(---,---.--)",bal),pos_right_column+48,factor+line_height)
+04078     fnpa_txt(pe$(2)(1:25),pos_column_column,factor+61.50)
 04080     pr #20: 'Call Print.MyFontsize(10)'
-04082     let fnpa_txt(e$(1)(1:18),pos_column_column,factor+42)
+04082     fnpa_txt(e$(1)(1:18),pos_column_column,factor+42)
 04084     pr #20: 'Call Print.MyFontSize(12)'
-04086     let fnpa_txt(pe$(3),pos_column_column,factor+65)
+04086     fnpa_txt(pe$(3),pos_column_column,factor+65)
 04088 ! pr #20: 'Call Print.MyFontsize(10)'
 04090 ! pr #20: 'Call Print.MyFontSize(12)'
-04092     let fnpa_txt(pe$(4)(1:25),pos_column_column,factor+68.50)
+04092     fnpa_txt(pe$(4)(1:25),pos_column_column,factor+68.50)
 04094     pr #20: 'Call Print.MyFontsize(10)'
-04096     let fnpa_txt(mg$(1),pos_right_column+6,factor+line_height+=3.5)
-04098     let fnpa_txt(mg$(2),pos_right_column+6,factor+line_height+=3.5)
-04100     let fnpa_txt(mg$(3),pos_right_column+6,factor+line_height+=3.5)
+04096     fnpa_txt(mg$(1),pos_right_column+6,factor+line_height+=3.5)
+04098     fnpa_txt(mg$(2),pos_right_column+6,factor+line_height+=3.5)
+04100     fnpa_txt(mg$(3),pos_right_column+6,factor+line_height+=3.5)
 04102     if line_height<90 then let updown=3
 04104     if line_height>90 and line_height<180 then let updown=6.5
 04106     if line_height>180 and line_height<270 then let updown=10
@@ -402,6 +402,6 @@
 04140       let psm_txt$='  '
 04142     end if 
 04143 ! if service_reading_prior>service_reading_current then let psm_temp=service_reading_current : service_reading_current=service_reading_prior : service_reading_prior=psm_temp
-04144     let fnpa_txt(psm_txt$&cnvrt$("pic(zzzzzzzz)",service_usage)&cnvrt$("pic(-----z.zz)",g(service_number)),pos_right_column,factor+line_height+=3.5)
-04146     let fnpa_txt(servicename$(service_number)(1:5)&cnvrt$("pic(-----z.zz)",g(service_number)),pos_column_column+55,factor+line_height)
+04144     fnpa_txt(psm_txt$&cnvrt$("pic(zzzzzzzz)",service_usage)&cnvrt$("pic(-----z.zz)",g(service_number)),pos_right_column,factor+line_height+=3.5)
+04146     fnpa_txt(servicename$(service_number)(1:5)&cnvrt$("pic(-----z.zz)",g(service_number)),pos_column_column+55,factor+line_height)
 04148   fnend  ! fn_print_serivce_metered

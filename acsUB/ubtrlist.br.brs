@@ -19,19 +19,19 @@
 16080   dim t1(5),tc$(5)*14,resp$(20)*256,msgline$(1)*128
 16100   dim st1(5)
 16120   if env$('ACSDeveloper')<>'' then let raw_output=1 ! 
-18000   let fntop(program$,cap$="Transaction Listing")
-18020   let fncno(cno,cnam$)
-18040   let fndat(dat$)
+18000   fntop(program$,cap$="Transaction Listing")
+18020   fncno(cno,cnam$)
+18040   fndat(dat$)
 18060   ccyymmdd_mask$="3"
 18080   dim servicename$(10)*20,service$(10)*2,tax_code$(10)*2,penalty$(10)*1,subjectto(10)
 18100   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative 
 18120   read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto
 18140   close #20: 
 18160 ! 
-18180   let fnreg_read('ubtrlist.date.start',tmp$) : let filter_date_start=val(tmp$) conv ignore
-18200   let fnreg_read('ubtrlist.date.end',tmp$) : let filter_date_end=val(tmp$) conv ignore
+18180   fnreg_read('ubtrlist.date.start',tmp$) : let filter_date_start=val(tmp$) conv ignore
+18200   fnreg_read('ubtrlist.date.end',tmp$) : let filter_date_end=val(tmp$) conv ignore
 18220 ! 
-18240   let fnreg_read('ubtrlist.skip_line_after_account',tmp$) : let skip_line_after_account=1 : if tmp$='True' then let skip_line_after_account=1 else if tmp$='False' then let skip_line_after_account=0
+18240   fnreg_read('ubtrlist.skip_line_after_account',tmp$) : let skip_line_after_account=1 : if tmp$='True' then let skip_line_after_account=1 else if tmp$='False' then let skip_line_after_account=0
 18260 let fnreg_read('ubtrlist.print_tbal',tmp$) : let print_tbal=1 : if tmp$='True' then let print_tbal=1 else if tmp$='False' then let print_tbal=0
 18280 let fnreg_read('ubtrlist.sequence',tmp$) : let seq=1 : if tmp$='True' then let seq=1 else if tmp$='False' then let seq=0
 18300 ! 
@@ -89,7 +89,7 @@
 23000 if filter_date_start>filter_date_end and filter_date_start>0 and filter_date_end>0 then 
 23020   mat msgline$(1)
 23040   let msgline$(1)="Ending Date Before Starting Date!"
-23060   let fnmsgbox(mat msgline$,resp$,cap$,48)
+23060   fnmsgbox(mat msgline$,resp$,cap$,48)
 23080   goto SCREEN1
 23100 end if 
 23990 ! 

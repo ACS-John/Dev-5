@@ -8,33 +8,33 @@
 00080   dim gl$*12,c$*12,p$*30,s$*2,a(3),dcode$*24,glc$*24,holdgc$*24,currgl$*12
 00090   dim cap$*128,resp$(10)*80
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Bank Reconciliation Report")
-00120   let fnconsole(off=0)
-00130   let fncno(cno,cnam$)
-00140   let fndat(dat$)
+00110   fntop(program$,cap$="Bank Reconciliation Report")
+00120   fnconsole(off=0)
+00130   fncno(cno,cnam$)
+00140   fndat(dat$)
 00150   let right=1 : center=2 : let pointtwo$="32"
-00160   let fntos(sn$="glCkRec") !:
+00160   fntos(sn$="glCkRec") !:
         let lc=0 : let mylen=40 : let mypos=mylen+2
-00170   let fnlbl(lc+=1,1,"General Ledger Bank Account Number:",mylen,right)
-00180   let fnqgl(lc,mypos) !:
+00170   fnlbl(lc+=1,1,"General Ledger Bank Account Number:",mylen,right)
+00180   fnqgl(lc,mypos) !:
         let resp$(1)=fnrgl$(resp$(1))
 00190 ! Let IO1$(1)="2,43,Nz 3,UT,N" : Let IO1$(2)="2,47,Nz 6,UT,N" !:
         ! Let IO1$(3)="2,54,Nz 3,UT,N" : Let IO1$(4)="3,43,c 20,UT,N" !:
         ! Let IO1$(5)="4,43,Nz 12.2,UT,N" : Let IO1$(6)="5,43,Nz 6,UT,N"
 00200 ! pr Fields "15,29,C 10,B,1": "Print (F1)" !:
         ! pr Fields "15,41,C 09,B,5": "Exit (F5)"
-00210   let fnlbl(lc+=1,1,"Report Heading Date:",mylen,right)
-00220   let fntxt(lc,mypos,20) !:
+00210   fnlbl(lc+=1,1,"Report Heading Date:",mylen,right)
+00220   fntxt(lc,mypos,20) !:
         let resp$(2)=dat$
-00230   let fnlbl(lc+=1,1,"Balance per Bank Statement:",mylen,right)
-00240   let fntxt(lc,mypos,12,0,0,'PointTwo') !:
+00230   fnlbl(lc+=1,1,"Balance per Bank Statement:",mylen,right)
+00240   fntxt(lc,mypos,12,0,0,'PointTwo') !:
         let resp$(3)=str$(bankbal)
-00250   let fnlbl(lc+=1,1,"Last Check Date for Reconciliation:",mylen,right)
-00260   let fntxt(lc,mypos,0,0,0,'CCYYMMDD') !:
+00250   fnlbl(lc+=1,1,"Last Check Date for Reconciliation:",mylen,right)
+00260   fntxt(lc,mypos,0,0,0,'CCYYMMDD') !:
         let resp$(4)=str$(lcd)
-00270   let fncmdset(3)
+00270   fncmdset(3)
 00280 ! Rinput #101,Fields MAT IO1$: GL1,GL2,GL3,DAT$,BANKBAL,LCD !:
-        let fnacs(sn$,0,mat resp$,ckey)
+        fnacs(sn$,0,mat resp$,ckey)
 00290   if ckey=5 then goto XIT
 00300   let resp$(1)=fnagl$(resp$(1)) !:
         let gl1=val(resp$(1)(1:3)) !:
@@ -44,11 +44,11 @@
         bankbal=val(resp$(3)) !:
         let lcd=val(resp$(4))
 00310   currgl$=resp$(1)
-00320   let fnwait(0,cap$,"Printing: Please wait...",1) !:
+00320   fnwait(0,cap$,"Printing: Please wait...",1) !:
         on fkey 5 goto DONE
 00330   open #glbrec=1: "Name="&env$('Q')&"\GLmstr\glbrec.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\glrecidx.h"&str$(cno)&",Shr",internal,input,keyed ioerr XIT
 00340   read #glbrec,using 'Form POS 1,C 12,C 12,C 30,C 2,N 6,PD 5.2,N 1',key>=currgl$&"            ": gl$,c$,p$,s$,mat a nokey DONE
-00350   let fnopenprn
+00350   fnopenprn
 00360   if currgl$<>gl$ then goto DONE
 00370   gosub HDR !:
         pr #255,using 'Form POS 20,C 35,N 16.2': "* Balance Per Bank Statement *",bankbal !:

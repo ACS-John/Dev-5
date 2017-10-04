@@ -18,6 +18,6 @@
 38060   dim exefil$*100
 38080   linput #exefil: exefil$
 38100   close #exefil,free: 
-38120   let fnMsExe$=exefil$
+38120   fnMsExe$=exefil$
 38140   let exefil=0
 38160 fnend 

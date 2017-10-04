@@ -8,8 +8,8 @@
 00080   dim lbl$(2)*38,tln(2),p$(2)*160,fltyp$(2),mask(2),sln(2)
 00090   dim c$(2,8)*40
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Payee Type")
-00120   let fncno(cno)
+00110   fntop(program$,cap$="Payee Type")
+00120   fncno(cno)
 00130   let lbl$(1)="Payee Type" !:
         let lbl$(2)="Type Description"
 00140   let tln(1)=2 : let tln(2)=25
@@ -19,7 +19,7 @@
 00180   open #1: "Name="&env$('Q')&"\GLmstr\PayeeType.dat,Version=1,KFName="&env$('Q')&"\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outin,keyed 
 00190   close #1: 
 00200   open #1: "Name="&env$('Q')&"\GLmstr\PayeeType.dat,Version=1,KFName="&env$('Q')&"\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outin,keyed 
-00210   let fnhamster("PayeeType",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00210   fnhamster("PayeeType",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00220 XIT: let fnxit
 00230 ! ______________________________________________________________________
 00240 ! <Updateable Region: ERTN>

@@ -2,7 +2,7 @@
 02000 ! r: SETUP: fntop, dims, open files, etc
 02020   library 'S:\Core\Library': fntop,fnxit, fncno,fnopenprn,fncloseprn,fnerror,fntos,fnfra,fnlbl,fntxt,fncombof,fncomboa,fnbutton,fncmdkey,fnacs,fnmsgbox,fnflexadd1,fnflexinit1,fnchk,fnaddpayee,fnagl$,fnrgl$,fnjob_srch,fncmbjob,fncmbcategory
 02040   library 'S:\Core\Library': fngethandle,fncmbsubcat,fncategory_srch,fnregistered_for_job_cost_pr,fncmdset,fnrglbig$,fnqglbig
-02060   let fntop(program$,cap$="Unpaid Invoice")
+02060   fntop(program$,cap$="Unpaid Invoice")
 02080   on error goto ERTN
 02120 ! ______________________________________________________________________
 02140   dim cap$*128
@@ -19,7 +19,7 @@
 02360 ! let screen_last=5
 02380 ! ______________________________________________________________________
 02400   let right=1
-02420   let fncno(cno)
+02420   fncno(cno)
 02440   open #20: "Name="&env$('Q')&"\CLmstr\PostDat.h"&str$(cno)&",Shr,Use,RecL=12",internal,outin,relative 
 02460   read #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2 norec L690
 02480   goto L700
@@ -72,10 +72,10 @@
 06300   cmask$(13)='30': cmask$(14)='3'
 06320   cmask$(15)='30': cmask$(16)='1'
 06340 DISPLAY_INVOICE_GRID: ! 
-06360   let fntos(sn$="unpaid1")
+06360   fntos(sn$="unpaid1")
 06380   let respc=0
 06400   let frame=0
-06420   let fnflexinit1('UnpaidFile',1,1,20,85,mat chdr$,mat cmask$,1,0)
+06420   fnflexinit1('UnpaidFile',1,1,20,85,mat chdr$,mat cmask$,1,0)
 06440   restore #paytrans: 
 06460 READ_INVOICE_GRID: ! r: read unpaid invoice file and populate the grid
 06480   read #paytrans,using 'Form POS 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof EO_INVOICE_GRID norec L970
@@ -86,20 +86,20 @@
 06580   let item$(11)=str$(pcde) : let item$(12)=str$(bcde)
 06600   let item$(13)=str$(ckn) : let item$(14)=str$(dp)
 06620   let item$(15)=str$(gde) : let item$(16)=str$(pdte)
-06640   let fnflexadd1(mat item$)
+06640   fnflexadd1(mat item$)
 06660 ! let transactionstotal+=upa
 06680 L970: ! 
 06700   goto READ_INVOICE_GRID
 06720 EO_INVOICE_GRID: ! /r
 06740   if havejc=1 then 
-06760     let fncmdkey("&Review Job Cost Entries",9,0,0,"Allows you to review and/or post any job cost allocations you have made.")
+06760     fncmdkey("&Review Job Cost Entries",9,0,0,"Allows you to review and/or post any job cost allocations you have made.")
 06780   end if
-06800   let fncmdkey("&Add",1,0,0,"Allows you to add new unpaid invoice records.")
-06820   let fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing unpaid invoice record.")
-06840   let fncmdkey("&Select to Pay",8,0,0,"Allows you to code invoices for payment")
-06860   let fncmdkey("&Listing",3,0,0,"Prints listings from unpaid file")
-06880   let fncmdkey("E&xit",5,0,1,"Exits to main menu")
-06900   let fnacs(sn$,0,mat resp$,ck)
+06800   fncmdkey("&Add",1,0,0,"Allows you to add new unpaid invoice records.")
+06820   fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing unpaid invoice record.")
+06840   fncmdkey("&Select to Pay",8,0,0,"Allows you to code invoices for payment")
+06860   fncmdkey("&Listing",3,0,0,"Prints listings from unpaid file")
+06880   fncmdkey("E&xit",5,0,1,"Exits to main menu")
+06900   fnacs(sn$,0,mat resp$,ck)
 06920   let displayalljobs=0
 06940   if ck=5 then goto FINIS
 06960   ! let screen=0
@@ -119,7 +119,7 @@
 08000 PRINTLISTING: ! r: pr listings
 08020 ! need screen here asking paid/unpaid/all,starting inv #,1st inv to print,show breakdowns(y/n),display last ref in file, 1st ref # used this time
 08040 ! need ref # to begin pr (blank for all)   rf2    show last ref  lrec(4)
-08060   let fnopenprn
+08060   fnopenprn
 08080   let pg=0
 08100   if rf2=0 then let rf2=1
 08120   gosub HDR
@@ -146,7 +146,7 @@
 08540   next j
 08560   pr #255,using 'Form POS 81,C 10,SKIP 1,POS 81,N 10.2,SKIP 1,POS 81,C 10,SKIP 1': "__________",t1,"=========="
 08580 ! 
-08600   let fncloseprn
+08600   fncloseprn
 08620   on fkey 99 ignore 
 08640   return ! /r
 10000 NEWPGE: ! r:
@@ -155,7 +155,7 @@
 10030 continue ! /r
 12000 HDR: ! r:
 12010   let pg=pg+1
-12020   let fnopenprn
+12020   fnopenprn
 12030   pr #255,using 'Form POS 1,C 8,Cc 82': date$,env$('cnam')
 12040   pr #255,using 'Form POS 1,C 4,N 4,POS 36,C 40': "Page",pg,"Unpaid Invoice File Listing"
 12050   pr #255: ""
@@ -170,7 +170,7 @@
 14030     let ml$(1)="It appears you have "&str$(lrec(jcbreakdown))&"job cost entries"
 14040     let ml$(2)="that have not been posted.  Do you wish to post these"
 14050     let ml$(3)="entries before you exit?"
-14060     let fnmsgbox(mat ml$,resp$,cap$,4)
+14060     fnmsgbox(mat ml$,resp$,cap$,4)
 14070     if resp$="Yes" then gosub POST_TO_JOB
 14080   end if
 14090 goto XIT ! /r
@@ -243,7 +243,7 @@
 21380   cmask$(11)='3' : cmask$(12)='30' : cmask$(13)='30'
 21390   cmask$(14)='1' : cmask$(15)='30' : cmask$(16)="1"
 21400 RE_DISPLAY_GRID: ! save a little time
-21410   let fntos(sn$="paidinv")
+21410   fntos(sn$="paidinv")
 21420   let respc=0 : mat resp$=('')
 21430 let fnfra(2,1,13,23,"Approval Options"," ")
 21440 let fnbutton(1,2,"&Approve All",62,"Will select to pay all unpaid invoices",1,18,1)
@@ -272,8 +272,8 @@
 21640 let resp$(respc_total:=respc+=1)=str$(total)
 21650 let fnchk(3,47,"Display at Top:",1)
 21660 let resp$(respc+=1)=displayattop$
-21670   let fnlbl(1,1,trim$(env$('cnam')(1:30))&"-"&type$,65,2)
-21680   let fnflexinit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
+21670   fnlbl(1,1,trim$(env$('cnam')(1:30))&"-"&type$,65,2)
+21680   fnflexinit1('unpaidinv',5,27,15,55,mat chdr$,mat cmask$,1)
 21682   respc_selectedrec=respc+=1
 21690   restore #clearing: 
 21700   if nextrec>0 and displayattop$="True" then goto L4890 else goto L5030
@@ -577,7 +577,7 @@
 35440   let ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
 35460   let ml$(2)="already exists in the Unpaid Invoice file."
 35480   let ml$(3)="Please change the Invoice Number or the Payee."
-35500   let fnmsgbox(mat ml$,resp$,cap$,0)
+35500   fnmsgbox(mat ml$,resp$,cap$,0)
 35520   goto TEST_KEY_FAIL
 35540 ! ___________
 35560 TEST_KEY_FAIL_ON_IV: ! 
@@ -585,17 +585,17 @@
 35600   let ml$(1)="The invoice number "&trim$(iv$)&" for Payee "&trim$(vn$)
 35620   let ml$(2)="already exists in the Paid Invoice file."
 35640   let ml$(3)="Please change the Invoice Number or the Payee."
-35660   let fnmsgbox(mat ml$,resp$,cap$,0)
+35660   fnmsgbox(mat ml$,resp$,cap$,0)
 35680   goto TEST_KEY_FAIL
 35700 ! ___________
 35720 TEST_KEY_OK: ! 
 35740 ! pr 'fnTest Key PASSED'
-35760   let fntest_key=1
+35760   fntest_key=1
 35780   goto EO_TEST_KEY
 35800 ! ___________
 35820 TEST_KEY_FAIL: ! 
 35840 ! pr 'fnTest Key FAILED'
-35860   let fntest_key=2
+35860   fntest_key=2
 35880   goto EO_TEST_KEY
 35900 ! ___________
 35920 EO_TEST_KEY: ! 
@@ -640,59 +640,59 @@
 42100   end if
 42120   !
 46000 ai_ADD_UNPAID_INVOICES_TOS: ! r:
-46020   let fntos(sn$="ai_unpaid-2")
+46020   fntos(sn$="ai_unpaid-2")
 46040   let respc=0 : mat resp$=("") : let frame_width=90
 46060   let lc=0
-46080   let fnfra(1,1,11,frame_width,"Unpaid Invoice")
+46080   fnfra(1,1,11,frame_width,"Unpaid Invoice")
 46100   let lc=0 : let mylen=18 : let mypos=mylen+2
 46120   let frame=1
-46160   let fnlbl(lc+=1,1,"Payee:",mylen,right,0,frame)
-46180   let fncombof("Paymstr",lc,mypos,0,env$('Q')&"\CLmstr\paymstr.h"&str$(cno),1,8,9,30,env$('Q')&"\CLmstr\Payidx1.h"&str$(cno),1,0, "Enter the payee number (Use the 'Add Payee' option to add a new vendor record",frame)
+46160   fnlbl(lc+=1,1,"Payee:",mylen,right,0,frame)
+46180   fncombof("Paymstr",lc,mypos,0,env$('Q')&"\CLmstr\paymstr.h"&str$(cno),1,8,9,30,env$('Q')&"\CLmstr\Payidx1.h"&str$(cno),1,0, "Enter the payee number (Use the 'Add Payee' option to add a new vendor record",frame)
 46200   let resp$(1)=vn$
-46220   let fnlbl(lc+=1,1,"Invoice Number:",mylen,right,0,frame)
-46240   let fntxt(lc,mypos,12,0,0,"",0,"",frame)
+46220   fnlbl(lc+=1,1,"Invoice Number:",mylen,right,0,frame)
+46240   fntxt(lc,mypos,12,0,0,"",0,"",frame)
 46260   let resp$(2)=iv$
 46280 ! had a required answer here; temporarly changed to a message box
-46300   let fnlbl(lc+=1,1,"Invoice Date:",mylen,right,0,frame)
-46320   let fntxt(lc,mypos,8,0,1,"mmddyy",0,"",frame)
+46300   fnlbl(lc+=1,1,"Invoice Date:",mylen,right,0,frame)
+46320   fntxt(lc,mypos,8,0,1,"mmddyy",0,"",frame)
 46340   let resp$(3)=up$(1)
-46360   let fnlbl(lc+=1,1,"Due Date:",mylen,right,0,frame)
-46380   let fntxt(lc,mypos,8,0,1,"mmddyy",0,"",frame)
+46360   fnlbl(lc+=1,1,"Due Date:",mylen,right,0,frame)
+46380   fntxt(lc,mypos,8,0,1,"mmddyy",0,"",frame)
 46400   let resp$(4)=up$(2)
-46420   let fnlbl(lc+=1,1,"P O Number:",mylen,right,0,frame)
-46440   let fntxt(lc,mypos,12,0,0,"",0,"",frame)
+46420   fnlbl(lc+=1,1,"P O Number:",mylen,right,0,frame)
+46440   fntxt(lc,mypos,12,0,0,"",0,"",frame)
 46460   let resp$(5)=up$(3)
-46480   let fnlbl(lc+=1,1,"Description:",mylen,right,0,frame)
-46500   let fntxt(lc,mypos,18,0,0,"",0,"",frame)
+46480   fnlbl(lc+=1,1,"Description:",mylen,right,0,frame)
+46500   fntxt(lc,mypos,18,0,0,"",0,"",frame)
 46520   let resp$(6)=up$(4)(1:18)
-46540   let fnlbl(lc+=1,1,"Amount:",mylen,right,0,frame)
-46560   let fntxt(lc,mypos,12,0,1,"10",0,"Enter the total invoice amount.",frame)
+46540   fnlbl(lc+=1,1,"Amount:",mylen,right,0,frame)
+46560   fntxt(lc,mypos,12,0,1,"10",0,"Enter the total invoice amount.",frame)
 46580   let resp$(7)=str$(upa)
-46600   let fnlbl(lc+=1,1,"Discount Amount:",mylen,right,0,frame)
-46620   let fntxt(lc,mypos,12,0,1,"10",0,"Enter any discount allowed.",frame)
+46600   fnlbl(lc+=1,1,"Discount Amount:",mylen,right,0,frame)
+46620   fntxt(lc,mypos,12,0,1,"10",0,"Enter any discount allowed.",frame)
 46640   let resp$(8)=str$(disamt)
-46660   let fnlbl(lc+=1,1,"Discount Date:",mylen,right,0,frame)
-46680   let fntxt(lc,mypos,10,0,1,"ccyymmdd",0,"",frame)
+46660   fnlbl(lc+=1,1,"Discount Date:",mylen,right,0,frame)
+46680   fntxt(lc,mypos,10,0,1,"ccyymmdd",0,"",frame)
 46700   let resp$(9)=str$(ddate)
-46720   let fnlbl(lc+=1,1,"Payment Code:",mylen,right,0,frame)
+46720   fnlbl(lc+=1,1,"Payment Code:",mylen,right,0,frame)
 46740   let item1$(1)="Pay Later"
 46760   let item1$(2)="Pay Now"
 46780   let item1$(3)="Paid"
-46800   let fncomboa("unpaid-2",lc,mypos,mat item1$,"If you choose pay now, the invoice will be coded for payment and will paid next time checks are printed.",0,1)
+46800   fncomboa("unpaid-2",lc,mypos,mat item1$,"If you choose pay now, the invoice will be coded for payment and will paid next time checks are printed.",0,1)
 46810   if pcde=0 then let resp$(10)=item1$(1) ! Pay Later
 46820   if pcde=1 then let resp$(10)=item1$(2) ! Pay Now
 46840   if pcde=2 then let resp$(10)=item1$(3) ! Paid
-46900   let fnlbl(lc+=1,1,"Bank Code:",mylen,right,0,frame)
-46920   let fncombof("bankmstr",lc,mypos,23,env$('Q')&"\CLmstr\bankmstr.h"&str$(cno),1,2,3,20,env$('Q')&"\CLmstr\bankidx1.h"&str$(cno),0,0, "",frame)
+46900   fnlbl(lc+=1,1,"Bank Code:",mylen,right,0,frame)
+46920   fncombof("bankmstr",lc,mypos,23,env$('Q')&"\CLmstr\bankmstr.h"&str$(cno),1,2,3,20,env$('Q')&"\CLmstr\bankidx1.h"&str$(cno),0,0, "",frame)
 46940   let resp$(11)=str$(bcde) ! RESP$(RESPC)
-46960   let fnbutton(1,80,"Payee",50,"Add or edit a payee",0,0,frame)
-47000   let fnlbl(lc=15,3,"Breakdown Information",mylen,center) 
+46960   fnbutton(1,80,"Payee",50,"Add or edit a payee",0,0,frame)
+47000   fnlbl(lc=15,3,"Breakdown Information",mylen,center) 
 47020   !
-47040   let fnlbl(lc+=1,35,"Allocation(s):",20,right)
-47060   let fnbutton(lc,56,"Auto by Payee [F2]",2,"Reset allocations to Payee's defaults")
-47080   let fnbutton(lc,76,"Add",52,"Add a new allocation")
-47100   let fnbutton(lc,81,"Edit",53,"Modify an existing allocation")
-47120   let fnbutton(lc,87,"Delete",54,"Remove selected allocation")
+47040   fnlbl(lc+=1,35,"Allocation(s):",20,right)
+47060   fnbutton(lc,56,"Auto by Payee [F2]",2,"Reset allocations to Payee's defaults")
+47080   fnbutton(lc,76,"Add",52,"Add a new allocation")
+47100   fnbutton(lc,81,"Edit",53,"Modify an existing allocation")
+47120   fnbutton(lc,87,"Delete",54,"Remove selected allocation")
 48000   fnflexinit1('unpdaloc',lc+=1,2,10,88,mat aiUaColHead$, mat aiUaColMask$,1)
 48020   dim alloc2d$(0,3)*30
 48040   dim alloc2d_setup$*20
@@ -710,11 +710,11 @@
 48280     tmpItem$(3)=alloc2d$(aiAllocItem,3)
 48300     fnflexadd1(mat tmpItem$)
 48320   nex aiAllocItem
-49000   let fncmdkey("Save",1,1)
+49000   fncmdkey("Save",1,1)
 49020 ! let fncmdkey("&Allocate",2,0,0,"Automatically allocates the general ledger breakdown if payee record contains the breakdown information")
-49040   let fncmdkey("&Delete",3,0,0,"Delete the invoice highlighted above")
-49060   let fncmdkey("&Cancel",5,0,1,"Return to Unpaid Invoice selection (without saving)")
-49080   let fnacs(sn$,0,mat resp$,ck)
+49040   fncmdkey("&Delete",3,0,0,"Delete the invoice highlighted above")
+49060   fncmdkey("&Cancel",5,0,1,"Return to Unpaid Invoice selection (without saving)")
+49080   fnacs(sn$,0,mat resp$,ck)
 52000   if ck=5 then 
 52020     alloc2d_setup$=''
 52040     mat alloc2d$=('')
@@ -736,22 +736,22 @@
 52340   bcde=val(resp$(11)(1:3))
 52360   selected_alloc$=fnagl$(resp$(12))
 52380   if ck=3 then ! delete invoice and breakdowns
-52400     let fn_InvoiceDelete(holdkey$)
+52400     fn_InvoiceDelete(holdkey$)
 52420     goto aiFinis
 52440   else if ck=2 then 
-52460     let fn_InvoiceAllocateFromPayee(mat alloc2d$,vn$,upa,paymstr1,payeegl)
+52460     fn_InvoiceAllocateFromPayee(mat alloc2d$,vn$,upa,paymstr1,payeegl)
 52480   else if ck=50 then 
 52500 !   let vn$=ss$=ph$=contact$=email$=fax$=myact$=""
-52520     let fnaddpayee
+52520     fnaddpayee
 52540   else if ck=52 then ! Add
-52560     let fn_InvoiceAllocationFM(vn$,iv$)
+52560     fn_InvoiceAllocationFM(vn$,iv$)
 52580   else if ck=53 then ! Edit
-52600     let fn_InvoiceAllocationFM(vn$,iv$, selected_alloc$)
+52600     fn_InvoiceAllocationFM(vn$,iv$, selected_alloc$)
 52620   else if ck=54 then 
-52640     let fn_InvoiceAllocationDelete(selected_alloc$)
+52640     fn_InvoiceAllocationDelete(selected_alloc$)
 52660   else if ck=1 then ! Save
 52680     if fn_InvoiceValid then
-52700       let fn_InvoiceSave
+52700       fn_InvoiceSave
 52720       if havejc=1 then gosub JOBCOST
 52740       if editing=1 then 
 52760         let editing=0
@@ -797,14 +797,14 @@
 72220     let ml$(1)="You must enter an invoice number on each unpaid "
 72240     let ml$(2)="record.  If you must make up an invoice number,"
 72260     let ml$(3)="be careful to use a different number each time!"
-72280     let fnmsgbox(mat ml$,resp$,cap$,16)
+72280     fnmsgbox(mat ml$,resp$,cap$,16)
 72300     ivReturn=0
 72320   else if tac<>upa then ! allocations don't match total invoice
 72340     mat ml$(3)
 72360     let ml$(1)="The allocations of "&trim$(cnvrt$("pic($$$$,$$$.##)",tac))&" do not agree with"
 72380     let ml$(2)="the total invoice of "&trim$(cnvrt$("pic($$$$,$$$.##)",upa))&"."
 72400     let ml$(3)="You must correct the problem before you can continue!"
-72420     let fnmsgbox(mat ml$,resp$,cap$,16)
+72420     fnmsgbox(mat ml$,resp$,cap$,16)
 72440     ivReturn=0 
 72460   end if
 72480   fn_InvoiceValid=ivReturn
@@ -889,15 +889,15 @@
 84500   respc=0 
 84520   mylen=32 : let mypos=mylen+2
 84540   lc=0
-84560   let fnlbl(lc+=1,1,"Payee:",mylen,right)
-84580   let fntxt(lc,mypos,20, 0,0,'',1)
+84560   fnlbl(lc+=1,1,"Payee:",mylen,right)
+84580   fntxt(lc,mypos,20, 0,0,'',1)
 84600   let resp$(respc+=1)=vn$
-84620   let fnlbl(lc+=1,1,"Invoice Number:",mylen,right)
-84640   let fntxt(lc,mypos,12,0,0,"",1)
+84620   fnlbl(lc+=1,1,"Invoice Number:",mylen,right)
+84640   fntxt(lc,mypos,12,0,0,"",1)
 84660   let resp$(respc+=1)=iv$
 84680   lc+=1
 84700   fnlbl(lc+=1,1,"General Ledger:",mylen,right)
-84720   let fnqglbig(lc,mypos,0,2)
+84720   fnqglbig(lc,mypos,0,2)
 84740   resp$(iaf_respc_gl:=respc+=1)=fnrglbig$(iaf_gl$)
 84760   fnlbl(lc+=1,1,"Amount:",mylen,right)
 84780   fntxt(lc,mypos,12,0,1,"10")

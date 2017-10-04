@@ -1,10 +1,10 @@
 00020   library 'S:\Core\Library': fntop,fnxit, fnwait, fnerror,fncno, fnopenprn,fncloseprn,fnprocess,fntos,fnlbl,fnqgl,fnrgl$,fncmdkey,fnacs,fnagl$,fnbutton,fntxt,fnss_employee,fnss_employer
 00030   dim tdc(10),tcp(32)
 00090   dim cap$*128
-00104   let fncno(cno)
+00104   fncno(cno)
 00110   let ssrate1=fnss_employee*.01
 00120   let ssrate2=fnss_employer*.01
-00130   let fntop(program$,cap$="Fix WH Wages in Check History")
+00130   fntop(program$,cap$="Fix WH Wages in Check History")
 00150 ! 
 00160   gosub READ_COMPANY_INFO
 00162   let mcr=mcr*.01

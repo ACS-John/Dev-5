@@ -6,7 +6,7 @@
 00060 ! ______________________________________________________________________
 00070   dim lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4),sp(4),c$(4,8)*40
 00080 ! ______________________________________________________________________
-00090   let fntop(program$)
+00090   fntop(program$)
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE    : gosub OPEN_FILE 
 00112   gosub HAMSTER   : gosub FIXGLACCOUNTS : gosub CLOSE_FILE : gosub INDEX
@@ -44,7 +44,7 @@
 00390 return ! /r
 00400 ! ______________________________________________________________________
 00410 BUILD_LAYOUT: ! 
-00420   let fncno(cno)
+00420   fncno(cno)
 00430 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
 00440   let lbl$(ic+=1)="Reference" !:
@@ -98,7 +98,7 @@
 00670 return 
 00680 ! ______________________________________________________________________
 00690 HAMSTER: ! 
-00700   let fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00700   fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00710   return 
 00720 ! ______________________________________________________________________
 00730 XIT: let fnxit

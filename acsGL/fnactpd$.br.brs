@@ -11,6 +11,6 @@
 33180   end if
 33200   CLOSE_TMP: !
 33220   close #tmp: 
-33240   let fnactpd$=actpd$
+33240   fnactpd$=actpd$
 33260   XIT: ! 
 33280 fnend 

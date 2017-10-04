@@ -7,8 +7,8 @@
 00080   dim msgline$(2)*60,wrd01$(2)*32,iomc$(5),iomr$(5),wrd_align$(3)
 00090   dim wrd_style$(6),iom$(5),lw(5),sw(6),style$(6)
 00100 ! ______________________________________________________________________
-00110   let fncno(cno,cnam$)
-00120   let fndat(dat$,1)
+00110   fncno(cno,cnam$)
+00120   fndat(dat$,1)
 00130 ! ______________________________________________________________________
 00140   on fkey 5 goto SCR_MAIN
 00150 SCR_MAIN: ! 
@@ -32,7 +32,7 @@
           let win_width=max(lw(j),win_width) !:
         next j !:
         let win_width=win_width+4
-00300   let fnwin3b(win,cap$,12,win_width,0,0,5,0)
+00300   fnwin3b(win,cap$,12,win_width,0,0,5,0)
 00310   pr #win,fields "3,2,C 20,N": "Enter your label:"
 00320   pr #win,fields "10,2,C "&str$(win_width-2)&",B,8": "(F8) "&cnam$(1:win_width-2)
 00330   pr #win,fields "11,2,C 25,B,9": "(F9) "&dat$
@@ -64,7 +64,7 @@
 00550 ! ______________________________________________________________________
 00560 SCR_HOW_MANY: ! 
 00570   let win=103
-00580   let fnwin3b(win,cap$,3,33,0,3,5,0)
+00580   fnwin3b(win,cap$,3,33,0,3,5,0)
 00590   pr #win,fields "2,2,C 26,N": "Number of Labels to print:"
 00600   if h=0 then let h=1
 00610   rinput #win,fields "2,29,Nz 3,UT,N" : h
@@ -72,9 +72,9 @@
 00630   if cmdkey=5 then goto SCR_MAIN
 00640 ! ______________________________________________________________________
 00650   let numberoflines=h*5
-00655   let fnwait(0,cap$,message$,1)
+00655   fnwait(0,cap$,message$,1)
 00660   for j=1 to h !:
-          let fnaddlabel(mat l$) !:
+          fnaddlabel(mat l$) !:
         next j
 00665   close #111: ioerr L670
 00670 L670: let fnlabel(101,cap$,mat pt$,cp,nw)
@@ -84,7 +84,7 @@
 00710 ! ______________________________________________________________________
 00720 ALIGNMENT: ! 
 00730   let win2=103
-00740   let fnwin3b(win2,cap$,5,33,0,1,2,2)
+00740   fnwin3b(win2,cap$,5,33,0,1,2,2)
 00750   let wrd_align$(1)="Left" !:
         let wrd_align$(2)="Center" !:
         let wrd_align$(3)="Right"
@@ -109,7 +109,7 @@
 00880 ! ______________________________________________________________________
 00890 LINE_STYLE: ! 
 00900   let win2=103
-00910   let fnwin3b(win2,cap$,8,33,0,1,2,2)
+00910   fnwin3b(win2,cap$,8,33,0,1,2,2)
 00920   let wrd_style$(1)="Standard " : let style$(1)="S" : let sw(1)=34 !:
         let wrd_style$(2)="Bold     " : let style$(2)="B" : let sw(2)=29 !:
         let wrd_style$(3)="Elete    " : let style$(3)="E" : let sw(3)=41 !:

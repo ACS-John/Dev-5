@@ -22,7 +22,7 @@
 00220 ! ______________________________________________________________________
 00230 ! <Updateable Region: ERTN>
 00240 ERTN: ! 
-00270   let fnerror(program$,err,line,act$,"QUIT_WO_CALC")
+00270   fnerror(program$,err,line,act$,"QUIT_WO_CALC")
 00280   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00290   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

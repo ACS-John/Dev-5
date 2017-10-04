@@ -2,7 +2,7 @@
 00020 ! Consolidate Companies
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnputcno,fntos,fnlbl,fncmbcno,fntxt,fncmdset,fnacs,fncmdkey
-00050   let fntop(program$,cap$="Consolidate Master Files")
+00050   fntop(program$,cap$="Consolidate Master Files")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim a$*416,n$*40,cap$*128,resp$(2)*80
@@ -10,27 +10,27 @@
 00100   cap$="Consolidate Companies"
 00110   let dcno=99
 00120 MAIN: ! 
-00130   let fntos(sn$='Combgl') !:
+00130   fntos(sn$='Combgl') !:
         let lc=rc=0 !:
         let mylen=29 : let mypos=mylen+2
-00140   let fnlbl(lc+=1,1,"&Source Company Number:",mylen,1)
-00150   let fncmbcno(lc,mypos) !:
+00140   fnlbl(lc+=1,1,"&Source Company Number:",mylen,1)
+00150   fncmbcno(lc,mypos) !:
         let resp$(rc+=1)=''
-00160   let fnlbl(lc+=1,1,"&Destination Company Number:",mylen,1)
-00170   let fntxt(lc,mypos,5,0,0,'30') !:
+00160   fnlbl(lc+=1,1,"&Destination Company Number:",mylen,1)
+00170   fntxt(lc,mypos,5,0,0,'30') !:
         let resp$(rc+=1)=str$(dcno)
 00180   if hcno>0 then let fnlbl(lc+=1,1,"Last Company Selected: "&str$(hcno),mylen,1)
 00190   let lc+=1
-00200   let fnlbl(lc+=1,1,"Warning",80,2,1)
-00210   let fnlbl(lc+=1,1,"Please make sure no one else is",80,2) !:
-        let fnlbl(lc+=1,1,"using either company. If the destination",80,2) !:
-        let fnlbl(lc+=1,1,"company exists, it will be over written",80,2) !:
-        let fnlbl(lc+=1,1,"by the first company selected.  All others",80,2) !:
-        let fnlbl(lc+=1,1,"will be combined with the first company selected. ",80,2)
-00220   let fncmdkey("&Next",1,1,0,"Allows you to combine this company and select more if desired.")
-00230   let fncmdkey("C&omplete",2,0,0,"All companies have been combined.  Return to the menu.")
-00240   let fncmdkey("Cancel",5,0,1,"Stop without combining any companies.")
-00250   let fnacs(sn$,0,mat resp$,ck)
+00200   fnlbl(lc+=1,1,"Warning",80,2,1)
+00210   fnlbl(lc+=1,1,"Please make sure no one else is",80,2) !:
+        fnlbl(lc+=1,1,"using either company. If the destination",80,2) !:
+        fnlbl(lc+=1,1,"company exists, it will be over written",80,2) !:
+        fnlbl(lc+=1,1,"by the first company selected.  All others",80,2) !:
+        fnlbl(lc+=1,1,"will be combined with the first company selected. ",80,2)
+00220   fncmdkey("&Next",1,1,0,"Allows you to combine this company and select more if desired.")
+00230   fncmdkey("C&omplete",2,0,0,"All companies have been combined.  Return to the menu.")
+00240   fncmdkey("Cancel",5,0,1,"Stop without combining any companies.")
+00250   fnacs(sn$,0,mat resp$,ck)
 00260 ! 
 00270   if ck=5 then goto XIT
 00280   if ck=2 then goto END1
@@ -60,7 +60,7 @@
 00460 END1: close #1: ioerr L470
 00470 L470: execute "Index "&env$('Q')&"\GLmstr\GLmstr.H"&str$(dcno)&' '&env$('Q')&"\GLmstr\GLIndex.H"&str$(dcno)&" 1 12 Replace DupKeys" ioerr XIT
 00480   execute "Index "&env$('Q')&"\GLmstr\GLmstr.H"&str$(dcno)&' '&env$('Q')&"\GLmstr\glIndx2.H"&str$(dcno)&" 13 30 Replace DupKeys"
-00490   let fnputcno(cno=dcno)
+00490   fnputcno(cno=dcno)
 00500 XIT: let fnxit
 00510 ! ______________________________________________________________________
 00520 ! <Updateable Region: ERTN>

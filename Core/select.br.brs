@@ -17,7 +17,7 @@
 00200     for j=1 to udim(option$)
 00210       let fio1$(j)=str$(j+wline)&","&str$(len(q$)+3)&",C "&str$(mxwo)&",N"
 00220     next j
-00230     let fnwin3b(win,cap$,win_height,win_width,display_cnam,button_option,win_align,pr_newpg)
+00230     fnwin3b(win,cap$,win_height,win_width,display_cnam,button_option,win_align,pr_newpg)
 00240     pr #win,fields str$(wline+1)&",2,C "&str$(len(q$))&",N": q$
 00250     rinput #win,select mat fio1$,attr "H": mat option$
 00260     let response$=str$(curfld)

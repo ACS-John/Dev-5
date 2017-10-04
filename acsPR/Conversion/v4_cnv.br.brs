@@ -2,9 +2,9 @@
 10020 !    medicare_is_seperated     ...         look for "Fica_Combined" if medicare not separated and remove both exclamations
 10040   if ~setup then let fn_setup
 10200 ! ______________________________________________________________________
-10220   let fntop(program$,cap$="Department Conversion")
+10220   fntop(program$,cap$="Department Conversion")
 12000 ! r: do every company - loop top
-12020   let fngetdir2(env$('Q')&'\'&fncursys$&"mstr",mat filename$,'/od /ta',"Company.*")
+12020   fngetdir2(env$('Q')&'\'&fncursys$&"mstr",mat filename$,'/od /ta',"Company.*")
 12040   let filename_item=0
 12060   for filename_item=1 to udim(mat filename$)
 12080     let tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
@@ -14,7 +14,7 @@
 12160 ! let fncno(cno)
 12180 ! 
 12200 ! /r
-14000       let fn_pr_conversion_department(cno)
+14000       fn_pr_conversion_department(cno)
 16000 ! r: do every company - loop bottom
 16020     end if 
 16040 ACNO_CONV: ! 
@@ -37,13 +37,13 @@
 20180   fnend 
 20200   def library fnpr_conversion_department(cno; medicare_is_seperated)
 20220     if ~setup then let fn_setup
-20240     let fnpr_conversion_department=fn_pr_conversion_department(cno, medicare_is_seperated)
+20240     fnpr_conversion_department=fn_pr_conversion_department(cno, medicare_is_seperated)
 20260   fnend 
 24000   def fn_pr_conversion_department(cno; medicare_is_seperated)
 24010 !  pr 'all files should be closed now' : pause
 24020     on error goto ERTN
-24040 !   let fncno(cno)
-24060     let fnstatus('Department Conversion(v4_cnv) for Company '&str$(cno))
+24040 !   fncno(cno)
+24060     fnstatus('Department Conversion(v4_cnv) for Company '&str$(cno))
 24070     let payrollcheck_write_count=0
 24080 !      fnstatus_pause
 24140     dim fullname$(10)*20
@@ -53,12 +53,12 @@
 28040       open #h_rpmstr:=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",RecL=196,Use",internal,outin 
 28060       close #h_rpmstr: 
 28080     end if 
-28100     let fnindex_it(env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno),env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno),"1 8")
-28120     let fnindex_it(env$('Q')&"\PRmstr\RPMSTR.H"&str$(cno),env$('Q')&"\PRmstr\RPINDX2.H"&str$(cno),"9 30")
+28100     fnindex_it(env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno),env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno),"1 8")
+28120     fnindex_it(env$('Q')&"\PRmstr\RPMSTR.H"&str$(cno),env$('Q')&"\PRmstr\RPINDX2.H"&str$(cno),"9 30")
 28140     open #h_rpmstr:=1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 28160     if rln(h_rpmstr)<196 then 
 28180       close #h_rpmstr: 
-28200       let fnCopy(env$('Q')&"\PRmstr\RPMstr.h"&str$(cno),env$('Q')&"\PRmstr\RPMstr.h"&str$(cno),196)
+28200       fnCopy(env$('Q')&"\PRmstr\RPMstr.h"&str$(cno),env$('Q')&"\PRmstr\RPMstr.h"&str$(cno),196)
 28220       goto RPMSTR_OPEN
 28240     end if 
 32000 ! 
@@ -83,7 +83,7 @@
 32304       close #30: ioerr ignore
 32380     end if 
 32460 ! L370: !
-32500     let fn_prcode_validate
+32500     fn_prcode_validate
 32550     goto TOPOFLOOP
 32640 ! ______________________________________________________________________
 34000 TOPOFLOOP: ! 
@@ -135,7 +135,7 @@
 46700     let gl$=cnvrt$("pic(zz#)",gl1)&cnvrt$("pic(zzzzz#)",gl2)&cnvrt$("pic(zz#)",gl3)
 46720     write #12,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': eno,tdn,gl$,mat tdt,mat tcd,tli,mat newtdet ! department record
 46740     if ~foundhistory then ! else  write check file later
-46760       let fn_payrollchecks_write
+46760       fn_payrollchecks_write
 46780     end if 
 46800     return 
 46820 ! 
@@ -173,7 +173,7 @@
 50620     cp(30)=tcp(20) ! tips
 50640     cp(31)=tcp(21) ! total wage
 50660     cp(32)=tcp(22) ! net
-50680     let fn_payrollchecks_write
+50680     fn_payrollchecks_write
 50700     goto PFH_READ_PRCKHIST
 50720 ! ______________________________________________________________________
 52000 DONE: ! 
@@ -181,18 +181,18 @@
 52040     open #h_deptname:=fngethandle: "Name="&env$('Q')&"\PRmstr\DeptName.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\DeptNameIdx.h"&str$(cno)&",replace,RecL=32,kps=1,kln=3,Shr",internal,outin,keyed 
 52060     close #h_deptname: 
 52080     close #12: ioerr ignore
-52100     let fnindex_it(env$('Q')&"\PRmstr\Department.h"&str$(cno),env$('Q')&"\PRmstr\DeptIdx.h"&str$(cno),"1 11")
+52100     fnindex_it(env$('Q')&"\PRmstr\Department.h"&str$(cno),env$('Q')&"\PRmstr\DeptIdx.h"&str$(cno),"1 11")
 52120     close #h_payrollchecks: 
-52140     let fnindex_it(env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno),env$('Q')&"\PRmstr\checkidx.h"&str$(cno),"1 17")
-52142     let fnindex_it(env$('Q')&"\PRmstr\dd.H"&str$(cno),env$('Q')&"\PRmstr\ddidx1.H"&str$(cno),"1,10")
+52140     fnindex_it(env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno),env$('Q')&"\PRmstr\checkidx.h"&str$(cno),"1 17")
+52142     fnindex_it(env$('Q')&"\PRmstr\dd.H"&str$(cno),env$('Q')&"\PRmstr\ddidx1.H"&str$(cno),"1,10")
 52150     close #h_rpmstr: ioerr ignore
-52160     let fnindex_it(env$('Q')&"\PRmstr\RPMSTR.H"&str$(cno),env$('Q')&"\PRmstr\RPINDEX.H"&str$(cno),"1,8")
-52200     let fnindex_it(env$('Q')&"\PRmstr\RPMSTR.H"&str$(cno),env$('Q')&"\PRmstr\RPINDX2.H"&str$(cno),"9 30")
+52160     fnindex_it(env$('Q')&"\PRmstr\RPMSTR.H"&str$(cno),env$('Q')&"\PRmstr\RPINDEX.H"&str$(cno),"1,8")
+52200     fnindex_it(env$('Q')&"\PRmstr\RPMSTR.H"&str$(cno),env$('Q')&"\PRmstr\RPINDX2.H"&str$(cno),"9 30")
 52220 !   end if  ! cno_current<>0
 52240 ! next company_item
 54000 XIT: ! 
 54010     close #h_prckhist: ioerr ignore
-54020     let fnstatus('payrollcheck_write_count='&str$(payrollcheck_write_count))
+54020     fnstatus('payrollcheck_write_count='&str$(payrollcheck_write_count))
 54040 ! fnstatus_pause
 54060   fnend 
 56000 ! <Updateable Region: ERTN>

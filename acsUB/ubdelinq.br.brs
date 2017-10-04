@@ -9,8 +9,8 @@
 00090   dim service$(10)*2,tax_code$(10)*1,penalty$(10)*1
 00095   dim srv$(10)*2
 00100 ! ______________________________________________________________________
-00120   let fnd1(lbill)
-00130   let fntop(program$,cap$="Past Due Balance Breakdown")
+00120   fnd1(lbill)
+00130   fntop(program$,cap$="Past Due Balance Breakdown")
 00140 ! need to build headings from this information
 00150   fnget_services(mat servicename$, mat srv$, mat tax_code$,mat penalty$)
 00152   fncreg_read('Route Low',bkno1$) : bkno1=val(bkno1$)
@@ -30,22 +30,22 @@
 00220   mat t(services+1)
 00230 ! ______________________________________________________________________
 00240 MENU1: ! 
-00250   let fntos(sn$="ubdelinq")
-00260   let fnlbl(1,1,"As of Date:",19,1)
-00270   let fntxt(1,21,8,8,0,"1001") !:
+00250   fntos(sn$="ubdelinq")
+00260   fnlbl(1,1,"As of Date:",19,1)
+00270   fntxt(1,21,8,8,0,"1001") !:
         if d1<>0 then let resp$(1)=str$(d1) else let resp$(1)=date$("mmddyy")
-00280   let fnlbl(2,1,"Last Billing Date:",19,1)
-00290   let fntxt(2,21,8,0,0,"1001") !:
+00280   fnlbl(2,1,"Last Billing Date:",19,1)
+00290   fntxt(2,21,8,0,0,"1001") !:
         let resp$(2)=str$(lbill)
-00300   let fnchk(3,1,"Skip customers who only owe current bill") !:
+00300   fnchk(3,1,"Skip customers who only owe current bill") !:
         let resp$(3)="False"
-00310   let fnchk(4,1,"Skip customers with credit balance") !:
+00310   fnchk(4,1,"Skip customers with credit balance") !:
         let resp$(4)="False"
-00320   let fnchk(5,1,"Only show past due amounts (not current month)") !:
+00320   fnchk(5,1,"Only show past due amounts (not current month)") !:
         let resp$(5)="True"
-00330   let fnchk(6,1,"Skip accounts with Zero balances") !:
+00330   fnchk(6,1,"Skip accounts with Zero balances") !:
         let resp$(6)="True"
-00340   let fncmdset(3)
+00340   fncmdset(3)
 00350 L350: let fnacs(sn$,0,mat resp$,ckey)
 00360   if ckey=5 then goto XIT
 00370   let d1=val(resp$(1)) !:
@@ -64,7 +64,7 @@
 00490   if d5<1 or d5>31 then goto L350
 00500 ! ______________________________________________________________________
 00510   on fkey 5 goto DONE
-00520   let fnopenprn
+00520   fnopenprn
 00530   gosub HEADER
 00550   let v=bkno1
 00560   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 

@@ -5,19 +5,19 @@
 00050 ! ______________________________________________________________________
 00060   dim z$*10,text$*45,cap$*128
 00070 ! ______________________________________________________________________
-00080   let fncno(cno) !:
+00080   fncno(cno) !:
         ! 
-00090   let fntop("S:\acsUB\UBZeroYt",cap$="Assign Sequence")
+00090   fntop("S:\acsUB\UBZeroYt",cap$="Assign Sequence")
 00100 ! ______________________________________________________________________
 00110 SCREEN1: ! 
 00120   let sn$ = "sequence" !:
-        let fntos(sn$) !:
+        fntos(sn$) !:
         let mylen=25 : let mypos=mylen+2
 00130   let text$='Increment by what number:' !:
-        let fnlbl(1,1,text$,mylen,1)
-00140   let fntxt(1,mypos,3,0,1,"30") !:
+        fnlbl(1,1,text$,mylen,1)
+00140   fntxt(1,mypos,3,0,1,"30") !:
         let resp$(1)=""
-00150   let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+00150   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00160   if ck=5 then goto XIT
 00170   let incr=val(resp$(1))
 00180   on fkey 5 goto DONE

@@ -5,19 +5,19 @@
 10110   dim Comp$(0)*128,CompN(0),form$(0)*256
 10120   dim cap$*128
 14000 ! /r
-14060   let fntop(program$)
+14060   fntop(program$)
 15000   gosub COMPANY_LOAD
-18020   let fntos(sn$="Company") : col1Len=19 : col2Pos=col1Len+2
+18020   fntos(sn$="Company") : col1Len=19 : col2Pos=col1Len+2
 18030 ! r: company information portion of screen
-18040   let fnlbl(1,1,"Name:",col1Len,1)
-18060   let fntxt(1,col2Pos,40)
-18100   let fnlbl(2,1,"Address:",col1Len,1)
-18120   let fntxt(2,col2Pos,40)
-18160   let fnlbl(3,1,"City,State and Zip:",col1Len,1)
-18180   let fntxt(3,col2Pos,40)
+18040   fnlbl(1,1,"Name:",col1Len,1)
+18060   fntxt(1,col2Pos,40)
+18100   fnlbl(2,1,"Address:",col1Len,1)
+18120   fntxt(2,col2Pos,40)
+18160   fnlbl(3,1,"City,State and Zip:",col1Len,1)
+18180   fntxt(3,col2Pos,40)
 23000 ! /r
-40000   let fncmdset(2)
-40020   let fnacs(sn$,0,mat Comp$,ck)
+40000   fncmdset(2)
+40020   fnacs(sn$,0,mat Comp$,ck)
 42000   if ck<>5 then 
 54000     gosub COMPANY_SAVE
 58000   end if

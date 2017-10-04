@@ -6,12 +6,12 @@
 10060 ! ______________________________________________________________________
 10080     dim cnam$*40,cap$*128,ml$(6)*48,resp$(5)*1,revb(13)
 10100 ! ______________________________________________________________________
-10120     let fntop(program$,cap$="GLmstr 338-416 Conversion")
-10140     let fncno(cno,cnam$)
+10120     fntop(program$,cap$="GLmstr 338-416 Conversion")
+10140     fncno(cno,cnam$)
 10160     let stopable$="xit"
-10200     let fnstatus('Converting GLmstr from 338 to 416...')
+10200     fnstatus('Converting GLmstr from 338 to 416...')
 10420 ! 
-10440     let fnCopy(env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),416) ! &" -416 -n"
+10440     fnCopy(env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),416) ! &" -416 -n"
 10460     let stopable$="NO"
 10520     open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,outin,keyed 
 10540     do 
@@ -21,8 +21,8 @@
 10620     loop 
 10660 DONE: ! 
 10680     close #1: 
-10700     let fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),env$('Q')&"\GLmstr\glIndex.h"&str$(cno),"1 12")
-10720     let fnacglblds
+10700     fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),env$('Q')&"\GLmstr\glIndex.h"&str$(cno),"1 12")
+10720     fnacglblds
 10740     goto XIT
 10760 ! ______________________________________________________________________
 10780 ! r: ertn - just uses stopable$ variable - otherwise standard

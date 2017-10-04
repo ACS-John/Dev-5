@@ -1,5 +1,5 @@
 00030   library 'S:\Core\Library': fncno
-00040   let fncno(cno,cnam$)
+00040   fncno(cno,cnam$)
 00120   dim ar(5),ph2$*12,ss2$*11,arta(2),des$*30,cm$*70,cnam$*40
 00130   dim z$*5,a$(5)*30,ph$*12,ss$*11,dd(10),sc(10),ca(10),ta(25,2),fb(25)
 00140   dim z$(3)*5,ph$(6)*12,ss$(6)*11,h$(3,6)*30,l(3,10),m(3,10),pno(3),mye(3),har(3,5)

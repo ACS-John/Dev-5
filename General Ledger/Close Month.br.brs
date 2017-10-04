@@ -6,18 +6,18 @@
 00060 ! ______________________________________________________________________
 00070   dim bc(13),tr(7),tr$*12,td$*30
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$="Close Month")
-00100   let fnconsole(off=0)
-00110   let fncno(cno)
+00090   fntop(program$,cap$="Close Month")
+00100   fnconsole(off=0)
+00110   fncno(cno)
 00120   if fnprocess=1 then goto GET_GOING
 00130 SCREEN1: ! 
-00140   let fntos(sn$='Close_Month')
+00140   fntos(sn$='Close_Month')
 00142   let lc=0 : let mylen=22 : let mypos=mylen+2
-00150   let fnlbl(lc+=1,1,"Closing Period Number:",mylen,right)
-00160   let fntxt(lc,mypos,2,0,0,'number')
+00150   fnlbl(lc+=1,1,"Closing Period Number:",mylen,right)
+00160   fntxt(lc,mypos,2,0,0,'number')
 00162   let resp$(1)=str$(fnactpd)
-00170   let fncmdset(2)
-00180   let fnacs(sn$,0,mat resp$,ckey)
+00170   fncmdset(2)
+00180   fnacs(sn$,0,mat resp$,ckey)
 00190   if ckey=5 then goto XIT
 00200   actpd=val(resp$(1))
 00210   if actpd<1 or actpd>13 then goto SCREEN1
@@ -27,7 +27,7 @@
 02020   read #1,using 'Form pos 384,n 2,POS 406,C 1,POS 417,N 1',rec=1: nap,actrcde$,reccode
 02040   close #1: 
 02060   if actrcde$="0" or actrcde$="N" then goto OPEN_GLMSTR
-02080   let fn_current_to_accumlated_trans
+02080   fn_current_to_accumlated_trans
 02100 OPEN_GLMSTR: ! 
 02120   open #h_glmstr:=1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&str$(cno),internal,outin,keyed 
 02140 ! fnwait - "Closing Month..."
@@ -42,7 +42,7 @@
 02322   let lmu=actpd
 02324   actpd=actpd+1
 02326   if actpd>nap then actpd=1
-02340   let fnactpd(actpd)
+02340   fnactpd(actpd)
 02343   open #21: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative 
 02344   rewrite #21,using 'Form pos 296,n 2',rec=1: lmu
 02345   close #21: 
@@ -86,7 +86,7 @@
 03100     goto L700
 03120 L740: close #1: 
 03140     close #2: 
-03160     let fnindex_it(env$('Q')&"\GLmstr\ACTRANS.h"&str$(cno),env$('Q')&"\GLmstr\ACTRIDX.h"&str$(cno),"1/71/17/13 12/2/2/4")
+03160     fnindex_it(env$('Q')&"\GLmstr\ACTRANS.h"&str$(cno),env$('Q')&"\GLmstr\ACTRIDX.h"&str$(cno),"1/71/17/13 12/2/2/4")
 03180   fnend 
 03200 ! ______________________________________________________________________
 50830 XIT: let fnxit

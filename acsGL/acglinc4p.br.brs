@@ -9,8 +9,8 @@
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
 00100   dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13),cap$*128,udf$*256
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Four Column Budget With Percent")
-00130   let fncno(cno,cnam$)
+00120   fntop(program$,cap$="Four Column Budget With Percent")
+00130   fncno(cno,cnam$)
 00140   let udf$=env$('temp')&'\'
 00141   let fscode=fnfscode
 00142   let priorcd=fnpriorcd
@@ -29,7 +29,7 @@
           let mp1=69 !:
           let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
 00250   open #1: fl1$,internal,input,keyed 
-00260   let fnopenprn !:
+00260   fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00270   on fkey 5 goto L1670
 00280   let report$="Statement of Income and Expenses"
@@ -37,7 +37,7 @@
 00300   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
 00310   goto L340
 00320 L320: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
-00330   let fnconsole(off=0)
+00330   fnconsole(off=0)
 00340 L340: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
 00350 L350: read #1,using L400: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1670
 00360   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L350
@@ -185,9 +185,9 @@
 01670 L1670: let eofcode=1
 01680   gosub L1290
 01690 ! 
-01700   let fncloseprn
-01705   let fnfscode(actpd)
-01706   let fnpriorcd(1)
+01700   fncloseprn
+01705   fnfscode(actpd)
+01706   fnpriorcd(1)
 01710   goto XIT
 01720 ! ______________________________________________________________________
 01730 XIT: let fnxit

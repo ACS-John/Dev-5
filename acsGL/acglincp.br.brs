@@ -8,8 +8,8 @@
 00080   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),bp(13),udf$*256
 00090   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*25
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Income Statement with Percents")
-00120   let fncno(cno,cnam$)
+00110   fntop(program$,cap$="Income Statement with Percents")
+00120   fncno(cno,cnam$)
 00130   let udf$=env$('temp')&'\'
 00140   actpd=fnactpd
 00150   actpd$=fnactpd$
@@ -28,19 +28,19 @@
         open #acglfnsi: fl1$,internal,outin,keyed 
 00220   if fnprocess=1 or fnUseDeptNo=0 then goto L330
 00230   if percent=1 then goto L330
-00240   let fntos(sn$="ACGlincp") !:
+00240   fntos(sn$="ACGlincp") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00250   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00260   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00250   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00260   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00270   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00280   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00290   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00300   let fnacs(sn$,0,mat resp$,ckey)
+00270   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00280   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00290   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00300   fnacs(sn$,0,mat resp$,ckey)
 00310   if ckey=5 then goto XIT
 00320   costcntr=val(resp$(1))
 00330 L330: on fkey 5 goto L1910
-00340   let fnopenprn !:
+00340   fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00350   if fnps=2 then goto L380 ! secondary
 00360   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
@@ -214,9 +214,9 @@
 01910 L1910: let eofcode=1
 01920   gosub L1480
 01930 ! ______________________________________________________________________
-01940   let fncloseprn
-01945   let fnfscode(actpd)
-01946   let fnpriorcd(1)
+01940   fncloseprn
+01945   fnfscode(actpd)
+01946   fnpriorcd(1)
 01950   goto XIT
 01960 ! ______________________________________________________________________
 01970 L1970: close #acglfnsi: 

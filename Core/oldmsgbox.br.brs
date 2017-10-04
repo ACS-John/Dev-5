@@ -16,7 +16,7 @@
           next j
 00120     let msgbox_height=udim(msgline$)+2
 00130     let mbr$=str$(int((24-msgbox_height)/2)+msgbox_height+1)
-00140     let fnwin3b(msgbox_win,cap$,msgbox_height,msgbox_width,0,0,5,0)
+00140     fnwin3b(msgbox_win,cap$,msgbox_height,msgbox_width,0,0,5,0)
 00150     let mglinerow=2 !:
           for j=1 to udim(msgline$) !:
             let tmp_fld$=str$(mglinerow+j-1)&",2,Cc "&str$(msgbox_width-1)&",N" !:

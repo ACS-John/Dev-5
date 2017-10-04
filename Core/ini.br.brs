@@ -53,15 +53,15 @@
 40520       let ii_section$(ii_item)=ii_section$
 40540     else 
 40560       let ii_section$(ii_item)=ii_section$
-40580       let fnAddOneC(mat ini_section$,ii_section$)
+40580       fnAddOneC(mat ini_section$,ii_section$)
 40600       let ii_pos_equal=pos(ii_line$(ii_item),"=")
 40620       if ii_pos_equal=-1 then let ii_pos_equal=pos(ii_line$(ii_item),tab$) ! if no equals sign than use a tab instead
 40640       let ini_field$=trim$(trim$(trim$(trim$(ii_line$(ii_item)(1:ii_pos_equal-1),tab$),'"')),tab$)
-40660       let fnAddOneC(mat ini_field$,ini_field$)
+40660       fnAddOneC(mat ini_field$,ini_field$)
 40680       let ini_field_len_longest=max(ini_field_len_longest,ii_pos_equal-1)
 40700       let ii_value$=trim$(trim$(ii_line$(ii_item)(ii_pos_equal+1:len(ii_line$(ii_item)))),tab$)
 40720       if lwrc$(ii_value$)="blank" then let ii_value$=''
-40740       let fnAddOneC(mat ini_value$,ii_value$)
+40740       fnAddOneC(mat ini_value$,ii_value$)
 40760     end if  ! II_Line$(II_Item)(1:1)=     '['     /  '!'   /     else 
 40780   next ii_item
 40800   INI_OPEN_FAIL: ! 
@@ -70,7 +70,7 @@
 42020   if ~setup then let fn_setup
 42040   let tab$=chr$(9)
 42060   mat empty$(0)
-42080   let fnIniRead$=fn_iniRead$(il_section$,il_field$)
+42080   fnIniRead$=fn_iniRead$(il_section$,il_field$)
 42100 fnend  ! fnIniRead$
 44000 def fn_iniRead$*256(il_section$*256,il_field$*256) ! shares MAT INI_Section$, MAT INI_Field$, MAT INI_Value$ with fnIniOpen
 44020   dim set_fn_iniRead$*256
@@ -95,7 +95,7 @@
 44400 fnend 
 46000 def library fnIniSet(inis_section$*256,inis_field$*256,inis_value$*256)
 46020   if ~setup then let fn_setup
-46040   let fnIniSet=fn_iniSet(inis_section$,inis_field$,inis_value$)
+46040   fnIniSet=fn_iniSet(inis_section$,inis_field$,inis_value$)
 46060 fnend
 48000 def fn_iniSet(inis_section$*256,inis_field$*256,inis_value$*256)
 48020   ! shares MAT INI_Section$, MAT INI_Field$, MAT INI_Value$, Mat II_Section$, INI_Field_Len_Longest with fnIniOpen
@@ -159,7 +159,7 @@
 50440       let inir_line$=ii_line$(ii_item)
 50460       gosub INIR_WRITE
 50480     else 
-50500       let fnAddOneC(mat ini_section$,ii_section$)
+50500       fnAddOneC(mat ini_section$,ii_section$)
 50520       let ii_pos_equal=pos(ii_line$(ii_item),"=")
 50540       if ii_pos_equal=-1 then let ii_pos_equal=pos(ii_line$(ii_item),tab$) ! if no equals sign than use a tab instead
 50560       let inir_field$=trim$(trim$(ii_line$(ii_item)(1:ii_pos_equal-1),'"'))
@@ -167,7 +167,7 @@
 50600       if inir_value$='' then let inir_value$=""
 50620       let inir_line$=ii_line$(ii_item)(1:ii_pos_equal)&' '&inir_value$
 50640       gosub INIR_WRITE
-50660       let fnAddOneC(mat ini_value$,ii_value$)
+50660       fnAddOneC(mat ini_value$,ii_value$)
 50680     end if  ! II_Line$(II_Item)(1:1)=     '['     /  '!'...   /     else 
 50700   next ii_item
 50720   close #inir_temp_handle: 

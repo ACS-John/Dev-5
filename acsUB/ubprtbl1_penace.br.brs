@@ -4,9 +4,9 @@
 00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn,fncmdkey,fnconsole
 00050   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),fli$(5),cap$*128
 00051   dim csz$*30
-00060   let fncno(cno,cnam$) !:
-        let fnd1(d1)
-00075   let fnconsole(on=1)
+00060   fncno(cno,cnam$) !:
+        fnd1(d1)
+00075   fnconsole(on=1)
 00080   def fnc(x)=int(100*(x+sgn(x)*.0001))
 00090   pr newpage
 00100   pr fields "06,20,Cc 40,R,n": "POSITION BILLING FORMS IN THE PRINTER"

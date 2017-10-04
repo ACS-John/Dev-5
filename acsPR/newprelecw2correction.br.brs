@@ -19,7 +19,7 @@
 00160   dim orgw2(9),orgw3(2)
 00170   dim terminat$*1,first$*15,mid$*15,last$*20,resp$(20)*40,path$*30
 00180 ! ______________________________________________________________________
-00190   let fntop("S:\acsPR\prElecW2",cap$="Electronic W-2")
+00190   fntop("S:\acsPR\prElecW2",cap$="Electronic W-2")
 00230   on fkey 5 goto XIT
 00250 ! 
 00260   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
@@ -30,28 +30,28 @@
 00310 DATE_SCREEN: ! 
 00320 L320: let fntos(sn$="W2-1") !:
         let rc=cf=0: let mylen=34 : let mypos=mylen+3
-00330   let fnfra(1,1,3,60,"Date Range for Corrected W2's","Normally this would the first and last day of the calendar year",0) !:
+00330   fnfra(1,1,3,60,"Date Range for Corrected W2's","Normally this would the first and last day of the calendar year",0) !:
         cf+=1 : let fratype=cf
-00340   let fnlbl(1,1,"Starting Date:",mylen,1,0,1)
-00350   let fntxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1) !:
+00340   fnlbl(1,1,"Starting Date:",mylen,1,0,1)
+00350   fntxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1) !:
         let resp$(rc+=1)=str$(beg_date)
-00360   let fnlbl(2,1,"Ending Date:",mylen,1,0,1)
-00370   let fntxt(2,mypos,10,0,1,"3",0,"Last day of calendar year",1) !:
+00360   fnlbl(2,1,"Ending Date:",mylen,1,0,1)
+00370   fntxt(2,mypos,10,0,1,"3",0,"Last day of calendar year",1) !:
         let resp$(rc+=1)=str$(end_date)
-00380   let fnlbl(3,1,"Output File Designation and Name:",mylen,1,0,1)
-00390   let fntxt(3,mypos,30,0,0,"",0,"Destination and file name you wish to use.",1) !:
+00380   fnlbl(3,1,"Output File Designation and Name:",mylen,1,0,1)
+00390   fntxt(3,mypos,30,0,0,"",0,"Destination and file name you wish to use.",1) !:
         let resp$(rc+=1)="c:\w2report"
-00400   let fnfra(7,1,3,60,"Date Range used on Original W2's","This could be any date rqnge entered by mistake",0) !:
+00400   fnfra(7,1,3,60,"Date Range used on Original W2's","This could be any date rqnge entered by mistake",0) !:
         cf+=1 : let fratype=cf
-00410   let fnlbl(1,1,"Original Starting Date:",mylen,1,0,2)
-00420   let fntxt(1,mypos,10,0,1,"3",0,"First day of calendar year used on original submission of W2s",2) !:
+00410   fnlbl(1,1,"Original Starting Date:",mylen,1,0,2)
+00420   fntxt(1,mypos,10,0,1,"3",0,"First day of calendar year used on original submission of W2s",2) !:
         let resp$(rc+=1)=str$(orgbeg_date)
-00430   let fnlbl(2,1,"Original Ending Date:",mylen,1,0,2)
-00440   let fntxt(2,mypos,10,0,1,"3",0,"Last day of calendar year used on original submission of W2s",2) !:
+00430   fnlbl(2,1,"Original Ending Date:",mylen,1,0,2)
+00440   fntxt(2,mypos,10,0,1,"3",0,"Last day of calendar year used on original submission of W2s",2) !:
         let resp$(rc+=1)=str$(orgend_date)
-00450   let fncmdkey("Next",1,1,0,"Prints the report")
-00460   let fncmdkey("Cancel",5,0,1,"Returns to menu")
-00470   let fnacs(sn$,0,mat resp$,ckey) !:
+00450   fncmdkey("Next",1,1,0,"Prints the report")
+00460   fncmdkey("Cancel",5,0,1,"Returns to menu")
+00470   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 00480   beg_date=val(resp$(1))
 00490   let end_date=val(resp$(2))
@@ -60,7 +60,7 @@
 00520   let orgend_date=val(resp$(5))
 00530   if beg_date=0 or end_date=0 then goto L320
 00540   if orgbeg_date=0 or orgend_date=0 then goto L320
-00550   let fnconsole(1)
+00550   fnconsole(1)
 00560 L560: let p1=pos(b$,"-",1)
 00570   if p1=0 then goto L600
 00580   b$(p1:p1)=""
@@ -100,45 +100,45 @@
 00920 ! ______________________________________________________________________
 00930 SCR1: ! 
 00940   goto L1220
-00950   let fntos(sn$="ElecW2-2") !:
+00950   fntos(sn$="ElecW2-2") !:
         let rc=cf=0: let mylen=30 : let mypos=mylen+3
-00960   let fnlbl(1,1,"Position Diskette in Drive A",mylen+25,1,0,0)
-00970   let fnlbl(3,1,"Company Name:",mylen,1,0,0)
-00980   let fntxt(3,mypos,40,0,0,"",0,"Enter the name of the company submitting the files",0) !:
+00960   fnlbl(1,1,"Position Diskette in Drive A",mylen+25,1,0,0)
+00970   fnlbl(3,1,"Company Name:",mylen,1,0,0)
+00980   fntxt(3,mypos,40,0,0,"",0,"Enter the name of the company submitting the files",0) !:
         let resp$(rc+=1)=a$(1)
-00990   let fnlbl(4,1,"Street Address:",mylen,1,0,0)
-01000   let fntxt(4,mypos,40,0,0,"",0,"Enter the address of the company submitting the files",0) !:
+00990   fnlbl(4,1,"Street Address:",mylen,1,0,0)
+01000   fntxt(4,mypos,40,0,0,"",0,"Enter the address of the company submitting the files",0) !:
         let resp$(rc+=1)=a$(2)
-01010   let fnlbl(5,1,"City:",mylen,1,0,0)
-01020   let fntxt(5,mypos,22,0,0,"",0,"Enter the city of the company submitting the files",0) !:
+01010   fnlbl(5,1,"City:",mylen,1,0,0)
+01020   fntxt(5,mypos,22,0,0,"",0,"Enter the city of the company submitting the files",0) !:
         let resp$(rc+=1)=ct$
-01030   let fnlbl(6,1,"State:",mylen,1,0,0)
-01040   let fntxt(6,mypos,2,0,0,"",0,"Enter the state forthe company being submitted.",0) !:
+01030   fnlbl(6,1,"State:",mylen,1,0,0)
+01040   fntxt(6,mypos,2,0,0,"",0,"Enter the state forthe company being submitted.",0) !:
         let resp$(rc+=1)=st$
-01050   let fnlbl(7,1,"Zip Code:",mylen,1,0,0)
-01060   let fntxt(7,mypos,5,0,0,"",0,"Enter the zip code for the company being submitted.",0) !:
+01050   fnlbl(7,1,"Zip Code:",mylen,1,0,0)
+01060   fntxt(7,mypos,5,0,0,"",0,"Enter the zip code for the company being submitted.",0) !:
         let resp$(rc+=1)=zip$
-01070   let fnlbl(8,1,"Federal ID #:",mylen,1,0,0)
-01080   let fntxt(8,mypos,9,0,0,"30",0,"Enter the Federal Id number without slashes or dashes.",0) !:
+01070   fnlbl(8,1,"Federal ID #:",mylen,1,0,0)
+01080   fntxt(8,mypos,9,0,0,"30",0,"Enter the Federal Id number without slashes or dashes.",0) !:
         let resp$(rc+=1)=str$(b1)
-01090   let fnlbl(9,1,"Payment Year:",mylen,1,0,0)
-01100   let fntxt(9,mypos,4,0,0,"30",0,"Enter the year for which the wages were paid in ccyy format.",0) !:
+01090   fnlbl(9,1,"Payment Year:",mylen,1,0,0)
+01100   fntxt(9,mypos,4,0,0,"30",0,"Enter the year for which the wages were paid in ccyy format.",0) !:
         let resp$(rc+=1)=str$(yr)
-01110   let fnlbl(10,1,"Social Security Maximum Wage:",mylen,1,0,0)
-01120   let fntxt(10,mypos,10,0,0,"10",0,"Enter the social security maximum wage for the year just completed.",0) !:
+01110   fnlbl(10,1,"Social Security Maximum Wage:",mylen,1,0,0)
+01120   fntxt(10,mypos,10,0,0,"10",0,"Enter the social security maximum wage for the year just completed.",0) !:
         let resp$(rc+=1)=str$(ssmax)
-01130   let fnlbl(11,1,"Social Security Rate:",mylen,1,0,0)
-01140   let fntxt(11,mypos,6,0,0,"34",0,"Enter the social security rate for the year just completed.",0) !:
+01130   fnlbl(11,1,"Social Security Rate:",mylen,1,0,0)
+01140   fntxt(11,mypos,6,0,0,"34",0,"Enter the social security rate for the year just completed.",0) !:
         let resp$(rc+=1)=str$(ssrate)
-01150   let fnlbl(12,1,"Medicare Maximum Wage:",mylen,1,0,0)
-01160   let fntxt(12,mypos,10,0,0,"10",0,"Enter the medicare maximum wage for the year just completed.",0) !:
+01150   fnlbl(12,1,"Medicare Maximum Wage:",mylen,1,0,0)
+01160   fntxt(12,mypos,10,0,0,"10",0,"Enter the medicare maximum wage for the year just completed.",0) !:
         let resp$(rc+=1)=str$(mcmax)
-01170   let fnlbl(13,1,"Medicare Rate:",mylen,1,0,0)
-01180   let fntxt(13,mypos,6,0,0,"34",0,"Enter the medicare rate for the year just completed.",0) !:
+01170   fnlbl(13,1,"Medicare Rate:",mylen,1,0,0)
+01180   fntxt(13,mypos,6,0,0,"34",0,"Enter the medicare rate for the year just completed.",0) !:
         let resp$(rc+=1)=str$(mcrate)
-01190   let fncmdkey("Next",1,1,0,"Proceed with submission")
-01200   let fncmdkey("Cancel",5,0,1,"Returns to menu")
-01210   let fnacs(sn$,0,mat resp$,ckey) !:
+01190   fncmdkey("Next",1,1,0,"Proceed with submission")
+01200   fncmdkey("Cancel",5,0,1,"Returns to menu")
+01210   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 01220 L1220: pr newpage
 01230   close #101: ioerr L1240
@@ -544,7 +544,7 @@
 04890   if button_option=7 then !:
           let fkey$(1)="Save" !:
           let fkey$(4)="Delete"
-04900   let scrline=er+1: gosub L5560 !  Let FNFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
+04900   let scrline=er+1: gosub L5560 !  fnFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
 04910 ! 
 04920 L4920: return  ! Fnend
 04930 L4930: ! mtype=0 means splash    - returns no response                                 ! mostly for "please wait..." and "printing..."                                 ! (anywhere no response is required - no buttons are displyed either)

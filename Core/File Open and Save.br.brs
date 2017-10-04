@@ -24,7 +24,7 @@
 24040     let file_open$=os_filename$(file$(h_tmp))
 24050     close #h_tmp: 
 24060   end if
-24070   let fnreg_close
+24070   fnreg_close
 24080   ! r: new way 12/4/2015
 24090   dim fileOpenDestination$*256
 24100   if env$('BR_MODEL')='CLIENT/SERVER' then 
@@ -55,9 +55,9 @@
 24680   execute 'sy '&env$('client_temp')&'\open_as_'&session$&'.cmd'
 24700   ! /r
 24720   if fn_analyze_7zip_compresslog(env$('client_temp')&'\Open_Log.txt','Successfully Opened',file_open$,1) then 
-24740     let fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
-24760     let fnreg_write('Last Open File',file_open$(pos(file_open$,'\',-1)+1:len(file_open$)))
-24780     let fnreg_write('Last Open Path',file_open$(1:pos(file_open$,'\',-1)))
+24740     fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
+24760     fnreg_write('Last Open File',file_open$(pos(file_open$,'\',-1)+1:len(file_open$)))
+24780     fnreg_write('Last Open Path',file_open$(1:pos(file_open$,'\',-1)))
 25000     if env$('BR_MODEL')='CLIENT/SERVER' then
 25020       if filter$='' then
 25040       else
@@ -84,7 +84,7 @@
 26040     mat ml$(2)
 26050     let ml$(1)='Select a different file name.'
 26060     let ml$(2)='Error: '&str$(err)
-26070     let fnmsgbox(mat ml$)
+26070     fnmsgbox(mat ml$)
 26080     !     if err=4150 then pr "Could not create file:";file$(1) : let fnpause ! file$(1) is blank!
 26090     pr "Err:";err;" Line:";line
 26100   end if 
@@ -156,17 +156,17 @@
 39180   end if
 39200   if fsa_automatedSaveFileName$<>'' then
 39220     if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$, 1,suppressErrorLog) then 
-39240       let fnreg_write('Last Automated Save Date',date$('ccyy/mm/dd'))
-39260       let fnreg_write('Last Automated Save Time',time$)
-39280       let fnreg_write('Last Automated Save File',save_name$)
-39300       let fnreg_write('Last Automated Save Path',save_name$(1:pos(save_name$,'\',-1)))
+39240       fnreg_write('Last Automated Save Date',date$('ccyy/mm/dd'))
+39260       fnreg_write('Last Automated Save Time',time$)
+39280       fnreg_write('Last Automated Save File',save_name$)
+39300       fnreg_write('Last Automated Save Path',save_name$(1:pos(save_name$,'\',-1)))
 39320     end if 
 39340   else
 39360     if fn_analyze_7zip_compresslog(save_log_filename$,'All ACS Data has successfully been saved to',save_name$,0,suppressErrorLog) then 
-39380       let fnreg_write('Last Save Date',date$('ccyy/mm/dd'))
-39400       let fnreg_write('Last Save Time',time$)
-39420       let fnreg_write('Last Save File',save_name$)
-39440       let fnreg_write('Last Save Path',save_name$(1:pos(save_name$,'\',-1)))
+39380       fnreg_write('Last Save Date',date$('ccyy/mm/dd'))
+39400       fnreg_write('Last Save Time',time$)
+39420       fnreg_write('Last Save File',save_name$)
+39440       fnreg_write('Last Save Path',save_name$(1:pos(save_name$,'\',-1)))
 39460     end if 
 39480   end if
 39500   ! 
@@ -177,7 +177,7 @@
 39600     let ml$(1)='Automated save failed'
 39620     let ml$(2)='Error: '&str$(err)
 39640     let ml$(3)='File: '&fsa_automatedSaveFileName$
-39660     let fnmsgbox(mat ml$)
+39660     fnmsgbox(mat ml$)
 39680     ! goto SAVE_AS_XIT
 39700   ! else if err=622 then ! it was just cancelled
 39720   !   goto SAVE_AS_XIT
@@ -185,11 +185,11 @@
 39760     mat ml$(2)
 39780     let ml$(1)='Select a different file name.'
 39800     let ml$(2)='Error: '&str$(err)
-39820     let fnmsgbox(mat ml$)
+39820     fnmsgbox(mat ml$)
 39840     pr "Err:";err;" Line:";line
 39860   end if 
 39880   SAVE_AS_XIT: ! 
-39900   !  let fn_fsa_clean_up
+39900   !  fn_fsa_clean_up
 39920 fnend 
 42000 def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_name$*256; statusInsteadOfMsgBox,suppressErrorLog)
 42020   open #h_compresslog:=fngethandle: 'Name='&arc_filename$,display,input ioerr A7C_OPEN_ERR
@@ -214,9 +214,9 @@
 42400       let ml$(2)='The following log was created:'
 42420       let ml$(3)=arc_filename$
 42440       let ml$(4)='Display the log now?'
-42460       let fnmsgbox(mat ml$,resp$,"ACS",4+64)
+42460       fnmsgbox(mat ml$,resp$,"ACS",4+64)
 42480       if resp$="Yes" then 
-42500         let fntext_editor(arc_filename$)
+42500         fntext_editor(arc_filename$)
 42520       end if 
 42540     end if 
 42560   else 
@@ -228,7 +228,7 @@
 42680       mat ml$(2)
 42700       let ml$(1)=success_text_line1$
 42720       let ml$(2)=save_name$
-42740       let fnmsgbox(mat ml$,resp$,"ACS",0)
+42740       fnmsgbox(mat ml$,resp$,"ACS",0)
 42760     end if
 42780   end if 
 42800   goto ARC_XIT
@@ -323,23 +323,23 @@
 52000 def fn_opMain(file_open$*256)
 52020   destination_company_number=val(env$('cno'))
 52040   OpmAskWhichToOpen: ! r: screen
-52060   let fntos(sn$="Open Partial")
+52060   fntos(sn$="Open Partial")
 52080   col1_width=27 : col2_pos=col1_width+2 : lc=rc=0
-52100   let fnlbl(lc+=1,1,"Source File:",col1_width,1)
-52120   let fntxt(lc,col2_pos,30,256,0,'',1,'select any data file from the data set to be imported.  i.e. Z:\vol002\CLmstr\BankIdx.h2')
+52100   fnlbl(lc+=1,1,"Source File:",col1_width,1)
+52120   fntxt(lc,col2_pos,30,256,0,'',1,'select any data file from the data set to be imported.  i.e. Z:\vol002\CLmstr\BankIdx.h2')
 52140   resp$(rc+=1)=file_open$
-52160   let fnlbl(lc+=1,1,"Source Company:",col1_width,1)
+52160   fnlbl(lc+=1,1,"Source Company:",col1_width,1)
 52180   fncomboa('compList',lc,col2_pos,mat archiveList$)
 52200   let resp$(resp_fileSource:=rc+=1)=archiveList$(1)
-52220   let fnlbl(lc+=1,1,"Destination Company Number:",col1_width,1)
-52240   let fntxt(lc,col2_pos,5,5,0,'1030',0,'')
-52250   let fnlbl(lc,col2_pos+7,"(only applies if a specific Source Company is selected)")
+52220   fnlbl(lc+=1,1,"Destination Company Number:",col1_width,1)
+52240   fntxt(lc,col2_pos,5,5,0,'1030',0,'')
+52250   fnlbl(lc,col2_pos+7,"(only applies if a specific Source Company is selected)")
 52260   let resp$(resp_cnoDestination:=rc+=1)=str$(destination_company_number)
 52280   ! let fnlbl(lc+=1,1,"System Abbreviation:",col1_width,1)
 52300   ! let fntxt(lc,col2_pos,2,2,0)
 52320   ! let resp$(resp_SystemAbbr:=rc+=1)=cursys$
-52340   let fncmdset(2)
-52360   let fnacs(sn$,0,mat resp$,ckey)
+52340   fncmdset(2)
+52360   fnacs(sn$,0,mat resp$,ckey)
 52380   ! /r
 52400   dim selectedSource$*128
 52420   selectedSource$=resp$(resp_fileSource)
@@ -430,14 +430,14 @@
 62990 fnend
 64000 def fn_copy_files_in(company_import_path$*256,company_import_extension$,destination_company_number)
 64020   fnFree(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
-64040   let fnstatus('Existing files ('&os_filename$(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
+64040   fnstatus('Existing files ('&os_filename$(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
 64060   cfiReturn=fnCopy(company_import_path$&'*'&company_import_extension$,env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
 64080   if cfiReturn>0 then
 64100     if env$('cursys')='UB' then
 64120       cfiReturn=fn_ub_copy_extras(company_import_path$,company_import_extension$,destination_company_number)
 64140     end if
 64160     if cfiReturn>0 then
-64180       let fnstatus('Import data copied in.')
+64180       fnstatus('Import data copied in.')
 64200     end if
 64220   end if
 64240   fn_copy_files_in=cfiReturn
@@ -450,17 +450,17 @@
 68100     end if  ! exists(env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
 68120     uceReturn=fnCopy(company_import_path$&'ubdata\*'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
 68140     if uceReturn>0 then
-68160       let fnstatus('UBmstr\ubData found in source and is replacing destination.')
+68160       fnstatus('UBmstr\ubData found in source and is replacing destination.')
 68180     end if
 68440   else 
-68460     let fnstatus('UBmstr\ubData did not exist in source. Destination ubData remains unchanged.')
+68460     fnstatus('UBmstr\ubData did not exist in source. Destination ubData remains unchanged.')
 68680   end if 
 68700   ! /r
 68720   ! r: import notes folder
 68740   if exists(company_import_path$&'UBmstr\notes'&company_import_extension$) then 
 68760     execute 'free "'&env$('Q')&'\'&env$('cursys')&'mstr\notes.h'&str$(destination_company_number)&'"'
 68780     execute 'sy xcopy "'&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*" "'&os_filename$(env$('Q')&'\UBmstr\notes.h'&str$(destination_company_number))&'\*.*" /t /y'
-68800     let fnstatus('UB Notes imported.')
+68800     fnstatus('UB Notes imported.')
 68820   end if  ! exists [import path]'&env$('Q')&'\UBmstr\notes.h[company_import_extension]
 68840   ! /r
 68850   fn_ub_copy_extras=uceReturn

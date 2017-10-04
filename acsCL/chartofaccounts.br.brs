@@ -7,8 +7,8 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(4)*38,tln(4),p$(4)*160,fltyp$(4),sln(4),mask(4)
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$='Chart of Accounts')
-00100   let fncno(cno)
+00090   fntop(program$,cap$='Chart of Accounts')
+00100   fncno(cno)
 00110   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2) !:
         close #20: 
@@ -27,7 +27,7 @@
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 00210 ! ______________________________________________________________________
 00220 BUILD_LAYOUT: ! 
-00230   let fncno(cno)
+00230   fncno(cno)
 00240 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
 00250   let lbl$(ic+=1)="Department" !:
@@ -68,7 +68,7 @@
 00360   return 
 00370 ! ______________________________________________________________________
 00380 HAMSTER: ! 
-00390   let fnhamster("ChartOfAccounts",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
+00390   fnhamster("ChartOfAccounts",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00400   return 
 00410 ! ______________________________________________________________________
 00420 XIT: let fnxit

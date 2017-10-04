@@ -1,5 +1,5 @@
 24000   def library fnbooktitle$*256(x$*256)
-24020     let fnbooktitle$=fn_booktitle$(x$)
+24020     fnbooktitle$=fn_booktitle$(x$)
 24040   fnend 
 24060   def fn_booktitle$*256(x$*256)
 24080     let x$=lwrc$(trim$(x$)) : let olda=0
@@ -39,5 +39,5 @@
 24760       a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a
 24780       goto L1320
 24800     end if 
-24820     let fn_booktitle$=x$
+24820     fn_booktitle$=x$
 24840   fnend 

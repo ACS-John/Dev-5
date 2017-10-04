@@ -7,7 +7,7 @@
 00070 ! ______________________________________________________________________
 00080     dim ln$*200,options$(50)*200
 00090 ! ______________________________________________________________________
-00100     let fncno(cno)
+00100     fncno(cno)
 00110     execute "Dir "&env$('Q')&"\GLmstr\budget*.H"&str$(cno)&" >FlexWork.tmp" ! Ioerr 271
 00120 L120: linput #13: ln$ eof L170
 00130     let x=pos(ln$,"<DIR>",1)
@@ -19,7 +19,7 @@
 00190     if j<=0 then let j=1
 00200     mat options$(j)
 00210     let fen$="CBud.h"&str$(cno)
-00220     let fncomboa(fen$,1,1,mat option$,"Select from the list of budget files. To add a new budget file, take the Add option.",20,container)
+00220     fncomboa(fen$,1,1,mat option$,"Select from the list of budget files. To add a new budget file, take the Add option.",20,container)
 00230     goto XIT
 00240 ! ______________________________________________________________________
 00250 ! <Updateable Region: ERTN>

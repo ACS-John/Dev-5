@@ -7,25 +7,25 @@
 00070   dim ba(13),bt1(14,2)
 00080   dim tr(2),cap$*128,txt$*80,udf$*256
 00090 ! ______________________________________________________________________
-00100   let fncno(cno)
+00100   fncno(cno)
 00102   let udf$=env$('temp')&'\'
-00110   let fntop("S:\acsUB\RmBudget",cap$="Remove Old Budget Transactions")
+00110   fntop("S:\acsUB\RmBudget",cap$="Remove Old Budget Transactions")
 00120 ! ______________________________________________________________________
 00130   gosub BUD1
 00140   if bud1=0 then goto XIT
 00150 ! ______________________________________________________________________
 00160   let sn$="RmBudget" !:
-        let fntos(sn$)
+        fntos(sn$)
 00170   let txt$="All paid budget records with a date prior" !:
-        let fnlbl(1,1,txt$,44,2)
+        fnlbl(1,1,txt$,44,2)
 00180   let txt$="to this date will be removed." !:
-        let fnlbl(2,1,txt$,44,2)
+        fnlbl(2,1,txt$,44,2)
 00190   let txt$="Oldest Date to Retain (MMDDYY):" !:
-        let fnlbl(4,1,txt$,33,1)
-00200   let fntxt(4,35,8,0,0,"1") !:
+        fnlbl(4,1,txt$,33,1)
+00200   fntxt(4,35,8,0,0,"1") !:
         let resp$(1)=""
-00210   let fncmdset(2)
-00220   let fnacs(sn$,0,mat resp$,ckey)
+00210   fncmdset(2)
+00220   fnacs(sn$,0,mat resp$,ckey)
 00230   let rd1=val(resp$(1))
 00240   if ckey=5 then goto XIT
 00250   open #2: "Name="&udf$&"Work1.dat,Size=0,RecL=149,Replace",internal,outin,relative 

@@ -7,8 +7,8 @@
 00070   dim iom$(4),scm$(4)*27,resp$(5)*50
 00080   dim cde$*3,des$*30,cnam$*40,sc$*3,cnt$*25,cap$*128,message$*40
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\acsPR\jcSCMaint",cap$="Sub-Category Description")
-00110   let fncno(cno,cnam$)
+00100   fntop("S:\acsPR\jcSCMaint",cap$="Sub-Category Description")
+00110   fncno(cno,cnam$)
 00120 ! 
 00130   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00140 ! ______________________________________________________________________
@@ -25,14 +25,14 @@
 00230 ! ______________________________________________________________________
 00240 ADDREC: ! 
 00250   cde$="": let des$=""
-00260   let fntos(sn$="Ask-sub-cat") !:
+00260   fntos(sn$="Ask-sub-cat") !:
         let respc=0
-00270   let fnlbl(1,1,"Sub-category #:",16,right)
-00280   let fntxt(1,19,3,3,0,"30",0,"Assign any number that has not been used before.") !:
+00270   fnlbl(1,1,"Sub-category #:",16,right)
+00280   fntxt(1,19,3,3,0,"30",0,"Assign any number that has not been used before.") !:
         let resp$(respc+=1)=""
-00290   let fncmdkey("&Next",1,1,0,"Record this sub category record.") !:
-        let fncmdkey("E&xit",5,0,1,"Returns to main screen.")
-00300   let fnacs(sn$,0,mat resp$,ckey) ! add sub-category #
+00290   fncmdkey("&Next",1,1,0,"Record this sub category record.") !:
+        fncmdkey("E&xit",5,0,1,"Returns to main screen.")
+00300   fnacs(sn$,0,mat resp$,ckey) ! add sub-category #
 00310   if ckey=5 then goto ASKSUBCAT
 00320   cde$=lpad$(rtrm$(resp$(1)),3)
 00330   read #1,using L760,key=cde$: cde$,des$ nokey L350
@@ -42,7 +42,7 @@
 00370   mat ml$(2) !:
         let ml$(1)="A record with this number already exists!" !:
         let ml$(2)="Select a different subcategory number." !:
-        let fnmsgbox(mat ml$,resp$,cap$,48) !:
+        fnmsgbox(mat ml$,resp$,cap$,48) !:
         goto ADDREC
 00380 ! ______________________________________________________________________
 00390 EDITREC: ! 
@@ -50,17 +50,17 @@
 00410   read #1,using L760,key=cde$: cde$,des$ nokey L420
 00420 L420: let fntos(sn$="Edit-sub-cat") !:
         let respc=0
-00430   let fnlbl(1,1,"Sub-category #:",16,right)
-00440   let fntxt(1,19,3,3,0,"30",0,"Can be any three digit number.") !:
+00430   fnlbl(1,1,"Sub-category #:",16,right)
+00440   fntxt(1,19,3,3,0,"30",0,"Can be any three digit number.") !:
         let resp$(respc+=1)=cde$
-00450   let fnlbl(2,1,"Description:",16,right)
-00460   let fntxt(2,19,30,30,0,"",0,"") !:
+00450   fnlbl(2,1,"Description:",16,right)
+00460   fntxt(2,19,30,30,0,"",0,"") !:
         let resp$(respc+=1)=des$
-00470   let fncmdkey("&Next",1,1,0,"Record any changes & return to main screen.") !:
-        let fncmdkey("&Add",2,0,0,"Save these changes and then add a new record." ) !:
-        let fncmdkey("&Delete",4,0,0,"Delete this sub-category record." ) !:
-        let fncmdkey("E&xit",5,0,1,"Returns to main screen.")
-00480   let fnacs(sn$,0,mat resp$,ckey) ! edit sub-category
+00470   fncmdkey("&Next",1,1,0,"Record any changes & return to main screen.") !:
+        fncmdkey("&Add",2,0,0,"Save these changes and then add a new record." ) !:
+        fncmdkey("&Delete",4,0,0,"Delete this sub-category record." ) !:
+        fncmdkey("E&xit",5,0,1,"Returns to main screen.")
+00480   fnacs(sn$,0,mat resp$,ckey) ! edit sub-category
 00490   if ckey=5 then goto ASKSUBCAT
 00500   cde$=lpad$(rtrm$(resp$(1)),3)
 00510   let des$=resp$(2)
@@ -69,7 +69,7 @@
 00540 L540: mat ml$(2) !:
         let ml$(1)="You are attempting to change the sub-category # from "&holdcde$ !:
         let ml$(2)="to "&cde$&".  Take OK to continue, else cancel." !:
-        let fnmsgbox(mat ml$,resp$,cap$,48)
+        fnmsgbox(mat ml$,resp$,cap$,48)
 00550   if resp$="OK" then goto L560 else goto EDITREC
 00560 L560: rewrite #1,using L760,key=cde$: cde$,des$ nokey L590
 00570   if ckey=2 then goto ADDREC
@@ -95,7 +95,7 @@
 00770 ! ______________________________________________________________________
 00780 SUBCAT_LISTING: ! 
 00790   on fkey 5 goto L910
-00800   let fnopenprn
+00800   fnopenprn
 00810   restore #1,key>="   ": nokey ASKSUBCAT
 00820   gosub L950
 00830 L830: read #1,using L760: cde$,des$ eof L910
@@ -107,7 +107,7 @@
 00890   continue 
 00900 ! ______________________________________________________________________
 00910 L910: on fkey 5 ignore 
-00920   let fncloseprn
+00920   fncloseprn
 00930   goto ASKSUBCAT
 00940 ! ______________________________________________________________________
 00950 L950: pr #255,using L960: date$,cnam$

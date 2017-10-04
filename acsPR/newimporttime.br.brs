@@ -10,31 +10,31 @@
 00100   dim msgline$(2)*60,response$(5)*1,simple$*50,wait$*40,name$*30,prname$*30
 00110   dim ln$*76,filename$*40
 00120 ! ______________________________________________________________________
-00130   let fntop(program$,cap$="Import Time from Time Clock System")
+00130   fntop(program$,cap$="Import Time from Time Clock System")
 00150   let pathtotimecard$="c:\progra~1\acs\"
 00160 ! 
 00170   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
 00180   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outin,relative 
 00190 ! ______________________________________________________________________
 00200 ASK_PAYROLL_DATE: ! 
-00210   let fntos(sn$="Importtime") !:
+00210   fntos(sn$="Importtime") !:
         let respc=0
-00220   let fnlbl(1,1,"",34,1) ! bigger screen
-00230   let fnlbl(2,1,"Payroll Date:",20,1)
-00240   let fntxt(2,23,10,0,1,"3",0,"Always use the calculation date.")
+00220   fnlbl(1,1,"",34,1) ! bigger screen
+00230   fnlbl(2,1,"Payroll Date:",20,1)
+00240   fntxt(2,23,10,0,1,"3",0,"Always use the calculation date.")
 00250   let resp$(respc+=1)=str$(ppd)
-00260   let fncmdkey("&Next",1,1,0,"Proceed with importing time." ) !:
-        let fncmdkey("E&xit",5,0,1,"Returns to menu")
-00270   let fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+00260   fncmdkey("&Next",1,1,0,"Proceed with importing time." ) !:
+        fncmdkey("E&xit",5,0,1,"Returns to menu")
+00270   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 00280   if ckey=5 then goto XIT
 00290   let endingdate=val(resp$(1))
 00300 ! ______________________________________________________________________
-00310   let fnopenprn
+00310   fnopenprn
 00320   let filename$="Payroll"&cnvrt$("Pic(zzzzzzzz)",endingdate)(5:6) &"-"&cnvrt$("Pic(zzzzzzzz)",endingdate)(7:8)&"-" &cnvrt$("Pic(zzzzzzzz)",endingdate)(3:4) &".txt"
 00330 ! if env$('client')="West Rest Haven" then let filename$=cnvrt$("Pic(zzzzzzzz)",endingdate)(5:6) &"-"&cnvrt$("Pic(zzzzzzzz)",endingdate)(7:8)&"-" &cnvrt$("Pic(zzzzzzzz)",endingdate)(3:4) &".txt"
 00340 ! if env$('client')="West Rest Haven" then execute "Copy c:\Acs\local\wrhPayroll"&filename$&" "&pathtotimecard$&"TimeCard.h"&env$('cno')
 00350   gosub HDR
-00360   let fnwait(101,cap$,wait$="Importing: please wait...",0)
+00360   fnwait(101,cap$,wait$="Importing: please wait...",0)
 00370   on fkey 5 goto L580
 00380   let simple$=pathtotimecard$&"TimeCard.h"&env$('cno')
 00390   open #3: "Name="&pathtotimecard$&"TimeCard\SimpleSummary,KFName="&pathtotimecard$&"TimeCard\SSIndex,Replace,RecL=46,KPs=1,KLn=16",internal,outin,keyed 
@@ -75,7 +75,7 @@
         let ml$(2)="file or in the wrong format.  You must export" !:
         let ml$(3)="the time from your time clock system before" !:
         let ml$(4)="attempting to run this menu option." !:
-        let fnmsgbox(mat ml$,resp$,cap$,48)
+        fnmsgbox(mat ml$,resp$,cap$,48)
 00730   goto XIT
 00740 MESSAGE2: ! bad employee number
 00750   mat ml$(4) !:
@@ -83,7 +83,7 @@
         let ml$(2)="from the time clock, but does not have a matching" !:
         let ml$(3)="employee number in the payroll system.  This" !:
         let ml$(4)="person will be skipped.   "&name$ !:
-        let fnmsgbox(mat ml$,resp$,cap$,48)
+        fnmsgbox(mat ml$,resp$,cap$,48)
 00760   goto L410
 00770 HDR: ! 
 00780   pr #255,using L790: time$,env$('cnam'),date$,"Time Card Summary",cnvrt$("pic(zzzz/zz/zz)",endingdate)

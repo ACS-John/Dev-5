@@ -47,14 +47,14 @@
 00047  !
 00048  !
 00049  ERtn: ! r: Template for a ACS Error Routine
-00050  let fnReturnCode('! <updateable region: ertn>')
-00051  let fnReturnCode('ERTN: ')
-00052  let fnReturnCode('  let fnerror(program$,err,line,act$,"xit")')
-00053  let fnReturnCode('  if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT')
-00054  let fnReturnCode('  if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT')
-00055  let fnReturnCode('  pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT')
-00056  let fnReturnCode('ERTN_EXEC_ACT: execute act$ : goto ERTN')
-00057  let fnReturnCode('! </updateable region: ertn>')
+00050  fnReturnCode('! <updateable region: ertn>')
+00051  fnReturnCode('ERTN: ')
+00052  fnReturnCode('  fnerror(program$,err,line,act$,"xit")')
+00053  fnReturnCode('  if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT')
+00054  fnReturnCode('  if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT')
+00055  fnReturnCode('  pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT')
+00056  fnReturnCode('ERTN_EXEC_ACT: execute act$ : goto ERTN')
+00057  fnReturnCode('! </updateable region: ertn>')
 00058  return ! /r
 00059  !
 00060  dim ReturnCode$*20000
@@ -63,9 +63,9 @@
 00063  fnend
 00064  !
 00065  def library fnRunTemplate(Template,FileLay$;___,Index)
-00066     let fnEstablishLinkage
+00066     fnEstablishLinkage
 00067     let ReturnCode$=""
-00068     let fnReadEntireLayout(FileLay$,Filename$,Prefix$,Mat Keys$,Mat KeyDescription$,Mat Ssubs$,Mat Nsubs$,Mat Sspec$,Mat Nspec$,Mat Sdescription$,Mat Ndescription$,Mat Spos,Mat Npos)
+00068     fnReadEntireLayout(FileLay$,Filename$,Prefix$,Mat Keys$,Mat KeyDescription$,Mat Ssubs$,Mat Nsubs$,Mat Sspec$,Mat Nspec$,Mat Sdescription$,Mat Ndescription$,Mat Spos,Mat Npos)
 00069     let LongestElement=0
 00070     for Index=1 to udim(mat SSpec$)
 00071        let LongestElement=max(LongestElement,fnLength(SSpec$(Index)))
@@ -110,7 +110,7 @@
 99010  OPEN: ! ***** Function To Call Library Openfile And Proc Subs
 99020        def Fnopen(Filename$*255, Mat F$, Mat F, Mat Form$; Inputonly, Keynum, Dont_Sort_Subs, Path$*255, Mat Descr$, Mat Field_Widths,Supress_Prompt,Ignore_Errors,___,Index)
 99030           dim _FileIOSubs$(1)*800, _Loadedsubs$(1)*80
-99040           let Fnopen=Fnopenfile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)
+99040           fnopen=Fnopenfile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)
 99050           if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : let _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index
 99060        fnend
 99070  !

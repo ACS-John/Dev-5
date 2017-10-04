@@ -8,12 +8,12 @@
 00080     dim df$*200,if$*200
 00090 ! ______________________________________________________________________
 00100     if addall<>1 then addall=0
-00110     let fncno(cno)
+00110     fncno(cno)
 00120     if addall=0 then let fen$="Cburden.h"&str$(cno) else !:
             let fen$="CburdenALL.h"&str$(cno)
 00130     if indexfile$="" then let if$=env$('Q')&"\PRmstr\burdenidx.h"&str$(cno) else !:
             let if$=indexfile$
-00140     let fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\burden.h"&str$(cno),1,8,9,30,if$,1+addall,0,"Select from the list of personnel burden records. To add a personnel burden record, take the Add option.",container)
+00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\burden.h"&str$(cno),1,8,9,30,if$,1+addall,0,"Select from the list of personnel burden records. To add a personnel burden record, take the Add option.",container)
 00150     let indexfile$=""
 00160     goto XIT
 00170 ! ______________________________________________________________________

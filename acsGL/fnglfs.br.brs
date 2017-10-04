@@ -21,24 +21,24 @@
 16000   actpd$=fnactpd$ 
 16020   actpd=fnactpd
 16040   if fnprocess=1 then 
-16060     let fnps(1)
-16080     let fnpriorcd(1)
+16060     fnps(1)
+16080     fnpriorcd(1)
 16100   else
-22000     let fntos(sn$="glFS-lib") 
+22000     fntos(sn$="glFS-lib") 
 22020     let lc=rc=0 : let mylen=23 : let mypos=mylen+3
-22040     let fnlbl(lc+=1,1,"Statement Format:",mylen,1)
-22060     let fncomboa("ps",lc,mypos,mat formatOption$) 
+22040     fnlbl(lc+=1,1,"Statement Format:",mylen,1)
+22060     fncomboa("ps",lc,mypos,mat formatOption$) 
 22080     let resp$(resp_format:=rc+=1)=formatOption$(1)
-22100     let fnlbl(lc+=1,1,"Year:",mylen,1)
-22120     let fncomboa("PriorCD",lc,mypos,mat priorOrCurrentOption$) 
+22100     fnlbl(lc+=1,1,"Year:",mylen,1)
+22120     fncomboa("PriorCD",lc,mypos,mat priorOrCurrentOption$) 
 22140     let resp$(resp_priorOrCurrent:=rc+=1)=priorOrCurrentOption$(1)
-22160     let fnlbl(lc+=1,1,"Period to Print:",mylen,1)
-22180     let fncomboa("FSCode",lc,mypos,mat periodOption$) 
+22160     fnlbl(lc+=1,1,"Period to Print:",mylen,1)
+22180     fncomboa("FSCode",lc,mypos,mat periodOption$) 
 22200     let resp$(resp_period:=rc+=1)=str$(actpd) ! periodOption$(1)
-22220     let fncmdset(3)
-22240     let fnacs(sn$,0,mat resp$,ckey)
+22220     fncmdset(3)
+22240     fnacs(sn$,0,mat resp$,ckey)
 32000     if ckey=5 then 
-32020       let fnglfs=5 
+32020       fnglfs=5 
 32040     else
 32060       format=srch(mat formatOption$,resp$(resp_format))
 32080       priorOrCurrent=srch(mat priorOrCurrentOption$,resp$(resp_priorOrCurrent))

@@ -2,8 +2,8 @@
 00030   on error goto L2010
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole
 00050   library 'S:\Core\Library': fnopenprn,fncloseprn
-00060   let fntop(program$,cap$="Service Code")
-00070   let fncno(cno,cnam$)
+00060   fntop(program$,cap$="Service Code")
+00070   fncno(cno,cnam$)
 00080   dim sc$*4,ds$*30,holdsc$*4,scode$*4
 00090   dim cnam$*40,dat$*20
 00100   dim sb$(4),sd$(4),se$(4)*25,pl$(4,3)*30
@@ -133,7 +133,7 @@
 01340 L1340: pr fields "10,10,c 50,n": "PRINT SERVICE CODE PROOF LIST IN PROCESS"
 01350   pr fields "23,2,C 30,N": "Press F5 to stop"
 01360   on fkey 5 goto L1670
-01370   let fnopenprn(cp,58,220,process)
+01370   fnopenprn(cp,58,220,process)
 01380 L1380: let j=0
 01390   let eofc=0
 01400 L1400: read #1,using L570: sc$,ds$,th,sf eof L1640 ioerr L2010

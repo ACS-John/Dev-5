@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnrgl$,fnerror,fnwait,fnoldmsgbox,fnsearch,fnopenprn,fncloseprn,fntos,fnfra,fnopt,fncmdset,fnacs,fnagl$,fnlbl,fnqgl,fntxt
 00050   on error goto ERTN
-00060   let fntop(program$,"Budget Amounts")
+00060   fntop(program$,"Budget Amounts")
 00070 ! ______________________________________________________________________
 00080   dim dat$*20,bm(13),io1$(4),in1(4),fl2$(2),sc2$(2)*50
 00090   dim revb(13),resp$(10)*256
@@ -14,23 +14,23 @@
 00142   read #1,using 'Form Pos 384,N 2',rec=1: nap 
 00144   close #1: 
 00150 !
-00160   let fntos(sn$="BudgetAmount") 
+00160   fntos(sn$="BudgetAmount") 
 00162   let mylen=50: let mypos=mylen+3 : let right=1
-00170   let fnfra(1,1,2,55,"Method of Budget Entry"," ",0)
-00180   let fnopt(1,3,"Enter new Budget amounts",0,1) 
+00170   fnfra(1,1,2,55,"Method of Budget Entry"," ",0)
+00180   fnopt(1,3,"Enter new Budget amounts",0,1) 
 00182   let resp$(rc+=1)="True"
-00190   let fnopt(2,3,"Pull Budget from Budget Management System",0,1) 
+00190   fnopt(2,3,"Pull Budget from Budget Management System",0,1) 
 00192   let resp$(rc+=1)="False"
-00200   let fnfra(5,1,3,55,"Method of Allocating Budget"," ",0)
-00210   let fnopt(1,3,"Divide new budget evenly between months",0,2) 
+00200   fnfra(5,1,3,55,"Method of Allocating Budget"," ",0)
+00210   fnopt(1,3,"Divide new budget evenly between months",0,2) 
 00212   let resp$(rc+=1)="True"
-00220   let fnopt(2,3,"Allocate full amount to month 12",0,2) 
+00220   fnopt(2,3,"Allocate full amount to month 12",0,2) 
 00222   let resp$(rc+=1)="False"
-00230   let fnopt(3,3,"Allocate full amount to month 1",0,2) 
+00230   fnopt(3,3,"Allocate full amount to month 1",0,2) 
 00232    let resp$(rc+=1)="False"
-00240   let fncmdset(2)
+00240   fncmdset(2)
 00250 ! 
-00260   let fnacs(sn$,0,mat resp$,ckey)
+00260   fnacs(sn$,0,mat resp$,ckey)
 00270   if ckey=5 then goto XIT
 00280   if resp$(1)="True" then let method=1 else let method=2
 00290   if resp$(3)="True" then let method_to_allocate=1 ! divide evenly
@@ -39,24 +39,24 @@
 00320   if method=2 then gosub L790
 00330   if method=2 then gosub BUDGET_FILE_NUM
 00340   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-00350   let fnopenprn
+00350   fnopenprn
 00370 ! 
 00380   pr #255: "   GL Number    New Budget  Old Budget"
 00390   pr #255: "--------------  ----------  ----------"
 00400 ENTER_BUDGET: ! 
 00410   if method=2 then goto L1090
-00420   let fntos(sn$="BudgetAmount2") 
+00420   fntos(sn$="BudgetAmount2") 
 00422   let mylen=25: let mypos=mylen+3 : let right=1
 00430   let k$="": read #1,using L440: k$ ioerr L450 eof L450 ! try to read next account
 00440 L440: form pos 1,c 12
 00450 L450: let fnlbl(1,1," General Ledger Number:",mylen,right)
-00460   let fnqgl(1,mypos,0,2) 
+00460   fnqgl(1,mypos,0,2) 
 00462   let resp$(1)=fnrgl$(k$)
-00470   let fnlbl(2,1," Budget Amount:",mylen,right)
-00480   let fntxt(2,mypos,12,0,1,"10",0,"Enter the total budget amount for this account.  Use negative amounts on revenues (any negative balance accounts).") 
+00470   fnlbl(2,1," Budget Amount:",mylen,right)
+00480   fntxt(2,mypos,12,0,1,"10",0,"Enter the total budget amount for this account.  Use negative amounts on revenues (any negative balance accounts).") 
 00482   let resp$(2)=""
-00490   let fncmdset(2)
-00500   let fnacs(sn$,0,mat resp$,ckey)
+00490   fncmdset(2)
+00500   fnacs(sn$,0,mat resp$,ckey)
 00510   if ckey=5 then goto XIT
 00520   let k$=fnagl$(resp$(1))
 00530   budgetamt=val(resp$(2)) ! new budget amount
@@ -80,7 +80,7 @@
 00710 L710: goto ENTER_BUDGET
 00720 ! ______________________________________________________________________
 00730 EOF2: ! 
-00740   let fncloseprn
+00740   fncloseprn
 00750 ! 
 00760 ! 
 00770 XIT: let fnxit
@@ -91,30 +91,30 @@
 00832   read #1,using 'Form Pos 384,N 2',rec=1: nap 
 00834   close #1: 
 00840   pr newpage
-00850   let fntos(sn$="BudgetAmount3") 
+00850   fntos(sn$="BudgetAmount3") 
 00852   let mylen=50: let mypos=mylen+3 : let right=1
-00860   let fnfra(1,1,2,55,"Update Current Budget or New Budget"," ",0)
-00870   let fnopt(1,3,"Update Current Budget for Changes",0,1) 
+00860   fnfra(1,1,2,55,"Update Current Budget or New Budget"," ",0)
+00870   fnopt(1,3,"Update Current Budget for Changes",0,1) 
 00872   let resp$(rc+=1)="True"
-00880   let fnopt(2,3,"Update for New Budget Year",0,1) 
+00880   fnopt(2,3,"Update for New Budget Year",0,1) 
 00882   let resp$(rc+=1)="False"
 00890 ! 
-00900   let fncmdset(2)
+00900   fncmdset(2)
 00910 ! 
-00920   let fnacs(sn$,0,mat resp$,ckey)
+00920   fnacs(sn$,0,mat resp$,ckey)
 00930   if ckey=5 then goto XIT
 00940   if resp$(1)="True" then budyear=1 else budyear=2
 00950   if budyear=1 then let p1=37 else let p1=43 ! CURRENT YEARS BUDGET OR NEXT YEARS BUDGET
 00960   return 
 00970 ! ______________________________________________________________________
 00980 BUDGET_FILE_NUM: ! r:
-00990   let fntos(sn$="BudgetAmount4") 
+00990   fntos(sn$="BudgetAmount4") 
 00992   let mylen=50: let mypos=mylen+3 : let right=1
-01000   let fnlbl(1,1," Budget File Number to Pull:",mylen,right)
-01010   let fntxt(1,mypos,3,0,1,"30",0,"You can have different budget files in the budget management system.  Enter the budget file you wish to pull.") 
+01000   fnlbl(1,1," Budget File Number to Pull:",mylen,right)
+01010   fntxt(1,mypos,3,0,1,"30",0,"You can have different budget files in the budget management system.  Enter the budget file you wish to pull.") 
 01012   let resp$(1)=""
-01020   let fncmdset(2)
-01030   let fnacs(sn$,0,mat resp$,ckey)
+01020   fncmdset(2)
+01030   fnacs(sn$,0,mat resp$,ckey)
 01040   if ckey=5 then goto XIT
 01050   bud=val(resp$(1)) ! budget file number to pull
 01060   open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".h"&env$('cno')&",Shr",internal,outin,keyed ioerr BUDGET_FILE_NUM

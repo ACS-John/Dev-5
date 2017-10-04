@@ -6,7 +6,7 @@
 18050   if fnask_account('Work Order',z$,h_customer)=5 then 
 18060     goto XIT
 18070   else
-18080     let fnworkOrderAdd(z$)
+18080     fnworkOrderAdd(z$)
 18090   end if 
 18100 loop
 18110 XIT: !
@@ -64,58 +64,58 @@
 33070   close #wo_h_customer:
 
 34000   WO_TOS: !
-34020   let fntos(sn$="workorder")
+34020   fntos(sn$="workorder")
 34040   let respc=0
-34060   let fnlbl(1,30,"WORK ORDER",20,0,4)
-34080   let fnlbl(2,1,"Account:",10,1)
+34060   fnlbl(1,30,"WORK ORDER",20,0,4)
+34080   fnlbl(2,1,"Account:",10,1)
 34160   fntxt(2,12,10,0,1,"",1)
 34200   let workinfo$(respc_accont=respc+=1)=z$
-34220   let fnlbl(2,24,"Name:",5,1)
-34240   let fntxt(2,31,25,30,0,"",1)
+34220   fnlbl(2,24,"Name:",5,1)
+34240   fntxt(2,31,25,30,0,"",1)
 34260   let workinfo$(respc+=1)=customer_name$
-34280   let fnlbl(4,1,"Date Order Taken:",23,1)
-34300   let fntxt(4,25,25)
+34280   fnlbl(4,1,"Date Order Taken:",23,1)
+34300   fntxt(4,25,25)
 34320   let workinfo$(respc+=1)=dat$
-34340   let fnlbl(5,1,ws$(2),23,1)
-34360   let fntxt(5,25,25)
+34340   fnlbl(5,1,ws$(2),23,1)
+34360   fntxt(5,25,25)
 34380   let workinfo$(respc+=1)=""
-34400   let fnlbl(6,1,ws$(3),23,1)
-34420   let fntxt(6,25,25)
+34400   fnlbl(6,1,ws$(3),23,1)
+34420   fntxt(6,25,25)
 34440   let workinfo$(respc+=1)=""
-34460   let fnlbl(7,1,ws$(4),23,1)
-34480   let fntxt(7,25,25)
+34460   fnlbl(7,1,ws$(4),23,1)
+34480   fntxt(7,25,25)
 34500   let workinfo$(respc+=1)=""
-34520   let fnlbl(8,1,ws$(5),23,1)
-34540   let fntxt(8,25,25)
+34520   fnlbl(8,1,ws$(5),23,1)
+34540   fntxt(8,25,25)
 34560   let workinfo$(respc+=1)=""
-34580   let fnlbl(9,1,ws$(6),23,1)
-34600   let fntxt(9,25,14)
+34580   fnlbl(9,1,ws$(6),23,1)
+34600   fntxt(9,25,14)
 34620   let workinfo$(respc+=1)=customer_phone_number$
-34640   let fnlbl(10,1,ws$(7),23,1)
-34660   let fntxt(10,25,25)
+34640   fnlbl(10,1,ws$(7),23,1)
+34660   fntxt(10,25,25)
 34680   let workinfo$(respc+=1)=""
-34700   let fnlbl(11,1,ws$(8),23,1)
-34720   let fntxt(11,25,8,0,0,"1")
+34700   fnlbl(11,1,ws$(8),23,1)
+34720   fntxt(11,25,8,0,0,"1")
 34740   let workinfo$(respc+=1)=""
-34760   let fnlbl(12,1,ws$(9),23,1)
-34780   let fntxt(12,25,8,0,0,"1")
+34760   fnlbl(12,1,ws$(9),23,1)
+34780   fntxt(12,25,8,0,0,"1")
 34800   let workinfo$(respc+=1)=""
-34820   let fnlbl(13,1,ws$(10),23,1)
-34840   let fntxt(13,25,8)
+34820   fnlbl(13,1,ws$(10),23,1)
+34840   fntxt(13,25,8)
 34860   let workinfo$(respc+=1)=""
-34880   let fnlbl(14,1,ws$(11),23,1)
-34900   let fntxt(14,25,30)
+34880   fnlbl(14,1,ws$(11),23,1)
+34900   fntxt(14,25,30)
 34920   let workinfo$(respc+=1)=""
-34940   let fnlbl(15,1,ws$(12),23,1)
-34960   let fntxt(15,25,30)
+34940   fnlbl(15,1,ws$(12),23,1)
+34960   fntxt(15,25,30)
 34980   let workinfo$(respc+=1)=""
-35000   let fnlbl(16,1,ws$(13),23,1)
-35020   let fntxt(16,25,50,280)
+35000   fnlbl(16,1,ws$(13),23,1)
+35020   fntxt(16,25,50,280)
 35040   let workinfo$(respc+=1)=""
-35060   let fncmdkey("Print History",8,0,0,"This allows you to review the description of any work order issued in the past")
-35080   let fncmdkey("&Print",1,1,0,"Prints a workorder on this customer for the information entered above.")
-35100   let fncmdkey("&Cancel",5,0,1,"Returns to main customer record.")
-35120   let fnacs(sn$,0,mat workinfo$,ckey) ! work order screen
+35060   fncmdkey("Print History",8,0,0,"This allows you to review the description of any work order issued in the past")
+35080   fncmdkey("&Print",1,1,0,"Prints a workorder on this customer for the information entered above.")
+35100   fncmdkey("&Cancel",5,0,1,"Returns to main customer record.")
+35120   fnacs(sn$,0,mat workinfo$,ckey) ! work order screen
 
 38000   if ckey=5 then goto woaXIT
 38020   z$=workinfo$(respc_accont)(1:10) ! lpad$(trim$(workinfo$(respc_accont)(1:10)),10)
@@ -142,7 +142,7 @@
 38560     end if 
 38580   next j
 
-40000   let fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$)
+40000   fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$)
 40020 ! let fn_workorder_print_legacy
 
 43000    ! r: write to WorkOrder History file (z$)
@@ -205,7 +205,7 @@
 50220   fn_clean_ul$=cu_in$
 50240  fnend
 73000 ERTN: ! r:
-73020   let fnerror(program$,err,line,act$,"xit")
+73020   fnerror(program$,err,line,act$,"xit")
 73040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 73060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 73080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -214,8 +214,8 @@
 77000 def fn_workorder_print_legacy
 77010   library 'S:\Core\Library': fnopenprn,fncloseprn,fnsavetoasstart
 77030 ! if exists(env$('Q')&"\WorkOrder")=0 then execute "mkdir "&env$('Q')&"\WorkOrder -n"
-77032   let fnsavetoasstart(env$('Q')&"\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
-77034   let fnopenprn
+77032   fnsavetoasstart(env$('Q')&"\WorkOrder\"&trim$(z$)&date$("ccyymmdd")&".rtf")
+77034   fnopenprn
 77040   pr #255: "\qc {\f181 {\fs32 {\b Utility Work Order}"
 77050   pr #255: "{\fs24 "&env$('cnam')&"}}}"
 77060   pr #255: "\qc {\fs20 "&trim$(i$(1))&"}"
@@ -239,9 +239,9 @@
 77240   pr #255: ""
 77250   pr #255,using "Form pos 10,C 132": "{\b "&ws$(11)&"}"&i$(11)&"  "&i$(12)(1:23)
 77260   pr #255: ""
-77270   let fn_pwo_service_data(srvnam$(1),d(1),f$(1),extra$(3)) ! Water
-77280   let fn_pwo_service_data(srvnam$(3),d(5),f$(2),extra$(4)) ! Electric or Lawn Meter
-77290   let fn_pwo_service_data(srvnam$(4),d(9),f$(3),extra$(5)) ! Gas
+77270   fn_pwo_service_data(srvnam$(1),d(1),f$(1),extra$(3)) ! Water
+77280   fn_pwo_service_data(srvnam$(3),d(5),f$(2),extra$(4)) ! Electric or Lawn Meter
+77290   fn_pwo_service_data(srvnam$(4),d(9),f$(3),extra$(5)) ! Gas
 77300   pr #255: "\qc ";"{\b Comments:}"
 77310   pr #255: ""
 77320   pr #255: "\ql "
@@ -279,7 +279,7 @@
 77640   pr #255,using 'form pos 47,c 51': "{\b Date Order Completed: _____________________}"
 77650   pr #255: ""
 77660   pr #255,using 'form pos 47,c 51': "{\b By: _______________________________________}"
-77670   let fncloseprn
+77670   fncloseprn
 77680 fnend 
 77690 def fn_pwo_service_data(service_name$*80,reading_prior,meter_number$,serial_number$)
 77700   if trim$(service_name$)<>"" and reading_prior>0 then 

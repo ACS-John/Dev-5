@@ -8,24 +8,24 @@
 00080   dim fa$(3),sa$(3)*40,cnam$*40
 00090   dim a$(3)*40,b$(2)*12,c$*5,e(2),e$(2)*11,pedat$*20
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Print State UC Report")
-00120   let fncno(cno,cnam$)
+00110   fntop(program$,cap$="Print State UC Report")
+00120   fncno(cno,cnam$)
 00140   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input 
 00150   read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,POS 188,PD 7.2,POS 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc
 00160   close #1: 
 00170   if fnprocess=1 then goto L240
 00180 ! 
-00190   let fntos(sn$="Prstatuc")
+00190   fntos(sn$="Prstatuc")
 00200   let mylen=35: let mypos=mylen+3 : let right=1
-00210   let fnlbl(1,1,"Quarterly Period Ending Date:",mylen,right)
-00220   let fntxt(1,mypos,20,0,left,"",0,"Enter the last day of the quarter.",0 )
+00210   fnlbl(1,1,"Quarterly Period Ending Date:",mylen,right)
+00220   fntxt(1,mypos,20,0,left,"",0,"Enter the last day of the quarter.",0 )
 00230   let resp$(1)=""
-00240   let fncmdset(2)
-00250   let fnacs(sn$,0,mat resp$,ckey)
+00240   fncmdset(2)
+00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
 00270   let pedat$=resp$(1)
 00275 L240: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-00280   let fnopenprn
+00280   fnopenprn
 00285   gosub HDR
 00340 L340: read #2,using L350: mat k,mat k$,mat l$,mat m eof L720
 00350 L350: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
@@ -67,7 +67,7 @@
 00710 ! ______________________________________________________________________
 00720 L720: gosub L920
 00730   close #2: 
-00740   let fncloseprn
+00740   fncloseprn
 00750   goto XIT
 00760 ! ______________________________________________________________________
 00770 XIT: let fnxit

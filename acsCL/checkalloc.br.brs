@@ -10,12 +10,12 @@
 00100   if glt=2 then !:
           cap$="GL Distribution Report" else !:
           cap$="Post to General Ledger"
-00110   let fncno(cno,cnam$)
+00110   fncno(cno,cnam$)
 00120   cancel=99
 00130 ! ______________________________________________________________________
 00140 ! determine if cash or accrual by checking for any !:
         ! accounts payable numbers in the general ledger control file
-00150   let fnopenprn
+00150   fnopenprn
 00160   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00170   open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\tralloc-idx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00180   open #bankmstr=4: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
@@ -35,5 +35,5 @@
 00290 L290: if totalalloc<>ca1 then pr #255: "Check # "&ck$ &"  total check="&str$(ca1)&" total allocations ="&str$(totalalloc)&" date: "&str$(pd)
 00300   goto L210
 00310 END1: ! 
-00320   let fncloseprn
+00320   fncloseprn
 00330 XIT: let fnxit

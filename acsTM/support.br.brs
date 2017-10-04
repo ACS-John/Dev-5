@@ -5,7 +5,7 @@
 00050 ! ______________________________________________________________________
 00060   dim cap$*128,lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),sln(11),mask(11),c$(11,8)*256 ! SP(11) - not used
 00070 ! ______________________________________________________________________
-00080   let fntop(program$,cap$='Support 420')
+00080   fntop(program$,cap$='Support 420')
 00090   gosub BUILD_LAYOUT
 00100   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 00110   gosub HAMSTER: gosub CLOSE_FILE
@@ -121,7 +121,7 @@
 01240   return 
 01250 ! ______________________________________________________________________
 01260 HAMSTER: ! 
-01270   let fnhamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+01270   fnhamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 01280   return 
 01290 ! ______________________________________________________________________
 01300 XIT: let fnxit

@@ -6,22 +6,22 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,resp$(1)*60
 00080 ! ______________________________________________________________________
-00090   let fncno(cno)
-00100   let fntop(program$, cap$="Select Bank Account")
+00090   fncno(cno)
+00100   fntop(program$, cap$="Select Bank Account")
 00110   cancel=99 : let right=1 : let left=0 : center=2 !:
         let limit_to_list=1
 00120 ! ______________________________________________________________________
 00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative: read #20,using 'Form POS 152,N 2',rec=1,release: wbc : close #20: 
 00140 ASK1: ! 
-00150   let fntos(sn$='ChgBank') !:
+00150   fntos(sn$='ChgBank') !:
         let lc=0 : let mylen=20 : let mypos=mylen+2
-00160   let fnlbl(lc+=1,1,"Working Bank:",mylen,right)
-00170   let fncombof('bank',lc,mypos,33,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list) !:
+00160   fnlbl(lc+=1,1,"Working Bank:",mylen,right)
+00170   fncombof('bank',lc,mypos,33,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list) !:
         let resp$(1)=str$(wbc)
-00180   let fncmdkey('&Save',2,1,0) !:
-        let fncmdkey('&Add',1,0,0,'This takes you to the Bank File') !:
-        let fncmdkey('&Cancel',5,0,1)
-00190   let fnacs(sn$,0,mat resp$,ckey)
+00180   fncmdkey('&Save',2,1,0) !:
+        fncmdkey('&Add',1,0,0,'This takes you to the Bank File') !:
+        fncmdkey('&Cancel',5,0,1)
+00190   fnacs(sn$,0,mat resp$,ckey)
 00200   if ckey=5 or ckey=cancel then goto XIT else !:
           if ckey=1 then let fnchain("S:\acsCL\Bank") else !:
             if ckey=2 then let wbc=val(resp$(1)(1:2))

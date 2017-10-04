@@ -9,11 +9,11 @@
 00090 ! ______________________________________________________________________
 00100 ! x$=account #     !:
           ! to extract the flexgrid information (master file)
-00110     let fncno(cno)
+00110     fncno(cno)
 00120     open #file_num:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\glIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr ERTN
 00130 ! ______________________________________________________________________
 00140     restore #file_num: 
-00150     let fntos(sn$="AccountSrch")
+00150     fntos(sn$="AccountSrch")
 00160     ch$(1)="Account" : ch$(2)="Description" : ch$(3)="Balance" !:
           ch$(4)="B/S Ref" : ch$(5)="B/S Ref2" !:
           ch$(6)="I/C Ref" : ch$(7)="I/C Ref2" !:
@@ -32,7 +32,7 @@
 00230     for j=1 to 6
 00240       let item$(j+3)=str$(rf(j))
 00250     next j
-00260     let fnflexadd1(mat item$)
+00260     fnflexadd1(mat item$)
 00270     goto READ_FILE
 00280 ! ______________________________________________________________________
 00290 ERR_READ: ! 
@@ -43,7 +43,7 @@
           goto READ_FILE
 00320 ! ______________________________________________________________________
 00330 L330: ! If FIXGRID=99 Then Goto XIT ! FIXING NEW GRID FILE without displaying it
-00340     let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey) !:
+00340     fncmdset(2): let fnacs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00350     let x$=lpad$(resp$(1),12)
 00360     if ckey=5 then let x$="            " ! no one selected

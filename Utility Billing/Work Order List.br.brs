@@ -1,6 +1,6 @@
 00020   library program$: fnWorkOrderList
 00025   library 'S:\Core\Library': fnxit,fntop
-00030   let fntop(program$,cap$="Work Order List")
+00030   fntop(program$,cap$="Work Order List")
 00035 fnWorkOrderList('[All]')
 00040 fnxit
 00045 def fn_setup
@@ -20,7 +20,7 @@
 00250   end if
 00260 fnend 
 76000 ERTN: ! r:
-76020   let fnerror(program$,err,line,act$,"xit")
+76020   fnerror(program$,err,line,act$,"xit")
 76040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -28,25 +28,25 @@
 76120 ! /r
 80000 def library fnWorkOrderList(; z$*10)
 80010   if ~setup then let fn_setup
-80020   let fntos(sn$="workorder")
+80020   fntos(sn$="workorder")
 80040   let respc=0
-80060   let fnlbl(1,43," ",1,1)
-80080   let fnlbl(1,1,"Beginning Date to Review:",32,1)
-80100   let fntxt(1,35,12,0,0,"3",0,"")
+80060   fnlbl(1,43," ",1,1)
+80080   fnlbl(1,1,"Beginning Date to Review:",32,1)
+80100   fntxt(1,35,12,0,0,"3",0,"")
 80120   let resp$(respc+=1)=str$(beg_date)
-80140   let fnlbl(2,1,"Ending Date to Review:",32,1)
-80160   let fntxt(2,35,12,0,0,"3",0,"")
+80140   fnlbl(2,1,"Ending Date to Review:",32,1)
+80160   fntxt(2,35,12,0,0,"3",0,"")
 80180   let resp$(respc+=1)=str$(end_date)
-80200   let fnlbl(3,1,"Customer to Print:",32,1)
-80220   let fncmbact(3,35,1)
+80200   fnlbl(3,1,"Customer to Print:",32,1)
+80220   fncmbact(3,35,1)
 80240   let resp$(respc+=1)=z$
-80260   let fncmdset(2)
-80270   let fnacs(sn$,0,mat resp$,ck)
+80260   fncmdset(2)
+80270   fnacs(sn$,0,mat resp$,ck)
 80280   if ck=5 then goto PWL_XIT
 80300   beg_date=val(resp$(1)) ! beginning of year
 80320   let end_date=val(resp$(2)) ! ending day of year
 80340   askz$=lpad$(trim$(resp$(3)(1:10)),10)
-80360   let fnopenprn
+80360   fnopenprn
 80370   open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outin,keyed
 80380   gosub PWL_HDR
 80400   if trim$(askz$)="[All]" or trim$(askz$)="" then 
@@ -71,7 +71,7 @@
 80760     end if
 80780   loop while trim$(askz$)=trim$(wkz$) or trim$(askz$)="[All]" or trim$(askz$)=""
 80800 PWL_FINIS: ! 
-80820   let fncloseprn
+80820   fncloseprn
 80840 PWL_XIT: ! 
 80860   let pgno=0
 80880   close #h_workorder: 

@@ -5,7 +5,7 @@
 00017   on error goto ERTN
 00020 ! ______________________________________________________________________
 00026 ! ______________________________________________________________________
-00032   let fncno(cno)
+00032   fncno(cno)
 00040 L40: pr newpage
 00050   pr fields "8,20,C 30,R,N": "  CONVERT PAYROLL FILES"
 00060   pr fields "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"

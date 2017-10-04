@@ -1,25 +1,25 @@
 10020   library 'S:\Core\Library': fntop,fnacs,fnopenprn,fncloseprn,fnerror,fnmsgbox,fntxt,fnlbl,fntos,fncno,fnxit,fncmdset,fntop,fndat,fnopt
-10040   let fntop("S:\acsUB\checkbalbrk",cap$="Check Balance Breakdown 1")
+10040   fntop("S:\acsUB\checkbalbrk",cap$="Check Balance Breakdown 1")
 10060   dim cnam$*40,dat$*20,cb(13),gb(10),a(7),resp$(1)*128
-10080   let fncno(cno,cnam$)
+10080   fncno(cno,cnam$)
 10100   dim g(10)
 10120   dim gb(10),u(61)
 10140   dim servicename$(10)*20,service$(10)*2,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
 10160   dim cap$*128,txt$*80
-10180   let fndat(dat$,1)
+10180   fndat(dat$,1)
 30000 ! r: screen 1
-30020   let fntos(sn$="checkbalbrk-7")
+30020   fntos(sn$="checkbalbrk-7")
 30040   mat resp$(3)
-30060   let fnlbl(1,1,"",40,0)
-30080   let fnlbl(1,1,"Print Options:",38,0)
-30100   let fnopt(2,3,'All',0)
+30060   fnlbl(1,1,"",40,0)
+30080   fnlbl(1,1,"Print Options:",38,0)
+30100   fnopt(2,3,'All',0)
 30120   let resp$(1)="False"
-30140   let fnopt(3,3,'Only accounts where Balance Breakdown does not equal Balance',0)
+30140   fnopt(3,3,'Only accounts where Balance Breakdown does not equal Balance',0)
 30160   let resp$(2)="True" !  if ckoption=1 or ckoption=3 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
-30180   let fnopt(4,3,'Only accounts without a credit balance but negative allocations exist',0)
+30180   fnopt(4,3,'Only accounts without a credit balance but negative allocations exist',0)
 30200   let resp$(3)="False"
-30220   let fncmdset(2)
-30240   let fnacs(sn$,0,mat resp$,ck)
+30220   fncmdset(2)
+30240   fnacs(sn$,0,mat resp$,ck)
 30260   if ck=5 then goto XIT
 30280   let filter_none=1
 30300   let filter_not_equal=2
@@ -35,7 +35,7 @@
 30500   end if 
 30520 ! /r
 31000 ! Gosub SCR_ASK_DATES
-32100   let fnopenprn
+32100   fnopenprn
 32120   gosub HEADER
 36000   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 36020   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -73,21 +73,21 @@
 46080   return  ! 
 48000 SCR_ASK_DATES: ! r:
 48020   let sn$
-48040   let fntos(sn$="balbrkfix")
+48040   fntos(sn$="balbrkfix")
 48060   let mylen=62 : let mypos=50
 48080   let txt$="Billing Dates for last three months:"
-48100   let fnlbl(1,1,txt$,mylen,1)
+48100   fnlbl(1,1,txt$,mylen,1)
 48120   for j=1 to 3
-48140     let fntxt(j+1,mypos,10,0,0,"3",0,"Put your most recent billing date first and then in order from there.")
+48140     fntxt(j+1,mypos,10,0,0,"3",0,"Put your most recent billing date first and then in order from there.")
 48160     let resp$(j)=""
 48180   next j
 48200   let txt$="Penalty Dates for last three months:"
-48220   let fnlbl(5,1,txt$,mylen,1)
+48220   fnlbl(5,1,txt$,mylen,1)
 48240   for j=1 to 3
-48260     let fntxt(j+5,mypos,10,0,0,"3",0,"Put your most recent penalty date first and then in order from there.")
+48260     fntxt(j+5,mypos,10,0,0,"3",0,"Put your most recent penalty date first and then in order from there.")
 48280     let resp$(j+3)=""
 48300   next j
-48320   let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+48320   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 48340   if ckey=5 then goto XIT
 48360   for j=1 to 6
 48380 L560: let x=pos(resp$(j),"/",1)
@@ -99,7 +99,7 @@
 48500   if cd1(1)=0 then 
 48520     mat message$(1): let mytype=0
 48540     let message$(1)="You must enter at least one date!"
-48560     let fnmsgbox(mat message$,resp$,cap$,mytype)
+48560     fnmsgbox(mat message$,resp$,cap$,mytype)
 48580     goto SCR_ASK_DATES
 48600   end if 
 48620   return  ! /r
@@ -123,5 +123,5 @@
 54040     for agn_item=1 to 10
 54060       if gb(agn_item)<0 then agn_return=1
 54080     next agn_item
-54100     let fn_any_gb_negative=agn_return
+54100     fn_any_gb_negative=agn_return
 54120   fnend  ! fn_any_gb_negative

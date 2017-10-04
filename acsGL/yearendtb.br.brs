@@ -9,8 +9,8 @@
 00090   dim wrddetail$(2),p$(20)*50,resp$(10)*80,bp(13),cap$*128
 00100 ! ______________________________________________________________________
 00110   let right=1
-00120   let fntop(program$,cap$="Reprint Year End Trial Balance")
-00140   let fncno(cno,cnam$)
+00120   fntop(program$,cap$="Reprint Year End Trial Balance")
+00140   fncno(cno,cnam$)
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno),internal,input,relative  !:
         read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2) !:
         read #20,using 'Form POS 152,2*C 12',rec=1: mat cogl$ !:
@@ -21,23 +21,23 @@
 00170   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&str$(cno)&",Shr",internal,input,keyed 
 00180   goto START_REPORT
 00190 SCREEN1: ! 
-00200   let fntos(sn$="GLTB") !:
+00200   fntos(sn$="GLTB") !:
         let lc=0 : let mylen=25 : let mypos=mylen+2
-00210   let fnchk(lc+=1,mypos,"List All Details",right) !:
+00210   fnchk(lc+=1,mypos,"List All Details",right) !:
         let resp$(1)="True"
-00220   let fnlbl(lc+=1,1,"Cost Center:",mylen,right)
-00230   let fntxt(lc,mypos,5,0,0,'number') !:
+00220   fnlbl(lc+=1,1,"Cost Center:",mylen,right)
+00230   fntxt(lc,mypos,5,0,0,'number') !:
         let resp$(2)=""
-00240   let fnchk(lc+=1,mypos,"Subtotal after each fund",right) !:
+00240   fnchk(lc+=1,mypos,"Subtotal after each fund",right) !:
         let resp$(3)="True"
-00250   let fnlbl(lc+=1,1,"Starting Account:",mylen,right)
-00260   let fnqgl(lc,mypos,0,1) !:
+00250   fnlbl(lc+=1,1,"Starting Account:",mylen,right)
+00260   fnqgl(lc,mypos,0,1) !:
         let resp$(4)="[All]"
-00270   let fnlbl(lc+=1,1,"Ending Account:",mylen,right)
-00280   let fnqgl(lc,mypos,0,1) !:
+00270   fnlbl(lc+=1,1,"Ending Account:",mylen,right)
+00280   fnqgl(lc,mypos,0,1) !:
         let resp$(5)="[All]"
-00290   let fncmdset(3)
-00300   let fnacs(sn$,0,mat resp$,ckey)
+00290   fncmdset(3)
+00300   fnacs(sn$,0,mat resp$,ckey)
 00310   if ckey=5 then goto XIT
 00320   if resp$(1)="True" then let pt=0 else let pt=1
 00330   costcent=val(resp$(2)) !:
@@ -46,7 +46,7 @@
 00350   let sl1$=fnagl$(resp$(4)) !:
         let sl2$=fnagl$(resp$(5))
 00360 START_REPORT: ! 
-00370   let fnopenprn
+00370   fnopenprn
 00380   gosub HDR2
 00390 READ_1: ! 
 00400   read #1,using L410: n$,d$,bb,cb,mat bp eof L580

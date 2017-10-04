@@ -6,9 +6,9 @@
 00060 ! ______________________________________________________________________
 00070   dim cd1(8),rw(8,13),cap$*128,x(13),cnam$*40,txt$*60,message$(5)*80,tt$*80,message$*60,tg(11)
 00080 ! ______________________________________________________________________
-00090   let fncno(cno,cnam$) !:
+00090   fncno(cno,cnam$) !:
         ! 
-00100   let fntop("S:\acsUB\ubMeans",cap$="Median Sewer Charge")
+00100   fntop("S:\acsUB\ubMeans",cap$="Median Sewer Charge")
 00110 ! ______________________________________________________________________
 00120   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00130   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -27,15 +27,15 @@
 00240 ! ______________________________________________________________________
 00250 SCR1: ! 
 00260   let sn$="Means-1" !:
-        let fntos(sn$) !:
+        fntos(sn$) !:
         let mylen=62 : let mypos=50
 00270   let txt$="Billing Dates for Months to be Considered:" !:
-        let fnlbl(1,1,txt$,mylen,1)
+        fnlbl(1,1,txt$,mylen,1)
 00280   for j=1 to 8 !:
-          let fntxt(j+1,mypos,10,0,0,"3") !:
+          fntxt(j+1,mypos,10,0,0,"3") !:
           let resp$(j)="" !:
         next j
-00290   let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+00290   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 00300   if ckey=5 then goto XIT
 00310   for j=1 to 8
 00320 L320: let x=pos(resp$(j),"/",1)
@@ -47,25 +47,25 @@
 00360   if cd1(1)=0 then !:
           mat message$(1): let mytype=0 !:
           let message$(1)="You must enter at least one date!" !:
-          let fnmsgbox(mat message$,resp$,cap$,mytype) !:
+          fnmsgbox(mat message$,resp$,cap$,mytype) !:
           goto SCR1
 00370 ! ______________________________________________________________________
 00380 SCR2: ! 
 00390   let sn$="Means-2" !:
-        let fntos(sn$)
+        fntos(sn$)
 00400   let txt$="Sewer code to analyze:" !:
-        let fnlbl(1,1,txt$,22,1)
-00410   let fntxt(1,24,2,2,0,"20") !:
+        fnlbl(1,1,txt$,22,1)
+00410   fntxt(1,24,2,2,0,"20") !:
         let resp$(1)=""
-00420   let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+00420   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 00430   if ckey=5 then goto SCR1
 00440   let sewcode=val(resp$(1)) conv SCR2
 00450   if sewcode=0 then !:
           mat message$(1): let mytype=0 !:
           let message$(1)="You must enter at least one date!" !:
-          let fnmsgbox(mat message$,resp$,cap$,mytype) !:
+          fnmsgbox(mat message$,resp$,cap$,mytype) !:
           goto SCR2
-00460   let fnopenprn
+00460   fnopenprn
 00470 L470: read #1,using L490: x$,a2 eof DONE
 00480   if a2<>sewcode then goto L470 ! only average certain rate codes
 00490 L490: form pos 1,c 10,pos 145,pd 2,pos 1822,n 9
@@ -88,7 +88,7 @@
 00650 ! ______________________________________________________________________
 00660 DONE: ! 
 00670   gosub PRINT_REPORT
-00680   let fncloseprn
+00680   fncloseprn
 00690 XIT: let fnxit
 00700 ! ______________________________________________________________________
 00710 ! ______________________________________________________________________

@@ -13,8 +13,8 @@
 00130   dim deduc(10),miscgl$(10)*12,actr$*1,reccode$*1,ar1$*1
 00140   dim resp$(150)*40
 00150 ! ______________________________________________________________________
-00160   let fntop("S:\acsSU\Company",cap$="Company Information")
-00170   let fncno(cno)
+00160   fntop("S:\acsSU\Company",cap$="Company Information")
+00170   fncno(cno)
 00180   cancel=99 : let right=1 : center=2 : let left=0 !:
         ccyymmdd$='3' : let mmddyy$='1' : let on=1 : let off=0 !:
         cancel=5 : let save=1 : let limit_to_list=1 : let pointtwo$='32' !:
@@ -40,12 +40,12 @@
                     ! to do it the old way change this whole line to read  GoTo Screen1
 00280 ! ______________________________________________________________________
 00290 NEWSCREEN: ! 
-00300   let fntos(sn$='Company-Pg'&str$(page)) !:
+00300   fntos(sn$='Company-Pg'&str$(page)) !:
         let lc=0
 00310   let page1=6 : let page2=07 : let page3=08 : let page4=09
 00320   let page=1 : gosub PAGE1
-00330   let fncmdset(4) ! Save and Cancel
-00340   let fnacs(sn$,0,mat resp$,ckey)
+00330   fncmdset(4) ! Save and Cancel
+00340   fnacs(sn$,0,mat resp$,ckey)
 00350   if page=1 then 
 00360     a$(1)=resp$(1) !:
           a$(2)=resp$(2) !:
@@ -63,26 +63,26 @@
 00410   goto NEWSCREEN
 00420 PAGE1: ! _____________________________________________________________ !:
         let lc=3 : let mylen=40 : let mypos=mylen+2
-00430   let fnlbl(lc+=1,1,'Company Name:',mylen,right)
-00440   let fntxt(lc,mypos,40,0,left) !:
+00430   fnlbl(lc+=1,1,'Company Name:',mylen,right)
+00440   fntxt(lc,mypos,40,0,left) !:
         let resp$(1)=a$(1)
-00450   let fnlbl(lc+=1,1,'Address:',mylen,right)
-00460   let fntxt(lc,mypos,40,0,left) !:
+00450   fnlbl(lc+=1,1,'Address:',mylen,right)
+00460   fntxt(lc,mypos,40,0,left) !:
         let resp$(2)=a$(2)
-00470   let fnlbl(lc+=1,1,'City State and Zip Code:',mylen,right)
-00480   let fntxt(lc,mypos,40,0,left) !:
+00470   fnlbl(lc+=1,1,'City State and Zip Code:',mylen,right)
+00480   fntxt(lc,mypos,40,0,left) !:
         let resp$(3)=a$(3)
-00490   let fnlbl(lc+=1,1,'Federal Identification Number:',mylen,right)
-00500   let fntxt(lc,mypos,12,0,left) !:
+00490   fnlbl(lc+=1,1,'Federal Identification Number:',mylen,right)
+00500   fntxt(lc,mypos,12,0,left) !:
         let resp$(4)=b$(1)
-00510   let fnlbl(lc+=1,1,'State Identification Number:',mylen,right)
-00520   let fntxt(lc,mypos,12,0,left) !:
+00510   fnlbl(lc+=1,1,'State Identification Number:',mylen,right)
+00520   fntxt(lc,mypos,12,0,left) !:
         let resp$(5)=b$(2)
-00530   let fnlbl(lc+=1,1,'Type of Business:',mylen,right)
-00540   let fntxt(lc,mypos,30,0,left) !:
+00530   fnlbl(lc+=1,1,'Type of Business:',mylen,right)
+00540   fntxt(lc,mypos,30,0,left) !:
         let resp$(6)=tb$
-00550   let fnlbl(lc+=1,1,'Number of Periods:',mylen,right)
-00560   let fntxt(lc,mypos,30,0,left,number$) !:
+00550   fnlbl(lc+=1,1,'Number of Periods:',mylen,right)
+00560   fntxt(lc,mypos,30,0,left,number$) !:
         let resp$(7)=str$(nap)
 00570   return 
 00580 ! ______________________________________________________________________
@@ -97,7 +97,7 @@
 00670 ! ______________________________________________________________________
 00680 XIT: ! 
 00690   close #company: 
-00700   let fnxit
+00700   fnxit
 00710 ! ______________________________________________________________________
 00720 ! <Updateable Region: ERTN>
 00730 ERTN: let fnerror(program$,err,line,act$,"xit")

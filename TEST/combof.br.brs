@@ -16,8 +16,8 @@
 00240 ! execute 'Index Test\Temp'&session$&'.dat Test\Temp'&session$&'.idx 1 8,Replace'
 00260 ! pr 'done indexing file at '&time$
 00280 ! pr 'starting TOS call at '&time$
-00300   let fntop("Test\ComboF","Test Combobox from File")
-00320   let fntos(sn$="ComboF")
+00300   fntop("Test\ComboF","Test Combobox from File")
+00320   fntos(sn$="ComboF")
 00340 ! let fncmbrt2(1,36,1)
 00360 ! let fncombof("F",2,1,82,'Test\Temp'&session$&'.dat',1,8,9,72,'Test\Temp'&session$&'.idx',0,0)
 00380 ! let fncombof("F",3,1,82,'Test\Temp'&session$&'.dat',1,8,9,72,'Test\Temp'&session$&'.idx',1,0)
@@ -31,10 +31,10 @@
 50024     f1Col2=1+f1Col1Len+2 : f1Col2Len=36
 50026     f1Col3=f1Col2+f1Col2Len+2 : f1Col3len=21
 50028     f1Col4=f1Col3+f1Col3len+6 : f1Col4Len=38
-50030   let fncombof("fs-bal2",1,2,f1Col4Len,env$('Q')&"\GLmstr\acglfnsc.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnscindx.h"&env$('cno'),0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",0)
+50030   fncombof("fs-bal2",1,2,f1Col4Len,env$('Q')&"\GLmstr\acglfnsc.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnscindx.h"&env$('cno'),0,0, "Select the balance sheet reference number where this account should appear on the secondary balance sheet.",0)
 50040   let response$(1)=str$(10)
-60000   let fncmdset(2)
-60020   let fnacs(sn$,0,mat response$,ckey)
+60000   fncmdset(2)
+60020   fnacs(sn$,0,mat response$,ckey)
 60040   pr mat response$
 60060 ! let fnpause
 60080 ! end  ! let fnxit

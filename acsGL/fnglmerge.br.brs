@@ -13,12 +13,12 @@
 00130     let on=1 : let off=0 : cancel=5 : let delete=4 : let selbyrow=1 !:
           let limit_to_list=1 : add_all=2 : let right=1 : let disable=1 !:
           center=2 : let pointtwo$='32' : let mmddyy$='1'
-00140     let fntop(program$,cap$="GL Merge")
+00140     fntop(program$,cap$="GL Merge")
 00150     if fncursys$='GL' then let fncno(cno) else gosub ASK_GLCNO
-00160     let fnprg(prg$)
+00160     fnprg(prg$)
 00170     if fnstyp=99 then goto L200
 00180     if fnstyp=9 then let prg$="S:\acsTM\tmMenu" else let prg$="S:\acsGL\acGLAuto"
-00190     let fnprg(prg$,2)
+00190     fnprg(prg$,2)
 00200 L200: open #glmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&str$(cno)&",Shr",internal,outin,keyed ioerr GLMSTR_OPEN_ERR
 00210     open #gltrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&str$(cno)&",Shr",internal,outin,relative 
 00220     open #glwk1:=fngethandle: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".dat,NoShr",internal,outin 
@@ -61,53 +61,53 @@
 00550     goto READ_GLWK1
 00560 ! ______________________________________________________________________
 00570 REJECT_GL: ! 
-00580     let fntos(sn$='GLMerge-Reject_GL') !:
+00580     fntos(sn$='GLMerge-Reject_GL') !:
           let lc=0 : let mylen=20 : let mypos=mylen+2
-00590     let fnlbl(lc+=1,1,'GL Account Reject',80,center)
-00600     let fnlbl(lc+=1,1,'Account Number:',mylen,right)
-00610     let fntxt(lc,mypos,12,0,right,'',disable) !:
+00590     fnlbl(lc+=1,1,'GL Account Reject',80,center)
+00600     fnlbl(lc+=1,1,'Account Number:',mylen,right)
+00610     fntxt(lc,mypos,12,0,right,'',disable) !:
           let resp$(1)=t$
-00620     let fnlbl(lc+=1,1,'Date:',mylen,right)
-00630     let fntxt(lc,mypos,0,0,right,mmddyy$,disable) !:
+00620     fnlbl(lc+=1,1,'Date:',mylen,right)
+00630     fntxt(lc,mypos,0,0,right,mmddyy$,disable) !:
           let resp$(2)=str$(s)
-00640     let fnlbl(lc+=1,1,'Amount:',mylen,right)
-00650     let fntxt(lc,mypos,11,0,right,pointtwo$,disable) !:
+00640     fnlbl(lc+=1,1,'Amount:',mylen,right)
+00650     fntxt(lc,mypos,11,0,right,pointtwo$,disable) !:
           let resp$(3)=str$(k)
-00660     let fnlbl(lc+=1,1,'Reference Number:',mylen,right)
-00670     let fntxt(lc,mypos,8,0,right,'',disable) !:
+00660     fnlbl(lc+=1,1,'Reference Number:',mylen,right)
+00670     fntxt(lc,mypos,8,0,right,'',disable) !:
           let resp$(4)=l$
-00680     let fnlbl(lc+=1,1,'Description:',mylen,right)
-00690     let fntxt(lc,mypos,30,0,right,'',disable) !:
+00680     fnlbl(lc+=1,1,'Description:',mylen,right)
+00690     fntxt(lc,mypos,30,0,right,'',disable) !:
           let resp$(5)=p$
-00700     let fnlbl(lc+=1,1,"Account Number "&trim$(t$)&" is not in the GL Master File",80,center) !:
-          let fnlbl(lc+=1,1,'Do you wish to add this account now?',80,center)
-00710     let fncmdkey('&Yes',1,1,0) !:
-          let fncmdkey('&No',5,0,1)
-00720     let fnacs(sn$,0,mat resp$,ckey) !:
+00700     fnlbl(lc+=1,1,"Account Number "&trim$(t$)&" is not in the GL Master File",80,center) !:
+          fnlbl(lc+=1,1,'Do you wish to add this account now?',80,center)
+00710     fncmdkey('&Yes',1,1,0) !:
+          fncmdkey('&No',5,0,1)
+00720     fnacs(sn$,0,mat resp$,ckey) !:
           if ckey=1 then let in1$='Yes' else if ckey=5 then let in1$='No'
 00730   if in1$="Yes" then goto ADD_GL else goto CORRECT_GL
 00740 ! ______________________________________________________________________
 00750 CORRECT_GL: ! 
-00760   let fntos(sn$='GLMerge-Correct_GL') !:
+00760   fntos(sn$='GLMerge-Correct_GL') !:
         let lc=0 : let mylen=31 : let mypos=mylen+2
-00770   let fnlbl(lc+=1,1,'GL Account Reject',80,center)
-00780   let fnlbl(lc+=1,1,'Correct General Ledger Account:',mylen,right)
-00790   let fncombof("gla-"&str$(cno),lc,mypos,0,env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),13,20,1,12,env$('Q')&"\GLmstr\glIndx2.h"&str$(cno),limit_to_list) !:
+00770   fnlbl(lc+=1,1,'GL Account Reject',80,center)
+00780   fnlbl(lc+=1,1,'Correct General Ledger Account:',mylen,right)
+00790   fncombof("gla-"&str$(cno),lc,mypos,0,env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),13,20,1,12,env$('Q')&"\GLmstr\glIndx2.h"&str$(cno),limit_to_list) !:
         let resp$(1)=''
-00800   let fncmdkey('&Okay',1,1,1)
-00810   let fnacs(sn$,0,mat resp$,ckey)
+00800   fncmdkey('&Okay',1,1,1)
+00810   fnacs(sn$,0,mat resp$,ckey)
 00820   let t$=resp$(1)(22:33)
 00830   goto HERE_A
 00840 ! ______________________________________________________________________
 00850 ADD_GL: ! 
-00860   let fntos(sn$='GLMerge-Add_GL') !:
+00860   fntos(sn$='GLMerge-Add_GL') !:
         let lc=0 : let mylen=32 : let mypos=mylen+2
-00870   let fnlbl(lc+=1,1,'GL Account Reject',80,center)
-00880   let fnlbl(lc+=1,1,'New General Ledger Account Name:',mylen,right)
-00890   let fntxt(lc,mypos,30) !:
+00870   fnlbl(lc+=1,1,'GL Account Reject',80,center)
+00880   fnlbl(lc+=1,1,'New General Ledger Account Name:',mylen,right)
+00890   fntxt(lc,mypos,30) !:
         let resp$(1)=''
-00900   let fncmdkey('&Okay',1,1,1)
-00910   let fnacs(sn$,0,mat resp$,ckey)
+00900   fncmdkey('&Okay',1,1,1)
+00910   fnacs(sn$,0,mat resp$,ckey)
 00920   let d$=resp$(1)
 00930   mat ta=(0) : cb=0
 00940   write #glmstr,using 'Form POS 1,C 12,C 50,6*PD 3,42*PD 6.2,2*PD 3': t$,d$,mat zo
@@ -151,7 +151,7 @@
               goto XIT
 01240 ! ______________________________________________________________________
 01250 L1250: cap$="GL Account Reject" !:
-        let fnwin3(win=101,cap$,15,70,1,0,5)
+        fnwin3(win=101,cap$,15,70,1,0,5)
 01260   pr #win,fields "4,2,C 50,N": "    Account Number: "&t$ !:
         pr #win,fields "5,2,C 50,N": "              Date: "&str$(s) !:
         pr #win,fields "6,2,C 50,N": "            Amount: "&str$(k) !:
@@ -167,7 +167,7 @@
 01330 ! ______________________________________________________________________
 01340 ASK_CORRECT_VN: ! 
 01350   cap$="GL Account Reject" !:
-        let fnwin3(win=101,cap$,5,33,1,0,5)
+        fnwin3(win=101,cap$,5,33,1,0,5)
 01360   pr #win,fields "4,2,C 22,N": "Correct Vendor Number:"
 01370 L1370: input #win,fields "4,25,Cu 8,UT,N": ven$ conv L1370
 01380   close #win: 
@@ -175,7 +175,7 @@
 01400   goto L460
 01410 ! ______________________________________________________________________
 01420 L1420: cap$="Vendor Information" !:
-        let fnwin3(win=101,cap$,10,56,1,0,5)
+        fnwin3(win=101,cap$,10,56,1,0,5)
 01430   pr #win,fields "4,2,Cr 18,N": "Vendor Name:" !:
         pr #win,fields "5,2,Cr 18,N": "Vendor Address:" !:
         pr #win,fields "6,2,Cr 18,N": "Vendor Address:" !:
@@ -212,7 +212,7 @@
         let ml$(1)='Company Number '&str$(cno)&' does not exists!' !:
         let ml$(2)='Please try again.' !:
         let ml$(3)='Nothing Posted.' !:
-        let fnmsgbox(mat ml$,ok$,cap$,16)
+        fnmsgbox(mat ml$,ok$,cap$,16)
 01700   goto XIT
 01710 ! ______________________________________________________________________
 01720 ! <updateable region: ertn>
@@ -224,12 +224,12 @@
 01780 ! /region
 01790 ! ______________________________________________________________________
 01800 ASK_GLCNO: ! 
-01810   let fntos(sn$='GLMerge_ask_glcno') !:
+01810   fntos(sn$='GLMerge_ask_glcno') !:
         let lc=0
-01820   let fnlbl(lc+=1,1,'Select the General Ledger Company to Post to')
-01830   let fncmbcno(lc+=1,5,'GL')
-01840   let fncmdkey('&Okay',1,1,1)
-01850   let fnacs(sn$,0,mat resp$,ckey)
+01820   fnlbl(lc+=1,1,'Select the General Ledger Company to Post to')
+01830   fncmbcno(lc+=1,5,'GL')
+01840   fncmdkey('&Okay',1,1,1)
+01850   fnacs(sn$,0,mat resp$,ckey)
 01860   cno=val(resp$(1)(43:47))
 01870 ! 
 01880   return 

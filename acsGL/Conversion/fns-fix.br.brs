@@ -2,7 +2,7 @@
 00020 ! financial statement file
 00030   library 'S:\Core\Library': fntop,fnerror
 00040   pr newpage
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   pr fields "10,10,C 60": "ENTER THE COMPANY NUMBER OR 0 TO STOP:"
 00070 L70: input fields "10,50,N 2,UE,N": cno conv L70
 00080   if cno=0 or cmdkey=5 or cmdkey=99 then goto XIT

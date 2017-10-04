@@ -6,7 +6,7 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),sp(1),c$(1,8)*40
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$='Bank Reconciliation')
+00090   fntop(program$,cap$='Bank Reconciliation')
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER : gosub FIXGLACCOUNTS: gosub CLOSE_FILE: gosub INDEX
@@ -42,7 +42,7 @@
 00390   return 
 00400 ! ______________________________________________________________________
 00410 BUILD_LAYOUT: ! 
-00420   let fncno(cno)
+00420   fncno(cno)
 00430 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
 00440   let lbl$(ic+=1)="G/L Number"
@@ -86,7 +86,7 @@
 00570   return 
 00580 ! ______________________________________________________________________
 00590 HAMSTER: ! 
-00600   let fnhamster("schgl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00600   fnhamster("schgl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00610   return 
 00620 ! ______________________________________________________________________
 00630 XIT: let fnxit

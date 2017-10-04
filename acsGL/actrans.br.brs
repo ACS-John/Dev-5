@@ -4,7 +4,7 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$='ACTrans')
+00090   fntop(program$,cap$='ACTrans')
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER : gosub CLOSE_FILE
@@ -20,7 +20,7 @@
 00190 ! ______________________________________________________________________
 00200 BUILD_LAYOUT: ! 
 00220 ! 
-00300   let fn_setup_hamster
+00300   fn_setup_hamster
 00400 ! 
 00420 ! ** Combo Boxes **                                                   !:
         ! CL=Field Number  : C$(CL,1)='ComboF'                                !:
@@ -51,7 +51,7 @@
 00460   return 
 00470 ! ______________________________________________________________________
 00480 HAMSTER: ! 
-00490   let fnhamster("ACTrans",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00490   fnhamster("ACTrans",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00500   return 
 00510 ! ______________________________________________________________________
 00520 XIT: let fnxit
@@ -85,14 +85,14 @@
 80140     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
 80160 ! 
 80180 ! fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,ar_mask)
-80200     let fn_add_rec("Dept",3,'N',0,mask_number)
-80220     let fn_add_rec("Acct",6,'N',0,mask_number)
-80240     let fn_add_rec("Sub",3,'N',0,mask_number)
-80260     let fn_add_rec("Date",6,'N',0,mask_mmddyy)
-80280     let fn_add_rec("Amount",12,'PD',6.2,mask_pointtwo)
-80300     let fn_add_rec("Trans Code",2,'N',0,mask_number)
-80320     let fn_add_rec("Posting Code",2,'N',0,mask_number)
-80340     let fn_add_rec("Reference #",12,'C')
-80360     let fn_add_rec("Description",30,'C')
-80380     let fn_add_rec("Period Code",2,'N',0,mask_number)
+80200     fn_add_rec("Dept",3,'N',0,mask_number)
+80220     fn_add_rec("Acct",6,'N',0,mask_number)
+80240     fn_add_rec("Sub",3,'N',0,mask_number)
+80260     fn_add_rec("Date",6,'N',0,mask_mmddyy)
+80280     fn_add_rec("Amount",12,'PD',6.2,mask_pointtwo)
+80300     fn_add_rec("Trans Code",2,'N',0,mask_number)
+80320     fn_add_rec("Posting Code",2,'N',0,mask_number)
+80340     fn_add_rec("Reference #",12,'C')
+80360     fn_add_rec("Description",30,'C')
+80380     fn_add_rec("Period Code",2,'N',0,mask_number)
 80400   fnend  ! fn_setup_hamster

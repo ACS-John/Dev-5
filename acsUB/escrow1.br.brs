@@ -5,28 +5,28 @@
 00050 ! ______________________________________________________________________
 00060   dim cnam$*40,customer_name$*30,cap$*128,resp$(2)*20
 00070 ! ______________________________________________________________________
-00080   let fntop("S:\acsUB\escrow1",cap$="Escrow Balance Report")
-00090   let fncno(cno,cnam$)
-00100   let fndat(resp$(1))
+00080   fntop("S:\acsUB\escrow1",cap$="Escrow Balance Report")
+00090   fncno(cno,cnam$)
+00100   fndat(resp$(1))
 00110 ! 
-00120   let fntos(sn$="escrow1") !:
+00120   fntos(sn$="escrow1") !:
         let mylen=20 : let mypos=mylen+2 : let lc=0
-00130   let fnlbl(lc+=1,1,"Report Heading Date:",mylen,1)
-00140   let fntxt(lc,mypos,20)
-00150   let fnlbl(lc+=1,1,"Sort by:",mylen,1)
+00130   fnlbl(lc+=1,1,"Report Heading Date:",mylen,1)
+00140   fntxt(lc,mypos,20)
+00150   fnlbl(lc+=1,1,"Sort by:",mylen,1)
 00160   let opt$(1)="1. Account" : let opt$(2)="2. Name" : mat opt$(2) !:
-        let fncomboa("acc_or_nam",lc,mypos,mat opt$) !:
+        fncomboa("acc_or_nam",lc,mypos,mat opt$) !:
         let resp$(2)=opt$(1)
-00170   let fncmdset(3)
-00180   let fnacs(sn$,0,mat resp$,ck)
+00170   fncmdset(3)
+00180   fnacs(sn$,0,mat resp$,ck)
 00190   if ck=5 then goto XIT
-00200   let fndat(resp$(1),put=2)
+00200   fndat(resp$(1),put=2)
 00210   customer=1 !:
         if resp$(2)=opt$(1) then !:
           open #customer: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed else !:
           if resp$(2)=opt$(2) then !:
             open #customer: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&str$(cno)&",Shr",internal,input,keyed 
-00220   let fnopenprn
+00220   fnopenprn
 00230   on pageoflow goto PGOF
 00240   gosub HDR
 00250 READ_CUSTOMER: ! 
@@ -50,7 +50,7 @@
 00430 DONE: ! 
 00440   pr #255: tab(43);"  __________"
 00450   pr #255,using 'Form POS 43,N 12.2': total_escrow
-00460   let fncloseprn
+00460   fncloseprn
 00470   goto XIT
 00480 ! ______________________________________________________________________
 00490 XIT: let fnxit

@@ -17,5 +17,5 @@
 20340       let x+=1
 20360     next j
 20380     mat option$(x-1)
-20400     let fncomboa("CmbRt2",myline,mypos,mat option$,"If the Route Number you want is not listed you can change your route number range in Configure > Company",5)
+20400     fncomboa("CmbRt2",myline,mypos,mat option$,"If the Route Number you want is not listed you can change your route number range in Configure > Company",5)
 20420   fnend 

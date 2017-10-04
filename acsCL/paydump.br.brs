@@ -6,10 +6,10 @@
 00060 ! ______________________________________________________________________
 00070   dim nam$*30,cnam$*40,dat$*20,gl(3),tr$(5)*35,cap$*128
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$="Remove Payee Records")
+00090   fntop(program$,cap$="Remove Payee Records")
 00100   cancel=99 : let right=1
-00110   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00110   fncno(cno,cnam$) !:
+        fndat(dat$)
 00120 ! ______________________________________________________________________
 00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form POS 150,2*N 1',rec=1: mat d !:
         close #20: 
@@ -17,17 +17,17 @@
 00150   open #paymstr1=1: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00160   open #paymstr2=2: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx2.H"&str$(cno)&",Shr",internal,outin,keyed 
 00170   open #payeeglbreakdown:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayeeGLBkdidx.h"&str$(cno)&",Shr",internal,outin,keyed 
-00180   let fntos(sn$="PayDump") !:
+00180   fntos(sn$="PayDump") !:
         let respc=0 : let mylen=21 : let mypos=mylen+2
-00190   let fnlbl(1,1,"Oldest retained Date:",mylen,right)
-00200   let fntxt(1,mypos,10,0,1,"1003",0,"This program will dump payee records who have not received a check since a certain date.") !:
+00190   fnlbl(1,1,"Oldest retained Date:",mylen,right)
+00200   fntxt(1,mypos,10,0,1,"1003",0,"This program will dump payee records who have not received a check since a certain date.") !:
         let resp$(respc+=1)=str$(date('ccyymmdd')-50000)
-00210   let fnlbl(1,46,"",1,1)
-00220   let fncmdset(2) !:
-        let fnacs(sn$,0,mat resp$,ckey)
+00210   fnlbl(1,46,"",1,1)
+00220   fncmdset(2) !:
+        fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT else !:
           let olddate=val(resp$(1))
-00240   let fnopenprn
+00240   fnopenprn
 00250   gosub HDR
 00260 ! ___________________________
 00270 READ_PAYMSTR1: ! 
@@ -61,7 +61,7 @@
 00490   return 
 00500 ! ______________________________________________________________________
 00510 DONE: ! 
-00520   let fncloseprn !:
+00520   fncloseprn !:
         goto XIT
 00530 ! ______________________________________________________________________
 00540 XIT: let fnxit

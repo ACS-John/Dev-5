@@ -9,8 +9,8 @@
 00090   dim miscname$(10)*20,dedcode(10),dedfed(10),dedfica(10),dedst(10)
 00100   dim deduc(10),miscgl$(10)*12,actr$*1,reccode$*1,resp$(150)*40
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Company Information")
-00130   let fncno(cno)
+00120   fntop(program$,cap$="Company Information")
+00130   fncno(cno)
 00140   cancel=99 : let right=1 : center=2 : let left=0 !:
         ccyymmdd$='3' : let mmddyy$='1' : let on=1 : let off=0 !:
         cancel=5 : let save=1 : let limit_to_list=1 : let pointtwo$='32' !:
@@ -37,20 +37,20 @@
                     ! to do it the old way change this whole line to read  GoTo Screen1
 00250 ! ______________________________________________________________________
 00260 NEWSCREEN: ! 
-00270   let fntos(sn$='Company-Pg'&str$(page)) !:
+00270   fntos(sn$='Company-Pg'&str$(page)) !:
         let lc=0
 00280   let page1=6 : let page2=07 : let page3=08 : let page4=09
-00290   let fnbutton(1,01,'&Basic            ',page1,'',height=02,23) !:
-        let fnbutton(1,26,'&General Ledger   ',page2,'',height=2,23) !:
-        let fnbutton(1,51,'&Rates and Maxs   ',page3,'',height=2,23) !:
-        let fnbutton(1,76,'&Deductions       ',page4,'',height=2,23)
+00290   fnbutton(1,01,'&Basic            ',page1,'',height=02,23) !:
+        fnbutton(1,26,'&General Ledger   ',page2,'',height=2,23) !:
+        fnbutton(1,51,'&Rates and Maxs   ',page3,'',height=2,23) !:
+        fnbutton(1,76,'&Deductions       ',page4,'',height=2,23)
 00300   if page=0 then let page=1
 00310   if page=1 then gosub PAGE1 else !:
           if page=2 then gosub PAGE2 else !:
             if page=3 then gosub PAGE3 else !:
               if page=4 then gosub PAGE4
-00320   let fncmdset(4) ! Save and Cancel
-00330   let fnacs(sn$,0,mat resp$,ckey)
+00320   fncmdset(4) ! Save and Cancel
+00330   fnacs(sn$,0,mat resp$,ckey)
 00340   if page=1 then 
 00350     a$(1)=resp$(1) !:
           a$(2)=resp$(2) !:
@@ -122,154 +122,154 @@
 00670   goto NEWSCREEN
 00680 PAGE1: ! _____________________________________________________________ !:
         let lc=3 : let mylen=40 : let mypos=mylen+2
-00690   let fnlbl(lc+=1,1,'Company Name:',mylen,right)
-00700   let fntxt(lc,mypos,40,0,left) !:
+00690   fnlbl(lc+=1,1,'Company Name:',mylen,right)
+00700   fntxt(lc,mypos,40,0,left) !:
         let resp$(1)=a$(1)
-00710   let fnlbl(lc+=1,1,'Address:',mylen,right)
-00720   let fntxt(lc,mypos,40,0,left) !:
+00710   fnlbl(lc+=1,1,'Address:',mylen,right)
+00720   fntxt(lc,mypos,40,0,left) !:
         let resp$(2)=a$(2)
-00730   let fnlbl(lc+=1,1,'City State and Zip Code:',mylen,right)
-00740   let fntxt(lc,mypos,40,0,left) !:
+00730   fnlbl(lc+=1,1,'City State and Zip Code:',mylen,right)
+00740   fntxt(lc,mypos,40,0,left) !:
         let resp$(3)=a$(3)
-00750   let fnlbl(lc+=1,1,'Federal Identification Number:',mylen,right)
-00760   let fntxt(lc,mypos,12,0,left) !:
+00750   fnlbl(lc+=1,1,'Federal Identification Number:',mylen,right)
+00760   fntxt(lc,mypos,12,0,left) !:
         let resp$(4)=b$(1)
-00770   let fnlbl(lc+=1,1,'State Identification Number:',mylen,right)
-00780   let fntxt(lc,mypos,12,0,left) !:
+00770   fnlbl(lc+=1,1,'State Identification Number:',mylen,right)
+00780   fntxt(lc,mypos,12,0,left) !:
         let resp$(5)=b$(2)
-00790   let fnlbl(lc+=1,1,'Type of Business:',mylen,right)
-00800   let fntxt(lc,mypos,30,0,left) !:
+00790   fnlbl(lc+=1,1,'Type of Business:',mylen,right)
+00800   fntxt(lc,mypos,30,0,left) !:
         let resp$(6)=tb$
-00810   let fnlbl(lc+=1,1,'Number of Periods:',mylen,right)
-00820   let fntxt(lc,mypos,30,0,left,number$) !:
+00810   fnlbl(lc+=1,1,'Number of Periods:',mylen,right)
+00820   fntxt(lc,mypos,30,0,left,number$) !:
         let resp$(7)=str$(nap)
-00830   let fnlbl(lc+=1,1,'Working Bank:',mylen,right)
-00840   let fncombof('bank',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list) !:
+00830   fnlbl(lc+=1,1,'Working Bank:',mylen,right)
+00840   fncombof('bank',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list) !:
         let resp$(8)=str$(wbc)
-00850   let fnchk(lc+=1,mypos,'My Checks are Pre-Numbered',right) !:
+00850   fnchk(lc+=1,mypos,'My Checks are Pre-Numbered',right) !:
         if prenum=1 then let resp$(9)='True' else let resp$(9)='False'
-00860   let fnchk(lc+=1,mypos,'Utilize Bank Reconciliation Features',right) !:
+00860   fnchk(lc+=1,mypos,'Utilize Bank Reconciliation Features',right) !:
         if reccode=1 then let resp$(10)='True' else let resp$(10)='False'
 00870   return 
 00880 PAGE2: ! _____________________________________________________________ !:
         let lc=3 : let mylen=40 : let mypos=mylen+2 !:
         let fc=0 ! framecount
-00890   let fnfra(04,1,5,framewidth=110,'General Ledger') !:
+00890   fnfra(04,1,5,framewidth=110,'General Ledger') !:
         let frame=fc+=1 : let lc=0
-00900   let fnchk(lc+=1,mypos,'Utilize Department Number Field',right,frame) !:
+00900   fnchk(lc+=1,mypos,'Utilize Department Number Field',right,frame) !:
         if d(1)=1 then let resp$(1)='True' else let resp$(1)='False'
-00910   let fnchk(lc+=1,mypos,'Utilize Sub Account Number Field',right,frame) !:
+00910   fnchk(lc+=1,mypos,'Utilize Sub Account Number Field',right,frame) !:
         if d(2)=1 then let resp$(2)='True' else let resp$(2)='False'
-00920   let fnlbl(lc+=1,1,'Last Balance Sheet Account Number:',mylen,right,0,frame)
+00920   fnlbl(lc+=1,1,'Last Balance Sheet Account Number:',mylen,right,0,frame)
 00930 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         ! Let RESP$(3)=STR$(WBC)
-00932   let fnqgl(lc,mypos,frame,2) !:
+00932   fnqgl(lc,mypos,frame,2) !:
         let resp$(3)=fnrgl$(lastact$)
-00940   let fnfra(11,1,2,framewidth,'Accounts Receivable') !:
+00940   fnfra(11,1,2,framewidth,'Accounts Receivable') !:
         let frame=fc+=1 : let lc=0
-00950   let fnchk(lc+=1,mypos,'Post Deposits from Accounts Receivable',right,frame) !:
+00950   fnchk(lc+=1,mypos,'Post Deposits from Accounts Receivable',right,frame) !:
         if ar1=1 then let resp$(4)='True' else let resp$(4)='False'
-00960   let fnfra(15,1,5,framewidth,'Payroll') !:
+00960   fnfra(15,1,5,framewidth,'Payroll') !:
         let frame=fc+=1 : let lc=0 : let mylen=32 : let mypos=mylen+2
-00970   let fnlbl(lc+=1,1,'FICA Withholding GL Account:',mylen,right,0,frame)
+00970   fnlbl(lc+=1,1,'FICA Withholding GL Account:',mylen,right,0,frame)
 00980 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         ! Let RESP$(5)=CNVRT$('pic(zz#)',PRGL(1,1))&CNVRT$('pic(zzzzz#)',PRGL(1,2))&CNVRT$('pic(zz#)',PRGL(1,3))
-00982   let fnqgl(lc,mypos,frame,2) !:
+00982   fnqgl(lc,mypos,frame,2) !:
         let resp$(5)=cnvrt$('pic(zz#)',prgl(1,1))&cnvrt$('pic(zzzzz#)',prgl(1,2))&cnvrt$('pic(zz#)',prgl(1,3)) !:
         let resp$(5)=fnrgl$(resp$(5))
-00990   let fnlbl(lc+=1,1,'Federal Withholding GL Account:',mylen,right,0,frame)
+00990   fnlbl(lc+=1,1,'Federal Withholding GL Account:',mylen,right,0,frame)
 01000 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         ! Let RESP$(6)=CNVRT$('pic(zz#)',PRGL(2,1))&CNVRT$('pic(zzzzz#)',PRGL(2,2))&CNVRT$('pic(zz#)',PRGL(2,3))
-01002   let fnqgl(lc,mypos,frame,2) !:
+01002   fnqgl(lc,mypos,frame,2) !:
         let resp$(6)=cnvrt$('pic(zz#)',prgl(2,1))&cnvrt$('pic(zzzzz#)',prgl(2,2))&cnvrt$('pic(zz#)',prgl(2,3)) !:
         let resp$(6)=fnrgl$(resp$(6))
-01010   let fnlbl(lc+=1,1,'State Withholding GL Account:',mylen,right,0,frame)
+01010   fnlbl(lc+=1,1,'State Withholding GL Account:',mylen,right,0,frame)
 01020 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         ! Let RESP$(7)=CNVRT$('pic(zz#)',PRGL(3,1))&CNVRT$('pic(zzzzz#)',PRGL(3,2))&CNVRT$('pic(zz#)',PRGL(3,3))
-01022   let fnqgl(lc,mypos,frame,2) !:
+01022   fnqgl(lc,mypos,frame,2) !:
         let resp$(7)=cnvrt$('pic(zz#)',prgl(3,1))&cnvrt$('pic(zzzzz#)',prgl(3,2))&cnvrt$('pic(zz#)',prgl(3,3)) !:
         let resp$(7)=fnrgl$(resp$(7))
-01030   let fnlbl(lc+=1,1,'Local Withholding GL Account:',mylen,right,0,frame)
-01040 !  Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
+01030   fnlbl(lc+=1,1,'Local Withholding GL Account:',mylen,right,0,frame)
+01040 !  fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         !  Let RESP$(8)=CNVRT$('pic(zz#)',PRGL(4,1))&CNVRT$('pic(zzzzz#)',PRGL(4,2))&CNVRT$('pic(zz#)',PRGL(4,3))
-01042   let fnqgl(lc,mypos,frame,2) !:
+01042   fnqgl(lc,mypos,frame,2) !:
         let resp$(8)=cnvrt$('pic(zz#)',prgl(4,1))&cnvrt$('pic(zzzzz#)',prgl(4,2))&cnvrt$('pic(zz#)',prgl(4,3)) !:
         let resp$(8)=fnrgl$(resp$(8))
-01050   let fnlbl(lc+=1,1,'Earned Income Credit GL Account:',mylen,right,0,frame)
+01050   fnlbl(lc+=1,1,'Earned Income Credit GL Account:',mylen,right,0,frame)
 01060 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         ! Let RESP$(9)=CNVRT$('pic(zz#)',PRGL(5,1))&CNVRT$('pic(zzzzz#)',PRGL(5,2))&CNVRT$('pic(zz#)',PRGL(5,3))
-01062   let fnqgl(lc,mypos,frame,2) !:
+01062   fnqgl(lc,mypos,frame,2) !:
         let resp$(9)=cnvrt$('pic(zz#)',prgl(5,1))&cnvrt$('pic(zzzzz#)',prgl(5,2))&cnvrt$('pic(zz#)',prgl(5,3)) !:
         let resp$(9)=fnrgl$(resp$(9))
 01070   return 
 01080 PAGE3: ! _____________________________________________________________ !:
         let lc=3 : let mylen=44 : let mypos=mylen+2 !:
         let fc=0 ! frame count
-01090   let fnfra(04,1,2,framewidth=110,'State Unemployment Compensation') !:
+01090   fnfra(04,1,2,framewidth=110,'State Unemployment Compensation') !:
         let frame=fc+=1 : let lc=0
-01100   let fnlbl(lc+=1,1,'State Unemployment Compensation Rate:',mylen,right,0,frame)
-01110   let fntxt(lc,mypos,5,0,left,'',0,'',frame) !:
+01100   fnlbl(lc+=1,1,'State Unemployment Compensation Rate:',mylen,right,0,frame)
+01110   fntxt(lc,mypos,5,0,left,'',0,'',frame) !:
         let resp$(1)=c$
-01120   let fnlbl(lc+=1,1,'State Unemployment Compensation Maximum:',mylen,right,0,frame)
-01130   let fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
+01120   fnlbl(lc+=1,1,'State Unemployment Compensation Maximum:',mylen,right,0,frame)
+01130   fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
         let resp$(2)=str$(ucm)
-01140   let fnfra(08,1,2,framewidth=110,'Social Security') !:
+01140   fnfra(08,1,2,framewidth=110,'Social Security') !:
         let frame=fc+=1 : let lc=0
-01150   let fnlbl(lc+=1,1,'Social Security Rate:',mylen,right,0,frame)
-01160   let fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
+01150   fnlbl(lc+=1,1,'Social Security Rate:',mylen,right,0,frame)
+01160   fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
         let resp$(3)=str$(ficarate)
-01170   let fnlbl(lc+=1,1,'Social Security Maximum:',mylen,right,0,frame)
-01180   let fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
+01170   fnlbl(lc+=1,1,'Social Security Maximum:',mylen,right,0,frame)
+01180   fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
         let resp$(4)=str$(ficawage)
-01190   let fnfra(12,1,2,framewidth=110,'Federal Unemployment Compensation') !:
+01190   fnfra(12,1,2,framewidth=110,'Federal Unemployment Compensation') !:
         let frame=fc+=1 : let lc=0
-01200   let fnlbl(lc+=1,1,'Federal Unemployment Compensation Rate:',mylen,right,0,frame)
-01210   let fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
+01200   fnlbl(lc+=1,1,'Federal Unemployment Compensation Rate:',mylen,right,0,frame)
+01210   fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
         let resp$(5)=str$(feducrat)
-01220   let fnlbl(lc+=1,1,'Federal Unemployment Compensation Maximum:',mylen,right,0,frame)
-01230   let fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
+01220   fnlbl(lc+=1,1,'Federal Unemployment Compensation Maximum:',mylen,right,0,frame)
+01230   fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
         let resp$(6)=str$(feducwag)
-01240   let fnfra(16,1,2,framewidth=110,'MediCare') !:
+01240   fnfra(16,1,2,framewidth=110,'MediCare') !:
         let frame=fc+=1 : let lc=0
-01250   let fnlbl(lc+=1,1,'MediCare Rate:',mylen,right,0,frame)
-01260   let fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
+01250   fnlbl(lc+=1,1,'MediCare Rate:',mylen,right,0,frame)
+01260   fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
         let resp$(7)=str$(mcr)
-01270   let fnlbl(lc+=1,1,'MediCare Maximum:',mylen,right,0,frame)
-01280   let fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
+01270   fnlbl(lc+=1,1,'MediCare Maximum:',mylen,right,0,frame)
+01280   fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
         let resp$(8)=str$(mcm)
 01290   return 
 01300 PAGE4: ! _____________________________________________________________ !:
         let lc=3 : let mylen=40 : let mypos=mylen+2 !:
         let rc=0 ! Resp$ Counter
-01310   let fnlbl(lc+=1,1,'Enter the names of the 10 miscellaneous deductions.',width,center)
-01320   let fnlbl(lc+=1,1,'Indicate how the deductions are to be handled by the system.',width,center)
-01330   let fnlbl(lc+=1,1,'Place a Check in the appropriate column to indicate if it should be',width,center)
-01340   let fnlbl(lc+=1,1,'deducted for Federal, FICA, State, or State Unemployment Compensation.',width,center)
+01310   fnlbl(lc+=1,1,'Enter the names of the 10 miscellaneous deductions.',width,center)
+01320   fnlbl(lc+=1,1,'Indicate how the deductions are to be handled by the system.',width,center)
+01330   fnlbl(lc+=1,1,'Place a Check in the appropriate column to indicate if it should be',width,center)
+01340   fnlbl(lc+=1,1,'deducted for Federal, FICA, State, or State Unemployment Compensation.',width,center)
 01350 ! 
-01360   let fnlbl(lc+=1,24,'Deduction or Addition',10,center)
-01370   let fnlbl(lc+=1,1,'Deduction Name')
-01380   let fnlbl(lc,40,'Fed')
-01390   let fnlbl(lc,45,'FICA')
-01400   let fnlbl(lc,50,'State')
-01410   let fnlbl(lc,56,'UC')
-01420   let fnlbl(lc,60,'General Ledger Number')
+01360   fnlbl(lc+=1,24,'Deduction or Addition',10,center)
+01370   fnlbl(lc+=1,1,'Deduction Name')
+01380   fnlbl(lc,40,'Fed')
+01390   fnlbl(lc,45,'FICA')
+01400   fnlbl(lc,50,'State')
+01410   fnlbl(lc,56,'UC')
+01420   fnlbl(lc,60,'General Ledger Number')
 01430   for j=1 to 10
-01440     let fntxt(j+lc,1,20) !:
+01440     fntxt(j+lc,1,20) !:
           let resp$(rc+=1)=miscname$(j)
 01450     let item$(1)='Deduction' : let item$(2)='Addition' : mat item$(2) !:
-          let fncomboa('ded_or_add',j+lc,24,mat item$) !:
+          fncomboa('ded_or_add',j+lc,24,mat item$) !:
           let resp$(rc+=1)=item$(dedcode(j))
-01460     let fnchk(j+lc,40,'',right) !:
+01460     fnchk(j+lc,40,'',right) !:
           let rc+=1 : if dedfed(j)=1 then let resp$(rc)='True' else let resp$(rc)='False'
-01470     let fnchk(j+lc,45,'',right) !:
+01470     fnchk(j+lc,45,'',right) !:
           let rc+=1 : if dedfica(j)=1 then let resp$(rc)='True' else let resp$(rc)='False'
-01480     let fnchk(j+lc,50,'',right) !:
+01480     fnchk(j+lc,50,'',right) !:
           let rc+=1 : if dedst(j)=1 then let resp$(rc)='True' else let resp$(rc)='False'
-01490     let fnchk(j+lc,55,'',right) !:
+01490     fnchk(j+lc,55,'',right) !:
           let rc+=1 : if deduc(j)=1 then let resp$(rc)='True' else let resp$(rc)='False'
 01500 ! Let FNCOMBOF(env$('Q')&'\GLmstr',LC+J,62,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,30,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST) !:
           ! Let RESP$(RC+=1)=MISCGL$(J)
-01502     let fnqgl(lc+j,62,0,2) !:
+01502     fnqgl(lc+j,62,0,2) !:
           let resp$(rc+=1)=fnrgl$(miscgl$(j))
 01510   next j
 01520   return 
@@ -285,7 +285,7 @@
 01620 ! ______________________________________________________________________
 01630 XIT: ! 
 01640   close #company: 
-01650   let fnxit
+01650   fnxit
 01660 ! ______________________________________________________________________
 01670 ! <Updateable Region: ERTN>
 01680 ERTN: let fnerror(program$,err,line,act$,"xit")

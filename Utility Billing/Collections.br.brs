@@ -1,6 +1,6 @@
 06000 ! (formerly) S:\acsUB\Collections  and before that acsUB\ubIpColl
-06020   let fn_setup ! r:
-06040   let fntop(program$) ! for now use the settings from Enter Collections for page formatting of reports
+06020   fn_setup ! r:
+06040   fntop(program$) ! for now use the settings from Enter Collections for page formatting of reports
 06060   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 06080   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
 06100   open #4: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -25,8 +25,8 @@
 06480 ! /r
 10000 MENU1B: ! r:
 10010   do 
-10020     let fntos(sn$="Collections-menu1") : rc=0
-10220     let fnflexinit1('Collections',6,1,10,80,mat chdr$,mat cm$,1) ! r: add the grid to the screen
+10020     fntos(sn$="Collections-menu1") : rc=0
+10220     fnflexinit1('Collections',6,1,10,80,mat chdr$,mat cm$,1) ! r: add the grid to the screen
 10240     restore #h_ubcolinp: 
 10260     let totalacct=0 : totalCollections=totalDebitMemos=totalCreditMemos=0
 10280     do  ! for j=1 to lrec(h_ubcolinp)
@@ -52,39 +52,39 @@
 10600       next j2
 10620       if uprc$(escrow$)="Y" then let m1_item$(cHdrItem+=1)=str$(escrow)
 10640       mat m1_item$(cHdrItem)
-10660       let fnflexadd1(mat m1_item$)
+10660       fnflexadd1(mat m1_item$)
 10680       L1070: ! 
 10700     loop  ! next j
 10720     L1080: ! /r
 10721     resp_selectedRecordNumber=rc+=1 ! resp$(1) returns the record number of the selected entry
-10722     let fnlbl(1,1,"Total Collections:",22,1)
-10724     let fnlbl(1,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCollections),15,1) 
+10722     fnlbl(1,1,"Total Collections:",22,1)
+10724     fnlbl(1,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCollections),15,1) 
 10725     ! fntxt(1,24,15,15,1,"10",1) : let resp$(rc+=1)=str$(totalCollections)
-10726     let fnlbl(2,1,"Total Credit Memos:",22,1)
-10727     let fnlbl(2,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCreditMemos),15,1) 
+10726     fnlbl(2,1,"Total Credit Memos:",22,1)
+10727     fnlbl(2,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalCreditMemos),15,1) 
 10728     ! let fntxt(2,24,15,15,1,"10",1) : let resp$(rc+=1)=str$(totalCreditMemos)
-10730     let fnlbl(3,1,"Total Debit Memos:",22,1)
-10731     let fnlbl(3,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalDebitMemos),15,1) 
+10730     fnlbl(3,1,"Total Debit Memos:",22,1)
+10731     fnlbl(3,24,cnvrt$('pic($$$$,$$$,$$#.##)',totalDebitMemos),15,1) 
 10732     ! let fntxt(3,24,15,15,1,"10",1) : let resp$(rc+=1)=str$(totalDebitMemos)
-10740     let fnlbl(4,1,"Total Account Numbers:",22,1)
-10750     let fnlbl(4,24,str$(totalacct),15,1) 
+10740     fnlbl(4,1,"Total Account Numbers:",22,1)
+10750     fnlbl(4,24,str$(totalacct),15,1) 
 10760     ! let fntxt(4,24,15,15,1,"10",1) : let resp$(rc+=1)=str$(totalacct)
 10780     if lrec(h_ubcolinp)<1 then 
-10800       let fncmdkey("Add &Transaction",2,1,0,"Allows you to enter transactions.")
-10820       let fncmdkey("&Close",5,0,1,"Returns to menu.")
+10800       fncmdkey("Add &Transaction",2,1,0,"Allows you to enter transactions.")
+10820       fncmdkey("&Close",5,0,1,"Returns to menu.")
 10840     else 
-10860       let fncmdkey("&Add",2)
-10880       let fncmdkey("E&dit",1,1)
-10890       let fncmdkey("Delete",4)
-10900       let fncmdkey("&Print",3)
-10940       let fncmdkey("&Close",5,0,1,'Return to main menu.\nEntries will not be lost nor will they be posted to accounts.')
-10960       let fncmdkey("&Post",10,0,0,'Apply collections to customer records.')
-10980       let fncmdkey("Open Drawer",12,0,0,'Open an attached cash drawer')
+10860       fncmdkey("&Add",2)
+10880       fncmdkey("E&dit",1,1)
+10890       fncmdkey("Delete",4)
+10900       fncmdkey("&Print",3)
+10940       fncmdkey("&Close",5,0,1,'Return to main menu.\nEntries will not be lost nor will they be posted to accounts.')
+10960       fncmdkey("&Post",10,0,0,'Apply collections to customer records.')
+10980       fncmdkey("Open Drawer",12,0,0,'Open an attached cash drawer')
 11000     end if 
 11002 !   if fnclient_has('U5') then
-11004     let fncmdkey("Import CSV",14,0,0,'Import Collections CSV')
+11004     fncmdkey("Import CSV",14,0,0,'Import Collections CSV')
 11008 !   end if
-11020     let fnacs(sn$,0,mat resp$,ck1)
+11020     fnacs(sn$,0,mat resp$,ck1)
 11030     if ck1=5 then 
 11040       goto XIT
 11060     else 
@@ -99,13 +99,13 @@
 11180 !       read #h_ubcolinp,using F_ubColInp,rec=edrec: x$,amount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow
 11190         delete #h_ubcolinp,rec=edrec: ioerr ignore
 11220       else if ck1=3 then 
-11240         let fn_print_listings
+11240         fn_print_listings
 11260       else if ck1=10 then 
 11280         goto SCREEN_LAST_CHANCE
 11300       else if ck1=12 then 
-11320         let fn_open_cash_drawer
+11320         fn_open_cash_drawer
 11340       else if ck1=14 then 
-11360         let fn_csv_import
+11360         fn_csv_import
 11440       end if 
 11460     end if
 11480   loop 
@@ -137,24 +137,24 @@
 16040   if x(3)=0 then let x(3)=date('mmddyy') ! date should default to today
 16060   let x(2)=0 ! amount collected should default to zero
 16080 ! 
-16100   let fntos(sn$="ipcollAddv2")
+16100   fntos(sn$="ipcollAddv2")
 16120   let respc=0
 16140 ! 
-16160   let fnlbl(3,1,"Amount:",25,1)
-16180   let fntxt(3,27,8,0,0,"32")
+16160   fnlbl(3,1,"Amount:",25,1)
+16180   fntxt(3,27,8,0,0,"32")
 16200   if ~do_not_blank_rcpt then let resp$(respc:=1)=cnvrt$("N 10.2",max(0,bal)) ! str$(x(2))
 16220 ! 
-16240   let fnlbl(4,1,"Date (mmddyy):",25,1)
-16260   let fntxt(4,27,8,0,0,"1001")
+16240   fnlbl(4,1,"Date (mmddyy):",25,1)
+16260   fntxt(4,27,8,0,0,"1001")
 16280   if ~do_not_blank_rcpt then let resp$(respc:=2)=str$(x(3))
 16300 ! 
-16320   let fnlbl(5,1,"Receipt Number (CA=Cash):",25,1)
-16340   let fnbutton(5,40,"Cash",7,"(F7) Set Receipt Number to CA (for Cash)")
-16360   let fntxt(5,27,9)
+16320   fnlbl(5,1,"Receipt Number (CA=Cash):",25,1)
+16340   fnbutton(5,40,"Cash",7,"(F7) Set Receipt Number to CA (for Cash)")
+16360   fntxt(5,27,9)
 16380 ! 
-16400   let fnlbl(1,1,"Entry Type:",25,1)
+16400   fnlbl(1,1,"Entry Type:",25,1)
 16420   if ~do_not_blank_rcpt then let resp$(respc:=3)=""
-16440   let fncomboa("coll_type_rdc",1,27,mat coll_type_option$)
+16440   fncomboa("coll_type_rdc",1,27,mat coll_type_option$)
 16460   if ~do_not_blank_rcpt then 
 16480     for a=1 to 3
 16500       if hresp1$=coll_type_option$(a) then let resp$(respc:=4)=coll_type_option$(a): let verify=1
@@ -162,35 +162,35 @@
 16540     if verify=0 then let resp$(respc:=4)=coll_type_option$(1)
 16560   end if 
 16580 ! 
-16600   let fnlbl(2,1,"Account:",25,1)
-16620   let fntxt(2,27,10,10,1,"",1,"Account (Press Cancel to Re-Select)")
+16600   fnlbl(2,1,"Account:",25,1)
+16620   fntxt(2,27,10,10,1,"",1,"Account (Press Cancel to Re-Select)")
 16640   if ~do_not_blank_rcpt then let resp$(respc:=5)=z$
 16660 ! 
 16680   col3_pos=50 : col4_pos=76
 16700 ! 
-16720   let fnlbl(1,col3_pos,"Name:",25,1)
-16740   let fntxt(1,col4_pos,30,30,0,"",1,"Account Name (Press Cancel to Re-Select)")
+16720   fnlbl(1,col3_pos,"Name:",25,1)
+16740   fntxt(1,col4_pos,30,30,0,"",1,"Account Name (Press Cancel to Re-Select)")
 16760   if ~do_not_blank_rcpt then let resp$(respc:=6)=trim$(nam$)
 16780 ! 
-16800   let fnlbl(2,col3_pos,"Balance:",25,1)
-16820   let fntxt(2,col4_pos,10,10,1,"",1,"Account Balance (Press Cancel to Re-Select)")
+16800   fnlbl(2,col3_pos,"Balance:",25,1)
+16820   fntxt(2,col4_pos,10,10,1,"",1,"Account Balance (Press Cancel to Re-Select)")
 16840   if ~do_not_blank_rcpt then let resp$(respc:=7)=cnvrt$("N 10.2",bal)
 16860 ! 
-16880   let fnlbl(3,col3_pos,"Billed:",25,1)
-16900   let fntxt(3,col4_pos,8,8,1,"1",1)
+16880   fnlbl(3,col3_pos,"Billed:",25,1)
+16900   fntxt(3,col4_pos,8,8,1,"1",1)
 16920   let resp$(respc:=8)=str$(db1)
 16940 ! 
 16960   if uprc$(escrow$)="Y" then 
-16980     let fnlbl(4,col3_pos,"Escrow Balance:",25,1)
-17000     let fntxt(4,col4_pos,10,10,1,"10",1)
+16980     fnlbl(4,col3_pos,"Escrow Balance:",25,1)
+17000     fntxt(4,col4_pos,10,10,1,"10",1)
 17020     if ~do_not_blank_rcpt then let resp$(respc:=9)=str$(escrowbal)
 17040   end if 
-17060   let fncmdkey("&Next",1,1,0,"Complete with this entry.  Move to next record.")
-17080   let fncmdkey("&Review Customer Record",8,0,0,"Allows you to review any customer record.")
-17100   let fncmdkey("&Notes",3,0,0,"Customer Notes")
-17120   let fncmdkey("&Back",2,0,0,"Back up one screen. Select a different customer.")
-17140   let fncmdkey("&Cancel",5,0,1,"Return to proof total screen.")
-17160   let fnacs(sn$,0,mat resp$,ckey,1)
+17060   fncmdkey("&Next",1,1,0,"Complete with this entry.  Move to next record.")
+17080   fncmdkey("&Review Customer Record",8,0,0,"Allows you to review any customer record.")
+17100   fncmdkey("&Notes",3,0,0,"Customer Notes")
+17120   fncmdkey("&Back",2,0,0,"Back up one screen. Select a different customer.")
+17140   fncmdkey("&Cancel",5,0,1,"Return to proof total screen.")
+17160   fnacs(sn$,0,mat resp$,ckey,1)
 17180 ! 
 17200   let do_not_blank_rcpt=0
 17220 ! 
@@ -204,7 +204,7 @@
 17380   let x(3)=val(resp$(2))
 17400   let rcpt$=trim$(resp$(3))(1:9)
 17420   if ckey=8 then 
-17440     let fncustomer(x)
+17440     fncustomer(x)
 17460     goto SCREEN_ADD
 17480   else if ckey=3 then
 17500     fnCustomerNotes(z$)
@@ -230,7 +230,7 @@
 17860     mat ml$(2)
 17880     let ml$(1)="Blank Date Detected."
 17900     let ml$(2)="Please correct the date."
-17920     let fnmsgbox(mat ml$,resp$)
+17920     fnmsgbox(mat ml$,resp$)
 17940     goto SCREEN_ADD
 17960   end if 
 17980 ! 
@@ -240,7 +240,7 @@
 18060       let mesg$(1)="The collection date of "&resp$(2)&" appears "
 18080       let mesg$(2)="to be wrong!"
 18100       let mesg$(3)="Enter Yes to correct, else No to proceed."
-18120       let fnmsgbox(mat mesg$,resp$,'',52)
+18120       fnmsgbox(mat mesg$,resp$,'',52)
 18140       let holdbaddate=x(3)
 18160       if resp$="Yes" then goto SCREEN_ADD
 18180     end if 
@@ -249,7 +249,7 @@
 18240   if x(2)<=0 then 
 18260     mat mesg$(1)
 18280     let mesg$(1)="Negative amounts are not allowed."
-18320     let fnmsgbox(mat mesg$)
+18320     fnmsgbox(mat mesg$)
 18340     goto SCREEN_ADD
 18360   end if 
 18380   if uprc$(receipt$)="Y" and trim$(rcpt$)="" then 
@@ -260,11 +260,11 @@
 18460     let mesg$(4)="either enter a receipt # or change the option to"
 18480     let mesg$(5)="prevent getting this message."
 18500     let mesg$(6)="Take OK to continue."
-18520     let fnmsgbox(mat mesg$)
+18520     fnmsgbox(mat mesg$)
 18540     goto SCREEN_ADD
 18560   end if 
 18580   if ckey=1 then 
-18600     let fn_print_receipt(z$,nam$,rcpt$,bal,x(2),x(3),hresp1$)
+18600     fn_print_receipt(z$,nam$,rcpt$,bal,x(2),x(3),hresp1$)
 18620   end if 
 18640 ! /r
 20000 ! r: after SCREEN_ADD - actually do the adding stuff
@@ -333,18 +333,18 @@
 22080   let mesg$(4)="Cash Receipts Journal"
 22100   let mesg$(5)="or a "
 22120   let mesg$(6)="Deposit List?"
-22140   let fnmsgbox(mat mesg$,resp$,'',52)
+22140   fnmsgbox(mat mesg$,resp$,'',52)
 22160   if uprc$(trim$(resp$))=uprc$("YES") then let fn_print_listings
 22180   goto MERGE ! /r
 24000 EDIT_REC: ! r:
 24040   read #h_ubcolinp,using F_ubColInp,rec=edrec: x$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow norec MENU1B
 24080   let nam$=""
 24100   read #h_customer,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=x$,release: nam$,bal,db1,mat gb,escrowbal nokey ignore
-24120   let fntos("Collections-edit")
+24120   fntos("Collections-edit")
 24140   let respc=0
 24160 ! 
-24180   let fnlbl(1,1,"Entry Type:",25,1)
-24200   let fncomboa("rdc",1,27,mat coll_type_option$)
+24180   fnlbl(1,1,"Entry Type:",25,1)
+24200   fncomboa("rdc",1,27,mat coll_type_option$)
 24210   let resp$(resp_CollType:=respc+=1)=fn_collType$(transType)
 24220   ! if transType=3 then 
 24240   !   let resp$(resp_CollType:=respc+=1)=coll_type_option$(1)
@@ -354,38 +354,38 @@
 24320   !   let resp$(resp_CollType:=respc+=1)=coll_type_option$(3)
 24340   ! end if 
 24360 ! 
-24380   let fnlbl(2,1,"Account:",25,1)
+24380   fnlbl(2,1,"Account:",25,1)
 24400 ! read #h_customer,using "Form POS 41,C 28",key=x$,release: nam$ nokey IGNORE ! <--  it's already read at the top of the screen
-24420   let fncmbact(2,27)
+24420   fncmbact(2,27)
 24440   let resp$(resp_account:=respc+=1)=x$&"  "&nam$
 24460 ! 
 24480   if uprc$(escrow$)="Y" then let transAmount=transAmount+escrow: let escrow=0 ! .   ! .    ! add escrow amount back into payment amount before edit
 24500 ! 
-24520   let fnlbl(3,1,"Amount:",25,1)
-24540   let fntxt(3,27,8,0,0,"10")
+24520   fnlbl(3,1,"Amount:",25,1)
+24540   fntxt(3,27,8,0,0,"10")
 24560   let resp$(resp_amount:=respc+=1)=str$(transAmount)
 24580 ! 
-24600   let fnlbl(4,1,"Date (mmddyy):",25,1)
-24620   let fntxt(4,27,8,0,0,"1")
+24600   fnlbl(4,1,"Date (mmddyy):",25,1)
+24620   fntxt(4,27,8,0,0,"1")
 24640   let resp$(resp_transDate:=respc+=1)=str$(transDate)
 24660 ! 
-24680   let fnlbl(5,1,"Receipt # (CA=Cash):",25,1)
-24700   let fntxt(5,27,9)
+24680   fnlbl(5,1,"Receipt # (CA=Cash):",25,1)
+24700   fntxt(5,27,9)
 24720   let resp$(resp_receiptNumber:=respc+=1)=rcpt$
 24740 ! 
-24760   let fnlbl(3,40,"Balance:",25,1)
-24780   let fntxt(3,66,12,12,1,"10",1,"Account Balance (Press Cancel to Re-Select)")
+24760   fnlbl(3,40,"Balance:",25,1)
+24780   fntxt(3,66,12,12,1,"10",1,"Account Balance (Press Cancel to Re-Select)")
 24800   let resp$(respc+=1)=cnvrt$("N 12.2",bal)
 24820 ! 
-24840   let fnlbl(4,40,"Billed:",25,1)
-24860   let fntxt(4,66,8,8,1,"1",1)
+24840   fnlbl(4,40,"Billed:",25,1)
+24860   fntxt(4,66,8,8,1,"1",1)
 24880   let resp$(respc+=1)=str$(db1) 
 24900 ! 
-24920   let fncmdkey("&Save",1,1,0,"Saves any changes")
-24940   let fncmdkey("&Edit",2,0,0,"Allows you to change the breakdown")
-24960   let fncmdkey("&Delete",4,0,0,"Deletes this collection record")
-24980   let fncmdkey("&Cancel",5,0,1,"Returns to main collection screen")
-25000   let fnacs(sn$,0,mat resp$,ckey)
+24920   fncmdkey("&Save",1,1,0,"Saves any changes")
+24940   fncmdkey("&Edit",2,0,0,"Allows you to change the breakdown")
+24960   fncmdkey("&Delete",4,0,0,"Deletes this collection record")
+24980   fncmdkey("&Cancel",5,0,1,"Returns to main collection screen")
+25000   fnacs(sn$,0,mat resp$,ckey)
 25020 ! 
 25040   if ckey=5 then goto L2590
 25060 ! If CKEY=2 Then Goto X
@@ -418,7 +418,7 @@
 25540 ! If BUD1=1 Then Gosub BUD2 : Gosub BUD3
 25560 L2590: ! 
 25580   ! fn_increaseMatR(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
-25600   let fn_print_receipt(x$,nam$,rcpt$,bal,x(2),x(3),hresp1$)
+25600   fn_print_receipt(x$,nam$,rcpt$,bal,x(2),x(3),hresp1$)
 25620 goto MENU1B ! /r
 26000 MERGE: ! r:
 26020   let r6=0
@@ -479,14 +479,14 @@
 28300   if bd1(1)>0 and bd1(2)=0 then bd3(1)=bd1(1): goto L5030
 28320   mat bd1(bd1)
 28340 ! MATCH_BUDGET_BILLING: !
-28360   let fntos(sn$="Collections-budget")
-28380   let fnlbl(2,1,"Check the bills to be paid:",30,0)
+28360   fntos(sn$="Collections-budget")
+28380   fnlbl(2,1,"Check the bills to be paid:",30,0)
 28400   for j=1 to udim(bd1)
 28420     if bd1(j)=0 then goto L4990
-28440     let fnchk(j+2,10,cnvrt$("pic(zz/zz/zz)",bd1(j)),0)
+28440     fnchk(j+2,10,cnvrt$("pic(zz/zz/zz)",bd1(j)),0)
 28460 L4990: next j
-28480   let fncmdset(2)
-28500   let fnacs(sn$,0,mat resp$,ck1)
+28480   fncmdset(2)
+28500   fnacs(sn$,0,mat resp$,ck1)
 28520   if ck1=5 then goto L5080 ! 7/06/05  KJ
 28540 L5030: for j=1 to 5
 28560     if uprc$(resp$(j))=uprc$("True") then bd3(j)=1
@@ -583,11 +583,11 @@
 36620    let srt=2
 36640   end if
 38020   if ti1=1 then 
-38040     let fnopenprn(0,0,0,0,"Receipt Listing") : let ti1_start=1 : let ti1_end=1
+38040     fnopenprn(0,0,0,0,"Receipt Listing") : let ti1_start=1 : let ti1_end=1
 38060   else if ti1=2 then 
-38080     let fnopenprn(0,0,0,0,"Deposit Listing") : let ti1_start=2 : let ti1_end=2
+38080     fnopenprn(0,0,0,0,"Deposit Listing") : let ti1_start=2 : let ti1_end=2
 38100   else if ti1=3 then 
-38120     let fnopenprn(0,0,0,0,"Receipt and Deposit Listing") : let ti1_start=1 : let ti1_end=2
+38120     fnopenprn(0,0,0,0,"Receipt and Deposit Listing") : let ti1_start=1 : let ti1_end=2
 38140   end if 
 38160   mat ct=(0): mat brk=(0)
 40000   if srt=2 then 
@@ -689,7 +689,7 @@
 54500    end if ! /r
 54540    if ti1<>ti1_end and env$('acsDeveloper')='' then pr #255: newpage
 54560   next ti1
-55000   let fncloseprn
+55000   fncloseprn
 55020   close #h_addr: ioerr ignore
 55040   h_addr=0
 55600 fnend  ! if l3=1 then goto MERGE else goto MENU1B
@@ -745,13 +745,13 @@
 60600   ! ______________________________________________________________________
 60640   ! 
 60660     collections_filename$=env$('Q')&"\UBmstr\Collections-"&env$('acsUserId')&".h"&env$('cno')
-60680     let fndat(dat$,1)
+60680     fndat(dat$,1)
 60700   ! ______________________________________________________________________
 60720     open #20: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",NoShr",internal,input 
 60740     read #20,using "Form pos 128,C 1,c 1": receipt$,escrow$
 60760     close #20: 
 60780   ! ______________________________________________________________________
-60800     let fnget_services(mat srvname$, mat srv$, mat unused_tax_code$,mat penalty$,mat unused_subjectto,mat apply)
+60800     fnget_services(mat srvname$, mat srv$, mat unused_tax_code$,mat penalty$,mat unused_subjectto,mat apply)
 60820     if trim$(srvname$(1))="Water" then let havewater=1
 60840     if trim$(srvname$(3))<>"Electric" and srv$(3)="EL" then let srvname$(3)=""
 60860     if trim$(srvname$(4))<>"Gas" and srv$(4)="GA" then let srvname$(4)=""
@@ -791,7 +791,7 @@
 61540     for j2=1 to 10
 61560       if trim$(srvname$(j2))<>"" then 
 61580         chdr$(cHdrItem+=1)=srvname$(j2)(1:10)
-61600         let fnremove(":",chdr$(cHdrItem))
+61600         fnremove(":",chdr$(cHdrItem))
 61620       end if 
 61640     next j2
 61660     if uprc$(escrow$)="Y" then chdr$(cHdrItem+=1)="Escrow"
@@ -817,11 +817,11 @@
 62040   read #h_budmstr,using 'Form POS 1,C 10,PD 4,12*PD 5.2,2*PD 3',key=x1$: z$,mat ba,mat badr nokey L3820 ! get mat ba again
 62060   if ba(2)+ba(3)+ba(4)+ba(5)+ba(6)+ba(7)+ba(8)+ba(9)+ba(10)+ba(11)>0 then let havemainbudget=1
 62080   L3820: ! 
-62100   let fn_haveMainBudget=havemainbudget
+62100   fn_haveMainBudget=havemainbudget
 62120 fnend 
 64000 def library fnBreakdown(h_customer,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baorder,&coramt,&ckey)
-64020   let fn_setup
-64040   let fnBreakdown=fn_breakdown(h_customer,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baorder,coramt,ckey)
+64020   fn_setup
+64040   fnBreakdown=fn_breakdown(h_customer,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baorder,coramt,ckey)
 64060 fnend 
 68000 def fn_breakdown(h_customer,h_budmstr,x1$,havebudget, mat tgb, mat alloc,mat baorder,&coramt,&ckey)
 68020   ! returns 0 if canceled, else 1  (back returns 1, but also coramt=1)
@@ -836,20 +836,20 @@
 68200   dim bd_real(11)
 68220   read #h_customer,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2,pos 143,7*pd 2',key=x1$,release: nam$,bal,db1,mat gb,escrowbal,mat a nokey BD_TOS
 68240 BD_TOS: ! 
-68260   let fntos(sn$="breakdown")
+68260   fntos(sn$="breakdown")
 68280   let reco=0
-68300   let fnlbl(1,1,"Account:",30,1)
-68320   let fntxt(1,32,10,0,1,"",1)
+68300   fnlbl(1,1,"Account:",30,1)
+68320   fntxt(1,32,10,0,1,"",1)
 68340   let resp$(reco+=1)=x1$
-68360   let fnlbl(2,1,"Customer Name:",30,1)
-68380   let fntxt(2,32,30,0,0,"",1)
+68360   fnlbl(2,1,"Customer Name:",30,1)
+68380   fntxt(2,32,30,0,0,"",1)
 68400   let resp$(reco+=1)=trim$(nam$)
-68420   let fnlbl(3,1,"Transaction Amount:",30,1)
-68440   let fntxt(3,32,10,12,1,"10",1)
+68420   fnlbl(3,1,"Transaction Amount:",30,1)
+68440   fntxt(3,32,10,12,1,"10",1)
 68460   let resp$(reco+=1)=str$(x(2))
-68480   let fnlbl(5,1,"Enter Allocation Breakdown amounts.",54,2)
-68500   let fnlbl(6,31,"Allocation",10,2)
-68520   let fnlbl(6,44,"Balance",10,2)
+68480   fnlbl(5,1,"Enter Allocation Breakdown amounts.",54,2)
+68500   fnlbl(6,31,"Allocation",10,2)
+68520   fnlbl(6,44,"Balance",10,2)
 68540   if bd_re_editmode=1 then 
 68560     bd_re_editmode=0
 68580   else 
@@ -859,29 +859,29 @@
 68660   for j=1 to 10
 68680     if trim$(srvname$(j))<>"" and trim$(srvname$(j)(1:5))<>"Reduc" then 
 68700       bd_line_add+=1
-68720       let fnlbl(bd_line_add+6,1,serviceLabel$(bd_line_add),29,1)
+68720       fnlbl(bd_line_add+6,1,serviceLabel$(bd_line_add),29,1)
 68740       let resp$(reco+=1)=str$(tgb(bd_line_add))
-68760       let fntxt(bd_line_add+6,44,12,0,1,"10",1)
+68760       fntxt(bd_line_add+6,44,12,0,1,"10",1)
 68780       let resp$(reco+=1)=str$(alloc(bd_line_add))
-68800       let fntxt(bd_line_add+6,32,12,0,1,"10")
+68800       fntxt(bd_line_add+6,32,12,0,1,"10")
 68820       bd_real(bd_line_add)=reco
 68840     end if 
 68860   next j
 68880   if uprc$(escrow$)="Y" then 
 68900     bd_line_add=bd_line_add+1
-68920     let fnlbl(bd_line_add+6,1,"Escrow:",29,1)
+68920     fnlbl(bd_line_add+6,1,"Escrow:",29,1)
 68940     let resp$(reco+=1)=str$(oldescrowbal)
-68960     let fntxt(bd_line_add+6,44,12,0,1,"10",1)
+68960     fntxt(bd_line_add+6,44,12,0,1,"10",1)
 68980     let resp$(reco+=1)=str$(escrow)
-69000     let fntxt(bd_line_add+6,32,12,0,1,"10")
+69000     fntxt(bd_line_add+6,32,12,0,1,"10")
 69020     bd_real(bd_line_add)=reco
 69040   end if 
 69060   if csv_import_in_process then 
-69080     let fncmdkey("&Save",1,1) : let fncmdkey("&Skip",5,0,1)
+69080     fncmdkey("&Save",1,1) : let fncmdkey("&Skip",5,0,1)
 69100   else 
-69120     let fncmdset(6) ! fncmdkey("&Next",1,1) : fncmdkey("&Back",2) : fncmdkey("&Cancel",5,0,1)
+69120     fncmdset(6) ! fncmdkey("&Next",1,1) : fncmdkey("&Back",2) : fncmdkey("&Cancel",5,0,1)
 69140   end if 
-69160   let fnacs(sn$,0,mat resp$,ckey)
+69160   fnacs(sn$,0,mat resp$,ckey)
 69180 ! 
 69200   for j=1 to udim(alloc)
 69220     if bd_real(j)<>0 then alloc(j)=val(resp$(bd_real(j))) else alloc(j)=0
@@ -907,12 +907,12 @@
 69600     let mesg$(4)=cnvrt$("pic(-----------#.##)",tal)&" (Total Allocations) "
 69620     let mesg$(5)="___________"
 69640     let mesg$(6)=cnvrt$("pic(-----------#.##)",x(2)-tal)&" (Difference)"
-69660     let fnmsgbox(mat mesg$, resp$,'',48)
+69660     fnmsgbox(mat mesg$, resp$,'',48)
 69680     bd_re_editmode=1 : goto BD_TOS ! (skip re-reading of record) ! goto BREAKDOWN
 69700   end if 
 69720   bd_return=1
 69740 BD_FINIS: ! 
-69760   let fn_breakdown=bd_return
+69760   fn_breakdown=bd_return
 69780 fnend 
 72000 BD_ALLOC: ! r:
 72020   if editmode=1 then 
@@ -988,9 +988,9 @@
 73420 BD_ALLOC_FINIS: ! 
 73440   return  ! /r
 73460 def fn_open_cash_drawer
-73500   let fnopen_receipt_printer
+73500   fnopen_receipt_printer
 73520   pr #255,using 'form pos 1,c 9,skip 0': hex$("1B70302828") ioerr ignore ! apg cash drawer hooked to epson t 88 thermal receipt printer
-73540   let fnclose_receipt_printer
+73540   fnclose_receipt_printer
 73580 fnend 
 74000 def fn_print_receipt(pr_acct_key$,pr_acct_name$*30,rcpt$,bal,pr_trans_amt,pr_trans_date,coll_type$*30)
 74020   if fnopen_receipt_printer(1) then 
@@ -1013,31 +1013,31 @@
 74360     pr #255: ''
 74380     pr #255: '________________________________' ! 32 characters - perfect max width fit for my POs-58 usb receipt printer
 74400     pr #255: ''
-74420     let fnclose_receipt_printer
+74420     fnclose_receipt_printer
 74440   end if 
 74460 fnend 
 76000 def fn_csv_import
-76020   let fnureg_read('Collections CSV Import Filename',ecp_filename$)
+76020   fnureg_read('Collections CSV Import Filename',ecp_filename$)
 76040   ! if ecp_filename$='' then let ecp_filename$=os_filename$(env$('userprofile')&'\Desktop')&"\ACS_ECP_Export.txt"
 76060   EI_SCREEN1: ! 
-76080   let fntos(sn$="coll_csv_imp")
-76100   let fnlbl(1,1,"Import CSV Path and File Name:",33,1)
-76120   let fntxt(1,35,40,256,0,"71")
+76080   fntos(sn$="coll_csv_imp")
+76100   fnlbl(1,1,"Import CSV Path and File Name:",33,1)
+76120   fntxt(1,35,40,256,0,"71")
 76140   let resp$(1)=ecp_filename$
 76160   ! let fnlbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
-76180   let fncmdset(2)
-76200   let fnacs(sn$,0,mat resp$,ckey)
+76180   fncmdset(2)
+76200   fnacs(sn$,0,mat resp$,ckey)
 76220   if ckey=5 then goto EI_XIT
 76240   let ecp_filename$=resp$(1)
 76260   ! 
-76280   let fn_ei_backup(ecp_filename$)
+76280   fn_ei_backup(ecp_filename$)
 76300   open #h_csv:=fngethandle: "Name="&env$('at')&br_filename$(ecp_filename$),display,input ioerr EI_SCREEN1
 76320   let ecp_filename$=os_filename$(file$(h_csv))
-76340   let fnureg_write('Collections CSV Import Filename',ecp_filename$)
+76340   fnureg_write('Collections CSV Import Filename',ecp_filename$)
 76360   let type=fn_csv_type(h_csv)
 76380   csv_import_in_process=1
 76400   if type=1 then 
-76420     let fn_ecp_import(h_csv)
+76420     fn_ecp_import(h_csv)
 76440   else if type=2 then 
 76460   ! r: import stardardized CSV (column headers enums already identified in fn_csv_type)
 76480     dim csv_line$*512
@@ -1058,7 +1058,7 @@
 76740         else 
 76760           let trans_type=3 ! regular collection
 76780         end if 
-76800         let fn_add_trans(csv_item$(csv_account),trans_date_mmddyy,trans_type,trans_amount)
+76800         fn_add_trans(csv_item$(csv_account),trans_date_mmddyy,trans_type,trans_amount)
 76820       end if 
 76840     loop 
 76860   CSV_FINIS: ! 
@@ -1074,7 +1074,7 @@
 77060     let ml$(7)=tab$&tab$&'("Pmt Type" is acceptable also.)'
 77080     let ml$(8)="Negative amounts will be entered as Debit Memos."
 77100     let ml$(9)="Tab or Comma delimiters are allowed."
-77120     let fnmsgbox(mat ml$, response$, '',64)
+77120     fnmsgbox(mat ml$, response$, '',64)
 77140   end if 
 77160   close #h_csv: ioerr ignore
 77180   csv_import_in_process=0
@@ -1119,7 +1119,7 @@
 78740     ct_return=2
 78760   end if 
 78780   CT_FINIS: ! 
-78800   let fn_csv_type=ct_return
+78800   fn_csv_type=ct_return
 78820 fnend 
 80000 def fn_remove_quote_encap_commas$*512(rqec_line$*512)
 80020   for rqec_char=1 to len(rqec_line$)
@@ -1131,7 +1131,7 @@
 80140       if rqec_inside_quote then let rqec_line$(rqec_char:rqec_char)=';' ! replace the quote with a semi-colon.
 80160     end if 
 80180   next rqec_char
-80200   let fn_remove_quote_encap_commas$=rqec_line$
+80200   fn_remove_quote_encap_commas$=rqec_line$
 80220 fnend 
 82000 def fn_ecp_import(h_ecp)
 82010   dim ecp_filename$*256
@@ -1141,7 +1141,7 @@
 82050     mat ml$(2)
 82060     let ml$(1)="You must purchase the ACS Utility Billing External Collections Processing"
 82070     let ml$(2)="module to import this type of CSV."
-82080     let fnmsgbox(mat ml$, response$, '',64)
+82080     fnmsgbox(mat ml$, response$, '',64)
 82090     goto EI_XIT
 82100   end if 
 82120   restore #h_ecp: 
@@ -1162,7 +1162,7 @@
 82420     else 
 82430       let trans_type=3 ! regular collection
 82440     end if 
-82460     let fn_add_trans(ei_item$(ei_item_account),trans_date_mmddyy,trans_type,trans_amount)
+82460     fn_add_trans(ei_item$(ei_item_account),trans_date_mmddyy,trans_type,trans_amount)
 82470   loop 
 82480   ! /r
 82490   EI_FINIS: ! 
@@ -1171,7 +1171,7 @@
 82520 fnend 
 83000 def fn_ei_backup(ecp_filename$*256)
 83020   if exists(ecp_filename$) then 
-83040     let fnCopy(ecp_filename$,fnreport_cache_folder_current$&'\Electronic Collections Imported - '&date$('ccyy-mm-dd')&' '&fnsafe_filename$(time$)&'.csv')
+83040     fnCopy(ecp_filename$,fnreport_cache_folder_current$&'\Electronic Collections Imported - '&date$('ccyy-mm-dd')&' '&fnsafe_filename$(time$)&'.csv')
 83060   end if  ! exists UBmstr\readings.[bk$]
 83080 fnend 
 84000 def fn_add_trans(at_customer$*10,at_date_mmddyy,at_trans_type,at_amount)
@@ -1281,7 +1281,7 @@
 86000   let ml$(4)=tab$&'Date:'&tab$&date$(days(at_date_mmddyy,'mmddyy'),'mm/dd/ccyy') ! this date is not formatting on the screen properlly
 86020   let ml$(5)=tab$&'Type:'&tab$&str$(at_trans_type)
 86040   let ml$(6)=tab$&'Amount:'&tab$&str$(at_amount)
-86060   let fnmsgbox(mat ml$,resp$,'',0)
+86060   fnmsgbox(mat ml$,resp$,'',0)
 86080   AT_FINIS: ! 
 86490 fnend
 87000 def fn_oSub1(coll_type_option$) ! returns appropriate transType based on coll_type_option$ 

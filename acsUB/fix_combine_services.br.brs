@@ -6,7 +6,7 @@
 24100   ! all breakdown amounts in service_from will be zeroed out and ADDED into service_to
 24120   service_from=5
 24140   service_to=10
-24160   let fncno(cno)
+24160   fncno(cno)
 30000   ! r: customer file
 30020     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&str$(cno)&",SHR",internal,outin,keyed 
 30040     dim z$*10,charge(10)

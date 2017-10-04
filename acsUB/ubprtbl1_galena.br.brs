@@ -2,15 +2,15 @@
 10010 ! pr bills (new format)
 10020 ! ______________________________________________________________________
 10030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_txt,fnpa_newpage
-10040   let fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
+10040   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 10050   on error goto ERTN
 10060 ! ______________________________________________________________________
 10070   dim resp$(10)*80,txt$*40,mg$(3)*30,rw(22,13),cap$*128
 10080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11)
 10090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40
 10100 ! ______________________________________________________________________
-10110   let fncno(cno,cnam$)
-10120   let fnd1(d1)
+10110   fncno(cno,cnam$)
+10120   fnd1(d1)
 10130   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
 10140   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 10150   close #21: 
@@ -31,40 +31,40 @@
 10300 ! ______________________________________________________________________
 10310 SCREEN1: ! 
 10320   a$="" : let prtbkno=0
-10330   let fntos(sn$="UBPrtBl1-1")
+10330   fntos(sn$="UBPrtBl1-1")
 10340   let pf=26 : let ll=24 : let respc=0
 10350 ! Let FNLBL(1,1,"Service From:",LL,1)
-10360 !  Let FNTXT(1,PF,8,8,1,"1",0,TT$)
+10360 !  fnTXT(1,PF,8,8,1,"1",0,TT$)
 10370 !  Let RESP$(RESPC+=1)=CNVRT$("pic(zzzzzz)",D2)
 10380 ! Let FNLBL(2,1,"Service To:",LL,1)
-10390 !  Let FNTXT(2,PF,8,8,1,"1")
+10390 !  fnTXT(2,PF,8,8,1,"1")
 10400 !  Let RESP$(RESPC+=1)=CNVRT$("pic(zzzzzz)",D3)
-10410   let fnlbl(1,1,"Penalty Due Date:",ll,1)
-10420   let fntxt(1,pf,8,8,1,"1",0,tt$)
+10410   fnlbl(1,1,"Penalty Due Date:",ll,1)
+10420   fntxt(1,pf,8,8,1,"1",0,tt$)
 10430   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
-10440   let fnlbl(2,1,"Meter Read:",ll,1)
-10450   let fntxt(2,pf,8,8,1,"1",0,tt$)
+10440   fnlbl(2,1,"Meter Read:",ll,1)
+10450   fntxt(2,pf,8,8,1,"1",0,tt$)
 10460   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3)
-10470   let fnlbl(4,1,"Message on Bill:",ll,1)
-10480   let fntxt(4,pf,30,30)
+10470   fnlbl(4,1,"Message on Bill:",ll,1)
+10480   fntxt(4,pf,30,30)
 10490   let resp$(respc+=1)=mg$(1)
-10500   let fntxt(5,pf,30,30)
+10500   fntxt(5,pf,30,30)
 10510   let resp$(respc+=1)=mg$(2)
-10520   let fntxt(6,pf,30,30)
+10520   fntxt(6,pf,30,30)
 10530   let resp$(respc+=1)=mg$(3)
-10540   let fnlbl(7,1,"Date of Billing:",ll,1)
-10550   let fntxt(7,pf,8,8,1,"1")
+10540   fnlbl(7,1,"Date of Billing:",ll,1)
+10550   fntxt(7,pf,8,8,1,"1")
 10560   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
-10570   let fnlbl(8,1,"Starting Route/Sequence:",ll,1)
-10580   let fncombof("ubm-act-nam",8,pf,40,env$('Q')&"\UBmstr\Customer.h"&str$(cno),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&str$(cno),2)
+10570   fnlbl(8,1,"Starting Route/Sequence:",ll,1)
+10580   fncombof("ubm-act-nam",8,pf,40,env$('Q')&"\UBmstr\Customer.h"&str$(cno),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&str$(cno),2)
 10590   let resp$(respc+=1)="[All]"
-10600   let fnlbl(9,1,"Route Number:",ll,1)
-10610   let fncmbrt2(9,pf)
+10600   fnlbl(9,1,"Route Number:",ll,1)
+10610   fncmbrt2(9,pf)
 10620   let resp$(respc+=1)="[All]"
-10630   let fnchk(10,pf,"Select Accounts to Print",1)
+10630   fnchk(10,pf,"Select Accounts to Print",1)
 10640   let resp$(respc+=1)="False"
-10650   let fncmdset(3)
-10660   let fnacs(sn$,0,mat resp$,ck)
+10650   fncmdset(3)
+10660   fnacs(sn$,0,mat resp$,ck)
 10670   if ck=5 then goto ENDSCR
 10680   let d1=val(resp$(6))
 10690   let d3=val(resp$(2))
@@ -93,7 +93,7 @@
 10920   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 10930 ! ______________________________________________________________________
 10940   open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-10950   let fnPa_open("Landscape")
+10950   fnPa_open("Landscape")
 10970 ! ______________________________________________________________________
 10980 ! IF SL1=0 THEN GOSUB SORT1
 10990 L570: if sl1=1 then goto SCREEN3
@@ -143,7 +143,7 @@
 11430 L950: ! 
 11440   let pb=bal-g(11)
 11450 ! ______________print bill routine______________________________________
-11460   let fn_vbprint
+11460   fn_vbprint
 11470 ! _____________end of pr routine______________________________________
 11480   bct(2)=bct(2)+1
 11490 ! accumulate totals
@@ -151,20 +151,20 @@
 11510 ! ______________________________________________________________________
 11520 SCREEN3: ! 
 11530   let sn$="UBPrtBl1-2"
-11540   let fntos(sn$)
+11540   fntos(sn$)
 11550   let txt$="Account (blank to stop)"
-11560   let fnlbl(1,1,txt$,31,1)
+11560   fnlbl(1,1,txt$,31,1)
 11570   if trim$(a$)="" then goto L1070 else goto L1080
 11580 L1070: if z$<>"" then 
 11590     let txt$="Last Account entered was "&z$
-11600     let fnlbl(3,1,txt$,44,1)
+11600     fnlbl(3,1,txt$,44,1)
 11610   else 
 11620     let txt$=""
-11630     let fnlbl(3,1,txt$,44,1)
+11630     fnlbl(3,1,txt$,44,1)
 11640   end if 
 11650 L1080: let fncmbact(1,17) ! 
 11660   let resp$(1)=a$
-11670   let fncmdset(11): let fnacs(sn$,0,mat resp$,ck)
+11670   fncmdset(11): let fnacs(sn$,0,mat resp$,ck)
 11680   if ck=5 then goto F5_CANCEL
 11690   a$=lpad$(trim$(resp$(1)(1:10)),10)
 11700   if trim$(a$)="" then goto F5_CANCEL
@@ -201,14 +201,14 @@
 12010 ! ______________________________________________________________________
 12020 ENDSCR: ! pr totals screen
 12030   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
-12040   let fntos(sn$="Bills-Total")
+12040   fntos(sn$="Bills-Total")
 12050   let mylen=23 : let mypos=mylen+2
 12060   let respc=0
-12070   let fnlbl(1,1,"Total Bills Printed:",mylen,1)
-12080   let fntxt(1,mypos,8,0,1,"",1)
+12070   fnlbl(1,1,"Total Bills Printed:",mylen,1)
+12080   fntxt(1,mypos,8,0,1,"",1)
 12090   let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-12120   let fncmdset(52)
-12130   let fnacs(sn$,0,mat resp$,ck)
+12120   fncmdset(52)
+12130   fnacs(sn$,0,mat resp$,ck)
 12140 XIT: let fnxit
 12150 ! ______________________________________________________________________
 12160 ERTN: let fnerror(program$,err,line,act$,"xit")
@@ -234,8 +234,8 @@
 12360     pr #20: 'Call Print.MyFontSize(10)'
 12370     pr #20: 'Call Print.MyFontBold(False)'
 12380     pr #20: 'Call Print.MyFontColor("Black")'
-12390     let fnpa_txt('#'&trim$(z$),xmargin,lyne*6+ymargin)
-12400     let fnpa_txt(e$(1),xmargin+26,lyne*6+ymargin)
+12390     fnpa_txt('#'&trim$(z$),xmargin,lyne*6+ymargin)
+12400     fnpa_txt(e$(1),xmargin+26,lyne*6+ymargin)
 12410 ! pr #20: 'Call Print.AddText("Billing Date: ",'&str$(xmargin+2)&','&str$(lyne*11+ymargin)&')'
 12420 ! pr #20: 'Call Print.AddText("'&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&'",'&str$(xmargin+30)&','&str$(lyne*11+ymargin)&')'
 12430 ! pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*12+1+ymargin)&','&str$(linelength)&',0)'
@@ -315,23 +315,23 @@
 13200     pr #20: 'Call Print.AddText("Please return this side with",'&str$(xmargin+75)&','&str$(lyne*6+ymargin)&')'
 13210     pr #20: 'Call Print.AddText("payment to:  '&cnam$&'",'&str$(xmargin+75)&','&str$(lyne*7+ymargin)&')'
 13220     addy=9
-13230     let fnpa_txt(e$(2),xmargin+75,lyne*(addy+=1)+ymargin)
-13240     let fnpa_txt(e$(3),xmargin+75,lyne*(addy+=1)+ymargin)
-13250     let fnpa_txt(e$(4),xmargin+75,lyne*(addy+=1)+ymargin)
-13260     let fnpa_txt(mg$(1),xmargin+75,lyne*(addy+=2)+ymargin)
-13270     let fnpa_txt(mg$(2),xmargin+75,lyne*(addy+=1)+ymargin)
-13280     let fnpa_txt(mg$(3),xmargin+75,lyne*(addy+=1)+ymargin)
+13230     fnpa_txt(e$(2),xmargin+75,lyne*(addy+=1)+ymargin)
+13240     fnpa_txt(e$(3),xmargin+75,lyne*(addy+=1)+ymargin)
+13250     fnpa_txt(e$(4),xmargin+75,lyne*(addy+=1)+ymargin)
+13260     fnpa_txt(mg$(1),xmargin+75,lyne*(addy+=2)+ymargin)
+13270     fnpa_txt(mg$(2),xmargin+75,lyne*(addy+=1)+ymargin)
+13280     fnpa_txt(mg$(3),xmargin+75,lyne*(addy+=1)+ymargin)
 13290     pr #20: 'Call Print.MyFontSize(9)'
-13300     let fnpa_txt(z$,xmargin+80,lyne*(addy+=5)+ymargin)
-13320     let fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),xmargin+107,lyne*addy+ymargin)
-13330     let fnpa_txt(fnformnumb$(bal,2,9),xmargin+75,lyne*(addy+=8.5)+ymargin)
+13300     fnpa_txt(z$,xmargin+80,lyne*(addy+=5)+ymargin)
+13320     fnpa_txt(cnvrt$("PIC(ZZ/ZZ/ZZ)",d4),xmargin+107,lyne*addy+ymargin)
+13330     fnpa_txt(fnformnumb$(bal,2,9),xmargin+75,lyne*(addy+=8.5)+ymargin)
 13340     if bal>0 then 
-13350       let fnpa_txt(fnformnumb$(bal+g(10),2,9),xmargin+106,lyne*addy+ymargin)
+13350       fnpa_txt(fnformnumb$(bal+g(10),2,9),xmargin+106,lyne*addy+ymargin)
 13360     else 
-13370       let fnpa_txt(fnformnumb$(bal,2,9),xmargin+106,lyne*addy+ymargin)
+13370       fnpa_txt(fnformnumb$(bal,2,9),xmargin+106,lyne*addy+ymargin)
 13380     end if 
 13390     if checkcounter=0 then 
-13400       let fnpa_newpage
+13400       fnpa_newpage
 13410     end if 
 13420   fnend 
 13430 ! ______________________________________________________________________

@@ -2,10 +2,10 @@
 00022   on error goto L530
 00030 ! 
 00040   library 'S:\Core\Library': fntop,fncno,fnxit,fnopenprn,fncloseprn
-00044   let fntop(program$,cap$="Client Listing")
-00046   let fncno(cno,cnam$)
+00044   fntop(program$,cap$="Client Listing")
+00046   fncno(cno,cnam$)
 00060   form pos 1,n 2,c 40,c 20,pos 83,n 6,pos 89,2*n 1
-00070   let fnopenprn
+00070   fnopenprn
 00100   dim z$*5,a$*30,cnam$*40,prg$*20,app(20),ma(20),a3$*30
 00110   let namtab=42-int(len(rtrm$(cnam$))/2)
 00120   pr newpage

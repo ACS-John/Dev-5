@@ -2,7 +2,7 @@
 00020 ! Select Automatic Processing Programs
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3b,fncno,fnfkey,fnoldmsgbox,fnxit,fnconsole
-00050   let fntop("S:\acsPR\SelAuto",cap$="Select Automatic Processing Programs")
+00050   fntop("S:\acsPR\SelAuto",cap$="Select Automatic Processing Programs")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim m$(100)*80,pgm$(100)*22,pgm(100)
@@ -12,8 +12,8 @@
 00120   dim cap$*128,fkey$(12)*20,temp$(20)*80
 00130 ! ______________________________________________________________________
 00140   cap$="Select Automatic Processing Programs"
-00150   let fncno(cno,cnam$)
-00155   let fnconsole(1)
+00150   fncno(cno,cnam$)
+00155   fnconsole(1)
 00160 ! ______________________________________________________________________
 00170   data "    pr Payroll Worksheet","S:\acsPR\PRWKSHT"
 00180   data "    Employee Proof List","S:\acsPR\PRPROOF"
@@ -70,7 +70,7 @@
 00690 L690: open #prpgmn=1: "Name=sa"&wsid$&".tmp,Use,RecL=58",internal,outin,relative 
 00700 ! ______________________________________________________________________
 00710 MENU1: ! 
-00720   let fnwin3b(win=101,cap$,21,75,0,4)
+00720   fnwin3b(win=101,cap$,21,75,0,4)
 00730   pr #win,fields "1,1,C 75,R,N": "Line   Program                              Weekly    Monthly  Quarterly"
 00740   for l1=1 to 20
 00750     let io1$(l1)=str$(l1+1)&",3,C 71,N"
@@ -89,7 +89,7 @@
 00860 XIT: ! 
 00870   close #prpgmn: ioerr L880
 00880 L880: if exists('sa'&wsid$&'.tmp') then execute 'Free sa'&wsid$&'.tmp'
-00890   let fnxit
+00890   fnxit
 00900 ! ______________________________________________________________________
 00910 PRINT_LINE_L1: ! 
 00920   pr #win,fields str$(l1+1)&",3,N 2,N": l1 !:
@@ -104,10 +104,10 @@
 01000 ! ______________________________________________________________________
 01010 CHANGE_PROGRAM: ! 
 01020   let j1=j3=0 : mat sd$(20)
-01030   let fnwin3b(win=102,cap$,22,38,0,0) !:
+01030   fnwin3b(win=102,cap$,22,38,0,0) !:
         pr #win: newpage
 01040   mat fkey$=("") : let fkey$(1)="Next" : let fkey$(2)="Top" !:
-        let fnfkey(24,mat fkey$,mat disfk,empty$,es=0)
+        fnfkey(24,mat fkey$,mat disfk,empty$,es=0)
 01050   for j=1 to udim(m$)
 01060     if pos(pgm$(j),"\",1)=0 then goto L1210
 01070     let pgm(j1+=1)=j : let sf$(j1)=str$(j1+1)&",2,C 35,N"
@@ -136,7 +136,7 @@
 01280 L1280: goto ASK_LINE_DATA
 01290 ! ______________________________________________________________________
 01300 ASK_LINE_DATA: ! 
-01310   let fnwin3b(win=103,cap$,7,55,0,0)
+01310   fnwin3b(win=103,cap$,7,55,0,0)
 01320   pr #win,fields "2,2,Cr 12,N": "Line Number:" !:
         pr #win,fields "2,15,N 2,N": l1
 01330   pr #win,fields "3,2,Cr 12,N": "Program:" !:
@@ -148,7 +148,7 @@
 01350   mat fkey$=("") !:
         let fkey$(1)="Save" : let fkey$(4)="Delete" : let fkey$(5)="Cancel" !:
         let fkey$(7)="Change Program" !:
-        let fnfkey(16,mat fkey$,mat disfk,em$="",es=0)
+        fnfkey(16,mat fkey$,mat disfk,em$="",es=0)
 01360   if wk(l1)=1 then let temp_wk$="Y" else let temp_wk$="N"
 01370   if mo(l1)=1 then let temp_mo$="Y" else let temp_mo$="N"
 01380   if qt(l1)=1 then let temp_qt$="Y" else let temp_qt$="N"

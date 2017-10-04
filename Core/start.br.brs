@@ -46,22 +46,22 @@
 04400       end if
 04420     end if
 04440     if env$('BR_MODEL')='CLIENT/SERVER' then
-04460      execute 'config shell default client'
-04480      setenv('at','@:') 
-04490      fn_startStatus('Collecting local environment variables...')
-04500      fncs_env
-04510      if env$('client_acsDeveloper')<>'' then let setenv('acsDeveloper',env$('client_acsDeveloper'))
-04520      setenv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
-04540      setenv('userprofile','@::'&env$('client_userprofile'))
-04560    else
-04580      setenv('local_program_dir',os_filename$('S:'))
-04600      setenv('at','')
+04460       execute 'config shell default client'
+04480       setenv('at','@:') 
+04490       fn_startStatus('Collecting local environment variables...')
+04500       fncs_env
+04510       if env$('client_acsDeveloper')<>'' then let setenv('acsDeveloper',env$('client_acsDeveloper'))
+04520       setenv('local_program_dir','@:'&env$("CLIENT_BR")(1:pos(env$("CLIENT_BR"),'\',-1)-1))
+04540       setenv('userprofile','@::'&env$('client_userprofile'))
+04560     else
+04580       setenv('local_program_dir',os_filename$('S:'))
+04600       setenv('at','')
 04620     end if
-04640   !
+04640     !
 04660     if env$('acsDeveloper')<>'' then 
 04680       execute 'config substitute [ScreenIO_ScreenFldDrive] S:'
 04700     end if
-04720   !
+04720     !
 04740     execute "load S:\Core\Menu.br,Resident" error ignore ! hopefully will decrease the amount of time it takes to load the menu between programs
 04900     execute "load S:\Core\Library.br,Resident" error ignore
 05000     !  fails on windows XP  !  execute "load S:\Core\Start.br,Resident"
@@ -147,7 +147,8 @@
 14140     fn_AcsUserId_Initialize ! called to initialize env$('acsUserId')
 14160     fnapply_theme ! ( disableConScreenOpenDflt)
 14180     if ~fn_multisession_test then goto XIT
-14200     setenv('path_to_7z_exe','"'&os_filename$(env$('local_program_dir')&'\Core\Programs\7zip-'&env$('client_platform.os_bits')&'bit\7z.exe')&'"')
+14200     ! setenv('path_to_7z_exe','"'&os_filename$(env$('local_program_dir')&'\Core\Programs\7zip-'&env$('client_platform.os_bits')&'bit\7z.exe')&'"')
+14202     setenv('path_to_7z_exe','"'&os_filename$('S:\Core\Programs\7zip-'&env$('server_platform.os_bits')&'bit\7z.exe')&'"')
 15000     version_prior$=fn_last_version_used$ 
 15020     version_current$=fnacs_version$       
 15030     setenv('acsVersion',version_current$)

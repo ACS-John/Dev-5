@@ -10,17 +10,17 @@
 00110   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00115   dim resp$(80)*50
 00120 ! ______________________________________________________________________
-00130   let fntop(program$,cap$="Fund Comparison Balance Sheet")
-00140   let fncno(cno,cnam$)
+00130   fntop(program$,cap$="Fund Comparison Balance Sheet")
+00140   fncno(cno,cnam$)
 00150   let udf$=env$('temp')&'\'
 00155   actpd$=fnactpd$ !:
         actpd=fnactpd !:
-        let fnfscode !:
-        let fnpriorcd
+        fnfscode !:
+        fnpriorcd
 00160   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00165   let fnfscode !:
-        let fnpriorcd
+00165   fnfscode !:
+        fnpriorcd
 00170   let pors=1
 00180   if fnprocess=0 then gosub L2010
 00190   let mp1=63 : if fnps=2 then let mp1=mp1+3
@@ -213,9 +213,9 @@
 01960   if pors=2 then goto XIT else goto DONE
 01970 XIT: let fnxit
 01980 DONE: ! 
-01982   let fnfscode(actpd)
-01983   let fnpriorcd(1)
-01984   let fncloseprn
+01982   fnfscode(actpd)
+01983   fnpriorcd(1)
+01984   fncloseprn
 01990   goto XIT
 02000 ! ______________________________________________________________________
 02010 L2010: pr newpage ! determine fund #s
@@ -228,16 +228,16 @@
 02070 L2070: form pos 1,10*n 3,10*c 20
 02080 L2080: let fntos(sn$="ACglcasf3") !:
         let mylen=1: let mypos=mylen+3
-02090   let fnlbl(1,4,"Fund                 Description ")
+02090   fnlbl(1,4,"Fund                 Description ")
 02100   for j=1 to 10
-02110     let fntxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") !:
+02110     fntxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") !:
           let resp$(j*2-1)=str$(fundnum(j))
-02120     let fntxt(j+1,mypos+10,20,0,0,"",0,"Enter the fund description.") !:
+02120     fntxt(j+1,mypos+10,20,0,0,"",0,"Enter the fund description.") !:
           let resp$(j*2)=funddesc$(j)
 02130   next j
-02140   let fncmdkey("&Next",1,1,0,"Continues with financial statement.")
-02150   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-02160   let fnacs(sn$,0,mat resp$,ckey)
+02140   fncmdkey("&Next",1,1,0,"Continues with financial statement.")
+02150   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+02160   fnacs(sn$,0,mat resp$,ckey)
 02170   if ckey=5 then goto XIT
 02180   for j=1 to 10
 02190     let fundnum(j)=val(resp$(j*2-1))

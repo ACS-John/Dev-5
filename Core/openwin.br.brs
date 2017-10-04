@@ -9,7 +9,7 @@
 00080     library 'S:\Core\Library': fncno,fnerror
 00090     on error goto ERTN
 00100 ! ______________________________________________________________________
-00110     let fncno(cno,cnam$)
+00110     fncno(cno,cnam$)
 00120     if sr<1 then let sr=10
 00130     if sc<1 then let sc=20
 00140     if er<1 then let er=14

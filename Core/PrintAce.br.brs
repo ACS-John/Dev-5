@@ -18,13 +18,13 @@
 12340     library 'S:\Core\PrintPdf': fnpdf_pic
 12360     library 'S:\Core\PrintPdf': fnpdf_fontsize
 12380     library 'S:\Core\PrintPdf': fnpdf_background
-12400     let fnreg_read('Report_Cache',report_cache$)
+12400     fnreg_read('Report_Cache',report_cache$)
 12420     if report_cache$='True' then let print_report_caching=1 else let print_report_caching=0
-12440     let fnreg_read('PrintAce.Max Pages',max_pages$)
-12460     let fnreg_read('formsFormat',formsFormat$)
+12440     fnreg_read('PrintAce.Max Pages',max_pages$)
+12460     fnreg_read('formsFormat',formsFormat$)
 12480     let g_pa_max_pages=val(max_pages$) conv ignore
 12500   end if 
-12520   let fn_pa_setup=pa_setup
+12520   fn_pa_setup=pa_setup
 12540 XIT: ! 
 12560 fnend  ! fn_pa_setup
 16000 IGNORE: continue 
@@ -36,11 +36,11 @@
 16120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 16140 ! </updateable region: ertn>
 18000 def library fnpa_finis(; h_printace)
-18020   let fn_pa_setup
+18020   fn_pa_setup
 18040   if formsFormat$="PDF" then
 18060     fnpa_finis=fnpdf_Close
 18080   else
-18100     let fnpa_finis=fn_pa_finis( h_printace,1)
+18100     fnpa_finis=fn_pa_finis( h_printace,1)
 18120     !   fnstatus_pause
 18140     !   fnstatus_close
 18160   end if
@@ -52,8 +52,8 @@
 18280 fnend 
 22000 def fn_pa_finis(; h_printace, pf_final_batch)
 22010   !   fnstatus('pf_final_batch='&str$(pf_final_batch))
-22020   let fnstatus('Sending PrintAce Batch '&str$(g_pa_batch)&' to the printer.')
-22030   let fnstatus('When the messagebox (labeled Print) says "Sending to Printer" click "Okay" to continue.')
+22020   fnstatus('Sending PrintAce Batch '&str$(g_pa_batch)&' to the printer.')
+22030   fnstatus('When the messagebox (labeled Print) says "Sending to Printer" click "Okay" to continue.')
 22040   dim pa_filename$*256
 22060   if h_printace=0 then let h_printace=20
 22080   pr #h_printace: "Print.EndDoc" ioerr ignore
@@ -63,7 +63,7 @@
 22160   if pa_filename$<>'' then 
 22180     if pf_final_batch then 
 22200       execute 'System -W -C "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(pa_filename$)
-22210       let fnstatus_close
+22210       fnstatus_close
 22220     else 
 22240       execute 'System -W "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(pa_filename$)
 22260     end if 
@@ -71,7 +71,7 @@
 22300   let pa_filename$=''
 22320 fnend 
 24000 def library fnpa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$)
-24020   let fn_pa_setup
+24020   fn_pa_setup
 24040   if formsFormatForce$<>'' then
 24060     formsFormatPrior$=formsFormat$
 24080     formsFormat$=formsFormatForce$
@@ -81,20 +81,20 @@
 24160   else
 24180     ! fnstatus('fnpa_open')
 24200     let g_pa_batch=0
-24220     let fnpa_open=fn_pa_open( pa_orientation$,pa_sendto_base_name_addition$)
+24220     fnpa_open=fn_pa_open( pa_orientation$,pa_sendto_base_name_addition$)
 24240   end if
 24250   setenv('FormsFormatCurrent',formsFormat$)
 24260 fnend 
 26000 def fn_pa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$)
 26040   let g_pa_batch+=1
-26060   let fnstatus('Iniating a PrintAce Batch '&str$(g_pa_batch))
+26060   fnstatus('Iniating a PrintAce Batch '&str$(g_pa_batch))
 26070   if g_pa_max_pages then let fnstatus('     (up to '&str$(g_pa_max_pages)&' pages per batch)')
 26080   let h_printace=20
 26100   if file(h_printace)=-1 then 
 26120     dim pa_o_filename$*1024
 26140     if print_report_caching then 
 26160       let pa_o_filename$=fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
-26170       let fnstatus('  Report Cache Name: '&pa_o_filename$)
+26170       fnstatus('  Report Cache Name: '&pa_o_filename$)
 26180     else 
 26200       let pa_o_filename$=env$('temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
 26220     end if 
@@ -111,7 +111,7 @@
 26480   end if 
 26500 fnend 
 27000 def library fnpa_background(background_pdf$*256)
-27020   let fn_pa_setup
+27020   fn_pa_setup
 27040   if formsFormat$="PDF" then
 27060     fnpdf_background(background_pdf$)
 27080   else
@@ -121,7 +121,7 @@
 27160 fnend
 28000 def library fnpa_newpage(;h_printace)
 28010   ! fnstatus('fnpa_newpage    g_pa_pagecount='&str$(g_pa_pagecount))
-28020   let fn_pa_setup
+28020   fn_pa_setup
 28022   if formsFormat$="PDF" then
 28024     fnpa_newpage=fnpdf_Newpage
 28026   else
@@ -131,9 +131,9 @@
 28100     else ! if g_pa_max_pages<>0 then
 28120       let g_pa_pagecount+=1
 28140       if g_pa_pagecount>g_pa_max_pages then 
-28150         let fnstatus('Maximum number of pages ('&str$(g_pa_max_pages)&') reached.')
-28180         let fn_pa_finis( h_printace,0)
-28200         let fn_pa_open( g_pa_handle, g_pa_orientation$, '') ! do not pass g_pa_filename$ or it will not set it again and the new batch number will not append
+28150         fnstatus('Maximum number of pages ('&str$(g_pa_max_pages)&') reached.')
+28180         fn_pa_finis( h_printace,0)
+28200         fn_pa_open( g_pa_handle, g_pa_orientation$, '') ! do not pass g_pa_filename$ or it will not set it again and the new batch number will not append
 28220       else 
 28240         pr #h_printace: 'Call Print.NewPage'
 28260       end if 
@@ -143,7 +143,7 @@
 32000 def library fnpa_line(pl_left_pos,pl_top_pos,pl_width; pl_height, pl_box_instead_of_line,h_printace)
 32020   ! pl_box_instead_of_line=0 means it's a box
 32040   ! pl_box_instead_of_line=1 means it's a line ! same as True
-32060   let fn_pa_setup
+32060   fn_pa_setup
 32080   if formsFormat$="PDF" then
 32100     if pl_width=0 then
 32120       pl_return=fnpdf_linev(pl_left_pos,pl_top_pos,pl_height)
@@ -169,7 +169,7 @@
 32520   fnpa_line=pl_return
 32540 fnend  ! fnpa_line
 34000 def library fnpa_txt(pt_text$*128,pt_x; pt_y,h_printace)
-34020   let fn_pa_setup
+34020   fn_pa_setup
 34040   if formsFormat$="PDF" then
 34060     fnpa_txt=fnpdf_text(pt_text$,pt_x, pt_y)
 34080   else
@@ -181,7 +181,7 @@
 34200   end if
 34220 fnend  ! fnpa_txt
 36000 def library fnpa_text(h_printace,pt_text$*128,pt_x,pt_y) ! older - demands handle as first parameter - try fnpa_txt for cleaner code
-36020   let fn_pa_setup
+36020   fn_pa_setup
 36022   if formsFormat$="PDF" then
 36024     fnpa_text=fnpdf_text(pt_text$,pt_x, pt_y)
 36026   else
@@ -193,7 +193,7 @@
 36130   end if
 36140 fnend  ! fnpa_text
 38000 def library fnpa_elipse(pe_a,pe_b,pe_c,pe_d; h_printace)
-38020   let fn_pa_setup
+38020   fn_pa_setup
 38022   if formsFormat$="PDF" then
 38024     pr 'add PDF elipse here'
 38025     if debug_pdf then pause
@@ -203,7 +203,7 @@
 38070   end if
 38080 fnend 
 39000 def library fnpa_pic(pp_pic$*1024,pp_x,pp_y; imgWidth,imgHeight,style$)
-39020   let fn_pa_setup
+39020   fn_pa_setup
 39040   if formsFormat$="PDF" then
 39060     if imgHeight=0 or imgWidth=0 then
 39080       if pp_x=1 and pp_y=1 then
@@ -223,7 +223,7 @@
 39360   end if
 39380 fnend 
 40000 def library fnpa_font(; pf_fontname$*256,h_printace)
-40020   let fn_pa_setup
+40020   fn_pa_setup
 40040   if formsFormat$="PDF" then
 40060     fnpa_font=fnpdf_font( pf_fontname$)
 40080   else
@@ -233,7 +233,7 @@
 40160   end if
 40180 fnend 
 42000 def library fnpa_fontsize(; pfs_fontsize,h_printace)
-42020   let fn_pa_setup
+42020   fn_pa_setup
 42040   if formsFormat$="PDF" then
 42060     fnpa_fontsize=fnpdf_fontsize( pfs_fontsize)
 42080   else
@@ -243,7 +243,7 @@
 42160   end if
 42180 fnend 
 44000 def library fnpa_fontbold(; pfb_off_or_on)
-44020   let fn_pa_setup
+44020   fn_pa_setup
 44040   if formsFormat$="PDF" then
 44060     fnpa_fontbold=fnpdf_fontbold( pfb_off_or_on)
 44080   else
@@ -254,7 +254,7 @@
 44180   end if
 44200 fnend 
 45000 def library fnpa_fontitalic(; pfi_off_or_on)
-45020   let fn_pa_setup
+45020   fn_pa_setup
 45040   if formsFormat$="PDF" then
 45060     fnpa_fontitalic=fnpdf_fontitalic( pfi_off_or_on)
 45080   else
@@ -267,7 +267,7 @@
 46000 def library fnpa_barcode(pb_a,pb_b,pb_bc$*256; h_printace)
 46020   ! see also:   fnbarcode(barcode$,rightleft,updown)      from S:\Core\barcode
 46040   ! and         fnbarcodewide(barcode$,rightleft,updown)  from S:\Core\barcodewide
-46060   let fn_pa_setup
+46060   fn_pa_setup
 46080   if formsFormat$="PDF" then
 46100     pr 'add pdf fnpa_barcode logic'
 46120     if debug_pdf then pause

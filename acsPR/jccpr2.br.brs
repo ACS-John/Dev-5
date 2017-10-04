@@ -7,15 +7,15 @@
 00070   dim tded(6),tdc(5),cnam$*40,dedcode(10),a2$*70,cap$*128,message$*40
 00080   dim jn1$*6,tr1(9),en1$*8,pl1$(6)*30,pl2$(6)*6,dr(7),hr1(8),hr2(8),ded(6)
 00090 ! ______________________________________________________________________
-00100   let fncno(cno,cnam$)
+00100   fncno(cno,cnam$)
 00110 ! 
 00120   cap$="Certified Payroll Register"
 00130 ! ______________________________________________________________________
 00140   pr newpage
 00150   on fkey 5 goto L1930
 00160   let message$="Printing: please wait..."
-00170   let fnwait(101,cap$,message$,1)
-00180   let fnopenprn(cp,58,220,process)
+00170   fnwait(101,cap$,message$,1)
+00180   fnopenprn(cp,58,220,process)
 00190   if file$(255)(1:3)<>"PRN" then let jbskip=1
 00200 ! ______________________________________________________________________
 00210   let pl2$(1)="FICA"

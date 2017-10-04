@@ -3,10 +3,10 @@
 20040   def library fnub_cnv_note
 20060     library 'S:\Core\Library': fnerror,fncno,fnstatus,fnCopy,fnub_cnv_note_phase_1,fngethandle,fnindex_it
 20080     fnub_cnv_note_phase_1 ! this needs to be done first in case they are on version 1 on note1 and note2 
-20100     let fnstatus('Converting Notes (S:\acsUB\conversion\Note-cnv)')
+20100     fnstatus('Converting Notes (S:\acsUB\conversion\Note-cnv)')
 20120     dim nam$*30,rm$*60,ra(2),z$*10
 20140 ! ______________________________________________________________________
-20160     let fncno(cno)
+20160     fncno(cno)
 20180 ! 
 20200     if exists(env$('Q')&"\UBmstr\Note1.h"&str$(cno)) then
 20220       fnindex_it(env$('Q')&"\UBmstr\Note1.h"&str$(cno), env$('Q')&"\UBmstr\NoteIdx1.h"&str$(cno),"1 10")
@@ -34,7 +34,7 @@
 20660     loop
 20680     ! 
 20700     DONE: ! 
-20720     let fnstatus('Note Conversion of company number '&str$(cno)&" completed successfully")
+20720     fnstatus('Note Conversion of company number '&str$(cno)&" completed successfully")
 20740   end if
 20760 ! Goto 110
 20780 XIT: fnend  ! chain "S:\acsUB\conversion\ubadrbil-cnv"

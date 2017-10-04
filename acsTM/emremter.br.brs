@@ -1,11 +1,11 @@
 00020 ! 
 00030   on error goto L320
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole
-00050   let fntop(program$,cap$="Employee")
-00060   let fncno(cno,cnam$)
+00050   fntop(program$,cap$="Employee")
+00060   fncno(cno,cnam$)
 00070 ! 
 00080 ! 
-00090   let fnconsole(1)
+00090   fnconsole(1)
 00100   dim eno$*9,prg$*20
 00110 L110: pr newpage
 00120   pr fields "8,25,c 30,r,n": "********  WARNING  ********"

@@ -5,22 +5,22 @@
 00080   dim cap$*128
 00090   dim z$*10,e$(4)*30,ba$(4)*30
 00150 ! ______________________________________________________________________
-20000   let fntop(program$,cap$='Fix Use Alternate Billing Address')
-20020   let fncno(cno,cnam$) 
+20000   fntop(program$,cap$='Fix Use Alternate Billing Address')
+20020   fncno(cno,cnam$) 
 20040 ! let fnd1(d1)
 20100 ! ______________________________________________________________________
 30000 ! r: SCREEN1:
-30020   let fntos(sn$="UBPrtBl1-1") 
+30020   fntos(sn$="UBPrtBl1-1") 
 30040   let pf=34 : let ll=32 : width=pf+8
 30060   let respc=0
-30080   let fnlbl(1,1,"Warning:  Continuing will change the Use/Do Not Use flag",width,2)
-30100   let fnlbl(2,1,"on all customer billing addresses. Anyone with a non-blank",width,2)
-30120   let fnlbl(3,1,"billing address will be changed to use that billing address.",width,2)
-30140   let fnlbl(7,1,"Date of Billing (blank for all):",ll,1)
-30160   let fntxt(7,pf,8,8,1,"1") 
+30080   fnlbl(1,1,"Warning:  Continuing will change the Use/Do Not Use flag",width,2)
+30100   fnlbl(2,1,"on all customer billing addresses. Anyone with a non-blank",width,2)
+30120   fnlbl(3,1,"billing address will be changed to use that billing address.",width,2)
+30140   fnlbl(7,1,"Date of Billing (blank for all):",ll,1)
+30160   fntxt(7,pf,8,8,1,"1") 
 30180   let resp$(1)='' ! cnvrt$("pic(zzzzzz)",d1)
-30200   let fncmdset(2) 
-30220   let fnacs(sn$,0,mat resp$,ck)
+30200   fncmdset(2) 
+30220   fnacs(sn$,0,mat resp$,ck)
 30240   if ck=5 then goto XIT
 30260   let d1=val(resp$(1))
 30280 ! /r
@@ -44,14 +44,14 @@
 60000 FINIS: ! r: pr totals screen
 60020   close #hCustomer: ioerr ignore
 60040   close #hAltBillAddr: ioerr ignore
-60060   let fntos(sn$="Bills-Total") 
+60060   fntos(sn$="Bills-Total") 
 60080   let mylen=53 : let mypos=mylen+2 
 60100   let respc=0
-60120   let fnlbl(1,1,"Total Customers Set to use atlernate billing address:",mylen,1)
-60140   let fntxt(1,mypos,8,0,1,"",1) 
+60120   fnlbl(1,1,"Total Customers Set to use atlernate billing address:",mylen,1)
+60140   fntxt(1,mypos,8,0,1,"",1) 
 60160   let resp$(respc+=1)=str$(changeCount)
-60180   let fncmdset(52) 
-60200   let fnacs(sn$,0,mat resp$,ck) ! /r
+60180   fncmdset(52) 
+60200   fnacs(sn$,0,mat resp$,ck) ! /r
 60220 XIT: let fnxit
 60240 ! ______________________________________________________________________
 76020 ! <updateable region: ertn>

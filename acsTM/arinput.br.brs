@@ -1,7 +1,7 @@
 00020   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fnd1,fnsearch
-00030   let fntop(program$,cap$="Collections")
-00040   let fncno(cno,cnam$)
-00050   let fnconsole(1)
+00030   fntop(program$,cap$="Collections")
+00040   fncno(cno,cnam$)
+00050   fnconsole(1)
 00060   dim fl1$(7),flo1$(11),sc3$(5),pt(6),f3$*255,flo3$(6),name$*25
 00070   dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50,cnam$*40
 00080   dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
@@ -189,7 +189,7 @@
 01830 L1830: input fields "10,60,n 1,eu,n": j conv L1830
 01840   on j goto L1850,L2060 none L1830
 01850 L1850: let r=0
-01860   let fnopenprn
+01860   fnopenprn
 01870   pr newpage
 01880   on fkey 5 goto L2040
 01890   pr newpage
@@ -252,7 +252,7 @@
 04840   let numeric_format$='pic($$$,$$$.##)'
 04850   let key_length=5
 04860   let heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"
-04870   let fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
+04870   fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
 04880   let p$=selection$ ! pull key from first field in search line
 04890   ano=0
 04900   ano=val(selection$) conv L4910

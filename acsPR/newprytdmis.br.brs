@@ -12,21 +12,21 @@
 00120   dim e$(10)*12,tpt(32),cap$*128,message$*40,resp$(15)*30
 00130   dim tcp(32),tdc(10),ytdtotal(32),ss$*11
 00140 ! ______________________________________________________________________
-00150   let fntop(program$,cap$="Deductions Register YTD")
-00170   let fnopenprn
+00150   fntop(program$,cap$="Deductions Register YTD")
+00170   fnopenprn
 00180   fnGetPayrollDates(beg_date,end_date)
 00190 ! ______________________________________________________________________
 00200 MENU1: ! 
-00210   let fntos(sn$="prytdmis")
+00210   fntos(sn$="prytdmis")
 00212   let respc=0
-00220   let fnlbl(1,43," ",1,1)
-00230   let fnlbl(1,1,"Beginning Date of Tax Year:",26,1)
-00240   let fntxt(1,30,12,0,0,"3",0,"") 
+00220   fnlbl(1,43," ",1,1)
+00230   fnlbl(1,1,"Beginning Date of Tax Year:",26,1)
+00240   fntxt(1,30,12,0,0,"3",0,"") 
 00242   let resp$(respc+=1)=str$(beg_date)
-00250   let fnlbl(2,1,"Ending Date of Tax Year:",26,1)
-00260   let fntxt(2,30,12,0,0,"3",0,"") 
+00250   fnlbl(2,1,"Ending Date of Tax Year:",26,1)
+00260   fntxt(2,30,12,0,0,"3",0,"") 
 00262   let resp$(respc+=1)=str$(end_date)
-00270   let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+00270   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00280   if ck=5 then goto XIT
 00290   beg_date=val(resp$(1)) ! beginning of year
 00310   let end_date=val(resp$(2)) ! ending day of year
@@ -82,7 +82,7 @@
 00800 L800: pr #255,using L680: t2(11),t2(12),t2(13),t2(14),t2(15),t2(16),t2(17),t2(18),t2(19),t2(20)
 00810 L810: ! ______________________________________________________________________
 00820 DONE: ! 
-00830   let fncloseprn
+00830   fncloseprn
 00840   close #1: ioerr L850
 00850 L850: close #2: ioerr L860
 00860 L860: let fnxit

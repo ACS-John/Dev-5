@@ -32,15 +32,15 @@
 03400     pr #window, fields "10,1,C 7,,B2504;10,18,C 7,,B2505": "OK", "Cancel"
 03500     pr #window, fields "9,1,C 25": "Today: "&date$("d3 m3 dd, ccyy")
 03600     let month=val(_date$(1:2)) : let year=val(_date$(5:8))
-03700     let fngridform(mat headers$,mat widths,mat forms$,days_in_week)
+03700     fngridform(mat headers$,mat widths,mat forms$,days_in_week)
 03800     let gridspec$="2,1,grid "&str$(rows_on_grid+1)&"/27"
 03900     pr #window, fields gridspec$&",headers,/W:#B0C4DE" : (mat headers$,mat widths,mat forms$)
 04000     do 
-04100       let fnprintdays (_date$,window,gridspec$,days_in_week,rows_on_grid)
+04100       fnprintdays (_date$,window,gridspec$,days_in_week,rows_on_grid)
 04200       let usermonth=month
 04300       let useryear=year
 04400       rinput #window, fields gridspec$&",cell,cur;1,3,N 02,AEX/#000066:#FFFFFF;1,10,N 4,AEX/#000066:#FFFFFF": day$, usermonth, useryear
-04500       let fnupdatemonthandyear (usermonth,useryear,month,year,fkey)
+04500       fnupdatemonthandyear (usermonth,useryear,month,year,fkey)
 04600       if fkey=2504 then let fkey(201)
 04700       if fkey=2505 then let fkey(99)
 04800 ! 
@@ -52,7 +52,7 @@
 05400       let _date$=date$(days(val(_date$),'mdcy'),format$)
 05500     end if 
 05600     let fkey(-1) ! reset fkey, so the calling program doesn't start reacting unexpectedly
-05700     let fndate_picker$=_date$
+05700     fndate_picker$=_date$
 05800 DATE_PICKER_COMPLETE: ! 
 05900     if baseyear <= 1900 then execute 'config baseyear '&str$(baseyear)
 06000   fnend 
@@ -113,10 +113,10 @@
 11800     let headers$(7) ="Sat"
 11900   fnend 
 12100   def fndaysinmonth (month,year;___,daysinmonth)
-12200     let fndaysinmonth=date(days(date$(days(date$(str$(year)&lpad$(str$(month),2,"0")&"01"),"CCYYMMDD")+32,"CCYYMM01"),"CCYYMMDD")-1,"DD")
+12200     fndaysinmonth=date(days(date$(days(date$(str$(year)&lpad$(str$(month),2,"0")&"01"),"CCYYMMDD")+32,"CCYYMM01"),"CCYYMMDD")-1,"DD")
 12300   fnend 
 12500   def fndayofweek(_date$,days_in_week) ! 0=sunday,1=monday, etc
-12600     let fndayofweek=mod(days(_date$),days_in_week)
+12600     fndayofweek=mod(days(_date$),days_in_week)
 12700   fnend 
 12900   def fngetfilenumber(;___, index_)
 13000     let index_=1
@@ -128,6 +128,6 @@
 13600         let index_ += 1
 13700       end if 
 13800     loop 
-13900     let fngetfilenumber=filenumber
+13900     fngetfilenumber=filenumber
 14000   fnend 
 14200 IGNORE: continue 

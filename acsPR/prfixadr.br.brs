@@ -6,11 +6,11 @@
 00060 ! ______________________________________________________________________
 00070   dim en$*8,ta(2),cap$*128,message$*40
 00080 ! ______________________________________________________________________
-00090   let fntop("S:\acsPR\prFixAdr",cap$="Reassign Department Addresses")
-00100   let fncno(cno)
+00090   fntop("S:\acsPR\prFixAdr",cap$="Reassign Department Addresses")
+00100   fncno(cno)
 00110 ! 
 00120 ! ___________________________
-00130   let fnwait(101,cap$,message$="Reassigning: please wait...",0)
+00130   fnwait(101,cap$,message$="Reassigning: please wait...",0)
 00140 ! ___________________________
 00150 ! Sort routine
 00160   open #control=1: "Name="&env$('Temp')&"\Control."&session$&",RecL=128,Replace",internal,output 

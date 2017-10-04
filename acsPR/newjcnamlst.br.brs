@@ -7,9 +7,9 @@
 00070   dim dat$*20,jn$*6,n$*40,cn$*11,cnt$*5,k$*25,cap$*128,p$(20)*50,io1$(2)
 00080   dim cnam$*40,message$*40
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\acsPR\NEWjcNamLst",cap$="Name and Number List")
-00110   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00100   fntop("S:\acsPR\NEWjcNamLst",cap$="Name and Number List")
+00110   fncno(cno,cnam$) !:
+        fndat(dat$)
 00120 ! 
 00130 ! ______________________________________________________________________
 00140 ! ______________________________________________________________________
@@ -19,23 +19,23 @@
 00180   if fnprocess=1 then goto L330
 00190 ! ______________________________________________________________________
 00200 MAIN_SCREEN: ! 
-00210   let fntos(sn$="namlst1") !:
+00210   fntos(sn$="namlst1") !:
         let mylen=25 : let mypos=mylen+2: let resp=0: let left=1
-00220   let fnlbl(1,1,"Report Heading Date:",23,left)
-00230   let fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
+00220   fnlbl(1,1,"Report Heading Date:",23,left)
+00230   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
         let resp$(resp+=1)=dat$
-00240   let fnchk(2,mypos,"Print Category Names:",left) !:
+00240   fnchk(2,mypos,"Print Category Names:",left) !:
         let resp$(resp+=1)="False"
-00250   let fncmdset(2)
-00260   let fnacs(sn$,0,mat resp$,ck)
+00250   fncmdset(2)
+00260   fnacs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
 00280   let dat$=resp$(1) ! heading date
 00290   if resp$(2)="True" then let prtcat$="Y" else let prtcat$="N"
 00300   let dattab=60-len(rtrm$(dat$))/2
-00310   let fndat(dat$,2)
+00310   fndat(dat$,2)
 00320 ! ______________________________________________________________________
 00330 L330: on fkey 5 goto L540
-00340   let fnopenprn
+00340   fnopenprn
 00350   gosub HDR
 00360 L360: read #1,using L370: jn$,n$ eof L510
 00370 L370: form pos 1,c 6,c 40
@@ -56,7 +56,7 @@
 00520 L520: close #1: 
 00530   close #2: 
 00540 L540: let fncloseprn
-00550   let fnxit
+00550   fnxit
 00560 ! ______________________________________________________________________
 00570 HDR: ! 
 00580   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$

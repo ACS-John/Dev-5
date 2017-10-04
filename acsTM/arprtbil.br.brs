@@ -3,9 +3,9 @@
 00030   on error goto L2020
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnconsole
 00050   dim p$*5,iv$*12,tr(6),id$*20,o(2),h$*10,ar(5),ta(2),e(5)
-00060   let fntop(program$,cap$="Statements")
-00070   let fncno(cno,cnam$)
-00080   let fnconsole(1)
+00060   fntop(program$,cap$="Statements")
+00070   fncno(cno,cnam$)
+00080   fnconsole(1)
 00110   dim z$*5,e$(4)*30,name$(4)*40,d$*20,flo$(2),scr1$(2)*55
 00120   dim age(4),st1$*5,mo(12)
 00130   data 0,31,59,90,120,151,181,212,243,273,304,334
@@ -36,7 +36,7 @@
 00380   pr fields "10,5,c 53": "ENTER CLIENT NUMBER TO START PRINTING, ELSE ENTER 0"
 00390   input fields "10,60,C 5,UE,N": st1$ conv L370
 00400   pr newpage
-00410   let fnopenprn
+00410   fnopenprn
 00420   pr fields "10,20,c 40,h,n": "STATEMENT pr IN PROCESS"
 00430   pr fields "23,2,C 30,N": "Press F5 to stop"
 00440   if rtrm$(st1$)="0" or rtrm$(st1$)="" then goto L450 else goto L1410
@@ -117,7 +117,7 @@
 01180 ! pr #255,using 1226:"Please be sure to remit to  P O Box 758"
 01190 ! form skip 5,pos 15,c 60,skip 1
 01200   if align=3 then pr #255: newpage: goto L1330
-01210   let fncloseprn
+01210   fncloseprn
 01220   pr newpage
 01230   pr fields "10,5,C 60": "CHECK FORM ALIGNMENT"
 01240   pr fields "12,5,C 60": "ENTER 1 TO REPRINT SAME STATEMENT"
@@ -126,7 +126,7 @@
 01270   pr fields "23,30,c 20": "Press F5 to Cancel"
 01280 L1280: input fields "15,11,N 1,UE,N": align conv L1280
 01290   if cmdkey=5 then goto XIT
-01300   let fnopenprn(cp,58,220,process)
+01300   fnopenprn(cp,58,220,process)
 01310   on align goto L500,L1330,L1330 none L1280
 01320 ! ______________________________________________________________________
 01330 L1330: let p=0

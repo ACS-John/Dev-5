@@ -1,9 +1,9 @@
 00020 ! 
 00030   on error goto L750
 00040   library 'S:\Core\Library': fncno,fnxit,fntop,fncloseprn,fnopenprn,fnconsole
-00050   let fntop(program$,cap$="Company Information")
-00060   let fncno(cno,cnam$)
-00065   let fnconsole(1)
+00050   fntop(program$,cap$="Company Information")
+00060   fncno(cno,cnam$)
+00065   fnconsole(1)
 00070   dim co$(4)*40,co(6),ag(4),dat$*20,gln(4,3)
 00080   dim fl1$(20),sc1$(19)*256,io1$(27),hd1$*50,cap$*128,cnam$*40
 00090 ! 

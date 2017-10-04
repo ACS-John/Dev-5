@@ -8,30 +8,30 @@
 00090   dim fa$(5),sa$(4),fb$(1),fc$(1),sb$(1)*38,fd$(1),z$(4)*11,svce$*11
 00100   dim io2$(38),cnam$*40,code$(4)
 00110 ! ______________________________________________________________________
-00120   let fncno(cno,cnam$)
-00130   let fndat(bdate)
-00140   let fntop("S:\acsUB\ubanlyze",cap$="Analyze Charges")
+00120   fncno(cno,cnam$)
+00130   fndat(bdate)
+00140   fntop("S:\acsUB\ubanlyze",cap$="Analyze Charges")
 00150 MAIN: ! 
 00160   let sn$ = "UBAnalyze" !:
-        let fntos(sn$) !:
+        fntos(sn$) !:
         let mylen=20 !:
         let mypos=mylen+2
 00170   let text$="Billing Date:" !:
-        let fnlbl(1,1,text$,mylen,1)
-00180   let fntxt(1,mypos,8,8,0,"1") !:
+        fnlbl(1,1,text$,mylen,1)
+00180   fntxt(1,mypos,8,8,0,"1") !:
         let resp$(1)=str$(bdate)
 00190   let text$="Type of Service:" !:
-        let fnlbl(2,1,text$,mylen,1)
+        fnlbl(2,1,text$,mylen,1)
 00200   code$(1)="Water" !:
         code$(2)="Sewer" !:
         code$(3)="Electric" !:
         code$(4)="Gas" !:
-        let fncomboa("Service",2,mylen+3,mat code$,"",16)
+        fncomboa("Service",2,mylen+3,mat code$,"",16)
 00204   let text$="Rate Code" !:
-        let fnlbl(2,1,text$,mylen,1)
-00205   let fntxt(3,mypos,3,3,0,"30") !:
+        fnlbl(2,1,text$,mylen,1)
+00205   fntxt(3,mypos,3,3,0,"30") !:
         let resp$(3)=""
-00210   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
+00210   fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
 00220   if ck=5 then goto XIT
 00230   bdate= val(resp$(1))
 00240   if resp$(2)="Water" then !:
@@ -42,7 +42,7 @@
           let svce=3
 00243   if resp$(4)="Sewer" then !:
           let svce=4
-00260   let fnopenprn
+00260   fnopenprn
 00350   open #1: "Name="&env$('Q')&"\UBmstr\ubMaster.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00510 L510: ! 
 00540   for k9=1 to 20
@@ -86,9 +86,9 @@
 00910     mat t=(0)
 00920   next k9
 00930 L930: let message$="Printing: Please wait..." !:
-        let fnwait(106,cap$,message$,1)
+        fnwait(106,cap$,message$,1)
 00940   on fkey 5 goto DONE
-00950   let fnopenprn(cp,58,220,process)
+00950   fnopenprn(cp,58,220,process)
 00960 L960: read #1,using L970: mat a,mat d,f eof L1250
 00970 L970: form pos 143,4*pd 2,pos 217,12*pd 5,pos 296,pd 4
 00980   if f<>bdate then goto L960
