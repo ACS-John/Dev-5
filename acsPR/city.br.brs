@@ -10,6 +10,6 @@
 05680   if p1>0 then csz$(p1+1:p1+1)="" : goto L5670
 05690   csz$=ltrm$(rtrm$(csz$)): let p1=pos(csz$," ",-1)
 05700   let zip$=csz$(p1+1:len(csz$)): let zip$=ltrm$(rtrm$(zip$))
-05710   let p2=pos(csz$(1:p1-1)," ",-1) : let state$=csz$(p2+1:p1-1)(1:2) : let state$=ltrm$(rtrm$(state$))
+05710   let p2=pos(csz$(1:p1-1)," ",-1) : state$=csz$(p2+1:p1-1)(1:2) : state$=ltrm$(rtrm$(state$))
 05720   city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 05730   return 

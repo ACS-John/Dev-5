@@ -25,7 +25,7 @@
 00210 L210: linput #13: ln$ eof L260
 00220   let x=pos(ln$,"<DIR>",1)
 00230   if x>0 and ln$(1:1)<>"." then goto L240 else goto L210
-00240 L240: let options$(j+=1)=ln$(46:len(trim$(ln$)))
+00240 L240: options$(j+=1)=ln$(46:len(trim$(ln$)))
 00250   goto L210
 00260 L260: close #13: 
 00270 L270: if j<=0 then let j=1
@@ -53,7 +53,7 @@
 00390   mat options$(100)
 00400   mat options$=("") !:
         mat resp$=("")
-00410 ! Let SN$ = "flexselect" !:
+00410 ! sN$ = "flexselect" !:
         ! Let FNtos(SN$)
 00420   let j=0
 00430 ! 
@@ -67,21 +67,21 @@
 00470 ! Open #12: "Name="&env$('temp')&"\flexwork2.tmp,RecL=30,Replace",Internal,Outin
 00480 ! Open #13: "Name=FlexWork.tmp",Display,Input Ioerr 540
 00490 ! Linput #13: LN$ Eof 540
-00500 ! Let LN$=TRIM$(UPRC$(LN$)) !:
+00500 ! lN$=TRIM$(UPRC$(LN$)) !:
         ! If LN$(LEN(LN$)-3:LEN(LN$))=".FIL" Then !:
-        ! Let OPTIONFILE$=LN$(46:LEN(LN$)) : Goto 450
-00510 ! Let LN$=TRIM$(UPRC$(LN$)) !:
+        ! oPTIONFILE$=LN$(46:LEN(LN$)) : Goto 450
+00510 ! lN$=TRIM$(UPRC$(LN$)) !:
         ! If LN$(LEN(LN$)-3:LEN(LN$))<>".GRD" Then Goto 450
 00520 ! Let J=J+1
-00530 ! Let OPTIONS$(J)=LN$(46:LEN(TRIM$(LN$))-4)
-00540 ! Let OPTIONS$(J)=TRIM$(OPTIONS$(J))
+00530 ! oPTIONS$(J)=LN$(46:LEN(TRIM$(LN$))-4)
+00540 ! oPTIONS$(J)=TRIM$(OPTIONS$(J))
 00550 ! Write #12,Using 520: OPTIONS$(J)(1:20)
 00560 ! Form POS 1,C 20
 00570 ! Goto 450
 00580 ! If J<=0 Then Let J=1
 00590   for j=1 to udim(options$)
 00600     if options$(j)="" then goto L630
-00610     let options$(j)=options$(j)(1:pos(options$(j),".")-1)
+00610     options$(j)=options$(j)(1:pos(options$(j),".")-1)
 00620   next j
 00630 L630: ! 
 00640   mat options$(max(1,j-1))
@@ -114,7 +114,7 @@
 00780 L780: let fullgridname$=programfolder$&"\Grid\"&database$&"\"&resp$(1)&".grd"
 00790   let fullgridindx$=programfolder$&"\grid\"&database$&"\"&resp$(1)&".idx"
 00800   let gridname$=resp$(1) !:
-        let open_read$=programfolder$&"\grid\"&database$&"\"&database$&"_info"
+        open_read$=programfolder$&"\grid\"&database$&"\"&database$&"_info"
 00810   if ckey=4 then close #15: ioerr L820
 00820 L820: if ckey=4 then execute "free "&fullgridname$ ioerr SELECTDATABASE : execute "free "&fullgridindx$: goto SELECTDATABASE
 00830   close #1: ioerr L840
@@ -127,7 +127,7 @@
 00900   mat item$(2)
 00910   close #15: ioerr L920
 00920 L920: open #15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outin,keyed ioerr SELECTDATABASE
-00930   let sn$="mstrflex" !:
+00930   sn$="mstrflex" !:
         fntos(sn$)
 00940   let txt$=uprc$(gridname$) !:
         fnlbl(1,1,txt$,20,2,3)
@@ -192,7 +192,7 @@
 01370 L1370: open #16: "Name="&programfolder$&"\grid\"&database$&"\"&optionfile$,display,input 
 01380 L1380: linput #16: ln$ eof L1420
 01390   let x=x+1
-01400   let options$(x)=trim$(ln$)
+01400   options$(x)=trim$(ln$)
 01410   goto L1380
 01420 L1420: mat options$(x)
 01430   close #16: ioerr L1440
@@ -255,7 +255,7 @@
 01810 L1810: read #15,using L1020,key=cnvrt$("pic(zzz)",lastcolumn): newcolumn nokey ADDTOGRID eof ADDTOGRID
 01820   let newcolumn=newcolumn+1
 01830   rewrite #15,using L1020: newcolumn
-01840   let lastcolumn=lastcolumn-1
+01840   lastcolumn=lastcolumn-1
 01850   if lastcolumn>0 and lastcolumn>=columnnum then goto L1810
 01860   goto L1670 ! WRITE NEW RECORD
 01870 ! ____________________________________________________________________
@@ -267,7 +267,7 @@
 01930   mat colmask$(80)
 01940   mat colmask$=("")
 01950   columns=0
-01960   let specline=10010 !:
+01960   specline=10010 !:
         let dataline=10510
 01970 ! ____________________________________________________________________
 01980 ! This section generates the program lines needed to create the column            headings and column masks
@@ -285,7 +285,7 @@
 02070   columns=columns+1
 02080   pr #10,using L2090: str$(specline)& " colHdr$("&str$(columns)&")="&'"'&trim$(abbrev$)&'"'&" !:COLMASK$("&str$(columns)&")="&'"'&trim$(colmask$)&'"'
 02090 L2090: form pos 1,c 255
-02100   let specline=specline+10
+02100   specline=specline+10
 02110   let x=pos(vname$,"$",1): if x>0 then goto L2120 else goto L2130 !:
           ! determine if numeric or character
 02120 L2120: pr #10,using L2090: str$(dataline)& " LET ITEM$("&str$(columns)&")="&trim$(vname$) !:
@@ -316,7 +316,7 @@
 02360 ! ____________________________________________________________________
 02370 ADDGRIDNAME: !  Allows you to add columns to your grid
 02380   mat resp$=("")
-02390   let sn$="addgrid" !:
+02390   sn$="addgrid" !:
         fntos(sn$)
 02400   let txt$="Grid Name:" !:
         fnlbl(1,1,txt$,20,1)

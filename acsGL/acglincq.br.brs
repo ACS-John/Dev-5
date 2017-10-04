@@ -20,8 +20,8 @@
 00190 ! pr NEWPAGE
 00200   let redir=0: if file$(255)(1:4)<>"PRN:" then let redir=1: goto L210
 00210 L210: if fnps=2 then let mp1=72 else let mp1=69
-00220   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
-00230   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
+00220   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00230   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
 00240   form c 9,skip 0
 00250 L250: form pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 00260   form c 7,skip 0
@@ -91,7 +91,7 @@
 00880 L880: if ds=1 then let dollar$="$" else let dollar$=" "
 00890   if total><0 or total2><0 then goto L910
 00900   if ls+ul+ds+ic>0 then goto L910 else goto L470
-00910 L910: let sp2=49-sp-1
+00910 L910: sp2=49-sp-1
 00915   if ul=1 then pr #255,using L931: d$(1:sp2),dollar$,"{\UL ",total,"}",dollar$,"{\UL ",total2,"}" pageoflow L1450 : goto L930
 00920   pr #255,using L930: d$(1:sp2),dollar$,total,dollar$,total2 pageoflow L1450
 00930 L930: form pos sp,c sp2,pos 49,c 1,pic(--,---,---.##),pos 67,c 1,pic(--,---,---.##),skip redir
@@ -110,7 +110,7 @@
 01040   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 01050   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
 01060   if ds=1 then let dollar$="$" else let dollar$=" "
-01070   let sp2=49-sp-1
+01070   sp2=49-sp-1
 01075   if ul=1 then pr #255,using L931: d$(1:sp2),dollar$,"{\UL ",accum1,"}",dollar$,"{\UL ",accum2,"}" pageoflow L1450 : goto L1090
 01080   pr #255,using L930: d$(1:sp2),dollar$,accum1,dollar$,accum2 pageoflow L1450
 01090 L1090: gosub L1240
@@ -119,7 +119,7 @@
 01110 L1110: gosub L1300
 01120   goto L470
 01130 L1130: if te$="R" then let report$=d$
-01140   if te$="S" then let secondr$=d$
+01140   if te$="S" then secondr$=d$
 01150   gosub L1300
 01160   goto L470
 01170 L1170: if foot1=1 then goto L1220
@@ -142,8 +142,8 @@
 01340   goto L1440
 01350 L1350: let fnpglen(pglen)
 01360 ! If PGLEN<>42 Then Let PGLEN=58
-01370   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01380 ! If PGLEN=42 Then Let SK=SK+1
+01370   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01380 ! If PGLEN=42 Then sK=SK+1
 01390   pr #255,using L1400: rtrm$(foot$),"Page "&str$(pt1)
 01400 L1400: form skip sk,pos tabnote,c fl,pos 75,c 8,skip 1
 01410   if eofcode=1 then goto L1440
@@ -177,7 +177,7 @@
 01690 L1690: form pos 43,c 20,pos 69,c 12,skip 2
 01700   return 
 01710 ! ______________________________________________________________________
-01720 L1720: let eofcode=1
+01720 L1720: eofcode=1
 01730   gosub L1350
 01740   fncloseprn
 01742   fnfscode(actpd)

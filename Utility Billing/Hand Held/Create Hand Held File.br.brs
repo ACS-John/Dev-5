@@ -81,7 +81,7 @@
 10590   fncmdkey("&Finish",2,0,1,"Completed with all routes")
 10595   fncmdkey("&Cancel",5,0,0,"Don't sent to Hand Held")
 10600   fnacs(sn$,0,mat resp$, ckey)
-10605   if resp$(1)="[All]" and ckey=1 then let selection_method=1 : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
+10605   if resp$(1)="[All]" and ckey=1 then selection_method=1 : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
 10610   bk1=val(resp$(1)) conv L850
 10615   let resp$(1)=""
 10620 L850: ! 
@@ -135,8 +135,8 @@
 11280 ! if trim$(z$)="200710.01" or trim$(z$)="201650.00" then pr 'final=';final : pause
 11290   if final><0 then goto NEXT_RECORD ! SKIP IF FINAL BILLED
 11300   fn_rmk1
-11310   if sq1=0 then let sq1=1234 ! DEFALT SEQ=W,E,D,G
-11320   let seq$=str$(sq1)
+11310   if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
+11320   seq$=str$(sq1)
 11330   if device$="Psion Workabout" then let fn_workabout : goto NEXT_RECORD
 11340   if device$="Badger" then let fn_badger : goto NEXT_RECORD
 11350   if device$="Boson" then let fn_boson : goto NEXT_RECORD
@@ -209,13 +209,13 @@
 12010     if a(1)=0 then goto BADGER_NEXT_SEQUENCE
 12020     let m$=ltrm$(f$(1))(1:10)
 12030     if env$('client')="Moweaqua" then let manual_or_dialog$=extra$(3)
-12040     if env$('client')="Moweaqua" then let extra$(3)=f$(1) ! they have meter number in first water meter number and a code in the second number
+12040     if env$('client')="Moweaqua" then extra$(3)=f$(1) ! they have meter number in first water meter number and a code in the second number
 12050     if env$('client')="Moweaqua" then let d(1)=d(1): let d(2)=d(2): let d(3)=d(3)
 12060     if env$('client')="Sangamon" then let manual_or_dialog$=f$(1)(1:1)
 12070     if env$('client')='Sangamon' then let z$=trim$(z$)
 12080     let rt$=cnvrt$("pic(##)",extra(1))&"  "
 12081     if env$('client')='Raymond' then let manual_or_dialog$="N"
-12082     if env$('client')='Raymond' and trim$(extra$(7))='' then let extra$(7)='54'
+12082     if env$('client')='Raymond' and trim$(extra$(7))='' then extra$(7)='54'
 12090     pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': "",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9),"","A","","1 ","  ","        "," ",d(1)+(d(3)*2),d(1),0,"        ","  ","  ",rt$,z$,"        ",manual_or_dialog$(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 12100     ! serial # can be extra$(3) rather than f$(1)
 12110     ! replaced UPRC$(TRIM$(F$(1)))(1:1) with manual_or_dialog$
@@ -676,7 +676,7 @@
 19150   fn_record_addn(2,itron_number_of_dials) ! field 10  -  number of dials
 19160   fn_record_addn(2,0) ! 
 19170   let transmitter_number$=fn_meter_info$('transmitter number',z$,servicecode$(a_item))
-19180   if transmitter_number$<>'' then let fn_record_addc(1,'R') else let fn_record_addc(1,'K') : let skip_next_rff_record=1
+19180   if transmitter_number$<>'' then let fn_record_addc(1,'R') else let fn_record_addc(1,'K') : skip_next_rff_record=1
 19190   fn_record_addn(10,reading_current)
 19200   fn_record_addn(10,unusual_usage_high)
 19210   fn_record_addn(10,unusual_usage_low) ! field 15
@@ -820,7 +820,7 @@
 20570 fnend  ! fn_dms_to_dec
 20580 def fn_itron_record_rff ! off-site (Radio) reads - pg 22
 20582   if skip_next_rff_record=1 then 
-20584     let skip_next_rff_record=0
+20584     skip_next_rff_record=0
 20586   else 
 20590     fn_record_init
 20600     fn_record_addc(3,'RFF')
@@ -1034,11 +1034,11 @@
 28020   dim z_out$*14,custname$*30
 28040   for j=1 to len(seq$)
 28060     if val(seq$(j:j))=1 then 
-28080       let svc_flag$="W"
+28080       svc_flag$="W"
 28100     else if val(seq$(j:j))=2 then 
-28120       let svc_flag$="E"
+28120       svc_flag$="E"
 28140     else if val(seq$(j:j))=4 then 
-28160       let svc_flag$="G"
+28160       svc_flag$="G"
 28180     end if 
 28280     custname$=e$(2)
 28320     let z_out$=trim$(z$)&svc_flag$
@@ -1093,7 +1093,7 @@
 29300 fnend 
 58000 TRANSFER: ! r: Transfer to or from Hand Held Computer
 58020   dim out_filename_report$*512
-58040   let out_filename_report$=file$(h_out)
+58040   out_filename_report$=file$(h_out)
 58060   close #h_out: ioerr ignore
 58080   close #h_customer_i1: ioerr ignore
 58100   fn_report_created_file(out_filename_report$)
@@ -1148,8 +1148,8 @@
 63340 fnend  ! fn_transfer
 64000 def fn_scr_selact
 64020   mat resp$(5)=('')
-64030   fncreg_read('hhto.selection_method',selection_method$) : let selection_method=val(selection_method$) conv ignore
-64040   if selection_method=0 then let selection_method=2
+64030   fncreg_read('hhto.selection_method',selection_method$) : selection_method=val(selection_method$) conv ignore
+64040   if selection_method=0 then selection_method=2
 64060   fntos(sn$="hhto1")
 64080   fnlbl(2,1,"Hand Held model:",16,1)
 64100   !   fncomboa("HH-FroCBox",1,18,mat ctext$)
@@ -1174,15 +1174,15 @@
 64460   fnacs(sn$,0,mat resp$,ckey)
 64480   if ckey<>5 then 
 64520     if resp$(1)='True' then 
-64540       let selection_method=1
+64540       selection_method=1
 64560     else if resp$(2)='True' then 
-64580       let selection_method=2
+64580       selection_method=2
 64600     else if resp$(3)='True' then 
-64620       let selection_method=3
+64620       selection_method=3
 64640     else if resp$(4)='True' then 
-64660       let selection_method=4
+64660       selection_method=4
 64680     end if 
-64690     let selection_method$=str$(selection_method) : let fncreg_write('hhto.selection_method',selection_method$)
+64690     selection_method$=str$(selection_method) : let fncreg_write('hhto.selection_method',selection_method$)
 64700   end if 
 64720   mat resp$=("")
 64740 fnend 

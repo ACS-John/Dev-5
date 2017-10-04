@@ -48,8 +48,8 @@
 00440   fncmbemp(1,mypos) !:
         let resp$(respc+=1)=str$(ji1(1))
 00450   fnlbl(2,1,"Method of Payment:",mylen,1)
-00460   let opt$(1)="1 = Salary" : let opt$(2)= "2 = Hourly" !:
-        let opt$(3)= "3 = Both" !:
+00460   opt$(1)="1 = Salary" : opt$(2)= "2 = Hourly" !:
+        opt$(3)= "3 = Both" !:
         fncomboa("Methods",2,mypos,mat opt$,empty$,13)
 00470   if ji1(2)=1 then let resp$(respc+=1)=opt$(1)
 00480   if ji1(2)=2 then let resp$(respc+=1)=opt$(2)
@@ -137,7 +137,7 @@
 01080   let ji2(5)=val(resp$(12)) ! units
 01090   let pt=val(resp$(13)) ! personnel burden
 01100   gosub UPDATE_AMOUNT
-01110   let empnam$="": read #1,using "FORM POS 9,C 30",key=cnvrt$("pic(ZZZZZZZ#)",ji1(1)): empnam$ nokey L1110
+01110   empnam$="": read #1,using "FORM POS 9,C 30",key=cnvrt$("pic(ZZZZZZZ#)",ji1(1)): empnam$ nokey L1110
 01115 L1110: if addone=1 then goto L1120 else goto L1150
 01120 L1120: write #3,using L1140: mat ji1, jn$, mat ji2, pt, empnam$, sal
 01130   goto L1160
@@ -165,7 +165,7 @@
 01520     if ji1(1)=en then goto L1590
 01530     pr #255,using L1540: " ________"," ________"," ____________",t5,t6,t10 pageoflow PROOF_LIST_NWPG
 01540 L1540: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Total",pos 38,2*n 9.2,x 29,n 13.2,skip 2
-01550 L1550: let en=ji1(1)
+01550 L1550: en=ji1(1)
 01560     let t5=0
 01570     let t6=0
 01580     let t10=0
@@ -215,7 +215,7 @@
 02020 ! INPUT FROM DISKETTE FILE    ! took this option out on new system
 02030 ! ______________________________________________________________________
 02040 CORRECTIONS: ! 
-02050   addone=0: let editone=0
+02050   addone=0: editone=0
 02060   fntos(sn$="EntryCorrection")
 02070   ch2$(1)="Rec #": ch2$(2)="Employee #": ch2$(3)="MOP" !:
         ch2$(4)="Date" !:
@@ -249,9 +249,9 @@
         fncmdkey("E&xit",5,0,1,"Returns to main screen.")
 02170   fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 02180   if ckey=5 then goto TRANSACTION_ENTRY
-02190   let editrec=val(resp$(1))
+02190   editrec=val(resp$(1))
 02200   if ckey=1 then addone=1: mat ji1=(0): mat ji2=(0): let jn$="": goto TRANSACTION_ENTRY
-02210   if ckey=2 then read #3,using L1140,rec=editrec: mat ji1, jn$, mat ji2, pt, empnam$, sal: let editone=1 : goto TRANSACTION_ENTRY
+02210   if ckey=2 then read #3,using L1140,rec=editrec: mat ji1, jn$, mat ji2, pt, empnam$, sal: editone=1 : goto TRANSACTION_ENTRY
 02220   if ckey=4 then delete #3,rec=editrec: : goto CORRECTIONS
 02230   goto CORRECTIONS
 02240 UPDATE_AMOUNT: ! 
@@ -299,7 +299,7 @@
         fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto L420
 02480 L2480: if ji2(4)<1 or ji2(4)>20 then let pt=ptp/100*ji2(3) else let pt=0
-02490   let eno$=cnvrt$("n 8",ji1(1)) : let ptp=0
+02490   eno$=cnvrt$("n 8",ji1(1)) : let ptp=0
 02500   read #7,using "form pos 39,n 6.3",key=eno$: ptp nokey L2510
 02510 L2510: if ji2(4)<1 or ji2(4)>20 then let pt=ptp/100*ji2(3) else let pt=0
 02520   if c1=2 then goto L1780

@@ -5,9 +5,9 @@
 00050   let io1$(1)="10,44,N 2,U,N"
 00060   let io1$(2)="12,46,N 6,U,N"
 00070   pr newpage
-00080   pr fields "10,15,C 60": "ENTER COMPANY NUMBER TO FIX:"
-00090   pr fields "12,10,C 60": "ENTER THE LAST DATE POSTED THROUGH:"
-00100   pr fields "14,10,C 34,R,N": "PRESS F1 TO CONTINUE OR F5 TO STOP"
+00080   pr f "10,15,C 60": "ENTER COMPANY NUMBER TO FIX:"
+00090   pr f "12,10,C 60": "ENTER THE LAST DATE POSTED THROUGH:"
+00100   pr f "14,10,C 34,R,N": "PRESS F1 TO CONTINUE OR F5 TO STOP"
 00110 L110: input fields mat io1$,attr "R": cno,dt1 conv CONV1
 00120   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 00130   if cmdkey>0 then goto L200 else ce=curfld
@@ -16,7 +16,7 @@
 00160   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L110
 00170 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00180   ce=cnt+1
-00190 ERR1: pr fields "24,78,C 1": bell : goto L150
+00190 ERR1: pr f "24,78,C 1": bell : goto L150
 00200 L200: if cmdkey=5 then stop 
 00210   pr #255: dt1
 00220 ! 

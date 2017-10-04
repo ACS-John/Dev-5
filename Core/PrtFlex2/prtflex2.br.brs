@@ -56,7 +56,7 @@
 04144 ! Let FNLBL(15,1,"Export the grid to a fixed width file, for later use.")
 04145   fncmdset(52): let fnacs(sn$,win,mat response$,ckey) !:
         ! CALL items selected
-04146   let lastgridresponse$=response$(1)
+04146   lastgridresponse$=response$(1)
 04160   if ckey=5 then chain "Core\prtflex\PRTFLEX1",programfolder$,datafolder$
 04170 ! Let FNXIT(CURSYS$)
 04180 ! ____________________________________________________________________

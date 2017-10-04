@@ -20,7 +20,7 @@
 00185   if tr(7)=7 or tr(7)=16 then goto L160 ! already posted (7 pr only, 16 both)
 00187 L180: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,c 6,c 5,c 3,pos 93,c 12
 00189   if tr(6)<>4 then goto L160 ! must be payroll check transaction
-00191   let en$=lpad$(rtrm$(ven$),4) soflow L870
+00191   en$=lpad$(rtrm$(ven$),4) soflow L870
 00193   if trim$(olden$)<>"" and olden$<>en$ or holdtr$<>"" and holdtr$<>tr$ then gosub REWRITE_RECORD
 00220 L220: if olden$<>en$ or holdtr$<>tr$ then read #1,using L230,key=en$: eno,mat m,mat adr nokey L870
 00230 L230: form pos 1,n 4,pos 91,36*pd 5.2,2*n 5
@@ -30,7 +30,7 @@
 00270   if j=1 or j=17 or j=18 then let m(j*2)=m(j*2)+tr(5) else let m(j*2)=m(j*2)-tr(5)
 00280   if j=17 then goto L310 ! skip weeks worked
 00290   let d(22)+=tr(5) ! add net
-00310 L310: let olden$=en$: let holdtr4=tr(4): let holdtr$=tr$: rewrite #2,using L470,rec=rec2: tr(7)+7: goto READ_ENTRIES
+00310 L310: olden$=en$: let holdtr4=tr(4): let holdtr$=tr$: rewrite #2,using L470,rec=rec2: tr(7)+7: goto READ_ENTRIES
 00320 REWRITE_RECORD: ! 
 00330 L330: let r9=lrec(3)+1
 00340   let nca=0
@@ -51,7 +51,7 @@
 00480 L480: if eofcode=1 then goto L500 ! write last record and quit
 00490   return 
 00500 L500: ! EOJ
-00510   if eofcode=0 then let eofcode=1: goto REWRITE_RECORD
+00510   if eofcode=0 then eofcode=1: goto REWRITE_RECORD
 00520   close #1: 
 00530   close #2: 
 00540   close #3: 
@@ -60,20 +60,20 @@
 00570 ! ______________________________________________________________________
 00580   if fnprocess=1 then goto L800
 00590   pr newpage
-00600   pr fields "4,10,c 60": "The Following Employee is not on File."
-00610   pr fields "7,2,c 60": "    Emp Number    Check Number    Date   Gross-Pay"
-00620   pr fields "9,1,PIC(ZZZZZZZZZZ#),N": d(1)
-00630   pr fields "9,20,PIC(ZZZZZZ#),N": d(3)
-00640   pr fields "9,32,PIC(ZZ/ZZ/ZZ),N": d(2)
-00650   pr fields "9,40,PIC(--------.##),N": d(4)
-00660   pr fields "20,1,C 66,N": "Enter 0 to Add this Employee or Enter Correct Employee Number"
+00600   pr f "4,10,c 60": "The Following Employee is not on File."
+00610   pr f "7,2,c 60": "    Emp Number    Check Number    Date   Gross-Pay"
+00620   pr f "9,1,PIC(ZZZZZZZZZZ#),N": d(1)
+00630   pr f "9,20,PIC(ZZZZZZ#),N": d(3)
+00640   pr f "9,32,PIC(ZZ/ZZ/ZZ),N": d(2)
+00650   pr f "9,40,PIC(--------.##),N": d(4)
+00660   pr f "20,1,C 66,N": "Enter 0 to Add this Employee or Enter Correct Employee Number"
 00670 L670: input fields "20,70,N 4,UE,N": numb conv L670
 00680   if numb>0 then let d(1)=numb: goto L220
 00690   pr newpage
-00700   pr fields "5,10,c 25": "Employee Name" !:
-        pr fields "7,10,c 25": "Address" !:
-        pr fields "9,10,c 25": "City, State, Zip Code" !:
-        pr fields "11,10,c 25": "Social Security Number"
+00700   pr f "5,10,c 25": "Employee Name" !:
+        pr f "7,10,c 25": "Address" !:
+        pr f "9,10,c 25": "City, State, Zip Code" !:
+        pr f "11,10,c 25": "Social Security Number"
 00710   let fb$(1)="5,40,C 25,UT,N" !:
         let fb$(2)="7,40,C 25,UT,N" !:
         let fb$(3)="9,40,C 25,UT,N" !:
@@ -94,7 +94,7 @@
 00820   pr #255: d(1)
 00830   let print1=1
 00840   mat k$=(" ")
-00850   let ss$=" "
+00850   ss$=" "
 00860   goto L730
 00870 L870: let fntos(sn$="prmerge") !:
         let mylen=40: let mypos=mylen+3 : let right=1
@@ -134,7 +134,7 @@
 01140   let k$(1)=resp$(1) !:
         let k$(2)=resp$(2) !:
         let k$(3)=resp$(3) !:
-        let ss$=resp$(4)
+        ss$=resp$(4)
 01150   mat m=(0)
 01160   mat adr=(0)
 01170   write #1,using L1180: en$,mat k$,ss$,mat m,mat adr
@@ -150,7 +150,7 @@
 01250   fncmdset(2)
 01260   fnacs(sn$,0,mat resp$,ckey)
 01270   if ckey=5 then goto L220
-01280   let en$=lpad$(rtrm$(resp$(1)(1:4)),4)
+01280   en$=lpad$(rtrm$(resp$(1)(1:4)),4)
 01290   goto L220
 01300 ! ______________________________________________________________________
 01310 XIT: let fnxit

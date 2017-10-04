@@ -80,7 +80,7 @@
 05054     mat f$=("")
 05055     mat f=(0)
 05056     currentField$="FirstField"
-05057     let LastReadRecord=0
+05057     lastReadRecord=0
 05058  fnend
 05059 !
 05060 ! Imported From "S:\Core\ScreenIO\function\listviewcombodelete.brs"
@@ -129,7 +129,7 @@
 05103     let TTT = LastReadRecord
 05104     let TT=ChangedRead
 05105     if LastReadRecord><rec(DataFile) then
-05106        let LastReadRecord=rec(Datafile)
+05106        lastReadRecord=rec(Datafile)
 05107        changedRead=1
 05108     end if
 05109  fnend

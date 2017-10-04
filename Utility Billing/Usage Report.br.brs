@@ -13,8 +13,8 @@
 22060   if trim$(serviceName$(1))<>"" then service1enabled=1
 22080   if trim$(serviceName$(3))="Electric" or trim$(srv$(3))="EL" or trim$(serviceName$(3))="Lawn Meter" then service3enabled=1
 22100   if trim$(serviceName$(4))="Gas" or trim$(srv$(4))="GA" then service4enabled=1
-22140   let sequenceRoute=1
-22160   let sequenceAccount=2
+22140   sequenceRoute=1
+22160   sequenceAccount=2
 24000   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 24020 ! /r
 30000 SCREEN1: ! r:
@@ -51,7 +51,7 @@
 30760   end if 
 36000   if filterRoute then 
 36100     if reportSequence=sequenceRoute then restore #hCustomerForReport,key>=lpad$(str$(filterRoute),2)&"       ": nokey SCREEN1
-36120     let oldroute=filterRoute
+36120     oldroute=filterRoute
 36140   end if
 36780 ! /r
 47000   fnopenprn(cp,58,320,process)
@@ -80,7 +80,7 @@
 48400       goto TOTAL_AND_FINISH
 48440   end if
 48460   if route<>oldroute and oldroute<>0 then 
-48480     let s9=1
+48480     s9=1
 48500     gosub PRINT_ROUTE_TOTALS
 48520   end if
 48530   gosub PRINT_DETAILS
@@ -134,18 +134,18 @@
 56740 return  ! /r
 58000 PRINT_DETAILS: ! r:
 58010   if sum(mat d(3:12))<>0 then
-58020     let line$= z$&" "&e$(2)(1:21)
+58020     line$= z$&" "&e$(2)(1:21)
 58040     if service1enabled then 
-58060       let line$=line$&cnvrt$("n 10",d(1))&cnvrt$("n 10",d(3))&cnvrt$("n 10",d(4))
+58060       line$=line$&cnvrt$("n 10",d(1))&cnvrt$("n 10",d(3))&cnvrt$("n 10",d(4))
 58080     end if 
 58100     if service3enabled then 
-58280       let line$=line$&cnvrt$("n 10",d(5))&cnvrt$("n 10",d(7))&cnvrt$("n 10",d(8))
+58280       line$=line$&cnvrt$("n 10",d(5))&cnvrt$("n 10",d(7))&cnvrt$("n 10",d(8))
 58300     end if 
 58340     if service4enabled then 
-58400       let line$=line$&cnvrt$("n 10",d(9))&cnvrt$("n 10",d(11))&cnvrt$("n 10",d(12))
+58400       line$=line$&cnvrt$("n 10",d(9))&cnvrt$("n 10",d(11))&cnvrt$("n 10",d(12))
 58420     end if 
 58460     pr #255: line$ pageoflow NEWPGE
-58480     let oldroute=route
+58480     oldroute=route
 58500     let t(1,1)=t(1,1)+d(3)
 58520     let t(1,2)=t(1,2)+d(4)
 58540     let t(2,1)=t(2,1)+d(7)
@@ -168,37 +168,37 @@
 60140     pr #255: ""
 60160     pr #255: tab(39);"Current    Year to Date";
 60180     if s9=0 then pr #255: tab(69);"Current    Year to Date"
-60200     let line$=""
+60200     line$=""
 60220     if trim$(serviceName$(1))="" then 
 60240       goto L1180
 60260     else 
-60280       let line$=serviceName$(1)(1:11)&line$&cnvrt$("n 10",t(1,1))&"      "&cnvrt$("n 10",t(1,2))
+60280       line$=serviceName$(1)(1:11)&line$&cnvrt$("n 10",t(1,1))&"      "&cnvrt$("n 10",t(1,2))
 60300     end if 
 60320     if s9=0 then 
-60340       let line$=line$ & "    "&cnvrt$("n 10",r(1,1))&"      "&cnvrt$("n 10",r(1,2))
+60340       line$=line$ & "    "&cnvrt$("n 10",r(1,1))&"      "&cnvrt$("n 10",r(1,2))
 60360     end if 
 60380     pr #255,using "Form POS 25,C 120": line$
 60400     L1180: ! 
-60420     let line$=""
+60420     line$=""
 60440     if service3enabled then 
-60460       let line$=serviceName$(3)(1:12)&line$&cnvrt$("n 10",t(2,1))&"      "&cnvrt$("n 10",t(2,2))
+60460       line$=serviceName$(3)(1:12)&line$&cnvrt$("n 10",t(2,1))&"      "&cnvrt$("n 10",t(2,2))
 60740     end if 
 60780     if s9=0 then 
-60800       let line$=line$ & "    "&cnvrt$("n 10",r(2,1))&"      "&cnvrt$("n 10",r(2,2))
+60800       line$=line$ & "    "&cnvrt$("n 10",r(2,1))&"      "&cnvrt$("n 10",r(2,2))
 60820     end if 
 60840     pr #255,using "Form POS 25,C 120": line$
-60880     let line$=""
+60880     line$=""
 60900     if service4enabled then 
-60920       let line$=serviceName$(4)(1:11)&line$&cnvrt$("n 10",t(3,1))&"      "&cnvrt$("n 10",t(3,2))
+60920       line$=serviceName$(4)(1:11)&line$&cnvrt$("n 10",t(3,1))&"      "&cnvrt$("n 10",t(3,2))
 60960     end if 
 61120     if s9=0 then 
-61140       let line$=line$ & "    "&cnvrt$("n 10",r(3,1))&"      "&cnvrt$("n 10",r(3,2))
+61140       line$=line$ & "    "&cnvrt$("n 10",r(3,1))&"      "&cnvrt$("n 10",r(3,2))
 61160     end if 
 61180     pr #255,using "Form POS 25,C 120": line$
-61240     if s9=1 then let s9=0 : pr #255: newpage ! gosub NEWPGE
+61240     if s9=1 then s9=0 : pr #255: newpage ! gosub NEWPGE
 61800   end if  ! reportSequence=sequenceRoute
 61820   mat t=(0)
-61860   let s9=0
+61860   s9=0
 61900 return  ! /r
 62000 XIT: let fnxit
 66000 ! <Updateable Region: ERTN>

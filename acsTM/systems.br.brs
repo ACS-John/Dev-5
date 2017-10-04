@@ -13,7 +13,7 @@
 20240   goto XIT
 20260 ! ______________________________________________________________________
 20280 OPEN_FILE: ! 
-20300   let open_file_count=0 ! this value is used in the close_file sub routine
+20300   open_file_count=0 ! this value is used in the close_file sub routine
 20320   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Systems.h420,Version=1,KFName="&env$('Q')&"\TMmstr\Systems-Idx.h420,Use,RecL=90,KPs=1,KLn=2,Shr",internal,outin,keyed 
 20340   return 
 20360 ! ______________________________________________________________________
@@ -22,9 +22,9 @@
 20420 BUILD_LAYOUT: ! 
 20440 ! ** Field Labels    **
 20460   let ic=0 ! temporary Item Counter
-20480   let lbl$(ic+=1)="ID"
-20500   let lbl$(ic+=1)="Name"
-20520   let lbl$(ic+=1)="Number"
+20480   lbl$(ic+=1)="ID"
+20500   lbl$(ic+=1)="Name"
+20520   lbl$(ic+=1)="Number"
 20540 ! ** Text Box / Field Display   Lengths   **
 20560   let ic=0 ! temporary Item Counter
 20580   let mmddyy=8
@@ -34,15 +34,15 @@
 20660   let tln(ic+=1)=2
 20680 ! ** Field Types **
 20700   let ic=0
-20720   let fltyp$(ic+=1)='C'
-20740   let fltyp$(ic+=1)='C'
-20760   let fltyp$(ic+=1)='N'
+20720   fltyp$(ic+=1)='C'
+20740   fltyp$(ic+=1)='C'
+20760   fltyp$(ic+=1)='N'
 20780 ! ** Field Storage Lengths **
 20800   let ic=0
 20820   let mmddyy=6 : ccyymmdd=8
-20840   let sln(ic+=1)=2
-20860   let sln(ic+=1)=50
-20880   let sln(ic+=1)=3
+20840   sln(ic+=1)=2
+20860   sln(ic+=1)=50
+20880   sln(ic+=1)=3
 20900 ! ** Field Masks **
 20920   let ic=0
 20940   let pointtwo=32 : let number=30

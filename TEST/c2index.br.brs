@@ -5,7 +5,7 @@
 00050   open #fin: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outin,keyed 
 00060   write #fin,using keyform$="Form Pos 1,C 2,Pos 3,C 2": mat blank$
 00070 ! Read #FIN,Key=KEY$: !:
-        let editrec=rec(fin)
+        editrec=rec(fin)
 00080   rewrite #fin,using 'Form Pos 1,C 2',rec=editrec: "8"
 00090   rewrite #fin,using 'Form Pos 3,C 2',rec=editrec: "9"
 00100   rewrite #fin,using 'Form Pos 5,C 40',rec=editrec: 'eight - nine'

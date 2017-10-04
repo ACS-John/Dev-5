@@ -9,16 +9,16 @@
 00075   fnconsole(on=1)
 00080   def fnc(x)=int(100*(x+sgn(x)*.0001))
 00090   pr newpage
-00100   pr fields "06,20,Cc 40,R,n": "POSITION BILLING FORMS IN THE PRINTER"
-00110   pr fields "08,23,c 26,N": " DATE OF BILLING (MMDDYY):"
-00120   pr fields "10,23,c 26,n": "DUE DATE OF BILL (MMDDYY):"
-00130   pr fields "12,23,c 26,n": " SERVICE FROM DATE (MMDD):"
-00140   pr fields "14,23,c 26,n": "   SERVICE TO DATE (MMDD):"
-00150   pr fields "16,20,Cc 40,R,N": "PRESS F5 TO STOP"
-00160   let fli$(1)="08,50,Nz 6,U,N"
-00170   let fli$(2)="10,50,Nz 6,CU,N"
-00180   let fli$(3)="12,50,Nz 4,U,N"
-00190   let fli$(4)="14,50,nz 4,U,n"
+00100   pr f "06,20,Cc 40,R,n": "POSITION BILLING FORMS IN THE PRINTER"
+00110   pr f "08,23,c 26,N": " DATE OF BILLING (MMDDYY):"
+00120   pr f "10,23,c 26,n": "DUE DATE OF BILL (MMDDYY):"
+00130   pr f "12,23,c 26,n": " SERVICE FROM DATE (MMDD):"
+00140   pr f "14,23,c 26,n": "   SERVICE TO DATE (MMDD):"
+00150   pr f "16,20,Cc 40,R,N": "PRESS F5 TO STOP"
+00160   fli$(1)="08,50,Nz 6,U,N"
+00170   fli$(2)="10,50,Nz 6,CU,N"
+00180   fli$(3)="12,50,Nz 4,U,N"
+00190   fli$(4)="14,50,nz 4,U,n"
 00200 L200: rinput fields mat fli$,attr "R": d1,d2,d3,d4 conv L200
 00210   if cmdkey=5 then goto DONE
 00220   if d1=0 then goto L240
@@ -76,7 +76,7 @@
 00700   mat e$=(" ")
 00710   goto L430
 00720 L720: pr newpage
-00730   pr fields "12,14,c 40,N": "Starting Account (Blank for All):"
+00730   pr f "12,14,c 40,N": "Starting Account (Blank for All):"
 00740 L740: input fields "12,55,C 10,U,N": a$
 00750   let numb=val(a$) conv L740
 00760   if numb=0 then goto L840
@@ -88,30 +88,30 @@
 00820   if ppos=0 then a$=a$(4:10)&".00"
 00830 L830: read #1,using L360,key=a$: z$,mat e$,f$,a4,mat b,mat d,bal,f,mat g,bkno nokey L720
 00840 L840: pr newpage
-00850   pr fields "10,20,Cc 40,R,N": "Printing Utility Bills: Please wait..."
-00860   pr fields "12,20,Cc 40,R,N": "Press F5 to stop"
+00850   pr f "10,20,Cc 40,R,N": "Printing Utility Bills: Please wait..."
+00860   pr f "12,20,Cc 40,R,N": "Press F5 to stop"
 00870   return 
 00880 L880: pr newpage
-00890   pr fields "10,20,C 37,N": "Book Number to pr (Blank for All):"
+00890   pr f "10,20,C 37,N": "Book Number to pr (Blank for All):"
 00900 L900: input fields "10,58,Nz 2,U,N": prtbkno conv L900
 00910   if prtbkno=0 then goto L330
 00920   pr newpage
-00930   pr fields "10,20,Cc 40,R,N": "Printing Utility Bills: Please wait..."
-00940   pr fields "12,20,Cc 40,R,N": "Press F5 to stop"
+00930   pr f "10,20,Cc 40,R,N": "Printing Utility Bills: Please wait..."
+00940   pr f "12,20,Cc 40,R,N": "Press F5 to stop"
 00950   let prtbkno$=lpad$(str$(prtbkno),2)&"00000.00"
-00960   let startcd=1
+00960   startcd=1
 00970   read #1,using L360,key>=prtbkno$: z$,mat e$,f$,a4,mat b,mat d,bal,f,mat g,bkno nokey L450
 00980   goto L390
-00990 L990: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1010
+00990 L990: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1010
 01000   goto L1050
 01010 L1010: pr newpage
-01020   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L1040
+01020   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L1040
 01030   goto L1050
-01040 L1040: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-01050 L1050: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+01040 L1040: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+01050 L1050: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 01060   input fields "24,60,C 1,N": quitcode$
 01070   if rtrm$(uprc$(quitcode$))="Q" then goto DONE
-01080   pr fields "23,3,C 78,N": ""
-01090   pr fields "24,3,C 78,N": ""
+01080   pr f "23,3,C 78,N": ""
+01090   pr f "24,3,C 78,N": ""
 01100   retry 
 01110 DONE: let fnxit

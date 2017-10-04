@@ -19,10 +19,10 @@
 19020   fncno(cno,cnam$)
 19040   fnget_services(mat servicename$ )
 19060   for j=1 to 4
-19080     let servicename$(j)=lpad$(rtrm$(servicename$(j)),16)
+19080     servicename$(j)=lpad$(rtrm$(servicename$(j)),16)
 19100   next j
 19120   fndat(dat$,1)
-19140   fncreg_read('ubcustdp.sequence',seq$) : let seq=val(seq$)
+19140   fncreg_read('ubcustdp.sequence',seq$) : seq=val(seq$)
 19160   fncreg_read('ubcustdp.subtotal by route',subtotal$)
 19180   fncreg_read('ubcustdp.filter choice',filter_default$)
 19200   if filter_default$='' then let filter_default$=filter_option$(1)
@@ -46,8 +46,8 @@
 32440   fnacs(sn$,0,mat resp$,ckey)
 32460   if ckey=5 then goto XIT
 32480   let dat$=resp$(1)
-32520   if resp$(2)="True" then let seq=1 else let seq=2 ! 1=name sequence  2= route sequence
-32540   let subtotal$=resp$(resp_subtotal)
+32520   if resp$(2)="True" then seq=1 else seq=2 ! 1=name sequence  2= route sequence
+32540   subtotal$=resp$(resp_subtotal)
 32560   let filter_choice=srch(mat filter_option$,resp$(resp_filter))
 36000 ! r: save answers
 36020   fndat(dat$,2)
@@ -91,7 +91,7 @@
 56140 ! ______________________________________________________________________
 58000 HEADER: ! r:
 58020   let p2=p2+1
-58040   let lnpg=0
+58040   lnpg=0
 58060   pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
 58080   pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
 58100   pr #255: "\qc  {\f181 \fs18 \b "&trim$(dat$)&"}"
@@ -103,7 +103,7 @@
 58220   mat services$=("")
 58240   for j=1 to 3
 58260     let x=pos(servicename$(j),":",1)
-58280     if x>0 then let servicename$(j)(x:x)=""
+58280     if x>0 then servicename$(j)(x:x)=""
 58300   next j
 58320   for j=1 to 4
 58340     if j=1 and trim$(servicename$(j))<>"Water" then goto L730
@@ -115,7 +115,7 @@
 58460     let date_amount$=date_amount$&"  --Date--  Amount"
 58480     let x=pos(trim$(servicename$(j))," ",1)
 58500     if x=0 then let x=len(servicename$(j))
-58520     let services$(jp)=trim$(servicename$(j))(1:x)
+58520     services$(jp)=trim$(servicename$(j))(1:x)
 58540 L730: ! 
 58542   next j
 58560   pr #255,using 'form pos 62,4*cc 18': mat services$
@@ -133,7 +133,7 @@
 62180     let depdate(jp)=c(j)
 62200     amount(jp)=b(j+7)
 62220     let r(j)=r(j)+b(j+7)
-62240     let s(j)=s(j)+b(j+7)
+62240     s(j)=s(j)+b(j+7)
 62260     let deposit$(jp)=cnvrt$("pic(zzz/zz/zz)",depdate(jp))&" "&cnvrt$("nz 8.2",amount(jp))
 62280 L930: ! 
 62282   next j

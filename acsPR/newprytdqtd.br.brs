@@ -33,7 +33,7 @@
 00300   a=pos (rtrm$(em$)," ",1)
 00310   b=pos (rtrm$(em$)," ",a+1)
 00320   ! if env$('client')="West Rest Haven" then goto L370 ! don't turn name around
-00330   let em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
+00330   em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
 00340   mat qtr1tcp=(0) : mat qt2tcp=(0): mat qtr3tcp=(0): mat qtr4tcp=(0)
 00350   let fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=medqtr=0
 00360   mat quartertotals=(0): mat ytdtotal=(0): let dedfedyr=dedficayr=0 !:
@@ -91,8 +91,8 @@
 00910   continue 
 00920 ! ______________________________________________________________________
 00930 L930: pr #255: 
-00940   let eno=0
-00950   let em$="Final Totals"
+00940   eno=0
+00950   em$="Final Totals"
 00960   mat rptemp=tot
 00970   let tx1=tx2
 00980   gosub L810
@@ -189,14 +189,14 @@
 01810   let dat=prdate=d1=val(resp$(1))
 01820   let dat$=resp$(2)
 01830   beg_date=val(resp$(3)) !:
-        let end_date=val(resp$(4)) !:
+        end_date=val(resp$(4)) !:
         let qtr1=val(resp$(5)) !:
         let qtr2=val(resp$(6)) !:
         let qtr3=val(resp$(7)) !:
         let qtr4=val(resp$(8))
 01840   let qtr5=val(resp$(9)(1:4))*10000+1231
 01850   begin_year=val(resp$(9)(1:4))*10000+0101
-01860   let end_year=val(resp$(9)(1:4))*10000+1231
+01860   end_year=val(resp$(9)(1:4))*10000+1231
 01870   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno'),internal,outin,relative 
 01880 ! Rewrite #11,Using "form pos 1,6*n 8,n 8,c 20",Rec=1: BEG_DATE,END_DATE,QTR1,QTR2,QTR3,QTR4,D1,DAT$
 01890   close #11: 
@@ -223,8 +223,8 @@
 02080   let fedyr=ytdtotal(1) ! ytdl fed
 02090   let ficayr=ytdtotal(2) ! fica year to date
 02100   let medyr=ytdtotal(3) ! medicare year to date
-02110   let stateyr=ytdtotal(4) ! total state  quarter
-02120   let eicyr=ytdtotal(25) ! eic
+02110   stateyr=ytdtotal(4) ! total state  quarter
+02120   eicyr=ytdtotal(25) ! eic
 02130   if prdate>=qtr1 and prdate<qtr2 then mat quartertotals=qtr1tcp
 02140   if prdate>=qtr2 and prdate<qtr3 then mat quartertotals=qtr2tcp
 02150   if prdate>=qtr3 and prdate<qtr4 then mat quartertotals=qtr3tcp
@@ -233,8 +233,8 @@
 02180   let fedqtr=quartertotals(1) ! total fed  quarter
 02190   let ficaqtr=quartertotals(2) ! total fica quarter
 02200   let medqtr=quartertotals(3) ! total medicare quarter
-02210   let stateqtr=quartertotals(4) ! total state  quarter
-02220   let eicqtr=quartertotals(25) ! eic qtr
+02210   stateqtr=quartertotals(4) ! total state  quarter
+02220   eicqtr=quartertotals(25) ! eic qtr
 02230   for j=1 to 20
 02240     if newdedfed(j)=1 then let dedfedyr+=ytdtotal(j+4) ! deduct for federal wh
 02250     if dedfica(j)=1 then let dedficayr+=ytdtotal(j+4) !:

@@ -4,13 +4,13 @@
 00050   fntop(program$,"CHANGE_ME")
 00060   close #101: ioerr ignore
 00070   open #101: "SROW=9,SCOL=23,EROW=11,ECOL=60,BORDER=DR,CAPTION=CONVERT ACCUMULATED TRANSACTIONS FILE",display,outin 
-00080   pr fields "10,24,C 32": "ENTER COMPANY NUMBER TO CONVERT:"
-00090   pr fields "12,32,C 16,R,N": "PRESS F5 TO STOP"
+00080   pr f "10,24,C 32": "ENTER COMPANY NUMBER TO CONVERT:"
+00090   pr f "12,32,C 16,R,N": "PRESS F5 TO STOP"
 00100 L100: input fields "10,57,N 2,UE,N",attr "R": cno conv L100
 00110   if cmdkey=5 then stop 
 00120 ! 
 00130   open #1: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno),internal,input ioerr L100
-00140   pr fields "14,32,C 16,BR,N": "   IN PROCESS"
+00140   pr f "14,32,C 16,BR,N": "   IN PROCESS"
 00150   open #2: "Name=X,size=0,RecL=72,REPLACE",internal,output 
 00160 L160: read #1,using L190: mat tr,tr$,td$ eof L220
 00170   if tr(1)+tr(2)+tr(3)=0 then goto L160

@@ -17,14 +17,14 @@
 00180 L180: form pos 170,4*pd 2,pos 226,c 20
 00185   close #1: 
 00190   at=int(66-len(rtrm$(cnam$))/2)
-00200   let fli$(1)="10,56,C 20,U,N"
-00210   let fli$(2)="12,56,N 6,U,N"
+00200   fli$(1)="10,56,C 20,U,N"
+00210   fli$(2)="12,56,N 6,U,N"
 00220   pr newpage
-00230 L230: pr fields "5,30,C 18,H,N": "AGED TRIAL BALANCE"
-00240   pr fields "10,5,cr 50,n": "ENTER AS OF DATE  (EXAMPLE = "&dat$&":"
-00250   pr fields "12,5,Cr 50,N": "ENTER THE AGING DATE IN MMDDYY FORMAT:"
-00260   pr fields "10,56,c 20,n": dat$
-00270   pr fields "14,28,C 30,N": "F1 Continue   F5 Stop"
+00230 L230: pr f "5,30,C 18,H,N": "AGED TRIAL BALANCE"
+00240   pr f "10,5,cr 50,n": "ENTER AS OF DATE  (EXAMPLE = "&dat$&":"
+00250   pr f "12,5,Cr 50,N": "ENTER THE AGING DATE IN MMDDYY FORMAT:"
+00260   pr f "10,56,c 20,n": dat$
+00270   pr f "14,28,C 30,N": "F1 Continue   F5 Stop"
 00280 L280: rinput fields mat fli$: dat$,d1 conv L280
 00285   if cmdkey=5 then goto XIT
 00286   if cmdkey<>1 then goto L230
@@ -34,8 +34,8 @@
 00320   gosub L1510
 00330   pr newpage
 00340   fnopenprn
-00350   pr fields "10,15,c 50,h": "A/R AGED TRIAL BALANCE PROGRAM IN PROCESS"
-00360   pr fields "23,2,C 30,N": "Press F5 to stop"
+00350   pr f "10,15,c 50,h": "A/R AGED TRIAL BALANCE PROGRAM IN PROCESS"
+00360   pr f "23,2,C 30,N": "Press F5 to stop"
 00370   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L1570
 00380   open #2: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&str$(cno)&",Shr",internal,input,relative ioerr L1570
 00390   gosub L550
@@ -110,18 +110,18 @@
 01080   ag1=mo(mm)+dd+yy*365+int(yy/4)
 01090   if yy-int(yy/4)*4=0 and mm>2 then ag1=ag1+1
 01100   ag2=ag0-ag1
-01110   if ag2>=age(4) then let e(5)=e(5)+tr3 else goto L1130
+01110   if ag2>=age(4) then e(5)=e(5)+tr3 else goto L1130
 01120   goto L1340
-01130 L1130: if ag2>=age(3) then let e(4)=e(4)+tr3 else goto L1150
+01130 L1130: if ag2>=age(3) then e(4)=e(4)+tr3 else goto L1150
 01140   goto L1340
-01150 L1150: if ag2>=age(2) then let e(3)=e(3)+tr3 else goto L1170
+01150 L1150: if ag2>=age(2) then e(3)=e(3)+tr3 else goto L1170
 01160   goto L1340
-01170 L1170: if ag2>=age(1) then let e(2)=e(2)+tr3 else goto L1190
+01170 L1170: if ag2>=age(1) then e(2)=e(2)+tr3 else goto L1190
 01180   goto L1340
-01190 L1190: let e(1)=e(1)+tr3
+01190 L1190: e(1)=e(1)+tr3
 01200   goto L1340
 01210 L1210: if ar(5)=2 then goto L1240
-01220   let e(5)=e(5)-tr3
+01220   e(5)=e(5)-tr3
 01230   goto L1340
 01240 L1240: let tr3=-tr3
 01250   let ta1=ta(1)
@@ -132,22 +132,22 @@
 01300 L1300: if cta=0 then goto L1330
 01310   let ta1=cta
 01320   goto L1260
-01330 L1330: let e(5)=e(5)+tr3
+01330 L1330: e(5)=e(5)+tr3
 01340 L1340: if nta=0 then goto L1370
 01350   let ta1=nta
 01360   goto L1040
 01370 L1370: if e(5)>=0 then goto L1400
-01380   let e(4)=e(4)+e(5)
-01390   let e(5)=0
+01380   e(4)=e(4)+e(5)
+01390   e(5)=0
 01400 L1400: if e(4)>=0 then goto L1430
-01410   let e(3)=e(3)+e(4)
-01420   let e(4)=0
+01410   e(3)=e(3)+e(4)
+01420   e(4)=0
 01430 L1430: if e(3)>=0 then goto L1460
-01440   let e(2)=e(2)+e(3)
-01450   let e(3)=0
+01440   e(2)=e(2)+e(3)
+01450   e(3)=0
 01460 L1460: if e(2)>=0 then goto L1500
-01470   let e(1)=e(1)+e(2)
-01480   let e(2)=0
+01470   e(1)=e(1)+e(2)
+01480   e(2)=0
 01490   if e(1)<0 then let v6=v6+(-e(1))
 01500 L1500: return 
 01510 L1510: let mm=int(d1/10000)
@@ -156,16 +156,16 @@
 01540   ag0=mo(mm)+dd+yy*365+int(yy/4)
 01550   if yy-int(yy/4)*4=0 and mm>2 then ag0=ag0+1
 01560   return 
-01570 L1570: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1590
+01570 L1570: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1590
 01580   goto L1630
 01590 L1590: pr newpage
-01600   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L1620
+01600   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L1620
 01610   goto L1630
-01620 L1620: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-01630 L1630: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+01620 L1620: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+01630 L1630: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 01640   input fields "24,60,C 1,N": quitcode$
 01650   if rtrm$(uprc$(quitcode$))="Q" then goto L1690
-01660   pr fields "23,3,C 78,N": ""
-01670   pr fields "24,3,C 78,N": ""
+01660   pr f "23,3,C 78,N": ""
+01670   pr f "24,3,C 78,N": ""
 01680   retry 
 01690 L1690: goto XIT

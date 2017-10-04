@@ -16,7 +16,7 @@
 20300 ! ______________________________________________________________________
 20320     mat filename$=("")
 20360     let filter$=trim$(filter$) : if filter$="" then let filter$="*.*"
-20380     let option$=trim$(option$)
+20380     option$=trim$(option$)
 20400     let dir$=trim$(dir$)
 20420     if dir$(len(dir$):len(dir$))<>"\" then let dir$=dir$&"\"
 20440 ! _____________

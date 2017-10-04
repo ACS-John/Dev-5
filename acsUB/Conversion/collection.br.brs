@@ -26,7 +26,7 @@
 00270   next j
 00280 L280: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pd 3,c 9,10*pd 4.2
 00310   if m=0 then goto L230
-00320   if o(1)<1 or o(1)>4 then let o(1)=1
+00320   if o(1)<1 or o(1)>4 then o(1)=1
 00330   if o(1)=3 then let ti2=1 : let tcode=3 ! REG.COLLECTION
 00340   if o(1)=4 then let ti2=2 : let tcode=5 ! CREDIT MEMO
 00350   if o(1)=1 and o(2)=4 then let ti2=3 : let tocde=6 ! DEBIT MEMO

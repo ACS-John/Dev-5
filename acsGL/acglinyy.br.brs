@@ -29,16 +29,16 @@
 00270   let redir=0: if file$(255)(1:4)<>"PRN:" then let redir=1
 00280   let mp1=69
 00290   if fnps=2 then let mp1=mp1+3
-00300   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
-00310   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
+00300   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00310   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
 00320   form c 9,skip 0
 00330 L330: form pos mp1,pd 3,pos 81,41*pd 6.2
 00340   form c 7,skip 0
 00350   let nametab=int(44-len(rtrm$(cnam$))/2)
 00360   let pas=1 : open #4: "Name="&env$('temp')&"\Work."&session$&",KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outin,keyed 
 00370   if actpd>0 and actpd<14 then goto L430
-00390   pr fields "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
-00400   pr fields "12,2,C 60,N": "USE OPTION 1 ON THE MENU TO ENTER THIS INFORMATION"
+00390   pr f "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
+00400   pr f "12,2,C 60,N": "USE OPTION 1 ON THE MENU TO ENTER THIS INFORMATION"
 00410   input fields "23,2,C 1,E,N": pause$
 00420   goto XIT
 00430 L430: open #1: fl1$,internal,input,keyed 
@@ -59,10 +59,10 @@
 00560   let pf1=len(cnam$)+int((43-len(cnam$))/2)
 00570   close #101: ioerr L580
 00580 L580: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= COMPARATIVE INCOME STATEMENT ",display,outin 
-00590   pr fields "08,18,C 41,H,N": lpad$(cnam$,pf1)
-00600   pr fields "09,18,C 41,H,N": "            COMPANY NUMBER "&str$(cno)
-00610   pr fields "11,18,C 41,R,N": "              IN PROCESS"
-00620   pr fields "13,30,C 16,R,N": "PRESS F5 TO STOP"
+00590   pr f "08,18,C 41,H,N": lpad$(cnam$,pf1)
+00600   pr f "09,18,C 41,H,N": "            COMPANY NUMBER "&str$(cno)
+00610   pr f "11,18,C 41,R,N": "              IN PROCESS"
+00620   pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
 00630   if cmdkey=5 then goto L2610
 00640   let report$="STATEMENT OF INCOME AND EXPENSES"
 00650   fnopenprn(cp,58,220,process)
@@ -129,7 +129,7 @@
 01260   if total><0 or total3><0 then goto L1280
 01270   if ls+ds+ul>0 then goto L1280 else goto L730
 01280 L1280: if percent=0 then goto L1450
-01290   let sp2=31-sp-1
+01290   sp2=31-sp-1
 01300   if pas=2 then gosub PAS2
 01310   if percent1=0 then let pdpct=0 else let pdpct=total/percent1*100
 01320   if percent2=0 then let ytdpct=0 else let ytdpct=total2/percent2*100
@@ -178,7 +178,7 @@
 01720   if pppd>999.99 then let pppd=999.99
 01730   if ppyear<-999.99 then let ppyear=-999.99
 01740   if ppyear>999.99 then let ppyear=999.99
-01750   let sp2=31-sp-1
+01750   sp2=31-sp-1
 01759   if ul=1 then pr #255,using L1441: d$(1:sp2),dollar$,"{\ul ",accum2,"}",ytdpct,percent$,dollar$,"{\ul ",accum4,"}",ppyear,percent$ pageoflow L2170 : goto L1770
 01760   pr #255,using L1440: d$(1:sp2),dollar$,accum2,ytdpct,percent$,dollar$,accum4,ppyear,percent$ pageoflow L2170
 01770 L1770: if pas=1 then let tp1=accum1: let tp2=accum2 : let tp3=accum3 : let tp4=accum4 : gosub PAS1
@@ -188,7 +188,7 @@
 01800 L1800: gosub L2010
 01810   goto L720
 01820 L1820: if te$="R" then let report$=d$
-01830   if te$="S" then let secondr$=d$
+01830   if te$="S" then secondr$=d$
 01840   gosub L2010
 01850   goto L720
 01860 L1860: if foot1=1 then goto L1910
@@ -214,8 +214,8 @@
 02060   goto L2160
 02070 L2070: let fnpglen(pglen)
 02080 ! If PGLEN<>42 Then Let PGLEN=58
-02090   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-02100 ! If PGLEN=42 Then Let SK=SK+1
+02090   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+02100 ! If PGLEN=42 Then sK=SK+1
 02110   pr #255,using L2120: rtrm$(foot$),"Page "&str$(pt1)
 02120 L2120: form skip sk,pos tabnote,c fl,pos 70,c 8,skip 1
 02130   if eofcode=1 then goto L2160
@@ -260,7 +260,7 @@
 02560   let percent3=0
 02570   let percent4=0
 02580   goto L2670
-02590 L2590: let eofcode=1
+02590 L2590: eofcode=1
 02600   gosub L2070
 02610 L2610: ! 
 02620 ! 

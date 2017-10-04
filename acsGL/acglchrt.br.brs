@@ -13,7 +13,7 @@
 00130   let process=fnprocess
 00140 ! ______________________________________________________________________
 00150   cap$="General Ledger Chart of Accounts"
-00160   if process=1 then let sel=1 : goto L330
+00160   if process=1 then sel=1 : goto L330
 00170 ! ______________________________________________________________________
 00180   pr newpage
 00190   fntos(sn$="ChartAccoutnts") !:
@@ -32,7 +32,7 @@
 00270   fncmdset(2)
 00280   fnacs(sn$,0,mat resp$,ckey)
 00290   if ckey=5 then goto XIT
-00300   if resp$(1)="True" then let sel=1 else let sel=2
+00300   if resp$(1)="True" then sel=1 else sel=2
 00310   if trim$(resp$(3))<>"" then let gl1$=fnagl$(resp$(3))
 00320   if trim$(resp$(4))<>"" then let gl2$=fnagl$(resp$(4))
 00330 L330: open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 

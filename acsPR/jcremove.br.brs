@@ -23,7 +23,7 @@
 00220 L220: pr newpage
 00230   fnopenwin(win=101,10,20,14,59,cap$)
 00240   pr #101,fields "4,2,C 21,N": "Job Number to Remove:"
-00250   pr fields "15,35,C 09,B,5": "Done (F5)"
+00250   pr f "15,35,C 09,B,5": "Done (F5)"
 00260 L260: input #101,fields "4,24,C 6,UT,N": jn$
 00270   let jn$=lpad$(rtrm$(jn$),6)
 00280   if cmdkey=5 then goto L390
@@ -52,7 +52,7 @@
 00510   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno),internal,output 
 00520   close #13,free: 
 00530   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",SIZE=0,RecL=88",internal,outin,relative 
-00540   let ot4=1
+00540   ot4=1
 00550   write #13,using L560,rec=1: " ","",mat tr," ",ot4
 00560 L560: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 00570 L570: read #1,using L580: jn$,n$,mat a$,mat b eof EOF1
@@ -68,8 +68,8 @@
 00670   adr=ta(1)
 00680   mat ta=(0)
 00690 L690: read #3,using L560,rec=adr: eno$,jno$,mat tr,pd$,nta
-00700   let ot4=ot4+1
-00710   if nta>0 then let ota=ot4+1 else let ota=0
+00700   ot4=ot4+1
+00710   if nta>0 then ota=ot4+1 else ota=0
 00720   write #13,using L560,rec=ot4: eno$,jno$,mat tr,pd$,ota
 00730   rewrite #13,using L740,rec=1: ot4
 00740 L740: form pos 86,pd 3

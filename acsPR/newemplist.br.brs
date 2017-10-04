@@ -58,33 +58,33 @@
 00590   goto XIT
 00600 ! ______________________________________________________________________
 00610 ERTN: ! 
-00620   if err=61 then pr fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L640
+00620   if err=61 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L640
 00630   goto L680
 00640 L640: pr newpage
-00650   if err=4148 then pr fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L670
+00650   if err=4148 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L670
 00660   goto L680
-00670 L670: pr fields "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00680 L680: pr fields "24,1,C 80,N": "Press Enter to Retry or Q to Quit:"
+00670 L670: pr f "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00680 L680: pr f "24,1,C 80,N": "Press Enter to Retry or Q to Quit:"
 00690   input fields "24,60,C 1,N": quitcode$
 00700   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-00710   pr fields "23,1,C 80,N": ""
-00720   pr fields "24,1,C 80,N": ""
+00710   pr f "23,1,C 80,N": ""
+00720   pr f "24,1,C 80,N": ""
 00730   retry 
 00740 ! ______________________________________________________________________
 00750 XIT: let fnxit
 00760 ! ______________________________________________________________________
 00770 L770: dim first$*15,mid$*15,last$*20,item1$(2)*30
-00780   let em$(1)=uprc$(rtrm$(em$(1)))
+00780   em$(1)=uprc$(rtrm$(em$(1)))
 00790   let x1=pos(em$(1)," ",1)
 00800   let x2=pos(em$(1)," ",x1+1)
 00810   let x3=pos(em$(1)," ",x2+1)
 00820   if uprc$(namcde$)="L" then goto L870
 00830   let first$=trim$(em$(1)(1:max(x1-1,1)))
-00840   if x2>0 then let mid$=trim$(em$(1)(x1+1:x2-1)): let last$=trim$(em$(1)(x2+1:len(em$(1))))
-00850   if x2=0 then let last$=trim$(em$(1)(x1+1:len(em$(1)))): let mid$=""
+00840   if x2>0 then let mid$=trim$(em$(1)(x1+1:x2-1)): last$=trim$(em$(1)(x2+1:len(em$(1))))
+00850   if x2=0 then last$=trim$(em$(1)(x1+1:len(em$(1)))): let mid$=""
 00860   goto L910
 00870 L870: ! last name first
-00880   if x1>0 and em$(1)(x1-1:x1-1)="," then let last$=trim$(em$(1)(1:x1-2)) else let last$=trim$(em$(1)(1:max(x1-1,1)))
+00880   if x1>0 and em$(1)(x1-1:x1-1)="," then last$=trim$(em$(1)(1:x1-2)) else last$=trim$(em$(1)(1:max(x1-1,1)))
 00890   if x2>0 then let first$=trim$(em$(1)(x1+1:x2-1)): let mid$=trim$(em$(1)(x2+1:len(em$(1))))
 00900   if x2=0 then let first$=trim$(em$(1)(x1+1:len(em$(1)))): let mid$=""
 00910 L910: ! pr FIRST$,MID$,LAST$
@@ -105,5 +105,5 @@
 01000   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 01010   if ckey=5 then goto XIT
 01020   let namcde$=resp$(1)(1:1)
-01030   let status=val(resp$(2)(1:2))
+01030   status=val(resp$(2)(1:2))
 01040   return 

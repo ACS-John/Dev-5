@@ -14,7 +14,7 @@
 00140   pr newpage
 00150 SCR1: ! 
 00160   fntos(sn$="Glzer109") !:
-        let lc=0 : let mylen=55 : let mypos=mylen+3 : center=2 : let right=1
+        lc=0 : let mylen=55 : let mypos=mylen+3 : center=2 : let right=1
 00170   fnlbl(lc+=1,1,"* * *   Warning   * * *",60,center)
 00180   fnlbl(lc+=1,1,"This selection will dump all old purchase transactions from each",width,0)
 00190   fnlbl(lc+=1,1,"vendor (payee) record. This selection should only be run at year end",width,0)
@@ -29,7 +29,7 @@
 00270   if lwrc$(pas$)<>lwrc$("zero") then goto SCR1
 00280 OLDEST_DATE: ! 
 00290   fntos(sn$="Glzer1092") !:
-        let lc=0 : let mylen=30 : let mypos=mylen+3 : let width=0
+        lc=0 : let mylen=30 : let mypos=mylen+3 : let width=0
 00300   fnlbl(lc+=1,1,"Oldest Date to be Retained:",mylen,right)
 00310   fntxt(1,mypos,8,0,left,'CCYYMMDD',0,'For example, if you wantto dump all transactions up to the beginning of the new year, you would enter the first day of the new year.') !:
         let resp$(1)=str$(transactionendingdate)
@@ -37,7 +37,7 @@
 00330   fncmdset(2)
 00340   fnacs(sn$,0,mat resp$,ckey)
 00350   if ckey=5 then goto XIT
-00360   let lastdate=val(resp$(1))
+00360   lastdate=val(resp$(1))
 00370 L370: read #2,using 'Form POS 1,C 8,N 6,PD 5.2,C 12,C 30': trvn$,da,amt,re$,de$ eof L400
 00375   let x=fndate_mmddyy_to_ccyymmdd(da)
 00380   if x<lastdate then delete #2,rec=rec(2): 

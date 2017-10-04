@@ -39,11 +39,11 @@
 14340     taxYear$=date$(days(date$)-120,'CCYY')
 14360     empStart$='[All]'
 14380     empEnd$='[All]'
-14400     let ssrate=.062
+14400     ssrate=.062
 14420     if taxYear$='2016' then
-14440       let ssmax=118500 ! 2016
+14440       ssmax=118500 ! 2016
 14460     else ! if taxYear$='2017' then
-14480         let ssmax=127200 ! 2017
+14480         ssmax=127200 ! 2017
 14500     end if
 14520     let mcrate=.0145
 14540     let mcmax=999999
@@ -204,10 +204,10 @@
 20120     nameFormat$=resp$(resp_namcde)
 20140     if enableDateRange then
 20160       beg_date=val(resp$(respc_startdate))
-20180       let end_date=val(resp$(respc_enddate))
+20180       end_date=val(resp$(respc_enddate))
 20200     else
 20220       beg_date=val(taxYear$&'0101')
-20240       let end_date=val(taxYear$&'1231')
+20240       end_date=val(taxYear$&'1231')
 20260     end if
 20280 !   pr beg_date,end_date : pause ! 1154
 20300     numb=empno=endnum=0
@@ -485,7 +485,7 @@
 86060     lReturn=w2Yoffset+1
 86080   else  ! if lineNumber>=1 and lineNumber<=14 then
 86100     lReturn=w2Yoffset+10+(8.5*(lineNumber-2))
-86120     if lineNumber>=11 then let lReturn+=3.5
+86120     if lineNumber>=11 then lReturn+=3.5
 86140   end if 
 86160   fn_line=lReturn
 86900 fnend

@@ -13,7 +13,7 @@
 00120   goto XIT
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
-        let open_file_count=0 ! this value is used in the close_file sub routine
+        open_file_count=0 ! this value is used in the close_file sub routine
 00150   open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\Year.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\GLmstr\Year-Idx.h"&str$(cno)&",Use,RecL=8,KPs=1,KLn=1,Shr",internal,outin,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
@@ -23,8 +23,8 @@
 00210   fncno(cno)
 00220 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
-00230   let lbl$(ic+=1)="Year Code" !:
-        let lbl$(ic+=1)="Name"
+00230   lbl$(ic+=1)="Year Code" !:
+        lbl$(ic+=1)="Name"
 00240 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
@@ -33,13 +33,13 @@
         let tln(ic+=1)=7
 00260 ! ** Field Types ** !:
         let ic=0
-00270   let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='C'
+00270   fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='C'
 00280 ! ** Field Storage Lengths ** !:
         let ic=0 !:
         let mmddyy=6 : ccyymmdd=8
-00290   let sln(ic+=1)=1 !:
-        let sln(ic+=1)=7
+00290   sln(ic+=1)=1 !:
+        sln(ic+=1)=7
 00300 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:

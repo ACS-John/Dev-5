@@ -2,8 +2,8 @@
 00030   dim tdc(10),tcp(32)
 00090   dim cap$*128
 00104   fncno(cno)
-00110   let ssrate1=fnss_employee*.01
-00120   let ssrate2=fnss_employer*.01
+00110   ssrate1=fnss_employee*.01
+00120   ssrate2=fnss_employer*.01
 00130   fntop(program$,cap$="Fix WH Wages in Check History")
 00150 ! 
 00160   gosub READ_COMPANY_INFO

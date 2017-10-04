@@ -11,7 +11,7 @@
 18040     setup=1
 18060     library 'S:\Core\Library': fntop,fnxit,fnerror,fnindex_it,fnstatus_close
 18080     library 'S:\Core\Library': fntos,fnlbl,fntxt,fncombof,fncmdset,fnacs,fnmsgbox,fnfra,fnbutton,fnflexinit1,fnflexadd1,fncmdkey,fndate_mmddyy_to_ccyymmdd,fngethandle,fnqgl,fnagl$,fnrgl$
-18100     let left=0: let right=1
+18100     left=0: let right=1
 18140   end if
 18160 fnend
 22000 def library fnaddglpayee
@@ -62,7 +62,7 @@
 28320     cmask$(1)=cmask$(2)=''
 28340     cmask$(3)=cmask$(4)=cmask$(5)=cmask$(6)='80'
 28360     fnflexinit1('Hayee',1,1,20,100,mat chdr$,mat cmask$,1,0,frame)
-28380     let editrec=0
+28380     editrec=0
 28400     restore #paymstr: 
 28420     do
 28440       read #paymstr,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',release: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof EO_FLEX1
@@ -93,14 +93,14 @@
 28940       add=1
 28960       goto ADD_NEW_PAYEE
 28980     else if ck=2 or ck=3 then 
-29000       let editrec=val(resp$(1))
+29000       editrec=val(resp$(1))
 29020     end if
 29040     if editrec=0 then goto MENU1
 29060     if ck=2 or ck=3 then 
 29080       read #paymstr,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',rec=editrec: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
 29100     end if
 29120     if ck=2 then 
-29140       let edit=1 
+29140       edit=1 
 29160       goto EDIT_PAYEE
 29180     end if
 29200     if ck=3 then gosub DELETE_PAYEE : goto MENU1
@@ -213,10 +213,10 @@
 38120     read #citystzip,using 'Form POS 1,C 30',key=rpad$(ltrm$(csz$),30),release: citystzip$ nokey L1150 : goto L1160
 38140     L1150: write #citystzip,using 'Form POS 1,C 30': csz$
 38160     L1160: let typ=val(resp$(6)(1:2)) ! type 
-38180     let ss$=resp$(7) ! ss or fed id 
+38180     ss$=resp$(7) ! ss or fed id 
 38200     let ph$=resp$(8) ! phone 
 38220     contact$=resp$(9) ! contact name 
-38240     let email$=resp$(10) ! email address
+38240     email$=resp$(10) ! email address
 38260     let fax$=resp$(11) ! fax number 
 38280     let myact$=resp$(12) ! my account number with this payee 
 38300     let gldistrec=val(resp$(13)) ! record number of gl distribution entry
@@ -293,8 +293,8 @@
 66020   close #trans: ioerr ignore
 66040   open #trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 66060   fntos(sn$='payee_hist') 
-66080   let lc=0 : let mylen=25 : let mypos=mylen+2 : let width=50
-66100   let lc+=1
+66080   lc=0 : let mylen=25 : let mypos=mylen+2 : let width=50
+66100   lc+=1
 66120   fnlbl(lc+=1,30,'Payee Transactions',width,center)
 66140   fnlbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
 66160   fntxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All') 
@@ -340,14 +340,14 @@
 66960   end if
 66980   fncmdkey('&Close',5,0,1)
 67000   fnacs(sn$,0,mat resp$,ck)
-68000   let edittrans=0
+68000   edittrans=0
 68020   if ck<>5 then 
 68040     if ck=3 then 
 68060       gosub ADD_TRANSACTIONS
 68070       goto PAYEE_TRANSACTIONS
 68080     else if ck=4 then 
-68100       let edittrans=1 
-68120       let editrec=val(resp$(3)) 
+68100       edittrans=1 
+68120       editrec=val(resp$(3)) 
 68140       gosub EDIT_TRANSACTIONS
 68150       goto PAYEE_TRANSACTIONS
 68160     else if ck=2 then 
@@ -450,7 +450,7 @@
 86300   let de$=resp$(4)
 86320   if edittrans=1 then 
 86340     rewrite #trans,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3',rec=editrec: vn$,dt,am,rn$,de$,0 
-86360     let edittrans=0
+86360     edittrans=0
 86380   else
 86400     write #trans,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3': vn$,dt,am,rn$,de$,0
 86420   end if

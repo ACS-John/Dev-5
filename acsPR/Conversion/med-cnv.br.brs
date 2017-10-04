@@ -11,7 +11,7 @@
 00110 ! ______________________________________________________________________
 00120   fncno(cno)
 00130   pr newpage
-00140   pr fields "10,20,c 21,n": "Company Number:"
+00140   pr f "10,20,c 21,n": "Company Number:"
 00150 L150: rinput fields "10,41,Nz 5,UE,N": cno conv L150
 00155   fnputcno(cno)
 00160   let fm4$="Form  Pos 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)

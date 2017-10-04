@@ -12,7 +12,7 @@
 00130   fntop(program$,cap$="Import from old AP")
 44000 SCR1: ! 
 44020   fntos(sn$='AP-Import')
-44040   let lc=0
+44040   lc=0
 44060   let mylen=40
 44080   let mypos=mylen+2
 44100   fnlbl(lc+=1,1,'Path to Accounts Payable Data Files:',mylen,1,0,0,0,'without trailing backslash')
@@ -44,10 +44,10 @@
 52020     read #apmstr,using 'Form POS 1,C 8,4*C 30,POS 159,C 12,POS 176,PD 5.2,POS 219,N 2,C 11,POS 213,2*PD 3': vn$,nam$,ad1$,ad2$,csz$,ph$,ytdp,typ,ss$,mat ta eof EO_11
 52040     gosub UNPDMSTR
 52060     mat ta=(0)
-52080     let lr2=lrec(payalloc)+1
+52080     lr2=lrec(payalloc)+1
 52100     write #payalloc,using 'Form POS 1,C 8,N 3,N 6,N 3,PD 3.2,C 30,PD 3',rec=lr2: vn$,mat gl,100,"",0
 52120     mat ta=(lr2)
-52140     let lr1=lrec(paymstr)+1
+52140     lr1=lrec(paymstr)+1
 52160     write #paymstr,using 'Form POS 1,C 8,4*C 30,PD 5.2,N 2,C 11,2*PD 3,C 12',rec=lr1: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat ta,ph$
 52180   loop 
 54000 EO_11: ! r:
@@ -82,7 +82,7 @@
 60220     XA: ! 
 60240     let gla(j)=-gla(j)
 60260     XB: ! 
-60280     let lr4=lrec(unpdaloc)+1
+60280     lr4=lrec(unpdaloc)+1
 60300     write #unpdaloc,using 'Form POS 1,C 8,2*C 12,PD 5.2,C 30,PD 3',rec=lr4: vn$,iv$,gl$(j),gla(j),gld$(j),0
 60320     if aa(1)=0 then aa(1)=lr4
 60340     if aa(2)>0 then 
@@ -106,7 +106,7 @@
 60700   let up$(2)=str$(dt(2)) ! due date
 60720   let up$(3)="" ! po #
 60740   let up$(4)=id$(1:18)
-60760   let lr3=lrec(paytrans)+1
+60760   lr3=lrec(paytrans)+1
 60780   write #paytrans,using 'Form POS 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
 60800   UNPDMSTR_ATZ: ! 
 60820   adr=nta

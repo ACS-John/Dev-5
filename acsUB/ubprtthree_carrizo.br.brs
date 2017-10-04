@@ -27,7 +27,7 @@
           let x=len(at$(j)) : let y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
-00180   let linelength=62
+00180   linelength=62
 00190 ! 
 00200   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00210   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
@@ -42,7 +42,7 @@
 00280 SCREEN1: ! 
 00290   a$="" : let prtbkno=0
 00300   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : let ll=24 !:
+        let pf=26 : ll=24 !:
         let respc=0
 00310   fnlbl(1,1,"Current Reading Date:",ll,1)
 00320   fntxt(1,pf,8,8,1,"1",0,tt$) !:
@@ -91,10 +91,10 @@
 00520   if resp$(9)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(9))
-00530   if resp$(10)="True" then let sl1=1: let z$="" else let sl1=0
+00530   if resp$(10)="True" then sl1=1: let z$="" else sl1=0
 00540   if trim$(a$)<>"" then read #2,using L550,key=a$: z$,route,sequence nokey SCREEN1 !:
           let holdz$=z$: begin=1 !:
-          let st1=1
+          st1=1
 00550 L550: form pos 1,c 10,pos 1741,n 2,n 7
 00560   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00570   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
@@ -111,27 +111,27 @@
 00680   begin=0 ! cancel starting account
 00690   form pos 1,c 12,c 10
 00700   read #1,using L720: z$,mat e$,f$,a1,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,dr$,bc,da$ eof RELEASE_PRINT
-00710   if estimatedate>0 then let est=1 else let est=0
+00710   if estimatedate>0 then est=1 else est=0
 00720 L720: form pos 1,c 10,4*c 30,c 12,pos 143,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1942,c 12,pos 1864,c 30,pos 1831,n 9,pos 1821,n 1,pos 1712,c 1,c 9,n 2,c 17
 00730   if prtbkno=0 then goto L750
 00740   if prtbkno><route then goto RELEASE_PRINT
 00750 L750: if f><d1 then goto L650
-00760 L760: let e1=0 : mat pe$=("")
+00760 L760: e1=0 : mat pe$=("")
 00770   for j=2 to 4
 00780     if rtrm$(e$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : let pe$(e1)=e$(j)
 00790   next j
 00800   if st1=0 then goto READALTADR
-00810 ! If ST1$=Z$ Then Let ST1=0 Else Goto 560
+00810 ! If ST1$=Z$ Then sT1=0 Else Goto 560
 00820 READALTADR: ! 
 00830 ! read alternate billing address
 00840   read #3,using L860,key=z$: mat ba$ nokey L950
 00850   if trim$(ba$(1))="" and trim$(ba$(2))="" and trim$(ba$(3))="" and trim$(ba$(4))="" then goto L950
 00860 L860: form pos 11,4*c 30
-00870   let e1=0 : mat pe$=("")
+00870   e1=0 : mat pe$=("")
 00880   for j=1 to 4
 00890     if rtrm$(ba$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : let pe$(e1)=ba$(j)
 00900   next j
 00910   if trim$(pe$(2))="" then let pe$(2)=pe$(3): let pe$(3)=""
 00920   if trim$(pe$(3))="" then let pe$(3)=pe$(4): let pe$(4)=""
@@ -162,7 +162,7 @@
 01180   goto L650
 01190 ! ______________________________________________________________________
 01200 SCREEN3: ! 
-01210   let sn$ = "UBPrtBl1-2" !:
+01210   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
 01220   let txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
@@ -184,7 +184,7 @@
 01320 SORT1: ! SELECT & SORT
 01330   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1580
 01340   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=22",internal,output 
-01350   let s5=1
+01350   s5=1
 01360   if prtbkno=0 then let routekey$="" else !:
           let routekey$=cnvrt$("N 2",prtbkno)&"       " !:
           ! key off first record in route (route # no longer part of customer #)
@@ -256,7 +256,7 @@
 01990   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(33)&','&str$(lyne+=4.5)&')'
 02000 ! Let TXT$=CNVRT$("pic(zz/zz/zz",D4)
 02010 !    pr #20: 'Call Print.AddText("'&TXT$&'",'&STR$(90)&','&STR$(LYNE)&')'
-02020   let lyne+=7 !:
+02020   lyne+=7 !:
         let txt$=cnvrt$("pic(zz/zz/zz",d2) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(52)&','&str$(lyne)&')'
 02030   let txt$=cnvrt$("pic(zz/zz/zz",d3) !:
@@ -265,7 +265,7 @@
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 02050   let txt$=cnvrt$("pic(---,---.##)",bal) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
-02055   let lyne+=9
+02055   lyne+=9
 02060   if g(1)>0 then let de$=service$(1) else let de$="  " : goto L2090
 02070   let txt$=de$& cnvrt$("pic(zzzzzzz)",d(2))&cnvrt$("pic(zzzzzzz)",d(1))&cnvrt$("pic(zzzzz#)",d(3)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
@@ -276,56 +276,56 @@
 02100   if g(2)>0 then let de$=service$(2) else let de$="  " : goto L2140
 02110   if bal>0 then let penbal=bal+round(bal*.10,2) else let penbal=0
 02120   let txt$=de$ !:
-        let lyne+=4 !:
+        lyne+=4 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 02130   let txt$=cnvrt$("pic(-----.--)",g(2)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column5)&','&str$(lyne)&')'
 02140 L2140: if g(3)>0 then let de$=service$(3) else let de$="  " : goto L2170
 02150   let txt$=de$ !:
-        let lyne+=4 !:
+        lyne+=4 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(6)&','&str$(lyne)&')'
 02160   let txt$=cnvrt$("pic(-----.--)",g(3)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column5)&','&str$(lyne)&')'
 02170 L2170: if g(4)>0 then let de$=service$(4) else let de$=" " : goto L2200
-02180   let lyne+=4 !:
+02180   lyne+=4 !:
         let txt$=de$& cnvrt$("pic(zzzzzzz)",d(10))&cnvrt$("pic(zzzzzzz)",d(9))&cnvrt$("pic(zzzzz#)",d(11)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 02190   let txt$=cnvrt$("pic(-----.--)",g(4)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column5)&','&str$(lyne)&')'
 02200 L2200: if g(5)>0 then let de$=service$(5) else let de$=" " : goto L2230
 02210   let txt$=de$ !:
-        let lyne+=4 !:
+        lyne+=4 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 02220   let txt$=cnvrt$("pic(-----.--)",g(5)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column5)&','&str$(lyne)&')'
 02230 L2230: if g(6)>0 then let de$=service$(6) else let de$=" " : goto L2260
 02240   let txt$=de$ !:
-        let lyne+=4 !:
+        lyne+=4 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 02250   let txt$=cnvrt$("pic(-----.--)",g(6)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column5)&','&str$(lyne)&')'
 02260 L2260: if g(7)>0 then let de$=service$(7) else let de$=" " : goto L2290
 02270   let txt$=de$ !:
-        let lyne+=4 !:
+        lyne+=4 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 02280   let txt$=cnvrt$("pic(-----.--)",g(7)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column5)&','&str$(lyne)&')'
 02290 L2290: if g(8)>0 then let de$=service$(8) else let de$=" " : goto L2320
 02300   let txt$=de$ !:
-        let lyne+=4 !:
+        lyne+=4 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 02310   let txt$=cnvrt$("pic(-----.--)",g(8)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column5)&','&str$(lyne)&')'
 02320 L2320: if g(9)>0 then let de$=service$(9) else let de$=" " : goto L2350
 02330   let txt$=de$ !:
-        let lyne+=4 !:
+        lyne+=4 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 02340   let txt$=cnvrt$("pic(-----.--)",g(9)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column5)&','&str$(lyne)&')'
 02350 L2350: ! 
-02360   if lyne<90 then let lyne=65.5: goto L2390 ! allow for three forms
-02370   if lyne<=180 then let lyne=158: goto L2390
-02380   if lyne>180 then let lyne=251
+02360   if lyne<90 then lyne=65.5: goto L2390 ! allow for three forms
+02370   if lyne<=180 then lyne=158: goto L2390
+02380   if lyne>180 then lyne=251
 02390 L2390: let txt$=cnvrt$("pic(-----.--)",pb) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 02400   let txt$=cnvrt$("pic(-----.--)",g(11)) !:
@@ -333,10 +333,10 @@
 02410   let txt$=cnvrt$("pic(-----.--)",bal) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+50)&','&str$(lyne)&')'
 02420   let txt$=cnvrt$("pic(zz/zz/zz)",d4) !:
-        let lyne+=8 !:
+        lyne+=8 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 02430   let txt$=e$(1) !:
-        let lyne+=4 !:
+        lyne+=4 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(60)&','&str$(lyne)&')'
 02440   if est=1 then let de2$="ESTIMATED" : goto L2470 else let de2$="              "
 02450   if final>0 then let de2$="Final Bill": goto L2470 else let de2$="               "
@@ -367,9 +367,9 @@
 02610   if lyne>180 and lyne<270 then let updown=10
 02620   if trim$(cr$)<>"" then pr #20: 'Call Print.DisplayBarCode('&str$(3)&','&str$(updown)&',"'&cr$&'")'
 02630   bills+=1
-02640   if int(bills/3)=bills/3 then let fnpa_newpage : let lyne=0: goto L2670
-02650   if lyne<90 then let lyne=93 : goto L2670
-02660   if lyne>90 then let lyne=186: goto L2670
+02640   if int(bills/3)=bills/3 then let fnpa_newpage : lyne=0: goto L2670
+02650   if lyne<90 then lyne=93 : goto L2670
+02660   if lyne>90 then lyne=186: goto L2670
 02670 L2670: return 
 02680 BULKSORT: ! bulk sort order
 02690   close #1: ioerr L2700
@@ -396,17 +396,17 @@
 02900   goto L2830
 02910 L2910: return 
 02920 WATER: ! water charge if residential instead of senior citizen (returns stdwater)
-02930   let stdwater=0
+02930   stdwater=0
 02940   let waterrate=1 ! set rate code water residential
 02950   let x1=d(3) ! water usage
 02960   read #ratemst,using L2970, key="WA"&lpad$(str$(waterrate),2): mc1,mu1,mat rt nokey WATER_COMPLETED
 02970 L2970: form pos 55,32*g 10
-02980   let stdwater=mc1*max(1,d(13))
+02980   stdwater=mc1*max(1,d(13))
 02990   if x1<=mu1*max(1,d(13)) then goto WATER_COMPLETED else let mu2=mu1*max(1,d(13))
 03000   for j=1 to 10
 03010     if rt(j,1)>x1 then goto WATER_COMPLETED
 03020     if x1<rt(j,2) then let w1=x1-mu2 else let w1=rt(j,2)-mu2
-03030     let stdwater=stdwater+round(w1*rt(j,3),2)
+03030     stdwater=stdwater+round(w1*rt(j,3),2)
 03040     if rt(j,2)>x1 then goto WATER_COMPLETED
 03050     let mu2=rt(j,2)
 03060   next j

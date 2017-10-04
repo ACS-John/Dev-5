@@ -24,7 +24,7 @@
 17000 !  fnstatus_pause
 18000   chain "S:\acsPR\conversion\v4_part2"
 20000   def fn_setup
-20020     let setup=1
+20020     setup=1
 20040     library 'S:\Core\Library': fntop, fnerror,fndate_mmddyy_to_ccyymmdd
 20042     library 'S:\Core\Library': fngetdir2,fnstatus,fnindex_it,fncursys$
 20044     library 'S:\Core\Library': fnstatus_pause,fnCopy,fngethandle,fnDedNames
@@ -237,7 +237,7 @@
 62120   reread #h_prckhist,using 'form pos 1,c 5': heno$ eof TOPOFLOOP
 62140   goto PFH_READ_PRCKHIST ! /r
 63000 FICA_COMBINED: ! r:
-63020   let med$="N": let ss=cp(2)
+63020   let med$="N": ss=cp(2)
 63040   cp(2)=ss*.810458: cp(3)=ss-cp(2) ! just use a ratio to calculate breakdwon
 63060   if uprc$(med$)="N" and em6=1 then cp(3)=0 : cp(2)=ss ! NO MC ALL SS ! change to seperate medicare
 63080   if uprc$(med$)="N" and em6=2 then cp(2)=0 : cp(3)=ss ! NO SS ALL MC ! change to seperate medicare

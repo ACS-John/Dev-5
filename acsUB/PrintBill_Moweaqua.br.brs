@@ -24,7 +24,7 @@
 00240     let x=len(at$(j)) : let y=z-x
 00250     at$(j)=rpt$(" ",int(y/2))&at$(j)
 00260   next j
-00270 ! let linelength=62
+00270 ! linelength=62
 00280 ! 
 00290 ! 
 00310   fn_bulksort
@@ -34,7 +34,7 @@
 00350 SCREEN1: ! 
 00360   a$="" : let prtbkno=0
 00370   fntos(sn$="UBPrtBl1-1")
-00380   let pf=26 : let ll=24
+00380   let pf=26 : ll=24
 00390   let respc=0
 00400   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00410   fntxt(3,pf,8,8,1,"1",0,tt$)
@@ -71,11 +71,11 @@
 00720   let mg$(3)=resp$(4)
 00730   if resp$(6)="[All]" then a$="" else a$=lpad$(trim$(resp$(6)(1:9)),9)
 00740   if resp$(7)="[All]" then let prtbkno=0 else let prtbkno=val(resp$(7))
-00750   if resp$(8)="True" then let sl1=1: let z$="" else let sl1=0
+00750   if resp$(8)="True" then sl1=1: let z$="" else sl1=0
 00760   if trim$(a$)<>"" then 
 00770     read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1
-00780     let st1=1
-00790     let st1$=z$
+00780     st1=1
+00790     st1$=z$
 00800   end if 
 00805 L460: form pos 1,c 10,pos 1741,n 2,n 7
 00810   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
@@ -84,7 +84,7 @@
 00825 ! ______________________________________________________________________
 00830   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.H"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\adrIndex.H"&str$(cno)&",Shr",internal,input,keyed 
 00835   fnpa_open("Landscape")
-00840   let lyne=3
+00840   lyne=3
 00857 NEXT_CUSTOMER: ! 
 00858   if sl1=1 then goto SCR_ASK_CUSTOMER
 00859 READ_SORT_FILE: ! 
@@ -95,20 +95,20 @@
 00869   if prtbkno><route then goto RELEASE_PRINT
 00871 L620: if f><d1 then goto NEXT_CUSTOMER
 00873   if st1=0 then goto AFTER_CUSTOMER_READ
-00875   if st1$=z$ then let st1=0 else goto NEXT_CUSTOMER
+00875   if st1$=z$ then st1=0 else goto NEXT_CUSTOMER
 00877 AFTER_CUSTOMER_READ: ! 
 00879 ! r: read alternate billing address
 00881   read #3,using 'form pos 11,4*c 30',key=z$: mat ba$ nokey L750
-00885   let e1=0 : mat pe$=("")
+00885   e1=0 : mat pe$=("")
 00887   for j=1 to 4
-00889     if rtrm$(ba$(j))<>"" then let e1=e1+1 : let pe$(e1)=ba$(j)
+00889     if rtrm$(ba$(j))<>"" then e1=e1+1 : let pe$(e1)=ba$(j)
 00891   next j
 00893   goto PRINT_IT
 00895 ! ______________________________________________________________________
 00897 L750: ! 
-00898   let e1=0 : mat pe$=("")
+00898   e1=0 : mat pe$=("")
 00899   for j=2 to 4
-00901     if rtrm$(e$(j))<>"" then let e1=e1+1 : let pe$(e1)=e$(j)
+00901     if rtrm$(e$(j))<>"" then e1=e1+1 : let pe$(e1)=e$(j)
 00903   next j
 00905   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 00907   goto PRINT_IT
@@ -131,7 +131,7 @@
 00937   goto NEXT_CUSTOMER ! /r
 00939 ! ______________________________________________________________________
 00941 SCR_ASK_CUSTOMER: ! r:
-00943   let sn$="UBPrtBl1-2"
+00943   sn$="UBPrtBl1-2"
 00945   fntos(sn$)
 00947   let txt$="Account (blank to stop)"
 00949   fnlbl(1,1,txt$,31,1)
@@ -255,7 +255,7 @@
 02490     fnpa_line(xmargin+1,lyne*26+1+ymargin,63,0)
 02500     fnpa_txt("Phone: 217-768-3435",xmargin+1,lyne*27+ymargin)
 02510 ! ______________________________________________________________________
-02520 !     let special=28
+02520 !     special=28
 02530 ! ______________________________________________________________________
 02540     fnpa_fontsize(7)
 02550     fnpa_line(xmargin+97,ymargin+0,29,lyne*5+2,1)

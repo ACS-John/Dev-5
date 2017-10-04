@@ -23,7 +23,7 @@
 40120     restore #h_file: 
 40140     do 
 40160       linput #h_file: line$ eof RIF_EOF
-40180       let line$=srep$(line$,from$,to$)
+40180       line$=srep$(line$,from$,to$)
 40200       pr #h_out: line$
 40220     loop 
 40240 RIF_EOF: ! 
@@ -45,9 +45,9 @@
 50140     restore #h_file: 
 50160     do 
 50180       linput #h_file: line$ eof GV_EOF
-50200       let line$=trim$(line$)
+50200       line$=trim$(line$)
 50220       do while pos(line$,' =')>0
-50240         let line$=srep$(line$,' =','=')
+50240         line$=srep$(line$,' =','=')
 50260       loop 
 50280       let var_set_pos=pos(lwrc$(line$),' '&lwrc$(var$)&'=')
 50300       if var_set_pos>0 then 

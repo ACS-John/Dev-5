@@ -72,7 +72,7 @@
               acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2'
 00520 READ_ACCTRN: ! 
 00530 L530: read #acctrn,using acctrn_form$: p$,tamt,tdate,transcode,postcode,g(1),g(2),g(3),g(4),g(5),g(6),g(7),g(8),g(9),g(10) eof PHASE2 ioerr R68F
-00540   pr fields "1,1,C 20,R,N": str$(accnt+=1)&"/"&str$(lrec(acctrn))
+00540   pr f "1,1,C 20,R,N": str$(accnt+=1)&"/"&str$(lrec(acctrn))
 00550   read #master,using 'form pos 1,c 10',key=p$: z$ nokey READ_ACCTRN
 00560   gosub TRANSLATE_TRANSCODE
 00570   if len(str$(tdate))<=6 then goto L530

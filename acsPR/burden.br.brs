@@ -41,10 +41,10 @@
 00300   if ckey=1 then goto ADD_RECORD
 00310   if ckey=3 then read #1,using L190: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE eof ASKEMPLOYEE: let holdeno=eno: goto SCREEN_1
 00320   if ckey=4 then read #1,using L190,key=holdeno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE,ioerr ASKEMPLOYEE : goto SCREEN_1
-00330   let eno=val(resp$(1)(1:8)): let holdeno=eno
-00340   let eno$=lpad$(str$(eno),8)
+00330   eno=val(resp$(1)(1:8)): let holdeno=eno
+00340   eno$=lpad$(str$(eno),8)
 00350   if ckey=2 then read #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE : goto SCREEN_1
-00360   if ckey=6 then let fnburden_srch(eno$,fixgrid) : let eno$=lpad$(rtrm$(eno$),8) : read #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE : goto SCREEN_1
+00360   if ckey=6 then let fnburden_srch(eno$,fixgrid) : eno$=lpad$(rtrm$(eno$),8) : read #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE : goto SCREEN_1
 00361   if trim$(eno$)="" then goto ASKEMPLOYEE else read #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE : goto SCREEN_1
 00370   if ckey=7 then gosub RECREATE_GRID: goto ASKEMPLOYEE
 00380 SCREEN_1: ! maintain personnel burdern screen
@@ -71,7 +71,7 @@
 00540   fncmdkey("&Cancel",5,0,1,"Returns to first screen without saving any changes.")
 00550   fnacs(sn$,0,mat resp$,ckey)
 00560   if ckey=5 then goto ASKEMPLOYEE
-00562   let eno=val(resp$(1)(1:8)) : let eno$=lpad$(trim$(resp$(1)),8)
+00562   eno=val(resp$(1)(1:8)) : eno$=lpad$(trim$(resp$(1)),8)
 00563   let name$=resp$(2)
 00564   burden=val(resp$(3))
 00570   if ckey<>4 then goto L640
@@ -102,8 +102,8 @@
 00790   fncmdset(11)
 00800   fnacs(sn$,0,mat resp$,ckey)
 00810   if ckey=5 then goto ASKEMPLOYEE
-00820   let eno=val(resp$(1)(1:8)) !:
-        let eno$=lpad$(trim$(resp$(1)(1:8)),8)
+00820   eno=val(resp$(1)(1:8)) !:
+        eno$=lpad$(trim$(resp$(1)(1:8)),8)
 00830   let name$=(resp$(1)(10:40))
 00840   if trim$(eno$)="" then goto ADD_RECORD
 00850   read #1,using L190,key=eno$: z$ nokey L870

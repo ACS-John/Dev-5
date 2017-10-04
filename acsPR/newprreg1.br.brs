@@ -86,7 +86,7 @@
 52240   read #h_dd,using "Form pos 1,C 10,C 1,N 9,N 2,N 17",key=dirdep$: key$,dd$,rtn,acc,acn nokey ignore
 52260 ! if env$('client')="West Rest Haven" then goto L690
 52280   a=pos(rtrm$(em$)," ",1) : b=pos(rtrm$(em$)," ",a+1)
-52300   let em$=rtrm$(em$(max(a,b):30))&" "&em$(1:a) error ignore
+52300   em$=rtrm$(em$(max(a,b):30))&" "&em$(1:a) error ignore
 52320 ! L690: !
 52340   restore #h_checks,key>=checkkey$: nokey LOOP_TOP
 52360 L700: ! 
@@ -97,19 +97,19 @@
 52460   mat tcp=tcp+cp : mat ttdc=ttdc+tdc
 52480   goto L700
 52500 L760: ! 
-52520 ! let oi=tcp(28)+tcp(29)+tcp(30)+tcp(27)
-52540   let other_wh=-tcp(25)
+52520 ! oi=tcp(28)+tcp(29)+tcp(30)+tcp(27)
+52540   other_wh=-tcp(25)
 52560   for j=5 to 24
 52580     if newdedcode(j-4)=3 then goto L810
 52600     if newdedcode(j-4)=2 then 
-52602       let other_wh=other_wh-tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&') deducts '&str$(tcp(j))
+52602       other_wh=other_wh-tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&') deducts '&str$(tcp(j))
 52604     else 
-52606       let other_wh=other_wh+tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&')    adds '&str$(tcp(j))
+52606       other_wh=other_wh+tcp(j) ! if break_is_on and tcp(j)<>0 then pr 'tcp('&str$(j)&')    adds '&str$(tcp(j))
 52608     end if 
 52620 L810: ! 
 52640   next j
 52642   if include_tips_in_other_wh then ! include tips in Other Withholdings added for West Accounting on 1/18/2016
-52650     let other_wh+=tcp(30) ! if break_is_on and tcp(30)<>0 then pr 'tcp('&str$(30)&') TIPS    adds '&str$(tcp(30))
+52650     other_wh+=tcp(30) ! if break_is_on and tcp(30)<>0 then pr 'tcp('&str$(30)&') TIPS    adds '&str$(tcp(30))
 52652   end if 
 52660   let tothrs=0
 52680   for j=1 to 5
@@ -128,7 +128,7 @@
 53020   let total_hours+=sum(mat thc)
 53040   let total_net_pay+=tcp(32)
 53050   let total_gross_pay+=tcp(31)
-53060   let other_wh=0
+53060   other_wh=0
 53080   goto LOOP_TOP ! /r
 53100 ! ______________________________________________________________________
 56000 TOTALS: ! r:

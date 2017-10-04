@@ -98,7 +98,7 @@
 00776   end if
 00778   if ds=1 then let dollar$="$" else let dollar$=" "
 00790   if annualb><0 or total2><0 or total<>0 or ls+ds+ul+ic>0 then 
-00800     let sp2=22-sp-1
+00800     sp2=22-sp-1
 00825     if ul=1 then pr #255,using L841: d$(1:sp2),dollar$,"{\ul ",annualb,"}",dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}",dollar$,"{\ul ",unexpend,"}" pageoflow PGOF : goto L840
 00830     pr #255,using L840: d$(1:sp2),dollar$,annualb,dollar$,total,dollar$,total2,dollar$,unexpend pageoflow PGOF
 00840     L840: form pos sp,c sp2,pos 22,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(---,---,---.##),skip 1
@@ -116,7 +116,7 @@
 00930   if rs=1 then accum3=-accum(ap,3) else accum3=accum(ap,3)
 00940   if rs=1 then accum4=accum(ap,4) else accum4=accum(ap,4)
 00950   if ds=1 then let dollar$="$" else let dollar$=" "
-00960   let sp2=22-sp-1
+00960   sp2=22-sp-1
 00964   if ul=1 then 
 00966     pr #255,using L841: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}",dollar$,"{\ul ",accum3,"}",dollar$,"{\ul ",accum4,"}" pageoflow PGOF
 00968   else
@@ -130,7 +130,7 @@
 01032   if te$="R" then 
 01034     let report$=d$
 01040   else if te$="S" then 
-01042     let secondr$=d$
+01042     secondr$=d$
 01044   end if
 01050   gosub PrFootnotesA
 01060 goto ReadFinStmtLayout ! /r
@@ -162,7 +162,7 @@
 01274 return ! /r
 01290 PrHeaderSecondary: ! r:
 01300   fnpglen(pglen)
-01310   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
+01310   sk=pglen-krec(255): fl=len(rtrm$(foot$))
 01330   pr #255,using L1340: rtrm$(foot$),"Page "&str$(pt1)
 01340   L1340: form skip sk,pos tabnote,c fl,pos 74,c 8,skip 1
 01350   if eofcode<>1 then 
@@ -197,7 +197,7 @@
 01640   pr #255: 
 01650 return ! /r
 01670 FINIS: ! r:
-01672   let eofcode=1
+01672   eofcode=1
 01680   gosub PrHeaderSecondary
 01690   fnfscode(actpd)
 01691   fnpriorcd(1)

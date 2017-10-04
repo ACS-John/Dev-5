@@ -7,7 +7,7 @@
 10600   dim srv$(3)*1,cap$*128,txt$*80,tg(11)
 10800   fntop(program$,cap$="Forgot to Zero Year-To-Date")
 10900 MAIN: ! 
-11000   let sn$="forgot"
+11000   sn$="forgot"
 11100   fntos(sn$)
 11200   let txt$="First Billing Date of New Year (MMDDYY):"
 11300   fnlbl(1,1,txt$,42,1)
@@ -32,7 +32,7 @@
 13200   let x=fbd
 13300   if tdate<fndate_mmddyy_to_ccyymmdd(x) then goto L240
 13400   let watuse=watuse+wu
-13500   let eleuse=eleuse+eu
+13500   eleuse=eleuse+eu
 13600   let gasuse=gasuse+gu
 13700   goto L240
 13800 L330: rewrite #1,using L340: watuse,elecuse,gasuse

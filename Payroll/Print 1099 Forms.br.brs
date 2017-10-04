@@ -17,7 +17,7 @@
 00880 START: ! r: main loop
 00890   mat ad$=("")
 00900   read #hrpmstr,using 'form pos 1,c 8,3*c 30,c 11': vn$,nam$,ad$(1),ad$(2),ss$ eof FINIS
-00930   let eno=val(vn$) ioerr START
+00930   eno=val(vn$) ioerr START
 00940   mat box=(0)
 00950   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 00960   restore #hChecks,key>=checkkey$: nokey START
@@ -38,7 +38,7 @@
 01140 FINIS: ! r:
 01150   close #hrpmstr: ioerr ignore
 01152   close #hChecks: ioerr ignore
-01162   let seltp=type=min1=0 
+01162   seltp=type=min1=0 
 01164   let vn$=nam$="" 
 01166   mat a$=(""): mat ad$=(""): mat box=(0) 
 01168   fn1099print_close

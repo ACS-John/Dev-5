@@ -27,10 +27,10 @@
 20120   if ckey=5 then goto XIT 
 20130   bdate=val(resp$(1)) 
 20140   bla3$=trim$(resp$(2)) 
-20150   let svce$=resp$(2)(1:4) 
+20150   svce$=resp$(2)(1:4) 
 20160   cde=val(resp$(2)(3:4))
 20170   for j=1 to udim(srv$)
-20180     if uprc$(resp$(2)(1:2))=uprc$(srv$(j)) then let svce=j
+20180     if uprc$(resp$(2)(1:2))=uprc$(srv$(j)) then svce=j
 20190   next j
 20200   open #20: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 20210   read #20,using "Form POS 55,32*G 10",key=svce$: mat rt$ ioerr SCR1 
@@ -119,11 +119,11 @@
 32020   L590: form pos 143,7*pd 2,pos 1806,3*n 2,pos 217,12*pd 5,pos 296,pd 4
 32030   if f<>bdate then goto READ_CUSTOMER
 32040   if a(svce)=0 then goto READ_CUSTOMER
-32050   let s9=3
+32050   s9=3
 32060   if svce<3 then goto L670
-32070   let s9+=4
+32070   s9+=4
 32080   if svce=3 then goto L670
-32090   let s9+=4
+32090   s9+=4
 32100   L670: !
 32110   if a(svce)=cde then goto L690
 32120   goto READ_CUSTOMER

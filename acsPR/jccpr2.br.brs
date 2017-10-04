@@ -61,7 +61,7 @@
 00590   gosub L1550
 00600   gosub TOTALS
 00610   pr #255: newpage
-00620 L620: let en$=en1$
+00620 L620: en$=en1$
 00630   let jn$=jn1$
 00640   let n$=""
 00650   read #2,using L660,key=jn$: n$ nokey L670
@@ -71,7 +71,7 @@
 00690 ! ______________________________________________________________________
 00700 L700: if val(en$)=0 then goto MOVEINFO
 00710   gosub L1550
-00720   let en$=en1$
+00720   en$=en1$
 00730   goto L780
 00740 ! ______________________________________________________________________
 00750 L750: gosub L1390
@@ -106,8 +106,8 @@
 01040 L1040: goto L840
 01050 ! ______________________________________________________________________
 01060 L1060: mat em$=("")
-01070   let ss$=""
-01080   let em2=0
+01070   ss$=""
+01080   em2=0
 01090   let ta1=0
 01100 MOVEINFO: ! 
 01110   let pl1$(1)=em$(1)
@@ -140,13 +140,13 @@
 01380 ! ______________________________________________________________________
 01390 L1390: if tgp=0 then let x3=0 else let x3=(gp1+gp2)/tgp
 01400   if hr1(8)=0 then goto L1450
-01410   let lnp=lnp+1
-01420   if lnp>5 then let lnp=6
+01410   lnp=lnp+1
+01420   if lnp>5 then lnp=6
 01430   pr #255,using L1440: pl1$(lnp),mat hr1,tdet2," REG",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF
 01440 L1440: form pos 1,c 30,9*n 6.2,c 6,n 9.2,3*n 8.2,n 9.2
 01450 L1450: if hr2(8)=0 then goto L1500
-01460   let lnp=lnp+1
-01470   if lnp>5 then let lnp=6
+01460   lnp=lnp+1
+01470   if lnp>5 then lnp=6
 01480   if hr1(8)=0 then pr #255,using L1440: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF else pr #255,using L1490: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PGOF
 01490 L1490: form pos 1,c 30,9*n 6.2,c 6
 01500 L1500: let hr8=hr8+hr1(8)+hr2(8)
@@ -155,7 +155,7 @@
 01530   return 
 01540 ! ______________________________________________________________________
 01550 L1550: gosub L1390
-01560   let lnp=lnp+1
+01560   lnp=lnp+1
 01570   if lnp>5 then goto L1620
 01580   for j=lnp to 5
 01590     pr #255,using L1600: pl1$(j) pageoflow PGOF
@@ -173,7 +173,7 @@
 01710   let tcd1=0
 01720   let hr8=0
 01730   let tcp22=0
-01740   let lnp=0
+01740   lnp=0
 01750   return 
 01760 ! ______________________________________________________________________
 01770 TOTALS: ! 

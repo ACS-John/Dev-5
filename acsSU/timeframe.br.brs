@@ -14,7 +14,7 @@
 00120   goto XIT
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
-        let open_file_count=0 ! this value is used in the close_file sub routine
+        open_file_count=0 ! this value is used in the close_file sub routine
 00150   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\TimeFrame.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\TMmstr\TimeFrame-Idx.h"&str$(cno)&",Use,RecL=52,KPs=1,KLn=2,Shr",internal,outin,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
@@ -24,8 +24,8 @@
 00210   fncno(cno)
 00220 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
-00230   let lbl$(ic+=1)="Time Frame ID" !:
-        let lbl$(ic+=1)="Description"
+00230   lbl$(ic+=1)="Time Frame ID" !:
+        lbl$(ic+=1)="Description"
 00250 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
@@ -34,13 +34,13 @@
         let tln(ic+=1)=50
 00280 ! ** Field Types ** !:
         let ic=0
-00290   let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='C'
+00290   fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='C'
 00310 ! ** Field Storage Lengths ** !:
         let ic=0 !:
         let mmddyy=6 : ccyymmdd=8
-00320   let sln(ic+=1)=2 !:
-        let sln(ic+=1)=50
+00320   sln(ic+=1)=2 !:
+        sln(ic+=1)=50
 00420   return 
 00430 ! ______________________________________________________________________
 00440 HAMSTER: ! 

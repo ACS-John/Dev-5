@@ -9,7 +9,7 @@
 00090 L90: pr newpage
 00100   close #101: ioerr L110
 00110 L110: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=CONVERT PAYEE MASTER FILE",display,outin 
-00120   pr fields "10,5,C 60": "ENTER COMPANY NUMBER TO CONVERT OR 0 TO STOP:"
+00120   pr f "10,5,C 60": "ENTER COMPANY NUMBER TO CONVERT OR 0 TO STOP:"
 00130   input fields "10,51,N 2,UE,N": cno
 00140   if cno=0 then goto XIT ! CHAIN "RABLDSCR/CCRA1"
 00150 ! 
@@ -19,7 +19,7 @@
 00190 L190: form pos 1,c 8,pos 147,n 3,n 6,n 3
 00200   mat ta=(0)
 00210 ! IF SUM(GL)=0 THEN GOTO 190
-00220   let lr2=lrec(2)+1
+00220   lr2=lrec(2)+1
 00230   write #2,using L240,rec=lr2: p$,mat gl,100,"",0
 00240 L240: form pos 1,c 8,n 3,n 6,n 3,pd 3.2,c 30,pd 3
 00250   mat ta=(lr2)
@@ -33,8 +33,8 @@
 00330 ! EXECUTE "Rename X "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
 00340 ! EXECUTE "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx1.H"&str$(cno)&",1,8,Replace,DupKeys"
 00350 ! EXECUTE "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx2.H"&str$(cno)&",9,28,Replace,DupKeys"
-00360   pr fields "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&str$(cno)
-00370   pr fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
+00360   pr f "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&str$(cno)
+00370   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00380   input fields "13,40,C 1,IAE,N": pause$
 00390   goto L90
 00400 ! ______________________________________________________________________

@@ -147,7 +147,7 @@
 38760 return ! /r
 42000 PrintPageFooter: ! r:
 42020   fnpglen(pglen)
-42040   let sk=pglen-krec(255): let fl=len(rtrm$(ft$))
+42040   sk=pglen-krec(255): fl=len(rtrm$(ft$))
 42060   pr #255,using L1190: rtrm$(ft$)
 42080   L1190: form skip sk,pos tabnote,c fl,skip 1
 42100   if eofcode<>1 then 
@@ -190,18 +190,18 @@
 58000 def fn_selectSchedules(mat prtsch)
 58020   selectSchedulesReturn=0
 58040   restore #hAcGlSchs1,key>="   ": nokey SelectSchedulesXit
-58060   let ln=1 : let totallisted=0
+58060   ln=1 : let totallisted=0
 58080   fntos(sn$="GLschprt") 
 58100   fnlbl(1,15,"Select Schedules to Be Printed")
 58120   do
 58140     read #hAcGlSchs1,using L270: sn,sn$,ft$,dp,rs,cm eof L1720
-58160     let ln=ln+1
+58160     ln=ln+1
 58180     let text$=cnvrt$("pic(zzz)",sn)&"  "&sn$(1:40)
 58200     fnchk(ln,1,text$,0)
 58220     let totallisted+=1
-58240     let scheduleno(totallisted)=val(text$(1:3))
+58240     scheduleno(totallisted)=val(text$(1:3))
 58260     ! if ln>21 and 1>1 then goto L1720 ! quit if more than two columns
-58280     ! if ln>21 then let ln=1: let 1+=52
+58280     ! if ln>21 then ln=1: let 1+=52
 58300   loop
 58320   L1720: !
 58340   if totallisted then

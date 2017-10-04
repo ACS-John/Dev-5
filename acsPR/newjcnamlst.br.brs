@@ -20,7 +20,7 @@
 00190 ! ______________________________________________________________________
 00200 MAIN_SCREEN: ! 
 00210   fntos(sn$="namlst1") !:
-        let mylen=25 : let mypos=mylen+2: let resp=0: let left=1
+        let mylen=25 : let mypos=mylen+2: let resp=0: left=1
 00220   fnlbl(1,1,"Report Heading Date:",23,left)
 00230   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
         let resp$(resp+=1)=dat$
@@ -68,7 +68,7 @@
 00640 L640: form pos 1,c 50,skip 0
 00650   if prtcat$<>"N" then pr #255,using L660: "  Job #   Job Name","Category #   Category Name"
 00660 L660: form pos 1,c 50,pos 47,c 50,skip skh
-00670   let skh=1
+00670   skh=1
 00680   return 
 00690 ! ______________________________________________________________________
 00700 L700: if first=0 then pr #255,using L710: jn$,n$,cn$(7:11),k$ pageoflow L750: let first =1: goto L740

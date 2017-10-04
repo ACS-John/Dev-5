@@ -7,14 +7,14 @@ def fnco_properties_btn_ok
     if s$(sio_cmbOrientation)='Landscape' then 
       if tmp_height>tmp_width then ! and it's taller than it is wide
         let tmp_hold=tmp_height
-        let tmp_height=tmp_width : let s$(sio_txtHeight)=str$(tmp_height)
-        let tmp_width=tmp_hold : let s$(sio_txtWidth)=str$(tmp_width)
+        let tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
+        let tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
       end if 
     else if s$(sio_cmbOrientation)='Portrait' then
       if tmp_width>tmp_height then ! and it's wider than it is tall
         let tmp_hold=tmp_height
-        let tmp_height=tmp_width : let s$(sio_txtHeight)=str$(tmp_height)
-        let tmp_width=tmp_hold : let s$(sio_txtWidth)=str$(tmp_width)
+        let tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
+        let tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
       end if 
     end if 
   ! /r

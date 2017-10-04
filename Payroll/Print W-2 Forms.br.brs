@@ -123,7 +123,7 @@
 26020   if exportFormatID=0 then 
 26040     fnpa_open('',w2Copy$,'PDF') 
 26060   end if
-26080 ! let lyne=topmargin ! starting of 1st line
+26080 ! lyne=topmargin ! starting of 1st line
 26100   let goproc=0
 26120   open #hEmployee:=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 26140   open #hDepartment:=2: "Name="&env$('Q')&"\PRmstr\department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\deptidx.h"&env$('cno'),internal,outin,keyed 
@@ -135,7 +135,7 @@
 27000   ! if loccode=0 or cLocality$="YES" or cLocality$="NO" then 
 27020   !   goto READ_EMPLOYEE 
 27040   ! else 
-27060   !   let empLocality$=cLocality$
+27060   !   empLocality$=cLocality$
 27080   !   gosub ASK_EMP_LOCALITY
 27100   ! end if
 27120 ! /r
@@ -163,15 +163,15 @@
 32140       read #hDepartment,using "form pos 48,n 2", key=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zzz)",tdn): tcd nokey ignore ! get state code
 32160       if tcd<1 or tcd>10 then let tcd=1
 32180       if exportFormatID then 
-32200         let stcode=tcd 
+32200         stcode=tcd 
 32220       else
-32240         if first=1 then let stcode=tcd
+32240         if first=1 then stcode=tcd
 32260         if first=0 and stcode><tcd then 
 32280           goto L1300
 32300         end if
 32320       end if
-32340       let state$=d$(tcd)(1:2)
-32360       let stcode$=e$(tcd)
+32340       state$=d$(tcd)(1:2)
+32360       stcode$=e$(tcd)
 32380       L1300: ! 
 32400       let dedfica=0
 32420       let dedret=0
@@ -207,7 +207,7 @@
 32980         if pn1>0 and tcp(pn1+4)>0 then let retirementPlanX$="X"
 33000         if dc1>0 and dc1<11 then let dcb+=tcp(dc1+4)
 33020       else
-33040         if loccode=0 then let lowh=0 else let lowh=tcp(loccode+4)
+33040         if loccode=0 then lowh=0 else lowh=tcp(loccode+4)
 33060         write #hAddr,using 'form pos 1,n 8,n 2,3*pd 5.2,c 8': eno,tcd,tcp(31)-dedret,tcp(3),lowh,empLocality$
 33080         let goproc=1
 33100       end if
@@ -299,7 +299,7 @@
 37160     let nameFirst$=nameMiddle$=nameLast$=""
 37180     mat k$=("")
 37190     ! state$=''
-37182     let ss$=printLocality$="" 
+37182     ss$=printLocality$="" 
 37200     gosub PrintW2
 37220     fnpa_finis
 37240   end if
@@ -340,10 +340,10 @@
 52200   fncmdkey("E&xit",5,0,1,"Returns to menu")
 52220   fnacs(sn$,0,mat resp$,ckey)
 52240   if ckey=5 then goto XIT
-52260   let empLocality$=resp$(1)
+52260   empLocality$=resp$(1)
 52280   controlNumber$=rtrm$(controlNumber$)
 52300   if controlNumber$="1" then goto L2770
-52320   let empLocality$=controlNumber$
+52320   empLocality$=controlNumber$
 52340 L2770: ! 
 52360 return  ! /r
 64000 BOX16_process: ! r: Box 16

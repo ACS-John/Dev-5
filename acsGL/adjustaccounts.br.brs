@@ -27,9 +27,9 @@
 10260               for period=1 to 13
 10270                 let priorym(period)=ymbal(period) : let ymbal(period)=0
 10280               next period
-10290               let startbal=priorym(oldpcode)
+10290               startbal=priorym(oldpcode)
 10300             end if 
-10310             let oldpcode=pcode
+10310             oldpcode=pcode
 10320             balance+=tramt
 10330             let ymbal(pcode)=balance
 10340           end if 
@@ -95,7 +95,7 @@
 10940       for period=1 to 13
 10950         let priorym(period)=ymbal(period) : let ymbal(period)=0
 10960       next period
-10970       let startbal=priorym(oldpcode)
+10970       startbal=priorym(oldpcode)
 10980       fn_confirmadjustment=fn_confirmadjustment
 10990     else 
 11000       dim mg$(2)*255

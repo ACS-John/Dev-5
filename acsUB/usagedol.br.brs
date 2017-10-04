@@ -16,7 +16,7 @@
         close #20: 
 00140 ! ______________________________________________________________________
 00150 SCREEN1: ! 
-00160   let sn$ = "ubAccTr" !:
+00160   sn$ = "ubAccTr" !:
         fntos(sn$) !:
         let mylen=23 !:
         let mypos=mylen+2
@@ -42,7 +42,7 @@
 00280   let dat$=resp$(1) !:
         let d(1)=val(resp$(2)) !:
         let d(2)=val(resp$(3))
-00290   let svce$=resp$(4)(1:4) !:
+00290   svce$=resp$(4)(1:4) !:
         cde=val(resp$(4)(3:4))
 00300   pause 
 00310   if d(1)<>0 then let d(1)=fndate_mmddyy_to_ccyymmdd(d(1))

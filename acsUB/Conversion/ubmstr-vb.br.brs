@@ -25,31 +25,31 @@
 00280     open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr,Use,RecL=149",internal,outin,relative 
 00290 L290: read #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$ eof L590
 00300     form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
-00310     let extra(1)=val(z$(1:2)) conv L290 ! route
-00320     let extra(2)=val(z$(3:7)) conv L290 ! sequence
-00330     if extra(2)=0 then let extra(2)=1 ! don't allow zero sequence #
-00340     let extra$(6)=f$(3) : let f$(3)="" ! bulk sort code
-00350     let extra$(3)=f$(2) : let f$(2)="" ! meter module #  (water meter serial)
-00360 ! Let EXTRA(11)=B(6): b(6)=0 ! note payable amount
-00370 ! let extra(17)=c(4) : c(4)=0 ! final billing code
-00380 ! let extra(3)=d(5) : let d(5)=0 ! date meter read current
-00390 ! let extra(4)=d(6): let d(6)=0 ! date meter read prior
+00310     extra(1)=val(z$(1:2)) conv L290 ! route
+00320     extra(2)=val(z$(3:7)) conv L290 ! sequence
+00330     if extra(2)=0 then extra(2)=1 ! don't allow zero sequence #
+00340     extra$(6)=f$(3) : let f$(3)="" ! bulk sort code
+00350     extra$(3)=f$(2) : let f$(2)="" ! meter module #  (water meter serial)
+00360 ! eXTRA(11)=B(6): b(6)=0 ! note payable amount
+00370 ! extra(17)=c(4) : c(4)=0 ! final billing code
+00380 ! extra(3)=d(5) : let d(5)=0 ! date meter read current
+00390 ! extra(4)=d(6): let d(6)=0 ! date meter read prior
 00400 ! Let D(7)=0
-00410 ! Let EXTRA$(2)=STR$(D(8)): Let D(8)=0 ! phone #
+00410 ! eXTRA$(2)=STR$(D(8)): Let D(8)=0 ! phone #
 00420 ! Let D(11)=0 ! city bank account will be in bank draft program
 00430 ! Let DA$=STR$(D(12)): Let D(12)=0 ! customer bank account
-00440 ! Let EXTRA$(7)=STR$(D(15)): Let D(15)=0 ! test cycle code
+00440 ! eXTRA$(7)=STR$(D(15)): Let D(15)=0 ! test cycle code
 00444     let d(13)=0 ! set # units to 0 if not used xxx-prb 05/18/11
 00450     let d(14)=0 ! don't know but has value on old system
 00460 ! Let GB(5)=GB(3)+GB(4): Let GB(3)=GB(4)=0 ! add rep parts and rep labor together
 00470 ! If G(5)=9.25 Then Let G(6)=9.25: Let GB(6)=GB(5): Let G(5)=0: Let GB(5)=0 ! KINCAID ONLY
 00480 ! Let GB(9)=GB(7): Let GB(7)=0 ! move sfc for service 7 to service 9
-00490 ! Let EXTRA(18)=D(7): Let D(7)=0 ! average sewer usage
-00495 ! If env$('client')="Monticello" AND A(2)>9 Then Let EXTRA(18)=D(7)=0 ! don't average sewer rate codes 10 or greater
+00490 ! eXTRA(18)=D(7): Let D(7)=0 ! average sewer usage
+00495 ! If env$('client')="Monticello" AND A(2)>9 Then eXTRA(18)=D(7)=0 ! don't average sewer rate codes 10 or greater
 00500 ! a(6)=A(7) ! penalty codes (was only 1 code but charges listed seperate
-00510 ! If A(2)>0 Then Let EXTRA(14)=D(13) ! make sewer units same as water units if have sewer
+00510 ! If A(2)>0 Then eXTRA(14)=D(13) ! make sewer units same as water units if have sewer
 00520     for j=1 to udim(extra)
-00522       if extra(j)<-99999 then let extra(j)=0
+00522       if extra(j)<-99999 then extra(j)=0
 00523     next j
 00528     rewrite #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
 00530 F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30

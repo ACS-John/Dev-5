@@ -40,14 +40,14 @@
 00320   fncmdkey("&Cancel",5,0,1,"Return to menu without reversing.")
 00330   fnacs(sn$,0,mat resp$,ckey)
 00340   if ckey=5 then goto XIT
-00350   let s_ad=val(resp$(1))
-00360   let s_rn$=resp$(2)
-00370   let s_tc=val(resp$(3))
-00380   if resp$(4)="True" then let sh$="Y" else let sh$="N"
+00350   s_ad=val(resp$(1))
+00360   s_rn$=resp$(2)
+00370   s_tc=val(resp$(3))
+00380   if resp$(4)="True" then sh$="Y" else sh$="N"
 00390   let r_ad=val(resp$(5))
 00400   let r_rn$=resp$(6)
 00410   if resp$(7)="True" then let re$="Y" else let re$="N"
-00420   let s_rn$=uprc$(rtrm$(ltrm$(s_rn$)))
+00420   s_rn$=uprc$(rtrm$(ltrm$(s_rn$)))
 00430 ! ______________________________________________________________________
 00440   let glmstr=1 !:
         open #glmstr: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -65,7 +65,7 @@
 00540     gosub REVERSE_WITH
 00550     read #glmstr,using L560,key=t$: cb,mat ta nokey NEXT_GLTRANS
 00560 L560: form pos 87,pd 6.2,pos 333,2*pd 3
-00570 L570: let lr2=lrec(2)+1
+00570 L570: lr2=lrec(2)+1
 00580     write #gltrans,using L520,rec=lr2: t$,s,k,mat n,l$,mp_p$,0 duprec L570
 00590     if ta(1)=0 then let ta(1)=lr2
 00600     if ta(2)>0 then !:
@@ -81,7 +81,7 @@
 00690   gosub SEARCH_FOR : if s_pass=0 then goto NXT_HIST
 00700   gosub REVERSE_WITH
 00710   read #glmstr,using L560,key=t$: cb,mat ta nokey NXT_HIST
-00720 L720: let lr2=lrec(2)+1
+00720 L720: lr2=lrec(2)+1
 00730   write #gltrans,using L520,rec=lr2: t$,s,k,mat n,l$,my_p$,0 duprec L720
 00740   if ta(1)=0 then let ta(1)=lr2
 00750   if ta(2)>0 then rewrite #gltrans,using L640,rec=ta(2): lr2
@@ -109,26 +109,26 @@
 00970   let test_p$=uprc$(rtrm$(ltrm$(p$)))
 00980   let test_l$=uprc$(rtrm$(ltrm$(l$)))
 00990 ! 
-01000   if test_p$<>uprc$(rtrm$(ltrm$(my_p$))) then let s_test_p=1
-01010   if test_p$=uprc$(rtrm$(ltrm$(my_p$))) then let s_test_p=0
-01020   if s_ad=0 then let s_test_ad=1
-01030   if s_ad<>0 and s_ad=s then let s_test_ad=1
-01040   if s_ad<>0 and s_ad<>s then let s_test_ad=0
-01050   if s_tc=0 then let s_test_tc=1
-01060   if s_tc<>0 and s_tc=n(1) then let s_test_tc=1
-01070   if s_tc<>0 and s_tc<>n(1) then let s_test_tc=0
-01080   if s_rn$="" then let s_test_rn=1
-01090   if s_rn$<>"" and s_rn$=test_l$ then let s_test_rn=1
-01100   if s_rn$<>"" and s_rn$<>test_l$ then let s_test_rn=0
+01000   if test_p$<>uprc$(rtrm$(ltrm$(my_p$))) then s_test_p=1
+01010   if test_p$=uprc$(rtrm$(ltrm$(my_p$))) then s_test_p=0
+01020   if s_ad=0 then s_test_ad=1
+01030   if s_ad<>0 and s_ad=s then s_test_ad=1
+01040   if s_ad<>0 and s_ad<>s then s_test_ad=0
+01050   if s_tc=0 then s_test_tc=1
+01060   if s_tc<>0 and s_tc=n(1) then s_test_tc=1
+01070   if s_tc<>0 and s_tc<>n(1) then s_test_tc=0
+01080   if s_rn$="" then s_test_rn=1
+01090   if s_rn$<>"" and s_rn$=test_l$ then s_test_rn=1
+01100   if s_rn$<>"" and s_rn$<>test_l$ then s_test_rn=0
 01110   if s_test_ad=1 and s_test_tc=1 and s_test_rn=1 and s_test_p=1 then !:
-          let s_pass=1 !      Pass                            !:
-        else let s_pass=0 ! Fail
+          s_pass=1 !      Pass                            !:
+        else s_pass=0 ! Fail
 01120   return 
 01130 ! ______________________________________________________________________
 01140 REVERSE_WITH: ! 
 01150   if re$="Y" then let k=-k
-01160   if r_ad<>0 then let s=r_ad
-01170   if r_rn$<>"" then let l$=r_rn$
+01160   if r_ad<>0 then s=r_ad
+01170   if r_rn$<>"" then l$=r_rn$
 01180   if t$(3:3)=" " then let t$(3:3)="0"
 01190   if t$(12:12)=" " then let t$(12:12)="0"
 01200   return 

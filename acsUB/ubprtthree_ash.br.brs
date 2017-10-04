@@ -34,7 +34,7 @@
           let x=len(at$(j)) : let y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
-00230   let linelength=62
+00230   linelength=62
 00240   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
 00250   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence #
 00260   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -43,11 +43,11 @@
 00290 SCREEN1: ! 
 00300   a$="" : let prtbkno=0
 00310   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : let ll=24 !:
+        let pf=26 : ll=24 !:
         let respc=0
 00320   a$="" : let prtbkno=0
 00330   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : let ll=24 !:
+        let pf=26 : ll=24 !:
         let respc=0
 00340   fnlbl(1,1,"Service From:",ll,1)
 00350   fntxt(1,pf,8,8,1,"1",0,tt$) !:
@@ -96,9 +96,9 @@
 00550   if resp$(9)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(9))
-00560   if resp$(10)="True" then let sl1=1 else let sl1=0
+00560   if resp$(10)="True" then sl1=1 else sl1=0
 00570   if trim$(a$)<>"" then read #1,using L580,key=a$: z$,route,sequence nokey SCREEN1 !:
-          let st1=1
+          st1=1
 00580 L580: form pos 1,c 10,pos 1741,n 2,n 7
 00590   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00600   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
@@ -127,22 +127,22 @@
 00830   if prtbkno><route then goto F5_CANCEL
 00840 L840: if f><d1 then goto L680
 00850   if st1=0 then goto HERE
-00860   if st1$=z$ then let st1=0 else goto L680
+00860   if st1$=z$ then st1=0 else goto L680
 00870 HERE: ! 
 00880 ! read alternate billing address
 00890   read #3,using L900,key=z$: mat ba$ nokey L970
 00900 L900: form pos 11,4*c 30
-00910   let e1=0 : mat pe$=("")
+00910   e1=0 : mat pe$=("")
 00920   for j=1 to 4
 00930     if rtrm$(ba$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : let pe$(e1)=ba$(j)
 00940   next j
 00950   goto L1090
 00960 ! ______________________________________________________________________
-00970 L970: let e1=0 : mat pe$=("")
+00970 L970: e1=0 : mat pe$=("")
 00980   for j=2 to 4
 00990     if rtrm$(e$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : let pe$(e1)=e$(j)
 01000   next j
 01010   goto L1090
 01020 ! ______________________________________________________________________
@@ -161,7 +161,7 @@
 01150   goto L680
 01160 ! ______________________________________________________________________
 01170 SCREEN3: ! 
-01180   let sn$ = "UBPrtBl1-2" !:
+01180   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
 01190   let txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
@@ -237,7 +237,7 @@
 01760   pr #255,using L1620: t$,0,0,0,g(9)
 01770   pr #255,using L1590: pb$,pb,z$
 01780   form pos 1,c 3,2*nz 6,nz 5,nz 10.2,x 1,c 10,skip 1
-01790   if est=1 then let est$="BILL ESTIMATED" else let est$=""
+01790   if est=1 then est$="BILL ESTIMATED" else est$=""
 01800   if c4>0 then let final$="FINAL BILL" else let final$=""
 01810   if df$="Y" then let final$="DRAFTED"
 01820   if bal<=0 then let penalty=0

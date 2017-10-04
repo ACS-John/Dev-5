@@ -31,13 +31,13 @@
 00240   if ck=5 then goto XIT
 00250   bdate= val(resp$(1))
 00260   if resp$(2)="Water" then !:
-          let srvc=1 : let srvc$=resp$(2)
+          srvc=1 : srvc$=resp$(2)
 00270   if resp$(2)="Sewer" then !:
-          let srvc=2 : let srvc$=resp$(2)
+          srvc=2 : srvc$=resp$(2)
 00280   if resp$(2)="Electric" then !:
-          let srvc=3 : let srvc$=resp$(2)
+          srvc=3 : srvc$=resp$(2)
 00290   if resp$(2)="Gas" then !:
-          let srvc=4 : let srvc$=resp$(2)
+          srvc=4 : srvc$=resp$(2)
 00300   let rcode=val(resp$(3))
 00310   fnopenprn
 00320   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 

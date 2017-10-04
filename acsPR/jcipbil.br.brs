@@ -17,7 +17,7 @@
 00160   open #2: "Name="&env$('temp')&"\Work."&session$,internal,output ioerr L180
 00170   close #2,free: 
 00180 L180: open #2: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=17,Replace",internal,outin,relative 
-00190 L190: let shoption=1
+00190 L190: shoption=1
 00200 L200: pr newpage
 00210   let win=101
 00220   fnopenwin(win,09,08,16,71,cap$)
@@ -30,13 +30,13 @@
 00290   let io1$(3)="6,17,Nz 6,UT,N"
 00300   let io1$(4)="7,17,N 2,UT,N"
 00310   if c1=2 then pr #win,fields mat io1$: jn$,mat inp
-00320   if shoption=1 then pr fields "17,24,C 09,B,1": "Next (F1)"
-00330   if shoption=1 then pr fields "17,34,C 09,B,5": "Done (F5)"
-00340   if shoption=1 then pr fields "17,44,C 11,B,6": "Search (F6)"
-00350   if shoption=2 then pr fields "17,17,C 09,B,1": "Next (F1)"
-00360   if shoption=2 then pr fields "17,27,C 11,B,4": "Delete (F4)"
-00370   if shoption=2 then pr fields "17,39,C 11,B,5": "Cancel (F5)"
-00380   if shoption=2 then pr fields "17,51,C 11,B,6": "Search (F6)"
+00320   if shoption=1 then pr f "17,24,C 09,B,1": "Next (F1)"
+00330   if shoption=1 then pr f "17,34,C 09,B,5": "Done (F5)"
+00340   if shoption=1 then pr f "17,44,C 11,B,6": "Search (F6)"
+00350   if shoption=2 then pr f "17,17,C 09,B,1": "Next (F1)"
+00360   if shoption=2 then pr f "17,27,C 11,B,4": "Delete (F4)"
+00370   if shoption=2 then pr f "17,39,C 11,B,5": "Cancel (F5)"
+00380   if shoption=2 then pr f "17,51,C 11,B,6": "Search (F6)"
 00390 L390: input #win,fields mat io1$: jn$,mat inp conv L390
 00400   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 00410   if cmdkey>0 then goto L510 else ce=curfld
@@ -51,7 +51,7 @@
 00470   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L390
 00480 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00490   ce=cnt+1
-00500 ERR1: pr fields "24,78,C 1": bell : goto L460
+00500 ERR1: pr f "24,78,C 1": bell : goto L460
 00510 L510: if cmdkey=5 then goto L730
 00520   if cmdkey=6 then gosub SRCH : let win=101 !:
           pr #win,fields io1$(1): k$ : c1=3: goto L390
@@ -87,7 +87,7 @@
 00820   for j=1 to udim(wrd2$)
 00830     let io2$(j)=str$(j+3)&",2,C 38,N"
 00840   next j
-00850   pr fields "16,27,C 25,B,5": "Exit without posting (F5)"
+00850   pr f "16,27,C 25,B,5": "Exit without posting (F5)"
 00860 L860: rinput #win,select mat io2$,attr "H": mat wrd2$
 00870   c1=curfld
 00880   if cmdkey=5 then goto XIT
@@ -122,14 +122,14 @@
 01170   let win=103
 01180   fnopenwin(win,10,20,14,59,cap$)
 01190   pr #win,fields "4,2,C 28,N": "Reference Number to correct:"
-01200   pr fields "15,35,C 09,B,5": "Done (F5)"
+01200   pr f "15,35,C 09,B,5": "Done (F5)"
 01210 L1210: input #win,fields "4,31,Nz 5,UT,N": rr conv L1210
 01220   if cmdkey=5 then goto L730
 01230   if rr=0 then goto L1210
 01240   if rr<1 or rr>rw then goto L1210
 01250   read #2,using L700,rec=rr: jn$,mat inp
 01260   let ta=ta-inp(1)
-01270   let shoption=2
+01270   shoption=2
 01280   goto L200
 01290 ! ______________________________________________________________________
 01300 L1300: for j=1 to rw
@@ -155,28 +155,28 @@
 01500   fnopenwin(win,06,10,10,69,wrds$(1))
 01510   let prtall=0
 01520   pr #win,fields "4,2,C 38,N": "Beginning Search Data (blank for all):"
-01530   pr fields "11,34,C 11,B,5": "Cancel (F5)"
+01530   pr f "11,34,C 11,B,5": "Cancel (F5)"
 01540 L1540: input #win,fields "4,41,C 6,UT,N": nam$
 01550   if cmdkey=5 then goto SEARCHEND
 01560   let nam$=lpad$(rtrm$(nam$),6)
 01570   restore #1,search>=nam$: nokey L1540
 01580 ! Close #WIN: Ioerr 1790
 01590 L1590: pr newpage
-01600   pr fields "1,02,Cc 06,R,N": "Job No"
-01610   pr fields "1,09,Cc 36,R,N": "Job Name"
-01620   pr fields "1,46,Cc 08,R,N": "Est.Date"
-01630   pr fields "1,55,Cc 12,R,N": "Ct.Amount"
-01640   pr fields "1,68,Cc 12,R,N": "Bld.Amount"
+01600   pr f "1,02,Cc 06,R,N": "Job No"
+01610   pr f "1,09,Cc 36,R,N": "Job Name"
+01620   pr f "1,46,Cc 08,R,N": "Est.Date"
+01630   pr f "1,55,Cc 12,R,N": "Ct.Amount"
+01640   pr f "1,68,Cc 12,R,N": "Bld.Amount"
 01650   cde=0
 01660   for j=1 to 20
 01670     read #1,using L1680: jn$,n$,mat a$,mat b eof SREND
 01680 L1680: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2 ! pd 7.2 was pd 5.2
 01690     cde=1
-01700     pr fields str$(j+1)&",2,C 6,N": jn$
-01710     pr fields str$(j+1)&",9,C 36,N": n$(1:36)
-01720     pr fields str$(j+1)&",46,PIC(ZZ/ZZ/ZZ),N": b(1)
-01730     pr fields str$(j+1)&",55,N 12.2,N": b(2)
-01740     pr fields str$(j+1)&",68,N 12.2,N": b(3)
+01700     pr f str$(j+1)&",2,C 6,N": jn$
+01710     pr f str$(j+1)&",9,C 36,N": n$(1:36)
+01720     pr f str$(j+1)&",46,PIC(ZZ/ZZ/ZZ),N": b(1)
+01730     pr f str$(j+1)&",55,N 12.2,N": b(2)
+01740     pr f str$(j+1)&",68,N 12.2,N": b(3)
 01750     if j>1 then goto L1790
 01760     bk=bk+1
 01770     if bk>20 then bk=1
@@ -184,10 +184,10 @@
 01790 L1790: next j
 01800 SREND: if j>1 then let j=j-1
 01810   mat in2$(j)
-01820   pr fields "24,09,C 09,B,1": "Next (F1)"
-01830   pr fields "24,19,C 09,B,2": "Back (F2)"
-01840   pr fields "24,29,C 09,B,5": "Stop (F5)"
-01850   pr fields "24,39,C 25,R,N": "or Select Account Number:"
+01820   pr f "24,09,C 09,B,1": "Next (F1)"
+01830   pr f "24,19,C 09,B,2": "Back (F2)"
+01840   pr f "24,29,C 09,B,5": "Stop (F5)"
+01850   pr f "24,39,C 25,R,N": "or Select Account Number:"
 01860   let k$=""
 01870   rinput fields "24,65,C 6,UT,N": k$
 01880   alp=0
@@ -199,10 +199,10 @@
 01940   if bk<1 then goto L2000
 01950   restore #1,key>=bk$(bk): nokey L2000
 01960   bk=bk-1
-01970 L1970: let selclp=1
+01970 L1970: selclp=1
 01980   goto L1590
 01990 ! ______________________________________________________________________
-02000 L2000: let selclp=0
+02000 L2000: selclp=0
 02010   goto L1480
 02020 ! ______________________________________________________________________
 02030 SEARCHEND: close #103: ioerr L2040

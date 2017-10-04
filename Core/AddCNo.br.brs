@@ -22,7 +22,7 @@
 18140 ! /r
 20000   else if env$('cursys')='UB' then ! r:
 20020     fntos(sn$="ub_add_cno")
-20040     let mylen=32 : let mypos=mylen+2 : let lc=0
+20040     let mylen=32 : let mypos=mylen+2 : lc=0
 20180     fnlbl(lc+=1,1,"Copy Service Types from Company:",mylen,1)
 20200     fncmbcno(lc,mypos)
 20220     let resp$(1)=''

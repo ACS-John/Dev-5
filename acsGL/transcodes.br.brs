@@ -13,7 +13,7 @@
 00120   goto XIT
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
-        let open_file_count=1 ! this value is used in the close_file sub routine
+        open_file_count=1 ! this value is used in the close_file sub routine
 00150   if exists(env$('Q')&"\GLmstr\transcodes.h"&str$(cno))=0 then goto L190
 00160   if exists(env$('Q')&"\GLmstr\transcodes-idx.h"&str$(cno))=0 then gosub INDEX
 00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\transcodes.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\transcodes-idx.H"&str$(cno)&",Version=1,Shr",internal,outin,keyed 
@@ -36,8 +36,8 @@
 00340   fncno(cno)
 00350 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
-00360   let lbl$(ic+=1)="Trans Code" !:
-        let lbl$(ic+=1)="Description"
+00360   lbl$(ic+=1)="Trans Code" !:
+        lbl$(ic+=1)="Description"
 00370 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
@@ -46,13 +46,13 @@
         let tln(ic+=1)=20
 00390 ! ** Field Types ** !:
         let ic=0
-00400   let fltyp$(ic+=1)='n' !:
-        let fltyp$(ic+=1)='C'
+00400   fltyp$(ic+=1)='n' !:
+        fltyp$(ic+=1)='C'
 00410 ! ** Field Storage Lengths ** !:
         let ic=0 !:
         let mmddyy=6 : ccyymmdd=8
-00420   let sln(ic+=1)=2 !:
-        let sln(ic+=1)=20
+00420   sln(ic+=1)=2 !:
+        sln(ic+=1)=20
 00430 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:
@@ -62,8 +62,8 @@
 00450 ! ** Storage Positions ** !:
         ! starting field position - default to the same as order displayed !:
         let ic=0
-00460   let sp(ic+=1)=1 !:
-        let sp(ic+=1)=3
+00460   sp(ic+=1)=1 !:
+        sp(ic+=1)=3
 00470 ! ** Combo Boxes **
 00480 ! cL=1 : c$(CL,1)='ComboF' !:
         ! c$(CL,2)=env$('Q')&'\CLmstr\PayMstr.h'&STR$(CNO) !:
@@ -87,4 +87,4 @@
 00620 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00630 ! /region
 00640 ! ______________________________________________________________________
-00650   let fltyp$(ic+=1)='N'
+00650   fltyp$(ic+=1)='N'

@@ -12,7 +12,7 @@
 00230   goto XIT
 00240 ! ______________________________________________________________________
 00250   def fn_open_file
-00260     let open_file_count=0 ! this value is used in the close_file sub routine
+00260     open_file_count=0 ! this value is used in the close_file sub routine
 00270     open #open_file_count+=1: 'Name='&env$('Q')&'\PRmstr\rpwork01.h'&env$('cno')&',Version=0,KFName='&env$('Q')&'\PRmstr\rpwork01Idx.h'&env$('cno')&',Use,RecL=167,KPs=1,KLn=11,Shr',internal,outin,keyed 
 00280   fnend 
 00290   def fn_close_file
@@ -32,7 +32,7 @@
 20020     let mask_pointtwo=32 : let mask_number=30
 20040     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 20060     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
-20080     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
+20080     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 20100     fnhamster_field_reset
 20120 !     fn_hamster_field_add(label$*38,textbox_len,field_type$*2; storage_length,ar_mask,storage_position)
 20140 ! dim inp(29),hr(2)

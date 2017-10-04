@@ -60,13 +60,13 @@
 44540   fnacs(sn$,0,mat resp$,ckey)
 44560   if ckey=5 then goto XIT
 44580   add=edit=0
-44600   let editrec=val(resp$(1))
-44620   if ckey=2 then let edit=1
+44600   editrec=val(resp$(1))
+44620   if ckey=2 then edit=1
 44640   if ckey=3 then chain "S:\acsGL\acglschp" ! prints prints a schedule
 44660   if ckey=1 then 
 44670     add=1 
-44680     let sn=dp=rs=cm=0 
-44700     let schnam$=ft$="" 
+44680     sn=dp=rs=cm=0 
+44700     schnam$=ft$="" 
 44720     goto ADD_EDIT_SCHEDULES ! add
 44740   else if ckey=2 then 
 44760     read #schedule,using 'Form POS 1,N 3,2*C 78,3*N 1',rec=editrec: sn,schnam$,ft$,dp,rs,cm norec SCHEDULEGRID 
@@ -97,10 +97,10 @@
 48300   fnchk(5,mypos,"Reverse Sign:",1) 
 48320   if rs=1 then let resp$(5)="True" else let resp$(5)="False"
 48340   fnlbl(6,1,"Type of Schedule:",mylen,right)
-48360   let option$(1)="Print Year to Date Only" 
-48380   let option$(2)="Print Current Month and Year to Date" 
-48400   let option$(3)="Print Comparison (Income and Expense Accounts" 
-48420   let option$(4)="Print Comparison (Balance Sheet Accounts"
+48360   option$(1)="Print Year to Date Only" 
+48380   option$(2)="Print Current Month and Year to Date" 
+48400   option$(3)="Print Comparison (Income and Expense Accounts" 
+48420   option$(4)="Print Comparison (Balance Sheet Accounts"
 48440   fncomboa("TypeOfPrint",6,mypos,mat option$,"You can choose any of the four types of schedules.",60)
 48460   if cm=0 then cm=1
 48480   let resp$(6)=option$(cm)
@@ -108,8 +108,8 @@
 48520   fncmdkey("&Cancel",5,0,1,"Returns to list of schedules withouit saving any changes.")
 48540   fnacs(sn$,0,mat resp$,ckey)
 48560   if ckey=5 then goto SCHEDULEGRID
-48580   let sn=val(resp$(1)(1:3)) conv ADD_EDIT_SCHEDULES
-48600   let schnam$=resp$(2)
+48580   sn=val(resp$(1)(1:3)) conv ADD_EDIT_SCHEDULES
+48600   schnam$=resp$(2)
 48620   let ft$=resp$(3)
 48640   if resp$(4)="True" then let dp=1 else let dp=0
 48660   if resp$(5)="True" then let rs=1 else let rs=0
@@ -218,7 +218,7 @@
 68180   gosub INDEX2
 68200 goto SCHEDULEGRID ! /r
 70000 OPEN_FILE: ! r:
-70020   let open_file_count=1 ! this value is used in the close_file sub routine
+70020   open_file_count=1 ! this value is used in the close_file sub routine
 70040   close #open_file_count: ioerr ignore
 70060   if exists(env$('Q')&"\GLmstr\Schedule"&str$(sn)&".h"&env$('cno'))=0 then 
 70080     open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&",Version=1,Replace,RecL=12",internal,outin 
@@ -246,7 +246,7 @@
 78000 BUILD_LAYOUT: ! r:
 78020   ! ** Field Labels    ** 
 78040   let ic=0 ! temporary Item Counter
-78060   let lbl$(ic+=1)="G/L Number"
+78060   lbl$(ic+=1)="G/L Number"
 78080 ! ** Text Box / Field Display   Lengths   ** 
 78100   let ic=0 ! temporary Item Counter 
 78120   let mmddyy=8 
@@ -254,11 +254,11 @@
 78160   let tln(ic+=1)=12
 78180 ! ** Field Types ** 
 78200   let ic=0
-78220   let fltyp$(ic+=1)='C'
+78220   fltyp$(ic+=1)='C'
 78240 ! ** Field Storage Lengths ** 
 78260   let ic=0 
 78280   let mmddyy=6 : ccyymmdd=8
-78300   let sln(ic+=1)=12
+78300   sln(ic+=1)=12
 78320 ! ** Field Masks ** 
 78340   let ic=0 
 78360   let pointtwo=32 : let number=30 
@@ -267,7 +267,7 @@
 78420 ! ** Storage Positions ** 
 78440   ! starting field position - default to the same as order displayed 
 78460   let ic=0
-78480   let sp(ic+=1)=1
+78480   sp(ic+=1)=1
 78500 ! ** Combo Boxes **                                                   
 78520   cl=1 : c$(cl,1)='ComboF' 
 78540   c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno') 
@@ -275,7 +275,7 @@
 78580   c$(cl,5)="13": c$(cl,6)="40" 
 78600   c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&env$('cno') 
 78620   ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     
-78640   let limit_to_list$='1'
+78640   limit_to_list$='1'
 78660 ! ** Combo Boxes **                                                   
 78680   ! cL=2 : c$(CL,1)='ComboF' 
 78700   ! c$(CL,2)=env$('Q')&"\GLmstr\transcode.h"&env$('cno') 
@@ -283,7 +283,7 @@
 78740   ! c$(CL,5)="3" : c$(CL,6)="30" 
 78760   ! c$(CL,7)=env$('Q')&"\GLmstr\transcode-idx.h"&env$('cno') 
 78780   ! c$(CL,8)="1" 
-78800   ! Let LIMIT_TO_LIST$=('1'=yes' ; '0'=NO)
+78800   ! lIMIT_TO_LIST$=('1'=yes' ; '0'=NO)
 78820 return ! /r
 82000 DELETEIT: !  r: delete a schedule
 82020   mat ml$(3) 

@@ -43,8 +43,8 @@
 50680     if pr_newpg=2 then goto L240
 50700     if pr_newpg=0 and exists(":C:\ACS\Local\Settings\No_Print_Newpage.txt") then goto L240 else pr newpage
 50720     if pr_newpg=1 then pr newpage
-50740 L240: let screen_width=80
-50760     let screen_height=24
+50740 L240: screen_width=80
+50760     screen_height=24
 50780     let win_width=min(screen_width-2,win_width)
 50800     let win_height=min(screen_height-2,win_height)
 50840     on win_align gosub WIN_ALIGN_1,WIN_ALIGN_2,WIN_ALIGN_3,WIN_ALIGN_4,WIN_ALIGN_5,WIN_ALIGN_6,WIN_ALIGN_7,WIN_ALIGN_8,WIN_ALIGN_9 none WIN_ALIGN_0
@@ -60,20 +60,20 @@
 51040 WIN_ALIGN_7: gosub H_LEFT : gosub V_TOP : return 
 51060 WIN_ALIGN_8: gosub H_CENTER : gosub V_TOP : return 
 51080 WIN_ALIGN_9: gosub H_RIGHT : gosub V_TOP : return 
-51100 H_LEFT: let sc=2 : let ec=sc+win_width-1 : return 
-51120 H_RIGHT: let ec=screen_width-1 : let sc=ec-win_width+1 : return 
+51100 H_LEFT: sc=2 : ec=sc+win_width-1 : return 
+51120 H_RIGHT: ec=screen_width-1 : sc=ec-win_width+1 : return 
 51140 H_CENTER: !
-51160     let sc=int(((screen_width-win_width)/2)+1) 
-51180     let ec=sc+win_width-1 
+51160     sc=int(((screen_width-win_width)/2)+1) 
+51180     ec=sc+win_width-1 
 51200     return 
 51220 V_TOP: !
-51240     let sr=2 : let er=sr+win_height-1 
+51240     sr=2 : er=sr+win_height-1 
 51260     return 
-51280 V_CENTER: let sr=int(((screen_height-win_height)/2)+1) 
-51300     let er=sr+win_height-1 
+51280 V_CENTER: sr=int(((screen_height-win_height)/2)+1) 
+51300     er=sr+win_height-1 
 51320     return 
 51340 V_BOTTOM: !
-51360     let er=screen_height-1 : let sr=er-win_height+1
+51360     er=screen_height-1 : sr=er-win_height+1
 51380     return  ! ____________
 51400 L490: ! past win_align(s)
 51420 ! 
@@ -93,7 +93,7 @@
 51700       pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
 51720     end if
 51740 L610: if button_option=0 then goto XIT
-51760     mat fkey$=("") : let em$="" : let es=0
+51760     mat fkey$=("") : em$="" : es=0
 51780     let fkey$(5)="Cancel" ! included by default
 51800     if button_option=2 then let fkey$(1)="Next"
 51820     if button_option=3 then let fkey$(1)="Print"
@@ -143,20 +143,20 @@
 60380     let temp_file$=env$('temp')&'\'&"Win-"&cnvrt$("pic(###)",win)&".tmp"
 60400     open #tfn:=fngethandle: "Name="&temp_file$&",RecL=80,use",internal,outin ioerr NO_TEMP_FILE
 60420     read #tfn,using 'Form POS 1,5*N 4': win_align,sc,ec,sr,er ioerr NO_TEMP_FILE
-60440     let startpos=int((ec-sc-totallen)/2+sc)+1
+60440     startpos=int((ec-sc-totallen)/2+sc)+1
 60460     goto L270
 60480 NO_TEMP_FILE: !
-60500     let startpos=int((80-totallen)/2)+1
+60500     startpos=int((80-totallen)/2)+1
 60520 L270: close #tfn: ioerr L280
-60540 L280: pr fields str$(scrline)&","&str$(startpos)&",C "&str$(totallen)&",N": rpt$("Ä",totallen)
+60540 L280: pr f str$(scrline)&","&str$(startpos)&",C "&str$(totallen)&",N": rpt$("Ä",totallen)
 60560     for j=1 to udim(fkey$)
 60580       if fkey$(j)="" then goto L350
-60600       if disfk(j)=1 then pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",R,"&str$(j): fkey$(j)
+60600       if disfk(j)=1 then pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",R,"&str$(j): fkey$(j)
 60620       if disfk(j)=1 then goto L340
-60640       pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",B,"&str$(j): fkey$(j)
-60660 L340: let startpos+=len(fkey$(j))+1
+60640       pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",B,"&str$(j): fkey$(j)
+60660 L340: startpos+=len(fkey$(j))+1
 60680 L350: next j
 60700     if rtrm$(em$)<>"" then 
-60720       pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(rtrm$(em$))+es)&",R,N": rtrm$(em$)
+60720       pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(rtrm$(em$))+es)&",R,N": rtrm$(em$)
 60740     end if
 60760 fnend 

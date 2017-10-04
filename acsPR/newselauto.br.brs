@@ -42,13 +42,13 @@
 00380   cmask$(1)='30' !:
         cmask$(2)='' !:
         fnflexinit1('selauto',2,55,20,35,mat chdr$,mat cmask$,1,0,frame) !:
-        let editrec=0
+        editrec=0
 00390   close #1: ioerr L400
 00400 L400: open #1: "Name=PR.mnu",display,input 
 00410 L410: linput #1: ln$ eof L540
 00420   if ln$(1:1)<>">" then goto L410 ! skip headings
-00430   if ln$(1:1)=">" then let ln$(1:1)=""
-00440   if ln$(1:1)=">" then let ln$(1:1)="" ! delete up to two >>
+00430   if ln$(1:1)=">" then ln$(1:1)=""
+00440   if ln$(1:1)=">" then ln$(1:1)="" ! delete up to two >>
 00450   let x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
 00460   if x=0 then goto L410 ! skip headings
 00470   let desc$=ln$(1:x-1)(1:35)
@@ -75,7 +75,7 @@
           mat qt=(0) !:
           execute "drop "&env$('Q')&"\PRmstr\NewPrPgmn.h"&str$(cno)&" -n" !:
           goto MAIN
-00630 L630: let sel=val(resp$(81))
+00630 L630: sel=val(resp$(81))
 00640   let x=0
 00650   for j=1 to 20
 00660     if resp$(j+(x+=1))="True" then let wk(j)=1 else let wk(j)=0

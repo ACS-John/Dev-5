@@ -17,8 +17,8 @@
 10160     dim cnam$*40,de$*30,tbc(99,2),pde$*30
 10180     dim apc(99,3),td$*30,prd(23),cap$*128,glwk$*256,opt_cash_or_accrual$(2)*12,ml$(3)*100
 10200 ! 
-10220     let opt_cash_or_accrual$(1)="Cash"
-10240     let opt_cash_or_accrual$(2)="Accrual"
+10220     opt_cash_or_accrual$(1)="Cash"
+10240     opt_cash_or_accrual$(2)="Accrual"
 10260 ! ______________________________________________________________________
 10280     if glt=glt_print_only then 
 10300       cap$="GL Distribution Report"
@@ -78,7 +78,7 @@
 16000     if pr2$="Y" then let fnprocess(4)
 16020     if glt=glt_print_only then let pr1$="Y"
 16040     fnputcno(gl2)
-16060 !   pr fields "13,34,C 12,B,99": "Cancel (Esc)"
+16060 !   pr f "13,34,C 12,B,99": "Cancel (Esc)"
 16080 !   on fkey 99 goto XIT
 16100     fnopenprn
 16120     open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
@@ -262,7 +262,7 @@
 24180     pr #255: "____________  ________  ________  ________  ______________________________  __________  __________" pageoflow NEWPGE
 24200     return  ! /r
 26000 ENDALL: ! r:
-26020     let endall=1 : let pr1$="Y" ! pr TOTALS
+26020     endall=1 : let pr1$="Y" ! pr TOTALS
 26040     if sc2=4 then gosub PRGL
 26060     if pr1$<>"N" then 
 26080       if sc2=4 then 
@@ -371,7 +371,7 @@
 31160 L2720: ! 
 31180     let pa1=pa2=0
 31200 L2730: ! 
-31220     let sc2=scd : let pgl$=gl$ : let pivd=ivd : let pde$="Payroll Total" : let pbank_code=bank_code
+31220     sc2=scd : let pgl$=gl$ : let pivd=ivd : let pde$="Payroll Total" : let pbank_code=bank_code
 31240     if amt<0 then let pa2+=abs(amt) else let pa1+=amt
 31260 L2750: ! 
 31280     return  ! /r

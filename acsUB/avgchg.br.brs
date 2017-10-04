@@ -12,7 +12,7 @@
 00130   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00140   gosub BLDHDR
 00150 SCR1: ! 
-00160   let sn$="ubsewer-1" !:
+00160   sn$="ubsewer-1" !:
         fntos(sn$)
 00170   let txt$="Billing Dates for Months to be Averaged:" !:
         let mylen=len(txt$)+4: let fnlbl(2,5,txt$,mylen,0)
@@ -31,7 +31,7 @@
 00250 L250: let x=pos(resp$(j),"/",1)
 00260     if x>0 then let resp$(j)(x:x)="": goto L250
 00270   next j
-00280   let sd1=val(resp$(1)) : let sd2=val(resp$(2))
+00280   sd1=val(resp$(1)) : sd2=val(resp$(2))
 00290   if sd1=0 or sd2=0 or sd2<sd1 then goto SCR1
 00300 ! ______________________________________________________________________
 00310   fnopenprn
@@ -109,15 +109,15 @@
         let hd2$="{\ul Number   }  {\ul Name                   }  "
 01000   for j=1 to 9 ! skip penalty
 01010     let x2=pos(trim$(servicename$(j))," ",1) !:
-          if x2>0 then let servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j)))
+          if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j)))
 01020     if trim$(servicename$(j))<>"" then !:
             let x1=pos (servicename$(j)," ",1) !:
             let x1=min(x1,7) !:
             let hd1$=hd1$&"---------" !:
             let hd2$=hd2$&"{\ul "&lpad$(trim$(servicename$(j)(1:x1)),8)&"} " !:
-            let sz1=sz1+1
+            sz1=sz1+1
 01030   next j
-01040   let sz1=sz1+1
+01040   sz1=sz1+1
 01050   let hd2$=hd2$&"{\ul    TOTAL} "
 01060   mat g1(sz1)
 01070   mat g2(sz1)

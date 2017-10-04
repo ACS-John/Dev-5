@@ -12,12 +12,12 @@
 00130   fnget_services(mat servicename$)
 00140   let x=0
 00150   for j=1 to 10
-00160     let service$(j)=servicename$(j)
-00170     if trim$(servicename$(j))<>"" then let option2$(x+=1)=servicename$(j)
-00180     if trim$(servicename$(j))="" then let servicename$(j)="N/A"
-00190     let servicename$(j)=trim$(servicename$(j)(1:8))&":"
+00160     service$(j)=servicename$(j)
+00170     if trim$(servicename$(j))<>"" then option2$(x+=1)=servicename$(j)
+00180     if trim$(servicename$(j))="" then servicename$(j)="N/A"
+00190     servicename$(j)=trim$(servicename$(j)(1:8))&":"
 00200   next j
-00210   let option2$(x)
+00210   option2$(x)
 00220   open #customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndex.h"&env$('cno'),internal,input,keyed 
 00230   open #ubtransvb=2: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno'),internal,input,keyed 
 00240   let glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
@@ -88,11 +88,11 @@
 00760   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
 00770   fnacs(sn$,0,mat resp$,ckey)
 00780   if ckey=5 then goto XIT
-00790   let dat$=resp$(1) : let ld1=val(resp$(2)) : let hd1=val(resp$(3))
+00790   let dat$=resp$(1) : ld1=val(resp$(2)) : let hd1=val(resp$(3))
 00800   let postingdate=val(resp$(3)(5:8))*100+val(resp$(3)(3:4))
 00810   if resp$(4)="True" then let gli=1 else let gli=0
 00820   if resp$(5)="True" then let printreport=1 else let printreport=0
-00830   if resp$(6)="True" then let showdetails=1
+00830   if resp$(6)="True" then showdetails=1
 00840   basis=0 : if resp$(7)="True" then basis=cash=1
 00850   if resp$(8)="True" then basis=accrual=2
 00860   if ld1>hd1 and ld1>0 and hd1>0 then !:
@@ -221,7 +221,7 @@
 01820   cmask$(1)=cmask$(2)='' !:
         cmask$(3)=cmask$(4)=cmask$(5)=cmask$(6)='' !:
         fnflexinit1('GlBreak',1,1,20,100,mat chdr$,mat cmask$,1,0,frame) !:
-        let editrec=0
+        editrec=0
 01830   restore #15: 
 01840 READ_GLINFO_1: ! 
 01850   read #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2": service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar eof EO_FLEX1
@@ -240,13 +240,13 @@
 01900   fnacs(sn$,0,mat resp$,ck)
 01910   addone=edit=0: let holdvn$=""
 01920   if ck=5 then goto SCREEN1 !:
-        else if ck=1 then addone=1: let service$="": let ratecode=0: mat gl$=("") !:
+        else if ck=1 then addone=1: service$="": let ratecode=0: mat gl$=("") !:
           goto MAINTAIN_GLINFO
-01930 if ck=2 or ck=3 then let editrec=val(resp$(1))
+01930 if ck=2 or ck=3 then editrec=val(resp$(1))
 01940 if editrec=0 then goto GL_INFORMATION
 01950 if ck=2 or ck=3 then !:
         read #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",rec=editrec: service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
-01960 if ck=2 then let edit=1 : let holdvn$=vn$: goto MAINTAIN_GLINFO
+01960 if ck=2 then edit=1 : let holdvn$=vn$: goto MAINTAIN_GLINFO
 01970 if ck=3 then gosub DELETE_GLINFO : goto GL_INFORMATION
 01980 ! ______________________________________________________________________
 01990 DELETE_GLINFO: ! 
@@ -285,7 +285,7 @@
 02240 let fnacs(sn$,0,mat resp$,ckey)
 02250 if ckey=5 then goto GL_INFORMATION
 02260 if ckey=3 then chain "S:\acsUB\chartofaccounts"
-02270 let service$=resp$(1)
+02270 service$=resp$(1)
 02280 let ratecode=val(resp$(2))
 02290 let gl$(1)=fnagl$(resp$(3))
 02300 let gl$(2)=fnagl$(resp$(4))

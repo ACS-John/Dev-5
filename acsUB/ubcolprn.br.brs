@@ -18,9 +18,9 @@
 00160   let hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
 00170   for j=1 to 10
 00180     let x2=pos(trim$(servicename$(j))," ",1)
-00182     if x2>0 then let servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
+00182     if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
 00190     if trim$(servicename$(j))<>"" then 
-00192       let scr1$(sz1+=1)=servicename$(j)
+00192       scr1$(sz1+=1)=servicename$(j)
 00194       let hd1$=hd1$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:7)),7)&"}"
 00196     end if 
 00200   next j
@@ -65,7 +65,7 @@
 40580   if ti1$="True" then 
 40600     pr #255,using 'Form POS 1,C 10,N 10.2,C 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 9.2,X 3,C 30': z$,tamount,c$,tdate,mat alloc,nam$(1:25) pageoflow PGOF
 40620   end if 
-40640   if extra1<0 or extra1>200 then let extra1=200
+40640   if extra1<0 or extra1>200 then extra1=200
 40660   if sum(alloc)<>tamount then 
 40700     mat ml$(3)
 40720     let ml$(1)="The breakdown on a collection transaction dated "&str$(tdate)& " for customer "&z$
@@ -122,7 +122,7 @@
 68340   fnacs(sn$,win,mat resp$,ck)
 68360   if ck=5 then goto XIT
 68380   let dat$=resp$(1)
-68400   let ld1=val(resp$(2))
+68400   ld1=val(resp$(2))
 68420   let hd1=val(resp$(3))
 68440   let ti1$=resp$(4)
 68460   if resp$(5)="True" then let routetotals=1

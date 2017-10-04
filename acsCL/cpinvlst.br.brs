@@ -25,7 +25,7 @@
 00210   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 00220   if ckey=5 then goto XIT
 00230   let ped=val(resp$(1))
-00240   let sq1$=resp$(2)(1:1)
+00240   sq1$=resp$(2)(1:1)
 00250   let fund=val(resp$(3))
 00260 ! ___________________________
 00270 ! ___________________________

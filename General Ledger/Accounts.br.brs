@@ -136,7 +136,7 @@
 01090       let revb(j)=val(resp$(x)): let x+=1
 01100     next j
 01102   end if 
-01104   if ckey<>3 then let edit_mode=0
+01104   if ckey<>3 then edit_mode=0
 01110   if ckey=1 then goto DO_EDIT
 01120   if ckey=2 then goto ADD ! add new accounts
 01130   if ckey=3 then goto REVIEW_TRANS ! review current or prior transactions
@@ -170,8 +170,8 @@
 01380   let dno=ano=sno=0
 01390   if use_dept=1 then let dno=val(resp$(1)) : ano=val(resp$(2))
 01400   if use_dept=0 then ano=val(resp$(1))
-01410   if use_dept=1 and use_sub=1 then let sno=val(resp$(3))
-01420   if use_dept=0 and use_sub=1 then let sno=val(resp$(2))
+01410   if use_dept=1 and use_sub=1 then sno=val(resp$(3))
+01420   if use_dept=0 and use_sub=1 then sno=val(resp$(2))
 01430   if use_dept=1 and use_sub=1 then let d$=resp$(4)
 01440   if use_dept=0 and use_sub=1 then let d$=resp$(3)
 01450   if use_dept=0 and use_sub=0 then let d$=resp$(2)
@@ -182,7 +182,7 @@
 01540 ! L1540: ! 
 01541   bb=cb=pbp=0
 01542   mat bc=(0): mat bp=(0): mat bm=(0): mat revb=(0): mat ta=(0): mat rf=(0)
-01543   let edit_mode=1
+01543   edit_mode=1
 01544   let gl$=key$
 01550 ! write_new_record
 01560   write #1,using L1740: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
@@ -198,7 +198,7 @@
 01610   for j=1 to 13
 01620     if revb(j)=-202020202.02 then let revb(j)=0
 01630   next j
-01640   let edit_mode=1
+01640   edit_mode=1
 01650 L1650: ! 
 01658   goto MAIN
 01660 ! /r
@@ -227,7 +227,7 @@
 01780 L1780: ! 
 01781   bb=cb=pbp=0
 01782   mat bc=(0) : mat bp=(0) : mat bm=(0) : mat revb=(0) : mat ta=(0) : mat rf=(0)
-01784   let edit_mode=0
+01784   edit_mode=0
 01786   let gl$=""
 01790   goto MAIN
 01800 ! /r
@@ -375,7 +375,7 @@
 02970   fncmdkey("E&xit",5,0,1,"Exits to main menu")
 02980   fnacs(sn$,0,mat resp$,ck)
 02990   if ck=5 then goto MAIN
-03000   if ck=2 then let edit_mode=1 else let edit_mode=0
+03000   if ck=2 then edit_mode=1 else edit_mode=0
 03010   let recordnum=val(resp$(1))
 03020   if recordnum=0 then goto MAIN
 03030   if rv=1 then read #2,using L2800,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta else read #3,using L3350,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
@@ -453,7 +453,7 @@
 03850 L3850: !
 03860 return ! /r
 03870 CHANGE_ACCT_NUM: ! r:
-03880   let dno=val(gl$(1:3)): ano=val(gl$(4:9)): let sno=val(gl$(10:12))
+03880   let dno=val(gl$(1:3)): ano=val(gl$(4:9)): sno=val(gl$(10:12))
 03890   mat resp$=("")
 03900   fntos(sn$="GLchange")
 03902   let mylen=28: let mypos=mylen+3 : let right=1: let rc=0
@@ -480,8 +480,8 @@
 04040   let dno=ano=sno=0
 04050   if use_dept=1 then let dno=val(resp$(1)) : ano=val(resp$(2))
 04060   if use_dept=0 then ano=val(resp$(1))
-04070   if use_dept=1 and use_sub=1 then let sno=val(resp$(3))
-04080   if use_dept=0 and use_sub=1 then let sno=val(resp$(2))
+04070   if use_dept=1 and use_sub=1 then sno=val(resp$(3))
+04080   if use_dept=0 and use_sub=1 then sno=val(resp$(2))
 04090   if use_dept=1 and use_sub=1 then let d$=resp$(4)
 04100   if use_dept=0 and use_sub=1 then let d$=resp$(3)
 04110   if use_dept=0 and use_sub=0 then let d$=resp$(2)

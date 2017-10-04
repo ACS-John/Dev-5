@@ -30,7 +30,7 @@
 00260   fncmdset(2)
 00270   fnacs(sn$,0,mat resp$,ckey)
 00280   if ckey=5 then goto XIT
-00290   let oldestdate=val(resp$(1))
+00290   oldestdate=val(resp$(1))
 00300 L300: read #trans,using L320: trvn$,dt,am,rn$,de$ eof XIT
 00310   if oldestdate > fndate_mmddyy_to_ccyymmdd(dt) then goto DELETEIT else goto L300
 00320 L320: form pos 1,c 8,n 6,pd 5.2,c 12,c 30

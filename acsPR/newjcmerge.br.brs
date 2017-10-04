@@ -49,21 +49,21 @@
 00490 L490: form pos 1,c 11,c 25,pos 37,11*pd 7.2,2*pd 2,2*pd 3
 00500 L500: form pos 1,c 11,c 25,pos 37,11*pd 7.2,2*pd 2,2*pd 3
 00510   if ji1(5)+ji1(6)=0 then goto L590
-00520   let l(4)=l(4)+ji2(3)
-00530   let l(7)=l(7)+ji2(3)
-00540   let l(5)=l(5)+ji1(5)+ji1(6)
-00550   let l(8)=l(8)+ji1(5)+ji1(6)
-00560   let l(6)=l(6)+ji2(6)
-00570   let l(9)=l(9)+ji2(6)
+00520   l(4)=l(4)+ji2(3)
+00530   l(7)=l(7)+ji2(3)
+00540   l(5)=l(5)+ji1(5)+ji1(6)
+00550   l(8)=l(8)+ji1(5)+ji1(6)
+00560   l(6)=l(6)+ji2(6)
+00570   l(9)=l(9)+ji2(6)
 00580   goto L610
-00590 L590: let l(6)=l(6)+ji2(3)+ji2(6)
-00600   let l(9)=l(9)+ji2(3)+ji2(6)
-00610 L610: let l(10)=l(10)+ji2(5)
+00590 L590: l(6)=l(6)+ji2(3)+ji2(6)
+00600   l(9)=l(9)+ji2(3)+ji2(6)
+00610 L610: l(10)=l(10)+ji2(5)
 00620   goto L630
 00630 L630: read #5,using L640,rec=1,reserve: ot5
 00640 L640: form pos 86,pd 3
-00650   let empnum$=lpad$(rtrm$(str$(ji1(1))),12)
-00660 L660: let ot5=lrec(5)+1
+00650   empnum$=lpad$(rtrm$(str$(ji1(1))),12)
+00660 L660: ot5=lrec(5)+1
 00670   write #5,using L680,rec=ot5,reserve: empnum$,jn$,ji2(1),ji2(2),ji1(4),ji1(3),ji1(5),ji1(6),ji2(5),ji2(6),ji2(3),empnam$,0 duprec L660
 00680 L680: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 00690   if ta(2)=0 then let ta(1)=ot5 else rewrite #5,using L640,rec=ta(2),reserve: ot5

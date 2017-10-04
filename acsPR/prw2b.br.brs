@@ -15,8 +15,8 @@
 00150   for j=1 to 3: a$(j)=a$(j)(1:30): next j
 00160   close #1: 
 00170   pr newpage
-00180   pr fields "10,5,C 60": "CHECK POSITION OF W2 FORMS FOR SECOND STATE"
-00190   pr fields "12,15,C 60": "PRESS ENTER TO CONTINUE:"
+00180   pr f "10,5,C 60": "CHECK POSITION OF W2 FORMS FOR SECOND STATE"
+00190   pr f "12,15,C 60": "PRESS ENTER TO CONTINUE:"
 00200   input fields "12,40,C 1,I,N": pause$
 00210   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 00220   open #2: "Name="&env$('Q')&"\PRmstr\PRW2ADDR.h"&env$('cno')&",NoShr",internal,input 
@@ -30,8 +30,8 @@
 00300   read #hAddr,using L310,rec=addr: eno,tcd,ty21,ty3,tlwh,pf$
 00310 L310: form pos 1,n 8,n 2,3*pd 5.2,c 8
 00320   if read1=1 then goto L360
-00330   let oldeno=eno
-00340   let oldtcd=tcd
+00330   oldeno=eno
+00340   oldtcd=tcd
 00350   let read1=1
 00360   L360: !
 00362   if oldeno=eno and oldtcd=tcd then goto L380
@@ -42,23 +42,23 @@
 00400   if tlwh=0 then goto L430 ! NO LOCAL WH
 00410   let w(10)=w(10)+ty21 ! LOCAL WAGES
 00420   let w(8)=w(8)+tlwh ! LOCAL WH
-00430 L430: let oldeno=eno
-00440   let oldtcd=tcd
+00430 L430: oldeno=eno
+00440   oldtcd=tcd
 00450   goto ADDR_LOOP_TOP 
 00460 EMP_READ: ! 
-00462   let eno$=lpad$(str$(oldeno),8)
+00462   eno$=lpad$(str$(oldeno),8)
 00470   read #1,using 'form pos 9,3*c 30,c 11',key=eno$: mat em$,ss$
 00490   let g$=ltrm$(eno$)
-00500   let stcode$=e$(oldtcd)
-00510   let state$=d$(oldtcd)(1:2)
+00500   stcode$=e$(oldtcd)
+00510   state$=d$(oldtcd)(1:2)
 00520   gosub PRINTW2
 00530   mat w=(0)
 00540   if lstrec=1 then goto FINIS
 00550   goto L380
 00560   EO_ADDR: !
-00562   let lstrec=1
-00570   let oldeno=eno
-00580   let oldtcd=tcd
+00562   lstrec=1
+00570   oldeno=eno
+00580   oldtcd=tcd
 00590 goto EMP_READ ! /r
 00600 FINIS: ! r:
 00602   close #1: 
@@ -90,7 +90,7 @@
 01180 return ! /r
 01210 NEWPGE: ! r:
 01212   let pl=33 ! INSERT PAGE LENGTH IN LINES
-01220   let sk=pl-(krec(255)-int(krec(255)/pl)*pl)
+01220   sk=pl-(krec(255)-int(krec(255)/pl)*pl)
 01230   pr #255,using L1240: ""
 01240   L1240: form c 1,skip sk
 01250 return ! /r

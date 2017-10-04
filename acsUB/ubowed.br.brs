@@ -34,12 +34,12 @@
 00290   for j=1 to 3
 00300 ! Let X=POS(RESP$(J),"/",1)
 00310 ! If X>0 Then Let RESP$(J)(X:X)="": Goto 300
-00320     let lastday(j)=val(resp$(j))
+00320     lastday(j)=val(resp$(j))
 00330     let firstday(j)=(val(resp$(j)(1:6))*100)+1
 00340   next j
 00350   let dat$=resp$(4) !:
         fndat(dat$,2)
-00360   if resp$(5)="True" then let skipcr=1
+00360   if resp$(5)="True" then skipcr=1
 00370 ! ______________________________________________________________________
 00380 PRINTING: ! 
 00390   on fkey 5 goto DONE
@@ -80,7 +80,7 @@
 00740   continue 
 00750 ! ______________________________________________________________________
 00760 READ_TRANS: ! 
-00770   let sortreq=0 : mat month=(0)
+00770   sortreq=0 : mat month=(0)
 00780   restore #2,key>=z$&"         ": nokey L990
 00790 L790: read #2,using 'Form POS 1,C 10,N 8,N 1,PD 4.2': p$,tdate,tcode,tamount eof L990
 00800   if p$<>z$ then goto L880

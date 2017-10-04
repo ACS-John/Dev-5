@@ -14,8 +14,8 @@
 00130   fntop(program$,cap$="Payroll Tax Deposit Summary")
 00150 ! ______________________________________________________________________
 00220   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d2,d1$)
-00242   let ssr1=fnss_employee
-00243   let ssr2=fnss_employer
+00242   ssr1=fnss_employee
+00243   ssr2=fnss_employer
 00250 ! If FNPROCESS=1 Then Goto 410
 00260   fntos(sn$="TaxDeposit") !:
         let rc=0: let mylen=22: let mypos=mylen+3: let frameno=1
@@ -31,7 +31,7 @@
 00340   fnacs(sn$,0,mat resp$,ckey)
 00350   if ckey=5 then goto XIT
 00360   beg_date=val(resp$(1)) !:
-        let end_date=val(resp$(2))
+        end_date=val(resp$(2))
 00370 ! ______________________________________________________________________
 00380   fnopenprn
 00390 ! ______________________________________________________________________

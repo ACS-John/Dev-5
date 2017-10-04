@@ -50,12 +50,12 @@
 00360   let dt1=val(resp$(1)) ! beginning date !:
         let dt2=val(resp$(2)) ! ending date !:
         let td1yn$=resp$(3)(1:1) !  detail
-00370   if resp$(4)(1:1)="T" then let sltyn$(1)="Y": let slt(1)=1 !:
-        else let sltyn$(1)="N" ! disb jrn
-00380   if resp$(5)(1:1)="T" then let sltyn$(2)="Y" : let slt(2)=1 !:
-        else let sltyn$(2)="N" ! rec jrn
-00390   if resp$(6)(1:1)="T" then let sltyn$(3)="Y" : let slt(3)=1 !:
-        else let sltyn$(3)="N" ! adj jrn
+00370   if resp$(4)(1:1)="T" then sltyn$(1)="Y": slt(1)=1 !:
+        else sltyn$(1)="N" ! disb jrn
+00380   if resp$(5)(1:1)="T" then sltyn$(2)="Y" : slt(2)=1 !:
+        else sltyn$(2)="N" ! rec jrn
+00390   if resp$(6)(1:1)="T" then sltyn$(3)="Y" : slt(3)=1 !:
+        else sltyn$(3)="N" ! adj jrn
 00400   let wbc=val(resp$(7)(1:2))
 00410 ! FNWAIT
 00420   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -88,11 +88,11 @@
 00670   if tcde><wcd then goto END1
 00680   if fndate_mmddyy_to_ccyymmdd(tr2)<dt1 or fndate_mmddyy_to_ccyymmdd(tr2)>dt2 then !:
           goto READ_TRMSTR
-00690   let sq$=" "
+00690   sq$=" "
 00700   if tcde><1 then goto L750
 00710   ck1=val(ck$) conv L750
 00720   if ck2=0 then goto L740
-00730   if ck2+1><ck1 then let sq$="*"
+00730   if ck2+1><ck1 then sq$="*"
 00740 L740: ck2=ck1
 00750 L750: if td1yn$="D" then !:
           pr #255,using 'Form POS 1,C 2,C 10,PIC(ZZ/ZZ/ZZBB),C 29,N 12.2': sq$,ck$,tr2,de$(1:29),amt pageoflow NEWPGE
@@ -142,7 +142,7 @@
           pr #255,using 'Form POS 52,G 12.2': "  __________"
 01050   if td1yn$="D" then !:
           pr #255,using 'Form POS 52,G 12.2': t1(wcd)
-01060   if td1yn$="T" then let end3=1 : gosub HDR
+01060   if td1yn$="T" then end3=1 : gosub HDR
 01070   if td1yn$="T" then !:
           pr #255: "" !:
           pr #255,using 'Form POS 1,C 60': "______________________________________" !:
@@ -173,7 +173,7 @@
 01260   restore #work,key>="            ": nokey END3
 01270   if td1yn$<>"T" then !:
           pr #255: newpage !:
-          let end3=1 : gosub HDR
+          end3=1 : gosub HDR
 01280   pr #255: "  GL Number   Disbursments    Receipts     Adjustments"
 01290   pr #255: "____________  ____________  ____________  ____________"
 01300 READ_WORK: ! 
@@ -191,7 +191,7 @@
 01400   goto READ_WORK
 01410 ! ___________________________
 01420 END3: ! 
-01430   if val(hgl$(1:3))<>0 then let subcode=1: goto L1330
+01430   if val(hgl$(1:3))<>0 then subcode=1: goto L1330
 01440 END3B: ! 
 01450   pr #255: "____________  ____________  ____________  ____________"
 01460   pr #255,using 'Form POS 1,C 12,3*N 14.2,X 2,C 30': "   Totals",mat t1

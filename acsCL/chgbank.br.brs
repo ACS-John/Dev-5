@@ -8,13 +8,13 @@
 00080 ! ______________________________________________________________________
 00090   fncno(cno)
 00100   fntop(program$, cap$="Select Bank Account")
-00110   cancel=99 : let right=1 : let left=0 : center=2 !:
-        let limit_to_list=1
+00110   cancel=99 : let right=1 : left=0 : center=2 !:
+        limit_to_list=1
 00120 ! ______________________________________________________________________
 00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative: read #20,using 'Form POS 152,N 2',rec=1,release: wbc : close #20: 
 00140 ASK1: ! 
 00150   fntos(sn$='ChgBank') !:
-        let lc=0 : let mylen=20 : let mypos=mylen+2
+        lc=0 : let mylen=20 : let mypos=mylen+2
 00160   fnlbl(lc+=1,1,"Working Bank:",mylen,right)
 00170   fncombof('bank',lc,mypos,33,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list) !:
         let resp$(1)=str$(wbc)

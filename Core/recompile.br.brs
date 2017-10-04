@@ -27,7 +27,7 @@
 12700   fnend 
 12800   def fninitupdate(&lastcompile)
 12900     dim lasttime$*256
-13100     if lasttime$="" then let lastcompile=190001010800 else let lastcompile=val(lasttime$)
+13100     if lasttime$="" then lastcompile=190001010800 else lastcompile=val(lasttime$)
 13200     curtime=fndatetime
 13500     if not exists("S:\(import)") then execute "sy -M md "&os_filename$("S:\(import)")
 13600     open #proc_file:=1: 'Name=S:\(import)\compile.prc,RecL=1024,Replace',display,output 

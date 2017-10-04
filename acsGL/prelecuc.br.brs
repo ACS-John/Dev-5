@@ -37,8 +37,8 @@
 00390   let p1=pos(a$(3),",",1): comma=1
 00400   if p1=0 then let p1=pos(a$(3)," ",1): comma=0
 00410   ct$=a$(3)(1:p1-1)
-00420   if comma=1 then let st$=a$(3)(p1+2:p1+3) else let st$=a$(3)(p1+1:p1+2)
-00430   if uprc$(a$(3)(p1+2:p1+4))="TEX" then let st$="Tx"
+00420   if comma=1 then st$=a$(3)(p1+2:p1+3) else st$=a$(3)(p1+1:p1+2)
+00430   if uprc$(a$(3)(p1+2:p1+4))="TEX" then st$="Tx"
 00440   let p2=len(rtrm$(a$(3)))
 00450   let p1=p2-4
 00460   let zip$=a$(3)(p1:p2)
@@ -64,27 +64,27 @@
 00660   pr newpage
 00670   close #101: ioerr L680
 00680 L680: open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic U/C Diskette for state.",display,outin 
-00690   pr fields "3,15,C 51,R,N": "  Insert diskette for elecronic U/C in drive A:"
-00700   pr fields "5,5,C 60": "Company Name:"
-00710   pr fields "6,5,C 60": "Street Address:"
-00720   pr fields "7,5,C 60": "City:"
-00730   pr fields "8,5,C 60": "State:"
-00740   pr fields "9,5,C 60": "Zip Code:"
-00750   pr fields "10,5,C 60": "Federal ID #:"
-00760   pr fields "11,5,C 60": "Quarter Ending Date:"
-00770   pr fields "12,5,C 60,N": "F=First Name First or S=Surname First on File:"
-00780   pr fields "13,5,C 60": "Type of Business Code R=Regular:"
-00790   pr fields "14,5,C 65": "State code used in your record to identify the selected state:"
-00800   pr fields "15,5,C 60": "Appropriate FIPS postal numeric code:"
-00810   pr fields "16,5,C 70": "(See an appendix in your electronic booklet for the postal code!)"
-00820   pr fields "17,5,C 60": "Country Code:"
-00830   pr fields "18,5,C 60": "NAICS Code:"
-00840   pr fields "19,5,C 60": "Deduct Cafiteria Plans for Calculating Wages (Y/N)?"
-00850   pr fields "20,5,C 60": "Deduct Pension for Calculating Wages (Y/N)?"
-00860   pr fields "22,28,C 9,B,1": "Next (F1)"
-00870   pr fields "22,39,C 11,B,5": "Cancel (F5)"
+00690   pr f "3,15,C 51,R,N": "  Insert diskette for elecronic U/C in drive A:"
+00700   pr f "5,5,C 60": "Company Name:"
+00710   pr f "6,5,C 60": "Street Address:"
+00720   pr f "7,5,C 60": "City:"
+00730   pr f "8,5,C 60": "State:"
+00740   pr f "9,5,C 60": "Zip Code:"
+00750   pr f "10,5,C 60": "Federal ID #:"
+00760   pr f "11,5,C 60": "Quarter Ending Date:"
+00770   pr f "12,5,C 60,N": "F=First Name First or S=Surname First on File:"
+00780   pr f "13,5,C 60": "Type of Business Code R=Regular:"
+00790   pr f "14,5,C 65": "State code used in your record to identify the selected state:"
+00800   pr f "15,5,C 60": "Appropriate FIPS postal numeric code:"
+00810   pr f "16,5,C 70": "(See an appendix in your electronic booklet for the postal code!)"
+00820   pr f "17,5,C 60": "Country Code:"
+00830   pr f "18,5,C 60": "NAICS Code:"
+00840   pr f "19,5,C 60": "Deduct Cafiteria Plans for Calculating Wages (Y/N)?"
+00850   pr f "20,5,C 60": "Deduct Pension for Calculating Wages (Y/N)?"
+00860   pr f "22,28,C 9,B,1": "Next (F1)"
+00870   pr f "22,39,C 11,B,5": "Cancel (F5)"
 00880   if b1>999999999 then b1=0
-00890   pr fields mat io1$: a$(1),a$(2),ct$,st$,zip$,b1,yr,namcde$,typemp$,1,48
+00890   pr f mat io1$: a$(1),a$(2),ct$,st$,zip$,b1,yr,namcde$,typemp$,1,48
 00900 L900: input fields mat io1$,attr "R": a$(1),a$(2),ct$,st$,zip$,b1,endingdate,namcde$,typemp$,sr1,sr2,country$,naics$,cafiteria$,pension$ conv CONV1
 00910   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 00920   if cmdkey>0 then goto L990 else ce=curfld+1
@@ -93,7 +93,7 @@
 00950   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L900
 00960 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00970   ce=cnt+1
-00980 ERR1: pr fields "24,78,C 1": bell : goto L940
+00980 ERR1: pr f "24,78,C 1": bell : goto L940
 00990 L990: ! 
 01000   if cmdkey=5 then goto XIT
 01010   if rtrm$(a$(1))="" then ce=1: goto ERR1
@@ -115,7 +115,7 @@
 01170   pr newpage
 01180   let win=101
 01190   let message$=""
-01200   let stopable=1: gosub L3390 ! Let FNWAIT(WIN,CAP$,MESSAGE$,1)
+01200   stopable=1: gosub L3390 ! Let FNWAIT(WIN,CAP$,MESSAGE$,1)
 01210 ! ______________________________________________________________________
 01220   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 01230 L1230: open #22: "Name="&env$('Q')&"\UCReport,RecL=512,eol=crlf,replace",display,output 
@@ -139,13 +139,13 @@
 01400   let r1=r1+1
 01410   let p1=pos(em$(3),",",1) : comma=1
 01420   if p1=0 then let p1=pos(em$(3)," ",1): comma=0
-01430   let emct$=em$(3)(1:p1-1)
-01440   gosub STATE_BREAKDOWN: let emst$=holdst$ ! If COMMA=1 Then Let EMST$=EM$(3)(P1+2:P1+3) Else Let EMST$=EM$(3)(P1+1:P1+2)
+01430   emct$=em$(3)(1:p1-1)
+01440   gosub STATE_BREAKDOWN: emst$=holdst$ ! If COMMA=1 Then eMST$=EM$(3)(P1+2:P1+3) Else eMST$=EM$(3)(P1+1:P1+2)
 01450   let p2=len(rtrm$(em$(3)))
 01460   let p1=p2-4
-01470   let emzip$=em$(3)(p1:p2)
+01470   emzip$=em$(3)(p1:p2)
 01480 L1480: let p1=pos(ss$,"-",1)
-01490   if p1>0 then let ss$(p1:p1)="": goto L1480 else let ssn=val(ss$)
+01490   if p1>0 then ss$(p1:p1)="": goto L1480 else ssn=val(ss$)
 01500 ! READ_DEPARTMENT: Read #2,Using 1500,Rec=TA: TENO,TCD,MAT TY,MAT TQM,TA
 01510 ! If SS$="459499366" Then Pause
 01520 ! Form POS 1,N 8,POS 48,N 2,POS 168,38*PD 5.2,POS 468,PD 3
@@ -230,28 +230,28 @@
         pr #win,fields "10,2,Cr 31,N": "Contact E-Mail:" !:
         pr #win,fields "11,2,Cr 31,N": "Terminating Business Indicator:" !:
         pr #win,fields "12,2,Cr 66,N": "Is Medicare W/H a separate field in the employee record (Y/N):"
-02260   let scr2_io$(1)="04,34,C 17,UT,N" !:
-        let scr2_io$(2)="05,34,C 01,UT,N" !:
-        let scr2_io$(3)="06,34,C 06,UT,N" !:
-        let scr2_io$(4)="07,34,C 27,UT,N" !:
-        let scr2_io$(5)="08,34,C 15,UT,N" !:
-        let scr2_io$(6)="09,34,C 05,UT,N" !:
-        let scr2_io$(7)="10,34,C 40,UT,N" !:
-        let scr2_io$(8)="11,34,C 01,UT,N" !:
-        let scr2_io$(9)="12,68,Cu 01,UT,N"
+02260   scr2_io$(1)="04,34,C 17,UT,N" !:
+        scr2_io$(2)="05,34,C 01,UT,N" !:
+        scr2_io$(3)="06,34,C 06,UT,N" !:
+        scr2_io$(4)="07,34,C 27,UT,N" !:
+        scr2_io$(5)="08,34,C 15,UT,N" !:
+        scr2_io$(6)="09,34,C 05,UT,N" !:
+        scr2_io$(7)="10,34,C 40,UT,N" !:
+        scr2_io$(8)="11,34,C 01,UT,N" !:
+        scr2_io$(9)="12,68,Cu 01,UT,N"
 02270   if resub$="" then let resub$="0"
 02280 ! If TLCN$="" Then Let TLCN$="0"
 02290   if terminat$="" then let terminat$="0"
 02300   let med$="Y"
 02310 L2310: rinput #win,fields mat scr2_io$: emppin$,resub$,tlcn$,contact$,contactph$,phoneext$,email$,terminat$,med$ conv CONV_SCR2
-02320   if ce>0 then let scr2_io$(ce)(ce1:ce2)="U": ce=0
+02320   if ce>0 then scr2_io$(ce)(ce1:ce2)="U": ce=0
 02330   if cmdkey>0 then goto L2400 else ce=curfld
 02340 L2340: ce=ce+1: if ce>udim(scr2_io$) then ce=1
-02350 L2350: let scr2_io$(ce)=rtrm$(scr2_io$(ce)) : ce1=pos(scr2_io$(ce),"U",9) : if ce1=0 then goto L2340
-02360   ce2=ce1+1 : let scr2_io$(ce)(ce1:ce1)="UC" : goto L2310
-02370 CONV_SCR2: if ce>0 then let scr2_io$(ce)(ce1:ce2)="U"
+02350 L2350: scr2_io$(ce)=rtrm$(scr2_io$(ce)) : ce1=pos(scr2_io$(ce),"U",9) : if ce1=0 then goto L2340
+02360   ce2=ce1+1 : scr2_io$(ce)(ce1:ce1)="UC" : goto L2310
+02370 CONV_SCR2: if ce>0 then scr2_io$(ce)(ce1:ce2)="U"
 02380   ce=cnt+1
-02390 ERR_SCR2: pr fields "24,78,C 1": bell : goto L2350
+02390 ERR_SCR2: pr f "24,78,C 1": bell : goto L2350
 02400 L2400: if resub$<>"0" and resub$<>"1" then ce=2 !:
           goto ERR_SCR2
 02410   if resub$="1" and rtrm$(tlcn$)="" then ce=3 !:
@@ -265,33 +265,33 @@
 02470 ! ______________________________________________________________________
 02480 NAME_BREAKDOWN: ! 
 02490   dim first$*15,mid$*15,last$*20,em$(3)*30
-02500   let em$(1)=uprc$(rtrm$(em$(1))): ! Let NAMCDE$="s"
+02500   em$(1)=uprc$(rtrm$(em$(1))): ! Let NAMCDE$="s"
 02510   let x1=pos(em$(1)," ",1)
 02520   let x2=pos(em$(1)," ",x1+1)
 02530   let x3=pos(em$(1)," ",x2+1)
 02540   if uprc$(namcde$)="S" or uprc$(namcde$)="L" then goto L2590
 02550   let first$=em$(1)(1:min(15,max(x1-1,1)))
-02560   if x2>0 then let mid$=em$(1)(x1+1:x2-1): let last$=em$(1)(x2+1:len(em$(1)))
-02570   if x2=0 then let last$=em$(1)(x1+1:len(em$(1))): let mid$=""
+02560   if x2>0 then let mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
+02570   if x2=0 then last$=em$(1)(x1+1:len(em$(1))): let mid$=""
 02580   goto L2640
 02590 L2590: ! last name first
 02600   if x1=0 then let x1=pos(em$(1),",",1)
-02610   if x1>0 and em$(1)(x1-1:x1-1)="," then let last$=em$(1)(1:x1-2) else let last$=em$(1)(1:max(x1-1,1))
+02610   if x1>0 and em$(1)(x1-1:x1-1)="," then last$=em$(1)(1:x1-2) else last$=em$(1)(1:max(x1-1,1))
 02620   if x2>0 then let first$=em$(1)(x1+1:x2-1): let mid$=em$(1)(x2+1:len(em$(1)))
 02630   if x2=0 then let first$=em$(1)(x1+1:len(em$(1)))(1:15): let mid$=""
 02640 L2640: let x=pos(first$,",",1): if x>0 then let first$(x:x)=""
-02650   let x=pos(last$,",",1): if x>0 then let last$(x:x)=""
+02650   let x=pos(last$,",",1): if x>0 then last$(x:x)=""
 02660 ! pr FIRST$,MID$,LAST$
 02670   return 
 02680 L2680: ! 
 02750   if exists("C:\ACS\Local\Settings\No_Print_Newpage.txt") then goto L2760 else pr newpage
-02760 L2760: let screen_width=80
-02770   let screen_height=24
+02760 L2760: screen_width=80
+02770   screen_height=24
 02780   if display_cnam=0 then goto L2790
-02790 L2790: let sc=max(int(((screen_width-win_width)/2)+1),2)
-02800   let ec=min(sc+win_width-1,79)
-02810   let sr=max(int(((screen_height-win_height)/2)+1),2)
-02820   let er=min(sr+win_height-1,23)
+02790 L2790: sc=max(int(((screen_width-win_width)/2)+1),2)
+02800   ec=min(sc+win_width-1,79)
+02810   sr=max(int(((screen_height-win_height)/2)+1),2)
+02820   er=min(sr+win_height-1,23)
 02830 !     pr "win_height="&STR$(WIN_HEIGHT),"win_width="&STR$(WIN_WIDTH)
 02840 !     pr "sr="&STR$(SR),"sc="&STR$(SC)
 02850 !     pr "er="&STR$(ER),"ec="&STR$(EC) : Pause
@@ -305,7 +305,7 @@
 02910   if display_cnam=2 then !:
           pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&str$(cno)(1:min(40,win_width))
 02920 L2920: if button_option=0 then goto L3030
-02930   mat fkey$=("") : let em$="" : let es=0
+02930   mat fkey$=("") : em$="" : es=0
 02940   let fkey$(5)="Cancel" ! included by default
 02950   if button_option=2 then !:
           let fkey$(1)="Next"
@@ -322,7 +322,7 @@
 03000   if button_option=7 then !:
           let fkey$(1)="Save" !:
           let fkey$(4)="Delete"
-03010   let scrline=er+1: gosub L3660 !  fnFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
+03010   scrline=er+1: gosub L3660 !  fnFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
 03020 ! 
 03030 L3030: return  ! Fnend
 03040 L3040: ! Def Library fnOldMsgBox(mat RESPONSE$,&CAP$,mat MSGLINE$,MTYPE)
@@ -332,9 +332,9 @@
 03080 ! mtype=3 means Yes, No, Cancel - returns "Y" or "N" or ""
 03090 ! response$(1)= code you're looking for 2-5 are reserved for future use
 03100   close #104: ioerr L3110
-03110 L3110: let endrow=12
+03110 L3110: endrow=12
 03120   for j=2 to udim(msgline$)
-03130     if msgline$(j)<>"" then let endrow=endrow+1
+03130     if msgline$(j)<>"" then endrow=endrow+1
 03140   next j
 03150   open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&cap$,display,outin 
 03160   pr #104: newpage
@@ -342,22 +342,22 @@
 03180   for j=1 to udim(msgline$)
 03190     pr #104,fields str$(mglinerow+j-1)&",2,Cc 60,N": msgline$(j)
 03200   next j
-03210   if mtype=1 then pr fields str$(endrow+1)&",38,Cc 4,B,1": "Ok"
+03210   if mtype=1 then pr f str$(endrow+1)&",38,Cc 4,B,1": "Ok"
 03220   if mtype=1 then input fields str$(endrow)&",09,C 1,AE,N": pause$
-03230   if mtype=2 then pr fields str$(endrow+1)&",35,Cc 4,B,21": "Yes"
-03240   if mtype=2 then pr fields str$(endrow+1)&",40,Cc 4,B,22": "No"
+03230   if mtype=2 then pr f str$(endrow+1)&",35,Cc 4,B,21": "Yes"
+03240   if mtype=2 then pr f str$(endrow+1)&",40,Cc 4,B,22": "No"
 03250 L3250: if mtype=2 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
 03260   if mtype=2 and cmdkey=22 then let response$(1)="N"
 03270   if mtype=2 and cmdkey=21 then let response$(1)="Y"
-03280   if mtype=2 and response$(1)<>"Y" and response$(1)<>"N" then pr fields "24,1,C 7,N": bell$ : goto L3250
-03290   if mtype=3 then pr fields str$(endrow+1)&",29,Cc 4,B,21": "Yes"
-03300   if mtype=3 then pr fields str$(endrow+1)&",34,Cc 4,B,22": "No"
-03310   if mtype=3 then pr fields str$(endrow+1)&",39,C 12,B,22": "Cancel (Esc)"
+03280   if mtype=2 and response$(1)<>"Y" and response$(1)<>"N" then pr f "24,1,C 7,N": bell$ : goto L3250
+03290   if mtype=3 then pr f str$(endrow+1)&",29,Cc 4,B,21": "Yes"
+03300   if mtype=3 then pr f str$(endrow+1)&",34,Cc 4,B,22": "No"
+03310   if mtype=3 then pr f str$(endrow+1)&",39,C 12,B,22": "Cancel (Esc)"
 03320   if mtype=3 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
 03330   if mtype=3 and cmdkey=22 then let response$(1)="N"
 03340   if mtype=3 and cmdkey=21 then let response$(1)="Y"
 03350   if mtype=3 and cmdkey=99 then let response$(1)=""
-03360   if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr fields "24,1,C 7,N": bell$ : goto L3250
+03360   if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr f "24,1,C 7,N": bell$ : goto L3250
 03370   close #104: ioerr L3380
 03380 L3380: return  ! Fnend
 03390 L3390: ! Def Library FNWAIT(WIN,&CAP$,&MESSAGE$,STOPABLE)
@@ -370,14 +370,14 @@
 03460   pr #win,fields "2,1,Cc 40,R,N": "Company Number "&str$(cno)
 03470   pr #win,fields "4,1,Cc 40,N": message$
 03480   if rtrm$(message$)="" then pr #win,fields "4,1,Cc 40,N": "Please wait..."
-03490   if stopable=0 then pr fields "15,34,C 11,R,N": "Do Not Stop"
-03500   if stopable=1 then pr fields "15,34,C 11,B,5": "Cancel (F5)"
+03490   if stopable=0 then pr f "15,34,C 11,R,N": "Do Not Stop"
+03500   if stopable=1 then pr f "15,34,C 11,B,5": "Cancel (F5)"
 03510   return  ! Fnend
 03520 ! Def Library FNOPENWIN(WIN,SR,SC,ER,EC,&CAP$)
-03530   if sr<1 then let sr=10
-03540   if sc<1 then let sc=20
-03550   if er<1 then let er=14
-03560   if ec<1 then let ec=59
+03530   if sr<1 then sr=10
+03540   if sc<1 then sc=20
+03550   if er<1 then er=14
+03560   if ec<1 then ec=59
 03570   let win_width=ec-sc+1
 03580   close #win: ioerr L3590
 03590 L3590: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
@@ -389,7 +389,7 @@
 03650   return  ! Fnend
 03660 L3660: ! Def Library FNFKEY(SCRLINE,MAT FKEY$,MAT DISFK,&EM$,ES)
 03670   let totallen=0 !:
-        let startpos=0
+        startpos=0
 03680   for j=1 to udim(fkey$) ! add ' (Fx)' to each button
 03690     if fkey$(j)="" then goto L3720
 03700     let fkey$(j)=fkey$(j)&" (F"&str$(j)&")" !:
@@ -398,17 +398,17 @@
 03720 L3720: next j
 03730   let totallen=totallen+len(rtrm$(em$))+min(len(rtrm$(em$)),1)+es
 03740   let totallen=totallen-1
-03750   let startpos=int((80-totallen)/2)+1
-03760   pr fields str$(scrline)&","&str$(startpos)&",C "&str$(totallen)&",N": rpt$("Ä",totallen)
+03750   startpos=int((80-totallen)/2)+1
+03760   pr f str$(scrline)&","&str$(startpos)&",C "&str$(totallen)&",N": rpt$("Ä",totallen)
 03770   for j=1 to udim(fkey$)
 03780     if fkey$(j)="" then goto L3830
-03790     if disfk(j)=1 then pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",R,"&str$(j): fkey$(j)
+03790     if disfk(j)=1 then pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",R,"&str$(j): fkey$(j)
 03800     if disfk(j)=1 then goto L3820
-03810     pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",B,"&str$(j): fkey$(j)
-03820 L3820: let startpos=startpos+len(fkey$(j))+1
+03810     pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",B,"&str$(j): fkey$(j)
+03820 L3820: startpos=startpos+len(fkey$(j))+1
 03830 L3830: next j
 03840   if rtrm$(em$)="" then goto L3860
-03850   pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(rtrm$(em$))+es)&",R,N": rtrm$(em$)
+03850   pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(rtrm$(em$))+es)&",R,N": rtrm$(em$)
 03860 L3860: return  ! Fnend
 03870 STATE_BREAKDOWN: ! extract state name
 03880   let holdst$="          "
@@ -417,7 +417,7 @@
 03910   for j=1 to 10
 03920     let p3=pos(rtrm$(em$(3))," ",p3+1)
 03930     if oldp3>p3 then goto L3960 ! end of address reached
-03940     if p3>0 then let oldp3=p3 else goto L3950
+03940     if p3>0 then oldp3=p3 else goto L3950
 03950 L3950: next j
 03960 L3960: for j=1 to 10
 03970     if rtrm$(em$(3)(oldp3-j:oldp3-j))="" or em$(3)(oldp3-j:oldp3-j)="," then goto L3980 else let p4=p4-1: let holdst$(p4:p4)=em$(3)(oldp3-j:oldp3-j): goto L3990
@@ -453,16 +453,16 @@
 04270   let t3=t3+h2
 04280 L4280: return 
 04290 ERTN: ! 
-04300   if err=61 then pr fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L4320
+04300   if err=61 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L4320
 04310   goto L4360
 04320 L4320: pr newpage
-04330   if err=4148 then pr fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L4350
+04330   if err=4148 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L4350
 04340   goto L4360
-04350 L4350: pr fields "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-04360 L4360: pr fields "24,1,C 80,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+04350 L4350: pr f "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+04360 L4360: pr f "24,1,C 80,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 04370   input fields "24,60,C 1,N": quitcode$
 04380   if rtrm$(uprc$(quitcode$))="Q" then goto L4420
-04390   pr fields "23,1,C 80,N": ""
-04400   pr fields "24,1,C 80,N": ""
+04390   pr f "23,1,C 80,N": ""
+04400   pr f "24,1,C 80,N": ""
 04410   retry 
 04420 L4420: let fnxit

@@ -17,14 +17,14 @@
 00170   on fkey 5 goto L2060
 00180   let mp1=75
 00190   if fnps=2 then let mp1=mp1+3
-00200   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
-00210   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
-00220   let flo$(1)="8,3,C 50,N" !:
-        let flo$(2)="8,55,N 10.2,N" !:
-        let flo$(3)="8,69,N 10.2,N"
-00230   let fli$(1)="08,03,C 50,UT,N" !:
-        let fli$(2)="08,55,N 10.2,UT,N" !:
-        let fli$(3)="08,69,N 10.2,UT,N"
+00200   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
+00210   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
+00220   flo$(1)="8,3,C 50,N" !:
+        flo$(2)="8,55,N 10.2,N" !:
+        flo$(3)="8,69,N 10.2,N"
+00230   fli$(1)="08,03,C 50,UT,N" !:
+        fli$(2)="08,55,N 10.2,UT,N" !:
+        fli$(3)="08,69,N 10.2,UT,N"
 00240   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00250 L250: read #1,using L260: acct$,cb,mat by,mat bp eof L350
 00260 L260: form pos 1,c 12,pos 87,27*pd 6.2
@@ -123,7 +123,7 @@
 01080 L1080: if ds=1 then let dollar$="$" else let dollar$=" "
 01090   if total><0 or total2><0 then goto L1110
 01100   if ls+ul+ds+ic>0 then goto L1110 else goto L550
-01110 L1110: let sp2=49-sp-1
+01110 L1110: sp2=49-sp-1
 01120   pr #255,using L1130: d$(1:sp2),dollar$,total,dollar$,total2 pageoflow L1680
 01130 L1130: form pos sp,c sp2,pos 49,c 1,pic(--,---,---.##),pos 67,c 1,pic(--,---,---.##),skip redir
 01140   let total=0
@@ -135,7 +135,7 @@
 01200 L1200: if ap=0 then ap=1
 01210   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 01220   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
-01230   let sp2=49-sp-1
+01230   sp2=49-sp-1
 01240   if ds=1 then let dollar$="$" else let dollar$=" "
 01250   pr #255,using L1130: d$(1:sp2),dollar$,accum1,dollar$,accum2 pageoflow L1680
 01260   gosub L1440
@@ -144,7 +144,7 @@
 01290   goto L550
 01300 ! ______________________________________________________________________
 01310 L1310: if te$="R" then let report$=d$
-01320   if te$="S" then let secondr$=d$
+01320   if te$="S" then secondr$=d$
 01330   gosub L1510
 01340   goto L550
 01350 ! ______________________________________________________________________
@@ -171,8 +171,8 @@
 01560 ! ______________________________________________________________________
 01570 L1570: let fnpglen(pglen)
 01580 ! If PGLEN<>42 Then Let PGLEN=58
-01590   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01600 ! If PGLEN=42 Then Let SK=SK+1
+01590   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01600 ! If PGLEN=42 Then sK=SK+1
 01610   pr #255,using L1620: rtrm$(foot$),"Page "&str$(pt1)
 01620 L1620: form skip sk,pos tabnote,c fl,pos 75,c 8,skip 1
 01630   if eofcode=1 then goto L1660
@@ -218,7 +218,7 @@
 02030   pr #255: 
 02040 L2040: return 
 02050 ! ______________________________________________________________________
-02060 L2060: let eofcode=1
+02060 L2060: eofcode=1
 02070   gosub L1570
 02080   fncloseprn
 02090   goto XIT

@@ -22,8 +22,8 @@
 00210   let pors=1
 00220   let mp1=69
 00230   if fnps=2 then let mp1=mp1+3
-00240   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
-00250   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
+00240   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00250   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
 00260   form c 9,skip 0
 00270   form c 7,skip 0
 00280   let nametab=int(44-len(rtrm$(cnam$))/2)
@@ -95,8 +95,8 @@
 00920 L920: if ir<val(r$) then goto L660
 00930   if ir>val(r$) then goto L950
 00940 L940: let notrans=1
-00950 L950: let overundr=ytdb-total2
-00955   let oumonth=monthb-total
+00950 L950: overundr=ytdb-total2
+00955   oumonth=monthb-total
 00960 ! Let UNEXPEND=ANNUALB-TOTAL2
 00970   for j=1 to 9
 00980     if ac(j)=9 then goto L1060 ! 10/14/87
@@ -112,14 +112,14 @@
 01090   annualb=-annualb
 01100   let monthb=-monthb
 01110   let ytdb=-ytdb
-01120   let overundr=overundr
+01120   overundr=overundr
 01130   let unexpend=unexpend
 01140 L1140: if ds=1 then let dollar$="$" else let dollar$=" "
 01150   goto L1190 ! pr all accounts even if zero balance  (if budget ever nets to zero, it messes the monthly budget column up
 01160   if annualb><0 or total2><0 then goto L1190
 01170   if total<>0 then goto L1190
 01180   if ls+ds+ul+ic>0 then goto L1190 else goto L500
-01190 L1190: let sp2=26-sp-1
+01190 L1190: sp2=26-sp-1
 01195   if ul=1 then pr #255,using L1211: d$(1:sp2),dollar$,"{\UL ",monthb,"}",dollar$,"{\UL ",total,"}",dollar$,"{\UL ",oumonth,"}",dollar$,"{\UL ",ytdb,"}",dollar$,"{\UL ",total2,"}",dollar$,"{\UL ",overundr,"}" pageoflow L1890 : goto L1210
 01200   pr #255,using L1210: d$(1:sp2),dollar$,monthb,dollar$,total,dollar$,oumonth,dollar$,ytdb,dollar$,total2,dollar$,overundr pageoflow L1890
 01210 L1210: form pos sp,c sp2,pos 26,c 1,n 13.2,x 1,c 1,n 11.2,x 1,c 1,n 11.2,x 1,c 1,n 13.2,x 1,c 1,n 13.2,x 1,c 1,n 13.2,x 1,c 1,n 13.2,skip redir
@@ -127,10 +127,10 @@
 01220   let total=0
 01230   let total2=0
 01240   annualb=0
-01245   let oumonth=0
+01245   oumonth=0
 01250   let monthb=0
 01260   let ytdb=0
-01270   let overundr=0
+01270   overundr=0
 01290   gosub L1600
 01295   if ul=1 then goto L1310
 01300   gosub L1900
@@ -144,7 +144,7 @@
 01380   if rs=1 then accum5=-accum(ap,5) else accum5=accum(ap,5)
 01390   if rs=1 then accum6=accum(ap,6) else accum6=accum(ap,6)
 01410   if ds=1 then let dollar$="$" else let dollar$=" "
-01420   let sp2=26-sp-1
+01420   sp2=26-sp-1
 01425   if ul=1 then pr #255,using L1211: d$(1:sp2),dollar$,"{\UL ",accum1,"}",dollar$,"{\UL ",accum2,"}",dollar$,"{\UL ",accum3,"}",dollar$,"{\UL ",accum4,"}",dollar$,"{\UL ",accum5,"}",dollar$,"{\UL ",accum6,"}" pageoflow L1890 : goto L1440
 01430   pr #255,using L1210: d$(1:sp2),dollar$,accum1,dollar$,accum2,dollar$,accum3,dollar$,accum4,dollar$,accum5,dollar$,accum6 pageoflow L1890
 01440 L1440: let ft1=0
@@ -154,7 +154,7 @@
 01470 L1470: gosub L1710
 01480   goto L500
 01490 L1490: if te$="R" then let report$=d$
-01500   if te$="S" then let secondr$=d$
+01500   if te$="S" then secondr$=d$
 01510   gosub L1710
 01520   goto L500
 01530 L1530: if foot1=1 then goto L1580
@@ -182,8 +182,8 @@
 01760 L1760: ! If FT1=1 Then Goto 1870
 01770   fnpglen(pglen)
 01780 ! If PGLEN<>42 Then Let PGLEN=58
-01790   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01800 ! If PGLEN=42 Then Let SK=SK+1
+01790   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01800 ! If PGLEN=42 Then sK=SK+1
 01810   pr #255,using L1820: rtrm$(foot$),"Page "&str$(pt1)
 01820 L1820: form skip sk,pos tabnote,c fl,pos 100,c 8,skip 1
 01830 ! Let FT1=1
@@ -218,7 +218,7 @@
 02130   pr #255: 
 02140   return 
 02150 ! ______________________________________________________________________
-02160 L2160: let eofcode=1
+02160 L2160: eofcode=1
 02170   gosub L1760
 02180 ! 
 02190 ! 

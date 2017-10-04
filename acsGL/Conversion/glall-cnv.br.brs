@@ -4,13 +4,13 @@
 00040   pr newpage
 00050   fntop(program$,"CHANGE_ME")
 00070 L70: ! 
-00080   pr fields "10,24,C 32": "COMPANY NUMBER TO CONVERT:"
-00090   pr fields "12,32,C 16,R,N": "PRESS F5 TO STOP"
+00080   pr f "10,24,C 32": "COMPANY NUMBER TO CONVERT:"
+00090   pr f "12,32,C 16,R,N": "PRESS F5 TO STOP"
 00100 L100: input fields "10,57,N 5,UE,N",attr "R": cno conv L100
 00110   if cmdkey=5 then stop 
 00120 ! 
 00130   open #1: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno),internal,input ioerr L260
-00140   pr fields "14,32,C 16,BR,N": "   IN PROCESS"
+00140   pr f "14,32,C 16,BR,N": "   IN PROCESS"
 00150   open #2: "Name=X,size=0,RecL=72,REPLACE",internal,output 
 00160 L160: read #1,using L190: mat tr,tr$,td$ eof L220
 00170   if tr(1)+tr(2)+tr(3)=0 then goto L160
@@ -66,7 +66,7 @@
 00670     execute "COPY  "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&""
 00680     if j=2 or j=5 then goto L690 else goto L950
 00690 L690: open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\"&idx$(j)&".h"&str$(cno)&"",internal,outin,keyed 
-00700     let end1=st1=st2=rno=rnp=0
+00700     end1=st1=st2=rno=rnp=0
 00710 L710: gosub FIND1
 00720     restore #1,key>=lpad$(str$(st1),5): nokey END2
 00730 L730: read #1,using L830: rno,ic eof END2
@@ -77,18 +77,18 @@
 00780 L780: rewrite #1,using L790: rnp
 00790 L790: form pos 79,n 5
 00800     goto L730
-00810 FIND1: let st1=rno : let st2=99999 : let rnp=0
+00810 FIND1: st1=rno : st2=99999 : let rnp=0
 00820 L820: read #1,using L830: rno,ic eof END1,conv L880
 00830 L830: form pos 1,g 5,pos 75,n 1
 00840     if ic=0 then goto L820
 00850     if ic=1 then let rnp=rno
-00860     if ic=2 then let st2=rno : goto L930
+00860     if ic=2 then st2=rno : goto L930
 00870     goto L820
 00880 L880: read #1,using L900: rno$ eof END1
 00890     delete #1: 
 00900 L900: form pos 1,c 5,pos 75,n 1
 00910     goto L820
-00920 END1: let end1=1
+00920 END1: end1=1
 00930 L930: return 
 00940 END2: close #1: 
 00950 L950: next j

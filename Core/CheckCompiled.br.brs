@@ -20,12 +20,12 @@
 36050     ! pr filename$ : pause
 36060     if env$('compile_without_asking')='Yes' then 
 36080       let docompile=2
-36100       let setenv('compile_without_asking','')
+36100       setenv('compile_without_asking','')
 36120     else 
 36140       let docompile=msgbox("You have uncompiled source files!  Recompile?", "ACS 5 - "&os_filename$(program$), "Yn", "Qst")
 36160     end if 
 36180     if docompile=2 then 
-36200       let setenv("AfterRecompile", "S:\Core\Start")
+36200       setenv("AfterRecompile", "S:\Core\Start")
 36220       chain 'S:\Core\ReCompile.br' ! execute "Proc S:\ReCompile.prc" ioerr ignore
 36240     end if 
 42000     DONE: ! 

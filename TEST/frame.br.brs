@@ -5,7 +5,7 @@
 00034   execute "Config Console Off"
 00045 ! -------------------------------------------------------------------
 00050   let prg$="test\Text3.br" : let fnprg(prg$,2)
-00060   let sn$="Text3" !:
+00060   sn$="Text3" !:
         fntos(sn$,2)
 00064   let ttt$ = "Hiya. Look at me. I'm a duplicate!"
 00065 ! -------------------------------------------------------------------

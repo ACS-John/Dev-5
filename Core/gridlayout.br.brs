@@ -6,18 +6,18 @@
 00060   fntop(program$,"Grid Layout")
 00070 ! ______________________________________________________________________
 00080 L80: let fntos(sn$="file_layout")
-00090   let lablen=15
+00090   lablen=15
 00100   let text$="File Name:"
 00102   fnlbl(1,1,text$,lablen,1)
 00110   fntxt(1,lablen+2,60,0,0,"")
 00112   let resp$(1)="programfolder\grid\data_base_name\filename"
 00120   fncmdset(2)
 00130   fnacs(sn$,0,mat resp$,ckey)
-00140   let outputfile$=trim$(resp$(1))&".fil"
+00140   outputfile$=trim$(resp$(1))&".fil"
 00150   open #10: "Name="&outputfile$&",RecL=87,use",display,output ioerr L80
-00160 L160: let sn$="file_layout"
+00160 L160: sn$="file_layout"
 00162   fntos(sn$)
-00170   let lablen=30
+00170   lablen=30
 00180   fnlbl(1,1,"Field name:",lablen,1)
 00190   fntxt(1,lablen+2,30,0,0,"")
 00192   let resp$(1)=""
@@ -45,7 +45,7 @@
 00320   if ckey=5 then goto XIT
 00330   let fieldnam$=trim$(resp$(1))
 00340   let vn$=trim$(resp$(2))
-00350   let fl=val(resp$(3))
+00350   fl=val(resp$(3))
 00360   let dp=val(resp$(4))
 00370   let ft$=trim$(resp$(5))
 00380   an$=trim$(resp$(6))

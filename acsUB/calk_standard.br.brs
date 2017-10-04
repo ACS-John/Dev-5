@@ -1,13 +1,13 @@
 08000 def fn_setup_calk
 08020   if ~setup_calk then ! 
-08040     let setup_calk=1
+08040     setup_calk=1
 08060     library 'S:\Core\Library': fnpause,fncd,fngethandle,fnget_services,fncreg_read
 08062     library 'S:\Core\Library': fnDepositChangeLog
 08080     dim x$*10,gb(10),dp$*60,servicename$(10)*20,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
 08140     FORM_RATEMSTR: form pos 55,32*g 10
 08160     fnget_services(mat servicename$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 08180     for j=1 to udim(servicename$)
-08200       let servicename$(j)=trim$(servicename$(j))
+08200       servicename$(j)=trim$(servicename$(j))
 08220     next j
 08240   end if 
 08260   if env$('client')='Campbell' then
@@ -42,8 +42,8 @@
 13040   ! you can use either gas or electric for some other meter reading by giving it the correct service code name, but using EL or GA as the codes.
 13060   ! don't ever change an existing routine for any service.  Add a new routine  for any service that cannot go thru an existing routine.  This will allow the calculation program to become standard.
 14000   ! 
-14500   ! (it is set in company configure)    if service$(6)='IF' and env$('client')="French Settlement" and extra(11)=0 then let extra(11)=1 ! default all Inspection Fee codes of 0 to a 1
-14520   !   if service$(6)='SF' and env$('client')="Pennington" and extra(11)=0 then let extra(11)=1 ! default all Inspection Fee codes of 0 to a 1
+14500   ! (it is set in company configure)    if service$(6)='IF' and env$('client')="French Settlement" and extra(11)=0 then extra(11)=1 ! default all Inspection Fee codes of 0 to a 1
+14520   !   if service$(6)='SF' and env$('client')="Pennington" and extra(11)=0 then extra(11)=1 ! default all Inspection Fee codes of 0 to a 1
 14900   ! 
 30000   let first_non_metered_service=5
 30020   if fn_PassesOnlyMonthFilter(1) and servicename$(1)<>"" and service$(1)="WA" then let fn_calk_water ! always use WA as water code in rate file
@@ -157,7 +157,7 @@
 36320   if env$('client')="Ash Grove" then let usage_sewer=int((usage_sewer+50)*.01)*100 ! ROUND TO NEAREST 100 ON SEWER
 36340   if servicename$(3)="Lawn Meter" then let usage_sewer=usage_sewer-x2 ! reduce sewer usage by lawn meter usage
 36360   if servicename$(3)(1:5)="Reduc" and service$(3)="SW" then let usage_sewer=usage_sewer-x2 ! reduce sewer usage by Reduce Sewer usage
-36380   if env$('client')="Kimberling" then let usage_sewer=usage_sewer-x2-x3 : let eu1=x2
+36380   if env$('client')="Kimberling" then let usage_sewer=usage_sewer-x2-x3 : eu1=x2
 36400   let w(2)=mc1*max(1,extra(14)) ! units per meter - sewer (default to one)
 36420   if usage_sewer<=mu1 then goto L3300 else let mu2=mu1
 36440   for j=1 to 10
@@ -200,45 +200,45 @@
 38002   !  if trim$(x$)='100150.00' then pause
 38010   calk_non_metered_return=0
 38020   if j=3 then ! electric fields used for a non         -metered service
-38040     let entered_amt=x(10)
-38060     let standard_amt=b(j)
+38040     entered_amt=x(10)
+38060     standard_amt=b(j)
 38080     let rate_code=a(j)
-38100     let service_code$=service$(j)
+38100     service_code$=service$(j)
 38120   else if j=4 then ! gas used for non=metered                service
-38140     let entered_amt=x(11)
-38160     let standard_amt=b(j)
+38140     entered_amt=x(11)
+38160     standard_amt=b(j)
 38180     let rate_code=a(j)
-38200     let service_code$=service$(j)
+38200     service_code$=service$(j)
 38220   else if j=5 then 
-38240     let entered_amt=x(6)
-38260     let standard_amt=b(j)
+38240     entered_amt=x(6)
+38260     standard_amt=b(j)
 38280     let rate_code=a(j)
-38300     let service_code$=service$(j)
+38300     service_code$=service$(j)
 38320   else if j=6 then 
-38340     let entered_amt=x(7)
-38360     let standard_amt=b(j)
+38340     entered_amt=x(7)
+38360     standard_amt=b(j)
 38380     let rate_code=extra(11)
-38400     let service_code$=service$(j)
+38400     service_code$=service$(j)
 38420   else if j=7 then 
-38440     let entered_amt=0
-38460     let standard_amt=0
+38440     entered_amt=0
+38460     standard_amt=0
 38480     let rate_code=extra(12)
-38500     let service_code$=service$(j)
+38500     service_code$=service$(j)
 38520   else if j=8 then 
-38540     let entered_amt=x(8)
-38560     let standard_amt=b(7)
+38540     entered_amt=x(8)
+38560     standard_amt=b(7)
 38580     let rate_code=extra(13)
-38600     let service_code$=service$(j)
+38600     service_code$=service$(j)
 38620   else if j=9 then 
-38640     let entered_amt=0
-38660     let standard_amt=0
+38640     entered_amt=0
+38660     standard_amt=0
 38680     let rate_code=a(6)
-38700     let service_code$=service$(j)
+38700     service_code$=service$(j)
 38720   else if j=10 then 
-38740     let entered_amt=0
-38760     let standard_amt=0
+38740     entered_amt=0
+38760     standard_amt=0
 38780     let rate_code=a(7)
-38800     let service_code$=service$(j)
+38800     service_code$=service$(j)
 38820   else 
 38840     let g(j)=0
 38860     goto NM_XIT ! service not covered
@@ -299,7 +299,7 @@
 42320   if b(3)><0 then goto STANDARD_LAWNMETER_CHARGE
 42340   read #h_ratemst,using FORM_RATEMSTR,key="LM"&lpad$(str$(a(3)),2): mc1,mu1,mat rt nokey STANDARD_LAWNMETER_CHARGE
 42360   ! wrong If env$('client')="Findlay" Then Let X2=X(3) ! findlay actually turns in a usage instead of a reading
-42380   let lmu1=x2
+42380   lmu1=x2
 42400   let w(3)=mc1*(max(1,extra(15))) !  units per meter
 42420   if lmu1<=mu1 then goto L3640 else let mu2=mu1
 42440   for j=1 to 10
@@ -350,8 +350,8 @@
 44330   if b(3)><0 then goto STANDARD_ELEC_CHARGE ! 2580
 44340   if a(3)=0 then goto L4290 ! if rate code is a zero than goto L4290
 44360   read #h_ratemst,using FORM_RATEMSTR,key="EL"&lpad$(str$(a(3)),2): mc1,mu1,mat rt nokey STANDARD_ELEC_CHARGE
-44380   if extra(8)=0 then let eu1=x2 else let eu1=x2*(extra(8)*.001) ! electric multiplier
-44400   if env$('client')="Bethany" and extra(15)=0 then let extra(15)=1
+44380   if extra(8)=0 then eu1=x2 else eu1=x2*(extra(8)*.001) ! electric multiplier
+44400   if env$('client')="Bethany" and extra(15)=0 then extra(15)=1
 44420   if env$('client')="Bethany" then goto L4050 ! minimum not used in calculation
 44440   let w(3)=mc1*(max(1,extra(15))) ! electric units per meter
 44460   L4050: ! 
@@ -594,8 +594,8 @@
 56000 def fn_calk_for_final_bill
 56020   ! if debug_account then pr x$ : pause
 56030    serviceOther=fn_service_other
-56040   if x(15)>0 then let extra(17)=x(15) ! FINAL BILL
-56060   if extra(17)=4 then let extra(17)=1 ! change from finaled, but bill once more to just finaled.
+56040   if x(15)>0 then extra(17)=x(15) ! FINAL BILL
+56060   if extra(17)=4 then extra(17)=1 ! change from finaled, but bill once more to just finaled.
 56080   if extra(17)=2 then 
 56120     ! b(8)  is service 1 (water)    deposit
 56140     ! b(9)  is service 2 (sewer)    deposit
@@ -689,11 +689,11 @@
 70020   if ~service_other_return then 
 70040     for service_other_servicename_item=1 to udim(mat servicename$)
 70060       if trim$(servicename$(service_other_servicename_item))(1:5)="Other" then 
-70080         let service_other_return=service_other_servicename_item
+70080         service_other_return=service_other_servicename_item
 70100         goto SERVICE_OTHER_XIT
 70120       end if 
 70140     next service_other_servicename_item
-70160     if ~service_other_return then let service_other_return=8 ! default to service 8
+70160     if ~service_other_return then service_other_return=8 ! default to service 8
 70180   end if 
 70200   SERVICE_OTHER_XIT: ! 
 70220   fn_service_other=service_other_return

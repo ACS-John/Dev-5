@@ -62,7 +62,7 @@
 24000 ! r: TYPEOSERVICE portion of screen
 24020   let disable_for_client=1
 24040   if env$('ACSDeveloper')<>'' then let disable_for_client=0
-24050   let srv_input_col_count=6
+24050   srv_input_col_count=6
 24060   fnfra(15,1,12,113, 'Type of Service') : let fra=1
 24080   fnlbl(2,13,"Full Name",20,2,0,fra)
 24100   fnlbl(2,34,"Code",4,0,0,fra)
@@ -125,8 +125,8 @@
 45000 ! r: RESP$ to Service variables
 45002   let respc=respc_service_base
 45510   for service_item=1 to 10
-45520     let servicename$(service_item)=resp$(respc+=1) ! resp$(respc_service_base+service_item*6-5)
-45530     let servicecode$(service_item)=uprc$(resp$(respc+=1)) ! uprc$(resp$(respc_service_base+service_item*6-4))
+45520     servicename$(service_item)=resp$(respc+=1) ! resp$(respc_service_base+service_item*6-5)
+45530     servicecode$(service_item)=uprc$(resp$(respc+=1)) ! uprc$(resp$(respc_service_base+service_item*6-4))
 45540     if resp$(respc+=1)="True" then ! resp$(respc_service_base+service_item*6-3)="True" then
 45550       let tax_code$(service_item)="Y"
 45560     else 
@@ -137,8 +137,8 @@
 45610     else 
 45620       let penalty$(service_item)="N"
 45630     end if 
-45640     let subjectto(service_item)=val(resp$(respc+=1)) ! respc_service_base+service_item*6-1))
-45660     let ordertoapply(service_item)=val(resp$(respc+=1)) ! resp$(respc_service_base+service_item*6))
+45640     subjectto(service_item)=val(resp$(respc+=1)) ! respc_service_base+service_item*6-1))
+45660     ordertoapply(service_item)=val(resp$(respc+=1)) ! resp$(respc_service_base+service_item*6))
 45680     onlyMonth(service_item)=val(resp$(respc+=1))
 45700     let default_rate$(service_item)=resp$(respc+=1)
 45720   next service_item
@@ -187,7 +187,7 @@
 82080   fnd1(d1)
 82090   if pcent=0 then let pcent=100
 82100   if uprc$(rcpt$)=uprc$("Y") then let rcpt$="True" else let rcpt$="False"
-82120   if uprc$(escrow$)=uprc$("Y") then let escrow$="True" else let escrow$="False"
+82120   if uprc$(escrow$)=uprc$("Y") then escrow$="True" else escrow$="False"
 82140   fncreg_read('unusual usage minimum water',uum_water$)
 82160   fncreg_read('unusual usage minimum gas',uum_gas$)
 82180   fncreg_read('unusual usage minimum electric',uum_electric$)
@@ -205,7 +205,7 @@
 83160 goto COMPANY_LOAD ! /r
 84000 COMPANY_SAVE: ! r:
 84020   if rcpt$="True" then let rcpt$="Y" else let rcpt$="N"
-84040   if escrow$="True" then let escrow$="Y" else let escrow$="N"
+84040   if escrow$="True" then escrow$="Y" else escrow$="N"
 84060   let maintac=1 ! maintac was variable used for maintaining accumulated transaction file, no longer used but be want history to be retained no matter what (so set it to 1)
 84080   close #1,free: ioerr ignore
 84100   open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Size=0,RecL=133,Replace",internal,outin 

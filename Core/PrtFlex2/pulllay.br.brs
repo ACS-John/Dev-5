@@ -19,18 +19,18 @@
         close #20: 
 00180 L180: let io1$(1)="10,34,c 45,UT,N" !:
         let io1$(2)="12,34,C 45,UT,N"
-00190   let outputfile$="acspb\grid\patient\patient"
-00200   let ev$="ACSpb\Layouts\pbMSTR-VB.LAY"
+00190   outputfile$="acspb\grid\patient\patient"
+00200   ev$="ACSpb\Layouts\pbMSTR-VB.LAY"
 00210   pr newpage
 00220   close #101: ioerr L230
 00230 L230: open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outin 
 00240   pr #101: newpage
-00250   pr fields "10,2,Cr 32": "File name to create (no ext):"
-00260   pr fields "12,2,Cr 32": "Layout file name (with exts):"
-00270   pr fields "14,35,c 9,B,1": "Next (F1)"
+00250   pr f "10,2,Cr 32": "File name to create (no ext):"
+00260   pr f "12,2,Cr 32": "Layout file name (with exts):"
+00270   pr f "14,35,c 9,B,1": "Next (F1)"
 00280 L280: rinput fields mat io1$: outputfile$,ev$ conv L280
-00290   let ev$=trim$(trim$(ev$,chr$(0)))
-00300   let outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
+00290   ev$=trim$(trim$(ev$,chr$(0)))
+00300   outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
 00310   open #2: "Name="&ev$,display,input 
 00320   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outin,keyed 
 00330 L330: linput #2: ln$ eof L830
@@ -51,12 +51,12 @@
 00480   let p3=len(rtrm$(a$(j3,3)))
 00490   let p4=pos(a$(j3,3),"*",1)
 00500   if p4=0 then let m1=1 else let m1=val(a$(j3,3)(1:p4-1))
-00510   let l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
+00510   l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
 00520   if p2>1 then let dp=val(a$(j3,3)(p2:p3)) else let dp=0 !:
           ! DECIMAL POSITIONS
 00530   if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !:
           !   ACTUAL FIELD LENGTH
-00540   let l=l*m1 ! TOTAL STORAGE LENGTH
+00540   l=l*m1 ! TOTAL STORAGE LENGTH
 00550   b=a+l
 00560   a=a+1
 00570   let ino=ino+1
@@ -89,7 +89,7 @@
 00830 L830: close #2: ioerr L840
 00840 L840: close #15: ioerr L850
 00850 L850: gosub MOVEITTOTEXT
-00860   pr fields "24,1,C 7,UT,N": "Done..."
+00860   pr f "24,1,C 7,UT,N": "Done..."
 00870   stop 
 00880 ! ______________________________________________________________________
 00890 MOVEITTOTEXT: ! 

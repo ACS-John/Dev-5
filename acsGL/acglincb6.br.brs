@@ -28,8 +28,8 @@
 00270   let pors=1
 00280   let mp1=69
 00290   if fnps=2 then let mp1=mp1+3
-00300   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
-00310   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
+00300   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00310   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
 00320   form c 9,skip 0
 00330   form c 7,skip 0
 00340   let nametab=int(44-len(rtrm$(cnam$))/2)
@@ -91,17 +91,17 @@
 00880   if fnfscode=0 then let pmonth=pmonth+bm(actpd) else let pmonth=pmonth+bm(fnfscode) ! 11/24/86
 00890   if fnfscode=0 then goto L900 else goto L940 ! 11/24/86
 00900 L900: for j=1 to actpd
-00910     let lastyr=lastyr+bm(j)
+00910     lastyr=lastyr+bm(j)
 00920   next j
 00930   goto L720
 00940 L940: for j=1 to fnfscode ! 11/24/86
-00950     let lastyr=lastyr+bm(j) ! 11/24/86
+00950     lastyr=lastyr+bm(j) ! 11/24/86
 00960   next j ! 11/24/86
 00970   goto L720 ! 11/24/86
 00980 L980: if ir<val(r$) then goto L720
 00990   if ir>val(r$) then goto L1010
 01000 L1000: let notrans=1
-01010 L1010: let overundr=lastyr-total2
+01010 L1010: overundr=lastyr-total2
 01020   let unexpend=annualb-total2
 01030   for j=1 to 9
 01040     if ac(j)=9 then goto L1120 ! 10/14/87
@@ -117,15 +117,15 @@
 01140   let total2=-total2
 01150   annualb=-annualb
 01160   let pmonth=-pmonth
-01170   let lastyr=-lastyr
-01180   let overundr=overundr
+01170   lastyr=-lastyr
+01180   overundr=overundr
 01190   let unexpend=unexpend
 01200 L1200: if ds=1 then let dollar$="$" else let dollar$=" "
 01210   goto L1250 ! pr all accounts even if zero balance  (if budget ever nets to zero, it messes the monthly budget column up
 01220   if annualb><0 or total2><0 then goto L1250
 01230   if total<>0 then goto L1250
 01240   if ls+ds+ul+ic>0 then goto L1250 else goto L560
-01250 L1250: let sp2=26-sp-1
+01250 L1250: sp2=26-sp-1
 01260   if ul=1 then pr #255,using L1570: d$(1:sp2),dollar$,"{\ul ",annualb,"}",ar$,"{\ul ",total,"}",ar$,"{\ul ",pmonth,"}",dollar$,"{\ul ",total2,"}",dollar$,"{\ul ",lastyr,"}",dollar$,"{\ul ",unexpend,"}" pageoflow L2040 : goto L1300
 01280   pr #255,using L1290: d$(1:sp2),dollar$,annualb,dollar$,total,dollar$,pmonth,dollar$,total2,dollar$,lastyr,dollar$,unexpend pageoflow L2040
 01290 L1290: form pos sp,c sp2,pos 26,c 1,n 13.2,x 1,c 1,n 11.2,x 1,c 1,n 11.2,x 1,c 1,n 13.2,x 1,c 1,n 13.2,x 1,c 1,n 13.2,x 1,skip 1
@@ -134,8 +134,8 @@
 01320   let total2=0
 01330   annualb=0
 01340   let pmonth=0
-01350   let lastyr=0
-01360   let overundr=0
+01350   lastyr=0
+01360   overundr=0
 01370   let unexpend=0
 01380   gosub L1750
 01390   if ul=1 then goto L1410
@@ -151,7 +151,7 @@
 01490   if rs=1 then accum6=accum(ap,6) else accum6=accum(ap,6)
 01500   if rs=1 then accum7=accum(ap,7) else accum7=accum(ap,7)
 01510   if ds=1 then let dollar$="$" else let dollar$=" "
-01520   let sp2=26-sp-1
+01520   sp2=26-sp-1
 01530   if ul=1 then pr #255,using L1570: d$(1:sp2),dollar$,"{\ul ",accum3,"}",dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum4,"}",dollar$,"{\ul ",accum2,"}",dollar$,"{\ul ",accum5,"}",dollar$,"{\ul ",accum7,"}" pageoflow L2040 : goto L1580
 01540 ! pr #255,Using 1210: D$(1:SP2),DOLLAR$,ACCUM3,DOLLAR$,ACCUM1,DOLLAR$,ACCUM4,DOLLAR$,ACCUM2,DOLLAR$,ACCUM5,DOLLAR$,ACCUM6,DOLLAR$,ACCUM7 Pageoflow 1890
 01550   pr #255,using L1560: d$(1:sp2),dollar$,accum3,dollar$,accum1,dollar$,accum4,dollar$,accum2,dollar$,accum5,dollar$,accum7 pageoflow L2040
@@ -164,7 +164,7 @@
 01620 L1620: gosub L1860
 01630   goto L560
 01640 L1640: if te$="R" then let report$=d$
-01650   if te$="S" then let secondr$=d$
+01650   if te$="S" then secondr$=d$
 01660   gosub L1860
 01670   goto L560
 01680 L1680: if foot1=1 then goto L1730
@@ -193,8 +193,8 @@
 01910 L1910: ! If FT1=1 Then Goto 1870
 01920   fnpglen(pglen)
 01930 ! If PGLEN<>42 Then Let PGLEN=58
-01940   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01950 ! If PGLEN=42 Then Let SK=SK+1
+01940   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01950 ! If PGLEN=42 Then sK=SK+1
 01960   pr #255,using L1970: rtrm$(foot$),"Page "&str$(pt1)
 01970 L1970: form skip sk,pos tabnote,c fl,pos 115,c 8,skip 1
 01980 ! Let FT1=1
@@ -234,7 +234,7 @@
 02320   pr #255: 
 02330   return 
 02340 ! ______________________________________________________________________
-02350 L2350: let eofcode=1
+02350 L2350: eofcode=1
 02360   gosub L1910
 02370   fnfscode(actpd)
 02380   fnpriorcd(1)

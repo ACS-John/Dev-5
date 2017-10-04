@@ -6,7 +6,7 @@
 08100 XIT: let fnxit
 10000   def fn_setup
 10020     if ~setup then 
-10040       let setup=1
+10040       setup=1
 10060       library 'S:\Core\Library': fntop,fnxit,fnGetPayrollDates,fnDedNames,fnerror,fnopenprn,fncloseprn,fnprocess,fndate_mmddyy_to_ccyymmdd,fnss_employee,fnss_employer,fnindex_it,fnstatus_close,fngethandle
 10080       on error goto ERTN
 10100     end if 
@@ -41,8 +41,8 @@
 18120     let ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
 18140     fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 18200     ! ______________________________________________________________________
-18220     let ssr1=fnss_employee*.01
-18240     let ssr2=fnss_employer*.01
+18220     ssr1=fnss_employee*.01
+18240     ssr2=fnss_employer*.01
 18260     open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 18280     read #1,using F_COMPANY: a$,ficar2,feducrat,mat statname$,ficar1,mat sucrat
 18300     F_COMPANY: form pos 1,c 40,pos 133,pd 6.3,pos 145,pd 5.2,pos 150,10*c 8,pos 236,pd 3.3,pos 287,10*pd 3.3,pos 618,30*n 1,pos 648,10*c 6
@@ -68,7 +68,7 @@
 22160     if det=2 then goto L580
 22200     a=pos (rtrm$(em$)," ",1)
 22220     b=pos (rtrm$(em$)," ",a+1)
-22240     let em$=rtrm$(em$(max(a,b):30))&" "&em$(1:a)  error ignore
+22240     em$=rtrm$(em$(max(a,b):30))&" "&em$(1:a)  error ignore
 22260     if dep2=0 then goto L550
 22280     if dep1=dep2 then goto L580
 22300     gosub PRINTDEPARTMENTTOTALS
@@ -81,14 +81,14 @@
 22440     gosub HDR
 22460     let dep2=dep1
 22480     L580: ! 
-22500     let oi=cp(27)+cp(28)+cp(29)+cp(30)
+22500     oi=cp(27)+cp(28)+cp(29)+cp(30)
 22520     let t3=t4=0
 22540     for j=5 to 24
 22560       if newdedcode(j-4)=3 then goto L680
 22580       if newdedcode(j-4)=2 then 
-22582         let other_wh=other_wh-cp(j) ! if break_is_on and cp(j)<>0 then pr 'cp('&str$(j)&') deducts '&str$(cp(j))
+22582         other_wh=other_wh-cp(j) ! if break_is_on and cp(j)<>0 then pr 'cp('&str$(j)&') deducts '&str$(cp(j))
 22584       else 
-22586         let other_wh=other_wh+cp(j) ! if break_is_on and cp(j)<>0 then pr 'cp('&str$(j)&')    adds '&str$(cp(j))
+22586         other_wh=other_wh+cp(j) ! if break_is_on and cp(j)<>0 then pr 'cp('&str$(j)&')    adds '&str$(cp(j))
 22588       end if 
 22600       if newdedfed(j-4)=2 and newdedcode(j-4)=1 then goto L630 else goto L660
 22620 L630: let t3=t3+cp(j) : let tt3=tt3+cp(j): let gtt3=gtt3+cp(j) ! cafiteria
@@ -97,8 +97,8 @@
 22680 L660: if newdedfed(j-4)=1 and newdedcode(j-4)=1 then goto L670 else goto L680
 22700 L670: let t4=t4+cp(j) ! retirement only
 22720 L680: next j
-22740     let other_wh=other_wh-cp(24)
-22750 !   if include_tips_in_other_wh then let other_wh+=tcp(30) ! include tips in Other Withholdings added for West Accounting on 1/18/2016
+22740     other_wh=other_wh-cp(24)
+22750 !   if include_tips_in_other_wh then other_wh+=tcp(30) ! include tips in Other Withholdings added for West Accounting on 1/18/2016
 22760     let taxwg1=taxwg1+cp(31)-t3-t4
 22780     let taxwg2=taxwg2+cp(31)-t3
 22800     let tothc=0
@@ -115,49 +115,49 @@
 23020     pr #255,using F_PR_LINE: dep1,eno,em$(1:11),mat hc,tothc,cp(31),cp(3),cp(2),cp(1),cp(4),other_wh,cp(32) pageoflow NWPG
 23040 F_PR_LINE: form pos 1,n 4,n 8,x 2,c 12,6*n 7.2,7*n 9.2,skip 1
 23060 L760: ! 
-23070     let sswg=ficawag=tdet(1)
+23070     sswg=ficawag=tdet(1)
 23080     let ficawage=ficawage+ficawag
 23100     let totalfi=totalfi+ficawag
-23120     let sswh1=sswh1+cp(2)
-23140     let sswh2=sswh2+cp(2)
+23120     sswh1=sswh1+cp(2)
+23140     sswh2=sswh2+cp(2)
 23160     let mcwh1=mcwh1+cp(3)
 23180     let mcwh2=mcwh2+cp(3)
 23200     let mcwg=tdc(8)
-23220     let sswg=tdc(7)
+23220     sswg=tdc(7)
 23240 !   if client$="Washington Parrish" and mcwh>0 then let mcwg=cp(31)-t3+cp(15) ! add deferred comp match to medicare wages  (always must be misc 2 deduction)
-23260     let sswg1=sswg1+sswg
-23280     let sswg2=sswg2+sswg
+23260     sswg1=sswg1+sswg
+23280     sswg2=sswg2+sswg
 23300     let mcwg1=mcwg1+mcwg
 23320     let mcwg2=mcwg2+mcwg
-23340     let stateuc+=round(tdc(10)*sucrat(statecode)*.01,2)
+23340     stateuc+=round(tdc(10)*sucrat(statecode)*.01,2)
 23360     let feduc+=round(tdc(9)*feducrat*.01,2)
 23380 !   if client$="Washington Parrish" then let feducwg=tdc(9)+tcp(5): goto L870
 23400     let feducwg=tdc(9)
 23420 ! L870: ! 
 23430     let fedwages=fedwages+feducwg
 23440     let totalfuc=totalfuc+feducwg
-23460 !   if client$="Washington Parrish" then let stucwg=tdc(10)+tcp(5): goto L900
-23480     let stucwg=tdc(10)
+23460 !   if client$="Washington Parrish" then stucwg=tdc(10)+tcp(5): goto L900
+23480     stucwg=tdc(10)
 23500 ! L900: ! 
-23510     let stuc1(statecode)=stuc1(statecode)+stucwg
-23520     let stuc2(statecode)=stuc2(statecode)+stucwg
+23510     stuc1(statecode)=stuc1(statecode)+stucwg
+23520     stuc2(statecode)=stuc2(statecode)+stucwg
 23540     mat tcp=tcp+cp
 23560     mat thc=thc+hc
-23580     let statewh(statecode)=statewh(statecode)+cp(4) ! accululate state w/h by dept
+23580     statewh(statecode)=statewh(statecode)+cp(4) ! accululate state w/h by dept
 23600     mat totaltcp=totaltcp+cp
 23620     mat totalthc=totalthc+hc
-23640     let other_wh=0
+23640     other_wh=0
 23660     goto READ_CHECKS
 23680 ! ______________________________________________________________________
 26000 PRINTDEPARTMENTTOTALS: ! r:
-26020     let lp=lp+1
-26040     let oi=tcp(17)+tcp(18)+tcp(20)+tcp(19)
+26020     lp=lp+1
+26040     oi=tcp(17)+tcp(18)+tcp(20)+tcp(19)
 26060     for j=5 to 24
 26080       if newdedcode(j-4)=3 then goto L1030
-26100       if newdedcode(j-4)=2 then let other_wh=other_wh-tcp(j) else let other_wh=other_wh+tcp(j)
+26100       if newdedcode(j-4)=2 then other_wh=other_wh-tcp(j) else other_wh=other_wh+tcp(j)
 26120 L1030: ! 
 26140     next j
-26160     let other_wh=other_wh-tcp(25)
+26160     other_wh=other_wh-tcp(25)
 26180     pr #255: "                   ________________________________________________________________________________________________________________" pageoflow NWPG
 26200     pr #255,using F_PR_DTOTALS_1: " Department Totals:",thc(2),thc(4),tothrs,tcp(3),tcp(1),other_wh pageoflow NWPG
 26220     let tothrs=0
@@ -228,11 +228,11 @@
 27500     pr #255,using F_PR_DTOTALS_3: "EIC",tcp(25)
 27520 L1610: ! 
 27540     if final=1 then goto PRINTDEPARTMENTTOTALS_XIT
-27560     let other_wh=0
-27580     let o1=0
+27560     other_wh=0
+27580     o1=0
 27600     mat gcp=gcp+tcp
 27620 ! IF NTC=0 THEN GOTO asdf
-27640 ! Let EMPMATCH=EMPMATCH+TCP(3) ! add medicare into employer match
+27640 ! eMPMATCH=EMPMATCH+TCP(3) ! add medicare into employer match
 27660 ! form pos 1,n 6
 27680 ! form pos 1,n 6,n 3,35*pd 5.2,n 4
 27700 ! ASDF: !
@@ -247,7 +247,7 @@
 27880 ! ______________________________________________________________________
 30000 NWPG: ! r:
 30020     pr #255: newpage
-30040     ct1=ct1+1: pr fields "12,45,CL 5,N": str$(ct1)
+30040     ct1=ct1+1: pr f "12,45,CL 5,N": str$(ct1)
 30060     gosub HDR
 30080     continue  ! /r
 30100 ! ______________________________________________________________________
@@ -270,11 +270,11 @@
 32320     pr #255: tab(8);"Emp #  Name";
 32340 L1940: pr #255: tab(29);" Reg    O/T   Sick    Vac    Hol   Total";
 32360     pr #255: tab(71);"  Total   Med WH    SS WH  Federal    State    Other      Pay"
-32380     let lp=6
+32380     lp=6
 32400     return  ! /r
 32420 ! ______________________________________________________________________
 34000 L1990: ! 
-34020     let eofcode=1
+34020     eofcode=1
 34040     if det=2 then goto L2040
 34060     gosub PRINTDEPARTMENTTOTALS
 34080     if dep=1 then goto L2200 ! only 1 dept printed-no summary
@@ -286,7 +286,7 @@
 34200     pr #255: "\ql   "
 34220     mat tcp=totaltcp : mat thc=totalthc : let tt3=gtt3
 34240     let ficawage=totalfi : let fedwages=totalfuc : mat stuc1=stuc2
-34260     let sswh1=sswh2 : let mcwh1=mcwh2 : let sswg1=sswg2
+34260     sswh1=sswh2 : let mcwh1=mcwh2 : sswg1=sswg2
 34280     let mcwg1=mcwg2 : let taxwg1=taxwg2 : let tothrs=grandtothrs
 34300     pr #255: ""
 34320     pr #255,using 'form pos 52,c 40': "Summary for all Departments"

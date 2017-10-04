@@ -37,16 +37,16 @@
 00240   for j2=1 to len(rtrm$(ln$))
 00250     if ln$(j2:j2)><"@" then goto L320
 00260     if ln$(j2+1:j2+1)="1" then !:
-            let ln$(j2:j2+1)=fnpedat$&ln$(j2+2:132-len(fnpedat$)) !:
+            ln$(j2:j2+1)=fnpedat$&ln$(j2+2:132-len(fnpedat$)) !:
           else goto L280
 00270     goto L310
 00280 L280: if ln$(j2+1:j2+1)="2" then !:
-            let ln$(j2:j2+1)=rtrm$(dat$)&ln$(j2+2:132-len(rtrm$(dat$))) !:
+            ln$(j2:j2+1)=rtrm$(dat$)&ln$(j2+2:132-len(rtrm$(dat$))) !:
           else goto L300
 00290     goto L310
 00300 L300: if ln$(j2+1:j2+1)="3" then !:
-            let ln$(j2:j2+1)=rtrm$(actpd$)&ln$(j2+2:132-len(rtrm$(actpd$))) else goto L320
-00310 L310: ! Let LN$=LN1$
+            ln$(j2:j2+1)=rtrm$(actpd$)&ln$(j2+2:132-len(rtrm$(actpd$))) else goto L320
+00310 L310: ! lN$=LN1$
 00320 L320: next j2
 00330   pr #255: tab(10);ln$
 00340   goto READ_ACGLCOVF

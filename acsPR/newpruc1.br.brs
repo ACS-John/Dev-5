@@ -61,7 +61,7 @@
 32360   for j=1 to 10
 32380     if trim$(e$(j))<>"" then 
 32400       let x+=1
-32420       let option1$(x)=str$(j)&" = "&d$(j)
+32420       option1$(x)=str$(j)&" = "&d$(j)
 32440     end if 
 32460   next j
 32480   mat option1$(max(1,x))
@@ -100,7 +100,7 @@
 34600   fnacs(sn$,0,mat resp$,ck)
 36000   if ck=5 then goto XIT
 36020   let quarter_ending_date$=resp$(1) ! quarter ending date
-36040   let stcode=val(resp$(2)(1:2)) ! state code
+36040   stcode=val(resp$(2)(1:2)) ! state code
 36050   let heading_2$(2)="   Over $"&cnvrt$("pic(zzzzz)",m(stcode))&' '
 36060   let quarter_code=val(resp$(3)) ! quarter to analyze earnings
 36080   fncreg_write('uc1 - quarter',resp$(3))
@@ -115,10 +115,10 @@
 36260   fncreg_write('uc1 - show state tax withheld',column$(4))
 36280   let department$=resp$(9)
 36300   if round$="Y" then let m(stcode)=round(m(stcode),0)
-36320   if quarter_code=1 then let ending_date=qtr2
-36340   if quarter_code=2 then let ending_date=qtr3
-36360   if quarter_code=3 then let ending_date=qtr4
-36380   if quarter_code=4 then let ending_date=end_date
+36320   if quarter_code=1 then ending_date=qtr2
+36340   if quarter_code=2 then ending_date=qtr3
+36360   if quarter_code=3 then ending_date=qtr4
+36380   if quarter_code=4 then ending_date=end_date
 38000 ! /r
 38020   on fkey 5 goto FINIS
 38040   fnopenprn
@@ -175,12 +175,12 @@
 48460   let m1=m1+qtr(31)-dcq
 48480 ! L1030: !
 48482   if m2=0 then goto TOP
-48500   let state_wh=qtr(4)
+48500   state_wh=qtr(4)
 48520   gosub SUBTOTALS
 48540   goto TOP
 48560 ! /r
 52000 DONE: ! r:
-52020   let eofcode=1
+52020   eofcode=1
 52040   gosub PAGE_TOTALS
 52060   gosub HDR
 52080   pr #255,using L1460: "Grand Totals:",grand_total(1),grand_total(2),grand_total(3)
@@ -211,7 +211,7 @@
 54340   if column$(1)<>"True" then let m1=0 ! no total column
 54360   if column$(2)<>"True" then let h3=0 ! no excess column
 54380   if column$(3)<>"True" then let h2=0 ! no taxable column
-54400   if column$(4)<>"True" then let state_wh=0 ! no state withholding column
+54400   if column$(4)<>"True" then state_wh=0 ! no state withholding column
 54420 ! pr #255,using L1710: ss$,em$(1)(1:28),m1,h3,h2,state_wh
 54440 ! L1710: form pos 1,c 11,pos 14,c 28,pos 42,pic(--,---,---.zz),pos 57,pic(--,---,---.zz),pos 70,pic(----,---.zz),pos 83,pic(----,---.zz),skip 1
 54460   pr #255: rpad$(ss$,11)&'   '&em$(1)(1:28);
@@ -265,7 +265,7 @@
 64200   pr #255: 
 64220   pr #255,using L1180: "     Rate",a$(1),"Fed ID",b$(1)
 64240 L1180: form pos 1,c 9,pos 17,c 40,pos 59,c 6,pos 69,c 40,skip 1
-64260   if stcode=0 then let stcode=1
+64260   if stcode=0 then stcode=1
 64280   pr #255,using L1210: r(stcode),a$(2),"State ID",e$(stcode)
 64300 L1210: form pos 3,pic(zzzz.##),pos 17,c 40,pos 59,c 8,pos 69,c 12,skip 1
 64320   pr #255,using L1230: a$(3),"STATE",d$(stcode)

@@ -7,8 +7,8 @@
 00070 ! ______________________________________________________________________
 00080   fntop(program$, cap$="Unclear All Entries by Bank")
 00090   fncno(cno,cnam$)
-00100   cancel=99 : let right=1 : center=2 : let on=1 : let off=0 !:
-        let limit_to_list=1
+00100   cancel=99 : let right=1 : center=2 : on=1 : off=0 !:
+        limit_to_list=1
 00110 ! ______________________________________________________________________
 00120   fntos(sn$='UnClBank1') !:
         let mylen=15 : let mypos=mylen+3

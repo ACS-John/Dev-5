@@ -31,9 +31,9 @@
 18180   fnreg_read('ubtrlist.date.start',tmp$) : let filter_date_start=val(tmp$) conv ignore
 18200   fnreg_read('ubtrlist.date.end',tmp$) : let filter_date_end=val(tmp$) conv ignore
 18220 ! 
-18240   fnreg_read('ubtrlist.skip_line_after_account',tmp$) : let skip_line_after_account=1 : if tmp$='True' then let skip_line_after_account=1 else if tmp$='False' then let skip_line_after_account=0
+18240   fnreg_read('ubtrlist.skip_line_after_account',tmp$) : skip_line_after_account=1 : if tmp$='True' then skip_line_after_account=1 else if tmp$='False' then skip_line_after_account=0
 18260 let fnreg_read('ubtrlist.print_tbal',tmp$) : let print_tbal=1 : if tmp$='True' then let print_tbal=1 else if tmp$='False' then let print_tbal=0
-18280 let fnreg_read('ubtrlist.sequence',tmp$) : let seq=1 : if tmp$='True' then let seq=1 else if tmp$='False' then let seq=0
+18280 let fnreg_read('ubtrlist.sequence',tmp$) : seq=1 : if tmp$='True' then seq=1 else if tmp$='False' then seq=0
 18300 ! 
 18320 let fnreg_read('ubtrlist.include_zero_balance_accounts',tmp$) : let include_zero_balance_accounts=1 : let include_zero_balance_accounts=val(tmp$) conv ignore
 18340 let fnreg_read('ubtrlist.include_no_activity_accounts',tmp$) : let include_no_activity_accounts=1 : let include_no_activity_accounts=val(tmp$) conv ignore
@@ -80,9 +80,9 @@
 22060 let filter_date_end=val(resp$(3))
 22080 if resp$(4)="True" then let print_tbal=1
 22100 if resp$(5)="True" then let print_tbal=2
-22120 if resp$(6)="True" then let seq=1
-22140 if resp$(resp_seq)="True" then let seq=2
-22160 if resp$(resp_skip_line)='True' then let skip_line_after_account=1 else let skip_line_after_account=0
+22120 if resp$(6)="True" then seq=1
+22140 if resp$(resp_seq)="True" then seq=2
+22160 if resp$(resp_skip_line)='True' then skip_line_after_account=1 else skip_line_after_account=0
 22180 if resp$(resp_zero_balance)='True' then let include_zero_balance_accounts=1 else let include_zero_balance_accounts=0
 22200 if resp$(resp_no_activity)='True' then let include_no_activity_accounts=1 else let include_no_activity_accounts=0
 22990 ! 
@@ -121,29 +121,29 @@
 28120   if v=0 then let v=route ! else If V<>ROUTE Then Gosub 1630  ! 001630 return      !  must change Index to indx5 to change to route seq
 28140   let t9=9
 28150   let q5=9
-28160   let firstone=2: let lastone=2: begbal=0
+28160   let firstone=2: lastone=2: begbal=0
 28180   if print_tbal=2 then gosub DETERMINE_CURRRENT_BALANCE
 28200   gosub DETERMINE_BEGINNING_BALANCE
 28220   mat tgb=tgb+gb : mat ggb=ggb+gb : mat ggb=ggb+gb : mat subtotal_gb=subtotal_gb+gb
 28230 ! tdate=0
 28240   restore #ubtransvb,key>=z$&"         ": nokey TRANS_NOKEY
-28260   let lastone=0: let firstone=1 : let have_tbal=0
+28260   lastone=0: let firstone=1 : let have_tbal=0
 30000 READ_UBTRANSVB: ! 
 30002 ! tdate=0
 30020   read #ubtransvb,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof READ_CUSTOMER
 30040   if p$=z$ and tbal<>0 then let have_tbal=1 ! try to see if only transactions on customer were when converted and transaction balances were not set
 30050   if p$<>z$ then let tdate=0
 30060   if p$<>z$ and noneprinted=0 then let tamount=0 ! no transactions found
-30080   if p$<>z$ and firstone=1 then let lastone=1 : goto TRANS_EO_CUSTOMER ! no transactions
-30100   if p$<>z$ then let firstone=2 : let lastone=2 : goto TRANS_EO_CUSTOMER ! no transactions
+30080   if p$<>z$ and firstone=1 then lastone=1 : goto TRANS_EO_CUSTOMER ! no transactions
+30100   if p$<>z$ then let firstone=2 : lastone=2 : goto TRANS_EO_CUSTOMER ! no transactions
 32000 TEST_TRANS: ! 
 32020   if filter_date_end<>0 and tdate>filter_date_end then goto READ_UBTRANSVB
 32040   if filter_date_start<>0 and tdate<filter_date_start then goto READ_UBTRANSVB
 32042 !                              if env$('ACSDeveloper')<>'' and trim$(z$)=debug_account_of_interest$ then pause
 32060   let testp$=""
 32080   read #ubtransvb,using 'Form POS 1,C 10,n 8': testp$,testtdate eof ignore
-32100   if testp$<>p$ then let lastone=1
-32120   if filter_date_end>0 and testtdate>filter_date_end then let lastone=1
+32100   if testp$<>p$ then lastone=1
+32120   if filter_date_end>0 and testtdate>filter_date_end then lastone=1
 32140   gosub PRINT_INFO
 32160   let firstone=0
 32180   if lastone=1 then 
@@ -187,7 +187,7 @@
 42000 PRINT_INFO: !  r: If TAMOUNT=0 Then Goto 1460
 42020 if tcode<1 or tcode>5 then let tcode=1 ! default to charge if no transaction code exits
 42040 let t1(tcode)=t1(tcode)+tamount
-42060 let st1(tcode)=st1(tcode)+tamount
+42060 st1(tcode)=st1(tcode)+tamount
 42080 ! if q5=9 then goto L1230
 42100 ! goto L1230
 42120 ! pr #255: newpage
@@ -245,14 +245,14 @@
 46080 end if 
 46100 continue  ! /r
 48000 ACCUM_TOTALS: ! r:
-48020 let s1+=r1
-48040 let s2+=r2
-48060 let s3+=r3
-48080 let s4+=bal
-48100 let st1+=r1
-48120 let st2+=r2
-48140 let st3+=r3
-48160 let st4+=bal
+48020 s1+=r1
+48040 s2+=r2
+48060 s3+=r3
+48080 s4+=bal
+48100 st1+=r1
+48120 st2+=r2
+48140 st3+=r3
+48160 st4+=bal
 48180 let r1=r2=r3=t9=0
 48200 return  ! /r
 50000 PRINT_TOTALS: ! r:
@@ -272,7 +272,7 @@
 50280 !  let grand_total_a2+=s2
 50300 !  let grand_total_a3+=s3
 50320 !  let grand_total_a4+=s4
-50340 let s1=s2=s3=s4=0
+50340 s1=s2=s3=s4=0
 50360 mat tgb=(0)
 50380 if q9<>9 and ~raw_output then pr #255: newpage : gosub HDR
 50400 return  ! /r
@@ -281,7 +281,7 @@
 52040 pr #255: ""
 52060 pr #255,using 'Form POS 34,C 16,POS 53,N 13.2,POS 68,N 13.2,POS 84,N 12.2,POS 100,N 13.2': "Sub-Totals",st1,st2,st3,st4 pageoflow PGOF
 52080 pr #255: ""
-52100 let st1=st2=st3=st4=0
+52100 st1=st2=st3=st4=0
 52120 for j=1 to 10
 52140   if trim$(servicename$(j))<>"" then 
 52160     pr #255,using 'Form POS 5,C 30,N 10.2': servicename$(j),subtotal_gb(j) pageoflow PGOF

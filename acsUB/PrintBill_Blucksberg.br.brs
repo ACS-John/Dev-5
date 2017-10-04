@@ -28,7 +28,7 @@
 14340   fnget_services(mat servicename$)
 14360   close #h_service: 
 14380   for j=1 to udim(servicename$)
-14400     let servicename$(j)=trim$(servicename$(j))
+14400     servicename$(j)=trim$(servicename$(j))
 14420   next j
 14440   gosub BULKSORT
 14460   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
@@ -49,7 +49,7 @@
 16000 SCREEN1: ! r:
 16020   a$="" : let prtbkno=0
 16040   fntos(sn$="UBPrtBl1-1")
-16060   let pf=26 : let ll=24
+16060   let pf=26 : ll=24
 16080   let respc=0
 16100   fnlbl(3,1,"Due Date:",ll,1)
 16120   fntxt(3,pf,8,8,1,"1",0,tt$)
@@ -60,22 +60,22 @@
 16220   fnlbl(6,1,"Service To Date:",ll,1)
 16240   fntxt(6,pf,8,8,1,"1",0,tt$)
 16260   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d6)
-16280   let scr_line=7
+16280   scr_line=7
 16300   fnlbl(scr_line+1,1,"Message on Bill:",ll,1)
 16320   let mg_len=95 : let mg_display_len=60
 16340   for mg_item=1 to udim(mat mg$)
-16360     let scr_line+=1
+16360     scr_line+=1
 16380     fntxt(scr_line,pf,mg_len,mg_display_len,2)
 16400     let resp$(respc+=1)=mg$(mg_item)(1:mg_len)
 16420   next mg_item
-16440   let scr_line+=1
+16440   scr_line+=1
 16460   fnlbl(scr_line+=1,1,"Date of Billing:",ll,1)
 16480   fntxt(scr_line,pf,8,8,1,"1")
 16500   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 16520   fnlbl(scr_line+=1,1,"Prior Date of Billing:",ll,1)
 16540   fntxt(scr_line,pf,8,8,1,"1")
 16560   let resp$(resp_billing_date_prior:=respc+=1)=cnvrt$("pic(zzzzzz)",billing_date_prior)
-16580   let scr_line+=1
+16580   scr_line+=1
 16600   fnlbl(scr_line+=1,1,"Starting Account:",ll,1)
 16620   fncombof("ubm-act-nam",scr_line,pf,40,env$('Q')&"\UBmstr\Customer.h"&str$(cno),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&str$(cno),2)
 16640   let resp$(resp_start:=respc+=1)="[All]"
@@ -111,7 +111,7 @@
 18440   billing_date_prior=date(days(billing_date_prior,'mmddyy'),'ccyymmdd')
 18460   if resp$(resp_start)="[All]" then a$="" else a$=lpad$(trim$(resp$(6)(1:9)),9)
 18480   if resp$(resp_route)="[All]" then let prtbkno=0 else let prtbkno=val(resp$(7))
-18500   if resp$(resp_select_accounts)="True" then let sl1=1: let z$="" else let sl1=0
+18500   if resp$(resp_select_accounts)="True" then sl1=1: let z$="" else sl1=0
 18520   goto GET_STARTED
 18540 ! /r
 24000 GET_STARTED: ! r:
@@ -127,7 +127,7 @@
 24200 ! ______________________________________________________________________
 24220   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 24240   fnpa_open
-24260   let lyne=3
+24260   lyne=3
 24280 ! 
 24300 ! on fkey 5 goto RELEASE_PRINT
 24320 NEXT_CUSTOMER: ! 
@@ -227,7 +227,7 @@
 40050   fnpa_txt("Billing Questions:   605-720-5013",tmp_box_left_pos+5,tmp_box_top+16)
 40060   if final>0 then let fnpa_txt('Final Bill'&cnvrt$("PIC(ZZzZZzZZ)",0),80,tmp_box_top+15)
 40070 ! 
-40080   let lyne=65 : adder=4
+40080   lyne=65 : adder=4
 40090   fnpa_txt("Meter Location: "&trim$(e$(1)) ,23,lyne+=adder)
 40100   fnpa_txt("Service From: "&cnvrt$("pic(zz/zz/zz)",d5)&" To: "&cnvrt$("pic(zz/zz/zz)",d6) ,23,lyne+=adder)
 40110 ! 
@@ -237,7 +237,7 @@
 40150   fnpa_fontitalic(1)
 40160   fnpa_fontbold(1)
 41000 ! 
-41060   let lyne=81
+41060   lyne=81
 41080   adder=4.5
 41100   fnpa_fontbold(1) : let fnpa_fontitalic
 41120   fnpa_txt("Activity Since "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),80,lyne+=adder)
@@ -252,7 +252,7 @@
 41290   fnpa_line(162,lyne+4,22)
 41292   fnpa_fontbold(1) ! on
 41300   fn_add_activity_line("Balance Forward",pb,1,110)
-41660   let lyne+=adder
+41660   lyne+=adder
 41680 ! let fnpa_fontbold(1) ! on
 41700   fnpa_line(26,lyne+=adder,157)
 41720   fnpa_txt("Current Charges",90,lyne+=1)
@@ -261,7 +261,7 @@
 41760 ! adder=5
 41770   fnpa_fontitalic
 42000   adder=4
-42020   let lyne+=adder
+42020   lyne+=adder
 42040   fnpa_txt("Current",83,lyne) ! lyne=100
 42060   fnpa_txt("Reading",83,lyne+adder)
 42080   fnpa_txt("Previous",103,lyne)
@@ -269,7 +269,7 @@
 42120   fnpa_txt("Usage",131,lyne+adder)
 42140   fnpa_txt("Charge",170,lyne+adder)
 42160   add=4.5
-43000   let lyne+=adder ! lyne=105
+43000   lyne+=adder ! lyne=105
 43020   if g(1)<>0 then 
 43040     if g(1)>=14 then 
 43060       fnpa_txt("Base Water Service Fee",26,lyne+=adder)
@@ -319,13 +319,13 @@
 43940     fnpa_txt(cnvrt$("pic(--------.##)",g(9)),160,lyne)
 43960   end if 
 43980 ! 
-44020   fnpa_line(162,lyne+4,22) : let lyne+=1
+44020   fnpa_line(162,lyne+4,22) : lyne+=1
 44030   fnpa_fontbold(1)
 44050   fn_add_activity_line("Total Current Charges",g(11), 1,110)
 44060 ! lyne+=adder ! let fnpa_txt("Total Current Charges",110,lyne+=adder)
 44080 ! let fnpa_txt(cnvrt$("pic(--------.##)",g(11)),160,lyne)
 44090   fnpa_fontbold(0)
-44100   let lyne+=adder
+44100   lyne+=adder
 44110   fnpa_line(162,lyne+3,22)
 44120   fnpa_fontsize(14)
 44140   fnpa_fontbold(1)
@@ -345,7 +345,7 @@
 44400   fnpa_line(26,165,157)
 44420   fnpa_fontsize
 44440   fnpa_fontitalic(1)
-44460   let lyne=165
+44460   lyne=165
 44480   fnpa_txt("MESSAGE BOARD",92,lyne+=4)
 44500   for j=1 to 13
 44520     fnpa_txt(mg$(j),5,lyne+=4)
@@ -417,10 +417,10 @@
 76140 ! </updateable region: ertn>
 80000 READALTADR: ! r: read alternate billing address
 80040   read #3,using 'form pos 11,4*c 30',key=z$: mat ba$ nokey RAA_2
-80060   let e1=0 : mat pe$=("")
+80060   e1=0 : mat pe$=("")
 80080   for j=1 to 4
 80100     if rtrm$(ba$(j))<>"" then 
-80120       let e1=e1+1
+80120       e1=e1+1
 80140       let pe$(e1)=ba$(j)
 80160     end if 
 80180   next j
@@ -429,9 +429,9 @@
 80240   goto XIT_READALTADR
 80260 ! 
 80280 RAA_2: ! 
-80300   let e1=0 : mat pe$=("")
+80300   e1=0 : mat pe$=("")
 80320   for j=2 to 4
-80340     if rtrm$(e$(j))<>"" then let e1=e1+1 : let pe$(e1)=e$(j)
+80340     if rtrm$(e$(j))<>"" then e1=e1+1 : let pe$(e1)=e$(j)
 80360   next j
 80380   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 80400 XIT_READALTADR: ! 

@@ -29,11 +29,11 @@
 02440     dim mroll(3) ! meter roll code from hand held file
 02460     dim serviceoption$(10)*25,srvnamc$(10)*21,srvnam$(10)*20,srv$(10)*2
 02480     dim opt_final_billing$(5)*33
-02500     let opt_final_billing$(1)="0 = Not Finaled"
-02520     let opt_final_billing$(2)="1 = Final Bill"
-02540     let opt_final_billing$(3)="2 = Final & Refund Deposit"
-02560     let opt_final_billing$(4)="3 = Active, but do not Bill"
-02580     let opt_final_billing$(5)="4 = Finaled, but not billed"
+02500     opt_final_billing$(1)="0 = Not Finaled"
+02520     opt_final_billing$(2)="1 = Final Bill"
+02540     opt_final_billing$(3)="2 = Final & Refund Deposit"
+02560     opt_final_billing$(4)="3 = Active, but do not Bill"
+02580     opt_final_billing$(5)="4 = Finaled, but not billed"
 02600   ! 
 02620     fnd1(d1)
 02700     if days(d1,'mmddyy')<days(date$('mmddyy'),'mmddyy')-15 then let d1=0
@@ -76,10 +76,10 @@
 11010   ! r: older stuff
 11012   fnget_services(mat srvnam$,mat srv$,mat tax_code$,mat penalty$)
 11050   for j=1 to udim(mat srvnam$)
-11060     let srvnam$(j)=trim$(srvnam$(j))
-11070     let srvnamc$(j)=srvnam$(j)&":"
+11060     srvnam$(j)=trim$(srvnam$(j))
+11070     srvnamc$(j)=srvnam$(j)&":"
 11080   next j
-11090   if srvnamc$(6)="Bad Check Charge:" then let srvnamc$(6)="Check Charge:"
+11090   if srvnamc$(6)="Bad Check Charge:" then srvnamc$(6)="Check Charge:"
 11100   ! /r
 11110   ! return explaind
 11120   ! +10    penalty$(   ) <>  "Y"
@@ -87,12 +87,12 @@
 11140   mat service_enabled=(0)
 11150   ! r: set mat service_is_not_blank
 11160   for x=1 to udim(mat srvnam$)
-11170     if srvnam$(x)<>"" then let service_is_not_blank(x)+=100
+11170     if srvnam$(x)<>"" then service_is_not_blank(x)+=100
 11180   next x
 11190   ! /r
 11200   ! r: set mat service_is_not_a_penalty
 11210   for x=1 to udim(mat srvnam$)
-11220     if penalty$(x) <>"Y" then let service_is_not_a_penalty(x)+=100
+11220     if penalty$(x) <>"Y" then service_is_not_a_penalty(x)+=100
 11230   next x
 11240   ! /r
 11250   ! r: set mat service_type
@@ -106,91 +106,91 @@
 11330   !                         5   - Other
 11340   for x=1 to udim(mat srvnam$)
 11350     if srvnam$(x)='Water' then 
-11360       let service_type(x)=1
+11360       service_type(x)=1
 11370     else if srvnam$(x)='Sewer' then 
-11380       let service_type(x)=2
+11380       service_type(x)=2
 11390     else if srvnam$(x)="Electric" or srv$(x)="EL" then 
-11400       let service_type(x)=3
+11400       service_type(x)=3
 11410     else if srvnam$(x)='Lawn Meter' then 
-11420       let service_type(x)=3.1
+11420       service_type(x)=3.1
 11430     else if srvnam$(x)(1:5)='Reduc' then 
-11440       let service_type(x)=3.2
+11440       service_type(x)=3.2
 11450     else if srvnam$(x)="Gas" or srv$(x)="GA" then 
-11460       let service_type(x)=4
+11460       service_type(x)=4
 11470     else if uprc$(srvnam$(x)(1:5))="OTHER" then 
-11480       let service_type(x)=5
+11480       service_type(x)=5
 11482     else if uprc$(srvnam$(x))="GAS CONNECT" then 
-11484       let service_type(x)=6
+11484       service_type(x)=6
 11485     else if uprc$(srvnam$(x))="WATER CONNECT" then 
-11486       let service_type(x)=7
+11486       service_type(x)=7
 11487     else if uprc$(srvnam$(x))="BAD CHECK CHARGE" then 
-11488       let service_type(x)=8
+11488       service_type(x)=8
 11490     end if 
 11500   next x
 11510   ! /r
 11520   ! r: set the mat service_enabled
 11530   for x=1 to udim(mat srvnam$)
 11540     if srvnam$(x)='Water' then 
-11550       let service_enabled(x)+=1
+11550       service_enabled(x)+=1
 11560     end if 
 11570   next x
 11580   if service_is_not_blank(1) then 
-11590     let service_enabled(1)=1
+11590     service_enabled(1)=1
 11600   end if 
 11610   ! 
 11620   if service_is_not_blank(2) then 
-11630     let service_enabled(2)=1
+11630     service_enabled(2)=1
 11640   end if 
 11650   ! 
 11660   if service_type(3)=3 then 
-11670     let service_enabled(3)=1
+11670     service_enabled(3)=1
 11680   else if service_type(3)=3.1 then ! Lawn Meter" then
-11690     let service_enabled(3)=2
+11690     service_enabled(3)=2
 11700   else if service_type(3)=3.2 then ! Reduc" then
-11710     let service_enabled(3)=3
+11710     service_enabled(3)=3
 11720   end if 
 11730   ! 
 11740   if service_type(4)=4 then 
-11750     let service_enabled(4)=1
+11750     service_enabled(4)=1
 11760   end if 
 11770   ! 
 11780   if service_type(5)=5 or (service_is_not_blank(5) and service_is_not_a_penalty(5)) then 
-11790     let service_enabled(5)=1
+11790     service_enabled(5)=1
 11800   end if 
 11810   ! 
 11820   if service_type(6)=5 or (service_is_not_blank(6) and service_is_not_a_penalty(6)) then 
-11830     let service_enabled(6)=1
+11830     service_enabled(6)=1
 11840   end if 
 11850   ! 
 11860   if service_type(7)=5 or (service_is_not_blank(7) and service_is_not_a_penalty(7)) then ! Service 7 seems to incompletly implemented
-11870     let service_enabled(7)=1
+11870     service_enabled(7)=1
 11880   end if 
 11890   ! 
 11900   if service_type(8)=5 or (service_is_not_blank(8) and service_is_not_a_penalty(8)) then 
-11910     let service_enabled(8)=1
+11910     service_enabled(8)=1
 11920   end if 
 11930   ! 
 11940   !   if service_is_not_blank(9) then
-11950   !     let service_enabled(9)=1
+11950   !     service_enabled(9)=1
 11960   !   end if
 11970   !   !
 11980   !   if service_is_not_blank(10) then
-11990   !     let service_enabled(10)=1
+11990   !     service_enabled(10)=1
 12000   !   end if
 12010   ! /r
 12020   ! r: set mat serviceoption$, serviceoption_count and service  (for fn_meter_change_out)
-12030   let serviceoption_count=0
+12030   serviceoption_count=0
 12040   if trim$(srvnam$(1))="Water" then 
-12050     let serviceoption$(serviceoption_count+=1)=srv$(1)&"-"&trim$(srvnam$(1)(1:20))
-12060     let service=service+1
+12050     serviceoption$(serviceoption_count+=1)=srv$(1)&"-"&trim$(srvnam$(1)(1:20))
+12060     service=service+1
 12070   end if 
 12080   if trim$(srvnam$(3))="Electric" or trim$(srv$(3))="EL" then 
-12090     let serviceoption$(serviceoption_count+=1)=srv$(3)&"-"&srvnam$(3)(1:20)
-12100     let service=service+1
+12090     serviceoption$(serviceoption_count+=1)=srv$(3)&"-"&srvnam$(3)(1:20)
+12100     service=service+1
 12110   end if 
 12120   if (trim$(srvnam$(4))="Gas" or trim$(srv$(4))="GA") then 
-12130     let serviceoption$(serviceoption_count+=1)=srv$(4)&"-"&srvnam$(4)(1:20)
-12140     let service=service+1
+12130     serviceoption$(serviceoption_count+=1)=srv$(4)&"-"&srvnam$(4)(1:20)
+12140     service=service+1
 12150   end if 
 12160   mat serviceoption$(serviceoption_count)
 12170   ! /r
@@ -213,7 +213,7 @@
 12750   if trim$(x$)="" then goto SEL_ACC
 12760   read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3) nokey AUTO_REC
 12770   if addmethod=1 and env$('client')<>"Choctaw" then 
-12780     let seq$=cnvrt$("pic(zz)",extra(1))&cnvrt$("pic(zzzzzzz)",extra(2))
+12780     seq$=cnvrt$("pic(zz)",extra(1))&cnvrt$("pic(zzzzzzz)",extra(2))
 12790     read #hCustomer5,using F_CUSTOMER_C,key=seq$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(7),extra$(3) nokey AUTO_REC
 12800   end if 
 12802   fnapply_default_rates(mat extra, mat a)
@@ -301,19 +301,19 @@
 16200   do 
 16220     read #hWork,using F_WORK: x$,mat x eof PR_TOTALS
 16240     let totwat+=x(1): let totele+=x(3): let totgas+=x(2)
-16260     let e1$=e2$=""
+16260     e1$=e2$=""
 16270     read #hCustomer1,using F_CUSTOMER_B,key=x$: e1$,e2$,mat d,f,mat a nokey PR_CUSTOMER_NOKEY
 16280     F_CUSTOMER_B: form pos 11,2*c 30,pos 217,15*pd 5,pos 296,pd 4,pos 143,7*pd 2
 16300     ! place usage in usage column if not usage already there so it shows on proof list
 16320     ! Water
-16340     if f<>d1 then let oldreading=d(1) else let oldreading=d(2)
+16340     if f<>d1 then oldreading=d(1) else oldreading=d(2)
 16360     ! if x(12)=0 then let x(12)=x(1)-oldreading
 16380     if x(12)=0 and a(1)<>0 then let x(12)=x(1)-oldreading ! A(1) checking was added 10/4/11 to prevent usage (and negative usage) on customers who have an (0) inactive rate code ! the whole line was commented out but added back in on 2/13/12
 16400     ! Electric
-16420     if f<>d1 then let oldreading=d(5) else let oldreading=d(6)
+16420     if f<>d1 then oldreading=d(5) else oldreading=d(6)
 16440     if x(13)=0 then let x(13)=x(3)-oldreading
 16460     ! Gas
-16480     if f<>d1 then let oldreading=d(9) else let oldreading=d(10)
+16480     if f<>d1 then oldreading=d(9) else oldreading=d(10)
 16500     if x(14)=0 and a(4)<>0 then let x(14)=max(0,x(2)-oldreading) ! A(4) checking was added 9/21/11 to prevent usage (and negative usage) on customers who have an (0) inactive rate code
 16520     PR_CUSTOMER_NOKEY: ! 
 16540     let rc=0
@@ -367,7 +367,7 @@
 17800   for j1=1 to 15 : let t(j1+1)-=x(j1) : next j1
 17810   read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3)
 17812   fnapply_default_rates(mat extra, mat a)
-17820   let editmode=1
+17820   editmode=1
 17840   goto ENTER_READING3 ! /r
 17860 REWRITE_WORK: ! r:
 17870   rewrite #hWork,using F_WORK,key=x$: trim$(x$),mat x nokey L3900
@@ -400,7 +400,7 @@
 18220 def fn_checkwater
 18230   if wr1=0 then let fn_us1
 18240   if a(1)<>0 then ! skip routine if no water code
-18250     let sn$=srvnam$(1)
+18250     sn$=srvnam$(1)
 18260     if trim$(srvnam$(1))="" or mroll(1)=1 or (d(wr1)=0 and x(1)=0) then 
 18270       let passcheck=ckpass
 18280       goto CHECKWATER_FINIS
@@ -411,9 +411,9 @@
 18330     end if 
 18335     if env$('client')="Billings" and len(str$(x(1)))=6 and len(str$(d(wr1)))=7 then let x(1)=val(str$(d(wr1))(1:1)&str$(x(1)))
 18340     let x4=x(1)-d(wr1)
-18350     let sn$=srvnam$(1) : let x0=x4 : let prior_read=d(wr1) : cur_read=x(1)
+18350     sn$=srvnam$(1) : let x0=x4 : let prior_read=d(wr1) : cur_read=x(1)
 18360     if x4>=0 then goto CHECKWATER_L4260
-18370     if x(12)>0 then let sn$=srvnam$(1) : goto CHECKWATER_FINIS
+18370     if x(12)>0 then sn$=srvnam$(1) : goto CHECKWATER_FINIS
 18380     if x4<0 then let fn_meter_roll
 18390   end if  ! a(1)<>0
 18400   goto CHECKWATER_FINIS
@@ -442,9 +442,9 @@
 18610   L4350: ! 
 18620   if x(3)=0 and d(er1)=0 then goto CHECKELEC_FINIS
 18630   let x2=x(3)-d(er1)
-18640   let sn$=srvnam$(3) : let x0=x2 : : let prior_read=d(er1) : cur_read=x(3)
+18640   sn$=srvnam$(3) : let x0=x2 : : let prior_read=d(er1) : cur_read=x(3)
 18650   if x2>=0 then goto L4420
-18660   if x(13)>0 then let sn$=srvnam$(3) : goto CHECKELEC_FINIS
+18660   if x(13)>0 then sn$=srvnam$(3) : goto CHECKELEC_FINIS
 18670   if x2<0 then let fn_meter_roll
 18680   goto CHECKELEC_FINIS
 18690   L4420: ! 
@@ -461,7 +461,7 @@
 18780 fnend 
 18790 def fn_checkgas
 18800   if a(4)=0 then goto CHECKGAS_FINIS ! skip if no gas codes
-18810   let sn$=srvnam$(4)
+18810   sn$=srvnam$(4)
 18820   if trim$(srvnam$(4))<>"Gas" or mroll(2)=1 then 
 18830     let passcheck=ckpass
 18840     goto CHECKGAS_FINIS
@@ -469,9 +469,9 @@
 18860   if trim$(sn$)="Gas" and x(14)>0 then let passcheck=ckpass : goto CHECKGAS_FINIS ! don't give warning if usage entered
 18870   if x(2)=0 and d(gr1)=0 then goto CHECKGAS_FINIS
 18880   let x3=x(2)-d(gr1)
-18890   let sn$=srvnam$(4): let x0=x3 : let prior_read=d(gr1): cur_read=x(2)
+18890   sn$=srvnam$(4): let x0=x3 : let prior_read=d(gr1): cur_read=x(2)
 18900   if x3>=0 then goto CHECKGAS_L4580
-18910   if x(14)>0 then let sn$=srvnam$(4): goto CHECKGAS_FINIS
+18910   if x(14)>0 then sn$=srvnam$(4): goto CHECKGAS_FINIS
 18920   if x3<0 then let fn_meter_roll
 18930   goto CHECKGAS_FINIS
 18940   CHECKGAS_L4580: ! 
@@ -509,14 +509,14 @@
 19240     let passcheck=ckfail
 19250   else if resp$="Cancel" then 
 19260     let passcheck=ckfail
-19270     let editmode=0
+19270     editmode=0
 19280   end if 
 19290   CHECKEND_XIT: ! 
 19300 fnend 
 19320 def fn_print_unusual
 19330   fnopenprn
 19340   if ~setup_printunusual<=0 then 
-19350     let setup_printunusual=1
+19350     setup_printunusual=1
 19360     dim fmun$*80
 19370     pr #255: " Account    Name                    Old Reading  New Reading   Usage"
 19380     pr #255: "----------  ----------------------  -----------  -----------  -----------"
@@ -548,10 +548,10 @@
 19810   L5000: if listonly=1 then let fnopenprn( 0,0,0,0, 'Book '&ip1$)
 19820   let j1=29 : let j2=97
 19830   HH_W_READ: ! 
-19840   let ln$="" : mat x=(0)
+19840   ln$="" : mat x=(0)
 19850   for j=j1 to j2
 19860     read #h_readings,using "Form POS 1,C 1",rec=j: c$ norec HH_W_END
-19870     let ln$=ln$&c$
+19870     ln$=ln$&c$
 19880   next j
 19890   let x$=lpad$(trim$(ln$(1:10)),10) : let x(1)=val(ln$(11:19))
 19900   let mroll(1)=val(ln$(20:20)) : let x(3)=val(ln$(21:29))
@@ -583,11 +583,11 @@
 20170   goto HH_CONTINUE ! /r
 20180   ! 
 20190   HH_BOSON: ! r: Hand Held routines for Boson (boson file is copied from                        '&env$('Q')&'\UBmstr\outofpalm.txt in hhfro to readings.(route# (which is asked))
-20210   let last_ln$=""
+20210   last_ln$=""
 20220   if listonly=1 then let fnopenprn
 20230   close #h_readings: ioerr ignore
 20240   open #h_readings:=13: "Name="&env$('Q')&"\UBmstr\Readings."&ip1$&",RecL=204",display,input 
-20250   HH_BOSON_READ: if last_ln$="" then linput #h_readings: ln$ eof HH_W_END else let ln$=last_ln$ : let last_ln$=''
+20250   HH_BOSON_READ: if last_ln$="" then linput #h_readings: ln$ eof HH_W_END else ln$=last_ln$ : last_ln$=''
 20260   if ln$(1:1)="T" or ln$(1:1)="H" then goto HH_BOSON_READ
 20270   mat x=(0)
 20280   if env$('client')="Monticello" then let x$=lpad$(rtrm$(ln$(1:10)),10) conv HH_BOSON_READ ! Account Key :goto 5150
@@ -605,9 +605,9 @@
 20450     if ti$="" then let x_g$=lpad$(rtrm$(ln$(5:14)),10) conv L5440 else let x_g$=lpad$(rtrm$(ln$(4:13)),10) conv L5440 : let ti$=ln$(14:14)
 20460     if x_g$=x$ and ti$="" or ti$="G" then 
 20470       let x(2)=val(ln$(89:97))
-20480       let last_ln$=""
+20480       last_ln$=""
 20490     else 
-20500       let last_ln$=ln$
+20500       last_ln$=ln$
 20510     end if 
 20520   end if 
 20530   L5440: ! 
@@ -673,15 +673,15 @@
 21090   read #hCustomer1,using F_CUSTOMER_C,key=x$,release: x$,aname$,mat a,final,mat d,alp$,mat extra,extra$(3) nokey HH_W_NXT
 21100   fn_us1
 21110   mat est1=(0)
-21120   if x(1)=999999 then let est1(1,1)=1 : let est1(1,2)=100
-21130   if x(2)=999999 then let est1(3,1)=1 : let est1(3,2)=100
-21140   if x(3)=999999 then let est1(2,1)=1 : let est1(2,2)=100
+21120   if x(1)=999999 then est1(1,1)=1 : est1(1,2)=100
+21130   if x(2)=999999 then est1(3,1)=1 : est1(3,2)=100
+21140   if x(3)=999999 then est1(2,1)=1 : est1(2,2)=100
 21150   if sum(est1)=0 then goto L6010
 21160   read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) nokey HH_W_NXT
 21170   gosub EST2B
 21180   L6010: ! 
 21190   gosub CHECK_UNUSUAL
-21200   if skiprec=1 then let skiprec=0 : goto HH_W_NXT ! skip record   !kj 3/24/06
+21200   if skiprec=1 then skiprec=0 : goto HH_W_NXT ! skip record   !kj 3/24/06
 21210   fn_writeWork(hWork,x$,mat x)
 21220   fn_accumulateprooftotals
 21230   fn_rmk1
@@ -737,20 +737,20 @@
 21670   let pos_equal=pos(line$,'=')
 21680   dim line_field$*256
 21690   dim line_value$*256
-21700   let line_field$=line$(1:pos_equal-1)
-21710   let line_value$=line$(pos_equal+1:len(line$))
-21720   let line_value=0
-21730   let line_value=val(line_value$) conv HPL_LV_CONV
-21740   let line_field_len=len(line_field$)
-21750   let line_field$=lwrc$(trim$(line_field$))
-21760   let line_field_pos_dot1=pos(line_field$,'.')
+21700   line_field$=line$(1:pos_equal-1)
+21710   line_value$=line$(pos_equal+1:len(line$))
+21720   line_value=0
+21730   line_value=val(line_value$) conv HPL_LV_CONV
+21740   line_field_len=len(line_field$)
+21750   line_field$=lwrc$(trim$(line_field$))
+21760   line_field_pos_dot1=pos(line_field$,'.')
 21770   if line_field_pos_dot1>0 then 
 21780     dim line_field$(2)*256
 21790     mat line_field$(2)
-21800     let line_field$(1)=line_field$(1:line_field_pos_dot1-1)
-21810     let line_field$(2)=line_field$(line_field_pos_dot1+1:line_field_len)
+21800     line_field$(1)=line_field$(1:line_field_pos_dot1-1)
+21810     line_field$(2)=line_field$(line_field_pos_dot1+1:line_field_len)
 21820   end if  ! 
-21830   if line_field$(2)='kwh' then let line_field$(2)="electric"
+21830   if line_field$(2)='kwh' then line_field$(2)="electric"
 21840   HPL_LV_CONV: ! 
 21850   if line_field$(1)="customer" then 
 21860     if line_field$(2)="number" then 
@@ -804,10 +804,10 @@
 22360   open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$,internal,outin,keyed 
 22370   ASK_EST: ! 
 22380   fntos(sn$="ubipchg-ask_est")
-22390   ! let services=0
-22400   if srvnam$(1)="Water" then let srvest$(1)=srvnam$(1) else let srvest$(1)="Unused"
-22410   if service_enabled(3) then let srvest$(2)=srvnam$(3) else let srvest$(2)="Unused"
-22420   if service_enabled(4) then let srvest$(3)=srvnam$(4) else let srvest$(3)="Unused"
+22390   ! services=0
+22400   if srvnam$(1)="Water" then srvest$(1)=srvnam$(1) else srvest$(1)="Unused"
+22410   if service_enabled(3) then srvest$(2)=srvnam$(3) else srvest$(2)="Unused"
+22420   if service_enabled(4) then srvest$(3)=srvnam$(4) else srvest$(3)="Unused"
 22430   let mylen=0
 22440   for j=1 to 3 : let mylen=max(mylen,len(srvest$(j))) : next j
 22450   fnfra(1,1,8,mylen+50,"Select and Configure Services to Estimate")
@@ -829,8 +829,8 @@
 22610   fnacs(sn$,0,mat resp$,ck)
 22620   if ck=cancel then goto MENU1
 22630   for j=1 to 3
-22640     if uprc$(resp$(j*2-1))=uprc$("True") then let est1(j,1)=1 else let est1(j,1)=0
-22650     let est1(j,2)=val(resp$(j*2)) conv EST1
+22640     if uprc$(resp$(j*2-1))=uprc$("True") then est1(j,1)=1 else est1(j,1)=0
+22650     est1(j,2)=val(resp$(j*2)) conv EST1
 22660   next j
 22670   if est1(1,1)=0 and est1(2,1)=0 and est1(3,1)=0 then goto L6520 else goto L6530
 22680   L6520: ! 
@@ -849,8 +849,8 @@
 22810   L6570: ! 
 22820   next j
 22830   if ck=cancel then goto MENU1
-22840   if uprc$(resp$(7))=uprc$("True") then let est1=1
-22850   if uprc$(resp$(8))=uprc$("True") then let est1=2 ! select route #
+22840   if uprc$(resp$(7))=uprc$("True") then est1=1
+22850   if uprc$(resp$(8))=uprc$("True") then est1=2 ! select route #
 22860   fn_est_dates
 22870   if est1=1 then goto EST3 ! selecting individual accounts to estimate
 22880   if est1=2 then goto ASK_ROUTE
@@ -875,7 +875,7 @@
 23072   fnapply_default_rates(mat extra, mat a)
 23080   F_CUSTOMER_A: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 296,pd 4,pos 1821,n 1,pos 217,15*pd 5,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 23090   gosub EST2
-23100   let ex$=x$
+23100   ex$=x$
 23110   goto EST3 ! /r
 23130 ASK_ROUTE: ! r:
 23140   fntos(sn$="ubipchg-ask_Route")
@@ -890,8 +890,8 @@
 23230   end if 
 23240   fncmdset(11)
 23250   fnacs(sn$,0,mat resp$,ck)
-23260   if resp$(1)="[All]" then let eb1=0 : goto L6890
-23270   let eb1=val(resp$(1))
+23260   if resp$(1)="[All]" then eb1=0 : goto L6890
+23270   eb1=val(resp$(1))
 23280 L6890: ! 
 23290   if ck=cancel then goto MENU1 ! finish
 23300   restore #hCustomer1: 
@@ -903,7 +903,7 @@
 23350   if eb1>0 and extra(1)><eb1 then goto READ_CUSTOMER ! if route selected and does not match route
 23360   if final=1 or final=3 then goto READ_CUSTOMER ! SKIP FINAL BILLED
 23370   gosub EST2
-23380   let eb2=eb1
+23380   eb2=eb1
 23390   goto READ_CUSTOMER ! /r
 23400 EST2: ! r:
 23410   mat x=(0) ! actually calculate the estimated usage
@@ -923,9 +923,9 @@
 23550       goto L7140 ! took this off front 71509  If EST1(J,1)=0 Then Goto 6790 Else 
 23560     end if 
 23570     fn_est5
-23580     if f=d1 then let oldwatread=d(2) else let oldwatread=d(1) ! old water reading equals the prior reading if recalculation else current reading if new calculation
-23590     if f=d1 then let oldelecread=d(6) else let oldelecread=d(5) ! old electric reading equals the prior reading if recalculation else current reading if new calculation
-23600     if f=d1 then let oldgasread=d(10) else let oldgasread=d(9) ! old gas reading equals the prior reading if recalculation else current reading if new calculation
+23580     if f=d1 then oldwatread=d(2) else oldwatread=d(1) ! old water reading equals the prior reading if recalculation else current reading if new calculation
+23590     if f=d1 then oldelecread=d(6) else oldelecread=d(5) ! old electric reading equals the prior reading if recalculation else current reading if new calculation
+23600     if f=d1 then oldgasread=d(10) else oldgasread=d(9) ! old gas reading equals the prior reading if recalculation else current reading if new calculation
 23610     if j=1 then 
 23620       let x(1)=oldwatread+watavg
 23630     else if j=2 then 
@@ -933,10 +933,10 @@
 23650     else if j=3 then 
 23660       let x(2)=oldgasread+gasavg
 23670     end if 
-23680     let est4=1
+23680     est4=1
 23690     L7140: ! 
 23700   next j
-23710   ! If A(2)>0 AND EST1(1,1)=1 Then Let EST4=1 ! Sewer
+23710   ! If A(2)>0 AND EST1(1,1)=1 Then eST4=1 ! Sewer
 23720   if est4=0 then goto L7220
 23730   if addmethod=from_holding_file then goto L7220 ! FROM Hand Held
 23740   if a1=1 then 
@@ -953,10 +953,10 @@
 34050 IGNORE: continue 
 34320 def fn_us1
 34340   let rc1=0 ! SET USAGE FIELDS
-34360   let wr1=1 : let er1=5 : let gr1=9
+34360   let wr1=1 : er1=5 : let gr1=9
 34380   read #hCustomer1,using "Form POS 296,PD 4",key=x$,release: f nokey US1_XIT
 34400   if f><d1 then goto US1_XIT
-34420   let wr1=2 : let er1=6 : let gr1=10 : let rc1=1 ! Re-Calculation
+34420   let wr1=2 : er1=6 : let gr1=10 : let rc1=1 ! Re-Calculation
 34440   US1_XIT: ! 
 34460 fnend 
 34480 def fn_rmk1
@@ -1028,7 +1028,7 @@
 35800   if tcode<>1 then goto EST5_READ_TRANS ! only charge transactions
 35820   for j=1 to 8
 35840     if est1(1,1)=1 and cd1(j)=tdate then let watermonths+=1: let watused+=wu
-35860     if est1(2,1)=1 and cd1(j)=tdate then let elecmonths+=1: let elecused+=eu
+35860     if est1(2,1)=1 and cd1(j)=tdate then elecmonths+=1: elecused+=eu
 35880     if est1(3,1)=1 and cd1(j)=tdate then let gasmonths+=1 : let gasused+=gu
 35900   next j
 35920   ! probably a mat x proof total problem right here
@@ -1036,7 +1036,7 @@
 35960   EST5_FINIS: ! 
 35980   let watavg=elecavg=gasavg=0
 36000   if watermonths>0 then let watavg=int(watused/watermonths)
-36020   if elecmonths>0 then let elecavg=int(elecused/elecmonths)
+36020   if elecmonths>0 then elecavg=int(elecused/elecmonths)
 36040   if gasmonths>0 then let gasavg=int(gasused/gasmonths)
 36060   EST5_XIT: ! write enter readings entry
 36080 fnend 
@@ -1121,9 +1121,9 @@
 40930     fnapply_default_rates(mat extra, mat a)
 40940     fn_us1
 40960     mat est1=(0)
-40980     if x(1)=999999 then let est1(1,1)=1 : let est1(1,2)=100
-41000     if x(2)=999999 then let est1(3,1)=1 : let est1(3,2)=100
-41020     if x(3)=999999 then let est1(2,1)=1 : let est1(2,2)=100
+40980     if x(1)=999999 then est1(1,1)=1 : est1(1,2)=100
+41000     if x(2)=999999 then est1(3,1)=1 : est1(3,2)=100
+41020     if x(3)=999999 then est1(2,1)=1 : est1(2,2)=100
 41040     if sum(est1)<>0 then 
 41060       read #hCustomer1,using F_CUSTOMER_A,key=x$,release: x$,e2$,mat a,f,final,mat d,mat extra,extra$(3) nokey IT_W_NEXT
 41070       fnapply_default_rates(mat extra, mat a)
@@ -1144,7 +1144,7 @@
 41360 IT_XIT: ! 
 41380   goto MENU1 ! /r
 42000 MENU1: ! r:
-42020   let editmode=0
+42020   editmode=0
 42060   addmethod=0
 42080   fntos(sn$="readings-1b")
 42100   let mylen=28 : let mypos=mylen+3
@@ -1554,8 +1554,8 @@
 60140   fnacs(sn$,0,mat resp$,ck)
 60160   let holdingFile$=""
 60180   let ip1$=resp$(1)
-60300   ! let listonly=0
-60320   ! if ck=6 then let listonly=1: ck=1
+60300   ! listonly=0
+60320   ! if ck=6 then listonly=1: ck=1
 60340   if ck=cancel or ip1$='' then 
 60360     goto IH_XIT
 60380   else if ck=6 then
@@ -1611,7 +1611,7 @@
 70210   let mylen=0 : for j=1 to 8 : let mylen=max(mylen,len(srvnam$(j))) : next j
 70220   let mypos1=mylen+2 : let mypos2=mypos1+12
 70230   let mypos3=mypos2+12 : let mypos4=mypos3+12 : let mypos5=mypos4+12+4
-70240   let lc=0 : let fraro=frac+=1
+70240   lc=0 : let fraro=frac+=1
 70250   fnlbl(lc+=1,mypos1,"Reading",10,2,0,fraro)
 70260   fnlbl(lc,mypos2,"Charge",10,2,0,fraro)
 70270   fnlbl(lc,mypos3,"Usage",10,2,0,fraro)
@@ -1625,7 +1625,7 @@
 70332   if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then let disa=1
 70340   ! water
 70350   if service_enabled(tmpService) then 
-70360     let lc+=1
+70360     lc+=1
 70370     fnlbl(lc,1,srvnamc$(1),mylen,1,0,2)
 70380     fntxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
 70390     fntxt(lc,mypos2,10,10,1,"10",disa,empty$,fraro) ! charge
@@ -1706,7 +1706,7 @@
 71090   if service_enabled(tmpService) then
 71100     if a(tmpService)=0 then let disa=1 else let disa=0 ! gas rate code
 71102     if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then let disa=1
-71110     let lc+=1
+71110     lc+=1
 71120     fnlbl(lc,1,srvnamc$(tmpService),mylen,1,0,2)
 71130     fntxt(lc,mypos1,10,11,1,"20",disa,empty$,fraro) ! reading
 71140     fntxt(lc,mypos2,10,10,1,"10",disa,empty$,fraro) ! charge
@@ -1787,7 +1787,7 @@
 71840       let disa=0 ! service 8 rate code
 71850     end if 
 71852     if onlyMonth(tmpService)>0 and onlyMonth(tmpService)<>date(days(d1,'mmddyy'),'mm') then let disa=1
-71860     let lc+=1
+71860     lc+=1
 71870     fnlbl(lc,1,srvnamc$(tmpService),mylen,1,0,2)
 71880     fntxt(lc,mypos2,10,0,1,"10",disa,empty$,fraro) ! charge
 71890     if editmode=1 then 
@@ -1798,7 +1798,7 @@
 71940   end if 
 71950   ! /r
 71960   ! 
-71970   let lc=lc+2
+71970   lc=lc+2
 71980   fnlbl(lc,1,"Final Billing Code:",mylen+8,1,0,2)
 71990   fncomboa("finalbill",lc,24,mat opt_final_billing$,"Used to record final billing code in customer record",28,fraro) ! final billing code
 72000   let resp_fianl_billing_code=(rc+=1)
@@ -1821,7 +1821,7 @@
 74260     goto ENTER_READING3
 74280   end if 
 74300   let rc=first_read_rc
-74320   ! If PASSCHECK=CKFAIL Then Let EDITMODE=0 ! xxx Ken
+74320   ! If PASSCHECK=CKFAIL Then eDITMODE=0 ! xxx Ken
 74340   if ck=3 then let done_with_readings=1 ! code as done with entering readings is select finish
 74360   if service_enabled(1) then ! Service 1 - Water
 74380     let x(01)=val(resp$(rc+=1))
@@ -1871,7 +1871,7 @@
 75260   let rc+=1
 75280   let x(15)=val(resp$(resp_fianl_billing_code)(1:1)) ! final billing code
 75300   if ck=2 and addmethod=from_hh_file then 
-75320     let skiprec=1
+75320     skiprec=1
 75340     goto L2910 ! if choose skip on pulling from hh file, then skip writing the record   ! kj 3/24/06
 75360   else if addmethod=from_holding_file then 
 75380     goto CHECK_UNUSUAL
@@ -1892,7 +1892,7 @@
 75670   ! 
 75680   fn_checkwater
 75700   if passcheck=ckfail then 
-75720     let editmode=1
+75720     editmode=1
 75740     goto ENTER_READING3
 75760   else if passcheck=ckcancel then 
 75780     goto ERXIT
@@ -1900,16 +1900,16 @@
 75810   ! 
 75820   fn_checkgas
 75840   if passcheck=ckfail then 
-75860     let editmode=1
+75860     editmode=1
 75880     goto ENTER_READING3
 75900   else if passcheck=ckcancel then 
-75920     let editmode=1
+75920     editmode=1
 75940     goto ENTER_READING3 ! Then Goto ERXIT
 75960   end if 
 75970   ! 
 75980   fn_checkelec
 76000   if passcheck=ckfail then 
-76020     let editmode=1
+76020     editmode=1
 76040     goto ENTER_READING3 
 76060   else if passcheck=ckcancel then 
 76080     goto ERXIT
@@ -1921,7 +1921,7 @@
 76200   if editmode=1 and unusual<>2 then gosub REWRITE_WORK
 76220   ERXIT: ! 
 76240   if addmethod=0 then goto MENU1
-76260   if addmethod=1 and done_with_readings=0 then let editmode=0 ! set editmode back after any corrections during the addmethod 1
+76260   if addmethod=1 and done_with_readings=0 then editmode=0 ! set editmode back after any corrections during the addmethod 1
 76280   if addmethod=1 and editmode=0 then goto READ_ROUTE_SEQUENCE
 76300   if addmethod=1 and editmode=1 then goto MENU1
 76320   ! If ADDMETHOD=1 AND EDITMODE=1 Then Goto READ_ROUTE_SEQUENCE ! MENU1
@@ -2025,7 +2025,7 @@
 88020   mco_return=0
 88040   do 
 88060     fntos(sn$="Method")
-88080     let rc=0 : let lc=0
+88080     let rc=0 : lc=0
 88100     fnfra(1,1,2,49,"Method of Change Out")
 88120     fnopt(1,1,"Current customer only",0,1)
 88140     let resp$(1)="True"
@@ -2040,14 +2040,14 @@
 88320     fncmdkey("&Next",1,1,0): let fncmdkey("&Cancel",5,0,1)
 88340     fnacs(sn$,0,mat resp$,ckey)
 88360     if ckey=5 then goto Mco_Xit
-88380     let servicetype$=resp$(3)(1:2)
+88380     servicetype$=resp$(3)(1:2)
 88400     begx$=resp$(4)(1:10)
 88420     if resp$(2)="True" then let method$="File" : goto MCO_UPDATE_FULL_FILE ! working from a file
 88440     if resp$(1)="True" then let method$="Customer" : goto MCO_RECORD_READINGS
 88460   loop 
 88480   MCO_RECORD_READINGS: ! 
 88500   fntos(sn$="Meter_Change")
-88520   let rc=0 : let lc=0: let resprc=0
+88520   let rc=0 : lc=0: let resprc=0
 88540   fnlbl(lc+=1,1,x$&"  "&aname$,50,0)
 88560   fnlbl(lc+=2,32,"Old Meter",10,2)
 88580   fnlbl(lc,55,"New Meter",10,2)
@@ -2091,8 +2091,8 @@
 89340   fnacs(sn$,0,mat resp$,ckey)
 89360   if ckey=5 then goto Mco_Xit
 89380   if ckey=10 then goto Mco_Xit
-89400   let oldmeterprior=val(resp$(1))
-89420   let oldmetercurrent=val(resp$(2))
+89400   oldmeterprior=val(resp$(1))
+89420   oldmetercurrent=val(resp$(2))
 89440   let newmeterprior=val(resp$(3))
 89460   let newmetercurrent=val(resp$(4))
 89480   let usage=oldmetercurrent-oldmeterprior+newmetercurrent-newmeterprior
@@ -2108,7 +2108,7 @@
 89680   if method$="Customer" and servicetype$="WA" then let x(1)=newmetercurrent: let x(12)=usage
 89700   if method$="Customer" and servicetype$="GA" then let x(2)=newmetercurrent: let x(14)=usage
 89720   if method$="Customer" and servicetype$="EL" then let x(3)=newmetercurrent: let x(13)=usage
-89740   if method$="Customer" then let passcheck=ckfail: let editmode=1 : goto mco_ENTER_READING3
+89740   if method$="Customer" then let passcheck=ckfail: editmode=1 : goto mco_ENTER_READING3
 89760   ! goto somewhere
 89780   MCO_UPDATE_FULL_FILE: ! meter change over - update full file
 89800   close #hWork: ioerr ignore

@@ -8,9 +8,9 @@
 00080 ! ______________________________________________________________________
 00090   fncno(cno)
 00100   pr newpage
-00110 L110: pr fields "8,20,C 30,R,N": "Mask Cisty State Zip"
-00120   pr fields "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
-00130   pr fields "11,1,Cr 38": "New City State and Zip:"
+00110 L110: pr f "8,20,C 30,R,N": "Mask Cisty State Zip"
+00120   pr f "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
+00130   pr f "11,1,Cr 38": "New City State and Zip:"
 00140   let io1$(1)="10,40,N 2,UT,N" : let io1$(2)="11,40,C 30,UT,N"
 00150   csz$="Townsville, AR  55555"
 00160 L160: rinput fields mat io1$: cno,csz$ conv L160
@@ -18,7 +18,7 @@
 00180   open #1: "Name="&env$('Q')&"\UBmstr\ubadrbil.h"&str$(cno),internal,outin,relative 
 00190   for j=1 to lrec(1)
 00200     rewrite #1,using "Form Pos 101,c 30",rec=j: csz$ norec L220
-00210     pr fields "1,1,N 10,R,N": j
+00210     pr f "1,1,N 10,R,N": j
 00220 L220: next j
 00230   goto DONE
 00240 ! ______________________________________________________________________

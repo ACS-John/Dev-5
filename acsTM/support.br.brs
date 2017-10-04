@@ -13,7 +13,7 @@
 00130   goto XIT
 00140 ! ______________________________________________________________________
 00150 OPEN_FILE: ! 
-00160   let open_file_count=0 ! this value is used in the close_file sub routine
+00160   open_file_count=0 ! this value is used in the close_file sub routine
 00170   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outin,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
@@ -22,17 +22,17 @@
 00220 BUILD_LAYOUT: ! 
 00240 ! ** Field Labels    **
 00250   let ic=0 ! temporary Item Counter
-00260   let lbl$(ic+=1)="Client ID"
-00270   let lbl$(ic+=1)="Sys#"
-00280   let lbl$(ic+=1)="System ID"
-00290   let lbl$(ic+=1)="Starting Date"
-00300   let lbl$(ic+=1)="Time Frame"
-00310   let lbl$(ic+=1)="Ending Date"
-00320   let lbl$(ic+=1)="Cost to User"
-00330   let lbl$(ic+=1)="Name"
-00340   let lbl$(ic+=1)="Contact (1)"
-00350   let lbl$(ic+=1)="Contact (2)"
-00360   let lbl$(ic+=1)="Contact (3)"
+00260   lbl$(ic+=1)="Client ID"
+00270   lbl$(ic+=1)="Sys#"
+00280   lbl$(ic+=1)="System ID"
+00290   lbl$(ic+=1)="Starting Date"
+00300   lbl$(ic+=1)="Time Frame"
+00310   lbl$(ic+=1)="Ending Date"
+00320   lbl$(ic+=1)="Cost to User"
+00330   lbl$(ic+=1)="Name"
+00340   lbl$(ic+=1)="Contact (1)"
+00350   lbl$(ic+=1)="Contact (2)"
+00360   lbl$(ic+=1)="Contact (3)"
 00370 ! ** Text Box / Field Display   Lengths   **
 00380   let ic=0 ! temporary Item Counter
 00390   let mmddyy=8
@@ -50,31 +50,31 @@
 00510   let tln(ic+=1)=50
 00520 ! ** Field Types **
 00530   let ic=0
-00540   let fltyp$(ic+=1)='N'
-00550   let fltyp$(ic+=1)='N'
-00560   let fltyp$(ic+=1)='C'
-00570   let fltyp$(ic+=1)='N'
-00580   let fltyp$(ic+=1)='C'
-00590   let fltyp$(ic+=1)='N'
-00600   let fltyp$(ic+=1)='N'
-00610   let fltyp$(ic+=1)='C'
-00620   let fltyp$(ic+=1)='C'
-00630   let fltyp$(ic+=1)='C'
-00640   let fltyp$(ic+=1)='C'
+00540   fltyp$(ic+=1)='N'
+00550   fltyp$(ic+=1)='N'
+00560   fltyp$(ic+=1)='C'
+00570   fltyp$(ic+=1)='N'
+00580   fltyp$(ic+=1)='C'
+00590   fltyp$(ic+=1)='N'
+00600   fltyp$(ic+=1)='N'
+00610   fltyp$(ic+=1)='C'
+00620   fltyp$(ic+=1)='C'
+00630   fltyp$(ic+=1)='C'
+00640   fltyp$(ic+=1)='C'
 00650 ! ** Field Storage Lengths **
 00660   let ic=0
 00670   let mmddyy=6 : ccyymmdd=8
-00680   let sln(ic+=1)=6
-00690   let sln(ic+=1)=2
-00700   let sln(ic+=1)=2
-00710   let sln(ic+=1)=ccyymmdd
-00720   let sln(ic+=1)=2
-00730   let sln(ic+=1)=ccyymmdd
-00740   let sln(ic+=1)=10.2
-00750   let sln(ic+=1)=50
-00760   let sln(ic+=1)=50
-00770   let sln(ic+=1)=50
-00780   let sln(ic+=1)=50
+00680   sln(ic+=1)=6
+00690   sln(ic+=1)=2
+00700   sln(ic+=1)=2
+00710   sln(ic+=1)=ccyymmdd
+00720   sln(ic+=1)=2
+00730   sln(ic+=1)=ccyymmdd
+00740   sln(ic+=1)=10.2
+00750   sln(ic+=1)=50
+00760   sln(ic+=1)=50
+00770   sln(ic+=1)=50
+00780   sln(ic+=1)=50
 00790 ! ** Field Masks **
 00800   let ic=0
 00810   let pointtwo=32 : let number=30
@@ -97,7 +97,7 @@
 00980 ! C$(CL,5)=Description Position : C$(CL,6)=Description Length
 00990 ! C$(CL,7)=Index File
 01000 ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
-01010   let limit_to_list$='1'
+01010   limit_to_list$='1'
 01020   cl=1 : c$(cl,1)='ComboF'
 01030   c$(cl,2)=env$('Q')&"\TMmstr\Clmstr.h420"
 01050   c$(cl,3)='1' : c$(cl,4)='5'

@@ -22,8 +22,8 @@
 00210   pr #win,fields "5,2,Cr 23,N": "Ending Date (mmddyy):"
 00220   let io1$(1)="4,26,Nz 6,UT,N"
 00230   let io1$(2)="5,26,Nz 6,UT,N"
-00240   pr fields "14,30,C 09,B,1": "Next (F1)"
-00250   pr fields "14,41,C 09,B,5": "Exit (F5)"
+00240   pr f "14,30,C 09,B,1": "Next (F1)"
+00250   pr f "14,41,C 09,B,5": "Exit (F5)"
 00260 L260: input #win,fields mat io1$: df,dt conv CONV1
 00270   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 00280   if cmdkey>0 then goto L350 else ce=curfld
@@ -33,7 +33,7 @@
 00310   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L260
 00320 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00330   ce=cnt+1
-00340 ERR1: pr fields "24,78,C 1": bell : goto L300
+00340 ERR1: pr f "24,78,C 1": bell : goto L300
 00350 L350: if cmdkey=5 then goto XIT
 00360   if df<10100 or df>123199 then ce=1: goto ERR1
 00370   if dt<10100 or dt>123199 then ce=2: goto ERR1
@@ -62,8 +62,8 @@
 00600   if rw>0 then !:
           pr #win,fields "6,1,Cc 40,R,N": "Last Job Number entered was "&ltrm$(jn$)
 00610   pr #win,fields "4,2,C 20,N": "Job Number to Print:"
-00620   pr fields "14,29,C 10,B,2": "Print (F2)"
-00630   pr fields "14,40,C 11,B,5": "Cancel (F5)"
+00620   pr f "14,29,C 10,B,2": "Print (F2)"
+00630   pr f "14,40,C 11,B,5": "Cancel (F5)"
 00640 L640: input #win,fields "4,23,C 6,UET,N": jn$
 00650   let jn$=lpad$(rtrm$(jn$),6)
 00660   if cmdkey=2 then goto L940

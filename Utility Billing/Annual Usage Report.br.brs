@@ -26,13 +26,13 @@
 14300   fnget_services(mat servicename$,mat srv$)
 14360 ! 
 14380   dim opt_service_to_analyze$(3)*20,opt_accum_type$(2)
-14400   let opt_service_to_analyze$(1)="Water"
-14420   if srv$(3)="EL" then let opt_service_to_analyze$(2)=servicename$(3)
-14440   if srv$(4)="GA" then let opt_service_to_analyze$(3)=servicename$(4)
+14400   opt_service_to_analyze$(1)="Water"
+14420   if srv$(3)="EL" then opt_service_to_analyze$(2)=servicename$(3)
+14440   if srv$(4)="GA" then opt_service_to_analyze$(3)=servicename$(4)
 14460 ! 
 14480   dim opt_accum_type$(2)*60
-14500   let opt_accum_type$(accum_type_total:=1)='Total'
-14520   let opt_accum_type$(accum_type_average:=2)='Average'
+14500   opt_accum_type$(accum_type_total:=1)='Total'
+14520   opt_accum_type$(accum_type_average:=2)='Average'
 14540 ! /r
 14560 ! r: open files
 14580   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -58,7 +58,7 @@
 25300 ! L270: !
 25320     let j=j+1
 25340     if j>12 then goto EO_BUILD_DEFAULT_RESP
-25360     let scr1_resp$(j)=str$(tdate)
+25360     scr1_resp$(j)=str$(tdate)
 25380     goto L230
 25400 L300: ! 
 25420     if scr1_resp$(1)="" then goto BDR_READ ! make sure this customer has current charges
@@ -71,50 +71,50 @@
 28060   let rc=0
 28080   fnlbl(1,1,"Billing dates to be printed:",35,1)
 28100   fntxt(2,1,10,10,0,"3")
-28120   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28120   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28140   fntxt(2,15,10,10,0,"3")
-28160   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28160   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28180   fntxt(2,29,10,10,0,"3")
-28200   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28200   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28220   fntxt(2,43,10,10,0,"3")
-28240   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28240   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28260   fntxt(2,57,10,10,0,"3")
-28280   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28280   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28300   fntxt(2,71,10,10,0,"3")
-28320   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28320   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28340   fntxt(4,1,10,10,0,"3")
-28360   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28360   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28380   fntxt(4,15,10,10,0,"3")
-28400   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28400   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28420   fntxt(4,29,10,10,0,"3")
-28440   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28440   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28460   fntxt(4,43,10,10,0,"3")
-28480   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28480   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28500   fntxt(4,57,10,10,0,"3")
-28520   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28520   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28540   fntxt(4,71,10,10,0,"3")
-28560   let rc+=1 : let scr1_resp$(rc)=scr1_resp$(rc)
+28560   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28580   fnlbl(6,1,"Service to Analyze:",24,1,0)
 28600   fncomboa("ubusage21",6,26,mat opt_service_to_analyze$,"",13)
 28620   let rc+=1
-28640   if trim$(scr1_resp$(rc))='' then let scr1_resp$(rc)=opt_service_to_analyze$(1)
+28640   if trim$(scr1_resp$(rc))='' then scr1_resp$(rc)=opt_service_to_analyze$(1)
 28660   fnlbl(8,1,"Accumulation Type:",24,1,0)
 28680   fncomboa("ubusage21",8,26,mat opt_accum_type$)
 28700   let rc+=1
-28720   if trim$(scr1_resp$(rc))='' then let scr1_resp$(rc)=opt_accum_type$(1)
+28720   if trim$(scr1_resp$(rc))='' then scr1_resp$(rc)=opt_accum_type$(1)
 28740   fncmdset(2)
 28760   fnacs(sn$,0,mat scr1_resp$,ckey)
 30000   if ckey=5 then goto XIT
 30020   for j=1 to 12
 30040 L560: ! 
 30060     let x=pos(scr1_resp$(j),"/",1)
-30080     if x>0 then let scr1_resp$(j)(x:x)="": goto L560
+30080     if x>0 then scr1_resp$(j)(x:x)="": goto L560
 30100     cd1(j)=val(scr1_resp$(j)) conv INVALID_DATES_MSGBOX
 30120   next j
 30140   if cd1(1)=0 then goto INVALID_DATES_MSGBOX
-30160   if scr1_resp$(13)="Water" then codepos=143: let service=1
-30180   if scr1_resp$(13)=trim$(opt_service_to_analyze$(2)) then codepos=147: let service=3
-30200   if scr1_resp$(13)=trim$(opt_service_to_analyze$(3)) then codepos=149 : let service=4
+30160   if scr1_resp$(13)="Water" then codepos=143: service=1
+30180   if scr1_resp$(13)=trim$(opt_service_to_analyze$(2)) then codepos=147: service=3
+30200   if scr1_resp$(13)=trim$(opt_service_to_analyze$(3)) then codepos=149 : service=4
 30220   accum_type=max(1,srch(mat opt_accum_type$,scr1_resp$(14)))
 30240 ! /r
 34000 ! r: save answers
@@ -185,7 +185,7 @@
 60160         let total_usage_grand(13)+=u1(cd1_item) ! usage
 60180         let total_usage_route(cd1_item)+=u1(cd1_item) ! usage
 60200         let total_usage_route(13)+=u1(cd1_item) ! usage
-60240         if servicecode<1 or servicecode>9 then let servicecode=10
+60240         if servicecode<1 or servicecode>9 then servicecode=10
 60260 ! 
 60280         let total_count_route_code_date(servicecode,13)+=1
 60300         let total_count_route_code_date(servicecode,cd1_item)+=1

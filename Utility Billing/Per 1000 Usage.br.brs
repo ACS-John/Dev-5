@@ -15,14 +15,14 @@
 14040 ! 
 16000   fnget_services(mat servicename$)
 16060   mat opt$(3)
-16080   let opt$(1)="Water"
-16100   let opt$(2)="Gas"
+16080   opt$(1)="Water"
+16100   opt$(2)="Gas"
 16120   if trim$(servicename$(3))="Lawn Meter" then 
-16140     let stfn$="wgl"
-16160     let opt$(3)="Lawn Meter"
+16140     stfn$="wgl"
+16160     opt$(3)="Lawn Meter"
 16180   else 
-16200     let stfn$="wge"
-16220     let opt$(3)="Electric"
+16200     stfn$="wge"
+16220     opt$(3)="Electric"
 16240   end if 
 16260 ! 
 18000   gosub USAGE_CHART_ASK_RANGE
@@ -48,14 +48,14 @@
 22260   end if 
 22280   gosub USAGE_CHART_ACCUMULATE
 22300   if weg$="W" and d(3)>range(16) then 
-22320     let ov=min(ov+1,160)
-22340     let over(ov)=d(3)
+22320     ov=min(ov+1,160)
+22340     over(ov)=d(3)
 22360   else if weg$="E" or weg$="L" and d(7)>range(16) then 
-22380     let ov=min(ov+1,160)
-22400     let over(ov)=d(7)
+22380     ov=min(ov+1,160)
+22400     over(ov)=d(7)
 22420   else if weg$="G" and d(11)>range(16) then 
-22440     let ov=min(ov+1,160)
-22460     let over(ov)=d(11)
+22440     ov=min(ov+1,160)
+22460     over(ov)=d(11)
 22480   end if 
 22500 goto READ_CUSTOMER ! /r
 24000 ENDUBM: ! r:
@@ -154,13 +154,13 @@
 52240   next j
 52260   cust(16)+=1
 52280   let x+=1 
-52300   let excess(x,1)=val(z$)
+52300   excess(x,1)=val(z$)
 52320   if weg$="W" then 
-52340     let excess(x,2)=d(3) 
+52340     excess(x,2)=d(3) 
 52360   else if weg$="E" or weg$="L" then 
-52380     let excess(x,2)=d(7) 
+52380     excess(x,2)=d(7) 
 52400   else if weg$="G" then 
-52420     let excess(x,2)=d(11)
+52420     excess(x,2)=d(11)
 52440   end if
 52460   L860: !
 52480 return ! /r

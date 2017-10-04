@@ -12,7 +12,7 @@
 00120   open #11: "Name=RPMSTR.X,RecL=196,Replace",internal,output 
 00130   open #12: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno),internal,input,relative 
 00140   open #13: "Name=RPTRAIL.X,SIZE=0,RecL=474,Replace",internal,outin,relative 
-00150   let ot13=1
+00150   ot13=1
 00160   write #13,using L170,rec=1: mat tdz,ot13,0
 00170 L170: form pos 1,n 8,n 3,n 3,n 6,n 3,4*n 6,3*n 2,24*pd 4.2,6*pd 3.2,60*pd 5.2,pd 3,pd 4.2
 00180   form pos 1,n 8,n 3,n 3,n 6,n 3,4*n 6,3*n 2,24*pd 4.2,5*pd 3.2,pos 471,pd 4.2,pos 165,pd 3.2,60*pd 5.2,pd 3
@@ -25,8 +25,8 @@
 00250 L250: if adr=0 then goto L370
 00260   read #12,using L270,rec=adr: tr$,adr,wkm
 00270 L270: form pos 1,c 467,pd 3,pd 4.2
-00280   let ot13=lrec(13)+1
-00290   if adr=0 then let ota=0 else let ota=ot13+1
+00280   ot13=lrec(13)+1
+00290   if adr=0 then ota=0 else ota=ot13+1
 00300   write #13,using L270,rec=ot13: tr$,ota,wkm
 00310   if ta(1)=0 then let ta(1)=ot13
 00320   let ta(2)=ot13

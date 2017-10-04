@@ -63,7 +63,7 @@
 01640       if tdep=1 and a(j)>29 then goto L1660
 01650       if ti(j)><1 then goto L1770
 01660 L1660: ! 
-01662       let lf1=len(rtrm$(ty$(a(j),1)))-1 : let lf2=len(rtrm$(ty$(a(j),4)))
+01662       lf1=len(rtrm$(ty$(a(j),1)))-1 : lf2=len(rtrm$(ty$(a(j),4)))
 01670       if ti(j)><1 then goto L1700
 01680       if a(j)=2 or a(j)=3 or a(j)=4 or a(j)=5 or a(j)=6 or a(j)=26 or a(j)=27 or a(j)=62 or a(j)=63 then goto L1720
 01690       pr #h_tmp_dr,using F_C255: str$(19910+j)&" "&ty$(a(j),4)&"="&ty$(a(j),4)&"+"&ty$(a(j),1)(1:lf1)
@@ -80,13 +80,13 @@
 01770 L1770: ! 
 01772     next j
 01780     af$=srep$(af$,'form,','form ') ! af$(11:11)=" "
-01790     let lf1=len(rtrm$(pf$))
-01792     let lf2=len(rtrm$(pfd$))
+01790     lf1=len(rtrm$(pf$))
+01792     lf2=len(rtrm$(pfd$))
 01800     let pf$(lf1:lf1)=" "
 01802     let pfd$(lf2:lf2)=" "
 01810     let pf$=rtrm$(pf$)&" pageoflow pgof"
 01812     let pfd$=rtrm$(pfd$)&" pageoflow pgof"
-01820     let lf1=len(rtrm$(gpf$))
+01820     lf1=len(rtrm$(gpf$))
 01830     let gpf$(lf1:lf1)=" "
 01840     let gpf$=rtrm$(gpf$)&" pageoflow pgof"
 01850     pr #h_tmp_dr,using F_C255: rf1$
@@ -109,7 +109,7 @@
 02010     pr #h_tmp_dr,using F_C255: "20100 ! Check for Totals to pr ______________"
 02020     pr #h_tmp_dr,using F_C255: "19899 L19899: if tdep=1 then goto F_PR_OUT"
 02030     if ips=0 then goto L2210
-02040     let lf1=len(rtrm$(ty$(ips,1)))-1 : let lf2=len(rtrm$(ty$(ips,4)))-1
+02040     lf1=len(rtrm$(ty$(ips,1)))-1 : lf2=len(rtrm$(ty$(ips,4)))-1
 02050 ! pr #h_tmp_dr,using F_C255: "19801 let ipsw=0"
 02060     if ips>24 and ips<104 then goto L2140
 02070     pr #h_tmp_dr,using F_C255: "19811 For j=1 to 100"

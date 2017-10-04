@@ -141,7 +141,7 @@
 01260 ! INPUT FROM DISKETTE FILE    ! took this option out on new system
 01270 ! ______________________________________________________________________
 01280 CORRECTIONS: ! 
-01290   addone=0: let editone=0
+01290   addone=0: editone=0
 01300   fntos(sn$="EntryCorrection")
 01310   ch2$(1)="Rec #": ch2$(2)="Job #": ch2$(3)="Amount": ch2$(4)="Date #" !:
         ch2$(5)="Status" !:
@@ -166,8 +166,8 @@
         fncmdkey("E&xit",5,0,1,"Returns to main screen.")
 01410   fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 01420   if ckey=5 then goto TRANSACTION_ENTRY
-01430   let editrec=val(resp$(1))
+01430   editrec=val(resp$(1))
 01440   if ckey=1 then addone=1: mat inp=(0): let jn$="": goto TRANSACTION_ENTRY
-01450   if ckey=2 then read #3,using L640,rec=editrec: jn$,mat inp: let editone=1 : goto TRANSACTION_ENTRY
+01450   if ckey=2 then read #3,using L640,rec=editrec: jn$,mat inp: editone=1 : goto TRANSACTION_ENTRY
 01460   if ckey=4 then delete #3,rec=editrec: : goto CORRECTIONS
 01470   goto CORRECTIONS

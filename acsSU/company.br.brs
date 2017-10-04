@@ -15,9 +15,9 @@
 00150 ! ______________________________________________________________________
 00160   fntop("S:\acsSU\Company",cap$="Company Information")
 00170   fncno(cno)
-00180   cancel=99 : let right=1 : center=2 : let left=0 !:
-        ccyymmdd$='3' : let mmddyy$='1' : let on=1 : let off=0 !:
-        cancel=5 : let save=1 : let limit_to_list=1 : let pointtwo$='32' !:
+00180   cancel=99 : let right=1 : center=2 : left=0 !:
+        ccyymmdd$='3' : let mmddyy$='1' : on=1 : off=0 !:
+        cancel=5 : save=1 : limit_to_list=1 : let pointtwo$='32' !:
         let pointthree$='33'
 00190   open #company=1: "Name="&env$('Q')&"\"&fncursys$&"mstr\Company.h"&str$(cno)&",Shr",internal,outin,relative ioerr BUILD_COMPANY
 00200   goto READ_COMPANY
@@ -41,7 +41,7 @@
 00280 ! ______________________________________________________________________
 00290 NEWSCREEN: ! 
 00300   fntos(sn$='Company-Pg'&str$(page)) !:
-        let lc=0
+        lc=0
 00310   let page1=6 : let page2=07 : let page3=08 : let page4=09
 00320   let page=1 : gosub PAGE1
 00330   fncmdset(4) ! Save and Cancel
@@ -62,7 +62,7 @@
           if ckey=cancel then goto XIT
 00410   goto NEWSCREEN
 00420 PAGE1: ! _____________________________________________________________ !:
-        let lc=3 : let mylen=40 : let mypos=mylen+2
+        lc=3 : let mylen=40 : let mypos=mylen+2
 00430   fnlbl(lc+=1,1,'Company Name:',mylen,right)
 00440   fntxt(lc,mypos,40,0,left) !:
         let resp$(1)=a$(1)

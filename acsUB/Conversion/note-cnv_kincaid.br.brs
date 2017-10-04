@@ -11,8 +11,8 @@
 00100 ! 
 00110   pr newpage
 00120   goto L190
-00130   pr fields "8,20,Cc 30,R,N": "Convert Notes "
-00140   pr fields "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
+00130   pr f "8,20,Cc 30,R,N": "Convert Notes "
+00140   pr f "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
 00150 ! 
 00160   let io1$(1)="10,40,N 2,UT,N"
 00170 L170: rinput fields mat io1$: cno conv L170

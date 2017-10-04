@@ -34,31 +34,31 @@
  ! #Autonumber# 1000,5
  SETTINGS: ! ***** Set Global Defaults For The Library Here
     def FnDefaultSettings(&Defaultfilelayoutpath$;&Promptonfilecreate,&PromptOnUpdate,&Createlogfile,&EnforceDupkeys,&StartFileNumber,&CheckIndex,&CompressColumns,&MaxColWidth,&NewLine$,&LogLibrary$,&LogLayout$,&AnimateDatacrawler,&TemplatePath$,&IgnoreLayouts$,&CloseFileSimple,&AuditPath$,&ScreenIOPath$,&FileLayoutExtension$,&FilterBoxFileList,&FilterBoxData)
-       let EnforceDupkeys=1  ! Enforce that key number 1 is unique key
+       enforceDupkeys=1  ! Enforce that key number 1 is unique key
        let Defaultfilelayoutpath$="filelay\" ! Path To Your File Layouts
        let FileLayoutExtension$="" ! Extension for your File Layouts
        let Promptonfilecreate=1 ! Ask User Before Creating New Files
        let PromptOnUpdate=2 ! 0 - Suppress Prompt, 1- Show Prompt, 2- Use PromptOnFileCreate
        createlogfile=0  ! 1 to turn on Logging. Caution, the log file can get big very quickly.
-       let StartFileNumber=1 ! Set above 255 to avoid conflicts with legacy programs.
+       startFileNumber=1 ! Set above 255 to avoid conflicts with legacy programs.
        checkIndex=0 ! Automatically Update Indexes (Use for partial fileio implementations, disable for full fileio installations.)
        compressColumns=0 ! Shrink or Expand Columns in Data Crawler by Default
        let MaxColWidth=20 ! Max Default Column Width in Data Crawler
        let NewLine$=Chr$(13)&Chr$(10) ! Default CRLF
-       let LogLibrary$="" ! Log Library to use, defaults to None (use FileIO's internal log functionality)
-       let LogLayout$="" ! Log file layout, defaults to Internal File (for use with FileIO's internal log functionality)
+       logLibrary$="" ! Log Library to use, defaults to None (use FileIO's internal log functionality)
+       logLayout$="" ! Log file layout, defaults to Internal File (for use with FileIO's internal log functionality)
        animateDatacrawler=1 ! Use ScreenIO Animation for Datacrawler (if available, will not cause error if not available)
        let TemplatePath$="filelay\template\" ! Default Template Path
        let IgnoreLayouts$="" ! List any Ignore Layouts here.
        closeFileSimple=0 ! Use simple comparison for fnCloseFile
        auditPath$="auditbr\" ! Backup Path to use for Auditing Files
-       let ScreenIOPath$="screenio.br" ! Default search location for ScreenIO Library (for fnAnimate in Data Crawler.)
+       screenIOPath$="screenio.br" ! Default search location for ScreenIO Library (for fnAnimate in Data Crawler.)
        let FilterBoxFileList=0 ! Use a Filter Box for the Layout Listview (1=Filter Box, 0=Search Box)
        let FilterBoxData=1 ! Use a Filter Box for the Data Crawler (1=Filter Box, 0=Search Box)
     fnend
 
     def fnReadSettings(mat SSettingNames$,mat SSettings$,mat NSettingNames$,mat NSettings$,&ReadSettings;___,Defaultfilelayoutpath$*255,NewLine$*255,LogLibrary$*255,Promptonfilecreate,PromptOnUpdate,Createlogfile,EnforceDupkeys,StartFileNumber,CheckIndex,CompressColumns,MaxColWidth,LogLibrary$*255,LogLayout$,AnimateDatacrawler,TemplatePath$*255,IgnoreLayouts$*255,CloseFileSimple,Star$,AuditPath$*255,ScreenIOPath$*255,FileLayoutExtension$,FilterBoxFileList,FilterBoxData)
-       let Star$=fnNeedStar$
+       star$=fnNeedStar$
 
        ! Read Defaults
        fnDefaultSettings(Defaultfilelayoutpath$,Promptonfilecreate,PromptOnUpdate,Createlogfile,EnforceDupkeys,StartFileNumber,CheckIndex,CompressColumns,MaxColWidth,NewLine$,LogLibrary$,LogLayout$,AnimateDatacrawler,TemplatePath$,IgnoreLayouts$,CloseFileSimple,AuditPath$,ScreenIOPath$,FileLayoutExtension$,FilterBoxFileList,FilterBoxData)
@@ -80,21 +80,21 @@
        end if
        
        ! Calculate Special Settings
-       if LogLayout$="" and exists(DefaultFileLayoutPath$&"logfile"&FileLayoutExtension$) then let LogLayout$="logfile"
+       if LogLayout$="" and exists(DefaultFileLayoutPath$&"logfile"&FileLayoutExtension$) then logLayout$="logfile"
        if LogLayout$<>"" then let IgnoreLayouts$=IgnoreLayouts$&","&LogLayout$
        let IgnoreLayouts$=lwrc$(IgnoreLayouts$)
        if PromptOnUpdate=2 then let PromptOnUpdate=Promptonfilecreate
 
        ! Load Settings Engine
-       let SSettingNames$(1)="layoutpath"
-       let SSettingNames$(2)="newline"
-       let SSettingNames$(3)="loglibrary"
-       let SSettingNames$(4)="loglayout"
-       let SSettingNames$(5)="templatepath"
-       let SSettingNames$(6)="ignorelayouts"
-       let SSettingNames$(7)="screeniopath"
-       let SSettingNames$(8)="auditpath"
-       let ssettingnames$(9)="layoutextension"
+       sSettingNames$(1)="layoutpath"
+       sSettingNames$(2)="newline"
+       sSettingNames$(3)="loglibrary"
+       sSettingNames$(4)="loglayout"
+       sSettingNames$(5)="templatepath"
+       sSettingNames$(6)="ignorelayouts"
+       sSettingNames$(7)="screeniopath"
+       sSettingNames$(8)="auditpath"
+       ssettingnames$(9)="layoutextension"
 
        let NSettingNames$(1)="promptonfilecreate"
        let NSettingNames$(2)="createlogfile"
@@ -109,15 +109,15 @@
        let nSettingNames$(11)="filterboxdata"
        let nSettingNames$(12)="promptonupdate"
 
-       let SSettings$(1)=Defaultfilelayoutpath$
-       let SSettings$(2)=NewLine$
-       let SSettings$(3)=LogLibrary$
-       let SSettings$(4)=LogLayout$
-       let SSettings$(5)=TemplatePath$
-       let SSettings$(6)=IgnoreLayouts$
-       let SSettings$(7)=ScreenIOPath$
-       let SSettings$(8)=AuditPath$
-       let ssettings$(9)=FileLayoutExtension$
+       sSettings$(1)=Defaultfilelayoutpath$
+       sSettings$(2)=NewLine$
+       sSettings$(3)=LogLibrary$
+       sSettings$(4)=LogLayout$
+       sSettings$(5)=TemplatePath$
+       sSettings$(6)=IgnoreLayouts$
+       sSettings$(7)=ScreenIOPath$
+       sSettings$(8)=AuditPath$
+       ssettings$(9)=FileLayoutExtension$
 
        let NSettings(1)=Promptonfilecreate
        let NSettings(2)=Createlogfile
@@ -141,12 +141,12 @@
 
     def fnSettings$*255(SettingName$;___,SettingSub)
        if ~ReadSettings then let fnReadSettings(mat SSettingNames$,mat SSettings$,mat NSettingNames$,mat NSettings$,ReadSettings)
-       let SettingSub=srch(mat SSettingNames$,lwrc$(SettingName$))
+       settingSub=srch(mat SSettingNames$,lwrc$(SettingName$))
        if SettingSub>0 then let fnSettings$=SSettings$(SettingSub)
     fnend
     def fnSettings(SettingName$;___,SettingSub)
        if ~ReadSettings then let fnReadSettings(mat SSettingNames$,mat SSettings$,mat NSettingNames$,mat NSettings$,ReadSettings)
-       let SettingSub=srch(mat NSettingNames$,lwrc$(SettingName$))
+       settingSub=srch(mat NSettingNames$,lwrc$(SettingName$))
        if SettingSub>0 then let fnSettings=NSettings(SettingSub)
     fnend
     
@@ -156,9 +156,9 @@
           if StarsChecked=-1 then let fnNeedStar$="*"
        else
           if Env$("guimode")="ON" then
-             let StarsChecked=1
+             starsChecked=1
           else
-             let StarsChecked=-1
+             starsChecked=-1
              fnNeedStar$="*"
           end if
        end if
@@ -186,9 +186,9 @@
     let Turnguibackoff=(Env$("guimode")=="OFF")
     if Turnguibackoff then execute "config gui on"
  !
-    let Lvdir_Headings$(1)="File Layouts" !:
-    let Lvdir_Widths(1)=38 !:
-    let Lvdir_Fieldforms$(1)="CC 30"
+    lvdir_Headings$(1)="File Layouts" !:
+    lvdir_Widths(1)=38 !:
+    lvdir_Fieldforms$(1)="CC 30"
     
     let UIOptions$(1)="quitbutton"
     let UIOptions$(2)="exportbutton"
@@ -218,7 +218,7 @@
 
     open #(Dc_Window:=Fngetfilenumber): "srow=2,scol="&str$(int((ScreenCols-39)/2))&",rows="&str$(ScreenRows-2)&",cols=39,Caption= Select File ... ENTER - View / F5 - Edit ,Border=S",display,outin
 
-    if Udim(Mat Lvdir_Listing$)>15 then let Lvdir_Widths(1)-=2 ! Make Room For Scrollbar
+    if Udim(Mat Lvdir_Listing$)>15 then lvdir_Widths(1)-=2 ! Make Room For Scrollbar
 
     let _Logging=fnSettings("createlogfile")
 
@@ -291,8 +291,8 @@
     dim filterF$(1)*1023,FilterF(1)
 
     def library Fndataedit(Filelay$;srow$,scol$,rows$,cols$,___,SRow,SCol,Rows,Cols)
-       let SRow=val(srow$) conv Ignore
-       let SCol=val(scol$) conv Ignore
+       sRow=val(srow$) conv Ignore
+       sCol=val(scol$) conv Ignore
        let Rows=val(rows$) conv Ignore
        cols=val(cols$) conv Ignore
        
@@ -301,8 +301,8 @@
     fnend
     
     def library Fndatacrawler(Filelay$;srow$,scol$,rows$,cols$,___,SRow,SCol,Rows,Cols)
-       let SRow=val(srow$) conv Ignore
-       let SCol=val(scol$) conv Ignore
+       sRow=val(srow$) conv Ignore
+       sCol=val(scol$) conv Ignore
        let Rows=val(rows$) conv Ignore
        cols=val(cols$) conv Ignore
 
@@ -319,8 +319,8 @@
        cols=max(min(Cols,MaxCols),MinCols)
 
        ! Center it if position isn't given
-       if ~sRow then let sRow=int((ScreenRows-Rows)/2)+1
-       if ~sCol then let sCol=int((ScreenCols-Cols)/2)+1
+       if ~sRow then sRow=int((ScreenRows-Rows)/2)+1
+       if ~sCol then sCol=int((ScreenCols-Cols)/2)+1
 
        adjRows=int((ScreenRows+MaxRows)/2)
        adjCols=int((ScreenCols+MaxCols)/2)
@@ -350,16 +350,16 @@
     fnend
 
     def fnIsEmptys(mat A$;___,Index,Empty)
-       let Empty=1
+       empty=1
        for Index=1 to udim(Mat A$)
-          if A$(Index)<>"" then let empty=0
+          if A$(Index)<>"" then empty=0
        next Index
        fnIsEmptys=Empty
     fnend
     def fnIsEmpty(mat A;___,Index,Empty)
-       let Empty=1
+       empty=1
        for Index=1 to udim(Mat A)
-          if A(Index) then let empty=0
+          if A(Index) then empty=0
        next Index
        fnIsEmpty=Empty
     fnend
@@ -396,8 +396,8 @@
        let Index=udim(mat OutputSpec$)+1
        mat OutputSpec$(Index)
        mat OutputData$(Index)
-       let OutputSpec$(Index)=Spec$
-       let OutputData$(Index)=Data$
+       outputSpec$(Index)=Spec$
+       outputData$(Index)=Data$
        fnAddObject=Index
     fnend
 
@@ -421,7 +421,7 @@
              let MinCols=max(MinCols,20)
           #Case# "grid"
           #Case# "border" # "caption" # "recl"
-             let o_border=1
+             o_border=1
           #End Select#
        next Index
 
@@ -482,7 +482,7 @@
 
           for Index=1 to udim(mat filterfields$)
              if len(trim$(filterfields$(Index))) then
-                let sub=srch(mat ColumnNames$,lwrc$(trim$(filterfields$(Index))))
+                sub=srch(mat ColumnNames$,lwrc$(trim$(filterfields$(Index))))
                 if sub>0 then
                    fnAddObject(mat OS$,mat OD$,"1,"&str$(FilterPosition)&",CR "&str$(len(FilterCaption$(Index))),FilterCaption$(Index))
                    let FilterPosition+=len(FilterCaption$(Index))+1
@@ -512,24 +512,24 @@
              fnAddButton(mat OS$,mat OD$,Rows,Cols,54,"Quit")
           #Case# "search"
              if exists("images\search.png") then
-                let SearchSub=fnAddObject(mat IS$,mat ID$,str$(firstrow)&",3,"&FilterString$&" "&str$(cols-12)&",/W:W,2,1"&FilterEndString$,"")
+                searchSub=fnAddObject(mat IS$,mat ID$,str$(firstrow)&",3,"&FilterString$&" "&str$(cols-12)&",/W:W,2,1"&FilterEndString$,"")
                 fnAddObject(mat OS$,mat OD$,str$(firstrow)&",1,P 1/2","images\search.png")
              else
-                let SearchSub=fnAddObject(mat IS$,mat ID$,str$(firstrow)&",1,"&FilterString$&" "&str$(cols-10)&",/W:W,2,1"&FilterEndString$,"")
+                searchSub=fnAddObject(mat IS$,mat ID$,str$(firstrow)&",1,"&FilterString$&" "&str$(cols-10)&",/W:W,2,1"&FilterEndString$,"")
              end if
              fnAddObject(mat OS$,mat OD$,str$(firstrow)&","&str$(cols-8)&",CC 8,/W:W,B70","Refresh")
-             let o_search=1
+             o_search=1
           #Case# "border"
-             let o_border=1
+             o_border=1
           #Case# "caption"
-             let o_caption=1
-             let o_border=1
+             o_caption=1
+             o_border=1
           #Case# "recl"
-             let o_recl=1
-             let o_caption=1
-             let o_border=1
+             o_recl=1
+             o_caption=1
+             o_border=1
           #Case# "position"
-             let o_position=1
+             o_position=1
           #End Select#
        next Index
 
@@ -581,14 +581,14 @@
        mat BadRead$(0) ! Clear Bad Record Reads
 
        do  ! Read Data
-          let LastTime=Timer
+          lastTime=Timer
           do while file(datafile)<>10
              if bRecords then
                 let RecPointer+=1
                 if RecPointer<=udim(mat Records) then
                    read #datafile, using Dc_Forms$(datafile), rec=Records(RecPointer), release : Mat dc_Data$,Mat dc_Data error Ignore
                 else
-                   let Stopreading=1
+                   stopreading=1
                 end if
              else
                 read #datafile, using Dc_Forms$(datafile),release : Mat dc_Data$,Mat dc_Data error Ignore
@@ -602,8 +602,8 @@
                       if ~len(SearchMatch$) or fnSearchIn(SearchMatch$,mat Dc_Data$,mat Dc_Data) then
                          if ~len(SearchNow$) or fnSearchIn(SearchNow$,mat Dc_Data$,mat Dc_Data) then
                             let RowCount+=1
-                            let Somethingfound=1
-                            let Or_Recordlocation=Udim(Mat dc_Outputrow$)
+                            somethingfound=1
+                            or_Recordlocation=Udim(Mat dc_Outputrow$)
                             mat dc_Outputrow$(Udim(dc_Outputrow$)+Recordsize) ! Add Room
                             mat dc_Deleterow(Udim(Mat dc_Records) + 1) ! Add Row To Delete From
                             mat dc_Records(Udim(Mat dc_Records) + 1)
@@ -614,7 +614,7 @@
 
                             if bIncludeColumns then
                                for Index=1 to udim(mat IncludeColumns$)
-                                  let Sub=srch(mat ColumnNames$,IncludeColumns$(Index))
+                                  sub=srch(mat ColumnNames$,IncludeColumns$(Index))
                                   if Sub>udim(mat dc_data$) then
                                      let dc_OutputRow$(Or_RecordLocation+Index+IncludeRecordNumbers)=str$(dc_data(sub-udim(mat Dc_Data$)))
                                   else if Sub>0 then
@@ -632,7 +632,7 @@
                          end if
                       end if
                    else
-                      let StopReading=1
+                      stopReading=1
                    end if
                 else if Action<0 then
                    action=Action*-1
@@ -654,7 +654,7 @@
                       restore #datafile, search>=Trim$(TempKey$): nokey StopReading
                    end if
                 else if Action=2 then
-                   StopReading: let StopReading=1 ! dont like it but its the simplest way to do it in this language.
+                   StopReading: stopReading=1 ! dont like it but its the simplest way to do it in this language.
                 end if
                 if Animate then
                    let TextDisplay$=""
@@ -862,7 +862,7 @@
        mat FilterValSubs(0)
 
        if CallingProgram$="" then callingProgram$="FileIO's fnShowData"
-       let Logging=fnSettings("createlogfile")
+       logging=fnSettings("createlogfile")
 
        if Logging then
           if Edit then
@@ -876,7 +876,7 @@
        ! in case they aren't given and we can't change the original
        mat IncludeColumns$(udim(mat IncludeCols$))=IncludeCols$
        mat Includebuttons$(udim(mat IncludeUI$))=IncludeUI$
-       let SearchNow$=""
+       searchNow$=""
 
        if ~keynumber then KeyNumber=-1 ! Default to Relative for preformance
        if Edit and ~fn42 then let KeyNumber=1 ! Must open keyed due to bug in 4.1 and earlier
@@ -900,13 +900,13 @@
 
           do  ! Whole Thing
 
-             let LastRec$=DisplayField$
+             lastRec$=DisplayField$
              if len(DisplayField$) then
                 if lwrc$(displayfield$)="rec" then
-                   let LastRec$=str$(lrec(DataFile))
+                   lastRec$=str$(lrec(DataFile))
                    let DisplaySub=-1
                 else if lwrc$(displayfield$)="count" or lwrc$(displayfield$)="readcount" then
-                   let LastRec$=str$(lrec(DataFile))
+                   lastRec$=str$(lrec(DataFile))
                    let DisplaySub=-2
                 else if lwrc$(displayfield$)="findcount" then
                    let DisplaySub=-3
@@ -928,13 +928,13 @@
                    if DisplaySub>udim(mat dc_data$) then
                       if DisplaySub<=udim(mat dc_Data$)+udim(mat dc_Data) then
                          if ~len(DisplayFieldConvert$) then
-                            let LastRec$=str$(dc_data(DisplaySub-udim(mat dc_data$)))
+                            lastRec$=str$(dc_data(DisplaySub-udim(mat dc_data$)))
                          else
-                            let LastRec$=cnvrt$(DisplayFieldConvert$,dc_data(DisplaySub-udim(mat dc_data$))) conv Ignore
+                            lastRec$=cnvrt$(DisplayFieldConvert$,dc_data(DisplaySub-udim(mat dc_data$))) conv Ignore
                          end if
                       end if
                    else
-                      let LastRec$=dc_data$(DisplaySub)
+                      lastRec$=dc_data$(DisplaySub)
                    end if
                 end if
              end if
@@ -968,7 +968,7 @@
                 restore #datafile, rec=RecordNum: norec ClearRec
              end if
 
-             let SomethingFound=fnPopulateGrid(Window,GridSpec$,FileLay$,KeyMatch$,SearchMatch$,mat Records,mat IncludeColumns$,mat ColumnNames$,RecordSize,Datafile,mat Dc_Data$,mat Dc_Data,mat dc_forms$,SearchNow$,mat Dc_Records,mat dc_DeleteRow,KeyNumber,LastRec$,DisplaySub,DisplayFieldConvert$,mat FilterCompare$,mat FilterSubs,mat FilterValSubs,mat FilterKey,mat InputData$,IncludeRecordNumbers)
+             somethingFound=fnPopulateGrid(Window,GridSpec$,FileLay$,KeyMatch$,SearchMatch$,mat Records,mat IncludeColumns$,mat ColumnNames$,RecordSize,Datafile,mat Dc_Data$,mat Dc_Data,mat dc_forms$,SearchNow$,mat Dc_Records,mat dc_DeleteRow,KeyNumber,LastRec$,DisplaySub,DisplayFieldConvert$,mat FilterCompare$,mat FilterSubs,mat FilterValSubs,mat FilterKey,mat InputData$,IncludeRecordNumbers)
              alreadyWarned=0
 
              pr #Window, fields mat InputSpec$(1:udim(mat InputSpec$)-1) : mat InputData$
@@ -986,7 +986,7 @@
                 else
                    if Edit and (2==Msgbox("There is no data in the file, or no records match the current search criteria. Would you like to add a row?","File Empty","YN","EXCL")) then
                       let Key=15 ! Add A Row
-                      let Somethingfound=1
+                      somethingfound=1
                    else
                       if ~AlreadyWarned then let MsgBox("Data File is Empty or no records match the current search criteria.","File Empty") : AlreadyWarned=1
                       if udim(mat InputData$) then
@@ -998,7 +998,7 @@
                       end if
                    end if
                 end if
-                let Shouldsave=0
+                shouldsave=0
 
                 #Select# Key #Case# 15 and Edit
                    gosub MergeNewChanges   ! Get any additional changes since the last time
@@ -1024,7 +1024,7 @@
 
                 #Case# 4 # 99 # 93 # 70
                    if Edit and (Changedrowcount Or Rowcount Or Sum(Mat dc_Deleterow)) then
-                      let Shouldsave=Msgbox("All unsaved changes will be lost. Do you want to Save first?","Search Warning","YNC","EXCL")
+                      shouldsave=Msgbox("All unsaved changes will be lost. Do you want to Save first?","Search Warning","YNC","EXCL")
                    end if
                 #End Select#
              loop Until ((Key=99 or Key=93 Or Key=4 or Key=70) And Shouldsave<>4) Or Key=5 or Key=57 or (Key=55 And ColsChanged) ! F4 Changes Settings, F5 Saves Settings, 70 is Search, needs to redraw
@@ -1034,7 +1034,7 @@
              if Key=4 then let Fninputkey(Key$,RecordNum,datafile,rows,cols,Window)
 
              if key=70 then
-                let SearchNow$=trim$(InputData$(SearchSub))  ! If there's a search box, its always first cause the grids always last so this should work but it would be better to use a subscript.
+                searchNow$=trim$(InputData$(SearchSub))  ! If there's a search box, its always first cause the grids always last so this should work but it would be better to use a subscript.
                 ! let InputData$(SearchSub)=""
              end if
 
@@ -1075,7 +1075,7 @@
        input #Window, fields GridSpec$&",ROWSUB,CHG,NOWAIT" : Mat dc_Savesubs
        input #Window, fields GridSpec$&",ROW,CHG,NOWAIT" : Mat dc_Savedata$
 
-       let SaveRecordSize=RecordSize-IncludeRecordNumbers
+       saveRecordSize=RecordSize-IncludeRecordNumbers
 
        for MergeIndex=1 to udim(mat dc_SaveSubs)
           let MergeFromStart=((MergeIndex-1)*RecordSize)+1+IncludeRecordNumbers
@@ -1108,15 +1108,15 @@
 
  dim SaveMessage$*255,UpdateCount,AddCount,DeleteCount
  SaveChangedData: ! Save all the changed records in the data crawler
-    let SaveMessage$="" : let UpdateCount=0 : addCount=0 : let DeleteCount=0
+    saveMessage$="" : let UpdateCount=0 : addCount=0 : let DeleteCount=0
 
     gosub MergeNewChanges   ! Get any additional changes since the last time
-    let SaveRecordSize=RecordSize-IncludeRecordNumbers
+    saveRecordSize=RecordSize-IncludeRecordNumbers
 
     if (~fnIsEmptys(mat IncludeColumns$)) then let IncludeCol=1
     ! Save Prerecorded Changes
     for Saveloop = 1 to Changedrowcount
-       let Saverecordsub=((Saveloop-1)*SaveRecordSize)
+       saverecordsub=((Saveloop-1)*SaveRecordSize)
        if dc_Deleterow(dc_Changedsubs(Saveloop))=0 then ! Skip It If Its Deleted
           mat dc_Data$=("") : mat Dc_Data=(0)
           if dc_Records(dc_Changedsubs(Saveloop)) then
@@ -1127,9 +1127,9 @@
  !        Convert Strings Back To Numbers And Assign Back To File Arrays
           for SaveIndex=1 to SaveRecordSize
              if IncludeCol then
-                let Sub=srch(mat ColumnNames$,IncludeColumns$(SaveIndex))
+                sub=srch(mat ColumnNames$,IncludeColumns$(SaveIndex))
              else
-                let Sub=SaveIndex
+                sub=SaveIndex
              end if
 
              if Sub>udim(mat dc_data$) then
@@ -1177,7 +1177,7 @@
 
  !  One Record At A Time
  !   for Saveloop = 1 to Rowcount
- !      let Saverecordsub=((Saveloop-1)*Recordsize)
+ !      saverecordsub=((Saveloop-1)*Recordsize)
  !      if dc_Deleterow(dc_Savesubs(Saveloop))=0 then ! Skip It If Its Deleted
  !         mat dc_Data$=("") : mat Dc_Data=(0)
  !         if dc_Records(dc_Savesubs(Saveloop)) then
@@ -1187,9 +1187,9 @@
 
  !         for SaveIndex=1 to RecordSize
  !            if IncludeCol then
- !               let Sub=srch(mat ColumnNames$,IncludeColumns$(SaveIndex))
+ !               sub=srch(mat ColumnNames$,IncludeColumns$(SaveIndex))
  !            else
- !               let Sub=SaveIndex
+ !               sub=SaveIndex
  !            end if
 
  !            if Sub>udim(mat dc_data$) then
@@ -1229,8 +1229,8 @@
        mat Input_Data$(UDim(mat Field_Desc$))
         
        ! Open main window
-       let SRow=Int((ScreenRows-Rows) / 2) + 1
-       let SCol=Int((ScreenCols-Cols) / 2) + 1
+       sRow=Int((ScreenRows-Rows) / 2) + 1
+       sCol=Int((ScreenCols-Cols) / 2) + 1
         
        open #(ColSel_Window:=Fngetfilenumber): "SROW="&Str$(SRow)&", SCOL="&Str$(SCol)&", ROWS="&str$(rows)&", COLS="&str$(cols),display,outin
        pr #ColSel_Window, fields str$(rows)&","&str$(cols-22)&",CC 10,/W:W,B55" : "OK"
@@ -1280,8 +1280,8 @@
              For TabIndex = 1 To UDim(ColSel_Tabs)
                 If ColSel_Tabs(TabIndex) = ThisTab Then CurrentTabIndex=TabIndex
              Next TabIndex
-             let StartCol = 1 + (CurrentTabIndex - 1) * ItemsPerpage
-             let EndCol = Min(CurrentTabIndex * ItemsPerpage, UDim(Input_Spec$))
+             startCol = 1 + (CurrentTabIndex - 1) * ItemsPerpage
+             endCol = Min(CurrentTabIndex * ItemsPerpage, UDim(Input_Spec$))
              rinput #ThisTab, fields mat Input_Spec$(StartCol:EndCol) : mat Input_Data$(StartCol:EndCol)
              let fK=fkey
              
@@ -1305,7 +1305,7 @@
           closeWindow=1
           if fK=0 or fK=55 then
              if NeedsSave then
-                let Shouldsave=Msgbox("All unsaved changes will be lost. Do you want to Save first?","Search Warning","YNC","EXCL")
+                shouldsave=Msgbox("All unsaved changes will be lost. Do you want to Save first?","Search Warning","YNC","EXCL")
                 if ShouldSave=2 then fnSelectDataCrawlerCols=2
                 if ShouldSave=3 then fnSelectDataCrawlerCols=1
                 if ShouldSave=4 then CloseWindow=0
@@ -1340,7 +1340,7 @@
  def library fnCsvImport(Layout$*64;SupressDialog,FileName$*300,ImportModeKey,___,OkToRun)
     if SupressDialog then
        if trim$(Filename$)><"" and exists(trim$(FileName$)) then
-          let OkToRun=1
+          okToRun=1
        else
           if trim$(FileName$)="" then
              let msgbox("The output file name was not given.","File Not Passed","Ok","ERR")
@@ -1350,7 +1350,7 @@
        end if
     else
        if fnCSVImportDlg(Layout$,Filename$,ImportModeKey) then
-          let OkToRun=1
+          okToRun=1
        end if
     end if
 
@@ -1363,13 +1363,13 @@
     library : fnReadLayoutHeader,fnReadLayoutArrays,fnOpenFile, fnGetFileNumber
     if SupressDialog then
        if trim$(Filename$)><"" then
-          let OkToRun=1
+          okToRun=1
        else
           let msgbox("The output file name was not given.","File Not Passed","Ok","ERR")
        end if
     else
        if fnCsvExportDlg(Filename$,IncludeRecNums) then
-          let OkToRun=1
+          okToRun=1
        end if
     end if
 
@@ -1461,13 +1461,13 @@
               fnClientServer=0
            end if
         else
-           let Serverfolder$=Os_Filename$(".")
+           serverfolder$=Os_Filename$(".")
            clientfolder$=Os_Filename$("@:.")
            if Clientfolder$(Len(Clientfolder$):Len(Clientfolder$))<>"\" then
               clientfolder$=Clientfolder$&"\"
            end if
            if Serverfolder$(Len(Serverfolder$):Len(Serverfolder$))<>"\" then
-              let Serverfolder$=Serverfolder$&"\"
+              serverfolder$=Serverfolder$&"\"
            end if
            if Lwrc$(Trim$(Serverfolder$))=Lwrc$(Trim$(Clientfolder$)) then
               fnclientserver=0
@@ -1556,7 +1556,7 @@
 
          ! Make the comparison case insensitive by lwrcing everything
          for Indx=1 to udim(mat SrcFieldNames$)
-            let SrcFieldNames$(Indx)=lwrc$(SrcFieldNames$(Indx))
+            srcFieldNames$(Indx)=lwrc$(SrcFieldNames$(Indx))
          next Indx
          for Indx=1 to udim(mat CsvFieldNames$)
             csvFieldNames$(Indx)=lwrc$(CsvFieldNames$(Indx))
@@ -1751,7 +1751,7 @@
  fnend
 
  def fnExtractCSVLine(&Line$,mat SValues$,mat NValues,mat DestFieldNames$,mat SrcFieldNames$;___,ChunkStart,CurField,CharInd,Chunk$*4000,NumInd,StrInd)
-      let Line$=TRIM$(Line$)
+      line$=TRIM$(Line$)
       chunkStart=1 : curField=1
       mat SValues$=("")
       mat NValues=(0)
@@ -1812,7 +1812,7 @@
                 end if
              end if
           else
-             let SValues$(Index)=Chunk$
+             sValues$(Index)=Chunk$
           end if
        else
           ! Field could not be found, report it later
@@ -1926,12 +1926,12 @@
 
           ! Sort through IncludeColumns and place columns in the grid in order.
           for Index=1 to udim(mat IncludeColumns$)
-             let Sub=srch(mat ColumnNames$,IncludeColumns$(Index))
+             sub=srch(mat ColumnNames$,IncludeColumns$(Index))
              if Sub>0 then  ! found it
-                let outWidths(Index)=Widths(Sub)
-                let outDescription$(Index)=Description$(Sub)
-                if bShowPositions then let outDescription$(Index)(1:0)=str$(FieldPositions(Sub))&" - "
-                let outColumnNames$(Index)=IncludeColumns$(Index)
+                outWidths(Index)=Widths(Sub)
+                outDescription$(Index)=Description$(Sub)
+                if bShowPositions then outDescription$(Index)(1:0)=str$(FieldPositions(Sub))&" - "
+                outColumnNames$(Index)=IncludeColumns$(Index)
              end if
           next Index
        else
@@ -1939,8 +1939,8 @@
           mat outDescription$(udim(mat Description$))
           mat outColumnNames$(udim(mat ColumnNames$))=ColumnNames$
           for Index=1 to udim(Mat Description$)
-             let outDescription$(Index)=Description$(Index)
-             if bShowPositions then let outDescription$(Index)(1:0)=str$(FieldPositions(Index))&" - "
+             outDescription$(Index)=Description$(Index)
+             if bShowPositions then outDescription$(Index)(1:0)=str$(FieldPositions(Index))&" - "
           next Index
        end if
 
@@ -1950,25 +1950,25 @@
           if bColumnDescription then
              if bOriginalInclude then
                 ! interpret ColumnDescription and ColumnWidth as matching original include
-                let Sub=srch(mat OriginalIncludeColumn$,outColumnNames$(Index))
-                if Sub>0 and Sub<=udim(mat ColumnDescription$) then let OutDescription$(Index)=ColumnDescription$(Sub)
+                sub=srch(mat OriginalIncludeColumn$,outColumnNames$(Index))
+                if Sub>0 and Sub<=udim(mat ColumnDescription$) then outDescription$(Index)=ColumnDescription$(Sub)
              else
                 ! interpret columndescription and Columnwidth as matching file record
                 if Index<udim(mat ColumnDescription$) then
-                   let outDescription$(Index)=ColumnDescription$(Index)
+                   outDescription$(Index)=ColumnDescription$(Index)
                 end if
              end if
           end if
 
           if ~CompressColumns then
-             let outWidths(Index)=Max(outWidths(Index),Len(outDescription$(Index)))
+             outWidths(Index)=Max(outWidths(Index),Len(outDescription$(Index)))
           end if
-          let outWidths(Index)=Min(outWidths(Index),MaxColWidth)
+          outWidths(Index)=Min(outWidths(Index),MaxColWidth)
 
           if bColumnForms then
              if bOriginalInclude then
                 ! interpret ColumnForms as matching original include
-                let Sub=srch(mat OriginalIncludeColumn$,outColumnNames$(Index))
+                sub=srch(mat OriginalIncludeColumn$,outColumnNames$(Index))
                 if Sub>0 and Sub<=udim(mat ColumnForms$) and len(trim$(ColumnForms$(Sub))) then let FieldForms$(Index)=ColumnForms$(Sub)
              else
                 ! interpret ColumnForms as matching file record
@@ -1981,12 +1981,12 @@
           if bColumnWidth then
              if bOriginalInclude then
                 ! interpret ColumnDescription and ColumnWidth as matching original include
-                let Sub=srch(mat OriginalIncludeColumn$,outColumnNames$(Index))
-                if Sub>0 and Sub<=udim(mat ColumnWidths) then let outWidths(Index)=ColumnWidths(Sub)
+                sub=srch(mat OriginalIncludeColumn$,outColumnNames$(Index))
+                if Sub>0 and Sub<=udim(mat ColumnWidths) then outWidths(Index)=ColumnWidths(Sub)
              else
                 ! interpret columndescription and Columnwidth as matching file record
                 if Index<=udim(mat ColumnWidths) then
-                   let outWidths(Index)=ColumnWidths(Index)
+                   outWidths(Index)=ColumnWidths(Index)
                 end if
              end if
           end if
@@ -1994,7 +1994,7 @@
        next Index
        
        if DisplaySub>0 and DisplaySub<=udim(mat ColumnNames$) then
-          let Sub=srch(mat outColumnNames$,ColumnNames$(DisplaySub))
+          sub=srch(mat outColumnNames$,ColumnNames$(DisplaySub))
           if Sub>0 then
              let DisplayFieldConvert$=FieldForms$(Sub)
           end if
@@ -2005,7 +2005,7 @@
     def fnGetFieldNames(Layout$*255,mat FieldNames$,mat Positions)
        dim StringSubs$(1)*80,NumSubs$(1)*80,StringSpecs$(1)*80,NumSpecs$(1)*80,StringDesc$(1)*80,NumDesc$(1)*80,StringPos(1),NumPos(1)
        fnReadLayoutArrays(Layout$,prefix$,mat StringSubs$,mat NumSubs$,mat StringSpecs$,mat NumSpecs$,mat StringDesc$,mat NumDesc$,mat StringPos,mat NumPos,0)
-       let SubCnt=UDim(StringSubs$)+UDim(NumSubs$)
+       subCnt=UDim(StringSubs$)+UDim(NumSubs$)
        mat FieldNames$(SubCnt)
        if udim(StringSubs$) then mat FieldNames$(1:udim(StringSubs$))=StringSubs$
        if udim(mat NumSubs$) then mat FieldNames$(udim(StringSubs$)+1:udim(mat FieldNames$))=NumSubs$
@@ -2023,7 +2023,7 @@
        let RecordLen=len(str$(lrec(datafile)))+1
        if kln(Datafile)>0 then
           ! let Height+=1
-          let length=kln(Datafile)
+          length=kln(Datafile)
        end if
        
        ! Uncomment the Hight code above and the Record num code below to
@@ -2032,10 +2032,10 @@
        !  and using the correct file channel to search by key or by
        !  record number
        
-       let srow=int((rows-Height)/2)+1
+       srow=int((rows-Height)/2)+1
        let viewlength=min(cols-2,max(length,RecordLen)+4)
        let viewlength=max(viewlength,15)
-       let scol=int((cols-viewlength)/2)+1
+       scol=int((cols-viewlength)/2)+1
        open #(Window:=Fngetfilenumber) : "srow="&str$(srow)&",scol="&Str$(scol)&",rows="&str$(Height)&",cols="&Str$(viewlength)&",Caption= Jump to ... ,Border=S,Parent="&str$(parentwindow),display,output
 
        mat InputKeyField$(Height)
@@ -2080,16 +2080,16 @@
 
  dim SearchFor$*999
  def fnSearchIn(&Search$,mat F$,mat F;___,SearchChunk$*64,Index,Found,Number,Passing)
-    let SearchFor$=Search$
+    searchFor$=Search$
 
     do while len(SearchFor$)
        if pos(SearchFor$," ") then
-          let SearchChunk$=lwrc$(trim$(SearchFor$(1:pos(SearchFor$," "))))
-          let SearchFor$(1:pos(SearchFor$," "))=""
-          let SearchFor$=trim$(SearchFor$)
+          searchChunk$=lwrc$(trim$(SearchFor$(1:pos(SearchFor$," "))))
+          searchFor$(1:pos(SearchFor$," "))=""
+          searchFor$=trim$(SearchFor$)
        else
-          let SearchChunk$=lwrc$(trim$(SearchFor$))
-          let SearchFor$=""
+          searchChunk$=lwrc$(trim$(SearchFor$))
+          searchFor$=""
        end if
     
        let Found=0
@@ -2151,8 +2151,8 @@
 
        fnReadScreenS(ScreenRows,ScreenCols)
 
-       let SRow=int((ScreenRows-3)/2)+1
-       let SCol=int((ScreenCols-20)/2)+1
+       sRow=int((ScreenRows-3)/2)+1
+       sCol=int((ScreenCols-20)/2)+1
 
        ! Open child window
        open #(Window:=Fngetfilenumber): "SROW="&str$(srow)&", SCOL="&str$(scol)&", ROWS=3, COLS=20, Border=S, Caption="&Caption$,display,outin
@@ -2181,8 +2181,8 @@
 
        fnReadScreenS(ScreenRows,ScreenCols)
        
-       let SRow=int((ScreenRows-22)/2)+1
-       let SCol=int((ScreenCols-60)/2)+1
+       sRow=int((ScreenRows-22)/2)+1
+       sCol=int((ScreenCols-60)/2)+1
 
        ! Read Specs for Output Controls
        LayoutWizardData: restore LayoutWizardData ! Restore Data Statements
@@ -2221,11 +2221,11 @@
        ! Fix for earlier versions of BR that don't support ENTER_CRLFS
        if ~fn42ia then
           for Index=1 to udim(mat lw_Input_Spec$)
-             let lw_Input_Spec$(Index)=srep$(lw_Input_Spec$(Index),"^ENTER_CRLFS","")
+             lw_Input_Spec$(Index)=srep$(lw_Input_Spec$(Index),"^ENTER_CRLFS","")
           next Index
        else if ~fn42j then
           for Index=1 to udim(mat lw_Input_Spec$)
-             let lw_Input_Spec$(Index)=srep$(lw_Input_Spec$(Index),"^ENTER_CRLFS","^ENTER-CRLFS")
+             lw_Input_Spec$(Index)=srep$(lw_Input_Spec$(Index),"^ENTER_CRLFS","^ENTER-CRLFS")
           next Index
        end if
 
@@ -2257,10 +2257,10 @@
           for Index=1 to udim(mat OpenString$)
              if len(trim$(OpenString$(Index))) then
                 let Jndex+=1
-                let OpenString$(Jndex)=trim$(OpenString$(Index))
+                openString$(Jndex)=trim$(OpenString$(Index))
              end if
           next Index
-          mat OpenString$(jndex+1) : let Openstring$(Jndex+1)="" ! add 1
+          mat OpenString$(jndex+1) : openstring$(Jndex+1)="" ! add 1
           
           curfld(Curfield,Function)
           ! populate it
@@ -2270,15 +2270,15 @@
           curfield=curfld
           
           #Select# Function #Case# 99 # 93 # lw_Done
-             let ExitMode=1
+             exitMode=1
           #Case# lw_Browse
              ! Browse for a data file
              open #(FileBrowser:=fngetfilenumber): "name=OPEN:.|*.wb;*.br,recl=1000",external,INPUT IOERR IGNORE
              if file(FileBrowser)>-1 then
-                let lw_Input_Data$(lw_ProgramName)=file$(FileBrowser)
+                lw_Input_Data$(lw_ProgramName)=file$(FileBrowser)
                 close #FileBrowser:
                 if lwrc$(lw_input_data$(lw_ProgramName))(1:2)="c:" then
-                   let lw_input_data$(lw_ProgramName)=lw_input_data$(lw_ProgramName)(3:999)
+                   lw_input_data$(lw_ProgramName)=lw_input_data$(lw_ProgramName)(3:999)
                    fnScanAll(mat lw_Input_Data$,mat OpenString$)
                 end if
              end if
@@ -2296,28 +2296,28 @@
              fnScanAll(mat lw_Input_Data$,mat OpenString$)
           #Case# lw_ClearAll
              mat OpenString$(1)=("")
-             let lw_Input_Data$(lw_ReadString)=""
-             let lw_Input_Data$(lw_FormString)=""
-             let lw_Input_Data$(lw_DimString)=""
+             lw_Input_Data$(lw_ReadString)=""
+             lw_Input_Data$(lw_FormString)=""
+             lw_Input_Data$(lw_DimString)=""
           #Case# lw_PasteOpen
              mat OpenString$(0)
-             let sd_dim$=env$("clipboard")
-             let sd_dim$=srep$(sd_dim$,chr$(13),chr$(10))
-             let sd_dim$=srep$(sd_dim$,chr$(10)&chr$(10),chr$(10))
+             sd_dim$=env$("clipboard")
+             sd_dim$=srep$(sd_dim$,chr$(13),chr$(10))
+             sd_dim$=srep$(sd_dim$,chr$(10)&chr$(10),chr$(10))
              do while pos(sd_dim$,chr$(10))
                 mat OpenString$(udim(mat OpenString$)+1)
-                let Openstring$(udim(mat OpenString$))=trim$(sd_dim$(1:pos(sd_dim$,chr$(10))-1))
-                let sd_dim$(1:pos(sd_dim$,chr$(10)))=""
+                openstring$(udim(mat OpenString$))=trim$(sd_dim$(1:pos(sd_dim$,chr$(10))-1))
+                sd_dim$(1:pos(sd_dim$,chr$(10)))=""
              loop
              if len(trim$(sd_dim$)) then
                 mat OpenString$(udim(mat OpenString$)+1)
-                let Openstring$(udim(mat OpenString$))=trim$(sd_dim$)
-                let sd_dim$=""
+                openstring$(udim(mat OpenString$))=trim$(sd_dim$)
+                sd_dim$=""
              end if
           #Case# lw_OpenScratchPad
              fnOpenScratchFile
           #Case# lw_Generate
-             let ExitMode=fnGenerateLay(mat OpenString$,lw_Input_Data$(lw_ReadString),lw_Input_Data$(lw_FormString),lw_Input_Data$(lw_DimString),1)
+             exitMode=fnGenerateLay(mat OpenString$,lw_Input_Data$(lw_ReadString),lw_Input_Data$(lw_FormString),lw_Input_Data$(lw_DimString),1)
           #End Select#
           
        loop Until ExitMode
@@ -2343,7 +2343,7 @@
           if len(FileName$) and srch(mat sp_Filename$,FileName$)<=0 then
              let FileIndex=udim(mat sp_fileName$)+1
              mat sp_FileName$(FileIndex)
-             let sp_FileName$(FileIndex)=FileName$
+             sp_FileName$(FileIndex)=FileName$
           end if
        next OpenIndex
 
@@ -2393,19 +2393,19 @@
              do until file(ResultsFile)
                 linput #ResultsFile: ResultString$ error Ignore
                 if file(ResultsFile)=0 then
-                   let so_Filename$=lwrc$(trim$(fnExtractFileName$(ResultString$)))
+                   so_Filename$=lwrc$(trim$(fnExtractFileName$(ResultString$)))
                    if len(so_fileName$) then
                       let Index=udim(mat so_results$)+1
                       mat so_results$(Index)
-                      let so_results$(Index)=trim$(Resultstring$)
+                      so_results$(Index)=trim$(Resultstring$)
                       let Index=srch(mat so_files$,so_FileName$)
                       if Index>0 then
-                         let so_Count(Index)+=1
+                         so_Count(Index)+=1
                       else
                          let Index=udim(mat so_Files$)+1
                          mat so_Files$(Index) : mat so_Count(Index)
-                         let so_Files$(Index)=so_Filename$
-                         let so_Count(Index)+=1
+                         so_Files$(Index)=so_Filename$
+                         so_Count(Index)+=1
                       end if
                    end if
                 end if
@@ -2414,8 +2414,8 @@
 
              for index=1 to udim(mat so_Count)
                 if so_Count(Index)>Largest then
-                   let Largest=so_Count(Index)
-                   let LargeIndex=Index
+                   largest=so_Count(Index)
+                   largeIndex=Index
                 end if
              next Index
              
@@ -2423,7 +2423,7 @@
              for Index=1 to udim(mat so_results$)
                 if so_Files$(LargeIndex)=lwrc$(trim$(fnExtractFileName$(so_results$(Index)))) then
                    let Jndex+=1
-                   let so_results$(Jndex)=so_results$(Index)
+                   so_results$(Jndex)=so_results$(Index)
                 end if
              next Index
              mat so_results$(Jndex)
@@ -2470,15 +2470,15 @@
                 if file(ResultsFile)=0 then
                    let Index=udim(mat so_results$)+1
                    mat so_results$(Index)
-                   let so_results$(Index)=trim$(Resultstring$)
+                   so_results$(Index)=trim$(Resultstring$)
                    if len(so_results$(Index))>Largest then
-                      let Largest=len(so_results$(Index))
-                      let LargeIndex=Index
+                      largest=len(so_results$(Index))
+                      largeIndex=Index
                    end if
                 end if
              loop
              close #ResultsFile:
-             if LargeIndex then let lw_Input_Data$(lw_ReadString)=so_results$(LargeIndex)
+             if LargeIndex then lw_Input_Data$(lw_ReadString)=so_results$(LargeIndex)
           end if
        end if
     fnend
@@ -2491,11 +2491,11 @@
     def fnSearchForm(mat lw_Input_Data$;DontShowFile,___,NoProc,Index,LargeIndex,Largest,Resultsfile)
        if len(trim$(lw_input_data$(lw_programName))) then
           if len(trim$(lw_Input_data$(lw_readString))) then
-             let Lineref$=fnExtractLineref$(lw_Input_data$(lw_readString))               ! Attempt to find read string
+             lineref$=fnExtractLineref$(lw_Input_data$(lw_readString))               ! Attempt to find read string
              if LineRef$="" then
                 let NoProc=1
              else if lwrc$(LineRef$(1:5))="""form" then
-                let lw_Input_Data$(lw_FormString)=trim$(LineRef$,"""")
+                lw_Input_Data$(lw_FormString)=trim$(LineRef$,"""")
                 let Noproc=1
              else if pos(LineRef$,"$") then
                 fnBuildProc("load """&trim$(lw_input_data$(lw_programName))&"""")
@@ -2532,15 +2532,15 @@
                    if file(ResultsFile)=0 then
                       let Index=udim(mat so_results$)+1
                       mat so_results$(Index)
-                      let so_results$(Index)=trim$(Resultstring$)
+                      so_results$(Index)=trim$(Resultstring$)
                       if len(so_results$(Index))>Largest then
-                         let Largest=len(so_results$(Index))
-                         let LargeIndex=Index
+                         largest=len(so_results$(Index))
+                         largeIndex=Index
                       end if
                    end if
                 loop
                 close #ResultsFile:
-                if LargeIndex then let lw_Input_Data$(lw_FormString)=so_results$(LargeIndex)
+                if LargeIndex then lw_Input_Data$(lw_FormString)=so_results$(LargeIndex)
              end if
 
           end if
@@ -2558,10 +2558,10 @@
           if len(trim$(lw_Input_data$(lw_readString))) then
              mat sd_Arrays$(0)
              let tPos=0
-             let string$=lwrc$(trim$(lw_Input_Data$(lw_readString)))
+             string$=lwrc$(trim$(lw_Input_Data$(lw_readString)))
              do while (tPos:=pos(string$,"mat"))
                 cPos=pos(String$,",",tpos+4)
-                let sPos=pos(String$," ",tpos+4)
+                sPos=pos(String$," ",tpos+4)
                 if cPos and sPos then
                    let xPos=min(cPos,sPos) ! whichever comes first
                 else
@@ -2570,11 +2570,11 @@
                 if ~xPos then let xPos=len(String$)+1 ! the rest of the string
 
                 let Var$=trim$(String$(tpos+3:xPos-1))
-                let string$=String$(xPos-1:len(string$))
+                string$=String$(xPos-1:len(string$))
                 fnProcListToFile("'dim' '"&Var$&"('")
                 let Index=udim(mat sd_arrays$)+1
                 mat sd_Arrays$(Index)
-                let sd_Arrays$(Index)=Var$
+                sd_Arrays$(Index)=Var$
              loop
           else
              fnProcListToFile("dim")
@@ -2585,16 +2585,16 @@
           
           if exists("work.[wsid]") then
              open #(Resultsfile:=fnGetFilenumber): "name=work.[wsid],recl=800",display,input
-             let sd_Dim$=""
+             sd_Dim$=""
              do until file(ResultsFile)
                 linput #ResultsFile: ResultString$ error Ignore
                 if file(ResultsFile)=0 then
-                   let sd_Dim$=sd_Dim$&lwrc$(trim$(ResultString$))
+                   sd_Dim$=sd_Dim$&lwrc$(trim$(ResultString$))
                 end if
              loop
-             let lw_Input_Data$(lw_DimString)="dim "
+             lw_Input_Data$(lw_DimString)="dim "
              for Index=1 to udim(mat sd_Arrays$)
-                let lw_Input_Data$(lw_DimString)=lw_Input_Data$(lw_DimString)&sd_Arrays$(Index)&"("&str$(fnReadArraySize(sd_dim$,sd_arrays$(Index)))&"), "
+                lw_Input_Data$(lw_DimString)=lw_Input_Data$(lw_DimString)&sd_Arrays$(Index)&"("&str$(fnReadArraySize(sd_dim$,sd_arrays$(Index)))&"), "
              next Index
              close #ResultsFile:
           end if
@@ -2605,14 +2605,14 @@
     def library Fnreadfiles(Mat Files$,Folder$*255;Extension$,Cleararray,Createfolder,Includeextensions,UseWindowsDIR,___,Dirfile,Dummy$*255,DirMask$*400,Star$)
        ! Note: The UseWindowsDIR parameter uses the windows Dir command instead of BRs in order to read long file names. It will not work under linux.
 
-       let Star$=fnNeedStar$
+       star$=fnNeedStar$
        if Cleararray then mat Files$(0)
  !
        if Createfolder then
           if ~Exists(Folder$) then execute Star$&"mkdir "&Folder$
        end if
  !
-       if ~Len(Trim$(Extension$)) then let Extension$="*"
+       if ~Len(Trim$(Extension$)) then extension$="*"
 
        let DirMask$=Folder$&"\*."&Lwrc$(Extension$)
  !
@@ -2631,9 +2631,9 @@
           linput #Dirfile: Dummy$ eof IGNORE
           if File(Dirfile)=0 and Dummy$(3:3)="/" and Dummy$(6:6)="/" and ~Pos(Dummy$,"<DIR>") then
              let FileName$=Trim$(Dummy$(40:999))
-             let Ext$=""
+             ext$=""
              if Pos(FileName$,".")>0 then
-                let Ext$=FileName$(pos(FileName$,".",-1)+1:999)
+                ext$=FileName$(pos(FileName$,".",-1)+1:999)
                 if ~IncludeExtensions then
                    let FileName$(pos(FileName$,".",-1):999)=""
                 end if
@@ -2683,10 +2683,10 @@
     def fnExtractName$*255(SearchString$,&OpenString$;___,tpos,ReturnName$*255,spos,SearchStringLen)
        let tpos=pos(lwrc$(OpenString$),SearchString$)
        if tpos then
-          let SearchStringLen=len(SearchString$)
+          searchStringLen=len(SearchString$)
           let ReturnName$=OpenString$(tpos+SearchStringLen:pos(lwrc$(OpenString$),",",tpos+SearchStringLen)-1)
 
-          let spos=pos(ReturnName$,"/")
+          spos=pos(ReturnName$,"/")
           if spos then   ! If linux style, reverse to be Windows style
              let ReturnName$=ReturnName$(spos+1:len(ReturnName$))&"\"&ReturnName$(1:spos-1)
           end if
@@ -2758,7 +2758,7 @@
 
     def library fnRunProcFile(;NoWait)=fnRunProc(Nowait)
     def fnRunProc(;NoWait,___,C$,Star$)
-       let Star$=fnNeedStar$
+       star$=fnNeedStar$
        if ProcFileNumber then
           pr #ProcFileNumber: "system"
           close #ProcFileNumber:
@@ -2777,8 +2777,8 @@
     fnend
     def fnProcListtoFile(String$*255;DontAddQuotes)
        if ~DontAddQuotes then
-          if String$(1:1)<>"'" then let String$(1:0)="'"
-          if String$(len(String$):len(String$))<>"'" then let String$=String$&"'"
+          if String$(1:1)<>"'" then string$(1:0)="'"
+          if String$(len(String$):len(String$))<>"'" then string$=String$&"'"
        end if
        fnBuildProc("list "&String$&" >>filelay\scratchpaper.brs")
        fnBuildProc("list "&String$&" >>work."&wsid$) ! use this WSID, not the procs WSID
@@ -2816,7 +2816,7 @@
  !
     dim Configstat$*30000
     def Fnreadconfigandexe(;___,Cr$,Filenumber,Qstart,Qend,Star$)
-       let Star$=fnNeedStar$
+       star$=fnNeedStar$
        cr$=Hex$("0D0A")
        execute Star$&"status files >TEMPFILE.[session]"
        if Exists("TEMPFILE.[session]") then
@@ -2835,10 +2835,10 @@
  !
              let Qstart=Pos(Uprc$(Configstat$),"EXECUTABLE FILE")
              if Qstart>0 then
-                let Executablefile$=Configstat$(Qstart+17:Qstart+300)
+                executablefile$=Configstat$(Qstart+17:Qstart+300)
                 let Qend=Pos(Executablefile$,Cr$)
-                let Executablefile$=Executablefile$(1:Qend-1)
-                if Executablefile$(1:1)=":" then let Executablefile$=Os_Filename$(Executablefile$)
+                executablefile$=Executablefile$(1:Qend-1)
+                if Executablefile$(1:1)=":" then executablefile$=Os_Filename$(Executablefile$)
              end if
           end if
        end if
@@ -2934,7 +2934,7 @@
           let tPos=pos(ReadString$,":",-1)
           do while len(var$:=fnExtractChunk$(ReadString$,TPos))
              if lwrc$(var$(1:3))="mat" then
-                let Size=fnReadArraySize(DimString$,var$(5:len(var$)))
+                size=fnReadArraySize(DimString$,var$(5:len(var$)))
                 if Size then
                    let Index=udim(mat gl_TempSubs$)
                    mat gl_TempSubs$(Index+Size) : mat gl_TempDescr$(Index+Size)
@@ -2997,8 +2997,8 @@
           loop until FailedForm
           
           let Index=0
-          let LastNum=-1
-          let StartPos=0
+          lastNum=-1
+          startPos=0
           
           ! Read Map, find length of consequetive vars
           do while (Index:=Index+1)<=udim(mat gl_Mapping)+1
@@ -3043,8 +3043,8 @@
                       let gl_Descr$(Jndex)="Unknown / Unused"
                    end if
                 end if
-                if Index<=udim(mat gl_Mapping) then let LastNum=gl_Mapping(Index)
-                let StartPos=Index
+                if Index<=udim(mat gl_Mapping) then lastNum=gl_Mapping(Index)
+                startPos=Index
              end if
           loop
        else
@@ -3063,7 +3063,7 @@
                 ! to calculate mat gl_kDescription$
 
                 let Index=kPos-1
-                let LastNum=-1
+                lastNum=-1
 
                 ! Read Map, find consequetive nums
                 do while (Index:=Index+1)<klen+kpos
@@ -3078,7 +3078,7 @@
                             let FailedKey=1
                          end if
 
-                         let LastNum=gl_Mapping(Index)
+                         lastNum=gl_Mapping(Index)
                       end if
                    end if
                 loop
@@ -3172,18 +3172,18 @@
           loop
           ! Find Chunk
           if FormString$(sPos:sPos+1)="*(" then ! if next char is "("
-             let ePos=sPos                      ! find matching ")"
+             ePos=sPos                      ! find matching ")"
              do                           ! go through string counting
-                let ePos+=1               ! parens until we're at match
+                ePos+=1               ! parens until we're at match
                 if FormString$(ePos:ePos)="(" then let pLevel+=1
                 if FormString$(ePos:ePos)=")" then let pLevel-=1
              loop while pLevel
              let fs_Chunk$=FormString$(sPos+2:ePos-1)&","
           else ! if its not a "*(" then
-             let ePos=pos(FormString$,",",sPos) ! look for the next ","
-             if ~ePos then let ePos=len(FormString$)+1
+             ePos=pos(FormString$,",",sPos) ! look for the next ","
+             if ~ePos then ePos=len(FormString$)+1
              let fs_Chunk$=FormString$(sPos+1:ePos-1)&","
-             let ePos-=1
+             ePos-=1
           end if
 
           ! Find Number
@@ -3211,9 +3211,9 @@
           let tPos+=1
        loop
        cPos=pos(readString$,",",tpos+1)
-       let sPos=pos(readString$," ",tpos+1)
+       sPos=pos(readString$," ",tpos+1)
        if lwrc$(ReadString$(tPos+1:sPos-1))="mat" then
-          let sPos=pos(readString$," ",sPos+1)
+          sPos=pos(readString$," ",sPos+1)
        end if
        if cPos and sPos then
           let xPos=min(cPos,sPos)
@@ -3255,7 +3255,7 @@
        if DimString$(tpos:tpos)="(" then
           let pPos=pos(Dimstring$,")",tpos+1)
           if pPos then
-             let Size$=DimString$(tPos+1:pPos-1)
+             size$=DimString$(tPos+1:pPos-1)
              fnReadArraySize=0
              fnReadArraySize=val(Size$) conv Ignore
           end if
@@ -3270,12 +3270,12 @@
  GETFILENUMBER: ! This Function Finds The Next Empty File Channel
     def library Fngetfilenumber(;Start,Count,___,I)
        if Start=-1 then
-          let Start=fnSettings("startfilenumber")
+          start=fnSettings("startfilenumber")
        end if
-       if (Start) then let Start-=1
+       if (Start) then start-=1
        count=max(Count,1)
        do
-          if Start>=199 and Start<300 then let Start=300 : let I=0 ! Skip over the invalid 200s
+          if Start>=199 and Start<300 then start=300 : let I=0 ! Skip over the invalid 200s
           if File(Start:=Start+1)=-1 then
              let I=I+1
           else
@@ -3305,8 +3305,8 @@
           if IgnoreErrors then on error goto ReturnFailed
 
           let PromptOnCreate=Fnsettings("promptonfilecreate")
-          let EnforceDupkeys=Fnsettings("enforcedupkeys")
-          let StartFileNumber=Fnsettings("startfilenumber")
+          enforceDupkeys=Fnsettings("enforcedupkeys")
+          startFileNumber=Fnsettings("startfilenumber")
 
           checkIndex=Fnsettings("checkindex")
           if lwrc$(trim$(FileName$))=lwrc$(trim$(fnSettings$("loglayout"))) then checkIndex=0
@@ -3328,14 +3328,14 @@
              end if
              if Not Exists(Path$&Filename$) then
                 if SupressPrompt then
-                   let OkToCreate=SupressPrompt-1
+                   okToCreate=SupressPrompt-1
                 else if Promptoncreate then
                    let Message$=Path$&Filename$
                    if Len(Trim$(Message$))>41 then let Message$=Message$(1:38)&"..."
                    let Message$='Should I create "'&Message$&'"?'
-                   let Oktocreate=Fnmessagebox(Message$,"File Not Found")
+                   oktocreate=Fnmessagebox(Message$,"File Not Found")
                 else
-                   let Oktocreate=1
+                   oktocreate=1
                 end if
                 if Oktocreate then
                    fncreate(Filename$,Recl$,Mat Keyname$,Mat Kpos$,Mat Klen$,Ver,Filelay$,Path$)
@@ -3382,7 +3382,7 @@
                 mat F$(Stringsize)
                 mat F(Numbersize)
                 fnopenfile=Filenumber
-                let LogLayout$=fnSettings$("loglayout")
+                logLayout$=fnSettings$("loglayout")
                 if Createlogfile and lwrc$(FileLay$)<>lwrc$(LogLayout$) then let Fnlog("Open "&Filename$&" file.",CallingProgram$)
              else
                 if Createlogfile then let Fnlog("Error: Failed to open "&Filename$&" file - File Not Found",CallingProgram$,1)
@@ -3465,14 +3465,14 @@
  !
  CALCULATEBACKUPFILENAME: !  Returns The Backup File Name Of The Given File Name
        def Fncalculatebackupfilename$*255(Newfilename$*255;___,Lastslash)
-          let Lastslash=Pos(Newfilename$,"\",-1)
+          lastslash=Pos(Newfilename$,"\",-1)
           let Newfilename$(Lastslash+1:Lastslash)="o"
           fncalculatebackupfilename$=Newfilename$
        fnend
  !
  CALCULATENEWFILENAME: ! Returns The New File Name Of The Given Backup File Name
        def Fncalculatenewfilename$*255(Backupfilename$*255;___,Lastslash)
-          let Lastslash=Pos(Backupfilename$,"\",-1)
+          lastslash=Pos(Backupfilename$,"\",-1)
           if Backupfilename$(Lastslash+1:Lastslash+1)="o" then
              backupfilename$(Lastslash+1:Lastslash+1)=""
           end if
@@ -3582,30 +3582,30 @@
           mat Op_Positions(0)
           mat Op_Lens(0)
           
-          let StartCurrent=IP_Positions(1)
-          let LengthCurrent=IP_Lens(1)
+          startCurrent=IP_Positions(1)
+          lengthCurrent=IP_Lens(1)
 
           for Index=2 to udim(mat IP_Positions)
              if StartCurrent+LengthCurrent-1<>IP_Positions(Index)-1 then ! If end of previous position is any different then right before current position then
                 ! We have a gap, save the entries and reset for the next time before processing this new spot.
-                let OutDex=udim(mat Op_Positions)+1
+                outDex=udim(mat Op_Positions)+1
                 mat Op_Positions(OutDex) : mat Op_Lens(OutDex)
-                let Op_Positions(OutDex)=StartCurrent
-                let Op_Lens(OutDex)=LengthCurrent
+                op_Positions(OutDex)=StartCurrent
+                op_Lens(OutDex)=LengthCurrent
                 
-                let StartCurrent=IP_Positions(Index) ! Record next start position.
+                startCurrent=IP_Positions(Index) ! Record next start position.
 
-                let LengthCurrent=0
+                lengthCurrent=0
              end if
              
-             let LengthCurrent+=IP_Lens(Index) ! Add in the start length
+             lengthCurrent+=IP_Lens(Index) ! Add in the start length
           next Index
 
           if LengthCurrent then
-             let OutDex=udim(mat Op_Positions)+1
+             outDex=udim(mat Op_Positions)+1
              mat Op_Positions(OutDex) : mat Op_Lens(OutDex)
-             let Op_Positions(OutDex)=StartCurrent
-             let Op_Lens(OutDex)=LengthCurrent
+             op_Positions(OutDex)=StartCurrent
+             op_Lens(OutDex)=LengthCurrent
           end if
           
           let Kpos$=Klen$=""
@@ -3626,7 +3626,7 @@
              let Index=udim(mat Matrix$)+1
              mat Matrix$(Index)
              let Matrix$(Index)=String$(1:Position-1)
-             let String$(1:Position)=""
+             string$(1:Position)=""
           loop
           let Index=udim(mat Matrix$)+1
           mat Matrix$(Index)
@@ -3638,7 +3638,7 @@
           library : fnReIndex,fnReadLayoutHeader
     !
           a=fnReadLayoutHeader(LayoutName$,FileName$)
-          let OrigFile$=FileName$
+          origFile$=FileName$
           let TempFile$="RemoveDeletes_"&Session$
     !
           ! If Q_Tempfile$ Exists,
@@ -3671,15 +3671,15 @@
  UPDATE: ! Updates File To Latest Version
        def Fnupdate(Filelay$*255,Oldver;&Path$,__,Index,Oldfile,Newfile,Opre$,Npre$,Nndex,Oldfilename$*255,Lastupdatedkey,Errindex,Lastpercent,Reccount,Useraborted,Interval,Numrecs,Oldfilelay$*255,Star$,LayoutPath$*128,FileLayoutExtension$)
 
-          let LongMessage$="The file layout has been updated. Before proceeding, we must update the data file to the newest version. "
-          let LongMessage$(99999:0)="Choose Yes to continue, or No to Abort.\n\nIf you recently got an update, choose Yes.\n\n"
-          let LongMessage$(99999:0)="If you don't know why you're seeing this message, choose No to Abort and then contact your vendor for support."
-          let LongMessage$=srep$(LongMessage$,"\n",hex$("0d0a"))
+          longMessage$="The file layout has been updated. Before proceeding, we must update the data file to the newest version. "
+          longMessage$(99999:0)="Choose Yes to continue, or No to Abort.\n\nIf you recently got an update, choose Yes.\n\n"
+          longMessage$(99999:0)="If you don't know why you're seeing this message, choose No to Abort and then contact your vendor for support."
+          longMessage$=srep$(LongMessage$,"\n",hex$("0d0a"))
 
           if ~fnSettings("promptonupdate") or (2==msgbox(LongMessage$,"Update","yn","QST")) then ! If don't Prompt, or if they chose "Yes"
-             let Star$=fnNeedStar$
+             star$=fnNeedStar$
              mat UpdateMessages$(0) : let PrintedYet=0
-             let Layoutpath$=fnSettings$("layoutpath")
+             layoutpath$=fnSettings$("layoutpath")
              let FileLayoutExtension$=fnSettings$("layoutextension")
 
              on error goto FILEINUSE ! Call Rollback Processing For No Changes Made
@@ -3689,7 +3689,7 @@
  !
              library : Fnopenfile, Fnclosefile, Fnreadsubs
  !
-             let Oldfilelay$="version\"&Filelay$&"."&Str$(Oldver)
+             oldfilelay$="version\"&Filelay$&"."&Str$(Oldver)
  !
              if Exists(Layoutpath$&Oldfilelay$&FileLayoutExtension$) then
                 fnfindindexes(Oldfilelay$,Oldfilename$,Mat Okeys$)
@@ -3710,7 +3710,7 @@
 
                 let G_Updating=1
                 fnprint(mat UpdateMessages$,"Opening old version of file.")
-                let Oldfile=Fnopen(Oldfilelay$,Mat Of$,Mat Of, Mat Fm$,0,-1,0,Path$,Dummy$,Dummy,0,0,1)
+                oldfile=Fnopen(Oldfilelay$,Mat Of$,Mat Of, Mat Fm$,0,-1,0,Path$,Dummy$,Dummy,0,0,1)
                 fnreadsubs(Oldfilelay$,Mat Ossubs$,Mat Onsubs$,Opre$)
                 fnprint(mat UpdateMessages$,"Creating new version of file.")
                 let Newfile=Fnopen(Filelay$,Mat Nf$,Mat Nf,Mat Fm$,0,0,0,Path$,Dummy$,Dummy,2,0,1) ! Will Automatically Create
@@ -3767,7 +3767,7 @@
        let UpdateErrorLine=Line
        if Oldfile then let Fnclosefile(Oldfile,Oldfilelay$)
        if Newfile then let Fnclosefile(Newfile,Filelay$)
-       let Lastupdatedkey=Udim(Okeys$) ! Set Value To Roll Back All Indexes
+       lastupdatedkey=Udim(Okeys$) ! Set Value To Roll Back All Indexes
  !
  FILEINUSEKEY: ! Error In Second Part. Partially Roll Back
        on error system
@@ -3776,7 +3776,7 @@
        pr Mat UpdateMessages$
        pr "Error encountered or User abort: Rolling back to previous version. Type GO[ENTER] to Quit."
        let PrintedYet=1
-       if ~Lastupdatedkey then let Lastupdatedkey=Index-1
+       if ~Lastupdatedkey then lastupdatedkey=Index-1
        for Errindex=1 to Lastupdatedkey ! Roll Back All Successful Indexes
           if Exists(Path$&Okeys$(Errindex)) then !:
              execute Star$&"copy "&Path$&Fncalculatenewfilename$(Okeys$(Errindex))&".bak "&Path$&Fncalculatenewfilename$(Okeys$(Errindex)) ! Copy Backup File To Origional File
@@ -3846,8 +3846,8 @@
        def library FnReadLayoutHeader(Layoutname$*255;&Filename$,Mat Keys$,Mat KeyDescription$,LeaveOpen,&Prefix$,___,Count,Keyname$*80,Description$*80,Vers$*80,BKeys,BKeyDescription,Line$*512,LayoutPath$*128,FileLayoutExtension$)
           library : fnGetFileNumber
 
-          let LayoutName$=trim$(LayoutName$)
-          let Layoutpath$=fnSettings$("layoutpath")
+          layoutName$=trim$(LayoutName$)
+          layoutpath$=fnSettings$("layoutpath")
           let FileLayoutExtension$=fnSettings$("layoutextension")
 
           if trim$(layoutname$)<>"" and Exists(Layoutpath$&Layoutname$&FileLayoutExtension$) then
@@ -3859,7 +3859,7 @@
 
              if ~fnOpenLayout(LayoutPath$&LayoutName$&FileLayoutExtension$) then goto ErrorReadFileLayout
 
-             let Line$=fnLayoutLinput$
+             line$=fnLayoutLinput$
              if uprc$(Line$)<>"#EOF#" then
                 fnReadHeading(Line$,Filename$,Prefix$,Vers$)
              else
@@ -3867,7 +3867,7 @@
                 goto ErrorReadFileLayout
              end if
 
-             let Line$=fnLayoutLinput$
+             line$=fnLayoutLinput$
              if uprc$(Line$)<>"#EOF#" then
                 fnReadKeys(Line$,KeyName$,Description$)
              else
@@ -3886,7 +3886,7 @@
                    let KeyDescription$(Count)=trim$(Description$)
                 end if
 
-                let Line$=fnLayoutLinput$
+                line$=fnLayoutLinput$
                 if uprc$(Line$)<>"#EOF#" then
                    fnReadKeys(Line$,KeyName$,Description$)
                 else
@@ -3895,7 +3895,7 @@
                 end if
              loop
              if Uprc$(KeyName$(1:4))="RECL" Then
-                let Line$=fnLayoutLinput$
+                line$=fnLayoutLinput$
                 if uprc$(Line$)="#EOF#" then
                    pr "Incomplete Layout."
                    goto ErrorReadFileLayout
@@ -3920,9 +3920,9 @@
        def library Fnreadlayoutarrays(Layoutname$*255,&Prefix$;Mat Ssubs$,Mat Nsubs$,Mat Sspec$,Mat Nspec$,Mat Sdescription$,Mat Ndescription$,Mat Spos,Mat Npos,AlreadyOpenFileNumber,___,Index,Dummy$*512,Dummy2$*255,Subname$*255,Layout,Description$*255,Spec$*255,Bssubs,Bnsubs,Bsdescription,Bndescription,Bsspec,Bnspec,Bspos,Bnpos,Position,Count,Line$*512)
           library : fnGetFileNumber
  !
-          let LayoutName$=Trim$(LayoutName$)
+          layoutName$=Trim$(LayoutName$)
           let Position=1
-          let Layoutpath$=fnSettings$("layoutpath") ! Read File Layout Path
+          layoutpath$=fnSettings$("layoutpath") ! Read File Layout Path
           let FileLayoutExtension$=fnSettings$("layoutextension")
  !
           if trim$(layoutname$)<>"" and Exists(Layoutpath$&Layoutname$&FileLayoutExtension$) then
@@ -3949,7 +3949,7 @@
                 ! Otherwise, (below) we get the prefix and skip to the details
              else
                 if ~fnOpenLayout(LayoutPath$&LayoutName$&FileLayoutExtension$) then goto ErrorReadFileLayout
-                let Line$=fnLayoutLinput$
+                line$=fnLayoutLinput$
                 if uprc$(Line$)<>"#EOF#" then
                    fnReadHeading(Line$,Dummy$,Prefix$,Dummy2$)
                    let Prefix$=Trim$(Prefix$)
@@ -3958,14 +3958,14 @@
                    goto ErrorReadFileLayout
                 end if
                 do
-                   let Line$=fnLayoutLinput$
+                   line$=fnLayoutLinput$
                    if uprc$(Line$)="#EOF#" then
                       pr "Incomplete Layout."
                       goto ErrorReadFileLayout
                    end if
                 loop While Uprc$(Line$(1:4))<>"RECL" and Line$(1:4)<>"===="
                 if Uprc$(Line$(1:4))="RECL" Then
-                   let Line$=fnLayoutLinput$
+                   line$=fnLayoutLinput$
                    if uprc$(Line$)="#EOF#" then
                       pr "Incomplete Layout."
                       goto ErrorReadFileLayout
@@ -3973,16 +3973,16 @@
                 end if
              end if
  READNEXTLAYOUTLINE: ! Read The Next Line For Processing
-             let Line$=fnLayoutLinput$
+             line$=fnLayoutLinput$
              if uprc$(Line$)="#EOF#" then goto DONEREADLAYOUTARRAYS
-             let SubName$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
-             let Line$=Line$(pos(Line$,",")+1:len(Line$))
+             subName$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
+             line$=Line$(pos(Line$,",")+1:len(Line$))
              let Description$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
-             let Line$=Line$(pos(Line$,",")+1:len(Line$))
+             line$=Line$(pos(Line$,",")+1:len(Line$))
              if pos(Line$,",") then
-                let Spec$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
+                spec$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
              else
-                let Spec$=Trim$(Srep$(Line$,Chr$(9)," "))
+                spec$=Trim$(Srep$(Line$,Chr$(9)," "))
              end if
 
              if Trim$(Uprc$(Spec$))(1:2)<>"X " then
@@ -3991,19 +3991,19 @@
                       count+=1
                       if Bssubs then
                          mat Ssubs$(Udim(Ssubs$)+1)
-                         let Ssubs$(Udim(Ssubs$))=Trim$(Srep$(Subname$,"$",""))
+                         ssubs$(Udim(Ssubs$))=Trim$(Srep$(Subname$,"$",""))
                       end if
                       if Bsspec then
                          mat Sspec$(Udim(Sspec$)+1)
-                         let Sspec$(Udim(Sspec$))=Trim$(Spec$)
+                         sspec$(Udim(Sspec$))=Trim$(Spec$)
                       end if
                       if Bsdescription then
                          mat Sdescription$(Udim(Sdescription$)+1)
-                         let Sdescription$(Udim(Sdescription$))=Trim$(Description$)
+                         sdescription$(Udim(Sdescription$))=Trim$(Description$)
                       end if
                       if Bspos then
                          mat Spos(Udim(Spos)+1)
-                         let Spos(Udim(Spos))=Position
+                         spos(Udim(Spos))=Position
                       end if
                    else
                       if Bnsubs then
@@ -4120,9 +4120,9 @@
              if kln(FileNumber)=-1 then let Remaining+=1
              do While Filenumber<=999
                 if ~CloseFileSimple and fn418 then
-                   let SleepRetryCount=0
+                   sleepRetryCount=0
                    cF_DummyFileName$=uprc$(os_filename$(file$(filenumber))) error SleepRetryCount
-                   let SleepRetryCount=0
+                   sleepRetryCount=0
                    cF_DummyFileName2$=uprc$(os_filename$(Path$&filename$)) error SleepRetryCount
                    if CF_DummyFileName$=CF_DummyFileName2$ then
                       close #(Filenumber): ! Close Only If Its This File
@@ -4140,7 +4140,7 @@
        fnend
 
        def fnInput(FileNumber;___,DisplayFile,Line$*255,Star$)
-          let Star$=fnNeedStar$
+          star$=fnNeedStar$
           library : fnGetFileNumber
           if exists("fileinfo."&session$) then execute Star$&"free fileinfo."&session$
           execute Star$&"status files >fileinfo."&session$
@@ -4163,8 +4163,8 @@
  ! #Autonumber# 25500,2
  MAKESUBPROC: ! Read File Layout, Returning All Subscripts As A Procfile
        def library Fnmakesubproc(Filename$*255;Mat Subs$,___,Index,Dummy$*512,Dummy2$*255,Subname$*255,Layout,Subs,Prefix$*255,LayoutPath$*255,Stringsize,Numbersize,Line$*512,Star$)
-          let Star$=fnNeedStar$
-          let Layoutpath$=fnSettings$("layoutpath")
+          star$=fnNeedStar$
+          layoutpath$=fnSettings$("layoutpath")
           let FileLayoutExtension$=fnSettings$("layoutextension")
 
           if ~fnopenlayout(layoutpath$&filename$&FileLayoutExtension$) then goto ERRORREADFILELAYOUT
@@ -4174,7 +4174,7 @@
              open #(Subs:=Fngetfilenumber): "Name=subs.$$$, replace", display, output
           end if
 
-          let Line$=fnLayoutLinput$
+          line$=fnLayoutLinput$
           if uprc$(Line$)<>"#EOF#" then
              fnReadHeading(Line$,Dummy$,Prefix$,Dummy2$)
              let Prefix$=Trim$(Prefix$)
@@ -4184,14 +4184,14 @@
           end if
 
           do
-             let Line$=fnLayoutLinput$
+             line$=fnLayoutLinput$
              if uprc$(Line$)="#EOF#" then
                 pr "Incomplete Layout."
                 goto ErrorReadFileLayout
              end if
           loop While Uprc$(Line$(1:4))<>"RECL" and Line$(1:4)<>"===="
           if Uprc$(Line$(1:4))="RECL" Then
-             let Line$=fnLayoutLinput$
+             line$=fnLayoutLinput$
              if uprc$(Line$)="#EOF#" then
                 pr "Incomplete Layout."
                 goto ErrorReadFileLayout
@@ -4199,18 +4199,18 @@
           end if
  !
  READNEXTSUBPROCLINE: ! Read The Next Line For Processing
-          let Line$=fnLayoutLinput$
+          line$=fnLayoutLinput$
           if uprc$(Line$)="#EOF#" then goto DONEMAKESUBPROC
           if pos(Line$,",") then
-             let SubName$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
+             subName$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
           else
-             let SubName$=Trim$(Srep$(Line$,Chr$(9)," "))
+             subName$=Trim$(Srep$(Line$,Chr$(9)," "))
           end if
 
           if Trim$(Uprc$(Dummy2$))(1:2)<>"X " then
              if Trim$(Subname$)<>"" then
                 if Pos(Subname$,"$") then
-                   let Stringsize+=1
+                   stringsize+=1
                    if Subs then
                       pr #Subs: "let "&Trim$(Prefix$)&Trim$(Srep$(Subname$,"$",""))&"="&Str$(Stringsize)
                    else
@@ -4242,7 +4242,7 @@
           if Index=0 or AddToSubsCount>31 or (~fn418 and len(Subs$(Index))>127) then
              gosub AddNewOne
           else
-             let Subs$(Index)=Subs$(Index)&":"&String$ SoFlow ErrorAddNewOne
+             subs$(Index)=Subs$(Index)&":"&String$ SoFlow ErrorAddNewOne
           end if
        fnend
 
@@ -4251,7 +4251,7 @@
        addToSubsCount=1
        let Index+=1
        mat Subs$(Index)
-       let Subs$(Index)=Star$&String$
+       subs$(Index)=Star$&String$
     return
 
     dim Dummy2$(1)*255
@@ -4281,7 +4281,7 @@
     fnend
     
     def fnOpenLayout(LayoutName$*255;___,Layout)
-       let LayoutName$=lwrc$(trim$(LayoutName$))
+       layoutName$=lwrc$(trim$(LayoutName$))
        currentLayout=srch(mat LayoutNames$,LayoutName$)
        if CurrentLayout>0 then
           ! Found, read it from memory
@@ -4292,10 +4292,10 @@
           mat LayoutNames$(CurrentLayout)
           mat LayoutStart(CurrentLayout)
           
-          let LayoutPosition=udim(mat LayoutData$)+1
+          layoutPosition=udim(mat LayoutData$)+1
 
-          let LayoutStart(CurrentLayout)=LayoutPosition
-          let LayoutNames$(CurrentLayout)=LayoutName$
+          layoutStart(CurrentLayout)=LayoutPosition
+          layoutNames$(CurrentLayout)=LayoutName$
 
           ! Read it from the disk and place it in Memory
           open #(Layout:=Fngetfilenumber): "Name="&LayoutName$&",recl=511,shr", display, input error Ignore
@@ -4305,25 +4305,25 @@
              if file(Layout)=0 then
                 if len(trim$(LayoutLine$)) and trim$(layoutline$)(1:1)<>"!" then
                    mat LayoutData$(LayoutPosition)
-                   let LayoutData$(LayoutPosition)=LayoutLine$
-                   let LayoutPosition+=1
+                   layoutData$(LayoutPosition)=LayoutLine$
+                   layoutPosition+=1
                    fnOpenLayout=1
                 end if
              end if
           loop
           
           mat LayoutData$(LayoutPosition)
-          let LayoutData$(LayoutPosition)="#EOF#"
+          layoutData$(LayoutPosition)="#EOF#"
           close #Layout:
        end if
-       let LayoutPosition=LayoutStart(CurrentLayout)
+       layoutPosition=LayoutStart(CurrentLayout)
     fnend
     
     def fnLayoutLinput$*512
        if CurrentLayout and LayoutPosition then
           if LayoutPosition<=udim(mat LayoutData$) then
              fnLayoutLinput$=LayoutData$(LayoutPosition)
-             let LayoutPosition+=1
+             layoutPosition+=1
           end if
        end if
     fnend
@@ -4337,13 +4337,13 @@
           dim StringForm$*4000, NumberForm$*4000
           dim Keyname$*255,Description$*80,Tempform$*80,Subname$*80,Ver$*80
 
-          let StringForm$=NumberForm$=""
+          stringForm$=NumberForm$=""
           let Keyname$=Description$=Tempform$=Subname$=Ver$=""
           mat Keyname$(0) : mat Kpos$(0) : mat Klen$(0) : mat Rfl_Sdescr$(0) : mat Rfl_Ndescr$(0) : mat Rfl_Descr$(0) : mat Rfl_Swidth(0) : mat Rfl_Nwidth(0) : mat Rfl_Width(0)
-          let Stringsize=0 : let Numbersize=0 : let Form$=""
+          stringsize=0 : let Numbersize=0 : let Form$=""
 
-          let Star$=fnNeedStar$
-          let Layoutpath$=fnSettings$("layoutpath")
+          star$=fnNeedStar$
+          layoutpath$=fnSettings$("layoutpath")
           let FileLayoutExtension$=fnSettings$("layoutextension")
 
 
@@ -4355,7 +4355,7 @@
              open #(Subs:=Fngetfilenumber): "Name=subs.$$$, replace", display, output
           end if
 
-          let Line$=fnLayoutLinput$
+          line$=fnLayoutLinput$
           if uprc$(Line$)<>"#EOF#" then
              fnReadHeading(Line$,Filename$,Prefix$,Ver$)
              let Ver=Val(Ver$) error ERRORREADFILELAYOUT
@@ -4365,7 +4365,7 @@
              goto ErrorReadFileLayout
           end if
 
-          let Line$=fnLayoutLinput$
+          line$=fnLayoutLinput$
           if uprc$(Line$)<>"#EOF#" then
              fnReadKeys(Line$,KeyName$,Description$)
           else
@@ -4381,7 +4381,7 @@
              let Kpos$(Udim(Kpos$))=Trim$(Description$) !:
              let Klen$(Udim(Klen$))=Trim$(Description$)
 
-             let Line$=fnLayoutLinput$
+             line$=fnLayoutLinput$
              if uprc$(Line$)<>"#EOF#" then
                 fnReadKeys(Line$,KeyName$,Description$)
              else
@@ -4394,7 +4394,7 @@
              calcRecl=1
           else
              let Recl$=Trim$(Keyname$)
-             let Line$=fnLayoutLinput$
+             line$=fnLayoutLinput$
              if uprc$(Line$)="#EOF#" then
                 pr "Incomplete Layout."
                 goto ErrorReadFileLayout
@@ -4403,13 +4403,13 @@
  !
           let Position=1
  READNEXTLINE: ! Read The Next Line For Processing
-          let Line$=fnLayoutLinput$
+          line$=fnLayoutLinput$
           if uprc$(Line$)="#EOF#" then goto DoneReadLayout
 
-          let SubName$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
-          let Line$=Line$(pos(Line$,",")+1:len(Line$))
+          subName$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
+          line$=Line$(pos(Line$,",")+1:len(Line$))
           let Description$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
-          let Line$=Line$(pos(Line$,",")+1:len(Line$))
+          line$=Line$(pos(Line$,",")+1:len(Line$))
           if pos(Line$,",") then
              let TempForm$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
           else
@@ -4424,15 +4424,15 @@
                 mat Rfl_Width(Udim(Mat Rfl_Width)+1)
                 let Rfl_Width(Udim(Mat Rfl_Width))=Fndisplaylengthof(Trim$(Tempform$))
                 if Pos(Subname$,"$") then
-                   let Stringsize+=1
+                   stringsize+=1
                    if Subs then
                       pr #Subs: "let "&Trim$(Prefix$)&Trim$(Srep$(Subname$,"$",""))&"="&Str$(Stringsize)
                    else
                       fnAddToSubsArray("let "&Trim$(Prefix$)&Trim$(Srep$(Subname$,"$",""))&"="&Str$(Stringsize),mat Subs$,Star$)
                    end if
-                   if Laststring<>Position And Position<>1 then let Stringform$=Stringform$&"POS "&Str$(Position)&","
+                   if Laststring<>Position And Position<>1 then stringform$=Stringform$&"POS "&Str$(Position)&","
                    fnaddtoform(Stringform$,Trim$(Tempform$))
-                   let Laststring=Position+Fnlengthof(Trim$(Tempform$))
+                   laststring=Position+Fnlengthof(Trim$(Tempform$))
                    mat Rfl_Sdescr$(Stringsize)
                    let Rfl_Sdescr$(Stringsize)=Trim$(Description$)
                    mat Rfl_Swidth(Stringsize)
@@ -4446,7 +4446,7 @@
                    end if
                    if Lastnumber<>Position then let Numberform$=Numberform$&"POS "&Str$(Position)&","
                    fnaddtoform(Numberform$,Trim$(Tempform$))
-                   let Lastnumber=Position+Fnlengthof(Trim$(Tempform$))
+                   lastnumber=Position+Fnlengthof(Trim$(Tempform$))
                    mat Rfl_Ndescr$(Numbersize)
                    let Rfl_Ndescr$(Numbersize)=Trim$(Description$)
                    mat Rfl_Nwidth(Numbersize)
@@ -4508,7 +4508,7 @@
  ! #Autonumber# 27000,5
  CHECKKEYS: ! Routine To Check If A Given Subname Matches Part Of A Key Spec
        def Fncheckkeys(Mat Kpos$,Mat Klen$,Subname$*50,Position,Spec$*30;___,Index)
-          let Subname$=Srep$(Subname$,"$","")
+          subname$=Srep$(Subname$,"$","")
           for Index=1 to Udim(Mat Kpos$)
              let Kpos$(Index)=Srep$(uprc$(Kpos$(Index)),uprc$(Subname$),Str$(Position))
              let Klen$(Index)=Srep$(uprc$(Klen$(Index)),uprc$(Subname$),Str$(Fnlengthof(Spec$)))
@@ -4535,10 +4535,10 @@
     def fnTakeThing$(&Line$,&Thing$)
        if Pos(Line$,",") then
           let Thing$=Trim$(Srep$(Line$(1:pos(Line$,",")-1),Chr$(9)," "))
-          let Line$=Line$(pos(Line$,",")+1:len(Line$))
+          line$=Line$(pos(Line$,",")+1:len(Line$))
        else
           let Thing$=trim$(srep$(Line$,Chr$(9)," "))
-          let Line$=""
+          line$=""
        end if
     fnend
  !
@@ -4548,7 +4548,7 @@
           fnLength=FnLengthOf(Spec$)
        fnend
        def Fnlengthof(Spec$*40;_Speclen)
-          let Spec$=Spec$&" " ! This Will Make Sure We At Least Have 1 Space
+          spec$=Spec$&" " ! This Will Make Sure We At Least Have 1 Space
           if Uprc$(Spec$(1:3))="PIC" then
              let _Speclen=Len(trim$(Spec$))-5 ! Pic(##) Returns 2
           else if Uprc$(Spec$(1:3))="FMT" then
@@ -4573,9 +4573,9 @@
           fnDisplayLength=fndisplaylengthof(Spec$)
        fnend
        def Fndisplaylengthof(Spec$;_Speclen)
-          let Spec$=uprc$(Spec$)
+          spec$=uprc$(Spec$)
           let _Speclen=Fnlengthof(Spec$)
-          let Spec$=Spec$&" "
+          spec$=Spec$&" "
           if Pos("S PDL D DLDHDTBLBHB N ZDG ",Spec$(1:2)) then ! If Numeric Spec
              if Spec$(1:2)="PD" then ! Pd Is Different
                 let _Speclen=(2*_Speclen)-1+2
@@ -4701,15 +4701,15 @@
           do While (Position:=Pos(Form$,",",Position+1))
              mat Chunk$(Udim(Mat Chunk$)+1)
              chunk$(Udim(Mat Chunk$))=Form$(Lastposition+1:Position)
-             let Lastposition:=Position
+             lastposition:=Position
           loop
        fnend
  !
  STRINGTOGETHER: ! Build String Out Of Array
        def Fnstringtogether$(Mat Chunk$,&String$) ! Pass Byref To Save Workstack
-          let String$=""
+          string$=""
           for Index=1 to Udim(Mat Chunk$)
-             let String$(4096:0)=Chunk$(Index)
+             string$(4096:0)=Chunk$(Index)
           next Index
        fnend
  !
@@ -4859,10 +4859,10 @@
  NEXTREADALLKEYS: ! Read Next Record
           read #Fl, using Fm$(Fl),release: Mat F$, Mat F eof DONEREADALLKEYS
           mat Out1$(Index:=Udim(Mat Out1$)+1) !:
-          let Out1$(Index)=F$(Sub1)
+          out1$(Index)=F$(Sub1)
           if Sub2 then !:
              mat Out2$(Index) !:
-             let Out2$(Index)=F$(Sub2)
+             out2$(Index)=F$(Sub2)
           goto NEXTREADALLKEYS
  DONEREADALLKEYS: ! We Finished Reading Here
        fnend
@@ -4877,10 +4877,10 @@
           read #Fl, using Fm$(Fl),release: Mat F$, Mat F eof IGNORE
           if (File(Fl)=10) Or (F$(Keyfld)<>Key$) then goto DONEREADMATCHINGKEYS
           mat Out1$(Index:=Udim(Mat Out1$)+1) !:
-          let Out1$(Index)=F$(Sub1)
+          out1$(Index)=F$(Sub1)
           if Sub2 then !:
              mat Out2$(Index) !:
-             let Out2$(Index)=F$(Sub2)
+             out2$(Index)=F$(Sub2)
           goto NEXTREADMATCHINGKEYS
  DONEREADMATCHINGKEYS: ! We Finished Reading Here
        fnend
@@ -4895,10 +4895,10 @@
           read #Fl, using Fm$(Fl),release: Mat F$, Mat F eof DONEREADALLNEWKEYS
           if Srch(Mat Out1$,F$(Sub1))<1 then ! If Not Found Then
              mat Out1$(Index:=Udim(Mat Out1$)+1) !:
-             let Out1$(Index)=F$(Sub1)
+             out1$(Index)=F$(Sub1)
              if Sub2 then !:
                 mat Out2$(Index) !:
-                let Out2$(Index)=F$(Sub2)
+                out2$(Index)=F$(Sub2)
           end if
           goto NEXTREADALLNEWKEYS
  DONEREADALLNEWKEYS: ! We Finished Reading Here
@@ -4917,16 +4917,16 @@
           if (File(Fl)=10) Or (~Readlarger And (F$(Keyfld)<>Key$)) Or (Readlarger And (F$(Keyfld)<Key$)) then goto DONEREADFILTERKEYS
           if (Filter$ ~= "" And F$(Filter_Sub) ~= Filter$) then goto NEXTREADFILTERKEYS
           mat Out1$(Index:=Udim(Mat Out1$)+1) !:
-          let Out1$(Index)=F$(Sub1)
+          out1$(Index)=F$(Sub1)
           if Sub2 then !:
              mat Out2$(Index) !:
-             let Out2$(Index)=F$(Sub2)
+             out2$(Index)=F$(Sub2)
           if Sub3 then !:
              mat Out3$(Index) !:
-             let Out3$(Index)=F$(Sub3)
+             out3$(Index)=F$(Sub3)
           if Sub4 then !:
              mat Out4$(Index) !:
-             let Out4$(Index)=F$(Sub4)
+             out4$(Index)=F$(Sub4)
           goto NEXTREADFILTERKEYS
  DONEREADFILTERKEYS: ! We Finished Reading Here
        fnend
@@ -4934,7 +4934,7 @@
  ! #Autonumber# 38000,10
  MAKEUNIQUEKEYS: ! ***** Builds A Unique Key For Given File Of Kylen Length
     def library Fnmakeuniquekey$*255(Fl;Random,Prepend$,___,Index,Size)
-       let Size=kln(fl)-len(Prepend$)
+       size=kln(fl)-len(Prepend$)
        library : Fnuniquekey
        dim Mukindexs(1)
        mat Mukindexs(Size)=(0)
@@ -5015,8 +5015,8 @@
     def library fnViewLogFile(;ShowQuit,ShowColumns,ShowExport,___,LogLayout$*255,FileLayoutExtension$,LayoutPath$*255,Index)
 
        if env$("guimode")="OFF" then execute "config gui on"
-       let LogLayout$=fnSettings$("loglayout")
-       let LayoutPath$=fnSettings$("layoutpath")
+       logLayout$=fnSettings$("loglayout")
+       layoutPath$=fnSettings$("layoutpath")
        let FileLayoutExtension$=fnSettings$("layoutextension")
  
        if len(trim$(loglayout$)) and exists(layoutpath$&loglayout$&FileLayoutExtension$) then
@@ -5040,12 +5040,12 @@
              mat ShowLogUI$(3+ShowQuit+ShowColumns+ShowExport)
 
              let Index=0
-             if ShowQuit then let ShowLogUI$(Index+=1)="quitbutton"
-             if ShowExport then let ShowLogUI$(Index+=1)="exportbutton"
-             if ShowColumns then let ShowLogUI$(Index+=1)="columnsbutton"
-             let ShowLogUI$(Index+=1)="search"
-             let ShowLogUI$(Index+=1)="border"
-             let ShowLogUI$(Index+=1)="caption"
+             if ShowQuit then showLogUI$(Index+=1)="quitbutton"
+             if ShowExport then showLogUI$(Index+=1)="exportbutton"
+             if ShowColumns then showLogUI$(Index+=1)="columnsbutton"
+             showLogUI$(Index+=1)="search"
+             showLogUI$(Index+=1)="border"
+             showLogUI$(Index+=1)="caption"
 
              ! Show the log file using fnShowData
              library : fnShowData
@@ -5077,27 +5077,27 @@
        else
           mat LogSSubs$(udim(mat F$)) : mat LogNSubs$(udim(mat F))
           for Index=1 to udim(mat F$)
-             let LogSSubs$(Index)="String "&str$(Index)
+             logSSubs$(Index)="String "&str$(Index)
           next Index
           for Index=1 to udim(mat F)
-             let LogNSubs$(Index)="Number "&str$(Index)
+             logNSubs$(Index)="Number "&str$(Index)
           next Index
        end if
 
-       let String$=String$&" Changed: "
+       string$=String$&" Changed: "
        for Index=1 to min(udim(mat F$),udim(mat LogChanges$))
           if trim$(F$(Index))<>trim$(LogChanges$(Index)) then
              if len(String$&" "&LogSSubs$(Index)&":"""&trim$(LogChanges$(Index))&""" to """&trim$(f$(Index))&""".")<512 then
-                let String$=String$&" "&LogSSubs$(Index)&":"""&trim$(LogChanges$(Index))&""" to """&trim$(f$(Index))&"""."
+                string$=String$&" "&LogSSubs$(Index)&":"""&trim$(LogChanges$(Index))&""" to """&trim$(f$(Index))&"""."
              else if len(String$&" skipped -")<512 then
-                let String$=String$&" skipped -"
+                string$=String$&" skipped -"
              end if
           end if
        next Index
        for Index=1 to min(udim(mat F),udim(mat LogChanges))
           if F(Index)<>LogChanges(Index) then
              if len(String$&" "&LogNSubs$(Index)&":"""&str$(LogChanges(Index))&""" to """&str$(f(Index))&""".") < 512 then
-                let String$=String$&" "&LogNSubs$(Index)&":"""&str$(LogChanges(Index))&""" to """&str$(f(Index))&"""."
+                string$=String$&" "&LogNSubs$(Index)&":"""&str$(LogChanges(Index))&""" to """&str$(f(Index))&"""."
              end if
           end if
        next Index
@@ -5112,16 +5112,16 @@
        for Index=1 to udim(mat F$)
           if len(String$)+len(f$(Index))+2>512 then
              fnLog(String$,CallingProgram$)
-             let String$=""
+             string$=""
           end if
-          let String$=String$&trim$(F$(Index)(1:500))&", "
+          string$=String$&trim$(F$(Index)(1:500))&", "
        next Index
        for Index=1 to udim(mat F)
           if len(String$)+len(str$(f(Index)))+2>512 then
              fnLog(String$,CallingProgram$)
-             let String$=""
+             string$=""
           end if
-          let String$=String$&str$(F(Index))(1:500)&", "
+          string$=String$&str$(F(Index))(1:500)&", "
        next Index
        fnLog(String$,CallingProgram$)
     fnend
@@ -5132,8 +5132,8 @@
 
  LOG: ! ***** Log An Entry
     def library Fnlog(String$*512;CallingProgram$*255,ForceTextfile,___,Filehandle,LogLibrary$*255,LogLayout$)
-       let LogLibrary$=fnSettings$("loglibrary")
-       let LogLayout$=fnSettings$("loglayout")
+       logLibrary$=fnSettings$("loglibrary")
+       logLayout$=fnSettings$("loglayout")
 
        if ~ForceTextfile and len(trim$(LogLibrary$)) then
           library LogLibrary$ : fnFileIOLog
@@ -5147,12 +5147,12 @@
           library : fnOpenFile,fnCloseFile
           let FileHandle=fnOpen(LogLayout$,mat LogData$,mat LogData,mat LogForm$,0,0,0,"",mat Dummy$,mat Dummy,0,1)
           if FileHandle then
-             let LogData$(log_Program)=CallingProgram$(len(CallingProgram$)-39:len(CallingProgram$))
-             let LogData$(log_Username)=Login_Name$
-             let LogData$(log_Session)=Session$
-             let LogData$(log_Time)=Time$("hh:mm:ss")
-             let LogData$(log_Message)=String$(1:255)
-             let LogData(log_date)=days(Date$("mm/dd/ccyy"),"mm/dd/ccyy")
+             logData$(log_Program)=CallingProgram$(len(CallingProgram$)-39:len(CallingProgram$))
+             logData$(log_Username)=Login_Name$
+             logData$(log_Session)=Session$
+             logData$(log_Time)=Time$("hh:mm:ss")
+             logData$(log_Message)=String$(1:255)
+             logData(log_date)=days(Date$("mm/dd/ccyy"),"mm/dd/ccyy")
 
              write #FileHandle, using LogForm$(FileHandle) : mat LogData$,mat LogData error ErrorUseTextFile
              fnCloseFile(FileHandle,LogLayout$,"",1)
@@ -5161,7 +5161,7 @@
           end if
        else
           UseTextFile: ! Use a text logfile.
-          let LoggingRetryCount=0
+          loggingRetryCount=0
           library : Fngetfilenumber
           open #(Filehandle:=Fngetfilenumber) : "Name=FileIO.log, use, recl=658",display,output locked RetryLogging
           if file(filehandle)<>-1 then
@@ -5179,11 +5179,11 @@
  
  RetryLogging: !
     if LoggingRetryCount<20 then
-       let LoggingRetryCount+=1
+       loggingRetryCount+=1
        sleep(.1)
        retry
     else
-       let LoggingRetryCount=0
+       loggingRetryCount=0
        continue
     end if
 
@@ -5202,7 +5202,7 @@
  GetFileDateTime: ! Performs a directory listing to get the date of a file
     def library fnGetFileDateTime$(FileName$*255)=fnGetFileDT$(FileName$)
     def fnGetFileDT$(FileName$*255;___,DirFile,Dummy$*255,Star$)
-       let Star$=fnNeedStar$
+       star$=fnNeedStar$
        library : Fngetfilenumber
        execute Star$&"dir "&FileName$&" >xxx[SESSION]"
        open #(Dirfile:=Fngetfilenumber) : "Name=xxx[SESSION]", display,input
@@ -5215,17 +5215,17 @@
           end if
        loop while file(DirFile)=0
        close #Dirfile:
-       let ErrorRetrycount=0
+       errorRetrycount=0
        execute Star$&"free xxx[SESSION] -n" error RetryCount
     fnend
  !
  ! #Autonumber# 43000,10
  READLAYOUTS: ! ***** Reads Into A Given Array The List Of File Layouts
     def library Fnreadlayouts(Mat Dirlist$;OverrideExtension$,___,Dummy$*255,Dirfile,FileLayoutExtension$,Layoutpath$*255,Star$)
-       let Star$=fnNeedStar$
+       star$=fnNeedStar$
        library : Fngetfilenumber
 
-       let Layoutpath$=fnSettings$("layoutpath")
+       layoutpath$=fnSettings$("layoutpath")
        let FileLayoutExtension$=fnSettings$("layoutextension")
        if OverrideExtension$><"" then let FileLayoutExtension$=OverrideExtension$
 
@@ -5250,9 +5250,9 @@
 
 
     def library fnDirVersionHistoryFiles(Layout$,mat DirList$;BypassExtension$,___,Dummy$*255,Dirfile,LayoutPath$*128,Star$)
-       let Layoutpath$=fnSettings$("layoutpath")
+       layoutpath$=fnSettings$("layoutpath")
 
-       let Star$=fnNeedStar$
+       star$=fnNeedStar$
 
        library : Fngetfilenumber
 
@@ -5284,9 +5284,9 @@
  !
  DOESLAYOUTEXIST: ! Return True If Layout Exists In The Layouts Folder
     def library Fndoeslayoutexist(Layout$;___,Layoutpath$*255,FileLayoutExtension$)
-       let Layoutpath$=fnSettings$("layoutpath")
+       layoutpath$=fnSettings$("layoutpath")
        let FileLayoutExtension$=fnSettings$("layoutextension")
-       let Layout$=trim$(Layout$)
+       layout$=trim$(Layout$)
        
        if trim$(layout$)<>"" then
           fndoeslayoutexist = exists(layoutpath$&layout$&FileLayoutExtension$)
@@ -5301,7 +5301,7 @@
     dim TemplateList$(1)
     dim TemplateDescription$(1)*255
     def fnReadTemplates(Mat Dirlist$,mat TemplateDesc$,mat TemplateNum;___,Dummy$*255,Dirfile,TemplatePath$*255,Index,Spot,Jndex,Star$)
-       let Star$=fnNeedStar$
+       star$=fnNeedStar$
        library : Fngetfilenumber
        let TemplatePath$=fnSettings$("templatepath")
        mat TemplateList$(0)
@@ -5327,7 +5327,7 @@
           library TemplatePath$&TemplateList$(Index) : fnTemplateList, fnRunTemplate error SkipThisTemplate
           fnTemplateList(mat TemplateDescription$) error SkipThisTemplate
 
-          let Spot=udim(mat DirList$)
+          spot=udim(mat DirList$)
           mat DirList$(udim(mat TemplateDescription$)+Spot)
           mat DirList$(Spot+1:Spot+udim(mat TemplateDescription$))=(TemplatePath$&TemplateList$(Index))
           mat TemplateDesc$(udim(mat TemplateDescription$)+Spot)
@@ -5346,7 +5346,7 @@
        for dc_Index=1 to udim(mat lvdir_listing$)
           if ~pos(lwrc$(_IgnoreLayouts$),lwrc$(trim$(lvdir_listing$(dc_index)))) then
              let dc_Jndex+=1
-             let lvDir_Listing$(dc_Jndex)=lvDir_Listing$(dc_Index)
+             lvDir_Listing$(dc_Jndex)=lvDir_Listing$(dc_Index)
           end if
        next dc_Index
        mat lvDir_Listing$(dc_Jndex)
@@ -5364,10 +5364,10 @@
           fnReadLayouts(Mat TmpDirList$,".")
           if udim(mat TmpDirList$) then
              dim LongMessage$*10000
-             let LongMessage$="I'm not seeing any layouts but I found some using your old layout extension. Would you like to "
-             let LongMessage$(99999:0)="run the Rename Layout Extension Wizard to rename all your layout files to use the new "
-             let LongMessage$(99999:0)="layout extension? (You can run the Rename Layout Extension Wizard at any time by loading "
-             let LongMessage$(99999:0)="fileio and typing ""run 50000"", though you should only do that when you actually want to change the extension.)"
+             longMessage$="I'm not seeing any layouts but I found some using your old layout extension. Would you like to "
+             longMessage$(99999:0)="run the Rename Layout Extension Wizard to rename all your layout files to use the new "
+             longMessage$(99999:0)="layout extension? (You can run the Rename Layout Extension Wizard at any time by loading "
+             longMessage$(99999:0)="fileio and typing ""run 50000"", though you should only do that when you actually want to change the extension.)"
              if (2==msgbox(LongMessage$,"New Layout Extension Detected","yN","QST")) then
                 count=fnRenameLayoutExtension
                 fnreadlayouts(Mat Lvdir_Listing$)
@@ -5397,7 +5397,7 @@
     dim LayoutRename$(1)*128
     dim VersionRename$(1)*128
     def fnRenameLayouts(FromExt$,ToExt$;___,Index,Jndex,LayoutPath$*128,Count)
-       let Layoutpath$=fnSettings$("layoutpath")
+       layoutpath$=fnSettings$("layoutpath")
        library : fnReadLayouts, fnDirVersionHistoryFiles
        fnReadLayouts(mat LayoutRename$,FromExt$)
        for Index=1 to udim(mat LayoutRename$)
@@ -5479,7 +5479,7 @@
        for Index=1 to udim(mat Keys$)
           read #DataFile, using form$(DataFile), key=keys$(Index), release : mat F$, mat F
           if file(DataFile)=0 then
-             let SortKey$(Index)=fnBuildKey$(Layout$,mat F$,mat F,KeyNum)
+             sortKey$(Index)=fnBuildKey$(Layout$,mat F$,mat F,KeyNum)
           end if
        next Index
 
@@ -5580,7 +5580,7 @@
 
                 let NewFile=fnOpen(FileList$(Index),mat NewF$,mat NewF,mat Compareform$,1,0,0,Path$,mat Dummy$,mat Dummy,1)
                 if NewFile then
-                   let OldFile=fnOpen(FileList$(Index),mat OldF$,mat OldF,mat Compareform$,1,0,0,BackupFolder$&Path$,mat Dummy$,mat Dummy,1)
+                   oldFile=fnOpen(FileList$(Index),mat OldF$,mat OldF,mat Compareform$,1,0,0,BackupFolder$&Path$,mat Dummy$,mat Dummy,1)
                    if OldFile then
 
                       if OutFile then pr #OutFile: "Comparing File: "&FileList$(Index)
@@ -5687,8 +5687,8 @@
 
     def fnPrintArrays$(FileNumber,mat F$,mat F;Color,mat Of$,mat Of,Length,___,Index)
        for Index=1 to udim(mat F$)
-          let Length+=len(f$(Index))+2
-          if Length>120 and FileNumber=255 then pr #FileNumber: : let Length=0
+          length+=len(f$(Index))+2
+          if Length>120 and FileNumber=255 then pr #FileNumber: : length=0
           if Color and trim$(Of$(Index))<>trim$(F$(Index)) then
              pr #FileNumber: "[Red]"&trim$(F$(Index))&", "&"[Black]";
           else
@@ -5696,8 +5696,8 @@
           end if
        next Index
        for Index=1 to udim(mat F)
-          let Length+=len(str$(f(Index)))+2
-          if Length>128 and FileNumber=255 then pr #FileNumber: : let Length=0
+          length+=len(str$(f(Index)))+2
+          if Length>128 and FileNumber=255 then pr #FileNumber: : length=0
           if Color and Of(Index)<>F(Index) then
              pr #FileNumber: "[Red]"&str$(F(Index))&", "&"[Black]";
           else
@@ -5749,9 +5749,9 @@
 
        open #(status:=fnGetFileNumber): "srow=5,scol=10,rows=15,cols=60, border=s, caption=Progress",display,outin
 
-       let StatHeadings$(1)="File"
-       let StatWidth(1)=58
-       let StatForm$(1)="CC 255"
+       statHeadings$(1)="File"
+       statWidth(1)=58
+       statForm$(1)="CC 255"
 
        pr #status, fields "1,1,LIST 15/60,HEADERS,/W:W" : (mat StatHeadings$,mat StatWidth, mat StatForm$)
 
@@ -5767,9 +5767,9 @@
              if exists(Path$&Filename$) then
                 fnMakeSurePathExists(Path$&fileName$,BackupFolder$)
 
-                let StatFile$(1)=Path$&filename$
+                statFile$(1)=Path$&filename$
                 pr #Status, fields "1,1,LIST 15/60,+" : mat StatFile$
-                let StatusCount+=1
+                statusCount+=1
                 curfld(1,StatusCount)
                 input #Status, fields "1,1,LIST 15/60,ROWSUB,SEL,NOWAIT" : Dummy
 
@@ -5786,9 +5786,9 @@
                    for Jndex=1 to udim(Mat AuditKeys$)
                       fnMakeSurePathExists(AuditKeys$(Jndex),BackupFolder$)
 
-                      let StatFile$(1)=AuditKeys$(Jndex)
+                      statFile$(1)=AuditKeys$(Jndex)
                       pr #Status, fields "1,1,LIST 15/60,+" : mat StatFile$
-                      let StatusCount+=1
+                      statusCount+=1
                       curfld(1,StatusCount)
                       input #Status, fields "1,1,LIST 15/60,ROWSUB,SEL,NOWAIT" : Dummy
 
@@ -5874,8 +5874,8 @@
              ! First, Detect Size and Position.
              fnReadScreenS(Rows,Cols)
              let pb_Size=int(Cols*.6666)    ! 78 Size should be .666*ScreenWidth
-             let SRow=int(Rows/2)           ! 11 SRow should be int(half of the window) - 1
-             let SCol=int((Cols-pb_Size)/2) ! 2  SCol should be int(ScreenWidth-Size/2)
+             sRow=int(Rows/2)           ! 11 SRow should be int(half of the window) - 1
+             sCol=int((Cols-pb_Size)/2) ! 2  SCol should be int(ScreenWidth-Size/2)
              let MessageRows=1 : pb_OpenedMessageRows=0
              if len(MessageRow$) then let MessageRows+=1 : let pb_OpenedMessageRows=1
 
@@ -6034,14 +6034,14 @@
           do
              mat ListRow$(numofcols)
              for n=1 to numofcols
-                let ListRow$(n)=trim$(listdata$(n+turn))
+                listRow$(n)=trim$(listdata$(n+turn))
                 ! Apply Conversion if needed
                 if lwrc$(trim$(ExForms$(n)(1:5)))="date(" or lwrc$(trim$(ExForms$(n)(1:4)))="fmt(" or lwrc$(trim$(ExForms$(n)(1:4)))="pic(" then
                    let Format$=ExForms$(n)
                    if pos(Format$,",") then
                       let Format$=Format$(1:pos(Format$,",")-1)
                    end if
-                   let ListRow$(n)=cnvrt$(Format$,val(ListRow$(n))) error Ignore
+                   listRow$(n)=cnvrt$(Format$,val(ListRow$(n))) error Ignore
                 end if
              next n
              let m=0
@@ -6086,11 +6086,11 @@
        library "fileio" : fnOpenFile, fnGetFileNumber, fnDoesLayoutExist
        if fnDoesLayoutExist("emailcfg") then
           if exists("sendemail.exe") then
-             let EmailConf=fnOpen("emailcfg",mat EmailConf$,mat EmailConf,mat Form$,1,0,0,"",d$,D,0,0,1)
+             emailConf=fnOpen("emailcfg",mat EmailConf$,mat EmailConf,mat Form$,1,0,0,"",d$,D,0,0,1)
              read #EmailConf, using form$(EmailConf),rec=1 : mat EmailConf$,mat EmailConf norec Ignore
              if file(EmailConf)=0 then
                 if Exists("EmailLog.[WSID]") then execute "*free EmailLog.[WSID]"
-                if EmailMessage$="" then let EmailMessage$=" "
+                if EmailMessage$="" then emailMessage$=" "
                 if len(BCCEmail$) then bCCEmail$(1:0)=" -bcc "
                 cCEmailString$=""
                 for Index=1 to udim(mat CCEmails$)
@@ -6100,11 +6100,11 @@
                    end if
                 next Index
 
-                let EmailAddressString$=Emailaddress$
+                emailAddressString$=Emailaddress$
 
                 if CCAsTo then
-                   if len(trim$(EmailAddressString$)) then let EmailAddressString$=EmailAddressString$&" "
-                   let EmailAddressString$=EmailAddressString$&CCEmailString$
+                   if len(trim$(EmailAddressString$)) then emailAddressString$=EmailAddressString$&" "
+                   emailAddressString$=EmailAddressString$&CCEmailString$
                    cCEmailString$=""
                 end if
 
@@ -6121,7 +6121,7 @@
                 open #(Resultfile:=Fngetfilenumber): "name=EmailLog.[WSID],recl=512",display,input
                 do Until File(Resultfile)
                    linput #Resultfile: Outputstring$ eof IGNORE
-                   if Pos(Outputstring$,"Email was sent successfully!") then let Success=1
+                   if Pos(Outputstring$,"Email was sent successfully!") then success=1
                 loop
                 close #Resultfile:
                 execute '*free EmailLog.[WSID]'
@@ -6153,7 +6153,7 @@
     fnend
 
     def FnOldreadscreensize(&Rows,&Cols;ParentWindow,___,Ffile,String$*2000,Srow,Scol,Erow,Ecol,Position,Star$)
-       let Star$=fnNeedStar$
+       star$=fnNeedStar$
        execute Star$&"Status Files >[SESSION].tmp"
        open #(Ffile:=Fngetfilenumber) : "name=[SESSION].tmp",display,input
  !
@@ -6171,16 +6171,16 @@
        execute Star$&"Free [SESSION].tmp"
  !
        if (Position:=Pos(Uprc$(String$),"SROW=")) then
-          let Srow=Val(String$(Position+5:Pos(String$,",",Position)-1)) conv IGNORE
+          srow=Val(String$(Position+5:Pos(String$,",",Position)-1)) conv IGNORE
        end if
        if (Position:=Pos(Uprc$(String$),"SCOL=")) then
-          let Scol=Val(String$(Position+5:Pos(String$,",",Position)-1)) conv IGNORE
+          scol=Val(String$(Position+5:Pos(String$,",",Position)-1)) conv IGNORE
        end if
        if (Position:=Pos(Uprc$(String$),"EROW=")) then
-          let Erow=Val(String$(Position+5:Pos(String$,",",Position)-1)) conv IGNORE
+          erow=Val(String$(Position+5:Pos(String$,",",Position)-1)) conv IGNORE
        end if
        if (Position:=Pos(Uprc$(String$),"ECOL=")) then
-          let Ecol=Val(String$(Position+5:Pos(String$,",",Position)-1)) conv IGNORE
+          ecol=Val(String$(Position+5:Pos(String$,",",Position)-1)) conv IGNORE
        end if
        if Srow And Erow then let Rows=Erow-Srow+1
        if Scol And Ecol then cols=Ecol-Scol+1
@@ -6205,19 +6205,19 @@
  IGNORE: continue
  RetryCount: !
     if ErrorRetryCount<5 then
-       let ErrorRetryCount+=1
+       errorRetryCount+=1
        retry
     else
-       let ErrorRetryCount=0
+       errorRetryCount=0
        continue
     end if
     
  SleepRetryCount: !
     sleep(.1)
     if SleepRetryCount<5 then
-       let SleepRetryCount+=1
+       sleepRetryCount+=1
        retry
     else
-       let SleepRetryCount=0
+       sleepRetryCount=0
        continue
     end if

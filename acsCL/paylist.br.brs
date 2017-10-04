@@ -41,12 +41,12 @@
 00320   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
 00340   let dat$=resp$(1)
-00350   let seq$=resp$(2)(1:1)
+00350   seq$=resp$(2)(1:1)
 00360   fndat(dat$,2)
 00370   if resp$(3)(1:1)="T" then let printgl=1 else let printgl=0 ! pr general ledger breakdowns
 00380   if resp$(4)(1:1)="T" then let printtotal=1 else let printtotal=0 ! pr total payments
 00390   begdate=val(resp$(5))
-00400   let enddate=val(resp$(6)) ! ending date for adding purchases for period of time
+00400   enddate=val(resp$(6)) ! ending date for adding purchases for period of time
 00410   let namtab=66-int(len(rtrm$(cnam$))/2)
 00420   let dattab=66-int(len(rtrm$(dat$))/2)
 00430   fnopenprn

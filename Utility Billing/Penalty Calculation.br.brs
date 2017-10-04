@@ -59,7 +59,7 @@
 21240 READ_CUSTOMER: ! 
 21260     read #h_customer,using 'Form POS 1,C 10,4*C 30,POS 143,7*PD 2,POS 292,PD 4.2,PD 4,12*PD 4.2,POS 388,10*PD 5.2,POS 1741,N 2,N 7,2*N 6,N 9,PD 5.2,N 3,3*N 9,3*N 2,3*N 3,N 1,3*N 9,3*PD 5.2,pos 217,15*pd 5': z$,mat e$,mat a,bal,f,mat g,mat gb,mat extra,mat d eof EO_CUSTOMER
 21270     ! if env$('acsDeveloper')<>'' and trim$(z$)='100001.00' then let debug_this_account=1 else debug_this_account=0
-21272     if debug_this_account then let show_math=1 else let show_math=0
+21272     if debug_this_account then show_math=1 else show_math=0
 21280     let route_number=extra(1)
 21300 !   if env$('client')="Divernon" and bal<0 then goto READ_CUSTOMER
 21320     if env$('client')="Sangamon" and (route_number<prtbkno1 or route_number>prtbkno2) then goto READ_CUSTOMER ! bill certain routes at different billing dates
@@ -186,7 +186,7 @@
 23650     basepenalty(10)=bal
 23660     goto GOT_BASEPENALTY
 23700   else if env$('client')='Lovington' and penaltybase$="Balance" then 
-23720     let waterpercent=round(g(1)/(g(1)+g(2)),2) ! let sewerpercent=1-waterpercent ! lovington
+23720     let waterpercent=round(g(1)/(g(1)+g(2)),2) ! sewerpercent=1-waterpercent ! lovington
 23740     basepenalty(9)=round((bal*waterpercent),2) ! logington
 23760     basepenalty(10)=bal-basepenalty(9) ! lovington allocate water and sewer penalty in ration of water to sewer
 23780     goto GOT_BASEPENALTY ! lovington

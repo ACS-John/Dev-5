@@ -9,10 +9,10 @@
 00100   dim z$*5,a$*30,cnam$*40,prg$*20,app(20),ma(20),a3$*30
 00110   let namtab=42-int(len(rtrm$(cnam$))/2)
 00120   pr newpage
-00130   pr fields "10,10,c 52,n": "ENTER 1 FOR NUMERIC LISTING, ENTER 2 FOR ALPHABETIC"
+00130   pr f "10,10,c 52,n": "ENTER 1 FOR NUMERIC LISTING, ENTER 2 FOR ALPHABETIC"
 00140 L140: input fields "10,65,n 1,eu,n": numalp conv L230
 00141   pr newpage
-00143   pr fields "10,5,C 60": "ENTER APPLICATION NUMBER TO pr OR BLANK FOR ALL:"
+00143   pr f "10,5,C 60": "ENTER APPLICATION NUMBER TO pr OR BLANK FOR ALL:"
 00144 L144: input fields "10,58,N 1,UE,N": sapp conv L144
 00145   if sapp<0 or sapp>20 then goto L144
 00150   if numalp<1 or numalp>2 then goto L140
@@ -21,13 +21,13 @@
 00180   goto L200
 00190 L190: open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&str$(cno)&",Shr",internal,input,keyed ioerr L530
 00200 L200: pr newpage
-00210   pr fields "10,10,c 46,n": "ENTER DATE FOR CLIENT LISTING IN MMDDYY FORMAT"
-00220   pr fields "10,60,n 6,n": dat
+00210   pr f "10,10,c 46,n": "ENTER DATE FOR CLIENT LISTING IN MMDDYY FORMAT"
+00220   pr f "10,60,n 6,n": dat
 00230 L230: input fields "10,60,n 6,eu,n": dat conv L230
 00240   if dat<10100 or dat>123199 then goto L200
 00250   pr newpage
-00260   pr fields "10,25,c 48,n": "CLIENT LISTING IN PROCESS"
-00270   pr fields "23,2,c 30,n": "Press F5 to stop"
+00260   pr f "10,25,c 48,n": "CLIENT LISTING IN PROCESS"
+00270   pr f "23,2,c 30,n": "Press F5 to stop"
 00280   gosub L370
 00290 L290: read #1,using L300: z$,a$,a3$,mat app,mat ma eof L490 ioerr L530
 00300 L300: form pos 1,c 5,c 30,x 30,c 30,pos 375,20*n 1,20*pd 3.2
@@ -60,16 +60,16 @@
 00500 L500: let fncloseprn
 00510   if uprc$(rtrm$(prg$))="S:\Time Management\Client Legacy" then chain prg$
 00520   goto XIT
-00530 L530: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L550
+00530 L530: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L550
 00540   goto L590
 00550 L550: pr newpage
-00560   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L580
+00560   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L580
 00570   goto L590
-00580 L580: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00590 L590: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00580 L580: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00590 L590: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00600   input fields "24,60,C 1,N": quitcode$
 00610   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-00620   pr fields "23,3,C 78,N": ""
-00630   pr fields "24,3,C 78,N": ""
+00620   pr f "23,3,C 78,N": ""
+00630   pr f "24,3,C 78,N": ""
 00640   retry 
 00650 XIT: let fnxit

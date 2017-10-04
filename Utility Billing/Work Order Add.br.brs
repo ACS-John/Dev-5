@@ -131,12 +131,12 @@
 38340   for j=1 to 5
 38360     let x=pos(i$(13)," ",y)
 38380     if x>0 and x<=j*70 then 
-38400       let line$(j)=i$(13)(z:x)
+38400       line$(j)=i$(13)(z:x)
 38420       let z=x+1
 38440       let y=x+55
 38460     end if 
 38480     if x=0 or x>j*70 then 
-38500       let line$(j)=i$(13)(z:j*70)
+38500       line$(j)=i$(13)(z:j*70)
 38520       let y=z+70
 38540       let z=z+70
 38560     end if 

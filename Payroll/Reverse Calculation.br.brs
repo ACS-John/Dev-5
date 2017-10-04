@@ -77,9 +77,9 @@
 00610 ! 
 00620   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 00630   if ckey=5 then goto XIT
-00640   let success=0
+00640   success=0
 00650   if resp$(1)="[All]" then let reverse_all=1 : goto L670
-00660   let eno=val(resp$(1)(1:8))
+00660   eno=val(resp$(1)(1:8))
 00670 L670: let d1=val(resp$(2))
 00680   if d1=0 then 
 00682     mat ml$(2)
@@ -107,14 +107,14 @@
 00850   if heno<>eno then goto UPDATE_MASTER
 00860   if prd=d1 then mat tcp=tcp+cp : delete #4: 
 00870   ck=1
-00890   if prd=d1 then let em10=em10+tdc(3) ! add sick hours back
-00900   if prd=d1 then let em11=em11+tdc(4) ! add vacation hours back
+00890   if prd=d1 then em10=em10+tdc(3) ! add sick hours back
+00900   if prd=d1 then em11=em11+tdc(4) ! add vacation hours back
 00910   goto L840
 00920 UPDATE_MASTER: ! 
 00930   if ck=0 then goto L1220
 00940   rewrite #1,using L950,key=x$: em10,em11,0 ! WRITE 0 IN LAST PAYROLL DATE IN MASTER RECORD
 00950 L950: form pos 132,2*pd 4.2,pos 162,n 6
-00960   let success=1
+00960   success=1
 00970 ! UPDATE_DEPARTMENT: !
 00980   restore #hDepartment,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey L1040
 00990   do
@@ -199,9 +199,9 @@
 01640 ! ______________________________________________________________________
 01650 POSTGL1: ! r:
 01652   let glinstal=1
-01660   let fli2$(1)="11,64,n 3,u"
-01670   let fli2$(2)="11,68,n 6,u"
-01680   let fli2$(3)="11,75,n 3,u"
+01660   fli2$(1)="11,64,n 3,u"
+01670   fli2$(2)="11,68,n 6,u"
+01680   fli2$(3)="11,75,n 3,u"
 01690   open #1: "Name="&env$('Q')&"\GLmstr\GLBUCKET.H"&env$('cno')&",Shr",internal,input,relative ioerr L1740
 01700   read #1,using 'form pos 1,n 1',rec=1: glb norec ignore
 01720   close #1: 
@@ -233,7 +233,7 @@
 02000   end if
 02010 return  ! /r
 02020 POSTGL2: ! r:
-02030   let oldteno=teno
+02030   oldteno=teno
 02040   let rec1=ta(1)
 02050   L2050: if rec1=0 then goto L2340
 02060   read #2,using L2070,rec=rec1: teno,mat tgl,dat,mat tcp,nta
@@ -244,7 +244,7 @@
 02110   let tgl$=lpad$(str$(tgl(1)),3)&lpad$(str$(tgl(2)),6)&lpad$(str$(tgl(3)),3)
 02120   if tgl(1)=0 or tgl(1)=oldtgl then goto L2130 else gosub OPNWORK_DUESTUFF
 02130   L2130: if oldteno=teno then goto L2160
-02140   let eno$=lpad$(str$(teno),8)
+02140   eno$=lpad$(str$(teno),8)
 02150   read #1,using 'form pos 9,c 30',key=eno$,release: em$ nokey L2340
 02160   L2160: !
 02170   pr #255,using L2180: teno,em$,mat tgl,-tcp(31)+tcp(29)+tcp(30) pageoflow PGOF
@@ -258,7 +258,7 @@
 02250   L2250: next j
 02260   let t(25)=t(25)+tcp(25) ! EIC
 02270   let t(26)=t(26)-tcp(32) ! ACCUMULATE NET
-02280   let subtotal=subtotal+tcp(31)-tcp(29)-tcp(30) ! ACCUMULATE TOTAL BY ACCT TO BE POSTED TO GL
+02280   subtotal=subtotal+tcp(31)-tcp(29)-tcp(30) ! ACCUMULATE TOTAL BY ACCT TO BE POSTED TO GL
 02290   let totaldue=totaldue-tcp(31)+tcp(29)+tcp(30) ! DUE TO PAYROLL CLEARING
 02300   let totaldr=totaldr+tcp(31)-tcp(29)-tcp(30)
 02310   let totalrec=totalrec+tcp(31)-tcp(29)-tcp(30) ! TOTAL DUE FRO OTHER FUNDS
@@ -280,7 +280,7 @@
 02470 L2470: form pos 65,c 11,skip 1,pos 64,pic(---------.##),skip 1
 02480   if accrued<>0 then pr #255,using L2490: "ACCRUED PORTION",accrued else pr #255: 
 02490 L2490: form pos 45,c 16,pos 64,pic(---------.##),skip 2
-02500   let subtotal=0
+02500   subtotal=0
 02510   return  ! /r
 02530 glDistHeaders: ! r: headers for General Ledger Distribution for Payroll
 02532   let p1=p1+1
@@ -359,8 +359,8 @@
 03160   L3160: if multigl=2 then goto L3330
 03170   ! CREATE DUE TO PAYROLL FUND ENTRIES
 03180   if mastercd=0 then goto L3290 ! FIRST TIME THRU ROUTINE
-03190   pr fields "10,2,c 78": "ENTER THE G/L ACCOUNT # FOR YOUR 'DUE TO PAYROLL CLEARING ACCOUNT '"
-03200   pr fields "11,2,c 60": "ON FUND # "&tgl$(1:3)
+03190   pr f "10,2,c 78": "ENTER THE G/L ACCOUNT # FOR YOUR 'DUE TO PAYROLL CLEARING ACCOUNT '"
+03200   pr f "11,2,c 60": "ON FUND # "&tgl$(1:3)
 03210   L3210: input fields mat fli2$: mat ttgl conv L3210
 03220   pr #255,using L2960: 0," ",mat ttgl,-totaldue
 03230   let totalcr=totalcr+totaldue
@@ -385,11 +385,11 @@
 03460   goto L3490
 03470   close #3: 
 03480   L3480: open #3: "Name="&glwk$,internal,output ioerr L3490
-03490   L3490: let oldtgl=tgl(1)
+03490   L3490: oldtgl=tgl(1)
 03500 return  ! /r
 03520 L3520: ! r: FINAL PAGE FOR CONTROL SET OF BOOKS  (MULTI-FUNDS ONLY)
-03530   pr fields "10,2,c 78": "ENTER THE G/L ACCOUNT # FOR YOUR 'DUE FROM OTHER FUNDS '"
-03540   pr fields "11,2,c 60": "ON YOUR CONTROL SET OF BOOKS"
+03530   pr f "10,2,c 78": "ENTER THE G/L ACCOUNT # FOR YOUR 'DUE FROM OTHER FUNDS '"
+03540   pr f "11,2,c 60": "ON YOUR CONTROL SET OF BOOKS"
 03550   input fields mat fli2$: mat ttgl conv L3210
 03560   pr #255,using L2180: 0," ",mat ttgl,-totalrec
 03570   let totaldr=totaldr+totalrec

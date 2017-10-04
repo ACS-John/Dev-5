@@ -12,8 +12,8 @@
 00120 L120: pr newpage
 00130   close #101: ioerr L140
 00140 L140: open #101: "SROW=9,SCOL=4,EROW=13,ECOL=65,BORDER=DR,CAPTION=CONVERT UNPAID INVOICE FILE",display,outin 
-00150   pr fields "10,5,C 60": "COMPANY NUMBER TO CONVERT:"
-00160   pr fields "12,5,C 60": "PREVIOUS ENDING DATE FOR POST TO GL:"
+00150   pr f "10,5,C 60": "COMPANY NUMBER TO CONVERT:"
+00160   pr f "12,5,C 60": "PREVIOUS ENDING DATE FOR POST TO GL:"
 00170   input fields mat io1$: cno,lpd
 00180   if cno=0 or cmdkey=5 then goto XIT
 00190 ! 
@@ -32,8 +32,8 @@
 00320   execute "Rename X "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
 00330   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx1.H"&str$(cno)&",1,8,Replace,DupKeys"
 00340   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx2.H"&str$(cno)&",9,28,Replace,DupKeys"
-00350   pr fields "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&str$(cno)
-00360   pr fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
+00350   pr f "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&str$(cno)
+00360   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00370   input fields "13,40,C 1,IAE,N": pause$
 00380   goto L120
 00390 ! ______________________________________________________________________

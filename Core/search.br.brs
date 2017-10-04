@@ -14,7 +14,7 @@
 00140     library 'S:\Core\Library': fnerror,fnwait,fncno,fnfkey,fnmsgbox,fnwin3b
 00150 ! _________________________________________
 00160     dim fs_sk$(22)*30,fs_bk$(99)*30,fs_sfl$(22),fs_sw$(22)*70,selection$*70,fs_info$(3)*30,numeric$*40,na1$*30
-00165     let selection$=''
+00165     selection$=''
 00170 ! _________________________________________
 00180 ASK_NAS: ! 
 00190     alpha_key_length=kln(file_num)
@@ -54,18 +54,18 @@
           next j
 00520     mat fkey$=("") !:
           let fkey$(1)="Next" : let fkey$(2)="Back" : let fkey$(5)="Cancel" !:
-          let em$="": let es=0 !:
+          em$="": es=0 !:
           fnfkey(24,mat fkey$,mat disfk,em$,es)
 00530     rinput #win,select mat fs_sfl$,attr "H": mat fs_sw$
 00540     if cmdkey=5 then goto ASK_NAS
 00550     if cmdkey=1 then goto L590
 00560     if cmdkey=2 then goto BACK
-00570     let selection$=fs_sk$(curfld)
+00570     selection$=fs_sk$(curfld)
 00580     if rtrm$(selection$)><"" then alp=1: goto L720
-00590 L590: let selclp=1
+00590 L590: selclp=1
 00600     goto L320
 00610 ! _________________________________________
-00620 L620: let selclp=0
+00620 L620: selclp=0
 00630     goto ASK_NAS
 00640 ! _________________________________________
 00650 BACK: ! 
@@ -76,7 +76,7 @@
 00700     goto L320
 00710 ! _________________________________________
 00720 L720: ! carry selection$ back; must pull key out in main program
-00725     let selection$=selection$(1:key_length)
+00725     selection$=selection$(1:key_length)
 00730 CANCEL_OUT: ! 
 00740     close #win: 
 00750     goto L770

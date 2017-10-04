@@ -15,8 +15,8 @@
 00130       let input_dec=input_dec-d*(16**i)
 00140     next i
 00150     let d2h_temp$=ltrm$(d2h_temp$)
-00160     if d2h_temp$="" then let output_hex$="0" else !:
-            let output_hex$=d2h_temp$
+00160     if d2h_temp$="" then output_hex$="0" else !:
+            output_hex$=d2h_temp$
 00170     goto XIT
 00180 ! ______________________________________________________________________
 00190 ! <Updateable Region: ERTN>

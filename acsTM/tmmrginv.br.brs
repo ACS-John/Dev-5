@@ -7,7 +7,7 @@
 00072 ! clmstr dims
 00080   dim ca(10),sc(10)
 00090   pr newpage
-00100   pr fields "10,20,Cc 60,h,n": "T/M Merging Invoices..."
+00100   pr f "10,20,Cc 60,h,n": "T/M Merging Invoices..."
 00108   open #h_tmwk1:=3: "Name="&env$('Q')&"\TMmstr\TMWk1.h"&env$('cno')&",NoShr",internal,input 
 00109 F_TMWK1: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2
 00112   dim cde$(30)*6,id$(30)*55,inv_amt(30),tmwk1_sc(30),ct(30)
@@ -35,7 +35,7 @@
 00360 !     let gl$=igl$(j)
 00370 !     let ga(j)=inv_amt(j)
 00380       if b(8)=0 then b8=25 else b8=b(8)
-00390 L390: let lta=lrec(h_tmtrans)+1
+00390 L390: lta=lrec(h_tmtrans)+1
 00400       write #h_tmtrans,using 'form pos 1,c 5,c 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,c 4,c 12,pd 3,c 30',rec=lta,reserve: k$," ",mat b,sc$,iv$,0,id$(j)(1:30) duprec L390
 00420       rewrite #h_tmtrans,using 'form pos 54,pd 3',rec=1,release: lta
 00440       if b(5)=0 or ca(b(5))=0 then goto THAT_STEP ! added b(5)=0 on 2/1/2012
@@ -52,7 +52,7 @@
 00520       rewrite #h_tmtraddr,using F_TMTRADDR,rec=ca(b(5)),release: ta1,lta,fb1
 00530       goto NEXT_ONE
 00532 THAT_STEP: ! 
-00540       let lta4=lrec(4)+1
+00540       lta4=lrec(4)+1
 00550       mat ta=(0)
 00560       mat fb=(0)
 00570       if b(5)>0 then ca(b(5))=lta4 ! added b(5)>0 on 2/1/2012
@@ -66,14 +66,14 @@
 00668 NEXT_ONE: ! 
 00670     next j
 00680     if abs(b(7))=3 then goto L800 ! SKIP AR IF WRITE OFF
-00690 L690: let lar=lrec(h_artrans)+1
+00690 L690: lar=lrec(h_artrans)+1
 00700     write #h_artrans,using 'form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,pd 3',rec=lar,reserve: k$,iv$,b(4),amt,amt,0,1,0,"CHARGE",0 duprec L690
 00720     if arta(2)>0 then rewrite #h_artrans,using 'form pos 58,pd 3',rec=arta(2): lar
 00730     arta(2)=lar
 00740     if arta(1)=0 then arta(1)=lar
 00750     rewrite #h_artrans,using 'form pos 58,pd 3',rec=1,release: lar
 00770     ar1=ar1+amt
-00800 L800: if b(7)=-2 and b(5)>0 then let sc(b(5))=2 ! added b(5)>0 on 2/1/2012
+00800 L800: if b(7)=-2 and b(5)>0 then sc(b(5))=2 ! added b(5)>0 on 2/1/2012
 00810     rewrite #h_clmstr,using 'form pos 220,10*n 1,10*pd 3,pos 283,pd 5.2,pos 299,2*pd 3',key=k$: mat sc,mat ca,ar1,mat arta
 00830     amt=0
 00840   loop  ! /r

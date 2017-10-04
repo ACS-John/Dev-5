@@ -7,8 +7,8 @@
 00070 ! ______________________________________________________________________
 00080   dim mask(2),p$(2)*25,lbl$(2)*21
 00090 ! ______________________________________________________________________
-00110   let lbl$(1)="Code" : let lbl$(2)="Name"
-00120   let fln(1)=3 : let fln(2)=25
+00110   lbl$(1)="Code" : lbl$(2)="Name"
+00120   fln(1)=3 : fln(2)=25
 00130   let mask(1)=30 : let mask(2)=0
 00140   fn_openfiles
 00150   fnhamster("Deptname",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
@@ -26,7 +26,7 @@
 00260 ! ______________________________________________________________________
 46000 def fn_openfiles
 46020   if ~openFiles then
-46040     let openFiles=1
+46040     openFiles=1
 46060     open #1: "Name="&env$('Q')&"\PRmstr\DeptName.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno')&",use,RecL=32,kps=1,kln=3,Shr",internal,outin,keyed 
 46080   end if
 46100 fnend

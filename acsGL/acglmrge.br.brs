@@ -47,7 +47,7 @@
 00440 L440: read #1,using L450,key=t$: cb,mat ta nokey L840
 00450 L450: form pos 87,pd 6.2,pos 333,2*pd 3
 00460 L460: ! READ #2,USING 460,REC=1: LR2
-00470   let lr2=lrec(2)+1
+00470   lr2=lrec(2)+1
 00480   write #2,using L540,rec=lr2: t$,s,k,mat n,l$,p$,0 duprec L460
 00490   if ta(1)=0 then let ta(1)=lr2
 00500   if ta(2)>0 then rewrite #2,using L550,rec=ta(2): lr2
@@ -61,8 +61,8 @@
 00580 BANK_REC_FILE: ! 
 00590   if l$="999999999999" then goto VENDOR_FILE ! don't update bkrec for contra entries
 00600   if n(1)>2 then goto VENDOR_FILE ! only allow receipts or disbursments to bank rec
-00610   let l$=trim$(l$): let l$=l$(1:8)
-00620   let l$=lpad$(rtrm$(l$),8)
+00610   l$=trim$(l$): l$=l$(1:8)
+00620   l$=lpad$(rtrm$(l$),8)
 00630   bank$=key$&str$(n(1))&l$
 00640   read #6,using L650,key=bank$: amt nokey WRITE_NEW_BANKREC ioerr VENDOR_FILE
 00650 L650: form pos 18,pd 10.2
@@ -79,7 +79,7 @@
 00710   let tr$(5)=p$ ! name or desc !:
         let pcde=0 ! posting code !:
         clr=0 ! cleared date !:
-        let scd=0 ! source code
+        scd=0 ! source code
 00720   if tcde=2 then let tx3=-tx3 ! turn sign around on bank rec file for receipts
 00730   write #6,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd
 00740   form pos 1,c 12,c 12,c 30,c 2,n 6,pd 5.2,n 1
@@ -87,7 +87,7 @@
 00760   if rtrm$(ven$)="" or ltrm$(rtrm$(ven$))="0" then goto L360
 00770   if n(1)<>1 or prtrans=1 then goto L360 ! only disbursments and not payroll trans
 00780   let ven$=lpad$(rtrm$(ven$),8)
-00790 L790: let lr5=lrec(5)+1
+00790 L790: lr5=lrec(5)+1
 00800   write #5,using L810,rec=lr5,reserve: ven$,s,k,l$,p$,0 duprec L790
 00810 L810: form pos 1,c 8,n 6,pd 5.2,c 12,c 30,pd 3
 00820   goto L360
@@ -114,7 +114,7 @@
 01000 ADD: ! 
 01010   let dno=val(t$(1:3)) conv L1020
 01020 L1020: ano=val(t$(4:9)) conv L1030
-01030 L1030: let sno=val(t$(10:12)) conv L1040
+01030 L1030: sno=val(t$(10:12)) conv L1040
 01040 L1040: let fntos(sn$="GLmerge3") !:
         let mylen=23: let mypos=mylen+3 : let right=1: let rc=0
 01050   if use_dept =1 then let fnlbl(1,26,"Fund #",6,2)
@@ -138,8 +138,8 @@
 01170   let dno=ano=sno=0
 01180   if use_dept=1 then let dno=val(resp$(1)) : ano=val(resp$(2))
 01190   if use_dept=0 then ano=val(resp$(1))
-01200   if use_dept=1 and use_sub=1 then let sno=val(resp$(3))
-01210   if use_dept=0 and use_sub=1 then let sno=val(resp$(2))
+01200   if use_dept=1 and use_sub=1 then sno=val(resp$(3))
+01210   if use_dept=0 and use_sub=1 then sno=val(resp$(2))
 01220 ! 
 01230   if use_dept=1 and use_sub=1 then let d$=resp$(4)
 01240   if use_dept=0 and use_sub=1 then let d$=resp$(3)
@@ -179,7 +179,7 @@
 01560     ckgl=1
 01570 L1570: next j
 01580   if ckgl=0 then goto L1620
-01590   pr fields "24,35,Cc 10,B,1": "Next  (F1)"
+01590   pr f "24,35,Cc 10,B,1": "Next  (F1)"
 01600 L1600: input fields "24,2,C 1,AE,N": pause$
 01610   if cmdkey><1 then goto L1600
 01620 L1620: close #1: 

@@ -13,7 +13,7 @@
 00130   dim io7$(9),dpt(3),io8$(25),dpd(5,5)
 00140 ! ______________________________________________________________________
 00150   fntop(program$, cap$="Reconcile Bank")
-00160   cancel=99 : let right=1 : center=2 : let left=0
+00160   cancel=99 : let right=1 : center=2 : left=0
 00170   fncno(cno,cnam$) !:
         fndat(dat$)
 00180   fnconsole(on=1)
@@ -60,7 +60,7 @@
         let item1$(5)="Print Reconciliation Listing" !:
         let item1$(6)="Make Corrections"
 00460   fncomboa("bankrec-1",8,30,mat item1$,"Select the funtion you would like to perform.  Normally you would clear the checks, deposits, adjustments and then calculate the bank totals")
-00470   if selection=0 then let selection=1: !:
+00470   if selection=0 then selection=1: !:
           let resp$(respc+=1)=item1$(selection)
 00480   fncmdkey("&Display Balances",3,0,0,"Displays previous balances for this bank account.") !:
         fncmdkey("&Next",1,1,0,"Proceed to next options") !:
@@ -71,12 +71,12 @@
 00520   rewrite #82,using "Form pos 1,c 12",rec=1: resp$(1)
 00530   if ck=3 then goto MENU1 ! redisplay balances
 00540   bn$=resp$(1)(13:30)
-00550   let stmtdt=val(resp$(2)(5:6))*10000+val(resp$(2)(7:8))*100+val(resp$(2)(3:4)) ! convert date back to mmddyy format
+00550   stmtdt=val(resp$(2)(5:6))*10000+val(resp$(2)(7:8))*100+val(resp$(2)(3:4)) ! convert date back to mmddyy format
 00560   bgbal=val(resp$(3))
-00570   let stmtbal=val(resp$(4))
+00570   stmtbal=val(resp$(4))
 00580   codt=val(resp$(5)(5:6))*10000+val(resp$(5)(7:8))*100+val(resp$(5)(3:4)) ! convert date back to mmddyy format
 00590   for j=1 to 6
-00600     if resp$(6)=item1$(j) then let ti3=j: let selection=j: goto L620
+00600     if resp$(6)=item1$(j) then let ti3=j: selection=j: goto L620
 00610   next j
 00620 L620: if ti3=6 then let fnchain("S:\acsGL\Bankreconciliation")
 00630   close #81: ioerr L640
@@ -345,10 +345,10 @@
         let resp$(respc+=1)=""
 02960 L2960: let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 02970   if ck=5 or ck=cancel then goto MENU1
-02980   let l1=val(resp$(1)) ! either lowest date or lowest check #
+02980   l1=val(resp$(1)) ! either lowest date or lowest check #
 02990   let h1=val(resp$(2)) ! either highest date or highest check #
 03000   if ti3><2 then goto L3030
-03010   let l1=fncd(l1)
+03010   l1=fncd(l1)
 03020   let h1=fncd(h1)
 03030 L3030: if ti3=1 then let k$=wbc$&str$(ti3)&lpad$(str$(l1),8)
 03040   if ti3=2 then let k$=wbc$&str$(ti3)&lpad$(str$(0),8)
@@ -358,8 +358,8 @@
         let ml$(1)="Nothing found in this range." !:
         fnmsgbox(mat ml$,resp$,cap$,48) !:
         goto CLEAR_BY_RANGE
-03080 L3080: ! pr Fields "1,2,C 8,R,N": " Check #"   ! do I want some kind of grid here???? kj
-03090 ! pr Fields "1,11,C 10,R,N": "  Amount"
+03080 L3080: ! pr f "1,2,C 8,R,N": " Check #"   ! do I want some kind of grid here???? kj
+03090 ! pr f "1,11,C 10,R,N": "  Amount"
 03100 L3100: read #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd eof DISPLAYCLEAREDSOFAR !:
         let tr$(3)=str$(tx3)
 03110   if bankgl$><wbc$ or tcde><ti3 then goto CLEAR_BY_RANGE
@@ -371,14 +371,14 @@
 03170 L3170: let h2=val(tr$(1)) conv L3100
 03180   if h2>h1 then let displaycleared=1 : goto CLEAR_TRANSACTIONS_FROM_LIST ! Goto 3710
 03190 L3190: rewrite #bankrec1,using 'Form POS 72,N 6': stmtdt
-03200 ! pr Fields STR$(R1)&","&STR$(C1)&",C 8,N": TR$(1)  ! also some kind of grid here
-03210 ! pr Fields STR$(R1)&","&STR$(C1+9)&",C 10,N": TR$(3)
+03200 ! pr f STR$(R1)&","&STR$(C1)&",C 8,N": TR$(1)  ! also some kind of grid here
+03210 ! pr f STR$(R1)&","&STR$(C1+9)&",C 10,N": TR$(3)
 03220 ! Let R1=R1+1
 03230 ! If R1=8 Then Let R1=14
 03240 ! If R1>23 Then Let R1=2: c1=C1+20 Else Goto 4230
 03250 ! If C1>62 Then c1=2
-03260 ! pr Fields "1,"&STR$(C1)&",C 8,R,N": " Check #"
-03270 ! pr Fields "1,"&STR$(C1+9)&",C 10,R,N": "  Amount"
+03260 ! pr f "1,"&STR$(C1)&",C 8,R,N": " Check #"
+03270 ! pr f "1,"&STR$(C1+9)&",C 10,R,N": "  Amount"
 03280   goto L3100
 03290 DISPLAYCLEAREDSOFAR: ! show what has been cleared
 03300   let displaycleared=1 : goto CLEAR_TRANSACTIONS_FROM_LIST
@@ -439,7 +439,7 @@
 03660 L3660: let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 03670   if ck=5 or ck=cancel then goto MENU1
 03680   for j=1 to 8
-03690     if resp$(j)(1:1)="T" then let sel_code=ti1=j: goto L3710
+03690     if resp$(j)(1:1)="T" then sel_code=ti1=j: goto L3710
 03700   next j
 03710 L3710: on ti1 goto L3720,L3760,DPTYPES,DPDATES,L5060,PRINT_EDITS,PRINT_EDITS,COR1 none DPAMENU
 03720 L3720: close #dpamnts,free: ioerr L3730
@@ -489,15 +489,15 @@
 04140   pr newpage
 04150   close #101: ioerr L4160
 04160 L4160: open #101: "SROW=04,SCOL=10,EROW=19,ECOL=73,Border=Sr,CAPTION=<Deposit Types to Total",display,outin 
-04170   pr fields "5,11,C 62": "This is designed to take care of two or more types of Credit"
-04180   pr fields "6,11,C 62": "Cards that are totaled together by the card company before"
-04190   pr fields "7,11,C 62": "they are transmitted to your bank for deposit."
-04200   pr fields "09,11,c 62": "credit card deposits begin with a prefix of c1,c2, or c3."
-04210   pr fields "10,11,c 62": "place a 1 by the types to be added together for 1 bank deposit"
+04170   pr f "5,11,C 62": "This is designed to take care of two or more types of Credit"
+04180   pr f "6,11,C 62": "Cards that are totaled together by the card company before"
+04190   pr f "7,11,C 62": "they are transmitted to your bank for deposit."
+04200   pr f "09,11,c 62": "credit card deposits begin with a prefix of c1,c2, or c3."
+04210   pr f "10,11,c 62": "place a 1 by the types to be added together for 1 bank deposit"
 04220   for j=1 to 3
-04230     pr fields str$(j*2+11)&",37,C 3": "C"&str$(j)
+04230     pr f str$(j*2+11)&",37,C 3": "C"&str$(j)
 04240   next j
-04250   pr fields "20,30,C 09,B,1": "Next (F1)"
+04250   pr f "20,30,C 09,B,1": "Next (F1)"
 04260 L4260: rinput fields mat io7$: mat dpt conv CONV7
 04270   if ce>0 then let io7$(ce)(ce1:ce2)="U": ce=0
 04280   if ck>0 then goto L4350 else ce=curfld
@@ -506,7 +506,7 @@
 04310   ce2=ce1+1 : let io7$(ce)(ce1:ce1)="UC" : goto L4260
 04320 CONV7: if ce>0 then let io7$(ce)(ce1:ce2)="U"
 04330   ce=cnt+1
-04340 ERR7: pr fields "24,78,C 1": bell : goto L4300
+04340 ERR7: pr f "24,78,C 1": bell : goto L4300
 04350 L4350: rewrite #93,using L3450,rec=1: mat dpt
 04360   goto DPAMENU
 04370 ! ______________________________________________________________________
@@ -522,17 +522,17 @@
 04470     let io8$(j+15)="20,"&str$(j*9+15)&",N 6,UT,N"
 04480     let io8$(j+20)="22,"&str$(j*9+15)&",N 6,UT,N"
 04490   next j
-04500   pr fields "4,11,c 62": "This is designed to take care of two or more dates on Credit"
-04510   pr fields "5,11,c 62": "Card batched totaled together by the credit card company"
-04520   pr fields "6,11,c 62": "before they are transmitted to your bank for deposit."
-04530   pr fields "08,11,c 62": "this usually occurs on weekends or when a batch is transmitted"
-04540   pr fields "09,11,c 62": "after 8pm (Eastern time) one day and before 8pm the next."
-04550   pr fields "11,11,C 62": "You may have 5 different entries with up to 5 Dates per entry"
+04500   pr f "4,11,c 62": "This is designed to take care of two or more dates on Credit"
+04510   pr f "5,11,c 62": "Card batched totaled together by the credit card company"
+04520   pr f "6,11,c 62": "before they are transmitted to your bank for deposit."
+04530   pr f "08,11,c 62": "this usually occurs on weekends or when a batch is transmitted"
+04540   pr f "09,11,c 62": "after 8pm (Eastern time) one day and before 8pm the next."
+04550   pr f "11,11,C 62": "You may have 5 different entries with up to 5 Dates per entry"
 04560   for j=1 to 5
-04570     pr fields str$(j*2+12)&",16,C 50": "Entry "&str$(j)&"        +        +        +        +"
+04570     pr f str$(j*2+12)&",16,C 50": "Entry "&str$(j)&"        +        +        +        +"
 04580   next j
-04590   pr fields "13,24,C 42,N": "         (use only mmddyy format)"
-04600   pr fields "24,35,C 09,B,1": "Next (F1)"
+04590   pr f "13,24,C 42,N": "         (use only mmddyy format)"
+04600   pr f "24,35,C 09,B,1": "Next (F1)"
 04610 L4610: rinput fields mat io8$: mat dpd conv ERR8
 04620   if ce>0 then let io8$(ce)(ce1:ce2)="U": ce=0
 04630   if ck>0 then goto L4700 else ce=curfld
@@ -541,7 +541,7 @@
 04660   ce2=ce1+1 : let io8$(ce)(ce1:ce1)="UC" : goto L4610
 04670 CONV8: if ce>0 then let io8$(ce)(ce1:ce2)="U"
 04680   ce=cnt+1
-04690 ERR8: pr fields "24,78,C 1": bell : goto L4650
+04690 ERR8: pr f "24,78,C 1": bell : goto L4650
 04700 L4700: let dpd$=cnvrt$("PIC(######)",stmtdt)
 04710   let mo2=val(dpd$(1:2))
 04720   let da2=val(dpd$(3:4))
@@ -566,14 +566,14 @@
 04910   goto DPAMENU
 04920 ! ______________________________________________________________________
 04930 COR1: pr newpage
-04940   pr fields "10,10,c 50": "Item Number to correct:"
-04950   pr fields "12,35,C 10,B,99": "Stop (Esc)"
+04940   pr f "10,10,c 50": "Item Number to correct:"
+04950   pr f "12,35,C 10,B,99": "Stop (Esc)"
 04960 L4960: input fields "10,50,Nz 4,UT,N": cr1 conv L4960
 04970   if cr1=0 or ck=5 then goto DPAMENU
 04980   if cr1<1 or cr1>lrec(91) then goto L4960
 04990   read #dpamnts,using L3880,rec=cr1: tr$,am1,ti$
 05000   pr newpage
-05010   pr fields "10,10,C 60": "Correct Amount (0 to Delete):"
+05010   pr f "10,10,C 60": "Correct Amount (0 to Delete):"
 05020   rinput fields "10,50,N 10.2,UT,N": am1
 05030   rewrite #dpamnts,using L3880,rec=cr1: tr$,am1,ti$
 05040   goto COR1
@@ -609,7 +609,7 @@
 05340 ! /region
 05350 ! ______________________________________________________________________
 05360 CLEAR_TRANSACTIONS_FROM_LIST: ! 
-05370   let lastrec=nextrec=total=0 !:
+05370   lastrec=nextrec=total=0 !:
         let displayattop$="True"
 05380   if ti3=1 then let type$="Checks" else let type$="Deposits"
 05390   close #clearing: ioerr L5400
@@ -640,21 +640,21 @@
 05570   let x=lrec(89): if nextrec>0 and x>1 and displayattop$="True" then goto L5580 else goto L5670
 05580 L5580: for j=nextrec to lrec(clearing) ! read starting with next record
 05590     read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,c 6',rec=j: flxitm$(2),flxitm$(3),amount,flxitm$(5) norec L5610 !:
-          let flxitm$(1)=str$(rec(clearing)) !:
-          let flxitm$(4)=str$(amount)
+          flxitm$(1)=str$(rec(clearing)) !:
+          flxitm$(4)=str$(amount)
 05600     fnflexadd1(mat flxitm$)
 05610 L5610: next j
 05620   for j=1 to max(nextrec-1,1) ! read records previously cleared or skipped
 05630     read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,c 6',rec=j: flxitm$(2),flxitm$(3),amount,flxitm$(5) norec L5650 !:
-          let flxitm$(1)=str$(rec(clearing)) !:
-          let flxitm$(4)=str$(amount) !:
+          flxitm$(1)=str$(rec(clearing)) !:
+          flxitm$(4)=str$(amount) !:
           if val(flxitm$(5))=stmtdt then let total+=amount
 05640     fnflexadd1(mat flxitm$)
 05650 L5650: next j
 05660   goto L5690
 05670 L5670: read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,c 6': flxitm$(2),flxitm$(3),amount,flxitm$(5) eof L5690 !:
-        let flxitm$(1)=str$(rec(clearing)) !:
-        let flxitm$(4)=str$(amount) !:
+        flxitm$(1)=str$(rec(clearing)) !:
+        flxitm$(4)=str$(amount) !:
         if val(flxitm$(5))=stmtdt then let total+=amount
 05680   fnflexadd1(mat flxitm$) : goto L5670
 05690 L5690: let fnlbl(17,30,"Total Cleared:",16,1)
@@ -684,7 +684,7 @@
 05860   rewrite #clearing,using 'Form POS 38,n 6',rec=val(resp$(1)): newclr
 05870   read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,N 6',rec=val(resp$(1)): k$,tr2,tr3,clr norec L5900
 05880   rewrite #bankrec1,using 'Form POS 72,N 6',key=k$: newclr ! update the transaction history
-05890   let lastrec=val(resp$(1)) !:
+05890   lastrec=val(resp$(1)) !:
         if lastrec+1 <= lrec(clearing) then let nextrec=lastrec+1 else let nextrec=1
 05900 L5900: goto L5530
 05910 ! ______________________________________________________________________

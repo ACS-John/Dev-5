@@ -54,10 +54,10 @@
 00470   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 00480   beg_date=val(resp$(1))
-00490   let end_date=val(resp$(2))
+00490   end_date=val(resp$(2))
 00500   let path$=resp$(3)
-00510   let orgbeg_date=val(resp$(4))
-00520   let orgend_date=val(resp$(5))
+00510   orgbeg_date=val(resp$(4))
+00520   orgend_date=val(resp$(5))
 00530   if beg_date=0 or end_date=0 then goto L320
 00540   if orgbeg_date=0 or orgend_date=0 then goto L320
 00550   fnconsole(1)
@@ -70,7 +70,7 @@
 00620   let p1=pos(a$(3),",",1): comma=1
 00630   if p1=0 then let p1=pos(a$(3)," ",1): comma=0
 00640   ct$=a$(3)(1:p1-1)
-00650   if comma=1 then let st$=a$(3)(p1+2:p1+3) else let st$=a$(3)(p1+1:p1+2)
+00650   if comma=1 then st$=a$(3)(p1+2:p1+3) else st$=a$(3)(p1+1:p1+2)
 00660   let p2=len(rtrm$(a$(3)))
 00670   let p1=p2-4
 00680   let zip$=a$(3)(p1:p2)
@@ -143,28 +143,28 @@
 01220 L1220: pr newpage
 01230   close #101: ioerr L1240
 01240 L1240: open #101: "SROW=2,SCOL=3,EROW=23,ECOL=77,BORDER=DR,CAPTION=<Create Electronic W2 Diskette for I.R.S.",display,outin 
-01250   pr fields "3,15,C 51,R,N": "  INSERT DISKETTE FOR ELECTRONIC W2'S IN DRIVE A:"
-01260   pr fields "5,5,C 60": "Company Name:"
-01270   pr fields "6,5,C 60": "Street Address:"
-01280   pr fields "7,5,C 60": "City:"
-01290   pr fields "8,5,C 60": "State:"
-01300   pr fields "9,5,C 60": "Zip Code:"
-01310   pr fields "10,5,C 60": "Federal ID #:"
-01320   pr fields "11,5,C 60": "Payment Year:"
-01330   pr fields "12,5,C 60": "Soc-Sec Maximum:"
-01340   pr fields "13,5,C 60": "Soc-Sec Rate:"
-01350   pr fields "14,5,C 60": "Medicare Maximum:"
-01360   pr fields "15,5,C 60": "Medicare Rate:"
-01370   pr fields "16,5,C 70": "Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins:"
-01380   pr fields "17,5,C 70": "Miscellaneous Deduction Used For Pension:"
-01390   pr fields "18,5,C 70": "Miscellaneous Deduction Used For Deferred Compensation:"
-01400   pr fields "19,5,C 70": "Miscellaneous Deduction Used For Dependent Care Assistance:"
-01410   pr fields "20,5,C 60": "Computer Manufacturer's Name:"
-01420   pr fields "21,5,C 60,N": "F=First Name First or S=Surname First on File:"
-01430   pr fields "22,5,C 60": "Type of Business Code R=Regular:"
-01440   pr fields "24,28,C 9,B,1": "Next (F1)"
-01450   pr fields "24,39,C 11,B,5": "Cancel (F5)"
-01460   pr fields mat io1$: a$(1),a$(2),ct$,st$,zip$,b1,yr,87900,.062,999999,.0145,ins,pen,dfc,dcan,ibm$,namcde$,typemp$
+01250   pr f "3,15,C 51,R,N": "  INSERT DISKETTE FOR ELECTRONIC W2'S IN DRIVE A:"
+01260   pr f "5,5,C 60": "Company Name:"
+01270   pr f "6,5,C 60": "Street Address:"
+01280   pr f "7,5,C 60": "City:"
+01290   pr f "8,5,C 60": "State:"
+01300   pr f "9,5,C 60": "Zip Code:"
+01310   pr f "10,5,C 60": "Federal ID #:"
+01320   pr f "11,5,C 60": "Payment Year:"
+01330   pr f "12,5,C 60": "Soc-Sec Maximum:"
+01340   pr f "13,5,C 60": "Soc-Sec Rate:"
+01350   pr f "14,5,C 60": "Medicare Maximum:"
+01360   pr f "15,5,C 60": "Medicare Rate:"
+01370   pr f "16,5,C 70": "Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins:"
+01380   pr f "17,5,C 70": "Miscellaneous Deduction Used For Pension:"
+01390   pr f "18,5,C 70": "Miscellaneous Deduction Used For Deferred Compensation:"
+01400   pr f "19,5,C 70": "Miscellaneous Deduction Used For Dependent Care Assistance:"
+01410   pr f "20,5,C 60": "Computer Manufacturer's Name:"
+01420   pr f "21,5,C 60,N": "F=First Name First or S=Surname First on File:"
+01430   pr f "22,5,C 60": "Type of Business Code R=Regular:"
+01440   pr f "24,28,C 9,B,1": "Next (F1)"
+01450   pr f "24,39,C 11,B,5": "Cancel (F5)"
+01460   pr f mat io1$: a$(1),a$(2),ct$,st$,zip$,b1,yr,87900,.062,999999,.0145,ins,pen,dfc,dcan,ibm$,namcde$,typemp$
 01470 L1470: input fields mat io1$,attr "R": a$(1),a$(2),ct$,st$,zip$,b1,yr,ssmax,ssrate,mcmax,mcrate,ins,pen,dfc,dcan,ibm$,namcde$,typemp$ conv CONV1
 01480   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 01490   if cmdkey>0 then goto L1560 else ce=curfld+1
@@ -173,7 +173,7 @@
 01520   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L1470
 01530 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 01540   ce=cnt+1
-01550 ERR1: pr fields "24,78,C 1": bell : goto L1510
+01550 ERR1: pr f "24,78,C 1": bell : goto L1510
 01560 L1560: ! 
 01570   if cmdkey=5 then goto XIT
 01580   if rtrm$(a$(1))="" then ce=1: goto ERR1
@@ -195,13 +195,13 @@
 01740   close #101: ioerr L1750
 01750 L1750: pr newpage
 01760   open #101: "SROW=7,SCOL=2,EROW=16,ECOL=79,BORDER=DR,CAPTION=<Electronic W-2   State Reporting Information",display,outin 
-01770   pr fields "8,4,C 72": "Some states require filing W2's on diskette.  Answer the following"
-01780   pr fields "9,4,C 72": "questions if you wish to create 'RS' records during this run."
-01790   pr fields "12,8,Cr 62": "State code used in your record to identify the selected state:"
-01800   pr fields "14,8,Cr 62": "Appropriate FIPS postal numeric code:"
-01810   pr fields "15,8,C 70": "(See an appendix in your electronic booklet for the postal code!)"
-01820   pr fields "17,28,C 9,B,1": "Next (F1)"
-01830   pr fields "17,39,C 11,B,5": "Cancel (F5)"
+01770   pr f "8,4,C 72": "Some states require filing W2's on diskette.  Answer the following"
+01780   pr f "9,4,C 72": "questions if you wish to create 'RS' records during this run."
+01790   pr f "12,8,Cr 62": "State code used in your record to identify the selected state:"
+01800   pr f "14,8,Cr 62": "Appropriate FIPS postal numeric code:"
+01810   pr f "15,8,C 70": "(See an appendix in your electronic booklet for the postal code!)"
+01820   pr f "17,28,C 9,B,1": "Next (F1)"
+01830   pr f "17,39,C 11,B,5": "Cancel (F5)"
 01840 L1840: input fields mat io1$: sr1,sr2 conv L1840
 01850   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 01860   if cmdkey>0 then goto L1930 else ce=curfld+1
@@ -210,7 +210,7 @@
 01890   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L1840
 01900 CONV2: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 01910   ce=cnt+1
-01920 ERR2: pr fields "24,78,C 1": bell : goto L1880
+01920 ERR2: pr f "24,78,C 1": bell : goto L1880
 01930 L1930: if cmdkey=5 then goto XIT
 01940   if sr1<0 or sr1>udim(e$) then ce=1: goto ERR2
 01950   if sr1>0 and sr2=0 then ce=2: goto ERR2
@@ -233,20 +233,20 @@
 02130   goto L2070
 02140 L2140: gosub RECRCA
 02150 ! GOSUB RECRE
-02160 L2160: ! pr Fields "12,32,N 3,UT,N": R1/LREC(1)*100
+02160 L2160: ! pr f "12,32,N 3,UT,N": R1/LREC(1)*100
 02170 L2170: read #1,using L2190: eno,mat em$,ss$,em6,ta eof END1
 02180   gosub L4380
 02190 L2190: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3
 02200   let r1=r1+1
 02210   let p1=pos(em$(3),",",1) : comma=1
 02220   if p1=0 then let p1=pos(em$(3)," ",1): comma=0
-02230   let emct$=em$(3)(1:p1-1)
-02240   gosub L5770: let emst$=holdst$ ! If COMMA=1 Then Let EMST$=EM$(3)(P1+2:P1+3) Else Let EMST$=EM$(3)(P1+1:P1+2)
+02230   emct$=em$(3)(1:p1-1)
+02240   gosub L5770: emst$=holdst$ ! If COMMA=1 Then eMST$=EM$(3)(P1+2:P1+3) Else eMST$=EM$(3)(P1+1:P1+2)
 02250   let p2=len(rtrm$(em$(3)))
 02260   let p1=p2-4
-02270   let emzip$=em$(3)(p1:p2)
+02270   emzip$=em$(3)(p1:p2)
 02280 L2280: let p1=pos(ss$,"-",1)
-02290   if p1>0 then let ss$(p1:p1)="": goto L2280 else let ssn=val(ss$)
+02290   if p1>0 then ss$(p1:p1)="": goto L2280 else ssn=val(ss$)
 02300   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 02310   restore #4,key>=checkkey$: nokey L2170
 02320 L2320: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L2680
@@ -282,13 +282,13 @@
 02620   if dfc>0 then let dc1=dc1+tcp(4+dfc)*100 ! DEFERRED COMPENSATION
 02630   if dcan>0 then let dca=dca+tcp(4+dcan)*100 ! DEPENDENT CARE ASSISTANCE
 02640   if sr1><tcd then goto L2670
-02650   let s2(1)=s2(1)+(tcp(31)*100)
-02660   let s2(2)=s2(2)+(tcp(4)*100)
+02650   s2(1)=s2(1)+(tcp(31)*100)
+02660   s2(2)=s2(2)+(tcp(4)*100)
 02670 L2670: goto L2320
 02680 L2680: gosub EXTRACT_ORIGINAL
-02690   if em6=9 then let w2(1)=w2(4)=w3(1)=w3(2)=0: let orgw2(1)=orgw2(4)=orgw3(1)=orgw3(2)=0 ! NO SS OR MC
-02700   if em6=1 then let w3(1)=w3(2)=0: let orgw3(1)=orgw3(2)=0 ! NO MEDICARE
-02710   if em6=2 then let w2(1)=w2(4)=0: let orgw2(1)=orgw2(4)=0 ! NO SOC-SEC
+02690   if em6=9 then let w2(1)=w2(4)=w3(1)=w3(2)=0: orgw2(1)=orgw2(4)=orgw3(1)=orgw3(2)=0 ! NO SS OR MC
+02700   if em6=1 then let w3(1)=w3(2)=0: orgw3(1)=orgw3(2)=0 ! NO MEDICARE
+02710   if em6=2 then let w2(1)=w2(4)=0: orgw2(1)=orgw2(4)=0 ! NO SOC-SEC
 02720   if w2(3)=0 and w2(1)=0 then goto L2160
 02725   if sum(w2)=sum(orgw2) and sum(w3)=sum(orgw3) then goto L2160 ! no changes to any dollar figusres
 02730   gosub RECRCE
@@ -316,38 +316,38 @@
 02950 RECRCW: ! 
 02960   for j=1 to 9
 02970     let w2(j)=w2(j)*100
-02980     let orgw2(j)=orgw2(j)*100
+02980     orgw2(j)=orgw2(j)*100
 02990   next j
 03000   for j=1 to 2
 03010     let w3(j)=w3(j)*100
-03020     let orgw3(j)=orgw3(j)*100
+03020     orgw3(j)=orgw3(j)*100
 03030   next j
 03040   if pen=0 then let pen$=" " else let pen$="1"
 03050   if dfc=0 then let dfc$="" else let dfc$="D"
 03060 ! medicare withholdings  exceptions
-03070   let orgw32$="           ": let w32$="           "
-03080   if orgw3(2)=w3(2) then let orgw32$="           ": let w32$="           " : goto L3100 ! if amounts are the same,then report both as blanks
-03090   if orgw3(2)>0 or w3(2)>0 then let orgw32$=cnvrt$("pic(###########)",orgw3(2)): let w32$=cnvrt$("pic(###########)",w3(2)) ! try to stop accuwage errors when either the original medicare withholdings or the new one is >0
+03070   orgw32$="           ": let w32$="           "
+03080   if orgw3(2)=w3(2) then orgw32$="           ": let w32$="           " : goto L3100 ! if amounts are the same,then report both as blanks
+03090   if orgw3(2)>0 or w3(2)>0 then orgw32$=cnvrt$("pic(###########)",orgw3(2)): let w32$=cnvrt$("pic(###########)",w3(2)) ! try to stop accuwage errors when either the original medicare withholdings or the new one is >0
 03100 L3100: ! federal withholdings exceptions
-03110   let w25$="           ": let orgw25$="           "
+03110   let w25$="           ": orgw25$="           "
 03120   if w2(5)=orgw2(5) then goto L3140 ! try to stop accuwage errors when both both federal wh are same
-03130   if w2(5)>0 or orgw2(5)>0 then let w25$=cnvrt$("pic(###########)",w2(5)): let orgw25$=cnvrt$("pic(###########)",orgw2(5)) ! try to stop accuwage errors when both both federal wh are zeros on indiviuals
+03130   if w2(5)>0 or orgw2(5)>0 then let w25$=cnvrt$("pic(###########)",w2(5)): orgw25$=cnvrt$("pic(###########)",orgw2(5)) ! try to stop accuwage errors when both both federal wh are zeros on indiviuals
 03140 L3140: !  total wages
-03150   let w23$="           ": let orgw23$="           "
+03150   let w23$="           ": orgw23$="           "
 03160   if w2(3)=orgw2(3) then goto L3180 ! try to stop accuwage errors when both both total wages
-03170   if w2(3)>0 or orgw2(3)>0 then let w23$=cnvrt$("pic(###########)",w2(3)): let orgw23$=cnvrt$("pic(###########)",orgw2(3)) ! try to stop accuwage errors when both both total wages are zeros on indiviuals
+03170   if w2(3)>0 or orgw2(3)>0 then let w23$=cnvrt$("pic(###########)",w2(3)): orgw23$=cnvrt$("pic(###########)",orgw2(3)) ! try to stop accuwage errors when both both total wages are zeros on indiviuals
 03180 L3180: ! ss wages
-03190   let w21$="           ": let orgw21$="           "
+03190   let w21$="           ": orgw21$="           "
 03200   if w2(1)=orgw2(1) then goto L3220 ! try to stop accuwage errors when both both ss wages agree
-03210   if w2(1)>0 or orgw2(1)>0 then let w21$=cnvrt$("pic(###########)",w2(1)): let orgw21$=cnvrt$("pic(###########)",orgw2(1)) ! try to stop accuwage errors when both both ss wages are zeros on indiviuals
+03210   if w2(1)>0 or orgw2(1)>0 then let w21$=cnvrt$("pic(###########)",w2(1)): orgw21$=cnvrt$("pic(###########)",orgw2(1)) ! try to stop accuwage errors when both both ss wages are zeros on indiviuals
 03220 L3220: ! medicare wages
-03230   let w31$="           ": let orgw31$="           "
+03230   let w31$="           ": orgw31$="           "
 03240   if w3(1)=orgw3(1) then goto L3260 ! try to stop accuwage errors when both both medicare wages agree
-03250   if w3(1)>0 or orgw3(1)>0 then let w31$=cnvrt$("pic(###########)",w3(1)): let orgw31$=cnvrt$("pic(###########)",orgw3(1)) ! try to stop accuwage errors when both both medicare wages are zeros on indiviuals
+03250   if w3(1)>0 or orgw3(1)>0 then let w31$=cnvrt$("pic(###########)",w3(1)): orgw31$=cnvrt$("pic(###########)",orgw3(1)) ! try to stop accuwage errors when both both medicare wages are zeros on indiviuals
 03260 L3260: ! ss wh
-03270   let w24$="           ": let orgw24$="           "
-03280   if w2(4)=orgw2(4) then let orgw2(4)=0: goto L3300 ! try to stop accuwage errors when both both medicare wages agree !! had to set the orgw2(4) to zero because I could never change the pr line to allow me to make it a alpha field  ??? still don't know why i cannot change it
-03290   if w2(4)>0 or orgw2(4)>0 then let w24$=cnvrt$("pic(###########)",w2(4)): let orgw24$=cnvrt$("pic(###########)",orgw2(4)) ! try to stop accuwage errors when both both ss wh are zeros
+03270   let w24$="           ": orgw24$="           "
+03280   if w2(4)=orgw2(4) then orgw2(4)=0: goto L3300 ! try to stop accuwage errors when both both medicare wages agree !! had to set the orgw2(4) to zero because I could never change the pr line to allow me to make it a alpha field  ??? still don't know why i cannot change it
+03290   if w2(4)>0 or orgw2(4)>0 then let w24$=cnvrt$("pic(###########)",w2(4)): orgw24$=cnvrt$("pic(###########)",orgw2(4)) ! try to stop accuwage errors when both both ss wh are zeros
 03300 L3300: pr #22,using L3310: "RCW",0,ssn,first$,mid$,last$,first$,mid$,last$,"",em$(2)(1:22),emct$,emst$,emzip$,"","","","","",orgw23$,w23$,orgw25$,w25$,orgw21$,w21$,orgw2(4),w24$,orgw31$,w31$,orgw32$,w32$,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",pen$,pen$,"","",""
 03310 L3310: form pos 1,c 3,2*pic(#########),c 15,c 15,c 20,c 15,c 15,c 20,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,6*c 11,pic(###########),5*c 11,28*c 11,c 22,2*c 11,8*c 11,c 187,c 1,c 1,c 1,c 1,c 1,c 1,c 16
 03320   return 
@@ -355,7 +355,7 @@
 03340   if sr1=0 then goto L3370 ! NO STATE SELECTED
 03350   if s2(1)=0 and s2(2)=0 then goto L3370 ! NO STATE WAGES
 03360   form pos 1,c 2,g 2,c 5,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 2,c 6,2*pic(###########),pic(##),2*pic(########),c 5,c 20,c 6,g 2,2*pic(###########),c 10,c 1,2*pic(###########),c 7,c 75,c 75,c 25
-03370 L3370: let t1=t1+1: mat t1=t1+w2 : let orgt1=orgt1+1: mat orgt1=orgt1+orgw2
+03370 L3370: let t1=t1+1: mat t1=t1+w2 : orgt1=orgt1+1: mat orgt1=orgt1+orgw2
 03380   mat i1=i1+w2
 03390   mat i2=i2+w3
 03400   mat t2=t2+w3 : mat orgt2=orgt2+orgw3
@@ -374,34 +374,34 @@
 03530 ! ______________________________________________________________________
 03540 RECRCT: ! 
 03550 ! total wages
-03560   let t13$="               " : let orgt13$="               "
+03560   let t13$="               " : orgt13$="               "
 03570   if orgt1(3)=t1(3) then goto L3590 ! both equal
-03580   if orgt1(3)>0 or t1(3)>0 then let orgt13$=cnvrt$("pic(###############)",orgt1(3)): let t13$=cnvrt$("pic(###############)",t1(3)) ! try to stop accuwage errors when either total wages are >0
+03580   if orgt1(3)>0 or t1(3)>0 then orgt13$=cnvrt$("pic(###############)",orgt1(3)): let t13$=cnvrt$("pic(###############)",t1(3)) ! try to stop accuwage errors when either total wages are >0
 03590 L3590: ! ss wages
-03600   let t11$="               " : let orgt11$="               "
+03600   let t11$="               " : orgt11$="               "
 03610   if orgt1(1)=t1(1) then goto L3630 ! both equal
-03620   if orgt1(1)>0 or t1(1)>0 then let orgt11$=cnvrt$("pic(###############)",orgt1(1)): let t11$=cnvrt$("pic(###############)",t1(1)) ! try to stop accuwage errors when either total ss wages are >0
+03620   if orgt1(1)>0 or t1(1)>0 then orgt11$=cnvrt$("pic(###############)",orgt1(1)): let t11$=cnvrt$("pic(###############)",t1(1)) ! try to stop accuwage errors when either total ss wages are >0
 03630 L3630: ! ss wh
-03640   let t14$="               " : let orgt14$="               "
+03640   let t14$="               " : orgt14$="               "
 03650   if orgt1(4)=t1(4) then goto L3670 ! both equal
-03660   if orgt1(4)>0 or t1(4)>0 then let orgt14$=cnvrt$("pic(###############)",orgt1(4)): let t14$=cnvrt$("pic(###############)",t1(4)) ! try to stop accuwage errors when either total ss wh are >0
+03660   if orgt1(4)>0 or t1(4)>0 then orgt14$=cnvrt$("pic(###############)",orgt1(4)): let t14$=cnvrt$("pic(###############)",t1(4)) ! try to stop accuwage errors when either total ss wh are >0
 03670 L3670: ! total medicare withholding
-03680   let t22$="               " : let orgt22$="               "
+03680   let t22$="               " : orgt22$="               "
 03690   if orgt2(2)=t2(2) then goto L3710 ! both equal
-03700   if orgt2(2)>0 or t2(2)>0 then let orgt22$=cnvrt$("pic(###############)",orgt2(2)): let t22$=cnvrt$("pic(###############)",t2(2)) ! try to stop accuwage errors when either medicare withholdings are >0
+03700   if orgt2(2)>0 or t2(2)>0 then orgt22$=cnvrt$("pic(###############)",orgt2(2)): let t22$=cnvrt$("pic(###############)",t2(2)) ! try to stop accuwage errors when either medicare withholdings are >0
 03710 L3710: ! medicare wages
-03720   let orgt21$="               " : let t21$="               "
+03720   orgt21$="               " : let t21$="               "
 03730   if orgt2(1)=t2(1) then goto L3750
-03740   if orgt2(1)>0 or t2(1)>0 then let orgt21$=cnvrt$("pic(###############)",orgt2(1)): let t21$=cnvrt$("pic(###############)",t2(1)) ! try to stop accuwage errors when either the old or new is greater than zero
+03740   if orgt2(1)>0 or t2(1)>0 then orgt21$=cnvrt$("pic(###############)",orgt2(1)): let t21$=cnvrt$("pic(###############)",t2(1)) ! try to stop accuwage errors when either the old or new is greater than zero
 03750 L3750: ! federal wh
-03760   let orgt15$="             " : let t15$="             "
+03760   orgt15$="             " : let t15$="             "
 03770   if t1(5)=orgt1(5) then goto L3800 ! both are same
-03780   if t1(5)>0 or orgt1(5)>0 then let t15$=cnvrt$("pic(###############)",t1(5)): let orgt15$=cnvrt$("pic(###############)",orgt1(5)) ! try to stop accuwage errors when both were either fed wh >0
+03780   if t1(5)>0 or orgt1(5)>0 then let t15$=cnvrt$("pic(###############)",t1(5)): orgt15$=cnvrt$("pic(###############)",orgt1(5)) ! try to stop accuwage errors when both were either fed wh >0
 03800 L3800: pr #22,using L3820: "RCT",tw2,orgt13$,t13$,orgt15$,t15$,orgt11$,t11$,orgt14$,t14$,orgt21$,t21$,orgt22$,t22$,orgt12$,t12$,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
 03810   let dc3=0 ! kj 120805
 03820 L3820: form pos 1,c 3,pic(#######),14*c 15,26*c 15,c 15,2*c 15,8*c 15,c 234
 03830   form pos 1,c 2,pic(#######),7*pic(###############),c 240,9*pic(###############),c 23
-03840   let t1=0: let orgt1=0: mat t1=(0) : mat orgt1=(0)
+03840   let t1=0: orgt1=0: mat t1=(0) : mat orgt1=(0)
 03850   mat t2=(0): mat orgt2=(0)
 03860   return 
 03870 ! ______________________________________________________________________
@@ -441,27 +441,27 @@
         pr #win,fields "09,2,Cr 31,N": "Contact Phone Extension:" !:
         pr #win,fields "10,2,Cr 31,N": "Contact E-Mail:" !:
         pr #win,fields "11,2,Cr 31,N": "Terminating Business Indicator:"
-04170   let scr2_io$(1)="04,34,C 17,UT,N" !:
-        let scr2_io$(2)="05,34,C 01,UT,N" !:
-        let scr2_io$(3)="06,34,C 06,UT,N" !:
-        let scr2_io$(4)="07,34,C 27,UT,N" !:
-        let scr2_io$(5)="08,34,C 15,UT,N" !:
-        let scr2_io$(6)="09,34,C 05,UT,N" !:
-        let scr2_io$(7)="10,34,C 40,UT,N" !:
-        let scr2_io$(8)="11,34,C 01,UT,N"
+04170   scr2_io$(1)="04,34,C 17,UT,N" !:
+        scr2_io$(2)="05,34,C 01,UT,N" !:
+        scr2_io$(3)="06,34,C 06,UT,N" !:
+        scr2_io$(4)="07,34,C 27,UT,N" !:
+        scr2_io$(5)="08,34,C 15,UT,N" !:
+        scr2_io$(6)="09,34,C 05,UT,N" !:
+        scr2_io$(7)="10,34,C 40,UT,N" !:
+        scr2_io$(8)="11,34,C 01,UT,N"
 04180   if resub$="" then let resub$="0"
 04190 ! If TLCN$="" Then Let TLCN$="0"
 04200   if terminat$="" then let terminat$="0"
 04210 L4210: rinput #win,fields mat scr2_io$: emppin$,resub$,tlcn$,contact$,contactph$,phoneext$,email$,terminat$ conv CONV_SCR2
 04220   let med$="Y"
-04230   if ce>0 then let scr2_io$(ce)(ce1:ce2)="U": ce=0
+04230   if ce>0 then scr2_io$(ce)(ce1:ce2)="U": ce=0
 04240   if cmdkey>0 then goto L4310 else ce=curfld
 04250 L4250: ce=ce+1: if ce>udim(scr2_io$) then ce=1
-04260 L4260: let scr2_io$(ce)=rtrm$(scr2_io$(ce)) : ce1=pos(scr2_io$(ce),"U",9) : if ce1=0 then goto L4250
-04270   ce2=ce1+1 : let scr2_io$(ce)(ce1:ce1)="UC" : goto L4210
-04280 CONV_SCR2: if ce>0 then let scr2_io$(ce)(ce1:ce2)="U"
+04260 L4260: scr2_io$(ce)=rtrm$(scr2_io$(ce)) : ce1=pos(scr2_io$(ce),"U",9) : if ce1=0 then goto L4250
+04270   ce2=ce1+1 : scr2_io$(ce)(ce1:ce1)="UC" : goto L4210
+04280 CONV_SCR2: if ce>0 then scr2_io$(ce)(ce1:ce2)="U"
 04290   ce=cnt+1
-04300 ERR_SCR2: pr fields "24,78,C 1": bell : goto L4260
+04300 ERR_SCR2: pr f "24,78,C 1": bell : goto L4260
 04310 L4310: if resub$<>"0" and resub$<>"1" then ce=2 !:
           goto ERR_SCR2
 04320   if resub$="1" and rtrm$(tlcn$)="" then ce=3 !:
@@ -473,18 +473,18 @@
 04360   if cmdkey=5 then goto SCR1
 04370   return 
 04380 L4380: dim first$*15,mid$*15,last$*20,em$(3)*30
-04390   let em$(1)=uprc$(rtrm$(em$(1))): ! Let NAMCDE$="s"
+04390   em$(1)=uprc$(rtrm$(em$(1))): ! Let NAMCDE$="s"
 04400   let x1=pos(em$(1)," ",1)
 04410   let x2=pos(em$(1)," ",x1+1)
 04420   let x3=pos(em$(1)," ",x2+1)
 04430   if uprc$(namcde$)="S" then goto L4480
 04440   let first$=em$(1)(1:min(15,max(x1-1,1)))
-04450   if x2>0 then let mid$=em$(1)(x1+1:x2-1): let last$=em$(1)(x2+1:len(em$(1)))
-04460   if x2=0 then let last$=em$(1)(x1+1:len(em$(1))): let mid$=""
+04450   if x2>0 then let mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
+04460   if x2=0 then last$=em$(1)(x1+1:len(em$(1))): let mid$=""
 04470   goto L4540
 04480 L4480: ! last name first
 04490   if x1=0 then let x1=pos(em$(1),",",1)
-04500   if x1>0 and em$(1)(x1-1:x1-1)="," then let last$=em$(1)(1:x1-2) else let last$=em$(1)(1:max(x1-1,1))
+04500   if x1>0 and em$(1)(x1-1:x1-1)="," then last$=em$(1)(1:x1-2) else last$=em$(1)(1:max(x1-1,1))
 04510   if x2>0 then let first$=em$(1)(x1+1:x2-1): let mid$=em$(1)(x2+1:len(em$(1)))
 04520   if x2=0 then let first$=em$(1)(x1+1:len(em$(1)))(1:15): let mid$=""
 04530   let x=pos(first$,",",1): if x>0 then let first$(x:x)=""
@@ -507,13 +507,13 @@
         !                8. (undefinded)  !:
         ! (button_option>0 is set to have Cancel(F5))
 04630   if exists("C:\ACS\Local\Settings\No_Print_Newpage.txt") then goto L4640 else pr newpage
-04640 L4640: let screen_width=80
-04650   let screen_height=24
+04640 L4640: screen_width=80
+04650   screen_height=24
 04660   if display_cnam=0 then goto L4680
-04680 L4680: let sc=max(int(((screen_width-win_width)/2)+1),2)
-04690   let ec=min(sc+win_width-1,79)
-04700   let sr=max(int(((screen_height-win_height)/2)+1),2)
-04710   let er=min(sr+win_height-1,23)
+04680 L4680: sc=max(int(((screen_width-win_width)/2)+1),2)
+04690   ec=min(sc+win_width-1,79)
+04700   sr=max(int(((screen_height-win_height)/2)+1),2)
+04710   er=min(sr+win_height-1,23)
 04720 !     pr "win_height="&STR$(WIN_HEIGHT),"win_width="&STR$(WIN_WIDTH)
 04730 !     pr "sr="&STR$(SR),"sc="&STR$(SC)
 04740 !     pr "er="&STR$(ER),"ec="&STR$(EC) : Pause
@@ -527,7 +527,7 @@
 04800   if display_cnam=2 then !:
           pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
 04810 L4810: if button_option=0 then goto L4920
-04820   mat fkey$=("") : let em$="" : let es=0
+04820   mat fkey$=("") : em$="" : es=0
 04830   let fkey$(5)="Cancel" ! included by default
 04840   if button_option=2 then !:
           let fkey$(1)="Next"
@@ -544,7 +544,7 @@
 04890   if button_option=7 then !:
           let fkey$(1)="Save" !:
           let fkey$(4)="Delete"
-04900   let scrline=er+1: gosub L5560 !  fnFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
+04900   scrline=er+1: gosub L5560 !  fnFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
 04910 ! 
 04920 L4920: return  ! Fnend
 04930 L4930: ! mtype=0 means splash    - returns no response                                 ! mostly for "please wait..." and "printing..."                                 ! (anywhere no response is required - no buttons are displyed either)
@@ -553,9 +553,9 @@
 04960 ! mtype=3 means Yes, No, Cancel - returns "Y" or "N" or ""
 04970 ! response$(1)= code you're looking for 2-5 are reserved for future use
 04980   close #104: ioerr L4990
-04990 L4990: let endrow=12
+04990 L4990: endrow=12
 05000   for j=2 to udim(msgline$)
-05010     if msgline$(j)<>"" then let endrow=endrow+1
+05010     if msgline$(j)<>"" then endrow=endrow+1
 05020   next j
 05030   open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&cap$,display,outin 
 05040   pr #104: newpage
@@ -563,29 +563,29 @@
 05060   for j=1 to udim(msgline$)
 05070     pr #104,fields str$(mglinerow+j-1)&",2,Cc 60,N": msgline$(j)
 05080   next j
-05090   if mtype=1 then pr fields str$(endrow+1)&",38,Cc 4,B,1": "Ok"
+05090   if mtype=1 then pr f str$(endrow+1)&",38,Cc 4,B,1": "Ok"
 05100   if mtype=1 then input fields str$(endrow)&",09,C 1,AE,N": pause$
-05110   if mtype=2 then pr fields str$(endrow+1)&",35,Cc 4,B,21": "Yes"
-05120   if mtype=2 then pr fields str$(endrow+1)&",40,Cc 4,B,22": "No"
+05110   if mtype=2 then pr f str$(endrow+1)&",35,Cc 4,B,21": "Yes"
+05120   if mtype=2 then pr f str$(endrow+1)&",40,Cc 4,B,22": "No"
 05130 L5130: if mtype=2 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
 05140   if mtype=2 and cmdkey=22 then let response$(1)="N"
 05150   if mtype=2 and cmdkey=21 then let response$(1)="Y"
-05160   if mtype=2 and response$(1)<>"Y" and response$(1)<>"N" then pr fields "24,1,C 7,N": bell$ : goto L5130
-05170   if mtype=3 then pr fields str$(endrow+1)&",29,Cc 4,B,21": "Yes"
-05180   if mtype=3 then pr fields str$(endrow+1)&",34,Cc 4,B,22": "No"
-05190   if mtype=3 then pr fields str$(endrow+1)&",39,C 12,B,22": "Cancel (Esc)"
+05160   if mtype=2 and response$(1)<>"Y" and response$(1)<>"N" then pr f "24,1,C 7,N": bell$ : goto L5130
+05170   if mtype=3 then pr f str$(endrow+1)&",29,Cc 4,B,21": "Yes"
+05180   if mtype=3 then pr f str$(endrow+1)&",34,Cc 4,B,22": "No"
+05190   if mtype=3 then pr f str$(endrow+1)&",39,C 12,B,22": "Cancel (Esc)"
 05200   if mtype=3 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
 05210   if mtype=3 and cmdkey=22 then let response$(1)="N"
 05220   if mtype=3 and cmdkey=21 then let response$(1)="Y"
 05230   if mtype=3 and cmdkey=99 then let response$(1)=""
-05240   if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr fields "24,1,C 7,N": bell$ : goto L5130
+05240   if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr f "24,1,C 7,N": bell$ : goto L5130
 05250   close #104: ioerr ignore
 05260 return  ! Fnend
 05410 ! Def Library FNOPENWIN(WIN,SR,SC,ER,EC,&CAP$)
-05430   if sr<1 then let sr=10
-05440   if sc<1 then let sc=20
-05450   if er<1 then let er=14
-05460   if ec<1 then let ec=59
+05430   if sr<1 then sr=10
+05440   if sc<1 then sc=20
+05450   if er<1 then er=14
+05460   if ec<1 then ec=59
 05470   let win_width=ec-sc+1
 05480   close #win: ioerr L5490
 05490 L5490: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
@@ -597,7 +597,7 @@
 05550   return  ! Fnend
 05560 L5560: ! Def Library FNFKEY(SCRLINE,MAT FKEY$,MAT DISFK,&EM$,ES)
 05570   let totallen=0 !:
-        let startpos=0
+        startpos=0
 05580   for j=1 to udim(fkey$) ! add ' (Fx)' to each button
 05590     if fkey$(j)="" then goto L5620
 05600     let fkey$(j)=fkey$(j)&" (F"&str$(j)&")" !:
@@ -606,17 +606,17 @@
 05620 L5620: next j
 05630   let totallen=totallen+len(rtrm$(em$))+min(len(rtrm$(em$)),1)+es
 05640   let totallen=totallen-1
-05650   let startpos=int((80-totallen)/2)+1
-05660   pr fields str$(scrline)&","&str$(startpos)&",C "&str$(totallen)&",N": rpt$("Ä",totallen)
+05650   startpos=int((80-totallen)/2)+1
+05660   pr f str$(scrline)&","&str$(startpos)&",C "&str$(totallen)&",N": rpt$("Ä",totallen)
 05670   for j=1 to udim(fkey$)
 05680     if fkey$(j)="" then goto L5730
-05690     if disfk(j)=1 then pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",R,"&str$(j): fkey$(j)
+05690     if disfk(j)=1 then pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",R,"&str$(j): fkey$(j)
 05700     if disfk(j)=1 then goto L5720
-05710     pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",B,"&str$(j): fkey$(j)
-05720 L5720: let startpos=startpos+len(fkey$(j))+1
+05710     pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(fkey$(j)))&",B,"&str$(j): fkey$(j)
+05720 L5720: startpos=startpos+len(fkey$(j))+1
 05730 L5730: next j
 05740   if rtrm$(em$)="" then goto L5760
-05750   pr fields str$(scrline)&","&str$(startpos)&",C "&str$(len(rtrm$(em$))+es)&",R,N": rtrm$(em$)
+05750   pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(rtrm$(em$))+es)&",R,N": rtrm$(em$)
 05760 L5760: return  ! Fnend
 05770 L5770: ! extract state name
 05780   let holdst$="          "
@@ -625,7 +625,7 @@
 05810   for j=1 to 10
 05820     let p3=pos(rtrm$(em$(3))," ",p3+1)
 05830     if oldp3>p3 then goto L5860 ! end of address reached
-05840     if p3>0 then let oldp3=p3 else goto L5850
+05840     if p3>0 then oldp3=p3 else goto L5850
 05850 L5850: next j
 05860 L5860: for j=1 to 10
 05870     if rtrm$(em$(3)(oldp3-j:oldp3-j))="" or em$(3)(oldp3-j:oldp3-j)="," then goto L5880 else let p4=p4-1: let holdst$(p4:p4)=em$(3)(oldp3-j:oldp3-j): goto L5890
@@ -659,26 +659,26 @@
 06150 L6150: if dedfica(j)=1 then goto L6160 else goto L6170
 06160 L6160: cafded=cafded+tcp(j+4)
 06170 L6170: next j
-06180   let orgw2(1)=min(orgw2(1)+tcp(31)-tcp(30)-cafded,ssmax-tcp(30)) ! TOTAL SOC-SEC WAGES
-06190   let orgw3=orgw3+tcp(2) ! TOTAL FICA WITHHELD
-06200   let orgw3(1)=orgw3(1)+tcp(31)-cafded ! TOTAL MEDICARE WAGES & TIPS
-06210 ! if env$('client')="Washington Parrish" then let orgw3(1)=orgw3(1)+tcp(5) ! add deferred comp match to medicare wages
-06220   let orgw3(1)=min(mcmax,orgw3(1)) ! MC WAGES CANNOT EXCEED MAXIMUM
-06230   if uprc$(med$)="Y" then let orgw2=orgw2+tcp(2) else let orgw2=round(min(orgw3/(ssrate+mcrate)*ssrate,ssmax*ssrate),2) ! SS WH
-06240   if uprc$(med$)="Y" then let orgw3(2)=orgw3(2)+tcp(3) else let orgw3(2)=orgw3-orgw2 ! MEDICARE WITHHELD
-06250   let orgw2(2)=orgw2(2)+tcp(30) ! FICA TIPS YTD
-06260   let orgw2(3)=orgw2(3)+tcp(31)-dedret ! TOTAL FEDERAL WAGES
-06270   let orgw2(4)=orgw2 ! orgw2(4)+tcp(2) ! FICA W/H YTD       (COULD BE +W2 INSTEAD OF +tcp(2)IF ONLY FICA PORTION GOES INTO W2 RECORD)
-06280 ! LET orgw2(4)=orgW2 ! PUT SS W/H ONLY IN 2-W RECORD (EXCLUDE MEDICARE W/H)
-06290   let orgw2(5)=orgw2(5)+tcp(1) ! FED W/H YTD
-06300   if ins>0 then let orgw2(6)=orgw2(6)+tcp(4+ins) ! EMPLOYER COST GROUP LIFE INS.
-06310   let orgw2(7)=orgw2(7)+0 ! UNCOLLECTED EMPLOYEE FICA TAX ON TIPS
-06320   let orgw2(8)=orgw2(8)+tcp(24) ! EIC TOTAL
-06330   let orgw2(9)=orgw2(9)+0 ! ALLOCATED TIPS
-06340   if orgdfc>0 then let orgdc1=orgdc1+tcp(4+orgdfc)*100 ! DEFERRED COMPENSATION
-06350   if orgdcan>0 then let orgdca=orgdca+tcp(4+orgdcan)*100 ! DEPENDENT CARE ASSISTANCE
+06180   orgw2(1)=min(orgw2(1)+tcp(31)-tcp(30)-cafded,ssmax-tcp(30)) ! TOTAL SOC-SEC WAGES
+06190   orgw3=orgw3+tcp(2) ! TOTAL FICA WITHHELD
+06200   orgw3(1)=orgw3(1)+tcp(31)-cafded ! TOTAL MEDICARE WAGES & TIPS
+06210 ! if env$('client')="Washington Parrish" then orgw3(1)=orgw3(1)+tcp(5) ! add deferred comp match to medicare wages
+06220   orgw3(1)=min(mcmax,orgw3(1)) ! MC WAGES CANNOT EXCEED MAXIMUM
+06230   if uprc$(med$)="Y" then orgw2=orgw2+tcp(2) else orgw2=round(min(orgw3/(ssrate+mcrate)*ssrate,ssmax*ssrate),2) ! SS WH
+06240   if uprc$(med$)="Y" then orgw3(2)=orgw3(2)+tcp(3) else orgw3(2)=orgw3-orgw2 ! MEDICARE WITHHELD
+06250   orgw2(2)=orgw2(2)+tcp(30) ! FICA TIPS YTD
+06260   orgw2(3)=orgw2(3)+tcp(31)-dedret ! TOTAL FEDERAL WAGES
+06270   orgw2(4)=orgw2 ! orgw2(4)+tcp(2) ! FICA W/H YTD       (COULD BE +W2 INSTEAD OF +tcp(2)IF ONLY FICA PORTION GOES INTO W2 RECORD)
+06280 ! orgw2(4)=orgW2 ! PUT SS W/H ONLY IN 2-W RECORD (EXCLUDE MEDICARE W/H)
+06290   orgw2(5)=orgw2(5)+tcp(1) ! FED W/H YTD
+06300   if ins>0 then orgw2(6)=orgw2(6)+tcp(4+ins) ! EMPLOYER COST GROUP LIFE INS.
+06310   orgw2(7)=orgw2(7)+0 ! UNCOLLECTED EMPLOYEE FICA TAX ON TIPS
+06320   orgw2(8)=orgw2(8)+tcp(24) ! EIC TOTAL
+06330   orgw2(9)=orgw2(9)+0 ! ALLOCATED TIPS
+06340   if orgdfc>0 then orgdc1=orgdc1+tcp(4+orgdfc)*100 ! DEFERRED COMPENSATION
+06350   if orgdcan>0 then orgdca=orgdca+tcp(4+orgdcan)*100 ! DEPENDENT CARE ASSISTANCE
 06360   goto L6040
-06370 L6370: if em6=9 then let orgw2(1)=orgw2(4)=orgw3(1)=orgw3(2)=0 ! NO SS OR MC
-06380   if em6=1 then let orgw3(1)=orgw3(2)=0 ! NO MEDICARE
-06390   if em6=2 then let orgw2(1)=orgw2(4)=0 ! NO SOC-SEC
+06370 L6370: if em6=9 then orgw2(1)=orgw2(4)=orgw3(1)=orgw3(2)=0 ! NO SS OR MC
+06380   if em6=1 then orgw3(1)=orgw3(2)=0 ! NO MEDICARE
+06390   if em6=2 then orgw2(1)=orgw2(4)=0 ! NO SOC-SEC
 06400   return 

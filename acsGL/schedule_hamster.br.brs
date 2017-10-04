@@ -13,8 +13,8 @@
 00120   goto XIT
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
-        let schedule=1 !:
-        let open_file_count=1 ! this value is used in the close_file sub routine
+        schedule=1 !:
+        open_file_count=1 ! this value is used in the close_file sub routine
 00150   if exists(env$('Q')&"\GLmstr\Schedule"&str$(schedule)&".h"&str$(cno))=0 then goto L190
 00160   if exists(env$('Q')&"\GLmstr\schedule"&str$(schedule)&"-idx.h"&str$(cno))=0 then gosub INDEX
 00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\schedule"&str$(schedule)&".H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\schedule"&str$(schedule)&"-idx.H"&str$(cno)&",Version=1,Shr",internal,outin,keyed 
@@ -45,7 +45,7 @@
 00420   fncno(cno)
 00430 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
-00440   let lbl$(ic+=1)="G/L Number"
+00440   lbl$(ic+=1)="G/L Number"
 00450 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
@@ -53,11 +53,11 @@
 00460   let tln(ic+=1)=12
 00470 ! ** Field Types ** !:
         let ic=0
-00480   let fltyp$(ic+=1)='C'
+00480   fltyp$(ic+=1)='C'
 00490 ! ** Field Storage Lengths ** !:
         let ic=0 !:
         let mmddyy=6 : ccyymmdd=8
-00500   let sln(ic+=1)=12
+00500   sln(ic+=1)=12
 00510 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:
@@ -66,7 +66,7 @@
 00530 ! ** Storage Positions ** !:
         ! starting field position - default to the same as order displayed !:
         let ic=0
-00540   let sp(ic+=1)=1
+00540   sp(ic+=1)=1
 00550 ! ** Combo Boxes **                                                   !:
         cl=1 : c$(cl,1)='ComboF' !:
         c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&str$(cno) !:
@@ -74,7 +74,7 @@
         c$(cl,5)="13": c$(cl,6)="40" !:
         c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&str$(cno) !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
-        let limit_to_list$='1'
+        limit_to_list$='1'
 00560 ! ** Combo Boxes **                                                   !:
         ! cL=2 : c$(CL,1)='ComboF' !:
         ! c$(CL,2)=env$('Q')&"\GLmstr\transcode.h"&STR$(CNO) !:
@@ -82,7 +82,7 @@
         ! c$(CL,5)="3" : c$(CL,6)="30" !:
         ! c$(CL,7)=env$('Q')&"\GLmstr\transcode-idx.h"&STR$(CNO) !:
         ! ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
-        ! Let LIMIT_TO_LIST$='1'
+        ! lIMIT_TO_LIST$='1'
 00570   return 
 00580 ! ______________________________________________________________________
 00590 HAMSTER: ! 
@@ -99,4 +99,4 @@
 00700 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00710 ! /region
 00720 ! ______________________________________________________________________
-00730   let fltyp$(ic+=1)='N'
+00730   fltyp$(ic+=1)='N'

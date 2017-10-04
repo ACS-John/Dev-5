@@ -33,10 +33,10 @@
 00370   fnlbl(1,1,"Tax Year:",26,1)
 00380   fntxt(1,30,4,0,0,"30",0,"")
 00382   let resp$(respc+=1)=str$(taxyear)
-00390   let option1$(1)="March 31"
-00400   let option1$(2)="June 30"
-00410   let option1$(3)="September 30"
-00420   let option1$(4)="December 31"
+00390   option1$(1)="March 31"
+00400   option1$(2)="June 30"
+00410   option1$(3)="September 30"
+00420   option1$(4)="December 31"
 00430   fnlbl(2,1,"Quarter Ending Date:",26,1)
 00440   fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
 00450   if val(date$(4:5))=3 or val(date$(4:5))=4 or val(date$(4:5))=5 then let resp$(respc+=1)=option1$(1) ! march filing
@@ -85,7 +85,7 @@
 00760   if ck=5 then goto XIT
 00770   let taxyear=val(resp$(1)) ! tax year
 00780   if taxyear<2000 then goto L810
-00790   let ending_date=taxyear*10000+1231 conv L810
+00790   ending_date=taxyear*10000+1231 conv L810
 00800   goto L820
 00810 L810: mat ml$(2) !:
         let ml$(1)="You must enter a valid tax year such as 2007." !:
@@ -95,10 +95,10 @@
 00820 L820: for j=1 to 4
 00830     if resp$(2)=option1$(j) then let qtr=j: let m$=option1$(j): goto L850 ! quarter ending date
 00840   next j
-00850 L850: if qtr=1 then begdate=taxyear*10000+0312: let enddate=val(taxyear$)*10000+0318
-00860   if qtr=2 then begdate=taxyear*10000+0612: let enddate=val(taxyear$)*10000+0618
-00870   if qtr=3 then begdate=taxyear*10000+0912: let enddate=val(taxyear$)*10000+0918
-00880   if qtr=4 then begdate=taxyear*10000+1212: let enddate=val(taxyear$)*10000+1218
+00850 L850: if qtr=1 then begdate=taxyear*10000+0312: enddate=val(taxyear$)*10000+0318
+00860   if qtr=2 then begdate=taxyear*10000+0612: enddate=val(taxyear$)*10000+0618
+00870   if qtr=3 then begdate=taxyear*10000+0912: enddate=val(taxyear$)*10000+0918
+00880   if qtr=4 then begdate=taxyear*10000+1212: enddate=val(taxyear$)*10000+1218
 00890   if resp$(3)="True" then let frm=2 else let frm=1 ! need a worksheet
 00900   box15a=val(resp$(4)) ! first month liability
 00910   box15b=val(resp$(5))
@@ -161,7 +161,7 @@
 10800   let m1=m1+qtr(31)-dedqtrfica ! TOTAL WAGES less deductions FOR QURATER
 10820   let m4=m4+qtr(31)-dedqtrfederal ! TOTAL Taxable WAGES less deductions FOR QURATER
 10840   let fedwh=fedwh+qtr(1) ! FEDERAL WH FOR QUARTER
-10860   let eicqtr+=qtr(25) ! EIC FOR QUARTER
+10860   eicqtr+=qtr(25) ! EIC FOR QUARTER
 10880   if m2=0 then goto L1140
 10900   fn_print_details
 10920   goto L1140
@@ -301,7 +301,7 @@
 13720       if b$(1)(j:j)="-" then b$(1)(j:j)=""
 13740     next j
 13760     fnpa_fontsize(16)
-13780     let lyne=15 ! starting line of fed id
+13780     lyne=15 ! starting line of fed id
 13800     fnpa_txt(b$(1)(1:1),47,lyne)
 13820     fnpa_txt(b$(1)(2:2),56,lyne)
 13840     fnpa_txt(b$(1)(3:3),70,lyne)
@@ -372,7 +372,7 @@
 15140     if p1>0 then csz$(p1+1:p1+1)="" : goto L3750
 15160     csz$=ltrm$(rtrm$(csz$)): let p1=pos(csz$," ",-1)
 15180     let zip$=csz$(p1+1:len(csz$)): let zip$=ltrm$(rtrm$(zip$))
-15200     let p2=pos(csz$(1:p1-1)," ",-1) : let state$=csz$(p2+1:p1-1)(1:2) : let state$=ltrm$(rtrm$(state$))
+15200     let p2=pos(csz$(1:p1-1)," ",-1) : state$=csz$(p2+1:p1-1)(1:2) : state$=ltrm$(rtrm$(state$))
 15220     city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 15240   fnend 
 15260   def fn_print941_info ! pr 941 information

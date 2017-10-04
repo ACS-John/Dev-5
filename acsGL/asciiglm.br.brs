@@ -10,7 +10,7 @@
 00100   fncno(cno,cnam$)
 00110 ! ______________________________________________________________________
 00120   crlf$=chr$(13)&chr$(10)
-00130   let fl$="C:\ASCIIGLM.txt"
+00130   fl$="C:\ASCIIGLM.txt"
 00140   fntos(sn$="GLascii") !:
         let mylen=30: let mypos=mylen+3 : let right=1
 00150   fnlbl(1,1,"Path and File Name to Create:",mylen,right)
@@ -20,7 +20,7 @@
 00180   fncmdkey("&Cancel",5,0,1,"Will return to menu without creating a file.")
 00190   fnacs(sn$,0,mat resp$,ckey)
 00200   if ckey=5 then goto XIT
-00210   let fl$=trim$(resp$(1))
+00210   fl$=trim$(resp$(1))
 00220   open #2: "Name="&fl$&",RecL=79,EOL=CRLF,Replace",external,output 
 00230   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,input,keyed 
 00240 L240: read #1,using 'Form POS 1,C 12,C 50,POS 87,PD 6.2': gl$,de$,cb eof XIT

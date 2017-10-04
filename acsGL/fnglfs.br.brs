@@ -25,7 +25,7 @@
 16080     fnpriorcd(1)
 16100   else
 22000     fntos(sn$="glFS-lib") 
-22020     let lc=rc=0 : let mylen=23 : let mypos=mylen+3
+22020     lc=rc=0 : let mylen=23 : let mypos=mylen+3
 22040     fnlbl(lc+=1,1,"Statement Format:",mylen,1)
 22060     fncomboa("ps",lc,mypos,mat formatOption$) 
 22080     let resp$(resp_format:=rc+=1)=formatOption$(1)

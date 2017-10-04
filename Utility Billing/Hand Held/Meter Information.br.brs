@@ -36,7 +36,7 @@
 16060     fn_open_meter=fn_open_file
 16080   fnend 
 18000   def fn_open_file
-18020     let open_file_count=0 ! this value is used in the close_file sub routine
+18020     open_file_count=0 ! this value is used in the close_file sub routine
 18040     mat open_file(1)
 18060     open #open_file(open_file_count+=1):=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Use,RecL=384,KPs=1/11,KLn=10/2,Shr",internal,outin,keyed 
 18080     fn_open_file=open_file(1)
@@ -51,7 +51,7 @@
 20410     let mask_pointtwo=32 : let mask_number=30
 20420     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 20430     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
-20440     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
+20440     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 20450 ! 
 20460     fnhamster_field_reset
 20470 ! 
@@ -70,7 +70,7 @@
 20600     for srv_item=1 to 10
 20610       if (srv_item=1 and trim$(srv$(srv_item))<>'') or (srvnam$(srv_item)="GAS" or srv$(srv_item)="GA") or srv$(srv_item)='EL' or srvnam$(srv_item)="Lawn Meter" then ! if it is a metered service
 20620         mat option$(c_y+=1)
-20630         let option$(c_y)=srv$(srv_item)
+20630         option$(c_y)=srv$(srv_item)
 20640       end if 
 20650     next srv_item
 20660     fnhamster_add_comboa(2,mat option$)

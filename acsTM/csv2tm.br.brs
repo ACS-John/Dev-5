@@ -6,7 +6,7 @@
 11000   dim cnam$*40
 11020   dim sage_code$*128
 11400 ! constants
-11600   cr$=chr$(13) : let lf$=chr$(10) : let tab$=chr$(9)
+11600   cr$=chr$(13) : lf$=chr$(10) : let tab$=chr$(9)
 11800   crlf$=cr$&lf$
 12000   fncno(cno,cnam$)
 12400 ! 
@@ -19,8 +19,8 @@
 13400   let filter_date(2)=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
 13600 ! /r
 13800   dim label$(2)*25,filter_date(2)
-14000   let label$(1)='Starting Date'
-14200   let label$(2)='Ending Date'
+14000   label$(1)='Starting Date'
+14200   label$(2)='Ending Date'
 14400   fn_ask_dates(mat label$,mat filter_date)
 14600   if fkey=93 or fkey=99 then goto XIT
 14800   open #h_in:=fngethandle: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input 
@@ -32,12 +32,12 @@
 16000 FORM_OUT: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
 16200 FORM_PRN: form pos 1,c 8,x 1,n 6,n 10.2,n 10,n 10,x 1,c 15,n 7.2
 16400 FORM_PRN_HEAD: form pos 1,cc 8,x 1,c 6,x 1,5*cr 10,x 1,c 30,cr 7
-16600   fn_get_next_line(line$) : let line_count+=1 ! consume headings
+16600   fn_get_next_line(line$) : line_count+=1 ! consume headings
 16800   do 
-17000     fn_get_next_line(line$) : let line_count+=1
+17000     fn_get_next_line(line$) : line_count+=1
 17064     let the_date_prior=the_date
 17200     if line$<>'' and line$<>chr$(13) then 
-17400       let str2mat(line$,mat item$,',',"QUOTES:TRIM")
+17400       str2mat(line$,mat item$,',',"QUOTES:TRIM")
 17600       if item$(1)<>'' then let the_date=fn_get_the_date(item$(1))
 17602       if the_date<the_date_prior and the_date_prior>20151218 then pr 'the_date('&str$(the_date)&')<the_date_prior('&str$(the_date_prior)&') - that indicates a problem on line '&str$(line_count) : pause 
 17800       if the_date=>filter_date(1) and the_date<=filter_date(2) then 
@@ -46,7 +46,7 @@
 18040           client_id=val(item$(4))
 18042 ! if client_id=970 then pause
 18060           let hours=val(item$(7))
-18080           if rtrm$(item$(13),cr$)<>'' then let sage_code$=rtrm$(item$(13),cr$)
+18080           if rtrm$(item$(13),cr$)<>'' then sage_code$=rtrm$(item$(13),cr$)
 18100           dim description$*512
 18120           let description$=item$(12)
 18130 !         if client_id=3811 and the_date=20160716 then pr 'sage_code$='&sage_code$&' date:';the_date : pause
@@ -77,13 +77,13 @@
 22200     b6=0 ! ???
 22400     b7=1 ! ???
 22800     if wo_cat=6 then 
-23000       let sc=601
+23000       sc=601
 23200     else if wo_cat=2 then 
-23400       let sc=201
+23400       sc=201
 23600     else if wo_cat=11 then 
-23800       let sc=1101
+23800       sc=1101
 24000     else if wo_cat=23 then 
-24200       let sc=2300
+24200       sc=2300
 24400     else 
 24600       pr #255: '!!! wo_cat ('&str$(wo_cat)&') is unrecognized - enhance code'
 24800 !   pr 'wo_cat (';wo_cat;') is unrecognized - enhance code' : pause
@@ -99,7 +99,7 @@
 28800       let gnl_buffer$=gnl_buffer$&gnl_block$
 29000     loop 
 29200     let pos_crlf=pos(gnl_buffer$,crlf$)
-29400     let line$=gnl_buffer$(1:pos_crlf)
+29400     line$=gnl_buffer$(1:pos_crlf)
 29600     let gnl_buffer$(1:pos_crlf+1)=''
 29800 ! line$=srep$(line$,cr$,'^') : line$=srep$(line$,lf$,'~')
 30000 ! pr 'line='&line$ : pause
@@ -243,37 +243,37 @@
 51300     fn_acs_hourly_rate=hr_return
 51320   fnend 
 53000   def fn_onsupport(wo_client,wo_month,the_date)
-53020     let os_return=0
+53020     os_return=0
 53040 ! try lpad first
-53060     let spk$=lpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
+53060     spk$=lpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
 53080     read #h_support,using FMSUPPORT,key=spk$: cln$,scode,scode$,sdt2 nokey OS_TRY_RPAD
 53100     goto OS_FOUND_REC
 53120 ! 
 53140 OS_TRY_RPAD: ! 
-53160     let spk$=rpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
+53160     spk$=rpad$(str$(wo_client),6)&cnvrt$("n 2",wo_month)
 53180     read #h_support,using FMSUPPORT,key=spk$: cln$,scode,scode$,sdt2 nokey OS_FINIS
 53200     goto OS_FOUND_REC
 53220 ! 
 53240 OS_FOUND_REC: ! 
-53260     if the_date<=sdt2 then let os_return=1
+53260     if the_date<=sdt2 then os_return=1
 53280 ! 
 53300 OS_FINIS: ! 
 53320     fn_onsupport=os_return
 53340   fnend 
 54000   def fn_sage_hourly_rate(wo_sage_code$)
 54020     if lwrc$(wo_sage_code$)='glover' then 
-54040       let shr_return=40
+54040       shr_return=40
 54060     else if lwrc$(wo_sage_code$)='pbj offsite' or lwrc$(wo_sage_code$)='acc offsite' or lwrc$(wo_sage_code$)='offsite' then 
-54120       let shr_return=40
+54120       shr_return=40
 54140     else 
-54160       let shr_return=48.5
+54160       shr_return=48.5
 54180     end if 
 54200     fn_sage_hourly_rate=shr_return
 54220   fnend 
 56000   def fn_sage_write_out(wo_date,wo_time,wo_sage_code$*128,wo_desc$*512)
 56020     dim wo_sage_code_prior$*128
 56040     if ~setup_sawo then 
-56060       let setup_sawo=1
+56060       setup_sawo=1
 56080       open #sawo_h_out:=fngethandle: 'Name='&env$('Q')&'\Sage_AX_'&str$(filter_date(1))&'-'&str$(filter_date(2))&'.csv,RecL=512,eol=crlf,Replace',display,output 
 56100     end if 
 56120     if wo_sage_code_prior$='' and wo_sage_code$='' then 
@@ -302,10 +302,10 @@
 56540     end if 
 56560     let wo_sage_code_prior$=wo_sage_code$
 56580     dim sawo_line$*512
-56600     let sawo_line$=''
-56620     let sawo_line$(inf:inf)=date$(days(wo_date,'ccyymmdd'),'ccyy/mm/dd')&tab$
-56640     let sawo_line$(inf:inf)=str$(wo_time)&tab$
-56660     let sawo_line$(inf:inf)=wo_sage_code$&tab$
-56680     let sawo_line$(inf:inf)=wo_desc$
+56600     sawo_line$=''
+56620     sawo_line$(inf:inf)=date$(days(wo_date,'ccyymmdd'),'ccyy/mm/dd')&tab$
+56640     sawo_line$(inf:inf)=str$(wo_time)&tab$
+56660     sawo_line$(inf:inf)=wo_sage_code$&tab$
+56680     sawo_line$(inf:inf)=wo_desc$
 56700     pr #sawo_h_out: sawo_line$
 56720   fnend  ! fn_acs_write_out

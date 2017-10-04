@@ -34,7 +34,7 @@
 00310   let dp$=lpad$(uprc$(rtrm$(dp$)),3)
 00320   addrec=editrec=0
 00330   if ckey=1 then addrec=1 else !:
-          if ckey=2 then let editrec=1 else !:
+          if ckey=2 then editrec=1 else !:
             if ckey=3 then goto DELETE_RECORD
 00340 ! ______________________________________________________________________
 00350 ADD_EDIT_REC: ! 
@@ -123,11 +123,11 @@
 01100 ! ______________________________________________________________________
 01110 BLDSCR: ! 
 01120   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
-01130   let label1$(1)="Fica Match"
+01130   label1$(1)="Fica Match"
 01140   let x=1
 01150   for j=1 to 20
 01160     if dedcode(j)=3 then goto L1170 else goto L1180
-01170 L1170: let label1$(x+=1)=rtrm$(fullname$(j))
+01170 L1170: label1$(x+=1)=rtrm$(fullname$(j))
 01180 L1180: next j
 01190   mat label1$(x)
 01200   return 

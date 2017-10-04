@@ -11,7 +11,7 @@
 00110   fnconsole(off=0)
 00120   fncno(cno,cnam$) !:
         fndat(dat$)
-00130   let right=1 : center=2 : let limit_to_list=1
+00130   let right=1 : center=2 : limit_to_list=1
 00140   ac1=1
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using "Form pos 384,N 2",rec=1: nap !:
         close #20: 
@@ -21,7 +21,7 @@
 00180 MENU1: ! 
 00185   let resp$(2)=""
 00190   fntos(sn$='Prior_Period_Adj') !:
-        let lc=0 !:
+        lc=0 !:
         let mylen=40 : let mypos=mylen+2
 00200   fnlbl(lc+=1,1,"General Ledger Number:",mylen,right)
 00210   fnqgl(lc,mypos,0,2) !:
@@ -30,12 +30,12 @@
 00230   fntxt(lc,mypos,12,0,0,'pointtwo')
 00240   fnlbl(lc+=1,1,"Date:",mylen,right)
 00250   fntxt(lc,mypos,0,0,0,'1')
-00260   let lc+=1
+00260   lc+=1
 00270   fnlbl(lc+=1,1,"First Period Affected:",mylen,right)
 00280   fncombof('Period',lc,mypos,0,env$('Q')&"\GLmstr\Period.h"&str$(cno),1,2,3,25,env$('Q')&"\GLmstr\Period-Idx.h"&str$(cno),limit_to_list)
 00290   fnlbl(lc+=1,1,"First Year Affected:",mylen,right)
 00300   fncombof('Year',lc,mypos,0,env$('Q')&"\GLmstr\Year.h"&str$(cno),1,1,2,7,env$('Q')&"\GLmstr\Year-Idx.h"&str$(cno),limit_to_list)
-00310   let lc+=1
+00310   lc+=1
 00320   fnlbl(lc+=1,1,"Last Period Affected:",mylen,right)
 00330   fncombof('Period',lc,mypos,0,env$('Q')&"\GLmstr\Period.h"&str$(cno),1,2,3,25,env$('Q')&"\GLmstr\Period-Idx.h"&str$(cno),limit_to_list)
 00340   fnlbl(lc+=1,1,"Last Year Affected:",mylen,right)
@@ -61,7 +61,7 @@
 00480   if am>0 then am1=am1+am else am2=am2+am
 00490   goto L500
 00500 L500: if fm(2)=1 then goto L580
-00510   if fm(4)=1 then let last=nap else let last=fm(3)
+00510   if fm(4)=1 then last=nap else last=fm(3)
 00520   for j=fm(1) to last
 00530     bp(j)=bp(j)+am
 00540   next j

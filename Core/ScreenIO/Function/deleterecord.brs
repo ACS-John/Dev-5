@@ -19,6 +19,6 @@
        if len(trim$(key$)) then
           delete #DataFile:
        end if
-       let ExitMode=QuitOnly
+       exitMode=QuitOnly
     end if
  fnend

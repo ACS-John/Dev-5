@@ -4,7 +4,7 @@
 00040   def library fnconsole(;on_off)
 00050     option retain 
 00070     dim cap$*128
-00080     let on=1 : let off=0
+00080     on=1 : off=0
 00090     if on_off=windowstate then goto XIT !   : pr "WindowState remains the same.
 00110     if on_off=off then 
 00120       execute 'Config GUI On'

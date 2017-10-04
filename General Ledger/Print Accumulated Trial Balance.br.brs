@@ -30,10 +30,10 @@
 14180   fncreg_Read(cap$&': DayEnd'  ,tmp$) : endday=val(tmp$)
 14200   let m2GlmCbAmtPos=87
 14220   if nap=13 then let m1GlmBbAmtPos=171-6 else let m1GlmBbAmtPos=171-12 ! 171 was 249
-14240   ! let last=val(lastCapitalAccount$(4:9))
+14240   ! last=val(lastCapitalAccount$(4:9))
 14260   open #h_glmstr:=1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 14280   open #h_actrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Shr",internal,input,keyed 
-14300   if fnprocess=1 then let s1=1 : goto mainLoopInit
+14300   if fnprocess=1 then s1=1 : goto mainLoopInit
 14320 goto SCREEN1
 16000 SCREEN1: ! r:
 16020   fntos(sn$="Acglactb")
@@ -77,9 +77,9 @@
 22020   lastCapitalAccount$=cogl$(3)=fnagl$(resp$(respc_lastCapitalAccount))
 22060   petro_opt$=resp$(respc_prBalFirst)
 22080   let periodToPrint=val(resp$(respc_periodCode)) ! period code to print
-22100   if resp$(respc_printAll)="True" then let s1=1 ! method of selecting
-22120   if resp$(respc_printSelected)="True" then let s1=2
-22140   if resp$(respc_printRange)="True" then let s1=3
+22100   if resp$(respc_printAll)="True" then s1=1 ! method of selecting
+22120   if resp$(respc_printSelected)="True" then s1=2
+22140   if resp$(respc_printRange)="True" then s1=3
 22160   let n1$=fnagl$(resp$(respc_rangeStart))
 22180   let n2$=fnagl$(resp$(respc_rangeEnd))
 22200   startday=days(resp$(resp_dateStart),'ccyymmdd')
@@ -125,7 +125,7 @@
 34240 AfterReadGlmstr: !
 34260   let dno=val(n$(1:3))
 34280   ano=val(n$(4:9))
-34300   let sno=val(n$(10:12))
+34300   sno=val(n$(10:12))
 34320   if (periodToPrint=0 or periodToPrint=1) and (dno>val(lastCapitalAccount$(1:3)) or ano>val(lastCapitalAccount$(4:9))) then  ! added the dno logic on 2/4/2017
 34322     bb=0
 34324 ! else

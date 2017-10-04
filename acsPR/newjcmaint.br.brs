@@ -59,7 +59,7 @@
 00420 ! ______________________________________________________________________
 00430 ADDREC: ! 
 00440   addjob=1: mat ta=(0): let dup=0: let jn$="": let n$="": mat a$=(''): mat b=(0) !:
-        contact$="": let ph$="": let email$=""
+        contact$="": let ph$="": email$=""
 00450   fntos(sn$="jobfm") !:
         let respc=0 : let frac=0 !:
         let mylen=25 : let mypos=mylen+2
@@ -152,7 +152,7 @@
 01080   b(4)=val(resp$(9)) ! Billing status
 01090   contact$=resp$(10)
 01100   let ph$=resp$(11)
-01110   let email$=resp$(12) ! e-mail address
+01110   email$=resp$(12) ! e-mail address
 01120   if addjob=1 then goto L1150
 01130   rewrite #1,using L1350,key=jn$: jn$,n$,mat a$,mat b,contact$,ph$,email$ nokey L1150
 01140   goto L1160
@@ -191,7 +191,7 @@
 01440 L1440: delete #1,key=hjn$: nokey L1580
 01450   restore #2,key>=hjn$&"     ": nokey L1580
 01460 L1460: read #2,using L1370: cn$,k$,mat l,mat ta eof L1580
-01470   let ojn$=cn$(1:6)
+01470   ojn$=cn$(1:6)
 01480   if hjn$<>ojn$ then goto L1580
 01490   delete #2,key=cn$: nokey L1460
 01500   gosub L1510: goto L1460
@@ -245,10 +245,10 @@
 01990 L1990: read #2,using L1370,release: cn$,k$,mat l eof L1900
 02000   if cn$(1:6)><jn$ then goto L2080
 02010   let x1=x1+1
-02020   let ln$(1,x1)=cn$(7:11)
-02030   let ln$(2,x1)=k$
+02020   ln$(1,x1)=cn$(7:11)
+02030   ln$(2,x1)=k$
 02040   for j=1 to 13
-02050     let ln(j,x1)=l(j)
+02050     ln(j,x1)=l(j)
 02060   next j
 02070   if x1<3 then goto L1990
 02080 L2080: if x1=0 then goto L2260
@@ -329,7 +329,7 @@
 02770 L2770: read #2,using L1360: mat ta eof L2800
 02780   rewrite #2,using L1360: 0,0
 02790   goto L2770
-02800 L2800: let lr3=lrec(3)
+02800 L2800: lr3=lrec(3)
 02810   rewrite #3,using L1390,rec=1: lr3
 02820   for j=2 to lr3
 02830     read #3,using L2840,rec=j: cn$,nta norec L2910
@@ -482,19 +482,19 @@
         let ml$(2)="to "&cn$&". Take OK to change, else Cancel." !:
         fnmsgbox(mat ml$,resp$,cap$,49)
 03860   if resp$="OK" then goto L3870 else goto EDITCAT
-03870 L3870: let l(1)=val(resp$(3)) ! labor estimate
-03880   let l(2)=val(resp$(4)) ! hours estimate
-03890   let l(3)=val(resp$(5)) ! other estimate
-03900   let l(4)=val(resp$(6)) ! labor to date
-03910   let l(5)=val(resp$(7)) ! hours to date
-03920   let l(6)=val(resp$(8)) ! other to date
-03930   let l(7)=val(resp$(9)) ! labor currrent period
-03940   let l(8)=val(resp$(10)) ! hours currrent period
-03950   let l(9)=val(resp$(11)) ! other currrent period
-03960   let l(10)=val(resp$(12)) ! units
-03970   let l(11)=val(resp$(13)) ! estimated units
-03980   let l(12)=val(resp$(14)) ! labor % complete
-03990   let l(13)=val(resp$(15)) ! labor % complete
+03870 L3870: l(1)=val(resp$(3)) ! labor estimate
+03880   l(2)=val(resp$(4)) ! hours estimate
+03890   l(3)=val(resp$(5)) ! other estimate
+03900   l(4)=val(resp$(6)) ! labor to date
+03910   l(5)=val(resp$(7)) ! hours to date
+03920   l(6)=val(resp$(8)) ! other to date
+03930   l(7)=val(resp$(9)) ! labor currrent period
+03940   l(8)=val(resp$(10)) ! hours currrent period
+03950   l(9)=val(resp$(11)) ! other currrent period
+03960   l(10)=val(resp$(12)) ! units
+03970   l(11)=val(resp$(13)) ! estimated units
+03980   l(12)=val(resp$(14)) ! labor % complete
+03990   l(13)=val(resp$(15)) ! labor % complete
 04000   rewrite #2,using L1370: cn$,k$,mat l,mat ta
 04010   if holdckey=98 then let holdckey=0: goto GET_CATEGORY_LISTING ! return to caterory grid listing from editcategory
 04020   if holdckey=99 then let holdckey=0: goto GET_CATEGORY_LISTING
@@ -546,10 +546,10 @@
 04250   fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 04260   if ckey=5 then goto GET_CATEGORY_LISTING
 04270   let detaileditrec=val(resp$(1))
-04280   if ckey=1 then adddetails=1: mat tr=(0): let eno$="": let jno$=jn$: goto EDIT_DETAILS
-04290   if ckey=2 then read #3,using L1380,rec=detaileditrec: eno$,jno$,mat tr,pd$,nta : let editdetails=1 : goto EDIT_DETAILS
+04280   if ckey=1 then adddetails=1: mat tr=(0): eno$="": let jno$=jn$: goto EDIT_DETAILS
+04290   if ckey=2 then read #3,using L1380,rec=detaileditrec: eno$,jno$,mat tr,pd$,nta : editdetails=1 : goto EDIT_DETAILS
 04300   if ckey=4 then read #3,using L1380,rec=detaileditrec: eno$,jno$,mat tr,pd$,nta !:
-          let eno$=jno$=pd$="": mat tr=(0) !:
+          eno$=jno$=pd$="": mat tr=(0) !:
           rewrite #3,using L1380,rec=detaileditrec: eno$,jno$,mat tr,pd$,nta !:
           goto GET_CATEGORY_LISTING
 04310   goto GET_CATEGORY_LISTING
@@ -599,7 +599,7 @@
 04610   fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
 04620   fnacs(sn$,0,mat resp$,ckey) ! full edit details
 04630   if ckey=5 then goto REVIEW_DETAILS
-04640   let eno$=resp$(1) ! employee #/ ref #
+04640   eno$=resp$(1) ! employee #/ ref #
 04650   let jno$=resp$(2) ! job number
 04660   let tr(1)=val(resp$(3)) ! category
 04670   let tr(2)=val(resp$(4)) ! sub-category
@@ -611,10 +611,10 @@
 04730   let tr(8)=val(resp$(10)) ! paroll taxes
 04740   let tr(9)=val(resp$(11)) ! amount
 04750   let pd$=resp$(12) ! description
-04760   if editdetails=1 then rewrite #3,using L1380,rec=detaileditrec: eno$,jno$,mat tr,pd$ : let editdetails=0: goto REVIEW_DETAILS
+04760   if editdetails=1 then rewrite #3,using L1380,rec=detaileditrec: eno$,jno$,mat tr,pd$ : editdetails=0: goto REVIEW_DETAILS
 04770   if adddetails=1 then goto L4780 else goto L4860
 04780 L4780: read #2,using L1360,key=cn$: mat ta
-04790 L4790: let lrec3=lrec(3)+1
+04790 L4790: lrec3=lrec(3)+1
 04800   write #3,using L1380,rec=lrec3: eno$,jno$,mat tr,pd$,0 ioerr L4790
 04810   if ta(2)>0 then rewrite #3,using L1390,rec=ta(2): lrec3
 04820   if ta(1)=0 then let ta(1)=ta(2)=lrec3

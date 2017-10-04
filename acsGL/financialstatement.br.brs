@@ -47,12 +47,12 @@
 14800   fnacs(sn$,0,mat resp$,ckey)
 14900   if ckey=5 then goto XIT
 15000   if ckey=2 then chain "S:\acsGL\Bld_D_Records"
-15100   if resp$(1)="True" then let selection=1
-15200   if resp$(2)="True" then let selection=2
-15300   if resp$(3)="True" then let selection=3
-15400   if resp$(4)="True" then let selection=4
-15500   if resp$(5)="True" then let selection=5
-15600   if resp$(6)="True" then let selection=6
+15100   if resp$(1)="True" then selection=1
+15200   if resp$(2)="True" then selection=2
+15300   if resp$(3)="True" then selection=3
+15400   if resp$(4)="True" then selection=4
+15500   if resp$(5)="True" then selection=5
+15600   if resp$(6)="True" then selection=6
 15700   let f1=selection
 15800   close #1: ioerr L520
 15900 L520: open #fin_stmt=1: "Name="&env$('Q')&"\GLmstr\"&fil$(f1)&",KFName="&env$('Q')&"\GLmstr\"&idx$(f1)&",Shr",internal,outin,keyed ioerr MENU1
@@ -83,15 +83,15 @@
 18400   fnacs(sn$,0,mat resp$,ckey)
 18500   if ckey=5 then goto L2350
 18600   add=edit=0
-18700   let editrec=val(resp$(1))
+18700   editrec=val(resp$(1))
 18800   if ckey=1 then 
 18900     add=1
-19000     let sp=ls=ds=ul=rs=bc=ap=ic=fc=rnp=0
+19000     sp=ls=ds=ul=rs=bc=ap=ic=fc=rnp=0
 19100     let rno$=d$=te$=""
 19200     mat ac=(0)
 19300     goto ADD_EDIT_FIN_STMTS ! add
 19400   else if ckey=2 then 
-19500     let edit=1
+19500     edit=1
 19600     read #fin_stmt,using "Form POS 1,C 5,C 50,C 1,2*N 2,15*N 1,N 3,N 5",rec=editrec: rno$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc,rnp norec FIN_STMT_GRID
 19700     let holdrno$=rno$
 19800     goto ADD_EDIT_FIN_STMTS
@@ -161,8 +161,8 @@
 26200   let rno$=lpad$(rtrm$(rno$),5)
 26300   let d$=resp$(2)
 26400   let te$=resp$(3)(1:1)
-26500   let sp=val(resp$(4))
-26600   let ls=val(resp$(5))
+26500   sp=val(resp$(4))
+26600   ls=val(resp$(5))
 26700   if resp$(6)="True" then let ds=1 else let ds=0 ! dollar sign
 26800   let ul=val(resp$(7))
 26900   if resp$(8)="True" then let rs=1 else let rs=0 ! reverse sign
@@ -380,16 +380,16 @@
 48100     cmask$(ic+=1)=number$
 48200     cmask$(ic+=1)=number$
 48300     cmask$(ic+=1)=""
-48400     let option2$(1)="D = Detail (Pulls amounts from G/L accounts)"
-48500     let option2$(2)="T = Total  (Used to pr totals or subtotals)"
-48600     let option2$(3)="R = Report Heading (Places name of report in heading)"
-48700     let option2$(4)="H = Header (Places headings within the F/S)"
-48800     let option2$(5)="S = Sub Heading (Places sub heading at top of F/S)"
-48900     let option2$(6)="F = Footnote (Used to place footnotes at bottom of F/S)"
-49000     let option2$(7)="P = Profit or Loss (Used to place P & L amount on B/S"
-49100     let option2$(8)="E = Equity (Used to combine P&L with equity"
-49200     let option2$(9)="B = Bank Accounts (Beginning and Ending on Fund Stmt)"
-49300     let option2$(10)="C = Cash Flow Pause Indicator (Pauses & asks amounts)"
+48400     option2$(1)="D = Detail (Pulls amounts from G/L accounts)"
+48500     option2$(2)="T = Total  (Used to pr totals or subtotals)"
+48600     option2$(3)="R = Report Heading (Places name of report in heading)"
+48700     option2$(4)="H = Header (Places headings within the F/S)"
+48800     option2$(5)="S = Sub Heading (Places sub heading at top of F/S)"
+48900     option2$(6)="F = Footnote (Used to place footnotes at bottom of F/S)"
+49000     option2$(7)="P = Profit or Loss (Used to place P & L amount on B/S"
+49100     option2$(8)="E = Equity (Used to combine P&L with equity"
+49200     option2$(9)="B = Bank Accounts (Beginning and Ending on Fund Stmt)"
+49300     option2$(10)="C = Cash Flow Pause Indicator (Pauses & asks amounts)"
 49400   fnend 
 49500 FIXRNP: ! 
 49600   reread #fin_stmt,using "Form POS 1,C 5,C 50,C 1,2*N 2,15*N 1,N 3,N 5": rno$ norec L630,eof EO_FIN_STMT_GRID,ioerr L9020

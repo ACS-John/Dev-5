@@ -88,7 +88,7 @@
 22300 L780: let fullgridname$=datafolder$&"\Grid\"&database$&"\"&resp$(1)&".grd"
 22320   let fullgridindx$=datafolder$&"\Grid\"&database$&"\"&resp$(1)&".idx"
 22340   let gridname$=resp$(1)
-22360   let open_read$=datafolder$&"\Grid\"&database$&"\"&database$&"_info"
+22360   open_read$=datafolder$&"\Grid\"&database$&"\"&database$&"_info"
 22380   if ckey=4 then 
 22390     close #hgridfile: ioerr ignore
 22400     execute 'free "'&fullgridname$&'" -n' ioerr SELECTDATABASE
@@ -105,7 +105,7 @@
 22560   mat item$(2)
 22580   close #hgridfile: ioerr ignore
 22600   open #hgridfile:=15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outin,keyed ioerr SELECTDATABASE
-22620   let sn$="mstrflex"
+22620   sn$="mstrflex"
 22640   fntos(sn$)
 22660   let txt$=uprc$(gridname$)
 22680   fnlbl(1,1,txt$,20,2,3)
@@ -258,7 +258,7 @@
 25510   read #hgridfile,using fGridFile,key=cnvrt$("pic(zzz)",lastcolumn): newcolumn nokey ADDTOGRID eof ADDTOGRID
 25520   let newcolumn=newcolumn+1
 25540   rewrite #hgridfile,using fGridFile: newcolumn
-25560   let lastcolumn=lastcolumn-1
+25560   lastcolumn=lastcolumn-1
 25580   if lastcolumn>0 and lastcolumn>=columnnum then goto L1810
 25600   goto WRITE_NEW_RECORD ! WRITE NEW RECORD
 25620 ! /r
@@ -270,7 +270,7 @@
 25740   mat colmask$(80)
 25760   mat colmask$=("")
 25780   columns=0
-25800   let specline=10010
+25800   specline=10010
 25820   let dataline=10510
 25840 ! ____________________________________________________________________
 25860 ! This section generates the program lines needed to create the column            headings and column masks
@@ -287,7 +287,7 @@
 26060     columns=columns+1
 26080     pr #h_gridspecs1,using F_GRIDSPECS1: str$(specline)& " colHdr$("&str$(columns)&")="&'"'&trim$(abbrev$)&'"'&" : ColMask$("&str$(columns)&")="&'"'&trim$(colmask$)&'"'
 26100     F_GRIDSPECS1: form pos 1,c 255
-26120     let specline=specline+10
+26120     specline=specline+10
 26140     if pos(vname$,"$",1) then  ! determine if numeric or character
 26180       pr #h_gridspecs1,using F_GRIDSPECS1: str$(dataline)& " let item$("&str$(columns)&")="&trim$(vname$)
 26200     else 
@@ -322,7 +322,7 @@
 26760 ! /r
 26780 ADDGRIDNAME: ! r: Allows you to add columns to your grid
 26800   mat resp$=("")
-26820   let sn$="addgrid"
+26820   sn$="addgrid"
 26840   fntos(sn$)
 26880   fnlbl(1,1,"Grid Name:" ,20,1)
 26900   let gridinfo$(2)=gridname$

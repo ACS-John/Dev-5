@@ -20,7 +20,7 @@
 01030    let ParentKey$=""
 01040    let Record=0
 01050    let Path$=""
-01060    let ScreenCode$="PROPERTIES"
+01060    screenCode$="PROPERTIES"
 01070    chain "s:\core\screenio\screeniosaveandtest.br",mat PassedData$,Key$,ParentKey$,Record,Path$,ScreenCode$
 01080    if len(trim$(Ret$)) then
 01090       pr Ret$
@@ -40,14 +40,14 @@
 05009     if s$(sio_cmbOrientation)='Landscape' then
 05010       if tmp_height>tmp_width then ! and it's taller than it is wide
 05011         let tmp_hold=tmp_height
-05012         let tmp_height=tmp_width : let s$(sio_txtHeight)=str$(tmp_height)
-05013         let tmp_width=tmp_hold : let s$(sio_txtWidth)=str$(tmp_width)
+05012         let tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
+05013         let tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
 05014       end if
 05015     else if s$(sio_cmbOrientation)='Portrait' then
 05016       if tmp_width>tmp_height then ! and it's wider than it is tall
 05017         let tmp_hold=tmp_height
-05018         let tmp_height=tmp_width : let s$(sio_txtHeight)=str$(tmp_height)
-05019         let tmp_width=tmp_hold : let s$(sio_txtWidth)=str$(tmp_width)
+05018         let tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
+05019         let tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
 05020       end if
 05021     end if
 05022   ! /r

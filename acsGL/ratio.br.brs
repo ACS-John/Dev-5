@@ -49,8 +49,8 @@
 00410   fnacs(sn$,0,mat resp$,ckey)
 00420   if ckey=5 then goto XIT
 00430   add=edit=0
-00440   let editrec=val(resp$(1))
-00450   if ckey=2 then let edit=1
+00440   editrec=val(resp$(1))
+00450   if ckey=2 then edit=1
 00460   if ckey=4 then goto GL_NUMBERS
 00470 ! If CKEY=3 Then Chain "S:\acsGL\acglschp" ! prints prints a Ratiomst
 00480   if ckey=1 then add=1 !:

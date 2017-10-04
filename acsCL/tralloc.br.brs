@@ -14,7 +14,7 @@
 00120   goto XIT
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
-        let open_file_count=0 ! this value is used in the close_file sub routine
+        open_file_count=0 ! this value is used in the close_file sub routine
 00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno)&",Use,RecL=80,KPs=1,KLn=11,Shr",internal,outin,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
@@ -24,15 +24,15 @@
 00210   fncno(cno)
 00220 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
-00230   let lbl$(ic+=1)="Bank Code" !:
-        let lbl$(ic+=1)="Transaction Type" !:
-        let lbl$(ic+=1)="Check/Reference" !:
-        let lbl$(ic+=1)="General Ledger Number" !:
-        let lbl$(ic+=1)="Amount"
-00240   let lbl$(ic+=1)="Description" !:
-        let lbl$(ic+=1)="Invoice Date" !:
-        let lbl$(ic+=1)="Purchase Order Number" !:
-        let lbl$(ic+=1)="Posting Code"
+00230   lbl$(ic+=1)="Bank Code" !:
+        lbl$(ic+=1)="Transaction Type" !:
+        lbl$(ic+=1)="Check/Reference" !:
+        lbl$(ic+=1)="General Ledger Number" !:
+        lbl$(ic+=1)="Amount"
+00240   lbl$(ic+=1)="Description" !:
+        lbl$(ic+=1)="Invoice Date" !:
+        lbl$(ic+=1)="Purchase Order Number" !:
+        lbl$(ic+=1)="Posting Code"
 00250 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
@@ -48,27 +48,27 @@
         let tln(ic+=1)=1
 00280 ! ** Field Types ** !:
         let ic=0
-00290   let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='Cr' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='PD'
-00300   let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='G' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='N'
+00290   fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='Cr' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='PD'
+00300   fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='G' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='N'
 00310 ! ** Field Storage Lengths ** !:
         let ic=0 !:
         let mmddyy=6 : ccyymmdd=8
-00320   let sln(ic+=1)=2 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=8 !:
-        let sln(ic+=1)=12 !:
-        let sln(ic+=1)=5.2
-00330   let sln(ic+=1)=30 !:
-        let sln(ic+=1)=6 !:
-        let sln(ic+=1)=12 !:
-        let sln(ic+=1)=1
+00320   sln(ic+=1)=2 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=8 !:
+        sln(ic+=1)=12 !:
+        sln(ic+=1)=5.2
+00330   sln(ic+=1)=30 !:
+        sln(ic+=1)=6 !:
+        sln(ic+=1)=12 !:
+        sln(ic+=1)=1
 00340 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:
@@ -85,15 +85,15 @@
 00370 ! ** Storage Positions ** !:
         ! default to the same as order displayed !:
         let ic=0
-00380   let sp(ic+=1)=1 !:
-        let sp(ic+=1)=3 !:
-        let sp(ic+=1)=4 !:
-        let sp(ic+=1)=12 !:
-        let sp(ic+=1)=24
-00390   let sp(ic+=1)=29 !:
-        let sp(ic+=1)=59 !:
-        let sp(ic+=1)=68 !:
-        let sp(ic+=1)=80
+00380   sp(ic+=1)=1 !:
+        sp(ic+=1)=3 !:
+        sp(ic+=1)=4 !:
+        sp(ic+=1)=12 !:
+        sp(ic+=1)=24
+00390   sp(ic+=1)=29 !:
+        sp(ic+=1)=59 !:
+        sp(ic+=1)=68 !:
+        sp(ic+=1)=80
 00400 ! ** Combo Boxes **                                                   !:
         ! CL=Field Number  : C$(CL,1)='ComboF'                                !:
         ! C$(CL,2)=Linked File Name                                           !:
@@ -101,7 +101,7 @@
         ! C$(CL,5)=Description Position : C$(CL,6)=Description Length         !:
         ! C$(CL,7)=Index File                                                 !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
-        let limit_to_list$='1'
+        limit_to_list$='1'
 00410 ! cL=1 : c$(CL,1)='ComboF' !:
         ! c$(CL,2)=env$('Q')&'\CLmstr\PayMstr.h'&STR$(CNO) !:
         ! c$(CL,3)='1' : c$(CL,4)='8' !:

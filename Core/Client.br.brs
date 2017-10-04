@@ -864,15 +864,15 @@
 82040   ! cursys type codes
 82060   ! 
 82080   st_code$=uprc$(st_code$)
-82100   ! if st_code$='G1' then let st_code$='GL'
-82120   if st_code$='G1' then let st_code$='GL'
-82140   if st_code$='G3' then let st_code$='G2' ! Accountant's GL Add On
-82160   if st_code$='U1' then let st_code$='UB' ! UB No Discount
-82180   if st_code$='U2' then let st_code$='UB' ! UB 500-1000 Customers
-82200   if st_code$='U3' then let st_code$='UB' ! UB <500 Customers
+82100   ! if st_code$='G1' then st_code$='GL'
+82120   if st_code$='G1' then st_code$='GL'
+82140   if st_code$='G3' then st_code$='G2' ! Accountant's GL Add On
+82160   if st_code$='U1' then st_code$='UB' ! UB No Discount
+82180   if st_code$='U2' then st_code$='UB' ! UB 500-1000 Customers
+82200   if st_code$='U3' then st_code$='UB' ! UB <500 Customers
 82220   ! U4 is UB handheld add on in both
-82240   if st_code$='P1' then let st_code$='PR'
-82260   if st_code$='P2' then let st_code$='P4' ! Job Cost Payroll Add On
+82240   if st_code$='P1' then st_code$='PR'
+82260   if st_code$='P2' then st_code$='P4' ! Job Cost Payroll Add On
 82280   fn_system_code_standardize$=st_code$
 82300 fnend 
 97000 def library fnclient_is_converting

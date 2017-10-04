@@ -17,8 +17,8 @@
 00180   open #1: "Name="&env$('Q')&"\TMmstr\Work2.H"&wsid$&",NoShr",internal,input ioerr ERTN
 00190   open #2: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr ERTN
 00200   pr newpage
-00210   pr fields "10,10,Cc 60,n": "Printing Unbilled Aging by Partner..."
-00220   pr fields "12,30,Cc 20,B,5": "Cancel (F5)"
+00210   pr f "10,10,Cc 60,n": "Printing Unbilled Aging by Partner..."
+00220   pr f "12,30,Cc 20,B,5": "Cancel (F5)"
 00230   fnopenprn(cp,58,220,process)
 00240   gosub L520
 00250 L250: read #1,using L260: cno$,cna$,en$,mat d eof L300 ioerr ERTN
@@ -89,9 +89,9 @@
 00890     if rtrm$(l$(j))="" then goto L920
 00900   next j
 00910   goto L930
-00920 L920: let l$(j)=en$
+00920 L920: l$(j)=en$
 00930 L930: for k=1 to 6
-00940     let l(j,k)=l(j,k)+d(k+2)
+00940     l(j,k)=l(j,k)+d(k+2)
 00950   next k
 00960   return 
 00970 ! ______________________________________________________________________
@@ -101,7 +101,7 @@
 01010     read #3,using L1020,key=lpad$(rtrm$(l$(j)),9): e$ nokey L1040 ioerr ERTN
 01020 L1020: form pos 10,c 25
 01030     goto L1050
-01040 L1040: let e$="UNASSIGNED"
+01040 L1040: e$="UNASSIGNED"
 01050 L1050: pr #255,using L1060: e$,l(j,1),l(j,2),l(j,3),l(j,4),l(j,5),l(j,6)
 01060 L1060: form pos 5,c 25,pos 38,n 7.2,x 1,5*n 11.2,skip 1
 01070     for j1=1 to 6

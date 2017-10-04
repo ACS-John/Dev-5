@@ -15,9 +15,9 @@
 10280 ! pr #win,fields "2,1,Cc 40,R,N": "Company Number "&str$(cno)
 10300     fnstatus(message$) ! pr #win,fields "4,1,Cc 40,N": message$
 10320 ! if stopable=1 then
-10340 !  pr fields "15,34,C 11,B,5": "Cancel (F5)"
+10340 !  pr f "15,34,C 11,B,5": "Cancel (F5)"
 10360 ! else 
-10380 !  pr fields "15,34,C 11,R,N": "Do Not Stop"
+10380 !  pr f "15,34,C 11,R,N": "Do Not Stop"
 10400 ! end if
 10420     goto XIT
 10440 ! ______________________________________________________________________

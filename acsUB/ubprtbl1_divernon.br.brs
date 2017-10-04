@@ -27,7 +27,7 @@
           let x=len(at$(j)) : let y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
-00190   let linelength=62
+00190   linelength=62
 00200   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
 00210   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence #
 00220   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -36,7 +36,7 @@
 00250 SCREEN1: ! 
 00260   a$="" : let prtbkno=0
 00270   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : let ll=24 !:
+        let pf=26 : ll=24 !:
         let respc=0
 00280   fnlbl(1,1,"Service From:",ll,1)
 00290   fntxt(1,pf,8,8,1,"1",0,tt$) !:
@@ -82,9 +82,9 @@
 00490   if resp$(9)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(9))
-00500   if resp$(10)="True" then let sl1=1 else let sl1=0
+00500   if resp$(10)="True" then sl1=1 else sl1=0
 00510   if trim$(a$)<>"" then read #1,using L520,key=a$: z$,route,sequence nokey SCREEN1 !:
-          let st1=1
+          st1=1
 00520 L520: form pos 1,c 10,pos 1741,n 2,n 7
 00530   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00540   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
@@ -110,23 +110,23 @@
 00740   if prtbkno><route then goto F5_CANCEL
 00750 L750: if f><d1 then goto L620
 00760   if st1=0 then goto HERE
-00770   if st1$=z$ then let st1=0 else goto L620
+00770   if st1$=z$ then st1=0 else goto L620
 00780 HERE: ! 
 00790 ! read alternate billing address
 00800   read #3,using L820,key=z$: mat ba$ nokey L890
 00810   if trim$(ba$(1))="" and trim$(ba$(2))="" and trim$(ba$(3))="" then goto L890 ! IF NO INFO IN ALTERNATE FILE SKIP
 00820 L820: form pos 11,4*c 30
-00830   let e1=0 : mat pe$=("")
+00830   e1=0 : mat pe$=("")
 00840   for j=1 to 4
 00850     if rtrm$(ba$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : let pe$(e1)=ba$(j)
 00860   next j
 00870   goto L1020
 00880 ! ______________________________________________________________________
-00890 L890: let e1=0 : mat pe$=("")
+00890 L890: e1=0 : mat pe$=("")
 00900   for j=2 to 4
 00910     if rtrm$(e$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : let pe$(e1)=e$(j)
 00920   next j
 00930   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$
 00940   goto L1020
@@ -147,7 +147,7 @@
 01080   goto L620
 01090 ! ______________________________________________________________________
 01100 SCREEN3: ! 
-01110   let sn$ = "UBPrtBl1-2" !:
+01110   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
 01120   let txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)

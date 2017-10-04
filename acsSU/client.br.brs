@@ -15,7 +15,7 @@
 00140   goto XIT
 00150 ! ______________________________________________________________________
 00160 OPEN_FILE: ! !:
-        let open_file_count=0 ! this value is used in the close_file sub routine
+        open_file_count=0 ! this value is used in the close_file sub routine
 00170   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Client.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\TMmstr\Client-Idx.h"&str$(cno)&",Use,RecL=406,KPs=1,KLn=6,Shr",internal,outin,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
@@ -25,15 +25,15 @@
 00230   fncno(cno)
 00240 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
-00250   let lbl$(ic+=1)="Client ID" !:
-        let lbl$(ic+=1)="Company Name" !:
-        let lbl$(ic+=1)="Company Address (1)" !:
-        let lbl$(ic+=1)="Company Address (2)" !:
-        let lbl$(ic+=1)="Company City State Zip"
-00260   let lbl$(ic+=1)="E-Mail Address" !:
-        let lbl$(ic+=1)="Primary Contact Name" !:
-        let lbl$(ic+=1)="Phone Number" !:
-        let lbl$(ic+=1)="x"
+00250   lbl$(ic+=1)="Client ID" !:
+        lbl$(ic+=1)="Company Name" !:
+        lbl$(ic+=1)="Company Address (1)" !:
+        lbl$(ic+=1)="Company Address (2)" !:
+        lbl$(ic+=1)="Company City State Zip"
+00260   lbl$(ic+=1)="E-Mail Address" !:
+        lbl$(ic+=1)="Primary Contact Name" !:
+        lbl$(ic+=1)="Phone Number" !:
+        lbl$(ic+=1)="x"
 00270 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
@@ -49,15 +49,15 @@
         let tln(ic+=1)=50
 00300 ! ** Field Types ** !:
         let ic=0
-00310   let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='C'
-00320   let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='C'
+00310   fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='C'
+00320   fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='C'
 00330 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:

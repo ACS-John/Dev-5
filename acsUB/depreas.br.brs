@@ -24,7 +24,7 @@
 00210   rewrite #1,using "Form POS 11,2*PD 3": 0,0
 00220   goto TOP
 00230 ! ______________________________________________________________________
-00240 L240: let lr2=lrec(2)
+00240 L240: lr2=lrec(2)
 00250   if lr2=0 then goto XIT
 00260   rewrite #2,using "Form POS 71,PD 3",rec=1: lr2
 00270   for j=1 to lr2

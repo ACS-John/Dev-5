@@ -7,12 +7,12 @@
  def fnEnterDoesNothing
     if fkey=0 or fkey=201 then
        let fkey(-1)
-       let ExitMode=0
+       exitMode=0
        let functionkey=-1
     end if
     if fkey=99 then
        let FunctionKey=-1
        let fkey(-1)
-       let ExitMode=QuitOnly
+       exitMode=QuitOnly
     end if
  fnend

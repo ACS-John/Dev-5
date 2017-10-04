@@ -18,26 +18,26 @@
         read #1,using 'Form POS 418,10*C 20,10*N 1': mat miscname$,mat dedcode !:
         close #1: 
 00190 ! 
-00200   let sc1$(1)="Description:" !:
-        let sc1$(2)="  Y.T.D." !:
-        let sc1$(3)="  Q.T.D." !:
-        let sc1$(4)="Employee #:" !:
-        let sc1$(5)="Name F/M/L:"
-00210   let sc1$(6)="Address:" !:
-        let sc1$(7)="City St Zip:" !:
-        let sc1$(8)="Soc-Sec-#:" !:
-        let sc1$(9)="Gross Wage:" !:
-        let sc1$(10)="Fed W/H:"
-00220   let sc1$(11)="FICA W/H:" !:
-        let sc1$(12)="State W/H:" !:
-        let sc1$(13)="Local W/H:"
-00230   for j=1 to 10: let sc1$(j+13)=rtrm$(miscname$(j)(1:12))&":" : next j
-00240   let sc1$(24)="Tips:" !:
-        let sc1$(25)="Weeks Worked:" !:
-        let sc1$(26)="EIC:"
-00250   let sc3$(1)="Check Date:" !:
-        let sc3$(2)="Check #:"
-00260   let sc3$(21)="Net Pay:"
+00200   sc1$(1)="Description:" !:
+        sc1$(2)="  Y.T.D." !:
+        sc1$(3)="  Q.T.D." !:
+        sc1$(4)="Employee #:" !:
+        sc1$(5)="Name F/M/L:"
+00210   sc1$(6)="Address:" !:
+        sc1$(7)="City St Zip:" !:
+        sc1$(8)="Soc-Sec-#:" !:
+        sc1$(9)="Gross Wage:" !:
+        sc1$(10)="Fed W/H:"
+00220   sc1$(11)="FICA W/H:" !:
+        sc1$(12)="State W/H:" !:
+        sc1$(13)="Local W/H:"
+00230   for j=1 to 10: sc1$(j+13)=rtrm$(miscname$(j)(1:12))&":" : next j
+00240   sc1$(24)="Tips:" !:
+        sc1$(25)="Weeks Worked:" !:
+        sc1$(26)="EIC:"
+00250   sc3$(1)="Check Date:" !:
+        sc3$(2)="Check #:"
+00260   sc3$(21)="Net Pay:"
 00270   if exists (env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')) =0 then goto INITIAL_BUILD
 00280   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L2900
 00290   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outin,relative 
@@ -67,7 +67,7 @@
 00510   let holden1=en1=val(resp$(1)(1:4))
 00520   goto DISPLAY_RECORD
 00530 ASK_NEW_NUMBER: !  add new employee
-00540   let eno=0: mat k$=(""): let ss$="": mat m=(0): mat ta=(0)
+00540   eno=0: mat k$=(""): ss$="": mat m=(0): mat ta=(0)
 00550   fntos(sn$="Payroll2") !:
         let mylen=20: let mypos=mylen+3 : let right=1
 00560   fnlbl(1,1,"Employee Number:",mylen,right)
@@ -80,7 +80,7 @@
 00620   if en1=0 then goto MAIN
 00630   addemployee=1 ! code for adding new employee
 00640 DISPLAY_RECORD: ! 
-00650   let en$=lpad$(str$(en1),4)
+00650   en$=lpad$(str$(en1),4)
 00660   read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey DISPLAY_EMPLOYEE
 00670   let disable=1: goto DISPLAY_EMPLOYEE
 00680 DISPLAY_EMPLOYEE: ! 
@@ -124,12 +124,12 @@
 00950   if ckey=6 then goto DELETEIT
 00960   if ckey=3 then add=0: goto REVIEW_CHECKS
 00970   if ckey=7 then let disable=0: goto DISPLAY_EMPLOYEE
-00980   let en1=eno=val(resp$(1))
+00980   en1=eno=val(resp$(1))
 00985   if ckey=8 then add=1: mat prd=(0): goto L2340
 00990   let k$(1)=resp$(2)
 01000   let k$(2)=resp$(3)
 01010   let k$(3)=resp$(4)
-01020   let ss$=resp$(5)
+01020   ss$=resp$(5)
 01030   for j=1 to 36
 01040     let m(j)=val(resp$(j+5))
 01050   next j
@@ -159,13 +159,13 @@
 01210   if ckey=6 then delete #2,rec=adr: else rewrite #2,using L1200,rec=adr: eno,nta
 01220   adr=nta
 01230   goto L1180
-01240 L1240: if ckey=6 then let eno=0: mat k$=(""): let ss$="": mat m=(0): mat ta=(0) !:
+01240 L1240: if ckey=6 then eno=0: mat k$=(""): ss$="": mat m=(0): mat ta=(0) !:
           goto MAIN
 01250 L1250: if ckey=1 and addemployee=1 then mat ta=(0): write #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat ta: addemployee=0 else goto L1280
 01260   let new1=1
-01270   let eno=0: mat k$=(""): let ss$="": mat m=(0): mat ta=(0): goto MAIN
+01270   eno=0: mat k$=(""): ss$="": mat m=(0): mat ta=(0): goto MAIN
 01280 L1280: if ckey=1 then rewrite #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5',key=en$: eno,mat k$,ss$,mat m,mat ta nokey L1290
-01290 L1290: let eno=0: mat k$=(""): let ss$="": mat m=(0): mat ta=(0): goto MAIN
+01290 L1290: eno=0: mat k$=(""): ss$="": mat m=(0): mat ta=(0): goto MAIN
 01300 ! ______________________________________________________________________
 01310 INITIAL_BUILD: ! 
 01320   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno'),internal,output ioerr L1330
@@ -187,11 +187,11 @@
 01480   gosub HDR
 01490 L1490: read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m eof L1610
 01500   let pl=pl+1
-01510   let l1(pl)=eno
-01520   let l2$(pl)=k$(1)
-01530   let l3$(pl)=k$(2)
-01540   let l4$(pl)=k$(3)
-01550   let l5$(pl)=ss$
+01510   l1(pl)=eno
+01520   l2$(pl)=k$(1)
+01530   l3$(pl)=k$(2)
+01540   l4$(pl)=k$(3)
+01550   l5$(pl)=ss$
 01560   for j1=1 to 36
 01570     let mp(pl,j1)=m(j1)
 01580   next j1
@@ -211,7 +211,7 @@
 01720   pr #255,using L1690: sc1$(8),mat l5$
 01730   for j1=1 to 36
 01740     let j2=int((j1-1)/2)+9
-01750     if fp(j1/2)=0 then let sc1$=sc1$(j2)&"QTD" else let sc1$=sc1$(j2)&"YTD"
+01750     if fp(j1/2)=0 then sc1$=sc1$(j2)&"QTD" else sc1$=sc1$(j2)&"YTD"
 01760     pr #255,using L1770: sc1$,mp(1,j1),mp(2,j1),mp(3,j1),mp(4,j1)
 01770 L1770: form pos 1,c 21,pic(---------.##),pic(-------------------------.##),pic(-------------------------.##),pic(------------------------.##),skip 1
 01780   next j1
@@ -241,12 +241,12 @@
 02020   return 
 02030 ! ______________________________________________________________________
 02040 ! pr NEWPAGE
-02050 ! pr Fields "10,15,Cc 43,N": "Reassigning Transaction Addresses..."
+02050 ! pr f "10,15,Cc 43,N": "Reassigning Transaction Addresses..."
 02060   restore #1,key>="    ": eof L2070
 02070 L2070: read #1,using 'Form POS 271,2*N 5': mat ta eof L2100
 02080   rewrite #1,using 'Form POS 271,2*N 5': 0,0
 02090   goto L2070
-02100 L2100: let lr2=lrec(2)
+02100 L2100: lr2=lrec(2)
 02110 ! REWRITE #2,USING 2360,REC=1: LR2
 02120   for j=1 to lr2
 02130     read #2,using 'Form POS 1,C 4,POS 108,PD 3',rec=j: en$,nta norec L2210
@@ -318,7 +318,7 @@
         let ml$(4)="Click OK to fix the check." !:
         fnmsgbox(mat ml$,resp$,cap$,49)
 02690   if resp$="OK" then goto L2340 else goto MAIN
-02700 L2700: let lr2=lrec(2)+1
+02700 L2700: lr2=lrec(2)+1
 02710   if add=1 then write #2,using L2320,rec=lr2: eno,mat prd,0 duprec L2700 else rewrite #2,using L2320,rec=adr: eno,mat prd,nca
 02720   if add=0 then goto L2770
 02730   if ta(2)>0 then rewrite #2,using L2740,rec=ta(2): lr2

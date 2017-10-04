@@ -29,8 +29,8 @@
 14440   close #hCompany: 
 14460   for j=1 to 3 : a$(j)=a$(j)(1:30) : next j
 14480   for j=1 to 4 
-14500     let fl1$(j)=str$(j+7)&",28,N 1,UT,N" 
-14520     let fl1$(j+4)=str$(j+7)&",37,N 1,UT,N" 
+14500     fl1$(j)=str$(j+7)&",28,N 1,UT,N" 
+14520     fl1$(j+4)=str$(j+7)&",37,N 1,UT,N" 
 14540   next j
 14760   dim w2laser_output_filename$*256
 14780   !
@@ -90,8 +90,8 @@
 30300   next j
 30320   if eno=0 then goto READ_EMPLOYEE
 30340   controlNumber$=str$(eno)
-30360   let empId$=b$(1) ! FEDERAL ID #
-30380   let stcode$=b$(2) ! STATE ID #
+30360   empId$=b$(1) ! FEDERAL ID #
+30380   stcode$=b$(2) ! STATE ID #
 30400   let w(1)=m(3) ! FED W/H YTD
 30420   let w(2)=m(1)-dedfed ! TOTAL TAXABLE WAGES
 30440   let w(3)=m(5) ! FICA W/H YTD
@@ -113,7 +113,7 @@
 30720   if box16=1 then gosub BOX16_process
 30740   let w(5)=min(ssmax-w(6),w(5)) ! SS WAGES CANNOT EXCEED MAXIMUM
 30760   let w(11)=min(mcmax,w(11)) ! MC WAGES CANNOT EXCEED MAXIMUM
-30780   let sswh=min(round((w(5)+w(6))*ssrate,2),w(3))
+30780   sswh=min(round((w(5)+w(6))*ssrate,2),w(3))
 30800   let w(12)=w(3)-sswh ! MEDICARE WH
 30820   let w(3)=sswh ! SOCIAL SECURITY WITHHELD
 35180       if exportFormatID=1 then 
@@ -143,7 +143,7 @@
 37140     controlNumber$="FINAL TOTAL"
 37160     let nameFirst$=nameMiddle$=nameLast$=""
 37180     mat k$=("")
-37182     let ss$=stcode$=printLocality$=""
+37182     ss$=stcode$=printLocality$=""
 37190     let x$=" "
 37200     gosub PRINTW2
 37280     fnpa_finis
@@ -172,10 +172,10 @@
 52200   fncmdkey("E&xit",5,0,1,"Returns to menu")
 52220   fnacs(sn$,0,mat resp$,ckey)
 52240   if ckey=5 then goto XIT
-52260   let empLocality$=resp$(1)
+52260   empLocality$=resp$(1)
 52280   ! controlNumber$=rtrm$(controlNumber$)
 52300   ! if controlNumber$="1" then goto L2770
-52320   ! let empLocality$=controlNumber$
+52320   ! empLocality$=controlNumber$
 52340   ! L2770: ! 
 52360 return ! /r
 64000 BOX16_process: ! r: Box 16

@@ -8,7 +8,7 @@
  !
  !
  def fnPrintListview(;___,ListviewSubscript)
-    let ListviewSubscript=fnFindSubscript(mat Subscripts$,"ctl_",UserData$(ControlIndex))
+    listviewSubscript=fnFindSubscript(mat Subscripts$,"ctl_",UserData$(ControlIndex))
     if ListviewSubscript then
        fnExportListviewCSV(Window,fnListSpec$(ControlSpec$(ListviewSubscript)),1)
     else

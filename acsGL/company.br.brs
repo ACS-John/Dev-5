@@ -40,7 +40,7 @@
 00380   if actr$="0" or actr$="1" then actr=val(actr$)
 00390   if uprc$(actr$)="Y" then actr=1
 00400   if uprc$(actr$)="N" then actr=0
-00410   let lastgl$=cnvrt$("pic(zz#)",a1)&cnvrt$("pic(zzzzz#)",a2)&cnvrt$("pic(zz#)",a3)
+00410   lastgl$=cnvrt$("pic(zz#)",a1)&cnvrt$("pic(zzzzz#)",a2)&cnvrt$("pic(zz#)",a3)
 00420 SCREEN_1: ! 
 00430   fntos(sn$="Company-1") !:
         let mylen=30: let mypos=mylen+3 : let right=1
@@ -87,8 +87,8 @@
 00730   fnchk(17,60,"Allocate Expenses to Job Cost:",1)
 00740   if jcc$="Y" or jccode=1 then let resp$(15)="True" else let resp$(15)="False"
 00750   fnlbl(18,1,"Posting Method:",mylen,right)
-00760   let option$(1)="Post Immediately" !:
-        let option$(2)="Retain in Holding Files"
+00760   option$(1)="Post Immediately" !:
+        option$(2)="Retain in Holding Files"
 00770   fncomboa("PostMethod",18,mypos,mat option$,"Normally you would post immediately. You would only consider posting to holding files if the general ledger is months behind.",mylen)
 00780   if glb=1 or glb=0 then let resp$(16)=option$(1) else let resp$(16)=option$(2)
 00790   fncmdkey("&Next",1,1,0,"Moves to 2nd screen of company information.")
@@ -109,7 +109,7 @@
 00940   if resp$(11)="True" then let d2$="Y": let d(2)=1 else let d2$="N": let d(2)=0
 00950   if resp$(12)="True" then actr$="Y": actr=1 else actr$="N": actr=0
 00960   if resp$(13)="True" then let recc$="Y": let reccode=1 else let recc$="N": let reccode=0
-00970   let lastgl$=fnagl$(resp$(14)) ! gl number
+00970   lastgl$=fnagl$(resp$(14)) ! gl number
 00980   a1=val(lastgl$(1:3)) !:
         a2=val(lastgl$(4:9)) !:
         a3=val(lastgl$(10:12))
@@ -137,8 +137,8 @@
 01170   fncmdkey("&Back",2,0,0,"Returns to previous screen.")
 01180   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes.")
 01190   fnacs(sn$,0,mat resp$,ckey)
-01200   let e$(1)=fnagl$(resp$(1)) ! Summary # 1
-01210   let e$(2)=fnagl$(resp$(2)) ! Summary # 1
+01200   e$(1)=fnagl$(resp$(1)) ! Summary # 1
+01210   e$(2)=fnagl$(resp$(2)) ! Summary # 1
 01220   if ckey=4 then gosub SAVE : goto XIT
 01230   if ckey=2 then goto SCREEN_1
 01240   goto SCREEN_3
@@ -218,8 +218,8 @@
 01850   for j=1 to 10
 01860     fntxt(j+8,1,20,0,left,"",0,"Enter you deduction name.",0 ) !:
           let resp$(resp+=1)=miscname$(j)
-01870     let option2$(1)="Deducttion" !:
-          let option2$(2)="Addition"
+01870     option2$(1)="Deducttion" !:
+          option2$(2)="Addition"
 01880     fncomboa("MIscdeduct",j+8,26,mat option2$,"Indicate whether the deduction should be deducted from the check or added to the check.",10)
 01890     if dedcode(j)=0 then let dedcode(j)=1
 01900     let resp$(resp+=1)=option2$(dedcode(j))
@@ -231,7 +231,7 @@
 01960     if dedst(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
 01970     fnchk(j+8,59,"",1)
 01980     if deduc(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
-01990     let linecount=j+8
+01990     linecount=j+8
 02000     fnqgl(linecount,64,0,2,pas) !:
           let resp$(resp+=1)=fnrgl$(miscgl$(j))
 02010   next j

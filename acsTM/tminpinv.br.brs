@@ -18,12 +18,12 @@
 00200   if subac=0 and dept=1 then let m$="n 3,n 6,x 3"
 00210   let fm$="FORM POS 1,n 5,n 1,pd 4.2,n 6,n 2,"&m$&",n 2,c 12"
 00220   let fp$="form pos 1,n 5,n 10,n 10,n 15.2,n 8,n 8,x 7,"&m$&",n 10,x 7,c 12,skip 1"
-00230   let fl1$(9)="2,10,c 60,h,n"
-00240   let fl1$(10)="3,10,c 60,h,n"
-00250   let fl1$(11)="15,10,c 70,h,n"
-00260   let fl2$(5)="2,10,c 60,h,n"
-00270   let fl2$(6)="14,10,c 60,h,n"
-00280   let fl2$(7)="15,10,c 70,h,n"
+00230   fl1$(9)="2,10,c 60,h,n"
+00240   fl1$(10)="3,10,c 60,h,n"
+00250   fl1$(11)="15,10,c 70,h,n"
+00260   fl2$(5)="2,10,c 60,h,n"
+00270   fl2$(6)="14,10,c 60,h,n"
+00280   fl2$(7)="15,10,c 70,h,n"
 00290   let in1$(1)="5,25,n 5,ut,n"
 00300   let in1$(2)="6,25,n 1,ut,n"
 00310   let in1$(3)="7,25,n 10.2,Cu,n"
@@ -35,12 +35,12 @@
 00370   let in1$(7+subac+dept)="11,25,n 2,ut,n"
 00380   let in1$(8+subac+dept)="12,25,c 12,ut,n"
 00390   for j=1 to x8
-00400     if j<9 then let fl1$(j)=str$(j+4)&",2,c 20"
-00410     if j<5 then let ot2$(j)=str$(j+4)&",25,n 10.2,ut,n"
-00420     if j<5 then let fl2$(j)=fl1$(j)
-00430     let ot1$(j)=in1$(j)
+00400     if j<9 then fl1$(j)=str$(j+4)&",2,c 20"
+00410     if j<5 then ot2$(j)=str$(j+4)&",25,n 10.2,ut,n"
+00420     if j<5 then fl2$(j)=fl1$(j)
+00430     ot1$(j)=in1$(j)
 00440   next j
-00450   let ot1$(3)="7,25,n 10.2,ut,n"
+00450   ot1$(3)="7,25,n 10.2,ut,n"
 00460   mat inp(x8-1)
 00470   data "CLIENT #"
 00480   data "BILLING CODE"
@@ -51,18 +51,18 @@
 00530   data "SUB CATEGORY"
 00540   data "INVOICE #"
 00550   read mat scr1$ ioerr L1770
-00560   let scr2$(1)="CLIENT #S"
-00570   let scr2$(2)="AMOUNTS"
-00580   let scr2$(3)="CATEGORIES"
-00590   let scr2$(4)="SUB CATEGORIES"
+00560   scr2$(1)="CLIENT #S"
+00570   scr2$(2)="AMOUNTS"
+00580   scr2$(3)="CATEGORIES"
+00590   scr2$(4)="SUB CATEGORIES"
 00600   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1770
 00601   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1770
 00610   open #2: "Name="&env$('Q')&"\TMmstr\TMWk2"&wsid$&".H"&env$('cno'),internal,outin,relative ioerr L630
 00620   close #2,free: 
 00630 L630: open #2: "Name="&env$('Q')&"\TMmstr\TMWk2"&wsid$&".H"&env$('cno')&",Replace,RecL=56",internal,outin,relative ioerr L1770
-00640 L640: let scrid$(1)="TIME MANAGEMENT INPUT OF INVOICES"
-00650   let scrid$(2)="Enter CLIENT # as 0 when completed."
-00660   let scrid$(3)="PRESS F1 IF YOU HAVE ANOTHER ALLOCATION FOR THE SAME INVOICE"
+00640 L640: scrid$(1)="TIME MANAGEMENT INPUT OF INVOICES"
+00650   scrid$(2)="Enter CLIENT # as 0 when completed."
+00660   scrid$(3)="PRESS F1 IF YOU HAVE ANOTHER ALLOCATION FOR THE SAME INVOICE"
 00670 L670: mat inp=(0)
 00680   let iv=val(iv$)+1 conv L710
 00690   let iv$=str$(iv)
@@ -71,19 +71,19 @@
 00720 L720: let inp(4)=inp4
 00730   let inp(2)=inp2
 00740 L740: pr newpage
-00750   pr fields mat fl1$: mat scr1$,mat scrid$
-00760   pr fields mat ot1$: mat inp," " ! IV$
-00770   pr fields "6,40,C 40,N": "(1=Partial  2=Final  3=Write-off)"
-00775   pr fields "23,30,c 25": "F4 Search  F5 Stop"
+00750   pr f mat fl1$: mat scr1$,mat scrid$
+00760   pr f mat ot1$: mat inp," " ! IV$
+00770   pr f "6,40,C 40,N": "(1=Partial  2=Final  3=Write-off)"
+00775   pr f "23,30,c 25": "F4 Search  F5 Stop"
 00780   if chg=2 then goto L870
 00790 L790: if cmdkey=1 then goto L800 else input fields "5,25,N 5,UE,N": inp(1) conv L790
 00795   if cmdkey=4 then goto TMSRCH
 00800 L800: if inp(1)=0 or cmdkey=5 then goto L1360
 00810   let k$=lpad$(str$(inp(1)),5)
 00820   read #1,using L970,key=k$,release: a1$ nokey L850
-00830   pr fields "5,45,C 30,N": a1$
+00830   pr f "5,45,C 30,N": a1$
 00840   goto L870
-00850 L850: pr fields "5,45,C 18,R,N": "CLIENT NOT ON FILE"
+00850 L850: pr f "5,45,C 18,R,N": "CLIENT NOT ON FILE"
 00860   goto L790
 00870 L870: input fields mat in1$: mat inp,iv$ conv L1690
 00880   if cv>0 then let in1$(cv)(cv1:cv2)="U"
@@ -125,7 +125,7 @@
 01230   goto L740
 01240 L1240: rewrite #2,using fm$,rec=rr: mat inp,iv$
 01250 L1250: pr newpage
-01260   pr fields "10,10,c 60": "ENTER REF # TO CORRECT; ENTER 0 WHEN COMPLETED"
+01260   pr f "10,10,c 60": "ENTER REF # TO CORRECT; ENTER 0 WHEN COMPLETED"
 01270 L1270: input fields "10,60,n 5,eu,n": rr conv L1270
 01280   if rr=0 then goto L1360
 01290   if rr>rw or rr<1 then goto L1270
@@ -136,16 +136,16 @@
 01340   let pt(4)=pt(4)-inp(x8-1)
 01350   goto L740
 01360 L1360: pr newpage
-01370   let scrid$(1)="TIME MANAGEMENT INPUT PROOF TOTALS"
-01380   let scrid$(2)="Enter 1 for a listing, 2 for corrections,"
-01390   let scrid$(3)=" 3 for additional entries, 4 to merge, 5 stop without posting."
-01400   pr fields mat fl2$: mat scr2$,mat scrid$
-01410   pr fields mat ot2$: mat pt
+01370   scrid$(1)="TIME MANAGEMENT INPUT PROOF TOTALS"
+01380   scrid$(2)="Enter 1 for a listing, 2 for corrections,"
+01390   scrid$(3)=" 3 for additional entries, 4 to merge, 5 stop without posting."
+01400   pr f mat fl2$: mat scr2$,mat scrid$
+01410   pr f mat ot2$: mat pt
 01420 L1420: input fields "16,30,n 1,eu,n": chg conv L1420
 01430   on chg goto L1440,L1620,L640,L1660,L1680 none L1420
 01440 L1440: pr newpage
-01450   pr fields "10,10,c 60,h,n": "TIME MANAGEMENT CORRECTION LISTING IN PROCESS"
-01460   pr fields "23,2,C 50,N": "Press F5 to stop!"
+01450   pr f "10,10,c 60,h,n": "TIME MANAGEMENT CORRECTION LISTING IN PROCESS"
+01460   pr f "23,2,C 50,N": "Press F5 to stop!"
 01470   gosub L1550
 01480   for j=1 to rw
 01490     read #2,using fm$,rec=j: mat inp,iv$ ioerr L1770
@@ -161,9 +161,9 @@
 01590 L1590: pr #255: newpage
 01600   gosub L1550
 01610   continue 
-01620 L1620: let scrid$(1)="TIME MANAGEMENT INPUT CORRECTION SCREEN"
-01630   let scrid$(2)="ENTER CLIENT # AS 0 TO DELETE THIS ENTRY"
-01640   let scrid$(3)=""
+01620 L1620: scrid$(1)="TIME MANAGEMENT INPUT CORRECTION SCREEN"
+01630   scrid$(2)="ENTER CLIENT # AS 0 TO DELETE THIS ENTRY"
+01640   scrid$(3)=""
 01650   goto L1250
 01660 L1660: close #1: 
 01670   close #2: 
@@ -171,23 +171,23 @@
 01685 XIT: let fnxit
 01690 L1690: if cv>0 then let in1$(cv)(cv1:cv2)="U"
 01700   cv=cnt+1
-01710 L1710: pr fields "24,78,C 1": bell
+01710 L1710: pr f "24,78,C 1": bell
 01720   let in1$(cv)=rtrm$(in1$(cv))
 01730   cv1=pos(uprc$(in1$(cv)),"U",1)
 01740   cv2=cv1+1
 01750   let in1$(cv)(cv1:cv1)="CR"
 01760   goto L870
-01770 L1770: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1790
+01770 L1770: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1790
 01780   goto L1830
 01790 L1790: pr newpage
-01800   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L1820
+01800   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L1820
 01810   goto L1830
-01820 L1820: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-01830 L1830: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+01820 L1820: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+01830 L1830: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 01840   input fields "24,60,C 1,N": quitcode$
 01850   if err=61 and rtrm$(uprc$(quitcode$))="Q" then goto L1360 else goto L1890
-01860   pr fields "23,3,C 78,N": ""
-01870   pr fields "24,3,C 78,N": ""
+01860   pr f "23,3,C 78,N": ""
+01870   pr f "24,3,C 78,N": ""
 01880   retry 
 01890 L1890: goto XIT
 04800 TMSRCH: ! search for customer #

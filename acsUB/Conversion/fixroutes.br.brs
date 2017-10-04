@@ -19,8 +19,8 @@
 00181   let z$=lpad$(rtrm$(ln$(1:9)),10)
 00190 ! Let ROUTE=VAL(LN$(1:7))
 00191   let route=val(ln$(81:81))
-00200 ! Let SEQUENCE=VAL(LN$(9:15))
-00201   let sequence=val(ln$(72:79))
+00200 ! sEQUENCE=VAL(LN$(9:15))
+00201   sequence=val(ln$(72:79))
 00205   pr z$,route,sequence: pause 
 00210   read #1,using "Form POS 1,c 10,pos 1741,n 2,pos 1743,n 7",key=z$: oldz$,oldroute,oldsequence nokey L250
 00220   rewrite #1,using "Form pos 1741,n 2,pos 1743,n 7": route,sequence

@@ -9,7 +9,7 @@
 00090   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00100 ! ______________________________________________________________________
 00110   pr newpage
-00120   pr fields "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
+00120   pr f "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
 00130 L130: input fields "10,55,N 2,UE,N": cno conv L130
 00140   if cno=0 then goto XIT
 00150 ! 

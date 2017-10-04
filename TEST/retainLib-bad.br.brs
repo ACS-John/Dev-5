@@ -4,6 +4,6 @@
 9060     fntestretain=fntestretainBLABLALBA(value)
 9080   fnend
 9100   def library fntestretainBLABLALBA(value)
-9180     let localvalue+=value
+9180     localvalue+=value
 9200     fntestretainBLABLALBA=localvalue
 9220   fnend 

@@ -8,7 +8,7 @@
 00070   dim item$(6)*30,prg$*30,chdr$(6)*20,cm$(6)*2
 00072 SCREEN1: ! 
 00080   fntos("S-Flex")
-00081 ! let use_old=1 : let replace_old=0 : let select_by_row=1
+00081 ! let use_old=1 : let replace_old=0 : select_by_row=1
 00090 ! chdr$(1)="AccountX" : chdr$(2)="Name" !:
         ! chdr$(3)="Address" : chdr$(4)="City" !:
         ! chdr$(5)="State" : chdr$(6)="Zip"

@@ -20,7 +20,7 @@
 00056 ! ______________________________________________________________________
 00060   fnopenwin(win=101,10,18,14,61,cap$)
 00062   pr #win,fields "4,2,C 20,N": "Report Heading Date:"
-00064   pr fields "15,34,C 09,B,5": "Exit (F5)"
+00064   pr f "15,34,C 09,B,5": "Exit (F5)"
 00066   rinput #win, fields "4,23,C 20,UT,N": dh$
 00068   close #win: ioerr L69
 00069 L69: let fndat(dh$,put=2)
@@ -30,7 +30,7 @@
 00088 ! ______________________________________________________________________
 00090 L90: pr newpage !:
         fnwait(102,cap$,message$="Printing: please wait...",1) !:
-        pr fields "15,34,C 09,B,5": "Exit (F5)" !:
+        pr f "15,34,C 09,B,5": "Exit (F5)" !:
         on fkey 5 goto EOF1
 00103   fnopenprn !:
         if file$(255)(1:3)<>"PRN" then let jbskip=1

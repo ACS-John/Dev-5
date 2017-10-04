@@ -90,8 +90,8 @@
 00830 L830: read #1,using L1030: dno,ano,sno,d$,mat rf eof MAIN
 00840   let gl=val(cnvrt$("PIC(###)",dno)&cnvrt$("PIC(######)",ano)&cnvrt$("PIC(###)",sno))
 00850   if gl>gl2 then goto MAIN
-00860   if rf(1)>0 then let fln=1: goto L890
-00870   if rf(3)>0 then let fln=2: goto L890
+00860   if rf(1)>0 then fln=1: goto L890
+00870   if rf(3)>0 then fln=2: goto L890
 00880   goto L830
 00890 L890: open #2: "Name="&env$('Q')&"\GLmstr\"&fil$(fln)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\"&idx$(fln)&".h"&env$('cno')&",Shr",internal,outin,keyed 
 00900   restore #2,key=lpad$(str$(fin(1)),5): nokey L970
@@ -114,7 +114,7 @@
 01070   let gl$=lpad$(str$(gl),12)
 01080   let dno=val(gl$(1:3))
 01090   ano=val(gl$(4:9))
-01100   let sno=val(gl$(10:12))
+01100   sno=val(gl$(10:12))
 01110   if fln=1 then let rf(1)=rf(1)+ff
 01120   if fln=2 then let rf(3)=rf(3)+ff
 01130   write #1,using L1030: dno,ano,sno,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta

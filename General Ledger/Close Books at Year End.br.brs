@@ -14,7 +14,7 @@
 24220 ! /r
 30000 do ! r: the first screen
 30020   fntos(sn$="CloseYear1") 
-30040   let lc=rc=frame=0 : let mylen=30 : let mypos=mylen+2 : let width=0
+30040   lc=rc=frame=0 : let mylen=30 : let mypos=mylen+2 : let width=0
 30060   fnlbl(lc+=1,1,"* * *   Warning   * * *",width,2)
 30080   fnlbl(lc+=1,1,"This program is to be used only at the end of the",width,2)
 30100   fnlbl(lc+=1,1,"year, after all reports have been processed.",width,2)
@@ -28,7 +28,7 @@
 
 31000   if fnUseDeptNo then
 
-32000     ! let lc+=1 : col3_pos=1 ! mypos+20
+32000     ! lc+=1 : col3_pos=1 ! mypos+20
 32020     ! let resp_lrea_fund_1=rc+1
 32060     ! col4_pos=mypos ! col3_pos+10
 32080     ! let fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account(s)')
@@ -62,7 +62,7 @@
 36080   let yr$=cnvrt$("pic(##)",val(resp$(rc_year)))
 36100   if fnUseDeptNo then
 36120     !   for fund_item=1 to udim(mat fund_list)
-36140     !     let last_retained_earnings_acct$(fund_item)=fnagl$(resp$(rc+=1))
+36140     !     last_retained_earnings_acct$(fund_item)=fnagl$(resp$(rc+=1))
 36160     !     fncreg_write("last retained earnings account - fund "&str$(fund_list(fund_item)),last_retained_earnings_acct$(fund_item))
 36180     !   next fund_item
 36200     fncreg_write('Close each fund to a separate account',resp$(rc_close1))
@@ -73,7 +73,7 @@
 36300       closeDeptToRetainedEarnings=1
 36320     end if
 36340   else 
-36360     let last_retained_earnings_acct$(1)=fnagl$(resp$(rc+=1))
+36360     last_retained_earnings_acct$(1)=fnagl$(resp$(rc+=1))
 36380     fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
 36400   end if
 36420 loop until lwrc$(pas$)=lwrc$("CLOSE") ! /r
@@ -97,10 +97,10 @@
 44000 SCR2: ! 
 44020   let t5=0
 44040   fntos(sn$='CloseYear3')
-44060   let lc=0 : let mylen=30 : let mypos=mylen+2 : let width=80
+44060   lc=0 : let mylen=30 : let mypos=mylen+2 : let width=80
 44080   fnlbl(lc+=1,1,"Enter the Last Retained Earnings Account or Equity Account.",width,2)
 44100   fnlbl(lc+=1,1,"The account that dividend, income, and expenses will be closed to.",width,2)
-44120   let lc+=1 
+44120   lc+=1 
 44140   if fnUseDeptNo=0 or closeDeptToRetainedEarnings=1 then 
 44160     fnlbl(lc+=1,1,"All accounts after this ",width,2)
 44180   else 

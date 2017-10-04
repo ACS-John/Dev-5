@@ -39,7 +39,7 @@
 00340 MENU1: pr newpage
 00350   if fnprocess=1 then let ti=4 : goto L520
 00360   let win=101
-00370   let sr=6 : let sc=20 : let er=14 : let ec=59
+00370   sr=6 : sc=20 : er=14 : ec=59
 00380   gosub XNOPENWIN
 00390   for j=1 to 5
 00400     let io3$(j)=str$(j+3)&",2,C 38,N"
@@ -50,7 +50,7 @@
 00450   let wrd1$(3)="3. Edit"
 00460   let wrd1$(4)="4. pr Proof List"
 00470   let wrd1$(5)="5. Reorganize"
-00480   pr fields "15,35,C 09,B,5": "Exit (F5)"
+00480   pr f "15,35,C 09,B,5": "Exit (F5)"
 00490   rinput #win,select mat io3$,attr "H": mat wrd1$
 00500   let ti=curfld
 00510   if ti=0 or cmdkey=5 then goto L540
@@ -64,7 +64,7 @@
 00590 L590: pr newpage
 00600   close #101: ioerr L610
 00610 L610: open #101: "SROW=2,SCOL=10,EROW=17,ECOL=65,Border=DR,Caption=<"&cap$,display,outin 
-00620   pr fields "3,10,C 20": "Employee #:"
+00620   pr f "3,10,C 20": "Employee #:"
 00630   if ce>0 then goto L820
 00640 L640: input fields "3,22,C 8,UET,N": t$ conv L640
 00650   if rtrm$(t$)="" or ltrm$(rtrm$(t$))="0" then goto MENU1
@@ -72,19 +72,19 @@
 00670   read #1,using fm1$,key=hk$: t$,mat in1$ nokey L690
 00680   if ti=2 then goto L640 else goto L700
 00690 L690: if ti=3 then goto L640
-00700 L700: pr fields "16,20,C 45": "Effect on wages (0=None, 1=Add, 2=Subtract)"
-00710   pr fields "6,20,C 45": "Description     Amount   Fed  Fica  State"
-00720   pr fields "7,11,Cr 8,N": "Box 11:"
-00730   pr fields "8,11,Cr 8,N": "Unused:"
-00740   pr fields "10,11,Cr 8,N": "Box 12a:"
-00750   pr fields "11,11,Cr 8,N": "Box 12b:"
-00760   pr fields "12,11,Cr 8,N": "Box 12c:"
-00770   pr fields "13,11,Cr 8,N": "Box 12d:"
-00780   pr fields "18,20,C 9,B,1": "Next (F1)"
-00790   pr fields "18,31,C 11,B,2": "Delete (F2)"
-00800   pr fields "18,44,C 9,B,5": "Exit (F5)"
+00700 L700: pr f "16,20,C 45": "Effect on wages (0=None, 1=Add, 2=Subtract)"
+00710   pr f "6,20,C 45": "Description     Amount   Fed  Fica  State"
+00720   pr f "7,11,Cr 8,N": "Box 11:"
+00730   pr f "8,11,Cr 8,N": "Unused:"
+00740   pr f "10,11,Cr 8,N": "Box 12a:"
+00750   pr f "11,11,Cr 8,N": "Box 12b:"
+00760   pr f "12,11,Cr 8,N": "Box 12c:"
+00770   pr f "13,11,Cr 8,N": "Box 12d:"
+00780   pr f "18,20,C 9,B,1": "Next (F1)"
+00790   pr f "18,31,C 11,B,2": "Delete (F2)"
+00800   pr f "18,44,C 9,B,5": "Exit (F5)"
 00810   if ti=2 then goto L830
-00820 L820: pr fields mat io1$: mat in1$
+00820 L820: pr f mat io1$: mat in1$
 00830 L830: input fields mat io1$: mat in1$ conv CONV1
 00840   if ce>0 then let io1$(ce)(ce1:ce2)="U" : ce=0
 00850   goto L930 ! IF CMDKEY>0 THEN GOTO 619 ELSE cE=CURFLD+1
@@ -94,7 +94,7 @@
 00890   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L830
 00900 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00910   ce=cnt+1
-00920 ERR1: pr fields "24,78,C 1": bell : goto L880
+00920 ERR1: pr f "24,78,C 1": bell : goto L880
 00930 L930: if cmdkey=2 then let t$="" : goto L1040
 00940   if cmdkey=5 then goto MENU1
 00950   for j=1 to 6
@@ -126,10 +126,10 @@
 01210 ! ______________________________________________________________________
 01220 L1220: read #1,using fm1$,key=k$: k$ nokey L1240
 01230   goto L590
-01240 L1240: if ltrm$(k$)<>"0" then pr fields "24,2,C 50,R,N": " ENTER 1 TO CHANGE EMPLOYEE # OR 0 TO CORRECT: "
-01250   pr fields "24,2,C 1": bell
+01240 L1240: if ltrm$(k$)<>"0" then pr f "24,2,C 50,R,N": " ENTER 1 TO CHANGE EMPLOYEE # OR 0 TO CORRECT: "
+01250   pr f "24,2,C 1": bell
 01260 L1260: input fields "24,60,N 1,UET,N": d1 conv L1260
-01270   pr fields "24,1,C 80,N": ""
+01270   pr f "24,1,C 80,N": ""
 01280 L1280: if d1=1 then goto L1320
 01290   if d1<>1 then let t$=k$=hk$
 01300   goto L820
@@ -152,14 +152,14 @@
 01470 L1470: pr newpage
 01480   close #101: ioerr L1490
 01490 L1490: open #101: "SROW=5,SCOL=13,EROW=15,ECOL=64,BORDER=DR,CAPTION=<INITIAL FILE PREPARATION",display,outin 
-01500   pr fields "5,13,Cc 52,R,N": cnam$
-01510   pr fields "6,13,Cc 52,R,N": "COMPANY NUMBER "&str$(cno)
-01520   pr fields "8,13,C 52,R,N": " ******************   WARNING   ******************"
-01530   pr fields "10,13,C 52,N": "  This selection will destroy all existing records"
-01540   pr fields "11,13,C 52,N": "  in the W-2 Box 12 File."
-01550   pr fields "16,33,C 11,B,5": "Cancel (F5)"
-01560   pr fields "13,15,C 47,R,N": " Enter ERASE to destroy all records in"
-01570   pr fields "14,15,C 47,R,N": " the W-2 Box 12 file:"
+01500   pr f "5,13,Cc 52,R,N": cnam$
+01510   pr f "6,13,Cc 52,R,N": "COMPANY NUMBER "&str$(cno)
+01520   pr f "8,13,C 52,R,N": " ******************   WARNING   ******************"
+01530   pr f "10,13,C 52,N": "  This selection will destroy all existing records"
+01540   pr f "11,13,C 52,N": "  in the W-2 Box 12 File."
+01550   pr f "16,33,C 11,B,5": "Cancel (F5)"
+01560   pr f "13,15,C 47,R,N": " Enter ERASE to destroy all records in"
+01570   pr f "14,15,C 47,R,N": " the W-2 Box 12 file:"
 01580   input fields "14,40,Cu 5,UT,N": pas$
 01590   if cmdkey=5 then goto MENU1
 01600   if uprc$(pas$)="ERASE" then cont=1 else cont=2
@@ -185,9 +185,9 @@
 01800 L1800: pr newpage
 01810   close #101: ioerr L1820
 01820 L1820: open #101: "SROW=9,SCOL=10,EROW=11,ECOL=65,Border=DR,Caption=<"&cap$& " - Proof List",display,outin 
-01830   pr fields "10,12,C 50": "Employee # to Start With (blank for all):"
-01840   pr fields "12,28,c 9,B,1": "Next (F1)"
-01850   pr fields "12,39,c 11,B,5": "Cancel (F5)"
+01830   pr f "10,12,C 50": "Employee # to Start With (blank for all):"
+01840   pr f "12,28,c 9,B,1": "Next (F1)"
+01850   pr f "12,39,c 11,B,5": "Cancel (F5)"
 01860   input fields "10,55,C 8,UET,N": t$
 01870   if cmdkey=5 then goto XIT
 01880   let k$=t$=uprc$(lpad$(rtrm$(t$),8))
@@ -195,7 +195,7 @@
 01900 L1900: pr newpage
 01910   let message$=""
 01920   let win =101 ! assign window #
-01930   let stopable=1
+01930   stopable=1
 01940   fnwait(win,cap$,message$,stopable)
 01950   on fkey 5 goto L2180
 01960   let pg=eof4=0
@@ -248,14 +248,14 @@
 02430 L2430: if err=4152 then goto L1660 else goto ERTN
 03140 ! ______________________________________________________________________
 03150 PRNBELL: ! pr bell
-03160   pr fields "24,1,C 7,N": bell$
+03160   pr f "24,1,C 7,N": bell$
 03170   return 
 03320 ! ______________________________________________________________________
 03330 XNOPENWIN: ! (WIN,SR,SC,ER,EC,&CAP$)
-03340   if sr<1 then let sr=10
-03350   if sc<1 then let sc=20
-03360   if er<1 then let er=14
-03370   if ec<1 then let ec=59
+03340   if sr<1 then sr=10
+03350   if sc<1 then sc=20
+03360   if er<1 then er=14
+03370   if ec<1 then ec=59
 03380   let win_width=ec-sc+1
 03390   close #win: ioerr L3400
 03400 L3400: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 

@@ -6,9 +6,9 @@
 00070   pr newpage
 00080   close #101: ioerr L90
 00090 L90: open #101: "SROW=10,SCOL=10,EROW=13,ECOL=52,BORDER=DR,CAPTION=FIX INCOME STATEMENT REFERENCE #'S",display,outin 
-00100   pr fields "11,11,C 40": "ENTER THE COMPANY # WITH GOOD NUMBERS:"
-00110   pr fields "12,11,C 40": "ENTER THE COMPANY # TO BE CHANGED:"
-00120   pr fields "14,13,C 34,R,N": "PRESS F1 TO CONTINUE OR F5 TO STOP"
+00100   pr f "11,11,C 40": "ENTER THE COMPANY # WITH GOOD NUMBERS:"
+00110   pr f "12,11,C 40": "ENTER THE COMPANY # TO BE CHANGED:"
+00120   pr f "14,13,C 34,R,N": "PRESS F1 TO CONTINUE OR F5 TO STOP"
 00130 L130: input fields mat io1$,attr "R": cn1,cn2 conv CONV1
 00140   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 00150   if cmdkey>0 then goto L220 else ce=curfld
@@ -17,7 +17,7 @@
 00180   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L130
 00190 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00200   ce=cnt+1
-00210 ERR1: pr fields "24,78,C 1": bell : goto L170
+00210 ERR1: pr f "24,78,C 1": bell : goto L170
 00220 L220: if cmdkey=5 then goto L350
 00250   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&str$(cn1)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.H"&str$(cn1)&"",internal,outin,keyed 
 00260   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&str$(cn2)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.H"&str$(cn2)&",Shr",internal,outin,keyed 

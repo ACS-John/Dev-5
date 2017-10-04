@@ -10,8 +10,8 @@
 00150 ! 
 00160   gosub READ_COMPANY_INFO
 00170   let mcr=mcr*.01
-00180   let ssrate1=fnss_employee*.01
-00190   let ssrate2=fnss_employer*.01
+00180   ssrate1=fnss_employee*.01
+00190   ssrate2=fnss_employer*.01
 00200   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00210   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,input,keyed 
 00220   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -36,8 +36,8 @@
 00410 FM_BANK: form pos 3,c 30,pos 45,pd 6.2,pd 6.2,g 8
 00420 L3870: return  ! /r
 00430 BUILD_CHECK_RECORD: ! 
-00440   let eno$=lpad$(str$(heno),8)
-00450   let em$(1)=''
+00440   eno$=lpad$(str$(heno),8)
+00450   em$(1)=''
 00460   read #1,using FM_PRMSTR,key=eno$: em$(1) nokey FM_PRMSTR
 00470 FM_PRMSTR: form pos 9,c 30
 00480   let tr$(1)=cnvrt$("n 8",ckno)

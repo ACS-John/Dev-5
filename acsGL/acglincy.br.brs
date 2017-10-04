@@ -31,8 +31,8 @@
 00290   let pors=1
 00300   let mp1=69
 00310   if fnps=2 then let mp1=mp1+3
-00320   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
-00330   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
+00320   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00330   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
 00340   form c 9,skip 0
 00350 L350: form pos mp1,pd 3,pos 81,41*pd 6.2
 00360   form c 7,skip 0
@@ -54,10 +54,10 @@
 00500   let pf1=len(cnam$)+int((43-len(cnam$))/2)
 00510   close #101: ioerr L520
 00520 L520: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= INCOME STATEMENT WITH MONTHLY COMPARISONS ",display,outin 
-00530   pr fields "08,18,C 41,H,N": lpad$(cnam$,pf1)
-00540   pr fields "09,18,C 41,H,N": "            COMPANY NUMBER "&str$(cno)
-00550   pr fields "11,18,C 41,R,N": "              IN PROCESS"
-00560   pr fields "13,30,C 16,R,N": "PRESS F5 TO STOP"
+00530   pr f "08,18,C 41,H,N": lpad$(cnam$,pf1)
+00540   pr f "09,18,C 41,H,N": "            COMPANY NUMBER "&str$(cno)
+00550   pr f "11,18,C 41,R,N": "              IN PROCESS"
+00560   pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
 00570   if cmdkey=5 then goto L2380 ! jb
 00580   let report$="STATEMENT OF INCOME AND EXPENSES"
 00590   fnopenprn
@@ -124,7 +124,7 @@
 01200   next j
 01210   goto L1230 ! IF SUM(TOTAL)><0 THEN GOTO 920
 01220   if ls+ul+ds+ic>0 then goto L1230 else goto L660
-01230 L1230: let sp2=48-sp-1
+01230 L1230: sp2=48-sp-1
 01240   if nap=13 then goto L1280
 01250   pr #255,using L1260: d$(1:sp2),sum(total),total(1),total(2),total(3),total(4),total(5),total(6),total(7),total(8),total(9),total(10),total(11),total(12) pageoflow L1960
 01260 L1260: form pos sp,c sp2,pos 38,13*n 12.2,skip redir
@@ -154,7 +154,7 @@
 01500   for j=1 to 13
 01510     if rs=1 then accumt=accumt-accum(ap,j) else accumt=accumt+accum(ap,j)
 01520   next j
-01530   let sp2=48-sp-1
+01530   sp2=48-sp-1
 01540   if nap=13 then goto L1580
 01550   pr #255,using L1560: d$(1:sp2),accumt,accum1,accum2,accum3,accum4,accum5,accum6,accum7,accum8,accum9,accum10,accum11,accum12 pageoflow L1960
 01560 L1560: form pos sp,c sp2,pos 38,13*n 12.2,skip redir
@@ -165,7 +165,7 @@
 01610   gosub L1810
 01620   goto L660
 01630 L1630: if te$="R" then let report$=d$
-01640   if te$="S" then let secondr$=d$
+01640   if te$="S" then secondr$=d$
 01650   gosub L1810
 01660   goto L660
 01670 L1670: if foot1=1 then goto L1720
@@ -189,8 +189,8 @@
 01850   goto L1950
 01860 L1860: let fnpglen(pglen)
 01870 ! If PGLEN<>42 Then Let PGLEN=58
-01880   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01890 ! If PGLEN=42 Then Let SK=SK+1
+01880   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01890 ! If PGLEN=42 Then sK=SK+1
 01900   pr #255,using L1910: rtrm$(foot$)
 01910 L1910: form skip sk,pos tabnote,c fl,skip 1
 01920   if eofcode=1 then goto L1950
@@ -237,7 +237,7 @@
 02330 L2330: form pos 42,14*c 12,skip 2
 02340 L2340: return 
 02350 ! ______________________________________________________________________
-02360 L2360: let eofcode=1
+02360 L2360: eofcode=1
 02370   gosub L1860
 02380 L2380: ! 
 02390 ! 

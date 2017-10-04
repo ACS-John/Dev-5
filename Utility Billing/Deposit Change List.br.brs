@@ -21,12 +21,12 @@
 26000   if ckey=5 then goto XIT
 26020   bd1=val(resp$(1)) 
 26040   bd1=fndate_mmddyy_to_ccyymmdd(bd1) 
-26060   let ed1=val(resp$(2)) 
-26080   let ed1=fndate_mmddyy_to_ccyymmdd(ed1)
+26060   ed1=val(resp$(2)) 
+26080   ed1=fndate_mmddyy_to_ccyymmdd(ed1)
 26090 goto Report ! /r
 31000 Report: ! r: start report
 32000   if bd1=20000000 then bd1=0
-32020   if ed1=20000000 then let ed1=0
+32020   if ed1=20000000 then ed1=0
 32060   open #hDeposit2:=fngethandle: 'Name='&env$('Q')&'\UBmstr\Deposit2.h'&env$('cno')&',KFName='&env$('Q')&'\UBmstr\Deposit2Index.h'&env$('cno')&',Shr,Use,RecL=73,KPs=1,KLn=10',internal,outin,keyed ! "Name="&env$('Q')&"\UBmstr\Deposit2.h"&env$('cno')&",Shr",internal,outin,relative 
 32080   fDeposit2: form pos 1,c 10,n 8,c 32,2*n 10.2,pd 3
 32120   fnopenprn

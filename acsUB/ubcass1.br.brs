@@ -14,13 +14,13 @@
 20260 ! let fntos(sn$:="ubCass1")
 20280 ! let respc=0
 20300 ! let fnlbl(1,1,"Destination Path for Cass file:",33,1)
-20320 ! let opt1$(1)="A:\"
-20340 ! let opt1$(2)="B:\"
-20360 ! let opt1$(3)="C:\"
-20380 ! let opt1$(4)="E:\"
-20400 ! let opt1$(5)="F:\"
-20420 ! let opt1$(6)="G:\"
-20440 ! let opt1$(7)="H:\"
+20320 ! opt1$(1)="A:\"
+20340 ! opt1$(2)="B:\"
+20360 ! opt1$(3)="C:\"
+20380 ! opt1$(4)="E:\"
+20400 ! opt1$(5)="F:\"
+20420 ! opt1$(6)="G:\"
+20440 ! opt1$(7)="H:\"
 20460 ! let fncomboa("AB",1,35,mat opt1$)
 20480 ! let resp$(respc+=1)=opt1$(1)
 20500 ! let fncmdset(2)
@@ -30,7 +30,7 @@
 25000 ! /r
 25020   open #h_out:=fngethandle: "Name=SAVE:ubCass1.dat,RecL=112,EOL=None,Replace",external,output ioerr XIT
 25040 !  pr file$(h_tmp);" ";lrec(h_tmp)
-25060 !  let save_name$=os_filename$(file$(h_tmp))
+25060 !  save_name$=os_filename$(file$(h_tmp))
 25080 !  close #h_tmp,free:
 25100 ! 
 25120 ! open #h_out:=2: "Name="&dv$&"ubCass1.dat,RecL=112,EOL=None,Replace",external,output ! ioerr l170
@@ -43,7 +43,7 @@
 28080     if altcode=2 then goto L350 ! alternate address coded as not being used at this time.
 28100     read #3,using L280,key=z$: nam$,sta$,sta2$,csz$ nokey L300
 28120 L280: form pos 11,4*c 30
-28140     if trim$(csz$)="" then csz$=sta2$ : let sta2$=""
+28140     if trim$(csz$)="" then csz$=sta2$ : sta2$=""
 28160 L300: csz$=trim$(csz$)
 28180     if csz$(len(csz$)-5:len(csz$)-5) =" " then goto L330
 28200     if csz$(len(csz$)-5:len(csz$)-5) < "0" or csz$(len(csz$)-5:len(csz$)-5)>"9" then csz$=csz$(1:len(csz$)-5) &" "&csz$((len(csz$)-4):len(csz$))

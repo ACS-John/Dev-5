@@ -16,7 +16,7 @@
 00160   fncmdkey("&Cancel",5,0,1,"Cancel printing any check endorsments.")
 00170   fnacs(sn$,0,mat resp$,ckey) ! endorse check
 00180   if ckey=5 then goto XIT
-00190   let endorsements=val(resp$(1))
+00190   endorsements=val(resp$(1))
 00200   bank=val(resp$(2))
 00210   fnopenprn
 00220   for j=1 to endorsements

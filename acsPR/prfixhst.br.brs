@@ -25,7 +25,7 @@
 00230   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno),internal,outin,relative 
 00240   goto L430
 00250 ! ______________________________________________________________________
-00260 UPDT: let ent$=lpad$(str$(heno),8)
+00260 UPDT: ent$=lpad$(str$(heno),8)
 00270 ! IF SUM(T1)=0 THEN GOTO asdf
 00280   read #1,using 'Form POS 1,N 8,3*C 30,C 11,2*N 1,7*N 2,2*PD 3.3,6*PD 4.2,2*N 6,PD 5.2,2*PD 3',key=ent$: teno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta nokey L400
 00290   let tadr=ta(1)
@@ -63,8 +63,8 @@
 00600   pr #win,fields "5,2,Cr 38,N": "Fix Quarter-To-Date Information (Y/N):"
 00610   let io5$(1)="4,41,Cu 1,UET,N"
 00620   let io5$(2)="5,41,Cu 1,UET,N"
-00630   pr fields "16,30,C 09,B,1": "Next (F1)" !:
-        pr fields "16,41,C 09,B,5": "Exit (F5)"
+00630   pr f "16,30,C 09,B,1": "Next (F1)" !:
+        pr f "16,41,C 09,B,5": "Exit (F5)"
 00640   let ytd$="N" : let qtd$="N"
 00650 L650: input #win,fields mat io5$: ytd$,qtd$ conv CONV1
 00660   if ce>0 then let io5$(ce)(ce1:ce2)="U": ce=0
@@ -74,7 +74,7 @@
 00700   ce2=ce1+1 : let io5$(ce)(ce1:ce1)="UC" : goto L650
 00710 CONV1: if ce>0 then let io5$(ce)(ce1:ce2)="U"
 00720   ce=cnt+1
-00730 ERR1: pr fields "24,78,C 1": bell : goto L690
+00730 ERR1: pr f "24,78,C 1": bell : goto L690
 00740 L740: if cmdkey=5 then goto XIT
 00750   if ytd$<>"Y" and ytd$<>"N" then ce=1 : goto ERR1
 00760   if qtd$<>"Y" and qtd$<>"N" then ce=2 : goto ERR1
@@ -87,8 +87,8 @@
 00820   pr #win,fields "5,2,Cr 36,N": "Ending Date for the Year (mmddyy):"
 00830   let io5$(1)="4,39,Nz 6,UT,N"
 00840   let io5$(2)="5,39,Nz 6,UT,N"
-00850   pr fields "16,30,C 09,B,1": "Next (F1)"
-00860   pr fields "16,41,C 09,B,5": "Exit (F5)"
+00850   pr f "16,30,C 09,B,1": "Next (F1)"
+00860   pr f "16,41,C 09,B,5": "Exit (F5)"
 00870 L870: input #win,fields mat io5$: yd1,yd2 conv CONV2
 00880   if ce>0 then let io5$(ce)(ce1:ce2)="U": ce=0
 00890   if cmdkey>0 then goto L960 else ce=curfld+1
@@ -97,7 +97,7 @@
 00920   ce2=ce1+1 : let io5$(ce)(ce1:ce1)="UC" : goto L870
 00930 CONV2: if ce>0 then let io5$(ce)(ce1:ce2)="U"
 00940   ce=cnt+1
-00950 ERR2: pr fields "24,78,C 1": bell : goto L910
+00950 ERR2: pr f "24,78,C 1": bell : goto L910
 00960 L960: if cmdkey=5 then goto XIT
 00970   if yd1=0 then ce=1 : goto ERR2
 00980   if yd2=0 then ce=2 : goto ERR2
@@ -111,8 +111,8 @@
         fnopenwin(win=101,10,16,15,63,cap$)
 01060   pr #win,fields "04,2,Cr 39,N": "Starting Date for the Quarter (mmddyy):"
 01070   pr #win,fields "05,2,Cr 39,N": "Ending Date for the Quarter (mmddyy):"
-01080   pr fields "16,30,C 09,B,1": "Next (F1)" !:
-        pr fields "16,41,C 09,B,5": "Exit (F5)"
+01080   pr f "16,30,C 09,B,1": "Next (F1)" !:
+        pr f "16,41,C 09,B,5": "Exit (F5)"
 01090   let io5$(1)="4,42,Nz 6,UT,N"
 01100   let io5$(2)="5,42,Nz 6,UT,N"
 01110 L1110: input #win,fields mat io5$: qd1,qd2 conv CONV2
@@ -123,7 +123,7 @@
 01160   ce2=ce1+1 : let io5$(ce)(ce1:ce1)="UC" : goto L1110
 01170 CONV3: if ce>0 then let io5$(ce)(ce1:ce2)="U"
 01180   ce=cnt+1
-01190 ERR3: pr fields "24,78,C 1": bell : goto L1150
+01190 ERR3: pr f "24,78,C 1": bell : goto L1150
 01200 L1200: if cmdkey=5 then goto XIT
 01210   if qd1=0 then ce=1 : goto ERR2
 01220   if qd2=0 then ce=2 : goto ERR2

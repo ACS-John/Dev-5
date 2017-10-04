@@ -13,7 +13,7 @@
         close #1: 
 00120   if jccode<>1 then goto L460
 00130   pr newpage
-00140   pr fields "10,15,Cc 60,N": "GENERAL LEDGER JOB COST MERGE CHARGES IN PROCESS"
+00140   pr f "10,15,Cc 60,N": "GENERAL LEDGER JOB COST MERGE CHARGES IN PROCESS"
 00150   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00160   open #3: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(cno),internal,input 
 00170   open #5: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",Shr",internal,outin,relative 
@@ -26,14 +26,14 @@
 00240   read #2,using L250,key=cn$: mat l,mat ta nokey L180
 00250 L250: form pos 37,11*pd 5.2,2*pd 2,2*pd 3
 00260   let nc1=0
-00270   let l(6)=l(6)+ji2(3)
-00280   let l(9)=l(9)+ji2(3)
+00270   l(6)=l(6)+ji2(3)
+00280   l(9)=l(9)+ji2(3)
 00290   goto L310
 00300   let nc1=1
 00310 L310: read #5,using L320,rec=1,reserve: ot5
 00320 L320: form pos 86,pd 3
-00330   let empnum$=lpad$(rtrm$(rn$),12)
-00340 L340: let ot5=lrec(5)+1
+00330   empnum$=lpad$(rtrm$(rn$),12)
+00340 L340: ot5=lrec(5)+1
 00350   write #5,using L360,rec=ot5,reserve: empnum$,jn$,ji2(1),ji2(2),0,dat,0,0,0,0,ji2(3),empnam$,0 duprec L340
 00360 L360: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 00370   if ta(2)=0 then let ta(1)=ot5 else rewrite #5,using L320,rec=ta(2): ot5

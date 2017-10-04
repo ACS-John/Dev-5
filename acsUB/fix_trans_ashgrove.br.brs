@@ -9,7 +9,7 @@
 10080 NEXTCUST: read #h_mstr,using MSTRFORM: z$,mat ru,bal,cdate,mat charge,net,gross,mat bd,rt eof XIT
 10090     if rt=3 then 
 10100       let got_bal=0 : let got_current=0 : let got_prior=0 : let has_bad=0 : collections=0
-10110       let srch$=lpad$(cnvrt$("PIC(######.##)",val(z$)+.01),10," ")
+10110       srch$=lpad$(cnvrt$("PIC(######.##)",val(z$)+.01),10," ")
 10120       read #h_trans,using TRANSFORM,search>=srch$: a$,tdate,tcode,tamt,mat tg,tnet,wread,wused,tbal,pcode eof PROCESSCUST
 10130 PROCESSCUST: do 
 10140         read #h_trans,using TRANSFORM,prior: a$,tdate,tcode,tamt,mat tg,tnet,wread,wused,tbal,pcode eof NEXTCUST

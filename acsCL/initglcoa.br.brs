@@ -7,13 +7,13 @@
 00070   dim cnam$*40,dat$*20,cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
 00080 ! ______________________________________________________________________
 00090   fntop(program$,cap$="Import GL Chart of Accounts")
-00100   cancel=99 : let right=1 : let left=0 : center=2 : let number$='30'
+00100   cancel=99 : let right=1 : left=0 : center=2 : let number$='30'
 00110   fncno(cno,cnam$) !:
         fndat(dat$)
 00120 L120: open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&str$(cno)&",Shr",internal,outin,keyed 
 00130 MENU1: ! 
 00140   fntos(sn$="InitGLCoA") !:
-        let mylen=38 : let mypos=mylen+2 : let lc=0
+        let mylen=38 : let mypos=mylen+2 : lc=0
 00150   fnlbl(lc+=1,1,"Extract general ledger accounts from:",38,right)
 00160   let item1$(1)="ACS G/L system" !:
         let item1$(2)="Accountant's Diskette"
@@ -48,7 +48,7 @@
 00390   goto XIT
 00400 ! ______________________________________________________________________
 00410   restore #1,key>="            ": nokey MENU1
-00420 L420: let ln=eof1=0
+00420 L420: ln=eof1=0
 00430   pr newpage
 00440   if ck=5 or eof1=1 then goto MENU1
 00450   goto L420

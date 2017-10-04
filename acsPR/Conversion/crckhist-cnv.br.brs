@@ -5,7 +5,7 @@
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   pr newpage
-00080   pr fields "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
+00080   pr f "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
 00090 L90: input fields "10,55,N 5,UE,N": cno conv L90
 00100   if cno=0 then stop 
 00110 ! 

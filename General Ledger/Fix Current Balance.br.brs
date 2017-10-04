@@ -113,7 +113,7 @@
 54400   fntxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
 54420   let resp$(resp_dateEnd=rc+=1)=date$(dayEnd,'ccyymmdd')
 56000 ! 
-56020     let lc+=1 : col3_pos=mypos+20
+56020     lc+=1 : col3_pos=mypos+20
 56410     let resp_lrea_fund_1=rc+1
 56420     if use_dept then 
 56440       col4_pos=col3_pos+10
@@ -147,11 +147,11 @@
 59020     if use_dept then 
 59030       mat last_retained_earnings_acct$(udim(mat fund_list))
 59040       for fund_item=1 to udim(mat fund_list)
-59060         let last_retained_earnings_acct$(fund_item)=fnagl$(resp$(rc+=1))
+59060         last_retained_earnings_acct$(fund_item)=fnagl$(resp$(rc+=1))
 59080         fncreg_write("last retained earnings account - fund "&str$(fund_list(fund_item)),last_retained_earnings_acct$(fund_item))
 59100       next fund_item
 59120     else 
-59140       let last_retained_earnings_acct$(1)=fnagl$(resp$(rc+=1))
+59140       last_retained_earnings_acct$(1)=fnagl$(resp$(rc+=1))
 59160       fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
 59180     end if 
 59200   end if  ! ck<>5

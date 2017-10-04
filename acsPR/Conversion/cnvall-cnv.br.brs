@@ -9,7 +9,7 @@
 00090 L90: pr newpage
 00100   close #101: ioerr L110
 00110 L110: open #101: "SROW=9,SCOL=9,EROW=11,ECOL=59,BORDER=DR,CAPTION=CONVERT MASTER FILES",display,outin 
-00120   pr fields "10,10,C 45": "COMPANY NUMBER TO CONVERT (0 TO STOP):"
+00120   pr f "10,10,C 45": "COMPANY NUMBER TO CONVERT (0 TO STOP):"
 00130   input fields "10,56,N 5,UE,N": cno
 00140   if cno=0 then goto XIT
 00160   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno),internal,outin,keyed 
@@ -17,7 +17,7 @@
 00180 L180: read #1,using 'Form POS 1,C 8,POS 147,N 3,N 6,N 3': p$,mat gl eof L280
 00190   mat ta=(0)
 00200 ! IF SUM(GL)=0 THEN GOTO 190
-00210   let lr2=lrec(2)+1
+00210   lr2=lrec(2)+1
 00220   write #2,using L230,rec=lr2: p$,mat gl,100,"",0
 00230 L230: form pos 1,c 8,n 3,n 6,n 3,pd 3.2,c 30,pd 3
 00240   mat ta=(lr2)
@@ -34,7 +34,7 @@
 00350 L350: read #1,using L360: k$,mat gl,de$,amt eof L460
 00360 L360: form pos 1,c 20,pos 33,n 3,n 6,n 3,c 18,n 10.2
 00370   mat ta=(0)
-00380   let lr2=lrec(2)+1
+00380   lr2=lrec(2)+1
 00390   write #2,using L400,rec=lr2: k$,mat gl,amt,de$,0
 00400 L400: form pos 1,c 20,n 3,n 6,n 3,pd 5.2,c 30,pd 3
 00410   mat ta=(lr2)
@@ -60,8 +60,8 @@
 00610   goto L730
 00620 ! ______________________________________________________________________
 00630 L630: pr newpage
-00640   pr fields "12,5,C 60": "COMPLETED CONVERTING FILES FOR COMPANY #: "&str$(cno)
-00650   pr fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
+00640   pr f "12,5,C 60": "COMPLETED CONVERTING FILES FOR COMPANY #: "&str$(cno)
+00650   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00660   input fields "13,40,C 1,IAE,N": pause$
 00670   goto L90
 00680 ! ______________________________________________________________________

@@ -14,18 +14,18 @@
 10260 fnend
 11000 def fn_sreg_close
 11020   close #sreg_h: ioerr ignore
-11040   let sreg_setup=0
+11040   sreg_setup=0
 11060 fnend 
 12000 def library fnsreg_read(field_name$*128,&field_value$; default_if_not_read$*128)
-12020   if ~sreg_setup then let sreg_setup=fn_sreg_setup
+12020   if ~sreg_setup then sreg_setup=fn_sreg_setup
 12040   fnsreg_read=fn_sreg_read(field_name$,field_value$, default_if_not_read$)
 12060 fnend 
 12200 def library fnsreg_rename(field_name_old$*128,fieldNameNew$*128)
-12220   if ~sreg_setup then let sreg_setup=fn_sreg_setup
+12220   if ~sreg_setup then sreg_setup=fn_sreg_setup
 12240   fnsreg_rename=fn_sreg_rename(field_name_old$,fieldNameNew$)
 12260 fnend 
 13000 def library fnsreg_write(field_name$*128,field_value$*256)
-13020   if ~sreg_setup then let sreg_setup=fn_sreg_setup
+13020   if ~sreg_setup then sreg_setup=fn_sreg_setup
 13040   fnsreg_write=fn_sreg_write(field_name$,field_value$)
 13060 fnend 
 16000 def fn_sreg_read(field_name$*128,&field_value$; default_if_not_read$*128)
@@ -218,7 +218,7 @@
 82000 def library fnIniToReg
 82010   if ~setup then let fn_setup
 82020   if ~reg_setup then let reg_setup=fn_reg_setup
-82030   if env$('ACSDeveloper')<>'' and ~sreg_setup then let sreg_setup=fn_sreg_setup
+82030   if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
 82040   fnIniToReg=fn_IniToReg
 82060 fnend
 84000 def fn_iniToReg
@@ -272,7 +272,7 @@
 86300 ! /r
 88000 def library fnread_program_print_property(key$*80,&value$; prgCapForSettingsOverride$*256)
 88020   if ~reg_setup then let reg_setup=fn_reg_setup
-88040   if env$('ACSDeveloper')<>'' and ~sreg_setup then let sreg_setup=fn_sreg_setup
+88040   if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
 88060   on error goto ERTN
 88080   dim prg$*256
 88100   if prgCapForSettingsOverride$='' then
@@ -310,7 +310,7 @@
 88760 fnend 
 90000 def library fnwrite_program_print_property(key$*80,value$*256; prgCapForSettingsOverride$*256)
 90020   if ~reg_setup then let reg_setup=fn_reg_setup
-90040   if env$('ACSDeveloper')<>'' and ~sreg_setup then let sreg_setup=fn_sreg_setup
+90040   if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
 90060   on error goto ERTN
 90080   dim prg$*256
 90100   if prgCapForSettingsOverride$='' then

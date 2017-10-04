@@ -4,7 +4,7 @@
 00040   library 'S:\Core\Library': fncno
 00080   fncno(cno)
 00090   pr newpage
-00100   pr fields "10,15,c 60,h,n": "TM FIX TRANSACTION ADDRESSES IN PROCESS"
+00100   pr f "10,15,c 60,h,n": "TM FIX TRANSACTION ADDRESSES IN PROCESS"
 00110   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&str$(cno)&",NoShr",internal,outin,keyed ioerr L690
 00120   open #2: "Name="&env$('Q')&"\TMmstr\TMTrans.h"&str$(cno)&",NoShr",internal,input,relative ioerr L690
 00130   open #4: "Name="&env$('Q')&"\TMmstr\WORK1.h"&str$(cno),internal,output ioerr L150
@@ -13,8 +13,8 @@
 00160   write #4,using L170,rec=1: k$,e$,mat b,sc$,iv$,1,id$
 00170 L170: form pos 1,c 5,c 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,c 4,c 12,pd 3,c 30
 00180   let r4=1
-00190   let fl5$="Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&str$(cno)
-00200   let exec$="FREE "&fl5$(6:len(fl5$))
+00190   fl5$="Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&str$(cno)
+00200   exec$="FREE "&fl5$(6:len(fl5$))
 00210   execute exec$
 00220   open #5: fl5$&",Replace,RecL=175",internal,outin,relative ioerr L690
 00230   write #5,using L240,rec=1: mat ta,mat fb
@@ -61,19 +61,19 @@
 00630   close #2,free: 
 00640   close #4: 
 00650   close #5: 
-00660   let exec$="Rename "&env$('Q')&"\TMmstr\WORK1.H"&str$(cno)&","&env$('Q')&"\TMmstr\TMTrans.h"&str$(cno)
+00660   exec$="Rename "&env$('Q')&"\TMmstr\WORK1.H"&str$(cno)&","&env$('Q')&"\TMmstr\TMTrans.h"&str$(cno)
 00670   execute exec$
 00680   chain "S:\Time Management\Client Legacy"
-00690 L690: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L710
+00690 L690: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L710
 00700   goto L750
 00710 L710: pr newpage
-00720   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L740
+00720   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L740
 00730   goto L750
-00740 L740: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00750 L750: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00740 L740: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00750 L750: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00760   input fields "24,60,C 1,N": quitcode$
 00770   if rtrm$(uprc$(quitcode$))="Q" then goto L810
-00780   pr fields "23,3,C 78,N": ""
-00790   pr fields "24,3,C 78,N": ""
+00780   pr f "23,3,C 78,N": ""
+00790   pr f "24,3,C 78,N": ""
 00800   retry 
 00810 L810: chain "S:\Core\Menu"

@@ -14,15 +14,15 @@
 00140   fndat(dat$)
 00150   let right=1 : center=2 : let pointtwo$="32"
 00160   fntos(sn$="glCkRec") !:
-        let lc=0 : let mylen=40 : let mypos=mylen+2
+        lc=0 : let mylen=40 : let mypos=mylen+2
 00170   fnlbl(lc+=1,1,"General Ledger Bank Account Number:",mylen,right)
 00180   fnqgl(lc,mypos) !:
         let resp$(1)=fnrgl$(resp$(1))
 00190 ! Let IO1$(1)="2,43,Nz 3,UT,N" : Let IO1$(2)="2,47,Nz 6,UT,N" !:
         ! Let IO1$(3)="2,54,Nz 3,UT,N" : Let IO1$(4)="3,43,c 20,UT,N" !:
         ! Let IO1$(5)="4,43,Nz 12.2,UT,N" : Let IO1$(6)="5,43,Nz 6,UT,N"
-00200 ! pr Fields "15,29,C 10,B,1": "Print (F1)" !:
-        ! pr Fields "15,41,C 09,B,5": "Exit (F5)"
+00200 ! pr f "15,29,C 10,B,1": "Print (F1)" !:
+        ! pr f "15,41,C 09,B,5": "Exit (F5)"
 00210   fnlbl(lc+=1,1,"Report Heading Date:",mylen,right)
 00220   fntxt(lc,mypos,20) !:
         let resp$(2)=dat$
@@ -42,7 +42,7 @@
         let gl3=val(resp$(1)(10:12)) !:
         let dat$=resp$(2) !:
         bankbal=val(resp$(3)) !:
-        let lcd=val(resp$(4))
+        lcd=val(resp$(4))
 00310   currgl$=resp$(1)
 00320   fnwait(0,cap$,"Printing: Please wait...",1) !:
         on fkey 5 goto DONE

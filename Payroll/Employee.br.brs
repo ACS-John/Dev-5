@@ -37,7 +37,7 @@
 14320   fncmdkey("E&xit",6,0,1,"Returns to menu")
 14340   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 14360   let hact$=resp$(1)(1:8)
-14380   let eno=ent=val(resp$(1)(1:8))
+14380   eno=ent=val(resp$(1)(1:8))
 14400   if ckey=1 then 
 14420     let ti1=ad1=1
 14440     goto ADDREC
@@ -47,14 +47,14 @@
 14520     read #1,using L870: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd eof L1120
 14540 L870: form pos 1,n 8,3*c 30,c 11,2*n 1,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2,2*pd 3,c 12,n 6
 14560     let holdeno=eno
-14580     let ent$=lpad$(str$(eno),8)
+14580     ent$=lpad$(str$(eno),8)
 14600     goto SCR_EMPLOYEE
 14620   else if ckey=4 then 
-14640     let ent=eno
+14640     ent=eno
 14660     goto EDITREC
 14680   else if ckey=8 then 
 14700     fnemployee_srch(x$,fixgrid)
-14720     let ent=val(x$)
+14720     ent=val(x$)
 14740     goto EDITREC
 14760   else if ckey=6 or env$('ExitNow')='yes' then ! Added ExitNow env$ by GSB to ensure program recursively exits when they click the Windows X in a Subwindow
 14780     goto XIT
@@ -74,8 +74,8 @@
 16180   fnacs(sn$,0,mat resp$,ckey)
 16200   if ckey=5 then goto ASKEMPLOYEE
 16220   add1=1
-16240   let ent=val(resp$(1))
-16260   let ent$=lpad$(str$(ent),8)
+16240   ent=val(resp$(1))
+16260   ent$=lpad$(str$(ent),8)
 16280   read #1,using F_RPMSTR,key=ent$: tempeno nokey L1020
 16300   mat ml$(2)
 16320   let ml$(1)="A record with this number already exists!"
@@ -88,13 +88,13 @@
 18060   bd=0
 18080   mat rs=(0)
 18100   mat em=(0)
-18120   let lpd=tgp=0
+18120   lpd=tgp=0
 18140   mat ta=(0)
 18160   mat ty=(0)
 18180   mat tqm=(0)
 18200   mat tcp=(0)
 18220   mat sc=(0)
-18240   let eno=teno=holdeno=ent
+18240   eno=teno=holdeno=ent
 18260 ! let holdem$=em$(1)
 18280   let dd$="N"
 18300 ! clear bank draft
@@ -105,7 +105,7 @@
 20000 EDITREC: ! r:
 20020   if ent=0 then goto ASKEMPLOYEE
 20040   let teno=eno=ent ! let hdar=0
-20060   let ent$=lpad$(str$(ent),8)
+20060   ent$=lpad$(str$(ent),8)
 20080   read #1,using F_RPMSTR,key=ent$: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd nokey L1120
 20100   let holdeno=eno
 20120   goto SCR_EMPLOYEE ! /r
@@ -228,30 +228,30 @@
 28200   fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
 28220   fnacs(sn$,0,mat resp$,ckey)
 29000   if ckey=5 then goto ASKEMPLOYEE
-29020   let eno=val(resp$(1)(1:8))
-29040   let em$(1)=resp$(2) ! name
-29060   let em$(2)=resp$(3)
-29080   let em$(3)=resp$(4)
-29100   let ss$=resp$(5)
+29020   eno=val(resp$(1)(1:8))
+29040   em$(1)=resp$(2) ! name
+29060   em$(2)=resp$(3)
+29080   em$(3)=resp$(4)
+29100   ss$=resp$(5)
 29120   let rs(1)=val(resp$(6)(1:1))
 29140   let rs(2)=val(resp$(7)(1:1)) ! sex
-29160   let em(1)=val(resp$(8)(1:1)) ! marital status
-29180   let em(2)=val(resp$(9)(1:2)) ! fed ex
-29200   let em(3)=val(resp$(10)(1:2)) ! state ex
-29220   let em(4)=val(resp$(11)(1:2)) ! emp status
-29240   let em(5)=val(resp$(12)(1:2)) ! pay code
-29260   let em(6)=val(resp$(13)(1:2)) ! fica code
-29280   let em(7)=val(resp$(14)(1:2)) ! eic code
-29300   let em(8)=val(resp$(15)(1:5)) ! sick pay
-29320   let em(9)=val(resp$(16)) ! vacation Pay code
-29340   let em(10)=val(resp$(17)) ! sick accrued
-29360   let em(11)=val(resp$(18)) ! vac accrued
-29380   let em(12)=val(resp$(19)) ! std fed
-29400   let em(13)=val(resp$(20)) ! fed addon
-29420   let em(14)=val(resp$(21)) ! std state
-29440   let em(15)=val(resp$(22)) ! state addon
-29460   let em(16)=val(resp$(23)) ! date hired
-29480   let lpd=val(resp$(24)) ! last payroll date
+29160   em(1)=val(resp$(8)(1:1)) ! marital status
+29180   em(2)=val(resp$(9)(1:2)) ! fed ex
+29200   em(3)=val(resp$(10)(1:2)) ! state ex
+29220   em(4)=val(resp$(11)(1:2)) ! emp status
+29240   em(5)=val(resp$(12)(1:2)) ! pay code
+29260   em(6)=val(resp$(13)(1:2)) ! fica code
+29280   em(7)=val(resp$(14)(1:2)) ! eic code
+29300   em(8)=val(resp$(15)(1:5)) ! sick pay
+29320   em(9)=val(resp$(16)) ! vacation Pay code
+29340   em(10)=val(resp$(17)) ! sick accrued
+29360   em(11)=val(resp$(18)) ! vac accrued
+29380   em(12)=val(resp$(19)) ! std fed
+29400   em(13)=val(resp$(20)) ! fed addon
+29420   em(14)=val(resp$(21)) ! std state
+29440   em(15)=val(resp$(22)) ! state addon
+29460   em(16)=val(resp$(23)) ! date hired
+29480   lpd=val(resp$(24)) ! last payroll date
 29500   bd=val(resp$(25)) ! birth date
 29520   let ph$=resp$(26) ! phone
 29540   ! if ckey=6 then goto PICTURE
@@ -500,7 +500,7 @@
 46940   ! L3980: ! change main employee record
 46960   delete #1,key=ent$: 
 46980   write #1,using F_RPMSTR: eno,mat em$,ss$,mat rs,mat em,lpd,tgp,mat ta,ph$,bd
-47000   let ent$=lpad$(str$(eno),8)
+47000   ent$=lpad$(str$(eno),8)
 47020   let hact$=ent$
 47060   CHGENO_XIT: ! 
 47080 goto MENU1 ! /r
@@ -568,7 +568,7 @@
 49160   read #1,using "form pos 150,10*c 8",rec=1: mat statenames$
 49180   close #1: 
 49200   dim state_option$(10)*11
-49220   for j=1 to 10: let state_option$(j)=cnvrt$("Pic(z#)",j)&" "&statenames$(j): next j
+49220   for j=1 to 10: state_option$(j)=cnvrt$("Pic(z#)",j)&" "&statenames$(j): next j
 49240   ! 
 49260   dim dednames$(20)*20
 49280   fnDedNames(mat dednames$)

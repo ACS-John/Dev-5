@@ -20,7 +20,7 @@
 01030    let ParentKey$=""
 01040    let Record=0
 01050    let Path$=""
-01060    let ScreenCode$="W-2MARGINS"
+01060    screenCode$="W-2MARGINS"
 01070    chain "s:\core\screenio\screeniosaveandtest.br",mat PassedData$,Key$,ParentKey$,Record,Path$,ScreenCode$
 01080    if len(trim$(Ret$)) then
 01090       pr Ret$
@@ -35,7 +35,7 @@
 05004   fnreg_write('W-2 - Form 1 Y' ,s$(sio_txtW2f1y))
 05005   fnreg_write('W-2 - Form 2 Y' ,s$(sio_txtW2f2y))
 05006   fnreg_write('W-2 - X'        ,s$(sio_txtW2x)  )
-05007   let ExitMode=QuitOnly
+05007   exitMode=QuitOnly
 05008 fnend
 05009 !
 05010 ! Imported From "S:\Core\ScreenIO\function\co_w2_margins_enter.brs"
@@ -54,7 +54,7 @@
 05023   !   fnreg_write('W-2 - Form 1 Y' ,s$(sio_txtW2f1y))
 05024   !   fnreg_write('W-2 - Form 2 Y' ,s$(sio_txtW2f2y))
 05025   !   fnreg_write('W-2 - X'        ,s$(sio_txtW2x)  )
-05026   !   let ExitMode=QuitOnly
+05026   !   exitMode=QuitOnly
 05027   !
 05028   ! else if fkey=99 or (ControlIndex and lwrc$(UserData$(ControlIndex))=lwrc$("btnCancel")) then
 05029   !   ExitMode=QuitOnly

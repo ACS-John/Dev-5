@@ -14,7 +14,7 @@
         let idx$(3)="ubIndx3"
 00150 ! ______________________________________________________________________
 00160 SCR1: ! 
-00170   let sn$="ubBudLst" !:
+00170   sn$="ubBudLst" !:
         fntos(sn$) !:
         let respc=0
 00180   let mylen=22 !:
@@ -29,9 +29,9 @@
 00220   fntxt(2,mypos,20) !:
         let resp$(respc+=1)=dat$
 00230   fnlbl(3,1,"Print:",mylen,1)
-00240   let sel$(1)="Active customers" !:
-        let sel$(2)="Inactive customers" !:
-        let sel$(3)="[All]" !:
+00240   sel$(1)="Active customers" !:
+        sel$(2)="Inactive customers" !:
+        sel$(3)="[All]" !:
         fncomboa("bs2",3,mypos,mat sel$) !:
         let resp$(respc+=1)=sel$(1)
 00250   fncmdset(2)

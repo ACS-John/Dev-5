@@ -7,7 +7,7 @@
 00070 L70: pr newpage
 00080   close #101: ioerr L90
 00090 L90: open #101: "SROW=9,SCOL=4,EROW=11,ECOL=65,BORDER=DR,CAPTION=CONVERT TRANSACTION ALLOCATION FILE",display,outin 
-00100   pr fields "10,5,C 60": "ENTER COMPANY NUMBER TO CONVERT OR 0 TO STOP:"
+00100   pr f "10,5,C 60": "ENTER COMPANY NUMBER TO CONVERT OR 0 TO STOP:"
 00110   input fields "10,51,Nz 5,UT,N": cno
 00120   if cno=0 then goto XIT
 00140   execute "Copy "&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)&" X -79 -n"

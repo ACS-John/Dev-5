@@ -26,7 +26,7 @@
 00220   fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   beg_date=val(resp$(1)) !:
-        let end_date=val(resp$(2))
+        end_date=val(resp$(2))
 00250   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode !:
         close #1: 
 00260   for j=1 to 10

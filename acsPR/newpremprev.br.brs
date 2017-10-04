@@ -27,7 +27,7 @@
 00260   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
 00280   beg_date=val(resp$(1)) ! beginning of year
-00300   let end_date=val(resp$(2)) ! ending day of year
+00300   end_date=val(resp$(2)) ! ending day of year
 00310 ! ______________________________________________________________________
 00320   on fkey 5 goto DONE
 00330   fnopenprn
@@ -39,7 +39,7 @@
 00390 L390: read #1,using L430: eno,em$,em4,mat em eof DONE
 00400   a=pos (rtrm$(em$)," ",1)
 00410   b=pos (rtrm$(em$)," ",a+1)
-00420   let em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
+00420   em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
 00430 L430: form pos 1,n 8,c 30,pos 118,n 2,pos 132,2*pd 4.2,pos 156,n 6,pos 173
 00440   let fsttrl=1
 00460   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey L390

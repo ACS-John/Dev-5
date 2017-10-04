@@ -227,7 +227,7 @@
 02260 L2260: let p1=pos(a$(3),",",1)
 02270   if p1=0 then let p1=pos(a$(3)," ",1)
 02280   ct$=a$(3)(1:p1-1)
-02290   let st$=a$(3)(p1+2:p1+3)
+02290   st$=a$(3)(p1+2:p1+3)
 02300   let p2=len(rtrm$(a$(3)))
 02310   let p1=p2-4
 02320   let zip$=a$(3)(p1:p2)
@@ -308,9 +308,9 @@
 02920   if fci$=" " or fci$="1" then goto L2930 else goto MAIN
 02930 L2930: if rtrm$(cn$)="" then goto MAIN
 02940   if rtrm$(uprc$(orc$))="O" or rtrm$(uprc$(orc$))="R" or rtrm$(uprc$(orc$))="C" then goto L2950 else goto MAIN
-02950 L2950: if uprc$(orc$)="O" then let orc2$="1  "
-02960   if uprc$(orc$)="R" then let orc2$=" 1 "
-02970   if uprc$(orc$)="C" then let orc2$="  1"
+02950 L2950: if uprc$(orc$)="O" then orc2$="1  "
+02960   if uprc$(orc$)="R" then orc2$=" 1 "
+02970   if uprc$(orc$)="C" then orc2$="  1"
 02980   csz$=a$(3)(1:20): gosub CSZ
 02990   if cfs$=" " then goto L3180
 03000   if cfs$><"1" then goto MAIN
@@ -329,7 +329,7 @@
 03110   fncmdkey("&Cancel",5,0,1,"Returns to menu.")
 03120   fnacs(sn$,0,mat resp$,ckey)
 03130   for j=1 to 51
-03140     if resp$(j)="True" then let stu(j)=1
+03140     if resp$(j)="True" then stu(j)=1
 03150   next j
 03170 ! ______________________________________________________________________
 03180 L3180: ! pr NEWPAGE ! commenting this line might screw up window 101 repeat processing
@@ -341,7 +341,7 @@
 03240     let wrd2$(j)=cnvrt$("N 2",j)&".  "&tr$(j)(3:18)
 03250     let io2$(j)=str$(j+1)&",20,C 18"
 03260   next j
-03270   pr fields "21,35,C 09,B,5": "Exit (F5)"
+03270   pr f "21,35,C 09,B,5": "Exit (F5)"
 03280 L3280: rinput #102,select mat io2$,attr "H": mat wrd2$
 03290   let ti1=curfld
 03300   if ti1<1 or ti1>udim(tr$) then goto L3280
@@ -349,15 +349,15 @@
 03320   close #101: ioerr L3330
 03330 L3330: open #101: "SROW=3,SCOL=3,ERow=22,ECOL=78,Border=DR,Caption=<"&cap$,display,outin 
 03340   pr #101: newpage
-03350   pr fields "4,05,C 04,R,N": "Type"
-03360   pr fields "4,11,C 40,R,N": "Category"
+03350   pr f "4,05,C 04,R,N": "Type"
+03360   pr f "4,11,C 40,R,N": "Category"
 03370   for j=1 to 14
-03380     if j<10 then pr fields str$(j+4)&",11,C 65": amt$(ti1,j)(8:70)
+03380     if j<10 then pr f str$(j+4)&",11,C 65": amt$(ti1,j)(8:70)
 03390     let io1$(j)=str$(j+4)&",7,N 2,UT,N"
 03400   next j
-03410   pr fields "17,5,C 65,R,N": "Vendor Type in your file that matches each category:"
-03420   pr fields "23,30,C 09,B,1": "Next (F1)"
-03430   pr fields "23,41,C 09,B,5": "Exit (F5)"
+03410   pr f "17,5,C 65,R,N": "Vendor Type in your file that matches each category:"
+03420   pr f "23,30,C 09,B,1": "Next (F1)"
+03430   pr f "23,41,C 09,B,5": "Exit (F5)"
 03440 L3440: input fields mat io1$: mat ti2 conv L3440
 03450   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 03460   if cmdkey>0 then goto L3530 else ce=curfld+1
@@ -366,7 +366,7 @@
 03490   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L3440
 03500 CONV2: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 03510   ce=cnt+1
-03520 ERR2: pr fields "24,78,C 1": bell : goto L3480
+03520 ERR2: pr f "24,78,C 1": bell : goto L3480
 03530 L3530: if cmdkey=5 then goto XIT
 03540   if sum(ti2)<1 then goto L3440
 03550   ai$=""
@@ -396,7 +396,7 @@
 03760   if ct1=0 then gosub RECT
 03770   gosub RECA
 03780   if lrec(1)=0 then goto L3800
-03790 L3790: pr fields "12,32,N 3,UT,N": r1/lrec(1)*100
+03790 L3790: pr f "12,32,N 3,UT,N": r1/lrec(1)*100
 03800 L3800: read #1,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12',release: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$ eof END1
 03810   restore #2,key>=vn$: nokey L3800
 03820   let ytdp=0 ! do not use ytdp from payee record
@@ -407,7 +407,7 @@
 03870   if x>transactionendingdate then goto L3830
 03880   let ytdp+=am
 03890   goto L3830
-03900 L3900: ! LET VN$="12345678": LET NAM$="JOE JONES": aD1$="11014 HWY 206": aD2$="PO BOX 925": cSZ$="HARRISON, AR 72601": LET YTDP=655.55: LET TYP=7: LET SS$="123456789"
+03900 L3900: ! LET VN$="12345678": LET NAM$="JOE JONES": aD1$="11014 HWY 206": aD2$="PO BOX 925": cSZ$="HARRISON, AR 72601": LET YTDP=655.55: LET TYP=7: sS$="123456789"
 03910   form pos 1,c 8,c 35,3*c 20,pd 5.2,n 2,c 11
 03920   for j=1 to 12
 03930     if typ=0 then goto L3980
@@ -420,19 +420,19 @@
 04000   let p1=pos(csz$,",",1)
 04010   if p1=0 then let p1=pos(csz$," ",1)
 04020   c$=csz$(1:p1-1)
-04030   let s$=uprc$(csz$(p1+2:p1+3))
+04030   s$=uprc$(csz$(p1+2:p1+3))
 04040   let p2=len(rtrm$(csz$))
 04050   let p1=p2-4
 04060   let z$=csz$(p1:p2)
-04070   let ssn=0: let tin$=" "
+04070   ssn=0: let tin$=" "
 04080   for j=1 to 11
 04090     if ss$(j:j)=>"0" and ss$(j:j)<="9" then goto L4130
 04100     if j=3 then let tin$="1"
 04110     if j=4 or j=7 then let tin$="2"
-04120     let ss$(j:j)=""
+04120     ss$(j:j)=""
 04130 L4130: next j
 04140   if len(ss$)><9 then goto L4180
-04150   let ssn=val(ss$)
+04150   ssn=val(ss$)
 04160   if tin$><" " then goto L4460
 04170 ! ______________________________________________________________________
 04180 L4180: pr newpage
@@ -445,9 +445,9 @@
 04250   pr #103,fields "2,2,Cc 63,H": "Unable to determine Federal ID or Social Security Number."
 04260   pr #103,fields "7,2,Cr 52,N": "[F]ederal ID, [S]ocial Security Number or [N]either:"
 04270   pr #103,fields "8,2,Cr 52,N": "Federal ID or Social Security Number:"
-04280   let ss$=ss$(1:9)
+04280   ss$=ss$(1:9)
 04290   pr #103,fields "1,1,C 7,N": hex$("07")
-04300 L4300: pr fields "16,35,C 09,B,5": "Stop (F5)"
+04300 L4300: pr f "16,35,C 09,B,5": "Stop (F5)"
 04310   if tin$="1" then let tinfs$="F"
 04320   if tin$="2" then let tinfs$="S"
 04330   if tin$=" " then let tinfs$="N"
@@ -456,20 +456,20 @@
 04360   if tinfs$="S" then let tin$="2"
 04370   if tinfs$="N" then let tin$=" "
 04380   if tinfs$<>"F" and tinfs$<>"S" and tinfs$<>"N" then goto L4340
-04390   let ssn=val(ss$) conv L4340
+04390   ssn=val(ss$) conv L4340
 04400   if tin$><" " and len(rtrm$(ss$))><9 then goto L4340
 04410   if tin$=" " and len(rtrm$(ss$))><0 then goto L4340
 04420   if tin$><" " and ssn=0 then goto L4300
 04430   if tin$=" " or tin$="1" or tin$="2" then goto L4450 else goto L4300
 04440   close #103: 
 04450 L4450: gosub PROCESS
-04460 L4460: if tin$="1" then let ln4$=uprc$(nam$(1:4)) : goto L4530
+04460 L4460: if tin$="1" then ln4$=uprc$(nam$(1:4)) : goto L4530
 04470   let p1=len(rtrm$(nam$))
-04480   if p1=0 then let ln4$="": goto L4530
+04480   if p1=0 then ln4$="": goto L4530
 04490   for j=p1 to 1 step -1
 04500     if nam$(j:j)=" " then goto L4520
 04510   next j
-04520 L4520: let ln4$=nam$(j+1:j+4)
+04520 L4520: ln4$=nam$(j+1:j+4)
 04530 L4530: for j=1 to 51
 04540     if s$><st$(j)(1:2) then goto L4610
 04550     if stu(j)=1 then let ps$=st$(j)(4:5) else let ps$="  "
@@ -497,18 +497,18 @@
 04770   goto L3790
 04780 ! ______________________________________________________________________
 04790 RECT: ! 
-04800   let seq=seq+1: pr #22,using L4810: "T",yr,"",b1,tcc$," "," "," ",fic$,a$(1)," ",a$(1)," ",a$(2),city$,st$,zip$," ",1,cn$,cpn," "," "," "," "," ",seq," ","V","Advanced Computer Services, Inc.","P O Box 758","Harrison","AR","72601","Ken Johnson","8707415447","acs1@alltel.net"," "," "
+04800   seq=seq+1: pr #22,using L4810: "T",yr,"",b1,tcc$," "," "," ",fic$,a$(1)," ",a$(1)," ",a$(2),city$,st$,zip$," ",1,cn$,cpn," "," "," "," "," ",seq," ","V","Advanced Computer Services, Inc.","P O Box 758","Harrison","AR","72601","Ken Johnson","8707415447","acs1@alltel.net"," "," "
 04810 L4810: form pos 1,c 1,n 4,c 1,n 9,c 5,c 2,c 5,c 1,c 1,6*c 40,c 2,c 9,c 15,pic(########),c 40,n 15,c 35,c 2,c 15,c 6,c 83,pic(########),c 10,c 1,c 40,c 40,c 40,c 2,c 9,c 40,c 15,c 35,c 9,c 2
 04820   return 
 04830 ! ______________________________________________________________________
 04840 RECA: ! 
-04850   let seq=seq+1: pr #22,using L4860: "A",yr," ",b1,pnc$," ",cfs$,ti$,ai$," ",orc2$," ",fci$,a$(1)," ",tai,a$(2),city$,st$,zip$,ppn," ",seq," "," "
+04850   seq=seq+1: pr #22,using L4860: "A",yr," ",b1,pnc$," ",cfs$,ti$,ai$," ",orc2$," ",fci$,a$(1)," ",tai,a$(2),city$,st$,zip$,ppn," ",seq," "," "
 04860 L4860: form pos 1,c 1,n 4,c 6,g 9,c 4,3*c 1,c 12,c 8,c 3,c 1,c 1,2*c 40,n 1,2*c 40,c 2,c 9,n 15,pos 240,c 260,pos 500,pic(########),c 231,c 2
 04870   return 
 04880 ! ______________________________________________________________________
 04890 RECB: ! 
 04900   let totalb=totalb+1
-04910   let seq=seq+1: pr #22,using L4920: "B",yr,cri$," ",tin$,ss$,vn$," "," ",mat amt,"",fci$,nam$,"","",ad1$,"",c$,s$,z$,"",seq,"","","",0,0,"",""
+04910   seq=seq+1: pr #22,using L4920: "B",yr,cri$," ",tin$,ss$,vn$," "," ",mat amt,"",fci$,nam$,"","",ad1$,"",c$,s$,z$,"",seq,"","","",0,0,"",""
 04920 L4920: form pos 1,c 1,n 4,c 1,c 4,c 1,c 9,c 20,c 4,c 10,12*pic(############),c 48,c 1,6*c 40,c 2,c 9,c 1,pic(########),pos 508,c 36,pos 544,c 119,c 60,2*pic(##########),c 2,c 2
 04930   mat camt=camt+amt
 04940   cnp=cnp+1
@@ -517,7 +517,7 @@
 04970   return 
 04980 ! ______________________________________________________________________
 04990 RECC: ! 
-05000   let seq=seq+1: pr #22,using L5010: "C",cnp,"",mat camt,"",seq," "," "
+05000   seq=seq+1: pr #22,using L5010: "C",cnp,"",mat camt,"",seq," "," "
 05010 L5010: form pos 1,c 1,pic(########),c 6,12*pic(##################),c 268,pic(########),c 231,c 2
 05020   mat camt=(0)
 05030   cnp=0
@@ -526,7 +526,7 @@
 05060 RECK: ! 
 05070   for j=1 to 51
 05080     if knp(j)=0 or stu(j)=0 then goto L5110
-05090     let seq=seq+1: pr #22,using L5100: "K",knp(j),"",kamt(j,1),kamt(j,2),kamt(j,3),kamt(j,4),kamt(j,5),kamt(j,6),kamt(j,7),kamt(j,8),kamt(j,9),kamt(j,10),kamt(j,11),kamt(j,12),"",seq," ","","","",st$(j)(4:5),""
+05090     seq=seq+1: pr #22,using L5100: "K",knp(j),"",kamt(j,1),kamt(j,2),kamt(j,3),kamt(j,4),kamt(j,5),kamt(j,6),kamt(j,7),kamt(j,8),kamt(j,9),kamt(j,10),kamt(j,11),kamt(j,12),"",seq," ","","","",st$(j)(4:5),""
 05100 L5100: form pos 1,c 1,pic(########),c 6,12*pic(##################),c 268,pic(########),c 18,c 18,c 4,c 2,c 2
 05110 L5110: next j
 05120   mat kamt=(0)
@@ -534,7 +534,7 @@
 05140   return 
 05150 ! ______________________________________________________________________
 05160 RECF: ! 
-05170   let seq=seq+1: pr #22,using L5180: "F",tnp,"",totalb,"",seq," "
+05170   seq=seq+1: pr #22,using L5180: "F",tnp,"",totalb,"",seq," "
 05180 L5180: form pos 1,c 1,pic(########),"000000000000000000000",c 19,pic(########),c 442,pic(########),c 241,c 2
 05190   return 
 05200 ! ______________________________________________________________________
@@ -561,9 +561,9 @@
 05410 PROCESS: pr newpage
 05420   close #101: ioerr L5430
 05430 L5430: open #101: "SROW=10,SCOL=20,EROW=12,ECOL=59,BORDER=DR,CAPTION=<"&cap$,display,outin 
-05440   pr fields "10,35,C 10,N": "processing"
-05450   pr fields "13,34,C 11,B,5": "Cancel (F5)"
-05460   pr fields "12,32,C 20": "  0% COMPLETED"
+05440   pr f "10,35,C 10,N": "processing"
+05450   pr f "13,34,C 11,B,5": "Cancel (F5)"
+05460   pr f "12,32,C 20": "  0% COMPLETED"
 05470   return 
 05480 ! ______________________________________________________________________
 05490 CSZ: ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
@@ -573,7 +573,7 @@
 05530   if p1=-1 then let p1=pos(csz$," ",1)-1
 05540   let p2=pos(csz$," ",p1+3)
 05550   city$=uprc$(rtrm$(csz$(1:p1))(1:15))
-05560   let state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2))
+05560   state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2))
 05570   let zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:25)))(1:9))
 05580   return 
 05590 ! ______________________________________________________________________

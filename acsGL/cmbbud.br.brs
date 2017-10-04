@@ -12,7 +12,7 @@
 00120 L120: linput #13: ln$ eof L170
 00130     let x=pos(ln$,"<DIR>",1)
 00140     if x>0 and ln$(1:1)<>"." then goto L150 else goto L120
-00150 L150: let options$(j+=1)=ln$(46:len(trim$(ln$)))
+00150 L150: options$(j+=1)=ln$(46:len(trim$(ln$)))
 00160     goto L120
 00170 L170: close #13: 
 00180     pause 

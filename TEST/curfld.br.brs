@@ -7,12 +7,12 @@
 00140   open #185: "SROW= 8, SCOL= 2, EROW=19, ECOL=61, PARENT=188",display,outin 
 00160 ! 
 00161   dim opt$(5)*28
-00162   let opt$(1)="0 = Not Finaled"
-00163   let opt$(2)="1 = Final Bill"
-00164   let opt$(3)="2 = Final & Refund Deposit"
-00165   let opt$(4)="3 = Active, but do not Bill"
-00166   let opt$(5)="4 = Finaled, but not billed"
-00168   pr fields '#185,7,24,28/combo 128,+,select': mat opt$
+00162   opt$(1)="0 = Not Finaled"
+00163   opt$(2)="1 = Final Bill"
+00164   opt$(3)="2 = Final & Refund Deposit"
+00165   opt$(4)="3 = Active, but do not Bill"
+00166   opt$(5)="4 = Finaled, but not billed"
+00168   pr f '#185,7,24,28/combo 128,+,select': mat opt$
 00170 ! 
 00172 !  curfld(4)
 00174 ! 

@@ -60,11 +60,11 @@
 15220 ! 
 15240   altaddr=srch(mat address_option$,resp$(2))
 15340 ! 
-15360   let line_1_print=srch(mat line_x_option$,resp$(3))
-15380   let line_2_print=srch(mat line_x_option$,resp$(4))
-15400   let line_3_print=srch(mat line_x_option$,resp$(5))
-15420   let line_4_print=srch(mat line_x_option$,resp$(6))
-15440   let line_5_print=srch(mat line_x_option$,resp$(7))
+15360   line_1_print=srch(mat line_x_option$,resp$(3))
+15380   line_2_print=srch(mat line_x_option$,resp$(4))
+15400   line_3_print=srch(mat line_x_option$,resp$(5))
+15420   line_4_print=srch(mat line_x_option$,resp$(6))
+15440   line_5_print=srch(mat line_x_option$,resp$(7))
 15460 ! 
 15480   if annbc=sequence_route then 
 15500     let filter_selection=6
@@ -159,7 +159,7 @@
 20700   goto ADDLABEL ! /r
 24000 ADDLABEL: ! r:
 24020 ! if annbc=sequence_bulk_sort then
-24040 !   let labeltext$(1)=labeltext$(1)&"  "&bulksort$ ! if bulk sort than auto add bulk sort code on to the end of the top line
+24040 !   labeltext$(1)=labeltext$(1)&"  "&bulksort$ ! if bulk sort than auto add bulk sort code on to the end of the top line
 24060 ! else 
 24080   fn_set_line_text(labeltext$(1),line_1_print)
 24100 ! end if
@@ -183,25 +183,25 @@
 26080   goto XIT ! /r
 27000   def fn_set_line_text(&labeltext$,line_2_print)
 27020     if line_2_print=line_x_blank then 
-27040       let labeltext$=''
+27040       labeltext$=''
 27060     else if line_2_print=line_x_account_number then 
-27080       let labeltext$=z$
+27080       labeltext$=z$
 27100     else if line_2_print=line_x_meter_address then 
-27120       let labeltext$=meter_address$
+27120       labeltext$=meter_address$
 27140     else if line_2_print=line_x_customer_name then 
-27160       let labeltext$=pe$(1)
+27160       labeltext$=pe$(1)
 27180     else if line_2_print=line_x_mailing_address_line_1 then ! Mailing Address Line 1
-27200       let labeltext$=pe$(2)
+27200       labeltext$=pe$(2)
 27220     else if line_2_print=line_x_mailing_address_line_2 then ! Mailing Address Line 2 or if blank City State Zip
-27240       let labeltext$=pe$(3)
+27240       labeltext$=pe$(3)
 27260     else if line_2_print=line_x_mailing_address_line_3 then ! City State Zip if Mailing Address Line 2 not blank
-27280       let labeltext$=pe$(4)
+27280       labeltext$=pe$(4)
 27282     else if line_2_print=line_x_meter_route_and_sequenc then ! City State Zip if Mailing Address Line 2 not blank
-27284       let labeltext$=f3$&' '&str$(route)&' '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
+27284       labeltext$=f3$&' '&str$(route)&' '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
 27286     else if line_2_print=line_x_account_meter4_and_seq then ! City State Zip if Mailing Address Line 2 not blank
-27288       let labeltext$=z$&' '&f3$&' '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
+27288       labeltext$=z$&' '&f3$&' '&str$(seq) ! just use meter 3 for now, French Settlement Gas is the only one that uses this option.
 27300     else 
-27320       let labeltext$='(invalid selection)'
+27320       labeltext$='(invalid selection)'
 27340     end if 
 27360   fnend 
 28000 XIT: let fnxit
@@ -216,15 +216,15 @@
 30160   fncmdset(22)
 30180   fnacs(sn$,0,mat resp$,ckey) ! select by range
 30200   if ckey=5 then goto XIT
-30220   let l1$=lpad$(trim$(resp$(1)(1:10)),10)
+30220   l1$=lpad$(trim$(resp$(1)(1:10)),10)
 30240   let h1$=lpad$(trim$(resp$(2)(1:10)),10)
 30260   if ckey=6 then let fncustomer_search(resp$(1)) else goto L1470
-30280   if trim$(l1$)="" then let l1$=resp$(1) : goto SELR
+30280   if trim$(l1$)="" then l1$=resp$(1) : goto SELR
 30300   if trim$(h1$)="" then let h1$=resp$(1) : goto SELR
 30320   goto SELR
 30340 L1470: ! 
 30360   if ckey=2 then goto SCR2
-30380   let l1$=lpad$(l1$,10) : let h1$=lpad$(h1$,10)
+30380   l1$=lpad$(l1$,10) : let h1$=lpad$(h1$,10)
 30400   if h1$<l1$ then 
 30420     mat msgline$(1)
 30440     let msgline$(1)="You have entered invalid accounts!"
@@ -244,7 +244,7 @@
 32160   fnacs(sn$,0,mat resp$,ckey)
 32180   if ckey=2 then 
 32190     fncustomer_search(resp$(1))
-32200     let selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
+32200     selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
 32220     read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
 32240     goto IACC
 32260   end if 
@@ -255,7 +255,7 @@
 32360   let z$=lpad$(rtrm$(resp$(1)(1:10)),10)
 32380   let hz$=z$
 32400   if rtrm$(z$)="" then goto DONE
-32420   let selz$="": mat sele$=("")
+32420   selz$="": mat sele$=("")
 32440   read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),final nokey IACC
 32460   let meter_address$=e$(1)
 32480   goto THERE ! /r
@@ -273,7 +273,7 @@
 34220   if ckey=5 then goto XIT
 34240   if ckey=2 then goto SCR2
 34260   bk=0 : bk=val(resp$(1)) conv L1860
-34280   let seq=val(resp$(2)) conv L1860
+34280   seq=val(resp$(2)) conv L1860
 34300   if annbc=sequence_bar_code and filter_selection=6 then goto TOP ! must start at front of file if bar coded and specific route
 34320   L1860: ! 
 34340   let routekey$=lpad$(str$(bk),2)&lpad$(str$(seq),7)
@@ -310,7 +310,7 @@
 38020   gosub OPENCASS
 38040   close #6: ioerr ignore
 38060   open #6: "Name="&env$('temp')&"\Work."&session$&",Replace,RecL=26",internal,output 
-38080   let s5=1
+38080   s5=1
 38100   restore #1: 
 38120   do 
 38140     read #customer,using "Form POS 1,C 10,POS 296,PD 4,pos 1864,C 30,pos 1821,n 1": z$,f,extra$(1),final eof END5
@@ -335,12 +335,12 @@
 40000 BARCODE: ! r:
 40020   gosub OPENCASS
 40040   if file(5)=-1 then goto BARCODE_XIT
-40060   let labeltext$(5)=""
+40060   labeltext$(5)=""
 40080   read #5,using 'Form POS 1,C 10,POS 96,C 12': z2$,bc$ nokey BARCODE_XIT
 40100   for j=1 to 4
-40120     let labeltext$(j)=labeltext$(j+1) ! move everything up one to allow for barcode
+40120     labeltext$(j)=labeltext$(j+1) ! move everything up one to allow for barcode
 40140   next j
-40160   let labeltext$(5)=rtrm$(bc$)
+40160   labeltext$(5)=rtrm$(bc$)
 40180   BARCODE_XIT: ! 
 40200 return  ! /r
 42000 SELSTART: ! r: select customer to start with
@@ -353,14 +353,14 @@
 42200   fnacs(sn$,0,mat resp$,ckey) ! select starting customer
 42220   if ckey=6 then 
 42240     fncustomer_search(resp$(1))
-42260     let selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
+42260     selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
 42280     read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
 42300     goto SELSTART
 42320   end if 
 42340   if ckey=5 then goto XIT
 42360   let z$=lpad$(trim$(resp$(1)(1:10)),10)
 42380   if trim$(z$)="[All]" then restore #1: : goto TOP
-42400   let selz$="": mat sele$=("")
+42400   selz$="": mat sele$=("")
 42420   read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),final nokey SELSTART
 42440   let meter_address$=e$(1)
 42460   goto THERE ! /r
@@ -432,14 +432,14 @@
 50500   GAL_XIT: ! 
 50520 fnend 
 52000 def fn_alternate_address
-52020   let e1=0
+52020   e1=0
 52040   mat pe$=("")
 52060   for j=1 to 4
 52080     if rtrm$(ba$(j))<>"" then let pe$(e1+=1)=ba$(j)
 52100   next j
 52120 fnend 
 54000 def fn_primary_address
-54020   let e1=0 : mat pe$=("")
+54020   e1=0 : mat pe$=("")
 54040   for j=2 to 4
 54060     if rtrm$(e$(j))<>"" then let pe$(e1+=1)=e$(j)
 54080   next j
@@ -502,15 +502,15 @@
 68260   fnget_services(mat srvnam$, mat srv$)
 68280 ! 
 68300   dim line_x_option$(9)*70
-68320   let line_x_option$(line_x_blank:=1)="(blank)"
-68340   let line_x_option$(line_x_account_number:=2)="Account"
-68360   let line_x_option$(line_x_meter_address:=3)="Meter Address"
-68380   let line_x_option$(line_x_customer_name:=4)="Name"
-68400   let line_x_option$(line_x_mailing_address_line_1:=5)="Mailing Address Line 1"
-68420   let line_x_option$(line_x_mailing_address_line_2:=6)="Mailing Address Line 2 or if blank City State Zip"
-68440   let line_x_option$(line_x_mailing_address_line_3:=7)="City State Zip if Mailing Address Line 2 not blank"
-68460   let line_x_option$(line_x_meter_route_and_sequenc:=8)=trim$(srvnam$(4))&" Meter, Route and Sequence Numbers"
-68480   let line_x_option$(line_x_account_meter4_and_seq:=9)="Account, "&trim$(srvnam$(4))&" Meter, and Sequence Numbers"
+68320   line_x_option$(line_x_blank:=1)="(blank)"
+68340   line_x_option$(line_x_account_number:=2)="Account"
+68360   line_x_option$(line_x_meter_address:=3)="Meter Address"
+68380   line_x_option$(line_x_customer_name:=4)="Name"
+68400   line_x_option$(line_x_mailing_address_line_1:=5)="Mailing Address Line 1"
+68420   line_x_option$(line_x_mailing_address_line_2:=6)="Mailing Address Line 2 or if blank City State Zip"
+68440   line_x_option$(line_x_mailing_address_line_3:=7)="City State Zip if Mailing Address Line 2 not blank"
+68460   line_x_option$(line_x_meter_route_and_sequenc:=8)=trim$(srvnam$(4))&" Meter, Route and Sequence Numbers"
+68480   line_x_option$(line_x_account_meter4_and_seq:=9)="Account, "&trim$(srvnam$(4))&" Meter, and Sequence Numbers"
 68500 ! 
 68520   dim address_option$(3)*30
 68540   address_option$(ao_primary:=1)="Primary Address"
@@ -518,12 +518,12 @@
 68580   address_option$(ao_billing:=3)="Billing Address"
 68600 ! 
 68620   dim sequence_option$(6)*22
-68640   let sequence_option$(sequence_account:=1)="Account"
-68660   let sequence_option$(sequence_name:=2)="Customer Name"
-68680   let sequence_option$(sequence_bar_code:=3)="Bar Code"
-68700   let sequence_option$(sequence_route:=4)="Route"
-68720   let sequence_option$(sequence_grid:=5)="Grid"
-68740   let sequence_option$(sequence_bulk_sort:=6)="Bulk Sort Code"
+68640   sequence_option$(sequence_account:=1)="Account"
+68660   sequence_option$(sequence_name:=2)="Customer Name"
+68680   sequence_option$(sequence_bar_code:=3)="Bar Code"
+68700   sequence_option$(sequence_route:=4)="Route"
+68720   sequence_option$(sequence_grid:=5)="Grid"
+68740   sequence_option$(sequence_bulk_sort:=6)="Bulk Sort Code"
 68760 ! 
 68780   dim filter_option$(7)*50
 68800   let filter_option$(1)="[All]"

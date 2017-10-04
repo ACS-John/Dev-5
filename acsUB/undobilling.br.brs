@@ -89,7 +89,7 @@
 24880             let readingdates(2)=readingdates(1)
 24900             let readingdates(1)=val(date$(days(priordate2,"ccyymmdd"),"mmddyy"))
 24920             ! update last billing date
-24940             if priordate>lastbilling then let lastbilling=priordate
+24940             if priordate>lastbilling then lastbilling=priordate
 24960           else 
 24980             mat readings(1:12)=(0) : mat charges(1:12)=(0) : balance=0 : chargedate=0 : mat breakdown(1:10)=(0) : mat readingdates(1:2)=(0)
 25000           end if 
@@ -108,7 +108,7 @@
 26060     continue ! /r
 28000     CUSTDONE: ! 
 28020     if filter=do_all then 
-28040       let lastbilling=val(date$(days(lastbilling,"ccyymmdd"),"mmddyy"))
+28040       lastbilling=val(date$(days(lastbilling,"ccyymmdd"),"mmddyy"))
 28060       fnd1(lastbilling,1)
 28080     end if 
 28100     mat msgtext$(1)=("Customers reversed: "&str$(undoCount))
@@ -127,20 +127,20 @@
 44060     let filter=0 : let route=0 : cust$=''
 44080 OPTIONS_TOS: ! 
 44100     fntos(screen_name$="UndoBillingOptions")
-44120     let rcnt=0 : let lc=0 : let pos_col2=16
-44140     let lc+=1
+44120     let rcnt=0 : lc=0 : let pos_col2=16
+44140     lc+=1
 44160     fnlbl(lc+=1,2,"Warning: only the most recent billing date can be reversed for any account(s).")
-44180     let lc+=1
+44180     lc+=1
 44200 ! billing date text box
 44220     fnlbl(lc+=1,2,"Billing Date:",13,1)
 44240     fntxt(lc,pos_col2,8,0,0,"1001")
 44260     let resp_billing_date=rcnt+=1
 44280     if resp$(resp_billing_date)='' then let resp$(resp_billing_date)=str$(lastbilling)
 44300 ! 
-44320     let lc+=1
-44340     let lc+=1
+44320     lc+=1
+44340     lc+=1
 44360     fnlbl(lc+=1,2,"Use only one of options below to limit the customers to reverse.")
-44380     let lc+=1
+44380     lc+=1
 44400 ! 
 44420     fnopt(lc+=1,1,'All') ! fnopt(lyne,ps, txt$*196; align,contain,tabcon)
 44440     let resp_opt_all=rcnt+=1
@@ -194,7 +194,7 @@
 52020   dim transacct$*10,transacct2$*10
 52040   CUSTTRANSFORM: form c 10,n 8,n 1
 52060   ! 
-52080   let lastdate=0 : let priordate=0 : let priordate2=0
+52080   lastdate=0 : let priordate=0 : let priordate2=0
 52100   let dateshouldbe=date(days(val(billingdate$),"mmddyy"),"ccyymmdd") : if str$(dateshouldbe)(1:2)="19" then let dateshouldbe+=1000000
 52120   ! 
 52140   ! first, check for the transaction for this customer on the date specified for rollback; if not found, exit
@@ -206,7 +206,7 @@
 52240   ! 
 52260   NOLATERTRANS: !
 52270   do  ! finally, read back up file to get 2 prior transaction dates
-52280     let lastdate=dateshouldbe
+52280     lastdate=dateshouldbe
 52300     read #h_trans,using CUSTTRANSFORM,prior: transacct2$,transdate,transcode eof GOTTRANS
 52320     if transacct2$=transacct2$ and transcode=1 and transdate<lastdate then 
 52340       if priordate=0 then 

@@ -16,9 +16,9 @@
         close #20: 
 00150   if process=1 then let prtall=1 : goto L320
 00160 L160: pr newpage
-00170   pr fields "5,25,c 50,h,n": "SELECTION OF SCHEDULES TO PRINT"
-00180   pr fields "10,5,C 60,N": "ENTER 1 TO pr ALL SCHEDULES  "
-00190   pr fields "11,5,c 60,n": "ENTER 0 TO SELECT SPECIFIC SCHEDULES TO PRINT"
+00170   pr f "5,25,c 50,h,n": "SELECTION OF SCHEDULES TO PRINT"
+00180   pr f "10,5,C 60,N": "ENTER 1 TO pr ALL SCHEDULES  "
+00190   pr f "11,5,c 60,n": "ENTER 0 TO SELECT SPECIFIC SCHEDULES TO PRINT"
 00200   let fa$="11,65,N 1,uE,N"
 00210 L210: input fields fa$: prtall conv L210
 00220   if prtall=1 then goto L320
@@ -26,7 +26,7 @@
 00240   let fb$="10,65,N 2,uE,N"
 00250   for j=1 to 99
 00260     pr newpage
-00270     if j=1 then pr fields "10,5,C 60,N": "ENTER SCHEDULE NUMBER TO PRINT" else pr fields "10,5,c 75,n": "ENTER NEXT SCHEDULE TO PRINT, ELSE ENTER 0 WHEN COMPLETE"
+00270     if j=1 then pr f "10,5,C 60,N": "ENTER SCHEDULE NUMBER TO PRINT" else pr f "10,5,c 75,n": "ENTER NEXT SCHEDULE TO PRINT, ELSE ENTER 0 WHEN COMPLETE"
 00280 L280: input fields fb$: prtsch(j) conv L280
 00290     if prtsch(j)=0 then goto L310
 00300   next j
@@ -34,8 +34,8 @@
 00320 L320: open #1: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\schindex.h"&str$(cno)&",Shr",internal,input,keyed ioerr DONE
 00330   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00340   pr newpage
-00350   pr fields "10,20,C 60,N": "PRINT SCHEDULES IN PROCESS"
-00360   pr fields "12,2,C 30,B,5": "Press F5 to stop"
+00350   pr f "10,20,C 60,N": "PRINT SCHEDULES IN PROCESS"
+00360   pr f "12,2,C 30,B,5": "Press F5 to stop"
 00370   fnopenprn(cp,58,220,process)
 00380 L380: if prtall=1 then goto L440
 00390 L390: let g=g+1
@@ -106,7 +106,7 @@
 01040   return 
 01050 ! ______________________________________________________________________
 01060 L1060: let fttab=int(43-len(rtrm$(ft$))/2)
-01070   let sk=58-krec(255): let fl=len(rtrm$(ft$))
+01070   sk=58-krec(255): fl=len(rtrm$(ft$))
 01080   pr #255,using L1090: rtrm$(ft$)
 01090 L1090: form skip sk,pos fttab,c fl,skip 1
 01100   pr #255: newpage
@@ -115,7 +115,7 @@
 01130 L1130: ! PAGE HEADING
 01140   pr #255,using L1150: cnam$,"SCHEDULE ",sn
 01150 L1150: form pos 11,cc 58,c 9,pic(zz)
-01160   let sntab=int(43-len(rtrm$(sn$))/2)
+01160   sntab=int(43-len(rtrm$(sn$))/2)
 01170   pr #255,using L1180: sn$
 01180 L1180: form pos sntab,c 80,skip 1
 01190   let dattab=int(43-len(rtrm$(pedat$))/2)

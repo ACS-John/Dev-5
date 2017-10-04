@@ -88,7 +88,7 @@
 16172     fnub_cnv_note
 16180   end if 
 16900   ! /r
-17000   let setenv('force_reindex','yes') ! for fncheckfileversion
+17000   setenv('force_reindex','yes') ! for fncheckfileversion
 17020   if ~import_only then 
 18000     if ~cnv_pr then let fncheckfileversion
 18020     if cnv_ub_french_settlement then 
@@ -295,15 +295,15 @@
 50160   do 
 50180     read #h_old,using F_UBMASTER_OLD: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$ eof EO_UBMASTER
 50200     !     if trim$(z$)(1:6)='100875' then pause
-50201     let extra(17)=c(3) ! in new system   extra(17) = final billing code
-50202     let extra(3)=d(5) ! meter reading date - current
-50203     let extra(4)=d(6) ! meter reading date - prior
+50201     extra(17)=c(3) ! in new system   extra(17) = final billing code
+50202     extra(3)=d(5) ! meter reading date - current
+50203     extra(4)=d(6) ! meter reading date - prior
 50204     c(3)=0 ! in new system   c(3) service 3 deposit date
 50206     ! 
-50207     let extra(1)=val(z$(1:2))
-50208     let extra(2)=val(f$(2))*10 ! in new system    extra(2) is the sequence number
+50207     extra(1)=val(z$(1:2))
+50208     extra(2)=val(f$(2))*10 ! in new system    extra(2) is the sequence number
 50210     let f$(2)='' ! in new system    f$(2) = service 3 meter number
-50212     let extra$(2)=f$(1) !   extra$(2)  is the phone number
+50212     extra$(2)=f$(1) !   extra$(2)  is the phone number
 50214     let f$(1)='' ! f$(1)  is the service 1 meter number
 50216     ! 
 50220     write #h_new,using F_CUSTOMER_NEW: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
@@ -324,7 +324,7 @@
 54080     if route_number=0 then 
 54090       let route_number=sequence_number=0
 54100       let route_number=val(z$(1:2)) conv UCRFA_SKIP_IT
-54110       let sequence_number=val(z$(3:7)) conv ignore
+54110       sequence_number=val(z$(3:7)) conv ignore
 54120       rewrite #h_customer,using 'Form Pos 1,C 10,pos 1741,n 2,n 7': z$,route_number,sequence_number
 54140     end if 
 54160     UCRFA_SKIP_IT: ! 

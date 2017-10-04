@@ -98,9 +98,9 @@
 00700   fntxt(8,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
 00710   fnlbl(10,1,"Service to Analyze:",24,1,0)
-00720   let opt$(1)="Water"
-00730   if srv$(3)="EL" then let opt$(2)= servicename$(3)
-00740   if srv$(4)="GA" then let opt$(3)= servicename$(4)
+00720   opt$(1)="Water"
+00730   if srv$(3)="EL" then opt$(2)= servicename$(3)
+00740   if srv$(4)="GA" then opt$(3)= servicename$(4)
 00750   fncomboa("ubbargraph",10,26,mat opt$,"",13) !:
         let rc+=1 : let resp$(rc)=opt$(1)
 00760   fnfra(12,1,2,45,"Base graph on usage or dollars","You can either analyze dollars or usage.",0) !:
@@ -129,9 +129,9 @@
 00940     if y=12 then let month$(j)="Dec"
 00950   next j
 00960   if cd1(1)=0 then goto MSGBOX
-00970   if resp$(25)="Water" then codepos=143: let service=1: let opt=1
-00980   if resp$(25)=trim$(opt$(2)) then codepos=147: let service=3: let opt=2
-00990   if resp$(25)=trim$(opt$(3)) then codepos=149 : let service=4 : let opt=3
+00970   if resp$(25)="Water" then codepos=143: service=1: opt=1
+00980   if resp$(25)=trim$(opt$(2)) then codepos=147: service=3: opt=2
+00990   if resp$(25)=trim$(opt$(3)) then codepos=149 : service=4 : opt=3
 01000   if resp$(26)="True" then baseon=1 else baseon =2 ! 1=usage  2=dollars
 01010   for j=1 to 24
 01020     actualdate$(j)=resp$(j)
@@ -186,7 +186,7 @@
 01450   let top=val(toplen$) : let top=100 ! change top here kj
 01460   let x=top*.10
 01470 DETERMINE_BOTTOM_LINE: ! 
-01480   let spacing=10 : let lyne=30
+01480   spacing=10 : lyne=30
 01485   cnam$="Ken Johnson"
 01490   cnam=(len(trim$(cnam$))/2)+120
 01500   pr #20: 'Call Print.MyFontsize(14)'
@@ -194,11 +194,11 @@
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(cnam)&','&str$(10)&')'
 01520   pr #20: 'Call Print.MyFontsize(12)'
 01530   let txt$="Eye Chart"
-01540   let servicetype=(len(trim$(txt$))/2)+120
+01540   servicetype=(len(trim$(txt$))/2)+120
 01550   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(servicetype)&','&str$(16)&')'
 01560   if baseon=1 then let txt$=""
 01570   if baseon=2 then let txt$=trim$(opt$(opt))
-01580   let servicetype=(len(trim$(txt$))/2)+140
+01580   servicetype=(len(trim$(txt$))/2)+140
 01590   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(servicetype)&','&str$(20)&')'
 01600   pr #20: 'Call Print.MyFontsize(9)'
 01610   let txt$=cnvrt$("pic(--------)",top) !:
@@ -210,7 +210,7 @@
 01650     pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',240,0)'
 01660   next j
 01670 ! zero line starts right here
-01680   let linezero=(spacing*10)+40
+01680   linezero=(spacing*10)+40
 01690   column=18 ! spacing sideways
 01700   pr #20: 'Call Print.MyFontBold(1)'
 01710   for j=1 to 24
@@ -254,7 +254,7 @@
 03020   if file(20)=-1 then 
 03040     open #20: "Name="&env$('Q')&"\UBmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 
 03060     pr #20: 'Call Print.MyOrientation("Landscape")'
-03080     let lyne=margin ! starting of 1st line
+03080     lyne=margin ! starting of 1st line
 03100     column1=16
 03120     column2=103
 03140     column3=153

@@ -8,11 +8,11 @@
 10100 ! ______________________________________________________________________
 10120     fntop(program$,cap$="GLmstr 338-416 Conversion")
 10140     fncno(cno,cnam$)
-10160     let stopable$="xit"
+10160     stopable$="xit"
 10200     fnstatus('Converting GLmstr from 338 to 416...')
 10420 ! 
 10440     fnCopy(env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),416) ! &" -416 -n"
-10460     let stopable$="NO"
+10460     stopable$="NO"
 10520     open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,outin,keyed 
 10540     do 
 10560       read #1,using 'Form POS 339,13*PD 6.2': mat revb eof DONE

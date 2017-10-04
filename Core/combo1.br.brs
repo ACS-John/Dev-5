@@ -22,7 +22,7 @@
 00190     let filnum=val(file_number_or_name$) conv OPEN20
 00200     if file(filnum)=-1 then goto XIT
 00210 CONTINUE_AFTER_OPEN20: ! 
-00220     let origional_rec=rec(filnum)
+00220     origional_rec=rec(filnum)
 00230     restore #filnum,key>=lpad$("",kln(filnum)): 
 00240     gosub BUILD_FRM
 00250     gosub BUILD_HEADER
@@ -48,12 +48,12 @@
 00430     return 
 00440 ! ___________________________
 00450 EOFILE: ! 
-00460     let eofile=1
+00460     eofile=1
 00470     goto PAST_READ_LOOP
 00480 ! ___________________________
 00490 START: ! 
 00500     let hit_count=0 !:
-          let eofile=0
+          eofile=0
 00510 NXT: ! 
 00520     mat choice$(max_size)
 00530     for j=1 to udim(choice$)
@@ -86,7 +86,7 @@
 00710     if cmdkey=1 and eofile=0 then goto NXT
 00720     if cmdkey=1 and eofile=1 then goto L700
 00730     if cmdkey=2 then !:
-            let eofile=0 !:
+            eofile=0 !:
             restore #filnum,key>=lpad$("",kln(filnum)): !:
             goto NXT
 00740     if cmdkey=5 or cmdkey=99 then mat cb_response$=("") : goto DONE
@@ -104,7 +104,7 @@
 00810     goto DONE
 00820 ! ___________________________
 00830 FILTER: ! 
-00840     let star_pos=pos(filter$,"*")
+00840     star_pos=pos(filter$,"*")
 00850     if star_pos=1 then gosub FILTER_TYPE2
 00860     if star_pos>1 then gosub FILTER_TYPE1
 00870     if star_pos=0 then let filter_pass=1

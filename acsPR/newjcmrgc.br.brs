@@ -20,14 +20,14 @@
 00220   read #2,using L230,key=cn$: mat l,mat ta nokey L280
 00230 L230: form pos 37,11*pd 7.2,2*pd 2,2*pd 3
 00240   let nc1=0
-00250   let l(6)=l(6)+ji2(3)
-00260   let l(9)=l(9)+ji2(3)
+00250   l(6)=l(6)+ji2(3)
+00260   l(9)=l(9)+ji2(3)
 00270   goto L290
 00280 L280: let nc1=1
 00290 L290: read #5,using L300,rec=1,reserve: ot5
 00300 L300: form pos 86,pd 3
-00310   let empnum$=lpad$(rtrm$(rn$),12)
-00320 L320: let ot5=lrec(5)+1
+00310   empnum$=lpad$(rtrm$(rn$),12)
+00320 L320: ot5=lrec(5)+1
 00330   write #5,using L340,rec=ot5,reserve: empnum$,jn$,ji2(1),ji2(2),0,dat,0,0,0,0,ji2(3),empnam$,0 duprec L320
 00340 L340: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 00350   if ta(2)=0 then let ta(1)=ot5 else rewrite #5,using L300,rec=ta(2): ot5

@@ -19,7 +19,7 @@
 00180   if fnprocess=1 then goto ASKJOB
 00190 MAIN_SCREEN: ! 
 00200   fntos(sn$="namlst1") !:
-        let mylen=25 : let mypos=mylen+2: let resp=0: let left=1
+        let mylen=25 : let mypos=mylen+2: let resp=0: left=1
 00210   fnlbl(1,1,"Report Heading Date:",23,left)
 00220   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
         let resp$(resp+=1)=dat$
@@ -41,12 +41,12 @@
 00360   mat ml$(1) !:
         let ml$(1)="Do you wish to skip all completed jobs?" !:
         fnmsgbox(mat ml$,resp$,cap$,4)
-00370   if resp$="Yes" then let skpcom$="Y" else let skpcom$="N"
+00370   if resp$="Yes" then skpcom$="Y" else skpcom$="N"
 00380   goto L510
 00390 ASKJOB: ! 
 00400   for j=1 to 100
 00410     fntos(sn$="prtdet2") !:
-          let mylen=12 : let mypos=mylen+3: let resp=0: let left=1 !:
+          let mylen=12 : let mypos=mylen+3: let resp=0: left=1 !:
           fnlbl(1,1,"Job Number:",mylen,1) !:
           fncmbjob(1,mypos) !:
           let resp$(respc+=1)=jn$

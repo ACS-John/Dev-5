@@ -12,12 +12,12 @@
 00120   dim ad2$*20,csz$*20,ss$*11,adr(2),revb(13)
 00130 ! ______________________________________________________________________
 00140   pr newpage
-00150   pr fields "8,5,C 70,HRB,N": "   WARNING THIS PROGRAM CAN ONLY BE RUN ONE TIME FOR EACH COMPANY #"
-00160   pr fields "10,9,C 60": "ENTER THE COMPANY # TO BE CONVERTED OR 0 TO STOP:"
+00150   pr f "8,5,C 70,HRB,N": "   WARNING THIS PROGRAM CAN ONLY BE RUN ONE TIME FOR EACH COMPANY #"
+00160   pr f "10,9,C 60": "ENTER THE COMPANY # TO BE CONVERTED OR 0 TO STOP:"
 00170 L170: input fields "10,60,N 5,UE,N": cno conv L170
 00180   if cno=0 then goto XIT
 00190   pr newpage
-00200   pr fields "10,5,C 60": "CONVERSION FOR COMPANY #"&str$(cno)&" IN PROCESS"
+00200   pr f "10,5,C 60": "CONVERSION FOR COMPANY #"&str$(cno)&" IN PROCESS"
 00210 ! 
 00220   fnputcno(cno)
 00230   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,outin,keyed 
@@ -118,9 +118,9 @@
 01180   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,outin,keyed 
 01190   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno),internal,outin,relative 
 01200   pr newpage
-01210   pr fields "10,15,c 60,h,n": "REASSIGN GL ADDRESSES IN PROCESS"
+01210   pr f "10,15,c 60,h,n": "REASSIGN GL ADDRESSES IN PROCESS"
 01220 L1220: form pos 333,2*pd 3
-01230   let lr2=lrec(2)
+01230   lr2=lrec(2)
 01240   rewrite #2,using L1340,rec=1: lr2
 01250   for j=1 to lr2
 01260     read #2,using L1270,rec=j: k$,nta norec L1350
@@ -138,9 +138,9 @@
 01380   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno),internal,outin,keyed ioerr L1580
 01390   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno),internal,outin,relative ioerr L1580
 01400   pr newpage
-01410   pr fields "10,15,c 60,h,n": "REASSIGN PR ADDRESSES IN PROCESS"
+01410   pr f "10,15,c 60,h,n": "REASSIGN PR ADDRESSES IN PROCESS"
 01420 L1420: form pos 181,2*n 5
-01430   let lr2=lrec(2)
+01430   lr2=lrec(2)
 01440   rewrite #2,using L1540,rec=1: lr2
 01450   for j=1 to lr2
 01460     read #2,using L1470,rec=j: en$,nta norec L1550,conv L1550
@@ -157,7 +157,7 @@
 01570   close #2: 
 01580 L1580: ! 
 01590   open #1: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno),internal,input,relative ioerr L1740
-01600   pr fields "14,32,C 16,BR,N": "   IN PROCESS"
+01600   pr f "14,32,C 16,BR,N": "   IN PROCESS"
 01610   open #2: "Name=X,RecL=72,Replace",internal,output 
 01620   for j=1 to lrec(1)
 01630     read #1,using L1660,rec=j: mat tr,tr$,td$ conv L1680
@@ -196,7 +196,7 @@
 01960 L1960: form pos 298,2*c 12
 01970   rewrite #1,using L1960,rec=1: gl2$,gl1$
 01980   close #1: 
-01990 L1990: let end1=0 ! 
+01990 L1990: end1=0 ! 
 02000   dim id$(6)*40,fil$(6),idx$(6)
 02010   let id$(1)=" 1 = BALANCE SHEET FILE" : let fil$(1)="ACGLFNSB" : let idx$(1)="FNSBINDX"
 02020   let id$(2)=" 2 = INCOME STATEMENT FILE" : let fil$(2)="ACGLFNSI" : let idx$(2)="FNSIINDX"
@@ -209,7 +209,7 @@
 02090     execute "COPY  "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&""
 02100     if j=2 or j=5 then goto L2110 else goto L2360
 02110 L2110: open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\"&idx$(j)&".h"&str$(cno),internal,outin,keyed 
-02120     let end1=st1=st2=rno=rnp=0
+02120     end1=st1=st2=rno=rnp=0
 02130 L2130: gosub FIND1
 02140     restore #1,key>=lpad$(str$(st1),5): nokey END2
 02150 L2150: read #1,using L2270: rno,ic eof END2
@@ -222,14 +222,14 @@
 02220 L2220: form pos 79,n 5
 02230     goto L2150
 02240 ! ______________________________________________________________________
-02250 FIND1: let st1=rno : let st2=99999 : let rnp=0
+02250 FIND1: st1=rno : st2=99999 : let rnp=0
 02260 L2260: read #1,using L2270: rno,ic eof END21
 02270 L2270: form pos 1,g 5,pos 75,n 1
 02280     if ic=0 then goto L2260
 02290     if ic=1 then let rnp=rno
-02300     if ic=2 then let st2=rno : goto L2330
+02300     if ic=2 then st2=rno : goto L2330
 02310     goto L2260
-02320 END21: let end1=1
+02320 END21: end1=1
 02330 L2330: return 
 02340 ! ______________________________________________________________________
 02350 END2: close #1: 

@@ -44,7 +44,7 @@
 34000   CNAM_XIT: ! 
 34020   ! /r
 34040   cnam$=cnam_read$ soflow ignore
-34080   let setenv('cnam',rtrm$(cnam_read$))
+34080   setenv('cnam',rtrm$(cnam_read$))
 34100   if env$('cno')<>str$(cno) then
 34110     setenv('cno',str$(cno))
 34120     execute 'config substitute [cno] '&str$(cno)
@@ -57,12 +57,12 @@
 36060 fnend
 36080 def fn_putcno(cno)
 36100   fnreg_write(session$&'.'&env$('CurSys')&'.cno',str$(cno))
-36120   let setenv('cno',str$(cno))
+36120   setenv('cno',str$(cno))
 36140   execute 'config substitute [cno] '&str$(cno)
 36160 fnend 
 38000 def library fnget_company_number_list(mat cno_list; sysid$*2)
 38020   if ~setup then let fn_setup
-38030   if sysid$='' then let sysid$=env$('cursys')
+38030   if sysid$='' then sysid$=env$('cursys')
 38040   fngetdir2(env$('Q')&'\'&sysid$&"mstr",mat filename$,'/od /ta',"Company.*")
 38060   company_count=filename_item=0
 38080   mat cno_list(99999)
@@ -194,7 +194,7 @@
 54160       curprg_tmp$(1:2)=''
 54180     end if 
 54200     !     /r
-54220     let setenv('Core_Program_Current',curprg_tmp$)
+54220     setenv('Core_Program_Current',curprg_tmp$)
 54240   else ! Get
 54260     curprg$=env$('Core_Program_Current')
 54280   end if 
@@ -281,8 +281,8 @@
 58520   if uprc$(cursys_cache$)="G2" then cursys_cache$="GL" ! Accountant's GL
 58540   if uprc$(cursys_cache$)="G3" then cursys_cache$="GL" ! Budget Management
 58560   if env$('CurSys')<>cursys_cache$ then
-58580     let setenv('CurSys',cursys_cache$)
-58600     let setenv('CurSystem',fn_system_abbr_2_name$(cursys_cache$))
+58580     setenv('CurSys',cursys_cache$)
+58600     setenv('CurSystem',fn_system_abbr_2_name$(cursys_cache$))
 58620     execute 'config substitute [CurSys] '&cursys_cache$
 58640   end if
 58660   fncursys$=cursys_cache$

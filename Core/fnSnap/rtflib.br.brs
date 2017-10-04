@@ -7,11 +7,11 @@
         let types$(2)="F" !:
         let types$(3)="D" !:
         let types$(4)="T"
-00050   let styles$(1)="li0|ri0|fs18|cfBlue|tc3.25|Header"
-00060   let styles$(2)="li0|ri0|fs8|cfRed|tc3.25|Footer"
-00070   let styles$(3)="li0.25|ri0|fs10||tl2.5|td3|tl3.2|td4.0|tl4.2|td4.6|tl4.8|td5.4|Data"
+00050   styles$(1)="li0|ri0|fs18|cfBlue|tc3.25|Header"
+00060   styles$(2)="li0|ri0|fs8|cfRed|tc3.25|Footer"
+00070   styles$(3)="li0.25|ri0|fs10||tl2.5|td3|tl3.2|td4.0|tl4.2|td4.6|tl4.8|td5.4|Data"
 00075   let mask$="pic(ZZZ,ZZ#)"
-00080   let styles$(4)="li0.5|ri0|fs10|tl2.5|td3|tl3.2|td4.0|tl4.2|td4.6|tl4.8|td5.4|Totals"
+00080   styles$(4)="li0.5|ri0|fs10|tl2.5|td3|tl3.2|td4.0|tl4.2|td4.6|tl4.8|td5.4|Totals"
 00090   let data$(1)="H|\b\tab Title Of Report"
 00100   let data$(2)="F|\tab Page Footer"
 00105   let data$(3)="D|Description |"&fnamt$(1000,mask$,"$")&"|"&fnamt$(2000,mask$,"$")&"|"&fnamt$(3000,mask$,"$")&"|"&fnamt$(4000,mask$,"$")
@@ -32,21 +32,21 @@
 00201 ! 
 00210   let datfmt$="MM-DD-CCYY" !:
         let maxsrows=22 !:
-        let ssav=103 !:
+        ssav=103 !:
         let windev=owindev=69 !:
         let mga$="24,2,c 78," !:
         let pfk=23 !:
         ! Common Variables Almost Always Required By Fnsnap
-00220   let pgup=90 : let pgdn=91 : let event=98 !:
-        let esc=99 : let up=102 : let left=103 !:
+00220   let pgup=90 : let pgdn=91 : event=98 !:
+        esc=99 : let up=102 : left=103 !:
         let dn=104 : let home=112 !:
-        let end=113
+        end=113
 00221   click=201 : let dblclick=202 !:
         let help=100 : let rtclick=100 !:
         let rtdblclick=100
 00222   let upfld=105 : let dnfld=106 : let foflow=107 !:
-        let right=109 : let left=108 : let home=112 !:
-        let end=113 : let fldplus=114 : let fldminus=115
+        let right=109 : left=108 : let home=112 !:
+        end=113 : fldplus=114 : fldminus=115
 00500   return 
 50000 ! DEF LIBRARY FNRTF(MAT TYPES$,MAT STYLES$,MAT CELLS$,TXTFILE,RTFFILE;LMARGIN,RMARGIN,LEFTTEXT$,NUME,LANDSCAPE)
 50001   def library fnrtf(txtfile,specfile$*100,rtffile;picpath$*100,subpath$*100)
@@ -67,21 +67,21 @@
 50040 ! RFTFILE is the file number already opened to hold the report !:
           ! this file should be a display file with an ".rtf" suffix
 50050     library env$("PD")&"Core\fnsnap\RTFLIB_dll.br": fnamt$,fntext$,fntype
-50051     let orientation$="PORTRAIT" !:
+50051     orientation$="PORTRAIT" !:
           let paper$="LETTER" !:
-          let lmargin=rmargin=tmargin=bmargin=0.5 !:
+          lmargin=rmargin=tmargin=bmargin=0.5 !:
           let nume=0
 50052     mat styles$(1)=("") !:
           mat cells$(1)=("") !:
           mat types$(1)=("") !:
-          let lefttext$=""
-50053     let setspec=1 !:
+          lefttext$=""
+50053     setspec=1 !:
           linput #txtfile: data$
 50054     if pos(data$,"[SPEC(") then gosub SET_SPECFILE !:
             restore #txtfile: 
 50056     execute "proc *"&specfile$
-50057     let setspec=0
-50058     if uprc$(trim$(orientation$))="LANDSCAPE" then let landscape=1 else let landscape=0
+50057     setspec=0
+50058     if uprc$(trim$(orientation$))="LANDSCAPE" then landscape=1 else landscape=0
 50060     let t=udim(mat types$) !:
           crlf$=chr$(13)&chr$(10)
 50070     dim s$(1)*2000,se$(1)*1000,colors$(19),data$*32000,bold$(1),fs$*100,fc$*100,sa$*100
@@ -155,7 +155,7 @@
           ! ?Format Detail Step Section Code E                            ?:
 50210     if uprc$(data$(1:1))="E" then 
 50212       if checklist>0 then 
-50213         let linecnt+=1 !:
+50213         linecnt+=1 !:
               if pos(data$(1:7),".")>1 or pos(data$(1:7),")")>1 then !:
                 let numplc=pos(data$," ") else !:
                 let numplc=0
@@ -175,7 +175,7 @@
               let data$(3:len(data$))="  "&data$(3:len(data$)) else !:
               let data$=srep$(data$,"Remedy ","  Remedy [RTFLINE]")
 50300     end if 
-50310   else let linecnt=0 ! END IF
+50310   else linecnt=0 ! END IF
 50319 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?Create special processing for PROGRAM G lines                ?:
 50320   if uprc$(data$(1:1))="G" then 
@@ -283,7 +283,7 @@
 50911   let xlis=pos(s$(srch(mat types$,uprc$(data$(1:1)))),"\li") !:
         let xlie=pos(s$(srch(mat types$,uprc$(data$(1:1)))),"\",xlis+1)-1
 50912   boxmargins$="\li"&str$(lmargin*1440)&"\ri"&str$((lmargin+rmargin)*2*1440)
-50913   let oldmargins$=s$(srch(mat types$,uprc$(data$(1:1))))(xlis:xlie)
+50913   oldmargins$=s$(srch(mat types$,uprc$(data$(1:1))))(xlis:xlie)
 50914   boxmarginsn$="\aspalpha\aspnum\faauto\adjustright"&srep$(srep$(boxmargins$,"\ri","\rin"),"\li","lin")&"\itap0"
 50920   if midline then 
 50930     if srch(mat types$,uprc$(data$(1:1)))>0 then pr #rtffile: "\pard \plain "&srep$(srep$(s$(srch(mat types$,uprc$(data$(1:1)))),"widctlpar","wictlpar\brdrt\brdrs\brdrw10\brsp20 \brdrl\brdrs\brdrw10\brsp80 \brdrb\brdrs\brdrw10\brsp20 \brdrr\brdrs\brdrw10\brsp80 \brdrbtw\brdrs\brdrw10\brsp20 "),oldmargins$,boxmargins$)&crlf$&boxmarginsn$&crlf$
@@ -304,8 +304,8 @@
 51080 for a=1 to t
 51090   let text$=trim$(text$)
 51100   ap=0
-51110 ! LET S$(A)="\s"&STR$(A+10)&"\q1 "
-51120   let s$(a)="\s"&str$(a+10)&"\ql "
+51110 ! s$(A)="\s"&STR$(A+10)&"\q1 "
+51120   s$(a)="\s"&str$(a+10)&"\ql "
 51130 ! ----------------------------------
 51140 SET_STYLES_1: ap+=1
 51150   let tx=pos(styles$(a),"|")
@@ -314,53 +314,53 @@
 51180 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?First line indent                                            ?:
 51190   if uprc$(styles$(a)(1:2))="FI" then 
-51200     let s$(a)=s$(a)&"\fi"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
+51200     s$(a)=s$(a)&"\fi"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51210     goto ZSET_STYLES_1
 51220   end if 
 51230   ap+=1
 51240 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?Left indent                                                  ?:
 51250   if uprc$(styles$(a)(1:2))="LI" then 
-51260     let s$(a)=s$(a)&"\li"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
-51270     let lin$(a)="\lin"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
+51260     s$(a)=s$(a)&"\li"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
+51270     lin$(a)="\lin"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51280     goto ZSET_STYLES_1
 51290   end if 
 51300 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?Right indent                                                 ?:
 51310   if uprc$(styles$(a)(1:2))="RI" then 
-51320     let s$(a)=s$(a)&"\ri"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
+51320     s$(a)=s$(a)&"\ri"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51330     goto ZSET_STYLES_1
 51340   end if 
-51350   if ap=1 then let s$(a)=s$(a)&"\li0\ri0\widctlpar" !:
-        else if pos(s$(a),"widctlpar")<1 then let s$(a)=s$(a)&"\widctlpar "
+51350   if ap=1 then s$(a)=s$(a)&"\li0\ri0\widctlpar" !:
+        else if pos(s$(a),"widctlpar")<1 then s$(a)=s$(a)&"\widctlpar "
 51360 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Tab left align                                               ?:
 51370 if uprc$(styles$(a)(1:2))="TL" then 
-51380   let s$(a)=s$(a)&"\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
+51380   s$(a)=s$(a)&"\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51390   goto ZSET_STYLES_1
 51400 end if 
 51410 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Tab center align                                             ?:
 51420 if uprc$(styles$(a)(1:2))="TC" then 
-51430   let s$(a)=s$(a)&"\tqc\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
+51430   s$(a)=s$(a)&"\tqc\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51440   goto ZSET_STYLES_1
 51450 end if 
 51460 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Tab right align                                              ?:
 51470 if uprc$(styles$(a)(1:2))="TR" then 
-51480   let s$(a)=s$(a)&"\tqr\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
+51480   s$(a)=s$(a)&"\tqr\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51490   goto ZSET_STYLES_1
 51500 end if 
 51510 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Tab decimal point align                                      ?:
 51520 if uprc$(styles$(a)(1:2))="TD" then 
-51530   let s$(a)=s$(a)&"\tqdec\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
+51530   s$(a)=s$(a)&"\tqdec\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51540   goto ZSET_STYLES_1
 51550 end if 
 51560 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Tab vertical Bar align                                       ?:
 51570 if uprc$(styles$(a)(1:2))="TB" then 
-51580   let s$(a)=s$(a)&"\tb"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
+51580   s$(a)=s$(a)&"\tb"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51590   goto ZSET_STYLES_1
 51600 end if 
 51601 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
@@ -397,20 +397,20 @@
 51770 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Space After Paragraph                                        ?:
 51780 if uprc$(styles$(a)(1:2))="SA" then 
-51790   let sa$="\sa"&cnvrt$("pic(####)",val(style$(a)(3:tx-1))*320)&" "
+51790   sa$="\sa"&cnvrt$("pic(####)",val(style$(a)(3:tx-1))*320)&" "
 51800   goto ZSET_STYLES_1
 51810 end if 
 51820 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Paragraph Alignment                                          ?:
 51830 if uprc$(styles$(a)(1:1))="Q" and pos("LRCJ",uprc$(styles$(a)(2:2)))>0 then 
 51840   let qa$="\q"&lwrc$(styles$(a)(2:2))&" "
-51850   let s$(a)=srep$(s$(a),"\ql ",qa$)
+51850   s$(a)=srep$(s$(a),"\ql ",qa$)
 51860   goto ZSET_STYLES_1
 51870 end if 
-51880 ZSET_STYLES_1: let styles$(a)=styles$(a)(tx+1:len(styles$(a)))
+51880 ZSET_STYLES_1: styles$(a)=styles$(a)(tx+1:len(styles$(a)))
 51890 if len(styles$(a))>1 and pos(styles$(a),"|")>0 then goto SET_STYLES_1
-51900 let s$(a)=s$(a)&"\aspalpha\aspnum\faauto\adjustright\rin0"&lin$(a)&"\itap0 "&bold$(a)&ff$&"\fs"&fs$&fc$&sa$&"\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 " !:
-      let se$(a)="\sbasedon"&str$((a-1)+10)&" \snext"&str$(a+10)
+51900 s$(a)=s$(a)&"\aspalpha\aspnum\faauto\adjustright\rin0"&lin$(a)&"\itap0 "&bold$(a)&ff$&"\fs"&fs$&fc$&sa$&"\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 " !:
+      se$(a)="\sbasedon"&str$((a-1)+10)&" \snext"&str$(a+10)
 51910 let fc$=fs$=sa$=ff$=""
 51920 next a
 51930 pr #rtffile: "{\rtf1\ansi\ansicpg1252\uc1 \deff0\deflang1033\deflangfe1033"&crlf$
@@ -551,7 +551,7 @@
 52808   if subx<1 then !:
           let msgbox("The replaceable parameter "&data$(nss-1:nse+1)&" was not found in the data-set. The parameter will be ommitted") !:
           let data$(nss-5:nse+2)="" !:
-        else let subx$=data$(nss-5:nse+2)
+        else subx$=data$(nss-5:nse+2)
 52810   if subx>0 then let data$=srep$(data$,subx$,sub$(subx))
 52812   goto SET_SUB
 52814 end if 
@@ -582,7 +582,7 @@
 53103 if newdata then pr #rtffile: "}" !:
         ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ? Turns off BLUE newline text                                 ?:
-53105 let laststyle=0
+53105 laststyle=0
 53110 return 
 53999 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Create table lines and pr to existing pr file          ?:
@@ -775,7 +775,7 @@
 54900   next a
 54910   pr #prntfil: "{"&celldef$&crlf$&"\row }"&crlf$
 54920   pr #prntfil: "\pard \ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0"&crlf$
-54930   let laststyle=1
+54930   laststyle=1
 54990 fnend 
 55000 def fnbrdr$(btype$)
 55010   fnbrdr$=""
@@ -792,10 +792,10 @@
 55130 fnend 
 55200 ! --------------------------------
 55210 SET_SPECFILE: ! 
-55220 let sps=pos(data$,"[SPEC(")+6
-55230 let spe=pos(data$,")]",sps)-1
+55220 sps=pos(data$,"[SPEC(")+6
+55230 spe=pos(data$,")]",sps)-1
 55240 if not setspec then goto L55260
-55250 if exists(picpath$&trim$(data$(sps:spe))) then let specfile$=picpath$&trim$(data$(sps:spe)) else let pause : let msgbox("Designated SPEC file does not exist.") : input fields "10,10,c 10": pause$
+55250 if exists(picpath$&trim$(data$(sps:spe))) then specfile$=picpath$&trim$(data$(sps:spe)) else let pause : let msgbox("Designated SPEC file does not exist.") : input fields "10,10,c 10": pause$
 55260 L55260: let data$=srep$(data$,"[SPEC("&data$(sps:spe)&")]","")
 55270 ! PAUSE
 55280 return 

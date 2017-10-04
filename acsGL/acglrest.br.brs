@@ -10,15 +10,15 @@
 00100   fntop(program$,cap$="Retained Earnings Statement")
 00110   fncno(cno,cnam$) !:
         fndat(dat$)
-00120   let sh$="2,10,C 60,H,N"
-00130   for j=1 to 10 : let fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
-00140   let fli1$(1)="5,2,C 78,UT,N" : let fli1$(2)="8,2,C 78,UT,N"
+00120   sh$="2,10,C 60,H,N"
+00130   for j=1 to 10 : fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
+00140   fli1$(1)="5,2,C 78,UT,N" : fli1$(2)="8,2,C 78,UT,N"
 00150   if fnprocess=1 then let t=2 : goto L240
 00160 ! ______________________________________________________________________
 00170 MENU1: ! 
 00180   fnwin3(win=101,cap$,6,40,1,1,5)
-00190   let sc2$(1)="1. Edit" : let sc2$(2)="2. Print"
-00200   for j=1 to 2 : let fl2$(j)=str$(j+3)&",02,C 08,N" : next j
+00190   sc2$(1)="1. Edit" : sc2$(2)="2. Print"
+00200   for j=1 to 2 : fl2$(j)=str$(j+3)&",02,C 08,N" : next j
 00210   rinput #win,select mat fl2$,attr "H": mat sc2$ !:
         let t=curfld
 00220   close #win: 
@@ -35,23 +35,23 @@
 00330   pr newpage
 00340   open #1: "Name="&env$('Q')&"\GLmstr\AcGLStmt.h"&str$(cno)&",Shr",display,input ioerr EDIT
 00350   pr newpage !:
-        pr fields "10,20,Cc 30,H,N": "R/E Statement Printing..." !:
-        pr fields "12,34,C 11,B,5": "Cancel (F5)" !:
+        pr f "10,20,Cc 30,H,N": "R/E Statement Printing..." !:
+        pr f "12,34,C 11,B,5": "Cancel (F5)" !:
         on fkey 5 goto L480
 00360 L360: linput #1: ln$ eof L480
 00370   for j2=1 to len(rtrm$(ln$))
 00380     if ln$(j2:j2)><"@" then goto L450
 00390     if ln$(j2+1:j2+1)="1" then !:
-            let ln1$=ln$(1:j2-1)&rtrm$(fnpedat$)&ln$(j2+2:78-len(rtrm$(fnpedat$))) !:
+            ln1$=ln$(1:j2-1)&rtrm$(fnpedat$)&ln$(j2+2:78-len(rtrm$(fnpedat$))) !:
           else goto L410
 00400     goto L440
 00410 L410: if ln$(j2+1:j2+1)="2" then !:
-            let ln1$=ln$(1:j2-1)&rtrm$(dat$)&ln$(j2+2:78-len(rtrm$(dat$))) !:
+            ln1$=ln$(1:j2-1)&rtrm$(dat$)&ln$(j2+2:78-len(rtrm$(dat$))) !:
           else goto L430
 00420     goto L440
 00430 L430: if ln$(j2+1:j2+1)="3" then !:
-            let ln1$=ln$(1:j2-1)&rtrm$(actpd$)&ln$(j2+2:78-len(rtrm$(actpd$)))
-00440 L440: let ln$=ln1$
+            ln1$=ln$(1:j2-1)&rtrm$(actpd$)&ln$(j2+2:78-len(rtrm$(actpd$)))
+00440 L440: ln$=ln1$
 00450 L450: next j2
 00460   pr #255: tab(10);ln$
 00470   goto L360

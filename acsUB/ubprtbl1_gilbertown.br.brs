@@ -24,7 +24,7 @@
           let x=len(at$(j)) : let y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
-00150   let linelength=62
+00150   linelength=62
 00160 ! 
 00170   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00180 ! Gosub BULKSORT
@@ -36,7 +36,7 @@
 00240 SCREEN1: ! 
 00250   a$="" : let prtbkno=0
 00260   fntos(sn$="UBPrtBl1-1") !:
-        let pf=33 : let ll=30 !:
+        let pf=33 : ll=30 !:
         let respc=0
 00270   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00280   fntxt(3,pf,8,8,1,"1",0,tt$) !:
@@ -77,10 +77,10 @@
 00440   if resp$(7)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(7))
-00450   if resp$(8)="True" then let sl1=1: let z$="" else let sl1=0
+00450   if resp$(8)="True" then sl1=1: let z$="" else sl1=0
 00460   if trim$(a$)<>"" then read #2,using L470,key=a$: z$,route,sequence nokey SCREEN1 !:
           let holdz$=z$: begin=1 !:
-          let st1=1
+          st1=1
 00470 L470: form pos 1,c 10,pos 1741,n 2,n 7
 00480   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00490   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
@@ -103,22 +103,22 @@
 00650 L650: if f<>d1 and bal<>0 then mat g=(0): goto L660
 00652   if f><d1 then goto L560
 00660 L660: if st1=0 then goto READALTADR
-00670 ! If ST1$=Z$ Then Let ST1=0 Else Goto 560
+00670 ! If ST1$=Z$ Then sT1=0 Else Goto 560
 00680 READALTADR: ! 
 00690 ! read alternate billing address
 00700   read #3,using L710,key=z$: mat ba$ nokey L780
 00710 L710: form pos 11,4*c 30
-00720   let e1=0 : mat pe$=("")
+00720   e1=0 : mat pe$=("")
 00730   for j=1 to 4
 00740     if rtrm$(ba$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : let pe$(e1)=ba$(j)
 00750   next j
 00760   goto L930
 00770 ! ______________________________________________________________________
-00780 L780: let e1=0 : mat pe$=("")
+00780 L780: e1=0 : mat pe$=("")
 00790   for j=2 to 4
 00800     if rtrm$(e$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : let pe$(e1)=e$(j)
 00810   next j
 00820   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 00830   goto L930
@@ -140,7 +140,7 @@
 01000   goto L560
 01010 ! ______________________________________________________________________
 01020 SCREEN3: ! 
-01030   let sn$ = "UBPrtBl1-2" !:
+01030   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
 01040   let txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
@@ -164,7 +164,7 @@
 01150 SORT1: ! SELECT & SORT
 01160   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1410
 01170   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output 
-01180   let s5=1
+01180   s5=1
 01190   if prtbkno=0 then let routekey$="" else !:
           let routekey$=cnvrt$("N 2",prtbkno)&"       " !:
           ! key off first record in route (route # no longer part of customer #)

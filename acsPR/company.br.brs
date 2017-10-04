@@ -21,13 +21,13 @@
 00212   dim gl$(20)*12,fid$*12
 00214 ! 
 00220   dim opt_ded_or_add$(3)*7
-00221   let opt_ded_or_add$(1)="Deduct"
-00222   let opt_ded_or_add$(2)="Add"
-00223   let opt_ded_or_add$(3)="Benefit"
+00221   opt_ded_or_add$(1)="Deduct"
+00222   opt_ded_or_add$(2)="Add"
+00223   opt_ded_or_add$(3)="Benefit"
 00224 ! 
 00225   dim opt_std_or_percent$(2)*8
-00226   let opt_std_or_percent$(1)="Standard"
-00227   let opt_std_or_percent$(2)="Percent"
+00226   opt_std_or_percent$(1)="Standard"
+00227   opt_std_or_percent$(2)="Percent"
 00230 ! ______________________________________________________________________
 00240 ! ______________________________________________________________________
 00250   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&',recl=759,version=0,use',internal,outin,relative 
@@ -178,7 +178,7 @@
 01280     if dedst(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
 01290     fnchk(j+5,pos_col(9),"",1)
 01300     if deduc(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
-01310     let linecount=j+5
+01310     linecount=j+5
 01320     fnqgl(linecount,pos_col(10),0,2,pas)
 01323     let resp$(resp+=1)=fnrgl$(gl$(j))
 01330   next j
@@ -235,7 +235,7 @@
 01790   let resp=0
 01800   for j=1 to 10
 01810     let d$(j)=resp$(resp+=1)
-01820     let e$(j)=resp$(resp+=1)
+01820     e$(j)=resp$(resp+=1)
 01830     let m(j)=val(resp$(resp+=1))
 01840     let r(j)=val(resp$(resp+=1))
 01850   next j
@@ -288,13 +288,13 @@
 02200   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
 02210   fnacs(sn$,0,mat resp$,ckey)
 02220   if ckey=5 then goto CONFIRMEXIT
-02230   let sck(1)=val(resp$(1))
-02240   let sck(2)=val(resp$(2))
-02250   let sck(3)=val(resp$(3))
-02260   let sck(4)=val(resp$(4))
+02230   sck(1)=val(resp$(1))
+02240   sck(2)=val(resp$(2))
+02250   sck(3)=val(resp$(3))
+02260   sck(4)=val(resp$(4))
 02270   let vacm=val(resp$(5))
 02280   let mhw=val(resp$(6))
-02290   let loccode=val(resp$(7))
+02290   loccode=val(resp$(7))
 02300   let wcm(1)=val(resp$(8))
 02310   let wcm(2)=val(resp$(9))
 02320   let wcm(3)=val(resp$(10))
@@ -336,9 +336,9 @@
 02680   let io6$(8)="10,53,Cu 1,UT,N" : let io6$(9)="11,53,C 6,UT,N" !:
         let io6$(10)="12,53,C 6,UT,N" : let io6$(11)="13,53,Nz 2,UT,N"
 02690   if tc=1 then let tc$="Y" else let tc$="N"
-02700 L2700: pr fields "23,25,C 09,B,1": "Next (F1)"
-02710   pr fields "23,35,C 09,B,2": "Back (F2)"
-02720   pr fields "23,45,C 09,B,5": "Done (F5)"
+02700 L2700: pr f "23,25,C 09,B,1": "Next (F1)"
+02710   pr f "23,35,C 09,B,2": "Back (F2)"
+02720   pr f "23,45,C 09,B,5": "Done (F5)"
 02730   if gli=1 then let gli$="Y" else let gli$="N"
 02740 L2740: if fnstyp=11 then !:
           rinput #106,fields mat io6$: gli$,mat sck,vacm,mhw,tc$,mat jn$,dc conv CONV7
@@ -351,7 +351,7 @@
 02800   ce2=ce1+1 : let io6$(ce)(ce1:ce1)="UC" : goto L2740
 02810 CONV7: if ce>0 then let io6$(ce)(ce1:ce2)="U"
 02820   ce=cnt+1
-02830 ERR7: pr fields "24,78,C 1": bell : goto L2790
+02830 ERR7: pr f "24,78,C 1": bell : goto L2790
 02840 L2840: if gli$<>"Y" and gli$<>"N" then ce=1 : goto ERR7
 02850   if gli$="Y" then let gli=1 else let gli=0
 02860   if fnstyp=14 then goto L2900

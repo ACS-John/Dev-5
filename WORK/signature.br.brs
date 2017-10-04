@@ -6,7 +6,7 @@
 00060 L60: form pos 1,c 30,n 3,n 3,n 2,c 1
 00065   pr newpage
 00070 MAINSCREEN: ! 
-00075   let sn$ = "SignatureMain"
+00075   sn$ = "SignatureMain"
 00076   mat comboa$(99)
 00080   fntos(sn$)
 00082   let mylen = 17: let myalign = 1
@@ -40,7 +40,7 @@
 00230 ! 
 00240 ! 
 00250 EDITSCREEN: ! 
-00260   let sn$ = "SignatureEdit": let fntos(sn$)
+00260   sn$ = "SignatureEdit": let fntos(sn$)
 00265   let mylen = 17: let myalign = 1
 00270   let mytext$ = "Document Name:" : let fnlbl(1,1,mytext$,mylen,myalign)
 00275   let response$(1)=docname$ !:

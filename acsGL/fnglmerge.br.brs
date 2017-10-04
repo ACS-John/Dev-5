@@ -10,8 +10,8 @@
 00100     dim ml$(10)*80 ! for fnMsgBox
 00110     dim resp$(10)*80 ! for Screen Ace
 00120 ! ______________________________________________________________________
-00130     let on=1 : let off=0 : cancel=5 : let delete=4 : let selbyrow=1 !:
-          let limit_to_list=1 : add_all=2 : let right=1 : let disable=1 !:
+00130     on=1 : off=0 : cancel=5 : let delete=4 : selbyrow=1 !:
+          limit_to_list=1 : add_all=2 : let right=1 : let disable=1 !:
           center=2 : let pointtwo$='32' : let mmddyy$='1'
 00140     fntop(program$,cap$="GL Merge")
 00150     if fncursys$='GL' then let fncno(cno) else gosub ASK_GLCNO
@@ -37,7 +37,7 @@
 00340     read #glmstr,using 'Form POS 87,PD 6.2,POS 333,2*PD 3',key=t$: cb,mat ta nokey REJECT_GL
 00350 READ_GLTRANS: ! 
 00360 ! READ #gltrans,USING 460,REC=1: LR2
-00370     let lr2=lrec(gltrans)+1
+00370     lr2=lrec(gltrans)+1
 00380     write #gltrans,using 'Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,PD 3',rec=lr2: t$,s,k,mat n,l$,p$,0 duprec READ_GLTRANS
 00390     if ta(1)=0 then let ta(1)=lr2
 00400     if ta(2)>0 then !:
@@ -51,7 +51,7 @@
 00470     read #gl1099,using 'Form POS 104,PD 5.2,POS 122,2*PD 3',key=ven$: ytdp ,mat adr nokey L1250
 00480     let ytdp+=k
 00490 ! READ #GLTR1099,USING 260,REC=1,RESERVE: LR5
-00500 L500: let lr5=lrec(gltr1099)+1 !:
+00500 L500: lr5=lrec(gltr1099)+1 !:
           write #gltr1099,using 'Form POS 1,C 8,N 6,PD 5.2,C 12,C 30,PD 3',rec=lr5,reserve: ven$,s,k,l$,p$,0 duprec L500
 00510     if adr(2)=0 then adr(1)=lr5 else !:
             rewrite #gltr1099,using 'Form POS 62,PD 3',rec=adr(2),reserve: lr5
@@ -62,7 +62,7 @@
 00560 ! ______________________________________________________________________
 00570 REJECT_GL: ! 
 00580     fntos(sn$='GLMerge-Reject_GL') !:
-          let lc=0 : let mylen=20 : let mypos=mylen+2
+          lc=0 : let mylen=20 : let mypos=mylen+2
 00590     fnlbl(lc+=1,1,'GL Account Reject',80,center)
 00600     fnlbl(lc+=1,1,'Account Number:',mylen,right)
 00610     fntxt(lc,mypos,12,0,right,'',disable) !:
@@ -89,7 +89,7 @@
 00740 ! ______________________________________________________________________
 00750 CORRECT_GL: ! 
 00760   fntos(sn$='GLMerge-Correct_GL') !:
-        let lc=0 : let mylen=31 : let mypos=mylen+2
+        lc=0 : let mylen=31 : let mypos=mylen+2
 00770   fnlbl(lc+=1,1,'GL Account Reject',80,center)
 00780   fnlbl(lc+=1,1,'Correct General Ledger Account:',mylen,right)
 00790   fncombof("gla-"&str$(cno),lc,mypos,0,env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),13,20,1,12,env$('Q')&"\GLmstr\glIndx2.h"&str$(cno),limit_to_list) !:
@@ -101,7 +101,7 @@
 00840 ! ______________________________________________________________________
 00850 ADD_GL: ! 
 00860   fntos(sn$='GLMerge-Add_GL') !:
-        let lc=0 : let mylen=32 : let mypos=mylen+2
+        lc=0 : let mylen=32 : let mypos=mylen+2
 00870   fnlbl(lc+=1,1,'GL Account Reject',80,center)
 00880   fnlbl(lc+=1,1,'New General Ledger Account Name:',mylen,right)
 00890   fntxt(lc,mypos,30) !:
@@ -129,7 +129,7 @@
 01080     ckgl=1
 01090 L1090: next j
 01100   if ckgl=0 then goto DONE
-01110   pr fields "24,35,Cc 10,B,1": "Next  (F1)"
+01110   pr f "24,35,Cc 10,B,1": "Next  (F1)"
 01120 L1120: input fields "24,2,C 1,AE,N": pause$
 01130   if cmdkey=1 then goto DONE else goto L1120
 01139 ! ______________________________________________________________________
@@ -182,24 +182,24 @@
         pr #win,fields "7,2,Cr 18,N": "City, State Zip:" !:
         pr #win,fields "8,2,Cr 18,N": "1099 Type:" !:
         pr #win,fields "9,2,Cr 18,N": "Federal ID Number:"
-01440   let fl1$(1)="4,21,C 35,UT,N" : let fl1$(2)="5,21,C 20,UT,N" !:
-        let fl1$(3)="6,21,C 20,UT,N" : let fl1$(4)="7,21,C 20,UT,N" !:
-        let fl1$(5)="8,21,N 02,UT,N" : let fl1$(6)="9,21,C 11,UT,N"
-01450   pr fields "18,35,C 09,B,1": "Next (F1)"
+01440   fl1$(1)="4,21,C 35,UT,N" : fl1$(2)="5,21,C 20,UT,N" !:
+        fl1$(3)="6,21,C 20,UT,N" : fl1$(4)="7,21,C 20,UT,N" !:
+        fl1$(5)="8,21,N 02,UT,N" : fl1$(6)="9,21,C 11,UT,N"
+01450   pr f "18,35,C 09,B,1": "Next (F1)"
 01460 L1460: input #win,fields mat fl1$: nam$,ad1$,ad2$,csz$,typ,ss$ conv CONV1
-01470   if ce>0 then let fl1$(ce)(ce1:ce2)="U": ce=0
+01470   if ce>0 then fl1$(ce)(ce1:ce2)="U": ce=0
 01480   if cmdkey>0 then goto L1550 else ce=curfld+1
 01490   if ce>udim(fl1$) then ce=1
-01500 L1500: let fl1$(ce)=rtrm$(uprc$(fl1$(ce))) : ce1=pos(fl1$(ce),"U",1)
-01510   ce2=ce1+1 : let fl1$(ce)(ce1:ce1)="UC" : goto L1460
-01520 CONV1: if ce>0 then let fl1$(ce)(ce1:ce2)="U"
+01500 L1500: fl1$(ce)=rtrm$(uprc$(fl1$(ce))) : ce1=pos(fl1$(ce),"U",1)
+01510   ce2=ce1+1 : fl1$(ce)(ce1:ce1)="UC" : goto L1460
+01520 CONV1: if ce>0 then fl1$(ce)(ce1:ce2)="U"
 01530   ce=cnt+1
-01540 ERR1: pr fields "24,78,C 1": bell : goto L1500
+01540 ERR1: pr f "24,78,C 1": bell : goto L1500
 01550 L1550: ! 
 01560   mat adr=(0)
 01570   if k=0 then goto L1630
 01580   read #gltr1099,using 'Form POS 62,PD 3',rec=1,reserve: lr5
-01590 L1590: let lr5=lrec(gltr1099)+1
+01590 L1590: lr5=lrec(gltr1099)+1
 01600   write #gltr1099,using 'Form POS 1,C 8,N 6,PD 5.2,C 12,C 30,PD 3',rec=lr5,reserve: ven$,s,k,l$,p$,0 duprec L1590
 01610   rewrite #gltr1099,using 'Form POS 62,PD 3',rec=1,release: lr5
 01620   mat adr=(lr5)
@@ -225,7 +225,7 @@
 01790 ! ______________________________________________________________________
 01800 ASK_GLCNO: ! 
 01810   fntos(sn$='GLMerge_ask_glcno') !:
-        let lc=0
+        lc=0
 01820   fnlbl(lc+=1,1,'Select the General Ledger Company to Post to')
 01830   fncmbcno(lc+=1,5,'GL')
 01840   fncmdkey('&Okay',1,1,1)

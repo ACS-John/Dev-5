@@ -11,11 +11,11 @@
 00090     dim ml$(3)*80 ! fnMsgBox Message Lines
 00091     dim path_source$*250,path_dest$*250 ! 
 00100 ! ______________________________________________________________________
-00110     let right=1 : let left=0 : center=2
+00110     let right=1 : left=0 : center=2
 00120     fngetcd(mcd$) : let fncno(cno)
 00130 ASK_PATHS: ! 
 00140     fntos(sn$="CopyOldFiles") !:
-          let mylen=40 : let mypos=mylen+2 : let lc=0
+          let mylen=40 : let mypos=mylen+2 : lc=0
 00150     fnlbl(lc+=1,1,"Old Program Path and Executable:",mylen,right)
 00160     fntxt(lc,mypos,50,250,left,'70') !:
           if exists(":C:\Vol002\wb.exe") then !:
@@ -24,7 +24,7 @@
 00170     fnlbl(lc+=1,1,"Old Company Number:",mylen,right)
 00180     fntxt(lc,mypos,2,5,left,'number') !:
           let resp$(2)="1"
-00190     let lc+=1
+00190     lc+=1
 00200     fnlbl(lc+=1,1,"New Program Path and Executable:",mylen,right)
 00210     fntxt(lc,mypos,50,250,left,'70') !:
           let resp$(3)=mcd$&"acsMenu.exe"
@@ -40,8 +40,8 @@
           cno_source=val(resp$(2)) !:
           let path_dest$=resp$(3)(1:pos(resp$(3),"\",-1)-1) !:
           cno_dest=val(resp$(4)) !:
-          let sys_source$=fncursys$ !:
-          let sys_dest$=fncursys$
+          sys_source$=fncursys$ !:
+          sys_dest$=fncursys$
 00290 ! If EXISTS(PATH_DEST$&"\"&SYS_DEST$&"mstr\Company.h"&STR$(CNO_DEST)) Then !:
           ! Mat ML$(2) !:
           ! Let ML$(1)="Please pick a Company Number that is not being used." !:

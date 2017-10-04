@@ -26,8 +26,8 @@
 00240   let io1$(1)="4,32,C 20,UT,N"
 00250   let io1$(2)="5,32,Cu 1,UT,N"
 00260   let io1$(3)="6,32,Cu 1,UT,N"
-00270   pr fields "16,30,C 09,B,1": "Next (F1)"
-00280   pr fields "16,41,C 09,B,5": "Exit (F5)"
+00270   pr f "16,30,C 09,B,1": "Next (F1)"
+00280   pr f "16,41,C 09,B,5": "Exit (F5)"
 00290   let prtjob$="Y"
 00300   let perpag$="Y"
 00310 L310: rinput #win,fields mat io1$: dat$,prtjob$,perpag$ conv CONV1
@@ -38,7 +38,7 @@
 00360   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L310
 00370 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00380   ce=cnt+1
-00390 ERR1: pr fields "24,78,C 1": bell : goto L350
+00390 ERR1: pr f "24,78,C 1": bell : goto L350
 00400 L400: if cmdkey=5 then goto XIT
 00410   if prtjob$<>"Y" and prtjob$<>"N" then goto L420 else goto L440
 00420 L420: ce=2
@@ -56,14 +56,14 @@
 00540   let msgline$(1)="Do you wish to skip all"
 00550   let msgline$(2)="completed Jobs? (Y/N)"
 00560   fnoldmsgbox(mat response$,cap$,mat msgline$,2)
-00570   let skpcom$=response$(1)
+00570   skpcom$=response$(1)
 00580 L580: goto L730
 00590 L590: pr newpage
 00600   fnopenwin(win=103,08,20,13,59,cap$)
 00610   for j=1 to 100
 00620     pr #win,fields "4,2,Cr 20,n": "Job Number to print:"
 00630     if j>1 then pr #win,fields "6,1,Cc 40,R,N": "Last Job Number entered was "&ltrm$(prtj$(j-1))
-00640     pr fields "14,34,C 11,B,2": "Print (F2)"
+00640     pr f "14,34,C 11,B,2": "Print (F2)"
 00650 L650: input #win,fields "4,23,C 6,UT,N": prtj$(j) conv L650
 00660     if cmdkey=2 then goto L710
 00670     if rtrm$(prtj$(j))="" or ltrm$(rtrm$(prtj$(j)))="0" then goto L650

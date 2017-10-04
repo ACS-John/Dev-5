@@ -57,7 +57,7 @@
 00330 ! 
 00340   fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 00380   for j=1 to udim(servicename$)
-00385     let servicename$(j)=trim$(servicename$(j))
+00385     servicename$(j)=trim$(servicename$(j))
 00390   next j
 00400   fn_ask_billing_date
 00420   if ck=5 then goto XIT
@@ -92,7 +92,7 @@
 00780 ! if x$(1:2)="00" or uprc$(x$)=uprc$("   DELETED") then goto TOP
 00790 ! read #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra nokey NKT9
 00792 ! r: set default rate codes
-00794 ! if env$('client')="Pennington" then let extra(12)=1 ! default to 1
+00794 ! if env$('client')="Pennington" then extra(12)=1 ! default to 1
 00796 ! if env$('client')="Albany" and (a(1)=1 or a(1)=3 or a(1)=4 or a(1)=6) then a(6)=0 ! set residential sales tax code to zero
 00798   if env$('client')="Raymond" and (a(1)<>0 and a(6)=0) then a(6)=1 ! if any water rate code and no water penalty than default to water penalty of 1.
 00800   if env$('client')="Raymond" and (a(2)<>0 and a(7)=0) then a(7)=1 ! if any sewer rate code and no sewer penalty than default to sewer penalty of 1.
@@ -161,7 +161,7 @@
 32060   let tdate=d1
 32080   let tdate=fndate_mmddyy_to_ccyymmdd(tdate)
 32100   let tcode=1
-32120   let wr=d(1): let wu=d(3): let er=d(5): let eu=d(7): let gr=d(9)
+32120   let wr=d(1): let wu=d(3): er=d(5): eu=d(7): let gr=d(9)
 32140   let gu=d(11)
 32160   for j=1 to 11 : let tg(j)=g(j) : next j
 32180   let transkey$=x$&cnvrt$("pic(########)",tdate)&cnvrt$("pic(#)",tcode)
@@ -245,7 +245,7 @@
 60280     let x=x+1
 60300     if x>12 then goto CUU_REPORT_USAGE_PRINT
 60320     let watuse(x)=wu : let watdat(x)=tdate
-60340     let elecuse(x)=eu : let elecdat(x)=tdate
+60340     elecuse(x)=eu : elecdat(x)=tdate
 60360     let gasuse(x)=gu : let gasdat(x)=tdate
 60380     goto CUU_UBTRANS_READ
 60400 ! 
@@ -275,10 +275,10 @@
 61100 ! if trim$(x$)='101385.00' then pause
 61120     if dateread<>0 then 
 61140       if f=d1 then 
-61160         let extra(3)=dateread
+61160         extra(3)=dateread
 61180       else 
-61200         let extra(4)=extra(3)
-61220         let extra(3)=dateread
+61200         extra(4)=extra(3)
+61220         extra(3)=dateread
 61240       end if 
 61260     end if  ! dateread<>0
 61280   fnend 
@@ -519,7 +519,7 @@
 83680       if d1<10101 then pr bell; : goto ASK_BILLING_DATE
 83700       fnd1(d1,1)
 83720       if resp_sewer_cap_date then ! if env$('client')='Campbell'
-83740         let sewer_cap_date$=resp$(resp_sewer_cap_date)
+83740         sewer_cap_date$=resp$(resp_sewer_cap_date)
 83760         fncreg_write('ubcalk-sewer_cap_date',sewer_cap_date$)
 83780       end if 
 83800     end if 

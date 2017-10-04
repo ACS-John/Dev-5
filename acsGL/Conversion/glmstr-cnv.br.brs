@@ -3,8 +3,8 @@
 00040   close #101: ioerr L60
 00050   fntop(program$,"CHANGE_ME")
 00060 L60: open #101: "SROW=9,SCOL=23,EROW=11,ECOL=60,BORDER=DR,CAPTION=Convert G/L Master for GASB",display,outin 
-00070   pr fields "10,24,C 32": "ENTER COMPANY NUMBER TO CONVERT:"
-00080   pr fields "12,32,C 16,R,N": "PRESS F5 TO STOP"
+00070   pr f "10,24,C 32": "ENTER COMPANY NUMBER TO CONVERT:"
+00080   pr f "12,32,C 16,R,N": "PRESS F5 TO STOP"
 00090 L90: input fields "10,57,N 2,UE,N",attr "R": cno conv L90
 00100   if cmdkey=5 then goto L230
 00110 ! 

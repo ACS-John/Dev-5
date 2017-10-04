@@ -44,7 +44,7 @@
 34180       let item$(2)=fn_cname_of_cno$(tmp_cno)
 34200       fnflexadd1(mat item$)
 34220       if tmp_cno=cno then 
-34240         let setenv('current_grid_row',str$(company_count))
+34240         setenv('current_grid_row',str$(company_count))
 34260       end if 
 34280     end if 
 34300   ACNO_CONV: ! 
@@ -226,18 +226,18 @@
 72050   let dcnam$=fn_cname_of_cno$(scno)
 72060   CC_SCREEN1: ! 
 72080   fntos(sn$='CopyCNo3')
-72100   let lc=0
+72100   lc=0
 72120   let mylen=29 : let mypos=mylen+2
 72140   fnlbl(lc+=1,1,"Source Company:",mylen,1)
 72160   fnlbl(lc,mypos,str$(scno)&'. '&fn_cname_of_cno$(scno),50)
-72180   let lc+=1
+72180   lc+=1
 72200   fnlbl(lc+=1,1,"&Destination Company Number:",mylen,1)
 72220   fntxt(lc,mypos,5,0,0,'30')
 72240   let resp$(1)=str$(dcno)
 72260   fnlbl(lc+=1,1,"Destination Company Name:",mylen,1)
 72280   fntxt(lc,mypos,40,40)
 72300   let resp$(2)=dcnam$
-72320   let lc+=1
+72320   lc+=1
 72340   fnlbl(lc+=1,1,"Warning",80,2,1)
 72360   fnlbl(lc+=1,1,"Please make sure no one else is",80,2)
 72380   fnlbl(lc+=1,1,"using either company number.",80,2)
@@ -267,7 +267,7 @@
 74140 fnend 
 76000 def fn_setup
 76020   if setup<>1 then 
-76040     let setup=1
+76040     setup=1
 76060     library 'S:\Core\Library': fnacs,fnerror,fncno,fntos,fnchain,fnxit,fnputcno,fngetdir2
 76080     library 'S:\Core\Library': fncursys$,fnlbl,fncmdset,fntop,fntxt,fncmdkey,fncheckfileversion
 76100     library 'S:\Core\Library': fnmsgbox,fnflexadd1,fnflexinit1,fngethandle,fnclient_is_converting

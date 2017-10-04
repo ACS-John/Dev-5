@@ -71,7 +71,7 @@
 34280   let z2$=z$
 34300 L820: read #26,using "Form POS 1,C 10",key=z2$: z2$ nokey L960
 36000 MENU3: ! 
-36020   let sn$="CoTr-3"
+36020   sn$="CoTr-3"
 36040   fntos(sn$)
 36060   let mylen=28
 36080   let mypos=mylen+2

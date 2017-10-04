@@ -112,7 +112,7 @@
 11020       fn_printheader
 11040       continue 
 11060 CUSTDONE: ! 
-11080 !     let lastbilling=val(date$(days(lastbilling,"ccyymmdd"),"mmddyy"))
+11080 !     lastbilling=val(date$(days(lastbilling,"ccyymmdd"),"mmddyy"))
 11100 !     fnd1(lastbilling,1)
 11120       mat msgtext$(1)=("Customers reversed: "&str$(undocount))
 11140       fnmsgbox(mat msgtext$,answer$,"Report",0)

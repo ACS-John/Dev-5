@@ -60,10 +60,10 @@
 00510   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00520   if ck=5 then goto XIT
 00530   beg_date=val(resp$(1)) ! beginning of year
-00540   let end_date=val(resp$(2)) ! ending day of year
+00540   end_date=val(resp$(2)) ! ending day of year
 00560   let deposits=val(resp$(3))
 00570   let topmargin=val(resp$(4))
-00580   let leftmargin=val(resp$(5))
+00580   leftmargin=val(resp$(5))
 00590   let futaqtr1=val(resp$(6))
 00600   let futaqtr2=val(resp$(7))
 00610   let futaqtr3=val(resp$(8))
@@ -172,7 +172,7 @@
 01630     if b$(1)(j:j)="-" then b$(1)(j:j)=""
 01640   next j
 01650   fnpa_fontsize(16)
-01660   let lyne=13.5+topmargin ! starting line of fed id
+01660   lyne=13.5+topmargin ! starting line of fed id
 01670   fnpa_txt(b$(1)(1:1),45+leftmargin,lyne)
 01680   fnpa_txt(b$(1)(2:2),55+leftmargin,lyne)
 01690   fnpa_txt(b$(1)(3:3),68+leftmargin,lyne)
@@ -205,7 +205,7 @@
 01955   fnpa_pic("S:\acsPR\Form 940 pg2.bmp",1,1)
 01960   column4=119.5
 01965   if fullform=1 then let x=2.5: let y=1 else let x=0: let y=0 ! adjust for bad alignment
-01970   let lyne=26.4 +topmargin-x : let leftmargin=leftmargin-y
+01970   lyne=26.4 +topmargin-x : leftmargin=leftmargin-y
 01980   fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",futaqtr1),column4+leftmargin,lyne+=8.2) ! tax liability for 1st qtr
 01990   fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",futaqtr2),column4+leftmargin,lyne+=8.2) ! tax liability for 2nd qtr
 02000   fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",futaqtr3),column4+leftmargin,lyne+=8.2) ! tax liability for 3rd  qtr
@@ -216,7 +216,7 @@
 02050 VBOPENPRINT: ! 
 02060   if file(20)=-1 then 
 02070     fnpa_open ! open #20: "Name="&env$('Q')&"\PRmstr\940"&wsid$&".txt,Replace,RecL=5000",display,output
-02090     let lyne=margin ! starting of 1st line
+02090     lyne=margin ! starting of 1st line
 02100     column2=103 !:
           column3=153
 02110   end if 
@@ -236,6 +236,6 @@
 02270   if p1>0 then csz$(p1+1:p1+1)="" : goto L2260
 02280   csz$=ltrm$(rtrm$(csz$)): let p1=pos(csz$," ",-1)
 02290   let zip$=csz$(p1+1:len(csz$)): let zip$=ltrm$(rtrm$(zip$))
-02300   let p2=pos(csz$(1:p1-1)," ",-1) : let state$=csz$(p2+1:p1-1)(1:2) : let state$=ltrm$(rtrm$(state$))
+02300   let p2=pos(csz$(1:p1-1)," ",-1) : state$=csz$(p2+1:p1-1)(1:2) : state$=ltrm$(rtrm$(state$))
 02310   city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 02320   return 

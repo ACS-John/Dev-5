@@ -28,7 +28,7 @@
 00240   let d1= val(resp$(1)) conv SCR1 !:
         if uprc$(resp$(2))=uprc$("[All]") then let route=0 else !:
           let route=val(resp$(2))
-00250   if resp$(3)="False" then let oob$="N" else let oob$="Y"
+00250   if resp$(3)="False" then oob$="N" else oob$="Y"
 00260   goto STARTREPORT
 00270 ! ______________________________________________________________________
 00280 DONE: ! 

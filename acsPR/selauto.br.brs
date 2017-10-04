@@ -81,7 +81,7 @@
 00790 L790: gosub PRINT_LINE_L1
 00800   next l1
 00810   input #win,select mat io1$,attr "H": mat temp$ !:
-        let l1=curfld
+        l1=curfld
 00820   if cmdkey=1 then goto MENU1_SAVE
 00830   if cmdkey=5 then goto XIT
 00840   goto ASK_LINE_DATA
@@ -110,7 +110,7 @@
         fnfkey(24,mat fkey$,mat disfk,empty$,es=0)
 01050   for j=1 to udim(m$)
 01060     if pos(pgm$(j),"\",1)=0 then goto L1210
-01070     let pgm(j1+=1)=j : let sf$(j1)=str$(j1+1)&",2,C 35,N"
+01070     let pgm(j1+=1)=j : sf$(j1)=str$(j1+1)&",2,C 35,N"
 01080     pr #win,fields sf$(j1): ltrm$(m$(j))(1:35)
 01090     if j1<20 then goto L1210
 01100 L1100: input #win,select mat sf$,attr "H": mat sd$
@@ -163,7 +163,7 @@
 01460   ce2=ce1+1 : let io3$(ce)(ce1:ce1)="UC" : goto L1410
 01470 CONV3: if ce>0 then let io3$(ce)(ce1:ce2)="U"
 01480   ce=cnt+1
-01490 ERR3: pr fields "24,78,C 1": bell : goto L1450
+01490 ERR3: pr f "24,78,C 1": bell : goto L1450
 01500 L1500: if cmdkey=5 then goto DONE_ASK_LINE_DATA
 01510   if cmdkey=7 then goto CHANGE_PROGRAM
 01520   if cmdkey=4 then let nxtdesc$(l1)="" : let nxtpgm$(l1)="" !:

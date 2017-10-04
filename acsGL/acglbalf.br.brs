@@ -25,24 +25,24 @@
 00180   if fnprocess=0 then gosub L2010
 00190   let mp1=63 : if fnps=2 then let mp1=mp1+3
 00200   if fnps=2 then !:
-          let fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&str$(cno)&"," !:
-          let fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&str$(cno)&",Shr" else !:
-          let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&str$(cno)&"," !:
-          let fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnSBIndx.h"&str$(cno)&",Shr"
+          fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&str$(cno)&"," !:
+          fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&str$(cno)&",Shr" else !:
+          fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&str$(cno)&"," !:
+          fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnSBIndx.h"&str$(cno)&",Shr"
 00210 L210: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos 87,27*pd 6.2
 00220   open #1: fl1$,internal,input,keyed 
 00230   if fnprocess=1 or fnUseDeptNo=0 then goto L320
 00240   goto L350 ! pr NEWPAGE
 00250   close #101: ioerr L260
 00260 L260: open #101: "SROW=9,SCOL=4,EROW=12,ECOL=75,BORDER=DR,CAPTION=PRINT BALANCE SHEET",display,outin 
-00270   pr fields "13,32,C 16,B,5": "Cancel (F5)"
-00280   pr fields "10,5,c 70,n": "ENTER THE COST CENTER OR DEPT # IF YOU WISH TO ONLY pr A STATEMENT"
-00290 L290: pr fields "11,5,c 65,n": "ON ONE DEPARTMENT; ELSE ENTER 0 TO pr ALL DEPARTMENTS"
+00270   pr f "13,32,C 16,B,5": "Cancel (F5)"
+00280   pr f "10,5,c 70,n": "ENTER THE COST CENTER OR DEPT # IF YOU WISH TO ONLY pr A STATEMENT"
+00290 L290: pr f "11,5,c 65,n": "ON ONE DEPARTMENT; ELSE ENTER 0 TO pr ALL DEPARTMENTS"
 00300   input fields "11,70,N 3,eu,N": costcntr conv L290
 00310   if cmdkey=5 then goto XIT
 00320 L320: pr newpage
-00330   pr fields "10,20,c 34,h,n": " BALANCE SHEET IN PROCESS"
-00340   pr fields "12,2,C 18,B,5": " Press F5 to stop"
+00330   pr f "10,20,c 34,h,n": " BALANCE SHEET IN PROCESS"
+00340   pr f "12,2,C 18,B,5": " Press F5 to stop"
 00350 L350: let fnopenprn
 00360   if fnps=2 then goto L390 ! secondary
 00370   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 63 3 Replace DupKeys -N"
@@ -99,7 +99,7 @@
 00890 ! If CP=1 Then Let DOLLAR=50+14*BC Else Let DOLLAR=24+14*BC
 00900   if sum(total)><0 then goto L920
 00910   if ls+ul+ds+ic>0 then goto L920 else goto L440
-00920 L920: let sp2=49-sp-1
+00920 L920: sp2=49-sp-1
 00930 ! pr #255,Using 990: D$(1:SP2),DOLLAR$,TOTAL(FUND) Pageoflow 1470
 00940   let dolcol$=""
 00950   for j=1 to totcol
@@ -127,7 +127,7 @@
 01125     if ul=1 then accumcol$=accumcol$&" "&dollar$&"{\ul "&cnvrt$("pic(-,---,---.##)",accum1)&"}" : goto L1140
 01130     accumcol$=accumcol$&" "&dollar$&cnvrt$("pic(-,---,---.##)",accum1)
 01140 L1140: next j
-01150   let sp2=49-sp-1
+01150   sp2=49-sp-1
 01155   if ul=1 then pr #255,using L991: d$(1:sp2),rtrm$(accumcol$) pageoflow L1640 : goto L1170
 01160   pr #255,using L1170: d$(1:sp2),rtrm$(accumcol$) pageoflow L1640
 01170 L1170: form pos sp,c sp2,pos 49,c big,skip redir
@@ -144,7 +144,7 @@
 01270 L1270: goto L440
 01280 ! ______________________________________________________________________
 01290 L1290: if te$="R" then let report$=d$
-01300   if te$="S" then let secondr$=d$
+01300   if te$="S" then secondr$=d$
 01310   gosub L1480
 01320   goto L440
 01330 ! ______________________________________________________________________
@@ -170,8 +170,8 @@
 01530 ! ______________________________________________________________________
 01540 L1540: let fnpglen(pglen)
 01550 ! If PGLEN<>42 Then Let PGLEN=58
-01560   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01570 ! If PGLEN=42 Then Let SK=SK+1
+01560   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01570 ! If PGLEN=42 Then sK=SK+1
 01580   pr #255,using L1590: rtrm$(foot$)
 01590 L1590: form skip sk,pos tabnote,c fl,skip 1
 01600   if eofcode=1 then goto L1630
@@ -208,7 +208,7 @@
 01910 L1910: form pos 49,c big,skip 2
 01920   return 
 01930 ! ______________________________________________________________________
-01940 L1940: let eofcode=1
+01940 L1940: eofcode=1
 01950   gosub L1540
 01960   if pors=2 then goto XIT else goto DONE
 01970 XIT: let fnxit

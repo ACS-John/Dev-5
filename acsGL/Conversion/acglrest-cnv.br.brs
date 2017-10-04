@@ -19,13 +19,13 @@
 00200 L200: let fnxit
 00210   goto L260
 00220   pr newpage
-00230   if err=4148 then pr fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L250
+00230   if err=4148 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L250
 00240   goto L260
-00250 L250: pr fields "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00260 L260: pr fields "24,1,C 80,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00250 L250: pr f "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00260 L260: pr f "24,1,C 80,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00270   input fields "24,60,C 1,N": quitcode$
 00280   if rtrm$(uprc$(quitcode$))="Q" then goto L320
-00290   pr fields "23,1,C 80,N": ""
-00300   pr fields "24,1,C 80,N": ""
+00290   pr f "23,1,C 80,N": ""
+00300   pr f "24,1,C 80,N": ""
 00310   retry 
 00320 L320: let fnxit

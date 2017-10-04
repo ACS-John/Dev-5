@@ -42,20 +42,20 @@
 00400   open #13: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00410 ! ______________________________________________________________________
 00420 INPUTSCREEN1: ! 
-00430   let shoption=1
+00430   shoption=1
 00440 INPUTSCREEN2: ! 
 00450   pr newpage
 00460   let win=102
 00470   fnopenwin(win,08,08,18,72,cap$)
 00480   pr #win,fields mat iolabel1$: mat label1$
 00490   pr #win,fields io1$(2): dat
-00500   if shoption=1 then pr fields "19,24,C 09,B,1": "Next (F1)"
-00510   if shoption=1 then pr fields "19,34,C 09,B,5": "Stop (F5)"
-00520   if shoption=1 then pr fields "19,44,C 11,B,5": "Search (F6)"
-00530   if shoption=2 then pr fields "19,18,C 09,B,1": "Next (F1)"
-00540   if shoption=2 then pr fields "19,28,C 11,B,4": "Delete (F4)"
-00550   if shoption=2 then pr fields "19,40,C 09,B,5": "Stop (F5)"
-00560   if shoption=2 then pr fields "19,50,C 11,B,5": "Search (F6)"
+00500   if shoption=1 then pr f "19,24,C 09,B,1": "Next (F1)"
+00510   if shoption=1 then pr f "19,34,C 09,B,5": "Stop (F5)"
+00520   if shoption=1 then pr f "19,44,C 11,B,5": "Search (F6)"
+00530   if shoption=2 then pr f "19,18,C 09,B,1": "Next (F1)"
+00540   if shoption=2 then pr f "19,28,C 11,B,4": "Delete (F4)"
+00550   if shoption=2 then pr f "19,40,C 09,B,5": "Stop (F5)"
+00560   if shoption=2 then pr f "19,50,C 11,B,5": "Search (F6)"
 00570   if c1=2 then pr #win,fields mat io1$: rn$,dat,jn$,mat ji2,d$
 00580 L580: input #win,fields mat io1$: rn$,dat,jn$,mat ji2,d$ conv L1770
 00590   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
@@ -96,7 +96,7 @@
 00740   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L580
 00750 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00760   ce=cnt+1
-00770 ERR1: pr fields "24,78,C 1": bell : goto L730
+00770 ERR1: pr f "24,78,C 1": bell : goto L730
 00780 L780: if cmdkey=5 then goto WHATNEXT
 00790   if cmdkey<>6 then goto L850
 00800   ce=curfld
@@ -139,11 +139,11 @@
 01170   goto L1210
 01180 ! ______________________________________________________________________
 01190 ADDITIONALENTRIES: ! 
-01200   let shoption=2
+01200   shoption=2
 01210 L1210: pr newpage
 01220   fnopenwin(win=103,10,20,14,59,cap$)
 01230   pr #win,fields "4,2,C 28,N": "Reference Number to correct:"
-01240   pr fields "15,35,C 09,B,5": "Done (F5)"
+01240   pr f "15,35,C 09,B,5": "Done (F5)"
 01250 L1250: input #win,fields "4,31,N 5,UT,N": rr conv L1250
 01260   if cmdkey=5 then goto WHATNEXT
 01270   if rr<1 or rr>rw then goto L1250
@@ -161,7 +161,7 @@
 01390   for j=1 to udim(wrd2$)
 01400     let io2$(j)=str$(j+3)&",2,C 38,N"
 01410   next j
-01420   pr fields "17,27,c 25,B,5": "Exit without posting (F5)"
+01420   pr f "17,27,c 25,B,5": "Exit without posting (F5)"
 01430 L1430: rinput #win,select mat io2$,attr "H": mat wrd2$
 01440   c1=curfld
 01450   if cmdkey=5 then goto XIT
@@ -198,7 +198,7 @@
 01760 ! ______________________________________________________________________
 01770 L1770: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 01780   ce=cnt+1
-01790 L1790: pr fields "24,1,C 7,N": bell
+01790 L1790: pr f "24,1,C 7,N": bell
 01800   let io1$(ce)=rtrm$(io1$(ce))
 01810   ce1=pos(uprc$(io1$(ce)),"U",1)
 01820   ce2=ce1+1
@@ -209,17 +209,17 @@
 01870   close #103: ioerr L1880
 01880 L1880: open #103: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,output 
 01890   pr #103: newpage
-01900   let wrds$(1)="1. JOB # SEARCH" : let skl(1)=6
-01910   let wrds$(2)="2. JOB NAME SEARCH" : let skl(2)=25
-01920   let seq=11 : goto L2020
+01900   let wrds$(1)="1. JOB # SEARCH" : skl(1)=6
+01910   let wrds$(2)="2. JOB NAME SEARCH" : skl(2)=25
+01920   seq=11 : goto L2020
 01930   for j=1 to udim(ios$): let ios$(j)=str$(j+12)&",25,C 30,N": next j
 01940 L1940: close #101: ioerr L1950
 01950 L1950: open #101: "SROW=12,SCOL=24,EROW="&str$(udim(ios$)+13)&",ECOL=55,BORDER=SR,CAPTION=SELECT TYPE OF SEARCH",display,outin 
 01960   pr #101: newpage
-01970   pr fields mat ios$: mat wrds$
-01980   pr fields str$(udim(ios$)+14)&",35,C 09,B,5": "Stop (F5)"
+01970   pr f mat ios$: mat wrds$
+01980   pr f str$(udim(ios$)+14)&",35,C 09,B,5": "Stop (F5)"
 01990   input select mat ios$,attr "H": mat wrds$
-02000   let seq=curfld
+02000   seq=curfld
 02010   if cmdkey=5 then goto SRCHEND
 02020 L2020: pr newpage
 02030   let win2=101
@@ -232,20 +232,20 @@
 02100   restore #seq,search>=nam$: nokey L2070
 02110   close #win2: ioerr L2120
 02120 L2120: pr newpage
-02130   pr fields "1,2,C 6,R,N": "Job #:"
-02140   pr fields "1,9,C 40,R,N": "Job Name"
-02150   pr fields "1,50,C 8,R,N": "Est.Date"
-02160   pr fields "1,59,C 10,R,N": "Est.Date"
-02170   pr fields "1,59,C 14,R,N": "   Ct.Amount"
+02130   pr f "1,2,C 6,R,N": "Job #:"
+02140   pr f "1,9,C 40,R,N": "Job Name"
+02150   pr f "1,50,C 8,R,N": "Est.Date"
+02160   pr f "1,59,C 10,R,N": "Est.Date"
+02170   pr f "1,59,C 14,R,N": "   Ct.Amount"
 02180   cde=0
 02190   for j=1 to 20
 02200     read #seq,using L2210: jn$,n$,mat a$,mat b eof SREND
 02210 L2210: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2
 02220     cde=1
-02230     pr fields str$(j+1)&",2,C 6,UT,N": jn$
-02240     pr fields str$(j+1)&",9,C 40,UT,N": n$
-02250     pr fields str$(j+1)&",50,PIC(ZZ/ZZ/ZZ),UT,N": b(1)
-02260     pr fields str$(j+1)&",59,N 14.2,UT,N": b(2)
+02230     pr f str$(j+1)&",2,C 6,UT,N": jn$
+02240     pr f str$(j+1)&",9,C 40,UT,N": n$
+02250     pr f str$(j+1)&",50,PIC(ZZ/ZZ/ZZ),UT,N": b(1)
+02260     pr f str$(j+1)&",59,N 14.2,UT,N": b(2)
 02270     if j>1 then goto L2310
 02280     bk=bk+1
 02290     if bk>20 then bk=1
@@ -253,10 +253,10 @@
 02310 L2310: next j
 02320 SREND: if j>1 then let j=j-1
 02330   mat in2$(j)
-02340   pr fields "24,02,C 16,B,1": "Continue (Enter)"
-02350   pr fields "24,19,C 09,B,2": "Back (F2)"
-02360   pr fields "24,29,C 09,B,5": "Stop (F5)"
-02370   pr fields "24,39,C 25,R,N": "or Select Account Number:"
+02340   pr f "24,02,C 16,B,1": "Continue (Enter)"
+02350   pr f "24,19,C 09,B,2": "Back (F2)"
+02360   pr f "24,29,C 09,B,5": "Stop (F5)"
+02370   pr f "24,39,C 25,R,N": "or Select Account Number:"
 02380   input fields "24,65,C 6,UT,N": k$
 02390   alp=0
 02400   if cmdkey=5 then goto SRCHEND
@@ -267,10 +267,10 @@
 02440   if bk<1 then goto L2500
 02450   restore #seq,key>=bk$(bk): nokey L2500
 02460   bk=bk-1
-02470 L2470: let selclp=1
+02470 L2470: selclp=1
 02480   goto L2120
 02490 ! ______________________________________________________________________
-02500 L2500: let selclp=0
+02500 L2500: selclp=0
 02510   goto L2020
 02520 ! ______________________________________________________________________
 02530 SRCHEND: close #103: ioerr L2540
@@ -285,19 +285,19 @@
 02620   read #11,using L2630,key=jn$: jn$,n$,mat a$,mat b nokey L2750
 02630 L2630: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2
 02640   restore #12,search>=jn$: nokey L2750
-02650 L2650: let ln=0
+02650 L2650: ln=0
 02660   pr #103: newpage
-02670   pr fields "2,47,C 33,R,N": " "&n$(1:31)
+02670   pr f "2,47,C 33,R,N": " "&n$(1:31)
 02680 L2680: read #12,using L2700: jn2$,cn$,cnt$ eof L2750
 02690   if jn2$<>jn$ then goto L2750
 02700 L2700: form pos 1,c 6,c 5,c 25
-02710   let ln=ln+1
-02720   pr fields str$(ln+2)&",48,C 5,UT,N": cn$
-02730   pr fields str$(ln+2)&",54,C 25,UT,N": cnt$
+02710   ln=ln+1
+02720   pr f str$(ln+2)&",48,C 5,UT,N": cn$
+02730   pr f str$(ln+2)&",54,C 25,UT,N": cnt$
 02740   if ln<20 then goto L2680
-02750 L2750: pr fields "23,47,Cc 33,B,1": "Next (Enter)"
-02760   pr fields "24,48,C 25,R,N": "or enter Category Number:"
-02770   pr fields "24,74,C 5,UT,N": ""
+02750 L2750: pr f "23,47,Cc 33,B,1": "Next (Enter)"
+02760   pr f "24,48,C 25,R,N": "or enter Category Number:"
+02770   pr f "24,74,C 5,UT,N": ""
 02780   input fields "24,74,C 5,UT,N": k$
 02790   let ji2(1)=val(k$) conv L2810
 02800   if rtrm$(k$)<>"" then pr #win,fields io1$(4): ji2(1)
@@ -309,17 +309,17 @@
 02860   close #103: ioerr L2870
 02870 L2870: open #103: "SROW=2,SCOL=47,EROW=23,ECOL=79,BORDER=DR",display,output 
 02880 L2880: pr #103: newpage
-02890   pr fields "2,47,C 33,R,N": " "&n$(1:31)
+02890   pr f "2,47,C 33,R,N": " "&n$(1:31)
 02900   restore #13: 
-02910   let ln=0
+02910   ln=0
 02920 L2920: read #13,using L2930: sc$,cnt$ eof L2980
 02930 L2930: form pos 1,c 3,c 25
-02940   let ln=ln+1
-02950   pr fields str$(ln+2)&",49,C 3,UT,N": sc$
-02960   pr fields str$(ln+2)&",54,C 25,UT,N": cnt$
+02940   ln=ln+1
+02950   pr f str$(ln+2)&",49,C 3,UT,N": sc$
+02960   pr f str$(ln+2)&",54,C 25,UT,N": cnt$
 02970   if ln<20 then goto L2920
-02980 L2980: pr fields "23,47,C 33,R,N": " PRESS ENTER TO CONTINUE"
-02990   pr fields "24,47,C 33,R,N": " OR ENTER SUB-CAT #:"
+02980 L2980: pr f "23,47,C 33,R,N": " PRESS ENTER TO CONTINUE"
+02990   pr f "24,47,C 33,R,N": " OR ENTER SUB-CAT #:"
 03000   input fields "24,69,C 2,RE,N": k$
 03010   let ji2(2)=val(k$) conv L3030
 03020   if rtrm$(k$)<>"" then pr #win,fields io1$(5): ji2(2)

@@ -24,7 +24,7 @@
           let x=len(at$(j)) : let y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
-00150   let linelength=62
+00150   linelength=62
 00160 ! 
 00170   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00180   gosub BULKSORT
@@ -35,7 +35,7 @@
 00230 SCREEN1: ! 
 00240   a$="" : let prtbkno=0
 00250   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : let ll=24 !:
+        let pf=26 : ll=24 !:
         let respc=0
 00260   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00270   fntxt(3,pf,8,8,1,"1",0,tt$) !:
@@ -76,10 +76,10 @@
 00430   if resp$(7)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(7))
-00440   if resp$(8)="True" then let sl1=1: let z$="" else let sl1=0
+00440   if resp$(8)="True" then sl1=1: let z$="" else sl1=0
 00450   if trim$(a$)<>"" then read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1 !:
           let holdz$=z$: begin=1 !:
-          let st1=1
+          st1=1
 00460 L460: form pos 1,c 10,pos 1741,n 2,n 7
 00470   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00480   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
@@ -100,24 +100,24 @@
 00630   if prtbkno><route then goto RELEASE_PRINT
 00640 L640: if f><d1 then goto L550
 00650   if st1=0 then goto READALTADR
-00660 ! If ST1$=Z$ Then Let ST1=0 Else Goto 560
+00660 ! If ST1$=Z$ Then sT1=0 Else Goto 560
 00670 READALTADR: ! 
 00680 ! read alternate billing address
 00690   read #3,using L700,key=z$: mat ba$ nokey L790
 00700 L700: form pos 11,4*c 30
-00710   let e1=0 : mat pe$=("")
+00710   e1=0 : mat pe$=("")
 00720   for j=1 to 4
 00730     if rtrm$(ba$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : let pe$(e1)=ba$(j)
 00740   next j
 00750   if trim$(pe$(2))="" then let pe$(2)=pe$(3): let pe$(3)=""
 00760   if trim$(pe$(3))="" then let pe$(3)=pe$(4): let pe$(4)=""
 00770   goto L940
 00780 ! ______________________________________________________________________
-00790 L790: let e1=0 : mat pe$=("")
+00790 L790: e1=0 : mat pe$=("")
 00800   for j=2 to 4
 00810     if rtrm$(e$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : let pe$(e1)=e$(j)
 00820   next j
 00830   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 00840   goto L940
@@ -139,7 +139,7 @@
 01010   goto L550
 01020 ! ______________________________________________________________________
 01030 SCREEN3: ! 
-01040   let sn$ = "UBPrtBl1-2" !:
+01040   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
 01050   let txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
@@ -161,7 +161,7 @@
 01150 SORT1: ! SELECT & SORT
 01160   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1410
 01170   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
-01180   let s5=1
+01180   s5=1
 01190   if prtbkno=0 then let routekey$="" else !:
           let routekey$=cnvrt$("N 2",prtbkno)&"       " !:
           ! key off first record in route (route # no longer part of customer #)
@@ -220,7 +220,7 @@
 01630 ! ______________________________________________________________________
 01640 VBOPENPRINT: ! 
 01660     fnPa_open("Landscape")
-01690     let lyne=3
+01690     lyne=3
 01720   return 
 01730 ! ______________________________________________________________________
 01740 VBPRINT: ! 
@@ -308,7 +308,7 @@
 02250   pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin)&',63,0)'
 02260   pr #20: 'Call Print.AddText("Phone: 217-762-2583",'&str$(xmargin+1)&','&str$(lyne*27+ymargin)&')'
 02270 ! ______________________________________________________________________
-02280   let special=28
+02280   special=28
 02290 ! ______________________________________________________________________
 02300   pr #20: 'Call Print.MyFontSize(7)'
 02310   pr #20: 'Call Print.AddLine('&str$(xmargin+97)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'

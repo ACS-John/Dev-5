@@ -20,7 +20,7 @@
 00200 MAIN: ! 
 00210     addhours=edithours=0
 00220     fntos(sn$="Main") !:
-          let respc=0 : let lc=0 : mat resp$=('') !:
+          let respc=0 : lc=0 : mat resp$=('') !:
           let mylen=20 : let mypos=mylen+2
 00230     fnlbl(lc+=1,1,'Employee Number:',mylen,1,0,0)
 00240     fncombof("PRmstr",lc,mypos,0,env$('Q')&"\PRmstr\rpmstr.h"&str$(cno),1,8,9,30,env$('Q')&"\PRmstr\Rpindex.h"&str$(cno),2,pas, "Enter the employee number you wish to work with.",0)
@@ -38,26 +38,26 @@
           cmask$(5)='3' : cmask$(6)='10' : cmask$(7)="10" !:
           cmask$(8)="10" !:
           fnflexinit1('Hours',lc+2,1,15,66,mat chdr$,mat cmask$,1) !:
-          let lc+=18
+          lc+=18
 00255     if hact$="[All]" then restore #breakdown: nokey EOBREAKDOWN !:
-            balance=0 : let oldclass$="" : goto READHOURBREAKDOWN
+            balance=0 : oldclass$="" : goto READHOURBREAKDOWN
 00260     let key$=lpad$(str$(eno),8)&"             " !:
           restore #breakdown,key>=key$: nokey EOBREAKDOWN !:
-          balance=0 : let oldclass$=""
-00270 READHOURBREAKDOWN: let holdempno=empno: let oldclass$=class$: read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",release: empno,class$,tdate,increase,decrease eof EOBREAKDOWN
-00275     if hact$="[All]" then let empkey$=lpad$(str$(empno),8): goto L310
+          balance=0 : oldclass$=""
+00270 READHOURBREAKDOWN: let holdempno=empno: oldclass$=class$: read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",release: empno,class$,tdate,increase,decrease eof EOBREAKDOWN
+00275     if hact$="[All]" then empkey$=lpad$(str$(empno),8): goto L310
 00290     if empno<>eno then goto EOBREAKDOWN
-00300     let empkey$=lpad$(str$(eno),8)
-00310 L310: let empname$="": read #prmstr,using "form pos 9,c 30",key=empkey$,release: empname$ nokey L320
+00300     empkey$=lpad$(str$(eno),8)
+00310 L310: empname$="": read #prmstr,using "form pos 9,c 30",key=empkey$,release: empname$ nokey L320
 00320 L320: if trim$(oldclass$)<>"" and oldclass$<>class$ then mat flxitm$=(""): balance=0: let fnflexadd1(mat flxitm$)
 00321     if hact$="[All]" and holdempno<>empno then mat flxitm$=(""): balance=0: let fnflexadd1(mat flxitm$)
 00330     balance+=increase-decrease
 00340     classification$="": read #classification,using "form pos 6,c 30",key=class$,release: classification$ nokey L350
-00350 L350: let flxitm$(1)=str$(rec(breakdown))
-00360     let flxitm$(2)=str$(empno): let flxitm$(3)=empname$ !:
-          let flxitm$(4)=classification$ : let flxitm$(5)=str$(tdate) !:
-          let flxitm$(6)=str$(increase): let flxitm$(7)=str$(decrease) !:
-          let flxitm$(8)=str$(balance)
+00350 L350: flxitm$(1)=str$(rec(breakdown))
+00360     flxitm$(2)=str$(empno): flxitm$(3)=empname$ !:
+          flxitm$(4)=classification$ : flxitm$(5)=str$(tdate) !:
+          flxitm$(6)=str$(increase): flxitm$(7)=str$(decrease) !:
+          flxitm$(8)=str$(balance)
 00370     fnflexadd1(mat flxitm$)
 00380     goto READHOURBREAKDOWN
 00390 EOBREAKDOWN: ! 
@@ -77,22 +77,22 @@
           if ck=5 then goto XIT
 00430     let hact$=trim$(resp$(1)(1:8))
 00440     if hact$="[All]" then goto MAIN
-00450     let empno=eno=val(resp$(1)(1:8))
-00460     let editrec=val(resp$(2)) ! record # if edit
-00470     if ck=45 then let edithours=1 else let edithours=0
+00450     empno=eno=val(resp$(1)(1:8))
+00460     editrec=val(resp$(2)) ! record # if edit
+00470     if ck=45 then edithours=1 else edithours=0
 00480     if ck=43 then addhours=1 else addhours=0
 00490     if ck=44 then goto MSGBOX1 ! delete a record
 00500     if ck=46 then goto MAIN ! refresh grid
 00510 ADDFM: ! add hours
 00520     let holdeno=eno ! allow then to enter time on more than one employee while here, but warn them
-00530     if empno=0 then let empno=eno ! assign to default employee if adding
-00540     let empkey$=lpad$(str$(eno),8)
-00550     let empname$="": read #prmstr,using "form pos 9,c 30",key=empkey$,release: empname$ nokey L560
+00530     if empno=0 then empno=eno ! assign to default employee if adding
+00540     empkey$=lpad$(str$(eno),8)
+00550     empname$="": read #prmstr,using "form pos 9,c 30",key=empkey$,release: empname$ nokey L560
 00560 L560: if addhours=1 then class$="": let increase=decrease=0
 00570     if edithours=1 then !:
             read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease norec ADD_FM_DONE
 00580     fntos(sn$="Addfm") !:
-          let respc=0 : let lc=0 : let mylen=21 : let mypos=mylen+2: mat resp$=(""): let right=1
+          let respc=0 : lc=0 : let mylen=21 : let mypos=mylen+2: mat resp$=(""): let right=1
 00590     fnfra(1,9,8,70,"Hourly Information - "&empname$,"",0) : let frame1=1
 00600     fnlbl(lc+=1,1,'Employee Number:',mylen,right,0,frame1)
 00610     fncombof("PRmstr",lc,mypos,0,env$('Q')&"\PRmstr\rpmstr.h"&str$(cno),1,8,9,30,env$('Q')&"\PRmstr\Rpindex.h"&str$(cno),0,pas, "Enter the employee number to whom the time should be recorded",frame1) !:
@@ -113,7 +113,7 @@
 00700     fncmdset(4)
 00710     fnacs(sn$,0,mat resp$,ck) !:
           if ck=5 then goto MAIN
-00720     let empno=val(resp$(1)(1:8)) !:
+00720     empno=val(resp$(1)(1:8)) !:
           class$=resp$(2)(1:5) !:
           let tdate=val(resp$(3)) !:
           let increase=val(resp$(4)) !:
@@ -126,7 +126,7 @@
             goto ADDFM
 00760     if edithours=1 then !:
             rewrite #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease !:
-            let edithours=0: goto ADD_FM_DONE
+            edithours=0: goto ADD_FM_DONE
 00770 ADD_FM_DONE: goto MAIN
 00780 MSGBOX1: ! delete this record?
 00790     mat ml$(3) !:
@@ -143,7 +143,7 @@
           let ml$(2)="You were assigned to employee "&str$(holdeno)&"." !:
           let ml$(3)="Do you wish to change to employee "&str$(empno)&"?" !:
           fnmsgbox(mat ml$,resp$,cap$,52)
-00850     if resp$="Yes" then let eno=empno: goto L740 else let empno=holdeno: goto ADDFM
+00850     if resp$="Yes" then eno=empno: goto L740 else empno=holdeno: goto ADDFM
 00860 MSGBOX3: ! set up classifications of time
 00870     mat ml$(3) !:
           let ml$(1)="You must set up the classification file before you can use" !:

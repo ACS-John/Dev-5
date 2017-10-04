@@ -59,7 +59,7 @@
 00580   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L370
 00590 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00600   ce=cnt+1
-00610 ERR1: pr fields "24,78,C 1": bell : goto L570
+00610 ERR1: pr f "24,78,C 1": bell : goto L570
 00620 L620: ! 
 00630   if cmdkey=5 then goto XIT
 00640 ! ______________________________________________________________________

@@ -66,15 +66,15 @@
 00066     fnEstablishLinkage
 00067     let ReturnCode$=""
 00068     fnReadEntireLayout(FileLay$,Filename$,Prefix$,Mat Keys$,Mat KeyDescription$,Mat Ssubs$,Mat Nsubs$,Mat Sspec$,Mat Nspec$,Mat Sdescription$,Mat Ndescription$,Mat Spos,Mat Npos)
-00069     let LongestElement=0
+00069     longestElement=0
 00070     for Index=1 to udim(mat SSpec$)
-00071        let LongestElement=max(LongestElement,fnLength(SSpec$(Index)))
+00071        longestElement=max(LongestElement,fnLength(SSpec$(Index)))
 00072     next Index
 00073     for Index=1 to udim(mat NSpec$)
-00074        let LongestElement=max(LongestElement,fnLength(NSpec$(Index)))
+00074        longestElement=max(LongestElement,fnLength(NSpec$(Index)))
 00075     next Index
 00076     for Index=1 to udim(mat SSubs$)
-00077        let SSubs$(Index)=lwrc$(SSubs$(Index))
+00077        sSubs$(Index)=lwrc$(SSubs$(Index))
 00078     next Index
 00079     for Index=1 to udim(mat NSubs$)
 00080        let NSubs$(Index)=lwrc$(NSubs$(Index))
@@ -82,7 +82,7 @@
 00082     let Prefix$=trim$(Prefix$)
 00083     gosub RunTemplate
 00084  !
-00085     if len(ReturnCode$) then let SetEnv("CLIPBOARD",ReturnCode$)
+00085     if len(ReturnCode$) then let setenv("CLIPBOARD",ReturnCode$)
 00086  fnend
 00087  !
 00088  RunTemplate: ! Template List gosub statement:
@@ -102,7 +102,7 @@
 00102  def fnEstablishLinkage
 00103     if ~LinkageEstablished then
 00104        library "fileio" : fnOpenFile, fnClose, fnReadEntireLayout, fnGetFileNumber, fnGetKeyElements, fnLength, fnAskCombo$
-00105        let linkageEstablished=1
+00105        linkageEstablished=1
 00106     end if
 00107  fnend
 00108  !

@@ -72,7 +72,7 @@
 32100   if resp$(5)="True" then let printmail=1 ! wants meter mailing address
 32120   let minimumbal=val(resp$(6))
 32140   let penaltyamt=val(resp$(7))
-32160   let skip_s10r9$=resp$(8)
+32160   skip_s10r9$=resp$(8)
 32180 ! 
 34000   if pendat=0 then 
 34020     let msgline$(1)="You must enter a valid Penalty Date"
@@ -148,7 +148,7 @@
 46620 L1000: ! 
 46640   let totb+=bal
 46660   rewrite #customer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2': bal,mat gb
-46680   if extra(1)<0 or extra(1)>99 then let extra(1)=99
+46680   if extra(1)<0 or extra(1)>99 then extra(1)=99
 46700   let route(extra(1))+=sum(pencolumn)
 46720 ! pr extra(1)
 46740   if printadr<>1 then 

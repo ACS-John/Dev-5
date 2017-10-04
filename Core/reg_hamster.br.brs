@@ -13,7 +13,7 @@
 22400   goto XIT
 22600 ! ______________________________________________________________________
 22800   def fn_open_file
-23000     let open_file_count=0 ! this value is used in the close_file sub routine
+23000     open_file_count=0 ! this value is used in the close_file sub routine
 23200     open #open_file_count+=1: 'Name='&env$('Q')&'\Data\reg.dat,Version=1,KFName='&env$('Q')&'\Data\reg.idx,Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed 
 23400 ! open #open_file_count+=1: 'Name=data\reg.dat,Version=1,KFName=data\reg.idx,Shr',internal,outin,keyed
 23600 ! open #open_file_count+=1: 'Name=data\reg.dat,Shr',internal,outin,relative
@@ -38,14 +38,14 @@
 27400 ! ______________________________________________________________________
 27600   def fn_add_rec(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
 27800     if field_type$='' then let field_type$='C'
-28000     if storage_length=0 then let storage_length=textbox_len
+28000     if storage_length=0 then storage_length=textbox_len
 28200 ! storage_length_prior=storage_length
 28400     add_rec_item=udim(mat lbl$)+1
-28600     mat lbl$(add_rec_item) : let lbl$(add_rec_item)=label$
+28600     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$
 28800     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
 29000     mat p$(add_rec_item)
-29200     mat fltyp$(add_rec_item) : let fltyp$(add_rec_item)=field_type$
-29400     mat sln(add_rec_item) : let sln(add_rec_item)=storage_length
+29200     mat fltyp$(add_rec_item) : fltyp$(add_rec_item)=field_type$
+29400     mat sln(add_rec_item) : sln(add_rec_item)=storage_length
 29600     mat mask(add_rec_item) : let mask(add_rec_item)=ar_mask
 29800 ! if storage_position=0 then
 30000 !   storage_position=1
@@ -53,7 +53,7 @@
 30400 ! else if auto_storage_position and storage_position=0 then
 30600 !   storage_position=storage_position_prior+storage_length_prior
 30800 ! end if
-31000     mat sp(add_rec_item) : let sp(add_rec_item)=storage_position
+31000     mat sp(add_rec_item) : sp(add_rec_item)=storage_position
 31200 ! storage_length_prior=storage_position
 31400     mat c$(add_rec_item,8)
 31600   fnend  ! fn_add_rec
@@ -61,7 +61,7 @@
 32000     let mask_pointtwo=32 : let mask_number=30
 32200     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 32400     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
-32600     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
+32600     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 32800 ! 
 33000     dim lbl$(1)*38,tln(1),p$(1)*256,fltyp$(1),sln(1),mask(1),c$(1,8)*40,sp(1)
 33200     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)

@@ -79,7 +79,7 @@
 26140     if uprc$(td$(1:6))="CONTRA" then goto L760 ! NO CONTRA ENTRIES IN NET
 26160     let net+=tr(5)
 26180 L760: ! 
-26200     let oldtr$=tr$
+26200     oldtr$=tr$
 26220   loop 
 28000 PJ_SOME_TOTAL: ! r:
 28020   if tr(6)><1 and uprc$(oldtrans$(1:21))><"DISBURSEMENTS JOURNAL" then 
@@ -122,8 +122,8 @@
 32160   if t9=9 then goto L1150
 32180   pr #255: newpage
 32200   gosub HDR
-32220   if tr(6)=0 then let oldtrans$=" " else let oldtrans$=a$(tr(6))(1:21)
-32240   let oldtr$=" "
+32220   if tr(6)=0 then oldtrans$=" " else oldtrans$=a$(tr(6))(1:21)
+32240   oldtr$=" "
 32260 L1150: return  ! /r
 34000 EO_JOURNAL: ! r:
 34020   if tr(5)=0 and tr(6)=0 then goto L1210

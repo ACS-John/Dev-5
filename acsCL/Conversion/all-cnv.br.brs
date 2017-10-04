@@ -13,9 +13,9 @@
 00130 L130: pr newpage
 00140   close #101: ioerr L150
 00150 L150: open #101: "SROW=9,SCOL=4,EROW=13,ECOL=65,BORDER=DR,CAPTION=CONVERT UNPAID INVOICE FILE",display,outin 
-00160   pr fields "10,5,C 60": "COMPANY NUMBER TO CONVERT:"
-00170   pr fields "12,5,C 60": "PREVIOUS ENDING DATE FOR POST TO GL:"
-00180   pr fields "14,20,Cc 35,B,5": "F5 to stop"
+00160   pr f "10,5,C 60": "COMPANY NUMBER TO CONVERT:"
+00170   pr f "12,5,C 60": "PREVIOUS ENDING DATE FOR POST TO GL:"
+00180   pr f "14,20,Cc 35,B,5": "F5 to stop"
 00190   rinput fields mat io1$: cno,lpd
 00200   if cmdkey=5 or cno=0 then goto XIT
 00210 ! 
@@ -37,8 +37,8 @@
 00370   execute "Copy "&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)&",X -D -80"
 00380   execute "Free "&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)
 00390   execute "RENAME X,"&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)
-00400   pr fields "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&str$(cno)
-00410   pr fields "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
+00400   pr f "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&str$(cno)
+00410   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00420   input fields "13,40,C 1,IAE,N": pause$
 00430   goto L130
 00440 XIT: let fnxit

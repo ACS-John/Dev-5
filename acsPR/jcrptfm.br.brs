@@ -19,11 +19,11 @@
 00180 ! ______________________________________________________________________
 00190 MENU1: pr newpage
 00200   fnopenwin(win=101,09,20,15,59,cap$)
-00210   let scm$(1)="1. Add or Edit" !:
-        let scm$(2)="2. pr Proof List" !:
-        let scm$(3)="3. Search"
+00210   scm$(1)="1. Add or Edit" !:
+        scm$(2)="2. pr Proof List" !:
+        scm$(3)="3. Search"
 00220   for j=1 to udim(scm$) : let iom$(j)=str$(j+3)&",2,C 38,N" : next j
-00230   pr fields "16,35,C 09,B,5": "Exit (F5)"
+00230   pr f "16,35,C 09,B,5": "Exit (F5)"
 00240 L240: rinput #win,select mat iom$,attr "H": mat scm$ !:
         let ti=curfld
 00250   if cmdkey=5 then goto XIT
@@ -34,7 +34,7 @@
 00300   let win=102
 00310   fnopenwin(win,10,20,14,59,cap$)
 00320   pr #win,fields "4,02,C 23,N": "Job Cost Report Number:"
-00330   pr fields "15,35,C 09,B,5": "Done (F5)"
+00330   pr f "15,35,C 09,B,5": "Done (F5)"
 00340 L340: input #win,fields "4,26,Nz 2,UT,N": rptn conv L340
 00350   let rx=rptn
 00360   if cmdkey=5 then goto XIT
@@ -88,9 +88,9 @@
         let fkey$(1)="Next" !:
         let fkey$(4)="Delete" !:
         let fkey$(5)="Done" !:
-        let em$="" !:
+        em$="" !:
         fnfkey(23,mat fkey$,mat disfk,em$,0)
-00820   if sd=1 then let sd$="Y" else let sd$="N"
+00820   if sd=1 then sd$="Y" else sd$="N"
 00830   if cp=1 then cp$="Y" else cp$="N"
 00840 L840: rinput #win,fields mat io1$: rn,rt$,mat tempch$,ips,sd$,cp$,sc conv CONV1
 00850   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
@@ -101,19 +101,19 @@
 00890   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L840
 00900 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00910   ce=cnt+1
-00920 ERR1: pr fields "24,78,C 1": bell : goto L880
+00920 ERR1: pr f "24,78,C 1": bell : goto L880
 00930 L930: if cmdkey=5 then goto MENU1
 00940   if sd$<>"Y" and sd$<>"N" then ce=8 : goto ERR1
-00950   if sd$="Y" then let sd=1 else let sd=0
+00950   if sd$="Y" then sd=1 else sd=0
 00960   if cp$<>"Y" and cp$<>"N" then ce=9 : goto ERR1
-00970   if cp$="Y" then cp=1 else let sd=0
+00970   if cp$="Y" then cp=1 else sd=0
 00980   if rn<1 then ce=1 : goto ERR1
 00990   if cmdkey=4 then goto L1080
 01000   if rn=rptn then goto L1120
 01010   let rnew$=lpad$(str$(rn),2)
 01020   read #1,using L1030,key=rnew$: rnew nokey L1120
 01030 L1030: form pos 1,n 2
-01040   pr fields "2,40,C 38,N": "DUPLICATE REPORT NUMBER.  PRESS ENTER."
+01040   pr f "2,40,C 38,N": "DUPLICATE REPORT NUMBER.  PRESS ENTER."
 01050 L1050: input fields "2,79,C 1,N": cnt$ conv L1050
 01060   goto L810
 01070 ! ______________________________________________________________________
@@ -146,8 +146,8 @@
 01340   next j
 01350   for w=1 to 5
 01360     for j=2 to 21
-01370       pr fields "1,25,C 50": "Job Cost Report Number "&str$(rptn)
-01380       pr fields str$(j)&",5,C 30,N": "Print Selection Criteria"
+01370       pr f "1,25,C 50": "Job Cost Report Number "&str$(rptn)
+01380       pr f str$(j)&",5,C 30,N": "Print Selection Criteria"
 01390     next j
 01400     if w=1 then goto L1410 else goto L1430
 01410 L1410: let k=0
@@ -161,7 +161,7 @@
 01490       let psc(q+k)=rptemp(q)
 01500     next q
 01510     if rptemp(20)><0 then goto L1530
-01520     let lst=1
+01520     lst=1
 01530 L1530: mat rptemp=(0)
 01540     pr newpage
 01550     if lst=1 then goto L1570
@@ -186,7 +186,7 @@
           let fkey$(2)="Back" !:
           let fkey$(3)="Screen 1" !:
           let fkey$(4)="Completed" !:
-          let em$="" !:
+          em$="" !:
           fnfkey(20,mat fkey$,mat disfk,em$,0)
 01710     let io2$(1)="06,24,C 50,UT,N"
 01720     let io2$(2)="07,24,Nz 3,UT,N"
@@ -208,7 +208,7 @@
 01860     ce2=ce1+1 : let io2$(ce)(ce1:ce1)="UC" : goto L1810
 01870 CONV2: if ce>0 then let io2$(ce)(ce1:ce2)="U"
 01880     ce=cnt+1
-01890 ERR2: pr fields "24,78,C 1": bell : goto L1850
+01890 ERR2: pr f "24,78,C 1": bell : goto L1850
 01900 L1900: if rtrm$(f$(j))="" then goto L2020
 01910     if detailprint$="Y" then let fc(j)=0 else let fc(j)=1
 01920     if totalbyjob$="Y" then let tcj(j)=1 else let tcj(j)=0
@@ -244,7 +244,7 @@
 02220   let wrd3$(2)="Select Reports to Print"
 02230   let io3$(1)="4,2,C 23,N"
 02240   let io3$(2)="5,2,C 23,N"
-02250   pr fields "16,34,C 11,B,5": "Cancel (F5)"
+02250   pr f "16,34,C 11,B,5": "Cancel (F5)"
 02260   rinput #win,select mat io3$,attr "H": mat wrd3$
 02270   let prtall=curfld-1
 02280   close #win: ioerr L2290
@@ -254,7 +254,7 @@
 02320     fnopenwin(win=103,10,20,15,59,cap$)
 02330     if j>1 then pr #win,fields "6,1,Cc 40,R,N": "Last Report Number Entered was "&rno$(j-1)
 02340     pr #win,fields "4,2,C 23,N": "Report Number to Print:"
-02350     pr fields "16,35,C 09,B,5": "Done (F5)"
+02350     pr f "16,35,C 09,B,5": "Done (F5)"
 02360 L2360: input #win,fields "4,26,N 2,UET,N": rno(j) conv L2360
 02370     let rno$(j)=lpad$(str$(rno(j)),2)
 02380     if cmdkey=5 or rno(j)=0 then goto L2400
@@ -310,7 +310,7 @@
 02880 ! ______________________________________________________________________
 02890   if ce>0 then let io1$(ce)(ce1:ce2)="U"
 02900   ce=cnt+1
-02910 L2910: pr fields "24,80,C 1,N": bell
+02910 L2910: pr f "24,80,C 1,N": bell
 02920   let io1$(ce)=rtrm$(io1$(ce))
 02930   ce1=pos(uprc$(io1$(ce)),"U",1)
 02940   ce2=ce1+1
@@ -319,7 +319,7 @@
 02970 ! ______________________________________________________________________
 02980   if ce>0 then let io2$(ce)(ce1:ce2)="U"
 02990   ce=cnt+1
-03000 L3000: pr fields "24,80,C 1,N": bell
+03000 L3000: pr f "24,80,C 1,N": bell
 03010   let io2$(ce)=rtrm$(io2$(ce))
 03020   ce1=pos(io2$(ce),"U",1)
 03030   ce2=ce1+1
@@ -332,21 +332,21 @@
 03100   fnopenwin(win=102,10,15,14,65,cap$)
 03110   let prtall=0
 03120   pr #win,fields "4,2,C 39,N": "Starting Report Number (blank for all):"
-03130   pr fields "15,34,C 11,B,5": "Cancel (F5)"
+03130   pr f "15,34,C 11,B,5": "Cancel (F5)"
 03140 L3140: input #win,fields "4,42,C 2,UT,N": nam$
 03150   if cmdkey=5 then goto SRCHEND
 03160   let nam$=lpad$(rtrm$(nam$),2)
 03170   restore #1,search>=nam$: nokey L3140
 03180   close #win: ioerr L3190
 03190 L3190: pr newpage
-03200   pr fields "1,2,C 6,R,N": "Rep #:"
-03210   pr fields "1,9,C 40,R,N": "Report Name"
+03200   pr f "1,2,C 6,R,N": "Rep #:"
+03210   pr f "1,9,C 40,R,N": "Report Name"
 03220   cde=0
 03230   for j=1 to 20
 03240     read #1,using L410: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs eof SREND
 03250     cde=1
-03260     pr fields str$(j+1)&",2,N 2,N": rn
-03270     pr fields str$(j+1)&",9,C 40,N": rt$(1:40)
+03260     pr f str$(j+1)&",2,N 2,N": rn
+03270     pr f str$(j+1)&",9,C 40,N": rt$(1:40)
 03280     if j>1 then goto L3320
 03290     bk=bk+1
 03300     if bk>20 then bk=1
@@ -358,8 +358,8 @@
         let fkey$(1)="Next" !:
         let fkey$(2)="Back" !:
         let fkey$(5)="Stop" !:
-        let em$="or Select Report Number:" !:
-        let es=2 !:
+        em$="or Select Report Number:" !:
+        es=2 !:
         fnfkey(24,mat fkey$,mat disfk,em$,es)
 03360 L3360: input fields "24,67,C 2,UT,N": k$
 03370   if cmdkey=5 then goto SRCHEND
@@ -369,9 +369,9 @@
 03410   if bk<1 then goto L3460
 03420   restore #1,key>=bk$(bk): nokey L3460
 03430   bk=bk-1
-03440 L3440: let selclp=1
+03440 L3440: selclp=1
 03450   goto L3190
-03460 L3460: let selclp=0
+03460 L3460: selclp=0
 03470   goto L3090
 03480 ! ______________________________________________________________________
 03490 SRCHEND: if rtrm$(k$)="" then goto L3550

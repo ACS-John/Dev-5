@@ -25,7 +25,7 @@
           let x=len(at$(j)) : let y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
-00160   let linelength=62
+00160   linelength=62
 00170 ! 
 00180   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00190   gosub BULKSORT
@@ -43,7 +43,7 @@
 00260 SCREEN1: ! 
 00270   a$="" : let prtbkno=0
 00280   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : let ll=24 !:
+        let pf=26 : ll=24 !:
         let respc=0
 00290   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00300   fntxt(3,pf,8,8,1,"1",0,tt$) !:
@@ -115,7 +115,7 @@
         let mg$(12) = resp$(13) !:
         let mg$(13) = resp$(14)
 00565   for j=1 to 13
-00566     rewrite #16,using "form pos 1,c 60",rec=j: mg$(j) norec L568 : let lastj=j
+00566     rewrite #16,using "form pos 1,c 60",rec=j: mg$(j) norec L568 : lastj=j
 00567   next j
 00568 L568: if lastj<13 then 
 00569     for j=lastj+1 to 13
@@ -129,7 +129,7 @@
 00580   if resp$(17)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(17))
-00590   if resp$(18)="True" then let sl1=1: let z$="" else let sl1=0
+00590   if resp$(18)="True" then sl1=1: let z$="" else sl1=0
 00600   let prebal$=resp$(19)
 00610   let dueby$=resp$(20)
 00620   goto L640 ! If TRIM$(PREBAL$)="" OR TRIM$(DUEBY$)="" Then Goto 550 Else Goto 560
@@ -140,7 +140,7 @@
         goto SCREEN1
 00640 L640: if trim$(a$)<>"" then read #2,using L650,key=a$: z$,route,sequence nokey SCREEN1 !:
           let holdz$=z$: begin=1 !:
-          let st1=1
+          st1=1
 00650 L650: form pos 1,c 10,pos 1741,n 2,n 7
 00660   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00670   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
@@ -165,19 +165,19 @@
 00860 ! read alternate billing address
 00870   read #3,using L880,key=z$: mat ba$ nokey L970
 00880 L880: form pos 11,4*c 30
-00890   let e1=0 : mat pe$=("")
+00890   e1=0 : mat pe$=("")
 00900   for j=1 to 4
 00910     if rtrm$(ba$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : let pe$(e1)=ba$(j)
 00920   next j
 00930   if trim$(pe$(2))="" then let pe$(2)=pe$(3): let pe$(3)=""
 00940   if trim$(pe$(3))="" then let pe$(3)=pe$(4): let pe$(4)=""
 00950   goto L1120
 00960 ! ______________________________________________________________________
-00970 L970: let e1=0 : mat pe$=("")
+00970 L970: e1=0 : mat pe$=("")
 00980   for j=2 to 4
 00990     if rtrm$(e$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : let pe$(e1)=e$(j)
 01000   next j
 01010   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 01020   goto L1120
@@ -199,7 +199,7 @@
 01190   goto L740
 01200 ! ______________________________________________________________________
 01210 SCREEN3: ! 
-01220   let sn$ = "UBPrtBl1-2" !:
+01220   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
 01230   let txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
@@ -223,7 +223,7 @@
 01340 SORT1: ! SELECT & SORT
 01350   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1600
 01360   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
-01370   let s5=1
+01370   s5=1
 01380   if prtbkno=0 then let routekey$="" else !:
           let routekey$=cnvrt$("N 2",prtbkno)&"       " !:
           ! key off first record in route (route # no longer part of customer #)
@@ -282,7 +282,7 @@
 01820 ! ______________________________________________________________________
 01830 VBOPENPRINT: ! 
 01850     fnpa_open
-01880     let lyne=3
+01880     lyne=3
 01910   return 
 01920 ! ______________________________________________________________________
 01930 VBPRINT: ! 
@@ -347,7 +347,7 @@
 02390   pr #20: 'Call Print.AddText("Prior Reading",'&str$(93)&','&str$(84)&")"
 02400   pr #20: 'Call Print.AddText("Usage",'&str$(128)&','&str$(84)&')'
 02410   pr #20: 'Call Print.AddText("Charge",'&str$(170)&','&str$(84)&')'
-02420   adder=5: let lyne=85
+02420   adder=5: lyne=85
 02430   if g(1)=0 then goto L2450 else !:
           a$=cnvrt$("pic(zzzzzzzz#)",d(1)) !:
           b$=cnvrt$("pic(zzzzzzzz#)",d(3)) !:
@@ -403,7 +403,7 @@
 02700   pr #20: 'Call Print.MyFontSize(10)'
 02705   pr #20: 'Call Print.AddText("'&"Notes From City"&'",'&str$(90)&','&str$(123.5)&')'
 02710   pr #20: 'Call Print.MyFontItalic(1)'
-02720   let lyne=124
+02720   lyne=124
 02740   for j=1 to 13
 02750     fnpa_text(20,mg$(j),40,lyne+=4) ! pr #20: 'Call Print.AddText("'&mg$(j)&'",'&str$(40)&','&str$(lyne+=4)&')'
 02760   next j

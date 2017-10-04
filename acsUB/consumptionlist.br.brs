@@ -33,13 +33,13 @@
 48000   if ck=5 then goto XIT
 48020   bdate= val(resp$(1))
 48040   if resp$(2)="Water" then 
-48060     let srvc=1 : let srvc$=resp$(2)
+48060     srvc=1 : srvc$=resp$(2)
 48080   else if resp$(2)="Sewer" then 
-48100     let srvc=2 : let srvc$=resp$(2)
+48100     srvc=2 : srvc$=resp$(2)
 48120   else if resp$(2)="Electric" then 
-48140     let srvc=3 : let srvc$=resp$(2)
+48140     srvc=3 : srvc$=resp$(2)
 48160   else if resp$(2)="Gas" then 
-48180     let srvc=4 : let srvc$=resp$(2)
+48180     srvc=4 : srvc$=resp$(2)
 48190   else 
 48192     goto MAIN
 48200   end if 

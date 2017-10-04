@@ -25,9 +25,9 @@
 00280   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
 00290 return ! /r
 00310 GET_STARTED: ! r:
-00330   let lb1=0
+00330   lb1=0
 00340   mat lb$=("")
-00350   let eno$=lpad$(str$(eno),8)
+00350   eno$=lpad$(str$(eno),8)
 00360 L360: if sey$="Y" then gosub ASK_EMP : goto JUST_AFTER_READ else goto READ_SEQUENTIAL
 00370 ! /r
 00380 READ_SEQUENTIAL: ! r:
@@ -43,16 +43,16 @@
 00480   if starting_employee<>0 and eno< starting_employee then goto L400
 00490 JUST_AFTER_READ: ! 
 00500   if lb1=>1 then gosub PRINT_LABEL
-00510   let lb1=lb1+1
-00520   if empyn$="Y" then let lb$(lb1,1)=str$(eno)&"  "
-00530   if ssyn$="Y" then let lb$(lb1,1)=lb$(lb1,1)&ss$&"  "
+00510   lb1=lb1+1
+00520   if empyn$="Y" then lb$(lb1,1)=str$(eno)&"  "
+00530   if ssyn$="Y" then lb$(lb1,1)=lb$(lb1,1)&ss$&"  "
 00540   if date_to_print>0 and ssyn$="N" then !:
-          let lb$(lb1,1)=lb$(lb1,1)&cnvrt$("PIC(ZZ/ZZ/ZZ)",date_to_print)
+          lb$(lb1,1)=lb$(lb1,1)&cnvrt$("PIC(ZZ/ZZ/ZZ)",date_to_print)
 00550   if date_to_print>0 and ssyn$="Y" then !:
-          let lb$(lb1,5)=lb$(lb1,5)&cnvrt$("PIC(ZZ/ZZ/ZZ)",date_to_print)
-00560   let lb$(lb1,2)=em$(1)
-00570   if empadryn$="Y" then let lb$(lb1,3)=em$(2)
-00580   if empadryn$="Y" then let lb$(lb1,4)=em$(3)
+          lb$(lb1,5)=lb$(lb1,5)&cnvrt$("PIC(ZZ/ZZ/ZZ)",date_to_print)
+00560   lb$(lb1,2)=em$(1)
+00570   if empadryn$="Y" then lb$(lb1,3)=em$(2)
+00580   if empadryn$="Y" then lb$(lb1,4)=em$(3)
 00590   goto L360
 00600 ! /r
 00610 CHECK_FOR_OLD_DATE: ! r:
@@ -81,7 +81,7 @@
 00850   fncmdkey("&Complete",2,0,0,"Print selected labels.")
 00860   fnacs(sn$,0,mat resp$,ck) !:
         if ck=2 then goto FINIS
-00870   let eno=val(resp$(1)(1:8))
+00870   eno=val(resp$(1)(1:8))
 00880   if eno=0 then goto FINIS
 00890   read #1,using L270,key=lpad$(str$(eno),8): eno,mat em$,ss$,mat rs,mat em nokey ASK_EMP
 00900   return ! /r
@@ -91,9 +91,9 @@
 00960   fnlbl(1,1,"Print Labels For:",mylen,right)
 00970   let fi$="cllabels" !:
         let item1$(print_all=1)="[All]" : all=1 !:
-        let item1$(2)="Employees from last payroll only": let last_payroll=2 !:
-        let item1$(3)="Select employees to print": let select_employee=3 !:
-        let item1$(4)="Select employment status to print": let emp_status=4 !:
+        let item1$(2)="Employees from last payroll only": last_payroll=2 !:
+        let item1$(3)="Select employees to print": select_employee=3 !:
+        let item1$(4)="Select employment status to print": emp_status=4 !:
         fncomboa(fi$,1,mypos,mat item1$,"Print labels based on certain employment status code. (Eg. all full time).") !:
         let resp$(respc+=1)=item1$(1)
 00980   fnchk(5,mypos+2,'Print Employee Number on Label:',right) !:
@@ -121,25 +121,25 @@
             if resp$(1)=item1$(2) then let prtall=last_payroll else !:
               if resp$(1)=item1$(3) then let prtall=select_employee else !:
                 if resp$(1)=item1$(4) then let prtall=emp_status
-01110   if resp$(2) ="True" then let empyn$="Y" else let empyn$="N"
-01120   if resp$(3) ="True" then let ssyn$="Y" else let ssn$="N"
-01130   if resp$(4) ="True" then let empadryn$="Y" else let empadryn$="N"
+01110   if resp$(2) ="True" then empyn$="Y" else empyn$="N"
+01120   if resp$(3) ="True" then ssyn$="Y" else ssn$="N"
+01130   if resp$(4) ="True" then empadryn$="Y" else empadryn$="N"
 01140   let date_to_select=val(resp$(5)) ! payroll date to use in selecting employees
 01150   let date_to_print=val(resp$(6)) ! payroll date to pr on label
-01160   let empstatuse=val(resp$(7)) ! employment status used as criteria
-01170   let starting_employee=val(resp$(8)(1:8)) ! starting employee #
-01180   if prtall=3 then let sey$="Y" else let sey$="N" !:
+01160   empstatuse=val(resp$(7)) ! employment status used as criteria
+01170   starting_employee=val(resp$(8)(1:8)) ! starting employee #
+01180   if prtall=3 then sey$="Y" else sey$="N" !:
           ! CHOSEN TO SELECT EMPLOYEE TO PRINT
 01190   return ! /r
 01210 PRINT_LABEL: ! r:
 01220   mat labeltext$=("")
 01230   for j1=1 to 5
-01240     let ln$="       "
-01250     for j2=1 to lb1 : let ln$=ln$&rpad$(lb$(j2,j1)(1:40),42) : next j2
-01260     let labeltext$(j1)=ln$
+01240     ln$="       "
+01250     for j2=1 to lb1 : ln$=ln$&rpad$(lb$(j2,j1)(1:40),42) : next j2
+01260     labeltext$(j1)=ln$
 01270   next j1
 01280   fnaddlabel(mat labeltext$)
-01290   let lb1=0 : mat lb$=("")
+01290   lb1=0 : mat lb$=("")
 01300   return ! /r
 01320 ! <Updateable Region: ERTN>
 01330 ERTN: let fnerror(program$,err,line,act$,"xit")

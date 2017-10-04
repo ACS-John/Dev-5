@@ -19,7 +19,7 @@
        if len(trim$(fnCallScreen$(Screen$,key$,ParentKey$,DisplayOnly,ParentWindow,DontRedoListviews))) and fkey<>92 then
           fnRunTab=1
        end if
-       if fkey=92 then let ExitMode=TabExitMode
+       if fkey=92 then exitMode=TabExitMode
     fnend
 
     def library fnTabs(mat Screen$,mat Caption$;Key$*255,ParentKey$*255,FileLay$,Parentwindow,StartScreen,BlockESC,ExitOnCancel,Predraw,MsgScreen$,MsgRow,MsgCol,Debug,RecordNum,Path$*255,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers)
@@ -63,11 +63,11 @@
        end if
 
        ! Preinspect screen record the attributes and the color settings, compile into Attributes list.
-       let ScreenIO=fnOpen("screenio",mat ScreenIO$,mat ScreenIO,mat Form$,1)
+       screenIO=fnOpen("screenio",mat ScreenIO$,mat ScreenIO,mat Form$,1)
        mat Attribute$(udim(mat Screen$))=("")
        for Index=1 to udim(mat Screen$)
           mat ScreenIO$=("") : mat ScreenIO=(0)
-          let ScreenIO$(si_screencode)=uprc$(Screen$(Index))
+          screenIO$(si_screencode)=uprc$(Screen$(Index))
           read #ScreenIO, using form$(ScreenIO), key=fnBuildKey$("screenio",mat ScreenIO$,mat Screenio) : mat ScreenIO$, mat ScreenIO nokey Ignore
           if file(ScreenIO)=0 then
              ! Also find largest rows and columns and use that for Rows and Cols if they aren't given
@@ -82,7 +82,7 @@
                 attribute$(Index)=","&NAttr$
              else if len(trim$(ScreenIO$(si_bgcolor))) then
                 if len(ScreenIO$(si_bgcolor))=6 then
-                   let ScreenIO$(si_bgcolor)(1:0)="#"
+                   screenIO$(si_bgcolor)(1:0)="#"
                 end if
                 attribute$(Index)=",N=/W:"&screenIO$(si_bgcolor)
              end if
@@ -106,35 +106,35 @@
        end if
 
        if Predraw or DisplayOnly then
-          let StartTime=timer
+          startTime=timer
           let PredrawWindows(Currentscreen)=fnfm(Screen$(Currentscreen),Key$,1,1,ParentKey$,InputWindows(Currentscreen),1,1,RecordVal)
           if Debug then pr Screen$(Currentscreen)&": "&str$(timer-StartTime)&" second(s)."
 
           if MsgScreen$<>"" then
              let PredrawMessage(Currentscreen)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,PredrawWindows(Currentscreen),1,1,RecordVal)
           end if
-          let scr_freeze
+          scr_freeze
        else
           if MsgScreen$<>"" then
              let PredrawMessage(Currentscreen)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,InputWindows(Currentscreen),1,1,RecordVal)
-             let scr_freeze
+             scr_freeze
           end if
        end if
 
        for Index=1 to udim(mat Screen$)
           if Index<>CurrentScreen then ! Skip the one we already did
              if Predraw or DisplayOnly then
-                let StartTime=timer
+                startTime=timer
                 let PredrawWindows(Index)=fnfm(Screen$(Index),Key$,1,1,ParentKey$,InputWindows(Index),1,1,RecordVal)
                 if Debug then pr Screen$(Index)&": "&str$(timer-StartTime)&" second(s)."
                 if MsgScreen$<>"" then
                    let PredrawMessage(Index)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,PreDrawWindows(Index),1,1,RecordVal)
                 end if
-                let scr_freeze
+                scr_freeze
              else
                 if MsgScreen$<>"" then
                    let PredrawMessage(Index)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,InputWindows(Index),1,1,RecordVal)
-                   let scr_freeze
+                   scr_freeze
                 end if
              end if
           end if
@@ -157,9 +157,9 @@
                 close #WarnWindow:
                 if ~Skip and File(FileNumber) then ! key not found
                    let msgbox("The Key "&trim$(Key$)&" could not be found.")
-                   let Skip=1
+                   skip=1
                 else
-                   let SaveKey$=Key$
+                   saveKey$=Key$
                 end if
              else if RecordVal then
                 let WarnWindow=fnDisplayLoadMessage
@@ -167,9 +167,9 @@
                 close #WarnWindow:
                 if ~Skip and File(FileNumber) then ! key not found
                    let msgbox("The Record "&str$(RecordVal)&" could not be found.")
-                   let Skip=1
+                   skip=1
                 else
-                   let SaveRecord=RecordVal
+                   saveRecord=RecordVal
                 end if
              end if
              if AskSaveTogether then
@@ -194,7 +194,7 @@
                 if CurrentScreen=1 and fkey<>92 then
                    fn_Tabs$=ReturnValue$
                 end if
-                let scr_freeze
+                scr_freeze
 
                 if Fkey=92 then ! If A Tab Is Clicked Then Jump To That Tab
                    if Srch(Mat Inputwindows,Curtab(InputWindows(1)))>0 then
@@ -328,24 +328,24 @@
        for Index=1 to Udim(Mat PushWorkArray$)
           if Len(PushWorkArray$(Index))>255 then
              mat Longstack$(Udim(Mat Longstack$)+1)
-             let Longstack$(Udim(Mat Longstack$))=PushWorkArray$(Index)
+             longstack$(Udim(Mat Longstack$))=PushWorkArray$(Index)
              let PushWorkArray$(Index)="[[[loNgsTaCk]]]"
           end if
        next Index
  !
-       let Startindex=Udim(Mat Stack$)+1
-       let Size=Udim(Mat PushWorkArray$)
-       let Endindex=Startindex+Size-1
+       startindex=Udim(Mat Stack$)+1
+       size=Udim(Mat PushWorkArray$)
+       endindex=Startindex+Size-1
        mat Stack$(Endindex+1)
        if Size then
           mat Stack$(Startindex:Endindex)=PushWorkArray$
        end if
-       let Stack$(Endindex+1)=Str$(Size)
+       stack$(Endindex+1)=Str$(Size)
     fnend
     def Fnpoparray$(Mat Array$,Mat Stack$,Mat Longstack$;___,Startindex,Endindex,Size,Index)
-       let Endindex=Udim(Mat Stack$)-1
-       let Size=Val(Stack$(Endindex+1))
-       let Startindex=Endindex-Size+1
+       endindex=Udim(Mat Stack$)-1
+       size=Val(Stack$(Endindex+1))
+       startindex=Endindex-Size+1
        mat Array$(Size)
        if Size then
           mat Array$=Stack$(Startindex:Endindex)
@@ -360,19 +360,19 @@
        next Index
     fnend
     def Fnpusharray(Mat Array,Mat Stack;___,Startindex,Endindex,Size)
-       let Startindex=Udim(Mat Stack)+1
-       let Size=Udim(Mat Array)
-       let Endindex=Startindex+Size-1
+       startindex=Udim(Mat Stack)+1
+       size=Udim(Mat Array)
+       endindex=Startindex+Size-1
        mat Stack(Endindex+1)
        if Size then
           mat Stack(Startindex:Endindex)=Array
        end if
-       let Stack(Endindex+1)=Size
+       stack(Endindex+1)=Size
     fnend
     def Fnpoparray(Mat Array,Mat Stack;___,Startindex,Endindex,Size)
-       let Endindex=Udim(Mat Stack)-1
-       let Size=Stack(Endindex+1)
-       let Startindex=Endindex-Size+1
+       endindex=Udim(Mat Stack)-1
+       size=Stack(Endindex+1)
+       startindex=Endindex-Size+1
        mat Array(Size)
        if Size then
           mat Array=Stack(Startindex:Endindex)
@@ -402,7 +402,7 @@
           if Ltrm$(LockUser$(11:14))=Ltrm$(Wsid$) then
              linput #Lockfile: LockUser$ error Ignore
           end if
-          let LockUser$=LockUser$(26:36)
+          lockUser$=LockUser$(26:36)
           close #Lockfile:
           execute "*free ERTMP[SESSION]"
  !
@@ -417,14 +417,14 @@
     if Fnretrylockederror(Key$,FileNumber) then
        retry
     else
-       let Skip=1 ! Cancel the edit
+       skip=1 ! Cancel the edit
        continue
     end if
  !
  ! #Autonumber# 99000,10
     def fnEstablishLibraryLinkage
        if ~LinkageEstablished then
-          let LinkageEstablished=1
+          linkageEstablished=1
           library "fileio" : fnGetFileNumber, fnOpenFile, fnCloseFile, fnBuildKey$
           library "screenio" : fnFm$, fnfm, fnCallScreen$
        end if

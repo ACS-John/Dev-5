@@ -10,11 +10,11 @@
 00100   fndat(resp$(1))
 00110 ! 
 00120   fntos(sn$="escrow1") !:
-        let mylen=20 : let mypos=mylen+2 : let lc=0
+        let mylen=20 : let mypos=mylen+2 : lc=0
 00130   fnlbl(lc+=1,1,"Report Heading Date:",mylen,1)
 00140   fntxt(lc,mypos,20)
 00150   fnlbl(lc+=1,1,"Sort by:",mylen,1)
-00160   let opt$(1)="1. Account" : let opt$(2)="2. Name" : mat opt$(2) !:
+00160   opt$(1)="1. Account" : opt$(2)="2. Name" : mat opt$(2) !:
         fncomboa("acc_or_nam",lc,mypos,mat opt$) !:
         let resp$(2)=opt$(1)
 00170   fncmdset(3)

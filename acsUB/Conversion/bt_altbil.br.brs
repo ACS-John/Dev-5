@@ -8,35 +8,35 @@
 00070   dim nam$*30,ab$(4)*30
 00080 ! ______________________________________________________________________
 00090   def fnbooktitle$*80(x$*80)
-00100     let x$=lwrc$(trim$(x$)) : let olda=0
+00100     let x$=lwrc$(trim$(x$)) : olda=0
 00110     let x$(1:1)=uprc$(x$(1:1))
 00120 ! capitalize anthing after a SPACE
 00130 L130: a=pos(x$," ",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L130
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L130
 00140     a=olda=0
 00150 L150: a=pos(x$,"-",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L150
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L150
 00160     a=olda=0
 00170 L170: a=pos(x$,"/",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L170
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L170
 00180     a=olda=0
 00190 L190: a=pos(x$,"\",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L190
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L190
 00200     a=olda=0
 00210 L210: a=pos(x$,".",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L210
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L210
 00220     fnbooktitle$=x$
 00230   fnend 
 00240 ! ______________________________________________________________________
 00250   fncno(cno)
 00260   pr newpage
-00270 L270: pr fields "8,20,C 30,R,N": "Book Title Capital"
-00280   pr fields "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
+00270 L270: pr f "8,20,C 30,R,N": "Book Title Capital"
+00280   pr f "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
 00290 ! 
 00300   let io1$(1)="10,40,N 2,UT,N"
 00310 L310: rinput fields mat io1$: cno conv L310

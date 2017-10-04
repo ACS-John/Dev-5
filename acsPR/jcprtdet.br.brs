@@ -16,7 +16,7 @@
 00155   fnconsole(1)
 00160   let dat1=date("mmddyy")
 00170 ! 
-00180   let prtjob$="N" : let prtdet$="N" : let sumcat$="N" : let sumjob$="N" !:
+00180   let prtjob$="N" : let prtdet$="N" : sumcat$="N" : sumjob$="N" !:
         let prtpag$="N" ! setup defaults to answers (also used by fnprocess=1)
 00190 ! ______________________________________________________________________
 00200   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -47,8 +47,8 @@
 00430   for j=2 to 6
 00440     let io1$(j)=str$(j+3)&",45,Cu 1,UT,N"
 00450   next j
-00460   pr fields "17,30,C 09,B,1": "Next (F1)"
-00470   pr fields "17,41,C 09,B,5": "Exit (F5)"
+00460   pr f "17,30,C 09,B,1": "Next (F1)"
+00470   pr f "17,41,C 09,B,5": "Exit (F5)"
 00480 L480: rinput #win,fields mat io1$: dat1,prtjob$,prtdet$,sumcat$,sumjob$,prtpag$ conv CONV1
 00490   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 00500   if cmdkey>0 then goto L570 else ce=curfld
@@ -58,7 +58,7 @@
 00530   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L480
 00540 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00550   ce=cnt+1
-00560 ERR1: pr fields "24,78,C 1": bell : goto L520
+00560 ERR1: pr f "24,78,C 1": bell : goto L520
 00570 L570: if cmdkey=5 then goto XIT
 00580   if dat1<10100 or dat1>123199 then ce=1: goto ERR1
 00590   if prtjob$<>"Y" and prtjob$<>"N" then ce=2: goto ERR1
@@ -74,7 +74,7 @@
 00690     if k=1 then goto L710
 00700     if k>1 then pr #win,fields "6,1,Cc 40,R,N": "Last Job Number entered was "&prtj$(k-1)
 00710 L710: pr #win,fields "4,2,C 20,N": "Job Number to print:"
-00720     pr fields "16,34,C 11,B,2": "Print (F2)"
+00720     pr f "16,34,C 11,B,2": "Print (F2)"
 00730 L730: input #win,fields "4,23,C 6,UT,N": prtj$(k) conv L730
 00740     if cmdkey=2 then goto L800
 00750     if rtrm$(prtj$(k))="" or ltrm$(rtrm$(prtj$(k)))="0" then goto L730
@@ -90,7 +90,7 @@
 00850 L850: if prtjob$="Y" then goto L940
 00860 L860: let j1=j1+1
 00870   if j1<=k then goto L910
-00880   let eofc=2
+00880   eofc=2
 00890   goto L1890
 00900 ! ______________________________________________________________________
 00910 L910: read #1,using L920,key=prtj$(j1): jn$,n$,mat a$,mat b nokey L860
@@ -188,13 +188,13 @@
 01830   if sumjob$="N" then goto L1850
 01840   gosub PRINTSUMMARYBYJOB
 01850 L1850: if eofc=1 then goto L1890 else goto L850
-01860 L1860: let eofc=1
+01860 L1860: eofc=1
 01870   goto L1670
 01880 ! ______________________________________________________________________
 01890 L1890: if sumjob$="N" or prtdet$="N" then goto L1920 ! END OF JOB ROUTINE
 01900   if eofc=1 or eofc=2 then goto L1920
 01910   gosub PRINTSUMMARYBYJOB
-01920 L1920: let eofc=2
+01920 L1920: eofc=2
 01930   mat totjob=totall
 01940   goto L1670
 01950 L1950: if sumjob$="N" then goto L1970
@@ -245,10 +245,10 @@
 02390   cattot(tr(2))=cattot(tr(2))+tr(8)+tr(9)
 02400   cdesc$(tr(2))=desc$(tr(2))
 02410   if lcat=0 and hcat=0 then goto L2420 else goto L2450
-02420 L2420: let lcat=tr(2)
+02420 L2420: lcat=tr(2)
 02430   let hcat=lcat
 02440   goto L2470
-02450 L2450: if tr(2)<lcat then let lcat=tr(2)
+02450 L2450: if tr(2)<lcat then lcat=tr(2)
 02460   if tr(2)>hcat then let hcat=tr(2)
 02470 L2470: return 
 02480 ! ______________________________________________________________________
@@ -268,7 +268,7 @@
 02620     let jtot$(j)=cdesc$(j)
 02630 L2630: next j
 02640   mat cattot=(0)
-02650   let lcat=0
+02650   lcat=0
 02660   let hcat=0
 02670   return 
 02680 ! ______________________________________________________________________

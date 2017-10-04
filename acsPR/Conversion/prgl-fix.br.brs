@@ -19,9 +19,9 @@
 00190   pr newpage
 00200   close #101: ioerr L210
 00210 L210: open #101: "SROW=10,SCOL=16,EROW=13,ECOL=62,BORDER=DR,CAPTION=CREATE GL ENTRIEX",display,outin 
-00220   pr fields "11,18,C 40": "ENTER LOWEST  DATE OR BLANK FOR ALL:"
-00230   pr fields "12,18,C 40": "ENTER HIGHEST DATE OR BLANK FOR ALL:"
-00240   pr fields "14,22,C 34,R,N": "Press F1 to continue or F5 to stop"
+00220   pr f "11,18,C 40": "ENTER LOWEST  DATE OR BLANK FOR ALL:"
+00230   pr f "12,18,C 40": "ENTER HIGHEST DATE OR BLANK FOR ALL:"
+00240   pr f "14,22,C 34,R,N": "Press F1 to continue or F5 to stop"
 00250 L250: input fields mat io5$,attr "R": prd1,prd2 conv L250
 00260   if ce>0 then let io5$(ce)(ce1:ce2)="U": ce=0
 00270   if cmdkey>0 then goto L340 else ce=curfld+1
@@ -30,7 +30,7 @@
 00300   ce2=ce1+1 : let io5$(ce)(ce1:ce1)="UC" : goto L250
 00310 CONV5: if ce>0 then let io5$(ce)(ce1:ce2)="U"
 00320   ce=cnt+1
-00330 ERR5: pr fields "24,78,C 1": bell : goto L290
+00330 ERR5: pr f "24,78,C 1": bell : goto L290
 00340 L340: ! 
 00350   if prd2=0 then let prd2=prd1
 00360   if fncd(prd2)<fncd(prd1) then goto L250
@@ -39,14 +39,14 @@
 00390 L390: read #4,using L400: eno,prd,ckno,mat tdc,mat tcp eof END1
 00400 L400: form pos 1,n 8,n 6,n 7,5*pd 3.2,pd 4.2,22*pd 5.2
 00410   if fncd(prd)<fncd(prd1) or fncd(prd)>fncd(prd2) then goto L390
-00420   let eno$=lpad$(str$(eno),8)
+00420   eno$=lpad$(str$(eno),8)
 00430   read #2,using L440,key=eno$: em$,ta1 nokey L390
 00440 L440: form pos 9,c 30,pos 173,pd 3
 00450   if ta1=0 then goto L390
 00460   read #3,using L470,rec=ta1: mat tgl,mat tdet
 00470 L470: form pos 12,n 3,n 6,n 3,pos 58,3*pd 4.2
-00480   let ot=round(tdc(2)*tdet(3),2)
-00490   let other=round((tdc(3)+tdc(4)+tdc(5))*tdet(2),2)
+00480   ot=round(tdc(2)*tdet(3),2)
+00490   other=round((tdc(3)+tdc(4)+tdc(5))*tdet(2),2)
 00500   bonus=tcp(18)
 00510   let reg=tcp(21)-ot-other-bonus
 00520   accum(1)=accum(1)+reg

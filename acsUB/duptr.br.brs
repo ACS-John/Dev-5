@@ -18,7 +18,7 @@
 00210   fn_filter_add_chk('Transaction Date','False')
 00220   fn_filter_add_chk('Amount','True')
 00230   fn_filter_add_chk('Transaction Code','True')
-00240   let lc+=1
+00240   lc+=1
 00250   fnlbl(lc+=1,1,"Starting Record:",16,1)
 00260   fntxt(lc,18,10,0,0,'30')
 00270   let resp$(respc+=1)=str$(max(1,trans1_lrec-1000))

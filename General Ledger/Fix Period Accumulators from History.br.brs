@@ -149,11 +149,11 @@
 26960       let respc=resp_lrea_fund_1-1
 26980       if use_dept then 
 27000         for fund_item=1 to udim(mat fund_list)
-27020           let last_retained_earnings_acct$(fund_item)=fnagl$(resp$(respc+=1))
+27020           last_retained_earnings_acct$(fund_item)=fnagl$(resp$(respc+=1))
 27040           fncreg_write("last retained earnings account - fund "&str$(fund_list(fund_item)),last_retained_earnings_acct$(fund_item))
 27060         next fund_item
 27080       else 
-27100         let last_retained_earnings_acct$(1)=fnagl$(resp$(respc+=1))
+27100         last_retained_earnings_acct$(1)=fnagl$(resp$(respc+=1))
 27120         fncreg_write("last retained earnings account - no fund ",last_retained_earnings_acct$(1))
 27140       end if 
 27160     end if  ! ck<>5

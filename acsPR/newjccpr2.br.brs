@@ -64,7 +64,7 @@
 00670   gosub L1610
 00680   gosub TOTALS
 00690   pr #255: newpage
-00700 L700: let en$=en1$
+00700 L700: en$=en1$
 00710   let jn$=jn1$
 00720   let n$=""
 00730   read #2,using L740,key=jn$: n$ nokey L750
@@ -74,7 +74,7 @@
 00770 ! ______________________________________________________________________
 00780 L780: if val(en$)=0 then goto MOVEINFO
 00790   gosub L1610
-00800   let en$=en1$
+00800   en$=en1$
 00810   goto L860
 00820 ! ______________________________________________________________________
 00830 L830: gosub L1450
@@ -103,8 +103,8 @@
 01100   goto MOVEINFO
 01110 ! ______________________________________________________________________
 01120 L1120: mat em$=("")
-01130   let ss$=""
-01140   let em2=0
+01130   ss$=""
+01140   em2=0
 01150   let ta1=0
 01160 MOVEINFO: ! 
 01170   let pl1$(1)=em$(1)
@@ -137,13 +137,13 @@
 01440 ! ______________________________________________________________________
 01450 L1450: if tgp=0 then let x3=0 else let x3=(gp1+gp2)/tgp
 01460   if hr1(8)=0 then goto L1510
-01470   let lnp=lnp+1
-01480   if lnp>5 then let lnp=6
+01470   lnp=lnp+1
+01480   if lnp>5 then lnp=6
 01490   pr #255,using L1500: pl1$(lnp),mat hr1,tdet2," REG",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF
 01500 L1500: form pos 1,c 30,9*n 6.2,c 6,n 9.2,3*n 8.2,n 9.2
 01510 L1510: if hr2(8)=0 then goto L1560
-01520   let lnp=lnp+1
-01530   if lnp>5 then let lnp=6
+01520   lnp=lnp+1
+01530   if lnp>5 then lnp=6
 01540   if hr1(8)=0 then pr #255,using L1500: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF else pr #255,using L1550: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PGOF
 01550 L1550: form pos 1,c 30,9*n 6.2,c 6
 01560 L1560: let hr8=hr8+hr1(8)+hr2(8)
@@ -152,7 +152,7 @@
 01590   return 
 01600 ! ______________________________________________________________________
 01610 L1610: gosub L1450
-01620   let lnp=lnp+1
+01620   lnp=lnp+1
 01630   if lnp>5 then goto L1680
 01640   for j=lnp to 5
 01650     pr #255,using L1660: pl1$(j) pageoflow PGOF
@@ -170,7 +170,7 @@
 01770   let tcd1=0
 01780   let hr8=0
 01790   let tcp22=0
-01800   let lnp=0
+01800   lnp=0
 01810   return 
 01820 ! ______________________________________________________________________
 01830 TOTALS: ! 
@@ -208,7 +208,7 @@
         let medqtr=eicyr=eicqtr=wagesqtr=0
 02160   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 02170   restore #7,key>=checkkey$: nokey L2500
-02180 L2180: read #7,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : let lastrec=rec(3)
+02180 L2180: read #7,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(3)
 02190   if heno<>eno then goto STORE_VARIABLES
 02200   if prd<beg_date or prd>end_date then goto L2180 ! not this year
 02210   if prd>=qtr1 and prd<qtr2 then mat qtr1tcp=qtr1tcp+tcp ! 1st qtr earnings
@@ -225,8 +225,8 @@
 02320   let fedyr=ytdtotal(1) ! ytdl fed
 02330   let ficayr=ytdtotal(2) ! fica year to date
 02340   let medyr=ytdtotal(3) ! medicare year to date
-02350   let stateyr=ytdtotal(4) ! total state  quarter
-02360   let eicyr=ytdtotal(25) ! eic
+02350   stateyr=ytdtotal(4) ! total state  quarter
+02360   eicyr=ytdtotal(25) ! eic
 02370   if prd>=qtr1 and prd<qtr2 then mat quartertotals=qtr1tcp
 02380   if prd>=qtr2 and prd<qtr3 then mat quartertotals=qtr2tcp
 02390   if prd>=qtr3 and prd<qtr4 then mat quartertotals=qtr3tcp
@@ -235,8 +235,8 @@
 02420   let fedqtr=quartertotals(1) ! total fed  quarter
 02430   let ficaqtr=quartertotals(2) ! total fica quarter
 02440   let medqtr=quartertotals(3) ! total medicare quarter
-02450   let stateqtr=quartertotals(4) ! total state  quarter
-02460   let eicqtr=quartertotals(25) ! eic qtr
+02450   stateqtr=quartertotals(4) ! total state  quarter
+02460   eicqtr=quartertotals(25) ! eic qtr
 02470   for j=1 to 20
 02480     if dedfed(j)=1 then let dedfedyr+=ytdtotal(j+4) ! deduct for federal wh
 02490   next j

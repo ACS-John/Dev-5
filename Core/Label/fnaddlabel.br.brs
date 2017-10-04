@@ -11,7 +11,7 @@
 00111     if udim(in_labeltext$)<>5 then !:
             pr "fnAddLabel - You should only send 5 array items to fnAddLabel."
 00120     for j=1 to min(5,udim(in_labeltext$)) !:
-            let labeltext$(j)=in_labeltext$(j)(1:min(len(in_labeltext$(j)),120)) !:
+            labeltext$(j)=in_labeltext$(j)(1:min(len(in_labeltext$(j)),120)) !:
           next j
 00130     open #tmp:=fngethandle: "Name="&env$('temp')&"\Label.dat,RecL=600,Use",internal,output  !:
           write #tmp,using "Form POS 1,5*C 120": mat labeltext$ !:

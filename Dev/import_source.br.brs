@@ -13,14 +13,14 @@
 10240 ! fn_import_source_init
 10260     fn_getdir2(dir_source$,mat filename$,'/s') ! option$)
 10280     for file_item=1 to udim(mat filename$)
-10300       pr fields '10,10,Cc 60': 'phase 1 of 2: processing '&str$(file_item)&' of '&str$(udim(mat filename$))
+10300       pr f '10,10,Cc 60': 'phase 1 of 2: processing '&str$(file_item)&' of '&str$(udim(mat filename$))
 10320       let dot_pos=pos(filename$(file_item),'.',-1)
 10340       backslash_pos=pos(filename$(file_item),'\',-1)
-10360       let ext$=''
+10360       ext$=''
 10380       if backslash_pos<=0 or dot_pos>backslash_pos then 
-10400         let ext$=filename$(file_item)(dot_pos+1:len(filename$(file_item)))
+10400         ext$=filename$(file_item)(dot_pos+1:len(filename$(file_item)))
 10420       end if 
-10440       let ext$=lwrc$(ext$)
+10440       ext$=lwrc$(ext$)
 10460       if ext$='brs' or ext$='wbs' or ext$='libs' or ext$='cnvs' then 
 10480         fn_import_source_add(filename$(file_item))
 10500       else if ~skip_asci_files and (ext$='mnu' or ext$='txt' or ext$='cmd' or ext$='bat' or ext$='lay' or ext$='ini') then 
@@ -94,7 +94,7 @@
 11840 ! ______________________________________________________________________
 11860     mat filename$(0)
 11880     let filter$=trim$(filter$) : if filter$="" then let filter$="*.*"
-11900     let option$=trim$(option$)
+11900     option$=trim$(option$)
 11920     let dir$=trim$(dir$)
 11940     if dir$(len(dir$):len(dir$))<>"\" then let dir$=dir$&"\"
 11960 ! _____________

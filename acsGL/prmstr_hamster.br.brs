@@ -17,7 +17,7 @@
 13200   goto XIT
 13400 ! ______________________________________________________________________
 13600   def fn_open_file
-13800     let open_file_count=0 ! this value is used in the close_file sub routine
+13800     open_file_count=0 ! this value is used in the close_file sub routine
 14000     open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&str$(cno)&",Shr",internal,outin,keyed 
 14200   fnend 
 14400   def fn_close_file
@@ -37,7 +37,7 @@
 17200     let mask_pointtwo=32 : let mask_number=30
 17400     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 17600     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
-17800     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
+17800     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 18000 ! 
 18200     dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40,sp(1)
 18400     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
@@ -56,14 +56,14 @@
 21000   fnend  ! fn_setup_hamster
 21200   def fn_add_rec(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
 21400     if field_type$='' then let field_type$='C'
-21420     if storage_length=0 then let storage_length=textbox_len
+21420     if storage_length=0 then storage_length=textbox_len
 21600 ! storage_length_prior=storage_length
 21800     add_rec_item=udim(mat lbl$)+1
-22000     mat lbl$(add_rec_item) : let lbl$(add_rec_item)=label$
+22000     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$
 22200     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
 22400     mat p$(add_rec_item)
-22600     mat fltyp$(add_rec_item) : let fltyp$(add_rec_item)=field_type$
-22800     mat sln(add_rec_item) : let sln(add_rec_item)=storage_length
+22600     mat fltyp$(add_rec_item) : fltyp$(add_rec_item)=field_type$
+22800     mat sln(add_rec_item) : sln(add_rec_item)=storage_length
 23000     mat mask(add_rec_item) : let mask(add_rec_item)=ar_mask
 23200 ! if storage_position=0 then
 23400 !   storage_position=1
@@ -71,7 +71,7 @@
 23800 ! else if auto_storage_position and storage_position=0 then
 24000 !   storage_position=storage_position_prior+storage_length_prior
 24200 ! end if
-24400     mat sp(add_rec_item) : let sp(add_rec_item)=storage_position
+24400     mat sp(add_rec_item) : sp(add_rec_item)=storage_position
 24600 ! storage_length_prior=storage_position
 24800     mat c$(add_rec_item,8)
 25000   fnend  ! fn_add_rec
@@ -84,7 +84,7 @@
 26400 ! C$(CL,5)=Description Position : C$(CL,6)=Description Length
 26600 ! C$(CL,7)=Index File
 26800 ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
-27000     let limit_to_list$='1'
+27000     limit_to_list$='1'
 27200 ! 
 27400 ! cl=1 : c$(cl,1)='ComboF'
 27600 ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&str$(cno)

@@ -12,26 +12,26 @@
 20400 ! 
 20600   fntop(program$(4:len(program$)-3),cap$=env$('Q')&"\CLmstr to Support")
 20800   dim system_id$(20)*2
-21000   let system_id$(01)='GL'
-21200   let system_id$(02)='AR'
-21400   let system_id$(03)='AP'
-21600   let system_id$(04)='UB'
-21800   let system_id$(05)='PB'
-22000   let system_id$(06)='PT'
-22200   let system_id$(07)='HA'
-22400   let system_id$(08)='FA'
-22600   let system_id$(09)='TM'
-22800   let system_id$(10)='CR'
-23000   let system_id$(11)='HH'
-23200   let system_id$(12)='IV' ! Invoicing
-23400   let system_id$(13)='IN' ! Inventory
-23600   let system_id$(14)='PR'
-23800   let system_id$(15)='PO'
-24000   let system_id$(16)='MC'
-24200   let system_id$(17)='??' ! 2010-2011 Payroll Changes ???
-24400   let system_id$(18)='CL'
-24600   let system_id$(19)='CO'
-24800   let system_id$(20)='??' ! Printing
+21000   system_id$(01)='GL'
+21200   system_id$(02)='AR'
+21400   system_id$(03)='AP'
+21600   system_id$(04)='UB'
+21800   system_id$(05)='PB'
+22000   system_id$(06)='PT'
+22200   system_id$(07)='HA'
+22400   system_id$(08)='FA'
+22600   system_id$(09)='TM'
+22800   system_id$(10)='CR'
+23000   system_id$(11)='HH'
+23200   system_id$(12)='IV' ! Invoicing
+23400   system_id$(13)='IN' ! Inventory
+23600   system_id$(14)='PR'
+23800   system_id$(15)='PO'
+24000   system_id$(16)='MC'
+24200   system_id$(17)='??' ! 2010-2011 Payroll Changes ???
+24400   system_id$(18)='CL'
+24600   system_id$(19)='CO'
+24800   system_id$(20)='??' ! Printing
 25000   let date_start=20110701
 25200   let date_end=20110731
 25400   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&str$(cno)&",Shr",internal,outin,keyed 
@@ -54,7 +54,7 @@
 28800     end if  ! sum(app)>0
 29000     for app_item=1 to udim(mat app)
 29200       if app(app_item) and ma(app_item)>.01 then 
-29400         let support_key$=lpad$(str$(client_id),6)&lpad$(str$(app_item),2)
+29400         support_key$=lpad$(str$(client_id),6)&lpad$(str$(app_item),2)
 29600         rewrite #h_support,using FORM_SUPPORT,key=support_key$: client_id,app_item,system_id$(app_item),date_start,'Mo',date_end,ma(app_item),'','','','' nokey WR_SUPPORT
 29800       end if  ! app(app_item)
 30000     next app_item

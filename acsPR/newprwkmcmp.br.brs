@@ -24,7 +24,7 @@
 15400   fnacs(sn$,0,mat resp$,ck)
 15600   if ck=5 then goto XIT
 15800   beg_date=val(resp$(1)) ! beginning of year
-16000   let end_date=val(resp$(2)) ! ending day of year
+16000   end_date=val(resp$(2)) ! ending day of year
 16200   fnGetPayrollDates(beg_date,end_date)
 16800   open #h_rpmstr:=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 17000   execute "Index "&env$('Q')&"\PRmstr\Department.h"&env$('cno')&' '&env$('Q')&"\PRmstr\DeptIdx4.h"&env$('cno')&" 50/1/9 2/8/3,Replace,DupKeys,Shr -n" ! index in workmans comp code,department #,employee # sequence
@@ -98,13 +98,13 @@
 27600     let pe_eno$=lpad$(str$(holdeno),8)
 27800     form pos 1,n 8
 27802     if totwage=0 and wcwage=0 then goto SET_NEXT
-28004     let ename$=''
+28004     ename$=''
 28020     read #h_rpmstr,using 'form pos 9,c 30',key=pe_eno$: ename$ nokey PA_CONTINUE
 28200 PA_CONTINUE: ! 
 28220     pr #255,using L620: ename$,tdept,prev_comp,totwage,wcwage pageoflow PGOFLOW
 28400 L620: form pos 1,c 30,pos 31,pic(zz#),pos 36,pic(zz),pos 38,pic(--,---,---.##),pos 52,pic(--,---,---.##)
-28600     let subtot(1)=subtot(1)+totwage
-28800     let subtot(2)=subtot(2)+wcwage
+28600     subtot(1)=subtot(1)+totwage
+28800     subtot(2)=subtot(2)+wcwage
 29000 SET_NEXT: let totwage=0
 29200     let wcwage=0
 29400     let prev_comp=workman_comp

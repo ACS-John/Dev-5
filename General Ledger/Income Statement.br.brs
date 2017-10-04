@@ -22,10 +22,10 @@
 00200   if fnps=2 then 
 00202     let mp1=mp1+3
 00204     let mp2=78
-00206     let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&env$('cno')&",Shr"
+00206     fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&env$('cno')&",Shr"
 00208   else 
 00210     let mp2=75
-00212     let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr"
+00212     fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr"
 00214   end if 
 00216   open #h_acglfnx:=1: fl1$,internal,input,keyed 
 00220   if fnprocess=1 or fnUseDeptNo=0 then goto L320
@@ -117,7 +117,7 @@
 00830   end if 
 00832   if total><0 or total2><0 then goto L850
 00840   if ls+ul+ds+ic>0 then goto L850 else goto READ_ACGLFNS
-00850 L850: let sp2=49-sp-1
+00850 L850: sp2=49-sp-1
 00852 ! If DS=1 Then Let DOLLAR$="": Let FORM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($$$$,$$$,$$$.##),C 1,POS 74,C 1,C 5,PIC($$$$$$,$$$,$$$.##),C 1,skip 1" Else Let FORM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
 00853 ! if debug_this then pr #255: '***'
 00854   if ul=1 then 
@@ -143,7 +143,7 @@
 00980   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 00990   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
 01000   if ds=1 then let dollar$="$" else let dollar$=" "
-01002   let sp2=49-sp-1
+01002   sp2=49-sp-1
 01004   if ds=1 then 
 01006     let dollar$=""
 01008     let form$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($---,---,---.##),C 1,POS 74,C 1,C 5,PIC($-----,---,---.##),C 1,skip 1"
@@ -164,7 +164,7 @@
 01060   goto READ_ACGLFNS
 01070 L1070: ! r:
 01072   if te$="R" then let report$=d$
-01080   if te$="S" then let secondr$=d$
+01080   if te$="S" then secondr$=d$
 01090   gosub HDR_COLUMN_A
 01100   goto READ_ACGLFNS ! /r
 01110 L1110: ! 
@@ -193,8 +193,8 @@
 01290 HDR_COLUMN_B: ! 
 01292   fnpglen(pglen)
 01300 ! If PGLEN<>42 Then Let PGLEN=58
-01310   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01320 ! If PGLEN=42 Then Let SK=SK+1
+01310   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01320 ! If PGLEN=42 Then sK=SK+1
 01330   pr #255,using L1340: rtrm$(foot$),"Page "&str$(pt1)
 01340 L1340: form skip sk,pos tabnote,c fl,pos 80,c 8,skip 1
 01350   if eofcode=1 then goto HDR_COLUMN_XIT
@@ -229,7 +229,7 @@
 01630   return  ! /r
 01640 ! ______________________________________________________________________
 01650 L1650: ! r:
-01652   let eofcode=1
+01652   eofcode=1
 01660   gosub HDR_COLUMN_B
 01675   fnfscode(actpd)
 01676   fnpriorcd(1)

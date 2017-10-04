@@ -62,17 +62,17 @@
 38000   if ck=5 then goto XIT
 38020   let q0=2 ! default to name sequence
 38040   if resp$(1)=item1$(1) then 
-38060     let q0=1 : let opt=1 : let turn$="N"
+38060     let q0=1 : opt=1 : let turn$="N"
 38080   else if resp$(1)=item1$(2) then 
-38100     let q0=2 : let opt=2 : let turn$="N"
+38100     let q0=2 : opt=2 : let turn$="N"
 38120   else if resp$(1)=item1$(3) then 
-38140     let q0=3 : let opt=3 : let turn$="N"
+38140     let q0=3 : opt=3 : let turn$="N"
 38160   else if resp$(1)=item1$(4) then 
-38180     let q0=3 : let opt=4 : let turn$="Y"
+38180     let q0=3 : opt=4 : let turn$="Y"
 38200   else if resp$(1)=item1$(5) then 
-38220     let q0=4 : let opt=5 : let turn$="N"
+38220     let q0=4 : opt=5 : let turn$="N"
 38240   else if resp$(1)=item1$(6) then 
-38260     let q0=5 : let opt=6 : let turn$="N"
+38260     let q0=5 : opt=6 : let turn$="N"
 38280   end if 
 38300   let dat$=resp$(2)
 38320   fndat(dat$,2)
@@ -159,8 +159,8 @@
 46540     pr #255,using F_OUT_NOBAL: z$,e$(2),e$(1),mat a2 pageoflow PGOF
 46550     F_OUT_NOBAL: form x 5,c 10,x 5,c 30,x 7,c 30,x 12,10*nz 3
 46560   end if 
-46580   if trim$(e$(3))="" then let e$(3)=extra$(1): let extra$(1)=""
-46600   if trim$(extra$(1))="" then let extra$(1)=e$(4): let e$(4)=""
+46580   if trim$(e$(3))="" then e$(3)=extra$(1): extra$(1)=""
+46600   if trim$(extra$(1))="" then extra$(1)=e$(4): e$(4)=""
 46620   if print_address=1 then 
 46640     pr #255,using "form pos 21,c 31": e$(3)
 46660     pr #255,using "form pos 21,c 31": extra$(1)
@@ -242,7 +242,7 @@
 60100     let x=y=0
 60120     let x=pos(e$(1)," ",1)
 60140     if x>0 then let y=val(e$(1)(1:x-1)) conv ignore
-60160     if y>0 then let e$(1)=rtrm$(e$(1)(x+1:30))&" "&e$(1)(1:x-1)
+60160     if y>0 then e$(1)=rtrm$(e$(1)(x+1:30))&" "&e$(1)(1:x-1)
 60180     write #10,using 'form pos 1,c 10,c 30': z$,e$(1)
 60200   loop 
 62000 SORT1: ! 
@@ -258,7 +258,7 @@
 62240   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 62260   return  ! /r
 64000 OPEN_GRID: ! r: select customers from grid
-64020   let sn$="ublabel-7"
+64020   sn$="ublabel-7"
 64040   cap$="Reading from grid"
 64060   fntos(sn$)
 64080   let text$="Grid name (including folders):"
@@ -281,10 +281,10 @@
 68080     goto L1690
 68100   end if 
 68120   if ti2=4 or ti2=5 then 
-68140     let e$(2)=ab$(1)
-68160     let e$(3)=ab$(2)
-68180     let e$(4)=ab$(4)
-68200     let extra$(1)=ab$(3)
+68140     e$(2)=ab$(1)
+68160     e$(3)=ab$(2)
+68180     e$(4)=ab$(4)
+68200     extra$(1)=ab$(3)
 68220   end if 
 68240 L1690: ! 
 68260   return  ! /r

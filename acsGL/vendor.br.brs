@@ -9,26 +9,26 @@
 20160   dim c$(8,8)*40
 20180 ! ______________________________________________________________________
 20200   fncno(cno)
-20220   let lbl$(1)="Vendor"
-20240   let lbl$(2)="Name"
-20260   let lbl$(3)="Address (1)"
-20280   let lbl$(4)="Address (2)"
-20300   let lbl$(5)="City, State and Zip"
-20320   let lbl$(6)="YTD Purchases"
-20340   let lbl$(7)="1099 Box"
-20360   let lbl$(8)="Federal ID or SSN"
-20380   let fln(1)=8
-20400   let fln(2)=35
-20420   let fln(3)=20
-20440   let fln(4)=20
-20460   let fln(5)=20
-20480   let fln(6)=9
-20500   let fln(7)=2
-20520   let fln(8)=11
-20540   let sln(6)=5.2
-20560   let fltyp$(1)="CR"
-20580   let fltyp$(6)="PD"
-20600   let fltyp$(7)="N"
+20220   lbl$(1)="Vendor"
+20240   lbl$(2)="Name"
+20260   lbl$(3)="Address (1)"
+20280   lbl$(4)="Address (2)"
+20300   lbl$(5)="City, State and Zip"
+20320   lbl$(6)="YTD Purchases"
+20340   lbl$(7)="1099 Box"
+20360   lbl$(8)="Federal ID or SSN"
+20380   fln(1)=8
+20400   fln(2)=35
+20420   fln(3)=20
+20440   fln(4)=20
+20460   fln(5)=20
+20480   fln(6)=9
+20500   fln(7)=2
+20520   fln(8)=11
+20540   sln(6)=5.2
+20560   fltyp$(1)="CR"
+20580   fltyp$(6)="PD"
+20600   fltyp$(7)="N"
 20620   let mask(1)=2000
 20640   let mask(6)=30
 20660   c$(07,1)='ComboF'

@@ -23,28 +23,28 @@
 00270 L270: read #4,using L280,key=e$: empname$ nokey L300 ioerr L2780
 00280 L280: form pos 10,c 25
 00290   return 
-00300 L300: let empname$="EMPLOYEE NOT ON FILE"
+00300 L300: empname$="EMPLOYEE NOT ON FILE"
 00310   if b(7)><2 then goto L340
-00320   let empname$="OTHER CHARGES"
+00320   empname$="OTHER CHARGES"
 00330   goto L450
 00340 L340: if b(7)><3 then goto L370
-00350   let empname$="ADJUSTMENT"
+00350   empname$="ADJUSTMENT"
 00360   goto L450
 00370 L370: if fb(j2)=1 or fb(j2)=2 then goto L410 else goto L380
 00380 L380: if b(7)><-3 then goto L450
-00390   let empname$="*** WRITE OFF"
+00390   empname$="*** WRITE OFF"
 00400   goto L450
 00410 L410: if b(7)><-1 then goto L440
-00420   let empname$="PARTIAL BILLING"
+00420   empname$="PARTIAL BILLING"
 00430   goto L450
-00440 L440: let empname$="*** FINAL BILLED"
+00440 L440: empname$="*** FINAL BILLED"
 00450 L450: return 
 00460 L460: open #5: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&str$(cno)&",Shr",internal,input,keyed ioerr L2780
 00470   goto L530
 00480   read #5,using L490,key=sc$: scdesc$ nokey L510 ioerr L2780
 00490 L490: form pos 5,c 30
 00500   goto L520
-00510 L510: let scdesc$=" "
+00510 L510: scdesc$=" "
 00520 L520: return 
 00530 L530: open #6: "Name="&env$('Q')&"\TMmstr\Work2.H"&wsid$,internal,input ioerr L550
 00540   close #6,free: 
@@ -52,10 +52,10 @@
 00560 L560: pr newpage
 00570   let in1$(1)="10,46,n 6,ute,n"
 00580   let in1$(2)="11,46,n 6,ute,n"
-00590   pr fields "10,10,cR 34,n": "ENTER AGING DATE IN MMDDYY FORMAT:"
-00600   pr fields "11,10,cR 34,n": "ENTER OLDEST DATE TO PRINT:"
-00610   pr fields mat in1$: dat,olddat
-00620   pr fields "12,20,c 40": "Press F1 to Continue; F5 to Cancel"
+00590   pr f "10,10,cR 34,n": "ENTER AGING DATE IN MMDDYY FORMAT:"
+00600   pr f "11,10,cR 34,n": "ENTER OLDEST DATE TO PRINT:"
+00610   pr f mat in1$: dat,olddat
+00620   pr f "12,20,c 40": "Press F1 to Continue; F5 to Cancel"
 00630 L630: input fields mat in1$: dat,olddat conv L630
 00640   if cmdkey=5 then goto XIT
 00650   if cmdkey<>1 then goto L560
@@ -71,12 +71,12 @@
 00750 L750: if d5>=1 and d5<=31 then goto L770
 00760   goto L560
 00770 L770: pr newpage
-00780   pr fields "10,10,c 57,n": "ENTER 1 IF ALL TRANSACTIONS SHOULD PRINT, ELSE ENTER 2 IF"
-00790   pr fields "11,10,c 56,n": "ONLY THOSE THAT HAVE NOT BEEN FINAL BILLED SHOULD PRINT."
+00780   pr f "10,10,c 57,n": "ENTER 1 IF ALL TRANSACTIONS SHOULD PRINT, ELSE ENTER 2 IF"
+00790   pr f "11,10,c 56,n": "ONLY THOSE THAT HAVE NOT BEEN FINAL BILLED SHOULD PRINT."
 00800 L800: input fields "11,68,n 1,ue,n": prtall conv L800
 00810   if prtall<1 or prtall>2 then goto L770
 00820 L820: pr newpage
-00830   pr fields "10,10,c 43,n": "ENTER 1 TO pr ALL CLIENTS, ELSE ENTER 2"
+00830   pr f "10,10,c 43,n": "ENTER 1 TO pr ALL CLIENTS, ELSE ENTER 2"
 00840 L840: input fields "10,55,n 1,ue,n": prtcli conv L840
 00850   if prtcli=1 then goto L990
 00860   if prtcli><2 then goto L820
@@ -84,7 +84,7 @@
 00880   close #7,free: 
 00890 L890: open #7: "Name="&env$('Q')&"\TMmstr\Work1.h"&wsid$&",SIZE=0,RecL=5",internal,output ioerr L2780
 00900 L900: pr newpage
-00910   pr fields "10,10,c 52,n": "ENTER CLIENT NUMBER TO PRINT, ENTER 0 WHEN COMPLETE"
+00910   pr f "10,10,c 52,n": "ENTER CLIENT NUMBER TO PRINT, ENTER 0 WHEN COMPLETE"
 00920 L920: input fields "10,65,n 5,ue,n": cliprt conv L920
 00930   if cliprt=0 then goto L980
 00940   cliprt$=lpad$(rtrm$(str$(cliprt)),5)
@@ -93,8 +93,8 @@
 00970   goto L900
 00980 L980: close #7: 
 00990 L990: pr newpage
-01000   pr fields "10,25,c 50,n": "NOW PRINTING UNBILLED WORK IN PROCESS"
-01010   pr fields "23,2,c 30,n": "Press F5 to stop"
+01000   pr f "10,25,c 50,n": "NOW PRINTING UNBILLED WORK IN PROCESS"
+01010   pr f "23,2,c 30,n": "Press F5 to stop"
 01020   gosub L2600
 01030   if prtcli=1 then goto L1090
 01040   open #7: "Name="&env$('Q')&"\TMmstr\Work1.h"&wsid$&",NoShr",internal,input ioerr L2780
@@ -172,7 +172,7 @@
 01760   pr #255,using L1770: z$,rtrm$(cliname$) pageoflow L1830
 01770 L1770: form skip 1,pos 1,"*** ",c 5,"-",c clen,pos numb1," ***",skip 1
 01780   return 
-01790 L1790: if ltrm$(sc$)="0" or ltrm$(sc$)="" then let sc2$=" " else let sc2$=sc$&" -"
+01790 L1790: if ltrm$(sc$)="0" or ltrm$(sc$)="" then sc2$=" " else sc2$=sc$&" -"
 01800   pr #255,using L1810: e$,empname$,b(4),b(2),b(1),b(3),b(5),"-",b(8),sc2$," ",scdesc$ pageoflow L1830 ! pr DETAIL LINE
 01810 L1810: form pos 2,c 9,pos 12,c 25,pos 38,pic(zz/zz/zz),n 8.2,n 7.2,n 11.2,x 2,n 2,x 1,c 1,n 2,x 2,c 6,c 1,c 30,skip 1
 01820   goto L1860
@@ -226,14 +226,14 @@
 02300     if l(j,1)=0 and l(j,2)=0 then goto L2330
 02310   next j
 02320   goto L2370
-02330 L2330: let l$(j,1)=e$
-02340   let l$(j,2)=empname$
-02350 L2350: let l(j,1)=l(j,1)+b(1)
-02360   let l(j,2)=l(j,2)+b(3)
+02330 L2330: l$(j,1)=e$
+02340   l$(j,2)=empname$
+02350 L2350: l(j,1)=l(j,1)+b(1)
+02360   l(j,2)=l(j,2)+b(3)
 02370 L2370: return 
-02380 L2380: let e7=int(b(4)/10000) ! ACCUMULATE INFORMATION FOR WORK TRANSACTIONS
-02390   let e5=int((b(4)-e7*10000)/100)
-02400   let e8=b(4)-(e5*100+e7*10000)
+02380 L2380: e7=int(b(4)/10000) ! ACCUMULATE INFORMATION FOR WORK TRANSACTIONS
+02390   e5=int((b(4)-e7*10000)/100)
+02400   e8=b(4)-(e5*100+e7*10000)
 02410   let f6=(d8-e8)*s(13)+(s(d7)-s(e7))+(d5-e5)
 02420   if f6<30 then goto L2460
 02430   if f6>30 and f6<=60 then goto L2480
@@ -250,38 +250,38 @@
 02540   let d(3)=d(3)+b(1)
 02550   cno$=z$
 02560   cna$=cliname$
-02570   let en$=lpad$(rtrm$(str$(pno)),5)
+02570   en$=lpad$(rtrm$(str$(pno)),5)
 02580   let d(1)=j1
 02590   return 
 02600 L2600: if int(d8/4)*100=int(d8/4*100) then goto L2630 ! INITIAL AGING PERIOD SETUP
 02610   at3=0
 02620   goto L2640
 02630 L2630: at3=1
-02640 L2640: let s(1)=0
-02650   let s(2)=31
-02660   let s(3)=59+at3
-02670   let s(4)=90+at3
-02680   let s(5)=120+at3
-02690   let s(6)=151+at3
-02700   let s(7)=181+at3
-02710   let s(8)=212+at3
-02720   let s(9)=243+at3
-02730   let s(10)=273+at3
-02740   let s(11)=304+at3
-02750   let s(12)=334+at3
-02760   let s(13)=365+at3
+02640 L2640: s(1)=0
+02650   s(2)=31
+02660   s(3)=59+at3
+02670   s(4)=90+at3
+02680   s(5)=120+at3
+02690   s(6)=151+at3
+02700   s(7)=181+at3
+02710   s(8)=212+at3
+02720   s(9)=243+at3
+02730   s(10)=273+at3
+02740   s(11)=304+at3
+02750   s(12)=334+at3
+02760   s(13)=365+at3
 02770   return 
-02780 L2780: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2800
+02780 L2780: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2800
 02790   goto L2840
 02800 L2800: pr newpage
-02810   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2830
+02810   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2830
 02820   goto L2840
-02830 L2830: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-02840 L2840: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+02830 L2830: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+02840 L2840: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 02850   input fields "24,60,C 1,N": quitcode$
 02860   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-02870   pr fields "23,3,C 78,N": ""
-02880   pr fields "24,3,C 78,N": ""
+02870   pr f "23,3,C 78,N": ""
+02880   pr f "24,3,C 78,N": ""
 02890   retry 
 02900 XIT: let fnxit
 02910   def fndate_mmddyy_to_ccyymmdd(x)

@@ -17,14 +17,14 @@
 00340   pr #win,fields "2,2,Cr 18,N": "Path and Filename:"
 00360   if wbversion$<'4.20hi' then let io1$(1)="2,21,C 40/150,U" else let io1$(1)="2,21,40/C 150,U"
 00380 ! 
-00400 ! let source_path$="S:\acsPR\Layouts\rptrail.lay"
-00420   let source_path$="S:\acsTM\Layouts\*.lay"
-00440 ! let source_path$="S:\acsUB\Layouts\*.lay"
-00460 ! let source_path$="S:\acsUB\Layouts\UBmstr-vb.lay"
+00400 ! source_path$="S:\acsPR\Layouts\rptrail.lay"
+00420   source_path$="S:\acsTM\Layouts\*.lay"
+00440 ! source_path$="S:\acsUB\Layouts\*.lay"
+00460 ! source_path$="S:\acsUB\Layouts\UBmstr-vb.lay"
 00480 L210: ! 
 00500   rinput #win,fields io1$(1): source_path$
 00520   if cmdkey=5 then goto XIT
-00540   let source_path$=rtrm$(source_path$)
+00540   source_path$=rtrm$(source_path$)
 00560   if source_path$="" then goto L210
 00580   fn_printlay3(source_path$) : goto L210
 00600   def fn_old
@@ -40,7 +40,7 @@
 00840     goto OLD_READ_LINE
 01060 OLD_READ_LINE: ! 
 01080     linput #1: ln$ eof L1180
-01100     if pos(srep$(ln$,'^','~'),'~')<=0 and pos(uprc$(ln$),'DATA ')>0 then let ln$=srep$(ln$,',','^')
+01100     if pos(srep$(ln$,'^','~'),'~')<=0 and pos(uprc$(ln$),'DATA ')>0 then ln$=srep$(ln$,',','^')
 01120     if uprc$(ln$(7:10))=uprc$("LET ") then goto LETLN
 01140     if uprc$(ln$(7:10))=uprc$("DATA") then goto DATALN
 01160     if uprc$(ln$(7:7))=uprc$("!") then pr #255: ln$(9:len(ln$))
@@ -82,12 +82,12 @@
 01860     let p3=len(rtrm$(a$(j3,3)))
 01880     let p4=pos(a$(j3,3),"*",1)
 01900     if p4=0 then let m1=1 else let m1=val(a$(j3,3)(1:p4-1))
-01920     let l=int(val(a$(j3,3)(p1:pos(srep$(a$(j3,3),'^','~'),'~')-1))) ! FIELD STORAGE LENGTH
+01920     l=int(val(a$(j3,3)(p1:pos(srep$(a$(j3,3),'^','~'),'~')-1))) ! FIELD STORAGE LENGTH
 01940 ! pos(srep$(a$(j3,3),'^','~'),'~')-1         was      P3
 01960     if p2>1 then let dp=val(a$(j3,3)(p2:pos(srep$(a$(j3,3),'^','~'),'~')-1)) else let dp=0 ! DECIMAL POS.
 01980 ! pos(srep$(a$(j3,3),'^','~'),'~')-1      was     P3
 02000     if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !   ACTUAL FIELD LENGTH
-02020     let l=l*m1 ! TOTAL STORAGE LENGTH
+02020     l=l*m1 ! TOTAL STORAGE LENGTH
 02040     col_6=a+l
 02060     a=a+1
 02080     let ino=ino+1
@@ -106,7 +106,7 @@
 02340     for j=1 to j3
 02360       let p1=pos(a$(j,3)," ",1)
 02380       let p2=len(a$(j,3))
-02400       let l=val(a$(j,3)(p1:pos(srep$(a$(j,3),'^','~'),'~')-1)) ! pos(srep$(a$(j,3),'^','~'),'~')-1   was    P2
+02400       l=val(a$(j,3)(p1:pos(srep$(a$(j,3),'^','~'),'~')-1)) ! pos(srep$(a$(j,3),'^','~'),'~')-1   was    P2
 02420       if l>0 then goto L1290
 02440       pr #255,using L1270: a$(j,1)
 02460 L1270: form pos 13,c 43,skip 2
@@ -168,21 +168,21 @@
 03700   def fn_printlay3(source_path$*256)
 03720     dim p3_filename$(1)*256,p3_filter$*20
 03740     if pos(source_path$,'*')>0 or pos(source_path$,'?')>0 then 
-03760       let source_path$=trim$(source_path$)
+03760       source_path$=trim$(source_path$)
 03780       let p3_pos_slash_last=pos(source_path$,'\',-1)
 03800       let p3_pos_slash_last=pos(source_path$,'\',-1)
 03820       let p3_filter$=source_path$(p3_pos_slash_last+1:len(source_path$))
-03840       let source_path$=source_path$(1:p3_pos_slash_last)
+03840       source_path$=source_path$(1:p3_pos_slash_last)
 03860       fngetdir2(source_path$,mat p3_filename$,'',p3_filter$)
 03880     else 
 03900       let p3_filename$(1)=rtrm$(source_path$,'\')
-03910       let source_path$=''
+03910       source_path$=''
 03920     end if  ! 
 03940     dim p3_line$(1)*256
 03960     fnopenprn(cp,58,220,process)
 03980 P3_FORM_PRINT: form pos 1,g 4,x 1,c 5,x 1,c 5,x 1,c 30,x 1,c 80
 04000     for p3_file_item=1 to udim(mat p3_filename$)
-04020 !  if trim$(p3_filename$(p3_file_item))=trim$(source_path$) then let source_path$=''
+04020 !  if trim$(p3_filename$(p3_file_item))=trim$(source_path$) then source_path$=''
 04040       fn_file_to_array(source_path$&p3_filename$(p3_file_item),mat p3_line$)
 04060       if p3_file_item>1 then pr #255: newpage
 04080       pr #255: os_filename$(source_path$&p3_filename$(p3_file_item))
@@ -199,12 +199,12 @@
 04300           let p3_tmp$=srep$(p3_tmp$,chr$(9),' ')
 04320 ! ie remaing data might be something like:  Customer Number^Z$^C 10^Customer #
 04340           dim p3_tmp_field$(1)*80
-04360           let str2mat(p3_tmp$,mat p3_tmp_field$,'^')
+04360           str2mat(p3_tmp$,mat p3_tmp_field$,'^')
 04380           if udim(p3_tmp_field$)<3 then 
 04400             pr #255: '    '&p3_tmp$
 04420           else 
-04440             let str2mat (p3_tmp_field$(3),mat p3_tmp_format$,' ')
-04460             let str2mat (p3_tmp_field$(3),mat p3_tmp_format$,' ')
+04440             str2mat (p3_tmp_field$(3),mat p3_tmp_format$,' ')
+04460             str2mat (p3_tmp_field$(3),mat p3_tmp_format$,' ')
 04480             pr #255,using P3_FORM_PRINT: p3_spos,p3_tmp_format$(1),p3_tmp_format$(2),p3_tmp_field$(2),p3_tmp_field$(1)
 04500             let p3_pos_star=pos(p3_tmp_format$(1),'*')
 04520             if p3_pos_star<=0 then 
