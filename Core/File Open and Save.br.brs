@@ -236,11 +236,12 @@
 42800   goto ARC_XIT
 42820   A7C_OPEN_ERR: ! 
 42840   mat ml$(2)
-42860   let ml$(1)='FAILURE: The log file could not be opened.'
-42880   let ml$(2)=arc_filename$
-42900   let fnmsgbox(mat ml$,resp$,"ACS",0)
+42860   ml$(1)='FAILURE: The log file could not be opened.'
+42880   ml$(2)=arc_filename$
+42900   fnmsgbox(mat ml$,resp$,"ACS",0)
+42910   if env$('acsDebug')<>'' then pause
 42920   ARC_XIT: ! 
-42940   let fn_analyze_7zip_compresslog=~failure
+42940   fn_analyze_7zip_compresslog=~failure
 42960 fnend 
 44000 def library fnOpenPartial
 44020   if ~setup then let fn_setup
