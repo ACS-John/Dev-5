@@ -8,22 +8,22 @@
 00080   dim k(1),k$(3)*25,l$(1)*11,d(22),m(36),r$*10,n$*5,n(2),dat$*20,empd(22)
 00090   dim fa$(2),sa$(2)*40,fb$(2),ext(2),adr(2),report$*35,deposit(31,2)
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Other Deductions Registers")
-00120   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00110   fntop(program$,cap$="Other Deductions Registers")
+00120   fncno(cno,cnam$) !:
+        fndat(dat$)
 00130 ! ______________________________________________________________________
-00140   let fntos(sn$="OtherDed") !:
+00140   fntos(sn$="OtherDed") !:
         let rc=cf=0: let mylen=22: let mypos=mylen+3: let frameno=1
-00150   let fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included in this report.")
-00160   let fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
-00170   let fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno) !:
+00150   fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included in this report.")
+00160   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
+00170   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno) !:
         let resp$(rc+=1)=str$(beg_date)
-00180   let fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
-00190   let fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this report. ",frameno) !:
+00180   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
+00190   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this report. ",frameno) !:
         let resp$(rc+=1)=str$(end_date)
-00200   let fncmdkey("Next",1,1,0,"Print report.")
-00210   let fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
-00220   let fnacs(sn$,0,mat resp$,ckey)
+00200   fncmdkey("Next",1,1,0,"Print report.")
+00210   fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
+00220   fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   beg_date=val(resp$(1)) !:
         let end_date=val(resp$(2))
@@ -36,7 +36,7 @@
 00300   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00310   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno)&",Shr",internal,outin,relative 
 00320   let report$="Other Deductions Register"
-00330   let fnopenprn
+00330   fnopenprn
 00340   gosub L620
 00350 L350: if d(1)>0 then goto L360 else goto L400
 00360 L360: if sum(empd)=0 then goto L400
@@ -81,7 +81,7 @@
 00750   pr #255,using L770: "","Totals",mat totalded
 00760   form pos 1,c 6,c 20,10*n 10.2
 00770 L770: form pos 1,c 6,c 20,10*n 10.2
-00780   let fncloseprn : goto XIT
+00780   fncloseprn : goto XIT
 00790 L790: ! ACCUMULATE TOTALS
 00800   for j=1 to 10
 00810     let totalded(j)+=d(j+8)

@@ -1,6 +1,6 @@
 00020 ! this pgm will search the check history file and delete any records with conversion errors
 00030   library 'S:\Core\Library': fncno,fnxit
-00040   let fncno(cno)
+00040   fncno(cno)
 00070   form c 9,skip 0
 00080 ! 
 00100   dim adr(2),gl(3),sf1$*28,pr$(4)*30,whgl$(5)*12,whgl(5,3)
@@ -17,4 +17,4 @@
 00210   close #2: 
 00220   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TRIDX2.H"&str$(cno)&" 28/1 8/11 Replace DupKeys"
 00230   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TRIDX1.H"&str$(cno)&" 1 11 Replace DupKeys"
-00240   let fnxit
+00240   fnxit

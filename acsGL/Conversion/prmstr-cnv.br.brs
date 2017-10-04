@@ -3,7 +3,7 @@
         ! from a recl of 190 to 280
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnputcno,fnerror
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim pr1$*90,pr1(18),pr2(36)
@@ -30,7 +30,7 @@
 00290   close #2: 
 00300   execute "COPY "&env$('Temp')&"\Work."&session$&", "&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&" -n"
 00310   execute "Index "&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&","&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",1,4,Replace,DupKeys -n"
-00320   let fnputcno(cno)
+00320   fnputcno(cno)
 00330   chain "S:\acsGL\Company"
 00340 ! ______________________________________________________________________
 00350 XIT: stop 

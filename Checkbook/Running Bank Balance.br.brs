@@ -6,26 +6,26 @@
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,de$*35,bn$*30,ml$(0)*100
 00080 ! ______________________________________________________________________
-00100   let fntop(program$)
-00120   let fndat(dat$,1)
+00100   fntop(program$)
+00120   fndat(dat$,1)
 00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative
 00132   read #20,using 'Form POS 152,N 2',rec=1,release: bank_code 
 00134   close #20: 
 00140 MAIN: ! 
-00150   let fntos(sn$="bankbal")
+00150   fntos(sn$="bankbal")
 00152   let respc=0
-00160   let fnlbl(1,40,"",1,1)
-00170   let fnlbl(1,1,"Starting Date:",31,1)
-00180   let fntxt(1,33,10,0,1,"3") 
+00160   fnlbl(1,40,"",1,1)
+00170   fnlbl(1,1,"Starting Date:",31,1)
+00180   fntxt(1,33,10,0,1,"3") 
 00182   let resp$(respc+=1)=""
-00190   let fnlbl(2,1,"Beginning Checkbook Balance:",31,1)
-00200   let fntxt(2,33,12,0,1,"10")
+00190   fnlbl(2,1,"Beginning Checkbook Balance:",31,1)
+00200   fntxt(2,33,12,0,1,"10")
 00202   let resp$(respc+=1)=""
-00210   let fnlbl(3,1,"Bank Number to Print:",31,1)
-00220   let fntxt(3,33,2,0,1,"30") 
+00210   fnlbl(3,1,"Bank Number to Print:",31,1)
+00220   fntxt(3,33,2,0,1,"30") 
 00222   let resp$(respc+=1)=str$(bank_code)
-00230   let fncmdset(2)
-00232   let fnacs(sn$,0,mat resp$,ckey)
+00230   fncmdset(2)
+00232   fnacs(sn$,0,mat resp$,ckey)
 00240   if ckey=5 then goto XIT
 00250   let d1=val(resp$(1))
 00260   b1=val(resp$(2))
@@ -39,7 +39,7 @@
 00330   execute "Index "&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&' '&env$('Q')&"\CLmstr\Tridx3.H"&env$('cno')&" 16/12/4 2/4/8 Replace DupKeys -n" ! index in year,monthday,reference
 00340 ! ______________________________________________________________________
 00350   open #trmstr=5: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&", KFName="&env$('Q')&"\CLmstr\Tridx3.H"&env$('cno')&",Shr", internal, outin, keyed ioerr ignore
-00360   let fnopenprn
+00360   fnopenprn
 00370   gosub HDR
 00380   goto READ_1
 00390 ! ______________________________________________________________________
@@ -51,7 +51,7 @@
 00440 L440: mat ml$(2) 
 00442   let ml$(1)='There are no transactions for' 
 00444   let ml$(2)="the date entered.  Check the date." 
-00446   let fnmsgbox(mat ml$) 
+00446   fnmsgbox(mat ml$) 
 00448 goto MAIN
 00450 READ_2: ! 
 00460   read #trmstr,using 'Form POS 1,N 2,N 1,C 8,g 6,PD 10.2,POS 36,C 35': tbank_code,tcde,ck$,d2,amt,de$ eof ENDALL
@@ -80,7 +80,7 @@
 00648   end if
 00650 return ! /r
 00670 ENDALL: ! r:
-00680   let fncloseprn
+00680   fncloseprn
 00690   close #trmstr: 
 00700 goto XIT ! /r
 00720 XIT: let fnxit

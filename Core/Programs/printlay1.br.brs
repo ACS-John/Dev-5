@@ -8,13 +8,13 @@
 00072   dim ev$*50
 00080   dim a(200,6),a$*132,prg$*30,mo$(12),cap$*128
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\Core\PrintLay",cap$="Print Several Layouts")
+00100   fntop("S:\Core\PrintLay",cap$="Print Several Layouts")
 00110   data January,February,March,April,May,June,July,August,September,October,November,December
 00120   read mat mo$
 00130 ! ______________________________________________________________________
-00140   let fnconsole(on=1)
+00140   fnconsole(on=1)
 00150   let dat$=mo$(val(date$("MM")))&" "&date$("DD")&", "&date$("CCYY")
-00160   let fnwin3b(win=101,cap$,4,58,0,2)
+00160   fnwin3b(win=101,cap$,4,58,0,2)
 00170 ! pr #WIN,Fields "2,2,Cr 41,N": "0.Printer; 1.Screen; 2.Both:"
 00180   pr #win,fields "3,2,Cr 41,N": "Ext/VolId to pr all (blank to select):"
 00190   let io1$(1)="2,44,N 1,U,N"
@@ -33,7 +33,7 @@
 00310 L310: if cmdkey=5 then goto XIT
 00320   if pp<0 or pp>2 then ce=1 : goto ERR1
 00330   if pp=1 then goto L350
-00340   let fnopenprn(cp,58,220,process)
+00340   fnopenprn(cp,58,220,process)
 00350 L350: let ev$=rtrm$(ev$)
 00360   if ev$="" then goto L430
 00370   execute "DROP DirFile" ioerr L380
@@ -163,7 +163,7 @@
 01580 L1580: close #1: 
 01590   if f2<f1 then goto L530
 01600 L1600: close #2: ioerr L1620
-01610   let fncloseprn
+01610   fncloseprn
 01620 L1620: goto XIT
 01630 ! ______________________________________________________________________
 01640 XIT: let fnxit

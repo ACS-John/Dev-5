@@ -1,5 +1,5 @@
 00020   library 'S:\Core\Library': fncno
-00030   let fncno(cno)
+00030   fncno(cno)
 00060   dim z$*5,a$(3)*30,prg$*20,ma(20)
 00070   open #255: "Name=LPT2:",display,output 
 00080   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&str$(cno)&",Shr",internal,input,keyed 

@@ -1,7 +1,7 @@
 00020 ! chained to from S:\acstm\tminpinv 
 00030   on error goto ERTN
 00040   library 'S:\Core\Library': fnopenprn,fncloseprn,fnconsole,fntop,fncno,fnxit,fnsearch
-00050   let fncno(cno)
+00050   fncno(cno)
 00060   dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4,ivr(6),arta(2),ga(10),pgl$*12
 00070   dim cde$(10)*6,gl$*12,des$*20
 00080   pr newpage

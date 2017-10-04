@@ -2,7 +2,7 @@
 00020 ! used to file a corrected w2 using prace.exe
 00030 ! ___________________
 00040   library 'S:\Core\Library': fncno,fntop,fnxit,fncloseprn,fnopenprn,fnconsole,fntos,fnfra,fnlbl,fntxt,fncmdkey,fnacs,fnopt,fncombof,fnmsgbox,fnchk,fncmbemp,fnpa_finis,fnpa_open,fnpa_newpage,fnDedNames
-00050   let fntop(program$,cap$="Corrected W2 Forms")
+00050   fntop(program$,cap$="Corrected W2 Forms")
 00060   on error goto L4300
 00070 ! ___________________
 00080   on fkey 5 goto XIT
@@ -25,17 +25,17 @@
 00280 DATE_SCREEN: ! 
 00290 L290: let fntos(sn$="W2-1") !:
         let rc=cf=0: let mylen=25 : let mypos=mylen+3
-00300   let fnfra(1,1,3,50,"Date Range for W2's","Normally this would the first and last day of the calendar year",0) !:
+00300   fnfra(1,1,3,50,"Date Range for W2's","Normally this would the first and last day of the calendar year",0) !:
         cf+=1 : let fratype=cf
-00310   let fnlbl(1,1,"Starting Date:",mylen,1,0,1)
-00320   let fntxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1) !:
+00310   fnlbl(1,1,"Starting Date:",mylen,1,0,1)
+00320   fntxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1) !:
         let resp$(rc+=1)=str$(beg_date)
-00330   let fnlbl(2,1,"Ending Date:",mylen,1,0,1)
-00340   let fntxt(2,mypos,10,0,1,"3",0,"Last day of calendar year",1) !:
+00330   fnlbl(2,1,"Ending Date:",mylen,1,0,1)
+00340   fntxt(2,mypos,10,0,1,"3",0,"Last day of calendar year",1) !:
         let resp$(rc+=1)=str$(end_date)
-00350   let fncmdkey("Next",1,1,0,"Prints the report")
-00360   let fncmdkey("Cancel",5,0,1,"Returns to menu")
-00370   let fnacs(sn$,0,mat resp$,ckey) !:
+00350   fncmdkey("Next",1,1,0,"Prints the report")
+00360   fncmdkey("Cancel",5,0,1,"Returns to menu")
+00370   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 00380   beg_date=val(resp$(1))
 00390   let end_date=val(resp$(2))
@@ -51,53 +51,53 @@
         bottom=141 !:
         let posx=130
 00430 ASK_INFO: ! 
-00440   let fntos(sn$="Prw2-2") !:
+00440   fntos(sn$="Prw2-2") !:
         let rc=cf=0: let mylen=46: let mypos=mylen+3
-00450   let fnfra(1,1,5,60,"Print W-2s","This W-2 program prints to preprinted W2 forms coded with 22222.",0) !:
+00450   fnfra(1,1,5,60,"Print W-2s","This W-2 program prints to preprinted W2 forms coded with 22222.",0) !:
         cf+=1 : let franum=cf
-00460   let fnlbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
-00470   let fntxt(1,mypos,10,0,1,"34",0,"Use format such as .062.",franum) !:
+00460   fnlbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
+00470   fntxt(1,mypos,10,0,1,"34",0,"Use format such as .062.",franum) !:
         let resp$(rc+=1)=str$(ssrate)
-00480   let fnlbl(2,1,"Maximum Wage Subject to SS Withholdings:",mylen,1,0,franum)
-00490   let fntxt(2,mypos,10,0,1,"10",0,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum) !:
+00480   fnlbl(2,1,"Maximum Wage Subject to SS Withholdings:",mylen,1,0,franum)
+00490   fntxt(2,mypos,10,0,1,"10",0,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum) !:
         let resp$(rc+=1)=str$(ssmax)
-00500   let fnlbl(4,1,"Medicare Withholding Rate:",mylen,1,0,franum)
-00510   let fntxt(4,mypos,10,0,1,"34",0,"Use format such as .0145 .",franum) !:
+00500   fnlbl(4,1,"Medicare Withholding Rate:",mylen,1,0,franum)
+00510   fntxt(4,mypos,10,0,1,"34",0,"Use format such as .0145 .",franum) !:
         let resp$(rc+=1)=str$(mcrate)
-00520   let fnlbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
-00530   let fntxt(5,mypos,10,0,1,"10",0,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum) !:
+00520   fnlbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
+00530   fntxt(5,mypos,10,0,1,"10",0,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum) !:
         let resp$(rc+=1)=str$(mcmax)
-00540   let fnfra(8,1,3,60,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.") !:
+00540   fnfra(8,1,3,60,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.") !:
         cf+=1 : let franum=cf : let mylen=26 : let mypos=mylen+2
-00550   let fnopt(1,3,"Print W-2",0,franum) !:
+00550   fnopt(1,3,"Print W-2",0,franum) !:
         let resp$(rc+=1)="True"
-00560   let fnopt(2,3,"Export to another system",0,franum) !:
+00560   fnopt(2,3,"Export to another system",0,franum) !:
         let resp$(rc+=1)="False"
-00570   let fnfra(13,1,3,60,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.") !:
+00570   fnfra(13,1,3,60,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.") !:
         cf+=1 : let franum=cf
-00580   let fnlbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
-00590   let fntxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum) !:
+00580   fnlbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
+00590   fntxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum) !:
         let resp$(rc+=1)=str$(pn1)
-00600   let fnlbl(2,1,"Dependent Care Benefits:",mylen,1,0,franum)
-00610   let fntxt(2,mypos,2,0,1,"30",0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum) !:
+00600   fnlbl(2,1,"Dependent Care Benefits:",mylen,1,0,franum)
+00610   fntxt(2,mypos,2,0,1,"30",0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum) !:
         let resp$(rc+=1)=str$(dc1)
-00620   let fnlbl(18,1,"Employee Name Format-(F)irst name 1st; (L)ast name 1st:",57,1,0,0)
-00630   let fntxt(18,60,1,0,1,"",0,"Is the first name shown first in the employee record or is the Last name shoun first. Indicate with an F or an L.",0) !:
+00620   fnlbl(18,1,"Employee Name Format-(F)irst name 1st; (L)ast name 1st:",57,1,0,0)
+00630   fntxt(18,60,1,0,1,"",0,"Is the first name shown first in the employee record or is the Last name shoun first. Indicate with an F or an L.",0) !:
         let resp$(rc+=1)=namcde$
-00640   let fnfra(20,1,3,60,"W-2 Alignment","You can move the pr up or down on either W-2 by increasing or decreasing the millimeters on the top margin.") !:
+00640   fnfra(20,1,3,60,"W-2 Alignment","You can move the pr up or down on either W-2 by increasing or decreasing the millimeters on the top margin.") !:
         cf+=1 : let franum=cf
-00650   let fnlbl(1,1,"Top Margin - Top W-2:",mylen,1,0,franum)
-00660   let fntxt(1,mypos,3,0,1,"30",0,"Decrease the top margin to move the pr up. Increase the top margin to move the W-2 down.",franum) !:
+00650   fnlbl(1,1,"Top Margin - Top W-2:",mylen,1,0,franum)
+00660   fntxt(1,mypos,3,0,1,"30",0,"Decrease the top margin to move the pr up. Increase the top margin to move the W-2 down.",franum) !:
         let resp$(rc+=1)=str$(topmargin)
-00670   let fnlbl(2,1,"Top Margin - Bottom W-2:",mylen,1,0,franum)
-00680   let fntxt(2,mypos,3,0,1,"30",0,"The spacing on the bottom W-2 is controlled seperate from the top W-2.",franum) !:
+00670   fnlbl(2,1,"Top Margin - Bottom W-2:",mylen,1,0,franum)
+00680   fntxt(2,mypos,3,0,1,"30",0,"The spacing on the bottom W-2 is controlled seperate from the top W-2.",franum) !:
         let resp$(rc+=1)=str$(bottom)
-00690   let fnlbl(3,1,"Position of Pension X:",mylen,1,0,franum)
-00700   let fntxt(3,mypos,3,0,1,"30",0,"Increasing the position of the X will move it right.  Decreasing will move it left.",franum) !:
+00690   fnlbl(3,1,"Position of Pension X:",mylen,1,0,franum)
+00700   fntxt(3,mypos,3,0,1,"30",0,"Increasing the position of the X will move it right.  Decreasing will move it left.",franum) !:
         let resp$(rc+=1)=str$(posx)
-00710   let fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-00720   let fncmdkey("&Cancel",5,0,1,"Returns to menu")
-00730   let fnacs(sn$,0,mat resp$,ckey) !:
+00710   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
+00720   fncmdkey("&Cancel",5,0,1,"Returns to menu")
+00730   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 00740   let ssrate=val(resp$(1))
 00750   let ssmax=val(resp$(2))
@@ -256,15 +256,15 @@
 02300 ! _________________________
 02310 L2310: let fntos(sn$="Prw2-6") !:
         let rc=cf=0: let mylen=20: let mypos=mylen+3
-02320   let fnlbl(1,1,"Locality Name:",mylen,1,0,0)
-02330   let fntxt(1,mypos,12,0,1,"",0,"If you have answered that you have local withholdings in the company information file, you must enter the locality name") !:
+02320   fnlbl(1,1,"Locality Name:",mylen,1,0,0)
+02330   fntxt(1,mypos,12,0,1,"",0,"If you have answered that you have local withholdings in the company information file, you must enter the locality name") !:
         let resp$(rc+=1)=z$
-02340   let fnlbl(3,5,"(Enter the locality name if the same on all employees.",60,0,0,0)
-02350   let fnlbl(4,5,"Leave blank if not applicable.  Enter YES if applicable",60,0,0,0)
-02360   let fnlbl(5,5,"but not he same on all employees.)",60,0,0,0)
-02370   let fncmdkey("&Next",1,1,0,"Proceed to next screen.") !:
-        let fncmdkey("&Cancel",5,0,1,"Returns to menu")
-02380   let fnacs(sn$,0,mat resp$,ckey) !:
+02340   fnlbl(3,5,"(Enter the locality name if the same on all employees.",60,0,0,0)
+02350   fnlbl(4,5,"Leave blank if not applicable.  Enter YES if applicable",60,0,0,0)
+02360   fnlbl(5,5,"but not he same on all employees.)",60,0,0,0)
+02370   fncmdkey("&Next",1,1,0,"Proceed to next screen.") !:
+        fncmdkey("&Cancel",5,0,1,"Returns to menu")
+02380   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 02390   let z$=resp$(1)
 02400   let z$=uprc$(rtrm$(z$))
@@ -273,19 +273,19 @@
 02430   let f$=z$
 02440   if z$="" then goto L2310
 02450 ASK_STARTING: ! 
-02460   let fntos(sn$="Prw2-3") !:
+02460   fntos(sn$="Prw2-3") !:
         let respc=cf=0: let mylen=40: let mypos=mylen+3 : let mylen2=62: let mypos2=20
-02470   let fnlbl(1,1,"Starting Employee Number:",mylen,1,0,0)
-02480   let fncmbemp(1,mypos) !:
+02470   fnlbl(1,1,"Starting Employee Number:",mylen,1,0,0)
+02480   fncmbemp(1,mypos) !:
         let resp$(respc+=1)=""
-02490   let fnlbl(2,1,"Ending Employee Number (blank for all):",mylen,1,0,0)
-02500   let fncmbemp(2,mypos) !:
+02490   fnlbl(2,1,"Ending Employee Number (blank for all):",mylen,1,0,0)
+02500   fncmbemp(2,mypos) !:
         let resp$(respc+=1)=""
-02510   let fnlbl(4,mypos2,"To pr a single W2, use the same starting and ending number.",mylen2,0,0,0)
-02560   let fnlbl(9,mypos2," ",mylen2,0,0,0)
-02570   let fncmdkey("&Next",1,1,0,"Proceed to next screen.") !:
-        let fncmdkey("&Complete",5,0,1,"Returns to menu")
-02580   let fnacs(sn$,0,mat resp$,ckey)
+02510   fnlbl(4,mypos2,"To pr a single W2, use the same starting and ending number.",mylen2,0,0,0)
+02560   fnlbl(9,mypos2," ",mylen2,0,0,0)
+02570   fncmdkey("&Next",1,1,0,"Proceed to next screen.") !:
+        fncmdkey("&Complete",5,0,1,"Returns to menu")
+02580   fnacs(sn$,0,mat resp$,ckey)
 02600   if ckey=5 then let totalcode=1 : goto L2130
 02610   restore #1: 
 02620   let numb=val(resp$(1)(1:8))
@@ -297,13 +297,13 @@
 02680 ASK_LOCALITY: ! 
 02690 L2690: let fntos(sn$="Prw2-5") !:
         let rc=cf=0: let mylen=30: let mypos=mylen+3
-02700   let fnlbl(1,1,k$(1),mylen,1,0,0)
-02710   let fnlbl(2,1,"Locality Name:",mylen,1,0,0)
-02720   let fntxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0) !:
+02700   fnlbl(1,1,k$(1),mylen,1,0,0)
+02710   fnlbl(2,1,"Locality Name:",mylen,1,0,0)
+02720   fntxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0) !:
         let resp$(rc+=1)=f$
-02730   let fncmdkey("&Next",1,1,0,"Proceed to next screen.") !:
-        let fncmdkey("&Cancel",5,0,1,"Returns to menu")
-02740   let fnacs(sn$,0,mat resp$,ckey) !:
+02730   fncmdkey("&Next",1,1,0,"Proceed to next screen.") !:
+        fncmdkey("&Cancel",5,0,1,"Returns to menu")
+02740   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 02750   let f$=resp$(1)
 02760   let g$=rtrm$(g$)
@@ -319,7 +319,7 @@
 02860   close #1: 
 02870   execute "Free "&env$('Q')&"\PRmstr\PRW2ADDR.H"&env$('cno')&" -n" ioerr L2880
 02880 L2880: execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
-02890   let fnxit ! stop  ! Let FNCHAIN("S:\acsPR\prw2b")
+02890   fnxit ! stop  ! Let FNCHAIN("S:\acsPR\prw2b")
 02900 ! ___________________________________________
 02910 TOT1: mat k$=(""): let ss$=stcode$=state$=pf$="": let eno=0: let k$(1)="Total Sheet"
 02920   let x$=" ": let p1=58: let p2=126
@@ -441,7 +441,7 @@
 04050   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 04060   let txt$=pf$(1:6)
 04070   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
-04080   let fnpa_newpage : let lyne=topmargin: count=0
+04080   fnpa_newpage : let lyne=topmargin: count=0
 04090   goto L4110
 04100 L4100: let x$=""
 04110 L4110: return 
@@ -587,23 +587,23 @@
 05530   goto L4100
 05540 L5540: ! ask if any misecllaneous deductions should pr in box 12
 05550 ASK_DEDUCTIONS: ! 
-05560   let fntos(sn$="Prw2-4") !:
+05560   fntos(sn$="Prw2-4") !:
         let rc=cf=0: let mylen=20: let mypos=mylen+3
-05570   let fnlbl(1,1,"Indicate if any of the 20 miscellaneous deductions",50,1,0,0)
-05580   let fnlbl(2,1,"should appear in any boxes on the W-2.",44,1,0,0)
-05590   let fnlbl(4,7," Deduction Name    Yes     Box #     Code",40,0,0,0)
+05570   fnlbl(1,1,"Indicate if any of the 20 miscellaneous deductions",50,1,0,0)
+05580   fnlbl(2,1,"should appear in any boxes on the W-2.",44,1,0,0)
+05590   fnlbl(4,7," Deduction Name    Yes     Box #     Code",40,0,0,0)
 05600   for j=1 to 20
-05610     let fnlbl(j+4,1,fullname$(j),mylen,1,0,0)
-05620     let fnchk(j+4,26,"",0,0) !:
+05610     fnlbl(j+4,1,fullname$(j),mylen,1,0,0)
+05620     fnchk(j+4,26,"",0,0) !:
           let resp$(rc+=1)="False"
-05630     let fntxt(j+4,35,2,0,1,"30",0,"Enter the box number on the W-2 where this deduction should print.",0) !:
+05630     fntxt(j+4,35,2,0,1,"30",0,"Enter the box number on the W-2 where this deduction should print.",0) !:
           let resp$(rc+=1)=str$(box12(j))
-05640     let fntxt(j+4,45,2,0,1,"",0,"Enter the Code that should appear in the box.",0) !:
+05640     fntxt(j+4,45,2,0,1,"",0,"Enter the Code that should appear in the box.",0) !:
           let resp$(rc+=1)=dedcode$(j)
 05650   next j
-05660   let fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-05670   let fncmdkey("&Cancel",5,0,1,"Returns to menu")
-05680   let fnacs(sn$,0,mat resp$,ckey) !:
+05660   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
+05670   fncmdkey("&Cancel",5,0,1,"Returns to menu")
+05680   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 05690   let x=0
 05700   for j=1 to 20
@@ -640,75 +640,75 @@
 06010   return 
 06020 VBOPENPRINT: ! 
 06030   if file(20)=-1 then 
-06040     let fnpa_open ! open #20: "Name="&env$('Q')&"\PRmstr\W2"&wsid$&".txt,Replace,RecL=5000",display,output
+06040     fnpa_open ! open #20: "Name="&env$('Q')&"\PRmstr\W2"&wsid$&".txt,Replace,RecL=5000",display,output
 06070     let lyne=topmargin ! starting of 1st line
 06080     character=1.5
 06090   end if 
 06100   return 
 06110 RELEASE_PRINT: ! 
 06120 ! 
-06130   let fnpa_finis
+06130   fnpa_finis
 06150   return 
 06160 ASK_OLD_INFO: ! 
-06170   let fntos(sn$="Ask_old") !:
+06170   fntos(sn$="Ask_old") !:
         let lc=rc=0 : let mylen=20 : let mypos=mylen+3
 06180   if totalcode=0 then let heading$="Enter Information from Incorrect W-2" else let heading$="Total Screen for Corrected W-2s"
-06190   let fnlbl(lc+=1,1,heading$,40,0)
-06200   let fnlbl(lc+=2,1,"Employee "&str$(eno),mylen,1)
-06210   let fnlbl(lc+=1,1,"SS #:",mylen,1)
-06220   let fntxt(lc,mypos,11,0,0,"") !:
+06190   fnlbl(lc+=1,1,heading$,40,0)
+06200   fnlbl(lc+=2,1,"Employee "&str$(eno),mylen,1)
+06210   fnlbl(lc+=1,1,"SS #:",mylen,1)
+06220   fntxt(lc,mypos,11,0,0,"") !:
         let resp$(rc+=1)=ss$
-06230   let fnlbl(lc+=1,1,"Total Wage:",mylen,1)
-06240   let fntxt(lc,mypos,10,0,0,"10") !:
+06230   fnlbl(lc+=1,1,"Total Wage:",mylen,1)
+06240   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(w(2))
-06250   let fnlbl(lc+=1,1,"SS Wages:",mylen,1)
-06260   let fntxt(lc,mypos,10,0,0,"10") !:
+06250   fnlbl(lc+=1,1,"SS Wages:",mylen,1)
+06260   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(w(5))
-06270   let fnlbl(lc+=1,1,"Medicare Wages:",mylen,1)
-06280   let fntxt(lc,mypos,10,0,0,"10") !:
+06270   fnlbl(lc+=1,1,"Medicare Wages:",mylen,1)
+06280   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(w(11))
-06290   let fnlbl(lc+=1,1,"State Wages:",mylen,1)
-06300   let fntxt(lc,mypos,10,0,0,"10") !:
+06290   fnlbl(lc+=1,1,"State Wages:",mylen,1)
+06300   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(w(9))
 06310   let mypos+=37: let fnlbl(lc=1,38,"Federal Wh:",mylen,1)
-06320   let fntxt(lc,mypos,10,0,0,"10") !:
+06320   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(w(1))
-06330   let fnlbl(lc+=1,38,"SS Withholdings:",mylen,1)
-06340   let fntxt(lc,mypos,10,0,0,"10") !:
+06330   fnlbl(lc+=1,38,"SS Withholdings:",mylen,1)
+06340   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(w(3))
-06350   let fnlbl(lc+=1,38,"Medicare Wh:",mylen,1)
-06360   let fntxt(lc,mypos,10,0,0,"10") !:
+06350   fnlbl(lc+=1,38,"Medicare Wh:",mylen,1)
+06360   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(w(12))
-06370   let fnlbl(lc+=1,38,"State Wh:",mylen,1)
-06380   let fntxt(lc,mypos,10,0,0,"10") !:
+06370   fnlbl(lc+=1,38,"State Wh:",mylen,1)
+06380   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(w(7))
-06390   let fnlbl(lc+=1,38,"Box 12a Code:",mylen,1)
-06400   let fntxt(lc,mypos,2,0,0,"") !:
+06390   fnlbl(lc+=1,38,"Box 12a Code:",mylen,1)
+06400   fntxt(lc,mypos,2,0,0,"") !:
         let resp$(rc+=1)=box1a$
-06410   let fnlbl(lc+=1,38,"Box 12a Amount:",mylen,1)
-06420   let fntxt(lc,mypos,10,0,0,"10") !:
+06410   fnlbl(lc+=1,38,"Box 12a Amount:",mylen,1)
+06420   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(box1)
-06430   let fnlbl(lc+=1,38,"Box 12b Code:",mylen,1)
-06440   let fntxt(lc,mypos,2,0,0,"") !:
+06430   fnlbl(lc+=1,38,"Box 12b Code:",mylen,1)
+06440   fntxt(lc,mypos,2,0,0,"") !:
         let resp$(rc+=1)=box2a$
-06450   let fnlbl(lc+=1,38,"Box 12b Amount:",mylen,1)
-06460   let fntxt(lc,mypos,10,0,0,"10") !:
+06450   fnlbl(lc+=1,38,"Box 12b Amount:",mylen,1)
+06460   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(box2)
-06470   let fnlbl(lc+=1,38,"Box 12c Code:",mylen,1)
-06480   let fntxt(lc,mypos,2,0,0,"") !:
+06470   fnlbl(lc+=1,38,"Box 12c Code:",mylen,1)
+06480   fntxt(lc,mypos,2,0,0,"") !:
         let resp$(rc+=1)=box3a$
-06490   let fnlbl(lc+=1,38,"Box 12c Amount:",mylen,1)
-06500   let fntxt(lc,mypos,10,0,0,"10") !:
+06490   fnlbl(lc+=1,38,"Box 12c Amount:",mylen,1)
+06500   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(box3)
-06510   let fnlbl(lc+=1,38,"Box 12d Code:",mylen,1)
-06520   let fntxt(lc,mypos,2,0,0,"") !:
+06510   fnlbl(lc+=1,38,"Box 12d Code:",mylen,1)
+06520   fntxt(lc,mypos,2,0,0,"") !:
         let resp$(rc+=1)=box4a$
-06530   let fnlbl(lc+=1,38,"Box 12d Amount:",mylen,1)
-06540   let fntxt(lc,mypos,10,0,0,"10") !:
+06530   fnlbl(lc+=1,38,"Box 12d Amount:",mylen,1)
+06540   fntxt(lc,mypos,10,0,0,"10") !:
         let resp$(rc+=1)=str$(box4)
-06550   let fncmdkey('&Next',1,1,0) !:
-        let fncmdkey('&Cancel',5,0,1)
-06560   let fnacs(sn$,0,mat resp$,ckey) ! old amounts
+06550   fncmdkey('&Next',1,1,0) !:
+        fncmdkey('&Cancel',5,0,1)
+06560   fnacs(sn$,0,mat resp$,ckey) ! old amounts
 06561   if totalcode=1 then goto L2270
 06570   if ckey=5 then goto ASK_STARTING
 06580   let oldss$=resp$(1) ! ss#

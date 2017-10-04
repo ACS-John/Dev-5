@@ -8,8 +8,8 @@
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
 00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,datafile$*256,indexfile$*256
 00100 ! ______________________________________________________________________
-00110   let fncno(cno,cnam$) !:
-        let fnd1(d1)
+00110   fncno(cno,cnam$) !:
+        fnd1(d1)
 00120   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
@@ -26,7 +26,7 @@
         next j
 00150   let linelength=62
 00160 ! 
-00170   let fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
+00170   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00180   gosub BULKSORT
 00190   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
 00200   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence #
@@ -34,36 +34,36 @@
 00220 ! ______________________________________________________________________
 00230 SCREEN1: ! 
 00240   a$="" : let prtbkno=0
-00250   let fntos(sn$="UBPrtBl1-1") !:
+00250   fntos(sn$="UBPrtBl1-1") !:
         let pf=26 : let ll=24 !:
         let respc=0
-00260   let fnlbl(3,1,"Penalty Due Date:",ll,1)
-00270   let fntxt(3,pf,8,8,1,"1",0,tt$) !:
+00260   fnlbl(3,1,"Penalty Due Date:",ll,1)
+00270   fntxt(3,pf,8,8,1,"1",0,tt$) !:
         let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
-00280   let fnlbl(4,1,"Message on Bill:",ll,1)
-00290   let fntxt(4,pf,30,30) !:
+00280   fnlbl(4,1,"Message on Bill:",ll,1)
+00290   fntxt(4,pf,30,30) !:
         let resp$(respc+=1)=mg$(1)
-00300   let fntxt(5,pf,30,30) !:
+00300   fntxt(5,pf,30,30) !:
         let resp$(respc+=1)=mg$(2)
-00310   let fntxt(6,pf,30,30) !:
+00310   fntxt(6,pf,30,30) !:
         let resp$(respc+=1)=mg$(3)
-00320   let fnlbl(7,1,"Date of Billing:",ll,1)
-00330   let fntxt(7,pf,8,8,1,"1") !:
+00320   fnlbl(7,1,"Date of Billing:",ll,1)
+00330   fntxt(7,pf,8,8,1,"1") !:
         let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
-00340   let fnlbl(8,1,"Starting Account:",ll,1)
+00340   fnlbl(8,1,"Starting Account:",ll,1)
 00350   let fe$="ubm-act-nam" !:
         let datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
         let indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
         let kp=1741: let kl=9 : let dp=41 : let dl=30 !:
-        let fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) !:
+        fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) !:
         let resp$(respc+=1)="[All]"
-00360   let fnlbl(9,1,"Route Number:",ll,1)
-00370   let fncmbrt2(9,pf) !:
+00360   fnlbl(9,1,"Route Number:",ll,1)
+00370   fncmbrt2(9,pf) !:
         let resp$(respc+=1)="[All]"
-00380   let fnchk(10,pf,"Select Accounts to Print",1) !:
+00380   fnchk(10,pf,"Select Accounts to Print",1) !:
         let resp$(respc+=1)="False"
-00390   let fncmdset(3) !:
-        let fnacs(sn$,0,mat resp$,ck)
+00390   fncmdset(3) !:
+        fnacs(sn$,0,mat resp$,ck)
 00400   if ck=5 then goto ENDSCR
 00410   let d1 = val(resp$(5)) !:
         let d4 = val(resp$(1)) !:
@@ -140,18 +140,18 @@
 01000 ! ______________________________________________________________________
 01010 SCREEN3: ! 
 01020   let sn$ = "UBPrtBl1-2" !:
-        let fntos(sn$)
+        fntos(sn$)
 01030   let txt$="Account (blank to stop)" !:
-        let fnlbl(1,1,txt$,31,1)
+        fnlbl(1,1,txt$,31,1)
 01040 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
 01050   if trim$(z$)<>"" then !:
           let txt$="Last Account entered was "&z$ !:
-          let fnlbl(3,1,txt$,44,1) else !:
+          fnlbl(3,1,txt$,44,1) else !:
           let txt$="" !:
-          let fnlbl(3,1,txt$,44,1)
-01060   let fncmbact(1,17) ! !:
+          fnlbl(3,1,txt$,44,1)
+01060   fncmbact(1,17) ! !:
         let resp$(1)=a$
-01070   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
+01070   fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
 01080   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto RELEASE_PRINT
 01090   if ck=5 then goto RELEASE_PRINT
@@ -190,11 +190,11 @@
 01400 ! ______________________________________________________________________
 01410 ENDSCR: ! pr totals screen
 01420   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
-01430   let fntos(sn$="Bills-Total") !:
+01430   fntos(sn$="Bills-Total") !:
         let mylen=23 : let mypos=mylen+2 !:
         let respc=0
-01440   let fnlbl(1,1,"Total Bills Printed:",mylen,1)
-01450   let fntxt(1,mypos,8,0,1,"",1) !:
+01440   fnlbl(1,1,"Total Bills Printed:",mylen,1)
+01450   fntxt(1,mypos,8,0,1,"",1) !:
         let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 01460 ! Let FNLBL(2,1,"Total  Bills  Coded:",MYLEN,1)
 01470 ! Let FNTXT(2,MYPOS,8,0,1,"",1) !:
@@ -205,8 +205,8 @@
 01500 ! Let FNLBL(4,1,"Percent of Bills Coded:",MYLEN,1)
 01510 ! Let FNTXT(4,MYPOS,8,0,1,"",1) !:
         ! Let RESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
-01520   let fncmdset(52) !:
-        let fnacs(sn$,0,mat resp$,ck)
+01520   fncmdset(52) !:
+        fnacs(sn$,0,mat resp$,ck)
 01530 XIT: let fnxit
 01540 ! ______________________________________________________________________
 01550 ERTN: let fnerror(program$,err,line,act$,"xit")
@@ -219,7 +219,7 @@
 01600   goto ERTN
 01610 ! ______________________________________________________________________
 01620 VBOPENPRINT: ! 
-01640   let fnPa_open("Landscape")
+01640   fnPa_open("Landscape")
 01670   let lyne=3
 01700   return 
 01710 ! ______________________________________________________________________
@@ -361,7 +361,7 @@
 02700   bc$=""
 02710   if trim$(bc$)<>"" then pr #20: 'Call Print.DisplayBarCode('&str$(checkx)&','&str$(checky)&',"'&bc$&'")'
 02720   if checkcounter=0 then !:
-          let fnpa_newpage
+          fnpa_newpage
 02730   return 
 02740 ! ______________________________________________________________________
 02750 BULKSORT: ! bulk sort order

@@ -6,8 +6,8 @@
 00060 ! ______________________________________________________________________
 00070   dim de$*30,cap$*128,tr$(5)*35
 00080 ! ______________________________________________________________________
-00090   let fncno(cno)
-00100   let fntop(program$,"Renumber Checks")
+00090   fncno(cno)
+00100   fntop(program$,"Renumber Checks")
 00110   cancel=99 : let right=1 : center=2 : let on=1 : let off=0 !:
         let left=0
 00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
@@ -17,20 +17,20 @@
 00140   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&str$(cno),internal,outin,keyed 
 00150 L150: let fntos(sn$='RmTrans-'&str$(rcn)) !:
         let mylen=30 : let mypos=mylen+3 : let lc=0
-00160   let fnlbl(lc+=1,1,"First Check Number to Renumber:",mylen,right)
-00170   let fntxt(lc,mypos,10,0,0,'30') !:
+00160   fnlbl(lc+=1,1,"First Check Number to Renumber:",mylen,right)
+00170   fntxt(lc,mypos,10,0,0,'30') !:
         let resp$(1)=""
-00180   let fnlbl(lc+=1,1,"Last Check Number to Renumber:",mylen,right)
-00190   let fntxt(lc,mypos,10,0,0,'30') !:
+00180   fnlbl(lc+=1,1,"Last Check Number to Renumber:",mylen,right)
+00190   fntxt(lc,mypos,10,0,0,'30') !:
         let resp$(2)=""
-00200   let fnlbl(lc+=1,1,"First New Check Number to Use:",mylen,right)
-00210   let fntxt(lc,mypos,10,0,0,'30') !:
+00200   fnlbl(lc+=1,1,"First New Check Number to Use:",mylen,right)
+00210   fntxt(lc,mypos,10,0,0,'30') !:
         let resp$(3)=""
-00220   let fnlbl(lc+=1,1,"Bank Account Number:",mylen,right)
-00230   let fntxt(lc,mypos,2,0,0,'30') !:
+00220   fnlbl(lc+=1,1,"Bank Account Number:",mylen,right)
+00230   fntxt(lc,mypos,2,0,0,'30') !:
         let resp$(4)=""
-00240   let fncmdset(2)
-00250   let fnacs(sn$,0,mat resp$,ckey)
+00240   fncmdset(2)
+00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 or ckey=cancel then goto XIT else !:
           let firstold=val(resp$(1)) !:
           let lastold=val(resp$(2)) !:

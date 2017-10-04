@@ -7,15 +7,15 @@
 00070   dim dat$*20,cnam$*40,vnam$*30,de$*50,fd$*30,ade$*50
 00080   dim t2(10),d2(10),cap$*128
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$="Report of Invoices Due By Selected Dates")
-00110   let fncno(cno,cnam$)
+00100   fntop(program$,cap$="Report of Invoices Due By Selected Dates")
+00110   fncno(cno,cnam$)
 00120   cancel=99
-00130   let fndat(dat$)
+00130   fndat(dat$)
 00140   gosub ASK
 00150   execute "Index "&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&' '&env$('Q')&"\CLmstr\Unpdidx2.H"&str$(cno)&" 31/27/1 2/4/26 Replace DupKeys -n" ! index in year,monthday,reference
 00160   open #paymstr:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 00170   open #paytrans:=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Unpdidx2.H"&str$(cno)&",Shr",internal,input,keyed 
-00180   let fnopenprn
+00180   fnopenprn
 00190   gosub HDR
 00200   let vn$=iv$=""
 00210 READ_INVOICES: ! 
@@ -68,44 +68,44 @@
 00670   next j
 00680   pr #255: tab(37);"______________"
 00690   pr #255,using L650: "Total Due by "&cnvrt$("PIC(####/##/##)",d2(d2)),t2
-00700   let fncloseprn
+00700   fncloseprn
 00710 XIT: let fnxit
 00720 ! ______________________________________________________________________
 00730 ASK: ! 
-00740   let fntos(sn$="Dueby") !:
+00740   fntos(sn$="Dueby") !:
         let respc=0
-00750   let fnlbl(1,40,"",1,1)
-00760   let fnlbl(1,1,"1st Due By Date:",25,1)
-00770   let fntxt(1,27,10,0,1,"3",0,"Normally these would be dates in the future such as how much will be due by the 15th and the 30th.  Use ccyymmdd format" ) !:
+00750   fnlbl(1,40,"",1,1)
+00760   fnlbl(1,1,"1st Due By Date:",25,1)
+00770   fntxt(1,27,10,0,1,"3",0,"Normally these would be dates in the future such as how much will be due by the 15th and the 30th.  Use ccyymmdd format" ) !:
         let resp$(respc+=1)=""
-00780   let fnlbl(2,1,"2nd Due by Date:",25,1)
-00790   let fntxt(2,27,10,0,1,"3") !:
+00780   fnlbl(2,1,"2nd Due by Date:",25,1)
+00790   fntxt(2,27,10,0,1,"3") !:
         let resp$(respc+=1)=""
-00800   let fnlbl(3,1,"3nd Due by Date:",25,1)
-00810   let fntxt(3,27,10,0,1,"3") !:
+00800   fnlbl(3,1,"3nd Due by Date:",25,1)
+00810   fntxt(3,27,10,0,1,"3") !:
         let resp$(respc+=1)=""
-00820   let fnlbl(4,1,"4th Due By Date:",25,1)
-00830   let fntxt(4,27,10,0,1,"3") !:
+00820   fnlbl(4,1,"4th Due By Date:",25,1)
+00830   fntxt(4,27,10,0,1,"3") !:
         let resp$(respc+=1)=""
-00840   let fnlbl(5,1,"5th Due by Date:",25,1)
-00850   let fntxt(5,27,10,0,1,"3") !:
+00840   fnlbl(5,1,"5th Due by Date:",25,1)
+00850   fntxt(5,27,10,0,1,"3") !:
         let resp$(respc+=1)=""
-00860   let fnlbl(6,1,"6th Due by Date:",25,1)
-00870   let fntxt(6,27,10,0,1,"3") !:
+00860   fnlbl(6,1,"6th Due by Date:",25,1)
+00870   fntxt(6,27,10,0,1,"3") !:
         let resp$(respc+=1)=""
-00880   let fnlbl(7,1,"7th Due By Date:",25,1)
-00890   let fntxt(7,27,10,0,1,"3") !:
+00880   fnlbl(7,1,"7th Due By Date:",25,1)
+00890   fntxt(7,27,10,0,1,"3") !:
         let resp$(respc+=1)=""
-00900   let fnlbl(8,1,"8th Due by Date:",25,1)
-00910   let fntxt(8,27,10,0,1,"3") !:
+00900   fnlbl(8,1,"8th Due by Date:",25,1)
+00910   fntxt(8,27,10,0,1,"3") !:
         let resp$(respc+=1)=""
-00920   let fnlbl(9,1,"9th Due by Date:",25,1)
-00930   let fntxt(9,27,10,0,1,"3") !:
+00920   fnlbl(9,1,"9th Due by Date:",25,1)
+00930   fntxt(9,27,10,0,1,"3") !:
         let resp$(respc+=1)=""
-00940   let fnlbl(10,1,"10th Due By Date:",25,1)
-00950   let fntxt(10,27,10,0,1,"3") !:
+00940   fnlbl(10,1,"10th Due By Date:",25,1)
+00950   fntxt(10,27,10,0,1,"3") !:
         let resp$(respc+=1)=""
-00960   let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+00960   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 00970   if ckey=5 then goto XIT
 00980   for j=1 to 10
 00990     let d2(j)=val(resp$(j))

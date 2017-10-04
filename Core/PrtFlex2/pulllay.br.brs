@@ -9,8 +9,8 @@
 00090   dim a$(200,3)*40,h1$*55,rm$(4)*44,filename$*20,fil$(50)*20,ln$*80
 00100   dim a(200,6),a$*132,prg$*20,mo$(12),outputfile$*50,ev$*50
 00110   dim servicename$(10)*20,servicecode$(10)*2,textfile$*87,abbrev$*30
-00120   let fnsetmonth(mat mo$)
-00130   let fncno(cno)
+00120   fnsetmonth(mat mo$)
+00130   fncno(cno)
 00140 ! 
 00150   let dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
 00160   cvp$=".h"&str$(cno)&"/acspb,Shr"

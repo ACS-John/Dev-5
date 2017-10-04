@@ -6,10 +6,10 @@
 00070   dim rt$*78,ch$(2)*132,psc(100),inp(20),pp(20),ti(20),cnam$*40
 00080   dim message$*40,cap$*128
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$="User Designed Reports Proof List")
-00110   let fncno(cno,cnam$)
+00100   fntop(program$,cap$="User Designed Reports Proof List")
+00110   fncno(cno,cnam$)
 00120   open #1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\prrptidx.h"&str$(cno)&",Shr",internal,input,keyed 
-00130   let fnopenprn
+00130   fnopenprn
 00160 ! ______________________________________________________________________
 00170   do 
 00180     read #1,using 'form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1': rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti eof L560
@@ -52,7 +52,7 @@
 00560 L560: ! 
 00562   close #1: ioerr ignore
 00570 L570: ! 
-00580   let fncloseprn
+00580   fncloseprn
 00590 XIT: let fnxit
 00600 IGNORE: continue 
 00610 ! <Updateable Region: ERTN>

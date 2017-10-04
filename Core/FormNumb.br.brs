@@ -5,7 +5,7 @@
 00050     library 'S:\Core\Library': fnerror
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
-00080     let fnformnumb$=lpad$(cnvrt$("N 10."&str$(decimals),numb),size)
+00080     fnformnumb$=lpad$(cnvrt$("N 10."&str$(decimals),numb),size)
 00090     goto XIT
 00100 ! ______________________________________________________________________
 00110 ! <Updateable Region: ERTN>

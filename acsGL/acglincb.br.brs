@@ -9,18 +9,18 @@
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
 00100   dim pedat$*20,actpd$*6,bm(13),bp(13),by(13),cap$*128,udf$*256
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Income Statement with Budget")
+00120   fntop(program$,cap$="Income Statement with Budget")
 00130   on fkey 5 goto L2160
-00140   let fncno(cno,cnam$)
+00140   fncno(cno,cnam$)
 00150   let udf$=env$('temp')&'\'
 00160   actpd=fnactpd
 00170   actpd$=fnactpd$
-00175   let fnfscode
-00176   let fnpriorcd
+00175   fnfscode
+00176   fnpriorcd
 00180   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00185   let fnfscode
-00186   let fnpriorcd
+00185   fnfscode
+00186   fnpriorcd
 00190 ! ______________________________________________________________________
 00200   pr newpage
 00210   let pors=1
@@ -33,21 +33,21 @@
 00280   let nametab=int(44-len(rtrm$(cnam$))/2)
 00290   open #1: fl1$,internal,input,keyed 
 00300   if fnprocess=1 or fnUseDeptNo=0 then goto L390
-00310   let fntos(sn$="ACglincb") !:
+00310   fntos(sn$="ACglincb") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00320   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00330   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00320   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00330   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00340   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00350   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00360   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00370   let fnacs(sn$,0,mat resp$,ckey)
+00340   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00350   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00360   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00370   fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00390 L390: costcntr=val(resp$(1))
 00400   cnam$=rtrm$(cnam$)
 00410   let pf1=len(cnam$)+int((43-len(cnam$))/2)
 00420   let report$="STATEMENT OF INCOME AND EXPENSES"
-00430   let fnopenprn(cp,58,220,process)
+00430   fnopenprn(cp,58,220,process)
 00440   let redir=0: if file$(255)(1:4)<>"PRN:" then let redir=1
 00450   if fnps=2 then goto L480 ! secondary
 00460   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
@@ -186,7 +186,7 @@
 01740 L1740: form pos 1,c 1,skip ls
 01750   goto L1870
 01760 L1760: ! If FT1=1 Then Goto 1870
-01770   let fnpglen(pglen)
+01770   fnpglen(pglen)
 01780 ! If PGLEN<>42 Then Let PGLEN=58
 01790   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
 01800 ! If PGLEN=42 Then Let SK=SK+1
@@ -227,9 +227,9 @@
 02150 ! ______________________________________________________________________
 02160 L2160: let eofcode=1
 02170   gosub L1760
-02180   let fnfscode(actpd)
-02190   let fnpriorcd(1)
-02200   let fncloseprn
+02180   fnfscode(actpd)
+02190   fnpriorcd(1)
+02200   fncloseprn
 02210 ! 
 02220 XIT: let fnxit
 02230 ! ______________________________________________________________________

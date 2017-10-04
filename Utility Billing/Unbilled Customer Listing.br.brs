@@ -5,23 +5,23 @@
 00050   ! 
 00060   dim z$*10,e$(4)*30,resp$(10)*40
 00070   ! 
-00090   let fnd1(d1)
-00110   let fntop(program$)
+00090   fnd1(d1)
+00110   fntop(program$)
 00120 goto MAIN ! /r
 28000 MAIN: ! r: main screen
-28020   let fntos(sn$:="UBUnBill") 
+28020   fntos(sn$:="UBUnBill") 
 28040   let mylen=20 
 28060   let mypos=mylen+2
-28080   let fnlbl(2,1,"Billing Date:" ,mylen,1)
-28100   let fntxt(2,mypos,8,8,0,"1") 
+28080   fnlbl(2,1,"Billing Date:" ,mylen,1)
+28100   fntxt(2,mypos,8,8,0,"1") 
 28120   let resp$(1)=str$(d1)
-28140   let fnlbl(3,1,"Route Number:" ,mylen,1)
-28160   let fncmbrt2(3,mypos) 
+28140   fnlbl(3,1,"Route Number:" ,mylen,1)
+28160   fncmbrt2(3,mypos) 
 28180   let resp$(2)="[All]"
-28200   let fnchk(4,23,"Print Meter Address:",1)
+28200   fnchk(4,23,"Print Meter Address:",1)
 28220   let resp$(3)="True"
-28240   let fncmdset(3)
-28260   let fnacs(sn$,0,mat resp$,ck)
+28240   fncmdset(3)
+28260   fnacs(sn$,0,mat resp$,ck)
 28280   if ck=5 then goto XIT
 28300 goto Initialize ! /r
 32000 Initialize: ! r:
@@ -29,7 +29,7 @@
 32040   if resp$(2)="[All]" then let prtbkno=0 else let prtbkno = val(resp$(2))
 32060   if resp$(3)="True" then let printadr=1 ! wants meter address printed
 32080   if d1<10100 or d1>123199 then goto MAIN
-32100   let fnopenprn
+32100   fnopenprn
 32120   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
 32140   gosub HDR
 32160   if prtbkno=0 then goto READ_CUSTOMER
@@ -74,7 +74,7 @@
 46060 continue ! /r
 54000 DONE: ! r:
 54020   close #1: ioerr ignore
-54040   let fncloseprn
+54040   fncloseprn
 54060 goto XIT ! /r
 58000 XIT: let fnxit
 62000 ! <Updateable Region: ERTN>

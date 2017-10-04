@@ -7,7 +7,7 @@
 14080   dim fl1$*256,cogl$(3)*12,accum(9,2),bp(13),by(13)
 14100   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*56
 14120 ! ______________________________________________________________________
-14140   let fntop(program$)
+14140   fntop(program$)
 14160   if fnglfs=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Pprior,period to print)
 14180   actpd$=fnactpd$ 
 14200   actpd=fnactpd 
@@ -37,15 +37,15 @@
 14680   ! /r
 20000   ! r: ask cost center
 20020   if fnprocess=1 or fnUseDeptNo=0 then goto L320
-20040   let fntos(sn$="Acglbalc") 
+20040   fntos(sn$="Acglbalc") 
 20060   let mylen=30: let mypos=mylen+3 : let right=1
-20080   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-20100   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) 
+20080   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+20100   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) 
 20120   let resp$(1)=""
-20140   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-20160   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-20180   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-20200   let fnacs(sn$,0,mat resp$,ckey)
+20140   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+20160   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+20180   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+20200   fnacs(sn$,0,mat resp$,ckey)
 20220   if ckey=5 then goto XIT
 20240   L320: !
 20260   costcntr=val(resp$(1))
@@ -58,7 +58,7 @@
 22100   end if
 22120   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('temp')&'\'&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 22140   ! /r
-23020   let fnopenprn 
+23020   fnopenprn 
 23040   let report$=env$('program_caption')
 24000 MainRead: ! r: main loop (on financial statement design)
 24020   read #1,using L470: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1660
@@ -177,7 +177,7 @@
 42160   end if
 42180 return ! /r
 44000 PrNewPageThing: ! ! r: newpage thing.  pr footer on page and if eofcode<>1 then pr newpage and heading
-44020   let fnpglen(pglen)
+44020   fnpglen(pglen)
 44040   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
 44060   if trim$(foot$)<>'' then pr #255,using L1280: rtrm$(foot$)
 44080   L1280: form skip sk,pos tabnote,c fl,skip 1
@@ -221,9 +221,9 @@
 58000 L1660: ! r:
 58020   let eofcode=1
 58040   gosub PrNewPageThing
-58060   let fnfscode(actpd)
-58080   let fnpriorcd(1)
-58100   let fncloseprn
+58060   fnfscode(actpd)
+58080   fnpriorcd(1)
+58100   fncloseprn
 58120 goto XIT ! /r
 58140 XIT: let fnxit
 62000 ! <Updateable Region: ERTN>

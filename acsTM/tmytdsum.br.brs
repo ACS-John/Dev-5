@@ -1,9 +1,9 @@
 00020   on fkey 5 goto L770
 00030   on error goto L1950
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnd1,fndat
-00050   let fntop(program$,cap$="YTD Billing Summary")
-00060   let fncno(cno,cnam$)
-00070   let fndat(dat$)
+00050   fntop(program$,cap$="YTD Billing Summary")
+00060   fncno(cno,cnam$)
+00070   fndat(dat$)
 00080   dim cnam$*40,cat$(30)*30,dat$*20,cliname$*30,enam$*25
 00090   dim cn$*5,en$*9,in$*12,sc$*4,y(7),hcn$*5,cap$*128,dat$*20
 00100   dim x$(10)*30,c$(50)*25,d(50),e(50),f(50),g(10),h(10),i(10)
@@ -13,12 +13,12 @@
 00140   pr fields "14,30,c 20,n": "Press F5 to stop"
 00150 L150: input fields "10,48,c 20,ue,n": dat$ conv L150
 00160   if cmdkey=5 then goto XIT
-00170   let fndat(dat$,put=2)
+00170   fndat(dat$,put=2)
 00180   pr newpage
 00190   let dattab=66-int(len(rtrm$(dat$))/2)
 00200   pr fields "10,25,c 40,n": "YTD BILLING SUMMARY IN PROCESS"
 00210   pr fields "23,2,c 30,n": "Press F5 to stop"
-00220   let fnopenprn
+00220   fnopenprn
 00230   gosub L2080 ! sort
 00240   let dattab=66-int(len(rtrm$(dat$))/2)
 00250   let dattab2=43-int(len(rtrm$(dat$))/2)

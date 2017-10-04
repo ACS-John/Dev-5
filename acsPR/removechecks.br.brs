@@ -6,22 +6,22 @@
 00060 ! ______________________________________________________________________
 00070   dim de$*30,cap$*128,tr$(5)*35,cp(32),tdc(10)
 00080 ! ______________________________________________________________________
-00090   let fncno(cno)
-00100   let fntop(program$,"Remove Old Payroll Checks")
+00090   fncno(cno)
+00100   fntop(program$,"Remove Old Payroll Checks")
 00110   cancel=99 : let right=1 : center=2 : let on=1 : let off=0 !:
         let left=0
 00120   open #1: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&str$(cno)&",NoShr",internal,outin,keyed 
 00130   open #work1:=2: "Name="&env$('Q')&"\PRmstr\Work1."&wsid$&",Size=0,RecL=224,replace",internal,outin,relative 
-00140   let fntos(sn$='RemoveChecks') !:
+00140   fntos(sn$='RemoveChecks') !:
         let mylen=22 : let mypos=mylen+3 : let lc=0
-00150   let fnlbl(lc+=1,1,"Oldest Date to Retain:",mylen,1)
-00160   let fntxt(lc,mypos,10,0,0,'1003') !:
+00150   fnlbl(lc+=1,1,"Oldest Date to Retain:",mylen,1)
+00160   fntxt(lc,mypos,10,0,0,'1003') !:
         let resp$(1)=str$(date('ccyymmdd')-50000)
 00170   let lc+=1
-00180   let fnlbl(lc+=1,1,"All transactions with a",mylen*2,center)
-00190   let fnlbl(lc+=1,1,"date prior to this date will be removed.",mylen*2,center)
-00200   let fncmdset(2)
-00210   let fnacs(sn$,0,mat resp$,ckey)
+00180   fnlbl(lc+=1,1,"All transactions with a",mylen*2,center)
+00190   fnlbl(lc+=1,1,"date prior to this date will be removed.",mylen*2,center)
+00200   fncmdset(2)
+00210   fnacs(sn$,0,mat resp$,ckey)
 00220   if ckey=5 or ckey=cancel then goto XIT else !:
           let rd1=val(resp$(1))
 00230 READ_CHECKS: ! 

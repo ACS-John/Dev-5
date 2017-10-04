@@ -4,7 +4,7 @@
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   let fntop(program$,"Payroll Only Month End Closing")
+00070   fntop(program$,"Payroll Only Month End Closing")
 00080 ! fnwait - "GENERAL LEDGER Payroll Only Month End Closing IN PROCESS"
 00090 ! empty the General Ledger Payroll Checks File !:
         open #20: "Name="&env$('Q')&"\GLmstr\ACPRCKS.H"&str$(cno)&",Size=0,RecL=110,Replace",internal,output: close #20: 

@@ -2,19 +2,19 @@
 00020 ! try converting colletion for 402 when they do not have allocations on them in the transaction history.
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fncno,fndat,fnxit,fntop,fnindex_it
-00050   let fntop("S:\acsUB\conversion\collection",cap$="Convert Collections")
+00050   fntop("S:\acsUB\conversion\collection",cap$="Convert Collections")
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,dat$*20,a$(61)*30,u(61),scr1$(10)*30,alloc(10),nam$*30,o(2)
 00080   dim r(20,4),hd1$*190,hd2$*190,cap$*128,message$*40
 00090 ! ______________________________________________________________________
-00100   let fncno(cno,cnam$)
+00100   fncno(cno,cnam$)
 00110 ! 
 00120   cap$="Convert Collections"
 00130 ! ______________________________________________________________________
 00140   def fndate_mmddyy_to_ccyymmdd(x)
 00150     let x2=(x-int(x*.01)*100)*10000+int(x*.01)
 00160     if int(x2*.0001)<90 then let x2=x2+20000000 else let x2=x2+19000000
-00170     let fndate_mmddyy_to_ccyymmdd=x2
+00170     fndate_mmddyy_to_ccyymmdd=x2
 00180   fnend 
 00190 ! ______________________________________________________________________
 00210   open #6: "Name="&env$('Q')&"\UBmstr\Collect.h"&str$(cno),internal,outin,relative 
@@ -39,5 +39,5 @@
 00420 L420: write #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
 00430 L430: goto L240
 00440 L440: close #2: 
-00450   let fnindex_it(env$('Q')&"\UBmstr\UBTransvb.h"&str$(cno),env$('Q')&"\UBmstr\UBTrindx.h"&str$(cno),"1 19")
+00450   fnindex_it(env$('Q')&"\UBmstr\UBTransvb.h"&str$(cno),env$('Q')&"\UBmstr\UBTrindx.h"&str$(cno),"1 19")
 00460 XIT: let fnxit

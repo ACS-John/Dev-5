@@ -8,14 +8,14 @@
 00080   dim eno$*12,jno$*6,tr(9),pd$*30,cap$*128,ml$(2)*60
 00090   dim response$(5)*1
 00100 ! ______________________________________________________________________
-00110   let fntop("S:\acsPR\jczcur",cap$="Zero Current Period Info")
-00120   let fncno(cno)
+00110   fntop("S:\acsPR\jczcur",cap$="Zero Current Period Info")
+00120   fncno(cno)
 00130 ! 
 00140 ! ______________________________________________________________________
 00150   mat ml$(2) !:
         let ml$(1)="Are you sure you want to zero all" !:
         let ml$(2)="current period information?." !:
-        let fnmsgbox(mat ml$,resp$,cap$,36)
+        fnmsgbox(mat ml$,resp$,cap$,36)
 00160 ! ______________________________________________________________________
 00170   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input,relative 
 00180   read #1,using L190,rec=1: kt

@@ -9,22 +9,22 @@
 00090   dim cap$*128,up$(4)*18
 00100   dim resp$(20)*80
 00110 ! ______________________________________________________________________
-00130   let fntop(program$,cap$="Import from old AP")
+00130   fntop(program$,cap$="Import from old AP")
 44000 SCR1: ! 
-44020   let fntos(sn$='AP-Import')
+44020   fntos(sn$='AP-Import')
 44040   let lc=0
 44060   let mylen=40
 44080   let mypos=mylen+2
-44100   let fnlbl(lc+=1,1,'Path to Accounts Payable Data Files:',mylen,1,0,0,0,'without trailing backslash')
-44120   let fntxt(lc,mypos,40,58,0,'70',0,"Pick any file in the directory, it doesn't matter which one - Only the directory name matters")
+44100   fnlbl(lc+=1,1,'Path to Accounts Payable Data Files:',mylen,1,0,0,0,'without trailing backslash')
+44120   fntxt(lc,mypos,40,58,0,'70',0,"Pick any file in the directory, it doesn't matter which one - Only the directory name matters")
 44140   let resp$(1)='C:\vol002\APmstr'
-44160   let fnlbl(lc+=1,1,'Old Accounts Payable Company Number:',mylen,1)
-44180   let fnlbl(2,90,'') ! work around to make the little button show up
-44200   let fnlbl(3,80,'') ! work around to make the little button show up
-44220   let fntxt(lc,mypos,2,0,1,'30')
+44160   fnlbl(lc+=1,1,'Old Accounts Payable Company Number:',mylen,1)
+44180   fnlbl(2,90,'') ! work around to make the little button show up
+44200   fnlbl(3,80,'') ! work around to make the little button show up
+44220   fntxt(lc,mypos,2,0,1,'30')
 44240   let resp$(2)='1'
-44260   let fncmdset(5)
-44280   let fnacs(sn$,0,mat resp$,ckey)
+44260   fncmdset(5)
+44280   fnacs(sn$,0,mat resp$,ckey)
 46000   if ckey=5 then goto XIT
 46020   apcno=val(resp$(2))
 46040   if ~exists(env$('Q')&'\tmpAP') then 
@@ -32,7 +32,7 @@
 46080   else 
 46100     execute 'Free '&env$('Q')&'\tmpAP\*.*' ioerr ignore
 46120   end if 
-48000   let fnCopy(resp$(1)&'\*.h'&str$(apcno),env$('Q')&'\tmpAP\*.*')
+48000   fnCopy(resp$(1)&'\*.h'&str$(apcno),env$('Q')&'\tmpAP\*.*')
 48040   if exists(env$('Q')&"\tmpAP\apcoinfo.h"&str$(apcno))=0 then goto SCR1
 50000   open #apmstr=fngethandle: "Name="&env$('Q')&"\tmpAP\APmstr.h"&str$(apcno),internal,input  ! &",KFName="&env$('Q')&"\tmpAP\apIndex.h"&str$(apcno) ,keyed
 50020   open #aptrans=10: "Name="&env$('Q')&"\tmpAP\apTrans.H"&str$(apcno),internal,outin,relative 
@@ -59,12 +59,12 @@
 54120   close #apmstr,free: 
 54140   execute 'free '&env$('Q')&'\tmpAP\*.* -n'
 54160   execute 'RmDir '&env$('Q')&'\tmpAP'
-56000   let fnindex_it(env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),"1 8")
-56020   let fnindex_it(env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno'),"9 30")
-56040   let fnindex_it(env$('Q')&"\CLmstr\PayTrans.H"&env$('cno'),env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno'),"1,20")
-56060   let fnindex_it(env$('Q')&"\CLmstr\PayTrans.H"&env$('cno'),env$('Q')&"\CLmstr\UnPdIdx2.h"&env$('cno'),"31/27/1 2/4/26")
-56080   let fnindex_it(env$('Q')&"\CLmstr\Unpdaloc.H"&env$('cno'),env$('Q')&"\CLmstr\Uaidx1.h"&env$('cno'),"9 12")
-56100   let fnindex_it(env$('Q')&"\CLmstr\Unpdaloc.H"&env$('cno'),env$('Q')&"\CLmstr\Uaidx2.h"&env$('cno'),"1 20")
+56000   fnindex_it(env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),"1 8")
+56020   fnindex_it(env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno'),"9 30")
+56040   fnindex_it(env$('Q')&"\CLmstr\PayTrans.H"&env$('cno'),env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno'),"1,20")
+56060   fnindex_it(env$('Q')&"\CLmstr\PayTrans.H"&env$('cno'),env$('Q')&"\CLmstr\UnPdIdx2.h"&env$('cno'),"31/27/1 2/4/26")
+56080   fnindex_it(env$('Q')&"\CLmstr\Unpdaloc.H"&env$('cno'),env$('Q')&"\CLmstr\Uaidx1.h"&env$('cno'),"9 12")
+56100   fnindex_it(env$('Q')&"\CLmstr\Unpdaloc.H"&env$('cno'),env$('Q')&"\CLmstr\Uaidx2.h"&env$('cno'),"1 20")
 56120   ! /r
 58040 XIT: !
 58060 fnend

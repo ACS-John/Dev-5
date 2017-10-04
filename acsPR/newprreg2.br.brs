@@ -1,8 +1,8 @@
 08000 ! Replace S:\acsPR\newprReg2
 08020 ! Payroll Register (Part 2 of 2)
-08040   let fn_setup
+08040   fn_setup
 08060   let det=0
-08080   let fn_payroll_register_2(det)
+08080   fn_payroll_register_2(det)
 08100 XIT: let fnxit
 10000   def fn_setup
 10020     if ~setup then 
@@ -12,8 +12,8 @@
 10100     end if 
 10120   fnend 
 12000   def library fnpayroll_register_2(; det,include_tips_in_other_wh,append_reg1)
-12020     let fn_setup
-12040     let fnpayroll_register_2=fn_payroll_register_2( det,include_tips_in_other_wh,append_reg1)
+12020     fn_setup
+12040     fnpayroll_register_2=fn_payroll_register_2( det,include_tips_in_other_wh,append_reg1)
 12060   fnend 
 14000   def fn_payroll_register_2(; det,include_tips_in_other_wh,append_reg1)
 14020 ! DET=1 if you dont want details printed but you want department totals.
@@ -26,7 +26,7 @@
 14180     dim statewh(10),totaltcp(32),totalthc(5),deptname$*20
 14200     dim sucrat(10),stuc1(10),stuc2(10),err$(3)*65,cap$*128
 14220 ! ______________________________________________________________________
-16000     let fntop(program$,cap$="Payroll Registers")
+16000     fntop(program$,cap$="Payroll Registers")
 16060     open #20: "Name="&env$('Q')&"\PRmstr\prCode.h"&env$('cno')&",Shr",internal,input ioerr L180
 16080     read #20,using 'Form POS 5,N 5': ckno
 16100     close #20: 
@@ -51,7 +51,7 @@
 18380     let ficar1=ficar1*.01
 18400     let ficar2=ficar2*.01
 18420     let ficarate=ficar1+ficar2
-18440     let fnindex_it(env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno'),env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno'),"9/12/1 3/6/8")
+18440     fnindex_it(env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno'),env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno'),"9/12/1 3/6/8")
 18460     ! execute "Index "&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&","&env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno')&" 9/12/1 3/6/8,replace,DupKeys -n"
 18480     open #h_payrollchecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno'),internal,input,keyed 
 18500     open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -304,8 +304,8 @@
 36040     close #2: ioerr ignore
 36060     close #h_payrollchecks: ioerr ignore
 36070 ! fnstatus_close
-36080     let fncloseprn
-36100     let fnindex_it(env$('Q')&"\PRmstr\prTot.h"&env$('cno'),env$('Q')&"\PRmstr\PRTotIdx.h"&env$('cno'),"1 9")
+36080     fncloseprn
+36100     fnindex_it(env$('Q')&"\PRmstr\prTot.h"&env$('cno'),env$('Q')&"\PRmstr\PRTotIdx.h"&env$('cno'),"1 9")
 36110 ! fnstatus_close
 36120   fnend 
 38000 IGNORE: continue 

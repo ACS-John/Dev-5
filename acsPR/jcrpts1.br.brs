@@ -10,8 +10,8 @@
 00100   dim ln$*255,pf$*255,af$*255,gpf$*255,gaf$*255,jpf$*255,jaf$*255,upf$*255
 00110   dim uaf$*255
 00120 ! ______________________________________________________________________
-00121   let fntop("S:\acsPR\jcRptS1",cap$="User Designed Reports (1)")
-00130   let fncno(cno)
+00121   fntop("S:\acsPR\jcRptS1",cap$="User Designed Reports (1)")
+00130   fncno(cno)
 00150 ! ______________________________________________________________________
 00160   data "JN"
 00170   data "n$"
@@ -50,7 +50,7 @@
 00500   close #1: 
 00510 ! ______________________________________________________________________
 00520   pr newpage
-00530   let fnwait(101,cap$,message$="Please wait...",0)
+00530   fnwait(101,cap$,message$="Please wait...",0)
 00540 ! ______________________________________________________________________
 00550   open #11: "Name=PROC."&session$,display,output ioerr L570
 00560   close #11,free: 

@@ -244,8 +244,8 @@
 20440     end if
 20460   !
 20480     if fkey_value=93 or fkey_value=99 or (fkey_value=98 and lwrc$(menu$)='exit') or env$('ExitNow')='yes' or menu$='Exit and Logout' then
-20500   !  removed 1/21/2017 -  does not seem necessary - it does it when it is selected       let fncursys$(env$('cursys'))
-20520   !       let fn_put_plus(env$('cursys'),mat program_file$,mat program_plus$)
+20500   !  removed 1/21/2017 -  does not seem necessary - it does it when it is selected       fncursys$(env$('cursys'))
+20520   !       fn_put_plus(env$('cursys'),mat program_file$,mat program_plus$)
 20530       fnureg_write('FavoritesOpen',env$('FavoritesOpen'))
 20540       goto XIT_MAIN
 20560     else

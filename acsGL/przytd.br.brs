@@ -2,25 +2,25 @@
 00020 ! Zero Year To Date and Quarter To Date Information
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fncno,fnerror,fnprocess,fnconsole,fntos,fnlbl,fntxt,fncmdset,fnacs,fnmsgbox
-00050   let fntop(program$,cap$="Zero YTD Payroll Information")
+00050   fntop(program$,cap$="Zero YTD Payroll Information")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim k$(3)*25,ss$*11,m(36),adr(2),n(2),d(14),cnam$*40,cap$*128,ml$(3)*80
 00090 ! ______________________________________________________________________
-00100   let fncno(cno,cnam$)
+00100   fncno(cno,cnam$)
 00110   if fnprocess=1 then goto L300
 00120 L120: let fntos(sn$="PrZqtr") !:
         let mylen=42: let mypos=mylen+3 : let right=2
-00130   let fnlbl(1,1,"* * * * *   WARNING   * * * * *",mylen,right)
-00140   let fnlbl(3,1,"This program zeroes all year to date",mylen,right)
-00150   let fnlbl(4,1,"information. It should be run at",mylen,right)
-00160   let fnlbl(5,1,"at the end of each year after all",mylen,right)
-00170   let fnlbl(6,1,"quarterly and annual reports have been run.",mylen,right)
-00180   let fnlbl(8,1,"Enter 'ZERO' to continue:",mylen,right)
-00190   let fntxt(8,mypos,4,0,right,"",0,"You must type the word 'Zero' to indicate that you for sure want to zero the year.",0 ) !:
+00130   fnlbl(1,1,"* * * * *   WARNING   * * * * *",mylen,right)
+00140   fnlbl(3,1,"This program zeroes all year to date",mylen,right)
+00150   fnlbl(4,1,"information. It should be run at",mylen,right)
+00160   fnlbl(5,1,"at the end of each year after all",mylen,right)
+00170   fnlbl(6,1,"quarterly and annual reports have been run.",mylen,right)
+00180   fnlbl(8,1,"Enter 'ZERO' to continue:",mylen,right)
+00190   fntxt(8,mypos,4,0,right,"",0,"You must type the word 'Zero' to indicate that you for sure want to zero the year.",0 ) !:
         let resp$(1)=""
-00200   let fncmdset(2)
-00210   let fnacs(sn$,0,mat resp$,ckey)
+00200   fncmdset(2)
+00210   fnacs(sn$,0,mat resp$,ckey)
 00220 ! 
 00230   if ckey=5 then goto XIT
 00240   let pas$=uprc$(resp$(1))
@@ -29,7 +29,7 @@
 00270   mat ml$(2) !:
         let ml$(1)="          Incorrect password! " !:
         let ml$(2)="Click OK to try again; else Cancel to stop." !:
-        let fnmsgbox(mat ml$,resp$,cap$,49)
+        fnmsgbox(mat ml$,resp$,cap$,49)
 00280   if resp$="OK" then goto L120 else goto XIT
 00290 ! ______________________________________________________________________
 00300 L300: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,outin,keyed 

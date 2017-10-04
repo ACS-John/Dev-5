@@ -4,12 +4,12 @@
 20600 ! ______________________________________________________________________
 20800   dim cap$*128
 21000 ! ______________________________________________________________________
-21200   let fntop(program$,cap$='Reg Hamster')
-21400   let fncno(cno)
-21600   let fn_setup_hamster
-21800   let fn_open_file : let fn_close_file : let fn_open_file
+21200   fntop(program$,cap$='Reg Hamster')
+21400   fncno(cno)
+21600   fn_setup_hamster
+21800   fn_open_file : let fn_close_file : let fn_open_file
 22000   gosub HAMSTER
-22200   let fn_close_file
+22200   fn_close_file
 22400   goto XIT
 22600 ! ______________________________________________________________________
 22800   def fn_open_file
@@ -23,7 +23,7 @@
 24400   fnend  ! fn_close_file
 24600 ! ______________________________________________________________________
 24800 HAMSTER: ! 
-25000   let fnhamster("Reg_Hamster",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+25000   fnhamster("Reg_Hamster",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 25200   return 
 25400 ! ______________________________________________________________________
 25600 XIT: let fnxit
@@ -67,6 +67,6 @@
 33200     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
 33400 ! 
 33600 ! fn_add_rec(label$*38,textbox_len,field_type$*2; storage_length,ar_mask,storage_position)
-33800     let fn_add_rec("Key",30,'C',128,0,1)
-34000     let fn_add_rec("Value",40,'C',256,0,129)
+33800     fn_add_rec("Key",30,'C',128,0,1)
+34000     fn_add_rec("Value",40,'C',256,0,129)
 34200   fnend  ! fn_setup_hamster

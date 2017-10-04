@@ -8,9 +8,9 @@
 00080   dim cap$*128,resp$(10)*80,revb(13)
 00090 ! ______________________________________________________________________
 00100   let right=1 : center=2 : let left=0
-00110   let fntop(program$,cap$="Budget Worksheet")
-00120   let fnconsole(off=0)
-00130   let fncno(cno,cnam$)
+00110   fntop(program$,cap$="Budget Worksheet")
+00120   fnconsole(off=0)
+00130   fncno(cno,cnam$)
 00140   gosub DETERMINE_DATE
 00150   on fkey 5 goto L760
 00160   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -19,31 +19,31 @@
 00190 ! defaults !:
         let pba$='False' : bud$="False"
 00200 SCREEN1: ! 
-00210   let fntos(sn$='BudgetWksht') !:
+00210   fntos(sn$='BudgetWksht') !:
         let lc=0 : let mylen=40 : let mypos=mylen+2
-00220   let fnlbl(lc+=1,1,'Fund:',mylen,right)
-00230   let fntxt(lc,mypos,40) !:
+00220   fnlbl(lc+=1,1,'Fund:',mylen,right)
+00230   fntxt(lc,mypos,40) !:
         let resp$(1)=name$
-00240   let fnlbl(lc+=1,1,'Starting Account:',mylen,right)
-00250   let fnqgl(lc,mypos) !:
+00240   fnlbl(lc+=1,1,'Starting Account:',mylen,right)
+00250   fnqgl(lc,mypos) !:
         let resp$(2)=fnrgl$(gln1$)
-00260   let fnlbl(lc+=1,1,'Ending Account:',mylen,right)
-00270   let fnqgl(lc,mypos) !:
+00260   fnlbl(lc+=1,1,'Ending Account:',mylen,right)
+00270   fnqgl(lc,mypos) !:
         let resp$(3)=fnrgl$(gln2$)
-00280   let fnchk(lc+=1,mypos,'Enter proposed budget amounts',right) !:
+00280   fnchk(lc+=1,mypos,'Enter proposed budget amounts',right) !:
         let resp$(4)=pba$
-00290   let fnchk(lc+=1,mypos,'Revised Budget instead of Origional',right) !:
+00290   fnchk(lc+=1,mypos,'Revised Budget instead of Origional',right) !:
         let resp$(5)=bud$
-00300   let fnlbl(lc+=1,1,'Closing date for previous budget year:',mylen,right)
-00310   let fntxt(lc,mypos,8,8,right,"1",0,"Reqired for prior year's budget to appear on worksheet.") !:
+00300   fnlbl(lc+=1,1,'Closing date for previous budget year:',mylen,right)
+00310   fntxt(lc,mypos,8,8,right,"1",0,"Reqired for prior year's budget to appear on worksheet.") !:
         let resp$(6)=str$(priordate) ! previous year end
-00320   let fnlbl(lc+=1,1,'Closing date for two years ago:',mylen,right)
-00330   let fntxt(lc,mypos,8,8,right,"1",0,"Reqired only if you want balance and budget from two years ago.") !:
+00320   fnlbl(lc+=1,1,'Closing date for two years ago:',mylen,right)
+00330   fntxt(lc,mypos,8,8,right,"1",0,"Reqired only if you want balance and budget from two years ago.") !:
         let resp$(7)=str$(priorpriordate) ! two years ago
-00340   let fnchk(lc+=1,mypos,"Year Already Closed:",right)
+00340   fnchk(lc+=1,mypos,"Year Already Closed:",right)
 00350   let resp$(8)="False"
-00360   let fncmdset(3)
-00370   let fnacs(sn$,0,mat resp$,ckey)
+00360   fncmdset(3)
+00370   fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00390   let name$=resp$(1) !:
         let gln1$=fnagl$(resp$(2)) !:
@@ -57,7 +57,7 @@
         let yr2$=resp$(7)(5:6)
 00430   read #1,using L530,key>=gln1$: n$,d$,cb,mat bp,mat bm,mat revb nokey L440
 00440 L440: let namtab=66-int(len(rtrm$(name$))/2)
-00450   let fnopenprn
+00450   fnopenprn
 00460   gosub HEADING
 00470   goto L540
 00480 L480: read #1,using L530: n$,d$,cb,mat bp,mat bm,mat revb eof L760 ! READ MASTER FILE
@@ -100,7 +100,7 @@
 00850   let tcyb=0
 00860   let tbud=0
 00870   let tpriorcb=tpriorcb=toldcb=toldbud=0
-00880   let fncloseprn
+00880   fncloseprn
 00890   goto SCREEN1
 00900   goto XIT
 00910 ! ______________________________________________________________________
@@ -136,16 +136,16 @@
 01210 ! ______________________________________________________________________
 01220 PRINT_MASTER_RECORD: ! 
 01230   if pba$="True" then 
-01240     let fntos(sn$='Budwksh-add-ba') !:
+01240     fntos(sn$='Budwksh-add-ba') !:
           let lc=0 : let mylen=50 : let mypos=mylen+2
-01250     let fnlbl(lc+=1,1,'Enter Proposed Budget',40,center,+2)
+01250     fnlbl(lc+=1,1,'Enter Proposed Budget',40,center,+2)
 01260     let lc+=1
-01270     let fnlbl(lc+=1,1,"Proposed Budget for Account "&str$(dno)&"-"&str$(ano)&"-"&str$(sno)&":",mylen,right)
-01280     let fntxt(lc,mypos,12,0,0,'currency') !:
+01270     fnlbl(lc+=1,1,"Proposed Budget for Account "&str$(dno)&"-"&str$(ano)&"-"&str$(sno)&":",mylen,right)
+01280     fntxt(lc,mypos,12,0,0,'currency') !:
           let resp$=''
-01290     let fnlbl(lc+=1,1,d$,mylen,right)
-01300     let fncmdset(3)
-01310     let fnacs(sn$,0,mat resp$,ckey)
+01290     fnlbl(lc+=1,1,d$,mylen,right)
+01300     fncmdset(3)
+01310     fnacs(sn$,0,mat resp$,ckey)
 01320     if ckey=5 then goto XIT
 01330     bud=val(resp$(1)) : let tbud+=bud
 01340   end if 

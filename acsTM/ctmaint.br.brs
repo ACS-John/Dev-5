@@ -1,8 +1,8 @@
 00020 ! 
 00030   on error goto L410
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
-00050   let fntop(program$,cap$="Category")
-00060   let fncno(cno,cnam$)
+00050   fntop(program$,cap$="Category")
+00060   fncno(cno,cnam$)
 00070   dim a$(30)*30,fli$(30),flo$(32),hd$(2)*40,b$(30)*2
 00080   pr newpage
 00090   pr fields "10,20,c 30,h,n": "CHANGE CATEGORIES IN PROCESS"

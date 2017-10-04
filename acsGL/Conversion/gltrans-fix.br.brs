@@ -2,7 +2,7 @@
 00030 ! 
 00040   pr newpage
 00041   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fntop
-00048   let fntop(program$,"CHANGE_ME")
+00048   fntop(program$,"CHANGE_ME")
 00050   close #101: ioerr L60
 00051   pause 
 00060 L60: open #101: "SROW=9,SCOL=23,EROW=11,ECOL=60,BORDER=DR,CAPTION=CONVERT ACCUMULATED TRANSACTIONS FILE",display,outin 

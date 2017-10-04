@@ -30,10 +30,10 @@
 00210 L210: a=pos(x$,".",olda) !:
           if a<>0 then !:
             a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L210
-00220     let fnbooktitle$=x$
+00220     fnbooktitle$=x$
 00230   fnend 
 00240 ! ______________________________________________________________________
-00250   let fncno(cno)
+00250   fncno(cno)
 00260   pr newpage
 00270 L270: pr fields "8,20,C 30,R,N": "Book Title Capital"
 00280   pr fields "10,1,Cr 38": "Company Number to Convert (0 to Stop):"

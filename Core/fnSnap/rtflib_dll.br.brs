@@ -20,7 +20,7 @@
 00130   next a
 00135   let data$(18)="D|"&fntext$("Description that is longer than the allowed size of the data space and needs to be out on multiple lines",30)&"|"&fnamt$(1000,mask$," ","s")&"|"&fnamt$(2000,mask$," ","s")&"|"&fnamt$(3000,mask$," ","s")&"|"&fnamt$(4000,mask$," ","s")
 00140   let data$(19)="T|Total|"&fnamt$(18000,mask$,"$","d")&"|"&fnamt$(36000,mask$,"$","d")&"|\cfRed "&fnamt$(54000,mask$,"$","d")&"|"&fnamt$(72000,mask$,"$","d")
-00150   let fnrtf(mat types$,mat styles$,mat data$,rtffile)
+00150   fnrtf(mat types$,mat styles$,mat data$,rtffile)
 00157   dim rtffile$*250
 00158   let rtffile$=file$(rtffile)
 00159   close #rtffile: 
@@ -54,7 +54,7 @@
           ! ?reated.  This function maintains compatability               !:
           ! -------------------------------- !
 09010     library env$("PD")&"Core\fnsnap\rtflib_dll.br": fnlistprint
-09020     let fnlistprint(winno,spec$,header$,footer$,title$,mat select,nolines,nosort,nototals$,subtotal)
+09020     fnlistprint(winno,spec$,header$,footer$,title$,mat select,nolines,nosort,nototals$,subtotal)
 09030   fnend 
 09999 ! ================================================================
 10000   def library fnlistprint(winno,spec$*100;header$*200,footer$*200,title$*200,mat selected,nolines,nosort,nototals$*200,nosubtotal,print) !:
@@ -75,7 +75,7 @@
           ! ?NOSUBTOTAL if true prevents printing of subtotals            !:
           ! --------------------------------
 10001     library 'S:\Core\Library': fnget_wordprocessor_exe
-10002     let fnget_wordprocessor_exe(word_processor_exe$, 'word')
+10002     fnget_wordprocessor_exe(word_processor_exe$, 'word')
 10004     dim mprint$*50,word_processor_exe$*256
 10005     if pr then let mprint$=" /q /n /mFilePrintDefault /mFileCloseOrExit" else let mprint$=""
 10010     library env$("PD")&"Core\fnsnap\RTFLIB_dll.br": fnrtf,fnamt$,fntext$
@@ -293,7 +293,7 @@
 10562     next a
 10563     mat lastcc$(udim(cc$)) : mat lastcc$=cc$
 10564     if nototals$(sort_col:sort_col)="2" then !:
-            let fndelrow$(mat cc$,sort_col) !:
+            fndelrow$(mat cc$,sort_col) !:
             let mat2str(mat cc$,cc$," | ") else !:
             let mat2str(mat cc$,cc$," | ")
 10565     if udim(mat cc$)>0 then pr #textfile: "2| "&cc$&"|" !:
@@ -351,7 +351,7 @@
 10700     let rtfout$=file$(rtfout)
 10705 ! close #waitwin:! PAUSE
 10710     gosub BUILD_SPEC
-10720     let fnrtf(textfile,env$("temp")&"\spec"&session$&".spc",rtfout,env$("temp")&"\")
+10720     fnrtf(textfile,env$("temp")&"\spec"&session$&".spc",rtfout,env$("temp")&"\")
 10730     if file(textfile)>-1 then close #textfile: 
 10740     if file(rtfout)>-1 then close #rtfout: 
 10742     if _cs then let fnCopys2c(rtfout$,outfile$:="temp\temp"&session$&".rtf",1)
@@ -689,7 +689,7 @@
         ! ?ead the incoming array and process for filtered items        !:
         ! ?                                                             !:
         ! -------------------------------- !
-12215   let fnwaitbar(udim(dorder),udim(dorder)-aa)
+12215   fnwaitbar(udim(dorder),udim(dorder)-aa)
 12220   aa-=1
 12230   if aa<=0 then !:
           mat cc$(0) : close #waitwin: : let waitwin=0 : goto BUILD_FILTER
@@ -791,7 +791,7 @@
         ! ?Erase the contents of the existing SAVE LIST and replace     !:
         ! ?with the new records                                         !:
         ! -------------------------------- !
-13100   let fnlistcopy=copy_count
+13100   fnlistcopy=copy_count
 13110 fnend 
 13120 ! ===================================================================
 14000 def library fnlistsave(savewin,savespec$,&sspec$;_swin,&_srow,&_scol) !:
@@ -808,13 +808,13 @@
         ! -------------------------------- !
 14010   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnmsexe$,fngethandle,fndelrow,fndelrow$,fnlistspec$,fnwinrowcol
 14020   dim sh$(1)*50,sw(1),sf$(1)*50,ss$(1)*20,ss$*20000,so(1)
-14030   let fnlistsave=0
+14030   fnlistsave=0
 14040   input #savewin, fields savespec$&",HEADERS,,nowait ": (mat sh$,mat sw,mat sf$)
 14050   let x=udim(mat sf$) !:
         for a=1 to x !:
           let sf$(a)=trim$(sf$(a)) !:
         next a
-14060   let fnwinrowcol(_swin,lrow,lcol) !:
+14060   fnwinrowcol(_swin,lrow,lcol) !:
         pr lrow !:
         ! -------------------------------- !:
         ! ?et the screen size of the main window                        !:
@@ -831,7 +831,7 @@
 14120   input #savewin, fields savespec$&",row,all,nowait": mat ss$
 14130   pr #_swin,fields sspec$&",=R": mat ss$
 14140 END_SAVE: ! 
-14145   let fnlistsave=_swin
+14145   fnlistsave=_swin
 14150 fnend 
 15000 def library fnlistenter(winno,spec$*100,element) !:
         ! -------------------------------- !:
@@ -938,7 +938,7 @@
 15321   if indate(af) then cc=val(cc$(af)) conv 15320
 15322   if indate(af) and not cc then !:
           curfld(af) !:
-          let fnwaitwin("Invalid date use MMDDYY","Date Error","OK") !:
+          fnwaitwin("Invalid date use MMDDYY","Date Error","OK") !:
           goto 15320
 15323   rem IF INDATE(AF) THEN !:                                                                     pr #ENTERWIN, FIELDS INDATE$(AF): " "
 15330   if curfld=udim(mat cc$) then goto 15400
@@ -1494,7 +1494,7 @@
 52563     acolor+=1
 52564     if pos(cd$,colors$(acolor))>0 then cd$=srep$(cd$,colors$(acolor),"\cf"&str$(acolor)&" ")
 52565   loop 
-52568   let fnrtfcolor$=cd$
+52568   fnrtfcolor$=cd$
 52640 fnend 
 52700 ! --------------------------------
 52710 SET_NEWCELL: ! 
@@ -1552,7 +1552,7 @@
 53018   if picpath$>"" then !:
           let pict_name$=picpath$&"\"&trim$(data$(pict_start+6:pict_end-1)) else !:
           let pict_name$=trim$(data$(pict_start+6:pict_end-1))
-53020   let fntype(pict_name$,rtffile)
+53020   fntype(pict_name$,rtffile)
 53022   let x=pos(pict_name$,"\",-1)+1 !:
         pr #rtffile: "{\par \fs16 Figure: "&pict_name$(x:len(pict_name$))&" \par }"
 53024   pr #rtffile: srep$(data$(pict_end+2:len(data$)),"|","}{\tab}{")&"}"&crlf$
@@ -1567,7 +1567,7 @@
 53048   if picpath$>"" then !:
           let pict_name$=srep$(picpath$&"\"&trim$(data$(pict_start+7:pict_end-1)),"\\","\") else !:
           let pict_name$=trim$(data$(pict_start+7:pict_end-1))
-53050   let fntype(pict_name$,rtffile)
+53050   fntype(pict_name$,rtffile)
 53052   rem LET X=POS(PICT_NAME$,"\",-1)+1 !:                                                         pr #RTFFILE: "{\par \fs16 Figure: "&PICT_NAME$(X:LEN(PICT_NAME$))&" \par }"
 53054   pr #rtffile: srep$(data$(pict_end+2:len(data$)),"|","}{\tab}{")&"}"&crlf$
 53080 else if pos("1234567890",data$(1:1))>0 then 
@@ -1826,7 +1826,7 @@
 54930   let laststyle=1
 54990 fnend 
 55000 def fnbrdr$(btype$)
-55010   let fnbrdr$=""
+55010   fnbrdr$=""
 55020   if btype$="s" then let fnbrdr$="\brdrs"
 55030   if btype$="o" then let fnbrdr$="\brdrdot"
 55040   if btype$="a" then let fnbrdr$="\brdrdash"
@@ -1836,7 +1836,7 @@
 55110   if inch>0 then let twips$=str$(round(inch*1440,0))
 55112   if inch<0 then let twips$="-"&str$(round(abs(inch)*1440,0))
 55114   if inch=0 then let twips$=""
-55120   let fntwips$=twips$
+55120   fntwips$=twips$
 55130 fnend 
 55200 ! --------------------------------
 55210 SET_SPECFILE: ! 

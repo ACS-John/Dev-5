@@ -9,13 +9,13 @@
 00090   dim sn$*78,ft$*78,gl$(80)*12,prtsch(0),d$*50,dol$*80,scheduleno(50)
 00100   dim text$*45,resp$(45)*50
 00110 ! ______________________________________________________________________
-00120   let fntop(program$)
+00120   fntop(program$)
 00124   let pedat=fnactpd
-00125   let fnfscode
-00126   let fnpriorcd
+00125   fnfscode
+00126   fnpriorcd
 00130   if fnglfs=5 then goto XIT
-00135   let fnfscode
-00136   let fnpriorcd
+00135   fnfscode
+00136   fnpriorcd
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20: 
 00170   open #hAcGlSchs1:=1: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schindex.h"&env$('cno')&",Shr",internal,input,keyed ioerr DONE
 00180   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -24,7 +24,7 @@
 24040   else
 24060     if ~fn_selectSchedules(mat prtsch) then goto XIT
 24080   end if
-24100   let fnopenprn( 0,0,0,0) ! str$(sn)&" - "&trim$(sn$))
+24100   fnopenprn( 0,0,0,0) ! str$(sn)&" - "&trim$(sn$))
 24120   for prtSchItem=1 to udim(mat prtsch)
 24180     if prtall=1 or prtsch(prtSchItem)<>0 then 
 24200       if prtall=1 then
@@ -146,7 +146,7 @@
 38740   mat byt=(0)
 38760 return ! /r
 42000 PrintPageFooter: ! r:
-42020   let fnpglen(pglen)
+42020   fnpglen(pglen)
 42040   let sk=pglen-krec(255): let fl=len(rtrm$(ft$))
 42060   pr #255,using L1190: rtrm$(ft$)
 42080   L1190: form skip sk,pos tabnote,c fl,skip 1
@@ -176,9 +176,9 @@
 46300   end if
 46320 return ! /r
 48000 DONE: ! r:
-48020   let fnfscode(pedat)
-48040   let fnpriorcd(1)
-48060   let fncloseprn
+48020   fnfscode(pedat)
+48040   fnpriorcd(1)
+48060   fncloseprn
 48080 goto XIT ! /r
 52000 AccumulateTotals: ! r:
 52020   let ytdtot=ytdtot+cb
@@ -191,13 +191,13 @@
 58020   selectSchedulesReturn=0
 58040   restore #hAcGlSchs1,key>="   ": nokey SelectSchedulesXit
 58060   let ln=1 : let totallisted=0
-58080   let fntos(sn$="GLschprt") 
-58100   let fnlbl(1,15,"Select Schedules to Be Printed")
+58080   fntos(sn$="GLschprt") 
+58100   fnlbl(1,15,"Select Schedules to Be Printed")
 58120   do
 58140     read #hAcGlSchs1,using L270: sn,sn$,ft$,dp,rs,cm eof L1720
 58160     let ln=ln+1
 58180     let text$=cnvrt$("pic(zzz)",sn)&"  "&sn$(1:40)
-58200     let fnchk(ln,1,text$,0)
+58200     fnchk(ln,1,text$,0)
 58220     let totallisted+=1
 58240     let scheduleno(totallisted)=val(text$(1:3))
 58260     ! if ln>21 and 1>1 then goto L1720 ! quit if more than two columns
@@ -205,10 +205,10 @@
 58300   loop
 58320   L1720: !
 58340   if totallisted then
-58360     let fncmdkey("&Next",1,1,0,"Allows you to enter transactions.")
+58360     fncmdkey("&Next",1,1,0,"Allows you to enter transactions.")
 58380   end if
-58400   let fncmdkey("&Cancel",5,0,1,"Returns to menu without printing.")
-58420   let fnacs(sn$,0,mat resp$,ckey)
+58400   fncmdkey("&Cancel",5,0,1,"Returns to menu without printing.")
+58420   fnacs(sn$,0,mat resp$,ckey)
 58440   if ckey<>5 then 
 58460     mat prtsch(totallisted)
 58480     for j=1 to totallisted

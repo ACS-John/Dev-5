@@ -5,29 +5,29 @@
 00030   library 'S:\Core\Library': fntop,fnxit, fnacs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fntxt,fnlbl,fntos,fnxit,fncmdset,fntop
 00050   on error goto ERTN
 00070   dim cap$*128,txt$*60,message$(5)*80,tt$*80,message$*60,tg(11),ttg(11),e2$*30,rt(10,3)
-00100   let fntop(program$,cap$="Set Sewer Standard Charges from Average Water Usage")
+00100   fntop(program$,cap$="Set Sewer Standard Charges from Average Water Usage")
 00102   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00120   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00130   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00142   mat resp$=("")
 00150 SCR1: ! 
 00160   let sn$="avgsewchg-1" !:
-        let fntos(sn$)
+        fntos(sn$)
 00170   let txt$="Average consumption for billing dates within range" !:
         let mylen=len(txt$)+4: let fnlbl(1,5,txt$,mylen,0)
 00172   let txt$="Charge will be moved into Sewer Standard charge" !:
         let mylen=len(txt$)+4: let fnlbl(2,5,txt$,mylen,0)
 00180   let mylen=12
 00190   let txt$="Date From: " !:
-        let fnlbl(3,6,txt$,mylen,1)
+        fnlbl(3,6,txt$,mylen,1)
 00200   let txt$="Date To: " !:
-        let fnlbl(4,6,txt$,mylen,1)
-00202   let fnlbl(5,4,"Sewer Rate Code: ",16,1)
+        fnlbl(4,6,txt$,mylen,1)
+00202   fnlbl(5,4,"Sewer Rate Code: ",16,1)
 00210   for j=1 to 2 !:
-          let fntxt(j+2,20,8,0,0,"3") !:
+          fntxt(j+2,20,8,0,0,"3") !:
         next j
-00212   let fntxt(5,22,2,0,0,"30")
-00220   let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+00212   fntxt(5,22,2,0,0,"30")
+00220   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   for j=1 to 8
 00250 L250: let x=pos(resp$(j),"/",1)
@@ -40,7 +40,7 @@
 00298 L298: form pos 55,32*g 10
 00299   close #ratemst: 
 00300 ! ______________________________________________________________________
-00310   let fnopenprn
+00310   fnopenprn
 00330   gosub HDR
 00340 L340: read #1,using L350: x$,e2$,a2,oldavg,extra14,fbc eof DONE
 00350 L350: form pos 1,c 10,x 30,c 30,pos 145,pd 2,pos 1822,n 9,pos 1880,n 3,pos 1818,n 3
@@ -86,7 +86,7 @@
 00680   next j
 00690 ! pr #255,using L610: "Total",g2(sz1)
 00700   close #1: 
-00710   let fncloseprn
+00710   fncloseprn
 00720 XIT: let fnxit
 00730 ! ______________________________________________________________________
 00740 NEWPGE: ! 

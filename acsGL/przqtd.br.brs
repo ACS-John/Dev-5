@@ -6,21 +6,21 @@
 00060 ! ______________________________________________________________________
 00070   dim n(2),k$(3)*25,ss$*11,m(36),adr(2),cnam$*40,cap$*128,ml$(3)*80
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$="Zero QTD Payroll Information")
-00100   let fncno(cno,cnam$)
+00090   fntop(program$,cap$="Zero QTD Payroll Information")
+00100   fncno(cno,cnam$)
 00130   if fnprocess=1 then goto L290
 00140 L140: let fntos(sn$="PrZqtr") !:
         let mylen=40: let mypos=mylen+3 : let right=2
-00150   let fnlbl(1,1,"* * * * *   WARNING   * * * * *",mylen,right)
-00160   let fnlbl(3,1,"This program zeroes all quarterly",mylen,right)
-00170   let fnlbl(4,1,"information. It should be run at",mylen,right)
-00180   let fnlbl(5,1,"the end of each quarter after all",mylen,right)
-00190   let fnlbl(6,1,"quarterly reports have been run.",mylen,right)
-00200   let fnlbl(8,1,"Enter 'ZERO' to continue:",mylen,right)
-00210   let fntxt(8,mypos,4,0,right,"",0,"You must type the word 'Zero' to indicate that you for sure want to zero the quarter.",0 ) !:
+00150   fnlbl(1,1,"* * * * *   WARNING   * * * * *",mylen,right)
+00160   fnlbl(3,1,"This program zeroes all quarterly",mylen,right)
+00170   fnlbl(4,1,"information. It should be run at",mylen,right)
+00180   fnlbl(5,1,"the end of each quarter after all",mylen,right)
+00190   fnlbl(6,1,"quarterly reports have been run.",mylen,right)
+00200   fnlbl(8,1,"Enter 'ZERO' to continue:",mylen,right)
+00210   fntxt(8,mypos,4,0,right,"",0,"You must type the word 'Zero' to indicate that you for sure want to zero the quarter.",0 ) !:
         let resp$(1)=""
-00220   let fncmdset(2)
-00230   let fnacs(sn$,0,mat resp$,ckey)
+00220   fncmdset(2)
+00230   fnacs(sn$,0,mat resp$,ckey)
 00240   if ckey=5 then goto XIT
 00250   let pas$=uprc$(resp$(1))
 00260   if pas$="ZERO" then goto L290
@@ -28,7 +28,7 @@
 00271   mat ml$(2) !:
         let ml$(1)="          Incorrect password! " !:
         let ml$(2)="Click OK to try again; else Cancel to stop." !:
-        let fnmsgbox(mat ml$,resp$,cap$,49)
+        fnmsgbox(mat ml$,resp$,cap$,49)
 00273   if resp$="OK" then goto L140 else goto XIT
 00280 ! ______________________________________________________________________
 00290 L290: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&str$(cno)&",Shr",internal,outin,keyed 

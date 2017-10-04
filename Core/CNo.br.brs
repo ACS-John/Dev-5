@@ -20,14 +20,14 @@
 20020   if ~setup then let fn_setup
 20060   cursys$=env$('cursys')
 22000   ! r: Read CNo (normal method - tied to session and cursys$
-22020   let fnreg_read(session$&'.'&cursys$&'.cno',cno$)
+22020   fnreg_read(session$&'.'&cursys$&'.cno',cno$)
 22040   cno=val(cno$)
 22060   ! /r
 25010   ! r: read cno tied to WSID (v 5 but before feb 2015)
 25020   if ~cno then 
-25040     let fnreg_read(wsid$&'.'&cursys$&'.cno',cno$)
+25040     fnreg_read(wsid$&'.'&cursys$&'.cno',cno$)
 25060     cno=val(cno$)
-25080     let fn_putcno(cno)
+25080     fn_putcno(cno)
 25100   end if 
 25900   ! /r
 30000   ! r: legacy cno fetch
@@ -49,21 +49,21 @@
 34110     setenv('cno',str$(cno))
 34120     execute 'config substitute [cno] '&str$(cno)
 34140   end if
-34160   let fncno=cno
+34160   fncno=cno
 34180 fnend 
 36000 def library fnputcno(cno)
 36020   if ~setup then let fn_setup
 36040   fnputcno=fn_putcno(cno)
 36060 fnend
 36080 def fn_putcno(cno)
-36100   let fnreg_write(session$&'.'&env$('CurSys')&'.cno',str$(cno))
+36100   fnreg_write(session$&'.'&env$('CurSys')&'.cno',str$(cno))
 36120   let setenv('cno',str$(cno))
 36140   execute 'config substitute [cno] '&str$(cno)
 36160 fnend 
 38000 def library fnget_company_number_list(mat cno_list; sysid$*2)
 38020   if ~setup then let fn_setup
 38030   if sysid$='' then let sysid$=env$('cursys')
-38040   let fngetdir2(env$('Q')&'\'&sysid$&"mstr",mat filename$,'/od /ta',"Company.*")
+38040   fngetdir2(env$('Q')&'\'&sysid$&"mstr",mat filename$,'/od /ta',"Company.*")
 38060   company_count=filename_item=0
 38080   mat cno_list(99999)
 38100   for filename_item=1 to udim(mat filename$)
@@ -75,7 +75,7 @@
 38210   ACNO_CONV: ! 
 38220   next filename_item
 38240   mat cno_list(company_count)
-38260   let fnget_company_number_list=company_count
+38260   fnget_company_number_list=company_count
 38280 fnend 
 40000 def library fnCnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; valuePassedIn)
 40020   if ~setup then let fn_setup
@@ -97,7 +97,7 @@
 42280   else if get_or_put=2 then 
 42300     fncreg_write(registryKey$,str$(valuePassedIn))
 42320   end if
-42340   let fn_CnoLegacyNtoCReg=valuePassedIn
+42340   fn_CnoLegacyNtoCReg=valuePassedIn
 42360 fnend 
 44000 def library fnpedat$*20(;pedat$*20)
 44020   if ~setup then let fn_setup
@@ -124,7 +124,7 @@
 44440   else if get_or_put=2 then 
 44460     fncreg_write('Pay Period Ending Date',pedat$)
 44480   end if
-44500   let fnpedat$=pedat$
+44500   fnpedat$=pedat$
 44520 fnend 
 46000 def library fnfscode(;fscode)
 46020   if ~setup then let fn_setup
@@ -165,7 +165,7 @@
 48240       ! close #tmp: 
 48260     end if
 48280   end if ! /r
-48300   let fnUseDeptNo=gld1
+48300   fnUseDeptNo=gld1
 48320 fnend 
 51000 def library fndat(&dat$;get_or_put)
 51010   if ~setup then let fn_setup
@@ -173,14 +173,14 @@
 51060   ! Get_or_Put=1 then READ Dat$
 51080   ! Get_or_Put=2 then REWRITE Dat$
 51100   if get_or_put=0 or get_or_put=1 then 
-51120     let fnreg_read('Report Heading Date',dat$)
+51120     fnreg_read('Report Heading Date',dat$)
 51140     let dat$=trim$(dat$)
 51160     if dat$="" then 
 51180       let dat$=date$("Month DD, CCYY")
-51200       let fnreg_write('Report Heading Date',dat$)
+51200       fnreg_write('Report Heading Date',dat$)
 51220     end if 
 51240   else if get_or_put=2 then 
-51260     let fnreg_write('Report Heading Date',dat$)
+51260     fnreg_write('Report Heading Date',dat$)
 51280   end if 
 51300 fnend 
 54000 def library fnprg(&curprg$; g_p)
@@ -250,21 +250,21 @@
 56960   else if as2n_abbr$='oe' then 
 56980     as2n_return$='BR Order Entry'
 57000   end if 
-57020   let fn_system_abbr_2_name$=as2n_return$
+57020   fn_system_abbr_2_name$=as2n_return$
 57040 fnend 
 58000 def library fncursys$(; cursys_set$*2)
 58020   if ~setup then let fn_setup
 58040   if cursys_set$<>'' then 
 58060     cursys_cache$=uprc$(cursys_set$)
-58080     let fnreg_write(session$&'.CurSys',cursys_cache$)
+58080     fnreg_write(session$&'.CurSys',cursys_cache$)
 58100   else 
 58120     cursys_cache$=uprc$(env$('CurSys'))
 58140   end if 
 58160   ! 
 58180   if cursys_cache$="" then 
-58200     let fnreg_read(session$&'.CurSys',cursys_cache$)
+58200     fnreg_read(session$&'.CurSys',cursys_cache$)
 58220     if cursys_cache$="" then 
-58240       let fngetdir2('S:\',mat system_abbr_list$, '/ON','??.mnu')
+58240       fngetdir2('S:\',mat system_abbr_list$, '/ON','??.mnu')
 58260       if udim(system_abbr_list$)=>1 then 
 58280         cursys_cache$=trim$(system_abbr_list$(1)(1:len(system_abbr_list$(1))-4))
 58300       end if 
@@ -285,5 +285,5 @@
 58600     let setenv('CurSystem',fn_system_abbr_2_name$(cursys_cache$))
 58620     execute 'config substitute [CurSys] '&cursys_cache$
 58640   end if
-58660   let fncursys$=cursys_cache$
+58660   fncursys$=cursys_cache$
 58680 fnend 

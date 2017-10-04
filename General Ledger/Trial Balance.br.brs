@@ -9,7 +9,7 @@
 00090   dim resp$(10)*80
 00100 ! ______________________________________________________________________
 00110   let right=1
-00120   let fntop(program$,cap$="Trial Balance")
+00120   fntop(program$,cap$="Trial Balance")
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno'),internal,input,relative 
 00151   read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2) 
 00152   read #20,using 'Form POS 152,2*C 12',rec=1: mat cogl$ 
@@ -21,23 +21,23 @@
 00180   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')&",Shr",internal,input,relative 
 00190   if fnprocess=1 then goto START_REPORT
 00200 SCREEN1: ! 
-00210   let fntos(sn$="GLTB") 
+00210   fntos(sn$="GLTB") 
 00220   let lc=0 : let mylen=25 : let mypos=mylen+2
-00230   let fnchk(lc+=1,mypos,"List All Details",right) 
+00230   fnchk(lc+=1,mypos,"List All Details",right) 
 00240   let resp$(1)="True"
-00250   let fnlbl(lc+=1,1,"Cost Center:",mylen,right)
-00260   let fntxt(lc,mypos,5,0,0,'number') 
+00250   fnlbl(lc+=1,1,"Cost Center:",mylen,right)
+00260   fntxt(lc,mypos,5,0,0,'number') 
 00270   let resp$(2)=""
-00280   let fnchk(lc+=1,mypos,"Subtotal after each fund",right) 
+00280   fnchk(lc+=1,mypos,"Subtotal after each fund",right) 
 00290   let resp$(3)="True"
-00300   let fnlbl(lc+=1,1,"Starting Account:",mylen,right)
-00310   let fnqgl(lc,mypos,0,1) 
+00300   fnlbl(lc+=1,1,"Starting Account:",mylen,right)
+00310   fnqgl(lc,mypos,0,1) 
 00320   let resp$(4)="[All]"
-00330   let fnlbl(lc+=1,1,"Ending Account:",mylen,right)
-00340   let fnqgl(lc,mypos,0,1) 
+00330   fnlbl(lc+=1,1,"Ending Account:",mylen,right)
+00340   fnqgl(lc,mypos,0,1) 
 00350   let resp$(5)="[All]"
-00360   let fncmdset(3)
-00370   let fnacs(sn$,0,mat resp$,ckey)
+00360   fncmdset(3)
+00370   fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00390   if resp$(1)="True" then let pt=0 else let pt=1
 00400   costcent=val(resp$(2)) 
@@ -51,7 +51,7 @@
 00614   end if
 00620 START_REPORT: ! r:
 00630   on fkey 5 goto L950
-00640   let fnopenprn
+00640   fnopenprn
 00650   gosub HDR2
 00660 ! IF D(1)=0 OR fnPROCESS=1 THEN GOTO 310 ELSE GOTO 340
 00670 READ_1: ! 
@@ -91,7 +91,7 @@
 00990   L990: form pos 80,pic(zz,zzz,zzz.## cr),pic(z,zzz,zzz.## cr),pic(zz,zzz,zzz.## cr)
 01000   close #1: ioerr ignore
 01010   close #2: ioerr ignore
-01020   let fncloseprn
+01020   fncloseprn
 01030 ! 
 01040   goto XIT ! /r
 01050 ! ______________________________________________________________________

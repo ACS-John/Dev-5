@@ -1,14 +1,14 @@
 00010 ! formerly acsTM\moInvoice
 20020   library "S:\acsTM\print_invoice": fnprint_invoice
 20040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fngethandle,fnAutomatedSavePoint,fncreg_read
-20060   let fntop(program$)
+20060   fntop(program$)
 20082   client_id_sage_ax=3811
 20084   client_id_brc=90
 20120   dim sys_name$(40)*55,client_id$*5,b(8),iv$*12,skln$*80 ! co$(4)*40,
 20150   dim client_addr$(3)*30,cap$*128
 20160   dim in1$(3)
 20180   dim inp(7),wo_desc$*30
-20200   let fn_get_system_list(mat sys_name$)
+20200   fn_get_system_list(mat sys_name$)
 20220   fncreg_read('Last Invoice Number',tmp$, '1704001') : invoice_number=val(tmp$)
 20280   let invoice_number=invoice_number+1
 20420   pr newpage
@@ -31,7 +31,7 @@
 20340 ! execute "Index "&env$('Q')&"\TMmstr\support.h"&env$('cno')&"  "&env$('Q')&"\TMmstr\support-idx.h"&env$('cno')&" 1/7,6/2,replace,DupKeys"
 20360   open #h_support:=fngethandle: "Name="&env$('Q')&"\TMmstr\Support.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\support-idx.h"&env$('cno')&",Shr",internal,input,keyed 
 20380 F_SUPPORT: form pos 1,g 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
-20400   let fn_thsht_combine_entries(env$('Q')&"\TMmstr\TIMESHEET.h"&env$('cno'),"TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
+20400   fn_thsht_combine_entries(env$('Q')&"\TMmstr\TIMESHEET.h"&env$('cno'),"TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
 20700   restore #h_clmstr,key>=lpad$(str$(starting_acct_no),5): nokey SCREEN1_ASK
 20710   pr newpage
 20720   pr fields "10,10,Cc 60": "Printing Invoices..."
@@ -88,11 +88,11 @@
 23000     loop  !  while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
 23020     BMM_SUPPORT_EOF: ! if client_id=4568 then pr 'A (maintenance renewal stuff) 4568 encountered' : pause
 23040     ! if client_id=918 then pr 'processing client 918 COMPLETE' : pause
-23060     let fn_print_inv
+23060     fn_print_inv
 23080   loop ! /r
 24000 EOJ: ! r:
-24020   let fn_summary_print
-24040   let fncloseprn
+24020   fn_summary_print
+24040   fncloseprn
 24060   open #h_ivnum:=fngethandle: "Name="&env$('Q')&"\TMmstr\IVNUM.h"&env$('cno')&",Use,RecL=8,Shr",internal,outin,relative 
 24080   rewrite #h_ivnum,using "Form POS 1,N 8",rec=1: invoice_number-1
 24100   close #h_ivnum: 
@@ -119,7 +119,7 @@
 28060   do 
 28080     if b8=0 then b8=19
 28100     delete #h_tmsht: ioerr ignore ! delete current record so it is not processed twice
-28120     let fn_bld_rec(client_id$)
+28120     fn_bld_rec(client_id$)
 28140     read #h_tmsht,using F_TIME: mat inp,b6,b7,b8,sc,o_o,wo_desc$ eof TM_XIT2
 28160   loop while inp(1)=client_id
 28180   TM_XIT2: ! 
@@ -255,7 +255,7 @@
 40260 SP_XIT: ! 
 40280   fnend 
 42000   def fn_print_inv ! pr INVOICE
-42020     let fn_timesheet2(h_tmsht)
+42020     fn_timesheet2(h_tmsht)
 42040     if b3>0 and sum(mat inv_amt)<250 then 
 42060       let inv_line+=1
 42080       if inv_line<30 and client_id<>client_id_sage_ax and client_id<>client_id_brc then 
@@ -266,15 +266,15 @@
 42160         let inv_gl$(inv_line)='  0  1160  0'
 42180       end if  ! inv_line<30
 42200     end if  ! pbal<250
-42220     let fn_summary_add ! pr all clients
+42220     fn_summary_add ! pr all clients
 42240     if b3=>1 then 
 42260       write #h_tmwk1,using F_TMWK1: client_id$,2,inv_date,iv$,mat cde$,mat inv_item$,mat inv_amt,mat inv_category,mat inv_service_code,mat inv_gl$
 42300     end if  ! b3=>1
 42320     if b3<1 and pbal<1 then goto PI_SKIP_PRINT
 42340 ! if sum(mat inv_amt)+pbal>0 then
-42360     let fnopenprn(cp,42,220,process)
+42360     fnopenprn(cp,42,220,process)
 42372 !   if trim$(client_id$)='3811' then pause 
-42380     let fnprint_invoice(align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal)
+42380     fnprint_invoice(align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal)
 42400     pr #255: newpage ! mat inv_item$=("")
 42420     let invoice_number=invoice_number+1 ! moved here 10/4/11 (from below) in an attempt to stop skipping invoice numbers
 42440 ! end if

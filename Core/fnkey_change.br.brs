@@ -1,5 +1,5 @@
 92000   def library fnkey_change(h_filehandle,f_fileform_key_only$*128,key_from$*128,key_to$*128)
-92020     let fnkey_change=fn_key_change(h_filehandle,f_fileform_key_only$,key_from$,key_to$)
+92020     fnkey_change=fn_key_change(h_filehandle,f_fileform_key_only$,key_from$,key_to$)
 92040   fnend 
 94000   def fn_key_change(h_filehandle,f_fileform_key_only$*128,key_from$*128,key_to$*128)
 94020 ! account must be indexed by account key primarily, other stuff may follow

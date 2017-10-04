@@ -7,17 +7,17 @@
 00070   dim acno$*12,bc(13),bp(13),wrd2$(2)*54,cap$*128,bud(13)
 00080   dim month(13), month$(24)*25,month$*25,actualdate$(24)
 00090   let right=1 : center=2
-00100   let fntop(program$,cap$="Bar Graph")
-00110   let fncno(cno,cnam$)
+00100   fntop(program$,cap$="Bar Graph")
+00110   fncno(cno,cnam$)
 00120   dim cd1(24),rw(8,13),e$*30,u1(24),u2(24),u3(24,13),message$*60
 00130   dim n2(24),n3(24,13),cap$*128,cnam$*40,resp$(27),txt$*80
 00140   dim servicename$(10)*20,dat$*20,msgline$(2)*40,tg(11),opt$(3)*20
 00150   dim srv$(10)*2,dollars(24)
 00160 ! ______________________________________________________________________
-00170   let fncno(cno,cnam$)
-00180   let fndat(dat$,1)
+00170   fncno(cno,cnam$)
+00180   fndat(dat$,1)
 00190 ! 
-00200   let fntop("S:\acsUB\UBbargraph",cap$="Bar Graph")
+00200   fntop("S:\acsUB\UBbargraph",cap$="Bar Graph")
 00210   open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno),internal,input  !:
         read #1,using "Form POS 121,N 6": d1 ioerr L230 !:
         close #1: 
@@ -43,69 +43,69 @@
 00360 ! ______________________________________________________________________
 00370 SCREEN1: ! 
 00380   restore #1: 
-00390   let fntos(sn$="ubbargraph") !:
+00390   fntos(sn$="ubbargraph") !:
         let rc=0
-00400   let fnlbl(1,1,"Billing dates to be used:",35,1)
-00410   let fntxt(2,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00400   fnlbl(1,1,"Billing dates to be used:",35,1)
+00410   fntxt(2,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00420   let fntxt(2,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00420   fntxt(2,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00430   let fntxt(2,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00430   fntxt(2,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00440   let fntxt(2,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00440   fntxt(2,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00450   let fntxt(2,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00450   fntxt(2,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00460   let fntxt(2,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00460   fntxt(2,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00470   let fntxt(4,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00470   fntxt(4,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00480   let fntxt(4,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00480   fntxt(4,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00490   let fntxt(4,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00490   fntxt(4,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00500   let fntxt(4,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00500   fntxt(4,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00510   let fntxt(4,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00510   fntxt(4,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00520   let fntxt(4,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00520   fntxt(4,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00530   let fntxt(6,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00530   fntxt(6,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00540   let fntxt(6,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00540   fntxt(6,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00550   let fntxt(6,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00550   fntxt(6,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00560   let fntxt(6,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00560   fntxt(6,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00570   let fntxt(6,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00570   fntxt(6,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00580   let fntxt(6,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00580   fntxt(6,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00590   let fntxt(8,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00590   fntxt(8,1,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00600   let fntxt(8,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00600   fntxt(8,15,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00610   let fntxt(8,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00610   fntxt(8,29,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00620   let fntxt(8,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00620   fntxt(8,43,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00630   let fntxt(8,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00630   fntxt(8,57,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00640   let fntxt(8,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
+00640   fntxt(8,71,10,10,0,"3",0,"Select up to 24 billing dates to use in the graph.") !:
         let rc+=1 : let resp$(rc)=resp$(rc)
-00650   let fnlbl(10,1,"Service to Analyze:",24,1,0)
+00650   fnlbl(10,1,"Service to Analyze:",24,1,0)
 00660   let opt$(1)="Water"
 00670   if srv$(3)="EL" then let opt$(2)= servicename$(3)
 00680   if srv$(4)="GA" then let opt$(3)= servicename$(4)
-00690   let fncomboa("ubbargraph",10,26,mat opt$,"",13) !:
+00690   fncomboa("ubbargraph",10,26,mat opt$,"",13) !:
         let rc+=1 : let resp$(rc)=opt$(1)
-00700   let fnfra(12,1,2,45,"Base graph on usage or dollars","You can either analyze dollars or usage.",0) !:
-        let fnopt(1,2,"Use Usage",0,1) !:
+00700   fnfra(12,1,2,45,"Base graph on usage or dollars","You can either analyze dollars or usage.",0) !:
+        fnopt(1,2,"Use Usage",0,1) !:
         let resp$(rc+=1)="True" !:
-        let fnopt(2,2,"Use Dollars",0,1)
-00710   let fncmdset(2) !:
-        let fnacs(sn$,0,mat resp$,ckey)
+        fnopt(2,2,"Use Dollars",0,1)
+00710   fncmdset(2) !:
+        fnacs(sn$,0,mat resp$,ckey)
 00720   if ckey=5 then goto XIT
 00730   for j=1 to 24
 00740 L740: let x=pos(resp$(j),"/",1) !:
@@ -254,10 +254,10 @@
 02050   end if 
 02060   return 
 02070 RELEASE_PRINT: ! 
-02090   let fnpa_finis
+02090   fnpa_finis
 02110   return 
 02120 MSGBOX: ! !:
         let msgline$(1)="You have entered dates in an" !:
         let msgline$(2)="invalid format.  Use mmddyy format." !:
-        let fnmsgbox(mat msgline$,resp$,cap$,1) !:
+        fnmsgbox(mat msgline$,resp$,cap$,1) !:
         goto SCREEN1

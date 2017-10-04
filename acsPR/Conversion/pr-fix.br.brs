@@ -6,7 +6,7 @@
 00060 ! ______________________________________________________________________
 00070   dim ta(2)
 00080 ! ______________________________________________________________________
-00090   let fncno(cno)
+00090   fncno(cno)
 00100 ! 
 00110   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno),internal,outin,keyed 
 00120   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno),internal,outin,relative 

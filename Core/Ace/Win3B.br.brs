@@ -2,7 +2,7 @@
 20020 dim msgline$(2)*128
 20040     let msgline$(1)="Do you wish to accrue part of this Payroll"
 20060     let msgline$(2)="in the previous month? (Y/N)"
-20080     let fnoldmsgbox(mat response$,cap$,mat msgline$,mtype=2)
+20080     fnoldmsgbox(mat response$,cap$,mat msgline$,mtype=2)
 20100 end
 20120 !
 20140 ! Replace S:\Core\Ace\Win3B.br
@@ -108,7 +108,7 @@
 52000     if button_option=42 then let fkey$(1)="Yes" : let fkey$(2)="No"
 52020     if button_option=51 then let fkey$(5)="Exit"
 52040     if button_option=52 then let fkey$(5)="Finish"
-52060     let fnfkey(er+1,mat fkey$,mat disfk,em$,es,win)
+52060     fnfkey(er+1,mat fkey$,mat disfk,em$,es,win)
 52080     goto XIT
 52100 ! ______________________________________________________________________
 52120 ! <Updateable Region: ERTN>

@@ -8,19 +8,19 @@
 00080   dim eno$*12,jno$*6,tr(9),pd$*30,cap$*128,message$*40,msgline$(2)*60
 00090   dim response$(5)*1
 00100 ! ______________________________________________________________________
-00110   let fntop("S:\acsPR\jczcur",cap$="Zero Current Period Info")
-00120   let fncno(cno)
+00110   fntop("S:\acsPR\jczcur",cap$="Zero Current Period Info")
+00120   fncno(cno)
 00130 ! 
-00135   let fnconsole(1)
+00135   fnconsole(1)
 00140 ! ______________________________________________________________________
 00150   pr newpage
 00160   let msgline$(1)="Are you sure you wish to zero all"
 00170   let msgline$(2)="current period information? (Y/N)"
-00180   let fnoldmsgbox(mat response$,cap$,mat msgline$,2)
+00180   fnoldmsgbox(mat response$,cap$,mat msgline$,2)
 00190   if response$(1)="N" then goto XIT
 00200 ! ______________________________________________________________________
 00210   pr newpage
-00220   let fnwait(101,cap$,message$="Zeroing: please wait...",0)
+00220   fnwait(101,cap$,message$="Zeroing: please wait...",0)
 00230 ! ______________________________________________________________________
 00240   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input,relative 
 00250   read #1,using L260,rec=1: kt

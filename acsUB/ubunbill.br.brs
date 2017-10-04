@@ -5,35 +5,35 @@
 00050 ! ______________________________________________________________________
 00060   dim z$*10,e$(4)*30,dat$*20,resp$(10)*40,text$*40, cap$*128
 00070 ! ______________________________________________________________________
-00090   let fnd1(d1)
-00100   let fndat(dat$)
-00110   let fntop(program$)
+00090   fnd1(d1)
+00100   fndat(dat$)
+00110   fntop(program$)
 00120 ! ______________________________________________________________________
 00130 MAIN: ! 
-00140   let fntos(sn$:="UBUnBill") 
+00140   fntos(sn$:="UBUnBill") 
 00150   let mylen=20 
 00160   let mypos=mylen+2
-00170   let fnlbl(1,1,"Report Heading Date:" ,mylen,1)
-00180   let fntxt(1,mypos,20) 
+00170   fnlbl(1,1,"Report Heading Date:" ,mylen,1)
+00180   fntxt(1,mypos,20) 
 00190   let resp$(1) = dat$
-00200   let fnlbl(2,1,"Billing Date:" ,mylen,1)
-00202   let fntxt(2,mypos,8,8,0,"1") 
+00200   fnlbl(2,1,"Billing Date:" ,mylen,1)
+00202   fntxt(2,mypos,8,8,0,"1") 
 00204   let resp$(2)=str$(d1)
-00206   let fnlbl(3,1,"Route Number:" ,mylen,1)
-00208   let fncmbrt2(3,mypos) 
+00206   fnlbl(3,1,"Route Number:" ,mylen,1)
+00208   fncmbrt2(3,mypos) 
 00209   let resp$(3)="[All]"
-00210   let fnchk(4,23,"Print Meter Address:",1)
+00210   fnchk(4,23,"Print Meter Address:",1)
 00220   let resp$(4)="True"
-00230   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
+00230   fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
 00240   if ck=5 then goto XIT
 00250   let dat$ = resp$(1) 
 00252   let d1 = val(resp$(2))
 00260   if resp$(3)="[All]" then let prtbkno=0 else let prtbkno = val(resp$(3))
 00270   if resp$(4)="True" then let printadr=1 ! wants meter address printed
 00280   if d1<10100 or d1>123199 then goto MAIN
-00290   let fndat(dat$,2)
+00290   fndat(dat$,2)
 00300   on fkey 5 goto DONE
-00310   let fnopenprn
+00310   fnopenprn
 00320   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
 00330   gosub HDR
 00340   if prtbkno=0 then goto READ_CUSTOMER

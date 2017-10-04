@@ -9,11 +9,11 @@
 00090 ! ______________________________________________________________________
 00100 ! jn$=Job #     !:
           ! to extract the flexgrid information (master file)
-00104     let fncno(cno)
+00104     fncno(cno)
 00105     open #file_num:=fngethandle: "Name="&env$('Q')&"\PRmstr\Jcmstr.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\jcIndx.h"&str$(cno)&",Shr",internal,input,keyed ioerr ERTN
 00110 ! ______________________________________________________________________
 00120     restore #file_num: 
-00130     let fntos(sn$="JobSrch")
+00130     fntos(sn$="JobSrch")
 00140     ch$(1)="Job #" : ch$(2)="Job Name" : ch$(3)="Address" !:
           ch$(4)="City, ST Zip" !:
           mat ch$(4) : mat cm$(4) : mat cm$=("4")
@@ -24,7 +24,7 @@
 00180     if usefile>0 then goto L280 ! file already exists, do not recreate
 00190 READ_FILE: ! 
 00200     read #file_num,using 'Form POS 1,c 6,c 40,c 30,x 30,c 30': mat item$ eof L280 ioerr ERR_READ
-00210     let fnflexadd1(mat item$)
+00210     fnflexadd1(mat item$)
 00220     goto READ_FILE
 00230 ! ______________________________________________________________________
 00240 ERR_READ: ! 
@@ -35,7 +35,7 @@
           goto READ_FILE
 00270 ! ______________________________________________________________________
 00280 L280: if fixgrid=99 then goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING job files
-00290     let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey) !:
+00290     fncmdset(2): let fnacs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00300     let jn$=lpad$(resp$(1),6)
 00310     if ckey=5 then let jn$="      " ! no one selected

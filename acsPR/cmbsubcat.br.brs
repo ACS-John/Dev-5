@@ -8,12 +8,12 @@
 00080     dim df$*200,if$*200
 00090 ! ______________________________________________________________________
 00100     if addall<>1 then addall=0
-00110     let fncno(cno)
+00110     fncno(cno)
 00120     if addall=0 then let fen$="Subcat.h"&str$(cno) else !:
             let fen$="SubCatALL.h"&str$(cno)
 00130     if indexfile$="" then let if$=env$('Q')&"\PRmstr\SCindEx.h"&str$(cno) else !:
             let if$=indexfile$
-00140     let fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\SCMStR.h"&str$(cno),1,3,4,25,if$,1+addall,0,"Select from the list of Sub-Categories.",container)
+00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\SCMStR.h"&str$(cno),1,3,4,25,if$,1+addall,0,"Select from the list of Sub-Categories.",container)
 00150     let indexfile$=""
 00160     goto XIT
 00170 ! ______________________________________________________________________

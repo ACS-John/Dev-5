@@ -11,14 +11,14 @@
 00025   dim cap$*128,message$*40
 00030 ! ______________________________________________________________________
 00031 ! Let FNTOP("S:\acsPR\jcRpt-MOD",CAP$="User Designed Reports (2)")
-00032   let fncno(cno) !:
-        let fndat(dh$)
+00032   fncno(cno) !:
+        fndat(dh$)
 00038 ! 
 00040 ! ______________________________________________________________________
 00050   pr newpage
 00055   if fnprocess=1 then goto L90
 00056 ! ______________________________________________________________________
-00060   let fnopenwin(win=101,10,18,14,61,cap$)
+00060   fnopenwin(win=101,10,18,14,61,cap$)
 00062   pr #win,fields "4,2,C 20,N": "Report Heading Date:"
 00064   pr fields "15,34,C 09,B,5": "Exit (F5)"
 00066   rinput #win, fields "4,23,C 20,UT,N": dh$
@@ -26,13 +26,13 @@
 00069 L69: let fndat(dh$,put=2)
 00070   if cmdkey=5 then goto XIT
 00075 ! ______________________________________________________________________
-00080   let fndat(dh$,2)
+00080   fndat(dh$,2)
 00088 ! ______________________________________________________________________
 00090 L90: pr newpage !:
-        let fnwait(102,cap$,message$="Printing: please wait...",1) !:
+        fnwait(102,cap$,message$="Printing: please wait...",1) !:
         pr fields "15,34,C 09,B,5": "Exit (F5)" !:
         on fkey 5 goto EOF1
-00103   let fnopenprn !:
+00103   fnopenprn !:
         if file$(255)(1:3)<>"PRN" then let jbskip=1
 00105 ! ______________________________________________________________________
 00110   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
@@ -61,7 +61,7 @@
 00380   return 
 00381 ! ______________________________________________________________________
 00390 EOF1: ! 
-00400   let fncloseprn
+00400   fncloseprn
 00410   close #1: 
 00420   close #2: 
 00430   goto XIT

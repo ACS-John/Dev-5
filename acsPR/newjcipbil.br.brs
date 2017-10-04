@@ -10,15 +10,15 @@
 00100   dim bk$(20)*28,nam$*28,ios$(2),wrds$(2)*30,b(4),a$(3)*30,sc$(20)*80
 00110   dim message$*40,ml$(3)*80,resp$(30)*60,fullname$(20)*20,comboname$(21)*23
 00120 ! ______________________________________________________________________
-00130   let fntop("S:\acsPR\NewJCIpbil",cap$="Enter Billings")
-00140   let fncno(cno,cnam$)
+00130   fntop("S:\acsPR\NewJCIpbil",cap$="Enter Billings")
+00140   fncno(cno,cnam$)
 00150 ! 
 00160 ! ______________________________________________________________________
 00170   if exists("jcbillings."&wsid$) >0 then goto L180 else goto L200
 00180 L180: mat ml$(2) !:
         let ml$(1)="An unposted file appears to exist! " !:
         let ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries." !:
-        let fnmsgbox(mat ml$,resp$,cap$,52)
+        fnmsgbox(mat ml$,resp$,cap$,52)
 00190   if resp$="Yes" then goto L220 else goto L200
 00200 L200: open #3: "Name=jcbillings."&wsid$&",SIZE=0,RecL=84,Replace",internal,outin,relative 
 00210   goto L230
@@ -32,33 +32,33 @@
 00290 ! ______________________________________________________________________
 00300 TRANSACTION_ENTRY: ! 
 00310   if addone=1 then let inp(1)=inp(3)=0
-00320   let fntos(sn$="billinginput") !:
+00320   fntos(sn$="billinginput") !:
         let respc=0 : let frac=0 !:
         let mylen=28 : let mypos=mylen+3
-00330   let fnlbl(1,1,"Job Number:",mylen,1)
-00340   let fncmbjob(1,mypos) !:
+00330   fnlbl(1,1,"Job Number:",mylen,1)
+00340   fncmbjob(1,mypos) !:
         let resp$(respc+=1)=jn$
-00350   let fnlbl(2,1,"Amount:",mylen,1)
-00360   let fntxt(2,mypos,10,10,0,"10",0,"Amount to be charged to job.") !:
+00350   fnlbl(2,1,"Amount:",mylen,1)
+00360   fntxt(2,mypos,10,10,0,"10",0,"Amount to be charged to job.") !:
         let resp$(respc+=1)=str$(inp(1))
-00370   let fnlbl(3,1,"Date:",mylen,1)
-00380   let fntxt(3,mypos,8,8,0,"1",0,"Date of transaction") !:
+00370   fnlbl(3,1,"Date:",mylen,1)
+00380   fntxt(3,mypos,8,8,0,"1",0,"Date of transaction") !:
         let resp$(respc+=1)=str$(inp(2))
-00390   let fnlbl(4,1,"Status:",mylen,1)
-00400   let fntxt(4,mypos,2,2,0,"30",0,"") !:
+00390   fnlbl(4,1,"Status:",mylen,1)
+00400   fntxt(4,mypos,2,2,0,"30",0,"") !:
         let resp$(respc+=1)=str$(inp(3))
-00410   let fncmdkey("&Save",1,1,0,"Saves all changes.")
-00420   let fncmdkey("Co&rrection",7,0,0,"Make a correction to any entry.")
-00430   let fncmdkey("&LIsting",9,0,0,"Print a listing of all entries.")
-00440   let fncmdkey("De&lete",4,0,0,"Deletes this entry.")
-00450   let fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
-00460   let fncmdkey("&Post",8,0,1,"Post these entries to the job files.")
-00470   let fnacs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
+00410   fncmdkey("&Save",1,1,0,"Saves all changes.")
+00420   fncmdkey("Co&rrection",7,0,0,"Make a correction to any entry.")
+00430   fncmdkey("&LIsting",9,0,0,"Print a listing of all entries.")
+00440   fncmdkey("De&lete",4,0,0,"Deletes this entry.")
+00450   fncmdkey("&Cancel",5,0,1,"Stops without applying any changes.")
+00460   fncmdkey("&Post",8,0,1,"Post these entries to the job files.")
+00470   fnacs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
 00480   if ckey=5 then goto L490 else goto L510
 00490 L490: mat ml$(2) !:
         let ml$(1)="You have chosen to cancel without postng these entries!  " !:
         let ml$(2)="Take Yes to Exit, else take No to return to the entry screens." !:
-        let fnmsgbox(mat ml$,resp$,cap$,52)
+        fnmsgbox(mat ml$,resp$,cap$,52)
 00500   if resp$="Yes" then goto XIT else goto TRANSACTION_ENTRY
 00510 L510: if ckey=7 then goto CORRECTIONS
 00520   if ckey=8 then goto POSTTOJOBS
@@ -71,7 +71,7 @@
 00590 L590: mat ml$(2) !:
         let ml$(1)="You failed to enter a job number. Take Yes to continue;" !:
         let ml$(2)="else take No to return to previous screen and enter the job number." !:
-        let fnmsgbox(mat ml$,resp$,cap$,52)
+        fnmsgbox(mat ml$,resp$,cap$,52)
 00600   if resp$="Yes" then goto L610 else goto TRANSACTION_ENTRY
 00610 L610: if addone=1 then goto L620 else goto L650
 00620 L620: write #3,using L640: jn$,mat inp
@@ -82,7 +82,7 @@
 00670 ! ______________________________________________________________________
 00680 PRINTPROOFLIST: ! 
 00690   on fkey 5 goto PROOF_LIST_DONE
-00700   let fnopenprn
+00700   fnopenprn
 00710   goto L810
 00720 ! ______________________________________________________________________
 00730 PROOF_LIST_HDR: ! 
@@ -106,7 +106,7 @@
 00910 L910: form pos 8,c 11,skip 1,pos 7,pic(-----,---.##),skip 1
 00920 PROOF_LIST_DONE: ! 
 00930   let gt1=0
-00940   let fncloseprn
+00940   fncloseprn
 00950   goto TRANSACTION_ENTRY
 00960 ! ______________________________________________________________________
 00970 POSTTOJOBS: ! 
@@ -142,7 +142,7 @@
 01270 ! ______________________________________________________________________
 01280 CORRECTIONS: ! 
 01290   addone=0: let editone=0
-01300   let fntos(sn$="EntryCorrection")
+01300   fntos(sn$="EntryCorrection")
 01310   ch2$(1)="Rec #": ch2$(2)="Job #": ch2$(3)="Amount": ch2$(4)="Date #" !:
         ch2$(5)="Status" !:
         mat ch2$(5) ! : Mat CM2$(5) : Mat ITEM2$(5)
@@ -150,21 +150,21 @@
         cm2$(4)="1" !:
         cm2$(5)="30" !:
         cm2$(5): ch2$(5): let item2$(5)
-01330   let fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
+01330   fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 01340   restore #3: 
 01350 READ_FILE: ! 
 01360   read #3,using L640: jn$,mat inp eof L1400
 01370   let item2$(1)=str$(rec(3)): let item2$(2)=jn$ !:
         let item2$(3)=str$(inp(1)): let item2$(4)=str$(inp(2)) !:
         let item2$(5)=str$(inp(3))
-01380   let fnflexadd1(mat item2$)
+01380   fnflexadd1(mat item2$)
 01390   goto READ_FILE
 01400 L1400: let fncmdkey("&Add",1,0,0,"Add a new transaction." ) !:
-        let fncmdkey("E&dit",2,1,0,"Edit the highlited record") !:
-        let fncmdkey("&Delete",4,0,0,"Deletes the highlited record") !:
-        let fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") !:
-        let fncmdkey("E&xit",5,0,1,"Returns to main screen.")
-01410   let fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
+        fncmdkey("E&dit",2,1,0,"Edit the highlited record") !:
+        fncmdkey("&Delete",4,0,0,"Deletes the highlited record") !:
+        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") !:
+        fncmdkey("E&xit",5,0,1,"Returns to main screen.")
+01410   fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 01420   if ckey=5 then goto TRANSACTION_ENTRY
 01430   let editrec=val(resp$(1))
 01440   if ckey=1 then addone=1: mat inp=(0): let jn$="": goto TRANSACTION_ENTRY

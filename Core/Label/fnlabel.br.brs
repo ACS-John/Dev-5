@@ -7,7 +7,7 @@
 00060 ! ______________________________________________________________________
 00070     dim label_hold_cap$*128
 00080     dim labeltext$(5)*120,wabel$(10,3,5)*120,opt$(3)*43,resp$(10)*80
-00082     let fn_test_mat_lab$
+00082     fn_test_mat_lab$
 00090 ! wabel$(10,3,5) wabel$(x,y,z) wabel$(left/right,Up/Down,LabelLine)
 00100 ! ______________________________________________________________________
 00110 ! win= window number to use for windows !:
@@ -35,32 +35,32 @@
 00290     goto LABEL_XIT
 00300 ! ______________________________________________________________________
 00310 ASK_LABEL_FORMAT: ! r:
-00320     let fntos(sn$="labellib1")
-00330     let fnlbl(1,1,"Label Format:",15,1)
+00320     fntos(sn$="labellib1")
+00330     fnlbl(1,1,"Label Format:",15,1)
 00340     let opt$(1)="Avery 8160 (30/Page Ink Jet)" !:
           let opt$(2)="Avery 5160 (30/Page Laser)" !:
           let opt$(3)="Universal Data Processing (1-Up Dot-Matrix)" !:
-          let fncomboa("labellib1."&wsid$,1,17,mat opt$,"Choose either dot-matrix or laser type labels",32) !:
+          fncomboa("labellib1."&wsid$,1,17,mat opt$,"Choose either dot-matrix or laser type labels",32) !:
           let resp$(1)=opt$(1)
-00350     let fncmdset(2)
-00360     let fnacs(sn$,win,mat resp$,ckey)
+00350     fncmdset(2)
+00360     fnacs(sn$,win,mat resp$,ckey)
 00370     if ckey=5 then goto XIT_ASK_LABEL
 00380     if resp$(1)=opt$(3) then !:
             let label_format=1 else let label_format=2
 00390 XIT_ASK_LABEL: return  ! /r
 00400 ! ______________________________________________________________________
 00410 ASK_LABEL_FORMAT_2_LSTART: ! r:
-00420     let fntos(sn$="labellib2")
-00430     let fnfra(1,2,10,28,"Select First Label to Print","If you only have a partial sheet of labels, you can select the starting place of the first label") !:
+00420     fntos(sn$="labellib2")
+00430     fnfra(1,2,10,28,"Select First Label to Print","If you only have a partial sheet of labels, you can select the starting place of the first label") !:
           let myline=1: let mypos=1
 00440     for j=1 to 30
-00450       let fnbutton(myline,mypos,"  "&cnvrt$("pic(zz)",j)&"  ",j+20,"Starts with label "&str$(j),0,6,1)
+00450       fnbutton(myline,mypos,"  "&cnvrt$("pic(zz)",j)&"  ",j+20,"Starts with label "&str$(j),0,6,1)
 00460       if j/3=int(j/3) then let myline+=1
 00470       let mypos+=10
 00480       if mypos>30 then let mypos=1
 00490     next j
-00500     let fncmdset(1)
-00510     let fnacs(sn$,win,mat resp$,ckey)
+00500     fncmdset(1)
+00510     fnacs(sn$,win,mat resp$,ckey)
 00520     if ckey=5 then goto XIT_ASK_LABEL_2
 00530     let lstart=ckey-21 ! because the other routine starts out adding one.
 00540     let labx=int((lstart+2)/3) !:
@@ -68,10 +68,10 @@
 00550 XIT_ASK_LABEL_2: ! 
 00552     return  ! /r
 00570 ASK_L2_MARGINS: ! r:
-00572     let fnreg_read('top_marg',top_marg$) : let top_marg=val(top_marg$) conv ignore
-00573     let fnreg_read('label_pos1',label_pos1$) : let label_pos1=val(label_pos1$) conv ignore
-00574     let fnreg_read('label_pos2',label_pos2$) : let label_pos2=val(label_pos2$) conv ignore
-00575     let fnreg_read('label_pos3',label_pos3$) : let label_pos3=val(label_pos3$) conv ignore
+00572     fnreg_read('top_marg',top_marg$) : let top_marg=val(top_marg$) conv ignore
+00573     fnreg_read('label_pos1',label_pos1$) : let label_pos1=val(label_pos1$) conv ignore
+00574     fnreg_read('label_pos2',label_pos2$) : let label_pos2=val(label_pos2$) conv ignore
+00575     fnreg_read('label_pos3',label_pos3$) : let label_pos3=val(label_pos3$) conv ignore
 00576     if top_marg=0 and label_pos1+label_pos2+label_pos3=0 then 
 00577       if uprc$(linestyle$(5))="BAR" then 
 00578         let label_pos1=01 : let label_pos2=75 : let label_pos3=150
@@ -81,36 +81,36 @@
 00582       let top_marg=2
 00583     end if  ! top_marg=0 and label_pos1+label_pos2+label_pos3=0
 00584     let sn$="labellib3" !:
-          let fntos(sn$)
-00590     let fnlbl(1,1,"Top Margin (lines):",24,1)
-00600     let fntxt(1,26,3,3,1,'20',0,"Increase or decrease the top margin to move the pr up or down on the labels") !:
+          fntos(sn$)
+00590     fnlbl(1,1,"Top Margin (lines):",24,1)
+00600     fntxt(1,26,3,3,1,'20',0,"Increase or decrease the top margin to move the pr up or down on the labels") !:
           let resp$(1)=str$(top_marg)
-00610     let fnlbl(2,1,"Left Column Position:",24,1)
-00620     let fntxt(2,26,3,3,1,'20',0,"Increase or decrease the position to move the left label right or left") !:
+00610     fnlbl(2,1,"Left Column Position:",24,1)
+00620     fntxt(2,26,3,3,1,'20',0,"Increase or decrease the position to move the left label right or left") !:
           let resp$(2)=str$(label_pos1)
-00630     let fnlbl(3,1,"Center Column Position:",24,1)
-00640     let fntxt(3,26,3,3,1,'20',0,"Increase or decrease the position to move the center label right or left") !:
+00630     fnlbl(3,1,"Center Column Position:",24,1)
+00640     fntxt(3,26,3,3,1,'20',0,"Increase or decrease the position to move the center label right or left") !:
           let resp$(3)=str$(label_pos2)
-00650     let fnlbl(4,1,"Right Column Position:",24,1)
-00660     let fntxt(4,26,3,3,1,'20',0,"Increase or decrease the position to move the right label right or left") !:
+00650     fnlbl(4,1,"Right Column Position:",24,1)
+00660     fntxt(4,26,3,3,1,'20',0,"Increase or decrease the position to move the right label right or left") !:
           let resp$(4)=str$(label_pos3)
-00670     let fncmdset(2)
-00680     let fnacs(sn$,win,mat resp$,ckey)
+00670     fncmdset(2)
+00680     fnacs(sn$,win,mat resp$,ckey)
 00690     let top_marg=val(resp$(1)) !:
           let label_pos1=val(resp$(2)) !:
           let label_pos2=val(resp$(3)) !:
           let label_pos3=val(resp$(4))
 00692     if ckey<>5 then 
-00694       let fnreg_write('top_marg',str$(top_marg))
-00696       let fnreg_write('label_pos1',str$(label_pos1))
-00698       let fnreg_write('label_pos2',str$(label_pos2))
-00700       let fnreg_write('label_pos3',str$(label_pos3))
+00694       fnreg_write('top_marg',str$(top_marg))
+00696       fnreg_write('label_pos1',str$(label_pos1))
+00698       fnreg_write('label_pos2',str$(label_pos2))
+00700       fnreg_write('label_pos3',str$(label_pos3))
 00702     end if 
 00708     return  ! /r
 00720 LABEL_DONE: ! r:
 00730     if uprc$(linestyle$(5))="BAR" then goto RELEASE_PRINT ! bar code to PrintAce
 00740     close #win: ioerr ignore
-00750     let fncloseprn
+00750     fncloseprn
 00760     close #88: 
 00770     return  ! /r
 00860 L2: ! 
@@ -136,8 +136,8 @@
 01140 ! ___________________________
 01150 L2_PRINT: ! 
 01160     if uprc$(linestyle$(5))="BAR" then goto BARCODE_PRINT
-01170     let fnopenprn
-01180     let fnwait(win,cap$,"Printing: Please wait...",1)
+01170     fnopenprn
+01180     fnwait(win,cap$,"Printing: Please wait...",1)
 01190     if top_marg>0 then !:
             pr #255,using "Form POS 1,C 1,SKIP "&str$(top_marg): ""
 01200     for x=1 to 10
@@ -145,7 +145,7 @@
 01220         for y=1 to 3
 01230 !     If UPRC$(LINESTYLE$(Z))="BAR" AND wabel$(X,Y,Z)<>"" Then !:
                 !     Let PRINTEDABARCODE=1 !:
-                !     Let FNBARCODE(wabel$(X,Y,Z),LABEL_POS(Y))
+                !     fnBARCODE(wabel$(X,Y,Z),LABEL_POS(Y))
 01240 !     If wabel$(X,Y,Z)<>"" Then Let FNBARCODE(wabel$(X,Y,Z),LABEL_POS(Y))
 01250         next y
 01260 ! 
@@ -192,14 +192,14 @@
 01620     return 
 01630 ! ______________________________________________________________________
 01640 L1: ! 
-01650     let fnopenprn
-01660     let fnwait(win,cap$,"Printing: Please wait...",1)
+01650     fnopenprn
+01660     fnwait(win,cap$,"Printing: Please wait...",1)
 01670     gosub OPEN_LABEL_WSID
 01680 L1_NEXT: ! 
 01690     read #88,using "Form POS 1,5*C 120": mat labeltext$ eof L1_DONE
 01710     for z=1 to 5
 01720 !   If UPRC$(LINESTYLE$(Z))="BAR" AND LABELTEXT$(Z)<>"" Then !:
-            !   Let FNBARCODE(LABELTEXT$(Z),LABEL_POS1) : pr #255: "" !:
+            !   fnBARCODE(LABELTEXT$(Z),LABEL_POS1) : pr #255: "" !:
             !   Goto 1400
 01730 !   If LINESTYLE$(Z)<>"" Then Let FNSETLINESTYLE(LINESTYLE$(Z))
 01740       pr #255,using L1750: labeltext$(z)(1:70)
@@ -222,7 +222,7 @@
 01980   fnend 
 01990 ! ______________________________________________________________________
 02000 VBOPENPRINT: ! 
-02010   let fnpa_open ! if file(20)=-1 then
+02010   fnpa_open ! if file(20)=-1 then
 02020 !   open #20: "Name="&env$('Q')&"\UBmstr\label"&wsid$&".txt,Replace,RecL=5000",display,output
 02030 !   pr #20: 'Call Print.MyOrientation("Portrait")'
 02032   pr #20: 'Call Print.MyFontsize(12)'
@@ -233,7 +233,7 @@
 02080 RELEASE_PRINT: ! 
 02090   close #1: ioerr ignore
 02100   close #3: ioerr ignore
-02120   let fnpa_finis
+02120   fnpa_finis
 02140 XIT: let fnxit
 20200   def fn_test_mat_lab$
 20220     if udim(wabel$,1)<>10 or udim(wabel$,2)<>3 or udim(wabel$,3)<>5 then 

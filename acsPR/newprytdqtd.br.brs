@@ -12,7 +12,7 @@
 00120   dim ytdtotal(32),qtr1tcp(32),qtr2tcp(32),qtr3tcp(32),qtr4tcp(32)
 00130   dim quartertotals(32),tcp(32),tdc(10),resp$(10)*40
 00140 ! ______________________________________________________________________
-00150   let fntop(program$,cap$="YTD and Qtd Register")
+00150   fntop(program$,cap$="YTD and Qtd Register")
 00170   open #1: "Name="&env$('Q')&"\PRmstr\prCode.h"&env$('cno')&",Shr",internal,input ioerr L180 
 00172   read #1,using 'Form POS 5,N 5': ckno 
 00174   close #1: 
@@ -111,7 +111,7 @@
 01110   goto DONE
 01120 ! ______________________________________________________________________
 01130 DONE: ! 
-01140   let fncloseprn
+01140   fncloseprn
 01150   close #1: ioerr L1160
 01160 L1160: close #2: ioerr L1170
 01170 L1170: let fnxit
@@ -141,50 +141,50 @@
 01410 ! CHECK_PASSWORD: ! 
 01420 !   return ! if env$('client')="Washington Parrish" then goto L1430 else return 
 01430 ! L1430: if wsid$="09" or wsid$="99" then return 
-01440 !   let fntos(sn$="WpTrap") !:
+01440 !   fntos(sn$="WpTrap") !:
       !   let respc=0 : let mylen=25 : let mypos=mylen+2
-01450 !   let fnlbl(1,1,"         Quit!      ",mylen,2)
-01460 !   let fnlbl(2,1,"Stay out of Payroll!",mylen,2)
-01470 !   let fnlbl(3,1,"Call Brenda for Password",mylen,2)
-01480 !   let fntxt(3,mylen+3,8,8,1,"",0,"You must have a password to get out.") !:
+01450 !   fnlbl(1,1,"         Quit!      ",mylen,2)
+01460 !   fnlbl(2,1,"Stay out of Payroll!",mylen,2)
+01470 !   fnlbl(3,1,"Call Brenda for Password",mylen,2)
+01480 !   fntxt(3,mylen+3,8,8,1,"",0,"You must have a password to get out.") !:
       !   let resp$(respc+=1)=""
-01490 !   let fncmdkey("E&xit",5,1,1,"Returns to menu")
-01500 !   let fnacs(sn$,0,mat resp$,ckey)
+01490 !   fncmdkey("E&xit",5,1,1,"Returns to menu")
+01500 !   fnacs(sn$,0,mat resp$,ckey)
 01510 !   if trim$(uprc$(resp$(1)))="GETMEOUT" then goto XIT else goto L1430
 01520 ASK_DATES: ! 
 01530   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,dat$)
-01580   let fntos(sn$="YtdQtdReg-1") !:
+01580   fntos(sn$="YtdQtdReg-1") !:
         let rc=cf=0: let mylen=42: let mypos=45: let frameno=1
-01590   let fnfra(1,1,4,66,"Payroll Date","Enter the payroll date.")
-01600   let fnlbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
-01610   let fntxt(1,mypos,10,0,1,"3",0,"Normally the last payroll date, but can beny point in time. ",frameno) !:
+01590   fnfra(1,1,4,66,"Payroll Date","Enter the payroll date.")
+01600   fnlbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
+01610   fntxt(1,mypos,10,0,1,"3",0,"Normally the last payroll date, but can beny point in time. ",frameno) !:
         let resp$(rc+=1)=str$(d1)
-01620   let fnlbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
-01630   let fntxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report heading." ,frameno) !:
+01620   fnlbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
+01630   fntxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report heading." ,frameno) !:
         let resp$(rc+=1)= dat$
-01640   let fnfra(7,25,6,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") !:
+01640   fnfra(7,25,6,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") !:
         let frameno=2 : let mylen=26 : let mypos=mylen+2
-01650   let fnlbl(1,1,"Starting Date:",mylen,1,0,frameno)
-01660   let fntxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno) !:
+01650   fnlbl(1,1,"Starting Date:",mylen,1,0,frameno)
+01660   fntxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno) !:
         let resp$(rc+=1)=str$(beg_date)
-01670   let fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
-01680   let fntxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno) !:
+01670   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
+01680   fntxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno) !:
         let resp$(rc+=1)=str$(end_date)
-01690   let fnlbl(3,1,"1st Day of 1st quarter:",mylen,1,0,frameno)
-01700   let fntxt(3,mypos,10,0,1,"3",0,"Enter the first day of the first quarter. Could be something other than January 1st if your last payroll of the previous year should be included in this year",frameno) !:
+01690   fnlbl(3,1,"1st Day of 1st quarter:",mylen,1,0,frameno)
+01700   fntxt(3,mypos,10,0,1,"3",0,"Enter the first day of the first quarter. Could be something other than January 1st if your last payroll of the previous year should be included in this year",frameno) !:
         let resp$(rc+=1)=str$(qtr1)
-01710   let fnlbl(4,1,"1st Day of 2nd quarter:",mylen,1,0,frameno)
-01720   let fntxt(4,mypos,10,0,1,"3",0,"Normally would be April 1st, but could be different if your payroll dates and check dates are not the same.",frameno) !:
+01710   fnlbl(4,1,"1st Day of 2nd quarter:",mylen,1,0,frameno)
+01720   fntxt(4,mypos,10,0,1,"3",0,"Normally would be April 1st, but could be different if your payroll dates and check dates are not the same.",frameno) !:
         let resp$(rc+=1)=str$(qtr2)
-01730   let fnlbl(5,1,"1st Day of 3rd quarter:",mylen,1,0,frameno)
-01740   let fntxt(5,mypos,10,0,1,"3",0,"Normally would be July 1st",frameno) !:
+01730   fnlbl(5,1,"1st Day of 3rd quarter:",mylen,1,0,frameno)
+01740   fntxt(5,mypos,10,0,1,"3",0,"Normally would be July 1st",frameno) !:
         let resp$(rc+=1)=str$(qtr3)
-01750   let fnlbl(6,1,"1st Day of 4th quarter:",mylen,1,0,frameno)
-01760   let fntxt(6,mypos,10,0,1,"3",0,"Normally would be October 1st.",frameno) !:
+01750   fnlbl(6,1,"1st Day of 4th quarter:",mylen,1,0,frameno)
+01760   fntxt(6,mypos,10,0,1,"3",0,"Normally would be October 1st.",frameno) !:
         let resp$(rc+=1)=str$(qtr4)
-01770   let fncmdkey("Next",1,1,0,"Proceed with calculations.")
-01780   let fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
-01790   let fnacs(sn$,0,mat resp$,ckey)
+01770   fncmdkey("Next",1,1,0,"Proceed with calculations.")
+01780   fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
+01790   fnacs(sn$,0,mat resp$,ckey)
 01800   if ckey=5 then goto XIT
 01810   let dat=prdate=d1=val(resp$(1))
 01820   let dat$=resp$(2)

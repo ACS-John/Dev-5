@@ -2,7 +2,7 @@
 00030 ! r: setup library, dims, on err, fntop, etc
 00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fntos,fncno,fnxit,fnerror,fncmdset,fntop,fnopenprn,fncloseprn,fnub_index_customer,fngethandle
 00050   on errror goto ERTN
-00110   let fntop(program$)
+00110   fntop(program$)
 00120  ! /r
 00130   ! gosub OldWorkFromFixedWidthList
 12000   ! r: primary loop setup
@@ -55,7 +55,7 @@
 32360   pr #255,using "form pos 1,c 50": "Account "&z$&" not found"
 32380   goto READ_CUSTOMER
 32400   OWFFL_Finis: !
-32420   let fncloseprn
+32420   fncloseprn
 32440   close #1: 
 32460   fnub_index_customer ! execute "Index "&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&' '&env$('Q')&"\UBmstr\UBIndx5.h"&env$('cno')&" 1741/1743 2/7 Replace DupKeys -n"
 32480 return ! /r

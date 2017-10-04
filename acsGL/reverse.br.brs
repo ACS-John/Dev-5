@@ -1,44 +1,44 @@
 00010 ! Replace S:\acsGL\Reverse
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno, fnwait,fnlbl,fntxt,fnacs,fncmdkey,fntos,fnchk
-00040   let fntop(program$,cap$="Generate Reversing Entries")
+00040   fntop(program$,cap$="Generate Reversing Entries")
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,cap$*128,wait_message$*40
 00080   dim t$*12,n(2),l$*12,adr(2),ta(2),p$*30,my_p$*30,test_p$*30,io1$(7)*25
 00090 ! ______________________________________________________________________
-00100   let fncno(cno)
+00100   fncno(cno)
 00110   let wait_message$="Generating Reversing Entries"
 00120 ! 
 00130   let my_p$="Generated Reversing Entry"
 00140 ! ______________________________________________________________________
 00150 MENU1: ! 
-00160   let fntos(sn$="Reverse") !:
+00160   fntos(sn$="Reverse") !:
         let mylen=20: let mypos=mylen+3 : let right=1
-00170   let fnlbl(1,10,"Search For (blank for all)")
-00180   let fnlbl(2,1,"Adjustment Date:",mylen,right)
-00190   let fntxt(2,mypos,8,0,right,"1",0,"If you are wanting to reverse some specific adjustments and can identify them by date, use that date.",0 ) !:
+00170   fnlbl(1,10,"Search For (blank for all)")
+00180   fnlbl(2,1,"Adjustment Date:",mylen,right)
+00190   fntxt(2,mypos,8,0,right,"1",0,"If you are wanting to reverse some specific adjustments and can identify them by date, use that date.",0 ) !:
         let resp$(1)=str$(s_ad)
-00200   let fnlbl(3,1,"Reference Number:",mylen,right)
-00210   let fntxt(3,mypos,12,0,right,"",0,"Enter the reference # of the adjustment to reverse a specific adjustment.",0 ) !:
+00200   fnlbl(3,1,"Reference Number:",mylen,right)
+00210   fntxt(3,mypos,12,0,right,"",0,"Enter the reference # of the adjustment to reverse a specific adjustment.",0 ) !:
         let resp$(2)=s_rn$
-00220   let fnlbl(4,1,"Transaction Code:",mylen,right)
-00230   let fntxt(4,mypos,1,0,right,"30",0,"If you wish to reverse all adjustments, you can enter a transaction code of 3.",0 ) !:
+00220   fnlbl(4,1,"Transaction Code:",mylen,right)
+00230   fntxt(4,mypos,1,0,right,"30",0,"If you wish to reverse all adjustments, you can enter a transaction code of 3.",0 ) !:
         let resp$(3)=str$(s_tc)
-00240   let fnchk(6,mypos,"Search History Also:",right) !:
+00240   fnchk(6,mypos,"Search History Also:",right) !:
         let resp$(4)=sh$
-00250   let fnlbl(8,5,"Reverse With (blank for no change)")
-00260   let fnlbl(9,1,"Adjustment Date:",mylen,right)
-00270   let fntxt(9,mypos,8,0,right,"1",0,"",0 ) !:
+00250   fnlbl(8,5,"Reverse With (blank for no change)")
+00260   fnlbl(9,1,"Adjustment Date:",mylen,right)
+00270   fntxt(9,mypos,8,0,right,"1",0,"",0 ) !:
         let resp$(5)=str$(r_ad)
-00280   let fnlbl(10,1,"Reference Number:",mylen,right)
-00290   let fntxt(10,mypos,12,0,right,"",0,"",0 ) !:
+00280   fnlbl(10,1,"Reference Number:",mylen,right)
+00290   fntxt(10,mypos,12,0,right,"",0,"",0 ) !:
         let resp$(6)=r_rn$
-00300   let fnchk(11,mypos,"Reverse Entry Now:",right) !:
+00300   fnchk(11,mypos,"Reverse Entry Now:",right) !:
         let resp$(7)="True"
-00310   let fncmdkey("&Next",1,1,0,"Proceed with reversing adjustments.")
-00320   let fncmdkey("&Cancel",5,0,1,"Return to menu without reversing.")
-00330   let fnacs(sn$,0,mat resp$,ckey)
+00310   fncmdkey("&Next",1,1,0,"Proceed with reversing adjustments.")
+00320   fncmdkey("&Cancel",5,0,1,"Return to menu without reversing.")
+00330   fnacs(sn$,0,mat resp$,ckey)
 00340   if ckey=5 then goto XIT
 00350   let s_ad=val(resp$(1))
 00360   let s_rn$=resp$(2)

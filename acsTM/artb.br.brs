@@ -1,10 +1,10 @@
 00020   on fkey 5 goto L970 ! 9/5/86
 00030   on error goto L1570
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fnd1,fndat
-00050   let fntop(program$,cap$="Trial Balance")
-00060   let fncno(cno,cnam$)
-00070   let fndat(dat$)
-00080   let fnconsole(1)
+00050   fntop(program$,cap$="Trial Balance")
+00060   fncno(cno,cnam$)
+00070   fndat(dat$)
+00080   fnconsole(1)
 00090   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&str$(cno)&",RecL=20,use,Shr",internal,outin,relative 
 00100   if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: d1
 00110   dim z$*5,e$(4)*30,e(5),s(5),c(5),cnam$*40,u$*20,flo$(3),fli$(2),dat$*20
@@ -28,12 +28,12 @@
 00280 L280: rinput fields mat fli$: dat$,d1 conv L280
 00285   if cmdkey=5 then goto XIT
 00286   if cmdkey<>1 then goto L230
-00290   let fndat(dat$,put=2)
+00290   fndat(dat$,put=2)
 00300   rewrite #8,using "form pos 1,n 6",rec=1: d1
 00310   close #8: 
 00320   gosub L1510
 00330   pr newpage
-00340   let fnopenprn
+00340   fnopenprn
 00350   pr fields "10,15,c 50,h": "A/R AGED TRIAL BALANCE PROGRAM IN PROCESS"
 00360   pr fields "23,2,C 30,N": "Press F5 to stop"
 00370   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L1570

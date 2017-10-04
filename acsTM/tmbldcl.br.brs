@@ -1,7 +1,7 @@
 00020 ! 
 00030   on error goto ERTN
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror
-00050   let fntop(program$,cap$="Build Files")
+00050   fntop(program$,cap$="Build Files")
 00070 ! 
 00080   dim ta(25,2),fb(25),tr(6),a$*5
 00090   pr newpage

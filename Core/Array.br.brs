@@ -1,5 +1,5 @@
 28200 def library fnarray_item_insert$(mat array$, insert_item$*1024, insert_item_number)
-28300   let fnarray_item_insert$=fn_array_item_insert$(mat array$, insert_item$, insert_item_number)
+28300   fnarray_item_insert$=fn_array_item_insert$(mat array$, insert_item$, insert_item_number)
 28400 fnend 
 28500 def fn_array_item_insert$(mat array$, insert_item$*1024, insert_item_number)
 28600   array_item_count=udim(mat array$)
@@ -14,7 +14,7 @@
 29500   end if  ! Insert_Item_Number>Array_Item_Count   /   else 
 29600 fnend 
 29700 def library fnarray_item_insert(mat array, insert_item, insert_item_number)
-29800   let fnarray_item_insert=fn_array_item_insert(mat array, insert_item, insert_item_number)
+29800   fnarray_item_insert=fn_array_item_insert(mat array, insert_item, insert_item_number)
 29900 fnend  ! fnARRAY_ITEM_INSERT
 30000 def fn_array_item_insert(mat array, insert_item, insert_item_number)
 30100   array_item_count=udim(mat array)
@@ -30,7 +30,7 @@
 31100 fnend 
 31200 def library fnsrch_case_insensitive(mat srch_array$,srch_for$*80; srch_start_ele)
 31300   ! if ~setup the let fn_setup
-31400   let fnsrch_case_insensitive=fn_srch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
+31400   fnsrch_case_insensitive=fn_srch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
 31500 fnend  ! fnsrch_case_insensitive
 31600 def fn_srch_case_insensitive(mat srch_array$,srch_for$*80; srch_start_ele)
 31700   let srch_array_count=udim(mat srch_array$)
@@ -45,7 +45,7 @@
 32600       let srch_start_ele=srch_array_count+1
 32700     end if 
 32800   loop until srch_start_ele>srch_array_count or srch_return
-32900   let fn_srch_case_insensitive=srch_return
+32900   fn_srch_case_insensitive=srch_return
 33000 fnend  ! fn_srch_case_insensitive
 33100 def library fnAddOneN(mat add_to, one; skip_zeros, skip_dupes)
 33200   fnAddOneN=fn_addOneN(mat add_to, one, skip_zeros, skip_dupes)

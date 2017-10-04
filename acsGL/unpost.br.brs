@@ -7,25 +7,25 @@
 00070   dim k(10,8),p$*30,ta(2),cap$*128,t$*12
 00080   dim cnam$*40,n(2),l$*12
 00090 ! /r
-00100   let fntop(program$,cap$="Remove Entries")
-00120   let fncno(cno,cnam$)
+00100   fntop(program$,cap$="Remove Entries")
+00120   fncno(cno,cnam$)
 18000 MENU1: ! r:
-18020   let fntos(sn$='UnPost')
+18020   fntos(sn$='UnPost')
 18040   let lc=0 : let mylen=47 : let mypos=mylen+2
-18060   let fnlbl(lc+=1,1,"Starting Date to Remove:",mylen,1)
-18080   let fntxt(lc,mypos,0,0,0,'ccyymmdd')
+18060   fnlbl(lc+=1,1,"Starting Date to Remove:",mylen,1)
+18080   fntxt(lc,mypos,0,0,0,'ccyymmdd')
 18100   let resp$(1)="" ! STR$(fndate_mmddyy_to_ccyymmdd(BEGDAT))
-18120   let fnlbl(lc+=1,1,"Ending Date to Remove:",mylen,1)
-18140   let fntxt(lc,mypos,0,0,0,'ccyymmdd')
+18120   fnlbl(lc+=1,1,"Ending Date to Remove:",mylen,1)
+18140   fntxt(lc,mypos,0,0,0,'ccyymmdd')
 18160   let resp$(2)="" ! STR$(fndate_mmddyy_to_ccyymmdd(ENDDAT))
 18170   let lc+=1
-18180   let fnchk(lc+=1,50,'Process History instead of Current Transactions',1)
+18180   fnchk(lc+=1,50,'Process History instead of Current Transactions',1)
 18200   let resp$(3)="False"
 18210   let lc+=1
-18220   let fnchk(lc+=1,50,'Remove Duplicates Only',1)
+18220   fnchk(lc+=1,50,'Remove Duplicates Only',1)
 18240   let resp$(4)='False'
-18260   let fncmdset(2)
-18280   let fnacs(sn$,0,mat resp$,ckey)
+18260   fncmdset(2)
+18280   fnacs(sn$,0,mat resp$,ckey)
 18300   if ckey=5 then goto XIT
 18320   begdat=val(resp$(1))
 18340   let enddat=val(resp$(2))
@@ -34,22 +34,22 @@
 18400   if enddat<begdat or (enddat=0 and begdat=0) then pr bell; : goto MENU1
 18420 ! /r
 18440 ! r: get ready to run
-24000   let fnstatus('date range: '&str$(begdat)&' - '&str$(enddat))
+24000   fnstatus('date range: '&str$(begdat)&' - '&str$(enddat))
 24020   if del_dupe_only then let fnstatus('only deleting duplicate entries')
 24040   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 24060   if uprc$(code$)="H" then 
-24080     let fnstatus('Processing history instead of current transactions')
+24080     fnstatus('Processing history instead of current transactions')
 24100     if del_dupe_only then 
-24120       let fnindex_it(env$('Q')&"\GLmstr\AcTrans.h"&str$(cno),env$('Q')&"\GLmstr\tmp70.h"&str$(cno),"1,70")
+24120       fnindex_it(env$('Q')&"\GLmstr\AcTrans.h"&str$(cno),env$('Q')&"\GLmstr\tmp70.h"&str$(cno),"1,70")
 24140     end if  ! del_dupe_only
 24160     open #h_trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&str$(cno)&",Shr",internal,outin,keyed  ! 3
 24180     if del_dupe_only then 
 24200       open #h_trans_dupe:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\tmp70.h"&str$(cno)&",Shr",internal,input,keyed 
 24220     end if  ! del_dupe_only
 24240   else 
-24260     let fnstatus('Processing current transactions only')
+24260     fnstatus('Processing current transactions only')
 24280     if del_dupe_only then 
-24300       let fnindex_it(env$('Q')&"\GLmstr\GLTrans.h"&str$(cno),env$('Q')&"\GLmstr\tmp70.h"&str$(cno),"1,70")
+24300       fnindex_it(env$('Q')&"\GLmstr\GLTrans.h"&str$(cno),env$('Q')&"\GLmstr\tmp70.h"&str$(cno),"1,70")
 24320     end if  ! del_dupe_only
 24340     open #h_trans=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,outin,relative  ! 2
 24360     if del_dupe_only then 
@@ -72,13 +72,13 @@
 28240 ! rec_to_delete=rec(h_trans)
 28260 ! if trim$(l$)='4905' and t$='  6   507  1' then pause
 28280   if ~del_dupe_only or fn_has_dupe(h_trans_dupe,rec(h_trans),'Form pos 1,C 70') then 
-28300     let fnstatus('deleting transaction: '&hd_key_one$)
+28300     fnstatus('deleting transaction: '&hd_key_one$)
 28320     delete #h_trans: ioerr ignore
 28340   end if  ! ~del_dupe_only or fn_has_dupe
 28360   goto READ_H_TRANS
 28380 ! _____________________________________________________________________
 32000 EO_H_TRANS: ! /r
-32020   let fnstatus('Reassigning Transaction Addresses...') ! r:
+32020   fnstatus('Reassigning Transaction Addresses...') ! r:
 32040   restore #1,key>="            ": eof ignore
 32060   do 
 32080     read #1,using 'Form POS 333,2*PD 3': mat ta eof L470
@@ -101,7 +101,7 @@
 32420 L580: ! 
 32440   next j
 32450 ! /r
-32460   let fnstatus_pause
+32460   fnstatus_pause
 32480   goto XIT
 34000 XIT: let fnxit
 36000 ! <Updateable Region: ERTN>
@@ -126,5 +126,5 @@
 40220 HD_EOF: ! 
 40240     if hd_key_one$=hd_key_two$ then let hd_return=1
 40260 HD_XIT: ! 
-40280     let fn_has_dupe=hd_return
+40280     fn_has_dupe=hd_return
 40300   fnend  ! fn_has_dupe

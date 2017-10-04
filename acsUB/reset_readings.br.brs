@@ -13,26 +13,26 @@
 12400   dim extra(23),extra$(11)*30,client$*30
 12600   dim cap$*128,work$*80,work_addr$*80
 12800 ! ______________________________________________________________________
-13000   let fncno(cno) : !  :  !
-13200   let fntop("S:\acsUB\reset_readings",cap$="Reset Readings")
+13000   fncno(cno) : !  :  !
+13200   fntop("S:\acsUB\reset_readings",cap$="Reset Readings")
 13400   dim srvnam$(10)*20,srv$(10)*2
 13600   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative 
 13800   read #20,using "Form POS 1,10*C 20,10*C 2",rec=1: mat srvnam$,mat srv$
 14000   close #20: 
 14200 ! ______________________________________________________________________
 14400 SCREEN1: ! 
-14600   let fntos(sn$='resetreadings3')
+14600   fntos(sn$='resetreadings3')
 14800   let mylen=22 : let mypos=mylen+2
-15000   let fnlbl(1,1,"Transaction Date (mmddyy):",mylen,1)
-15200   let fntxt(1,mypos,8,0,1,"1001") : let resp$(1)='' ! '070611'
-15400   let fnlbl(3,1,"Reading to Reset:",mylen,1)
-15600   let fnopt(3,mypos,"Current") : let resp$(2)='True'
-15800   let fnopt(4,mypos,"Prior") : let resp$(3)='False'
-16000   let fnchk(6,mypos,srvnam$(1),1) : let resp$(4)='True'
-16200   let fnchk(7,mypos,srvnam$(4),1) : let resp$(5)='True'
-16400   let fnchk(9,mypos,"Update Usages",1) : let resp$(6)='False'
-16600   let fncmdset(2)
-16800   let fnacs(sn$,0,mat resp$,ck)
+15000   fnlbl(1,1,"Transaction Date (mmddyy):",mylen,1)
+15200   fntxt(1,mypos,8,0,1,"1001") : let resp$(1)='' ! '070611'
+15400   fnlbl(3,1,"Reading to Reset:",mylen,1)
+15600   fnopt(3,mypos,"Current") : let resp$(2)='True'
+15800   fnopt(4,mypos,"Prior") : let resp$(3)='False'
+16000   fnchk(6,mypos,srvnam$(1),1) : let resp$(4)='True'
+16200   fnchk(7,mypos,srvnam$(4),1) : let resp$(5)='True'
+16400   fnchk(9,mypos,"Update Usages",1) : let resp$(6)='False'
+16600   fncmdset(2)
+16800   fnacs(sn$,0,mat resp$,ck)
 17000   if ck=5 then goto XIT
 17200   let d1=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
 17400   if resp$(2)='True' then let do_current=1 else let do_current=0
@@ -57,7 +57,7 @@
 21200 NEXT_ONE: ! 
 21400   loop 
 21600 XIT: ! 
-21800   let fnxit
+21800   fnxit
 22000 ! ______________________________________________________________________
 22200 ! <Updateable Region: ERTN>
 22400 ERTN: let fnerror(program$,err,line,act$,"NO")

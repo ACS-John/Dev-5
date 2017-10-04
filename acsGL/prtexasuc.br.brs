@@ -9,8 +9,8 @@
 00090   dim a$(3)*40,b$(2)*12,c$*5,e(2),e$(2)*11,pedat$*5
 00100   dim resp$(3)*255,csvpath$*255
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Print Texas Unemployment Report")
-00130   let fncno(cno,cnam$)
+00120   fntop(program$,cap$="Print Texas Unemployment Report")
+00130   fncno(cno,cnam$)
 00150   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,POS 188,PD 7.2,POS 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc !:
         close #1: 
@@ -18,19 +18,19 @@
 00170 ! 
 00175 L170: let fntos(sn$="PrTexasUc1") !:
         let mylen=60: let mypos=mylen+3 : let right=1
-00180   let fnlbl(1,1,"Quarter Ending Date(mm-yy):",mylen,right)
-00185   let fntxt(1,mypos,5,0,left,"",0,"Enter the date as two numeric digits for the month, then a dash, and two digits for the year." ,0 ) !:
+00180   fnlbl(1,1,"Quarter Ending Date(mm-yy):",mylen,right)
+00185   fntxt(1,mypos,5,0,left,"",0,"Enter the date as two numeric digits for the month, then a dash, and two digits for the year." ,0 ) !:
         let resp$(1)=""
-00190   let fnlbl(2,1,"Name Format (F=first name first; L=Last name first):",mylen,right)
-00195   let fntxt(2,mypos,1,0,left,"",0,"Enter 'F' if first name first; else 'L' if last name shown first." ,0 ) !:
+00190   fnlbl(2,1,"Name Format (F=first name first; L=Last name first):",mylen,right)
+00195   fntxt(2,mypos,1,0,left,"",0,"Enter 'F' if first name first; else 'L' if last name shown first." ,0 ) !:
         let resp$(2)=""
-00200   let fnlbl(3,1,"Enter the location to save employees to CSV for QuickFile",mylen,right)
-00205   let fntxt(3,mypos,60,0,left,"",0,"Enter a CSV file path.",0)
-00210   let fnreg_read("TexasUCFile",csvpath$)
+00200   fnlbl(3,1,"Enter the location to save employees to CSV for QuickFile",mylen,right)
+00205   fntxt(3,mypos,60,0,left,"",0,"Enter a CSV file path.",0)
+00210   fnreg_read("TexasUCFile",csvpath$)
 00215   if trim$(csvpath$)="" then csvpath$=env$('Q')&"\GLmstr\txuc.csv"
 00220   let resp$(3)=csvpath$
-00225   let fncmdset(2)
-00230   let fnacs(sn$,0,mat resp$,ckey)
+00225   fncmdset(2)
+00230   fnacs(sn$,0,mat resp$,ckey)
 00235   if ckey=5 then goto XIT
 00240   let pedat$=resp$(1)
 00245   let namcde$=uprc$(resp$(2))
@@ -38,7 +38,7 @@
 00255   if trim$(namcde$)="" then goto L170
 00280 L280: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00290   open #(h_csv:=fngethandle): "Name="&csvpath$&",REPLACE",display,output 
-00300   let fnopenprn
+00300   fnopenprn
 00310   gosub HDR
 00315 L310: read #2,using L320: mat k,mat k$,mat l$,mat m eof L600
 00320 L320: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
@@ -71,8 +71,8 @@
 00590 ! ______________________________________________________________________
 00600 L600: gosub L820
 00610   close #2: 
-00620   let fncloseprn
-00630   let fnreg_write("TexasUCFile",csvpath$)
+00620   fncloseprn
+00630   fnreg_write("TexasUCFile",csvpath$)
 00640   close #h_csv: 
 00650   goto XIT
 00660 ! ______________________________________________________________________

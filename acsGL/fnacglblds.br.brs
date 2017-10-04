@@ -6,8 +6,8 @@
 00060 ! ______________________________________________________________________
 00070     dim flo$(31),fli$(65),scr$(30)*20,otd$(65)*30,d(2)
 00080 ! ______________________________________________________________________
-00090     let fncno(cno)
-00100     let fntop(program$,"CHANGE_ME")
+00090     fncno(cno)
+00100     fntop(program$,"CHANGE_ME")
 00110     open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
           read #20,using 'Form POS 150,2*N 1': mat d !:
           close #20: 
@@ -92,11 +92,11 @@
 00370     execute "Free "&env$('Q')&"\GLmstr\ACGLScr.h"&str$(cno)&" -n" ioerr L380
 00380 L380: open #20: "Name="&env$('Q')&"\GLmstr\ACGLScr.h"&str$(cno)&",Size=0,RecL=4281",internal,output: write #20,using 'Form POS 1,31*C 15,30*C 20,65*C 18,65*C 30': mat flo$,mat scr$,mat fli$,mat otd$ !:
           close #20: 
-00390     let fnacprscr
+00390     fnacprscr
 00400     goto XIT
 00410 ! ______________________________________________________________________
 00420 ERTN: ! <Updateable Region: ERTN>
-00430     let fnerror(program$,err,line,act$,"xit")
+00430     fnerror(program$,err,line,act$,"xit")
 00440     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00450     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00460     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

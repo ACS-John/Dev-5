@@ -46,7 +46,7 @@
 00522 ! /r
 00540 cursys$=fncursys$(cursys$)
 00542 if cursys_origional$<>cursys$ then 
-00560   let fnstatus('Set current system to: '&cursys$&' from '&cursys_origional$)
+00560   fnstatus('Set current system to: '&cursys$&' from '&cursys_origional$)
 00570 end if 
 00580 fnputcno(destination_company_number) : cno=destination_company_number
 00600 fnstatus('Set active Company Number to: '&str$(destination_company_number))
@@ -56,13 +56,13 @@
 10040   mat message$(2)
 10060   let message$(1)='the company_file$ ('&company_file$&') does not exist'
 10080   let message$(2)="Please correct the selected path"
-10100   let fnmsgbox(mat message$, response$, cap$)
+10100   fnmsgbox(mat message$, response$, cap$)
 10120   goto SCREEN1
 10140 else if pos_point_h<=0 then 
 10160   mat message$(2)
 10180   let message$(1)="the source company_file$ ("&company_file$&") does not contain a .h"
 10200   let message$(2)="It must be a zip or rar file type archive, please enhance code to handle such things."
-10220   let fnmsgbox(mat message$, response$, cap$)
+10220   fnmsgbox(mat message$, response$, cap$)
 10240   goto SCREEN1
 10260 else 
 11000   if ~import_only then let fn_is_converison_detection
@@ -73,39 +73,39 @@
 16000   ! r: conversion point A
 16020   if cnv_ub then 
 16040     if cnv_ub_french_settlement then 
-16060       let fn_ubmaster2customer_frenchset(env$('Q')&'\UBmstr\UBMaster.h'&str$(destination_company_number),env$('Q')&'\UBmstr\Customer.h'&str$(destination_company_number))
+16060       fn_ubmaster2customer_frenchset(env$('Q')&'\UBmstr\UBMaster.h'&str$(destination_company_number),env$('Q')&'\UBmstr\Customer.h'&str$(destination_company_number))
 16080     else if cnv_ub_merriam_woods then 
-16090       let fn_ubmaster2customer_merriam(env$('Q')&'\UBmstr\Customer.h'&str$(destination_company_number),env$('Q')&'\UBmstr\Customer.h'&str$(destination_company_number))
+16090       fn_ubmaster2customer_merriam(env$('Q')&'\UBmstr\Customer.h'&str$(destination_company_number),env$('Q')&'\UBmstr\Customer.h'&str$(destination_company_number))
 16092     else if cnv_exeter then 
-16094       let fnCopy(env$('Q')&'\UBmstr\UBMaster.h'&str$(destination_company_number),env$('Q')&'\UBmstr\Customer.h'&str$(destination_company_number),2067)
+16094       fnCopy(env$('Q')&'\UBmstr\UBMaster.h'&str$(destination_company_number),env$('Q')&'\UBmstr\Customer.h'&str$(destination_company_number),2067)
 16096       fnFree(env$('Q')&'\UBmstr\UBMaster.h'&str$(destination_company_number))
 16100     else if ~exists(env$('Q')&'\UBmstr\Customer.h'&str$(destination_company_number)) and exists(env$('Q')&'\UBmstr\UBMaster.h'&str$(destination_company_number)) then 
-16110       let fnCopy(env$('Q')&'\UBmstr\UBMaster.h'&str$(destination_company_number),env$('Q')&'\UBmstr\Customer.h'&str$(destination_company_number))
+16110       fnCopy(env$('Q')&'\UBmstr\UBMaster.h'&str$(destination_company_number),env$('Q')&'\UBmstr\Customer.h'&str$(destination_company_number))
 16120       fnFree(env$('Q')&'\UBmstr\UBMaster.h'&str$(destination_company_number))
 16140     end if 
-16160     let fnub_cnv_build_transactions
-16170     let fnub_cnv_ubmstr_vb
-16172     let fnub_cnv_note
+16160     fnub_cnv_build_transactions
+16170     fnub_cnv_ubmstr_vb
+16172     fnub_cnv_note
 16180   end if 
 16900   ! /r
 17000   let setenv('force_reindex','yes') ! for fncheckfileversion
 17020   if ~import_only then 
 18000     if ~cnv_pr then let fncheckfileversion
 18020     if cnv_ub_french_settlement then 
-18040       let fnfix_trans_breakdowns(1,0)
-18060       let fntranslate_rate_abreviations('GS','GA')
-18080     !       let fn_ub_combine_services(5,4)
+18040       fnfix_trans_breakdowns(1,0)
+18060       fntranslate_rate_abreviations('GS','GA')
+18080     !       fn_ub_combine_services(5,4)
 18100     else if cnv_ub_merriam_woods then 
-18120       let fn_ub_cust_route_from_acctno(destination_company_number)
+18120       fn_ub_cust_route_from_acctno(destination_company_number)
 18140     end if 
 18160     !     if env$('client')="West Accounting" then pause ! dir '&env$('Q')&'\PRmstr\dednames.h4560
 19000     if cnv_pr then 
 19020       if ~exists(env$('Q')&"\PRmstr\dednames.h"&str$(cno)) then 
 19040         if env$('client')="Merriam Woods" then let pr_cnv_medicare_is_seperated=0
-19060         let fnpr_conversion_department(cno, pr_cnv_medicare_is_seperated)
-19080         let fnpr_conversion_add_missing(cno)
+19060         fnpr_conversion_department(cno, pr_cnv_medicare_is_seperated)
+19080         fnpr_conversion_add_missing(cno)
 19100       end if 
-19110       let fncheckfileversion
+19110       fncheckfileversion
 19120     end if 
 19140   end if 
 19160 end if 
@@ -116,10 +116,10 @@
 20020   company_import_extension$=company_file$(pos_point_h:len(company_file$))
 20040   company_import_path$=company_file$(1:pos(company_file$,'\',-1))
 20060   fnFree(env$('Q')&'\'&cursys$&'mstr\*.h'&str$(destination_company_number))
-20062   let fnstatus('Existing files ('&os_filename$(env$('Q')&'\'&cursys$&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
-20080   let fnCopy(env$('at')&company_import_path$&'*'&company_import_extension$,env$('Q')&'\'&cursys$&'mstr\*.h'&str$(destination_company_number))
+20062   fnstatus('Existing files ('&os_filename$(env$('Q')&'\'&cursys$&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
+20080   fnCopy(env$('at')&company_import_path$&'*'&company_import_extension$,env$('Q')&'\'&cursys$&'mstr\*.h'&str$(destination_company_number))
 20100   if cursys$='UB' then let fn_ub_copy_extras
-20120   let fnstatus('Import data copied in.')
+20120   fnstatus('Import data copied in.')
 20140   ! 
 20990 fnend 
 21000 def fn_is_converison_detection
@@ -157,12 +157,12 @@
 21462     else if is_campbell then 
 21464       cnv_ub_capbell=1
 21480     end if 
-21500     let fnstatus('Processing as '&env$('client')&' '&cursys$&' Conversion')
+21500     fnstatus('Processing as '&env$('client')&' '&cursys$&' Conversion')
 21520   else if cnv_pr then 
 21540     !     if is_merriam_woods or is_west_accounting then
 21560     !       cnv_pr=1
 21580     !     end if
-21600     let fnstatus('Processing as '&env$('client')&' '&cursys$&' Conversion')
+21600     fnstatus('Processing as '&env$('client')&' '&cursys$&' Conversion')
 21620   end if 
 21640   ! /r
 22990 fnend 
@@ -209,20 +209,20 @@
 25400   ! PRCoInfoOldVersionFinis: !
 25410   if ~exists(env$('Q')&'\'&cursys$&'mstr\Company.h'&str$(destination_company_number)) then 
 25420     if exists(env$('Q')&'\'&cursys$&'mstr\'&cursys$&'coinfo.h'&str$(destination_company_number)) then 
-25440       let fnCopy(env$('Q')&'\'&cursys$&'mstr\'&cursys$&'coinfo.h'&str$(destination_company_number),env$('Q')&'\'&cursys$&'mstr\Company.h'&str$(destination_company_number))
+25440       fnCopy(env$('Q')&'\'&cursys$&'mstr\'&cursys$&'coinfo.h'&str$(destination_company_number),env$('Q')&'\'&cursys$&'mstr\Company.h'&str$(destination_company_number))
 25460       fnFree(env$('Q')&'\'&cursys$&'mstr\'&cursys$&'coinfo.h'&str$(destination_company_number))
 26000     end if 
 26020     if exists(env$('Q')&'\'&cursys$&'mstr\prcoinfo.h'&str$(destination_company_number)) then 
-26040       let fnCopy(env$('Q')&'\'&cursys$&'mstr\prcoinfo.h'&str$(destination_company_number),env$('Q')&'\'&cursys$&'mstr\Company.h'&str$(destination_company_number))
+26040       fnCopy(env$('Q')&'\'&cursys$&'mstr\prcoinfo.h'&str$(destination_company_number),env$('Q')&'\'&cursys$&'mstr\Company.h'&str$(destination_company_number))
 26060       fnFree(env$('Q')&'\'&cursys$&'mstr\prcoinfo.h'&str$(destination_company_number))
 26080     end if 
 26100     if exists(env$('Q')&'\'&cursys$&'mstr\coinfo.h'&str$(destination_company_number)) then 
-26120       let fnCopy(env$('Q')&'\'&cursys$&'mstr\coinfo.h'&str$(destination_company_number),env$('Q')&'\'&cursys$&'mstr\Company.h'&str$(destination_company_number))
+26120       fnCopy(env$('Q')&'\'&cursys$&'mstr\coinfo.h'&str$(destination_company_number),env$('Q')&'\'&cursys$&'mstr\Company.h'&str$(destination_company_number))
 26140       fnFree(env$('Q')&'\'&cursys$&'mstr\coinfo.h'&str$(destination_company_number))
 26160     end if 
 26180   end if 
 26181   if cursys$='UB' then 
-26182     let fnd1(d1,1)
+26182     fnd1(d1,1)
 26183   end if 
 26200 fnend 
 30000 def fn_ub_copy_extras
@@ -231,15 +231,15 @@
 30030     if exists(env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number)) then 
 30040       fnFree(env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
 30050     end if  ! exists(env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
-30060     let fnCopy(env$('at')&company_import_path$&'ubdata\*'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
-30070     let fnstatus('UBmstr\ubData found in source and replaced destination.')
+30060     fnCopy(env$('at')&company_import_path$&'ubdata\*'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
+30070     fnstatus('UBmstr\ubData found in source and replaced destination.')
 30080   else if exists(company_import_path$&'..\acsub\ratemst'&company_import_extension$) then 
-30090     let fnstatus('RateMst found in source acsUB folder.  Copying to UBmstr\ubData from there.')
-30100     let fnCopy(env$('at')&company_import_path$&'..\acsub\ratemst'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\RateMst.h'&str$(destination_company_number))
-30110     let fnCopy(env$('at')&company_import_path$&'..\acsub\RateIdx1'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\RateIdx1.h'&str$(destination_company_number))
-30120     let fnCopy(env$('at')&company_import_path$&'..\acsub\RateIdx2'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\RateIdx2.h'&str$(destination_company_number))
+30090     fnstatus('RateMst found in source acsUB folder.  Copying to UBmstr\ubData from there.')
+30100     fnCopy(env$('at')&company_import_path$&'..\acsub\ratemst'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\RateMst.h'&str$(destination_company_number))
+30110     fnCopy(env$('at')&company_import_path$&'..\acsub\RateIdx1'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\RateIdx1.h'&str$(destination_company_number))
+30120     fnCopy(env$('at')&company_import_path$&'..\acsub\RateIdx2'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\RateIdx2.h'&str$(destination_company_number))
 30130   else 
-30300     let fnstatus('UBmstr\ubData did not exist in source. Destination ubData remains unchanged.')
+30300     fnstatus('UBmstr\ubData did not exist in source. Destination ubData remains unchanged.')
 30310   !   it is a UB system but no ubdata directory exists - so get the rate files from ACSUB
 30320   !   copy in rates from acsUB
 32000     dim import_install_path$*256
@@ -248,7 +248,7 @@
 32060     let import_install_path$=import_install_path$(1:pos(import_install_path$,'\',-1))
 32080   !  pause
 32100     if exists(env$('at')&import_install_path$&'S:\acsUB\ratemst'&company_import_extension$) then 
-32120       let fnCopy(env$('at')&import_install_path$&'S:\acsUB\ratemst'&company_import_extension$,env$('Q')&'\'&cursys$&'mstr\ubdata\*.h'&str$(destination_company_number))
+32120       fnCopy(env$('at')&import_install_path$&'S:\acsUB\ratemst'&company_import_extension$,env$('Q')&'\'&cursys$&'mstr\ubdata\*.h'&str$(destination_company_number))
 32140     end if 
 32160   end if 
 32180   ! /r
@@ -257,7 +257,7 @@
 32240     fnFree(env$('Q')&'\'&cursys$&'mstr\notes.h'&str$(destination_company_number))
 32258     ! this would not get subdirs ! fnCopy(env$('at')&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*',env$('Q')&'\UBmstr\notes.h'&str$(destination_company_number)&'\*.*')
 32260     execute 'sy xcopy "'&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*" "'&os_filename$(env$('Q')&'\UBmstr\notes.h'&str$(destination_company_number))&'\*.*" /t /y'
-32262     let fnstatus('UB Notes imported.')
+32262     fnstatus('UB Notes imported.')
 32280   end if  ! exists [import path]'&env$('Q')&'\UBmstr\notes.h[company_import_extension]
 32300   ! /r
 32320   ! r: rename ubmaster to customer
@@ -311,8 +311,8 @@
 50260   EO_UBMASTER: ! 
 50280   close #h_old: 
 50300   close #h_new: 
-50320   let fnub_index_customer
-50322   let fnstatus('UBMaster Conversion for French Settlement complete.')
+50320   fnub_index_customer
+50322   fnstatus('UBMaster Conversion for French Settlement complete.')
 50340 fnend 
 52000 def fn_ubmaster2customer_merriam(file_source$*256,file_destination$*256)
 52322   fnstatus('UBMaster Conversion for Merriam Woods complete.')

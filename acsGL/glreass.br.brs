@@ -2,28 +2,28 @@
 00020 ! duh
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnwin3,fnerror,fncno,fnwait,fntos,fnlbl,fncmdkey,fnacs
-00050   let fntop(program$,"Reassign Transaction Addresses")
+00050   fntop(program$,"Reassign Transaction Addresses")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim ta(2),tr1$*70,wrd1$(2)*35,fil$(12,4),cnam$*40,cap$*128
 00090 ! ______________________________________________________________________
 00100 ! ______________________________________________________________________
-00110   let fncno(cno)
+00110   fncno(cno)
 00120 ! 
 00130   cap$="Backup Restore or Reorganize"
 00140   let h$=".H"&str$(cno)
 00150 ! ______________________________________________________________________
 00160 MENU1: ! 
-00170   let fntos(sn$="glreorg") !:
+00170   fntos(sn$="glreorg") !:
         let mylen=20: let mypos=mylen+3 : let right=1
-00180   let fnlbl(1,1,"If you get errors trying to access general ledger")
-00190   let fnlbl(2,1,"transaction, this option might help.  It")
-00200   let fnlbl(3,1,"will reassign all transactions back to the ")
-00210   let fnlbl(4,1,"correct general ledger accounts.")
-00220   let fnlbl(5,1,"Take Next to continue with the reassign process.")
-00230   let fncmdkey("&Next",1,1,0,"Reassigns the general ledger transactions.")
-00240   let fncmdkey("&Cancel",5,0,1,"Returns to menu without processing.")
-00250   let fnacs(sn$,0,mat resp$,ckey)
+00180   fnlbl(1,1,"If you get errors trying to access general ledger")
+00190   fnlbl(2,1,"transaction, this option might help.  It")
+00200   fnlbl(3,1,"will reassign all transactions back to the ")
+00210   fnlbl(4,1,"correct general ledger accounts.")
+00220   fnlbl(5,1,"Take Next to continue with the reassign process.")
+00230   fncmdkey("&Next",1,1,0,"Reassigns the general ledger transactions.")
+00240   fncmdkey("&Cancel",5,0,1,"Returns to menu without processing.")
+00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
 00270   if ckey=1 then gosub REORG
 00280   goto XIT

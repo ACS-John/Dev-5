@@ -9,7 +9,7 @@
 00090   dim month(13), month$(13)*25,month$*25
 00100 ! ______________________________________________________________________
 00110   let right=1 : center=2
-00120   let fntop(program$,cap$="Print Bar Graph of Earnings")
+00120   fntop(program$,cap$="Print Bar Graph of Earnings")
 00140   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative  !:
         read #20,using 'form pos 296,pos 384,n 2': lmu,nap : close #20: 
 00150 ! ______________________________________________________________________
@@ -26,20 +26,20 @@
 00250   open #12: "Name="&env$('Q')&"\GLmstr\BudgetInfo.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\BudIndx.h"&env$('cno')&",Use,RecL=28,KPs=1,KLn=14,Shr",internal,outin,keyed 
 00260 SCR1: ! 
 00270   let t5=0
-00280   let fntos(sn$='CloseYear3') !:
+00280   fntos(sn$='CloseYear3') !:
         let lc=0 : let mylen=20 : let mypos=mylen+2 : let width=50
-00290   let fnlbl(lc+=1,1,"Year to Print:",18,1)
-00300   let fntxt(lc,mypos,4,0,1,"30",0,"You must choose the year to use printing a chart.") !:
+00290   fnlbl(lc+=1,1,"Year to Print:",18,1)
+00300   fntxt(lc,mypos,4,0,1,"30",0,"You must choose the year to use printing a chart.") !:
         let resp$(1)=""
-00310   let fnfra(lc+=1,1,2,45,"Current Year or Prior Year","Indicate if the information is to be pulled form the current files or prior files.",0) !:
-        let fnopt(1,2,"Pull from Current",0,1) !:
-        let fnopt(2,2,"Pull from Prior Year",0,1)
-00320   let fnlbl(lc+=4,1,"Enter the Last Retained Earnings Account",width,0)
-00330   let fnlbl(lc+=1,1,"or Equity Account:",width,0)
-00340   let fnqgl(lc,mypos) !:
+00310   fnfra(lc+=1,1,2,45,"Current Year or Prior Year","Indicate if the information is to be pulled form the current files or prior files.",0) !:
+        fnopt(1,2,"Pull from Current",0,1) !:
+        fnopt(2,2,"Pull from Prior Year",0,1)
+00320   fnlbl(lc+=4,1,"Enter the Last Retained Earnings Account",width,0)
+00330   fnlbl(lc+=1,1,"or Equity Account:",width,0)
+00340   fnqgl(lc,mypos) !:
         let resp$(2)=""
-00350   let fncmdset(2)
-00360   let fnacs(sn$,0,mat resp$,ckey)
+00350   fncmdset(2)
+00360   fnacs(sn$,0,mat resp$,ckey)
 00370   if ckey=5 then goto XIT
 00380   let year=val(resp$(1))
 00390   if resp$(2)="True" then let pullfrom$="Current"
@@ -198,5 +198,5 @@
 01640   end if 
 01650   return 
 01660 RELEASE_PRINT: ! 
-01680   let fnpa_finis
+01680   fnpa_finis
 01700   return 

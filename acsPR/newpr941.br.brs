@@ -2,7 +2,7 @@
 00020 ! 941 Summary  ( Prints a detail of employees and the complete 941 using priint ace
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit,fntos,fnlbl,fnGetPayrollDates,fnerror,fnopenprn,fncloseprn,fntxt,fnchk,fncmdset,fnacs,fncomboa,fnfra,fnmsgbox,fnpa_finis,fnpa_open,fnpa_newpage,fncreg_read,fnpa_txt,fnpa_pic,fnpa_fontsize,fnDedNames
-00050   let fntop(program$,cap$="941 Summary")
+00050   fntop(program$,cap$="941 Summary")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim dedcode(20),calcode(20),dedfed(20),option1$(4)*20
@@ -27,61 +27,61 @@
 00320   close #20: 
 00330 ! ______________________________________________________________________
 00340 MENU1: ! 
-00350   let fntos(sn$="pr941")
+00350   fntos(sn$="pr941")
 00352   let respc=0
 00360   if val(date$(4:5))=1 then let taxyear=val(date$(1:2))+2000-1 else let taxyear =val(date$(1:2))+2000 ! current tax year (if processing in jan, assume last year)
-00370   let fnlbl(1,1,"Tax Year:",26,1)
-00380   let fntxt(1,30,4,0,0,"30",0,"")
+00370   fnlbl(1,1,"Tax Year:",26,1)
+00380   fntxt(1,30,4,0,0,"30",0,"")
 00382   let resp$(respc+=1)=str$(taxyear)
 00390   let option1$(1)="March 31"
 00400   let option1$(2)="June 30"
 00410   let option1$(3)="September 30"
 00420   let option1$(4)="December 31"
-00430   let fnlbl(2,1,"Quarter Ending Date:",26,1)
-00440   let fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
+00430   fnlbl(2,1,"Quarter Ending Date:",26,1)
+00440   fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
 00450   if val(date$(4:5))=3 or val(date$(4:5))=4 or val(date$(4:5))=5 then let resp$(respc+=1)=option1$(1) ! march filing
 00460   if val(date$(4:5))=6 or val(date$(4:5))=7 or val(date$(4:5))=8 then let resp$(respc+=1)=option1$(2) ! June  filing
 00470   if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then let resp$(respc+=1)=option1$(3) ! September filing
 00480   if val(date$(4:5))=12 or val(date$(4:5))=1 or val(date$(4:5))=2 then let resp$(respc+=1)=option1$(4) ! December
-00490   let fnchk(3,30,"Print Worksheet:",1) 
+00490   fnchk(3,30,"Print Worksheet:",1) 
 00492   let resp$(respc+=1)="True"
-00500   let fnfra(5,1,4,30,"Tax Liability","Enter the total tax liability by month")
-00510   let fnlbl(1,1,"Month 1:",10,1,0,1)
-00520   let fntxt(1,13,12,0,1,"10",0,"",1) 
+00500   fnfra(5,1,4,30,"Tax Liability","Enter the total tax liability by month")
+00510   fnlbl(1,1,"Month 1:",10,1,0,1)
+00520   fntxt(1,13,12,0,1,"10",0,"",1) 
 00522   let resp$(respc+=1)=""
-00530   let fnlbl(2,1,"Month 2:",10,1,0,1)
-00540   let fntxt(2,13,12,0,1,"10",0,"",1) !:
+00530   fnlbl(2,1,"Month 2:",10,1,0,1)
+00540   fntxt(2,13,12,0,1,"10",0,"",1) !:
         let resp$(respc+=1)=""
-00550   let fnlbl(3,1,"Month 3:",10,1,0,1)
-00560   let fntxt(3,13,12,0,1,"10",0,"",1) !:
+00550   fnlbl(3,1,"Month 3:",10,1,0,1)
+00560   fntxt(3,13,12,0,1,"10",0,"",1) !:
         let resp$(respc+=1)=""
-00570   let fnfra(11,1,7,72,"Adjustments","Enter any applicable adjustments")
+00570   fnfra(11,1,7,72,"Adjustments","Enter any applicable adjustments")
 00580   let mylen=52
-00590   let fnlbl(1,1,"Current quarter's fraction of cents:",mylen,1,0,2)
-00600   let fntxt(1,mylen+3,12,0,1,"10",0,"",2) !:
+00590   fnlbl(1,1,"Current quarter's fraction of cents:",mylen,1,0,2)
+00600   fntxt(1,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00610   let fnlbl(2,1,"Current quarter's sick pay:",mylen,1,0,2)
-00620   let fntxt(2,mylen+3,12,0,1,"10",0,"",2) !:
+00610   fnlbl(2,1,"Current quarter's sick pay:",mylen,1,0,2)
+00620   fntxt(2,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00630   let fnlbl(3,1,"Current quarter's adjustments for tips and ins:",mylen,1,0,2)
-00640   let fntxt(3,mylen+3,12,0,1,"10",0,"",2) !:
+00630   fnlbl(3,1,"Current quarter's adjustments for tips and ins:",mylen,1,0,2)
+00640   fntxt(3,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00650   let fnlbl(4,1,"Current year's income tax withholding:",mylen,1,0,2)
-00660   let fntxt(4,mylen+3,12,0,1,"10",0,"",2) !:
+00650   fnlbl(4,1,"Current year's income tax withholding:",mylen,1,0,2)
+00660   fntxt(4,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00670   let fnlbl(5,1,"Prior quarters' ss and medicare taxes:",mylen,1,0,2)
-00680   let fntxt(5,mylen+3,12,0,1,"10",0,"",2) !:
+00670   fnlbl(5,1,"Prior quarters' ss and medicare taxes:",mylen,1,0,2)
+00680   fntxt(5,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00690   let fnlbl(6,1,"Special Additions to Federal income taxes:",mylen,1,0,2)
-00700   let fntxt(6,mylen+3,12,0,1,"10",0,"",2) !:
+00690   fnlbl(6,1,"Special Additions to Federal income taxes:",mylen,1,0,2)
+00700   fntxt(6,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00710   let fnlbl(7,1,"Special Additions to ss and medicare:",mylen,1,0,2)
-00720   let fntxt(7,mylen+3,12,0,1,"10",0,"",2) !:
+00710   fnlbl(7,1,"Special Additions to ss and medicare:",mylen,1,0,2)
+00720   fntxt(7,mylen+3,12,0,1,"10",0,"",2) !:
         let resp$(respc+=1)=""
-00730   let fnlbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0)
-00740   let fntxt(20,mylen+4,12,0,1,"10",0,"",0) !:
+00730   fnlbl(20,1,"Total deposits for quarter including overpayments:",mylen+1,1,0,0)
+00740   fntxt(20,mylen+4,12,0,1,"10",0,"",0) !:
         let resp$(respc+=1)=""
-00750   let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+00750   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00760   if ck=5 then goto XIT
 00770   let taxyear=val(resp$(1)) ! tax year
 00780   if taxyear<2000 then goto L810
@@ -90,7 +90,7 @@
 00810 L810: mat ml$(2) !:
         let ml$(1)="You must enter a valid tax year such as 2007." !:
         let ml$(2)="Take OK to enter the year." !:
-        let fnmsgbox(mat ml$,resp$,cap$,0) !:
+        fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto MENU1
 00820 L820: for j=1 to 4
 00830     if resp$(2)=option1$(j) then let qtr=j: let m$=option1$(j): goto L850 ! quarter ending date
@@ -111,10 +111,10 @@
 00980   box7f=val(resp$(12)) ! special add
 00990   box7g=val(resp$(13)) ! special add - ss
 01000   box11=val(resp$(14))
-01008   let fnopenprn
-01010   let fn_start_print
-01020   let fn_build_941
-01022   let fn_print941_info
+01008   fnopenprn
+01010   fn_start_print
+01020   fn_build_941
+01022   fn_print941_info
 01030 ! gosub LASER_941
 01040   goto FINIS
 01050 ! ______________________________________________________________________
@@ -163,7 +163,7 @@
 10840   let fedwh=fedwh+qtr(1) ! FEDERAL WH FOR QUARTER
 10860   let eicqtr+=qtr(25) ! EIC FOR QUARTER
 10880   if m2=0 then goto L1140
-10900   let fn_print_details
+10900   fn_print_details
 10920   goto L1140
 10940   ! ______________________________________________________________________
 10960   WK_HEADER: ! 
@@ -192,12 +192,12 @@
 11420   L1790: return 
 11440   ! ______________________________________________________________________
 11460   WK_END: ! 
-11480   let fn_totals
+11480   fn_totals
 11530   pr #255: newpage
 11532   on pageoflow ignore 
 11540 fnend 
 11560 FINIS: ! 
-11580   let fncloseprn
+11580   fncloseprn
 11600 XIT: let fnxit
 11640   def fn_print_details: ! detailed listing
 11660     if m1=0 then goto L2130
@@ -274,12 +274,12 @@
 13120     box15d=box15a+box15b+box15c ! total deposits for quarter
 13140   fnend 
 13180 ! LASER_941: ! r:
-13200   let fnpa_open
-13220   let fn_print941_origional
+13200   fnpa_open
+13220   fn_print941_origional
 13240   close #2: ioerr ignore
 13260   close #3: ioerr ignore
 13280   ! 
-13300   let fnpa_finis
+13300   fnpa_finis
 13320   return  ! /r
 13360 ! <Updateable Region: ERTN>
 13380 ERTN: let fnerror(program$,err,line,act$,"xit")
@@ -350,7 +350,7 @@
 14700     fnpa_txt(cnvrt$("pic(-,---,---.##)",box11),tab3,232)
 14720     fnpa_txt(cnvrt$("pic(-,---,---.##)",box12),tab3,238)
 14740     fnpa_txt(cnvrt$("pic(-,---,---.##)",box13),tab2,247)
-14760     let fnpa_newpage
+14760     fnpa_newpage
 14780     fnpa_pic("S:\acsPR\941-back.bmp",1,1)
 14800     fnpa_txt(trim$(state$(1:1)),15,33)
 14820     fnpa_txt(trim$(state$(2:2)),21,33)

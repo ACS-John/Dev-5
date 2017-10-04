@@ -2,8 +2,8 @@
 00220   library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fnhamster,fnhamster_field_reset,fnhamster_field_add,fnhamster_add_combo,fnhamster_add_combof,fnhamster_add_comboa,fnhamster_2,fnhand_held_device$
 00300   on error goto ERTN
 00400 ! ______________________________________________________________________
-00700   let fntop(program$)
-00900   let fn_setup_hamster
+00700   fntop(program$)
+00900   fn_setup_hamster
 01000   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 01100   ! let fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 01110   fnhamster_2("workorder")
@@ -41,14 +41,14 @@
 35220   let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
 35240   fnhamster_field_reset
 35260   !
-36000   let fnhamster_field_add("Account  "       ,10              ,'C'                                    )    
+36000   fnhamster_field_add("Account  "       ,10              ,'C'                                    )    
 36020   ! let fnhamster_field_add("Date"            ,8,'N',8,mask_number )    
-36022   let fnhamster_field_add("Date"            ,textlen_ccyymmdd,'N',storage_len_ccyymmdd,mask_ccyymmdd )    
-36040   let fnhamster_field_add("e$(2)(1:30)"     ,30              ,'C'                                    )    
-36060   let fnhamster_field_add("line$(1)"        ,100             ,'C'                                    )    
-36080   let fnhamster_field_add("line$(2)"        ,100             ,'C'                                    )    
-36100   let fnhamster_field_add("line$(3)"        ,100             ,'C'                                    )    
-36120   let fnhamster_field_add("line$(4)"        ,100             ,'C'                                    )    
+36022   fnhamster_field_add("Date"            ,textlen_ccyymmdd,'N',storage_len_ccyymmdd,mask_ccyymmdd )    
+36040   fnhamster_field_add("e$(2)(1:30)"     ,30              ,'C'                                    )    
+36060   fnhamster_field_add("line$(1)"        ,100             ,'C'                                    )    
+36080   fnhamster_field_add("line$(2)"        ,100             ,'C'                                    )    
+36100   fnhamster_field_add("line$(3)"        ,100             ,'C'                                    )    
+36120   fnhamster_field_add("line$(4)"        ,100             ,'C'                                    )    
 36140   ! let fnhamster_field_add("line$(5)"        ,100             ,'C'                                    ) ! adding this line causes err 58 - at least with Pennington it does   
 36160   !
 36180     fnhamster_add_combof(1,env$('Q')&'\UBmstr\Customer.h'&env$('cno'),1,10,41,30,env$('Q')&'\UBmstr\ubIndex.h'&env$('cno'),0)

@@ -10,7 +10,7 @@
 00110   dim deptname$*20
 00120   dim cap$*128
 00130 ! ______________________________________________________________________
-00140   let fntop(program$,cap$="Accrued Payroll Tax Information")
+00140   fntop(program$,cap$="Accrued Payroll Tax Information")
 00160   gosub BLDSCR
 00170 ! ______________________________________________________________________
 00180   if exists(env$('Q')&"\PRmstr\MGLMstr.h"&env$('cno'))=0 then gosub CREATE_FILES
@@ -19,16 +19,16 @@
 00210 ! ______________________________________________________________________
 00220 MENU1: ! 
 00230 ASKDEPARTMENT: ! 
-00240   let fntos(sn$="Department-ask") !:
+00240   fntos(sn$="Department-ask") !:
         let respc=0
-00250   let fnlbl(1,1,"Department #:",15,1)
-00260   let fncombof("Dept",1,18,3,env$('Q')&"\PRmstr\mglmstr.h"&env$('cno'),1,3,0,0,env$('Q')&"\PRmstr\mglidx1.h"&env$('cno'),0,0, "Set the matching g/l numbers for accruing payroll taxes by department. Choose a department.",0,0) !:
+00250   fnlbl(1,1,"Department #:",15,1)
+00260   fncombof("Dept",1,18,3,env$('Q')&"\PRmstr\mglmstr.h"&env$('cno'),1,3,0,0,env$('Q')&"\PRmstr\mglidx1.h"&env$('cno'),0,0, "Set the matching g/l numbers for accruing payroll taxes by department. Choose a department.",0,0) !:
         let resp$(respc+=1)=""
-00270   let fncmdkey("&Add",1,0,0,"Enter accrual information on a new department." ) !:
-        let fncmdkey("E&dit",2,1,0,"Change or review then highlighted record") !:
-        let fncmdkey("&Delete",3,0,0,"Deletes the highlited record.") !:
-        let fncmdkey("E&xit",5,0,1,"Returns to menu")
-00280   let fnacs(sn$,0,mat resp$,ckey) ! ask department #
+00270   fncmdkey("&Add",1,0,0,"Enter accrual information on a new department." ) !:
+        fncmdkey("E&dit",2,1,0,"Change or review then highlighted record") !:
+        fncmdkey("&Delete",3,0,0,"Deletes the highlited record.") !:
+        fncmdkey("E&xit",5,0,1,"Returns to menu")
+00280   fnacs(sn$,0,mat resp$,ckey) ! ask department #
 00290   if ckey=5 then goto XIT
 00300   let dp$=resp$(1)
 00310   let dp$=lpad$(uprc$(rtrm$(dp$)),3)
@@ -44,23 +44,23 @@
 00390   read #1,using "Form POS 1,G 3,11*C 12",key=k$,release: dp$,mat mgl$ nokey MENU1
 00400 L400: let fntos(sn$="Department-gl") !:
         let respc=0
-00410   let fnlbl(1,1,deptname$,50,2)
-00420   let fnlbl(2,1,"Department #:",15,1)
-00430   let fntxt(2,18,3,3,1,"30",0,"Department # to change or add.") !:
+00410   fnlbl(1,1,deptname$,50,2)
+00420   fnlbl(2,1,"Department #:",15,1)
+00430   fntxt(2,18,3,3,1,"30",0,"Department # to change or add.") !:
         let resp$(respc+=1)=dp$
-00440   let fnlbl(3,1,label1$(1),15,1)
-00450   let fnqgl(3,18,0,2,0) !:
+00440   fnlbl(3,1,label1$(1),15,1)
+00450   fnqgl(3,18,0,2,0) !:
         let resp$(respc+=1)=fnrgl$(mgl$(1)) ! fica
 00460   let x=1 : let y=3
 00470   for j=1 to 20
 00480     if dedcode(j)=3 then goto L490 else goto L510
 00490 L490: let fnlbl(y+=1,1,label1$(x+=1),15,1)
-00500     let fnqgl(y,18,0,2,0) !:
+00500     fnqgl(y,18,0,2,0) !:
           let resp$(respc+=1)=fnrgl$(mgl$(j+1))
 00510 L510: next j
-00520   let fncmdkey("&Next",1,1,0,"Save changes and move to next record" ) !:
-        let fncmdkey("&Complete",5,0,1,"Returns to menu")
-00530   let fnacs(sn$,0,mat resp$,ckey) ! ask gl numbers
+00520   fncmdkey("&Next",1,1,0,"Save changes and move to next record" ) !:
+        fncmdkey("&Complete",5,0,1,"Returns to menu")
+00530   fnacs(sn$,0,mat resp$,ckey) ! ask gl numbers
 00540   if ckey=5 then goto XIT
 00550   let dp$=resp$(1)
 00560   let dp$=lpad$(uprc$(rtrm$(dp$)),3)
@@ -76,7 +76,7 @@
 00660   mat ml$(2) !:
         let ml$(1)="You have chosen to delete department # "&dp$ ! " !:
         let ml$(2)="Take OK to delete; else Cancel to retain the record." !:
-        let fnmsgbox(mat ml$,resp$,cap$,1)
+        fnmsgbox(mat ml$,resp$,cap$,1)
 00670   if resp$="OK" then goto L680 else goto MENU1
 00680 L680: delete #1,key=dp$: nokey MENU1
 00690   goto MENU1
@@ -98,7 +98,7 @@
 00850   restore #1: 
 00860   let pg=0
 00870   let hp1=66-int(len(rtrm$(env$('cnam')))/2)
-00880   let fnopenprn (cp,58,230,process)
+00880   fnopenprn (cp,58,230,process)
 00890   gosub HDR4
 00900 L900: read #1,using "Form POS 1,G 3,11*C 12",release: dp$,mat mgl$ eof END4
 00910   pr #255,using L920: dp$,mat mgl$ pageoflow NWPG
@@ -118,7 +118,7 @@
 01050 ! ______________________________________________________________________
 01060 END4: on fkey 5 ignore 
 01070   if nw=0 then pr #255: newpage
-01080   let fncloseprn
+01080   fncloseprn
 01090   goto MENU1
 01100 ! ______________________________________________________________________
 01110 BLDSCR: ! 

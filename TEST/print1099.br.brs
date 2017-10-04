@@ -6,8 +6,8 @@
 00060 ! ______________________________________________________________________
 00070   dim cinfo$(6)*40,einfo$(6)*40,box(19)
 00080 ! ______________________________________________________________________
-00090   let fncno(cno,cnam$)
-00100   let fntop("Test\Print1099",cap$="Print 1099s")
+00090   fncno(cno,cnam$)
+00100   fntop("Test\Print1099",cap$="Print 1099s")
 00101   for j=1 to 3
 00110     cinfo$(1)='Company Name' !:
           cinfo$(2)='company Address (1)' !:
@@ -22,7 +22,7 @@
           let einfo$(5)='Employee CSZ' !:
           let einfo$(6)='Employee Account Number'
 00130     box(1)=123 : box(2)=234.3 : box(3)=123.1 : box(4)=123
-00140     let fnadd1099(mat cinfo$,mat einfo$,mat box)
+00140     fnadd1099(mat cinfo$,mat einfo$,mat box)
 00141   next j
 00142   let lz1$='L'
 00150   chain 'S:\Core\Print1099',lz1$ ! Let FNPRINT1099('L')

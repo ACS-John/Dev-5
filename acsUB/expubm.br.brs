@@ -17,24 +17,24 @@
 20300   dim dest$*256,csz$*40,first_name$*30,last_name$*30,cap$*128
 20320   dim delim$*1,streetnam$*30,streetnum$*30,state$*30,city$*30,zip$*30
 20340   dim resp$(3)*256,extra$(11)*30
-20380   let fntop(program$,cap$="Export UB Master File")
+20380   fntop(program$,cap$="Export UB Master File")
 24000   dim servicename$(10)*20
 24020   fnget_services(mat servicename$) : for sNitem=1 to udim(mat servicename$) : servicename$(sNitem)=trim$(servicename$(sNitem)) : nex sNitem
 34000 MENU1: ! r:
-34020   let fntos(sn$="expubm")
-34040   let fnlbl(1,1,"Destination Path and File Name:",34,1)
-34060   let fntxt(1,36,40,256,0,"71")
-34080   let fnreg_read('exp_ubm.path',resp$(1)) : if resp$(1)='' then let resp$(1)=os_filename$(env$('userprofile')&'\Desktop')&"\ubm.txt"
-34100   let fnlbl(2,1,"Delimiter (ASCII Code):" ,34,1)
-34120   let fntxt(2,36,3,0,0,"30")
+34020   fntos(sn$="expubm")
+34040   fnlbl(1,1,"Destination Path and File Name:",34,1)
+34060   fntxt(1,36,40,256,0,"71")
+34080   fnreg_read('exp_ubm.path',resp$(1)) : if resp$(1)='' then let resp$(1)=os_filename$(env$('userprofile')&'\Desktop')&"\ubm.txt"
+34100   fnlbl(2,1,"Delimiter (ASCII Code):" ,34,1)
+34120   fntxt(2,36,3,0,0,"30")
 34140   let resp$(2)="9"
-34160   let fnlbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
-34180   let fncmdset(2)
-34200   let fnacs(sn$,0,mat resp$,ckey)
+34160   fnlbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
+34180   fncmdset(2)
+34200   fnacs(sn$,0,mat resp$,ckey)
 38000   if ckey=5 then goto XIT
 38020   let dest$=resp$(1)
 38040   let delas=val(resp$(2))
-38060   let fnreg_write('exp_ubm.path',dest$)
+38060   fnreg_write('exp_ubm.path',dest$)
 38080   goto OPENS
 38100 ! /r
 42000 OP2ERR: ! r:
@@ -76,7 +76,7 @@
 52060   close #3: ioerr ignore
 52080   goto XIT ! /r
 52100 XIT: ! 
-52120   let fnxit
+52120   fnxit
 54000 ALT_BILL_ADR: ! r:
 54020   mat ab$=("")
 54040   read #3,using 'Form POS 11,3*C 30',key=z$: mat ab$ nokey ignore

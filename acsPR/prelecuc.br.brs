@@ -14,13 +14,13 @@
 00110   dim w2(9),i1(9),t1(9),ct$*20,st$*2,ibm$*8,namcde$*1,typemp$*1,io1$(15)
 00120   dim terminat$*1,first$*15,mid$*15,last$*20,m(10),r(10),e$(10)*12
 00130 ! ______________________________________________________________________
-00140   let fntop("S:\acsPR\prElecuc",cap$="Electronic U/C")
-00150   let fncno(cno)
-00155   let fnconsole(1)
+00140   fntop("S:\acsPR\prElecuc",cap$="Electronic U/C")
+00150   fncno(cno)
+00155   fnconsole(1)
 00160   def fndate_mmddyy_to_ccyymmdd(x)
 00170     let x2=(x-int(x*.01)*100)*10000+int(x*.01)
 00180     if int(x2*.0001)<20 then let x2=x2+20000000 else let x2=x2+19000000
-00190     let fndate_mmddyy_to_ccyymmdd=x2
+00190     fndate_mmddyy_to_ccyymmdd=x2
 00200   fnend 
 00210   if exists("demo.txt")<>0 then !:
           pr "This Program is disabled in the demo version" !:
@@ -204,7 +204,7 @@
 01970 END1: ! 
 01980   pr #255,using "form skip 1,pos 1,c 14,pic(zz,zzz,zzz.##)": "Total wages:",totwage,"Total Taxable:",tottaxable
 01990   pr #255,using "form pos 1,c 16,pic(zz,zzz,zzz)": "Total employees:",totemployees
-02000   let fncloseprn
+02000   fncloseprn
 02010   gosub L2040
 02020 XIT: let fnxit
 02030 ! ______________________________________________________________________
@@ -312,7 +312,7 @@
 02730 L2730: let screen_width=80
 02740   let screen_height=24
 02750   if display_cnam=0 then goto L2770
-02760   let fncno(cno,cnam$)
+02760   fncno(cno,cnam$)
 02770 L2770: let sc=max(int(((screen_width-win_width)/2)+1),2)
 02780   let ec=min(sc+win_width-1,79)
 02790   let sr=max(int(((screen_height-win_height)/2)+1),2)
@@ -347,7 +347,7 @@
 02980   if button_option=7 then !:
           let fkey$(1)="Save" !:
           let fkey$(4)="Delete"
-02990   let scrline=er+1: gosub L3660 !  Let FNFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
+02990   let scrline=er+1: gosub L3660 !  fnFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
 03000 ! 
 03010 L3010: return  ! Fnend
 03020 L3020: ! Def Library fnOldMsgBox(mat RESPONSE$,&CAP$,mat MSGLINE$,MTYPE)
@@ -388,7 +388,7 @@
 03370 L3370: ! Def Library FNWAIT(WIN,&CAP$,&MESSAGE$,STOPABLE)
 03380 ! if stopable=1 will display "Cancel (F5)" button
 03390 ! win = window number
-03400   let fncno(cno,cnam$)
+03400   fncno(cno,cnam$)
 03410   close #win: ioerr L3420
 03420 L3420: open #win: "Srow=10,SCol=20,ERow=14,ECol=59,Border=Sr,Caption=<"&cap$,display,outin 
 03430   pr #win: newpage
@@ -400,7 +400,7 @@
 03490   if stopable=1 then pr fields "15,34,C 11,B,5": "Cancel (F5)"
 03500   return  ! Fnend
 03510 ! Def Library FNOPENWIN(WIN,SR,SC,ER,EC,&CAP$)
-03520   let fncno(cno,cnam$)
+03520   fncno(cno,cnam$)
 03530   if sr<1 then let sr=10
 03540   if sc<1 then let sc=20
 03550   if er<1 then let er=14

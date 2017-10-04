@@ -2,8 +2,8 @@
 00030   on error goto L550
 00040 ! (C) COPYRIGHT - 1986 - ADVANCED COMPUTER SERVICES, INC.
 00050   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnd1
-00060   let fntop(program$,cap$="Service Code")
-00070   let fncno(cno,cnam$)
+00060   fntop(program$,cap$="Service Code")
+00070   fncno(cno,cnam$)
 00090   dim sc$*4,ds$*30
 00100   dim cnam$*40,prg$*20
 00110   open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&str$(cno),internal,input,keyed ioerr L550
@@ -17,7 +17,7 @@
 00200   pr newpage
 00210   pr fields "10,25,c 48,n": "SERVICE CODE LISTING IN PROCESS"
 00220   pr fields "23,2,c 20,n": "Press F5 to stop"
-00230   let fnopenprn
+00230   fnopenprn
 00250   gosub L410
 00260 L260: read #1,using L270: sc$,ds$ eof L520 ioerr L550
 00270 L270: form pos 1,c 4,c 30

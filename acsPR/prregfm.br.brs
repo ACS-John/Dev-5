@@ -7,9 +7,9 @@
 00070   dim io1$(2),pt(26),rpnames$(10)*6,a$(28)*20,sc$(28)*20,in1$(28)
 00080   dim cap$*128,msgline$(2)*60,response$(5)*1
 00090 ! ______________________________________________________________________
-00100   let fntop('S:\acsPR\prRegFM',cap$="Tax Deposit")
-00110   let fncno(cno)
-00115   let fnconsole(1)
+00100   fntop('S:\acsPR\prRegFM',cap$="Tax Deposit")
+00110   fncno(cno)
+00115   fnconsole(1)
 00120   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input, relative: read #1,using 'Form POS 648,10*C 6',rec=1: mat rpnames$ : close #1: 
 00130   open #1: "Name="&env$('Q')&"\PRmstr\prTot.H"&str$(cno)&",Use,RecL=138,KFName="&env$('Q')&"\PRmstr\prTotIDX.H"&str$(cno)&",kps=1,kln=9",internal, outin,keyed 
 00140 ! ______________________________________________________________________
@@ -17,7 +17,7 @@
 00160 ! ______________________________________________________________________
 00170 SCR1: ! 
 00180   pr newpage
-00190   let fnopenwin(win=101,10,24,15,55,cap$)
+00190   fnopenwin(win=101,10,24,15,55,cap$)
 00200   pr #win,fields "4,2,Cr 23,N": "Payroll Date to change:"
 00210   pr #win,fields "5,2,Cr 23,N": "Department to change:"
 00220   let io1$(1)="4,26,Nz 6,UT,N"
@@ -39,7 +39,7 @@
 00380 L380: form pos 1,n 6,n 3,25*pd 5.2,n 4
 00390 L390: pr newpage
 00400   let win=101
-00410   let fnopenwin(win,2,2,23,75,cap$)
+00410   fnopenwin(win,2,2,23,75,cap$)
 00420   pr #win: newpage
 00430   pr #win,fields mat sc$: mat a$
 00440   pr fields "24,22,c 11,B,1": "Save   (F1)"
@@ -128,7 +128,7 @@
 01270 ADDOPTION: ! 
 01280   let msgline$(1)="A record for this Date and Department Number does not exist."
 01290   let msgline$(2)="Do you wish to add this record? (Y/N)"
-01300   let fnoldmsgbox(mat response$,cap$,mat msgline$,2)
+01300   fnoldmsgbox(mat response$,cap$,mat msgline$,2)
 01310   add$=response$(1)
 01320   if add$="Y" then goto L390
 01330   if add$="N" then goto SCR1

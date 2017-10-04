@@ -48,7 +48,7 @@
 00365 ! Let X$="  0"&LPAD$(TRIM$(X$),6)&"  0": Goto 390 ! kj
 00368 FINIS: ! 
 00370     let x$=lpad$(trim$(x$),12)
-00432     let fnagl$=x$(1:12)
+00432     fnagl$=x$(1:12)
 00440     goto XIT
 00450 COMPANY_OPEN_IOERR: ! r:
 00452     let x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3) ! default if gl or cl not installed

@@ -10,8 +10,8 @@
 12140   dim resp$(20)*40,text$*40
 12160   dim servicename$(10)*20
 12180 ! ______________________________________________________________________
-14000   let fntop(program$)
-14020   let fnd1(d1)
+14000   fntop(program$)
+14020   fnd1(d1)
 14040 ! 
 16000   fnget_services(mat servicename$)
 16060   mat opt$(3)
@@ -30,7 +30,7 @@
 18040 ! on fkey 99 goto DONE
 18060 ! on fkey 5 goto DONE
 18080   on pageoflow goto PGOF
-18100   let fnopenprn
+18100   fnopenprn
 18120 goto READ_CUSTOMER
 22000 READ_CUSTOMER: ! r:
 22020   read #customer,using F_CUSTOMER: z$,mat e$,mat a,mat d,bal,f,mat g eof ENDUBM
@@ -65,7 +65,7 @@
 24080 goto DONE ! /r
 26000 DONE: ! r:
 26020   close #1: ioerr ignore
-26040   let fncloseprn
+26040   fncloseprn
 26060 goto XIT ! /r
 28000 XIT: let fnxit
 28020 IGNORE: continue 
@@ -85,37 +85,37 @@
 34260   end if
 34280 ! /r
 42000 MENU1: ! r:
-42020   let fntos(sn$:="Per1000")
+42020   fntos(sn$:="Per1000")
 42040   let mylen=22
 42060   let mypos=mylen+2
 42080   let respc=0
-42100   let fnlbl(2,1,"Billing Date:" ,mylen,1) : let fnlbl(2,36,"(most recent billing date only)") ! ,31,0)
-42120   let fntxt(2,mypos,8,0,1,"1")
+42100   fnlbl(2,1,"Billing Date:" ,mylen,1) : let fnlbl(2,36,"(most recent billing date only)") ! ,31,0)
+42120   fntxt(2,mypos,8,0,1,"1")
 42140   let resp$(respc+=1)=str$(d1)
 42160   let text$="Service for Analysis:"
-42180   let fnlbl(3,1,text$,mylen,1)
-42200   let fncomboa(stfn$,3,mypos,mat opt$)
+42180   fnlbl(3,1,text$,mylen,1)
+42200   fncomboa(stfn$,3,mypos,mat opt$)
 42220   let resp$(respc+=1)=opt$(1)
-42260   let fnlbl(4,1,"Rate Code:",mylen,1)
-42280   let fntxt(4,mypos,2,0,1,"30")
+42260   fnlbl(4,1,"Rate Code:",mylen,1)
+42280   fntxt(4,mypos,2,0,1,"30")
 42300   let resp$(respc+=1)="0"
 42320   let text$="Usage Break Points:"
-42340   let fnlbl(6,1,text$,mylen,1)
+42340   fnlbl(6,1,text$,mylen,1)
 42360   for a = 1 to 16
 42380     let resp$(respc+=1) = str$(range(a))
 42400   next a
 42420   let mypos(1)=mylen+2 : let mypos(2)=mypos(1)+9
 42440   let mypos(3)=mypos(2)+9 : let mypos(4)=mypos(3)+9
-42460   let fntxt(6,mypos(1),7) : let fntxt(6,mypos(2),7)
-42480   let fntxt(6,mypos(3),7) : let fntxt(6,mypos(4),7)
-42500   let fntxt(7,mypos(1),7) : let fntxt(7,mypos(2),7)
-42520   let fntxt(7,mypos(3),7) : let fntxt(7,mypos(4),7)
-42540   let fntxt(8,mypos(1),7) : let fntxt(8,mypos(2),7)
-42560   let fntxt(8,mypos(3),7) : let fntxt(8,mypos(4),7)
-42580   let fntxt(9,mypos(1),7) : let fntxt(9,mypos(2),7)
-42600   let fntxt(9,mypos(3),7) : let fntxt(9,mypos(4),7)
-42620   let fncmdset(3)
-42640   let fnacs(sn$,win,mat resp$,ck)
+42460   fntxt(6,mypos(1),7) : let fntxt(6,mypos(2),7)
+42480   fntxt(6,mypos(3),7) : let fntxt(6,mypos(4),7)
+42500   fntxt(7,mypos(1),7) : let fntxt(7,mypos(2),7)
+42520   fntxt(7,mypos(3),7) : let fntxt(7,mypos(4),7)
+42540   fntxt(8,mypos(1),7) : let fntxt(8,mypos(2),7)
+42560   fntxt(8,mypos(3),7) : let fntxt(8,mypos(4),7)
+42580   fntxt(9,mypos(1),7) : let fntxt(9,mypos(2),7)
+42600   fntxt(9,mypos(3),7) : let fntxt(9,mypos(4),7)
+42620   fncmdset(3)
+42640   fnacs(sn$,win,mat resp$,ck)
 44000   if ck=5 then goto XIT
 44020   let d1=val(resp$(1))
 44040   let weg$=resp$(2)(1:1)

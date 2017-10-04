@@ -5,16 +5,16 @@
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim ref$*12,des$*30,glan$(10)*12,glam(10),ml$(3)*80
-24000   let fntop(program$)
+24000   fntop(program$)
 24020   let dat=date("mmddyy")
 00080 ! /r
-24080   let fntos("poststdadj") 
-24120   let fnlbl(1,1,"Date to be used on Standard Adjusting Entries:",45,1)
-24140   let fntxt(1,48,8,0,0,"1",0,"Enter the date to be used on the standard adjusting entries.") 
+24080   fntos("poststdadj") 
+24120   fnlbl(1,1,"Date to be used on Standard Adjusting Entries:",45,1)
+24140   fntxt(1,48,8,0,0,"1",0,"Enter the date to be used on the standard adjusting entries.") 
 24160   let resp$(1)=str$(dat)
-24180   let fnlbl(1,60,"",1,1) ! space it over
-24200   let fncmdset(2)
-24210   let fnacs(sn$,0,mat resp$,ckey)
+24180   fnlbl(1,60,"",1,1) ! space it over
+24200   fncmdset(2)
+24210   fnacs(sn$,0,mat resp$,ckey)
 24220   if ckey=5 then goto XIT
 24240   let dat=val(resp$(1))
 24260 ! ______________________________________________________________________
@@ -46,7 +46,7 @@
 38040   let ml$(1)="Journal entry # "&trim$(ref$)&" does not foot." 
 38060   let ml$(2)="Credits  = "&trim$(cnvrt$("pic(---,---,---.##)",totalcr))& "     Debits = "&trim$(cnvrt$("pic(---,---,---.##)",totaldr)) 
 38080   let ml$(3)="The entry will be posted, but it may need to be corrected!" 
-38100   let fnmsgbox(mat ml$,resp$)
+38100   fnmsgbox(mat ml$,resp$)
 38120 return ! /r
 38140 ! ______________________________________________________________________
 40000 ChainToAcGlMrge: !

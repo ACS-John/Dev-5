@@ -1,7 +1,7 @@
 00020   library 'S:\Core\Library': fnxit,fntop
 00030   dim io1$(2)
 00040   let io1$(1)="11,50,N 2,U,N"
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   let io1$(2)="12,46,N 2,U,N"
 00070   pr newpage
 00080   close #101: ioerr L90

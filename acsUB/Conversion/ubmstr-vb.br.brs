@@ -7,17 +7,17 @@
 00070     dim custname$*30,badr(2)
 00080     dim z$*10,e$(4)*30,f$(3)*12,c(4),g(12),adr(2),alp$*7,gb(10)
 00090     dim x$*10,p$*10,rw4(22,13)
-00100     let fnstatus('Customer File Conversion (S:\acsUB\conversion\ubmstr-vb)')
+00100     fnstatus('Customer File Conversion (S:\acsUB\conversion\ubmstr-vb)')
 00120 ! 
 00122 ! let fnCopy(env$('Q')&"\UBmstr\ubcoinfo.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'),133) ! this should already be done.
 00132     if exists(env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')) then 
 00133       execute 'free "'&env$('Q')&"\UBmstr\customer.h"&env$('cno')&'"' ioerr ignore
-00134       let fnCopy(env$('Q')&"\UBmstr\ubMaster.h"&env$('cno'),env$('Q')&"\UBmstr\Customer.h"&env$('cno'))
+00134       fnCopy(env$('Q')&"\UBmstr\ubMaster.h"&env$('cno'),env$('Q')&"\UBmstr\Customer.h"&env$('cno'))
 00136       execute 'free "'&env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')&'"' ioerr ignore
 00138     end if 
-00150     let fnCopy(env$('Q')&"\UBmstr\Customer.h"&env$('cno'),env$('Q')&"\UBmstr\Customer.h"&env$('cno'),2067)
-00180     let fnub_index_customer
-00230     let fnindex_it(env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno'),env$('Q')&"\UBmstr\adrIndex.h"&env$('cno'),"1 10")
+00150     fnCopy(env$('Q')&"\UBmstr\Customer.h"&env$('cno'),env$('Q')&"\UBmstr\Customer.h"&env$('cno'),2067)
+00180     fnub_index_customer
+00230     fnindex_it(env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno'),env$('Q')&"\UBmstr\adrIndex.h"&env$('cno'),"1 10")
 00240 ! 
 00250     open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),internal,outin,keyed 
 00260     if version(1)=1 then goto XIT
@@ -64,7 +64,7 @@
 00600     close #1: 
 00610     close #81: ioerr ignore
 00620     close #82: ! ioerr L640
-00630     let fnindex_it(env$('Q')&"\UBmstr\BudMstr.h"&env$('cno'),env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno'), '1 10')
+00630     fnindex_it(env$('Q')&"\UBmstr\BudMstr.h"&env$('cno'),env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno'), '1 10')
 00640 ! L640: ! Goto 70
 00650 XIT: fnend  ! chain "S:\acsUB\conversion\note-cnv" ! Let fnxit
 00660 IGNORE: continue 

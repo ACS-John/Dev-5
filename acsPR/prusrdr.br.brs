@@ -5,15 +5,15 @@
 00050 ! ______________________________________________________________________
 00060   dim jcs$(40),cap$*128,rn(20),rn$(20)*74
 00070 ! ______________________________________________________________________
-00075   let fnconsole(1)
-00080   let fntop(program$,cap$="User Designed Report (2)")
+00075   fnconsole(1)
+00080   fntop(program$,cap$="User Designed Report (2)")
 00090   open #1: "Name=S:\acsPR\JCReport.mst,KFName=S:\acsPR\JCReport.idx,Shr",internal,input,keyed 
 00100   for j=1 to 20 !:
           read #1,using 'Form POS 1,N 2,C 74': rn(j),rn$(j) eof L110 !:
         next j
 00110 L110: close #1: 
 00120 L120: pr newpage !:
-        let fnopenwin(win=101,3,2,22,79,cap$)
+        fnopenwin(win=101,3,2,22,79,cap$)
 00130   pr #win: newpage
 00140   for j=1 to 20 !:
           let jcs$(j)=str$(j)&",2,Pic(ZZ),N" !:

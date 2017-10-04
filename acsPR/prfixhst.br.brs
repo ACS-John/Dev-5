@@ -10,9 +10,9 @@
 00090   dim tdt(4),tcd(3),tdet(17),tc2(22),ty(21),tqm(17),tcp(22)
 00100   dim tdy(6),tdc(6),cap$*128,tmp8(13),nam$*28,n$*30
 00110 ! ______________________________________________________________________
-00120   let fntop("S:\acsPR\prFixHst",cap$="Fix YTD and QTD From History")
-00130   let fncno(cno)
-00135   let fnconsole(1)
+00120   fntop("S:\acsPR\prFixHst",cap$="Fix YTD and QTD From History")
+00130   fncno(cno)
+00135   fnconsole(1)
 00140 ! 
 00150 ! ______________________________________________________________________
 00160   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno),internal,input,relative 
@@ -43,7 +43,7 @@
 00410   return 
 00420 ! ______________________________________________________________________
 00430 L430: gosub INPSCRN
-00440   let fnwait(102,cap$,message$,0)
+00440   fnwait(102,cap$,message$,0)
 00450 L450: read #4,using L460: eno,prd,ckno,mat tdc,mat tc2 eof L540
 00460 L460: form pos 1,n 8,pd 6,n 7,5*pd 3.2,pd 4.2,22*pd 5.2
 00470   if heno=0 then goto L490
@@ -58,7 +58,7 @@
 00560 ! ______________________________________________________________________
 00570 INPSCRN: ! 
 00580   pr newpage !:
-        let fnopenwin(win=101,10,15,15,62,cap$)
+        fnopenwin(win=101,10,15,15,62,cap$)
 00590   pr #win,fields "4,2,Cr 38,N": "Fix Year-To-Date Information (Y/N):"
 00600   pr #win,fields "5,2,Cr 38,N": "Fix Quarter-To-Date Information (Y/N):"
 00610   let io5$(1)="4,41,Cu 1,UET,N"
@@ -82,7 +82,7 @@
 00780   if ytd$="N" then goto L1020
 00790 ! _______
 00800   pr newpage !:
-        let fnopenwin(win=101,10,18,15,62,cap$)
+        fnopenwin(win=101,10,18,15,62,cap$)
 00810   pr #win,fields "4,2,Cr 36,N": "Starting Date for the Year (mmddyy):"
 00820   pr #win,fields "5,2,Cr 36,N": "Ending Date for the Year (mmddyy):"
 00830   let io5$(1)="4,39,Nz 6,UT,N"
@@ -108,7 +108,7 @@
 01030   if qtd$="N" then goto L1260
 01040 ! _______
 01050   pr newpage !:
-        let fnopenwin(win=101,10,16,15,63,cap$)
+        fnopenwin(win=101,10,16,15,63,cap$)
 01060   pr #win,fields "04,2,Cr 39,N": "Starting Date for the Quarter (mmddyy):"
 01070   pr #win,fields "05,2,Cr 39,N": "Ending Date for the Quarter (mmddyy):"
 01080   pr fields "16,30,C 09,B,1": "Next (F1)" !:

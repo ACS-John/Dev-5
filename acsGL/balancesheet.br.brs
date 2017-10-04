@@ -9,15 +9,15 @@
 00080   dim b$*3,a$(8)*30,oldtrans$*16,g(8),d(2),by(13),bp(13)
 00090   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Balance Sheet")
+00110   fntop(program$,cap$="Balance Sheet")
 00134   actpd$=fnactpd$ 
 00135   actpd=fnactpd
-00136   let fnfscode(actpd)
-00137   let fnpriorcd
+00136   fnfscode(actpd)
+00137   fnpriorcd
 00140   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00146   let fnfscode
-00147   let fnpriorcd
+00146   fnfscode
+00147   fnpriorcd
 00150   if fnps=2 then let mp1=66 !:
           let fl1$="Name="&env$('Q')&"\GLmstr\acglFnSC.h"&env$('cno') !:
           let fl1$=fl1$&",KFName="&env$('Q')&"\GLmstr\fnSCIndx.h"&env$('cno')&",Shr" else !:
@@ -29,13 +29,13 @@
 00180 ! ______________________________________________________________________
 00190 L190: let fntos(sn$="GLInput") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00200   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00210   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00200   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00210   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00220   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00230   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00240   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00250   let fnacs(sn$,0,mat resp$,ckey)
+00220   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00230   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00240   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
 00270   costcntr=val(resp$(1))
 00280 L280: if fnps=2 then goto L310 ! secondary
@@ -43,7 +43,7 @@
 00300   goto L320
 00310 L310: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\fsindex.H"&env$('cno')&" 66 3 Replace DupKeys -N"
 00320 L320: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
-00330   let fnopenprn
+00330   fnopenprn
 00340   if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00350   let report$="Balance Sheet"
 00360 READ_TOP: ! 
@@ -181,8 +181,8 @@
 01610 DONE: ! 
 01620   let eofcode=1
 01630   gosub L1220
-01634   let fnfscode(actpd)
-01635   let fnpriorcd(1)
+01634   fnfscode(actpd)
+01635   fnpriorcd(1)
 01640   if pors<>2 then let fncloseprn
 01650   goto XIT
 01660 ! ______________________________________________________________________

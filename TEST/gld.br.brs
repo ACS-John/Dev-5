@@ -5,13 +5,13 @@
 00050 ! ______________________________________________________________________
 00060   dim resp$(10)*80
 00070 ! ______________________________________________________________________
-00080   let fncno(cno)
-00090   let fntos(sn$='alpha-GLD') !:
+00080   fncno(cno)
+00090   fntos(sn$='alpha-GLD') !:
         let lc=0
-00100   let fncombof('gld-alpha',lc+=1,1,0,env$('Q')&"\CLmstr\GLmstr.h"&str$(cno),13,20,1,12,env$('Q')&"\CLmstr\GLIndx2.h"&str$(cno),1) !:
+00100   fncombof('gld-alpha',lc+=1,1,0,env$('Q')&"\CLmstr\GLmstr.h"&str$(cno),13,20,1,12,env$('Q')&"\CLmstr\GLIndx2.h"&str$(cno),1) !:
         let resp$(1)=fngld$('0   700  0')
-00110   let fncmdset(1)
-00120   let fnacs(sn$,0,mat resp$,ckey)
+00110   fncmdset(1)
+00120   fnacs(sn$,0,mat resp$,ckey)
 00130   pr resp$(1)
 00140   pr fngld$('0   375  0')
 00150   pr 'first 0 should be in pos 24 - first blank in 22'

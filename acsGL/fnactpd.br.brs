@@ -13,5 +13,5 @@
 20180   end if
 20200   CLOSE_TMP: !
 20220   close #tmp: 
-20240   let fnactpd=actpd
+20240   fnactpd=actpd
 20260 fnend 

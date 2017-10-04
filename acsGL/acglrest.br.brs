@@ -7,16 +7,16 @@
 00070   dim ln1$*78,ln$*78,shd$*60,fli$(10),cnam$*40,fli1$(2),hdr$*78,foot$*78
 00080   dim sc2$(2),dat$*20,cap$*128
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$="Retained Earnings Statement")
-00110   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00100   fntop(program$,cap$="Retained Earnings Statement")
+00110   fncno(cno,cnam$) !:
+        fndat(dat$)
 00120   let sh$="2,10,C 60,H,N"
 00130   for j=1 to 10 : let fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
 00140   let fli1$(1)="5,2,C 78,UT,N" : let fli1$(2)="8,2,C 78,UT,N"
 00150   if fnprocess=1 then let t=2 : goto L240
 00160 ! ______________________________________________________________________
 00170 MENU1: ! 
-00180   let fnwin3(win=101,cap$,6,40,1,1,5)
+00180   fnwin3(win=101,cap$,6,40,1,1,5)
 00190   let sc2$(1)="1. Edit" : let sc2$(2)="2. Print"
 00200   for j=1 to 2 : let fl2$(j)=str$(j+3)&",02,C 08,N" : next j
 00210   rinput #win,select mat fl2$,attr "H": mat sc2$ !:
@@ -31,7 +31,7 @@
 00290   goto MENU1
 00300 L300: ! ______________________________________________________________________
 00310   if fnglfs=5 then goto MENU1
-00320   let fnopenprn
+00320   fnopenprn
 00330   pr newpage
 00340   open #1: "Name="&env$('Q')&"\GLmstr\AcGLStmt.h"&str$(cno)&",Shr",display,input ioerr EDIT
 00350   pr newpage !:
@@ -56,7 +56,7 @@
 00460   pr #255: tab(10);ln$
 00470   goto L360
 00480 L480: close #1: 
-00490   let fncloseprn
+00490   fncloseprn
 00500   on fkey 5 ignore 
 00510   if fnprocess=1 then goto XIT else goto MENU1
 00520 ! ______________________________________________________________________

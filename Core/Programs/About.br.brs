@@ -1,9 +1,9 @@
 10040   library 'S:\Core\Library': fntop,fnxit,fnacs_version$,fnclient_has_mat,fnSystemName$,fnmsgbox,fnacs,fnlbl,fntxt,fngethandle,fntos,fnerror,fncno,fncmdset,fnchk,fncd,fnactpd,fnstatus,fnqgl,fnagl$,fnindex_it,fnrgl$,fnclient_support
 10060   on error goto ERTN
 10100   dim txt$(1)*256
-10140   let fntop(program$, cap$="About ACS")
+10140   fntop(program$, cap$="About ACS")
 10160   c_has_count=fnclient_has_mat(mat c_has$)
-10180   let fnclient_support(mat system_id$,mat system_support_end_date,mat on_support)
+10180   fnclient_support(mat system_id$,mat system_support_end_date,mat on_support)
 20000   let txt_item=0
 20020   mat txt$(txt_item+=1) : let txt$(txt_item)='ACS Version '&fnacs_version$
 20040   mat txt$(txt_item+=1) : let txt$(txt_item)=chr$(9)&'Customized for '&env$('Client')
@@ -43,7 +43,7 @@
 24200   mat txt$(txt_item+=1) : let txt$(txt_item)=chr$(9)&'Advanced Computer Services LLC'
 24220   mat txt$(txt_item+=1) : let txt$(txt_item)=chr$(9)&'4 Syme Ave'
 24240   mat txt$(txt_item+=1) : let txt$(txt_item)=chr$(9)&'West Orange, NJ 07052'
-30000   let fnmsgbox(mat txt$, response$, cap$)
+30000   fnmsgbox(mat txt$, response$, cap$)
 30020   goto XIT
 40000 ! <Updateable Region: ERTN>
 40020 ERTN: let fnerror(program$,err,line,act$,"xit")

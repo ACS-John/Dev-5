@@ -13,23 +13,23 @@
 24140   code$(3)="Electric"
 24160   code$(4)="Gas"
 24180 ! 
-38000   let fncno(cno,cnam$)
-38020   let fnd1(bdate)
-38040   let fntop("S:\acsUB\Consumptionlist",cap$="Consumption List")
+38000   fncno(cno,cnam$)
+38020   fnd1(bdate)
+38040   fntop("S:\acsUB\Consumptionlist",cap$="Consumption List")
 44000 MAIN: ! 
-44020   let fntos(sn$:="UBAnalyze")
+44020   fntos(sn$:="UBAnalyze")
 44040   let mylen=20
 44060   let mypos=mylen+2
-44080   let fnlbl(1,1,"Billing Date:",mylen,1)
-44100   let fntxt(1,mypos,8,8,0,"1")
+44080   fnlbl(1,1,"Billing Date:",mylen,1)
+44100   fntxt(1,mypos,8,8,0,"1")
 44120   let resp$(1)=str$(bdate)
-44140   let fnlbl(2,1,"Type of Service:",mylen,1)
-44160   let fncomboa("Service",2,mylen+3,mat code$,"",16)
-44180   let fnlbl(3,1,"Rate Code",mylen,1)
-44200   let fntxt(3,mypos,3,3,0,"1030")
+44140   fnlbl(2,1,"Type of Service:",mylen,1)
+44160   fncomboa("Service",2,mylen+3,mat code$,"",16)
+44180   fnlbl(3,1,"Rate Code",mylen,1)
+44200   fntxt(3,mypos,3,3,0,"1030")
 44220   let resp$(3)=""
-44240   let fncmdset(3)
-44260   let fnacs(sn$,0,mat resp$,ck)
+44240   fncmdset(3)
+44260   fnacs(sn$,0,mat resp$,ck)
 48000   if ck=5 then goto XIT
 48020   bdate= val(resp$(1))
 48040   if resp$(2)="Water" then 
@@ -45,7 +45,7 @@
 48200   end if 
 48220   let rcode=val(resp$(3))
 54000   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-54040   let fnopenprn
+54040   fnopenprn
 54060   gosub PRINTIT
 58000 DONE: close #1: ioerr ignore
 58020 L370: let fncloseprn

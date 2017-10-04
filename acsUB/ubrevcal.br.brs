@@ -8,9 +8,9 @@
 00045   dim cap$*128,txt$*200,tg(11),key$*19
 00050   dim bt1(14,2),badr(2),resp$(5)*60
 00055 ! ______________________________________________________________________
-00060   let fncno(cno)
+00060   fncno(cno)
 00065 !  : !
-00070   let fntop("S:\acsUB\UBRevCal",cap$="Reverse Calculation")
+00070   fntop("S:\acsUB\UBRevCal",cap$="Reverse Calculation")
 00075 ! ______________________________________________________________________
 00080   goto ALLOW_PROGRAM ! if env$('client')="Ash Grove" then goto ALLOW_PROGRAM
 00085   dim _msg$(4)*80
@@ -18,41 +18,41 @@
 00100   let _msg$(2)="To recalculate bills simply use Enter Readings and Charges"
 00105   let _msg$(3)="with the same billing date as used previously."
 00110   let _msg$(4)="If you feel you need to use this legacy program, please contact ACS."
-00115   let fnmsgbox(mat _msg$,resp$(1),cap$,16)
+00115   fnmsgbox(mat _msg$,resp$(1),cap$,16)
 00120   goto XIT
 00125 ALLOW_PROGRAM: ! 
 00130 ! ______________________________________________________________________
-00135   let fnd1(d1)
+00135   fnd1(d1)
 00140   if d1=0 then let d1=val(date$(4:5)&date$(7:8)&date$(1:2))
 00145 ! ______________________________________________________________________
 00170   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00180   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00190   open #12: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBIndx3.h"&str$(cno)&",Shr",internal,outin,keyed 
 00200   open #2: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
-00210   let fn_bud1
+00210   fn_bud1
 00220 ASK1: ! 
 00230   let x=6
 00240   close #111: ioerr L250
 00250 L250: let fntos(sn$="ubrevcal")
 00252   let respc=0
-00260   let fnlbl(1,1,"You may limit the customers to reverse by changing the options below.",73,2)
-00270   let fnlbl(2,1,"You may only reverse calculations for the most recent Billing Date!",73,2)
-00280   let fnlbl(4,1,"Account:",27,1)
-00290   let fncmbact(4,29,1)
+00260   fnlbl(1,1,"You may limit the customers to reverse by changing the options below.",73,2)
+00270   fnlbl(2,1,"You may only reverse calculations for the most recent Billing Date!",73,2)
+00280   fnlbl(4,1,"Account:",27,1)
+00290   fncmbact(4,29,1)
 00292   let resp$(respc+=1)="[All]"
-00300   let fnlbl(5,1,"Current Billing Date:",27,1)
-00310   let fntxt(5,29,8,0,0,"1")
+00300   fnlbl(5,1,"Current Billing Date:",27,1)
+00310   fntxt(5,29,8,0,0,"1")
 00312   let resp$(respc+=1)=str$(d1)
-00320   let fnlbl(6,1,"Previous Billing Date:",27,1)
-00330   let fntxt(6,29,8,0,0,"1")
+00320   fnlbl(6,1,"Previous Billing Date:",27,1)
+00330   fntxt(6,29,8,0,0,"1")
 00332   let resp$(respc+=1)=""
-00340   let fnlbl(7,1,"Route Number:",27,1)
-00350   let fncmbrt2(7,29)
+00340   fnlbl(7,1,"Route Number:",27,1)
+00350   fncmbrt2(7,29)
 00352   let resp$(respc+=1)="[All]"
-00360   let fnchk(8,29,"Print Status Report")
+00360   fnchk(8,29,"Print Status Report")
 00362   let resp$(respc+=1)="True"
-00370   let fncmdset(2)
-00372   let fnacs(sn$,0,mat resp$,ckey)
+00370   fncmdset(2)
+00372   fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00410   if trim$(reqz$)="" and trim$(holdreqz$)<>"" then goto XIT ! if they ever select a customer and then accidently take f1 to continue, it will stop instead of reversing everyone else in file
 00420   let reqz$=lpad$(rtrm$(resp$(1)(1:10)),10)
@@ -124,7 +124,7 @@
 00870 ! ______________________________________________________________________
 00880 FINIS: ! 
 00890   if sr$<>"Y" then goto XIT
-00900   let fncloseprn
+00900   fncloseprn
 00910 XIT: let fnxit
 00920 ! ______________________________________________________________________
 00930   def fn_srhdr
@@ -140,7 +140,7 @@
 01030 ! ______________________________________________________________________
 01040 SRPGOF: ! 
 01050   pr #255: newpage
-01060   let fn_srhdr
+01060   fn_srhdr
 01070   continue 
 01080   def fn_bud1
 01082     bud1=0

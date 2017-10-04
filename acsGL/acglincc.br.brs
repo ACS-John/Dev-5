@@ -2,7 +2,7 @@
 00020 ! -- ! COMPARATIVE INCOME STATEMENT FOR 14 7/8*11 PAPER WITH PERCENTAGES
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnpglen,fnerror,fncno,fncch$,fnpedat$,fnactpd$,fnactpd,fnfscode,fnUseDeptNo,fnpriorcd,fnps,fnprocess,fnglfs,fntos,fnlbl,fntxt,fncmdkey,fnacs
-00050   let fntop(program$,cap$="Comparative Income Statement")
+00050   fntop(program$,cap$="Comparative Income Statement")
 00060 ! ______________________________________________________________________
 00070   on error goto ERTN
 00090 ! ______________________________________________________________________
@@ -11,12 +11,12 @@
 00120   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,4),udf$*256
 00130   dim bp(13),by(13),tp1(4)
 00140 ! ______________________________________________________________________
-00150   let fncno(cno,cnam$)
+00150   fncno(cno,cnam$)
 00160   let udf$=env$('temp')&'\'
 00185   actpd$=fnactpd$ !:
         actpd=fnactpd !:
-        let fnfscode !:
-        let fnpriorcd
+        fnfscode !:
+        fnpriorcd
 00190   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00195   let fscode=fnfscode !:
@@ -42,20 +42,20 @@
 00380 L380: open #1: fl1$,internal,input,keyed 
 00390   if fnprocess=1 or fnUseDeptNo=0 then goto L510
 00400   if percent=1 then goto L510
-00410   let fntos(sn$="Acglincc") !:
+00410   fntos(sn$="Acglincc") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00420   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00430   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00420   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00430   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00440   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00450   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00460   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00470   let fnacs(sn$,0,mat resp$,ckey)
+00440   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00450   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00460   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00470   fnacs(sn$,0,mat resp$,ckey)
 00480   if ckey=5 then goto XIT
 00490   costcntr=val(resp$(1))
 00500   cnam$=rtrm$(cnam$)
 00510 L510: let pf1=len(cnam$)+int((43-len(cnam$))/2)
-00520   let fnopenprn
+00520   fnopenprn
 00530   let redir=0: if file$(255)(1:4)<>"PRN:" then let redir=1
 00540   let report$="STATEMENT OF INCOME AND EXPENSES"
 00550   if fnps=2 then goto L580 ! secondary
@@ -254,9 +254,9 @@
 02420   gosub L1940
 02430 ! 
 02440 ! 
-02450   let fncloseprn
-02460   let fnfscode(actpd)
-02465   let fnpriorcd(1)
+02450   fncloseprn
+02460   fnfscode(actpd)
+02465   fnpriorcd(1)
 02470   goto XIT
 02480 ! ______________________________________________________________________
 02490 L2490: close #1: ioerr L2500

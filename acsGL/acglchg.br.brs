@@ -9,9 +9,9 @@
 00080   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00090   dim cnam$*40,accum(9,2),acct$*12,bp(13),by(13),udf$*256
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Comparative (FP)")
+00110   fntop(program$,cap$="Comparative (FP)")
 00120   if fnglfs=5 then goto XIT
-00130   let fncno(cno,cnam$)
+00130   fncno(cno,cnam$)
 00140   let udf$=env$('temp')&'\'
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20: 
 00160   actpd=fnactpd : let fscode=fnfscode
@@ -39,15 +39,15 @@
 00340 L340: close #1: 
 00350   open #1: fl1$,internal,input,keyed 
 00360   if fnprocess=1 or fnUseDeptNo=0 then goto L460
-00370   let fntos(sn$="ACglchg") !:
+00370   fntos(sn$="ACglchg") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00380   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00390   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00380   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00390   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00400   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00410   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00420   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00430   let fnacs(sn$,0,mat resp$,ckey)
+00400   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00410   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00420   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00430   fnacs(sn$,0,mat resp$,ckey)
 00440   if ckey=5 then goto XIT
 00450   costcntr=val(resp$(1))
 00460 L460: let fnopenprn !:
@@ -195,7 +195,7 @@
 01830 L1830: let eofcode=1
 01840   gosub L1370
 01850 ! 
-01860   let fncloseprn
+01860   fncloseprn
 01870   goto XIT
 01880 ! ______________________________________________________________________
 01890 L1890: let total=income

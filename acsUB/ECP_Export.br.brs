@@ -15,40 +15,40 @@
 11300   dim extra(23),extra$(11)*30
 11320   dim exp_filename$*256
 11340 ! ______________________________________________________________________
-12000   let fncno(cno)
-12020   let fntop(program$,cap$="Export for External Collections Process")
+12000   fncno(cno)
+12020   fntop(program$,cap$="Export for External Collections Process")
 12040 ! 
 14000   if ~fnclient_has('U5') then 
 14020     mat m$(2)
 14040     let m$(1)="You must purchase the ACS Utility Billing External Collections Processing"
 14060     let m$(2)="module to access these features"
-14080     let fnmsgbox(mat m$, response$, cap$,64)
+14080     fnmsgbox(mat m$, response$, cap$,64)
 14100     goto XIT
 14120   end if 
 14140 ! 
-14160   let fnget_services(mat servicename$) : for servicename_item=1 to udim(mat servicename$) : let servicename$(servicename_item)=trim$(servicename$(servicename_item)) : next servicename_item
+14160   fnget_services(mat servicename$) : for servicename_item=1 to udim(mat servicename$) : let servicename$(servicename_item)=trim$(servicename$(servicename_item)) : next servicename_item
 14180   let delim$=chr$(9)
 14200 ! 
 16000   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 16020   open #h_alt_bill:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 16040 ! 
-16060   let fnureg_read('ECP Export Filename',exp_filename$)
+16060   fnureg_read('ECP Export Filename',exp_filename$)
 16080   if exp_filename$='' then let exp_filename$=os_filename$(env$('userprofile')&'\Desktop')&"\ACS_ECP_Export.txt"
 16100 ! /r
 20000 MENU1: ! 
-20020   let fntos(sn$="ecp_export")
-20040   let fnlbl(1,1,"Destination Path and File Name:",34,1)
-20060   let fntxt(1,36,40,256,0,"71")
+20020   fntos(sn$="ecp_export")
+20040   fnlbl(1,1,"Destination Path and File Name:",34,1)
+20060   fntxt(1,36,40,256,0,"71")
 20080   let resp$(1)=exp_filename$
-20100   let fnlbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
-20120   let fncmdset(2)
-20140   let fnacs(sn$,0,mat resp$,ckey)
+20100   fnlbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
+20120   fncmdset(2)
+20140   fnacs(sn$,0,mat resp$,ckey)
 20160   if ckey=5 then goto XIT
 20180   let exp_filename$=resp$(1)
 20200 ! 
 20220   open #h_ecp:=fngethandle: "Name="&env$('at')&br_filename$(exp_filename$)&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
 20240   let exp_filename$=os_filename$(file$(h_ecp))
-20260   let fnureg_write('ECP Export Filename',exp_filename$)
+20260   fnureg_write('ECP Export Filename',exp_filename$)
 20280 ! restore #h_customer:
 20370 ! r: main loop
 20940   gosub HEADER ! work in progress
@@ -225,7 +225,7 @@
 58020   close #h_customer: ioerr ignore
 58040   close #h_alt_bill: ioerr ignore
 58060   close #h_ecp: ioerr ignore
-58080   let fn_report_created_file(exp_filename$)
+58080   fn_report_created_file(exp_filename$)
 58100   goto XIT ! /r
 60000 XIT: let fnxit
 60010 ! IGNORE: continue
@@ -235,6 +235,6 @@
 65120       mat m$(2)
 65140       let m$(1)="External Collections File created:"
 65160       let m$(2)=os_filename$(exp_filename_report$)
-65180       let fnmsgbox(mat m$, response$, cap$,64)
+65180       fnmsgbox(mat m$, response$, cap$,64)
 65200     end if 
 65240   fnend 

@@ -2,7 +2,7 @@
 00020 ! Service Code File
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnwin3b,fnerror,fnwait,fncno,fnmsgbox,fnxit,fnprocess,fndat,fntop,fncode_search,fntos,fnlbl,fncmbcode,fncmdkey,fnacs,fntxt,fncmdset,fncombof,fnrgl$,fnqgl,fnagl$,fnchk,fnflexinit1,fncmbemp,fnflexadd1,fncmbburden,fnburden_srch
-00050   let fntop("S:\acsPR\burden",cap$="Personnel Burden")
+00050   fntop("S:\acsPR\burden",cap$="Personnel Burden")
 00060   on error goto ERTN
 00070   dim cnam$*40,dat$*20,gl(3),sf1$*28,sn$*30,cap$*128,search$(22),resp$(10)*60
 00080   dim name$*30
@@ -10,8 +10,8 @@
 00100   dim df$*256,if$*256
 00110   dim code$(2),item2$(4)*30,breakdownde$*30,ml$(3)*80,code2$(3)
 00120 ! ______________________________________________________________________
-00130   let fncno(cno,cnam$)
-00140   let fndat(dat$,1)
+00130   fncno(cno,cnam$)
+00140   fndat(dat$,1)
 00150   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00160 ! 
 00170   if exists(env$('Q')&"\PRmstr\Burden.H"&str$(cno))=0 then goto SETUP_FILES
@@ -21,21 +21,21 @@
 00205   mat resp$=("")
 00210   ad1=0 ! add code - used to tell other parts of the program, !:
         ! that I am currently adding a service code record.
-00220   let fntos(sn$="Pr-askemployee") !:
+00220   fntos(sn$="Pr-askemployee") !:
         let respc=0
-00230   let fnlbl(1,1,"Employee Number:",20,right)
-00240   let fncmbburden(1,23)
+00230   fnlbl(1,1,"Employee Number:",20,right)
+00240   fncmbburden(1,23)
 00250   if hact$="" then !:
           let resp$(respc+=1)="" else !:
           let resp$(respc+=1)=hact$
-00260   let fncmdkey("&Add",1,0,0,"Add a new employee burden record." ) !:
-        let fncmdkey("E&dit",2,1,0,"Access the highlited record") !:
-        let fncmdkey("&Next",3,0,0,"Access next record in employee burden order") !:
-        let fncmdkey("&Search",6,0,0,"Search for employee burden record") !:
-        let fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee burden information") !:
-        let fncmdkey("&Proof List",8,0,0,"Returns to menu") !:
-        let fncmdkey("E&xit",5,0,1,"Returns to menu")
-00270   let fnacs(sn$,0,mat resp$,ckey)
+00260   fncmdkey("&Add",1,0,0,"Add a new employee burden record." ) !:
+        fncmdkey("E&dit",2,1,0,"Access the highlited record") !:
+        fncmdkey("&Next",3,0,0,"Access next record in employee burden order") !:
+        fncmdkey("&Search",6,0,0,"Search for employee burden record") !:
+        fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new employee burden information") !:
+        fncmdkey("&Proof List",8,0,0,"Returns to menu") !:
+        fncmdkey("E&xit",5,0,1,"Returns to menu")
+00270   fnacs(sn$,0,mat resp$,ckey)
 00280   if ckey=5 then goto XIT
 00290   if ckey=8 then gosub PRINT_PROOF: goto ASKEMPLOYEE
 00300   if ckey=1 then goto ADD_RECORD
@@ -48,28 +48,28 @@
 00361   if trim$(eno$)="" then goto ASKEMPLOYEE else read #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey ASKEMPLOYEE : goto SCREEN_1
 00370   if ckey=7 then gosub RECREATE_GRID: goto ASKEMPLOYEE
 00380 SCREEN_1: ! maintain personnel burdern screen
-00390   let fntos(sn$="Pr-burden") !:
+00390   fntos(sn$="Pr-burden") !:
         let respc=0
 00400   let mylen=12: let mypos=mylen+3 : let right=1
-00410   let fnlbl(1,1,"Employee #:",mylen,right)
-00420   let fntxt(1,mypos,6,0,0,"") !:
+00410   fnlbl(1,1,"Employee #:",mylen,right)
+00420   fntxt(1,mypos,6,0,0,"") !:
         let resp$(1)=eno$
-00430   let fnlbl(2,1,"Name:",mylen,right)
-00440   let fntxt(2,mypos,30,0,0,"",0,"The name should be pulled from payroll and automatically displayed.") !:
+00430   fnlbl(2,1,"Name:",mylen,right)
+00440   fntxt(2,mypos,30,0,0,"",0,"The name should be pulled from payroll and automatically displayed.") !:
         let resp$(2)=name$
-00460   let fnlbl(3,1,"Burden %:",mylen,right)
-00470   let fntxt(3,mypos,6,0,0,"33",0,"Enter the % of wage that you wish to use on this employee to calculate the personnel burden charged to jobs.") !:
+00460   fnlbl(3,1,"Burden %:",mylen,right)
+00470   fntxt(3,mypos,6,0,0,"33",0,"Enter the % of wage that you wish to use on this employee to calculate the personnel burden charged to jobs.") !:
         let resp$(3)=str$(burden)
-00480   let fnlbl(4,1,"Unused:",mylen,right)
-00490   let fntxt(4,mypos,6,0,0,"33",0,"Unused field at this time.") !:
+00480   fnlbl(4,1,"Unused:",mylen,right)
+00490   fntxt(4,mypos,6,0,0,"33",0,"Unused field at this time.") !:
         let resp$(4)=""
-00500   let fnlbl(5,1,"Unused:",mylen,right)
-00510   let fntxt(5,mypos,6,0,0,"33",0,"Unused field at this time.") !:
+00500   fnlbl(5,1,"Unused:",mylen,right)
+00510   fntxt(5,mypos,6,0,0,"33",0,"Unused field at this time.") !:
         let resp$(5)=""
-00520   let fncmdkey("&Save",1,1,0,"Saves any changes and returns to main screen.")
-00530   let fncmdkey("&Delete",4,0,0,"Deletes this record from the personnel burden file.")
-00540   let fncmdkey("&Cancel",5,0,1,"Returns to first screen without saving any changes.")
-00550   let fnacs(sn$,0,mat resp$,ckey)
+00520   fncmdkey("&Save",1,1,0,"Saves any changes and returns to main screen.")
+00530   fncmdkey("&Delete",4,0,0,"Deletes this record from the personnel burden file.")
+00540   fncmdkey("&Cancel",5,0,1,"Returns to first screen without saving any changes.")
+00550   fnacs(sn$,0,mat resp$,ckey)
 00560   if ckey=5 then goto ASKEMPLOYEE
 00562   let eno=val(resp$(1)(1:8)) : let eno$=lpad$(trim$(resp$(1)),8)
 00563   let name$=resp$(2)
@@ -78,7 +78,7 @@
 00580   mat ml$(2) !:
         let ml$(1)="You have chosen to delete employee "&trim$(eno$)&" from the burden file!" !:
         let ml$(2)="Select OK to delete; else Cancel to retain the record." !:
-        let fnmsgbox(mat ml$,resp$,cap$,49)
+        fnmsgbox(mat ml$,resp$,cap$,49)
 00590   if resp$="OK" then goto L600 else goto ASKEMPLOYEE
 00600 L600: if ckey=4 then delete #1,key=eno$: : gosub RECREATE_GRID: goto ASKEMPLOYEE
 00640 L640: rewrite #1,using L190,key=eno$: eno,name$,burden,burden2,burden3 nokey L650
@@ -86,21 +86,21 @@
 00660   goto ASKEMPLOYEE
 00670 ! ______________________________________________________________________
 00680 RECREATE_GRID: ! 
-00690   let fnburden_srch(x$,99) !:
+00690   fnburden_srch(x$,99) !:
         let df$=env$('Q')&"\PRmstr\Burden.h"&str$(cno) : let if$=env$('Q')&"\PRmstr\Burdenidx.h"&str$(cno) !:
-        let fncombof("CBurden",lyne,mypos,43,df$,1,8,9,30,if$,1) !:
-        let fncombof("CBurdenaLL",lyne,mypos,43,df$,1,8,9,30,if$,2)
+        fncombof("CBurden",lyne,mypos,43,df$,1,8,9,30,if$,1) !:
+        fncombof("CBurdenaLL",lyne,mypos,43,df$,1,8,9,30,if$,2)
 00700   ad1=0 ! set add code back before returning to main screen
 00710   return 
 00720 ADD_RECORD: ! 
 00730   if reindex>3 then goto ERTN
-00740   let fntos(sn$="Burden2")
-00750   let fnlbl(1,5,"New Personnel Burden Information",45,1)
-00760   let fnlbl(3,1,"Employee Number:",15,0)
-00770   let fncmbemp(3,18)
+00740   fntos(sn$="Burden2")
+00750   fnlbl(1,5,"New Personnel Burden Information",45,1)
+00760   fnlbl(3,1,"Employee Number:",15,0)
+00770   fncmbemp(3,18)
 00780   let resp$(1)=""
-00790   let fncmdset(11)
-00800   let fnacs(sn$,0,mat resp$,ckey)
+00790   fncmdset(11)
+00800   fnacs(sn$,0,mat resp$,ckey)
 00810   if ckey=5 then goto ASKEMPLOYEE
 00820   let eno=val(resp$(1)(1:8)) !:
         let eno$=lpad$(trim$(resp$(1)(1:8)),8)
@@ -110,7 +110,7 @@
 00860   mat ml$(2) !:
         let ml$(1)="A record # "&eno$&" already exists!" !:
         let ml$(2)="Choose to review the record." !:
-        let fnmsgbox(mat ml$,resp$,cap$,48) !:
+        fnmsgbox(mat ml$,resp$,cap$,48) !:
         goto ADD_RECORD
 00870 L870: burden=burden2=burden3=0
 00880   write #1,using L190: eno,name$,burden,burden2,burden3
@@ -127,7 +127,7 @@
 00990 L990: execute "Index "&env$('Q')&"\PRmstr\Burden.H"&str$(cno)&' '&env$('Q')&"\PRmstr\BurdenIdx.H"&str$(cno)&" 1 8 Replace DupKeys -n"
 01000   goto L180
 01010 PRINT_PROOF: ! 
-01020   let fnopenprn
+01020   fnopenprn
 01030   gosub L1140
 01040   restore #1: 
 01050 L1050: read #1,using L190,release: eno,name$,burden,burden2,burden3 eof L1090
@@ -135,7 +135,7 @@
 01070 L1070: form pos 1,n 8,x 6,c 30,n 6.3 ,skip 1
 01080   goto L1050
 01090 L1090: if nw=0 then pr #255: newpage
-01100   let fncloseprn
+01100   fncloseprn
 01110   on fkey 5 ignore 
 01120   goto ASKEMPLOYEE
 01130 L1130: pr #255: newpage : gosub L1140 : continue 

@@ -8,9 +8,9 @@
 00080   dim sc1$(3),sd1$(3),se1$(3)*50,prtj$(100)*6,dat$*20
 00090   dim ml$(1)*80
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Job Status Worksheet")
-00120   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00110   fntop(program$,cap$="Job Status Worksheet")
+00120   fncno(cno,cnam$) !:
+        fndat(dat$)
 00130 ! 
 00140   let prtjob$="N" : let perpag$="N"
 00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -18,42 +18,42 @@
 00170 ! ______________________________________________________________________
 00180   if fnprocess=1 then goto ASKJOB
 00190 MAIN_SCREEN: ! 
-00200   let fntos(sn$="namlst1") !:
+00200   fntos(sn$="namlst1") !:
         let mylen=25 : let mypos=mylen+2: let resp=0: let left=1
-00210   let fnlbl(1,1,"Report Heading Date:",23,left)
-00220   let fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
+00210   fnlbl(1,1,"Report Heading Date:",23,left)
+00220   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
         let resp$(resp+=1)=dat$
-00230   let fnchk(2,mypos,"Print All Jobs:",left) !:
+00230   fnchk(2,mypos,"Print All Jobs:",left) !:
         let resp$(resp+=1)="False"
-00240   let fnchk(3,mypos,"Print One Job Per Page:",left) !:
+00240   fnchk(3,mypos,"Print One Job Per Page:",left) !:
         let resp$(resp+=1)="False"
-00250   let fncmdset(2)
-00260   let fnacs(sn$,0,mat resp$,ck)
+00250   fncmdset(2)
+00260   fnacs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
 00280   let dat$=resp$(1) ! heading date
 00290   if resp$(2)="True" then let prtjob$="Y" else let prtjob$="N"
 00300   if resp$(3)="True" then let perpag$="Y" else let perpad$="N"
 00310 ! ______________________________________________________________________
-00320   let fndat(dat$,2)
+00320   fndat(dat$,2)
 00330   if prtjob$="N" then goto ASKJOB
 00340   if fnprocess=1 then goto L510
 00350 ! ______________________________________________________________________
 00360   mat ml$(1) !:
         let ml$(1)="Do you wish to skip all completed jobs?" !:
-        let fnmsgbox(mat ml$,resp$,cap$,4)
+        fnmsgbox(mat ml$,resp$,cap$,4)
 00370   if resp$="Yes" then let skpcom$="Y" else let skpcom$="N"
 00380   goto L510
 00390 ASKJOB: ! 
 00400   for j=1 to 100
-00410     let fntos(sn$="prtdet2") !:
+00410     fntos(sn$="prtdet2") !:
           let mylen=12 : let mypos=mylen+3: let resp=0: let left=1 !:
-          let fnlbl(1,1,"Job Number:",mylen,1) !:
-          let fncmbjob(1,mypos) !:
+          fnlbl(1,1,"Job Number:",mylen,1) !:
+          fncmbjob(1,mypos) !:
           let resp$(respc+=1)=jn$
 00420     let prtj$(j)=lpad$(rtrm$(prtj$(j)),6)
-00430     let fncmdkey("&Next",1,1,0,"Print this job." ) !:
-          let fncmdkey("&Complete",5,0,1,"No more jobs. Release the print.")
-00440     let fnacs(sn$,0,mat resp$,ck)
+00430     fncmdkey("&Next",1,1,0,"Print this job." ) !:
+          fncmdkey("&Complete",5,0,1,"No more jobs. Release the print.")
+00440     fnacs(sn$,0,mat resp$,ck)
 00450     if ck=5 then goto L490
 00460     let prtj$(j)=lpad$(rtrm$(resp$(1)(1:6)),6)
 00470   next j
@@ -61,7 +61,7 @@
 00490 L490: let j=j-1
 00500 ! ______________________________________________________________________
 00510 L510: on fkey 5 goto DONE
-00520   let fnopenprn !:
+00520   fnopenprn !:
         if file$(255)(1:3)<>"PRN" then let jbskip=1
 00530   gosub HDR
 00540 L540: if prtjob$="Y" then goto L590
@@ -82,7 +82,7 @@
 00690 ! ______________________________________________________________________
 00700 DONE: close #1: 
 00710   close #2: 
-00720   let fncloseprn
+00720   fncloseprn
 00730   goto XIT
 00740 ! ______________________________________________________________________
 00750 HDR: ! 

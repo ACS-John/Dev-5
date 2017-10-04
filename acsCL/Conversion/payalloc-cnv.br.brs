@@ -8,7 +8,7 @@
 00070   dim cnam$*40,dat$*20,gl(3),sf1$*28,sn$*30,de$*30
 00080   dim rn$*12,de$*30,ta(2),tvn$*8,tr$(5)*35,tr(2),de$*30
 00090   let io1$(1)="10,51,N 2,U,N"
-00100   let fncno(cno)
+00100   fncno(cno)
 00110   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno),internal,outin,keyed 
 00120   open #2: "Name="&env$('Q')&"\CLmstr\X.H"&str$(cno)&",RecL=164,Replace",internal,outin,relative 
 00130   open #3: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&str$(cno)&",SIZE=0,RecL=56,Replace",internal,outin,relative 

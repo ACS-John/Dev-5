@@ -15,19 +15,19 @@
 00160 ! ______________________________________________________________________
 00170   dim cap$*128,resp$(10)*80,g(11),acctrn_form$*80,rw4(22,13),key$*19,ru(6)
 00180 ! ______________________________________________________________________
-00190   let fntop("S:\acsUB\Conversion\Bld_Trans",cap$="Build Transactions")
+00190   fntop("S:\acsUB\Conversion\Bld_Trans",cap$="Build Transactions")
 00210 LOOP_STEP_1: ! 
 00220   let delubtransvb$="True"
 00230 ! let removebaddates$="True" ! Gosub MENU1
-00240   let fn_ub_build_transactions
+00240   fn_ub_build_transactions
 00250   goto XIT
 26000 MENU1: ! r:
-26020   let fntos(sn$="bldtrans")
-26040   let fnlbl(1,1,"Convert Transactions")
-26060   let fnchk(4,1,"Delete existing transaction file before conversion") : let resp$(1)="True"
-26080   let fnchk(5,1,"Remove Transactions with Bad Dates") : let resp$(2)="False"
-26100   let fncmdset(2)
-26120   let fnacs(sn$,0,mat resp$,ck)
+26020   fntos(sn$="bldtrans")
+26040   fnlbl(1,1,"Convert Transactions")
+26060   fnchk(4,1,"Delete existing transaction file before conversion") : let resp$(1)="True"
+26080   fnchk(5,1,"Remove Transactions with Bad Dates") : let resp$(2)="False"
+26100   fncmdset(2)
+26120   fnacs(sn$,0,mat resp$,ck)
 26140   let delubtransvb$=resp$(1) : let removebaddates$=resp$(2)
 26160   if ck=5 then pr 'cancel selected.  end reached - call support - conversion incomplete' : pause
 26180 ! 
@@ -38,21 +38,21 @@
 28020     library 'S:\Core\Library': fnerror,fntop,fntos,fnacs,fncmdset,fnlbl,fndate_mmddyy_to_ccyymmdd,fnchk,fnxit,fnpause,fngethandle,fnub_index_customer,fnstatus,fnindex_it
 28060     let delubtransvb$="True"
 28080 ! let removebaddates$="True" ! Gosub MENU1
-28100     let fnub_cnv_build_transactions=fn_ub_build_transactions
+28100     fnub_cnv_build_transactions=fn_ub_build_transactions
 28120   fnend 
 40000   def fn_ub_build_transactions
-40020     let fnstatus('Building Transactions...')
+40020     fnstatus('Building Transactions...')
 40040     if uprc$(delubtransvb$)=uprc$("True") and exists(env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')) then execute "Free "&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&" -n"
 40060 ! 
-40062     let fnstatus('   * an error indexing ubindx5 on the next line is acceptable')
-40080     let fnub_index_customer
+40062     fnstatus('   * an error indexing ubindx5 on the next line is acceptable')
+40080     fnub_index_customer
 40100     open #master=3: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 40120 ! 
 40140 ! open NEW files
 40160     open #transvb=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outin,keyed 
 40180 PHASE1: ! 
 46000 ! r: convert transactions from ubAccTrn
-46020     let fnstatus('converting transactions from History Transactions (ubAccTrn.h'&env$('cno')&')')
+46020     fnstatus('converting transactions from History Transactions (ubAccTrn.h'&env$('cno')&')')
 46040     open #h_ubacctrn=1: "Name="&env$('Q')&"\UBmstr\ubAccTrn.h"&env$('cno'),internal,outin 
 46060     if env$('client')='Franklinton' then 
 46080       acctrn_form$='Form Pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2' ! Franklinton only
@@ -65,15 +65,15 @@
 46220     else ! seems to be a problem
 46240       pr 'unrecognised ubacctrn record length' : let fnpause
 46260     end if 
-46280     let fn_transaction_conv(h_ubacctrn)
+46280     fn_transaction_conv(h_ubacctrn)
 46300 ! /r
 48000 ! r: convert transactions from ubTrans
-48020     let fnstatus('converting transactions from Current Transactions (ubTrans.h'&env$('cno')&')')
+48020     fnstatus('converting transactions from Current Transactions (ubTrans.h'&env$('cno')&')')
 48040     open #h_ubtrans=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTrans.h"&env$('cno'),internal,input 
-48060     let fn_transaction_conv(h_ubtrans)
+48060     fn_transaction_conv(h_ubtrans)
 48080 ! /r
 50000 ! r: convert transactions 13 month history
-50020     let fnstatus('converting charge (only) transactions from 13 month history (deletes previously made matching entries)')
+50020     fnstatus('converting charge (only) transactions from 13 month history (deletes previously made matching entries)')
 50040     restore #master: 
 50060     do 
 50080       read #master,using 'form pos 1,c 10,pos 438,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2': p$,mat rw4 eof PHASE4
@@ -124,7 +124,7 @@
 51340 !         loop
 51360 !        goto NEXT_MONTH
 51380 EO_DELETE_MATCHING_TRANS: !  /r
-52000           let fn_fix_trans_breakdown(mat g,tamt)
+52000           fn_fix_trans_breakdown(mat g,tamt)
 52020 !         if sum(g)=tamt then ! SKIP ANY TRANSACTIONS THAT DON'T ADD UP
 52040           write #transvb,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat g,mat ru,bal,postcode
 52060 !         if trim$(p$)='209740.00' and month=1 then pr 'tdate=';tdate; 'tamt=';tamt : for x=1 to udim(mat rw4,1) : pr rw4(x,1) : next x :  pause
@@ -138,10 +138,10 @@
 52220 ! /r
 54000     close #master: 
 54040     close #transvb: 
-54060     let fnindex_it(env$('Q')&"\UBmstr\UBTransvb.h"&env$('cno'), env$('Q')&"\UBmstr\UBTrindx.h"&env$('cno'),"1 19")
+54060     fnindex_it(env$('Q')&"\UBmstr\UBTransvb.h"&env$('cno'), env$('Q')&"\UBmstr\UBTrindx.h"&env$('cno'),"1 19")
 54080     if removebaddates$="True" then let fn_removebaddates
-54100     let fnstatus('    Build Transaction - write_count='&str$(write_count))
-54120     let fnstatus('Building Transactions complete.')
+54100     fnstatus('    Build Transaction - write_count='&str$(write_count))
+54120     fnstatus('Building Transactions complete.')
 54140   fnend  ! fn_ub_build_transactions
 56000   def fn_translate_transcode
 56020     if transcode=1 and postcode=4 then 
@@ -183,7 +183,7 @@
 60220       read #master,using 'form pos 1,c 10,pos 296,pd 4,11*pd 4.2',key=p$: z$,fdate,mat g nokey READ_TRANS
 60240       if sum(g)-g(10)=tamt or transcode=1 then let g(10)=0 ! don't include penaltiies unless they are needed to total to the transaction amount
 60260       if transcode=2 and g(10)=tamt then let g(1)=g(2)=g(3)=g(4)=g(5)=g(6)=g(7)=g(8)=g(9)=0 ! make sure all other charges are zero on penalty records where g(10) is the penalty field
-60280       let fn_translate_transcode
+60280       fn_translate_transcode
 60282       if postcode=5 then goto READ_TRANS ! Skip all transaction code 5s.
 60300       if len(str$(tdate))<=6 then let tdate=fndate_mmddyy_to_ccyymmdd(tdate)
 60320       if len(str$(fdate))<=6 then let fdate=fndate_mmddyy_to_ccyymmdd(fdate)
@@ -195,11 +195,11 @@
 60440 !     read #transvb,using 'form pos 1,C 10,pos 20,pd 4.2',key=rpad$(p$&str$(tdate)&str$(transcode),kln(transvb)): p$,tamt_compare nokey TC_MATCHING_TRAN_NOKEY
 60460 !     if tamt_compare=tamt  then goto READ_TRANS  ! skip if trans already exists (matches on transcode, account, date and amount)
 60480 TC_MATCHING_TRAN_NOKEY: ! 
-60490       let fn_fix_trans_breakdown(mat tg,tamt)
+60490       fn_fix_trans_breakdown(mat tg,tamt)
 60500       write #transvb,using 'form pos 1,C 10,N 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat tg,d1,d3,empty,empty,d9,d10,bal,postcode
 60520       let write_count+=1
 60560 !    goto READ_TRANS
-60580 !     let fn_fix_trans_breakdown(mat g,tamt)
+60580 !     fn_fix_trans_breakdown(mat g,tamt)
 60600 !     write #transvb,using 'form pos 1,C 10,N 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat g,d1,d3,d,d,d9,d10,bal,postcode
 60620 !     let write_count+=1
 60640     loop 

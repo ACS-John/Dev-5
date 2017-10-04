@@ -2,7 +2,7 @@
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fnerror,fnsetmonth,fncno,fnxit,fnremove,fnrights_test,fntop,fnbooktitle$
 00032 ! let msgbox("Reverse Billing Cycle is currently under construction.","Reverse Billing Cycle Unavailable","OK","Inf") : if env$('ACSDeveloper')='' then goto XIT
-00033   let fntop(program$,cap$="Main menu")
+00033   fntop(program$,cap$="Main menu")
 00034   if ~fnrights_test('',"Try Run As Administrator.",'Program','This program must write data into the working (program) directory.') then goto XIT
 00040 ! This program will read a standard ACS layout and pull the data names for use in the user designed grid features of any ACS system
 00050 ! to create your own file instead of using this program, store the description,variable name,field length,# of decimal points, format (example:  Customer Name,Variable Name,30,0,C)   Form POS 1,C 30,C 20,N 4,N 2,C 11
@@ -12,8 +12,8 @@
 00090   dim a$(200,3)*40,h1$*55,rm$(4)*44,filename$*20,fil$(50)*20,ln$*80
 00100   dim a(200,6),a$*132,prg$*20,mo$(12),outputfile$*50,ev$*50,cap$*128
 00110   dim servicename$(10)*20,servicecode$(10)*2,textfile$*87,abbrev$*30
-00120   let fnsetmonth(mat mo$)
-00130   let fncno(cno)
+00120   fnsetmonth(mat mo$)
+00130   fncno(cno)
 00160   let dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
 00180   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative ioerr L190
 00182   read #20,using "Form POS 1,10*C 20,10*c 2",rec=1: mat servicename$,mat srv$
@@ -40,7 +40,7 @@
 00342 READ_TEMP: ! 
 00344     linput #2: ln$ eof FINIS
 00346     let ln$=srep$(ln$,'^','~')
-00350     let fnremove(chr$(9),ln$)
+00350     fnremove(chr$(9),ln$)
 00360     if uprc$(ln$(7:10))<>"DATA" then goto READ_TEMP
 00370 DATALN: let j3=1
 00380     let p1=11

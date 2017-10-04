@@ -4,8 +4,8 @@
 00040   library 'S:\Core\Library': fnpostgl2,fnxit,fnerror,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   let fntop(program$,"GL Distribution Report")
-00080   let fnpostgl2(2)
+00070   fntop(program$,"GL Distribution Report")
+00080   fnpostgl2(2)
 00090   goto XIT
 00100 ! ______________________________________________________________________
 00110 ! <Updateable Region: ERTN>

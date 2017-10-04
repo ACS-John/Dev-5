@@ -1,7 +1,7 @@
 18000 ! r: testing zone
-18020 !    let fn_setup
+18020 !    fn_setup
 18040 !   fntop('W-3 Line Testing')
-18060 !   let fnpa_open('','W-3','PDF')
+18060 !   fnpa_open('','W-3','PDF')
 18080 !   fnpa_background('S:\Core\pdf\W-3.pdf')
 18100 !   for lyne=1 to 14
 18120 !     fnpa_txt(str$(lyne)&'. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' ,8,fn_line(lyne))
@@ -37,7 +37,7 @@
 30360   ! state$    
 30380   ! stcode$   
 32000   if ~setup then let fn_setup
-32020   let fnpa_open('','W-3','PDF')
+32020   fnpa_open('','W-3','PDF')
 32040   if enableBackground$='True' then let fnpa_background('S:\Core\pdf\2016\W-3.pdf')
 32080   fnpa_fontsize(12)
 32100   fnpa_txt("X",38,fn_line(2))

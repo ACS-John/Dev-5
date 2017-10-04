@@ -19,14 +19,14 @@
 10360   a$(7)="Sales Journal"
 10380   a$(8)="Purchases Journal"
 12000 ! /r
-12020   let fntop(program$,cap$="Fix Current Period Transactions Dates")
-12040   let fncno(cno,cnam$)
-12060   let fnconsole(off=0) ! temporary-take out
+12020   fntop(program$,cap$="Fix Current Period Transactions Dates")
+12040   fncno(cno,cnam$)
+12060   fnconsole(off=0) ! temporary-take out
 16000 ! 
 16040   gosub ASK_PERIOD
 16050   if ck=5 then goto XIT
 16060 ! 
-18020   let fnopenprn
+18020   fnopenprn
 18040 ! if cur_prior=period_current then
 18080   open #h_gltrans:=3: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,outin,relative 
 18100 F_GLTRANS: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
@@ -149,7 +149,7 @@
 38500 ! ______________________________________________________________________
 40000 ASK_PERIOD: ! r:
 40020 ! pr newpage
-40040   let fntos(sn$="fix_trans_dates")
+40040   fntos(sn$="fix_trans_dates")
 40060   let respc=0
 40080 ! let fnfra(1,1,5,50,"Print from current month files or history"," ")
 40100 ! let fnopt(1,3,"Current Period Transactions",0,1)
@@ -157,18 +157,18 @@
 40140 ! let fnopt(3,3,"Prior Period Transactions",0,1)
 40160 ! let resp$(respc+=1)="False"
 40180 ! let fnlbl(4,1,"Prior period code (blank for all):",35,0,0,1)
-40200   let fnlbl(1,1,"Only Current Period transactions will be processed.",51,2)
-40220   let fnlbl(2,1,"All matching dates will be changed.",51,2)
+40200   fnlbl(1,1,"Only Current Period transactions will be processed.",51,2)
+40220   fnlbl(2,1,"All matching dates will be changed.",51,2)
 40240   let resp$(respc+=1)=" "
 40260 ! let fnfra(7,1,4,50,"Date Correction"," ")
-40280   let fnlbl(4,1,"Bad Date:",12,1) ! ,0,0,2)
-40300   let fntxt(4,14,2,0,1,"1",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
+40280   fnlbl(4,1,"Bad Date:",12,1) ! ,0,0,2)
+40300   fntxt(4,14,2,0,1,"1",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
 40320   let resp$(respc+=1)=" "
-40340   let fnlbl(5,1,"Good Date:",12,1) ! ,0,0,2)
-40360   let fntxt(5,14,2,0,1,"1",0,"")
+40340   fnlbl(5,1,"Good Date:",12,1) ! ,0,0,2)
+40360   fntxt(5,14,2,0,1,"1",0,"")
 40380   let resp$(respc+=1)=" "
-40400   let fncmdset(2)
-40420   let fnacs(sn$,0,mat resp$,ck)
+40400   fncmdset(2)
+40420   fnacs(sn$,0,mat resp$,ck)
 40440   if ck<>5 then 
 40460     let date_bad=val(resp$(1))
 40480     let date_good=val(resp$(2))

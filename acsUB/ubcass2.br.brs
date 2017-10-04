@@ -7,23 +7,23 @@
 00070   dim nam$*30,sta$*30,city$*23,csz$*30,opt1$(4),cap$*128,txt$*100
 00071   dim a$*5,b$*4,c$*3,bc$*12,cr$*4,d$(2)
 00080 ! ______________________________________________________________________
-00090   let fncno(cno) !:
+00090   fncno(cno) !:
         ! 
-00100   let fntop("S:\acsUB\ubCass2",cap$="Place Certified File Back on PC")
+00100   fntop("S:\acsUB\ubCass2",cap$="Place Certified File Back on PC")
 00110 ! ______________________________________________________________________
 00120   let sn$="ubCass2" !:
-        let fntos(sn$) !:
+        fntos(sn$) !:
         let respc = 0
-00130   let fnlbl(1,1,"Path to Returned Postal Diskette:",33,1)
+00130   fnlbl(1,1,"Path to Returned Postal Diskette:",33,1)
 00140   let opt1$(1)="A:\" !:
         let opt1$(2)="C:\" !:
         let opt1$(3)="E:\" !:
         let opt1$(4)="F:\" !:
-        let fncomboa("AB",1,35,mat opt1$) !:
+        fncomboa("AB",1,35,mat opt1$) !:
         let resp$(respc+=1)=opt1$(1)
-00150   let fnlbl(3,1,"This program prints:")
-00160   let fnlbl(4,1,"Listing of Customer Addresses that could not be certified",58,2)
-00170   let fncmdset(2)
+00150   fnlbl(3,1,"This program prints:")
+00160   fnlbl(4,1,"Listing of Customer Addresses that could not be certified",58,2)
+00170   fncmdset(2)
 00180 L180: let fnacs(sn$,0,mat resp$,ckey)
 00190   if ckey=5 then goto XIT
 00200   let dv$=resp$(1)
@@ -33,7 +33,7 @@
 00230   open #2: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",RecL=112,Replace",internal,output 
 00240   open #3: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00250   open #4: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&str$(cno)&",Shr",internal,outin,relative 
-00260   let fnopenprn(cp,0,0,process)
+00260   fnopenprn(cp,0,0,process)
 00270   pr #255: "\qc {\b "&cap$ !:
         pr #255: "Listing of Customer Addresses that could not be certified" !:
         pr #255: date$("mm/dd/ccyy")&"}" !:
@@ -59,7 +59,7 @@
 00400   close #1: 
 00410   close #2: 
 00420   execute "Index "&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&","&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",1,10,Replace,DupKeys -n"
-00430   let fncloseprn
+00430   fncloseprn
 00440 XIT: let fnxit
 00450 ! ______________________________________________________________________
 00460 CREATE_CHECK_DIGIT: ! 

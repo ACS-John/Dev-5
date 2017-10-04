@@ -2,13 +2,13 @@
 20020 ! Vendor file with dynamic editor - hamster
 20040 ! ______________________________________________________________________
 20060   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
-20080   let fntop(program$,cap$="Vendor")
+20080   fntop(program$,cap$="Vendor")
 20100   on error goto ERTN
 20120 ! ______________________________________________________________________
 20140   dim cap$*128,fltyp$(08),fln(08),mask(08),p$(08)*65,lbl$(08)*22,sln(08)
 20160   dim c$(8,8)*40
 20180 ! ______________________________________________________________________
-20200   let fncno(cno)
+20200   fncno(cno)
 20220   let lbl$(1)="Vendor"
 20240   let lbl$(2)="Name"
 20260   let lbl$(3)="Address (1)"
@@ -37,7 +37,7 @@
 20720   c$(07,5)='3' : c$(07,6)='60'
 20740   c$(07,7)=env$('Q')&"\Data\1099Box.idx" : c$(07,8)='1'
 20760   open #1: "Name="&env$('Q')&"\GLmstr\gl1099.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\gl109idx.h"&str$(cno)&",Use,RecL=127,KPs=1,KLn=8,Shr",internal,outin,keyed 
-20780   let fnhamster("gl1099",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask,mat startpos,mat c$)
+20780   fnhamster("gl1099",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask,mat startpos,mat c$)
 20800 XIT: let fnxit
 20820 ! ______________________________________________________________________
 20840 ! <Updateable Region: ERTN>

@@ -9,9 +9,9 @@
 10160   dim sc1$(2)*20,cap$*128,wrd1$(2)*30,resp$(50)*50
 10180   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*21,journal_to_print(8),tgl(200,4)
 10200 ! ______________________________________________________________________
-10220   let fntop(program$,cap$="Transactions Journal")
-10240   let fncno(cno,cnam$)
-10260   let fnconsole(off=0) ! temporary-take out
+10220   fntop(program$,cap$="Transactions Journal")
+10240   fncno(cno,cnam$)
+10260   fnconsole(off=0) ! temporary-take out
 10280   a$(1)="Disbursements Journal"
 10300   a$(2)="Receipts Journal"
 10320   a$(3)="General Journal      (Adj)"
@@ -26,7 +26,7 @@
 16040   gosub ASK_PERIOD
 16060 ! ______________________________________________________________________
 18000 PR_JOURNAL: ! 
-18020   let fnopenprn
+18020   fnopenprn
 18040   if cur_prior=1 then 
 18060     execute "Index "&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&" "&env$('Temp')&"\fsindex.H"&str$(cno)& " 25/29/1 2/12/12 Replace DupKeys -N,Shr"
 18080     open #3: "Name="&env$('Q')&"\GLmstr\GLtrans.h"&str$(cno)&",KFName="&env$('Temp')&"\fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -198,35 +198,35 @@
 38500 ! ______________________________________________________________________
 40000 ASK_PERIOD: ! r:
 40020 ! pr newpage
-40040   let fntos(sn$="TRJR")
+40040   fntos(sn$="TRJR")
 40060   let respc=0
-40080   let fnfra(1,1,2,50,"Print from current month files or history"," ")
-40100   let fnopt(1,3,"Current Period Transactions",0,1)
+40080   fnfra(1,1,2,50,"Print from current month files or history"," ")
+40100   fnopt(1,3,"Current Period Transactions",0,1)
 40120   let resp$(respc+=1)="True"
-40140   let fnopt(2,3,"Prior Period Transactions",0,1)
+40140   fnopt(2,3,"Prior Period Transactions",0,1)
 40160   let resp$(respc+=1)="False"
-40180   let fnfra(5,1,8,50,"Select Journals to Print"," ")
-40200   let fnchk(1,3,"Disbursements Journal",0,2)
+40180   fnfra(5,1,8,50,"Select Journals to Print"," ")
+40200   fnchk(1,3,"Disbursements Journal",0,2)
 40220   let resp$(respc+=1)="True"
-40240   let fnchk(2,3,"Receipts Journal",0,2)
+40240   fnchk(2,3,"Receipts Journal",0,2)
 40260   let resp$(respc+=1)="True"
-40280   let fnchk(3,3,"General Journal (Adj)",0,2)
+40280   fnchk(3,3,"General Journal (Adj)",0,2)
 40300   let resp$(respc+=1)="True"
-40320   let fnchk(4,3,"General Journal (A/P)",0,2)
+40320   fnchk(4,3,"General Journal (A/P)",0,2)
 40340   let resp$(respc+=1)="False"
-40360   let fnchk(5,3,"General Journal (Payroll)",0,2)
+40360   fnchk(5,3,"General Journal (Payroll)",0,2)
 40380   let resp$(respc+=1)="False"
-40400   let fnchk(6,3,"General Journal (A/R)",0,2)
+40400   fnchk(6,3,"General Journal (A/R)",0,2)
 40420   let resp$(respc+=1)="False"
-40440   let fnchk(7,3,"Sales Journal",0,2)
+40440   fnchk(7,3,"Sales Journal",0,2)
 40460   let resp$(respc+=1)="False"
-40480   let fnchk(8,3,"Purchases Journal",0,2)
+40480   fnchk(8,3,"Purchases Journal",0,2)
 40500   let resp$(respc+=1)="False"
-40520   let fnlbl(16,1,"Prior period code (blank for all):",35,0)
-40540   let fntxt(16,37,2,0,1,"30",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
+40520   fnlbl(16,1,"Prior period code (blank for all):",35,0)
+40540   fntxt(16,37,2,0,1,"30",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
 40560   let resp$(respc+=1)=" "
-40580   let fncmdset(2)
-40590   let fnacs(sn$,0,mat resp$,ck)
+40580   fncmdset(2)
+40590   fnacs(sn$,0,mat resp$,ck)
 40600   if ck=5 then goto XIT
 40620   if resp$(1)="True" then cur_prior=1 else cur_prior=2
 40640   mat journal_to_print=(0)

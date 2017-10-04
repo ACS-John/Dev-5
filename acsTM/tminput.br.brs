@@ -1,9 +1,9 @@
 00020 ! 
 00030   on error goto L2650
 00040   library 'S:\Core\Library': fncno,fnxit,fntop,fncloseprn,fnopenprn,fnconsole,fnsearch
-00050   let fntop(program$,cap$="Enter Time")
-00060   let fncno(cno,cnam$)
-00065   let fnconsole(1)
+00050   fntop(program$,cap$="Enter Time")
+00060   fncno(cno,cnam$)
+00065   fnconsole(1)
 00070   dim scr1$(10),fl1$(12),io1$(10),scrid$(2)*60,inp(7),iv$*12,a1$*30,app(20)
 00080   dim fl2$(10),scr2$(7)*36,e$*9,e1$*25,he$*9,r(11),des$*30,cnam$*40,de$*30
 00090   dim a$(5)*30,ph$*12,ss$*11,dd(10),sc(10),ca(10),ph2$*12,ss2$*11,ar(5),arta(2),cm$*70,app(40),ma(40),cap$*128
@@ -232,7 +232,7 @@
 02220   goto L830
 02230 L2230: pr newpage
 02240   pr fields "10,10,c 60,h,n": "TIME MANAGEMENT CORRECTION LISTING IN PROCESS"
-02250   let fnopenprn(cp,58,220,process)
+02250   fnopenprn(cp,58,220,process)
 02260   if rtrm$(file$(255))(1:4)<>"PRN:" then goto L2280
 02270   if cp=1 then pr #255,using L2280: hex$("2B0205000F1042") else pr #255,using L2280: hex$("2B0205000F1042")
 02280 L2280: form pos 1,c 9,skip 0
@@ -267,7 +267,7 @@
 02570 L2570: next j
 02580   pr #255,using L2430: tinp3,tottime,totexp
 02590   dim sendto$*80
-02600   let fncloseprn ! Let SENDTO$=FILE$(255): pr #255: NEWPAGE : Close #255: : If SENDTO$(1:4)<>"PRN:" Then Execute "SY START /W "&SENDTO$ : Execute "DROP "&SENDTO$&" -N"
+02600   fncloseprn ! Let SENDTO$=FILE$(255): pr #255: NEWPAGE : Close #255: : If SENDTO$(1:4)<>"PRN:" Then Execute "SY START /W "&SENDTO$ : Execute "DROP "&SENDTO$&" -N"
 02610   goto L600
 02620 L2620: close #1: 
 02630   close #2: 
@@ -350,7 +350,7 @@
 04840   let numeric_format$='pic($$$,$$$.##)'
 04850   let key_length=5
 04860   let heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"
-04870   let fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
+04870   fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
 04880   let k$=z$=selection$ ! pull key from first field in search line
 04890   let inp(1)=0
 04900   let inp(1)=val(selection$) conv L4910

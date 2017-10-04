@@ -9,8 +9,8 @@
 00090 ! ----------------------------------------------------------------------
 00100   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00110   def fncd2(x)=(x-int(x*.0001)*10000)*10000+int(x*.0001)
-00120   let fntop("S:\acsUB\ubColDel","Remove Cash Receipt Records")
-00130   let fncno(cno) !:
+00120   fntop("S:\acsUB\ubColDel","Remove Cash Receipt Records")
+00130   fncno(cno) !:
         ! 
 00140   open #6: "Name="&env$('Q')&"\UBmstr\Collect.h"&str$(cno),internal,input 
 00150   open #7: "Name="&env$('temp')&"\Work."&session$&",Replace,RecL=72",internal,output 
@@ -29,15 +29,15 @@
 00260 ! ______________________________________________________________________
 00270 ASKDATE: ! 
 00280   let sn$="ubcoldel" !:
-        let fntos(sn$) !:
+        fntos(sn$) !:
         let mylen=37 !:
         let mypos=mylen+2 !:
         let respc=0
-00290   let fnlbl(1,1,"Lowest Date to Retained (mm\dd\ccyy):",mylen,1)
-00300   let fntxt(1,mypos,10,10,0,"2") !:
+00290   fnlbl(1,1,"Lowest Date to Retained (mm\dd\ccyy):",mylen,1)
+00300   fntxt(1,mypos,10,10,0,"2") !:
         let resp$(respc+=1)=""
-00310   let fncmdset(2)
-00320   let fnacs(sn$,win,mat resp$,ckey)
+00310   fncmdset(2)
+00320   fnacs(sn$,win,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
 00340   let ld1=val(resp$(1)) conv ASKDATE !:
         let ld1=fncd2(ld1) !:

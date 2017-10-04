@@ -1,7 +1,7 @@
 00020 ! 
 00030   on error goto L770
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole
-00050   let fncno(cno,cnam$)
+00050   fncno(cno,cnam$)
 00060   form pos 1,n 2,c 40,c 20,pos 83,n 6
 00070   dim z$*5,a$*30,sc(10),cnam$*40,cat$(30)*30,prg$*20
 00080   let namtab=43-int(len(rtrm$(cnam$))/2)

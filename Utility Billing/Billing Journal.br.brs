@@ -14,8 +14,8 @@
 00110   dim servicename$(10)*20,tax_code$(10)*1
 00112   dim tg(11),usages(3)
 00120 ! ______________________________________________________________________
-00130   let fntop(program$)
-00170   let fnd1(billing_date)
+00130   fntop(program$)
+00170   fnd1(billing_date)
 00200   fncreg_read('Route Low',bkno1$) : route_number=val(bkno1$)
 00230   fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$)
 00260   let hd1$="Account                             "
@@ -34,32 +34,32 @@
 00390   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00400   open #8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00402 ! r: get default sequence
-00404   let fncreg_read('ubBilJrn.Sort_Option',sequence$)
+00404   fncreg_read('ubBilJrn.Sort_Option',sequence$)
 00406   let seq=val(sequence$) conv ignore
 00408   if seq<1 then let seq=1
 00410 ! /r
 00420 MAIN: ! r: Screen 1
-00430   let fntos(sn$="UBBilJrn")
+00430   fntos(sn$="UBBilJrn")
 00440   let respc=0
-00480   let fnlbl(2,1,"Billing Date:",25,1)
-00490   let fntxt(2,27,8,0,1,"1")
+00480   fnlbl(2,1,"Billing Date:",25,1)
+00490   fntxt(2,27,8,0,1,"1")
 00500   let resp$(respc+=1)=str$(billing_date)
-00510   let fnfra(3,1,4,65,"Sort Order","The billing journal can be printed if route number sequence, account sequence or Alpha Sort Sequence.",0)
-00520   let fnopt(1,2,"Route/Sequence Number (includes Subtotals by Route)",0,1)
+00510   fnfra(3,1,4,65,"Sort Order","The billing journal can be printed if route number sequence, account sequence or Alpha Sort Sequence.",0)
+00520   fnopt(1,2,"Route/Sequence Number (includes Subtotals by Route)",0,1)
 00530   if seq=1 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
-00540   let fnopt(2,2,"Account",0,1)
+00540   fnopt(2,2,"Account",0,1)
 00550   if seq=2 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
-00560   let fnopt(3,2,"Alpha Sort",0,1)
+00560   fnopt(3,2,"Alpha Sort",0,1)
 00570   if seq=3 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
-00572   let fnopt(4,2,"Customer Name",0,1)
+00572   fnopt(4,2,"Customer Name",0,1)
 00574   if seq=4 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
-00580   let fnlbl(9,1,"Route Number:",25,1)
-00590   let fncmbrt2(9,27)
+00580   fnlbl(9,1,"Route Number:",25,1)
+00590   fncmbrt2(9,27)
 00600   let resp$(resp_route:=respc+=1)="[All]"
-00610   let fnchk(10,27,"Print Usages:",1)
-00612   let fncreg_read('ubBilJrn.Print Usages',resp$(resp_print_usages:=respc+=1))
-00620   let fncmdset(3)
-00630   let fnacs(sn$,0,mat resp$,ckey)
+00610   fnchk(10,27,"Print Usages:",1)
+00612   fncreg_read('ubBilJrn.Print Usages',resp$(resp_print_usages:=respc+=1))
+00620   fncmdset(3)
+00630   fnacs(sn$,0,mat resp$,ckey)
 00650   if ckey=5 then goto XIT
 00670   billing_date=val(resp$(1))
 00680   if resp$(2)="True" then let seq=1 ! route sequence
@@ -69,8 +69,8 @@
 00702   if uprc$(resp$(resp_route)) = uprc$("[All]") then let resp$(resp_route) = "0"
 00710   let prtbkno=val(resp$(resp_route))
 00720   let prtusage$=resp$(resp_print_usages)(1:1)
-00722   let fncreg_write('ubBilJrn.Sort_Option',str$(seq))
-00726   let fncreg_write('ubBilJrn.Print Usages',resp$(resp_print_usages))
+00722   fncreg_write('ubBilJrn.Sort_Option',str$(seq))
+00726   fncreg_write('ubBilJrn.Print Usages',resp$(resp_print_usages))
 00732 ! /r
 00740   if seq=0 or seq=1 then ! route number
 00742     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -79,7 +79,7 @@
 00746   else if seq=3 then ! Alpha Sort Sequence
 00747     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&",Shr",internal,input,keyed  
 00748   else if seq=4 then ! Customer Name
-00750     let fnindex_it(env$('Q')&"\UBmstr\Customer.h"&env$('cno'), env$('temp')&"\customer_name"&session$&".h"&env$('cno'),"41 30")
+00750     fnindex_it(env$('Q')&"\UBmstr\Customer.h"&env$('cno'), env$('temp')&"\customer_name"&session$&".h"&env$('cno'),"41 30")
 00758     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('temp')&"\customer_name"&session$&".h"&env$('cno')&",Shr",internal,input,keyed  
 00760   end if
 00770   if trim$(servicename$(1))="Water" then let services=services+1 : let water=1
@@ -100,7 +100,7 @@
 00910   if prtusage$="T" and trim$(service$(3))="LM" then let hd2$=hd2$&" {\ul LM-Usage}"
 00920   if prtusage$="T" and trim$(servicename$(4))="Gas" then let hd2$=hd2$&"{ \ul  G-Usage}"
 00930   if prtusage$="T" then let hd2$=hd2$&"{ \ul Meter Address}"
-00950   let fnopenprn
+00950   fnopenprn
 00952   gosub HDR
 00954   if prtbkno<>0 and seq=1 then 
 00956     let prtbkno$=rpad$(lpad$(str$(prtbkno),2),kln(1))
@@ -191,7 +191,7 @@
 01270   gosub PRINT1
 01275   goto DONE ! /r
 01285 DONE: close #1: ioerr ignore
-01310   let fncloseprn
+01310   fncloseprn
 01320 XIT: let fnxit
 01330 IGNORE: continue 
 01420 TOT1: ! r: ACCUMULATE TOTALS BY CODE

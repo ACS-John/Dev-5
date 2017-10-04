@@ -6,26 +6,26 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,txt$*60,message$(5)*80,tt$*80,message$*60,tg(11),ttg(11),e2$*30
 00080 ! ______________________________________________________________________
-00100   let fntop("S:\acsUB\ubSewer",cap$="Calculate Average Charges for Date Range")
+00100   fntop("S:\acsUB\ubSewer",cap$="Calculate Average Charges for Date Range")
 00110 ! ______________________________________________________________________
 00120   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00130   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00140   gosub BLDHDR
 00150 SCR1: ! 
 00160   let sn$="ubsewer-1" !:
-        let fntos(sn$)
+        fntos(sn$)
 00170   let txt$="Billing Dates for Months to be Averaged:" !:
         let mylen=len(txt$)+4: let fnlbl(2,5,txt$,mylen,0)
 00180   let mylen=12
 00190   let txt$="Date From: " !:
-        let fnlbl(3,6,txt$,mylen,1)
+        fnlbl(3,6,txt$,mylen,1)
 00200   let txt$="Date To: " !:
-        let fnlbl(4,6,txt$,mylen,1)
+        fnlbl(4,6,txt$,mylen,1)
 00210   for j=1 to 2 !:
-          let fntxt(j+2,20,8,0,0,"3") !:
+          fntxt(j+2,20,8,0,0,"3") !:
           let resp$(j)="" !:
         next j
-00220   let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+00220   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   for j=1 to 8
 00250 L250: let x=pos(resp$(j),"/",1)
@@ -34,9 +34,9 @@
 00280   let sd1=val(resp$(1)) : let sd2=val(resp$(2))
 00290   if sd1=0 or sd2=0 or sd2<sd1 then goto SCR1
 00300 ! ______________________________________________________________________
-00310   let fnopenprn
+00310   fnopenprn
 00320   let message$="Calculating: please wait..." !:
-        let fnwait(0,cap$,message$,1)
+        fnwait(0,cap$,message$,1)
 00330   gosub HDR
 00340 L340: read #1,using L350: x$,e2$,oldavg eof DONE
 00350 L350: form pos 1,c 10,x 30,c 30,pos 1822,n 9
@@ -75,7 +75,7 @@
 00680 L680: next j
 00690   pr #255,using L610: "Total",g2(sz1)
 00700   close #1: 
-00710   let fncloseprn
+00710   fncloseprn
 00720 XIT: let fnxit
 00730 ! ______________________________________________________________________
 00740 NEWPGE: pr #255: newpage

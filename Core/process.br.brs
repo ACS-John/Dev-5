@@ -5,10 +5,10 @@
 00040     library 'S:\Core\Library': fncno
 00050     option retain 
 00060 ! ______________________________________________________________________
-00070     let fncno(cno)
+00070     fncno(cno)
 00080     if putpro=-1 then let process=oldpro=putpro=0
 00090     if putpro>0 then let process=oldpro=putpro else let process=oldpro
 00100 XIT: ! 
-00110     let fnprocess=process
+00110     fnprocess=process
 00120   fnend 
 00130 ! ______________________________________________________________________

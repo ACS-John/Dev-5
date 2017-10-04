@@ -9,11 +9,11 @@
 02120   dim resp$(11)*40
 02140   dim notefile$*100,notedir$*100,ul$*60,d(15),snm$(10)*20,srv$(10)*2
 02160 ! ______________________________________________________________________
-02180   let fntop(program$,cap$="Meter Reading Book")
-02240   let fndat(dat$,1)
+02180   fntop(program$,cap$="Meter Reading Book")
+02240   fndat(dat$,1)
 02260   if env$('client')="Gilbertown" then let seq=2
 02280 ! r: this section+the comboA on the first screen is just what you need  for a fnCurrently availableServiceTypeComboBox
-02300   let fnget_services(mat snm$,mat srv$)
+02300   fnget_services(mat snm$,mat srv$)
 02360   let x=0
 02380   let option$(x+=1)="[All]"
 02400   for j=1 to 4
@@ -40,39 +40,39 @@
 02820 ! /r
 02900   if env$('client')='Campbell' then let fn_campbell_meter_book : goto XIT
 08000 MENU1: ! r:
-08020   let fntos(sn$="ubMetrRt")
+08020   fntos(sn$="ubMetrRt")
 08040   let mylen=22 : let mypos=mylen+2 : let respc=lc=0
-08060   let fnlbl(lc+=1,1,"Route Number:",mylen,1)
-08080   let fncmbrt2(lc,mypos)
+08060   fnlbl(lc+=1,1,"Route Number:",mylen,1)
+08080   fncmbrt2(lc,mypos)
 08100   let resp$(1)=fn_reg_try$(sn$&'.route',"1")
-08120   let fnlbl(lc+=1,1,"Service Type:",mylen,1)
-08140   let fncomboa("ubrate3",lc,mypos,mat option$)
+08120   fnlbl(lc+=1,1,"Service Type:",mylen,1)
+08140   fncomboa("ubrate3",lc,mypos,mat option$)
 08160   let resp$(2)=fn_reg_try$(sn$&'.service type',option$(1))
 08170   let lc+=1
-08180   let fnchk(lc+=1,mylen+2,"Print Footnotes:",1)
+08180   fnchk(lc+=1,mylen+2,"Print Footnotes:",1)
 08200   let resp$(3)=fn_reg_try$(sn$&'.print footnotes',"False")
-08220   let fnchk(lc+=1,mylen+2,"Double Space:",1)
+08220   fnchk(lc+=1,mylen+2,"Double Space:",1)
 08240   let resp$(4)=fn_reg_try$(sn$&'.double space',"False")
-08260   let fnchk(lc+=1,mylen+2,"Blank Used Column:",1)
+08260   fnchk(lc+=1,mylen+2,"Blank Used Column:",1)
 08280   let resp$(5)=fn_reg_try$(sn$&'.blank used column',"False")
-08300   let fnchk(lc+=1,mylen+2,"Show Disconnects:",1)
+08300   fnchk(lc+=1,mylen+2,"Show Disconnects:",1)
 08320   let resp$(6)=fn_reg_try$(sn$&'.show disconnects',"False")
-08340   let fnchk(lc+=1,mylen+2,"Print Prior Usage:",1)
+08340   fnchk(lc+=1,mylen+2,"Print Prior Usage:",1)
 08360   let resp$(7)=fn_reg_try$(sn$&'.print prior usage',"False")
-08380   let fnchk(lc+=1,mylen+2,"Skip Meter Number:",1)
+08380   fnchk(lc+=1,mylen+2,"Skip Meter Number:",1)
 08400   let resp$(8)=fn_reg_try$(sn$&'.skip meter number',"False")
 08410   let lc+=1
-08420   let fnlbl(lc+=1,1,"Number of Blank Lines:",mylen-2,1)
-08440   let fntxt(lc,mylen+2,2,0,0,"30",0,"If you want extra space between accounts, enter the number of lines.")
+08420   fnlbl(lc+=1,1,"Number of Blank Lines:",mylen-2,1)
+08440   fntxt(lc,mylen+2,2,0,0,"30",0,"If you want extra space between accounts, enter the number of lines.")
 08460   let resp$(9)=fn_reg_try$(sn$&'.# of blank lines',str$(extralines))
 08470   let lc+=1
-08480   let fnfra(lc+=1,10,2,26,"Order for printing","The billing journal can be printed if route # sequence, Account sequence or name sequence.",0)
-08500   let fnopt(1,2,"Route Number Sequence",0,1)
+08480   fnfra(lc+=1,10,2,26,"Order for printing","The billing journal can be printed if route # sequence, Account sequence or name sequence.",0)
+08500   fnopt(1,2,"Route Number Sequence",0,1)
 08520   let resp$(10)=fn_reg_try$(sn$&'.route number sequence',"True")
-08540   let fnopt(2,2,"Account Sequence",0,1)
+08540   fnopt(2,2,"Account Sequence",0,1)
 08560   let resp$(11)=fn_reg_try$(sn$&'.account sequence',"False")
-08580   let fncmdset(3)
-08600   let fnacs(sn$,0,mat resp$,ck)
+08580   fncmdset(3)
+08600   fnacs(sn$,0,mat resp$,ck)
 10000   if ck=5 then goto XIT
 10020   if uprc$(resp$(1))=uprc$("[All]") then let route=0 else let route=val(resp$(1))
 10040   let svt$=resp$(2)
@@ -86,17 +86,17 @@
 10200   let extralines=val(resp$(9))
 10220   if resp$(10)="True" then let seq=1
 10240   if resp$(11)="True" then let seq=2
-10260   let fnreg_write(sn$&'.route',resp$(1))
-10280   let fnreg_write(sn$&'.service type',resp$(2))
-10300   let fnreg_write(sn$&'.print footnotes',resp$(3))
-10320   let fnreg_write(sn$&'.double space',resp$(4))
-10340   let fnreg_write(sn$&'.blank used column',resp$(5))
-10360   let fnreg_write(sn$&'.show disconnects',resp$(6))
-10380   let fnreg_write(sn$&'.print prior usage',resp$(7))
-10400   let fnreg_write(sn$&'.skip meter number',resp$(8))
-10420   let fnreg_write(sn$&'.# of blank lines',resp$(9))
-10440   let fnreg_write(sn$&'.route number sequence',resp$(10))
-10460   let fnreg_write(sn$&'.account sequence',resp$(11))
+10260   fnreg_write(sn$&'.route',resp$(1))
+10280   fnreg_write(sn$&'.service type',resp$(2))
+10300   fnreg_write(sn$&'.print footnotes',resp$(3))
+10320   fnreg_write(sn$&'.double space',resp$(4))
+10340   fnreg_write(sn$&'.blank used column',resp$(5))
+10360   fnreg_write(sn$&'.show disconnects',resp$(6))
+10380   fnreg_write(sn$&'.print prior usage',resp$(7))
+10400   fnreg_write(sn$&'.skip meter number',resp$(8))
+10420   fnreg_write(sn$&'.# of blank lines',resp$(9))
+10440   fnreg_write(sn$&'.route number sequence',resp$(10))
+10460   fnreg_write(sn$&'.account sequence',resp$(11))
 10480 ! /r
 10500   if seq=2 then 
 10520     open #h_customer:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -105,7 +105,7 @@
 10580   end if 
 10600 ! ______________________________________________________________________
 12000 ! on fkey 5 goto DONE
-12020   let fnopenprn
+12020   fnopenprn
 12040   on pageoflow goto PGOF
 12060   gosub HEADER
 15000 LOOP_TOP: ! r: main loop
@@ -209,14 +209,14 @@
 21000 PGOF: pr #255: newpage : gosub HEADER : continue 
 22000 DONE: ! r:
 22020   close #h_customer: ioerr ignore
-22040   let fncloseprn ! /r
+22040   fncloseprn ! /r
 22060 XIT: let fnxit
 22080 ! ______________________________________________________________________
 24000   def fn_reg_try$*256(field_name$*128,default_value$*256)
 24020     dim rt_return$*256
-24040     let fnreg_read(field_name$,rt_return$)
+24040     fnreg_read(field_name$,rt_return$)
 24060     if rt_return$='' then let rt_return$=default_value$
-24080     let fn_reg_try$=rt_return$
+24080     fn_reg_try$=rt_return$
 24100   fnend  ! fn_reg_try$
 26000 HEADER: ! r:
 26020   if env$('client')="Thomasboro" then 
@@ -335,7 +335,7 @@
 40300   goto CAMPBELL_LOOP_TOP
 40320   CAMPBELL_DONE: ! 
 40340   close #h_customer: Ioerr ignore
-40360   let fncloseprn
+40360   fncloseprn
 40380   CAMPBELL_XIT: !
 40400   close #h_customer:
 40420 fnend

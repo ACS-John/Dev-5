@@ -18,7 +18,7 @@
 14180   dim nameFirst$*64,nameMiddle$*64,nameLast$*64,nameSuffix$*64
 14190   dim k$(3)*30
 14200 ! ______________________________________________________________________
-14220   let fntop(program$,cap$="Print W-2 Forms")
+14220   fntop(program$,cap$="Print W-2 Forms")
 14240   let fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 14260   !
 14280 ! ______________________________________________________________________
@@ -65,14 +65,14 @@
 22180   end if 
 22200   ! /r
 24000 ! ASK_DEDUCTIONS: ! r: ! ask if any misecllaneous deductions should pr in box 12
-24020   let fntos(sn$="Prw2-box12")
+24020   fntos(sn$="Prw2-box12")
 24040   let rc=cf=0 : let mylen=20 : let mypos=mylen+3
-24060   let fnlbl(1,1,"Indicate if any of the miscellaneous deductions",50,1,0,0)
-24080   let fnlbl(2,1,"should appear in box 12 on the W-2.",44,1,0,0)
-24100   let fnlbl(4,7,"Deduction Name")
-24120   let fnlbl(4,26,"Yes" )
-24140   let fnlbl(4,35,"Box" )
-24160   let fnlbl(4,45,"Code")
+24060   fnlbl(1,1,"Indicate if any of the miscellaneous deductions",50,1,0,0)
+24080   fnlbl(2,1,"should appear in box 12 on the W-2.",44,1,0,0)
+24100   fnlbl(4,7,"Deduction Name")
+24120   fnlbl(4,26,"Yes" )
+24140   fnlbl(4,35,"Box" )
+24160   fnlbl(4,45,"Code")
 24180   for dedItem=1 to 20
 24200     if trim$(fullname$(dedItem))<>'' then
 24220       fncreg_read('w2 deduction '&str$(dedItem)&' box 12 enable',dedyn$(dedItem),'False')
@@ -85,8 +85,8 @@
 24350   tmpLine=5
 24360   for dedItem=1 to 20
 24420     if trim$(fullname$(dedItem))<>'' then 
-24430       let fnlbl(tmpLine+=1,1,fullname$(dedItem),mylen,1,0,0)
-24440       let fnchk(tmpLine,26,"",0,0,0,0)
+24430       fnlbl(tmpLine+=1,1,fullname$(dedItem),mylen,1,0,0)
+24440       fnchk(tmpLine,26,"",0,0,0,0)
 24460       let resp$(rc+=1)=dedyn$(dedItem)
 24480       fncomboa('w2Copy',tmpLine,35,mat w2box12Opt$, '',3)
 24500       if box12which(dedItem)=0 then
@@ -94,7 +94,7 @@
 24540       else
 24560         let resp$(respc_box12opt(dedItem)=rc+=1)=w2box12Opt$(box12which(dedItem))
 24580       end if
-24660       let fntxt(tmpLine,45,2,0,1,"",0,"Enter the Code that should appear in the box.")
+24660       fntxt(tmpLine,45,2,0,1,"",0,"Enter the Code that should appear in the box.")
 24680       let resp$(rc+=1)=dedcode$(dedItem)
 24700     end if
 24720   next dedItem
@@ -301,7 +301,7 @@
 37190     ! state$=''
 37182     let ss$=printLocality$="" 
 37200     gosub PrintW2
-37220     let fnpa_finis
+37220     fnpa_finis
 37240   end if
 37260   if enableW3$="True" then let fnw3(empId$,mat a$,mat w,dcb,state$,stcode$)
 37280   if exportFormatID then 
@@ -309,7 +309,7 @@
 37320       let tmpMsgLine$(1)='Export file created:'
 37340       let tmpMsgLine$(2)=os_filename$(file$(hExport))
 37360       close #hExport:
-37380       let fnmsgbox(mat tmpMsgLine$,resp$,cap$) ! ,16+4)
+37380       fnmsgbox(mat tmpMsgLine$,resp$,cap$) ! ,16+4)
 37400     goto XIT
 37420   else
 37440     if goproc=1 then 
@@ -328,17 +328,17 @@
 40140   execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 40160 fnchain("S:\acsPR\prw2b") ! /r
 52000 ASK_EMP_LOCALITY: ! r:
-52020   let fntos(sn$="Prw2-5")
+52020   fntos(sn$="Prw2-5")
 52040   let rc=cf=0
 52060   let mylen=30
 52080   let mypos=mylen+3
-52100   let fnlbl(1,1,k$(1),mylen,1,0,0)
-52120   let fnlbl(2,1,"Locality Name:",mylen,1,0,0)
-52140   let fntxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
+52100   fnlbl(1,1,k$(1),mylen,1,0,0)
+52120   fnlbl(2,1,"Locality Name:",mylen,1,0,0)
+52140   fntxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
 52160   let resp$(rc+=1)=empLocality$
-52180   let fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-52200   let fncmdkey("E&xit",5,0,1,"Returns to menu")
-52220   let fnacs(sn$,0,mat resp$,ckey)
+52180   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
+52200   fncmdkey("E&xit",5,0,1,"Returns to menu")
+52220   fnacs(sn$,0,mat resp$,ckey)
 52240   if ckey=5 then goto XIT
 52260   let empLocality$=resp$(1)
 52280   controlNumber$=rtrm$(controlNumber$)

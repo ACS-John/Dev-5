@@ -7,7 +7,7 @@
 00070     dim cap$*128,mss$(4)*128
 00080     dim path$*256,prog$*256
 00090 ! 
-00100     let fngetpp(prg$,path$,prog$,ext$)
+00100     fngetpp(prg$,path$,prog$,ext$)
 00110     if ext$="" then let ext$=".br"
 00120 ! display menu : "","",""
 00130 ! pr 'fnChain to '&PATH$&PROG$
@@ -20,7 +20,7 @@
 00200       let mss$(2)=""
 00210       let mss$(3)="Retry will look again."
 00220       let mss$(4)="Cancel will return you to the Menu."
-00230       let fnmsgbox(mat mss$,resp$,cap$,21)
+00230       fnmsgbox(mat mss$,resp$,cap$,21)
 00240     end if  ! exists(path$&prog$&ext$)=0
 00250     if resp$="Cancel" then goto XIT else if resp$="Retry" then goto TEST
 00260   if ~noLog then let fnlog('fnChain to '&prg$,1)

@@ -4,7 +4,7 @@
 10060     if env$('exitnow')='yes' then let setenv('exitnow','cancelled by fnmsgbox')
 10080     if cap$='' then cap$=env$('Program_Caption')
 10100 !   if env$('ACSDeveloper')<>'' then
-10120     let fn_br_messagebox(mat mg$,response$, cap$,mt)
+10120     fn_br_messagebox(mat mg$,response$, cap$,mt)
 10140 !   else 
 10160 !     fn_ace_messagebox(mat mg$,response$, cap$,mt)
 10180 !   end if
@@ -40,14 +40,14 @@
 30300     if bm_type=>016 then bm_type-=016 : bm_icon$='Err'
 31000 ! 
 31020     if bm_type=5 then ! retry/cancel
-31040       let fn_ace_messagebox(mat mg$,response$, cap$,mt)
+31040       fn_ace_messagebox(mat mg$,response$, cap$,mt)
 31060       goto BM_XIT
 31080     else if bm_type=4 then ! yes/no
 31100       bm_button$='yn'
 31120     else if bm_type=3 then ! yes/no/cancel
 31140       bm_button$='ync'
 31160     else if bm_type=2 then ! abort/retry/ignore
-31180       let fn_ace_messagebox(mat mg$,response$, cap$,mt)
+31180       fn_ace_messagebox(mat mg$,response$, cap$,mt)
 31200       goto BM_XIT
 31220     else if bm_type=1 then ! ok/cancel
 31240       bm_button$='okc'
@@ -88,9 +88,9 @@
 32520   fnend 
 60000   def fn_ace_messagebox(&mat mg$, &response$; cap$*128, mt)
 60020     let mat_mg_len=0 : for j=1 to udim(mat mg$) : let mat_mg_len+=len(mg$(j)) : next j
-60040     let fntos(sn$="mb"&str$(udim(mat mg$))&'-'&str$(mat_mg_len))
+60040     fntos(sn$="mb"&str$(udim(mat mg$))&'-'&str$(mat_mg_len))
 60060     for mg_item=1 to udim(mat mg$)
-60080       let fnlbl(mg_item,1,mg$(mg_item))
+60080       fnlbl(mg_item,1,mg$(mg_item))
 60100     next mg_item
 60120     mat btn_default=(0)
 60140     if mt=>768 then let mt-=768 : btn_default(4)=1
@@ -102,26 +102,26 @@
 60260     if mt=>032 then let mt-=032 ! 
 60280     if mt=>016 then let mt-=016 ! (X) Critical
 60300     if mt=5 then ! retry/cancel
-60320       let fncmdkey("&Retry",4)
-60340       let fncmdkey("&Cancel",99,btn_default(2),1)
+60320       fncmdkey("&Retry",4)
+60340       fncmdkey("&Cancel",99,btn_default(2),1)
 60360     else if mt=4 then ! yes/no
-60380       let fncmdkey("&Yes",6)
-60400       let fncmdkey("&No",7,btn_default(2))
+60380       fncmdkey("&Yes",6)
+60400       fncmdkey("&No",7,btn_default(2))
 60420     else if mt=3 then ! yes/no/cancel
-60440       let fncmdkey("&Yes",6)
-60460       let fncmdkey("&No",7,btn_default(2))
-60480       let fncmdkey("&Cancel",99,btn_default(3),1)
+60440       fncmdkey("&Yes",6)
+60460       fncmdkey("&No",7,btn_default(2))
+60480       fncmdkey("&Cancel",99,btn_default(3),1)
 60500     else if mt=2 then ! abort/retry/ignore
-60520       let fncmdkey("&Abort",3)
-60540       let fncmdkey("&Retry",4,btn_default(2))
-60560       let fncmdkey("&Ignore",5,btn_default(3))
+60520       fncmdkey("&Abort",3)
+60540       fncmdkey("&Retry",4,btn_default(2))
+60560       fncmdkey("&Ignore",5,btn_default(3))
 60580     else if mt=1 then ! ok/cancel
-60600       let fncmdkey("&Ok",1)
-60620       let fncmdkey("&Cancel",99,btn_default(2),1)
+60600       fncmdkey("&Ok",1)
+60620       fncmdkey("&Cancel",99,btn_default(2),1)
 60640     else if mt=0 then ! ok
-60660       let fncmdkey("&Ok",1,1,1)
+60660       fncmdkey("&Ok",1,1,1)
 60680     end if 
-60700     let fnacs(sn$,0,mat resp$,ckey,0,0,1,1)
+60700     fnacs(sn$,0,mat resp$,ckey,0,0,1,1)
 60720     if ckey=1 then let response$="OK"
 60740     if ckey=99 then let response$="Cancel"
 60760     if ckey=3 then let response$="Abort"

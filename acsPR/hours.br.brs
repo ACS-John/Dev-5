@@ -4,8 +4,8 @@
 00040   library 'S:\Core\Library': fnhours,fnxit,fnerror,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   let fntop("S:\acsPR\hours","Breakdown of Hours")
-00080   let fnhours(eno)
+00070   fntop("S:\acsPR\hours","Breakdown of Hours")
+00080   fnhours(eno)
 00090   goto XIT
 00100 ! ______________________________________________________________________
 00110 ! <Updateable Region: ERTN>

@@ -1,14 +1,14 @@
 00010 ! (foundone is special for montincello. Take out refereence to foundone on any others,, they have 3 cycles.
 00020   library 'S:\Core\Library': fntop,fnxit, fnacs,fnwait,fnopenprn,fncloseprn,fnerror,fnmsgbox,fntxt,fnlbl,fntos,fnxit,fncmdset,fntop
 00030   form pos 1,c 9,skip 0
-00040   let fntop("S:\acsUB\balbrkfix",cap$="Fix Balance Breakdown")
+00040   fntop("S:\acsUB\balbrkfix",cap$="Fix Balance Breakdown")
 00050   dim dat$*20,ln$*132,sde$*30,cb(13),a$(61)*30,u(61),gb(10),a(7)
 00070 ! :  !
 00080   dim o(2),alloc(10),g(10),answer(10,3)
 00090   dim adr(2),gb(10),tgb(10),a$(61)*30,u(61)
 00100   dim servicename$(10)*20,service$(10)*2,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
 00110   dim t1$(11)*25,ta(2),t2$(4)*25,io1$(3),dt1(31),dt2(31),cap$*128,txt$*80
-00180   let fnopenprn
+00180   fnopenprn
 00190   gosub SCR1
 00200   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00210   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -89,21 +89,21 @@
 00930   goto L800
 00940 SCR1: ! 
 00950   let sn$="balbrkfix" !:
-        let fntos(sn$) !:
+        fntos(sn$) !:
         let mylen=62 : let mypos=50
 00960   let txt$="Billing Dates for last three months:" !:
-        let fnlbl(1,1,txt$,mylen,1)
+        fnlbl(1,1,txt$,mylen,1)
 00970   for j=1 to 3 !:
-          let fntxt(j+1,mypos,10,0,0,"3",0,"Put your most recent billing date first and then in order from there.") !:
+          fntxt(j+1,mypos,10,0,0,"3",0,"Put your most recent billing date first and then in order from there.") !:
           let resp$(j)="" !:
         next j
 00980   let txt$="Penalty Dates for last three months:" !:
-        let fnlbl(5,1,txt$,mylen,1)
+        fnlbl(5,1,txt$,mylen,1)
 00990   for j=1 to 3 !:
-          let fntxt(j+5,mypos,10,0,0,"3",0,"Put your most recent penalty date first and then in order from there.") !:
+          fntxt(j+5,mypos,10,0,0,"3",0,"Put your most recent penalty date first and then in order from there.") !:
           let resp$(j+3)="" !:
         next j
-01000   let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+01000   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 01010   if ckey=5 then goto XIT
 01020   for j=1 to 6
 01030 L1030: let x=pos(resp$(j),"/",1)
@@ -115,7 +115,7 @@
 01070   if cd1(1)=0 then !:
           mat message$(1): let mytype=0 !:
           let message$(1)="You must enter at least one date!" !:
-          let fnmsgbox(mat message$,resp$,cap$,mytype) !:
+          fnmsgbox(mat message$,resp$,cap$,mytype) !:
           goto SCR1
 01080   return 
 01090 ! ______________________________________________________________________

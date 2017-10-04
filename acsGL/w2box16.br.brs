@@ -3,7 +3,7 @@
 00040 ! r: setup for local
 00060   fn_wesupSetup
 00080   dim  cap$*128,io1$(30)*64,in1$(30)
-00090   let fntop(program$,cap$:="W-2 Supplemental Information")
+00090   fntop(program$,cap$:="W-2 Supplemental Information")
 00106   let io1$(1)="7,11,C 12,[screen]" 
 00108   let io1$(2)="7,25,G 10.2,[screen]" 
 00110   let io1$(3)="7,37,G 1,[screen]" 
@@ -153,7 +153,7 @@
 52000 PrintProofList: ! r:
 52020   restore #hw2box16: 
 52040   let pg=0
-52060   let fnopenprn
+52060   fnopenprn
 52080   gosub HEADER
 52100   do
 52120     read #hw2box16,using fw2box16$: t$,mat in1$ eof END_OF_PROOF_LIST
@@ -168,7 +168,7 @@
 52300     L1820: form pos 2,c 9,c 12,n 12.2,3*n 6
 52320   loop
 52340   END_OF_PROOF_LIST: ! 
-52360   let fncloseprn
+52360   fncloseprn
 52380 goto MENU1 ! /r
 52400 HEADER: ! r:
 52420   pr #255,using 'pos 1,c 10,cc 51': date$("mm/dd/ccyy"),env$('cnam')

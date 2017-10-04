@@ -9,7 +9,7 @@
 00090   dim printline1(20),printline2(20),dedname$(20)*8
 00100   dim fullname$(20)*20,abbrevname$(20)*8, newdedcode(20)
 00110 ! ______________________________________________________________________
-00130   let fntop(program$,cap$="Other Pay and Deductions Register")
+00130   fntop(program$,cap$="Other Pay and Deductions Register")
 00140   fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode)
 00170   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1)
 00200   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
@@ -34,22 +34,22 @@
 00219   if fnprocess=1 then goto START_REPORT
 00220 ! /r
 00230 ASK_PAYROLL_DATE: ! r:
-00240   let fntos(sn$="OtherPayded") !:
+00240   fntos(sn$="OtherPayded") !:
         let respc=0
-00250   let fnlbl(1,1,"",34,1) ! bigger screen
-00260   let fnlbl(2,1,"Payroll Date:",20,1)
-00270   let fntxt(2,23,10,0,1,"3",0,"You can pr or reprint for any pay period.  Normally you would use the last payroll date.")
+00250   fnlbl(1,1,"",34,1) ! bigger screen
+00260   fnlbl(2,1,"Payroll Date:",20,1)
+00270   fntxt(2,23,10,0,1,"3",0,"You can pr or reprint for any pay period.  Normally you would use the last payroll date.")
 00280   let resp$(respc+=1)=str$(d1)
-00290   let fncmdkey("&Next",1,1,0,"Proceed with importing time." ) !:
-        let fncmdkey("E&xit",5,0,1,"Returns to menu")
-00300   let fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+00290   fncmdkey("&Next",1,1,0,"Proceed with importing time." ) !:
+        fncmdkey("E&xit",5,0,1,"Returns to menu")
+00300   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 00310   if ckey=5 then goto XIT
 00320   let ppd=val(resp$(1))
 00330 ! /r
 00340 START_REPORT: !  r: main report loop
 00480 ! 
 00490   on fkey 5 goto DONE
-00500   let fnopenprn
+00500   fnopenprn
 00510   gosub HDR
 00520   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00530 L530: read #1,using "Form POS 1,N 8,C 30,pos 162,n 6": eno,em$,lastpaydate eof FINALTOTALS
@@ -139,7 +139,7 @@
 01400 DONE: ! r:
 01410   close #1: ioerr ignore
 01420   close #2: ioerr ignore
-01430   let fncloseprn
+01430   fncloseprn
 01440 XIT: let fnxit ! /r
 01450 IGNORE: continue 
 01460 HDR: ! r:

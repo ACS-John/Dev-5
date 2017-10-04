@@ -2,15 +2,15 @@
 00020 ! Create Type "D" Records
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnwait,fncno,fnfkey,fnoldmsgbox,fnwin3b,fncno,fnerror,fnconsole
-00050   let fntop(program$,cap$="Financial Statement")
+00050   fntop(program$,cap$="Financial Statement")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim cnam$*40,dat$*20,io1$(9),gln(2,3),ta(2),ac(18),te$*1,cap$*128
 00090   dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5
 00100 ! ______________________________________________________________________
-00110   let fncno(cno)
+00110   fncno(cno)
 00120 ! 
-00125   let fnconsole(on=1)
+00125   fnconsole(on=1)
 00130   on fkey 5 goto XIT
 00140   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00150   let fil$(1)="ACGLFNSB" : let idx$(1)="FNSBINDX"
@@ -33,7 +33,7 @@
 00320   close #2: ioerr L330 ! close any reference file that is opened
 00330 L330: let win=101
 00340   cap$='Create Type "D" Records' ! use correct name above for printing
-00350   let fnwin3b(win,cap$,14,75,0,2,5,2)
+00350   fnwin3b(win,cap$,14,75,0,2,5,2)
 00360   pr #win: newpage
 00370 L370: pr #win,fields "2,1,Cc 75,R,N": 'Create "D" records for a range of general ledger numbers'
 00380   pr #win,fields "4,32,Cc 14,N": "From"

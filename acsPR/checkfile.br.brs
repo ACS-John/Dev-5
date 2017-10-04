@@ -7,7 +7,7 @@
 00070     dim prg$*30,cm$(47)*2,resp$(60)*80
 00080     dim hf(46) ,hf$(46),gridname$*30,oldgridname$*30
 00090     ! ___________________________________________________________________
-00100     let fntop(program$,cap$="Payroll Check History")
+00100     fntop(program$,cap$="Payroll Check History")
 00120     cancel=5 : back=2 : let edit=1 : let save=1 : let disable=1 
 00122     add=4
 00124     let transtype$(1)="Check Only" 
@@ -50,13 +50,13 @@
 00520     if ckey=cancel then goto XIT else goto SCREEN2
 00530 ! ___________________________________________________________________
 00540 SCREEN2: ! 
-00550     let fntos(sn$="CheckHistory-2")
+00550     fntos(sn$="CheckHistory-2")
 00560     goto FLEXGRID: ! 
 00570 L570: let fncmdkey('&Edit',edit,1,0) !:
-          let fncmdkey('&Back',back,0,0) !:
-          let fncmdkey('&Add',add,0,0) !:
-          let fncmdkey('&Close',cancel,0,1)
-00580     let fnacs(sn$,0,mat resp$,ckey) ! check history building grid
+          fncmdkey('&Back',back,0,0) !:
+          fncmdkey('&Add',add,0,0) !:
+          fncmdkey('&Close',cancel,0,1)
+00580     fnacs(sn$,0,mat resp$,ckey) ! check history building grid
 00590     addcode=0 : let holdeno=0
 00600     if ckey=back then goto SCREEN1
 00610     if ckey=cancel then goto SCREEN1
@@ -66,7 +66,7 @@
 00618     let mg$(1)="You cannot edit a record when you have selected to display "
 00619     let mg$(2)="by Departmental Details.  You must select Check only"
 00620     let mg$(3)="before you can make changes."
-00621     let fnmsgbox(mat mg$,resp$,cap$,0)
+00621     fnmsgbox(mat mg$,resp$,cap$,0)
 00622     goto SCREEN1
 00624 L620: if ckey=edit then let editrec=val(resp$(1)) conv SCREEN2 : mat employeetdc=(0): mat employeetcp=(0): goto SCREEN3
 00630     if ckey=add then 
@@ -81,83 +81,83 @@
 00680     read #filnum,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",rec=editrec: heno,tdn,prd,ckno,mat tdc,mat tcp norec SCREEN2
 00690     mat holdtdc=tdc: mat holdtcp=tcp ! hold arrays to see if dollar changes
 00700 SCREEN3_ADD: ! 
-00710     let fntos(sn$="CheckHistory-3")
+00710     fntos(sn$="CheckHistory-3")
 00712     let lc=rc=0 : let mylen=20 : let mypos=mylen+3
 00720     if addcode=1 then let disablecode=0 else let disablecode=1
-00730     let fnlbl(lc+=1,1,"Employee #:",mylen,1)
-00740     let fntxt(lc,mypos,8,0,0,"30",disablecode) !:
+00730     fnlbl(lc+=1,1,"Employee #:",mylen,1)
+00740     fntxt(lc,mypos,8,0,0,"30",disablecode) !:
           let resp$(rc+=1)=str$(heno)
-00750     let fnlbl(lc+=1,1,"Department:",mylen,1)
-00760     let fntxt(lc,mypos,3,0,0,"",0) !:
+00750     fnlbl(lc+=1,1,"Department:",mylen,1)
+00760     fntxt(lc,mypos,3,0,0,"",0) !:
           let resp$(rc+=1)=str$(tdn)
-00770     let fnlbl(lc+=1,1,"Date:",mylen,1)
-00780     let fntxt(lc,mypos,10,0,0,"3") !:
+00770     fnlbl(lc+=1,1,"Date:",mylen,1)
+00780     fntxt(lc,mypos,10,0,0,"3") !:
           let resp$(rc+=1)=str$(prd)
-00790     let fnlbl(lc+=1,1,"Check #:",mylen,1)
-00800     let fntxt(lc,mypos,10,0,0,"30") !:
+00790     fnlbl(lc+=1,1,"Check #:",mylen,1)
+00800     fntxt(lc,mypos,10,0,0,"30") !:
           let resp$(rc+=1)=str$(ckno)
-00810     let fnlbl(lc+=1,1,"Regular Hours:",mylen,1)
-00820     let fntxt(lc,mypos,10,0,0,"32") !:
+00810     fnlbl(lc+=1,1,"Regular Hours:",mylen,1)
+00820     fntxt(lc,mypos,10,0,0,"32") !:
           let resp$(rc+=1)=str$(tdc(1))
-00830     let fnlbl(lc+=1,1,"Overtime Hours:",mylen,1)
-00840     let fntxt(lc,mypos,10,0,0,"32") !:
+00830     fnlbl(lc+=1,1,"Overtime Hours:",mylen,1)
+00840     fntxt(lc,mypos,10,0,0,"32") !:
           let resp$(rc+=1)=str$(tdc(2))
-00850     let fnlbl(lc+=1,1,"Sick Hours:",mylen,1)
-00860     let fntxt(lc,mypos,10,0,0,"32") !:
+00850     fnlbl(lc+=1,1,"Sick Hours:",mylen,1)
+00860     fntxt(lc,mypos,10,0,0,"32") !:
           let resp$(rc+=1)=str$(tdc(3))
-00870     let fnlbl(lc+=1,1,"Vacation Hours:",mylen,1)
-00880     let fntxt(lc,mypos,10,0,0,"32") !:
+00870     fnlbl(lc+=1,1,"Vacation Hours:",mylen,1)
+00880     fntxt(lc,mypos,10,0,0,"32") !:
           let resp$(rc+=1)=str$(tdc(4))
-00890     let fnlbl(lc+=1,1,"Holiday Hours:",mylen,1)
-00900     let fntxt(lc,mypos,10,0,0,"32") !:
+00890     fnlbl(lc+=1,1,"Holiday Hours:",mylen,1)
+00900     fntxt(lc,mypos,10,0,0,"32") !:
           let resp$(rc+=1)=str$(tdc(5))
-00910     let fnlbl(lc+=1,1,"Regular Earnings:",mylen,1)
-00920     let fntxt(lc,mypos,10,0,0,"10") !:
+00910     fnlbl(lc+=1,1,"Regular Earnings:",mylen,1)
+00920     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tcp(26))
-00930     let fnlbl(lc+=1,1,"Overtime Earnings:",mylen,1)
-00940     let fntxt(lc,mypos,10,0,0,"10") !:
+00930     fnlbl(lc+=1,1,"Overtime Earnings:",mylen,1)
+00940     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tcp(27))
-00950     let fnlbl(lc+=1,1,"Other Compensation:",mylen,1)
-00960     let fntxt(lc,mypos,10,0,0,"10") !:
+00950     fnlbl(lc+=1,1,"Other Compensation:",mylen,1)
+00960     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tcp(28))
-00970     let fnlbl(lc+=1,1,"Meals:",mylen,1)
-00980     let fntxt(lc,mypos,10,0,0,"10") !:
+00970     fnlbl(lc+=1,1,"Meals:",mylen,1)
+00980     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tcp(29))
-00990     let fnlbl(lc+=1,1,"Tips:",mylen,1)
-01000     let fntxt(lc,mypos,10,0,0,"10") !:
+00990     fnlbl(lc+=1,1,"Tips:",mylen,1)
+01000     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tcp(30))
-01010     let fnlbl(lc+=1,1,"Total Wage:",mylen,1)
-01020     let fntxt(lc,mypos,10,0,0,"10") !:
+01010     fnlbl(lc+=1,1,"Total Wage:",mylen,1)
+01020     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tcp(31))
-01030     let fnlbl(lc+=1,1,"Net Pay:",mylen,1)
-01040     let fntxt(lc,mypos,10,0,0,"10") !:
+01030     fnlbl(lc+=1,1,"Net Pay:",mylen,1)
+01040     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tcp(32))
-01050     let fnlbl(lc+=2,1,"Workmans Comp Wages:",mylen,1)
-01060     let fntxt(lc,mypos,10,0,0,"10") !:
+01050     fnlbl(lc+=2,1,"Workmans Comp Wages:",mylen,1)
+01060     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tdc(6))
-01070     let fnlbl(lc+=1,1,"SS Wages:",mylen,1)
-01080     let fntxt(lc,mypos,10,0,0,"10") !:
+01070     fnlbl(lc+=1,1,"SS Wages:",mylen,1)
+01080     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tdc(7))
-01090     let fnlbl(lc+=1,1,"Medicare Wages:",mylen,1)
-01100     let fntxt(lc,mypos,10,0,0,"10") !:
+01090     fnlbl(lc+=1,1,"Medicare Wages:",mylen,1)
+01100     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tdc(8))
-01110     let fnlbl(lc+=1,1,"Federal U/C Wages:",mylen,1)
-01120     let fntxt(lc,mypos,10,0,0,"10") !:
+01110     fnlbl(lc+=1,1,"Federal U/C Wages:",mylen,1)
+01120     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tdc(9))
-01130     let fnlbl(lc+=1,1,"State U/C Wages:",mylen,1)
-01140     let fntxt(lc,mypos,10,0,0,"10") !:
+01130     fnlbl(lc+=1,1,"State U/C Wages:",mylen,1)
+01140     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tdc(10))
 01150     let mypos+=37: let fnlbl(lc=1,38,"Federal Wh:",mylen,1)
-01160     let fntxt(lc,mypos,10,0,0,"10") !:
+01160     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tcp(1))
-01170     let fnlbl(lc+=1,38,"SS Withholdings:",mylen,1)
-01180     let fntxt(lc,mypos,10,0,0,"10") !:
+01170     fnlbl(lc+=1,38,"SS Withholdings:",mylen,1)
+01180     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tcp(2))
-01190     let fnlbl(lc+=1,38,"Medicare Wh:",mylen,1)
-01200     let fntxt(lc,mypos,10,0,0,"10") !:
+01190     fnlbl(lc+=1,38,"Medicare Wh:",mylen,1)
+01200     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tcp(3))
-01210     let fnlbl(lc+=1,38,"State Wh:",mylen,1)
-01220     let fntxt(lc,mypos,10,0,0,"10") !:
+01210     fnlbl(lc+=1,38,"State Wh:",mylen,1)
+01220     fntxt(lc,mypos,10,0,0,"10") !:
           let resp$(rc+=1)=str$(tcp(4))
 01230     for j=1 to 20
 01240       if trim$(dednames$(j))="" then goto L1250 else goto L1260
@@ -166,17 +166,17 @@
 01270 L1270: let fntxt(lc,mypos,10,0,0,"10") !:
             let resp$(rc+=1)=str$(tcp(j+4))
 01280     next j
-01290     let fncmdkey('&Save',save,1,0) !:
-          let fncmdkey('&Delete',4,0,0) !:
-          let fncmdkey('&Cancel',cancel,0,1)
-01300     let fnacs(sn$,0,mat resp$,ckey) ! correcting check
+01290     fncmdkey('&Save',save,1,0) !:
+          fncmdkey('&Delete',4,0,0) !:
+          fncmdkey('&Cancel',cancel,0,1)
+01300     fnacs(sn$,0,mat resp$,ckey) ! correcting check
 01310     if ckey=cancel then goto SCREEN2
 01320     if ckey=4 then goto L1330 else goto L1360
 01330 L1330: mat mg$(3) !:
           let mg$(1)="You are deleting a check.  This will change the " !:
           let mg$(2)="earnings. It will change the quarterly and annual reports." !:
           let mg$(3)="Click OK to delete; else Cancel to retain the record." !:
-          let fnmsgbox(mat mg$,resp$,cap$,49)
+          fnmsgbox(mat mg$,resp$,cap$,49)
 01340     if resp$="OK" then delete #filnum,rec=editrec: : let eno=holdeno
 01350     goto SCREEN2
 01360 L1360: let heno=val(resp$(1)) ! employee #
@@ -213,7 +213,7 @@
           let mg$(1)="You have changed dollar amounts on a real check! " !:
           let mg$(2)="This will change the quarterly and annual reports.." !:
           let mg$(3)="Click OK to continue; else Cancel to exit without saving the changes." !:
-          let fnmsgbox(mat mg$,resp$,cap$,49)
+          fnmsgbox(mat mg$,resp$,cap$,49)
 01670     if resp$="OK" then goto L1680 else goto L1700
 01680 L1680: if ckey=save then rewrite #filnum,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",rec=editrec: heno,tdn,prd,ckno,mat tdc,mat tcp: let eno=heno
 01690 ! Close #filnum:
@@ -228,64 +228,64 @@
 01780 ! /region
 01790 ! ___________________________________________________________________
 01800 ASKTRANSET: ! 
-01810     let fntos(sn$="CHECKhISTORY") !:
+01810     fntos(sn$="CHECKhISTORY") !:
           let rc=cf=0
-01820     let fnfra(1,1,3,26,"Informatin to be Shown","You can choose to have the checks listed as one total or have the department breakdowns shown.  You cannot select both!",0) !:
+01820     fnfra(1,1,3,26,"Informatin to be Shown","You can choose to have the checks listed as one total or have the department breakdowns shown.  You cannot select both!",0) !:
           cf+=1 : let fratype=cf
-01830     let fnopt(1,3,"Departmental Details",0,fratype)
+01830     fnopt(1,3,"Departmental Details",0,fratype)
 01832     if checkonly=1 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
-01840     let fnopt(2,3,"Check only",0,fratype)
+01840     fnopt(2,3,"Check only",0,fratype)
 01842     if details=1 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
 01845     if details=0 and checkonly=0 then let resp$(rc)="True"
-01850     let fnfra(6,1,6,26,"Print options","You can get totals by any combination of the following options.",0) !:
+01850     fnfra(6,1,6,26,"Print options","You can get totals by any combination of the following options.",0) !:
           cf+=1 : let fratype=cf
-01860     let fnchk(1,3,"Grand Totals",0,fratype) !:
+01860     fnchk(1,3,"Grand Totals",0,fratype) !:
           if grand=1 then let resp$(rc+=1)="True" else !:
             let resp$(rc+=1)="False"
-01870     let fnchk(2,3,"Quarterly Totals",0,fratype) !:
+01870     fnchk(2,3,"Quarterly Totals",0,fratype) !:
           if quarterly=1 then let resp$(rc+=1)="True" else !:
             let resp$(rc+=1)="False"
-01880     let fnchk(3,3,"Annual Totals",0,fratype) !:
+01880     fnchk(3,3,"Annual Totals",0,fratype) !:
           if annual=1 then let resp$(rc+=1)="True" else !:
             let resp$(rc+=1)="False"
-01890     let fnchk(4,3,"Employee Totals",0,fratype) !:
+01890     fnchk(4,3,"Employee Totals",0,fratype) !:
           if employee=1 then let resp$(rc+=1)="True" else !:
             let resp$(rc+=1)="False"
-01900     let fnfra(1,30,6,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.") !:
+01900     fnfra(1,30,6,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.") !:
           cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
-01910     let fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
-01920     let fntxt(1,mypos,10,0,1,"3",0,empty$,fradate) !:
+01910     fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
+01920     fntxt(1,mypos,10,0,1,"3",0,empty$,fradate) !:
           let resp$(rc+=1)=str$(beg_date)
-01930     let fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
-01940     let fntxt(2,mypos,10,0,1,"3",0,empty$,fradate) !:
+01930     fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
+01940     fntxt(2,mypos,10,0,1,"3",0,empty$,fradate) !:
           let resp$(rc+=1)=str$(end_date)
-01950     let fnlbl(3,1,"1st Day of 1st quarter:",mylen,1,0,fradate)
-01960     let fntxt(3,mypos,10,0,1,"3",0,empty$,fradate) !:
+01950     fnlbl(3,1,"1st Day of 1st quarter:",mylen,1,0,fradate)
+01960     fntxt(3,mypos,10,0,1,"3",0,empty$,fradate) !:
           let resp$(rc+=1)=str$(qtr1)
-01970     let fnlbl(4,1,"1st Day of 2nd quarter:",mylen,1,0,fradate)
-01980     let fntxt(4,mypos,10,0,1,"3",0,empty$,fradate) !:
+01970     fnlbl(4,1,"1st Day of 2nd quarter:",mylen,1,0,fradate)
+01980     fntxt(4,mypos,10,0,1,"3",0,empty$,fradate) !:
           let resp$(rc+=1)=str$(qtr2)
-01990     let fnlbl(5,1,"1st Day of 3rd quarter:",mylen,1,0,fradate)
-02000     let fntxt(5,mypos,10,0,1,"3",0,empty$,fradate) !:
+01990     fnlbl(5,1,"1st Day of 3rd quarter:",mylen,1,0,fradate)
+02000     fntxt(5,mypos,10,0,1,"3",0,empty$,fradate) !:
           let resp$(rc+=1)=str$(qtr3)
-02010     let fnlbl(6,1,"1st Day of 4th quarter:",mylen,1,0,fradate)
-02020     let fntxt(6,mypos,10,0,1,"3",0,empty$,fradate) !:
+02010     fnlbl(6,1,"1st Day of 4th quarter:",mylen,1,0,fradate)
+02020     fntxt(6,mypos,10,0,1,"3",0,empty$,fradate) !:
           let resp$(rc+=1)=str$(qtr4)
-02030     let fnfra(10,30,2,60,"Employee","You can review check information for all employees or for an individual.") !:
+02030     fnfra(10,30,2,60,"Employee","You can review check information for all employees or for an individual.") !:
           cf+=1 : let fraaccount=cf
-02040     let fnlbl(1,1,"Employee:",8,1,0,fraaccount)
-02050     let fncmbemp(1,10,1,fraaccount) !:
+02040     fnlbl(1,1,"Employee:",8,1,0,fraaccount)
+02050     fncmbemp(1,10,1,fraaccount) !:
           let rc+=1 !:
           if trim$(hact$)<>"" then let resp$(rc)=hact$ else !:
             if resp$(rc)="" or trim$(resp$(rc))="True" then let resp$(rc)="[All]"
-02060     let fnlbl(15,20,"Column format to use:",40,1)
-02070     let fncombof("payrollrpt",15,62,30,env$('Q')&"\PRmstr\payrollreports.h"&env$('cno'),1,30,0,0,env$('Q')&"\PRmstr\reportidx.h"&env$('cno'),0,pas, "",frame) !:
+02060     fnlbl(15,20,"Column format to use:",40,1)
+02070     fncombof("payrollrpt",15,62,30,env$('Q')&"\PRmstr\payrollreports.h"&env$('cno'),1,30,0,0,env$('Q')&"\PRmstr\reportidx.h"&env$('cno'),0,pas, "",frame) !:
           let resp$(rc+=1)=gridname$
-02080     let fncmdkey("&Display Grid",1,1,0,"Displays a list of checks on the scree using the format you have selected.")
-02090     let fncmdkey("&Print Report",2,0,0,"Prints a check listing using the columns selected.")
-02100     let fncmdkey("&Maintain column selections",3,0,0,"Allows you to add or change columns that should be displayed.")
-02110     let fncmdkey("&Back",5,0,1,"Returns to employee record")
-02120     let fnacs(sn$,0,mat resp$,ckey) ! dates and options
+02080     fncmdkey("&Display Grid",1,1,0,"Displays a list of checks on the scree using the format you have selected.")
+02090     fncmdkey("&Print Report",2,0,0,"Prints a check listing using the columns selected.")
+02100     fncmdkey("&Maintain column selections",3,0,0,"Allows you to add or change columns that should be displayed.")
+02110     fncmdkey("&Back",5,0,1,"Returns to employee record")
+02120     fnacs(sn$,0,mat resp$,ckey) ! dates and options
 02130     let printit=0: let f1=0
 02140     if ckey=cancel then goto DONE
 02150     checkonly=details=grand=quarterly=annual=employee=0 : let holdnam$=""
@@ -310,12 +310,12 @@
 02280     if checkonly=1 and details=1 then goto L2290 else goto L2300
 02290 L2290: let mg$(1)="You cannot select 'Checkonly' and Details " !:
           let mg$(2)="at the same time. Click OK to correct." !:
-          let fnmsgbox(mat mg$,resp$,cap$,0) !:
+          fnmsgbox(mat mg$,resp$,cap$,0) !:
           goto SCREEN1
 02300 L2300: if ckey<>3 and checkonly+details+grand+quarterly+annual+employee=0 then goto L2310 else goto L2370
 02310 L2310: let mg$(1)="You must select at least one type of information to be shown. " !:
           let mg$(2)="                Click OK to correct." !:
-          let fnmsgbox(mat mg$,resp$,cap$,0) !:
+          fnmsgbox(mat mg$,resp$,cap$,0) !:
           goto SCREEN1
 02320 ! Let FNTOS(SN$="msgbox1")
 02330 ! Let FNLBL(1,1,MG$(1),80,1)
@@ -367,26 +367,26 @@
 02680     if justopen=1 then goto L2930
 02690 L2690: let fntos(sn$="Checkprint") !:
           let rc=cf=0 : let linecnt=2
-02700     let fnlbl(1,1,"Grid or Report Name:",20,1)
-02710     let fncombof("payrollrpt",1,22,30,env$('Q')&"\PRmstr\payrollreports.h"&env$('cno'),1,30,0,0,env$('Q')&"\PRmstr\reportidx.h"&env$('cno'),0,pas, "",frame) !:
+02700     fnlbl(1,1,"Grid or Report Name:",20,1)
+02710     fncombof("payrollrpt",1,22,30,env$('Q')&"\PRmstr\payrollreports.h"&env$('cno'),1,30,0,0,env$('Q')&"\PRmstr\reportidx.h"&env$('cno'),0,pas, "",frame) !:
           let resp$(rc+=1)=resp$(1)
 02720     for j=1 to 23
-02730       let fnchk(linecnt+=1,16,name$(j),1,rratype) !:
+02730       fnchk(linecnt+=1,16,name$(j),1,rratype) !:
             if hf(j)=1 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
 02740     next j
 02750     let linecnt=2
 02760     for j=1 to 22
-02770       let fnchk(linecnt+=1,35,name$(j+23),1,rratype) !:
+02770       fnchk(linecnt+=1,35,name$(j+23),1,rratype) !:
             if hf(j+23)=1 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
 02780     next j
-02790     let fnchk(linecnt+=1,35,name$(46),1,rratype) !:
+02790     fnchk(linecnt+=1,35,name$(46),1,rratype) !:
           if hf(46)=1 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
-02800     let fncmdkey("&Next",1,1,0,"Begins printing your report.")
+02800     fncmdkey("&Next",1,1,0,"Begins printing your report.")
 02810     if addone=0 then let fncmdkey("&Add",2,0,0,"Allows you to add another report or grid format..")
 02820     if addone=1 then let fncmdkey("&Save This Format",4,0,0,"Save this format for later use.")
-02830     let fncmdkey("&Use This Format",3,0,0,"Use the format as now displayed.")
-02840     let fncmdkey("&Cancel",5,0,1,"Cancel without saving the format selections.")
-02850     let fnacs(sn$,0,mat resp$,ckey) !:
+02830     fncmdkey("&Use This Format",3,0,0,"Use the format as now displayed.")
+02840     fncmdkey("&Cancel",5,0,1,"Cancel without saving the format selections.")
+02850     fnacs(sn$,0,mat resp$,ckey) !:
           if ckey=5 then goto L3150 ! select columns
 02860     addone=0
 02870     if ckey=2 then addone=1: gosub ADD_GRID: goto L2690
@@ -544,7 +544,7 @@
 04220       if hf(j)=1 then colhdr$(x+=1)=name$(j) : colmask$(x)="10"
 04230     next j
 04240     mat colhdr$(x) : mat colmask$(x) : mat printitem$(x)
-04250     let fnflexinit1("prchecks",1,1,20,100,mat colhdr$,mat colmask$,1)
+04250     fnflexinit1("prchecks",1,1,20,100,mat colhdr$,mat colmask$,1)
 04260 READ_CHECKS: ! 
 04270     if trim$(hact$)="[All]" then restore #filnum: : goto READ_BREAKDOWNS
 04280     restore #filnum,key>=lpad$(hact$,8)&cnvrt$("pd 6",beg_date)&"   ": nokey L570 ioerr L570
@@ -705,14 +705,14 @@
 05190     execute "Index "&env$('Q')&"\PRmstr\payrollreports.H"&env$('cno')&' '&env$('Q')&"\PRmstr\reportidx.H"&env$('cno')&" 1 30 Replace DupKeys -n"
 05200     return 
 05210 ADD_GRID: ! 
-05220     let fntos(sn$="Addgrid") !:
+05220     fntos(sn$="Addgrid") !:
           let lc=rc=0 : let mylen=20 : let mypos=mylen+3
-05230     let fnlbl(1,1,"Grid or Report Name:",20,1)
-05240     let fntxt(1,mypos,30,0,0,"") !:
+05230     fnlbl(1,1,"Grid or Report Name:",20,1)
+05240     fntxt(1,mypos,30,0,0,"") !:
           let resp$(1)=""
-05250     let fncmdkey('&Save',1,1,0,"Adds this new grid or report to your selections.") !:
-          let fncmdkey('&Cancel',5,0,1,"Returns to selection screen without adding this report.")
-05260     let fnacs(sn$,0,mat resp$,ckey) ! add grid name
+05250     fncmdkey('&Save',1,1,0,"Adds this new grid or report to your selections.") !:
+          fncmdkey('&Cancel',5,0,1,"Returns to selection screen without adding this report.")
+05260     fnacs(sn$,0,mat resp$,ckey) ! add grid name
 05270     if ckey=5 then goto L5330
 05280     let oldgridname$=gridname$=rpad$(trim$(resp$(1)),30)
 05290     rewrite #9,using "form pos 1,c 30",rec=1: gridname$

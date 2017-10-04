@@ -1,7 +1,7 @@
 02000 ! formerly S:\acsUB\hhto
 02010 ! -- Tranfer Data From Computer to Hand Held
 02020   fn_setup
-02160   let fntop(program$)
+02160   fntop(program$)
 02280   ! 
 02330   open #h_customer_i1:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 02340   open #h_customer_i5:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -19,8 +19,8 @@
 08160   dim notefile$*100,notedir$*100
 08180   dim servicename$(10)*20,servicecode$(10)*2
 08200   dim rt$*4,extra(23)
-08240   let fn_constants_setup
-08260   let fnget_services(mat servicename$, mat servicecode$)
+08240   fn_constants_setup
+08260   fnget_services(mat servicename$, mat servicecode$)
 08280   dim device$*20
 08300   let device$=fnhand_held_device$
 08320 fnend
@@ -51,7 +51,7 @@
 08860   crlf$=chr$(13)&chr$(10)
 08880 fnend  ! fn_constants_setup
 10370 SEL_ACT: ! r:
-10380   let fn_scr_selact
+10380   fn_scr_selact
 10390   if ckey=5 then goto XIT
 10400   if workopen=0 then let fn_openwork ! open work files based on type of Hand Held
 10410   if ckey=2 then 
@@ -67,20 +67,20 @@
 10510   end if  ! /r
 10520 ! ______________________________________________________________________
 10530 ASK_BOOK: ! r:
-10535   let fntos(sn$="Ask_Book")
+10535   fntos(sn$="Ask_Book")
 10540   if hbk<>0 then 
-10545     let fnlbl(1,1,"Last Route Number Selected: "&str$(hbk))
+10545     fnlbl(1,1,"Last Route Number Selected: "&str$(hbk))
 10550     let myline=3
 10555   else 
 10560     let myline=1
 10565   end if 
-10570   let fnlbl(myline,1,"Route Number to Read:")
-10575   let fncmbrt2(myline,22,0)
+10570   fnlbl(myline,1,"Route Number to Read:")
+10575   fncmbrt2(myline,22,0)
 10580   let resp$(1)=""
-10585   let fncmdkey("&Next",1,1,0,"Add the selected route" )
-10590   let fncmdkey("&Finish",2,0,1,"Completed with all routes")
-10595   let fncmdkey("&Cancel",5,0,0,"Don't sent to Hand Held")
-10600   let fnacs(sn$,0,mat resp$, ckey)
+10585   fncmdkey("&Next",1,1,0,"Add the selected route" )
+10590   fncmdkey("&Finish",2,0,1,"Completed with all routes")
+10595   fncmdkey("&Cancel",5,0,0,"Don't sent to Hand Held")
+10600   fnacs(sn$,0,mat resp$, ckey)
 10605   if resp$(1)="[All]" and ckey=1 then let selection_method=1 : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
 10610   bk1=val(resp$(1)) conv L850
 10615   let resp$(1)=""
@@ -113,18 +113,18 @@
 11020   if selection_method=1 then goto TRANSFER
 11030   if selection_method=2 then let hbk=bk1 : goto ASK_BOOK ! /r
 11040 ASK_ACT: ! r:
-11050   let fntos(sn$="Ask_Act")
+11050   fntos(sn$="Ask_Act")
 11060   if z$<>"" then 
-11070     let fnlbl(1,1,"Last Account Selected: "&z$,40,2)
+11070     fnlbl(1,1,"Last Account Selected: "&z$,40,2)
 11080     let myline=3
 11090   else 
 11100     let myline=1
 11110   end if 
-11120   let fnlbl(myline,1,"Account:",15,1)
-11130   let fncmbact(myline,16)
+11120   fnlbl(myline,1,"Account:",15,1)
+11130   fncmbact(myline,16)
 11140   let resp$(1)=z$
-11150   let fncmdset(5)
-11160   let fnacs(sn$,0,mat resp$,ckey)
+11150   fncmdset(5)
+11160   fnacs(sn$,0,mat resp$,ckey)
 11170   if ckey=6 then let fncustomer_search(resp$(1))
 11180   if ckey=99 or ckey=5 or resp$(1)="          " then goto SEL_ACT
 11190   let z$=lpad$(trim$(resp$(1)(1:10)), 10)
@@ -134,7 +134,7 @@
 11270 FINAL_BILLING_CODE: ! r: doesn't seem to be very well named.
 11280 ! if trim$(z$)="200710.01" or trim$(z$)="201650.00" then pr 'final=';final : pause
 11290   if final><0 then goto NEXT_RECORD ! SKIP IF FINAL BILLED
-11300   let fn_rmk1
+11300   fn_rmk1
 11310   if sq1=0 then let sq1=1234 ! DEFALT SEQ=W,E,D,G
 11320   let seq$=str$(sq1)
 11330   if device$="Psion Workabout" then let fn_workabout : goto NEXT_RECORD
@@ -342,25 +342,25 @@
 13820   L3430: ! 
 13830 fnend 
 14000 def fn_searchScreen(x$,&res$)
-14020   let fncustomer_search(x$)
+14020   fncustomer_search(x$)
 14040   if x$<>"" then 
 14060     read #h_customer_i1,using "Form POS 1,C 10,x 30,c 30",key=x$: z$,e2$
 14080     let res$=rpad$(trim$(z$),10)&" "&trim$(e2$)
 14100   end if 
 14120 fnend
 14290 RANGE: ! r:
-14310   let fntos(sn$:="Range")
-14320   let fnfra(1,1,1,57,"Starting Account:")
-14330   let fnfra(4,1,1,57,"Ending Account:")
-14340   let fncmbact(1,1,0,1)
+14310   fntos(sn$:="Range")
+14320   fnfra(1,1,1,57,"Starting Account:")
+14330   fnfra(4,1,1,57,"Ending Account:")
+14340   fncmbact(1,1,0,1)
 14350   let text$="Search"
-14360   let fnbutton(1,48,text$,6,blank$,0,7,1)
+14360   fnbutton(1,48,text$,6,blank$,0,7,1)
 14370   let resp$(1)=resp$(2)=""
-14380   let fncmbact(1,1,0,2)
-14390   let fnbutton(1,48,text$,7,blank$,0,7,2)
-14400   let fncmdkey("&Finish",2,1,0,"Completed with all routes")
-14410   let fncmdset(2)
-14420   let fnacs(sn$,0,mat resp$,ckey)
+14380   fncmbact(1,1,0,2)
+14390   fnbutton(1,48,text$,7,blank$,0,7,2)
+14400   fncmdkey("&Finish",2,1,0,"Completed with all routes")
+14410   fncmdset(2)
+14420   fnacs(sn$,0,mat resp$,ckey)
 14430   bk1$=lpad$(trim$(resp$(1)(1:10)), 10)
 14440   bk2$=lpad$(trim$(resp$(2)(1:10)), 10)
 14450   if ckey=2 then goto TRANSFER
@@ -408,9 +408,9 @@
 14950 ! 
 15000 def fn_openwork ! open work areas based on type of Hand Held
 15020   dim out_filename$*256
-15040   let fnureg_read('Hand Held To File',out_filename$)
+15040   fnureg_read('Hand Held To File',out_filename$)
 15060   if device$='Itron FC300' then 
-15080     let fn_itron_open
+15080     fn_itron_open
 15100   else 
 15120     h_out                  =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT",                      80)
 15140     if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT",                                  80)
@@ -510,12 +510,12 @@
 16670     if pcent_return=0 then let pcent_return=100
 16680     let pcent_return=pcent_return*.01 ! convert to percent
 16690   end if  ! ~pcent_setup
-16700   let fn_pcent=pcent_return
+16700   fn_pcent=pcent_return
 16710 fnend  ! fn_pcent
 17640 ! r: itron
 17650 def fn_itron_open
 17660   open #h_out:=fngethandle: "Name="&env$('Q')&"\HH"&ssession$&".int,RecL=128,EoL=None,Replace",internal,outin,relative 
-17670   let fn_itron_record_fhd
+17670   fn_itron_record_fhd
 17680   let itron_rdg_count=0
 17690   let itron_cus_count=0
 17700   let itron_mtr_count=0
@@ -523,8 +523,8 @@
 17730   let itron_chd_count=0
 17740 fnend 
 17750 def fn_itron_close
-17760   let fn_itron_route_trailer
-17770   let fn_itron_record_ftr
+17760   fn_itron_route_trailer
+17770   fn_itron_record_ftr
 17780   ! 
 17790   let rec_current=0 ! restore #h_out:
 17800   do 
@@ -590,17 +590,17 @@
 18405   close #h_out2: 
 18410   close #h_out,free: 
 18412   if out_filename$<>'' then 
-18413     let fnCopy(env$('Q')&"\Download.dat",br_filename$(out_filename$))
-18414     let fn_report_created_file(out_filename$)
+18413     fnCopy(env$('Q')&"\Download.dat",br_filename$(out_filename$))
+18414     fn_report_created_file(out_filename$)
 18415   else if env$('client')='Findlay' then 
-18430     let fnCopy(env$('Q')&"\Download.dat",'\\vof-pc\itronshared\FCS\Import\Input\download.dat')
-18435     let fn_report_created_file(os_filename$('\\vof-pc\itronshared\FCS\Import\Input\download.dat'))
+18430     fnCopy(env$('Q')&"\Download.dat",'\\vof-pc\itronshared\FCS\Import\Input\download.dat')
+18435     fn_report_created_file(os_filename$('\\vof-pc\itronshared\FCS\Import\Input\download.dat'))
 18436   else 
 18437     if ~exists("c:\mvrs") then execute 'mkdir c:\mvrs'
 18438     if ~exists("c:\mvrs\xfer") then execute 'mkdir c:\mvrs\xfer'
 18440     if ~exists("C:\mvrs\xfer\Download") then execute 'mkdir c:\mvrs\xfer\Download'
 18445     execute 'copy '&env$('Q')&'\Download.dat C:\mvrs\xfer\Download\*.*'
-18455     let fn_report_created_file(os_filename$('C:\mvrs\xfer\Download\Download.dat'))
+18455     fn_report_created_file(os_filename$('C:\mvrs\xfer\Download\Download.dat'))
 18460   end if 
 18470   !   if exists ("C:\MVRS\MVRSWin5.exe") then
 18480   !     if ~exists ("C:\MVRS\MVRSWin5.cmd") then
@@ -614,8 +614,8 @@
 18560   !   end if
 18570 fnend 
 18580 def fn_itron_route_trailer
-18590   let fn_itron_record_rtr
-18600   let fn_itron_record_ctr
+18590   fn_itron_record_rtr
+18600   fn_itron_record_ctr
 18610   let itron_rtr_count+=1
 18620 fnend  ! fn_itron_route_trailer
 18630 def fn_itron
@@ -640,163 +640,163 @@
 18820           let z_prior$=z$
 18830           if route<>route_prior then 
 18840             if route_prior<>0 then 
-18850               let fn_itron_route_trailer
+18850               fn_itron_route_trailer
 18860             end if  ! route_prior<>0
 18870             let route_prior=route
-18880             let fn_itron_record_chd
+18880             fn_itron_record_chd
 18890             let route_itron$=cnvrt$('pic(##)',route)&cnvrt$('pic(######)',route)
-18900             let fn_itron_record_rhd
+18900             fn_itron_record_rhd
 18910           end if  ! route<>route_prior
-18920           let fn_itron_record_cus
+18920           fn_itron_record_cus
 18930         end if  ! z$<>z_prior$
-18940         let fn_itron_record_mtr
-18950         let fn_itron_record_mtx
+18940         fn_itron_record_mtr
+18950         fn_itron_record_mtx
 18960         let unusual_usage_low=int(usage_current-usage_current*fn_pcent) : if unusual_usage_low<0 then let unusual_usage_low=0
 18970         let unusual_usage_high=int(usage_current+usage_current*fn_pcent)
-18980         let fn_itron_record_rdg
-18990         let fn_itron_record_rff
+18980         fn_itron_record_rdg
+18990         fn_itron_record_rff
 19000       end if  ! a(a_item)>0
 19010     end if  ! it is a metered service
 19020   next a_item
 19030 fnend 
 19040 def fn_itron_record_rdg ! reading - pg 19
-19050   let fn_record_init
-19060   let fn_record_addc(3,'RDG')
-19070   let fn_record_addc(8,route_itron$)
-19080   let fn_record_addc(4,servicecode$(a_item))
-19090   let fn_record_addc(1,'Y')
-19100   let fn_record_addc(1,'L') ! field 5
-19102   let fn_record_addn(3,0)
-19104   let fn_record_addn(3,0)
-19106   let fn_record_addx(1)
-19108   let fn_record_addn(2,0)
+19050   fn_record_init
+19060   fn_record_addc(3,'RDG')
+19070   fn_record_addc(8,route_itron$)
+19080   fn_record_addc(4,servicecode$(a_item))
+19090   fn_record_addc(1,'Y')
+19100   fn_record_addc(1,'L') ! field 5
+19102   fn_record_addn(3,0)
+19104   fn_record_addn(3,0)
+19106   fn_record_addx(1)
+19108   fn_record_addn(2,0)
 19110   ! 
 19112   let itron_number_of_dials=val(fn_meter_info$('Number of Dials',z$,servicecode$(a_item)))
 19114   if itron_number_of_dials=0 then let itron_number_of_dials=6
-19150   let fn_record_addn(2,itron_number_of_dials) ! field 10  -  number of dials
-19160   let fn_record_addn(2,0) ! 
+19150   fn_record_addn(2,itron_number_of_dials) ! field 10  -  number of dials
+19160   fn_record_addn(2,0) ! 
 19170   let transmitter_number$=fn_meter_info$('transmitter number',z$,servicecode$(a_item))
 19180   if transmitter_number$<>'' then let fn_record_addc(1,'R') else let fn_record_addc(1,'K') : let skip_next_rff_record=1
-19190   let fn_record_addn(10,reading_current)
-19200   let fn_record_addn(10,unusual_usage_high)
-19210   let fn_record_addn(10,unusual_usage_low) ! field 15
-19220   let fn_record_addn(6,0)
-19230   let fn_record_addn(1,0)
-19240   let fn_record_addn(1,0)
-19250   let fn_record_addn(5,0)
-19260   let fn_record_addn(1,0) ! field 20
-19270   let fn_record_addx(1)
+19190   fn_record_addn(10,reading_current)
+19200   fn_record_addn(10,unusual_usage_high)
+19210   fn_record_addn(10,unusual_usage_low) ! field 15
+19220   fn_record_addn(6,0)
+19230   fn_record_addn(1,0)
+19240   fn_record_addn(1,0)
+19250   fn_record_addn(5,0)
+19260   fn_record_addn(1,0) ! field 20
+19270   fn_record_addx(1)
 19272   ! 
 19274   let itron_read_type=val(fn_meter_info$('Read Type',z$,servicecode$(a_item)))
 19276   if itron_read_type=0 then let itron_read_type=a_item ! gas, water, electric a unique number for each - a_item (service number) is as good as any
-19280   let fn_record_addc(2,cnvrt$('pic(##)',itron_read_type))
-19290   let fn_record_addn(6,0)
-19300   let fn_record_addn(6,0)
-19310   let fn_record_addn(5,0) ! field 25
-19320   let fn_record_addx(31)
+19280   fn_record_addc(2,cnvrt$('pic(##)',itron_read_type))
+19290   fn_record_addn(6,0)
+19300   fn_record_addn(6,0)
+19310   fn_record_addn(5,0) ! field 25
+19320   fn_record_addx(31)
 19330   ! fn_record_addc(2,crlf$)
-19340   let fn_record_write(h_out)
+19340   fn_record_write(h_out)
 19350 fnend  ! fn_itron_record_rdg
 19360 def fn_itron_record_rhd ! route header - pg 6
-19370   let fn_record_init
-19380   let fn_record_addc(3,'RHD')
-19390   let fn_record_addc(8,route_itron$)
-19400   let fn_record_addc(1,'N')
-19410   let fn_record_addc(1,'N')
-19420   let fn_record_addn(4,0) ! field 5 - total number of keys
-19430   let fn_record_addn(4,0) ! field 6 - total number of reading records
-19440   let fn_record_addn(4,0) ! field 7 - total number of demand meters
-19450   let fn_record_addn(4,0) ! field 8 - total number of keyed readings
-19460   let fn_record_addn(4,0) ! field 9 - total number of optical probe readings
-19470   let fn_record_addn(4,0) ! field 10 - total number of off-site (Radio) readings
-19480   let fn_record_addn(4,0) ! field 11 - total number of customer records
-19490   let fn_record_addn(4,0) ! field 12 - total number of meter records
-19500   let fn_record_addn(6,0)
-19510   let fn_record_addn(4,0)
-19520   let fn_record_addn(4,0) ! field 15
-19530   let fn_record_addn(4,0)
-19540   let fn_record_addn(4,0)
-19550   let fn_record_addn(4,0)
-19560   let fn_record_addc(2,'')
-19570   let fn_record_addc(2,'') ! field 20 - zone
-19580   let fn_record_addc(2,'')
-19590   let fn_record_addn(2,0)
-19600   let fn_record_addn(2,0)
-19610   let fn_record_addn(4,0)
-19620   let fn_record_addc(1,'') ! field 25
-19630   let fn_record_addx(40)
+19370   fn_record_init
+19380   fn_record_addc(3,'RHD')
+19390   fn_record_addc(8,route_itron$)
+19400   fn_record_addc(1,'N')
+19410   fn_record_addc(1,'N')
+19420   fn_record_addn(4,0) ! field 5 - total number of keys
+19430   fn_record_addn(4,0) ! field 6 - total number of reading records
+19440   fn_record_addn(4,0) ! field 7 - total number of demand meters
+19450   fn_record_addn(4,0) ! field 8 - total number of keyed readings
+19460   fn_record_addn(4,0) ! field 9 - total number of optical probe readings
+19470   fn_record_addn(4,0) ! field 10 - total number of off-site (Radio) readings
+19480   fn_record_addn(4,0) ! field 11 - total number of customer records
+19490   fn_record_addn(4,0) ! field 12 - total number of meter records
+19500   fn_record_addn(6,0)
+19510   fn_record_addn(4,0)
+19520   fn_record_addn(4,0) ! field 15
+19530   fn_record_addn(4,0)
+19540   fn_record_addn(4,0)
+19550   fn_record_addn(4,0)
+19560   fn_record_addc(2,'')
+19570   fn_record_addc(2,'') ! field 20 - zone
+19580   fn_record_addc(2,'')
+19590   fn_record_addn(2,0)
+19600   fn_record_addn(2,0)
+19610   fn_record_addn(4,0)
+19620   fn_record_addc(1,'') ! field 25
+19630   fn_record_addx(40)
 19640   ! fn_record_addc(2,crlf$)
-19650   let fn_record_write(h_out)
+19650   fn_record_write(h_out)
 19660 fnend  ! fn_itron_record_rhd
 19670 def fn_itron_record_rtr ! route trailer - pg 6
-19680   let fn_record_init
-19690   let fn_record_addc(3,'RTR')
-19700   let fn_record_addc(8,route_itron$)
-19710   let fn_record_addc(1,'N')
-19720   let fn_record_addc(1,'N')
-19730   let fn_record_addn(4,0) ! field 5 - total number of keys
-19740   let fn_record_addn(4,0) ! field 6 - total number of reading records
-19750   let fn_record_addn(4,0) ! field 7 - total number of demand meters
-19760   let fn_record_addn(4,0) ! field 8 - total number of keyed readings
-19770   let fn_record_addn(4,0) ! field 9 - total number of optical probe readings
-19780   let fn_record_addn(4,0) ! field 10 - total number of off-site (Radio) readings
-19790   let fn_record_addn(4,0) ! field 11 - total number of customer records
-19800   let fn_record_addn(4,0) ! field 12 - total number of meter records
-19810   let fn_record_addn(6,0)
-19820   let fn_record_addn(4,0)
-19830   let fn_record_addn(4,0) ! field 15
-19840   let fn_record_addn(4,0)
-19850   let fn_record_addn(4,0)
-19860   let fn_record_addn(4,0)
-19870   let fn_record_addc(2,'')
-19880   let fn_record_addc(2,'') ! field 20 - zone
-19890   let fn_record_addc(2,'')
-19900   let fn_record_addn(2,0)
-19910   let fn_record_addn(2,0)
-19920   let fn_record_addn(4,0)
-19930   let fn_record_addc(1,'') ! field 25
-19940   let fn_record_addx(40)
+19680   fn_record_init
+19690   fn_record_addc(3,'RTR')
+19700   fn_record_addc(8,route_itron$)
+19710   fn_record_addc(1,'N')
+19720   fn_record_addc(1,'N')
+19730   fn_record_addn(4,0) ! field 5 - total number of keys
+19740   fn_record_addn(4,0) ! field 6 - total number of reading records
+19750   fn_record_addn(4,0) ! field 7 - total number of demand meters
+19760   fn_record_addn(4,0) ! field 8 - total number of keyed readings
+19770   fn_record_addn(4,0) ! field 9 - total number of optical probe readings
+19780   fn_record_addn(4,0) ! field 10 - total number of off-site (Radio) readings
+19790   fn_record_addn(4,0) ! field 11 - total number of customer records
+19800   fn_record_addn(4,0) ! field 12 - total number of meter records
+19810   fn_record_addn(6,0)
+19820   fn_record_addn(4,0)
+19830   fn_record_addn(4,0) ! field 15
+19840   fn_record_addn(4,0)
+19850   fn_record_addn(4,0)
+19860   fn_record_addn(4,0)
+19870   fn_record_addc(2,'')
+19880   fn_record_addc(2,'') ! field 20 - zone
+19890   fn_record_addc(2,'')
+19900   fn_record_addn(2,0)
+19910   fn_record_addn(2,0)
+19920   fn_record_addn(4,0)
+19930   fn_record_addc(1,'') ! field 25
+19940   fn_record_addx(40)
 19950       ! fn_record_addc(2,crlf$)
-19960   let fn_record_write(h_out)
+19960   fn_record_write(h_out)
 19970 fnend  ! fn_itron_record_rtr
 19980 def fn_itron_record_cus ! Customer - pg 11
-19990   let fn_record_init
-20000   let fn_record_addc(3,'CUS')
-20010   let fn_record_addc(8,route_itron$)
-20020   let fn_record_addn(3,fn_cnt_of_metered_svcs_active)
-20030   let fn_record_addc(20,z$)
-20040   let fn_record_addc(20,e$(2)) ! field 5 - name
-20050   let fn_record_addc(20,e$(1))
+19990   fn_record_init
+20000   fn_record_addc(3,'CUS')
+20010   fn_record_addc(8,route_itron$)
+20020   fn_record_addn(3,fn_cnt_of_metered_svcs_active)
+20030   fn_record_addc(20,z$)
+20040   fn_record_addc(20,e$(2)) ! field 5 - name
+20050   fn_record_addc(20,e$(1))
 20060   ! fn_record_addc(6,'')
 20070   ! fn_record_addc(14,'')
-20080   let fn_record_addc(20,'')
-20090   let fn_record_addx(2)
-20100   let fn_record_addn(1,0)
-20110   let fn_record_addc(20,'') ! field 10 - Customer Information
-20120   let fn_record_addc(1,'N')
-20130   let fn_record_addc(4,'')
-20140   let fn_record_addc(2,'')
-20150   let fn_record_addc(1,'')
-20160   let fn_record_addx(1) ! field 15
+20080   fn_record_addc(20,'')
+20090   fn_record_addx(2)
+20100   fn_record_addn(1,0)
+20110   fn_record_addc(20,'') ! field 10 - Customer Information
+20120   fn_record_addc(1,'N')
+20130   fn_record_addc(4,'')
+20140   fn_record_addc(2,'')
+20150   fn_record_addc(1,'')
+20160   fn_record_addx(1) ! field 15
 20170   ! fn_record_addc(2,crlf$)
-20180   let fn_record_write(h_out)
+20180   fn_record_write(h_out)
 20190 fnend  ! fn_itron_record_cus
 20200 def fn_itron_record_mtx ! latitude, longitude, etc - pg 16
-20210   let fn_record_init
-20220   let fn_record_addc(3,'MTX')
-20230   let fn_record_addc(8,route_itron$)
-20240   let fn_record_addc(12,fn_meter_info$('meter number',z$,servicecode$(a_item)))
+20210   fn_record_init
+20220   fn_record_addc(3,'MTX')
+20230   fn_record_addc(8,route_itron$)
+20240   fn_record_addc(12,fn_meter_info$('meter number',z$,servicecode$(a_item)))
 20250   dim irm_tmp$*20
 20260   let irm_tmp$=lwrc$(fn_meter_info$('longitude',z$,servicecode$(a_item)))
 20270   if irm_tmp$(1:1)="n" or irm_tmp$(1:1)="s" or irm_tmp$(1:1)="e" or irm_tmp$(1:1)="w" then let irm_tmp$=str$(fn_dms_to_dec(irm_tmp$))
-20280   let fn_record_addc(17,irm_tmp$)
+20280   fn_record_addc(17,irm_tmp$)
 20290   let irm_tmp$=lwrc$(fn_meter_info$('latitude',z$,servicecode$(a_item)))
 20300   if irm_tmp$(1:1)="n" or irm_tmp$(1:1)="s" or irm_tmp$(1:1)="e" or irm_tmp$(1:1)="w" then let irm_tmp$=str$(fn_dms_to_dec(irm_tmp$))
-20310   let fn_record_addc(17,irm_tmp$)
-20320   let fn_record_addc(12,'')
-20330   let fn_record_addx(57)
+20310   fn_record_addc(17,irm_tmp$)
+20320   fn_record_addc(12,'')
+20330   fn_record_addx(57)
 20340   ! fn_record_addc(2,crlf$)
-20350   let fn_record_write(h_out)
+20350   fn_record_write(h_out)
 20360 fnend  ! fn_itron_record_mtx
 20370 def fn_dms_to_dec(dtd_in$*20) ! for longitude and latitude
 20380 ! N31 35 47.8
@@ -816,121 +816,121 @@
 20520   let dtd_seconds=val(dtd_in$) conv ignore
 20540   let dtd_return=dtd_degrees+dtd_minutes/60+dtd_seconds/3600
 20550   if dtd_sign$='-' then let dtd_return=-dtd_return
-20560   let fn_dms_to_dec=dtd_return
+20560   fn_dms_to_dec=dtd_return
 20570 fnend  ! fn_dms_to_dec
 20580 def fn_itron_record_rff ! off-site (Radio) reads - pg 22
 20582   if skip_next_rff_record=1 then 
 20584     let skip_next_rff_record=0
 20586   else 
-20590     let fn_record_init
-20600     let fn_record_addc(3,'RFF')
-20610     let fn_record_addc(8,route_itron$)
-20620     let fn_record_addc(8,fn_meter_info$('transmitter number',z$,servicecode$(a_item)))
-20630     let fn_record_addc(6,'')
-20640     let fn_record_addc(4,'ERT ') ! field 5
-20650     let fn_record_addx(7)
-20660     let fn_record_addn(2,0)
-20670     let fn_record_addn(12,0)
-20680     let fn_record_addn(4,0)
-20690     let fn_record_addx(10) ! field 10
-20700     let fn_record_addc(2,'16')
-20710     let fn_record_addc(1,'')
-20720     let fn_record_addc(1,'')
-20730     let fn_record_addc(1,'')
-20740     let fn_record_addc(1,'') ! field 15
-20750     let fn_record_addx(56)
+20590     fn_record_init
+20600     fn_record_addc(3,'RFF')
+20610     fn_record_addc(8,route_itron$)
+20620     fn_record_addc(8,fn_meter_info$('transmitter number',z$,servicecode$(a_item)))
+20630     fn_record_addc(6,'')
+20640     fn_record_addc(4,'ERT ') ! field 5
+20650     fn_record_addx(7)
+20660     fn_record_addn(2,0)
+20670     fn_record_addn(12,0)
+20680     fn_record_addn(4,0)
+20690     fn_record_addx(10) ! field 10
+20700     fn_record_addc(2,'16')
+20710     fn_record_addc(1,'')
+20720     fn_record_addc(1,'')
+20730     fn_record_addc(1,'')
+20740     fn_record_addc(1,'') ! field 15
+20750     fn_record_addx(56)
 20760     ! fn_record_addc(2,crlf$)
-20770     let fn_record_write(h_out)
+20770     fn_record_write(h_out)
 20772   end if 
 20780 fnend  ! fn_itron_record_rff
 20790 def fn_itron_record_fhd ! file header - pg 3
-20800   let fn_record_init
-20810   let fn_record_addc(3,'FHD')
-20820   let fn_record_addc(1,'N')
-20830   let fn_record_addc(1,'N')
-20840   let fn_record_addc(5,'')
-20850   let fn_record_addx(3) ! field 5
-20860   let fn_record_addn(2,99) ! field 6 - number of cycles - should be one for each route
-20870   let fn_record_addc(1,'Y') ! field 7 - RFF records present?  Y/N
-20880   let fn_record_addc(1,'N')
-20890   let fn_record_addc(1,'N')
-20900   let fn_record_addx(108) ! field 10
+20800   fn_record_init
+20810   fn_record_addc(3,'FHD')
+20820   fn_record_addc(1,'N')
+20830   fn_record_addc(1,'N')
+20840   fn_record_addc(5,'')
+20850   fn_record_addx(3) ! field 5
+20860   fn_record_addn(2,99) ! field 6 - number of cycles - should be one for each route
+20870   fn_record_addc(1,'Y') ! field 7 - RFF records present?  Y/N
+20880   fn_record_addc(1,'N')
+20890   fn_record_addc(1,'N')
+20900   fn_record_addx(108) ! field 10
 20910   ! fn_record_addc(2,crlf$)
-20920   let fn_record_write(h_out)
+20920   fn_record_write(h_out)
 20930 fnend  ! fn_itron_record_fhd
 20940 def fn_itron_record_ftr ! file trailer - pg 3
-20950   let fn_record_init
-20960   let fn_record_addc(3,'FTR')
-20970   let fn_record_addc(1,'N')
-20980   let fn_record_addc(1,'N')
-20990   let fn_record_addc(5,'')
-21000   let fn_record_addx(3) ! field 5
-21010   let fn_record_addn(2,99) ! field 6 - number of cycles - should be one for each route
-21020   let fn_record_addc(1,'Y') ! field 7 - RFF records present?  Y/N
-21030   let fn_record_addc(1,'N')
-21040   let fn_record_addc(1,'N')
-21050   let fn_record_addx(108) ! field 10
+20950   fn_record_init
+20960   fn_record_addc(3,'FTR')
+20970   fn_record_addc(1,'N')
+20980   fn_record_addc(1,'N')
+20990   fn_record_addc(5,'')
+21000   fn_record_addx(3) ! field 5
+21010   fn_record_addn(2,99) ! field 6 - number of cycles - should be one for each route
+21020   fn_record_addc(1,'Y') ! field 7 - RFF records present?  Y/N
+21030   fn_record_addc(1,'N')
+21040   fn_record_addc(1,'N')
+21050   fn_record_addx(108) ! field 10
 21060   ! fn_record_addc(2,crlf$)
-21070   let fn_record_write(h_out)
+21070   fn_record_write(h_out)
 21080 fnend  ! fn_itron_record_FTR
 21090 def fn_itron_record_chd ! cycle header - pg 5
-21100   let fn_record_init
-21110   let fn_record_addc(3,'CHD')
-21120   let fn_record_addc(2,cnvrt$('pic(##)',route))
-21130   let fn_record_addn(4,1)
-21140   let fn_record_addc(8,date$('mmddccyy'))
-21150   let fn_record_addx(109) ! field 5
+21100   fn_record_init
+21110   fn_record_addc(3,'CHD')
+21120   fn_record_addc(2,cnvrt$('pic(##)',route))
+21130   fn_record_addn(4,1)
+21140   fn_record_addc(8,date$('mmddccyy'))
+21150   fn_record_addx(109) ! field 5
 21160   ! fn_record_addc(2,crlf$)
-21170   let fn_record_write(h_out)
+21170   fn_record_write(h_out)
 21180 fnend  ! fn_itron_record_chd
 21190 def fn_itron_record_ctr ! cycle trailer - pg 5
-21200   let fn_record_init
-21210   let fn_record_addc(3,'CTR')
-21220   let fn_record_addc(2,cnvrt$('pic(##)',route))
-21230   let fn_record_addn(4,1)
-21240   let fn_record_addc(8,date$('mmddccyy'))
-21250   let fn_record_addx(109) ! field 5
+21200   fn_record_init
+21210   fn_record_addc(3,'CTR')
+21220   fn_record_addc(2,cnvrt$('pic(##)',route))
+21230   fn_record_addn(4,1)
+21240   fn_record_addc(8,date$('mmddccyy'))
+21250   fn_record_addx(109) ! field 5
 21260   ! fn_record_addc(2,crlf$)
-21270   let fn_record_write(h_out)
+21270   fn_record_write(h_out)
 21280 fnend  ! fn_itron_record_ctr
 21290 def fn_itron_record_mtr ! meter record - pg 13
-21300   let fn_record_init
-21310   let fn_record_addc(3,'MTR')
-21320   let fn_record_addc(8,route_itron$)
-21330   let fn_record_addn(3,1)
-21340   let fn_record_addx(2)
-21350   let fn_record_addn(1,0) ! field 5
-21360   let fn_record_addx(8)
-21370   let fn_record_addn(1,0)
-21380   let fn_record_addx(2)
-21390   let fn_record_addn(1,0)
-21400   let fn_record_addc(1,' ') ! field 10
-21410   let fn_record_addc(1,'A')
-21420   let fn_record_addc(14,'') ! field 12 - optiocal probe recorder ID
-21430   let fn_record_addc(12,fn_meter_info$('Meter Number',z$,servicecode$(a_item)))
-21440   let fn_record_addx(2)
-21450   let fn_record_addc(2,'00') ! field 15 - meter type
-21460   let fn_record_addn(8,sequence*10+a_item)
-21470   let fn_record_addx(20)
-21480   let fn_record_addx(1)
-21490   let fn_record_addc(2,'00')
-21500   let fn_record_addx(1) ! field 20
-21510   let fn_record_addc(2,'00')
-21520   let fn_record_addx(1)
-21530   let fn_record_addc(2,'00')
-21540   let fn_record_addn(1,3)
-21550   let fn_record_addc(1,'Y') ! field 25
-21560   let fn_record_addc(1,'N')
-21570   let fn_record_addc(1,servicecode$(a_item)(1:1))
-21580   let fn_record_addc(1,'L')
-21590   let fn_record_addn(3,0)
-21600   let fn_record_addc(2,'') ! field 30 - meter audit 1
-21610   let fn_record_addc(2,'')
-21620   let fn_record_addc(1,'')
-21630   let fn_record_addc(1,'')
-21640   let fn_record_addx(14)
+21300   fn_record_init
+21310   fn_record_addc(3,'MTR')
+21320   fn_record_addc(8,route_itron$)
+21330   fn_record_addn(3,1)
+21340   fn_record_addx(2)
+21350   fn_record_addn(1,0) ! field 5
+21360   fn_record_addx(8)
+21370   fn_record_addn(1,0)
+21380   fn_record_addx(2)
+21390   fn_record_addn(1,0)
+21400   fn_record_addc(1,' ') ! field 10
+21410   fn_record_addc(1,'A')
+21420   fn_record_addc(14,'') ! field 12 - optiocal probe recorder ID
+21430   fn_record_addc(12,fn_meter_info$('Meter Number',z$,servicecode$(a_item)))
+21440   fn_record_addx(2)
+21450   fn_record_addc(2,'00') ! field 15 - meter type
+21460   fn_record_addn(8,sequence*10+a_item)
+21470   fn_record_addx(20)
+21480   fn_record_addx(1)
+21490   fn_record_addc(2,'00')
+21500   fn_record_addx(1) ! field 20
+21510   fn_record_addc(2,'00')
+21520   fn_record_addx(1)
+21530   fn_record_addc(2,'00')
+21540   fn_record_addn(1,3)
+21550   fn_record_addc(1,'Y') ! field 25
+21560   fn_record_addc(1,'N')
+21570   fn_record_addc(1,servicecode$(a_item)(1:1))
+21580   fn_record_addc(1,'L')
+21590   fn_record_addn(3,0)
+21600   fn_record_addc(2,'') ! field 30 - meter audit 1
+21610   fn_record_addc(2,'')
+21620   fn_record_addc(1,'')
+21630   fn_record_addc(1,'')
+21640   fn_record_addx(14)
 21650   ! fn_record_addc(2,crlf$) ! field 35 (the end CR/LF)
-21660   let fn_record_write(h_out)
+21660   fn_record_write(h_out)
 21670 fnend  ! fn_itron_record_mtr
 21680 ! /r
 24000 def fn_aclara ! z$,mat e$,extra$(1-2),route
@@ -1096,20 +1096,20 @@
 58040   let out_filename_report$=file$(h_out)
 58060   close #h_out: ioerr ignore
 58080   close #h_customer_i1: ioerr ignore
-58100   let fn_report_created_file(out_filename_report$)
-58120   let fn_transfer
+58100   fn_report_created_file(out_filename_report$)
+58120   fn_transfer
 58200 goto XIT ! /r
 60000 XIT: let fnxit
 60010 IGNORE: continue 
 62000 def fn_transfer
 62020   if device$="ACS Meter Reader" then 
-62040     let fntos(sn$="ACSMR_ASK_DEST")
+62040     fntos(sn$="ACSMR_ASK_DEST")
 62060     mat resp$=("")
-62080     let fnlbl(1,1,"Android Drive:",20,1)
+62080     fnlbl(1,1,"Android Drive:",20,1)
 62100     let tip$="Drive letter of the destination android device."
-62120     let fncomboa("USB-Drive",1,23,mat drive$,tip$)
-62140     let fncmdset(2)
-62160     let fnacs(sn$,0,mat resp$,ckey)
+62120     fncomboa("USB-Drive",1,23,mat drive$,tip$)
+62140     fncmdset(2)
+62160     fnacs(sn$,0,mat resp$,ckey)
 62180     if ckey<>5 then 
 62200       let dest$=resp$(1)
 62220       execute "copy "&out_filename$&" "&trim$(dest$)&"acs_meter_data.txt"
@@ -1129,14 +1129,14 @@
 62600   end if 
 62620   goto TRANSFER_XIT
 63000   TRANSFER_TO_LAPTOP: ! r: transfer files for laptop
-63020   let fntos(sn$="trtolaptop")
+63020   fntos(sn$="trtolaptop")
 63040   mat resp$=("")
-63060   let fnlbl(1,1,"Destination Drive:",20,1)
+63060   fnlbl(1,1,"Destination Drive:",20,1)
 63080   let tip$="Destination can be a drive designation including folders"
-63100   let fntxt(1,23,20,100,0,"",0,tip$)
+63100   fntxt(1,23,20,100,0,"",0,tip$)
 63120   if resp$(1)="" then let resp$(1)="A:\"
-63140   let fncmdset(2)
-63160   let fnacs(sn$,0,mat resp$,ckey) ! 
+63140   fncmdset(2)
+63160   fnacs(sn$,0,mat resp$,ckey) ! 
 63180   if ckey=5 then goto TRANSFER_XIT
 63200   let dest$=resp$(1)
 63220   if len(dest$)=0 then goto TRANSFER_TO_LAPTOP
@@ -1148,30 +1148,30 @@
 63340 fnend  ! fn_transfer
 64000 def fn_scr_selact
 64020   mat resp$(5)=('')
-64030   let fncreg_read('hhto.selection_method',selection_method$) : let selection_method=val(selection_method$) conv ignore
+64030   fncreg_read('hhto.selection_method',selection_method$) : let selection_method=val(selection_method$) conv ignore
 64040   if selection_method=0 then let selection_method=2
-64060   let fntos(sn$="hhto1")
-64080   let fnlbl(2,1,"Hand Held model:",16,1)
-64100   !   let fncomboa("HH-FroCBox",1,18,mat ctext$)
+64060   fntos(sn$="hhto1")
+64080   fnlbl(2,1,"Hand Held model:",16,1)
+64100   !   fncomboa("HH-FroCBox",1,18,mat ctext$)
 64120   !   let resp$(0)=device$
-64140   let fnlbl(2,18,device$)
-64160   let fnlbl(4,1,"Select:",16,1)
-64180   let fnopt(4,18,"[All]")
+64140   fnlbl(2,18,device$)
+64160   fnlbl(4,1,"Select:",16,1)
+64180   fnopt(4,18,"[All]")
 64200   if selection_method=1 then let resp$(1)='True' else let resp$(1)='False'
-64220   let fnopt(5,18,"An Entire Route")
+64220   fnopt(5,18,"An Entire Route")
 64240   if selection_method=2 then let resp$(2)='True' else let resp$(2)='False'
-64260   let fnopt(6,18,"A Range of Accounts")
+64260   fnopt(6,18,"A Range of Accounts")
 64280   if selection_method=3 then let resp$(3)='True' else let resp$(3)='False'
-64300   let fnopt(7,18,"Specific Accounts")
+64300   fnopt(7,18,"Specific Accounts")
 64320   if selection_method=4 then let resp$(4)='True' else let resp$(4)='False'
 64340   if lrec(2)>0 then 
-64360     let fncmdset(19)
-64380     let fnlbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
+64360     fncmdset(19)
+64380     fnlbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
 64400   else 
-64410     let fnlbl(9,1,"",46,2)
-64420     let fncmdset(2)
+64410     fnlbl(9,1,"",46,2)
+64420     fncmdset(2)
 64440   end if 
-64460   let fnacs(sn$,0,mat resp$,ckey)
+64460   fnacs(sn$,0,mat resp$,ckey)
 64480   if ckey<>5 then 
 64520     if resp$(1)='True' then 
 64540       let selection_method=1
@@ -1191,7 +1191,7 @@
 65120     mat m$(2)
 65140     let m$(1)="Hand Held File created:"
 65160     let m$(2)=os_filename$(out_filename_report$)
-65180     let fnmsgbox(mat m$, response$, cap$,64)
+65180     fnmsgbox(mat m$, response$, cap$,64)
 65200   end if 
 65240 fnend 
 68000 def fn_cnt_of_metered_svcs_active
@@ -1204,7 +1204,7 @@
 68140   else ! the old way
 68160     let nomsa_return=max(1,d(13))
 68180   end if 
-68200   let fn_cnt_of_metered_svcs_active=nomsa_return
+68200   fn_cnt_of_metered_svcs_active=nomsa_return
 68220 fnend 
 70000 def fn_meter_info$*20(mi_field$,z$*10,servicecode$)
 70020   if ~mi_setup then 
@@ -1249,7 +1249,7 @@
 70840     end if 
 70860   end if 
 70880   MI_FINIS: ! 
-70900   let fn_meter_info$=mi_return$
+70900   fn_meter_info$=mi_return$
 70920 fnend  ! fn_meter_info$
 72000 def library fnHand_Held_Device_list(mat device$)
 72010   if ~setup then let fn_setup

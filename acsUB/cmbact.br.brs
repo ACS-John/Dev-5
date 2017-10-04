@@ -14,5 +14,5 @@
 20200     else 
 20220       let if$=indexfile$
 20240     end if 
-20260     let fncmbact=fncombof(fen$,myline,mypos,43,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1,10,41,30,if$,1+addall,1,"Select from the list of accounts, to add an account go to the Customer File.",container)
+20260     fncmbact=fncombof(fen$,myline,mypos,43,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1,10,41,30,if$,1+addall,1,"Select from the list of accounts, to add an account go to the Customer File.",container)
 30140  fnend 

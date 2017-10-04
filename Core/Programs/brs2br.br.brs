@@ -26,7 +26,7 @@
 00220   if exists(dir$)=0 then !:
           pr "Directory not found..." !:
           goto XIT
-00230   let fngetdir(dir$,mat filename$)
+00230   fngetdir(dir$,mat filename$)
 00240 ! __
 00250   for tmp=1 to udim(filename$)
 00260     if rtrm$(filename$(tmp))="" then goto L280

@@ -11,29 +11,29 @@
 00100   dim d1$*20
 00110   dim em$*30
 00120 ! ______________________________________________________________________
-00130   let fntop(program$,cap$="Payroll Tax Deposit Summary")
+00130   fntop(program$,cap$="Payroll Tax Deposit Summary")
 00150 ! ______________________________________________________________________
 00220   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d2,d1$)
 00242   let ssr1=fnss_employee
 00243   let ssr2=fnss_employer
 00250 ! If FNPROCESS=1 Then Goto 410
-00260   let fntos(sn$="TaxDeposit") !:
+00260   fntos(sn$="TaxDeposit") !:
         let rc=0: let mylen=22: let mypos=mylen+3: let frameno=1
-00270   let fnfra(1,1,3,40,"Date Range of Deposit","Enter the date range for the payrolls to be included.")
-00280   let fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
-00290   let fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this deposit. ",frameno) !:
+00270   fnfra(1,1,3,40,"Date Range of Deposit","Enter the date range for the payrolls to be included.")
+00280   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
+00290   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this deposit. ",frameno) !:
         let resp$(rc+=1)=str$(beg_date)
-00300   let fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
-00310   let fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this deposit. ",frameno) !:
+00300   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
+00310   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this deposit. ",frameno) !:
         let resp$(rc+=1)=str$(end_date)
-00320   let fncmdkey("Next",1,1,0,"Calculate tax deposit.")
-00330   let fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
-00340   let fnacs(sn$,0,mat resp$,ckey)
+00320   fncmdkey("Next",1,1,0,"Calculate tax deposit.")
+00330   fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
+00340   fnacs(sn$,0,mat resp$,ckey)
 00350   if ckey=5 then goto XIT
 00360   beg_date=val(resp$(1)) !:
         let end_date=val(resp$(2))
 00370 ! ______________________________________________________________________
-00380   let fnopenprn
+00380   fnopenprn
 00390 ! ______________________________________________________________________
 00400   fnDedNames(mat fullname$,mat ab$)
 00430   for j=1 to 20
@@ -91,7 +91,7 @@
 00940 L940: form pos 25,"__________",skip 1,pos 10,c 6,pos 23,n 12.2,skip 1,pos 25,"=========="
 00945   pr #255,using "form skip 2,pos 1,c 40": "Total Employees: "&str$(t(36))
 00950 DONE: ! 
-00960   let fncloseprn
+00960   fncloseprn
 00970   close #1: ioerr ignore
 00980   goto XIT
 00990 ! ______________________________________________________________________

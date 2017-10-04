@@ -5,15 +5,15 @@
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim msgline$(3)*60,cap$*128,ta(2),message$*40
-00080   let fncno(cno)
+00080   fncno(cno)
 00090 ! 
-00100   let fntop(program$,cap$="Reassign Deposit Change Addresses")
+00100   fntop(program$,cap$="Reassign Deposit Change Addresses")
 00110 ! ______________________________________________________________________
 00120 MAIN: ! 
 00130   let msgline$(1)="No other users may be using the Deposit file" !:
         let msgline$(2)="while this option is running.  Do you want to run" !:
         let msgline$(3)="Reassign Deposit Change Addresses now?" !:
-        let fnmsgbox(mat msgline$,resp$,cap$,49)
+        fnmsgbox(mat msgline$,resp$,cap$,49)
 00140   if uprc$(resp$)=uprc$("CANCEL") then goto XIT
 00150 ! ______________________________________________________________________
 00160   open #1: "Name="&env$('Q')&"\UBmstr\Deposit1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\DepIdx1.h"&str$(cno),internal,outin,keyed ioerr MAIN

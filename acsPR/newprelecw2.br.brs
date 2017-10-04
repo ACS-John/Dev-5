@@ -7,7 +7,7 @@
 10120 ! "
 10140   library 'S:\Core\Library': fntop,fnxit, fnerror,fnacs,fnlbl,fntxt,fntos,fncmdkey,fnureg_read,fnureg_write,fngethandle,fnDedNames,fncreg_read,fncreg_write,fncomboa
 10160   on error goto ERTN
-10180   let fntop(program$,cap$="Electronic W-2")
+10180   fntop(program$,cap$="Electronic W-2")
 10200 ! ______________________________________________________________________
 10220   dim em$(3)*30,ss$*11,tcp(32),cap$*128,tmp$*128
 10240   dim tdc(10),newdedcode(20),newcalcode(20),newdedfed(20),dedfica(20)
@@ -34,7 +34,7 @@
 11020   open #hEmployee:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 11040   open #hChecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
 12000 ! r: initialize variables
-12020   let fnureg_read('electronic w-2 file',path$,os_filename$(env$('userprofile')&'\Desktop\w2elec-'&env$('cno')))
+12020   fnureg_read('electronic w-2 file',path$,os_filename$(env$('userprofile')&'\Desktop\w2elec-'&env$('cno')))
 12040   beg_date=val('0101'&date$(days(date$)-180,'YY'))
 12060   end_date=val('1231'&date$(days(date$)-180,'YY'))
 12080   yr=date(days(date$)-180,'ccyy')
@@ -79,17 +79,17 @@
 12860 !
 12880 ! /r
 14000 SCREEN1_NEW: ! r:
-14020   let fntos(sn$="W2-1") 
+14020   fntos(sn$="W2-1") 
 14040   let rc=lyne=0: mylen=17 : mypos=mylen+2
-14060   let fnlbl(lyne+=1,1,"Starting Date:",mylen,1,0,0)
-14080   let fntxt(lyne,mypos,10,0,1,"3",0,"First day of calendar year",0) 
+14060   fnlbl(lyne+=1,1,"Starting Date:",mylen,1,0,0)
+14080   fntxt(lyne,mypos,10,0,1,"3",0,"First day of calendar year",0) 
 14100   let resp$(respc_dateStart:=rc+=1)=str$(beg_date)
-14120   let fnlbl(lyne+=1,1,"Ending Date:",mylen,1,0,0)
-14140   let fntxt(lyne,mypos,10,0,1,"3",0,"Last day of calendar year",0) 
+14120   fnlbl(lyne+=1,1,"Ending Date:",mylen,1,0,0)
+14140   fntxt(lyne,mypos,10,0,1,"3",0,"Last day of calendar year",0) 
 14160   let resp$(respc_dateEnd:=rc+=1)=str$(end_date)
 14180   lyne+=1
-14200   let fnlbl(lyne+=1,1,"Output File Name:",mylen,1,0,0)
-14220   let fntxt(lyne,mypos,30,0,0,'70',0,"Destination and file name you wish to use.",0) 
+14200   fnlbl(lyne+=1,1,"Output File Name:",mylen,1,0,0)
+14220   fntxt(lyne,mypos,30,0,0,'70',0,"Destination and file name you wish to use.",0) 
 14240   let resp$(respc_path:=rc+=1)=path$
 14260   lyne+=1
 14280   fnlbl(lyne+=1,1,"Company Name:",mylen,1,0,0)
@@ -184,9 +184,9 @@
 16040   resp$(resp_fips:=rc+=1)=str$(sr2)
 16060   fnlbl(lyne+=1,1,'(See an appendix in your electronic booklet for the postal code!)',80,2)
 16080   !
-16100   let fncmdkey("Next",1,1,0,"Creates the export")
-16120   let fncmdkey("Cancel",5,0,1,"Returns to menu")
-16140   let fnacs(sn$,0,mat resp$,ckey) ! /r
+16100   fncmdkey("Next",1,1,0,"Creates the export")
+16120   fncmdkey("Cancel",5,0,1,"Returns to menu")
+16140   fnacs(sn$,0,mat resp$,ckey) ! /r
 16160   if ckey=5 then goto XIT
 18000 ! r: populate local variables from mat resp$
 18020   beg_date=val(resp$(respc_dateStart))

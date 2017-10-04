@@ -3,8 +3,8 @@
 00220   library 'S:\Core\Library': fntop,fnxit, fnerror,fnhamster,fnhamster_field_reset,fnhamster_field_add,fnhamster_add_combo,fnhamster_add_combof,fnhamster_add_comboa,fnhamster_2,fnhand_held_device$
 00300   on error goto ERTN
 00400 ! ______________________________________________________________________
-00700   let fntop(program$)
-00900   let fn_setup_hamster
+00700   fntop(program$)
+00900   fn_setup_hamster
 01000   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 01110   fnhamster_2(env$('Program_Caption'))
 01200   gosub CLOSE_FILE
@@ -39,19 +39,19 @@
 35200   let textlen_mmddyy=8 : let textlen_ccyymmdd=10
 35220   let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
 35240   fnhamster_field_reset
-35260   let fnhamster_field_add("Client ID",5)
-35280   let fnhamster_field_add("?? (N 9)",9)
-35300   let fnhamster_field_add("Hours",5.2,'PD',3.2,mask_pointtwo)
-35320   let fnhamster_field_add("Rate",5.2,'PD',3.2,mask_pointtwo)
-35340   let fnhamster_field_add("Amount",7.2,'PD',4.2,mask_pointtwo)
-35360   let fnhamster_field_add("Date",textlen_mmddyy,'N',storage_len_mmddyy,mask_mmddyy)
-35380   let fnhamster_field_add("Category",2,'N',2,mask_number)
-35400   let fnhamster_field_add("(??) PD 2",3,'PD',2,mask_number)
-35420   let fnhamster_field_add("(??) PD 3",3,'PD',1,mask_number)
-35440   let fnhamster_field_add("System Code",2,'N',0,mask_number)
-35460   let fnhamster_field_add("(??) N 4",4,'N',0,mask_number)
-35480   let fnhamster_field_add("(??) X 12",12,'C',0,mask_number)
-35500   let fnhamster_field_add("(??) PD 3",5,'PD',3,mask_number)
-35520   let fnhamster_field_add("(??) C 30",30,'C',0,mask_number)
+35260   fnhamster_field_add("Client ID",5)
+35280   fnhamster_field_add("?? (N 9)",9)
+35300   fnhamster_field_add("Hours",5.2,'PD',3.2,mask_pointtwo)
+35320   fnhamster_field_add("Rate",5.2,'PD',3.2,mask_pointtwo)
+35340   fnhamster_field_add("Amount",7.2,'PD',4.2,mask_pointtwo)
+35360   fnhamster_field_add("Date",textlen_mmddyy,'N',storage_len_mmddyy,mask_mmddyy)
+35380   fnhamster_field_add("Category",2,'N',2,mask_number)
+35400   fnhamster_field_add("(??) PD 2",3,'PD',2,mask_number)
+35420   fnhamster_field_add("(??) PD 3",3,'PD',1,mask_number)
+35440   fnhamster_field_add("System Code",2,'N',0,mask_number)
+35460   fnhamster_field_add("(??) N 4",4,'N',0,mask_number)
+35480   fnhamster_field_add("(??) X 12",12,'C',0,mask_number)
+35500   fnhamster_field_add("(??) PD 3",5,'PD',3,mask_number)
+35520   fnhamster_field_add("(??) C 30",30,'C',0,mask_number)
 35540   !   fnhamster_add_combof(itemTCode,'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
 35560 fnend  ! fn_setup_hamster

@@ -7,47 +7,47 @@
 00070   dim z$*10,e$(4)*30,dat$*20,idx$(3)*20,wrd2$(3)
 00080   dim sel$(3)*38,cap$*128,txt$*40,resp$(10)*20
 00090 ! ______________________________________________________________________
-00120   let fndat(dat$)
-00130   let fntop(program$,cap$="Customer List")
+00120   fndat(dat$)
+00130   fntop(program$,cap$="Customer List")
 00140   let idx$(1)="ubIndex" !:
         let idx$(2)="ubIndx2" !:
         let idx$(3)="ubIndx3"
 00150 ! ______________________________________________________________________
 00160 SCR1: ! 
 00170   let sn$="ubBudLst" !:
-        let fntos(sn$) !:
+        fntos(sn$) !:
         let respc=0
 00180   let mylen=22 !:
         let mypos=mylen+2
-00190   let fnlbl(1,1,"Sort by:",mylen,1)
+00190   fnlbl(1,1,"Sort by:",mylen,1)
 00200   let wrd2$(1)="Account" !:
         let wrd2$(2)="Customer Name" !:
         let wrd2$(3)="Street" !:
-        let fncomboa("bs",1,mypos,mat wrd2$) !:
+        fncomboa("bs",1,mypos,mat wrd2$) !:
         let resp$(respc+=1)=wrd2$(1)
-00210   let fnlbl(2,1,"Report Heading Date:",mylen,1)
-00220   let fntxt(2,mypos,20) !:
+00210   fnlbl(2,1,"Report Heading Date:",mylen,1)
+00220   fntxt(2,mypos,20) !:
         let resp$(respc+=1)=dat$
-00230   let fnlbl(3,1,"Print:",mylen,1)
+00230   fnlbl(3,1,"Print:",mylen,1)
 00240   let sel$(1)="Active customers" !:
         let sel$(2)="Inactive customers" !:
         let sel$(3)="[All]" !:
-        let fncomboa("bs2",3,mypos,mat sel$) !:
+        fncomboa("bs2",3,mypos,mat sel$) !:
         let resp$(respc+=1)=sel$(1)
-00250   let fncmdset(2)
-00260   let fnacs(sn$,0,mat resp$,ckey)
+00250   fncmdset(2)
+00260   fnacs(sn$,0,mat resp$,ckey)
 00270   if ckey=5 then goto XIT
 00280   if resp$(1)=wrd2$(1) then let q0=1 else !:
           if resp$(1)=wrd2$(2) then let q0=2 else !:
             if resp$(1)=wrd2$(3) then let q0=3 ! sort by
 00290   let dat$=resp$(2) !:
-        let fndat(dat$,2)
+        fndat(dat$,2)
 00300   if resp$(3)=sel$(1) then let ti2=1 else !:
           if resp$(3)=sel$(2) then let ti2=2 else !:
             if resp$(3)=sel$(3) then let ti2=3 ! active, inactive, etc...
 00310 ! ______________________________________________________________________
 00320   on fkey 5 goto DONE
-00330   let fnopenprn(cp,0,0,process)
+00330   fnopenprn(cp,0,0,process)
 00340   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\"&idx$(q0)&".h"&env$('cno')&",Shr",internal,input,keyed 
 00350   gosub BUD1
 00360   gosub HEADER

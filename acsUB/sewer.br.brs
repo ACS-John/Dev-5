@@ -6,7 +6,7 @@
 00200 ! ______________________________________________________________________
 00220   dim cd1(8),cap$*128,x(13),message$(5)*80,message$*60,tg(11),extra(23)
 00240 ! ______________________________________________________________________
-00280   let fntop(program$,cap$="Calculate Sewer Average")
+00280   fntop(program$,cap$="Calculate Sewer Average")
 00300 ! ______________________________________________________________________
 00320   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00340   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -25,21 +25,21 @@
 00580   restore #h_customer: 
 00600 ! ______________________________________________________________________
 00620 SCR1: ! 
-00640   let fntos(sn$:="ubsewer-1b")
+00640   fntos(sn$:="ubsewer-1b")
 00660   let mylen=47 : let mypos=49
-00680   let fnlbl(1,1,"Billing Dates for Months to Average:",mylen,1)
+00680   fnlbl(1,1,"Billing Dates for Months to Average:",mylen,1)
 00700   for j=1 to 8
-00720     let fntxt(j,mypos,10,0,0,"3")
-00740     let fncreg_read(sn$&'.billing date.'&str$(j),resp$(j))
+00720     fntxt(j,mypos,10,0,0,"3")
+00740     fncreg_read(sn$&'.billing date.'&str$(j),resp$(j))
 00760   next j
-00780   let fnlbl(10,1,"Sewer code to average:",mylen,1)
-00800   let fntxt(10,mypos,2,2,0,"20")
-00820   let fncreg_read(sn$&'.sewer code to average',resp$(9))
+00780   fnlbl(10,1,"Sewer code to average:",mylen,1)
+00800   fntxt(10,mypos,2,2,0,"20")
+00820   fncreg_read(sn$&'.sewer code to average',resp$(9))
 00840 ! let fncmdset(2)
-00842   let fncmdkey("&Clear Sewer Code Averages",3,0)
-00843   let fncmdkey("&Next",1,1)
-00844   let fncmdkey("&Cancel",5,0,1)
-00860   let fnacs(sn$,0,mat resp$,ckey)
+00842   fncmdkey("&Clear Sewer Code Averages",3,0)
+00843   fncmdkey("&Next",1,1)
+00844   fncmdkey("&Cancel",5,0,1)
+00860   fnacs(sn$,0,mat resp$,ckey)
 00870   if ckey=5 then goto XIT
 00880   if ckey=3 then clear_averages=1 else clear_averages=0
 00900   for j=1 to 8
@@ -54,24 +54,24 @@
 01080   if filter_sewer_code=0 and ~clear_averages then 
 01100     mat message$(1)
 01120     let message$(1)="You must enter at least one date!"
-01140     let fnmsgbox(mat message$,resp$,cap$,0)
+01140     fnmsgbox(mat message$,resp$,cap$,0)
 01160     goto SCR1
 01180   end if 
 01200   for j=1 to 8
 01220     cd1(j)=val(resp$(j)) conv SCR1
-01240     let fncreg_write(sn$&'.billing date.'&str$(j),resp$(j))
+01240     fncreg_write(sn$&'.billing date.'&str$(j),resp$(j))
 01260   next j
-01280   let fncreg_write(sn$&'.sewer code to average',resp$(9))
+01280   fncreg_write(sn$&'.sewer code to average',resp$(9))
 01300   if cd1(1)=0 and ~clear_averages then 
 01320     mat message$(1)
 01340     let message$(1)="You must enter at least one date!"
-01360     let fnmsgbox(mat message$,resp$,cap$,0)
+01360     fnmsgbox(mat message$,resp$,cap$,0)
 01380     goto SCR1
 01400   end if 
 01420 ! ______________________________________________________________________
-01440   let fnopenprn
+01440   fnopenprn
 01460   let message$="Calculating: please wait..."
-01480   let fnwait(0,cap$,message$,1)
+01480   fnwait(0,cap$,message$,1)
 01500   gosub HDR
 01520 L480: ! 
 01540   read #h_customer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE
@@ -116,7 +116,7 @@
 02180 ! ______________________________________________________________________
 02200 DONE: ! 
 02220   close #h_customer: 
-02240   let fncloseprn
+02240   fncloseprn
 02260 XIT: let fnxit
 02280 ! ______________________________________________________________________
 02300 PAGE: pr #255: newpage

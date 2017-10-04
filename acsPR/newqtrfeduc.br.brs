@@ -12,8 +12,8 @@
 00120   dim qtr1tcp(32),qtr2tcp(32),qtr3tcp(32),qtr4tcp(32),qtr(32)
 00130   dim ytdtotal(32),ss$*11,em$(3)*30,m$*20
 00140 ! ______________________________________________________________________
-00150   let fntop(program$,cap$="Quarterly Federal Unemployment Worksheet")
-00170   let fnopenprn
+00150   fntop(program$,cap$="Quarterly Federal Unemployment Worksheet")
+00170   fnopenprn
 00180 ! ______________________________________________________________________
 00190   fncreg_read('calculation date text',m$)
 00200   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
@@ -26,23 +26,23 @@
 00270 ! ______________________________________________________________________
 00280 ! If FNPROCESS=1 Then Goto 230
 00290 MENU1: ! 
-00300   let fntos(sn$="prqtrfeduc") !:
+00300   fntos(sn$="prqtrfeduc") !:
         let respc=0
 00310   if val(date$(4:5))=1 then let taxyear=val(date$(1:2))+2000-1 else let taxyear =val(date$(1:2))+2000 ! current tax year (if processing in jan, assume last year)
-00320   let fnlbl(1,1,"Tax Year:",26,1)
-00330   let fntxt(1,30,4,0,0,"30",0,"") !:
+00320   fnlbl(1,1,"Tax Year:",26,1)
+00330   fntxt(1,30,4,0,0,"30",0,"") !:
         let resp$(respc+=1)=str$(taxyear)
 00340   let option1$(1)="March 31"
 00350   let option1$(2)="June 30"
 00360   let option1$(3)="September 30"
 00370   let option1$(4)="December 31"
-00380   let fnlbl(2,1,"Quarter Ending Date:",26,1)
-00390   let fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
+00380   fnlbl(2,1,"Quarter Ending Date:",26,1)
+00390   fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
 00400   if val(date$(4:5))=3 or val(date$(4:5))=4 or val(date$(4:5))=5 then let resp$(respc+=1)=option1$(1) ! march filing
 00410   if val(date$(4:5))=6 or val(date$(4:5))=7 or val(date$(4:5))=8 then let resp$(respc+=1)=option1$(2) ! June  filing
 00420   if val(date$(4:5))=9 or val(date$(4:5))=10 or val(date$(4:5))=11 then let resp$(respc+=1)=option1$(3) ! September filing
 00430   if val(date$(4:5))=12 or val(date$(4:5))=1 or val(date$(4:5))=2 then let resp$(respc+=1)=option1$(4) ! December
-00440   let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+00440   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00450   if ck=5 then goto XIT
 00460   let taxyear=val(resp$(1)) ! tax year
 00470   if taxyear<2000 then goto L510
@@ -52,7 +52,7 @@
 00510 L510: mat ml$(2) !:
         let ml$(1)="You must enter a valid tax year such as 2007." !:
         let ml$(2)="Take OK to enter the year." !:
-        let fnmsgbox(mat ml$,resp$,cap$,0) !:
+        fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto MENU1
 00520 L520: for j=1 to 4
 00530     if resp$(2)=option1$(j) then let qtr=j: let m$=option1$(j): goto L550 ! quarter ending date

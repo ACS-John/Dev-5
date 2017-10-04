@@ -6,10 +6,10 @@
 00060 ! ______________________________________________________________________
 00070   dim text$*40,cap$*128,ln$*128
 00080 ! ______________________________________________________________________
-00090   let fncno(cno)
+00090   fncno(cno)
 00100 ! 
-00110   let fntop("S:\acsUB\TotalBal",cap$="Change Route and Sequence Numbers")
-00120   let fnopenprn
+00110   fntop("S:\acsUB\TotalBal",cap$="Change Route and Sequence Numbers")
+00120   fnopenprn
 00130 ! ______________________________________________________________________
 00140   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00150   open #2: "Name=newroute2.txt",display,input 
@@ -31,7 +31,7 @@
 00270 XIT: let fncloseprn
 00280   close #1: 
 00290   execute "Index "&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&' '&env$('Q')&"\UBmstr\UBIndx5.h"&str$(cno)&" 1741/1743 2/7 Replace DupKeys -n"
-00300   let fnxit
+00300   fnxit
 00310 ! ______________________________________________________________________
 00320 ! <Updateable Region: ERTN>
 00330 ERTN: let fnerror(program$,err,line,act$,"xit")

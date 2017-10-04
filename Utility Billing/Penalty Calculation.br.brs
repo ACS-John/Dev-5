@@ -13,9 +13,9 @@
 20240   dim columnhead$(10)*13,tmp$*220,coltot(10),basepenalty(10)
 20260 ! ______________________________________________________________________
 20280   let right=1
-20300   let fntop(program$)
-20320   let fnd1(bildat)
-20340   let fndat(dat$)
+20300   fntop(program$)
+20320   fnd1(bildat)
+20340   fndat(dat$)
 20400 ! r:  get MinimumBal
 20420   open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&env$('cno')&",Use,RecL=10,Shr",internal,outin,relative 
 20440   read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal norec SET_DEFAULT_MINUMUMBAL
@@ -26,11 +26,11 @@
 20540 EO_MINIMUMBAL: ! 
 20560   close #minbal: 
 20580 ! /r
-20600   let fn_scr_main
+20600   fn_scr_main
 20620   if ck=5 then goto XIT
 20640 ! 
 20660   if env$('client')="Sangamon" then 
-20680     let fn_scr_route_range
+20680     fn_scr_route_range
 20700     if ck=5 then goto XIT
 20720   end if 
 20740 ! 
@@ -51,10 +51,10 @@
 21080   mat pencolumn(pencount)
 21100   mat columnhead$(pencount)
 21120   mat coltot(pencount)
-21140   let fn_bud1
+21140   fn_bud1
 21160   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-21180   let fnopenprn
-21200   let fn_print_header
+21180   fnopenprn
+21200   fn_print_header
 21220   do 
 21240 READ_CUSTOMER: ! 
 21260     read #h_customer,using 'Form POS 1,C 10,4*C 30,POS 143,7*PD 2,POS 292,PD 4.2,PD 4,12*PD 4.2,POS 388,10*PD 5.2,POS 1741,N 2,N 7,2*N 6,N 9,PD 5.2,N 3,3*N 9,3*N 2,3*N 3,N 1,3*N 9,3*PD 5.2,pos 217,15*pd 5': z$,mat e$,mat a,bal,f,mat g,mat gb,mat extra,mat d eof EO_CUSTOMER
@@ -64,7 +64,7 @@
 21300 !   if env$('client')="Divernon" and bal<0 then goto READ_CUSTOMER
 21320     if env$('client')="Sangamon" and (route_number<prtbkno1 or route_number>prtbkno2) then goto READ_CUSTOMER ! bill certain routes at different billing dates
 21340     if bud1=1 then 
-21360       let fn_bud2
+21360       fn_bud2
 21380       if env$('client')='White Hall' and bd1>0 then goto READ_CUSTOMER ! Never penalize if Budget Billing
 21400       if totba>0 and bd1>0 and f=bildat then goto EO_READ ! Penalize if Budget Bill and Havent Paid Last Bill, Even If BAL <0
 21420       if totba>0 and bd1=0 then goto READ_CUSTOMER ! have budget billing and have paid last bill
@@ -73,19 +73,19 @@
 21480     if env$('client')='Sangamon' then goto EO_READ
 21500     if f<>bildat then goto READ_CUSTOMER
 21520 EO_READ: ! 
-21540     let fn_pencal
+21540     fn_pencal
 21560   loop 
 21580 ! 
 21600 EO_CUSTOMER: ! 
-21620   let fn_print_totals
+21620   fn_print_totals
 21640   close #h_customer: ioerr ignore
 21660   close #h_trans: ioerr ignore
-21680   let fncloseprn
+21680   fncloseprn
 21700   goto XIT
 21720 ! ______________________________________________________________________
 21740 PGOF: ! 
 21760   pr #255: newpage
-21780   let fn_print_header
+21780   fn_print_header
 21800   continue 
 21820 ! ______________________________________________________________________
 21840 XIT: let fnxit
@@ -101,41 +101,41 @@
 22040 ! ______________________________________________________________________
 22060 def fn_scr_main
 22080   SM_ASK: ! 
-22100   let fntos(sn$="ubPenCal")
+22100   fntos(sn$="ubPenCal")
 22120   let mylen=27
 22140   let mypos=mylen+2
-22160   let fnlbl(1,1,"Penalty Date:",mylen,right)
-22180   let fntxt(1,mypos,10,0,1,"1003")
+22160   fnlbl(1,1,"Penalty Date:",mylen,right)
+22180   fntxt(1,mypos,10,0,1,"1003")
 22200   let resp$(1)=str$(pendat)
-22220   let fnlbl(2,1,"Last Billing Date:",mylen,right)
-22240   let fntxt(2,mypos,10,0,1,"1003")
+22220   fnlbl(2,1,"Last Billing Date:",mylen,right)
+22240   fntxt(2,mypos,10,0,1,"1003")
 22260   let resp$(2)=str$(bildat)
-22280   let fnlbl(3,1,"Report Heading Date:",mylen,right)
-22300   let fntxt(3,mypos,20)
+22280   fnlbl(3,1,"Report Heading Date:",mylen,right)
+22300   fntxt(3,mypos,20)
 22320   let resp$(3)=dat$
-22340   let fnchk(4,31,"Print Meter Address:",right)
+22340   fnchk(4,31,"Print Meter Address:",right)
 22360   let resp$(4)="False"
-22380   let fnchk(5,31,"Print Mailing Address:",right)
+22380   fnchk(5,31,"Print Mailing Address:",right)
 22400   let resp$(5)="False"
-22420   let fnlbl(6,1,"Minimum Balance:",mylen,right)
-22440   let fntxt(6,mypos,8,0,1,"10",0,"The customer's balance must be at least this amount before a penalty will be calculated.")
+22420   fnlbl(6,1,"Minimum Balance:",mylen,right)
+22440   fntxt(6,mypos,8,0,1,"10",0,"The customer's balance must be at least this amount before a penalty will be calculated.")
 22460   let resp$(6)=str$(minimumbal)
-22480   let fnfra(8,1,2,45,"Base for calculating penalty","The penalty can either be calculated on current bill or the total balance owed.",0)
-22500   let fnopt(1,2,"Base penalty on current bill",0,1)
+22480   fnfra(8,1,2,45,"Base for calculating penalty","The penalty can either be calculated on current bill or the total balance owed.",0)
+22500   fnopt(1,2,"Base penalty on current bill",0,1)
 22520   let resp$(7)="True"
-22540   let fnopt(2,2,"Base penalty on total balance",0,1)
+22540   fnopt(2,2,"Base penalty on total balance",0,1)
 22560   let resp$(8)="False"
 22580   if env$('client')="Colyell" or env$('client')="Sangamon" or env$('client')="Cerro Gordo" then ! can change the default on that to: Base penalty on total balance
 22600     let resp$(7)="False"
 22620     let resp$(8)="True"
 22640   end if  ! env$('client')=...
-22660   let fncmdset(2)
-22680   let fnacs(sn$,0,mat resp$,ck)
+22660   fncmdset(2)
+22680   fnacs(sn$,0,mat resp$,ck)
 22700   if ck<>5 then 
 22720     let pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
 22740     bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))
 22760     let dat$=resp$(3)
-22780     let fndat(dat$,2)
+22780     fndat(dat$,2)
 22800     if resp$(4)="True" then let printadr=1 ! wants meter address printed
 22820     if resp$(5)="True" then let printmail=1 ! wants meter mailing address
 22840     let minimumbal=val(resp$(6))
@@ -146,26 +146,26 @@
 22940     if resp$(8)="True" then let penaltybase$="Balance" ! base penalties on current balance
 22960     if pendat=0 then 
 22980       let msgline$(1)="You must enter a valid Penalty Date"
-23000       let fnmsgbox(mat msgline$,pause$,'',48)
+23000       fnmsgbox(mat msgline$,pause$,'',48)
 23020       goto SM_ASK
 23040     else if bildat=0 then 
 23060       let msgline$(1)="You must enter a valid Last Billing Date."
-23080       let fnmsgbox(mat msgline$,pause$,'',48)
+23080       fnmsgbox(mat msgline$,pause$,'',48)
 23100       goto SM_ASK
 23120     end if 
 23140     let pendat=fndate_mmddyy_to_ccyymmdd(pendat)
 23160   end if 
 23180 fnend 
 23200 def fn_scr_route_range ! Sangamon's second screen
-23220   let fntos(sn$="ubPenCalb")
-23240   let fnlbl(1,1,"First Route #:",27,1)
-23260   let fntxt(1,29,2,0,1,"30",0,"Enter the first route number that is subject to a penalty on this penalty date")
+23220   fntos(sn$="ubPenCalb")
+23240   fnlbl(1,1,"First Route #:",27,1)
+23260   fntxt(1,29,2,0,1,"30",0,"Enter the first route number that is subject to a penalty on this penalty date")
 23280   let resp$(1)=str$(prtbkno1)
-23300   let fnlbl(2,1,"Last Route #:",27,1)
-23320   let fntxt(2,29,2,0,1,"30")
+23300   fnlbl(2,1,"Last Route #:",27,1)
+23320   fntxt(2,29,2,0,1,"30")
 23340   let resp$(2)=str$(prtbkno2)
-23360   let fncmdset(2)
-23380   let fnacs(sn$,0,mat resp$,ck)
+23360   fncmdset(2)
+23380   fnacs(sn$,0,mat resp$,ck)
 23400   if ck<>5 then 
 23420     let prtbkno1=val(resp$(1))
 23440     let prtbkno2=val(resp$(2))
@@ -338,7 +338,7 @@
 25480   let totb+=bal
 25500   if route_number<0 or route_number>99 then let route_number=99
 25520   let route(route_number)+=sum(pencolumn)
-25540   let fn_print_record
+25540   fn_print_record
 25560   XIT_PENCAL: ! 
 25580 fnend 
 25600 def fn_print_header

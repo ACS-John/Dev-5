@@ -72,7 +72,7 @@
 40180   if ckey=5 then goto Tf_XIT else goto SCREEN_TRANS_GRID
 40200   ! ___________________________________________________________________
 41000   SCREEN_TRANS_GRID: ! r:
-41020   let fntos(sn$="Transaction-2")
+41020   fntos(sn$="Transaction-2")
 41040   stgFlexLine=0
 41080   fnbutton(stgFlexLine+=1,1,'Columns',opt_columns:=6)
 41120   if z$<>'[All]' then
@@ -80,67 +80,67 @@
 41160     fntxt(stgFlexLine,10,10,0,0,'',1)
 41180     resp$(1)=z$
 41200   end if
-41220   let fn_flextran (stgFlexLine+=1,1,0,z$,beg_date,end_date,sel_code)
-41240   let fncmdkey('Print',opt_print:=4,0,0)
-41260   let fncmdkey('Edit',opt_edit:=1,1,0)
-41280   let fncmdkey('Back',opt_back:=2,0,0,'Return to filter selection')
-41300   let fncmdkey('Close',5,0,1)
-41320   let fnacs(sn$,0,mat resp$,ckey)
+41220   fn_flextran (stgFlexLine+=1,1,0,z$,beg_date,end_date,sel_code)
+41240   fncmdkey('Print',opt_print:=4,0,0)
+41260   fncmdkey('Edit',opt_edit:=1,1,0)
+41280   fncmdkey('Back',opt_back:=2,0,0,'Return to filter selection')
+41300   fncmdkey('Close',5,0,1)
+41320   fnacs(sn$,0,mat resp$,ckey)
 41340   if ckey=opt_back then 
 41360     goto SCREEN1
 41380   else if ckey=5 then 
 41400     goto Tf_XIT
 41420   else if opt_columns and ckey=opt_columns then 
-41440     let fn_columnSelect
+41440     fn_columnSelect
 41460   else if ckey=opt_print then 
-41480     let fn_PRINTTRANS
+41480     fn_PRINTTRANS
 41500   else if ckey=opt_edit then 
 41520     if z$='[All]' then let editrec=val(resp$(1)) else editrec=val(resp$(2))
 41540     fn_TransactionEdit(editrec)
 41560   end if 
 41580   goto SCREEN_TRANS_GRID ! /r
 42000   ASKTRANSET: ! r: Def FNASKTRANSET(&CKEY,&SEL_CODE,&BEG_DATE,&END_DATE,&Z$,HACT$*80)
-42020     let fntos(sn$="Transaction-1")
+42020     fntos(sn$="Transaction-1")
 42040     let rc=cf=0
-42060     let fnfra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
+42060     fnfra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
 42080     cf+=1 : let fratype=cf
-42100     let fnopt(1,3,"[All]",0,fratype)
+42100     fnopt(1,3,"[All]",0,fratype)
 42120     if sel_code=1 or sel_code=0 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
-42140     let fnopt(2,3,"Charges",0,fratype)
+42140     fnopt(2,3,"Charges",0,fratype)
 42160     if sel_code=2 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
-42180     let fnopt(3,3,"Penalties",0,fratype)
+42180     fnopt(3,3,"Penalties",0,fratype)
 42200     if sel_code=3 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
-42220     let fnopt(4,3,"Collections",0,fratype)
+42220     fnopt(4,3,"Collections",0,fratype)
 42240     if sel_code=4 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
-42260     let fnopt(5,3,"Credit Memos",0,fratype)
+42260     fnopt(5,3,"Credit Memos",0,fratype)
 42280     if sel_code=5 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
-42300     let fnopt(6,3,"Debit Memos",0,fratype)
+42300     fnopt(6,3,"Debit Memos",0,fratype)
 42320     if sel_code=6 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
-42340     let fnfra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
+42340     fnfra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
 42360     cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
-42380     let fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
-42400     let fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
+42380     fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
+42400     fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
 42420     if beg_date=0 then beg_date=date('mm')*10000+100+date('yy')-1
 42440     let resp$(rc+=1)=str$(beg_date)
-42460     let fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
-42480     let fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
+42460     fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
+42480     fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
 42500     let resp$(rc+=1)=str$(end_date)
-42520     let fnfra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
+42520     fnfra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
 42540     cf+=1 : let fraaccount=cf
-42560     let fnlbl(1,1,"Account:",8,1,0,fraaccount)
+42560     fnlbl(1,1,"Account:",8,1,0,fraaccount)
 42580     if trim$(hact$)='' then 
-42600       let fncmbact(1,10,1,fraaccount)
+42600       fncmbact(1,10,1,fraaccount)
 42620       let rc+=1
 42640       if resp$(rc)="" then let resp$(rc)="[All]"
 42660     else 
-42680       let fntxt(1,10,10,0,1,'',1,'',fraaccount) ! fntxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
+42680       fntxt(1,10,10,0,1,'',1,'',fraaccount) ! fntxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 42700       let resp$(rc+=1)=hact$
 42720     end if 
 42740     if trim$(hact$)<>"" then let resp$(rc)=hact$ else if resp$(rc)="" then let resp$(rc)="[All]"
-42760     let fncmdkey("Next",1,1,0,"Displays a list of transactions on the screen")
-42780     let fncmdkey("Print",2,0,0,"Prints a transaction listing. (To get totals, you can only select one type of transaction at a time.")
-42800     let fncmdkey("Cancel",5,0,1,"Returns to customer record")
-42820     let fnacs(sn$,0,mat resp$,ckey)
+42760     fncmdkey("Next",1,1,0,"Displays a list of transactions on the screen")
+42780     fncmdkey("Print",2,0,0,"Prints a transaction listing. (To get totals, you can only select one type of transaction at a time.")
+42800     fncmdkey("Cancel",5,0,1,"Returns to customer record")
+42820     fnacs(sn$,0,mat resp$,ckey)
 43000     if ckey=5 then goto L810
 43020     if resp$(1)="True" then 
 43040       let sel_code=1
@@ -165,26 +165,26 @@
 46000 def fn_TransactionEdit(editrec)
 46020   open #trans=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",Shr",internal,outin,relative 
 46040   read #trans,using "Form pos 1,c 10,N 8,N 1,pd 4.2",rec=editrec: p$,tdate,tcode,tamount
-46060   let fntos(sn$="Transaction-3")
+46060   fntos(sn$="Transaction-3")
 46080   let lc=rc=0 : let mylen=20 : let mypos=mylen+2
-46100   let fnlbl(lc+=1,1,"Record:",mylen)
-46120   let fntxt(lc,mypos,10,0,0,empty$,1)
+46100   fnlbl(lc+=1,1,"Record:",mylen)
+46120   fntxt(lc,mypos,10,0,0,empty$,1)
 46140   let resp$(rc+=1)=str$(editrec)
-46160   let fnlbl(lc+=1,1,"Customer:",mylen)
-46180   let fntxt(lc,mypos,10,0,0,empty$,1)
+46160   fnlbl(lc+=1,1,"Customer:",mylen)
+46180   fntxt(lc,mypos,10,0,0,empty$,1)
 46200   let resp$(rc+=1)=p$
-46220   let fnlbl(lc+=1,1,"Date:",mylen)
-46240   let fntxt(lc,mypos,10,0,0,"3")
+46220   fnlbl(lc+=1,1,"Date:",mylen)
+46240   fntxt(lc,mypos,10,0,0,"3")
 46260   let resp$(respc_tDate:=rc+=1)=str$(tdate)
-46280   let fnlbl(lc+=1,1,"Type:",mylen)
-46300   let fntxt(lc,mypos,10,0,0,empty$,1)
+46280   fnlbl(lc+=1,1,"Type:",mylen)
+46300   fntxt(lc,mypos,10,0,0,empty$,1)
 46320   let resp$(rc+=1)=transtype$(tcode)
-46340   let fnlbl(lc+=1,1,"Amount:",mylen)
-46360   let fntxt(lc,mypos,10,0,0,"10",1)
+46340   fnlbl(lc+=1,1,"Amount:",mylen)
+46360   fntxt(lc,mypos,10,0,0,"10",1)
 46380   let resp$(rc+=1)=str$(tamount)
-46400   let fncmdkey('Save',1,1,0)
-46420   let fncmdkey('Cancel',5,0,1)
-46440   let fnacs(sn$,0,mat resp$,ckey)
+46400   fncmdkey('Save',1,1,0)
+46420   fncmdkey('Cancel',5,0,1)
+46440   fnacs(sn$,0,mat resp$,ckey)
 46460   if ckey=1 then 
 46480     let tdate=val(resp$(respc_tDate))
 46500     rewrite #trans,using "Form pos 11,N 8",rec=editrec: tdate
@@ -206,7 +206,7 @@
 48240   let msgbox$(1)="Include balance column?"
 48260   let msgbox$(2)="The balances listed were the account balance at the time the transaction completed"
 48280   let msgbox$(3)="and will be misleading if transactions were processed out of date sequence."
-48300   let fnmsgbox(mat msgbox$,resp$,cap$,32+3+msgbox_default)
+48300   fnmsgbox(mat msgbox$,resp$,cap$,32+3+msgbox_default)
 48320   if resp$='Cancel' then goto PT_XIT
 48340   if resp$='Yes' then 
 48360     let print_balance=1
@@ -214,7 +214,7 @@
 48400     let print_balance=0
 48420   end if 
 48440   ! /r
-48460   let fnopenprn
+48460   fnopenprn
 48480   if trim$(servicename$(3))<>"Electric" and srv$(3)="EL" then let ptShowElecUsed=1 ! electric readings are being used for a reduction meter
 48500   if trim$(servicename$(4))<>"Gas" and srv$(4)="GA" then let ptShowGasUsed=1 ! gas readings are being used for a reduction meter
 48520   if trim$(z$)="[All]" then let hd1$="    {\ul Account        Date   }" else let hd1$="    {\ul    Date   }"
@@ -352,7 +352,7 @@
 51160   PT_NO_CUSTOMER: ! 
 51180   close #h_customer: ioerr ignore
 51200   close #trans: ioerr ignore
-51220   let fncloseprn
+51220   fncloseprn
 51240   PT_XIT: ! 
 51260 fnend
 62000 def fn_flextran(myline,mypos; hTrans,z$,begdate,enddate,selcode)
@@ -466,7 +466,7 @@
 68180     if colEnabled(colEnabledItem+=1) then
 68200       let item$(items+=1)=str$(tbal)
 68220     end if
-68240     let fnflexadd1(mat item$) 
+68240     fnflexadd1(mat item$) 
 68260   loop
 68280   FlexTranFinis: ! 
 68300   if close_hTrans=1 then close #hTrans: : close_hTrans=0

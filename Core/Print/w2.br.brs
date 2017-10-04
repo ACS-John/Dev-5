@@ -83,7 +83,7 @@
 15680   end if
 17000   ASK_INFO: !
 17020   ! r: build and display the ASK_INFO screen
-17040   let fntos(sn$="Prw2-2")
+17040   fntos(sn$="Prw2-2")
 17060   let rc=cf=0: let mylen=21: let mypos=mylen+2 
 17080    if enableAskCLocality then 
 17100      fraWidth=94
@@ -132,29 +132,29 @@
 17960   let resp$(resp_namcde:=rc+=1)=nameFormat$
 17980   !
 18000   fra2Height=5 : fra2Y=fraGeneralHeight+3
-18020   let fnfra(fra2Y,1,fra2Height,fraWidth,"Print W-2s","",0)
+18020   fnfra(fra2Y,1,fra2Height,fraWidth,"Print W-2s","",0)
 18040   cf+=1 : let franum=cf : lc=0
 18060   mylen=46: let mypos=mylen+2
-18080   let fnlbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
-18100   let fntxt(1,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .062.",franum)
+18080   fnlbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
+18100   fntxt(1,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .062.",franum)
 18120   let resp$(respc_ssrate:=rc+=1)=str$(ssrate)
-18140   let fnlbl(2,1,"Maximum Wage Subject to SS Withholdings:",mylen,1,0,franum)
-18160   let fntxt(2,mypos,10,0,1,"10",disableSSMCedit,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum)
+18140   fnlbl(2,1,"Maximum Wage Subject to SS Withholdings:",mylen,1,0,franum)
+18160   fntxt(2,mypos,10,0,1,"10",disableSSMCedit,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum)
 18180   let resp$(respc_ssmax:=rc+=1)=str$(ssmax)
-18200   let fnlbl(4,1,"Medicare Withholding Rate:",mylen,1,0,franum)
-18220   let fntxt(4,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .0145 .",franum)
+18200   fnlbl(4,1,"Medicare Withholding Rate:",mylen,1,0,franum)
+18220   fntxt(4,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .0145 .",franum)
 18240   let resp$(respc_mcrate:=rc+=1)=str$(mcrate)
-18260   let fnlbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
-18280   let fntxt(5,mypos,10,0,1,"10",disableSSMCedit,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum)
+18260   fnlbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
+18280   fntxt(5,mypos,10,0,1,"10",disableSSMCedit,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum)
 18300   let resp$(respc_mcmax:=rc+=1)=str$(mcmax)
 18320   !
 18340   fra3Y=fra2Y+fra2Height+2 : fra3Height=6
-18360   let fnfra(fra3Y,1,fra3Height,fraWidth,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.")
+18360   fnfra(fra3Y,1,fra3Height,fraWidth,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.")
 18380   cf+=1 : let franum=cf : let mylen=26 : let mypos=mylen+2
-18400   let fnopt(1,3,"Print W-2",0,franum)
+18400   fnopt(1,3,"Print W-2",0,franum)
 18420   let resp$(respc_PrintW2:=rc+=1)=w2destinationOpt$(1)
 18440   fnlbl(1,fraWidth-50,"(2 per page is not yet available with Backgrounds)",50,1,0,franum)
-18460   let fnlbl(2,5,"Copy:",12,1,0,franum)
+18460   fnlbl(2,5,"Copy:",12,1,0,franum)
 18480   fncomboa('w2Copy',2,19,mat optW2Copy$, '',20,franum)
 18500   let resp$(respc_w2copy:=rc+=1)=w2Copy$
 18520   fnchk(2,68,'W-2 - Enable Background',1,franum)
@@ -174,26 +174,26 @@
 18820   !
 18840   if enablePayrollDeductions then
 18860     fra4Y=fra3y+fra3Height+2 ! 25
-18880     let fnfra(fra4Y,1,2,fraWidth,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.")
+18880     fnfra(fra4Y,1,2,fraWidth,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.")
 18900     cf+=1 : let franum=cf
-18920     let fnlbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
-18940     let fntxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
+18920     fnlbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
+18940     fntxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 18960     let resp$(respc_qpenplan:=rc+=1)=str$(pn1)
-18980     let fnlbl(2,1,"Dependent Care Benefits:",mylen,1,0,franum)
-19000     let fntxt(2,mypos,2,0,1,"30",0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
+18980     fnlbl(2,1,"Dependent Care Benefits:",mylen,1,0,franum)
+19000     fntxt(2,mypos,2,0,1,"30",0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 19020     let resp$(respc_depCareBen:=rc+=1)=str$(dc1)
 19040   else if enableAskState then
 19060     fra4Y=fra3y+fra3Height+2 ! 25
-19080     let fnfra(fra4Y,1,2,fraWidth,"State","")
+19080     fnfra(fra4Y,1,2,fraWidth,"State","")
 19100     cf+=1 : let franum=cf
-19120     let fnlbl(1,1,"State Name:",mylen,1,0,franum)
-19140     let fntxt(1,mypos,2,0,1,"",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
+19120     fnlbl(1,1,"State Name:",mylen,1,0,franum)
+19140     fntxt(1,mypos,2,0,1,"",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 19160     let resp$(respc_state:=rc+=1)=state$
 19180   end if
-19200   let fncmdkey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
-19220   let fncmdkey("&Next",1,1,0,"Proceed to next screen.")
-19240   let fncmdkey("&Cancel",5,0,1,"Returns to menu")
-19260   let fnacs(sn$,0,mat resp$,ckey)
+19200   fncmdkey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
+19220   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
+19240   fncmdkey("&Cancel",5,0,1,"Returns to menu")
+19260   fnacs(sn$,0,mat resp$,ckey)
 19280   ! /r
 20000   ! r: ASK_INFO screen - respond to FKeys, and get local values from mat resp$
 20020   if ckey=5 then 
@@ -260,7 +260,7 @@
 21300 !     end if 
 21320       goto ASK_INFO
 21340     else if ckey=ckey_margins then
-21360       let fn_ask_margins
+21360       fn_ask_margins
 21380       goto ASK_INFO
 21400     end if
 21420     if beg_date=0 or end_date=0 then goto ASK_INFO

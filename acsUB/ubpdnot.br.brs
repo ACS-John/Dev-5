@@ -13,13 +13,13 @@
 00132   dim tmp_rtf_filename$*1024
 00140 ! /r
 00142 ! r: top of programs, constants,initial setup, etc
-00150   let fntop(program$,cap$="Past Due Notices")
+00150   fntop(program$,cap$="Past Due Notices")
 00170   let tmp_rtf_filename$=fnprint_file_name$
-00180   let fnget_atlantis(atlantis$)
-00190   let fncno(cno)
+00180   fnget_atlantis(atlantis$)
+00190   fncno(cno)
 00202   if env$('client')='French Settlement' or env$('client')='Granby' or env$('client')='Eldorado' then let hard_coded=1 ! env$('client')='Merriam Woods' or
-00210   let fnd1(d1)
-00220   let fndat(d$(4))
+00210   fnd1(d1)
+00220   fndat(d$(4))
 00230   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
 00240   read #21,using "Form POS 1,3*C 40": at$(1),at$(2),at$(3)
 00250   close #21: 
@@ -42,38 +42,38 @@
 00382   F_CUSTOMER: form pos 1,c 10,c 30,x 90,c 12,pos 361,2*c 12,pos 143,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,10*pd 5.2,pos 1741,n 2,pos 1821,n 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 00390 goto MENU1 ! /r
 00400 MENU1: ! r:
-00410   let fntos(sn$="UBPdNot1")
+00410   fntos(sn$="UBPdNot1")
 00420   let respc=0
-00430   let fnlbl(2,1,"@D1=Last Billing Date (mmddyy):",38,1)
-00440   let fntxt(2,40,8,0,1,"1")
+00430   fnlbl(2,1,"@D1=Last Billing Date (mmddyy):",38,1)
+00440   fntxt(2,40,8,0,1,"1")
 00450   let resp$(respc+=1)=str$(d1)
-00460   let fnlbl(3,1,"@D2= Payment Due Date (mmddyy):",38,1)
-00470   let fntxt(3,40,8,0,1,"1")
+00460   fnlbl(3,1,"@D2= Payment Due Date (mmddyy):",38,1)
+00470   fntxt(3,40,8,0,1,"1")
 00480   let resp$(respc+=1)=str$(d2)
-00490   let fnlbl(4,1,"@D3=    Shut Off Date (mmddyy):",38,1)
-00500   let fntxt(4,40,8,0,1,"1")
+00490   fnlbl(4,1,"@D3=    Shut Off Date (mmddyy):",38,1)
+00500   fntxt(4,40,8,0,1,"1")
 00510   let resp$(respc+=1)=str$(d3)
-00520   let fnlbl(5,1,"@D4=            Date of Notice:",38,1)
-00530   let fntxt(5,40,20,20)
+00520   fnlbl(5,1,"@D4=            Date of Notice:",38,1)
+00530   fntxt(5,40,20,20)
 00540   let resp$(respc+=1)=d$(4)
-00550   let fnlbl(6,1,"Minimum balance required:",38,1)
-00560   let fntxt(6,40,10,10,0,"10")
+00550   fnlbl(6,1,"Minimum balance required:",38,1)
+00560   fntxt(6,40,10,10,0,"10")
 00570   let resp$(respc+=1)=""
-00580   let fnfra(8,5,6,50,"Print all customers who:")
-00590   let fnopt(1,1,"Have not paid their current bill",0,1)
+00580   fnfra(8,5,6,50,"Print all customers who:")
+00590   fnopt(1,1,"Have not paid their current bill",0,1)
 00600   if deltype<=1 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
-00610   let fnopt(2,1,"Have not paid their prior month's bill",0,1)
+00610   fnopt(2,1,"Have not paid their prior month's bill",0,1)
 00620   if deltype=2 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
-00630   let fnopt(3,1,"Are Active",0,1)
+00630   fnopt(3,1,"Are Active",0,1)
 00640   if deltype=3 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
-00650   let fnopt(4,1,"Are Final Billed Customers and have not paid",0,1)
+00650   fnopt(4,1,"Are Final Billed Customers and have not paid",0,1)
 00660   if deltype=4 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
-00670   let fnopt(5,1,"Have a balance",0,1)
+00670   fnopt(5,1,"Have a balance",0,1)
 00680   if deltype=5 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
-00690   let fnopt(6,1,"Who Were Billed This Month",0,1)
+00690   fnopt(6,1,"Who Were Billed This Month",0,1)
 00700   if deltype=6 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
-00710   let fncmdset(2)
-00720   let fnacs(sn$,0,mat resp$,ckey)
+00710   fncmdset(2)
+00720   fnacs(sn$,0,mat resp$,ckey)
 00730   if ckey=5 then goto XIT
 00740   let d$(1)=cnvrt$("PIC(##/##/##)",d1=val(resp$(1)))
 00750   let d$(2)=cnvrt$("PIC(##/##/##)",d2=val(resp$(2)))
@@ -84,7 +84,7 @@
 00800     if uprc$(resp$(a))=uprc$("True") then let deltype=a-5
 00810     let resp$(a)=""
 00820   next a
-00822   let fnreg_write('UB - Past Due Notices - Delinquent Type',str$(deltype))
+00822   fnreg_write('UB - Past Due Notices - Delinquent Type',str$(deltype))
 01090   goto UBFORM ! /r
 01100 ! ______________________________________________________________________
 01110 PRINT_NEXT: ! r: the main read it and pr it routine
@@ -122,34 +122,34 @@
 01430 ! end if 
 01455 ! L940: ! /r
 01460   if reminder=1 then 
-01465     let fn_vbprint
+01465     fn_vbprint
 01470   else if env$('client')="Granby" then 
-01472     let fn_print_granby
+01472     fn_print_granby
 01474   else if env$('client')="Eldorado" then 
-01476     let fn_eldorado
+01476     fn_eldorado
 01478   else if env$('client')="French Settlement" then 
-01480     let fn_french_settlement_gas
+01480     fn_french_settlement_gas
 01482 ! else if env$('client')="Merriam Woods" then
-01484 !   let fn_merriam_woods
+01484 !   fn_merriam_woods
 01490   else if do_print_std_form=1 then 
-01495     let fn_print_standard_form
+01495     fn_print_standard_form
 01500   else 
-01505     let fn_prnt1
+01505     fn_prnt1
 01510   end if 
-01515   let fn_report_add
+01515   fn_report_add
 01520   goto PRINT_NEXT
 01525 ! /r
 16000   def fn_open_template
 16020     if ~h_template then 
 16040       open #h_template:=fngethandle: "Name="&env$('Q')&"\UBmstr\"&flname$&",RecL=1",external,input,relative 
 16060     end if 
-16080     let fn_open_template=h_template
+16080     fn_open_template=h_template
 16100   fnend  ! fn_open_template
 18000   def fn_prnt1
 18020     if ~h_prnt1 then 
 18040       open #h_prnt1:=fngethandle: "Name="&tmp_rtf_filename$&",eol=none,Replace",display,output 
 18060     end if 
-18080     let fn_bldr1
+18080     fn_bldr1
 18100     let r=0
 18120 P1_NEXT_LN: ! 
 18140     let ln$=""
@@ -262,7 +262,7 @@
 20280   fnend  ! fn_bldr1
 30000   def fn_vbopenprint
 30020     let h_vb_pr_out:=20
-30040     let fnpa_open
+30040     fnpa_open
 30080     let lyne=3
 30120     let spacer=0
 30160   fnend  ! fn_vbopenprint
@@ -297,25 +297,25 @@
 30740     checkcounter+=1
 30760     let spacer+=90
 30780     if checkcounter=3 then 
-30800       let fnpa_newpage
+30800       fnpa_newpage
 30820       checkcounter=0
 30840       let spacer=0
 30860     end if  ! checkcounter=3
-30880     let fn_report_add
+30880     fn_report_add
 30900   fnend 
 30920   def fn_report_close
 30940     if h_ra then 
 30960       dim ra_line$*256
 30980       close #h_ra: 
 31000       open #h_ra: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256',display,input 
-31020       let fnopenprn(0,0,0,0, 'Summary')
+31020       fnopenprn(0,0,0,0, 'Summary')
 31040       gosub RC_HDR
 31060       do 
 31080         linput #h_ra: ra_line$ eof RC_DONE
 31100         pr #255: rtrm$(ra_line$) pageoflow RC_PGOF ! ,using 'form pos 1,c 256'
 31120       loop 
 31140 RC_DONE: ! 
-31160       let fncloseprn
+31160       fncloseprn
 31180       close #h_ra,free: 
 31200       let h_ra=0
 31220     end if  ! h_ra
@@ -352,7 +352,7 @@
 31860   def fn_print_standard_form
 31880     if a(1)=0 then let water$="     " else let water$="Water"
 31900     if a(4)=0 then let gas$="   " else let gas$="Gas"
-31920     let fnopenprn(cp,33,220,process)
+31920     fnopenprn(cp,33,220,process)
 31940     for j=1 to 4 : pr #255: "" : next j
 31960     for j=1 to 3 : pr #255,using "Form pos 7,C 40": at$(j) : next j
 31980     for j=1 to 3 : pr #255: "" : next j
@@ -370,7 +370,7 @@
 32220     pr #255: newpage
 32240   fnend 
 32260   def fn_print_granby
-32280     let fnopenprn
+32280     fnopenprn
 32300     pr #255,using L3620: e$(1)
 32320 L3620: form pos 4,c 47,skip 4
 32340     if gb(1)=0 then 
@@ -415,7 +415,7 @@
 33120     end if 
 33140   fnend  ! fn_print_granby
 33160   def fn_eldorado
-33180     let fnopenprn
+33180     fnopenprn
 33200     pr #255,using 'form skip 8,pos 37,c 30': e$(2)
 33220     pr #255,using 'form pos 37,c 30': e$(3)
 33240     pr #255,using 'form pos 37,c 30': e$(4)
@@ -434,7 +434,7 @@
 33500     end if 
 33520   fnend  ! fn_eldorado
 34000   def fn_french_settlement_gas
-34020     let fnopenprn
+34020     fnopenprn
 34040 ! ______________pre-print calculations__________________________________
 34060     if pb<>0 then let pb$="Prior Balance" else let pb$=""
 34080     if g(1)=0 then let t1$="" else let t1$="WTR"
@@ -496,7 +496,7 @@
 35200   fnend 
 36000 UBFORM: ! r: pr FROM TEXT FILE
 36020   dim file_rtf$(1)*512
-36060   let fngetdir2(env$('Q')&"\UBmstr",mat file_rtf$, '/ON','*.rtf')
+36060   fngetdir2(env$('Q')&"\UBmstr",mat file_rtf$, '/ON','*.rtf')
 36080   let fl1=udim(mat file_rtf$)
 36100   for fl1=1 to udim(mat file_rtf$)
 36120     let file_rtf$(fl1)=file_rtf$(fl1)
@@ -522,20 +522,20 @@
 38320 !     if bal<=0 then let g(10)=0
 38340 !     let gross=max(bal+g(10),0)
 38360 ! ! ______________actual Bill Printing____________________________________
-38560 !     let fnpast_due_notice(z$)
+38560 !     fnpast_due_notice(z$)
 39180 ! ! _____________end_________________
 39200 ! /r  fnend
 40000 SELECT_SCREEN: ! r:
-40020   let fn_report_close
-40040   let fntos(sn$="Select_and_Book")
+40020   fn_report_close
+40040   fntos(sn$="Select_and_Book")
 40060   mat resp$=("")
 40080   let respc=0
-40100   let fnlbl(1,1,"File Name:",28,1)
+40100   fnlbl(1,1,"File Name:",28,1)
 40120   if hard_coded then 
-40140     let fntxt(1,30,10,0,0,'',1,'',0)
+40140     fntxt(1,30,10,0,0,'',1,'',0)
 40160     let resp$(respc+=1)='hard coded'
 40180   else 
-40200     let fncomboa("PDNOTRTF",1,30,mat file_rtf$)
+40200     fncomboa("PDNOTRTF",1,30,mat file_rtf$)
 40220 ! resp$(respc+=1)=file_rtf$(1)
 40240     if env$('client')='White Hall' then 
 40260       let resp$(respc+=1)='White_Ha'
@@ -543,29 +543,29 @@
 40300       let resp$(respc+=1)='ASHGROVE'
 40320     else 
 40330       let respc+=1
-40332       let fncreg_read('ubpdnot_file_name',resp$(respc))
+40332       fncreg_read('ubpdnot_file_name',resp$(respc))
 40340       if resp$(respc)='' or srch(mat file_rtf$,resp$(respc))<=0 then let resp$(respc)=file_rtf$(1)
 40360     end if 
 40380   end if 
-40400   let fnlbl(3,1,"Route Number:",28,1)
-40420   let fncmbrt2(3,30)
+40400   fnlbl(3,1,"Route Number:",28,1)
+40420   fncmbrt2(3,30)
 40440   let resp$(respc+=1)="[All]"
-40460   let fnlbl(4,1,"Beginning Account:",28,1)
-40480   let fncmbact(4,30,1)
+40460   fnlbl(4,1,"Beginning Account:",28,1)
+40480   fncmbact(4,30,1)
 40500   let resp$(respc+=1)="[All]"
-40520   let fnchk(6,30,"Print only Selected Accounts")
+40520   fnchk(6,30,"Print only Selected Accounts")
 40540 ! let fncmdset(102)
-40560   let fncmdkey("&Print",1,1)
+40560   fncmdkey("&Print",1,1)
 40580   if ~hard_coded then let fncmdkey("E&dit",3)
 40600   if ~hard_coded then let fncmdkey("&Add",4)
 40620   if ~hard_coded then let fncmdkey("&Delete",7)
 40640   if ~hard_coded then let fncmdkey("&Refresh",6)
-40660   let fncmdkey("&Cancel",5,0,1)
-40680   let fnacs(sn$,0,mat resp$,ckey)
+40660   fncmdkey("&Cancel",5,0,1)
+40680   fnacs(sn$,0,mat resp$,ckey)
 40700   let do_print_std_form=0
 40720   dim flname$*256
 40740   let flname$=rtrm$(resp$(1))
-40750   let fncreg_write('ubpdnot_file_name',flname$)
+40750   fncreg_write('ubpdnot_file_name',flname$)
 40760   if resp$(2)<>"[All]" then 
 40762     bk1=val(resp$(2))
 40764     let resp$(2)=""
@@ -593,7 +593,7 @@
 40880   else if ckey=1 then ! pr the Past Due Notices
 40900     count=0
 40920     if resp$(1)="(Reminder)" then 
-40940       let fn_vbopenprint
+40940       fn_vbopenprint
 40960       let reminder=1
 40980     else 
 41000       let resp$(1)=""
@@ -607,13 +607,13 @@
 41160   else if resp$(1)="(Pre-Printed)" or resp$(1)="(Reminder)" and ckey<>4 then 
 41180     goto SELECT_SCREEN ! CANT EDIT STANDARD FORM
 41200   else if ckey=4 then ! r: Add
-41220     let fntos(sn$="Select_Name")
+41220     fntos(sn$="Select_Name")
 41240     let respc=0
-41260     let fnlbl(1,1,"File Name:",15,1)
-41280     let fntxt(1,17,40,64,1,"")
+41260     fnlbl(1,1,"File Name:",15,1)
+41280     fntxt(1,17,40,64,1,"")
 41300     let resp$(respc+=1)=""
-41320     let fncmdset(2)
-41340     let fnacs(sn$,0,mat resp$,ckey)
+41320     fncmdset(2)
+41340     fnacs(sn$,0,mat resp$,ckey)
 41360     if ckey=5 then goto MENU1
 41380     dim newname$*256
 41400     let newname$=trim$(resp$(1))&'.rtf' ! &".rtf" ! trim$(resp$(1)(1:8))&".rtf"
@@ -654,13 +654,13 @@
 44520     goto PRINT_NEXT
 44540   end if  ! /r
 44560 ASK_NEXT_ACT: ! r:
-44580   let fntos(sn$="UBPdNot-5")
+44580   fntos(sn$="UBPdNot-5")
 44600   let respc=0
-44620   let fnlbl(1,1,"Next Account:",18,1)
-44640   let fncmbact(1,20,1)
+44620   fnlbl(1,1,"Next Account:",18,1)
+44640   fncmbact(1,20,1)
 44660   let resp$(respc+=1)=""
-44680   let fncmdset(19)
-44700   let fnacs(sn$,0,mat resp$,ckey)
+44680   fncmdset(19)
+44700   fnacs(sn$,0,mat resp$,ckey)
 44720   if ckey=5 then 
 44740     goto XIT
 44760   else if ckey=2 then 
@@ -676,7 +676,7 @@
 44960   goto READ_ADRBIL ! /r
 46000 EO_CUSTOMER: ! r:
 46020 ! if env$('client')='Merriam Woods' then
-46040 !   let fnpast_due_notice_finis
+46040 !   fnpast_due_notice_finis
 46060 ! else 
 46080   if ~reminder then 
 46100     restore #customer1: ! Close #customer1: Ioerr 980
@@ -685,22 +685,22 @@
 46160       close #h_prnt1: : let h_prnt1=0
 46180       execute 'SY -w '&atlantis$&' "'&os_filename$(tmp_rtf_filename$)&'" -n'
 46200     else 
-46220       let fncloseprn
+46220       fncloseprn
 46240     end if 
 46260     goto SELECT_SCREEN ! XIT
 46280   end if 
 46300   close #customer1: ioerr ignore
 46320   customer1=0
-46340   let fnpa_finis(h_vb_pr_out)
+46340   fnpa_finis(h_vb_pr_out)
 46360 ! end if
 46380 ! 
 46400   if h_prnt1 then 
 46420     close #h_prnt1: : let h_prnt1=0
 46440     execute 'SY -w '&atlantis$&' "'&os_filename$(tmp_rtf_filename$)&'" -n'
 46460   else 
-46480     let fncloseprn
+46480     fncloseprn
 46500   end if  ! /r
 48000 XIT: ! r:
-48020   let fn_report_close
-48040   let fnxit
+48020   fn_report_close
+48040   fnxit
 48060 ! /r

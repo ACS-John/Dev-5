@@ -8,8 +8,8 @@
 00080   dim pdate$(2)*20,de$*50,sm1$(6)*37,sf1$(6),d(2)
 00090   dim d$*30,key$*9,nkey$*9,flo$(4),fli$(3),scr$(3)
 00100 ! ______________________________________________________________________
-00110   let fncno(cno,cnam$)
-00120   let fndat(dat$)
+00110   fncno(cno,cnam$)
+00120   fndat(dat$)
 00130 ! 
 00140   let hp1=26-int(len(ltrm$(rtrm$(cnam$)))/2) !:
         let hp2=26-int(len(ltrm$(rtrm$(dat$)))/2)
@@ -166,7 +166,7 @@
 01590   pr fields "11,18,C 41,R,N": "              IN PROCESS"
 01600   pr fields "13,30,C 16,R,N": "PRESS F5 TO STOP"
 01610   on fkey 5 goto L1720
-01620   let fnopenprn(cp,58,220,process)
+01620   fnopenprn(cp,58,220,process)
 01630   gosub L1690
 01640 L1640: read #1,using L1250: fun,dpt,d$ eof L1720
 01650   pr #255,using L1660: fun,dpt,d$ pageoflow L1680

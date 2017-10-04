@@ -1,8 +1,8 @@
 00020   library "S:\Core\Library.br": fnopenprn,fncloseprn,fncno,fnxit,fntop
 00040   on error goto L2780
-00070   let fntop(program$,cap$="Unbilled Work In Process")
-00080   let fncno(cno,cnam$)
-00090   let fnopenprn
+00070   fntop(program$,cap$="Unbilled Work In Process")
+00080   fncno(cno,cnam$)
+00090   fnopenprn
 00100   dim cnam$*40,cat$(30)*30,cliprt$*5,cap$*128
 00110   dim l$(20,2)*25,l(20,2),s(13)
 00120   dim z$*5,cliname$*30,ca(10),ta(25,2),fb(25),empname$*25,scdesc$*30
@@ -287,5 +287,5 @@
 02910   def fndate_mmddyy_to_ccyymmdd(x)
 02920     let x2=(x-int(x*.01)*100)*10000+int(x*.01)
 02930     if int(x2*.0001)<90 then let x2=x2+20000000 else let x2=x2+19000000
-02940     let fndate_mmddyy_to_ccyymmdd=x2
+02940     fndate_mmddyy_to_ccyymmdd=x2
 02950   fnend 

@@ -10,9 +10,9 @@
 00100   dim scid$*79
 00110   dim sd$(8),se$(8)*30,pl$(8,2)*35
 00120 ! ______________________________________________________________________
-00130   let fntop("S:\acsGL\VendorTransList",cap$="Dump Old Payee Transactions")
-00140   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00130   fntop("S:\acsGL\VendorTransList",cap$="Dump Old Payee Transactions")
+00140   fncno(cno,cnam$) !:
+        fndat(dat$)
 00150   open #payee=1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00160   open #payee2=11: "Name="&env$('Q')&"\GLmstr\paymstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\payidx2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00170   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -21,14 +21,14 @@
 00200 ! _________________________
 00210 MENU1: ! 
 00220 ASKDAT: ! 
-00230   let fntos(sn$="DumpVendorTrans") !:
+00230   fntos(sn$="DumpVendorTrans") !:
         let mylen=35 : let mypos=mylen+2
-00240   let fnlbl(1,1,"Oldest Transaction Date to Retain:",mylen,right)
-00250   let fntxt(1,mypos,8,0,left,'CCYYMMDD',0,'All payee transactions older than the date you enter here will be removed.') !:
+00240   fnlbl(1,1,"Oldest Transaction Date to Retain:",mylen,right)
+00250   fntxt(1,mypos,8,0,left,'CCYYMMDD',0,'All payee transactions older than the date you enter here will be removed.') !:
         let resp$(1)=str$(oldestdate)
-00255   let fnlbl(1,50,"")
-00260   let fncmdset(2)
-00270   let fnacs(sn$,0,mat resp$,ckey)
+00255   fnlbl(1,50,"")
+00260   fncmdset(2)
+00270   fnacs(sn$,0,mat resp$,ckey)
 00280   if ckey=5 then goto XIT
 00290   let oldestdate=val(resp$(1))
 00300 L300: read #trans,using L320: trvn$,dt,am,rn$,de$ eof XIT

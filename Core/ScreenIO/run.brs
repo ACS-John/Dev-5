@@ -10,32 +10,32 @@
  !
 
     def library fnRun(Screen$*255;key$*255,ParentKey$*255,DisplayOnly,ParentWindow,DontRedoListviews) ! Run a screen through a function
-       let fnEstablishLibraryLinkage
-       let fnCallScreen$(Screen$,key$,ParentKey$,DisplayOnly,ParentWindow,DontRedoListviews)
+       fnEstablishLibraryLinkage
+       fnCallScreen$(Screen$,key$,ParentKey$,DisplayOnly,ParentWindow,DontRedoListviews)
     fnend
 
     def library fnRunTab(&ExitMode,TabExitMode,Screen$*255;key$*255,ParentKey$*255,DisplayOnly,ParentWindow,DontRedoListviews) ! Run a screen on a tab
-       let fnEstablishLibraryLinkage
+       fnEstablishLibraryLinkage
        if len(trim$(fnCallScreen$(Screen$,key$,ParentKey$,DisplayOnly,ParentWindow,DontRedoListviews))) and fkey<>92 then
-          let fnRunTab=1
+          fnRunTab=1
        end if
        if fkey=92 then let ExitMode=TabExitMode
     fnend
 
     def library fnTabs(mat Screen$,mat Caption$;Key$*255,ParentKey$*255,FileLay$,Parentwindow,StartScreen,BlockESC,ExitOnCancel,Predraw,MsgScreen$,MsgRow,MsgCol,Debug,RecordNum,Path$*255,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers)
-       let fnTabs=fnReturnValue(fn_Tabs$(mat Screen$,mat Caption$,0,0,Predraw,MsgScreen$,MsgRow,MsgCol,StartScreen,BlockESC,ExitOnCancel,Key$,ParentKey$,Debug,ParentWindow,FileLay$,RecordNum,Path$,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers))
+       fnTabs=fnReturnValue(fn_Tabs$(mat Screen$,mat Caption$,0,0,Predraw,MsgScreen$,MsgRow,MsgCol,StartScreen,BlockESC,ExitOnCancel,Key$,ParentKey$,Debug,ParentWindow,FileLay$,RecordNum,Path$,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers))
     fnend
 
     def library fnTabs$(mat Screen$,mat Caption$;Key$*255,ParentKey$*255,FileLay$,Parentwindow,StartScreen,BlockESC,ExitOnCancel,Predraw,MsgScreen$,MsgRow,MsgCol,Debug,RecordNum,Path$*255,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers)
-       let fnTabs$=fn_Tabs$(mat Screen$,mat Caption$,0,0,Predraw,MsgScreen$,MsgRow,MsgCol,StartScreen,BlockESC,ExitOnCancel,Key$,ParentKey$,Debug,ParentWindow,FileLay$,RecordNum,Path$,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers)
+       fnTabs$=fn_Tabs$(mat Screen$,mat Caption$,0,0,Predraw,MsgScreen$,MsgRow,MsgCol,StartScreen,BlockESC,ExitOnCancel,Key$,ParentKey$,Debug,ParentWindow,FileLay$,RecordNum,Path$,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers)
     fnend
 
     def library fnRunTabs(mat Screen$,mat Caption$,Rows,Cols;InsideScreen,Predraw,MsgScreen$,MsgRow,MsgCol,StartScreen,BlockESC,ExitOnCancel,Key$*255,ParentKey$*255,Debug,Parentwindow,FileLay$,RecordNum,Path$*255,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers,DisplayOnly)
-       let fnRunTabs=fnReturnValue(fn_Tabs$(mat Screen$,mat Caption$,Rows,Cols,Predraw,MsgScreen$,MsgRow,MsgCol,StartScreen,BlockESC,ExitOnCancel,Key$,ParentKey$,Debug,ParentWindow,FileLay$,RecordNum,Path$,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers,DisplayOnly))
+       fnRunTabs=fnReturnValue(fn_Tabs$(mat Screen$,mat Caption$,Rows,Cols,Predraw,MsgScreen$,MsgRow,MsgCol,StartScreen,BlockESC,ExitOnCancel,Key$,ParentKey$,Debug,ParentWindow,FileLay$,RecordNum,Path$,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers,DisplayOnly))
     fnend
 
     def library fnRunTabs$(mat Screen$,mat Caption$,Rows,Cols;InsideScreen,Predraw,MsgScreen$,MsgRow,MsgCol,StartScreen,BlockESC,ExitOnCancel,Key$*255,ParentKey$*255,Debug,ParentWindow,FileLay$,RecordNum,Path$*255,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers,DisplayOnly)
-       let fnRunTabs$=fn_Tabs$(mat Screen$,mat Caption$,Rows,Cols,Predraw,MsgScreen$,MsgRow,MsgCol,StartScreen,BlockESC,ExitOnCancel,Key$,ParentKey$,Debug,ParentWindow,FileLay$,RecordNum,Path$,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers,DisplayOnly)
+       fnRunTabs$=fn_Tabs$(mat Screen$,mat Caption$,Rows,Cols,Predraw,MsgScreen$,MsgRow,MsgCol,StartScreen,BlockESC,ExitOnCancel,Key$,ParentKey$,Debug,ParentWindow,FileLay$,RecordNum,Path$,AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers,DisplayOnly)
     fnend
 
     dim F$(1)*1024, F(1)
@@ -45,9 +45,9 @@
     dim Form$(1)*255
 
     def fn_Tabs$(mat Screen$,mat Caption$;Rows,Cols,Predraw,MsgScreen$,MsgRow,MsgCol,StartScreen,BlockESC,ExitOnCancel,&Key$,&ParentKey$,Debug,ParentWindow,FileLay$,RecordVal,&Path$,&AskSaveTogether,mat IgnoreStrings,mat IgnoreNumbers,DisplayOnly,___,Index,CurrentScreen,dummy$,ReturnValue$*255,Return$*255,StartTime,ParentWindow$,FileNumber,Skip,ScreenIO,BigRow,BigCol,NAttr$*255,Choice,SaveKey$*127,SaveRecord,HiddenWindow,HiddenInput$,CancelledExit)
-       let fnEstablishLibraryLinkage
+       fnEstablishLibraryLinkage
 
-       let fnPushData(1)
+       fnPushData(1)
 
        dim Inputwindows(1)
        dim PredrawWindows(1)
@@ -192,7 +192,7 @@
                 end if
 
                 if CurrentScreen=1 and fkey<>92 then
-                   let fn_Tabs$=ReturnValue$
+                   fn_Tabs$=ReturnValue$
                 end if
                 let scr_freeze
 
@@ -237,7 +237,7 @@
              end if
           end if
           if len(FileLay$) then
-             let fnCloseFile(FileNumber,FileLay$,"",1)
+             fnCloseFile(FileNumber,FileLay$,"",1)
           end if
        end if
        
@@ -251,7 +251,7 @@
           close #Inputwindows(Index):
        next Index
 
-       let fnPopData
+       fnPopData
     fnend
 
     def library Fnrunedit(Screenname$,Ckey$*255)
@@ -272,53 +272,53 @@
     dim Stack(1)
  !
     def fnPushData(;Wipe)
-       let Fnpush(Mat PredrawMessage,Wipe)
-       let Fnpush(Mat PredrawWindows,Wipe)
-       let fnPush(mat Inputwindows,Wipe)
+       fnpush(Mat PredrawMessage,Wipe)
+       fnpush(Mat PredrawWindows,Wipe)
+       fnPush(mat Inputwindows,Wipe)
     fnend
     def fnPopData
-       let fnPop(Mat InputWindows)
-       let Fnpop(Mat PredrawWindows)
-       let Fnpop(Mat PredrawMessage)
+       fnPop(Mat InputWindows)
+       fnpop(Mat PredrawWindows)
+       fnpop(Mat PredrawMessage)
     fnend
 
     def Fnpush$(Mat Array$,Wipe)
-       let Fnpush$=Fnpusharray$(Mat Array$,Mat Stack$,Mat Longstack$)
+       fnpush$=Fnpusharray$(Mat Array$,Mat Stack$,Mat Longstack$)
        if Wipe then
           mat Array$(0)
        end if
     fnend
     def Fnpop$(Mat Array$)
-       let Fnpop$=Fnpoparray$(Mat Array$,Mat Stack$,Mat Longstack$)
+       fnpop$=Fnpoparray$(Mat Array$,Mat Stack$,Mat Longstack$)
     fnend
     def Fnpush(Mat Array;Wipe)
-       let Fnpush=Fnpusharray(Mat Array,Mat Stack)
+       fnpush=Fnpusharray(Mat Array,Mat Stack)
        if Wipe then
           mat Array(0)
        end if
     fnend
     def Fnpop(Mat Array)
-       let Fnpop=Fnpoparray(Mat Array,Mat Stack)
+       fnpop=Fnpoparray(Mat Array,Mat Stack)
     fnend
     dim PushValue$(1)*2047,PushValue(1)
     def fnPushValue$(&Var$;Altstack,Wipe)
        mat PushValue$(1)
        let PushValue$(1)=Var$
-       let fnPush$(mat PushValue$,AltStack,Wipe)
+       fnPush$(mat PushValue$,AltStack,Wipe)
        if Wipe then let Var$=""
     fnend
     def fnPopValue$(&Var$;Altstack)
-       let fnPop$(mat PushValue$,AltStack)
+       fnPop$(mat PushValue$,AltStack)
        let Var$=PushValue$(1)
     fnend
     def fnPushValue(&Var;Altstack,Wipe)
        mat PushValue(1)
        let PushValue(1)=Var
-       let fnPush(mat PushValue,Altstack,Wipe)
+       fnPush(mat PushValue,Altstack,Wipe)
        if Wipe then let Var=0
     fnend
     def fnPopValue(&Var;Altstack)
-       let fnPop(mat PushValue,Altstack)
+       fnPop(mat PushValue,Altstack)
        let Var=PushValue(1)
     fnend
 
@@ -386,7 +386,7 @@
        pr #Window, fields "1,1,CC 50" : "Now Reading Record - Requesting Write Permission"
        pr #Window, fields "2,1,CC 50" : "If you see this message for more then a"
        pr #Window, fields "3,1,CC 50" : "few seconds the record is probably in use."
-       let fnDisplayLoadMessage=Window
+       fnDisplayLoadMessage=Window
     fnend
  !
     def Fnretrylockederror(Key$*255,Filenumber;___,Lockfile,LockUser$*80,Choice,_ErrLine,_ErrNumber)
@@ -408,7 +408,7 @@
  !
           choice=Msgbox("This record is locked in file #"&Str$(Filenumber)&', "'&File$(Filenumber)&'", by user '&Trim$(LockUser$)&". Do you want to retry?","Record Locked","Okc","Qst")
           if Choice=1 then
-             let Fnretrylockederror=1
+             fnretrylockederror=1
           end if
        end if
     fnend
@@ -433,7 +433,7 @@
     def Fnreturnvalue(Value$*1000;___,Number)
        let Number=1 ! If Conversion Failed, Then Its A Non-Null String, Return True
        let Number=Val(Value$) conv IGNORE
-       let Fnreturnvalue=Number
+       fnreturnvalue=Number
     fnend
  !
  !  ***** Compares Two String Arrays Returning True If Same
@@ -444,7 +444,7 @@
                 if trim$(trim$(Trim$(A$(Index)),chr$(0)))<>trim$(trim$(Trim$(B$(Index)),chr$(0))) then let Failed=1
              end if
           next Index
-          let Fnsameas=(~(Failed))
+          fnsameas=(~(Failed))
        end if
     fnend
  !
@@ -456,14 +456,14 @@
                 if A(Index)<>B(Index) then let Failed=1
              end if
           next Index
-          let Fnsamea=(~(Failed))
+          fnsamea=(~(Failed))
        end if
     fnend
 
  OPEN: ! ***** Function To Call Library Openfile And Proc Subs
        def Fnopen(Filename$*255, Mat F$, Mat F, Mat Form$; Inputonly, Keynum, Dont_Sort_Subs, Path$*255, Mat Descr$, Mat Field_Widths,Supress_Prompt,Ignore_Errors,___,Index)
           dim _FileIOSubs$(1)*800, _Loadedsubs$(1)*32
-          let Fnopen=Fnopenfile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)
+          fnopen=Fnopenfile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)
           if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : let _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index
        fnend
  !

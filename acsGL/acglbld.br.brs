@@ -3,8 +3,8 @@
 00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnacglbld
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
-00060   let fntop(program$,"Build Screens")
-00070   let fnacglbld
+00060   fntop(program$,"Build Screens")
+00070   fnacglbld
 00080 ! ______________________________________________________________________
 00090 XIT: let fnxit
 00100 ! ______________________________________________________________________

@@ -6,7 +6,7 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),mask(11),sln(11),c$(11,8)*40
 00080 ! ______________________________________________________________________
-00090   let fntop(program$,cap$='Transaction (Hamster)')
+00090   fntop(program$,cap$='Transaction (Hamster)')
 00100   gosub BUILD_LAYOUT
 00110   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER
@@ -22,7 +22,7 @@
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 00210 ! ______________________________________________________________________
 00220 BUILD_LAYOUT: ! 
-00230   let fncno(cno)
+00230   fncno(cno)
 00240   let lbl$(1)="Bank" !:
         let lbl$(2)="Transaction Code" !:
         let lbl$(3)="Check/Reference Number" !:
@@ -135,7 +135,7 @@
 00500   return 
 00510 ! ______________________________________________________________________
 00520 HAMSTER: ! 
-00530   let fnhamster("Transaction",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00530   fnhamster("Transaction",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00540   return 
 00550 ! ______________________________________________________________________
 00560 XIT: let fnxit

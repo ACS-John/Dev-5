@@ -7,29 +7,29 @@
 00070   dim z$*10,e$*30,g(12),adr(2),o(2),e(5),rt(10,3)
 00080   dim cap$*128,firstday(3),lastday(3),month(4)
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$="Balance Breakdown Aged by Month")
-00130   let fndat(dat$,1)
+00100   fntop(program$,cap$="Balance Breakdown Aged by Month")
+00130   fndat(dat$,1)
 00140 ! 
 00150 ! ______________________________________________________________________
-00160   let fntos(sn$="ubowed")
+00160   fntos(sn$="ubowed")
 00162   let respc=0 : let mylen=29 : let mypos=mylen+2 : let frac=0
-00170   let fnfra(1,1,3,mypos+14,"Aging Dates","Use the last day of each month for your aging dates.") : let fraaging=frac+=1
-00180   let fnlbl(1,1,"Last Day of Current Month:",mylen,1,0,fraaging)
-00190   let fntxt(1,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
+00170   fnfra(1,1,3,mypos+14,"Aging Dates","Use the last day of each month for your aging dates.") : let fraaging=frac+=1
+00180   fnlbl(1,1,"Last Day of Current Month:",mylen,1,0,fraaging)
+00190   fntxt(1,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
         let resp$(respc+=1)=''
-00200   let fnlbl(2,1,"Last Day of Last Month:",mylen,1,0,fraaging)
-00210   let fntxt(2,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
+00200   fnlbl(2,1,"Last Day of Last Month:",mylen,1,0,fraaging)
+00210   fntxt(2,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
         let resp$(respc+=1)=''
-00220   let fnlbl(3,1,"Last Day of Third Month:",mylen,1,0,fraaging)
-00230   let fntxt(3,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
+00220   fnlbl(3,1,"Last Day of Third Month:",mylen,1,0,fraaging)
+00230   fntxt(3,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
         let resp$(respc+=1)=''
-00240   let fnlbl(7,1,"Report Heading Dage:",mylen,1)
-00250   let fntxt(7,mypos,20) !:
+00240   fnlbl(7,1,"Report Heading Dage:",mylen,1)
+00250   fntxt(7,mypos,20) !:
         let resp$(respc+=1)=dat$
-00260   let fnchk(9,mypos+10,"Skip customers with credit balance:",1) !:
+00260   fnchk(9,mypos+10,"Skip customers with credit balance:",1) !:
         let resp$(respc+=1)="False"
-00270   let fncmdset(3) !:
-        let fnacs(sn$,0,mat resp$,ckey,1)
+00270   fncmdset(3) !:
+        fnacs(sn$,0,mat resp$,ckey,1)
 00280   if ckey=5 then goto XIT
 00290   for j=1 to 3
 00300 ! Let X=POS(RESP$(J),"/",1)
@@ -38,12 +38,12 @@
 00330     let firstday(j)=(val(resp$(j)(1:6))*100)+1
 00340   next j
 00350   let dat$=resp$(4) !:
-        let fndat(dat$,2)
+        fndat(dat$,2)
 00360   if resp$(5)="True" then let skipcr=1
 00370 ! ______________________________________________________________________
 00380 PRINTING: ! 
 00390   on fkey 5 goto DONE
-00400   let fnopenprn
+00400   fnopenprn
 00410   gosub HEADER
 00430   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00440   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 

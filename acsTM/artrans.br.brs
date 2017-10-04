@@ -5,8 +5,8 @@
 00300   on error goto ERTN
 00400 ! ______________________________________________________________________
 00600 ! ______________________________________________________________________
-00700   let fntop(program$)
-00900   let fn_setup_hamster
+00700   fntop(program$)
+00900   fn_setup_hamster
 01000   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 01100   ! let fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 01110   fnhamster_2("ARTrans")
@@ -42,16 +42,16 @@
 35440     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
 35460     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
 35480     fnhamster_field_reset
-35500     let fnhamster_field_add("Client ID",5)
-35520     let fnhamster_field_add("Invoice Number",12)
-35540     let fnhamster_field_add("Date",6,'N',0,mask_date) ! 30 (mask_number) =no decimals, no commas
-35560     let fnhamster_field_add("Origional Amount",10,'PD',5.2,mask_pointtwo)
-35580     let fnhamster_field_add("Amount",10,'PD',5.2,mask_pointtwo)
-35600     let fnhamster_field_add("Salesman Number",3,'PD',2,mask_pointtwo)
+35500     fnhamster_field_add("Client ID",5)
+35520     fnhamster_field_add("Invoice Number",12)
+35540     fnhamster_field_add("Date",6,'N',0,mask_date) ! 30 (mask_number) =no decimals, no commas
+35560     fnhamster_field_add("Origional Amount",10,'PD',5.2,mask_pointtwo)
+35580     fnhamster_field_add("Amount",10,'PD',5.2,mask_pointtwo)
+35600     fnhamster_field_add("Salesman Number",3,'PD',2,mask_pointtwo)
 35620     let itemTCode=fnhamster_field_add("Trans Code",1,'N',0,mask_number)
 35630 !   fnhamster_add_combof(fnhamster_field_add("Trans Code",1,'N',0,mask_number),'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
-35640     let fnhamster_field_add("Posting Code",1,'N',0,mask_number)
-35660     let fnhamster_field_add("Invoice Description",20,'C')
-35680     let fnhamster_field_add("Next Trans Addr",5,'PD',3)
+35640     fnhamster_field_add("Posting Code",1,'N',0,mask_number)
+35660     fnhamster_field_add("Invoice Description",20,'C')
+35680     fnhamster_field_add("Next Trans Addr",5,'PD',3)
 35700     fnhamster_add_combof(itemTCode,'S:\Core\Data\TransactionCode.dat',1,1,2,40,'S:\Core\Data\TransactionCode.idx',1)
 35720   fnend  ! fn_setup_hamster

@@ -7,10 +7,10 @@
 00060 ! ______________________________________________________________________
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
 00080 ! ______________________________________________________________________
-00090     let fncno(cno,cnam$)
+00090     fncno(cno,cnam$)
 00100     cap$="Checkbook update Trans to v1"
 00110 ! ______________________________________________________________________
-00120     let fnstatus("Updating Transaction file.")
+00120     fnstatus("Updating Transaction file.")
 00160 ! let fnwait(101,cap$,message$="Converting: please wait...",0)
 00170     open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno),internal,outin,relative 
 00180     if version(trmstr)=1 then pr "trmstr is already version 1" !:

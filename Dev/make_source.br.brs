@@ -2,16 +2,16 @@
 00020   pr border: 'Make Source'
 00030   library 'S:\Core\Library': fngetdir2
 00040   dim filename$(1)*256,prg_list$(1)*256,dir_destination$*128,dir_source$*128,ext$*128
-00050   let fn_make_source_init
-00060   let fn_make_source(':C:\ACS\Dev-5')
+00050   fn_make_source_init
+00060   fn_make_source(':C:\ACS\Dev-5')
 00070 ! let fn_make_source('c:\vol002')
-00080   let fn_make_source_run
+00080   fn_make_source_run
 00090   end 
 00100   def fn_make_source(dir_source$*128)
 00110     dim dir_destination$*128
 00120     let dir_source$=rtrm$(dir_source$,'\')
 00130     let dir_destination$=dir_source$
-00140     let fngetdir2(dir_source$,mat filename$,'/s') ! option$)
+00140     fngetdir2(dir_source$,mat filename$,'/s') ! option$)
 00150     for file_item=1 to udim(mat filename$)
 00160       let dot_pos=pos(filename$(file_item),'.',-1)
 00170       backslash_pos=pos(filename$(file_item),'\',-1)
@@ -21,7 +21,7 @@
 00210       end if 
 00220       let ext$=lwrc$(ext$)
 00230       if (ext$='br' or ext$='wb' or ext$='lib' or ext$='cnv') and pos(filename$(file_item),'264')<=0 then 
-00240         let fn_make_source_add(filename$(file_item),dir_source$,dir_destination$)
+00240         fn_make_source_add(filename$(file_item),dir_source$,dir_destination$)
 00250       end if  ! ext$=...
 00260     next file_item
 00270 ! 

@@ -7,8 +7,8 @@
 00070   dim io1$(9),gln(2,3),ta(2),ac(18),te$*1,cap$*128
 00080   dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,"Fix Reference Numbers")
-00110   let fncno(cno)
+00100   fntop(program$,"Fix Reference Numbers")
+00110   fncno(cno)
 00120   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00130   let fil$(1)="ACGLFNSB" : let idx$(1)="FNSBINDX"
 00140   let fil$(2)="ACGLFNSc" : let idx$(2)="FNScINDX"

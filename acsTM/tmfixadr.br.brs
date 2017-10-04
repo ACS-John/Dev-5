@@ -2,7 +2,7 @@
 00022   on error goto L690
 00030   dim exec$*132
 00040   library 'S:\Core\Library': fncno
-00080   let fncno(cno)
+00080   fncno(cno)
 00090   pr newpage
 00100   pr fields "10,15,c 60,h,n": "TM FIX TRANSACTION ADDRESSES IN PROCESS"
 00110   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&str$(cno)&",NoShr",internal,outin,keyed ioerr L690

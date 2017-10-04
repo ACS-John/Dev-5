@@ -5,8 +5,8 @@
 00500   dim cap$*128
 00600 ! ______________________________________________________________________
 00602   cap$=srep$(program$(pos(program$,'\',-1)+1:pos(program$,'.',-1)-1),'Hamster','')
-00700   let fntop(program$,cap$)
-00900   let fn_setup_hamster
+00700   fntop(program$,cap$)
+00900   fn_setup_hamster
 01000   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 01110   fnhamster_2(cap$)
 01200   gosub CLOSE_FILE
@@ -37,7 +37,7 @@
 35200     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
 35220     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
 35240     fnhamster_field_reset
-35260     let fnhamster_field_add("Client ID",8)
+35260     fnhamster_field_add("Client ID",8)
 35280     boxid$(1)="Box 11:"
 35300     boxid$(2)="Unused:"
 35320     boxid$(3)="Box 12a:"

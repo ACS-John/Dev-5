@@ -8,7 +8,7 @@
 00080   let msgline$(1)="Do you wish open the web site:"
 00090   let msgline$(2)="http://planetacs.net/user"
 00100   let msgline$(3)="in your default browser?"
-00110   let fnmsgbox(mat msgline$,resp$,cap$,3)
+00110   fnmsgbox(mat msgline$,resp$,cap$,3)
 00120   if resp$="No" or resp$="Cancel" then goto XIT
 00130   execute "sy start http://planetacs.net/user/index.htm"
 00140 XIT: let fnxit("")

@@ -8,7 +8,7 @@
 00080   dim d$*50,bc(13),bp(13),bm(13),rf(6),glk$*12,fsk$*5,resp$(20)*50
 00090 ! ______________________________________________________________________
 00100   ! fnconsole(off=0)
-00110   let fntop(program$,"Duplicate Range of Accounts")
+00110   fntop(program$,"Duplicate Range of Accounts")
 00130   open #company=1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00140   read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 00150   close #company: 
@@ -17,43 +17,43 @@
 00180   let fil$(2)="ACGLFNSI" : let idx$(2)="FNSIINDX"
 00190 ! ______________________________________________________________________
 00210 MAIN: ! 
-00230   let fntos(sn$="Bldrange") 
+00230   fntos(sn$="Bldrange") 
 00232   let mylen=40: let mypos=mylen+3 : let right=1: let rc=0
-00240   let fnfra(1,1,6,90,"Duplicate Range of Accounts","This option will allow you to quickly duplicate a range of general ledger numbers when setting up multiple departments with similar accounts. ",0)
-00250   let fnlbl(1,50,"Source",0,0,0,1)
-00260   let fnlbl(2,1,"1st G/L Number to Duplicate:",mylen,right,0,1)
-00270   let fnqgl(2,mypos,1,0) 
+00240   fnfra(1,1,6,90,"Duplicate Range of Accounts","This option will allow you to quickly duplicate a range of general ledger numbers when setting up multiple departments with similar accounts. ",0)
+00250   fnlbl(1,50,"Source",0,0,0,1)
+00260   fnlbl(2,1,"1st G/L Number to Duplicate:",mylen,right,0,1)
+00270   fnqgl(2,mypos,1,0) 
 00272   let resp$(rc+=1)=fnrgl$(gl1$)
-00280   let fnlbl(3,1,"Last G/L Number to Duplicate:",mylen,right,0,1)
-00290   let fnqgl(3,mypos,1,0) 
+00280   fnlbl(3,1,"Last G/L Number to Duplicate:",mylen,right,0,1)
+00290   fnqgl(3,mypos,1,0) 
 00292   let resp$(rc+=1)=fnrgl$(gl2$)
-00300   let fnlbl(6,1,"First new general ledger # to be used:",mylen,right,0,1)
-00310   let fnlbl(5,44,"Fund #",6,1,0,1)
-00320   let fnlbl(5,58,"Sub #",6,2,0,1)
+00300   fnlbl(6,1,"First new general ledger # to be used:",mylen,right,0,1)
+00310   fnlbl(5,44,"Fund #",6,1,0,1)
+00320   fnlbl(5,58,"Sub #",6,2,0,1)
 00330   if use_dept=1 then let fntxt(6,46,3,0,right,"30",0,"Enter the fund portion of the general ledger number.",1 ) else let fntxt(6,46,3,0,right,"30",1,"Enter the fund portion of the general ledger number.",1 ) ! : Let RESP$(RC+=1)=STR$(DNO)
-00340   let fntxt(6,51,6,0,right,"30",0,"Enter the main part of the general ledger number.",1 ) 
+00340   fntxt(6,51,6,0,right,"30",0,"Enter the main part of the general ledger number.",1 ) 
 00342   let resp$(rc+=1)=""
 00350   if use_sub=1 then let fntxt(6,60,3,0,right,"30",0,"Enter the sub portion of the general ledger number.",1 ) else let fntxt(6,60,3,0,right,"30",1,"Enter the sub portion of the general ledger number.",1 ) 
 00352     let resp$(rc+=1)=""
-00360   let fnfra(9,1,8,125,"Duplicating Matching Range of Financial Statement Formats"," ",0)
+00360   fnfra(9,1,8,125,"Duplicating Matching Range of Financial Statement Formats"," ",0)
 00370 ! 
-00380   let fnlbl(1,1,"Beginning                         Ending",90,right,0,2)
-00390   let fnlbl(2,1,"Balance Sheet Refernece Number:",mylen,right,0,2)
-00400   let fncombof("fs-bal",2,43,25,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,pas, "If the accounts you are duplicating are balance sheet accounts, select the beginning balance sheet reference number to match the first new balance sheet account.",2) 
+00380   fnlbl(1,1,"Beginning                         Ending",90,right,0,2)
+00390   fnlbl(2,1,"Balance Sheet Refernece Number:",mylen,right,0,2)
+00400   fncombof("fs-bal",2,43,25,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,pas, "If the accounts you are duplicating are balance sheet accounts, select the beginning balance sheet reference number to match the first new balance sheet account.",2) 
 00402   let resp$(rc+=1)="" ! first balance sheet ref # to be duplicated
-00410   let fncombof("fs-bal2",2,85,25,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,pas, "Select the last balance sheet reference number to be duplicated.",2) 
+00410   fncombof("fs-bal2",2,85,25,env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),0,pas, "Select the last balance sheet reference number to be duplicated.",2) 
 00412   let resp$(5)="" ! ending balance sheet ref # to be duplicated
-00420   let fnlbl(4,1,"Beginning                         Ending",90,right,0,2)
-00430   let fnlbl(5,1,"Income Statement Refernece Number:",mylen,right,0,2)
-00440   let fncombof("fs-inc",5,43,25,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,pas, "If you are duplicating income statement accounts, enter the first income statement reference to be duplicated.",2) 
+00420   fnlbl(4,1,"Beginning                         Ending",90,right,0,2)
+00430   fnlbl(5,1,"Income Statement Refernece Number:",mylen,right,0,2)
+00440   fncombof("fs-inc",5,43,25,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,pas, "If you are duplicating income statement accounts, enter the first income statement reference to be duplicated.",2) 
 00442   let resp$(rc+=1)="" ! 1st income statement ref # to be duplicated
-00450   let fncombof("fs-inc-2",5,85,25,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,pas, "If you are duplicating income statement accounts, enter the last income statement reference to be duplicated.",2) 
+00450   fncombof("fs-inc-2",5,85,25,env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno'),1,5,6,30,env$('Q')&"\GLmstr\Fnsiindx.h"&env$('cno'),0,pas, "If you are duplicating income statement accounts, enter the last income statement reference to be duplicated.",2) 
 00452   let resp$(rc+=1)="" ! last income statement ref # to be duplicated
-00460   let fnlbl(7,1,"First new reference # to be used:",mylen,right,0,2)
-00470   let fntxt(7,mylen+3,5,0,right,"30",0,"Enter the first new financial statement reference number to be matched with the new general ledger numbers.",2 ) 
+00460   fnlbl(7,1,"First new reference # to be used:",mylen,right,0,2)
+00470   fntxt(7,mylen+3,5,0,right,"30",0,"Enter the first new financial statement reference number to be matched with the new general ledger numbers.",2 ) 
 00472   let resp$(rc+=1)=""
-00480   let fncmdset(2)
-00490   let fnacs(sn$,0,mat resp$,ckey)
+00480   fncmdset(2)
+00490   fnacs(sn$,0,mat resp$,ckey)
 00500   let pas=0 ! rebuild each time
 00510   if ckey=5 then goto XIT
 00520   let gl$=fnagl$(resp$(1))

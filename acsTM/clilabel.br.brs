@@ -2,7 +2,7 @@
 00040 ! pr client labels
 00060 ! _______________________________________________________________
 00080   library 'S:\Core\Library': fnopenprn,fncloseprn,fnaddlabel,fnlabel,fncno,fnxit,fntop
-00100   let fntop(program$,cap$="Client Labels")
+00100   fntop(program$,cap$="Client Labels")
 00120   on error goto L850
 00140 ! _______________________________________________________________
 00160   dim label_text$(5)*40,cap$*128
@@ -11,7 +11,7 @@
 00220   dim a2$*30,a3$*30
 00240 ! _______________________________________________________________
 00260   on fkey 5 goto L710
-00280   let fncno(cno,cnam$)
+00280   fncno(cno,cnam$)
 00300 ! needs something like Let FNPRG$
 00320   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&env$('cno')&",Shr",internal,input,keyed 
 00340   open #32: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.H"&env$('cno')&",Shr",internal,input,keyed 
@@ -73,19 +73,19 @@
 01460 L640: ! 
 01480   mat label_text$=("")
 01500   for j=1 to 3 : let label_text$(j)=a$(j) : next j
-01520   let fnaddlabel(mat label_text$)
+01520   fnaddlabel(mat label_text$)
 01540   let labelcount+=1
 01560   return  ! /r
 01580 ! ______________________________________________________________________
 01600 L710: close #1: ioerr ignore
-01620   let fnlabel(win=101,cap$, mat linestyle$, cp, nw)
+01620   fnlabel(win=101,cap$, mat linestyle$, cp, nw)
 01640   let labelcount=0
 01660   if uprc$(rtrm$(prg$))="S:\Time Management\Client Legacy" or uprc$(rtrm$(prg$))="S:\Time Management\Client Legacy" then chain prg$ ! XXX
 01680 XIT: ! 
 01700   if labelcount>0 then 
-01720     let fnlabel(win=101,cap$, mat linestyle$, cp, nw)
+01720     fnlabel(win=101,cap$, mat linestyle$, cp, nw)
 01740   end if 
-01760   let fnxit
+01760   fnxit
 01780 L850: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L870
 01800   goto L910
 01820 L870: pr newpage

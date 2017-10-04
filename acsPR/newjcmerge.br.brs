@@ -7,8 +7,8 @@
 00070   dim h(7),ji1(6),jn$*6,ji2(6),cn$*11,l(13),ta(2),tr(9),empnum$*12
 00080   dim empnam$*30,cap$*128,message$*40,k$*25
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\acsPR\jcMerge",cap$="Job Cost Merge")
-00110   let fncno(cno)
+00100   fntop("S:\acsPR\jcMerge",cap$="Job Cost Merge")
+00110   fncno(cno)
 00120 ! 
 00130 ! ______________________________________________________________________
 00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -86,5 +86,5 @@
 00860 ! ______________________________________________________________________
 00870 XIT: ! Let FNXIT
 00880   close #3,free: 
-00890   let fnxit
+00890   fnxit
 00900 ! ______________________________________________________________________

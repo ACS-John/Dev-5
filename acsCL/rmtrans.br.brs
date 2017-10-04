@@ -6,8 +6,8 @@
 00060 ! ______________________________________________________________________
 00070   dim de$*30,cap$*128,tr$(5)*35
 00080 ! ______________________________________________________________________
-00090   let fncno(cno)
-00100   let fntop(program$,"Remove Old Transactions")
+00090   fncno(cno)
+00100   fntop(program$,"Remove Old Transactions")
 00110   cancel=99 : let right=1 : center=2 : let on=1 : let off=0 !:
         let left=0
 00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
@@ -17,19 +17,19 @@
 00140   open #work1:=2: "Name="&env$('Q')&"\CLmstr\Work1."&wsid$&",version=2,Size=0,RecL=84,Replace",internal,outin,relative 
 00150   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&str$(cno),internal,input,keyed 
 00160   open #work2=4: "Name="&env$('Q')&"\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outin,relative 
-00170   let fntos(sn$='RmTrans-'&str$(rcn)) !:
+00170   fntos(sn$='RmTrans-'&str$(rcn)) !:
         let mylen=21 : let mypos=mylen+2 : let lc=0
-00180   let fnlbl(lc+=1,1,"Oldest Retained Date:",mylen,right)
-00190   let fntxt(lc,mypos,10,0,0,'1003') !:
+00180   fnlbl(lc+=1,1,"Oldest Retained Date:",mylen,right)
+00190   fntxt(lc,mypos,10,0,0,'1003') !:
         let resp$(1)=str$(date('ccyymmdd')-50000)
 00200   let lc+=1
 00210   if rcn=1 then !:
-          let fnlbl(lc+=1,1,"All cleared transactions with a",mylen*2,center)
+          fnlbl(lc+=1,1,"All cleared transactions with a",mylen*2,center)
 00220   if rcn><1 then !:
-          let fnlbl(lc+=1,1,"All transactions with a",mylen*2,center)
-00230   let fnlbl(lc+=1,1,"date prior to this date will be removed.",mylen*2,center)
-00240   let fncmdset(2)
-00250   let fnacs(sn$,0,mat resp$,ckey)
+          fnlbl(lc+=1,1,"All transactions with a",mylen*2,center)
+00230   fnlbl(lc+=1,1,"date prior to this date will be removed.",mylen*2,center)
+00240   fncmdset(2)
+00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 or ckey=cancel then goto XIT else !:
           let rd1=val(resp$(1))
 00270 ! fnwait

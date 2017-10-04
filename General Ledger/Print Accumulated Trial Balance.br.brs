@@ -18,7 +18,7 @@
 12300   a$(8)="P/J"
 12320   a$(9)=" "
 12340 ! /r
-14000   let fntop(program$,cap$="Print Accumulated Trial Balance")
+14000   fntop(program$,cap$="Print Accumulated Trial Balance")
 14020   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
 14040   read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$
 14060   read #20,using "Form pos 296,N 2",rec=1: lmu
@@ -36,43 +36,43 @@
 14300   if fnprocess=1 then let s1=1 : goto mainLoopInit
 14320 goto SCREEN1
 16000 SCREEN1: ! r:
-16020   let fntos(sn$="Acglactb")
+16020   fntos(sn$="Acglactb")
 16040   let mylen=53: let mypos=mylen+3 : rc=0 : let right=1
-16060   let fnlbl(1,1,'General ledger number for the last "Capital" account:',mylen,right)
-16080   let fnqgl(1,mypos,0,2)
+16060   fnlbl(1,1,'General ledger number for the last "Capital" account:',mylen,right)
+16080   fnqgl(1,mypos,0,2)
 16100   let resp$(respc_lastCapitalAccount:=rc+=1)=lastCapitalAccount$
-16120   let fnchk(2,mypos,"Print Ending Balance on First Line:",1,0)
+16120   fnchk(2,mypos,"Print Ending Balance on First Line:",1,0)
 16140   let resp$(respc_prBalFirst:=rc+=1)=petro_opt$
-16160   let fnlbl(3,1,"Period Code to pr (blank for all):",mylen,right)
-16180   let fntxt(3,mypos,2,0,1,"30",0,"You can pr any month or the entire year.")
+16160   fnlbl(3,1,"Period Code to pr (blank for all):",mylen,right)
+16180   fntxt(3,mypos,2,0,1,"30",0,"You can pr any month or the entire year.")
 16200   let resp$(respc_periodCode:=rc+=1)="" ! STR$(LMU)
-16220   let fnfra(5,1,5,90,"Selection Type"," ",0) : frameno=1
-16240   let fnopt(1,3,"Print All GL Accounts",0,frameno)
+16220   fnfra(5,1,5,90,"Selection Type"," ",0) : frameno=1
+16240   fnopt(1,3,"Print All GL Accounts",0,frameno)
 16260   let resp$(respc_printAll:=rc+=1)="True"
-16280   let fnopt(2,3,"Print Selected GL Accounts",0,frameno)
+16280   fnopt(2,3,"Print Selected GL Accounts",0,frameno)
 16300   let resp$(respc_printSelected:=rc+=1)="False"
-16320   let fnopt(3,3,"Print a Range of Accounts",0,frameno)
+16320   fnopt(3,3,"Print a Range of Accounts",0,frameno)
 16340   let resp$(respc_printRange:=rc+=1)="False"
 16380   let mylen=6 : let mypos=mylen+2
-16400   let fnlbl(4,1+10,'First:',mylen,right,0,frameno)
-16420   let fnqgl(4,mypos+10,frameno,2)
+16400   fnlbl(4,1+10,'First:',mylen,right,0,frameno)
+16420   fnqgl(4,mypos+10,frameno,2)
 16440   let resp$(respc_rangeStart:=rc+=1)=""
-16460   let fnlbl(5,1+10,'Last:',mylen,right,0,frameno)
-16480   let fnqgl(5,mypos+10,frameno,2)
+16460   fnlbl(5,1+10,'Last:',mylen,right,0,frameno)
+16480   fnqgl(5,mypos+10,frameno,2)
 16500   let resp$(respc_rangeEnd:=rc+=1)=""
-16520   let fnfra(12,1,4,90,"Filters"," ",0) : frameno=2
+16520   fnfra(12,1,4,90,"Filters"," ",0) : frameno=2
 16540   mylen=14 : mypos=mylen+2
-16560   let fnlbl(1,1,'Starting Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
-16580   let fntxt(1,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
+16560   fnlbl(1,1,'Starting Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
+16580   fntxt(1,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
 16600   let resp$(resp_dateStart:=rc+=1)=date$(startday,'ccyymmdd')
-16620   let fnlbl(2,1,'Ending Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
-16640   let fntxt(2,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
+16620   fnlbl(2,1,'Ending Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
+16640   fntxt(2,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
 16660   let resp$(resp_dateEnd:=rc+=1)=date$(endday,'ccyymmdd')
-16680   let fnlbl(4,1,'Fund Number:',mylen,right,0,frameno,0,"Select a Cost Center to filter results or blank for all") ! costCenterFilter
-16700   let fntxt(4,mypos,2,0,1,"30",0,"Select a Cost Center to filter results or blank for all",frameno)
+16680   fnlbl(4,1,'Fund Number:',mylen,right,0,frameno,0,"Select a Cost Center to filter results or blank for all") ! costCenterFilter
+16700   fntxt(4,mypos,2,0,1,"30",0,"Select a Cost Center to filter results or blank for all",frameno)
 16720   let resp$(resp_costCenter:=rc+=1)=""
-16740   let fncmdset(2)
-16760   let fnacs(sn$,0,mat resp$,ckey)
+16740   fncmdset(2)
+16760   fnacs(sn$,0,mat resp$,ckey)
 22000   if ckey=5 then goto XIT
 22020   lastCapitalAccount$=cogl$(3)=fnagl$(resp$(respc_lastCapitalAccount))
 22060   petro_opt$=resp$(respc_prBalFirst)
@@ -105,7 +105,7 @@
 28260   on fkey 5 goto TOTALS
 28280 goto mainLoopInit ! /r (costCenterFilter)
 32000 mainLoopInit: ! r: main loop setup (costCenterFilter)
-32020   let fnopenprn
+32020   fnopenprn
 32040   gosub HDR
 32060   goto READ_GLMSTR ! /r main loop setup
 34000 READ_GLMSTR: ! r: main loop
@@ -157,7 +157,7 @@
 38060   L1100: form pos 1,cr 78,pos 80,pic(zz,zzz,zzz.## cr),pic(z,zzz,zzz.## cr),pic(z,zzz,zzz.## cr)
 38080   close #h_glmstr: 
 38100   close #h_actrans: 
-38120   let fncloseprn
+38120   fncloseprn
 38140   goto XIT ! /r
 39000 XIT: let fnxit
 41000 PGOF: ! r:
@@ -234,13 +234,13 @@
 56100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 56120 ! /region
 58000 SELECT_ACCOUNT: ! r:
-58020   let fntos(sn$="Acglactb3")
+58020   fntos(sn$="Acglactb3")
 58040   let mylen=38: let mypos=mylen+3 : let right=1
-58060   let fnlbl(1,1,'General ledger # to print:',mylen,right,0,0)
-58080   let fnqgl(1,mypos,0,2)
+58060   fnlbl(1,1,'General ledger # to print:',mylen,right,0,0)
+58080   fnqgl(1,mypos,0,2)
 58100   let resp$(1)=""
-58120   let fncmdset(2)
-58140   let fnacs(sn$,0,mat resp$,ckey)
+58120   fncmdset(2)
+58140   fnacs(sn$,0,mat resp$,ckey)
 58160   if ckey=5 then goto TOTALS
 58180   let n$=fnagl$(resp$(1))
 58200   read #h_glmstr,using F_GLMSTR,key=n$: n$,d$,bb,cb,mat bp nokey SELECT_ACCOUNT

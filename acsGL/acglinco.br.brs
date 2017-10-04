@@ -9,8 +9,8 @@
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
 00100   dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13),revb(13),cap$*128,udf$*256
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Income Statement with GASB Budget")
-00130   let fncno(cno,cnam$)
+00120   fntop(program$,cap$="Income Statement with GASB Budget")
+00130   fncno(cno,cnam$)
 00140   let udf$=env$('temp')&'\'
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
@@ -26,15 +26,15 @@
           let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr" : let mp1=69
 00250   open #1: fl1$,internal,input,keyed 
 00260   if fnprocess=1 or fnUseDeptNo=0 then goto L360
-00270   let fntos(sn$="ACglinco") !:
+00270   fntos(sn$="ACglinco") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00280   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00290   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00280   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00290   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00300   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00310   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00320   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00330   let fnacs(sn$,0,mat resp$,ckey)
+00300   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00310   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00320   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00330   fnacs(sn$,0,mat resp$,ckey)
 00340   if ckey=5 then goto XIT
 00350   costcntr=val(resp$(1))
 00360 L360: let fnopenprn !:
@@ -202,9 +202,9 @@
 01920 L1920: let eofcode=1
 01930   gosub L1520
 01940 ! 
-01948   let fnfscode(actpd)
-01949   let fnpriorcd(1)
-01950   let fncloseprn
+01948   fnfscode(actpd)
+01949   fnpriorcd(1)
+01950   fncloseprn
 01960   goto XIT
 01970 ! ______________________________________________________________________
 01980 XIT: let fnxit

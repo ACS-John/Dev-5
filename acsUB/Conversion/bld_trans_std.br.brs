@@ -16,8 +16,8 @@
 00070 ! ______________________________________________________________________
 00080   dim cap$*128,resp$(10)*80,g(11),acctrn_form$*80,rw4(22,13),key$*19,ru(6)
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\acsUB\Conversion\Bld_Trans",cap$="Build Transactions")
-00110   let fncno(cno)
+00100   fntop("S:\acsUB\Conversion\Bld_Trans",cap$="Build Transactions")
+00110   fncno(cno)
 00115   pr newpage
 00120 LOOP_STEP_1: ! 
 00130   gosub MENU1
@@ -36,14 +36,14 @@
 00240 XIT: chain "S:\acsUB\conversion\UBmstr-vb"
 00250 ! ______________________________________________________________________
 00260 MENU1: ! 
-00270   let fntos(sn$="bldtrans")
-00280   let fnlbl(1,1,"Convert Transactions")
-00290   let fnchk(4,1,"Delete existing transaction file before conversion") !:
+00270   fntos(sn$="bldtrans")
+00280   fnlbl(1,1,"Convert Transactions")
+00290   fnchk(4,1,"Delete existing transaction file before conversion") !:
         let resp$(1)="True"
-00300   let fnchk(5,1,"Remove Transactions with Bad Dates") !:
+00300   fnchk(5,1,"Remove Transactions with Bad Dates") !:
         let resp$(2)="False"
-00310   let fncmdset(2)
-00320   let fnacs(sn$,0,mat resp$,ck)
+00310   fncmdset(2)
+00320   fnacs(sn$,0,mat resp$,ck)
 00330   let delubtransvb$=resp$(1) !:
         let removebaddates$=resp$(2)
 00340   if ck=5 then cno=0
@@ -131,7 +131,7 @@
 00990 ! 
 01000   close #transvb: 
 01010   pr "ReIndexing ubTransVB..."
-01020   let fnindex_it(env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno),env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno),"1 19")
+01020   fnindex_it(env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno),env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno),"1 19")
 01030   pr "Transactions for company "&str$(cno)&" were built successfully."
 01040   pr ""
 01050   if removebaddates$="True" then gosub REMOVEBADDATES

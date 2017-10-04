@@ -7,9 +7,9 @@
 00070   dim cap$*128,cnam$*40,newkey$*20
 00080   dim de$*30,gl(3),t1(5),sc3$(5)*55,up$(4),d(2),nam$*30
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$="Print Selected Invoice Listing")
+00100   fntop(program$,cap$="Print Selected Invoice Listing")
 00110   cancel=99
-00120   let fncno(cno,cnam$)
+00120   fncno(cno,cnam$)
 00130   open #20: "Name="&env$('Q')&"\CLmstr\PostDat.H"&str$(cno)&",Shr,Use,RecL=12",internal,outin,relative 
 00140   read #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2 norec L150 !:
         goto L160
@@ -32,7 +32,7 @@
 00240   read #bankmstr,using 'Form Pos 45,PD 6.2,PD 6.2,G 8',key=bc$,release: bal,upi,lcn$ nokey L250
 00250 L250: let sc3$(1)=" Bank Code "&bc$&" Current Bank Balance:"
 00260   let t1(1)=bal
-00270   let fnopenprn !:
+00270   fnopenprn !:
         ! fnwait !:
         pr fields "13,34,C 12,B,99": "Cancel (Esc)" !:
         on fkey 99 goto EO_PAYTRANS
@@ -91,7 +91,7 @@
 00750   for j=1 to 5 !:
           pr #255,using 'Form POS 5,C 55,PIC($$$$,$$$,$$$,$$$.##CR)': sc3$(j),t1(j) !:
         next j
-00760   let fncloseprn
+00760   fncloseprn
 00770   on fkey 99 ignore 
 00780   goto XIT
 00790 ! ______________________________________________________________________

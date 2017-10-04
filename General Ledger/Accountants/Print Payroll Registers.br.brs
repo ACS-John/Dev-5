@@ -8,21 +8,21 @@
 11400   dim k(1),k$(3)*25,l$(1)*11,d(22),m(36),r$*10,n$*5,n(2),dat$*20
 11600   dim fa$(2),sa$(2)*40,fb$(2),ext(2),adr(2),report$*35,deposit(31,2)
 11800 ! ______________________________________________________________________
-12000   let fntop(program$,cap$="Print Payroll Registers")
-12400   let fndat(dat$)
+12000   fntop(program$,cap$="Print Payroll Registers")
+12400   fndat(dat$)
 12600 ! ______________________________________________________________________
-12800   let fntos(sn$="PayrollReg")
+12800   fntos(sn$="PayrollReg")
 13000   let rc=cf=0: let mylen=22: let mypos=mylen+3: let frameno=1
-13200   let fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included.")
-13400   let fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
-13600   let fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno)
+13200   fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included.")
+13400   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
+13600   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno)
 13800   let resp$(rc+=1)=str$(beg_date)
-14000   let fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
-14200   let fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this report. ",frameno)
+14000   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
+14200   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this report. ",frameno)
 14400   let resp$(rc+=1)=str$(end_date)
-14600   let fncmdkey("Next",1,1,0,"Calculate tax deposit.")
-14800   let fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
-15000   let fnacs(sn$,0,mat resp$,ckey)
+14600   fncmdkey("Next",1,1,0,"Calculate tax deposit.")
+14800   fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
+15000   fnacs(sn$,0,mat resp$,ckey)
 15200   if ckey=5 then goto XIT
 15400 ! 
 15600   beg_date=val(resp$(1))
@@ -34,8 +34,8 @@
 16900   fPrmstr: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
 17000   open #h_acprcks:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outin,relative 
 17200   let report$="Payroll Check Register"
-17400   let fnopenprn(cp,58,220,0)
-17600   let fn_hdr1
+17400   fnopenprn(cp,58,220,0)
+17600   fn_hdr1
 17800 L350: if d(1)>0 then goto L360 else goto L390
 18000 L360: if sum(empd)=0 then goto L390
 18200   pr #255,using L870: eno,"Total",empd(4),empd(5),empd(6),empd(7),empd9,empd(8),empd(22),empd(19),empd(21) pageoflow PGOF1
@@ -48,17 +48,17 @@
 19400   do 
 19600     read #h_acprcks,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca conv L350
 19800     if fndate_mmddyy_to_ccyymmdd(d(2))<beg_date or fndate_mmddyy_to_ccyymmdd(d(2))>end_date then goto L470
-20000     let fn_941_breakdown
-20200     let fn_accumulate_totals
-20400     let fn_print_1
+20000     fn_941_breakdown
+20200     fn_accumulate_totals
+20400     fn_print_1
 20600 L470: if nca=0 then goto L350
 20800     ca=nca
 21000   loop 
 21200 L650: ! pr TOTALS
-21400   let fn_totals_1
+21400   fn_totals_1
 21600   pr #255: newpage
-21800   let fn_941_summary
-22000   let fn_report3
+21800   fn_941_summary
+22000   fn_report3
 22200   goto FINIS
 22400 ! ______________________________________________________________________
 22600 def fn_header
@@ -74,7 +74,7 @@
 24300   L590: ! 
 24400 fnend 
 24600 def fn_hdr1
-24800   let fn_header
+24800   fn_header
 25000   pr #255:''
 25020   pr #255,using 'form pos 1,c 132': "EMP #    EMPLOYEE NAME         GROSS   FED W/H  FICA W/H    ST W/H  MISC W/H   LOC W/H       NET     TIPS    EIC   DATE    CK #"
 25040   pr #255:''
@@ -102,7 +102,7 @@
 29600 fnend 
 29800 PGOF1: ! r:
 30000   pr #255: newpage
-30200   let fn_hdr1
+30200   fn_hdr1
 30400 continue ! /r
 30600 def fn_totals_1
 30800   pr #255,using L930: "TOTALS",t1,t2,t3,t4,t5,t6,t7,t8,t9
@@ -121,20 +121,20 @@
 33400   let t7=0
 33600   let t8=0
 33800   let t9=0
-34000   let fn_hdr3
+34000   fn_hdr3
 34200   restore #h_prmstr: 
 34220   ! restore #h_PRmstr,key>="    ": nokey L1140 eof L1140 ! nokey FINIS eof L1090
 34400   do 
 34600     ! L1090: ! 
 34800     read #h_prmstr,using fPrmstr: eno,mat k$,mat l$,mat m,mat adr eof L1140
-35200     let fn_print_3
-35400     let fn_calk_3b
+35200     fn_print_3
+35400     fn_calk_3b
 35600   loop 
 35800   L1140: ! 
 36000 fnend 
 36200   def fn_hdr3
 36400     let report$="PAYROLL REGISTER - EARNINGS TO DATE"
-36600     let fn_header
+36600     fn_header
 36800     pr #255,using L1180: "*********************** Y.T.D. ***************************    **************** Q.T.D *******************"
 37000 L1180: form skip 1,pos 23,c 105,skip 1
 37200     pr #255: "EMP #  EMPLOYEE NAME    GROSS   FED W/H FICA W/H   ST W/H  LOC W/H    TIPS     EIC      GROSS  FED W/H FICA W/H  ST W/H  LOC W/H"
@@ -142,9 +142,9 @@
 37600 FINIS: ! 
 37800   close #h_acprcks: ioerr L1230
 38000 L1230: ! 
-38200   let fn_totals_3
+38200   fn_totals_3
 38400 ! pr #255,USING 40: HEX$("2B0205000A1042")
-38600   let fncloseprn
+38600   fncloseprn
 38800   goto XIT
 39000   def fn_calk_3b
 39200     let t1=t1+m(1)
@@ -168,9 +168,9 @@
 42800     goto PAST_PGOF3
 43000 PGOF3: ! 
 43200     pr #255: newpage
-43400     let fn_hdr3
+43400     fn_hdr3
 43600 PAST_PGOF3: ! 
-43800     let fn_calc_3
+43800     fn_calc_3
 44000     at6=at6+at5
 44200     let mcw2=mcw2+mcw1
 44400     if m(1)-m(2)>=feducwag then goto L1550
@@ -199,7 +199,7 @@
 49000   fnend 
 49200   def fn_941_summary
 49400     let report$="941 BREAKDOWN"
-49600     let fn_header
+49600     fn_header
 49800     pr #255: 
 50000     pr #255: tab(43);"GROSS";tab(63);"TAXES"
 50200 L1790: form pos 5,c 30,pos 38,n 10.2,pos 58,n 10.2,skip 1

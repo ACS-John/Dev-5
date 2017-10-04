@@ -48,7 +48,7 @@
 45180     goto XIT
 50280 XIT: ! 
 50300     if sp_return$(len(sp_return$)-1:len(sp_return$))='\\' then let sp_return$=sp_return$(1:len(sp_return$)-1)
-50320     let fnshortpath$=sp_return$
+50320     fnshortpath$=sp_return$
 50380   fnend 
 62000   def fn_make_shortpath_cmd(msc_path$*256)
 62020     if ~exists(msc_path$&'\ShortPath.cmd') or do_debug then 

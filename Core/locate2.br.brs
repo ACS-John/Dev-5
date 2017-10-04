@@ -7,8 +7,8 @@
 00070   dim brfn$(1000)*255,brsfn$(1000)*255,dur$*200,item$(1000)*255
 00080   dim report$*256,subprocfile$*256,procfile$*256,tempfile1$*256,tempfile2$*256
 00100 ! ______________________________________________________________________
-00120   let fngetcd(dur$)
-00140   let fntop(program$,'Locate2')
+00120   fngetcd(dur$)
+00140   fntop(program$,'Locate2')
 00150   let filter$="*.br, *.br"
 00160   cancel=5
 00170   let report$=env$('temp')&"\LocRpt-"&session$&".txt" !:
@@ -18,36 +18,36 @@
         let tempfile2$=env$('temp')&"\Loc2-"&session$&".tmp"
 00180 ! ______________________________________________________________________
 00190 MAIN: ! 
-00200   let fntos("Locate") !:
+00200   fntos("Locate") !:
         let lngth=8 : let ps=lngth+2 : let rc=lc=0
-00210   let fnlbl(lc+=1,1,'Find:',lngth,1)
-00220   let fntxt(lc,ps,16,40) !:
+00210   fnlbl(lc+=1,1,'Find:',lngth,1)
+00220   fntxt(lc,ps,16,40) !:
         let resp$(rc+=1)=lc$
-00230   let fnlbl(lc,ps+18,'and',lngth)
-00240   let fntxt(lc,ps+22,16,40) !:
+00230   fnlbl(lc,ps+18,'and',lngth)
+00240   fntxt(lc,ps+22,16,40) !:
         let resp$(rc+=1)=lc2$
-00250   let fnlbl(lc+=1,1,'Path:',lngth,1)
-00260   let fntxt(lc,ps,38,66,0,'72') !:
+00250   fnlbl(lc+=1,1,'Path:',lngth,1)
+00260   fntxt(lc,ps,38,66,0,'72') !:
         let resp$(rc+=1)=dur$
 00270   let lc+=1 ! blank line
-00280   let fnlbl(lc+=1,1,'Replace:',lngth,1)
-00290   let fntxt(lc,ps,38) !:
+00280   fnlbl(lc+=1,1,'Replace:',lngth,1)
+00290   fntxt(lc,ps,38) !:
         let resp$(rc+=1)=rep$
-00300   let fnlbl(lc+=1,1,"Filter:",lngth,1)
-00310   let fntxt(lc,ps,38) !:
+00300   fnlbl(lc+=1,1,"Filter:",lngth,1)
+00310   fntxt(lc,ps,38) !:
         let resp$(rc+=1)=filter$
-00320   let fnchk(lc+=1,ps,'Append Previous Report',0) !:
+00320   fnchk(lc+=1,ps,'Append Previous Report',0) !:
         let resp$(rc+=1)="FALSE"
-00330   let fnchk(lc+=1,ps,'Renumber all Programs',0) !:
+00330   fnchk(lc+=1,ps,'Renumber all Programs',0) !:
         let resp$(rc+=1)="FALSE"
-00340 !  Let FNTXT(LC,PS,18,40) !:
+00340 !  fnTXT(LC,PS,18,40) !:
         !  Let RESP$(RC+=1)=LC2$
 00350   let lc+=1 ! blank line
-00360   let fnlbl(lc+=1,1,"Leave Replace blank to locate only" )
-00370   let fnlbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
-00380   let fnlbl(lc+=1,1,"In Windows XP I can use '*.br,*.br'")
-00390   let fncmdset(2)
-00400   let fnacs("Locate",0,mat resp$,ck)
+00360   fnlbl(lc+=1,1,"Leave Replace blank to locate only" )
+00370   fnlbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
+00380   fnlbl(lc+=1,1,"In Windows XP I can use '*.br,*.br'")
+00390   fncmdset(2)
+00400   fnacs("Locate",0,mat resp$,ck)
 00410   if ck=cancel then goto XIT
 00420   let lc$=trim$(resp$(1)) !:
         let lc2$=trim$(resp$(2)) !:
@@ -57,7 +57,7 @@
         app_prev$=resp$(6)
 00430   if lc2$<>"" and rep$<>"" then goto MAIN
 00440 ! 
-00450   let fngetdir(dur$,mat brfn$," /s ",filter$)
+00450   fngetdir(dur$,mat brfn$," /s ",filter$)
 00460   for j=1 to udim(brfn$)
 00470     if trim$(brfn$(j))="" then mat brfn$(j-1) : goto L490
 00480   next j

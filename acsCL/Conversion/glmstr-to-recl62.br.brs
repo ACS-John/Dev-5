@@ -9,7 +9,7 @@
 00070 ! dim
 00080 ! ______________________________________________________________________
 00090 ! fntop
-00100     let fncno(cno)
+00100     fncno(cno)
 00110 ! 
 00120     execute "Copy "&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&" X."&session$&" -62"
 00130     execute "COPY X."&session$&' '&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&" -D"

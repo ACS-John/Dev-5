@@ -12,8 +12,8 @@
 00120   dim nxtpgm$(20)*20,nxtdesc$(20)*35,ff$(3)*18,wk(20),mo(20),qt(20)
 00130   dim ln$*128,ln2$*128,item$(1)*35,resp$(100)*35,prg$(100)*40,nam$(100)*35
 00140 ! ______________________________________________________________________
-00150   let fntop(program$,cap$="Select Auto Processing Programs")
-00160   let fncno(cno)
+00150   fntop(program$,cap$="Select Auto Processing Programs")
+00160   fncno(cno)
 00170   open #1: "Name="&env$('Q')&"\PRmstr\NewPrPgmn.h"&str$(cno)&",Use,RecL=61",internal,outin,relative ioerr MAIN
 00180   for j=1 to lrec(1)
 00190     read #1,using L810: nxtpgm$(j),nxtdesc$(j),wk(j),mo(j),qt(j) norec L200
@@ -24,16 +24,16 @@
 00240 L240: let fntos(sn$="PrAuto") !:
         let mylen=20: let mypos=mylen+3 : let right=1
 00250   let item=0: let resp=0
-00260   let fnlbl(1,1,"Selected Items                       Wk Qtr Anl       Menu Options to Select From",80,0)
+00260   fnlbl(1,1,"Selected Items                       Wk Qtr Anl       Menu Options to Select From",80,0)
 00270   for j=1 to 20
 00280 ! If TRIM$(NXTDESC$(J))="Employee" Then Let NXTDESC$(J)="": Let NXTPGM$(J)=""
-00290     let fntxt(j+1,1,35,0,left,"",0,"Items select for automatic processing.",0 ) !:
+00290     fntxt(j+1,1,35,0,left,"",0,"Items select for automatic processing.",0 ) !:
           let resp$(resp+=1)=nxtdesc$(j)
-00300     let fnchk(j+1,39,"",1)
+00300     fnchk(j+1,39,"",1)
 00310     if wk(j)=1 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
-00320     let fnchk(j+1,43,"",1)
+00320     fnchk(j+1,43,"",1)
 00330     if mo(j)=1 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
-00340     let fnchk(j+1,47,"",1)
+00340     fnchk(j+1,47,"",1)
 00350     if qt(j)=1 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
 00360   next j
 00370   mat chdr$(2) : mat cmask$(2) : mat item$(2) !:
@@ -41,7 +41,7 @@
         chdr$(2)='Menu option'
 00380   cmask$(1)='30' !:
         cmask$(2)='' !:
-        let fnflexinit1('selauto',2,55,20,35,mat chdr$,mat cmask$,1,0,frame) !:
+        fnflexinit1('selauto',2,55,20,35,mat chdr$,mat cmask$,1,0,frame) !:
         let editrec=0
 00390   close #1: ioerr L400
 00400 L400: open #1: "Name=PR.mnu",display,input 
@@ -58,14 +58,14 @@
 00510   let nam$(item)=ln$(1:x-1)(1:35)
 00520   let item$(1)=str$(item) !:
         let item$(2)=desc$ !:
-        let fnflexadd1(mat item$)
+        fnflexadd1(mat item$)
 00530   goto L410
 00540 L540: let fnlbl(22,1," ")
-00550   let fncmdkey("&Next",1,1,0,"Selects the highlited option for automatic processing.")
-00560   let fncmdkey("&Save",2,0,0,"Saves the selections and returns to menu.")
-00570   let fncmdkey("&Delete All",4,0,0,"Deletes all selections.")
-00580   let fncmdkey("&Cancel",5,0,1,"Returns to main menu without saving the selections.")
-00590   let fnacs(sn$,0,mat resp$,ckey)
+00550   fncmdkey("&Next",1,1,0,"Selects the highlited option for automatic processing.")
+00560   fncmdkey("&Save",2,0,0,"Saves the selections and returns to menu.")
+00570   fncmdkey("&Delete All",4,0,0,"Deletes all selections.")
+00580   fncmdkey("&Cancel",5,0,1,"Returns to main menu without saving the selections.")
+00590   fnacs(sn$,0,mat resp$,ckey)
 00600   if ckey=5 then goto XIT
 00610   if ckey=2 then goto L630
 00620   if ckey=4 then mat nxtdesc$=(""): !:

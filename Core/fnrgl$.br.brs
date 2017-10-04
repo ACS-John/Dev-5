@@ -47,7 +47,7 @@
 28880     end if
 32000 DONE: ! 
 32020 ! pr ' fnRgl$ returned "'&(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)&'"'
-32040     let fnrgl$=(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)
+32040     fnrgl$=(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)
 32060     goto XIT
 32080 ! _______________________________________________________________________
 34000 NOKEYGLMSTR: ! 

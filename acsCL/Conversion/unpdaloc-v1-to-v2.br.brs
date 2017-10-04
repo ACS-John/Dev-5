@@ -6,9 +6,9 @@
 00060 ! ______________________________________________________________________
 00070     dim cnam$*40,cap$*128,message$*40,msgline$(6)*48,response$(5)*1
 00080 ! ______________________________________________________________________
-00090     let fncno(cno,cnam$)
+00090     fncno(cno,cnam$)
 00100     cap$="Checkbook update UnPdAloc from v1 to v2"
-00120     let fnstatus("Payment Allocation file until it is updating from v1 to v2")
+00120     fnstatus("Payment Allocation file until it is updating from v1 to v2")
 00180     open #unpdaloc=1: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UAIdx1.h"&str$(cno),internal,outin,keyed 
 00182 !      close #unpdaloc:
 00190     if version(unpdaloc)=2 then let fnstatus("UnPdAloc is already version 2") : goto XIT
@@ -16,7 +16,7 @@
 00210     close #unpdaloc: 
 00220 ! 
 00230 ! change the record length
-00240     let fnCopy(env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno),env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno),67)
+00240     fnCopy(env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno),env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno),67)
 00270 ! 
 00280 ! make sure the Key is right justified
 00290     open #unpdaloc=1: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UAIdx1.h"&str$(cno),internal,outin,keyed 
@@ -26,8 +26,8 @@
 00320       rewrite #unpdaloc,using 'Form Pos 1,Cr 8,c 12',rec=j: vn$,iv$
 00330 L330: next j
 00340     close #unpdaloc: 
-00350     let fnindex_it(env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno),env$('Q')&"\CLmstr\UAIdx1.h"&str$(cno),"9 12")
-00360     let fnindex_it(env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno),env$('Q')&"\CLmstr\UAIdx2.h"&str$(cno),"1 20")
+00350     fnindex_it(env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno),env$('Q')&"\CLmstr\UAIdx1.h"&str$(cno),"9 12")
+00360     fnindex_it(env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno),env$('Q')&"\CLmstr\UAIdx2.h"&str$(cno),"1 20")
 00370     goto XIT
 00380 ! ______________________________________________________________________
 00390 ! <Updateable Region: ERTN>

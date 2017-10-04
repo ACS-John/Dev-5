@@ -7,11 +7,11 @@
 00070   dim msgline$(2)*60,response$(5)*1,wrd2$(4)*38,wrds$(2)*20,n$*40
 00080   dim io1$(4),jn$*6,inp(3),n$*40,a$(3)*30,b(4),cap$*128,message$*40
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\acsPR\jcIpBil",cap$="Enter Billings")
-00110   let fncno(cno)
+00100   fntop("S:\acsPR\jcIpBil",cap$="Enter Billings")
+00110   fncno(cno)
 00120 ! 
 00130   c1=3
-00135   let fnconsole(1)
+00135   fnconsole(1)
 00140 ! ______________________________________________________________________
 00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00160   open #2: "Name="&env$('temp')&"\Work."&session$,internal,output ioerr L180
@@ -20,7 +20,7 @@
 00190 L190: let shoption=1
 00200 L200: pr newpage
 00210   let win=101
-00220   let fnopenwin(win,09,08,16,71,cap$)
+00220   fnopenwin(win,09,08,16,71,cap$)
 00230   pr #win,fields "4,2,Cr 14,N": "Job Number:"
 00240   pr #win,fields "5,2,Cr 14,N": "Amount:"
 00250   pr #win,fields "6,2,Cr 14,N": "Date (mmddyy):"
@@ -64,7 +64,7 @@
 00590 ! ______________________________________________________________________
 00600 L600: let msgline$(1)="Job Number not found."
 00610   let msgline$(2)="Please reselect."
-00620   let fnoldmsgbox(mat response$,cap$,mat msgline$,1)
+00620   fnoldmsgbox(mat response$,cap$,mat msgline$,1)
 00630   ce=1
 00640   goto ERR1
 00650 ! ______________________________________________________________________
@@ -77,7 +77,7 @@
 00720 ! ______________________________________________________________________
 00730 L730: pr newpage
 00740   let win=102
-00750   let fnopenwin(win,07,20,15,59,cap$)
+00750   fnopenwin(win,07,20,15,59,cap$)
 00760   pr #win,fields "9,1,C 40,R,N": " Total of Amounts Entered:"
 00770   pr #win,fields "9,28,N 10.2,R,N": ta
 00780   let wrd2$(1)="1. pr Billing Proof List"
@@ -96,9 +96,9 @@
 00910 PROOFLIST: ! 
 00920   pr newpage
 00930   let message$="Printing Proof List..."
-00940   let fnwait(103,cap$,message$,1)
+00940   fnwait(103,cap$,message$,1)
 00950   on fkey 5 goto L1080
-00960   let fnopenprn(cp,58,220,process)
+00960   fnopenprn(cp,58,220,process)
 00970   pr #255,using L980: "Job Cost Input Billings Proof List"
 00980 L980: form skip 2,pos 10,c 60,skip 1
 00990   pr #255: tab(10);"Date:  ";date$;"   Time:  ";time$
@@ -120,7 +120,7 @@
 01150 L1150: rewrite #2,using L700,rec=rr: "",0,0,0
 01160 L1160: pr newpage
 01170   let win=103
-01180   let fnopenwin(win,10,20,14,59,cap$)
+01180   fnopenwin(win,10,20,14,59,cap$)
 01190   pr #win,fields "4,2,C 28,N": "Reference Number to correct:"
 01200   pr fields "15,35,C 09,B,5": "Done (F5)"
 01210 L1210: input #win,fields "4,31,Nz 5,UT,N": rr conv L1210
@@ -152,7 +152,7 @@
 01470   pr #103: newpage
 01480 L1480: pr newpage
 01490   let win=102
-01500   let fnopenwin(win,06,10,10,69,wrds$(1))
+01500   fnopenwin(win,06,10,10,69,wrds$(1))
 01510   let prtall=0
 01520   pr #win,fields "4,2,C 38,N": "Beginning Search Data (blank for all):"
 01530   pr fields "11,34,C 11,B,5": "Cancel (F5)"

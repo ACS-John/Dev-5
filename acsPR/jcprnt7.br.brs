@@ -10,28 +10,28 @@
 00100   dim fc(20),tcj(20),tcs(20),dt(125),gt(125),dh$*20,cnam$*40,jn1$*6
 00110   dim cap$*128,message$*40
 00120 ! ______________________________________________________________________
-00130   let fntop("S:\acsPR\newPrUsrDR",cap$="Print User Designed Reports (2)")
-00140   let fncno(cno,cnam$) !:
-        let fndat(dh$)
+00130   fntop("S:\acsPR\newPrUsrDR",cap$="Print User Designed Reports (2)")
+00140   fncno(cno,cnam$) !:
+        fndat(dh$)
 00150 ! 
 00160 ! ______________________________________________________________________
 00170   let rn$=" 7"
 00180   if fnprocess=1 then goto L103
 00190 ! ______________________________________________________________________
 00200 MAIN_SCREEN: ! 
-00210   let fntos(sn$="namlst1") !:
+00210   fntos(sn$="namlst1") !:
         let mylen=25 : let mypos=mylen+2: let resp=0: let left=1
-00220   let fnlbl(1,1,"Report Heading Date:",23,left)
-00230   let fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
+00220   fnlbl(1,1,"Report Heading Date:",23,left)
+00230   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
         let resp$(resp+=1)=dh$
-00240   let fncmdset(2)
-00250   let fnacs(sn$,0,mat resp$,ck)
+00240   fncmdset(2)
+00250   fnacs(sn$,0,mat resp$,ck)
 00260   if ck=5 then goto XIT
 00270   let dat$=dh$=resp$(1) ! heading date
 00280   close #win: ioerr L69
 00285 L69: let fndat(dh$,put=2)
 00290 ! ______________________________________________________________________
-00295   let fndat(dh$,2)
+00295   fndat(dh$,2)
 00300 ! ______________________________________________________________________
 00302 L103: let fnopenprn
 00304 ! ______________________________________________________________________
@@ -59,10 +59,10 @@
 00348   return 
 00350 ! ______________________________________________________________________
 00352 EOF1: ! 
-00354   let fncloseprn
+00354   fncloseprn
 00356   close #1: 
 00358   close #2: 
-00360   let fnxit
+00360   fnxit
 00362 ! ______________________________________________________________________
 00364 PRTRPT: read #1,using L19810: jn$,n$,mat a$,x6,x7,x8,x9 eof SND
 00366   let jn1$=jn$

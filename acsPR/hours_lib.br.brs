@@ -9,7 +9,7 @@
 00090     dim oldclass$*5,class$*5,classification$*30,impname$*25,empname$*30
 00100     dim flxitm$(8)*30,key$*21,ml$(3)*80
 00110 ! ______________________________________________________________________
-00120     let fncno(cno,cnam$)
+00120     fncno(cno,cnam$)
 00130 ! ______________________________________________________________________
 00140 ! 
 00150 ! 
@@ -19,25 +19,25 @@
 00190     open #prmstr=33: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00200 MAIN: ! 
 00210     addhours=edithours=0
-00220     let fntos(sn$="Main") !:
+00220     fntos(sn$="Main") !:
           let respc=0 : let lc=0 : mat resp$=('') !:
           let mylen=20 : let mypos=mylen+2
-00230     let fnlbl(lc+=1,1,'Employee Number:',mylen,1,0,0)
-00240     let fncombof("PRmstr",lc,mypos,0,env$('Q')&"\PRmstr\rpmstr.h"&str$(cno),1,8,9,30,env$('Q')&"\PRmstr\Rpindex.h"&str$(cno),2,pas, "Enter the employee number you wish to work with.",0)
+00230     fnlbl(lc+=1,1,'Employee Number:',mylen,1,0,0)
+00240     fncombof("PRmstr",lc,mypos,0,env$('Q')&"\PRmstr\rpmstr.h"&str$(cno),1,8,9,30,env$('Q')&"\PRmstr\Rpindex.h"&str$(cno),2,pas, "Enter the employee number you wish to work with.",0)
 00241     if hact$="[All]" then let resp$(1)="[All]" else !:
             let resp$(1)=str$(eno)
-00242     let fnbutton(lc+=2,32,"&Refresh",46,"",0,0,0,0,1) !:
-          !   let fnbutton(lc,41,"&Add",43) !:
-          !   let fnbutton(lc,46,"&Edit",45) !:
-          !   let fnbutton(lc,52,"&Delete",44) !:
-          !   let fnbutton(lc,60,"&Cancel",5)
+00242     fnbutton(lc+=2,32,"&Refresh",46,"",0,0,0,0,1) !:
+          !   fnbutton(lc,41,"&Add",43) !:
+          !   fnbutton(lc,46,"&Edit",45) !:
+          !   fnbutton(lc,52,"&Delete",44) !:
+          !   fnbutton(lc,60,"&Cancel",5)
 00250     mat chdr$(8) : mat cmask$(8) : mat flxitm$(8) !:
           chdr$(1)="Ref #" : chdr$(2)="Emp #" : chdr$(3)="Name" : chdr$(4)="Classification" !:
           chdr$(5)="Date" : chdr$(6)="Increase" !:
           chdr$(7)="Decrease" : chdr$(8)="Balance" !:
           cmask$(5)='3' : cmask$(6)='10' : cmask$(7)="10" !:
           cmask$(8)="10" !:
-          let fnflexinit1('Hours',lc+2,1,15,66,mat chdr$,mat cmask$,1) !:
+          fnflexinit1('Hours',lc+2,1,15,66,mat chdr$,mat cmask$,1) !:
           let lc+=18
 00255     if hact$="[All]" then restore #breakdown: nokey EOBREAKDOWN !:
             balance=0 : let oldclass$="" : goto READHOURBREAKDOWN
@@ -58,22 +58,22 @@
           let flxitm$(4)=classification$ : let flxitm$(5)=str$(tdate) !:
           let flxitm$(6)=str$(increase): let flxitm$(7)=str$(decrease) !:
           let flxitm$(8)=str$(balance)
-00370     let fnflexadd1(mat flxitm$)
+00370     fnflexadd1(mat flxitm$)
 00380     goto READHOURBREAKDOWN
 00390 EOBREAKDOWN: ! 
 00395     if hact$="[All]" then let hact$=""
-00400 !   let fnlbl(lc,85,'',0,1)
-00410 !   let fnbutton(lc,32,"&Refresh",46,"",0,0,0,0,1) !:
-          !   let fnbutton(lc,41,"&Add",43) !:
-          !   let fnbutton(lc,46,"&Edit",45) !:
-          !   let fnbutton(lc,52,"&Delete",44) !:
-          !   let fnbutton(lc,60,"&Cancel",5)
-00412 !   let fncmdkey("&Refresh",46,1) !:
-          let fncmdkey("&Add",43) !:
-          let fncmdkey("&Edit",45) !:
-          let fncmdkey("&Delete",44) !:
-          let fncmdkey("&Cancel",5,0,1)
-00420     let fnacs(sn$,0,mat resp$,ck) !:
+00400 !   fnlbl(lc,85,'',0,1)
+00410 !   fnbutton(lc,32,"&Refresh",46,"",0,0,0,0,1) !:
+          !   fnbutton(lc,41,"&Add",43) !:
+          !   fnbutton(lc,46,"&Edit",45) !:
+          !   fnbutton(lc,52,"&Delete",44) !:
+          !   fnbutton(lc,60,"&Cancel",5)
+00412 !   fncmdkey("&Refresh",46,1) !:
+          fncmdkey("&Add",43) !:
+          fncmdkey("&Edit",45) !:
+          fncmdkey("&Delete",44) !:
+          fncmdkey("&Cancel",5,0,1)
+00420     fnacs(sn$,0,mat resp$,ck) !:
           if ck=5 then goto XIT
 00430     let hact$=trim$(resp$(1)(1:8))
 00440     if hact$="[All]" then goto MAIN
@@ -91,27 +91,27 @@
 00560 L560: if addhours=1 then class$="": let increase=decrease=0
 00570     if edithours=1 then !:
             read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease norec ADD_FM_DONE
-00580     let fntos(sn$="Addfm") !:
+00580     fntos(sn$="Addfm") !:
           let respc=0 : let lc=0 : let mylen=21 : let mypos=mylen+2: mat resp$=(""): let right=1
-00590     let fnfra(1,9,8,70,"Hourly Information - "&empname$,"",0) : let frame1=1
-00600     let fnlbl(lc+=1,1,'Employee Number:',mylen,right,0,frame1)
-00610     let fncombof("PRmstr",lc,mypos,0,env$('Q')&"\PRmstr\rpmstr.h"&str$(cno),1,8,9,30,env$('Q')&"\PRmstr\Rpindex.h"&str$(cno),0,pas, "Enter the employee number to whom the time should be recorded",frame1) !:
+00590     fnfra(1,9,8,70,"Hourly Information - "&empname$,"",0) : let frame1=1
+00600     fnlbl(lc+=1,1,'Employee Number:',mylen,right,0,frame1)
+00610     fncombof("PRmstr",lc,mypos,0,env$('Q')&"\PRmstr\rpmstr.h"&str$(cno),1,8,9,30,env$('Q')&"\PRmstr\Rpindex.h"&str$(cno),0,pas, "Enter the employee number to whom the time should be recorded",frame1) !:
           let resp$(1)=str$(empno)
-00620     let fnlbl(lc+=1,1,'Classification:',mylen,right,0,frame1)
-00630     let fncombof("Hours",lc,mypos,0,env$('Q')&"\PRmstr\Hourclass.h"&str$(cno),1,5,6,30,env$('Q')&"\PRmstr\Hourclass-idx.h"&str$(cno),0,pas, "Enter the proper classification of hours. If you need a new classification, you must add it under a different menu option",frame1) !:
+00620     fnlbl(lc+=1,1,'Classification:',mylen,right,0,frame1)
+00630     fncombof("Hours",lc,mypos,0,env$('Q')&"\PRmstr\Hourclass.h"&str$(cno),1,5,6,30,env$('Q')&"\PRmstr\Hourclass-idx.h"&str$(cno),0,pas, "Enter the proper classification of hours. If you need a new classification, you must add it under a different menu option",frame1) !:
           let resp$(2)=class$
-00640     let fnlbl(lc+=1,1,'Date:',mylen,right,0,frame1)
+00640     fnlbl(lc+=1,1,'Date:',mylen,right,0,frame1)
 00645     if addhours=1 then let tdate=0
-00650     let fntxt(lc,mypos,10,0,right,'1003',0,"",frame1 ) !:
+00650     fntxt(lc,mypos,10,0,right,'1003',0,"",frame1 ) !:
           let resp$(3)=str$(tdate)
-00660     let fnlbl(lc+=1,1,'Increase:',mylen,right,0,frame1)
-00670     let fntxt(lc,mypos,10,0,right,'32',0,"",frame1 ) !:
+00660     fnlbl(lc+=1,1,'Increase:',mylen,right,0,frame1)
+00670     fntxt(lc,mypos,10,0,right,'32',0,"",frame1 ) !:
           let resp$(4)=str$(increase)
-00680     let fnlbl(lc+=1,1,'Decrease:',mylen,right,0,frame1)
-00690     let fntxt(lc,mypos,10,0,right,'32',0,"",frame1 ) !:
+00680     fnlbl(lc+=1,1,'Decrease:',mylen,right,0,frame1)
+00690     fntxt(lc,mypos,10,0,right,'32',0,"",frame1 ) !:
           let resp$(5)=str$(decrease)
-00700     let fncmdset(4)
-00710     let fnacs(sn$,0,mat resp$,ck) !:
+00700     fncmdset(4)
+00710     fnacs(sn$,0,mat resp$,ck) !:
           if ck=5 then goto MAIN
 00720     let empno=val(resp$(1)(1:8)) !:
           class$=resp$(2)(1:5) !:
@@ -133,7 +133,7 @@
           let ml$(1)="You have chosen to delete the "&classification$&" for " !:
           let ml$(2)="employee "&str$(empno)&". Click on Yes to delete the entry, else" !:
           let ml$(3)="No to return to the display screen" !:
-          let fnmsgbox(mat ml$,resp$,cap$,52)
+          fnmsgbox(mat ml$,resp$,cap$,52)
 00800     if resp$="Yes" then goto L810 else goto MAIN
 00810 L810: delete #breakdown,rec=editrec: 
 00820     goto MAIN
@@ -142,14 +142,14 @@
           let ml$(1)="You are attempting to enter hours on a different employee." !:
           let ml$(2)="You were assigned to employee "&str$(holdeno)&"." !:
           let ml$(3)="Do you wish to change to employee "&str$(empno)&"?" !:
-          let fnmsgbox(mat ml$,resp$,cap$,52)
+          fnmsgbox(mat ml$,resp$,cap$,52)
 00850     if resp$="Yes" then let eno=empno: goto L740 else let empno=holdeno: goto ADDFM
 00860 MSGBOX3: ! set up classifications of time
 00870     mat ml$(3) !:
           let ml$(1)="You must set up the classification file before you can use" !:
           let ml$(2)="this feature.  Go to Files on the main menu and then " !:
           let ml$(3)="take Time Classifications." !:
-          let fnmsgbox(mat ml$,resp$,cap$,65)
+          fnmsgbox(mat ml$,resp$,cap$,65)
 00880     goto XIT
 00890 ! ______________________________________________________________________
 00900 ! <Updateable Region: ERTN>

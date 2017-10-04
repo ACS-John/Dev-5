@@ -50,8 +50,8 @@
 24520   let heading_2$(4)="      W/H    "
 24540   let heading_3$(4)="  ___________"
 28990 ! ______________________________________________________________________
-32000   let fntop(program$,cap$="State UnEmp Report")
-32080   let fncreg_read('calculation date text',quarter_ending_date$)
+32000   fntop(program$,cap$="State UnEmp Report")
+32080   fncreg_read('calculation date text',quarter_ending_date$)
 32160   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
 32220   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 32240   read #1,using 'Form POS 1,3*C 40,2*C 12,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,PD 4.2,PD 4.2,10*PD 4.2,10*PD 3.3,10*C 12,POS 618,30*N 1': mat a$,mat b$,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
@@ -65,54 +65,54 @@
 32440     end if 
 32460   next j
 32480   mat option1$(max(1,x))
-32500   let fncreg_read('uc1 - quarter',quarter$) : if quarter$='' then let quarter$='1'
-32520   let fncreg_read('uc1 - show total wage',column$(1)) : if column$(1)='' then column$(1)='True'
-32540   let fncreg_read('uc1 - show excess wage',column$(2)) : if column$(2)='' then column$(2)='True'
-32560   let fncreg_read('uc1 - show taxable wage',column$(3)) : if column$(3)='' then column$(3)='True'
-32580   let fncreg_read('uc1 - show state tax withheld',column$(4)) : if column$(4)='' then column$(1)='True'
+32500   fncreg_read('uc1 - quarter',quarter$) : if quarter$='' then let quarter$='1'
+32520   fncreg_read('uc1 - show total wage',column$(1)) : if column$(1)='' then column$(1)='True'
+32540   fncreg_read('uc1 - show excess wage',column$(2)) : if column$(2)='' then column$(2)='True'
+32560   fncreg_read('uc1 - show taxable wage',column$(3)) : if column$(3)='' then column$(3)='True'
+32580   fncreg_read('uc1 - show state tax withheld',column$(4)) : if column$(4)='' then column$(1)='True'
 32590 ! /r
 32600 ! r: main screen (falls through to next section)
-34000   let fntos(sn$="pruc1b")
+34000   fntos(sn$="pruc1b")
 34020   let respc=0: let x=0
-34040   let fnlbl(1,1,"Quarter Ending Date:",26,1)
-34060   let fntxt(1,30,20,0,0,"",0,"Use alpha format (eg. March 31, 20xx)")
+34040   fnlbl(1,1,"Quarter Ending Date:",26,1)
+34060   fntxt(1,30,20,0,0,"",0,"Use alpha format (eg. March 31, 20xx)")
 34080   if trim$(quarter_ending_date$)='' then let resp$(respc+=1)=date$("Month DD, CCYY") else let resp$(respc+=1)=quarter_ending_date$
-34100   let fnlbl(2,1,"State Code:",26,1)
-34120   let fncomboa("pruc1-2",2,30,mat option1$,"Enter the state code from the company information file for the state being processed.")
+34100   fnlbl(2,1,"State Code:",26,1)
+34120   fncomboa("pruc1-2",2,30,mat option1$,"Enter the state code from the company information file for the state being processed.")
 34140   let resp$(respc+=1)=option1$(1)
-34180   let fnlbl(3,1,"Quarter Code:",26,1)
-34200   let fncomboa("pruc1-3",3,30,mat qtr_option$,"Enter the quarter you are processing.")
+34180   fnlbl(3,1,"Quarter Code:",26,1)
+34200   fncomboa("pruc1-3",3,30,mat qtr_option$,"Enter the quarter you are processing.")
 34220   let resp$(respc+=1)=quarter$
-34240   let fnchk(5,40,"Round to Whole Dollars:",1)
+34240   fnchk(5,40,"Round to Whole Dollars:",1)
 34260   let resp$(respc+=1)="False"
-34280   let fnchk(6,40,"Show Total Column:",1)
+34280   fnchk(6,40,"Show Total Column:",1)
 34300   let resp$(respc+=1)=column$(1)
-34320   let fnchk(7,40,"Show Excess Wage Column:",1)
+34320   fnchk(7,40,"Show Excess Wage Column:",1)
 34340   let resp$(respc+=1)=column$(2)
-34360   let fnchk(8,40,"Show Taxable Column:",1)
+34360   fnchk(8,40,"Show Taxable Column:",1)
 34380   let resp$(respc+=1)=column$(3)
-34400   let fnchk(8,40,"Show State Tax Withheld:",1)
+34400   fnchk(8,40,"Show State Tax Withheld:",1)
 34420   let resp$(respc+=1)=column$(4)
-34440   let fnlbl(10,1,"Payroll Department:",26,1)
-34460   let fncombof("DeptName",10,30,29,env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),1,3,4,25,env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno'),2,0, " ",0,0)
+34440   fnlbl(10,1,"Payroll Department:",26,1)
+34460   fncombof("DeptName",10,30,29,env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),1,3,4,25,env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno'),2,0, " ",0,0)
 34480   let resp$(respc+=1)='[All]'
-34580   let fncmdset(2)
-34600   let fnacs(sn$,0,mat resp$,ck)
+34580   fncmdset(2)
+34600   fnacs(sn$,0,mat resp$,ck)
 36000   if ck=5 then goto XIT
 36020   let quarter_ending_date$=resp$(1) ! quarter ending date
 36040   let stcode=val(resp$(2)(1:2)) ! state code
 36050   let heading_2$(2)="   Over $"&cnvrt$("pic(zzzzz)",m(stcode))&' '
 36060   let quarter_code=val(resp$(3)) ! quarter to analyze earnings
-36080   let fncreg_write('uc1 - quarter',resp$(3))
+36080   fncreg_write('uc1 - quarter',resp$(3))
 36100   if resp$(4)(1:1)="T" then let round$="Y"
 36120   column$(1)=resp$(5) ! want total wage column
 36140   column$(2)=resp$(6) ! want excess wage column
 36160   column$(3)=resp$(7) ! want taxable wage column
 36180   column$(4)=resp$(8) ! True=want state tax withheld column
-36200   let fncreg_write('uc1 - show total wage',column$(1))
-36220   let fncreg_write('uc1 - show excess wage',column$(2))
-36240   let fncreg_write('uc1 - show taxable wage',column$(3))
-36260   let fncreg_write('uc1 - show state tax withheld',column$(4))
+36200   fncreg_write('uc1 - show total wage',column$(1))
+36220   fncreg_write('uc1 - show excess wage',column$(2))
+36240   fncreg_write('uc1 - show taxable wage',column$(3))
+36260   fncreg_write('uc1 - show state tax withheld',column$(4))
 36280   let department$=resp$(9)
 36300   if round$="Y" then let m(stcode)=round(m(stcode),0)
 36320   if quarter_code=1 then let ending_date=qtr2
@@ -121,7 +121,7 @@
 36380   if quarter_code=4 then let ending_date=end_date
 38000 ! /r
 38020   on fkey 5 goto FINIS
-38040   let fnopenprn
+38040   fnopenprn
 38060   if file$(255)(1:3)="PRN" then let redir=0 else let redir=1
 38080 ! ______________________________________________________________________
 38100   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -189,8 +189,8 @@
 52140 L1480: form pos 5,c 15,pic(--,---,---.zz)
 52160 FINIS: close #2: ioerr ignore
 52180   close #h_department: ioerr ignore
-52200   let fncloseprn
-52220   let fnxit ! /r
+52200   fncloseprn
+52220   fnxit ! /r
 54000 SUBTOTALS: ! r:
 54020   if m1=0 then goto L1780 ! SKIP IF QUARTERLY WAGE=0
 54040   let p3=p3+1
@@ -219,7 +219,7 @@
 54500   col_amt(2)=h3
 54520   col_amt(3)=h2
 54540   col_amt(4)=state_wh
-54560   let fn_print_line_amt(mat col_amt,mat col_amt_form$)
+54560   fn_print_line_amt(mat col_amt,mat col_amt_form$)
 54580   for col_item=1 to udim(mat column$)
 54600     let ptotal(col_item)+=col_amt(col_item)
 54620     let grand_total(col_item)+=col_amt(col_item) ! grand totals
@@ -229,10 +229,10 @@
 54700 L1780: ! 
 54720   return  ! /r
 56000 PAGE_TOTALS: ! r:
-56180   let fn_print_line_str(mat total_underline$,44)
+56180   fn_print_line_str(mat total_underline$,44)
 56200   pr #255: "Employees on this page:";p3;"    Page Totals";
 56220 ! pr #255,using L1880: ptotal(1),ptotal(2),ptotal(3),ptotal(4)
-56260   let fn_print_line_amt(mat ptotal,mat col_amt_form$)
+56260   fn_print_line_amt(mat ptotal,mat col_amt_form$)
 56360   if nw=1 and eofcode=1 then goto L1910
 56380   pr #255: newpage
 56400 L1910: let p3=0
@@ -273,11 +273,11 @@
 64360   pr #255: 
 64380 ! /r
 65000 ! r: column headings
-65320   let fn_print_line_str(mat heading_1$, 44)
+65320   fn_print_line_str(mat heading_1$, 44)
 65340   pr #255: " SS Number             Name              ";
-65360   let fn_print_line_str(mat heading_2$, 44)
+65360   fn_print_line_str(mat heading_2$, 44)
 65380   pr #255: "___________  __________________________";
-65400   let fn_print_line_str(mat heading_3$, 44) ! underlines
+65400   fn_print_line_str(mat heading_3$, 44) ! underlines
 65420 ! /r
 65440   return  ! /r
 68000   def fn_print_line_str(mat pl_str$; pl_pos)

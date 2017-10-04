@@ -8,7 +8,7 @@
 00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
 00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,datafile$*256,indexfile$*256
 00100 ! ______________________________________________________________________
-00110   let fnd1(d1)
+00110   fnd1(d1)
 00120   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
@@ -32,42 +32,42 @@
 00220 ! ______________________________________________________________________
 00230 SCREEN1: ! 
 00240   a$="" : let prtbkno=0
-00250   let fntos(sn$="UBPrtBl1-1") !:
+00250   fntos(sn$="UBPrtBl1-1") !:
         let pf=27 : let ll=25 !:
         let respc=0
-00260   let fnlbl(3,1,"Penalty Due Date:",ll,1)
-00270   let fntxt(3,pf,8,8,1,"1",0,tt$) !:
+00260   fnlbl(3,1,"Penalty Due Date:",ll,1)
+00270   fntxt(3,pf,8,8,1,"1",0,tt$) !:
         let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
-00280   let fnlbl(4,1,"Message on Bill:",ll,1)
-00290   let fntxt(4,pf,30,30) !:
+00280   fnlbl(4,1,"Message on Bill:",ll,1)
+00290   fntxt(4,pf,30,30) !:
         let resp$(respc+=1)=mg$(1)
-00300   let fntxt(5,pf,30,30) !:
+00300   fntxt(5,pf,30,30) !:
         let resp$(respc+=1)=mg$(2)
-00310   let fntxt(6,pf,30,30) !:
+00310   fntxt(6,pf,30,30) !:
         let resp$(respc+=1)=mg$(3)
-00320   let fnlbl(7,1,"Date of Billing:",ll,1)
-00330   let fntxt(7,pf,8,8,1,"1") !:
+00320   fnlbl(7,1,"Date of Billing:",ll,1)
+00330   fntxt(7,pf,8,8,1,"1") !:
         let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
-00340   let fnlbl(8,1,"Starting Route/Sequence:",ll,1)
+00340   fnlbl(8,1,"Starting Route/Sequence:",ll,1)
 00350   let fe$="ubm-act-nam" !:
         let datafile$=env$('Q')&"\UBmstr\Customer.h"&env$('cno') !:
         let indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&env$('cno') !:
         let kp=1741: let kl=9 : let dp=41 : let dl=30 !:
-        let fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) !:
+        fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) !:
         let resp$(respc+=1)="[All]"
-00360   let fnlbl(9,1,"Route Number:",ll,1)
-00370   let fncmbrt2(9,pf) !:
+00360   fnlbl(9,1,"Route Number:",ll,1)
+00370   fncmbrt2(9,pf) !:
         let resp$(respc+=1)="[All]"
-00380   let fnchk(10,pf,"Select Accounts to Print",1)
+00380   fnchk(10,pf,"Select Accounts to Print",1)
 00382   let resp$(respc+=1)="False"
-00384   let fnlbl(12,1,"Service From Date:",ll,1)
-00386   let fntxt(12,pf,8,8,1,"1")
+00384   fnlbl(12,1,"Service From Date:",ll,1)
+00386   fntxt(12,pf,8,8,1,"1")
 00388   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d2_override)
-00390   let fnlbl(13,1,"Service To Date:",ll,1)
-00392   let fntxt(13,pf,8,8,1,"1")
+00390   fnlbl(13,1,"Service To Date:",ll,1)
+00392   fntxt(13,pf,8,8,1,"1")
 00394   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3_override)
-00396   let fncmdset(3)
-00398   let fnacs(sn$,0,mat resp$,ck)
+00396   fncmdset(3)
+00398   fnacs(sn$,0,mat resp$,ck)
 00400   if ck=5 then goto ENDSCR
 00402   let d1 = val(resp$(5))
 00404   let d4 = val(resp$(1))
@@ -129,7 +129,7 @@
 00890   close #1: ioerr L900
 00900 L900: close #3: ioerr L910
 00910 L910: ! 
-00920   let fnpa_finis
+00920   fnpa_finis
 00940   goto ENDSCR
 00950 ! ______________________________________________________________________
 00960 L960: ! 
@@ -146,18 +146,18 @@
 01040 ! ______________________________________________________________________
 01050 SCREEN3: ! 
 01060   let sn$ = "UBPrtBl1-2" !:
-        let fntos(sn$)
+        fntos(sn$)
 01070   let txt$="Account (blank to stop)" !:
-        let fnlbl(1,1,txt$,31,1)
+        fnlbl(1,1,txt$,31,1)
 01080 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
 01090   if trim$(z$)<>"" then !:
           let txt$="Last Account entered was "&z$ !:
-          let fnlbl(3,1,txt$,44,1) else !:
+          fnlbl(3,1,txt$,44,1) else !:
           let txt$="" !:
-          let fnlbl(3,1,txt$,44,1)
-01100   let fncmbact(1,17) ! !:
+          fnlbl(3,1,txt$,44,1)
+01100   fncmbact(1,17) ! !:
         let resp$(1)=a$
-01110   let fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
+01110   fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
 01120   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto RELEASE_PRINT
 01130   if ck=5 then goto RELEASE_PRINT
@@ -196,14 +196,14 @@
 01440 ! ______________________________________________________________________
 01450 ENDSCR: ! pr totals screen
 01460   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
-01470   let fntos(sn$="Bills-Total") !:
+01470   fntos(sn$="Bills-Total") !:
         let mylen=23 : let mypos=mylen+2 !:
         let respc=0
-01480   let fnlbl(1,1,"Total Bills Printed:",mylen,1)
-01490   let fntxt(1,mypos,8,0,1,"",1) !:
+01480   fnlbl(1,1,"Total Bills Printed:",mylen,1)
+01490   fntxt(1,mypos,8,0,1,"",1) !:
         let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-01560   let fncmdset(52) !:
-        let fnacs(sn$,0,mat resp$,ck)
+01560   fncmdset(52) !:
+        fnacs(sn$,0,mat resp$,ck)
 01570 XIT: let fnxit
 01580 ! ______________________________________________________________________
 01590 ERTN: let fnerror(program$,err,line,act$,"xit")
@@ -216,7 +216,7 @@
 01640   goto ERTN
 01650 ! ______________________________________________________________________
 01660 VBOPENPRINT: ! 
-01680   let fnPa_open("Landscape")
+01680   fnPa_open("Landscape")
 01710   let lyne=3
 01740   return 
 01750 ! ______________________________________________________________________
@@ -233,12 +233,12 @@
 01850   pr #20: "Call Print.MyFontBold(True)"
 01860   pr #20: 'Call Print.MyFontSize(12)'
 01870   pr #20: 'Call Print.MyFont("Courier New")'
-01880   let fnpa_text(20,at$(1),xmargin+8,lyne*1-1+ymargin) ! pr #20: 'Call Print.AddText("'&at$(1)&'",'&str$(xmargin+8)&','&str$(lyne*1-1+ymargin)&')'
+01880   fnpa_text(20,at$(1),xmargin+8,lyne*1-1+ymargin) ! pr #20: 'Call Print.AddText("'&at$(1)&'",'&str$(xmargin+8)&','&str$(lyne*1-1+ymargin)&')'
 01890   pr #20: 'Call Print.MyFont("Lucida Console")'
 01900   pr #20: 'Call Print.MyFontSize(10)'
 01910   pr #20: 'Call Print.MyFontBold(False)'
-01920   let fnpa_text(20,at$(2),xmargin+6,lyne*2+1+ymargin-.2) !  pr #20: 'Call Print.AddText("'&at$(2)&'",'&str$(xmargin+6)&','&str$(lyne*2+1+ymargin-.2)&')'
-01930   let fnpa_text(20,at$(3),xmargin+6,lyne*3+1+ymargin) ! pr #20: 'Call Print.AddText("'&at$(3)&'",'&str$(xmargin+6)&','&str$(lyne*3+1+ymargin)&')'
+01920   fnpa_text(20,at$(2),xmargin+6,lyne*2+1+ymargin-.2) !  pr #20: 'Call Print.AddText("'&at$(2)&'",'&str$(xmargin+6)&','&str$(lyne*2+1+ymargin-.2)&')'
+01930   fnpa_text(20,at$(3),xmargin+6,lyne*3+1+ymargin) ! pr #20: 'Call Print.AddText("'&at$(3)&'",'&str$(xmargin+6)&','&str$(lyne*3+1+ymargin)&')'
 01940   pr #20: 'Call Print.AddText("#'&trim$(z$)&'  '&bulk$&'",'&str$(xmargin+4)&','&str$(lyne*5+ymargin)&')'
 01950   pr #20: 'Call Print.AddText("'&e$(1)&'",'&str$(xmargin+4)&','&str$(lyne*6+ymargin)&')'
 01960   pr #20: 'Call Print.AddText("From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d3)&'",'&str$(xmargin+2)&','&str$(lyne*7+ymargin)&')'
@@ -352,9 +352,9 @@
 02740   if g(5)+g(6)+g(7)>0 then pr #20: 'Call Print.AddText("'&fnformnumb$(bal+round(currentcharges*penalty_rate,2),2,9)&'",'&str$(xmargin+106)&','&str$(lyne*12+ymargin)&')'
 02750 L2750: fnpa_fontsize(9)
 02760   addy=14
-02770   let fnpa_text(20,mg$(1),xmargin+68,(addy+=1)*lyne+ymargin)
-02780   let fnpa_text(20,mg$(2),xmargin+68,(addy+=1)*lyne+ymargin)
-02790   let fnpa_text(20,mg$(3),xmargin+68,(addy+=1)*lyne+ymargin)
+02770   fnpa_text(20,mg$(1),xmargin+68,(addy+=1)*lyne+ymargin)
+02780   fnpa_text(20,mg$(2),xmargin+68,(addy+=1)*lyne+ymargin)
+02790   fnpa_text(20,mg$(3),xmargin+68,(addy+=1)*lyne+ymargin)
 02800   addy+=1
 02810   pr #20: 'Call Print.MyFontSize(10)'
 02820   if df$="Y" then !:
@@ -375,7 +375,7 @@
 02910   if checkcounter=3 then checkx=1.375 : checky=7.9375
 02920   if checkcounter=0 then checkx=6.75 : checky=7.9375
 02950   if checkcounter=0 then !:
-          let fnpa_newpage
+          fnpa_newpage
 02960   return 
 02970 ! ______________________________________________________________________
 02980 BULKSORT: ! bulk sort order

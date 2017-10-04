@@ -2,20 +2,20 @@
 00020 ! PR Year To Date Pay Report
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnopenprn,fncloseprn,fndat
-00050   let fntop("S:\acsPR\prytdpay",cap$="YTD Wage Breakdown")
+00050   fntop("S:\acsPR\prytdpay",cap$="YTD Wage Breakdown")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim cnam$*40,dat$*20,em1$*30,tdet(17),tdy(6),tdc(6),ty(21)
 00090 ! ______________________________________________________________________
-00100   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00100   fncno(cno,cnam$) !:
+        fndat(dat$)
 00110   bob1=(132-len(rtrm$(cnam$)))/2 !:
         bob2=(132-len(rtrm$(dat$)))/2 !:
         bob3=132-10 : bob4=(132-26)/2
 00120   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
 00130   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno)&",Shr",internal,input,relative 
 00140   pr "please wait..."
-00150   let fnopenprn(cp,0,0,process)
+00150   fnopenprn(cp,0,0,process)
 00160   gosub HDR
 00170   goto LYNES
 00180 ! ______________________________________________________________________
@@ -75,7 +75,7 @@
 00700   pr #255,using L710: "      Total Wages:",tc9
 00710 L710: form pos 10,c 25,pos 37,n 19.2
 00720 DONE: ! 
-00730   let fncloseprn
+00730   fncloseprn
 00740 XIT: let fnxit
 00750 ! ______________________________________________________________________
 00760 ! <Updateable Region: ERTN>

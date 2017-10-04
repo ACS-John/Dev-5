@@ -3,8 +3,8 @@
 00040   on error goto L860
 00050 ! 
 00060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
-00070   let fntop(program$,cap$="Client Directory")
-00080   let fncno(cno,cnam$)
+00070   fntop(program$,cap$="Client Directory")
+00080   fncno(cno,cnam$)
 00090   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&str$(cno)&",Shr",internal,input,relative ioerr L860
 00100   read #1,using L110: mat cat$ ioerr L860
 00110 L110: form pos 1,10*c 30
@@ -33,7 +33,7 @@
 00360   pr newpage
 00370   pr fields "10,25,c 48,n": "CLIENT DIRECTORY IN PROCESS"
 00380   pr fields "23,2,c 30,n": "Press F5 to stop"
-00390   let fnopenprn(cp,0,0,process)
+00390   fnopenprn(cp,0,0,process)
 00400   form c 9,skip 0
 00410   if numprint=1 then goto L440
 00420   for j=1 to 10

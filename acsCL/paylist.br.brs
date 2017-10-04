@@ -9,47 +9,47 @@
 00090   dim contact$*30,email$*50,fax$*12,myact$*20
 00100   dim gl$*12,gldesc$*30,key$*19,tr$(5)*35,payeegl$*12,payeekey$*12
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Payee Listing")
-00130   let fndat(dat$)
-00140   let fncno(cno,cnam$)
+00120   fntop(program$,cap$="Payee Listing")
+00130   fndat(dat$)
+00140   fncno(cno,cnam$)
 00150   open #1: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PAYIDX1.h"&str$(cno)&",Shr",internal,outin,keyed 
 00160   open #2: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PAYIDX2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00170   open #trmstr2=31: "Name="&env$('Q')&"\CLmstr\TRMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TRIDX2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00180   open #payeegl=3: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00190   pr newpage
-00200   let fntos("ubnamlst") !:
+00200   fntos("ubnamlst") !:
         let respc=0
 00210   let text$="Report Heading Date:" !:
-        let fnlbl(1,1,text$,25,1)
-00220   let fntxt(1,27,20) !:
+        fnlbl(1,1,text$,25,1)
+00220   fntxt(1,27,20) !:
         let resp$(respc+=1)=dat$
-00230   let fnlbl(2,1,"Print Order:",25,1)
+00230   fnlbl(2,1,"Print Order:",25,1)
 00240   let item1$(1)="Payee Number" !:
         let item1$(2)="Alphabetic by Name"
-00250   let fncomboa("paylist-srt",2,27,mat item1$,tt$) !:
+00250   fncomboa("paylist-srt",2,27,mat item1$,tt$) !:
         let resp$(respc+=1)=item1$(1)
-00260   let fnchk(4,29,"Print G/L Breakdowns:",1) !:
+00260   fnchk(4,29,"Print G/L Breakdowns:",1) !:
         let resp$(respc+=1)="False"
-00270   let fnchk(6,29,"Print Total Payments:",1) !:
+00270   fnchk(6,29,"Print Total Payments:",1) !:
         let resp$(respc+=1)="False"
-00280   let fnlbl(8,1,"Transaction Starting Date:",25,1)
-00290   let fntxt(8,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)') !:
+00280   fnlbl(8,1,"Transaction Starting Date:",25,1)
+00290   fntxt(8,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)') !:
         let resp$(respc+=1)=" "
-00300   let fnlbl(9,1,"Transaction Ending Date:",25,1)
-00310   let fntxt(9,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)') !:
+00300   fnlbl(9,1,"Transaction Ending Date:",25,1)
+00310   fntxt(9,27,8,0,0,"3",0,'Blank for All (Only applicable if need Total Payments Printed)') !:
         let resp$(respc+=1)=""
-00320   let fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+00320   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
 00340   let dat$=resp$(1)
 00350   let seq$=resp$(2)(1:1)
-00360   let fndat(dat$,2)
+00360   fndat(dat$,2)
 00370   if resp$(3)(1:1)="T" then let printgl=1 else let printgl=0 ! pr general ledger breakdowns
 00380   if resp$(4)(1:1)="T" then let printtotal=1 else let printtotal=0 ! pr total payments
 00390   begdate=val(resp$(5))
 00400   let enddate=val(resp$(6)) ! ending date for adding purchases for period of time
 00410   let namtab=66-int(len(rtrm$(cnam$))/2)
 00420   let dattab=66-int(len(rtrm$(dat$))/2)
-00430   let fnopenprn
+00430   fnopenprn
 00440   gosub L730
 00450 L450: if seq$="A" then read #2,using L460,release: vn$,nam$,ad1$,ad2$,csz$,ph$ eof L790 else read #1,using L460,release: vn$,nam$,ad1$,ad2$,csz$,ph$,contact$,email$,fax$,myact$ eof L790
 00460 L460: form pos 1,c 8,4*c 30,pos 153,c 12,c 30,c 50,c 12,c 20

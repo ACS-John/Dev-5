@@ -5,11 +5,11 @@
 20080   library 'S:\Core\Library': fntext_editor
 20100   library 'S:\Core\Library': fnget_atlantis
 20120   on error goto ERTN
-20140   let fntop(program$,cap$="Edit Retained Earnings Statement")
+20140   fntop(program$,cap$="Edit Retained Earnings Statement")
 20160   dim cap$*128
 26000   ! fntext_editor(os_filename$(env$('Q')&'\GLmstr\ACGLStmt.h'&env$('cno')))
 26020   dim atlantis$*256
-26040   let fnget_atlantis(atlantis$)
+26040   fnget_atlantis(atlantis$)
 26060   execute 'SY -w '&atlantis$&' "'&os_filename$(env$('Q')&'\GLmstr\ACGLStmt.h'&env$('cno'))&'" -n'
 26080   goto XIT
 28000 ! 

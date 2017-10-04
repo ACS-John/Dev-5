@@ -9,11 +9,11 @@
 00090   dim fa$(1),fb$(1),fc$(1),fd$(1),l$(10),dedfed(10),dedcode(10)
 00100   dim fm4$*255,in4$(30)
 00110 ! ______________________________________________________________________
-00120   let fncno(cno)
+00120   fncno(cno)
 00130   pr newpage
 00140   pr fields "10,20,c 21,n": "Company Number:"
 00150 L150: rinput fields "10,41,Nz 5,UE,N": cno conv L150
-00155   let fnputcno(cno)
+00155   fnputcno(cno)
 00160   let fm4$="Form  Pos 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 00170   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input ioerr L150 !:
         read #1,using 'Form POS 1,3*C 40,C 12,POS 150,10*C 8,N 2,POS 317,10*C 12,POS 618,10*N 1,POS 638,10*N 1,POS 133,PD 6.3,PD 6.2,POS 236,PD 3.3,PD 4.2': mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed,mcrate,mcmax,ssrate,ssmax !:

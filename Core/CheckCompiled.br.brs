@@ -1,5 +1,5 @@
 20000   library program$ : fncheckcompiled
-20020   let fncheckcompiled
+20020   fncheckcompiled
 20900   end 
 32000 def library fncheckcompiled
 32020   if env$('acsEnableComplier')='Yes' then

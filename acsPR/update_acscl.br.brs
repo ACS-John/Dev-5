@@ -6,7 +6,7 @@
 00070   dim tad(29),tradesc$*30,lcn$*8,tr$(5)*35
 00080   dim rpnames2$(10)*6,dept(6),dedcode(10),bankgl$*12,gl$*12,bn$*30
 00090   dim cap$*128
-00130   let fntop(program$,cap$="Update Checkbook From Check History")
+00130   fntop(program$,cap$="Update Checkbook From Check History")
 00150 ! 
 00160   gosub READ_COMPANY_INFO
 00170   let mcr=mcr*.01

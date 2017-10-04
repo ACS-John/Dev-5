@@ -9,13 +9,13 @@
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7),tr(7),cap$*128
 00100   dim bm(13),bp(13),by(13),tr$*12,td$*30,ta(2)
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Cash Flow Statement - Detail") ! not on menu
+00120   fntop(program$,cap$="Cash Flow Statement - Detail") ! not on menu
 00130   let report$=cap$
-00140   let fncno(cno,cnam$)
+00140   fncno(cno,cnam$)
 00145   actpd$=fnactpd$ !:
         actpd=fnactpd !:
-        let fnfscode !:
-        let fnpriorcd
+        fnfscode !:
+        fnpriorcd
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00151   let fscode=fnfscode !:
@@ -24,7 +24,7 @@
 00170   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative  !:
         read #20,using 'form pos 384,n 2': nap : close #20: 
 00180   let pors=1
-00190   let fnopenprn
+00190   fnopenprn
 00200   let in3$(1)="8,25,N 12.2,UT,N"
 00210   let in3$(2)="8,45,N 12.2,UT,N"
 00220   let mp1=75
@@ -37,15 +37,15 @@
 00280   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",Shr",internal,input,relative 
 00300   open #4: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&str$(cno)&",Shr",internal,outin,relative 
 00310   if fnprocess=1 or fnUseDeptNo=0 then goto L410
-00320   let fntos(sn$="GLInput") !:
+00320   fntos(sn$="GLInput") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00330   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00340   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00330   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00340   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00350   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00360   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00370   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00380   let fnacs(sn$,0,mat resp$,ckey)
+00350   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00360   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00370   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00380   fnacs(sn$,0,mat resp$,ckey)
 00390   if ckey=5 then goto XIT
 00400   costcntr=val(resp$(1))
 00410 L410: read #1,using L450: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1870
@@ -196,9 +196,9 @@
 01860 ! ______________________________________________________________________
 01870 L1870: let eofcode=1
 01880   gosub L1500
-01890   let fnfscode(actpd)
-01900   let fnpriorcd(1)
-01910   let fncloseprn
+01890   fnfscode(actpd)
+01900   fnpriorcd(1)
+01910   fncloseprn
 01920 ! 
 01930   goto XIT
 01940 L1940: ! 

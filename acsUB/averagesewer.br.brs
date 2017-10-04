@@ -1,33 +1,33 @@
 00020 ! average sewer usage program
 00030   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fndat,fnerror,fnopenprn,fncloseprn,fncno,fnxit,fndate_mmddyy_to_ccyymmdd,fnd1,fncmdset,fntop,fnpause,fnchk,fncmbact,fnopt
 00040   dim cap$*128,sendto$*80,z$*10,e$(4)*30,temp$(3)*26
-00050   let fntop("S:\Utility Billing\Billing Journal",cap$="Average Sewer Usage Report")
-00060   let fncno(cno,cnam$)
+00050   fntop("S:\Utility Billing\Billing Journal",cap$="Average Sewer Usage Report")
+00060   fncno(cno,cnam$)
 00080 ! ______________________________________________________________________
 00090   on fkey 5 goto DONE
-00100   let fntos(sn$="sewerusage")
-00110   let fnlbl(1,5,"Show Customers who have sewer usage")
-00120   let fnlbl(2,1,"Less than:",20,1)
-00130   let fntxt(2,23,9,0,right,"30",0,"Enter the minimum usage you want cosidered in your report. (Blank for all)",0 ) !:
+00100   fntos(sn$="sewerusage")
+00110   fnlbl(1,5,"Show Customers who have sewer usage")
+00120   fnlbl(2,1,"Less than:",20,1)
+00130   fntxt(2,23,9,0,right,"30",0,"Enter the minimum usage you want cosidered in your report. (Blank for all)",0 ) !:
         let resp$(2)=""
-00140   let fnlbl(3,1,"Greater than:",20,1)
-00150   let fntxt(3,23,9,0,right,"30",0,"Enter the maximum usage you want cosidered in your report (Blank for all).",0 ) !:
+00140   fnlbl(3,1,"Greater than:",20,1)
+00150   fntxt(3,23,9,0,right,"30",0,"Enter the maximum usage you want cosidered in your report (Blank for all).",0 ) !:
         let resp$(3)=""
-00160   let fncmdset(2)
-00170   let fnacs(sn$,0,mat resp$,ckey)
+00160   fncmdset(2)
+00170   fnacs(sn$,0,mat resp$,ckey)
 00180   if ckey=5 then goto XIT
 00190   let minu=val(resp$(1))
 00200   let maxu=val(resp$(2))
 00210   goto STARTREPORT
 00220 ! ______________________________________________________________________
 00230 DONE: ! 
-00240   let fncloseprn
+00240   fncloseprn
 00250 XIT: let fnxit
 00260 ! ______________________________________________________________________
 00270 STARTREPORT: ! 
 00280 ! maybe a printing please wait screen here would be nice.
 00290   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-00300   let fnopenprn
+00300   fnopenprn
 00310   gosub HEADER
 00320   goto REPORT
 00330 ! ______________________________________________________________________

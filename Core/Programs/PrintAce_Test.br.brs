@@ -61,14 +61,14 @@
 42040     lyne=3 : let xmargin=139 : let ymargin=108
 42060     fnpa_line(xmargin+5,ymargin+2,57,lyne*3+3,1)
 42080     !
-42100     let fnpa_line(xmargin+97,ymargin+0,29,lyne*5+2,1)
-42120     let fnpa_line(xmargin+90,ymargin+0,7,0)
-42140     let fnpa_line(xmargin+90,ymargin+2.8,7,0)
-42160     let fnpa_line(xmargin+90,ymargin+5.6,7,0)
-42180     let fnpa_line(xmargin+90,ymargin+8.4,7,0)
-42200     let fnpa_line(xmargin+90,ymargin+11.2,7,0)
-42220     let fnpa_line(xmargin+90,ymargin+14,7,0)
-42240     let fnpa_line(xmargin+90,ymargin+17,7,0)
+42100     fnpa_line(xmargin+97,ymargin+0,29,lyne*5+2,1)
+42120     fnpa_line(xmargin+90,ymargin+0,7,0)
+42140     fnpa_line(xmargin+90,ymargin+2.8,7,0)
+42160     fnpa_line(xmargin+90,ymargin+5.6,7,0)
+42180     fnpa_line(xmargin+90,ymargin+8.4,7,0)
+42200     fnpa_line(xmargin+90,ymargin+11.2,7,0)
+42220     fnpa_line(xmargin+90,ymargin+14,7,0)
+42240     fnpa_line(xmargin+90,ymargin+17,7,0)
 42260     !
 42280     if enableText then let fnpa_txt("30mm Horizontal Line",105,105)
 42300     fnpa_line(80,110,30,0)

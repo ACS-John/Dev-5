@@ -9,10 +9,10 @@
 00090   dim tr$(5)*35,tr(2),pp1yn$*1,item2$(2)*35,item1$(2)*15
 00100   dim tmp$*40,dp(3),dp$*30
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Claims or Purchases Report")
+00120   fntop(program$,cap$="Claims or Purchases Report")
 00130   cancel=99
-00140   let fncno(cno,cnam$)
-00160   let fndat(dat$)
+00140   fncno(cno,cnam$)
+00160   fndat(dat$)
 00170   gosub ASK_TI1
 00180   goto ASK_PP1
 00190 ! ______________________________________________________________________
@@ -154,7 +154,7 @@
 01610 ! ______________________________________________________________________
 01620 L1620: gosub TOTNOFX
 01630   if fund=2 then gosub FT2
-01640   let fncloseprn
+01640   fncloseprn
 01650   close #work,free: ioerr XIT
 01660 XIT: let fnxit
 01670 ! ______________________________________________________________________
@@ -218,44 +218,44 @@
 02440   return 
 02450 ! ______________________________________________________________________
 02460 ASK_TI1: ! r:
-02470   let fntos(sn$="claims") !:
+02470   fntos(sn$="claims") !:
         let respc=0
-02480   let fnlbl(1,1,"Cutoff Date:",38,1)
-02490   let fntxt(1,40,8,0,1,"1",0,"No invoices past this date will be listed!") !:
+02480   fnlbl(1,1,"Cutoff Date:",38,1)
+02490   fntxt(1,40,8,0,1,"1",0,"No invoices past this date will be listed!") !:
         let resp$(respc+=1)=""
-02500   let fnlbl(2,1,"Type of Report:",38,1)
+02500   fnlbl(2,1,"Type of Report:",38,1)
 02510   let item1$(1)="Claims" !:
         let item1$(2)="Purchases"
-02520   let fncomboa("claims-srt",2,40,mat item1$,tt$) !:
+02520   fncomboa("claims-srt",2,40,mat item1$,tt$) !:
         let resp$(respc+=1)=item1$(1)
-02530   let fnchk(3,41,"Include previously paid Invoices:",1) !:
+02530   fnchk(3,41,"Include previously paid Invoices:",1) !:
         let resp$(respc+=1)="False"
-02540   let fnlbl(5,1,"Starting Date:",38,1)
-02550   let fntxt(5,40,8,0,1,"1",0,"Only applicable if including previously paid invoices!") !:
+02540   fnlbl(5,1,"Starting Date:",38,1)
+02550   fntxt(5,40,8,0,1,"1",0,"Only applicable if including previously paid invoices!") !:
         let resp$(respc+=1)=""
-02560   let fnlbl(6,1,"Ending Date:",38,1)
-02570   let fntxt(6,40,8,0,1,"1",0,"Only applicable if including previously paid invoices!") !:
+02560   fnlbl(6,1,"Ending Date:",38,1)
+02570   fntxt(6,40,8,0,1,"1",0,"Only applicable if including previously paid invoices!") !:
         let resp$(respc+=1)=""
-02580   let fnlbl(8,1,"Sort by:",38,1)
+02580   fnlbl(8,1,"Sort by:",38,1)
 02590   let item2$(1)="Fund Number" !:
         let item2$(2)="Vendor Number"
-02600   let fncomboa("claims-act",8,40,mat item2$) !:
+02600   fncomboa("claims-act",8,40,mat item2$) !:
         let resp$(respc+=1)=item2$(1)
-02610   let fnlbl(10,1,"Show Invoices:",38,1)
+02610   fnlbl(10,1,"Show Invoices:",38,1)
 02620   let item2$(1)="All Invoices" !:
         let item2$(2)="Coded for Payment"
-02630   let fncomboa("claims-3",10,40,mat item2$,"You have a choice of listing all unpaid invoices on the report, or just those that have been selected for payment") !:
+02630   fncomboa("claims-3",10,40,mat item2$,"You have a choice of listing all unpaid invoices on the report, or just those that have been selected for payment") !:
         let resp$(respc+=1)=item2$(1)
-02640   let fnchk(11,41,"Include payroll checks:",1) !:
+02640   fnchk(11,41,"Include payroll checks:",1) !:
         let resp$(respc+=1)="False"
-02650   let fnlbl(13,1,"Beginning Position of Department Number:",43,1)
-02660   let fntxt(13,46,2,0,1,"30",0,"If you have departmental breakdowns within a fund, you must identify the first digit of the department # within the general ledger number") !:
+02650   fnlbl(13,1,"Beginning Position of Department Number:",43,1)
+02660   fntxt(13,46,2,0,1,"30",0,"If you have departmental breakdowns within a fund, you must identify the first digit of the department # within the general ledger number") !:
         let resp$(respc+=1)=" "
-02670   let fnlbl(14,1,"Ending Position of Department Number:",43,1)
-02680   let fntxt(14,46,2,0,1,"30",0,"Last digit representing department #. Example: GL # '001001600000' The beginning position would be 6 and the ending 7 if department number was the 16.") !:
+02670   fnlbl(14,1,"Ending Position of Department Number:",43,1)
+02680   fntxt(14,46,2,0,1,"30",0,"Last digit representing department #. Example: GL # '001001600000' The beginning position would be 6 and the ending 7 if department number was the 16.") !:
         let resp$(respc+=1)=" "
-02690   let fncmdset(2)
-02692   let fnacs(sn$,0,mat resp$,ck)
+02690   fncmdset(2)
+02692   fnacs(sn$,0,mat resp$,ck)
 02700   if ck=5 then goto XIT
 02710   let d2=val(resp$(1)) ! cutoff date
 02720   let ti1$=resp$(2)(1:1)

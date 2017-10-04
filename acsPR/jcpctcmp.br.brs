@@ -7,16 +7,16 @@
 00070   dim cap$*128,msgline$(2)*60,response$(5)*1
 00080   dim jn$*6,jno$*6,n$*40,cn$*11,cnt$*5,k$*25
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\acsPR\jcPctCmp",cap$="Enter Percent Complete")
-00110   let fncno(cno)
+00100   fntop("S:\acsPR\jcPctCmp",cap$="Enter Percent Complete")
+00110   fncno(cno)
 00120 ! 
-00125   let fnconsole(1)
+00125   fnconsole(1)
 00130 ! ______________________________________________________________________
 00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00160 ! ______________________________________________________________________
 00170 L170: pr newpage
-00180   let fnopenwin(win=101,08,07,16,72,cap$)
+00180   fnopenwin(win=101,08,07,16,72,cap$)
 00190   pr #win,fields "4,2,Cr 25,N": "Job Number:"
 00200   pr #win,fields "5,2,Cr 25,N": "Cost Category:"
 00210   pr #win,fields "6,2,Cr 25,N": "Percent Complete (Labor):"
@@ -64,7 +64,7 @@
 00620 ! ______________________________________________________________________
 00630 L630: let msgline$(1)="Invalid Job Number or Category Number"
 00640   let msgline$(2)="Please reselect."
-00650   let fnoldmsgbox(mat response$,cap$,mat msgline$,1)
+00650   fnoldmsgbox(mat response$,cap$,mat msgline$,1)
 00660   ce=1
 00670   goto ERR1
 00680 ! ______________________________________________________________________

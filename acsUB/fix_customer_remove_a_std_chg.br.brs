@@ -1,7 +1,7 @@
 24000   library "S:\Core\Library.br": fncno,fnxit,fngethandle
 24020   ! this one time fix program will remove the service X ([pick 1-7]) standard charge from all customers 
 24120   service=2 ! NOT READY FOR SERVICES 8, 9 nor 10, ADDITIONAL PROGRAMMING REQUIRED FOR THAT.
-24160   let fncno(cno)
+24160   fncno(cno)
 30000   ! r: customer file
 30020     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&str$(cno)&",SHR",internal,outin,keyed 
 30040     dim z$*10,customer_b(7)

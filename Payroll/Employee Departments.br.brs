@@ -2,49 +2,49 @@
 10200 ! Department names for payroll
 10400 ! ______________________________________________________________________
 10600   library 'S:\Core\Library': fntop,fnxit,fnerror,fnhamster
-10800   let fntop(program$,cap$="Employee Departments")
+10800   fntop(program$,cap$="Employee Departments")
 11000   on error goto ERTN
 11200 ! ______________________________________________________________________
 11400   dim cap$*128,mask(1),p$(1)*25,lbl$(1)*40
 11600 ! ______________________________________________________________________
 12000   add_count=0
-12200   let fn_add('Emp',8, '',0,30)       ! used
-12400   let fn_add('Dept',3)                ! used
-12600   let fn_add('gl no 1',3)
-12800   let fn_add('gl no 2',6)
-13000   let fn_add('gl no 3',3)
-13200   let fn_add('last review date',6)
-13400   let fn_add('next review date',6)
-13600   let fn_add('last increase date',6)
-13800   let fn_add('last payroll date',6)    !  used
-14000   let fn_add('state code',2)
-14200   let fn_add('workmans comp code',2)
-14400   let fn_add('union code',2)
-14600   let fn_add('Salary',10, 'PD',4.2)
-14800   let fn_add('Hourly Rate - Regular',10, 'PD',4.2)
-15000   let fn_add('Hourly Rate - Overtime',10, 'PD',4.2)
-15200   let fn_add('Misc 1 ',10, 'PD',4.2)
-15400   let fn_add('Misc 2 ',10, 'PD',4.2)
-15600   let fn_add('Misc 3 ',10, 'PD',4.2)
-15800   let fn_add('Misc 4 ',10, 'PD',4.2)
-16000   let fn_add('Misc 5 ',10, 'PD',4.2)
-16200   let fn_add('Misc 6 ',10, 'PD',4.2)
-16400   let fn_add('Misc 7 ',10, 'PD',4.2)
-16600   let fn_add('Misc 8 ',10, 'PD',4.2)
-16800   let fn_add('Misc 9 ',10, 'PD',4.2)
-17000   let fn_add('Misc 10',10, 'PD',4.2)
-17200   let fn_add('Misc 11',10, 'PD',4.2)
-17400   let fn_add('Misc 12',10, 'PD',4.2)
-17600   let fn_add('Misc 13',10, 'PD',4.2)
-17800   let fn_add('Misc 14',10, 'PD',4.2)
-18000   let fn_add('Misc 15',10, 'PD',4.2)
-18200   let fn_add('Misc 16',10, 'PD',4.2)
-18400   let fn_add('Misc 17',10, 'PD',4.2)
-18600   let fn_add('Misc 18',10, 'PD',4.2)
-18800   let fn_add('Misc 19',10, 'PD',4.2)
-19000   let fn_add('Misc 20',10, 'PD',4.2)
+12200   fn_add('Emp',8, '',0,30)       ! used
+12400   fn_add('Dept',3)                ! used
+12600   fn_add('gl no 1',3)
+12800   fn_add('gl no 2',6)
+13000   fn_add('gl no 3',3)
+13200   fn_add('last review date',6)
+13400   fn_add('next review date',6)
+13600   fn_add('last increase date',6)
+13800   fn_add('last payroll date',6)    !  used
+14000   fn_add('state code',2)
+14200   fn_add('workmans comp code',2)
+14400   fn_add('union code',2)
+14600   fn_add('Salary',10, 'PD',4.2)
+14800   fn_add('Hourly Rate - Regular',10, 'PD',4.2)
+15000   fn_add('Hourly Rate - Overtime',10, 'PD',4.2)
+15200   fn_add('Misc 1 ',10, 'PD',4.2)
+15400   fn_add('Misc 2 ',10, 'PD',4.2)
+15600   fn_add('Misc 3 ',10, 'PD',4.2)
+15800   fn_add('Misc 4 ',10, 'PD',4.2)
+16000   fn_add('Misc 5 ',10, 'PD',4.2)
+16200   fn_add('Misc 6 ',10, 'PD',4.2)
+16400   fn_add('Misc 7 ',10, 'PD',4.2)
+16600   fn_add('Misc 8 ',10, 'PD',4.2)
+16800   fn_add('Misc 9 ',10, 'PD',4.2)
+17000   fn_add('Misc 10',10, 'PD',4.2)
+17200   fn_add('Misc 11',10, 'PD',4.2)
+17400   fn_add('Misc 12',10, 'PD',4.2)
+17600   fn_add('Misc 13',10, 'PD',4.2)
+17800   fn_add('Misc 14',10, 'PD',4.2)
+18000   fn_add('Misc 15',10, 'PD',4.2)
+18200   fn_add('Misc 16',10, 'PD',4.2)
+18400   fn_add('Misc 17',10, 'PD',4.2)
+18600   fn_add('Misc 18',10, 'PD',4.2)
+18800   fn_add('Misc 19',10, 'PD',4.2)
+19000   fn_add('Misc 20',10, 'PD',4.2)
 19210   open #1: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",use,RecL=149,kps=1/9,kln=8/3,Shr",internal,outin,keyed 
-19400   let fnhamster("department",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
+19400   fnhamster("department",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)
 19600   close #1: 
 19800   execute "Index "&env$('Q')&"\PRmstr\department.h"&env$('cno')&' '&env$('Q')&"\PRmstr\deptidx.h"&env$('cno')&" 1 11,Replace" ioerr XIT
 20000 XIT: let fnxit

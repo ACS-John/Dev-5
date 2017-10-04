@@ -5,24 +5,24 @@
 20080 ! ______________________________________________________________________
 20100   dim cap$*128
 20120 ! ______________________________________________________________________
-20140   let fntop("S:\acsUB\ubRemove",cap$="Remove Old Transactions")
+20140   fntop("S:\acsUB\ubRemove",cap$="Remove Old Transactions")
 20160   cancel=5 : let left=0 : let right=1 : center=2
-20180   let fncno(cno)
+20180   fncno(cno)
 20200 SCREEN1: ! 
-20220   let fntos(sn$="ubRemove")
+20220   fntos(sn$="ubRemove")
 20240   let frac=0
-20260   let fnfra(1,1,10,fraonewidth=70,'') ! cap$)
+20260   fnfra(1,1,10,fraonewidth=70,'') ! cap$)
 20280   let fraone=frac+=1 : let flc=0
 20300   let fraonewidth-=2
-20320   let fnlbl(flc+=1,1,"Warning",fraonewidth,center,3,fraone)
-20340   let fnlbl(flc+=2,1,"This program will erase old transactions ",fraonewidth,center,0,fraone)
-20360   let fnlbl(flc+=1,1,"from the Customer Transaction History File.  ",fraonewidth,center,0,fraone)
-20380   let fnlbl(flc+=1,1,"Enter the oldest date to be retained (mm/dd/yy):",55,right,0,fraone)
-20400   let fntxt(flc,58,8,8,1,"1",0,"",fraone)
+20320   fnlbl(flc+=1,1,"Warning",fraonewidth,center,3,fraone)
+20340   fnlbl(flc+=2,1,"This program will erase old transactions ",fraonewidth,center,0,fraone)
+20360   fnlbl(flc+=1,1,"from the Customer Transaction History File.  ",fraonewidth,center,0,fraone)
+20380   fnlbl(flc+=1,1,"Enter the oldest date to be retained (mm/dd/yy):",55,right,0,fraone)
+20400   fntxt(flc,58,8,8,1,"1",0,"",fraone)
 20420   let resp$(1)=""
-20440   let fnlbl(flc+=2,1,"Transactions older than this date will be deleted!",fraonewidth,center,2,fraone)
-20460   let fncmdset(2)
-20480   let fnacs(sn$,0,mat resp$,ck)
+20440   fnlbl(flc+=2,1,"Transactions older than this date will be deleted!",fraonewidth,center,2,fraone)
+20460   fncmdset(2)
+20480   fnacs(sn$,0,mat resp$,ck)
 20500   if ck=cancel then goto XIT
 20520   let rd1=val(resp$(1))
 20540   let rd1=fndate_mmddyy_to_ccyymmdd(rd1)

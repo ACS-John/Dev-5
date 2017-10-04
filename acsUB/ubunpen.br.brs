@@ -8,16 +8,16 @@
 20140   dim servicename$(10)*20,servicecode$(10)*2,tax_code$(10)*1,pencolumn(10)
 20160   dim penatly$(10)*1,gb(10),extra(23),extra$(11)*30,a(7)
 20180 ! 
-20200   let fntop(program$,cap$="Undo Penalty Calculation")
+20200   fntop(program$,cap$="Undo Penalty Calculation")
 20220 ! ______________________________________________________________________
-20240   let fntos(sn$="ubUnPen") 
+20240   fntos(sn$="ubUnPen") 
 20260   let mylen=26 : let mypos=mylen+2
-20280   let fnlbl(1,1,"Penalty Date:",mylen,1)
-20300   let fntxt(1,mypos,10,0,0,"3") 
+20280   fnlbl(1,1,"Penalty Date:",mylen,1)
+20300   fntxt(1,mypos,10,0,0,"3") 
 20320   let resp$(1)=""
-20340   let fnlbl(1,40,"")
-20360   let fncmdset(2) 
-20380   let fnacs(sn$,win,mat resp$,ckey)
+20340   fnlbl(1,40,"")
+20360   fncmdset(2) 
+20380   fnacs(sn$,win,mat resp$,ckey)
 20400   let ubpendat=val(srep$(resp$(1),'/',''))
 20420   if ckey=5 then goto XIT
 20440   fnAutomatedSavePoint('before')

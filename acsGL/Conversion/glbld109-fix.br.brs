@@ -1,7 +1,7 @@
 00020 ! (C) COPYRIGHT - 2003 - ADVANCED COMPUTER SERVICES, INC.
 00030   library 'S:\Core\Library': fnxit,fntop
 00040   open #20: "Name=CNO.H"&wsid$,internal,input,relative 
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   read #20,using L70,rec=1: cno,cnam$,dat$,cp,nw,process
 00070 L70: form pos 1,n 2,c 40,x 20,c 20,pos 89,2*n 1,pos 141,n 1
 00080   form c 9,skip 0

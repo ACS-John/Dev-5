@@ -10,9 +10,9 @@
 25020       dim tmp$*1024
 25040       let tmp$=env$("xit_override")
 25060       let setenv("xit_override","")
-25080       let fnchain(tmp$)
+25080       fnchain(tmp$)
 25100     end if 
-30000     let fnchain('S:\Core\Menu.br',0,1)
+30000     fnchain('S:\Core\Menu.br',0,1)
 50120 ! ______________________________________________________________________
 50130 ! <Updateable Region: ERTN>
 50140 ERTN: let fnerror(program$,err,line,act$,"xit")

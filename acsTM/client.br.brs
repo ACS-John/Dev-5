@@ -6,13 +6,13 @@
 20500 ! ______________________________________________________________________
 20600   dim cap$*128
 20700 ! ______________________________________________________________________
-20800   let fntop(program$,cap$='Client 420')
+20800   fntop(program$,cap$='Client 420')
 21000 ! 
-21200   let fn_hamster_setup_1
-21300   let fn_hamster_setup_2
-21400   let fn_open_file : let fn_close_file : let fn_open_file
+21200   fn_hamster_setup_1
+21300   fn_hamster_setup_2
+21400   fn_open_file : let fn_close_file : let fn_open_file
 21500   gosub HAMSTER
-21600   let fn_close_file
+21600   fn_close_file
 21700   goto XIT
 21800 ! ______________________________________________________________________
 21900   def fn_open_file
@@ -72,7 +72,7 @@
 27300   fnend 
 27400 ! ______________________________________________________________________
 27500 HAMSTER: ! 
-27600   let fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+27600   fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 27700   return 
 27800 ! ______________________________________________________________________
 27900 XIT: let fnxit
@@ -91,19 +91,19 @@
 29200     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
 29300     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
 29400 ! 
-29500     let fn_hamster_field_reset
+29500     fn_hamster_field_reset
 29600 ! 
 29700 ! fn_hamster_field_add(label$*38,textbox_len,field_type$*2; storage_length,ar_mask,storage_position)
 29800 ! 
-29900     let fn_hamster_field_add("Client ID" ,5,'N',0,mask_number)
-30000     let fn_hamster_field_add("Name",30,'C')
-30020     let fn_hamster_field_add("Balance",12,'pd',5.2,mask_pointtwo,283) ! ,disable:=1) ! ar(1)
-30100     let fn_hamster_field_add("Address" ,30,'C',0,0,36)
-30200     let fn_hamster_field_add("CSZ" ,30,'C',0,0,66)
-30300     let fn_hamster_field_add("Contact",30,'C')
-30400     let fn_hamster_field_add("Business Type",30,'C')
-30500     let fn_hamster_field_add("Phone",12,'C') ! ph$
-30600     let fn_hamster_field_add("Federal ID",11,'c') ! ss$
+29900     fn_hamster_field_add("Client ID" ,5,'N',0,mask_number)
+30000     fn_hamster_field_add("Name",30,'C')
+30020     fn_hamster_field_add("Balance",12,'pd',5.2,mask_pointtwo,283) ! ,disable:=1) ! ar(1)
+30100     fn_hamster_field_add("Address" ,30,'C',0,0,36)
+30200     fn_hamster_field_add("CSZ" ,30,'C',0,0,66)
+30300     fn_hamster_field_add("Contact",30,'C')
+30400     fn_hamster_field_add("Business Type",30,'C')
+30500     fn_hamster_field_add("Phone",12,'C') ! ph$
+30600     fn_hamster_field_add("Federal ID",11,'c') ! ss$
 30700 ! let fn_hamster_field_add("Partner #",9,'n',0,mask_number) ! pno
 30800 ! let fn_hamster_field_add("Month of Year-End",2,'n',0,mask_number) ! mye
 30900 ! let fn_hamster_field_add("dd(01)",4,"PD", 3,mask_number) ! due date
@@ -136,7 +136,7 @@
 33600 ! let fn_hamster_field_add("ca(08)" ,5,"PD", 3)
 33700 ! let fn_hamster_field_add("ca(09)" ,5,"PD", 3)
 33800 ! let fn_hamster_field_add("ca(10)" ,5,"PD", 3)
-33900     let fn_hamster_field_add("Home Phone",12,'c',0,0,260) ! ph2$
+33900     fn_hamster_field_add("Home Phone",12,'c',0,0,260) ! ph2$
 34000 ! let fn_hamster_field_add("Spouse SSN",11,'c') ! ss2$
 34100 ! let fn_hamster_field_add("Balance",12,'pd',5.2,mask_pointtwo,283) ! ar(1)
 34200 ! let fn_hamster_field_add("ar(2)",12,'pd',5.2,mask_pointtwo)

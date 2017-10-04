@@ -9,16 +9,16 @@
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7),cap$*128
 00100   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Cash Flow Statement")
+00120   fntop(program$,cap$="Cash Flow Statement")
 00130   let report$=cap$
-00140   let fncno(cno,cnam$)
+00140   fncno(cno,cnam$)
 00144   actpd$=fnactpd$
 00145   let pedat=val(actpd$)
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00160   let fscode=fnfscode
-00165   let fnfscode
-00166   let fnpriorcd
+00165   fnfscode
+00166   fnpriorcd
 00170   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00175   let fscode=fnfscode
@@ -33,15 +33,15 @@
           let fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
 00250   open #1: fl1$,internal,input,keyed 
 00260   if fnprocess=1 or fnUseDeptNo=0 then goto L360
-00270   let fntos(sn$="ACglcash") !:
+00270   fntos(sn$="ACglcash") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00280   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00290   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00280   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00290   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00300   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00310   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00320   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00330   let fnacs(sn$,0,mat resp$,ckey)
+00300   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00310   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00320   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00330   fnacs(sn$,0,mat resp$,ckey)
 00340   if ckey=5 then goto XIT
 00350   costcntr=val(resp$(1))
 00360 L360: if fnps=2 then goto L390 ! secondary
@@ -50,7 +50,7 @@
 00380   goto L400
 00390 L390: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&env$('Temp')&"\fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
 00400 L400: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Temp')&"\fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
-00410   let fnopenprn !:
+00410   fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00420 L420: read #1,using L460: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1820
 00430   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L420
@@ -203,22 +203,22 @@
 01810 ! ______________________________________________________________________
 01820 L1820: let eofcode=1
 01830   gosub L1440
-01840   let fnfscode(pedat)
-01841   let fnpriorcd(1)
-01850   let fncloseprn
+01840   fnfscode(pedat)
+01841   fnpriorcd(1)
+01850   fncloseprn
 01860   goto XIT
 01870 ! ______________________________________________________________________
 01880 L1880: let fntos(sn$="ACglcash2") !:
         let mylen=25: let mypos=mylen+3 : let right=1
-01890   let fnlbl(1,1,"Total Current Month:",mylen,right)
-01900   let fntxt(1,mypos,12,0,right,"10",0,"Enter the total for the current month.",0 ) !:
+01890   fnlbl(1,1,"Total Current Month:",mylen,right)
+01900   fntxt(1,mypos,12,0,right,"10",0,"Enter the total for the current month.",0 ) !:
         let resp$(1)=str$(total)
-01910   let fnlbl(2,1,"Total Year to Date:",mylen,right)
-01920   let fntxt(2,mypos,12,0,right,"10",0,"Enter the total for the year.",0 ) !:
+01910   fnlbl(2,1,"Total Year to Date:",mylen,right)
+01920   fntxt(2,mypos,12,0,right,"10",0,"Enter the total for the year.",0 ) !:
         let resp$(2)=str$(total2)
-01930   let fncmdkey("&Next",1,1,0,"Accept the answer.")
-01940   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-01950   let fnacs(sn$,0,mat resp$,ckey)
+01930   fncmdkey("&Next",1,1,0,"Accept the answer.")
+01940   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+01950   fnacs(sn$,0,mat resp$,ckey)
 01960   if ckey=5 then goto XIT
 01970   let total=val(resp$(1))
 01980   let total2=val(resp$(2))

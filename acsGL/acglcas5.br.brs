@@ -9,8 +9,8 @@
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7)
 00100   dim pedat$*20,actpd$*6,bm(13),d(2),bp(13),by(13)
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Cash Flow with Budget")
-00130   let fncno(cno,cnam$)
+00120   fntop(program$,cap$="Cash Flow with Budget")
+00130   fncno(cno,cnam$)
 00140   let udf$=env$('temp')&'\'
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
@@ -32,7 +32,7 @@
 00290   pr newpage
 00300   pr fields "10,20,C 30,h,n": "CASH FLOW STATEMENT IN PROCESS"
 00310   on fkey 5 goto L2130
-00320   let fnopenprn(cp,58,220,process)
+00320   fnopenprn(cp,58,220,process)
 00330   open #1: fl1$,internal,input,keyed 
 00340   if process=1 or d(1)=0 then goto L390
 00350   pr newpage
@@ -216,7 +216,7 @@
 02120 ! ______________________________________________________________________
 02130 L2130: let eofcode=1
 02140   gosub L1770
-02150   let fncloseprn
+02150   fncloseprn
 02160   goto XIT
 02170 ! ______________________________________________________________________
 02180 L2180: pr newpage

@@ -7,8 +7,8 @@
 00070   dim jn$*6,cn$*11,ta(2),tr(9),io1$(2),n$*40,tn$*6,dr(7),en$*12
 00080   dim cap$*128,resp$(3)*50,ml$(2)*60
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$="Certified Payroll Register")
-00110   let fncno(cno)
+00100   fntop(program$,cap$="Certified Payroll Register")
+00110   fncno(cno)
 00120 ! 
 00130   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -16,16 +16,16 @@
 00160   open #4: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=55,Replace",internal,output 
 00170 ! ______________________________________________________________________
 00180 MENU1: ! 
-00190   let fntos(sn$="jccpr1") !:
+00190   fntos(sn$="jccpr1") !:
         let respc=0
-00200   let fnlbl(1,47," ",1,1)
-00210   let fnlbl(1,1,"Beginning Date:",20,1)
-00220   let fntxt(1,23,8,0,0,"1",0,"First day of week being printed.") !:
+00200   fnlbl(1,47," ",1,1)
+00210   fnlbl(1,1,"Beginning Date:",20,1)
+00220   fntxt(1,23,8,0,0,"1",0,"First day of week being printed.") !:
         let resp$(respc+=1)=str$(df)
-00230   let fnlbl(2,1,"Ending Date:",20,1)
-00240   let fntxt(2,23,8,0,0,"1",0,"Week ending date.") !:
+00230   fnlbl(2,1,"Ending Date:",20,1)
+00240   fntxt(2,23,8,0,0,"1",0,"Week ending date.") !:
         let resp$(respc+=1)=str$(dt)
-00250   let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+00250   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00255   if ck=5 then goto XIT
 00260   let df=val(resp$(1)) ! beginning date
 00270   let dt=val(resp$(2)) ! ending date
@@ -52,15 +52,15 @@
 00480   goto ASKJOB
 00490 ! ______________________________________________________________________
 00500 ASKJOB: ! 
-00510   let fntos(sn$="jccpr1J") !:
+00510   fntos(sn$="jccpr1J") !:
         let respc=0
-00520   let fnlbl(1,1,"Job #:",8,1)
-00530   let fncmbjob(1,11) !:
+00520   fnlbl(1,1,"Job #:",8,1)
+00530   fncmbjob(1,11) !:
         let resp$(respc+=1)=jn$
 00540   if trim$(jn$)<>"" then let fnlbl(3,1,"Last job processed:"&trim$(jn$),35,1)
-00550   let fncmdkey("&Next",1,1,0,"Process the job" ) !:
-        let fncmdkey("&Complete",2,0,0,"Start printing")
-00560   let fnacs(sn$,0,mat resp$,ck)
+00550   fncmdkey("&Next",1,1,0,"Process the job" ) !:
+        fncmdkey("&Complete",2,0,0,"Start printing")
+00560   fnacs(sn$,0,mat resp$,ck)
 00570   if ck=2 then goto PRINT_REPORT
 00580   let jn$=lpad$(trim$(resp$(1)(1:6)),6)
 00590   let rw=0
@@ -72,7 +72,7 @@
 00650   mat ml$(2) !:
         let ml$(1)="No Transactions exist for Job Number "&ltrm$(jn$) !:
         let ml$(2)="within the specified date range." !:
-        let fnmsgbox(mat ml$,resp$,cap$,0) !:
+        fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto ASKJOB
 00660 L660: read #2,using L620: cn$,mat ta eof L640
 00670 L670: if jn$><cn$(1:6) then goto L640
@@ -102,7 +102,7 @@
 00910   close #1: 
 00920   execute "FREE "&env$('Temp')&"\Addr."&session$&" -n"
 00930   execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
-00940   let fnchain ("S:\acsPR\newJCCPR2")
+00940   fnchain ("S:\acsPR\newJCCPR2")
 00950 ! ______________________________________________________________________
 00960 XIT: let fnxit
 00970 ! ______________________________________________________________________

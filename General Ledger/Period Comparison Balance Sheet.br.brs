@@ -9,7 +9,7 @@
 00090   dim b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,13)
 00100   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*12
 00110 ! ______________________________________________________________________
-00120   let fntop(program$)
+00120   fntop(program$)
 00122   if fnglfs=5 then goto XIT
 00135   actpd$=fnactpd$ !:
         actpd=fnactpd
@@ -235,9 +235,9 @@
 02110 ! ______________________________________________________________________
 02120 L2120: let eofcode=1
 02130   gosub L1650
-02135   let fnfscode(actpd)
-02136   let fnpriorcd(1)
-02140   let fncloseprn
+02135   fnfscode(actpd)
+02136   fnpriorcd(1)
+02140   fncloseprn
 02150   goto XIT
 02160 ! ______________________________________________________________________
 02170 XIT: let fnxit

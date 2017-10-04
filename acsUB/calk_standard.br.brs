@@ -11,12 +11,12 @@
 08220     next j
 08240   end if 
 08260   if env$('client')='Campbell' then
-08280       let fncreg_read('ubcalk-sewer_cap_date',sewer_cap_date$)
+08280       fncreg_read('ubcalk-sewer_cap_date',sewer_cap_date$)
 08300       sewer_cap_date=val(sewer_cap_date$)
 08320   end if
 08340   dim onlyMonth(10)
 08360   for service_item=1 to 10
-08380     let fncreg_read('Service '&str$(service_item)&' only month',tmp$) : onlyMonth(service_item)=val(tmp$)
+08380     fncreg_read('Service '&str$(service_item)&' only month',tmp$) : onlyMonth(service_item)=val(tmp$)
 08400   next service_item
 09990 fnend 
 09992 Ignore: continue
@@ -67,11 +67,11 @@
 30380     let g(5)=fn_calk_purcahsed_gas_cost_adj(btu,usage_gas)
 30400     let first_non_metered_service=6
 30420   end if 
-32000   let fn_calk_demand
+32000   fn_calk_demand
 32010   for j=first_non_metered_service to 10
 32012     if fn_PassesOnlyMonthFilter(j) then 
 32020       if trim$(servicename$(j))="Interest on Deposit" and calc_interest_on_deposit then 
-32030         let fn_interest_credit(interest_credit_rate)
+32030         fn_interest_credit(interest_credit_rate)
 32040       else if penalty$(j)<>"Y" and service$(j)<>"TX" and trim$(servicename$(j))<>"" then ! skip penalty, sales tax and unused services
 32050         if env$('client')="Kimberling" and int(d1*.0001)><2 and (j=5 or j=6) then goto LX1110 ! CALCULATE fees EACH FEB 1
 32060         if trim$(servicename$(j))="Inspection Fee" and ~charge_inspection_fee then goto LX1110 ! French Settlement Gas only ask that question, but it should only be calculated when selected
@@ -82,10 +82,10 @@
 32140       LX1110: ! 
 32150     end if
 32160   next j
-32180   let fn_calk_for_final_bill
-32200   let fn_calk_sales_tax
-32220   let fn_calk_penalty
-32240   let fn_calk_net ! NET AND GROSS BILL
+32180   fn_calk_for_final_bill
+32200   fn_calk_sales_tax
+32220   fn_calk_penalty
+32240   fn_calk_net ! NET AND GROSS BILL
 32260 fnend 
 33000 def fn_PassesOnlyMonthFilter(pomfServiceCode)
 33020   if onlyMonth(pomfServiceCode)<=0 then
@@ -259,7 +259,7 @@
 39150     if env$('client')="Pennington" and service_code$='SF' then gosub PENNINGTON_SERVICE_FEE
 39160   end if 
 39180   NM_XIT: ! 
-39200   let fn_calk_non_metered=calk_non_metered_return
+39200   fn_calk_non_metered=calk_non_metered_return
 39220 fnend  ! fn_calk_non_metered(j)
 39300 ! CARRIZO_TRASH_TAX: ! r:  called from fn_calk_non_metered
 39310 !   if extra(12)=0 then 
@@ -603,7 +603,7 @@
 56180     ! b(11) is service 4 (gas)      deposit
 56200     let g(serviceOther)=g(serviceOther)-b(8)-b(9)-b(10)-b(11) ! REFUND DEPOSITS (takes out of any service titled  "Other"
 56220     if d1=f then 
-56240       let fn_depr(x$,d1) ! recalculation and deposit possibly already refunded
+56240       fn_depr(x$,d1) ! recalculation and deposit possibly already refunded
 56260     else
 56280       if b(8)<>0 then let fnDepositChangeLog(x$,b(8),0,d1,trim$(servicename$(1))(1:15)&' Deposit Refunded')
 56300       if b(9)<>0 then let fnDepositChangeLog(x$,b(9),0,d1,trim$(servicename$(2))(1:15)&' Deposit Refunded')
@@ -659,7 +659,7 @@
 60180   L6390: ! 
 60200 fnend  ! fn_calk_demand
 64000 def fn_calk_purcahsed_gas_cost_adj(btu,usage_gas)
-64160   let fn_calk_purcahsed_gas_cost_adj=round((btu*.1)*max(0,usage_gas),2)
+64160   fn_calk_purcahsed_gas_cost_adj=round((btu*.1)*max(0,usage_gas),2)
 64190 fnend 
 66000 def fn_interest_credit(interest_credit_rate) ! INTEREST CREDIT
 66020   ! requires: d1, c(4)
@@ -683,7 +683,7 @@
 66380 fnend 
 68000 def library fnservice_other
 68020   if ~setup_calk then let fn_setup_calk
-68040   let fnservice_other=fn_service_other
+68040   fnservice_other=fn_service_other
 68060 fnend 
 70000 def fn_service_other
 70020   if ~service_other_return then 
@@ -696,5 +696,5 @@
 70160     if ~service_other_return then let service_other_return=8 ! default to service 8
 70180   end if 
 70200   SERVICE_OTHER_XIT: ! 
-70220   let fn_service_other=service_other_return
+70220   fn_service_other=service_other_return
 70240 fnend 

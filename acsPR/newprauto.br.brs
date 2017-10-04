@@ -6,7 +6,7 @@
 00060 ! ______________________________________________________________________
 00070   dim prg$*20,a$*40,cnam$*40,ml$(3)*80
 00080 ! ______________________________________________________________________
-00090   let fncno(cno)
+00090   fncno(cno)
 00100 L100: if fnprocess=0 then goto XIT
 00110 ! ______________________________________________________________________
 00120   let pgnum=fnpgnum
@@ -20,15 +20,15 @@
 00160   if m=1 and mo<>1 then goto L140 ! MONTHY PERIOD NOT SELECTED
 00170   if q=1 and qt<>1 then goto L140 ! QUARTER PERIOD NOT SELECTED
 00180   if rtrm$(prg$)="" then goto L260
-00190   let fnprg(prg$,put=2)
-00200   let fnpgnum(pgnum) : let fnps(ps)
+00190   fnprg(prg$,put=2)
+00200   fnpgnum(pgnum) : let fnps(ps)
 00210   goto CHAIN_PRG
 00220 MSGBOX1: ! 
 00230   mat ml$(3) !:
         let ml$(1)="The order for automatic processing has" !:
         let ml$(2)="never been set for company # "&str$(cno)&"." !:
         let ml$(3)="Click OK to skip this company." !:
-        let fnmsgbox(mat ml$,resp$,cap$,49)
+        fnmsgbox(mat ml$,resp$,cap$,49)
 00240   goto L260
 00250 ! ______________________________________________________________________
 00260 L260: let fnkillauto : let fnpgnum(-1) !:

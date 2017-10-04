@@ -10,27 +10,27 @@
 00090   dim ytdtdc(10),tdc(10),tcp(32),ytdtotal(32),tdet(23)
 00100   dim message$*40,cap$*128
 00110 ! ______________________________________________________________________
-00130   let fntop(program$,cap$="Employee Review Register")
+00130   fntop(program$,cap$="Employee Review Register")
 00140 ! ______________________________________________________________________
 00150   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
 00180 ! ______________________________________________________________________
 00190 MENU1: ! 
-00200   let fntos(sn$="premprev")
+00200   fntos(sn$="premprev")
 00202   let respc=0
-00210   let fnlbl(1,47," ",1,1)
-00220   let fnlbl(1,1,"Beginning Date of Tax Year:",30,1)
-00230   let fntxt(1,34,12,0,0,"3",0,"") 
+00210   fnlbl(1,47," ",1,1)
+00220   fnlbl(1,1,"Beginning Date of Tax Year:",30,1)
+00230   fntxt(1,34,12,0,0,"3",0,"") 
 00232   let resp$(respc+=1)=str$(beg_date)
-00240   let fnlbl(2,1,"Last Payroll Date to Analyze:",30,1)
-00250   let fntxt(2,34,12,0,0,"3",0,"") 
+00240   fnlbl(2,1,"Last Payroll Date to Analyze:",30,1)
+00250   fntxt(2,34,12,0,0,"3",0,"") 
 00252   let resp$(respc+=1)=str$(end_date)
-00260   let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+00260   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
 00280   beg_date=val(resp$(1)) ! beginning of year
 00300   let end_date=val(resp$(2)) ! ending day of year
 00310 ! ______________________________________________________________________
 00320   on fkey 5 goto DONE
-00330   let fnopenprn
+00330   fnopenprn
 00340 ! ______________________________________________________________________
 00350   gosub HDR
 00360   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -78,7 +78,7 @@
 00800 DONE: ! 
 00810   close #1: ioerr ignore
 00820   close #2: ioerr ignore
-00830   let fncloseprn
+00830   fncloseprn
 00840   goto XIT
 00850 ! ______________________________________________________________________
 00860 HDR: ! 
@@ -111,11 +111,11 @@
 01130 ! L1130: if wsid$="09" or wsid$="99" then return 
 01140 ! L1140: let fntos(sn$="WpTrap") !:
       !   let respc=0 : let mylen=25 : let mypos=mylen+2
-01150 !   let fnlbl(1,1,"         Quit!      ",mylen,2)
-01160 !   let fnlbl(2,1,"Stay out of Payroll!",mylen,2)
-01170 !   let fnlbl(3,1,"Call Brenda for Password",mylen,2)
-01180 !   let fntxt(3,mylen+3,8,8,1,"",0,"You must have a password to get out.") !:
+01150 !   fnlbl(1,1,"         Quit!      ",mylen,2)
+01160 !   fnlbl(2,1,"Stay out of Payroll!",mylen,2)
+01170 !   fnlbl(3,1,"Call Brenda for Password",mylen,2)
+01180 !   fntxt(3,mylen+3,8,8,1,"",0,"You must have a password to get out.") !:
       !   let resp$(respc+=1)=""
-01190 !   let fncmdkey("E&xit",5,1,1,"Returns to menu")
-01200 !   let fnacs(sn$,0,mat resp$,ckey)
+01190 !   fncmdkey("E&xit",5,1,1,"Returns to menu")
+01200 !   fnacs(sn$,0,mat resp$,ckey)
 01210 !   if trim$(uprc$(resp$(1)))="GETMEOUT" then goto XIT else goto L1140

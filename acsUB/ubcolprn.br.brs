@@ -7,10 +7,10 @@
 00080   dim r(20,4),hd1$*255,cap$*128,servicename$(10)*20,tg(11),resp$(7)*40
 00081   dim ml$(3)*90
 00090 ! ______________________________________________________________________
-00100   let fntop("S:\acsUB\UBColPrn",cap$="Cash Receipts Journal")
-00110   let fncno(cno,cnam$)
+00100   fntop("S:\acsUB\UBColPrn",cap$="Cash Receipts Journal")
+00110   fncno(cno,cnam$)
 00120 ! skip_header=1 ! <--  this is really a developer only option.
-00130   let fndat(dat$,1)
+00130   fndat(dat$,1)
 00140   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative 
 00142   read #20,using "Form POS 1,10*C 20",rec=1: mat servicename$
 00144   close #20: 
@@ -30,7 +30,7 @@
 00240   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00250   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00260 ! ______________________________________________________________________
-00280   let fnopenprn
+00280   fnopenprn
 00290   gosub HDR
 00300 ! 
 40000 MAIN_LOOP_TOP: ! 
@@ -71,7 +71,7 @@
 40720     let ml$(1)="The breakdown on a collection transaction dated "&str$(tdate)& " for customer "&z$
 40740     let ml$(2)="does not balance.  Your totals will be off by "& trim$(cnvrt$("pic($$$,$$$.## cr)",tamount-sum(alloc)))&"."
 40750     let ml$(3)="(transaction record number: "&str$(rec(h_trans))&')'
-40760     let fnmsgbox(mat ml$,resp$,cap$,49)
+40760     fnmsgbox(mat ml$,resp$,cap$,49)
 40780   end if 
 40800   let route(extra1)+=tamount
 40820   if resp$="Cancel" then goto XIT
@@ -98,35 +98,35 @@
 66280       end if 
 66300     next j
 66320   end if 
-66330   let fncloseprn
+66330   fncloseprn
 66340   goto XIT ! /r
 66350 XIT: let fnxit
 66360 IGNORE: continue 
 68000 SCREEN1: ! r:
-68020   let fntos(sn$="UBColPrn")
+68020   fntos(sn$="UBColPrn")
 68040   let mylen=33 : let mypos=mylen+2
-68060   let fnlbl(1,1,"Report Heading Date:",mylen,1)
-68080   let fntxt(1,mypos,20)
+68060   fnlbl(1,1,"Report Heading Date:",mylen,1)
+68080   fntxt(1,mypos,20)
 68100   let resp$(1)=dat$
-68120   let fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
-68140   let fntxt(2,mypos,10,0,1,"3",0,"First day of the period to be printed. (ccyymmdd format)")
+68120   fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
+68140   fntxt(2,mypos,10,0,1,"3",0,"First day of the period to be printed. (ccyymmdd format)")
 68160   let resp$(2)=str$(ld1)
-68180   let fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
-68200   let fntxt(3,mypos,10,0,1,"3",0,"Last day of the period to be printed. (ccyymmdd format)")
+68180   fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
+68200   fntxt(3,mypos,10,0,1,"3",0,"Last day of the period to be printed. (ccyymmdd format)")
 68220   let resp$(3)=str$(hd1)
-68240   let fnchk(4,mypos,"Include Details:",1)
+68240   fnchk(4,mypos,"Include Details:",1)
 68260   let resp$(4)="True"
-68280   let fnchk(5,mypos,"Show Totals by Route:",1)
+68280   fnchk(5,mypos,"Show Totals by Route:",1)
 68300   let resp$(5)="False"
-68320   let fncmdset(3)
-68340   let fnacs(sn$,win,mat resp$,ck)
+68320   fncmdset(3)
+68340   fnacs(sn$,win,mat resp$,ck)
 68360   if ck=5 then goto XIT
 68380   let dat$=resp$(1)
 68400   let ld1=val(resp$(2))
 68420   let hd1=val(resp$(3))
 68440   let ti1$=resp$(4)
 68460   if resp$(5)="True" then let routetotals=1
-68480   let fndat(dat$,2)
+68480   fndat(dat$,2)
 68500   return  ! /r
 70000 HDR: ! r:
 70010   if ~skip_header then 

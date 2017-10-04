@@ -13,7 +13,7 @@
 11200   dim item$(10)*50 ! flex grid items
 11300   dim tradesc$*30 ! for tralloc file
 11400 ! /r
-11500   let fntop(program$, cap$="Transaction") ! r:
+11500   fntop(program$, cap$="Transaction") ! r:
 11600 ! constants
 11700   cancel=99 : let right=1 : let limit_to_list=1 : center=2
 11800   ccyymmdd$='3' : let mmddyy$='1' : let number$='30'
@@ -22,7 +22,7 @@
 12100   let true$='True' : let false$='False'
 12200 ! defaults
 12300   addloop$='True'
-12400   let fncno(cno)
+12400   fncno(cno)
 12500   let d1=val(date$(4:5))*10000+val(date$(7:8))*100+val(date$(1:2))
 12600   if d1<19999 then let d1=d1+110000 : let rollback=1 else let d1=d1-10000 : let rollback=0
 12700   begd=(int(d1/10000)*10000)+100+val(date$('yy'))-rollback
@@ -35,41 +35,41 @@
 13400 ! /r
 13500 SCREEN1: ! r:
 13600 ! select limitations for the menu1's record selection grid
-13700   let fntos(sn$='Trans-Screen1')
+13700   fntos(sn$='Trans-Screen1')
 13800   let lc=0 : let mylen=25 : let mypos=mylen+2 : let width=100
-13900   let fnlbl(lc+=1,1,'Transaction Grid Selection Criteria',width,center)
+13900   fnlbl(lc+=1,1,'Transaction Grid Selection Criteria',width,center)
 14000   let lc+=1
-14100   let fnlbl(lc+=1,1,"Working Bank:",mylen,right)
-14200   let fncombof('BankAll',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),add_all)
+14100   fnlbl(lc+=1,1,"Working Bank:",mylen,right)
+14200   fncombof('BankAll',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),add_all)
 14300   if wbc=0 then let resp$(1)='[All]' else let resp$(1)=str$(wbc)
-14400   let fnlbl(lc+=1,1,"Working Transaction Type:",mylen,right)
-14500   let fncombof('TransactionTypeall',lc,mypos,0,env$('Q')&"\CLmstr\TransactionType.dat",1,1,2,25,env$('Q')&"\CLmstr\TransactionType.idx",add_all)
+14400   fnlbl(lc+=1,1,"Working Transaction Type:",mylen,right)
+14500   fncombof('TransactionTypeall',lc,mypos,0,env$('Q')&"\CLmstr\TransactionType.dat",1,1,2,25,env$('Q')&"\CLmstr\TransactionType.idx",add_all)
 14600   if wtt=0 then let resp$(2)='[All]' else let resp$(2)=str$(wtt)
-14700   let fnlbl(lc+=1,1,"Payee:",mylen,right)
-14800   let fncombof('Payeeall',lc,mypos,0,env$('Q')&"\CLmstr\PayMstr.h"&str$(cno),1,8,9,30,env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno),add_all)
+14700   fnlbl(lc+=1,1,"Payee:",mylen,right)
+14800   fncombof('Payeeall',lc,mypos,0,env$('Q')&"\CLmstr\PayMstr.h"&str$(cno),1,8,9,30,env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno),add_all)
 14900   if wpayee$='' then let resp$(3)='[All]' else let resp$(3)=wpayee$
 15000   let lc+=1
-15100   let fnlbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
-15200   let fntxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
+15100   fnlbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
+15200   fntxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
 15300   let resp$(4)=str$(transstartdate)
-15400   let fnlbl(lc+=1,1,"Transaction Ending Date:",mylen,right)
-15500   let fntxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
+15400   fnlbl(lc+=1,1,"Transaction Ending Date:",mylen,right)
+15500   fntxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
 15600   let resp$(5)=str$(transenddate)
-15700   let fnlbl(lc+=1,1,"Statement Date Cleared:",mylen,right)
-15800   let fntxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
+15700   fnlbl(lc+=1,1,"Statement Date Cleared:",mylen,right)
+15800   fntxt(lc,mypos,8,0,left,ccyymmdd$,0,'Blank for All')
 15900   let resp$(6)=''
 16000   let lc+=1
-16100   let fnlbl(lc+=1,1,"Posting Status:",mylen,right)
-16200   let fncombof('PostCodeall',lc,mypos,0,"S:\acsCL\PostingCode.dat",1,1,2,25,"S:\acsCL\PostingCode.idx",add_all)
+16100   fnlbl(lc+=1,1,"Posting Status:",mylen,right)
+16200   fncombof('PostCodeall',lc,mypos,0,"S:\acsCL\PostingCode.dat",1,1,2,25,"S:\acsCL\PostingCode.idx",add_all)
 16300   let resp$(7)='[All]'
-16400   let fnlbl(lc+=1,1,"Source:",mylen,right)
-16500   let fncombof('SourceAll',lc,mypos,0,"S:\acsCL\SourceCode.dat",1,1,2,25,"S:\acsCL\SourceCode.idx",add_all)
+16400   fnlbl(lc+=1,1,"Source:",mylen,right)
+16500   fncombof('SourceAll',lc,mypos,0,"S:\acsCL\SourceCode.dat",1,1,2,25,"S:\acsCL\SourceCode.idx",add_all)
 16600   let resp$(8)='[All]'
-16700   let fnlbl(lc+=1,1,"Check/Reference #:",mylen,right)
-16800   let fntxt(lc,mypos,8,0,left,"",0,'Enter the check or reference # to access a specific transactin, else blank for all')
+16700   fnlbl(lc+=1,1,"Check/Reference #:",mylen,right)
+16800   fntxt(lc,mypos,8,0,left,"",0,'Enter the check or reference # to access a specific transactin, else blank for all')
 16900   let resp$(9)=''
-17000   let fncmdset(2)
-17100   let fnacs(sn$,0,mat resp$,ckey)
+17000   fncmdset(2)
+17100   fnacs(sn$,0,mat resp$,ckey)
 17200   if ckey=5 or ckey=cancel then goto XIT
 17300   if resp$(1)='[All]' then 
 17400     let wbc=0 : bn$='[All]'
@@ -102,49 +102,49 @@
 20200   open #h_trmstr(2)=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
 20300   return  ! /r
 20500 MENU1: ! r:
-20600   let fntos(sn$='Transaction-Menu1')
+20600   fntos(sn$='Transaction-Menu1')
 20700   let lc=0 : let mylen=30 : let mypos=mylen+2
 20800   let fc=0 ! frame count
-20900   let fnfra(1,1,10,100,'Transaction Grid Selection Criteria')
+20900   fnfra(1,1,10,100,'Transaction Grid Selection Criteria')
 21000   let frame=fc+=1
 21100   let lc=0
-21200   let fnlbl(lc+=1,1,'Bank:',mylen,right,0,frame)
-21300   let fntxt(lc,mypos,3,0,center,'',disable,'',frame)
+21200   fnlbl(lc+=1,1,'Bank:',mylen,right,0,frame)
+21300   fntxt(lc,mypos,3,0,center,'',disable,'',frame)
 21400   let resp$(1)=str$(wbc)
-21500   let fntxt(lc,mypos+5,30,0,center,'',disable,'',frame)
+21500   fntxt(lc,mypos+5,30,0,center,'',disable,'',frame)
 21600   let resp$(2)=bn$
-21700   let fntxt(lc,mypos+38,15,0,right,pointtwo$,disable,'',frame)
+21700   fntxt(lc,mypos+38,15,0,right,pointtwo$,disable,'',frame)
 21800   let resp$(3)=str$(fnbankbal(wbc))
-21900   let fnlbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
-22000   let fntxt(lc,mypos,1,0,left,'',disable,'',frame)
+21900   fnlbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
+22000   fntxt(lc,mypos,1,0,left,'',disable,'',frame)
 22100   let resp$(4)=str$(wtt)
-22200   let fntxt(lc,mypos+4,25,0,left,'',disable,'',frame)
+22200   fntxt(lc,mypos+4,25,0,left,'',disable,'',frame)
 22300   let resp$(5)=tcde$
 22400   let lc+=1
-22500   let fnlbl(lc+=1,1,'Transaction Starting Date:',mylen,right,0,frame)
-22600   let fntxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
+22500   fnlbl(lc+=1,1,'Transaction Starting Date:',mylen,right,0,frame)
+22600   fntxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
 22700   let resp$(6)=str$(transstartdate)
 22720 ! 
-22800   let fnlbl(lc+=1,1,'Transaction Ending Date:',mylen,right,0,frame)
-22900   let fntxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
+22800   fnlbl(lc+=1,1,'Transaction Ending Date:',mylen,right,0,frame)
+22900   fntxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
 23000   let resp$(7)=str$(transenddate)
 23020 ! 
-23100   let fnlbl(lc+=1,1,'Statement Cleared Date:',mylen,right,0,frame)
-23200   let fntxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
+23100   fnlbl(lc+=1,1,'Statement Cleared Date:',mylen,right,0,frame)
+23200   fntxt(lc,mypos,0,0,left,ccyymmdd$,disable,'',frame)
 23300   let resp$(8)=str$(statementcleareddate)
 23320 ! 
 23400   let lc+=1
 23420 ! 
-23500   let fnlbl(lc+=1,1,'Posting Status:',mylen,right,0,frame)
-23600   let fntxt(lc,mypos,30,0,left,'',disable,'',frame)
+23500   fnlbl(lc+=1,1,'Posting Status:',mylen,right,0,frame)
+23600   fntxt(lc,mypos,30,0,left,'',disable,'',frame)
 23700   let resp$(9)=postingcode$
 23720 ! 
-23800   let fnlbl(lc+=1,1,'Source:',mylen,right,0,frame)
-23900   let fntxt(lc,mypos,30,0,left,'',disable,'',frame)
+23800   fnlbl(lc+=1,1,'Source:',mylen,right,0,frame)
+23900   fntxt(lc,mypos,30,0,left,'',disable,'',frame)
 24000   let resp$(10)=sourcecode$
-24100   let fnbutton(1,90,'Change',1,'',1,10,frame)
+24100   fnbutton(1,90,'Change',1,'',1,10,frame)
 24200 ! r: Transaction Allocation Grid
-24210   let fnlbl(lc=13,1,'Transaction Grid',20)
+24210   fnlbl(lc=13,1,'Transaction Grid',20)
 24220   mat chdr$(11) : mat cmask$(11) : mat item$(11)
 24230   chdr$(1)='Rec'
 24240   chdr$(2)='Ck/Rf'
@@ -163,7 +163,7 @@
 24370   cmask$(4)='10'
 24380   cmask$(8)='1'
 25120 ! 
-25500   let fnflexinit1('ApTrans',14,1,10,100,mat chdr$,mat cmask$,1,pas)
+25500   fnflexinit1('ApTrans',14,1,10,100,mat chdr$,mat cmask$,1,pas)
 25600 ! if pas=1 then goto 1140  ! for pas to work properly, totals need to be adjusted for adds,corrections, and deletions
 25700   restore #h_trmstr(1): 
 25800   let transactionstotal=0
@@ -182,24 +182,24 @@
 27100   let item$(5)=tr$(4) : let item$(6)=tr$(5) : let item$(7)=str$(posting_code)
 27200   let item$(8)=str$(clr) : let item$(9)=str$(scd)
 27300   let item$(10)=newkey$(1:2) : let item$(11)=newkey$(3:3)
-27400   let fnflexadd1(mat item$)
+27400   fnflexadd1(mat item$)
 27500   let transactionstotal+=tr3
 27600   goto READ_TRMSTR1_1
 27700 EO_FLEX1: ! /r
 27710   let resp$(11)=''
 27720 !  r:
 27740 !  this uses the transactionstotal which is calculated when the flex grid is made
-27750   let fnlbl(13,31,'Transactions Total:',mylen,right)
-27760   let fntxt(13,mypos+30,15,0,right,pointtwo$,disable,'This is the total of only the transactions shown in the Transaction Grid above.  To update this total click the change button at the top and reselect your Transaction Grid Selection Criteria')
+27750   fnlbl(13,31,'Transactions Total:',mylen,right)
+27760   fntxt(13,mypos+30,15,0,right,pointtwo$,disable,'This is the total of only the transactions shown in the Transaction Grid above.  To update this total click the change button at the top and reselect your Transaction Grid Selection Criteria')
 27780   let resp$(12)=str$(transactionstotal)
 27790 ! /r
-28100   let fncmdkey('E&dit',3,1,0,"Highlight any entry and click edit to change or review the complete entry.")
-28200   let fncmdkey('&Add Deposit (Receipt)',2,0,0,"Allows you to enter deposits into the files.")
-28300   let fncmdkey('Add &Check (Disbursment)',8,0,0,"Allows you to add hand written checks to the checkbook files.")
-28400   let fncmdkey('&ReIndex',7,0,0,"Allows you to reindex the check history files. Should only be necessary if power failures have corrupted the files.")
-28500   let fncmdkey('&Change Selection Criteria',6,0,0,"Allows you to return to first screen and change date ranges, etc.")
-28600   let fncmdkey('E&xit',5,0,1,"Exits the checkbook system.")
-28700   let fnacs(sn$,0,mat resp$,ckey)
+28100   fncmdkey('E&dit',3,1,0,"Highlight any entry and click edit to change or review the complete entry.")
+28200   fncmdkey('&Add Deposit (Receipt)',2,0,0,"Allows you to enter deposits into the files.")
+28300   fncmdkey('Add &Check (Disbursment)',8,0,0,"Allows you to add hand written checks to the checkbook files.")
+28400   fncmdkey('&ReIndex',7,0,0,"Allows you to reindex the check history files. Should only be necessary if power failures have corrupted the files.")
+28500   fncmdkey('&Change Selection Criteria',6,0,0,"Allows you to return to first screen and change date ranges, etc.")
+28600   fncmdkey('E&xit',5,0,1,"Exits the checkbook system.")
+28700   fnacs(sn$,0,mat resp$,ckey)
 28800   if ckey=5 or ckey=cancel then goto XIT
 28900   if ckey=2 or ckey=8 then addloopcode=1 else addloopcode=0
 29000 ! let pas=1
@@ -281,7 +281,7 @@
 36900   mat ml$(3)
 37000   let ml$(1)='You must enter the transaction amount before'
 37100   let ml$(2)="you can pull the standard general ledger breakdowns."
-37200   let fnmsgbox(mat ml$,ok$,cap$,48)
+37200   fnmsgbox(mat ml$,ok$,cap$,48)
 37300   goto EO_READSTGL
 37400 GET_TOTAL: ! 
 37500   do until totalamt>=val(tr$(3))
@@ -322,14 +322,14 @@
 41200   read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey EMPTY_BANK_MSG
 41300   mat ml$(1)
 41400   let ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
-41500   let fnmsgbox(mat ml$,resp$,cap$,0)
+41500   fnmsgbox(mat ml$,resp$,cap$,0)
 41600   let tr$(1)=""
 41700   goto FM_SCREEN
 41800 EMPTY_BANK_MSG: ! 
 41900   if bank_code=0 then 
 42000     mat ml$(1)
 42100     let ml$(1)="You must first select a Bank."
-42200     let fnmsgbox(mat ml$,resp$,cap$,0)
+42200     fnmsgbox(mat ml$,resp$,cap$,0)
 42300     goto EO_SAVE
 42400   end if 
 42500 ! if trim$(tr$(4))='' and tcde=1 and trim$(uprc$(tr$(5)))<>"VOID" then mat ml$(1)
@@ -341,7 +341,7 @@
 43100   if trim$(tr$(3))='0.00' and trim$(uprc$(tr$(5)))<>"VOID" then 
 43200     mat ml$(1)
 43300     let ml$(1)="You must first enter an amount."
-43400     let fnmsgbox(mat ml$,resp$,cap$,0)
+43400     fnmsgbox(mat ml$,resp$,cap$,0)
 43500     goto EO_SAVE
 43600   end if 
 43700 RELEASE_TRMSTR1: release #h_trmstr(1): 
@@ -354,7 +354,7 @@
 44400     mat ml$(2)
 44500     let ml$(1)='Your allocations have changed on a posted transaction.'
 44600     let ml$(2)='You will need to update your General Ledger!'
-44700     let fnmsgbox(mat ml$,resp$,cap$,0)
+44700     fnmsgbox(mat ml$,resp$,cap$,0)
 44800     allocations_messed_with=false
 44900   end if 
 45000 ! 
@@ -362,15 +362,15 @@
 45200   if editrec=0 then goto L2040 ! adding new record
 45300   if oldtr3<>val(tr$(3)) or oldbank_code<>bank_code or tcde<>oldtcde then 
 45400     if oldtcde=1 or oldtcde=4 then 
-45500       let fnupdatebankbal(oldbank_code,+oldtr3)
+45500       fnupdatebankbal(oldbank_code,+oldtr3)
 45600     else 
-45700       let fnupdatebankbal(oldbank_code,-oldtr3) ! take out the old
+45700       fnupdatebankbal(oldbank_code,-oldtr3) ! take out the old
 45800     end if 
 45900 L2040: ! 
 46000     if tcde=1 or tcde=4 then 
-46100       let fnupdatebankbal(bank_code,-val(tr$(3)))
+46100       fnupdatebankbal(bank_code,-val(tr$(3)))
 46200     else 
-46300       let fnupdatebankbal(bank_code,+val(tr$(3))) ! put in the new
+46300       fnupdatebankbal(bank_code,+val(tr$(3))) ! put in the new
 46400     end if 
 46500   end if 
 46600 ! save - update key fields in tralloc
@@ -406,7 +406,7 @@
 49600   read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey L2250
 49700   mat ml$(1)
 49800   let ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
-49900   let fnmsgbox(mat ml$,resp$,cap$,0)
+49900   fnmsgbox(mat ml$,resp$,cap$,0)
 50000   let tr$(1)=""
 50100   goto FM_SCREEN
 50200 L2250: ! 
@@ -419,7 +419,7 @@
 50900     let ml$(2)='Please correct the Check Amount or '
 51000     let ml$(3)='the Allocations'
 51100     let ml$(4)='You are off by '&str$(val(tr$(3))-allocationstotal)
-51200     let fnmsgbox(mat ml$,yn$,cap$,48)
+51200     fnmsgbox(mat ml$,yn$,cap$,48)
 51300     goto EO_SAVE
 51400   end if 
 51500   let save_good=true
@@ -444,24 +444,24 @@
 53500 VOID_EO_TRALLOC: ! 
 53600   return  ! /r
 53800 DELETE_TRANSACTION: ! r:
-53900   let fntos(sn$='Trans-Delete')
+53900   fntos(sn$='Trans-Delete')
 54000   let lc=0 : let width=50
-54100   let fnlbl(lc+=1,1,'Delete Transaction Options',width,center)
+54100   fnlbl(lc+=1,1,'Delete Transaction Options',width,center)
 54200   let ln+=1
-54300   let fnchk(lc+=1,1,'Update Bank Balance')
+54300   fnchk(lc+=1,1,'Update Bank Balance')
 54400   let resp$(1)="True"
-54500   let fnchk(lc+=1,1,'Delete Transaction Allocations too')
+54500   fnchk(lc+=1,1,'Delete Transaction Allocations too')
 54600   let resp$(2)='True'
-54700   let fncmdset(2)
-54800   let fnacs(sn$,0,mat resp$,ckey)
+54700   fncmdset(2)
+54800   fnacs(sn$,0,mat resp$,ckey)
 54900   if ckey=5 or ckey=cancel then goto DELETE_TRANSACTION_DONE
 55000   let updatebankbalance$=resp$(1)
 55100   let deletetransactionallocation$=resp$(2)
 55200   if updatebankbalance$='True' then 
 55300     if tcde=1 or tcde=4 then 
-55400       let fnupdatebankbal(bank_code,+val(tr$(3)))
+55400       fnupdatebankbal(bank_code,+val(tr$(3)))
 55500     else 
-55600       let fnupdatebankbal(bank_code,-val(tr$(3)))
+55600       fnupdatebankbal(bank_code,-val(tr$(3)))
 55700 ! take out the old
 55800     end if 
 55900   end if 
@@ -499,37 +499,37 @@
 59300 L2670: return  ! /r
 59500 FM_ALLOCATION: ! r:
 59600   allocations_messed_with=true
-59700   let fntos(sn$='Trans-TrAlloc')
+59700   fntos(sn$='Trans-TrAlloc')
 59800   let lc=0 : let mylen=22 : let mypos=mylen+2
-59900   let fnlbl(lc+=1,1,'Bank:',mylen,right)
-60000   let fntxt(lc,mypos,2,0,left,number$,disable)
+59900   fnlbl(lc+=1,1,'Bank:',mylen,right)
+60000   fntxt(lc,mypos,2,0,left,number$,disable)
 60100   let resp$(1)=str$(trabank_code)
-60200   let fnlbl(lc+=1,1,'Transaction Type:',mylen,right)
-60300   let fntxt(lc,mypos,1,0,left,number$,disable)
+60200   fnlbl(lc+=1,1,'Transaction Type:',mylen,right)
+60300   fntxt(lc,mypos,1,0,left,number$,disable)
 60400   let resp$(2)=str$(tratcde)
-60500   let fnlbl(lc+=1,1,'Check/Reference:',mylen,right)
-60600   let fntxt(lc,mypos,8,0,right,'',disable)
+60500   fnlbl(lc+=1,1,'Check/Reference:',mylen,right)
+60600   fntxt(lc,mypos,8,0,right,'',disable)
 60700   let resp$(3)=track$
-60800   let fnlbl(lc+=1,1,'General Ledger Number:',mylen,right)
-60900   let fnqgl(lc,mypos)
+60800   fnlbl(lc+=1,1,'General Ledger Number:',mylen,right)
+60900   fnqgl(lc,mypos)
 61000   let resp$(4)=fnrgl$(tragl$)
-61100   let fnlbl(lc+=1,1,'Amount:',mylen,right)
-61200   let fntxt(lc,mypos,9,0,right,pointtwo$)
+61100   fnlbl(lc+=1,1,'Amount:',mylen,right)
+61200   fntxt(lc,mypos,9,0,right,pointtwo$)
 61300   let resp$(5)=str$(traamt)
-61400   let fnlbl(lc+=1,1,'Description:',mylen,right)
-61500   let fntxt(lc,mypos,30,0,left)
+61400   fnlbl(lc+=1,1,'Description:',mylen,right)
+61500   fntxt(lc,mypos,30,0,left)
 61600   let resp$(6)=tradesc$
-61700   let fnlbl(lc+=1,1,'Reference:',mylen,right)
-61800   let fntxt(lc,mypos,6,0,left,"",0)
+61700   fnlbl(lc+=1,1,'Reference:',mylen,right)
+61800   fntxt(lc,mypos,6,0,left,"",0)
 61900   let resp$(7)=traivd$ ! the last zero above was disabled, why kj
-62000   let fnlbl(lc+=1,1,'Purchase Order:',mylen,right)
-62100   let fntxt(lc,mypos,12,0,left)
+62000   fnlbl(lc+=1,1,'Purchase Order:',mylen,right)
+62100   fntxt(lc,mypos,12,0,left)
 62200   let resp$(8)=trapo$
-62300   let fnlbl(lc+=1,1,'Posting Status:',mylen,right)
-62400   let fntxt(lc,mypos,1,0,left,number$,disable)
+62300   fnlbl(lc+=1,1,'Posting Status:',mylen,right)
+62400   fntxt(lc,mypos,1,0,left,number$,disable)
 62500   let resp$(9)=str$(tragde)
-62600   let fncmdset(4)
-62700   let fnacs(sn$,0,mat resp$,ckey)
+62600   fncmdset(4)
+62700   fnacs(sn$,0,mat resp$,ckey)
 62800   if ckey=5 then goto CANCEL_ALLOC
 62900   let trabank_code=val(resp$(1))
 63000   let tratcde=val(resp$(2))
@@ -574,59 +574,59 @@
 67200   let ml$(1)='Delete Allocation Error'
 67300   let ml$(2)="You must select an Allocation Record to delete"
 67400   let ml$(3)="before clicking the Delete Allocation button."
-67500   let fnmsgbox(mat ml$,ok$,cap$,48)
+67500   fnmsgbox(mat ml$,ok$,cap$,48)
 67600   continue  ! /r
 67800 FM_SCREEN: ! r:
-67900   let fntos(sn$='transfm2b'&str$(typeofentry))
+67900   fntos(sn$='transfm2b'&str$(typeofentry))
 68000   let lc=0 ! line count
 68100   let fc=0 ! frame count
 68200   let width=120 ! screen width
-68300   let fnfra(1,1,10,width,'Transaction Data')
+68300   fnfra(1,1,10,width,'Transaction Data')
 68400   let frame=fc+=1
 68500   let lc=0 : let mylen=23 : let mypos=mylen+2
-68600   let fnlbl(lc+=1,1,'Bank:',mylen,right,0,frame)
-68700   let fncombof('Bank',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list,0,'',frame)
+68600   fnlbl(lc+=1,1,'Bank:',mylen,right,0,frame)
+68700   fncombof('Bank',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list,0,'',frame)
 68800   let resp$(1)=str$(bank_code)
-68900   let fnlbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
+68900   fnlbl(lc+=1,1,'Transaction Type:',mylen,right,0,frame)
 69000 ! let fncombof('TransactionType',lc,mypos,0,env$('Q')&'\CLmstr\TransactionType.dat',1,1,2,25,env$('Q')&'\CLmstr\TransactionType.idx',limit_to_list,0,'',frame)
 69100 ! let resp$(2)=str$(tcde)
-69200   let fntxt(lc,mypos,28,0,left,'',disable,'',frame)
+69200   fntxt(lc,mypos,28,0,left,'',disable,'',frame)
 69300   let resp$(2)=str$(tcde)
 69400   if wit=1 then 
-69500     let fnlbl(lc+=1,1,'Check Number:',mylen,right,0,frame)
+69500     fnlbl(lc+=1,1,'Check Number:',mylen,right,0,frame)
 69600   else 
-69700     let fnlbl(lc+=1,1,'Reference Number:',mylen,right,0,frame)
+69700     fnlbl(lc+=1,1,'Reference Number:',mylen,right,0,frame)
 69800   end if 
-69900   let fntxt(lc,mypos,8,0,right,'',0,'',frame)
+69900   fntxt(lc,mypos,8,0,right,'',0,'',frame)
 70000   let resp$(3)=tr$(1)
-70100   let fnlbl(lc+=1,1,'Transaction Date:',mylen,right,0,frame)
-70200   let fntxt(lc,mypos,8,0,left,mmddyy$,0,'',frame)
+70100   fnlbl(lc+=1,1,'Transaction Date:',mylen,right,0,frame)
+70200   fntxt(lc,mypos,8,0,left,mmddyy$,0,'',frame)
 70300   let resp$(4)=tr$(2)
-70400   let fnlbl(lc+=1,1,'Transaction Amount:',mylen,right,0,frame)
-70500   let fntxt(lc,mypos,12,0,right,pointtwo$,0,'',frame)
+70400   fnlbl(lc+=1,1,'Transaction Amount:',mylen,right,0,frame)
+70500   fntxt(lc,mypos,12,0,right,pointtwo$,0,'',frame)
 70600   let resp$(5)=cnvrt$("N 10.2",val(tr$(3)))
 70700   if typeofentry=2 then 
-70800     let fnlbl(lc+=1,1,'Receipt Type:',mylen,right,0,frame)
-70900     let fncombof('ReceiptType',lc,mypos,0,env$('Q')&"\CLmstr\RecMstr.h"&str$(cno),1,8,9,30,env$('Q')&"\CLmstr\RecIdx1.h"&str$(cno),limit_to_list,0,'',frame)
+70800     fnlbl(lc+=1,1,'Receipt Type:',mylen,right,0,frame)
+70900     fncombof('ReceiptType',lc,mypos,0,env$('Q')&"\CLmstr\RecMstr.h"&str$(cno),1,8,9,30,env$('Q')&"\CLmstr\RecIdx1.h"&str$(cno),limit_to_list,0,'',frame)
 71000     let resp$(6)=tr$(4)
 71100   else 
-71200     let fnlbl(lc+=1,1,'Payee:',mylen,right,0,frame)
+71200     fnlbl(lc+=1,1,'Payee:',mylen,right,0,frame)
 71300     if scd=4 then 
-71400       let fntxt(lc,mypos,8,0,left,"",0,'Employee # for payroll checksl',frame)
+71400       fntxt(lc,mypos,8,0,left,"",0,'Employee # for payroll checksl',frame)
 71500       let resp$(6)=tr$(4)
 71600     else 
-71700       let fncombof('Payee',lc,mypos,0,env$('Q')&"\CLmstr\PayMstr.h"&str$(cno),1,8,9,30,env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno),limit_to_list,0,'',frame)
+71700       fncombof('Payee',lc,mypos,0,env$('Q')&"\CLmstr\PayMstr.h"&str$(cno),1,8,9,30,env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno),limit_to_list,0,'',frame)
 71800       let resp$(6)=tr$(4)
 71900     end if  ! scd=4   /   else 
 72000   end if  ! typeofentry=2   /   else 
-72100   let fnlbl(lc+=1,1,'Name/Description:',mylen,right,0,frame)
-72200   let fntxt(lc,mypos,35,0,left,'',0,'',frame)
+72100   fnlbl(lc+=1,1,'Name/Description:',mylen,right,0,frame)
+72200   fntxt(lc,mypos,35,0,left,'',0,'',frame)
 72300   let resp$(7)=tr$(5)
-72400   let fnlbl(lc+=1,1,'Posting Status:',mylen,right,0,frame)
-72500   let fncombof('PostCode',lc,mypos,0,"S:\acsCL\PostingCode.dat",1,1,2,25,"S:\acsCL\PostingCode.idx",limit_to_list,0,'',frame)
+72400   fnlbl(lc+=1,1,'Posting Status:',mylen,right,0,frame)
+72500   fncombof('PostCode',lc,mypos,0,"S:\acsCL\PostingCode.dat",1,1,2,25,"S:\acsCL\PostingCode.idx",limit_to_list,0,'',frame)
 72600   let resp$(8)=str$(posting_code)
-72700   let fnlbl(lc+=1,1,'Statement Date Cleared:',mylen,right,0,frame)
-72800   let fntxt(lc,mypos,8,0,left,mmddyy$,0,'',frame)
+72700   fnlbl(lc+=1,1,'Statement Date Cleared:',mylen,right,0,frame)
+72800   fntxt(lc,mypos,8,0,left,mmddyy$,0,'',frame)
 72900   let resp$(9)=str$(clr)
 73000 !  r: the transaction allocation grid
 73300   mat chdr$(7) : mat cmask$(7) : mat item$(7)
@@ -642,7 +642,7 @@
 73390   cmask$(2)=''
 73400   cmask$(3)='10'
 73410   cmask$(5)=''
-73900   let fnflexinit1('TrAlloc-tran2',16,1,4,90,mat chdr$,mat cmask$,1)
+73900   fnflexinit1('TrAlloc-tran2',16,1,4,90,mat chdr$,mat cmask$,1)
 74000   allocationstotal=0
 74100 ! let fnflexinit1('TrAlloc-'&str$(bank_code)&'-'&str$(tcde)&'-'&trim$(tr$(1)),13,1,7,80,mat chdr$,mat cmask$,1)
 74200 ! allocationstotal=0
@@ -654,25 +654,25 @@
 74800   allocationstotal+=tmp
 74900   let item$(1)=str$(rec(h_tralloc))
 75000   let item$(3)=str$(tmp)
-75100   let fnflexadd1(mat item$)
+75100   fnflexadd1(mat item$)
 75200   goto READ_TRALLOC_1
 75300 EO_FLEX2: ! /r
-75400   let fnlbl(lc=15,1,'Allocation Total: $'&trim$(cnvrt$("N 15.2",allocationstotal)),40,right)
-76100   let fnbutton(lc=15,(61),'&Add',8,'Add Allocation')
-76200   let fnbutton(lc,(61+4+2),'&Edit',7,'Edit Allocation')
-76300   let fnbutton(lc,(61+4+2+5+2),'&Delete',6,'Delete Allocation')
-76400   let fnbutton(lc,(61+4+2+5+2+7+2),'&Get Standard G/L Breakdowns',9,'Reset Allocations to those associated with the Payee.')
+75400   fnlbl(lc=15,1,'Allocation Total: $'&trim$(cnvrt$("N 15.2",allocationstotal)),40,right)
+76100   fnbutton(lc=15,(61),'&Add',8,'Add Allocation')
+76200   fnbutton(lc,(61+4+2),'&Edit',7,'Edit Allocation')
+76300   fnbutton(lc,(61+4+2+5+2),'&Delete',6,'Delete Allocation')
+76400   fnbutton(lc,(61+4+2+5+2+7+2),'&Get Standard G/L Breakdowns',9,'Reset Allocations to those associated with the Payee.')
 76500   if typeofentry=2 then 
-76600     let fnbutton(6,72,'&Receipt Type File',11,'Add or Edit different types or classifications of receipts ',0,0,1)
+76600     fnbutton(6,72,'&Receipt Type File',11,'Add or Edit different types or classifications of receipts ',0,0,1)
 76700   else 
-76800     let fnbutton(6,72,'&Payee File',10,'Add or Edit Payees',0,0,1)
+76800     fnbutton(6,72,'&Payee File',10,'Add or Edit Payees',0,0,1)
 76900   end if 
 77000   let lc+=1
-77100   let fncmdkey('&Save',1,1,0,"Saves this record and any changes back to the files.")
-77200   let fncmdkey('&Delete',3,0,0,"Will delete this entry from your files.  You will have an option as to how to effect the bank balance.")
-77300   let fncmdkey('&Void',4,0,0,"Voids the transaction that is on the screen. It will adjust the bank balance. It leaves a voided transaction on file.")
-77400   let fncmdkey('&Cancel',5,0,1,"Returns to previous screen without saving any changes.")
-77500   let fnacs(sn$,0,mat resp$,ckey)
+77100   fncmdkey('&Save',1,1,0,"Saves this record and any changes back to the files.")
+77200   fncmdkey('&Delete',3,0,0,"Will delete this entry from your files.  You will have an option as to how to effect the bank balance.")
+77300   fncmdkey('&Void',4,0,0,"Voids the transaction that is on the screen. It will adjust the bank balance. It leaves a voided transaction on file.")
+77400   fncmdkey('&Cancel',5,0,1,"Returns to previous screen without saving any changes.")
+77500   fnacs(sn$,0,mat resp$,ckey)
 78000   let holdtr1$=tr$(1)
 78020   if ckey=3 then 
 78040     gosub DELETE_TRANSACTION
@@ -695,13 +695,13 @@
 78380     let ml$(1)='Allocations ('&cnvrt$('pic(---,---,--#.##)',allocationstotal)&') do not equal the Check Amount ('&cnvrt$('pic(---,---,--#.##)',val(tr$(3)))&')'
 78400     let ml$(2)='Please correct the Check Amount or the Allocations'
 78420     let ml$(3)='You are off by '&str$(val(tr$(3))-allocationstotal)
-78440     let fnmsgbox(mat ml$,yn$,cap$,48)
+78440     fnmsgbox(mat ml$,yn$,cap$,48)
 78460     goto FM_SCREEN
 78480   end if 
 78500   if (ckey=1 or ckey=8) and trim$(tr$(1))="" then 
 78520     mat ml$(1)
 78540     let ml$(1)="You must first enter a Reference Number."
-78560     let fnmsgbox(mat ml$,resp$,cap$,0)
+78560     fnmsgbox(mat ml$,resp$,cap$,0)
 78580     goto FM_SCREEN
 78600   end if 
 78620   if ckey=6 then 
@@ -714,7 +714,7 @@
 80700   read #h_trmstr(1),using 'Form Pos 1,C 11',key=check_key$: newkey$ nokey L3780
 80800   mat ml$(1)
 80900   let ml$(1)="You already have a transaction with reference # "&trim$(tr$(1))&"."
-81000   let fnmsgbox(mat ml$,resp$,cap$,0)
+81000   fnmsgbox(mat ml$,resp$,cap$,0)
 81020   let tr$(1)=""
 81040   goto FM_SCREEN
 81060 L3780: ! /r
@@ -732,10 +732,10 @@
 81300     gosub SAVE
 81320     goto MENU1
 81340   else if ckey=10 then 
-81360     let fnaddpayee
+81360     fnaddpayee
 81380     goto FM_SCREEN
 81400   else if ckey=11 then 
-81420     let fnaddreceipt
+81420     fnaddreceipt
 81440     goto FM_SCREEN
 81460   end if 
 81480   gosub SAVE

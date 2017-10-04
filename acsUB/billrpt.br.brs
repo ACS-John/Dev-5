@@ -6,24 +6,24 @@
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,z$*10,e$(4)*30,temp$(3)*26,resp$(4)*40,cnam$*40,dat$*20
 00080 ! ______________________________________________________________________
-00090   let fntop("S:\acsUB\Bill-Rpt", cap$="Final Billing")
-00100   let fncno(cno,cnam$) !:
+00090   fntop("S:\acsUB\Bill-Rpt", cap$="Final Billing")
+00100   fncno(cno,cnam$) !:
         ! 
-00110   let fnd1(d1)
-00120   let fndat(dat$,1)
+00110   fnd1(d1)
+00120   fndat(dat$,1)
 00130 ! ______________________________________________________________________
 00140 SCR1: ! 
-00150   let fntos(sn$="Bill-Rpt")
-00160   let fnlbl(1,1,"Billing Date:",15,1)
-00170   let fntxt(1,17,8,8,1,"1",0,"Only enter the billing date if you wish to limit the report to those billed and finaled this month. (mmddyy)") !:
+00150   fntos(sn$="Bill-Rpt")
+00160   fnlbl(1,1,"Billing Date:",15,1)
+00170   fntxt(1,17,8,8,1,"1",0,"Only enter the billing date if you wish to limit the report to those billed and finaled this month. (mmddyy)") !:
         let resp$(1)=str$(d1)
-00180   let fnlbl(2,1,"Route Number:",15,1)
-00190   let fncmbrt2(2,17,0) !:
+00180   fnlbl(2,1,"Route Number:",15,1)
+00190   fncmbrt2(2,17,0) !:
         let resp$(2)= "[All]"
-00200   let fnchk(4,2,"Outstanding Balances Only") !:
+00200   fnchk(4,2,"Outstanding Balances Only") !:
         let resp$(3)="False"
-00210   let fncmdset(3)
-00220   let fnacs(sn$,0,mat resp$,ck)
+00210   fncmdset(3)
+00220   fnacs(sn$,0,mat resp$,ck)
 00230   if ck=5 then goto XIT
 00240   let d1= val(resp$(1)) conv SCR1 !:
         if uprc$(resp$(2))=uprc$("[All]") then let route=0 else !:
@@ -32,14 +32,14 @@
 00260   goto STARTREPORT
 00270 ! ______________________________________________________________________
 00280 DONE: ! 
-00290   let fncloseprn
+00290   fncloseprn
 00300 XIT: let fnxit
 00310 ! ______________________________________________________________________
 00320 STARTREPORT: ! 
-00330   let fnwait(0,cap$,"Printing: please wait...",1)
+00330   fnwait(0,cap$,"Printing: please wait...",1)
 00340   on fkey 5 goto DONE
 00350   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-00360   let fnopenprn
+00360   fnopenprn
 00370   gosub HEADER
 00380   goto REPORT
 00390 ! ______________________________________________________________________

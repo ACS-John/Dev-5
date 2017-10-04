@@ -2,7 +2,7 @@
 00020 ! Fund Balance Report
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim cnam$*40,pedat$*20,d$*50,tr(7),tr$*12,td$*30,n$*12,t$*12,x$*3
@@ -24,7 +24,7 @@
 00220   data " "
 00230   data " "
 00240   read mat desc$
-00250   let fnopenprn(cp,58,220,process)
+00250   fnopenprn(cp,58,220,process)
 00260   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00270   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,input,relative 
 00280   pr newpage
@@ -96,7 +96,7 @@
 00920   pr #255,using L700: "------------","------------","------------","------------"
 00930   pr #255,using L780: "TOTAL",sum(begb),sum(bankdr),-sum(bankcr),sum(endb)
 00940   pr #255,using L700: "============","============","============","============"
-00950   let fncloseprn
+00950   fncloseprn
 00960   return 
 00970 ! ______________________________________________________________________
 00980   pr #255: newpage

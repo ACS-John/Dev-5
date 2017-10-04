@@ -3,7 +3,7 @@
 10200   library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnacs,fnflexadd1,fnflexinit1,fntos,fncustomer_search,fnlbl,fntxt,fnmsgbox,fnbutton,fnfra
 10300   library 'S:\Core\Library': fndat,fncmbact,fncombof,fncmbrt2,fnd1,fncmdset,fncmdkey,fntop,fngethandle
 10400   library 'S:\Core\Library': fntransfile
-10500   let fntop(program$,cap$="Import Transactions from Mint CSV to CL")
+10500   fntop(program$,cap$="Import Transactions from Mint CSV to CL")
 10600   dim cr$*1,lf$*1,crlf$*2,line$*2048,item$(1)*1024
 10700   cr$=chr$(13) : let lf$=chr$(10)
 10800   crlf$=cr$&lf$
@@ -11,7 +11,7 @@
 11200   dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50
 11300   dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
 11400   dim gl(10,4),fli1$(49),ot1$(49),pgl(3)
-11500   let fn_get_old_setup
+11500   fn_get_old_setup
 11600   open #h_clmstr:=9: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERR_FILE
 11700   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERR_FILE
 11800   open #h_addr:=3: "Name="&env$('Temp')&"\Addr."&session$&",RecL=239,Replace",internal,outin,relative ioerr ERR_FILE
@@ -25,19 +25,19 @@
 12600   let filter_date(1)=20120101
 12700   let filter_date(2)=20121231
 12800   let file_import$=env$('userprofile')&'\Downloads\transactions.csv'
-12900   let fntos(sn$="ask_fdd"&str$(udim(mat label$))&'_dates')
+12900   fntos(sn$="ask_fdd"&str$(udim(mat label$))&'_dates')
 13000   let respc=0 : ad_line=0 : col1_len=36 : col2_pos=col1_len+2
-13100   let fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right:=1)
-13200   let fntxt(ad_line,col2_pos,8,0,1,"3")
+13100   fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right:=1)
+13200   fntxt(ad_line,col2_pos,8,0,1,"3")
 13300   let resp$(respc+=1)=str$(filter_date(ad_line))
-13400   let fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right)
-13500   let fntxt(ad_line,col2_pos,8,0,1,"3")
+13400   fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right)
+13500   fntxt(ad_line,col2_pos,8,0,1,"3")
 13600   let resp$(respc+=1)=str$(filter_date(ad_line))
-13700   let fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right)
-13800   let fntxt(ad_line,col2_pos,40,256,1,"70")
+13700   fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right)
+13800   fntxt(ad_line,col2_pos,40,256,1,"70")
 13900   let resp$(respc+=1)=file_import$
-14000   let fncmdset(3)
-14100   let fnacs(sn$,0,mat resp$,ckey)
+14000   fncmdset(3)
+14100   fnacs(sn$,0,mat resp$,ckey)
 14200   if ckey=5 then 
 14300     let fkey(99)
 14400   else 
@@ -45,7 +45,7 @@
 14600     let filter_date(2)=val(srep$(resp$(2),'/',''))
 14700     let file_import$=resp$(3)
 14800   end if 
-14900   let fn_import_it(file_import$)
+14900   fn_import_it(file_import$)
 15000   end  ! pr newpage
 15100 ! pr fields mat fl1$: mat sc1$,"A/R Input Selection Menu","Selection:"
 15200 L630: ! 
@@ -200,7 +200,7 @@
 30100 ! /r
 30200   def fn_print_proof_list
 30300     let r=0
-30400     let fnopenprn
+30400     fnopenprn
 30500     pr newpage
 30600     on fkey 5 goto L2040
 30700     pr newpage
@@ -222,7 +222,7 @@
 32300 L2020: form pos 1,n 4,x 2,c 5,x 2,c 18,n 6,n 11.2,pic(zzzzzz),x 7,c 22,n 12.2,n 12
 32400     goto L1960
 32500 L2040: ! 
-32600     let fncloseprn
+32600     fncloseprn
 32700     on fkey 5 ignore 
 32800   fnend 
 32900 SCREEN_ASK_REF_TO_FIX: ! r:
@@ -252,7 +252,7 @@
 35300 ! /r
 35400 CHAIN_ARMERGE: chain "S:\acsTM\ARMerge"
 35500 XIT: ! 
-35600   let fnxit
+35600   fnxit
 35700 ERR_FILE: ! r:
 35800   if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2310
 35900   goto L2350
@@ -275,7 +275,7 @@
 37600     let numeric_format$='pic($$$,$$$.##)'
 37700     let key_length=5
 37800     let heading$="Acct #-Name--------------------Address--------Balance"
-37900     let fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
+37900     fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
 38000     let p$=selection$ ! pull key from first field in search line
 38100     ano=0
 38200     ano=val(selection$) conv L4910
@@ -457,13 +457,13 @@
 55800   fnend  ! fn_get_next_line
 55900   def fn_import_it(file_import$*256)
 56000     open #h_in:=fngethandle: 'Name='&file_import$&',RecL=100,Shr',external,input 
-56100     let fnopenprn
+56100     fnopenprn
 56200     pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'
 56300 FORM_OUT: form pos 1,n 5,n 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,n 4,c 12,pd 3,c 30
 56400 FORM_PRN: form pos 1,pic(####d##d##),x 1,n 10.2,x 2,c 40,6*(skip 1,x 10,c 80)
 56500 FORM_PRN_HEAD: form pos 1,cc 8,x 1,5*cr 10,x 1,c 30,cr 7
 56600 ! r: headings
-56700     let fn_get_next_line(line$) : let line_count+=1
+56700     fn_get_next_line(line$) : let line_count+=1
 56800     let str2mat(line$,mat item$,',',"QUOTES:TRIM")
 56900     csv_date=srch(mat item$,"Date")
 57000     csv_desc=srch(mat item$,"Description")
@@ -476,7 +476,7 @@
 57700     csv_notes=srch(mat item$,"Notes"&lf$) ! pr csv_notes : pause
 57800 ! /r
 57900     do 
-58000       let fn_get_next_line(line$) : let line_count+=1
+58000       fn_get_next_line(line$) : let line_count+=1
 58100       if line$<>'' then 
 58200         let str2mat(line$,mat item$,',',"QUOTES:TRIM")
 58300         if item$(csv_date)<>'' then let the_date=fn_get_the_date(item$(csv_date))
@@ -498,18 +498,18 @@
 59900             pause 
 60000           end if 
 60300 !       /r
-60400 !    let fn_write_out(the_date,val(item$(4)),val(item$(7)),val(item$(9)),val(item$(10)),item$(11)(1:30))
+60400 !    fn_write_out(the_date,val(item$(4)),val(item$(7)),val(item$(9)),val(item$(10)),item$(11)(1:30))
 60500           pr #255,using FORM_PRN: the_date,val(item$(csv_amt)),item$(csv_type),item$(csv_desc),item$(csv_odesc),item$(csv_cat),item$(csv_acct),item$(csv_labels),item$(csv_notes)
 60900         end if  ! the_date=>filter_date(1) and <=filter_date(2)
 61000       end if  ! line$<>''
 61100     loop until line$=''
 61200 THE_END: ! 
 61300     close #h_in: 
-61400     let fncloseprn
+61400     fncloseprn
 61500   fnend 
 61600   def fn_get_the_date(the_date$)
 61700     let the_date=date(days(the_date$,'m/dd/ccyy'),'ccyymmdd')
-61800     let fn_get_the_date=the_date
+61800     fn_get_the_date=the_date
 61900   fnend 
 62000   def fn_write_out(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30)
 62100     dim des$*30,inp(7)

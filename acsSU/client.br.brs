@@ -7,7 +7,7 @@
 00070   dim cap$*128,lbl$(9)*38,tln(9),p$(9)*160,fltyp$(9),mask(9)
 00080 ! dim sln(9)
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$='Client')
+00100   fntop(program$,cap$='Client')
 00110   gosub BUILD_LAYOUT
 00120   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER: gosub CLOSE_FILE
@@ -22,7 +22,7 @@
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 00210 ! ______________________________________________________________________
 00220 BUILD_LAYOUT: ! 
-00230   let fncno(cno)
+00230   fncno(cno)
 00240 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
 00250   let lbl$(ic+=1)="Client ID" !:
@@ -74,7 +74,7 @@
 00360   return 
 00370 ! ______________________________________________________________________
 00380 HAMSTER: ! 
-00390   let fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
+00390   fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00400   return 
 00410 ! ______________________________________________________________________
 00420 XIT: let fnxit

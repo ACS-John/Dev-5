@@ -9,6 +9,6 @@
  !
  def fnListviewComboValFld
     if ~ChangedRead then
-       let fnListviewComboValFld=1
+       fnListviewComboValFld=1
     end if
  fnend

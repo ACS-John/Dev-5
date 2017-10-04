@@ -5,7 +5,7 @@
         ! create an RO record
 00030 ! ______________________________________________________________________
 00032   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd
-00034   let fntop(program$,cap$="PR ELEC UC")
+00034   fntop(program$,cap$="PR ELEC UC")
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim em$(3)*30,ss$*11,d(14),ty(21),tqm(17),s(9),t(9),z$*8,cap$*128,message$*40
@@ -16,7 +16,7 @@
 00110   dim w2(9),i1(9),t1(9),ct$*20,st$*2,ibm$*8,namcde$*1,typemp$*1,io1$(15)
 00120   dim terminat$*1,first$*15,mid$*15,last$*20,m(10),r(10),e$(10)*12
 00130 ! ______________________________________________________________________
-00140   let fncno(cno, cnam$)
+00140   fncno(cno, cnam$)
 00190 ! open #1: "Name=CNO.H"&wsid$,internal,input,relative
 00200 ! read #1,using 'form pos 1,n 2,c 40',rec=1: cno,cnam$
 00220 !:
@@ -322,7 +322,7 @@
 03000   if button_option=7 then !:
           let fkey$(1)="Save" !:
           let fkey$(4)="Delete"
-03010   let scrline=er+1: gosub L3660 !  Let FNFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
+03010   let scrline=er+1: gosub L3660 !  fnFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
 03020 ! 
 03030 L3030: return  ! Fnend
 03040 L3040: ! Def Library fnOldMsgBox(mat RESPONSE$,&CAP$,mat MSGLINE$,MTYPE)

@@ -7,8 +7,8 @@
 20120 ! ______________________________________________________________________
 20140   dim z$,nam$*30,sta$*30,sta2$*30,csz$*30,opt1$(7),txt$*80,cap$*128
 20160 ! ______________________________________________________________________
-20180   let fntop("S:\acsUB\ubCass1",cap$="Create Certification File")
-20200   let fncno(cno)
+20180   fntop("S:\acsUB\ubCass1",cap$="Create Certification File")
+20200   fncno(cno)
 20220 ! ______________________________________________________________________
 20240 ! r: a screen
 20260 ! let fntos(sn$:="ubCass1")

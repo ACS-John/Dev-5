@@ -1,10 +1,10 @@
 10100   pr border: 'Import Source'
 10200   execute 'con gui off'
-10300   let fnupdatesource
+10300   fnupdatesource
 10400   def fndatetime
 10500     dim tm$*8
 10600     let tm$=time$
-10700     let fndatetime=val(date$("CCYYMMDD")&tm$(1:2)&tm$(4:5))
+10700     fndatetime=val(date$("CCYYMMDD")&tm$(1:2)&tm$(4:5))
 10800   fnend 
 10900   def fnfiledatetime(filename$*255)
 11000     dim infoline$*255,hh$*2
@@ -18,10 +18,10 @@
 11800     let hh=val(infoline$(13:14))
 11900     if infoline$(19:20)="PM" then let hh+=12
 12000     if hh<10 then let hh$="0"&str$(hh) else let hh$=str$(hh)
-12100     let fnfiledatetime=val(infoline$(7:10)&infoline$(1:2)&infoline$(4:5)&hh$&infoline$(16:17))
+12100     fnfiledatetime=val(infoline$(7:10)&infoline$(1:2)&infoline$(4:5)&hh$&infoline$(16:17))
 12200     goto GOTDATE
 12300 NODATE: ! 
-12400     let fnfiledatetime=190001010800
+12400     fnfiledatetime=190001010800
 12500 GOTDATE: ! 
 12600     close #fileinfo,free: ioerr ignore
 12700   fnend 
@@ -34,7 +34,7 @@
 13700   fnend 
 13800   def fnupdatesource
 13900     dim filename$*255,msr_file$*255
-14000     let fninitupdate(lastcompile)
+14000     fninitupdate(lastcompile)
 14100     execute "sy -M sortfiles -D . -C "".br.brs|.br""" ioerr ROLLBACK
 14200     open #dirfile:=20: "Name=S:\(import)\brsfiles",display,input 
 14250     pr #proc_file: 'Let Scr_Freeze'

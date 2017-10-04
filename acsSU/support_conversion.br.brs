@@ -8,8 +8,8 @@
 00080   dim z$*5,a$(5)*30,ph$*12,ss$*11,dd(10),sc(10),ca(10),ar(5),arta(2),cm$*70
 00090   dim app(20),ma(20),ap2(20),ma2(20),st$(40)*24,cd$(40)*2
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$='Support Conversion')
-00120   let fncno(cno)
+00110   fntop(program$,cap$='Support Conversion')
+00120   fncno(cno)
 00130   gosub READ_NAMES
 00140   gosub OPEN_FILE
 00150   gosub READ_FILES

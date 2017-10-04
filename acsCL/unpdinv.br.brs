@@ -8,21 +8,21 @@
 00080   dim cap$*128,io1$(2),wrd1$(2),item1$(2)*15
 00090   dim udf$*256
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Unpaid Invoice Listing")
+00110   fntop(program$,cap$="Unpaid Invoice Listing")
 00120   let udf$=env$('temp')&'\'
 00130   cancel=99
-00140   let fncno(cno,cnam$) !:
-        let fndat (dat$)
-00150   let fntos(sn$="unpdinv") !:
+00140   fncno(cno,cnam$) !:
+        fndat (dat$)
+00150   fntos(sn$="unpdinv") !:
         let respc=0
-00160   let fnlbl(1,40,"",1,1)
-00170   let fnlbl(1,1,"Order for Printing:",20,1)
+00160   fnlbl(1,40,"",1,1)
+00170   fnlbl(1,1,"Order for Printing:",20,1)
 00180   let item1$(1)="Payee" !:
         let item1$(2)="Fund Number" !:
-        let fncomboa("unpdinv",1,22,mat item1$,tt$) !:
+        fncomboa("unpdinv",1,22,mat item1$,tt$) !:
         let resp$(respc+=1)=item1$(1)
-00190   let fncmdset(2) !:
-        let fnacs(sn$,0,mat resp$,ck)
+00190   fncmdset(2) !:
+        fnacs(sn$,0,mat resp$,ck)
 00200   if ck=5 then goto XIT else !:
           if resp$(1)=item1$(1) then let fund=1 else !:
             let fund=2
@@ -61,7 +61,7 @@
 00510 L510: execute "INDEX "&udf$&"WORK,"&udf$&"INDX,1,12,Replace"
 00520   open #work=6: "Name="&udf$&"WORK,KFName="&udf$&"INDX",internal,outin,keyed 
 00530   open #fundmstr=7: "Name="&env$('Q')&"\CLmstr\FundMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\FundIdx1.h"&str$(cno)&",Shr",internal,input,keyed 
-00540   let fnopenprn
+00540   fnopenprn
 00550   let vn$="": let iv$=""
 00560 L560: read #9,using 'FORM POS 1,PD 3': r4 eof END1
 00570   if r4=0 then goto L560
@@ -151,7 +151,7 @@
 01410   return 
 01420 ! ______________________________________________________________________
 01430 EO_WORK: gosub TOTF1
-01440   let fncloseprn
+01440   fncloseprn
 01450   close #work,free: ioerr XIT
 01460 XIT: let fnxit
 01470 ! ______________________________________________________________________

@@ -4,7 +4,7 @@
 00040   library "S:\Core\search.br": fnsearch
 00050   library "S:\Core\Library.br": fnerror,fnwait,fnmsgbox,fnwin3b
 00060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnd1
-00070   let fntop(program$)
+00070   fntop(program$)
 00100 ! 
 00110 ! 
 00120   dim ar(5),ph2$*12,ss2$*11,arta(2),des$*30,cm$*70
@@ -220,7 +220,7 @@
 02090   if ti=9 then chain "S:\acsTM\CLRSETST"
 02100   if ti=10 then chain "S:\acsTM\TMNAMINQ"
 02110 PROOF_LIST: ! 
-02120   let fnopenprn
+02120   fnopenprn
 02130 L2130: restore #1,key>="     ": 
 02140   on fkey 5 goto L2330
 02150   pr newpage !:
@@ -241,7 +241,7 @@
 02280   gosub L2350
 02290   goto L2180
 02300 L2300: if r>1 then gosub L2350
-02310   let fncloseprn
+02310   fncloseprn
 02320   goto L420
 02330 L2330: pr #255: newpage
 02340   goto L420
@@ -501,7 +501,7 @@
 04880   let numeric_format$='pic($$$,$$$.##)'
 04890   let key_length=5
 04900   let heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"
-04910   let fnsearch(env$('progrgam_caption'),file_num,heading$,form$,numeric_format$,selection$,key_length)
+04910   fnsearch(env$('progrgam_caption'),file_num,heading$,form$,numeric_format$,selection$,key_length)
 04920   let k$=z$=selection$ ! pull key from first field in search line
 04930   ano=0
 04940   ano=val(selection$) conv L4950

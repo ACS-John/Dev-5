@@ -8,32 +8,32 @@
 00080   dim prgln$(15)*12,pra(15),r9$*104,cap$*128,glwk$*256,ml$(2)*70
 00090   dim ty$(3)*20
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Transfer to Accountant")
+00110   fntop(program$,cap$="Transfer to Accountant")
 00120   cancel=99 : let right=1
-00130   let fncno(cno,cnam$)
-00140   let fndat(dat$,1)
+00130   fncno(cno,cnam$)
+00140   fndat(dat$,1)
 00150   let ty$(1)=" Check Number:" !:
         let ty$(2)=" Deposit Number:" !:
         let ty$(3)=" Adjustment Number: "
 00160 ! ______________________________________________________________________
 00170 MAIN: ! 
-00180   let fntos(sn$="Tr2cpa") !:
+00180   fntos(sn$="Tr2cpa") !:
         let mylen=40 : let mypos=mylen+2 : let lc=0
-00190   let fnlbl(lc+=1,1,"Starting Date:",mylen,right)
-00200   let fntxt(lc,mypos,10,0,1,"1003",0,"Earliest transation date to be transferred") !:
+00190   fnlbl(lc+=1,1,"Starting Date:",mylen,right)
+00200   fntxt(lc,mypos,10,0,1,"1003",0,"Earliest transation date to be transferred") !:
         ! Let RESP$(1)=""
-00210   let fnlbl(lc+=1,1,"Ending Date:",mylen,right)
-00220   let fntxt(lc,mypos,10,0,1,"1003",0,"Last transation date to be transferred") !:
+00210   fnlbl(lc+=1,1,"Ending Date:",mylen,right)
+00220   fntxt(lc,mypos,10,0,1,"1003",0,"Last transation date to be transferred") !:
         ! Let RESP$(2)=""
 00230   let lc+=1
-00240   let fnchk(lc+=1,mypos,"Transfer previously posted transactions:",1) !:
+00240   fnchk(lc+=1,mypos,"Transfer previously posted transactions:",1) !:
         if resp$(3)="" then let resp$(3)="False"
 00250   let lc+=1
-00260   let fnlbl(lc+=1,1,"Destination Path:",mylen,right)
-00270   let fntxt(lc,mypos,66) !:
+00260   fnlbl(lc+=1,1,"Destination Path:",mylen,right)
+00270   fntxt(lc,mypos,66) !:
         if resp$(4)="" then let resp$(4)="A:\"
-00280   let fncmdset(2) !:
-        let fnacs(sn$,0,mat resp$,ck)
+00280   fncmdset(2) !:
+        fnacs(sn$,0,mat resp$,ck)
 00290   if ck=5 then goto XIT
 00300   let d1=val(resp$(1)(5:6))*10000+val(resp$(1)(7:8))*100+val(resp$(1)(3:4)) ! beginning date !:
         let d2=val(resp$(2)(5:6))*10000+val(resp$(2)(7:8))*100+val(resp$(2)(3:4)) ! ending date  ! convert dates back to mmddyy
@@ -42,7 +42,7 @@
 00320   let dv$=resp$(4)
 00330   gosub GETPRC
 00340 ! ______________________________________________________________________
-00350   let fnwait
+00350   fnwait
 00360   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative  !:
         read #20,using 'Form POS 618,10*N 1': mat dedcode !:
         close #20: 
@@ -58,7 +58,7 @@
 00450   open #glwk201=4: "Name="&env$('Q')&"\CLmstr\GLWK201.H"&str$(cno)&",Size=0,RecL=110,Replace",internal,output 
 00460   open #bankmstr=5: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 00470   open #paymstr=6: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
-00480   let fnopenprn
+00480   fnopenprn
 00490   gosub HDR
 00500 READ_TRMSTR: ! 
 00510   read #trmstr,using 'Form POS 1,G 2,N 1,C 8,N 6,pd 10.2,C 8,C 35,N 1,X 6,N 1': bk$,cde,tr$,tr4,amt,ven$,de$,pcde,scd eof ENDALL
@@ -149,7 +149,7 @@
 01310   gosub CONTRA
 01320   pr #255: tab(56);"  ____________  ____________"
 01330   pr #255,using 'Form POS 56,2*N 14.2': t1,t2
-01340   let fncloseprn
+01340   fncloseprn
 01350   close #1: 
 01360   close #tralloc: 
 01370   close #glwk101: 
@@ -169,8 +169,8 @@
 01510   execute "Copy "&env$('Q')&"\CLmstr\GLWK201.H"&str$(cno)&' '&env$('Q')&"\GLmstr\GLWK2"&wsid$&".H"&str$(cno)&" -n"
 01520   if lr4=0 then goto L1550
 01530   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L1550
-01540   let fnprg("S:\acsGL\PRMerge",2) !:
-        let fnstyp(99)
+01540   fnprg("S:\acsGL\PRMerge",2) !:
+        fnstyp(99)
 01550 L1550: let fnchain("S:\acsGL\acglMrge")
 01560 ! ______________________________________________________________________
 01570 CONTRA: let t9$="999999999999"
@@ -201,7 +201,7 @@
 01780   let ml$(1)="This program can combine all like General Ledger Numbers for"
 01790   let ml$(2)="Payroll Withholding Accounts as they are transferred to GL."
 01800   let ml$(4)="Do you wish to combine these accounts?"
-01810   let fnmsgbox(mat ml$,resp$,cap$,3)
+01810   fnmsgbox(mat ml$,resp$,cap$,3)
 01820   if resp$='Cancel' then goto XIT else let prc$=resp$(1:1)
 01830 L1830: return 
 01840 ! ______________________________________________________________________
@@ -241,7 +241,7 @@
 02140   write #9,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$,tr4,tr5,tr6,tr7,tr$,td$,ven$,j$,j$,j$,bgl$
 02150   goto L2130
 02160 L2160: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&str$(cno)&",Shr",internal,outin,keyed ioerr XIT
-02170   let fnchain("S:\acsGL\PRMerge")
+02170   fnchain("S:\acsGL\PRMerge")
 02180 ! ______________________________________________________________________
 02190 ! <Updateable Region: ERTN>
 02200 ERTN: let fnerror(program$,err,line,act$,"xit")
@@ -255,6 +255,6 @@
 02280   mat ml$(2) !:
         let ml$(1)="Make sure the diskette is properly inserted " !:
         let ml$(2)="and the proper device has been selected." !:
-        let fnmsgbox(mat ml$,resp$,cap$,16) !:
+        fnmsgbox(mat ml$,resp$,cap$,16) !:
         goto MAIN
 02290 ! ______________________________________________________________________

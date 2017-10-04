@@ -18,8 +18,8 @@
 00180   dim exec$*132,prg$*20,cogl$(3)*12,pedat$*20,cch$*20,cdk$(22)
 00190   dim iom2$(1),scm2$(1)*40,iom3$(2),scm3$(2)*40,btnfld02$(4),dosfld02$(4)
 00200 ! ______________________________________________________________________
-00210   let fntop(program$,cap$="Budget Management")
-00230   let fndat(dat$,1)
+00210   fntop(program$,cap$="Budget Management")
+00230   fndat(dat$,1)
 00240   gosub GRID_SPECS
 00280   for j=1 to 22: let ios$(j)=str$(j+1)&",2,C 12,N" : next j
 00290   let type$(1)="Heading" !:
@@ -46,14 +46,14 @@
 00450   mat ml$(2) !:
         let ml$(1)="Budget Management is a separately licensed product. " !:
         let ml$(2)="Contact your representative or ACS to license the product. " !:
-        let fnmsgbox(mat ml$,resp$,cap$,0)
+        fnmsgbox(mat ml$,resp$,cap$,0)
 00460   goto XIT
 00470 L470: gosub DATE_SCREEN
 00480 ! ______________________________________________________________________
 00490 MENU1: ! 
-00500   let fntos(sn$="Budget_File") !:
+00500   fntos(sn$="Budget_File") !:
         let respc=0
-00510   let fnlbl(1,1,"Budget File #:",14,right)
+00510   fnlbl(1,1,"Budget File #:",14,right)
 00520   execute "Dir "&env$('Q')&"\GLmstr\budget*.H"&env$('cno')&" >"&env$('temp')&"\FlexWork.tmp" ioerr L530
 00530 L530: let j=0
 00540   open #13: "Name="&env$('temp')&"\FlexWork.tmp",display,input ioerr L690
@@ -75,16 +75,16 @@
 00690 L690: if j<=0 then let j=1
 00700   mat options$(j)
 00710   let fen$="CBud.h"&env$('cno')
-00720   let fncomboa(fen$,1,16,mat options$,"Select from the list of budget files. To add a new budget file, take the Add option.",40,container)
+00720   fncomboa(fen$,1,16,mat options$,"Select from the list of budget files. To add a new budget file, take the Add option.",40,container)
 00730 ! Let FNCMBBUD(INDEXFILE$)
 00740   if hact$="" then !:
           let resp$(respc+=1)="" else !:
           let resp$(respc+=1)=hact$
-00750   let fncmdkey("&Display",4,1,0,"Display the budget files for this budget.") !:
-        let fncmdkey("&Add",1,0,0,"Add a new budget file" ) !:
-        let fncmdkey("E&dit",2,0,0,"Edit the highlited record") !:
-        let fncmdkey("E&xit",5,0,1,"Returns to menu")
-00760   let fnacs(sn$,0,mat resp$,ckey) ! ask budget file #
+00750   fncmdkey("&Display",4,1,0,"Display the budget files for this budget.") !:
+        fncmdkey("&Add",1,0,0,"Add a new budget file" ) !:
+        fncmdkey("E&dit",2,0,0,"Edit the highlited record") !:
+        fncmdkey("E&xit",5,0,1,"Returns to menu")
+00760   fnacs(sn$,0,mat resp$,ckey) ! ask budget file #
 00770   ad1=0
 00780   let hg1$=g1$=resp$(1)(1:12)
 00790   bud=val(resp$(1)(1:2))
@@ -118,7 +118,7 @@
 01000 L1000: mat ml$(2) !:
       let ml$(1)="You already have a budget file # "&str$(bud) ! " !:
       let ml$(2)="Take YES to continue, else NO to retain the old file." !:
-      let fnmsgbox(mat ml$,resp$,cap$,52)
+      fnmsgbox(mat ml$,resp$,cap$,52)
 01010 if resp$="Yes" then goto L1020 else goto MENU1
 01020 L1020: open #2: "Name="&env$('Q')&"\GLmstr\Budget"&str$(bud)&".H"&env$('cno')&",Replace,KFName="&env$('Q')&"\GLmstr\BgIndx"&str$(bud)&".H"&env$('cno')&",RecL=149,KPS=1/149,KLN=12/1",internal,outin,keyed 
 01030 close #2: ioerr L1040
@@ -258,8 +258,8 @@
 02310 let fnqgl(1,33) !:
       let resp$(1)=fnrgl$(gl$(1))
 02320 let fncmdkey("&Next",1,1,0,"Display budget file starting with this account. ") !:
-      let fncmdkey("&Back",2,0,0,"Takes you back one screen.") !:
-      let fncmdkey("E&xit",5,0,1,"Returns to main menu")
+      fncmdkey("&Back",2,0,0,"Takes you back one screen.") !:
+      fncmdkey("E&xit",5,0,1,"Returns to main menu")
 02330 let fnacs(sn$,0,mat resp$,ckey) ! ask general ledger #
 02340 if ckey=5 then goto MENU1
 02350 let g1$=startgl$=fnagl$(resp$(1))
@@ -334,7 +334,7 @@
 02860 L2860: mat ml$(2) !:
       let ml$(1)="You have chosen to delete the highlighted budget item." !:
       let ml$(2)="Take YES to continue, else NO to retain the record." !:
-      let fnmsgbox(mat ml$,resp$,cap$,52)
+      fnmsgbox(mat ml$,resp$,cap$,52)
 02870 if resp$="Yes" then goto L2880 else goto DISPLAY_GRID
 02880 L2880: delete #2,rec=val(resp$(1)): !:
       restore #2: !:
@@ -384,7 +384,7 @@
       let ml$(1)="General ledger account # "&key$&" already " !:
       let ml$(2)="exists. Take OK to add a different account." !:
       let ml$(3)="Take Cancel to return to main screen." !:
-      let fnmsgbox(mat ml$,resp$,cap$,49)
+      fnmsgbox(mat ml$,resp$,cap$,49)
 03230 if resp$="OK" then goto MAINTAIN_NONB_RECORDS else goto MENU1
 03240 L3240: if add=1 then goto WRITE_NEW_RECORD else goto REWRITE_EXISTING_RECORD
 03250 WRITE_NEW_RECORD: ! 
@@ -456,7 +456,7 @@
 03630 let resp$(respc+=1)=option2$(1)
 03640 let fncomboa("Types",12,mypos,mat option2$,"Select the type of entry.",20,container)
 03650 let fncmdkey("&Save",1,1,0,"Save any changes." ) !:
-      let fncmdkey("E&xit",5,0,1,"Exit without saving any changes.")
+      fncmdkey("E&xit",5,0,1,"Exit without saving any changes.")
 03660 let fnacs(sn$,0,mat resp$,ck) ! EDIT SCREEN
 03670 if ckey=5 then goto MENU1
 03680 let g1$=fnagl$(resp$(1))
@@ -477,7 +477,7 @@
 03830 mat ml$(2) !:
       let ml$(1)="You are attempting to change the record number to  an existing" !:
       let ml$(2)="record number.  Take OK to change to a different number. " !:
-      let fnmsgbox(mat ml$,resp$,cap$,0)
+      fnmsgbox(mat ml$,resp$,cap$,0)
 03840 goto MAINTAIN_LINE_ITEM
 03850 L3850: if add=1 then goto L3880
 03860 rewrite #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',rec=rec2: g1$,mat bg,gd$,ex$,cd$
@@ -542,7 +542,7 @@
 04210 let fntxt(lyne,mypos,30,0,0,"",0,"Date you want printed in heading of the report.") !:
       let resp$(respc+=1)=dat$
 04220 let fncmdkey("&Next",1,1,0,"Display ") !:
-      let fncmdkey("E&xit",5,0,1,"Returns to main menu")
+      fncmdkey("E&xit",5,0,1,"Returns to main menu")
 04230 let fnacs(sn$,0,mat resp$,ck) ! pr setup
 04240 if ck=5 then goto DISPLAY_GRID
 04250 if resp$(1)="True" then an1$(1)="Y" !:
@@ -574,7 +574,7 @@
 04380 L4380: mat ml$(2) !:
       let ml$(1)="You have selected a column width longer than the maximum allowed." !:
       let ml$(2)="Select a smaller width." !:
-      let fnmsgbox(mat ml$,resp$,cap$,0) !:
+      fnmsgbox(mat ml$,resp$,cap$,0) !:
       goto PRNT1
 04390 L4390: let fnopenprn
 04400 restore #2,search>="": nokey MENU1 ioerr L4420
@@ -667,15 +667,15 @@
 05240 let fnlbl(3,30,"Range From:",mylen,0)
 05250 let fnlbl(3,70,"Range To:",mylen,0)
 05260 for j=1 to 40 step 2
-05270   let fnqgl(lyne+=1,mypos,0,2) !:
+05270   fnqgl(lyne+=1,mypos,0,2) !:
         let resp$(respc+=1)=fnrgl$(gl$(j))
-05280   let fnqgl(lyne,mypos2,0,2) !:
+05280   fnqgl(lyne,mypos2,0,2) !:
         let resp$(respc+=1)=fnrgl$(gl$(j+1))
 05290 next j
 05300 let fncmdkey("&Complete",1,1,0,"Saves the changes and and builds the new file from the general ledger.") !:
       !:
-      let fncmdkey("&Delete",6,0,1,"Deletes this complete budget file.") !:
-      let fncmdkey("&Cancel",5,0,1,"Returns to main budget file menu.")
+      fncmdkey("&Delete",6,0,1,"Deletes this complete budget file.") !:
+      fncmdkey("&Cancel",5,0,1,"Returns to main budget file menu.")
 05310 let fnacs(sn$,0,mat resp$,ck) ! gl breakdown screen
 05320 if ck=5 then goto MENU1
 05330 bud=val(resp$(1))
@@ -689,7 +689,7 @@
 05410 L5410: mat ml$(2) !:
       let ml$(1)="You have chosen to delete the budget file. Click Yes " !:
       let ml$(2)="to continue, else No to retain the file." !:
-      let fnmsgbox(mat ml$,resp$,cap$,52)
+      fnmsgbox(mat ml$,resp$,cap$,52)
 05420 if resp$="Yes" then goto L5430 else goto L5510
 05430 L5430: delete #5,key=lpad$(str$(bud),2): 
 05440 goto L5510
@@ -709,7 +709,7 @@
 05570 let fnchk(lyne+=1,mypos,"Include Changes in Remaining Balance:",1) !:
       let resp$(respc+=1)="True"
 05580 let fncmdkey("&Next",1,1,0,"Continue with re-calculations. ") !:
-      let fncmdkey("E&xit",5,0,1,"Returns to main menu")
+      fncmdkey("E&xit",5,0,1,"Returns to main menu")
 05590 let fnacs(sn$,0,mat resp$,ck) ! include changes if remaining balance
 05600 if ck=5 then goto MENU1
 05610 if resp$(1)="True" then let ti3=1 else let ti3=2
@@ -727,11 +727,11 @@
 05700 let fntxt(lyne,mypos,2,0,0,"30",0,"Year code in YY format.") !:
       let resp$(respc+=1)=""
 05710 for j=1 to 4
-05720   let fntxt(lyne+=1,mypos,2,0,0,"30",0,"Year code in YY format.") !:
+05720   fntxt(lyne+=1,mypos,2,0,0,"30",0,"Year code in YY format.") !:
         let resp$(respc+=1)=""
 05730 next j
 05740 let fncmdkey("&Next",1,1,0,"Display ") !:
-      let fncmdkey("E&xit",5,0,1,"Returns to main menu")
+      fncmdkey("E&xit",5,0,1,"Returns to main menu")
 05750 let fnacs(sn$,0,mat resp$,ck) ! ask prior years
 05760 if ck=5 then goto MENU1
 05770 if resp$(1)="True" then let needactual=1 else let needactual=0

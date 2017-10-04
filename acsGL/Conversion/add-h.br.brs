@@ -2,10 +2,10 @@
 00020 ! this program renames "&env$('Q')&"\GLmstr\*.[cno] to "&env$('Q')&"\GLmstr\*.H[cno]
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror
-00050   let fntop(program$,"CHANGE_ME")
+00050   fntop(program$,"CHANGE_ME")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
-00080   let fncno(cno)
+00080   fncno(cno)
 00090   pr newpage
 00100 MENU1: ! 
 00110   close #101: ioerr L120

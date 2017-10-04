@@ -11,8 +11,8 @@
 00110   dim cn$*11,holdcn$*11,cnt$*5,k$*25,l(13),ta(2),eno$*12,jno$*6,tr(9)
 00120   dim io1$(6)*21,pd$*30,message$*40,cap$*128,resp$(6)*50
 00130 ! ______________________________________________________________________
-00140   let fntop(program$,cap$="Job Cost Report")
-00150   let fncno(cno)
+00140   fntop(program$,cap$="Job Cost Report")
+00150   fncno(cno)
 00160   let dat1=date("mmddyy")
 00170 ! 
 00180   let prtjob$="N" : let prtdet$="N" : let sumcat$="N" : let sumjob$="N" !:
@@ -35,22 +35,22 @@
 00320 ! ______________________________________________________________________
 00330 L330: let fntos(sn$="prtdet") !:
         let mylen=25 : let mypos=mylen+2: let resp=0: let left=1
-00340   let fnlbl(1,37,"",1)
-00350   let fnlbl(1,1,"Date of LIsting:",23,left)
-00360   let fntxt(1,mypos,8,0,1,"1") !:
+00340   fnlbl(1,37,"",1)
+00350   fnlbl(1,1,"Date of LIsting:",23,left)
+00360   fntxt(1,mypos,8,0,1,"1") !:
         let resp$(resp+=1)=str$(dat1)
-00370   let fnchk(2,mypos,"Print all Jobs:",left) !:
+00370   fnchk(2,mypos,"Print all Jobs:",left) !:
         let resp$(resp+=1)="False"
-00380   let fnchk(3,mypos,"Print Details:",left) !:
+00380   fnchk(3,mypos,"Print Details:",left) !:
         let resp$(resp+=1)="False"
-00390   let fnchk(4,mypos,"Summarize by Category:",left) !:
+00390   fnchk(4,mypos,"Summarize by Category:",left) !:
         let resp$(resp+=1)="False"
-00400   let fnchk(5,mypos,"Summarize by Job:",left) !:
+00400   fnchk(5,mypos,"Summarize by Job:",left) !:
         let resp$(resp+=1)="False"
-00410   let fnchk(6,mypos,"Start Jobs On a New Page:",left) !:
+00410   fnchk(6,mypos,"Start Jobs On a New Page:",left) !:
         let resp$(resp+=1)="False"
-00420   let fncmdset(2)
-00430   let fnacs(sn$,0,mat resp$,ck)
+00420   fncmdset(2)
+00430   fnacs(sn$,0,mat resp$,ck)
 00440   if ck=5 then goto XIT
 00450   let dat1=val(resp$(1)) ! date
 00460   if resp$(2)="True" then let prtjob$="Y" else let prtjob$="N"
@@ -63,15 +63,15 @@
 00530 ! ______________________________________________________________________
 00540 ASK_JOB: ! 
 00550   for k=1 to 100
-00560     let fntos(sn$="prtdet2") !:
+00560     fntos(sn$="prtdet2") !:
           let mylen=12 : let mypos=mylen+3: let resp=0: let left=1
-00570     let fnlbl(1,1,"Job Number:",mylen,1) !:
-          let fncmbjob(1,mypos) !:
+00570     fnlbl(1,1,"Job Number:",mylen,1) !:
+          fncmbjob(1,mypos) !:
           let resp$(respc+=1)=jn$
 00580     if k=1 then goto L600
 00590     if k>1 then let fnlbl(3,1,"Last Job Number entered was "&prtj$(k-1),50,1)
 00600 L600: let fncmdset(2)
-00610     let fnacs(sn$,0,mat resp$,ck)
+00610     fnacs(sn$,0,mat resp$,ck)
 00620     if ck=5 then goto L690
 00630     let prtj$(k)=lpad$(trim$(resp$(1)(1:6)),6)
 00640     if rtrm$(prtj$(k))="" or ltrm$(rtrm$(prtj$(k)))="0" then goto L330
@@ -81,7 +81,7 @@
 00680 ! ______________________________________________________________________
 00690 L690: let k=k-1
 00700 L700: on fkey 5 goto DONE
-00710   let fnopenprn
+00710   fnopenprn
 00720 L720: if prtjob$="Y" then goto L810
 00730 L730: let j1=j1+1
 00740   if j1<=k then goto L780
@@ -198,7 +198,7 @@
 01850   close #2: 
 01860   close #3: 
 01870 DONE: ! 
-01880   let fncloseprn
+01880   fncloseprn
 01890   goto XIT
 01900 ! ______________________________________________________________________
 01910 HDR: ! 

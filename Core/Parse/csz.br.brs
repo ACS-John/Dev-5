@@ -40,7 +40,7 @@
 00177     mat ml$(2) !:
           let ml$(1)="You have a bad address: "&csz$ !:
           let ml$(2)="You should fix the address and run this option again." !:
-          let fnmsgbox(mat ml$,resp$,cap$,48)
+          fnmsgbox(mat ml$,resp$,cap$,48)
 00178     goto XIT
 00180 L180: ! pr STATE$ ! XXX
 00190     goto XIT

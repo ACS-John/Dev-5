@@ -12,7 +12,7 @@
 00120   dim tcp(32),tdc(10)
 00140   dim ytdtotal(32),ss$*11,em$(3)*30,csz$*40
 00150 ! ______________________________________________________________________
-00170   let fntop(program$,cap$="Annual Federal Unemployment Worksheet")
+00170   fntop(program$,cap$="Annual Federal Unemployment Worksheet")
 00190   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 00200   fnGetPayrollDates(beg_date,end_date)
 00210   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
@@ -22,42 +22,42 @@
 00250 ! ______________________________________________________________________
 00260 ! If FNPROCESS=1 Then Goto 230
 00270 ! MENU1: !
-00280   let fntos(sn$="prfeduc") !:
+00280   fntos(sn$="prfeduc") !:
         let respc=0
-00290   let fnlbl(1,43," ",1,1)
-00300   let fnlbl(1,1,"Beginning Date of Tax Year:",29,1)
-00310   let fntxt(1,30,12,0,0,"3",0,"If filing annually, this would be the first day of the year.") !:
+00290   fnlbl(1,43," ",1,1)
+00300   fnlbl(1,1,"Beginning Date of Tax Year:",29,1)
+00310   fntxt(1,30,12,0,0,"3",0,"If filing annually, this would be the first day of the year.") !:
         let resp$(respc+=1)=str$(beg_date)
-00320   let fnlbl(2,1,"Ending Date of Tax Year:",29,1)
-00330   let fntxt(2,30,12,0,0,"3",0,"If filing annually, this would be the last day of the year.") !:
+00320   fnlbl(2,1,"Ending Date of Tax Year:",29,1)
+00330   fntxt(2,30,12,0,0,"3",0,"If filing annually, this would be the last day of the year.") !:
         let resp$(respc+=1)=str$(end_date)
-00340   let fnlbl(3,1,"Deposits Made:",29,1)
-00350   let fntxt(3,30,12,0,0,"10",0,"Total deposits made for this time frame.") !:
+00340   fnlbl(3,1,"Deposits Made:",29,1)
+00350   fntxt(3,30,12,0,0,"10",0,"Total deposits made for this time frame.") !:
         let resp$(respc+=1)=str$(deposits)
-00360   let fnlbl(4,1,"Top Margin:",29,1)
-00370   let fntxt(4,30,3,0,0,"30",0,"Reduce the top margin to move the pr up. Increse to move down.") !:
+00360   fnlbl(4,1,"Top Margin:",29,1)
+00370   fntxt(4,30,3,0,0,"30",0,"Reduce the top margin to move the pr up. Increse to move down.") !:
         let resp$(respc+=1)=str$(5)
-00380   let fnlbl(5,1,"Left Margin:",29,1)
-00390   let fntxt(5,30,3,0,0,"30",0,"Reduce the left margin to move the pr left. Increse to move right.") !:
+00380   fnlbl(5,1,"Left Margin:",29,1)
+00390   fntxt(5,30,3,0,0,"30",0,"Reduce the left margin to move the pr left. Increse to move right.") !:
         let resp$(respc+=1)=str$(5)
-00400   let fnlbl(7,1,"FUTA Tax Liability 1st Qtr:",29,1)
-00410   let fntxt(7,30,12,0,0,"10",0,"Total FUTA Tax Libality for the first quarter.") !:
+00400   fnlbl(7,1,"FUTA Tax Liability 1st Qtr:",29,1)
+00410   fntxt(7,30,12,0,0,"10",0,"Total FUTA Tax Libality for the first quarter.") !:
         let resp$(respc+=1)=str$(futaqtr1)
-00420   let fnlbl(8,1,"FUTA Tax Liability 2nd Qtr:",29,1)
-00430   let fntxt(8,30,12,0,0,"10",0,"Total FUTA Tax Libality for the second quarter.") !:
+00420   fnlbl(8,1,"FUTA Tax Liability 2nd Qtr:",29,1)
+00430   fntxt(8,30,12,0,0,"10",0,"Total FUTA Tax Libality for the second quarter.") !:
         let resp$(respc+=1)=str$(futaqtr2)
-00440   let fnlbl(9,1,"FUTA Tax Liability 3rd Qtr:",29,1)
-00450   let fntxt(9,30,12,0,0,"10",0,"Total FUTA Tax Libality for the third quarter.") !:
+00440   fnlbl(9,1,"FUTA Tax Liability 3rd Qtr:",29,1)
+00450   fntxt(9,30,12,0,0,"10",0,"Total FUTA Tax Libality for the third quarter.") !:
         let resp$(respc+=1)=str$(futaqtr3)
-00460   let fnlbl(10,1,"FUTA Tax Liability 4th Qtr:",29,1)
-00470   let fntxt(10,30,12,0,0,"10",0,"Total FUTA Tax Libality for the fourth quarter.") !:
+00460   fnlbl(10,1,"FUTA Tax Liability 4th Qtr:",29,1)
+00470   fntxt(10,30,12,0,0,"10",0,"Total FUTA Tax Libality for the fourth quarter.") !:
         let resp$(respc+=1)=str$(futaqtr4)
-00480   let fnfra(12,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
-00490   let fnopt(1,2,"Print complete form",0,1) !:
+00480   fnfra(12,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
+00490   fnopt(1,2,"Print complete form",0,1) !:
         let resp$(respc+=1)="True"
-00500   let fnopt(2,2,"Fill in the blanks",0,1) !:
+00500   fnopt(2,2,"Fill in the blanks",0,1) !:
         let resp$(respc+=1)="False"
-00510   let fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+00510   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00520   if ck=5 then goto XIT
 00530   beg_date=val(resp$(1)) ! beginning of year
 00540   let end_date=val(resp$(2)) ! ending day of year
@@ -70,7 +70,7 @@
 00620   let futaqtr4=val(resp$(9))
 00630   if resp$(10)="True" then let fullform=1 ! pr full form
 00640   if resp$(11)="True" then let fullform=2 ! fill in blanks
-00650   let fnopenprn
+00650   fnopenprn
 00660 ! ______________________________________________________________________
 00670   on pageoflow goto PGOF
 00680   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -115,7 +115,7 @@
 01050 EOF2: ! 
 01060   gosub TOTALS
 01070 ! DONE: !
-01080   let fncloseprn
+01080   fncloseprn
 01090 ! CANCEL_OUT: !
 01092 close #2: ioerr L1100
 01100 L1100: close #3: ioerr L1110
@@ -138,7 +138,7 @@
 01290   pr #255: ""
 01300   pr #255,using L1310: "Total Futa Tax",t3*feducrat/100
 01310 L1310: form pos 26,c 14,pos 42,pic(--,---,---.##)
-01320   let fncloseprn
+01320   fncloseprn
 01330   return 
 01340 ! ______________________________________________________________________
 01350 PGOF: pr #255: newpage : gosub HDR : continue 
@@ -201,7 +201,7 @@
 01920   fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",deposits),column3+leftmargin,208+topmargin) ! deposits
 01930   if (t3*feducrat/100)-deposits>0 then let fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",(t3*feducrat/100)-deposits),column3+leftmargin,222.5+topmargin) ! due
 01940   if (t3*feducrat/100)-deposits<=0 then let fnpa_txt(cnvrt$("pic(-----------.##)",abs((t3*feducrat/100)-deposits)),column3+leftmargin,31+topmargin) ! overpaid
-01950   let fnpa_newpage
+01950   fnpa_newpage
 01955   fnpa_pic("S:\acsPR\Form 940 pg2.bmp",1,1)
 01960   column4=119.5
 01965   if fullform=1 then let x=2.5: let y=1 else let x=0: let y=0 ! adjust for bad alignment
@@ -215,14 +215,14 @@
 02040   return 
 02050 VBOPENPRINT: ! 
 02060   if file(20)=-1 then 
-02070     let fnpa_open ! open #20: "Name="&env$('Q')&"\PRmstr\940"&wsid$&".txt,Replace,RecL=5000",display,output
+02070     fnpa_open ! open #20: "Name="&env$('Q')&"\PRmstr\940"&wsid$&".txt,Replace,RecL=5000",display,output
 02090     let lyne=margin ! starting of 1st line
 02100     column2=103 !:
           column3=153
 02110   end if 
 02120   return 
 02130 RELEASE_PRINT: ! 
-02140   let fnpa_finis
+02140   fnpa_finis
 02170   return 
 02180 CSZ: ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
 02190 L2190: let p1=pos(csz$,".",1)

@@ -12,7 +12,7 @@
 00120   dim terminat$*1,first$*15,mid$*15,last$*20
 00130   dim w2(9),i1(9),t1(9),ct$*20,st$*2,ibm$*8,namcde$*1,typemp$*1,io1$(18)
 00140 ! ______________________________________________________________________
-00150   let fntop(program$,cap$="Create Electronic W-2s")
+00150   fntop(program$,cap$="Create Electronic W-2s")
 00175   pr newpage
 00180   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
         read #1,using 'Form POS 1,3*C 40,C 12,POS 618,50*N 1': mat a$,b$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc !:
@@ -374,7 +374,7 @@
 03560   if button_option=7 then !:
           let fkey$(1)="Save" !:
           let fkey$(4)="Delete"
-03570   let scrline=er+1: gosub L4320 !  Let FNFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
+03570   let scrline=er+1: gosub L4320 !  fnFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
 03580 ! 
 03590 L3590: return  ! Fnend
 03600 ! ______________________________________________________________________

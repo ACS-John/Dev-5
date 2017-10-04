@@ -4,8 +4,8 @@
 00060 ! ______________________________________________________________________
 00070 ! 
 00080   on error goto ERTN
-00090   let fntop(program$,cap$="Print Invoice")
-00100   let fncno(cno,cnam$)
+00090   fntop(program$,cap$="Print Invoice")
+00100   fncno(cno,cnam$)
 00102   dim fl1$(8),io1$(60),scrid$(4)*80,inp(3),iv$*12,a1$*30
 00104   dim pt(4),fl2$(8),scr2$(4),ot2$(4),cnam$*40,nam$*25,bk$(20)*30
 00106   dim cde$(30)*6,ct(30),sc(30),id$(30)*55,da(30),gl$(30)*12,gl(3)
@@ -61,7 +61,7 @@
 00870   open #h_tmwk1:=2: "Name="&env$('Q')&"\TMmstr\TMWk1.h"&str$(cno)&",RecL=2484,Replace",internal,outin,relative 
 00880 L880: ! 
 00882   open #3: "Name="&env$('Q')&"\TMmstr\IVDesc.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\IVDIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr ERTN
-00890   let fnopenprn(cp,58,220,process)
+00890   fnopenprn(cp,58,220,process)
 00900   if f1=2 then gosub REPR_PREV_INV
 00910 L910: ! 
 00912   let scrid$(1)="Time Management Input Of Invoices"
@@ -239,7 +239,7 @@
 02430       pr #255: 
 02440     end if 
 02442   next j
-02452   let fncloseprn
+02452   fncloseprn
 02460   goto SCR_FINAL ! /r
 02461 PR_PROOF_HEAD: ! r:
 02462   pr #255,using L2200: date$,cnam$,time$,"Time Management pr Invoices Proof Listing"
@@ -270,7 +270,7 @@
 02610   if select_invoices_to_print><0 then goto L2590
 02620   pr newpage
 02630   pr fields "10,10,c 60": "Print invoices in process"
-02640   let fnopenprn
+02640   fnopenprn
 02670   align=0
 02672   restore #h_tmwk1: 
 02680   do  ! for j=1 to lrec(h_tmwk1)
@@ -280,12 +280,12 @@
 02710     let k$=lpad$(str$(inp(1)),5)
 02720     read #1,using L2730,key=k$: mat a$ ioerr ERTN
 02730 L2730: form pos 6,3*c 30
-02750     let fnprint_invoice(align, k$, mat a$, iv$, inp(3),mat id$, mat da,0)
+02750     fnprint_invoice(align, k$, mat a$, iv$, inp(3),mat id$, mat da,0)
 02840 L2840: ! 
 02842     if select_invoices_to_print=1 then goto SCR_SELECT_INVOICE
 02850   loop  ! next j
 02852 PRI_EOF: ! 
-02860   let fncloseprn
+02860   fncloseprn
 02870 L2870: ! 
 02872   goto SCR_FINAL ! /r
 02880 SCR_SELECT_INVOICE: ! r:

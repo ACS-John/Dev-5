@@ -172,7 +172,7 @@
 76000 ! <updateable region: fn_open (supressprompt:=2)>  
 76020 def fn_open(filename$*255, mat f$, mat fn, mat form$; inputonly, keynum, dont_sort_subs, path$*255, mat descr$, mat field_widths,dontupdate,___,index)
 76040   dim _fileiosubs$(1)*800, loadedsubs$(1)*32
-76060   let fn_open=fnOpenFile(filename$, mat f$, mat fn, mat form$, inputonly, keynum, dont_sort_subs, path$, mat descr$, mat field_widths, mat _fileiosubs$,supressprompt:=2)
+76060   fn_open=fnOpenFile(filename$, mat f$, mat fn, mat form$, inputonly, keynum, dont_sort_subs, path$, mat descr$, mat field_widths, mat _fileiosubs$,supressprompt:=2)
 76080   if ~max(srch(loadedsubs$,uprc$(filename$)),0) then 
 76100     mat loadedsubs$(udim(loadedsubs$)+1) 
 76120     let loadedsubs$(udim(loadedsubs$))=uprc$(filename$)

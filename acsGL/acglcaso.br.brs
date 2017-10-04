@@ -8,17 +8,17 @@
 00080   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,7),fl1$*256,cap$*128
 00090   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Cash Flow with YTD Budget Comparison")
+00110   fntop(program$,cap$="Cash Flow with YTD Budget Comparison")
 00120   let report$=cap$
 00125   actpd$=fnactpd$ !:
         actpd=fnactpd !:
-        let fnfscode !:
-        let fnpriorcd
+        fnfscode !:
+        fnpriorcd
 00130   if fnglfs=5 then goto XIT
 00135   let fscode=fnfscode !:
         let priorcd=fnpriorcd
-00140   let fncno(cno,cnam$)
-00150   let fnopenprn
+00140   fncno(cno,cnam$)
+00150   fnopenprn
 00160   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00170   let fscode=fnfscode
 00180   if nap<12 or nap>13 then let nap=12
@@ -29,15 +29,15 @@
 00220   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&str$(cno)&",Shr"
 00230   open #1: fl1$,internal,input,keyed 
 00240   if fnprocess=1 or fnUseDeptNo=0 then goto L340
-00250   let fntos(sn$="Acglcaso") !:
+00250   fntos(sn$="Acglcaso") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00260   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00270   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00260   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00270   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00280   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00290   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00300   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00310   let fnacs(sn$,0,mat resp$,ckey)
+00280   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00290   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00300   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00310   fnacs(sn$,0,mat resp$,ckey)
 00320   if ckey=5 then goto XIT
 00330   costcntr=val(resp$(1))
 00340 L340: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -212,23 +212,23 @@
 02000 ! ______________________________________________________________________
 02010 DONE: let eofcode=1
 02020   gosub L1650
-02022   let fnfscode(actpd)
-02023   let fnpriorcd(1)
-02030   let fncloseprn
+02022   fnfscode(actpd)
+02023   fnpriorcd(1)
+02030   fncloseprn
 02040   goto XIT
 02050 ! ______________________________________________________________________
-02060   let fntos(sn$="ACglchgs2") !:
+02060   fntos(sn$="ACglchgs2") !:
         let mylen=30: let mypos=mylen+3 : let right=1
 02070 L2070: let fnlbl(1,10,d$)
-02080   let fnlbl(3,1,"Total Amount YTD:",mylen,right)
-02090   let fntxt(3,mypos,12,0,right,"10",0,"Enter the total for the year.",0 ) !:
+02080   fnlbl(3,1,"Total Amount YTD:",mylen,right)
+02090   fntxt(3,mypos,12,0,right,"10",0,"Enter the total for the year.",0 ) !:
         let resp$(1)=str$(total2)
-02100   let fnlbl(4,1,"Total Budget Year to Date:",mylen,right)
-02110   let fntxt(4,mypos,12,0,right,"10",0,"Enter the annual budget.",0 ) !:
+02100   fnlbl(4,1,"Total Budget Year to Date:",mylen,right)
+02110   fntxt(4,mypos,12,0,right,"10",0,"Enter the annual budget.",0 ) !:
         let resp$(2)=str$(annualb)
-02120   let fncmdkey("&Next",1,1,0,"Accept the answer.")
-02130   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-02140   let fnacs(sn$,0,mat resp$,ckey)
+02120   fncmdkey("&Next",1,1,0,"Accept the answer.")
+02130   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+02140   fnacs(sn$,0,mat resp$,ckey)
 02150   if ckey=5 then goto XIT
 02160   let total2=val(resp$(1))
 02170   annualb=val(resp$(2))

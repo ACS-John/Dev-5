@@ -3,10 +3,10 @@
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnacprscr
 00050 ! ______________________________________________________________________
-00060   let fntop(program$,cap$="Payroll Screens")
+00060   fntop(program$,cap$="Payroll Screens")
 00070   on error goto ERTN
 00080 ! ______________________________________________________________________
-00090   let fnacprscr
+00090   fnacprscr
 00830   goto XIT
 00840 ! ______________________________________________________________________
 00850 ! <updateable region: ertn>

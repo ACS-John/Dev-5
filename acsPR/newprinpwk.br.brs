@@ -7,9 +7,9 @@
 00070   dim em$*30,em(3),tdt(4),tdy(6),ta(2),dat$*20,cap$*128,message$*40
 00080   dim gl$*12,tdt(4),tcd(3),tdet(23)
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$="Input Worksheet")
+00100   fntop(program$,cap$="Input Worksheet")
 00120   on fkey 5 goto DONE
-00130   let fnopenprn
+00130   fnopenprn
 00150   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,dat$)
 00170 L170: gosub HDR
 00180   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -38,7 +38,7 @@
 00410   pr #255,using L420: "Totals",rpt$("  ==========",3)
 00420 L420: form pos 11,c 33,skip 1,pos 57,c 36,skip 1
 00430 L430: let fncloseprn
-00440   let fnxit
+00440   fnxit
 00450 ! ______________________________________________________________________
 00460 HDR: ! 
 00470   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$

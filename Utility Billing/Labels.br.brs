@@ -1,46 +1,46 @@
 10020 ! -- pr Customer Labels
 10040 let fn_setup
-10100   let fntop(program$)
+10100   fntop(program$)
 14000 SCR1: ! r:
-14020   let fntos(sn$="ublabel-1b")
-14040   let fnlbl(1,1,"Sort by:",20,1)
-14060   let fncomboa("ublabels-ord",1,22,mat sequence_option$,"The labels can be printed in customer # order,customer name order, or in bar code sequence")
-14080   let fnreg_read('ublabel.sequence',resp$(1)) : if resp$(1)='' then let resp$(1)=sequence_option$(sequence_account)
+14020   fntos(sn$="ublabel-1b")
+14040   fnlbl(1,1,"Sort by:",20,1)
+14060   fncomboa("ublabels-ord",1,22,mat sequence_option$,"The labels can be printed in customer # order,customer name order, or in bar code sequence")
+14080   fnreg_read('ublabel.sequence',resp$(1)) : if resp$(1)='' then let resp$(1)=sequence_option$(sequence_account)
 14100 ! 
-14120   let fnlbl(3,1,"Print Address:",20,1)
-14140   let fncomboa("ubnamlst-act",3,22,mat address_option$)
-14160   let fnreg_read('ublabel.address',resp$(2)) : if srch(mat address_option$,resp$(2))<=0 then let resp$(2)=address_option$(ao_billing)
+14120   fnlbl(3,1,"Print Address:",20,1)
+14140   fncomboa("ubnamlst-act",3,22,mat address_option$)
+14160   fnreg_read('ublabel.address',resp$(2)) : if srch(mat address_option$,resp$(2))<=0 then let resp$(2)=address_option$(ao_billing)
 14280 ! 
-14300   let fnlbl(5,1,"Line 1:",20,1)
-14320   let fncomboa("ublabel_tl1",5,22,mat line_x_option$,'',70)
-14340   let fnreg_read('ublabel.line 1',resp$(3)) : if resp$(3)='' then let resp$(3)=line_x_option$(1)
+14300   fnlbl(5,1,"Line 1:",20,1)
+14320   fncomboa("ublabel_tl1",5,22,mat line_x_option$,'',70)
+14340   fnreg_read('ublabel.line 1',resp$(3)) : if resp$(3)='' then let resp$(3)=line_x_option$(1)
 14360 ! 
-14380   let fnlbl(6,1,"Line 2:",20,1)
-14400   let fncomboa("ublabel_tl2",6,22,mat line_x_option$,'',70)
-14420   let fnreg_read('ublabel.line 2',resp$(4)) : if resp$(4)='' then let resp$(4)=line_x_option$(2)
+14380   fnlbl(6,1,"Line 2:",20,1)
+14400   fncomboa("ublabel_tl2",6,22,mat line_x_option$,'',70)
+14420   fnreg_read('ublabel.line 2',resp$(4)) : if resp$(4)='' then let resp$(4)=line_x_option$(2)
 14440 ! 
-14460   let fnlbl(7,1,"Line 3:",20,1)
-14480   let fncomboa("ublabel_tl3",7,22,mat line_x_option$,'',70)
-14500   let fnreg_read('ublabel.line 3',resp$(5)) : if resp$(5)='' then let resp$(5)=line_x_option$(3)
+14460   fnlbl(7,1,"Line 3:",20,1)
+14480   fncomboa("ublabel_tl3",7,22,mat line_x_option$,'',70)
+14500   fnreg_read('ublabel.line 3',resp$(5)) : if resp$(5)='' then let resp$(5)=line_x_option$(3)
 14520 ! 
-14540   let fnlbl(8,1,"Line 4:",20,1)
-14560   let fncomboa("ublabel_tl4",8,22,mat line_x_option$,'',70)
-14580   let fnreg_read('ublabel.line 4',resp$(6)) : if resp$(6)='' then let resp$(6)=line_x_option$(4)
+14540   fnlbl(8,1,"Line 4:",20,1)
+14560   fncomboa("ublabel_tl4",8,22,mat line_x_option$,'',70)
+14580   fnreg_read('ublabel.line 4',resp$(6)) : if resp$(6)='' then let resp$(6)=line_x_option$(4)
 14600 ! 
-14620   let fnlbl(9,1,"Line 5:",20,1)
-14640   let fncomboa("ublabel_tl5",9,22,mat line_x_option$,'',70)
-14660   let fnreg_read('ublabel.line 5',resp$(7)) : if resp$(7)='' then let resp$(7)=line_x_option$(5 )
+14620   fnlbl(9,1,"Line 5:",20,1)
+14640   fncomboa("ublabel_tl5",9,22,mat line_x_option$,'',70)
+14660   fnreg_read('ublabel.line 5',resp$(7)) : if resp$(7)='' then let resp$(7)=line_x_option$(5 )
 14680 ! 
-14700   let fncmdset(2)
-14720   let fnacs(sn$,0,mat resp$,ck) ! select order of printing
+14700   fncmdset(2)
+14720   fnacs(sn$,0,mat resp$,ck) ! select order of printing
 14740   if ck=5 then goto XIT
-14760   let fnreg_write('ublabel.sequence',resp$(1))
-14780   let fnreg_write('ublabel.address',resp$(2))
-14800   let fnreg_write('ublabel.line 1',resp$(3))
-14820   let fnreg_write('ublabel.line 2',resp$(4))
-14840   let fnreg_write('ublabel.line 3',resp$(5))
-14860   let fnreg_write('ublabel.line 4',resp$(6))
-14880   let fnreg_write('ublabel.line 5',resp$(7))
+14760   fnreg_write('ublabel.sequence',resp$(1))
+14780   fnreg_write('ublabel.address',resp$(2))
+14800   fnreg_write('ublabel.line 1',resp$(3))
+14820   fnreg_write('ublabel.line 2',resp$(4))
+14840   fnreg_write('ublabel.line 3',resp$(5))
+14860   fnreg_write('ublabel.line 4',resp$(6))
+14880   fnreg_write('ublabel.line 5',resp$(7))
 14900   annbc=sequence_name ! default to name sequence
 14920   let pt$(5)=""
 14940   if resp$(1)=sequence_option$(sequence_account) then 
@@ -79,8 +79,8 @@
 15680     goto BULK_READ
 15700   end if 
 15720 SCR2: ! 
-15740   let fntos(sn$="ublabel-2")
-15760   let fnlbl(1,1,"Select by:",12,0,0)
+15740   fntos(sn$="ublabel-2")
+15760   fnlbl(1,1,"Select by:",12,0,0)
 15780   if annbc=sequence_account then 
 15800     let filter_option_enabled$(1)=filter_option$(1)
 15820     let filter_option_enabled$(2)=filter_option$(2)
@@ -111,11 +111,11 @@
 16320     let filter_option_enabled$(4)=filter_option$(6)
 16340     mat filter_option_enabled$(4)
 16360   end if 
-16380   let fncomboa("ublabels-ord",1,14,mat filter_option_enabled$,'',30)
+16380   fncomboa("ublabels-ord",1,14,mat filter_option_enabled$,'',30)
 16400   let resp$(1)=filter_option_enabled$(1)
 16420   gosub OPEN_FILES
-16440   let fncmdset(6)
-16460   let fnacs(sn$,0,mat resp$,ckey) ! method of selection
+16440   fncmdset(6)
+16460   fnacs(sn$,0,mat resp$,ckey) ! method of selection
 16480   let filter_selection=srch(mat filter_option$,resp$(1))
 16500   if ckey=5 then goto XIT
 16520   if ckey=2 then goto SCR1
@@ -155,23 +155,23 @@
 20520   if filter_selection=6 and bk>0 and route<>bk then goto TOP
 20540   if filter_selection=2 and d1><f then goto TOP
 20560 THERE: ! 
-20580   let fn_get_address_lines
+20580   fn_get_address_lines
 20700   goto ADDLABEL ! /r
 24000 ADDLABEL: ! r:
 24020 ! if annbc=sequence_bulk_sort then
 24040 !   let labeltext$(1)=labeltext$(1)&"  "&bulksort$ ! if bulk sort than auto add bulk sort code on to the end of the top line
 24060 ! else 
-24080   let fn_set_line_text(labeltext$(1),line_1_print)
+24080   fn_set_line_text(labeltext$(1),line_1_print)
 24100 ! end if
-24120   let fn_set_line_text(labeltext$(2),line_2_print)
-24140   let fn_set_line_text(labeltext$(3),line_3_print)
-24160   let fn_set_line_text(labeltext$(4),line_4_print)
-24180   let fn_set_line_text(labeltext$(5),line_5_print)
+24120   fn_set_line_text(labeltext$(2),line_2_print)
+24140   fn_set_line_text(labeltext$(3),line_3_print)
+24160   fn_set_line_text(labeltext$(4),line_4_print)
+24180   fn_set_line_text(labeltext$(5),line_5_print)
 24200   if annbc=sequence_bar_code then 
 24220     gosub BARCODE
 24240   end if 
 24260   if final=0 or filter_selection<>7 then 
-24280     let fnaddlabel(mat labeltext$)
+24280     fnaddlabel(mat labeltext$)
 24300   end if 
 24320   if annbc=sequence_grid then return 
 24340   if filter_selection=5 then goto IACC
@@ -179,7 +179,7 @@
 24380 ! /r
 26000 DONE: ! r:
 26020   close #1: ioerr ignore
-26040   let fnlabel(101,cap$,mat pt$,cp,nw)
+26040   fnlabel(101,cap$,mat pt$,cp,nw)
 26080   goto XIT ! /r
 27000   def fn_set_line_text(&labeltext$,line_2_print)
 27020     if line_2_print=line_x_blank then 
@@ -206,15 +206,15 @@
 27360   fnend 
 28000 XIT: let fnxit
 30000 SELR: ! r: select range of accounts
-30020   let fntos(sn$="ublabel-3")
-30040   let fnlbl(1,1,"Starting Account:",20)
-30060   let fncmbact(1,22,1)
+30020   fntos(sn$="ublabel-3")
+30040   fnlbl(1,1,"Starting Account:",20)
+30060   fncmbact(1,22,1)
 30080   let resp$(1)=l1$
-30100   let fnlbl(2,1,"Ending Account:",20)
-30120   let fncmbact(2,22,1)
+30100   fnlbl(2,1,"Ending Account:",20)
+30120   fncmbact(2,22,1)
 30140   let resp$(2)=h1$
-30160   let fncmdset(22)
-30180   let fnacs(sn$,0,mat resp$,ckey) ! select by range
+30160   fncmdset(22)
+30180   fnacs(sn$,0,mat resp$,ckey) ! select by range
 30200   if ckey=5 then goto XIT
 30220   let l1$=lpad$(trim$(resp$(1)(1:10)),10)
 30240   let h1$=lpad$(trim$(resp$(2)(1:10)),10)
@@ -228,22 +228,22 @@
 30400   if h1$<l1$ then 
 30420     mat msgline$(1)
 30440     let msgline$(1)="You have entered invalid accounts!"
-30460     let fnmsgbox(mat msgline$,resp$,cap$,48)
+30460     fnmsgbox(mat msgline$,resp$,cap$,48)
 30480     goto SELR
 30500   end if 
 30520   restore #customer,key=l1$: nokey SELR
 30540   goto TOP ! /r
 32000 IACC: ! r: select individual accounts
-32020   let fntos(sn$="ublabel-4")
-32040   let fnlbl(1,1,"Account:",15)
-32060   let fncmbact(1,17)
+32020   fntos(sn$="ublabel-4")
+32040   fnlbl(1,1,"Account:",15)
+32060   fncmbact(1,17)
 32080   let resp$(1)=selz$
-32100   let fnlbl(3,1,"Last selection: "&hz$,35,0)
+32100   fnlbl(3,1,"Last selection: "&hz$,35,0)
 32120   if trim$(sele$(2))<>"" then let fnlbl(2,17,sele$(2),20,0)
-32140   let fncmdset(23)
-32160   let fnacs(sn$,0,mat resp$,ckey)
+32140   fncmdset(23)
+32160   fnacs(sn$,0,mat resp$,ckey)
 32180   if ckey=2 then 
-32190     let fncustomer_search(resp$(1))
+32190     fncustomer_search(resp$(1))
 32200     let selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
 32220     read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
 32240     goto IACC
@@ -260,16 +260,16 @@
 32460   let meter_address$=e$(1)
 32480   goto THERE ! /r
 34000 SELBK: ! r: selects by route
-34020   let fntos(sn$="ublabel-5")
+34020   fntos(sn$="ublabel-5")
 34040   let respc=0
-34060   let fnlbl(1,1,"Route Number:",15,0)
-34080   let fncmbrt2(1,17)
+34060   fnlbl(1,1,"Route Number:",15,0)
+34080   fncmbrt2(1,17)
 34100   let resp$(respc+=1)="1"
-34120   let fnlbl(2,1,"Sequence Number:",15,0)
-34140   let fntxt(2,17,7,7,1,"20",0,"The sequence number is only required if you wish to start in the middle of a route")
+34120   fnlbl(2,1,"Sequence Number:",15,0)
+34140   fntxt(2,17,7,7,1,"20",0,"The sequence number is only required if you wish to start in the middle of a route")
 34160   let resp$(respc+=1)=""
-34180   let fncmdset(22)
-34200   let fnacs(sn$,0,mat resp$,ckey) ! select labels by route
+34180   fncmdset(22)
+34200   fnacs(sn$,0,mat resp$,ckey) ! select labels by route
 34220   if ckey=5 then goto XIT
 34240   if ckey=2 then goto SCR2
 34260   bk=0 : bk=val(resp$(1)) conv L1860
@@ -280,15 +280,15 @@
 34360   restore #customer,key>=routekey$: nokey SELBK
 34380 goto TOP ! /r
 36000 SCR4F3: ! r: select starting account name
-36020   let fntos(sn$="ublabel-7")
-36040   let fnlbl(1,1,"Customer Name:",15,0)
-36060   let fntxt(1,17,30,30,1,"",0,"Search and find the exact customer name if you wish to start with a specific customer")
+36020   fntos(sn$="ublabel-7")
+36040   fnlbl(1,1,"Customer Name:",15,0)
+36060   fntxt(1,17,30,30,1,"",0,"Search and find the exact customer name if you wish to start with a specific customer")
 36080   let resp$(1)=""
 36100   if trim$(sele$(2))<>"" then 
-36120     let fnlbl(2,17,sele$(2),20,0)
+36120     fnlbl(2,17,sele$(2),20,0)
 36140   end if 
-36160   let fncmdset(21)
-36180   let fnacs(sn$,0,mat resp$,ckey) ! select starting customer name
+36160   fncmdset(21)
+36180   fnacs(sn$,0,mat resp$,ckey) ! select starting customer name
 36200   if ckey=5 then goto XIT
 36220   if ckey=6 then let fncustomer_search(resp$(1))
 36260   restore #customer,key>="       ": nokey ignore
@@ -303,7 +303,7 @@
 36440 SCR4F3_NO_MATCH: ! r:
 36460   mat msgline$(1)
 36480   let msgline$(1)="No matching name found!"
-36500   let fnmsgbox(mat msgline$,resp$,cap$,48)
+36500   fnmsgbox(mat msgline$,resp$,cap$,48)
 36520 goto SELSTART ! /r
 36540 ! /r
 38000 SORT1: ! r: SELECT & SORT
@@ -344,15 +344,15 @@
 40180   BARCODE_XIT: ! 
 40200 return  ! /r
 42000 SELSTART: ! r: select customer to start with
-42020   let fntos(sn$="ublabel-6")
+42020   fntos(sn$="ublabel-6")
 42040   let mylen=26 : let mypos=mylen+2
-42060   let fnlbl(1,1,"Starting account:",mylen,0)
-42080   let fncmbact(1,mypos,1)
+42060   fnlbl(1,1,"Starting account:",mylen,0)
+42080   fncmbact(1,mypos,1)
 42100   if trim$(selz$)='' then let resp$(1)='[All]' else let resp$(1)=selz$
-42180   let fncmdset(5)
-42200   let fnacs(sn$,0,mat resp$,ckey) ! select starting customer
+42180   fncmdset(5)
+42200   fnacs(sn$,0,mat resp$,ckey) ! select starting customer
 42220   if ckey=6 then 
-42240     let fncustomer_search(resp$(1))
+42240     fncustomer_search(resp$(1))
 42260     let selz$=lpad$(rtrm$(resp$(1)(1:10)),10)
 42280     read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=selz$: selz$,mat sele$,extra$(1),final nokey ignore
 42300     goto SELSTART
@@ -365,20 +365,20 @@
 42440   let meter_address$=e$(1)
 42460   goto THERE ! /r
 44000 READ_FROM_GRID: ! r: select customers from grid
-44020   let fntos(sn$="ublabel-7")
-44040   let fnlbl(1,1,"Grid name (including folders):",30,0)
-44060   let fntxt(1,30,30,66,0,"70",0,"You must first export a fixed width file from the gird program (remember the name!)")
+44020   fntos(sn$="ublabel-7")
+44040   fnlbl(1,1,"Grid name (including folders):",30,0)
+44060   fntxt(1,30,30,66,0,"70",0,"You must first export a fixed width file from the gird program (remember the name!)")
 44080   let resp$(1)=""
-44100   let fnlbl(2,40,"",30,0)
-44120   let fncmdset(3)
-44140   let fnacs(sn$,0,mat resp$,ckey) ! select starting customer #
+44100   fnlbl(2,40,"",30,0)
+44120   fncmdset(3)
+44140   fnacs(sn$,0,mat resp$,ckey) ! select starting customer #
 44160   if ckey=5 then goto XIT
 44180   open #6: "Name="&trim$(resp$(1)),display,input ioerr READ_FROM_GRID
 44200   LIN6: linput #6: x$ eof DONE
 44220   let z$=lpad$(trim$(x$(1:10)),10)
 44240   read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),final nokey LIN6
 44260   let meter_address$=e$(1)
-44280   let fn_get_address_lines
+44280   fn_get_address_lines
 44380   gosub ADDLABEL
 44400 goto LIN6 ! /r
 46000 def library fncustomer_address(z$*10,mat addr$; ca_address_type)
@@ -396,7 +396,7 @@
 48160   mat pe$=('')
 48170   z$=lpad$(trim$(z$),kln(h_ca_customer))
 48180   read #h_ca_customer,using 'Form POS 11,4*C 30,pos 1864,C 30,pos 1854,PD 5.2',key=lpad$(z$,kln(h_ca_customer)): mat e$,extra$(1),extra(22) nokey CA_FINIS
-48200   let fn_get_address_lines
+48200   fn_get_address_lines
 48220   CA_FINIS: !
 48230   if trim$(pe$(2))="" then let pe$(2)=pe$(3): let pe$(3)=""
 48232   if trim$(pe$(3))="" then let pe$(3)=pe$(4): let pe$(4)=""
@@ -424,10 +424,10 @@
 50340   goto GAL_XIT
 50360   GAL_USE_ALT_ADDR: ! r:
 50380   read #adrbil,using "Form POS 11,4*C 30",key=z$: mat ba$ nokey GAL_USE_PRIME_ADR
-50400   let fn_alternate_address
+50400   fn_alternate_address
 50420   goto GAL_XIT ! /r
 50440   GAL_USE_PRIME_ADR: ! r:
-50460   let fn_primary_address
+50460   fn_primary_address
 50480   goto GAL_XIT ! /r
 50500   GAL_XIT: ! 
 50520 fnend 
@@ -478,7 +478,7 @@
 60180   close #adrbil=3: ioerr ignore
 60200   open #adrbil: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 60220   execute "drop "&env$('temp')&"\label.dat -n" ioerr ignore
-60240   let fnd1(d1)
+60240   fnd1(d1)
 60260   if annbc=sequence_bar_code and s5=0 then gosub SORT1
 60280   return  ! /r
 62000 OPENCASS: ! r:

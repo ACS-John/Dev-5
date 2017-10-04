@@ -2,14 +2,14 @@
 00020 ! -- Edit/Print Cover Letter
 00030 ! ______________________________________________________________________
 00040   library 'S:\Core\Library': fntop,fnxit, fnxit,fntop, fnopenprn,fncloseprn,fnerror,fncno,fndat,fnprocess,fnpedat$,fnactpd$,fnchain
-00050   let fntop(program$,cap$="Cover Leter")
+00050   fntop(program$,cap$="Cover Leter")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim tb$*32,cap$*128,p$(20)*50
 00090   dim ln1$*78,ln$*78,shd$*60,fli$(20),cnam$*40,dat$*20,fl2$(2),sc2$(2)*46
 00100 ! ______________________________________________________________________
-00120   let fncno(cno,cnam$)
-00130   let fndat(dat$)
+00120   fncno(cno,cnam$)
+00130   fndat(dat$)
 00140   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #1,using 'Form POS 195,C 30',rec=1: tb$ !:
         close #1: !:
@@ -57,7 +57,7 @@
         pr fields "10,20,Cc 25,H,N": "Cover Letter Printing..." !:
         pr fields "12,2,C 18,B,5": " Press F5 to stop"
 00410   on fkey 5 goto L550
-00420   let fnopenprn
+00420   fnopenprn
 00430 L430: linput #1: ln$ eof L550
 00440   for j2=1 to len(rtrm$(ln$))
 00450     if ln$(j2:j2)><"@" then goto L520
@@ -77,7 +77,7 @@
 00540   goto L430
 00550 L550: close #1: 
 00555   pr newpage
-00560   let fncloseprn
+00560   fncloseprn
 00570 XIT: let fnchain("S:\acsGL\acglAuto")
 00580 ! ______________________________________________________________________
 00590 ! <Updateable Region: ERTN>

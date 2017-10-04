@@ -1,9 +1,9 @@
 05000 ! formerly S:\acsUB\hhfro
 05020 ! -- Transfer Data From Hand Held to Computer
 05040   library program$: fnretrieve_hand_held_file
-05060   let fn_setup
-05100   let fnretrieve_hand_held_file
-05120   let fnxit
+05060   fn_setup
+05100   fnretrieve_hand_held_file
+05120   fnxit
 08000   def fn_setup
 08020     library 'S:\Core\Library': fnxit,fnureg_read
 08040     library 'S:\Core\Library': fntop, fnerror,fntos,fnlbl,fnacs,fntxt,fncmdset,fnmsgbox,fngethandle,fnregistered_for_hh,fnhand_held_device$,fnCopy
@@ -11,7 +11,7 @@
 08140   fnend 
 10000   def library fnretrieve_hand_held_file
 10030     if ~setup then let fn_setup
-10040     let fntop(program$)
+10040     fntop(program$)
 10080     dim ml$(2)*256,cap$*128,a$*512,ln$*22,tip$*120
 10090     dim resp$(3)*100,amr$*619,hersey$*290,path$*100,easy$*619
 10092     dim device$*20
@@ -19,30 +19,30 @@
 10150       mat ml$(2)
 10160       let ml$(1)="You must purchase the ACS Utility Billing Hand Held"
 10170       let ml$(2)="module to access these features"
-10180       let fnmsgbox(mat ml$, response$, cap$,64)
+10180       fnmsgbox(mat ml$, response$, cap$,64)
 10190       goto XIT
 10200     end if  ! ~fnregistered_for_hh
 10220     let device$=fnhand_held_device$ ! let fn_ctext_setup
 10230 SCREEN1: ! 
-10240     let fntos(sn$="hh_fro")
-10250     let fnlbl(2,1,"Hand Held model:",30,1)
-10252     let fnlbl(2,32,device$)
+10240     fntos(sn$="hh_fro")
+10250     fnlbl(2,1,"Hand Held model:",30,1)
+10252     fnlbl(2,32,device$)
 10260 ! let fncomboa("HH-FroCBox",1,44,mat ctext$)
 10270 ! let resp$(0)=device$
-10280     let fnlbl(4,1,"Book Number to store readings:",30,1)
-10290     let fntxt(4,32,2,0,1,"20",0,"Be careful not to use the same route # twice in the same billing cycle.  The first route will be lost if it has not been calculated.")
+10280     fnlbl(4,1,"Book Number to store readings:",30,1)
+10290     fntxt(4,32,2,0,1,"20",0,"Be careful not to use the same route # twice in the same billing cycle.  The first route will be lost if it has not been calculated.")
 10380     if device$="Green Tree" or device$="Hersey" or device$="EZReader" then goto L630 else goto L650
 10390 L630: ! 
-10400     let fnlbl(6,1,"Source File:",30,1)
+10400     fnlbl(6,1,"Source File:",30,1)
 10410     let tip$="Source file should be drive designation and file name of the file returned from the Hand Held. "
-10420     let fntxt(6,32,20,100,0,"",0,tip$)
+10420     fntxt(6,32,20,100,0,"",0,tip$)
 10430     if resp$(2)="" then let resp$(2)=path$
 10432     goto L660
 10440 L650: ! 
-10442     let fnlbl(6,1,"Importing from "&fn_hh_input_filename$,len("Importing from "&fn_hh_input_filename$),1)
+10442     fnlbl(6,1,"Importing from "&fn_hh_input_filename$,len("Importing from "&fn_hh_input_filename$),1)
 10444 L660: ! 
-10450     let fncmdset(2)
-10460     let fnacs(sn$,0,mat resp$,ckey)
+10450     fncmdset(2)
+10460     fnacs(sn$,0,mat resp$,ckey)
 10470     if ckey=5 then goto XIT
 10480     bk$=resp$(1)
 10490 ! let device$=ctext_default$ ! resp$(0)
@@ -50,7 +50,7 @@
 10510     if ~exists(path$) then 
 10520       mat ml$(1)
 10530       let ml$(1)="There is no file by this name at "&path$
-10540       let fnmsgbox(mat ml$, response$)
+10540       fnmsgbox(mat ml$, response$)
 10550       goto SCREEN1
 10560     else 
 10570       goto TRANSFER
@@ -59,29 +59,29 @@
 32030 ! let device$=trim$(device$)
 32180 ! 
 32210     if device$="Sensus" then 
-32240       let fn_sensus_in
+32240       fn_sensus_in
 32270     else if device$="LapTop" then 
-32300       let fn_laptop
+32300       fn_laptop
 32330     else if device$="Hersey" then 
-32360       let fn_hersey
+32360       fn_hersey
 32390     else if device$="EZReader" then 
-32420       let fn_ezreader
+32420       fn_ezreader
 32450     else if device$="ACS Meter Reader" then 
-32480       let fn_acsmr
+32480       fn_acsmr
 32510     else if device$="AMR" then 
-32540       let fn_amr
+32540       fn_amr
 32570     else if device$="Itron FC300" then 
-32600       let fn_itron
+32600       fn_itron
 32630     else if device$="Psion Workabout" then 
-32660       let fn_psion_workabout
+32660       fn_psion_workabout
 32690     else if device$="Badger" or device$="DriveBy" then 
-32720       let fn_badger
+32720       fn_badger
 32750     else if device$="Unisys" then 
-32780       let fn_unisys
+32780       fn_unisys
 32810     else if device$="Boson" then 
-32840       let fn_boson
+32840       fn_boson
 32870     else if device$="Green Tree" then 
-32900       let fn_green_tree
+32900       fn_green_tree
 32930     else if device$="Other" and env$('client')="Brier Lake" then 
 32960       fn_import_l_readings_txt(bk$)
 32970     else if device$="READy Water" then 
@@ -96,7 +96,7 @@
 34020 ! requires local variables: device$
 34040     dim hif_return$*256
 34060     let hif_return$=''
-34062     let fnureg_read('Hand Held From File',hif_return$)
+34062     fnureg_read('Hand Held From File',hif_return$)
 34064     if trim$(hif_return$)='' then 
 34080       if device$="Sensus" then 
 34100         let hif_return$='c:\vol002\amrs\READ.DAT'
@@ -139,23 +139,23 @@
 34860         let hif_return$="L:\readings.txt"
 34880       end if 
 34890     end if 
-34900     let fn_hh_input_filename$=hif_return$
+34900     fn_hh_input_filename$=hif_return$
 34920   fnend 
 35000 IGNORE: continue 
 36000   def fn_unisys
-36020     let fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
+36020     fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
 36080   fnend 
 38000   def fn_green_tree
-38030     let fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$)) ! only for Gilbertown at this time
+38030     fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$)) ! only for Gilbertown at this time
 38060   fnend 
 40000   def fn_boson
 40030     if ~exists(fn_hh_input_filename$) then 
 40060       mat ml$(2)
 40090       let ml$(1)='The import file ('&os_filename$(fn_hh_input_filename$)&') could not be found.'
 40120       let ml$(2)='You may need to perform the Hot Sync and try again.'
-40150       let fnmsgbox(mat ml$, response$, cap$,0)
+40150       fnmsgbox(mat ml$, response$, cap$,0)
 40270     else 
-40300       let fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
+40300       fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
 40330       execute "Rename "&fn_hh_input_filename$&' '&env$('Q')&"\UBmstr\outofpalm."&ltrm$(bk$)&"."&date$("YYMMDD")&srep$(time$("HHMMSS"),":","")&".txt"
 40360     end if 
 40390   fnend 
@@ -168,14 +168,14 @@
 42390       execute 'Sy "'&os_filename$("S:\acsUB\PreRoute.bat")&'"'
 42400     end if 
 42420 ! in august 2006 meters.opo changed to send back route as meters.out; before that it came back with the route # on the file name  (readings.1, etc)
-42520     let fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
+42520     fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
 42630   fnend 
 43000   def fn_badger ! need to copy badger files into '&env$('Q')&'\UBmstr\readings.x
-43040     let fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
+43040     fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
 43120   fnend 
 44000   def fn_sensus_in
 44020     open #h_sensus:=fngethandle: "Name="&fn_hh_input_filename$&",RecL=22",external,input 
-44040     let fn_readings_backup(bk$)
+44040     fn_readings_backup(bk$)
 44060     open #h_readings:=fngethandle: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output 
 44080     do 
 44100       read #h_sensus,using "form pos 1,c 22": ln$ eof SENSUS_IN_XIT ioerr SENSUS_IN_XIT
@@ -188,25 +188,25 @@
 46000   def fn_laptop
 46030     let route=val(bk$)
 46060 L1420: ! 
-46090     let fntos(sn$="Retrieve")
+46090     fntos(sn$="Retrieve")
 46120     mat resp$=("")
-46150     let fnlbl(1,1,"Source Drive:",20,1)
+46150     fnlbl(1,1,"Source Drive:",20,1)
 46180     let tip$="Source drive should be drive designation for the usb drive, including a : and a \ "
-46210     let fntxt(1,23,20,100,0,"",0,tip$)
+46210     fntxt(1,23,20,100,0,"",0,tip$)
 46240     if resp$(1)="" then let resp$(1)="F:\"
-46270     let fncmdset(2)
-46300     let fnacs(sn$,0,mat resp$,ckey) ! 
+46270     fncmdset(2)
+46300     fnacs(sn$,0,mat resp$,ckey) ! 
 46330     if ckey=5 then goto XIT
 46360     let source$=resp$(1)
 46390     if len(source$)=0 then goto L1420
 46420     if len(source$)=1 then let source$(2:2)=":"
 46450     if source$(3:3)=" " then let source$(3:3)="\"
-46480     let fnCopy(source$&"readings."&str$(route),env$('Q')&"\UBmstr\readings."&str$(route))
+46480     fnCopy(source$&"readings."&str$(route),env$('Q')&"\UBmstr\readings."&str$(route))
 46510   fnend 
 48000   def fn_acsmr ! ACS Meter Reader
 48030     let source$=resp$(1)
 48060     open #2: "Name="&fn_hh_input_filename$&"acs_meter_data.txt,RecL=256",display,input 
-48090     let fn_readings_backup(bk$)
+48090     fn_readings_backup(bk$)
 48120     open #3: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output 
 48150     do 
 48180       linput #2: amr$ eof ACSMR_XIT
@@ -254,7 +254,7 @@
 51050       end if 
 51080     loop 
 51110 EO_ITRON: ! 
-51140     let fn_itron_write ! write the last one
+51140     fn_itron_write ! write the last one
 51170     close #h_itron: 
 51200     close #h_itron_out: 
 51230   fnend 
@@ -275,7 +275,7 @@
 52360   fnend 
 54000   def fn_amr
 54030     let path$="c:\ezreader\upload.dat"
-54060     let fn_readings_backup(bk$)
+54060     fn_readings_backup(bk$)
 54090     open #3: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output 
 54120     open #2: "Name="&fn_hh_input_filename$&",RecL=620",display,input 
 54150     linput #2: amr$ ioerr AMR_NOTHING_TO_READ ! read header
@@ -289,7 +289,7 @@
 54420 AMR_NOTHING_TO_READ: ! 
 54450     mat ml$(1)
 54480     let ml$(1)="The File ("&path$&") is empty."
-54510     let fnmsgbox(mat ml$,resp$,cap$,0)
+54510     fnmsgbox(mat ml$,resp$,cap$,0)
 54540     goto AMR_XIT !  AMR_NOTHING_TO_READ
 54570 AMR_XIT: ! 
 54600     close #2: ioerr ignore
@@ -297,7 +297,7 @@
 54660 ! 
 54690   fnend 
 56000   def fn_hersey
-56030     let fn_readings_backup(bk$)
+56030     fn_readings_backup(bk$)
 56060     open #h_out:=3: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output 
 56090     open #2: "Name=" &fn_hh_input_filename$&",RecL=282",display,input 
 56110     do 
@@ -312,7 +312,7 @@
 56330 ! 
 56360   fnend 
 58000   def fn_ezreader
-58030     let fn_readings_backup(bk$)
+58030     fn_readings_backup(bk$)
 58060     open #h_out:=3: "Name="&env$('Q')&"\UBmstr\Readings."&bk$&",RecL=30,replace",display,output 
 58090     open #2: "Name="&fn_hh_input_filename$&",RecL=578",display,input 
 58120     do 
@@ -334,11 +334,11 @@
 60210 ! /region
 62000   def fn_readings_backup(bk$)
 62030     if exists(env$('Q')&"\UBmstr\readings."&bk$) then 
-62060       let fnCopy(env$('Q')&"\UBmstr\readings."&bk$,env$('Q')&"\UBmstr\readings_"&bk$&'.bak')
+62060       fnCopy(env$('Q')&"\UBmstr\readings."&bk$,env$('Q')&"\UBmstr\readings_"&bk$&'.bak')
 62090     end if  ! exists UBmstr\readings.[bk$]
 62120   fnend  ! fn_readings_backup
 64000 def fn_import_l_readings_txt(bk$; inFileRecordLen)
-64020   let fn_readings_backup(bk$)
+64020   fn_readings_backup(bk$)
 64040   open #hReadingsOut:=fngethandle: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output 
 64060   ! if inFileRecordLen=0 then inFileRecordLen=129
 64060   open #hHandHeld:=fngethandle: "Name="&fn_hh_input_filename$,display,input 

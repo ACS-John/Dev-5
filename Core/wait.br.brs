@@ -13,7 +13,7 @@
 10240 ! pr #win: newpage
 10260 ! pr #win,fields "1,1,Cc 40,R,N": cnam$
 10280 ! pr #win,fields "2,1,Cc 40,R,N": "Company Number "&str$(cno)
-10300     let fnstatus(message$) ! pr #win,fields "4,1,Cc 40,N": message$
+10300     fnstatus(message$) ! pr #win,fields "4,1,Cc 40,N": message$
 10320 ! if stopable=1 then
 10340 !  pr fields "15,34,C 11,B,5": "Cancel (F5)"
 10360 ! else 

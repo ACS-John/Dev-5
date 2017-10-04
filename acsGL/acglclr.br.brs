@@ -7,21 +7,21 @@
 00070   dim cnam$*40,tr(7),tr$*12,td$*30,cap$*128
 00080 ! ______________________________________________________________________
 00090   let right=1 : center=2 : let left=0
-00100   let fntop(program$,cap$="Clear Accumulated Transactions")
-00110   let fnconsole(off=0)
-00120   let fncno(cno,cnam$)
-00130   let fntos(sn$='ClrAccTrans') !:
+00100   fntop(program$,cap$="Clear Accumulated Transactions")
+00110   fnconsole(off=0)
+00120   fncno(cno,cnam$)
+00130   fntos(sn$='ClrAccTrans') !:
         let lc=0 !:
         let mylen=50 : let mypos=mylen+2 : let width=80
-00140   let fnlbl(lc+=1,1,"* * *   Warning   * * *",width,center)
-00150   let fnlbl(lc+=1,1,"This selection will remove all records from the",width,center)
-00160   let fnlbl(lc+=1,1,"General Ledger Accumulated Transactions File ",width,center)
-00170   let fnlbl(lc+=1,1,"older than the date entered.",width,center)
-00180   let fnlbl(lc+=1,1,"Enter the Removal Date:",mylen,right)
-00190   let fntxt(lc,mypos,8,0,0,'ccyymmdd') !:
+00140   fnlbl(lc+=1,1,"* * *   Warning   * * *",width,center)
+00150   fnlbl(lc+=1,1,"This selection will remove all records from the",width,center)
+00160   fnlbl(lc+=1,1,"General Ledger Accumulated Transactions File ",width,center)
+00170   fnlbl(lc+=1,1,"older than the date entered.",width,center)
+00180   fnlbl(lc+=1,1,"Enter the Removal Date:",mylen,right)
+00190   fntxt(lc,mypos,8,0,0,'ccyymmdd') !:
         let resp$=''
-00200   let fncmdset(2)
-00210   let fnacs(sn$,0,mat resp$,ckey)
+00200   fncmdset(2)
+00210   fnacs(sn$,0,mat resp$,ckey)
 00220   if ckey=5 then goto XIT
 00230   let rd1=val(resp$(1))
 00240 ! 

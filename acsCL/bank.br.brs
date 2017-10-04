@@ -2,12 +2,12 @@
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnhamster
 00040   on error goto ERTN
-00050   let fntop(program$,cap$="Bank")
+00050   fntop(program$,cap$="Bank")
 00060 ! ______________________________________________________________________
 00070   dim lbl$(6)*24,tln(6),p$(6)*160,fltyp$(6),sln(6),mask(6)
 00080   dim c$(6,8)*256
 00090 ! ______________________________________________________________________
-00100   let fncno(cno)
+00100   fncno(cno)
 00110   let lbl$(1)="Bank Code" : let lbl$(2)="Bank Name" !:
         let lbl$(3)="General Ledger Number" : let lbl$(4)="Bank Balance" !:
         let lbl$(5)="Unpaid Invoices" : let lbl$(6)="Last Check Number"
@@ -26,7 +26,7 @@
 00170   open #1: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno)&",Use,RecL=64,KPs=1,KLn=2,Shr",internal,outin,keyed 
 00180   close #1: 
 00190   open #1: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno)&",Use,RecL=64,KPs=1,KLn=2,Shr",internal,outin,keyed 
-00200   let fnhamster("Bank",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+00200   fnhamster("Bank",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00210   close #1: 
 00220   execute "Index "&env$('Q')&"\CLmstr\BankMstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno)&" 1 2 DupKeys Replace Shr -n" ioerr XIT
 00230   gosub FIX_GL_NUMBERS

@@ -8,18 +8,18 @@
 00080   dim sc1$(3),sd1$(3),se1$(3)*50,prtj$(100)*6,dat$*20,message$*40
 00090   dim msgline$(2)*60
 00100 ! ______________________________________________________________________
-00110   let fntop("S:\acsPR\jcStWkSh",cap$="Job Status Worksheet")
-00120   let fncno(cno) !:
-        let fndat(dat$)
+00110   fntop("S:\acsPR\jcStWkSh",cap$="Job Status Worksheet")
+00120   fncno(cno) !:
+        fndat(dat$)
 00130 ! 
-00135   let fnconsole(1)
+00135   fnconsole(1)
 00140   let prtjob$="N" : let perpag$="N"
 00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00160   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00170 ! ______________________________________________________________________
 00180   if fnprocess=1 then goto L590 ! goto "asdf"
 00190   pr newpage
-00200   let fnopenwin(win=101,09,14,15,65,cap$)
+00200   fnopenwin(win=101,09,14,15,65,cap$)
 00210   pr #win,fields "4,2,Cr 29,N": "Report Heading Date:"
 00220   pr #win,fields "5,2,Cr 29,N": "Print All Jobs (Y/N):"
 00230   pr #win,fields "6,2,Cr 29,N": "Print One Job Per Page (Y/N):"
@@ -55,11 +55,11 @@
 00530   pr newpage
 00540   let msgline$(1)="Do you wish to skip all"
 00550   let msgline$(2)="completed Jobs? (Y/N)"
-00560   let fnoldmsgbox(mat response$,cap$,mat msgline$,2)
+00560   fnoldmsgbox(mat response$,cap$,mat msgline$,2)
 00570   let skpcom$=response$(1)
 00580 L580: goto L730
 00590 L590: pr newpage
-00600   let fnopenwin(win=103,08,20,13,59,cap$)
+00600   fnopenwin(win=103,08,20,13,59,cap$)
 00610   for j=1 to 100
 00620     pr #win,fields "4,2,Cr 20,n": "Job Number to print:"
 00630     if j>1 then pr #win,fields "6,1,Cc 40,R,N": "Last Job Number entered was "&ltrm$(prtj$(j-1))
@@ -74,8 +74,8 @@
 00720 ! ______________________________________________________________________
 00730 L730: pr newpage
 00740   on fkey 5 goto DONE
-00750   let fnwait(104,cap$,message$,1)
-00760   let fnopenprn !:
+00750   fnwait(104,cap$,message$,1)
+00760   fnopenprn !:
         if file$(255)(1:3)<>"PRN" then let jbskip=1
 00770   gosub HDR
 00780 L780: if prtjob$="Y" then goto L830
@@ -96,7 +96,7 @@
 00930 ! ______________________________________________________________________
 00940 DONE: close #1: 
 00950   close #2: 
-00960   let fncloseprn
+00960   fncloseprn
 00970   goto XIT
 00980 ! ______________________________________________________________________
 00990 HDR: ! 

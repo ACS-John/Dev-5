@@ -8,7 +8,7 @@
 00070 MAINSCREEN: ! 
 00075   let sn$ = "SignatureMain"
 00076   mat comboa$(99)
-00080   let fntos(sn$)
+00080   fntos(sn$)
 00082   let mylen = 17: let myalign = 1
 00085   let mytext$ = "Document Name:" : let fnlbl(1,1,mytext$,mylen,myalign)
 00088   a = 0
@@ -18,11 +18,11 @@
 00100   goto L94
 00105 L105: a=max(1,a)
 00106   mat comboa$(a) : let filename$="DocNames" !:
-        let fncomboa(filename$,1,18,mat comboa$,ttt$,25)
+        fncomboa(filename$,1,18,mat comboa$,ttt$,25)
 00110   let mytext$="Number of Copies:": let fnlbl(2,1,mytext$,mylen,myalign)
 00120   let response$(2)=str$(1) !:
-        let fntxt(2,18,2)
-00130   let fncmdset(14): let fnacs(sn$,0,mat response$,ckey)
+        fntxt(2,18,2)
+00130   fncmdset(14): let fnacs(sn$,0,mat response$,ckey)
 00140   let docname$=response$(1)
 00150   copies=max(1,val(response$(2)))
 00160   if ckey=5 then goto XIT
@@ -46,28 +46,28 @@
 00275   let response$(1)=docname$ !:
         let tt$="Choose a name that you will remember, such as Payroll Check" !:
         let mask$="" !:
-        let fntxt(1,mylen+1,30,30,0,mask$,0,tt$)
+        fntxt(1,mylen+1,30,30,0,mask$,0,tt$)
 00280   let mytext$ = "Line on Form:" : let fnlbl(2,1,mytext$,mylen,myalign)
 00285   let response$(2)=str$(docline) !:
         let tt$="This is the distance from the top of the form where the signature shold print. (Normally about 6 lines per inch)" !:
         let mask$="30" !:
-        let fntxt(2,mylen+1,4,3,0,mask$,0,tt$)
+        fntxt(2,mylen+1,4,3,0,mask$,0,tt$)
 00290   let mytext$="Position on Form:": let fnlbl(3,1,mytext$,mylen,myalign)
 00295   let response$(3)=str$(docposition) !:
         let tt$="This is the number of characters from the left side of the form.       (Normally about 10 characters per inch)" !:
         let mask$="30" !:
-        let fntxt(3,mylen+1,4,3,0,mask$,0,tt$)
+        fntxt(3,mylen+1,4,3,0,mask$,0,tt$)
 00300   let mytext$="Signature Choice:": let fnlbl(4,1,mytext$,mylen,myalign)
 00305   let response$(4)=str$(docsigchoice) !:
         let tt$="You can have up to 10 different signatures.  Choose the one you want printed on this document." !:
         let mask$="30" !:
-        let fntxt(4,mylen+1,3,2,0,mask$,0,tt$)
+        fntxt(4,mylen+1,3,2,0,mask$,0,tt$)
 00310   let mytext$="CD Drive:": let fnlbl(5,1,mytext$,mylen,myalign)
 00315   let response$(5)=cddrive$ !:
         let tt$="Your signature is stored on a cd.  What is the drive designation used on this computer for the cd drive?" !:
         let mask$="" !:
-        let fntxt(5,mylen+1,1,1,0,mask$,0,tt$)
-00320   let fncmdset(4): let fnacs(sn$,0,mat response$,ckey)
+        fntxt(5,mylen+1,1,1,0,mask$,0,tt$)
+00320   fncmdset(4): let fnacs(sn$,0,mat response$,ckey)
 00330   if ckey=5 then goto MAINSCREEN
 00340   let docname$=response$(1)(1:30)
 00350   let docline=val(response$(2)) conv BADLINE
@@ -91,7 +91,7 @@
 00540   mat msgline$(1): let msgline$(1)="You can have up to 10 different signatures.  You may just one.  Choose an answer from 1 to 10" !:
         cap$="Bad position" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
 01000 PRINTSIGNATURE: ! 
-01020   let fnopenprn
+01020   fnopenprn
 01025   if docline = 0 then let docline = 1
 01026   if docposition = 0 then let docposition = 1
 01030   for j=1 to copies
@@ -100,10 +100,10 @@
 01060     pr #255: "*Insert File:Z:\Signature1.acs"
 01070     pr #255: newpage
 01080   next j
-01085   let fncloseprn
+01085   fncloseprn
 01088   pr newpage
 01090   goto MAINSCREEN
 07000 MSGBOX: ! 
-07010   let fnmsgbox(mat msgline$,response$,cap$,mtype)
+07010   fnmsgbox(mat msgline$,response$,cap$,mtype)
 07020   return 
 08000 XIT: ! chain "menu"

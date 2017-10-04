@@ -2,26 +2,26 @@
 00030   on fkey 5 goto DONE
 00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fndat,fnerror,fnopenprn,fncloseprn,fncno,fnxit,fndate_mmddyy_to_ccyymmdd,fnd1,fncmdset,fntop,fnpause,fnchk,fncmbact,fnopt,fnd1
 00050   dim cap$*128,sendto$*80,z$*10,e2$*30,temp$(3)*26,resp$(10)*50,cnam$*40
-00060   let fntop("S:\Utility Billing\Billing Journal",cap$="Secondary Water Usage Report")
-00065   let fnd1(d1)
-00070   let fncno(cno,cnam$)
+00060   fntop("S:\Utility Billing\Billing Journal",cap$="Secondary Water Usage Report")
+00065   fnd1(d1)
+00070   fncno(cno,cnam$)
 00090 ! ______________________________________________________________________
-00100   let fntos(sn$="billingrpt")
-00110   let fnlbl(1,1,"First Account:",25,1)
-00120   let fncmbact(1,28) !:
+00100   fntos(sn$="billingrpt")
+00110   fnlbl(1,1,"First Account:",25,1)
+00120   fncmbact(1,28) !:
         let resp$(1)=selz$
-00130   let fnlbl(2,1,"Last Account:",25,1)
-00140   let fncmbact(2,28) !:
+00130   fnlbl(2,1,"Last Account:",25,1)
+00140   fncmbact(2,28) !:
         let resp$(2)=selz$
-00150   let fnchk(3,29,"Print Grand Totals:",1)
+00150   fnchk(3,29,"Print Grand Totals:",1)
 00160   let resp$(3)="True"
-00170   let fnchk(4,29,"Print Details:",1)
+00170   fnchk(4,29,"Print Details:",1)
 00180   let resp$(4)="True"
-00190   let fnlbl(5,1,"Billing Date:",25,1)
-00200   let fntxt(5,28,8,0,right,"1001",0,"Enter the last billing date.",0 ) !:
+00190   fnlbl(5,1,"Billing Date:",25,1)
+00200   fntxt(5,28,8,0,right,"1001",0,"Enter the last billing date.",0 ) !:
         let resp$(5)=str$(d1)
-00210   let fncmdset(2)
-00220   let fnacs(sn$,0,mat resp$,ckey)
+00210   fncmdset(2)
+00220   fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   let fan$=lpad$(rtrm$(resp$(1)(1:10)),10)
 00250   let lan$=lpad$(rtrm$(resp$(2)(1:10)),10)
@@ -31,13 +31,13 @@
 00290   goto STARTREPORT
 00300 ! ______________________________________________________________________
 00310 DONE: ! 
-00320   let fncloseprn
+00320   fncloseprn
 00330 XIT: let fnxit
 00340 ! ______________________________________________________________________
 00350 STARTREPORT: ! 
 00370   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00380 L380: form pos 1,c 10,pos 41,c 30,pos 227,pd 5,pos 296,pd 4
-00390   let fnopenprn
+00390   fnopenprn
 00400 ! sort prep !!!
 00410   open #6: "Name="&env$('temp')&"\Work."&session$&",REPLACE,RecL=50",internal,output 
 00420   if fan$>"" then restore #1,search>=fan$: 

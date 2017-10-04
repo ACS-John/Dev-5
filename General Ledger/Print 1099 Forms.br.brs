@@ -1,6 +1,6 @@
 00010 ! (formerly) S:\acsGL\glPrt109
 00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fntxt,fncmdset,fnacs,fndat,fncombof,fnfra,fnopt,fnask_1099_info,fn1099print_close,fn1099print
-00050   let fntop(program$,cap$="Print 1099 Forms")
+00050   fntop(program$,cap$="Print 1099 Forms")
 00060   on error goto ERTN
 00080   dim vn$*8,nam$*30,ss$*11,box(11),ad$(3)*30
 00090   dim cap$*128

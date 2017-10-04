@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newprRptS1
 00020 ! pr User Designed Reports
-00022   let fn_setup
-00130   let fntop(program$,cap$="Print Designed Reports")
+00022   fn_setup
+00130   fntop(program$,cap$="Print Designed Reports")
 01220 OPEN3: ! 
 01230   close #3: ioerr ignore
 01240   open #3: "Name="&env$('Q')&"\PRmstr\PRReport.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\PRRptIdx.h"&str$(cno)&",Shr",internal,input,keyed ioerr NO_PRREPORT
@@ -10,22 +10,22 @@
 01260   goto MENU1
 01270 ! ______________________________________________________________________
 01280 MENU1: ! 
-01290   let fntos(sn$="PrintReport-ask")
+01290   fntos(sn$="PrintReport-ask")
 01292   let respc=0
-01300   let fnlbl(1,1,"Report:",11,1)
-01310   let fncombof("Report",1,14,43,env$('Q')&"\PRmstr\prreport.h"&str$(cno),1,2,3,30,env$('Q')&"\PRmstr\prrptidx.h"&str$(cno),1+addall,1,"Select from the list of reports. You can only select one report at a time.",0)
+01300   fnlbl(1,1,"Report:",11,1)
+01310   fncombof("Report",1,14,43,env$('Q')&"\PRmstr\prreport.h"&str$(cno),1,2,3,30,env$('Q')&"\PRmstr\prrptidx.h"&str$(cno),1+addall,1,"Select from the list of reports. You can only select one report at a time.",0)
 01312   let resp$(respc+=1)=""
-01320   let fncmdkey("&Next",1,1,0,"Prints the highlighted report." )
-01322   let fncmdkey("&Complete",5,0,1,"Returns to menu")
-01330   let fnacs(sn$,0,mat resp$,ckey) ! ask report #
+01320   fncmdkey("&Next",1,1,0,"Prints the highlighted report." )
+01322   fncmdkey("&Complete",5,0,1,"Returns to menu")
+01330   fnacs(sn$,0,mat resp$,ckey) ! ask report #
 01332   if ckey=5 then goto XIT
 01334   let rn=val(resp$(1)(1:2))
-01336   let fn_print_designed_report(rn,3)
+01336   fn_print_designed_report(rn,3)
 01338   goto OPEN3
 01340 ! 
 01342   def library fnprint_designed_report(rn)
-01343     let fn_setup
-01344     let fnprint_designed_report=fn_print_designed_report(rn)
+01343     fn_setup
+01344     fnprint_designed_report=fn_print_designed_report(rn)
 01346   fnend 
 01354   def fn_print_designed_report(rn)
 01358     let rn$=lpad$(str$(rn),2)
@@ -38,11 +38,11 @@
 01370       mat ml$(2)
 01372       let ml$(1)="The report you have selected has no fields selected to print."
 01374       let ml$(2)="Click OK to contine."
-01376       let fnmsgbox(mat ml$,resp$,cap$,48)
+01376       fnmsgbox(mat ml$,resp$,cap$,48)
 01378       goto PDR_XIT
 01380     end if 
 01400 ! 
-01410     let fnCopy('S:\acsPR\newPRRpt_s1.brs',env$('Q')&"\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h"&env$('cno'))
+01410     fnCopy('S:\acsPR\newPRRpt_s1.brs',env$('Q')&"\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h"&env$('cno'))
 01464 ! 
 01472     open #h_tmp_dr:=fngethandle: "Name="&env$('Q')&"\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h"&env$('cno')&",RecL=255",display,output 
 01474     pr #h_tmp_dr,using F_C255: "00081 RN$="""&rn$&""""
@@ -144,7 +144,7 @@
 02310   mat ml$(2)
 02312   let ml$(1)="It appears this report is not in the report file!"
 02314   let ml$(2)="Click OK to contine."
-02318   let fnmsgbox(mat ml$,resp$,cap$,48)
+02318   fnmsgbox(mat ml$,resp$,cap$,48)
 02320   goto PDR_XIT ! /r
 02330 ! ______________________________________________________________________
 02340 ! XIT_PRAUTO: let fnxit
@@ -163,8 +163,8 @@
 02510   mat ml$(2)
 02512   let ml$(1)="No reports have been designed in the User Designed"
 02514   let ml$(2)="Reports file.  Click OK to go there now."
-02516   let fnmsgbox(mat ml$,resp$,cap$,48)
-02520   let fnchain("S:\acsPR\newprRpt3") ! /r
+02516   fnmsgbox(mat ml$,resp$,cap$,48)
+02520   fnchain("S:\acsPR\newprRpt3") ! /r
 22000   def fn_setup
 22020     library 'S:\Core\Library': fntop,fnxit, fnerror,fnchain,fncno,fntos,fnlbl,fncombof,fncmdkey,fnacs,fnmsgbox,fngethandle,fnCopy
 22040     on error goto ERTN
@@ -176,7 +176,7 @@
 22160     dim resp$(10)*132 ! iom$(20),af1$*255,af2$*255,af1$*255,af2$*255,msgline$(2)*60,t(104),tt(104),e$(7)*30,e(17),ansm(20),wrdm$(20)*65,rf2$*255,message$*40,
 22180 ! ______________________________________________________________________
 22200     execute "clear proc only"
-22220     let fncno(cno)
+22220     fncno(cno)
 22240 ! r: set mat ty$
 22260     data "ENO,","Pos 1,n 8,",",pic(zzzzzzzz)","DT(2)","GT(2)"
 22280     data "EM$(1),","Pos 9,C 30,",",c 30","DT(3)","GT(3)"

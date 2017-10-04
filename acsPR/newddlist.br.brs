@@ -15,7 +15,7 @@
 00140 ! ______________________________________________________________________
 00150   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
 00160 ! ______________________________________________________________________
-00170   let fntop(program$,cap$="Direct Deposit List")
+00170   fntop(program$,cap$="Direct Deposit List")
 00200   open #mstr=1: "Name="&env$('Q')&"\PRmstr\RPmstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00210   open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outin,keyed 
 00220   goto SCREEN1
@@ -32,18 +32,18 @@
 00320 SCREEN1: ! 
 00330   let mypos=20
 00340 ASK_INFO: ! 
-00350   let fntos(sn$="DD")
-00360   let fnlbl(1,35,"",1,1) ! bigger screen
-00370   let fnlbl(2,1,"As of Date:",mypos,1)
-00380   let fntxt(2,mypos+3,10,0,1,"3",0,"This report will list any employees who direct deposit on the date the report is printed.")
+00350   fntos(sn$="DD")
+00360   fnlbl(1,35,"",1,1) ! bigger screen
+00370   fnlbl(2,1,"As of Date:",mypos,1)
+00380   fntxt(2,mypos+3,10,0,1,"3",0,"This report will list any employees who direct deposit on the date the report is printed.")
 00390   let resp$(1)=str$(d1)
-00400   let fncmdkey("&Print",1,1,0,"Print the direct deposit listing." ) !:
-        let fncmdkey("E&xit",5,0,1,"Returns to menu")
-00410   let fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+00400   fncmdkey("&Print",1,1,0,"Print the direct deposit listing." ) !:
+        fncmdkey("E&xit",5,0,1,"Returns to menu")
+00410   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 00420   if ckey=5 then goto XIT
 00430   let ppd=val(resp$(1))
 00440   open #ddout=22: "Name=DDout"&wsid$&".txt,RecL=96,EOL=CRLF,Replace",external,output 
-00450   let fnopenprn
+00450   fnopenprn
 00460   gosub HDR ! pr header
 00470 READ_DD: ! 
 00480 L480: read #dd,using "Form pos 1,C 10,C 1,N 9,N 2,N 17": key$,dd$,rtn,acc,acn eof DONE
@@ -55,7 +55,7 @@
 00520   goto READ_DD
 00530 ! ______________________________________________________________________
 00540 DONE: ! r:
-00550   let fncloseprn
+00550   fncloseprn
 00570 goto XIT ! /r
 00580 PRINT_NEWPAGE: ! r:
 00590   pr #255: newpage

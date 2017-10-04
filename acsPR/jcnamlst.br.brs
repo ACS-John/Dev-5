@@ -7,11 +7,11 @@
 00070   dim dat$*20,jn$*6,n$*40,cn$*11,cnt$*5,k$*25,cap$*128,p$(20)*50,io1$(2)
 00080   dim cnam$*40,message$*40
 00090 ! ______________________________________________________________________
-00100   let fntop(program$,cap$="Name and Number List")
-00110   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00100   fntop(program$,cap$="Name and Number List")
+00110   fncno(cno,cnam$) !:
+        fndat(dat$)
 00120 ! 
-00125   let fnconsole(1)
+00125   fnconsole(1)
 00130 ! ______________________________________________________________________
 00140 ! ______________________________________________________________________
 00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -44,13 +44,13 @@
 00410 L410: if cmdkey=5 then goto XIT
 00420   if prtcat$<>"Y" and prtcat$<>"N" then ce=2: goto ERR1
 00430   let dattab=60-len(rtrm$(dat$))/2
-00440   let fndat(dat$,2)
+00440   fndat(dat$,2)
 00450 ! ______________________________________________________________________
 00460 L460: pr newpage
 00470   let message$="Printing: please wait"
-00480   let fnwait (102,cap$,message$,1)
+00480   fnwait (102,cap$,message$,1)
 00490   on fkey 5 goto L710
-00500   let fnopenprn
+00500   fnopenprn
 00510   gosub HDR
 00520 L520: read #1,using L530: jn$,n$ eof L680
 00530 L530: form pos 1,c 6,c 40

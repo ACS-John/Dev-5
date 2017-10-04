@@ -1,18 +1,18 @@
-10000   let fn_setup
-10200   let fntop(program$,cap$="Check Balance Breakdowns 2")
+10000   fn_setup
+10200   fntop(program$,cap$="Check Balance Breakdowns 2")
 10600 MENU1: ! r:
-10800   let fntos(sn$="bldtrans") : chk_align=0
-11000   let fnlbl(1,1,"Scan:")
-11200   let fnchk(2,5,"Scan Customer Balance Breakdowns",chk_align) : let resp$(1)="True"
-11400   let fnchk(3,5,"Scan Transaction Breakdowns",chk_align)      : let resp$(2)="True"
-11600   let fnlbl(5,1,"Error Handling:")
-11800   let fnchk(6,5,"Report Erroneous Transactions",chk_align)    : let resp$(3)="True"
-12000   let fnchk(7,5,"Fix Erroneous Transactions",chk_align)       : let resp$(4)="False"
-12100   let fnlbl(9,1,"Miscellaneous:")
-12200   let fnchk(10,5,"Move Credit Balnces to Other",chk_align)    : let resp$(5)="False"
-12220   let fnchk(11,5,"  and apply credits",chk_align)             : let resp$(6)="False"
-12300   let fncmdset(2)
-12400   let fnacs(sn$,0,mat resp$,ck)
+10800   fntos(sn$="bldtrans") : chk_align=0
+11000   fnlbl(1,1,"Scan:")
+11200   fnchk(2,5,"Scan Customer Balance Breakdowns",chk_align) : let resp$(1)="True"
+11400   fnchk(3,5,"Scan Transaction Breakdowns",chk_align)      : let resp$(2)="True"
+11600   fnlbl(5,1,"Error Handling:")
+11800   fnchk(6,5,"Report Erroneous Transactions",chk_align)    : let resp$(3)="True"
+12000   fnchk(7,5,"Fix Erroneous Transactions",chk_align)       : let resp$(4)="False"
+12100   fnlbl(9,1,"Miscellaneous:")
+12200   fnchk(10,5,"Move Credit Balnces to Other",chk_align)    : let resp$(5)="False"
+12220   fnchk(11,5,"  and apply credits",chk_align)             : let resp$(6)="False"
+12300   fncmdset(2)
+12400   fnacs(sn$,0,mat resp$,ck)
 12500   if ck<>5 then 
 12600     if resp$(1)='True' then let do_fix_balance_breakdowns=1 else let do_fix_balance_breakdowns=0
 12800     if resp$(2)='True' then let do_fix_trans_breakdowns=1 else let do_fix_trans_breakdowns=0
@@ -51,7 +51,7 @@
 19600   if do_report then 
 19800     if ~setup_report_it then 
 20000       let setup_report_it=1
-20200       let fnopenprn
+20200       fnopenprn
 20400       pr #255,using F_HDR1: heading$
 20500       pr #255,using F_HDR2: 'Account',col_2_heading$,servicename$(1)(1:12),servicename$(2)(1:12),servicename$(3)(1:12),servicename$(4)(1:12),servicename$(5)(1:12),servicename$(6)(1:12),servicename$(7)(1:12),servicename$(8)(1:12),servicename$(9)(1:12),servicename$(10)(1:12),'*Calculated*'
 20600       F_HDR1: form pos 1,cc 156
@@ -68,14 +68,14 @@
 22600   for agn_item=1 to 10
 22800     if gb(agn_item)<0 then agn_return=1
 23000   next agn_item
-23200   let fn_any_gb_negative=agn_return
+23200   fn_any_gb_negative=agn_return
 23400 fnend  ! fn_any_gb_negative
 23600 ! def library fnfix_balance_breakdowns(do_fix,do_report)
-23800 !   let fn_setup
-24000 !   let fnfix_balance_breakdowns=fn_fix_balance_breakdowns(do_fix,do_report)
+23800 !   fn_setup
+24000 !   fnfix_balance_breakdowns=fn_fix_balance_breakdowns(do_fix,do_report)
 24200 ! fnend
 24400 def fn_fix_balance_breakdowns(do_fix,do_report) ! assumes balance is right, puts the difference into other
-24420   let fnstatus('Checking Customer Balance Breakdowns')
+24420   fnstatus('Checking Customer Balance Breakdowns')
 24500   dim customer_g(10)
 24520   dim z$*10,service_rate_code(7)
 24530   dim gb(10)
@@ -90,7 +90,7 @@
 26200     next gb_item
 26400     bal_breakdown=sum(gb)
 26600     if bal<>bal_breakdown then 
-26800       let fn_report_it(mat customer_g,bal_breakdown,"Customer Balance Breakdowns",'Balance')
+26800       fn_report_it(mat customer_g,bal_breakdown,"Customer Balance Breakdowns",'Balance')
 27000       if do_fix then 
 27200         let gb(gb_other)-=(bal_breakdown-bal)
 27400         rewrite #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb
@@ -104,8 +104,8 @@
 28800   let setup_report_it=0
 29200 fnend 
 29400   def library fnservice_other
-29600     let fn_setup
-29800     let fnservice_other=fn_service_other
+29600     fn_setup
+29800     fnservice_other=fn_service_other
 30000   fnend 
 30200   def fn_service_other
 30400 !  this function returns en enumeration of the OTHER balance breakdown service
@@ -130,16 +130,16 @@
 33600       end if 
 33620     next j
 33640 ! /r
-33660     let fn_service_other=so_return
+33660     fn_service_other=so_return
 33680   fnend 
 34000   def library fnfix_trans_breakdowns(do_fix,do_report)
-34020     let fn_setup
-34040     let fnfix_trans_breakdowns=fn_fix_trans_breakdowns(do_fix,do_report)
+34020     fn_setup
+34040     fnfix_trans_breakdowns=fn_fix_trans_breakdowns(do_fix,do_report)
 34060   fnend 
 35000   def fn_fix_trans_breakdowns(do_fix,do_report)
 35020     dim trans_g(11),ru(6)
 35040     let gb_other=fn_service_other
-35060     let fnstatus('Checking Transaction Breakdowns')
+35060     fnstatus('Checking Transaction Breakdowns')
 35080     if do_fix then 
 35100       open #h_trans=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,outin,relative 
 35120     else 
@@ -160,7 +160,7 @@
 36600 !      bal_breakdown=sum(trans_g)
 36620 ! /r
 36800       if tamt<>bal_breakdown then 
-37000         let fn_report_it(mat trans_g,bal_breakdown,"Transaction Breakdowns",'T Amount')
+37000         fn_report_it(mat trans_g,bal_breakdown,"Transaction Breakdowns",'T Amount')
 37200         if do_fix then 
 37400           let trans_g(gb_other)-=(bal_breakdown-tamt)
 37600           rewrite #h_trans,using F_TRANS: p$,tdate,transcode,tamt,mat trans_g,mat ru,bal,postcode
@@ -174,7 +174,7 @@
 39200     close #h_trans: 
 39400   fnend  ! fn_fix_balance_breakdowns
 42000   def fn_move_credit(do_move_credit)
-42020     let fnstatus('Moving Credit Balances to Other in Customer Balance Breakdowns')
+42020     fnstatus('Moving Credit Balances to Other in Customer Balance Breakdowns')
 42040     dim customer_g(10)
 42060     dim z$*10,service_rate_code(7)
 42080     dim gb(10)
@@ -184,7 +184,7 @@
 42160       read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof MC_CUSTOMER_EOF
 42200       let read_count+=1
 42220       if fn_any_gb_negative then 
-42240         let fn_report_it(mat gb,bal,"Customer Balance Breakdowns Before Credits Moved to Other",'Balance')
+42240         fn_report_it(mat gb,bal,"Customer Balance Breakdowns Before Credits Moved to Other",'Balance')
 42280         for gb_item=1 to 10
 42300           if gb_item<>gb_other then 
 42320             if gb(gb_item)<0 then 
@@ -201,7 +201,7 @@
 42540     close #h_customer: 
 42560   fnend 
 44000   def fn_apply_credit_from_other(do_apply_credit)
-44020     let fnstatus('Applying Credit Balances (from Other) to the rest of the Customer Balance Breakdowns')
+44020     fnstatus('Applying Credit Balances (from Other) to the rest of the Customer Balance Breakdowns')
 44040     dim customer_g(10)
 44060     dim z$*10,service_rate_code(7)
 44080     dim gb(10)
@@ -211,7 +211,7 @@
 44160       read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof ACFO_CUSTOMER_EOF
 44180       let read_count+=1
 44200       if gb(gb_other)<0 then 
-44220         let fn_report_it(mat gb,bal,"Customer Balance Breakdowns Before Credits Moved to Other",'Balance')
+44220         fn_report_it(mat gb,bal,"Customer Balance Breakdowns Before Credits Moved to Other",'Balance')
 44240         for gb_item=1 to 10
 44260           if gb_item<>gb_other then ! 
 44280             if gb(gb_item)=>abs(gb(gb_other)) then ! this item has more (or equal) charge than other has credit

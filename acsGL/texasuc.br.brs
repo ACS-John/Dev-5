@@ -8,14 +8,14 @@
 00080   dim cap$*128,message$*40,cnam$*40
 00090   dim a$(3)*40,b$(2)*12,c$*5,e(2),e$(2)*11
 00100 ! ______________________________________________________________________
-00110   let fntop(program$,cap$="Texas Unemployment Compensation Report")
-00120   let fncno(cno,cnam$)
+00110   fntop(program$,cap$="Texas Unemployment Compensation Report")
+00120   fncno(cno,cnam$)
 00130   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,POS 188,PD 7.2': mat a$,mat b$,c$,ucm !:
         close #1: 
 00140   if fnprocess=1 then goto L220
 00150 SCR1: ! 
-00160   let fnwin3b(win=101,cap$,5,44,1,3,5)
+00160   fnwin3b(win=101,cap$,5,44,1,3,5)
 00170   pr #win,fields "4,2,C 36,N": "Quarterly Period Ending Date (q-yy):"
 00180 L180: input #win,fields "4,39,C 5,UT,N": m$ conv L180
 00190   close #win: 
@@ -23,9 +23,9 @@
 00210 ! ______________________________________________________________________
 00220 L220: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00230   let message$="Printing: please wait..." !:
-        let fnwait(102,cap$,message$,1)
+        fnwait(102,cap$,message$,1)
 00240   on fkey 5 goto XIT
-00250   let fnopenprn
+00250   fnopenprn
 00260   gosub L400
 00270 L270: read #2,using L280: mat k,mat k$,mat l$,mat m eof L480
 00280 L280: form pos 1,n 4,3*c 25,c 11,18*pd 5.2,2*n 5
@@ -50,8 +50,8 @@
 00470 ! ______________________________________________________________________
 00480 L480: gosub L620
 00490   close #2: 
-00500   let fncloseprn
-00510   let fnchain("S:\acsGL\PRSTATUC")
+00500   fncloseprn
+00510   fnchain("S:\acsGL\PRSTATUC")
 00520 ! ______________________________________________________________________
 00530 L530: let p3=p3+1
 00540   for ln=len(rtrm$(k$(1))) to 1 step -1

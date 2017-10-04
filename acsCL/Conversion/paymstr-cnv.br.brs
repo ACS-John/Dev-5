@@ -5,7 +5,7 @@
 00050   on error goto ERTN
 00060 ! _____________________________________
 00070 ! fntop
-00080   let fncno(cno)
+00080   fncno(cno)
 00090   pr newpage
 00100   close #101: ioerr L110
 00110 L110: open #101: "SROW=11,SCOL=20,EROW=13,ECOL=63,BORDER=DR,CAPTION=CHANGE PAYEE NUMBERS",display,outin 

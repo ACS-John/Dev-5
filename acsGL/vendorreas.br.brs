@@ -10,9 +10,9 @@
 00100   dim flit$(4)*16,scrt$(4)*20,scid$*79,desc$(6)*14
 00110   dim sc$(8),sd$(8),se$(8)*30,pl$(8,2)*35,fl2$(7),sc2$(7)*38
 00120 ! ______________________________________________________________________
-00130   let fntop("S:\acsGL\VendorReas",cap$="Reassign Vendor Transaction Addresses")
-00140   let fncno(cno,cnam$) !:
-        let fndat(dat$)
+00130   fntop("S:\acsGL\VendorReas",cap$="Reassign Vendor Transaction Addresses")
+00140   fncno(cno,cnam$) !:
+        fndat(dat$)
 00150 ! 
 00160   for j=1 to 7: let fl2$(j)=str$(j+3)&",2,C 38": next j
 00170   let sc2$(1)="1. Initial File Preparation"
@@ -220,7 +220,7 @@
 02190   pr fields "11,18,Cc 41,N": "Printing..."
 02200   pr fields "13,34,C 11,B,5": "Cancel (F5)"
 02210   on fkey 5 goto L2560
-02220   let fnopenprn
+02220   fnopenprn
 02230 L2230: let j=0
 02240   let eofc=0
 02250 L2250: read #1,using L880,release: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat adr eof L2530
@@ -362,7 +362,7 @@
 03610   pr #101,fields "4,1,Cc 41,N": "Printing..."
 03620   pr fields "13,34,C 11,B,5": "Cancel (F5)"
 03630   on fkey 5 goto L2560
-03640   let fnopenprn
+03640   fnopenprn
 03650   gosub L3870
 03660 L3660: read #1,using L3670: vn$,nam$,ytdp,mat adr eof L2560
 03670 L3670: form pos 1,c 8,c 35,pos 104,pd 5.2,pos 122,2*pd 3

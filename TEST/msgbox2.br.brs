@@ -5,7 +5,7 @@
         let mesg$(4)="Yes:  Allows you to edit previous unposted input and make new entries" !:
         let mesg$(5)="No:  Erases previous unposted entries and allows you to make new entries" !:
         let mesg$(6)="Cancel:  Exits this program without any changes" !:
-        let fnmsgbox(mat mesg$, resp$, cap$, 3)
+        fnmsgbox(mat mesg$, resp$, cap$, 3)
 02000   dim mesg$(6)*80
 02150   let mesg$(1)="This is your last chance!" !:
         let mesg$(2)="" !:
@@ -13,4 +13,4 @@
         let mesg$(4)="Cash Receipts Journal" !:
         let mesg$(5)="or a " !:
         let mesg$(6)="Deposit List?" !:
-        let fnmsgbox(mat mesg$,resp$,cap$,52)
+        fnmsgbox(mat mesg$,resp$,cap$,52)

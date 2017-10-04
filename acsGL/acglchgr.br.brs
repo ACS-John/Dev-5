@@ -10,8 +10,8 @@
 00090   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),accum(9,2),udf$*256
 00100   dim acct$*12,bp(13),lastact$*12,d(2),by(13),cap$*128,message$*40
 00110 ! ______________________________________________________________________
-00120   let fntop(program$,cap$="Change in Financial Position")
-00130   let fncno(cno,cnam$)
+00120   fntop(program$,cap$="Change in Financial Position")
+00130   fncno(cno,cnam$)
 00140   let udf$=env$('temp')&'\'
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
@@ -38,23 +38,23 @@
 00350 L350: close #1: 
 00360   open #1: fl1$,internal,input,keyed 
 00370   if fnprocess=1 or fnUseDeptNo=0 then goto BEGIN_PRINTING
-00380   let fntos(sn$="GLInput") !:
+00380   fntos(sn$="GLInput") !:
         let mylen=30: let mypos=mylen+3 : let right=1
-00390   let fnlbl(1,1,"Cost Center or Department #:",mylen,right)
-00400   let fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
+00390   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
+00400   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
         let resp$(1)=""
-00410   let fnlbl(2,1,"(Blank for all Departments)",mylen,right)
-00420   let fncmdkey("&Next",1,1,0,"Prints the financial statement.")
-00430   let fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
-00440   let fnacs(sn$,0,mat resp$,ckey)
+00410   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
+00420   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
+00430   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
+00440   fnacs(sn$,0,mat resp$,ckey)
 00450   if ckey=5 then goto XIT
 00460   costcntr=val(resp$(1))
 00470 BEGIN_PRINTING: ! 
 00480   on fkey 5 goto L1840
-00490   let fnopenprn !:
+00490   fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00500   let report$="STATEMENT OF CHANGES IN FINANCIAL POSITION"
-00510   let fnopenprn !:
+00510   fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00520   if fnps=2 then goto L550 ! secondary
 00530   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"

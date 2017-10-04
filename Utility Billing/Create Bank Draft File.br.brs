@@ -8,39 +8,39 @@
 14160   dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),alp$*7
 14180   dim resp$(5)*128,msgline$(5)*80
 14200 ! /r
-18020   let fntop(program$)
+18020   fntop(program$)
 18030   fnd1(d1)
 18100   fnget_services(mat srvname$)
 18120   for j=1 to 10
 18140     if trim$(srvname$(j))>"" then let order(j)=1 : let sz1+=1
 18160   next j
-18180   let fnureg_read('Bank Draft File',pth$,env$('userprofile')&'\Desktop\bkdraft.dat')
+18180   fnureg_read('Bank Draft File',pth$,env$('userprofile')&'\Desktop\bkdraft.dat')
 18200   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",Shr",internal,outin,relative 
 18220   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 18240   close #22: ioerr ignore
 18260 goto SCREEN1 ! /r
 22000 SCREEN1: ! r:
-22020   let fntos(sn$="BKDraft")
+22020   fntos(sn$="BKDraft")
 22040   let mylen=13 
 22060   let mypos=mylen+2
 22080   let respc=0
-22100   let fnlbl(1,1,"Billing Date:",mylen,1)
-22120   let fntxt(1,mypos,8,0,1,"1")
+22100   fnlbl(1,1,"Billing Date:",mylen,1)
+22120   fntxt(1,mypos,8,0,1,"1")
 22140   let resp$(respc+=1)=str$(d1)
-22160   let fnlbl(2,1,"Payment Date:",mylen,1)
-22180   let fntxt(2,mypos,8,0,1,"1")
+22160   fnlbl(2,1,"Payment Date:",mylen,1)
+22180   fntxt(2,mypos,8,0,1,"1")
 22200   let resp$(respc+=1)=""
-22220   let fnlbl(3,1,"File:",mylen,1)
-22240   let fntxt(3,mypos,30,128,0,"70",0,"Destination and file name.",0)
+22220   fnlbl(3,1,"File:",mylen,1)
+22240   fntxt(3,mypos,30,128,0,"70",0,"Destination and file name.",0)
 22260   let resp$(respc_bankDraftFile:=respc+=1)=pth$
-22280   let fnchk(4,mypos,"Post Collections:",1)
-22300   let fncmdset(2)
-22320   let fnacs(sn$,0,mat resp$,ck)
+22280   fnchk(4,mypos,"Post Collections:",1)
+22300   fncmdset(2)
+22320   fnacs(sn$,0,mat resp$,ck)
 22340   if ck=5 then goto XIT
 22360   let d1=val(resp$(1))
 22380   let d2=val(resp$(2))
 22400   let pth$=trim$(resp$(respc_bankDraftFile))
-22420   let fnureg_write('Bank Draft File',pth$)
+22420   fnureg_write('Bank Draft File',pth$)
 22440   if resp$(4)="True" then let postub=1
 22460 goto initialization ! /r
 26000 initialization: ! r: initialization
@@ -49,7 +49,7 @@
 26060     open #6: "Name="&env$('Q')&"\UBmstr\Collections-"&env$('acsUserId')&".h"&env$('cno')&",RecL=91,Replace", internal,outin,relative 
 26080   end if 
 26100   open #7: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
-26120   let fnopenprn
+26120   fnopenprn
 26140   gosub HDRP1
 26160   gosub HDR1
 26180 goto READ_CUSTOMER ! /r
@@ -176,7 +176,7 @@
 46020   gosub CTRL1
 46040   pr #255: "                                                    {\ul            }"
 46060   pr #255,using L900: "  Total","",0,t1
-46080   let fncloseprn
+46080   fncloseprn
 46100   gosub L1500
 46120 if postub=1 then goto L1370 else goto XIT
 46140 ! /r
@@ -185,7 +185,7 @@
 48040   let ml$(1)="You have indicated you want to post the drafts" 
 48060   let ml$(2)="as collections to each customers account." 
 48080   let ml$(3)="Click OK to continue else Cancel to skip posting." 
-48100   let fnmsgbox(mat ml$,resp$,'',1)
+48100   fnmsgbox(mat ml$,resp$,'',1)
 48120 if resp$="OK" then gosub MERGE else goto XIT ! /r
 50000 XIT: let fnxit
 51000 NEWPGE: pr #255: newpage : gosub HDRP1: continue 
@@ -218,7 +218,7 @@
 58040   let msgline$(1)="Unable to create file: "
 58060   let msgline$(2)=pth$
 58080   let msgline$(3)='Select OK to retry.'
-58100   let fnmsgbox(mat msgline$,resp$,'',65)
+58100   fnmsgbox(mat msgline$,resp$,'',65)
 58120   if resp$="OK" then goto COPY_TO_DESTINATION
 58140 goto XIT  ! /r
 60000 ! <Updateable Region: ERTN>

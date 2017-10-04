@@ -10,7 +10,7 @@
 00050   dim newdedcode(20),newcalcode(20),newdedfed(20),cap$*128
 00055   dim dedfica(20),dedst(20),deduc(20),thc(5)
 00060 ! ______________________________________________________________________
-00065   let fntop(program$,cap$="Payroll Registers")
+00065   fntop(program$,cap$="Payroll Registers")
 00076   fncreg_read('prreg2.include_tips_in_other_wh',include_tips_in_other_wh$) : if include_tips_in_other_wh$='' then let include_tips_in_other_wh$='True'
 00078   fnreg_read('prreg2.append_reg1',append_reg1$) : if append_reg1$='' then append_reg1$='False'
 00080   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
@@ -38,39 +38,39 @@
 00280 ! /r
 00340   if fnprocess=1 then goto START_REPORT else goto ASK_CHECK_NO
 46000 ASK_CHECK_NO: ! r:
-46020   let fntos(sn$="Payrollreg1")
+46020   fntos(sn$="Payrollreg1")
 46040   let respc=0
-46060   let fnlbl(1,1,"Beginning Check Number:",20,1)
-46080   let fntxt(1,23,8,0,1,"30",0," ")
+46060   fnlbl(1,1,"Beginning Check Number:",20,1)
+46080   fntxt(1,23,8,0,1,"30",0," ")
 46100   let resp$(respc+=1)=str$(ckno)
-46120   let fnlbl(1,1,"",34,1) ! bigger screen
-46140   let fnlbl(2,1,"Payroll Date:",20,1)
-46160   let fntxt(2,23,10,0,1,"1",0,"For current payroll, always use the calculation date.  You can reprint older payroll registers by using that date.")
+46120   fnlbl(1,1,"",34,1) ! bigger screen
+46140   fnlbl(2,1,"Payroll Date:",20,1)
+46160   fntxt(2,23,10,0,1,"1",0,"For current payroll, always use the calculation date.  You can reprint older payroll registers by using that date.")
 46180   let resp$(respc+=1)=str$(ppd)
-46190   let fnchk(4,2,'Combine both registers into one multi-page report',50)
+46190   fnchk(4,2,'Combine both registers into one multi-page report',50)
 46192   let resp$(resp_append_reg1:=respc+=1)=append_reg1$
 46200   if env$('ACSDeveloper')<>'' then ! option under development for West Accounting... held until they decide if they actually want/nedd this - currently causes mismatch (in their cno 18) in other_wh in 1st and 2nd PR Registers
-46202     let fnchk(6,2,'Include Tips in Other Withholdings',50)
+46202     fnchk(6,2,'Include Tips in Other Withholdings',50)
 46204     let resp$(resp_include_tips_in_other_wh:=respc+=1)=include_tips_in_other_wh$
 46206   else 
 46208     let resp$(resp_include_tips_in_other_wh:=respc+=1)='False'
 46210   end if 
-46240   let fncmdkey("&Next",1,1,0,"Proceed with pr the payroll register." )
-46260   let fncmdkey("E&xit",5,0,1,"Returns to menu")
-48000   let fnacs(sn$,0,mat resp$,ckey) ! ask employee #
+46240   fncmdkey("&Next",1,1,0,"Proceed with pr the payroll register." )
+46260   fncmdkey("E&xit",5,0,1,"Returns to menu")
+48000   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 48020   if ckey=5 then goto XIT
 48040   ckno=val(resp$(1))
 48060   let ppd=val(resp$(2))
 48070   append_reg1$=resp$(resp_append_reg1)
 48080   let include_tips_in_other_wh$=resp$(resp_include_tips_in_other_wh)
-48100   let fncreg_write('prreg2.include_tips_in_other_wh',include_tips_in_other_wh$) : if include_tips_in_other_wh$='True' then let include_tips_in_other_wh=1 else let include_tips_in_other_wh=0
-48110   let fnreg_write('prreg2.append_reg1',append_reg1$) : if append_reg1$='True' then append_reg1=1 else append_reg1=0
+48100   fncreg_write('prreg2.include_tips_in_other_wh',include_tips_in_other_wh$) : if include_tips_in_other_wh$='True' then let include_tips_in_other_wh=1 else let include_tips_in_other_wh=0
+48110   fnreg_write('prreg2.append_reg1',append_reg1$) : if append_reg1$='True' then append_reg1=1 else append_reg1=0
 48120   goto START_REPORT ! /r
 51000 START_REPORT: ! r:
 51020   if append_reg1 then 
-51040     let fnopenprn( 0,0,0,fnprocess,' (Check and Departmental Registers)')
+51040     fnopenprn( 0,0,0,fnprocess,' (Check and Departmental Registers)')
 51060   else 
-51080     let fnopenprn( 0,0,0,fnprocess,' (Check Register)')
+51080     fnopenprn( 0,0,0,fnprocess,' (Check Register)')
 51100   end if 
 51120   gosub HDR
 51140   goto LOOP_TOP
@@ -169,9 +169,9 @@
 62068       pr #255: newpage
 62070     end if 
 62072   else 
-62074     let fncloseprn
+62074     fncloseprn
 62076   end if 
-62080   let fnpayroll_register_2(0,include_tips_in_other_wh,append_reg1)
+62080   fnpayroll_register_2(0,include_tips_in_other_wh,append_reg1)
 62100   goto XIT ! /r let fnchain("S:\acsPR\newprReg2")
 64000 XIT: let fnxit
 66000 IGNORE: continue 

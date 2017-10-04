@@ -139,7 +139,7 @@
 01340 L1340: next j
 01350   pr #255: newpage
 01360   pr #255,using L970: hex$("1B40")
-01365   let fncloseprn
+01365   fncloseprn
 01370 L1370: close #1: 
 01380   if f2<f1 then goto L360
 01390 L1390: close #2: ioerr L1400

@@ -7,8 +7,8 @@
 00160 def fn_undobilling ! main
 00180   dim program_caption$*80,billingdate$*10,msgtext$(1)*1000,readings(12),charges(12),breakdown(10),readingdates(2),servicename$(10)*20
 00200   let do_all=1 : let do_route=2 : let do_individual=3
-00220   let fntop(program$,program_caption$="Reverse Billing Cycle")
-00230   let fnget_services(mat servicename$,mat servicecode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
+00220   fntop(program$,program_caption$="Reverse Billing Cycle")
+00230   fnget_services(mat servicename$,mat servicecode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
 00240   ! 
 06000   ASK_OPTIONS: ! 
 06020   cont=fn_options(route,billingdate$) ! collect user options
@@ -16,7 +16,7 @@
 06060   if trim$(billingdate$)="0" then 
 06080     mat msgtext$(1)
 06100     let msgtext$(1)=("You must enter a billing date")
-06120     let fnmsgbox(mat msgtext$,answer$,"Invalid Entry",0)
+06120     fnmsgbox(mat msgtext$,answer$,"Invalid Entry",0)
 06140     goto ASK_OPTIONS
 06160   end if 
 08000  ! 
@@ -24,7 +24,7 @@
 08040   let msgtext$(1) = "Warning: this action will reduce the balance and balance breakdown of all selected customers"
 08060   let msgtext$(2) = "with a matching billing date by the amount of the billing on that date."
 08080   let msgtext$(3) = "Are you sure?"
-08100   let fnmsgbox(mat msgtext$,answer$,"Confirm Action",4)
+08100   fnmsgbox(mat msgtext$,answer$,"Confirm Action",4)
 08120   if (answer$<>"Yes") then cont=0
 08140   ! 
 08160   let undoCount=0
@@ -33,8 +33,8 @@
 12040     CUSTFORM: form c 10,x 30,c 30,pos 1741,n 2,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1750,2*n 6
 12060     TRANSFORM: form c 10,n 8,x 1,12*pd 4.2,6*pd 5,pd 4.2
 12070     fnAutomatedSavePoint('before')
-12080     let fn_openfiles ! open data files
-12100     let fnopenprn : let fn_printheader
+12080     fn_openfiles ! open data files
+12100     fnopenprn : let fn_printheader
 12120     do 
 14000       NEXT_CUSTOMER: ! 
 14020       if filter=do_individual then 
@@ -104,17 +104,17 @@
 25180     goto CUSTDONE
 26000     PRINTPAGEOVERFLOW: ! r:
 26020      pr #255: newpage
-26040      let fn_printheader
+26040      fn_printheader
 26060     continue ! /r
 28000     CUSTDONE: ! 
 28020     if filter=do_all then 
 28040       let lastbilling=val(date$(days(lastbilling,"ccyymmdd"),"mmddyy"))
-28060       let fnd1(lastbilling,1)
+28060       fnd1(lastbilling,1)
 28080     end if 
 28100     mat msgtext$(1)=("Customers reversed: "&str$(undoCount))
-28120     let fnmsgbox(mat msgtext$,answer$,"Report",0)
-28140     let fncloseprn
-28160     let fn_close_files
+28120     fnmsgbox(mat msgtext$,answer$,"Report",0)
+28140     fncloseprn
+28160     fn_close_files
 28180     if filter=do_individual then goto ASK_OPTIONS
 28200   end if 
 28220   ! 
@@ -123,48 +123,48 @@
 30000 XIT: let fnxit
 44000   def fn_options(&route,&billingdate$) ! show options dialog to user and return selections
 44020     dim screen_name$*100,resp$(20)*255
-44040     let fnd1(lastbilling) ! get last billing date and use it for the default
+44040     fnd1(lastbilling) ! get last billing date and use it for the default
 44060     let filter=0 : let route=0 : cust$=''
 44080 OPTIONS_TOS: ! 
-44100     let fntos(screen_name$="UndoBillingOptions")
+44100     fntos(screen_name$="UndoBillingOptions")
 44120     let rcnt=0 : let lc=0 : let pos_col2=16
 44140     let lc+=1
-44160     let fnlbl(lc+=1,2,"Warning: only the most recent billing date can be reversed for any account(s).")
+44160     fnlbl(lc+=1,2,"Warning: only the most recent billing date can be reversed for any account(s).")
 44180     let lc+=1
 44200 ! billing date text box
-44220     let fnlbl(lc+=1,2,"Billing Date:",13,1)
-44240     let fntxt(lc,pos_col2,8,0,0,"1001")
+44220     fnlbl(lc+=1,2,"Billing Date:",13,1)
+44240     fntxt(lc,pos_col2,8,0,0,"1001")
 44260     let resp_billing_date=rcnt+=1
 44280     if resp$(resp_billing_date)='' then let resp$(resp_billing_date)=str$(lastbilling)
 44300 ! 
 44320     let lc+=1
 44340     let lc+=1
-44360     let fnlbl(lc+=1,2,"Use only one of options below to limit the customers to reverse.")
+44360     fnlbl(lc+=1,2,"Use only one of options below to limit the customers to reverse.")
 44380     let lc+=1
 44400 ! 
-44420     let fnopt(lc+=1,1,'All') ! fnopt(lyne,ps, txt$*196; align,contain,tabcon)
+44420     fnopt(lc+=1,1,'All') ! fnopt(lyne,ps, txt$*196; align,contain,tabcon)
 44440     let resp_opt_all=rcnt+=1
 44460     if resp$(resp_opt_all)='' then let resp$(resp_opt_all)='True'
 44480 ! 
-44500     let fnopt(lc+=1,1,'Route:')
+44500     fnopt(lc+=1,1,'Route:')
 44520     let resp_opt_route=rcnt+=1
 44540     if resp$(resp_opt_route)='' then let resp$(resp_opt_route)='False'
-44560     let fncmbrt2(lc,pos_col2,1)
+44560     fncmbrt2(lc,pos_col2,1)
 44580     let resp_route=rcnt+=1
 44600 ! if resp$(resp_route)='' then let resp$(resp_route)="[All]"
 44620 ! 
-44640     let fnopt(lc+=1,1,'Individual:')
+44640     fnopt(lc+=1,1,'Individual:')
 44660     let resp_opt_individual=rcnt+=1
 44680     if resp$(resp_opt_individual)='' then let resp$(resp_opt_individual)='False'
-44700     let fncmbact(lc,pos_col2) ! fncmbact(lyne,mypos; addall,c,a$*25)
+44700     fncmbact(lc,pos_col2) ! fncmbact(lyne,mypos; addall,c,a$*25)
 44720     let resp_individual=rcnt+=1
 44740 ! if resp$(resp_individual)='' then let resp$(resp_individual)="[All]"
 44760 ! 
-44780     let fncmdset(2) ! show "Next" and "Cancel" buttons
-44800     let fnacs(screen_name$,0,mat resp$,ckey) ! run the screen
+44780     fncmdset(2) ! show "Next" and "Cancel" buttons
+44800     fnacs(screen_name$,0,mat resp$,ckey) ! run the screen
 44820 ! 
 44840     if ckey=5 then ! if user pressed Cancel
-44860       let fn_options=0
+44860       fn_options=0
 44880     else 
 44900       billingdate$=resp$(resp_billing_date)
 44920       if resp$(resp_opt_all)='True' then 
@@ -179,7 +179,7 @@
 45090         if trim$(cust$)='' then pr bell;'please select a customer' : goto OPTIONS_TOS
 45100       end if 
 45120 !     pr 'answers retreived' : pause  !
-45140       let fn_options=1
+45140       fn_options=1
 45160     end if 
 45180   fnend  ! fn_Options
 46000   def fn_openfiles

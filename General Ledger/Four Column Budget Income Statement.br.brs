@@ -9,7 +9,7 @@
 00090   dim accum(9,7)
 00100   dim actpd$*6,bm(13),bp(13),by(13),cap$*128
 00110 ! /r
-00120   let fntop(program$,cap$="Four Column Budget Income Statement")
+00120   fntop(program$,cap$="Four Column Budget Income Statement")
 00130   let report$="Statement of Income and Expenses"
 00150   if fnglfs=5 then goto XIT ! ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00152   on fkey 5 goto FINIS
@@ -28,7 +28,7 @@
 00250     open #hAcGlFnsX:=fngethandle:"Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr",internal,input,keyed 
 00252   end if
 00254   fnindex_it(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),env$('temp')&"\fsindex.H"&env$('cno'),str$(mp1)&" 3")
-00260   let fnopenprn
+00260   fnopenprn
 00290   open #hGlMstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('temp')&"\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 00300   fHlMstr: form pos mp1,pd 3,pos 81,41*pd 6.2
 00320   ! /r
@@ -161,7 +161,7 @@
 01272   end if
 01274 return ! /r
 01290 PrHeaderSecondary: ! r:
-01300   let fnpglen(pglen)
+01300   fnpglen(pglen)
 01310   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
 01330   pr #255,using L1340: rtrm$(foot$),"Page "&str$(pt1)
 01340   L1340: form skip sk,pos tabnote,c fl,pos 74,c 8,skip 1
@@ -199,9 +199,9 @@
 01670 FINIS: ! r:
 01672   let eofcode=1
 01680   gosub PrHeaderSecondary
-01690   let fnfscode(actpd)
-01691   let fnpriorcd(1)
-01700   let fncloseprn
+01690   fnfscode(actpd)
+01691   fnpriorcd(1)
+01700   fncloseprn
 01710 goto XIT ! /r
 01730 XIT: let fnxit
 01750 ! <updateable region: ertn>

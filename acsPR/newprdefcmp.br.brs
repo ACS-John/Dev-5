@@ -1,12 +1,12 @@
 00020   on fkey 5 goto END1
 00030   on error goto ERTN
 00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnopenprn, fncloseprn,fnerror,fntos,fnfra,fnopt,fnlbl,fntxt,fncmbact,fncmdkey,fnacs,fnchk,fnDedNames
-00050   let fntop(program$,cap$="Deferred Compensation Report")
+00050   fntop(program$,cap$="Deferred Compensation Report")
 00070 ! 
 00080   def fndate_mmddyy_to_ccyymmdd(x)
 00090     let x2=(x-int(x*.01)*100)*10000+int(x*.01)
 00100     if int(x2*.0001)<90 then let x2=x2+20000000 else let x2=x2+19000000
-00110     let fndate_mmddyy_to_ccyymmdd=x2
+00110     fndate_mmddyy_to_ccyymmdd=x2
 00120   fnend 
 00130   dim em$*30,tcp(32),tdc(10),cp(32),ttdc(10)
 00140   dim dedcode(20),calcode(20),dedfed(20),fullname$(20)*20,resp$(50)*60
@@ -17,7 +17,7 @@
 00200   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",Shr",internal,input,relative 
 00210   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
 00220   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,input,relative 
-00230   let fnopenprn
+00230   fnopenprn
 00240   gosub HDR
 00250 L250: read #1,using L260: eno,em$,ss$ eof END1
 00260 L260: form pos 1,n 8,c 30,pos 99,c 11
@@ -40,7 +40,7 @@
 00410 L410: form pos 1,c 24,c 12,4*n 12.2
 00420   pr #255: "                                      =========-  ==========  ========== "
 00430   form pos 1,c 1,c 32,n 6,3*n 9,c 14,c 2
-00440   let fncloseprn
+00440   fncloseprn
 00450   close #25: ioerr XIT
 00460 XIT: let fnxit
 00470 ! ______________________________________________________________________
@@ -69,29 +69,29 @@
 00700   goto L600
 00710 L710: let fntos(sn$="Deferred-1") !:
         let rc=cf=0
-00720   let fnfra(1,1,20,23,"Deferred Comp W/H","Mark the Deferred Comp Withholding deduction",0) !:
+00720   fnfra(1,1,20,23,"Deferred Comp W/H","Mark the Deferred Comp Withholding deduction",0) !:
         cf+=1 : let fratype=cf
 00730   for j=1 to 20
-00740     let fnchk(j,3,fullname$(j),0,fratype) !:
+00740     fnchk(j,3,fullname$(j),0,fratype) !:
           let resp$(rc+=1)="False"
 00750   next j
-00760   let fnfra(1,30,20,23,"Deferred Comp Match","Mark the deferred compensation match.",0) !:
+00760   fnfra(1,30,20,23,"Deferred Comp Match","Mark the deferred compensation match.",0) !:
         cf+=1 : let fratype=cf
 00770   for j=1 to 20
-00780     let fnopt(j,3,fullname$(j),0,fratype) !:
+00780     fnopt(j,3,fullname$(j),0,fratype) !:
           let resp$(rc+=1)="False"
 00790   next j
-00800   let fnfra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.") !:
+00800   fnfra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.") !:
         cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
-00810   let fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
-00820   let fntxt(1,mypos,10,0,1,"3",0,empty$,fradate) !:
+00810   fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
+00820   fntxt(1,mypos,10,0,1,"3",0,empty$,fradate) !:
         let resp$(rc+=1)=str$(beg_date)
-00830   let fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
-00840   let fntxt(2,mypos,10,0,1,"3",0,empty$,fradate) !:
+00830   fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
+00840   fntxt(2,mypos,10,0,1,"3",0,empty$,fradate) !:
         let resp$(rc+=1)=str$(end_date)
-00850   let fncmdkey("Next",1,1,0,"Prints the report")
-00860   let fncmdkey("Cancel",5,0,1,"Returns to menu")
-00870   let fnacs(sn$,0,mat resp$,ckey) !:
+00850   fncmdkey("Next",1,1,0,"Prints the report")
+00860   fncmdkey("Cancel",5,0,1,"Returns to menu")
+00870   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 00880   for j=1 to 20
 00890     if resp$(j)="True" then let sel_ded(j)=1

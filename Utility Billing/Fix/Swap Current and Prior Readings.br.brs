@@ -13,8 +13,8 @@
 12400   dim extra(23),extra$(11)*30,client$*30
 12600   dim cap$*128,work$*80,work_addr$*80
 12800 ! ______________________________________________________________________
-13200   let fntop(program$,cap$="Swap Current and Prior Readings for Water")
-13400   let fnd1(d1)
+13200   fntop(program$,cap$="Swap Current and Prior Readings for Water")
+13400   fnd1(d1)
 13600   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative 
 13800   read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto
 14000   close #20: 
@@ -22,14 +22,14 @@
 14400     let servicename$(j)=trim$(servicename$(j))
 14600   next j
 14800 ! ______________________________________________________________________
-15000   let fntos(sn$='SwapCurPri1')
+15000   fntos(sn$='SwapCurPri1')
 15200   let mylen=22 : let mypos=mylen+2
-15400   let fnlbl(1,1,"Billing Date (mmddyy):",mylen,1)
-15600   let fntxt(1,mypos,8,0,1,"1001")
+15400   fnlbl(1,1,"Billing Date (mmddyy):",mylen,1)
+15600   fntxt(1,mypos,8,0,1,"1001")
 15800   let resp$(1)=str$(d1)
 16000 L440: ! 
-16200   let fncmdset(2)
-16400   let fnacs(sn$,0,mat resp$,ck)
+16200   fncmdset(2)
+16400   fnacs(sn$,0,mat resp$,ck)
 16600   if ck=5 then goto XIT
 16800   let d1=val(resp$(1))
 17000   open #customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -46,7 +46,7 @@
 19000     end if  ! f=d1
 19400   loop 
 19600 XIT: ! 
-19800   let fnxit
+19800   fnxit
 20000 ! ______________________________________________________________________
 20200 ! <Updateable Region: ERTN>
 20400 ERTN: let fnerror(program$,err,line,act$,"NO")

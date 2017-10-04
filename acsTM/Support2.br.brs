@@ -2,8 +2,8 @@
 00220   library 'S:\Core\Library': fntop,fnxit, fnerror,fnmsgbox,fnhamster,fnhamster_field_reset,fnhamster_field_add,fnhamster_add_combo,fnhamster_add_combof,fnhamster_add_comboa,fnhamster_2,fnhand_held_device$
 00300   on error goto ERTN
 00400 ! ______________________________________________________________________
-00700   let fntop(program$)
-00900   let fn_setup_hamster
+00700   fntop(program$)
+00900   fn_setup_hamster
 01000   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 01100   ! let fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 01110   fnhamster_2("ARTrans")
@@ -41,14 +41,14 @@
 35240     fnhamster_field_reset
 35260  !
 35280  !
-35300   let fnhamster_field_add("Client ID"       ,6               ,'N'                     ,mask_number   )    
-35320   let fnhamster_field_add("Sys#"            ,2               ,'N',0                   ,mask_number   )    
-35340   let fnhamster_field_add("System ID"       ,2               ,'C'                                    )    
-35360   let fnhamster_field_add("Starting Date"   ,textlen_ccyymmdd,'N',storage_len_ccyymmdd,mask_ccyymmdd )    
-35380   let fnhamster_field_add("Time Frame"      ,2               ,'C'                                    )    
-35400   let fnhamster_field_add("Ending Date"     ,textlen_ccyymmdd,'N',storage_len_ccyymmdd,mask_ccyymmdd )
-35420   let fnhamster_field_add("Cost to User"    ,10              ,'N'                                    )
-35440   let fnhamster_field_add("Name"            ,50              ,'C'                                    )     
+35300   fnhamster_field_add("Client ID"       ,6               ,'N'                     ,mask_number   )    
+35320   fnhamster_field_add("Sys#"            ,2               ,'N',0                   ,mask_number   )    
+35340   fnhamster_field_add("System ID"       ,2               ,'C'                                    )    
+35360   fnhamster_field_add("Starting Date"   ,textlen_ccyymmdd,'N',storage_len_ccyymmdd,mask_ccyymmdd )    
+35380   fnhamster_field_add("Time Frame"      ,2               ,'C'                                    )    
+35400   fnhamster_field_add("Ending Date"     ,textlen_ccyymmdd,'N',storage_len_ccyymmdd,mask_ccyymmdd )
+35420   fnhamster_field_add("Cost to User"    ,10              ,'N'                                    )
+35440   fnhamster_field_add("Name"            ,50              ,'C'                                    )     
 35460 ! let fnhamster_field_add("Contact (1)"     ,50              ,'C'                                    )           
 35480 ! let fnhamster_field_add("Contact (2)"     ,50              ,'C'                                    )           
 35500 ! let fnhamster_field_add("Contact (3)"     ,50              ,'C'                                    )           
@@ -74,7 +74,7 @@
 55080 ! old program !  ! ______________________________________________________________________
 55100 ! old program !    dim cap$*128,lbl$(11)*38,tln(11),p$(11)*160,fltyp$(11),sln(11),mask(11),c$(11,8)*256 ! SP(11) - not used
 55120 ! old program !  ! ______________________________________________________________________
-55140 ! old program !    let fntop(program$,cap$='Support 420')
+55140 ! old program !    fntop(program$,cap$='Support 420')
 55160 ! old program !    gosub BUILD_LAYOUT
 55180 ! old program !    gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 55200 ! old program !    gosub HAMSTER: gosub CLOSE_FILE
@@ -190,7 +190,7 @@
 57400 ! old program !    return 
 57420 ! old program !  ! ______________________________________________________________________
 57440 ! old program !  HAMSTER: ! 
-57460 ! old program !    let fnhamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+57460 ! old program !    fnhamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 57480 ! old program !    return 
 57500 ! old program !  ! ______________________________________________________________________
 57520 ! old program !  XIT: let fnxit

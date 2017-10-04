@@ -5,11 +5,11 @@
 20080 ! ______________________________________________________________________
 20100   dim cap$*128,lbl$(3)*38,tln(3),p$(3)*160,fltyp$(3),sln(3),mask(3)
 20120 ! ______________________________________________________________________
-20140   let fntop(program$,cap$='Systems 420')
+20140   fntop(program$,cap$='Systems 420')
 20160   gosub BUILD_LAYOUT
 20180   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
 20200   gosub HAMSTER: gosub CLOSE_FILE
-20220   let fnindex_it(env$('Q')&"\TMmstr\Systems.h420",env$('Q')&"\TMmstr\Systems-idx.h420","1,2")
+20220   fnindex_it(env$('Q')&"\TMmstr\Systems.h420",env$('Q')&"\TMmstr\Systems-idx.h420","1,2")
 20240   goto XIT
 20260 ! ______________________________________________________________________
 20280 OPEN_FILE: ! 
@@ -53,7 +53,7 @@
 21040   return 
 21060 ! ______________________________________________________________________
 21080 HAMSTER: ! 
-21100   let fnhamster("Systems",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp) ! ,mat c$)
+21100   fnhamster("Systems",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp) ! ,mat c$)
 21120   return 
 21140 XIT: let fnxit
 21160 ! <Updateable Region: ERTN>

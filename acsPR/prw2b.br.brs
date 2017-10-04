@@ -68,7 +68,7 @@
 00632 goto XIT ! /r 
 00640 XIT: fnxit
 00670 PRINTW2: ! r: pr W2 FORM
-00680   let fnopenprn(cp,0,0,process)
+00680   fnopenprn(cp,0,0,process)
 00690   ! if rtrm$(file$(255))="PRN:/SELECT" then pr #255,using ' form pos 1,c 9': hex$("2B0205000A1021")
 00720   pr #255,using L740: ss$
 00730   pr #255,using L770: b$,w(2),w(1)
