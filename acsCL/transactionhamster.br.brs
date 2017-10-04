@@ -13,7 +13,7 @@
 00120   goto XIT
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
-        let open_file_count=0 ! this value is used in the close_file sub routine
+        open_file_count=0 ! this value is used in the close_file sub routine
 00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&str$(cno)&",Use,RecL=78,KPs=1,KLn=11,Shr",internal,outin,keyed 
 00160   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&str$(cno)&",Use,RecL=78,KPs=28/1,KLn=8/11,Shr",internal,outin,keyed 
 00170   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx3.h"&str$(cno)&",Use,RecL=78,KPs=16/12/4,KLn=2/4/8,Shr",internal,outin,keyed 
@@ -23,17 +23,17 @@
 00210 ! ______________________________________________________________________
 00220 BUILD_LAYOUT: ! 
 00230   fncno(cno)
-00240   let lbl$(1)="Bank" !:
-        let lbl$(2)="Transaction Code" !:
-        let lbl$(3)="Check/Reference Number" !:
-        let lbl$(4)="Check Date" !:
-        let lbl$(5)="Amount"
-00250   let lbl$(6)="Payee" !:
-        let lbl$(7)="Name/Description (1 of 2)" !:
-        let lbl$(8)="Name/Description (2 of 2)" !:
-        let lbl$(9)="Posting Code" !:
-        let lbl$(10)="Statement Date Cleared"
-00260   let lbl$(11)="Source Code"
+00240   lbl$(1)="Bank" !:
+        lbl$(2)="Transaction Code" !:
+        lbl$(3)="Check/Reference Number" !:
+        lbl$(4)="Check Date" !:
+        lbl$(5)="Amount"
+00250   lbl$(6)="Payee" !:
+        lbl$(7)="Name/Description (1 of 2)" !:
+        lbl$(8)="Name/Description (2 of 2)" !:
+        lbl$(9)="Posting Code" !:
+        lbl$(10)="Statement Date Cleared"
+00260   lbl$(11)="Source Code"
 00270 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
@@ -51,31 +51,31 @@
 00300   let tln(ic+=1)=1
 00310 ! ** Field Types ** !:
         let ic=0
-00320   let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='Cr' !:
-        let fltyp$(ic+=1)='G' !:
-        let fltyp$(ic+=1)='PD'
-00330   let fltyp$(ic+=1)='Cr' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N'
-00340   let fltyp$(ic+=1)='N'
+00320   fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='Cr' !:
+        fltyp$(ic+=1)='G' !:
+        fltyp$(ic+=1)='PD'
+00330   fltyp$(ic+=1)='Cr' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N'
+00340   fltyp$(ic+=1)='N'
 00350 ! ** Field Storage Lengths ** !:
         let ic=0 !:
         let mmddyy=6 : ccyymmdd=8
-00360   let sln(ic+=1)=2 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=8 !:
-        let sln(ic+=1)=mmddyy !:
-        let sln(ic+=1)=10.2
-00370   let sln(ic+=1)=8 !:
-        let sln(ic+=1)=34 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=mmddyy
-00380   let sln(ic+=1)=1
+00360   sln(ic+=1)=2 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=8 !:
+        sln(ic+=1)=mmddyy !:
+        sln(ic+=1)=10.2
+00370   sln(ic+=1)=8 !:
+        sln(ic+=1)=34 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=mmddyy
+00380   sln(ic+=1)=1
 00390 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:
@@ -101,7 +101,7 @@
         ! C$(CL,5)=Description Position : C$(CL,6)=Description Length         !:
         ! C$(CL,7)=Index File                                                 !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
-        let limit_to_list$='1'
+        limit_to_list$='1'
 00450   cl=1 : c$(cl,1)='ComboF' !:
         c$(cl,2)=env$('Q')&"\CLmstr\BankMstr.h"&str$(cno) !:
         c$(cl,3)='1' : c$(cl,4)='2' !:

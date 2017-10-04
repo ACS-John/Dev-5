@@ -27,21 +27,21 @@
         let in3$(3)="8,45,N 12.2,UT,N" : let in3$(4)="8,65,N 12.2,UT,N"
 00250   let mp1=75
 00260   if ps=2 then let mp1=mp1+3
-00270   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
-00280   if ps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
+00270   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
+00280   if ps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
 00290   pr newpage
-00300   pr fields "10,20,C 30,h,n": "CASH FLOW STATEMENT IN PROCESS"
+00300   pr f "10,20,C 30,h,n": "CASH FLOW STATEMENT IN PROCESS"
 00310   on fkey 5 goto L2130
 00320   fnopenprn(cp,58,220,process)
 00330   open #1: fl1$,internal,input,keyed 
 00340   if process=1 or d(1)=0 then goto L390
 00350   pr newpage
-00360   pr fields "10,5,C 75,": "ENTER THE COST CENTER OR DEPT # IF YOU WISH TO ONLY pr A STATEMENT"
-00370 L370: pr fields "11,5,C 65": "ON ONE DEPARTMENT; ELSE ENTER 0 TO pr ALL DEPARTMENTS"
+00360   pr f "10,5,C 75,": "ENTER THE COST CENTER OR DEPT # IF YOU WISH TO ONLY pr A STATEMENT"
+00370 L370: pr f "11,5,C 65": "ON ONE DEPARTMENT; ELSE ENTER 0 TO pr ALL DEPARTMENTS"
 00380   input fields "11,70,N 3,ue,N": costcntr conv L370
 00390 L390: pr newpage
-00400   pr fields "10,1,Cc 80,N": "Printing: please wait..."
-00410   pr fields "12,2,c 30,B,5": "Press F5 to stop"
+00400   pr f "10,1,Cc 80,N": "Printing: please wait..."
+00410   pr f "12,2,c 30,B,5": "Press F5 to stop"
 00420   if fnps=2 then goto L450 ! secondary
 00430   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
 00440   goto L460
@@ -96,7 +96,7 @@
 00930 L930: if ir<val(r$) then goto L640
 00940   if ir>val(r$) then goto L960
 00950 L950: let notrans=1
-00960 L960: let overundr=ytdb-total2
+00960 L960: overundr=ytdb-total2
 00970   let unexpend=annualb-total2
 00980   for j=1 to 9
 00990     if ac(j)=9 then goto L1070
@@ -113,13 +113,13 @@
 01100   annualb=-annualb
 01110   let monthb=-monthb
 01120   let ytdb=-ytdb
-01130   let overundr=overundr
+01130   overundr=overundr
 01140   let unexpend=unexpend
 01150 L1150: if ds=1 then let dollar$="$" else let dollar$=" "
 01160   if annualb><0 or total2><0 then goto L1190
 01170   if total<>0 then goto L1190
 01180   if ls+ds+ul+ic>0 then goto L1190 else goto L470
-01190 L1190: let sp2=24-sp-1
+01190 L1190: sp2=24-sp-1
 01200   if te$="B" then let total=-total: let total2=-total2 ! REVERSE SIGN ON BEGINNING BANK BALANCE
 01210   pr #255,using L1220: d$(1:sp2),dollar$,monthb,dollar$,total,dollar$,total2,dollar$,ytdb,dollar$,annualb
 01220 L1220: form pos sp,c sp2,pos 24,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),skip 0
@@ -128,7 +128,7 @@
 01250   annualb=0
 01260   let monthb=0
 01270   let ytdb=0
-01280   let overundr=0
+01280   overundr=0
 01290   let unexpend=0
 01300   gosub L1660
 01310   gosub L1850
@@ -144,7 +144,7 @@
 01410   if rs=1 then accum6=accum(ap,6) else accum6=accum(ap,6)
 01420   if rs=1 then accum7=accum(ap,7) else accum7=accum(ap,7)
 01430   if ds=1 then let dollar$="$" else let dollar$=" "
-01440   let sp2=24-sp-1
+01440   sp2=24-sp-1
 01450   if te$="B" then accum3=accum4=0
 01460   pr #255,using L1220: d$(1:sp2),dollar$,accum4,dollar$,accum1,dollar$,accum2,dollar$,accum5,dollar$,accum3
 01470   gosub L1660
@@ -153,7 +153,7 @@
 01500   goto L470
 01510 ! ______________________________________________________________________
 01520 L1520: if te$="R" then let report$=d$
-01530   if te$="S" then let secondr$=d$
+01530   if te$="S" then secondr$=d$
 01540   gosub L1720
 01550   goto L470
 01560 ! ______________________________________________________________________
@@ -177,8 +177,8 @@
 01740   pr #255,using L1750: " "
 01750 L1750: form pos 1,c 1,skip ls
 01760   goto L1830
-01770 L1770: let sk=62-krec(255) !:
-        let fl=len(rtrm$(foot$))
+01770 L1770: sk=62-krec(255) !:
+        fl=len(rtrm$(foot$))
 01780   pr #255,using L1790: rtrm$(foot$)
 01790 L1790: form skip sk,pos tabnote,c fl
 01800   if eofcode=1 then goto L1830
@@ -214,15 +214,15 @@
 02100   pr #255: ""
 02110   return 
 02120 ! ______________________________________________________________________
-02130 L2130: let eofcode=1
+02130 L2130: eofcode=1
 02140   gosub L1770
 02150   fncloseprn
 02160   goto XIT
 02170 ! ______________________________________________________________________
 02180 L2180: pr newpage
-02190   pr fields "2,5,C 75,N": "Enter the Following Information for "& rtrm$(d$)
-02200   pr fields "6,5,C 70,N": "Monthly             Current             Year To             Annual"
-02210   pr fields "7,5,C 70,N": "Budget               Month                Date              Budget"
+02190   pr f "2,5,C 75,N": "Enter the Following Information for "& rtrm$(d$)
+02200   pr f "6,5,C 70,N": "Monthly             Current             Year To             Annual"
+02210   pr f "7,5,C 70,N": "Budget               Month                Date              Budget"
 02220 L2220: input fields mat in3$: monthb,total,total2,annualb conv L2220
 02230   pr newpage
 02240   goto L960

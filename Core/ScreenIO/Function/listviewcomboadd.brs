@@ -9,5 +9,5 @@
     mat f$=("")
     mat f=(0)
     currentField$="FirstField"
-    let LastReadRecord=0
+    lastReadRecord=0
  fnend

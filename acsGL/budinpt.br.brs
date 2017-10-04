@@ -62,7 +62,7 @@
 00530   budgetamt=val(resp$(2)) ! new budget amount
 00540   read #1,using L550,key=k$: mat bm,mat revb
 00550 L550: form pos 249,13*pd 6.2,pos 339,13*pd 6.2
-00560 L560: let o1=sum(bm)
+00560 L560: o1=sum(bm)
 00570   mat bm=(0)
 00580   if method_to_allocate=2 then bm(12)=budgetamt: goto L650 ! allocate all to month 12
 00590   if method_to_allocate=3 then bm(1)=budgetamt: goto L650 ! allocate all to month 1

@@ -12,15 +12,15 @@
 20220   fncreg_read('Last Invoice Number',tmp$, '1704001') : invoice_number=val(tmp$)
 20280   let invoice_number=invoice_number+1
 20420   pr newpage
-20440   pr fields "5,2,cr 43": "Invoice Date (mmddyy):"
-20460   pr fields "4,30,c": "Invoice Date MUST match expiration date of Annual Support contracts!"
-20480   pr fields "6,2,cr 43": "Starting Invoice Number:"
-20500   pr fields "7,2,Cr 43": "Starting Account Number:"
+20440   pr f "5,2,cr 43": "Invoice Date (mmddyy):"
+20460   pr f "4,30,c": "Invoice Date MUST match expiration date of Annual Support contracts!"
+20480   pr f "6,2,cr 43": "Starting Invoice Number:"
+20500   pr f "7,2,Cr 43": "Starting Account Number:"
 20520   let in1$(1)="5,46,Nz 6,U"
 20540   let in1$(2)="6,46,N 12,U"
 20560   let in1$(3)="7,46,N 5,U"
 20600 ! let inv_date=date('mmddyy')
-20620   pr fields "10,30,c 20,,B99": "Cancel (Esc)"
+20620   pr f "10,30,c 20,,B99": "Cancel (Esc)"
 20640 SCREEN1_ASK: ! 
 20650   rinput fields mat in1$: inv_date,invoice_number,starting_acct_no conv SCREEN1_ASK
 20660   if cmdkey=5 or fkey=99 then goto XIT
@@ -34,7 +34,7 @@
 20400   fn_thsht_combine_entries(env$('Q')&"\TMmstr\TIMESHEET.h"&env$('cno'),"TMSHT"&wsid$,"TMSHT-IDX"&wsid$)
 20700   restore #h_clmstr,key>=lpad$(str$(starting_acct_no),5): nokey SCREEN1_ASK
 20710   pr newpage
-20720   pr fields "10,10,Cc 60": "Printing Invoices..."
+20720   pr f "10,10,Cc 60": "Printing Invoices..."
 22000 ! r: process env$('Q')&"\TMmstr\TMWK1"&wsid$&".h"&env$('cno')
 22020   open #h_tmwk1:=fngethandle: 'Name='&env$('Q')&'\TMmstr\TMWK1.h'&env$('cno')&',Replace,RecL=2484,Shr',internal,outin 
 22040   F_TMWK1: form pos 1,c 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2,30*c 12
@@ -101,7 +101,7 @@
 24160   goto ASK_MERGE  ! /r
 26000   ASK_MERGE: ! r:
 26010   pr newpage
-26020   pr fields "10,2,c 70": "All invoices have been printed.  Enter 1 to merge, or 2 to Stop"
+26020   pr f "10,2,c 70": "All invoices have been printed.  Enter 1 to merge, or 2 to Stop"
 26040     L1260: input fields "10,72,n 1,eu,n": num conv L1260
 26060   if num=1 then 
 26080     chain "S:\acsTM\TMMRGINV"
@@ -127,7 +127,7 @@
 32000 def fn_bld_rec(client_id$)
 32020   if inv_line=30 then let fn_print_inv ! pr invoice if more than 20 entries
 32040   if inv_line>29 then pause 
-32060   let spk$=" "&client_id$&cnvrt$("n 2",b8)
+32060   spk$=" "&client_id$&cnvrt$("n 2",b8)
 32080   if inp(7)=2 then goto BLD_REC_L1780 ! always bill modifications
 32100   if inp(7)=23 or inp(7)=11 then goto BLD_XIT ! always no charge
 32120   read #h_support,using F_SUPPORT,key=spk$: cln$,scode,scode$,sdt1,stm$,sup_exp_date,scst nokey BLD_REC_L1780
@@ -156,46 +156,46 @@
 33360 fnend 
 34000 def fn_get_system_list(mat sys_name$)
 34020   mat sys_name$(40)
-34040   let sys_name$(01)="General Ledger"
-34060   let sys_name$(02)="Accounts Receivable"
-34080   let sys_name$(03)="Accounts Payable"
-34100   let sys_name$(04)="Utility Billing"
-34120   let sys_name$(05)="Patient Billing"
-34140   let sys_name$(06)="Property Tax"
-34160   let sys_name$(07)="Accountants G.L."
-34180   let sys_name$(08)="Fixed Asset"
-34200   let sys_name$(09)="Time Management"
-34220   let sys_name$(10)="Cash Register"
-34240   let sys_name$(11)="Point of Sale"
-34260   let sys_name$(12)="Invoicing"
-34280   let sys_name$(13)="Inventory"
-34300   let sys_name$(14)="Payroll"
-34320   let sys_name$(15)="Purchase Order"
-34340   let sys_name$(16)="Municipal Court"
-34360   let sys_name$(17)="Electronic UB 82"
-34380   let sys_name$(18)="Checkbook"
-34400   let sys_name$(19)="Core"
-34420   let sys_name$(20)="Printing"
-34440   let sys_name$(21)="Job Cost"
-34460   let sys_name$(22)=""
-34480   let sys_name$(23)=""
-34500   let sys_name$(24)="Sales Tax"
-34520   let sys_name$(25)=""
-34540   let sys_name$(26)="ITbrain Anti-Malware"
-34560   let sys_name$(27)=""
-34580   let sys_name$(28)=""
-34600   let sys_name$(29)=""
-34620   let sys_name$(30)=""
-34640   let sys_name$(31)=""
-34660   let sys_name$(32)=""
-34680   let sys_name$(33)=""
-34700   let sys_name$(34)=""
-34720   let sys_name$(35)=""
-34740   let sys_name$(36)=""
-34760   let sys_name$(37)=""
-34780   let sys_name$(38)=""
-34800   let sys_name$(39)=""
-34820   let sys_name$(40)=""
+34040   sys_name$(01)="General Ledger"
+34060   sys_name$(02)="Accounts Receivable"
+34080   sys_name$(03)="Accounts Payable"
+34100   sys_name$(04)="Utility Billing"
+34120   sys_name$(05)="Patient Billing"
+34140   sys_name$(06)="Property Tax"
+34160   sys_name$(07)="Accountants G.L."
+34180   sys_name$(08)="Fixed Asset"
+34200   sys_name$(09)="Time Management"
+34220   sys_name$(10)="Cash Register"
+34240   sys_name$(11)="Point of Sale"
+34260   sys_name$(12)="Invoicing"
+34280   sys_name$(13)="Inventory"
+34300   sys_name$(14)="Payroll"
+34320   sys_name$(15)="Purchase Order"
+34340   sys_name$(16)="Municipal Court"
+34360   sys_name$(17)="Electronic UB 82"
+34380   sys_name$(18)="Checkbook"
+34400   sys_name$(19)="Core"
+34420   sys_name$(20)="Printing"
+34440   sys_name$(21)="Job Cost"
+34460   sys_name$(22)=""
+34480   sys_name$(23)=""
+34500   sys_name$(24)="Sales Tax"
+34520   sys_name$(25)=""
+34540   sys_name$(26)="ITbrain Anti-Malware"
+34560   sys_name$(27)=""
+34580   sys_name$(28)=""
+34600   sys_name$(29)=""
+34620   sys_name$(30)=""
+34640   sys_name$(31)=""
+34660   sys_name$(32)=""
+34680   sys_name$(33)=""
+34700   sys_name$(34)=""
+34720   sys_name$(35)=""
+34740   sys_name$(36)=""
+34760   sys_name$(37)=""
+34780   sys_name$(38)=""
+34800   sys_name$(39)=""
+34820   sys_name$(40)=""
 34860 fnend  ! fn_get_system_list
 36000 def fn_thsht_combine_entries(file_from$*256,file_to$*256,file_to_index$*256)
 36020   dim tce_to_inp(7)

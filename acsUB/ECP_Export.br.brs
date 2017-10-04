@@ -26,14 +26,14 @@
 14100     goto XIT
 14120   end if 
 14140 ! 
-14160   fnget_services(mat servicename$) : for servicename_item=1 to udim(mat servicename$) : let servicename$(servicename_item)=trim$(servicename$(servicename_item)) : next servicename_item
+14160   fnget_services(mat servicename$) : for servicename_item=1 to udim(mat servicename$) : servicename$(servicename_item)=trim$(servicename$(servicename_item)) : next servicename_item
 14180   let delim$=chr$(9)
 14200 ! 
 16000   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 16020   open #h_alt_bill:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 16040 ! 
 16060   fnureg_read('ECP Export Filename',exp_filename$)
-16080   if exp_filename$='' then let exp_filename$=os_filename$(env$('userprofile')&'\Desktop')&"\ACS_ECP_Export.txt"
+16080   if exp_filename$='' then exp_filename$=os_filename$(env$('userprofile')&'\Desktop')&"\ACS_ECP_Export.txt"
 16100 ! /r
 20000 MENU1: ! 
 20020   fntos(sn$="ecp_export")
@@ -44,10 +44,10 @@
 20120   fncmdset(2)
 20140   fnacs(sn$,0,mat resp$,ckey)
 20160   if ckey=5 then goto XIT
-20180   let exp_filename$=resp$(1)
+20180   exp_filename$=resp$(1)
 20200 ! 
 20220   open #h_ecp:=fngethandle: "Name="&env$('at')&br_filename$(exp_filename$)&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr MENU1
-20240   let exp_filename$=os_filename$(file$(h_ecp))
+20240   exp_filename$=os_filename$(file$(h_ecp))
 20260   fnureg_write('ECP Export Filename',exp_filename$)
 20280 ! restore #h_customer:
 20370 ! r: main loop

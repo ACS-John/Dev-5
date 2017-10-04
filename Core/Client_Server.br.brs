@@ -6,9 +6,9 @@
 14060     fntxt(2,22,20,128,0,'',0,'localhost for single user, IP Address for internet based access')
 14080     fnureg_read('CS Server Name',server_name$)
 14100     if server_name$='' and env$('user_limit')='1' then 
-14120       let server_name$='localhost'
+14120       server_name$='localhost'
 14140     else if server_name$='' then 
-14160       let server_name$=env$('computername')
+14160       server_name$=env$('computername')
 14180     end if 
 14200     let resp$(1)=server_name$
 14220 ! 
@@ -29,7 +29,7 @@
 15020     fncmdkey("Uninstall Server",3,0,0)
 15040     fncmdkey('&Back',5,0,1)
 15060     fnacs(sn$,0,mat resp$,ck)
-16000     let server_name$=resp$(1) : let fnureg_write('CS Server Name',server_name$)
+16000     server_name$=resp$(1) : let fnureg_write('CS Server Name',server_name$)
 16020     cs_port$=resp$(2) : let fnureg_write('CS Server Port',cs_port$)
 16040     anon_user$=resp$(3) : let fnureg_write('CS Anonymous User',anon_user$)
 16060     anon_pass$=resp$(4) : let fnureg_write('CS Anonymous Password',anon_pass$)
@@ -108,9 +108,9 @@
 42020     dim sia_br_server_executable$*1024
 42040     fnureg_read('CS Server Activate Executable',sia_br_server_executable$)
 42060     if sia_br_server_executable$<>'' then 
-42080       let sia_return=1
+42080       sia_return=1
 42100     else 
-42120       let sia_return=0
+42120       sia_return=0
 42140     end if 
 42160     fn_server_is_active=sia_return
 42180   fnend 
@@ -119,7 +119,7 @@
 60000 XIT: let fnxit
 62000   def fn_setup
 62020     if ~setup then 
-62040       let setup=1
+62040       setup=1
 62060       library 'S:\Core\Library': fntop,fnxit,fnerror,fnbutton_or_disabled,fnacs,fncmdkey,fnbutton,fnCopy,fnureg_read,fnureg_write,fntos,fngetpp,fnstatus,fngethandle,fnlbl,fntxt,fnstatus_close
 62070       library 'S:\Core\Library': fnmakesurepathexists
 62080       on error goto ERTN

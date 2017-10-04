@@ -17,7 +17,7 @@
 00150     pr #102,fields "6,1,Cc 52,N": " This selection will destroy all existing records"
 00160     pr #102,fields "7,1,Cc 52,N": " in the GL Master and Transactions File."
 00170     pr #102,fields "9,2,C 26,N": " Enter ERASE to continue:"
-00180     pr fields "15,35,C 09,B,5": "Exit (F5)"
+00180     pr f "15,35,C 09,B,5": "Exit (F5)"
 00190 L190: input #102,fields "9,29,Cu 5,UT,N": pas$
 00200     if cmdkey=5 then goto XIT
 00210     if pas$><"ERASE" then goto L190

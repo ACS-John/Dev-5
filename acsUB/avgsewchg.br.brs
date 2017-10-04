@@ -11,7 +11,7 @@
 00130   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00142   mat resp$=("")
 00150 SCR1: ! 
-00160   let sn$="avgsewchg-1" !:
+00160   sn$="avgsewchg-1" !:
         fntos(sn$)
 00170   let txt$="Average consumption for billing dates within range" !:
         let mylen=len(txt$)+4: let fnlbl(1,5,txt$,mylen,0)
@@ -33,9 +33,9 @@
 00250 L250: let x=pos(resp$(j),"/",1)
 00260     if x>0 then let resp$(j)(x:x)="": goto L250
 00270   next j
-00280   let sd1=val(resp$(1)) : let sd2=val(resp$(2))
+00280   sd1=val(resp$(1)) : sd2=val(resp$(2))
 00290   if sd1=0 or sd2=0 or sd2<sd1 then goto SCR1
-00292   let swcde=val(resp$(3))
+00292   swcde=val(resp$(3))
 00296   read #ratemst,using L298,key="SW"&lpad$(str$(swcde),2): mc1,mu1,mat rt nokey SCR1
 00298 L298: form pos 55,32*g 10
 00299   close #ratemst: 
@@ -65,7 +65,7 @@
 00510     let g1(j2)=ttg(j)/ttg
 00520 L520: next j
 00530 ! let g1(sz1)=ttg(11)/ttg
-00532   let su1=twu/ttg
+00532   su1=twu/ttg
 00534   gosub SEWER_CALK
 00540   pr #255,using L550: x$,e2$(1:24),g1(1),g1(2),su1,swchg pageoflow NEWPGE
 00550 L550: form pos 1,c 11,c 24,2*n 9.2,n 9,n 9.2,skip 1
@@ -114,12 +114,12 @@
 00950   dim hd1$*400,hd2$*400,g1(11),g2(11)
 00960   dim servicename$(10)*20,services$(10)*2,tax_code$(10)*1,tg(11),usages(3)
 01090 SEWER_CALK: ! calculate standard sewer charge
-01100   let swchg=mc1*max(1,extra14) ! units per meter - sewer (default to one)
+01100   swchg=mc1*max(1,extra14) ! units per meter - sewer (default to one)
 01120   if su1<=mu1 then goto SEWER_COMPLETED else let mu2=mu1
 01150   for j=1 to 10
 01160     if rt(j,1)>su1 then goto SEWER_COMPLETED
 01180     if su1<rt(j,2) then let w1=su1-mu2 else let w1=rt(j,2)-mu2
-01200     let swchg=swchg+round(w1*rt(j,3),2)
+01200     swchg=swchg+round(w1*rt(j,3),2)
 01220     if rt(j,2)>su1 then goto SEWER_COMPLETED
 01240     let mu2=rt(j,2)
 01260   next j

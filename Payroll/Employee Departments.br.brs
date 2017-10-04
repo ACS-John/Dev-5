@@ -2,10 +2,10 @@
 10200 ! Department names for payroll
 10400 ! ______________________________________________________________________
 10600   library 'S:\Core\Library': fntop,fnxit,fnerror,fnhamster
-10800   fntop(program$,cap$="Employee Departments")
+10800   fntop(program$)
 11000   on error goto ERTN
 11200 ! ______________________________________________________________________
-11400   dim cap$*128,mask(1),p$(1)*25,lbl$(1)*40
+11400   dim mask(1),p$(1)*25,lbl$(1)*40
 11600 ! ______________________________________________________________________
 12000   add_count=0
 12200   fn_add('Emp',8, '',0,30)       ! used
@@ -56,10 +56,10 @@
 21200     mat fltyp$(add_count)
 21400     mat sln(add_count)
 21600     mat mask(add_count)
-21800     let lbl$(add_count)=lbl$
-22000     let fln(add_count)=fln
-22200     let fltyp$(add_count)=field_type$
-22400     let sln(add_count)=storage_length
+21800     lbl$(add_count)=lbl$
+22000     fln(add_count)=fln
+22200     fltyp$(add_count)=field_type$
+22400     sln(add_count)=storage_length
 22600     let mask(add_count)=mask
 22800   fnend 
 80000 ! ______________________________________________________________________

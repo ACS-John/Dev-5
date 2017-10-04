@@ -8,9 +8,9 @@
 20120 ! ______________________________________________________________________
 20140     dim getfilepath_ln$*256,sp_return$*256
 20160 ! ______________________________________________________________________
-30000     let longpath$=trim$(longpath$,'"')
+30000     longpath$=trim$(longpath$,'"')
 35000     if trim$(longpath$)='' then 
-35020       let sp_return$=os_filename$('')&'\'
+35020       sp_return$=os_filename$('')&'\'
 38000     else 
 38020       csOption$=''
 38040       if env$('BR_Model')='CLIENT/SERVER' then 
@@ -32,22 +32,22 @@
 40180       linput #tmp: getfilepath_ln$
 40200       if len(rtrm$(getfilepath_ln$))<256 then 
 40220         if getfilepath_ln$='\' then 
-40240           let sp_return$=rtrm$(longpath$)
+40240           sp_return$=rtrm$(longpath$)
 40260         else 
-40280           let sp_return$=longpath$
+40280           sp_return$=longpath$
 40300         end if  ! getfilepath_ln$='\'   /   else 
 45000       else 
 45020         pr 'path returned from shortpath.cmd is longer than 256, but only 256 will fit - origional path is being returned instead.'
 45040         pr '  Please call ACS Support     or'
 45060         pr '  Type GO and press ENTER to continue.'
 45080         pause 
-45100         let sp_return$=rtrm$(getfilepath_ln$)
+45100         sp_return$=rtrm$(getfilepath_ln$)
 45120       end if 
 45140       close #tmp,free: ioerr ignore
 45160     end if 
 45180     goto XIT
 50280 XIT: ! 
-50300     if sp_return$(len(sp_return$)-1:len(sp_return$))='\\' then let sp_return$=sp_return$(1:len(sp_return$)-1)
+50300     if sp_return$(len(sp_return$)-1:len(sp_return$))='\\' then sp_return$=sp_return$(1:len(sp_return$)-1)
 50320     fnshortpath$=sp_return$
 50380   fnend 
 62000   def fn_make_shortpath_cmd(msc_path$*256)

@@ -119,11 +119,11 @@
 01040   let x3=pos(k$(1)," ",x2+1)
 01050   if uprc$(namcde$)="L" then goto L1100
 01060   let first$=k$(1)(1:max(min(15,x1-1),1))
-01070   if x2>0 then let mid$=k$(1)(x1+1:x2-1): let last$=k$(1)(x2+1:len(k$(1)))
-01080   if x2=0 then let last$=k$(1)(x1+1:len(k$(1))): let mid$=""
+01070   if x2>0 then let mid$=k$(1)(x1+1:x2-1): last$=k$(1)(x2+1:len(k$(1)))
+01080   if x2=0 then last$=k$(1)(x1+1:len(k$(1))): let mid$=""
 01090   goto L1140
 01100 L1100: ! last name first
-01110   if x1>0 and k$(1)(x1-1:x1-1)="," then let last$=k$(1)(1:x1-2) else let last$=k$(1)(1:max(x1-1,1))
+01110   if x1>0 and k$(1)(x1-1:x1-1)="," then last$=k$(1)(1:x1-2) else last$=k$(1)(1:max(x1-1,1))
 01120   if x2>0 then let first$=k$(1)(x1+1:x2-1): let mid$=k$(1)(x2+1:len(k$(1)))
 01130   if x2=0 then let first$=k$(1)(x1+1:len(k$(1))): let mid$=""
 01140 L1140: ! pr FIRST$,MID$,LAST$

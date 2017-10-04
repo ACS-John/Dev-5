@@ -18,12 +18,12 @@
 20000   fntos(sn$="testflex")
 20020   fnflexinit1("ubrate",1,1,10,50,mat colhdr$,mat colmask$,1)
 20040   dim source_format$(6)
-20060   let source_format$(1)='ccyymmdd'
-20080   let source_format$(2)='mmddccyy'
-20100   let source_format$(3)='mm/dd/ccyy'
-20120   let source_format$(4)='ccyy/mm/dd'
-20122   let source_format$(5)='mmddyy'
-20124   let source_format$(6)='mm/dd/yy'
+20060   source_format$(1)='ccyymmdd'
+20080   source_format$(2)='mmddccyy'
+20100   source_format$(3)='mm/dd/ccyy'
+20120   source_format$(4)='ccyy/mm/dd'
+20122   source_format$(5)='mmddyy'
+20124   source_format$(6)='mm/dd/yy'
 20140   for x=1 to udim(mat source_format$)
 20160     dim item$(6)*30
 20180     let item$(1)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! date$("mm/dd/ccyy")

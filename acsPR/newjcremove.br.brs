@@ -54,7 +54,7 @@
 00480   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno),internal,output 
 00490   close #13,free: 
 00500   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",SIZE=0,RecL=88",internal,outin,relative 
-00510   let ot4=1
+00510   ot4=1
 00520   write #13,using L530,rec=1: " ","",mat tr," ",ot4
 00530 L530: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 00540 L540: read #1,using "Form POS 1,C 6,C 40,3*C 30,N 6,2*PD 7.2,N 2,C 30,C 12,C 60": jn$,n$,mat a$,mat b,contact$,ph$,email$ eof EOF1
@@ -70,8 +70,8 @@
 00640   adr=ta(1)
 00650   mat ta=(0)
 00660 L660: read #3,using L530,rec=adr: eno$,jno$,mat tr,pd$,nta
-00670   let ot4=ot4+1
-00680   if nta>0 then let ota=ot4+1 else let ota=0
+00670   ot4=ot4+1
+00680   if nta>0 then ota=ot4+1 else ota=0
 00690   write #13,using L530,rec=ot4: eno$,jno$,mat tr,pd$,ota
 00700   rewrite #13,using L710,rec=1: ot4
 00710 L710: form pos 86,pd 3

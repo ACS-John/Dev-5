@@ -13,7 +13,7 @@
 00120   goto XIT
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
-        let open_file_count=0 ! this value is used in the close_file sub routine
+        open_file_count=0 ! this value is used in the close_file sub routine
 00150   open #open_file_count+=1: "Name="&env$('Q')&"\PRmstr\hourclass.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\PRmstr\hourclass-Idx.h"&str$(cno)&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outin,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
@@ -23,8 +23,8 @@
 00210   fncno(cno)
 00220 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
-00230   let lbl$(ic+=1)="Classication Code" !:
-        let lbl$(ic+=1)="Classification Name"
+00230   lbl$(ic+=1)="Classication Code" !:
+        lbl$(ic+=1)="Classification Name"
 00250 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
@@ -33,13 +33,13 @@
         let tln(ic+=1)=30
 00280 ! ** Field Types ** !:
         let ic=0
-00290   let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='C'
+00290   fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='C'
 00310 ! ** Field Storage Lengths ** !:
         let ic=0 !:
         let mmddyy=6 : ccyymmdd=8
-00320   let sln(ic+=1)=5 !:
-        let sln(ic+=1)=30
+00320   sln(ic+=1)=5 !:
+        sln(ic+=1)=30
 00340 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:
@@ -49,8 +49,8 @@
 00370 ! ** Storage Positions ** !:
         ! default to the same as order displayed !:
         let ic=0
-00380   let sp(ic+=1)=1 !:
-        let sp(ic+=1)=6
+00380   sp(ic+=1)=1 !:
+        sp(ic+=1)=6
 00420   return 
 00430 ! ______________________________________________________________________
 00440 HAMSTER: ! 

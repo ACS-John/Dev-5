@@ -5,9 +5,9 @@
 00070 ! 
 00080   dim ta(25,2),fb(25),tr(6),a$*5
 00090   pr newpage
-00100   pr fields "8,25,c 30,r,n": "********  WARNING  ********"
-00110   pr fields "11,10,c 70": "THIS PROGRAM WILL ERASE ALL CLIENT RECORDS FROM THIS FILE."
-00120   pr fields "13,5,C 75": "ENTER PASSWORD TO CONTINUE; ELSE PRESS ENTER TO RETURN TO CLIENT MENU."
+00100   pr f "8,25,c 30,r,n": "********  WARNING  ********"
+00110   pr f "11,10,c 70": "THIS PROGRAM WILL ERASE ALL CLIENT RECORDS FROM THIS FILE."
+00120   pr f "13,5,C 75": "ENTER PASSWORD TO CONTINUE; ELSE PRESS ENTER TO RETURN TO CLIENT MENU."
 00130 L130: input fields "15,10,C 5,IE,n": a$ conv L130
 00140   if uprc$(a$)="THINK" then goto L150 else goto L610
 00150 L150: pr newpage
@@ -57,16 +57,16 @@
 00590   close #99: 
 00600   chain "PROC=PROC."&wsid$
 00610 L610: chain "S:\Time Management\Client Legacy"
-00620 ERTN: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L640
+00620 ERTN: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L640
 00630   goto L680
 00640 L640: pr newpage
-00650   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L670
+00650   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L670
 00660   goto L680
-00670 L670: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00680 L680: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00670 L670: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00680 L680: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00690   input fields "24,60,C 1,N": quitcode$
 00700   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-00710   pr fields "23,3,C 78,N": ""
-00720   pr fields "24,3,C 78,N": ""
+00710   pr f "23,3,C 78,N": ""
+00720   pr f "24,3,C 78,N": ""
 00730   retry 
 00740 XIT: let fnxit

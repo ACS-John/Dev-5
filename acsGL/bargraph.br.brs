@@ -27,7 +27,7 @@
 00260 SCR1: ! 
 00270   let t5=0
 00280   fntos(sn$='CloseYear3') !:
-        let lc=0 : let mylen=20 : let mypos=mylen+2 : let width=50
+        lc=0 : let mylen=20 : let mypos=mylen+2 : let width=50
 00290   fnlbl(lc+=1,1,"Year to Print:",18,1)
 00300   fntxt(lc,mypos,4,0,1,"30",0,"You must choose the year to use printing a chart.") !:
         let resp$(1)=""
@@ -83,7 +83,7 @@
 00770   if maximumdepth<1000 then bottom=-1000 : goto L800
 00780   if maximumdepth<10000 then bottom=-10000 : goto L800
 00790   if maximumdepth<100000 then bottom=-100000 : goto L800
-00800 L800: let spacing=10 : let lyne=10
+00800 L800: spacing=10 : lyne=10
 00810   cnam=(len(trim$(env$('cnam')))/2)+50
 00820   pr #20: 'Call Print.MyFontsize(14)'
 00830   pr #20: 'Call Print.AddText("'&env$('cnam')&'",'&str$(cnam)&','&str$(1)&')'
@@ -146,14 +146,14 @@
           pr #20: 'Call Print.AddText('&txt$&','&str$(1)&','&str$(lyne+=spacing)&')'
 01190     pr #20: 'Call Print.AddLine('&str$(15)&','&str$(lyne)&',200,0)' ! left,up/down,lenght of top line on chart
 01200   next j
-01210   let linezero=(spacing*10)+20
+01210   linezero=(spacing*10)+20
 01220   column=18 ! spacing sideways
 01230   pr #20: 'Call Print.MyFontBold(1)'
 01240   for j=1 to 12
 01250     let homedot=linezero+(profit(j)/x)
 01260 ! never could make the line chart work!! kj
-01270 ! If PROFIT(J+1)<=0 Then Let LINELENGTH=SQR((10*10)+(ABS(PROFIT(J+1)/X)-LINEZERO+HOMEDOT)*(ABS(PROFIT(J+1)/X)-LINEZERO+HOMEDOT)) ! profit
-01280 ! If PROFIT(J+1)>0 Then Let LINELENGTH=SQR((10*10)+(ABS(PROFIT(J+1)/X)+LINEZERO)*(ABS(PROFIT(J+1)/X)+LINEZERO)) ! loss
+01270 ! If PROFIT(J+1)<=0 Then lINELENGTH=SQR((10*10)+(ABS(PROFIT(J+1)/X)-LINEZERO+HOMEDOT)*(ABS(PROFIT(J+1)/X)-LINEZERO+HOMEDOT)) ! profit
+01280 ! If PROFIT(J+1)>0 Then lINELENGTH=SQR((10*10)+(ABS(PROFIT(J+1)/X)+LINEZERO)*(ABS(PROFIT(J+1)/X)+LINEZERO)) ! loss
 01290 ! Let NEXTDOT=LINEZERO+(PROFIT(J+1)/X)-HOMEDOT
 01300 ! \If NEXTDOT=0 Then Let NEXTDOT=1
 01310     if homedot<10 then let homedot=10
@@ -191,7 +191,7 @@
 01590   if file(20)=-1 then 
 01600     open #20: "Name="&env$('Q')&"\GLmstr\linechart"&wsid$&".txt,Replace,RecL=5000",display,output 
 01610     pr #20: 'Call Print.MyOrientation("Portrait")'
-01620     let lyne=margin ! starting of 1st line
+01620     lyne=margin ! starting of 1st line
 01630     column1=16 !:
           column2=103 !:
           column3=153

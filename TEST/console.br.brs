@@ -13,7 +13,7 @@
 00112   fnconsole ! should turn console off
 00113   fnconsole ! should turn console off
 00120 ! ***********************************************************************
-00130   let sleep(5)
+00130   sleep(5)
 00140   pr newpage
 00150   fnconsole(1)
 00151   fnconsole(1)

@@ -24,7 +24,7 @@
           let x=len(at$(j)) : let y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
-00150   let linelength=62
+00150   linelength=62
 00160 ! 
 00170 ! let fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00180 ! Gosub BULKSORT ! want printed in alphabetic order
@@ -35,7 +35,7 @@
 00230 SCREEN1: ! 
 00240   a$="" : let prtbkno=0
 00250   fntos(sn$="UBPrtBl1-1") !:
-        let pf=33 : let ll=30 !:
+        let pf=33 : ll=30 !:
         let respc=0
 00260   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00270   fntxt(3,pf,8,8,1,"1",0,tt$) !:
@@ -82,10 +82,10 @@
 00450   if resp$(7)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(7))
-00460   if resp$(8)="True" then let sl1=1: let z$="" else let sl1=0
+00460   if resp$(8)="True" then sl1=1: let z$="" else sl1=0
 00470   if trim$(a$)<>"" then read #2,using L500,key=a$: z$,route,sequence nokey SCREEN1 !:
           let holdz$=z$: begin=1 !:
-          let st1=1
+          st1=1
 00480   let newd3=val(resp$(9))
 00490   let newd2=val(resp$(10))
 00500 L500: form pos 1,c 10,pos 1741,n 2,n 7
@@ -112,22 +112,22 @@
 00710   if prtbkno><route then goto L610
 00720 L720: if f><d1 then goto L600
 00730   if st1=0 then goto READALTADR
-00740 ! If ST1$=Z$ Then Let ST1=0 Else Goto 560
+00740 ! If ST1$=Z$ Then sT1=0 Else Goto 560
 00750 READALTADR: ! 
 00760 ! read alternate billing address
 00770   read #3,using L780,key=z$: mat ba$ nokey L850
 00780 L780: form pos 11,4*c 30
-00790   let e1=0 : mat pe$=("")
+00790   e1=0 : mat pe$=("")
 00800   for j=1 to 4
 00810     if rtrm$(ba$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : let pe$(e1)=ba$(j)
 00820   next j
 00830   goto L1010
 00840 ! ______________________________________________________________________
-00850 L850: let e1=0 : mat pe$=("")
+00850 L850: e1=0 : mat pe$=("")
 00860   for j=2 to 4
 00870     if rtrm$(e$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : let pe$(e1)=e$(j)
 00880   next j
 00890   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 00900   goto L1010
@@ -150,7 +150,7 @@
 01090   goto L600
 01100 ! ______________________________________________________________________
 01110 SCREEN3: ! 
-01120   let sn$ = "UBPrtBl1-2" !:
+01120   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
 01130   let txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
@@ -176,7 +176,7 @@
 01260 SORT1: ! SELECT & SORT
 01270   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1520
 01280   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
-01290   let s5=1
+01290   s5=1
 01300   if prtbkno=0 then let routekey$="" else !:
           let routekey$=cnvrt$("N 2",prtbkno)&"       " !:
           ! key off first record in route (route # no longer part of customer #)
@@ -235,7 +235,7 @@
 01740 ! ______________________________________________________________________
 01750 VBOPENPRINT: ! 
 01770   fnPa_open("Landscape")
-01800   let lyne=3
+01800   lyne=3
 01830   return 
 01840 ! ______________________________________________________________________
 01850 VBPRINT: ! 
@@ -332,7 +332,7 @@
 02470   pr #20: 'Call Print.AddText("Phone: 985-839-3569",'&str$(xmargin+1)&','&str$(lyne*31+ymargin)&')'
 02480 ! pr #20: 'Call Print.AddText("Re-connect fee $??.00",'&STR$(XMARGIN+1)&','&STR$(LYNE*28+YMARGIN)&')'
 02490 ! ______________________________________________________________________
-02500   let special=28
+02500   special=28
 02510 ! ______________________________________________________________________
 02520   pr #20: 'Call Print.MyFontSize(7)'
 02530   pr #20: 'Call Print.AddLine('&str$(xmargin+112)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'

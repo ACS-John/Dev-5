@@ -26,7 +26,7 @@
 00230 L230: restore #1: 
 00240 ! ______________________________________________________________________
 00250 SCR1: ! 
-00260   let sn$="Means-1" !:
+00260   sn$="Means-1" !:
         fntos(sn$) !:
         let mylen=62 : let mypos=50
 00270   let txt$="Billing Dates for Months to be Considered:" !:
@@ -51,7 +51,7 @@
           goto SCR1
 00370 ! ______________________________________________________________________
 00380 SCR2: ! 
-00390   let sn$="Means-2" !:
+00390   sn$="Means-2" !:
         fntos(sn$)
 00400   let txt$="Sewer code to analyze:" !:
         fnlbl(1,1,txt$,22,1)
@@ -59,7 +59,7 @@
         let resp$(1)=""
 00420   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
 00430   if ckey=5 then goto SCR1
-00440   let sewcode=val(resp$(1)) conv SCR2
+00440   sewcode=val(resp$(1)) conv SCR2
 00450   if sewcode=0 then !:
           mat message$(1): let mytype=0 !:
           let message$(1)="You must enter at least one date!" !:

@@ -26,8 +26,8 @@
 00220   let pors=1
 00230   let mp1=69
 00240   if fnps=2 then let mp1=mp1+3
-00250   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
-00260   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
+00250   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00260   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
 00270   form c 9,skip 0
 00280 L280: form pos mp1,pd 3,pos 81,41*pd 6.2
 00290   form c 7,skip 0
@@ -35,8 +35,8 @@
 00310   let pas=1 : open #4: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('temp')&"\IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outin,keyed 
 00320   if actpd>0 and actpd<14 then goto L380
 00330   pr newpage
-00340   pr fields "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
-00350   pr fields "12,2,C 70,N": "USE THE SELECT DATE ROUTINE TO ENTER THIS INFORMATION"
+00340   pr f "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
+00350   pr f "12,2,C 70,N": "USE THE SELECT DATE ROUTINE TO ENTER THIS INFORMATION"
 00360   input fields "23,2,C 1,E,N": pause$
 00370   goto XIT
 00380 L380: open #1: fl1$,internal,input,keyed 
@@ -120,7 +120,7 @@
 01130   if total><0 or total3><0 then goto L1150
 01140   if ls+ds+ul>0 then goto L1150 else goto L610
 01150 L1150: if percent=0 then goto L1320
-01160   let sp2=31-sp-1
+01160   sp2=31-sp-1
 01170   if pas=2 then gosub PAS2
 01180   if percent1=0 then let pdpct=0 else let pdpct=total/percent1*100
 01190   if percent2=0 then let ytdpct=0 else let ytdpct=total2/percent2*100
@@ -169,7 +169,7 @@
 01590   if pppd>999.99 then let pppd=999.99
 01600   if ppyear<-999.99 then let ppyear=-999.99
 01610   if ppyear>999.99 then let ppyear=999.99
-01620   let sp2=31-sp-1
+01620   sp2=31-sp-1
 01625   if ul=1 then pr #255,using L1311: d$(1:sp2),dollar$,"{\ul ",accum1,"}",pdpct,percent$,dollar$,"{\ul ",accum2,"}",ytdpct,percent$,dollar$,"{\ul ",accum3,"}",pppd,percent$,dollar$,"{\ul ",accum4,"}",ppyear,percent$ pageoflow L2040 : goto L1640
 01630   pr #255,using L1310: d$(1:sp2),dollar$,accum1,pdpct,percent$,dollar$,accum2,ytdpct,percent$,dollar$,accum3,pppd,percent$,dollar$,accum4,ppyear,percent$ pageoflow L2040
 01640 L1640: if pas=1 then let tp1=accum1: let tp2=accum2 : let tp3=accum3 : let tp4=accum4 : gosub PAS1
@@ -179,7 +179,7 @@
 01670   gosub L1880
 01680   goto L600
 01690 L1690: if te$="R" then let report$=d$
-01700   if te$="S" then let secondr$=d$
+01700   if te$="S" then secondr$=d$
 01710   gosub L1880
 01720   goto L600
 01730 L1730: if foot1=1 then goto L1780
@@ -205,8 +205,8 @@
 01930   goto L2030
 01940 L1940: let fnpglen(pglen)
 01950 ! If PGLEN<>42 Then Let PGLEN=58
-01960   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01970 ! If PGLEN=42 Then Let SK=SK+1
+01960   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01970 ! If PGLEN=42 Then sK=SK+1
 01980   pr #255,using L1990: rtrm$(foot$),"Page "&str$(pt1)
 01990 L1990: form skip sk,pos tabnote,c fl,pos 120,c 8,skip 1
 02000   if eofcode=1 then goto L2030
@@ -250,7 +250,7 @@
 02380   let percent3=0
 02390   let percent4=0
 02400   goto L2490
-02410 L2410: let eofcode=1
+02410 L2410: eofcode=1
 02420   gosub L1940
 02430 ! 
 02440 ! 

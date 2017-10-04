@@ -16,7 +16,7 @@
         read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2,pos 261,10*n 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto,mat apply !:
         close #20: 
 00230   for j=1 to 10
-00240     let servicename$(j)=lpad$(rtrm$(servicename$(j)(1:8)),8)
+00240     servicename$(j)=lpad$(rtrm$(servicename$(j)(1:8)),8)
 00250   next j
 00260   gosub NWPGE
 00270 L270: read #1,using L280: z$,mat a,bal,mat g,mat gb eof DONE
@@ -88,7 +88,7 @@
 00920 ! pr #255: "Rewrote next record "&CAUSE$
 00930   goto L800
 00940 SCR1: ! 
-00950   let sn$="balbrkfix" !:
+00950   sn$="balbrkfix" !:
         fntos(sn$) !:
         let mylen=62 : let mypos=50
 00960   let txt$="Billing Dates for last three months:" !:

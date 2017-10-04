@@ -28,7 +28,7 @@
 00250   goto READ_COLLECT
 00260 ! ______________________________________________________________________
 00270 ASKDATE: ! 
-00280   let sn$="ubcoldel" !:
+00280   sn$="ubcoldel" !:
         fntos(sn$) !:
         let mylen=37 !:
         let mypos=mylen+2 !:
@@ -39,8 +39,8 @@
 00310   fncmdset(2)
 00320   fnacs(sn$,win,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
-00340   let ld1=val(resp$(1)) conv ASKDATE !:
-        let ld1=fncd2(ld1) !:
+00340   ld1=val(resp$(1)) conv ASKDATE !:
+        ld1=fncd2(ld1) !:
         cutoff$=str$(ld1)
 00350   return 
 00360 ! ______________________________________________________________________

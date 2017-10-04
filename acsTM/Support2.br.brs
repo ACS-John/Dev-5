@@ -11,7 +11,7 @@
 01300   goto XIT
 01400 ! ______________________________________________________________________
 01500 OPEN_FILE: ! 
-01600   let open_file_count=0 ! this value is used in the close_file sub routine
+01600   open_file_count=0 ! this value is used in the close_file sub routine
 01700   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outin,keyed 
 01800 return 
 01900 ! ______________________________________________________________________
@@ -30,14 +30,14 @@
 35020     let mask_pointtwo=32 : let mask_number=30
 35040     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 35060     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
-35080     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
+35080     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 35100 ! 
 35120     dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40 ! SP(1) - not used
 35140     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
 35160     let mask_pointtwo=32 : let mask_number=30
 35180     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 35200     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
-35220     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
+35220     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 35240     fnhamster_field_reset
 35260  !
 35280  !
@@ -82,7 +82,7 @@
 55240 ! old program !    goto XIT
 55260 ! old program !  ! ______________________________________________________________________
 55280 ! old program !  OPEN_FILE: ! 
-55300 ! old program !    let open_file_count=0 ! this value is used in the close_file sub routine
+55300 ! old program !    open_file_count=0 ! this value is used in the close_file sub routine
 55320 ! old program !    open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\Support.h420,Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h420,Use,RecL=246,KPs=1/7,KLn=6/2,Shr",internal,outin,keyed 
 55340 ! old program !    return 
 55360 ! old program !  ! ______________________________________________________________________
@@ -91,17 +91,17 @@
 55420 ! old program !  BUILD_LAYOUT: ! 
 55440 ! old program !  ! ** Field Labels    **
 55460 ! old program !    let ic=0 ! temporary Item Counter
-55480 ! old program !    let lbl$(ic+=1)="Client ID"
-55500 ! old program !    let lbl$(ic+=1)="Sys#"
-55520 ! old program !    let lbl$(ic+=1)="System ID"
-55540 ! old program !    let lbl$(ic+=1)="Starting Date"
-55560 ! old program !    let lbl$(ic+=1)="Time Frame"
-55580 ! old program !    let lbl$(ic+=1)="Ending Date"
-55600 ! old program !    let lbl$(ic+=1)="Cost to User"
-55620 ! old program !    let lbl$(ic+=1)="Name"
-55640 ! old program !    let lbl$(ic+=1)="Contact (1)"
-55660 ! old program !    let lbl$(ic+=1)="Contact (2)"
-55680 ! old program !    let lbl$(ic+=1)="Contact (3)"
+55480 ! old program !    lbl$(ic+=1)="Client ID"
+55500 ! old program !    lbl$(ic+=1)="Sys#"
+55520 ! old program !    lbl$(ic+=1)="System ID"
+55540 ! old program !    lbl$(ic+=1)="Starting Date"
+55560 ! old program !    lbl$(ic+=1)="Time Frame"
+55580 ! old program !    lbl$(ic+=1)="Ending Date"
+55600 ! old program !    lbl$(ic+=1)="Cost to User"
+55620 ! old program !    lbl$(ic+=1)="Name"
+55640 ! old program !    lbl$(ic+=1)="Contact (1)"
+55660 ! old program !    lbl$(ic+=1)="Contact (2)"
+55680 ! old program !    lbl$(ic+=1)="Contact (3)"
 55700 ! old program !  ! ** Text Box / Field Display   Lengths   **
 55720 ! old program !    let ic=0 ! temporary Item Counter
 55740 ! old program !    let mmddyy=8
@@ -119,31 +119,31 @@
 55980 ! old program !    let tln(ic+=1)=50
 56000 ! old program !  ! ** Field Types **
 56020 ! old program !    let ic=0
-56040 ! old program !    let fltyp$(ic+=1)='N'
-56060 ! old program !    let fltyp$(ic+=1)='N'
-56080 ! old program !    let fltyp$(ic+=1)='C'
-56100 ! old program !    let fltyp$(ic+=1)='N'
-56120 ! old program !    let fltyp$(ic+=1)='C'
-56140 ! old program !    let fltyp$(ic+=1)='N'
-56160 ! old program !    let fltyp$(ic+=1)='N'
-56180 ! old program !    let fltyp$(ic+=1)='C'
-56200 ! old program !    let fltyp$(ic+=1)='C'
-56220 ! old program !    let fltyp$(ic+=1)='C'
-56240 ! old program !    let fltyp$(ic+=1)='C'
+56040 ! old program !    fltyp$(ic+=1)='N'
+56060 ! old program !    fltyp$(ic+=1)='N'
+56080 ! old program !    fltyp$(ic+=1)='C'
+56100 ! old program !    fltyp$(ic+=1)='N'
+56120 ! old program !    fltyp$(ic+=1)='C'
+56140 ! old program !    fltyp$(ic+=1)='N'
+56160 ! old program !    fltyp$(ic+=1)='N'
+56180 ! old program !    fltyp$(ic+=1)='C'
+56200 ! old program !    fltyp$(ic+=1)='C'
+56220 ! old program !    fltyp$(ic+=1)='C'
+56240 ! old program !    fltyp$(ic+=1)='C'
 56260 ! old program !  ! ** Field Storage Lengths **
 56280 ! old program !    let ic=0
 56300 ! old program !    let mmddyy=6 : ccyymmdd=8
-56320 ! old program !    let sln(ic+=1)=6
-56340 ! old program !    let sln(ic+=1)=2
-56360 ! old program !    let sln(ic+=1)=2
-56380 ! old program !    let sln(ic+=1)=ccyymmdd
-56400 ! old program !    let sln(ic+=1)=2
-56420 ! old program !    let sln(ic+=1)=ccyymmdd
-56440 ! old program !    let sln(ic+=1)=10.2
-56460 ! old program !    let sln(ic+=1)=50
-56480 ! old program !    let sln(ic+=1)=50
-56500 ! old program !    let sln(ic+=1)=50
-56520 ! old program !    let sln(ic+=1)=50
+56320 ! old program !    sln(ic+=1)=6
+56340 ! old program !    sln(ic+=1)=2
+56360 ! old program !    sln(ic+=1)=2
+56380 ! old program !    sln(ic+=1)=ccyymmdd
+56400 ! old program !    sln(ic+=1)=2
+56420 ! old program !    sln(ic+=1)=ccyymmdd
+56440 ! old program !    sln(ic+=1)=10.2
+56460 ! old program !    sln(ic+=1)=50
+56480 ! old program !    sln(ic+=1)=50
+56500 ! old program !    sln(ic+=1)=50
+56520 ! old program !    sln(ic+=1)=50
 56540 ! old program !  ! ** Field Masks **
 56560 ! old program !    let ic=0
 56580 ! old program !    let pointtwo=32 : let number=30
@@ -166,7 +166,7 @@
 56920 ! old program !  ! C$(CL,5)=Description Position : C$(CL,6)=Description Length
 56940 ! old program !  ! C$(CL,7)=Index File
 56960 ! old program !  ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
-56980 ! old program !    let limit_to_list$='1'
+56980 ! old program !    limit_to_list$='1'
 57000 ! old program !    cl=1 : c$(cl,1)='ComboF'
 57020 ! old program !    c$(cl,2)=env$('Q')&"\TMmstr\Clmstr.h420"
 57040 ! old program !    c$(cl,3)='1' : c$(cl,4)='5'

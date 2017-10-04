@@ -29,8 +29,8 @@
 00280   gosub L2510
 00290   let pors=1
 00300   if fnps=2 then let mp1=72 else let mp1=69
-00310   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
-00320   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
+00310   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00320   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
 00330   form c 9,skip 0
 00340 L340: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 00350   form c 7,skip 0
@@ -110,7 +110,7 @@
 01070 L1070: if ds=1 then let dollar$="$" else let dollar$=" "
 01080   if sum(total)><0 or sum(total2)><0 then goto L1100
 01090   if ls+ul+ds+ic>0 then goto L1100 else goto L560
-01100 L1100: let sp2=49-sp-1
+01100 L1100: sp2=49-sp-1
 01110 ! pr #255,USING 1070: D$(1:SP2),DOLLAR$,TOTAL(FUND),DOLLAR$,TOTAL2(FUND) PAGEOFLOW 1560
 01120   let dolcol$=""
 01130   if monthly=2 then mat total=total2 ! substitute ytd figures if ytd stmt
@@ -137,14 +137,14 @@
 01340     if monthly=2 then accum1=accum2
 01350     accumcol$=accumcol$&" "&dollar$&cnvrt$("pic(-,---,---.##)",accum1)
 01360   next j
-01370   let sp2=49-sp-1
+01370   sp2=49-sp-1
 01380   pr #255,using L1180: d$(1:sp2),rtrm$(accumcol$) pageoflow L1790
 01390   gosub L1540
 01400   gosub L1810
 01410   gosub L1640
 01420   goto L560
 01430 L1430: if te$="R" then let report$=d$
-01440   if te$="S" then let secondr$=d$
+01440   if te$="S" then secondr$=d$
 01450   gosub L1640
 01460   goto L560
 01470 L1470: if foot1=1 then goto L1520
@@ -171,8 +171,8 @@
 01680   goto L1780
 01690 L1690: let fnpglen(pglen)
 01700 ! If PGLEN<>42 Then Let PGLEN=58
-01710   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01720 ! If PGLEN=42 Then Let SK=SK+1
+01710   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01720 ! If PGLEN=42 Then sK=SK+1
 01730   pr #255,using L1740: rtrm$(foot$)
 01740 L1740: form skip sk,pos tabnote,c fl,skip 1
 01750   if eofcode=1 then goto L1780
@@ -217,7 +217,7 @@
 02140 L2140: form pos 49,c big,skip 2
 02150   return 
 02160 ! ______________________________________________________________________
-02170 L2170: let eofcode=1
+02170 L2170: eofcode=1
 02180   gosub L1690
 02190 ! 
 02200 ! 

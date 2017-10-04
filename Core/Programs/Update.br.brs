@@ -8,7 +8,7 @@
 10700   dim return_name$*256
 10800   dim line$*256
 10900   batch_name$=env$('temp')&'\update'&session$&'.cmd'
-11000   let script_name$=env$('temp')&'\ftp_script'&session$&'.txt'
+11000   script_name$=env$('temp')&'\ftp_script'&session$&'.txt'
 11100   let return_name$=env$('temp')&'\return'&session$&'.txt'
 11110   let grace_days=45
 11120   fnclient_support(mat system_id$,mat system_support_end_date,mat on_support,grace_days)
@@ -27,7 +27,7 @@
 20180 XIT: let fnxit
 20200 ! /r
 25000   def fn_setup
-25020     let setup=1
+25020     setup=1
 25040     library 'S:\Core\Library': fnreg_read,fnreg_write,fnmsgbox,fntop,fnxit,fngethandle,fnclient_has_on_support_list,fnSystemName$,fnclient_support,fnerror
 25050     on error goto ERTN
 25060   fnend
@@ -41,7 +41,7 @@
 26140 ! </updateable region: ertn>
 30000 ! def fn_acs_update_date$*40(;setit$*40)
 30020 !   dim aud_return$*40
-30040 !   if setit$='(default)' then let setit$=date$('ccyy/mm/dd')&' - '&time$
+30040 !   if setit$='(default)' then setit$=date$('ccyy/mm/dd')&' - '&time$
 30060 !   if setit$<>'' then
 30080 !     aud_return$=setit$
 30100 !     fnreg_write('ACS.Update.Date',setit$)
@@ -171,13 +171,13 @@
 44060       let u_which=srch(mat system_id$,client_has$(client_has_item))
 44080       if u_which>0 then
 44100         if days(date('ccyymmdd'),'ccyymmdd')<=days(system_support_end_date(u_which),'ccyymmdd') then
-44120           let support_text$='      active until '
-44140           let support_text$(inf:inf)=cnvrt$('pic(####/##/##)',system_support_end_date(u_which))
+44120           support_text$='      active until '
+44140           support_text$(inf:inf)=cnvrt$('pic(####/##/##)',system_support_end_date(u_which))
 44160         else
-44180           let support_text$='      Support expired on '
-44200           let support_text$(inf:inf)=cnvrt$('pic(####/##/##)',system_support_end_date(u_which))
+44180           support_text$='      Support expired on '
+44200           support_text$(inf:inf)=cnvrt$('pic(####/##/##)',system_support_end_date(u_which))
 44220           if on_support(u_which) then
-44240             let support_text$(inf:inf)=' but update is allowed during '&str$(grace_days)&' day grace period.'
+44240             support_text$(inf:inf)=' but update is allowed during '&str$(grace_days)&' day grace period.'
 44250           end if
 44260         end if
 44280         fn_status(support_text$)
@@ -231,7 +231,7 @@
 51160       next ch_item
 51180       fn_status('Closing program and launching Core update.')
 51200       fn_execute('-c',env$('temp')&'\ACS-5-Update-CO.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS')
-51220       let sleep(4)
+51220       sleep(4)
 51240       execute 'free '&batch_name$
 51260       execute 'free '&script_name$
 51280       execute 'free '&return_name$
@@ -250,7 +250,7 @@
 54000   def fn_acs_installation_path$*256(; longFileName)
 54020     dim acs_installation_path$*256
 54040 !   if ~setup_acs_installation_path then
-54060 !     let setup_acs_installation_path=1
+54060 !     setup_acs_installation_path=1
 54080 !     fnIniOpen('acs.ini')
 54100 !     acs_installation_path$=fnIniRead$('Core','InstallPath')
 54120 !     if acs_installation_path$='' then
@@ -298,19 +298,19 @@
 79040   fnend
 80000   def fn_status(text$*512)
 80020     if ~status_initialized or file$(h_status_win)='' then
-80040       let status_initialized=1
+80040       status_initialized=1
 80060       dim headings$(1)*40,widths(1),forms$(1)*40,status_gridspec$*80
 80080       open #h_status_win:=fngethandle: 'SRow=1,SCol=1,Rows=20,Cols=80,Parent=None,Caption=Status',display,output
-80100       let status_gridspec$='#'&str$(h_status_win)&',1,1,List 20/80'
+80100       status_gridspec$='#'&str$(h_status_win)&',1,1,List 20/80'
 80120       let headings$(1)='Status'
 80140       let widths(1)=80
 80160       let forms$(1)='C 512'
-80180       pr fields status_gridspec$&",headers,[gridheaders]": (mat headings$,mat widths, mat forms$)
+80180       pr f status_gridspec$&",headers,[gridheaders]": (mat headings$,mat widths, mat forms$)
 80200     end if
 80220     if env$('ACSDeveloper')<>'' then
-80240       pr fields status_gridspec$&",+": text$(1:512)
+80240       pr f status_gridspec$&",+": text$(1:512)
 80260     else
-80280       pr fields status_gridspec$&",+": text$(1:512) error ignore
+80280       pr f status_gridspec$&",+": text$(1:512) error ignore
 80300     end if
 80320 !
 80340     input fields status_gridspec$&",rowcnt,all,nowait": grid_rows
@@ -345,5 +345,5 @@
 87080   def fn_status_close
 87100     close #h_status_win: ioerr ignore
 87120     let h_status_win=0
-87140     let status_initialized=0
+87140     status_initialized=0
 87160   fnend

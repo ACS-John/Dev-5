@@ -14,7 +14,7 @@
 00130   gosub BUD1
 00140   if bud1=0 then goto XIT
 00150 ! ______________________________________________________________________
-00160   let sn$="RmBudget" !:
+00160   sn$="RmBudget" !:
         fntos(sn$)
 00170   let txt$="All paid budget records with a date prior" !:
         fnlbl(1,1,txt$,44,2)
@@ -43,7 +43,7 @@
         let d2=fndate_mmddyy_to_ccyymmdd(d2) !:
         if d1<d2 then goto L440
 00370 L370: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-00380   let lr2=lrec(2)+1
+00380   lr2=lrec(2)+1
 00390   write #2,using L370,rec=lr2: z$,mat bt1,0
 00400   if tr(2)>0 then rewrite #2,using L410,rec=tr(2): lr2
 00410 L410: form pos 147,pd 3

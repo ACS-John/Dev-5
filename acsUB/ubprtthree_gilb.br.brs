@@ -27,7 +27,7 @@
           let x=len(at$(j)) : let y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
-00180   let linelength=62
+00180   linelength=62
 00190 ! 
 00200   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00210   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
@@ -42,7 +42,7 @@
 00290 SCREEN1: ! 
 00300   a$="" : let prtbkno=0
 00310   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : let ll=24 !:
+        let pf=26 : ll=24 !:
         let respc=0
 00320   fnlbl(1,1,"Current Reading Date:",ll,1)
 00330   fntxt(1,pf,8,8,1,"1",0,tt$) !:
@@ -91,10 +91,10 @@
 00530   if resp$(9)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(9))
-00540   if resp$(10)="True" then let sl1=1: let z$="" else let sl1=0
+00540   if resp$(10)="True" then sl1=1: let z$="" else sl1=0
 00550   if trim$(a$)<>"" then read #2,using L560,key=a$: z$,route,sequence nokey SCREEN1 !:
           let holdz$=z$: begin=1 !:
-          let st1=1
+          st1=1
 00560 L560: form pos 1,c 10,pos 1741,n 2,n 7
 00570   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00580   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
@@ -111,27 +111,27 @@
 00680   begin=0 ! cancel starting account
 00690 L690: form pos 1,c 12,c 10
 00700   read #1,using L720,key=z$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,dr$,bc,da$ nokey L660
-00710   if estimatedate>0 then let est=1 else let est=0
+00710   if estimatedate>0 then est=1 else est=0
 00720 L720: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1942,c 12,pos 1864,c 30,pos 1831,n 9,pos 1821,n 1,pos 1712,c 1,c 9,n 2,c 17
 00730   if prtbkno=0 then goto L750
 00740   if prtbkno><route then goto RELEASE_PRINT
 00750 L750: if f><d1 then goto L650
-00760 L760: let e1=0 : mat pe$=("")
+00760 L760: e1=0 : mat pe$=("")
 00770   for j=2 to 4
 00780     if rtrm$(e$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : let pe$(e1)=e$(j)
 00790   next j
 00800   if st1=0 then goto READALTADR
-00810 ! If ST1$=Z$ Then Let ST1=0 Else Goto 560
+00810 ! If ST1$=Z$ Then sT1=0 Else Goto 560
 00820 READALTADR: ! 
 00830 ! read alternate billing address
 00840   read #3,using L860,key=z$: mat ba$ nokey L950
 00850   if trim$(ba$(1))="" and trim$(ba$(2))="" and trim$(ba$(3))="" and trim$(ba$(4))="" then goto L950
 00860 L860: form pos 11,4*c 30
-00870   let e1=0 : mat pe$=("")
+00870   e1=0 : mat pe$=("")
 00880   for j=1 to 4
 00890     if rtrm$(ba$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : let pe$(e1)=ba$(j)
 00900   next j
 00910   if trim$(pe$(2))="" then let pe$(2)=pe$(3): let pe$(3)=""
 00920   if trim$(pe$(3))="" then let pe$(3)=pe$(4): let pe$(4)=""
@@ -162,7 +162,7 @@
 01180   goto L650
 01190 ! ______________________________________________________________________
 01200 SCREEN3: ! 
-01210   let sn$ = "UBPrtBl1-2" !:
+01210   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
 01220   let txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
@@ -184,7 +184,7 @@
 01320 SORT1: ! SELECT & SORT
 01330   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1580
 01340   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=22",internal,output 
-01350   let s5=1
+01350   s5=1
 01360   if prtbkno=0 then let routekey$="" else !:
           let routekey$=cnvrt$("N 2",prtbkno)&"       " !:
           ! key off first record in route (route # no longer part of customer #)
@@ -249,7 +249,7 @@
 01950   pr #20: 'Call Print.MyFontSize(10)'
 01960   let txt$="FROM "&cnvrt$("pic(zz/zz)",int(d2x*.01))&"  TO "&cnvrt$("pic(zz/zz)",int(d3x*.01))&" "&cnvrt$("pic(##/##/##)",d1) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(6)&','&str$(lyne+=13)&')'
-01970   let lyne+=14
+01970   lyne+=14
 01980   if g(1)>0 then let de$=service$(1) else let de$="  "
 01990   let txt$=de$& cnvrt$("pic(zzzzzzzzzz)",d(1))&cnvrt$("pic(zzzzzzzz)",d(3))&cnvrt$("pic(------.--)",g(1)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(6)&','&str$(lyne+=3.5)&')'
@@ -280,9 +280,9 @@
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(6)&','&str$(lyne+=3.5)&')'
 02165   fnbarcode(z$,86,lyne)
 02170 L2170: ! 
-02180   if lyne<90 then let lyne=50: goto L2210 ! allow for three forms
-02190   if lyne<=180 then let lyne=140: goto L2210
-02200   if lyne>180 then let lyne=230
+02180   if lyne<90 then lyne=50: goto L2210 ! allow for three forms
+02190   if lyne<=180 then lyne=140: goto L2210
+02200   if lyne>180 then lyne=230
 02210 L2210: if pb>0 then let de2$="Prior Balance" else let de2$="             "
 02220   let txt$=de2$&"        "&cnvrt$("pic(-----.--)",pb)&"      "&z$ !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(6)&','&str$(lyne)&')'
@@ -308,9 +308,9 @@
 02350   if lyne>180 and lyne<270 then let updown=10
 02360   if trim$(cr$)<>"" then pr #20: 'Call Print.DisplayBarCode('&str$(3)&','&str$(updown)&',"'&cr$&'")'
 02370   bills+=1
-02380   if int(bills/3)=bills/3 then let fnpa_newpage: let lyne=0: goto L2410
-02390   if lyne<90 then let lyne=90 : goto L2410
-02400   if lyne>90 then let lyne=180 : goto L2410
+02380   if int(bills/3)=bills/3 then let fnpa_newpage: lyne=0: goto L2410
+02390   if lyne<90 then lyne=90 : goto L2410
+02400   if lyne>90 then lyne=180 : goto L2410
 02410 L2410: return 
 02420 BULKSORT: ! bulk sort order
 02430   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order

@@ -44,14 +44,14 @@
 36020     let prd=d1=val(resp$(1))
 36040     let d1$=resp$(2)
 36080     beg_date=val(resp$(3)) 
-36100     let end_date=val(resp$(4)) 
+36100     end_date=val(resp$(4)) 
 36120     let qtr1=val(resp$(5)) 
 36140     let qtr2=val(resp$(6)) 
 36160     let qtr3=val(resp$(7)) 
 36180     let qtr4=val(resp$(8))
 36200     let qtr5=val(resp$(8)(1:4))*10000+1231
 36220     begin_year=val(resp$(8)(1:4))*10000+0101
-36240     let end_year=val(resp$(8)(1:4))*10000+1231
+36240     end_year=val(resp$(8)(1:4))*10000+1231
 36260     fn_putPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
 36280   end if
 36300 fnend

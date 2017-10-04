@@ -23,7 +23,7 @@
 00260 L260: form pos 1,n 8,c 30,pos 99,c 11
 00270   a=pos (rtrm$(em$)," ",1)
 00280   b=pos (rtrm$(em$)," ",a+1)
-00290   let em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
+00290   em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
 00300   let reg_earnings=deferred_comp_wh=deferred_comp_match=0
 00310   goto L560
 00320 L320: if deferred_comp_wh=0 and deferred_comp_match=0 then goto L360 ! skip if no deferred comp
@@ -94,13 +94,13 @@
 00870   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 00880   for j=1 to 20
-00890     if resp$(j)="True" then let sel_ded(j)=1
+00890     if resp$(j)="True" then sel_ded(j)=1
 00900   next j
 00910   for j=1 to 20
-00920     if resp$(j+20)="True" then let sel_pen(j)=1
+00920     if resp$(j+20)="True" then sel_pen(j)=1
 00930   next j
 00940   beg_date=val(resp$(41)) !:
-        let end_date=val(resp$(42))
+        end_date=val(resp$(42))
 00950   return 
 00960 HDR: ! 
 00970   pr #255: "\qc  {\f181 \fs18 \b "&trim$(env$('cnam'))&"}"

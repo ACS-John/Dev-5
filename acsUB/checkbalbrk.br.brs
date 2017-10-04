@@ -43,7 +43,7 @@
 36060   read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2,pos 261,10*n 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto,mat apply
 36080   close #20: 
 36100   for j=1 to 10
-36120     let servicename$(j)=lpad$(rtrm$(servicename$(j)(1:8)),8)
+36120     servicename$(j)=lpad$(rtrm$(servicename$(j)(1:8)),8)
 36140   next j
 36160   gosub NWPGE
 38000 READ_CUSTOMER: ! 
@@ -72,7 +72,7 @@
 46060 ! pr #255: "Rewrote next record "&cause$
 46080   return  ! 
 48000 SCR_ASK_DATES: ! r:
-48020   let sn$
+48020   sn$
 48040   fntos(sn$="balbrkfix")
 48060   let mylen=62 : let mypos=50
 48080   let txt$="Billing Dates for last three months:"

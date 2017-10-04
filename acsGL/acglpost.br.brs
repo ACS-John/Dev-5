@@ -62,13 +62,13 @@
 00530   fncmdkey("&Print",3,0,0,"Prints list of entries.")
 00540   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
 00550   fnacs(sn$,0,mat resp$,ckey)
-00560   if ckey=1 then let listing$='N' : goto PRINT_POST
+00560   if ckey=1 then listing$='N' : goto PRINT_POST
 00570   if ckey=2 then goto REVIEW
-00580   if ckey=3 then let listing$="Y" : goto PRINT_POST
+00580   if ckey=3 then listing$="Y" : goto PRINT_POST
 00590   if ckey=5 then goto XIT
 00592 ! /r
 00600 PRINT_POST: !
-00602   if listing$="Y" then let listing=1 else let listing=0
+00602   if listing$="Y" then listing=1 else listing=0
 00610   if listing=1 then gosub L1230
 00620   for j3=1 to dircount
 00630     if dir(j3)<>0 then 
@@ -90,7 +90,7 @@
 00750         L750: form pos 87,pd 6.2,pos 333,2*pd 3
 00760         L760: !
 00762         read #2,using L900,rec=1: lr2
-00770         let lr2=lrec(2)+1
+00770         lr2=lrec(2)+1
 00780         write #2,using L880,rec=lr2,reserve: t$,s,k,mat n,l$,p$,0 duprec L760
 00790         if k>0 then let x=25 else let x=40
 00800         if listing=1 then pr #255,using L810: t$,s,k,l$,p$,n(1) pageoflow L1290
@@ -178,7 +178,7 @@
 01540   goto MAIN
 01550 ! ______________________________________________________________________
 01560 OPEN_FILE: ! r:
-01562   let open_file_count=1 : close #3: ioerr ignore ! this value is used in the close_file sub routine
+01562   open_file_count=1 : close #3: ioerr ignore ! this value is used in the close_file sub routine
 01570   if exists(env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H"&env$('cno'))=0 then gosub INDEX
 01580   open #open_file_count: "Name="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",review)&"-idx.H"&env$('cno')&",RecL=104,kps=1,kln=12,USE",internal,outin,keyed 
 01590   return  ! /r
@@ -223,8 +223,8 @@
 02150   let dno=ano=sno=0
 02160   if use_dept=1 then let dno=val(resp$(1)) : ano=val(resp$(2))
 02170   if use_dept=0 then ano=val(resp$(1))
-02180   if use_dept=1 and use_sub=1 then let sno=val(resp$(3))
-02190   if use_dept=0 and use_sub=1 then let sno=val(resp$(2))
+02180   if use_dept=1 and use_sub=1 then sno=val(resp$(3))
+02190   if use_dept=0 and use_sub=1 then sno=val(resp$(2))
 02200 ! 
 02210   if use_dept=1 and use_sub=1 then let d$=resp$(4)
 02220   if use_dept=0 and use_sub=1 then let d$=resp$(3)
@@ -262,14 +262,14 @@
 20000 BUILD_LAYOUT: ! r:
 20040 ! ** Field Labels    **
 20060   let ic=0 ! temporary Item Counter
-20080   let lbl$(ic+=1)="G/L"
-20100   let lbl$(ic+=1)="Date"
-20120   let lbl$(ic+=1)="Amount"
-20140   let lbl$(ic+=1)="TCode"
-20160   let lbl$(ic+=1)="PCode"
-20180   let lbl$(ic+=1)="Ref#"
-20200   let lbl$(ic+=1)="Description"
-20220   let lbl$(ic+=1)="Vendor"
+20080   lbl$(ic+=1)="G/L"
+20100   lbl$(ic+=1)="Date"
+20120   lbl$(ic+=1)="Amount"
+20140   lbl$(ic+=1)="TCode"
+20160   lbl$(ic+=1)="PCode"
+20180   lbl$(ic+=1)="Ref#"
+20200   lbl$(ic+=1)="Description"
+20220   lbl$(ic+=1)="Vendor"
 20240 ! ** Text Box / Field Display   Lengths   **
 20260   let ic=0 ! temporary Item Counter
 20280   let mmddyy=8
@@ -284,25 +284,25 @@
 20460   let tln(ic+=1)=8
 20480 ! ** Field Types **
 20500   let ic=0
-20520   let fltyp$(ic+=1)='C'
-20540   let fltyp$(ic+=1)='N'
-20560   let fltyp$(ic+=1)='PD'
-20580   let fltyp$(ic+=1)='N'
-20600   let fltyp$(ic+=1)='N'
-20620   let fltyp$(ic+=1)='C'
-20640   let fltyp$(ic+=1)='C'
-20660   let fltyp$(ic+=1)='C'
+20520   fltyp$(ic+=1)='C'
+20540   fltyp$(ic+=1)='N'
+20560   fltyp$(ic+=1)='PD'
+20580   fltyp$(ic+=1)='N'
+20600   fltyp$(ic+=1)='N'
+20620   fltyp$(ic+=1)='C'
+20640   fltyp$(ic+=1)='C'
+20660   fltyp$(ic+=1)='C'
 20680 ! ** Field Storage Lengths **
 20700   let ic=0
 20720   let mmddyy=6 : ccyymmdd=8
-20740   let sln(ic+=1)=12
-20760   let sln(ic+=1)=6
-20780   let sln(ic+=1)=6.2
-20800   let sln(ic+=1)=2
-20820   let sln(ic+=1)=2
-20840   let sln(ic+=1)=12
-20860   let sln(ic+=1)=30
-20880   let sln(ic+=1)=8
+20740   sln(ic+=1)=12
+20760   sln(ic+=1)=6
+20780   sln(ic+=1)=6.2
+20800   sln(ic+=1)=2
+20820   sln(ic+=1)=2
+20840   sln(ic+=1)=12
+20860   sln(ic+=1)=30
+20880   sln(ic+=1)=8
 20900 ! ** Field Masks **
 20920   let ic=0
 20940   let pointtwo=32 : let number=30
@@ -318,14 +318,14 @@
 21140 ! ** Storage Positions **
 21160 ! starting field position - default to the same as order displayed
 21180   let ic=0
-21200   let sp(ic+=1)=1
-21220   let sp(ic+=1)=13
-21240   let sp(ic+=1)=19 ! 
-21260   let sp(ic+=1)=25
-21280   let sp(ic+=1)=27
-21300   let sp(ic+=1)=29
-21320   let sp(ic+=1)=41
-21340   let sp(ic+=1)=71
+21200   sp(ic+=1)=1
+21220   sp(ic+=1)=13
+21240   sp(ic+=1)=19 ! 
+21260   sp(ic+=1)=25
+21280   sp(ic+=1)=27
+21300   sp(ic+=1)=29
+21320   sp(ic+=1)=41
+21340   sp(ic+=1)=71
 21360 ! ** Combo Boxes **
 21380   cl=1 : c$(cl,1)='ComboF'
 21400   c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')
@@ -333,5 +333,5 @@
 21440   c$(cl,5)="13": c$(cl,6)="40"
 21460   c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&env$('cno')
 21480 ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
-21500   let limit_to_list$='1'
+21500   limit_to_list$='1'
 21520   return  ! /r

@@ -45,98 +45,98 @@
 00460   data DESCRIPTION
 00470   read mat scr2$ ioerr L2000
 00480   for j=1 to 21
-00490     if j<15 then let fl2$(j)=str$(j+3)&",2,C 25,N"
-00500     let fl1$(j)=str$(j+1)&",2,C 25,N"
-00510     if j=1 then let oi1$(j)=str$(j+1)&",28,N 5,ut,N"
-00520     if j>1 and j<7 then let oi1$(j)=str$(j+1)&",28,C 30,ut,N"
-00530     if j=7 or j=11 then let oi1$(j)=str$(j+1)&",28,C 12,ut,N"
-00540     if j=8 or j=12 then let oi1$(j)=str$(j+1)&",28,c 11,ut,N"
-00550     if j=9 then let oi1$(j)=str$(j+1)&",28,n 9,ut,N"
-00560     if j=10 then let oi1$(j)=str$(j+1)&",28,n 2,ut,N"
-00570     if j=13 or j=14 then let oi1$(j)=str$(j+1)&",28,n 10.2,ut,N"
-00580     if j=15 then let oi1$(j)=str$(j+1)&",28,N 8.3,Ut,N"
-00590     if j=16 or j=17 then let oi1$(j)=str$(j+1)&",28,N 1,Ut,N"
-00600     if j=18 then let oi1$(j)=str$(j+1)&",10,C 70,Ut,N"
+00490     if j<15 then fl2$(j)=str$(j+3)&",2,C 25,N"
+00500     fl1$(j)=str$(j+1)&",2,C 25,N"
+00510     if j=1 then oi1$(j)=str$(j+1)&",28,N 5,ut,N"
+00520     if j>1 and j<7 then oi1$(j)=str$(j+1)&",28,C 30,ut,N"
+00530     if j=7 or j=11 then oi1$(j)=str$(j+1)&",28,C 12,ut,N"
+00540     if j=8 or j=12 then oi1$(j)=str$(j+1)&",28,c 11,ut,N"
+00550     if j=9 then oi1$(j)=str$(j+1)&",28,n 9,ut,N"
+00560     if j=10 then oi1$(j)=str$(j+1)&",28,n 2,ut,N"
+00570     if j=13 or j=14 then oi1$(j)=str$(j+1)&",28,n 10.2,ut,N"
+00580     if j=15 then oi1$(j)=str$(j+1)&",28,N 8.3,Ut,N"
+00590     if j=16 or j=17 then oi1$(j)=str$(j+1)&",28,N 1,Ut,N"
+00600     if j=18 then oi1$(j)=str$(j+1)&",10,C 70,Ut,N"
 00610   next j
 00620   for j=1 to 10
-00630     let scr1$(j+21)=lpad$(scr1$(j+21),4)
-00640     let fl1$(j+21)="20,"&str$(j*7+6)&",C 4,R,N"
-00650     let oi1$(j+18)="21,"&str$(j*7+6)&",N 4,Ut,N"
-00660     let oi1$(j+28)="22,"&str$(j*7+9)&",N 1,Ut,N"
+00630     scr1$(j+21)=lpad$(scr1$(j+21),4)
+00640     fl1$(j+21)="20,"&str$(j*7+6)&",C 4,R,N"
+00650     oi1$(j+18)="21,"&str$(j*7+6)&",N 4,Ut,N"
+00660     oi1$(j+28)="22,"&str$(j*7+9)&",N 1,Ut,N"
 00670   next j
-00680   let fl1$(32)="1,20,C 40,R,n"
-00690   let fl1$(33)="2,36,C 40,N"
-00700   let fl2$(15)="1,20,C 50,H,N"
-00710   let ot2$(1)="4,28,c 5,ut,n"
-00720   let ot2$(2)="5,28,c 9,ut,n"
-00730   let ot2$(3)="6,28,n 6.2,ut,n"
-00740   let ot2$(4)="7,28,n 6.2,ut,n"
-00750   let ot2$(5)="8,28,n 10.2,ut,n"
-00760   let ot2$(6)="9,28,n 6,ut,n"
-00770   let ot2$(7)="10,28,n 2,ut,n"
-00780   let ot2$(8)="11,28,n 3,ut,n"
-00790   let ot2$(9)="12,28,n 2,ut,n"
-00800   let ot2$(10)="13,28,n 2,ut,n"
-00810   let ot2$(11)="14,28,c 4,ut,n"
-00820   let ot2$(12)="15,28,c 12,ut,n"
-00830   let ot2$(13)="16,28,n 5,ut,n"
-00840   let ot2$(14)="17,28,C 30,ut,N"
+00680   fl1$(32)="1,20,C 40,R,n"
+00690   fl1$(33)="2,36,C 40,N"
+00700   fl2$(15)="1,20,C 50,H,N"
+00710   ot2$(1)="4,28,c 5,ut,n"
+00720   ot2$(2)="5,28,c 9,ut,n"
+00730   ot2$(3)="6,28,n 6.2,ut,n"
+00740   ot2$(4)="7,28,n 6.2,ut,n"
+00750   ot2$(5)="8,28,n 10.2,ut,n"
+00760   ot2$(6)="9,28,n 6,ut,n"
+00770   ot2$(7)="10,28,n 2,ut,n"
+00780   ot2$(8)="11,28,n 3,ut,n"
+00790   ot2$(9)="12,28,n 2,ut,n"
+00800   ot2$(10)="13,28,n 2,ut,n"
+00810   ot2$(11)="14,28,c 4,ut,n"
+00820   ot2$(12)="15,28,c 12,ut,n"
+00830   ot2$(13)="16,28,n 5,ut,n"
+00840   ot2$(14)="17,28,C 30,ut,N"
 00850   for j=1 to 15
-00860     let fl3$(j)=str$(j+3)&",2,C 25,N"
+00860     fl3$(j)=str$(j+3)&",2,C 25,N"
 00870     if j>1 then goto L910
-00880     let ot3$(j)=str$(j+3)&",28,c 9,ut,N"
+00880     ot3$(j)=str$(j+3)&",28,c 9,ut,N"
 00890     let in3$(j)=str$(j+3)&",28,n 9,ut,N"
 00900     goto L1050
 00910 L910: if j>2 then goto L950
-00920     let ot3$(j)=str$(j+3)&",28,c 25,ut,N"
+00920     ot3$(j)=str$(j+3)&",28,c 25,ut,N"
 00930     let in3$(j)=ot3$(j)
 00940     goto L1050
 00950 L950: if j>3 then goto L990
-00960     let ot3$(j)=str$(j+3)&",28,n 3,ut,N"
+00960     ot3$(j)=str$(j+3)&",28,n 3,ut,N"
 00970     let in3$(j)=ot3$(j)
 00980     goto L1050
 00990 L990: if j>4 then goto L1030
-01000     let ot3$(j)=str$(j+3)&",28,n 1,ut,N"
+01000     ot3$(j)=str$(j+3)&",28,n 1,ut,N"
 01010     let in3$(j)=ot3$(j)
 01020     goto L1050
-01030 L1030: let ot3$(j)=str$(j+3)&",28,n 6.2,ut,N"
+01030 L1030: ot3$(j)=str$(j+3)&",28,n 6.2,ut,N"
 01040     let in3$(j)=str$(j+3)&",28,n 6.2,ut,N"
 01050 L1050: next j
-01060   let fl3$(16)="1,1,C 80,H,N"
-01070   let fl3$(17)="2,1,C 80,H,N"
+01060   fl3$(16)="1,1,C 80,H,N"
+01070   fl3$(17)="2,1,C 80,H,N"
 01080   for j=1 to 20
 01090     if j>10 then goto L1160
-01100     let fl4$(j)=str$(j+2)&",2,c 30,n"
-01110     let ot4$(j)=str$(j+2)&",35,n 8.2,ut,n"
+01100     fl4$(j)=str$(j+2)&",2,c 30,n"
+01110     ot4$(j)=str$(j+2)&",35,n 8.2,ut,n"
 01120     let in4$(j)=str$(j+2)&",35,n 8.2,ut,n"
-01130     let ot4$(j+10)=str$(j+2)&",60,n 8.2,ut,n"
+01130     ot4$(j+10)=str$(j+2)&",60,n 8.2,ut,n"
 01140     let in4$(j+10)=str$(j+2)&",60,n 8.2,ut,n"
 01150     goto L1210
-01160 L1160: let fl4$(j)=str$(j+3)&",2,c 30,n"
-01170     let ot4$(j+10)=str$(j+3)&",35,n 10.2,ut,n"
+01160 L1160: fl4$(j)=str$(j+3)&",2,c 30,n"
+01170     ot4$(j+10)=str$(j+3)&",35,n 10.2,ut,n"
 01180     let in4$(j+10)=str$(j+3)&",35,n 10.2,ut,n"
-01190     let ot4$(j+20)=str$(j+3)&",60,n 10.2,ut,n"
+01190     ot4$(j+20)=str$(j+3)&",60,n 10.2,ut,n"
 01200     let in4$(j+20)=str$(j+3)&",60,n 10.2,ut,n"
 01210 L1210: next j
-01220   let fl4$(21)="1,1,C 80,H,N"
-01230   let fl4$(22)="2,1,C 80,H,N"
-01240   let fl4$(23)="13,2,c 78,n"
+01220   fl4$(21)="1,1,C 80,H,N"
+01230   fl4$(22)="2,1,C 80,H,N"
+01240   fl4$(23)="13,2,c 78,n"
 01250   for j=1 to 20
-01260     let fl5$(j)=str$(j+3)&",2,c 30,n"
-01270     let ot5$(j)=str$(j+3)&",35,n 8.2,ut,n"
+01260     fl5$(j)=str$(j+3)&",2,c 30,n"
+01270     ot5$(j)=str$(j+3)&",35,n 8.2,ut,n"
 01280     let in5$(j)=str$(j+3)&",35,n 8.2,ut,n"
-01290     let ot5$(j+20)=str$(j+3)&",60,n 8.2,ut,n"
+01290     ot5$(j+20)=str$(j+3)&",60,n 8.2,ut,n"
 01300     let in5$(j+20)=str$(j+3)&",60,n 8.2,ut,n"
-01310     let fl6$(j)=str$(j+3)&",2,c 30,n"
-01320     let ot6$(j)=str$(j+3)&",35,n 10.2,ut,n"
+01310     fl6$(j)=str$(j+3)&",2,c 30,n"
+01320     ot6$(j)=str$(j+3)&",35,n 10.2,ut,n"
 01330     let in6$(j)=str$(j+3)&",35,n 10.2,ut,n"
-01340     let ot6$(j+20)=str$(j+3)&",60,n 10.2,ut,n"
+01340     ot6$(j+20)=str$(j+3)&",60,n 10.2,ut,n"
 01350     let in6$(j+20)=str$(j+3)&",60,n 10.2,ut,n"
 01360   next j
-01370   let fl5$(21)="1,1,C 80,H,N"
-01380   let fl5$(22)="2,1,C 80,H,N"
-01390   let fl6$(21)="1,1,C 80,H,N"
-01400   let fl6$(22)="2,1,C 80,H,N"
+01370   fl5$(21)="1,1,C 80,H,N"
+01380   fl5$(22)="2,1,C 80,H,N"
+01390   fl6$(21)="1,1,C 80,H,N"
+01400   fl6$(22)="2,1,C 80,H,N"
 01410   gosub L1720
 01420 ! GOTO 1740 ! TEST SCREEN
 01430   open #1: "Name=S:\acsTM\TMSCRN.CL",internal,input ioerr L1450
@@ -161,19 +161,19 @@
 01620   dim z$*5,a$(5)*30,ph$*12,ss$*11,dd(10),sc(10),ca(10),ar(5)
 01630   dim ph2$*12,ss2$*11,cm$*70
 01640   pr newpage
-01650   let scrid$(1)="  TIME MANAGEMENT KDKDKDKD"
-01660   let scrid$(2)=" FDAS;JFDASKJLFDSKJALFDASKJLFDSKJL"
-01670   pr fields mat fl1$: mat scr1$,mat scrid$
+01650   scrid$(1)="  TIME MANAGEMENT KDKDKDKD"
+01660   scrid$(2)=" FDAS;JFDASKJLFDSKJALFDASKJLFDSKJL"
+01670   pr f mat fl1$: mat scr1$,mat scrid$
 01680   input fields mat oi1$: clinum,mat a$,ph$,ss$,pno,mye,ph2$,ss2$,mat ar,cm$,mat dd,mat sc
 01690   pause 
 01700   dim flit$(6)*18,scrt$(6)*20,scrz$(2)*79,desc$(8)*18
 01710   dim hlp$(20)*78,flh$(22)*18,hhd$*60
-01720 L1720: let flit$(1)="6,22,c 12,ut,N"
-01730   let flit$(2)="8,22,n 6,ut,N"
-01740   let flit$(3)="10,22,n 11.2,ut,N"
-01750   let flit$(4)="12,22,c 20,ut,N"
-01760   let flit$(5)="14,22,n 3,ut,N"
-01770   let flit$(6)="16,22,n 1,ut,N"
+01720 L1720: flit$(1)="6,22,c 12,ut,N"
+01730   flit$(2)="8,22,n 6,ut,N"
+01740   flit$(3)="10,22,n 11.2,ut,N"
+01750   flit$(4)="12,22,c 20,ut,N"
+01760   flit$(5)="14,22,n 3,ut,N"
+01770   flit$(6)="16,22,n 1,ut,N"
 01780   let desc$(1)="3,2,c 79,n"
 01790   let desc$(2)="4,2,c 79,n"
 01800   let desc$(3)="6,2,c 20,n"
@@ -182,30 +182,30 @@
 01830   let desc$(6)="12,2,c 20,n"
 01840   let desc$(7)="14,2,c 20,n"
 01850   let desc$(8)="16,2,c 20,n"
-01860   let scrt$(1)="INVOICE NUMBER"
-01870   let scrt$(2)="DATE"
-01880   let scrt$(3)="AMOUNT"
-01890   let scrt$(4)="INVOICE DESCRIPTION"
-01900   let scrt$(5)="SALESMAN NUMBER"
-01910   let scrt$(6)="TRANSACTION CODE"
+01860   scrt$(1)="INVOICE NUMBER"
+01870   scrt$(2)="DATE"
+01880   scrt$(3)="AMOUNT"
+01890   scrt$(4)="INVOICE DESCRIPTION"
+01900   scrt$(5)="SALESMAN NUMBER"
+01910   scrt$(6)="TRANSACTION CODE"
 01920 ! DIM, OPEN AND BLDSCR
 01930   dim hlp$(20)*78,flh$(22)*18,hhd$*60
 01940   for j=1 to 20
-01950     let flh$(j)=str$(j+2)&",2,C 78,ut,N"
+01950     flh$(j)=str$(j+2)&",2,C 78,ut,N"
 01960   next j
-01970   let flh$(21)="1,25,C 40,H,N"
-01980   let flh$(22)="24,5,C 65,H,N"
+01970   flh$(21)="1,25,C 40,H,N"
+01980   flh$(22)="24,5,C 65,H,N"
 01990   return 
-02000 L2000: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2020
+02000 L2000: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2020
 02010   goto L2060
 02020 L2020: pr newpage
-02030   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2050
+02030   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2050
 02040   goto L2060
-02050 L2050: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-02060 L2060: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+02050 L2050: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+02060 L2060: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 02070   input fields "24,60,C 1,N": quitcode$
 02080   if rtrm$(uprc$(quitcode$))="Q" then goto L2120
-02090   pr fields "23,3,C 78,N": ""
-02100   pr fields "24,3,C 78,N": ""
+02090   pr f "23,3,C 78,N": ""
+02100   pr f "24,3,C 78,N": ""
 02110   retry 
 02120 L2120: chain "S:\Core\Menu"

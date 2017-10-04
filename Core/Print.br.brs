@@ -4,7 +4,7 @@
 12000 def fn_setup
 12020   on error goto ERTN
 12040   if ~setup then 
-12060     let setup=1
+12060     setup=1
 12080     library 'S:\Core\Library': fnerror,fnread_program_print_property,fnCopy,fnreg_read,fnureg_read,fnSystemName$,fngetpp
 12100     library 'S:\Core\Library': fnosver,fnget_wordprocessor_exe,fninch2twip,fnprocess,fngethandle,fnstatus_close
 12110     library 'S:\Core\Library': fnmakesurepathexists
@@ -110,9 +110,9 @@
 30040   dim g_prgCapForSettingsOverride$*256
 30060   g_prgCapForSettingsOverride$=prgCapForSettingsOverride$
 30080   dim op_printFileName$*1024
-30090   let op_printFileName$=fn_print_file_name$( sendto_base_name_addition$,'',programCaptionOverride$) ! ,pfn_extension$)
+30090   op_printFileName$=fn_print_file_name$( sendto_base_name_addition$,'',programCaptionOverride$) ! ,pfn_extension$)
 30100   ! 
-30120   fnread_program_print_property("Lines",lpp$, g_prgCapForSettingsOverride$) ! let lpp=val(lpp$)
+30120   fnread_program_print_property("Lines",lpp$, g_prgCapForSettingsOverride$) ! lpp=val(lpp$)
 30140   if lpp$='' then gosub SET_DEFAULTS
 30180   dim g_prn_destination_name$*1024
 30200   let g_prn_destination_name$=op_printFileName$
@@ -122,7 +122,7 @@
 30280     pr "Lines settings for this program were not found."
 30300     pr "Default Settings will be used."
 30320     pr "  Lines: 54"
-30340     let lpp$='54'
+30340     lpp$='54'
 30360   return  ! /r
 30400 XIT: fnend 
 38000   def library fncloseprn(;forceWordProcessor$)
@@ -152,7 +152,7 @@
 42160     dim marg(4)
 42180     dim wordprocessor_exe$*512 ! full path and executable for wordprocessor_exe
 42200 ! ______________________________________________________________________
-42260     let start_destinationFilename$=trim$(start_destinationFilename$)
+42260     start_destinationFilename$=trim$(start_destinationFilename$)
 42280     let winxp$="Microsoft Windows XP"
 42300     let win2k$="Microsoft Windows 2000"
 42320     let winnt2kxp$="Microsoft Windows NT/2000/XP"
@@ -194,7 +194,7 @@
 46120     ! else
 46140     open #20: "Name="&serverSendto$,display,input
 46160     ! end if
-46180     let lrec20=lrec(20)
+46180     lrec20=lrec(20)
 46200     let y=0
 46220     open #21: "Name="&env$('temp')&"\acs_print_tmp"&session$&".rtf,Size=0,RecL=800,Replace",display,output 
 46240     pr #21: "{\rtf1\ansi\deflang1033";
@@ -233,7 +233,7 @@
 46900     pr #21: "\f181\fs24\pard\f8\fs"&str$(fsize*2)&" "
 46920 L640: linput #20: line$ eof END_OF_FILE
 46940     if uprc$(line$(1:13))=uprc$("*INSERT FILE:") then 
-46960       let line$=line$(14:len(line$))
+46960       line$=line$(14:len(line$))
 46980       goto L660
 47000     else if line$(1:12)="S:\Core\images\" then 
 47020       goto L660
@@ -251,13 +251,13 @@
 47260     L730: ! 
 47280     let z=pos(line$,"\",z)
 47300     if z=>1 and line$(z-1:z-1)<>"{" and uprc$(line$(z+1:z+1))<>"Q" then 
-47320       let line$(z:z)="\\" : let z=z+2
+47320       line$(z:z)="\\" : let z=z+2
 47340       goto L730
 47360     else 
 47380     L18700: !
 47390       let z=pos(line$,"/fcode/",z)
 47400       if z=>1 then 
-47420         let line$(z:z+6)="\" : let z=z+1
+47420         line$(z:z+6)="\" : let z=z+1
 47440         goto L18700
 47460       else 
 47480         let z=0
@@ -272,7 +272,7 @@
 47660       if y<lrec20 then  
 47680         pr #21: "\page"
 47700       end if
-47720       let line$(1:1)=''
+47720       line$(1:1)=''
 47740     end if 
 47760     pr #21: line$&"\par"
 47780     goto L640
@@ -317,7 +317,7 @@
 50280   fnend 
 52000   def fn_start_read_properties
 52020     fnread_program_print_property('Orientation',orientation$, g_prgCapForSettingsOverride$)
-52040     if orientation$="Landscape" then let landscape$="Y" else let landscape$="N"
+52040     if orientation$="Landscape" then landscape$="Y" else landscape$="N"
 52060     fnread_program_print_property('Height',pgh$, g_prgCapForSettingsOverride$) : let pgh=val(pgh$)
 52080     if pgh=0 then let pgh=11
 52100     fninch2twip(pgh)
@@ -336,7 +336,7 @@
 52360   fnend 
 54000   def fn_start_workaround_4591
 54020     pr newpage
-54040     pr fields "10,10,Cc 60,N": "Press ENTER to continue"
+54040     pr f "10,10,Cc 60,N": "Press ENTER to continue"
 54060     input fields "11,10,C 1,N": pause$
 54080   fnend 
 58000 def fn_start_winxp
@@ -356,43 +356,43 @@
 61040 fnend
 62000 def fn_safe_filename$*256(sf_in$*256)
 62020   if ~sf_setup then ! r:
-62040     let sf_setup=1
-62060     let sf_symbol_count=0
+62040     sf_setup=1
+62060     sf_symbol_count=0
 62080     dim sf_symbol$(999)*1
 62100     dim sf_replace_with$(999)*1
 62120     mat sf_symbol$(999)
 62140     mat sf_replace_with$(999)
 62160     ! alloe #    sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='#' : sf_replace_with$(sf_symbol_count)=' ' ! pound
-62180     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='<' : let sf_replace_with$(sf_symbol_count)='(' ! left angle bracket
-62200     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='$' : let sf_replace_with$(sf_symbol_count)=' ' ! dollar sign
+62180     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='<' : sf_replace_with$(sf_symbol_count)='(' ! left angle bracket
+62200     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='$' : sf_replace_with$(sf_symbol_count)=' ' ! dollar sign
 62220     ! allow plus   sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='+' : sf_replace_with$(sf_symbol_count)='_' ! plus sign
-62240     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='%' : let sf_replace_with$(sf_symbol_count)=' ' ! percent
-62260     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='>' : let sf_replace_with$(sf_symbol_count)=')' ! right angle bracket
-62280     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='!' : let sf_replace_with$(sf_symbol_count)=' ' ! exclamation point
-62300     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='`' : let sf_replace_with$(sf_symbol_count)=' ' ! backtick
+62240     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='%' : sf_replace_with$(sf_symbol_count)=' ' ! percent
+62260     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='>' : sf_replace_with$(sf_symbol_count)=')' ! right angle bracket
+62280     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='!' : sf_replace_with$(sf_symbol_count)=' ' ! exclamation point
+62300     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='`' : sf_replace_with$(sf_symbol_count)=' ' ! backtick
 62320     ! allow ampersands     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='&' : sf_replace_with$(sf_symbol_count)=' ' ! ampersand
-62340     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='*' : let sf_replace_with$(sf_symbol_count)=' ' ! asterisk
-62360     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)="'" : let sf_replace_with$(sf_symbol_count)='' ! single quotes
-62380     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='|' : let sf_replace_with$(sf_symbol_count)=' ' ! pipe
-62400     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='{' : let sf_replace_with$(sf_symbol_count)='(' ! left bracket
-62420     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='?' : let sf_replace_with$(sf_symbol_count)=' ' ! question mark
-62440     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='"' : let sf_replace_with$(sf_symbol_count)='' ! double quotes
-62460     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='=' : let sf_replace_with$(sf_symbol_count)=' ' ! equal sign
-62480     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='}' : let sf_replace_with$(sf_symbol_count)=')' ! right bracket
-62500     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='/' : let sf_replace_with$(sf_symbol_count)='-' ! forward slash
-62520     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)=':' : let sf_replace_with$(sf_symbol_count)='-' ! colon
-62540     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='\' : let sf_replace_with$(sf_symbol_count)='-' ! back slash
-62560     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='@' : let sf_replace_with$(sf_symbol_count)=' ' ! at sign
-62570     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)=',' : let sf_replace_with$(sf_symbol_count)='' ! comma  (BR! can not handle them.)
-62580     let sf_symbol_count+=1 : let sf_symbol$(sf_symbol_count)='.' : let sf_replace_with$(sf_symbol_count)='' ! period / dot
+62340     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='*' : sf_replace_with$(sf_symbol_count)=' ' ! asterisk
+62360     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)="'" : sf_replace_with$(sf_symbol_count)='' ! single quotes
+62380     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='|' : sf_replace_with$(sf_symbol_count)=' ' ! pipe
+62400     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='{' : sf_replace_with$(sf_symbol_count)='(' ! left bracket
+62420     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='?' : sf_replace_with$(sf_symbol_count)=' ' ! question mark
+62440     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='"' : sf_replace_with$(sf_symbol_count)='' ! double quotes
+62460     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='=' : sf_replace_with$(sf_symbol_count)=' ' ! equal sign
+62480     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='}' : sf_replace_with$(sf_symbol_count)=')' ! right bracket
+62500     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='/' : sf_replace_with$(sf_symbol_count)='-' ! forward slash
+62520     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)=':' : sf_replace_with$(sf_symbol_count)='-' ! colon
+62540     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='\' : sf_replace_with$(sf_symbol_count)='-' ! back slash
+62560     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='@' : sf_replace_with$(sf_symbol_count)=' ' ! at sign
+62570     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)=',' : sf_replace_with$(sf_symbol_count)='' ! comma  (BR! can not handle them.)
+62580     sf_symbol_count+=1 : sf_symbol$(sf_symbol_count)='.' : sf_replace_with$(sf_symbol_count)='' ! period / dot
 62600     mat sf_symbol$(sf_symbol_count)
 62620     mat sf_replace_with$(sf_symbol_count)
 62640   end if  ! /r
 62660   for sf_item=1 to sf_symbol_count
-62680     let sf_in$=srep$(sf_in$,sf_symbol$(sf_item),sf_replace_with$(sf_item))
+62680     sf_in$=srep$(sf_in$,sf_symbol$(sf_item),sf_replace_with$(sf_item))
 62700   next sf_item
 62720   do 
-62740     let sf_in$=srep$(sf_in$,'  ',' ')
+62740     sf_in$=srep$(sf_in$,'  ',' ')
 62760   loop until pos(sf_in$,'  ')<=0
 62780   fn_safe_filename$=trim$(sf_in$)
 62800 fnend 

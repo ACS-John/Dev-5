@@ -5,7 +5,7 @@
 32080       dim hWsCmdFile$*256
 32100     end if
 32200     library 'S:\Core\Library': fngethandle
-44000     if shortTermUniqueNumber=>9999 then let shortTermUniqueNumber=0
+44000     if shortTermUniqueNumber=>9999 then shortTermUniqueNumber=0
 44020     shortTermUniqueNumber$=cnvrt$('pic(####)',shortTermUniqueNumber+=1)
 44040     hWsCmdFile$=env$('client_temp')&'\acsWinStart_'&session$&'-'&shortTermUniqueNumber$&'.cmd'
 44060     wsFile$=os_filename$(wsFile$)

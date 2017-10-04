@@ -16,7 +16,7 @@
 00170   let win=101
 00180   ce=0
 00190   for j=1 to 5
-00200     if lw(j)=0 then let lw(j)=34
+00200     if lw(j)=0 then lw(j)=34
 00210     if pt$(j)="" then let pt$(j)="S"
 00220     if align(j)<1 or align>3 then align(j)=1
 00230     let iomc$(j)=str$(j+3)&",2,Cc "&str$(lw(j))&",U,AE,N" !:
@@ -25,7 +25,7 @@
 00240     if align(j)=1 then let iom$(j)=ioml$(j)
 00250     if align(j)=2 then let iom$(j)=iomc$(j)
 00260     if align(j)=3 then let iom$(j)=iomr$(j)
-00270     let l$(j)=rtrm$(ltrm$(l$(j)))(1:lw(j))
+00270     l$(j)=rtrm$(ltrm$(l$(j)))(1:lw(j))
 00280   next j
 00290   let win_width=50 !:
         for j=1 to udim(l$) !:
@@ -36,10 +36,10 @@
 00310   pr #win,fields "3,2,C 20,N": "Enter your label:"
 00320   pr #win,fields "10,2,C "&str$(win_width-2)&",B,8": "(F8) "&cnam$(1:win_width-2)
 00330   pr #win,fields "11,2,C 25,B,9": "(F9) "&dat$
-00340   pr fields "19,14,C 10,B,1": "Print (F1)"
-00350   pr fields "19,25,C 16,B,2": "Align  Line (F2)"
-00360   pr fields "19,42,C 15,B,3": "Line Style (F3)"
-00370   pr fields "19,58,C 10,B,99": "Exit (Esc)"
+00340   pr f "19,14,C 10,B,1": "Print (F1)"
+00350   pr f "19,25,C 16,B,2": "Align  Line (F2)"
+00360   pr f "19,42,C 15,B,3": "Line Style (F3)"
+00370   pr f "19,58,C 10,B,99": "Exit (Esc)"
 00380 L380: rinput #win,fields mat iom$: mat l$
 00390   let main_curfld=curfld
 00400   if ce>0 then let iom$(ce)(ce1:ce2)="U": ce=0
@@ -49,16 +49,16 @@
 00440   ce2=ce1+1 : let iom$(ce)(ce1:ce1)="UC" : goto L380
 00450 CONV1: if ce>0 then let iom$(ce)(ce1:ce2)="U"
 00460   ce=cnt+1
-00470 ERR1: pr fields "24,78,C 1": bell : goto L430
+00470 ERR1: pr f "24,78,C 1": bell : goto L430
 00480 L480: if cmdkey=1 then goto SCR_HOW_MANY
 00490   if cmdkey=2 and main_curfld<6 then gosub ALIGNMENT !:
           ce=main_curfld : goto SCR_MAIN
 00500   if cmdkey=3 then gosub LINE_STYLE !:
           ce=main_curfld : goto SCR_MAIN
 00510   if cmdkey=8 then !:
-          let l$(main_curfld)=cnam$(1:lw(main_curfld)) : goto L380
+          l$(main_curfld)=cnam$(1:lw(main_curfld)) : goto L380
 00520   if cmdkey=9 then !:
-          let l$(main_curfld)=dat$(1:lw(main_curfld)) : goto L380
+          l$(main_curfld)=dat$(1:lw(main_curfld)) : goto L380
 00530   if cmdkey=5 or cmdkey=99 then goto XIT
 00540   goto SCR_MAIN
 00550 ! ______________________________________________________________________
@@ -102,20 +102,20 @@
 00810   close #win2: 
 00820   align(main_curfld)=curfld
 00830   if cmdkey=5 then goto L870
-00840 ! If ALIGN(MAIN_CURFLD)=1 Then Let LA$(MAIN_CURFLD)=IOML$(MAIN_CURFLD)
-00850 ! If ALIGN(MAIN_CURFLD)=2 Then Let LA$(MAIN_CURFLD)=IOMC$(MAIN_CURFLD)
-00860 ! If ALIGN(MAIN_CURFLD)=3 Then Let LA$(MAIN_CURFLD)=IOMR$(MAIN_CURFLD)
+00840 ! If ALIGN(MAIN_CURFLD)=1 Then lA$(MAIN_CURFLD)=IOML$(MAIN_CURFLD)
+00850 ! If ALIGN(MAIN_CURFLD)=2 Then lA$(MAIN_CURFLD)=IOMC$(MAIN_CURFLD)
+00860 ! If ALIGN(MAIN_CURFLD)=3 Then lA$(MAIN_CURFLD)=IOMR$(MAIN_CURFLD)
 00870 L870: return 
 00880 ! ______________________________________________________________________
 00890 LINE_STYLE: ! 
 00900   let win2=103
 00910   fnwin3b(win2,cap$,8,33,0,1,2,2)
-00920   let wrd_style$(1)="Standard " : let style$(1)="S" : let sw(1)=34 !:
-        let wrd_style$(2)="Bold     " : let style$(2)="B" : let sw(2)=29 !:
-        let wrd_style$(3)="Elete    " : let style$(3)="E" : let sw(3)=41 !:
-        let wrd_style$(4)="Condensed" : let style$(4)="C" : let sw(4)=59 !:
-        let wrd_style$(5)="Wide     " : let style$(5)="W" : let sw(5)=17 !:
-        let wrd_style$(6)="Bar Code " : let style$(6)="BAR" : let sw(6)=14
+00920   let wrd_style$(1)="Standard " : style$(1)="S" : sw(1)=34 !:
+        let wrd_style$(2)="Bold     " : style$(2)="B" : sw(2)=29 !:
+        let wrd_style$(3)="Elete    " : style$(3)="E" : sw(3)=41 !:
+        let wrd_style$(4)="Condensed" : style$(4)="C" : sw(4)=59 !:
+        let wrd_style$(5)="Wide     " : style$(5)="W" : sw(5)=17 !:
+        let wrd_style$(6)="Bar Code " : style$(6)="BAR" : sw(6)=14
 00930   for j=1 to udim(wrd_style$)
 00940     if pt$(main_curfld)=style$(j) then !:
             let iows$(j)=str$(j+1)&",23,C 9,CN" else !:
@@ -124,10 +124,10 @@
 00960   pr #win2,fields "2,2,C 19,N": "Current Line Style:"
 00970   rinput #win2,select mat iows$,attr "H": mat wrd_style$
 00980   close #win2: 
-00990   let style=curfld
+00990   style=curfld
 01000   if cmdkey=5 then goto L1020
 01010   let pt$(main_curfld)=style$(style) !:
-        let lw(main_curfld)=sw(style)
+        lw(main_curfld)=sw(style)
 01020 L1020: return 
 01030 ! ______________________________________________________________________
 01040 ERTN: let fnerror(program$,err,line,act$,"xit")

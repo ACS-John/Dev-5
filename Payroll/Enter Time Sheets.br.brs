@@ -15,20 +15,20 @@
 00140   dim tdt(4),tcd(3)
 00150 ! 
 00155   fnDedNames(mat dednames$)
-00170   let sc1$(1)="Regular Hours "
-00175   let sc1$(2)="Overtime Hours"
-00180   let sc1$(3)="Sick Hours    "
-00185   let sc1$(4)="Vacation Hours"
-00190   let sc1$(5)="Holiday Hours "
-00195   let sc1$(6)="Salary        "
-00200   let sc1$(7)="Other Compensation"
-00205   let sc1$(8)="Meals"
-00210   let sc1$(9)="Tips "
+00170   sc1$(1)="Regular Hours "
+00175   sc1$(2)="Overtime Hours"
+00180   sc1$(3)="Sick Hours    "
+00185   sc1$(4)="Vacation Hours"
+00190   sc1$(5)="Holiday Hours "
+00195   sc1$(6)="Salary        "
+00200   sc1$(7)="Other Compensation"
+00205   sc1$(8)="Meals"
+00210   sc1$(9)="Tips "
 00215   for j=1 to 20
-00220     let sc1$(j+9)=dednames$(j)
+00220     sc1$(j+9)=dednames$(j)
 00225   next j
-00230   let sc1$(30)="Reg Hourly Rate"
-00235   let sc1$(31)="O/T Hourly Rate"
+00230   sc1$(30)="Reg Hourly Rate"
+00235   sc1$(31)="O/T Hourly Rate"
 00240 ! 
 00265   let f1$="Form POS 1,C 20" ! need this for edit list
 00270   let f2$=f1$
@@ -101,11 +101,11 @@
 00728   else if resp$(5)="True" then 
 00730     let noauto=ti1=2
 00732   else if resp$(6)="True" then 
-00734     let estat=99
+00734     estat=99
 00736   else if resp$(7)="True" then 
 00738     let jobcost=1
 00740   end if 
-00742   let em4=val(resp$(8)(1:2))
+00742   em4=val(resp$(8)(1:2))
 00750 ! SKIPDEDUCTIONS: !
 00760   fntos(sn$="Prinput-2")
 00762   let rc=cf=linecnt=0
@@ -124,9 +124,9 @@
 00860   fnacs(sn$,0,mat resp$,ckey)
 00862   if ckey=5 then goto L900
 00870   for j=1 to 20
-00880     if resp$(j)="True" then let skipit$(j)="Y" else let skipit$(j)="N"
+00880     if resp$(j)="True" then skipit$(j)="Y" else skipit$(j)="N"
 00890   next j
-00900 L900: if noauto<>2 then let em4=0 ! don't allow any employment status code if not selecting to automatically pay salaried
+00900 L900: if noauto<>2 then em4=0 ! don't allow any employment status code if not selecting to automatically pay salaried
 00902   if (~exists(env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')) and additional=2) or additional<>2 then 
 00904     close #h_rpwork:=3,free: ioerr ignore
 00906     open #h_rpwork:=3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",RecL=167,Replace",internal,output 
@@ -155,7 +155,7 @@
 01070   end if 
 01072 ! ______________________________________________________________________
 01220 ENTER_TIME: ! 
-01230   let en$=lpad$(str$(eno),8)
+01230   en$=lpad$(str$(eno),8)
 01240   read #h_rpmstr,using F_RPMSTR_1,key=en$: em$,em4,em8,em9,lpd,tgp nokey L1060
 01270   if editmode=1 then goto READ_DEPARTMENTS
 01280   if prd=lpd then goto EMP_PREV_ENTERED_WARN
@@ -169,20 +169,20 @@
 01326   if goprev=0 then 
 01328     read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,dep,gl$,mat tdt,mat tcd,tli,mat tdet eof ASK_EMPLOYEE
 01330   else if goprev=1 then 
-01332     let semp-=1
+01332     semp-=1
 01334     let goprev=0
 01336     read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',prior: teno,dep,gl$,mat tdt,mat tcd,tli,mat tdet eof ASK_EMPLOYEE
 01338   end if 
-01342   if teno=eno and goprev=0 then let semp+=1
-01343   if teno<>eno then let semp=0
+01342   if teno=eno and goprev=0 then semp+=1
+01343   if teno<>eno then semp=0
 01350   if teno<>eno then goto ASK_EMPLOYEE
 01360   let hr(1)=tdet(2) : let hr(2)=tdet(3) ! set hourly rates from dept rec
-01370   let simplekey$=en$&cnvrt$("n 3",dep)&cnvrt$("n 5",cno) ! timecard
+01370   simplekey$=en$&cnvrt$("n 3",dep)&cnvrt$("n 5",cno) ! timecard
 01380   let reghrs=othrs=vachrs=sickhrs=holhrs=othercomp=0 ! timecard
 01390   if timecard=1 then 
 01400     read #4,using 'form pos 17,6*pd 5.2',key=simplekey$: reghrs,othrs,vachrs,sickhrs,holhrs,othercomp nokey ignore ! timecard
 01410   end if 
-01420 ! let shd$="Employee # "&ltrm$(en$)&"   Name "&rtrm$(em$)&"    Department # "&str$(dep)
+01420 ! shd$="Employee # "&ltrm$(en$)&"   Name "&rtrm$(em$)&"    Department # "&str$(dep)
 01430   if editmode=1 then goto L1450
 01440   goto L1490
 01450 L1450: ! 
@@ -313,7 +313,7 @@
 02332   next j
 02340   ! if env$('client')="West Rest Haven" then 
 02342   !   let inp(7)=inp(7)+round(sickhrs*(hr(1)*.50),2)
-02344   !   let sickhrs=0 ! place  double time portion of holiday overtime hours in other compensation, then clear the sick hours
+02344   !   sickhrs=0 ! place  double time portion of holiday overtime hours in other compensation, then clear the sick hours
 02346   ! end if 
 02350   if inp(9)>0 and gpd+inp(6)+inp(7)+inp(8)+inp(9)<round((inp(1)*mhw+inp(2)*mhw*1.5),2) then let inp(7)=inp(7)+round((inp(1)*mhw+inp(2)*mhw*1.5),2)-(gpd+inp(6)+inp(7)+inp(8)+inp(9))
 02360   let gpd=gpd+inp(6)+inp(7) +inp(8)+inp(9) ! inp(8) (meals) and inp(9) tips both need to be added in for taxing purposes  they will be taken back out in S:\Payroll\Calc
@@ -327,7 +327,7 @@
 02440   if tgp=0 then let ped=0 else let ped=prd
 02450   rewrite #h_rpmstr,using F_RPMSTR_2,key=en$: ped,tgp
 02470   if heno=eno then goto L2490
-02480   if tgp>0 then let ent1=ent1+1
+02480   if tgp>0 then ent1=ent1+1
 02490 L2490: ! 
 02492   let heno=eno
 02500   goto L1340 ! If ADR>0 Then Goto 1050 Else Goto 820
@@ -391,14 +391,14 @@
 02930   fncmdkey("&Add",4,0,0,"Add additional time. (If you missed a department, you should delete the original entries on that employee and completely re-enter the employee time.")
 02940   fncmdkey("E&xit",5,0,1,"Exit without calculating")
 02950   fnacs(sn$,0,mat resp$,ckey) ! proof totals
-02960   let estat=0
+02960   estat=0
 02970   cor=ckey
 02980   if ckey=5 then goto XITWOCAL
 02990   if ckey=1 or ckey=2 or ckey=4 then gosub OFILE
 03000   on ckey goto CORRECTIONS,PRINT_LISTING,GOCALK,ASK_EMPLOYEE none PROOF_TOTALS
 03002 ! ______________________________________________________________________
 03870 DELETE_IT: ! 
-03880 ! Let ENO=0
+03880 ! eNO=0
 03890 ! Let DEP=0
 03900 ! Mat INP=(0)
 03910 ! Let GPD=0
@@ -421,7 +421,7 @@
 04050 ! ______________________________________________________________________
 04930 ! r: unaccessed lines... delete them someday
 04940 !       12/23/2015  these lines seem totally unaccessed     for j=1 to 20
-04950 !       12/23/2015  these lines seem totally unaccessed       if skipit$(j)="Y" then let skipit(j)=1 else let skipit(j)=0
+04950 !       12/23/2015  these lines seem totally unaccessed       if skipit$(j)="Y" then skipit(j)=1 else skipit(j)=0
 04960 !       12/23/2015  these lines seem totally unaccessed   ! If SKIPIT$(J)<>"Y" AND SKIPIT$(J)<>"N" Then cE=J : Goto ERR4
 04970 !       12/23/2015  these lines seem totally unaccessed     next j
 04980 !       12/23/2015  these lines seem totally unaccessed     close #win:
@@ -453,14 +453,14 @@
 35420   let tgp=0
 35460 ! If ESTAT=99 AND EM4=1 Then Goto 3590 ! employment status on salaries people must be 1
 35480 ! If EM4><ESTAT Then Goto 3552
-35500   let eno=val(en$)
-35520   pr fields "16,20,C 60": en$&"  "&em$
+35500   eno=val(en$)
+35520   pr f "16,20,C 60": en$&"  "&em$
 35540 L4290: ! 
 35560   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": 
 35580 L4300: ! 
 35600   read #2,using 'FORM POS 1,n 8,n 3,POS 58,23*PD 4.2': depeno,dep,mat tdet
 35620   if depeno<>eno then goto L1060
-35640   let simplekey$=en$&cnvrt$("n 3",dep)&cnvrt$("n 5",cno) ! timecard
+35640   simplekey$=en$&cnvrt$("n 3",dep)&cnvrt$("n 5",cno) ! timecard
 35660   let reghrs=othrs=vachrs=sickhrs=holhrs=othercomp=0 ! timecard
 35680   if timecard=1 then 
 35700     read #4,using 'form pos 17,6*pd 5.2',key=simplekey$: reghrs,othrs,vachrs,sickhrs,holhrs,othercomp nokey L4380 ! timecard
@@ -487,7 +487,7 @@
 36140   next j
 36160   goto L2220
 38000 CORRECTIONS: ! r:
-38020   let editmode=1
+38020   editmode=1
 38040   fntos(sn$="Employee-ask2")
 38060   let respc=0
 38080   fnlbl(1,1,"Employee to Correct:",22,right)
@@ -496,8 +496,8 @@
 38140   fncmdkey("&Next",1,1,0,"Make corrections to this employee's time." )
 38160   fncmdkey("&Finish",6,0,1,"Finished making corrections")
 38180   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
-38200   if ckey=6 then let editmode=0: goto PROOF_TOTALS ! finished corretions
-38220   let eno=ent=val(resp$(1)(1:8))
+38200   if ckey=6 then editmode=0: goto PROOF_TOTALS ! finished corretions
+38220   eno=ent=val(resp$(1)(1:8))
 38240   read #h_rpwork,using F_RPWORK,key>=cnvrt$("pic(ZZZZZZZZ)",eno)&cnvrt$("pic(ZZZ)",0),release: depeno,dep2,mat inp,gpd,mat hr nokey L4790
 38260   if eno<>depeno then goto L4790
 38280   if eno=0 then goto CORRECTIONS
@@ -516,8 +516,8 @@
 38460   read #h_rpwork,using F_RPWORK,release: depeno,dep2,mat inp,gpd,mat hr nokey CORRECTIONS eof CORRECTIONS
 38480 L4840: ! 
 38500   if depeno<>eno then goto CORRECTIONS
-38520   let em$=""
-38540   let en$=lpad$(str$(eno),8)
+38520   em$=""
+38540   en$=lpad$(str$(eno),8)
 38560   read #h_rpmstr,using F_RPMSTR_1,key=en$: em$,em4,em8,em9,lpd,tgp nokey ignore
 38580   let teno=teno-eno ! remove from proof totals
 38620   mat tinp=tinp-inp
@@ -588,7 +588,7 @@
 50220 ! /r goto L1060
 52000 ! WRH_SIMPLE_OFFSET_HOLIDAY: ! r: offset holiday hours for West Rest Haven
 52020 !   if sickhrs>0 then 
-52040 !     let othrs=othrs-sickhrs
+52040 !     othrs=othrs-sickhrs
 52060 !     let reghrs=reghrs-(max(0,holhrs-sickhrs)) ! wrh places any holiday hours considered overtime in the sick hours column.  The holiday hours are duplicated either in the reg hours or the ot hours.  this is how we decide which
 52080 !   end if 
 52100 !   if sickhrs=0 then let reghrs=reghrs-holhrs ! their timeclock puts holiday hours in reghrs column or othrs as well holiday column  (if no part belongs to othrs, then take all from the regular hrs
@@ -623,14 +623,14 @@
 56540   let inp(1)=inp(1)+h(4) ! accumulate hours
 56560   let inp(2)=inp(2)+h(5)
 56580 L5630: ! 
-56600   let eno=h(1)
+56600   eno=h(1)
 56620   let dep=h(3)
 56640   if h(7)=0 then goto L5660 else let inp(h(7)+7)=inp(h(7)+7)+tdet(h(7)-3)
 56660 L5660: ! 
 56680   if h2=1 or h2=3 then let inp(6)=inp(6)+h(6)
 56700   if h(7)=21 and h(6)>0 then let inp(7)=inp(7)+h(6)
 56720   if eno=0 then goto L5520
-56740   let en$=lpad$(str$(eno),8)
+56740   en$=lpad$(str$(eno),8)
 56760   read #h_rpmstr,using 'form pos 9,c 30,pos 126,2*pd 3.3,pos 168,pd 5.2',key=en$: em$,em8,em9,tgp nokey L5710
 56780   goto L5720
 56800 L5710: ! 
@@ -668,13 +668,13 @@
 57460   if tgp=0 then let ped=0 else let ped=prd
 57480   rewrite #h_rpmstr,using 'form pos 162,n 6,pd 5.2',key=en$: ped,tgp
 57500   if holdeno=eno then goto L5960
-57520   if tgp>0 then let ent1=ent1+1
+57520   if tgp>0 then ent1=ent1+1
 57540 L5960: ! 
 57560   let holdeno=h(1) : let holddep=h(3) : mat inp=(0)
 57580   if eofcode=1 then goto L6000
 57600   goto L5590
 57620 L5990: ! 
-57640   let eofcode=1: goto L5820 ! allow last entry to post
+57640   eofcode=1: goto L5820 ! allow last entry to post
 57660 L6000: ! 
 57680   goto PROOF_TOTALS
 57700 ! /r
@@ -688,7 +688,7 @@
 60140   execute "SORT "&env$('Temp')&"\Sort"&session$&".tmp -n"
 60160   return  ! /r
 62000 ASK_EMPLOYEE: ! r:
-62020   let editmode=0
+62020   editmode=0
 62040   fntos(sn$="Employee-ask")
 62060   let respc=0
 62080   fnlbl(1,1,"Employee:",11,right)
@@ -699,12 +699,12 @@
 62180   fncmdkey("&Finish",6,0,1,"Finished entering hours")
 62200 !                     fnCMDKEY("E&xit",5,0,1,"Returns to menu") !   fix kj
 62220   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
-62240   let eno=ent=val(resp$(1)(1:8))
+62240   eno=ent=val(resp$(1)(1:8))
 62260   if ckey=1 then 
 62280     goto ENTER_TIME
 62300   else if ckey=2 then 
 62320     fnemployee_srch(x$,fixgrid)
-62340     let eno=val(x$)
+62340     eno=val(x$)
 62360     goto ENTER_TIME
 62380   else if ckey=5 or ckey=6 then 
 62400     goto FINISH
@@ -777,7 +777,7 @@
 66820   end if 
 66840 L3270: ! 
 66860   let teno=teno+eno
-66880   let ent1=ent1+1
+66880   ent1=ent1+1
 66900 L3290: ! 
 66920   mat tinp=tinp+inp
 66940   let heno=eno
@@ -785,7 +785,7 @@
 66980   if pc=9 then gosub PL_PRINT_EMP_BLOCK
 67000   let pc=pc+1
 67020   read #h_rpmstr,using F_RPMSTR_1,key=lpad$(str$(eno),8),release: em$ nokey L3440
-67040   let em$=rtrm$(em$)
+67040   em$=rtrm$(em$)
 67060   for j1=len(em$) to 1 step -1
 67080     if em$(j1:j1)=" " then goto L3410
 67100   next j1

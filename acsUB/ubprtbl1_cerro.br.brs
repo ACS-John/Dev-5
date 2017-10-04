@@ -27,7 +27,7 @@
           let x=len(at$(j)) : let y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
-00190   let linelength=62
+00190   linelength=62
 00200   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
 00210   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence #
 00220   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -36,11 +36,11 @@
 00250 SCREEN1: ! 
 00260   a$="" : let prtbkno=0
 00270   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : let ll=24 !:
+        let pf=26 : ll=24 !:
         let respc=0
 00280   a$="" : let prtbkno=0
 00290   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : let ll=24 !:
+        let pf=26 : ll=24 !:
         let respc=0
 00300   fnlbl(1,1,"Service From:",ll,1)
 00310   fntxt(1,pf,8,8,1,"1",0,tt$) !:
@@ -89,9 +89,9 @@
 00510   if resp$(9)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(9))
-00520   if resp$(10)="True" then let sl1=1 else let sl1=0
+00520   if resp$(10)="True" then sl1=1 else sl1=0
 00530   if trim$(a$)<>"" then read #2,using L540,key=a$: holdz$,route,sequence nokey SCREEN1 ! !:
-          let st1=1
+          st1=1
 00540 L540: form pos 1,c 10,pos 1741,n 2,n 7
 00550   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00560   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
@@ -120,23 +120,23 @@
 00790   if prtbkno><route then goto F5_CANCEL
 00800 L800: if f><d1 then goto L640
 00810 ! If ST1=0 Then Goto HERE
-00820 ! If ST1$=Z$ Then Let ST1=0 Else Goto 650
+00820 ! If ST1$=Z$ Then sT1=0 Else Goto 650
 00830 HERE: ! 
 00840 ! read alternate billing address
 00850   read #3,using L870,key=z$: mat ba$ nokey L940
 00860   if trim$(ba$(1))="" and trim$(ba$(2))="" and trim$(ba$(3))="" and trim$(ba$(4))="" then goto L940
 00870 L870: form pos 11,4*c 30
-00880   let e1=0 : mat pe$=("")
+00880   e1=0 : mat pe$=("")
 00890   for j=1 to 4
 00900     if trim$(ba$(j))<>"" then !:
             let pe$(e1+=1)=ba$(j)
 00910   next j
 00920   goto L1060
 00930 ! ______________________________________________________________________
-00940 L940: let e1=0 : mat pe$=("")
+00940 L940: e1=0 : mat pe$=("")
 00950   for j=2 to 4
 00960     if rtrm$(e$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : let pe$(e1)=e$(j)
 00970   next j
 00980   goto L1060
 00990 ! ______________________________________________________________________

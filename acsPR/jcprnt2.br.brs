@@ -20,7 +20,7 @@
 00190 ! ______________________________________________________________________
 00200 MAIN_SCREEN: ! 
 00210   fntos(sn$="namlst1") !:
-        let mylen=25 : let mypos=mylen+2: let resp=0: let left=1
+        let mylen=25 : let mypos=mylen+2: let resp=0: left=1
 00220   fnlbl(1,1,"Report Heading Date:",23,left)
 00230   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
         let resp$(resp+=1)=dh$

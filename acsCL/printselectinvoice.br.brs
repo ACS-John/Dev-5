@@ -23,18 +23,18 @@
 00200   open #paymstr1:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00210   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00220   open #unpdaloc=5: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\uaidx2.H"&str$(cno)&",Shr",internal,outin,keyed 
-00230   let sc3$(2)=" Total Invoices selected for payment-Bank " !:
-        let sc3$(2)=sc3$(2)&ltrm$(str$(bankcode))&":" !:
-        let sc3$(3)=" Balance after paying selected Invoices:" !:
-        let sc3$(4)=" Total Invoices not selected for payment from Bank " !:
-        let sc3$(4)=sc3$(4)&rtrm$(str$(bankcode))&":" !:
-        let sc3$(5)=" Total of all unpaid Invoices (less credits) on file:"
+00230   sc3$(2)=" Total Invoices selected for payment-Bank " !:
+        sc3$(2)=sc3$(2)&ltrm$(str$(bankcode))&":" !:
+        sc3$(3)=" Balance after paying selected Invoices:" !:
+        sc3$(4)=" Total Invoices not selected for payment from Bank " !:
+        sc3$(4)=sc3$(4)&rtrm$(str$(bankcode))&":" !:
+        sc3$(5)=" Total of all unpaid Invoices (less credits) on file:"
 00240   read #bankmstr,using 'Form Pos 45,PD 6.2,PD 6.2,G 8',key=bc$,release: bal,upi,lcn$ nokey L250
-00250 L250: let sc3$(1)=" Bank Code "&bc$&" Current Bank Balance:"
+00250 L250: sc3$(1)=" Bank Code "&bc$&" Current Bank Balance:"
 00260   let t1(1)=bal
 00270   fnopenprn !:
         ! fnwait !:
-        pr fields "13,34,C 12,B,99": "Cancel (Esc)" !:
+        pr f "13,34,C 12,B,99": "Cancel (Esc)" !:
         on fkey 99 goto EO_PAYTRANS
 00280   restore #paytrans,key>="                    ": nokey EO_PAYTRANS !:
         let hvn$="" : let t1=pg1=0
@@ -97,7 +97,7 @@
 00790 ! ______________________________________________________________________
 00800 BREAKDOWN: ! 
 00810 ! 
-00820   let startxx=0
+00820   startxx=0
 00830   restore #unpdaloc,key>=vn$&iv$: nokey EO_UNPDALOC
 00840 L840: read #unpdaloc,using 'Form pos 1,c 20,Pos 21,N 3,N 6,N 3,PD 5.2,C 30': newkey$,mat gl,aa,de$ eof EO_UNPDALOC nokey EO_UNPDALOC !:
         if newkey$<>vn$ & iv$ then goto EO_UNPDALOC
@@ -106,7 +106,7 @@
           pr #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,PIC(ZZZ,ZZZ,ZZZ.##CR),POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': vn$,iv$,val(up$(1)),val(up$(2)),up$(4),upa,mat gl, de$, aa pageoflow PGOF
 00870   if startxx>0 then !:
           pr #255,using 'Form POS 79,N 3,N 6,N 3,X 1,C 30,X 1,PIC(---,--#.##)': mat gl, de$, aa
-00880   let startxx+=1
+00880   startxx+=1
 00890   goto L840
 00900 EO_UNPDALOC: ! 
 00910   if startxx=0 then !:

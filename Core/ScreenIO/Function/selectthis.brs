@@ -8,11 +8,11 @@
  !
  def fnSelectThis(controlindex,mat subscripts$,mat controlname$,prefix$,mat s$,mat f$;___,FileSubscript,Return$*255,ScreenSubscript)
     let FileSubscript=fnFindSubscript(mat Subscripts$,prefix$,controlname$(controlIndex))
-    let ScreenSubscript=fnFindSubscript(mat Subscripts$,"sio_",controlname$(controlIndex))
+    screenSubscript=fnFindSubscript(mat Subscripts$,"sio_",controlname$(controlIndex))
 
     let Return$=fnCallScreen$("["&trim$(controlname$(controlindex))&"]")
     if len(trim$(Return$)) then
        let f$(FileSubscript)=Return$
-       let s$(ScreenSubscript)=fnReadUnopenedDescription$(trim$(controlname$(controlindex)),Return$)
+       s$(ScreenSubscript)=fnReadUnopenedDescription$(trim$(controlname$(controlindex)),Return$)
     end if
  fnend

@@ -26,7 +26,7 @@
 15200   if ckey=5 then goto XIT
 15400 ! 
 15600   beg_date=val(resp$(1))
-15800   let end_date=val(resp$(2))
+15800   end_date=val(resp$(2))
 16000 ! 
 16200   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : close #1: 
 16400   let ficarate=ficarate/100 : let feducrat=feducrat/100 : let mcr=mcr/100
@@ -151,16 +151,16 @@
 39400     let t2=t2+m(3)
 39600     let t3=t3+m(5)
 39800     let t4=t4+m(7)
-40000     let l1=l1+m(9)
-40200     let l3=l3+m(31)
-40400     let l5=l5+m(35)
+40000     l1=l1+m(9)
+40200     l3=l3+m(31)
+40400     l5=l5+m(35)
 40600     let t5=t5+m(2)
 40800     let t6=t6+m(4)
 41000     let t7=t7+m(6)
 41200     let t8=t8+m(8)
-41400     let l2=l2+m(10)
-41600     let l4=l4+m(32)
-41800     let l6=l6+m(36)
+41400     l2=l2+m(10)
+41600     l4=l4+m(32)
+41800     l6=l6+m(36)
 42000   fnend 
 42200   def fn_print_3
 42400     pr #255,using L1450: eno,k$(1)(1:12),m(1),m(3),m(5),m(7),m(9),m(31),m(35),m(2),m(4),m(6),m(8),m(10) pageoflow PGOF3

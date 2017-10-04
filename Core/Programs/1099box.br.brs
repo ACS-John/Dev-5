@@ -8,8 +8,8 @@
 00080   dim cap$*128,fltyp$(2),sln(2),mask(2),fln(2),p$(2)*60,lbl$(2)
 00090 ! ______________________________________________________________________
 00100 ! the Third Item (C 40) is not used and is there for unintended use
-00110   let lbl$(1)="Box Number" : let lbl$(2)="Description" ! Let LBL$(3)="NA"
-00120   let fln(1)=2 : let fln(2)=60 ! Let FLN(3)=40
+00110   lbl$(1)="Box Number" : lbl$(2)="Description" ! lBL$(3)="NA"
+00120   fln(1)=2 : fln(2)=60 ! flN(3)=40
 00130   let mask(1)=1030 ! Let MASK(3)=20000
 00140   open #1: "Name="&env$('Q')&"\Data\1099Box.dat,KFName="&env$('Q')&"\Data\1099Box.Idx,Use,RecL=102,KPs=1,KLn=2,Shr",internal,outin,keyed 
 00150   fnhamster("1099Box",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)

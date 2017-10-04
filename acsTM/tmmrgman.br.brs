@@ -5,7 +5,7 @@
 00060   dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4,ivr(6),arta(2),ga(10),pgl$*12
 00070   dim cde$(10)*6,gl$*12,des$*20
 00080   pr newpage
-00090   pr fields "10,20,c 60,h,n": "T/M MERGE INVOICES IN PROCESS"
+00090   pr f "10,20,c 60,h,n": "T/M MERGE INVOICES IN PROCESS"
 00100   open #3: "Name="&env$('Q')&"\TMmstr\TMWk2"&wsid$&".H"&str$(cno)&",NoShr",internal,input 
 00110   open #12: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&str$(cno)&",Shr",internal,outin,relative 
 00120   open #2: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&str$(cno)&",Shr",internal,outin,relative 
@@ -30,11 +30,11 @@
 00310   if b(8)=0 then b8=25 else b8=b(8)
 00320   read #1,using L330,key=k$: e$,mat sc,mat ca,ar1,mat arta nokey L770 
 00330 L330: form pos 179,c 9,pos 220,10*n 1,10*pd 3,pos 283,pd 5.2,pos 299,2*pd 3
-00340 L340: let lta=lrec(2)+1
+00340 L340: lta=lrec(2)+1
 00350   write #2,using L360,rec=lta,reserve: k$," ",mat b,sc$,iv$,0 duprec L340 
 00360 L360: form pos 1,c 5,c 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,c 4,c 12,pd 3
 00370   rewrite #2,using L130,rec=1,release: lta
-00380 L380: let lar=lrec(12)+1
+00380 L380: lar=lrec(12)+1
 00390   write #12,using L400,rec=lar,reserve: k$,iv$,b(4),b(3),b(3),0,1,0,des$,0 duprec L380
 00400 L400: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,pd 3
 00410   if arta(2)>0 then rewrite #12,using L450,rec=arta(2): lar
@@ -53,7 +53,7 @@
 00540   if ta1=0 then let ta1=lta
 00550   rewrite #4,using L510,rec=ca(b(5)),release: ta1,lta,fb1
 00560   goto L690 ! 6/24/87
-00570 L570: let lta4=lrec(4)+1
+00570 L570: lta4=lrec(4)+1
 00580   mat ta=(0)
 00590   mat fb=(0)
 00600   ca(b(5))=lta4
@@ -69,7 +69,7 @@
 00700   let ga(1)=b(3)
 00710 ! write #h_armotran,using F_armotran: k$,iv$,b(4),b(3),b(3),0,1,0,des$,pgl$,mat igl$,mat ga
 00720 ! F_armotran: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,11*c 12,10*pd 5.2
-00730   if b(7)=-2 then let sc(b(5))=2
+00730   if b(7)=-2 then sc(b(5))=2
 00740   rewrite #1,using L750,key=k$: mat sc,mat ca,ar1,mat arta
 00750 L750: form pos 220,10*n 1,10*pd 3,pos 283,pd 5.2,pos 299,2*pd 3
 00760   let ga(1)=b(3)
@@ -79,16 +79,16 @@
 00800   close #3: 
 00810   close #4: 
 00820 XIT: let fnxit
-00830 ERTN: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L850
+00830 ERTN: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L850
 00840   goto L890
 00850 L850: pr newpage
-00860   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L880
+00860   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L880
 00870   goto L890
-00880 L880: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00890 L890: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00880 L880: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00890 L890: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00900   input fields "24,60,C 1,N": quitcode$
 00910   if rtrm$(uprc$(quitcode$))="Q" then goto L950
-00920   pr fields "23,3,C 78,N": ""
-00930   pr fields "24,3,C 78,N": ""
+00920   pr f "23,3,C 78,N": ""
+00930   pr f "24,3,C 78,N": ""
 00940   retry 
 00950 L950: goto XIT

@@ -8,7 +8,7 @@
  def fnSelectFile(controlindex,mat subscripts$,mat controlname$,prefix$,mat s$,mat f$;___,Folder$*255,FileHandle)
     
     let FileSubscript=fnFindSubscript(mat Subscripts$,prefix$,controlname$(controlIndex))
-    let ScreenSubscript=fnFindSubscript(mat Subscripts$,"sio_",controlname$(controlIndex))
+    screenSubscript=fnFindSubscript(mat Subscripts$,"sio_",controlname$(controlIndex))
 
     let Folder$=trim$(f$(FileSubscript))
     if Folder$="" then let Folder$=".\"
@@ -24,6 +24,6 @@
        end if
 
        if FileSubscript then let f$(FileSubscript)=folder$
-       if ScreenSubscript then let s$(ScreenSubscript)=folder$
+       if ScreenSubscript then s$(ScreenSubscript)=folder$
     end if
  fnend

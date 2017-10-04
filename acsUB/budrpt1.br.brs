@@ -27,7 +27,7 @@
 00230   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 00240   open #82: "Name="&env$('Q')&"\UBmstr\BudTrans.h"&env$('cno')&",Shr",internal,outin,relative 
 00250   bud1=1
-00260   let sn$="BudRpt1" !:
+00260   sn$="BudRpt1" !:
         fntos(sn$) !:
         let mylen=32 : let mypos=mylen+2
 00270   let txt$="Starting Date (blank for all):" !:
@@ -74,11 +74,11 @@
 00630   if y<x then goto L800
 00640   let x=0: if d2>0 then let x=d2 : let x=fndate_mmddyy_to_ccyymmdd(x) else goto L660
 00650   if y>x then goto L800
-00660 L660: let service=1
+00660 L660: service=1
 00670   let t1(1)=bt1(1,1) ! date
 00680   for j=1 to 10
 00690     if trim$(servicename$(j))="" then goto L720
-00700     let service=service+1
+00700     service=service+1
 00710     let t1(service)=bt1(j+1,2) !:
           let totalbudget=totalbudget+bt1(j+1,1) !:
           let totactual=totactual+bt1(j+1,2)

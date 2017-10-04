@@ -15,11 +15,11 @@
 00150     for file_item=1 to udim(mat filename$)
 00160       let dot_pos=pos(filename$(file_item),'.',-1)
 00170       backslash_pos=pos(filename$(file_item),'\',-1)
-00180       let ext$=''
+00180       ext$=''
 00190       if backslash_pos<=0 or dot_pos>backslash_pos then 
-00200         let ext$=filename$(file_item)(dot_pos+1:len(filename$(file_item)))
+00200         ext$=filename$(file_item)(dot_pos+1:len(filename$(file_item)))
 00210       end if 
-00220       let ext$=lwrc$(ext$)
+00220       ext$=lwrc$(ext$)
 00230       if (ext$='br' or ext$='wb' or ext$='lib' or ext$='cnv') and pos(filename$(file_item),'264')<=0 then 
 00240         fn_make_source_add(filename$(file_item),dir_source$,dir_destination$)
 00250       end if  ! ext$=...

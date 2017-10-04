@@ -11,17 +11,17 @@
 00120   close #1: 
 00130   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L770
 00140 L140: pr newpage
-00150   pr fields "10,10,c 53,n": "ENTER 1 FOR A LISTING, ENTER 2 TO RESET STATUS CODES"
+00150   pr f "10,10,c 53,n": "ENTER 1 FOR A LISTING, ENTER 2 TO RESET STATUS CODES"
 00160   input fields "10,65,n 1,eu,n": lstres conv L220
 00170   on lstres goto L180,L580 none L140
 00180 L180: pr newpage
-00190   pr fields "7,10,c 60,n": "POSITION PAPER IN PRINTER FOR LISTING OF COMPLETED JOBS"
-00200   pr fields "10,2,c 68,n": "ENTER DATE OF LISTING IN MMDDYY FORMAT"
-00210   pr fields "10,72,n 6,n": dat
+00190   pr f "7,10,c 60,n": "POSITION PAPER IN PRINTER FOR LISTING OF COMPLETED JOBS"
+00200   pr f "10,2,c 68,n": "ENTER DATE OF LISTING IN MMDDYY FORMAT"
+00210   pr f "10,72,n 6,n": dat
 00220 L220: input fields "10,72,n 6,eu,n": dat conv L220
 00230   if dat<10100 or dat>123199 then goto L180
 00240   pr newpage
-00250   pr fields "10,15,c 60,n": "COMPLETED JOB LISTING IN PROCESS"
+00250   pr f "10,15,c 60,n": "COMPLETED JOB LISTING IN PROCESS"
 00260   gosub L450
 00270 L270: read #1,using L280: z$,a$,mat sc eof L570 ioerr L770
 00280 L280: form pos 1,c 5,c 30,pos 220,10*n 1
@@ -55,34 +55,34 @@
 00560   return 
 00570 L570: pr #255: newpage
 00580 L580: pr newpage
-00590   pr fields "10,10,c 53,n": "ENTER CLIENT NUMBER TO CHANGE, ENTER 0 WHEN COMPLETE"
+00590   pr f "10,10,c 53,n": "ENTER CLIENT NUMBER TO CHANGE, ENTER 0 WHEN COMPLETE"
 00600 L600: input fields "10,72,n 5,eu,n": clinum conv L600
 00610   if clinum=0 then goto L740
 00620   read #1,using L280,key=lpad$(rtrm$(str$(clinum)),5): z$,a$,mat sc nokey L580 ioerr L770
 00630 L630: pr newpage
-00640   pr fields "6,10,c 69,n": "CLIENT NUMBER "&ltrm$(z$)&"   CLIENT NAME "&rtrm$(a$)
-00650   pr fields "10,10,c 53,n": "ENTER CATEGORY NUMBER TO RESET, ENTER 0 WHEN COMPLETE"
+00640   pr f "6,10,c 69,n": "CLIENT NUMBER "&ltrm$(z$)&"   CLIENT NAME "&rtrm$(a$)
+00650   pr f "10,10,c 53,n": "ENTER CATEGORY NUMBER TO RESET, ENTER 0 WHEN COMPLETE"
 00660 L660: input fields "10,72,n 2,eu,n": cat conv L660
 00670   if cat=0 then goto L720
 00680   if cat<1 or cat>10 then goto L630
 00690   if sc(cat)=1 then goto L630
-00700   let sc(cat)=0
+00700   sc(cat)=0
 00710   goto L630
 00720 L720: rewrite #1,using L280,key=lpad$(rtrm$(str$(clinum)),5): z$,a$,mat sc
 00730   goto L580
 00740 L740: close #1: 
 00750   if uprc$(rtrm$(prg$))="S:\Time Management\Client Legacy" then chain prg$
 00760   goto XIT
-00770 L770: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L790
+00770 L770: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L790
 00780   goto L830
 00790 L790: pr newpage
-00800   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L820
+00800   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L820
 00810   goto L830
-00820 L820: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00830 L830: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00820 L820: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00830 L830: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00840   input fields "24,60,C 1,N": quitcode$
 00850   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-00860   pr fields "23,3,C 78,N": ""
-00870   pr fields "24,3,C 78,N": ""
+00860   pr f "23,3,C 78,N": ""
+00870   pr f "24,3,C 78,N": ""
 00880   retry 
 00890 XIT: let fnxit

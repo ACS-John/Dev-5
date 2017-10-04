@@ -34,8 +34,8 @@
 00200 MENU1: pr newpage
 00210   fntos(sn$="acglnote") !:
         let mylen=20: let mypos=mylen+3 : let right=1
-00220   let option$(1)="1 = Edit Notes to Financial Statements" !:
-        let option$(2)="2 = pr Notes"
+00220   option$(1)="1 = Edit Notes to Financial Statements" !:
+        option$(2)="2 = pr Notes"
 00230   fncomboa("NoteOption",1,mypos,mat option$,"You can edit or pr notes to the financial statements ",40)
 00240   fncmdkey("&Next",1,1,0,"Allows you to enter information.")
 00250   fncmdkey("&Cancel",5,0,1,"Return to menu.")
@@ -50,8 +50,8 @@
 00320 L320: pr newpage
 00330   open #1: "Name="&env$('Q')&"\GLmstr\AcGLNote.h"&str$(cno)&",Shr",display,input ioerr MENU1
 00340   pr newpage
-00350   pr fields "10,20,Cc 25,N": "Foot Notes Printing..." !:
-        pr fields "12,2,C 11,B,5": "Cancel (F5)" !:
+00350   pr f "10,20,Cc 25,N": "Foot Notes Printing..." !:
+        pr f "12,2,C 11,B,5": "Cancel (F5)" !:
         on fkey 5 goto L460 !:
         fnopenprn
 00360 ! 
@@ -59,12 +59,12 @@
 00380   for j2=1 to len(rtrm$(ln$))
 00390     if ln$(j2:j2)><"@" then goto L430
 00400     if ln$(j2+1:j2+1)="1" then !:
-            let ln$(j2:j2+1)=rtrm$(fnpedat$)&ln$(j2+2:78-len(rtrm$(fnpedat$))) !:
+            ln$(j2:j2+1)=rtrm$(fnpedat$)&ln$(j2+2:78-len(rtrm$(fnpedat$))) !:
             goto L420
 00410     if ln$(j2+1:j2+1)="2" then !:
-            let ln$(j2:j2+1)=rtrm$(dat$)&ln$(j2+2:78-len(rtrm$(dat$))) !:
+            ln$(j2:j2+1)=rtrm$(dat$)&ln$(j2+2:78-len(rtrm$(dat$))) !:
           else if ln$(j2+1:j2+1)="3" then !:
-            let ln$(j2:j2+1)=rtrm$(actpd$)&ln$(j2+2:78-len(rtrm$(fnactpd$)))
+            ln$(j2:j2+1)=rtrm$(actpd$)&ln$(j2+2:78-len(rtrm$(fnactpd$)))
 00420 L420: ! 
 00430 L430: next j2
 00440 pr #255: tab(10);ln$

@@ -7,8 +7,8 @@
 00026 ! ______________________________________________________________________
 00032   fncno(cno)
 00040 L40: pr newpage
-00050   pr fields "8,20,C 30,R,N": "  CONVERT PAYROLL FILES"
-00060   pr fields "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
+00050   pr f "8,20,C 30,R,N": "  CONVERT PAYROLL FILES"
+00060   pr f "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
 00070 L70: rinput fields "10,55,N 5,UT,N": cno conv L70
 00080   if cno=0 then goto XIT
 00090 ! 

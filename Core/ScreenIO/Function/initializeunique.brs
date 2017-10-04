@@ -5,7 +5,7 @@
  ! This function will initialize any key to unique
  !
  def fnInitializeUnique(mat Subscripts$,mat f$,prefix$,DataFile;___,Subscript)
-    let Subscript=fnFindSubscript(mat Subscripts$,prefix$,"id")
+    subscript=fnFindSubscript(mat Subscripts$,prefix$,"id")
     if Subscript then
        let f$(Subscript)=fnMakeUniqueKey$(DataFile)
     end if

@@ -38,11 +38,11 @@
 00370   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
 00380   beg_date=val(resp$(1))
-00390   let end_date=val(resp$(2))
+00390   end_date=val(resp$(2))
 00400   let taxyear=val(resp$(2)(1:4))
 00410   if beg_date=0 or end_date=0 then goto L290
-00420   let ssrate=.062 !:
-        let ssmax=102000 !:
+00420   ssrate=.062 !:
+        ssmax=102000 !:
         let mcrate=.0145 !:
         let mcmax=999999 !:
         let w1=4 !:
@@ -99,8 +99,8 @@
 00720   fncmdkey("&Cancel",5,0,1,"Returns to menu")
 00730   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
-00740   let ssrate=val(resp$(1))
-00750   let ssmax=val(resp$(2))
+00740   ssrate=val(resp$(1))
+00750   ssmax=val(resp$(2))
 00760   let mcrate=val(resp$(3))
 00770   let mcmax=val(resp$(4))
 00780   if resp$(5)="True" then let w1=4 else let w1=3
@@ -149,11 +149,11 @@
 01210   if prd<beg_date or prd>end_date then goto L1190 ! not this year
 01220   read #2,using "form pos 48,n 2", key=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zzz)",tdn): tcd nokey L1230 ! get state code
 01230 L1230: if tcd<1 or tcd>10 then let tcd=1
-01240   if w1=3 then let stcode=tcd : goto L1270
-01250   if first=1 then let stcode=tcd
+01240   if w1=3 then stcode=tcd : goto L1270
+01250   if first=1 then stcode=tcd
 01260   if first=0 and stcode><tcd then goto L1290
-01270 L1270: let state$=d$(tcd)(1:2)
-01280   let stcode$=e$(tcd)
+01270 L1270: state$=d$(tcd)(1:2)
+01280   stcode$=e$(tcd)
 01290 L1290: let dedfica=0
 01300   let dedret=0
 01310   for j=1 to 20
@@ -182,7 +182,7 @@
 01550 L1550: if pn1>0 and tcp(pn1+4)>0 then let px$="X"
 01560   if dc1>0 and dc1<11 then let dcb=dcb+tcp(dc1+4)
 01570   goto L1620
-01580 L1580: if loccode=0 then let lowh=0 else let lowh=tcp(loccode+4)
+01580 L1580: if loccode=0 then lowh=0 else lowh=tcp(loccode+4)
 01590   write #3,using L1600: eno,tcd,tcp(31)-dedret,tcp(3),lowh,f$
 01600 L1600: form pos 1,n 8,n 2,3*pd 5.2,c 8
 01610   let goproc=1
@@ -289,9 +289,9 @@
 02600   if ckey=5 then let totalcode=1 : goto L2130
 02610   restore #1: 
 02620   let numb=val(resp$(1)(1:8))
-02630   let endnum=val(resp$(2)(1:8))
+02630   endnum=val(resp$(2)(1:8))
 02640   if numb=0 then goto L1040
-02650   let empno=numb
+02650   empno=numb
 02660   goto L1040
 02670 ! ___________________________________________
 02680 ASK_LOCALITY: ! 
@@ -321,7 +321,7 @@
 02880 L2880: execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 02890   fnxit ! stop  ! Let FNCHAIN("S:\acsPR\prw2b")
 02900 ! ___________________________________________
-02910 TOT1: mat k$=(""): let ss$=stcode$=state$=pf$="": let eno=0: let k$(1)="Total Sheet"
+02910 TOT1: mat k$=(""): ss$=stcode$=state$=pf$="": eno=0: let k$(1)="Total Sheet"
 02920   let x$=" ": let p1=58: let p2=126
 02930 PRINTW2: ! pr W2 FORM
 02940   gosub ASK_OLD_INFO
@@ -332,30 +332,30 @@
 02960   let inc=0
 02970   pr #20: 'Call Print.MyFontSize(10)'
 02980   let txt$=ss$
-02990   let lyne+=4.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+02990   lyne+=4.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03000   let txt$=str$(taxyear)
 03010   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03020   let txt$=a$(1)
-03030   let lyne=lyne+4.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03030   lyne=lyne+4.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03040   let txt$=a$(2)
-03050   let lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03050   lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03060   let txt$=a$(3)
-03070   let lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03070   lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03080   if trim$(oldss$)<>trim$(ss$) then goto L3090 else goto L3110
 03090 L3090: let txt$=oldss$
-03100   let lyne+=3: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03100   lyne+=3: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03110 L3110: let txt$=b$
-03120   let lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+03120   lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03130   let txt$= trim$(first$)&" "&trim$(mid$)(1:1)
-03140   let lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03140   lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03150   let txt$=last$
 03160   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03170   let txt$=k$(2)
-03180   let lyne=lyne+5.3: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03180   lyne=lyne+5.3: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03190   let txt$=k$(3)
-03200   let lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
+03200   lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03210   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(2))
-03220   let lyne=lyne+17: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03220   lyne=lyne+17: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03230   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(2))
 03240   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03250   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(1))
@@ -363,7 +363,7 @@
 03270   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(1))
 03280   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03290   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(5))
-03300   let lyne+=8: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03300   lyne+=8: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03310   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(5))
 03320   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03330   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(3))
@@ -371,7 +371,7 @@
 03350   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(3))
 03360   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03370   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(11))
-03380   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03380   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03390   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(11))
 03400   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03410   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(12))
@@ -379,11 +379,11 @@
 03430   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(12))
 03440   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03450   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(6))
-03460   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03460   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03470   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(6))
 03480   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03490   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(4))
-03500   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03500   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03510   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(4))
 03520   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03530   let txt$=cnvrt$("pic(zz,zzz,zzz.##",dcb)
@@ -391,15 +391,15 @@
 03550   let txt$=cnvrt$("pic(zz,zzz,zzz.##",olddcb)
 03560   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
 03570   let txt$=desc$(1)
-03580   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03580   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03590   let txt$=box1a$&"  "&cnvrt$("pic(zz,zzz,zzz.##",box1)
 03600   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
 03610   let txt$=desc$(3)
-03620   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03620   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03630   let txt$=box2b$&"  "&cnvrt$("pic(zz,zzz,zzz.##",box2)
 03640   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
 03650   let txt$=px$
-03660   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(posx)&','&str$(lyne)&')'
+03660   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(posx)&','&str$(lyne)&')'
 03670   if posx<51 then goto L3700
 03680   let txt$=px$
 03690   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(posx-50)&','&str$(lyne)&')'
@@ -408,40 +408,40 @@
 03720   let txt$=box3c$&"  "&cnvrt$("pic(zz,zzz,zzz.##",box3)
 03730   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
 03740   let txt$=desc$(5)
-03750   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
+03750   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
 03760   let txt$=box4d$&"  "&cnvrt$("pic(zz,zzz,zzz.##",box4)
 03770   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-3)&','&str$(lyne)&')'
 03780 ! Let TXT$=DESC$(6)
-03790 ! Let LYNE=LYNE+8.5: pr #20: 'Call Print.AddText("'&TXT$&'",'&STR$(COLUMN4)&','&STR$(LYNE)&')'
+03790 ! lYNE=LYNE+8.5: pr #20: 'Call Print.AddText("'&TXT$&'",'&STR$(COLUMN4)&','&STR$(LYNE)&')'
 03800   let txt$=state$
-03810   let lyne=lyne+21: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03810   lyne=lyne+21: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03820   let txt$=state$
 03830   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03840   let txt$=stcode$
-03850   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03850   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03860   let txt$=stcode$
 03870   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03880   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(9))
-03890   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03890   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03900   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(9))
 03910   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03920   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(7))
-03930   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03930   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03940   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(7))
 03950   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03960   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(10))
-03970   let lyne+=17: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+03970   lyne+=17: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 03980   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(10))
 03990   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 04000   let txt$=cnvrt$("pic(zz,zzz,zzz.##",w(8))
-04010   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+04010   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 04020   let txt$=cnvrt$("pic(zz,zzz,zzz.##",oldw(8))
 04030   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 04040   let txt$=pf$(1:6)
-04050   let lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
+04050   lyne+=8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 04060   let txt$=pf$(1:6)
 04070   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
-04080   fnpa_newpage : let lyne=topmargin: count=0
+04080   fnpa_newpage : lyne=topmargin: count=0
 04090   goto L4110
 04100 L4100: let x$=""
 04110 L4110: return 
@@ -461,38 +461,38 @@
 04270 ! If (J=3 OR J=4) AND (IN4$(J*5-4)(1:1)="D" OR IN4$(J*5-4)(1:1)="E" OR IN4$(J*5-4)(1:1)="F" OR IN4$(J*5-4)(1:1)="H") Then Let W(13)=W(13)+AMT(J) ! SUBTOTAL BOX 17 IF D,E,F,OR H CODES
 04280   next j
 04290 L4290: return 
-04300 L4300: if err=61 then pr fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L4320
+04300 L4300: if err=61 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L4320
 04310   goto L4360
 04320 L4320: pr newpage
-04330   if err=4148 then pr fields "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L4350
+04330   if err=4148 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L4350
 04340   goto L4360
-04350 L4350: pr fields "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-04360 L4360: pr fields "24,1,C 80,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+04350 L4350: pr f "23,1,C 80,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+04360 L4360: pr f "24,1,C 80,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 04370   input fields "24,60,C 1,N": quitcode$
 04380   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-04390   pr fields "23,1,C 80,N": ""
-04400   pr fields "24,1,C 80,N": ""
+04390   pr f "23,1,C 80,N": ""
+04400   pr f "24,1,C 80,N": ""
 04410   retry 
 04420   goto XIT
 04430 L4430: dim fl$*40
 04440 ! pr NEWPAGE
 04450   close #101: ioerr L4460
 04460 L4460: open #101: "SROW=2,SCOL=2,EROW=07,ECOL=35,BORDER=DR,CAPTION=SELECT LASER W2 SOFTWARE",display,outin 
-04470   pr fields "3,5,C 28": "1 = ADVANCED MICRO SOLUTIONS"
-04480   pr fields "4,5,C 28": "2 = CENTER PIECE SOFTWARE"
-04490   pr fields "6,5,C 25,R,N": " ENTER YOUR SELECTION #: "
-04500   pr fields "8,8,C 16,R,N": "PRESS F5 TO STOP"
+04470   pr f "3,5,C 28": "1 = ADVANCED MICRO SOLUTIONS"
+04480   pr f "4,5,C 28": "2 = CENTER PIECE SOFTWARE"
+04490   pr f "6,5,C 25,R,N": " ENTER YOUR SELECTION #: "
+04500   pr f "8,8,C 16,R,N": "PRESS F5 TO STOP"
 04510 L4510: input fields "6,30,N 1,UET,N": sw1 conv L4510
 04520   if cmdkey=5 then goto XIT
 04530   on sw1 goto L4540,L4550 none L4510
-04540 L4540: let fl$="\1099ETC.W04\W2DATA\W2DAT.PRN" : goto L4560
-04550 L4550: let fl$="\CPS04\ASCIIW2.TXT" : goto L4560
+04540 L4540: fl$="\1099ETC.W04\W2DATA\W2DAT.PRN" : goto L4560
+04550 L4550: fl$="\CPS04\ASCIIW2.TXT" : goto L4560
 04560 L4560: pr #101: newpage
-04570   pr fields "3,5,C 30,R,N": "ENTER OUTPUT PATH & FILE NAME"
+04570   pr f "3,5,C 30,R,N": "ENTER OUTPUT PATH & FILE NAME"
 04580 L4580: rinput fields "5,5,C 30,UT,N": fl$
 04590   if cmdkey=5 then goto XIT
 04600   on sw1 goto L4620,L4640
-04610   let fl$=rtrm$(fl$)
+04610   fl$=rtrm$(fl$)
 04620 L4620: open #5: "Name="&fl$&",REPLACE",display,output ioerr L4580
 04630   goto L4650
 04640 L4640: open #5: "Name="&fl$&",RecL=470,REPLACE",display,output ioerr L4580
@@ -504,7 +504,7 @@
 04700   let p1=0
 04710   for j=1 to 11
 04720     let p1=pos(ss$," ",1)
-04730     if p1>0 then let ss$(p1:p1)=""
+04730     if p1>0 then ss$(p1:p1)=""
 04740   next j
 04750   pr #5: "ROAN=";g$
 04760   pr #5: "FEIN=";b$
@@ -620,11 +620,11 @@
 05810   let x3=pos(k$(1)," ",x2+1)
 05820   if uprc$(namcde$)="L" then goto L5870
 05830   let first$=k$(1)(1:max(min(15,x1-1),1))
-05840   if x2>0 then let mid$=k$(1)(x1+1:x2-1): let last$=k$(1)(x2+1:len(k$(1)))
-05850   if x2=0 then let last$=k$(1)(x1+1:len(k$(1))): let mid$=""
+05840   if x2>0 then let mid$=k$(1)(x1+1:x2-1): last$=k$(1)(x2+1:len(k$(1)))
+05850   if x2=0 then last$=k$(1)(x1+1:len(k$(1))): let mid$=""
 05860   goto L5910
 05870 L5870: ! last name first
-05880   if x1>0 and k$(1)(x1-1:x1-1)="," then let last$=k$(1)(1:x1-2) else let last$=k$(1)(1:max(x1-1,1))
+05880   if x1>0 and k$(1)(x1-1:x1-1)="," then last$=k$(1)(1:x1-2) else last$=k$(1)(1:max(x1-1,1))
 05890   if x2>0 then let first$=k$(1)(x1+1:x2-1): let mid$=k$(1)(x2+1:len(k$(1)))
 05900   if x2=0 then let first$=k$(1)(x1+1:len(k$(1))): let mid$=""
 05910 L5910: ! pr FIRST$,MID$,LAST$
@@ -632,16 +632,16 @@
 05930 L5930: pr newpage ! left or right stub
 05940   close #101: ioerr L5950
 05950 L5950: open #101: "SROW=4,SCOL=14,EROW=6,ECOL=60,BORDER=DR,CAPTION=<"&cap$&" - Right or Left Stub",display,outin 
-05960   pr fields "5,20,C 40,N": '5 1/2" stub on Left or Right (L/R):'
-05970   pr fields "7,28,C 9,B,1": "Next (F1)"
-05980   pr fields "7,39,C 11,B,5": "Cancel (F5)"
+05960   pr f "5,20,C 40,N": '5 1/2" stub on Left or Right (L/R):'
+05970   pr f "7,28,C 9,B,1": "Next (F1)"
+05980   pr f "7,39,C 11,B,5": "Cancel (F5)"
 05990   input fields "5,56,Cu 1,UT,N": left$
 06000   if cmdkey=5 then goto XIT
 06010   return 
 06020 VBOPENPRINT: ! 
 06030   if file(20)=-1 then 
 06040     fnpa_open ! open #20: "Name="&env$('Q')&"\PRmstr\W2"&wsid$&".txt,Replace,RecL=5000",display,output
-06070     let lyne=topmargin ! starting of 1st line
+06070     lyne=topmargin ! starting of 1st line
 06080     character=1.5
 06090   end if 
 06100   return 
@@ -651,7 +651,7 @@
 06150   return 
 06160 ASK_OLD_INFO: ! 
 06170   fntos(sn$="Ask_old") !:
-        let lc=rc=0 : let mylen=20 : let mypos=mylen+3
+        lc=rc=0 : let mylen=20 : let mypos=mylen+3
 06180   if totalcode=0 then let heading$="Enter Information from Incorrect W-2" else let heading$="Total Screen for Corrected W-2s"
 06190   fnlbl(lc+=1,1,heading$,40,0)
 06200   fnlbl(lc+=2,1,"Employee "&str$(eno),mylen,1)
@@ -711,15 +711,15 @@
 06560   fnacs(sn$,0,mat resp$,ckey) ! old amounts
 06561   if totalcode=1 then goto L2270
 06570   if ckey=5 then goto ASK_STARTING
-06580   let oldss$=resp$(1) ! ss#
-06590   let oldw(2)=val(resp$(2)) ! total wage
-06600   let oldw(5)=val(resp$(3)) ! total ss wage
-06610   let oldw(11)=val(resp$(4)) ! total medicare wage
-06620   let oldw(9)=val(resp$(5)) ! total state wage
-06630   let oldw(1)=val(resp$(6)) ! federal wh
-06640   let oldw(3)=val(resp$(7)) ! ss wh
-06650   let oldw(12)=val(resp$(8)) ! medicare wh
-06660   let oldw(7)=val(resp$(9)) ! state  wh
+06580   oldss$=resp$(1) ! ss#
+06590   oldw(2)=val(resp$(2)) ! total wage
+06600   oldw(5)=val(resp$(3)) ! total ss wage
+06610   oldw(11)=val(resp$(4)) ! total medicare wage
+06620   oldw(9)=val(resp$(5)) ! total state wage
+06630   oldw(1)=val(resp$(6)) ! federal wh
+06640   oldw(3)=val(resp$(7)) ! ss wh
+06650   oldw(12)=val(resp$(8)) ! medicare wh
+06660   oldw(7)=val(resp$(9)) ! state  wh
 06670   box1a$=resp$(10) ! box 12a code
 06680   box1=val(resp$(11)) ! box 12a amount
 06690   box2b$=resp$(12) ! box 12b code

@@ -28,9 +28,9 @@
 00200   let in3$(1)="8,25,N 12.2,UT,N" : let in3$(2)="8,45,N 12.2,UT,N"
 00210   let mp1=75
 00220   if fnps=2 then let mp1=mp1+3
-00230   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
-00240   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&"," !:
-          let fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
+00230   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
+00240   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&"," !:
+          fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
 00250   open #1: fl1$,internal,input,keyed 
 00260   if fnprocess=1 or fnUseDeptNo=0 then goto L360
 00270   fntos(sn$="ACglcash") !:
@@ -110,7 +110,7 @@
 00940   if total><0 or total2><0 then goto L970
 00950   if total<>0 then goto L970
 00960   if ls+ds+ul+ic>0 then goto L970 else goto L420
-00970 L970: let sp2=30-sp-1
+00970 L970: sp2=30-sp-1
 00980   if te$="B" then let total=-total: let total2=-total2 !:
           ! Reverse sign on beginning bank balance
 00985   if ul=1 then pr #255,using L1001: d$(1:sp2),dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}" pageoflow L1550 : goto L1000
@@ -129,7 +129,7 @@
 01090   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 01100   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
 01110   if ds=1 then let dollar$="$" else let dollar$=" "
-01120   let sp2=30-sp-1
+01120   sp2=30-sp-1
 01121   if te$="B" then accum2=0
 01125   if ul=1 then pr #255,using L1001: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}" pageoflow L1550 : goto L1140
 01130   pr #255,using L1000: d$(1:sp2),dollar$,accum1,dollar$,accum2 pageoflow L1550
@@ -140,7 +140,7 @@
 01170   goto L420
 01180 ! ______________________________________________________________________
 01190 L1190: if te$="R" then let report$=d$
-01200   if te$="S" then let secondr$=d$
+01200   if te$="S" then secondr$=d$
 01210   gosub L1390
 01220   goto L420
 01230 ! ______________________________________________________________________
@@ -166,8 +166,8 @@
 01430   goto L1530
 01440 L1440: let fnpglen(pglen)
 01450 ! If PGLEN<>42 Then Let PGLEN=58
-01460   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01470 ! If PGLEN=42 Then Let SK=SK+1
+01460   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01470 ! If PGLEN=42 Then sK=SK+1
 01480   pr #255,using L1490: rtrm$(foot$),"Page "&str$(pt1)
 01490 L1490: form skip sk,pos tabnote,c fl,pos 75,c 8,skip 1
 01500   if eofcode=1 then goto L1530
@@ -201,7 +201,7 @@
 01790   pr #255: ""
 01800   return 
 01810 ! ______________________________________________________________________
-01820 L1820: let eofcode=1
+01820 L1820: eofcode=1
 01830   gosub L1440
 01840   fnfscode(pedat)
 01841   fnpriorcd(1)

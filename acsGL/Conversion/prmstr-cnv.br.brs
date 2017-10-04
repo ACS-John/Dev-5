@@ -9,9 +9,9 @@
 00080   dim pr1$*90,pr1(18),pr2(36)
 00090 ! ______________________________________________________________________
 00100   pr newpage
-00110   pr fields "08,08,C 32,R,N": " CONVERT GL PAYROLL MASTER FILE"
-00120   pr fields "10,5,C 60": "ENTER COMPANY NUMBER TO BE CONVERTED:"
-00130   pr fields "12,15,C 16,B,5": "PRESS F5 TO STOP"
+00110   pr f "08,08,C 32,R,N": " CONVERT GL PAYROLL MASTER FILE"
+00120   pr f "10,5,C 60": "ENTER COMPANY NUMBER TO BE CONVERTED:"
+00130   pr f "12,15,C 16,B,5": "PRESS F5 TO STOP"
 00140 L140: input fields "10,43,N 2,UE,N": cno conv L140
 00150   if cmdkey=5 then goto XIT
 00160 ! 

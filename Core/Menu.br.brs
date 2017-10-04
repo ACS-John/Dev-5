@@ -104,7 +104,7 @@
 13020   fntop(program$)
 13040   !
 13060   fnreg_read('Last Update',last_update$)
-13080   if last_update$='' then let last_update$='(never updated)'
+13080   if last_update$='' then last_update$='(never updated)'
 13100   !     setenv('Icon','S:\Core\Icon\ACS-v5.ico')
 13120   if env$('guimode')='OFF' then execute 'config gui on'
 13140   if env$('FavoritesOpen')='' then
@@ -692,7 +692,7 @@
 47180         next ss_cat_item
 47200         ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&ltrm$(program_plus$(glpa_program_count))
 47220         !
-47240         if program_item_count>1 then let ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&' ~ '&program_item$(2)
+47240         if program_item_count>1 then ss_text$(glpa_program_count)=ss_text$(glpa_program_count)&' ~ '&program_item$(2)
 47250       end if
 47260     end if
 47280   loop

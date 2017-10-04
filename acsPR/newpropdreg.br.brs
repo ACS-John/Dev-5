@@ -58,7 +58,7 @@
 00550   a=pos (rtrm$(em$)," ",1)
 00560   b=pos (rtrm$(em$)," ",a+1)
 00570   ! if env$('client')="West Rest Haven" then goto L590
-00580   let em$=rtrm$(em$(max(a,b):30))&" "&em$(1:a)
+00580   em$=rtrm$(em$(max(a,b):30))&" "&em$(1:a)
 00590 ! L590: form pos 1,n 8,c 30,pos 162,n 6,pos 173,2*pd 3
 00600   checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 00610   restore #4,key>=checkkey$: nokey L530
@@ -75,7 +75,7 @@
 00720     goto L740
 00730 L730: let rptemp(j)=rptemp(j)+tcp(j)
 00740 L740: next j
-00750   let eic+=tcp(25)
+00750   eic+=tcp(25)
 00760   let totaleic+=tcp(25)
 00770   gosub L790
 00780   goto L530

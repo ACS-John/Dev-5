@@ -22,21 +22,21 @@
 00270   let hd2$="{\ul Number   }  {\ul Name                   }  "
 00280   for j=1 to 10
 00290     let x2=pos(trim$(servicename$(j))," ",1)
-00300     if x2>0 then let servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j)))
+00300     if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j)))
 00310     if trim$(servicename$(j))<>"" then 
 00320       let x1=pos (servicename$(j)," ",1)
 00330       let x1=min(x1,7)
 00340       let hd1$=hd1$&"---------"
 00350       let hd2$=hd2$&"{\ul "&lpad$(trim$(servicename$(j)(1:x1)),8)&"} "
-00360       let sz1=sz1+1 : let px$(sz1)=servicename$(j)
+00360       sz1=sz1+1 : let px$(sz1)=servicename$(j)
 00370     end if 
 00380   next j
 00390   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00400   open #8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00402 ! r: get default sequence
 00404   fncreg_read('ubBilJrn.Sort_Option',sequence$)
-00406   let seq=val(sequence$) conv ignore
-00408   if seq<1 then let seq=1
+00406   seq=val(sequence$) conv ignore
+00408   if seq<1 then seq=1
 00410 ! /r
 00420 MAIN: ! r: Screen 1
 00430   fntos(sn$="UBBilJrn")
@@ -62,10 +62,10 @@
 00630   fnacs(sn$,0,mat resp$,ckey)
 00650   if ckey=5 then goto XIT
 00670   billing_date=val(resp$(1))
-00680   if resp$(2)="True" then let seq=1 ! route sequence
-00690   if resp$(3)="True" then let seq=2 ! account sequence
-00700   if resp$(4)="True" then let seq=3 ! Alpha Sort Sequence
-00701   if resp$(5)="True" then let seq=4 ! Customer Name Sequence
+00680   if resp$(2)="True" then seq=1 ! route sequence
+00690   if resp$(3)="True" then seq=2 ! account sequence
+00700   if resp$(4)="True" then seq=3 ! Alpha Sort Sequence
+00701   if resp$(5)="True" then seq=4 ! Customer Name Sequence
 00702   if uprc$(resp$(resp_route)) = uprc$("[All]") then let resp$(resp_route) = "0"
 00710   let prtbkno=val(resp$(resp_route))
 00720   let prtusage$=resp$(resp_print_usages)(1:1)
@@ -82,10 +82,10 @@
 00750     fnindex_it(env$('Q')&"\UBmstr\Customer.h"&env$('cno'), env$('temp')&"\customer_name"&session$&".h"&env$('cno'),"41 30")
 00758     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('temp')&"\customer_name"&session$&".h"&env$('cno')&",Shr",internal,input,keyed  
 00760   end if
-00770   if trim$(servicename$(1))="Water" then let services=services+1 : let water=1
-00780   if trim$(servicename$(3))="Electric" or trim$(service$(3))="LM" then let services=services+1
-00782   if servicename$(3)(1:5)="Re-Se" then let reduc=1 : let services+=1
-00790   if trim$(servicename$(4))="Gas" then let services=services+1 : let gas=1
+00770   if trim$(servicename$(1))="Water" then services=services+1 : let water=1
+00780   if trim$(servicename$(3))="Electric" or trim$(service$(3))="LM" then services=services+1
+00782   if servicename$(3)(1:5)="Re-Se" then let reduc=1 : services+=1
+00790   if trim$(servicename$(4))="Gas" then services=services+1 : let gas=1
 00800   mat usages(services)
 00810   let hd1$=hd1$&"---------    Prior  Current"
 00820   let hd2$=hd2$&"{\ul    Total} {\ul  Balance} {\ul  Balance}  "
@@ -104,7 +104,7 @@
 00952   gosub HDR
 00954   if prtbkno<>0 and seq=1 then 
 00956     let prtbkno$=rpad$(lpad$(str$(prtbkno),2),kln(1))
-00958     let startcd=1
+00958     startcd=1
 00960     restore #1,key>=prtbkno$: nokey MAIN
 00962   end if
 00970 ! ______________________________________________________________________
@@ -139,7 +139,7 @@
 01058   pr #255: hd2$
 01060   return  ! /r
 01064 L910: ! r:
-01066   let e=bal-g(11) : let j1=0
+01066   e=bal-g(11) : let j1=0
 01068   for j=1 to 10
 01070     if trim$(servicename$(j))<>"" then let px(j1+=1)=g(j)
 01072   next j
@@ -149,7 +149,7 @@
 01080   if water=1 then let x=x+1 : let usages(x)=d(3)
 01083   if reduc=1 then let x=x+1 : let usages(x)=d(3)-d(7)
 01084   if gas=1 then let x=x+1 : let usages(x)=d(11)
-01086   if estimatedate=billing_date then let est$="E" else let est$=""
+01086   if estimatedate=billing_date then est$="E" else est$=""
 01088   if prtusage$="T" then pr #255,using L1020: z$,e$(2)(1:23),mat px,est$,mat usages,e$(1)(1:25) pageoflow PGOF else pr #255,using L1020: z$,e$(2)(1:23),mat px,est$ pageoflow PGOF
 01090 L1020: form pos 1,c 10,x 2,c 23,sz1*n 9.2,x 1,c 1,services*n 9,x 1,c 25
 01092   gosub TOT1
@@ -259,7 +259,7 @@
 01730   return  ! /r
 01732 PRINT1: ! r: pr TOTALS BY CODE
 01734   for st_item=1 to 10
-01736     let st$(st_item)=service$(st_item)
+01736     st$(st_item)=service$(st_item)
 01738   next st_item
 01754   pr #255: ""
 01756   pr #255: "{\ul Service             }  {\ul Code}  {\ul Description                             }  {\ul Billed}  {\ul     Amount}  {\ul     Tax Base}  {\ul          Usage}"
@@ -276,7 +276,7 @@
 01890 L1890: ! pr #255,using L1950: st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
 01892       pr #255,using L1950: servicename$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
 01900       if env$('client')="Sangamon" and st$(j1)="WA" then let waterdollars+=t1(j1,j2,2) : let waterusage+=t1(j1,j2,3)
-01910       if env$('client')="Sangamon" and st$(j1)="SW" then let sewerdollars+=t1(j1,j2,2) : let sewerusage+=t1(j1,j2,3)
+01910       if env$('client')="Sangamon" and st$(j1)="SW" then sewerdollars+=t1(j1,j2,2) : sewerusage+=t1(j1,j2,3)
 01920       goto L1960
 01930 L1930: ! 
 01932       pr #255,using L1940: st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)

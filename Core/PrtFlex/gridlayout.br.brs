@@ -8,16 +8,16 @@
 00080 ! ______________________________________________________________________
 00090   fntop("S:\Core\PrtFlex\GridLayout","Grid Layout")
 00100 L100: let fntos(sn$="file_layout") !:
-        let lablen=15
+        lablen=15
 00110   fnlbl(1,1,"File Name:",lablen,1)
 00120   fntxt(1,lablen+2,60,0,0,"") !:
         let resp$(1)="programfolder\grid\data_base_name\filename"
 00130   fncmdset(2)
 00140   fnacs(sn$,0,mat resp$,ckey)
-00150   let outputfile$=trim$(resp$(1))&".fil"
+00150   outputfile$=trim$(resp$(1))&".fil"
 00160   open #10: "Name="&outputfile$&",RecL=87,Use",display,output ioerr L100
 00170 L170: let fntos(sn$="file_layout") !:
-        let lablen=30
+        lablen=30
 00180   fnlbl(1,1,"Field name:",lablen,1)
 00190   fntxt(1,lablen+2,30,0,0,"") !:
         let resp$(1)=""
@@ -41,7 +41,7 @@
 00320   if ckey=5 then goto XIT
 00330   let fieldnam$=trim$(resp$(1))
 00340   let vn$=trim$(resp$(2))
-00350   let fl=val(resp$(3))
+00350   fl=val(resp$(3))
 00360   let dp=val(resp$(4))
 00370   let ft$=trim$(resp$(5))
 00380   an$=trim$(resp$(6))

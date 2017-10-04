@@ -11,8 +11,8 @@
 00120   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr,USE,RecL=102,KPs=1,KLn=19",internal,outin,keyed 
 00130   fnget_services(mat srv$)
 00140   for j=1 to udim(srv$)
-00150     let srv$(j)=trim$(srv$(j)) !:
-          if srv$(j)<>"" then let srv$(j)=srv$(j)&":" : let services+=1
+00150     srv$(j)=trim$(srv$(j)) !:
+          if srv$(j)<>"" then srv$(j)=srv$(j)&":" : services+=1
 00160   next j
 00180   fntop(program$)
 00190   goto MENU1
@@ -48,7 +48,7 @@
 00400   goto SCREEN2
 00410 ! ______________________________________________________________________
 00420 SCREEN2: ! 
-00430   let sn$="ubCorAmt-2" !:
+00430   sn$="ubCorAmt-2" !:
         fntos(sn$)
 00440   let mylen=15 !:
         for j=1 to 10 ! UDIM(SRV$) !:
@@ -102,7 +102,7 @@
 00640     if trim$(srv$(j))="Water:" and (j=1) then !:
             let respc+=1 : let d(1)=val(resp$(respc)): let wr=d(1)
 00650     if trim$(srv$(j))="Electric:" and (j=3) then !:
-            let respc+=1 : let d(5)=val(resp$(respc)): let er=d(5)
+            let respc+=1 : let d(5)=val(resp$(respc)): er=d(5)
 00660     if trim$(srv$(j))="Gas:" and (j=4) then !:
             let respc+=1 : let d(9)=val(resp$(respc)): let gr=d(9)
 00670 L670: next j

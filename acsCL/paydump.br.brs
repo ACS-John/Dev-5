@@ -26,7 +26,7 @@
 00220   fncmdset(2) !:
         fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT else !:
-          let olddate=val(resp$(1))
+          olddate=val(resp$(1))
 00240   fnopenprn
 00250   gosub HDR
 00260 ! ___________________________
@@ -38,7 +38,7 @@
 00320   if vn$><tr$(4) then goto PRINT_IT !:
           ! moved thru all checks without finding a check with date !:
           ! later than one entered above
-00330   let lastdate=val(tr$(2)) conv READ_TRMSTR2
+00330   lastdate=val(tr$(2)) conv READ_TRMSTR2
 00340   if fndate_mmddyy_to_ccyymmdd(lastdate)>olddate then goto READ_PAYMSTR1 !:
           ! keep this vendor recored
 00350   goto READ_TRMSTR2

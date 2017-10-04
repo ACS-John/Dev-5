@@ -25,7 +25,7 @@
 12400     let x=len(at$(j)) : let y=z-x
 12500     at$(j)=rpt$(" ",int(y/2))&at$(j)
 12600   next j
-12700   let linelength=62
+12700   linelength=62
 12800   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in account order
 12900   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence
 13000 ! ______________________________________________________________________
@@ -35,7 +35,7 @@
 13400 SCREEN1: ! 
 13500   a$="" : let prtbkno=0
 13600   fntos(sn$="UBPrtBl1-1")
-13700   let pf=26 : let ll=24 : let respc=0
+13700   let pf=26 : ll=24 : let respc=0
 13800 ! Let FNLBL(1,1,"Service From:",LL,1)
 13900 !  fnTXT(1,PF,8,8,1,"1",0,TT$)
 14000 !  Let RESP$(RESPC+=1)=CNVRT$("pic(zzzzzz)",D2)
@@ -81,10 +81,10 @@
 18000   else 
 18100     let prtbkno=val(resp$(7))
 18200   end if 
-18300   if resp$(8)="True" then let sl1=1 else let sl1=0
+18300   if resp$(8)="True" then sl1=1 else sl1=0
 18400   if trim$(a$)<>"" then 
 18500     read #1,using L480,key=a$: z$,route,sequence nokey SCREEN1
-18600     let st1=1
+18600     st1=1
 18700   end if 
 18800 L480: form pos 1,c 10,pos 1741,n 2,n 7
 18900   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
@@ -110,24 +110,24 @@
 20800   if prtbkno><route then goto F5_CANCEL
 20900 L680: if f><d1 then goto L570
 21000   if st1=0 then goto HERE
-21100   if st1$=z$ then let st1=0 else goto L570
+21100   if st1$=z$ then st1=0 else goto L570
 21200 HERE: ! 
 21300 ! read alternate billing address
 21400   read #3,using L740,key=z$: mat ba$ nokey L810
 21500 L740: form pos 11,4*c 30
-21600   let e1=0 : mat pe$=("")
+21600   e1=0 : mat pe$=("")
 21700   for j=1 to 4
 21800     if rtrm$(ba$(j))<>"" then 
-21900       let e1=e1+1
+21900       e1=e1+1
 22000       let pe$(e1)=ba$(j)
 22100     end if 
 22200   next j
 22300   goto L950
 22400 ! ______________________________________________________________________
-22500 L810: let e1=0 : mat pe$=("")
+22500 L810: e1=0 : mat pe$=("")
 22600   for j=2 to 4
 22700     if rtrm$(e$(j))<>"" then 
-22800       let e1=e1+1
+22800       e1=e1+1
 22900       let pe$(e1)=e$(j)
 23000     end if 
 23100   next j
@@ -151,7 +151,7 @@
 24900   goto L570
 25000 ! ______________________________________________________________________
 25100 SCREEN3: ! 
-25200   let sn$="UBPrtBl1-2"
+25200   sn$="UBPrtBl1-2"
 25300   fntos(sn$)
 25400   let txt$="Account (blank to stop)"
 25500   fnlbl(1,1,txt$,31,1)
@@ -175,7 +175,7 @@
 27300 SORT1: ! SELECT & SORT
 27400   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1410
 27500   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
-27600   let s5=1
+27600   s5=1
 27700   if prtbkno=0 then let routekey$="" else let routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
 27800   restore #2,search>=routekey$: 
 27900 L1210: read #2,using L1220: z$,f,route eof END5
@@ -229,7 +229,7 @@
 32900     col2_adj=65
 33000 ! ___________________________
 33100 ! - CONSTANTS
-33200     let lyne=3
+33200     lyne=3
 33300     character=1.5
 33400 ! pr #20: 'Call Print.MyOrientation("Landscape")'
 33500     pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',55,'&str$(lyne*3+3)&',True)'

@@ -16,17 +16,17 @@
 00170   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&str$(cno)&",RecL=20,use,Shr",internal,outin,relative 
 00180   if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
 00190   pr newpage
-00200   pr fields "10,5,c 57,n": "ENTER DATE FOR SERVICE PRODUCTION REPORT IN MMDDYY FORMAT"
-00210   pr fields "10,65,n 6,n": dat
-00220   pr fields "13,30,c 20": "Press F5 to Stop"
+00200   pr f "10,5,c 57,n": "ENTER DATE FOR SERVICE PRODUCTION REPORT IN MMDDYY FORMAT"
+00210   pr f "10,65,n 6,n": dat
+00220   pr f "13,30,c 20": "Press F5 to Stop"
 00230 L230: input fields "10,65,n 6,eu,n": dat conv L230
 00240   if cmdkey=5 then goto XIT
 00250   if dat<10100 or dat>123199 then goto L230
 00260   rewrite #8,using "form pos 1,n 6",rec=1: dat
 00270   close #8: 
 00280   pr newpage
-00290   pr fields "10,15,c 57,n": "PRINT SERVICE PRODUCTION REPORT IN PROCESS"
-00300   pr fields "23,2,C 30,N": "Press F5 to stop"
+00290   pr f "10,15,c 57,n": "PRINT SERVICE PRODUCTION REPORT IN PROCESS"
+00300   pr f "23,2,C 30,N": "Press F5 to stop"
 00310   gosub L800
 00320 L320: read #1,using L330: sc$,ds$,th,sf eof L460 ioerr L920
 00330 L330: form pos 1,c 4,c 30,pd 4.2,pd 5.2
@@ -88,16 +88,16 @@
 00890   pr #255,using L900: "CODE","DESCRIPTION","HOURS","AT STANDARD","HOURLY RATE"
 00900 L900: form pos 5,c 4,pos 18,c 11,pos 60,c 5,pos 68,c 11,pos 81,c 11,skip 3
 00910   return 
-00920 L920: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L940
+00920 L920: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L940
 00930   goto L980
 00940 L940: pr newpage
-00950   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L970
+00950   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L970
 00960   goto L980
-00970 L970: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00980 L980: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00970 L970: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00980 L980: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00990   input fields "24,60,C 1,N": quitcode$
 01000   if rtrm$(uprc$(quitcode$))="Q" then goto L1040
-01010   pr fields "23,3,C 78,N": ""
-01020   pr fields "24,3,C 78,N": ""
+01010   pr f "23,3,C 78,N": ""
+01020   pr f "24,3,C 78,N": ""
 01030   retry 
 01040 L1040: goto XIT

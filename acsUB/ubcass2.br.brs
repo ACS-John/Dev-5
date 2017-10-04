@@ -11,14 +11,14 @@
         ! 
 00100   fntop("S:\acsUB\ubCass2",cap$="Place Certified File Back on PC")
 00110 ! ______________________________________________________________________
-00120   let sn$="ubCass2" !:
+00120   sn$="ubCass2" !:
         fntos(sn$) !:
         let respc = 0
 00130   fnlbl(1,1,"Path to Returned Postal Diskette:",33,1)
-00140   let opt1$(1)="A:\" !:
-        let opt1$(2)="C:\" !:
-        let opt1$(3)="E:\" !:
-        let opt1$(4)="F:\" !:
+00140   opt1$(1)="A:\" !:
+        opt1$(2)="C:\" !:
+        opt1$(3)="E:\" !:
+        opt1$(4)="F:\" !:
         fncomboa("AB",1,35,mat opt1$) !:
         let resp$(respc+=1)=opt1$(1)
 00150   fnlbl(3,1,"This program prints:")
@@ -70,7 +70,7 @@
 00510     c1=c1+val(bc$(j:j)) conv L520
 00520 L520: next j
 00530   c1$=str$(c1) !:
-        let l1=len(c1$) !:
+        l1=len(c1$) !:
         c2=val(c1$(l1:l1))
 00540   if c2=0 then cd$="0" else cd$=str$(10-c2)
 00550   bc$=bc$&cd$

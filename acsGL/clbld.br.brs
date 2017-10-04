@@ -17,8 +17,8 @@
 00190   fnlbl(1,1,"Insert Blank Formatted Diskette In Selected Drive:",mylen,right)
 00200   fntxt(1,mypos,1,0,right,"",0,"The information needs to be placed on a diskette.  If you do not have a diskette drive, use your C: drive and transfer the information to a CD.",0 ) !:
         let resp$(1)= dv$
-00210   let option$(1)="Build G/L Master File" !:
-        let option$(2)="Build Payee File"
+00210   option$(1)="Build G/L Master File" !:
+        option$(2)="Build Payee File"
 00220   fncomboa("TypeOfFile",3,25,mat option$,"You must indicate the type of entry you will be entering.",25)
 00230   let resp$(2)=str$(sel)
 00240   fncmdkey("&Next",1,1,0,"Allows you to enter transactions.")

@@ -15,7 +15,7 @@
 00150   fncno(cno)
 00160   let dat1=date("mmddyy")
 00170 ! 
-00180   let prtjob$="N" : let prtdet$="N" : let sumcat$="N" : let sumjob$="N" !:
+00180   let prtjob$="N" : let prtdet$="N" : sumcat$="N" : sumjob$="N" !:
         let prtpag$="N" ! setup defaults to answers (also used by fnprocess=1)
 00190 ! ______________________________________________________________________
 00200   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -34,7 +34,7 @@
 00310   open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",Shr",internal,input,relative 
 00320 ! ______________________________________________________________________
 00330 L330: let fntos(sn$="prtdet") !:
-        let mylen=25 : let mypos=mylen+2: let resp=0: let left=1
+        let mylen=25 : let mypos=mylen+2: let resp=0: left=1
 00340   fnlbl(1,37,"",1)
 00350   fnlbl(1,1,"Date of LIsting:",23,left)
 00360   fntxt(1,mypos,8,0,1,"1") !:
@@ -55,8 +55,8 @@
 00450   let dat1=val(resp$(1)) ! date
 00460   if resp$(2)="True" then let prtjob$="Y" else let prtjob$="N"
 00470   if resp$(3)="True" then let prtdet$="Y" else let prtdet$="N"
-00480   if resp$(4)="True" then let sumcat$="Y" else let sumcat$="N"
-00490   if resp$(5)="True" then let sumjob$="Y" else let sumjob$="N"
+00480   if resp$(4)="True" then sumcat$="Y" else sumcat$="N"
+00490   if resp$(5)="True" then sumjob$="Y" else sumjob$="N"
 00500   if resp$(6)="True" then let prtpag$="Y" else let prtpag$="N"
 00510   if prtdet$="N" and sumcat$="N" and sumjob$="N" then goto L520 else let noread=1
 00520 L520: if prtjob$="Y" then goto L700
@@ -64,7 +64,7 @@
 00540 ASK_JOB: ! 
 00550   for k=1 to 100
 00560     fntos(sn$="prtdet2") !:
-          let mylen=12 : let mypos=mylen+3: let resp=0: let left=1
+          let mylen=12 : let mypos=mylen+3: let resp=0: left=1
 00570     fnlbl(1,1,"Job Number:",mylen,1) !:
           fncmbjob(1,mypos) !:
           let resp$(respc+=1)=jn$
@@ -85,7 +85,7 @@
 00720 L720: if prtjob$="Y" then goto L810
 00730 L730: let j1=j1+1
 00740   if j1<=k then goto L780
-00750   let eofc=2
+00750   eofc=2
 00760   goto L1760
 00770 ! ______________________________________________________________________
 00780 L780: read #1,using L790,key=prtj$(j1): jn$,n$,mat a$,mat b nokey L730
@@ -183,13 +183,13 @@
 01700   if sumjob$="N" then goto L1720
 01710   gosub PRINTSUMMARYBYJOB
 01720 L1720: if eofc=1 then goto L1760 else goto L720
-01730 L1730: let eofc=1
+01730 L1730: eofc=1
 01740   goto L1540
 01750 ! ______________________________________________________________________
 01760 L1760: if sumjob$="N" or prtdet$="N" then goto L1790 ! END OF JOB ROUTINE
 01770   if eofc=1 or eofc=2 then goto L1790
 01780   gosub PRINTSUMMARYBYJOB
-01790 L1790: let eofc=2
+01790 L1790: eofc=2
 01800   mat totjob=totall
 01810   goto L1540
 01820 L1820: if sumjob$="N" then goto L1840
@@ -243,10 +243,10 @@
 02290   cattot(tr(2))=cattot(tr(2))+tr(8)+tr(9)
 02300   cdesc$(tr(2))=desc$(tr(2))
 02310   if lcat=0 and hcat=0 then goto L2320 else goto L2350
-02320 L2320: let lcat=tr(2)
+02320 L2320: lcat=tr(2)
 02330   let hcat=lcat
 02340   goto L2370
-02350 L2350: if tr(2)<lcat then let lcat=tr(2)
+02350 L2350: if tr(2)<lcat then lcat=tr(2)
 02360   if tr(2)>hcat then let hcat=tr(2)
 02370 L2370: return 
 02380 ! ______________________________________________________________________
@@ -266,7 +266,7 @@
 02520     let jtot$(j)=cdesc$(j)
 02530 L2530: next j
 02540   mat cattot=(0)
-02550   let lcat=0
+02550   lcat=0
 02560   let hcat=0
 02570   return 
 02580 ! ______________________________________________________________________

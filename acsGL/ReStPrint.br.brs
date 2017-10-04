@@ -45,25 +45,25 @@
 20800   for j2=1 to len(rtrm$(ln$))
 20820     if ln$(j2:j2)><"@" then goto L320
 20840     if ln$(j2+1:j2+1)="1" then 
-20860       let ln$(j2:j2+1)=fnpedat$&ln$(j2+2:132-len(fnpedat$)) 
+20860       ln$(j2:j2+1)=fnpedat$&ln$(j2+2:132-len(fnpedat$)) 
 20880     else 
 20900       goto L280
 20920     end if
 20940     goto L310
 20960 L280: !
 20980     if ln$(j2+1:j2+1)="2" then 
-21000       let ln$(j2:j2+1)=rtrm$(dat$)&ln$(j2+2:132-len(rtrm$(dat$))) 
+21000       ln$(j2:j2+1)=rtrm$(dat$)&ln$(j2+2:132-len(rtrm$(dat$))) 
 21020     else 
 21040       goto L300
 21060     end if
 21080     goto L310
 21100 L300: !
 21120     if ln$(j2+1:j2+1)="3" then 
-21140       let ln$(j2:j2+1)=rtrm$(actpd$)&ln$(j2+2:132-len(rtrm$(actpd$)))
+21140       ln$(j2:j2+1)=rtrm$(actpd$)&ln$(j2+2:132-len(rtrm$(actpd$)))
 21160     else 
 21180       goto L320
 21200     end if
-21220 L310: ! Let LN$=LN1$
+21220 L310: ! lN$=LN1$
 21240 L320: !
 21260   next j2
 21280   pr #255: tab(10);ln$

@@ -13,11 +13,11 @@
 32120     fncopy('S:\Core\fnSnap\BRRegister2.exe',env$('at')&pathToBrRegister$&"\BRRegister2.exe")
 32140   end if
 38000   execute "sys -M "&pathToBrRegister$&"\BRRegister2.exe -B"&session$&" -N"&l$
-38020   let exefil=1
+38020   exefil=1
 38040   open #exefil:=fngethandle: "name="&env$('at')&pathToBrRegister$&"\dbde"&session$&".txt",display,input 
 38060   dim exefil$*100
 38080   linput #exefil: exefil$
 38100   close #exefil,free: 
 38120   fnMsExe$=exefil$
-38140   let exefil=0
+38140   exefil=0
 38160 fnend 

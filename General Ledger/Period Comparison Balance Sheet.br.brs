@@ -35,20 +35,20 @@
         let m2$(13)="Thirteen"
 00200   let mp1=63
 00210   if fnps=2 then let mp1=mp1+3
-00220   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FnSBIndx.h"&env$('cno')&",Shr"
-00230   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&env$('cno')&",Shr"
+00220   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FnSBIndx.h"&env$('cno')&",Shr"
+00230   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&env$('cno')&",Shr"
 00240   open #1: fl1$,internal,input,keyed 
 00250   if fnprocess=1 or fnUseDeptNo=0 then goto L330
 00260   goto L370 ! pr NEWPAGE
 00270   close #101: ioerr L280
 00280 L280: open #101: "SROW=9,SCOL=4,EROW=12,ECOL=75,BORDER=DR,CAPTION=PRINT BALANCE SHEET",display,outin 
-00290   pr fields "13,32,C 16,R,N": "Press F5 to stop"
-00300   pr fields "10,5,c 70,n": "ENTER THE COST CENTER OR DEPT # IF YOU WISH TO ONLY pr A STATEMENT"
-00310 L310: pr fields "11,5,c 65,n": "ON ONE DEPARTMENT; ELSE ENTER 0 TO pr ALL DEPARTMENTS"
+00290   pr f "13,32,C 16,R,N": "Press F5 to stop"
+00300   pr f "10,5,c 70,n": "ENTER THE COST CENTER OR DEPT # IF YOU WISH TO ONLY pr A STATEMENT"
+00310 L310: pr f "11,5,c 65,n": "ON ONE DEPARTMENT; ELSE ENTER 0 TO pr ALL DEPARTMENTS"
 00320   input fields "11,70,N 3,eu,N": costcntr conv L310
 00330 L330: ! pr NEWPAGE
-00340   pr fields "10,10,Cc 60,n": " BALANCE SHEET IN PROCESS"
-00350   pr fields "12,34,C 11,B,5": "Cancel (F5)"
+00340   pr f "10,10,Cc 60,n": " BALANCE SHEET IN PROCESS"
+00350   pr f "12,34,C 11,B,5": "Cancel (F5)"
 00360   on fkey 5 goto L2120
 00370 L370: let fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
@@ -112,7 +112,7 @@
 00930   let dollar=27+14*bc
 00940   goto L960
 00950   if ls+ul+ds+ic>0 then goto L960 else goto L440
-00960 L960: let sp2=dollar-sp-1
+00960 L960: sp2=dollar-sp-1
 00970   if nap=13 then goto L1010
 00975   if ul=1 then pr #255,using L991: d$(1:sp2),"{\ul ",total(1),"}","{\ul ",total(2),"}","{\ul ",total(3),"}","{\ul ",total(4),"}","{\ul ",total(5),"}","{\ul ",total(6),"}","{\ul ",total(7),"}","{\ul ",total(8),"}","{\ul ",total(9),"}","{\ul ",total(10),"}","{\ul ",total(11),"}","{\ul",total(12),"}" pageoflow L1760 : goto L990
 00980   pr #255,using L990: d$(1:sp2),total(1),total(2),total(3),total(4),total(5),total(6),total(7),total(8),total(9),total(10),total(11),total(12) pageoflow L1760
@@ -129,7 +129,7 @@
 01070   goto L440
 01080 L1080: if ap=0 then ap=1
 01090   let dollar=27+14*bc
-01100   let sp2=dollar-sp-1
+01100   sp2=dollar-sp-1
 01110   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 01120   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
 01130   if rs=1 then accum3=-accum(ap,3) else accum3=accum(ap,3)
@@ -160,7 +160,7 @@
 01360   next j
 01370 L1370: goto L440
 01380 L1380: if te$="R" then let report$=d$
-01390   if te$="S" then let secondr$=d$
+01390   if te$="S" then secondr$=d$
 01400   gosub L1600
 01410   goto L440
 01420 ! ______________________________________________________________________
@@ -188,8 +188,8 @@
 01640   goto L1740
 01650 L1650: let fnpglen(pglen)
 01660   if pglen<>42 then let pglen=58
-01670   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01680   if pglen=42 then let sk=sk+1
+01670   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01680   if pglen=42 then sk=sk+1
 01690   pr #255,using L1700: rtrm$(foot$)
 01700 L1700: form skip sk,pos tabnote,c fl,skip 1
 01710   if eofcode=1 then goto L1740
@@ -233,7 +233,7 @@
 02090 L2090: form pos 42,13*c 12,skip 2
 02100 L2100: return 
 02110 ! ______________________________________________________________________
-02120 L2120: let eofcode=1
+02120 L2120: eofcode=1
 02130   gosub L1650
 02135   fnfscode(actpd)
 02136   fnpriorcd(1)

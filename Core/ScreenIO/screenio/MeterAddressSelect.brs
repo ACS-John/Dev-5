@@ -20,7 +20,7 @@
 01030    let ParentKey$=""
 01040    let Record=0
 01050    let Path$=""
-01060    let ScreenCode$="METERADDRESSSELECT"
+01060    screenCode$="METERADDRESSSELECT"
 01070    chain "s:\core\screenio\screeniosaveandtest.br",mat PassedData$,Key$,ParentKey$,Record,Path$,ScreenCode$
 01080    if len(trim$(Ret$)) then
 01090       pr Ret$

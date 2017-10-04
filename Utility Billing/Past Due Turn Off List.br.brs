@@ -11,9 +11,9 @@
 26040   fnd1(lbill)
 26060   fndat(dat$)
 26080   dim opt_aai$(3)
-26100   let opt_aai$(1)="[All]"
-26120   let opt_aai$(2)="Active"
-26140   let opt_aai$(3)="Inactive"
+26100   opt_aai$(1)="[All]"
+26120   opt_aai$(2)="Active"
+26140   opt_aai$(3)="Inactive"
 26150   fncreg_read('ubpdtnof.aai',aai$,opt_aai$(1))
 26160   fncreg_read('ubpdtnof.printadr',printadr$,'False')
 26180   fncreg_read('ubpdtnof.excludecurrent',excludecurrent$,'False')
@@ -67,17 +67,17 @@
 32640 L400: let x=pos(resp$(j),"/",1)
 32660     if x>0 then let resp$(j)(x:x)="" : goto L400
 32680   next j
-32700   let lastday(1)=val(resp$(1))
+32700   lastday(1)=val(resp$(1))
 32720   let firstday(1)=(val(resp$(1)(1:6))*100)+1
-32740   let lastday(2)= val(resp$(2))
+32740   lastday(2)= val(resp$(2))
 32760   let firstday(2)=(val(resp$(2)(1:6))*100)+1
-32780   let lastday(3)=val(resp$(3))
+32780   lastday(3)=val(resp$(3))
 32800   let firstday(3)=(val(resp$(3)(1:6))*100)+1
-32820   let lbill=val(resp$(4))
+32820   lbill=val(resp$(4))
 32840   aai$=printal$=resp$(5)
 32860   let printadr$=resp$(6) : if printadr$="True" then let printadr=1 ! wants meter address printed
-32880   let excludecurrent$=resp$(7) : if excludecurrent$="True" then let excludecurrent=1 ! do not list those owing just the current month
-32900   let excludelast$=resp$(8) : if excludelast$="True" then let excludelast=1 ! do not list those owing just the current month and last month
+32880   excludecurrent$=resp$(7) : if excludecurrent$="True" then excludecurrent=1 ! do not list those owing just the current month
+32900   excludelast$=resp$(8) : if excludelast$="True" then excludelast=1 ! do not list those owing just the current month and last month
 32920   let pastduebalance$=resp$(9) : if pastduebalance$="True" then let pastduebalance=1 ! only show past due amount in balance column
 32925   let pr_s4_meter_number$=resp$(10) : if pr_s4_meter_number$="True" then let pr_s4_meter_number=1 ! only show past due amount in balance column
 32926   let pr_blank_lines_for_notes$=resp$(11)
@@ -133,7 +133,7 @@
 45140     az$="**"
 45160   end if 
 45180 ! 
-45200   if totba>0 then let lev$="L" else let lev$=""
+45200   if totba>0 then lev$="L" else lev$=""
 45220   if excludecurrent=1 and len(az$)<2 then goto L880 ! exclude those oweing only current month
 45240   if excludelast=1 and len(az$)<3 then goto L880 ! exclude those oweing only current month  or previous month
 45260   if pastduebalance=1 and excludecurrent=1 then bal=bal-month(1) ! don't show current in past due balance column
@@ -158,10 +158,10 @@
 45558   end if 
 45560 F_REPORT_LINE: form pos 1,c 12,c 25,n 12.2,pic(bbzz/zz/zzbb),x 3,c 4,x 1,c 1,x 2,c 25,x 2,c 25
 45580 ! 
-45600   let s2=s2+bal
+45600   s2=s2+bal
 45620   let t2=t2+bal
 45640   let t1=t1+g(10)
-45660   let s1=s1+g(10)
+45660   s1=s1+g(10)
 45680   let holdrt=route
 45700 L880: ! 
 45720   goto MAIN_LOOP_TOP
@@ -196,14 +196,14 @@
 52080   pr #255,using F_PR_TOTAL: s2 pageoflow PGOF
 52100 F_PR_TOTAL: form pos 38,pic(-,---,---.##)
 52120   pr #255: "" pageoflow PGOF
-52140   let s1=0
-52160   let s2=0
+52140   s1=0
+52160   s2=0
 52180   let holdrt=route
 52200   return  ! /r
 54000 TOTAL_FINAL: ! r:
 54020   gosub TOTAL_BOOK
 54040 ! TOTAL_GRAND: !
-54060   let s1=t1 : let s2=t2
+54060   s1=t1 : s2=t2
 54080   pr #255: ""
 54100   pr #255: ""
 54120   pr #255: "               Grand Totals";

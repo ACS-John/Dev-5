@@ -12,10 +12,10 @@
 00130   let io1$(1)="10,44,C 20,U,N"
 00140   let io1$(2)="12,58,N 6,U,N"
 00150   pr newpage
-00160   pr fields "10,5,c 35,n": "ENTER MONTHLY BILLING SUMMARY DATE:"
-00170   pr fields "12,5,C 60": "ENTER THE OLDEST BILLING DATE TO pr OR 0 FOR ALL:"
-00180   pr fields io1$(1): dat$
-00190   pr fields "23,2,c 30,n": "Press F5 to stop"
+00160   pr f "10,5,c 35,n": "ENTER MONTHLY BILLING SUMMARY DATE:"
+00170   pr f "12,5,C 60": "ENTER THE OLDEST BILLING DATE TO pr OR 0 FOR ALL:"
+00180   pr f io1$(1): dat$
+00190   pr f "23,2,c 30,n": "Press F5 to stop"
 00200 L200: input fields mat io1$: dat$,od conv L200
 00210   if cmdkey=5 then goto XIT
 00220   fndat(dat$,put=2)
@@ -23,8 +23,8 @@
 00240 L240: let fnopenprn
 00250   pr newpage
 00260   let dattab=66-int(len(rtrm$(dat$))/2)
-00270   pr fields "10,20,c 60,n": "MONTHLY BILLING SUMMARY IN PROCESS"
-00280   pr fields "23,2,c 30,n": "Press F5 to stop"
+00270   pr f "10,20,c 60,n": "MONTHLY BILLING SUMMARY IN PROCESS"
+00280   pr f "23,2,c 30,n": "Press F5 to stop"
 00290   let dattab=66-int(len(rtrm$(dat$))/2)
 00300   let dattab2=43-int(len(rtrm$(dat$))/2)
 00310   let namtab=66-int(len(rtrm$(cnam$))/2)
@@ -42,7 +42,7 @@
 00430 L430: read #4,using L440,key=lpad$(str$(pno),9): enam$ nokey L460 ioerr L2080
 00440 L440: form pos 10,c 25
 00450   goto L470
-00460 L460: let enam$=" "
+00460 L460: enam$=" "
 00470 L470: return 
 00480 L480: read #1,using L490: z$,cliname$,pno,mat ca eof L870 ioerr L2080
 00490 L490: form pos 1,c 5,c 30,pos 179,n 9,pos 230,10*pd 3
@@ -59,7 +59,7 @@
 00600 L600: let nta=ta(j2,1)
 00610     let iv$=" "
 00620     let hrs=0
-00630     let std=0
+00630     std=0
 00640     bil=0
 00650 L650: read #3,using L680,rec=nta: k$,e$,mat b,sc$,tempiv$,nta ioerr L2080
 00660     if b(7)=-1 and fncd(b(4))<fncd(od) then goto L800
@@ -73,7 +73,7 @@
 00740     bil=bil+b(3)
 00750     if b(7)<0 then goto L780
 00760 L760: let hrs=hrs+b(1)
-00770     let std=std+b(3)
+00770     std=std+b(3)
 00780 L780: if nta><0 then goto L650
 00790     gosub L820
 00800 L800: next j2
@@ -115,7 +115,7 @@
 01160   gosub L1020
 01170   goto L1190
 01180 L1180: pr #255,using L1130: cliname$(1:26),b(5),"-",b(8),hrs,std,bil,bil-std,0," ",ast$,cat$(j1)(1:17),enam$(1:17),iv$ pageoflow L1150
-01190 L1190: let l1=l1+hrs
+01190 L1190: l1=l1+hrs
 01200   let m1=m1+std
 01210   let n1=n1+bil
 01220   return 
@@ -156,7 +156,7 @@
 01570 L1570: form pos 30,c 18,pos 66,c 4,skip 2
 01580   return 
 01590 L1590: if rtrm$(enam$)><"" then goto L1610
-01600   let enam$="-1"
+01600   enam$="-1"
 01610 L1610: for y=1 to 50
 01620     if c$(y)=enam$ then goto L1670
 01630     if rtrm$(c$(y))="" then goto L1660
@@ -165,7 +165,7 @@
 01660 L1660: c$(y)=enam$
 01670 L1670: let f(y)=f(y)+bil
 01680   let d(y)=d(y)+hrs
-01690   let e(y)=e(y)+std
+01690   e(y)=e(y)+std
 01700 L1700: return 
 01710 L1710: if rtrm$(cat$(j1))><"" then goto L1730
 01720   cat$(j1)="-1"
@@ -204,16 +204,16 @@
 02050   goto L2070
 02060 L2060: pr #255,using L1390: "   FINAL TOTALS",x1,y1,w1,w1-y1,0," "
 02070 L2070: return 
-02080 L2080: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2100
+02080 L2080: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L2100
 02090   goto L2140
 02100 L2100: pr newpage
-02110   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2130
+02110   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2130
 02120   goto L2140
-02130 L2130: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-02140 L2140: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+02130 L2130: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+02140 L2140: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 02150   input fields "24,60,C 1,N": quitcode$
 02160   if rtrm$(uprc$(quitcode$))="Q" then goto L2200
-02170   pr fields "23,3,C 78,N": ""
-02180   pr fields "24,3,C 78,N": ""
+02170   pr f "23,3,C 78,N": ""
+02180   pr f "24,3,C 78,N": ""
 02190   retry 
 02200 L2200: goto XIT

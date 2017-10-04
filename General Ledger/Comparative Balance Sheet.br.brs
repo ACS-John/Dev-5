@@ -19,17 +19,17 @@
 14320   ! pr newpage
 14340   if fnps=2 then 
 14360     let mp1=66 
-14380     let fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&env$('cno')&"," 
-14400     let fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&env$('cno')&",Shr" 
+14380     fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&env$('cno')&"," 
+14400     fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&env$('cno')&",Shr" 
 14420   else 
 14440     let mp1=63 
-14460     let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&"," 
-14480     let fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnSBIndx.h"&env$('cno')&",Shr"
+14460     fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&"," 
+14480     fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnSBIndx.h"&env$('cno')&",Shr"
 14500   end if
 14520   ! if actpd>0 and actpd<13 then goto L230
 14540   ! pr newpage
-14560   ! pr fields "10,2,C 78,N": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING MONTH END"
-14580   ! pr fields "12,2,c 78,n": "USE OPTION 1 ON THE CURRENT PERIOD PROCESSING MENU TO ENTER THIS INFORMATION"
+14560   ! pr f "10,2,C 78,N": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING MONTH END"
+14580   ! pr f "12,2,c 78,n": "USE OPTION 1 ON THE CURRENT PERIOD PROCESSING MENU TO ENTER THIS INFORMATION"
 14600   ! input fields "23,2,c 1,e,n": pause$
 14620   ! goto XIT
 14640   ! L230: 
@@ -108,7 +108,7 @@
 28580   if total><0 or total2><0 then goto L800
 28600   if ls+ul+ds+ic>0 then goto L800 else goto MainRead
 28620   L800: !
-28640   let sp2=dollar-sp-1
+28640   sp2=dollar-sp-1
 28660   if ul=1 then pr #255,using L816: d$(1:sp2),dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}" pageoflow PgOf : goto L830
 28680   pr #255,using L820: d$(1:sp2),dollar$,total,dollar$,total2 pageoflow PgOf
 28700   L816: form pos sp,c sp2,pos dollar,c 1,c 5,pic(--,---,---.##),c 1,x 28,c 1,c 5,pic(--,---,---.##),c 1,skip 1
@@ -128,7 +128,7 @@
 32060   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
 32080   if ds=1 then let dollar$="$" else let dollar$=" "
 32100   let dollar=24+14*bc
-32120   let sp2=dollar-sp-1
+32120   sp2=dollar-sp-1
 32140   if ul=1 then pr #255,using L816: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}" pageoflow PgOf : goto L960
 32160   pr #255,using L820: d$(1:sp2),dollar$,accum1,dollar$,accum2 pageoflow PgOf
 32180   L960: !
@@ -148,7 +148,7 @@
 34020   if te$="R" then 
 34040     let report$=d$ 
 34060   else if te$="S" then 
-34080     let secondr$=d$
+34080     secondr$=d$
 34100   end if
 34120   gosub L1180
 34140   goto MainRead
@@ -178,7 +178,7 @@
 42180 return ! /r
 44000 PrNewPageThing: ! ! r: newpage thing.  pr footer on page and if eofcode<>1 then pr newpage and heading
 44020   fnpglen(pglen)
-44040   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
+44040   sk=pglen-krec(255): fl=len(rtrm$(foot$))
 44060   if trim$(foot$)<>'' then pr #255,using L1280: rtrm$(foot$)
 44080   L1280: form skip sk,pos tabnote,c fl,skip 1
 44100   if eofcode<>1 then 
@@ -219,7 +219,7 @@
 54200   L1630: form pos 38,cc 42,x 1,cc 42,skip 1
 54220 return ! /r
 58000 L1660: ! r:
-58020   let eofcode=1
+58020   eofcode=1
 58040   gosub PrNewPageThing
 58060   fnfscode(actpd)
 58080   fnpriorcd(1)

@@ -8,7 +8,7 @@
 00080     dim hf(46) ,hf$(46),gridname$*30,oldgridname$*30
 00090     ! ___________________________________________________________________
 00100     fntop(program$,cap$="Payroll Check History")
-00120     cancel=5 : back=2 : let edit=1 : let save=1 : let disable=1 
+00120     cancel=5 : back=2 : edit=1 : save=1 : let disable=1 
 00122     add=4
 00124     let transtype$(1)="Check Only" 
 00126     let transtype$(2)="Departmental Breakdowns" 
@@ -20,7 +20,7 @@
 00160     fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
 00210 ! ___________________________________________________________________
 00220     open #9: "Name="&env$('Q')&"\PRmstr\GridNames.H"&env$('cno')&",USE,RecL=30",internal,outin,relative 
-00230     if lrec(9)=0 then let oldgridname$= gridname$="[All]                         ": write #9,using "form pos 1,c 30",rec=1: gridname$
+00230     if lrec(9)=0 then oldgridname$= gridname$="[All]                         ": write #9,using "form pos 1,c 30",rec=1: gridname$
 00240     fnDedNames(mat dednames$)
 00250     mat hf=(1)
 00270     for j=1 to 20
@@ -68,9 +68,9 @@
 00620     let mg$(3)="before you can make changes."
 00621     fnmsgbox(mat mg$,resp$,cap$,0)
 00622     goto SCREEN1
-00624 L620: if ckey=edit then let editrec=val(resp$(1)) conv SCREEN2 : mat employeetdc=(0): mat employeetcp=(0): goto SCREEN3
+00624 L620: if ckey=edit then editrec=val(resp$(1)) conv SCREEN2 : mat employeetdc=(0): mat employeetcp=(0): goto SCREEN3
 00630     if ckey=add then 
-00632       if trim$(hact$)<>'[All]' then let eno=val(hact$) else let eno=0
+00632       if trim$(hact$)<>'[All]' then eno=val(hact$) else eno=0
 00634       let tdn=prd=ckno=0 : mat tdc=(0) : mat tcp=(0) : addcode=1
 00636       goto SCREEN3_ADD
 00638     end if
@@ -82,7 +82,7 @@
 00690     mat holdtdc=tdc: mat holdtcp=tcp ! hold arrays to see if dollar changes
 00700 SCREEN3_ADD: ! 
 00710     fntos(sn$="CheckHistory-3")
-00712     let lc=rc=0 : let mylen=20 : let mypos=mylen+3
+00712     lc=rc=0 : let mylen=20 : let mypos=mylen+3
 00720     if addcode=1 then let disablecode=0 else let disablecode=1
 00730     fnlbl(lc+=1,1,"Employee #:",mylen,1)
 00740     fntxt(lc,mypos,8,0,0,"30",disablecode) !:
@@ -177,7 +177,7 @@
           let mg$(2)="earnings. It will change the quarterly and annual reports." !:
           let mg$(3)="Click OK to delete; else Cancel to retain the record." !:
           fnmsgbox(mat mg$,resp$,cap$,49)
-01340     if resp$="OK" then delete #filnum,rec=editrec: : let eno=holdeno
+01340     if resp$="OK" then delete #filnum,rec=editrec: : eno=holdeno
 01350     goto SCREEN2
 01360 L1360: let heno=val(resp$(1)) ! employee #
 01370     let tdn=val(resp$(2)) ! dept #
@@ -215,7 +215,7 @@
           let mg$(3)="Click OK to continue; else Cancel to exit without saving the changes." !:
           fnmsgbox(mat mg$,resp$,cap$,49)
 01670     if resp$="OK" then goto L1680 else goto L1700
-01680 L1680: if ckey=save then rewrite #filnum,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",rec=editrec: heno,tdn,prd,ckno,mat tdc,mat tcp: let eno=heno
+01680 L1680: if ckey=save then rewrite #filnum,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",rec=editrec: heno,tdn,prd,ckno,mat tdc,mat tcp: eno=heno
 01690 ! Close #filnum:
 01700 L1700: goto SCREEN2
 01710 ! ___________________________________________________________________
@@ -289,15 +289,15 @@
 02130     let printit=0: let f1=0
 02140     if ckey=cancel then goto DONE
 02150     checkonly=details=grand=quarterly=annual=employee=0 : let holdnam$=""
-02160     let eno=holdeno=printeno=holdckno=printckno=0 : mat cp1=(0)
+02160     eno=holdeno=printeno=holdckno=printckno=0 : mat cp1=(0)
 02170     if resp$(1)="True" then checkonly=1
 02180     if resp$(2)="True" then let details=1
 02190     if resp$(3)="True" then let grand=1
 02200     if resp$(4)="True" then let quarterly=1
 02210     if resp$(5)="True" then annual=1
-02220     if resp$(6)="True" then let employee=1
+02220     if resp$(6)="True" then employee=1
 02230     beg_date=val(resp$(7)) !:
-          let end_date=val(resp$(8)) !:
+          end_date=val(resp$(8)) !:
           let qtr1=val(resp$(9)) !:
           let qtr2=val(resp$(10)) !:
           let qtr3=val(resp$(11)) !:
@@ -305,7 +305,7 @@
           let z$=holdz$=hact$=resp$(13)(1:8) : let z$=holdz$=hact$=lpad$(trim$(z$),8)
 02240     let qtr5=val(resp$(12)(1:4))*10000+1231
 02250     begin_year=val(resp$(12)(1:4))*10000+0101
-02260     let end_year=val(resp$(12)(1:4))*10000+1231
+02260     end_year=val(resp$(12)(1:4))*10000+1231
 02270     let gridname$=rpad$(trim$(resp$(14)),30) : rewrite #9,using "form pos 1,c 30",rec=1: gridname$
 02280     if checkonly=1 and details=1 then goto L2290 else goto L2300
 02290 L2290: let mg$(1)="You cannot select 'Checkonly' and Details " !:
@@ -356,9 +356,9 @@
 02570     read #29,using "form pos 1,c 30,46*n 1",key=gridname$: gridname$,mat hf nokey L2600
 02580     goto L2620
 02590 L2590: write #9,using "form pos 1,c 30",rec=1: gridname$
-02600 L2600: let oldgridname$= gridname$="[All]                         "
+02600 L2600: oldgridname$= gridname$="[All]                         "
 02610     write #29,using "form pos 1,c 30,46*n 1": gridname$,mat hf
-02620 L2620: let oldgridname$=gridname$
+02620 L2620: oldgridname$=gridname$
 02630 L2630: let resp$(1)=gridname$
 02640     for j=1 to udim(hf)
 02650       if hf(j)=1 then let resp$(j+1)="True"
@@ -366,7 +366,7 @@
 02670     next j
 02680     if justopen=1 then goto L2930
 02690 L2690: let fntos(sn$="Checkprint") !:
-          let rc=cf=0 : let linecnt=2
+          let rc=cf=0 : linecnt=2
 02700     fnlbl(1,1,"Grid or Report Name:",20,1)
 02710     fncombof("payrollrpt",1,22,30,env$('Q')&"\PRmstr\payrollreports.h"&env$('cno'),1,30,0,0,env$('Q')&"\PRmstr\reportidx.h"&env$('cno'),0,pas, "",frame) !:
           let resp$(rc+=1)=resp$(1)
@@ -374,7 +374,7 @@
 02730       fnchk(linecnt+=1,16,name$(j),1,rratype) !:
             if hf(j)=1 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
 02740     next j
-02750     let linecnt=2
+02750     linecnt=2
 02760     for j=1 to 22
 02770       fnchk(linecnt+=1,35,name$(j+23),1,rratype) !:
             if hf(j+23)=1 then let resp$(rc+=1)="True" else let resp$(rc+=1)="False"
@@ -391,7 +391,7 @@
 02860     addone=0
 02870     if ckey=2 then addone=1: gosub ADD_GRID: goto L2690
 02880     let gridname$=rpad$(trim$(resp$(1)),30)
-02890     if oldgridname$<>gridname$ then read #29,using "form pos 1,c 30,46*n 1",key=gridname$: gridname$,mat hf nokey L3150 : let oldgridname$=gridname$: goto L2630
+02890     if oldgridname$<>gridname$ then read #29,using "form pos 1,c 30,46*n 1",key=gridname$: gridname$,mat hf nokey L3150 : oldgridname$=gridname$: goto L2630
 02900     for j=1 to 46
 02910       if resp$(j+1)="True" then let hf(j)=1 else let hf(j)=0
 02920     next j
@@ -438,7 +438,7 @@
 03250     form pos 1,n 8,n 3,pd 6,n 7,5*pd 3.2,37*pd 5.2
 03260     let hs3=0
 03270     for j=1 to udim(hs1)
-03280       if j=1 and eno<>holdeno then let empz$=lpad$(str$(hs1(1)),8): let nam$="": read #1,using "form pos 9,c 25",key=empz$: nam$ nokey L3290
+03280       if j=1 and eno<>holdeno then empz$=lpad$(str$(hs1(1)),8): let nam$="": read #1,using "form pos 9,c 25",key=empz$: nam$ nokey L3290
 03290 L3290: if hf(j)=0 then goto L3330
 03300       let hs3=hs3+1
 03310       cp0(hs3)=hs1(j)
@@ -591,7 +591,7 @@
             mat totaltdc=totaltdc+tdc: mat totaltcp=totaltcp+tcp: !:
             let desc$="Total Ck"
 04580     if details=1 then !:
-            let enoprint=eno !:
+            enoprint=eno !:
             let tdnprint=tdn !:
             let prdprint=prd !:
             cknoprint=ckno !:
@@ -602,13 +602,13 @@
 04610 PRINT_GRID: ! 
 04620     let recnum=rec(filnum): if trim$(desc$)<>"" then let recnum=0
 04630     if trim$(desc$)="1st Qtr" or trim$(desc$)="2nd Qtr" or trim$(desc$)="3rd Qtr" or trim$(desc$)="4th Qtr" or trim$(desc$)="YTD" or trim$(desc$)="Grand Total" or trim$(desc$)="Employee Total" then !:
-            let enoprint=tdnprint=prdprint=cknoprint=0 !:
+            enoprint=tdnprint=prdprint=cknoprint=0 !:
             let item$(1)=item$(3)=item$(4)=item$(5)=item$(6)="": let item$(2)=desc$ !:
             let desc$="": goto L4690
-04640     if details=0 then let enoprint=holdeno: let tdnprint=holdtdn: let prdprint=holdprd: cknoprint=holdckno
-04645     if printit=1 then let employeekey$=cnvrt$("pic(zzzzzzzz)",eno) : goto L4660 ! use different key for pr instead of grid
-04650     if printit=1 or details=1 then let employeekey$=cnvrt$("pic(zzzzzzzz)",eno) : goto L4660 ! use different key for pr instead of grid
-04653     let employeekey$=cnvrt$("pic(zzzzzzzz)",holdeno) ! key for grids
+04640     if details=0 then enoprint=holdeno: let tdnprint=holdtdn: let prdprint=holdprd: cknoprint=holdckno
+04645     if printit=1 then employeekey$=cnvrt$("pic(zzzzzzzz)",eno) : goto L4660 ! use different key for pr instead of grid
+04650     if printit=1 or details=1 then employeekey$=cnvrt$("pic(zzzzzzzz)",eno) : goto L4660 ! use different key for pr instead of grid
+04653     employeekey$=cnvrt$("pic(zzzzzzzz)",holdeno) ! key for grids
 04660 L4660: if sum(totaltcp)=(0) and sum(totaltdc)=(0) then goto L4920
 04670     read #1,using "form pos 9,c 18",key=employeekey$: desc$ nokey L4680
 04680 L4680: let item$(1)=cnvrt$("pic(zzzzzzz)",recnum) : : let item$(2)=desc$ !:
@@ -656,7 +656,7 @@
 04910     if qtr4printed=1 then let qtr4printed=2: return 
 04920 L4920: return 
 04930 CONSIDER_ANNUAL_EOF: ! 
-04940     let eofcode=1
+04940     eofcode=1
 04950 CONSIDER_ANNUAL: ! 
 04960 ! If EOFCODE=1 AND EMPLOYEE=1 AND PRD>=BEG_DATE AND PRD<=END_DATE Then Mat EMPLOYEETDC=EMPLOYEETDC+TDC: Mat EMPLOYEETCP=EMPLOYEETCP+TCP : Mat GRAND2TCP=GRAND2TCP+TCP: Mat GRAND2TDC=GRAND2TDC+TDC
 04970 ! If EOFCODE=1 AND ANNUAL=1 AND PRD>=BEGIN_YEAR AND PRD<=END_YEAR Then Mat ANNUALTDC=ANNUALTDC+TDC: Mat ANNUALTCP=ANNUALTCP+TCP
@@ -674,7 +674,7 @@
 05030     if (sum(qtr4tdc)>0 or sum(qtr4tcp)>0) and qtr4printed=0 then !:
             mat totaltdc=qtr4tdc: mat totaltcp=qtr4tcp: let qtr4printed=1 !:
             let desc$="4th Qtr": let holdnam$="": gosub PRINT_GRID
-05040     if annual=1 then let enoprint=tdnprint=prdprint=cknoprint=0 !:
+05040     if annual=1 then enoprint=tdnprint=prdprint=cknoprint=0 !:
             mat totaltdc=annualtdc: mat totaltcp=annualtcp !:
             annual_printed=1 : let desc$="YTD": gosub PRINT_GRID !:
             mat annualtcp=(0) : mat annualtdc=(0)
@@ -682,9 +682,9 @@
 05060 ! If PRINTIT=1 Then Gosub EMPLOYEE_TOTALS
 05070     if employee=1 and holdeno<>0 then !:
             mat totaltdc=employeetdc: mat totaltcp=employeetcp !:
-            let employee_printed=1 : let desc$="Employee Total": gosub PRINT_GRID: mat employeetcp=(0): mat employeetdc=(0)
+            employee_printed=1 : let desc$="Employee Total": gosub PRINT_GRID: mat employeetcp=(0): mat employeetdc=(0)
 05080     if eofcode=1 and grand=1 then gosub GRAND_TOTAL
-05090     if eofcode=1 then let eofcode=0: let holdeno=0: goto L5120
+05090     if eofcode=1 then eofcode=0: let holdeno=0: goto L5120
 05100     if trim$(hact$)="[All]" and quarterly=1 and holdeno>0 then !:
             let qtr1printed=qtr2printed=qtr3printed=qtr4printed=0 !:
             mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0) : mat qtr4tcp=(0) !:
@@ -706,7 +706,7 @@
 05200     return 
 05210 ADD_GRID: ! 
 05220     fntos(sn$="Addgrid") !:
-          let lc=rc=0 : let mylen=20 : let mypos=mylen+3
+          lc=rc=0 : let mylen=20 : let mypos=mylen+3
 05230     fnlbl(1,1,"Grid or Report Name:",20,1)
 05240     fntxt(1,mypos,30,0,0,"") !:
           let resp$(1)=""
@@ -714,14 +714,14 @@
           fncmdkey('&Cancel',5,0,1,"Returns to selection screen without adding this report.")
 05260     fnacs(sn$,0,mat resp$,ckey) ! add grid name
 05270     if ckey=5 then goto L5330
-05280     let oldgridname$=gridname$=rpad$(trim$(resp$(1)),30)
+05280     oldgridname$=gridname$=rpad$(trim$(resp$(1)),30)
 05290     rewrite #9,using "form pos 1,c 30",rec=1: gridname$
 05300     mat hf=(0)
 05310     write #29,using "form pos 1,c 30,46*n 1": gridname$,mat hf
 05320     mat resp$=(""): let resp$(1)=gridname$
 05330 L5330: return 
 05340 NOKEY_ON_GRID: ! 
-05350     let oldgridname$=gridname$=resp$(1)
+05350     oldgridname$=gridname$=resp$(1)
 05360     rewrite #9,using "form pos 1,c 30",rec=1: gridname$
 05370     mat hf=(0)
 05380     write #29,using "form pos 1,c 30,46*n 1": gridname$,mat hf

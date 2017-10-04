@@ -9,13 +9,13 @@
 00100   let namtab=66-int(len(rtrm$(cnam$))/2)
 00110   open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr L440
 00120 L120: pr newpage
-00130   pr fields "10,10,c 48,n": "ENTER DATE FOR STAFF DIRECTORY IN MMDDYY FORMAT"
-00140   pr fields "10,60,n 6,n": dat
+00130   pr f "10,10,c 48,n": "ENTER DATE FOR STAFF DIRECTORY IN MMDDYY FORMAT"
+00140   pr f "10,60,n 6,n": dat
 00150 L150: input fields "10,60,n 6,eu,n": dat conv L150
 00160   if dat<10100 or dat>123199 then goto L120
 00170   pr newpage
-00180   pr fields "10,25,c 30,n": "STAFF DIRECTORY IN PROCESS"
-00190   pr fields "23,2,c 30,n": "Press F5 to stop"
+00180   pr f "10,25,c 30,n": "STAFF DIRECTORY IN PROCESS"
+00190   pr f "23,2,c 30,n": "Press F5 to stop"
 00200   gosub L290
 00210 L210: read #1,using L220: eno$,e$,dept,mat r eof L400 ioerr L440
 00220 L220: form pos 1,c 9,c 25,pd 2,pos 578,11*pd 3.2
@@ -40,16 +40,16 @@
 00410 L410: let fncloseprn
 00420   if uprc$(rtrm$(prg$))="S:\acsTM\EMAINT" then chain prg$
 00430   goto XIT
-00440 L440: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L460
+00440 L440: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L460
 00450   goto L500
 00460 L460: pr newpage
-00470   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L490
+00470   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L490
 00480   goto L500
-00490 L490: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00500 L500: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00490 L490: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00500 L500: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00510   input fields "24,60,C 1,N": quitcode$
 00520   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-00530   pr fields "23,3,C 78,N": ""
-00540   pr fields "24,3,C 78,N": ""
+00530   pr f "23,3,C 78,N": ""
+00540   pr f "24,3,C 78,N": ""
 00550   retry 
 00560 XIT: let fnxit

@@ -27,9 +27,9 @@
 10280 ! a selected exit (must be 15 characters or less)
 10300 ! ______________________________________________________________________
 10320 !   pr border: "Error "&str$(errornumber)&" on line "&str$(linenumber)
-10340     pr fields "1,73,C 7,N": bell$
-10360     let log$="Error "&str$(errornumber)&" at line "&str$(linenumber)
-10380     let log$=log$&" of "&callingProgram$(1:100)
+10340     pr f "1,73,C 7,N": bell$
+10360     log$="Error "&str$(errornumber)&" at line "&str$(linenumber)
+10380     log$=log$&" of "&callingProgram$(1:100)
 10400     fnlog(log$,2)
 10440     act$="Go "&str$(linenumber)
 10460     acshelp$="Help\co\error\br\"
@@ -48,15 +48,15 @@
 12220       pr #win,fields "1,1,Cc 69,N": "Problem with Index File"
 12240     end if 
 12260 ! 
-12280     let lc=7
+12280     lc=7
 12300     pr #win,fields str$(lc)&",2,Cr 13,N": "Program:"
 12320     pr #win,fields str$(lc)&",16,C 53,P[textboxes]": env$('Core_Program_Current')(1:53)
 12340     pr #win,fields str$(lc+=1)&",2,Cr 13,N": "File:"
 12360     pr #win,fields str$(lc)&",16,C 53,P[textboxes]": callingProgram$(1:53)
-12380     let lc+=1
+12380     lc+=1
 12400     pr #win,fields str$(lc+=1)&",2,Cr 13,[screen]": "Error Number:"
 12420     pr #win,fields str$(lc)&",16,C 5,P[textboxes]": str$(errornumber) ! ,r,n
-12440     let lc+=1
+12440     lc+=1
 12460     pr #win,fields str$(lc+=1)&",2,Cr 13,[screen]": "Line Number:"
 12480     pr #win,fields str$(lc)&",16,C 5,P[textboxes]": str$(linenumber) ! ,r,n
 12500     pr #win,fields str$(lc+=1)&",2,Cr 13,N": "Count+1:"
@@ -75,24 +75,24 @@
 12760 ERR_INP: ! 
 14000     input #0,fields "4,4,C 1,AE,N": pause$
 14020     if cmdkey=0 then 
-14040       let log$="action taken = Retry" : let fnlog(log$,2)
+14040       log$="action taken = Retry" : let fnlog(log$,2)
 14060       act$="Go "&str$(linenumber)
 14080       goto ERROR_XIT
 14100     else if cmdkey=5 or cmdkey=99 then 
-14120       let log$="action taken = Quit" : let fnlog(log$,2)
+14120       log$="action taken = Quit" : let fnlog(log$,2)
 14140       goto ERR_QUITER
 14160     else if cmdkey=8 then 
-14180       let log$="action taken = BRWiki Help" : let fnlog(log$,2)
+14180       log$="action taken = BRWiki Help" : let fnlog(log$,2)
 14200       gosub BRWIKIHELP
 14220 !   else if cmdkey=9 then
-14240 !     let log$="action taken = ACS Help" : let fnlog(log$,2)
+14240 !     log$="action taken = ACS Help" : let fnlog(log$,2)
 14260 !     gosub ACSHELP
 14280 !   else if cmdkey=10 then
-14300 !     let log$="action taken = WB Help" : let fnlog(log$,2)
+14300 !     log$="action taken = WB Help" : let fnlog(log$,2)
 14320 !     gosub ERR_WBHELP
 14340     else if cmdkey=12 then 
 14360       act$="PAUSE"
-14380       let log$="action taken = Program Pause" : let fnlog(log$,2)
+14380       log$="action taken = Program Pause" : let fnlog(log$,2)
 14400       goto ERROR_XIT
 14420     end if 
 14440     goto ERR_INP
@@ -119,7 +119,7 @@
 20400 !     return  ! /r
 20600 ERR_QUITER: ! r:
 20700     if uprc$(rtrm$(stopable$))="NO" then 
-20710       let setenv('ExitNow','no')
+20710       setenv('ExitNow','no')
 20800       mat msgline$(2)
 20900       let msgline$(1)="Do not stop the processing of this program."
 21000       let msgline$(2)="Please contact ACS Technical Support."

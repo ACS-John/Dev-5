@@ -9,7 +9,7 @@
 25000     if env$("xit_override")<>'' then 
 25020       dim tmp$*1024
 25040       let tmp$=env$("xit_override")
-25060       let setenv("xit_override","")
+25060       setenv("xit_override","")
 25080       fnchain(tmp$)
 25100     end if 
 30000     fnchain('S:\Core\Menu.br',0,1)

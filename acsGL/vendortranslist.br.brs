@@ -46,7 +46,7 @@
 00410   if ytdp<-200000 then let ytdp=0
 00420 L420: form pos 1,c 8,c 30,pos 129,pd 5.2
 00430   let fst=0
-00440   let ec$=""
+00440   ec$=""
 00450   let tot=0
 00460   restore #trans,key>=vn$: nokey L400
 00470 L470: read #trans,using L520,release: trvn$,dt,am,rn$,de$ eof L400

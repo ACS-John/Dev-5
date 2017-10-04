@@ -20,8 +20,8 @@
 00150 ! r: prepare arrays
 00160     mat flxitm$(199) : mat flxhdr$(199) : mat sln2(199) : mat fltyp2$(199)
 00170     mat mask2(199) : mat startpos2(199) : mat option$(199) : mat control$(60,26)
-00180     let row_select=1 : let opt_cancel=5 : let opt_add=4 : let opt_edit=3
-00190     let opt_delete=7 : let right=1
+00180     let row_select=1 : opt_cancel=5 : opt_add=4 : opt_edit=3
+00190     opt_delete=7 : let right=1
 00200     let itemcount=udim(p$)
 00202     mat hcombof(itemcount)
 00210 ! 
@@ -30,52 +30,52 @@
 00240       mat control$=incontrol$
 00250     end if 
 00260     if udim(startpos)<>itemcount then 
-00270       let startpos2(1)=1
+00270       startpos2(1)=1
 00280     else 
-00290       let startpos2(1)=startpos(1)
+00290       startpos2(1)=startpos(1)
 00300     end if 
 00310     for j=1 to itemcount
 00312       if lwrc$(control$(j,1))='combof' and control$(j,7)<>'' then ! it is a combof that has an index
-00314         let fltyp2$(j)="c"
+00314         fltyp2$(j)="c"
 00318         open #hcombof(j):=fngethandle: 'name='&control$(j,2)&',kfname='&control$(j,7)&',Shr',internal,input,keyed 
 00320       else if udim(fltyp$)<>itemcount then 
-00330         let fltyp2$(j)="g"
+00330         fltyp2$(j)="g"
 00340       else if j>udim(fltyp$) then 
-00350         let fltyp2$(j)="g"
+00350         fltyp2$(j)="g"
 00360       else if fltyp$(j)="" then 
-00370         let fltyp2$(j)="g"
+00370         fltyp2$(j)="g"
 00380       else 
-00390         let fltyp2$(j)=lwrc$(fltyp$(j))
+00390         fltyp2$(j)=lwrc$(fltyp$(j))
 00400       end if 
 00410       if udim(sln)<>itemcount then 
-00420         let sln2(j)=fln(j)
+00420         sln2(j)=fln(j)
 00430       else if sln(j)=0 then 
-00440         let sln2(j)=fln(j)
+00440         sln2(j)=fln(j)
 00450       else 
-00460         let sln2(j)=sln(j)
+00460         sln2(j)=sln(j)
 00470       end if 
 00480       if udim(mask)<>itemcount then 
 00490         let mask2(j)=0
 00500       else 
 00510         let mask2(j)=mask(j)
 00520       end if 
-00530       if mask2(j)=1 then let fln(j)=8
+00530       if mask2(j)=1 then fln(j)=8
 00540       if j=1 then goto SKIP_STARTPOS
 00550       if udim(mat startpos)=itemcount then 
-00560         let startpos2(j)=startpos(j)
+00560         startpos2(j)=startpos(j)
 00570       else if udim(mat startpos)<>itemcount and udim(mat startpos)<>0 then 
-00580         let startpos2(j)=startpos2(j-1)+int(sln2(j-1))
+00580         startpos2(j)=startpos2(j-1)+int(sln2(j-1))
 00590       else if udim(mat startpos)<>itemcount and udim(mat startpos)<>0 then 
-00600         let startpos2(j)=startpos2(j-1)+int(sln2(j-1))
+00600         startpos2(j)=startpos2(j-1)+int(sln2(j-1))
 00610       else if udim(mat startpos)=itemcount then 
-00620         let startpos2(j)=startpos2(j-1)+int(sln2(j-1))
+00620         startpos2(j)=startpos2(j-1)+int(sln2(j-1))
 00630       else if udim(startpos)=0 then 
-00640         let startpos2(j)=startpos2(j-1)+int(sln2(j-1))
+00640         startpos2(j)=startpos2(j-1)+int(sln2(j-1))
 00650       else if startpos(j)=0 then 
-00660         let startpos2(j)=startpos2(j-1)+int(sln2(j-1))
+00660         startpos2(j)=startpos2(j-1)+int(sln2(j-1))
 00670       end if 
 00680       if udim(mat startpos)=>j and startpos(j)<>0 then 
-00690         let startpos2(j)=startpos(j)
+00690         startpos2(j)=startpos(j)
 00700       end if 
 00710 SKIP_STARTPOS: ! 
 00720     next j
@@ -83,9 +83,9 @@
 00732 ! /r
 00740 ! Gosub KEYORDER_BUILD
 00750 ! r: Build Flex Headers and Flex Mask
-00760     mat flxhdr$(itemcount+1) : let fhc=0 : let flxhdr$(fhc+=1)='Rec'
+00760     mat flxhdr$(itemcount+1) : let fhc=0 : flxhdr$(fhc+=1)='Rec'
 00770     for j=2 to itemcount+1
-00780       if mask2(j-1)<20000 then let flxhdr$(fhc+=1)=lbl$(j-1)
+00780       if mask2(j-1)<20000 then flxhdr$(fhc+=1)=lbl$(j-1)
 00790       controlx=j-1
 00800       let testmask=mask2(controlx)
 00810       if testmask=>1000 and testmask<2000 then let testmask-=1000
@@ -132,7 +132,7 @@
 01210       let prec=j1
 01212       gosub READ_P ! Read #FIN,Using FRM$,Rec=J1: MAT P$ Norec (just past fnflexadd1)
 01220       if pnorec<>1 then 
-01230         let fic=0 : let flxitm$(fic+=1)=str$(rec(fin))
+01230         let fic=0 : flxitm$(fic+=1)=str$(rec(fin))
 01240         for j2=2 to itemcount+1
 01242           controlx=j2-1
 01244           if mask2(controlx)<20000 then 
@@ -143,7 +143,7 @@
 01252               read #hcombof(controlx),using 'form pos '&control$(controlx,5)&',c '&control$(controlx,6),key=hcfkey$: hcfdesc$ nokey ignore
 01253               let hcfdesc$=rtrm$(hcfdesc$)
 01254             end if 
-01255             let flxitm$(fic+=1)=p$(controlx)&' '&hcfdesc$
+01255             flxitm$(fic+=1)=p$(controlx)&' '&hcfdesc$
 01256 !           if hcfDesc$<>'' then pr 'flxitm$('&str$(fic)&')="'&flxitm$(fic)&'" hcfDesc$="'&hcfDesc$&'"' : pause
 01258           end if 
 01260         next j2
@@ -197,10 +197,10 @@
 01470     next j
 01475     mat p2$(alana=udim(p$)+1) : mat p2$(1:udim(p$))=p$(1:udim(p$))
 01480     fntos(sn$=uw$&"3")
-01485     let mypos=mylen+3 : let lc=ic=0 : col=1 : colpos=1
+01485     let mypos=mylen+3 : lc=ic=0 : col=1 : colpos=1
 01490     for j=1 to itemcount
 01495       if itemcount>30 and j>(itemcount/2) and col=1 then 
-01500         let lc=0 : colpos=mypos+myflen+4 : col+=1
+01500         lc=0 : colpos=mypos+myflen+4 : col+=1
 01505         let mypos=colpos+mylen+2
 01510       end if 
 01515       if mask2(ic+1)=>20000 then let ic+=1 : goto SKIP_LABEL_AND_CONTROL
@@ -221,7 +221,7 @@
 01587 L1160: ! 
 01589       cj+=1
 01591       if cj<udim(control$,2)-1 and trim$(control$(j,cj))<>"" then 
-01593         let option$(cj)=control$(j,cj+1)
+01593         option$(cj)=control$(j,cj+1)
 01595         goto L1160
 01597       else 
 01599         mat option$(cj-1)
@@ -343,7 +343,7 @@
 01835     continue  ! not Return  ! not Retry
 01837 ! /r
 01839 REWR_P: ! r:
-01841 ! let spos=1
+01841 ! spos=1
 01843     if menu1_opt=opt_add then 
 01845       let prec=lrec(fin)+1
 01847       gosub SET_KEY_FORM
@@ -369,7 +369,7 @@
 01887       crflag=0
 01889       if fltyp2$(j)="cr" then 
 01891         let p$(j)=lpad$(trim$(p$(j)),sln2(j))
-01893         let fltyp2$(j)="c"
+01893         fltyp2$(j)="c"
 01895         crflag=1
 01897       end if 
 01899       if lwrc$(fltyp2$(j))<>"pd" then let p$(j)=p$(j)(1:sln2(j))
@@ -379,7 +379,7 @@
 01907         rewrite #fin,using tmp$,same,reserve: p$(j)
 01909 ! .! pr 'Rewr$ - '&TMP$&"   P$("&STR$(J)&")="&P$(J)
 01911       end if 
-01913       if crflag=1 then let fltyp2$(j)="cr" : crflag=0
+01913       if crflag=1 then fltyp2$(j)="cr" : crflag=0
 01915       if fltyp2$(j)="n" or fltyp2$(j)="pd" then 
 01917         let tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "
 01919         let tmp$=tmp$&str$(sln2(j)) : let t=val(p$(j))

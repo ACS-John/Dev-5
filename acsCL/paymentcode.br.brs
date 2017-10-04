@@ -10,11 +10,11 @@
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Payment Code")
 00120   fncno(cno)
-00130   let lbl$(1)="Payment Code" !:
-        let lbl$(2)="Code Description"
+00130   lbl$(1)="Payment Code" !:
+        lbl$(2)="Code Description"
 00140   let tln(1)=1 : let tln(2)=25
-00150   let fltyp$(1)="N" : let fltyp$(2)="C"
-00160   let sln(1)=1 : let sln(2)=25
+00150   fltyp$(1)="N" : fltyp$(2)="C"
+00160   sln(1)=1 : sln(2)=25
 00170   let mask(1)=1030
 00180   open #1: "Name="&env$('Q')&"\CLmstr\PaymentCode.dat,Version=1,KFName="&env$('Q')&"\CLmstr\PaymentCode.Idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outin,keyed 
 00190   close #1: 

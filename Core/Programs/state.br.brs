@@ -21,12 +21,12 @@
 40080   dim sln(3)    ! Storage Length
 40100   dim mask(3)   ! input mask
 40120   dim fln(3)    ! Field Length
-40140   let lbl$(1)="Abreviation" 
-40160   let lbl$(2)="Name" 
-40180   let lbl$(3)="Code"
-40200   let fln(1)=2 
-40220   let fln(2)=25
-40240   let fln(3)=2
+40140   lbl$(1)="Abreviation" 
+40160   lbl$(2)="Name" 
+40180   lbl$(3)="Code"
+40200   fln(1)=2 
+40220   fln(2)=25
+40240   fln(3)=2
 40260   let mask(1)=2000 
 40280   let mask(3)=30
 40300   hState=fnOpenFile(layoutName$,mat statedata$,mat statedatan,mat form$)

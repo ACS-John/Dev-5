@@ -9,7 +9,7 @@
 00080   fntop(program$,cap$="User Designed Report")
 00090 MAIN_SCREEN: ! 
 00100   fntos(sn$="user1") !:
-        let mylen=25 : let mypos=mylen+2: let resp=0: let left=1
+        let mylen=25 : let mypos=mylen+2: let resp=0: left=1
 00110   let df$="S:\acsPR\Jcreport.mst" : let if$="S:\acsPR\jcreport.idx" !:
         fncombof("CRjcreport",1,1,80,df$,1,2,3,74,if$,1) !:
         fncombof("CRjcreportALL",1,1,80,df$,1,2,3,74,if$,2)

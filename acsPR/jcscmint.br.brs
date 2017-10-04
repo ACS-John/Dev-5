@@ -16,13 +16,13 @@
 00140 MENU1: ! 
 00150   pr newpage
 00160   fnopenwin(win=101,08,19,15,60,cap$)
-00170   let scm$(1)="1. Initial File Preparation"
-00180   let scm$(2)="2. Add or Edit"
-00190   let scm$(3)="3. pr Proof List"
-00200   let scm$(4)="4. Search"
+00170   scm$(1)="1. Initial File Preparation"
+00180   scm$(2)="2. Add or Edit"
+00190   scm$(3)="3. pr Proof List"
+00200   scm$(4)="4. Search"
 00210   for j=1 to 4: let iom$(j)=str$(j+3)&",2,C 38,N": next j !:
         let iom$(2)="5,2,C 38,C,N"
-00220   pr fields "16,34,C 09,B,5": "Exit (F5)"
+00220   pr f "16,34,C 09,B,5": "Exit (F5)"
 00230 L230: rinput #win,select mat iom$,attr "H": mat scm$
 00240   alp=0
 00250   let ti=curfld
@@ -37,7 +37,7 @@
 00340   pr #win,fields "5,1,Cc 40,N": "This selection will erase all records"
 00350   pr #win,fields "6,1,Cc 40,N": "in the Sub-Category Description File."
 00360   pr #win,fields "8,2,C 24,N": "Enter ERASE to continue:"
-00370   pr fields "17,34,C 11,B,5": "Cancel (F5)"
+00370   pr f "17,34,C 11,B,5": "Cancel (F5)"
 00380 L380: input #win,fields "8,27,Cu 5,UT,N": cont$ conv L380
 00390   if cont$="ERASE" then let new1=1 else let new1=2
 00400   if new1=2 then goto MENU1
@@ -66,7 +66,7 @@
 00620   let win=102
 00630   fnopenwin(win,10,20,14,59,cap$)
 00640   pr #win,fields "4,2,C 17,N": "Description Code:"
-00650   pr fields "15,34,C 11,B,5": "Cancel (F5)"
+00650   pr f "15,34,C 11,B,5": "Cancel (F5)"
 00660   if ti=4 then cde$=lpad$(rtrm$(k$),3) : goto L720
 00670 L670: input #win,fields "4,20,Nz 2,UT,N": cde conv L670
 00680   if cmdkey=5 or cde=0 then goto MENU1
@@ -82,9 +82,9 @@
 00780   pr #win,fields "3,1,Cc 40,R,N": "Modifying"
 00790   goto L810
 00800 L800: pr #win,fields "3,1,Cc 40,R,N": "Adding"
-00810 L810: pr fields "15,22,C 12,B,1": "Save (Enter)"
-00820   pr fields "15,35,C 11,B,4": "Delete (F4)"
-00830   pr fields "15,47,C 11,B,5": "Cancel (F5)"
+00810 L810: pr f "15,22,C 12,B,1": "Save (Enter)"
+00820   pr f "15,35,C 11,B,4": "Delete (F4)"
+00830   pr f "15,47,C 11,B,5": "Cancel (F5)"
 00840   pr #win,fields "5,2,Cr 12,N": "Code:"
 00850   pr #win,fields "6,2,Cr 12,N": "Description:"
 00860   pr #win,fields "5,15,C 3,N": ltrm$(cde$)
@@ -139,16 +139,16 @@
 01350 ! READ #41,USING 12500,KEY=JN$: JN$,N$,MAT A$,MAT B NOKEY (list 'asdf')
 01360   restore #1,search>="": nokey L1370
 01370 L1370: pr #win: newpage
-01380   pr fields "2,47,C 33,R,N": " "&n$(1:31)
-01390   let ln=0
+01380   pr f "2,47,C 33,R,N": " "&n$(1:31)
+01390   ln=0
 01400 L1400: read #1,using L1410: cde$,des$ eof L1460
 01410 L1410: form pos 1,c 3,c 25
-01420   let ln=ln+1
-01430   pr fields str$(ln+2)&",49,C 3,N": cde$
-01440   pr fields str$(ln+2)&",54,C 25,N": des$
+01420   ln=ln+1
+01430   pr f str$(ln+2)&",49,C 3,N": cde$
+01440   pr f str$(ln+2)&",54,C 25,N": des$
 01450   if ln<20 then goto L1400
-01460 L1460: pr fields "23,47,C 33,R,N": " Press Enter to continue" ! asdf
-01470   pr fields "24,47,C 33,R,N": " or enter category Number:"
+01460 L1460: pr f "23,47,C 33,R,N": " Press Enter to continue" ! asdf
+01470   pr f "24,47,C 33,R,N": " or enter category Number:"
 01480   input fields "24,74,C 2,UT,N": k$
 01490   if rtrm$(k$)><"" then close #win: : goto L610
 01500   if ln<20 then goto SRCHEND

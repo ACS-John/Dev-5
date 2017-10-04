@@ -43,7 +43,7 @@
 01030   read #h_customer_1,using F_CUSTOMER_1,key=x$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ nokey ACCOUNT_X_NOKEY
 01032   gosub REMOVE_INCORRECT_ALLOCATIONS
 01040   let holdz$=z$
-01050   let olde3$=e$(3)
+01050   olde3$=e$(3)
 01054   EDIT_LOADED_CUSTOMER: ! 
 01056     dim meterAddressBeforeEdit$*30
 01058     if u4_meterAddress$='True' then meterAddressBeforeEdit$=e$(1)
@@ -51,11 +51,11 @@
 01072     oldService2DepositAmount=b(9)
 01074     oldService3DepositAmount=b(10)
 01075     oldService4DepositAmount=b(11)
-01076     !   let old_gas_deposit=b(11)
+01076     !   old_gas_deposit=b(11)
 01078     mat ab$=('')
 01080     read #h_ubadrbil,using "Form POS 11,4*C 30",key=z$: mat ab$ nokey ignore
 01090     ! let pb=bal
-01100     let odp=b(8)+b(9)+b(11)
+01100     odp=b(8)+b(9)+b(11)
 01110   goto NAMESCREEN ! /r
 01120   ! ______________________________________________________________________
 01130   CHECK_BALANCE_BREAKDOWN: ! r:
@@ -204,23 +204,23 @@
 03010     read #h_budmstr,using F_BUDMSTR,key=z$: z$,mat ba,mat badr nokey L3040
 03030     br1=1
 03040     L3040: !
-03041     let sn$="budget1"
+03041     sn$="budget1"
 03042     fntos(sn$)
 03050     fnfra(1,1,framelen-1,45,"Budget Billing Information","Enter budget amounts to activate budget billing",0)
 03060     fnlbl(2,16,"Budget Amounts",20,2,3,1)
 03070     fnlbl(3,1,"Date:",20,1,0,1)
 03080     fntxt(3,22,8,8,1,"1",0,"Date budget billing approved (mmddyy format)",1)
 03082     budgetinfo$(1)=str$(ba(1))
-03090     let x=1 : let lyne =3
+03090     let x=1 : lyne =3
 03100     for j=1 to 10
 03110       if trim$(srvnam$(j))<>"" then  ! have this service
-03120         let x+=1 : let lyne+=1
+03120         let x+=1 : lyne+=1
 03122         fnlbl(lyne,1,trim$(srvnam$(j))&":",20,1,0,1)
 03130         fntxt(lyne,22,10,0,1,"10",0,"Enter budget amounts where applicable.  All other services will be calculated as normal.",1)
 03132         budgetinfo$(x)=str$(ba(j+1))
 03140       end if
 03142     next j
-03150     let lyne+=1 : let fnlbl(lyne,1,"Net Bill:",20,1,0,1)
+03150     lyne+=1 : let fnlbl(lyne,1,"Net Bill:",20,1,0,1)
 03160     fntxt(lyne,22,10,10,1,"10",0,"Net would never have a value unless all items above were budgeted",1)
 03162     budgetinfo$(x+=1)=str$(ba(12))
 03170     fncmdkey("&Next",1,1)
@@ -285,7 +285,7 @@
 14210       fntxt(3,22,8,8,1,"1",0,'',1)
 14220       budgetinfo$(2)=str$(bt1(1,2))
 14230       fntxt(3,34,8,8,1,"1",0,empty$,1)
-14240       x=2: let lyne=3
+14240       x=2: lyne=3
 14250       for j=1 to 10
 14260         if trim$(srvnam$(j))<>"" then ! they have this service
 14270           x=x+2
@@ -454,7 +454,7 @@
 26270     else
 26280       fnlbl(21,1,"Test Circle Code:",mylen,1)
 26290     end if
-26300     if extra(22)<0 then let extra(22)=0
+26300     if extra(22)<0 then extra(22)=0
 26310     if extra(22)=0 or extra(22)=2 then let do_not_use_alt_addr=1 else let do_not_use_alt_addr=0
 26320     ! 
 26330     fntxt(21,27,12)
@@ -526,7 +526,7 @@
 27420     extra$(1)=custinfo$(6)
 27440     e$(4)=custinfo$(7)
 27460     e$(1)=custinfo$(8)
-27480     if trim$(e$(1))="" then let e$(1)=e$(3) ! set meter address same as customer address if left blank
+27480     if trim$(e$(1))="" then e$(1)=e$(3) ! set meter address same as customer address if left blank
 27500     citykey$=rpad$(e$(4),30)
 27520     read #h_citystzip,using 'form pos 1,c 30',key=citykey$,release: citystzip$ nokey L5430
 27540     goto L5440
@@ -620,9 +620,9 @@
 29200       fnWorkOrderList(z$)
 29220       goto NAMESCREEN
 29240     else if ckey=50 then 
-29260       let extra(22)=2 : goto NAMESCREEN
+29260       extra(22)=2 : goto NAMESCREEN
 29280     else if ckey=51 then 
-29300       let extra(22)=1 : goto NAMESCREEN
+29300       extra(22)=1 : goto NAMESCREEN
 29400     else if ckey=fkey_meterAddress then ! if ckey=54
 29420       dim meterAddressBeforeSelect$*30
 29440       meterAddressBeforeSelect$=e$(1)
@@ -668,7 +668,7 @@
 32600     if ratecode=0 then let rateinfo$(3)=" 0=Not applicable"
 32620   return  ! /r
 34000   BILLING_INFO: ! r:
-34020     let sn$="billing_info"
+34020     sn$="billing_info"
 34040     fntos(sn$)
 34060     fnlbl(1,14,"Billing Information",30,2,4)
 34080     fnlbl(2,1,"Account:",10,1)
@@ -691,11 +691,11 @@
 34420     end if 
 34440     fnlbl(3,19,"Current      Balance",25,2,2,1)
 34460     fnlbl(4,20,"    Bill      Breakdown",25,2,2,1)
-34480     let lyne=4
+34480     lyne=4
 34500     if uprc$(escrow$)="Y" then billinfo=5 else billinfo=4
 34520     for j=1 to 10
 34540       if rtrm$(srvnam$(j))<>"" then 
-34560         let lyne+=1
+34560         lyne+=1
 34580         fnlbl(lyne,1,trim$(srvnam$(j))&":",16,1,0,1)
 34600         fntxt(lyne,19,10,0,1,'10',0,'',1)
 34620         bxnf$(billinfo+=1)=str$(g(j))
@@ -703,10 +703,10 @@
 34660         bxnf$(billinfo+=1)=str$(gb(j))
 34680       end if 
 34700     next j
-34720     let lyne+=1 : let fnlbl(lyne,1,"Net Bill:",16,1,0,1)
+34720     lyne+=1 : let fnlbl(lyne,1,"Net Bill:",16,1,0,1)
 34740     fntxt(lyne,19,10,0,1,'10',0,'',1)
 34760     bxnf$(billinfo+=1)=str$(g(11))
-34780     let lyne+=1 : let fnlbl(lyne,1,"Gross Bill:",16,1,0,1)
+34780     lyne+=1 : let fnlbl(lyne,1,"Gross Bill:",16,1,0,1)
 34800     fntxt(lyne,19,10,0,1,'10',0,'',1)
 34820     bxnf$(billinfo+=1)=str$(g(12))
 34840     fncmdset(2)
@@ -714,7 +714,7 @@
 34880     if ckey=5 then goto NAMESCREEN
 34900     let f=val(bxnf$(3))
 34920     bal=val(bxnf$(4))
-34940     if uprc$(escrow$)="Y" then let extra(23)=val(bxnf$(5))
+34940     if uprc$(escrow$)="Y" then extra(23)=val(bxnf$(5))
 34960     if uprc$(escrow$)="Y" then billinfo=5 else billinfo=4
 34980     for j=1 to 10
 35000       if rtrm$(srvnam$(j))<>"" then 
@@ -726,7 +726,7 @@
 35120     billinfo=billinfo+1 : let g(12)=val(bxnf$(billinfo))
 35140   goto NAMESCREEN ! /r
 36000   BANK_DRAFT: ! r:
-36020     let sn$="bank_draft"
+36020     sn$="bank_draft"
 36040     fntos(sn$)
 36060     fnlbl(1,9,"Bank Draft Information",40,2,4)
 36080     fnlbl(2,1,"Account:",10,1)
@@ -747,8 +747,8 @@
 36380     fntxt(5,20,9,0,0,'',0,"Routing number for customer's bank")
 36400     let dri$(4)=dr$
 36420     fnlbl(6,1,"Account Code:",18,1,0)
-36440     let opt$(1)="27 = Checking"
-36460     let opt$(2)= "37 = Savings"
+36440     opt$(1)="27 = Checking"
+36460     opt$(2)= "37 = Savings"
 36480     fncomboa("bankdraft",6,20,mat opt$,empty$,13)
 36500     if dc$="37" then 
 36520       let dri$(5)="37 = Savings"
@@ -848,7 +848,7 @@
 44400   goto ADD_RECORD
 44420   ! /r
 44440   ADD_CONTINUE: ! r:
-44460     let z$=x$ : mat e$=("") : let e$(4)=newe4$
+44460     let z$=x$ : mat e$=("") : e$(4)=newe4$
 44480     mat f$=("") : mat a=(0) : mat b=(0) : mat c=(0) : mat d=(0)
 44500     mat g=(0) : mat adr=(0) : mat gb=(0) : bal=f=0
 44520     alp$="" : let df$=dr$=dc$=da$="" : mat extra=(0) : mat extra$=("")
@@ -897,10 +897,10 @@
 47020   close #cf_handle: ioerr ignore
 47040 fnend 
 48000 SERVICE_BUTTONS: ! r:
-48020   let lyne=5
+48020   lyne=5
 48040   for j=1 to 10
 48060     if trim$(srv$(j))<>"" and trim$(srvnam$(j))<>"" then 
-48070       let lyne+=1 : let funkeyval=j+20
+48070       lyne+=1 : let funkeyval=j+20
 48086       fnbutton_or_disabled(trim$(srv$(j))<>searchcode$,lyne,45,srvnam$(j),funkeyval,"Allows you to assign "&lwrc$(trim$(srvnam$(j)))&" codes for this customer (service "&str$(j)&')',20)
 48200     end if
 48220   next j
@@ -917,7 +917,7 @@
 50180   end if 
 50220 goto NAMESCREEN ! /r
 51000 SERVICE1: ! r: 1ST SERVICE  -  Water
-51010   fntos(sn$="Service1") : let service_code=1
+51010   fntos(sn$="Service1") : service_code=1
 51020   let respc=0
 51030   fnlbl(1,19,srvnam$(service_code),20,2,4)
 51040   fnlbl(2,1,"Account:",10,1)
@@ -927,7 +927,7 @@
 51080   fntxt(2,31,25,30,0,'',1)
 51090   let rateinfo$(respc+=1)=e$(2) ! 2
 51100   fnlbl(4,1,"Rate Code:",17,1)
-51110   let searchcode$=srv$(service_code)
+51110   searchcode$=srv$(service_code)
 51120   let ratecode=a(1)
 51130   gosub GET_CODES
 51140   fncomboa("ubfm-rates",4,19,mat rates$,"",30)
@@ -976,7 +976,7 @@
 51560   let x=pos(rateinfo$(3),"=",1)
 51570   if x=3 then a(1)=val(rateinfo$(3)(1:2)) else a(1)=val(rateinfo$(3)(1:1))
 51580   let f$(1)=rateinfo$(4)(1:12)
-51590   let extra$(3)=rateinfo$(5)(1:12)
+51590   extra$(3)=rateinfo$(5)(1:12)
 51600   b(8)=val(rateinfo$(6))
 51610   c(1)=val(rateinfo$(7))
 51620   b(1)=val(rateinfo$(8))
@@ -989,7 +989,7 @@
 51690   goto SERVICE_SCREEN
 51700   return  ! /r
 52000 SERVICE2: ! r: 2nd SERVICE  -  Sewer
-52020   fntos(sn$="service2") : let service_code=2
+52020   fntos(sn$="service2") : service_code=2
 52040   let respc=0
 52060   fnlbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
 52080   fnlbl(2,1,"Account:",10,1)
@@ -999,7 +999,7 @@
 52160   fntxt(2,31,25,30,0,'',1)
 52180   let rateinfo$(respc+=1)=e$(2)
 52200   fnlbl(4,1,"Rate Code:",17,1)
-52220   let searchcode$=srv$(service_code) : let ratecode=a(2) : gosub GET_CODES
+52220   searchcode$=srv$(service_code) : let ratecode=a(2) : gosub GET_CODES
 52240   fncomboa("ubfm-rates",4,19,mat rates$,"",30)
 52260   let respc+=1
 52280   fnlbl(5,1,"Deposit:",17,1)
@@ -1036,12 +1036,12 @@
 52880   b(9)=val(rateinfo$(4))
 52900   c(2)=val(rateinfo$(5))
 52920   b(2)=val(rateinfo$(6))
-52940   let extra(5)=val(rateinfo$(7))
-52960   let extra(18)=val(rateinfo$(8))
-52980   let extra(14)=val(rateinfo$(9))
+52940   extra(5)=val(rateinfo$(7))
+52960   extra(18)=val(rateinfo$(8))
+52980   extra(14)=val(rateinfo$(9))
 53000   goto SERVICE_SCREEN ! /r
 54000 SERVICE3: ! r: 3RD SERVICE  -  Electric
-54020   fntos(sn$="service3") : let service_code=3
+54020   fntos(sn$="service3") : service_code=3
 54040   let respc=0
 54060   fnlbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
 54080   fnlbl(2,1,"Account:",10,1)
@@ -1051,7 +1051,7 @@
 54160   fntxt(2,31,25,30,0,'',1)
 54180   let rateinfo$(respc+=1)=e$(2)
 54200   fnlbl(4,1,"Rate Code:",14,1)
-54220   let searchcode$=srv$(service_code) : let ratecode=a(3) : gosub GET_CODES
+54220   searchcode$=srv$(service_code) : let ratecode=a(3) : gosub GET_CODES
 54240   fncomboa("ubfm-rates",4,18,mat rates$,"",30)
 54260   let respc+=1
 54280   if srv$(3)="EL" or srv$(3)="LM" then 
@@ -1123,7 +1123,7 @@
 55580     a(3)=val(rateinfo$(3)(1:1))
 55600   end if 
 55620   let f$(2)=rateinfo$(4)(1:12)
-55640   let extra$(4)=rateinfo$(5)(1:12)
+55640   extra$(4)=rateinfo$(5)(1:12)
 55660   b(10)=val(rateinfo$(6))
 55680   c(3)=val(rateinfo$(7))
 55700   b(3)=val(rateinfo$(8))
@@ -1133,15 +1133,15 @@
 55780   let d(8)=val(rateinfo$(12))
 55800   let d(15)=val(rateinfo$(13))
 55820   let d(14)=val(rateinfo$(14))*1000
-55840   let extra(9)=val(rateinfo$(15))
-55860   let extra(8)=val(rateinfo$(16))*1000
-55880   let extra(6)=val(rateinfo$(17))
-55900   let extra(7)=val(rateinfo$(18))
-55920   let extra(15)=val(rateinfo$(19))
+55840   extra(9)=val(rateinfo$(15))
+55860   extra(8)=val(rateinfo$(16))*1000
+55880   extra(6)=val(rateinfo$(17))
+55900   extra(7)=val(rateinfo$(18))
+55920   extra(15)=val(rateinfo$(19))
 55940   if ckey=1 then goto NAMESCREEN
 55960   goto SERVICE_SCREEN ! /r
 56000 SERVICE4: ! r: 4th SERVICE  -  Gas
-56020   fntos(sn$="service4") : let service_code=4
+56020   fntos(sn$="service4") : service_code=4
 56040   let respc=0
 56060   fnlbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
 56080   fnlbl(2,1,"Account:",10,1)
@@ -1151,7 +1151,7 @@
 56160   fntxt(2,31,25,30,0,"",1)
 56180   let rateinfo$(respc+=1)=e$(2)
 56200   fnlbl(4,1,"Rate Code:",14,1)
-56220   let searchcode$=srv$(service_code) : let ratecode=a(4) : gosub GET_CODES
+56220   searchcode$=srv$(service_code) : let ratecode=a(4) : gosub GET_CODES
 56240   fncomboa("ubfm-rates",4,16,mat rates$,"",30)
 56260   let respc+=1
 56280   if srv$(4)="GA" then ! show all of gas information (unless field is used for something other than gas)
@@ -1198,7 +1198,7 @@
 57060   let x=pos(rateinfo$(3),"=",1)
 57080   if x=3 then a(4)=val(rateinfo$(3)(1:2)) else a(4)=val(rateinfo$(3)(1:1))
 57100   let f$(3)=rateinfo$(4)(1:12)
-57120   let extra$(5)=rateinfo$(5)(1:12)
+57120   extra$(5)=rateinfo$(5)(1:12)
 57140   b(11)=val(rateinfo$(6))
 57160   c(4)=val(rateinfo$(7))
 57180   b(4)=val(rateinfo$(8))
@@ -1206,12 +1206,12 @@
 57220   let d(10)=val(rateinfo$(10))
 57240   let d(11)=val(rateinfo$(11))
 57260   let d(12)=val(rateinfo$(12))
-57280   let extra(10)=val(rateinfo$(13))*1000
-57300   let extra(16)=val(rateinfo$(14))
+57280   extra(10)=val(rateinfo$(13))*1000
+57300   extra(16)=val(rateinfo$(14))
 57320   if ckey=1 then goto NAMESCREEN
 57340   goto SERVICE_SCREEN ! /r
 58000 SERVICE5: ! r: 5th SERVICE
-58020   fntos(sn$="service5") : let service_code=5
+58020   fntos(sn$="service5") : service_code=5
 58040   let respc=0
 58060   fnlbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
 58080   fnlbl(2,1,"Account:",10,1)
@@ -1221,7 +1221,7 @@
 58160   fntxt(2,31,25,30,0,"",1)
 58180   let rateinfo$(respc+=1)=e$(2)
 58200   fnlbl(4,1,"Rate Code:",14,1)
-58220   let searchcode$=srv$(service_code) : let ratecode=a(5) : gosub GET_CODES
+58220   searchcode$=srv$(service_code) : let ratecode=a(5) : gosub GET_CODES
 58240   fncomboa("ubfm-rates",4,20,mat rates$,"",30)
 58260   let respc+=1
 58280   fnlbl(5,1,"Standard Charge:",18,1)
@@ -1239,7 +1239,7 @@
 58480   b(5)=val(rateinfo$(4))
 58500   goto SERVICE_SCREEN ! /r
 60000 SERVICE6: ! r: 6th SERVICE
-60020   fntos(sn$="service6") : let service_code=6
+60020   fntos(sn$="service6") : service_code=6
 60040   let respc=0
 60060   fnlbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
 60080   fnlbl(2,1,"Account:",10,1)
@@ -1249,7 +1249,7 @@
 60160   fntxt(2,31,25,30,0,"",1)
 60180   let rateinfo$(respc+=1)=e$(2)
 60200   fnlbl(4,1,"Rate Code:",14,1)
-60220   let searchcode$=srv$(service_code) : let ratecode=extra(11) : gosub GET_CODES
+60220   searchcode$=srv$(service_code) : let ratecode=extra(11) : gosub GET_CODES
 60240   fncomboa("ubfm-rates",4,20,mat rates$,"",30)
 60260   let respc+=1
 60280   fnlbl(5,1,"Standard Charge:",18,1)
@@ -1263,11 +1263,11 @@
 60410   fnacs(sn$,0,mat rateinfo$,ckey) ! .   ! rate screen 6
 60420   if ckey=5 then goto NAMESCREEN
 60440   let x=pos(rateinfo$(3),"=",1)
-60460   if x=3 then let extra(11)=val(rateinfo$(3)(1:2)) else let extra(11)=val(rateinfo$(3)(1:1))
+60460   if x=3 then extra(11)=val(rateinfo$(3)(1:2)) else extra(11)=val(rateinfo$(3)(1:1))
 60480   b(6)=val(rateinfo$(4))
 60500   goto SERVICE_SCREEN ! /r
 62000 SERVICE7: ! r:  7th SERVICE
-62020   fntos(sn$="service7") : let service_code=7
+62020   fntos(sn$="service7") : service_code=7
 62040   let respc=0
 62060   fnlbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
 62080   fnlbl(2,1,"Account:",10,1)
@@ -1277,7 +1277,7 @@
 62160   fntxt(2,31,25,30,0,"",1)
 62180   let rateinfo$(respc+=1)=e$(2)
 62200   fnlbl(4,1,"Rate Code:",14,1)
-62220   let searchcode$=srv$(service_code) : let ratecode=extra(12) : gosub GET_CODES
+62220   searchcode$=srv$(service_code) : let ratecode=extra(12) : gosub GET_CODES
 62240   fncomboa("ubfm-rates",4,16,mat rates$,"",30)
 62260   let respc+=1
 62280 ! Let fnlbl(5,1,"Standard Charge:",16,1)
@@ -1291,11 +1291,11 @@
 62410   fnacs(sn$,0,mat rateinfo$,ckey) ! rate screen 7
 62420   if ckey=5 then goto NAMESCREEN
 62440   let x=pos(rateinfo$(3),"=",1)
-62460   if x=3 then let extra(12)=val(rateinfo$(3)(1:2)) else let extra(12)=val(rateinfo$(3)(1:1))
+62460   if x=3 then extra(12)=val(rateinfo$(3)(1:2)) else extra(12)=val(rateinfo$(3)(1:1))
 62480 ! b(7)=VAL(RATEINFO$(4))
 62500   goto SERVICE_SCREEN ! /r
 64000 SERVICE8: ! r:  8th SERVICE
-64020   fntos(sn$="service8") : let service_code=8
+64020   fntos(sn$="service8") : service_code=8
 64040   let respc=0
 64060   fnlbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
 64080   fnlbl(2,1,"Account:",10,1)
@@ -1305,7 +1305,7 @@
 64160   fntxt(2,31,25,30,0,"",1)
 64180   let rateinfo$(respc+=1)=e$(2)
 64200   fnlbl(4,1,"Rate Code:",14,1)
-64220   let searchcode$=srv$(service_code) : let ratecode=extra(13) : gosub GET_CODES
+64220   searchcode$=srv$(service_code) : let ratecode=extra(13) : gosub GET_CODES
 64240   fncomboa("ubfm-rates",4,16,mat rates$,"",30)
 64260   let respc+=1
 64280   fnlbl(5,1,"Standard Charge:",16,1)
@@ -1318,11 +1318,11 @@
 64400   fnacs(sn$,0,mat rateinfo$,ckey) ! rate screen 8
 64420   if ckey=5 then goto NAMESCREEN
 64440   let x=pos(rateinfo$(3),"=",1)
-64460   if x=3 then let extra(13)=val(rateinfo$(3)(1:2)) else let extra(13)=val(rateinfo$(3)(1:1))
+64460   if x=3 then extra(13)=val(rateinfo$(3)(1:2)) else extra(13)=val(rateinfo$(3)(1:1))
 64480   b(7)=val(rateinfo$(4))
 64500   goto SERVICE_SCREEN ! /r
 66000 SERVICE9: ! r:  9th service (sales tax)
-66020   fntos(sn$="service9") : let service_code=9
+66020   fntos(sn$="service9") : service_code=9
 66040   let respc=0
 66060   fnlbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
 66080   fnlbl(2,1,"Account:",10,1)
@@ -1332,7 +1332,7 @@
 66160   fntxt(2,31,25,30,0,"",1)
 66180   let rateinfo$(respc+=1)=e$(2)
 66200   fnlbl(4,1,"Rate Code:",14,1)
-66220   let searchcode$=srv$(service_code) : let ratecode=a(6) : gosub GET_CODES
+66220   searchcode$=srv$(service_code) : let ratecode=a(6) : gosub GET_CODES
 66240   fncomboa("ubfm-rates",4,16,mat rates$,"",30)
 66260   let respc+=1
 66280   gosub SERVICE_BUTTONS
@@ -1345,7 +1345,7 @@
 66400   if x=3 then a(6)=val(rateinfo$(3)(1:2)) else a(6)=val(rateinfo$(3)(1:1))
 66420   goto SERVICE_SCREEN ! /r
 68000 SERVICE10: ! r:  10th SERVICE   (penalty)
-68020   fntos(sn$="service10") : let service_code=10
+68020   fntos(sn$="service10") : service_code=10
 68040   let respc=0
 68060   fnlbl(1,19,uprc$(srvnam$(service_code)),20,2,4)
 68080   fnlbl(2,1,"Account:",10,1)
@@ -1355,7 +1355,7 @@
 68160   fntxt(2,31,25,30,0,"",1)
 68180   let rateinfo$(respc+=1)=e$(2)
 68200   fnlbl(4,1,"Rate Code:",14,1)
-68220   let searchcode$=srv$(service_code) : let ratecode=a(7) : gosub GET_CODES
+68220   searchcode$=srv$(service_code) : let ratecode=a(7) : gosub GET_CODES
 68240   fncomboa("ubfm-rates",4,16,mat rates$,"",30)
 68260   let respc+=1
 68280   gosub SERVICE_BUTTONS
@@ -1568,7 +1568,7 @@
 84170     if account_selection_method=0 then account_selection_method=asm_combo
 84180     fn_record_previous_load(prev_list_id$)
 84190   end if 
-84200   if select_button_text$='' then let select_button_text$='Next'
+84200   if select_button_text$='' then select_button_text$='Next'
 84210   col1_width=17
 84220   col2_pos=col1_width+2
 84230   do 
@@ -1685,11 +1685,11 @@
 86350       if service_item=>1 and service_item<=5 then 
 86360         if a(service_item)=0 then a(service_item)=tmp_rate_val(service_item)
 86370       else if service_item=6 then 
-86380         if extra(11)=0 then let extra(11)=tmp_rate_val(service_item)
+86380         if extra(11)=0 then extra(11)=tmp_rate_val(service_item)
 86390       else if service_item=7 then 
-86400         if extra(12)=0 then let extra(12)=tmp_rate_val(service_item)
+86400         if extra(12)=0 then extra(12)=tmp_rate_val(service_item)
 86410       else if service_item=8 then 
-86420         if extra(13)=0 then let extra(13)=tmp_rate_val(service_item)
+86420         if extra(13)=0 then extra(13)=tmp_rate_val(service_item)
 86430       else if service_item=9 then 
 86440         if a(6)=0 then a(6)=tmp_rate_val(service_item)
 86450       else if service_item=10 then 

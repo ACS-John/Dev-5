@@ -22,7 +22,7 @@
 00162 ! _
 00165 ! add fnWAIT here when it been rewritten
 00170   fnopenprn
-00180   let ln$=rpt$("X",val(resp$(1)))
+00180   ln$=rpt$("X",val(resp$(1)))
 00190   for j=1 to val(resp$(2)) : pr #255: ln$ : next j
 00200   fncloseprn
 00210   goto XIT

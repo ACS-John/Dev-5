@@ -26,7 +26,7 @@
           let x=len(at$(j)) : let y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
-00150   let linelength=62
+00150   linelength=62
 00170   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00180   gosub BULKSORT ! want printed in alphabetic order
 00190   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.H"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
@@ -38,7 +38,7 @@
 00230 SCREEN1: ! 
 00240   a$="" : let prtbkno=0
 00250   fntos(sn$="UBPrtBl1-1") !:
-        let pf=33 : let ll=30 !:
+        let pf=33 : ll=30 !:
         let respc=0
 00260   fnlbl(1,1,"Penalty Due Date:",ll,1)
 00270   fntxt(1,pf,8,8,1,"1",0,tt$) !:
@@ -81,12 +81,12 @@
 00450   if resp$(5)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(5))
-00460   if resp$(6)="True" then let sl1=1: let z$="" else let sl1=0
-00462   pr service_from=val(resp$(7)) : let service_to=val(resp$(8))
+00460   if resp$(6)="True" then sl1=1: let z$="" else sl1=0
+00462   pr service_from=val(resp$(7)) : service_to=val(resp$(8))
 00466   if service_from<>0 and service_to<>0 then let use_entered_dates=1 else let use_entered_dates=0
 00470   if trim$(a$)<>"" then read #2,using L500,key=a$: z$,route,sequence nokey SCREEN1 !:
           let holdz$=z$: begin=1 !:
-          let st1=1
+          st1=1
 00500 L500: form pos 1,c 10,pos 1741,n 2,n 7
 00510   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
 00520   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
@@ -110,23 +110,23 @@
 00700   if prtbkno><route then goto L610
 00710 L710: if f><d1 then goto L600
 00720   if st1=0 then goto READALTADR
-00730 ! If ST1$=Z$ Then Let ST1=0 Else Goto 560
+00730 ! If ST1$=Z$ Then sT1=0 Else Goto 560
 00740 READALTADR: ! 
 00750 ! read alternate billing address
 00752   if extra_22<>1 then goto L840
 00760   read #h_adrbil,using L770,key=z$: mat ba$ nokey L840
 00770 L770: form pos 11,4*c 30
-00780   let e1=0 : mat pe$=("")
+00780   e1=0 : mat pe$=("")
 00790   for j=1 to 4
 00800     if rtrm$(ba$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : let pe$(e1)=ba$(j)
 00810   next j
 00820   goto L1000
 00830 ! ______________________________________________________________________
-00840 L840: let e1=0 : mat pe$=("")
+00840 L840: e1=0 : mat pe$=("")
 00850   for j=2 to 4
 00860     if rtrm$(e$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : let pe$(e1)=e$(j)
 00870   next j
 00880   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 00890   goto L1000
@@ -151,7 +151,7 @@
 01080   goto L600
 01090 ! ______________________________________________________________________
 01100 SCREEN3: ! 
-01110   let sn$ = "UBPrtBl1-2" !:
+01110   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
 01120   let txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
@@ -177,7 +177,7 @@
 01250 SORT1: ! r: SELECT & SORT
 01260   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1510
 01270   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
-01280   let s5=1
+01280   s5=1
 01290   if prtbkno=0 then let routekey$="" else !:
           let routekey$=cnvrt$("N 2",prtbkno)&"       " !:
           ! key off first record in route (route # no longer part of customer #)
@@ -237,7 +237,7 @@
 01730 ! ______________________________________________________________________
 01740 VBOPENPRINT: ! r:
 01760     fnPa_open("Landscape")
-01790     let lyne=3
+01790     lyne=3
 01820   return  ! /r
 01830 ! ______________________________________________________________________
 01840 VBPRINT: ! r:
@@ -261,8 +261,8 @@
 02020   pr #20: 'Call Print.AddText("#'&trim$(z$)&'  '&bulk$&'",'&str$(xmargin+4)&','&str$(lyne*5+ymargin)&')'
 02030   pr #20: 'Call Print.AddText("'&e$(1)&'",'&str$(xmargin+4)&','&str$(lyne*6+ymargin)&')'
 02032   if ~use_entered_dates then 
-02034     let service_from=extra_4
-02036     let service_to=extra_3
+02034     service_from=extra_4
+02036     service_to=extra_3
 02038   end if 
 02040   pr #20: 'Call Print.AddText("From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",service_from)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",service_to)&'",'&str$(xmargin+2)&','&str$(lyne*7+ymargin)&')'
 02050   pr #20: 'Call Print.AddText("Due upon receipt",'&str$(xmargin+2)&','&str$(lyne*8+ymargin)&')'
@@ -275,7 +275,7 @@
 02100   pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+52+5)&','&str$(lyne*13+ymargin)&')'
 02110 ! ______________________________________________________________________
 02112 PRINTGRID: ! 
-02114   let meter=14 ! 02114   let meter=20 ! let lyne=2 ! 3 ! 2.15 !  started at 20 and 2.1
+02114   let meter=14 ! 02114   let meter=20 ! lyne=2 ! 3 ! 2.15 !  started at 20 and 2.1
 02116   pr #20: 'Call Print.MyFontSize(10)' ! 02116   pr #20: 'Call Print.MyFontSize(10)' ! line_top(1)
 02118   if g(1)<>0 then 
 02120     pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
@@ -354,7 +354,7 @@
 02266     pr #20: 'Call Print.AddText("Prior",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin+2)&')'
 02268     pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin+2)&')'
 02270   end if  ! pb
-02272   pr #20: 'Call Print.MyFontSize(10)' : let lyne=3
+02272   pr #20: 'Call Print.MyFontSize(10)' : lyne=3
 02274 ! 
 02276   if estimatedate=d1 then pr #20: 'Call Print.AddText("Bill estimated!",'&str$(xmargin+1)&','&str$(lyne*21+ymargin)&')'
 02278   pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*23+1+ymargin+10)&',63,0)'
@@ -376,7 +376,7 @@
 02308 ! pr #20: 'Call Print.AddText("Phone: 217-665-3351",'&STR$(XMARGIN+1)&','&STR$(LYNE*27+YMARGIN)&')'
 02310 ! pr #20: 'Call Print.AddText("Re-connect fee $??.00",'&STR$(XMARGIN+1)&','&STR$(LYNE*28+YMARGIN)&')'
 02312 ! ______________________________________________________________________
-02314   let special=28
+02314   special=28
 02316 ! ______________________________________________________________________
 02318   pr #20: 'Call Print.MyFontSize(7)'
 02320   pr #20: 'Call Print.AddLine('&str$(xmargin+97)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'

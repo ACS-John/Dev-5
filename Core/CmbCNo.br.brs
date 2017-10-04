@@ -14,9 +14,9 @@
 00140     mat opt$(9999) : mat filename$(9999)
 00150     fncno(cno,oldcnam$)
 00170     if trim$(mysys$)='' then 
-00180       let sys_data_path$=env$('Q')&'\'&fncursys$&"mstr"
+00180       sys_data_path$=env$('Q')&'\'&fncursys$&"mstr"
 00190     else 
-00200       let sys_data_path$=env$('Q')&'\'&mysys$&"mstr"
+00200       sys_data_path$=env$('Q')&'\'&mysys$&"mstr"
 00210     end if 
 00220 ! 
 00230     fngetdir(sys_data_path$,mat filename$,empty$,temp$="Company.h*")
@@ -24,8 +24,8 @@
 00240     for a=1 to udim(filename$)
 00250       let filename$=trim$(filename$)
 00260       if filename$(a)<>"" then 
-00270         let end=len(filename$(a))
-00280         let opt$(a)=filename$(a)(10:end)
+00270         end=len(filename$(a))
+00280         opt$(a)=filename$(a)(10:end)
 00290         open #x: "Name="&sys_data_path$&"\Company.h"&opt$(a),internal,input 
 00300         read #x,using "Form pos 1,c 40": cnam$
 00310         close #x: 
@@ -34,7 +34,7 @@
 00340         else 
 00350           let kill99999=0
 00360         end if 
-00370         let opt$(a)=cnam$&" ("&cnvrt$("pic(#####)",val(opt$(a)))&")"
+00370         opt$(a)=cnam$&" ("&cnvrt$("pic(#####)",val(opt$(a)))&")"
 00380       else 
 00390         if kill99999=1 then 
 00400           mat opt$(a-2)

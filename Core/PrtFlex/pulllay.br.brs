@@ -16,18 +16,18 @@
 00160   let dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
 00190   let io1$(1)="10,34,c 45,UT,N" !:
         let io1$(2)="12,34,C 45,UT,N"
-00200   let outputfile$="S:\acsPR\grid\checks\checkhistory"
-00210   let ev$="S:\acsPR\Layouts\checkhistory.LAY"
+00200   outputfile$="S:\acsPR\grid\checks\checkhistory"
+00210   ev$="S:\acsPR\Layouts\checkhistory.LAY"
 00220   pr newpage
 00230   close #101: ioerr L240
 00240 L240: open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outin 
 00250   pr #101: newpage
-00260   pr fields "10,2,Cr 32": "File name to create (no ext):"
-00270   pr fields "12,2,Cr 32": "Layout file name (with exts):"
-00280   pr fields "14,35,c 9,B,1": "Next (F1)"
+00260   pr f "10,2,Cr 32": "File name to create (no ext):"
+00270   pr f "12,2,Cr 32": "Layout file name (with exts):"
+00280   pr f "14,35,c 9,B,1": "Next (F1)"
 00290 L290: rinput fields mat io1$: outputfile$,ev$ conv L290
-00300   let ev$=trim$(trim$(ev$,chr$(0)))
-00310   let outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
+00300   ev$=trim$(trim$(ev$,chr$(0)))
+00310   outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
 00320   open #2: "Name="&ev$,display,input 
 00330   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outin,keyed 
 00340 L340: linput #2: ln$ eof L870
@@ -54,14 +54,14 @@
 00521 ! Let P3=pos(srep$(a$(j3,3),'^','~'),'~',1)-1 ! for acsea and acscl only  (way John does layouts)
 00530   let p4=pos(a$(j3,3),"*",1)
 00540   if p4=0 then let m1=1 else let m1=val(a$(j3,3)(1:p4-1))
-00550   let l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
+00550   l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
 00551   pr ln$
 00560   if p2>1 then let dp=val(a$(j3,3)(p2:p3)) else let dp=0 !:
           ! DECIMAL POSITIONS
 00570   if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !:
           !   ACTUAL FIELD LENGTH
 00572   if uprc$(a$(j3,3)(1:1))="X" then goto L340 ! skip any formats of "x"
-00580   let l=l*m1 ! TOTAL STORAGE LENGTH
+00580   l=l*m1 ! TOTAL STORAGE LENGTH
 00590   b=a+l
 00600   a=a+1
 00610   let ino=ino+1
@@ -96,7 +96,7 @@
 00870 L870: close #2: ioerr L880
 00880 L880: close #15: ioerr L890
 00890 L890: gosub MOVEITTOTEXT
-00900   pr fields "24,1,C 7,UT,N": "Done..."
+00900   pr f "24,1,C 7,UT,N": "Done..."
 00910   stop 
 00920 ! ______________________________________________________________________
 00930 MOVEITTOTEXT: ! 
@@ -119,28 +119,28 @@
 01100   dim nam$*30
 01110 ! ______________________________________________________________________
 01120   def fnbooktitle$*80(x$*80)
-01130     let x$=lwrc$(trim$(x$)) : let olda=0
+01130     let x$=lwrc$(trim$(x$)) : olda=0
 01140     let x$(1:1)=uprc$(x$(1:1))
 01150 ! capitalize anthing after a SPACE
 01160 L1160: a=pos(x$," ",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1160
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1160
 01170     a=olda=0
 01180 L1180: a=pos(x$,"-",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1180
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1180
 01190     a=olda=0
 01200 L1200: a=pos(x$,"/",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1200
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1200
 01210     a=olda=0
 01220 L1220: a=pos(x$,"\",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1220
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1220
 01230     a=olda=0
 01240 L1240: a=pos(x$,".",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : let olda=a : goto L1240
+            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1240
 01250     fnbooktitle$=x$
 01260   fnend 
 01270   return 

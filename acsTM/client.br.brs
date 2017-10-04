@@ -16,7 +16,7 @@
 21700   goto XIT
 21800 ! ______________________________________________________________________
 21900   def fn_open_file
-22000     let open_file_count=0 ! this value is used in the close_file sub routine
+22000     open_file_count=0 ! this value is used in the close_file sub routine
 22100     open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\CLmstr.h420,Version=0,KFName="&env$('Q')&"\TMmstr\CLIndex.h420,Use,RecL=534,KPs=1,KLn=5,Shr",internal,outin,keyed 
 22200     open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\CLmstr.h420,Version=0,KFName="&env$('Q')&"\TMmstr\CLIndx2-Idx.h420,Use,RecL=534,KPs=6,KLn=28,Shr",internal,outin,keyed 
 22300   fnend 
@@ -34,7 +34,7 @@
 23500 ! C$(c_x,5)=Description Position : C$(c_x,6)=Description Length
 23600 ! C$(c_x,7)=Index File
 23700 ! C$(c_x,8)=limit to list option ('1'=Yes; '0'=No)
-23800     let limit_to_list$='1'
+23800     limit_to_list$='1'
 23900 ! 
 24000 ! cl=1 : c$(cl,1)='ComboF'
 24100 ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h420'
@@ -89,7 +89,7 @@
 29000     let mask_pointtwo=32 : let mask_number=30
 29100     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 29200     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
-29300     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
+29300     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 29400 ! 
 29500     fn_hamster_field_reset
 29600 ! 
@@ -233,21 +233,21 @@
 43300   fnend  ! fn_hamster_field_reset
 43400   def fn_hamster_field_add(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position) ! ,disable) <- didn't quite work as easily as i was hoping for it to.
 43500     if field_type$='' then let field_type$='C'
-43600     if storage_length=0 then let storage_length=textbox_len
+43600     if storage_length=0 then storage_length=textbox_len
 43700     add_rec_item=udim(mat lbl$)+1
-43800     mat lbl$(add_rec_item) : let lbl$(add_rec_item)=label$
+43800     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$
 43900     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
 44000     mat p$(add_rec_item)
-44100     mat fltyp$(add_rec_item) : let fltyp$(add_rec_item)=field_type$
-44200     mat sln(add_rec_item) : let sln(add_rec_item)=storage_length
+44100     mat fltyp$(add_rec_item) : fltyp$(add_rec_item)=field_type$
+44200     mat sln(add_rec_item) : sln(add_rec_item)=storage_length
 44300     mat mask(add_rec_item) : let mask(add_rec_item)=ar_mask
-44400     mat sp(add_rec_item) : let sp(add_rec_item)=storage_position
+44400     mat sp(add_rec_item) : sp(add_rec_item)=storage_position
 44500     if storage_position=0 then 
 44600       if add_rec_item=1 then 
-44700         let sp(add_rec_item)=1
+44700         sp(add_rec_item)=1
 44800         auto_storage_position=1
 44900       else 
-45000         let sp(add_rec_item)=sp(add_rec_item-1)+sln(add_rec_item-1)
+45000         sp(add_rec_item)=sp(add_rec_item-1)+sln(add_rec_item-1)
 45100       end if 
 45200     end if 
 45300     mat c$(add_rec_item,8)

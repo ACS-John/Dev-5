@@ -67,7 +67,7 @@
 76060   fn_open=fnOpenFile(filename$, mat f$, mat fn, mat form$, inputonly, keynum, dont_sort_subs, path$, mat descr$, mat field_widths, mat _fileiosubs$,supressprompt:=2)
 76080   if ~max(srch(loadedsubs$,uprc$(filename$)),0) then 
 76100     mat loadedsubs$(udim(loadedsubs$)+1) 
-76120     let loadedsubs$(udim(loadedsubs$))=uprc$(filename$)
+76120     loadedsubs$(udim(loadedsubs$))=uprc$(filename$)
 76140     for index=1 to udim(mat _fileiosubs$) 
 76160       execute (_fileiosubs$(index)) 
 76180     next index

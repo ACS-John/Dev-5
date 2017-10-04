@@ -24,7 +24,7 @@
 00220   fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   let fan$=lpad$(rtrm$(resp$(1)(1:10)),10)
-00250   let lan$=lpad$(rtrm$(resp$(2)(1:10)),10)
+00250   lan$=lpad$(rtrm$(resp$(2)(1:10)),10)
 00260   if resp$(3)="True" then let print_grand_totals$="Y"
 00270   if resp$(4)="True" then let print_details$="Y"
 00280   let d1=val(resp$(5))
@@ -94,10 +94,10 @@
 00930 L930: form pos 1,pd 3
 00940   read #6,using L470,rec=r6: d3,z$,e2$ eof GRANDTOTAL
 00950   if subtotal_break_check<>d3 and not_first_rec=1 then gosub SUBTOTAL
-00960   let subtotal_count+=1
-00970   let subtotal_d3+=d3
+00960   subtotal_count+=1
+00970   subtotal_d3+=d3
 00980   if print_details$="Y" then gosub DETAILS
-00990   let subtotal_break_check=d3 ! vaL(Z$(1:2))
+00990   subtotal_break_check=d3 ! vaL(Z$(1:2))
 01000   let not_first_rec=1
 01010   goto REPORT
 01020 ! ______________________________________________________________________
@@ -119,7 +119,7 @@
 01180 L1180: pr #255: "" pageoflow PGOF
 01190   let grandtotal_count+=subtotal_count
 01200   let grandtotal_d3+=subtotal_d3
-01210   let subtotal_count=subtotal_d3=0
+01210   subtotal_count=subtotal_d3=0
 01220   if no_more_header=0 then gosub HEADER_COLUMN
 01230   return 
 01240 ! ______________________________________________________________________

@@ -24,21 +24,21 @@
 00190   fnacs("S-Flex",0,mat resp$,ck)
 00191   pr 'just after return from fnacs - '&time$
 00200 ! 
-00210   let sleep(5) : pr "sleep for 5 seconds"
+00210   sleep(5) : pr "sleep for 5 seconds"
 00215   pr 'just before tos - '&time$
 00220   fntos(sn$="S-2")
 00230   fncmdkey('Ok-2',1,1,0)
 00240   fnacs(sn$,0,mat resp$,ck)
 00241   pr 'just after return from fnacs - '&time$
 00250 ! 
-00260   let sleep(5) : pr "sleep for 5 seconds"
+00260   sleep(5) : pr "sleep for 5 seconds"
 00261   pr 'just before tos - '&time$
 00270   fntos(sn$="S-3")
 00280   fncmdkey('Ok-3',1,1,0)
 00290   fnacs(sn$,0,mat resp$,ck)
 00291   pr 'just after return from fnacs - '&time$
 00300 ! 
-00310   let sleep(5) : pr "sleep for 5 seconds"
+00310   sleep(5) : pr "sleep for 5 seconds"
 00311   pr 'just before tos - '&time$
 00320   fntos(sn$="S-4")
 00330   fncmdkey('Ok-4',1,1,0)

@@ -37,17 +37,17 @@
         let n$=lpad$(str$(costcent),3)&"     0  0"
 00290   read #glmstr,using 'Form POS 1,C 12,C 50,POS 81,2*PD 6.2',key>=n$: n$,d$,bb,cb nokey SCREEN1
 00300 ! pr NEWPAGE
-00310 ! pr Fields "10,2,C 78": "Enter the Cost Center (Fund or Company Num) If you wish to only pr a work"
-00320 ! pr Fields "11,2,C 69": "sheet for one Cost Center (Blank for All)"
-00330 ! pr Fields "13,34,C 11,B,5": "Cancel (F5)"
+00310 ! pr f "10,2,C 78": "Enter the Cost Center (Fund or Company Num) If you wish to only pr a work"
+00320 ! pr f "11,2,C 69": "sheet for one Cost Center (Blank for All)"
+00330 ! pr f "13,34,C 11,B,5": "Cancel (F5)"
 00340 ! Input Fields "11,70,Nz 3,EUT,N": COSTCENT Conv 250
 00350 ! If CMDKEY=5 Then Goto XIT
 00360 ! Let N$=LPAD$(STR$(COSTCENT),3)&"     0  0"
 00370 ! Read #GLmstr,Using 'Form POS 1,C 12,C 50,POS 81,2*PD 6.2',Key>=N$: N$,D$,BB,CB Nokey SCREEN1
 00380 START_REPORT: ! 
 00390 ! fnwait !:
-        ! pr Fields "10,25,C 30,R,N": "G/L WORKSHEET IN PROCESS" !:
-        ! pr Fields "12,20,Cc 30,B,5": "Cancel (F5)" !:
+        ! pr f "10,25,C 30,R,N": "G/L WORKSHEET IN PROCESS" !:
+        ! pr f "12,20,Cc 30,B,5": "Cancel (F5)" !:
         on fkey 5 goto END1
 00400   fnopenprn
 00410   gosub HDR
@@ -57,9 +57,9 @@
 00450   read #glmstr,using 'Form POS 1,C 12,C 50,POS 81,2*PD 6.2': n$,d$,bb,cb eof END1
 00460   if first=0 and n$(1:3)<>oldn$(1:3) then gosub TOTALS
 00470   let first=0
-00480   let oldn$=n$
+00480   oldn$=n$
 00490   if costcent><0 and val(n$(1:3))><costcent then goto END1
-00500 L500: let dno=val(n$(1:3)) : ano=val(n$(4:9)) : let sno=val(n$(10:12))
+00500 L500: let dno=val(n$(1:3)) : ano=val(n$(4:9)) : sno=val(n$(10:12))
 00510   gosub SOMETHING
 00520   if n$<>cogl$ then goto READ_GLMSTR
 00530   pr #255,using L540: "**Net Income or Loss",drtotal+crtotal
@@ -68,7 +68,7 @@
 00560 ! ______________________________________________________________________
 00570 TOTALS: pr #255: 
 00580   pr #255: tab(13);"Worksheet Proof Totals";
-00590   let oldn$=n$
+00590   oldn$=n$
 00600   pr #255,using L610: drtotal,crtotal,page$ !:
         pr #255: ""
 00610 L610: form pos 39,pic(---,---,---.##),pos 53,pic(---,---,---.##),c 80
@@ -78,7 +78,7 @@
 00650   gosub HDR
 00660   return 
 00670 ! ______________________________________________________________________
-00680 END1: let end1=1
+00680 END1: end1=1
 00690   gosub TOTALS
 00700   close #glmstr: 
 00710   fncloseprn

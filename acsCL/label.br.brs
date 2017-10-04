@@ -10,8 +10,8 @@
 00100 ! ______________________________________________________________________
 00110   fncno(cno,cnam$)
 00120   fntop(program$,cap$="Payee Labels")
-00130   cancel=99 : let right=1 : let limit_to_list=1 : let on=1 !:
-        let off=0 : let left=0 : center=2
+00130   cancel=99 : let right=1 : limit_to_list=1 : on=1 !:
+        off=0 : left=0 : center=2
 00140 ! ______________________________________________________________________
 00150 MAIN: ! 
 00160   fntos(sn$="cllabel-1")
@@ -95,15 +95,15 @@
 00660   read #paymstr,using 'Form Pos 1,C 8,4*C 30',key=vn$: vn$,nam$,ad1$,ad2$,csz$ nokey READ_TRMSTR
 00670 PRT: ! 
 00680   mat labeltext$=("")
-00690   if printpayeenum$="True" then let labeltext$(1)=vn$
-00700   let labeltext$(2)= nam$ !:
-        let labeltext$(3)=ad1$ !:
-        let labeltext$(4)=ad2$ !:
-        let labeltext$(5)=csz$
-00710   if trim$(labeltext$(3))="" then let labeltext$(3)=labeltext$(4) !:
-          let labeltext$(4)=""
-00720   if trim$(labeltext$(4))="" then let labeltext$(4)=labeltext$(5) !:
-          let labeltext$(5)=""
+00690   if printpayeenum$="True" then labeltext$(1)=vn$
+00700   labeltext$(2)= nam$ !:
+        labeltext$(3)=ad1$ !:
+        labeltext$(4)=ad2$ !:
+        labeltext$(5)=csz$
+00710   if trim$(labeltext$(3))="" then labeltext$(3)=labeltext$(4) !:
+          labeltext$(4)=""
+00720   if trim$(labeltext$(4))="" then labeltext$(4)=labeltext$(5) !:
+          labeltext$(5)=""
 00730   fnaddlabel(mat labeltext$)
 00740   if prtall=check_range then goto READ_TRMSTR
 00750 EO_OPT2: return 

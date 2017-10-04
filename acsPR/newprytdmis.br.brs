@@ -29,7 +29,7 @@
 00270   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 00280   if ck=5 then goto XIT
 00290   beg_date=val(resp$(1)) ! beginning of year
-00310   let end_date=val(resp$(2)) ! ending day of year
+00310   end_date=val(resp$(2)) ! ending day of year
 00320 ! ______________________________________________________________________
 00330   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 00340   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 

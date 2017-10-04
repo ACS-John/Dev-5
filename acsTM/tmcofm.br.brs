@@ -27,12 +27,12 @@
 00280   data REPORT HEADING DATE
 00290   read mat sc1$
 00300   for j=1 to 19
-00310     let fl1$(j)=str$(j+2)&",2,C 66"
+00310     fl1$(j)=str$(j+2)&",2,C 66"
 00320     if j<5 then let io1$(j)=str$(j+2)&",20,C 40,U,N"
 00330     if j>4 and j<9 then let io1$(j)=str$(j+2)&",42,N 1,U,N"
 00340     if j>9 and j<15 then let io1$(j)=str$(j+2)&",40,N 3,U,N"
 00350   next j
-00360   let fl1$(20)="1,5,C 60,H,N"
+00360   fl1$(20)="1,5,C 60,H,N"
 00370   let io1$(9)="11,37,N 6.3,U,N"
 00380   for j=1 to 4
 00390     let io1$(j*3+12)=str$(j+16)&",30,N 3,U,N"
@@ -49,9 +49,9 @@
 00500 L500: read #1,using L510,rec=1: mat co$,mat co,mat ag,mat gln,dat$ ioerr L750
 00510 L510: form pos 1,4*c 40,4*n 1,pd 3.3,5*pd 2,n 3,n 6,n 3,n 3,n 6,n 3,n 3,n 6,n 3,n 3,n 6,n 3,c 20
 00520   pr newpage
-00530   pr fields mat fl1$: mat sc1$,hd1$
-00540   pr fields mat io1$: mat co$,mat co,mat ag,mat gln,dat$
-00545   pr fields "23,34,c 20": "F1 Continue"
+00530   pr f mat fl1$: mat sc1$,hd1$
+00540   pr f mat io1$: mat co$,mat co,mat ag,mat gln,dat$
+00545   pr f "23,34,c 20": "F1 Continue"
 00550 L550: input fields mat io1$: mat co$,mat co,mat ag,mat gln,dat$ conv L670
 00560   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 00570   if rtrm$(co$(1))="" then ce=1: goto L690
@@ -66,22 +66,22 @@
 00660   goto XIT
 00670 L670: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00680   ce=cnt+1
-00690 L690: pr fields "24,78,C 1": bell
+00690 L690: pr f "24,78,C 1": bell
 00700   let io1$(ce)=rtrm$(io1$(ce))
 00710   ce1=pos(uprc$(io1$(ce)),"U",1)
 00720   ce2=ce1+1
 00730   let io1$(ce)(ce1:ce1)="CR"
 00740   goto L550
-00750 L750: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L770
+00750 L750: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L770
 00760   goto L810
 00770 L770: pr newpage
-00780   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L800
+00780   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L800
 00790   goto L810
-00800 L800: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00810 L810: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00800 L800: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00810 L810: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00820   input fields "24,60,C 1,N": quitcode$
 00830   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-00840   pr fields "23,3,C 78,N": ""
-00850   pr fields "24,3,C 78,N": ""
+00840   pr f "23,3,C 78,N": ""
+00850   pr f "24,3,C 78,N": ""
 00860   retry 
 00870 XIT: let fnxit

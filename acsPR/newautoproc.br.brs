@@ -19,8 +19,8 @@
         next j
 00210 ! ______________________________________________________________________
 00220   if trim$(mysys$)='' then !:
-          let sys$=fncursys$&"mstr" else !:
-          let sys$=mysys$&"mstr"
+          sys$=fncursys$&"mstr" else !:
+          sys$=mysys$&"mstr"
 00230 ! ______________________________________________________________________
 00240   gosub BLD_ACNO
 00250 ! ______________________________________________________________________
@@ -74,12 +74,12 @@
 00590   mat acno(99999): cav=0
 00600 L600: if trim$(filename$(fx+=1))="" then goto L660
 00610   acno(cav+=1)=val(filename$(fx)(10:14)) conv L600
-00620   let end=len(filename$(fx))
+00620   end=len(filename$(fx))
 00630   let x=115
 00631   open #x: "Name="&sys$&"\Company.h"&filename$(fx)(10:14),internal,input ioerr L650
 00632   read #x,using "Form pos 1,c 40": cnam$
 00633   close #x: 
-00640   let opt$(fx)=cnam$(1:30)&" ("&cnvrt$("pic(#####)",val(filename$(fx)(10:14)))&")"(1:40)
+00640   opt$(fx)=cnam$(1:30)&" ("&cnvrt$("pic(#####)",val(filename$(fx)(10:14)))&")"(1:40)
 00650 L650: goto L600
 00660 L660: mat opt$(fx)
 00670   return 

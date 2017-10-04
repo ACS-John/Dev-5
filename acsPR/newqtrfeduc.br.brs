@@ -32,10 +32,10 @@
 00320   fnlbl(1,1,"Tax Year:",26,1)
 00330   fntxt(1,30,4,0,0,"30",0,"") !:
         let resp$(respc+=1)=str$(taxyear)
-00340   let option1$(1)="March 31"
-00350   let option1$(2)="June 30"
-00360   let option1$(3)="September 30"
-00370   let option1$(4)="December 31"
+00340   option1$(1)="March 31"
+00350   option1$(2)="June 30"
+00360   option1$(3)="September 30"
+00370   option1$(4)="December 31"
 00380   fnlbl(2,1,"Quarter Ending Date:",26,1)
 00390   fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
 00400   if val(date$(4:5))=3 or val(date$(4:5))=4 or val(date$(4:5))=5 then let resp$(respc+=1)=option1$(1) ! march filing
@@ -46,7 +46,7 @@
 00450   if ck=5 then goto XIT
 00460   let taxyear=val(resp$(1)) ! tax year
 00470   if taxyear<2000 then goto L510
-00480   let ending_date=taxyear*10000+1231 conv L510
+00480   ending_date=taxyear*10000+1231 conv L510
 00490   goto L520
 00500 ! 
 00510 L510: mat ml$(2) !:
@@ -57,10 +57,10 @@
 00520 L520: for j=1 to 4
 00530     if resp$(2)=option1$(j) then let qtr=j: let m$=option1$(j): goto L550 ! quarter ending date
 00540   next j
-00550 L550: if qtr=1 then begdate=taxyear*10000+0312: let enddate=val(taxyear$)*10000+0318
-00560   if qtr=2 then begdate=taxyear*10000+0612: let enddate=val(taxyear$)*10000+0618
-00570   if qtr=3 then begdate=taxyear*10000+0912: let enddate=val(taxyear$)*10000+0918
-00580   if qtr=4 then begdate=taxyear*10000+1212: let enddate=val(taxyear$)*10000+1218
+00550 L550: if qtr=1 then begdate=taxyear*10000+0312: enddate=val(taxyear$)*10000+0318
+00560   if qtr=2 then begdate=taxyear*10000+0612: enddate=val(taxyear$)*10000+0618
+00570   if qtr=3 then begdate=taxyear*10000+0912: enddate=val(taxyear$)*10000+0918
+00580   if qtr=4 then begdate=taxyear*10000+1212: enddate=val(taxyear$)*10000+1218
 00590 ! ______________________________________________________________________
 00600   on pageoflow goto PGOF
 00610   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -129,7 +129,7 @@
 01260   return 
 01270 ! ______________________________________________________________________
 01280 DONE: ! 
-01290   let eofcode=1
+01290   eofcode=1
 01300   gosub PAGETOTALS
 01310   close #2: ioerr L1320
 01320 L1320: close #3: ioerr L1330

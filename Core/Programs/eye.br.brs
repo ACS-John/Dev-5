@@ -8,8 +8,8 @@
 00080   dim cap$*128,lbl$(1),fltyp$(1),sln(1),mask(1),fln(1),p$(1)*10
 00090 ! ______________________________________________________________________
 00100   fncno(cno)
-00110   let lbl$(1)="Eye Color"
-00120   let fln(1)=10
+00110   lbl$(1)="Eye Color"
+00120   fln(1)=10
 00130   let mask(1)=2000
 00140   open #1: "Name=S:\Core\Data\Eye.dat,RecL=10,Use,Shr",internal,outin,relative 
 00150   fnhamster("Eye",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)

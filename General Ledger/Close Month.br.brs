@@ -12,7 +12,7 @@
 00120   if fnprocess=1 then goto GET_GOING
 00130 SCREEN1: ! 
 00140   fntos(sn$='Close_Month')
-00142   let lc=0 : let mylen=22 : let mypos=mylen+2
+00142   lc=0 : let mylen=22 : let mypos=mylen+2
 00150   fnlbl(lc+=1,1,"Closing Period Number:",mylen,right)
 00160   fntxt(lc,mypos,2,0,0,'number')
 00162   let resp$(1)=str$(fnactpd)
@@ -39,7 +39,7 @@
 02260   loop 
 02280 EO_GLMSTR: ! 
 02300   close #h_glmstr: 
-02322   let lmu=actpd
+02322   lmu=actpd
 02324   actpd=actpd+1
 02326   if actpd>nap then actpd=1
 02340   fnactpd(actpd)

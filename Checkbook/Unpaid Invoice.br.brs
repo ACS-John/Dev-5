@@ -16,7 +16,7 @@
 02300   dim gldesc$*30,ml$(3)*80
 02320   dim item1$(3)*15,type$*25,holdkey$*20,resp$(256)*50 ! holdresp$(256)*50,
 02340 ! ______________________________________________________________________
-02360 ! let screen_last=5
+02360 ! screen_last=5
 02380 ! ______________________________________________________________________
 02400   let right=1
 02420   fncno(cno)
@@ -102,15 +102,15 @@
 06900   fnacs(sn$,0,mat resp$,ck)
 06920   let displayalljobs=0
 06940   if ck=5 then goto FINIS
-06960   ! let screen=0
-06980   if ck=2 then let edit=1 : RecordNumberToEdit=val(resp$(1)) else let edit=0 : RecordNumberToEdit=0
+06960   ! screen=0
+06980   if ck=2 then edit=1 : RecordNumberToEdit=val(resp$(1)) else edit=0 : RecordNumberToEdit=0
 07000   if (ck=1 or ck=2) then let fn_addInvoice(vn$,iv$,RecordNumberToEdit) : goto menu1
 07020   if ck=3 then gosub PRINTLISTING : goto DISPLAY_INVOICE_GRID ! pr listings of unpaid invoice file
 07040   if ck=8 then goto CODE_FOR_PAYMENT ! select invoices to payment
 07060   if ck=9 then 
 07080     let displayalljobs=1
 07100     let jn$="" : let iv$="" : let vn$=""
-07120     let subcat=0 : cat=0
+07120     subcat=0 : cat=0
 07140     gosub JOBCOST
 07160     goto DISPLAY_INVOICE_GRID
 07180   end if 
@@ -203,7 +203,7 @@
 18070 IGNORE: continue 
 18080 ! ______________________________________________________________________
 21000 CODE_FOR_PAYMENT: ! r:
-21010   let lastrec=nextrec=total=0
+21010   lastrec=nextrec=total=0
 21020   let displayattop$="True"
 21030   close #clearing: ioerr ignore
 21040   open #clearing=fngethandle: "Name="&env$('Q')&"\CLmstr\clearing.H"&wsid$&",replace,RecL=114",internal,outin,relative  ! kj wrong recl
@@ -279,36 +279,36 @@
 21700   if nextrec>0 and displayattop$="True" then goto L4890 else goto L5030
 21710 L4890: for j=nextrec to lrec(clearing) ! read starting with next record
 21720     read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L4940
-21730     let flxitm$(9)=str$(upa) : let flxitm$(10)=str$(disamt)
-21740     let flxitm$(11)=str$(ddate) : let flxitm$(3)=str$(pcde)
-21750     let flxitm$(2)= flxitm$(12)=str$(bcde): let flxitm$(13)=str$(ckn)
-21760     let flxitm$(14)=str$(dp) : let flxitm$(15)=str$(gde)
-21770     let flxitm$(16)=str$(pdte)
-21780     let flxitm$(1)=str$(rec(clearing))
-21790     if pcde=1 then let flxitm$(3)="Yes" else if pcde=0 then let flxitm$(3)="No" else if pcde=1 and dp>0 then let flxitm$(3)="Paid"
+21730     flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
+21740     flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
+21750     flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
+21760     flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
+21770     flxitm$(16)=str$(pdte)
+21780     flxitm$(1)=str$(rec(clearing))
+21790     if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
 21800 let fnflexadd1(mat flxitm$)
 21810 L4940: next j
 21820 if nextrec=1 then goto L5020 ! thinks it rereads the 1st record twice
 21830 for j=1 to max(nextrec-1,1) ! read records previously coded or skipped
 21840   read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
-21850   let flxitm$(9)=str$(upa) : let flxitm$(10)=str$(disamt)
-21860   let flxitm$(11)=str$(ddate) : let flxitm$(3)=str$(pcde)
-21870   let flxitm$(2)= flxitm$(12)=str$(bcde): let flxitm$(13)=str$(ckn)
-21880   let flxitm$(14)=str$(dp) : let flxitm$(15)=str$(gde)
-21890   let flxitm$(1)=str$(rec(clearing))
-21900   if pcde=1 then let flxitm$(3)="Yes" else if pcde=0 then let flxitm$(3)="No" else if pcde=1 and dp>0 then let flxitm$(3)="Paid"
+21850   flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
+21860   flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
+21870   flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
+21880   flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
+21890   flxitm$(1)=str$(rec(clearing))
+21900   if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
 21910 let fnflexadd1(mat flxitm$)
 21920 next j
 21930 L5020: goto L5070
 21940 L5030: ! 
 21950 read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
-21960 let flxitm$(9)=str$(upa) : let flxitm$(10)=str$(disamt)
-21970 let flxitm$(11)=str$(ddate) : let flxitm$(3)=str$(pcde)
-21980 let flxitm$(2)= flxitm$(12)=str$(bcde): let flxitm$(13)=str$(ckn)
-21990 let flxitm$(14)=str$(dp) : let flxitm$(15)=str$(gde)
-22000 let flxitm$(16)=str$(pdte)
-22010 let flxitm$(1)=str$(rec(clearing)) ! assign flxitm$(1) with new record #
-22020 if pcde=1 then let flxitm$(3)="Yes" else if pcde=0 then let flxitm$(3)="No" else if pcde=1 and dp>0 then let flxitm$(3)="Paid"
+21960 flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
+21970 flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
+21980 flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
+21990 flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
+22000 flxitm$(16)=str$(pdte)
+22010 flxitm$(1)=str$(rec(clearing)) ! assign flxitm$(1) with new record #
+22020 if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
 22030 let fnflexadd1(mat flxitm$) : goto L5030
 22040 L5070: !
 22050 let fncmdkey("&Approve Highlighted",1,1,0,"Approves or cancels the invoice that is highlighted.")
@@ -319,7 +319,7 @@
 22100 let fnacs(sn$,0,mat resp$,ck)
 22110 let displayunpaid=total=displayall=0
 22120 if ck=5 or ck=99 then goto MENU1
-22130 let selectedrec=val(resp$(respc_selectedrec)) ! selected record from grid
+22130 selectedrec=val(resp$(respc_selectedrec)) ! selected record from grid
 22140 let rangefrom=val(resp$(respc_rangefrom)) ! if select range of reference numbers
 22150 let rangeto=val(resp$(respc_rangeto)) ! if select range of reference numbers
 22160 let duedate =val(resp$(respc_duedate)) ! used in selecting invoices by due date
@@ -344,11 +344,11 @@
 23040 if pcde=0 then let pcde=1 : let newbcde= bankcode: goto L5540 ! change from no to yes
 23050 if pcde=1 and dp>0 then let pcde=1 : let newbcde=bcde: goto L5540 ! don't change previously paid
 23060 L5540: ! 
-23070 if pcde=1 then let flxitm$(3)="Yes" else if pcde=0 then let flxitm$(3)="No" else if pcde=1 and dp>0 then let flxitm$(3)="Paid"
+23070 if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
 23080 ! pr PCDE,BCDE
 23090 rewrite #clearing,using 'Form POS 73,n 1,n 2',rec=selectedrec: pcde,newbcde
 23100 rewrite #paytrans,using 'Form POS 73,n 1,n 2',key=vn$ & iv$: pcde,newbcde ! update the transaction history
-23110 let lastrec=selectedrec
+23110 lastrec=selectedrec
 23120 if lastrec+1 <= lrec(clearing) then let nextrec=lastrec+1 else let nextrec=1
 23130 goto RE_DISPLAY_GRID ! /r
 24000 MSGBOX3: ! r: need range of reference numbers
@@ -403,7 +403,7 @@
 28130 goto CODE_FOR_PAYMENT ! /r
 29000 APPROVE_BY_PAYEE: ! r: select payee to pay
 29010 restore #paytrans: 
-29020 L6000: read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L6060 : let lastrec=rec(paytrans)
+29020 L6000: read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L6060 : lastrec=rec(paytrans)
 29030 if uprc$(lpad$(rtrm$(payeevn$),8))<>uprc$(vn$) then goto L6000
 29040 if pcde<>1 then let pcde=1
 29050 if bcde=0 then bcde=bankcode ! don't change bank # if one                                                      previously entered
@@ -414,7 +414,7 @@
 30010 dim jn$*6
 30020 ENTRY_SCREEN: ! 
 30030 let fntos(sn$="Jobcost")
-30040 let respc=0 : mat resp$=(''): let lc=0: let mylen=20: let mypos=mylen+3
+30040 let respc=0 : mat resp$=(''): lc=0: let mylen=20: let mypos=mylen+3
 30050 let fnlbl(lc+=1,1,"Payee # "&trim$(vn$)&" Invoice # "&trim$(iv$),50,0)
 30060 let fnlbl(lc+=2,1,"Job #:",mylen,1)
 30070 ! Let FNTXT(LC,MYPOS,6,0,1,"",0,"Choose from the sub-category list.")
@@ -463,11 +463,11 @@
 30500 let fnacs(sn$,0,mat resp$,ck)
 30510 if ck=4 then gosub PRINT_JOB_COST_ENTRIES: goto ENTRY_SCREEN
 30520 if val(resp$(4))=0 and ck<>65 then ck=5 ! exit if no amount on next
-30530 if ck=5 then amt=0: let totalcost=0 : goto L6930 ! Let SCREEN=0: Goto MENU1
+30530 if ck=5 then amt=0: let totalcost=0 : goto L6930 ! sCREEN=0: Goto MENU1
 30540 if ck=3 then gosub POST_TO_JOB : goto ENTRY_SCREEN
 30550 if ck=65 then goto L6520 else goto L6530
 30560 L6520: ! 
-30570 let editrec=val(resp$(6))
+30570 editrec=val(resp$(6))
 30580 read #jcbreakdown,using "form pos 1,c 6,pd 3,pd 3,pd 5.2,c 30,c 8,c 12",rec=editrec: jn$,cat,subcat,amt,jobdesc$,vn$,iv$
 30590 delete #jcbreakdown,rec=editrec: norec ENTRY_SCREEN
 30600 goto ENTRY_SCREEN
@@ -487,7 +487,7 @@
 30740 L6600: if ck=69 then goto L6610 else goto L6620
 30750 L6610: cn$="": let fncategory_srch(cn$,1) : cat=val(cn$): goto ENTRY_SCREEN
 30760 L6620: cat=val(resp$(2)(1:5))
-30770 let subcat=val(resp$(3)(1:3))
+30770 subcat=val(resp$(3)(1:3))
 30780 amt=val(resp$(4))
 30790 let jobdesc$=resp$(5)
 30800 write #jcbreakdown,using "form pos 1,c 6,pd 3,pd 3,pd 5.2,c 30,c 8,c 12": jn$,cat,subcat,amt,jobdesc$,vn$,iv$
@@ -499,14 +499,14 @@
 30860 cn$=jn$&lpad$(str$(cat),5)
 30870 read #2,using L6740,key=cn$: mat l,mat ta nokey L6780
 30880 L6740: form pos 37,11*pd 7.2,2*pd 2,2*pd 3
-30890 let l(6)=l(6)+amt
-30900 let l(9)=l(9)+amt
+30890 l(6)=l(6)+amt
+30900 l(9)=l(9)+amt
 30910 goto L6780
 30920 L6780: read #45,using L6790,rec=1,reserve: ot5
 30930 L6790: form pos 86,pd 3
 30940 ! dim empnum$*12
-30950 ! let empnum$=lpad$(rtrm$(str$(ji1(1))),12)
-30960 L6810: let ot5=lrec(45)+1
+30950 ! empnum$=lpad$(rtrm$(str$(ji1(1))),12)
+30960 L6810: ot5=lrec(45)+1
 30970 let invdate=val(up$(1))
 30980 write #45,using L6840,rec=ot5,reserve: "",jn$,cat,subcat,0,invdate,0,0,0,0,amt,jobdesc$,0 duprec L6810
 30990 L6840: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
@@ -642,9 +642,9 @@
 46000 ai_ADD_UNPAID_INVOICES_TOS: ! r:
 46020   fntos(sn$="ai_unpaid-2")
 46040   let respc=0 : mat resp$=("") : let frame_width=90
-46060   let lc=0
+46060   lc=0
 46080   fnfra(1,1,11,frame_width,"Unpaid Invoice")
-46100   let lc=0 : let mylen=18 : let mypos=mylen+2
+46100   lc=0 : let mylen=18 : let mypos=mylen+2
 46120   let frame=1
 46160   fnlbl(lc+=1,1,"Payee:",mylen,right,0,frame)
 46180   fncombof("Paymstr",lc,mypos,0,env$('Q')&"\CLmstr\paymstr.h"&str$(cno),1,8,9,30,env$('Q')&"\CLmstr\Payidx1.h"&str$(cno),1,0, "Enter the payee number (Use the 'Add Payee' option to add a new vendor record",frame)
@@ -754,7 +754,7 @@
 52700       fn_InvoiceSave
 52720       if havejc=1 then gosub JOBCOST
 52740       if editing=1 then 
-52760         let editing=0
+52760         editing=0
 52780         goto aiFinis
 52800       end if
 52820       goto aiFinis ! jb 11/30/2016   !   goto ai_ADD_UNPAID_INVOICES ! setup up new invoice  kj 11609

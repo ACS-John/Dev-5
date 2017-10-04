@@ -7,16 +7,16 @@
 10120 ! -----------------------------------------------------------------------
 20000   fntos("ComboA")
 20020   for a = 1 to 9999
-20040     let option$(a) = "Option #"&str$(a)
+20040     option$(a) = "Option #"&str$(a)
 20060   next a
 20080   let filename$="ComboA-tst"
 20100   let test$ = "I'm a test of tool tip text.  Does it work?"
 20120 ! let fncomboa(filename$,1,1,mat option$,test$)
 20140 ! 
 20160   mat opt$(3)
-20180   let opt$(1)="Regular Collection"
-20200   let opt$(2)="Credit Memo"
-20220   let opt$(3)="Debit Memo"
+20180   opt$(1)="Regular Collection"
+20200   opt$(2)="Credit Memo"
+20220   opt$(3)="Debit Memo"
 20240   fncomboa("coll_type_rdc",1,27,mat opt$,opt$(1))
 20260 ! 
 20280   fncmdkey("Okay",1,1,1)

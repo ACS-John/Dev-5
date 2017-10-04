@@ -29,8 +29,8 @@
 00270   pr #101,fields "5,2,Cr 30,n": "Print Category Names (Y/N):"
 00280   let io1$(1)="4,33,C 20,UT,N"
 00290   let io1$(2)="5,33,Cu 1,UT,N"
-00300   pr fields "15,30,C 10,B,1": "Print (F1)"
-00310   pr fields "15,41,C 09,B,5": "Exit (F5)"
+00300   pr f "15,30,C 10,B,1": "Print (F1)"
+00310   pr f "15,41,C 09,B,5": "Exit (F5)"
 00320 L320: rinput #101,fields mat io1$: dat$,prtcat$ conv L320
 00330   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 00340   if cmdkey>0 then goto L410 else ce=curfld
@@ -40,7 +40,7 @@
 00370   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L320
 00380 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00390   ce=cnt+1
-00400 ERR1: pr fields "24,78,C 1": bell : goto L360
+00400 ERR1: pr f "24,78,C 1": bell : goto L360
 00410 L410: if cmdkey=5 then goto XIT
 00420   if prtcat$<>"Y" and prtcat$<>"N" then ce=2: goto ERR1
 00430   let dattab=60-len(rtrm$(dat$))/2
@@ -81,7 +81,7 @@
 00780 L780: form pos 1,c 50,skip 0
 00790   if prtcat$<>"N" then pr #255,using L800: "  Job #   Job Name","Category #   Category Name"
 00800 L800: form pos 1,c 50,pos 47,c 50,skip skh
-00810   let skh=1
+00810   skh=1
 00820   return 
 00830 ! ______________________________________________________________________
 00840 L840: if first=0 then pr #255,using L842: jn$,n$,cn$(7:11),k$ pageoflow L870: let first =1: goto L860

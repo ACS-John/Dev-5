@@ -20,7 +20,7 @@
 00140 L140: goto XIT
 00150 ! ______________________________________________________________________
 00160 OPEN_FILE: ! !:
-        let open_file_count=0 ! this value is used in the close_file sub routine
+        open_file_count=0 ! this value is used in the close_file sub routine
 00170   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",Version=0,KFName="&env$('Q')&"\CLmstr\GLIndex.h"&str$(cno)&",Use,RecL=62,KPs=1,KLn=12,Shr",internal,outin,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
@@ -30,10 +30,10 @@
 00230   fncno(cno)
 00240 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
-00250   let lbl$(ic+=1)="Department" !:
-        let lbl$(ic+=1)="Account" !:
-        let lbl$(ic+=1)="Sub Account" !:
-        let lbl$(ic+=1)="Description"
+00250   lbl$(ic+=1)="Department" !:
+        lbl$(ic+=1)="Account" !:
+        lbl$(ic+=1)="Sub Account" !:
+        lbl$(ic+=1)="Description"
 00260 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
@@ -44,17 +44,17 @@
         let tln(ic+=1)=50
 00280 ! ** Field Types ** !:
         let ic=0
-00290   let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='C'
+00290   fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='C'
 00300 ! ** Field Storage Lengths ** !:
         let ic=0 !:
         let mmddyy=6 : ccyymmdd=8
-00310   let sln(ic+=1)=3 !:
-        let sln(ic+=1)=6 !:
-        let sln(ic+=1)=3 !:
-        let sln(ic+=1)=50
+00310   sln(ic+=1)=3 !:
+        sln(ic+=1)=6 !:
+        sln(ic+=1)=3 !:
+        sln(ic+=1)=50
 00320 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:

@@ -10,7 +10,7 @@
 00100 ! 
 00110 ! ______________________________________________________________________
 00120   for j=1 to 9
-00130     let fl1$(j)=str$(j+2)&",2,cr 20,n"
+00130     fl1$(j)=str$(j+2)&",2,cr 20,n"
 00140     if j<=1 then let io1$(1)=str$(j+2)&",23,C 6,UT,N" : goto L240
 00150     if j>2 then goto L170
 00160     let io1$(j)=str$(j+2)&",23,C 40,CUT,N" : goto L240
@@ -23,7 +23,7 @@
 00230 L230: let io1$(j)=str$(j+2)&",23,N 2,UT,N"
 00240 L240: next j
 00250   for j=1 to 15
-00260     let fl2$(j)=str$(j+2)&",2,Cr 20,N"
+00260     fl2$(j)=str$(j+2)&",2,Cr 20,N"
 00270     if j>1 then goto L290
 00280     let io2$(j)=str$(j+2)&",23,N 5,UT,N" : goto L340
 00290 L290: if j>2 then goto L310
@@ -32,8 +32,8 @@
 00320     let io2$(j)=str$(j+2)&",23,N 14.2,UT,N" : goto L340
 00330 L330: let io2$(j)=str$(j+2)&",23,N 3,UT,N"
 00340 L340: next j
-00350   for j=1 to 12 : let fl3$(j)=str$(j+3)&",2,cr 30" : next j
-00360   let fl3$(13)="2,5,c 70,h,n"
+00350   for j=1 to 12 : fl3$(j)=str$(j+3)&",2,cr 30" : next j
+00360   fl3$(13)="2,5,c 70,h,n"
 00370   data "Ref/Emp #:"
 00380   data "Job Number:"
 00390   data "Category:"

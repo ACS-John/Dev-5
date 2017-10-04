@@ -15,7 +15,7 @@
 25020   open #h_out:=fngethandle: "Name=SAVE:text documents (*.txt) |*.txt,RecL=112,EOL=CRLF,Replace",display,output ioerr XIT
 25030 F_OUT_FIXED: form pos 1,c 10,c 30,c 30,c 23,c 2,c 5,pos 112,c 1
 25040 !  pr file$(h_tmp);" ";lrec(h_tmp)
-25060 !  let save_name$=os_filename$(file$(h_tmp))
+25060 !  save_name$=os_filename$(file$(h_tmp))
 25080 !  close #h_tmp,free:
 25100 ! 
 25120 ! open #h_out:=2: "Name="&dv$&"ubCass1.dat,RecL=112,EOL=None,Replace",external,output ! ioerr l170
@@ -29,7 +29,7 @@
 28040     read #1,using F_CUSTOMER: z$,nam$,sta$,csz$,fb1,lbd,altcode eof XIT
 28060     if altcode=2 then goto L350 ! alternate address coded as not being used at this time.
 28100     read #h_adrbil,using F_ADRBIL,key=z$: nam$,sta$,sta2$,csz$ nokey L300
-28120     if trim$(csz$)="" then csz$=sta2$ : let sta2$=""
+28120     if trim$(csz$)="" then csz$=sta2$ : sta2$=""
 28140 L300: ! 
 28160     csz$=trim$(csz$)
 28180     if csz$(len(csz$)-5:len(csz$)-5) =" " then goto L330

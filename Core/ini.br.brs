@@ -29,7 +29,7 @@
 40040   if ~setup_fnIniOpen then 
 40060     dim ii_line$(1)*2048,ii_section$(1)*1024,ii_section$*1024,ii_value$*1024,ini_file$*256,ini_field$*256
 40080     dim ini_section$(1)*1024, ini_field$(1)*256, ini_value$(1)*256
-40100     let setup_fnIniOpen=1
+40100     setup_fnIniOpen=1
 40120   end if 
 40140   let ini_file$=trim$(ii_file$)
 40160   let ini_field_len_longest=0

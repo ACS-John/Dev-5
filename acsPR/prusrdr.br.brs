@@ -20,8 +20,8 @@
           let jcs$(j+20)=str$(j)&",5,C 74,N" !:
         next j
 00150   pr #win,fields mat jcs$: mat rn,mat rn$
-00160   pr fields "23,22,C 09,B,5": "Exit (F5)"
-00170   pr fields "23,32,C 23,R,N": "Report Number to Print:"
+00160   pr f "23,22,C 09,B,5": "Exit (F5)"
+00170   pr f "23,32,C 23,R,N": "Report Number to Print:"
 00180 L180: rinput fields "23,56,Nz 2,UT,N": rno conv L180
 00190   if rno=0 then goto XIT
 00200   for j=1 to 20

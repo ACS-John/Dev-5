@@ -37,7 +37,7 @@
 36040   gosub HDR
 36060   if prtbkno=0 then goto READ_CUSTOMER
 36080   let prtbkno$=lpad$(str$(prtbkno),2)&"       "
-36100   let startcd=1
+36100   startcd=1
 36120   restore #1,key>=prtbkno$: nokey TOTALS
 36140   goto READ_CUSTOMER
 36160 ! ______________________________________________________________________

@@ -243,8 +243,8 @@
 64080   ! PRINTER PDF [TILE PIC(XX,YY,IMGNAME)], "\Epicture='XX,YY,IMGNAME: TILE'"
 64100   if ~setup then let fn_Setup
 64120   ! background_pdf$ requres a br_filename$
-64140 ! if style$='' then let style$='Isotropic'
-64160   if style$<>'' then let style$=': '&style$
+64140 ! if style$='' then style$='Isotropic'
+64160   if style$<>'' then style$=': '&style$
 64180   fn_pdf_push
 64200   fn_pdf_mmpos(mmX,mmY) 
 64220   if imgWidth=0 and imgHeight=0 then

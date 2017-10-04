@@ -27,9 +27,9 @@
 20280         open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\"&idx$(j)&".h"&str$(cno),internal,outin,keyed 
 20300         let version(1,1)
 20320         let delete_count=read_count=0
-20340         let end1=st1=st2=rno=rnp=0
+20340         end1=st1=st2=rno=rnp=0
 20360 PHASE1: ! gosub FIND1
-20380         let st1=rno : let st2=99999 : let rnp=0
+20380         st1=rno : st2=99999 : let rnp=0
 20400 READ_1: ! 
 20420         read #1,using 'Form POS 1,G 5,POS 75,N 1': rno,ic eof PHASE1_EOF,conv PHASE1_READ_CONV
 20440         let read_count+=1
@@ -37,7 +37,7 @@
 20480         if rno=0 then delete #1: : goto READ_1
 20500         if ic=0 then pr ' ic=0, skipped' : goto READ_1
 20520         if ic=1 then pr ' let rnp=rno' : let rnp=rno
-20540         if ic=2 then pr ' let st2=rno' : let st2=rno : goto PHASE2
+20540         if ic=2 then pr ' st2=rno' : st2=rno : goto PHASE2
 20560         pr ' ic=';ic;', skipped'
 20580         goto READ_1
 20600 ! 
@@ -50,7 +50,7 @@
 20740 ! 
 20760 PHASE1_EOF: ! 
 20780 !   pr 'PHASE1_EOF,read_count=';read_count : pause
-20800         let end1=1
+20800         end1=1
 20820 PHASE2: ! 
 20840         pr 'restoring to ';st1
 20860 !   pr 'PHASE2,read_count=';read_count : pause

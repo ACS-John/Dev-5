@@ -8,7 +8,7 @@
 00080   dim k$*12,d$*50,rf(6),bc(12),bm(12),bp(12),ta(2)
 00090 ! ______________________________________________________________________
 00100   pr newpage
-00110   pr fields "10,5,C 60": "COMPANY NUMBER TO CONVERT:"
+00110   pr f "10,5,C 60": "COMPANY NUMBER TO CONVERT:"
 00120 L120: input fields "10,55,N 2,UE,N": cno conv L120
 00130   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,outin,keyed ioerr L120
 00140   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),internal,output ioerr L160

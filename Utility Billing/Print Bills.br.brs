@@ -50,51 +50,51 @@
 18040     let message1_max_len=52
 18050     let include_zero_bal=include_credit_bal=1
 18052     forceWordProcessor$='atlantis'
-18054     let enable_service_from=1
-18056     let enable_service_to=1
+18054     enable_service_from=1
+18056     enable_service_to=1
 18060   else if env$('client')='Campbell' then ! completed 4/23/16
 18070     let message1_line_count=0 ! 3
 18080     let message1_max_len=30
-18090     let enable_service_from=0
-18100     let enable_service_to=1
+18090     enable_service_from=0
+18100     enable_service_to=1
 18110     let include_zero_bal=include_credit_bal=1
 18120   else if env$('client')='Raymond' then ! completed 4/23/16
 18130     let message1_line_count=3
 18140     let pa_enabled=1
 18150     let pa_orientation$='Landscape'
 18160     let include_zero_bal=include_credit_bal=1
-18162     let enable_service_from=1
-18164     let enable_service_to=1
+18162     enable_service_from=1
+18164     enable_service_to=1
 18170   else if env$('client')='Cerro Gordo' then 
 18180     let message1_line_count=3
 18190     let message1_max_len=30
-18200     let enable_bulksort=1
-18210     let enable_service_from=1
-18220     let enable_service_to=1
+18200     enable_bulksort=1
+18210     enable_service_from=1
+18220     enable_service_to=1
 18230     let include_zero_bal=include_credit_bal=1
 18240   else if env$('client')='Merriam Woods' then ! completed 5/5/16
 18250     let message1_line_count=1
-18260     let enable_service_from=1
-18270     let enable_service_to=1
+18260     enable_service_from=1
+18270     enable_service_to=1
 18280     let pa_enabled=1
 18290     let pa_orientation$='Landscape'
-18300     let enable_bulksort=1
+18300     enable_bulksort=1
 18310     let include_zero_bal=include_credit_bal=1
 18320   else if env$('client')='Omaha' then ! 8/10/2016
 18330     let message1_line_count=3
 18340     let message1_max_len=30
-18350     let enable_service_from=1
-18360     let enable_service_to=1
+18350     enable_service_from=1
+18360     enable_service_to=1
 18370     let include_zero_bal=include_credit_bal=1
 18380     let message2_line_count=12
 18390     let message2_max_len=24
 18400   else if env$('client')='Blucksberg' then 
-18410     let enable_bulksort=1
+18410     enable_bulksort=1
 18420     let message1_line_count=13
 18430     let message1_max_len=95
 18440     let message_onscreen_alignment=2
-18450     let enable_service_from=1
-18460     let enable_service_to=1
+18450     enable_service_from=1
+18460     enable_service_to=1
 18470   else if env$('client')='Pennington' then ! 12/07/2016
 18480     message1_line_count=3
 18490     message1_max_len=40
@@ -180,9 +180,9 @@
 22380   open #h_customer_2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence
 22400 ! /r
 24000 SCREEN1: ! r:
-24020   let starting_key$="" : let route_filter=0 : let respc=0
+24020   starting_key$="" : let route_filter=0 : let respc=0
 24040   fntos(sn$="UBPrtBl1-1")
-24060   let pf=27 : let lc=0
+24060   let pf=27 : lc=0
 24080   fnlbl(lc+=1,1,"Penalty Due Date:",25,1)
 24100   fntxt(lc,pf,8,8,1,"1",0,tt$)
 24120   let resp$(respc_penalty_due_date:=respc+=1)=cnvrt$("pic(zzzzzz)",d4)
@@ -190,7 +190,7 @@
 24160   fntxt(lc,pf,8,8,1,"1")
 24180   let resp$(respc_billing_date:=respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 24200   if enable_service_from or enable_service_to then 
-24220     let lc+=1
+24220     lc+=1
 24240     if enable_service_from then 
 24260       fnlbl(lc+=1,1,"Service From:",25,1)
 24280       fntxt(lc,pf,8,8,1,"1",0,"This field can be used to override the Prior Reading Date in the customer's record")
@@ -204,15 +204,15 @@
 24400       let resp$(respc_service_to:=respc+=1)=cnvrt$("pic(zzzzzz)",d3)
 24420     end if 
 24440   end if 
-24460   let lc+=1
+24460   lc+=1
 24480   fnlbl(lc+=1,1,"Starting Route/Sequence:",25,1)
 24500   fncombof("ubm-act-nam",lc,pf,40,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&env$('cno'),2)
 24520   let resp$(respc_start_place:=respc+=1)="[All]"
-24540   let lc+=1
+24540   lc+=1
 24560   fnlbl(lc+=1,1,"Route Number:",25,1)
 24580   fncmbrt2(lc,pf)
 24600   let resp$(respc_route:=respc+=1)="[All]"
-24620   let lc+=1
+24620   lc+=1
 24640   fnlbl(lc+=1,1,"Filter:",25,1)
 24660   fnopt(lc,pf,"All")
 24680   let resp$(respc_filter_none:=respc+=1)="True"
@@ -224,14 +224,14 @@
 24782   let resp$(respc_filter_not_past_due:=respc+=1)="False"
 24790 ! 
 24800   if message1_line_count then 
-24810     let lc+=1
+24810     lc+=1
 24820     if message2_line_count then 
 24830       fnlbl(lc+=1,1,"Message 1:",25,1)
 24840     else 
 24850       fnlbl(lc+=1,1,"Message:",25,1)
 24860     end if 
 24880   end if 
-24900   let lc-=1
+24900   lc-=1
 24910   if message1_line_count>0 and message1_max_len=0 then let message1_max_len=30
 24920   for mg1_item=1 to message1_line_count
 24940     fntxt(lc+=1,pf,max(30,int(message1_max_len*.75)),message1_max_len,message_onscreen_alignment)
@@ -240,10 +240,10 @@
 25000     let resp$(respc_mg1(mg1_item))=resp$(respc_mg1(mg1_item))(1:message1_max_len)
 25020   next mg1_item
 25060   if message2_line_count then 
-25080     let lc+=1
+25080     lc+=1
 25100     fnlbl(lc+=1,1,"Message 2:",25,1)
 25120   end if 
-25140   let lc-=1
+25140   lc-=1
 25160   for mg2_item=1 to message2_line_count
 25180     fntxt(lc+=1,pf,min(message2_max_len,30),message2_max_len,message_onscreen_alignment)
 25200     let respc_mg2(mg2_item)=respc+=1
@@ -263,12 +263,12 @@
 25480     let d3=val(resp$(respc_service_to))
 25500   end if 
 25520   if resp$(respc_start_place)="[All]" then 
-25540     let starting_key$=""
+25540     starting_key$=""
 25560   else 
-25580     let starting_key$=lpad$(trim$(resp$(6)(1:10)),10)
+25580     starting_key$=lpad$(trim$(resp$(6)(1:10)),10)
 25600     if trim$(starting_key$)<>"" then 
 25620       read #h_customer_1,using 'form pos 1,c 10,pos 1741,n 2,n 7',key=starting_key$,release: z$,route,sequence nokey SCREEN1
-25640 !    let starting_place_enabled=1
+25640 !    starting_place_enabled=1
 25660     end if 
 25680   end if 
 25700   if resp$(respc_route)="[All]" then 
@@ -335,7 +335,7 @@
 30400   gosub BUD2 ! determine if budget customer
 30420 ! if ~starting_place_enabled then
 30440 !   if st1$=z$ then
-30460 !     let starting_place_enabled=0  ! starting_place_enabled used to be st1
+30460 !     starting_place_enabled=0  ! starting_place_enabled used to be st1
 30480 !   else 
 30500 !     goto NEXT_ACCOUNT
 30520 !   end if
@@ -372,8 +372,8 @@
 33230     fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2,d3,d4,mat e$,final)
 33232 !   fn_print_bill_choctaw(z$,mat g,mat b,mat penalty$,d1,d2,d3,d4,mat pe$,final)
 33240   else ! Exeter, Findlay, etc
-33242     if enableReturnServiceRequested=>0 then let enableReturnServiceRequested=1
-33244     if enableIsDueNowAndPayable=>0 then let enableIsDueNowAndPayable=1
+33242     if enableReturnServiceRequested=>0 then enableReturnServiceRequested=1
+33244     if enableIsDueNowAndPayable=>0 then enableIsDueNowAndPayable=1
 33250     fn_print_bill_standard_pdf_a(z$,mat mg$,mat mg2$,enableIsDueNowAndPayable,enableReturnServiceRequested)
 33260   end if 
 33270 ! /r
@@ -419,7 +419,7 @@
 38280   fncmdset(11)
 38290   fnacs(sn$,0,mat resp$,ck)
 38300   if ck=5 then goto RELEASE_PRINT
-38320   let starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
+38320   starting_key$=lpad$(trim$(resp$(1)(1:10)),10)
 38340   if trim$(starting_key$)="" then goto RELEASE_PRINT
 38360   read #h_customer_1,using F_CUSTOMER_A,key=starting_key$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey SCR_ASK_ACCOUNT
 38380   goto HERE
@@ -495,8 +495,8 @@
 54040   ! osd_service_to / d3=Service To Date (ask on Screen)
 54060   ! osd_extra_3 / extra(3)=Current Reading Date (from customer record)
 54080   ! osd_extra_4 / extra(4)=Prior Reading Date (from customer record)
-54100   if osd_service_from=0 then let osd_service_from=osd_extra_4
-54120   if osd_service_to=0 then let osd_service_to=osd_extra_3
+54100   if osd_service_from=0 then osd_service_from=osd_extra_4
+54120   if osd_service_to=0 then osd_service_to=osd_extra_3
 54140 fnend 
 55000 def fn_pay_after_amt
 55020   if bal<=0 then let fn_pay_after_amt=round(bal,2) else let fn_pay_after_amt=bal+g(10) ! Penalties at Merriam Woods are flat
@@ -519,7 +519,7 @@
 60458     let t8$="Other"
 60460   end if 
 60480   if g(9)=0 then let t9$="" else let t9$="La. Sales Tax"
-60500   ! If D(10)=1 Then Let EST$="Bill Estimated" Else Let EST$=""
+60500   ! If D(10)=1 Then eST$="Bill Estimated" Else eST$=""
 60520   if final>0 then let final$="Final Bill" else let final$=""
 60530   if budget>0 then bud$="Budgeted Amount:"&trim$(cnvrt$("Pic($$,$$$.##",budget)) else bud$=""
 60540   if bal<=0 then let g(10)=0
@@ -582,35 +582,35 @@
 68440   pr #255: "" ! Line 5
 68460   pr #255: "" ! Line 6
 68480   if g(3)=0 then 
-68500     let e$=""
+68500     e$=""
 68520   else if a3=3 then 
-68540     let e$="CE"
+68540     e$="CE"
 68560   else if a3=4 then 
-68580     let e$="RH"
+68580     e$="RH"
 68600   else if a3=5 then 
-68620     let e$="CH"
+68620     e$="CH"
 68640   else 
-68660     let e$="RE"
+68660     e$="RE"
 68680   end if 
 68700   pr #255,using PBCAMPBEL_L1020: z$,e$,g(3),d(5),d(6),d(7),e$,g(3),"" ! line 7
 68720   PBCAMPBEL_L1020: form pos 1,c 10,pos 13,c 2,pic(---,---.--),x 4,3*pic(zzzzzzzz),pos 58,c 2,x 1,pic(--,---.--),pos 74,c 21
-68760   if g(1)=0 then let e$="" else let e$="WA"
+68760   if g(1)=0 then e$="" else e$="WA"
 68780   pr #255,using PBCAMPBEL_L1020: "",e$,g(1),d(1),d(2),d(3),e$,g(1),z$ ! Line 8
-68800   if g(2)=0 then let e$="" else let e$="SW"
+68800   if g(2)=0 then e$="" else e$="SW"
 68820   pr #255,using PBCAMPBEL_L1080: e$,g(2),e$,g(2),pbcampbel_addr$(1) ! Line 9
 68840   PBCAMPBEL_L1080: form pos 13,c 2,pic(---,---.--),pos 58,c 2,pic(---,---.--),pos 74,c 30
 68860   PBCAMPBEL_L1082: form pos 13,c 2,pic(---,---.--),x 2,c 30,pos 58,c 2,pic(---,---.--),pos 74,c 30
-68880   if g(5)=0 then let e$="" else let e$="SA"
+68880   if g(5)=0 then e$="" else e$="SA"
 68900   pr #255,using PBCAMPBEL_L1082: e$,g(5),pbcampbel_addr$(1),e$,g(5),pbcampbel_addr$(2) ! line 10
-68920   if g(6)=0 then let e$="" else let e$="SL"
+68920   if g(6)=0 then e$="" else e$="SL"
 68940   pr #255,using PBCAMPBEL_L1082: e$,g(6),pbcampbel_addr$(2),e$,g(6),pbcampbel_addr$(3) ! line 11
-68960   if g(9)=0 then let e$="" else let e$="TX"
+68960   if g(9)=0 then e$="" else e$="TX"
 68980   pr #255,using PBCAMPBEL_L1082: e$,g(9),pbcampbel_addr$(3),e$,g(9),pbcampbel_addr$(4) ! line 12
-69000   if g(4)=0 then let e$="" else let e$="SC"
+69000   if g(4)=0 then e$="" else e$="SC"
 69020   pr #255,using PBCAMPBEL_L1082: e$,g(4),pbcampbel_addr$(4),e$,g(4),"" ! line 13
-69040   if g(8)=0 then let e$="" else let e$="OC"
+69040   if g(8)=0 then e$="" else e$="OC"
 69060   pr #255,using PBCAMPBEL_L1080: e$,g(8),e$,g(8),"" ! line 14
-69080   ! If BAL-G(11)=0 Then Let E$="" Else Let E$="AR"
+69080   ! If BAL-G(11)=0 Then e$="" Else e$="AR"
 69100   pr #255: "" ! line 15
 69120   pr #255: "" ! line 16
 69140   pr #255: "" ! line 17
@@ -632,8 +632,8 @@
 69440 fnend 
 71000 def fn_print_bill_raymond(z$,mat mg$; raymondAdditionalText$*128) ! inherrits all those local customer variables too
 71020   if ~setup_raymond then 
-71040     let setup_raymond=1
-71060     let lyne=3
+71040     setup_raymond=1
+71060     lyne=3
 71070     fn_get_mat_at(mat at$)
 71080   end if 
 71100   ! -- Standard 4 Per Page Even Perferated Card Stock Bills
@@ -776,10 +776,10 @@
 74180   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
 74200   return  ! /r
 76000 SORT1: ! r: SELECT & SORT
-76010   let enable_cass_sort=0 ! replaces old s5 variable
+76010   enable_cass_sort=0 ! replaces old s5 variable
 76020   open #h_cass1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&env$('cno')&",Shr",internal,input,keyed ioerr XIT_SORT1
 76040   open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output 
-76060   let enable_cass_sort=1
+76060   enable_cass_sort=1
 76080   if route_filter=0 then let routekey$="" else let routekey$=cnvrt$("N 2",route_filter)&"       " ! key off first record in route (route # no longer part of customer #)
 76100   restore #h_customer_2,search>=routekey$: 
 76120   do 
@@ -854,7 +854,7 @@
 78920   pr #255,using L1580: pb$,pb,z$
 78960   if g(8)=0 then let t$="" else let t$=service$(8)
 78980   pr #255,using PBC_L1610: t$,0,0,0,g(8)
-79000   if est=1 then let est$="BILL ESTIMATED" else let est$=""
+79000   if est=1 then est$="BILL ESTIMATED" else est$=""
 79020   if c4>0 then let final$="FINAL BILL" else let final$=""
 79040   if df$="Y" then let final$="DRAFTED"
 79060   if bal<=0 then let penalty=0
@@ -874,8 +874,8 @@
 79340 fnend 
 80000 def fn_print_bill_merriam(z$,mat mg$,service_from,service_to) ! inherrits all those local customer variables too
 80020   if ~setup_merriam then ! r:
-80040     let setup_merriam=1
-80060     let lyne=3
+80040     setup_merriam=1
+80060     lyne=3
 80080     addr_indent=8
 80100     addr_down=3
 80120     fn_get_mat_at(mat at$)
@@ -924,7 +924,7 @@
 81360   pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+52+5)&','&str$(lyne*13+ymargin)&')'
 81380   ! ______________________________________________________________________
 81400   ! PRINTGRID: !
-81420   let meter=14 ! 02114   let meter=20 ! let lyne=2 ! 3 ! 2.15 !  started at 20 and 2.1
+81420   let meter=14 ! 02114   let meter=20 ! lyne=2 ! 3 ! 2.15 !  started at 20 and 2.1
 81440   fnpa_fontsize ! line_top(1)
 81460   if g(1)<>0 then 
 81480     pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
@@ -948,7 +948,7 @@
 81840     pr #20: 'Call Print.AddText("EL",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
 81860     pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
 81880   end if  ! g(3)<>0 or d(7)<>0
-81900   let s4code$="GAS"
+81900   s4code$="GAS"
 81920   if g(4)<>0 then 
 81940     pr #20: 'Call Print.AddText("'&s4code$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 81960     pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'
@@ -999,7 +999,7 @@
 82860     pr #20: 'Call Print.AddText("Prior",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin+2)&')'
 82880     pr #20: 'Call Print.AddText("'&fnformnumb$(pb,2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin+2)&')'
 82900   end if  ! pb
-82920   fnpa_fontsize : let lyne=3
+82920   fnpa_fontsize : lyne=3
 82940   ! 
 82960   if estimatedate=d1 then let fnpa_txt("Bill estimated!",xmargin+1,lyne*21+ymargin)
 82980   fnpa_line(xmargin+1,lyne*23+1+ymargin+10,63,0)
@@ -1065,8 +1065,8 @@
 84340 fnend 
 86000 def fn_print_bill_blucksberg(z$,mat mg$) ! inherrits all those local customer variables too
 86010   if ~setup_blucksberg then ! r:
-86020     let setup_blucksberg=1
-86030     let lyne=3
+86020     setup_blucksberg=1
+86030     lyne=3
 86040     addr_indent=8
 86050     addr_down=3
 86060      ! 
@@ -1127,7 +1127,7 @@
 86610   fnpa_txt("Billing Questions:   605-720-5013",tmp_box_left_pos+5,tmp_box_top16)
 86620   if final>0 then let fnpa_txt('Final Bill'&cnvrt$("PIC(ZZzZZzZZ)",0),80,tmp_box_top+15)
 86630   ! 
-86640   let lyne=65 : adder=4
+86640   lyne=65 : adder=4
 86650   fnpa_txt("Meter Location: "&trim$(e$(1)) ,23,lyne+=adder)
 86660   fnpa_txt("Service From: "&cnvrt$("pic(zz/zz/zz)",d5)&" To: "&cnvrt$("pic(zz/zz/zz)",d6) ,23,lyne+=adder)
 86670   ! 
@@ -1137,7 +1137,7 @@
 86710   fnpa_fontitalic(1)
 86720   fnpa_fontbold(1)
 86730   ! 
-86740   let lyne=81
+86740   lyne=81
 86750   adder=4.5
 86760   fnpa_fontbold(1) : let fnpa_fontitalic
 86770   fnpa_txt("Activity Since "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),80,lyne+=adder)
@@ -1152,7 +1152,7 @@
 86860   fnpa_line(162,lyne+4,22)
 86870   fnpa_fontbold(1) ! on
 86880   fn_add_activity_line("Balance Forward",pb,1,110)
-86890   let lyne+=adder
+86890   lyne+=adder
 86900   ! let fnpa_fontbold(1) ! on
 86910   fnpa_line(26,lyne+=adder,157)
 86920   fnpa_txt("Current Charges",90,lyne+=1)
@@ -1161,7 +1161,7 @@
 86950   ! adder=5
 86960   fnpa_fontitalic
 86970   adder=4
-86980   let lyne+=adder
+86980   lyne+=adder
 86990   fnpa_txt("Current",83,lyne) ! lyne=100
 87000   fnpa_txt("Reading",83,lyne+adder)
 87010   fnpa_txt("Previous",103,lyne)
@@ -1169,7 +1169,7 @@
 87030   fnpa_txt("Usage",131,lyne+adder)
 87040   fnpa_txt("Charge",170,lyne+adder)
 87050   adder=4 ! maybe it should be 4.5
-87060   let lyne+=adder ! lyne=105
+87060   lyne+=adder ! lyne=105
 87070   if g(1)<>0 then 
 87080     if g(1)>=14 then 
 87090       fnpa_txt("Base Water Service Fee",26,lyne+=adder)
@@ -1219,13 +1219,13 @@
 87530     fnpa_txt(cnvrt$("pic(--------.##)",g(9)),160,lyne)
 87540   end if 
 87550   ! 
-87560   fnpa_line(162,lyne+4,22) : let lyne+=1
+87560   fnpa_line(162,lyne+4,22) : lyne+=1
 87570   fnpa_fontbold(1)
 87580   fn_add_activity_line("Total Current Charges",g(11), 1,110)
 87590   ! lyne+=adder ! let fnpa_txt("Total Current Charges",110,lyne+=adder)
 87600   ! let fnpa_txt(cnvrt$("pic(--------.##)",g(11)),160,lyne)
 87610   fnpa_fontbold(0)
-87620   let lyne+=adder
+87620   lyne+=adder
 87630   fnpa_line(162,lyne+3,22)
 87640   fnpa_fontsize(14)
 87650   fnpa_fontbold(1)
@@ -1245,7 +1245,7 @@
 87790   fnpa_line(26,165,157)
 87800   fnpa_fontsize
 87810   fnpa_fontitalic(1)
-87820   let lyne=165
+87820   lyne=165
 87830   fnpa_txt("MESSAGE BOARD",92,lyne+=4)
 87840   for j=1 to 13
 87850     fnpa_txt(mg$(j),5,lyne+=4)
@@ -1348,7 +1348,7 @@
 89710   PBO_L1620: form pos 6,c 17,nz 10.2,pos 36,c 10,pos pboposrightcol,c message2_max_len
 89720   if g(4)=0 then let t$="" else let t$="SF "
 89730   pr #255,using PBO_F_ONE: t$,0,0,0,g(4),0,0,fn_mg2$
-89740   if d(10)=1 then let est$="Bill Estimated" else let est$=""
+89740   if d(10)=1 then est$="Bill Estimated" else est$=""
 89750   if c4>0 then let final$="Final Bill" else let final$=""
 89760   if df$="Y" then let final$="Drafted"
 89770   if bal<=0 then let penalty=g(10)=0
@@ -1510,13 +1510,13 @@
 94245   end if
 94246   if g(4)<>0 then 
 94250     if a4=1 then 
-94255       let s4code$="RSGS" 
+94255       s4code$="RSGS" 
 94260     else if a4=2 then 
-94265       let s4code$="CMGS" 
+94265       s4code$="CMGS" 
 94270     else if a4=3 then 
-94275       let s4code$="INGS" 
+94275       s4code$="INGS" 
 94280     else 
-94285       let s4code$="GAS"
+94285       s4code$="GAS"
 94290     end if
 94300     fnpa_txt(s4code$,xmargin+1,lyne*(meter+=1)+ymargin)
 94305     pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' 
@@ -1554,7 +1554,7 @@
 94465   pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin)&',63,0)'
 94470   pr #20: 'Call Print.AddText("Phone: 217-623-5542",'&str$(xmargin+1)&','&str$(lyne*27+ymargin)&')'
 94475 ! ______________________________________________________________________
-94480 ! let special=28
+94480 ! special=28
 94485 ! ______________________________________________________________________
 94490   fnpa_fontsize(7)
 94495   pr #20: 'Call Print.AddLine('&str$(xmargin+97)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'
@@ -1620,8 +1620,8 @@
 95000 def fn_print_bill_standard_pdf_a(z$,mat mg$; mat mg2$,enableIsDueNowAndPayable,enableReturnServiceRequested) ! inherrits all those local customer variables too
 95010 ! based of fn_print_bill_raymond, but enhanced 
 95020   if ~setup_standardA then 
-95030     let setup_standardA=1
-95040     let lyne=3
+95030     setup_standardA=1
+95040     lyne=3
 95050     fn_get_mat_at(mat at$)
 95060   end if 
 95070   subtotalAmt=g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)+g(9)
@@ -1836,7 +1836,7 @@
 97310   else
 97320     pr #255,using billings_fL1590: pb$,pb,0,bal
 97330   end if
-97340   if d(10)=1 then let est$="BILL ESTIMATED" else let est$=""
+97340   if d(10)=1 then est$="BILL ESTIMATED" else est$=""
 97350   if c4>0 then let final$="FINAL BILL" else let final$=""
 97360   if df$="Y" then let final$="DRAFTED"
 97370   if bal>g(11) then let final$="DELINQUENT NOTICE"

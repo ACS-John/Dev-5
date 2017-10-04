@@ -13,7 +13,7 @@
 00120   goto XIT
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
-        let open_file_count=1 ! this value is used in the close_file sub routine
+        open_file_count=1 ! this value is used in the close_file sub routine
 00150   if exists(env$('Q')&"\GLmstr\bankrec.H"&str$(cno))=0 then goto L190
 00160   if exists(env$('Q')&"\GLmstr\glstdidx.h"&str$(cno))=0 then gosub INDEX
 00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\bankrec.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\bankrec-idx.H"&str$(cno)&",Version=1,Shr",internal,outin,keyed 
@@ -45,16 +45,16 @@
 00420   fncno(cno)
 00430 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
-00440   let lbl$(ic+=1)="Bank G/L" !:
-        let lbl$(ic+=1)="T/C" !:
-        let lbl$(ic+=1)="Ref #" !:
-        let lbl$(ic+=1)="Date"
-00442   let lbl$(ic+=1)="Amount" !:
-        let lbl$(ic+=1)="Payee" !:
-        let lbl$(ic+=1)="Description" !:
-        let lbl$(ic+=1)="P/C"
-00444   let lbl$(ic+=1)="Cleared" !:
-        let lbl$(ic+=1)="S/C"
+00440   lbl$(ic+=1)="Bank G/L" !:
+        lbl$(ic+=1)="T/C" !:
+        lbl$(ic+=1)="Ref #" !:
+        lbl$(ic+=1)="Date"
+00442   lbl$(ic+=1)="Amount" !:
+        lbl$(ic+=1)="Payee" !:
+        lbl$(ic+=1)="Description" !:
+        lbl$(ic+=1)="P/C"
+00444   lbl$(ic+=1)="Cleared" !:
+        lbl$(ic+=1)="S/C"
 00460 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
@@ -71,29 +71,29 @@
         let tln(ic+=1)=1
 00500 ! ** Field Types ** !:
         let ic=0
-00510   let fltyp$(ic+=1)='CR' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='N'
-00512   let fltyp$(ic+=1)='PD' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='N'
-00514   let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N'
+00510   fltyp$(ic+=1)='CR' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='N'
+00512   fltyp$(ic+=1)='PD' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='N'
+00514   fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N'
 00530 ! ** Field Storage Lengths ** !:
         let ic=0 !:
         let mmddyy=6 : ccyymmdd=8
-00540   let sln(ic+=1)=12 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=8 !:
-        let sln(ic+=1)=6
-00542   let sln(ic+=1)=10.2 !:
-        let sln(ic+=1)=8 !:
-        let sln(ic+=1)=35 !:
-        let sln(ic+=1)=1
-00544   let sln(ic+=1)=6 !:
-        let sln(ic+=1)=1
+00540   sln(ic+=1)=12 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=8 !:
+        sln(ic+=1)=6
+00542   sln(ic+=1)=10.2 !:
+        sln(ic+=1)=8 !:
+        sln(ic+=1)=35 !:
+        sln(ic+=1)=1
+00544   sln(ic+=1)=6 !:
+        sln(ic+=1)=1
 00570 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:
@@ -111,16 +111,16 @@
 00610 ! ** Storage Positions ** !:
         ! starting field position - default to the same as order displayed !:
         let ic=0
-00620   let sp(ic+=1)=79 !:
-        let sp(ic+=1)=3 !:
-        let sp(ic+=1)=4 !:
-        let sp(ic+=1)=12
-00622   let sp(ic+=1)=18 !:
-        let sp(ic+=1)=28 !:
-        let sp(ic+=1)=36 !:
-        let sp(ic+=1)=71
-00624   let sp(ic+=1)=72 !:
-        let sp(ic+=1)=78
+00620   sp(ic+=1)=79 !:
+        sp(ic+=1)=3 !:
+        sp(ic+=1)=4 !:
+        sp(ic+=1)=12
+00622   sp(ic+=1)=18 !:
+        sp(ic+=1)=28 !:
+        sp(ic+=1)=36 !:
+        sp(ic+=1)=71
+00624   sp(ic+=1)=72 !:
+        sp(ic+=1)=78
 00650 ! ** Combo Boxes **                                                   !:
         cl=1 : c$(cl,1)='ComboF' !:
         c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&str$(cno) !:
@@ -128,7 +128,7 @@
         c$(cl,5)="13" : c$(cl,6)="30" !:
         c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&str$(cno) !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
-        let limit_to_list$='1'
+        limit_to_list$='1'
 00652 ! ** Combo Boxes **                                                   !:
         cl=2 : c$(cl,1)='ComboF' !:
         c$(cl,2)=env$('Q')&"\GLmstr\transcode.h"&str$(cno) !:
@@ -136,7 +136,7 @@
         c$(cl,5)="3" : c$(cl,6)="30" !:
         c$(cl,7)=env$('Q')&"\GLmstr\transcode-idx.h"&str$(cno) !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
-        let limit_to_list$='1'
+        limit_to_list$='1'
 00670   return 
 00680 ! ______________________________________________________________________
 00690 HAMSTER: ! 
@@ -153,4 +153,4 @@
 00800 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00810 ! /region
 00820 ! ______________________________________________________________________
-00830   let fltyp$(ic+=1)='N'
+00830   fltyp$(ic+=1)='N'

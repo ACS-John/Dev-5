@@ -34,7 +34,7 @@
 00330 L330: form pos 333,2*pd 3
 00340   rewrite #1,using L330: 0,0
 00350   goto L320
-00360 L360: let lr2=lrec(2)
+00360 L360: lr2=lrec(2)
 00370   rewrite #2,using L470,rec=1: lr2
 00380   for j=1 to lr2
 00390     read #2,using L400,rec=j: k$,nta norec L480

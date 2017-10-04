@@ -29,9 +29,9 @@
 00210   let in3$(2)="8,45,N 12.2,UT,N"
 00220   let mp1=75
 00230   if fnps=2 then let mp1+=3
-00240   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFINDX.H"&str$(cno)&",Shr"
+00240   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFINDX.H"&str$(cno)&",Shr"
 00250   if fnps=2 then !:
-          let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&str$(cno)&",Shr"
+          fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&str$(cno)&",Shr"
 00260   let nametab=int(44-len(rtrm$(cnam$))/2)
 00270   open #1: fl1$,internal,input,keyed 
 00280   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",Shr",internal,input,relative 
@@ -114,7 +114,7 @@
 01040   if total><0 or total2><0 then goto L1070
 01050   if total<>0 then goto L1070
 01060   if ls+ds+ul+ic>0 then goto L1070 else goto L410
-01070 L1070: let sp2=30-sp-1
+01070 L1070: sp2=30-sp-1
 01080   if te$="B" then let total=-total: let total2=-total2 ! REVERSE SIGN ON BEGINNING BANK BALANCE
 01090   if total=0 and total2=0 and ls+ds+ul+ic>0 then pr #255,using L1100: "",dollar$,0 pageoflow L1600
 01100 L1100: form pos sp,c sp2,pos 52,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),skip 1
@@ -128,14 +128,14 @@
 01180   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 01190   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
 01200   if ds=1 then let dollar$="$" else let dollar$=" "
-01210   let sp2=30-sp-1
+01210   sp2=30-sp-1
 01220   pr #255,using L1100: d$(1:sp2),dollar$,accum1 pageoflow L1600
 01230   gosub L1380
 01240   gosub L1610
 01250   gosub L1450
 01260   goto L410
 01270 L1270: if te$="R" then let report$=d$
-01280   if te$="S" then let secondr$=d$
+01280   if te$="S" then secondr$=d$
 01290   gosub L1450
 01300   goto L410
 01310 L1310: if foot1=1 then goto L1360
@@ -159,7 +159,7 @@
 01490   goto L1580
 01500 L1500: let fnpglen(pglen)
 01510   if pglen<>42 then let pglen=58
-01520   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
+01520   sk=pglen-krec(255): fl=len(rtrm$(foot$))
 01530   pr #255,using L1540: rtrm$(foot$),"Page "&str$(pt1)
 01540 L1540: form skip sk,pos tabnote,c fl,pos 70,c 8,skip 1
 01550   if eofcode=1 then goto L1580
@@ -194,7 +194,7 @@
 01840   pr #255: 
 01850   return 
 01860 ! ______________________________________________________________________
-01870 L1870: let eofcode=1
+01870 L1870: eofcode=1
 01880   gosub L1500
 01890   fnfscode(actpd)
 01900   fnpriorcd(1)
@@ -202,9 +202,9 @@
 01920 ! 
 01930   goto XIT
 01940 L1940: ! 
-01950   pr fields "2,5,C 75,N": "ENTER THE FOLLOWING INFORMATION FOR "& rtrm$(d$)
-01960   pr fields "6,5,C 70,N": "                    CURRENT         "
-01970   pr fields "7,5,C 70,N": "                     MONTH       "
+01950   pr f "2,5,C 75,N": "ENTER THE FOLLOWING INFORMATION FOR "& rtrm$(d$)
+01960   pr f "6,5,C 70,N": "                    CURRENT         "
+01970   pr f "7,5,C 70,N": "                     MONTH       "
 01980 L1980: input fields mat in3$: total conv L1980
 01990   goto L950
 02000 ! ______________________________________________________________________

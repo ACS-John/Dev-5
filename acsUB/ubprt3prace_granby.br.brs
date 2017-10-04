@@ -27,7 +27,7 @@
 00270     let x=len(at$(j)) : let y=z-x
 00280     at$(j)=rpt$(" ",int(y/2))&at$(j)
 00290   next j
-00300   let linelength=62
+00300   linelength=62
 00310 !  :  !
 00320   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00330   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
@@ -42,7 +42,7 @@
 00420 SCREEN1: ! 
 00430   a$="" : let prtbkno=0
 00440   fntos(sn$="UBPrtBl1-1")
-00450   let pf=26 : let ll=24
+00450   let pf=26 : ll=24
 00460   let respc=0
 00470   fnlbl(1,1,"Current Reading Date:",ll,1)
 00480   fntxt(1,pf,8,8,1,"1",0,tt$)
@@ -96,11 +96,11 @@
 00950   else 
 00960     let prtbkno = val(resp$(9))
 00970   end if 
-00980   if resp$(10)="True" then let sl1=1: let z$="" else let sl1=0
+00980   if resp$(10)="True" then sl1=1: let z$="" else sl1=0
 00990   if trim$(a$)<>"" then 
 01000     read #1,using 'form pos 1,c 10,pos 1741,n 2,n 7',key=a$: z$,route,sequence nokey SCREEN1
 01010     let holdz$=z$: begin=1
-01020     let st1=1
+01020     st1=1
 01030   end if 
 01035 ! 
 01040   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
@@ -119,29 +119,29 @@
 01090 L690: form pos 1,c 12,c 10
 01092   read #1,using F_CUSTOMER,key=z$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final,df$,dr$,bc,da$ nokey L660
 01094 ! if bal<=0 then goto L660 ! skip anyone with a balance less than or equal to zero
-01096   if estimatedate>0 then let est=1 else let est=0
+01096   if estimatedate>0 then est=1 else est=0
 01098 F_CUSTOMER: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6,pos 1942,c 12,pos 1864,c 30,pos 1831,n 9,pos 1821,n 1,pos 1712,c 1,c 9,n 2,c 17
 01100   if prtbkno=0 then goto L750
 01102   if prtbkno><route then goto RELEASE_PRINT
 01104 L750: if f><d1 then goto L650
-01106 L760: let e1=0 : mat pe$=("")
+01106 L760: e1=0 : mat pe$=("")
 01108   for j=2 to 4
 01110     if rtrm$(e$(j))<>"" then 
-01112       let e1=e1+1
+01112       e1=e1+1
 01114       let pe$(e1)=e$(j)
 01116     end if 
 01118   next j
 01120   if st1=0 then goto READALTADR
-01122 ! If ST1$=Z$ Then Let ST1=0 Else Goto 560
+01122 ! If ST1$=Z$ Then sT1=0 Else Goto 560
 01124 READALTADR: ! 
 01126 ! read alternate billing address
 01128   read #3,using L860,key=z$: mat ba$ nokey L950
 01130   if trim$(ba$(1))="" and trim$(ba$(2))="" and trim$(ba$(3))="" and trim$(ba$(4))="" then goto L950
 01132 L860: form pos 11,4*c 30
-01134   let e1=0 : mat pe$=("")
+01134   e1=0 : mat pe$=("")
 01136   for j=1 to 4
 01138     if rtrm$(ba$(j))<>"" then 
-01140       let e1=e1+1
+01140       e1=e1+1
 01142       let pe$(e1)=ba$(j)
 01144     end if 
 01146   next j
@@ -219,7 +219,7 @@
 02030   def fn_sort1 ! SELECT & SORT
 02040     open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed 
 02050     open #h_temp:=6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=22",internal,output 
-02060     let s5=1
+02060     s5=1
 02070     if prtbkno=0 then 
 02080       let routekey$=""
 02090     else 
@@ -279,7 +279,7 @@
 03240 ! -- Printer Program for three per page  Utility Bills
 03250     if reading_date_cur_s1=0 then let reading_date_cur=d3 else let reading_date_cur=reading_date_cur_s1
 03260     if reading_date_prior_s1=0 then let reading_date_prior=d2 else let reading_date_prior=reading_date_prior_s1
-03270     let line_height=3
+03270     line_height=3
 03280     let pos_column_column=5 ! 20 !  pos_column_column=remit side position
 03290     let pos_right_column=120 ! pos_right_column=customer side position
 03300     fnpa_line(pos_right_column+12,factor+0,62,line_height+12,1) ! the box around the company name and address
@@ -326,7 +326,7 @@
 03710     pr #20: 'Call Print.MyFontsize(10)'
 03720     fnpa_txt("From:"&cnvrt$("pic(zz/zz/zz)",reading_date_prior)&"  To:"&cnvrt$("pic(zz/zz/zz)",reading_date_cur),pos_column_column+6,factor+line_height+=13)
 03730     fnpa_txt("From:"&cnvrt$("pic(zz/zz/zz)",reading_date_prior)&"  To:"&cnvrt$("pic(zz/zz/zz)",reading_date_cur),pos_right_column+6,factor+line_height)
-03740     let line_height+=14
+03740     line_height+=14
 03750     pr #20: 'Call Print.MyFontsize(9)'
 03760     fn_print_serivce_metered(1,d(2),d(1),d(3)) ! Water
 03770     fn_print_serivce_metered(2) ! Sewer
@@ -340,11 +340,11 @@
 03850     pr #20: 'Call Print.MyFontsize(10)'
 03860 ! allow for three forms
 03870     if line_height<90 then 
-03880       let line_height=62
+03880       line_height=62
 03890     else if line_height<=180 then 
-03900       let line_height=152
+03900       line_height=152
 03910     else if line_height>180 then 
-03920       let line_height=242
+03920       line_height=242
 03930     end if 
 03940     fnpa_txt(z$,pos_column_column,factor+52)
 03950 ! let fnbarcode(z$,103,factor+45)

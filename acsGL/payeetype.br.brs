@@ -10,11 +10,11 @@
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Payee Type")
 00120   fncno(cno)
-00130   let lbl$(1)="Payee Type" !:
-        let lbl$(2)="Type Description"
+00130   lbl$(1)="Payee Type" !:
+        lbl$(2)="Type Description"
 00140   let tln(1)=2 : let tln(2)=25
-00150   let fltyp$(1)="N" : let fltyp$(2)="C"
-00160   let sln(1)=2 : let sln(2)=25
+00150   fltyp$(1)="N" : fltyp$(2)="C"
+00160   sln(1)=2 : sln(2)=25
 00170   let mask(1)=1030
 00180   open #1: "Name="&env$('Q')&"\GLmstr\PayeeType.dat,Version=1,KFName="&env$('Q')&"\GLmstr\PayeeType.Idx,Use,RecL=27,KPs=1,KLn=2,Shr",internal,outin,keyed 
 00190   close #1: 

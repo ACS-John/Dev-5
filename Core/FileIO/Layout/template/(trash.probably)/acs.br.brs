@@ -66,15 +66,15 @@
 00066     fnestablishlinkage
 00067     let returncode$=""
 00068     fnreadentirelayout(filelay$,filename$,prefix$,mat keys$,mat keydescription$,mat ssubs$,mat nsubs$,mat sspec$,mat nspec$,mat sdescription$,mat ndescription$,mat spos,mat npos)
-00069     let longestelement=0
+00069     longestelement=0
 00070     for index=1 to udim(mat sspec$)
-00071       let longestelement=max(longestelement,fnlength(sspec$(index)))
+00071       longestelement=max(longestelement,fnlength(sspec$(index)))
 00072     next index
 00073     for index=1 to udim(mat nspec$)
-00074       let longestelement=max(longestelement,fnlength(nspec$(index)))
+00074       longestelement=max(longestelement,fnlength(nspec$(index)))
 00075     next index
 00076     for index=1 to udim(mat ssubs$)
-00077       let ssubs$(index)=lwrc$(ssubs$(index))
+00077       ssubs$(index)=lwrc$(ssubs$(index))
 00078     next index
 00079     for index=1 to udim(mat nsubs$)
 00080       let nsubs$(index)=lwrc$(nsubs$(index))
@@ -102,7 +102,7 @@
 00102   def fnestablishlinkage
 00103     if ~linkageestablished then 
 00104       library "S:\Core\FileIO\fileio" : fnopenfile, fnclose, fnreadentirelayout, fngetfilenumber, fngetkeyelements, fnlength, fnaskcombo$
-00105       let linkageestablished=1
+00105       linkageestablished=1
 00106     end if 
 00107   fnend 
 00108 ! 

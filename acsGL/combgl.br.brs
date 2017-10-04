@@ -11,7 +11,7 @@
 00110   let dcno=99
 00120 MAIN: ! 
 00130   fntos(sn$='Combgl') !:
-        let lc=rc=0 !:
+        lc=rc=0 !:
         let mylen=29 : let mypos=mylen+2
 00140   fnlbl(lc+=1,1,"&Source Company Number:",mylen,1)
 00150   fncmbcno(lc,mypos) !:
@@ -20,7 +20,7 @@
 00170   fntxt(lc,mypos,5,0,0,'30') !:
         let resp$(rc+=1)=str$(dcno)
 00180   if hcno>0 then let fnlbl(lc+=1,1,"Last Company Selected: "&str$(hcno),mylen,1)
-00190   let lc+=1
+00190   lc+=1
 00200   fnlbl(lc+=1,1,"Warning",80,2,1)
 00210   fnlbl(lc+=1,1,"Please make sure no one else is",80,2) !:
         fnlbl(lc+=1,1,"using either company. If the destination",80,2) !:

@@ -32,7 +32,7 @@
 16120   dim ml$(3)*70,citystzip$*30,glitem$(5)*30,payeekey$*8,payeegl$*12
 16130   dim gldesc$*30,resp$(60)*50
 16140   ! ______________________________________________________________________
-18020   let left=0: let right=1
+18020   left=0: let right=1
 18040   open #trmstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
 18060   open #paymstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 18080   open #paymstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -59,7 +59,7 @@
 22320   cmask$(1)=cmask$(2)='' 
 22340   cmask$(3)=cmask$(4)=cmask$(5)=cmask$(6)='80' 
 22360   fnflexinit1('Payee',2,1,20,100,mat chdr$,mat cmask$,1,0,frame) 
-22380   let editrec=0
+22380   editrec=0
 22400   restore #paymstr: 
 22420   READ_PAYMSTR_1: ! 
 22440   read #paymstr,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',release: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof EO_FLEX1
@@ -90,12 +90,12 @@
 24200     add=1
 24220     goto ADD_NEW_PAYEE
 24240   end if
-24260   if ck=2 or ck=3 then let editrec=val(resp$(1))
+24260   if ck=2 or ck=3 then editrec=val(resp$(1))
 24280   if editrec=0 then goto MENU1
 24300   if ck=2 or ck=3 then 
 24320     read #paymstr,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',rec=editrec: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
 24340   end if
-24360   if ck=2 then let edit=1 : let holdvn$=vn$: goto EDIT_PAYEE
+24360   if ck=2 then edit=1 : let holdvn$=vn$: goto EDIT_PAYEE
 24380   if ck=3 then gosub DELETE_PAYEE : goto MENU1
 24400   ! ______________________________________________________________________
 26000   DELETE_PAYEE: ! r:
@@ -247,10 +247,10 @@
 42080   write #citystzip,using 'Form POS 1,C 30': csz$
 42100   L1250: !
 42120   let typ=val(resp$(6)(1:2)) ! type 
-42140   let ss$=resp$(7) ! ss or fed id 
+42140   ss$=resp$(7) ! ss or fed id 
 42160   let ph$=resp$(8) ! phone 
 42180   contact$=resp$(9) ! contact name 
-42200   let email$=resp$(10) ! email address
+42200   email$=resp$(10) ! email address
 42220   let fax$=resp$(11) ! fax number 
 42240   let myact$=resp$(12) ! my account number with this vendor 
 42260   let gldistrec=val(resp$(13)) ! record number of gl distribution entry
@@ -343,8 +343,8 @@
 58000   CHECK_HISTORY: ! r:
 58020   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,input,keyed 
 58040   fntos(sn$='payee_hist') 
-58060   let lc=0 : let mylen=25 : let mypos=mylen+2 : let width=50
-58080   let lc+=1
+58060   lc=0 : let mylen=25 : let mypos=mylen+2 : let width=50
+58080   lc+=1
 58100   fnlbl(lc+=1,30,'Check History Selection Criteria',width,center)
 58120   fnlbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
 58140   fntxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All') 

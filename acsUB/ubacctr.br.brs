@@ -15,7 +15,7 @@
         code$(5)="Debit Memo" : code$(6)="INVALID !?!"
 00130 ! ______________________________________________________________________
 00140 SCREEN1: ! 
-00150   let sn$ = "ubAccTr" !:
+00150   sn$ = "ubAccTr" !:
         fntos(sn$) !:
         let mylen=26 !:
         let mypos=mylen+2

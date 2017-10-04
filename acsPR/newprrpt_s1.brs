@@ -106,6 +106,6 @@
 61080   fnacs(sn$,0,mat resp$,ckey) 
 61082   if ckey=5 then goto XIT
 61090   beg_date=val(resp$(1))
-61100   let end_date=val(resp$(2))
+61100   end_date=val(resp$(2))
 61110   let dh$=resp$(3)
 61120   return ! /r

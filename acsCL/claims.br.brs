@@ -124,7 +124,7 @@
 01330 IGNORE: continue 
 01340 END1: ! 
 01350   if r4=0 then goto XIT
-01360   let endcode=1
+01360   endcode=1
 01370   goto L760
 01375 L1360: if vc<2 then goto L1390
 01380 ! pr #255: TAB(87);"__________"
@@ -169,7 +169,7 @@
 01760   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 01770   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.H"&str$(cno)&",Shr",internal,input,keyed 
 01880   if pp1yn$="N" then goto END8
-02070   let ld1=fndate_mmddyy_to_ccyymmdd(ld1) : let hd1=fndate_mmddyy_to_ccyymmdd(hd1)
+02070   ld1=fndate_mmddyy_to_ccyymmdd(ld1) : let hd1=fndate_mmddyy_to_ccyymmdd(hd1)
 02080 READ_TRMSTR: ! 
 02090   read #trmstr,using 'Form POS 1,N 2,N 1,C 8,G 6,PD 10.2,C 8,C 35,pos 78,n 1': bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),scd eof END8 !:
         let tr$(3)=str$(tr3)
@@ -260,7 +260,7 @@
 02710   let d2=val(resp$(1)) ! cutoff date
 02720   let ti1$=resp$(2)(1:1)
 02730   if resp$(3)(1:1)="T" then let pp1yn$="Y" else let pp1yn$="N"
-02740   let ld1=val(resp$(4))
+02740   ld1=val(resp$(4))
 02750   let hd1=val(resp$(5))
 02760   if resp$(6)(1:1)="V" then let fund=1 else let fund=2 ! vendor # or fund #
 02770   if resp$(7)(1:1)="A" then coded=1 else coded=2 ! all invoices or only coded for payment

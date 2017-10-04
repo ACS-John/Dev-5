@@ -8,16 +8,16 @@
 00090   dim cn$*5,en$*9,in$*12,sc$*4,y(7),hcn$*5,cap$*128,dat$*20
 00100   dim x$(10)*30,c$(50)*25,d(50),e(50),f(50),g(10),h(10),i(10)
 00110   pr newpage
-00120   pr fields "10,10,c 35,n": "ENTER YTD BILLING SUMMARY DATE"
-00130   pr fields "10,48,c 20,n": dat$
-00140   pr fields "14,30,c 20,n": "Press F5 to stop"
+00120   pr f "10,10,c 35,n": "ENTER YTD BILLING SUMMARY DATE"
+00130   pr f "10,48,c 20,n": dat$
+00140   pr f "14,30,c 20,n": "Press F5 to stop"
 00150 L150: input fields "10,48,c 20,ue,n": dat$ conv L150
 00160   if cmdkey=5 then goto XIT
 00170   fndat(dat$,put=2)
 00180   pr newpage
 00190   let dattab=66-int(len(rtrm$(dat$))/2)
-00200   pr fields "10,25,c 40,n": "YTD BILLING SUMMARY IN PROCESS"
-00210   pr fields "23,2,c 30,n": "Press F5 to stop"
+00200   pr f "10,25,c 40,n": "YTD BILLING SUMMARY IN PROCESS"
+00210   pr f "23,2,c 30,n": "Press F5 to stop"
 00220   fnopenprn
 00230   gosub L2080 ! sort
 00240   let dattab=66-int(len(rtrm$(dat$))/2)
@@ -43,7 +43,7 @@
 00440 L440: read #3,using L450,key=lpad$(rtrm$(en$),9): enam$ nokey L470 ioerr L1950
 00450 L450: form pos 10,c 25
 00460   goto L480
-00470 L470: let enam$=" "
+00470 L470: enam$=" "
 00480 L480: return 
 00490 L490: read #4,using L500: addr eof L670 ioerr L1950
 00500 L500: form pos 1,pd 3
@@ -97,7 +97,7 @@
 00980   goto L1010
 00990 L990: if y(3)= 0 then let y(3)=1
 01000   pr #255,using L940: cliname$(1:26),y(3),"-",y(2),y(5),y(6),y(7),y(7),0," ",y(1),cat$(y(3))(1:22),enam$(1:22) pageoflow L960
-01010 L1010: let l1=l1+y(5)
+01010 L1010: l1=l1+y(5)
 01020   let m1=m1+y(6)
 01030   let n1=n1+y(7)
 01040   return 
@@ -138,7 +138,7 @@
 01390 L1390: form pos 30,c 18,pos 66,c 4,skip 2
 01400   return 
 01410 L1410: if rtrm$(enam$)><"" then goto L1430
-01420   let enam$="-1"
+01420   enam$="-1"
 01430 L1430: for y2=1 to 50
 01440     if c$(y2)=enam$ then goto L1490
 01450     if rtrm$(c$(y2))="" then goto L1480
@@ -147,7 +147,7 @@
 01480 L1480: c$(y2)=enam$
 01490 L1490: let f(y2)=f(y2)+y(7)
 01500   let d(y2)=d(y2)+y(5)
-01510   let e(y2)=e(y2)+y(6)
+01510   e(y2)=e(y2)+y(6)
 01520 L1520: return 
 01530 L1530: if rtrm$(cat$(y(3)))><"" then goto L1550
 01540   cat$(y(3))="-1"
@@ -191,17 +191,17 @@
 01920   let tbil=0
 01930   let tgy=0
 01940   return 
-01950 L1950: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1970
+01950 L1950: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1970
 01960   goto L2010
 01970 L1970: pr newpage
-01980   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2000
+01980   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L2000
 01990   goto L2010
-02000 L2000: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-02010 L2010: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+02000 L2000: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+02010 L2010: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 02020   input fields "24,60,C 1,N": quitcode$
 02030   if rtrm$(uprc$(quitcode$))="Q" then goto L2070
-02040   pr fields "23,3,C 78,N": ""
-02050   pr fields "24,3,C 78,N": ""
+02040   pr f "23,3,C 78,N": ""
+02050   pr f "24,3,C 78,N": ""
 02060   retry 
 02070 L2070: goto XIT
 02080 L2080: open #9: "Name="&env$('Temp')&"\Control."&session$&",SIZE=0,RecL=128,REPLACE",internal,output 

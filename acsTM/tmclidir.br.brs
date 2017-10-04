@@ -10,29 +10,29 @@
 00110 L110: form pos 1,10*c 30
 00120   close #1: 
 00130   for j=1 to 10
-00140     let flo$(j)=str$(j+10)&",30,C 30,N"
-00150     let fli$(j)=str$(j+10)&",62,N 1,U,N"
+00140     flo$(j)=str$(j+10)&",30,C 30,N"
+00150     fli$(j)=str$(j+10)&",62,N 1,U,N"
 00160   next j
 00170   dim z$*5,a$(5)*30,ph$*12,cnam$*40,prg$*20,cm$*70
 00180   dim cat$(10)*30,flo$(10),fli$(10),catcode(10),dd(10),ph2$*12
 00190   let namtab=44-len(rtrm$(cnam$))/2
 00200   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr L860
 00210 L210: pr newpage
-00230   pr fields "10,10,c 48,n": "ENTER DATE FOR CLIENT DIRECTORY IN MMDDYY FORMAT"
-00240   pr fields "10,60,n 6,n": dat
+00230   pr f "10,10,c 48,n": "ENTER DATE FOR CLIENT DIRECTORY IN MMDDYY FORMAT"
+00240   pr f "10,60,n 6,n": dat
 00250 L250: input fields "10,60,n 6,eu,n": dat conv L250
 00260   if dat<10100 or dat>123199 then goto L210
 00280   form pos 83,n 6
 00290   pr newpage
-00300   pr fields "3,15,C 65,N": "You have the option to get the client directory sorted by "
-00310   pr fields "4,10,c 70,n": "category.  Place a 1 by any category you want printed.  Leave all"
-00320   pr fields "5,10,c 70,n": "items blank for numeric order."
-00330   pr fields mat flo$: mat cat$
+00300   pr f "3,15,C 65,N": "You have the option to get the client directory sorted by "
+00310   pr f "4,10,c 70,n": "category.  Place a 1 by any category you want printed.  Leave all"
+00320   pr f "5,10,c 70,n": "items blank for numeric order."
+00330   pr f mat flo$: mat cat$
 00340 L340: input fields mat fli$: mat catcode conv L340
 00350   if sum(catcode)=0 then let numprint=1
 00360   pr newpage
-00370   pr fields "10,25,c 48,n": "CLIENT DIRECTORY IN PROCESS"
-00380   pr fields "23,2,c 30,n": "Press F5 to stop"
+00370   pr f "10,25,c 48,n": "CLIENT DIRECTORY IN PROCESS"
+00380   pr f "23,2,c 30,n": "Press F5 to stop"
 00390   fnopenprn(cp,0,0,process)
 00400   form c 9,skip 0
 00410   if numprint=1 then goto L440
@@ -80,16 +80,16 @@
 00830 L830: let fncloseprn
 00840 L840: if uprc$(rtrm$(prg$))="S:\Time Management\Client Legacy" then chain prg$
 00850   goto XIT
-00860 L860: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L880
+00860 L860: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L880
 00870   goto L920
 00880 L880: pr newpage
-00890   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L910
+00890   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L910
 00900   goto L920
-00910 L910: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00920 L920: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY OR ENTER  Q  TO QUIT"
+00910 L910: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00920 L920: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY OR ENTER  Q  TO QUIT"
 00930   input fields "24,60,C 1,N": quitcode$
 00940   if rtrm$(uprc$(quitcode$))="Q" then goto XIT
-00950   pr fields "23,3,C 78,N": ""
-00960   pr fields "24,3,C 78,N": ""
+00950   pr f "23,3,C 78,N": ""
+00960   pr f "24,3,C 78,N": ""
 00970   retry 
 00980 XIT: let fnxit

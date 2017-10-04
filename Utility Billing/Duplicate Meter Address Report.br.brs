@@ -31,7 +31,7 @@
 42020 fnopenprn
 42040 for customer=1 to udim(mat acctList$)
 42060   searchBefore=srch(mat LocIdList,LocIdList(customer))
-42080   if searchBefore=customer then let searchBefore=0
+42080   if searchBefore=customer then searchBefore=0
 42100   searchAfter=srch(mat LocIdList,LocIdList(customer),customer+1)
 42120   if searchBefore or searchAfter then
 42140     pr #255,using 'form pos 1,C 10,x 1,N 9,x 2,C 30': acctList$(customer),LocIdList(customer),meterAddressList$(customer)

@@ -3,7 +3,7 @@
 00030 ! 
 00040   dim tr(2),up$(4),aa(2)
 00050   pr newpage
-00060   pr fields "10,15,C 60": "ENTER THE COMPANY NUMBER TO BE CHECKED: 1"
+00060   pr f "10,15,C 60": "ENTER THE COMPANY NUMBER TO BE CHECKED: 1"
 00070 L70: input fields "10,55,N 2,UE,N": cno conv L70
 00080   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00090   if cno=0 then stop 

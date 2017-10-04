@@ -29,12 +29,12 @@
         if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
 00240   let mp1=69
 00250   if fnps=2 then let mp1=mp1+3
-00260   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" else !:
-          let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00260   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" else !:
+          fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
 00270 L270: form pos mp1,pd 3,pos 81,41*pd 6.2
 00280   if actpd>0 and actpd<14 then goto L330
-00290   pr fields "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
-00300   pr fields "12,2,C 60,N": "USE OPTION 1 ON THE MENU TO ENTER THIS INFORMATION"
+00290   pr f "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
+00300   pr f "12,2,C 60,N": "USE OPTION 1 ON THE MENU TO ENTER THIS INFORMATION"
 00310   input fields "23,2,C 1,E,N": pause$
 00320   goto L2530
 00330 L330: open #1: fl1$,internal,input,keyed 
@@ -123,7 +123,7 @@
 01130   if total><0 or total3><0 then goto L1150
 01140   if ls+ds+ul+ic>0 then goto L1150 else goto L550
 01150 L1150: if percent=0 then goto L1380
-01160   let sp2=31-sp-1
+01160   sp2=31-sp-1
 01170   if percent=2 and ic=1 then gosub L2560
 01180   if percent1=0 then let pdpct=0 else let pdpct=total/percent1*100
 01190   if percent2=0 then let ytdpct=0 else let ytdpct=total2/percent2*100
@@ -188,7 +188,7 @@
 01770   if ppyvar>999.99 then let ppyvar=999.99
 01780   if ppcvar<-999.99 then let ppcvar=-999.99
 01790   if ppcvar>999.99 then let ppcvar=999.99
-01800   let sp2=31-sp-1
+01800   sp2=31-sp-1
 01810   if ul=1 then pr #255,using L1370: d$(1:sp2),dollar$,"{\UL ",accum1,"}",pdpct,percent$,dollar$,"{\UL ",accum2,"}",ytdpct,percent$,dollar$,"{\UL ",accum3,"}",pppd,percent$,dollar$,"{\UL ",accum4,"}",ppyear,percent$,dollar$,"{\UL ",accum5,"}",ppcvar,percent$,dollar$,"{\UL ",accum6,"}",ppyvar,percent$ pageoflow PGOF : goto L1830
 01820   pr #255,using L1360: d$(1:sp2),dollar$,accum1,pdpct,percent$,dollar$,accum2,ytdpct,percent$,dollar$,accum3,pppd,percent$,dollar$,accum4,ppyear,percent$,dollar$,accum5,ppcvar,percent$,dollar$,accum6,ppyvar,percent$ pageoflow PGOF
 01830 L1830: if percent=0 and ic=1 then !:
@@ -199,7 +199,7 @@
 01860 L1860: gosub EOPAGE : goto TOP_OF_LOOP
 01870 ! ______________________________________________________________________
 01880 L1880: if te$="R" then let report$=d$ else !:
-          if te$="S" then let secondr$=d$
+          if te$="S" then secondr$=d$
 01890   gosub EOPAGE : goto TOP_OF_LOOP
 01900 ! ______________________________________________________________________
 01910 L1910: if foot1=1 then let foot$=rtrm$(foot$)&d$ else !:
@@ -219,8 +219,8 @@
 02030   pr #255,using L2040: " "
 02040 L2040: form pos 1,c 1,skip ls
 02050   goto L2130
-02060 FOOTER: let sk=58-krec(255): let fl=len(rtrm$(foot$))
-02070 ! If PGLEN=42 Then Let SK=SK+1
+02060 FOOTER: sk=58-krec(255): fl=len(rtrm$(foot$))
+02070 ! If PGLEN=42 Then sK=SK+1
 02080   pr #255,using L2090: rtrm$(foot$),"Page "&str$(pt1)
 02090 L2090: form skip sk,pos tabnote,c fl,pos 165,c 8,skip 1
 02100   if eofcode=1 then goto L2130
@@ -263,7 +263,7 @@
 02470   let percent1=percent2=percent3=percent4=percent5=percent6=0
 02480   goto L570
 02490 ! ______________________________________________________________________
-02500 L2500: let eofcode=1
+02500 L2500: eofcode=1
 02510   gosub FOOTER
 02520   fncloseprn
 02525   fnfscode(actpd)

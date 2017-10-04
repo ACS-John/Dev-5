@@ -8,14 +8,14 @@
 00080   dim c$(6,8)*256
 00090 ! ______________________________________________________________________
 00100   fncno(cno)
-00110   let lbl$(1)="Bank Code" : let lbl$(2)="Bank Name" !:
-        let lbl$(3)="General Ledger Number" : let lbl$(4)="Bank Balance" !:
-        let lbl$(5)="Unpaid Invoices" : let lbl$(6)="Last Check Number"
+00110   lbl$(1)="Bank Code" : lbl$(2)="Bank Name" !:
+        lbl$(3)="General Ledger Number" : lbl$(4)="Bank Balance" !:
+        lbl$(5)="Unpaid Invoices" : lbl$(6)="Last Check Number"
 00120   let tln(1)=2 : let tln(2)=30 : let tln(3)=12 : let tln(4)=11 !:
         let tln(5)=11 : let tln(6)=8
-00130   let fltyp$(1)="N" : let fltyp$(2)="C" : let fltyp$(3)="C" !:
-        let fltyp$(4)="PD" : let fltyp$(5)="PD" : let fltyp$(6)="C"
-00140   let sln(3)=12 : let sln(4)=sln(5)=6.2
+00130   fltyp$(1)="N" : fltyp$(2)="C" : fltyp$(3)="C" !:
+        fltyp$(4)="PD" : fltyp$(5)="PD" : fltyp$(6)="C"
+00140   sln(3)=12 : sln(4)=sln(5)=6.2
 00150   let mask(1)=1030 !:
         let mask(4)=32 : let mask(5)=30 : let mask(6)=30
 00160   cl=3: c$(cl,1)='ComboF' !:

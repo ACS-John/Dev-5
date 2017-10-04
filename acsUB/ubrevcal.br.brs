@@ -58,13 +58,13 @@
 00420   let reqz$=lpad$(rtrm$(resp$(1)(1:10)),10)
 00421   if trim$(reqz$)='[All]' then let reqz$=''
 00422   let reqf=val(resp$(2))
-00423   let olddat=val(resp$(3))
+00423   olddat=val(resp$(3))
 00424   let reqz12$=resp$(4)
 00425   if reqz12$="[All]" then let reqz12$=""
-00430   if uprc$(resp$(5))=uprc$("True") then let sr$="Y" else let sr$="N"
+00430   if uprc$(resp$(5))=uprc$("True") then sr$="Y" else sr$="N"
 00440   if sr$="Y" then let fnopenprn
 00450   if sr$="Y" and secondpass<>1 then let fn_srhdr
-00460   let secondpass=1
+00460   secondpass=1
 00470 L470: form pos 5,c 10,x 5,pic(zz/zz/zz)
 00480 L480: ! 
 00482   if rtrm$(reqz$)<> "" then 
@@ -103,7 +103,7 @@
 00720   let d(12)=d(12)-d(11) ! subtract out current usage from year to date
 00730   let d(11)=gu ! set usage to amount in history
 00740   let f=0 !  f=olddat   ! set billing date to zero
-00745   let extra3=extra4 : let extra4=0
+00745   extra3=extra4 : extra4=0
 00750   mat g=(0) ! SET ALL LAST TIME BILL TO ZERO
 00760   rewrite #1,using L770: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4
 00770 L770: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 354,c 7,2*c 12,pd 3,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6

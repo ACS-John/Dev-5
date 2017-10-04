@@ -28,15 +28,15 @@
 00260   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00270   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,input,relative 
 00280   pr newpage
-00290   pr fields "10,20,C 30,H,N": " FUND BALANCE IN PROCESS"
-00300   pr fields "12,2,C 18,B,5": " Press F5 to stop"
+00290   pr f "10,20,C 30,H,N": " FUND BALANCE IN PROCESS"
+00300   pr f "12,2,C 18,B,5": " Press F5 to stop"
 00310 L310: read #1,using L520: n$,d$,bb,cb,mat ta eof L550
 00320   let fund=val(n$(1:3)): acct=val(n$(4:9))
 00330   if acct>90 then goto L460
 00340   if acct<1 then goto L310
 00350   bank$(acct)=d$(1:25)
 00360   begb(acct)=bb
-00370   let endb(acct)=cb
+00370   endb(acct)=cb
 00380   let nta=ta(1)
 00390 L390: if nta=0 then goto L310
 00400   read #2,using L410,rec=nta: mat tr,tr$,td$,nta norec L310
@@ -106,10 +106,10 @@
 01020 L1020: pr newpage
 01030   close #101: ioerr L1040
 01040 L1040: open #101: "SROW=4,SCOL=18,EROW=17,ECOL=64,BORDER=DR,CAPTION=ENTER FUND BALANCES",display,outin 
-01050   pr fields "18,25,C 32,R,N": "Press F1 to continue; F5 to stop"
-01060   pr fields "5,20,c 45,n": "ENTER THE FUND BALANCE AT BEGINNING OF MONTH"
+01050   pr f "18,25,C 32,R,N": "Press F1 to continue; F5 to stop"
+01060   pr f "5,20,c 45,n": "ENTER THE FUND BALANCE AT BEGINNING OF MONTH"
 01070   for j=1 to 10
-01080     pr fields str$(j+6)&",25,C 20,N": desc$(j) !:
+01080     pr f str$(j+6)&",25,C 20,N": desc$(j) !:
           let io1$(j)=str$(j+6)&",45,N 12.2,UT,N"
 01090   next j
 01100 L1100: input fields mat io1$,attr "R": mat beg conv L1100
@@ -121,7 +121,7 @@
 01150   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L1100
 01160 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 01170   ce=cnt+1
-01180 ERR1: pr fields "24,78,C 1": bell : goto L1140
+01180 ERR1: pr f "24,78,C 1": bell : goto L1140
 01190 L1190: ! 
 01200   pr newpage
 01210   return 

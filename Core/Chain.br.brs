@@ -8,7 +8,7 @@
 00080     dim path$*256,prog$*256
 00090 ! 
 00100     fngetpp(prg$,path$,prog$,ext$)
-00110     if ext$="" then let ext$=".br"
+00110     if ext$="" then ext$=".br"
 00120 ! display menu : "","",""
 00130 ! pr 'fnChain to '&PATH$&PROG$
 00140     let prg$=path$&prog$

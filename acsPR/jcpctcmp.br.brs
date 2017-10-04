@@ -27,8 +27,8 @@
 00260   let io1$(3)="6,28,N 3,UT,N"
 00270   let io1$(4)="7,28,N 3,UT,N"
 00280   let io1$(5)="8,28,N 7,UT,N"
-00290   pr fields "17,30,C 09,B,1": "Next (F1)"
-00300   pr fields "17,41,C 09,B,5": "Exit (F5)"
+00290   pr f "17,30,C 09,B,1": "Next (F1)"
+00300   pr f "17,41,C 09,B,5": "Exit (F5)"
 00310 L310: input #win,fields mat io1$: jn$,cn,l12,l13,l10 conv CONV1
 00320   if rtrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto DONE
 00330   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
@@ -47,17 +47,17 @@
 00450   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L310
 00460 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00470   ce=cnt+1
-00480 ERR1: pr fields "24,78,C 1": bell : goto L440
+00480 ERR1: pr f "24,78,C 1": bell : goto L440
 00490 L490: if cndkey=5 then goto DONE
 00500   if rtrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto DONE
 00510   cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(cn),5)
 00520   read #2,using L600,key=cn$: k$,rl10,rl12,rl13 nokey L630
 00530   if l10=0 then goto L540 else goto L550
-00540 L540: let l10=rl10
+00540 L540: l10=rl10
 00550 L550: if l12=0 then goto L560 else goto L570
-00560 L560: let l12=rl12
+00560 L560: l12=rl12
 00570 L570: if l13=0 then goto L580 else goto L590
-00580 L580: let l13=rl13
+00580 L580: l13=rl13
 00590 L590: rewrite #2,using L600,key=cn$: k$,l10,l12,l13 nokey L630
 00600 L600: form pos 12,c 25,pos 100,pd 7.2,pos 114,2*pd 2
 00610   goto L170

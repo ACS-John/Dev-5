@@ -12,7 +12,7 @@
 00120     if get_or_put=0 then let get_or_put=1
 00130     on error goto OSV_ERTN
 00140     if get_or_put<>2 then let get_or_put=1
-00152     let osv_file$=env$('temp')&"\osVer-"&wsid$
+00152     osv_file$=env$('temp')&"\osVer-"&wsid$
 00160     on get_or_put gosub OSV_READ, OSV_BUILD_AND_READ
 00170     gosub OSV_RIP_RELEASE
 00172     goto XIT
@@ -21,7 +21,7 @@
 00192     open #osv_tfn:=fngethandle: "Name="&osv_file$,display,input ioerr OSV_READ_OPEN_IOERR
 00200 OSV_LI: ! 
 00202     linput #osv_tfn: osv_temp$
-00210     if osv_temp$<>"" then let osver$=osv_temp$ else goto OSV_LI
+00210     if osv_temp$<>"" then osver$=osv_temp$ else goto OSV_LI
 00220     close #osv_tfn: ioerr OSV_LI_RETURN
 00230 OSV_LI_RETURN: ! 
 00232     return 
@@ -36,9 +36,9 @@
 00270 OSV_BUILD_NXT: ! 
 00280     open #osv_tfn:=fngethandle: "Name="&osv_file$&",RecL=80,replace",display,output 
 00290     if rtrm$(env$("os"))="" then 
-00292       let osv_temp$="Microsoft Windows 95/98"
+00292       osv_temp$="Microsoft Windows 95/98"
 00294     else 
-00296       let osv_temp$="Microsoft Windows NT/2000/XP"
+00296       osv_temp$="Microsoft Windows NT/2000/XP"
 00298     end if 
 00300     pr #osv_tfn: osv_temp$
 00310     close #osv_tfn: 
@@ -50,7 +50,7 @@
 00348     return 
 00350 OSV_RIP_RELEASE: ! 
 00352     let tmp=pos(osver$,"[",1)
-00354     if tmp>1 then let osver$(tmp-1:len(osver$))=""
+00354     if tmp>1 then osver$(tmp-1:len(osver$))=""
 00360     return 
 00370 ! ______________________________________________________________________
 00380 OSV_ERTN: ! 

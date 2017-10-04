@@ -18,9 +18,9 @@
 00160   let hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
 00170   for j=1 to 10
 00180     let x2=pos(trim$(servicename$(j))," ",1) !:
-          if x2>0 then let servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
+          if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
 00190     if trim$(servicename$(j))<>"" then !:
-            let scr1$(sz1+=1)=servicename$(j) !:
+            scr1$(sz1+=1)=servicename$(j) !:
             let hd1$=hd1$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:7)),7)&"}"
 00200   next j
 00210   let hd1$=hd1$&"  {\ul Customer Name               }"
@@ -109,7 +109,7 @@
 00990   fnacs(sn$,win,mat resp$,ck)
 00992   if ck=5 then goto XIT
 01000   let dat$=resp$(1) !:
-        let ld1=val(resp$(2)) !:
+        ld1=val(resp$(2)) !:
         let hd1=val(resp$(3)) !:
         let ti1$=resp$(4)
 01030   fndat(dat$,2)

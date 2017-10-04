@@ -24,7 +24,7 @@
 00240     let x=len(at$(j)) : let y=z-x
 00250     at$(j)=rpt$(" ",int(y/2))&at$(j)
 00260   next j
-00270   let linelength=62
+00270   linelength=62
 00280 ! 
 00290 ! 
 00300   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
@@ -35,7 +35,7 @@
 00350 SCREEN1: ! 
 00360   a$="" : let prtbkno=0
 00370   fntos(sn$="UBPrtBl1-1")
-00380   let pf=26 : let ll=24
+00380   let pf=26 : ll=24
 00390   let respc=0
 00400   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00410   fntxt(3,pf,8,8,1,"1",0,tt$)
@@ -72,11 +72,11 @@
 00720   let mg$(3)=resp$(4)
 00730   if resp$(6)="[All]" then a$="" else a$=lpad$(trim$(resp$(6)(1:9)),9)
 00740   if resp$(7)="[All]" then let prtbkno=0 else let prtbkno=val(resp$(7))
-00750   if resp$(8)="True" then let sl1=1: let z$="" else let sl1=0
+00750   if resp$(8)="True" then sl1=1: let z$="" else sl1=0
 00760   if trim$(a$)<>"" then 
 00770     read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1
-00780     let st1=1
-00790     let st1$=z$
+00780     st1=1
+00790     st1$=z$
 00800   end if 
 00805 L460: form pos 1,c 10,pos 1741,n 2,n 7
 00810   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
@@ -86,7 +86,7 @@
 00830   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.H"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\adrIndex.H"&str$(cno)&",Shr",internal,input,keyed ioerr FAIL_OPEN_3
 00835 FAIL_OPEN_3: ! 
 00840   fnPa_open("Landscape")
-00845   let lyne=3
+00845   lyne=3
 00850   character=1.5
 00855 ! ______________________________________________________________________
 00860   on fkey 5 goto RELEASE_PRINT
@@ -99,20 +99,20 @@
 00874   if prtbkno><route then goto RELEASE_PRINT
 00876 L620: if f><d1 then goto L550
 00878   if st1=0 then goto READALTADR
-00880   if st1$=z$ then let st1=0 else goto L550
+00880   if st1$=z$ then st1=0 else goto L550
 00882 READALTADR: ! 
 00884 ! read alternate billing address
 00886   read #3,using L680,key=z$: mat ba$ nokey L750 ioerr L750
 00888 L680: form pos 11,4*c 30
-00890   let e1=0 : mat pe$=("")
+00890   e1=0 : mat pe$=("")
 00892   for j=1 to 4
-00894     if rtrm$(ba$(j))<>"" then let e1=e1+1 : let pe$(e1)=ba$(j)
+00894     if rtrm$(ba$(j))<>"" then e1=e1+1 : let pe$(e1)=ba$(j)
 00896   next j
 00898   goto L900
 00900 ! ______________________________________________________________________
-00902 L750: let e1=0 : mat pe$=("")
+00902 L750: e1=0 : mat pe$=("")
 00904   for j=2 to 4
-00906     if rtrm$(e$(j))<>"" then let e1=e1+1 : let pe$(e1)=e$(j)
+00906     if rtrm$(e$(j))<>"" then e1=e1+1 : let pe$(e1)=e$(j)
 00908   next j
 00910   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 00912   goto L900
@@ -133,7 +133,7 @@
 00942   goto L550
 00944 ! ______________________________________________________________________
 00946 SCREEN3: ! 
-00948   let sn$="UBPrtBl1-2"
+00948   sn$="UBPrtBl1-2"
 00950   fntos(sn$)
 00952   let txt$="Account (blank to stop)"
 00954   fnlbl(1,1,txt$,31,1)
@@ -157,7 +157,7 @@
 00990 SORT1: ! SELECT & SORT
 00992   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1370
 00994   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
-00996   let s5=1
+00996   s5=1
 00998   if prtbkno=0 then let routekey$="" else let routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
 01000   restore #2,search>=routekey$: 
 01170 L1170: read #2,using L1180: z$,f,route eof END5
@@ -310,7 +310,7 @@
 02506     fnpa_txt("due date without further notice.",xmargin+1,lyne*29+ymargin)
 02508     pr #20: 'Call Print.MyFontSize(10)'
 02510 ! ______________________________________________________________________
-02520     let special=28
+02520     special=28
 02530 ! ______________________________________________________________________
 02540 ! pr #20: 'Call Print.MyFontSize(7)'
 02550 ! pr #20: 'Call Print.AddLine('&str$(xmargin+97)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'

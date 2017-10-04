@@ -32,7 +32,7 @@
 00572   let newdeptkey$=cnvrt$("pic(zzzzzzz#)",val(x$))&cnvrt$("pic(zz#)",dep)
 00573   ! let totaldef=0
 00575   ! Form POS 1,C 8,N 3,5*PD 4.2,15*PD 5.2,2*PD 4.2,PD 3
-00577   let eno=val(x$)
+00577   eno=val(x$)
 00579   if eno=0 then goto ReadRpWork
 00581   if n$=x$ then goto L1540
 00583   let twc=twy=tfy=cafy=eicytd=deducy=0
@@ -40,8 +40,8 @@
 00589 goto L1010
 00591 ! ______________________________________________________________________
 00593 SUBROUTINE2: ! r: (reallocate state taxes based on earnings by dept and state
-00595   let s3=0 : let tcp(4)=0 : let tcp4=0
-00597   let oldeno=val(n$)
+00595   s3=0 : let tcp(4)=0 : let tcp4=0
+00597   oldeno=val(n$)
 00599   restore #h_department,key>=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",0): 
 00601   if em(14)=-1 then goto L960
 00603   ! Read #h_department,Using 610,Rec=TRA: tdt(4),TCD(1),ty4,tqm4,tcp4,tcp31,TCP22,NTA,MAT DST
@@ -51,24 +51,24 @@
 00680   if teno<>oldeno then goto L960
 00690   if d1><tdt(4) then goto L670
 00700   let holdtdn=tdn
-00710   let olddeptkey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)
+00710   olddeptkey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)
 00720   read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",key=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",tdn)&cnvrt$("pd 6",prd): heno,tdn,prdate,ckno,mat tdc,mat tcp nokey L670
 00722   if debug then let fnstatus('read check history: heno='&str$(heno)&',tdn='&str$(tdn)&',prdate='&str$(prdate)&',ckno='&str$(ckno)&'...')
 00740   let dst3=0
 00750   for j=1 to 20
 00760     if dedst(j)>0 then let dst3=dst3+tcp(j+4)
 00770   next j
-00780   ! LET STWH(tcd(1),1)=STWH(tcd(1),1)-DST3
+00780   ! sTWH(tcd(1),1)=STWH(tcd(1),1)-DST3
 00790   if stwh(tcd(1),1)=0 then goto L670
 00800   if stwh(tcd(1),2)><0 then goto L870
 00810   if em(14)=0 then goto L840
-00820   if in2$(4)<>"Y" then let stwh(tcd(1),2)=em(14)
+00820   if in2$(4)<>"Y" then stwh(tcd(1),2)=em(14)
 00830   goto L870
 00840   L840: ! 
-00842   if in2$(2)="Y" then let s3=0: goto L860
+00842   if in2$(2)="Y" then s3=0: goto L860
 00850   on tcd(1) gosub ST01,ST02,ST03,ST04,ST05,ST06,ST07,ST08,ST09,ST10
 00860   L860: ! 
-00862   let stwh(tcd(1),2)=s3
+00862   stwh(tcd(1),2)=s3
 00870   L870: ! 
 00872   if env$('client')="Lamar" then 
 00873     let tcp4=(stwh(tcd(1),2))*((tcp(31)-dst3)/stwh(tcd(1),1))
@@ -100,13 +100,13 @@
 01090   let da=val(dat$(3:4)) : let yr=val(dat$(5:6))
 01100   let dh=round(yr*365+int(yr/4)+motab(mo)+da,2)
 01110   if ppd-dh<sck(1) then goto L1110
-01120   let em(8)=sck(3) : let em(10)=sck(2)
+01120   em(8)=sck(3) : em(10)=sck(2)
 01125 L1110: ! 
-01126   if em(8)>0 then let em(10)+=em(8) ! Accrue Sick
+01126   if em(8)>0 then em(10)+=em(8) ! Accrue Sick
 01130   ! if env$('client')='Battlefield' then goto L1140
 01135   if em(8)>0 then write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Sick",prd,em(8),0 ioerr ignore
 01140   ! L1140: ! 
-01142   if em(9)>0 then let em(11)+=em(9) ! Accrue Vacation
+01142   if em(9)>0 then em(11)+=em(9) ! Accrue Vacation
 01150   ! if env$('client')='Battlefield' then goto L1170
 01160   if em(9)>0 then write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Vac",prd,em(9),0 ioerr ignore
 01170   L1170: ! 
@@ -175,7 +175,7 @@
 01501     end if 
 01503   next j
 01505   let twy+=twd : let tfy+=(ytdFICA+tmd) : let ficatfy=tfy
-01507   let oldsswg=twy-cafy : let eicytd+=td14 : let stuc(tcd(1))+=twd-cafd
+01507   oldsswg=twy-cafy : eicytd+=td14 : stuc(tcd(1))+=twd-cafd
 01509   cafd=0
 01540   L1540: ! 
 01542   read #h_department,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=newdeptkey$: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
@@ -211,7 +211,7 @@
 01702     if in2$(4)="Y" then let inp(j+9)=0
 01710   L1710: ! 
 01712   next j
-01720   let em(10)-=inp(3) : let em(11)-=inp(4)
+01720   em(10)-=inp(3) : em(11)-=inp(4)
 01730   ! if env$('client')='Battlefield' then goto L1760
 01740   if inp(3)>0 then ! write sick hours taken to breakdown file
 01742     write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Sick",prd,0,inp(3) ioerr ignore
@@ -223,10 +223,10 @@
 01762   if inp(5)>0 then ! write holiday hours taken to breakdown file
 01764     write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Hol",prd,0,inp(5) ioerr ignore
 01766   end if 
-01772   if sck(4)=999 then let sck(4)=1000 ! system will only hold 999 maximum accrued sick hours.  If maximum is set at 999, assume no maximum
-01780   if sck(4)<>0 and em(10)>sck(4) then let em(10)=sck(4)
-01790   if vacm<>0 and em(11)>vacm then let em(11)=vacm
-01800   let ext=0 ! Excess Tips
+01772   if sck(4)=999 then sck(4)=1000 ! system will only hold 999 maximum accrued sick hours.  If maximum is set at 999, assume no maximum
+01780   if sck(4)<>0 and em(10)>sck(4) then em(10)=sck(4)
+01790   if vacm<>0 and em(11)>vacm then em(11)=vacm
+01800   ext=0 ! Excess Tips
 01810   goto NO_EXCESS_TIPS
 01812 ! ______________________________________________________________________
 01814   if inp(9)=0 then 
@@ -234,7 +234,7 @@
 01818   else 
 01820     let tr=round(inp(1)*MinHourlyWage+inp(2)*MinHourlyWage*1.5,2)
 01821     let g1=gpd-inp(9)
-01822     let ext=0
+01822     ext=0
 01823     if g1>=tr then 
 01824       let g2=inp(9)
 01826     else 
@@ -247,7 +247,7 @@
 01860     if dedfica(j)=1 and newdedcode(j)=1 then let ficat3+=inp(j+9)
 01870     if deduc(j)=1 then let deduc+=inp(j+9): let deducy+=caf(j) ! total deductions for unemployment for current period and year to date
 01880   next j
-01890   let sswg=sswh=mcwh=0
+01890   sswg=sswh=mcwh=0
 01900   if tgp=0 then let f3=0: goto CALC_NO_GROSS ! calculate checks w/ no gross pay
 01910   if in2$(3)="Y" then goto FEDWH_DEPT
 01920   on em(6)+1 goto L1930,SS_TAX_ONLY,L3240 none FEDWH_DEPT
@@ -265,46 +265,46 @@
 01954     let mcwh=ficamxr+ficamx2-ficatfy
 01955     goto FICAEND
 01956   else if ficatfy>=ficamxr then 
-01957     let mcwh=tf0*ficar2 : let sswg=0
+01957     let mcwh=tf0*ficar2 : sswg=0
 01958     goto FICAEND
 01959   end if 
 01960 ! if went over first max this time else Under 1st Max 
 01961   if ficatfy+(tf0*ficarate)>=ficamxr then 
 01962     let tf1=ficamax-ficatfy/ficarate : let tf2=tgp-t3 
-01963     let sswh=(tf1*ficar1) 
+01963     sswh=(tf1*ficar1) 
 01964     let mcwh=(tf2*ficar2) 
-01965     let sswg=tf1 
+01965     sswg=tf1 
 01966   else 
-01967     let sswh=tf0*ficar1 
+01967     sswh=tf0*ficar1 
 01968     let mcwh=tf0*ficar2
-01969     let sswg=tf0
+01969     sswg=tf0
 01970   end if
 01971 FICAEND: ! 
 01980   if sswg>ficamax-oldsswg-.10 and sswg<ficamax-oldsswg+.10 then 
-01982     let sswg=ficamax-oldsswg
+01982     sswg=ficamax-oldsswg
 01984   end if
 01990   if tgp-t3>0 then 
 01992     let ficapog=((gpd-ficat3)/(tgp-t3)) 
 01994   else 
 01996     let ficapog=1
 01998   end if
-02000   let sswh=round(sswh*ficapog,2) 
+02000   sswh=round(sswh*ficapog,2) 
 02002   let mcwh=round(mcwh*ficapog,2) 
-02004   let f3=sswh+mcwh : let oldsswg+=sswg
+02004   let f3=sswh+mcwh : oldsswg+=sswg
 02010 CALC_NO_GROSS: let tfy+=f3
 02020 FEDWH_DEPT: ! Fed WH for Dept ! Federal Withholding for Department
 02021   if debug then let fnstatus('federal  withholding for department calculating')
 02022   let f4=round(tf4_a*pog,2)
-02030   let stwh(tcd(1),1)+=gpd : let eic4=0 ! Calculate EIC
+02030   stwh(tcd(1),1)+=gpd : eic4=0 ! Calculate EIC
 02040   if em(7)=0 then goto CURRENT_PERIOD else let g2=tgp
-02050   let eic1=round(8970/em(7)/g_pay_periods_per_year,2)                ! this is one of the lines that change every year (formerly line 1800)
-02060   let eic2=round(16450/em(7)/g_pay_periods_per_year,2)               ! this is one of the lines that change every year (formerly line 1810)
-02070   let eic3=round(1830/em(7)/g_pay_periods_per_year,2)                ! this is one of the lines that change every year (formerly line 1820)
-02080   if g2<=eic1 then let eic4=round(tgp*.2040,2)
-02090   if g2>eic1 and g2<=eic2 then let eic4=eic3
-02100   if g2>eic2 then let eic4=eic3-(tgp-eic2)*.09588
-02110   if ytdtotal(25)+eic4<0 then let eic4=-ytdtotal(25)
-02120   let eic4=round(eic4*pog,2)
+02050   eic1=round(8970/em(7)/g_pay_periods_per_year,2)                ! this is one of the lines that change every year (formerly line 1800)
+02060   eic2=round(16450/em(7)/g_pay_periods_per_year,2)               ! this is one of the lines that change every year (formerly line 1810)
+02070   eic3=round(1830/em(7)/g_pay_periods_per_year,2)                ! this is one of the lines that change every year (formerly line 1820)
+02080   if g2<=eic1 then eic4=round(tgp*.2040,2)
+02090   if g2>eic1 and g2<=eic2 then eic4=eic3
+02100   if g2>eic2 then eic4=eic3-(tgp-eic2)*.09588
+02110   if ytdtotal(25)+eic4<0 then eic4=-ytdtotal(25)
+02120   eic4=round(eic4*pog,2)
 02130 CURRENT_PERIOD: ! 
 02132   let tcp(1)=f4 : let tcp(2)=sswh : let tcp(3)=mcwh: let tcp(4)=tcp4
 02140   for j=5 to 24
@@ -382,8 +382,8 @@
 02462   write #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,tdn,prd,0,mat tdc,mat tcp
 02463 ! fnstatus('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
 02464 ! fnstatus_pause
-02470   let twy+=gpd : cafy+=ficat3 : let eicytd+=ytdtotal(25)
-02480   if tdet(16)<>0 then let stuc(tcd(1))+=tdet(16) ! ??? kj
+02470   let twy+=gpd : cafy+=ficat3 : eicytd+=ytdtotal(25)
+02480   if tdet(16)<>0 then stuc(tcd(1))+=tdet(16) ! ??? kj
 02490   goto ReadRpWork
 02500 ! /r
 02502 EMPLOYEE_NOT_FOUND: ! r:
@@ -458,16 +458,16 @@
 03200 SS_TAX_ONLY: ! r: SOC-SEC-TAX ONLY
 03202   let tf0=tgp-t3
 03210   if ficatfy>=ssmax then 
-03212     let sswg=0
+03212     sswg=0
 03214     goto FICAEND ! OVER MAX
 03216   end if 
 03220   if ficatfy+tf0>=ssmax then ! WENT OVER MAX THIS TIME
-03222     let sswh=(ssmax-ficatfy)*ficar1
-03224     let sswg=ssmax-ficatfy
+03222     sswh=(ssmax-ficatfy)*ficar1
+03224     sswg=ssmax-ficatfy
 03226     goto FICAEND
 03228   end if 
-03230   let sswh=tf0*ficar1
-03234   let sswg=tf0
+03230   sswh=tf0*ficar1
+03234   sswg=tf0
 03238   goto FICAEND ! UNDER MAX /r
 03240 L3240: ! r: MEDICARE-TAX ONLY??
 03242 ! if env$('client')="Washington Parrish" then ! MEDICARE-TAX ONLY  (add deferred comp match to medicare wages)
@@ -484,12 +484,12 @@
 03280   let mcwh=tf0*ficar2
 03282   goto FICAEND ! UNDER MAX  /r
 03290 SUBROUTINE6: ! r:
-03292   let sc1=1
+03292   sc1=1
 03294   read #h_department,using 'form pos 48,n 2',key=newdeptkey$: sc1 nokey ignore
-03300   if sc1=0 then let sc1=1
-03320   ! If env$('client')="Washington Parrish" AND J=3 Then Let SD3=INP(J+9)*(GPD+DEFCOMPMATCH)/100 : Goto 3150 ! add deferred comp to gross for calculating pension deduction
-03330   if newcalcode(j)=1 then let sd3=inp(j+9) else let sd3=inp(j+9)*gpd/100
-03340   let stwh(sc1,1)=stwh(sc1,1)-sd3
+03300   if sc1=0 then sc1=1
+03320   ! If env$('client')="Washington Parrish" AND J=3 Then sD3=INP(J+9)*(GPD+DEFCOMPMATCH)/100 : Goto 3150 ! add deferred comp to gross for calculating pension deduction
+03330   if newcalcode(j)=1 then sd3=inp(j+9) else sd3=inp(j+9)*gpd/100
+03340   stwh(sc1,1)=stwh(sc1,1)-sd3
 03350 return  ! /r
 03360 ! ______________________________________________________________________
 03370 ASKSKIPWH: ! r:
@@ -532,9 +532,9 @@
 08140   !  new way needs awesome function !    allowances_line_2=em(3)-allowances_line_1
 08160   !  new way needs awesome function !    g2=g2-(allowances_line_1*2175+allowances_line_2*1000)
 08180   let g2=g2-1000*em(3)
-08200   let s3=g2*.0495 ! changed from .0375 on 7/10/17  ! changed from .03 to .05 1/1/11, changed from .05 to .0375 1/1/15, ok as of 1/6/16
-08220   let s3=round(s3/g_pay_periods_per_year,2)
-08240   if s3<.1 then let s3=0 ! do not withhold less than 10 cents.
+08200   s3=g2*.0495 ! changed from .0375 on 7/10/17  ! changed from .03 to .05 1/1/11, changed from .05 to .0375 1/1/15, ok as of 1/6/16
+08220   s3=round(s3/g_pay_periods_per_year,2)
+08240   if s3<.1 then s3=0 ! do not withhold less than 10 cents.
 08260 return  ! /r
 09000 MOWH: ! r: REPLACE ACSWRK\MISSOURI.WH,SOURCE ! MISSOURI MO(10,3) REC # 28  REVISED 1/1/2002
 09020   if ~setup_mowh then  ! r: MO Missouri
@@ -576,9 +576,9 @@
 09700   let h3=numb4-h1-h2-numb6
 09720   if h3<0 then let h3=0
 09740   let j1=fn_table_line(mat mo,h3)
-09860   let s3=(mo(j1,2)+(h3-mo(j1,1))*mo(j1,3))/g_pay_periods_per_year
-09880   let s3=round(s3,0)
-09900   if s3<.1 then let s3=0
+09860   s3=(mo(j1,2)+(h3-mo(j1,1))*mo(j1,3))/g_pay_periods_per_year
+09880   s3=round(s3,0)
+09900   if s3<.1 then s3=0
 09920 return  ! /r
 10000 ARWH: ! r: REPLACE ACSWRK\ARKANSAS.WH,SOURCE ! arkansas #5 ar(7,3)  REVISED 7/01/91
 10020   if ~setup_arwh then ! r: setup AR Arkansas
@@ -598,21 +598,21 @@
 10300   let t2=2000
 10320   let t3=t1-t2
 10340   let j1=fn_table_line(mat ar,t3)
-10360   let s1=round(ar(j1,2)+(t3-ar(j1,1))*ar(j1,3),2)
-10380   let s2=em(3)*20
-10400   let s3=round((s1-s2)/g_pay_periods_per_year,2)
-10420   if s3<.1 then let s3=0
+10360   s1=round(ar(j1,2)+(t3-ar(j1,1))*ar(j1,3),2)
+10380   s2=em(3)*20
+10400   s3=round((s1-s2)/g_pay_periods_per_year,2)
+10420   if s3<.1 then s3=0
 10440 return  ! /r
 11000 AZWH: ! r: REPLACE ACSWRK\ARIZONA.WH,SOURCE ! ARIZONA:  NO TABLE  REVISED 1/01/10
 11020   ! effective june 30, 2010 the rates changed and also the base change from a percent of federal wh to a percent of total taxable wages
-11040   let stp=0
-11060   if em(3)=1 then let stp=.013
-11080   if em(3)=2 then let stp=.018
-11100   if em(3)=3 then let stp=.027
-11120   if em(3)=4 then let stp=.036
-11140   if em(3)=5 then let stp=.042
-11160   if em(3)=6 then let stp=.0510
-11180   let s3=round(stwh(tcd(1),1)*stp,2)
+11040   stp=0
+11060   if em(3)=1 then stp=.013
+11080   if em(3)=2 then stp=.018
+11100   if em(3)=3 then stp=.027
+11120   if em(3)=4 then stp=.036
+11140   if em(3)=5 then stp=.042
+11160   if em(3)=6 then stp=.0510
+11180   s3=round(stwh(tcd(1),1)*stp,2)
 11200   let h3=min(h3,1200)
 11220 return  ! /r
 12000 MSWH: ! r: REPLACE ACSWRK\MISISIPI.WH,SOURCE ! MISSISSIPPI  NO TABLE
@@ -623,19 +623,19 @@
 12100   ! SINGLE =2300, MARRIED=3400, MARRIED BOTH WORKING=1700
 12120   let h1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
 12140   let h3=h1-em(15)
-12160   if h3<=0 then let s3=0 : goto L4481
+12160   if h3<=0 then s3=0 : goto L4481
 12180   if h3<10000 then goto L4474
-12200   let s3=350+.05*(h3-10000)
+12200   s3=350+.05*(h3-10000)
 12220   goto L4481
 12240   L4474: if h3>0 and h3<=5000 then goto L4477
-12260   let s3=150+.04*(h3-5000)
+12260   s3=150+.04*(h3-5000)
 12280   goto L4481
-12300   L4477: let s3=.03*h3
-12320   if s3<.1 then let s3=0
+12300   L4477: s3=.03*h3
+12320   if s3<.1 then s3=0
 12340   goto L4481
-12360   L4481: let s3=s3/g_pay_periods_per_year
-12380   let s3=round(s3,2)
-12400   if s3<.1 then let s3=0
+12360   L4481: s3=s3/g_pay_periods_per_year
+12380   s3=round(s3,2)
+12400   if s3<.1 then s3=0
 12420 return  ! /r
 13000 OKWH: ! r:  ACSWRK\OKLAHOMA.WH,SOURCE ! rec=39 ok(8,6) REV. 1/01/07 (table change also!)
 13020   if ~setup_okwh then ! r: OK Oklahoma
@@ -667,11 +667,11 @@
 13540   let g2=g2-em(3)*1000
 13560   if em(1)=0 or em(1)=2 then let j2=1 else let j2=4 ! single of married
 13580   let j1=fn_table_line(mat ok,g2)
-13600   let s3=ok(j1,j2+1)+(g2-ok(j1,j2))*ok(j1,j2+2)
-13620   let s3=s3/g_pay_periods_per_year
-13640   let s3=round(s3,2)
-13660   let s3=round(s3,0)
-13680   if s3<.1 then let s3=0
+13600   s3=ok(j1,j2+1)+(g2-ok(j1,j2))*ok(j1,j2+2)
+13620   s3=s3/g_pay_periods_per_year
+13640   s3=round(s3,2)
+13660   s3=round(s3,0)
+13680   if s3<.1 then s3=0
 13700 return  ! /r
 14000 ASKDATES: ! r:
 14020   open #h_dates:=11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",USE,RecL=76,shr",internal,outin,relative 
@@ -708,7 +708,7 @@
 14640     let d1$=resp$(2)
 14660     if resp$(3)(1:1)="T" then let d3$="Y" else let d3$="N"
 14680     beg_date=val(resp$(4))
-14700     let end_date=val(resp$(5))
+14700     end_date=val(resp$(5))
 14720     rewrite #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1: beg_date,end_date,d1,d1$
 14740     close #h_dates: 
 14760   end if
@@ -786,15 +786,15 @@
 18040   close #20: 
 18060   let ficamax=ficamax*10
 18080   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-18100   let ssmax=ficamax : let mcmax=ficamx2 : let ficar1=ficarate*.01
+18100   ssmax=ficamax : let mcmax=ficamx2 : let ficar1=ficarate*.01
 18120   let ficar2=ficar2*.01 : let ficarate=ficar1+ficar2
 18140   let ficamxr=ficamax*ficarate : let ficamx2=(ficamx2-ficamax)*ficar2
 19100   ! 
 19120   ! if env$('client')="West Accounting" then 
-19140   !   let saif(1)=173.33
-19160   !   let saif(2)=86.66
-19180   !   let saif(3)=80
-19200   !   let saif(4)=40
+19140   !   saif(1)=173.33
+19160   !   saif(2)=86.66
+19180   !   saif(3)=80
+19200   !   saif(4)=40
 19220   ! end if 
 19240 fnend 
 30000 def fn_setupOpenFiles
@@ -844,7 +844,7 @@
 37040 ! g_pay_periods_per_year     = number of pay periods per year (formerly b8)
 37060 ! em(3)  = allowances
 37080 ! em(1)  = married (1=yes and more )
-37100   let s3=0
+37100   s3=0
 37120   if fnpayroll_client_state$='AR' then 
 37140     gosub ARWH
 37160   else if fnpayroll_client_state$='AZ' then 
@@ -860,7 +860,7 @@
 37360   else if fnpayroll_client_state$='IN' then 
 37380     gosub INWH
 37400   else if fnpayroll_client_state$='KY' then ! added 10/03/2016 for R R Crawford Engineering
-37420     let s3=fn_wh_kentuky(stwh(tcd(1),1),g_pay_periods_per_year,em(3))
+37420     s3=fn_wh_kentuky(stwh(tcd(1),1),g_pay_periods_per_year,em(3))
 37440   else if fnpayroll_client_state$='LA' then 
 37460     gosub LAWH
 37480   else if fnpayroll_client_state$='MO' then 
@@ -870,7 +870,7 @@
 37560   else if fnpayroll_client_state$='OK' then 
 37580     gosub OKWH
 37600   else if fnpayroll_client_state$='OR' then 
-37620     let s3=fn_wh_oregon(stwh(tcd(1),1),fed_wh_annual_estimate,g_pay_periods_per_year,em(3),em(1))
+37620     s3=fn_wh_oregon(stwh(tcd(1),1),fed_wh_annual_estimate,g_pay_periods_per_year,em(3),em(1))
 37640   else if fnpayroll_client_state$='TN' then 
 37660     goto ST1_XIT ! no Tenn wh
 37680   else if fnpayroll_client_state$='TX' then 
@@ -878,21 +878,21 @@
 37720   end if 
 37740   ST1_XIT: ! 
 37760 return  ! /r
-37780 ST02: let s3=0 : return 
-37800 ST03: let s3=0 : return 
-37820 ST04: let s3=0 : return 
-37840 ST05: let s3=0 : return 
-37860 ST06: let s3=0 : return 
-37880 ST07: let s3=0 : return 
-37900 ST08: let s3=0 : return 
-37920 ST09: let s3=0 : return 
-37940 ST10: let s3=0 : return 
+37780 ST02: s3=0 : return 
+37800 ST03: s3=0 : return 
+37820 ST04: s3=0 : return 
+37840 ST05: s3=0 : return 
+37860 ST06: s3=0 : return 
+37880 ST07: s3=0 : return 
+37900 ST08: s3=0 : return 
+37920 ST09: s3=0 : return 
+37940 ST10: s3=0 : return 
 38000 LAWH: ! r: REPLACE ACSWRK\LOUSIANA.WH,SOURCE ! LOUISANA: NO TABLE: LA(5): revised 1/01/03
 38020   let h1=0
 38040   let h2=0
 38060   let h3=0
 38080   mat la=(0)
-38100   let s=round(stwh(tcd(1),1),2)
+38100   s=round(stwh(tcd(1),1),2)
 38120   if em(1)=0 or em(1)=2 then 
 38140     let y=em(3)-1
 38160     let x=1
@@ -913,17 +913,17 @@
 38460   if s>(m2/n) then c=.0135*(s-(m2/n)) else c=0
 38480   let d=.021*(((x*4500)+(y*1000))/n)
 38500   if ((x*4500)+(y*1000))>m1 then 
-38520     let e=.0135*(((x*4500)+(y*1000)-m1)/n)
+38520     e=.0135*(((x*4500)+(y*1000)-m1)/n)
 38540   else 
-38560     let e=0
+38560     e=0
 38580   end if 
 38600   if (a+b+c)-(d+e)>0 then 
-38620     let s3=(a+b+c)-(d+e)
+38620     s3=(a+b+c)-(d+e)
 38640   else 
-38660     let s3=0
+38660     s3=0
 38680   end if 
-38700   let s3=round(s3,2)
-38720   if s3<.1 then let s3=0
+38700   s3=round(s3,2)
+38720   if s3<.1 then s3=0
 38740 return  ! /r
 39000 INWH: ! r: INDIANA    NO TABLE   07/01/2000  ! still in effect 71508, changed on 1/1/2016, but I didn't bother to update it because no one is using it.
 39020   ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
@@ -932,9 +932,9 @@
 39080   let h2=em(3)*1000
 39100   let h3=h1-h2
 39120   if h3>0 then 
-39140     let s3=h3*.034 ! +H3*.003  SOME COUNTIES HAVE WH
-39160     let s3=round(s3/g_pay_periods_per_year,2)
-39180     if s3<.1 then let s3=0
+39140     s3=h3*.034 ! +H3*.003  SOME COUNTIES HAVE WH
+39160     s3=round(s3/g_pay_periods_per_year,2)
+39180     if s3<.1 then s3=0
 39200   end if 
 39220 return  ! /r
 40000 def fn_wh_oregon(wor_wages_taxable_current,wor_fed_wh_annual_estimate,wor_pay_periods_per_year,wor_allowances,wor_is_married)
@@ -1035,29 +1035,29 @@
 42680 fnend 
 44000 def fn_or_phase_out(opo_wages,opo_fed_wh,opo_table,opo_is_single,opo_is_married)
 44020   if opo_wages<50000 then 
-44040     let opo_return=min(opo_fed_wh,6500)
+44040     opo_return=min(opo_fed_wh,6500)
 44060   else if opo_table=1 then 
-44080     if opo_wages => 50000 and opo_wages<125000 then let opo_return= 6550 : goto OPO_XIT
-44100     if opo_wages =>125000 and opo_wages<130000 then let opo_return= 5200 : goto OPO_XIT
-44120     if opo_wages =>130000 and opo_wages<135000 then let opo_return= 3900 : goto OPO_XIT
-44140     if opo_wages =>135000 and opo_wages<140000 then let opo_return= 2600 : goto OPO_XIT
-44160     if opo_wages =>140000 and opo_wages<145000 then let opo_return= 1300 : goto OPO_XIT
-44180     if opo_wages =>145000 then let opo_return=0
+44080     if opo_wages => 50000 and opo_wages<125000 then opo_return= 6550 : goto OPO_XIT
+44100     if opo_wages =>125000 and opo_wages<130000 then opo_return= 5200 : goto OPO_XIT
+44120     if opo_wages =>130000 and opo_wages<135000 then opo_return= 3900 : goto OPO_XIT
+44140     if opo_wages =>135000 and opo_wages<140000 then opo_return= 2600 : goto OPO_XIT
+44160     if opo_wages =>140000 and opo_wages<145000 then opo_return= 1300 : goto OPO_XIT
+44180     if opo_wages =>145000 then opo_return=0
 44200   else ! if opo_table=2 then
 44220     if opo_is_married then 
-44240       if opo_wages => 50000 and opo_wages<250000 then let opo_return= 6550 : goto OPO_XIT
-44260       if opo_wages =>250000 and opo_wages<260000 then let opo_return= 5200 : goto OPO_XIT
-44280       if opo_wages =>260000 and opo_wages<270000 then let opo_return= 3900 : goto OPO_XIT
-44300       if opo_wages =>270000 and opo_wages<280000 then let opo_return= 2600 : goto OPO_XIT
-44320       if opo_wages =>280000 and opo_wages<290000 then let opo_return= 1300 : goto OPO_XIT
-44340       if opo_wages =>290000 then let opo_return=0
+44240       if opo_wages => 50000 and opo_wages<250000 then opo_return= 6550 : goto OPO_XIT
+44260       if opo_wages =>250000 and opo_wages<260000 then opo_return= 5200 : goto OPO_XIT
+44280       if opo_wages =>260000 and opo_wages<270000 then opo_return= 3900 : goto OPO_XIT
+44300       if opo_wages =>270000 and opo_wages<280000 then opo_return= 2600 : goto OPO_XIT
+44320       if opo_wages =>280000 and opo_wages<290000 then opo_return= 1300 : goto OPO_XIT
+44340       if opo_wages =>290000 then opo_return=0
 44360     else ! if opo_is_single then
-44380       if opo_wages => 50000 and opo_wages<125000 then let opo_return= 6550 : goto OPO_XIT
-44400       if opo_wages =>125000 and opo_wages<130000 then let opo_return= 5200 : goto OPO_XIT
-44420       if opo_wages =>130000 and opo_wages<135000 then let opo_return= 3900 : goto OPO_XIT
-44440       if opo_wages =>135000 and opo_wages<140000 then let opo_return= 2600 : goto OPO_XIT
-44460       if opo_wages =>140000 and opo_wages<145000 then let opo_return= 1300 : goto OPO_XIT
-44480       if opo_wages =>145000 then let opo_return=0
+44380       if opo_wages => 50000 and opo_wages<125000 then opo_return= 6550 : goto OPO_XIT
+44400       if opo_wages =>125000 and opo_wages<130000 then opo_return= 5200 : goto OPO_XIT
+44420       if opo_wages =>130000 and opo_wages<135000 then opo_return= 3900 : goto OPO_XIT
+44440       if opo_wages =>135000 and opo_wages<140000 then opo_return= 2600 : goto OPO_XIT
+44460       if opo_wages =>140000 and opo_wages<145000 then opo_return= 1300 : goto OPO_XIT
+44480       if opo_wages =>145000 then opo_return=0
 44500     end if 
 44520   end if 
 44540   OPO_XIT: ! 
@@ -1083,11 +1083,11 @@
 46380   let h1=(wky_wages_taxable_current)*g_pay_periods_per_year
 46400   let h2=h1-1970
 46420   let j1=fn_table_line(mat ky,h2)
-46440   let s3=ky(j1,2)+(h2-ky(j1,1))*ky(j1,3)
-46460   let s3=s3-20*wky_allowances
-46480   let s3=s3/g_pay_periods_per_year
-46500   let s3=round(s3,2)
-46520   if s3<.1 then let s3=0 ! do not withhold less than 10 cents.
+46440   s3=ky(j1,2)+(h2-ky(j1,1))*ky(j1,3)
+46460   s3=s3-20*wky_allowances
+46480   s3=s3/g_pay_periods_per_year
+46500   s3=round(s3,2)
+46520   if s3<.1 then s3=0 ! do not withhold less than 10 cents.
 46540   fn_wh_kentuky=s3
 46560 fnend 
 47000 def fn_wh_georgia(wga_wages_taxable_current,g_pay_periods_per_year,wga_allowances,wga_is_married,wga_eicCode)
@@ -1155,11 +1155,11 @@
 47582   ! if dev then pr '   table line ';j1
 47610   ! if dev then pause
 47612   ga_AnnualWagesSubjToWithhold=Ga_WagesAnnualTaxable-gaAnnualDependantAllowance*wga_allowances
-47620   let s3=gawh(j1,2)+(ga_AnnualWagesSubjToWithhold-gawh(j1,1))*gawh(j1,3)
-47630   let s3=s3
-47640   let s3=s3/g_pay_periods_per_year
-47650   let s3=round(s3,2) ! round to the nearest whole dollar
-47660   if s3<.1 then let s3=0 ! do not withhold less than 10 cents.
+47620   s3=gawh(j1,2)+(ga_AnnualWagesSubjToWithhold-gawh(j1,1))*gawh(j1,3)
+47630   s3=s3
+47640   s3=s3/g_pay_periods_per_year
+47650   s3=round(s3,2) ! round to the nearest whole dollar
+47660   if s3<.1 then s3=0 ! do not withhold less than 10 cents.
 47670   fn_wh_georgia=s3
 47680 fnend 
 64000 def fn_standardStateDeduction(state$,wga_is_married,wga_eicCode)
@@ -1212,7 +1212,7 @@
 66200                     ! is_married = 2 - Single - Head of Household
 66220                     ! is_married = 3 - Married - filing joint return - only one working
 66240                     ! is_married = 4 - Married - filing seperate or joint return both working
-66260   let eicCode=0    ! eicCode = 0 - Not qualified for EIC
+66260   eicCode=0    ! eicCode = 0 - Not qualified for EIC
 66262                    ! eicCode = 1 - Single or Spouse not file
 66264                    ! eicCode = 2 - Married both filing
 66280   pr 'wages_taxable_current: ';wages_taxable_current

@@ -10,7 +10,7 @@
 00090   fntop("S:\acsUB\UBZeroYt",cap$="Assign Sequence")
 00100 ! ______________________________________________________________________
 00110 SCREEN1: ! 
-00120   let sn$ = "sequence" !:
+00120   sn$ = "sequence" !:
         fntos(sn$) !:
         let mylen=25 : let mypos=mylen+2
 00130   let text$='Increment by what number:' !:

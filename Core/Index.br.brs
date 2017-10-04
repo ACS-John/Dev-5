@@ -14,7 +14,7 @@
 12000   def fn_index_it_setup
 12020     library 'S:\Core\Library': fnxit,fnerror,fnstatus,fnget_company_number_list,fngethandle
 12040     if ~setup_index_it then 
-12060       let setup_index_it=1
+12060       setup_index_it=1
 12080       on error goto ERTN
 12100       option retain 
 12120 !     working_dir_rights=fnrights_test('',"Try Run As Administrator.",'Program','Indexes are unable to process without this access and will be skipped for the remainder of this session.')
@@ -107,7 +107,7 @@
 52000   def fn_index_sys(; only_cno,system_id$*2)
 52020 ! only_cno=0 means index all company numbers, otherwise index only the company number passed
 52040 ! system_id$ of blank means to index the currenet system - otherwise index the system specified.
-52060     if system_id$='' then let system_id$=env$('CurSys')
+52060     if system_id$='' then system_id$=env$('CurSys')
 52080     if only_cno then 
 52100       fn_index_sys_do_one(only_cno,system_id$)
 52120     else 
@@ -176,7 +176,7 @@
 53380       fn_index_it(env$('Q')&"\GLmstr\RatioMST.h"&str$(cno),env$('Q')&"\GLmstr\RaNamIdx.h"&str$(cno),"4 28")
 53400 ! /r
 53420 ! r: S
-53440       let sn=1
+53440       sn=1
 53460       fn_index_it(env$('Q')&"\GLmstr\schedule"&str$(sn)&".H"&str$(cno),env$('Q')&"\GLmstr\schedule"&str$(sn)&"-idx.h"&str$(cno),"1 12")
 53480       for sn=1 to 8
 53500         fn_index_it(env$('Q')&"\GLmstr\schedule"&str$(sn)&".H"&str$(cno),env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".h"&str$(cno),"1 12")

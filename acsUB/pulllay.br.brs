@@ -20,18 +20,18 @@
 00184   close #20: 
 00190 L190: let io1$(1)="10,34,c 45,UT,N"
 00192   let io1$(2)="12,34,C 45,UT,N"
-00200   let outputfile$="S:\acsUB\grid\Customer\Customer.fil"
-00210   let ev$="S:\acsUB\Layouts\UBmstr-vb.LAY"
+00200   outputfile$="S:\acsUB\grid\Customer\Customer.fil"
+00210   ev$="S:\acsUB\Layouts\UBmstr-vb.LAY"
 00220 !  goto L320 ! for utility billing automatically from menu
 00230 !   close #101: ioerr ignore
 00240 !   open #101: "SROW=9,SCOL=2,EROW=13,ECOL=79,BORDER=DR,CAPTION=Pull Flex Grid Files",display,outin
 00250 !   pr #101: newpage
-00260 !   pr fields "10,2,Cr 32": "File name to create (no ext):"
-00270 !   pr fields "12,2,Cr 32": "Layout file name (with exts):"
-00280 !   pr fields "14,35,c 9,B,1": "Next (F1)"
+00260 !   pr f "10,2,Cr 32": "File name to create (no ext):"
+00270 !   pr f "12,2,Cr 32": "Layout file name (with exts):"
+00280 !   pr f "14,35,c 9,B,1": "Next (F1)"
 00290 ! L290: rinput fields mat io1$: outputfile$,ev$ conv L290
-00300 !   let ev$=trim$(trim$(ev$,chr$(0)))
-00310 !   let outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
+00300 !   ev$=trim$(trim$(ev$,chr$(0)))
+00310 !   outputfile$=trim$(trim$(outputfile$,chr$(0)))&".fil"
 00320 ! L320:
 00322   open #2: "Name="&ev$,display,input 
 00330   open #h_temp:=15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outin,keyed 
@@ -39,7 +39,7 @@
 00340   do 
 00342 READ_TEMP: ! 
 00344     linput #2: ln$ eof FINIS
-00346     let ln$=srep$(ln$,'^','~')
+00346     ln$=srep$(ln$,'^','~')
 00350     fnremove(chr$(9),ln$)
 00360     if uprc$(ln$(7:10))<>"DATA" then goto READ_TEMP
 00370 DATALN: let j3=1
@@ -64,11 +64,11 @@
 00530 ! Let P3=POS(A$(J3,3),"~",1)-1 ! for acsea and acscl only  (way John does layouts)
 00540     let p4=pos(a$(j3,3),"*",1)
 00550     if p4=0 then let m1=1 else let m1=val(a$(j3,3)(1:p4-1))
-00560     let l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
+00560     l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
 00570     if p2>1 then let dp=val(a$(j3,3)(p2:p3)) else let dp=0 ! DECIMAL POSITIONS
 00580     if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !   ACTUAL FIELD LENGTH
 00590     if uprc$(a$(j3,3)(1:1))="X" then goto READ_TEMP ! skip any formats of "x"
-00600     let l=l*m1 ! TOTAL STORAGE LENGTH
+00600     l=l*m1 ! TOTAL STORAGE LENGTH
 00610     b=a+l
 00620     a=a+1
 00630     let ino=ino+1

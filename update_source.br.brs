@@ -29,7 +29,7 @@
 12800   def fninitupdate(&lastcompile)
 12900     dim lasttime$*256
 13000     fnreg_read("LastCompile",lasttime$)
-13100     if lasttime$="" then let lastcompile=190001010800 else let lastcompile=val(lasttime$)
+13100     if lasttime$="" then lastcompile=190001010800 else lastcompile=val(lasttime$)
 13200     curtime=fndatetime
 13300     fnreg_write("LastCompile",str$(curtime))
 13400     fnreg_write("OldLastCompile", str$(lastcompile))

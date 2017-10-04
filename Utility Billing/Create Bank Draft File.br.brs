@@ -12,7 +12,7 @@
 18030   fnd1(d1)
 18100   fnget_services(mat srvname$)
 18120   for j=1 to 10
-18140     if trim$(srvname$(j))>"" then let order(j)=1 : let sz1+=1
+18140     if trim$(srvname$(j))>"" then order(j)=1 : sz1+=1
 18160   next j
 18180   fnureg_read('Bank Draft File',pth$,env$('userprofile')&'\Desktop\bkdraft.dat')
 18200   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",Shr",internal,outin,relative 
@@ -94,7 +94,7 @@
 32620   pr #22,using L690: 1,pcde,imd$,imo$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,ion$,rc$,"0"
 32640   L690: form pos 1,g 1,pic(##),c 10,c 10,g 6,g 4,c 1,c 3,c 2,c 1,c 23,c 23,c 7,c 1
 32660   ! COMPANY/BATCH HEADER RECORD
-32680   let scc=225 ! SERVICE CLASS CODE
+32680   scc=225 ! SERVICE CLASS CODE
 32700   cdd$="" ! COMPANY DISCRETIONARY DATA
 32720   if env$('client')="Sangamon" and env$('cno')='1' then cid$="1370902201" ! COMPANY IDENTIFICATION   (code 1 followed by federal id number)
 32740   if env$('client')="Sangamon" and env$('cno')='2' then cid$="1371337231" ! COMPANY IDENTIFICATION
@@ -103,18 +103,18 @@
 32800   if env$('client')="Billings" then cid$=" 430903099" ! COMPANY IDENTIFICATION
 32820   if env$('client')="Thomasboro" then cid$=" 376000521" ! COMPANY IDENTIFICATION
 32840   ! if env$('client')="Ashland" then cid$="1646018046" ! COMPANY IDENTIFICATION
-32860   let ecc$="PPD" ! STANDARD ENTRY CLASS CODE
-32880   if env$('client')="Billings" then let ecc$='CCD' ! Corporate
+32860   ecc$="PPD" ! STANDARD ENTRY CLASS CODE
+32880   if env$('client')="Billings" then ecc$='CCD' ! Corporate
 32900   ced$="UTILITIES" ! COMPANY ENTRY DESCRIPTIVE
-32920   let eed$=date$(1:2)&date$(4:5)&date$(7:8) ! EFFECTIVE ENTRY DATE
-32940   let osc$="1" ! ORIGINATOR STATUS CODE
-32960   if env$('client')="Sangamon" and cno=1 then let odi$="00707945" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
-32980   if env$('client')="Sangamon" and cno=2 then let odi$="00208977" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
-33000   if env$('client')="Monticello" then let odi$="010251" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
-33020   if env$('client')="Franklinton" then let odi$="06520161" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
-33040   if env$('client')="Billings" then let odi$="08150596" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
-33060   if env$('client')="Thomasboro" then let odi$=" 2000412" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
-33080   ! if env$('client')="Ashland" then let odi$="08420167" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
+32920   eed$=date$(1:2)&date$(4:5)&date$(7:8) ! EFFECTIVE ENTRY DATE
+32940   osc$="1" ! ORIGINATOR STATUS CODE
+32960   if env$('client')="Sangamon" and cno=1 then odi$="00707945" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
+32980   if env$('client')="Sangamon" and cno=2 then odi$="00208977" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
+33000   if env$('client')="Monticello" then odi$="010251" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
+33020   if env$('client')="Franklinton" then odi$="06520161" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
+33040   if env$('client')="Billings" then odi$="08150596" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
+33060   if env$('client')="Thomasboro" then odi$=" 2000412" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
+33080   ! if env$('client')="Ashland" then odi$="08420167" ! ORIGINATING DFI IDENTIFICATION  (bank's account)
 33100   bn=1 !  BN=BATCH NUMBER
 33120   if env$('client')="Depoe Bay" then 
 33140     pr #22,using L850: 5,scc,env$('cnam')(1:16),cdd$,cid$,ecc$,ced$,fcd$,fcd$,"",osc$,odi$,bn
@@ -128,7 +128,7 @@
 38040   L900: form pos 1,c 12,c 32,pic(zz/zz/zz),n 13.2,skip 1
 38060   let t1=t1+bal
 38080   let tc=bc ! TRANSACTION CODE
-38100   ! LET L1=LEN(RTRM$(BA$))
+38100   ! l1=LEN(RTRM$(BA$))
 38120   ! cD=VAL(BA$(L1:L1)) ! CHECK DIGIT
 38140   ari=0 ! ADDENDA RECORD INDICATOR
 38160   let tn1=tn1+1
@@ -138,13 +138,13 @@
 38240   L1000: form pos 1,g 1,g 2,c 9,c 17,pic(##########),c 15,c 22,g 2,n 1,c 15
 38260   let td1=td1+bal
 38280   if env$('client')<>"Billings" then let tc1=tc1+bal
-38300   let eh=eh+val(dr$(1:8)) ! ENTRY HASH
+38300   eh=eh+val(dr$(1:8)) ! ENTRY HASH
 38320 return  ! /r
 42000 CTRL1: ! r: COMPANY/BATCH CONTROL RECORD
-42020   let scc=225 ! SERVICE CLASS CODE
-42040   let eac=tn1 ! ENTRY ADDENDA COUNT
-42060   let n=d2: let m=bal: let o(1)=3: let rcpt$= "BkDraft"
-42080   let eh$=str$(eh): let x=len(eh$): let eh=val(eh$(max(1,x-9):x))
+42020   scc=225 ! SERVICE CLASS CODE
+42040   eac=tn1 ! ENTRY ADDENDA COUNT
+42060   let n=d2: let m=bal: o(1)=3: let rcpt$= "BkDraft"
+42080   eh$=str$(eh): let x=len(eh$): eh=val(eh$(max(1,x-9):x))
 42100   ! TD1=TOTAL DEBIT AMOUNT
 42120   ! TC1=TOTAL CREDIT AMOUNT
 42140   ! CID$=COMPANY IDENTIFICATION
@@ -162,7 +162,7 @@
 42380   let tn2=tn1+4 ! total # records (all 6 records plus the 1&5 plus 8&9)
 42400   if fp(tn2/10)>0 then blctr=int(tn2/10)+1: bkfactor=blctr*10-tn2 ! block counter and block factor
 42420   if fp(tn2/10)=0 then blctr=int(tn2/10): bkfactor=0
-42440   let eac=tn1 ! entry/adgenda count (number of 6 records)
+42440   eac=tn1 ! entry/adgenda count (number of 6 records)
 42460   ! EH=ENTRY HASH
 42480   pr #22,using L1230: 9,bactr,blctr,eac,eh,td1*100,tc1*100,"                                      "," "
 42500   L1230: form pos 1,g 1,2*pic(######),pic(########),pic(##########),2*pic(############),c 38,c 1
@@ -235,7 +235,7 @@
 64060   for j=1 to 10
 64080     if order(j)=1 then alloc(x+=1)=gb(j)
 64100   next j
-64120   let m=bal : let n=d2 : let o(1)=3
+64120   let m=bal : let n=d2 : o(1)=3
 64140   write #6,using "Form POS 1,C 10,PD 4.2,PD 4,2*N 1,POS 24,C 9,SZ1*PD 4.2,5*PD 3,PD 4.2": z$,m,n,mat o,rcpt$,mat alloc,mat bd2
 64160 return ! /r
 68000 MERGE: ! r:
@@ -270,7 +270,7 @@
 68580       end if
 68600     next j
 68620     rewrite #1,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=z$: bal,mat gb
-68640     let o(2)=9
+68640     o(2)=9
 68660     rewrite #6,using "Form POS 19,2*N 1",rec=r6: mat o
 68680   loop
 68700   L2120: !

@@ -7,12 +7,12 @@
 00070   dim cnam$*40,dat$*20,cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
 00080 ! ______________________________________________________________________
 00090   fntop(program$,cap$="Import GL Payee Records")
-00100   cancel=99 : let right=1 : let left=0 : center=2 : let number$='30'
+00100   cancel=99 : let right=1 : left=0 : center=2 : let number$='30'
 00110   fncno(cno,cnam$) !:
         fndat(dat$)
 00120 MENU1: ! 
 00130   fntos(sn$="InitGLPay") !:
-        let mylen=45 : let mypos=mylen+2 : let lc=0
+        let mylen=45 : let mypos=mylen+2 : lc=0
 00140   fnlbl(lc+=1,1,"Extract Payee Information from general ledger:",45,right)
 00150   let item1$(1)="ACS G/L system" !:
         let item1$(2)="Accountant's Diskette"

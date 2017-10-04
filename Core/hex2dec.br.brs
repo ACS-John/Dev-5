@@ -9,13 +9,13 @@
 00090     dim h2d_temp$*1024
 00100 ! ______________________________________________________________________
 00110     let h2d_temp$=uprc$(ltrm$(trim$(input_hex$),"0")) !:
-          let dec=0 : let l=len(h2d_temp$)
+          let dec=0 : l=len(h2d_temp$)
 00120     for i=l to 1 step -1
 00130       if ord(h2d_temp$(i:i))<65 then !:
               let dec+=val(h2d_temp$(i:i))*(16**(l-i)) else !:
               let dec+=(ord(h2d_temp$(i:i))-55)*(16**(l-i))
 00140     next i
-00150     let output_dec=dec
+00150     output_dec=dec
 00160     goto XIT
 00170 ! ______________________________________________________________________
 00180 ! <Updateable Region: ERTN>

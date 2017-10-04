@@ -8,8 +8,8 @@
 00080 ! ______________________________________________________________________
 00090   fncno(cno)
 00100   fntop(program$,"Remove Old Transactions")
-00110   cancel=99 : let right=1 : center=2 : let on=1 : let off=0 !:
-        let left=0
+00110   cancel=99 : let right=1 : center=2 : on=1 : off=0 !:
+        left=0
 00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #20,using 'Form POS 417,N 1': rcn !:
         close #20: 
@@ -18,11 +18,11 @@
 00150   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&str$(cno),internal,input,keyed 
 00160   open #work2=4: "Name="&env$('Q')&"\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outin,relative 
 00170   fntos(sn$='RmTrans-'&str$(rcn)) !:
-        let mylen=21 : let mypos=mylen+2 : let lc=0
+        let mylen=21 : let mypos=mylen+2 : lc=0
 00180   fnlbl(lc+=1,1,"Oldest Retained Date:",mylen,right)
 00190   fntxt(lc,mypos,10,0,0,'1003') !:
         let resp$(1)=str$(date('ccyymmdd')-50000)
-00200   let lc+=1
+00200   lc+=1
 00210   if rcn=1 then !:
           fnlbl(lc+=1,1,"All cleared transactions with a",mylen*2,center)
 00220   if rcn><1 then !:

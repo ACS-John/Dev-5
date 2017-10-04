@@ -51,7 +51,7 @@
 12300     let p1=pos(a$(3),",",1): comma=1
 12320     if p1=0 then let p1=pos(a$(3)," ",1): comma=0
 12340     ct$=a$(3)(1:p1-1)
-12360     if comma=1 then let st$=a$(3)(p1+2:p1+3) else let st$=a$(3)(p1+1:p1+2)
+12360     if comma=1 then st$=a$(3)(p1+2:p1+3) else st$=a$(3)(p1+1:p1+2)
 12380     let p2=len(rtrm$(a$(3)))
 12400     let p1=p2-4
 12420     let zip$=a$(3)(p1:p2)
@@ -273,19 +273,19 @@
 32160   gosub RecRA
 32180   gosub RecRE ! kj 22610  was commented
 34000 NEXT_EMPLOYEE: ! r: main loop
-34020  ! pr Fields "12,32,N 3,UT,N": readCount+=1/LREC(1)*100
+34020  ! pr f "12,32,N 3,UT,N": readCount+=1/LREC(1)*100
 34040   read #hEmployee,using fEmployee: eno,mat em$,ss$,em6,ta eof FINIS
 34060   fEmployee: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3
 34080   gosub NameParse
 34100   let p1=pos(em$(3),",",1) : comma=1
 34120   if p1=0 then let p1=pos(em$(3)," ",1): comma=0
-34140   let emct$=em$(3)(1:p1-1)
-34160   gosub EXTRACT_STATE : let emst$=holdst$ ! If COMMA=1 Then Let EMST$=EM$(3)(P1+2:P1+3) Else Let EMST$=EM$(3)(P1+1:P1+2)
+34140   emct$=em$(3)(1:p1-1)
+34160   gosub EXTRACT_STATE : emst$=holdst$ ! If COMMA=1 Then eMST$=EM$(3)(P1+2:P1+3) Else eMST$=EM$(3)(P1+1:P1+2)
 34180   let p2=len(rtrm$(em$(3)))
 34200   let p1=p2-4
-34220   let emzip$=em$(3)(p1:p2)
+34220   emzip$=em$(3)(p1:p2)
 34240 L2070: let p1=pos(ss$,"-",1)
-34260   if p1>0 then let ss$(p1:p1)="": goto L2070 else let ssn=val(ss$)
+34260   if p1>0 then ss$(p1:p1)="": goto L2070 else ssn=val(ss$)
 34280   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 34300   restore #hChecks,key>=checkkey$: nokey NEXT_EMPLOYEE
 34320 L2120: read #hChecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L2480
@@ -331,8 +331,8 @@
 35120   if dfc>0 then let dc1=dc1+tcp(4+dfc)*100 ! DEFERRED COMPENSATION
 35140   if dcan>0 then let dca=dca+tcp(4+dcan)*100 ! DEPENDENT CARE ASSISTANCE
 35160   if sr1><tcd then goto L2470
-35180   let s2(1)=s2(1)+((tcp(31)-dedret)*100)
-35200   let s2(2)=s2(2)+(tcp(4)*100)
+35180   s2(1)=s2(1)+((tcp(31)-dedret)*100)
+35200   s2(2)=s2(2)+(tcp(4)*100)
 35220 L2470: !
 35240   goto L2120
 35260 L2480: !
@@ -355,7 +355,7 @@
 38040   fRecRA: form pos 1,c 2,pic(#########),c 8,c 9,c 1,c 6,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 27,c 15,c 5,c 3,c 40,c 3,c 10,c 1,c 1,c 12
 38060 return ! /r
 42000 RecRE: ! r:
-42020 ! if client$="PiattCO" then let emptype$="S"
+42020 ! if client$="PiattCO" then emptype$="S"
 42040   pr #hOut,using fRecRE: "RE",yr,"",federal_id_val,"",terminat$,"","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"",emptype$,"","","","","R","",0,""
 42060   fRecRE: form pos 1,c 2,pic(####),c 1,pic(#########),c 9,c 1,c 4,c 9,c 57,c 22,c 22,c 22,c 2,c 5,c 4,c 1,c 4,c 23,c 15,c 2,c 1,c 1,n 1,c 291
 42080 return ! /r
@@ -438,20 +438,20 @@
 62280 return ! /r
 72000 NameParse: ! r:
 72020   dim first$*15,mid$*15,last$*20,em$(3)*30
-72040   let em$(1)=uprc$(rtrm$(em$(1))): ! Let nameFormat$="s"
+72040   em$(1)=uprc$(rtrm$(em$(1))): ! Let nameFormat$="s"
 72060   let x1=pos(em$(1)," ",1)
 72080   let x2=pos(em$(1)," ",x1+1)
 72100   ! let x3=pos(em$(1)," ",x2+1)
 72120   if uprc$(nameFormat_sf$(nameFormat))="S" then ! last name first
 72140     if x1=0 then let x1=pos(em$(1),",",1)
-72160     if x1>0 and em$(1)(x1-1:x1-1)="," then let last$=em$(1)(1:x1-2) else let last$=em$(1)(1:max(x1-1,1))
+72160     if x1>0 and em$(1)(x1-1:x1-1)="," then last$=em$(1)(1:x1-2) else last$=em$(1)(1:max(x1-1,1))
 72180     if x2>0 then let first$=em$(1)(x1+1:x2-1): let mid$=em$(1)(x2+1:len(em$(1)))
 72200     if x2=0 then let first$=em$(1)(x1+1:len(em$(1)))(1:15): let mid$=""
 72220     let x=pos(first$,",",1): if x>0 then let first$(x:x)=""
 72240   else
 72260     let first$=em$(1)(1:min(15,max(x1-1,1)))
-72280     if x2>0 then let mid$=em$(1)(x1+1:x2-1): let last$=em$(1)(x2+1:len(em$(1)))
-72300     if x2=0 then let last$=em$(1)(x1+1:len(em$(1))): let mid$=""
+72280     if x2>0 then let mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
+72300     if x2=0 then last$=em$(1)(x1+1:len(em$(1))): let mid$=""
 72320   end if
 72340   ! pr FIRST$,MID$,LAST$
 72360 return ! /r
@@ -465,7 +465,7 @@
 76140       goto L5110 ! end of address reached
 76160     end if
 76180     if p3>0 then 
-76200       let oldp3=p3 
+76200       oldp3=p3 
 76220     end if
 76240   next j
 76260   L5110: !
@@ -531,8 +531,8 @@
 80780 !   pr #101,fields "20,5,C 60": "Computer Manufacturer's Name:"
 80800 !   pr #101,fields "21,5,C 60,N": "F=First Name First or S=Surname First on File:"
 80820 !   pr #101,fields "22,5,C 60": "Type of Business Code R=Regular:"
-80840 !   pr fields "24,28,C 9,B,1": "Next (F1)"
-80860 !   pr fields "24,39,C 11,B,5": "Cancel (F5)"
+80840 !   pr f "24,28,C 9,B,1": "Next (F1)"
+80860 !   pr f "24,39,C 11,B,5": "Cancel (F5)"
 80880 !   pr #101,fields mat io1$: a$(1),a$(2),ct$,st$,zip$,federal_id_val,yr,87900,.062,999999,.0145,ins,pen,dfc,dcan,ibm$,nameFormat$,typemp$
 80900 ! L1260: rinput #101,fields mat io1$,attr "R": a$(1),a$(2),ct$,st$,zip$,federal_id_val,yr,ssmax,ssrate,mcmax,mcrate,ins,pen,dfc,dcan,ibm$,nameFormat$,typemp$ conv CONV1
 80920 !   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
@@ -542,7 +542,7 @@
 81000 !   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L1260
 81020 ! CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 81040 !   ce=cnt+1
-81060 ! ERR1: pr fields "24,78,C 1": bell : goto L1300
+81060 ! ERR1: pr f "24,78,C 1": bell : goto L1300
 81080 ! L1350: ! 
 81100 !   if cmdkey=5 then goto XIT
 81120 !   if rtrm$(a$(1))="" then ce=1: goto ERR1

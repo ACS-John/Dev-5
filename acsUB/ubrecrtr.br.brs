@@ -8,7 +8,7 @@
 00080   fncno(cno)
 00090 ! 
 00100   fntop("S:\acsUB\UbRecrTr",cap$="Recreate Transaction File")
-00110   let sn$="ubRecrTr" !:
+00110   sn$="ubRecrTr" !:
         fntos(sn$) !:
         let mylen=30 !:
         let mypos=mylen+2
@@ -39,7 +39,7 @@
 00310     if tcode=3 then let tg(j)=-tg(j)
 00320   next j
 00330   let tbal=bal
-00340   let wr=d(1): let wu=d(3): let er=d(5): let eu=d(7): let gr=d(9): let gu=d(11)
+00340   let wr=d(1): let wu=d(3): er=d(5): eu=d(7): let gr=d(9): let gu=d(11)
 00350   write #2,using L360: z$,trandate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
 00360 L360: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 00370   goto READ_CUSTOMER

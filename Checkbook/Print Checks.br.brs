@@ -64,7 +64,7 @@
 10660   if pcde=0 then goto READ_4
 10670   if bc=0 then bc=bankcode ! if coded for payment with no bank code, pay from the  current bank account
 10680   if bc<>bankcode then goto READ_4
-10690   let lr4=rec(h_paytrans) ! what to do
+10690   lr4=rec(h_paytrans) ! what to do
 10700   if holdvn$=vn$ or rtrm$(holdvn$)="" then goto L1130 else gosub SUB_PRINT_CHECK
 10710 L1130: if arec>30 then gosub SUB_PRINT_CHECK
 10720   fn_checkdiscount
@@ -84,7 +84,7 @@
 10860   let holdvn$=vn$
 10870   let hiv$=iv$
 10880   amt=sum(amt)
-10890   let st1=1
+10890   st1=1
 10900   goto READ_4
 10910 ! ______________________________________________________________________
 10920 SUB_PRINT_CHECK: ! r:
@@ -185,7 +185,7 @@
 11910   mat amt=(0) : mat de$=("")
 11920   amt=arec=x=y=0
 11930   let x=y=1
-11940   let st1=0
+11940   st1=0
 11950   let holdvn$=vn$
 11960   let tr$(3)=tr$(4)=tr$(5)=""
 11970   let hiv$=""
@@ -197,7 +197,7 @@
 12040   fncloseprn
 12050 ! if env$('client')="Washington Parrish" then let fnprocess(0)
 12060   mat amt=(0) : mat de$=("") : mat iv$=("") : mat de$=("") : let x=y=1
-12070   let st1=0 : let holdvn$=""
+12070   st1=0 : let holdvn$=""
 12080   goto MENU3
 12090 ! /r
 12100 MENU3: ! r: (reprint or transfer to history)
@@ -290,13 +290,13 @@
 13010   end if 
 13020 ! /r
 13030 ASSIGN_SCREENS: ! r: assign screen # based on more and back options
-13040   if screen=0 then let screen=1
-13050   if ck=20 and screen=1 then let screen=2 : goto L5070
-13060   if ck=20 and screen=2 then let screen=3 : goto L5070
-13070   if ck=20 and screen=3 then let screen=3 : goto L5070 ! shouldn't happen
-13080   if ck=21 and screen=2 then let screen=1 : goto L5070
-13090   if ck=21 and screen=1 then let screen=1 : goto L5070 ! shouldn't happen
-13100   if ck=21 and screen=3 then let screen=2 : goto L5070
+13040   if screen=0 then screen=1
+13050   if ck=20 and screen=1 then screen=2 : goto L5070
+13060   if ck=20 and screen=2 then screen=3 : goto L5070
+13070   if ck=20 and screen=3 then screen=3 : goto L5070 ! shouldn't happen
+13080   if ck=21 and screen=2 then screen=1 : goto L5070
+13090   if ck=21 and screen=1 then screen=1 : goto L5070 ! shouldn't happen
+13100   if ck=21 and screen=3 then screen=2 : goto L5070
 13110 L5070: for j=1 to 30
 13120     if screen=1 then let x=j+2
 13130     if screen=2 then let x=j+34
@@ -305,7 +305,7 @@
 13160   next j
 13170   goto CKOPTION1_CHECK_ENTRY_2 ! /r
 13180 COMPLETED_WITH_SCREEN: ! r:
-13190   let screen=0
+13190   screen=0
 13200   if ck<>2 then goto PRINT_REGULAR_CHECKS ! skip automatic allocation
 13210   fn_read_standard_breakdowns
 13220   goto CKOPTION1_CHECK_ENTRY_2
@@ -348,7 +348,7 @@
 13580   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
 13590   if ck=5 then goto XIT
 13600   let firstckn=ckn1=reprintckn=val(resp$(1))
-13610   let lastckn=val(resp$(2)) : if lastckn=0 then let lastckn=firstckn
+13610   lastckn=val(resp$(2)) : if lastckn=0 then lastckn=firstckn
 13620   if lastckn>0 and lastckn<firstckn then goto REPRINT_CHECKS ! smaller lastckn
 13630 REPRINT_CHECK_LOOP_TOP: ! 
 13640   check_ref$=cnvrt$("pic(ZZ)",bankcode)&str$(1)&cnvrt$("n 8",reprintckn)
@@ -358,7 +358,7 @@
 13680   let vn$=lpad$(trim$(tr$(4)),8)
 13690   amt=tr3 ! set amount for check
 13700   mat amt=(0) : mat de$=("") : mat iv$=("") : let x=1: let y=0
-13710   let st1=0 : let holdvn$="        ": amt=0
+13710   st1=0 : let holdvn$="        ": amt=0
 13720   let vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
 13730   goto L7790
 13740 L7780: ! 
@@ -475,7 +475,7 @@
 15300   fncmdkey("&Complete",5,0,1,"Return to menu.")
 15310   ! need a fncmdkey to change screens for the breakdowns  (screen 1,2 or 3)
 15320   fnacs(sn$,0,mat resp$,ck)
-15340   if ck=5 then let screen=0 : goto SCE_XIT
+15340   if ck=5 then screen=0 : goto SCE_XIT
 15350   ! 
 15360   for j=3 to 30, step 3
 15370     let resp$(j)=fnagl$(resp$(j))
@@ -498,7 +498,7 @@
 15540   let tr$(2)=cnvrt$("pic(######)",prdmmddyy)
 15550   ! STORE_RESPONSES: ! hold all 94 possible responses in holdresp$
 15560   let x=0
-15570   if screen=0 then let screen=1
+15570   if screen=0 then screen=1
 15580   for j=1 to 34
 15590     if j=1 then let holdresp$(j)=resp$(j): goto SCE_L4820 ! amount
 15600     if j=2 then let holdresp$(j)=resp$(j): goto SCE_L4820 ! vendor
@@ -601,7 +601,7 @@
 16580 fnend 
 16590 def fn_englishdollar(dolamt) ! returns eng$
 16600   if ~setup_englishdollar then 
-16610     let setup_englishdollar=1
+16610     setup_englishdollar=1
 16620     data One,Two,Three,Four,Five,Six,Seven,Eight,Nine,Ten,Eleven,Twelve
 16630     data Thirteen,Fourteen,Fifteen,Sixteen,Seventeen,Eighteen,Nineteen
 16640     data Twenty,Thirty,Forty,Fifty,Sixty,Seventy,Eighty,Ninety
@@ -610,11 +610,11 @@
 16670   let dol=dolamt ! ENGLISH DOLLAR ROUTINE
 16680   let n=64
 16690   if dol<1000000 and dol>=0 then goto L2760
-16700   let eng$="Value too big for editing or was less than zero"
+16700   eng$="Value too big for editing or was less than zero"
 16710   goto ENGLISHDOLLAR_XIT
 16720   ! ______________________________________________________________________
 16730   L2760: ! 
-16740   let eng$="***"
+16740   eng$="***"
 16750   amount(1)=int(dol*100+.500000001)
 16760   for a0=2 to 10
 16770     amount(a0)=int(amount(a0-1)/10+.000000001)
@@ -625,25 +625,25 @@
 16820   if amount(11)+amount(10)+amount(9)=0 then goto L2880
 16830   a0=9
 16840   gosub ENGLISHDOLLAR_L3190
-16850   let eng$=rtrm$(eng$)&" Million"
+16850   eng$=rtrm$(eng$)&" Million"
 16860   L2880: if amount(8)+amount(7)+amount(6)=0 then goto L2920
 16870   a0=6
 16880   gosub ENGLISHDOLLAR_L3190
-16890   let eng$=rtrm$(eng$)&" Thousand"
+16890   eng$=rtrm$(eng$)&" Thousand"
 16900   L2920: ! 
 16910   if amount(5)+amount(4)+amount(3)=0 then goto L2950
 16920   a0=3
 16930   gosub ENGLISHDOLLAR_L3190
 16940   L2950: ! 
 16950   if dol>=1 then goto L2970
-16960   let eng$=rtrm$(eng$)&" Zero"
+16960   eng$=rtrm$(eng$)&" Zero"
 16970   L2970: ! 
-16980   let eng$=rtrm$(eng$)&" Dollar"
+16980   eng$=rtrm$(eng$)&" Dollar"
 16990   if dol<2 and dol>=1 then goto L3010
-17000   let eng$=rtrm$(eng$)&"s"
+17000   eng$=rtrm$(eng$)&"s"
 17010   if len(rtrm$(eng$))>64 then goto L3010
 17020   L3010: ! 
-17030   let eng$=rtrm$(eng$)&" and"
+17030   eng$=rtrm$(eng$)&" and"
 17040   if amount(2)+amount(1)=0 then goto L3080
 17050   amount(3)=0
 17060   a0=1
@@ -651,11 +651,11 @@
 17080   goto L3090
 17090   ! ______________________________________________________________________
 17100   L3080: ! 
-17110   let eng$=rtrm$(eng$)&" Zero"
+17110   eng$=rtrm$(eng$)&" Zero"
 17120   L3090: ! 
-17130   let eng$=rtrm$(eng$)&" Cent"
+17130   eng$=rtrm$(eng$)&" Cent"
 17140   if abs(dol-int(dol+.000000001)-.01)<.001 then goto L3120
-17150   let eng$=rtrm$(eng$)&"s"
+17150   eng$=rtrm$(eng$)&"s"
 17160   L3120: ! 
 17170   if len(rtrm$(eng$))<64 then goto L3170
 17180   for j=1 to 9
@@ -667,14 +667,14 @@
 17240   ! ______________________________________________________________________
 17250   ENGLISHDOLLAR_L3190: ! 
 17260     if amount(a0+2)=0 then goto L3210
-17270     let eng$=rtrm$(eng$)&" "&wording$(amount(a0+2))
-17280     let eng$=rtrm$(eng$)&" Hundred"
+17270     eng$=rtrm$(eng$)&" "&wording$(amount(a0+2))
+17280     eng$=rtrm$(eng$)&" Hundred"
 17290     L3210: if amount(a0+1)=0 and amount(a0)=0 then goto ED_L3190_XIT
 17300     if amount(a0+1)<2 then goto L3260
-17310     let eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)+18)
+17310     eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)+18)
 17320     if amount(a0)=0 then goto ED_L3190_XIT
 17330     amount(a0+1)=0
-17340     L3260: let eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)*10+amount(a0))
+17340     L3260: eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)*10+amount(a0))
 17350     ED_L3190_XIT: ! 
 17360   return  ! ENGLISHDOLLAR_L3190
 17370   ENGLISHDOLLAR_XIT: ! 
@@ -949,7 +949,7 @@
 40780     b$(3)=b$(4) : b$(4)=""
 40800   end if 
 40820   fn_englishdollar(dolamt)
-40840   if dolamt=0 then let eng$='        *** V O I D ***'
+40840   if dolamt=0 then eng$='        *** V O I D ***'
 40860   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 40880   ! /r
 40900   if env$('client')="ACS" or env$('client')="Thomasboro" or env$('client')="Hope Welty" or env$('client')="Philo" or env$('client')="Divernon" then goto L1730 ! don't skip
@@ -980,12 +980,12 @@
 41320     pr #255,using "Form Pos 8,C 30": b$(j) ! lines 17-20
 41340   next j
 41360   if length=0 then ! do it the old way
-41380     let skipline=6
-41400     if scc$="SCC" then let skipline=skipline-1 ! don't space as far if stub,check,check
-41420     ! if env$('client')="Washington Parrish" then let skipline=skipline-1
-41440     if env$('client')="ACS" or env$('client')="Hope Welty" then let skipline=skipline+2
-41460     if env$('client')="Philo" or env$('client')="Thomasboro" then let skipline=skipline+2
-41480     ! if env$('client')="PiattCO" then let skipline=skipline+4
+41380     skipline=6
+41400     if scc$="SCC" then skipline=skipline-1 ! don't space as far if stub,check,check
+41420     ! if env$('client')="Washington Parrish" then skipline=skipline-1
+41440     if env$('client')="ACS" or env$('client')="Hope Welty" then skipline=skipline+2
+41460     if env$('client')="Philo" or env$('client')="Thomasboro" then skipline=skipline+2
+41480     ! if env$('client')="PiattCO" then skipline=skipline+4
 41500     for j=1 to skipline
 41520       pr #255: ""
 41540     next j
@@ -1003,11 +1003,11 @@
 41780   for j=1 to x
 41800     pr #255: ""
 41820   next j
-41840   if dolamt=0 then let eng$='        *** V O I D ***'
+41840   if dolamt=0 then eng$='        *** V O I D ***'
 41860   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 41880   skipline=9
 41900   if prenum=2 then pr #255,using "form skip 2,pos 74,n 8,skip 1": ckn1
-41920   if prenum=2 then let skipline=max(skipline-3,1)
+41920   if prenum=2 then skipline=max(skipline-3,1)
 41940   pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
 41980   a=65
 42000   let normal4=4
@@ -1021,8 +1021,8 @@
 42180   for j=1 to 4
 42200     pr #255,using "Form Pos 8,C 30": b$(j)
 42220   next j
-42240   let skipline=6
-42260   if scc$="SCC" then let skipline=skipline-1 ! don't space as far if stub,check,check
+42240   skipline=6
+42260   if scc$="SCC" then skipline=skipline-1 ! don't space as far if stub,check,check
 42280   for j=1 to skipline+3
 42300     pr #255: ""
 42320   next j
@@ -1037,7 +1037,7 @@
 43200   end if 
 43220   PCE_L1680: ! 
 43240   fn_englishdollar(dolamt)
-43260   if dolamt=0 then let eng$='        *** V O I D ***'
+43260   if dolamt=0 then eng$='        *** V O I D ***'
 43280   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 43300   pr #255: ''
 43320   pr #255: ''
@@ -1078,11 +1078,11 @@
 44020   for j=1 to x
 44040     pr #255: ""
 44060   next j
-44080   if dolamt=0 then let eng$='        *** V O I D ***'
+44080   if dolamt=0 then eng$='        *** V O I D ***'
 44100   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
-44120   let skipline=9
+44120   skipline=9
 44140   if prenum=2 then pr #255,using "form skip 2,pos 74,n 8,skip 1": ckn1
-44160   if prenum=2 then let skipline=max(skipline-3,1)
+44160   if prenum=2 then skipline=max(skipline-3,1)
 44180   pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
 44200   pr #255: ""
 44220   pr #255,using 'Form POS 60,PIC(ZZ/ZZ/ZZ),X 7,C 18': prdmmddyy,ca$
@@ -1096,8 +1096,8 @@
 44380   for j=1 to 4
 44400     pr #255,using "Form Pos 8,C 30": b$(j)
 44420   next j
-44440   let skipline=8
-44460   if scc$="SCC" then let skipline=skipline-1 ! don't space as far if stub,check,check
+44440   skipline=8
+44460   if scc$="SCC" then skipline=skipline-1 ! don't space as far if stub,check,check
 44480   for j=1 to skipline
 44500     pr #255: ""
 44520   next j
@@ -1111,14 +1111,14 @@
 44680   for j=1 to x
 44700     pr #255: ""
 44720   next j
-44740   if dolamt=0 then let eng$='        *** V O I D ***'
+44740   if dolamt=0 then eng$='        *** V O I D ***'
 44760   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 44780   for j=1 to 9
 44800     pr #255: " "
 44820   next j
 44840   a=62
 44860   pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X 4,C 18': prdmmddyy,ca$
-44880   let skipline=2
+44880   skipline=2
 44900   pr #255,using 'Form SKIP SKIPLINE,POS 4,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
 44920   if trim$(b$(2))="" then 
 44940     b$(2)=b$(3): b$(3)=b$(4) : b$(4)=""
@@ -1128,7 +1128,7 @@
 45020   for j=1 to 4
 45040     pr #255,using "Form Pos 8,C 30": b$(j)
 45060   next j
-45080   let skipline=6
+45080   skipline=6
 45100   for j=1 to skipline
 45120     pr #255: ""
 45140   next j
@@ -1142,12 +1142,12 @@
 47160     b$(3)=b$(4) : b$(4)=""
 47180   end if 
 47200   fn_englishdollar(dolamt)
-47220   if dolamt=0 then let eng$='        *** V O I D ***'
+47220   if dolamt=0 then eng$='        *** V O I D ***'
 47240   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 47260   pr #255: ""
-47280   let skipline=9
+47280   skipline=9
 47300   if prenum=2 then pr #255,using "form skip 2,pos 74,n 8,skip 1": ckn1
-47320   if prenum=2 then let skipline=max(skipline-3,1)
+47320   if prenum=2 then skipline=max(skipline-3,1)
 47340   pr #255,using "form skip 1, pos 80,pic(zz/zz/zz)": prdmmddyy
 47360   pr #255: ""
 47380   pr #255,using 'Form skip 1,POS 15,C 30,pos 73,c 18': b$(1),ca$
@@ -1157,8 +1157,8 @@
 47460   for j=1 to 4
 47480     pr #255,using "Form Pos 8,C 30": b$(j)
 47500   next j
-47520   let skipline=10
-47540   if scc$="SCC" then let skipline=skipline-1 ! don't space as far if stub,check,check
+47520   skipline=10
+47540   if scc$="SCC" then skipline=skipline-1 ! don't space as far if stub,check,check
 47560   for j=1 to skipline
 47580     pr #255: ""
 47600   next j
@@ -1171,12 +1171,12 @@
 47740   for j=1 to x
 47760     pr #255: ""
 47780   next j
-47800   if dolamt=0 then let eng$='        *** V O I D ***'
+47800   if dolamt=0 then eng$='        *** V O I D ***'
 47820   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
-47840   let skipline=8
+47840   skipline=8
 47880   if prenum=2 then pr #255,using "form skip 3,pos 74,n 8,skip 1": ckn1
-47900   if prenum=2 then let skipline=max(skipline-3,1)
-47920   let skipline=skipline-2
+47900   if prenum=2 then skipline=max(skipline-3,1)
+47920   skipline=skipline-2
 47940   pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70,SKIP 1': eng$(1:n), eng$(n+1:128)
 47960   pr #255: ""
 47980   a=55
@@ -1193,8 +1193,8 @@
 48220   for j=1 to 4
 48240     pr #255,using "Form Pos 8,C 30": b$(j)
 48260   next j
-48280   let skipline=6
-48300   if scc$="SCC" then let skipline=skipline-1 ! don't space as far if stub,check,check
+48280   skipline=6
+48300   if scc$="SCC" then skipline=skipline-1 ! don't space as far if stub,check,check
 48320   for j=1 to skipline
 48340     pr #255: ""
 48360   next j
@@ -1208,7 +1208,7 @@
 49220     b$(3)=b$(4) : b$(4)=""
 49240   end if 
 49260   fn_englishdollar(dolamt)
-49280   if dolamt=0 then let eng$='        *** V O I D ***'
+49280   if dolamt=0 then eng$='        *** V O I D ***'
 49300   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 49320 ! 
 49340   pr #255: ""
@@ -1251,7 +1251,7 @@
 50120     b$(3)=b$(4) : b$(4)=""
 50140   end if 
 50160   fn_englishdollar(dolamt)
-50180   if dolamt=0 then let eng$='        *** V O I D ***'
+50180   if dolamt=0 then eng$='        *** V O I D ***'
 50200   if dolamt<=0 then ca$="***VOID***" else ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",dolamt))
 50220   ! 
 50240   pr #255: ''
@@ -1331,7 +1331,7 @@
 64860     bankcode=val(resp$(6)(1:3))
 64880     layoutOptionSelected$=resp$(7)
 64900     for j=1 to 4
-64920       if trim$(layoutOptionSelected$)=trim$(layoutOption$(j)) then let scc$=scc$(j)
+64920       if trim$(layoutOptionSelected$)=trim$(layoutOption$(j)) then scc$=scc$(j)
 64940     next j
 64960     fncreg_write('Check Layout Option',layoutOptionSelected$)
 64980   end if  ! ck<>5

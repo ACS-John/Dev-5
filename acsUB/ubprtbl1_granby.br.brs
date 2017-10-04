@@ -31,7 +31,7 @@
           let x=len(at$(j)) : let y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
-00200   let linelength=62
+00200   linelength=62
 00210   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.H"&str$(cno)&",Shr",internal,input,keyed  ! open in account order
 00220   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.H"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence
 00230   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.H"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
@@ -39,7 +39,7 @@
 00250 SCREEN1: ! 
 00260   a$="" : let prtbkno=0
 00270   fntos(sn$="PrtBl35x75") !:
-        let pf=26 : let ll=24 !:
+        let pf=26 : ll=24 !:
         let respc=0
 00280   fnlbl(1,1,"Service From:",ll,1)
 00290   fntxt(1,pf,8,8,1,"1",0,tt$) !:
@@ -84,10 +84,10 @@
 00500   if resp$(9)="[All]" then !:
           let prtbkno=0 else !:
           let prtbkno = val(resp$(9))
-00510   if resp$(10)="True" then let sl1=1 else let sl1=0
+00510   if resp$(10)="True" then sl1=1 else sl1=0
 00520   if trim$(a$)<>"" then !:
           read #2,using L530,key=a$: holdz$,route,sequence nokey SCREEN1 !:
-          let st1=1
+          st1=1
 00530 L530: form pos 1,c 10,pos 1741,n 2,n 7
 00540   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": !:
           ! if no beginning account or starting route #, start at beginning of file
@@ -118,23 +118,23 @@
 00760   if prtbkno><route then goto F5_CANCEL
 00770 L770: if f><d1 then goto L620
 00780 ! If ST1=0 Then Goto HERE
-00790 ! If ST1$=Z$ Then Let ST1=0 Else Goto 650
+00790 ! If ST1$=Z$ Then sT1=0 Else Goto 650
 00800 HERE: ! 
 00810 ! read alternate billing address
 00820   read #3,using L840,key=z$: mat ba$ nokey L910
 00830   if trim$(ba$(1))="" and trim$(ba$(2))="" and trim$(ba$(3))="" and trim$(ba$(4))="" then goto L910
 00840 L840: form pos 11,4*c 30
-00850   let e1=0 : mat pe$=("")
+00850   e1=0 : mat pe$=("")
 00860   for j=1 to 4
 00870     if trim$(ba$(j))<>"" then !:
             let pe$(e1+=1)=ba$(j)
 00880   next j
 00890   goto L1030
 00900 ! ______________________________________________________________________
-00910 L910: let e1=0 : mat pe$=("")
+00910 L910: e1=0 : mat pe$=("")
 00920   for j=2 to 4
 00930     if rtrm$(e$(j))<>"" then !:
-            let e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : let pe$(e1)=e$(j)
 00940   next j
 00950   goto L1030
 00960 ! ______________________________________________________________________

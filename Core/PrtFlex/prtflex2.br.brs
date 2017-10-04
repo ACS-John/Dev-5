@@ -59,7 +59,7 @@
 04140 EOFONREAD: ! Complete the grid once all data has been read
 04144 ! Let FNLBL(15,1,"Export the grid to a fixed width file, for later use.")
 04145   fncmdset(52): let fnacs(sn$,win,mat response$,ckey) ! CALL items selected
-04146   let lastgridresponse$=response$(1)
+04146   lastgridresponse$=response$(1)
 04160   if ckey=5 then chain "S:\Core\prtflex\PRTFLEX1",programfolder$,datafolder$
 04170 ! Let FNXIT(CURSYS$)
 04180 ! /r
@@ -161,19 +161,19 @@
 12220   fnacs(sn$,0,mat resp$,ckey)
 12222   if ckey=cancel then goto XIT_ASKTRANSET
 12224   if resp$(1)="True" then 
-12225     let sel_code=1
+12225     sel_code=1
 12226   else if resp$(2)="True" then 
-12227     let sel_code=2
+12227     sel_code=2
 12228   else if resp$(3)="True" then 
-12229     let sel_code=3
+12229     sel_code=3
 12230   else if resp$(4)="True" then 
-12231     let sel_code=4
+12231     sel_code=4
 12232   else if resp$(5)="True" then 
-12233     let sel_code=5
+12233     sel_code=5
 12234   else if resp$(6)="True" then 
-12235     let sel_code=6
+12235     sel_code=6
 12236   end if 
 12240   beg_date=val(resp$(7))
-12242   let end_date=val(resp$(8))
+12242   end_date=val(resp$(8))
 12244   c$=resp$(9)(1:10)
 12250 XIT_ASKTRANSET: return  ! /r

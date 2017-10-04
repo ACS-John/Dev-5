@@ -18,7 +18,7 @@
 14000 XIT: let fnxit
 16000 def fn_setup
 16010   if ~setup then 
-16020     let setup=1
+16020     setup=1
 16030     library 'S:\Core\Library': fntop,fnxit, fnerror,fngethandle,fnd1
 16031     library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnchk,fntos,fncmdkey
 16032     library 'S:\Core\Library': fncreg_read,fncreg_write

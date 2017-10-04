@@ -19,7 +19,7 @@
 18080   read #1,using 'form pos 1,n 8,c 30,pos 99,c 11': eno,em$,ss$ eof FINIS
 18100   a=pos (rtrm$(em$)," ",1)
 18120   b=pos (rtrm$(em$)," ",a+1)
-18140   let em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
+18140   em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
 18160   let reg_earnings=ded_pension=pension_amount=0
 18180   checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
 20040   mat tcp=(0) : mat ttdc=(0)
@@ -102,11 +102,11 @@
 60480   fnacs(sn$,0,mat resp$,ckey)
 60500   if ckey=5 then goto XIT
 60520   for j=1 to 20
-60540     if resp$(j)="True" then let sel_ded(j)=1
+60540     if resp$(j)="True" then sel_ded(j)=1
 60560   next j
 60580   for j=1 to 20
-60600     if resp$(j+20)="True" then let sel_pen(j)=1
+60600     if resp$(j+20)="True" then sel_pen(j)=1
 60620   next j
 60640   beg_date=val(resp$(41))
-60660   let end_date=val(resp$(42))
+60660   end_date=val(resp$(42))
 60680   return  ! /r

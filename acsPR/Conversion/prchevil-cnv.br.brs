@@ -14,7 +14,7 @@
 00130   fnend 
 00140 ! ______________________________________________________________________
 00150   pr newpage
-00160   pr fields "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
+00160   pr f "10,15,C 50": "ENTER COMPANY # TO CONVERT OR 0 TO STOP:"
 00170 L170: input fields "10,55,N 2,UE,N": cno conv L170
 00180   if cno=0 then goto XIT
 00190 ! 

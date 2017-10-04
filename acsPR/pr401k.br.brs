@@ -26,16 +26,16 @@
 00260   a=pos (rtrm$(em$(1))," ",1)
 00270   b=pos (rtrm$(em$(1))," ",a+1)
 00280   c=a+1
-00290   let em$=ltrm$(rtrm$(em$(1)(max(a,b):30))&", "&em$(1)(1:a))
-00300   if c<b then let em$=em$&em$(1)(c:c)
+00290   em$=ltrm$(rtrm$(em$(1)(max(a,b):30))&", "&em$(1)(1:a))
+00300   if c<b then em$=em$&em$(1)(c:c)
 00310   csz$=em$(3) : gosub CSZ
-00320   let ss$=ltrm$(rtrm$(ss$))
+00320   ss$=ltrm$(rtrm$(ss$))
 00330   for j=1 to len(ss$)
-00340     if ss$(j:j)<"0" or ss$(j:j)>"9" then let ss$(j:j)=""
+00340     if ss$(j:j)<"0" or ss$(j:j)>"9" then ss$(j:j)=""
 00350   next j
-00360   let ss=0
-00370   let ss=val(ss$) conv L380
-00380 L380: let em16=fndate_mmddyy_to_ccyymmdd(em16)
+00360   ss=0
+00370   ss=val(ss$) conv L380
+00380 L380: em16=fndate_mmddyy_to_ccyymmdd(em16)
 00390   bd=fndate_mmddyy_to_ccyymmdd(bd)
 00400   mat thc=(0)
 00410   mat tcp=(0)
@@ -87,12 +87,12 @@
 00870   city$=uprc$(rtrm$(csz$(1:p1))(1:15))
 00880   if city$(1:3)="FT " then city$(1:3)="FORT "
 00890   if city$(1:3)="FT. " then city$(1:3)="FORT "
-00900   let state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2))
-00910   let l1=len(csz$)
+00900   state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2))
+00910   l1=len(csz$)
 00920   let zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:l1))))
 00930   let zip5$=zip$(1:5)
 00940   let zip4$=""
-00950   let l2=len(zip$)
+00950   l2=len(zip$)
 00960   if l2<9 then goto L980
 00970   let zip4$=zip$(l2-3:l2)
 00980 L980: return 
@@ -107,8 +107,8 @@
 01070   let io1$(1)="8,42,CU 1,UET,N"
 01080   if driv=1 then pr #win,fields "3,2,Cc 30,n": "Drive Not Ready!"
 01090   pr #win,fields "4,2,C 30,n": "Insert 401k Diskette in Drive:"
-01100   pr fields "12,15,C 9,B,1": "Next (F1)"
-01110   pr fields "12,26,C 11,B,5": "Cancel (F5)"
+01100   pr f "12,15,C 9,B,1": "Next (F1)"
+01110   pr f "12,26,C 11,B,5": "Cancel (F5)"
 01120   if dv$="" then let dv$="A"
 01130 L1130: rinput #win,fields "4,33,Cu 1,UET,N": dv$
 01140   if cmdkey=5 then goto XIT

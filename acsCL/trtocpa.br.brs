@@ -18,17 +18,17 @@
 00160 ! ______________________________________________________________________
 00170 MAIN: ! 
 00180   fntos(sn$="Tr2cpa") !:
-        let mylen=40 : let mypos=mylen+2 : let lc=0
+        let mylen=40 : let mypos=mylen+2 : lc=0
 00190   fnlbl(lc+=1,1,"Starting Date:",mylen,right)
 00200   fntxt(lc,mypos,10,0,1,"1003",0,"Earliest transation date to be transferred") !:
         ! Let RESP$(1)=""
 00210   fnlbl(lc+=1,1,"Ending Date:",mylen,right)
 00220   fntxt(lc,mypos,10,0,1,"1003",0,"Last transation date to be transferred") !:
         ! Let RESP$(2)=""
-00230   let lc+=1
+00230   lc+=1
 00240   fnchk(lc+=1,mypos,"Transfer previously posted transactions:",1) !:
         if resp$(3)="" then let resp$(3)="False"
-00250   let lc+=1
+00250   lc+=1
 00260   fnlbl(lc+=1,1,"Destination Path:",mylen,right)
 00270   fntxt(lc,mypos,66) !:
         if resp$(4)="" then let resp$(4)="A:\"
@@ -153,7 +153,7 @@
 01350   close #1: 
 01360   close #tralloc: 
 01370   close #glwk101: 
-01380   let lr4=lrec(glwk201)
+01380   lr4=lrec(glwk201)
 01390   close #glwk201: 
 01400   close #bankmstr: 
 01410   if trim$(dv$)="" then goto TRY_TO_SEND_TO_GL

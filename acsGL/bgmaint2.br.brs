@@ -58,7 +58,7 @@
 00530 L530: let j=0
 00540   open #13: "Name="&env$('temp')&"\FlexWork.tmp",display,input ioerr L690
 00550 L550: linput #13: ln$ eof L680
-00560   let ln$=uprc$(ln$)
+00560   ln$=uprc$(ln$)
 00570   let x=pos(ln$,"KILOBYTES",1)
 00580   if x>0 then goto L680
 00590   let x=pos(ln$(1:3),"DIR",1)
@@ -69,7 +69,7 @@
 00640 L640: let k$=lpad$(str$(bud),2) !:
         read #5,using L650,key=k$: k$,bud$,mat gl$ nokey L670
 00650 L650: form c 2,c 50,40*c 12
-00660   let options$(j+=1)=str$(bud)&" "&bud$
+00660   options$(j+=1)=str$(bud)&" "&bud$
 00670 L670: goto L550
 00680 L680: close #13: 
 00690 L690: if j<=0 then let j=1
@@ -133,7 +133,7 @@
 01120   if g1$>=gl$(j) and g1$<=gl$(j+1) then goto L1150
 01130 next j
 01140 goto L1100
-01150 L1150: mat bg=(0) : let ex$="" : cd$="B"
+01150 L1150: mat bg=(0) : ex$="" : cd$="B"
 01160 ! If TI1=5 Then Goto 1170
 01170 read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1',key=g1$&cd$: g1$,mat bg,gd$,ex$,cd$ nokey L1210
 01180 bg(1)=sum(bm) : bg(2)=cb : bg(3)=0 !:
@@ -156,7 +156,7 @@
 01330 execute "DIR "&env$('Q')&"\GLmstr\GL*.H"&env$('cno')&" >"&env$('temp')&"\Work."&session$
 01340 open #3: "Name="&env$('temp')&"\Work."&session$,display,input 
 01350 L1350: linput #3: ln$ eof L1530
-01360 let ln$=uprc$(ln$)
+01360 ln$=uprc$(ln$)
 01370 if ln$(1:2)><"GL" then goto L1350
 01380 let d1=val(ln$(3:8)) conv L1350
 01390 if fndate_mmddyy_to_ccyymmdd(d1)<fd1 or fndate_mmddyy_to_ccyymmdd(d1)>fd2 then goto L1350
@@ -314,7 +314,7 @@
 02760 let fnacs(sn$,0,mat resp$,ck) ! GRID
 02770 add=edit=0
 02780 if ck=5 then goto MENU1
-02790 if ck=2 then let edit=1
+02790 if ck=2 then edit=1
 02800 if ck=3 then goto PRNT1 ! pr listings of unpaid invoice file
 02810 if ck=1 then add=1: let insrt=1: let jb1=1 !:
         let g1$=k$(max(1,curfld-1)): mat bg=(0): let gd$=ex$=cd$="" !:
@@ -359,10 +359,10 @@
 03020 let fntxt(3,mypos,50,0,left,"",0,"Enter the account description.",0 ) !:
       let resp$(rc+=1)=gd$
 03030 let fnlbl(4,1,"Type of Entry:",mylen,right)
-03040 let option2$(1)="A "&type$(1) !:
-      let option2$(2)="B "&type$(2) !:
-      let option2$(3)="S "&type$(3) : let option2$(4)="T "&type$(4): !:
-      let option2$(5)="X "&type$(5) : let option2$(6)="Z "&type$(6)
+03040 option2$(1)="A "&type$(1) !:
+      option2$(2)="B "&type$(2) !:
+      option2$(3)="S "&type$(3) : option2$(4)="T "&type$(4): !:
+      option2$(5)="X "&type$(5) : option2$(6)="Z "&type$(6)
 03050 let fncomboa("Types",4,mypos,mat option2$,"Select the type of entry.",20,container)
 03060 let resp$(rc+=1)=cd$
 03070 let fncmdset(2)
@@ -371,8 +371,8 @@
 03100 let dno=ano=sno=0
 03110 if use_dept=1 then let dno=val(resp$(1)) : ano=val(resp$(2))
 03120 if use_dept=0 then ano=val(resp$(1))
-03130 if use_dept=1 and use_sub=1 then let sno=val(resp$(3))
-03140 if use_dept=0 and use_sub=1 then let sno=val(resp$(2))
+03130 if use_dept=1 and use_sub=1 then sno=val(resp$(3))
+03140 if use_dept=0 and use_sub=1 then sno=val(resp$(2))
 03150 if use_dept=1 and use_sub=1 then let gd$=resp$(4): cd$=resp$(5)(1:1)
 03160 if use_dept=0 and use_sub=1 then let gd$=resp$(3): cd$=resp$(4)(1:1)
 03170 if use_dept=0 and use_sub=0 then let gd$=resp$(2): cd$=resp$(3)(1:1)
@@ -388,7 +388,7 @@
 03230 if resp$="OK" then goto MAINTAIN_NONB_RECORDS else goto MENU1
 03240 L3240: if add=1 then goto WRITE_NEW_RECORD else goto REWRITE_EXISTING_RECORD
 03250 WRITE_NEW_RECORD: ! 
-03260 mat bg=(0) : let ex$="": let edit=1 !:
+03260 mat bg=(0) : ex$="": edit=1 !:
       let g1$=key$(1:12)
 03270 let write_new_record
 03280 write #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$
@@ -430,29 +430,29 @@
 03550 let fntxt(10,mypos,50,0,0,"",0,"Brief reason for change in budget.") !:
       let resp$(respc+=1)=ex$
 03560 let fnlbl(12,1,"Type of Entry:",mylen,right)
-03570 if cd$="A" or trim$(cd$)="" then let option2$(1)="A "&type$(1) !:
-        let option2$(2)="B "&type$(2) !:
-        let option2$(3)="S "&type$(3) : let option2$(4)="T "&type$(4): !:
-        let option2$(5)="X "&type$(5) : let option2$(6)="Z "&type$(6)
-03580 if cd$="B" then let option2$(1)="B "&type$(2) !:
-        let option2$(2)="A "&type$(1) !:
-        let option2$(3)="S "&type$(3) : let option2$(4)="T "&type$(4): !:
-        let option2$(5)="X "&type$(5) : let option2$(6)="Z "&type$(6)
-03590 if cd$="S" then let option2$(1)="S "&type$(3) !:
-        let option2$(2)="A "&type$(1) !:
-        let option2$(3)="B "&type$(2) : let option2$(4)="T "&type$(4): !:
-        let option2$(5)="X "&type$(5) : let option2$(6)="z "&type$(6)
-03600 if cd$="T" then let option2$(4)="T "&type$(4) !:
-        let option2$(2)="A "&type$(1) !:
-        let option2$(3)="B "&type$(2) : let option2$(4)="S "&type$(3): !:
-        let option2$(5)="X "&type$(5) : let option2$(6)="Z "&type$(6)
-03610 if cd$="X" then let option2$(1)="X "&type$(5) !:
-        let option2$(2)="A "&type$(1) !:
-        let option2$(3)="B "&type$(2) : let option2$(4)="S "&type$(3): !:
-        let option2$(5)="T "&type$(4) : let option2$(6)="Z "&type$(6)
-03620 if cd$="Z" then let option2$(1)="Z "&type$(6) : let option2$(2)="A "&type$(1) !:
-        let option2$(3)="B "&type$(2) : let option2$(4)="S "&type$(3): !:
-        let option2$(5)="T "&type$(4) : let option2$(6)="X "&type$(5)
+03570 if cd$="A" or trim$(cd$)="" then option2$(1)="A "&type$(1) !:
+        option2$(2)="B "&type$(2) !:
+        option2$(3)="S "&type$(3) : option2$(4)="T "&type$(4): !:
+        option2$(5)="X "&type$(5) : option2$(6)="Z "&type$(6)
+03580 if cd$="B" then option2$(1)="B "&type$(2) !:
+        option2$(2)="A "&type$(1) !:
+        option2$(3)="S "&type$(3) : option2$(4)="T "&type$(4): !:
+        option2$(5)="X "&type$(5) : option2$(6)="Z "&type$(6)
+03590 if cd$="S" then option2$(1)="S "&type$(3) !:
+        option2$(2)="A "&type$(1) !:
+        option2$(3)="B "&type$(2) : option2$(4)="T "&type$(4): !:
+        option2$(5)="X "&type$(5) : option2$(6)="z "&type$(6)
+03600 if cd$="T" then option2$(4)="T "&type$(4) !:
+        option2$(2)="A "&type$(1) !:
+        option2$(3)="B "&type$(2) : option2$(4)="S "&type$(3): !:
+        option2$(5)="X "&type$(5) : option2$(6)="Z "&type$(6)
+03610 if cd$="X" then option2$(1)="X "&type$(5) !:
+        option2$(2)="A "&type$(1) !:
+        option2$(3)="B "&type$(2) : option2$(4)="S "&type$(3): !:
+        option2$(5)="T "&type$(4) : option2$(6)="Z "&type$(6)
+03620 if cd$="Z" then option2$(1)="Z "&type$(6) : option2$(2)="A "&type$(1) !:
+        option2$(3)="B "&type$(2) : option2$(4)="S "&type$(3): !:
+        option2$(5)="T "&type$(4) : option2$(6)="X "&type$(5)
 03630 let resp$(respc+=1)=option2$(1)
 03640 let fncomboa("Types",12,mypos,mat option2$,"Select the type of entry.",20,container)
 03650 let fncmdkey("&Save",1,1,0,"Save any changes." ) !:
@@ -466,7 +466,7 @@
 03720 bg(4)=val(resp$(5))
 03730 bg(5)=val(resp$(6))
 03740 let gd$=resp$(7)
-03750 let ex$=resp$(8)
+03750 ex$=resp$(8)
 03760 for j=1 to 6
 03770   if resp$(9)(1:1)=option2$(j)(1:1) then cd$=option2$(j)(1:1)
 03780 next j
@@ -488,8 +488,8 @@
 03910 goto DISPLAY_GRID
 03920 ! ______________________________________________________________________
 03930 PRNT1: ! John's pr Routine ... yeah, i made this mess
-03940 let header$="" : let opr=255 : let ps$="############" !:
-      let screen=cp=page=bob1=bob2=bob3=bob4=lyne=0
+03940 let header$="" : opr=255 : let ps$="############" !:
+      screen=cp=page=bob1=bob2=bob3=bob4=lyne=0
 03950 let uline2$=rpt$("_",244) : let dline2$=rpt$("=",244)
 03960 let fntos(sn$="bgprint") !:
       let respc=0 : let right=1 : let mylen=25 : let mypos=mylen+3
@@ -600,7 +600,7 @@
 04600   if an1$(j)="Y" then let dline$=dline$&dline2$(1:an2(j))&"  "
 04610   if an1$(j)="Y" then let uline$=uline$&uline2$(1:an2(j))&"  "
 04620 L4620: next j
-04630 let lhdr=len(header$)
+04630 lhdr=len(header$)
 04640 bob1=lhdr-11
 04650 bob2=int((lhdr-len(rtrm$(env$('cnam'))))/2)
 04660 bob3=int((lhdr-len(rtrm$(rdate$)))/2)
@@ -609,23 +609,23 @@
 04690 gosub HDR
 04700 L4700: read #2,using 'Form POS 1,C 12,6*PD 6.2,2*C 50,C 1': g1$,mat bg,gd$,ex$,cd$ eof L4970
 04710 L4710: form pos 1,c lhdr,skip 1,pos 1,c lhdr,skip 1
-04720 let line$=""
-04730 if an1$(1)="Y" then let line$=line$&gd$(1:an2(1))&"  "
+04720 line$=""
+04730 if an1$(1)="Y" then line$=line$&gd$(1:an2(1))&"  "
 04740 for j=2 to 7
-04750   if an1$(j)="Y" and len(ltrm$(cnvrt$("N 12.2",(bg(j-1)))))>an2(j) then let line$=line$&ps$(13-an2(j):12)&"  ": goto L4770
-04760   if an1$(j)="Y" then let line$=line$&cnvrt$("N 12.2",bg(j-1))(13-an2(j):12)&"  "
+04750   if an1$(j)="Y" and len(ltrm$(cnvrt$("N 12.2",(bg(j-1)))))>an2(j) then line$=line$&ps$(13-an2(j):12)&"  ": goto L4770
+04760   if an1$(j)="Y" then line$=line$&cnvrt$("N 12.2",bg(j-1))(13-an2(j):12)&"  "
 04770 L4770: next j
-04780 if an1$(8)="Y" then let line$=line$&ex$(1:an2(8))&"  "
+04780 if an1$(8)="Y" then line$=line$&ex$(1:an2(8))&"  "
 04790 if ti3=2 then goto L4830
-04800 if an1$(9)="Y" and len(ltrm$(cnvrt$("N 12.2",bg(1)-bg(2)-bg(3)+bg(4))))>an2(9) then let line$=line$&ps$(13-an2(9):12)&"  ": goto L4850
-04810 if an1$(9)="Y" then let line$=line$&cnvrt$("N 12.2",bg(1)-bg(2)-bg(3)+bg(4))(13-an2(9):12)&"  "
+04800 if an1$(9)="Y" and len(ltrm$(cnvrt$("N 12.2",bg(1)-bg(2)-bg(3)+bg(4))))>an2(9) then line$=line$&ps$(13-an2(9):12)&"  ": goto L4850
+04810 if an1$(9)="Y" then line$=line$&cnvrt$("N 12.2",bg(1)-bg(2)-bg(3)+bg(4))(13-an2(9):12)&"  "
 04820 goto L4850
-04830 L4830: if an1$(9)="Y" and len(ltrm$(cnvrt$("N 12.2",bg(1)-bg(2)-bg(3))))>an2(9) then let line$=line$&ps$(13-an2(9):12)&"  ": goto L4850
-04840 if an1$(9)="Y" then let line$=line$&cnvrt$("N 12.2",bg(1)-bg(2)-bg(3))(13-an2(9):12)&"  "
-04850 L4850: if an1$(10)="Y" and cd$<>"T" and cd$<>"H" then let line$=line$&g1$(1:an2(10)) ! THIS WONT WORK IF YOU ADD ANYTHING AFTER IT!!!
-04860 if an1$(10)="Y" and cd$="T" then let line$=line$&"                                        "(1:an2(10))
+04830 L4830: if an1$(9)="Y" and len(ltrm$(cnvrt$("N 12.2",bg(1)-bg(2)-bg(3))))>an2(9) then line$=line$&ps$(13-an2(9):12)&"  ": goto L4850
+04840 if an1$(9)="Y" then line$=line$&cnvrt$("N 12.2",bg(1)-bg(2)-bg(3))(13-an2(9):12)&"  "
+04850 L4850: if an1$(10)="Y" and cd$<>"T" and cd$<>"H" then line$=line$&g1$(1:an2(10)) ! THIS WONT WORK IF YOU ADD ANYTHING AFTER IT!!!
+04860 if an1$(10)="Y" and cd$="T" then line$=line$&"                                        "(1:an2(10))
 04870 if bg(1)<>0 then let pused=(bg(2)+bg(3))/bg(1) else let pused=0
-04880 if an1$(11)="Y" then let line$=line$&cnvrt$("N 12",pused*100)(13-an2(11):12)&"  "
+04880 if an1$(11)="Y" then line$=line$&cnvrt$("N 12",pused*100)(13-an2(11):12)&"  "
 04890 bobtom=len(line$)
 04900 if cd$="A" and an1$(1)="Y" then pr #255,using L5120: gd$ pageoflow NWPGE
 04910 if cd$="B" then pr #255,using L5130: line$(1:len(line$)) pageoflow NWPGE
@@ -657,7 +657,7 @@
 05170 MAINTAIN_RANGE_FILE: ! 
 05180 if ad1=1 then bud=0: bud$="": mat gl$=("")
 05190 let fntos(sn$="bgmaintrange") !:
-      let respc=0 : let mylen=20 : let mypos=20: let mypos2=60: let lyne=3
+      let respc=0 : let mylen=20 : let mypos=20: let mypos2=60: lyne=3
 05200 let fnlbl(1,1,"Budget #:",mylen,right)
 05210 let fntxt(1,mylen+3,2,0,0,"30",0,"") !:
       let resp$(respc+=1)=str$(bud)
@@ -705,7 +705,7 @@
 05540 ! ______________________________________________________________________
 05550 INCLUDE_CHANGES: ! 
 05560 let fntos(sn$="Include_Changes") !:
-      let respc=0: let mylen=40: let mypos=mylen+3 : let lyne=0
+      let respc=0: let mylen=40: let mypos=mylen+3 : lyne=0
 05570 let fnchk(lyne+=1,mypos,"Include Changes in Remaining Balance:",1) !:
       let resp$(respc+=1)="True"
 05580 let fncmdkey("&Next",1,1,0,"Continue with re-calculations. ") !:
@@ -718,7 +718,7 @@
 05640 ! ______________________________________________________________________
 05650 ASK_ABOUT_HISTORY: ! 
 05660 let fntos(sn$="Ask_about") !:
-      let respc=0: let mylen=40: let mypos=mylen+3 : let lyne=0
+      let respc=0: let mylen=40: let mypos=mylen+3 : lyne=0
 05670 let fnchk(lyne+=1,mypos,"Include Actual Receitps and Expenditures:",1) !:
       let resp$(respc+=1)="True"
 05680 let fnchk(lyne+=1,mypos,"Include Budget Amounts:",1) !:

@@ -2,7 +2,7 @@
 00020   dim tr(2)
 00030 ! 
 00040   pr newpage
-00050   pr fields "10,28,C 60": "ENTER COMPANY #: 1"
+00050   pr f "10,28,C 60": "ENTER COMPANY #: 1"
 00060 L60: input fields "10,45,N 2,UE,N": cno conv L60
 00070   if cno=0 then stop 
 00080 ! 

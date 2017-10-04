@@ -59,7 +59,7 @@
 00580   return 
 00590 ! ______________________________________________________________________
 00600 END1: if end1=1 then goto L630
-00610   let end1=1 : goto TOT1
+00610   end1=1 : goto TOT1
 00620   let t2=0
 00630 L630: for j=1 to d2
 00640     pr #255,using L650: "      Due by "&cnvrt$("PIC(####/##/##)",d2(j)),t2(j)

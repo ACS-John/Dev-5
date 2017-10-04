@@ -11,7 +11,7 @@
 20100 ! ______________________________________________________________________
 30000 ! r: SCREEN1:
 30020   fntos(sn$="UBPrtBl1-1") 
-30040   let pf=34 : let ll=32 : width=pf+8
+30040   let pf=34 : ll=32 : width=pf+8
 30060   let respc=0
 30080   fnlbl(1,1,"Warning:  Continuing will change the Use/Do Not Use flag",width,2)
 30100   fnlbl(2,1,"on all customer billing addresses. Anyone with a non-blank",width,2)

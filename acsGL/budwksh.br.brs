@@ -7,7 +7,7 @@
 00070   dim cnam$*40,d$*50,n$*12,bp(13),bm(13),name$*30,gln1$*12,gln2$*12
 00080   dim cap$*128,resp$(10)*80,revb(13)
 00090 ! ______________________________________________________________________
-00100   let right=1 : center=2 : let left=0
+00100   let right=1 : center=2 : left=0
 00110   fntop(program$,cap$="Budget Worksheet")
 00120   fnconsole(off=0)
 00130   fncno(cno,cnam$)
@@ -20,7 +20,7 @@
         let pba$='False' : bud$="False"
 00200 SCREEN1: ! 
 00210   fntos(sn$='BudgetWksht') !:
-        let lc=0 : let mylen=40 : let mypos=mylen+2
+        lc=0 : let mylen=40 : let mypos=mylen+2
 00220   fnlbl(lc+=1,1,'Fund:',mylen,right)
 00230   fntxt(lc,mypos,40) !:
         let resp$(1)=name$
@@ -68,7 +68,7 @@
 00530 L530: form pos 1,c 12,c 50,pos 87,pd 6.2,pos 171,26*pd 6.2,pos 339,13*pd 6.2
 00540 L540: let dno=val(n$(1:3))
 00550   ano=val(n$(4:9))
-00560   let sno=val(n$(10:12))
+00560   sno=val(n$(10:12))
 00570   if yearclosed=1 then cb=bp(12) ! use last year end balance if year already closed.
 00580   if uprc$(bud$)="R" then mat bm=revb
 00590   cyb=bm(1)+bm(2)+bm(3)+bm(4)+bm(5)+bm(6)+bm(7)+bm(8)+bm(9)+bm(10)+bm(11)+bm(12)
@@ -81,7 +81,7 @@
 00660   let tcyb=tcyb+cyb
 00670   if yr1$="" then goto L710
 00680   budkey$=n$&yr1$ ! gl number plus year for last year
-00690   budacno$="": let yr$="": let oldcb=oldbud=0
+00690   budacno$="": let yr$="": oldcb=oldbud=0
 00700   read #12,using "form pos 1,c 12,c 2,2*pd 6.2",key=budkey$: budacno$,yr$,oldcb,oldbud nokey L720 ! read old budget history record
 00710 L710: if yr2$="" then goto L740
 00720 L720: let priorbudkey$=n$&yr2$ ! get two years ago
@@ -137,9 +137,9 @@
 01220 PRINT_MASTER_RECORD: ! 
 01230   if pba$="True" then 
 01240     fntos(sn$='Budwksh-add-ba') !:
-          let lc=0 : let mylen=50 : let mypos=mylen+2
+          lc=0 : let mylen=50 : let mypos=mylen+2
 01250     fnlbl(lc+=1,1,'Enter Proposed Budget',40,center,+2)
-01260     let lc+=1
+01260     lc+=1
 01270     fnlbl(lc+=1,1,"Proposed Budget for Account "&str$(dno)&"-"&str$(ano)&"-"&str$(sno)&":",mylen,right)
 01280     fntxt(lc,mypos,12,0,0,'currency') !:
           let resp$=''
@@ -190,7 +190,7 @@
 01730 ! /region
 01740 ! ______________________________________________________________________
 01750 DETERMINE_DATE: ! 
-01760   let endingdate$=rtrm$(fnpedat$)
+01760   endingdate$=rtrm$(fnpedat$)
 01770   let x=pos(endingdate$," ",1)
 01780   let month$=endingdate$(1:x-1)
 01790   let day=val(endingdate$(x+1:x+2)) conv L1800

@@ -9,7 +9,7 @@
 00090 ! ______________________________________________________________________
 00100     cde$=lpad$(rtrm$(cde$),3) ! pass back sub-category #
 00110     fncno(cno)
-00120     let subcat=1 ! # of subcatergory file in calling program
+00120     subcat=1 ! # of subcatergory file in calling program
 00130 ! ______________________________________________________________________
 00140     restore #subcat: 
 00150     fntos(sn$="SubCatSrch")

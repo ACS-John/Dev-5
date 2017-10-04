@@ -52,7 +52,7 @@
 24000   if ckey=5 then goto XIT
 24020   let dat1=d1=val(resp$(1))
 24040   let dat2=d2=val(resp$(2))
-24060   if resp$(3)="True" then let skipposting=1
+24060   if resp$(3)="True" then skipposting=1
 24080   if glb=2 then let glwk$=env$('Q')&"\GLmstr\GL"&date$(days(dat1,'ccyymmdd'),'mmddyy')&".h"&env$('cno')
 24100   if glb><2 then let glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
 24120   if glb=2 and accrue$="Yes" then 
@@ -93,9 +93,9 @@
 28040     mat oldtgl=tgl
 28060     read #6,using "Form POS 1,N 8,POS 12,n 3,n 6,n 3,pos 42,n 6": teno,mat tgl,paydat eof L1400
 28080     ! If fndate_mmddyy_to_ccyymmdd(PAYDAT)<DAT1 OR fndate_mmddyy_to_ccyymmdd(PAYDAT)>DAT2 Then Goto 770 ! payroll date in department record must match
-28100     let oldtgl$=tgl$
+28100     oldtgl$=tgl$
 28120     mat ttgl=oldtgl
-28140     let oldteno=teno
+28140     oldteno=teno
 28160     checkkey$=cnvrt$("pic(zzzzzzzz)",teno)&"         "
 28180     restore #4,key>=checkkey$: nokey DEPT_READ
 28200     L840: ! 
@@ -110,7 +110,7 @@
 28380     L920: ! 
 28400     if tgl(1)=0 or tgl(1)=oldtgl then goto L930 else let fn_l1800 ! No Cost Center or same Cost Center
 28420     L930: ! If OLDTENO=TENO Then Goto 830
-28440     let eno$=lpad$(str$(teno),8)
+28440     eno$=lpad$(str$(teno),8)
 28460     read #2,using L960,key=eno$: em$ nokey DEPT_READ
 28480     L960: form pos 9,c 30
 28500     pr #255,using L980: teno,em$,mat tgl,tcp(31) ! -TCP(29)-TCP(30) Pageoflow PR_HDR kj
@@ -126,7 +126,7 @@
 28700     next j
 28720     let t(25)=t(25)+tcp(25) ! EIC
 28740     let t(26)=t(26)-tcp(32) ! ACCUMULATE NET
-28760     let subtotal=subtotal+tcp(31) ! -TCP(19)-TCP(20)
+28760     subtotal=subtotal+tcp(31) ! -TCP(19)-TCP(20)
 28780     ! accumulate total by acct to be posted to gl kj
 28800     let totaldue=totaldue-tcp(31) ! +TCP(29)+TCP(30) ! DUE TO PAYROLL CLEARING kj
 28820     let totaldr=totaldr+tcp(31) ! -TCP(29)-TCP(30)  ! kj
@@ -134,9 +134,9 @@
 28860   loop
 28880 ! ______________________________________________________________________
 32000 L1400: ! r:
-32020   let eofcode=1
+32020   eofcode=1
 32040   mat ttgl=tgl
-32060   let oldtgl$=tgl$
+32060   oldtgl$=tgl$
 32080   fn_write_gl_trans ! WRITE LAST ENTRY
 32100   if multigl=1 then ! ONLY ONE FUND OR COMPANY
 32120     fn_l1800
@@ -173,7 +173,7 @@
 36260   L1240: form pos 65,c 11,skip 1,pos 64,pic(---------.##),skip 1
 36280   if accrued<>0 then pr #255,using L1260: "Accrued Portion",-accrued else pr #255: 
 36300   L1260: form pos 45,c 16,pos 64,pic(---------.##),skip 2
-36320   let subtotal=0
+36320   subtotal=0
 36340 fnend 
 38000 def fn_pr_hdr
 38020   let p1=p1+1
@@ -263,7 +263,7 @@
 46240   close #14: 
 46260   open #14: "Name="&glwk$,internal,output ioerr L2210
 46280   L2210: ! 
-46300   let oldtgl=tgl(1)
+46300   oldtgl=tgl(1)
 46320 fnend 
 48000 def fn_finalscrctrlbookmulitfunds
 48020   ! FINAL PAGE FOR CONTROL SET OF BOOKS  (MULTI-FUNDS ONLY)

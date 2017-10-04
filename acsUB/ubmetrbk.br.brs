@@ -11,27 +11,27 @@
 02160 ! ______________________________________________________________________
 02180   fntop(program$,cap$="Meter Reading Book")
 02240   fndat(dat$,1)
-02260   if env$('client')="Gilbertown" then let seq=2
+02260   if env$('client')="Gilbertown" then seq=2
 02280 ! r: this section+the comboA on the first screen is just what you need  for a fnCurrently availableServiceTypeComboBox
 02300   fnget_services(mat snm$,mat srv$)
 02360   let x=0
-02380   let option$(x+=1)="[All]"
+02380   option$(x+=1)="[All]"
 02400   for j=1 to 4
 02420     if j=1 and trim$(snm$(j))="Water" then 
-02440       let option$(x+=1)=srv$(j)&"-"&snm$(j)(1:20)
+02440       option$(x+=1)=srv$(j)&"-"&snm$(j)(1:20)
 02460       let x_service=x_service+1
 02480       mat service$(x_service)=service$
-02500       let service$(x_service)="WA"
+02500       service$(x_service)="WA"
 02520     else if j=3 and (trim$(snm$(j))="Electric" or trim$(srv$(3)))="EL" then 
-02540       let option$(x+=1)=srv$(j)&"-"&snm$(j)(1:20)
+02540       option$(x+=1)=srv$(j)&"-"&snm$(j)(1:20)
 02560       let x_service=x_service+1
 02580       mat service$(x_service)=service$
-02600       let service$(x_service)="EL"
+02600       service$(x_service)="EL"
 02620     else if j=4 and (trim$(snm$(j))="Gas" or trim$(srv$(4))="GA") then 
-02640       let option$(x+=1)=srv$(j)&"-"&snm$(j)(1:20)
+02640       option$(x+=1)=srv$(j)&"-"&snm$(j)(1:20)
 02660       let x_service=x_service+1
 02680       mat service$(x_service)=service$
-02700       let service$(x_service)="GA"
+02700       service$(x_service)="GA"
 02720     end if 
 02740   next j
 02760   mat option$(x)
@@ -48,7 +48,7 @@
 08120   fnlbl(lc+=1,1,"Service Type:",mylen,1)
 08140   fncomboa("ubrate3",lc,mypos,mat option$)
 08160   let resp$(2)=fn_reg_try$(sn$&'.service type',option$(1))
-08170   let lc+=1
+08170   lc+=1
 08180   fnchk(lc+=1,mylen+2,"Print Footnotes:",1)
 08200   let resp$(3)=fn_reg_try$(sn$&'.print footnotes',"False")
 08220   fnchk(lc+=1,mylen+2,"Double Space:",1)
@@ -61,11 +61,11 @@
 08360   let resp$(7)=fn_reg_try$(sn$&'.print prior usage',"False")
 08380   fnchk(lc+=1,mylen+2,"Skip Meter Number:",1)
 08400   let resp$(8)=fn_reg_try$(sn$&'.skip meter number',"False")
-08410   let lc+=1
+08410   lc+=1
 08420   fnlbl(lc+=1,1,"Number of Blank Lines:",mylen-2,1)
 08440   fntxt(lc,mylen+2,2,0,0,"30",0,"If you want extra space between accounts, enter the number of lines.")
 08460   let resp$(9)=fn_reg_try$(sn$&'.# of blank lines',str$(extralines))
-08470   let lc+=1
+08470   lc+=1
 08480   fnfra(lc+=1,10,2,26,"Order for printing","The billing journal can be printed if route # sequence, Account sequence or name sequence.",0)
 08500   fnopt(1,2,"Route Number Sequence",0,1)
 08520   let resp$(10)=fn_reg_try$(sn$&'.route number sequence',"True")
@@ -75,17 +75,17 @@
 08600   fnacs(sn$,0,mat resp$,ck)
 10000   if ck=5 then goto XIT
 10020   if uprc$(resp$(1))=uprc$("[All]") then let route=0 else let route=val(resp$(1))
-10040   let svt$=resp$(2)
+10040   svt$=resp$(2)
 10060   if resp$(2)<>"[All]" then let x_service=1 ! only printing one service if not answered as all
 10080   if resp$(3)(1:1)="T" then let remark=1 ! yes want remarks printed
 10100   if resp$(4)(1:1)="T" then let double=1 ! yes want to double space
 10120   if resp$(5)(1:1)="T" then let usedcolumn=1 ! yes want a gallons used column
-10140   if resp$(6)(1:1)="T" then let skipdisconnects=1 ! yes want show disconnects
+10140   if resp$(6)(1:1)="T" then skipdisconnects=1 ! yes want show disconnects
 10160   if resp$(7)(1:1)="T" then let printprior=1 ! pr prior months usage
-10180   if resp$(8)(1:1)="T" then let skipmeter=1 ! don't pr meter number
-10200   let extralines=val(resp$(9))
-10220   if resp$(10)="True" then let seq=1
-10240   if resp$(11)="True" then let seq=2
+10180   if resp$(8)(1:1)="T" then skipmeter=1 ! don't pr meter number
+10200   extralines=val(resp$(9))
+10220   if resp$(10)="True" then seq=1
+10240   if resp$(11)="True" then seq=2
 10260   fnreg_write(sn$&'.route',resp$(1))
 10280   fnreg_write(sn$&'.service type',resp$(2))
 10300   fnreg_write(sn$&'.print footnotes',resp$(3))
@@ -172,7 +172,7 @@
 16420     end if 
 16440   next j
 18000 L940: ! If env$('client')="Thomasboro" AND FBC<>0 Then Goto 500
-18020   if fbc><0 then let e$(2)="Disconnect"
+18020   if fbc><0 then e$(2)="Disconnect"
 18040   if env$('client')="Thomasboro" then 
 18120     pr #255,using 'Form POS 1,C 10,X 1,C 18,X 1,C 20,X 1,X_service*c 43': z$,e$(2)(1:18),e$(1)(1:20),mat x_service$
 18140     goto L1050
@@ -312,7 +312,7 @@
 38060   ! elecode=a(3) ! no longer used  
 38070   ! litecode=    ! no longer used
 38080   if route and extra(1)<>route then goto CAMPBELL_LOOP_TOP
-38100   if c4><0 then let e$(2)="DISCONNECT"
+38100   if c4><0 then e$(2)="DISCONNECT"
 38120   if uprc$(service$)="W" and watcode=0 then goto CAMPBELL_LOOP_TOP ! if water selected and water code=0 then skip
 38140   if uprc$(service$)="W" and watcode>0 then goto CAMPBELL_EO_LOOP ! if water selected and water code>0 then print
 38160 ! if uprc$(service$)="E" and elecode>0 then goto CAMPBELL_EO_LOOP ! if elec selected and elec code>0 then print

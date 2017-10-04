@@ -30,14 +30,14 @@
 00258   fncmdkey("E&xit",5,0,1,"Return to menu")
 00260   fnacs(sn$,0,mat resp$,ckey) ! ask report #
 00270   if ckey=5 then goto XIT
-00280   let editrec=addone=0
+00280   editrec=addone=0
 00292   let rptn=val(resp$(1)(1:2))
 00294   if ckey=1 then 
 00296     addone=1
 00298     let rptn=0
 00302     goto CONTINUE_FOR_ADD_AND_EDIT
 00304   else if ckey=2 then 
-00306     let editrec=1
+00306     editrec=1
 00310     goto CONTINUE_FOR_ADD_AND_EDIT
 00312   else if ckey=4 then 
 00320     fnprint_designed_report(rptn)
@@ -67,8 +67,8 @@
 00420     mat ch$=("")
 00422 !   mat tempch$=("")
 00424     let ips=0
-00426     let sd$=""
-00428     let sd=cp=0
+00426     sd$=""
+00428     sd=cp=0
 00430     mat psc=(0)
 00432     mat pp=(0)
 00434     mat ti=(0)
@@ -125,7 +125,7 @@
 00740     if resp$(5)=code$(j) then let ips=j-1: goto L760
 00750   next j
 00760 L760: ! 
-00762   if resp$(6)(1:1)="T" then let sd$="Y": let sd=1 else let sd$="N": let sd=0
+00762   if resp$(6)(1:1)="T" then sd$="Y": sd=1 else sd$="N": sd=0
 00770   if ips<0 or ips>126 or (ips>1 and ips<6) then 
 00772     mat ml$(2)
 00774     let ml$(1)="You can not use "&code$(ips+1)&" as selection criteria!"
@@ -133,7 +133,7 @@
 00778     fnmsgbox(mat ml$,resp$,cap$,48)
 00780     goto SCR2
 00782   end if 
-00800   if sd$="Y" then let sd=1 else let sd=0
+00800   if sd$="Y" then sd=1 else sd=0
 00810   let rt$=rt40$
 00820   if ckey=4 then 
 00822     goto DELETEIT
@@ -231,7 +231,7 @@
 01610 !   let io5$(2)="7,2,Cc 38,N"
 01620 !   let wrd5$(1)="Reselect Report Number"
 01630 !   let wrd5$(2)="Add Reports"
-01640 !   pr fields "16,35,C 09,B,5": "Exit (F5)"
+01640 !   pr f "16,35,C 09,B,5": "Exit (F5)"
 01650 !   rinput #105,select mat io5$,attr "H": mat wrd5$
 01660 !   if cmdkey=5 or cmdkey=99 then goto XIT
 01670 !   if curfld=2 then goto L1770 else goto SCR1 ! /r

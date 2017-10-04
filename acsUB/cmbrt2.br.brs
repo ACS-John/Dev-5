@@ -9,11 +9,11 @@
 20180     if all=1 then 
 20200       let x=1
 20220     else 
-20240       let option$(1)="[All]"
+20240       option$(1)="[All]"
 20260       let x=2
 20280     end if 
 20300     for j=bkno1 to bkno2
-20320       let option$(x)=str$(j)
+20320       option$(x)=str$(j)
 20340       let x+=1
 20360     next j
 20380     mat option$(x-1)

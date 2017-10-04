@@ -9,8 +9,8 @@
 00090   pr newpage
 00100   close #101: ioerr L110
 00110 L110: open #101: "SROW=11,SCOL=20,EROW=13,ECOL=63,BORDER=DR,CAPTION=CHANGE PAYEE NUMBERS",display,outin 
-00120   pr fields "12,22,C 40": "ENTER COMPANY NUMBER TO BE CHANGE:"
-00130   pr fields "14,32,C 16,B,5": "PRESS F5 TO STOP"
+00120   pr f "12,22,C 40": "ENTER COMPANY NUMBER TO BE CHANGE:"
+00130   pr f "14,32,C 16,B,5": "PRESS F5 TO STOP"
 00140 L140: rinput fields "12,57,N 2,UE,N": cno conv L140
 00150   if cmdkey=5 then goto XIT
 00160 ! 
@@ -19,7 +19,7 @@
 00190   open #3: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TRIDX2.H"&str$(cno),internal,outin,keyed 
 00200 ! OPEN #4: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno),INTERNAL,OUTIN,RELATIVE
 00210   open #6: "Name="&env$('Q')&"\CLmstr\IvPaid.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\IVINDEX.H"&str$(cno)&"",internal,outin,keyed 
-00220   pr fields "14,32,C 16,RB,N": "  IN PROCESS"
+00220   pr f "14,32,C 16,RB,N": "  IN PROCESS"
 00230   let nk=10
 00240 L240: read #1,using L250: k1$,ad1 eof END1
 00250 L250: form pos 1,c 8,pos 147,pd 3

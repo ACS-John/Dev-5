@@ -8,8 +8,8 @@
 00080   dim cap$*128,fltyp$(2),p$(2)*25
 00090 ! ______________________________________________________________________
 00100   fncno(cno)
-00110   let lbl$(1)="Key" : let lbl$(2)="Desc"
-00120   let fln(1)=1 : let fln(2)=25
+00110   lbl$(1)="Key" : lbl$(2)="Desc"
+00120   fln(1)=1 : fln(2)=25
 00130   open #1: "Name=S:\Core\Data\1099Type.dat,KFName=S:\Core\Data\1099Type.idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outin,keyed 
 00131   close #1: 
 00132   open #1: "Name=S:\Core\Data\1099Type.dat,KFName=S:\Core\Data\1099Type.idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outin,keyed 

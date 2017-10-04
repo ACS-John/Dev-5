@@ -174,17 +174,17 @@
 30020 fnend 
 34000 def fn_line(lineNumber)
 34020   if lineNumber=1  then
-34040     let lineReturn=yOffset+10
+34040     lineReturn=yOffset+10
 34060   else if lineNumber=2  then
-34080     let lineReturn=yOffset+23
+34080     lineReturn=yOffset+23
 34100   else if lineNumber=3 then
-34120     let lineReturn=yOffset+32
+34120     lineReturn=yOffset+32
 34140   else if lineNumber=4 then
-34160     let lineReturn=yOffset+43+2+4
+34160     lineReturn=yOffset+43+2+4
 34180   else if lineNumber=5 then
-34200     let lineReturn=yOffset+56+2+8
+34200     lineReturn=yOffset+56+2+8
 34220   else if lineNumber>5 then
-34240     let lineReturn=yOffset+56+2+((lineNumber-5)*13)
+34240     lineReturn=yOffset+56+2+((lineNumber-5)*13)
 34260   else
 34280     pr 'i dunno' : pause
 34300   end if
@@ -344,7 +344,7 @@
 47260       goto ASK_INFO
 47280     end if
 47300     if ckey=14 then 
-47320         let output_filename$=os_filename$(env$('userprofile')&'\Desktop\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt')
+47320         output_filename$=os_filename$(env$('userprofile')&'\Desktop\ACS [TaxYear] 1099 Export (Company [CompanyNumber]).txt')
 47340       goto ASK_INFO
 47360     else if ckey=ckey_margins then
 47380       fn_ask_margins

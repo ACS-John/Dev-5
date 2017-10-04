@@ -34,17 +34,17 @@
         fncmdkey("E&xit",5,0,1,"Returns to menu")
 00320   fnacs(sn$,0,mat resp$,ckey) ! ask report #
 00330   if ckey=5 then goto XIT
-00340   let editrec=addone=0
+00340   editrec=addone=0
 00350   let hreport$=resp$(1)(1:2) !:
         let rptn=val(resp$(1)(1:2)) !:
         let rptn$=lpad$(str$(rptn),2)
 00360   if ckey=1 then addone=1: let rptn=0: goto ADD_EDIT
-00370   if ckey=2 then let editrec=1: goto ADD_EDIT
+00370   if ckey=2 then editrec=1: goto ADD_EDIT
 00380 RECREATE_GRID: ! 
 00390 ! ______________________________________________________________________
 00400 ADD_EDIT: ! 
 00410   let rptn$=lpad$(str$(rptn),2)
-00420   if addone=1 then let rn=0: let rt$="": mat ch$=(""): mat tempch$=(""): let ips=0: let sd$="": let sd=cp=0: mat psc=(0): mat pp=(0) : mat ti=(0): let holdrn=0 : goto SCR2
+00420   if addone=1 then let rn=0: let rt$="": mat ch$=(""): mat tempch$=(""): let ips=0: sd$="": sd=cp=0: mat psc=(0): mat pp=(0) : mat ti=(0): let holdrn=0 : goto SCR2
 00430   if editrec=1 then read #1,using L1780,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs nokey L460
 00440   goto L470
 00450 ! 
@@ -110,14 +110,14 @@
 00830   for j=1 to udim(ty2$)
 00840     if resp$(5)=trim$(ty2$(j)) then let ips=val(ty2$(j)(1:2)): goto L860
 00850   next j
-00860 L860: if resp$(6)(1:1)="T" then let sd$="Y": let sd=1 else let sd$="N": let sd=0
+00860 L860: if resp$(6)(1:1)="T" then sd$="Y": sd=1 else sd$="N": sd=0
 00870   if ips>1 and (ps>1 and ps<5) then goto L880 else goto L890 ! can't use name fields fro selection criteria
 00880 L880: mat ml$(2) !:
         let ml$(1)="You can not use "&trim$(ty2$(ips+1))&" as selection criteria!" !:
         let ml$(2)=" Take OK to select a different item." !:
         fnmsgbox(mat ml$,resp$,cap$,48) !:
         goto SCR2
-00890 L890: if sd$="Y" then let sd=1 else let sd=0
+00890 L890: if sd$="Y" then sd=1 else sd=0
 00900   let rt$=rt40$
 00910   if ckey=1 then rewrite #1,using L1780,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
 00920   if ips>0 then goto SCR5 else : goto SCR3 ! ask criteris for pr selection
@@ -147,7 +147,7 @@
 01110   goto SCR4 ! allow to edit
 01120 SCR4: ! edit/columns
 01130   fntos(sn$="columns") !:
-        let mylen=25 : let mypos=mylen+2: let respc=0: let left=1
+        let mylen=25 : let mypos=mylen+2: let respc=0: left=1
 01140   fnlbl(1,1,"Report #:  "&str$(rn),mylen,left)
 01150   fnlbl(2,1,"Column #:  "&str$(column),mylen,left)
 01160   fnlbl(3,1,"Formula for printing:",mylen,left)
@@ -195,13 +195,13 @@
 01480 CHANGETHENUMBER: ! 
 01490   write #1,using L1780: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
 01500   delete #1,key=rptn$: nokey L1510
-01510 L1510: let lst=0
+01510 L1510: lst=0
 01520   form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
 01530   goto SCR1
 01540 MAIN_SCREEN: ! 
 01550   if rno=0 then let rno=1
 01560   fntos(sn$="user1") !:
-        let mylen=25 : let mypos=mylen+2: let respc=0: let left=1
+        let mylen=25 : let mypos=mylen+2: let respc=0: left=1
 01570   let df$="S:\acsPR\Jcreport.mst" : let if$="S:\acsPR\jcreport.idx" !:
         fncombof("CRjcreport",1,1,80,df$,1,2,3,74,if$,1) !:
         fncombof("CRjcreportALL",1,1,80,df$,1,2,3,74,if$,2)
@@ -220,7 +220,7 @@
 01650 ! ______________________________________________________________________
 01660 EDIT_ADD_REPORT: ! 
 01670   fntos(sn$="namlst1") !:
-        let mylen=25 : let mypos=mylen+2: let respc=0: let left=1
+        let mylen=25 : let mypos=mylen+2: let respc=0: left=1
 01680   fnlbl(1,1,"Report #:",mylen,left)
 01690   fntxt(1,mypos,2,0,0,"30",0,"Each report must be assigned a unique number between 1 and 100.") !:
         let resp$(respc+=1)=str$(rn)
@@ -247,7 +247,7 @@
 01880   let wrd3$(2)="Select Reports to Print"
 01890   let io3$(1)="4,2,C 23,N"
 01900   let io3$(2)="5,2,C 23,N"
-01910   pr fields "16,34,C 11,B,5": "Cancel (F5)"
+01910   pr f "16,34,C 11,B,5": "Cancel (F5)"
 01920   rinput #win,select mat io3$,attr "H": mat wrd3$
 01930   let prtall=curfld-1
 01940   close #win: ioerr L1950
@@ -257,7 +257,7 @@
 01980     fnopenwin(win=103,10,20,15,59,cap$)
 01990     if j>1 then pr #win,fields "6,1,Cc 40,R,N": "Last Report Number Entered was "&rno$(j-1)
 02000     pr #win,fields "4,2,C 23,N": "Report Number to Print:"
-02010     pr fields "16,35,C 09,B,5": "Done (F5)"
+02010     pr f "16,35,C 09,B,5": "Done (F5)"
 02020 L2020: input #win,fields "4,26,N 2,UET,N": rno(j) conv L2020
 02030     let rno$(j)=lpad$(str$(rno(j)),2)
 02040     if cmdkey=5 or rno(j)=0 then goto L2060

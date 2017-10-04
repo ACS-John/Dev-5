@@ -1,5 +1,5 @@
 00300   def library fndate_picker$ (;_date$,format$,row,column,___, window,days_in_week,gridspec$*255,usermonth,save_date$*8,baseyear)
-00400     let save_date$=_date$
+00400     save_date$=_date$
 00500     baseyear=val(env$('status.config.baseyear'))
 00600     if baseyear <= 1900 then execute 'config baseyear 1930'
 00700 ! 
@@ -89,7 +89,7 @@
 09300     mat days$(42)=("")
 09400     let month=val(_date$(1:2))
 09500     let year=val(_date$(5:8))
-09600     let offset=fndayofweek(_date$(1:2)&'01'&_date$(5:8),days_in_week)
+09600     offset=fndayofweek(_date$(1:2)&'01'&_date$(5:8),days_in_week)
 09700     let days_this_month=fndaysinmonth(month,year)
 09800     for rowindex_=1 + offset to days_this_month + offset
 09900       let days$(rowindex_)=lpad$(str$(idx:=idx+1),2,'0')

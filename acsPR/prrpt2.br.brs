@@ -42,8 +42,8 @@
 00420   let io1$(7)="16,51,N 3,UT,N"
 00430   let io1$(8)="17,51,Cu 1,UT,N"
 00440   let io1$(9)="18,51,Cu 1,UT,N"
-00450   pr fields "23,30,C 09,B,1": "Next (F1)"
-00460   pr fields "23,41,C 09,B,5": "Exit (F5)"
+00450   pr f "23,30,C 09,B,1": "Next (F1)"
+00460   pr f "23,41,C 09,B,5": "Exit (F5)"
 00470 L470: input #101,fields mat io1$: rn,rt$,mat tempch$,ips,sd$,cp$ conv L470
 00480   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
 00490   if cmdkey>0 then goto L560 else ce=curfld
@@ -52,11 +52,11 @@
 00520   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L470
 00530 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
 00540   ce=cnt+1
-00550 ERR1: pr fields "24,78,C 1": bell : goto L510
+00550 ERR1: pr f "24,78,C 1": bell : goto L510
 00560 L560: if cmdkey=5 then goto DONE
 00570   read #1,using L580,key=lpad$(str$(rn),2),release: rn nokey L640
 00580 L580: form pos 1,n 2
-00590 ! pr Fields "2,40,C 35,N": "This Report Number Already Exists"
+00590 ! pr f "2,40,C 35,N": "This Report Number Already Exists"
 00600   let msgline$(1)="Report Number "&str$(rn)&" already exists"
 00610   let msgline$(2)="Please use a different Report Number."
 00620   fnoldmsgbox(mat resonse$,cap$,mat msgline$,1)
@@ -64,7 +64,7 @@
 00640 L640: if ips<0 or ips>126 then goto L470
 00650   if ips>1 and ips<6 then goto L470
 00660   if sd<0 or sd>1 then goto L470
-00670   if sd$="Y" then let sd=1 else let sd=0
+00670   if sd$="Y" then sd=1 else sd=0
 00680   if sd$<>"Y" and sd$<>"N" then ce=8 : goto ERR1
 00690   if cp$="Y" then cp=1 else cp=0
 00700   if cp$<>"Y" and cp$<>"N" then ce=9 : goto ERR1
@@ -76,7 +76,7 @@
 00760   pr newpage
 00770   for w=1 to 5
 00780     for j=1 to 20
-00790       pr fields str$(j+1)&",5,C 30,N": "PRINT SELECTION CRITERIA"
+00790       pr f str$(j+1)&",5,C 30,N": "PRINT SELECTION CRITERIA"
 00800     next j
 00810 L810: input fields mat fb$: mat rptemp conv L810
 00820     on w goto L830,L850,L850,L850,L850
@@ -99,8 +99,8 @@
 00990     pr #102,fields str$(j+1)&",22,C 15,N": "Print Position:"
 01000     pr #102,fields str$(j+1)&",45,C 16,N": "Total this Item:"
 01010   next j
-01020   pr fields "24,30,C 09,B,1": "Save (F1)"
-01030   pr fields "24,40,C 11,B,5": "Cancel (F5)"
+01020   pr f "24,30,C 09,B,1": "Save (F1)"
+01030   pr f "24,40,C 11,B,5": "Cancel (F5)"
 01040 L1040: input #102,fields mat io2$: mat temp conv CONV2
 01050   if ce>0 then let io2$(ce)(ce1:ce2)="U": ce=0
 01060   if cmdkey>0 then goto L1130 else ce=curfld
@@ -109,7 +109,7 @@
 01090   ce2=ce1+1 : let io2$(ce)(ce1:ce1)="UC" : goto L1040
 01100 CONV2: if ce>0 then let io2$(ce)(ce1:ce2)="U"
 01110   ce=cnt+1
-01120 ERR2: pr fields "24,78,C 1": bell : goto L1080
+01120 ERR2: pr f "24,78,C 1": bell : goto L1080
 01130 L1130: ! 
 01140   if cmdkey=5 then goto SCR1
 01150   for j=1 to 20

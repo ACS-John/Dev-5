@@ -99,7 +99,7 @@
 00462   open #5: "Name="&env$('Q')&"\GLmstr\GLPT"&wsid$&".h"&env$('cno')&",SIZE=0,RecL=538,Replace",internal,outin,relative 
 00470   write #5,using F_5,rec=1: kn,mat k,td,tc,mat tcde
 28000 SCREEN_1: ! r:
-28020   let edit=0
+28020   edit=0
 28040   fntos(sn$="GLInput")
 28060   let mylen=20: let mypos=mylen+3 : let right=1 : rc=0
 28080   fnfra(1,1,4,60,"Method of Entry","Choose the method of transaction entry.")
@@ -114,7 +114,7 @@
 28260 ! let resp$(4)="False"
 28280   fnlbl(7,1,"Type Of Entry:",mylen,right)
 28300   fncomboa("TypeOfEntry1",7,mypos,mat typeofentry_option$,"You must indicate the type of entry you will be entering.",18)
-28310   if sel=0 then let sel=3
+28310   if sel=0 then sel=3
 28320   let resp$(respc_entryType:=rc+=1)=typeofentry_option$(sel)
 28340   ! resp$(4)=typeofentry_option$(max(1,sel)) !  for j=1 to 6
 28360                            !    if sel=j then let resp$(4)=typeofentry_option$(j)
@@ -136,7 +136,7 @@
 28680   if resp$(respc_erasePrevious)="True" then let pt1=2
 28700   if resp$(respc_inputClientCL)="True" then let pt1=3
 28720 ! if resp$(4)="True" then let pt1=4
-28740   let sel=sel1=srch(mat typeofentry_option$,resp$(respc_entryType)) ! val(resp$(respc_entryType)(1:1)) ! type of transaction
+28740   sel=sel1=srch(mat typeofentry_option$,resp$(respc_entryType)) ! val(resp$(respc_entryType)(1:1)) ! type of transaction
 28750 ! if sel<=1 then pause
 28760 ! If SEL=4 Then Goto SCREEN_1 ! temporary line do not access payroll checks
 28780   let typeofentry$=resp$(4)
@@ -194,7 +194,7 @@
 29820 goto MAIN
 34000 PREPARE_EDIT_SCREEN: ! r:
 34020   let transactionamt=0
-34040   let editmode=1
+34040   editmode=1
 34060   let gl$=""
 34080   let totalalloc=0
 34100   read #h_gl_work,using fGlWork,rec=rn: mat tr,tr$,td$,vn$,mat jv$,key$ norec PES_XIT ! get basic information from record clicked to find the complete transaction
@@ -208,13 +208,13 @@
 34260   if tr(6)=2 or tr(6)=7 then let tr(5)=-tr(5) ! reverse signs on receipts and sales BEFORE DISPLAYING ON CORRECTION SCREEN
 34280   let transactionamt+=tr(5)
 34300   let vn$=vn$
-34320   let sel=tr(6)
-34340   if tr(6)=1 then let sel=1 ! reg disb
-34360   if tr(6)=2 then let sel=2 ! reg receipt
-34380   if tr(6)=3 then let sel=3 ! reg adj
-34400   if tr(6)=4 then let sel=4
-34420   if tr(6)=7 then let sel=5 ! 
-34440   if tr(6)=8 then let sel=6 ! 
+34320   sel=tr(6)
+34340   if tr(6)=1 then sel=1 ! reg disb
+34360   if tr(6)=2 then sel=2 ! reg receipt
+34380   if tr(6)=3 then sel=3 ! reg adj
+34400   if tr(6)=4 then sel=4
+34420   if tr(6)=7 then sel=5 ! 
+34440   if tr(6)=8 then sel=6 ! 
 34460   write #glallocations,using "form pos 1,c 12,pd 10.2,c 30,pd 5": payeegl$,tr(5),td$,rec(2)
 34480   let totalalloc+=tr(5) ! re-add total allocations
 34500   goto GLALLOCATIONS_READ
@@ -259,7 +259,7 @@
 38060     rewrite #h_gl_work,using fGlWork,rec=transadr: mat tr,tr$,td$ norec L3280 
 38080     goto L3300
 38100   end if
-38120   let lr2=lrec(h_gl_work)+1
+38120   lr2=lrec(h_gl_work)+1
 38140   L3280: ! 
 38160   write #h_gl_work,using fGlWork,rec=lr2: mat tr,tr$,td$,vn$,mat jv$,key$
 38180   fGlWork: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8,c 6,c 5,c 3,c 12
@@ -310,7 +310,7 @@
 42840     fntxt(7,70,13,0,right,"10",0,"Amount to allocated to this general ledger number. Not applicable to adjustments.",0 )
 42860     let resp$(6)=""
 42880   end if 
-42900   let seltype=tr(6) : if tr(6)>4 then let seltype=tr(6)-2
+42900   seltype=tr(6) : if tr(6)>4 then seltype=tr(6)-2
 42920   if edit=1 then let typeofentry_selected$=typeofentry_option$(seltype) else let typeofentry_selected$=typeofentry$(4:20)
 42940   fnlbl(1,4,"Type of Entry: "&typeofentry_selected$,36,right)
 42960   fnlbl(1,38,"Bank Account: "&bankname$,50,right)
@@ -361,7 +361,7 @@
 43860   allocamt=0
 43880 ! Let PAS=1 ! kj 61107
 43900   let message$=""
-43920   if extract=1 and ckey<>1 then let extract=0
+43920   if extract=1 and ckey<>1 then extract=0
 43940   if (ckey=9 or ckey=3) and sel1=3 and val(resp$(2))<>0 then ckey=1 ! force the last entry to write   ! KJ 50707
 43960   if ckey=30 and sel1=3 and val(resp$(2))<>0 then ckey=1 ! force the last entry to write   ! KJ 50707
 43980   if (ckey=9 or ckey=3 or ckey=6) and lrec(glallocations)>0 and edit=0 then goto AFP_XIT ! 4430 ! unwritten record on screen
@@ -395,7 +395,7 @@
 44540   let td$=resp$(4)(9:38) ! transaction description = vendor name when vendor entered
 44560 ALLOCATE_FROM_PAYEE: ! 
 44580   if ckey=15 and editmode=0 then 
-44600     let extract=1
+44600     extract=1
 44620     goto EXTRACT ! pull allocation breakdown from payee record
 44640   end if 
 44660   allocgl$=fnagl$(resp$(5))
@@ -435,7 +435,7 @@
 46280     gosub EDIT_ALLOCATIONS
 46300     goto MAIN
 46320   else if ckey=19 then 
-46340     let editall=1
+46340     editall=1
 46360     gosub EDIT_ALLOCATIONS
 46380     goto MAIN
 46400   else if ckey=30 then 
@@ -506,10 +506,10 @@
 52206   else 
 52208     goto L4770
 52210   end if 
-52220   let lastallocation+=transactionamt-totalalloc
+52220   lastallocation+=transactionamt-totalalloc
 52240   rewrite #glallocations,using "Form pos 13,pd 10.2",rec=lrec(glallocations): lastallocation
 52260   L4770: !
-52270   allocamt=0: ! kj  Let EXTRACT=0
+52270   allocamt=0: ! kj  eXTRACT=0
 52280   L4780: ! 
 52300 goto MAIN ! /r
 54000 DELETE_TRANS: ! r: deletes entire transaction
@@ -550,7 +550,7 @@
 57700   let glitem2$(7)=td$
 57720   fnflexadd1(mat glitem2$)
 57740   let net+=tr(5) ! add net check
-57760   let oldtr$=tr$ ! hold reference numbers
+57760   oldtr$=tr$ ! hold reference numbers
 57780   goto L5230
 57800 L5310: ! 
 57820   mat glitem2$=("")
@@ -562,9 +562,9 @@
 57940   fncmdkey("&Print Proof List",4,0,0,"Prints a proof list of your entries..")
 57960   fncmdkey("&Back",5,0,1,"Return to main entry screen.")
 57980   fnacs(sn$,0,mat resp$,ckey)
-58000   if ckey=5 then let edit=0: goto CLEAN_MAIN_SCREEN
+58000   if ckey=5 then edit=0: goto CLEAN_MAIN_SCREEN
 58020   let rn=val(resp$(1))
-58040   if ckey=2 then let edit=1 else let edit=0 ! set edit mode
+58040   if ckey=2 then edit=1 else edit=0 ! set edit mode
 58060   if ckey=2 and trim$(resp$(1))="" then gosub REVIEW_TRANS : goto EO_FLEX3
 58080   if ckey=2 then gosub PREPARE_EDIT_SCREEN : goto EO_FLEX3
 58100   if ckey=4 then let fn_pr_proof_list
@@ -601,7 +601,7 @@
 66020   close #101: ioerr ignore
 66040   open #101: "SROW=10,SCOL=19,EROW=12,ECOL=62,BORDeR=DR,CaPTION=<Choose Input Drive",display,outin 
 66060   pr #101: newpage
-66080   pr fields "#101,2,1,Cr 40": "Insert Input Diskette in selected drive:"
+66080   pr f "#101,2,1,Cr 40": "Insert Input Diskette in selected drive:"
 66100   if dv$="" then let dv$="A"
 66120   rinput fields "#101,2,42,Cu 1,UT,N": dv$
 66140   let dv$=dv$&":" ! if dv$="A" or dv$="B" then let dv$=dv$&":" else goto L5750
@@ -746,7 +746,7 @@
 74140   next j
 74180   return  ! /r
 76000 PAYROLL: ! r:
-76020   if sel=0 then let sel=4 ! default to payroll
+76020   if sel=0 then sel=4 ! default to payroll
 76040   fntos(sn$="GLInput7")
 76060   let mylen=18: let mypos=mylen+3 : let right=1
 76080   fnlbl(3,1,"Date:",mylen,right)
@@ -840,7 +840,7 @@
 77840   let tr$=resp$(3) ! ref #
 77860   let pr(1)=val(resp$(4)(1:4)): let vn$=resp$(4)(1:4) ! employee number
 77880   let td$=resp$(4)(5:30) ! transaction description = employee name
-77900   let empname$=td$
+77900   empname$=td$
 77920   let gl$=fnagl$(resp$(5))
 77940   for j=2 to 19
 77960     let pr(j)=val(resp$(j+5))
@@ -921,8 +921,8 @@
 84160     end if 
 84180   fnend 
 86000 EDIT_ALLOCATIONS: ! r:  editing glallocation while still being entered into allocation grid
-86020   let editrecord=val(resp$(7))
-86040   if editall=19 then let editrecord=1
+86020   editrecord=val(resp$(7))
+86040   if editall=19 then editrecord=1
 86060 EA_READ_GLALLOC: ! 
 86080   read #glallocations,using "Form pos 1,c 12,pd 10.2,c 30,pd 5",rec=editrecord: gl$,allocation,td$,transadr norec EA_FINIS
 86100   let holdallocation=allocation
@@ -963,11 +963,11 @@
 86780     let totalalloc+=allocation-holdallocation ! 
 86800   end if 
 86820   if editall=1 then 
-86840     let editrecord=editrecord+1
+86840     editrecord=editrecord+1
 86860     goto EA_READ_GLALLOC
 86880   end if 
 86900 EA_FINIS: ! 
-86920   let editall=0
+86920   editall=0
 86940   return  ! /r
 88000   def fn_pr_proof_list
 88020     fnopenprn

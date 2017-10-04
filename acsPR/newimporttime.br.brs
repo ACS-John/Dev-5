@@ -27,7 +27,7 @@
         fncmdkey("E&xit",5,0,1,"Returns to menu")
 00270   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 00280   if ckey=5 then goto XIT
-00290   let endingdate=val(resp$(1))
+00290   endingdate=val(resp$(1))
 00300 ! ______________________________________________________________________
 00310   fnopenprn
 00320   let filename$="Payroll"&cnvrt$("Pic(zzzzzzzz)",endingdate)(5:6) &"-"&cnvrt$("Pic(zzzzzzzz)",endingdate)(7:8)&"-" &cnvrt$("Pic(zzzzzzzz)",endingdate)(3:4) &".txt"
@@ -36,16 +36,16 @@
 00350   gosub HDR
 00360   fnwait(101,cap$,wait$="Importing: please wait...",0)
 00370   on fkey 5 goto L580
-00380   let simple$=pathtotimecard$&"TimeCard.h"&env$('cno')
+00380   simple$=pathtotimecard$&"TimeCard.h"&env$('cno')
 00390   open #3: "Name="&pathtotimecard$&"TimeCard\SimpleSummary,KFName="&pathtotimecard$&"TimeCard\SSIndex,Replace,RecL=46,KPs=1,KLn=16",internal,outin,keyed 
 00400   open #5: "Name="&simple$&",RecL=76",display,input 
 00410 L410: linput #5: ln$ eof L570
-00420   let eno=val(ln$(1:8)) conv MESSAGE1
+00420   eno=val(ln$(1:8)) conv MESSAGE1
 00430   let dep=val(ln$(39:41)) conv L440
 00440 L440: let reghrs=val(ln$(42:48)) conv L450
-00450 L450: let othrs=val(ln$(49:55)) conv L460
+00450 L450: othrs=val(ln$(49:55)) conv L460
 00460 L460: let vachrs=val(ln$(56:62)) conv L470
-00470 L470: let sickhrs=val(ln$(63:69)) conv L480
+00470 L470: sickhrs=val(ln$(63:69)) conv L480
 00480 L480: let holhrs=val(ln$(70:76)) conv L490
 00490 L490: let name$=ln$(9:38)
 00500   write #3,using L530: eno,dep,val(env$('cno')),reghrs,othrs,vachrs,sickhrs,holhrs,0

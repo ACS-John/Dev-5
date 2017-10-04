@@ -98,7 +98,7 @@
 38020   dim save_name$*256,ln$*512
 38040   dim save_log_filename$*256
 38060   let failure=0
-38080   let save_log_filename$=env$('temp')&'\Save_As_Log.txt'
+38080   save_log_filename$=env$('temp')&'\Save_As_Log.txt'
 38100   execute 'free '&br_filename$(save_log_filename$) ioerr ignore
 38120   if fsa_automatedSaveFileName$<>'' then
 38140     save_name$=fsa_automatedSaveFileName$

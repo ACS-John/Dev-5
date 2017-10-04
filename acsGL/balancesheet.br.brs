@@ -19,11 +19,11 @@
 00146   fnfscode
 00147   fnpriorcd
 00150   if fnps=2 then let mp1=66 !:
-          let fl1$="Name="&env$('Q')&"\GLmstr\acglFnSC.h"&env$('cno') !:
-          let fl1$=fl1$&",KFName="&env$('Q')&"\GLmstr\fnSCIndx.h"&env$('cno')&",Shr" else !:
+          fl1$="Name="&env$('Q')&"\GLmstr\acglFnSC.h"&env$('cno') !:
+          fl1$=fl1$&",KFName="&env$('Q')&"\GLmstr\fnSCIndx.h"&env$('cno')&",Shr" else !:
           let mp1=63 !:
-          let fl1$="Name="&env$('Q')&"\GLmstr\acglFnSB.h"&env$('cno') !:
-          let fl1$=fl1$&",KFName="&env$('Q')&"\GLmstr\FNSBIndx.h"&env$('cno')&",Shr"
+          fl1$="Name="&env$('Q')&"\GLmstr\acglFnSB.h"&env$('cno') !:
+          fl1$=fl1$&",KFName="&env$('Q')&"\GLmstr\FNSBIndx.h"&env$('cno')&",Shr"
 00160   open #1: fl1$,internal,input,keyed 
 00170   if fnprocess=1 or fnUseDeptNo=0 then goto L280 else goto L190
 00180 ! ______________________________________________________________________
@@ -85,7 +85,7 @@
 00720   let dollar=24+14*bc ! If CP=1 Then Let DOLLAR=50+14*BC Else Let DOLLAR=24+14*BC
 00730   if total><0 then goto L750
 00740   if ls+ul+ds+ic>0 then goto L750 else goto READ_TOP
-00750 L750: let sp2=dollar-sp-1
+00750 L750: sp2=dollar-sp-1
 00755   if ul=1 then pr #255,using L761: d$(1:sp2),dollar$,"{\ul ",total,"}" pageoflow PGOF : goto L770 ! atlantis underline
 00760   pr #255,using L770: d$(1:sp2),dollar$,total pageoflow PGOF
 00761 L761: form pos sp,c sp2,pos dollar,c 1,c 5,pic(---,---,---.##),c 2,skip redir  ! ! atlantis underline
@@ -101,7 +101,7 @@
 00850   if rs=1 then accum1=-accum(ap) else accum1=accum(ap)
 00860   if ds=1 then let dollar$="$" else let dollar$=" "
 00870   let dollar=24+14*bc ! if  CP=1 Then Let DOLLAR=50+14*BC Else Let DOLLAR=24+14*BC
-00880   let sp2=dollar-sp-1
+00880   sp2=dollar-sp-1
 00885   if ul=1 then pr #255,using L761: d$(1:sp2),dollar$,"{\ul ",accum1,"}" pageoflow PGOF : goto L900
 00890   pr #255,using L770: d$(1:sp2),dollar$,accum1 pageoflow PGOF
 00900 L900: gosub SET_ACCUM
@@ -115,7 +115,7 @@
 00950 L950: goto READ_TOP
 00960 ! ______________________________________________________________________
 00970 L970: if te$="R" then let report$=d$
-00980   if te$="S" then let secondr$=d$
+00980   if te$="S" then secondr$=d$
 00990   gosub FOOTER
 01000   goto READ_TOP
 01010 L1010: if foot1=1 then goto L1070
@@ -141,8 +141,8 @@
 01210   goto EO_FOOTER
 01220 L1220: let fnpglen(pglen)
 01230 ! If PGLEN<>42 Then Let PGLEN=58
-01240   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01250 ! If PGLEN=42 Then Let SK+=1
+01240   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01250 ! If PGLEN=42 Then sK+=1
 01260   pr #255,using L1270: rtrm$(foot$)
 01270 L1270: form skip sk,pos tabnote,c fl,skip 1
 01280   if eofcode=1 then goto EO_FOOTER
@@ -179,7 +179,7 @@
 01590   return 
 01600 ! ______________________________________________________________________
 01610 DONE: ! 
-01620   let eofcode=1
+01620   eofcode=1
 01630   gosub L1220
 01634   fnfscode(actpd)
 01635   fnpriorcd(1)

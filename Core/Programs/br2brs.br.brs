@@ -10,7 +10,7 @@
           let dir$="\\DISKSTATION\public\ACS\acs.402" !:
           pr "Directory not set default used (Default Dir: "&dir$&" )"
 00100   if dir$(len(dir$):len(dir$))="\" then let dir$=dir$(1:len(dir$)-1)
-00110   let option$="/s /a-d /on" ! widows xp ... /s   - include sub dirs. !:
+00110   option$="/s /a-d /on" ! widows xp ... /s   - include sub dirs. !:
         ! .                                       /a-d - exclude dir. names !:
         ! .                                       /on  - order by name
 00120   fngetdir(dir$,mat filename$,option$)

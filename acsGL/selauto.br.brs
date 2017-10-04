@@ -42,13 +42,13 @@
 00380   cmask$(1)='30' !:
         cmask$(2)='' !:
         fnflexinit1('selauto',2,50,20,35,mat chdr$,mat cmask$,1,0,frame) !:
-        let editrec=0
+        editrec=0
 00390   close #1: ioerr ignore
 00400   open #1: "Name=gL.mnu",display,input 
 00410 L410: linput #1: ln$ eof L540
 00420   if ln$(1:1)<>">" then goto L410 ! skip headings
-00430   if ln$(1:1)=">" then let ln$(1:1)=""
-00440   if ln$(1:1)=">" then let ln$(1:1)="" ! delete up to two >>
+00430   if ln$(1:1)=">" then ln$(1:1)=""
+00440   if ln$(1:1)=">" then ln$(1:1)="" ! delete up to two >>
 00450   let x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
 00460   if x=0 then goto L410 ! skip headings
 00470   let desc$=ln$(1:x-1)(1:35)
@@ -64,8 +64,8 @@
 00550   if fnclient_has('G2') then open #1: "Name=S:\General Ledger\Accountants\Menu.mnu",display,input else goto L700
 00560 L560: linput #1: ln$ eof L690
 00570   if ln$(1:1)<>">" then goto L560 ! skip headings
-00580   if ln$(1:1)=">" then let ln$(1:1)=""
-00590   if ln$(1:1)=">" then let ln$(1:1)="" ! delete up to two >>
+00580   if ln$(1:1)=">" then ln$(1:1)=""
+00590   if ln$(1:1)=">" then ln$(1:1)="" ! delete up to two >>
 00600   let x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
 00610   if x=0 then goto L560 ! skip headings
 00620   let desc$=ln$(1:x-1)(1:35)
@@ -90,7 +90,7 @@
           mat prim=(0) !:
           execute "drop "&env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno) !:
           goto MAIN
-00780   let sel=val(resp$(41))
+00780   sel=val(resp$(41))
 00790   for j=1 to 20
 00800     let prim(j)=val(resp$(j*2))
 00810   next j

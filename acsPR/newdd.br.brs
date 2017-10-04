@@ -138,19 +138,19 @@
 01190   let rc$="" ! Reference Code
 01200   write #ddout,using 'Form POS 1,G 1,PIC(##),C 10,C 10,G 6,G 4,C 1,C 3,C 2,C 1,C 23,C 23,C 7,C 1,c 2': 1,pcde,imd$,imo$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,ion$,rc$,"0",crlf$
 01210 ! Company/Batch Header Record __________________________________________
-01220   let scc=220 ! Service Class Code !:
+01220   scc=220 ! Service Class Code !:
         cdd$="" ! Company Discretionary Data !:
-        let ecc$="PPD" ! Standard Entry Class Code !:
+        ecc$="PPD" ! Standard Entry Class Code !:
         ced$="Payroll  " ! Company Entry Descriptive
 01230 ! if env$('client')="West Rest Haven" then cid$="1741551549" ! Company Identification  ! instructions say it is a 1 digit identification code designator plus a nine digit identification number (assure a 1 means federal id code plus the federal id #)
 01240 ! if env$('client')="Washington Parrish" then cid$="1726001461" ! Company Identification
 01250   if env$('client')="Billings" then cid$="1430903099" ! Company Identification
-01260   let eed$=date$("YYMMDD") ! Effective Entry Date !:
-        let osc$="1" ! Originator Status Code !:
+01260   eed$=date$("YYMMDD") ! Effective Entry Date !:
+        osc$="1" ! Originator Status Code !:
         bn=1 !  BN=Batch Number
-01270 ! if env$('client')="Washington Parrish" then let odi$="20428027" ! Origination DFI Identification  (your bank account number)
-01280 ! if env$('client')="West Rest Haven" then let odi$=" 1055003" ! Origination DFI Identification  (your bank account number)
-01290   if env$('client')="Billings" then let odi$=" 0040118" ! Origination DFI Identification  (your bank account number)
+01270 ! if env$('client')="Washington Parrish" then odi$="20428027" ! Origination DFI Identification  (your bank account number)
+01280 ! if env$('client')="West Rest Haven" then odi$=" 1055003" ! Origination DFI Identification  (your bank account number)
+01290   if env$('client')="Billings" then odi$=" 0040118" ! Origination DFI Identification  (your bank account number)
 01300   write #ddout,using 'Form POS 1,G 1,PIC(###),C 16,C 20,C 10,C 3,C 10,PIC(######),G 6,G 3,G 1,C 8,PIC(#######),c 2': 5,scc,env$('cnam')(1:16),cdd$="Payroll",cid$,ecc$,ced$,fncd(d2),eed$,"",osc$,odi$,bn,crlf$
 01310   return 
 01320 ! ______________________________________________________________________
@@ -172,16 +172,16 @@
 01430   let td1=td1+(tcp(32)*100)
 01440   let tc1+=(tcp(32)*100) ! added this for the batch totals - ??
 01450   ! if env$('client')="West Rest Haven" and rtn=1190515 then let totalin=totalin+tcp(32)
-01460   let eh=eh+int(rtn/10) !:
+01460   eh=eh+int(rtn/10) !:
         ! Entry Hash should accumulate Routing numbers !:
         ! dropping the last digit of the routing number
 01470 return ! /r
 01480 ! ______________________________________________________________________
 01490 CTRL1: ! r: Company/Batch Control Record
-01500   let scc=220 ! Service Class Code
-01510   let eac=tn1 ! Entry Addenda Count
-01520   ! LET EH=0 ! Entry Hash
-01530   let eh$=str$(eh): let x=len(eh$): let eh=val(eh$(max(1,x-9):x))
+01500   scc=220 ! Service Class Code
+01510   eac=tn1 ! Entry Addenda Count
+01520   ! eH=0 ! Entry Hash
+01530   eh$=str$(eh): let x=len(eh$): eh=val(eh$(max(1,x-9):x))
 01540   ! TD1=Total Debit Amount
 01550   ! TC1=Total Credit Amount
 01560   ! CID$=Company Identification
@@ -201,8 +201,8 @@
           blctr=int(tn2/10)+1: bkfactor=blctr*10-tn2 !:
           ! block counter and block factor
 01640   if fp(tn2/10)=0 then blctr=int(tn2/10): bkfactor=0
-01650   let eac=tn1 ! entry/adgenda count (number of 6 Records)
-01660   ! don't change my entry hash any more ! Let EH=0008150573 ! EH=Entry Hash
+01650   eac=tn1 ! entry/adgenda count (number of 6 Records)
+01660   ! don't change my entry hash any more ! eH=0008150573 ! EH=Entry Hash
 01670   if eh=0 then mat ml$(2) !:
           let ml$(1)="It appears you do not have anyone with" !:
           let ml$(2)="direct deposit this pay period." !:
@@ -250,8 +250,8 @@
 01990   if trim$(path$)<>"" then execute "Copy DDout"&wsid$&".txt "&path$&" -n"
 02000   if trim$(email$)<>"" then execute "sy Start Mailto:"&trim$(email$)&"?attach=DDout"&wsid$&".txt?subject=Direct_Deposit_Payroll" !:
           pr newpage !:
-          pr fields "10,1,Cc 80,N": "After sending your e-mail," !:
-          pr fields "11,1,Cc 80,N": "Pess ENTER to continue." !:
+          pr f "10,1,Cc 80,N": "After sending your e-mail," !:
+          pr f "11,1,Cc 80,N": "Pess ENTER to continue." !:
           input fields "1,1,C 1,N": pause$
 02010   execute "Free DDout"&wsid$&".txt -n"
 02020 return ! /r

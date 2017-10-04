@@ -45,8 +45,8 @@
 32160   let z$=lpad$(rtrm$(ln$(1:9)),10)
 32180   ! Let ROUTE=VAL(LN$(1:7))
 32200   let route=val(ln$(81:87))
-32220   ! Let SEQUENCE=VAL(LN$(9:15))
-32240   let sequence=val(ln$(73:79))
+32220   ! sEQUENCE=VAL(LN$(9:15))
+32240   sequence=val(ln$(73:79))
 32260   read #1,using "Form POS 1,c 10,pos 1741,n 2,pos 1743,n 7",key=z$: oldz$,oldroute,oldsequence nokey L250
 32280   rewrite #1,using "Form pos 1741,n 2,pos 1743,n 7": route,sequence
 32300   goto READ_CUSTOMER

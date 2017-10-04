@@ -6,8 +6,8 @@
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070 L70: pr newpage
-00080   pr fields "8,20,C 30,R,N": "  CONVERT PAYROLL FILES"
-00090   pr fields "10,15,C 50": "Company Number (0 to stop):"
+00080   pr f "8,20,C 30,R,N": "  CONVERT PAYROLL FILES"
+00090   pr f "10,15,C 50": "Company Number (0 to stop):"
 00100 L100: input fields "10,55,N 5,UE,N": cno conv L100
 00110   if cno=0 then goto XIT
 00120 ! 

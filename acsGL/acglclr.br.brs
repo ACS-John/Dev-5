@@ -6,12 +6,12 @@
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,tr(7),tr$*12,td$*30,cap$*128
 00080 ! ______________________________________________________________________
-00090   let right=1 : center=2 : let left=0
+00090   let right=1 : center=2 : left=0
 00100   fntop(program$,cap$="Clear Accumulated Transactions")
 00110   fnconsole(off=0)
 00120   fncno(cno,cnam$)
 00130   fntos(sn$='ClrAccTrans') !:
-        let lc=0 !:
+        lc=0 !:
         let mylen=50 : let mypos=mylen+2 : let width=80
 00140   fnlbl(lc+=1,1,"* * *   Warning   * * *",width,center)
 00150   fnlbl(lc+=1,1,"This selection will remove all records from the",width,center)

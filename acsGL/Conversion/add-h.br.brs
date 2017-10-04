@@ -10,8 +10,8 @@
 00100 MENU1: ! 
 00110   close #101: ioerr L120
 00120 L120: open #101: "SROW=9,SCOL=23,EROW=11,ECOL=60,BORDER=DR,CAPTION="&cap$,display,outin: pr #101: newpage
-00130   pr fields "10,24,C 32": "Company Number:"
-00140   pr fields "12,32,C 16,B,5": "Cancel (F5)"
+00130   pr f "10,24,C 32": "Company Number:"
+00140   pr f "12,32,C 16,B,5": "Cancel (F5)"
 00150 L150: rinput fields "10,57,N 5,UT,N": cno conv L150
 00160   if cmdkey=5 then goto XIT
 00170   goto START

@@ -10,9 +10,9 @@
 00110   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&str$(cno)&",RecL=20,use,Shr",internal,outin,relative 
 00120   if lrec(8)=0 then write #8,using "form pos 1,n 6": dat else read #8,using "form pos 1,n 6",rec=1,release: dat
 00130   pr newpage
-00140   pr fields "10,15,c 60": "POSITION PAPER FOR G/L DISTRIBUTION REPORT"
-00150   pr fields "12,12,c 60": "ENTER THE AS OF DATE: FORMAT = MMDDYY"
-00160   pr fields "12,53,n 6,N": dat
+00140   pr f "10,15,c 60": "POSITION PAPER FOR G/L DISTRIBUTION REPORT"
+00150   pr f "12,12,c 60": "ENTER THE AS OF DATE: FORMAT = MMDDYY"
+00160   pr f "12,53,n 6,N": dat
 00170 L170: input fields "12,53,n 6,ue": tr4 conv L170
 00180   if tr4<10100 or tr4>123199 then goto L170
 00190   rewrite #8,using "form pos 1,n 6",rec=1: d1
@@ -20,8 +20,8 @@
 00210   open #1: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr L730
 00220   open #2: "Name="&env$('temp')&"\Work."&session$,internal,input,relative ioerr L730
 00230   pr newpage
-00240   pr fields "10,15,c 50,h,n": "PRINT A/R GENERAL LEDGER DISTRIBUTION IN PROCESS"
-00250   pr fields "23,2,C 30,N": "Press F5 to stop"
+00240   pr f "10,15,c 50,h,n": "PRINT A/R GENERAL LEDGER DISTRIBUTION IN PROCESS"
+00250   pr f "23,2,C 30,N": "Press F5 to stop"
 00260   gosub L590
 00270 L270: read #1,using L280: r1 eof L670 ioerr L730
 00280 L280: form pos 1,pd 3
@@ -69,16 +69,16 @@
 00700 L700: close #2: ioerr L710
 00710 L710: if nw=1 then close #255: else pr #255: newpage
 00720 XIT: let fnxit
-00730 L730: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L750
+00730 L730: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L750
 00740   goto L790
 00750 L750: pr newpage
-00760   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L780
+00760   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L780
 00770   goto L790
-00780 L780: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00790 L790: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00780 L780: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00790 L790: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00800   input fields "24,60,C 1,N": quitcode$
 00810   if rtrm$(uprc$(quitcode$))="Q" then goto L850
-00820   pr fields "23,3,C 78,N": ""
-00830   pr fields "24,3,C 78,N": ""
+00820   pr f "23,3,C 78,N": ""
+00830   pr f "24,3,C 78,N": ""
 00840   retry 
 00850 L850: goto XIT

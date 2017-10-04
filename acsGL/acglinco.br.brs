@@ -22,8 +22,8 @@
 00210   let priorcd=fnpriorcd
 00220 ! ______________________________________________________________________
 00230   let pors=1
-00240   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" : let mp1=72 else !:
-          let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr" : let mp1=69
+00240   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" : let mp1=72 else !:
+          fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr" : let mp1=69
 00250   open #1: fl1$,internal,input,keyed 
 00260   if fnprocess=1 or fnUseDeptNo=0 then goto L360
 00270   fntos(sn$="ACglinco") !:
@@ -107,7 +107,7 @@
 01020   if annualb><0 or total2><0 then goto L1050
 01030   if finalb<>0 then goto L1050
 01040   if ls+ds+ul+ic>0 then goto L1050 else goto L430
-01050 L1050: let sp2=22-sp-1
+01050 L1050: sp2=22-sp-1
 01059   if ul=1 then pr #255,using L1071: d$(1:sp2),dollar$,"{\ul ",annualb,"}",dollar$,"{\ul ",finalb,"}",dollar$,"{\ul ",total2,"}",dollar$,"{\ul ",unexpend,"}" pageoflow L1620 : goto L1070
 01060   pr #255,using L1070: d$(1:sp2),dollar$,annualb,dollar$,finalb,dollar$,total2,dollar$,unexpend pageoflow L1620
 01070 L1070: form pos sp,c sp2,pos 22,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),skip redir
@@ -127,7 +127,7 @@
 01190   if rs=1 then accum3=-accum(ap,3) else accum3=accum(ap,3)
 01200   if rs=1 then accum4=accum(ap,4) else accum4=accum(ap,4)
 01210   if ds=1 then let dollar$="$" else let dollar$=" "
-01220   let sp2=22-sp-1
+01220   sp2=22-sp-1
 01228   if ul=1 then pr #255,using L1071: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}",dollar$,"{\ul ",accum3,"}",dollar$,"{\ul ",accum4,"}" pageoflow L1620 : goto L1240
 01230   pr #255,using L1070: d$(1:sp2),dollar$,accum1,dollar$,accum2,dollar$,accum3,dollar$,accum4 pageoflow L1620
 01240 L1240: gosub L1390
@@ -136,7 +136,7 @@
 01260 L1260: gosub L1470
 01270   goto L430
 01280 L1280: if te$="R" then let report$=d$
-01290   if te$="S" then let secondr$=d$
+01290   if te$="S" then secondr$=d$
 01300   gosub L1470
 01310   goto L430
 01320 L1320: if foot1=1 then goto L1370
@@ -161,8 +161,8 @@
 01510   goto L1610
 01520 L1520: let fnpglen(pglen)
 01530 ! If PGLEN<>42 Then Let PGLEN=58
-01540   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01550 ! If PGLEN=42 Then Let SK=SK+1
+01540   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01550 ! If PGLEN=42 Then sK=SK+1
 01560   pr #255,using L1570: rtrm$(foot$),"Page "&str$(pt1)
 01570 L1570: form skip sk,pos tabnote,c fl,pos 75,c 8,skip 1
 01580   if eofcode=1 then goto L1610
@@ -199,7 +199,7 @@
 01890   pr #255: 
 01900   return 
 01910 ! ______________________________________________________________________
-01920 L1920: let eofcode=1
+01920 L1920: eofcode=1
 01930   gosub L1520
 01940 ! 
 01948   fnfscode(actpd)

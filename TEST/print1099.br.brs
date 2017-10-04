@@ -15,16 +15,16 @@
           cinfo$(4)='Company CSZ' !:
           cinfo$(5)='Company Phone Number' !:
           cinfo$(6)='Company Federal ID'
-00120     let einfo$(1)='Employee ID '&str$(j) !:
-          let einfo$(2)='Employee Name' !:
-          let einfo$(3)='Employee Address (1)' !:
-          let einfo$(4)='Employee Address (2)' !:
-          let einfo$(5)='Employee CSZ' !:
-          let einfo$(6)='Employee Account Number'
+00120     einfo$(1)='Employee ID '&str$(j) !:
+          einfo$(2)='Employee Name' !:
+          einfo$(3)='Employee Address (1)' !:
+          einfo$(4)='Employee Address (2)' !:
+          einfo$(5)='Employee CSZ' !:
+          einfo$(6)='Employee Account Number'
 00130     box(1)=123 : box(2)=234.3 : box(3)=123.1 : box(4)=123
 00140     fnadd1099(mat cinfo$,mat einfo$,mat box)
 00141   next j
-00142   let lz1$='L'
+00142   lz1$='L'
 00150   chain 'S:\Core\Print1099',lz1$ ! Let FNPRINT1099('L')
 00160   pr ' you should some 1099'
 00170   goto XIT

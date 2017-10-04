@@ -19,7 +19,7 @@
 13800   read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto
 14000   close #20: 
 14200   for j=1 to udim(servicename$)
-14400     let servicename$(j)=trim$(servicename$(j))
+14400     servicename$(j)=trim$(servicename$(j))
 14600   next j
 14800 ! ______________________________________________________________________
 15000   fntos(sn$='SwapCurPri1')

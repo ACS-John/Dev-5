@@ -36,7 +36,7 @@
 10350     let totcust=lrec(h_ubmstr) : custidx=0
 10360     do 
 10370 NEXTCUST: read #h_ubmstr,using CUSTFORM: z$ eof ENDOFCUST
-10380       custidx+=1 : pr fields "10,10,C 35": "Reading customer "&str$(custidx)&" of "&str$(totcust)
+10380       custidx+=1 : pr f "10,10,C 35": "Reading customer "&str$(custidx)&" of "&str$(totcust)
 10390       let transkey$=z$&cnvrt$("N 8",0)&cnvrt$("N 1",0)
 10400       read #h_ubtrans,using TRANSFORM,key>=transkey$: a$,tdate,tcode,seweramt nokey NEXTCUST : goto PROCESSTRANS
 10410 NEXTTRANS: read #h_ubtrans,using TRANSFORM: a$,tdate,tcode,seweramt eof NEXTCUST
@@ -69,7 +69,7 @@
 10680     fn_showresults
 10690   fnend 
 10700   def fn_showresults
-10710     let lncnt=2+yrcnt
+10710     lncnt=2+yrcnt
 10720     fntop("S:\acsUB\sewerstats2","Sewer Statistics")
 10730     fntos("sewerstats-2")
 10740     fnlbl(1,1,"Date Range:",19)

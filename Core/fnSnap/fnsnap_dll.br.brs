@@ -7,19 +7,19 @@
           ! | If run more than once it may overwrite updated variables      | !:
           ! +----------------------------------------------------------------+!
 00210     let datfmt$="MM-DD-CCYY" !:
-          let maxsrows=22 : let ssav=106 !:
+          let maxsrows=22 : ssav=106 !:
           let windev=owindev=69 : let mga$="24,2,c 78," !:
           let mgac$="24,2,CC 78," : let pfk=23 !:
           ! Common Variables Almost Always Required By Fnsnap
 00213     library env$("PD")&"WORKMENU.br": fnmenu
 00214     library release,env$("PD")&"Core\fnsnap\FNPRTMAT.DLL": fnprtmat
 00215     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprtpag,fnpfkey,fnprtpickbar,fnpm,fnsetall,fnsetsel,fnwin,fnkeysel_ex,fnzero,fnsavpart,fnauto,fnclswin,fnrelpart,fnzlpad$,fndialog$,fnsize,fnpick,fnerrtrap,fngetk$,fnclkbuf,fnbutton,fnclrbutton,fnnokey,fnok,fnpickwin,fntype
-00220     let pgup=90 : let pgdn=91 : let esc=99 !:
-          let esc$=chr$(27) !:
-          let up=102 : let left=103 : let dn=104
+00220     let pgup=90 : let pgdn=91 : esc=99 !:
+          esc$=chr$(27) !:
+          let up=102 : left=103 : let dn=104
 00222     let upfld=105 : let dnfld=106 : let foflow=107 !:
-          let home=112 : let end=113 : let fldplus=114 !:
-          let fldminus=115
+          let home=112 : end=113 : fldplus=114 !:
+          fldminus=115
 00225     if file(windev)>-1 then 
 00226       let windev+=1 !:
             goto 225
@@ -53,7 +53,7 @@
           ! | as the value of _A$                                         | !:
           !    !
 00650     dim config$(1)*100
-00660     let env$("STATUS",mat config$,_a$) !:
+00660     env$("STATUS",mat config$,_a$) !:
           fnstatus$=""
 00670     for _a =1 to udim(mat config$)
 00680       if config$(_a)(1:len(_a$))=_a$ then !:
@@ -70,7 +70,7 @@
 00720     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnstatus$,fnwinrowcol,fnlistspec$,fnsrchcrit$,fnwinbuttons
 00725     library env$("PD")&"Core\fnsnap\RTFLIB.DLL": fnrtf,fnamt$,fntext$,fnlistprint
 00730     dim config$(1)*100,header$(1)*100,forms$(1)*100,widths(1),srchstring$*50
-00735     let env$("STATUS",mat config$,"")
+00735     env$("STATUS",mat config$,"")
 00740     ad=udim(mat config$)
 00745     mat headers$(1) !:
           let headers$(1)="Environment"
@@ -79,10 +79,10 @@
 00755     mat forms$(1) !:
           let forms$(1)="V 100"
 00760     fnwinrowcol(0,lrow,lcol) ! function is in S:\Core\fnsnap\NEWSCRN.DLL
-00765     arows=0 : let srow=4 : let scol=3 !:
-          let lcols=min(lcol-srow-2,sum(mat widths)+2) !:
-          let lrows=min(lrow-srow+2,max(3,ad+2+arows))
-00775     let listspec$=fnlistspec$(listwin,srow,scol,lrows,lcols,arows,mat headers$,mat widths,mat forms$,"Select Line",grid$,parent:=0,head:=2) !:
+00765     arows=0 : srow=4 : scol=3 !:
+          lcols=min(lcol-srow-2,sum(mat widths)+2) !:
+          lrows=min(lrow-srow+2,max(3,ad+2+arows))
+00775     listspec$=fnlistspec$(listwin,srow,scol,lrows,lcols,arows,mat headers$,mat widths,mat forms$,"Select Line",grid$,parent:=0,head:=2) !:
           ! add ,GRID$ after "select Invoice" to make a grid where grid$="GRID"
 00777     fnwinbuttons(-1,"^F2:Filter ^F12:Print ^ESC:End",listwin)
 00780     pr #listwin, fields listspec$&",=R" : (mat config$)
@@ -95,7 +95,7 @@
             goto 790
 00800     if fk=2 then 
 00805       if fk=2 and wbversion$=>"4.30" then rinput #listwin, fields str$(lrows+1)&",2,15/FILTER 50/10,[D],1,1,FULLROW,ALL": srchstring$ : cx=1 : goto 790
-00810       let srchstr$=fnsrchcrit$(str$(round(lrows/2,0)),"2",2,lcols-4,listwin,"Item to search for") !:
+00810       srchstr$=fnsrchcrit$(str$(round(lrows/2,0)),"2",2,lcols-4,listwin,"Item to search for") !:
             mat select(1)=(0) !:
             ! LET FNLISTSRCH(MAT PDINVNR$,SRCHSTR$,MAT SELECT) !:
             ! LET FNLISTSRCHN(MAT PDPAID,SRCHSTR$,MAT SELECT) !:
@@ -113,7 +113,7 @@
 00840     end if 
 00845     if not (fk=0 or fk=esc or fk=close) then goto 790
 00850     close #listwin: !:
-          let listwin=0
+          listwin=0
 00855   fnend 
 01000 ! ---------------------------------
 01010   def library fnsize(flnm$*100,fllen) ! Function to change file size !:
@@ -138,14 +138,14 @@
 01034     open #(flin:=fngethandle): "name=work"&session$&".tmp",internal,outin 
 01036     execute "free "&flnm$&" -N"
 01038     open #(flout:=fngethandle): "NAME="&flnm$&",recl="&str$(rln(flin))&",replace,version=1",internal,output 
-01040     let flfrm$=cform$("FORM C "&str$(rln(flin)))
+01040     flfrm$=cform$("FORM C "&str$(rln(flin)))
 01042     read #flin,using flfrm$: f$ eof 1050
 01044     write #flout,using flfrm$: f$
 01046     goto 1042
 01050     close #flin,free: !:
-          let flin=0
+          flin=0
 01052     close #flout: !:
-          let flout=0
+          flout=0
 01054   fnend 
 01070 ! -----------------------------------
 01080   def library fnfileok(number,name$*100,length,file_version;&old_version) !:
@@ -160,19 +160,19 @@
           ! 3 = versions do not match existing version is newer  !:
           ! 4 = versions do not match existing version is older
 01100     pr newpage
-01110     pr fields "10,10,c 60,n/W:T": "Processing file #"&str$(number)&"  "&name$
+01110     pr f "10,10,c 60,n/W:T": "Processing file #"&str$(number)&"  "&name$
 01120     fnfileok=0
 01130     open #number: "NAME="&name$,internal,outin ioerr NEWFILE
 01132     if version(number)=0 then close #number: !:
             fnverone(name$) !:
             goto 1130
-01135     let old_version=version(number)
+01135     old_version=version(number)
 01136     if file_version<old_version then let fnfileok=3
 01138     if file_version>old_version then let fnfileok=4
-01139     let old_length=rln(number)
+01139     old_length=rln(number)
 01140     if rln(number)=length and old_version=file_version then goto FILEOK
-01150     pr fields "12,1,CC 79,n/W:T": "Record length is "&str$(rln(number))&" it should be "&str$(length)
-01152     pr fields "14,1,CC 79,n/W:t": "File version is "&str$(old_version)&" it should be "&str$(file_version)
+01150     pr f "12,1,CC 79,n/W:T": "Record length is "&str$(rln(number))&" it should be "&str$(length)
+01152     pr f "14,1,CC 79,n/W:t": "File version is "&str$(old_version)&" it should be "&str$(file_version)
 01160     close #number: 
 01170     fnsize(name$,length)
 01180     open #number: "NAME="&name$,internal,outin ioerr NEWFILE
@@ -191,7 +191,7 @@
           ! | Displays a box indicating that a timeout has occured          | !:
           ! |                                                               | !:
           ! +----------------------------------------------------------------+!
-01310     if not seconds then let seconds=10
+01310     if not seconds then seconds=10
 01320     if env$("guimode")="ON" then let msgbox("You have waited more than "&str$(seconds)&" seconds to make an entry.  The system has timed out.","Time Out","OK","EXCL") else let fndialog$("16","5",70,"You have waited more than "&str$(seconds)&" seconds to make an entry.  The system has timed out.","","","",1,1,1,1)
 01330   fnend 
 01350   def library fncurdrv$*100 !:
@@ -214,8 +214,8 @@
           ! | Open a source file to prepare to build and RTF file using   | !:
           ! | FNRTF from RTFLIB.dll - also uses FNRTFEND                  | !:
           !    !
-01430     let outfile=10
-01440     if file(outfile)>-1 then let outfile+=1 : goto 1440
+01430     outfile=10
+01440     if file(outfile)>-1 then outfile+=1 : goto 1440
 01450     open #outfile: "name=out"&session$&".txt,eol=none,replace",display,output 
 01460     crlf$=chr$(13)&chr$(10)
 01470     if header$>"" then pr #outfile: "H|"&header$&crlf$
@@ -350,10 +350,10 @@
           ! INDIR$,INDRV$,OUTDIR$ and OUTDRV$ are intended to NOT be included     !:
           !             and will therefore be set to NULL                         !
 02150     dim srtcnt$*100
-02160     let srtcnt=10
-02170     if file(srtcnt)>-1 then let srtcnt+=1 : goto 2170
+02160     srtcnt=10
+02170     if file(srtcnt)>-1 then srtcnt+=1 : goto 2170
 02180     open #srtcnt: "name="&env$("TEMP")&"\srtcnt."&session$&",recl=128,replace",internal,output 
-02190     let srtcnt$=file$(srtcnt)
+02190     srtcnt$=file$(srtcnt)
 02200     goto 2220
 02210     for a=1 to 4 !:
             write #srtcnt,using "form C 128": "!"&rpt$(" ",126)&"!" !:
@@ -418,10 +418,10 @@
           ! |                                                               | !:
           ! +----------------------------------------------------------------+!
 02620     dim a$(2)*400,a(2)
-02630     let old=1 !:
+02630     old=1 !:
           let new=2 !:
           let ver=1 !:
-          let str=2 !:
+          str=2 !:
           let num=3
 02640     fnupdate_version=0
 02650     if not exists("dircopy$") then execute "MKDIR "&dircopy$ ioerr 2655
@@ -496,7 +496,7 @@
 02980     close #helpfil: 
 02985 ! EXECUTE "sys -c-M"&ENV$("TEMP")&"\brhelp.htm -w"
 02986     execute "sys -c -M "&helpfil$&" -w"
-02987 ! LET SLEEP(10) : IF _CS THEN EXECUTE "FREE @:"&HELPFIL$ ELSE EXECUTE "FREE "&HELPFIL$
+02987 ! sLEEP(10) : IF _CS THEN EXECUTE "FREE @:"&HELPFIL$ ELSE EXECUTE "FREE "&HELPFIL$
 02990   fnend 
 03000 ! ----------------------
 03010   def library fnputpickwin(mat ppickwin) !:
@@ -556,34 +556,34 @@
           !                 Times_new      !:
           !                 gothic
 03280     dim s$(2),ss$(2),st$(7),sts$(7),sw$(5),sws$(5),tf$(4),tfs$(4)
-03290     let s$(1)="ROMAN" !:
-          let s$(2)="MATH"
-03300     let ss$(1)="8U" !:
-          let ss$(2)="8M"
-03310     let st$(1)="UPRIGHT" !:
-          let st$(2)="ITALIC" !:
-          let st$(3)="CONDENSED" !:
-          let st$(4)="COMPRESSED" !:
-          let st$(5)="EXPANDED" !:
-          let st$(6)="OUTLINE" !:
-          let st$(7)="SHADOWED"
-03320     let sts$(1)='0' !:
-          let sts$(2)="1" !:
-          let sts$(3)="4" !:
-          let sts$(4)="8" !:
-          let sts$(5)="24" !:
-          let sts$(6)="32" !:
-          let sts$(7)="128"
-03330     let sw$(1)="THIN" !:
-          let sw$(2)="LIGHT" !:
-          let sw$(3)="MEDIUM" !:
-          let sw$(4)="BOLD" !:
-          let sw$(5)="BLACK"
-03340     let sws$(1)="-5" !:
-          let sws$(2)="-3" !:
-          let sws$(3)="0" !:
-          let sws$(4)="3" !:
-          let sws$(5)="5"
+03290     s$(1)="ROMAN" !:
+          s$(2)="MATH"
+03300     ss$(1)="8U" !:
+          ss$(2)="8M"
+03310     st$(1)="UPRIGHT" !:
+          st$(2)="ITALIC" !:
+          st$(3)="CONDENSED" !:
+          st$(4)="COMPRESSED" !:
+          st$(5)="EXPANDED" !:
+          st$(6)="OUTLINE" !:
+          st$(7)="SHADOWED"
+03320     sts$(1)='0' !:
+          sts$(2)="1" !:
+          sts$(3)="4" !:
+          sts$(4)="8" !:
+          sts$(5)="24" !:
+          sts$(6)="32" !:
+          sts$(7)="128"
+03330     sw$(1)="THIN" !:
+          sw$(2)="LIGHT" !:
+          sw$(3)="MEDIUM" !:
+          sw$(4)="BOLD" !:
+          sw$(5)="BLACK"
+03340     sws$(1)="-5" !:
+          sws$(2)="-3" !:
+          sws$(3)="0" !:
+          sws$(4)="3" !:
+          sws$(5)="5"
 03350     let tf$(1)="ARIA" !:
           let tf$(2)="TIMES" !:
           let tf$(3)="TIMES_NEW" !:
@@ -593,11 +593,11 @@
           let tfs$(3)="16901" !:
           let tfs$(4)="4102"
 03370     let x=srch(mat s$,uprc$(symbol_set$))
-03380     if x>0 then let symbol_set$=ss$(x)
+03380     if x>0 then symbol_set$=ss$(x)
 03390     if proportional>0 then let proportional$="1" else let proportional$="0"
 03400     let pitch$=str$(round(72/chr_per_inch,4))
 03410     let x=srch(mat st$,uprc$(style$))
-03420     if x>0 then let style$=sts$(x) else let style$="0"
+03420     if x>0 then style$=sts$(x) else style$="0"
 03430     let x=srch(mat sw$,uprc$(weight$))
 03440     if x>0 then let weight$=sws$(x) else let weight$="0"
 03450     let x=srch(mat tf$,uprc$(typeface$))
@@ -644,7 +644,7 @@
           !    !
 03810     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fnwinrowcol,fncount,fnwinbuttons
 03812     if len(buttons$)>0 then !:
-            let str2mat(buttons$,mat buttons$,"|") !:
+            str2mat(buttons$,mat buttons$,"|") !:
             buttons=1 !:
             mat _buttons$(udim(mat buttons$)) else !:
             buttons=0
@@ -660,18 +660,18 @@
 03818     execute "config attribute [MSG]N/W:T,font=SWISS:MEDIUM" ! BOLD"
 03819     if not len(message$) then let message$="Processing - Please wait"
 03820     fnwinrowcol(0,rows,cols) !:
-          let sr=1.
+          sr=1.
 03830     let maxrows=fncount(message$,"\n",maxlen) !:
-          let srow=int(rows/2-2) !:
-          let scol=int(cols/2-len(message$)/2)
+          srow=int(rows/2-2) !:
+          scol=int(cols/2-len(message$)/2)
 03832     if maxrows>0 then let str2mat(message$,mat message$,"\n") !:
             mat mwrk$(udim(mat message$)) !:
             for a=1 to udim(mat message$) !:
               let maxlen=max(len(message$(a)),maxlen,34) !:
             next a !:
           else let maxlen=max(sr*len(message$),34)
-03835     let srow=int(rows/2-2) !:
-          let scol=int(cols/2-maxlen/2) !:
+03835     srow=int(rows/2-2) !:
+          scol=int(cols/2-maxlen/2) !:
           if maxrows>0 then !:
             for a=1 to udim(mwrk$) !:
               let mwrk$(a)=str$(a)&","&str$(int(sr*maxlen/2))&",0/cc "&str$(maxlen)&",[MSG]" !:
@@ -696,7 +696,7 @@
           fnwaitwin=fkey-50 : close #waitwin: : let waitin=0 : goto ZWAITWIN !:
         else goto 3854
 03858 end if 
-03860 ZWAITWIN: let lastb=0 !:
+03860 ZWAITWIN: lastb=0 !:
       fnend 
 03861 def library fnwaitmsg(message$*1000) !:
         !    !:
@@ -712,7 +712,7 @@
         else goto ZWAITMSG !:
           ! This changes focus to this window and forces it to the top
 03864   if maxrows>0 then !:
-          let str2mat(message$,mat message$,"\n") !:
+          str2mat(message$,mat message$,"\n") !:
           mat message$(maxrows)
 03865   if not maxrows and len(message$)=0 then let message$="  "
 03866   rem IF NOT MAXROWS THEN pr #WAITWIN, FIELDS "1,1,c": RPT$(" ",1000) !:                     pr #WAITWIN, FIELDS "2,"&STR$(MIN(70,LEN(MESSAGE$))/2)&",cc ,N/W:T": MESSAGE$ !:       ELSE pr #WAITWIN, FIELDS "1,1,c": RPT$(" ",1000) !:                                    pr #WAITWIN, FIELDS MAT MWRK$: MAT MESSAGE$
@@ -807,7 +807,7 @@
         ! in the current calendar year
 04300   let yr=date(d,"CY")
 04305   let wkday=mod(d,7) ! Monday=1 Sunday=0
-04310   let styear=days(yr*10000+101,"cymd")
+04310   styear=days(yr*10000+101,"cymd")
 04315   let x=d-styear
 04320   fnweekofyear=ip(x/7)+1
 04325 fnend 
@@ -837,8 +837,8 @@
         ! of the week has occired !:
         ! in the current calendar year
 04385   let yr=date(d,"CY")
-04390   let styear=days(yr*10000+101,"cymd")-1
-04395 ! LET STDAY=FP((STMONTH)/7)*7
+04390   styear=days(yr*10000+101,"cymd")-1
+04395 ! sTDAY=FP((STMONTH)/7)*7
 04400   let x=d-styear
 04405   if x>0 then let fndayofyear=x else let fndayofyear=0
 04410 fnend 
@@ -891,7 +891,7 @@
         ! starting down from top to allow for a HEADER !:
         ! stopping before the bottom to allow for a FOOTER
 04560   dim m$(1)*80 ! SORT_WRK$(1)*80,
-04570   let elements=udim(l$) !:
+04570   elements=udim(l$) !:
         mat idx(elements-header-footer) !:
         mat sort_wrk$(elements) !:
         mat m$(elements-header-footer)
@@ -904,12 +904,12 @@
 04620   loop 
 04630   if udim(mat m$)=udim(mat l$)-header-footer then mat idx=aidx(m$) else mat idx=aidx(l$)
 04640   if desending and udim(mat m$)=udim(mat l$)-header-footer then mat idx=didx(m$)
-04650   let elements=udim(l$) !:
+04650   elements=udim(l$) !:
         mat idx(elements-header-footer) !:
         mat sort_wrk$(elements) !:
         mat sort_wrk$=l$ !:
         for i=1 to elements-header-footer !:
-          let sort_wrk$(i+header)=l$(idx(i)+header) !:
+          sort_wrk$(i+header)=l$(idx(i)+header) !:
         next i !:
         mat l$=sort_wrk$
 04660 fnend 
@@ -1070,7 +1070,7 @@
 05140 ! pr #PRINTFILE,USING SETPRINT: "[LETTER]" ! condensed print
 05145   if greybar then let macro=300 !:
           let v=.1 : let h=.2 : bv=10.75 : bh=7.75 !:
-          let shade=10 : let head=4/6 : bar=3/6
+          shade=10 : let head=4/6 : bar=3/6
 05146   if greybar and not select then let macro=300 !:
           let gbmacro$=fngreybar$(macro,printfile,v,h,bv,bh,shade,head,bar)
 05150 SETPRINT: form c 25,skip 0
@@ -1082,14 +1082,14 @@
 05210 FORM1: form c 106,"[CPI=15]"
 05220   pr #printfile,using "form skip 5": ! GOSUB HEADER
 05230 ! -----------------------------------
-05235   let linecnt=0
+05235   linecnt=0
 05240 RDLOOP: mat b$=("")
 05250   linput #f: apf$ eof ZPRINT_FILE
 05255   if linecnt>50 then gosub PRINT_FILE_NWPG
 05260   if len(apf$)<101 then 
-05270     pr #printfile: indent$&apf$ : let linecnt+=1
+05270     pr #printfile: indent$&apf$ : linecnt+=1
 05280   else 
-05290     pr #printfile: indent$&apf$(1:100) : let linecnt+=1
+05290     pr #printfile: indent$&apf$(1:100) : linecnt+=1
 05300     apf$=apf$(101:len(apf$))
 05310     goto 5260
 05320   end if 
@@ -1112,7 +1112,7 @@
 05423   if not file_end then !:
           pr #printfile: newpage !:
           pr #printfile,using "form skip 5": 
-05425   let linecnt=0
+05425   linecnt=0
 05430   return 
 05440 ZPRINT_FILE: close #f: !:
         let f=0
@@ -1154,10 +1154,10 @@
 05620   mat forms$(1) !:
         let forms$(1)="V 50"
 05622   fnwinrowcol(0,lrow,lcol)
-05624   arows=0 : let srow=4 : let scol=3 !:
-        let lcols=min(lcol-srow-2,sum(mat widths)+2) !:
-        let lrows=min(lrow-srow-2,max(3,udim(mat _prn$)+arows))
-05626   let listspec$=fnlistspec$(listwin,srow,scol,lrows,lcols,arows,mat headers$,mat widths,mat forms$,"Select Printer","",0,2)
+05624   arows=0 : srow=4 : scol=3 !:
+        lcols=min(lcol-srow-2,sum(mat widths)+2) !:
+        lrows=min(lrow-srow-2,max(3,udim(mat _prn$)+arows))
+05626   listspec$=fnlistspec$(listwin,srow,scol,lrows,lcols,arows,mat headers$,mat widths,mat forms$,"Select Printer","",0,2)
 05628   fnwinbuttons(0,"^F2:Search ^F3:Repeat",listwin)
 05630   pr #listwin, fields listspec$&",=R" : (mat _prn$)
 05632   mat select(1)=(0) !:
@@ -1169,7 +1169,7 @@
         let fk=fkey !:
         if fk=201 then let fk=0
 05636   if fk=2 then 
-05638     let srchstr$=fnsrchcrit$(str$(round(lrows/2,0)),"2",2,lcols-4,listwin,"Printer to search for") !:
+05638     srchstr$=fnsrchcrit$(str$(round(lrows/2,0)),"2",2,lcols-4,listwin,"Printer to search for") !:
           mat select(1)=(0) !:
           fnlistsrch(mat _prn$,srchstr$,mat select) !:
           ! LET FNLISTSRCHN(MAT PDPAID,SRCHSTR$,MAT SELECT) !:
@@ -1187,7 +1187,7 @@
 05650   end if 
 05652   if not (fk=0 or fk=99) then goto 5634
 05654   close #listwin: !:
-        let listwin=0
+        listwin=0
 05656   if fk=99 then let fnprinterselect$="" else let fnprinterselect$=_prn$(px)
 05658 fnend 
 05900 def library fnwikierror(ecode$) !:
@@ -1197,7 +1197,7 @@
         !    !
 05910   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnmsexe$
 05920   dim epath$*100
-05930   let epath$=fnmsexe$("iexplore.exe")
+05930   epath$=fnmsexe$("iexplore.exe")
 05940   if exists(epath$)=2 then !:
           execute "Sys -w -C "&epath$&" http://brwiki.ads.net/index.php/Special:Search?search="&ecode$ else !:
           execute "Sys -C start http://brwiki.ads.net/index.php/Special:Search?search="&ecode$
@@ -1209,8 +1209,8 @@
         ! | R is the specified row.  Returns 0 if R is outside range      | !:
         ! +----------------------------------------------------------------+!
 06010   on error ignore 
-06020   let lcols=0 : if udim(l,2)>0 then let lcols=udim(l,2)
-06030   let lrows=udim(l)
+06020   lcols=0 : if udim(l,2)>0 then lcols=udim(l,2)
+06030   lrows=udim(l)
 06040   on error system 
 06050   let x=0
 06060   if r>lrows or r<1 then goto 6100
@@ -1226,12 +1226,12 @@
         ! | C is the column specified.  Returns 0 if outside the range    | !:
         ! +----------------------------------------------------------------+!
 06140   on error ignore 
-06150   let lcols=0 : if udim(l,2)>0 then let lcols=udim(l,2)
-06160   let lrows=udim(l)
+06150   lcols=0 : if udim(l,2)>0 then lcols=udim(l,2)
+06160   lrows=udim(l)
 06170   on error system 
 06180   let x=0
-06182   if srow<1 then let srow=1
-06183   if erow>udim(mat l) or erow<srow then let erow=udim(mat l)
+06182   if srow<1 then srow=1
+06183   if erow>udim(mat l) or erow<srow then erow=udim(mat l)
 06190   if c>lcols or c<1 then goto 6250
 06200   if lcols then 
 06210     for a=srow to erow
@@ -1246,22 +1246,22 @@
         ! | Searches a row of an array for a match                      | !:
         ! | returns the column number of the first match as the value   | !:
         !    !
-06275   let srchfound=xsrch=0
+06275   srchfound=xsrch=0
 06280   let xsrch=udim(mat l$,2) error SRCHROW1
 06285   goto SRCHROW2
 06290 SRCHROW1: if nocase=0 and srchstring$=l$(srchrow) then !:
-          let srchfound=srchrow else !:
+          srchfound=srchrow else !:
           if nocase>0 and uprc$(srchstring$)=uprc$(l$(srchrow)) then !:
-            let srchfound=srchrow !:
-          else let srchfound=0
+            srchfound=srchrow !:
+          else srchfound=0
 06295   goto ZSRCHROW
 06300 SRCHROW2: for asrch=1 to xsrch
-06305     let srchfound=0
+06305     srchfound=0
 06310     if nocase then 
-06315       if uprc$(l$(srchrow,asrch))=uprc$(srchstring$) then let srchfound=asrch !:
+06315       if uprc$(l$(srchrow,asrch))=uprc$(srchstring$) then srchfound=asrch !:
               goto ZSRCHROW
 06320     else 
-06325       if l$(srchrow,asrch)=srchstring$ then let srchfound=asrch : goto ZSRCHROW
+06325       if l$(srchrow,asrch)=srchstring$ then srchfound=asrch : goto ZSRCHROW
 06330     end if 
 06335   next asrch
 06340 ZSRCHROW: let fnrowsrch=srchfound
@@ -1271,20 +1271,20 @@
         ! | IF NOCASE is true then search is case INsensitve            | !:
         ! | Searches a column of an array for a match                   | !:
         !    !
-06355   let srchfound=xsrch=0
+06355   srchfound=xsrch=0
 06360   let xsrch=udim(mat l$,1) error SRCHCOL1
 06365   goto SRCHCOL2
-06370 SRCHCOL1: if nocase=0 then let srchfound=max(0,srch(mat l$,srchstring$)) !:
-        else if nocase>0 then let srchfound=max(0,srch(mat l$,"^"&srchstring$)) !:
-        else let srchfound=0
+06370 SRCHCOL1: if nocase=0 then srchfound=max(0,srch(mat l$,srchstring$)) !:
+        else if nocase>0 then srchfound=max(0,srch(mat l$,"^"&srchstring$)) !:
+        else srchfound=0
 06375 goto ZSRCHCOL
 06380 SRCHCOL2: for asrch=1 to xsrch
-06385   let srchfound=0
+06385   srchfound=0
 06390   if nocase then 
-06395     if uprc$(l$(asrch,srchcol))=uprc$(srchstring$) then let srchfound=asrch !:
+06395     if uprc$(l$(asrch,srchcol))=uprc$(srchstring$) then srchfound=asrch !:
             goto ZSRCHCOL
 06400   else 
-06405     if l$(asrch,srchcol)=srchstring$ then let srchfound=asrch : goto ZSRCHCOL
+06405     if l$(asrch,srchcol)=srchstring$ then srchfound=asrch : goto ZSRCHCOL
 06410   end if 
 06415 next asrch
 06420 ZSRCHCOL: let fncolsrch=srchfound
@@ -1300,7 +1300,7 @@
         ! sufx$ is an optional file suffix (not currently implemented)
 06454   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fnfil
 06456   let filloc$=trim$(filloc$)
-06458   let lf=len(filloc$)
+06458   lf=len(filloc$)
 06460   if not filloc$(lf:lf)="\" then let filloc$=filloc$&"\"
 06462 !    !:
         ! |  Create a file number and file name of an ascending sequence| !:
@@ -1519,10 +1519,10 @@
         !    !
 07550   dim vamt$*100
 07560   dim ones$(10),tens$(10),teens$(10)
-07570   let ones$(1)="One" : let ones$(2)="Two": let ones$(3)="Three" !:
-        let ones$(4)="Four": let ones$(5)="Five": let ones$(6)="Six" !:
-        let ones$(7)="Seven": let ones$(8)="Eight": let ones$(9)="Nine" !:
-        let ones$(10)="Ten"
+07570   ones$(1)="One" : ones$(2)="Two": ones$(3)="Three" !:
+        ones$(4)="Four": ones$(5)="Five": ones$(6)="Six" !:
+        ones$(7)="Seven": ones$(8)="Eight": ones$(9)="Nine" !:
+        ones$(10)="Ten"
 07580   let tens$(1)="" : let tens$(2)="Twenty": let tens$(3)="Thirty" !:
         let tens$(4)="Forty": let tens$(5)="Fifty": let tens$(6)="Sixty" !:
         let tens$(7)="Seventy": let tens$(8)="Eighty": let tens$(9)="Ninety" !:
@@ -1585,11 +1585,11 @@
         ! | Replace leading digits or characters with "X" except for the| !:
         ! | last N items of the string.  Used for masking SSNs or credit| !:
         !    !
-08010   let s$=trim$(s$)
+08010   s$=trim$(s$)
 08020   let nx=len(s$)
-08030 ! LET S$=SREP$(SREP$(SREP$(SREP$(SREP$(SREP$(SREP$(SREP$(SREP$(SREP$(S$(1:NX-N),"0","X"),"1","X"),"2","X"),"3","X"),"4","X"),"5","X"),"6","X"),"7","X"),"8","X"),"9","X")&S$(NX-N+1:NX)
+08030 ! s$=SREP$(SREP$(SREP$(SREP$(SREP$(SREP$(SREP$(SREP$(SREP$(SREP$(S$(1:NX-N),"0","X"),"1","X"),"2","X"),"3","X"),"4","X"),"5","X"),"6","X"),"7","X"),"8","X"),"9","X")&S$(NX-N+1:NX)
 08031   for _s=1 to nx-n
-08032     let s$(_s:_s)=srep$(srep$(srep$(srep$(srep$(srep$(srep$(srep$(srep$(srep$(s$(_s:_s),"0","X"),"1","X"),"2","X"),"3","X"),"4","X"),"5","X"),"6","X"),"7","X"),"8","X"),"9","X")
+08032     s$(_s:_s)=srep$(srep$(srep$(srep$(srep$(srep$(srep$(srep$(srep$(srep$(s$(_s:_s),"0","X"),"1","X"),"2","X"),"3","X"),"4","X"),"5","X"),"6","X"),"7","X"),"8","X"),"9","X")
 08033   next _s
 08040   fnmask$=s$
 08050 fnend 
@@ -1649,7 +1649,7 @@
 10025 let dupa=0
 10030 open #flnr: "NAME="&flnm$&",KFNAME="&kfnm$&",SHR",internal,outin,keyed 
 10040 let keylen=kln(flnr)
-10060 let savecurfld=curfld
+10060 savecurfld=curfld
 10065 close #flnr: 
 10070 choice$=fndialog$("10","10",60,"File "&flnm$&" has duplicate key records. This condition will not prevent the system from working, but could cause inefficiencies and some lost data. You can continue without deleting the duplicates or elect to delete them now","Delete","Continue","List",1,dupa,0,0)
 10080 if choice$="Delete" then goto DELDUPS0
@@ -1669,15 +1669,15 @@
 10109 ! -----------------------------
 10110 DELDUPS0: open #flnr: "NAME="&flnm$&",NOSHR",internal,outin,relative 
 10120 open #flnr+1: "NAME=LDUP.[WSID]",display,input 
-10130 let lstkey$=""
+10130 lstkey$=""
 10140 DELDUPS1: input #flnr+1: a$ eof ZDELDUPS1
 10145 dim key$*50,lstkey$*50 ! A$*2000,
 10150 aln=len(a$)
 10160 let key$=a$(1:keylen)
 10170 let keyrec=val(a$(keylen+1:aln)) conv DELDUPS1
 10180 if key$=lstkey$ then delete #flnr,rec=keyrec: 
-10190 let lstkey$=key$
-10200 pr fields "10,10,C 60,N,N": "RECORD "&str$(keyrec)&" FOR FILE "&flnm$&" DELETED"
+10190 lstkey$=key$
+10200 pr f "10,10,C 60,N,N": "RECORD "&str$(keyrec)&" FOR FILE "&flnm$&" DELETED"
 10210 goto DELDUPS1
 10219 ! -----------------------------
 10220 ZDELDUPS1: close #flnr: 
@@ -1727,13 +1727,13 @@
 10702   dim eol$*50
 10703 ! IF NOT ESC THEN EXECUTE "PROC=*"&env$("PD")&"Core\fnsnap\tt"
 10710   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnnextfil$
-10720   let flpath$=trim$(lwrc$(flpath$))
+10720   flpath$=trim$(lwrc$(flpath$))
 10730   if trim$(printdesc$)<="" then askdesc=1 else askdesc=0
-10740   if not flpath$(len(flpath$):len(flpath$))="\" then let flpath$=flpath$&"\"
+10740   if not flpath$(len(flpath$):len(flpath$))="\" then flpath$=flpath$&"\"
 10745   execute "mkdir "&flpath$ ioerr 10746
 10746   execute "mkdir "&flpath$&date$("CYM") ioerr 10747
-10747   let flpath$=flpath$&date$("cym")&"\"
-10750   let flnm$=fnnextfil$(flnm$,flpath$)
+10747   flpath$=flpath$&date$("cym")&"\"
+10750   flnm$=fnnextfil$(flnm$,flpath$)
 10760   let filno=10
 10770   if file(filno)>-1 then let filno+=1 : goto 10770
 10780   if uprc$(printtype$)="DIRECT" then let printtype$="DIRECT" !:
@@ -1741,9 +1741,9 @@
         else if uprc$(printtype$)="MICR" then let printtype$="MICR" !:
         else let printtype$="ANY"
 10790 if llen<1 then !:
-        let eol$=",EOL=NONE" else !:
-        if llen=0 then let eol$=",recl=32000" else !:
-          let eol$=",recl="&str$(llen)
+        eol$=",EOL=NONE" else !:
+        if llen=0 then eol$=",recl=32000" else !:
+          eol$=",recl="&str$(llen)
 10795 if pageo>0 then !:
         let _pageo$=",pageoflow="&str$(pageo) else !:
         let _pageo$=""
@@ -1801,8 +1801,8 @@
 11122   library env$("PD")&"Core\fnsnap\rtflib.dll": fnlistprint
 11130   if not esc then execute "PROC="&env$("PD")&"Core\fnsnap\tt"
 11140   if logname$<="" or not exists(logname$) then !:
-          let logname$="reportlog.fil" !:
-          let logkey$="reportlog.idx"
+          logname$="reportlog.fil" !:
+          logkey$="reportlog.idx"
 11150   let reportog=10
 11155   if not exists(logname$) then !:
           let msgbox("No report log file exists.") !:
@@ -1895,7 +1895,7 @@
         goto REPRINT1
 11430 end if 
 11440 close #listwin: !:
-      let listwin=0
+      listwin=0
 11450 ZREPRINT: close #reportlog: !:
       let reportlog=0
 11460 ZZREPRINT: fnend 
@@ -1983,7 +1983,7 @@
 11820 if not f2k then 
 11830   let pfile=10
 11840   if file(pfile)>-1 then let pfile+=1 : goto 11840
-11850   let setenv("PRINT_DOCUMENT_NAME","Reprinted Report") ! PAUSE
+11850   setenv("PRINT_DOCUMENT_NAME","Reprinted Report") ! PAUSE
 11860   if uprc$(trim$(d2typ$(d2r)))="ANY" then open #pfile: "name=preview:/select,eol=none",display,output  !:
           goto 11900
 11870   if uprc$(trim$(d2typ$(d2r)))="DIRECT" then let msgbox("The report that you are reprinting contains characters that are not compatable with the preview mode."&cr$&cr$&"The report must be sent directly to a PCL compatable laser printer.  Please select an appropriate printer for this report.") !:
@@ -2006,7 +2006,7 @@
             goto REPRINT2
 11940   end if 
 11950   close #pfile: ioerr 11955
-11952   let setenv("PRINT_DOCUMENT_NAME","")
+11952   setenv("PRINT_DOCUMENT_NAME","")
 11955   if err=6245 then let d2typ$(d2r)="DIRECT" : goto 11870
 11960   goto 11690
 11970 end if 
@@ -2018,13 +2018,13 @@
         ! | original access rights in WORKMENU                          | !:
         !    !
 12010   library env$("PD")&"workmenu.br": fnmenushow
-12020   let local=val(env$("LOCAL"))
+12020   local=val(env$("LOCAL"))
 12030   fnmenushow(trim$(mname$),mseq$,1) !:
         !    !:
         ! | The 1 at the end prevents WORKMENU form displaying the menu | !:
         ! | the function FNMENUSHO simply reinstates the menu to LOCAL  | !:
         !    !
-12040   let lr=lrec(local) !:
+12040   lr=lrec(local) !:
         restore #local, rec=1: !:
         let r=0
 12050   dim mtype$*150,mopts$(1)*150,mstat$(1)*150,mpgm$(1)*150,upgm$(1)*150,mlvl(1)
@@ -2059,14 +2059,14 @@
 12230   if reportlog>0 then cleanlog=1 : goto CLEANLOG1
 12240   if not esc then execute "PROC="&env$("PD")&"Core\fnsnap\tt"
 12250   if logname$<="" or not exists(logname$) then !:
-          let logname$="reportlog.fil" !:
-          let logkey$="reportlog.idx"
+          logname$="reportlog.fil" !:
+          logkey$="reportlog.idx"
 12260   let reportog=10
 12270   if file(reportlog)>-1 then let reportlog+=1: goto 12270
 12280   open #reportlog: "name="&logname$&",kfname="&logkey$&",shr,release",internal,outin,keyed 
 12290 CLEANLOG1: read #reportlog,using FRMLOG: dmu$,dsq$,dpg$,dlnm$,dunm$,ddelby$,dflnm$,dflpath$,ddat,sday,ddel,dtyp$,ddsc$ eof ZCLEANLOG
 12295   if not sday then !:
-          let sday=30 !:
+          sday=30 !:
           rewrite #reportlog,using "form pos 193,zd 6",key=dflnm$&dflpath$: sday
 12300   if not exists(trim$(dflpath$)&trim$(dflnm$)) then 
 12310     if days(date)-ddel<30 and ddel then !:
@@ -2120,7 +2120,7 @@
 12620   execute "PROC="&env$("PD")&"Core\fnsnap\tt"
 12630   dim _a$*2000,_lt$*20000
 12640   let v=_v : let h=_h !:
-        let vh=_lm : let ll=_ll : let vx=_lm/_lh : let vl=0 !:
+        let vh=_lm : ll=_ll : let vx=_lm/_lh : let vl=0 !:
         !    !:
         ! | pr the instruction text box                              | !:
         ! |                                                             | !:
@@ -2158,7 +2158,7 @@
 12820   execute "PROC="&env$("PD")&"Core\fnsnap\tt"
 12830   dim _a$*2000,_lt$*20000
 12840   let v=_v : let h=_h !:
-        let vh=_lm : let ll=_ll : let vx=_lm/_lh : let vl=0 !:
+        let vh=_lm : ll=_ll : let vx=_lm/_lh : let vl=0 !:
         !    !:
         ! | pr the instruction text box                              | !:
         ! |                                                             | !:
@@ -2216,12 +2216,12 @@
         ! | Delete row ROW from numeric array X and shrink the array    | !:
         ! | by one row                                                  | !:
         !    !
-30012   let onecol=rx=cx=1
+30012   onecol=rx=cx=1
 30014   on error goto 30018
 30016   let rx=udim(mat x,1)
 30018   on error goto 30022
 30020   cx=udim(mat x,2)
-30021   let onecol=0
+30021   onecol=0
 30022   on error system 
 30024   dim l(1,1)
 30026   if row>rx then goto ZDELNMAT
@@ -2229,7 +2229,7 @@
 30030   mat l(rx*cx)
 30032   mat x(rx*cx)
 30034   mat l=x
-30036   for adel=(row-1)*cx+1 to (rx-1)*cx : let l(adel)=x(adel+cx) : next adel
+30036   for adel=(row-1)*cx+1 to (rx-1)*cx : l(adel)=x(adel+cx) : next adel
 30038   mat l(rx-1,cx) : mat x(rx-1,cx)
 30040   mat x=l
 30041   if onecol then mat x(udim(x))
@@ -2244,12 +2244,12 @@
         ! | Delete a ROW from an array and shorten the array by one ROW | !:
         ! |                                                             | !:
         !    !
-30072   let onecol=rx=cx=1
+30072   onecol=rx=cx=1
 30074   on error goto 30078
 30076   let rx=udim(mat x$,1)
 30078   on error goto 30082
 30080   cx=udim(mat x$,2)
-30081   let onecol=0
+30081   onecol=0
 30082   on error system 
 30084   dim l$(1,1)*10000
 30086   if row>rx then goto ZDELSMAT
@@ -2257,7 +2257,7 @@
 30090   mat l$(rx*cx)
 30092   mat x$(rx*cx)
 30094   mat l$=x$
-30096   for adel=(row-1)*cx+1 to (rx-1)*cx : let l$(adel)=x$(adel+cx) : next adel
+30096   for adel=(row-1)*cx+1 to (rx-1)*cx : l$(adel)=x$(adel+cx) : next adel
 30098   mat l$(rx-1,cx) : mat x$(rx-1,cx)
 30100   mat x$=l$
 30101   if onecol then mat x$(udim(x$))
@@ -2338,10 +2338,10 @@
 30490   end if 
 30500   if wbversion$>"4.19z" then !:
           input #critwin,fields "2,2,50/cu "&str$(lcols-4): srchcrit$ !:
-          let srchcrit$=trim$(srchcrit$) !:
+          srchcrit$=trim$(srchcrit$) !:
         else !:
           input #critwin,fields "3,2,50/cu "&str$(lcols-4): srchcrit$ !:
-          let srchcrit$=trim$(srchcrit$)
+          srchcrit$=trim$(srchcrit$)
 30510   close #critwin: 
 30520   critwin=0 !:
         fnsrchcrit$=trim$(srchcrit$)
@@ -2356,7 +2356,7 @@
 30620 ! SRCHSTR$ is the string for which to search
 30630 ! MAT SELECT is the returned list of elements in which there is a match!:
         ! STRT if TRUE (non-zero) matches only the first chatacters of the string
-30640   let srchstr$=uprc$(trim$(srchstr$))
+30640   srchstr$=uprc$(trim$(srchstr$))
 30650   if select(1)>0 then !:
           as=udim(select) else !:
           as=0
@@ -2367,7 +2367,7 @@
 30680     if ax>0 then 
 30690       as+=1 !:
             mat select(as) !:
-            let select(as)=a
+            select(as)=a
 30700 !  INPUT FIELDS "23,60,c 1": P$
 30710     end if 
 30720   next a
@@ -2399,13 +2399,13 @@
         ! SMASK if not null is the format that the number will be converted !:
         ! to for the search
 30890   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnlistsrch
-30900   let lx=udim(mat l)
+30900   lx=udim(mat l)
 30910   mat l$(lx)
-30920   let la=0
-30930 LISTSRCHN_1: let la+=1
+30920   la=0
+30930 LISTSRCHN_1: la+=1
 30940   if not strt then !:
-          let l$(la)=str$(l(la)) else !:
-          let l$(la)=cnvrt$(smask$,l(la))
+          l$(la)=str$(l(la)) else !:
+          l$(la)=cnvrt$(smask$,l(la))
 30950   if la<lx then goto LISTSRCHN_1
 30960   fnlistsrch(mat l$,srchstr$,mat select,strt)
 30970 fnend 
@@ -2427,7 +2427,7 @@
 31045     execute "config attribute [BLANK]N/W:T,font=SYSTEMPC"
 31050     let pct_windev=windev
 31060     if file(pct_windev)>-1 then let pct_windev+=1 : goto 31060
-31070     if sr$="" then let sr$="10"
+31070     if sr$="" then sr$="10"
 31080     fnwin(sr$,"5",str$(val(sr$)+2),"72",srep$(caption$,","," "),"DS[X]","[W]",pct_windev,1)
 31090     let pctwrk$="1,5,C 62,N/W:T": !:
           pr #pct_windev,fields pctwrk$: "0     1     2     3     4     5     6     7     8     9     0"
@@ -2467,7 +2467,7 @@
         ! SHORTNAMR$  =  Key used to call the specific item from keyed FILNUM
 31230   dim frmform$*200,formin$*32000,pfont$*40,pdesc$*30,mfont$*40
 31240   crlf$=chr$(13)&chr$(10) !:
-        let esc$=chr$(27)
+        esc$=chr$(27)
 31250 FRMSTART: form c 8,c 3,n 7,n 5,c 1,c 40,c 30
 31260   restore #formfile,key=shortname$&"001": nokey ZPRINTFORM
 31270   read #formfile,using FRMSTART: pshort$,pseq$,plen,pmacro,ptype$,pfont$,pdesc$ eof ZPRINTFORM
@@ -2527,22 +2527,22 @@
 31570       open #(progwin:=fngethandle): "srow="&str$(prow)&",scol="&str$(pcol)&",rows=12,cols=3,picture="&env$("PD")&"icons\black.bmp",display,outin 
 31580       execute "config attribute [PROG]n/#FFFFFF:T,FONT=ARIAL:SLANT:SMALL"
 31590       for apg=1 to 10 : pr #progwin, fields str$(12-apg)&",1,c 2,[PROG]": str$(apg) : next apg
-31620       let srow=2+10-progx !:
+31620       srow=2+10-progx !:
             open #(progbar:=fngethandle): "srow="&str$(srow)&",scol=2,rows="&str$(max(2,progx))&",cols=2,picture="&env$("PD")&"icons\green.bmp",display,outin 
 31630     end if 
 31640     if progx<6 and progx>=0 then 
 31650       close #progbar: 
-31660       let srow=2+10-progx !:
+31660       srow=2+10-progx !:
             open #progbar: "srow="&str$(srow)&",scol=2,rows="&str$(max(1,progx))&",cols=1,parent="&str$(progwin)&",picture="&env$("PD")&"icons\green.bmp",display,outin 
 31670     end if 
 31680     if progx<8 and progx>5 then 
 31690       close #progbar: 
-31700       let srow=2+10-progx !:
+31700       srow=2+10-progx !:
             open #progbar: "srow="&str$(srow)&",scol=2,rows="&str$(max(1,progx))&",cols=1,parent="&str$(progwin)&",picture="&env$("PD")&"icons\yellow.bmp",display,outin 
 31710     end if 
 31720     if progx>7 then 
 31730       close #progbar: 
-31740       let srow=2+10-progx !:
+31740       srow=2+10-progx !:
             open #progbar: "srow="&str$(srow)&",scol=2,rows="&str$(max(1,progx))&",cols=1,parent="&str$(progwin)&",picture="&env$("PD")&"icons\red.bmp",display,outin 
 31750     end if 
 31760   end if 
@@ -2567,12 +2567,12 @@
 31812   open #infile: "name="&infile$&",recl=1",external,input 
 31815   let inrec=lrec(infile)-12
 31820   close #infile: 
-31825   let lr=min(5000,inrec)
+31825   lr=min(5000,inrec)
 31830   dim inform$*500
 31835   let inform$=cform$("form c "&str$(lr))
 31840   open #infile: "name="&infile$&",recl="&str$(lr),external,input 
-31845   let outfile=infile+1
-31846   if file(outfile)>-1 then let outfile+=1 : goto 31846
+31845   outfile=infile+1
+31846   if file(outfile)>-1 then outfile+=1 : goto 31846
 31847   open #outfile: "name="&outfile$&",eol=NONE,replace",display,output 
 31848   acnt=0
 31850   if acnt*lr+lr<inrec then 
@@ -2623,7 +2623,7 @@
 32160   pr #outfile: fntop$(0)&fnleft$(0)&fnlines$(0)&chr$(27)&"&a0v0H"&chr$(27)&"picture='8.2,10.9,"&png$&":ISOTROPIC'"
 32170   close #outfile: 
 32180 ZPIC2PRN: ! 
-32190   let outfile=infile=0
+32190   outfile=infile=0
 32200 fnend 
 33000 ! **** Fnbarcode2 ****    Actually pr The Bar Code
 33010 def library fnbarcodem(odev,zip$;indent) !:
@@ -2636,9 +2636,9 @@
 33030   if not bc$(1)="SSSLL" then gosub BARCODEARRAY
 33040   gosub BARCODEZIP
 33050   if trim$(zip$)="" then goto 33280
-33060   let shx$=hex$("1B5A")
-33070   let l1=len(zip$)
-33080   let l2=l1*11*5+2*11
+33060   shx$=hex$("1B5A")
+33070   l1=len(zip$)
+33080   l2=l1*11*5+2*11
 33090   let n2=int(l2/256)
 33100   let n1=l2-n2*256
 33110 !  pr Zip$,L1
@@ -2682,7 +2682,7 @@
 33490 let number$="1234567890" !:
       a$=rpt$(" ",9)
 33500 let k=1 : if trim$(zip$)="" then goto 33560
-33510 for j=1 to len(zip$) : let loc=pos(number$,zip$(j:j)) ioerr 33550 : if loc<=zz then goto 33550
+33510 for j=1 to len(zip$) : loc=pos(number$,zip$(j:j)) ioerr 33550 : if loc<=zz then goto 33550
 33520   a$(k:k)=zip$(j:j) : let k+=1
 33530 next j
 33540 let zip$=trim$(a$) : goto 33560
@@ -2702,7 +2702,7 @@
           if a>0 and a<11 then let fnprintbox(filnum,a,h,0,0,0,0,.1,str$(a),10,"[FONT ARIAL]")
 34050     for b=1 to 9
 34060       bv=.005 !:
-            if mod(b,2) then let shade=20 else let shade=50
+            if mod(b,2) then shade=20 else shade=50
 34070       if a+b*.1<11 then let fnprintbox(filnum,a+b/10,h,bv,bh,shade)
 34080     next b
 34090   next a
@@ -2713,7 +2713,7 @@
           fnprintbox(filnum,v,a,0,0,0,.1,th,str$(a),10,"[FONT ARIAL]")
 34140     for b=1 to 9
 34150       bh=.005 !:
-            if mod(b,2) then let shade=20 else let shade=50
+            if mod(b,2) then shade=20 else shade=50
 34160       if a+b*.1<8.5 then let fnprintbox(filnum,v,a+b/10,bv,bh,shade)
 34170     next b
 34180   next a
@@ -2729,11 +2729,11 @@
 34207   if uprc$(cs$)="C" or cs$="" then !:
           execute "*sys -M -@ set > "&cs_textfile$ !:
           fnCopyc2s("@:\"&cs_textfile$,cs_textfile$,1) !:
-          let setenv("C_DIR",os_filename$("@:")&"\") !:
+          setenv("C_DIR",os_filename$("@:")&"\") !:
         else !:
           if uprc$(cs$)="S" then execute "*sys -M -S set > "&cs_textfile$ !:
             ! EXECUTE "copy "&CS_TEXTFILE$&" @:"&CS_TEXTFILE$&" -n"
-34208   rem IF UPRC$(CS$)="C" OR CS$="" THEN EXECUTE "*sys -M -@ set > "&CS_TEXTFILE$ !:              LET SETENV("C_DIR",OS_FILENAME$("@:")&"\") !:                                             EXECUTE "copy @:"&CS_TEXTFILE$&" "&CS_TEXTFILE$&" -n" !:                                  ELSE !:                                                                                   IF UPRC$(CS$)="S" THEN EXECUTE "*sys -M -S set > "&CS_TEXTFILE$
+34208   rem IF UPRC$(CS$)="C" OR CS$="" THEN EXECUTE "*sys -M -@ set > "&CS_TEXTFILE$ !:              sETENV("C_DIR",OS_FILENAME$("@:")&"\") !:                                             EXECUTE "copy @:"&CS_TEXTFILE$&" "&CS_TEXTFILE$&" -n" !:                                  ELSE !:                                                                                   IF UPRC$(CS$)="S" THEN EXECUTE "*sys -M -S set > "&CS_TEXTFILE$
 34209   open #(cs_text:=fngethandle): "NAME="&cs_textfile$,display,input error XIT_FNCS_ENV
 34210   rem OPEN #(CS_TEXT:=FNGETHANDLE): "NAME="&CS_TEXTFILE$,DISPLAY,INPUT ERROR XIT_FNCS_ENV
 34212 STARTCSLOOP: ! 
@@ -2745,9 +2745,9 @@
 34222     if gw_posfnwp>0 then 
 34224       let gw_equal =pos(tempenv$,'=')
 34226       if gw_equal > 0 then 
-34228         let leftstr$ = addstr$&tempenv$(1:gw_posfnwp-1)
+34228         leftstr$ = addstr$&tempenv$(1:gw_posfnwp-1)
 34230         let rightstr$ = tempenv$(gw_posfnwp+1:gw_wholeline)
-34232         let setenv(leftstr$,rightstr$) error 34234
+34232         setenv(leftstr$,rightstr$) error 34234
 34234 ! Should SETENV FAIL, Ignore it
 34236       end if 
 34238     end if 
@@ -2807,7 +2807,7 @@
         let drow$=str$(drow)
 38045   let dtext$=dtext$&suffix$
 38046 ! IF DSEP THEN LET DTEXT$=DTEXT$&" "&RPT$(hex$('C4'),DLEN-2)
-38050 ! LET OPT$=FNDIALOG$(DROW$,DCOL$,DLEN,DTITLE$&DTEXT$,DOPTS$(1),DOPTS$(2),DOPTS$(3),DREMOVE,DFLTOPT,DISPANYKEY,KEYWAIT)
+38050 ! oPT$=FNDIALOG$(DROW$,DCOL$,DLEN,DTITLE$&DTEXT$,DOPTS$(1),DOPTS$(2),DOPTS$(3),DREMOVE,DFLTOPT,DISPANYKEY,KEYWAIT)
 38051   let textstring$=dtext$
 38052   if trim$(dopts$(1))>"" then !:
           let textstring$=textstring$&"|"&trim$(dopts$(1)) !:
@@ -2821,7 +2821,7 @@
 38055   let default$(dfltopt:dfltopt)="1"
 38056   colwidth=(dlen/len(default$)-len(default$)*2)*10
 38057 ! INPUT FIELDS "23,64,C 1": PAUSE$
-38059   let opt$=fnradiochk$(dtitle$,"",val(dcol$)*12,val(drow$)*12,allow,default$,"B",1,1,colwidth,0,textstring$)
+38059   opt$=fnradiochk$(dtitle$,"",val(dcol$)*12,val(drow$)*12,allow,default$,"B",1,1,colwidth,0,textstring$)
 38060 ! LET FNDLG=SRCH(DOPTS$,OPT$)
 38061   fndlg=pos(opt$,"1")
 38080 fnend 
@@ -2947,10 +2947,10 @@
 38810   fngetfile$=""
 38820   dim getfile$*200,progpath$*100
 38830   let progpath$=env$("PD")&"Core\fnsnap\" !:
-        let lookin$=trim$(lookin$) !:
-        let lookfor$=trim$(lookfor$)
+        lookin$=trim$(lookin$) !:
+        lookfor$=trim$(lookfor$)
 38840   let x=len(lookin$)
-38850   if not lookin$(x:x)="\" then let lookin$=lookin$&"\"
+38850   if not lookin$(x:x)="\" then lookin$=lookin$&"\"
 38855   if wbversion$<"4.20" then 
 38860     execute "sys -W "&os_filename$(progpath$&"filedialog.exe")&" -T1 -B"&wsid$&" -P"&lookin$&" -X"&lookfor$
 38870     if exists(progpath$&"dbde"&wsid$&".txt") then goto 38880 else goto 38960
@@ -2982,10 +2982,10 @@
 39010   fnputfile$=""
 39020   dim putfile$*200 ! ,PROGPATH$*100
 39030   let progpath$=env$("PD")&"Core\fnsnap\" !:
-        let lookin$=trim$(lookin$) !:
-        let lookfor$=trim$(lookfor$)
+        lookin$=trim$(lookin$) !:
+        lookfor$=trim$(lookfor$)
 39040   let x=len(lookin$)
-39050   if not lookin$(x:x)="\" then let lookin$=lookin$&"\"
+39050   if not lookin$(x:x)="\" then lookin$=lookin$&"\"
 39060   execute "sys -W "&os_filename$(progpath$&"filedialog.exe")&" -T2 -B"&wsid$&" -P"&lookin$&" -X"&lookfor$
 39070   if exists(progpath$&"dbde"&wsid$&".txt") then goto 39080 else goto 39160
 39080   let putfile=50
@@ -3066,8 +3066,8 @@
 39600 if pos(res$,"screen:")=1 then 
 39610   let res$=srep$(res$,"screen:","")
 39620   let resx=pos(uprc$(res$),"X")
-39630   let scrnres(2)=val(res$(1:resx-1)) !:
-        let scrnres(1)=val(res$(resx+1:len(res$)))
+39630   scrnres(2)=val(res$(1:resx-1)) !:
+        scrnres(1)=val(res$(resx+1:len(res$)))
 39640   goto ZSETRES
 39650 end if 
 39660 if pos(res$,"Window")=1 then 
@@ -3129,14 +3129,14 @@
 40090 ! 
 40100 ! 
 40110   execute "status files >s_files."&wsid$
-40120   let s_files=10
-40130   if file(s_files)>-1 then let s_files+=1 : goto 40130
+40120   s_files=10
+40130   if file(s_files)>-1 then s_files+=1 : goto 40130
 40140   open #s_files: "name=s_files."&wsid$,display,input 
 40150   dim s_a$*1000
-40160   let s_a=0
+40160   s_a=0
 40170 S_FILES_1: linput #s_files: s_a$ eof S_FILES_2
 40180   if not s_a$(1:11)="Open File #" or pos(s_a$,":CON:")<11 then goto S_FILES_1
-40190   let s_a+=1
+40190   s_a+=1
 40200   mat s_winno(s_a) !:
         mat s_srow(s_a) !:
         mat s_scol(s_a)
@@ -3145,33 +3145,33 @@
         mat s_rows(s_a) !:
         mat s_cols(s_a) !:
         mat s_parent(s_a)
-40220   let s_s=pos(s_a$,"#")+1 !:
-        let s_e=pos(s_a$,":CON:",12)-1
-40230   let s_winno(s_a)=val(trim$(s_a$(s_s:s_e)))
+40220   s_s=pos(s_a$,"#")+1 !:
+        s_e=pos(s_a$,":CON:",12)-1
+40230   s_winno(s_a)=val(trim$(s_a$(s_s:s_e)))
 40240   linput #s_files: s_a$ eof S_FILES_2
 40250   let x=pos(s_a$,"SROW=")+5 !:
         let y=pos(s_a$,",",x)-1 !:
-        let s_srow(s_a)=val(trim$(s_a$(x:y)))
+        s_srow(s_a)=val(trim$(s_a$(x:y)))
 40260   let x=pos(s_a$,"SCOL=")+5 !:
         let y=pos(s_a$,",",x)-1 !:
-        let s_scol(s_a)=val(trim$(s_a$(x:y)))
+        s_scol(s_a)=val(trim$(s_a$(x:y)))
 40270   let x=pos(s_a$,"EROW=")+5 !:
         let y=pos(s_a$,",",x)-1 !:
-        let s_erow(s_a)=val(trim$(s_a$(x:y)))
+        s_erow(s_a)=val(trim$(s_a$(x:y)))
 40280   let x=pos(s_a$,"ECOL=")+5 !:
         let y=pos(s_a$,",",x)-1 !:
-        let s_ecol(s_a)=val(trim$(s_a$(x:y)))
-40290   let s_rows(s_a)=s_erow(s_a)-s_srow(s_a)
-40300   let s_cols(s_a)=s_ecol(s_a)-s_scol(s_a)
+        s_ecol(s_a)=val(trim$(s_a$(x:y)))
+40290   s_rows(s_a)=s_erow(s_a)-s_srow(s_a)
+40300   s_cols(s_a)=s_ecol(s_a)-s_scol(s_a)
 40310   let x=pos(s_a$,"PARENT=#")+8 !:
         let y=pos(s_a$,":",x)-1 !:
-        let s_ecol(s_a)=val(trim$(s_a$(x:y)))
+        s_ecol(s_a)=val(trim$(s_a$(x:y)))
 40320   goto S_FILES_1
 40330 S_FILES_2: ! 
-40340   let s_a$=file$(s_files)
+40340   s_a$=file$(s_files)
 40350   close #s_files: 
 40360   execute "free "&s_a$&" -N" ioerr 40370
-40370   let s_a=s_files=0
+40370   s_a=s_files=0
 40380 fnend 
 40390 ! ---------------------------------------
 40400 def library fnoptions(mat o$;default,title$*100,message$*1000,waittime,srow,scol) !:
@@ -3203,8 +3203,8 @@
           next a !:
           let default$(default:default)="1"
 40475     rem FOR A=1 TO DEFAULT !:                                                                     LET DEFAULT$(A:A)="1" !:                                                                  NEXT A
-40476     caption$=title$ : let infile$="": let left=0 !:
-          let top=0 : allow=0 : let type$="R" : let locate=0 !:
+40476     caption$=title$ : let infile$="": left=0 !:
+          let top=0 : allow=0 : let type$="R" : locate=0 !:
           let nocols=ceil(udim(mat o$)/15) : colwidth=0 : let waittime=20 !:
           fnoptions=pos(fnradiochk$(caption$,infile$,scol*20,srow*20,allow,default$,type$,locate,nocols,colwidth,waittime,textstring$),"1")
 40478 !  GOTO 40652
@@ -3235,42 +3235,42 @@
 40530 fnend 
 40598 OPTS: ! 
 40599 if udim(mat o$)>20 then !:
-        let ocols=ceil(udim(mat o$)/20) !:
+        ocols=ceil(udim(mat o$)/20) !:
         let pcols=20-ip((20*ocols-udim(mat o$))/ocols) !:
-      else let ocols=1 : let pcols=udim(mat o$)
+      else ocols=1 : let pcols=udim(mat o$)
 40600 for a=1 to udim(o$)
 40602   if default<=udim(o$) then 
-40604     if a=default and not o$(a)(1:1)="^" then let o$(a)="^"&o$(a)
-40606     if not a=default and o$(a)(1:1)="^" then let o$(a)(1:1)=""
+40604     if a=default and not o$(a)(1:1)="^" then o$(a)="^"&o$(a)
+40606     if not a=default and o$(a)(1:1)="^" then o$(a)(1:1)=""
 40608   end if 
 40610   alen=max(alen,len(o$(a)))
 40612 next a
-40614 let owin=fngethandle !:
+40614 owin=fngethandle !:
       arows=ceil(len(message$)/alen)+t+1
-40616 if file(owin)>-1 then let owin+=1 : goto 40616
+40616 if file(owin)>-1 then owin+=1 : goto 40616
 40618 al=alen+4 !:
       al$=str$(al) !:
       bl$=str$(blen+4) !:
-      let slen$=str$(ip(.6*(al)))
+      slen$=str$(ip(.6*(al)))
 40619 ! PAUSE
 40620 open #owin: "srow="&str$(max(srow,8))&",scol="&str$(max(scol,10))&",rows="&str$(pcols+arows+2)&",cols="&str$(max(35,ocols*ip(.6*al+2)))&",border=s,picture=none,caption="&title$&",parent=NONE,font.LABELS=Swiss:small,MODAL",display,outin 
 40622 let fnwinrowcol(owin,rows,cols)
 40623 for a=1 to udim(o$) !:
         mat owrk$(a)
 40624   if a<=pcols then !:
-          let owrk$(a)=str$(a+t)&",2,"&slen$&"/radio "&al$&",,"&str$(1000+a) !:
+          owrk$(a)=str$(a+t)&",2,"&slen$&"/radio "&al$&",,"&str$(1000+a) !:
           goto 40629
 40625   if a<=2*pcols then !:
-          let owrk$(a)=str$(a-pcols+t)&","&str$(3+ip(.6*alen+4))&","&slen$&"/radio "&al$&",,"&str$(1000+a) !:
+          owrk$(a)=str$(a-pcols+t)&","&str$(3+ip(.6*alen+4))&","&slen$&"/radio "&al$&",,"&str$(1000+a) !:
           goto 40629
 40626   if a<=3*pcols then !:
-          let owrk$(a)=str$(a-2*pcols+t)&","&str$(3+2*ip(.6*alen+4))&","&slen$&"/radio "&al$&",,"&str$(1000+a) !:
+          owrk$(a)=str$(a-2*pcols+t)&","&str$(3+2*ip(.6*alen+4))&","&slen$&"/radio "&al$&",,"&str$(1000+a) !:
           goto 40629
 40627   if a<=4*pcols then !:
-          let owrk$(a)=str$(a-2*pcols+t)&","&str$(3+3*ip(.6*alen+4))&","&slen$&"/radio "&al$&",,"&str$(1000+a) !:
+          owrk$(a)=str$(a-2*pcols+t)&","&str$(3+3*ip(.6*alen+4))&","&slen$&"/radio "&al$&",,"&str$(1000+a) !:
           goto 40629
 40628   if a<=5*pcols then !:
-          let owrk$(a)=str$(a-2*pcols+t)&","&str$(3+4*ip(.6*alen+4))&","&slen$&"/radio "&al$&",,"&str$(1000+a) !:
+          owrk$(a)=str$(a-2*pcols+t)&","&str$(3+4*ip(.6*alen+4))&","&slen$&"/radio "&al$&",,"&str$(1000+a) !:
           goto 40629
 40629 next a
 40630 if t then !:
@@ -3282,14 +3282,14 @@
 40636 if waittime>0 then let waittime=waittime else let waittime=-1
 40637 curfld(default)
 40638 rinput #owin,fields mat owrk$,attr "[OPLINE]",wait=waittime: mat o$ timeout 40644 !:
-      let of=curfld : let ok=fkey
-40639 if ok=99 or ok=93 then let opt=0 : goto 40648
+      of=curfld : ok=fkey
+40639 if ok=99 or ok=93 then opt=0 : goto 40648
 40640 if ok=20 or ok=0 or ok>1000 then goto 40644
 40642 if not ok then let curfld(of+1,ok): goto 40638 else let curfld(of,ok) : goto 40638
-40644 let opt=fnradnum(mat o$)
+40644 opt=fnradnum(mat o$)
 40646 if not opt then let waittime$="" : goto 40638
 40648 close #owin: 
-40650 let owin=0
+40650 owin=0
 40652 return 
 40730 ! -------------------------------------------
 40740 def library fnxlcol$(colno) !:
@@ -3372,27 +3372,27 @@
             let textstring$=textstring$&"|"&trim$(o$(a)) !:
           next a
 41074     if not_one then allow=1 else allow=0
-41077     caption$=title$ : let infile$="": let left=200 !:
-          let top=200 : let type$="C" : let locate=0 !:
+41077     caption$=title$ : let infile$="": left=200 !:
+          let top=200 : let type$="C" : locate=0 !:
           let nocols=ceil(udim(mat o$)/20) : colwidth=0 !:
           fnoptions$=fnradiochk$(caption$,infile$,left,top,allow,default$,type$,locate,nocols,colwidth,waittime,textstring$)
 41078     goto 41330
 41079   end if 
 41080   for a=1 to udim(o$)
-41090     if default$(a:a)="1" and not o$(a)(1:1)="^" then let o$(a)="^"&o$(a)
-41100     if default$(a:a)="0" and o$(a)(1:1)="^" then let o$(a)(1:1)=""
+41090     if default$(a:a)="1" and not o$(a)(1:1)="^" then o$(a)="^"&o$(a)
+41100     if default$(a:a)="0" and o$(a)(1:1)="^" then o$(a)(1:1)=""
 41110     alen=max(alen,len(o$(a)))
 41120   next a
-41130   let owin=10 !:
+41130   owin=10 !:
         arows=ceil(len(message$)/alen)+t+1
-41140   if file(owin)>-1 then let owin+=1 : goto 41140
+41140   if file(owin)>-1 then owin+=1 : goto 41140
 41150   open #owin: "srow=2,scol=2,rows="&str$(udim(mat o$)+arows)&",cols="&str$(ip(.8*(alen+6)))&",border=s,picture=none,parent=NONE,font.LABELS=Swiss:medium,MODAL",display,outin 
 41160   al$=str$(ip(.8*(alen+4)))&"/"&str$(alen+4) !:
         bl$=str$(ip(.8*(blen+4)))&"/"&str$(blen+4)
 41170   fnwinrowcol(owin,rows,cols)
 41180   for a=1 to udim(o$)
 41190     mat owrk$(a) !:
-          let owrk$(a)=str$(a+t)&",2,check "&al$ ! ,,"&STR$(20)
+          owrk$(a)=str$(a+t)&",2,check "&al$ ! ,,"&STR$(20)
 41200   next a
 41210   if t then !:
           execute "config attribute [OPTITLE] N/B:T,FONT=ARIAL:LARGE:BOLD" !:
@@ -3402,22 +3402,22 @@
 41230   pr #owin, fields str$(rows+1)&","&str$(ceil(cols/2-3))&",Cc 5,N/W:Wfont=SWISS,B20": "OK"
 41240   if waittime>0 then let waittime=waittime else let waittime=-1
 41250   rinput #owin,fields mat owrk$,attr "[L]",wait=waittime: mat o$ timeout 41290 !:
-        let of=curfld : let ok=fkey
+        of=curfld : ok=fkey
 41260   if (not ok or ok=20) then goto 41280
 41270   if not ok then !:
           curfld(of+1,ok) !:
           goto 41250 else let curfld(of,ok) !:
           goto 41250
-41280   let opt$=""
+41280   opt$=""
 41281   for a=1 to udim(mat o$)
 41282     if o$(a)(1:1)="^" then !:
-            let opt$=opt$&"1" else !:
-            let opt$=opt$&"0"
+            opt$=opt$&"1" else !:
+            opt$=opt$&"0"
 41285   next a
 41290   fnoptions$=opt$
 41300 ! IF NOT OPT THEN LET WAITTIME$="" : GOTO 40660
 41310   close #owin: 
-41320   let owin=0
+41320   owin=0
 41330 fnend 
 41340 ! -------------------------------------------
 41350 def library fn_cs: !:
@@ -3456,7 +3456,7 @@
 41440   if infile$="" then 
 41450     let infile$=env$("PD")&"Core\fnsnap\radchk."&session$
 41460     let rcfile=10 !:
-          let locate=1
+          locate=1
 41470     if file(rcfile)>-1 then let rcfile+=1 : goto 41470 else !:
             open #rcfile: "name="&infile$&",replace,recl=3200",display,output 
 41480     pr #rcfile: textstring$
@@ -3558,14 +3558,14 @@
 41865   rem IF _CS THEN LET TEMPFILE$="@:S:\Core\fnsnap\DBDE"&SESSION$&".txt" !:                              EXECUTE "rename "&TEMPFILE$&" "&LWRC$(TEMPFILE$) IOERR 41867
 41867   if _cs then !:
           fnCopyc2s(lwrc$("@:S:\Core\fnsnap\dbde"&session$&".txt"),env$("PD")&"Core\fnsnap\dbde"&session$&".txt")
-41870   let exefil=1
-41880   if file(exefil)>-1 then let exefil+=1 : goto 41880
+41870   exefil=1
+41880   if file(exefil)>-1 then exefil+=1 : goto 41880
 41890   open #exefil: "name="&env$("PD")&"Core\fnsnap\dbde"&session$&".txt",display,input 
 41900   dim exefil$*100
 41910   linput #exefil: exefil$
 41920   close #exefil,free: 
 41930   fnmsexe$=exefil$
-41940   let exefil=0
+41940   exefil=0
 41950 fnend 
 42000 ! ----------------
 42010 def library fnnextmonth(indate) !:
@@ -3665,7 +3665,7 @@
         !    !
 42720   dim in_a$*512,outfile$*100,frm_infile$*100
 42730   if infile$<="" then let infile$=env$("PD")&"efile\w2*.*"
-42735   let outfile$=env$("TEMP")&"\viewext.txt"
+42735   outfile$=env$("TEMP")&"\viewext.txt"
 42740   if not inlen then let inlen=512
 42750   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngethandle,fnmsexe$
 42760   if infile$="efile\w2*.*" then !:
@@ -3673,7 +3673,7 @@
           open #(in:=fngethandle): "name="&infile$&",recl="&str$(inlen),external,input 
 42770   let frm_infile$=cform$("FORM C "&str$(inlen))
 42780   open #(save:=fngethandle): "name="&outfile$&",recl="&str$(inlen+2)&",replace",display,output 
-42790   let outfile$=os_filename$(file$(save))
+42790   outfile$=os_filename$(file$(save))
 42800 READ_IN: read #in,using frm_infile$: in_a$ eof ZVIEW_EXT
 42810   pr #save: in_a$
 42820   goto READ_IN
@@ -3702,14 +3702,14 @@
 43730   if brow<1 then brow$=str$(br+brow+1) else brow$=str$(brow)
 43735   pr #bwin, fields brow$&",1,c "&str$(bc)&",N/W:T": rpt$(" ",bc)
 43740   dim bbut$(1)*50,bbuttxt$(1),bbutlen(1),bbutcol$(1),bfkey$(1),bwrk$(1)*40
-43750   let ebut=bb=bmax=0
+43750   ebut=bb=bmax=0
 43755 !    !:
         ! | Build the arrays for printing buttons                       | !:
         ! |                                                             | !:
         !    !
-43760 START_BUT: let ebut=pos(btext$,"^",2)
+43760 START_BUT: ebut=pos(btext$,"^",2)
 43770   if ebut<=2 then !:
-          let ebut=len(btext$) : bend=1 else !:
+          ebut=len(btext$) : bend=1 else !:
           bend=0
 43780   bb+=1 !:
         mat bbut$(bb) !:
@@ -3777,13 +3777,13 @@
 44040   dim picmat$(1)*40,picpic$(1)*100,ebut(2)
 44045 ! LET PICPATH$=":icons\"
 44050   dim bbut$(1)*50,hbut$(1)*100,bbutpic$(1),bbutlen(1),bbutcol$(1),bfkey$(1),bwrk$(1)*40
-44055   let ebut(1)=ebut(2)=bb=bmax=0
-44060 START_PIC: let ebut(2)=pos(picbuttons$,"^",2)
+44055   ebut(1)=ebut(2)=bb=bmax=0
+44060 START_PIC: ebut(2)=pos(picbuttons$,"^",2)
 44065   if ebut(2)<=2 then !:
-          let ebut(2)=len(picbuttons$) : bend=1 else !:
+          ebut(2)=len(picbuttons$) : bend=1 else !:
           bend=0
-44070   let ebut(1)=pos(picbuttons$,"|")
-44075   if ebut(1)<1 or ebut(1)>ebut(2) then let ebut(1)=ebut(2)
+44070   ebut(1)=pos(picbuttons$,"|")
+44075   if ebut(1)<1 or ebut(1)>ebut(2) then ebut(1)=ebut(2)
 44080   bb+=1 !:
         mat bbut$(bb) !:
         mat hbut$(bb) !:
@@ -3837,8 +3837,8 @@
 44210   dim spmask$(2)*20
 44215   mat spmask$(2)=("")
 44220   let number=fp(number/1000)*1000
-44225   let spmask$(1)=srep$(srep$(srep$(mask$,"Z","*")(1:pos(mask$,"#")-1),"PIC(",""),"D","-")
-44230   let spmask$(2)="PIC("&mask$(pos(mask$,"#"):len(mask$))
+44225   spmask$(1)=srep$(srep$(srep$(mask$,"Z","*")(1:pos(mask$,"#")-1),"PIC(",""),"D","-")
+44230   spmask$(2)="PIC("&mask$(pos(mask$,"#"):len(mask$))
 44235   fnspic$=spmask$(1)&cnvrt$(spmask$(2),number)
 44240 fnend 
 44300 def library fnunderscore$*500(v,h,l;opt,ht,w) !:
@@ -3898,9 +3898,9 @@
 50030   pr #printfile: chr$(27)&"*v0n0o3T";
 50040   let d=720 ! 720 is the number of pixels per inch
 50042   if fp(shade/10)*10>0 then let pattern$=str$(fp(shade/10)*10) else let pattern$="2"
-50043   if pattern$="3" then let shade=ip(shade/10)
+50043   if pattern$="3" then shade=ip(shade/10)
 50050   pr #printfile: chr$(27)&"&a"&str$(h*d)&"h"&str$(v*d)&"V"&chr$(27)&"*p0R"&chr$(27)&"*c"&str$(bh*d)&"h"&str$(bv*d)&"v"&str$(shade)&"g"&pattern$&"P"&chr$(27)&"*p0x0Y"
-50060   if cpi then let lastcpi=cpi else cpi=10
+50060   if cpi then lastcpi=cpi else cpi=10
 50065   if th=-1 then let text$=trim$(text$)
 50066   let white$="1" : black$="0" !:
         if shade>80 then let pattern$=black$ else let pattern$=white$
@@ -3930,7 +3930,7 @@
 50115   let pb$=chr$(27)&"*v0n03T" !:
         let d=720 !:
         if fp(shade/10)*10>0 then let pattern$="3" else let pattern$="2"
-50116   if pattern$="3" then let shade=ip(shade/10)
+50116   if pattern$="3" then shade=ip(shade/10)
 50120   let pb$= chr$(27)&"&a"&str$(h*d)&"h"&str$(v*d)&"V"&chr$(27)&"*p0R"&chr$(27)&"*c"&str$(bh*d)&"h"&str$(bv*d)&"v"&str$(shade)&"g"&pattern$&"P"&chr$(27)&"*p0x0Y"
 50130   fnprintbox$=pb$
 50140 fnend 
@@ -3951,28 +3951,28 @@
         let h=hp !:
         bv=weight !:
         bh=hl !:
-        let shade=100 !:
+        shade=100 !:
         let dpb$=fnprintbox$(v,h,bv,bh,shade) !:
         ! prints top bar of box
 50158   let v=vp+weight !:
         let h=hp !:
         bv=vl-weight !:
         bh=weight !:
-        let shade=100 !:
+        shade=100 !:
         let dpb$=dpb$&fnprintbox$(v,h,bv,bh,shade) !:
         ! pr left hand bar of box
 50160   let v=vp+vl-weight !:
         let h=hp !:
         bv=weight !:
         bh=hl-weight !:
-        let shade=100 !:
+        shade=100 !:
         let dpb$=dpb$&fnprintbox$(v,h,bv,bh,shade) !:
         ! prints bottom bar of box
 50162   let v=vp+weight !:
         let h=hp+hl-weight !:
         bv=vl-weight !:
         bh=weight !:
-        let shade=100 !:
+        shade=100 !:
         let dpb$=dpb$&fnprintbox$(v,h,bv,bh,shade) !:
         ! prints right hand bar
 50164   if fill>0 then 
@@ -3980,7 +3980,7 @@
           let h=hp !:
           bv=vl !:
           bh=hl !:
-          let shade=fill !:
+          shade=fill !:
           let dpb$=dpb$&fnprintbox$(v,h,bv,bh,shade)
 50168   end if 
 50170   fndrawbox$=dpb$
@@ -4001,28 +4001,28 @@
         let h=hp !:
         bv=weight !:
         bh=hl !:
-        let shade=100 !:
+        shade=100 !:
         fnprintbox(printfile,v,h,bv,bh,shade) !:
         ! prints top bar of box
 50230   let v=vp+weight !:
         let h=hp !:
         bv=vl-weight !:
         bh=weight !:
-        let shade=100 !:
+        shade=100 !:
         fnprintbox(printfile,v,h,bv,bh,shade) !:
         ! pr left hand bar of box
 50240   let v=vp+vl-weight !:
         let h=hp !:
         bv=weight !:
         bh=hl-weight !:
-        let shade=100 !:
+        shade=100 !:
         fnprintbox(printfile,v,h,bv,bh,shade) !:
         ! prints bottom bar of box
 50250   let v=vp+weight !:
         let h=hp+hl-weight !:
         bv=vl-weight !:
         bh=weight !:
-        let shade=100 !:
+        shade=100 !:
         fnprintbox(printfile,v,h,bv,bh,shade) !:
         ! prints right hand bar
 50260   if fill>0 then 
@@ -4030,7 +4030,7 @@
           let h=hp !:
           bv=vl !:
           bh=hl !:
-          let shade=fill !:
+          shade=fill !:
           fnprintbox(printfile,v,h,bv,bh,shade)
 50280   end if 
 50290 fnend 
@@ -4052,7 +4052,7 @@
 50370   if not esc then let fninit
 50380   dim sigin$*32000,hstart$*2000
 50390 FORMSIG: form c 8,c 10,c 32000
-50392   let lastrec=lrec(sigfil) : let srec=1
+50392   lastrec=lrec(sigfil) : srec=1
 50400   restore #sigfil,rec=1: 
 50405 ! input fields "23,64,c 1":pause$
 50410   if not uprc$(short$)=uprc$(pshort$) then let pass=0
@@ -4060,7 +4060,7 @@
 50420   if srec<=lastrec then !:
           read #sigfil,using FORMSIG,rec=srec: pshort$,ppass$ norec 50430 eof ZSIGNBOX !:
         else goto ZSIGNBOX
-50430   if not uprc$(trim$(pshort$))=uprc$(trim$(short$)) then let srec+=1 : goto 50420
+50430   if not uprc$(trim$(pshort$))=uprc$(trim$(short$)) then srec+=1 : goto 50420
 50440   if not pass and trim$(pass$)<="" and trim$(ppass$)>"" then gosub GET_PASSWORD
 50450   let pass+=1
 50460   if not trim$(ppass$)=trim$(pass$) then goto ZSIGNBOX
@@ -4071,14 +4071,14 @@
         else goto 50510
 50500   as+=1 !:
         goto 50490
-50510   let sigin$=trim$(sigin$)
+50510   sigin$=trim$(sigin$)
 50520   let d=720
 50530   let hstart$=esc$&"&a"&str$(h*d)&"H"
 50540   pr #filnum : esc$&"*t600R"&esc$&"&u600D" !:
         ! Graphic resolution to 600 per inch !:
         ! PCL units to 600 per inch
 50550   let x=pos(sigin$,"||"&esc$)
-50560   if x>0 then let sigin$(x:x+1)=hstart$ !:
+50560   if x>0 then sigin$(x:x+1)=hstart$ !:
           goto 50550
 50570 ! pr #FILNUM: ESC$&"&a"&STR$(V*D-AS*120)&"V"
 50571   pr #filnum: esc$&"&a"&str$(v*d)&"V"
@@ -4108,7 +4108,7 @@
         let postpat$(8)="LSSLS" !:
         let postpat$(9)="LSLSS" !:
         let postpat$(10)="LLSSS"
-50735   let outstring$="" !:
+50735   outstring$="" !:
         let text$=srep$(text$,1,"-","") !:
         let textsum=rejected=0
 50740   for position=1 to len(text$)
@@ -4117,17 +4117,17 @@
             goto 50755 else !:
             let rejected+=1 !:
             goto 50760
-50755     let outstring$=outstring$&postpat$(foundpat) !:
+50755     outstring$=outstring$&postpat$(foundpat) !:
           let textsum+=foundpat
 50760   next position
 50765   if rejected>0 then goto REJECTZIP
-50770   let lenout=len(outstring$)
+50770   lenout=len(outstring$)
 50775   if lenout=25 or lenout=45 then !:
           goto 50780 else !:
           goto REJECTZIP
 50780   checkdigit=10-fp(textsum/10)*10
-50785   let outstring$="L"&outstring$&postpat$(checkdigit)&"L"
-50790   let lenout=len(outstring$)
+50785   outstring$="L"&outstring$&postpat$(checkdigit)&"L"
+50790   lenout=len(outstring$)
 50795 ! Set Source And Pattern Transparency Mode To 0 For Pattern 3
 50800   let postnet$=chr$(27)&"*v0n0o3T" !:
         ! Source transparent  = Transparent (0) !:
@@ -4327,7 +4327,7 @@
 53040 ! format of data file is unformatted internal data file with !:
         ! matrix layout same as mat names$
 53050   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnpostnet$,fnfont$,fnprintbox,fnpostnet,fntype,fnprint
-53060   let overlay=0 !:
+53060   overlay=0 !:
         let manual=0
 53065   black$=chr$(27)&"*v0o0T"
 53070 !    !:
@@ -4342,35 +4342,35 @@
         ! 
 53120   let h=4 !:
         let v=1.5 !:
-        let es$="81"
+        es$="81"
 53128   if size$="A9" then !:
           let h=4.0 !:
           let v=2.0 !:
-          let es$="81"
+          es$="81"
 53130   if size$="#9" then !:
           let h=3.9 !:
           let v=1.5 !:
-          let es$="80"
+          es$="80"
 53140   if size$="#10" then !:
           let h=4 !:
           let v=1.5 !:
-          let es$="81"
+          es$="81"
 53150   if size$="DL" then !:
           let h=4.5 !:
           let v=1.5 !:
-          let es$="90"
+          es$="90"
 53160   if size$="C5" then !:
           let h=4.7 !:
           let v=2.5 !:
-          let es$="91"
+          es$="91"
 53170   if size$="B5" then !:
           let h=5 !:
           let v=2.5 !:
-          let es$="100"
+          es$="100"
 53175   if size$="XM" then !:
           let h=3.5 !:
           let v=2.5 !:
-          let es$="81" !:
+          es$="81" !:
           ! Speccial set up for Christmas Cards - calls a #10 envelope
 53180   if prtfile<1 then 
 53190     let prtfile=126
@@ -4388,7 +4388,7 @@
 53250 ! CLOSE #PRTFILE:
 53260     if exists("envelope.ovl")=2 then !:
             fntype("envelope.ovl",prtfile) !:
-            let overlay=1
+            overlay=1
 53270 ! 
 53280   end if 
 53290 !    !:
@@ -4401,10 +4401,10 @@
 53320 !    !:
         ! |    Set font to Times New Roman Bold 10 CPI                  | !:
         ! 
-53331   let symbol_set$="ROMAN" !:
+53331   symbol_set$="ROMAN" !:
         let proportional=1 !:
         chr_per_inch=6 !:
-        let style$="UPRIGHT" !:
+        style$="UPRIGHT" !:
         let weight$="BOLD" !:
         let typeface$="TIMES_NEW"
 53332   let f10$=chr$(27)&"*v0o0T"&fnfont$(symbol_set$,proportional,chr_per_inch,style$,weight$,typeface$) !:
@@ -4507,14 +4507,14 @@
         ! shade used is rounded to a multiple of 10
 53705   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprintbox,fndrawbox,fninit
 53710   if not esc then let fninit
-53720   let end=ip((bv-head-bar)/bar) !:
+53720   end=ip((bv-head-bar)/bar) !:
         let weight=.01 !:
-        let offset=0/6 !:
+        offset=0/6 !:
         ! WEIGHT defines the width of the borders !:
         ! OFFSET raises the top of the box above the "normal" top of page !:
         ! END is th number of times a greybar will be printed
-53730   let shade=round(shade,-1)
-53740   let shade=max(0,min(100,shade))
+53730   shade=round(shade,-1)
+53740   shade=max(0,min(100,shade))
 53750   if not shade then bshade=100 else bshade=min(shade*2,100)
 53755   pr #printfile,using "form c 20,skip 0": esc$&"&l1E"&esc$&"*p0x0Y"
 53760   fnprintbox(printfile,v-offset,h,weight,bh,bshade) !:
@@ -4547,7 +4547,7 @@
         ! |      pr                                                  | !:
         !    !
 53920   dim f12$*50,f10$*50,f10a$*50
-53921   let flines=udim(mat fadd$,1)
+53921   flines=udim(mat fadd$,1)
 53930   let f10$=chr$(27)&"(s1p10v0s1b16901T"
 53940   let f12$=chr$(27)&"(s1p12v0s1b16901T"
 53950   let f10a$=chr$(27)&"(s1p10v0s1b16602T"
@@ -4679,17 +4679,17 @@
 54420   if not lbl then 
 54430     open #(lblno:=fngethandle): "srow=5,scol=10,rows=3,cols=25,parent=0,border=S",display,output 
 54440     pr #lblno, fields "2,2,c 15,N/W:T": "Lable number"
-54442     let lbl=fngeta("FNPRT3X10")
+54442     lbl=fngeta("FNPRT3X10")
 54450     rinput #lblno, fields "2,18,n 3,N/W:W": lbl conv 54450
 54460     if fkey=99 or fkey=93 then goto ZPRT3X10 else if not lbl>0 then goto 54450
 54470   close #lblno: !:
-        let lblno=0
+        lblno=0
 54480 end if 
 54490 let f8$=chr$(27)&"(s1p09v0s1b16901T"
 54491 let f10$=chr$(27)&"(s1p10v0s1b16901T"
 54500 dim lbl$*2000,f8$*50
-54510 let lcol=fnmod(lbl,3) ! IF MOD(LBL,3) THEN LET LCOL=MOD(LBL,3) ELSE LET LCOL=3
-54520 let lrow=ip((lbl-1)/3)
+54510 lcol=fnmod(lbl,3) ! IF MOD(LBL,3) THEN lCOL=MOD(LBL,3) ELSE lCOL=3
+54520 lrow=ip((lbl-1)/3)
 54530 let w=2.75 !:
       let v=lrow*1+1/6 !:
       let h=lcol*w-w+.1 !:
@@ -4704,7 +4704,7 @@
 54590 if trim$(addr$(5))>" " then let fnprintbox(filnum,v:=v+1/6,h,bv,bh,shade,tv,th,addr$(5))
 54595 if lbl>=30 then !:
         pr #filnum: newpage !:
-        let lbl=0
+        lbl=0
 54600 let fnprt3x10=lbl+1
 54610 ZPRT3X10: ! 
 54615 let fnputa("FNPRT3X10",lbl+1)
@@ -4720,7 +4720,7 @@
 55030   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnprintbox
 55038   dim codepat$(44),literal$*50,outstring$*250,longtext$*100
 55040 PATTERN_3OF9: ! 
-55041   let literal$="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%"
+55041   literal$="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%"
 55043   data NNNWWNWNN,WNNWNNNNW,NNWWNNNNW,WNWWNNNNN,NNNWWNNNW,WNNWWNNNN,
 55044   data NNWWWNNNN,NNNWNNWNW,WNNWNNWNN,NNWWNNWNN,WNNNNWNNW,NNWNNWNNW,
 55045   data WNWNNWNNN,NNNNWWNNW,WNNNWWNNN,NNWNWWNNN,NNNNNWWNW,WNNNNWWNN,
@@ -4731,20 +4731,20 @@
 55050   data NNNWNWNWN,NWNNWNWNN
 55052   restore PATTERN_3OF9: read mat codepat$
 55054   let height=min(max(.25,height),.5)
-55056   if uprc$(prntxt$)="Y" then let offset=height else let offset=height
-55080   let longtext$=outstring$="": let textsum=rejected=0: let text$=uprc$(trim$(text$)): let texth=h
+55056   if uprc$(prntxt$)="Y" then offset=height else offset=height
+55080   longtext$=outstring$="": let textsum=rejected=0: let text$=uprc$(trim$(text$)): let texth=h
 55100   for position=1 to len(text$)
 55120     let foundpat=pos(literal$,text$(position:position),1)
 55140     if foundpat>0 then goto 55150 else let rejected+=1: goto 55180
-55150     let longtext$=longtext$&" "&text$(position:position)&" "
-55160     let outstring$=outstring$&codepat$(foundpat)&"N": let textsum+=foundpat
+55150     longtext$=longtext$&" "&text$(position:position)&" "
+55160     outstring$=outstring$&codepat$(foundpat)&"N": let textsum+=foundpat
 55180   next position
 55200   if rejected>0 then goto REJECT3OF9
-55220   let lenout=len(outstring$)
-55260   if checkd=1 then checkdigit=fp(textsum/43)*43: let outstring$=outstring$&codepat$(checkdigit)&"N"
-55280   let outstring$=codepat$(44)&"N"&outstring$&codepat$(44)&"N"
-55290   let longtext$="  "&longtext$
-55300   let lenout=len(outstring$)
+55220   lenout=len(outstring$)
+55260   if checkd=1 then checkdigit=fp(textsum/43)*43: outstring$=outstring$&codepat$(checkdigit)&"N"
+55280   outstring$=codepat$(44)&"N"&outstring$&codepat$(44)&"N"
+55290   longtext$="  "&longtext$
+55300   lenout=len(outstring$)
 55320 ! Set Source And Pattern Transparency Mode To 0 For Pattern 3
 55340   pr #printfile: escape$&"*v0n0o3T";
 55360   let d=720 ! 720 is the number of decipoints
@@ -4767,30 +4767,30 @@
 55560   if len(text$)><11 then goto REJECTUPC
 55570 !   DIM CODEPAT$(20),LITERAL$*50,OUTSTRING$*250,LONGTEXT$*100
 55580 PATTERN_UPC: ! 
-55590   let literal$="0123456789"
+55590   literal$="0123456789"
 55600   data 3211,2221,2122,1411,1132,1231,1114,1312,1213,3112
 55610   data 3211,2221,2122,1411,1132,1231,1114,1312,1213,3112
-55620   let leftguard$="111": let rightguard$="1111": let middleguard$="11111"
+55620   leftguard$="111": let rightguard$="1111": let middleguard$="11111"
 55630   restore PATTERN_UPC: read mat codepat$
 55640   let height=min(max(.8,height),2.): let texth=h: let h=h+(.1*height): let pitch=12/height
 55650 ! adjust left margin to pr 1st character and
-55660   let offset=height
-55670   let longtext$=outstring$="": let even=odd=rejected=0
+55660   offset=height
+55670   longtext$=outstring$="": even=odd=rejected=0
 55680   for position=1 to len(text$)
 55690     let foundpat=pos(literal$,text$(position:position),1)
 55700     if foundpat>0 then goto 55710 else let rejected+=1: goto 55750
-55710     let longtext$=longtext$&" "&text$(position:position)&" "
+55710     longtext$=longtext$&" "&text$(position:position)&" "
 55720     if position>6 then let foundpat+=10
-55730     let outstring$=outstring$&codepat$(foundpat)
-55740     if int(position/2)*2=position then let even+=val(text$(position:position)) else let odd+=val(text$(position:position))
+55730     outstring$=outstring$&codepat$(foundpat)
+55740     if int(position/2)*2=position then even+=val(text$(position:position)) else odd+=val(text$(position:position))
 55750   next position
 55760   if rejected>0 then goto REJECTUPC
 55770   checkdigit=(10-fp((even+(odd*3))/10)*10)+1
 55780   if checkdigit=11 then checkdigit=1
-55790   let outstring$=outstring$&codepat$(checkdigit+10)
-55800   let outstring$=leftguard$&outstring$(1:24)&middleguard$&outstring$(25:48)&rightguard$
-55810 !  let LONGTEXT$="  "&LONGTEXT$
-55820   let lenout=len(outstring$)
+55790   outstring$=outstring$&codepat$(checkdigit+10)
+55800   outstring$=leftguard$&outstring$(1:24)&middleguard$&outstring$(25:48)&rightguard$
+55810 !  lONGTEXT$="  "&LONGTEXT$
+55820   lenout=len(outstring$)
 55830 ! Set Source And Pattern Transparency Mode To 0 For Pattern 3
 55840   pr #printfile: escape$&"*v0n0o3T";
 55850   let d=720 ! 720 is the number of decipoints
@@ -4890,7 +4890,7 @@
 60240 def library fnsavpart(sr$,sc1$,er$,ec$,clearit) !:
         ! Save part of the screen at Starting Row, Starting Column, Ending Row,!:
         ! Ending Column, Clear the part saved? (1=YES, 0=NO)
-60250   let ssav+=1 !:
+60250   ssav+=1 !:
         open #ssav: "SROW="&sr$&",SCOL="&sc1$&",EROW="&er$&",ECOL="&ec$&",N=[S]",display,outin  !:
         if clearit then !:
           pr #ssav: newpage
@@ -4902,7 +4902,7 @@
 60280   if restscr then close #scrref: !:
         else !:
           close #scrref,free: 
-60290   let ssav-=1 !:
+60290   ssav-=1 !:
         fnrelpart=0 !:
       fnend 
 60320 def library fnsrtary(mat l$;mat m$,desending,header,footer) !:
@@ -4912,17 +4912,17 @@
         ! starting down from top to allow for a HEADER !:
         ! stopping before the bottom to allow for a FOOTER
 60322   dim sort_wrk$(1)*500
-60325   let elements=udim(l$) !:
+60325   elements=udim(l$) !:
         mat idx(elements-header-footer) !:
         mat sort_wrk$(elements)
 60326   if udim(mat m$)=udim(mat l$)-header-footer then mat idx=aidx(m$) else mat idx=aidx(l$)
 60327   if desending and udim(mat m$)=udim(mat l$)-header-footer then mat idx=didx(m$)
-60330   let elements=udim(l$) !:
+60330   elements=udim(l$) !:
         mat idx(elements-header-footer) !:
         mat sort_wrk$(elements) !:
         mat sort_wrk$=l$ !:
         for i=1 to elements-header-footer !:
-          let sort_wrk$(i+header)=l$(idx(i)+header) !:
+          sort_wrk$(i+header)=l$(idx(i)+header) !:
         next i !:
         mat l$=sort_wrk$
 60332 fnend 
@@ -4933,17 +4933,17 @@
         ! starting down from top to allow for a HEADER !:
         ! stopping before the bottom to allow for a FOOTER
 60342   dim sort_wrk(1)
-60345   let elements=udim(l) !:
+60345   elements=udim(l) !:
         mat idx(elements-header-footer) !:
         mat sort_wrk(elements)
 60346   if udim(mat m$)=udim(mat l)-header-footer then mat idx=aidx(m$) else mat idx=aidx(l)
 60347   if desending and udim(mat m$)=udim(mat l)-header-footer then mat idx=didx(m$)
-60350   let elements=udim(l) !:
+60350   elements=udim(l) !:
         mat idx(elements-header-footer) !:
         mat sort_wrk(elements) !:
         mat sort_wrk=l !:
         for i=1 to elements-header-footer !:
-          let sort_wrk(i+header)=l(idx(i)+header) !:
+          sort_wrk(i+header)=l(idx(i)+header) !:
         next i !:
         mat l=sort_wrk
 60352 fnend 
@@ -4995,7 +4995,7 @@
 60760   if not x$=er$(1:15) then goto 60750
 60770   let msgbox(srep$(er$(17:inf),"\n",crlf$),"Error Description")
 60780 ZERRTXT: close #errtxt: !:
-        let errtxt=0
+        errtxt=0
 60790 fnend 
 61450 def library fnclkbuf !:
         !    !:
@@ -5046,23 +5046,23 @@
 63024     let default$(dfltopt:dfltopt)="1" !:
           let dcols=len(default$)
 63025     let txtstr$=srep$(txtstr$,hex$('C4'),"")
-63026     caption$=dtitle$ : let infile$="": let left=val(scol$)*20 !:
-          let top=val(srow$)*20 : allow=0 : let type$="B" : let locate=0 !:
+63026     caption$=dtitle$ : let infile$="": left=val(scol$)*20 !:
+          let top=val(srow$)*20 : allow=0 : let type$="B" : locate=0 !:
           let nocols=1 : colwidth=150 !:
-          let opt=pos(fnradiochk$(caption$,infile$,left,top,allow,default$,type$,locate,nocols,colwidth,waittime,txtstr$),"1")
+          opt=pos(fnradiochk$(caption$,infile$,left,top,allow,default$,type$,locate,nocols,colwidth,waittime,txtstr$),"1")
 63027     if opt then let fndialog$=dopt$(opt) else let fndialog$=""
 63028     goto ZDIALOG
 63029   end if 
-63030   let numopts=toptlen=0: let selform$="": mat dopt$(3)=("") !:
+63030   let numopts=toptlen=0: selform$="": mat dopt$(3)=("") !:
         if opt1$<>"" then let numopts+=1 !:
-          let ol=len(opt1$) : let dopt$(numopts)=opt1$ !:
-          let selform$="ROW#,17,C "&str$(ol)&",E;" : let toptlen+=ol
+          ol=len(opt1$) : let dopt$(numopts)=opt1$ !:
+          selform$="ROW#,17,C "&str$(ol)&",E;" : let toptlen+=ol
 63040   if opt2$<>"" then let numopts+=1 !:
-          let ol=len(opt2$): let dopt$(numopts)=opt2$ !:
-          let selform$=selform$&"ROW#,"&str$(toptlen+15+numopts*2)&",C "&str$(ol)&",E;": let toptlen+=ol
+          ol=len(opt2$): let dopt$(numopts)=opt2$ !:
+          selform$=selform$&"ROW#,"&str$(toptlen+15+numopts*2)&",C "&str$(ol)&",E;": let toptlen+=ol
 63050   if opt3$<>"" then let numopts+=1 !:
-          let ol=len(opt3$): let dopt$(numopts)=opt3$ !:
-          let selform$=selform$&"ROW#,"&str$(toptlen+15+numopts*2)&",C "&str$(ol)&",E;": let toptlen+=ol
+          ol=len(opt3$): let dopt$(numopts)=opt3$ !:
+          selform$=selform$&"ROW#,"&str$(toptlen+15+numopts*2)&",C "&str$(ol)&",E;": let toptlen+=ol
 63060   mat dopt$(numopts) !:
         if not numopts and dispanykey then let minlen=30 !:
         else !:
@@ -5077,7 +5077,7 @@
         else !:
           let dscr$="" : mat ddscr$=("") : let dd=0 !:
           for dbl=1 to dbrows-1
-63072     if dbl=1 then let spacpos=pos(txtstr$(1:winwidth-1)," ",-1) else let spacpos=pos(txtstr$(1:dbwidth-1)," ",-1)
+63072     if dbl=1 then spacpos=pos(txtstr$(1:winwidth-1)," ",-1) else spacpos=pos(txtstr$(1:dbwidth-1)," ",-1)
 63080     if not spacpos then let dscr$=dscr$&" "&txtstr$ !:
             let dbrows-=1: goto 63092
 63085     adj=dbwidth-spacpos !:
@@ -5085,7 +5085,7 @@
           let dd+=1 : mat ddscr$(dd) : mat ddwrk$(dd) !:
           let ddwrk$(dd)=str$(dd)&","&indent$&",c " !:
           let ddscr$(dd)=" "&rtrm$(txtstr$(1:dbwidth-adj)) !:
-          let lstlen=len(txtstr$(1:dbwidth-adj)) !:
+          lstlen=len(txtstr$(1:dbwidth-adj)) !:
           let txtstr$(1:dbwidth-adj)="" !:
         next dbl
 63090   if len(txtstr$)+lstlen<=dbwidth-2 then !:
@@ -5109,7 +5109,7 @@
           cmdkey(ord(x$)) error 63130 !:
           goto 63130 !:
         else !:
-          let selform$=srep$(selform$,"ROW#",r$) !:
+          selform$=srep$(selform$,"ROW#",r$) !:
           pr #dialwin,fields r$&",2,C": "Select choice: "
 63120   curfld(dfltopt) !:
         rinput #dialwin, select selform$,attr "[L]": mat dopt$ !:
@@ -5148,8 +5148,8 @@
           pr #windev: newpage !:
         else !:
           pr #windev,border bordtyp$: wintitl$
-65040   let lstwin=windev !:
-        let lsttitle$=wintitl$ !:
+65040   lstwin=windev !:
+        lsttitle$=wintitl$ !:
         fnwin=windev !:
       fnend 
 65070 def library fnpfkey(r,c,f$,txt$*78) !:
@@ -5184,8 +5184,8 @@
         else !:
           if file(windev)<>-1 then close #windev,free: 
 65530   let windev=max(windev-1,owindev) !:
-        let lstwin=fnclswin=0 !:
-        let lsttitle$=""
+        lstwin=fnclswin=0 !:
+        lsttitle$=""
 65532   if file(windev)<>-1 then pr #windev,border "DS[X]": 
 65535 fnend 
 65750 def library fnencrypt$(pw$) !:
@@ -5227,7 +5227,7 @@
 66009     let default$(hmrow:hmrow)="1"
 66010     colwidth=0 ! (opLEN/LEN(DEFAULT$)-LEN(DEFAULT$)*2)*10
 66011 ! INPUT FIELDS "23,64,C 1": PAUSE$
-66012     let opt$=fnradiochk$(dummy$,"",val(scol$)*20,val(srow$)*20,allow,default$,"R",1,1,colwidth,waittime,textstring$)
+66012     opt$=fnradiochk$(dummy$,"",val(scol$)*20,val(srow$)*20,allow,default$,"R",1,1,colwidth,waittime,textstring$)
 66013 !   fnDLG=SRCH(DOPTS$,OPT$)
 66014     fnpopup=pos(opt$,"1")
 66015     goto 66420
@@ -5246,8 +5246,8 @@
           let pforms$(1)="c "&str$(oplen) !:
           let pheadings$(1)=menutitle$ !:
           let pparent=0 !:
-          let lcols=sum(mat pwidths)+2 !:
-          let lrows=min(20,max(3,udim(mat mopt$)+1)) !:
+          lcols=sum(mat pwidths)+2 !:
+          lrows=min(20,max(3,udim(mat mopt$)+1)) !:
           arows=-1
 66035     library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnlistspec$
 66036     let plistspec$=fnlistspec$(popwin,val(srow$),val(scol$),lrows,lcols,arows,mat pheadings$,mat pwidths,mat pforms$,"Options","",0,2)
@@ -5278,7 +5278,7 @@
         bar=fnzero(popbar(popnum),1)
 66160   if not moving then 
 66170     if not popstat or lpopnum<>popnum then 
-66180       let lpopnum=popnum !:
+66180       lpopnum=popnum !:
             let mscr$="" !:
             mat popscrmat$(mo)=("") !:
             mat popfldmat$(mo)=("") !:
@@ -5308,7 +5308,7 @@
 66270   let hit$=fngetk$(1) !:
         on clrnxt gosub MGCLR
 66280   let mov=srch(popkcodes$,hit$) !:
-        let ele=srch(hotkey_sav$,hex$(hit$)) !:
+        ele=srch(hotkey_sav$,hex$(hit$)) !:
         if mov=-1 and ele=-1 then goto 66270 !:
         else !:
           if hit$<>"0D" and len(hit$)<=2 then !:
@@ -5415,30 +5415,30 @@
         !    !
 66702   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fnwinhead
 66704   let htext$=srep$(htext$,","," ")
-66710   let listwin=max(listwin,300) !:
-        if file(listwin)>-1 then let listwin+=1 !:
+66710   listwin=max(listwin,300) !:
+        if file(listwin)>-1 then listwin+=1 !:
           goto 66710
 66711   if wbversion$<"4.20a" then 
 66712     if len(trim$(htext$))<1 then border$="S" else border$="NONE"
 66713     if len(trim$(htext$))<1 then let pict$="NONE" else let pict$=env$("PD")&"window.gif" ! "window.bmp" ! "window.gif" ! "pane.bmp"
 66715     open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",erow="&str$(sr+lrows+2)&",ecol="&str$(sc+lcols+1)&",border="&border$&",Parent="&str$(parent)&",picture="&pict$,display,outin  !:
-          let setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
+          setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
 66716     fnwinhead(listwin,htext$,lcols)
 66718   else 
 66720     if head=0 then border$="NONE" !:
             open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",rows="&str$(lrows+2)&",cols="&str$(lcols+1)&",border="&border$&",Parent="&str$(parent)&",picture="&pict$,display,outin  !:
-            let setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
+            setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
 66722     if head=1 then border$="S" !:
             open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",rows="&str$(lrows+2)&",cols="&str$(lcols+1)&",border="&border$&",Parent="&str$(parent)&",picture="&pict$,display,outin  !:
-            let setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
+            setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
 66724     if head=2 then open #listwin: "srow="&str$(sr)&",scol="&str$(sc)&",rows="&str$(lrows+2)&",cols="&str$(lcols+1)&",Parent=NONE, font.buttons=Arial:small,caption="&htext$&",picture="&pict$&",NO_TASK_BAR",display,outin  !:
-            let setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
+            setenv("FILE"&str$(listwin)&"_parent",cnvrt$("pic(###)",parent))
 66729   end if 
 66730   if uprc$(g$)="GRID" then !:
-          let listspec$="1,1,GRID "&str$(max(3,lrows-arows))&"/"&str$(lcols) !:
-        else let listspec$="1,1,LIST "&str$(max(3,lrows-arows))&"/"&str$(lcols)
+          listspec$="1,1,GRID "&str$(max(3,lrows-arows))&"/"&str$(lcols) !:
+        else listspec$="1,1,LIST "&str$(max(3,lrows-arows))&"/"&str$(lcols)
 66735 ! IF WBVERSION$<"4.2a" THEN LET FNWINHEAD(LISTWIN,HTEXT$,LCOLS)
-66737   let lkey$=","&str$(1000+listwin)
+66737   lkey$=","&str$(1000+listwin)
 66738   execute "config attribute [H]n/#000000:#CCCCCC,font=swiss:small:bold"
 66740   pr #listwin, fields listspec$&",HEADERS,[H]": (mat h$, mat w, mat f$)
 66741 ! pr #LISTWIN, FIELDS LISTSPEC$&",HEADERS": (MAT H$, MAT W, MAT F$)
@@ -5471,14 +5471,14 @@
 66880   if many then 
 66890     if not sel(selection) then 
 66900       if many>1 then !:
-              let sel$(selection)=cnvrt$("pic(###)",sum(mat sel)+1) !:
+              sel$(selection)=cnvrt$("pic(###)",sum(mat sel)+1) !:
             else !:
-              let sel$(selection)="SELECTED"
-66910       let sel(selection)=1
+              sel$(selection)="SELECTED"
+66910       sel(selection)=1
 66920     else 
 66930       if many=1 then !:
-              let sel$(selection)="" !:
-              let sel(selection)=0 !:
+              sel$(selection)="" !:
+              sel(selection)=0 !:
             else !:
               gosub REORDER_SEL
 66940     end if 
@@ -5488,10 +5488,10 @@
 66980   if not many then return 
 66990   let delnumb=val(sel$(selection))
 67000   if not delnumb or delnumb=sum(sel)+1 then return 
-67010   let sel$(selection)="" : let sel(selection)=0
+67010   sel$(selection)="" : sel(selection)=0
 67020   for a=1 to udim(sel$)
 67030     if val(sel$(a))>delnumb then !:
-            let sel$(a)=cnvrt$("pic(###)",val(sel$(a))-1)
+            sel$(a)=cnvrt$("pic(###)",val(sel$(a))-1)
 67040   next a
 67050   return 
 67060 ZFNSELECTION: let fnselection=sum(mat sel)
@@ -5551,7 +5551,7 @@
 67418 KEYCOD: data 02,05,06,0A,0B,17,09,08,07,0D,0100,19,0200,0300,0400,0500,0600,0700,0800,0900,0A00,0B00,0C00,0D00,0E00,0F00,1000,1100,1200,1300,1400,6300,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,2A00,2B00,2C00,2D00,2E00,2F00,3000,3100,3200,3300,3400,3500,3600,3700
 67420 ! MAT KCODES$ - Key codes for: PgUp, End, PgDn, Dn Arrow, Up Arrow,!:
         ! Home, Tab, Backspace, Shift-Tab, Enter, F1, Ctrl-Y, F2-F20, & Esc
-67422   let optlen=maxl !:
+67422   optlen=maxl !:
         addl=typele=0 !:
         if many then 
 67424     mat sel(pick_ops) !:
@@ -5560,15 +5560,15 @@
             if many=1 then addl=11 ! accom length for ' <SELECTED> '
 67430     if many=-1 then 
 67432       addl=0 !:
-            let seldes$="" !:
+            seldes$="" !:
             mat sel_tkeys$(max_sel_types)=("") !:
             for j=1 to udim(sel_types$) !:
-              let seldes$=seldes$&sel_types$(j)(1:1)&"-"&sel_types$(j)&", " !:
+              seldes$=seldes$&sel_types$(j)(1:1)&"-"&sel_types$(j)&", " !:
               addl=max(addl,len(sel_types$(j))+3)
-67434         let sel_tkeys$(j)=sel_types$(j)(1:1) !:
+67434         sel_tkeys$(j)=sel_types$(j)(1:1) !:
             next j !:
-            let l=len(seldes$) !:
-            let seldes$(l-1:l)="." !:
+            l=len(seldes$) !:
+            seldes$(l-1:l)="." !:
             mat sel_tkeys$(j-1) ! 
 67436     end if 
 67438   end if 
@@ -5579,29 +5579,29 @@
           mat lsts$(ptyp) !:
           mat pickwin(ptyp) ! Establish req. nbr of elements for pointer arrays!:
           ! 
-67442   let maxl+=addl: let pp=lpp=min(pp,pick_ops): let srchstr$="" !:
+67442   let maxl+=addl: let pp=lpp=min(pp,pick_ops): srchstr$="" !:
         if mustrset then bpts(ptyp)=ats(ptyp)=scpts(ptyp)=0 !:
-          let obord$=""
-67450   bpts(ptyp)=max(1,bpts(ptyp)): let scpts(ptyp)=max(1,scpts(ptyp)) !:
-        bpt=min(bpts(ptyp),pick_ops): let scpt=min(scpts(ptyp),pick_ops) !:
+          obord$=""
+67450   bpts(ptyp)=max(1,bpts(ptyp)): scpts(ptyp)=max(1,scpts(ptyp)) !:
+        bpt=min(bpts(ptyp),pick_ops): scpt=min(scpts(ptyp),pick_ops) !:
         ats(ptyp)=max(lpp,ats(ptyp)): at=min(ats(ptyp),pick_ops) ! pointers
 67460   at=min(at,pick_ops): let fnprtpag(max(1,at-lpp+1),at) !:
         if moving then goto GETIT !:
         else !:
           if rtrm$(lsts$(ptyp))<>"" and rptfcol then !:
             fnpfkey(23,rptfcol,"F3","Repeat Search")
-67470   if autosel then let s=searchon: goto 67590 !:
+67470   if autosel then s=searchon: goto 67590 !:
         else !:
           if searchon then !:
-            let soset=0: let srchstr$=sstr$: goto LOOKST !:
+            soset=0: srchstr$=sstr$: goto LOOKST !:
             ! these statements allow the bar to be pointed at a 'default' selctn
-67480 GETIT: let soset=1: if insr then goto 67590 !:
+67480 GETIT: soset=1: if insr then goto 67590 !:
         else !:
           fnprtpickbar("[L]",bpt) !:
           on moving goto PICKOUT ! prt color bar & exit if moving window !:
           ! 
 67490   if many then 
-67492     let selspec$=str$(val(srow$)+pp)&","&scol$&",C " !:
+67492     selspec$=str$(val(srow$)+pp)&","&scol$&",C " !:
           if obord$="" or prev_maxl<>maxl then !:
             input #fullscr,fields selspec$&str$(maxl)&",G": obord$ !:
             let prev_maxl=maxl
@@ -5624,7 +5624,7 @@
             if hit$<>"0D" and len(hit$)<=2 then !:
               fnprtpickbar("[W]",bpt)
 67540   on clrnxt gosub MGCLR
-67550   if hit$<>"0D" then let srchstr$=""
+67550   if hit$<>"0D" then srchstr$=""
 67560   on mov goto PPGUP,LSTPG,PPGDN,PBDN,PBUP,FSTPG,PBDN,PBUP,PBUP,PICKOUT,PICKHLP,PICKHLP,PICKOUT,LSTSRCH,PICKOUT,PICKOUT none PICKOUT
 67570 PICKHLP: let help$(hk$&","&hlpfil$,hlpele) error GETIT !:
         goto GETIT
@@ -5632,7 +5632,7 @@
         else !:
           if autosel then let typele=srch(sel_types$,hex$(hit$)): goto PICKOUT !:
           else !:
-            let hit$=uprc$(hex$(hit$)): on soflow ignore : let srchstr$=srchstr$&hit$: on soflow goto ERRTRAP: let fnpm(" Building search string: "&srchstr$): let s=0
+            let hit$=uprc$(hex$(hit$)): on soflow ignore : srchstr$=srchstr$&hit$: on soflow goto ERRTRAP: let fnpm(" Building search string: "&srchstr$): s=0
 67590   if s<=0 or s>pick_ops then goto GETIT !:
         else !:
           if s>at then let insr=1: goto PPGDN !:
@@ -5642,18 +5642,18 @@
               fnprtpickbar("[W]",bpt)
 67600   if insr then goto 67620 !:
         else !:
-          if s>pp then let scpt=pp-(at-s) !:
+          if s>pp then scpt=pp-(at-s) !:
           else !:
-            if bpt=s or scpt=bpt then let scpt=s !:
+            if bpt=s or scpt=bpt then scpt=s !:
             else !:
-              let scpt+=((s-bpt))
+              scpt+=((s-bpt))
 67610   bpt=s: if (autosel and typele>0) then !:
           fnprtpickbar("[L]",typele) : goto PICKDONE !:
         else !:
           if many then goto GETIT !:
           else !:
             on clrnxt gosub MGCLR: goto GETIT
-67620   bpt=s: let scpt=savscpt: let insr=0 !:
+67620   bpt=s: scpt=savscpt: let insr=0 !:
         if (autosel and typele>0) then !:
           fnprtpickbar("[L]",typele) : goto PICKDONE !:
         else !:
@@ -5667,49 +5667,49 @@
             fnpm(" Press F3 to REPEAT the last search.") !:
             clrnxt=0 !:
           else !:
-            let searchon=0
+            searchon=0
 67632   for k=bpt+soset to pick_ops !:
-          if pos(uprc$(l$(k)),rtrm$(srchstr$)) then let s=k !:
-            let lsts$(ptyp)=srchstr$(1:18) !:
-            let srchstr$="" !:
+          if pos(uprc$(l$(k)),rtrm$(srchstr$)) then s=k !:
+            lsts$(ptyp)=srchstr$(1:18) !:
+            srchstr$="" !:
             goto 67590
 67640   next k !:
         fnpm(" Search string: "&srchstr$&" was NOT found.") !:
-        let lsts$(ptyp)=srchstr$(1:18) !:
-        let srchstr$="" !:
+        lsts$(ptyp)=srchstr$(1:18) !:
+        srchstr$="" !:
         goto GETIT
-67650 PPGUP: if scpt<>1 and barup=0 then let scpt=1 !:
+67650 PPGUP: if scpt<>1 and barup=0 then scpt=1 !:
           bpt=max(1,at-pp+1) !:
           goto GETIT
-67660   if at=lpp then bpt=1: let scpt=1: goto GETIT !:
+67660   if at=lpp then bpt=1: scpt=1: goto GETIT !:
         else !:
           at=max(lpp,at-lpp): let fnprtpag(max(at-(lpp)+1,1),at)
-67670   if not barup then let scpt=1: bpt=max(1,at-pp+1): goto GETIT !:
+67670   if not barup then scpt=1: bpt=max(1,at-pp+1): goto GETIT !:
         else !:
-          barup=0: let scpt=min(pp,at): bpt=max(pp,at): goto GETIT
-67680 FSTPG: if at=lpp then bpt=1: let scpt=1: goto GETIT !:
+          barup=0: scpt=min(pp,at): bpt=max(pp,at): goto GETIT
+67680 FSTPG: if at=lpp then bpt=1: scpt=1: goto GETIT !:
         else !:
-          at=lpp: bpt=1: let scpt=1 !:
+          at=lpp: bpt=1: scpt=1 !:
           fnprtpag(1,lpp): goto GETIT !:
           ! 
-67690 LSTPG: if at=pick_ops then bpt=at: let scpt=min(pp,at): goto GETIT !:
+67690 LSTPG: if at=pick_ops then bpt=at: scpt=min(pp,at): goto GETIT !:
         else !:
-          at=pick_ops: bpt=max(1,at-pp+1): let scpt=1 !:
+          at=pick_ops: bpt=max(1,at-pp+1): scpt=1 !:
           fnprtpag(max(1,(pick_ops-lpp)+1),pick_ops): goto GETIT !:
           ! 
 67700 PPGDN: if scpt<min(pp,at) then !:
-          let scpt=min(pp,at): bpt=max(pp,at): goto GETIT
-67710   if at=pick_ops then bpt=at: let scpt=min(pp,at): goto GETIT !:
+          scpt=min(pp,at): bpt=max(pp,at): goto GETIT
+67710   if at=pick_ops then bpt=at: scpt=min(pp,at): goto GETIT !:
         else !:
-          let savat=at: at=min(at+lpp,pick_ops): bpt=max(1,at-pp+1) !:
-          let scpt=1: let fnprtpag(min(savat+1,(pick_ops-lpp)+1),at) !:
+          savat=at: at=min(at+lpp,pick_ops): bpt=max(1,at-pp+1) !:
+          scpt=1: let fnprtpag(min(savat+1,(pick_ops-lpp)+1),at) !:
           goto GETIT
-67720 PBDN: if scpt<>pp then let scpt+=1: bpt=bpt+1: goto GETIT
+67720 PBDN: if scpt<>pp then scpt+=1: bpt=bpt+1: goto GETIT
 67730   if at=pick_ops then goto GETIT !:
         else !:
           bpt+=1: at+=1 !:
           fnprtpag(at-lpp+1,min(at,pick_ops)): goto GETIT
-67740 PBUP: if scpt<>1 then let scpt-=1: bpt=bpt-1: goto GETIT
+67740 PBUP: if scpt<>1 then scpt-=1: bpt=bpt-1: goto GETIT
 67750   if bpt=1 then goto GETIT !:
         else !:
           bpt-=1: at-=1 !:
@@ -5718,16 +5718,16 @@
           goto PICKOUT else !:
           let mpt=srch(mousecodes$,hit$) !:
           bpt=min(bpt+(mpt-scpt),pick_ops) !:
-          let scpt=mpt !:
+          scpt=mpt !:
           fnprtpag(max(1,at-lpp+1),min(at,pick_ops)): !:
           goto GETIT
 67760 LSTSRCH: if rtrm$(lsts$(ptyp))="" then 
 67762     if rptfcol then let fnpm(" Search String NOT yet entered. Enter the Search String to search for first."): goto GETIT !:
           else !:
             goto PICKOUT
-67764   else let srchstr$=lsts$(ptyp) !:
+67764   else srchstr$=lsts$(ptyp) !:
         goto LOOKST
-67770 PICKOUT: if srch(mousecodes$,hit$)>0 then goto MSCLK else bpts(ptyp)=bpt: ats(ptyp)=at: let scpts(ptyp)=scpt
+67770 PICKOUT: if srch(mousecodes$,hit$)>0 then goto MSCLK else bpts(ptyp)=bpt: ats(ptyp)=at: scpts(ptyp)=scpt
 67780   let xkey=took=0 !:
         if len(hit$)>2 then goto 67784 !:
         else !:
@@ -5736,7 +5736,7 @@
             if autosel and hit$<>"0D" then let took=typele !:
             else !:
               let took=bpt
-67782   if autosel and typele>0 then let s=typele !:
+67782   if autosel and typele>0 then s=typele !:
           goto 67590 !:
         else !:
           goto 67790
@@ -5760,7 +5760,7 @@
           fnsetsel(took,1) !:
         else !:
           if sel(took) then let fnsetsel(took,0)
-67820   let lsttop=lstbot=lstmaxl=0 !:
+67820   lsttop=lstbot=lstmaxl=0 !:
         fnprtpag(max(1,at-lpp+1),min(at,pick_ops)) !:
         if many>1 and sum(sel)=many then goto 67830 !:
         else !:
@@ -5798,24 +5798,24 @@
         c2$=str$(val(scol$)+maxl+3-6)&",C ,[L],x06"
 67874   rem c$=STR$(VAL(SCOL$)+MAXL+3-11)&",C ,[L],"&STR$(PGUP) !:                      c1$=STR$(VAL(SCOL$)+MAXL+3-6)&",C ,[L],"&STR$(PGUP) !:                      c2$=STR$(VAL(SCOL$)+MAXL+3-6)&",C ,[L],"&STR$(PGDN)
 67876   if at<>pick_ops and at-lpp>0 then !:
-          pr fields r$&c$: "PgUp/" !:
-          pr fields r$&c2$: "PgDn" !:
+          pr f r$&c$: "PgUp/" !:
+          pr f r$&c2$: "PgDn" !:
         else !:
-          if at-lpp>0 then pr fields r$&c1$: "PgUp" !:
+          if at-lpp>0 then pr f r$&c1$: "PgUp" !:
           else !:
-            if at<>pick_ops then pr fields r$&c2$: "PgDn"
+            if at<>pick_ops then pr f r$&c2$: "PgDn"
 67878   if mustrset then let mustrset=0 !:
         else !:
           if lsttop=topele and lstbot=botele and lstmaxl=maxl and lstptyp=ptyp then !:
             goto 67900
-67880   let pscr$="": let lstmaxl=maxl: let lsttop=topele: let lstbot=botele !:
-        let lstptyp=ptyp: let j1=0
+67880   let pscr$="": lstmaxl=maxl: lsttop=topele: lstbot=botele !:
+        lstptyp=ptyp: let j1=0
 67882   mat pscrmat$(botele-topele+1)=("") !:
         mat pscrfld$(botele-topele+1)=("")
 67885   for j=topele to botele !:
           let j1+=1 !:
           let pscr$=pscr$&"  "&rpad$(l$(j),maxl+2) !:
-          if insr and j=s then let savscpt=j1
+          if insr and j=s then savscpt=j1
 67887     let pscrmat$(j1)="  "&rpad$(l$(j),maxl+1)
 67888     let pscrfld$(j1)=str$(j1)&",1,C "&str$(maxl+3)&",[W],"&str$(31+j1)
 67890   next j !:
@@ -5828,28 +5828,28 @@
         ! |                                                             | !:
         ! |                                                             | !:
         !    ! ! Set L$(ELE) for setflg 1-ON, 0-OFF
-67920   let sel(ele)=setflg !:
-        let l$(ele)=rpad$(l$(ele),maxl) !:
+67920   sel(ele)=setflg !:
+        l$(ele)=rpad$(l$(ele),maxl) !:
         on setflg+1 goto 67930,67940
 67930   gosub REORGLEV !:
-        let l$(ele)(optlen+1:maxl)="" !:
+        l$(ele)(optlen+1:maxl)="" !:
         goto 67950
 67940   if many=-1 then !:
-          let l$(ele)(optlen+1:maxl)=" <"&sel_types$(sel_num)&">" !:
-          let sel(ele)=sel_num !:
+          l$(ele)(optlen+1:maxl)=" <"&sel_types$(sel_num)&">" !:
+          sel(ele)=sel_num !:
         else !:
-          if many=1 then let l$(ele)(optlen+1:maxl)=" <SELECTED>" !:
+          if many=1 then l$(ele)(optlen+1:maxl)=" <SELECTED>" !:
           else !:
-            let l$(ele)(optlen+1:maxl)=" <SELECTED-Lev"&str$(100+sum(sel))(2:3)&">"
+            l$(ele)(optlen+1:maxl)=" <SELECTED-Lev"&str$(100+sum(sel))(2:3)&">"
 67950 fnend 
 67960 REORGLEV: if many<=1 then return  !:
       else !:
         let delnum=val(l$(ele)(maxl-2:maxl-1)) !:
         if not delnum or delnum=sum(sel)+1 then return  ! not a limited select or last one deleted - no reorg necessary
 67970 for j=1 to pick_ops !:
-        let srtnum=val(l$(j)(maxl-2:maxl-1)) !:
-        if srtnum>delnum then let srtnum-=1 !:
-          let l$(j)(maxl-2:maxl-1)=str$(100+srtnum)(2:3)
+        srtnum=val(l$(j)(maxl-2:maxl-1)) !:
+        if srtnum>delnum then srtnum-=1 !:
+          l$(j)(maxl-2:maxl-1)=str$(100+srtnum)(2:3)
 67980 next j !:
       return 
 67982 def library fnprtpickbar(color$,pick_ele) !:
@@ -5912,14 +5912,14 @@
         let keyselwin=fnwin(srow$,scol$,str$(val(srow$)+per_win-1),str$(val(scol$)+totlength+1),wintitle$,bordtype$&"[X]","[W]",0,1,font$)
 75110   botrow$=str$(val(srow$)+per_win)&"," !:
         input fields botrow$&scol$&",C 11,G": obord$ !:
-        let longcol$=str$(val(scol$)+totlength-11+1)&",C ,[L]" !:
-        let shortcol$=str$(val(scol$)+totlength-6+1)&",C ,[L]"
+        longcol$=str$(val(scol$)+totlength-11+1)&",C ,[L]" !:
+        shortcol$=str$(val(scol$)+totlength-6+1)&",C ,[L]"
 75120   restore #filenbr,search>=rtrm$(key$): nokey 75130 !:
         goto 75140
 75130   restore #filenbr: 
-75140   let startval=1: let endval=per_win: let stepval=1
+75140   startval=1: endval=per_win: stepval=1
 75150   mat keyselect$=(""): mat retkeysave$=("") !:
-        mat actkeysave$=(""): mat mastrrn=(0): let lstkeycur=0
+        mat actkeysave$=(""): mat mastrrn=(0): lstkeycur=0
 75160   for key_num=startval to endval step stepval
 75170     if stepval>0 then 
 75180       read #filenbr,using kform$,release: mat selfields$ locked 75190,eof SELENDFIL
@@ -5930,7 +5930,7 @@
             if retkeyfield>1 then let desfield=1 !:
             else !:
               let desfield=retkeyfield+1
-75200       let selfields$(desfield)="** LOCKED **"
+75200       selfields$(desfield)="** LOCKED **"
 75210     else 
 75220       read #filenbr,using kform$,prior,release: mat selfields$ locked 75230,eof SELENDFIL
 75221       if key_check and not selfields$(key_check)=key_check_field$ then goto 75220
@@ -5940,7 +5940,7 @@
             if retkeyfield>1 then let desfield=1 !:
             else !:
               let desfield=retkeyfield+1
-75240       let selfields$(desfield)="** LOCKED **"
+75240       selfields$(desfield)="** LOCKED **"
 75250     end if 
 75260     let retkeysave$(key_num)=selfields$(retkeyfield) !:
           actkeysave$(key_num)=selfields$(actkeyfield) !:
@@ -5967,9 +5967,9 @@
               let mastrrn(i)=mastrrn(key_num)
 75320       let key_num+=1
 75330     next i !:
-          let startval=max(1,per_win-key_needed+1) !:
-          let endval=per_win !:
-          let stepval=1 !:
+          startval=max(1,per_win-key_needed+1) !:
+          endval=per_win !:
+          stepval=1 !:
           let moreup=0 !:
           if startval=1 then goto 75160
 75340     read #filenbr,key=actkeysave$(startval-1),release: locked 75140
@@ -5980,28 +5980,28 @@
           else !:
             goto 75160
 75360   else let moredown=0
-75370 KEYPGDISP: pr fields botrow$&srep$(longcol$,"[L]","[X]"): obord$ !:
+75370 KEYPGDISP: pr f botrow$&srep$(longcol$,"[L]","[X]"): obord$ !:
         ! 
 75380   if moreup and moredown then !:
-          pr fields botrow$&longcol$&",90": "PgUp\" !:
-          pr fields botrow$&shortcol$&",91": "PgDn" !:
+          pr f botrow$&longcol$&",90": "PgUp\" !:
+          pr f botrow$&shortcol$&",91": "PgDn" !:
         else !:
           if moreup and not moredown then !:
-            pr fields botrow$&shortcol$&",90": "PgUp" !:
+            pr f botrow$&shortcol$&",90": "PgUp" !:
           else !:
             if not moreup and moredown then !:
-              pr fields botrow$&shortcol$&",91": "PgDn"
+              pr f botrow$&shortcol$&",91": "PgDn"
 75390 KEYSELINP: curfld(lstkeycur) !:
         ! 
 75400 KEYSELINP_NP: rinput #keyselwin,select keyselatr$,attr "[L]": mat keyselect$ help 75410 !:
-        let lstkeycur=curfld !:
+        lstkeycur=curfld !:
         on cmdkey goto 75410 none 75430
 75410   let help$(hk$&","&hlpfil$,hlpele) error 75420
 75420   curfld(curfld) !:
         goto KEYSELINP_NP
 75430   if cmdkey=91 or fkey=106 or fkey=109 or fkey=104 then ! Page Down, Down/Right Arrow or Tab
 75440     if not cmdkey and lstkeycur=1 then !:
-            let lstkeycur+=1 !:
+            lstkeycur+=1 !:
             goto KEYSELINP
 75450     if not mastrrn(per_win) then goto KEYSELINP !:
             ! No record on this line
@@ -6020,12 +6020,12 @@
             actkeysave$(i)=actkeysave$(i+1) !:
             let mastrrn(i)=mastrrn(i+1)
 75510     next i !:
-          let startval=per_win: let endval=per_win !:
-          let stepval=1 !:
+          startval=per_win: endval=per_win !:
+          stepval=1 !:
           goto 75160
 75520   else if cmdkey=90 or fkey=105 or fkey=108 or fkey=102 then ! Page Up, Up/Left Arrow or Shift-Tab
 75530     if not cmdkey and lstkeycur=per_win then !:
-            let lstkeycur-=1 !:
+            lstkeycur-=1 !:
             goto KEYSELINP
 75540     read #filenbr,key=actkeysave$(1),release: locked KEYSELINP
 75550     if rec(filenbr)<>mastrrn(1) then !:
@@ -6036,8 +6036,8 @@
           restore #filenbr,prior: nokey KEYPGDISP,eof KEYPGDISP !:
           let moreup=1 !:
           if cmdkey=90 then !:
-            let startval=per_win: let endval=1 !:
-            let stepval=-1 !:
+            startval=per_win: endval=1 !:
+            stepval=-1 !:
             goto 75150
 75570     for i=per_win to 2 step -1
 75580       let keyselect$(i)=keyselect$(i-1) !:
@@ -6045,8 +6045,8 @@
             actkeysave$(i)=actkeysave$(i-1) !:
             let mastrrn(i)=mastrrn(i-1)
 75590     next i !:
-          let startval=1: let endval=1 !:
-          let stepval=1 !:
+          startval=1: endval=1 !:
+          stepval=1 !:
           goto 75160
 75600   end if 
 75610   if fnauto(lstkeycur) then goto KEYSELINP_NP
@@ -6174,7 +6174,7 @@
 78045   if eerr=61 or eerr=4148 then goto LOCKERR
 78050 ERRTRAP1: on error system 
 78055   fnhelptip(env$("PD")&"Core\fnsnap\","errors.txt",eprog$&" line "&cnvrt$("pic(#####)",eline)&" Count "&str$(ecount),eerr,5,20)
-78060   let ecufld=curfld
+78060   ecufld=curfld
 78065   count=cnt
 78070   open #(errwin:=fngethandle): "srow=4,scol=4,erow=20,ecol=75,border=S,N=h/rgb:r,caption=PROGRAM_ERROR",display,outin 
 78075   pr #errwin: newpage
@@ -6206,14 +6206,14 @@
         pr #errfil: " Variable     = "&evariable$ !:
         pr #errfil: " Field        = "&str$(ecurfld)
 78180   pr #errfil: " ------------------------------------------" !:
-        let errfile$=file$(errfil) !:
+        errfile$=file$(errfil) !:
         close #errfil: !:
-        let errfil=0
+        errfil=0
 78185   fnemailfile(env$("PD")&"emailq","client@client.com","Error "&cnvrt$("pic(####)",eerr)&" "&wsid$&" "&eprog$,mat aic$,errfile$,mat dummy$)
 78190   input #errwin,fields "17,68,c 1,ie,n": epause$
 78195   if cmdkey=0 then 
 78200     close #errwin: !:
-          let errwin=0
+          errwin=0
 78205     curfld(ecurfld)
 78210     on error goto ERRTRAP
 78215     fnerrtrap=1
@@ -6280,15 +6280,15 @@
               ! |                                                             | !:
               !    !
 78533       if pos(attach$(a),"\",-1)>0 then !:
-              let spos=pos(attach$(a),"\",-1) else !:
-              let spos=0 !:
+              spos=pos(attach$(a),"\",-1) else !:
+              spos=0 !:
               !    !:
               ! |  Set the SLASH position for a backslash                     | !:
               ! |                                                             | !:
               !    !
 78534       if not spos and pos(attach$(a),"/",-1)>0 then !:
-              let spos=pos(attach$(a),"/",-1)
-78535       let epos=len(attach$(a)) !:
+              spos=pos(attach$(a),"/",-1)
+78535       epos=len(attach$(a)) !:
             !    !:
             ! | Set the position for the end of the file name               | !:
             ! |                                                             | !:
@@ -6313,14 +6313,14 @@
 78580   close #fileno: 
 78585 ! EXECUTE "RENAME "&WMLFILE$&" "&SREP$(WMLFILE$,".txt",".wml") IOERR EMAIL_RETRY
 78586   execute "copy "&wmlfile$&" "&srep$(wmlfile$,".txt",".wml") ioerr EMAIL_RETRY
-78587   let sleep(2) !:
-        let swml+=1 !:
+78587   sleep(2) !:
+        swml+=1 !:
         if exists(srep$(wmlfile$,".txt",".wml"))=2 then !:
           execute "free "&wmlfile$ !:
         else if swml<5 then goto 78587
-78588 let swml=0
+78588 swml=0
 78590 fnend 
-78592 EMAIL_RETRY: let sleep(5) !:
+78592 EMAIL_RETRY: sleep(5) !:
       retry 
 78594 ! ----------------------------------------
 78595 def library fnemailfile(senddir$*80,mailfrom$*50,subject$*100,mat mailto$,textfile$*100;mat attach$,smailq$*80) !:
@@ -6338,7 +6338,7 @@
 78625   open #fileno: "name="&trim$(textfile$),display,input 
 78630   mat message$(1)
 78635 FILE_1: linput #fileno: message$ eof FILE_2
-78640   let fl+=1 !:
+78640   fl+=1 !:
         mat message$(fl)
 78645   let message$(fl)=message$
 78650   goto FILE_1
@@ -6360,7 +6360,7 @@
 80080   if fp(number)=0 and decimal>0 then let nx$=ltrm$(str$(round(number,decimal)))&"."&dx$
 80090   if fp(number)>0 and dxl<decimal then let nx$=ltrm$(str$(round(number,decimal)))&dx$
 80100   if fp(number)>0 and dxl>=decimal then let nx$=ltrm$(str$(round(number,decimal)))
-80110   let lx=len(nx$)
+80110   lx=len(nx$)
 80120   fnzlpad$=rpt$("0",length-lx)&nx$
 80130 fnend 
 80160 ! ====================================================================
@@ -6405,7 +6405,7 @@
 80350   end if 
 80360 DSPSCRN: if not nopaint then 
 80362     pr newpage ! -               Write image to display
-80364     pr fields mat scratr$: mat screen$
+80364     pr f mat scratr$: mat screen$
 80370   end if 
 80380   mat inwrk$=inflda$
 80390   fnscreen=scrno
@@ -6559,13 +6559,13 @@
         mat stcusci$(a) !:
         mat stcusst$(a) !:
         mat stcuszi$(a)
-81820   let stcusnr$(a)="00" !:
-        let stcusnm$(a)=cusnm$ !:
-        let stcusa1$(a)=cusa1$ !:
-        let stcusa2$(a)=cusa2$ !:
-        let stcusci$(a)=cusci$ !:
-        let stcusst$(a)=cusst$ !:
-        let stcuszi$(a)=cuszi$
+81820   stcusnr$(a)="00" !:
+        stcusnm$(a)=cusnm$ !:
+        stcusa1$(a)=cusa1$ !:
+        stcusa2$(a)=cusa2$ !:
+        stcusci$(a)=cusci$ !:
+        stcusst$(a)=cusst$ !:
+        stcuszi$(a)=cuszi$
 81830   restore #cfil1,search=cusnr$: nokey ZSRCH_SHIPTO
 81840 FRMSHP: form c 5,c 2,pos 120,c 30,pos 8,c 25,c 25,c 18,c 2,c 9
 81850 SRCH_SHIPTO1: read #cfil1,using FRMSHP: scusnr$,sshpnr$,sshpnm$,sshpa1$,sshpa2$,sshpci$,sshpst$,sshpzi$ eof SRCH_SHIPTO2
@@ -6579,13 +6579,13 @@
           mat stcusci$(a) !:
           mat stcusst$(a) !:
           mat stcuszi$(a)
-81900     let stcusnr$(a)=sshpnr$ !:
-          let stcusnm$(a)=sshpnm$ !:
-          let stcusa1$(a)=sshpa1$ !:
-          let stcusa2$(a)=sshpa2$ !:
-          let stcusci$(a)=sshpci$ !:
-          let stcusst$(a)=sshpst$ !:
-          let stcuszi$(a)=sshpzi$
+81900     stcusnr$(a)=sshpnr$ !:
+          stcusnm$(a)=sshpnm$ !:
+          stcusa1$(a)=sshpa1$ !:
+          stcusa2$(a)=sshpa2$ !:
+          stcusci$(a)=sshpci$ !:
+          stcusst$(a)=sshpst$ !:
+          stcuszi$(a)=sshpzi$
 81910     goto SRCH_SHIPTO1
 81920   end if 
 81930 SRCH_SHIPTO2: ! 
@@ -6613,13 +6613,13 @@
         let forms$(5)="c 18" !:
         let forms$(6)="c 2" !:
         let forms$(7)="pic(#####D####)"
-81970   let lcols=sum(mat widths)+2 !:
-        let lrows=min(20,max(3,a+2)) !:
-        let srow$="2" !:
-        let scol$="2"
+81970   lcols=sum(mat widths)+2 !:
+        lrows=min(20,max(3,a+2)) !:
+        srow$="2" !:
+        scol$="2"
 81980   if env$("GUIMODE")="ON" then 
 81985 ! INPUT FIELDS "23,64,c 1": PAUSE$
-81990     let listspec$=fnlistspec$(listwin,val(srow$),val(scol$),lrows,lcols,arows,mat headers$,mat widths,mat forms$,"Select Ship-to","",0,2)
+81990     listspec$=fnlistspec$(listwin,val(srow$),val(scol$),lrows,lcols,arows,mat headers$,mat widths,mat forms$,"Select Ship-to","",0,2)
 82000     pr #listwin, fields listspec$&",=R" : (mat stcusnr$,mat stcusnm$,mat stcusa1$,mat stcusa2$,mat stcusci$,mat stcusst$,mat stcuszi$)
 82010     input #listwin, fields listspec$&",rowsub,CUR ": cs !:
           let fk=fkey
@@ -6627,7 +6627,7 @@
           else if fk=pgup then let curfld(1,max(1,cs-lrows)) : goto 82010
 82013   if not (fk=0 or fk=99) then goto 82010
 82020   close #listwin: !:
-        let listwin=0
+        listwin=0
 82030 else 
 82040   autosel=o !:
         ! LET RESET=1
@@ -6639,9 +6639,9 @@
 82100 ! -------------------
 82110 NOSHIPTO: ! 
 82120 ! -------------------
-82130 let shpnr=0 !:
-      let shpnr$="00" !:
-      let shipto=0
+82130 shpnr=0 !:
+      shpnr$="00" !:
+      shipto=0
 82140 continue 
 82150 ! ===============
 82160 ZSRCH_SHIPTO: fnend 
@@ -6676,7 +6676,7 @@
 83090   dim scratr$(21)*15,htext$*200,windwrk$(60)*40
 83100   dim sscreen$(21)*78,inflda$(60)*40
 83110   for a=1 to 21 step 1
-83120     let scratr$(a)=rpad$(str$(a),2)&",2,C "&str$(winlen-2)
+83120     scratr$(a)=rpad$(str$(a),2)&",2,C "&str$(winlen-2)
 83130   next a
 83140   let recno=scrno+1
 83150   if version(sfil)<2 then !:
@@ -6690,7 +6690,7 @@
 83200     restore #(sfil+1),search=cnvrt$("pic(###)",scrno): nokey 83260 eof 83260
 83210     read #sfil+1,using "form n 3,n 2": hscrno,hfldno eof 83260
 83220     if hscrno=scrno then reread #sfil+1, using "form POS 6,c 1,c 2,c 200": hlevel$,hloc$,htext$ else goto 83260
-83230     if hfldno>0 then let shelp$(hfldno)=hlevel$&rtrm$(hloc$)&";"&rtrm$(htext$)&";"
+83230     if hfldno>0 then shelp$(hfldno)=hlevel$&rtrm$(hloc$)&";"&rtrm$(htext$)&";"
 83240     goto 83210
 83250   end if 
 83260 DSPWINSCRN: if not display then pr #winno: newpage ! -               Write image to display
@@ -6708,6 +6708,6 @@
 83415   fnwinclose=winno
 83420   let x=val(env$("FILE"&cnvrt$("PIC(###)",winno)&"_parent")) conv ZWINCLOSE
 83430   if x>0 then close #x: else if winno>0 then close #winno: 
-83440 let setenv("FILE"&cnvrt$("PIC(###)",winno)&"_parent","")
+83440 setenv("FILE"&cnvrt$("PIC(###)",winno)&"_parent","")
 83445 let fnwinclose=0
 83450 ZWINCLOSE: fnend 

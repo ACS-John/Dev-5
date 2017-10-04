@@ -31,7 +31,7 @@
 14700 ignore: continue
 14800 def fn_setup
 15000   if ~setup then 
-15200     let setup=1
+15200     setup=1
 15400     library 'S:\Core\Library': fngethandle,fnstatus,fnget_services
 15600     library 'S:\Core\Library': fnerror,fntop,fnxit,fnopenprn,fncloseprn,fnacs,fnchk,fncmdset,fnlbl,fntos
 15800     on error goto ERTN
@@ -50,7 +50,7 @@
 19400 def fn_report_it(mat report_g,bal_breakdown; heading$*80,col_2_heading$*12)
 19600   if do_report then 
 19800     if ~setup_report_it then 
-20000       let setup_report_it=1
+20000       setup_report_it=1
 20200       fnopenprn
 20400       pr #255,using F_HDR1: heading$
 20500       pr #255,using F_HDR2: 'Account',col_2_heading$,servicename$(1)(1:12),servicename$(2)(1:12),servicename$(3)(1:12),servicename$(4)(1:12),servicename$(5)(1:12),servicename$(6)(1:12),servicename$(7)(1:12),servicename$(8)(1:12),servicename$(9)(1:12),servicename$(10)(1:12),'*Calculated*'
@@ -101,7 +101,7 @@
 28220 close #h_customer: ioerr ignore
 28400   if print_count>0 then let fncloseprn
 28600   pr 'print_count=';print_count
-28800   let setup_report_it=0
+28800   setup_report_it=0
 29200 fnend 
 29400   def library fnservice_other
 29600     fn_setup
@@ -112,21 +112,21 @@
 30420 !   also returns sz1, mat servicename$ and mat srv$
 30600     dim servicename$(10)*20,srv$(10)*2
 30800     fnget_services(mat servicename$,mat srv$)
-31400     let so_return=srch(mat srv$,'OT')
-31600     if so_return<=0 then let so_return=srch(mat srv$,'OC') ! Other Charge
-31700     if so_return<=0 then let so_return=srch(mat servicename$,'Other') ! Other Charge
-31800     if so_return<=0 then let so_return=srch(mat servicename$,rpad$('Other',20)) ! Other Charge
+31400     so_return=srch(mat srv$,'OT')
+31600     if so_return<=0 then so_return=srch(mat srv$,'OC') ! Other Charge
+31700     if so_return<=0 then so_return=srch(mat servicename$,'Other') ! Other Charge
+31800     if so_return<=0 then so_return=srch(mat servicename$,rpad$('Other',20)) ! Other Charge
 32000     if so_return<=0 then 
 32200       pr "OT (Other) nor OC (Other Charge) not found in Service Code abbreviations"
 32400       pr "(nor was Other found in Service Code names"
-32600       let so_return=0
+32600       so_return=0
 32800       pause 
 33000     end if 
 33500 ! r: get sz1
-33520     let sz1=0
+33520     sz1=0
 33540     for j=1 to 10
 33560       if trim$(servicename$(j))<>"" then 
-33580         let sz1+=1
+33580         sz1+=1
 33600       end if 
 33620     next j
 33640 ! /r
@@ -170,7 +170,7 @@
 38400 TRANS_EOF: ! 
 38600     if print_count>0 then let fncloseprn
 38800     pr 'print_count=';print_count
-39000     let setup_report_it=0
+39000     setup_report_it=0
 39200     close #h_trans: 
 39400   fnend  ! fn_fix_balance_breakdowns
 42000   def fn_move_credit(do_move_credit)

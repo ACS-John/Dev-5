@@ -24,7 +24,7 @@
 14600     let x=len(at$(j)) : let y=z-x
 14800     at$(j)=rpt$(" ",int(y/2))&at$(j)
 15000   next j
-15200   let linelength=62
+15200   linelength=62
 15400 ! 
 15600 ! 
 15800   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
@@ -36,7 +36,7 @@
 17000 SCREEN1: ! 
 17200   a$="" : let prtbkno=0
 17400   fntos(sn$="UBPrtBl1-1T")
-17600   let pf=32 : let ll=30
+17600   let pf=32 : ll=30
 17800   let respc=0
 18000   fnlbl(2,1,"Penalty Due Date:",ll,1)
 18200   fntxt(2,pf,8,8,1,"1",0,tt$)
@@ -69,11 +69,11 @@
 23600   let reading_date_cur_s1=val(resp$(7))
 23800   a$=""
 24000   let prtbkno=0
-24200   let sl1=0
+24200   sl1=0
 24400   if trim$(a$)<>"" then 
 24600     read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1
 24800     let holdz$=z$: begin=1
-25000     let st1=1
+25000     st1=1
 25200   end if 
 25400 L460: form pos 1,c 10,pos 1741,n 2,n 7
 25600   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
@@ -96,24 +96,24 @@
 29000   if prtbkno><route then goto RELEASE_PRINT
 29200 L640: if f><d1 then goto L550
 29400   if st1=0 then goto READALTADR
-29600 ! If ST1$=Z$ Then Let ST1=0 Else Goto 560
+29600 ! If ST1$=Z$ Then sT1=0 Else Goto 560
 29800 READALTADR: ! 
 30000 ! read alternate billing address
 30200   read #3,using L700,key=z$: mat ba$ nokey L770
 30400 L700: form pos 11,4*c 30
-30600   let e1=0 : mat pe$=("")
+30600   e1=0 : mat pe$=("")
 30800   for j=1 to 4
 31000     if rtrm$(ba$(j))<>"" then 
-31200       let e1=e1+1
+31200       e1=e1+1
 31400       let pe$(e1)=ba$(j)
 31600     end if 
 31800   next j
 32000   goto L920
 32200 ! ______________________________________________________________________
-32400 L770: let e1=0 : mat pe$=("")
+32400 L770: e1=0 : mat pe$=("")
 32600   for j=2 to 4
 32800     if rtrm$(e$(j))<>"" then 
-33000       let e1=e1+1
+33000       e1=e1+1
 33200       let pe$(e1)=e$(j)
 33400     end if 
 33600   next j
@@ -139,7 +139,7 @@
 37800   goto L550
 38000 ! ______________________________________________________________________
 38200 SCREEN3: ! 
-38400   let sn$="UBPrtBl1-2"
+38400   sn$="UBPrtBl1-2"
 38600   fntos(sn$)
 38800   let txt$="Account (blank to stop)"
 39000   fnlbl(1,1,txt$,31,1)
@@ -163,7 +163,7 @@
 42600 SORT1: ! SELECT & SORT
 42800   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1390
 43000   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
-43200   let s5=1
+43200   s5=1
 43400   if prtbkno=0 then 
 43600     let routekey$=""
 43800   else 
@@ -223,7 +223,7 @@
 55000 ! ______________________________________________________________________
 55200 VBOPENPRINT: ! 
 55600     fnpa_open("Landscape")
-56400     let lyne=3
+56400     lyne=3
 57000   return 
 57200 ! ______________________________________________________________________
 57400   def fn_vbprint
@@ -342,7 +342,7 @@
 79612     fnpa_txt(mg$(2),xmargin+1,32*lyne+ymargin)
 79614     fnpa_txt(mg$(3),xmargin+1,33*lyne+ymargin)
 79800 ! ______________________________________________________________________
-80000     let special=28
+80000     special=28
 80200 ! ______________________________________________________________________
 80400     pr #20: 'Call Print.MyFontSize(7)'
 80600     pr #20: 'Call Print.AddLine('&str$(xmargin+97)&','&str$(ymargin+0)&',29,'&str$(lyne*5+2)&',TRUE)'

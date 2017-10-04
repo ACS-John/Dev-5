@@ -30,10 +30,10 @@
 00370   fnlbl(1,1,"Tax Year:",26,1)
 00380   fntxt(1,30,4,0,0,"30",0,"") !:
         let resp$(respc+=1)=str$(taxyear)
-00390   let option1$(1)="March 31"
-00400   let option1$(2)="June 30"
-00410   let option1$(3)="September 30"
-00420   let option1$(4)="December 31"
+00390   option1$(1)="March 31"
+00400   option1$(2)="June 30"
+00410   option1$(3)="September 30"
+00420   option1$(4)="December 31"
 00430   fnlbl(2,1,"Quarter Ending Date:",26,1)
 00440   fncomboa("pr941-yr",2,30,mat option1$,"Enter the quarter ending date")
 00450   if val(date$(4:5))=3 or val(date$(4:5))=4 or val(date$(4:5))=5 then let resp$(respc+=1)=option1$(1) ! march filing
@@ -84,10 +84,10 @@
 00760   for j=1 to 4
 00770     if resp$(2)=option1$(j) then let qtr=j: let m$=option1$(j): goto L790 ! quarter ending date
 00780   next j
-00790 L790: if qtr=1 then begdate=val(taxyear$)*10000+0312: let enddate=val(taxyear$)*10000+0318
-00800   if qtr=2 then begdate=val(taxyear$)*10000+0612: let enddate=val(taxyear$)*10000+0618
-00810   if qtr=3 then begdate=val(taxyear$)*10000+0912: let enddate=val(taxyear$)*10000+0918
-00820   if qtr=4 then begdate=val(taxyear$)*10000+1212: let enddate=val(taxyear$)*10000+1218
+00790 L790: if qtr=1 then begdate=val(taxyear$)*10000+0312: enddate=val(taxyear$)*10000+0318
+00800   if qtr=2 then begdate=val(taxyear$)*10000+0612: enddate=val(taxyear$)*10000+0618
+00810   if qtr=3 then begdate=val(taxyear$)*10000+0912: enddate=val(taxyear$)*10000+0918
+00820   if qtr=4 then begdate=val(taxyear$)*10000+1212: enddate=val(taxyear$)*10000+1218
 00830   if resp$(3)="True" then let frm=2 else let frm=1 ! need a worksheet
 00840   box15a=val(resp$(4)) ! first month liability
 00850   box15b=val(resp$(5))
@@ -119,7 +119,7 @@
 01100   let m2=0
 01110   let h2=0
 01120   let h3=0
-01130   let extram1=0
+01130   extram1=0
 01140   let dfy=dfq=0
 01150 ! Read #2,Using 1120: ENO,MAT EM$,SS$,EM5,EM6,TA Eof WK_END
 01160   read #2,using L1170: mat k,mat k$,mat l$,mat m eof WK_END
@@ -235,7 +235,7 @@
 02260 ! ______________________________________________________________________
 02270 SUMMARY: ! 
 02280   fnopenprn
-02290   let eof=1: gosub WK_HEADER
+02290   eof=1: gosub WK_HEADER
 02300   let wagefica=fna((gt2-m(32))*(ficarate+ficarate+.02)) ! FICARATE*2) ! pull tips out  2011
 02310   let taxfica=fna(m(32)*(ficarate+ficarate+.02)) ! FICARATE*2)  2011
 02320   let tipfica= fna((m(2)-m(32))*ficarate)
@@ -332,7 +332,7 @@
 03190 L3190: if b$(1)(j:j)=" " then b$(1)(j:j)=""
 03200   next j
 03210   pr #20: 'Call Print.MyFontSize(16)'
-03220   let lyne=15 ! starting line of fed id
+03220   lyne=15 ! starting line of fed id
 03230   pr #20: 'Call Print.AddText("'&b$(1)(1:1)&'",'&str$(47)&','&str$(lyne)&')'
 03240   pr #20: 'Call Print.AddText("'&b$(1)(2:2)&'",'&str$(56)&','&str$(lyne)&')'
 03250   pr #20: 'Call Print.AddText("'&b$(1)(3:3)&'",'&str$(70)&','&str$(lyne)&')'
@@ -410,6 +410,6 @@
 03980   csz$=ltrm$(rtrm$(csz$)): let p1=pos(csz$," ",-1)
 03990   let x$=csz$(p1+1:len(csz$)): let zip$=ltrm$(rtrm$(zip$))
 03992   let zip$=x$(1:5)
-04000   let p2=pos(csz$(1:p1-1)," ",-1) : let state$=csz$(p2+1:p1-1)(1:2) : let state$=ltrm$(rtrm$(state$))
+04000   let p2=pos(csz$(1:p1-1)," ",-1) : state$=csz$(p2+1:p1-1)(1:2) : state$=ltrm$(rtrm$(state$))
 04010   city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 04020   return 

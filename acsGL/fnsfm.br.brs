@@ -42,12 +42,12 @@
 00290   fncmdkey("&Cancel",5,1,0,"Return to main menu.")
 00300   fnacs(sn$,0,mat resp$,ckey)
 00310   if ckey=5 then goto XIT
-00320   if resp$(1)="True" then let selection=1
-00330   if resp$(2)="True" then let selection=2
-00340   if resp$(3)="True" then let selection=3
-00350   if resp$(4)="True" then let selection=4
-00360   if resp$(5)="True" then let selection=5
-00370   if resp$(6)="True" then let selection=6
+00320   if resp$(1)="True" then selection=1
+00330   if resp$(2)="True" then selection=2
+00340   if resp$(3)="True" then selection=3
+00350   if resp$(4)="True" then selection=4
+00360   if resp$(5)="True" then selection=5
+00370   if resp$(6)="True" then selection=6
 00380   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER !:
         gosub CLOSE_FILE !:
@@ -55,7 +55,7 @@
 00390   goto MAIN
 00400 ! ______________________________________________________________________
 00410 OPEN_FILE: ! !:
-        let open_file_count=0 ! this value is used in the close_file sub routine
+        open_file_count=0 ! this value is used in the close_file sub routine
 00420   open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\"&fil$(selection)&",KFName="&env$('Q')&"\GLmstr\"&idx$(selection)&",Use,RecL=83,KPs=1,KLn=5,Shr",internal,outin,keyed 
 00430   return 
 00440 ! ______________________________________________________________________
@@ -69,27 +69,27 @@
 00520   fncno(cno)
 00530 ! ** Field Labels    ** !:
         let ic=0 ! temporary Item Counter
-00540   let lbl$(ic+=1)="F/S #" !:
-        let lbl$(ic+=1)="Description" !:
-        let lbl$(ic+=1)="Type of Entry" !:
-        let lbl$(ic+=1)="Starting Print" !:
-        let lbl$(ic+=1)="Lines to Skip"
-00550   let lbl$(ic+=1)="Dollar Sign" !:
-        let lbl$(ic+=1)="Underlines" !:
-        let lbl$(ic+=1)="Reverse Sign" !:
-        let lbl$(ic+=1)="B/S Column"
-00560   let lbl$(ic+=1)="Print Accumulator" !:
-        let lbl$(ic+=1)="Clr 1" !:
-        let lbl$(ic+=1)="Clr 2" !:
-        let lbl$(ic+=1)="Clr 3"
-00570   let lbl$(ic+=1)="Clr 4" !:
-        let lbl$(ic+=1)="Clr 5" !:
-        let lbl$(ic+=1)="Clr 6" !:
-        let lbl$(ic+=1)="Clr 7"
-00580   let lbl$(ic+=1)="Clr 8" !:
-        let lbl$(ic+=1)="Clr 9"
-00590   let lbl$(ic+=1)="I/C % Base" !:
-        let lbl$(ic+=1)="Cost Center"
+00540   lbl$(ic+=1)="F/S #" !:
+        lbl$(ic+=1)="Description" !:
+        lbl$(ic+=1)="Type of Entry" !:
+        lbl$(ic+=1)="Starting Print" !:
+        lbl$(ic+=1)="Lines to Skip"
+00550   lbl$(ic+=1)="Dollar Sign" !:
+        lbl$(ic+=1)="Underlines" !:
+        lbl$(ic+=1)="Reverse Sign" !:
+        lbl$(ic+=1)="B/S Column"
+00560   lbl$(ic+=1)="Print Accumulator" !:
+        lbl$(ic+=1)="Clr 1" !:
+        lbl$(ic+=1)="Clr 2" !:
+        lbl$(ic+=1)="Clr 3"
+00570   lbl$(ic+=1)="Clr 4" !:
+        lbl$(ic+=1)="Clr 5" !:
+        lbl$(ic+=1)="Clr 6" !:
+        lbl$(ic+=1)="Clr 7"
+00580   lbl$(ic+=1)="Clr 8" !:
+        lbl$(ic+=1)="Clr 9"
+00590   lbl$(ic+=1)="I/C % Base" !:
+        lbl$(ic+=1)="Cost Center"
 00600 ! ** Text Box / Field Display   Lengths   ** !:
         let ic=0 ! temporary Item Counter !:
         let mmddyy=8 !:
@@ -117,51 +117,51 @@
 00660   let tln(ic+=1)=5
 00670 ! ** Field Types ** !:
         let ic=0
-00680   let fltyp$(ic+=1)='c' !:
-        let fltyp$(ic+=1)='c' !:
-        let fltyp$(ic+=1)='C' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N'
-00690   let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N'
-00700   let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N'
-00710   let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N'
-00720   let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N' !:
-        let fltyp$(ic+=1)='N'
-00730   let fltyp$(ic+=1)='N'
+00680   fltyp$(ic+=1)='c' !:
+        fltyp$(ic+=1)='c' !:
+        fltyp$(ic+=1)='C' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N'
+00690   fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N'
+00700   fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N'
+00710   fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N'
+00720   fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N' !:
+        fltyp$(ic+=1)='N'
+00730   fltyp$(ic+=1)='N'
 00740 ! ** Field Storage Lengths ** !:
         let ic=0 !:
         let mmddyy=6 : ccyymmdd=8
-00750   let sln(ic+=1)=5 !:
-        let sln(ic+=1)=50 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=2 !:
-        let sln(ic+=1)=2
-00760   let sln(ic+=1)=1 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=1
-00770   let sln(ic+=1)=1 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=1
-00780   let sln(ic+=1)=1 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=1
-00790   let sln(ic+=1)=1 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=1 !:
-        let sln(ic+=1)=3
-00800   let sln(ic+=1)=5
+00750   sln(ic+=1)=5 !:
+        sln(ic+=1)=50 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=2 !:
+        sln(ic+=1)=2
+00760   sln(ic+=1)=1 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=1
+00770   sln(ic+=1)=1 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=1
+00780   sln(ic+=1)=1 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=1
+00790   sln(ic+=1)=1 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=1 !:
+        sln(ic+=1)=3
+00800   sln(ic+=1)=5
 00810 ! ** Field Masks ** !:
         let ic=0 !:
         let pointtwo=32 : let number=30 !:
@@ -190,27 +190,27 @@
 00880 ! ** Storage Positions ** !:
         ! default to the same as order displayed !:
         let ic=0
-00890   let sp(ic+=1)=1 !:
-        let sp(ic+=1)=6 !:
-        let sp(ic+=1)=56 !:
-        let sp(ic+=1)=57 !:
-        let sp(ic+=1)=59
-00900   let sp(ic+=1)=61 !:
-        let sp(ic+=1)=62 !:
-        let sp(ic+=1)=63 !:
-        let sp(ic+=1)=64
-00910   let sp(ic+=1)=65 !:
-        let sp(ic+=1)=66 !:
-        let sp(ic+=1)=67 !:
-        let sp(ic+=1)=68
-00920   let sp(ic+=1)=69 !:
-        let sp(ic+=1)=70 !:
-        let sp(ic+=1)=71 !:
-        let sp(ic+=1)=72
-00930   let sp(ic+=1)=73 !:
-        let sp(ic+=1)=74: !:
-        let sp(ic+=1)=75
-00940   let sp(ic+=1)=78
+00890   sp(ic+=1)=1 !:
+        sp(ic+=1)=6 !:
+        sp(ic+=1)=56 !:
+        sp(ic+=1)=57 !:
+        sp(ic+=1)=59
+00900   sp(ic+=1)=61 !:
+        sp(ic+=1)=62 !:
+        sp(ic+=1)=63 !:
+        sp(ic+=1)=64
+00910   sp(ic+=1)=65 !:
+        sp(ic+=1)=66 !:
+        sp(ic+=1)=67 !:
+        sp(ic+=1)=68
+00920   sp(ic+=1)=69 !:
+        sp(ic+=1)=70 !:
+        sp(ic+=1)=71 !:
+        sp(ic+=1)=72
+00930   sp(ic+=1)=73 !:
+        sp(ic+=1)=74: !:
+        sp(ic+=1)=75
+00940   sp(ic+=1)=78
 00950   return 
 00960 ! ______________________________________________________________________
 00970 HAMSTER: ! 

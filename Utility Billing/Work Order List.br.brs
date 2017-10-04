@@ -44,7 +44,7 @@
 80270   fnacs(sn$,0,mat resp$,ck)
 80280   if ck=5 then goto PWL_XIT
 80300   beg_date=val(resp$(1)) ! beginning of year
-80320   let end_date=val(resp$(2)) ! ending day of year
+80320   end_date=val(resp$(2)) ! ending day of year
 80340   askz$=lpad$(trim$(resp$(3)(1:10)),10)
 80360   fnopenprn
 80370   open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outin,keyed

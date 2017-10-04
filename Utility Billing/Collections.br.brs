@@ -90,10 +90,10 @@
 11060     else 
 11080       edrec=val(resp$(resp_selectedRecordNumber))
 11100       if ck1=1 then 
-11110         let editmode=1
+11110         editmode=1
 11120         goto EDIT_REC
 11130       else if ck1=2 then 
-11140         let editmode=0
+11140         editmode=0
 11150         goto ADD_REC
 11160       else if ck1=4 then 
 11180 !       read #h_ubcolinp,using F_ubColInp,rec=edrec: x$,amount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow
@@ -125,11 +125,11 @@
 14120 ! r: read selected account and prepare data for SCREEN_ADD
 14140   read #h_customer,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=x1$,release: nam$,bal,db1,mat gb,escrowbal nokey SCREEN_SELECT_ACCOUNT
 14160   let havebudget=0 : mat tgb=(0)
-14180   let j2=0: let escrow=0
+14180   let j2=0: escrow=0
 14200   for j=1 to 10
 14220     if trim$(srvname$(j))<>"" and trim$(srvname$(j)(1:5))<>"Reduc" then let tgb(j2+=1)=gb(j)
 14240   next j
-14260   if uprc$(escrow$)="Y" and transType=3 then let oldescrowbal=escrowbal ! add escrow balance into last allocation if have escrow and processing a collection transaction
+14260   if uprc$(escrow$)="Y" and transType=3 then oldescrowbal=escrowbal ! add escrow balance into last allocation if have escrow and processing a collection transaction
 14280 ! /r
 14300   goto SCREEN_ADD ! /r
 16000 SCREEN_ADD: ! r:
@@ -320,9 +320,9 @@
 21020 L2060: if sum(tgb)=x(2) then gosub BUD2 ! kj 10/14/09
 21040   if sum(tgb)=x(2) and bud1=1 then gosub BUD3 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
 21060   let r6=lrec(h_ubcolinp)+1
-21080   if escrow>90000 then let escrow=0 ! PREVENT 726 ERROR
+21080   if escrow>90000 then escrow=0 ! PREVENT 726 ERROR
 21100   write #h_ubcolinp,using F_ubColInp,rec=r6: z$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd2,escrow duprec L2060
-21120 ! let oldn=transDate
+21120 ! oldn=transDate
 21140   let transType=b7
 21160   goto SCREEN_SELECT_ACCOUNT ! /r
 22000 SCREEN_LAST_CHANCE: ! r:
@@ -359,7 +359,7 @@
 24420   fncmbact(2,27)
 24440   let resp$(resp_account:=respc+=1)=x$&"  "&nam$
 24460 ! 
-24480   if uprc$(escrow$)="Y" then let transAmount=transAmount+escrow: let escrow=0 ! .   ! .    ! add escrow amount back into payment amount before edit
+24480   if uprc$(escrow$)="Y" then let transAmount=transAmount+escrow: escrow=0 ! .   ! .    ! add escrow amount back into payment amount before edit
 24500 ! 
 24520   fnlbl(3,1,"Amount:",25,1)
 24540   fntxt(3,27,8,0,0,"10")
@@ -427,7 +427,7 @@
 26080   read #h_ubcolinp,using F_ubColInp,rec=r6: p$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd3,escrow norec MERGE_LOOP_TOP
 26100   if p$(1:2)="  " and transAmount=0 and escrow=0 then goto MERGE_LOOP_TOP
 26120   read #h_customer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=p$: bal,mat gb,escrowbal nokey MERGE_LOOP_TOP
-26140 ! Let ESCROW=0   ken 52505
+26140 ! eSCROW=0   ken 52505
 26160   if transType=3 then let tcode=3 ! collection
 26180   if transType=4 then let tcode=4 ! credit memo
 26200   if transType=5 then let tcode=5 ! debit memo
@@ -534,7 +534,7 @@
 32100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 32120 ! /region
 34000 CHECK_ESCROW: ! r:
-34020   let escrow=0
+34020   escrow=0
 34040   a2=a1=0
 34060   let tg=0
 34080   for j=1 to 10
@@ -546,7 +546,7 @@
 34200   a1=tg-x(2)
 34220   if escrowbal>=a1 then a2=a1 else a2=escrowbal
 34240   let x(2)=x(2)+a2
-34260   let escrow=-a2
+34260   escrow=-a2
 34280   L5710: !
 34300 return  ! /r
 36000 def fn_print_listings
@@ -561,8 +561,8 @@
 36182   ! let fnopt(3,1,"Both Receipt and Deposit Listing",0,1)
 36184   ! let resp$(3)="True"
 36186    ! let fnlbl(6,1,"Sort Order:",20,1)
-36190   ! let opt2$(1)="Entry Order"
-36300   ! let opt2$(2)="Account"
+36190   ! opt2$(1)="Entry Order"
+36300   ! opt2$(2)="Account"
 36320   ! mat opt2$(2)
 36340   ! let fncomboa("Collections_report_so",6,22,mat opt2$)
 36360   ! let resp$(4)=opt2$(1)
@@ -578,9 +578,9 @@
 36520   end if
 36540   let reportdate$=date$('month, d, ccyy')
 36560   if ub_collPrintInAccountOrder$='False' then ! if resp$(4)=opt2$(1) then
-36580     let srt=1
+36580     srt=1
 36600   else ! else if resp$(4)=opt2$(2) then
-36620    let srt=2
+36620    srt=2
 36640   end if
 38020   if ti1=1 then 
 38040     fnopenprn(0,0,0,0,"Receipt Listing") : let ti1_start=1 : let ti1_end=1
@@ -715,7 +715,7 @@
 58300 return  ! /r
 60000 def fn_setup
 60020   if ~setup then 
-60040     let setup=1
+60040     setup=1
 60060  ! ______________________________________________________________________
 60080     library 'S:\Core\Library': fnopenprn,fncloseprn,fnmsgbox,fnflexinit1,fnflexadd1,fndat,fncomboa
 60100     library 'S:\Core\Library': fnremove,fncmbact,fndate_mmddyy_to_ccyymmdd,fnchk,fnCustomerNotes
@@ -753,14 +753,14 @@
 60780   ! ______________________________________________________________________
 60800     fnget_services(mat srvname$, mat srv$, mat unused_tax_code$,mat penalty$,mat unused_subjectto,mat apply)
 60820     if trim$(srvname$(1))="Water" then let havewater=1
-60840     if trim$(srvname$(3))<>"Electric" and srv$(3)="EL" then let srvname$(3)=""
-60860     if trim$(srvname$(4))<>"Gas" and srv$(4)="GA" then let srvname$(4)=""
+60840     if trim$(srvname$(3))<>"Electric" and srv$(3)="EL" then srvname$(3)=""
+60860     if trim$(srvname$(4))<>"Gas" and srv$(4)="GA" then srvname$(4)=""
 60880     if trim$(srvname$(2))="Sewer" then let havesewer=1
 60900     ! if trim$(srvname$(3))="Electric" then let haveelectric=1
 60920     ! if trim$(srvname$(4))="Gas" then let havegas=1
 60940     for j=1 to 10
-60960       let original(j)=apply(j)
-60980       if apply(j)>0 then apply=apply+1: let order(apply)=apply(j) ! set order of applying     collections
+60960       original(j)=apply(j)
+60980       if apply(j)>0 then apply=apply+1: order(apply)=apply(j) ! set order of applying     collections
 61000       if apply(j)=0 then let noapply=noapply+1 ! let notuse(noapply)=apply(j) ! set non used services
 61020     next j
 61040     for j=1 to 10
@@ -772,9 +772,9 @@
 61160     let hd1$="{\ul Rec }  {\ul Account   }  {\ul    Total}    {\ul   Date  }  {\ul ReceiptNo}"
 61180     for j=1 to 10
 61200       if trim$(srvname$(j))<>"" and trim$(srvname$(j)(1:5))<>"Reduc" then 
-61220         let sz1+=1
+61220         sz1+=1
 61240         let hd1$=hd1$&"  {\ul "&srvname$(j)(1:6)&"}"
-61260         let serviceLabel$(sz1)=trim$(srvname$(j)(1:28))&":"
+61260         serviceLabel$(sz1)=trim$(srvname$(j)(1:28))&":"
 61280       end if 
 61300     next j
 61320     if uprc$(escrow$)="Y" then let hd1$=rtrm$(hd1$)&"  {\ul Escrow}"
@@ -804,10 +804,10 @@
 61780     for j=7 to max(9,udim(chdr$)) : cm$(j)="10" : next j
 61800     mat cm$(udim(chdr$))
 61820   ! /r
-61840   let ei_item_account=1
-61860   let ei_item_amount=2
-61880   let ei_item_date_time=3
-61900   let ei_item_collection_type=4
+61840   ei_item_account=1
+61860   ei_item_amount=2
+61880   ei_item_date_time=3
+61900   ei_item_collection_type=4
 61920   !
 61940   fnreg_read('Collections pr in Account Order',ub_collPrintInAccountOrder$,'False')
 61960   fnreg_read('Collections Disable Deposit List',ub_collDisableDepositList$,'False')
@@ -886,7 +886,7 @@
 69200   for j=1 to udim(alloc)
 69220     if bd_real(j)<>0 then alloc(j)=val(resp$(bd_real(j))) else alloc(j)=0
 69240   next j
-69260   if uprc$(escrow$)="Y" then let escrow=val(resp$(bd_real(j)))
+69260   if uprc$(escrow$)="Y" then escrow=val(resp$(bd_real(j)))
 69280   if ckey=1 then 
 69300     goto NEXT_AFTER_BREAKDOWN
 69320   else if ckey=2 then 
@@ -928,7 +928,7 @@
 72220     end if 
 72240   end if 
 72260   if uprc$(escrow$)="Y" and transType=3 then ! add escrow balance into last allocation if have escrow and processing a collection transaction
-72280     let oldescrowbal=escrowbal
+72280     oldescrowbal=escrowbal
 72300   end if 
 72320   bd_tgbj=tn=0
 72340   mat ba=(0) : mat badr=(0)
@@ -1018,7 +1018,7 @@
 74460 fnend 
 76000 def fn_csv_import
 76020   fnureg_read('Collections CSV Import Filename',ecp_filename$)
-76040   ! if ecp_filename$='' then let ecp_filename$=os_filename$(env$('userprofile')&'\Desktop')&"\ACS_ECP_Export.txt"
+76040   ! if ecp_filename$='' then ecp_filename$=os_filename$(env$('userprofile')&'\Desktop')&"\ACS_ECP_Export.txt"
 76060   EI_SCREEN1: ! 
 76080   fntos(sn$="coll_csv_imp")
 76100   fnlbl(1,1,"Import CSV Path and File Name:",33,1)
@@ -1028,11 +1028,11 @@
 76180   fncmdset(2)
 76200   fnacs(sn$,0,mat resp$,ckey)
 76220   if ckey=5 then goto EI_XIT
-76240   let ecp_filename$=resp$(1)
+76240   ecp_filename$=resp$(1)
 76260   ! 
 76280   fn_ei_backup(ecp_filename$)
 76300   open #h_csv:=fngethandle: "Name="&env$('at')&br_filename$(ecp_filename$),display,input ioerr EI_SCREEN1
-76320   let ecp_filename$=os_filename$(file$(h_csv))
+76320   ecp_filename$=os_filename$(file$(h_csv))
 76340   fnureg_write('Collections CSV Import Filename',ecp_filename$)
 76360   let type=fn_csv_type(h_csv)
 76380   csv_import_in_process=1
@@ -1047,7 +1047,7 @@
 76560       if trim$(srep$(csv_line$,csv_delim$,''))<>'' then ! if not a blank line then
 76580         csv_line$=fn_remove_quote_encap_commas$(csv_line$)
 76600         csv_line$=fn_remove_quote_encap_commas$(csv_line$)
-76620         let str2mat(csv_line$,mat csv_item$,csv_delim$)
+76620         str2mat(csv_line$,mat csv_item$,csv_delim$)
 76640         let trans_date_mmddyy=date(days(csv_item$(csv_date),'m/d/ccyy'),'mmddyy')
 76642         csv_item$(csv_amount)=srep$(csv_item$(csv_amount),'$','')
 76644         csv_item$(csv_amount)=srep$(csv_item$(csv_amount),',','')
@@ -1087,7 +1087,7 @@
 78100   dim ct_item$(0)*256
 78120   linput #h_csv: ct_line$
 78140   if pos(ct_line$,tab$)>0 then csv_delim$=tab$ else csv_delim$=','
-78160   let str2mat(ct_line$,mat ct_item$,csv_delim$)
+78160   str2mat(ct_line$,mat ct_item$,csv_delim$)
 78180   if udim(mat ct_item$)<4 then ct_return=0 : goto CT_FINIS
 78200   ct_item_2_val=val(ct_item$(2)) conv CT_ITEM_2_CONV
 78220   ct_return=1 ! second item on first line has a numeric value - it's ECP_IMPORT type
@@ -1149,11 +1149,11 @@
 82290   do 
 82300     ! 
 82310     linput #h_ecp: ei_line$ eof EI_FINIS
-82320     let str2mat(ei_line$,mat ei_item$,csv_delim$)
-82330     let ei_item_account=1
-82340     let ei_item_amount=2
-82350     let ei_item_date_time=3
-82360     let ei_item_collection_type=4 ! Check or Credit
+82320     str2mat(ei_line$,mat ei_item$,csv_delim$)
+82330     ei_item_account=1
+82340     ei_item_amount=2
+82350     ei_item_date_time=3
+82360     ei_item_collection_type=4 ! Check or Credit
 82370     let trans_date_mmddyy=date(days(ei_item$(ei_item_date_time)(1:pos(ei_item$(ei_item_date_time),' ')-1),'m/d/ccyy'),'mmddyy')
 82380     let trans_amount=val(ei_item$(ei_item_amount))
 82390     if trans_amount<0 then !  debit memos maybe used for bounced checks
@@ -1186,11 +1186,11 @@
 84200   read #h_customer,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=at_customer$,release: nam$,bal,db1,mat gb,escrowbal nokey AT_NO_CUSTOMER
 84210   let x1$=at_customer$
 84220   let havebudget=0 : mat tgb=(0)
-84240   let j2=0 : let escrow=0
+84240   let j2=0 : escrow=0
 84260   for j=1 to 10
 84280     if trim$(srvname$(j))<>"" and trim$(srvname$(j)(1:5))<>"Reduc" then let tgb(j2+=1)=gb(j)
 84300   next j
-84320   if uprc$(escrow$)="Y" and transType=3 then let oldescrowbal=escrowbal ! add escrow balance into last allocation if have escrow and processing a collection transaction
+84320   if uprc$(escrow$)="Y" and transType=3 then oldescrowbal=escrowbal ! add escrow balance into last allocation if have escrow and processing a collection transaction
 84340   ! /r
 84360   ! SCREEN_ADD: !
 84380   let x(3)=at_date_mmddyy
@@ -1258,9 +1258,9 @@
 85560   if sum(tgb)=x(2) then gosub BUD2 ! kj 10/14/09
 85580   if sum(tgb)=x(2) and bud1=1 then gosub BUD3 ! was commented out; changed to if sum= on 101409 to keep from skipping ubdget update if exact amount paid.
 85600   let r6=lrec(h_ubcolinp)+1
-85620   if escrow>90000 then let escrow=0 ! PREVENT 726 ERROR
+85620   if escrow>90000 then escrow=0 ! PREVENT 726 ERROR
 85640   write #h_ubcolinp,using F_ubColInp,rec=r6: at_customer$,transAmount,transDate,transType,postingCodeUnused,rcpt$,mat alloc,mat bd2,escrow duprec L2060
-85660   ! let oldn=transDate
+85660   ! oldn=transDate
 85680   let transType=b7
 85700   goto AT_FINIS
 85720   ! pr 'completed add' : pause ! goto SCREEN_SELECT_ACCOUNT ! /r
@@ -1290,11 +1290,11 @@
 87060   ! 2="Credit Memo",transType=4
 87080   ! 3="Debit Memo",transType=5
 87100   if coll_type_option$=coll_type_option$(1) then 
-87120     let oSub1Return=3
+87120     oSub1Return=3
 87140   else if coll_type_option$=coll_type_option$(2) then 
-87160     let oSub1Return=4
+87160     oSub1Return=4
 87180   else if coll_type_option$=coll_type_option$(3) then 
-87200     let oSub1Return=5
+87200     oSub1Return=5
 87220   end if 
 87240   fn_oSub1=oSub1Return
 87260 fnend

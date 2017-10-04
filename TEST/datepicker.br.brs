@@ -24,36 +24,36 @@
 04899              if nextrec>0 and displayattop$="True" then goto L4890 else goto L5030
 04901            L4890: for j=nextrec to lrec(clearing) ! read starting with next record
 04903                read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L4940
-04905                let flxitm$(9)=str$(upa) : let flxitm$(10)=str$(disamt)
-04907                let flxitm$(11)=str$(ddate) : let flxitm$(3)=str$(pcde)
-04909                let flxitm$(2)= flxitm$(12)=str$(bcde): let flxitm$(13)=str$(ckn)
-04911                let flxitm$(14)=str$(dp) : let flxitm$(15)=str$(gde)
-04913                let flxitm$(16)=str$(pdte)
-04915                let flxitm$(1)=str$(rec(clearing))
-04917                if pcde=1 then let flxitm$(3)="Yes" else if pcde=0 then let flxitm$(3)="No" else if pcde=1 and dp>0 then let flxitm$(3)="Paid"
+04905                flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
+04907                flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
+04909                flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
+04911                flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
+04913                flxitm$(16)=str$(pdte)
+04915                flxitm$(1)=str$(rec(clearing))
+04917                if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
 04919            fnflexadd1(mat flxitm$)
 04940            L4940: next j
 04950            if nextrec=1 then goto L5020 ! thinks it rereads the 1st record twice
 04960            for j=1 to max(nextrec-1,1) ! read records previously coded or skipped
 04970              read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=j: flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
-04980              let flxitm$(9)=str$(upa) : let flxitm$(10)=str$(disamt)
-04990              let flxitm$(11)=str$(ddate) : let flxitm$(3)=str$(pcde)
-05000              let flxitm$(2)= flxitm$(12)=str$(bcde): let flxitm$(13)=str$(ckn)
-05010              let flxitm$(14)=str$(dp) : let flxitm$(15)=str$(gde)
-05020              let flxitm$(1)=str$(rec(clearing))
-05030              if pcde=1 then let flxitm$(3)="Yes" else if pcde=0 then let flxitm$(3)="No" else if pcde=1 and dp>0 then let flxitm$(3)="Paid"
+04980              flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
+04990              flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
+05000              flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
+05010              flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
+05020              flxitm$(1)=str$(rec(clearing))
+05030              if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
 05040            fnflexadd1(mat flxitm$)
 05050            next j
 05055            L5020: goto L5070
 05057            L5030: ! 
 05059            read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': flxitm$(4), flxitm$(5), flxitm$(6),flxitm$(7), flxitm$(8), up$(4),upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate eof L5070
-05061            let flxitm$(9)=str$(upa) : let flxitm$(10)=str$(disamt)
-05063            let flxitm$(11)=str$(ddate) : let flxitm$(3)=str$(pcde)
-05065            let flxitm$(2)= flxitm$(12)=str$(bcde): let flxitm$(13)=str$(ckn)
-05067            let flxitm$(14)=str$(dp) : let flxitm$(15)=str$(gde)
-05069            let flxitm$(16)=str$(pdte)
-05071            let flxitm$(1)=str$(rec(clearing)) ! assign flxitm$(1) with new record #
-05073            if pcde=1 then let flxitm$(3)="Yes" else if pcde=0 then let flxitm$(3)="No" else if pcde=1 and dp>0 then let flxitm$(3)="Paid"
+05061            flxitm$(9)=str$(upa) : flxitm$(10)=str$(disamt)
+05063            flxitm$(11)=str$(ddate) : flxitm$(3)=str$(pcde)
+05065            flxitm$(2)= flxitm$(12)=str$(bcde): flxitm$(13)=str$(ckn)
+05067            flxitm$(14)=str$(dp) : flxitm$(15)=str$(gde)
+05069            flxitm$(16)=str$(pdte)
+05071            flxitm$(1)=str$(rec(clearing)) ! assign flxitm$(1) with new record #
+05073            if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
 05075            fnflexadd1(mat flxitm$) : goto L5030
 05077 L5070: let fnfra(2,1,13,23,"Approval Options"," ")
 05079 let fnbutton(1,2,"&Approve All",62,"Will select to pay all unpaid invoices",1,18,1)

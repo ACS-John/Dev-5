@@ -5,21 +5,21 @@
 00050   fnend  ! fn_hamster_field_reset
 00060   def library fnhamster_field_add(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
 00070     if field_type$='' then let field_type$='C'
-00080     if storage_length=0 then let storage_length=textbox_len
+00080     if storage_length=0 then storage_length=textbox_len
 00090     add_rec_item=udim(mat lbl$)+1
-00100     mat lbl$(add_rec_item) : let lbl$(add_rec_item)=label$
+00100     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$
 00110     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
 00120     mat p$(add_rec_item)
-00130     mat fltyp$(add_rec_item) : let fltyp$(add_rec_item)=field_type$
-00140     mat sln(add_rec_item) : let sln(add_rec_item)=storage_length
+00130     mat fltyp$(add_rec_item) : fltyp$(add_rec_item)=field_type$
+00140     mat sln(add_rec_item) : sln(add_rec_item)=storage_length
 00150     mat mask(add_rec_item) : let mask(add_rec_item)=ar_mask
-00160     mat sp(add_rec_item) : let sp(add_rec_item)=storage_position
+00160     mat sp(add_rec_item) : sp(add_rec_item)=storage_position
 00170     if storage_position=0 then 
 00180       if add_rec_item=1 then 
-00190         let sp(add_rec_item)=1
+00190         sp(add_rec_item)=1
 00200         auto_storage_position=1
 00210       else 
-00220         let sp(add_rec_item)=sp(add_rec_item-1)+int(sln(add_rec_item-1))
+00220         sp(add_rec_item)=sp(add_rec_item-1)+int(sln(add_rec_item-1))
 00230       end if 
 00240     end if 
 00250     mat c$(add_rec_item,8)

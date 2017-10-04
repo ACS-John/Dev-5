@@ -12,17 +12,17 @@
 00120 ! ______________________________________________________________________
 00130 MENU1: ! 
 00140   pr newpage
-00150   pr fields "10,20,Cc 40,R,N": cap$
-00160   pr fields "12,2,Cr 27,N": "Destination Company Number:"
-00170   pr fields "13,2,Cr 27,N": "Source File Path and Name:"
+00150   pr f "10,20,Cc 40,R,N": cap$
+00160   pr f "12,2,Cr 27,N": "Destination Company Number:"
+00170   pr f "13,2,Cr 27,N": "Source File Path and Name:"
 00180   let io1$(1)="12,30,Nz 3,UT,N" !:
         let io1$(2)="13,30,C 40,UT,N"
-00190   pr fields "15,21,Cc 19,B,1": "Start (F1)"
-00200   pr fields "15,41,Cc 19,B,99": "Exit (Esc)"
-00210   pr fields "18,01,Cc 80,R,N": "WARNING:  All Files in the Destination Company Number will"
-00220   pr fields "19,01,Cc 80,R,N": "be duplicates of Company Number 1 with new merged records!"
-00230   pr fields "21,01,Cc 80,R,N": "No other users may be using Utility Billing for this to run"
-00240   let s_file$="C:\kentemp\ken.prn"
+00190   pr f "15,21,Cc 19,B,1": "Start (F1)"
+00200   pr f "15,41,Cc 19,B,99": "Exit (Esc)"
+00210   pr f "18,01,Cc 80,R,N": "WARNING:  All Files in the Destination Company Number will"
+00220   pr f "19,01,Cc 80,R,N": "be duplicates of Company Number 1 with new merged records!"
+00230   pr f "21,01,Cc 80,R,N": "No other users may be using Utility Billing for this to run"
+00240   s_file$="C:\kentemp\ken.prn"
 00250   rinput fields mat io1$: cno,s_file$
 00260   if cmdkey=99 then goto XIT
 00270   if cmdkey=1 then goto START
@@ -47,17 +47,17 @@
 00430   if line$(1:3)="tax" then goto DONE
 00440   if trim$(z$)<>"" and trim$(line$(19:26))<>trim$(z$) then goto L830 ! write this record  (there is a seperate record for each serice in the text file)
 00450 L450: let z$=lpad$(line$(19:26),10)
-00460   let e$(2)=trim$(rtrm$(rtrm$(line$(31:43))&" "&rtrm$(line$(45:71)))(1:30)) ! Name
-00470   let e$(1)=e$(3)=rtrm$(rtrm$(line$(72:79))&" "&rtrm$(line$(80:100))) ! street
-00480   let e$(4)="CARRIZO SPRINGS, TX 78834"
-00490   let extra(1)=val(line$(102:104))
-00500   let extra(2)=val(line$(110:114))
+00460   e$(2)=trim$(rtrm$(rtrm$(line$(31:43))&" "&rtrm$(line$(45:71)))(1:30)) ! Name
+00470   e$(1)=e$(3)=rtrm$(rtrm$(line$(72:79))&" "&rtrm$(line$(80:100))) ! street
+00480   e$(4)="CARRIZO SPRINGS, TX 78834"
+00490   extra(1)=val(line$(102:104))
+00500   extra(2)=val(line$(110:114))
 00510   let f=22810 ! ALWAYS FIX
 00520   let rate$=trim$(line$(147:153))
 00530   if rate$(1:3)="PKU" or rate$(1:3)="PKE" then goto L790 ! handle cannister pick up seperately
 00550   if rate$(1:3)="SCH" then a(2)=4: goto L790 ! handle school sewer seperately
 00560   if rate$(1:3)="CME" then a(4)=2: a(6)=9: goto L790 ! handle school sewer seperately as tax exempt commercial
-00570   if rate$(1:3)="MHT" then a(5)=4: let extra(12)=1: goto L790 ! handle mobile home trash seperately as taxable
+00570   if rate$(1:3)="MHT" then a(5)=4: extra(12)=1: goto L790 ! handle mobile home trash seperately as taxable
 00580   if rate$(1:3)="ASF" then goto L790 ! handle assessmemt seperately
 00590   if line$(149:149)<"0" or line$(149:149)>"9" then goto L790
 00600   if rate$(1:3)="WR1" then a(1)=1 ! residential in
@@ -70,10 +70,10 @@
 00670   if rate$(1:2)="MC" then a(4)=2 ! commercial
 00680   if rate$(1:2)="SR" then a(2)=1 ! sewer residential
 00690   if rate$(1:2)="SC" then a(2)=2 ! commercial sewer
-00700   if rate$(1:2)="TR" or rate$(1:2)="TC" then a(5)=val(rate$(3:3)): let extra(12)=1 ! assume taxable on trash unless changed to not taxable
-00705   if rate$(1:3)="TCE" then a(5)=2: let extra(12)=9: goto L790 ! handle cannister pick up seperately
-00710   let extra(4)=013110
-00720   let extra(3)=22810
+00700   if rate$(1:2)="TR" or rate$(1:2)="TC" then a(5)=val(rate$(3:3)): extra(12)=1 ! assume taxable on trash unless changed to not taxable
+00705   if rate$(1:3)="TCE" then a(5)=2: extra(12)=9: goto L790 ! handle cannister pick up seperately
+00710   extra(4)=013110
+00720   extra(3)=22810
 00730   if rate$(1:2)="WR" or rate$(1:2)="WC" then let d(2)=val(line$(171:178)) ! prior water reading
 00740   if rate$(1:2)="MR" or rate$(1:2)="MC" then let d(10)=val(line$(171:178)) ! prior gas reading
 00750   if rate$(1:2)="WR" or rate$(1:2)="WC" then let d(1)=val(line$(179:177)) ! current water reading
@@ -105,14 +105,14 @@
 01000 L1000: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 01010 L1010: let x(1)=d(1) : let x(2)=d(9)
 01020   write #work,using L990,rec=rctr: z$,mat x
-01030   mat a=(0): mat d =(0): let extra(11)=extra(12)=0: mat g=(0): mat gb=(0)
+01030   mat a=(0): mat d =(0): extra(11)=extra(12)=0: mat g=(0): mat gb=(0)
 01040   goto L450 ! process last record written
 01050 ! ______________________________________________________________________
 01060 ! ______________________________________________________________________
 01070 ! ______________________________________________________________________
 01080 DONE: ! 
 01090   pr newpage
-01100   pr fields "12,20,Cc 40,N": "Please wait: reIndexing Customer file..."
+01100   pr f "12,20,Cc 40,N": "Please wait: reIndexing Customer file..."
 01110   close #1: ioerr L1120
 01120 L1120: close #2: ioerr L1130
 01130 L1130: execute "Index "&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&' '&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&" 1 10 Replace DupKeys -n"
@@ -125,15 +125,15 @@
 01180   close #15: 
 01190   execute "Index "&env$('Q')&"\UBmstr\UBTransvb.h"&str$(cno)&' '&env$('Q')&"\UBmstr\UBTrindx.h"&str$(cno)&" 1 19 Replace DupKeys -n"
 01200   pr newpage
-01210   pr fields "11,20,Cc 40,N": "Completed Sucessfully."
-01220   pr fields "12,20,Cc 40,B,X0D": "Press any key to continue..."
+01210   pr f "11,20,Cc 40,N": "Completed Sucessfully."
+01220   pr f "12,20,Cc 40,B,X0D": "Press any key to continue..."
 01230   goto XIT
 01240 ! ______________________________________________________________________
 01250 METER_ADDRESS: ! 
-01260   let e$(1)=rtrm$(line$(93:117))(1:30)
+01260   e$(1)=rtrm$(line$(93:117))(1:30)
 01270   let x=pos(e$(1)," ",1)
 01280   let x2=val(e$(1)(1:x)) conv L1300
-01290   let e$(1)=rtrm$(e$(1)(x+1:30))&" "&e$(1)(1:x-1)
+01290   e$(1)=rtrm$(e$(1)(x+1:30))&" "&e$(1)(1:x-1)
 01300 L1300: return 
 01310 ! ______________________________________________________________________
 01320 ! <Updateable Region: ERTN>
@@ -181,14 +181,14 @@
 01730   if rate$(1:2)="SR" and a(2)=2 and val(line$(227:234))<>17.55 and val(line$(227:234))>0 then a(2)=5: b(2)=val(line$(227:234)) ! if sewer code 2 and not a normal charge the use as a standard charge
 01740   if rate$(1:2)="MT" and val(line$(227:234))>0 then a(2)=41: b(2)=val(line$(227:234)) ! motels have a special sewer code
 01750   if rate$(1:2)="TR" or rate$(1:2)="TC" then let g(5)=val(line$(227:234)): let gb(5)=val(line$(220:227))+g(5) ! previous balance of trash plus  current charge
-01751   if rate$(1:2)="TR" or rate$(1:2)="TC" and g(5)>0 then let extra(12)=1 ! trash taxable
-01760   if rate$(1:2)="CN" then let g(3)=val(line$(227:234)): let gb(3)=val(line$(220:227))+g(3): let extra(12)=1: a(3)=int(g(3)/15) ! previous balance of cannister plus current charge--set tax code to 1
-01770   if rate$(1:3)="PKU" then let g(6)=val(line$(227:234)): let gb(6)=val(line$(220:227))+g(6): let extra(11)=int(g(6)/35) : let extra(12)=1 ! previous balance of cannister pickup plus current charge and also assign a code for cannister pickup and tax
-01780   if rate$(1:3)="PKE" then let g(6)=val(line$(227:234)): let gb(6)=val(line$(220:227))+g(6): let extra(11)=int(g(6)/35): let extra(12)=1 ! previous balance of cannister pickup plus current charge and also assign a code 1 since no code # in code-- also set sales tax code
+01751   if rate$(1:2)="TR" or rate$(1:2)="TC" and g(5)>0 then extra(12)=1 ! trash taxable
+01760   if rate$(1:2)="CN" then let g(3)=val(line$(227:234)): let gb(3)=val(line$(220:227))+g(3): extra(12)=1: a(3)=int(g(3)/15) ! previous balance of cannister plus current charge--set tax code to 1
+01770   if rate$(1:3)="PKU" then let g(6)=val(line$(227:234)): let gb(6)=val(line$(220:227))+g(6): extra(11)=int(g(6)/35) : extra(12)=1 ! previous balance of cannister pickup plus current charge and also assign a code for cannister pickup and tax
+01780   if rate$(1:3)="PKE" then let g(6)=val(line$(227:234)): let gb(6)=val(line$(220:227))+g(6): extra(11)=int(g(6)/35): extra(12)=1 ! previous balance of cannister pickup plus current charge and also assign a code 1 since no code # in code-- also set sales tax code
 01790   if rate$(1:3)="ASF" then let g(8)=val(line$(227:234)): let gb(8)=val(line$(220:227))+g(8) ! assessment to other
 01800   if rate$(1:2)="MR" then let g(9)=g(9)+val(line2$(1:9)): a(6)=1 ! residential tax on gas
 01810   if rate$(1:2)="MC" then let g(9)=g(9)+val(line2$(1:9)): a(6)=2 ! commercial tax on gas
-01820   if rate$(1:2)="TR" or rate$(1:2)="TC" then let g(7)=g(7)+val(line2$(1:9)): let extra(12)=1 ! tax on trash
-01830   if rate$(1:3)="TCE" or rate$(1:3)="CNE" then let extra(12)=9 ! tax exempt commercial trash
+01820   if rate$(1:2)="TR" or rate$(1:2)="TC" then let g(7)=g(7)+val(line2$(1:9)): extra(12)=1 ! tax on trash
+01830   if rate$(1:3)="TCE" or rate$(1:3)="CNE" then extra(12)=9 ! tax exempt commercial trash
 01835   let total_balance+=val(line2$(17:25)) ! get net bill
 01840 L1840: return 

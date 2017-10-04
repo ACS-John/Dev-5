@@ -58,17 +58,17 @@
         let ml$(2)="You must enter a valid job or category number." !:
         fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto TRANSACTION_ENTRY
-00420 L420: let l12=val(resp$(3)) ! labor %
-00430   let l13=val(resp$(4)) ! other %
-00440   let l10=val(resp$(5)) ! units
+00420 L420: l12=val(resp$(3)) ! labor %
+00430   l13=val(resp$(4)) ! other %
+00440   l10=val(resp$(5)) ! units
 00450   cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(cn),5)
 00460   read #2,using L540,key=cn$: k$,rl10,rl12,rl13
 00470   if l10=0 then goto L480 else goto L490
-00480 L480: let l10=rl10
+00480 L480: l10=rl10
 00490 L490: if l12=0 then goto L500 else goto L510
-00500 L500: let l12=rl12
+00500 L500: l12=rl12
 00510 L510: if l13=0 then goto L520 else goto L530
-00520 L520: let l13=rl13
+00520 L520: l13=rl13
 00530 L530: rewrite #2,using L540,key=cn$: k$,l10,l12,l13
 00540 L540: form pos 12,c 25,pos 100,pd 7.2,pos 114,2*pd 2
 00550   goto TRANSACTION_ENTRY

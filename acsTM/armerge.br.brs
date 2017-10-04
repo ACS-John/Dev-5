@@ -6,7 +6,7 @@
 00070   fncno(cno,cnam$)
 00080   dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50,ta(2)
 00090   pr newpage
-00100   pr fields "10,10,c 50,H,N": "A/R Merge Transactions In Process"
+00100   pr f "10,10,c 50,H,N": "A/R Merge Transactions In Process"
 00110   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L700
 00120   open #2: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&str$(cno)&",Shr",internal,outin,relative ioerr L700
 00130   open #h_addr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,outin,relative ioerr L700
@@ -64,19 +64,19 @@
 00640   pr "TRANSACTIONS THAT WERE REJECTED."
 00650   pr 
 00660   pr 
-00670   pr fields "22,2,c 40": "Press enter to return to system menu."
+00670   pr f "22,2,c 40": "Press enter to return to system menu."
 00680   input fields "23,2,c 1,ae,n": pause$
 00690   goto XIT
-00700 L700: if err=61 then pr fields "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L720
+00700 L700: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L720
 00710   goto L760
 00720 L720: pr newpage
-00730   if err=4148 then pr fields "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L750
+00730   if err=4148 then pr f "23,3,C 78,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L750
 00740   goto L760
-00750 L750: pr fields "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
-00760 L760: pr fields "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
+00750 L750: pr f "23,3,C 75,N": "YOU HAVE A WORKSTATION BASIC ERROR # "&str$(err)&" AT LINE # "&str$(line)&"."
+00760 L760: pr f "24,3,C 70,N": "PRESS ENTER TO RETRY; ELSE ENTER  Q  TO QUIT"
 00770   input fields "24,60,C 1,N": quitcode$
 00780   if rtrm$(uprc$(quitcode$))="Q" then goto L820
-00790   pr fields "23,3,C 78,N": ""
-00800   pr fields "24,3,C 78,N": ""
+00790   pr f "23,3,C 78,N": ""
+00800   pr f "24,3,C 78,N": ""
 00810   retry 
 00820 L820: goto XIT

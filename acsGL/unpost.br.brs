@@ -11,24 +11,24 @@
 00120   fncno(cno,cnam$)
 18000 MENU1: ! r:
 18020   fntos(sn$='UnPost')
-18040   let lc=0 : let mylen=47 : let mypos=mylen+2
+18040   lc=0 : let mylen=47 : let mypos=mylen+2
 18060   fnlbl(lc+=1,1,"Starting Date to Remove:",mylen,1)
 18080   fntxt(lc,mypos,0,0,0,'ccyymmdd')
 18100   let resp$(1)="" ! STR$(fndate_mmddyy_to_ccyymmdd(BEGDAT))
 18120   fnlbl(lc+=1,1,"Ending Date to Remove:",mylen,1)
 18140   fntxt(lc,mypos,0,0,0,'ccyymmdd')
 18160   let resp$(2)="" ! STR$(fndate_mmddyy_to_ccyymmdd(ENDDAT))
-18170   let lc+=1
+18170   lc+=1
 18180   fnchk(lc+=1,50,'Process History instead of Current Transactions',1)
 18200   let resp$(3)="False"
-18210   let lc+=1
+18210   lc+=1
 18220   fnchk(lc+=1,50,'Remove Duplicates Only',1)
 18240   let resp$(4)='False'
 18260   fncmdset(2)
 18280   fnacs(sn$,0,mat resp$,ckey)
 18300   if ckey=5 then goto XIT
 18320   begdat=val(resp$(1))
-18340   let enddat=val(resp$(2))
+18340   enddat=val(resp$(2))
 18360   if resp$(3)='True' then code$='H' else code$='C'
 18380   if resp$(4)='True' then let del_dupe_only=1 else let del_dupe_only=0
 18400   if enddat<begdat or (enddat=0 and begdat=0) then pr bell; : goto MENU1
@@ -85,7 +85,7 @@
 32100     rewrite #1,using 'Form POS 333,2*PD 3': 0,0
 32120   loop 
 32140 L470: ! 
-32160   let lr2=lrec(2)
+32160   lr2=lrec(2)
 32180   if uprc$(code$)<>"H" then rewrite #h_trans,using 'Form POS 71,PD 3',rec=1: lr2
 32200   for j=1 to lr2
 32220     read #h_trans,using 'Form POS 1,C 12,POS 71,PD 3',rec=j: k$,nta norec L580

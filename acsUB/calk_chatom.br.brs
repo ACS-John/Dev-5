@@ -1,15 +1,15 @@
 10000 ! replace S:\acsUB\calk_chatom
 10400   def library fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,ratemst,unused,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
 10500     if ~setup_calk then ! r:
-10600       let setup_calk=1
+10600       setup_calk=1
 10700       library 'S:\Core\Library': fnget_services,fnpause
 10800       dim x$*10,gb(10),da(2),c(4),dp$*60,servicename$(10)*20,tax_code$(10)*1,penalty$(10)*1,subjectto(10)
 11000       dim san(3)
-11100       let san(1)=8 : let san(2)=15 : let san(3)=20
+11100       san(1)=8 : san(2)=15 : san(3)=20
 11400 FORM_RATEMSTR: form pos 55,32*g 10
 11500       fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 11800       for j=1 to udim(servicename$)
-11900         let servicename$(j)=trim$(servicename$(j))
+11900         servicename$(j)=trim$(servicename$(j))
 12000       next j
 12100     end if  ! /r ~setup_calk then
 12200     gosub WATER

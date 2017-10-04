@@ -47,7 +47,7 @@
 20200   if tr(6)>1 and tr(6)<9 then goto L390 else let tr(6)=1
 20220 L390: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 20240   if journal_to_print(tr(6))><1 then goto PJ_READ_1 ! JOURNAL NOT SELECTED
-20260   let oldtrans$=a$(tr(6))(1:21)
+20260   oldtrans$=a$(tr(6))(1:21)
 20280   gosub HDR
 20300   goto PJ_PRINT_REC
 20320 PJ_READ_2: ! 
@@ -110,7 +110,7 @@
 26140   if uprc$(td$(1:6))="CONTRA" then goto L760 ! NO CONTRA ENTRIES IN NET
 26160   let net+=tr(5)
 26180 L760: ! 
-26200   let oldtr$=tr$ : let oldtd$=td$
+26200   oldtr$=tr$ : oldtd$=td$
 26220   goto PJ_READ_2
 28000 PJ_SOME_TOTAL: ! r:
 28020   if tr(6)><1 and uprc$(oldtrans$(1:21))><"DISBURSEMENTS JOURNAL" then 
@@ -156,8 +156,8 @@
 32160   if t9=9 then goto L1150
 32180   pr #255: newpage
 32200   gosub HDR
-32220   if tr(6)=0 then let oldtrans$=" " else let oldtrans$=a$(tr(6))(1:21)
-32240   let oldtr$=" "
+32220   if tr(6)=0 then oldtrans$=" " else oldtrans$=a$(tr(6))(1:21)
+32240   oldtr$=" "
 32260 L1150: return  ! /r
 34000 EO_JOURNAL: ! r:
 34020   if tr(5)=0 and tr(6)=0 then goto L1210

@@ -8,10 +8,10 @@
 00080   dim c$(6,8)*40,cap$*128
 00090 ! ______________________________________________________________________
 00100   fncno(cno)
-00110   let lbl$(1)="Fund Number" : let lbl$(2)="Department Number" !:
-        let lbl$(3)="Description"
+00110   lbl$(1)="Fund Number" : lbl$(2)="Department Number" !:
+        lbl$(3)="Description"
 00120   let tln(1)=3 : let tln(2)=2 : let tln(3)=30
-00130   let fltyp$(1)="N" : let fltyp$(2)="n" : let fltyp$(3)="C"
+00130   fltyp$(1)="N" : fltyp$(2)="n" : fltyp$(3)="C"
 00140   let mask(1)=30 : let mask(2)=30 : let mask(3)=0
 00150   open #1: "Name="&env$('Q')&"\CLmstr\dptmstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\dptidx1.h"&str$(cno)&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outin,keyed 
 00160   close #1: 

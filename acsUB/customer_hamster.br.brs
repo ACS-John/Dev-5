@@ -15,7 +15,7 @@
 24400   goto XIT
 24600 ! ______________________________________________________________________
 24800   def fn_open_file
-25000     let open_file_count=0 ! this value is used in the close_file sub routine
+25000     open_file_count=0 ! this value is used in the close_file sub routine
 25200     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 25400     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
 25600     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -34,7 +34,7 @@
 28200 ! C$(CL,5)=Description Position : C$(CL,6)=Description Length
 28400 ! C$(CL,7)=Index File
 28600 ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)
-28800     let limit_to_list$='1'
+28800     limit_to_list$='1'
 29000 ! 
 29200 ! cl=1 : c$(cl,1)='ComboF'
 29400 ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&env$('cno')
@@ -72,14 +72,14 @@
 35800 ! ______________________________________________________________________
 36000   def fn_add_rec(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
 36200     if field_type$='' then let field_type$='C'
-36400     if storage_length=0 then let storage_length=textbox_len
+36400     if storage_length=0 then storage_length=textbox_len
 36600 ! storage_length_prior=storage_length
 36800     add_rec_item=udim(mat lbl$)+1
-37000     mat lbl$(add_rec_item) : let lbl$(add_rec_item)=label$
+37000     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$
 37200     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
 37400     mat p$(add_rec_item)
-37600     mat fltyp$(add_rec_item) : let fltyp$(add_rec_item)=field_type$
-37800     mat sln(add_rec_item) : let sln(add_rec_item)=storage_length
+37600     mat fltyp$(add_rec_item) : fltyp$(add_rec_item)=field_type$
+37800     mat sln(add_rec_item) : sln(add_rec_item)=storage_length
 38000     mat mask(add_rec_item) : let mask(add_rec_item)=ar_mask
 38200 ! if storage_position=0 then
 38400 !   storage_position=1
@@ -87,7 +87,7 @@
 38800 ! else if auto_storage_position and storage_position=0 then
 39000 !   storage_position=storage_position_prior+storage_length_prior
 39200 ! end if
-39400     mat sp(add_rec_item) : let sp(add_rec_item)=storage_position
+39400     mat sp(add_rec_item) : sp(add_rec_item)=storage_position
 39600 ! storage_length_prior=storage_position
 39800     mat c$(add_rec_item,8)
 40000   fnend  ! fn_add_rec
@@ -95,7 +95,7 @@
 40400     let mask_pointtwo=32 : let mask_number=30
 40600     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 40800     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
-41000     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
+41000     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 41200 ! 
 41400     dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40,sp(1)
 41600     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)

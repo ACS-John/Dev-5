@@ -15,24 +15,24 @@
 00110   close #101: ioerr L120
 00120 L120: open #101: "SROW=9,SCOL=4,EROW=13,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS",display,outin 
 00130   pr #101: newpage
-00140   pr fields "10,5,C 60": "Enter 0 for Printer only, 1 for Screen only, or 2 for Both:"
-00150   pr fields "12,5,C 60": "Enter Ext/VolId to pr all or blank to select:"
+00140   pr f "10,5,C 60": "Enter 0 for Printer only, 1 for Screen only, or 2 for Both:"
+00150   pr f "12,5,C 60": "Enter Ext/VolId to pr all or blank to select:"
 00160 L160: input fields mat io1$: pp,ev$ conv L160
 00165   if pp=0 then let fnopenprn
 00170   if pp<0 or pp>2 then goto L160
-00180   let ev$=rtrm$(ev$)
+00180   ev$=rtrm$(ev$)
 00190   if ev$="" then goto L260
 00200   execute "DROP DIRFILE" ioerr L210
 00210 L210: execute "DIR *."&ev$&" >DIRFILE"
 00220   open #2: "Name=DIRFILE",display,input 
 00230   let p1=pos(ev$,"/",1)
-00240   let ex$=ev$(1:p1-1)
+00240   ex$=ev$(1:p1-1)
 00250   goto L360
 00260 L260: close #101: ioerr L270
 00270 L270: open #101: "SROW=2,SCOL=4,EROW=6,ECOL=79,BORDER=DR,CAPTION=PRINT LAYOUTS",display,outin 
 00280   pr #101: newpage
-00290   if f1>0 then pr fields "2,5,C 60,H,N": "LAST FILE NAME ENTER WAS "&fil$(f1)
-00300   pr fields "4,5,C 60": "Enter File Name/VolId to pr or Blank to stop"
+00290   if f1>0 then pr f "2,5,C 60,H,N": "LAST FILE NAME ENTER WAS "&fil$(f1)
+00300   pr f "4,5,C 60": "Enter File Name/VolId to pr or Blank to stop"
 00310   rinput fields "4,55,C 20,UE,N": fil$(f1+1)
 00320   let fil$(f1+1)=rtrm$(fil$(f1+1))
 00330   if pp>0 or fil$(f1+1)="" then goto L360
@@ -51,23 +51,23 @@
 00460 L460: let p1=pos(filename$,".",1)
 00470   if p1=0 then let p1=min(8,len(filename$)) else let p1=p1-1
 00480   pr newpage
-00490   pr fields "1,1,C 40,R,N": " FIELD DESCRIPTIONS: "&filename$(1:p1)&"/"&volid$
-00500   pr fields "1,43,C 8,R,N": " NAME"
-00510   pr fields "1,53,C 8,R,N": " FORMAT"
-00520   pr fields "1,63,C 5,R,N": " FROM"
-00530   pr fields "1,70,C 5,R,N": "  TO"
-00540   let sln=1
+00490   pr f "1,1,C 40,R,N": " FIELD DESCRIPTIONS: "&filename$(1:p1)&"/"&volid$
+00500   pr f "1,43,C 8,R,N": " NAME"
+00510   pr f "1,53,C 8,R,N": " FORMAT"
+00520   pr f "1,63,C 5,R,N": " FROM"
+00530   pr f "1,70,C 5,R,N": "  TO"
+00540   sln=1
 00550 L550: if pp=0 or j3=0 then goto L660
 00560   if sln=0 then goto L460
-00570   if sln<23 then let sln=sln+1: goto L610
-00580   pr fields "24,5,C 60,R,N": "  SCREEN FULL  PRESS ENTER TO CONTINUE:"
+00570   if sln<23 then sln=sln+1: goto L610
+00580   pr f "24,5,C 60,R,N": "  SCREEN FULL  PRESS ENTER TO CONTINUE:"
 00590   input fields "24,50,C 1,RE,N": pause$
 00600   goto L460
-00610 L610: pr fields str$(sln)&",1,C 40,UT,N": a$(j3,1)
-00620   pr fields str$(sln)&",43,C 8,UT,N": a$(j3,2)(1:10)
-00630   pr fields str$(sln)&",53,C 8,UT,N": a$(j3,3)(1:8)
-00640   pr fields str$(sln)&",63,PIC(ZZZZZ),UT,N": a(j3,5)
-00650   pr fields str$(sln)&",70,PIC(ZZZZZ),UT,N": a(j3,6)
+00610 L610: pr f str$(sln)&",1,C 40,UT,N": a$(j3,1)
+00620   pr f str$(sln)&",43,C 8,UT,N": a$(j3,2)(1:10)
+00630   pr f str$(sln)&",53,C 8,UT,N": a$(j3,3)(1:8)
+00640   pr f str$(sln)&",63,PIC(ZZZZZ),UT,N": a(j3,5)
+00650   pr f str$(sln)&",70,PIC(ZZZZZ),UT,N": a(j3,6)
 00660 L660: linput #1: ln$ eof L1200
 00670   if ln$(7:10)="LET " then goto LETLN
 00680   if ln$(7:10)="DATA" then goto DATALN
@@ -106,10 +106,10 @@
 01010   let p3=len(rtrm$(a$(j3,3)))
 01020   let p4=pos(a$(j3,3),"*",1)
 01030   if p4=0 then let m1=1 else let m1=val(a$(j3,3)(1:p4-1))
-01040   let l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
+01040   l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
 01050   if p2>1 then let dp=val(a$(j3,3)(p2:p3)) else let dp=0 ! DECIMAL POSITIONS
 01060   if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !   ACTUAL FIELD LENGTH
-01070   let l=l*m1 ! TOTAL STORAGE LENGTH
+01070   l=l*m1 ! TOTAL STORAGE LENGTH
 01080   b=a+l
 01090   a=a+1
 01100   let ino=ino+1
@@ -128,7 +128,7 @@
 01230   for j=1 to j3
 01240     let p1=pos(a$(j,3)," ",1)
 01250     let p2=len(a$(j,3))
-01260     let l=val(a$(j,3)(p1:p2))
+01260     l=val(a$(j,3)(p1:p2))
 01270     if l>0 then goto L1310
 01280     pr #255,using L1290: a$(j,1) pageoflow NEWPGE
 01290 L1290: form pos 13,c 43,skip 2
@@ -143,7 +143,7 @@
 01370 L1370: close #1: 
 01380   if f2<f1 then goto L360
 01390 L1390: close #2: ioerr L1400
-01400 L1400: pr fields "24,1,C 7,UT,N": "Done..."
+01400 L1400: pr f "24,1,C 7,UT,N": "Done..."
 01410   stop 
 01420 NEWPGE: if j=j3 then goto L1450
 01430   pr #255: newpage

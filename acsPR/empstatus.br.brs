@@ -8,8 +8,8 @@
 00080   dim cap$*128,mask(2),p$(2)*25,lbl$(2)*21
 00090 ! ______________________________________________________________________
 00100   fncno(cno)
-00110   let lbl$(1)="Code" : let lbl$(2)="Name"
-00120   let fln(1)=2 : let fln(2)=25
+00110   lbl$(1)="Code" : lbl$(2)="Name"
+00120   fln(1)=2 : fln(2)=25
 00130   let mask(1)=30 : let mask(2)=0
 00140   open #1: "Name="&env$('Q')&"\PRmstr\EmpStatus.dat,KFName="&env$('Q')&"\PRmstr\Empstatus.idx,Use,RecL=32,KPs=1,KLn=2,Shr",internal,outin,keyed 
 00150   fnhamster("County",mat lbl$,mat fln,1,mat p$,mat fltyp$,mat sln,mat mask)

@@ -7,7 +7,7 @@
 50380     let p1=1
 50382     if udim(mat sln)<udim(mat lbl$) then mat sln(udim(mat lbl$))
 50390     for j=1 to udim(mat lbl$)
-50400       if sln(j)=0 then let sln(j)=tln(j)
+50400       if sln(j)=0 then sln(j)=tln(j)
 50402       let p2=p1+sln(j)
 50410       pr #255,using 'form pos 1,c 30,2*n 5,"  ",cr 4," ",g 6': lbl$(j),p1,p2-1,fltyp$(j),str$(sln(j))
 50430       let p1=p2

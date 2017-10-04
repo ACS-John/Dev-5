@@ -95,7 +95,7 @@
 41460   else if ckey=opt_print then 
 41480     fn_PRINTTRANS
 41500   else if ckey=opt_edit then 
-41520     if z$='[All]' then let editrec=val(resp$(1)) else editrec=val(resp$(2))
+41520     if z$='[All]' then editrec=val(resp$(1)) else editrec=val(resp$(2))
 41540     fn_TransactionEdit(editrec)
 41560   end if 
 41580   goto SCREEN_TRANS_GRID ! /r
@@ -143,20 +143,20 @@
 42820     fnacs(sn$,0,mat resp$,ckey)
 43000     if ckey=5 then goto L810
 43020     if resp$(1)="True" then 
-43040       let sel_code=1
+43040       sel_code=1
 43060     else if resp$(2)="True" then 
-43080       let sel_code=2
+43080       sel_code=2
 43100     else if resp$(3)="True" then 
-43120       let sel_code=3
+43120       sel_code=3
 43140     else if resp$(4)="True" then 
-43160       let sel_code=4
+43160       sel_code=4
 43180     else if resp$(5)="True" then 
-43200       let sel_code=5
+43200       sel_code=5
 43220     else if resp$(6)="True" then 
-43240       let sel_code=6
+43240       sel_code=6
 43260     end if 
 43280     beg_date=val(resp$(7))
-43300     let end_date=val(resp$(8))
+43300     end_date=val(resp$(8))
 43320     let z$=resp$(9)(1:10)
 43340     L810: !
 43360   return  ! /r
@@ -166,7 +166,7 @@
 46020   open #trans=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",Shr",internal,outin,relative 
 46040   read #trans,using "Form pos 1,c 10,N 8,N 1,pd 4.2",rec=editrec: p$,tdate,tcode,tamount
 46060   fntos(sn$="Transaction-3")
-46080   let lc=rc=0 : let mylen=20 : let mypos=mylen+2
+46080   lc=rc=0 : let mylen=20 : let mypos=mylen+2
 46100   fnlbl(lc+=1,1,"Record:",mylen)
 46120   fntxt(lc,mypos,10,0,0,empty$,1)
 46140   let resp$(rc+=1)=str$(editrec)
@@ -218,15 +218,15 @@
 48480   if trim$(servicename$(3))<>"Electric" and srv$(3)="EL" then let ptShowElecUsed=1 ! electric readings are being used for a reduction meter
 48500   if trim$(servicename$(4))<>"Gas" and srv$(4)="GA" then let ptShowGasUsed=1 ! gas readings are being used for a reduction meter
 48520   if trim$(z$)="[All]" then let hd1$="    {\ul Account        Date   }" else let hd1$="    {\ul    Date   }"
-48540   let sz1=0
+48540   sz1=0
 48560   let x=0
 48580   for j=1 to 10
 48600     if j=3 and ptShowElecUsed=1 then goto L1010 ! skp heading is electric field is used to hold other readings w/o matching changes (eg Kimberling City as reduction meters)
 48620     if j=4 and ptShowGasUsed=1 then goto L1010 ! skp heading is gas field is used to hold other readings w/o matching changes (eg Kimberling City as reduction meters)
 48640     let x2=pos(trim$(servicename$(j))," ",1)
-48660     if x2>0 then let servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
+48660     if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
 48680     if trim$(servicename$(j))<>"" then 
-48700       let scr1$(sz1+=1)=servicename$(j)
+48700       scr1$(sz1+=1)=servicename$(j)
 48720       let hd1$=hd1$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:6)),6)&"}" : let name$(x+=1)=servicename$(j)
 48740     end if  ! trim$(servicename$(j))<>"" then
 48760     L1010: ! 
@@ -241,10 +241,10 @@
 48960     end if 
 48980     if trim$(servicename$(3))="Electric" then 
 49000       let hd1$=hd1$&"  {\ul   El Used }" 
-49020       let electric=1 
+49020       electric=1 
 49040     else if ptShowElecUsed=1 then 
 49060       let hd1$=hd1$&"  {\ul      Used }" 
-49080       let electric=1
+49080       electric=1
 49100     end if 
 49120     if trim$(servicename$(4))="Gas" then 
 49140       let hd1$=hd1$&"  {\ul   Ga Used }" 
@@ -297,10 +297,10 @@
 50080     if tcode=3 then c$="COL"
 50100     if tcode=4 then c$="CM"
 50120     if tcode=5 then c$="DM"
-50140     let service=0
-50160     if water=1 then let service+=1: let usage(service)=wu ! water
-50180     if electric=1 then let service+=1: let usage(service)=eu ! Electric
-50200     if gas=1 then let service+=1: let usage(service)=gu ! Gas
+50140     service=0
+50160     if water=1 then service+=1: let usage(service)=wu ! water
+50180     if electric=1 then service+=1: let usage(service)=eu ! Electric
+50200     if gas=1 then service+=1: let usage(service)=gu ! Gas
 50220     if print_balance then 
 50240       let printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 8.2,n 10.2,3*pic(--------.--),x 1"
 50260       let usage(1)=tbal

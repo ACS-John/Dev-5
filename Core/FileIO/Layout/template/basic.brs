@@ -52,7 +52,7 @@
  ! this layout if its not found in the layout folder already
 
     ! Dim at next largest multiple of 255
-    let LongestElement=(int((LongestElement-1)/255)+1)*255
+    longestElement=(int((LongestElement-1)/255)+1)*255
 
     let FileLay$=Trim$(FileLay$)
     
@@ -173,14 +173,14 @@
 
     ! Get code from making one and trying it.
     !  but it should be something like:
-    !    if sio_name then let s$(sio_name)=F$(ac_name)
-    !    if sio_add1 then let s$(sio_Add1)=F$(ac_add1)
+    !    if sio_name then s$(sio_name)=F$(ac_name)
+    !    if sio_add1 then s$(sio_Add1)=F$(ac_add1)
 
     for Index=1 to udim(mat SSubs$)
-       fnReturnCode('    if sio_field_'&Ssubs$(Index)&' then let s$(sio_field_'&Ssubs$(Index)&')=f$('&prefix$&ssubs$(Index)&')')
+       fnReturnCode('    if sio_field_'&Ssubs$(Index)&' then s$(sio_field_'&Ssubs$(Index)&')=f$('&prefix$&ssubs$(Index)&')')
     next Index
     for Index=1 to udim(mat NSubs$)
-       fnReturnCode('    if sio_field_'&Nsubs$(Index)&' then let s$(sio_field_'&Nsubs$(Index)&')=str$(f('&prefix$&Nsubs$(Index)&'))')
+       fnReturnCode('    if sio_field_'&Nsubs$(Index)&' then s$(sio_field_'&Nsubs$(Index)&')=str$(f('&prefix$&Nsubs$(Index)&'))')
     next Index
 
  return
@@ -191,7 +191,7 @@
  ReadLoop: ! Template for a standard Read Loop and dim statement
 
     ! Dim at next largest multiple of 255
-    let LongestElement=(int((LongestElement-1)/255)+1)*255
+    longestElement=(int((LongestElement-1)/255)+1)*255
 
     fnReturnCode(' ')
     fnReturnCode(' ! FileIO Dimensions')
@@ -226,7 +226,7 @@
  ReadLoopKey: ! Template for a keyed Read Loop and dim statement
 
     ! Dim at next largest multiple of 256
-    let LongestElement=(int((LongestElement-1)/256)+1)*256
+    longestElement=(int((LongestElement-1)/256)+1)*256
     mat NumberList$(udim(mat KeyDescription$))
     for Index=1 to udim(mat NumberList$)
        let NumberList$(Index)=str$(Index)
@@ -235,7 +235,7 @@
     let KeyGiven=0
     let KeyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
     if KeyGiven and KeyGiven<=udim(mat KeyDescription$) then
-       let str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
+       str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
 
        fnReturnCode(' ')
        fnReturnCode(' ! FileIO Dimensions')
@@ -249,15 +249,15 @@
        let KeyLength=0
 
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
-             let Length=fnLength(SSpec$(Sub))
+             length=fnLength(SSpec$(Sub))
              codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
              let KeyLength+=Length
           else
-             let Sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
+             sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
-                let Length=fnLength(NSpec$(Sub))
+                length=fnLength(NSpec$(Sub))
                 codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
                 let KeyLength+=Length
              end if
@@ -273,7 +273,7 @@
        fnReturnCode(' ! Initialize Key Information Here')
        fnReturnCode(' let KeyNumber='&str$(KeyGiven))
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              fnReturnCode(' let '&KeyFields$(Index)&'$=')
           else
@@ -287,7 +287,7 @@
        fnReturnCode(' ! Calculate the Key')
 
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              fnReturnCode(' let '&FileLay$&'$('&Prefix$&KeyFields$(Index)&')='&KeyFields$(Index)&'$')
           else
@@ -323,7 +323,7 @@
  ReadLoopOnly: ! Template for a standard Read Loop and dim statement
 
     ! Dim at next largest multiple of 255
-    let LongestElement=(int((LongestElement-1)/255)+1)*255
+    longestElement=(int((LongestElement-1)/255)+1)*255
 
     fnReturnCode(' ')
     fnReturnCode(' ! Position to start of file')
@@ -356,7 +356,7 @@
     let KeyGiven=0
     let KeyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
     if KeyGiven and KeyGiven<=udim(mat KeyDescription$) then
-       let str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
+       str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
 
        fnReturnCode(' ')
        fnReturnCode(' ! Variables Used')
@@ -366,15 +366,15 @@
        let KeyLength=0
 
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
-             let Length=fnLength(SSpec$(Sub))
+             length=fnLength(SSpec$(Sub))
              codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
              let KeyLength+=Length
           else
-             let Sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
+             sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
-                let Length=fnLength(NSpec$(Sub))
+                length=fnLength(NSpec$(Sub))
                 codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
                 let KeyLength+=Length
              end if
@@ -390,7 +390,7 @@
        fnReturnCode(' ! Initialize Key Information Here')
        fnReturnCode(' let KeyNumber='&str$(KeyGiven))
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              fnReturnCode(' let '&KeyFields$(Index)&'$=')
           else
@@ -401,7 +401,7 @@
        fnReturnCode(' ! Calculate the Key')
 
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              fnReturnCode(' let '&FileLay$&'$('&Prefix$&KeyFields$(Index)&')='&KeyFields$(Index)&'$')
           else
@@ -435,7 +435,7 @@
  OpenFile: ! Template for Opening the file
 
     ! Dim at next largest multiple of 256
-    let LongestElement=(int((LongestElement-1)/256)+1)*256
+    longestElement=(int((LongestElement-1)/256)+1)*256
 
     fnReturnCode(' ')
     fnReturnCode(' ! FileIO Dimensions')
@@ -454,7 +454,7 @@
  WriteCodeKey: ! Template for a keyed writing and dim statements
 
     ! Dim at next largest multiple of 256
-    let LongestElement=(int((LongestElement-1)/256)+1)*256
+    longestElement=(int((LongestElement-1)/256)+1)*256
     mat NumberList$(udim(mat KeyDescription$))
     for Index=1 to udim(mat NumberList$)
        let NumberList$(Index)=str$(Index)
@@ -463,7 +463,7 @@
     let KeyGiven=0
     let KeyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
     if KeyGiven and KeyGiven<=udim(mat KeyDescription$) then
-       let str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
+       str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
 
        fnReturnCode(' ')
        fnReturnCode(' ! FileIO Dimensions')
@@ -476,15 +476,15 @@
        codeLine$=" dim "
        let KeyLength=0
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
-             let Length=fnLength(SSpec$(Sub))
+             length=fnLength(SSpec$(Sub))
              codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
              let KeyLength+=Length
           else
-             let Sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
+             sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
-                let Length=fnLength(NSpec$(Sub))
+                length=fnLength(NSpec$(Sub))
                 codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
                 let KeyLength+=Length
              end if
@@ -500,7 +500,7 @@
        fnReturnCode(' ! Initialize Key Information Here')
        fnReturnCode(' let KeyNumber='&str$(KeyGiven))
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              fnReturnCode(' let '&KeyFields$(Index)&'$=')
           else
@@ -514,7 +514,7 @@
        fnReturnCode(' ! Calculate the Key')
 
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              fnReturnCode(' let '&FileLay$&'$('&Prefix$&KeyFields$(Index)&')='&KeyFields$(Index)&'$')
           else
@@ -554,7 +554,7 @@
  WriteCode: ! Template for writing and dim statements
 
     ! Dim at next largest multiple of 256
-    let LongestElement=(int((LongestElement-1)/256)+1)*256
+    longestElement=(int((LongestElement-1)/256)+1)*256
 
     fnReturnCode(' ')
     fnReturnCode(' ! FileIO Dimensions')
@@ -598,7 +598,7 @@
     let KeyGiven=0
     let KeyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
     if KeyGiven and KeyGiven<=udim(mat KeyDescription$) then
-       let str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
+       str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
 
        fnReturnCode(' ')
        fnReturnCode(' ! Variables Used')
@@ -608,15 +608,15 @@
        let KeyLength=0
 
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
-             let Length=fnLength(SSpec$(Sub))
+             length=fnLength(SSpec$(Sub))
              codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
              let KeyLength+=Length
           else
-             let Sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
+             sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
-                let Length=fnLength(NSpec$(Sub))
+                length=fnLength(NSpec$(Sub))
                 codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
                 let KeyLength+=Length
              end if
@@ -632,7 +632,7 @@
        fnReturnCode(' ! Initialize Key Information Here')
        fnReturnCode(' let KeyNumber='&str$(KeyGiven))
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              fnReturnCode(' let '&KeyFields$(Index)&'$=')
           else
@@ -643,7 +643,7 @@
        fnReturnCode(' ! Calculate the Key')
 
        for Index=1 to udim(Mat KeyFields$)
-          let Sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
+          sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              fnReturnCode(' let '&FileLay$&'$('&Prefix$&KeyFields$(Index)&')='&KeyFields$(Index)&'$')
           else
@@ -704,7 +704,7 @@
     fnReturnCode('       library "fileio" : fnOpenFile,Fnclosefile,Fngetfilenumber,Fnkey$,FnBuildKey$,Fnreadlayoutarrays,Fndoeslayoutexist,Fnreadallkeys,fnReadRelativeDescription$,fnReadRelUnopenedDescription$,fnReadRelUnopenedNumber,fnUpdateFile,fnLog,fnLogArray,fnErrLog,fnReadLayouts,Fnmakeuniquekey$,FnDisplayLength,FnLength,FnReadDescription$,FnReadUnopenedDescription$,fnReadRecordWhere$,fnUniqueKey,fnReadNumber,fnReadUnopenedNumber,fnReadRelativeNumber,fnNotInFile,fnDataCrawler,fnDataEdit')
     fnReturnCode('       library "fileio" : fnMakeSubProc,fnReadMatchingKeys,fnReadAllNewKeys,fnReadFilterKeys,fnReadEntireLayout,fnReadLayoutHeader,fnReadSubs,fnReadLayoutPath$,fnReadKeyFiles, fnAskCombo$,fnRunProcFile,fnBuildProcFile,fnDataShow')
     fnReturnCode('       library "screenio" : fnCallScreen$,fnFindSubscript,fnFm$,fnfm,fnDisplayScreen,fnGetUniqueName$,fnIsInputSpec,fnIsOutputSpec,fnDays,fnBR42')
-    fnReturnCode('       let linkageEstablished=1')
+    fnReturnCode('       linkageEstablished=1')
     fnReturnCode('    end if')
     fnReturnCode(' fnend')
     fnReturnCode(' !')
@@ -731,15 +731,15 @@
     let ReturnCode$=""
     fnReadEntireLayout(FileLay$,Filename$,Prefix$,Mat Keys$,Mat KeyDescription$,Mat Ssubs$,Mat Nsubs$,Mat Sspec$,Mat Nspec$,Mat Sdescription$,Mat Ndescription$,Mat Spos,Mat Npos)
     let RawForm$=fnReadForm$(FileLay$)
-    let LongestElement=0
+    longestElement=0
     for Index=1 to udim(mat SSpec$)
-       let LongestElement=max(LongestElement,fnLength(SSpec$(Index)))
+       longestElement=max(LongestElement,fnLength(SSpec$(Index)))
     next Index
     for Index=1 to udim(mat NSpec$)
-       let LongestElement=max(LongestElement,fnLength(NSpec$(Index)))
+       longestElement=max(LongestElement,fnLength(NSpec$(Index)))
     next Index
     for Index=1 to udim(mat SSubs$)
-       let SSubs$(Index)=lwrc$(SSubs$(Index))
+       sSubs$(Index)=lwrc$(SSubs$(Index))
     next Index
     for Index=1 to udim(mat NSubs$)
        let NSubs$(Index)=lwrc$(NSubs$(Index))
@@ -747,7 +747,7 @@
     let Prefix$=trim$(Prefix$)
     gosub RunTemplate
 
-    if len(ReturnCode$) then let SetEnv("CLIPBOARD",ReturnCode$)
+    if len(ReturnCode$) then let setenv("CLIPBOARD",ReturnCode$)
  fnend
 
  RunTemplate: ! Template List gosub statement:
@@ -780,7 +780,7 @@
  def fnEstablishLinkage
     if ~LinkageEstablished then
        library "fileio" : fnOpenFile, fnClose, fnReadEntireLayout, fnGetFileNumber, fnGetKeyElements, fnLength, fnAskCombo$, fnReadForm$
-       let linkageEstablished=1
+       linkageEstablished=1
     end if
  fnend
  !

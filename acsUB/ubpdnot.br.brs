@@ -98,7 +98,7 @@
 01200   if deltype<3 and bal<=1 then goto PRINT_NEXT
 01210   if bal<minbal and minbal>0 then goto PRINT_NEXT ! skip if under minimum balance
 01220   b4$=""
-01230   pr fields "1,1,Cc 80,R,N": str$(rec(customer5))&"/"&str$(lrec(customer5))
+01230   pr f "1,1,Cc 80,R,N": str$(rec(customer5))&"/"&str$(lrec(customer5))
 01240   if deltype=3 and final=0 then goto READ_ADRBIL ! pr ALL ACTIVE CUSTOMERS
 01250   if deltype=4 and final>0 and bal>0 then goto READ_ADRBIL ! pr ALL INACTIVE CUSTOMERS WITH BAL
 01260 ! IF UPRC$(NEWBIL$)="Y" AND F=D1 AND BAL=<G(11) THEN GOTO 440
@@ -115,10 +115,10 @@
 01346 ! dim altadr$(4)*30
 01350 ! read #adrbil,using "Form POS 11,4*C 30",key=z$: mat altadr$ nokey L940
 01360 ! if trim$(altadr$(1)&altadr$(2)&altadr$(3)&altadr$(4))<>"" then 
-01390 !   let e$(2)=altadr$(1)
-01400 !   let e$(3)=altadr$(2)
+01390 !   e$(2)=altadr$(1)
+01400 !   e$(3)=altadr$(2)
 01410 !   b4$=altadr$(3)
-01420 !   let e$(4)=altadr$(4)
+01420 !   e$(4)=altadr$(4)
 01430 ! end if 
 01455 ! L940: ! /r
 01460   if reminder=1 then 
@@ -152,18 +152,18 @@
 18080     fn_bldr1
 18100     let r=0
 18120 P1_NEXT_LN: ! 
-18140     let ln$=""
+18140     ln$=""
 18160 P1_L2250: read #h_template,using "Form POS 1,C 1",rec=r+=1: ln3$ eof P1_END1 norec P1_END1
 18180     if ln3$=chr$(13) then goto P1_L2310
-18200     let ln$=ln$&ln3$
+18200     ln$=ln$&ln3$
 18220     if len(rtrm$(ln$))>3900 then pr #h_prnt1: ln$ : goto P1_NEXT_LN
 18240     goto P1_L2250
 18260 ! ___________________________
-18280 P1_L2310: let p3=len(ln$) : let l2$="" : let p1=0
+18280 P1_L2310: let p3=len(ln$) : l2$="" : let p1=0
 18300 P1_L2320: let p2=pos(ln$,"@",p1)
 18320     if p2=0 then goto P1_L2570
-18340     if p1>len(l2$) then let l2$=rpad$(l2$,p1)
-18360     let l2$=l2$&ln$(p1:p2-1) : let p4=pos(ln$," ",p2)
+18340     if p1>len(l2$) then l2$=rpad$(l2$,p1)
+18360     l2$=l2$&ln$(p1:p2-1) : let p4=pos(ln$," ",p2)
 18380     if p4=0 then let p4=p3 else let p4=p4-1
 18400 P1_L2370: if ln$(p4:p4)="." or ln$(p4:p4)="," or ln$(p4:p4)=":" or ln$(p4:p4)="\" or ln$(p4:p4)=";" then let p4=p4-1 : goto P1_L2370
 18420     if ln$(p2+2:p2+5)="\par" then let p4=p2+1 ! if they don't space after the variable at the end of a line, it doesn't pr the variable
@@ -172,22 +172,22 @@
 18480     if ln$(p2+5:p2+8)="\par" then let p4=p2+3
 18500     if ln$(p2+6:p2+9)="\par" then let p4=p2+3
 18520     let v1=val(ln$(p2+1:p4)) conv P1_L2480
-18540     if v1<>0 and v1<=udim(mat r1$) then let l2$=l2$&r1$(v1)
+18540     if v1<>0 and v1<=udim(mat r1$) then l2$=l2$&r1$(v1)
 18560 P1_L2450: let p1=p4+1
 18580     goto P1_L2320
 18600 ! ___________________________
 18620 P1_L2480: ! 
 18640 ! if uprc$(ln$(p2+1:p2+2))><"B4" then
 18660 !   if rtrm$(b4$)="" then b4$=extra$(1) : let r1$(5)=e$(4)
-18680 !   let l2$=l2$&rtrm$(b4$)
+18680 !   l2$=l2$&rtrm$(b4$)
 18700 ! end if
 18720     if uprc$(ln$(p2+1:p2+1))><"D" then goto P1_L2550
 18740     let v1=val(ln$(p2+2:p2+2)) conv P1_L2550
 18760     if v1<1 or v1>4 then goto P1_L2550
-18780     let l2$=l2$&d$(v1)
+18780     l2$=l2$&d$(v1)
 18800 P1_L2550: goto P1_L2450
 18820 ! ___________________________
-18840 P1_L2570: let l2$=l2$&ln$(p1:p3)
+18840 P1_L2570: l2$=l2$&ln$(p1:p3)
 18860     pr #h_prnt1: l2$&chr$(13)
 18880     goto P1_NEXT_LN
 18900 ! ______________________________________________________________________
@@ -198,9 +198,9 @@
 19000   def fn_bldr1 ! BUILD RECORD IN pr ARRAY
 19020 ! if trim$(z$)='901246.40' then pr 'the beginning of it' : pause
 19040 !   if trim$(b4$)="" then b4$=extra$(1)
-19060 !   if trim$(e$(3))="" then let e$(3)=b4$: b4$=""
-19080 !   if trim$(b4$)="" then b4$=e$(4) ! : let e$(4)="" ! blanking out of standard CSZ removed 7/25/11 to fix missing CSZ in @5
-19100 !   if trim$(extra$(1))="" then let extra$(1)=e$(4) : let e$(4)='' ! re=added to make @108 the address line 2 or CSZ (if no addr line 2) and thusly @5 be blank.
+19060 !   if trim$(e$(3))="" then e$(3)=b4$: b4$=""
+19080 !   if trim$(b4$)="" then b4$=e$(4) ! : e$(4)="" ! blanking out of standard CSZ removed 7/25/11 to fix missing CSZ in @5
+19100 !   if trim$(extra$(1))="" then extra$(1)=e$(4) : e$(4)='' ! re=added to make @108 the address line 2 or CSZ (if no addr line 2) and thusly @5 be blank.
 19120     mat r1$=("")
 19140     let r1$(1)=ltrm$(z$)
 19160     let r1$(2)=rtrm$(meter_address$) ! meter address
@@ -249,10 +249,10 @@
 20020     let r1$(101)=ltrm$(cnvrt$("PIC(ZZ/zz/zz)",extra(17))) ! final billing date
 20040     let r1$(102)=ltrm$(cnvrt$("PIC(ZZzzzzzzz)",extra(18))) ! average sewer usage
 20060     let r1$(103)=ltrm$(cnvrt$("PIC(ZZ/zz/zz)",extra(19))) ! estimated date
-20080     let extra(20)=0: let r1$(104)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(20))) ! extra
-20100     let extra(21)=0: let r1$(105)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(21))) ! extra
-20120     let extra(22)=0: let r1$(106)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(22))) ! extra
-20140     if extra(23)<-10000 then let extra(23)=0
+20080     extra(20)=0: let r1$(104)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(20))) ! extra
+20100     extra(21)=0: let r1$(105)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(21))) ! extra
+20120     extra(22)=0: let r1$(106)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(22))) ! extra
+20140     if extra(23)<-10000 then extra(23)=0
 20160 ! Let R1$(107)=LTRM$(CNVRT$("PIC(n 10.2)",EXTRA(23))) ! escrow balance
 20180 !   if trim$(extra$(1))<>"" then let r1$(108)=extra$(1)
 20200     for j=109 to 117
@@ -263,8 +263,8 @@
 30000   def fn_vbopenprint
 30020     let h_vb_pr_out:=20
 30040     fnpa_open
-30080     let lyne=3
-30120     let spacer=0
+30080     lyne=3
+30120     spacer=0
 30160   fnend  ! fn_vbopenprint
 30180   def fn_vbprint
 30200     pr #h_vb_pr_out: "Call Print.MyFontBold(True)"
@@ -295,11 +295,11 @@
 30700     fnpa_txt(addr$(3),20,lyne*19+spacer)
 30720     fnpa_txt(addr$(4),20,lyne*20.5+spacer)
 30740     checkcounter+=1
-30760     let spacer+=90
+30760     spacer+=90
 30780     if checkcounter=3 then 
 30800       fnpa_newpage
 30820       checkcounter=0
-30840       let spacer=0
+30840       spacer=0
 30860     end if  ! checkcounter=3
 30880     fn_report_add
 30900   fnend 
@@ -447,7 +447,7 @@
 34220     if g(8)=0 then let t8$="" else let t8$="Other Charges"
 34240     if g(8)<0 then let t8$="Deposit Refund"
 34260     if g(9)=0 then let t9$="" else let t9$="La. Sales Tax"
-34280 ! If D(10)=1 Then Let EST$="Bill Estimated" Else Let EST$=""
+34280 ! If D(10)=1 Then eST$="Bill Estimated" Else eST$=""
 34300     if c4>0 then let final$="Final Bill" else let final$=""
 34320     if bal<=0 then let g(10)=0
 34340     let gross=max(bal+g(10),0)
@@ -497,7 +497,7 @@
 36000 UBFORM: ! r: pr FROM TEXT FILE
 36020   dim file_rtf$(1)*512
 36060   fngetdir2(env$('Q')&"\UBmstr",mat file_rtf$, '/ON','*.rtf')
-36080   let fl1=udim(mat file_rtf$)
+36080   fl1=udim(mat file_rtf$)
 36100   for fl1=1 to udim(mat file_rtf$)
 36120     let file_rtf$(fl1)=file_rtf$(fl1)
 36140   next fl1
@@ -564,7 +564,7 @@
 40680   fnacs(sn$,0,mat resp$,ckey)
 40700   let do_print_std_form=0
 40720   dim flname$*256
-40740   let flname$=rtrm$(resp$(1))
+40740   flname$=rtrm$(resp$(1))
 40750   fncreg_write('ubpdnot_file_name',flname$)
 40760   if resp$(2)<>"[All]" then 
 40762     bk1=val(resp$(2))
@@ -574,18 +574,18 @@
 40770     let resp$(2)=""
 40772   end if 
 40774   if trim$(resp$(3))<>"[All]" then 
-40776     let sz$=lpad$(trim$(resp$(3)(1:10)),10)
+40776     sz$=lpad$(trim$(resp$(3)(1:10)),10)
 40778     let resp$(3)=""
 40780   else 
-40782     let sz$=""
+40782     sz$=""
 40784     let resp$(3)=""
 40786   end if 
 40788   if resp$(4)="True" then 
 40790     let resp$(4)=""
-40792     let sel_indv$="Y"
+40792     sel_indv$="Y"
 40794   else 
 40796     let resp$(4)=""
-40798     let sel_indv$="N"
+40798     sel_indv$="N"
 40800   end if 
 40820   if ckey=1 and resp$(1)="(Pre-Printed)" then 
 40840     let do_print_std_form=1
@@ -639,7 +639,7 @@
 44120   if bk1=0 and trim$(sz$)="" then goto NEXT_RECORD
 44140   if bk1=0 then goto L1360
 44160   if trim$(sz$)="" or bk1>0 then ! restore_for_route
-44170     let sz$=cnvrt$("N 2",bk1)&"       " conv PRINTING_BEGIN
+44170     sz$=cnvrt$("N 2",bk1)&"       " conv PRINTING_BEGIN
 44180     restore #customer5,key>=sz$: nokey PRINTING_BEGIN
 44200   else ! restore_for_customer
 44220     restore #customer1,key=sz$: nokey PRINTING_BEGIN
@@ -666,7 +666,7 @@
 44760   else if ckey=2 then 
 44780     goto EO_CUSTOMER
 44800   else 
-44820     let sz$=lpad$(trim$(resp$(1)(1:10)),10)
+44820     sz$=lpad$(trim$(resp$(1)(1:10)),10)
 44840     goto READ_CUSTOMER ! if ckey=1
 44860   end if 
 44880 ! ______________________________________________________________________

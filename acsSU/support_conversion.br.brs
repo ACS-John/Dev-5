@@ -27,14 +27,14 @@
 00270     if j>20 then goto SECOND_TWENTY
 00280     if app(j)=0 then goto L570
 00290     if ma(j)=0 then goto L570 ! if no maintenance skip
-00300     let supportid$=z$&cnvrt$("PIC(#####)",j)
+00300     supportid$=z$&cnvrt$("PIC(#####)",j)
 00310     clientid=val(z$) ! CLIENT ID TO CUSTOMER NUMBER
-00320     let systemid$=cd$(j) ! SET SYSTEM ID TO "ub" ETC
-00330     let stardingdate=0
+00320     systemid$=cd$(j) ! SET SYSTEM ID TO "ub" ETC
+00330     stardingdate=0
 00340     if ma(j)>1.00 then let timeframe$="Mo"
 00350     if ma(j)=-.01 then let timeframe$="An"
 00360     if ma(j)=0 then let timeframe$="Na"
-00370     let endingdate=0
+00370     endingdate=0
 00380     cost=ma(j)
 00390     contact$(1)=a$(1) ! name
 00400     contact$(2)=a$(4) ! contact
@@ -43,13 +43,13 @@
 00430 SECOND_TWENTY: ! 
 00440     if ap2(j-20)=0 then goto L570
 00450     if ma(j-20)=0 then goto L570 ! if no maintenance skip
-00460     let supportid$=z$&cnvrt$("PIC(#####)",j)
-00470     let systemid$=cd$(j) ! SET SYSTEM ID TO "ub" ETC
-00480     let stardingdate=0
+00460     supportid$=z$&cnvrt$("PIC(#####)",j)
+00470     systemid$=cd$(j) ! SET SYSTEM ID TO "ub" ETC
+00480     stardingdate=0
 00490     if ma2(j-20)>1.00 then let timeframe$="Mo"
 00500     if ma2(j-20)=-.01 then let timeframe$="An"
 00510     if ma2(j-20)=0 then let timeframe$="NA"
-00520     let endingdate=0
+00520     endingdate=0
 00530     cost=ma(j-20)
 00540     contact$(1)=a$(1) ! name
 00550     contact$(2)=a$(4) ! contact

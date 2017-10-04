@@ -10,18 +10,18 @@
 00200        if Trim$(Content$)="" then goto RT_ENCODE
 00220        gosub RD_ROUTINE
 00240        dim Bl$*1200000,Line$*1200000,B64$*1200000
-00260        let Encode=1
-00280        let Line$=Content$
-00300        let L=Len(Line$)
+00260        encode=1
+00280        line$=Content$
+00300        l=Len(Line$)
 00320        for I=1 to L
 00340           bl$=Bl$&Bt$(Ord(Line$(I:I)))
 00360        next I
-00380        let L=Len(Bl$): let Nullcount=Mod(L,3)
-00400        if Nullcount=2 then let L=L+16
-00420        if Nullcount=1 then let L=L+8
+00380        l=Len(Bl$): let Nullcount=Mod(L,3)
+00400        if Nullcount=2 then l=L+16
+00420        if Nullcount=1 then l=L+8
 00440        bl$=Rpad$(Bl$,L,"0")
-00460        let L=Len(Bl$)
-00480        let D=Int(L/6): let E=D*6
+00460        l=Len(Bl$)
+00480        let D=Int(L/6): e=D*6
 00500        b64=0: for I=1 to E step 6
 00520           let F$=Bl$(I:I+5)
 00540           if F$(1:1)="1" then b64=B64+32
@@ -42,34 +42,34 @@
 00840        dim Bl$*1200000,Line$*1200000,B64$*1200000,Id(1200000)
 00860        let Decode=1
 00880        gosub RD_ROUTINE
-00900        let Line$=Content$
-00920        let L=Len(Line$)
+00900        line$=Content$
+00920        l=Len(Line$)
 00940        for I=1 to L
 00960           for Q=0 to 63
 00980              if Line$(I:I)=B64t$(Q) then let Id(I)=Q
 01000           next Q
 01020        next I
 01040        for I=1 to L
-01060           let Sav=Id(I)
-01080           if Sav<32 then bt$="0" else let Sav=Sav-32 : bt$="1"
-01100           if Sav<16 then bt$=Bt$&"0" else let Sav=Sav-16: bt$=Bt$&"1"
-01120           if Sav<8 then bt$=Bt$&"0" else let Sav=Sav-8 : bt$=Bt$&"1"
-01140           if Sav<4 then bt$=Bt$&"0" else let Sav=Sav-4 : bt$=Bt$&"1"
-01160           if Sav<2 then bt$=Bt$&"0" else let Sav=Sav-2 : bt$=Bt$&"1"
-01180           if Sav<1 then bt$=Bt$&"0" else let Sav=Sav-1 : bt$=Bt$&"1"
+01060           sav=Id(I)
+01080           if Sav<32 then bt$="0" else sav=Sav-32 : bt$="1"
+01100           if Sav<16 then bt$=Bt$&"0" else sav=Sav-16: bt$=Bt$&"1"
+01120           if Sav<8 then bt$=Bt$&"0" else sav=Sav-8 : bt$=Bt$&"1"
+01140           if Sav<4 then bt$=Bt$&"0" else sav=Sav-4 : bt$=Bt$&"1"
+01160           if Sav<2 then bt$=Bt$&"0" else sav=Sav-2 : bt$=Bt$&"1"
+01180           if Sav<1 then bt$=Bt$&"0" else sav=Sav-1 : bt$=Bt$&"1"
 01200           if Sav<>0 then pr "Problem" : pause
 01220           bl$=Bl$&Bt$
 01240        next I
-01260        let L=Len(Bl$)
-01280        let D=Int(L/8): let E=D*8
-01300        let Line$="" : for I=1 to E step 8
+01260        l=Len(Bl$)
+01280        let D=Int(L/8): e=D*8
+01300        line$="" : for I=1 to E step 8
 01320           for Q=0 to 255
 01340              let F$=Bl$(I:I+7)
-01360              if F$=Bt$(Q) then let Line$=Line$&Chr$(Q) : let Q=255
+01360              if F$=Bt$(Q) then line$=Line$&Chr$(Q) : let Q=255
 01380           next Q
 01400        next I
-01420        let X=Len(Line$) : if Line$(X-1:X)=Chr$(0)&Chr$(0) then let Line$=Line$(1:X-2)
-01440        if Line$(X:X)=Chr$(0) then let Line$=Line$(1:X-1)
+01420        let X=Len(Line$) : if Line$(X-1:X)=Chr$(0)&Chr$(0) then line$=Line$(1:X-2)
+01440        if Line$(X:X)=Chr$(0) then line$=Line$(1:X-1)
 01460  RT_DECODE: content$=Trim$(Line$)
 01480     fnend
 01500  RD_ROUTINE: !

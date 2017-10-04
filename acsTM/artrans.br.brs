@@ -14,7 +14,7 @@
 01300   goto XIT
 01400 ! ______________________________________________________________________
 01500 OPEN_FILE: ! 
-01600   let open_file_count=0 ! this value is used in the close_file sub routine
+01600   open_file_count=0 ! this value is used in the close_file sub routine
 01700   open #open_file_count+=1: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Version=0,Use,RecL=60,Shr",internal,outin,relative 
 01800   return 
 01900 ! ______________________________________________________________________
@@ -33,14 +33,14 @@
 35020     let mask_pointtwo=32 : let mask_number=30
 35040     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 35060     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
-35080     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
+35080     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 35100 ! 
 35120     dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40 ! SP(1) - not used
 35140     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
 35400     let mask_pointtwo=32 : let mask_number=30
 35420     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 35440     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
-35460     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
+35460     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 35480     fnhamster_field_reset
 35500     fnhamster_field_add("Client ID",5)
 35520     fnhamster_field_add("Invoice Number",12)

@@ -127,7 +127,7 @@
 01050     if ji1(1)=en then goto L1120
 01060     pr #255,using L1070: " ________"," ________"," ____________",t5,t6,t10 pageoflow PROOF_LIST_NWPG
 01070 L1070: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Total",pos 38,2*n 9.2,x 29,n 13.2,skip 2
-01080 L1080: let en=ji1(1)
+01080 L1080: en=ji1(1)
 01090     let t5=0
 01100     let t6=0
 01110     let t10=0
@@ -177,7 +177,7 @@
 01550 ! INPUT FROM DISKETTE FILE    ! took this option out on new system
 01560 ! ______________________________________________________________________
 01570 CORRECTIONS: ! 
-01580   addone=0: let editone=0
+01580   addone=0: editone=0
 01590   fntos(sn$="EntryCorrection")
 01600   ch2$(1)="Rec #": ch2$(2)="Ref #": ch2$(3)="Date": ch2$(4)="Job #" !:
         ch2$(5)="Cat" !:
@@ -205,8 +205,8 @@
         fncmdkey("E&xit",5,0,1,"Returns to main screen.")
 01700   fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 01710   if ckey=5 then goto TRANSACTION_ENTRY
-01720   let editrec=val(resp$(1))
+01720   editrec=val(resp$(1))
 01730   if ckey=1 then addone=1: mat ji2=(0): let jn2$="": goto TRANSACTION_ENTRY
-01740   if ckey=2 then read #3,using L840,rec=editrec: rn$,dat,jn2$, mat ji2,d$: let editone=1 : goto TRANSACTION_ENTRY
+01740   if ckey=2 then read #3,using L840,rec=editrec: rn$,dat,jn2$, mat ji2,d$: editone=1 : goto TRANSACTION_ENTRY
 01750   if ckey=4 then delete #3,rec=editrec: : goto CORRECTIONS
 01760   goto CORRECTIONS

@@ -10,7 +10,7 @@
 00100   fntop(program$,cap$="General Ledger Number")
 00110   let right=1 : center=2
 00120   fntos(sn$="GLNumber") !:
-        let lc=0 : let mylen=30 : let mypos=mylen+2
+        lc=0 : let mylen=30 : let mypos=mylen+2
 00130   fnlbl(lc+=1,1,"General Ledger Account Number:",mylen,right)
 00140   fnqgl(lc,mypos) !:
         let resp$(1)=fnrgl$('  0   700  0')

@@ -24,7 +24,7 @@
 00182     if j=4 and needgasused=1 then goto L200
 00190     if trim$(servicename$(j))<>"" then !:
             let hdr$=hdr$&" {\ul "&lpad$((trim$(servicename$(j)(1:9))),9)&"}" !:
-            let services+=1
+            services+=1
 00200 L200: next j
 00210   mat detail(services+1)
 00220   mat t(services+1)
@@ -49,11 +49,11 @@
 00350 L350: let fnacs(sn$,0,mat resp$,ckey)
 00360   if ckey=5 then goto XIT
 00370   let d1=val(resp$(1)) !:
-        let lbill=val(resp$(2))
-00380   if uprc$(resp$(3))=uprc$("True") then let skipcurrent=1
-00390   if uprc$(resp$(4))=uprc$("True") then let skipcredits=1
+        lbill=val(resp$(2))
+00380   if uprc$(resp$(3))=uprc$("True") then skipcurrent=1
+00390   if uprc$(resp$(4))=uprc$("True") then skipcredits=1
 00400   if uprc$(resp$(5))=uprc$("True") then let pastdueonly=1
-00410   if uprc$(resp$(6))=uprc$("True") then let skipzero=1
+00410   if uprc$(resp$(6))=uprc$("True") then skipzero=1
 00420   if lbill<10100 or lbill>123199 then goto L350
 00430   if d1<10100 or d1>123199 then goto L350
 00440   let d7=int(d1/10000)

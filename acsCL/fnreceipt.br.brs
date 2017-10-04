@@ -14,7 +14,7 @@
 00140 ! ______________________________________________________________________
 00150     fncno(cno)
 00155     execute "Index "&env$('Q')&"\CLmstr\Recmstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\Recidx1.h"&str$(cno)&" 1 8 Replace DupKeys,Shr" ioerr ignore
-00160     let left=0: let right=1
+00160     left=0: let right=1
 00170     open #trmstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00180     if exists(env$('Q')&"\CLmstr\RECmstr.H"&str$(cno))=0 then gosub CREATERECEIPTFILE
 00190     open #receipt:=fngethandle: "Name="&env$('Q')&"\CLmstr\recmstr.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\CLmstr\recidx1.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -30,7 +30,7 @@
 00260     cmask$(1)=cmask$(2)='' !:
           cmask$(3)="80" !:
           fnflexinit1('Receipt1',1,1,10,35,mat chdr$,mat cmask$,1,0,frame) !:
-          let editrec=0
+          editrec=0
 00270     restore #receipt: 
 00280 READ_RECEIPT_1: ! 
 00290     read #receipt,using 'Form Pos 1,C 8,c 30,',release: rec$,nam$ eof EO_FLEX1
@@ -47,11 +47,11 @@
 00350     add=edit=0
 00360     if ck=5 then goto XIT !:
           else if ck=1 then add=1: goto ADD_NEW_RECEIPT
-00370   if ck=2 or ck=3 then let editrec=val(resp$(1))
+00370   if ck=2 or ck=3 then editrec=val(resp$(1))
 00380   if editrec=0 then goto MENU1
 00390   if ck=2 or ck=3 then !:
           read #receipt,using 'Form Pos 1,C 8,c 30',rec=editrec: rec$,nam$
-00400   if ck=2 then let edit=1 : goto EDIT_RECEIPT
+00400   if ck=2 then edit=1 : goto EDIT_RECEIPT
 00410   if ck=3 then gosub DELETE_RECEIPT : goto MENU1
 00420 ! ______________________________________________________________________
 00430 DELETE_RECEIPT: ! 

@@ -4,7 +4,7 @@
 00040   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
 00050   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno),internal,outin 
 00060   open #2: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno),internal,outin 
-00070   let fln=trmstr
+00070   fln=trmstr
 00080 L80: read #fln,using 'Form POS 4,C 2,C 6': ty$,d$ eof END1
 00090   if ty$="CA" then goto L140
 00100   if ty$="C1" then goto L140
@@ -16,7 +16,7 @@
 00160   rewrite #fln,using 'Form POS 6,N 6': d2
 00170 L170: goto L80
 00180 END1: if fln=2 then goto L200
-00190   let fln=2 : goto L80
+00190   fln=2 : goto L80
 00200 L200: close #trmstr: 
 00210   close #2: 
 00220   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TRIDX1.H"&str$(cno)&" 1 11 Replace DupKeys"

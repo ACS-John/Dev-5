@@ -11,7 +11,7 @@
 00070 CSZ_SET_P1: ! 
 00080     let p1=pos(csz$,".",1)
 00090     if p1>0 then csz$(p1:p1)="": goto CSZ_SET_P1
-00100     let l1=len(csz$) !:
+00100     l1=len(csz$) !:
           let p1=pos(csz$,",",1)-1
 00110     if p1=-1 then let p1=pos(csz$," ",1)-1
 00120     let p2=pos(csz$," ",p1+3) !:
@@ -21,20 +21,20 @@
             ! but didn't forget the space after the city comma.
 00140     if uprc$(city$(1:3))="FT " then city$(1:3)="Fort " else !:
             if uprc$(city$(1:3))="FT." then city$(1:3)="Fort "
-00150     let state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2)) !:
+00150     state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2)) !:
           let zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:l1)))) !:
           let zip5$=zip$(1:5) !:
           let zip4$="" !:
-          let l2=len(zip$)
+          l2=len(zip$)
 00160     if l2<9 then goto XIT
 00165     on error goto MESSAGEBOX
 00170     let p2=pos(csz$," ",p1+3) !:
           city$=rtrm$(csz$(1:p1))(1:15) !:
-          let state$=rtrm$(csz$(p2-2:p2))(1:2) !:
+          state$=rtrm$(csz$(p2-2:p2))(1:2) !:
           let zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:l1)))) !:
           let zip5$=zip$(1:5) !:
           let zip4$="" !:
-          let l2=len(zip$)
+          l2=len(zip$)
 00175     goto L180
 00176 MESSAGEBOX: ! 
 00177     mat ml$(2) !:

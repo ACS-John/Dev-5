@@ -1,6 +1,6 @@
 08020 def fn_setup
 08040   if ~setup_library then 
-08060     let setup_library=1
+08060     setup_library=1
 08080     library 'S:\Core\Library': fnprg,fnerror
 08100     library 'S:\Core\Library': fnmsgbox,fnpause
 08120     library 'S:\Core\Library': fngethandle,fncmdkey
@@ -13,7 +13,7 @@
 08220   dim _menu$(1)*255
 08222   dim combooptionsetlist$(0)*256
 08240   let tab$=hex$('09')
-08260   let setup=1
+08260   setup=1
 08280 fnend 
 09000 def library fntop(;prg$*256,cap$*128)
 09020   !  top of (every) program function
@@ -31,7 +31,7 @@
 09260     if env$('acsDeveloper')<>'' then pr 'fnTop called but program was not set.' : pause 
 09280   end if 
 09300   fnprg(prg$,put=2)
-09320   let setenv('Program_Caption',cap$)
+09320   setenv('Program_Caption',cap$)
 09330   if env$('acsDeveloper')='' then
 09340     if ~exists('FileIO.ini') then
 09360       fnCopy('S:\FileIO.ini','FileIO.ini')
@@ -44,7 +44,7 @@
 10000 def library fntos(sn$*100)
 10020   ! screen ace top of screen function
 10040   if ~setup then let fn_setup
-10060   let sn$=trim$(sn$&session$)
+10060   sn$=trim$(sn$&session$)
 10080   let tmp_combo_count_for_set=0
 10100   combooptionsetlistcount=combooption_which_prior=combooption_which=0
 10120   combokeycurrent$=combokeyprior$=''
@@ -65,12 +65,12 @@
 11160   !          0=left,  1=right,  2=center
 11180   if ~setup then let fn_setup
 11200   if mylen=0 then let mylen=len(txt$)
-11220   let setenv('control'&str$(fn_control_count), "LABEL|"&str$(myline)&"|"&str$(mypos)&"|"&str$(mylen)&"|"&str$(myalign)&"|"&txt$&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(font_mod)&"|"&lbl_tooltip$)
+11220   setenv('control'&str$(fn_control_count), "LABEL|"&str$(myline)&"|"&str$(mypos)&"|"&str$(mylen)&"|"&str$(myalign)&"|"&txt$&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(font_mod)&"|"&lbl_tooltip$)
 11240 fnend 
 12000 def library fnpic(lyne,ps,height,width,picture$*300;con,tabcon)
 12020   ! add a picture/image to a screen ace form
 12040   if ~setup then let fn_setup
-12060   let setenv('control'&str$(fn_control_count), "PICTURE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(height)&"|"&picture$&"|")
+12060   setenv('control'&str$(fn_control_count), "PICTURE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(height)&"|"&picture$&"|")
 12080 fnend 
 12160 def library fntxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 12162   if ~setup then let fn_setup
@@ -99,13 +99,13 @@
 12620   end if 
 12640   if val(mask$)>=10 and val(mask$)<=49 then ali=1
 12660   if maxlen=0 then let maxlen=width
-12680   let setenv('control'&str$(fn_control_count), "TEXT|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(maxlen)&"|"&str$(ali)&"|"&str$(disable)&"|"&mask$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&addtomask$&"|")
+12680   setenv('control'&str$(fn_control_count), "TEXT|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(maxlen)&"|"&str$(ali)&"|"&str$(disable)&"|"&mask$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&addtomask$&"|")
 12700 fnend 
 12720 def library fnmultiline(lyne,ps,height,width;contain,tabcon,tooltip$*200)
 12740   ! add a multiline text box to a screen ace form
 12760   if ~setup then let fn_setup
-12780   let setenv('control'&str$(fn_control_count), "MULTILINE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
-12800   let lyne=ps=height=width=contain=tabcon=0
+12780   setenv('control'&str$(fn_control_count), "MULTILINE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
+12800   lyne=ps=height=width=contain=tabcon=0
 12820   let tooltip$=""
 12840 fnend 
 12860 def library fnopt(lyne,ps, txt$*196; align,contain,tabcon)
@@ -116,13 +116,13 @@
 12960   ! contain   container number (for containers like frames and tab strips)
 12980   if ~setup then let fn_setup
 13000   if align=1 then let ps=ps-len(trim$(txt$))
-13020   let setenv('control'&str$(fn_control_count), "OPTION|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
+13020   setenv('control'&str$(fn_control_count), "OPTION|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 13040 fnend 
 13060 def library fnchk(lyne,ps,txt$*196; align,contain,tabcon,chk_disable)
 13080   ! add a screen ace check box
 13100   if ~setup then let fn_setup
 13120   if align=1 then let ps=ps-len(trim$(txt$))-2
-13140   let setenv('control'&str$(fn_control_count), "CHECK|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&str$(chk_disable)&"|")
+13140   setenv('control'&str$(fn_control_count), "CHECK|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&str$(chk_disable)&"|")
 13160 fnend 
 13180 def library fncomboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon)
 13182   if ~setup then let fn_setup
@@ -139,7 +139,7 @@
 13360   ! __________________________________________________
 13380   ! ** get/set constants ********
 13400   ! let fncno(cno)
-13420   let sfn$=trim$(sfn$)&env$('cno')
+13420   sfn$=trim$(sfn$)&env$('cno')
 13440   if width=0 then 
 13460     for j=1 to udim(mat opt$)
 13480       let width=max(width,len(opt$(j)))
@@ -149,7 +149,7 @@
 13980   for rec_count=1 to udim(mat opt$)
 14010     fn_add_combo_option_list(opt$(rec_count)(1:81),opt$(rec_count)(1:81))
 14020   next rec_count
-14060   let setenv('control'&str$(fn_control_count),"COMBOA|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|0|"&sfn$&"[SESSION].tmp|1|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&comboa_combooptionset$&"|")
+14060   setenv('control'&str$(fn_control_count),"COMBOA|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|0|"&sfn$&"[SESSION].tmp|1|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&comboa_combooptionset$&"|")
 14070   fn_combooptionsetlist_add(comboa_combooptionset$)
 14080   let width=contain=0
 14100   COMBOA_COMPLETE: ! 
@@ -171,8 +171,8 @@
 14400   ! urep  (use or replace)=0=make new/replace,  1=use if possible
 14420   ! __________________________________________________
 14440   ! **** get/set constants **********
-14500   let lnk=min(lnk,30) : let lnd=min(lnd,60)
-14520   let width=min(width,81) : let sfn$=trim$(sfn$) : let df$=trim$(df$)
+14500   lnk=min(lnk,30) : lnd=min(lnd,60)
+14520   let width=min(width,81) : sfn$=trim$(sfn$) : let df$=trim$(df$)
 14540   let if$=trim$(if$)
 14560   let form$="Form Pos "&str$(psk)&",C "&str$(lnk) : let nodesc=1
 14580   if psd<>0 and lnd<>0 then 
@@ -185,8 +185,8 @@
 14710   combokeycurrent$='df='&df$&',if='&if$&',psk='&str$(psk)&',lnk='&str$(lnk)&',psd='&str$(psd)&'lnd='&str$(lnd)&',limlis='&str$(limlis)
 14720   !     if combokeycurrent$=combokeyprior$ and combokeyprior$<>'' then
 14730   !       acol_env_variable$='tmp_combo'&str$(tmp_combo_count_for_set+=1)
-14740   !       let setenv(acol_env_variable$&'_key','dupe') ! XXX env$(acol_env_variable_prior$&'_key')) ! pr 'adding first key: '&key$ : pause
-14750   !       let setenv(acol_env_variable$,'dupe') ! XXX env$(acol_env_variable_prior$))
+14740   !       setenv(acol_env_variable$&'_key','dupe') ! XXX env$(acol_env_variable_prior$&'_key')) ! pr 'adding first key: '&key$ : pause
+14750   !       setenv(acol_env_variable$,'dupe') ! XXX env$(acol_env_variable_prior$))
 14752   ! !     pr 'saved time here ';savedtimecount+=1
 14760   !       goto EODF
 14770   !     else 
@@ -241,7 +241,7 @@
 15840   fnpause
 15850   goto WRITE_IT ! /r
 15860   WRITE_IT: ! 
-15870   let setenv('control'&str$(fn_control_count),"COMBOF|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(lnk)&"|"&becky$&"|"&str$(limlis)&"|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&combokeycurrent$&"|")
+15870   setenv('control'&str$(fn_control_count),"COMBOF|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(lnk)&"|"&becky$&"|"&str$(limlis)&"|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&combokeycurrent$&"|")
 15872   fn_combooptionsetlist_add(combokeycurrent$)
 15880   COMBOF_COMPLETE: ! 
 15890 fnend 
@@ -256,15 +256,15 @@
 15904   let txt$=trim$(txt$)
 15910   if reset_only then 
 15912     acol_env_variable$='tmp_combo'&str$(tmp_combo_count_for_set+=1) ! control_count is not right - it's a response count
-15915     let setenv(acol_env_variable$,'') ! PR 'setting up '&acol_env_variable$
+15915     setenv(acol_env_variable$,'') ! PR 'setting up '&acol_env_variable$
 15920     acol_is_first=1
 15925   else if acol_is_first then 
 15930     acol_is_first=0
-15935     let setenv(acol_env_variable$&'_key',key$) ! pr 'adding first key: '&key$ : pause
-15940     let setenv(acol_env_variable$,txt$)
+15935     setenv(acol_env_variable$&'_key',key$) ! pr 'adding first key: '&key$ : pause
+15940     setenv(acol_env_variable$,txt$)
 15945   else 
-15946     let setenv(acol_env_variable$&'_key',env$(acol_env_variable$&'_key')&'|'&key$)
-15950     let setenv(acol_env_variable$,env$(acol_env_variable$)&'|'&txt$)
+15946     setenv(acol_env_variable$&'_key',env$(acol_env_variable$&'_key')&'|'&key$)
+15950     setenv(acol_env_variable$,env$(acol_env_variable$)&'|'&txt$)
 15955   end if 
 15960 fnend 
 16000 def library fnflexinit1(sfn$*100,lyne,ps,height,width,mat ch$;mat cm$,seltype,usr,con,tabcon)
@@ -285,7 +285,7 @@
 16120   ! if usr=0 then pr "USR=0-Replace"
 16140   ! if usr>0 then pr "USR>0-Use Previous USR="&str$(usr)
 16160   ! if usr<0 then pr "USR<0-append=-1    USR="&str$(usr)
-16180   let sfn$=trim$(sfn$)
+16180   sfn$=trim$(sfn$)
 16200   if sfn$='' then 
 16220     pr 'SFN$ is required for Flex grids'
 16260     pr 'Press Enter to continue without the flex grid'
@@ -297,7 +297,7 @@
 16360   all_hdr$=all_mask$=""
 16380   ! let fn_get_flexhandle
 16400   let filenumber=fn_get_flexhandle(1)
-16420   let sfn$=trim$(sfn$)&env$('cno') : let optfile$=sfn$&"[SESSION].tmp"
+16420   sfn$=trim$(sfn$)&env$('cno') : optfile$=sfn$&"[SESSION].tmp"
 16440   let hdr_count=udim(ch$) : let hdrfile$=sfn$&".hdr"
 16460   if usr<>0 then goto USEPREVIOUS
 16480   XRETRY: ! !print "Retrying delete here! (If you see this twice)"
@@ -334,8 +334,8 @@
 17120   end if 
 17140   open #filenumber: "Name="&env$('temp')&'\'&optfile$&",Size=0,Replace,EoL=CRLF,RecL=6491",display,output 
 17160   WRITE_TO_ACE: ! 
-17180   let sorttype=0
-17200   let setenv('control'&str$(fn_control_count),"FLEX|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|2|"&str$(seltype)&"|"&str$(sorttype)&"|"&sfn$&"|"&str$(hdr_count)&"|"&str$(con)&"|"&str$(tabcon)&"|")
+17180   sorttype=0
+17200   setenv('control'&str$(fn_control_count),"FLEX|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|2|"&str$(seltype)&"|"&str$(sorttype)&"|"&sfn$&"|"&str$(hdr_count)&"|"&str$(con)&"|"&str$(tabcon)&"|")
 17220   let usr=0
 17240   FLEXINIT1_COMPLETE: ! 
 17260 fnend 
@@ -345,7 +345,7 @@
 17320   if ~setup then let fn_setup
 17340   dim all_item$*6491
 17360   let mat2str(mat item$,all_item$,hex$('09'))
-17380   let flexhandle=fn_get_flexhandle
+17380   flexhandle=fn_get_flexhandle
 17382   let grid_populated+=1
 17400   pr #flexhandle,using "Form pos 1,C "&str$(len(all_item$)): all_item$ ioerr ignore
 17410   FLEXADD1_COMPLETE: ! 
@@ -353,7 +353,7 @@
 17440 def library fnfra(lyne,ps,hi,wd; cap$*128,tooltip$*300,contain,tabcon)
 17460   ! add a frame to a screen ace form
 17480   if ~setup then let fn_setup
-17500   let setenv('control'&str$(fn_control_count),"FRAME|"&str$(lyne)&"|"&str$(ps)&"|"&str$(hi)&"|"&str$(wd)&"|"&cap$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
+17500   setenv('control'&str$(fn_control_count),"FRAME|"&str$(lyne)&"|"&str$(ps)&"|"&str$(hi)&"|"&str$(wd)&"|"&cap$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 17520 fnend 
 17540 def library fntab(myline,mypos,height,width,mat cap$)
 17560   ! myline sets the vertical (up and down) position
@@ -370,12 +370,12 @@
 17780     write #tf1,using "Form Pos 1,C 80": cap$(j)(1:80)
 17800   next j
 17820   close #tf1: 
-17840   let setenv('control'&str$(fn_control_count),"TAB|"&str$(myline)&"|"&str$(mypos)&"|"&str$(height)&"|"&str$(width)&"|"&env$('temp')&"\|tab.txt|")
+17840   setenv('control'&str$(fn_control_count),"TAB|"&str$(myline)&"|"&str$(mypos)&"|"&str$(height)&"|"&str$(width)&"|"&env$('temp')&"\|tab.txt|")
 17860 fnend 
 17880 def library fncmdkey(caption$*200,returnkey; default,cancel,tt$*200)
 17900   ! add a button to a screen ace form
 17920   if ~setup then let fn_setup
-17940   let setenv('control'&str$(fn_control_count),"CMDKEY|"&caption$&"|"&str$(returnkey)&"|"&str$(default)&"|"&str$(cancel)&"|"&tt$&"|")
+17940   setenv('control'&str$(fn_control_count),"CMDKEY|"&caption$&"|"&str$(returnkey)&"|"&str$(default)&"|"&str$(cancel)&"|"&tt$&"|")
 17960 fnend 
 17980 def library fncmdset(bon)
 18000   if ~setup then let fn_setup
@@ -463,7 +463,7 @@
 19660   if ~setup then let fn_setup
 19680   let height=max(height,1) ! button height is at least 1
 19700   if width=0 then let width=len(txt$)
-19720   let setenv('control'&str$(fn_control_count),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(cancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
+19720   setenv('control'&str$(fn_control_count),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(cancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
 19740 fnend 
 19760 def library fnpicbut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*150,container,tabcon,default,cancel)
 19762   if ~setup then let fn_setup
@@ -472,7 +472,7 @@
 19820   ! tt$      button.tooltiptext
 19840   btnh=max(btnh,1) ! button height is at least 1
 19860   if btnw=0 then btnw=len(txt$)
-19880   let setenv('control'&str$(fn_control_count),"PicBut|"&str$(lyne)&"|"&str$(ps)&"|"&str$(comkey)&"|"&str$(btnh)&"|"&str$(btnw)&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(default)&"|"&str$(cancel)&"|"&txt$&"|"&pic1$&"|"&pic2$&"|"&tt$&"|")
+19880   setenv('control'&str$(fn_control_count),"PicBut|"&str$(lyne)&"|"&str$(ps)&"|"&str$(comkey)&"|"&str$(btnh)&"|"&str$(btnw)&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(default)&"|"&str$(cancel)&"|"&txt$&"|"&pic1$&"|"&pic2$&"|"&tt$&"|")
 19900 fnend 
 19920 IGNORE: continue 
 19940 def library fndisplay_menu (mat _menu$,mat _program$,mat _status$;___,menu_string$*10000,index_)
@@ -480,7 +480,7 @@
 19960   for index_=1 to udim(mat _menu$)
 19980     let menu_string$(inf:inf)=_menu$(index_)&'~~~'&_program$(index_)&'~~~'&_status$(index_)&'###'
 20000   next index_
-20020   let setenv('control'&str$(fn_control_count),"menu|"&menu_string$(1:len(menu_string$)-3))
+20020   setenv('control'&str$(fn_control_count),"menu|"&menu_string$(1:len(menu_string$)-3))
 20040 fnend 
 20041 def library fnclear_menu
 20042   fn_clear_menu
@@ -496,7 +496,7 @@
 20220   ! env$('Core_Program_Current')  dim prg$*80 ! current running program with relative to app.path
 20240   dim cap$*128 ! caption / title bar text
 20260   dim addtomask$*40
-20280   ! let on=1
+20280   ! on=1
 20300   ! ****************
 20320   acs=1
 20340   let tabcon=0
@@ -512,7 +512,7 @@
 20560   goto XIT
 20580   ERTN: ! 
 20600   ! execute "Config Console On" ! in ertn
-20620   !   pr fields "15,1,Cc 80,H,N": "Screen Ace 5 encountered an error."
+20620   !   pr f "15,1,Cc 80,H,N": "Screen Ace 5 encountered an error."
 20660   fnerror(program$,err,line,act$,"xit")
 20680   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 20720   execute "List -"&str$(line)
@@ -529,19 +529,19 @@
 20990   mat text_masks(0) : mat control$(0) : mat return_keys(0) : mat frames(0,4)
 21000   mat date_fielddata(0,6) : mat file_select_data(0,2)
 21010   let grid_filter$=''
-21020   let scr_freeze
+21020   scr_freeze
 21030   let resp_size=udim(mat resp$)
 21040   button_win_width=0
 21050   control_count=val(env$('control_count'))
 21060   if udim(mat resp$)<control_count then mat resp$(control_count)
 21070   mat ace_typ$(control_count)
-21080   acs_win_rows=35 : let setenv('acs_win_rows',str$(acs_win_rows))
-21082   acs_win_cols=115 : let setenv('acs_win_cols',str$(acs_win_cols))
+21080   acs_win_rows=35 : setenv('acs_win_rows',str$(acs_win_rows))
+21082   acs_win_cols=115 : setenv('acs_win_cols',str$(acs_win_cols))
 21090 fnend 
 21100 def fn_draw_windows
-21110   acs_win_rows=max(acs_win_rows,ace_lyne_max+4) : let setenv('acs_win_rows',str$(acs_win_rows)) ! in case 35 rows is not enough
+21110   acs_win_rows=max(acs_win_rows,ace_lyne_max+4) : setenv('acs_win_rows',str$(acs_win_rows)) ! in case 35 rows is not enough
 21120     ! 
-21130   acs_win_cols=max(acs_win_cols,ace_column_max+4) : let setenv('acs_win_cols',str$(acs_win_cols)) ! in case 115 columns is not enough
+21130   acs_win_cols=max(acs_win_cols,ace_column_max+4) : setenv('acs_win_cols',str$(acs_win_cols)) ! in case 115 columns is not enough
 21140   if acs_win_rows>35 or acs_win_cols>115 then 
 21150     open #0: 'SRow=1,SCol=2,Rows='&str$(acs_win_rows)&",Cols="&str$(acs_win_cols)&',Picture='&env$('background_picture')&',border=S:[screen],N=[screen]',display,outin 
 21160   end if 
@@ -585,8 +585,8 @@
 21530 def fn_default_cmb_options
 21540   dim tmp_combo_key$(1)*81,tmp_combo_item$(1)*81
 21550   for tmp_combo_key_item=1 to tmp_combo_count_for_set
-21560     let str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)&'_key'),mat tmp_combo_key$,'|')
-21570     let str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)),mat tmp_combo_item$,'|')
+21560     str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)&'_key'),mat tmp_combo_key$,'|')
+21570     str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)),mat tmp_combo_item$,'|')
 21580     ! 
 21590     let tck_response_item=val(env$('tmp_combo'&str$(tmp_combo_key_item)&'_response_item'))
 21600     let tck_which=srch(mat tmp_combo_key$,trim$(resp$(tck_response_item)))
@@ -598,7 +598,7 @@
 22200 def fn_set_controls
 22220   dim control$(1)*5095
 22240   for index_=1 to control_count
-22260     let str2mat(env$('control'&str$(index_)),mat control$,"|")
+22260     str2mat(env$('control'&str$(index_)),mat control$,"|")
 22280     ace_typ$(index_)=typ$=uprc$(control$(1))
 22300     if typ$="LABEL" then 
 22320       fn_ace_rd_label
@@ -695,7 +695,7 @@
 24140     fn_print_grid
 24160     let fkey(-1) : let goto_main_input=1
 24180     !   else if fkey=2503 then
-24200     !     pr fields gridspec$&",sort": 1
+24200     !     pr f gridspec$&",sort": 1
 24220     !     let fkey(-1) : let goto_main_input=1
 24240   else if fkey > date_fkey_base and fkey < date_fkey_base+100 then 
 24260     let _date$=ace_resp$( date_fielddata(fkey-date_fkey_base,5))
@@ -792,7 +792,7 @@
 26040     current_grid_row=val( env$('current_grid_row')) ! if current_grid_row then pr 'current_grid_row=';current_grid_row : pause
 26050     if current_grid_row then 
 26060       curfld(grid_index,current_grid_row)
-26070       let setenv('current_grid_row','')
+26070       setenv('current_grid_row','')
 26080       input fields gridspec$&",rowcnt,all,nowait": grid_rows
 26090     else 
 26100       curfld(grid_index,row_count)
@@ -801,9 +801,9 @@
 26130     let grid_filter$=''
 26140     dim grid_row$(1)*10000
 26150     if not grid_populated then ! file_nonempty then ! if no rows have been populated, we have to create one
-26160       pr fields gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
+26160       pr f gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
 26170       mat grid_row$(udim(ace_resp$))=("")
-26180       pr fields gridspec$&",=": mat grid_row$
+26180       pr f gridspec$&",=": mat grid_row$
 26190     end if 
 26200     ! 
 26210     ! 
@@ -839,7 +839,7 @@
 26510     end if 
 26520   else if ace_io_count <> 0 then 
 26530     if fn_all_fields_protected(mat ace_io$) then 
-26540       pr fields mat ace_io$: mat ace_resp$
+26540       pr f mat ace_io$: mat ace_resp$
 26550       input #0, fields str$(acs_win_rows)&","&str$(acs_win_cols)&',C 1' : dummy$ ! this is when a screen has no inputs, only labels and/or buttons
 26560     else 
 26570       rinput fields mat ace_io$: mat ace_resp$ conv CONV_HANDLER
@@ -939,21 +939,21 @@
 28640 fnend 
 28660 def fn_clear_env
 28670   for index_=1 to control_count
-28680     let setenv('control'&str$(index_),"")
-28690     !     let setenv('combo'&str$(index_),"")
+28680     setenv('control'&str$(index_),"")
+28690     !     setenv('combo'&str$(index_),"")
 28700   next index_
 28710   for tmp_combo_item=1 to tmp_combo_count_for_set
-28720     let setenv('tmp_combo'&str$(tmp_combo_item),'')
-28722     let setenv('tmp_combo'&str$(tmp_combo_count_for_read)&'_response_item','')
-28724     let setenv('tmp_combo'&str$(tmp_combo_count_for_read)&'_key','')
+28720     setenv('tmp_combo'&str$(tmp_combo_item),'')
+28722     setenv('tmp_combo'&str$(tmp_combo_count_for_read)&'_response_item','')
+28724     setenv('tmp_combo'&str$(tmp_combo_count_for_read)&'_key','')
 28730   next tmp_combo_item
 28740   let tmp_combo_count_for_set=tmp_combo_count_for_read=0
-28750   let setenv('control_count',0)
+28750   setenv('control_count',0)
 28760 fnend 
 28800 def fn_window_size
 28820   !   let frame_or_tab_present=0
 28840   for index_=1 to control_count
-28860     let str2mat(env$('control'&str$(index_)),mat control$,"|")
+28860     str2mat(env$('control'&str$(index_)),mat control$,"|")
 28880     ace_typ$(index_)=typ$=uprc$(control$(1))
 28900     if typ$="LABEL" then 
 28920       ace_lyne_max=max(ace_lyne_max,val(control$(2)))
@@ -970,7 +970,7 @@
 29120       ace_lyne_max=max(ace_lyne_max,val(control$(2))+val(control$(4)))
 29140       if typ$="FRAME" or typ$="TAB" and (not save_bottom or val(control$(2))+val(control$(4))>save_bottom) then ace_lyne_max += 1
 29160       ace_column_max=max( ace_column_max, val(control$(3))+val(control$(5)) )
-29180       let save_bottom=val(control$(2))+val(control$(4))
+29180       save_bottom=val(control$(2))+val(control$(4))
 29200     else if typ$="CMDKEY" then 
 29220       button_win_width +=(len(control$(2))+1)
 29240     else if typ$="BUTTON" then 
@@ -1042,11 +1042,11 @@
 30440 fnend 
 30460 def fn_ace_rd_menu (;___,index_,item_count)
 30480   dim menu_items$(1)*1023,menu_sub_items$(1)*255,_menu$(1)*255,_program$(1)*255,_status$(1)*255
-30500   let str2mat(control$(2),mat menu_items$,'###')
+30500   str2mat(control$(2),mat menu_items$,'###')
 30520   let item_count=udim(mat menu_items$)
 30540   mat _menu$(item_count)=(''): mat _program$(item_count)=(''): mat _status$(item_count)=('')
 30560   for index_=1 to udim(mat menu_items$)
-30580     let str2mat(menu_items$(index_),mat menu_sub_items$,'~~~')
+30580     str2mat(menu_items$(index_),mat menu_sub_items$,'~~~')
 30600     let _menu$(index_)=menu_sub_items$(1)
 30620     let _program$(index_)=menu_sub_items$(2)
 30640     let _status$(index_)=menu_sub_items$(3)
@@ -1055,7 +1055,7 @@
 30700 fnend 
 30720 def fn_ace_rd_multiline
 30740   let respc+=1
-30760   let lyne=val(control$(2))
+30760   lyne=val(control$(2))
 30780   let ps=val(control$(3))
 30800   let height=val(control$(4))
 30820   let width=val(control$(5))
@@ -1066,7 +1066,7 @@
 30910    !   let resp$(respc)=srep$(resp$(respc),'"','""') ! let fn2quote(resp$(respc))
 30920 fnend 
 30940 def fn_ace_rd_picbut
-30960   let lyne=val(control$(2))
+30960   lyne=val(control$(2))
 30980   let ps=val(control$(3))
 31000   comkey=val(control$(4))
 31020   let height=val(control$(5))
@@ -1082,7 +1082,7 @@
 31220 fnend 
 31240 def fn_ace_rd_cmdkey
 31260   dim spec$*255
-31280   let spec$=''
+31280   spec$=''
 31300   let txt$=control$(2)
 31320   mat return_keys(udim(return_keys)+1)
 31340   let returnkey=return_keys(udim(return_keys))=val(control$(3))
@@ -1094,20 +1094,20 @@
 31460   if cancel then let fkey_cancel=returnkey
 31480   let txt$=srep$(txt$,'&','') ! remove underlined letters...   would be nice to use them. xxx
 31500   let width=len(txt$)
-31520   let spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
+31520   spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
 31540   if default then 
 31560     let default_button_fkey=returnkey
-31580     let spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttons],B'&str$(returnkey)
+31580     spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttons],B'&str$(returnkey)
 31600     pr #0, fields "1,5,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
 31610   else if cancel then 
-31620     let spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttoncancel],B'&str$(returnkey)
+31620     spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttoncancel],B'&str$(returnkey)
 31630     if env$('tmp_acs_back_arrow')<>'' then 
 31640       pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): env$('tmp_acs_back_arrow') ioerr ignore
 31650     else 
 31660       pr #0, fields "1,2,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\back-icon.png" ioerr ignore
 31670     end if 
 31680   else 
-31700     let spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
+31700     spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
 31720   end if 
 31740   ! 
 31760   dim _help$*255
@@ -1130,7 +1130,7 @@
 32120   ace_cmdkey_ps+=(width+2)
 32140 fnend 
 32160 def fn_ace_rd_tab
-32180   let lyne=val(control$(2))
+32180   lyne=val(control$(2))
 32200   let ps=val(control$(3))
 32220   let height=val(control$(4))
 32240   let width=val(control$(5))
@@ -1149,7 +1149,7 @@
 32500   close #tab_file: 
 32520 fnend 
 32540 def fn_ace_rd_frame
-32560   let lyne=val(control$(2))
+32560   lyne=val(control$(2))
 32580   let ps=val(control$(3))
 32600   let height=val(control$(4))
 32620   let width=val(control$(5))
@@ -1172,12 +1172,12 @@
 32960   let frames(udim(frames),3)=ps+1
 32980 fnend 
 33000 def fn_ace_rd_flex(;___,index_)
-33040   let lyne=val(control$(2))
+33040   lyne=val(control$(2))
 33060   let ps=val(control$(3))
 33080   let height= rows - lyne ! val(control$(4))
 33100   let width= cols - ps -2 ! val(control$(5))
-33120   let seltype=val(control$(7))
-33140   let sorttype=val(control$(8))
+33120   seltype=val(control$(7))
+33140   sorttype=val(control$(8))
 33160   let path1$=control$(9)
 33180   let hdr_count=val(control$(10))
 33200   container=val(control$(11))
@@ -1186,9 +1186,9 @@
 33250   ! pr env$('temp')&'\'&trim$(path1$)&'.hdr' : pause
 33260   open #grid_headers:=fngethandle: 'Name='&env$('temp')&'\'&trim$(path1$)&'.hdr',display,input 
 33280   linput #grid_headers: _line$
-33300   let str2mat(_line$,mat _headings$,tab$)
+33300   str2mat(_line$,mat _headings$,tab$)
 33320   linput #grid_headers: _line$
-33340   let str2mat(_line$,mat _mask$,tab$)
+33340   str2mat(_line$,mat _mask$,tab$)
 33360   mat _mask$(udim(_headings$))
 33380   close #grid_headers: 
 33400   let file_nonempty=fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$)
@@ -1207,10 +1207,10 @@
 33660   ! 
 33680   if not container and not tabcon then 
 33700     let gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-1)&"/"&str$(width+2)
-33720     let loading_spec$=str$(lyne + height)&","&str$(ps)&",C "
+33720     loading_spec$=str$(lyne + height)&","&str$(ps)&",C "
 33740   else 
 33760     let gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-2)&"/"&str$(width+2)
-33780     let loading_spec$=str$(lyne + height-1)&","&str$(ps)&",C "
+33780     loading_spec$=str$(lyne + height-1)&","&str$(ps)&",C "
 33800   end if 
 33820   ! 
 33840   if container then 
@@ -1222,9 +1222,9 @@
 33960   end if 
 33980   let filterspec$(0:0)=window_prefix$
 34000   let gridspec$(0:0)=window_prefix$
-34020   let loading_spec$(0:0)=window_prefix$
+34020   loading_spec$(0:0)=window_prefix$
 34040   ! 
-34060   pr fields gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
+34060   pr f gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
 34080   open #grid_data:=fngethandle: 'Name='&env$('temp')&'\'&trim$(path1$)&'[SESSION].tmp',display,input 
 34100   clearflag$="="
 34120   ! 
@@ -1234,7 +1234,7 @@
 34200   let row_count=1 : let record_count=1
 34220   let printed=0
 34240   ! 
-34260   let scr_thaw
+34260   scr_thaw
 34280   ! 
 34300   fn_alpha_mask_indices (mat alpha_mask_indices)
 34340   do while file_nonempty
@@ -1249,7 +1249,7 @@
 34520       if value=3 then goto GRID_DATA_LOAD_COMPLETE
 34540     end if 
 34560     ! 
-34580     let str2mat(_line$,mat _chunks$,tab$)
+34580     str2mat(_line$,mat _chunks$,tab$)
 34600     if udim(_chunks$)<>udim(_headings$)-1 then ! truncate extra columns, which are there by mistake
 34620       mat _chunks$(udim(_headings$)-1 )
 34640     end if 
@@ -1306,9 +1306,9 @@
 35580     if row_count <= rows then 
 35600       mat long_row$(1+(row_count-1)*udim(_chunks$):row_count*udim(_chunks$))= _chunks$
 35620       if row_count=rows then 
-35640         pr fields gridspec$&","&clearflag$&"L": mat long_row$
-35660         pr fields loading_spec$ : "Loading... Please wait"
-35680         let scr_freeze
+35640         pr f gridspec$&","&clearflag$&"L": mat long_row$
+35660         pr f loading_spec$ : "Loading... Please wait"
+35680         scr_freeze
 35700         clearflag$="+"
 35720         mat long_row$=('')
 35740         let row_count=1
@@ -1321,14 +1321,14 @@
 35880   let row_count -= 1
 35900   if row_count<>0 then 
 35920     if not printed then 
-35940       pr fields gridspec$&",=L": mat long_row$(1:(row_count)*udim(_chunks$))
+35940       pr f gridspec$&",=L": mat long_row$(1:(row_count)*udim(_chunks$))
 35960     else if row_count <> rows then 
-35980       pr fields gridspec$&",+L": mat long_row$(1:(row_count)*udim(_chunks$))
+35980       pr f gridspec$&",+L": mat long_row$(1:(row_count)*udim(_chunks$))
 36000     end if 
 36020   end if 
 36040   GRID_DATA_LOAD_COMPLETE: ! 
 36060   ! clear the "Loading..." message
-36080   pr fields loading_spec$ : rpt$(" ",30)
+36080   pr f loading_spec$ : rpt$(" ",30)
 36100   ! 
 36120   close #grid_data: 
 36140   fn_ace_io_add(gridspec$&",row,selone")
@@ -1336,14 +1336,14 @@
 36180   !   let filter_index=ace_io_count
 36200   ! 
 36220   if not container and not tabcon then 
-36240     let srow$=str$(lyne+height)
+36240     srow$=str$(lyne+height)
 36260   else 
-36280     let srow$=str$(lyne+height-1)
+36280     srow$=str$(lyne+height-1)
 36300   end if 
 36320   ! 
-36340   pr fields window_prefix$&srow$&","&str$(ps+00)&",CC 7,,B2501": "Export"
-36360   pr fields window_prefix$&srow$&","&str$(ps+08)&",CC 7,,B2502": "Print" ! if env$('ACSDeveloper')<>'' then
-36380   !   pr fields window_prefix$&srow$&","&str$(ps+16)&",CC 7,,B2503": "Reset"
+36340   pr f window_prefix$&srow$&","&str$(ps+00)&",CC 7,,B2501": "Export"
+36360   pr f window_prefix$&srow$&","&str$(ps+08)&",CC 7,,B2502": "Print" ! if env$('ACSDeveloper')<>'' then
+36380   !   pr f window_prefix$&srow$&","&str$(ps+16)&",CC 7,,B2503": "Reset"
 36400 fnend 
 36420 def fn_alpha_mask_indices (mat alpha_mask_indices;___,index_,mask)
 36440   mat alpha_mask_indices(0)
@@ -1367,7 +1367,7 @@
 36800   for count=1 to 500
 36820     linput #grid_data: _line$ eof ignore
 36840     if file(grid_data)<>0 then goto GRIDFORM_COMPLETE
-36860     let str2mat(_line$,mat _chunks$,chr$(9))
+36860     str2mat(_line$,mat _chunks$,chr$(9))
 36880     if udim(_chunks$)<> udim(_headings$)-1 then ! truncate extra columns, which are there by mistake or are missing
 36900       mat _chunks$( udim(_headings$)-1 )
 36920     end if 
@@ -1503,14 +1503,14 @@
 39930   ! PRINT_GRID_XIT: !
 39940 fnend 
 39960 def fn_ace_rd_pic
-39980   let lyne=val(control$(2))
+39980   lyne=val(control$(2))
 40000   let ps=val(control$(3))
 40020   let width=val(control$(4))
 40040   let height=val(control$(5))
 40060   let path1$=control$(6)
 40080 fnend 
 40100 def fn_ace_rd_button
-40120   let lyne=val(control$(2))
+40120   lyne=val(control$(2))
 40140   let ps=val(control$(3))
 40160   let height=val(control$(4))
 40180   let width=val(control$(5))
@@ -1526,22 +1526,22 @@
 40380   container=val(control$(11)) error ignore
 40400   let tabcon=val(control$(12)) error ignore
 40420   dim spec$*255
-40422   let spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',,B'&str$(comkey)
+40422   spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',,B'&str$(comkey)
 40424   ! r: new logic 10/19/2015
-40426   !   let spec$=str$(lyne)&','&str$(ps)&',CC '&str$(width)&',,B'&str$(comkey)
+40426   !   spec$=str$(lyne)&','&str$(ps)&',CC '&str$(width)&',,B'&str$(comkey)
 40428   if default then 
 40430     let default_button_fkey=comkey
-40432     let spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',[buttons],B'&str$(comkey)
+40432     spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',[buttons],B'&str$(comkey)
 40434     pr #0, fields "1,5,P 1/2,[buttons],"&str$(comkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
 40436   else if cancel then 
-40438     let spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',[buttoncancel],B'&str$(comkey)
+40438     spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',[buttoncancel],B'&str$(comkey)
 40440     if env$('tmp_acs_back_arrow')<>'' then 
 40442       pr #0, fields "1,2,P 1/2,[buttons],"&str$(comkey): env$('tmp_acs_back_arrow') ioerr ignore
 40444     else 
 40446       pr #0, fields "1,2,P 1/2,[buttons],"&str$(comkey): "S:\Core\Icon\back-icon.png" ioerr ignore
 40448     end if 
 40450   else 
-40452     let spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',,B'&str$(comkey)
+40452     spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',,B'&str$(comkey)
 40454   end if 
 40456   ! /r
 40460   if container then 
@@ -1573,7 +1573,7 @@
 40619 fnend 
 40620 def fn_ace_rd_option
 40640   let respc+=1
-40660   let lyne=val(control$(2))
+40660   lyne=val(control$(2))
 40680   let ps=val(control$(3))
 40700   align=val(control$(4))
 40720   let txt$=control$(5)
@@ -1593,7 +1593,7 @@
 41000 fnend 
 41020 def fn_ace_rd_check
 41040   let respc+=1
-41060   let lyne=val(control$(2))
+41060   lyne=val(control$(2))
 41080   let ps=val(control$(3))
 41100   if ps<=0 then let ps=1
 41120   align=val(control$(4))
@@ -1604,7 +1604,7 @@
 41200   ! txt$=srep$(txt$,'"','""') ! let fn2quote(txt$)
 41220   let txt$=ltrm$(txt$,'^')
 41240   if trim$(uprc$(resp$(respc)))="TRUE" then let resp$(respc)='^' else let resp$(respc)=''
-41260   let spec$=','&str$(lyne)&','&str$(ps+len(txt$)+1)&',check 2'
+41260   spec$=','&str$(lyne)&','&str$(ps+len(txt$)+1)&',check 2'
 41280   if align then 
 41300     align$='CR'
 41320   else 
@@ -1623,7 +1623,7 @@
 41560   end if 
 41580 fnend 
 41600 def fn_ace_rd_label
-41620   let lyne=val(control$(2))
+41620   lyne=val(control$(2))
 41640   let ps=val(control$(3))
 41660   let mylen=val(control$(4))
 41680   align=val(control$(5))
@@ -1633,19 +1633,19 @@
 41760   let font_mod=val(control$(9))
 41780   let txt$=srep$(trim$(txt$),'&','')
 41790   dim lbl_tooltip$*256
-41792   if udim(control$)>=10 then let lbl_tooltip$=control$(10) else let lbl_tooltip$=''
+41792   if udim(control$)>=10 then lbl_tooltip$=control$(10) else lbl_tooltip$=''
 41800   if txt$<>'' then 
 41820   ! txt$=srep$(txt$,'"','""') ! let fn2quote(txt$)
 41840     let mylen=max(mylen,len(txt$))
 41860     if align=1 then ace_rd_label_align$='r' else if align=2 then ace_rd_label_align$='c' else ace_rd_label_align$='l'
 41880     if container then 
-41890       let lbl_win=frames(container,1)
+41890       lbl_win=frames(container,1)
 41900     ! pr #frames(container,1), fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen): trim$(txt$)
 41910     else if tabcon then 
-41920       let lbl_win=tabs(tabcon,1)
+41920       lbl_win=tabs(tabcon,1)
 41930     ! pr #tabs(tabcon,1), fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen): trim$(txt$)
 41940     else 
-41950       let lbl_win=acs_win
+41950       lbl_win=acs_win
 41960     ! pr #acs_win, fields str$(lyne)&','&str$(ps)&',C'&ace_rd_label_align$&' '&str$(mylen): trim$(txt$)
 41970     end if 
 41980     if lbl_tooltip$<>'' then 
@@ -1657,7 +1657,7 @@
 42040 fnend 
 42060 def fn_ace_rd_text
 42080   let respc+=1
-42100   let lyne=val(control$(2))
+42100   lyne=val(control$(2))
 42120   let ps=val(control$(3)) ! -.6
 42140   let width=val(control$(4))
 42160   let maxlen=max(val(control$(5)),width)
@@ -1672,7 +1672,7 @@
 42340 ! let resp$(respc)=srep$(resp$(respc),'"','""') soflow ignore ! let fn2quote(resp$(respc))
 42350 ! tt$=srep$(tt$,'"','""') soflow ignore ! let fn2quote(tt$)
 42360   dim spec$*255
-42380   let spec$=fn_textmask$(mask$,lyne,ps,width,container,maxlen)
+42380   spec$=fn_textmask$(mask$,lyne,ps,width,container,maxlen)
 42400   mat text_masks(respc)
 42420   let text_masks(respc)=val(mask$)
 42440   if container then 
@@ -1834,7 +1834,7 @@
 45720   mat file_select_data(file_select_boxes,2)
 45740   let file_select_data(file_select_boxes,1)=respc
 45760   let file_select_data(file_select_boxes,2)=mask
-45780   pr fields file_select_button_spec$: "."
+45780   pr f file_select_button_spec$: "."
 45800 fnend 
 45820 def fn_selectfile (&filename$,mask)
 45830   if mask=70 or mask=71 then 
@@ -1886,7 +1886,7 @@
 46540     let date_fielddata(date_boxes,3)=ps
 46560     let date_button_spec$(0:0)='#'&str$(acs_win)&','
 46580   end if 
-46600   pr fields date_button_spec$: "S:\Core\Icon\calendar_icon.png" ioerr ignore
+46600   pr f date_button_spec$: "S:\Core\Icon\calendar_icon.png" ioerr ignore
 46620   let date_fielddata(date_boxes,4)=width
 46640   let date_fielddata(date_boxes,5)=respc ! parent textbox number
 46660   let date_fielddata(date_boxes,6)=mask
@@ -1896,12 +1896,12 @@
 48040   ace_combo_io$=''
 48060 ! combo_count=0
 48080   let respc+=1
-48100   let lyne=val(control$(2))
+48100   lyne=val(control$(2))
 48120   let ps=val(control$(3))
 48140   let width=val(control$(4))
 48160 ! let keylen=val(control$(5))
 48180   let path1$=control$(6)
-48200   let limittolist=val(control$(7))
+48200   limittolist=val(control$(7))
 48220   let tt$=control$(8)
 48240   container=val(control$(9))
 48260   let tabcon=val(control$(10))
@@ -1918,7 +1918,7 @@
 48426     let keylen=val(combooptionset$(poskeylen+4:pos(combooptionset$,',',poskeylen)-1))
 48428     let posdesclen=pos(combooptionset$,'lnd=')
 48430     let desclen=val(combooptionset$(posdesclen+4:pos(combooptionset$,',',posdesclen)-1))
-48431     if desclen>0 then let spacerlen=1 else let spacerlen=0
+48431     if desclen>0 then spacerlen=1 else spacerlen=0
 48432     if (keylen+desclen+spacerlen)>width then 
 48434       let width=keylen+desclen+spacerlen
 48436     end if 
@@ -1943,14 +1943,14 @@
 48760   end if 
 48780 ! /r
 48800   if container then 
-48820     let spec$='#'&str$(frames(container,1))&','&ace_combo_io$
+48820     spec$='#'&str$(frames(container,1))&','&ace_combo_io$
 48840   else if tabcon then 
-48860     let spec$='#'&str$(tabs(tabcon,1))&','&ace_combo_io$
+48860     spec$='#'&str$(tabs(tabcon,1))&','&ace_combo_io$
 48880   else 
-48900     let spec$='#'&str$(acs_win)&','&ace_combo_io$
+48900     spec$='#'&str$(acs_win)&','&ace_combo_io$
 48920   end if 
 48940 ! 
-48960 ! let setenv('combo'&str$(respc),env$('tmp_combo'&str$(tmp_combo_count_for_read)))
+48960 ! setenv('combo'&str$(respc),env$('tmp_combo'&str$(tmp_combo_count_for_read)))
 48980   dim tmp_combo_option$(1)*81
 49000   combooption_which=srch(mat combooptionsetlist$,combooptionset$)
 49010 ! if comboOption_which=4 then pause
@@ -1964,25 +1964,25 @@
 49142 !   pr 'comboOption_which=';comboOption_which
 49150 ! end if
 49160 ! if comboOption_which>0 and comboOption_which<>comboOption_which_prior then
-49180   let str2mat(env$('tmp_combo'&str$(tmp_combo_count_for_read)),mat tmp_combo_option$,'|')
+49180   str2mat(env$('tmp_combo'&str$(tmp_combo_count_for_read)),mat tmp_combo_option$,'|')
 49184 ! else 
 49186 !   pr 'saved time on tmp_combo'&str$(tmp_combo_count_for_read)
 49200 ! end if
 49202   combooption_which_prior=combooption_which
-49220   pr fields spec$: mat tmp_combo_option$
+49220   pr f spec$: mat tmp_combo_option$
 49240 ! 
-49260   let setenv('tmp_combo'&str$(tmp_combo_count_for_read)&'_response_item',str$(respc))
+49260   setenv('tmp_combo'&str$(tmp_combo_count_for_read)&'_response_item',str$(respc))
 49280 ! COMBO_COMPLETE: !
 49300 ! 
 49320   if pos(spec$,"+,Select")>0 then 
-49340     let spec$=srep$(spec$,"+,Select","Select")
+49340     spec$=srep$(spec$,"+,Select","Select")
 49360   else 
-49380     let spec$=srep$(spec$,",+",",")
+49380     spec$=srep$(spec$,",+",",")
 49400   end if 
-49420   let spec$=spec$&'T[textboxes]'
+49420   spec$=spec$&'T[textboxes]'
 49440   if pos (spec$,',Select')>0 then ! move the ,select to the end
-49460     let spec$=srep$(spec$,',Select',',')
-49480     let spec$=spec$&',Select'
+49460     spec$=srep$(spec$,',Select',',')
+49480     spec$=spec$&',Select'
 49500   end if 
 49520   fn_ace_io_add(spec$)
 49540 fnend 
@@ -1993,7 +1993,7 @@
 50080 fnend 
 51000 def fn_control_count
 51020   control_count=val(env$('control_count'))+1
-51040   let setenv('control_count',str$(control_count))
+51040   setenv('control_count',str$(control_count))
 51060   fn_control_count=control_count
 51080 fnend 
 54000 def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,use_or_replace,qgllength,qgltabcon)
@@ -2032,7 +2032,7 @@
 54330   end if 
 54340 ! /r
 54350   if setupqgl$<>qgl_cursys$ then ! r:
-54360     let setupqgl$=qgl_cursys$
+54360     setupqgl$=qgl_cursys$
 54370     open #company:=fngethandle: "Name="&env$('Q')&"\"&qgl_cursys$&"mstr\Company.h"&env$('cno')&",Shr",internal,input ioerr CLOSECOMPANY
 54380     if qgl_cursys$='CL' then 
 54390       read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read it from checkbook
@@ -2056,7 +2056,7 @@
 54570     goto QGLFINIS
 54580   else 
 54590     let qglsetupkeyprior$=qglsetupkeycurrent$
-54600     mat qgloption$(0) : let option_count=0
+54600     mat qgloption$(0) : option_count=0
 54610     if add_all_or_blank=1 then 
 54620       mat qgloption$(option_count+=1) : let qgloption$(option_count)='[All]'
 54630     else if add_all_or_blank=2 then 
@@ -2101,12 +2101,12 @@
 55020   let myline=mypos=con=0
 55030 fnend 
 56000 def fn_remove_crlf(&txt$)
-56020   let lastx=x=0
+56020   lastx=x=0
 56040   do 
 56060     let x=pos(txt$,hex$("0D0A"),lastx)
 56080     if x>0 then 
 56100       let txt$=txt$(1:x-1)&"HEX$(0D0A)"&txt$(x+2:len(trim$(txt$)))
-56120       let lastx=x
+56120       lastx=x
 56140     end if 
 56160   loop while x>0
 56180 fnend 
@@ -2126,7 +2126,7 @@
 60260   for index_=1 to grid_rows
 60280     input fields gridspec$&",row,range,nowait": index_, index_, mat _chunks$
 60300     for eg_grid_line_item=2 to udim(mat _chunks$)
-60320       let eg_tmp_mask=val(_mask$(eg_grid_line_item-1))
+60320       eg_tmp_mask=val(_mask$(eg_grid_line_item-1))
 60340       if eg_tmp_mask=>1 and eg_tmp_mask<=5 then 
 60360 ! r: get date_format$
 60380         if eg_tmp_mask=1 then 

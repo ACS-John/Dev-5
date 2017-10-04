@@ -16,17 +16,17 @@
 00150   goto XIT
 00160 ! ______________________________________________________________________
 00170 OPEN_FILE: ! (open_file_count)
-00180   let open_file_count=0
+00180   open_file_count=0
 00190   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\IvPaid.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\IVIndex.h"&str$(cno)&",Use,RecL=34,KPs=1,KLn=20,Shr",internal,outin,keyed  !:
         ! Version=0 or Version=1
 00200   return 
 00210 ! ______________________________________________________________________
 00220 BUILD_LAYOUT: ! 
 00230 ! ** Field Labels **
-00240   let lbl$(1)="Vendor Key" !:
-        let lbl$(2)="Invoice Key" !:
-        let lbl$(3)="Date Paid" !:
-        let lbl$(4)="Check Number"
+00240   lbl$(1)="Vendor Key" !:
+        lbl$(2)="Invoice Key" !:
+        lbl$(3)="Date Paid" !:
+        lbl$(4)="Check Number"
 00250 ! ** Field Display Lengths ** !:
         let mmddyy=8 : ccyymmdd=10 !:
         ! TC=0 ! Text Box Length Item Coutner
@@ -38,16 +38,16 @@
         ! Valid are C, G, N, PD, !:
         ! Default is 'G' !:
         let fc=0 ! Field Type Item Counter
-00280   let fltyp$(fc+=1)='C' !:
-        let fltyp$(fc+=1)='C' !:
-        let fltyp$(fc+=1)='G' !:
-        let fltyp$(fc+=1)='G'
+00280   fltyp$(fc+=1)='C' !:
+        fltyp$(fc+=1)='C' !:
+        fltyp$(fc+=1)='G' !:
+        fltyp$(fc+=1)='G'
 00290 ! ** Field Storage Lengths ** !:
         ! sc=0 ! Field Storage Length Item Counter
-00300   let sln(sc+=1)=8 !:
-        let sln(sc+=1)=12 !:
-        let sln(sc+=1)=6 !:
-        let sln(sc+=1)=8
+00300   sln(sc+=1)=8 !:
+        sln(sc+=1)=12 !:
+        sln(sc+=1)=6 !:
+        sln(sc+=1)=8
 00310 ! ** Field Mask ** !:
         let number=30 !:
         let pointtwo=32 ! number with 2 decimal places (no commas)!:
@@ -58,13 +58,13 @@
         let mask(mc+=1)=mmddyy !:
         let mask(mc+=1)=number
 00330 ! ** Storage Position ** !:
-        let sc=0 ! Storage Position Item Counter
+        sc=0 ! Storage Position Item Counter
 00340 ! ** Let's Make Some Combo Boxes ** !:
         ! CL = Item you want a ComboBox on !:
         ! C$(cl,2)=linked file : c$(cl,3)=key pos c$(cl,4)=key len !:
         ! c$(cl,5)=desc pos c$(cl,6)=desc len  C$(cl,7)=Index File !:
         ! C$(cl,8)=limit to list option '1'=yes '0'=no !:
-        let limit_to_list$='1'
+        limit_to_list$='1'
 00350   cl=1 !:
         c$(cl,1)='ComboF' !:
         c$(cl,2)=env$('Q')&"\CLmstr\PayMstr.h"&str$(cno) !:

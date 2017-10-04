@@ -22,7 +22,7 @@
 00180   goto START_REPORT
 00190 SCREEN1: ! 
 00200   fntos(sn$="GLTB") !:
-        let lc=0 : let mylen=25 : let mypos=mylen+2
+        lc=0 : let mylen=25 : let mypos=mylen+2
 00210   fnchk(lc+=1,mypos,"List All Details",right) !:
         let resp$(1)="True"
 00220   fnlbl(lc+=1,1,"Cost Center:",mylen,right)
@@ -42,16 +42,16 @@
 00320   if resp$(1)="True" then let pt=0 else let pt=1
 00330   costcent=val(resp$(2)) !:
         let n$=lpad$(str$(costcent),3)&"     0  0"
-00340   if resp$(3)="True" then let subt=1 else let subt=0
-00350   let sl1$=fnagl$(resp$(4)) !:
-        let sl2$=fnagl$(resp$(5))
+00340   if resp$(3)="True" then subt=1 else subt=0
+00350   sl1$=fnagl$(resp$(4)) !:
+        sl2$=fnagl$(resp$(5))
 00360 START_REPORT: ! 
 00370   fnopenprn
 00380   gosub HDR2
 00390 READ_1: ! 
 00400   read #1,using L410: n$,d$,bb,cb,mat bp eof L580
 00410 L410: form pos 1,c 12,c 50,pos 81,2*pd 6.2,pos 171,13*pd 6.2
-00420   let olddno=dno
+00420   olddno=dno
 00430   if costcent><0 and val(n$(1:3))><costcent then goto READ_1
 00440   if sgl(4)=0 and sgl(5)=0 and sgl(6)=0 then goto L460
 00450   if n$>sl2$ then goto L590
@@ -60,14 +60,14 @@
 00480 L480: form skip 1,pos 30,c 20,pos 80,pic(zz,zzz,zzz.## cr),skip 2
 00490   let fundt1=fundt2=fundt3=0
 00500 L500: ano=val(n$(4:9))
-00510   let sno=val(n$(10:12))
+00510   sno=val(n$(10:12))
 00520   begbal=0
 00530   curbal=curbal+bp(12)
 00540   let fundt1=fundt1+0
 00550   let fundt3=fundt3+bp(12)
 00560   gosub L840
 00570   goto READ_1
-00580 L580: let olddno=dno
+00580 L580: olddno=dno
 00590 L590: pr #255: 
 00600   if subt=1 then !:
           pr #255,using L480: "Fund "&str$(olddno)&" Totals",0 ,0,fundt3

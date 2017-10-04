@@ -20,8 +20,8 @@
 00165   let priorcd=fnpriorcd
 00166   let fscode=fnfscode
 00170   if fnps=2 then let mp1=72 else let mp1=69
-00180   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" else !:
-          let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
+00180   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" else !:
+          fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
 00190 L190: form pos mp1,pd 3,pos 81,41*pd 6.2
 00200   let pas=1 : open #hwork:=4: "Name="&env$('temp')&"\Work."&session$&",KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outin,keyed 
 00210 L210: acglfnsi=1 !:
@@ -95,7 +95,7 @@
 00850   if ls+ds+ul>0 then goto L860 else goto L420
 00860 L860: if percent=0 then goto L970
 00870   if pas=2 then gosub PAS2
-00880   let sp2=31-sp-1
+00880   sp2=31-sp-1
 00890   if percent1><0 then let monthpct=total/percent1*100 else let monthpct=0
 00900   if percent2><0 then let ytdpct=total2/percent2*100 else let ytdpct=0
 00910   if monthpct<-999.99 then let monthpct=-999.99
@@ -126,7 +126,7 @@
 01130   if monthpct>999.99 then let monthpct=999.99
 01140   if ytdpct<-999.99 then let ytdpct=-999.99
 01150   if ytdpct>999.99 then let ytdpct=999.99
-01160   let sp2=31-sp-1
+01160   sp2=31-sp-1
 01165   if ul=1 then pr #255,using L961: d$(1:sp2),dollar$,"{\UL ",accum1,"}",monthpct,percent$,dollar$,"{\UL ",accum2,"}",ytdpct,percent$ pageoflow L1590 : goto L1180
 01170   pr #255,using L960: d$(1:sp2),dollar$,accum1,monthpct,percent$,dollar$,accum2,ytdpct,percent$ pageoflow L1590
 01180 L1180: if pas=1 then let tp1=accum1 : let tp2=accum2 : gosub PAS1
@@ -138,7 +138,7 @@
 01230   goto READ_ACGLFNSI
 01240 ! ______________________________________________________________________
 01250 L1250: if te$="R" then let report$=d$
-01260   if te$="S" then let secondr$=d$
+01260   if te$="S" then secondr$=d$
 01270   gosub L1420
 01280   goto READ_ACGLFNSI
 01290 ! ______________________________________________________________________
@@ -169,8 +169,8 @@
 01470   goto L1570
 01480 L1480: let fnpglen(pglen)
 01490 ! If PGLEN<>42 Then Let PGLEN=58
-01500   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01510 ! If PGLEN=42 Then Let SK+=1
+01500   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01510 ! If PGLEN=42 Then sK+=1
 01520   pr #255,using L1530: rtrm$(foot$),"Page "&str$(pt1)
 01530 L1530: form skip sk,pos tabnote,c fl,pos 80,c 8
 01540   if eofcode=1 then goto L1570
@@ -211,7 +211,7 @@
 01880 L1880: if pas=2 then goto L1910
 01890   let pas=2 : let percent=1 : let percent1=percent2=0
 01900   goto L1970
-01910 L1910: let eofcode=1
+01910 L1910: eofcode=1
 01920   gosub L1480
 01930 ! ______________________________________________________________________
 01940   fncloseprn

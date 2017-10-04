@@ -7,7 +7,7 @@
 10000   dim srv$(3)*1,cap$*128,txt$*80,tg(11)
 10600   fntop(program$,cap$="Change Wrong Transaction Dates")
 10800 MAIN: ! 
-11000   let sn$="redate"
+11000   sn$="redate"
 11200   fntos(sn$)
 11600   fnlbl(1,1,"Wrong Date:",22,1)
 11800   fntxt(1,23,8,0,0,"1")

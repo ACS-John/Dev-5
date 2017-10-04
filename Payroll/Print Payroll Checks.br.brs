@@ -38,17 +38,17 @@
 08360   dim eng$*128,wording$(27)*9,amount(11)
 08380 ! 
 08400   dim opt_check_format$(6)*20, scc$(6)
-08410   let opt_check_format$(1)="Check, Stub"        : let scc$(1)="CS"
-08420   let opt_check_format$(2)="Stub, Check"        : let scc$(2)="SC"
-08430   let opt_check_format$(3)="Stub, Check, Stub"  : let scc$(3)="SCS"
-08440   let opt_check_format$(4)="Check, Stub, Stub"  : let scc$(4)="CSS"
-08450   let opt_check_format$(5)="Stub, Stub, Check"  : let scc$(5)="SSC"
-08460   let opt_check_format$(6)="Stub, Check, Check" : let scc$(6)="SCC"
+08410   opt_check_format$(1)="Check, Stub"        : scc$(1)="CS"
+08420   opt_check_format$(2)="Stub, Check"        : scc$(2)="SC"
+08430   opt_check_format$(3)="Stub, Check, Stub"  : scc$(3)="SCS"
+08440   opt_check_format$(4)="Check, Stub, Stub"  : scc$(4)="CSS"
+08450   opt_check_format$(5)="Stub, Stub, Check"  : scc$(5)="SSC"
+08460   opt_check_format$(6)="Stub, Check, Check" : scc$(6)="SCC"
 08500 ! 
 08520   dim opt_check_type$(3)*14
-08540   let opt_check_type$(1)="Regular Check"
-08560   let opt_check_type$(2)="Direct Deposit"
-08580   let opt_check_type$(3)="All"
+08540   opt_check_type$(1)="Regular Check"
+08560   opt_check_type$(2)="Direct Deposit"
+08580   opt_check_type$(3)="All"
 08600 ! r: set mat wording$
 08620   let wc=0 ! Wording$ counter
 08640   let wording$(wc+=1)='One'
@@ -80,13 +80,13 @@
 09160   let wording$(wc+=1)='Ninety'
 09180 ! /r
 09181   dim opt_yn$(2)*4
-09182   let opt_yn$(1)="Yes"
-09184   let opt_yn$(2)="No"
+09182   opt_yn$(1)="Yes"
+09184   opt_yn$(2)="No"
 09185 ! 
 09200 ! /r
 10240 ! r: set default answers and semi-consants and open some files
-10260   let ssr1=fnss_employee*.01
-10270   let ssr2=fnss_employer*.01
+10260   ssr1=fnss_employee*.01
+10270   ssr2=fnss_employer*.01
 10280   open #20: "Name="&env$('Q')&"\PRmstr\prCode.h"&env$('cno')&",Shr",internal,input 
 10290   read #20,using 'Form POS 2,POS 5,N 5': ckno
 10300   close #20: 
@@ -108,11 +108,11 @@
 10660 ! ___________________________
 10680   if bankcode=0 then bankcode=1
 10690   check_number=ckno
-10710 ! if env$('client')="West Rest Haven" then let sc1$="C"
-10720   if env$('client')="Billings" then let sc1$="CSS"
+10710 ! if env$('client')="West Rest Haven" then sc1$="C"
+10720   if env$('client')="Billings" then sc1$="CSS"
 10730   if env$('client')="Divernon" or env$('client')="Thomasboro" or env$('client')="Edinburg" or env$('client')="Philo" or env$('client')="Hope Welty" or env$('client')="Monticello" then let ficam1$="Y"
 10740   let ddcode$="R"
-10742   fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then let skip_alignment$='No'
+10742   fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then skip_alignment$='No'
 10745   goto MAIN_QUESTIONS ! /r
 10750 MAIN_QUESTIONS: ! r:
 10760   fntos(sn$="prckprt")
@@ -186,10 +186,10 @@
 11360   check_number=val(resp$(3)) ! check #
 11370   ckdat$=resp$(resp_date_of_checks) ! check date
 11380   let dat=val(ckdat$(5:6)&ckdat$(7:8)&ckdat$(3:4))
-11390   let empno=val(resp$(5)) ! beginning employee #
+11390   empno=val(resp$(5)) ! beginning employee #
 11400   acsclcv$=uprc$(resp$(6)(1:1)) ! post Checkbook system
 11410   let ficam1$=uprc$(resp$(7)(1:1)) ! post fica match
-11430   let sc1$=scc$(srch(mat opt_check_format$,resp$(8)))
+11430   sc1$=scc$(srch(mat opt_check_format$,resp$(8)))
 11460   let ddcode$=uprc$(resp$(9)(1:1)) ! regular check or direct deposit
 11470   accr$=uprc$(resp$(10)(1:1)) ! pr vac and sick
 11472   if resp_cl_bankcode then 
@@ -200,7 +200,7 @@
 11492   end if 
 11496 ! date_of_checks=val(ckdat$)
 11500   let prdmmddyy=val(ckdat$(5:6))*10000+val(ckdat$(7:8))*100+val(ckdat$(3:4)) ! convert date back to mmddyy format
-11506   let skip_alignment$=resp$(resp_skip_align)
+11506   skip_alignment$=resp$(resp_skip_align)
 11507   if skip_alignment$='Yes' then allign=3
 11508 ! 
 11510   if acsclcv$="Y" then cl_installed=1 else cl_installed=0
@@ -277,7 +277,7 @@
 11950 L1440: ! 
 11960   end if 
 11980 MAIN_LOOP_TOP: ! 
-11990   let s1=1
+11990   s1=1
 12000 L1480: ! 
 12010   read #rpmstr,using L1570: eno,mat em$,ss$,em10,em11,lpd eof EO_RPMSTR
 12020   mat v=(0): let v1=1
@@ -298,7 +298,7 @@
 12170   let tpd3=tpd4=tpd5=0
 12180   let tdct=0
 12190   let rate=0
-12200   let s1=1
+12200   s1=1
 12210 ! If fndate_mmddyy_to_ccyymmdd(LPD)><D1 Then Goto 1360  ! with comment can reprint any payroll
 12220   fn_determine_earnings
 12230   if print_netzero_checks and ttc(32)=0 and fndate_mmddyy_to_ccyymmdd(lpd)=d1 then goto L1670 ! pr zero checks
@@ -394,13 +394,13 @@
 13080   end if 
 13082   let dol=ttc(32)
 13084   if dol<=0 then 
-13086     let eng$="*** VOID ***"
+13086     eng$="*** VOID ***"
 13088     goto L3810
 13090   else if dol=>10**8 then 
-13092     let eng$="Value too big for editing"
+13092     eng$="Value too big for editing"
 13094     goto L3810
 13096   end if 
-13150   let eng$="***"
+13150   eng$="***"
 13160   amount(1)=int(dol*100+.500000001)
 13170   for a0=2 to 10
 13180     amount(a0)=int(amount(a0-1)/10+.000000001)
@@ -411,36 +411,36 @@
 13230   if amount(11)+amount(10)+amount(9)=0 then goto L3530
 13240   a0=9
 13250   fn_l3830
-13260   let eng$=rtrm$(eng$)&" Million"
+13260   eng$=rtrm$(eng$)&" Million"
 13270   L3530: ! 
 13280   if amount(8)+amount(7)+amount(6)=0 then goto L3570
 13290   a0=6
 13300   fn_l3830
-13310   let eng$=rtrm$(eng$)&" Thousand"
+13310   eng$=rtrm$(eng$)&" Thousand"
 13320   L3570: if amount(5)+amount(4)+amount(3)=0 then goto L3600
 13330   a0=3
 13340   fn_l3830
 13350   L3600: ! 
 13360   if dol>=1 then goto L3620
-13370   let eng$=rtrm$(eng$)&" Zero"
+13370   eng$=rtrm$(eng$)&" Zero"
 13380   L3620: ! 
-13390   let eng$=rtrm$(eng$)&" Dollar"
+13390   eng$=rtrm$(eng$)&" Dollar"
 13400   if dol<2 and dol>=1 then goto L3660
-13410   let eng$=rtrm$(eng$)&"s"
+13410   eng$=rtrm$(eng$)&"s"
 13420   if len(rtrm$(eng$))>58 then goto L3660
 13430   L3660: ! 
-13440   let eng$=rtrm$(eng$)&" and"
+13440   eng$=rtrm$(eng$)&" and"
 13450   if amount(2)+amount(1)=0 then goto L3720
 13460   amount(3)=0
 13470   a0=1
 13480   fn_l3830
 13490   goto L3730
 13500   L3720: ! 
-13510   let eng$=rtrm$(eng$)&" Zero"
+13510   eng$=rtrm$(eng$)&" Zero"
 13520   L3730: ! 
-13530   let eng$=rtrm$(eng$)&" Cent"
+13530   eng$=rtrm$(eng$)&" Cent"
 13540   if abs(dol-int(dol+.000000001)-.01)<.001 then goto L3760
-13550   let eng$=rtrm$(eng$)&"s"
+13550   eng$=rtrm$(eng$)&"s"
 13560   L3760: ! 
 13570   if len(rtrm$(eng$))<58 then goto L3810
 13580   for j=1 to 9
@@ -451,16 +451,16 @@
 13630 return  ! /r
 13650 def fn_l3830
 13660   if amount(a0+2)=0 then goto L3860
-13670   let eng$=rtrm$(eng$)&" "&wording$(amount(a0+2))
-13680   let eng$=rtrm$(eng$)&" Hundred"
+13670   eng$=rtrm$(eng$)&" "&wording$(amount(a0+2))
+13680   eng$=rtrm$(eng$)&" Hundred"
 13690   L3860: ! 
 13700   if amount(a0+1)=0 and amount(a0)=0 then goto L3920
 13710   if amount(a0+1)<2 then goto L3910
-13720   let eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)+18)
+13720   eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)+18)
 13730   if amount(a0)=0 then goto L3920
 13740   amount(a0+1)=0
 13750   L3910: ! 
-13760   let eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)*10+amount(a0))
+13760   eng$=rtrm$(eng$)&" "&wording$(amount(a0+1)*10+amount(a0))
 13770   L3920: ! 
 13780 fnend 
 13790 EO_RPMSTR: ! r:
@@ -581,17 +581,17 @@
 14960      L4870: ! 
 14970      alloc=tdep(j1,1)
 14980      let gl$=cnvrt$("N 3",tdep(j1,2))&cnvrt$("N 6",tdep(j1,3))&cnvrt$("N 3",tdep(j1,4))
-14990      let sd5$="Gross Pay"
+14990      sd5$="Gross Pay"
 15000      goto L4990
 15010      L4910: ! 
-15020      if j=2 then let sd5$="Federal WH" : let gl$=gln$(1)
-15030      if j=3 then let sd5$="FICA WH" : let gl$=gln$(2) : let fica0=val(ded$(j))
-15040      if j=4 then let sd5$="Medicare" : let gl$=gln$(2) : let medi0=val(ded$(j)): goto L4990
-15050      if j=5 then let sd5$="State WH" : let gl$=gln$(3)
-15060      if j>5 and j<26 then let sd5$=abrevname$(j-5) : let gl$=gl$(j-5)
-15070      if j=26 then let gl$=gln$(1): let sd5$="eic" : goto L4990 ! use federal
+15020      if j=2 then sd5$="Federal WH" : let gl$=gln$(1)
+15030      if j=3 then sd5$="FICA WH" : let gl$=gln$(2) : let fica0=val(ded$(j))
+15040      if j=4 then sd5$="Medicare" : let gl$=gln$(2) : let medi0=val(ded$(j)): goto L4990
+15050      if j=5 then sd5$="State WH" : let gl$=gln$(3)
+15060      if j>5 and j<26 then sd5$=abrevname$(j-5) : let gl$=gl$(j-5)
+15070      if j=26 then let gl$=gln$(1): sd5$="eic" : goto L4990 ! use federal
 15080      if j=27 then goto L4990 ! skip tips i think
-15090      ! If J=28 Then Let GL$=GLN$(1): Let SD5$="Meals" : Goto 4890 ! use wages
+15090      ! If J=28 Then Let GL$=GLN$(1): sD5$="Meals" : Goto 4890 ! use wages
 15100      L4990: ! 
 15110      cd1=1
 15120      read #h_cl_glmstr,using F_CL_GLMSTR,key=rpad$(gl$,kln(h_cl_glmstr)),release: de$ nokey INVALIDGLNUMBER
@@ -610,7 +610,7 @@
 15250      if j=4 and ficam1=1 then alloc=alloc-medic3 ! prb 2012
 15260      if j=3 and ficam1=1 then alloc=alloc-ficam3 ! prb 2012
 15280      if alloc=0 then goto L5220 ! dont write zero allocation
-15290      let lr3=lrec(23)+1
+15290      lr3=lrec(23)+1
 15300      if j=3 then let fica1=alloc : let fica_rec=lr3
 15310      if j=4 then let medi1=alloc
 15320      write #h_cl_trans_alloc,using L5140,rec=lr3: bankcode,1,val(tr$(1)),gl$,alloc,de$(1:30),miscode,0
@@ -686,21 +686,21 @@
 16200       if tdep(j,j2)=0 then goto L5980
 16210       if j2>6 then goto L5870
 16220       if ficam1=0 then goto L5980
-16230       let sd5$=de$="FICA Match"
+16230       sd5$=de$="FICA Match"
 16240       let fica2=fica2+tdep(j,j2)
 16250       let j4=3
 16260       goto L5900
 16270       L5870: ! 
 16280       if dedcode(j2-6)><3 then goto L5980
 16290       let j4=j2-2
-16300       let sd5$=de$=rtrm$(abrevname$(j4-4))&" Match"
+16300       sd5$=de$=rtrm$(abrevname$(j4-4))&" Match"
 16310       L5900: ! 
 16320       let gl$=mgl$(j2-5)
 16330       read #h_cl_glmstr,using F_CL_GLMSTR,key=gl$,release: de$ nokey INVALIDGLNUMBER
 16340       ! 
 16350       ! 
 16360       EXLNKD_L5920: ! 
-16370       let lr3=lrec(23)+1
+16370       lr3=lrec(23)+1
 16380       write #h_cl_trans_alloc,using L5140,rec=lr3: bankcode,1,val(tr$(1)),gl$,tdep(j,j2),de$(1:30),j4,0
 16390       !       if ~exists(env$('Q')&"\CLmstr\Tralloc-Idx.h"&env$('cno')) then
 16400       !         if tr(2)>0 and version(h_cl_trans_alloc)=2 then
@@ -731,7 +731,7 @@
 17040     ca$=rtrm$(cnvrt$("PIC($$$,$$$,$$$.##)",ttc(32)))
 17050   end if 
 17060   gosub ENG_DOL_IDK
-17070   if uprc$(ddcode$)="D" then let eng$="Direct Deposit" : ca$="V O I D"
+17070   if uprc$(ddcode$)="D" then eng$="Direct Deposit" : ca$="V O I D"
 17080   if env$('client')="ACS" then 
 17090     fn_check_acs
 17100   else if env$('client')="Ash Grove" then 
@@ -843,15 +843,15 @@
 18280       pr #255,using "form Pos pos_nameOnly,C 30": em$(1)
 18300     else if line_item=line_amount and line_item=line_name_and_address then
 18320       pr #255,using "form Pos 12,C 30,pos pos_amt,c 18": em$(1),ca$
-18340       pr #255,using "form Pos 12,C 30": em$(2) : let line_item+=1
-18360       pr #255,using "form Pos 12,C 30": em$(3) : let line_item+=1
+18340       pr #255,using "form Pos 12,C 30": em$(2) : line_item+=1
+18360       pr #255,using "form Pos 12,C 30": em$(3) : line_item+=1
 18380     else if line_item=line_amount_english then 
 18400       pr #255,using 'form Pos 9,C 62': eng$(1:n)
-18420       pr #255,using 'form Pos 9,C 62': eng$(n+1:128) : let line_item+=1
+18420       pr #255,using 'form Pos 9,C 62': eng$(n+1:128) : line_item+=1
 18440     else if line_item=line_name_and_address then 
 18460       pr #255,using "form Pos 12,C 30": em$(1)
-18480       pr #255,using "form Pos 12,C 30": em$(2) : let line_item+=1
-18500       pr #255,using "form Pos 12,C 30": em$(3) : let line_item+=1
+18480       pr #255,using "form Pos 12,C 30": em$(2) : line_item+=1
+18500       pr #255,using "form Pos 12,C 30": em$(3) : line_item+=1
 18520     else if line_item=line_amount then
 18540       pr #255,using "form pos pos_amt,c 18": ca$
 18560     else 
@@ -1369,8 +1369,8 @@
 63760   pr #255: ""
 63780 fnend 
 64000 def fn_stub_billings
-64020   let stub_one_or_two+=1
-64040   if stub_one_or_two=3 then let stub_one_or_two=1
+64020   stub_one_or_two+=1
+64040   if stub_one_or_two=3 then stub_one_or_two=1
 64060   if stub_one_or_two=2 then 
 64070     pr #255: ""
 64072     pr #255: ""
@@ -1469,7 +1469,7 @@
 74120   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! indexed by employee#,department# and payroll date
 74140   restore #3,key>=checkkey$: nokey L6920
 74160   L6580: ! 
-74180   read #3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : let lastrec=rec(3)
+74180   read #3,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(3)
 74200   if heno<>eno then goto STORE_VARIABLES
 74220   if prd<beg_date or prd>end_date then ! not this year
 74230     goto L6580
@@ -1491,8 +1491,8 @@
 74520   let fedyr=ytdtotal(1) ! ytdl fed
 74540   let ficayr=ytdtotal(2) ! fica year to date
 74560   let medyr=ytdtotal(3) ! medicare year to date
-74580   let stateyr=ytdtotal(4) ! total state  quarter
-74600   let eicyr=ytdtotal(25) ! eic
+74580   stateyr=ytdtotal(4) ! total state  quarter
+74600   eicyr=ytdtotal(25) ! eic
 74620   if prd>=qtr1 and prd<qtr2 then mat quartertotals=qtr1tcp
 74640   if prd>=qtr2 and prd<qtr3 then mat quartertotals=qtr2tcp
 74660   if prd>=qtr3 and prd<qtr4 then mat quartertotals=qtr3tcp
@@ -1501,8 +1501,8 @@
 74720   let fedqtr=quartertotals(1) ! total fed  quarter
 74740   let ficaqtr=quartertotals(2) ! total fica quarter
 74760   let medqtr=quartertotals(3) ! total medicare quarter
-74780   let stateqtr=quartertotals(4) ! total state  quarter
-74800   let eicqtr=quartertotals(25) ! EIC qtr
+74780   stateqtr=quartertotals(4) ! total state  quarter
+74800   eicqtr=quartertotals(25) ! EIC qtr
 74820   !   for j=1 to 20
 74840   !     if dedfed(j)=1 then let dedfedyr+=ytdtotal(j+4) ! deduct for federal wh
 74860   !   next j

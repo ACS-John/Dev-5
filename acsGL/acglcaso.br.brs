@@ -25,8 +25,8 @@
 00190   let in3$(1)="8,05,N 12.2,UT,N" : let in3$(2)="8,25,N 12.2,UT,N" !:
         let in3$(3)="8,45,N 12.2,UT,N" : let in3$(4)="8,65,N 12.2,UT,N"
 00200   if fnps=2 then let mp1=78 else let mp1=75
-00210   let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFINDX.H"&str$(cno)&",Shr"
-00220   if fnps=2 then let fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&str$(cno)&",Shr"
+00210   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFINDX.H"&str$(cno)&",Shr"
+00220   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&str$(cno)&",Shr"
 00230   open #1: fl1$,internal,input,keyed 
 00240   if fnprocess=1 or fnUseDeptNo=0 then goto L340
 00250   fntos(sn$="Acglcaso") !:
@@ -87,7 +87,7 @@
 00750 L750: if ir<val(r$) then goto READ_3
 00760   if ir>val(r$) then goto L780
 00770 L770: let notrans=1
-00780 L780: let overundr=ytdb-total2
+00780 L780: overundr=ytdb-total2
 00790   let unexpend=annualb-total2
 00800   for j=1 to 9
 00810     if ac(j)=9 then goto L890
@@ -104,13 +104,13 @@
 00920   annualb=-annualb
 00930   let monthb=-monthb
 00940   let ytdb=-ytdb
-00950   let overundr=overundr
+00950   overundr=overundr
 00960   let unexpend=unexpend
 00970 L970: if ds=1 then let dollar$="$" else let dollar$=" "
 00980   if annualb><0 or total2><0 then goto L1010
 00990   if total<>0 then goto L1010
 01000   if ls+ds+ul+ic>0 then goto L1010 else goto L350
-01010 L1010: let sp2=36-sp-1
+01010 L1010: sp2=36-sp-1
 01020   if te$="B" then let total=-total: let total2=-total2: let unexpend=0: ! REVERSE SIGN ON BEGINNING BANK BALANCE
 01030   pr #255,using L1040: d$(1:sp2),dollar$,total2,dollar$,annualb,dollar$,unexpend pageoflow L1760
 01040 L1040: form pos sp,c sp2,pos 37,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),skip redir
@@ -119,7 +119,7 @@
 01070   annualb=0
 01080   let monthb=0
 01090   let ytdb=0
-01100   let overundr=0
+01100   overundr=0
 01110   let unexpend=0
 01120   gosub L1470
 01130   gosub L1770
@@ -135,7 +135,7 @@
 01230   if rs=1 then accum6=accum(ap,6) else accum6=accum(ap,6)
 01240   if rs=1 then accum7=-accum(ap,7) else accum7=accum(ap,7)
 01250   if ds=1 then let dollar$="$" else let dollar$=" "
-01260   let sp2=36-sp-1
+01260   sp2=36-sp-1
 01270   if te$="B" then accum3=accum4=accum7=0
 01280   pr #255,using L1040: d$(1:sp2),dollar$,accum2,dollar$,accum3,dollar$,accum7 pageoflow L1760
 01290   gosub L1470
@@ -143,7 +143,7 @@
 01310   gosub L1590
 01320   goto L350
 01330 L1330: if te$="R" then let report$=d$
-01340   if te$="S" then let secondr$=d$
+01340   if te$="S" then secondr$=d$
 01350   gosub L1590
 01360   goto L350
 01370 ! ______________________________________________________________________
@@ -176,8 +176,8 @@
 01640 ! ______________________________________________________________________
 01650 L1650: let fnpglen(pglen)
 01660 ! If PGLEN<>42 Then Let PGLEN=58
-01670   let sk=pglen-krec(255): let fl=len(rtrm$(foot$))
-01680 ! If PGLEN=42 Then Let SK=SK+1
+01670   sk=pglen-krec(255): fl=len(rtrm$(foot$))
+01680 ! If PGLEN=42 Then sK=SK+1
 01690   pr #255,using L1700: rtrm$(foot$),"Page "&str$(pt1)
 01700 L1700: form skip sk,pos tabnote,c fl,pos 75,c 8
 01710   if eofcode=1 then goto L1740
@@ -210,7 +210,7 @@
 01980   pr #255: tab(45);"Date";tab(60);"Budget";tab(73);"Budget"
 01990   return 
 02000 ! ______________________________________________________________________
-02010 DONE: let eofcode=1
+02010 DONE: eofcode=1
 02020   gosub L1650
 02022   fnfscode(actpd)
 02023   fnpriorcd(1)

@@ -1,5 +1,5 @@
 20000   def fn_setup
-20020     let setup=1
+20020     setup=1
 20040     library 'S:\Core\Library': fnbutton,fnlbl
 20060   fnend 
 20080   def library fnbutton_or_disabled(enable,lyne,ps,txt$*200,comkey; tt$*200,width,container,tabcon,default,cancel)

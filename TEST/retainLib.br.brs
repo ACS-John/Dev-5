@@ -7,6 +7,6 @@
 9120     fntestretainBLABLALBA=fn_testretainBLABLALBA(value)
 9140   fnend
 9160   def fn_testretainBLABLALBA(value)
-9180     let localvalue+=value
+9180     localvalue+=value
 9200     fn_testretainBLABLALBA=localvalue
 9220   fnend 

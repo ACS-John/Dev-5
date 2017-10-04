@@ -16,7 +16,7 @@
 00230   goto XIT
 00240 ! ______________________________________________________________________
 00250   def fn_open_file
-00260     let open_file_count=0 ! this value is used in the close_file sub routine
+00260     open_file_count=0 ! this value is used in the close_file sub routine
 00270     open #open_file_count+=1: "Name="&env$('Q')&"\UBmstr\MeterType.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\MeterTypeIdx.h"&env$('cno')&",Use,RecL=128,KPs=1,KLn=5,Shr",internal,outin,keyed 
 00280   fnend 
 00290   def fn_close_file
@@ -36,7 +36,7 @@
 50020     let mask_pointtwo=32 : let mask_number=30
 50040     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
 50060     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
-50080     let storage_len_mmddyy=6 : let storage_len_ccyymmdd=8
+50080     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 50100     fnhamster_field_reset
 50120 !     fn_hamster_field_add(label$*38,textbox_len,field_type$*2; storage_length,ar_mask,storage_position)
 50140     fnhamster_field_add("Code",5)

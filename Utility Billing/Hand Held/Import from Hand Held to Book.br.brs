@@ -197,14 +197,14 @@
 46270     fncmdset(2)
 46300     fnacs(sn$,0,mat resp$,ckey) ! 
 46330     if ckey=5 then goto XIT
-46360     let source$=resp$(1)
+46360     source$=resp$(1)
 46390     if len(source$)=0 then goto L1420
-46420     if len(source$)=1 then let source$(2:2)=":"
-46450     if source$(3:3)=" " then let source$(3:3)="\"
+46420     if len(source$)=1 then source$(2:2)=":"
+46450     if source$(3:3)=" " then source$(3:3)="\"
 46480     fnCopy(source$&"readings."&str$(route),env$('Q')&"\UBmstr\readings."&str$(route))
 46510   fnend 
 48000   def fn_acsmr ! ACS Meter Reader
-48030     let source$=resp$(1)
+48030     source$=resp$(1)
 48060     open #2: "Name="&fn_hh_input_filename$&"acs_meter_data.txt,RecL=256",display,input 
 48090     fn_readings_backup(bk$)
 48120     open #3: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output 
@@ -224,7 +224,7 @@
 50150     let z$=''
 50180     do 
 50210       linput #h_itron: line$ eof EO_ITRON
-50240       let line_type$=line$(1:3)
+50240       line_type$=line$(1:3)
 50270       if line_type$="CUS" then 
 50300         if z$<>'' then let fn_itron_write ! write the previous one
 50330         let reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0

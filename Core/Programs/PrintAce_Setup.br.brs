@@ -5,7 +5,7 @@
 60000 XIT: let fnxit
 70000   def fn_setup
 70020     if ~setup then 
-70040       let setup=1
+70040       setup=1
 70080       library 'S:\Core\Library': fntop,fnxit,fnerror
 70100       on error goto ERTN
 70120       dim cap$*128

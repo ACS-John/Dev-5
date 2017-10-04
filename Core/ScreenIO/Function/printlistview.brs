@@ -43,7 +43,7 @@
        let TargetField$=UserData$(ControlIndex)
     end if
     
-    let ListviewSubscript=fnFindSubscript(mat Subscripts$,"ctl_",TargetField$)
+    listviewSubscript=fnFindSubscript(mat Subscripts$,"ctl_",TargetField$)
     if ListviewSubscript then
        fnListPrint(Window,fnListSpec$(ControlSpec$(ListviewSubscript)),"","","",mat S,1,0,totalsupp$)
     else

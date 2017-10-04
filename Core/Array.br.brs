@@ -33,16 +33,16 @@
 31400   fnsrch_case_insensitive=fn_srch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
 31500 fnend  ! fnsrch_case_insensitive
 31600 def fn_srch_case_insensitive(mat srch_array$,srch_for$*80; srch_start_ele)
-31700   let srch_array_count=udim(mat srch_array$)
-31800   let srch_return=0
+31700   srch_array_count=udim(mat srch_array$)
+31800   srch_return=0
 31900   do 
-32000     let srch_found=srch(mat srch_array$,'^'&srch_for$,srch_start_ele)
+32000     srch_found=srch(mat srch_array$,'^'&srch_for$,srch_start_ele)
 32100     if srch_found>0 and lwrc$(srch_for$)=lwrc$(srch_array$(srch_found)) then 
-32200       let srch_return=srch_found
+32200       srch_return=srch_found
 32300     else if srch_found>0 then 
-32400       let srch_start_ele=srch_found+1
+32400       srch_start_ele=srch_found+1
 32500     else if srch_found<=0 then ! it's not there, anywhere - get outta here.
-32600       let srch_start_ele=srch_array_count+1
+32600       srch_start_ele=srch_array_count+1
 32700     end if 
 32800   loop until srch_start_ele>srch_array_count or srch_return
 32900   fn_srch_case_insensitive=srch_return

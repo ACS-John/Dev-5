@@ -54,7 +54,7 @@
 00440 ! cInfo$(6)*12 ! Federal Identification Number
 00450 ! LZ1$*1 ! 'D', 'L', or 'E' -[D]ot Matrix, [L]aser, [E]xport
 00460 ! ___________________________
-00470     if lz1$='' then let lz1$='D'
+00470     if lz1$='' then lz1$='D'
 00480 ! fnwait !:
           on fkey 5 goto EODAVE
 00490     open #dave=fngethandle: 'Name=1099-'&session$&'.dat',internal,outin ioerr XIT
