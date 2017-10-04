@@ -118,9 +118,9 @@
 38420     if env$('BR_MODEL')='CLIENT/SERVER' then
 38440       dim serverTempSaveFile$*256
 38460       serverTempSaveFile$=env$('temp')&'\save_'&session$&'.zip'
-38480       tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\* -xr!"Report Cache\*"'
+38480       tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\*" -xr!"Report Cache\*"'
 38500     else
-38520       tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\* -xr!"Report Cache\*"'
+38520       tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\*" -xr!"Report Cache\*"'
 38540     end if
 38560   end if
 38580   pr #h_tmp: '@echo off'
