@@ -228,7 +228,9 @@
 48160   if clientServer then
 48170     tmpFileOpen$=env$('temp')&'\acs\OpenPartial\tmpFileOpen'&session$&'.zip'
 48172     fnmakesurepathexists(tmpFileOpen$)
+48174     if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
 48180     fnCopyFile(env$('at')&file_open$,tmpFileOpen$)
+48182     SKIPFORDEV: ! XXX DELETE ME
 48190   else
 48200     tmpFileOpen$=file_open$
 48260   end if
@@ -237,7 +239,7 @@
 48320   fn_fileListToArchiveList(mat fileList$,mat archiveList$)
 48340   fnstatus_close
 48360   fnreg_close
-48380   fn_opMain(file_open$)
+48380   fn_opMain(tmpFileOpen$)
 48400   goto OP_XIT
 48420   OP_OP_ERR: ! 
 48440   if err=622 then ! it was just cancelled
