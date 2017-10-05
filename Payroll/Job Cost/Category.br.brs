@@ -20,12 +20,12 @@
 00210   ad1=0 ! add code - used to tell other parts of the program, !:
         ! that I am currently adding a service code record.
 00220   fntos(sn$="Pr-askcategory") !:
-        let respc=0
+        respc=0
 00230   fnlbl(1,1,"Category Number:",20,right)
 00240   fncmbcategory(1,23)
 00250   if hact$="" then !:
-          let resp$(respc+=1)="" else !:
-          let resp$(respc+=1)=hact$
+          resp$(respc+=1)="" else !:
+          resp$(respc+=1)=hact$
 00260   fncmdkey("&Add",1,0,0,"Add a new category record." ) !:
         fncmdkey("E&dit",2,1,0,"Access the highlited record") !:
         fncmdkey("&Next",3,0,0,"Access next record in category order") !:
@@ -37,8 +37,8 @@
 00280   if ckey=5 then goto XIT
 00290   if ckey=8 then gosub PRINT_PROOF: goto ASKCATEGORY
 00300   if ckey=1 then goto ADD_RECORD
-00310   if ckey=3 then read #1,using L180: category,name$ nokey ASKCATEGORY eof ASKCATEGORY: let holdcategory=category: goto SCREEN_1
-00320   category=val(resp$(1)(1:5)): let holdcategory=category
+00310   if ckey=3 then read #1,using L180: category,name$ nokey ASKCATEGORY eof ASKCATEGORY: holdcategory=category: goto SCREEN_1
+00320   category=val(resp$(1)(1:5)): holdcategory=category
 00330   category$=lpad$(str$(category),5)
 00340   if ckey=2 then read #1,using L180,key=category$: category,name$ nokey ASKCATEGORY : goto SCREEN_1
 00350   if ckey=6 then let fncategory_srch(category$,fixgrid) : category$=lpad$(rtrm$(category$),5) : read #1,using L180,key=category$: category,name$ nokey ASKCATEGORY : goto SCREEN_1
@@ -46,36 +46,36 @@
 00370   if ckey=7 then gosub RECREATE_GRID: goto ASKCATEGORY
 00380 SCREEN_1: ! maintain category screen
 00390   fntos(sn$="Pr-Category") !:
-        let respc=0
-00400   let mylen=12: let mypos=mylen+3 : let right=1
+        respc=0
+00400   mylen=12: mypos=mylen+3 : right=1
 00410   fnlbl(1,1,"Category #:",mylen,right)
 00420   fntxt(1,mypos,6,0,0,"") !:
-        let resp$(1)=str$(category)
+        resp$(1)=str$(category)
 00430   fnlbl(2,1,"Name:",mylen,right)
 00440   fntxt(2,mypos,30,0,0,"",0,"The enter the category name.") !:
-        let resp$(2)=name$
+        resp$(2)=name$
 00450   fncmdkey("&Save",1,1,0,"Saves any changes and returns to main screen.")
 00460   fncmdkey("&Delete",4,0,0,"Deletes this record from the Category file.")
 00470   fncmdkey("&Cancel",5,0,1,"Returns to first screen without saving any changes.")
 00480   fnacs(sn$,0,mat resp$,ckey)
 00490   if ckey=5 then goto ASKCATEGORY
 00500   category=val(resp$(1)(1:5)) : category$=lpad$(trim$(resp$(1)),5)
-00510   let name$=resp$(2)
+00510   name$=resp$(2)
 00520   category=val(resp$(1))
 00530   if ckey<>4 then goto L570
 00540   mat ml$(2) !:
-        let ml$(1)="You have chosen to delete category "&trim$(category$)&" from the Category file!" !:
-        let ml$(2)="Select OK to delete; else Cancel to retain the record." !:
+        ml$(1)="You have chosen to delete category "&trim$(category$)&" from the Category file!" !:
+        ml$(2)="Select OK to delete; else Cancel to retain the record." !:
         fnmsgbox(mat ml$,resp$,'',49)
 00550   if resp$="OK" then goto L560 else goto ASKCATEGORY
-00560 L560: if ckey=4 then delete #1,key=catergory$: : gosub RECREATE_GRID: goto ASKCATEGORY: let fnmsgbox(mat ml$,resp$,'',49)
+00560 L560: if ckey=4 then delete #1,key=catergory$: : gosub RECREATE_GRID: goto ASKCATEGORY: fnmsgbox(mat ml$,resp$,'',49)
 00570 L570: rewrite #1,using L180,key=category$: category,name$ nokey L580
 00580 L580: if ckey=1 then goto ASKCATEGORY
 00590   goto ASKCATEGORY
 00600 ! ______________________________________________________________________
 00610 RECREATE_GRID: ! 
 00620   fncategory_srch(x$,99) !:
-        let df$=env$('Q')&"\PRmstr\category.h"&env$('cno') : let if$=env$('Q')&"\PRmstr\categoryidx.h"&env$('cno') !:
+        df$=env$('Q')&"\PRmstr\category.h"&env$('cno') : if$=env$('Q')&"\PRmstr\categoryidx.h"&env$('cno') !:
         fncombof("Ccategory",lyne,mypos,43,df$,1,5,6,30,if$,1) !:
         fncombof("CcategoryaLL",lyne,mypos,43,df$,1,5,6,30,if$,2)
 00630   ad1=0 ! set add code back before returning to main screen
@@ -86,23 +86,23 @@
 00680   fnlbl(1,5,"New Category Information",30,1)
 00690   fnlbl(3,1,"Category Number:",15,0)
 00700   fntxt(3,18,5,0,0,"") !:
-        let resp$(1)=str$(category)
-00710   let resp$(1)=""
+        resp$(1)=str$(category)
+00710   resp$(1)=""
 00720   fncmdset(11)
 00730   fnacs(sn$,0,mat resp$,ckey)
 00740   if ckey=5 then goto ASKCATEGORY
 00750   category=val(resp$(1)(1:5)) !:
         category$=lpad$(trim$(resp$(1)(1:5)),5)
-00760   let name$=(resp$(1)(10:40))
+00760   name$=(resp$(1)(10:40))
 00770   if trim$(category$)="" then goto ADD_RECORD
 00780   read #1,using L180,key=category$: z$ nokey L800
 00790   mat ml$(2) !:
-        let ml$(1)="A record # "&category$&" already exists!" !:
-        let ml$(2)="Choose to review the record." !:
+        ml$(1)="A record # "&category$&" already exists!" !:
+        ml$(2)="Choose to review the record." !:
         fnmsgbox(mat ml$,resp$,'',48) !:
         goto ADD_RECORD
 00800 L800: write #1,using L180: category,name$
-00810   let holdcategory=category
+00810   holdcategory=category
 00820   gosub RECREATE_GRID
 00830   goto SCREEN_1
 00840 SETUP_FILES: ! 
@@ -110,7 +110,7 @@
 00860   close #1: 
 00870   goto REINDEX
 00880 REINDEX: ! indexes if needed
-00890   let reindex+=1
+00890   reindex+=1
 00900   close #1: ioerr L910
 00910 L910: execute "Index "&env$('Q')&"\PRmstr\Category.H"&env$('cno')&' '&env$('Q')&"\PRmstr\categoryIDX.H"&env$('cno')&" 1 5 Replace DupKeys -n"
 00920   goto L170
@@ -144,9 +144,9 @@
 01200 L1200: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 53,c 30,skip 1,pos dattab,c 20,skip 2
 01210   continue 
 01220 ! ______________________________________________________________________
-01230 XIT: let fnxit
+01230 XIT: fnxit
 01240 ! ______________________________________________________________________
-01250 ERTN: let fnerror(program$,err,line,act$,"xit")
+01250 ERTN: fnerror(program$,err,line,act$,"xit")
 01260   if uprc$(act$)<>"PAUSE" then goto L1290
 01270   if trim$(env$("ACSDeveloper"))<>"" then !:
           execute "list "&str$(line) !:

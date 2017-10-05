@@ -23,46 +23,46 @@
 00260 ! If FNPROCESS=1 Then Goto 230
 00270 ! MENU1: !
 00280   fntos(sn$="prfeduc") !:
-        let respc=0
+        respc=0
 00290   fnlbl(1,43," ",1,1)
 00300   fnlbl(1,1,"Beginning Date of Tax Year:",29,1)
 00310   fntxt(1,30,12,0,0,"3",0,"If filing annually, this would be the first day of the year.") !:
-        let resp$(respc+=1)=str$(beg_date)
+        resp$(respc+=1)=str$(beg_date)
 00320   fnlbl(2,1,"Ending Date of Tax Year:",29,1)
 00330   fntxt(2,30,12,0,0,"3",0,"If filing annually, this would be the last day of the year.") !:
-        let resp$(respc+=1)=str$(end_date)
+        resp$(respc+=1)=str$(end_date)
 00340   fnlbl(3,1,"Deposits Made:",29,1)
 00350   fntxt(3,30,12,0,0,"10",0,"Total deposits made for this time frame.") !:
-        let resp$(respc+=1)=str$(deposits)
+        resp$(respc+=1)=str$(deposits)
 00360   fnlbl(4,1,"Top Margin:",29,1)
 00370   fntxt(4,30,3,0,0,"30",0,"Reduce the top margin to move the pr up. Increse to move down.") !:
-        let resp$(respc+=1)=str$(5)
+        resp$(respc+=1)=str$(5)
 00380   fnlbl(5,1,"Left Margin:",29,1)
 00390   fntxt(5,30,3,0,0,"30",0,"Reduce the left margin to move the pr left. Increse to move right.") !:
-        let resp$(respc+=1)=str$(5)
+        resp$(respc+=1)=str$(5)
 00400   fnlbl(7,1,"FUTA Tax Liability 1st Qtr:",29,1)
 00410   fntxt(7,30,12,0,0,"10",0,"Total FUTA Tax Libality for the first quarter.") !:
-        let resp$(respc+=1)=str$(futaqtr1)
+        resp$(respc+=1)=str$(futaqtr1)
 00420   fnlbl(8,1,"FUTA Tax Liability 2nd Qtr:",29,1)
 00430   fntxt(8,30,12,0,0,"10",0,"Total FUTA Tax Libality for the second quarter.") !:
-        let resp$(respc+=1)=str$(futaqtr2)
+        resp$(respc+=1)=str$(futaqtr2)
 00440   fnlbl(9,1,"FUTA Tax Liability 3rd Qtr:",29,1)
 00450   fntxt(9,30,12,0,0,"10",0,"Total FUTA Tax Libality for the third quarter.") !:
-        let resp$(respc+=1)=str$(futaqtr3)
+        resp$(respc+=1)=str$(futaqtr3)
 00460   fnlbl(10,1,"FUTA Tax Liability 4th Qtr:",29,1)
 00470   fntxt(10,30,12,0,0,"10",0,"Total FUTA Tax Libality for the fourth quarter.") !:
-        let resp$(respc+=1)=str$(futaqtr4)
+        resp$(respc+=1)=str$(futaqtr4)
 00480   fnfra(12,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
 00490   fnopt(1,2,"Print complete form",0,1) !:
-        let resp$(respc+=1)="True"
+        resp$(respc+=1)="True"
 00500   fnopt(2,2,"Fill in the blanks",0,1) !:
-        let resp$(respc+=1)="False"
-00510   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+        resp$(respc+=1)="False"
+00510   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
 00520   if ck=5 then goto XIT
 00530   beg_date=val(resp$(1)) ! beginning of year
 00540   end_date=val(resp$(2)) ! ending day of year
-00560   let deposits=val(resp$(3))
-00570   let topmargin=val(resp$(4))
+00560   deposits=val(resp$(3))
+00570   topmargin=val(resp$(4))
 00580   leftmargin=val(resp$(5))
 00590   let futaqtr1=val(resp$(6))
 00600   let futaqtr2=val(resp$(7))
@@ -79,7 +79,7 @@
 00710   open #3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
 00720 L720: read #2,using L730: eno,mat em$,ss$,em5,em6 eof EOF2
 00730 L730: form pos 1,n 8,3*c 30,c 11,pos 120,2*n 2
-00740   let m2=dedytdfeduc=0
+00740   m2=dedytdfeduc=0
 00750   mat ytdtotal=(0)
 00760   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 00770   restore #4,key>=checkkey$: nokey ANALYZE_WAGES
@@ -90,9 +90,9 @@
 00820   goto L780
 00830 ANALYZE_WAGES: ! analyze wages on each person
 00840   for j=1 to 20
-00850     if deduc(j)=1 and dedcode(j)=1 then let dedytdfeduc+=ytdtotal(j+4) ! TOTAL DEDUCTIONS FOR federal u/c FOR QUARTER
+00850     if deduc(j)=1 and dedcode(j)=1 then dedytdfeduc+=ytdtotal(j+4) ! TOTAL DEDUCTIONS FOR federal u/c FOR QUARTER
 00860   next j
-00870   let m2=m2+ytdtotal(31)-dedytdfeduc ! TOTAL WAGES less deductions FOR THIS EMPLOYEE FOR YEAR
+00870   m2=m2+ytdtotal(31)-dedytdfeduc ! TOTAL WAGES less deductions FOR THIS EMPLOYEE FOR YEAR
 00880   if m2=0 then goto L720
 00890   gosub PRINT_LINE
 00900   goto L720
@@ -120,14 +120,14 @@
 01092 close #2: ioerr L1100
 01100 L1100: close #3: ioerr L1110
 01110 L1110: gosub PRINT_940
-01140 XIT: let fnxit
+01140 XIT: fnxit
 01150 ! ______________________________________________________________________
 01160 PRINT_LINE: ! 
-01170   let tw=0
-01180   if m2>=feducmax then let tw=feducmax else let tw=min(feducmax,m2)
+01170   tw=0
+01180   if m2>=feducmax then tw=feducmax else tw=min(feducmax,m2)
 01190   pr #255,using L1200: ss$,em$(1)(1:28),m2,max(m2-feducmax,0),tw
 01200 L1200: form pos 1,c 11,pos 14,c 28,pos 42,pic(--,---,---.##),pos 57,pic(--,---,---.##),pos 70,pic(----,---.##)
-01210   let t1+=m2 : let t2+=max(m2-feducmax,0) : let t3+=tw
+01210   t1+=m2 : t2+=max(m2-feducmax,0) : t3+=tw
 01220   pr #255: "" pageoflow PGOF
 01230   return 
 01240 ! ______________________________________________________________________
@@ -144,7 +144,7 @@
 01350 PGOF: pr #255: newpage : gosub HDR : continue 
 01360 ! ______________________________________________________________________
 01370 ! <Updateable Region: ERTN>
-01380 ERTN: let fnerror(program$,err,line,act$,"xit")
+01380 ERTN: fnerror(program$,err,line,act$,"xit")
 01390   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01400   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01410   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -225,17 +225,17 @@
 02140   fnpa_finis
 02170   return 
 02180 CSZ: ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
-02190 L2190: let p1=pos(csz$,".",1)
-02200   if p1>0 then csz$(p1:p1)=" ": let p2=p1: goto L2190
+02190 L2190: p1=pos(csz$,".",1)
+02200   if p1>0 then csz$(p1:p1)=" ": p2=p1: goto L2190
 02210 ! IF P2>0 AND CSZ$(P2+1:P2+1)=" " THEN cSZ$(P2+1:P2+1)="" ! dump any extra spaces
-02220   let p2=0
-02230 L2230: let p1=pos(csz$,",",1)
-02240   if p1>0 then csz$(p1:p1)=" ": let p2=p1: goto L2230
+02220   p2=0
+02230 L2230: p1=pos(csz$,",",1)
+02240   if p1>0 then csz$(p1:p1)=" ": p2=p1: goto L2230
 02250 ! IF P2>0 AND CSZ$(P2+1:P2+1)=" " THEN cSZ$(P2+1:P2+1)="" ! dump any extra spaces
-02260 L2260: let p1=pos(rtrm$(csz$),"  ",1)
+02260 L2260: p1=pos(rtrm$(csz$),"  ",1)
 02270   if p1>0 then csz$(p1+1:p1+1)="" : goto L2260
-02280   csz$=ltrm$(rtrm$(csz$)): let p1=pos(csz$," ",-1)
+02280   csz$=ltrm$(rtrm$(csz$)): p1=pos(csz$," ",-1)
 02290   let zip$=csz$(p1+1:len(csz$)): let zip$=ltrm$(rtrm$(zip$))
-02300   let p2=pos(csz$(1:p1-1)," ",-1) : state$=csz$(p2+1:p1-1)(1:2) : state$=ltrm$(rtrm$(state$))
+02300   p2=pos(csz$(1:p1-1)," ",-1) : state$=csz$(p2+1:p1-1)(1:2) : state$=ltrm$(rtrm$(state$))
 02310   city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 02320   return 

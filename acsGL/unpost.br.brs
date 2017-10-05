@@ -11,26 +11,26 @@
 00120   fncno(cno,cnam$)
 18000 MENU1: ! r:
 18020   fntos(sn$='UnPost')
-18040   lc=0 : let mylen=47 : let mypos=mylen+2
+18040   lc=0 : mylen=47 : mypos=mylen+2
 18060   fnlbl(lc+=1,1,"Starting Date to Remove:",mylen,1)
 18080   fntxt(lc,mypos,0,0,0,'ccyymmdd')
-18100   let resp$(1)="" ! STR$(fndate_mmddyy_to_ccyymmdd(BEGDAT))
+18100   resp$(1)="" ! STR$(fndate_mmddyy_to_ccyymmdd(BEGDAT))
 18120   fnlbl(lc+=1,1,"Ending Date to Remove:",mylen,1)
 18140   fntxt(lc,mypos,0,0,0,'ccyymmdd')
-18160   let resp$(2)="" ! STR$(fndate_mmddyy_to_ccyymmdd(ENDDAT))
+18160   resp$(2)="" ! STR$(fndate_mmddyy_to_ccyymmdd(ENDDAT))
 18170   lc+=1
 18180   fnchk(lc+=1,50,'Process History instead of Current Transactions',1)
-18200   let resp$(3)="False"
+18200   resp$(3)="False"
 18210   lc+=1
 18220   fnchk(lc+=1,50,'Remove Duplicates Only',1)
-18240   let resp$(4)='False'
+18240   resp$(4)='False'
 18260   fncmdset(2)
 18280   fnacs(sn$,0,mat resp$,ckey)
 18300   if ckey=5 then goto XIT
 18320   begdat=val(resp$(1))
 18340   enddat=val(resp$(2))
 18360   if resp$(3)='True' then code$='H' else code$='C'
-18380   if resp$(4)='True' then let del_dupe_only=1 else let del_dupe_only=0
+18380   if resp$(4)='True' then del_dupe_only=1 else del_dupe_only=0
 18400   if enddat<begdat or (enddat=0 and begdat=0) then pr bell; : goto MENU1
 18420 ! /r
 18440 ! r: get ready to run
@@ -62,8 +62,8 @@
 28040   reread #h_trans,using 'Form POS 1,C 70': hd_key_one$
 28060   if fndate_mmddyy_to_ccyymmdd(s)<begdat or fndate_mmddyy_to_ccyymmdd(s)>enddat then goto READ_H_TRANS
 28080 ! if val(t$(1:3))=0 and val(t$(4:9))=0 and val(t$(10:12))=0 then goto READ_H_TRANS
-28100   if t$(3:3)=" " then let t$(3:3)="0"
-28120   if t$(12:12)=" " then let t$(12:12)="0"
+28100   if t$(3:3)=" " then t$(3:3)="0"
+28120   if t$(12:12)=" " then t$(12:12)="0"
 28140   read #1,using 'Form POS 81,2*PD 6.2',key=t$: bb,cb nokey DEL_H_TRANS ! delete any transactions without a matching master record.
 28160   cb=cb-k
 28180   if uprc$(code$)="H" then bb=bb-k
@@ -91,11 +91,11 @@
 32220     read #h_trans,using 'Form POS 1,C 12,POS 71,PD 3',rec=j: k$,nta norec L580
 32240     if k$="  0     0  0" then goto L580
 32260     read #1,using 'Form POS 333,2*PD 3',key=k$: mat ta nokey L580
-32280     if ta(1)=0 then let ta(1)=j
+32280     if ta(1)=0 then ta(1)=j
 32300     if ta(2)>0 then 
 32320       rewrite #h_trans,using 'Form POS 71,PD 3',rec=ta(2): j
 32340     end if 
-32360     let ta(2)=j
+32360     ta(2)=j
 32380     rewrite #1,using 'Form POS 333,2*PD 3',key=k$: mat ta
 32400     if uprc$(code$)<>"H" then rewrite #h_trans,using 'Form POS 71,PD 3',rec=j: 0
 32420 L580: ! 
@@ -103,9 +103,9 @@
 32450 ! /r
 32460   fnstatus_pause
 32480   goto XIT
-34000 XIT: let fnxit
+34000 XIT: fnxit
 36000 ! <Updateable Region: ERTN>
-36020 ERTN: let fnerror(program$,err,line,act$,"xit")
+36020 ERTN: fnerror(program$,err,line,act$,"xit")
 36040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 36060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 36080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -116,15 +116,15 @@
 40020 ! hd_key$ must be formatted properly and contain ENTIRE key not just part, h_trans_dupe must be keyed and it's record pointer will be changed
 40040 ! hd_form$ - form for key only
 40060     dim hd_key_one$*128,hd_key_two$*128
-40080     let hd_return=0
-40100     let hd_key_two$=''
+40080     hd_return=0
+40100     hd_key_two$=''
 40120 ! restore #h_trans_dupe:
 40140 ! release #h_trans:
 40160 ! read #h_trans_dupe,using hd_form$,rec=hd_rec,release: hd_key_one$ norec HD_XIT
 40180     read #h_trans_dupe,using hd_form$,key=hd_key_one$: hd_key_one$ norec HD_XIT
 40200     read #h_trans_dupe,using hd_form$: hd_key_two$ eof HD_EOF
 40220 HD_EOF: ! 
-40240     if hd_key_one$=hd_key_two$ then let hd_return=1
+40240     if hd_key_one$=hd_key_two$ then hd_return=1
 40260 HD_XIT: ! 
 40280     fn_has_dupe=hd_return
 40300   fnend  ! fn_has_dupe

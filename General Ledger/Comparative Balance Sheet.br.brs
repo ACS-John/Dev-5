@@ -18,11 +18,11 @@
 14300   ! fnpriorcd
 14320   ! pr newpage
 14340   if fnps=2 then 
-14360     let mp1=66 
+14360     mp1=66 
 14380     fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&env$('cno')&"," 
 14400     fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&env$('cno')&",Shr" 
 14420   else 
-14440     let mp1=63 
+14440     mp1=63 
 14460     fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&"," 
 14480     fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnSBIndx.h"&env$('cno')&",Shr"
 14500   end if
@@ -38,10 +38,10 @@
 20000   ! r: ask cost center
 20020   if fnprocess=1 or fnUseDeptNo=0 then goto L320
 20040   fntos(sn$="Acglbalc") 
-20060   let mylen=30: let mypos=mylen+3 : let right=1
+20060   mylen=30: mypos=mylen+3 : right=1
 20080   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
 20100   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) 
-20120   let resp$(1)=""
+20120   resp$(1)=""
 20140   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
 20160   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
 20180   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
@@ -59,7 +59,7 @@
 22120   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('temp')&'\'&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 22140   ! /r
 23020   fnopenprn 
-23040   let report$=env$('program_caption')
+23040   report$=env$('program_caption')
 24000 MainRead: ! r: main loop (on financial statement design)
 24020   read #1,using L470: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1660
 24040   L470: form pos 1,c 5,c 50,c 1,2*n 2,5*n 1,9*n 1,n 1,n 3
@@ -87,24 +87,24 @@
 28160   if fnpriorcd=1 then cb=by(fnfscode)
 28180   L650: !
 28200   if br=val(r$) then 
-28220     let total=total+cb 
-28240     let total2+=bp(fnfscode)
+28220     total=total+cb 
+28240     total2+=bp(fnfscode)
 28260     goto ReadGLmstr
 28280   end if
 28300   if br<val(r$) then goto ReadGLmstr
 28320   if br>val(r$) then goto L710
 28340   L700: !
-28360   let notrans=1
+28360   notrans=1
 28380   L710: !
-28400   if te$="E" then let total=-accum(ap,1) : let total2=-accum(ap,2)
+28400   if te$="E" then total=-accum(ap,1) : total2=-accum(ap,2)
 28420   for j=1 to 9
 28440     if ac(j)<>9 then 
 28460       accum(j,1)=accum(j,1)+total : accum(j,2)=accum(j,2)+total2
 28480     end if
 28500   next j
-28520   if rs=1 then let total=-total : let total2=-total2
-28540   if ds=1 then let dollar$="$" else let dollar$=" "
-28560   let dollar=24+14*bc
+28520   if rs=1 then total=-total : total2=-total2
+28540   if ds=1 then dollar$="$" else dollar$=" "
+28560   dollar=24+14*bc
 28580   if total><0 or total2><0 then goto L800
 28600   if ls+ul+ds+ic>0 then goto L800 else goto MainRead
 28620   L800: !
@@ -114,8 +114,8 @@
 28700   L816: form pos sp,c sp2,pos dollar,c 1,c 5,pic(--,---,---.##),c 1,x 28,c 1,c 5,pic(--,---,---.##),c 1,skip 1
 28720   L820: form pos sp,c sp2,pos dollar,c 1,pic(--,---,---.##),x 28,c 1,pic(--,---,---.##),skip 1
 28740   L830: !
-28760   let total=0
-28780   let total2=0
+28760   total=0
+28780   total2=0
 28800   gosub L1120
 28820   if ul=1 then goto L870
 28840   gosub L1370
@@ -126,8 +126,8 @@
 32020   if ap=0 then ap=1
 32040   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 32060   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
-32080   if ds=1 then let dollar$="$" else let dollar$=" "
-32100   let dollar=24+14*bc
+32080   if ds=1 then dollar$="$" else dollar$=" "
+32100   dollar=24+14*bc
 32120   sp2=dollar-sp-1
 32140   if ul=1 then pr #255,using L816: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}" pageoflow PgOf : goto L960
 32160   pr #255,using L820: d$(1:sp2),dollar$,accum1,dollar$,accum2 pageoflow PgOf
@@ -146,7 +146,7 @@
 32420 goto MainRead ! /r
 34000 TypeRandS: ! r:
 34020   if te$="R" then 
-34040     let report$=d$ 
+34040     report$=d$ 
 34060   else if te$="S" then 
 34080     secondr$=d$
 34100   end if
@@ -156,7 +156,7 @@
 34180   if foot1=1 then 
 34200     let foot$=rtrm$(foot$)&d$ 
 34220   else
-34240     let tabnote=sp : let foot1=1 : let foot$=d$
+34240     tabnote=sp : let foot1=1 : let foot$=d$
 34260   end if
 34280 goto MainRead ! /r
 38000 L1120: ! r:
@@ -207,7 +207,7 @@
 52280   L1490: form skip 1,c 1,skip 1
 52300 return ! /r
 54000 PrHeading: ! r: heading
-54020   let heading=1
+54020   heading=1
 54040   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 54060   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 54080   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
@@ -225,9 +225,9 @@
 58080   fnpriorcd(1)
 58100   fncloseprn
 58120 goto XIT ! /r
-58140 XIT: let fnxit
+58140 XIT: fnxit
 62000 ! <Updateable Region: ERTN>
-62020 ERTN: let fnerror(program$,err,line,act$,"xit")
+62020 ERTN: fnerror(program$,err,line,act$,"xit")
 62040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 62060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 62080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

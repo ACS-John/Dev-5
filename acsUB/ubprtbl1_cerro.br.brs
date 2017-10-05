@@ -34,61 +34,61 @@
 00230   def fnc(x)=int(100*(x+sgn(x)*.0001))
 00240 ! ______________________________________________________________________
 00250 SCREEN1: ! 
-00260   a$="" : let prtbkno=0
+00260   a$="" : prtbkno=0
 00270   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : ll=24 !:
-        let respc=0
-00280   a$="" : let prtbkno=0
+        pf=26 : ll=24 !:
+        respc=0
+00280   a$="" : prtbkno=0
 00290   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : ll=24 !:
-        let respc=0
+        pf=26 : ll=24 !:
+        respc=0
 00300   fnlbl(1,1,"Service From:",ll,1)
 00310   fntxt(1,pf,8,8,1,"1",0,tt$) !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d2)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d2)
 00320   fnlbl(2,1,"Service To:",ll,1)
 00330   fntxt(2,pf,8,8,1,"1") !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3)
 00340   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00350   fntxt(3,pf,8,8,1,"1",0,tt$) !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 00360   fnlbl(4,1,"Message on Bill:",ll,1)
 00370   fntxt(4,pf,30,30) !:
-        let resp$(respc+=1)=mg$(1)
+        resp$(respc+=1)=mg$(1)
 00380   fntxt(5,pf,30,30) !:
-        let resp$(respc+=1)=mg$(2)
+        resp$(respc+=1)=mg$(2)
 00390   fntxt(6,pf,30,30) !:
-        let resp$(respc+=1)=mg$(3)
+        resp$(respc+=1)=mg$(3)
 00400   fnlbl(7,1,"Date of Billing:",ll,1)
 00410   fntxt(7,pf,8,8,1,"1") !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00420   fnlbl(8,1,"Starting Account:",ll,1)
 00430   let fe$="ubm-act-nam" !:
-        let datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
-        let indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
-        let kp=1741: let kl=9 : let dp=41 : let dl=30 !:
+        datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
+        indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
+        kp=1741: kl=9 : dp=41 : dl=30 !:
         fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) !:
-        let resp$(respc+=1)="[All]"
+        resp$(respc+=1)="[All]"
 00440   fnlbl(9,1,"Route Number:",ll,1)
 00450   fncmbrt2(9,pf) !:
-        let resp$(respc+=1)="[All]"
+        resp$(respc+=1)="[All]"
 00460   fnchk(10,pf,"Select Accounts to Print",1) !:
-        let resp$(respc+=1)="False"
+        resp$(respc+=1)="False"
 00470   fncmdset(3) !:
         fnacs(sn$,0,mat resp$,ck)
 00480   if ck=5 then goto ENDSCR
-00490   let d1 = val(resp$(7)) !:
-        let d2x= val(resp$(1)) !:
-        let d3x= val(resp$(2)) !:
-        let d4 = val(resp$(3)) !:
-        let mg$(1) = resp$(4) !:
-        let mg$(2) = resp$(5) !:
-        let mg$(3) = resp$(6)
+00490   d1 = val(resp$(7)) !:
+        d2x= val(resp$(1)) !:
+        d3x= val(resp$(2)) !:
+        d4 = val(resp$(3)) !:
+        mg$(1) = resp$(4) !:
+        mg$(2) = resp$(5) !:
+        mg$(3) = resp$(6)
 00500   if resp$(8)="[All]" then !:
           a$="" else !:
           a$ = lpad$(trim$(resp$(8)(1:9)),9)
 00510   if resp$(9)="[All]" then !:
-          let prtbkno=0 else !:
-          let prtbkno = val(resp$(9))
+          prtbkno=0 else !:
+          prtbkno = val(resp$(9))
 00520   if resp$(10)="True" then sl1=1 else sl1=0
 00530   if trim$(a$)<>"" then read #2,using L540,key=a$: holdz$,route,sequence nokey SCREEN1 ! !:
           st1=1
@@ -111,8 +111,8 @@
 00700   read #2,using L710: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,escrow,d2,d3 eof F5_CANCEL
 00710 L710: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1859,pd 5.2,pos 1750,2*n 6
 00720   mat ba=(0): budget=0
-00730   if d2=0 and d2x>0 then let d2=d2x
-00740   if d3=0 and d3x>0 then let d3=d3x
+00730   if d2=0 and d2x>0 then d2=d2x
+00740   if d3=0 and d3x>0 then d3=d3x
 00750   read #81,using L760,key=z$: x$,mat ba nokey L780
 00760 L760: form pos 1,c 10,pd 4,12*pd 5.2
 00770   for j=2 to 12: budget=budget+ba(j): next j ! get total budget amount
@@ -129,25 +129,25 @@
 00880   e1=0 : mat pe$=("")
 00890   for j=1 to 4
 00900     if trim$(ba$(j))<>"" then !:
-            let pe$(e1+=1)=ba$(j)
+            pe$(e1+=1)=ba$(j)
 00910   next j
 00920   goto L1060
 00930 ! ______________________________________________________________________
 00940 L940: e1=0 : mat pe$=("")
 00950   for j=2 to 4
 00960     if rtrm$(e$(j))<>"" then !:
-            e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : pe$(e1)=e$(j)
 00970   next j
 00980   goto L1060
 00990 ! ______________________________________________________________________
 01000 F5_CANCEL: ! 
 01010   close #1: ioerr L1020
 01020 L1020: close #3: ioerr L1030
-01030 L1030: let fncloseprn
+01030 L1030: fncloseprn
 01040   goto ENDSCR
 01050 ! ______________________________________________________________________
 01060 L1060: ! 
-01070   let pb=bal-g(11)
+01070   pb=bal-g(11)
 01080 ! ______________print bill routine______________________________________
 01090   gosub PRINTBILL
 01100 ! _____________end of pr routine______________________________________
@@ -157,12 +157,12 @@
 01130 ! ______________________________________________________________________
 01140 SCREEN3: ! 
 01150   fntos(sn$="ubprtbl1-2")
-01160   let txt$="Account (blank to stop)" !:
+01160   txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
 01170   if z$<>"" then !:
           fnlbl(3,1,"Last Account entered was "&z$,44,1)
 01180   fncmbact(1,17) ! !:
-        let resp$(1)=a$
+        resp$(1)=a$
 01190   fncmdkey("Add",1,1,0) !:
         fncmdkey("Print",5,0,1)
 01200   fnacs(sn$,0,mat resp$,ck)
@@ -185,18 +185,18 @@
 01360   return 
 01370 ! ______________________________________________________________________
 01380 ENDSCR: ! pr totals screen
-01390   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
+01390   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01400   fntos(sn$="Bills-Total") !:
-        let mylen=23 : let mypos=mylen+2 !:
-        let respc=0
+        mylen=23 : mypos=mylen+2 !:
+        respc=0
 01410   fnlbl(1,1,"Total Bills Printed:",mylen,1)
 01420   fntxt(1,mypos,8,0,1,"",1) !:
-        let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
+        resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 01430   fncmdset(52) !:
         fnacs(sn$,0,mat resp$,ck)
-01440 XIT: let fnxit
+01440 XIT: fnxit
 01450 ! ______________________________________________________________________
-01460 ERTN: let fnerror(program$,err,line,act$,"xit")
+01460 ERTN: fnerror(program$,err,line,act$,"xit")
 01470   if uprc$(act$)<>"PAUSE" then goto L1500
 01480   execute "list -"&str$(line) !:
         pause  !:
@@ -207,25 +207,25 @@
 01520 ! ______________________________________________________________________
 01530 PRINTBILL: ! 
 01540   if final=2 then let g(8)=g(8)-b(8): let g(11)=g(12)+g(8): bal=bal +g(8)
-01550   let pb=bal-g(11)
+01550   pb=bal-g(11)
 01560   pr #255,using L1570: int(d2*.01),int(d3*.01)
 01570 L1570: form pos 15,pic(##/##),"-",pic(##/##),skip 3
-01580   if g(1)=0 then let t$="" else let t$="WA"
+01580   if g(1)=0 then t$="" else t$="WA"
 01590   pr #255,using L1600: t$,d(2),d(1),d(3),g(1),cnvrt$("PIC(##/##/##)",d1)
 01600 L1600: form pos 2,c 3,3*nz 9,x 1,nz 10.2,x 3,c 30,skip 1
-01610   if g(2)=0 then let t$="" else let t$="SW"
+01610   if g(2)=0 then t$="" else t$="SW"
 01620   pr #255,using L1600: t$,0,0,0,g(2),pe$(1)
-01630   let t$=""
+01630   t$=""
 01640   pr #255,using L1600: t$,0,0,0,0,pe$(2)
-01650   if g(9)=0 then let tr$="" else let t$="TX"
+01650   if g(9)=0 then tr$="" else t$="TX"
 01660   pr #255,using L1600: t$,0,0,0,g(9),pe$(3)
-01670   if g(8)=0 then let t$="" else let t$="OC"
+01670   if g(8)=0 then t$="" else t$="OC"
 01680   pr #255,using L1600: t$,0,0,0,g(8),pe$(4)
 01690   pr #255: 
 01700   if final>0 then let final$="FINAL BILL" else let final$=""
 01710   pr #255,using L1720: final$
 01720 L1720: form pos 11,c 20,skip 1
-01730   let pn=o
+01730   pn=o
 01740   if pb=0 then pr #255: else pr #255,using L1750: "Prior Bill",pb
 01750 L1750: form pos 11,c 20,pos 33,n 10.2,skip 1
 01760 L1760: form pos 2,pic(zz/zz/zz),x 1,c 20,n 10.2,skip 1
@@ -234,7 +234,7 @@
           pr #255: !:
         next j
 01790   pr #255: rtrm$(mg$(1))&" "&rtrm$(mg$(2))&" "&rtrm$(mg$(3))
-01800   let pn=g(5)+g(10)
+01800   pn=g(5)+g(10)
 01810   pr #255,using L1820: d4,pn+bal,bal,pn+bal,bal
 01820 L1820: form skip 2,pos 4,pic(##/##/##),n 12.2,x 7,n 12.2,x 1,n 12.2,x 3,n 12.2,skip 3
 01830   pr #255,using L1840: z$,z$

@@ -1,6 +1,6 @@
 10000 ! Replace Test\Grid
 10040   library 'S:\Core\Library': fncmdkey,fnacs,fnflexinit1,fntos,fnflexadd1
-10060   let test_date= 20082214 ! 20070713  ! date('ccyymmdd')
+10060   test_date= 20082214 ! 20070713  ! date('ccyymmdd')
 10180   mat colhdr$(6)
 10200   colhdr$(1)="ccyymmdd"
 10220   colhdr$(2)="mm/dd/ccyy"
@@ -26,12 +26,12 @@
 20124   source_format$(6)='mm/dd/yy'
 20140   for x=1 to udim(mat source_format$)
 20160     dim item$(6)*30
-20180     let item$(1)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! date$("mm/dd/ccyy")
-20200     let item$(2)=date$(days(test_date,'ccyymmdd'),source_format$(x)) !  date$("ccyy/mm/dd")
-20220     let item$(3)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! date$("dd/mm/ccyy")
-20240     let item$(4)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! )date$("dd/mm/yy")
-20260     let item$(5)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! )date$("dd/mm/yy")
-20280     let item$(6)=source_format$(x) ! )date$("dd/mm/yy")
+20180     item$(1)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! date$("mm/dd/ccyy")
+20200     item$(2)=date$(days(test_date,'ccyymmdd'),source_format$(x)) !  date$("ccyy/mm/dd")
+20220     item$(3)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! date$("dd/mm/ccyy")
+20240     item$(4)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! )date$("dd/mm/yy")
+20260     item$(5)=date$(days(test_date,'ccyymmdd'),source_format$(x)) ! )date$("dd/mm/yy")
+20280     item$(6)=source_format$(x) ! )date$("dd/mm/yy")
 20300     fnflexadd1(mat item$)
 20320   next x
 20340 EO_GRID: ! 

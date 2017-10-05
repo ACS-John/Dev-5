@@ -37,7 +37,7 @@
 00330     if ckey=5 then cn$="     " ! no one selected
 00340   goto XIT ! /r
 00360 ! <Updateable Region: ERTN>
-00370 ERTN: let fnerror(program$,err,line,act$,"xit")
+00370 ERTN: fnerror(program$,err,line,act$,"xit")
 00380     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00390     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00400     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

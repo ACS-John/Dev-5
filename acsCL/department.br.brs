@@ -10,19 +10,19 @@
 00100   fncno(cno)
 00110   lbl$(1)="Fund Number" : lbl$(2)="Department Number" !:
         lbl$(3)="Description"
-00120   let tln(1)=3 : let tln(2)=2 : let tln(3)=30
+00120   tln(1)=3 : tln(2)=2 : tln(3)=30
 00130   fltyp$(1)="N" : fltyp$(2)="n" : fltyp$(3)="C"
-00140   let mask(1)=30 : let mask(2)=30 : let mask(3)=0
+00140   mask(1)=30 : mask(2)=30 : mask(3)=0
 00150   open #1: "Name="&env$('Q')&"\CLmstr\dptmstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\dptidx1.h"&str$(cno)&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outin,keyed 
 00160   close #1: 
 00170   open #1: "Name="&env$('Q')&"\CLmstr\dptmstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\dptidx1.h"&str$(cno)&",Use,RecL=35,KPs=1,KLn=5,Shr",internal,outin,keyed 
 00180   fnhamster("Bank",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00190   close #1: 
 00200   execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys -n"
-00210 XIT: let fnxit
+00210 XIT: fnxit
 00220 ! ______________________________________________________________________
 00230 ! <Updateable Region: ERTN>
-00240 ERTN: let fnerror(program$,err,line,act$,"xit")
+00240 ERTN: fnerror(program$,err,line,act$,"xit")
 00250   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00260   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00270   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

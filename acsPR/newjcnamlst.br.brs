@@ -15,23 +15,23 @@
 00140 ! ______________________________________________________________________
 00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00160   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
-00170   let prtcat$="N"
+00170   prtcat$="N"
 00180   if fnprocess=1 then goto L330
 00190 ! ______________________________________________________________________
 00200 MAIN_SCREEN: ! 
 00210   fntos(sn$="namlst1") !:
-        let mylen=25 : let mypos=mylen+2: let resp=0: left=1
+        mylen=25 : mypos=mylen+2: resp=0: left=1
 00220   fnlbl(1,1,"Report Heading Date:",23,left)
 00230   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
-        let resp$(resp+=1)=dat$
+        resp$(resp+=1)=dat$
 00240   fnchk(2,mypos,"Print Category Names:",left) !:
-        let resp$(resp+=1)="False"
+        resp$(resp+=1)="False"
 00250   fncmdset(2)
 00260   fnacs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
-00280   let dat$=resp$(1) ! heading date
-00290   if resp$(2)="True" then let prtcat$="Y" else let prtcat$="N"
-00300   let dattab=60-len(rtrm$(dat$))/2
+00280   dat$=resp$(1) ! heading date
+00290   if resp$(2)="True" then prtcat$="Y" else prtcat$="N"
+00300   dattab=60-len(rtrm$(dat$))/2
 00310   fndat(dat$,2)
 00320 ! ______________________________________________________________________
 00330 L330: on fkey 5 goto L540
@@ -55,7 +55,7 @@
 00510 L510: exit eof L520,nokey L520
 00520 L520: close #1: 
 00530   close #2: 
-00540 L540: let fncloseprn
+00540 L540: fncloseprn
 00550   fnxit
 00560 ! ______________________________________________________________________
 00570 HDR: ! 
@@ -80,10 +80,10 @@
 00760   gosub HDR
 00770 L770: return 
 00780 ! ______________________________________________________________________
-00790 XIT: let fnxit
+00790 XIT: fnxit
 00800 ! ______________________________________________________________________
 00810 ! <Updateable Region: ERTN>
-00820 ERTN: let fnerror(program$,err,line,act$,"xit")
+00820 ERTN: fnerror(program$,err,line,act$,"xit")
 00830   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00840   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00850   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -12,13 +12,13 @@
 00120   fnsetmonth(mat mo$)
 00130   fncno(cno)
 00140 ! 
-00150   let dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
+00150   dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
 00160   cvp$=".h"&str$(cno)&"/acspb,Shr"
 00170   open #20: "Name=UBData\Service.h"&str$(cno)&",Shr",internal,input,relative ioerr L180 !:
         read #20,using "Form POS 1,10*C 20",rec=1: mat servicename$ !:
         close #20: 
-00180 L180: let io1$(1)="10,34,c 45,UT,N" !:
-        let io1$(2)="12,34,C 45,UT,N"
+00180 L180: io1$(1)="10,34,c 45,UT,N" !:
+        io1$(2)="12,34,C 45,UT,N"
 00190   outputfile$="acspb\grid\patient\patient"
 00200   ev$="ACSpb\Layouts\pbMSTR-VB.LAY"
 00210   pr newpage
@@ -35,32 +35,32 @@
 00320   open #15: "Name="&env$('Temp')&"\Temp."&wsid$&",KFName="&env$('Temp')&"\TempIdx."&session$&",RecL=87,KPs=1,KLn=30,Replace",internal,outin,keyed 
 00330 L330: linput #2: ln$ eof L830
 00340   if uprc$(ln$(7:10))<>"DATA" then goto L330
-00350 DATALN: let j3=1
-00360   let p1=11
-00370   let p2=pos(ln$,"^",p1+1)
-00380   let p3=pos(ln$,"^",p2+1)
-00390   let p4=pos(ln$,"^",p3+1)
-00400   let p5=len(rtrm$(ln$))
+00350 DATALN: j3=1
+00360   p1=11
+00370   p2=pos(ln$,"^",p1+1)
+00380   p3=pos(ln$,"^",p2+1)
+00390   p4=pos(ln$,"^",p3+1)
+00400   p5=len(rtrm$(ln$))
 00410   a$(j3,1)=ln$(p1+1:p2-1)
 00420   a$(j3,2)=ln$(p2+1:p3-1)
 00430   a$(j3,3)=ln$(p3+1:p4-1)
 00440   abbrev$=ln$(p4+1:len(ln$))(1:20)
 00450   if rtrm$(a$(j3,3))="" then goto L810
-00460   let p1=pos(a$(j3,3)," ",1)+1
-00470   let p2=pos(a$(j3,3),".",1)+1
-00480   let p3=len(rtrm$(a$(j3,3)))
-00490   let p4=pos(a$(j3,3),"*",1)
-00500   if p4=0 then let m1=1 else let m1=val(a$(j3,3)(1:p4-1))
+00460   p1=pos(a$(j3,3)," ",1)+1
+00470   p2=pos(a$(j3,3),".",1)+1
+00480   p3=len(rtrm$(a$(j3,3)))
+00490   p4=pos(a$(j3,3),"*",1)
+00500   if p4=0 then m1=1 else m1=val(a$(j3,3)(1:p4-1))
 00510   l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
-00520   if p2>1 then let dp=val(a$(j3,3)(p2:p3)) else let dp=0 !:
+00520   if p2>1 then dp=val(a$(j3,3)(p2:p3)) else dp=0 !:
           ! DECIMAL POSITIONS
 00530   if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !:
           !   ACTUAL FIELD LENGTH
 00540   l=l*m1 ! TOTAL STORAGE LENGTH
 00550   b=a+l
 00560   a=a+1
-00570   let ino=ino+1
-00580   let j3=1
+00570   ino=ino+1
+00580   j3=1
 00590   a(j3,1)=ino
 00600   a(j3,2)=al
 00610   a(j3,3)=dp
@@ -68,7 +68,7 @@
 00630   a(j3,5)=a
 00640   a(j3,6)=b
 00650   a=b
-00660   let rl=rl+int(val(a$(j3,3)(p1:p3)))*m1
+00660   rl=rl+int(val(a$(j3,3)(p1:p3)))*m1
 00670 ! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAME !:
         ! ON EACH SERVICE IN UTILITY BILLING
 00680   if uprc$(a$(j3,1)(1:7))<>"SERVICE" then goto L730
@@ -102,7 +102,7 @@
 00960 L960: return 
 00970 ! ______________________________________________________________________
 00980 ! <Updateable Region: ERTN>
-00990 ERTN: let fnerror(program$,err,line,act$,"xit")
+00990 ERTN: fnerror(program$,err,line,act$,"xit")
 01000   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01010   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01020   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

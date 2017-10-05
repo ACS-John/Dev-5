@@ -26,8 +26,8 @@
 00270   next j
 00280   flo$(31)="1,28,c 40,h,n"
 00290   flo$(32)="13,30,c 40,h,n"
-00300   let hd$(1)="CHARGEABLE CATEGORIES"
-00310   let hd$(2)="NON CHARGEABLE CATEGORIES"
+00300   hd$(1)="CHARGEABLE CATEGORIES"
+00310   hd$(2)="NON CHARGEABLE CATEGORIES"
 00320   pr newpage
 00330   pr f mat flo$: mat b$,mat hd$
 00340   pr f mat fli$: mat a$
@@ -38,7 +38,7 @@
 00370 L370: form pos 1,30*c 30
 00380   pr newpage
 00390   close #1: 
-00400 XIT: let fnxit
+00400 XIT: fnxit
 00410 L410: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L430
 00420   goto L470
 00430 L430: pr newpage

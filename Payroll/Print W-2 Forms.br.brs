@@ -66,7 +66,7 @@
 22200   ! /r
 24000 ! ASK_DEDUCTIONS: ! r: ! ask if any misecllaneous deductions should pr in box 12
 24020   fntos(sn$="Prw2-box12")
-24040   let rc=cf=0 : let mylen=20 : let mypos=mylen+3
+24040   rc=cf=0 : mylen=20 : mypos=mylen+3
 24060   fnlbl(1,1,"Indicate if any of the miscellaneous deductions",50,1,0,0)
 24080   fnlbl(2,1,"should appear in box 12 on the W-2.",44,1,0,0)
 24100   fnlbl(4,7,"Deduction Name")
@@ -87,15 +87,15 @@
 24420     if trim$(fullname$(dedItem))<>'' then 
 24430       fnlbl(tmpLine+=1,1,fullname$(dedItem),mylen,1,0,0)
 24440       fnchk(tmpLine,26,"",0,0,0,0)
-24460       let resp$(rc+=1)=dedyn$(dedItem)
+24460       resp$(rc+=1)=dedyn$(dedItem)
 24480       fncomboa('w2Copy',tmpLine,35,mat w2box12Opt$, '',3)
 24500       if box12which(dedItem)=0 then
-24520         let resp$(respc_box12opt(dedItem)=rc+=1)=''
+24520         resp$(respc_box12opt(dedItem)=rc+=1)=''
 24540       else
-24560         let resp$(respc_box12opt(dedItem)=rc+=1)=w2box12Opt$(box12which(dedItem))
+24560         resp$(respc_box12opt(dedItem)=rc+=1)=w2box12Opt$(box12which(dedItem))
 24580       end if
 24660       fntxt(tmpLine,45,2,0,1,"",0,"Enter the Code that should appear in the box.")
-24680       let resp$(rc+=1)=dedcode$(dedItem)
+24680       resp$(rc+=1)=dedcode$(dedItem)
 24700     end if
 24720   next dedItem
 24740   fncmdset(2)
@@ -145,12 +145,12 @@
 30040     if endnum>0 and eno>endnum then goto EO_EMPLOYEE ! ending employee number entered
 30060     fnNameParse(k$(1),nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
 30070     if numb<>0 and eno<empno then goto READ_EMPLOYEE
-30080     let kz$=lpad$(rtrm$(str$(eno)),8)
-30100     let retirementPlanX$=""
+30080     kz$=lpad$(rtrm$(str$(eno)),8)
+30100     retirementPlanX$=""
 30120     box12aCode$=box12aAmt$=box12bCode$=box12bAmt$=box12cCode$=box12cAmt$=box12dCode$=box12dAmt$=''
 30140     mat amt=(0)
 30160     mat miscded=(0)
-30180 !   let tdedret=0 ! REMOVE EXPLANATION  FROM LINE 905 TO LIST RETIREMENT IN BOX 13
+30180 !   tdedret=0 ! REMOVE EXPLANATION  FROM LINE 905 TO LIST RETIREMENT IN BOX 13
 30260     let first=1
 30280     ! Read #hDepartment,Using 1190,Rec=TA: TENO,TCD,MAT TY,TA
 32000     checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
@@ -161,7 +161,7 @@
 32100       if heno<>eno then goto EO_CHECKS_FOR_EMP
 32120       if prd<beg_date or prd>end_date then goto READ_CHECK ! not this year
 32140       read #hDepartment,using "form pos 48,n 2", key=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zzz)",tdn): tcd nokey ignore ! get state code
-32160       if tcd<1 or tcd>10 then let tcd=1
+32160       if tcd<1 or tcd>10 then tcd=1
 32180       if exportFormatID then 
 32200         stcode=tcd 
 32220       else
@@ -173,14 +173,14 @@
 32340       state$=d$(tcd)(1:2)
 32360       stcode$=e$(tcd)
 32380       L1300: ! 
-32400       let dedfica=0
-32420       let dedret=0
+32400       dedfica=0
+32420       dedret=0
 32440       for dedItem=1 to 20
-32460         if newdedfed(dedItem)>=1 and newdedcode(dedItem)=1 then let dedret=dedret+tcp(dedItem+4)
-32480         if dedfica(dedItem)=1 and newdedcode(dedItem)=1 then let dedfica=dedfica+tcp(dedItem+4)
-32500         let miscded(dedItem)=miscded(dedItem)+tcp(dedItem+4)
+32460         if newdedfed(dedItem)>=1 and newdedcode(dedItem)=1 then dedret=dedret+tcp(dedItem+4)
+32480         if dedfica(dedItem)=1 and newdedcode(dedItem)=1 then dedfica=dedfica+tcp(dedItem+4)
+32500         miscded(dedItem)=miscded(dedItem)+tcp(dedItem+4)
 32520       next dedItem
-32540       ! LET TDEDRET=TDEDRET+DEDRET ! ACCUMULATE BOX 13 RETIREMENT; THIS LINE WILL ONLY WORK IF NO CAFETERIA; REMOVE ! OFF 861 AND 882 FOR RETIREMENT ONLY ! can change 882 only if know specific ded to show in box 13
+32540       ! tDEDRET=TDEDRET+DEDRET ! ACCUMULATE BOX 13 RETIREMENT; THIS LINE WILL ONLY WORK IF NO CAFETERIA; REMOVE ! OFF 861 AND 882 FOR RETIREMENT ONLY ! can change 882 only if know specific ded to show in box 13
 32560       let w(1)+=tcp(1) ! FED W/H YTD
 32580       let w(2)+=tcp(31)-dedret ! TOTAL TAXABLE WAGES
 32600       let ytdFica+=tcp(2) ! FICA W/H YTD
@@ -204,8 +204,8 @@
 32920         let w(8)+=tcp(loccode+4) ! LOCAL WITHHOLDING
 32940         let w(10)+=tcp(31)-dedret ! LOCAL WAGES
 32960         L1560: ! 
-32980         if pn1>0 and tcp(pn1+4)>0 then let retirementPlanX$="X"
-33000         if dc1>0 and dc1<11 then let dcb+=tcp(dc1+4)
+32980         if pn1>0 and tcp(pn1+4)>0 then retirementPlanX$="X"
+33000         if dc1>0 and dc1<11 then dcb+=tcp(dc1+4)
 33020       else
 33040         if loccode=0 then lowh=0 else lowh=tcp(loccode+4)
 33060         write #hAddr,using 'form pos 1,n 8,n 2,3*pd 5.2,c 8': eno,tcd,tcp(31)-dedret,tcp(3),lowh,empLocality$
@@ -228,27 +228,27 @@
 34240             if box12bCode$='' and box12bAmt$='' then 
 34260               box12bCode$=lpad$(dedcode$(dedItem),4)
 34280               box12bAmt$=cnvrt$("Nz 10.2",miscded(dedItem))
-34300               let totalbox12(dedItem)+=miscded(dedItem)
+34300               totalbox12(dedItem)+=miscded(dedItem)
 34320             end if
 34340             ! descWhich=4
 34360           else if box12which(dedItem)=box_12c then
 34380             if box12cCode$='' and box12cAmt$='' then 
 34400               box12cCode$=lpad$(dedcode$(dedItem),4)
 34420               box12cAmt$=cnvrt$("Nz 10.2",miscded(dedItem))
-34440               let totalbox12(dedItem)+=miscded(dedItem)
+34440               totalbox12(dedItem)+=miscded(dedItem)
 34460             end if
 34480             ! descWhich=5
 34500           else if box12which(dedItem)=box_12d then
 34520             if box12dCode$='' and box12dAmt$='' then 
 34540               box12dCode$=lpad$(dedcode$(dedItem),4)
 34560               box12dAmt$=cnvrt$("Nz 10.2",miscded(dedItem))
-34580               let totalbox12(dedItem)+=miscded(dedItem)
+34580               totalbox12(dedItem)+=miscded(dedItem)
 34600             end if
 34620             ! descWhich=6
 34640           end if
 34660           ! if trim$(desc$(descWhich))="" then 
-34680           !   let desc$(descWhich)=lpad$(dedcode$(dedItem)&" "&cnvrt$("Nz 10.2",miscded(dedItem)),15)
-34700           !   ! let totalbox12(dedItem)+=miscded(dedItem)
+34680           !   desc$(descWhich)=lpad$(dedcode$(dedItem)&" "&cnvrt$("Nz 10.2",miscded(dedItem)),15)
+34700           !   ! totalbox12(dedItem)+=miscded(dedItem)
 34720           ! end if
 34740         end if 
 34760       end if
@@ -257,10 +257,10 @@
 34820     let w(11)=min(mcmax,w(11)) ! MC WAGES CANNOT EXCEED MAXIMUM
 35000     if em6=9 then let w(3)=w(5)=w(11)=w(12)=0 ! NO SS OR MC
 35020     if w(8)=0 then 
-35040       let printLocality$=""
+35040       printLocality$=""
 35060     else
 35080       if cLocality$="YES" then gosub ASK_EMP_LOCALITY
-35100       let printLocality$=empLocality$
+35100       printLocality$=empLocality$
 35120     end if
 35140     controlNumber$=str$(eno)
 35160     if w(2)<>0 or w(5)<>0 then ! only pr w2 if wages
@@ -275,15 +275,15 @@
 35940       let wctr=wctr+1
 35950     end if
 35960     mat w=(0)
-35970     let nqp=dcb=ytdFica=0
+35970     nqp=dcb=ytdFica=0
 35980   loop ! /r
 36000 EO_EMPLOYEE: ! r:
 36020   mat t=t+s
-36040   let misc=3
+36040   misc=3
 36060   for dedItem=1 to 20 ! changed from 10 to 20 on 1/4/17
 36080     if totalbox12(dedItem)<>0 then 
-36100       let desc$(misc)=lpad$("  "&cnvrt$("Nz 10.2", totalbox12(dedItem)),15)
-36120       let misc+=1
+36100       desc$(misc)=lpad$("  "&cnvrt$("Nz 10.2", totalbox12(dedItem)),15)
+36120       misc+=1
 36140       if misc>7 then goto FINIS ! only allow 4 different deductions
 36160     end if
 36180   next dedItem
@@ -296,7 +296,7 @@
 37100   if ~exportFormatID then 
 37135     mat w=t 
 37140     controlNumber$="Final Total" 
-37160     let nameFirst$=nameMiddle$=nameLast$=""
+37160     nameFirst$=nameMiddle$=nameLast$=""
 37180     mat k$=("")
 37190     ! state$=''
 37182     ss$=printLocality$="" 
@@ -306,8 +306,8 @@
 37260   if enableW3$="True" then let fnw3(empId$,mat a$,mat w,dcb,state$,stcode$)
 37280   if exportFormatID then 
 37300       mat tmpMsgLine$(2)
-37320       let tmpMsgLine$(1)='Export file created:'
-37340       let tmpMsgLine$(2)=os_filename$(file$(hExport))
+37320       tmpMsgLine$(1)='Export file created:'
+37340       tmpMsgLine$(2)=os_filename$(file$(hExport))
 37360       close #hExport:
 37380       fnmsgbox(mat tmpMsgLine$,resp$,cap$) ! ,16+4)
 37400     goto XIT
@@ -317,7 +317,7 @@
 37480     end if
 37500   end if
 37520 goto XIT ! /r
-38000 XIT: let fnxit
+38000 XIT: fnxit
 40000 PRW2B: ! r:
 40020   open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output 
 40040   restore #1: 
@@ -329,13 +329,13 @@
 40160 fnchain("S:\acsPR\prw2b") ! /r
 52000 ASK_EMP_LOCALITY: ! r:
 52020   fntos(sn$="Prw2-5")
-52040   let rc=cf=0
-52060   let mylen=30
-52080   let mypos=mylen+3
+52040   rc=cf=0
+52060   mylen=30
+52080   mypos=mylen+3
 52100   fnlbl(1,1,k$(1),mylen,1,0,0)
 52120   fnlbl(2,1,"Locality Name:",mylen,1,0,0)
 52140   fntxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
-52160   let resp$(rc+=1)=empLocality$
+52160   resp$(rc+=1)=empLocality$
 52180   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
 52200   fncmdkey("E&xit",5,0,1,"Returns to menu")
 52220   fnacs(sn$,0,mat resp$,ckey)
@@ -452,7 +452,7 @@
 67400 return ! /r
 75000 IGNORE: continue 
 76000 ! <updateable region: ertn>
-76040 ERTN: let fnerror(program$,err,line,act$,"xit")
+76040 ERTN: fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

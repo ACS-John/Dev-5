@@ -11,7 +11,7 @@
 00110 L110: pr f "8,20,C 30,R,N": "Mask Cisty State Zip"
 00120   pr f "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
 00130   pr f "11,1,Cr 38": "New City State and Zip:"
-00140   let io1$(1)="10,40,N 2,UT,N" : let io1$(2)="11,40,C 30,UT,N"
+00140   io1$(1)="10,40,N 2,UT,N" : io1$(2)="11,40,C 30,UT,N"
 00150 L150: rinput fields mat io1$: cno,csz$ conv L150
 00160   if cno=0 or cmdkey=5 or cmdkey=99 then goto XIT
 00170   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -27,7 +27,7 @@
 00270 XIT: stop 
 00280 ! ______________________________________________________________________
 00290 ! <Updateable Region: ERTN>
-00300 ERTN: let fnerror(program$,err,line,act$,"xit")
+00300 ERTN: fnerror(program$,err,line,act$,"xit")
 00310   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00320   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00330   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

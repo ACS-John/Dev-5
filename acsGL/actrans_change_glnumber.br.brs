@@ -28,20 +28,20 @@
 16600     end if  ! gln_period_did_change>0
 16800   loop 
 17000 EO_ACTRANS: ! 
-17200   fncloseprn : let report_open=0
-17400 XIT: let fnxit
+17200   fncloseprn : report_open=0
+17400 XIT: fnxit
 17600 ! ______________________________________________________________________
 17800   def fn_screen_1(&gln_from$,&gln_to$)
 18000     fntos(sn$="FixGLN")
-18200     let mylen=22
-18400     let mypos=mylen+2
-18600     let respc=0 : let myline=0
+18200     mylen=22
+18400     mypos=mylen+2
+18600     respc=0 : myline=0
 18800     fnlbl(myline+=1,1,"Change GL Number From:",mylen,1)
 19000     fntxt(myline,mypos,12,0,1)
-19200     let resp$(respc+=1)=gln_from$
+19200     resp$(respc+=1)=gln_from$
 19400     fnlbl(myline+=1,1,"To:",mylen,1)
 19600     fntxt(myline,mypos,12,0,1)
-19800     let resp$(respc+=1)=gln_to$
+19800     resp$(respc+=1)=gln_to$
 20200     fncmdset(2)
 20400     fnacs(sn$,0,mat resp$,ck)
 20600     if ck<>5 then 
@@ -52,14 +52,14 @@
 21600   fnend  ! fn_screen_1
 21800   def fn_report(line$*256)
 22000     if ~report_open then 
-22200       let report_open=1
+22200       report_open=1
 22400       fnopenprn
 22600     end if  ! ~report_open
 22800     pr #255: line$ ! if gl$='  6   101  0' then pr #255: line$
 23000   fnend 
 51670 ! ______________________________________________________________________
 51680 ! <Updateable Region: ERTN>
-51690 ERTN: let fnerror(program$,err,line,act$,"xit")
+51690 ERTN: fnerror(program$,err,line,act$,"xit")
 51700   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 51710   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 51720   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

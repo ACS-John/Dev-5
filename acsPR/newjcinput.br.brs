@@ -25,8 +25,8 @@
 00270   open #2: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno'),internal,outin,keyed 
 00280   if exists("jcWork."&session$) >0 then goto L280 else goto L300
 00285 L280: mat ml$(2) !:
-        let ml$(1)="An unposted file appears to exist! " !:
-        let ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries." !:
+        ml$(1)="An unposted file appears to exist! " !:
+        ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries." !:
         fnmsgbox(mat ml$,resp$,cap$,52)
 00290   if resp$="Yes" then goto L320 else goto L300
 00300 L300: open #3: "Name=jcWork."&session$&",SIZE=0,RecL=84,Replace",internal,outin,relative 
@@ -40,55 +40,55 @@
 00380   addone=1 ! set code as adding when first entering
 00390 ! ______________________________________________________________________
 00400 TRANSACTION_ENTRY: ! 
-00410   if addone=1 then let ji1(5)=ji1(6)=ji2(3)=0: let ji1(2)=2
-00420 L420: let fntos(sn$="jobinput") !:
-        let respc=0 : let frac=0 !:
-        let mylen=28 : let mypos=mylen+3
+00410   if addone=1 then ji1(5)=ji1(6)=ji2(3)=0: ji1(2)=2
+00420 L420: fntos(sn$="jobinput") !:
+        respc=0 : let frac=0 !:
+        mylen=28 : mypos=mylen+3
 00430   fnlbl(1,1,"Employee #:",mylen,1)
 00440   fncmbemp(1,mypos) !:
-        let resp$(respc+=1)=str$(ji1(1))
+        resp$(respc+=1)=str$(ji1(1))
 00450   fnlbl(2,1,"Method of Payment:",mylen,1)
 00460   opt$(1)="1 = Salary" : opt$(2)= "2 = Hourly" !:
         opt$(3)= "3 = Both" !:
         fncomboa("Methods",2,mypos,mat opt$,empty$,13)
-00470   if ji1(2)=1 then let resp$(respc+=1)=opt$(1)
-00480   if ji1(2)=2 then let resp$(respc+=1)=opt$(2)
-00490   if ji1(2)=3 then let resp$(respc+=1)=opt$(3)
+00470   if ji1(2)=1 then resp$(respc+=1)=opt$(1)
+00480   if ji1(2)=2 then resp$(respc+=1)=opt$(2)
+00490   if ji1(2)=3 then resp$(respc+=1)=opt$(3)
 00500   fnlbl(3,1,"Date:",mylen,1)
 00510   fntxt(3,mypos,8,8,0,"1",0,"Date of transaction") !:
-        let resp$(respc+=1)=str$(ji1(3))
+        resp$(respc+=1)=str$(ji1(3))
 00520   fnlbl(4,1,"Payroll Department:",mylen,1)
 00530   fncombof("Deptname",4,mypos,25,env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),1,3,4,25,env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno'),0,0, " ",0,0) !:
-        let resp$(respc+=1)=str$(ji1(4))
+        resp$(respc+=1)=str$(ji1(4))
 00540   fnlbl(5,1,"Regular Hours:",mylen,1)
 00550   fntxt(5,mypos,8,8,0,"32",0,"") !:
-        let resp$(respc+=1)=str$(ji1(5))
+        resp$(respc+=1)=str$(ji1(5))
 00560   fnlbl(6,1,"Overtime Hours:",mylen,1)
 00570   fntxt(6,mypos,8,8,0,"32",0,"") !:
-        let resp$(respc+=1)=str$(ji1(6))
+        resp$(respc+=1)=str$(ji1(6))
 00580   fnlbl(7,1,"Job Number:",mylen,1)
 00590   fncmbjob(7,mypos) !:
-        let resp$(respc+=1)=jn$
+        resp$(respc+=1)=jn$
 00600   fnlbl(8,1,"Category:",mylen,1)
 00610   fncmbcategory(8,mypos) !:
-        let resp$(respc+=1)=str$(ji2(1))
+        resp$(respc+=1)=str$(ji2(1))
 00620   fnlbl(9,1,"Sub-Category:",mylen,1)
 00630   fncmbsubcat(9,mypos) !:
-        let resp$(respc+=1)=str$(ji2(2))
+        resp$(respc+=1)=str$(ji2(2))
 00640   fnlbl(10,1,"Amount:",mylen,1)
 00650   fntxt(10,mypos,10,10,0,"10",0,"Amount to be charged to job. Payroll will be extended as it is posted.") !:
-        let resp$(respc+=1)=str$(ji2(3))
+        resp$(respc+=1)=str$(ji2(3))
 00660   fnlbl(11,1,"Deduction/Addition Code:",mylen,1)
 00670   fncomboa("Deductions",11,mypos,mat comboname$,empty$,23)
-00680   if ji2(4)=0 then let resp$(respc+=1)=comboname$(1): goto L700
-00690   if ji2(4)>0 and ji2(4)<=20 then let resp$(respc+=1)=comboname$(ji2(4)) else let resp$(respc+=1)=""
-00700 L700: let fnlbl(12,1,"Units:",mylen,1)
+00680   if ji2(4)=0 then resp$(respc+=1)=comboname$(1): goto L700
+00690   if ji2(4)>0 and ji2(4)<=20 then resp$(respc+=1)=comboname$(ji2(4)) else resp$(respc+=1)=""
+00700 L700: fnlbl(12,1,"Units:",mylen,1)
 00710   fntxt(12,mypos,6,6,0,"30",0,"Enter units, if applicable.") !:
-        let resp$(respc+=1)=str$(ji2(5))
+        resp$(respc+=1)=str$(ji2(5))
 00720   fnlbl(13,1,"Personnel Burden:",mylen,1)
 00730   fntxt(13,mypos,10,10,0,"10",0,"Personnel burden will calculated automatically if you have the burden % set up on each employee.") !:
-        let resp$(respc+=1)=str$(pt)
-00740   let picture=0
+        resp$(respc+=1)=str$(pt)
+00740   picture=0
 00750   fncmdkey("&Save",1,1,0,"Saves all changes.")
 00760   fncmdkey("Co&rrection",7,0,0,"Make a correction to any entry.")
 00770   fncmdkey("&LIsting",9,0,0,"Print a listing of all entries.")
@@ -98,44 +98,44 @@
 00810   fnacs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
 00820   if ckey=5 then goto L830 else goto L850
 00830 L830: mat ml$(2) !:
-        let ml$(1)="You have chosen to cancel without postng these entries!  " !:
-        let ml$(2)="Take Yes to Exit, else take No to return to the entry screens." !:
+        ml$(1)="You have chosen to cancel without postng these entries!  " !:
+        ml$(2)="Take Yes to Exit, else take No to return to the entry screens." !:
         fnmsgbox(mat ml$,resp$,cap$,52)
 00840   if resp$="Yes" then goto XIT else goto TRANSACTION_ENTRY
 00850 L850: if ckey=7 then goto CORRECTIONS
 00860   if ckey=8 then goto POSTTOJOBS
 00870   if ckey=9 then goto PRINTPROOFLIST
-00880   let ji1(1)=val(resp$(1)(1:8)) ! employee number
-00890   let ji1(2)=val(resp$(2)(1:1)) ! Method of pay
-00900   let ji1(3)=val(resp$(3)) ! date
-00910   let ji1(4)=val(resp$(4)(1:3)) ! dept #
-00920   let ji1(5)=val(resp$(5)) ! regular hours
-00930   let ji1(6)=val(resp$(6)) ! ot hours
-00940   let jn$=resp$(7)(1:6) ! job #
+00880   ji1(1)=val(resp$(1)(1:8)) ! employee number
+00890   ji1(2)=val(resp$(2)(1:1)) ! Method of pay
+00900   ji1(3)=val(resp$(3)) ! date
+00910   ji1(4)=val(resp$(4)(1:3)) ! dept #
+00920   ji1(5)=val(resp$(5)) ! regular hours
+00930   ji1(6)=val(resp$(6)) ! ot hours
+00940   jn$=resp$(7)(1:6) ! job #
 00950   if trim$(jn$)="" then goto L960 else goto L980
 00960 L960: mat ml$(2) !:
-        let ml$(1)="You failed to enter a job number. Take Yes to continue;" !:
-        let ml$(2)="else take No to return to previous screen and enter the job number." !:
+        ml$(1)="You failed to enter a job number. Take Yes to continue;" !:
+        ml$(2)="else take No to return to previous screen and enter the job number." !:
         fnmsgbox(mat ml$,resp$,cap$,52)
 00970   if resp$="Yes" then goto L980 else goto L420
-00980 L980: let ji2(1)=val(resp$(8)(1:3)) ! category
+00980 L980: ji2(1)=val(resp$(8)(1:3)) ! category
 00990   if ji2(1)=0 and dontwarnsubcat=0 then goto L1000 else goto L1020
 01000 L1000: mat ml$(2) !:
-        let ml$(1)="You failed to enter a category number. Take Yes to continue;" !:
-        let ml$(2)="else take No to return to previous screen and enter the category number." !:
+        ml$(1)="You failed to enter a category number. Take Yes to continue;" !:
+        ml$(2)="else take No to return to previous screen and enter the category number." !:
         fnmsgbox(mat ml$,resp$,cap$,52)
-01010   if resp$="Yes" then let dontwarnsubcat=1: goto L1020 else goto L420
-01020 L1020: let ji2(2)=val(resp$(9)(1:3)) ! sub-category
+01010   if resp$="Yes" then dontwarnsubcat=1: goto L1020 else goto L420
+01020 L1020: ji2(2)=val(resp$(9)(1:3)) ! sub-category
 01030   if ji2(2)=0 and dontwarnsubcat=0 then goto L1040 else goto L1060
 01040 L1040: mat ml$(2) !:
-        let ml$(1)="You failed to enter a sub-category number. Take Yes to continue;" !:
-        let ml$(2)="else take No to return to previous screen and enter the sub-category number." !:
+        ml$(1)="You failed to enter a sub-category number. Take Yes to continue;" !:
+        ml$(2)="else take No to return to previous screen and enter the sub-category number." !:
         fnmsgbox(mat ml$,resp$,cap$,52)
-01050   if resp$="Yes" then let dontwarnsubcat=1 : goto L1060 else goto L420
-01060 L1060: let ji2(3)=val(resp$(10)) ! amount
-01070   let ji2(4)=val(resp$(11)(1:2)) ! deduction code
-01080   let ji2(5)=val(resp$(12)) ! units
-01090   let pt=val(resp$(13)) ! personnel burden
+01050   if resp$="Yes" then dontwarnsubcat=1 : goto L1060 else goto L420
+01060 L1060: ji2(3)=val(resp$(10)) ! amount
+01070   ji2(4)=val(resp$(11)(1:2)) ! deduction code
+01080   ji2(5)=val(resp$(12)) ! units
+01090   pt=val(resp$(13)) ! personnel burden
 01100   gosub UPDATE_AMOUNT
 01110   empnam$="": read #1,using "FORM POS 9,C 30",key=cnvrt$("pic(ZZZZZZZ#)",ji1(1)): empnam$ nokey L1110
 01115 L1110: if addone=1 then goto L1120 else goto L1150
@@ -166,14 +166,14 @@
 01530     pr #255,using L1540: " ________"," ________"," ____________",t5,t6,t10 pageoflow PROOF_LIST_NWPG
 01540 L1540: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Total",pos 38,2*n 9.2,x 29,n 13.2,skip 2
 01550 L1550: en=ji1(1)
-01560     let t5=0
-01570     let t6=0
-01580     let t10=0
+01560     t5=0
+01570     t6=0
+01580     t10=0
 01590 L1590: pr #255,using L1600: j,mat ji1,jn$,mat ji2 pageoflow PROOF_LIST_NWPG
 01600 L1600: form pos 1,n 5,n 8,n 6,n 13,n 5,2*n 9.2,x 2,c 6,n 11,n 10,n 13.2,n 6,n 10.2,skip 1
-01610     let t5=t5+ji1(5)
-01620     let t6=t6+ji1(6)
-01630     let t10=t10+ji2(3)
+01610     t5=t5+ji1(5)
+01620     t6=t6+ji1(6)
+01630     t10=t10+ji2(3)
 01640     let gt5=gt5+ji1(5)
 01650     let gt6=gt6+ji1(6)
 01660     let gt10=tg10+ji2(3)
@@ -201,7 +201,7 @@
 01880   continue 
 01890 ! ______________________________________________________________________
 01900 ! <Updateable Region: ERTN>
-01910 ERTN: let fnerror(program$,err,line,act$,"xit")
+01910 ERTN: fnerror(program$,err,line,act$,"xit")
 01920   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01930   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01940   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -210,7 +210,7 @@
 01970 ! ______________________________________________________________________
 01980   if err=61 then goto TRANSACTION_ENTRY
 01990 ! ______________________________________________________________________
-02000 XIT: let fnxit
+02000 XIT: fnxit
 02010 ! ______________________________________________________________________
 02020 ! INPUT FROM DISKETTE FILE    ! took this option out on new system
 02030 ! ______________________________________________________________________
@@ -233,16 +233,16 @@
 02100   restore #3: 
 02110 READ_FILE: ! 
 02120   read #3,using L1140: mat ji1, jn$, mat ji2, pt, empnam$, sal eof L2160
-02130   let item2$(1)=str$(rec(3)): let item2$(2)=str$(ji1(1)) !:
-        let item2$(3)=str$(ji1(2)): let item2$(4)=str$(ji1(3)) !:
-        let item2$(5)=str$(ji1(4)): let item2$(6)=str$(ji1(5)) !:
-        let item2$(7)=str$(ji1(6)) : let item2$(8)=jn$ !:
-        let item2$(9)=str$(ji2(1)): let item2$(10)=str$(ji2(2)) !:
-        let item2$(11)=str$(ji2(3)) : let item2$(12)=str$(ji2(4)) !:
-        let item2$(13)=str$(ji2(5)): let item2$(14)=str$(pt)
+02130   item2$(1)=str$(rec(3)): item2$(2)=str$(ji1(1)) !:
+        item2$(3)=str$(ji1(2)): item2$(4)=str$(ji1(3)) !:
+        item2$(5)=str$(ji1(4)): item2$(6)=str$(ji1(5)) !:
+        item2$(7)=str$(ji1(6)) : item2$(8)=jn$ !:
+        item2$(9)=str$(ji2(1)): item2$(10)=str$(ji2(2)) !:
+        item2$(11)=str$(ji2(3)) : item2$(12)=str$(ji2(4)) !:
+        item2$(13)=str$(ji2(5)): item2$(14)=str$(pt)
 02140   fnflexadd1(mat item2$)
 02150   goto READ_FILE
-02160 L2160: let fncmdkey("&Add",1,0,0,"Add a new transaction." ) !:
+02160 L2160: fncmdkey("&Add",1,0,0,"Add a new transaction." ) !:
         fncmdkey("E&dit",2,1,0,"Edit the highlited record") !:
         fncmdkey("&Delete",4,0,0,"Deletes the highlited record") !:
         fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") !:
@@ -250,7 +250,7 @@
 02170   fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 02180   if ckey=5 then goto TRANSACTION_ENTRY
 02190   editrec=val(resp$(1))
-02200   if ckey=1 then addone=1: mat ji1=(0): mat ji2=(0): let jn$="": goto TRANSACTION_ENTRY
+02200   if ckey=1 then addone=1: mat ji1=(0): mat ji2=(0): jn$="": goto TRANSACTION_ENTRY
 02210   if ckey=2 then read #3,using L1140,rec=editrec: mat ji1, jn$, mat ji2, pt, empnam$, sal: editone=1 : goto TRANSACTION_ENTRY
 02220   if ckey=4 then delete #3,rec=editrec: : goto CORRECTIONS
 02230   goto CORRECTIONS
@@ -258,18 +258,18 @@
 02250   read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=cnvrt$("pic(ZZZZZZZ#)",ji1(1))&cnvrt$("pic(ZZ#)",ji1(4)): teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet nokey L2270
 02260   goto L2280
 02270 L2270: mat ml$(2) !:
-        let ml$(1)="There is no department number "&str$(ji1(4))&" on employee number "&str$(ji1(1))&"!" !:
-        let ml$(2)="Take OK to correct." !:
+        ml$(1)="There is no department number "&str$(ji1(4))&" on employee number "&str$(ji1(1))&"!" !:
+        ml$(2)="Take OK to correct." !:
         fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto L420
-02280 L2280: if ji2(3)=0 then let ji2(3)=tdet(2)*ji1(5)+tdet(3)*ji1(6)
+02280 L2280: if ji2(3)=0 then ji2(3)=tdet(2)*ji1(5)+tdet(3)*ji1(6)
 02290   if rtrm$(jn$)="" and ji2(1)=0 then goto L2390
 02300   read #11,using L2310,key=lpad$(rtrm$(jn$),6): n$ nokey L2330
 02310 L2310: form pos 7,c 40
 02320   goto L2340
 02330 L2330: mat ml$(2) !:
-        let ml$(1)="The job # number appears to be an incorrect number!  " !:
-        let ml$(2)="Take OK to correct." !:
+        ml$(1)="The job # number appears to be an incorrect number!  " !:
+        ml$(2)="Take OK to correct." !:
         fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto L420
 02340 L2340: cn$=lpad$(rtrm$(jn$),6)&lpad$(str$(ji2(1)),5)
@@ -277,8 +277,8 @@
 02360   form pos 1,c 11
 02370   goto L2390
 02380   mat ml$(2) !:
-        let ml$(1)="Category # "&str$(ji2(1))&" has never been used on this job before!  " !:
-        let ml$(2)="Do you wish to use this number or select a different one?" !:
+        ml$(1)="Category # "&str$(ji2(1))&" has never been used on this job before!  " !:
+        ml$(2)="Do you wish to use this number or select a different one?" !:
         fnmsgbox(mat ml$,resp$,cap$,36)
 02390   if resp$="Yes" then goto L2390 else goto L420
 02395 L2390: if ji2(2)=0 then goto L2450
@@ -286,21 +286,21 @@
 02420 L2420: form pos 4,c 30
 02430   goto L2450
 02440 L2440: mat ml$(2) !:
-        let ml$(1)="The subcategory # number appears to be an incorrect number!  " !:
-        let ml$(2)="Take OK to correct." !:
+        ml$(1)="The subcategory # number appears to be an incorrect number!  " !:
+        ml$(2)="Take OK to correct." !:
         fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto L420
 02450 L2450: if lrec(13)=0 then goto L2480 ! if they are not using subcategory, skip warning
 02460   if ji2(2)=0 then goto L2470
 02470   goto L2480
 02475 L2470: mat ml$(2) !:
-        let ml$(1)="The subcategory # number cannot be zero.!  " !:
-        let ml$(2)="Take OK to correct." !:
+        ml$(1)="The subcategory # number cannot be zero.!  " !:
+        ml$(2)="Take OK to correct." !:
         fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto L420
-02480 L2480: if ji2(4)<1 or ji2(4)>20 then let pt=ptp/100*ji2(3) else let pt=0
-02490   eno$=cnvrt$("n 8",ji1(1)) : let ptp=0
+02480 L2480: if ji2(4)<1 or ji2(4)>20 then pt=ptp/100*ji2(3) else pt=0
+02490   eno$=cnvrt$("n 8",ji1(1)) : ptp=0
 02500   read #7,using "form pos 39,n 6.3",key=eno$: ptp nokey L2510
-02510 L2510: if ji2(4)<1 or ji2(4)>20 then let pt=ptp/100*ji2(3) else let pt=0
+02510 L2510: if ji2(4)<1 or ji2(4)>20 then pt=ptp/100*ji2(3) else pt=0
 02520   if c1=2 then goto L1780
 02530   return 

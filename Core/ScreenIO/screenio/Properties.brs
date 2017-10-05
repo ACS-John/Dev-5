@@ -16,10 +16,10 @@
 00600 !
 01000 Main: ! If you run me as a program, I run the properties screen
 01010    library "S:\Core\ScreenIO\Screenio" : fnfm$
-01020    let Key$=""
-01030    let ParentKey$=""
-01040    let Record=0
-01050    let Path$=""
+01020    key$=""
+01030    parentKey$=""
+01040    record=0
+01050    path$=""
 01060    screenCode$="PROPERTIES"
 01070    chain "s:\core\screenio\screeniosaveandtest.br",mat PassedData$,Key$,ParentKey$,Record,Path$,ScreenCode$
 01080    if len(trim$(Ret$)) then
@@ -35,19 +35,19 @@
 05004   ! library 'S:\Core\Library': fnIniSet,fnIniWrite
 05005   library 'S:\Core\Library': fnwrite_program_print_property
 05006   ! r: if Landscape/Portrait, than switch height and width if necessary
-05007     let tmp_height=val(s$(sio_txtHeight))
-05008     let tmp_width=val(s$(sio_txtWidth))
+05007     tmp_height=val(s$(sio_txtHeight))
+05008     tmp_width=val(s$(sio_txtWidth))
 05009     if s$(sio_cmbOrientation)='Landscape' then
 05010       if tmp_height>tmp_width then ! and it's taller than it is wide
-05011         let tmp_hold=tmp_height
-05012         let tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
-05013         let tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
+05011         tmp_hold=tmp_height
+05012         tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
+05013         tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
 05014       end if
 05015     else if s$(sio_cmbOrientation)='Portrait' then
 05016       if tmp_width>tmp_height then ! and it's wider than it is tall
-05017         let tmp_hold=tmp_height
-05018         let tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
-05019         let tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
+05017         tmp_hold=tmp_height
+05018         tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
+05019         tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
 05020       end if
 05021     end if
 05022   ! /r
@@ -132,9 +132,9 @@
 05102   ! 2500+ is reserved for screenio
 05103   if fkey=1 or fkey=1504 then
 05104     if env$('Program_Caption')='Select Company' then
-05105       let help_cursys$='co'
+05105       help_cursys$='co'
 05106     else
-05107       let help_cursys$=lwrc$(env$('CurSys'))
+05107       help_cursys$=lwrc$(env$('CurSys'))
 05108     end if
 05109     ! pr 'help_cursys$='&help_cursys$ : pause
 05110     execute 'system -M start http://planetacs.net/help/'&help_cursys$&'/'&srep$(env$('Program_Caption'),' ','%20')&'.html'
@@ -236,7 +236,7 @@
 92001 !
 92002    if ~DataIsInside then
 92003       fnPopData(2)
-92004       if Function$="{{SetData}}" then let DataIsInside=1
+92004       if Function$="{{SetData}}" then dataIsInside=1
 92005    end if
 92006 !
 92007    if ~FileIOLinkageSet then
@@ -248,19 +248,19 @@
 92013    end if
 92014 !
 92015    if Function$ = "{co_properties_btn_ok}" then
-92016       let ReturnValue = fnco_properties_btn_ok
+92016       returnValue = fnco_properties_btn_ok
 92017    else if Function$ = "{co_pop_combo_orientation}" then
-92018       let ReturnValue = fnco_pop_combo_orientation
+92018       returnValue = fnco_pop_combo_orientation
 92019    else if Function$ = "{co_properties_enter}" then
-92020       let ReturnValue = fnco_properties_enter
+92020       returnValue = fnco_properties_enter
 92021    else if Function$ = "{co_properties_main_loop}" then
-92022       let ReturnValue = fnco_properties_main_loop
+92022       returnValue = fnco_properties_main_loop
 92023    else if Function$ = "{defaults\enter}" then
-92024       let ReturnValue = fnEnterDefault
+92024       returnValue = fnEnterDefault
 92025    else if Function$ = "{defaults\mainloop}" then
-92026       let ReturnValue = fnMainLoop
+92026       returnValue = fnMainLoop
 92027    else if Function$ = "{defaults\exit}" then
-92028       let ReturnValue = fnExitDefault
+92028       returnValue = fnExitDefault
 92029    else
 92030       if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
 92031          pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
@@ -269,7 +269,7 @@
 92034 !
 92035    if ~DataIsInside or Function$="{{GetData}}" then
 92036       fnPushData(2)
-92037       let DataIsInside=0
+92037       dataIsInside=0
 92038    end if
 92039 return
 92040 !

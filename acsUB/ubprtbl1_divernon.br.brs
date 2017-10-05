@@ -34,54 +34,54 @@
 00230   def fnc(x)=int(100*(x+sgn(x)*.0001))
 00240 ! ______________________________________________________________________
 00250 SCREEN1: ! 
-00260   a$="" : let prtbkno=0
+00260   a$="" : prtbkno=0
 00270   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : ll=24 !:
-        let respc=0
+        pf=26 : ll=24 !:
+        respc=0
 00280   fnlbl(1,1,"Service From:",ll,1)
 00290   fntxt(1,pf,8,8,1,"1",0,tt$) !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d2)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d2)
 00300   fnlbl(2,1,"Meter Reading Date:",ll,1)
 00310   fntxt(2,pf,8,8,1,"1") !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3)
 00320   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00330   fntxt(3,pf,8,8,1,"1",0,tt$) !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 00340   fnlbl(4,1,"Message on Bill:",ll,1)
 00350   fntxt(4,pf,30,30) !:
-        let resp$(respc+=1)=mg$(1)
+        resp$(respc+=1)=mg$(1)
 00360   fntxt(5,pf,30,30) !:
-        let resp$(respc+=1)=mg$(2)
+        resp$(respc+=1)=mg$(2)
 00370   fntxt(6,pf,30,30) !:
-        let resp$(respc+=1)=mg$(3)
+        resp$(respc+=1)=mg$(3)
 00380   fnlbl(7,1,"Date of Billing:",ll,1)
 00390   fntxt(7,pf,8,8,1,"1") !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00400   fnlbl(8,1,"Starting Account:",ll,1)
-00410   let kp=1741: let kl=9 : let dp=41 : let dl=30 !:
+00410   kp=1741: kl=9 : dp=41 : dl=30 !:
         fncombof("ubm-act-nam",8,pf,40,env$('Q')&"\UBmstr\Customer.h"&str$(cno),kp,kl,dp,dl,env$('Q')&"\UBmstr\ubindx5.h"&str$(cno),2) !:
-        let resp$(respc+=1)="[All]"
+        resp$(respc+=1)="[All]"
 00420   fnlbl(9,1,"Route Number:",ll,1)
 00430   fncmbrt2(9,pf) !:
-        let resp$(respc+=1)="[All]"
+        resp$(respc+=1)="[All]"
 00440   fnchk(10,pf,"Select Accounts to Print",1) !:
-        let resp$(respc+=1)="False"
+        resp$(respc+=1)="False"
 00450   fncmdset(3) !:
         fnacs(sn$,0,mat resp$,ck)
 00460   if ck=5 then goto ENDSCR
-00470   let d1 = val(resp$(7)) !:
-        let d2 = val(resp$(1)) !:
-        let d3 = val(resp$(2)) !:
-        let d4 = val(resp$(3)) !:
-        let mg$(1) = resp$(4) !:
-        let mg$(2) = resp$(5) !:
-        let mg$(3) = resp$(6)
+00470   d1 = val(resp$(7)) !:
+        d2 = val(resp$(1)) !:
+        d3 = val(resp$(2)) !:
+        d4 = val(resp$(3)) !:
+        mg$(1) = resp$(4) !:
+        mg$(2) = resp$(5) !:
+        mg$(3) = resp$(6)
 00480   if resp$(8)="[All]" then !:
           a$="" else !:
           a$ = lpad$(trim$(resp$(8)(1:10)),10)
 00490   if resp$(9)="[All]" then !:
-          let prtbkno=0 else !:
-          let prtbkno = val(resp$(9))
+          prtbkno=0 else !:
+          prtbkno = val(resp$(9))
 00500   if resp$(10)="True" then sl1=1 else sl1=0
 00510   if trim$(a$)<>"" then read #1,using L520,key=a$: z$,route,sequence nokey SCREEN1 !:
           st1=1
@@ -119,26 +119,26 @@
 00830   e1=0 : mat pe$=("")
 00840   for j=1 to 4
 00850     if rtrm$(ba$(j))<>"" then !:
-            e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : pe$(e1)=ba$(j)
 00860   next j
 00870   goto L1020
 00880 ! ______________________________________________________________________
 00890 L890: e1=0 : mat pe$=("")
 00900   for j=2 to 4
 00910     if rtrm$(e$(j))<>"" then !:
-            e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : pe$(e1)=e$(j)
 00920   next j
-00930   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$
+00930   if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$
 00940   goto L1020
 00950 ! ______________________________________________________________________
 00960 F5_CANCEL: ! 
 00970   close #1: ioerr L980
 00980 L980: close #3: ioerr L990
-00990 L990: let fncloseprn
+00990 L990: fncloseprn
 01000   goto ENDSCR
 01010 ! ______________________________________________________________________
 01020 L1020: ! 
-01030   let pb=bal-g(11)
+01030   pb=bal-g(11)
 01040 ! ______________print bill routine______________________________________
 01050   gosub PRINTBILL
 01060 ! _____________end of pr routine______________________________________
@@ -149,17 +149,17 @@
 01100 SCREEN3: ! 
 01110   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
-01120   let txt$="Account (blank to stop)" !:
+01120   txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
 01130 ! If TRIM$(A$)="" Then Goto 1080 Else Goto 1120
 01140   if z$<>"" then !:
-          let txt$="Last Account entered was "&z$ !:
+          txt$="Last Account entered was "&z$ !:
           fnlbl(3,1,txt$,44,1) else !:
-          let txt$="" !:
+          txt$="" !:
           fnlbl(3,1,txt$,44,1)
 01150   fncmbact(1,17) ! !:
-        let resp$(1)=a$
-01160   fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
+        resp$(1)=a$
+01160   fncmdset(3): fnacs(sn$,0,mat resp$,ck)
 01170   if ck=5 then goto F5_CANCEL
 01180   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto ENDSCR
@@ -180,19 +180,19 @@
 01330   return 
 01340 ! ______________________________________________________________________
 01350 ENDSCR: ! pr totals screen
-01360   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
+01360   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01370   fntos(sn$="Bills-Total") !:
-        let mylen=23 : let mypos=mylen+2 !:
-        let respc=0
+        mylen=23 : mypos=mylen+2 !:
+        respc=0
 01380   fnlbl(1,1,"Total Bills Printed:",mylen,1)
 01390   fntxt(1,mypos,8,0,1,"",1) !:
-        let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
+        resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 01400   fncmdset(52) !:
         fnacs(sn$,0,mat resp$,ck)
-01410 XIT: let fnxit
+01410 XIT: fnxit
 01420 ! ______________________________________________________________________
 01430 ! <Updateable Region: ERTN>
-01440 ERTN: let fnerror(program$,err,line,act$,"xit")
+01440 ERTN: fnerror(program$,err,line,act$,"xit")
 01450   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01460   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01470   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -205,8 +205,8 @@
 01540   if a(4)<1 or a(4)>2 then a4=5 else a4=a(4)+4 ! GAS
 01550   a3=7 ! ADMINISTRATION FEE
 01560   a6=8 ! TAX
-01570   let pb=bal-g(11)
-01580   let pn=g(5)+g(6)+g(7)
+01570   pb=bal-g(11)
+01580   pn=g(5)+g(6)+g(7)
 01590 ! pr #255,Using 1750: HEX$("2B0205000A1018")
 01600   form c 9,skip 0
 01610   pr #255,using L1620: d1

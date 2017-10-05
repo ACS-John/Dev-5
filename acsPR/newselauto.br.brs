@@ -21,20 +21,20 @@
 00210   form pos 1,c 20,c 35,n 3,3*n 1
 00220   close #1: 
 00230 MAIN: ! 
-00240 L240: let fntos(sn$="PrAuto") !:
-        let mylen=20: let mypos=mylen+3 : let right=1
-00250   let item=0: let resp=0
+00240 L240: fntos(sn$="PrAuto") !:
+        mylen=20: mypos=mylen+3 : right=1
+00250   item=0: resp=0
 00260   fnlbl(1,1,"Selected Items                       Wk Qtr Anl       Menu Options to Select From",80,0)
 00270   for j=1 to 20
-00280 ! If TRIM$(NXTDESC$(J))="Employee" Then Let NXTDESC$(J)="": Let NXTPGM$(J)=""
+00280 ! If TRIM$(NXTDESC$(J))="Employee" Then nXTDESC$(J)="": nXTPGM$(J)=""
 00290     fntxt(j+1,1,35,0,left,"",0,"Items select for automatic processing.",0 ) !:
-          let resp$(resp+=1)=nxtdesc$(j)
+          resp$(resp+=1)=nxtdesc$(j)
 00300     fnchk(j+1,39,"",1)
-00310     if wk(j)=1 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
+00310     if wk(j)=1 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
 00320     fnchk(j+1,43,"",1)
-00330     if mo(j)=1 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
+00330     if mo(j)=1 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
 00340     fnchk(j+1,47,"",1)
-00350     if qt(j)=1 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
+00350     if qt(j)=1 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
 00360   next j
 00370   mat chdr$(2) : mat cmask$(2) : mat item$(2) !:
         chdr$(1)='Item #' !:
@@ -51,16 +51,16 @@
 00440   if ln$(1:1)=">" then ln$(1:1)="" ! delete up to two >>
 00450   let x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
 00460   if x=0 then goto L410 ! skip headings
-00470   let desc$=ln$(1:x-1)(1:35)
-00480   let item+=1
+00470   desc$=ln$(1:x-1)(1:35)
+00480   item+=1
 00490   let y=pos(srep$(ln$,'^','~'),'~',x) ! pos(ln$,"^",x)
-00500   let prg$(item)=ln$(x+1:len(ln$))
-00510   let nam$(item)=ln$(1:x-1)(1:35)
-00520   let item$(1)=str$(item) !:
-        let item$(2)=desc$ !:
+00500   prg$(item)=ln$(x+1:len(ln$))
+00510   nam$(item)=ln$(1:x-1)(1:35)
+00520   item$(1)=str$(item) !:
+        item$(2)=desc$ !:
         fnflexadd1(mat item$)
 00530   goto L410
-00540 L540: let fnlbl(22,1," ")
+00540 L540: fnlbl(22,1," ")
 00550   fncmdkey("&Next",1,1,0,"Selects the highlited option for automatic processing.")
 00560   fncmdkey("&Save",2,0,0,"Saves the selections and returns to menu.")
 00570   fncmdkey("&Delete All",4,0,0,"Deletes all selections.")
@@ -79,13 +79,13 @@
 00640   let x=0
 00650   for j=1 to 20
 00660     if resp$(j+(x+=1))="True" then let wk(j)=1 else let wk(j)=0
-00670     if resp$(j+(x+=1))="True" then let mo(j)=1 else let mo(j)=0
+00670     if resp$(j+(x+=1))="True" then mo(j)=1 else mo(j)=0
 00680     if resp$(j+(x+=1))="True" then let qt(j)=1 else let qt(j)=0
 00690   next j
 00700   for j=1 to 20
-00710     if trim$(nxtdesc$(j))="Employee" then let nxtdesc$(j)="": let nxtpgm$(j)="": let wk(j)=0: let mo(j)=0: let qt(j)=0: goto L740
+00710     if trim$(nxtdesc$(j))="Employee" then nxtdesc$(j)="": nxtpgm$(j)="": let wk(j)=0: mo(j)=0: let qt(j)=0: goto L740
 00720     if sel=1 then goto L740
-00730     if trim$(nxtdesc$(j))="" then let nxtdesc$(j)=nam$(sel): let nxtpgm$(j)=prg$(sel): goto L750
+00730     if trim$(nxtdesc$(j))="" then nxtdesc$(j)=nam$(sel): nxtpgm$(j)=prg$(sel): goto L750
 00740 L740: next j
 00750 L750: if ckey=1 then goto L240
 00760   execute "drop "&env$('Q')&"\PRmstr\NewPrPgmn.h"&str$(cno)&" -n"
@@ -97,10 +97,10 @@
 00810 L810: form pos 1,c 20,c 35,3*n 1
 00820   close #1: ioerr L830
 00830 L830: close #3: ioerr XIT
-00840 XIT: let fnxit
+00840 XIT: fnxit
 00850 ! ______________________________________________________________________
 00860 ! <Updateable Region: ERTN>
-00870 ERTN: let fnerror(program$,err,line,act$,"xit")
+00870 ERTN: fnerror(program$,err,line,act$,"xit")
 00880   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00890   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00900   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

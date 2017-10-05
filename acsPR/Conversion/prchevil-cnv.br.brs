@@ -23,7 +23,7 @@
 00220 L220: read #4,using L230: d1 eof L350,conv L320
 00230 L230: form pos 9,pd 6
 00240   if d1<1000000 then goto L270
-00250   let d1=val(str$(d1)(5:6)&str$(d1)(7:8)&str$(d1)(3:4))
+00250   d1=val(str$(d1)(5:6)&str$(d1)(7:8)&str$(d1)(3:4))
 00260 ! pr D1
 00270 L270: ! 
 00280   rewrite #4,using L290: d1
@@ -38,7 +38,7 @@
 00370 XIT: stop  ! Chain "PRMENU/acsPR"
 00380 ! ______________________________________________________________________
 00390 ! <updateable region: ertn>
-00400 ERTN: let fnerror(program$,err,line,act$,"xit")
+00400 ERTN: fnerror(program$,err,line,act$,"xit")
 00410   if uprc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00420   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00430   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

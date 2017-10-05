@@ -6,7 +6,7 @@
 00060     fnstatus('Converting Alternate Billing Address file (S:\acsUB\conversion\ubadrbil-cnv)')
 00070     dim a$(4)*30,cap$*128,z$*10,ab$(4)*30
 00080 ! ______________________________________________________________________
-00090 ! let fntop("S:\acsUB\conversion\ubadrbil-cnv",cap$="adrbil-cnv")
+00090 ! fntop("S:\acsUB\conversion\ubadrbil-cnv",cap$="adrbil-cnv")
 00100     fncno(cno)
 00110 ! note!!!!   may have to change a$(3) to a$(4), etc and form on line 220
 00120 ! 
@@ -49,7 +49,7 @@
 00410 XIT: fnend 
 00418 IGNORE: continue 
 76220 ! <updateable region: ertn>
-76240 ERTN: let fnerror(program$,err,line,act$,"xit")
+76240 ERTN: fnerror(program$,err,line,act$,"xit")
 76260   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76280   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

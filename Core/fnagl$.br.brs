@@ -5,15 +5,15 @@
 00050     on error goto ERTN
 00060 ! _______________________________________________________________________
 00070     if x$="[All]" or x$='' then let fnagl$="  0     0  0" : goto XIT
-00080     let tmp_cursys$=env$('CurSys')
-00090     if env$('CurSys')='UB' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then let tmp_cursys$="GL": goto COMPANY_OPEN
-00100     if env$('CurSys')='UB' and exists(env$('Q')&"\UBmstr\GLmstr.h"&env$('cno')) then let tmp_cursys$="UB": goto COMPANY_POST_READ
-00110     if env$('CurSys')='PR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then let tmp_cursys$="GL": goto COMPANY_OPEN
-00120     if env$('CurSys')='PR' and exists(env$('Q')&"\CLmstr\Company.h"&env$('cno')) then let tmp_cursys$="CL": goto COMPANY_OPEN
-00130     if env$('CurSys')='PR' and exists(env$('Q')&"\PRmstr\glmstr.h"&env$('cno')) then let tmp_cursys$="PR": goto COMPANY_OPEN
-00140     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')) then let tmp_cursys$="GL": goto COMPANY_OPEN
-00150     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'))=0 then let tmp_cursys$="CR": goto COMPANY_OPEN
-00160     if env$('CurSys')='CL' then let tmp_cursys$='CL' else let tmp_cursys$='GL'
+00080     tmp_cursys$=env$('CurSys')
+00090     if env$('CurSys')='UB' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then tmp_cursys$="GL": goto COMPANY_OPEN
+00100     if env$('CurSys')='UB' and exists(env$('Q')&"\UBmstr\GLmstr.h"&env$('cno')) then tmp_cursys$="UB": goto COMPANY_POST_READ
+00110     if env$('CurSys')='PR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then tmp_cursys$="GL": goto COMPANY_OPEN
+00120     if env$('CurSys')='PR' and exists(env$('Q')&"\CLmstr\Company.h"&env$('cno')) then tmp_cursys$="CL": goto COMPANY_OPEN
+00130     if env$('CurSys')='PR' and exists(env$('Q')&"\PRmstr\glmstr.h"&env$('cno')) then tmp_cursys$="PR": goto COMPANY_OPEN
+00140     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')) then tmp_cursys$="GL": goto COMPANY_OPEN
+00150     if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'))=0 then tmp_cursys$="CR": goto COMPANY_OPEN
+00160     if env$('CurSys')='CL' then tmp_cursys$='CL' else tmp_cursys$='GL'
 00170 ! find out if I should use the department number and/or the sub account number
 00180 COMPANY_OPEN: ! 
 00190     open #company:=fngethandle: "Name="&env$('Q')&"\"&tmp_cursys$&"mstr\Company.h"&env$('cno')&",Shr",internal,input ioerr COMPANY_OPEN_IOERR
@@ -28,8 +28,8 @@
 00275 ! strip off any description
 00280     let x$=x$(1:14)
 00285 ! find the position of the "-"s
-00290     let dash1=pos(x$,"-")
-00295     let dash2=pos(x$,"-",-1)
+00290     dash1=pos(x$,"-")
+00295     dash2=pos(x$,"-",-1)
 00300 ! reformat it into a read key= ready format
 00301     if dash1=0 and dash2=0 and len(x$)=12 then 
 00302 ! do nothing - it is already formatted properly
@@ -55,7 +55,7 @@
 00460     goto FINIS ! /r
 00470 ! _______________________________________________________________________
 00480 ! <Updateable Region: ERTN>
-00490 ERTN: let fnerror(program$,err,line,act$,"xit")
+00490 ERTN: fnerror(program$,err,line,act$,"xit")
 00500     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00510     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00520     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

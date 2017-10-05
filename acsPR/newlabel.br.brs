@@ -70,13 +70,13 @@
 00750   close #2: ioerr ignore
 00760   fnlabel(101,cap$,mat pt$,cp,nw) 
 00762 goto XIT ! /r
-00770 XIT: let fnxit
+00770 XIT: fnxit
 00790 ASK_EMP: ! r: 
-00800   let respc=0
+00800   respc=0
 00810   fntos(sn$="prlabel-2")
 00820   fnlbl(1,1,"Employee Number to Print:",25,1)
 00830   fncombof("Employee",1,28,20,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),1,0, "Select any employee number you wish printed") !:
-        let resp$(respc+=1)=""
+        resp$(respc+=1)=""
 00840   fncmdkey("&Next",1,1,0,"Add this employee to list of labels to be printed.")
 00850   fncmdkey("&Complete",2,0,0,"Print selected labels.")
 00860   fnacs(sn$,0,mat resp$,ck) !:
@@ -87,45 +87,45 @@
 00900   return ! /r
 00920 SCR1: ! r:
 00940   fntos(sn$="prlabel-1")
-00950   let respc=0 : let mylen=50 : let mypos=mylen+3 : let right=1
+00950   respc=0 : mylen=50 : mypos=mylen+3 : right=1
 00960   fnlbl(1,1,"Print Labels For:",mylen,right)
 00970   let fi$="cllabels" !:
-        let item1$(print_all=1)="[All]" : all=1 !:
-        let item1$(2)="Employees from last payroll only": last_payroll=2 !:
-        let item1$(3)="Select employees to print": select_employee=3 !:
-        let item1$(4)="Select employment status to print": emp_status=4 !:
+        item1$(print_all=1)="[All]" : all=1 !:
+        item1$(2)="Employees from last payroll only": last_payroll=2 !:
+        item1$(3)="Select employees to print": select_employee=3 !:
+        item1$(4)="Select employment status to print": emp_status=4 !:
         fncomboa(fi$,1,mypos,mat item1$,"Print labels based on certain employment status code. (Eg. all full time).") !:
-        let resp$(respc+=1)=item1$(1)
+        resp$(respc+=1)=item1$(1)
 00980   fnchk(5,mypos+2,'Print Employee Number on Label:',right) !:
-        let resp$(respc+=1)='False'
+        resp$(respc+=1)='False'
 00990   fnchk(6,mypos+2,'Print Social Security Number on Label:',right) !:
-        let resp$(respc+=1)='False'
+        resp$(respc+=1)='False'
 01000   fnchk(7,mypos+2,'Print Employee Address on Label:',right) !:
-        let resp$(respc+=1)='True'
+        resp$(respc+=1)='True'
 01010   fnlbl(9,1,"Payroll Date to Use (if applicable):",mylen,1)
 01020   fntxt(9,mypos,12,0,1,"3",0,'You can pr labels for any payroll period. Only applicable if printing labels for those employees who got paid."') ! !:
-        let resp$(respc+=1)=""
+        resp$(respc+=1)=""
 01030   fnlbl(10,1,"Payroll Date to pr on Label:",mylen,1)
 01040   fntxt(10,mypos,12,0,1,"1",0,'Used for placing a date on the label. Leave blank if not applilcable."') ! !:
-        let resp$(respc+=1)=""
+        resp$(respc+=1)=""
 01050   fnlbl(11,1,"Employment Status to pr (if applicable):",mylen,1)
 01060   fntxt(11,mypos,2,0,1,"30",0,'Used for selectiing a specific employment status code. Leave blank if not applilcable."') ! !:
-        let resp$(respc+=1)=""
+        resp$(respc+=1)=""
 01070   fnlbl(13,1,"Starting Employee Number (if applicable):",mylen,1)
 01080   fncombof("Employee",13,mypos,20,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),1,0, "Select starting employee record for printing. Only applicable if not starting with first employee.") !:
-        let resp$(respc+=1)=""
+        resp$(respc+=1)=""
 01090   fncmdset(2)
 01100   fnacs(sn$,0,mat resp$,ck) !:
         if ck=5 then goto XIT else !:
-          if resp$(1)=item1$(1) then let prtall=all else !:
-            if resp$(1)=item1$(2) then let prtall=last_payroll else !:
-              if resp$(1)=item1$(3) then let prtall=select_employee else !:
-                if resp$(1)=item1$(4) then let prtall=emp_status
+          if resp$(1)=item1$(1) then prtall=all else !:
+            if resp$(1)=item1$(2) then prtall=last_payroll else !:
+              if resp$(1)=item1$(3) then prtall=select_employee else !:
+                if resp$(1)=item1$(4) then prtall=emp_status
 01110   if resp$(2) ="True" then empyn$="Y" else empyn$="N"
 01120   if resp$(3) ="True" then ssyn$="Y" else ssn$="N"
 01130   if resp$(4) ="True" then empadryn$="Y" else empadryn$="N"
-01140   let date_to_select=val(resp$(5)) ! payroll date to use in selecting employees
-01150   let date_to_print=val(resp$(6)) ! payroll date to pr on label
+01140   date_to_select=val(resp$(5)) ! payroll date to use in selecting employees
+01150   date_to_print=val(resp$(6)) ! payroll date to pr on label
 01160   empstatuse=val(resp$(7)) ! employment status used as criteria
 01170   starting_employee=val(resp$(8)(1:8)) ! starting employee #
 01180   if prtall=3 then sey$="Y" else sey$="N" !:
@@ -142,7 +142,7 @@
 01290   lb1=0 : mat lb$=("")
 01300   return ! /r
 01320 ! <Updateable Region: ERTN>
-01330 ERTN: let fnerror(program$,err,line,act$,"xit")
+01330 ERTN: fnerror(program$,err,line,act$,"xit")
 01340   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01350   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

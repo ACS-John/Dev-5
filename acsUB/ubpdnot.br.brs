@@ -14,10 +14,10 @@
 00140 ! /r
 00142 ! r: top of programs, constants,initial setup, etc
 00150   fntop(program$,cap$="Past Due Notices")
-00170   let tmp_rtf_filename$=fnprint_file_name$
+00170   tmp_rtf_filename$=fnprint_file_name$
 00180   fnget_atlantis(atlantis$)
 00190   fncno(cno)
-00202   if env$('client')='French Settlement' or env$('client')='Granby' or env$('client')='Eldorado' then let hard_coded=1 ! env$('client')='Merriam Woods' or
+00202   if env$('client')='French Settlement' or env$('client')='Granby' or env$('client')='Eldorado' then hard_coded=1 ! env$('client')='Merriam Woods' or
 00210   fnd1(d1)
 00220   fndat(d$(4))
 00230   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
@@ -34,7 +34,7 @@
 00340     at$(j)=rpt$(" ",int(y/2))&at$(j)
 00350   next j
 00352 ! 
-00354   let deltype=0 : let fnreg_read('UB - Past Due Notices - Delinquent Type',deltype$) : let deltype=val(deltype$) conv ignore
+00354   deltype=0 : fnreg_read('UB - Past Due Notices - Delinquent Type',deltype$) : deltype=val(deltype$) conv ignore
 00356 ! 
 00360   open #adrbil=3: "Name="&env$('Q')&"\UBmstr\UBADRBIL.H"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00370   open #customer5=11: "Name="&env$('Q')&"\UBmstr\Customer.H"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBINDx5.H"&str$(cno)&",Shr",internal,input,keyed 
@@ -43,46 +43,46 @@
 00390 goto MENU1 ! /r
 00400 MENU1: ! r:
 00410   fntos(sn$="UBPdNot1")
-00420   let respc=0
+00420   respc=0
 00430   fnlbl(2,1,"@D1=Last Billing Date (mmddyy):",38,1)
 00440   fntxt(2,40,8,0,1,"1")
-00450   let resp$(respc+=1)=str$(d1)
+00450   resp$(respc+=1)=str$(d1)
 00460   fnlbl(3,1,"@D2= Payment Due Date (mmddyy):",38,1)
 00470   fntxt(3,40,8,0,1,"1")
-00480   let resp$(respc+=1)=str$(d2)
+00480   resp$(respc+=1)=str$(d2)
 00490   fnlbl(4,1,"@D3=    Shut Off Date (mmddyy):",38,1)
 00500   fntxt(4,40,8,0,1,"1")
-00510   let resp$(respc+=1)=str$(d3)
+00510   resp$(respc+=1)=str$(d3)
 00520   fnlbl(5,1,"@D4=            Date of Notice:",38,1)
 00530   fntxt(5,40,20,20)
-00540   let resp$(respc+=1)=d$(4)
+00540   resp$(respc+=1)=d$(4)
 00550   fnlbl(6,1,"Minimum balance required:",38,1)
 00560   fntxt(6,40,10,10,0,"10")
-00570   let resp$(respc+=1)=""
+00570   resp$(respc+=1)=""
 00580   fnfra(8,5,6,50,"Print all customers who:")
 00590   fnopt(1,1,"Have not paid their current bill",0,1)
-00600   if deltype<=1 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+00600   if deltype<=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00610   fnopt(2,1,"Have not paid their prior month's bill",0,1)
-00620   if deltype=2 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+00620   if deltype=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00630   fnopt(3,1,"Are Active",0,1)
-00640   if deltype=3 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+00640   if deltype=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00650   fnopt(4,1,"Are Final Billed Customers and have not paid",0,1)
-00660   if deltype=4 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+00660   if deltype=4 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00670   fnopt(5,1,"Have a balance",0,1)
-00680   if deltype=5 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+00680   if deltype=5 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00690   fnopt(6,1,"Who Were Billed This Month",0,1)
-00700   if deltype=6 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+00700   if deltype=6 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00710   fncmdset(2)
 00720   fnacs(sn$,0,mat resp$,ckey)
 00730   if ckey=5 then goto XIT
-00740   let d$(1)=cnvrt$("PIC(##/##/##)",d1=val(resp$(1)))
-00750   let d$(2)=cnvrt$("PIC(##/##/##)",d2=val(resp$(2)))
-00760   let d$(3)=cnvrt$("PIC(##/##/##)",d3=val(resp$(3)))
-00770   let d$(4)=rtrm$(d$(4)=resp$(4))
-00780   let minbal=val(resp$(5))
+00740   d$(1)=cnvrt$("PIC(##/##/##)",d1=val(resp$(1)))
+00750   d$(2)=cnvrt$("PIC(##/##/##)",d2=val(resp$(2)))
+00760   d$(3)=cnvrt$("PIC(##/##/##)",d3=val(resp$(3)))
+00770   d$(4)=rtrm$(d$(4)=resp$(4))
+00780   minbal=val(resp$(5))
 00790   for a=6 to 11
-00800     if uprc$(resp$(a))=uprc$("True") then let deltype=a-5
-00810     let resp$(a)=""
+00800     if uprc$(resp$(a))=uprc$("True") then deltype=a-5
+00810     resp$(a)=""
 00820   next a
 00822   fnreg_write('UB - Past Due Notices - Delinquent Type',str$(deltype))
 01090   goto UBFORM ! /r
@@ -150,7 +150,7 @@
 18040       open #h_prnt1:=fngethandle: "Name="&tmp_rtf_filename$&",eol=none,Replace",display,output 
 18060     end if 
 18080     fn_bldr1
-18100     let r=0
+18100     r=0
 18120 P1_NEXT_LN: ! 
 18140     ln$=""
 18160 P1_L2250: read #h_template,using "Form POS 1,C 1",rec=r+=1: ln3$ eof P1_END1 norec P1_END1
@@ -159,30 +159,30 @@
 18220     if len(rtrm$(ln$))>3900 then pr #h_prnt1: ln$ : goto P1_NEXT_LN
 18240     goto P1_L2250
 18260 ! ___________________________
-18280 P1_L2310: let p3=len(ln$) : l2$="" : let p1=0
-18300 P1_L2320: let p2=pos(ln$,"@",p1)
+18280 P1_L2310: p3=len(ln$) : l2$="" : p1=0
+18300 P1_L2320: p2=pos(ln$,"@",p1)
 18320     if p2=0 then goto P1_L2570
 18340     if p1>len(l2$) then l2$=rpad$(l2$,p1)
-18360     l2$=l2$&ln$(p1:p2-1) : let p4=pos(ln$," ",p2)
-18380     if p4=0 then let p4=p3 else let p4=p4-1
-18400 P1_L2370: if ln$(p4:p4)="." or ln$(p4:p4)="," or ln$(p4:p4)=":" or ln$(p4:p4)="\" or ln$(p4:p4)=";" then let p4=p4-1 : goto P1_L2370
-18420     if ln$(p2+2:p2+5)="\par" then let p4=p2+1 ! if they don't space after the variable at the end of a line, it doesn't pr the variable
-18440     if ln$(p2+3:p2+6)="\par" then let p4=p2+2
-18460     if ln$(p2+4:p2+7)="\par" then let p4=p2+3
-18480     if ln$(p2+5:p2+8)="\par" then let p4=p2+3
-18500     if ln$(p2+6:p2+9)="\par" then let p4=p2+3
-18520     let v1=val(ln$(p2+1:p4)) conv P1_L2480
+18360     l2$=l2$&ln$(p1:p2-1) : p4=pos(ln$," ",p2)
+18380     if p4=0 then p4=p3 else p4=p4-1
+18400 P1_L2370: if ln$(p4:p4)="." or ln$(p4:p4)="," or ln$(p4:p4)=":" or ln$(p4:p4)="\" or ln$(p4:p4)=";" then p4=p4-1 : goto P1_L2370
+18420     if ln$(p2+2:p2+5)="\par" then p4=p2+1 ! if they don't space after the variable at the end of a line, it doesn't pr the variable
+18440     if ln$(p2+3:p2+6)="\par" then p4=p2+2
+18460     if ln$(p2+4:p2+7)="\par" then p4=p2+3
+18480     if ln$(p2+5:p2+8)="\par" then p4=p2+3
+18500     if ln$(p2+6:p2+9)="\par" then p4=p2+3
+18520     v1=val(ln$(p2+1:p4)) conv P1_L2480
 18540     if v1<>0 and v1<=udim(mat r1$) then l2$=l2$&r1$(v1)
-18560 P1_L2450: let p1=p4+1
+18560 P1_L2450: p1=p4+1
 18580     goto P1_L2320
 18600 ! ___________________________
 18620 P1_L2480: ! 
 18640 ! if uprc$(ln$(p2+1:p2+2))><"B4" then
-18660 !   if rtrm$(b4$)="" then b4$=extra$(1) : let r1$(5)=e$(4)
+18660 !   if rtrm$(b4$)="" then b4$=extra$(1) : r1$(5)=e$(4)
 18680 !   l2$=l2$&rtrm$(b4$)
 18700 ! end if
 18720     if uprc$(ln$(p2+1:p2+1))><"D" then goto P1_L2550
-18740     let v1=val(ln$(p2+2:p2+2)) conv P1_L2550
+18740     v1=val(ln$(p2+2:p2+2)) conv P1_L2550
 18760     if v1<1 or v1>4 then goto P1_L2550
 18780     l2$=l2$&d$(v1)
 18800 P1_L2550: goto P1_L2450
@@ -202,66 +202,66 @@
 19080 !   if trim$(b4$)="" then b4$=e$(4) ! : e$(4)="" ! blanking out of standard CSZ removed 7/25/11 to fix missing CSZ in @5
 19100 !   if trim$(extra$(1))="" then extra$(1)=e$(4) : e$(4)='' ! re=added to make @108 the address line 2 or CSZ (if no addr line 2) and thusly @5 be blank.
 19120     mat r1$=("")
-19140     let r1$(1)=ltrm$(z$)
-19160     let r1$(2)=rtrm$(meter_address$) ! meter address
-19180     let r1$(3)=rtrm$(addr$(1)) ! name
-19200     let r1$(4)=rtrm$(addr$(2)) ! rtrm$(e$(3)) ! address
-19220     let r1$(108)=rtrm$(addr$(3)) ! address
-19240     let r1$(5)=rtrm$(addr$(4)) ! city st zip
-19260     for j=1 to 3 : let r1$(j+5)=f$(j) : next j
-19280     for j=1 to 7 : let r1$(j+9)=str$(a(j)) : next j
-19300     for j=1 to 11 : let r1$(j+16)=ltrm$(cnvrt$("N 8.2",b(j))) : next j
-19320     for j=1 to 4 : let r1$(j+27)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)",c(j))) : next j
-19340     for j=1 to 15: let r1$(j+31)=ltrm$(cnvrt$("N 10",d(j))) : next j
-19360     let r1$(47)=ltrm$(cnvrt$("N 10.2",bal))
-19380     let r1$(49)=ltrm$(cnvrt$("PIC(##/##/##)",f))
-19400     for j=1 to 12 : let r1$(j+49)=cnvrt$("N 10.2",g(j)) : next j
-19420     for j=1 to 10 : let r1$(j+61)=cnvrt$("N 10.2",gb(j)) : next j
-19440     let r1$(72)=cnvrt$("n 10.2",bal+(g(12)-g(11))) ! balance plus penalty (assume total penalties will be difference in gross and net bill)
-19460     let r1$(73)=ltrm$(cnvrt$("n 10.2",bal+(g(12)-g(11)))) ! balance plus penalty trimmed
-19480     if env$('client')="White Hall" then let r1$(73)=ltrm$(cnvrt$("n 10.2",bal+10)) ! balance plus $10 penalty trimmed
-19500     let r1$(74)=cnvrt$("n 10.2",bal-g(11)) ! past due balance
-19520     let r1$(75)=ltrm$(cnvrt$("n 10.2",bal-g(11))) ! past due balance trimed
-19540     let r1$(76)=cnvrt$("N 10.2",bal) ! balance not trimed
-19560     let r1$(77)=ltrm$(cnvrt$("PIC(##/##/##)",extra(3))) ! date read current
-19580     if balance >0 then let r1$(78)=ltrm$(cnvrt$("pic(zzzzzzz.##",max(0,bal+(g(12)-g(11))))) else let r1$(78)=ltrm$(cnvrt$("pic(zzzzzzz.##",0)) ! pay after amount (balance plus penalty trimmed) nothing if balance <0
-19600     let r1$(80)=df$ ! bank draft Y
-19620     let r1$(81)=da$ ! bank Account
-19640     let r1$(82)=dc$ ! Account code
-19660     let r1$(83)=dc$ ! bank acct #
-19680     let r1$(84)=trim$(cnvrt$("N 2",extra(1))) ! route number
-19700     let r1$(85)=trim$(cnvrt$("N 7",extra(2))) ! sequence #
-19720     let r1$(86)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)",extra(3))) ! current reading date
-19740     let r1$(87)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)",extra(4))) ! prior   reading date
-19760     let r1$(88)=ltrm$(cnvrt$("PIC(zZzZZZZ)",extra(5))) ! sewer rediction
-19780     let r1$(89)=ltrm$(cnvrt$("n 10.2",extra(6))) conv L3040 ! security light charge
-19800 L3040: let r1$(90)=ltrm$(cnvrt$("PIC(ZZzZZzZZ)",extra(7))) ! security light count
-19820     let r1$(91)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(8))) ! electric multiplier
-19840     let r1$(92)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(9))) ! demand average usage
-19860     let r1$(93)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(10))) ! gas multiplier
-19880     let r1$(94)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(11))) ! service 6 rate code
-19900     let r1$(95)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(12))) ! service 7 rate code
-19920     let r1$(96)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(13))) ! service 8 rate code
-19940     let r1$(97)=ltrm$(cnvrt$("PIC(zZZ)",extra(14))) ! units per meter sewer
-19960     let r1$(98)=ltrm$(cnvrt$("PIC(zZZ)",extra(15))) ! units per meter electric
-19980     let r1$(99)=ltrm$(cnvrt$("PIC(zZZ)",extra(16))) ! units per meter gas
+19140     r1$(1)=ltrm$(z$)
+19160     r1$(2)=rtrm$(meter_address$) ! meter address
+19180     r1$(3)=rtrm$(addr$(1)) ! name
+19200     r1$(4)=rtrm$(addr$(2)) ! rtrm$(e$(3)) ! address
+19220     r1$(108)=rtrm$(addr$(3)) ! address
+19240     r1$(5)=rtrm$(addr$(4)) ! city st zip
+19260     for j=1 to 3 : r1$(j+5)=f$(j) : next j
+19280     for j=1 to 7 : r1$(j+9)=str$(a(j)) : next j
+19300     for j=1 to 11 : r1$(j+16)=ltrm$(cnvrt$("N 8.2",b(j))) : next j
+19320     for j=1 to 4 : r1$(j+27)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)",c(j))) : next j
+19340     for j=1 to 15: r1$(j+31)=ltrm$(cnvrt$("N 10",d(j))) : next j
+19360     r1$(47)=ltrm$(cnvrt$("N 10.2",bal))
+19380     r1$(49)=ltrm$(cnvrt$("PIC(##/##/##)",f))
+19400     for j=1 to 12 : r1$(j+49)=cnvrt$("N 10.2",g(j)) : next j
+19420     for j=1 to 10 : r1$(j+61)=cnvrt$("N 10.2",gb(j)) : next j
+19440     r1$(72)=cnvrt$("n 10.2",bal+(g(12)-g(11))) ! balance plus penalty (assume total penalties will be difference in gross and net bill)
+19460     r1$(73)=ltrm$(cnvrt$("n 10.2",bal+(g(12)-g(11)))) ! balance plus penalty trimmed
+19480     if env$('client')="White Hall" then r1$(73)=ltrm$(cnvrt$("n 10.2",bal+10)) ! balance plus $10 penalty trimmed
+19500     r1$(74)=cnvrt$("n 10.2",bal-g(11)) ! past due balance
+19520     r1$(75)=ltrm$(cnvrt$("n 10.2",bal-g(11))) ! past due balance trimed
+19540     r1$(76)=cnvrt$("N 10.2",bal) ! balance not trimed
+19560     r1$(77)=ltrm$(cnvrt$("PIC(##/##/##)",extra(3))) ! date read current
+19580     if balance >0 then r1$(78)=ltrm$(cnvrt$("pic(zzzzzzz.##",max(0,bal+(g(12)-g(11))))) else r1$(78)=ltrm$(cnvrt$("pic(zzzzzzz.##",0)) ! pay after amount (balance plus penalty trimmed) nothing if balance <0
+19600     r1$(80)=df$ ! bank draft Y
+19620     r1$(81)=da$ ! bank Account
+19640     r1$(82)=dc$ ! Account code
+19660     r1$(83)=dc$ ! bank acct #
+19680     r1$(84)=trim$(cnvrt$("N 2",extra(1))) ! route number
+19700     r1$(85)=trim$(cnvrt$("N 7",extra(2))) ! sequence #
+19720     r1$(86)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)",extra(3))) ! current reading date
+19740     r1$(87)=ltrm$(cnvrt$("PIC(ZZ/ZZ/ZZ)",extra(4))) ! prior   reading date
+19760     r1$(88)=ltrm$(cnvrt$("PIC(zZzZZZZ)",extra(5))) ! sewer rediction
+19780     r1$(89)=ltrm$(cnvrt$("n 10.2",extra(6))) conv L3040 ! security light charge
+19800 L3040: r1$(90)=ltrm$(cnvrt$("PIC(ZZzZZzZZ)",extra(7))) ! security light count
+19820     r1$(91)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(8))) ! electric multiplier
+19840     r1$(92)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(9))) ! demand average usage
+19860     r1$(93)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(10))) ! gas multiplier
+19880     r1$(94)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(11))) ! service 6 rate code
+19900     r1$(95)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(12))) ! service 7 rate code
+19920     r1$(96)=ltrm$(cnvrt$("PIC(ZZZzZZzZZ)",extra(13))) ! service 8 rate code
+19940     r1$(97)=ltrm$(cnvrt$("PIC(zZZ)",extra(14))) ! units per meter sewer
+19960     r1$(98)=ltrm$(cnvrt$("PIC(zZZ)",extra(15))) ! units per meter electric
+19980     r1$(99)=ltrm$(cnvrt$("PIC(zZZ)",extra(16))) ! units per meter gas
 20000 ! r1$(100)  skipped
-20020     let r1$(101)=ltrm$(cnvrt$("PIC(ZZ/zz/zz)",extra(17))) ! final billing date
-20040     let r1$(102)=ltrm$(cnvrt$("PIC(ZZzzzzzzz)",extra(18))) ! average sewer usage
-20060     let r1$(103)=ltrm$(cnvrt$("PIC(ZZ/zz/zz)",extra(19))) ! estimated date
-20080     extra(20)=0: let r1$(104)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(20))) ! extra
-20100     extra(21)=0: let r1$(105)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(21))) ! extra
-20120     extra(22)=0: let r1$(106)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(22))) ! extra
+20020     r1$(101)=ltrm$(cnvrt$("PIC(ZZ/zz/zz)",extra(17))) ! final billing date
+20040     r1$(102)=ltrm$(cnvrt$("PIC(ZZzzzzzzz)",extra(18))) ! average sewer usage
+20060     r1$(103)=ltrm$(cnvrt$("PIC(ZZ/zz/zz)",extra(19))) ! estimated date
+20080     extra(20)=0: r1$(104)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(20))) ! extra
+20100     extra(21)=0: r1$(105)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(21))) ! extra
+20120     extra(22)=0: r1$(106)=ltrm$(cnvrt$("PIC(ZZzzzzzz)",extra(22))) ! extra
 20140     if extra(23)<-10000 then extra(23)=0
-20160 ! Let R1$(107)=LTRM$(CNVRT$("PIC(n 10.2)",EXTRA(23))) ! escrow balance
-20180 !   if trim$(extra$(1))<>"" then let r1$(108)=extra$(1)
+20160 ! r1$(107)=LTRM$(CNVRT$("PIC(n 10.2)",EXTRA(23))) ! escrow balance
+20180 !   if trim$(extra$(1))<>"" then r1$(108)=extra$(1)
 20200     for j=109 to 117
-20220       let r1$(j)=trim$(extra1$(j-107)) ! escrow balance thru end
+20220       r1$(j)=trim$(extra1$(j-107)) ! escrow balance thru end
 20240     next j
 20260 ! if trim$(z$)='901246.40' then pr 'the end of it' : pause
 20280   fnend  ! fn_bldr1
 30000   def fn_vbopenprint
-30020     let h_vb_pr_out:=20
+30020     h_vb_pr_out:=20
 30040     fnpa_open
 30080     lyne=3
 30120     spacer=0
@@ -317,7 +317,7 @@
 31140 RC_DONE: ! 
 31160       fncloseprn
 31180       close #h_ra,free: 
-31200       let h_ra=0
+31200       h_ra=0
 31220     end if  ! h_ra
 31240     goto RC_XIT
 31260 RC_PGOF: ! 
@@ -325,7 +325,7 @@
 31300     gosub RC_HDR
 31320     continue  ! RC_PGOF
 31340 RC_HDR: ! 
-31360     let rc_page+=1
+31360     rc_page+=1
 31380     pr #255: "\qc "&cnam$
 31400     pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
 31420     pr #255,using "form pos 1,c 70,cr 14": "\ql "&date$,"Page "&str$(rc_page)
@@ -336,14 +336,14 @@
 31520   def fn_report_add
 31540     if ~h_ra then 
 31560       open #h_ra:=fngethandle: 'Name='&env$('temp')&'\ubpdnot_summary_s'&session$&'.txt,RecL=256,replace',display,output 
-31580       let rc_page=0
+31580       rc_page=0
 31600     end if  ! ~h_ra
 31620     pr #h_ra,using 'form pos 1,c 256': z$&'  '&addr$(1)&cnvrt$("pic(---,---.##)",bal)&'  '&meter_address$&'  '
 31640 ! 
 31660   fnend  ! fn_report_add
 31666 IGNORE: continue 
 31700 ! <Updateable Region: ERTN>
-31720 ERTN: let fnerror(program$,err,line,act$,"xit")
+31720 ERTN: fnerror(program$,err,line,act$,"xit")
 31740   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 31760   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 31780   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -436,24 +436,24 @@
 34000   def fn_french_settlement_gas
 34020     fnopenprn
 34040 ! ______________pre-print calculations__________________________________
-34060     if pb<>0 then let pb$="Prior Balance" else let pb$=""
-34080     if g(1)=0 then let t1$="" else let t1$="WTR"
-34100     if g(2)=0 then let t2$="" else let t2$="SWR"
-34120     if g(3)=0 then let t3$="" else let t3$="RPR"
-34140     if g(4)=0 then let t4$="" else let t4$="GAS"
-34160     if g(5)=0 then let t5$="" else let t5$="Purchased Gas Adj."
-34180     if g(6)=0 then let t6$="" else let t6$="Inspection Fee"
-34200     if g(7)=0 then let t7$="" else let t7$="Deposit Interest"
-34220     if g(8)=0 then let t8$="" else let t8$="Other Charges"
-34240     if g(8)<0 then let t8$="Deposit Refund"
-34260     if g(9)=0 then let t9$="" else let t9$="La. Sales Tax"
+34060     if pb<>0 then pb$="Prior Balance" else pb$=""
+34080     if g(1)=0 then t1$="" else t1$="WTR"
+34100     if g(2)=0 then t2$="" else t2$="SWR"
+34120     if g(3)=0 then t3$="" else t3$="RPR"
+34140     if g(4)=0 then t4$="" else t4$="GAS"
+34160     if g(5)=0 then t5$="" else t5$="Purchased Gas Adj."
+34180     if g(6)=0 then t6$="" else t6$="Inspection Fee"
+34200     if g(7)=0 then t7$="" else t7$="Deposit Interest"
+34220     if g(8)=0 then t8$="" else t8$="Other Charges"
+34240     if g(8)<0 then t8$="Deposit Refund"
+34260     if g(9)=0 then t9$="" else t9$="La. Sales Tax"
 34280 ! If D(10)=1 Then eST$="Bill Estimated" Else eST$=""
 34300     if c4>0 then let final$="Final Bill" else let final$=""
 34320     if bal<=0 then let g(10)=0
 34340     let gross=max(bal+g(10),0)
 34360 ! ______________actual Bill Printing____________________________________
-34380     let pos_amt=28
-34400     let pos_r=39
+34380     pos_amt=28
+34400     pos_r=39
 34420 L310: form pos 1,nz 6,nz 7,nz 7,x 2,c 3,pos pos_amt,nz 8.2,pos pos_r,c 30
 34440 L320: form pos 1,c 20,pos pos_amt,nz 8.2,pos pos_r,c 30
 34460 L340: form pos 1,pic(## ## ##),x 1,pic(## ## ##),n 8.2,pos 27,pic(-----.--),pos 40,n 7.2,x 3,pic(## ## ##),pic(-----.--),skip 1
@@ -507,17 +507,17 @@
 38000 !  r: def fn_merriam_woods
 38020 !     library 'S:\acsUB\PrintBill_Merriam_Woods': fnpast_due_notice,fnpast_due_notice_finis
 38040 ! ! ______________pre-print calculations__________________________________
-38060 !     if pb<>0 then let pb$="Prior Balance" else let pb$=""
-38080 !     if g(1)=0 then let t1$="" else let t1$="WTR"
-38100 !     if g(2)=0 then let t2$="" else let t2$="SWR"
-38120 !     if g(3)=0 then let t3$="" else let t3$="RPR"
-38140 !     if g(4)=0 then let t4$="" else let t4$="GAS"
-38160 !     if g(5)=0 then let t5$="" else let t5$="Purchased Gas Adj."
-38180 !     if g(6)=0 then let t6$="" else let t6$="Inspection Fee"
-38200 !     if g(7)=0 then let t7$="" else let t7$="Deposit Interest"
-38220 !     if g(8)=0 then let t8$="" else let t8$="Other Charges"
-38240 !     if g(8)<0 then let t8$="Deposit Refund"
-38260 !     if g(9)=0 then let t9$="" else let t9$="La. Sales Tax"
+38060 !     if pb<>0 then pb$="Prior Balance" else pb$=""
+38080 !     if g(1)=0 then t1$="" else t1$="WTR"
+38100 !     if g(2)=0 then t2$="" else t2$="SWR"
+38120 !     if g(3)=0 then t3$="" else t3$="RPR"
+38140 !     if g(4)=0 then t4$="" else t4$="GAS"
+38160 !     if g(5)=0 then t5$="" else t5$="Purchased Gas Adj."
+38180 !     if g(6)=0 then t6$="" else t6$="Inspection Fee"
+38200 !     if g(7)=0 then t7$="" else t7$="Deposit Interest"
+38220 !     if g(8)=0 then t8$="" else t8$="Other Charges"
+38240 !     if g(8)<0 then t8$="Deposit Refund"
+38260 !     if g(9)=0 then t9$="" else t9$="La. Sales Tax"
 38300 !     if c4>0 then let final$="Final Bill" else let final$=""
 38320 !     if bal<=0 then let g(10)=0
 38340 !     let gross=max(bal+g(10),0)
@@ -529,32 +529,32 @@
 40020   fn_report_close
 40040   fntos(sn$="Select_and_Book")
 40060   mat resp$=("")
-40080   let respc=0
+40080   respc=0
 40100   fnlbl(1,1,"File Name:",28,1)
 40120   if hard_coded then 
 40140     fntxt(1,30,10,0,0,'',1,'',0)
-40160     let resp$(respc+=1)='hard coded'
+40160     resp$(respc+=1)='hard coded'
 40180   else 
 40200     fncomboa("PDNOTRTF",1,30,mat file_rtf$)
 40220 ! resp$(respc+=1)=file_rtf$(1)
 40240     if env$('client')='White Hall' then 
-40260       let resp$(respc+=1)='White_Ha'
+40260       resp$(respc+=1)='White_Ha'
 40280     else if env$('client')='Ash Grove' then 
-40300       let resp$(respc+=1)='ASHGROVE'
+40300       resp$(respc+=1)='ASHGROVE'
 40320     else 
-40330       let respc+=1
+40330       respc+=1
 40332       fncreg_read('ubpdnot_file_name',resp$(respc))
-40340       if resp$(respc)='' or srch(mat file_rtf$,resp$(respc))<=0 then let resp$(respc)=file_rtf$(1)
+40340       if resp$(respc)='' or srch(mat file_rtf$,resp$(respc))<=0 then resp$(respc)=file_rtf$(1)
 40360     end if 
 40380   end if 
 40400   fnlbl(3,1,"Route Number:",28,1)
 40420   fncmbrt2(3,30)
-40440   let resp$(respc+=1)="[All]"
+40440   resp$(respc+=1)="[All]"
 40460   fnlbl(4,1,"Beginning Account:",28,1)
 40480   fncmbact(4,30,1)
-40500   let resp$(respc+=1)="[All]"
+40500   resp$(respc+=1)="[All]"
 40520   fnchk(6,30,"Print only Selected Accounts")
-40540 ! let fncmdset(102)
+40540 ! fncmdset(102)
 40560   fncmdkey("&Print",1,1)
 40580   if ~hard_coded then let fncmdkey("E&dit",3)
 40600   if ~hard_coded then let fncmdkey("&Add",4)
@@ -562,41 +562,41 @@
 40640   if ~hard_coded then let fncmdkey("&Refresh",6)
 40660   fncmdkey("&Cancel",5,0,1)
 40680   fnacs(sn$,0,mat resp$,ckey)
-40700   let do_print_std_form=0
+40700   do_print_std_form=0
 40720   dim flname$*256
 40740   flname$=rtrm$(resp$(1))
 40750   fncreg_write('ubpdnot_file_name',flname$)
 40760   if resp$(2)<>"[All]" then 
 40762     bk1=val(resp$(2))
-40764     let resp$(2)=""
+40764     resp$(2)=""
 40766   else 
 40768     bk1=0
-40770     let resp$(2)=""
+40770     resp$(2)=""
 40772   end if 
 40774   if trim$(resp$(3))<>"[All]" then 
 40776     sz$=lpad$(trim$(resp$(3)(1:10)),10)
-40778     let resp$(3)=""
+40778     resp$(3)=""
 40780   else 
 40782     sz$=""
-40784     let resp$(3)=""
+40784     resp$(3)=""
 40786   end if 
 40788   if resp$(4)="True" then 
-40790     let resp$(4)=""
+40790     resp$(4)=""
 40792     sel_indv$="Y"
 40794   else 
-40796     let resp$(4)=""
+40796     resp$(4)=""
 40798     sel_indv$="N"
 40800   end if 
 40820   if ckey=1 and resp$(1)="(Pre-Printed)" then 
-40840     let do_print_std_form=1
+40840     do_print_std_form=1
 40860     goto PRINTING_BEGIN
 40880   else if ckey=1 then ! pr the Past Due Notices
 40900     count=0
 40920     if resp$(1)="(Reminder)" then 
 40940       fn_vbopenprint
-40960       let reminder=1
+40960       reminder=1
 40980     else 
-41000       let resp$(1)=""
+41000       resp$(1)=""
 41020       if ~hard_coded then let fn_open_template
 41040     end if 
 41060     goto PRINTING_BEGIN
@@ -608,15 +608,15 @@
 41180     goto SELECT_SCREEN ! CANT EDIT STANDARD FORM
 41200   else if ckey=4 then ! r: Add
 41220     fntos(sn$="Select_Name")
-41240     let respc=0
+41240     respc=0
 41260     fnlbl(1,1,"File Name:",15,1)
 41280     fntxt(1,17,40,64,1,"")
-41300     let resp$(respc+=1)=""
+41300     resp$(respc+=1)=""
 41320     fncmdset(2)
 41340     fnacs(sn$,0,mat resp$,ckey)
 41360     if ckey=5 then goto MENU1
 41380     dim newname$*256
-41400     let newname$=trim$(resp$(1))&'.rtf' ! &".rtf" ! trim$(resp$(1)(1:8))&".rtf"
+41400     newname$=trim$(resp$(1))&'.rtf' ! &".rtf" ! trim$(resp$(1)(1:8))&".rtf"
 41420     execute 'copy  "S:\Core\default\plain.rtf"  "'&os_filename$(env$('Q')&"\UBmstr\"&newname$)&'" -n'
 41440     execute 'SY -w '&atlantis$&' "'&os_filename$(env$('Q')&"\UBmstr\"&newname$)&'" -n'
 41460     goto UBFORM ! /r
@@ -655,10 +655,10 @@
 44540   end if  ! /r
 44560 ASK_NEXT_ACT: ! r:
 44580   fntos(sn$="UBPdNot-5")
-44600   let respc=0
+44600   respc=0
 44620   fnlbl(1,1,"Next Account:",18,1)
 44640   fncmbact(1,20,1)
-44660   let resp$(respc+=1)=""
+44660   resp$(respc+=1)=""
 44680   fncmdset(19)
 44700   fnacs(sn$,0,mat resp$,ckey)
 44720   if ckey=5 then 
@@ -682,7 +682,7 @@
 46100     restore #customer1: ! Close #customer1: Ioerr 980
 46120     let granby_print_count=0
 46140     if h_prnt1 then 
-46160       close #h_prnt1: : let h_prnt1=0
+46160       close #h_prnt1: : h_prnt1=0
 46180       execute 'SY -w '&atlantis$&' "'&os_filename$(tmp_rtf_filename$)&'" -n'
 46200     else 
 46220       fncloseprn
@@ -695,7 +695,7 @@
 46360 ! end if
 46380 ! 
 46400   if h_prnt1 then 
-46420     close #h_prnt1: : let h_prnt1=0
+46420     close #h_prnt1: : h_prnt1=0
 46440     execute 'SY -w '&atlantis$&' "'&os_filename$(tmp_rtf_filename$)&'" -n'
 46460   else 
 46480     fncloseprn

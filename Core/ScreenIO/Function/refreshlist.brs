@@ -4,5 +4,5 @@
  ! fnRefreshList - This function refreshes the list using the filters.
  !
  def fnRefreshList
-    let RepopulateListviews=1
+    repopulateListviews=1
  fnend

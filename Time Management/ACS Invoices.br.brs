@@ -10,16 +10,16 @@
 20180   dim inp(7),wo_desc$*30
 20200   fn_get_system_list(mat sys_name$)
 20220   fncreg_read('Last Invoice Number',tmp$, '1704001') : invoice_number=val(tmp$)
-20280   let invoice_number=invoice_number+1
+20280   invoice_number=invoice_number+1
 20420   pr newpage
 20440   pr f "5,2,cr 43": "Invoice Date (mmddyy):"
 20460   pr f "4,30,c": "Invoice Date MUST match expiration date of Annual Support contracts!"
 20480   pr f "6,2,cr 43": "Starting Invoice Number:"
 20500   pr f "7,2,Cr 43": "Starting Account Number:"
-20520   let in1$(1)="5,46,Nz 6,U"
-20540   let in1$(2)="6,46,N 12,U"
-20560   let in1$(3)="7,46,N 5,U"
-20600 ! let inv_date=date('mmddyy')
+20520   in1$(1)="5,46,Nz 6,U"
+20540   in1$(2)="6,46,N 12,U"
+20560   in1$(3)="7,46,N 5,U"
+20600 ! inv_date=date('mmddyy')
 20620   pr f "10,30,c 20,,B99": "Cancel (Esc)"
 20640 SCREEN1_ASK: ! 
 20650   rinput fields mat in1$: inv_date,invoice_number,starting_acct_no conv SCREEN1_ASK
@@ -49,7 +49,7 @@
 22220   do 
 22240     read #h_clmstr,using 'form pos 1,c 5,3*c 30,pos 283,pd 5.2': client_id$,mat client_addr$,pbal eof EOJ
 22260     client_id=val(client_id$)
-22280     let iv$=rpad$(str$(invoice_number),12)
+22280     iv$=rpad$(str$(invoice_number),12)
 22300     restore #h_support: ! ,key>=lpad$(trim$(client_id$),kln(h_support)): nokey BMM_SUPPORT_EOF
 22320     do 
 22340       read #h_support,using F_SUPPORT: cln$,scode,scode$,sdt1,stm$,sup_exp_date,scst eof BMM_SUPPORT_EOF
@@ -67,22 +67,22 @@
 22580         b(3)=scst
 22600         b(8)=scode
 22620         b3=b3+b(3)
-22640         let inv_line=inv_line+1
+22640         inv_line=inv_line+1
 22660         if stm$="An" then 
-22680           let inv_item$(inv_line)='Annual'
+22680           inv_item$(inv_line)='Annual'
 22700         else 
-22720           let inv_item$(inv_line)='Monthly'
+22720           inv_item$(inv_line)='Monthly'
 22740         end if 
 22760         if scode$='U4' then 
-22780           let inv_item$(inv_line)=inv_item$(inv_line)&" Maintenance for (UB) Hand Held Add-On"
+22780           inv_item$(inv_line)=inv_item$(inv_line)&" Maintenance for (UB) Hand Held Add-On"
 22800         else 
-22820           let inv_item$(inv_line)=inv_item$(inv_line)&" Maintenance for "&trim$(sys_name$(scode))
+22820           inv_item$(inv_line)=inv_item$(inv_line)&" Maintenance for "&trim$(sys_name$(scode))
 22840           if trim$(sys_name$(scode))='' then pr ' sending blank system name  scode='&str$(scode) : pause 
 22860         end if 
-22880         let inv_amt(inv_line)=scst
-22900         let inv_category(inv_line)=6
-22920         let inv_service_code(inv_line)=scode
-22940         let inv_gl$(inv_line)="  0  1160  0"
+22880         inv_amt(inv_line)=scst
+22900         inv_category(inv_line)=6
+22920         inv_service_code(inv_line)=scode
+22940         inv_gl$(inv_line)="  0  1160  0"
 22960       end if 
 22980       NXTJ: ! 
 23000     loop  !  while cln=client_id ! commented out to work around a critical nokey problem above.  should severely slow things down though
@@ -131,7 +131,7 @@
 32080   if inp(7)=2 then goto BLD_REC_L1780 ! always bill modifications
 32100   if inp(7)=23 or inp(7)=11 then goto BLD_XIT ! always no charge
 32120   read #h_support,using F_SUPPORT,key=spk$: cln$,scode,scode$,sdt1,stm$,sup_exp_date,scst nokey BLD_REC_L1780
-32140   let trans_date=date(days(inp(6),'mmddyy'),'ccyymmdd')
+32140   trans_date=date(days(inp(6),'mmddyy'),'ccyymmdd')
 32160   !   if stm$="Mo" or (stm$='An' and trans_date<=sup_exp_date) then goto BLD_XIT ! TM_RD2 ! on maintenance
 32180   if (stm$='An' and trans_date<=sup_exp_date) then goto BLD_XIT ! TM_RD2 ! on maintenance
 32200   ! if client_id=4625 then pause
@@ -139,19 +139,19 @@
 33020   b(3)=inp(5)
 33040   b(8)=b8
 33060   b3=b3+b(3)
-33080   ! let inv_line=inv_line+1
+33080   ! inv_line=inv_line+1
 33100   if val(client_id$)=client_id_sage_ax or val(client_id$)=client_id_brc then 
-33120   !     pause  ! let inv_item$(inv_line)=str$(inp(3))&' hours at a rate of '&&' on '&cnvrt$("pic(##/##/##)",inp(6))
-33140     let inv_item$(inv_line+=1)=str$(inp(3))&' hours at a rate of '&cnvrt$('pic($$#.##)',inp(4))&' on '&cnvrt$("pic(##/##/##)",inp(6))
+33120   !     pause  ! inv_item$(inv_line)=str$(inp(3))&' hours at a rate of '&&' on '&cnvrt$("pic(##/##/##)",inp(6))
+33140     inv_item$(inv_line+=1)=str$(inp(3))&' hours at a rate of '&cnvrt$('pic($$#.##)',inp(4))&' on '&cnvrt$("pic(##/##/##)",inp(6))
 33160   else if inp(7)=2 then 
-33180     let inv_item$(inv_line+=1)=str$(inp(3))&' hours of '&trim$(sys_name$(b8))&" programming on "&cnvrt$("pic(##/##/##)",inp(6))
+33180     inv_item$(inv_line+=1)=str$(inp(3))&' hours of '&trim$(sys_name$(b8))&" programming on "&cnvrt$("pic(##/##/##)",inp(6))
 33200   else 
-33220     let inv_item$(inv_line+=1)=str$(inp(3))&' hours of '&trim$(sys_name$(b8))&" support on "&cnvrt$("pic(##/##/##)",inp(6))
+33220     inv_item$(inv_line+=1)=str$(inp(3))&' hours of '&trim$(sys_name$(b8))&" support on "&cnvrt$("pic(##/##/##)",inp(6))
 33240   end if 
-33260   let inv_amt(inv_line)=inp(5)
-33280   let inv_category(inv_line)=6
-33300   let inv_service_code(inv_line)=b8
-33320   let inv_gl$(inv_line)="  0  1160  0"
+33260   inv_amt(inv_line)=inp(5)
+33280   inv_category(inv_line)=6
+33300   inv_service_code(inv_line)=b8
+33320   inv_gl$(inv_line)="  0  1160  0"
 33340   BLD_XIT: ! 
 33360 fnend 
 34000 def fn_get_system_list(mat sys_name$)
@@ -204,11 +204,11 @@
 36080   do 
 36100     read #tce_h_from,using F_TIME: mat inp,b6,b7,b8,sc,o_o,wo_desc$ eof TCE_EOF
 36120     if b8=20 then b8=19 ! ALL PRINTING SUPPORT IS COVERED BY CORE
-36140     let tce_key$=cnvrt$("N 5",inp(1))&cnvrt$("N 2",b8)&cnvrt$("N 6",inp(6))
+36140     tce_key$=cnvrt$("N 5",inp(1))&cnvrt$("N 2",b8)&cnvrt$("N 6",inp(6))
 36160   !   IF INP(1)=2040 then pause
 36180     read #tce_h_to,using F_TIME,key=tce_key$: mat tce_to_inp nokey TCE_TO_ADD
-36200     let inp(3)+=tce_to_inp(3) ! time
-36220     let inp(5)+=tce_to_inp(5) ! charge
+36200     inp(3)+=tce_to_inp(3) ! time
+36220     inp(5)+=tce_to_inp(5) ! charge
 36240     rewrite #tce_h_to,using F_TIME,key=tce_key$: mat inp,b6,b7,b8,sc,o_o,wo_desc$
 36260   !   if inp(1)=4568 then rewr_count+=1
 36280     goto TCE_NEXT
@@ -231,13 +231,13 @@
 38020   open #22: "Name=skip_prn,RecL=80,replace",display,output ioerr SI_ADD
 38040   pr #22: "Clnt   Name           Date      Prev Bal    New Amt     Total Due   Inv No  "
 38060   pr #22: "_____ ______________  ________  __________  __________  __________  __________"
-38080   SI_ADD: if (pbal+b3)<1 then let piv$="" else let piv$=iv$ ! if less than a dollar than don't charge it
+38080   SI_ADD: if (pbal+b3)<1 then piv$="" else piv$=iv$ ! if less than a dollar than don't charge it
 38100   if piv$<>'' then 
 38120     pr #22,using L1420: client_id$,client_addr$(1)(1:14),inv_date,pbal,b3,pbal+b3,piv$
 38140   end if  ! piv$<>''
 38160   L1420: form pos 1,c 5,x 2,c 15,pic(zz/zz/zz),3*nz 12.2,x 2,c 12
-38180   let tb3=tb3+b3
-38200   let tb4=tb4+pbal
+38180   tb3=tb3+b3
+38200   tb4=tb4+pbal
 38220 fnend 
 40000   def fn_summary_print
 40020     close #22: ioerr SP_XIT
@@ -257,13 +257,13 @@
 42000   def fn_print_inv ! pr INVOICE
 42020     fn_timesheet2(h_tmsht)
 42040     if b3>0 and sum(mat inv_amt)<250 then 
-42060       let inv_line+=1
+42060       inv_line+=1
 42080       if inv_line<30 and client_id<>client_id_sage_ax and client_id<>client_id_brc then 
 
-42100         let inv_item$(inv_line)='Minimum Monthly Billing of $250.00'
-42120         let inv_amt(inv_line)=250-sum(mat inv_amt) : b3+=inv_amt(inv_line)
-42140         let inv_service_code(inv_line)=19
-42160         let inv_gl$(inv_line)='  0  1160  0'
+42100         inv_item$(inv_line)='Minimum Monthly Billing of $250.00'
+42120         inv_amt(inv_line)=250-sum(mat inv_amt) : b3+=inv_amt(inv_line)
+42140         inv_service_code(inv_line)=19
+42160         inv_gl$(inv_line)='  0  1160  0'
 42180       end if  ! inv_line<30
 42200     end if  ! pbal<250
 42220     fn_summary_add ! pr all clients
@@ -276,15 +276,15 @@
 42372 !   if trim$(client_id$)='3811' then pause 
 42380     fnprint_invoice(align,client_id$, mat client_addr$,iv$,inv_date,mat inv_item$,mat inv_amt,pbal)
 42400     pr #255: newpage ! mat inv_item$=("")
-42420     let invoice_number=invoice_number+1 ! moved here 10/4/11 (from below) in an attempt to stop skipping invoice numbers
+42420     invoice_number=invoice_number+1 ! moved here 10/4/11 (from below) in an attempt to stop skipping invoice numbers
 42440 ! end if
 42460 PI_SKIP_PRINT: ! 
 42480     mat inv_item$=(" ")
 42500     mat inv_category=(0)
 42520     mat inv_service_code=(0)
 42540     mat inv_gl$=("")
-42560 ! let invoice_number=invoice_number+1
+42560 ! invoice_number=invoice_number+1
 42580     mat inv_amt=(0)
-42600     let inv_line=b3=0
+42600     inv_line=b3=0
 42620   fnend  ! fn_print_inv
 44000 IGNORE: continue 

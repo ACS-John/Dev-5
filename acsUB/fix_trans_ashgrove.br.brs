@@ -8,14 +8,14 @@
 10070   do 
 10080 NEXTCUST: read #h_mstr,using MSTRFORM: z$,mat ru,bal,cdate,mat charge,net,gross,mat bd,rt eof XIT
 10090     if rt=3 then 
-10100       let got_bal=0 : let got_current=0 : let got_prior=0 : let has_bad=0 : collections=0
+10100       let got_bal=0 : let got_current=0 : let got_prior=0 : has_bad=0 : collections=0
 10110       srch$=lpad$(cnvrt$("PIC(######.##)",val(z$)+.01),10," ")
 10120       read #h_trans,using TRANSFORM,search>=srch$: a$,tdate,tcode,tamt,mat tg,tnet,wread,wused,tbal,pcode eof PROCESSCUST
 10130 PROCESSCUST: do 
 10140         read #h_trans,using TRANSFORM,prior: a$,tdate,tcode,tamt,mat tg,tnet,wread,wused,tbal,pcode eof NEXTCUST
 10150         if a$<>z$ then goto NEXTCUST
 10160         if tdate=20130405 then ! this is one of the bad transactions
-10170           let has_bad=1
+10170           has_bad=1
 10180 ! edit breakdowns
 10190           if tcode=3 or tcode=4 then ! C/M or collection
 10200             for j=1 to 10 : bd(j)+=tg(j) : next j
@@ -33,13 +33,13 @@
 10320           if tcode=1 and pcode<>4 then ! this is a charge
 10330             if got_current=0 then ! this is the current charge
 10340               cdate=fn_date6(tdate)
-10350               let ru(4)=ru(4)-wused : let ru(1)=wread : let ru(3)=wused
-10360               let net=tnet : let gross=tnet+tg(10)
+10350               ru(4)=ru(4)-wused : ru(1)=wread : ru(3)=wused
+10360               net=tnet : let gross=tnet+tg(10)
 10370               mat charge=tg
 10380               if tbal-collections<>bal then bal=tbal-collections
 10390               let got_current=1
 10400             else ! this is the prior charge
-10410               let ru(2)=wread
+10410               ru(2)=wread
 10420               let got_prior=1
 10430             end if 
 10440           end if 
@@ -62,8 +62,8 @@
 10610   loop 
 10620   def fn_date6(date8)
 10630     dim date8$*8
-10640     let date8$=str$(date8)
-10650     let date8$=date8$(5:6)&date8$(7:8)&date8$(3:4)
+10640     date8$=str$(date8)
+10650     date8$=date8$(5:6)&date8$(7:8)&date8$(3:4)
 10660     fn_date6=val(date8$)
 10670   fnend 
-10680 XIT: let fnxit
+10680 XIT: fnxit

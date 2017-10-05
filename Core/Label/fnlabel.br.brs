@@ -17,7 +17,7 @@
           ! (this linestyle feature is not yet written !:
           ! CP = 1=Condensed pr 2 or 0=Normal Print
 00140 ! if uprc$(linestyle$(5))="BAR" then label_pos1=01 : label_pos2=75 : label_pos3=150 else label_pos1=02 : label_pos2=30 : label_pos3=63
-00150 ! let top_marg=2
+00150 ! top_marg=2
 00160     label_hold_cap$=cap$
 00170     cap$=cap$&" Label Printing"(1:udim(cap$))
 00180 ! _*_*_*_____________________
@@ -41,7 +41,7 @@
           opt$(2)="Avery 5160 (30/Page Laser)" !:
           opt$(3)="Universal Data Processing (1-Up Dot-Matrix)" !:
           fncomboa("labellib1."&wsid$,1,17,mat opt$,"Choose either dot-matrix or laser type labels",32) !:
-          let resp$(1)=opt$(1)
+          resp$(1)=opt$(1)
 00350     fncmdset(2)
 00360     fnacs(sn$,win,mat resp$,ckey)
 00370     if ckey=5 then goto XIT_ASK_LABEL
@@ -52,12 +52,12 @@
 00410 ASK_LABEL_FORMAT_2_LSTART: ! r:
 00420     fntos(sn$="labellib2")
 00430     fnfra(1,2,10,28,"Select First Label to Print","If you only have a partial sheet of labels, you can select the starting place of the first label") !:
-          let myline=1: let mypos=1
+          myline=1: mypos=1
 00440     for j=1 to 30
 00450       fnbutton(myline,mypos,"  "&cnvrt$("pic(zz)",j)&"  ",j+20,"Starts with label "&str$(j),0,6,1)
-00460       if j/3=int(j/3) then let myline+=1
-00470       let mypos+=10
-00480       if mypos>30 then let mypos=1
+00460       if j/3=int(j/3) then myline+=1
+00470       mypos+=10
+00480       if mypos>30 then mypos=1
 00490     next j
 00500     fncmdset(1)
 00510     fnacs(sn$,win,mat resp$,ckey)
@@ -68,7 +68,7 @@
 00550 XIT_ASK_LABEL_2: ! 
 00552     return  ! /r
 00570 ASK_L2_MARGINS: ! r:
-00572     fnreg_read('top_marg',top_marg$) : let top_marg=val(top_marg$) conv ignore
+00572     fnreg_read('top_marg',top_marg$) : top_marg=val(top_marg$) conv ignore
 00573     fnreg_read('label_pos1',label_pos1$) : label_pos1=val(label_pos1$) conv ignore
 00574     fnreg_read('label_pos2',label_pos2$) : label_pos2=val(label_pos2$) conv ignore
 00575     fnreg_read('label_pos3',label_pos3$) : label_pos3=val(label_pos3$) conv ignore
@@ -78,25 +78,25 @@
 00579       else 
 00580         label_pos1=02 : label_pos2=30 : label_pos3=63
 00581       end if 
-00582       let top_marg=2
+00582       top_marg=2
 00583     end if  ! top_marg=0 and label_pos1+label_pos2+label_pos3=0
 00584     sn$="labellib3" !:
           fntos(sn$)
 00590     fnlbl(1,1,"Top Margin (lines):",24,1)
 00600     fntxt(1,26,3,3,1,'20',0,"Increase or decrease the top margin to move the pr up or down on the labels") !:
-          let resp$(1)=str$(top_marg)
+          resp$(1)=str$(top_marg)
 00610     fnlbl(2,1,"Left Column Position:",24,1)
 00620     fntxt(2,26,3,3,1,'20',0,"Increase or decrease the position to move the left label right or left") !:
-          let resp$(2)=str$(label_pos1)
+          resp$(2)=str$(label_pos1)
 00630     fnlbl(3,1,"Center Column Position:",24,1)
 00640     fntxt(3,26,3,3,1,'20',0,"Increase or decrease the position to move the center label right or left") !:
-          let resp$(3)=str$(label_pos2)
+          resp$(3)=str$(label_pos2)
 00650     fnlbl(4,1,"Right Column Position:",24,1)
 00660     fntxt(4,26,3,3,1,'20',0,"Increase or decrease the position to move the right label right or left") !:
-          let resp$(4)=str$(label_pos3)
+          resp$(4)=str$(label_pos3)
 00670     fncmdset(2)
 00680     fnacs(sn$,win,mat resp$,ckey)
-00690     let top_marg=val(resp$(1)) !:
+00690     top_marg=val(resp$(1)) !:
           label_pos1=val(resp$(2)) !:
           label_pos2=val(resp$(3)) !:
           label_pos3=val(resp$(4))
@@ -116,7 +116,7 @@
 00860 L2: ! 
 00870     gosub OPEN_LABEL_WSID
 00880 L2_NEXT: ! 
-00890     mat wabel$=("") : let fn_test_mat_lab$
+00890     mat wabel$=("") : fn_test_mat_lab$
 00900 L900: read #88,using "Form POS 1,5*C 120": mat labeltext$ eof L2_DONE
 00910 ! wabel$(10,3,4) wabel$(x,y,z) wabel$(Up/Down,left/right,LabelLine)
 00920     laby=laby+1
@@ -144,13 +144,13 @@
 01210       for z=1 to 5
 01220         for y=1 to 3
 01230 !     If UPRC$(LINESTYLE$(Z))="BAR" AND wabel$(X,Y,Z)<>"" Then !:
-                !     Let PRINTEDABARCODE=1 !:
+                !     pRINTEDABARCODE=1 !:
                 !     fnBARCODE(wabel$(X,Y,Z),LABEL_POS(Y))
 01240 !     If wabel$(X,Y,Z)<>"" Then Let FNBARCODE(wabel$(X,Y,Z),LABEL_POS(Y))
 01250         next y
 01260 ! 
 01270         if printedabarcode=1 then pr #255: "" !:
-                let printedabarcode=0 !:
+                printedabarcode=0 !:
                 goto L1310
 01280 !   If LINESTYLE$(Z)<>"" Then Let FNSETLINESTYLE(LINESTYLE$(Z))
 01290         pr #255,using L1300: wabel$(x,1,z)(1:25),wabel$(x,2,z)(1:25),wabel$(x,3,z)(1:25)
@@ -173,7 +173,7 @@
 01450         if z=5 then goto L1460 else goto L1560
 01460 L1460:  lyne+=addy
 01470         for j=1 to 3
-01480           let v=val(wabel$(x,j,z)) conv L1560
+01480           v=val(wabel$(x,j,z)) conv L1560
 01490           bc$=trim$(wabel$(x,j,z))
 01500           if j=1 then label_pos =0
 01510           if j=2 then label_pos =2.75
@@ -234,7 +234,7 @@
 02090   close #1: ioerr ignore
 02100   close #3: ioerr ignore
 02120   fnpa_finis
-02140 XIT: let fnxit
+02140 XIT: fnxit
 20200   def fn_test_mat_lab$
 20220     if udim(wabel$,1)<>10 or udim(wabel$,2)<>3 or udim(wabel$,3)<>5 then 
 20240       mat wabel$(10,3,5)
@@ -242,7 +242,7 @@
 20280   fnend  ! fn_test_mat_lab$
 75000 IGNORE: continue 
 76020 ! r:  ertn - fails to label_xit instead of xit
-76040 ERTN: let fnerror(program$,err,line,act$,"label_xit")
+76040 ERTN: fnerror(program$,err,line,act$,"label_xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

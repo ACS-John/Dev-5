@@ -13,11 +13,11 @@
 30060   fnlbl(1,1,"",40,0)
 30080   fnlbl(1,1,"Print Options:",38,0)
 30100   fnopt(2,3,'All',0)
-30120   let resp$(1)="False"
+30120   resp$(1)="False"
 30140   fnopt(3,3,'Only accounts where Balance Breakdown does not equal Balance',0)
-30160   let resp$(2)="True" !  if ckoption=1 or ckoption=3 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+30160   resp$(2)="True" !  if ckoption=1 or ckoption=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 30180   fnopt(4,3,'Only accounts without a credit balance but negative allocations exist',0)
-30200   let resp$(3)="False"
+30200   resp$(3)="False"
 30220   fncmdset(2)
 30240   fnacs(sn$,0,mat resp$,ck)
 30260   if ck=5 then goto XIT
@@ -64,8 +64,8 @@
 40020   pr #255: "Account    Balance   TotBrk   "&servicename$(1)(1:8)&" "&servicename$(2)(1:8)&" "&servicename$(3)(1:8)&" "&servicename$(4)(1:8)&" "&servicename$(5)(1:8)&" "&servicename$(6)(1:8)&" "&servicename$(7)(1:8)&" "&servicename$(8)(1:8)&" "&servicename$(9)(1:8)&" "&servicename$(10)(1:8)&" "
 40040   pr #255: "__________ _________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________"
 40060   return 
-42000 DONE: let fncloseprn
-44000 XIT: let fnxit
+42000 DONE: fncloseprn
+44000 XIT: fnxit
 46000 REW_MAT_GB: ! 
 46020   rewrite #1,using L440,key=z$: mat gb
 46040 L440: form pos 388,10*pd 5.2
@@ -74,31 +74,31 @@
 48000 SCR_ASK_DATES: ! r:
 48020   sn$
 48040   fntos(sn$="balbrkfix")
-48060   let mylen=62 : let mypos=50
-48080   let txt$="Billing Dates for last three months:"
+48060   mylen=62 : mypos=50
+48080   txt$="Billing Dates for last three months:"
 48100   fnlbl(1,1,txt$,mylen,1)
 48120   for j=1 to 3
 48140     fntxt(j+1,mypos,10,0,0,"3",0,"Put your most recent billing date first and then in order from there.")
-48160     let resp$(j)=""
+48160     resp$(j)=""
 48180   next j
-48200   let txt$="Penalty Dates for last three months:"
+48200   txt$="Penalty Dates for last three months:"
 48220   fnlbl(5,1,txt$,mylen,1)
 48240   for j=1 to 3
 48260     fntxt(j+5,mypos,10,0,0,"3",0,"Put your most recent penalty date first and then in order from there.")
-48280     let resp$(j+3)=""
+48280     resp$(j+3)=""
 48300   next j
-48320   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+48320   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 48340   if ckey=5 then goto XIT
 48360   for j=1 to 6
 48380 L560: let x=pos(resp$(j),"/",1)
-48400     if x>0 then let resp$(j)(x:x)="": goto L560
+48400     if x>0 then resp$(j)(x:x)="": goto L560
 48420   next j
 48440   for j=1 to 6
 48460     cd1(j)=val(resp$(j)) conv SCR_ASK_DATES
 48480   next j
 48500   if cd1(1)=0 then 
-48520     mat message$(1): let mytype=0
-48540     let message$(1)="You must enter at least one date!"
+48520     mat message$(1): mytype=0
+48540     message$(1)="You must enter at least one date!"
 48560     fnmsgbox(mat message$,resp$,cap$,mytype)
 48580     goto SCR_ASK_DATES
 48600   end if 

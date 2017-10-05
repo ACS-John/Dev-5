@@ -10,7 +10,7 @@
 24020 ! 8/24/2017 - more modifications to better work with UNC paths
 25000 def library fnMakeSurepathExists(fileName$*255; path$*255)
 25020   do while pos(fileName$,"\")
-25040     let path$=path$&fileName$(1:pos(fileName$,"\"))
+25040     path$=path$&fileName$(1:pos(fileName$,"\"))
 25060     let fileName$=fileName$(pos(fileName$,"\")+1:len(fileName$))
 25080     ! pr 'if ~exists '&path$
 25100     doNotTryThisOne=0

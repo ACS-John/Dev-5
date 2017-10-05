@@ -32,8 +32,8 @@
 24400   system_id$(18)='CL'
 24600   system_id$(19)='CO'
 24800   system_id$(20)='??' ! Printing
-25000   let date_start=20110701
-25200   let date_end=20110731
+25000   date_start=20110701
+25200   date_end=20110731
 25400   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&str$(cno)&",Shr",internal,outin,keyed 
 25600   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndx2.H"&str$(cno)&",Shr",internal,outin,keyed 
 25800 FORM_CLMSTR: form pos 1,c 5,5*c 30,c 12,c 11,n 9,n 2,10*pd 3,10*n 1,10*pd 3,c 12,c 11,2*pd 5.2,pd 4.3,2*n 1,2*pd 3,c 70,20*n 1,20*pd 3.2,20*n 1,20*pd 3.2
@@ -47,8 +47,8 @@
 27400     if sum(ma)>0 then 
 27600       let which_app=fn_first_item_gtr_than_one(mat ma)
 27800       if which_app>0 then 
-28000         let ma(which_app)=ma(which_app)-1
-28200         let ma(19)=1
+28000         ma(which_app)=ma(which_app)-1
+28200         ma(19)=1
 28400         app(19)=1
 28600       end if  ! which_app>0
 28800     end if  ! sum(app)>0

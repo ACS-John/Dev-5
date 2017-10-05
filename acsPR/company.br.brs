@@ -39,58 +39,58 @@
 00310   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 00380 ! ______________________________________________________________________
 00390 SCREEN_1: ! 
-00400   let resp=0
+00400   resp=0
 00410   fntos(sn$="Company-1") !:
-        let mylen=30: let mypos=mylen+3 : let right=1
-00420   let fram1=1: let fnfra(1,1,10,80,"Company # "&str$(cno))
+        mylen=30: mypos=mylen+3 : right=1
+00420   let fram1=1: fnfra(1,1,10,80,"Company # "&str$(cno))
 00430   fnlbl(1,1,"Company Name:",mylen,right,0,fram1)
 00440   fntxt(1,mypos,40,0,left,"",0,"",fram1) !:
-        let resp$(1)=a$(1)
+        resp$(1)=a$(1)
 00450   fnlbl(2,1,"Company Address:",mylen,right,0,fram1)
 00460   fntxt(2,mypos,40,0,left,"",0,"",fram1) !:
-        let resp$(2)=a$(2)
+        resp$(2)=a$(2)
 00470   fnlbl(3,1,"City, State, Zip:",mylen,right,0,fram1)
 00480   fntxt(3,mypos,40,0,left,"",0,"",fram1) !:
-        let resp$(3)=a$(3)
+        resp$(3)=a$(3)
 00490   fnlbl(4,1,"Federal ID #:",mylen,right,0,fram1)
 00500   fntxt(4,mypos,12,0,left,"",0,"",fram1) !:
-        let resp$(4)=fid$
+        resp$(4)=fid$
 00510   fnlbl(5,1,"Federal U/C Rate:",mylen,right,0,fram1)
 00520   fntxt(5,mypos,10,0,left,"33",0,"In 2007 the rate was .8% and should be entered as .8 and not .008",fram1) !:
-        let resp$(5)=str$(feducrat)
+        resp$(5)=str$(feducrat)
 00530   fnlbl(6,1,"Federal U/C Maximum Wage:",mylen,right,0,fram1)
 00540   fntxt(6,mypos,12,0,left,"10",0,"",fram1) !:
-        let resp$(6)=str$(feducmax)
+        resp$(6)=str$(feducmax)
 00550   fnlbl(7,1,"Social Security Rate:",mylen,right,0,fram1)
 00560   fntxt(7,mypos,10,0,left,"33",0,"Sample format 6.2",fram1 ) !:
-        let resp$(7)=str$(ficarate)
+        resp$(7)=str$(ficarate)
 00570   fnlbl(8,1,"SS Maximum Wage:",mylen,right,0,fram1)
 00580   fntxt(8,mypos,12,0,left,"10",0,"The maximum was 97500 for the year 2007.  See a 941 form.",fram1)
-00852   let resp$(8)=str$(ficamaxw)
+00852   resp$(8)=str$(ficamaxw)
 00590   fnlbl(9,1,"Medicare Rate:",mylen,right,0,fram1)
 00600   fntxt(9,mypos,10,0,left,"33",0,"Format would be 1.450",fram1) !:
-        let resp$(9)=str$(mcr)
+        resp$(9)=str$(mcr)
 00610   fnlbl(10,1,"Medicare Maximum Wage:",mylen,right,0,fram1)
 00620   fntxt(10,mypos,12,0,left,"10",0,"Use 999999.99 since there no maximum wage at this time.",fram1) !:
-        let resp$(10)=str$(mcm)
-00630   let fram2=2: let fnfra(13,1,8,90,"General Ledger Information")
+        resp$(10)=str$(mcm)
+00630   let fram2=2: fnfra(13,1,8,90,"General Ledger Information")
 00640   fnchk(1,30,"General Ledger Installed:",1,fram2)
-00650   if gli=1 then let resp$(11)="True" else let resp$(11)="False"
+00650   if gli=1 then resp$(11)="True" else resp$(11)="False"
 00660   fnlbl(2,1,"Cash In Bank:",mylen,right,0,fram2)
 00670   fnqgl(2,32,fram2,2,pas) 
-00672   let resp$(12)=fnrgl$(gln$(15))
+00672   resp$(12)=fnrgl$(gln$(15))
 00680   fnlbl(3,1,"Federal W/H:",mylen,right,0,fram2)
 00690   fnqgl(3,32,fram2,2,pas) 
-00692   let resp$(13)=fnrgl$(gln$(1))
+00692   resp$(13)=fnrgl$(gln$(1))
 00700   fnlbl(4,1,"SS & Medicare W/H:",mylen,right,0,fram2)
 00710   fnqgl(4,32,fram2,2,pas) 
-00712   let resp$(14)=fnrgl$(gln$(2))
+00712   resp$(14)=fnrgl$(gln$(2))
 00720   fnlbl(5,1,"State W/H:",mylen,right,0,fram2)
 00730   fnqgl(5,32,fram2,2,pas) 
-00732   let resp$(15)=fnrgl$(gln$(3))
+00732   resp$(15)=fnrgl$(gln$(3))
 00740   fnlbl(6,1,"EIC:",mylen,right,0,fram2)
 00750   fnqgl(6,32,fram2,2,pas) 
-00752   let resp$(16)=fnrgl$(gln$(14))
+00752   resp$(16)=fnrgl$(gln$(14))
 00760   fncmdkey("&Next",1,1,0,"Moves to 2nd screen of company information.")
 00770   fncmdkey("&Save and Exit",4,0,0,"Saves any changes and returns to menu without reviewing remainter of screens.")
 00780   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
@@ -104,43 +104,43 @@
 00860   let feducmax=val(resp$(6))
 00870   let ficarate=val(resp$(7))
 00880   let ficamaxw=val(resp$(8))
-00890   let mcr=val(resp$(9))
-00900   let mcm=val(resp$(10))
+00890   mcr=val(resp$(9))
+00900   mcm=val(resp$(10))
 00910   if resp$(11)="True" then let gli=1 else let gli=0
 00920   let gln$(15)=fnagl$(resp$(12)) ! bank
 00930   let gln$(1)=fnagl$(resp$(13)) ! fed
 00940   let gln$(2)=fnagl$(resp$(14)) ! fica
 00950   let gln$(3)=fnagl$(resp$(15)) ! state
 00960   let gln$(14)=fnagl$(resp$(16)) ! eic
-00970   if mcr<=0 then let mcr=1.45
-00980   if mcm<=0 then let mcm=999999
+00970   if mcr<=0 then mcr=1.45
+00980   if mcm<=0 then mcm=999999
 00990   if feducrat>5 then goto L1000 else goto L1010
 01000 L1000: mat ml$(2) !:
-        let ml$(1)="The Federal Unemployment Rate appears to be wrong!" !:
-        let ml$(2)="Do you wish to continue anyway?" !:
+        ml$(1)="The Federal Unemployment Rate appears to be wrong!" !:
+        ml$(2)="Do you wish to continue anyway?" !:
         fnmsgbox(mat ml$,resp$,cap$,52) !:
         if resp$<>"Yes" then goto SCREEN_1
 01010 L1010: goto L1030 ! If FEDUCMAX<=0 Then Goto 1020 Else Goto 1120
 01020   mat ml$(2) !:
-        let ml$(1)="The Federal U/C Maximum wage appears to be wrong!" !:
-        let ml$(2)="Do you wish to continue anyway?" !:
+        ml$(1)="The Federal U/C Maximum wage appears to be wrong!" !:
+        ml$(2)="Do you wish to continue anyway?" !:
         fnmsgbox(mat ml$,resp$,cap$,52) !:
         if resp$="Yes" then goto SCREEN_2 else goto SCREEN_1
 01030 L1030: if ckey=4 then goto DONE
 01040 ! ______________________________________________________________________
 01050 SCREEN_2: ! 
 01052   fntos(sn$="Company-2")
-01054   let mylen=32: let mypos=mylen+3 : let right=1
-01055   let pos_col(1)=1 ! deduction numbers
-01056   let pos_col(2)=5 ! deduction name
-01058   let pos_col(3)=23 ! name
-01060   let pos_col(4)=33 ! ded/add
-01062   let pos_col(5)=43 ! std/pct
-01064   let pos_col(6)=57 ! ded fed
-01066   let pos_col(7)=62 ! ded fica
-01068   let pos_col(8)=67 ! ded state
-01070   let pos_col(9)=72 ! ded u/c
-01072   let pos_col(10)=75
+01054   mylen=32: mypos=mylen+3 : right=1
+01055   pos_col(1)=1 ! deduction numbers
+01056   pos_col(2)=5 ! deduction name
+01058   pos_col(3)=23 ! name
+01060   pos_col(4)=33 ! ded/add
+01062   pos_col(5)=43 ! std/pct
+01064   pos_col(6)=57 ! ded fed
+01066   pos_col(7)=62 ! ded fica
+01068   pos_col(8)=67 ! ded state
+01070   pos_col(9)=72 ! ded u/c
+01072   pos_col(10)=75
 01074   fnlbl(1,1,"Enter your deductions names. Mark whether a deduction or addition.",90,left)
 01076   fnlbl(2,1,"A check mark will indicate 'yes' to deduct before calculating Federal w/h, etc.",90,left)
 01078   fnlbl(5,pos_col(2),"Deduction Name")
@@ -157,30 +157,30 @@
 01100   fnlbl(4,pos_col(9)-2,"Ded")
 01102   fnlbl(5,pos_col(9)-2,"U/C")
 01115   fnlbl(5,pos_col(10),"GL Number")
-01120   let resp=0
+01120   resp=0
 01125   for j=1 to 20
 01130     fnlbl(j+5,pos_col(1),str$(j)&'.',3,1)
 01131     fntxt(j+5,pos_col(2),15,20,left,"",0,"Enter your deduction name.",0 )
-01132     let resp$(resp+=1)=fullname$(j)
+01132     resp$(resp+=1)=fullname$(j)
 01140     fntxt(j+5,pos_col(3),8,0,left,"",0,"Enter an abbreviated name that will be used in report headings.",0 )
-01142     let resp$(resp+=1)=abrevname$(j)
+01142     resp$(resp+=1)=abrevname$(j)
 01160     fncomboa("MiscDeduct",j+5,pos_col(4),mat opt_ded_or_add$,"Indicate whether the amont should be deducted from the check or added to the check.",6)
-01170     if newdedcode(j)=0 then let newdedcode(j)=1
-01180     let resp$(resp+=1)=opt_ded_or_add$(newdedcode(j))
+01170     if newdedcode(j)=0 then newdedcode(j)=1
+01180     resp$(resp+=1)=opt_ded_or_add$(newdedcode(j))
 01200     fncomboa("std_or_percent",j+5,pos_col(5),mat opt_std_or_percent$,"Standard would a fixed amount each pay period.  Percent would indicate the deduction is a percent of gross pay.",8)
-01210     if newcalcode(j)=0 then let newcalcode(j)=1 ! stop subscript error
-01220     let resp$(resp+=1)=opt_std_or_percent$(newcalcode(j))
+01210     if newcalcode(j)=0 then newcalcode(j)=1 ! stop subscript error
+01220     resp$(resp+=1)=opt_std_or_percent$(newcalcode(j))
 01230     fnchk(j+5,pos_col(6),"",1)
-01240     if newdedfed(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
+01240     if newdedfed(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
 01250     fnchk(j+5,pos_col(7),"",1)
-01260     if dedfica(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
+01260     if dedfica(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
 01270     fnchk(j+5,pos_col(8),"",1)
-01280     if dedst(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
+01280     if dedst(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
 01290     fnchk(j+5,pos_col(9),"",1)
-01300     if deduc(j)>0 then let resp$(resp+=1)="True" else let resp$(resp+=1)="False"
+01300     if deduc(j)>0 then resp$(resp+=1)="True" else resp$(resp+=1)="False"
 01310     linecount=j+5
 01320     fnqgl(linecount,pos_col(10),0,2,pas)
-01323     let resp$(resp+=1)=fnrgl$(gl$(j))
+01323     resp$(resp+=1)=fnrgl$(gl$(j))
 01330   next j
 01340   fncmdkey("&Next",1,1,0,"Moves to next screen of company information.")
 01350   fncmdkey("&Save and Exit",4,0,0,"Saves any changes and returns to menu.")
@@ -188,19 +188,19 @@
 01370   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
 01380   fnacs(sn$,0,mat resp$,ckey)
 01390   if ckey=5 then goto CONFIRMEXIT
-01400   let resp=0
+01400   resp=0
 01410   for j=1 to 20
 01420     let fullname$(j)=resp$(resp+=1)
 01430     abrevname$(j)=resp$(resp+=1)
-01440     if resp$(resp+=1)=opt_ded_or_add$(1) then let newdedcode(j)=1 ! deduction
-01450     if resp$(resp)=opt_ded_or_add$(2) then let newdedcode(j)=2 ! addition
-01460     if resp$(resp)=opt_ded_or_add$(3) then let newdedcode(j)=3 ! benefit
-01470     if resp$(resp+=1)=opt_std_or_percent$(1) then let newcalcode(j)=1
-01480     if resp$(resp)=opt_std_or_percent$(2) then let newcalcode(j)=2 ! percent method of calucalating
-01490     if resp$(resp+=1)="True" then let newdedfed(j)=1 else let newdedfed(j)=0
-01500     if resp$(resp+=1)="True" then let dedfica(j)=1 else let dedfica(j)=0
-01510     if resp$(resp+=1)="True" then let dedst(j)=1 else let dedst(j)=0
-01520     if resp$(resp+=1)="True" then let deduc(j)=1 else let deduc(j)=0
+01440     if resp$(resp+=1)=opt_ded_or_add$(1) then newdedcode(j)=1 ! deduction
+01450     if resp$(resp)=opt_ded_or_add$(2) then newdedcode(j)=2 ! addition
+01460     if resp$(resp)=opt_ded_or_add$(3) then newdedcode(j)=3 ! benefit
+01470     if resp$(resp+=1)=opt_std_or_percent$(1) then newcalcode(j)=1
+01480     if resp$(resp)=opt_std_or_percent$(2) then newcalcode(j)=2 ! percent method of calucalating
+01490     if resp$(resp+=1)="True" then newdedfed(j)=1 else newdedfed(j)=0
+01500     if resp$(resp+=1)="True" then dedfica(j)=1 else dedfica(j)=0
+01510     if resp$(resp+=1)="True" then dedst(j)=1 else dedst(j)=0
+01520     if resp$(resp+=1)="True" then deduc(j)=1 else deduc(j)=0
 01530     let gl$(j)=fnagl$(resp$(resp+=1))
 01540   next j
 01550   if ckey=2 then goto SCREEN_1
@@ -210,21 +210,21 @@
 01590 ! ______________________________________________________________________
 01600 SCREEN_3: ! 
 01610   fntos(sn$="Company-3") !:
-        let mylen=32: let mypos=mylen+3 : let right=1
+        mylen=32: mypos=mylen+3 : right=1
 01620   fnlbl(1,10,"STATE CODES AND UNEMPLOYMENT INFORMATION",0,0)
 01630   fnlbl(3,1,"Code State Name     State ID    U/C Maximum      U/C Rate",0,0)
-01640   let resp=0
+01640   resp=0
 01650 ! 
 01660   for j=1 to 10
 01670     fnlbl(j+3,3,str$(j),mylen,0,0)
 01680     fntxt(j+3,6,8,0,left,"",0,"Enter your state name.",0 ) !:
-          let resp$(resp+=1)=d$(j)
+          resp$(resp+=1)=d$(j)
 01690     fntxt(j+3,19,12,0,left,"",0,"Enter the state id #.",0 ) !:
-          let resp$(resp+=1)=e$(j)
+          resp$(resp+=1)=e$(j)
 01700     fntxt(j+3,32,12,0,left,"10",0,"Enter the maximum wage subject to state unemployment (See your state u/c report.",0 ) !:
-          let resp$(resp+=1)=str$(m(j))
+          resp$(resp+=1)=str$(m(j))
 01710     fntxt(j+3,49,8,0,left,"33",0,"Enter the state unemployment rate (See your state u/c report. Enter in percent format. Example: 5% as 5.00",0 ) !:
-          let resp$(resp+=1)=str$(r(j))
+          resp$(resp+=1)=str$(r(j))
 01720   next j
 01730   fncmdkey("&Next",1,1,0,"Moves to next screen of company information.")
 01740   fncmdkey("&Save and Exit",4,0,0,"Saves any changes and returns to menu.")
@@ -232,12 +232,12 @@
 01760   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on any screen.")
 01770   fnacs(sn$,0,mat resp$,ckey)
 01780   if ckey=5 then goto CONFIRMEXIT
-01790   let resp=0
+01790   resp=0
 01800   for j=1 to 10
-01810     let d$(j)=resp$(resp+=1)
+01810     d$(j)=resp$(resp+=1)
 01820     e$(j)=resp$(resp+=1)
-01830     let m(j)=val(resp$(resp+=1))
-01840     let r(j)=val(resp$(resp+=1))
+01830     m(j)=val(resp$(resp+=1))
+01840     r(j)=val(resp$(resp+=1))
 01850   next j
 01860   if ckey=2 then goto SCREEN_2
 01870   if ckey=4 then goto DONE
@@ -245,43 +245,43 @@
 01890 ! ______________________________________________________________________
 01900 SCREEN_4: ! 
 01910   fntos(sn$="Company-4") !:
-        let mylen=45: let mypos=mylen+3 : let right=1: let resp=0
-01920   let fram3=1: let fnfra(1,1,6,60,"Vacation and Sick Pay Information")
+        mylen=45: mypos=mylen+3 : right=1: resp=0
+01920   let fram3=1: fnfra(1,1,6,60,"Vacation and Sick Pay Information")
 01930   fnlbl(1,1,"Days employed before accruing sick hours",mylen,right,0,fram3)
 01940   fntxt(1,mypos,8,0,0,"30",0,"",fram3) !:
-        let resp$(1)=str$(sck(1))
+        resp$(1)=str$(sck(1))
 01950   fnlbl(2,1,"Sick hours accrued after eligibility period:",mylen,right,0,fram3)
 01960   fntxt(2,mypos,8,0,0,"33",0,"",fram3) !:
-        let resp$(2)=str$(sck(2))
+        resp$(2)=str$(sck(2))
 01970   fnlbl(3,1,"Sick hours to accrue once eligible:",mylen,right,0,fram3)
 01980   fntxt(3,mypos,8,0,0,"33",0,"",fram3) !:
-        let resp$(3)=str$(sck(3))
+        resp$(3)=str$(sck(3))
 01990   fnlbl(4,1,"Maximum Sick Hours:",mylen,right,0,fram3)
 02000   fntxt(4,mypos,8,0,0,"32",0,"",fram3) !:
-        let resp$(4)=str$(sck(4))
+        resp$(4)=str$(sck(4))
 02010   fnlbl(5,1,"Maximum Vacation Hours:",mylen,right,0,fram3)
 02020   fntxt(5,mypos,8,0,0,"32",0,"",fram3) !:
-        let resp$(5)=str$(vacm)
-02030   let fram4=2: let fnfra(9,1,3,60,"Miscellaneous Payroll Information")
+        resp$(5)=str$(vacm)
+02030   let fram4=2: fnfra(9,1,3,60,"Miscellaneous Payroll Information")
 02040   fnlbl(1,1,"Minimum Hourly Wage:",mylen,right,0,fram4)
 02050   fntxt(1,mypos,10,0,0,"10",0,"",fram4) !:
-        let resp$(6)=str$(mhw)
+        resp$(6)=str$(mhw)
 02060   fnlbl(2,1,"Local Withholding Code:",mylen,right,0,fram4)
 02070   fntxt(2,mypos,2,0,0,"30",0,"If one the twenty miscellaneous dedutions is used for local withholdings, then enter the number of the deduction.",fram4) !:
-        let resp$(7)=str$(loccode)
-02080   let fram5=3: let fnfra(14,1,5,60,"Workman's Compensation Limits")
+        resp$(7)=str$(loccode)
+02080   let fram5=3: fnfra(14,1,5,60,"Workman's Compensation Limits")
 02090   fnlbl(1,1,"Monthly:",mylen,right,0,fram5)
 02100   fntxt(1,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
-        let resp$(8)=str$(wcm(1))
+        resp$(8)=str$(wcm(1))
 02110   fnlbl(2,1,"Semi-Monthly:",mylen,right,0,fram5)
 02120   fntxt(2,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
-        let resp$(9)=str$(wcm(2))
+        resp$(9)=str$(wcm(2))
 02130   fnlbl(3,1,"Bi-Weekly:",mylen,right,0,fram5)
 02140   fntxt(3,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
-        let resp$(10)=str$(wcm(3))
+        resp$(10)=str$(wcm(3))
 02150   fnlbl(4,1,"Weekly:",mylen,right,0,fram5)
 02160   fntxt(4,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
-        let resp$(11)=str$(wcm(4))
+        resp$(11)=str$(wcm(4))
 02170   fncmdkey("&Next",1,1,0,"Moves to next screen of company information.")
 02180   fncmdkey("&Save and Exit",4,0,0,"Saves any changes and returns to menu.")
 02190   fncmdkey("&Back",2,0,0,"Returns to previous screen.")
@@ -292,8 +292,8 @@
 02240   sck(2)=val(resp$(2))
 02250   sck(3)=val(resp$(3))
 02260   sck(4)=val(resp$(4))
-02270   let vacm=val(resp$(5))
-02280   let mhw=val(resp$(6))
+02270   vacm=val(resp$(5))
+02280   mhw=val(resp$(6))
 02290   loccode=val(resp$(7))
 02300   let wcm(1)=val(resp$(8))
 02310   let wcm(2)=val(resp$(9))
@@ -321,21 +321,21 @@
 02530   pr #106,fields "6,2,Cr 44,N": "Maximum Sick Hours:"
 02540   pr #106,fields "7,2,Cr 44,N": "Maximum Vacation Hours:"
 02550   pr #106,fields "8,2,Cr 44,N": "Minimum Hourly Wage:"
-02560   let io6$(1)="2,47,Cu 1,UT,N"
-02570   let io6$(2)="3,47,N 8.3,UT,N"
-02580   let io6$(3)="4,47,N 8.3,UT,N"
-02590   let io6$(4)="5,47,N 8.3,UT,N"
-02600   let io6$(5)="6,47,N 6.2,UT,N"
-02610   let io6$(6)="7,47,N 6.2,UT,N"
-02620   let io6$(7)="8,47,N 6.2,UT,N"
+02560   io6$(1)="2,47,Cu 1,UT,N"
+02570   io6$(2)="3,47,N 8.3,UT,N"
+02580   io6$(3)="4,47,N 8.3,UT,N"
+02590   io6$(4)="5,47,N 8.3,UT,N"
+02600   io6$(5)="6,47,N 6.2,UT,N"
+02610   io6$(6)="7,47,N 6.2,UT,N"
+02620   io6$(7)="8,47,N 6.2,UT,N"
 02630   if fnstyp=11 then goto L2640 else goto L2700 ! (skips Job Cost Questions)
 02640 L2640: pr #106,fields "10,2,Cr 50,N": "Retain Transactions until Jobs are complete (Y/N):"
 02650   pr #106,fields "11,2,Cr 50,N": "Starting of Range for Non-Productive Jobs:"
 02660   pr #106,fields "12,2,Cr 50,N": "Ending of Range for Non-Productive Jobs:"
 02670   pr #106,fields "13,2,Cr 50,N": "Number of Deduction used for Union Dues (if any):"
-02680   let io6$(8)="10,53,Cu 1,UT,N" : let io6$(9)="11,53,C 6,UT,N" !:
-        let io6$(10)="12,53,C 6,UT,N" : let io6$(11)="13,53,Nz 2,UT,N"
-02690   if tc=1 then let tc$="Y" else let tc$="N"
+02680   io6$(8)="10,53,Cu 1,UT,N" : io6$(9)="11,53,C 6,UT,N" !:
+        io6$(10)="12,53,C 6,UT,N" : io6$(11)="13,53,Nz 2,UT,N"
+02690   if tc=1 then tc$="Y" else tc$="N"
 02700 L2700: pr f "23,25,C 09,B,1": "Next (F1)"
 02710   pr f "23,35,C 09,B,2": "Back (F2)"
 02720   pr f "23,45,C 09,B,5": "Done (F5)"
@@ -344,18 +344,18 @@
           rinput #106,fields mat io6$: gli$,mat sck,vacm,mhw,tc$,mat jn$,dc conv CONV7
 02750   if fnstyp<>11 then !:
           rinput #106,fields mat io6$: gli$,mat sck,vacm,mhw conv CONV7
-02760   if ce>0 then let io6$(ce)(ce1:ce2)="U": ce=0
+02760   if ce>0 then io6$(ce)(ce1:ce2)="U": ce=0
 02770   if ckey>0 then goto L2840 else ce=curfld+1
 02780   if ce>udim(io6$) then ce=1
-02790 L2790: let io6$(ce)=rtrm$(io6$(ce)) : ce1=pos(io6$(ce),"U",1)
-02800   ce2=ce1+1 : let io6$(ce)(ce1:ce1)="UC" : goto L2740
-02810 CONV7: if ce>0 then let io6$(ce)(ce1:ce2)="U"
+02790 L2790: io6$(ce)=rtrm$(io6$(ce)) : ce1=pos(io6$(ce),"U",1)
+02800   ce2=ce1+1 : io6$(ce)(ce1:ce1)="UC" : goto L2740
+02810 CONV7: if ce>0 then io6$(ce)(ce1:ce2)="U"
 02820   ce=cnt+1
 02830 ERR7: pr f "24,78,C 1": bell : goto L2790
 02840 L2840: if gli$<>"Y" and gli$<>"N" then ce=1 : goto ERR7
 02850   if gli$="Y" then let gli=1 else let gli=0
 02860   if fnstyp=14 then goto L2900
-02870   if tc$="Y" then let tc=1 else let tc=0
+02870   if tc$="Y" then tc=1 else tc=0
 02880   if fnstyp=11 and tc$<>"Y" and tc$<>"N" then ce=8 : goto ERR7
 02890   if dc<0 or dc>10 then ce=11: goto ERR7
 02900 L2900: if ckey=5 or ckey=1 then goto CONFIRMEXIT
@@ -363,8 +363,8 @@
 02920   goto L2740
 02930 CONFIRMEXIT: ! 
 02940   mat ml$(2) !:
-        let ml$(1)="You have chosen to exit without saving any changes." !:
-        let ml$(2)="Save changes now?" !:
+        ml$(1)="You have chosen to exit without saving any changes." !:
+        ml$(2)="Save changes now?" !:
         fnmsgbox(mat ml$,resp$,cap$,52) !:
         if resp$="Yes" then goto DONE else goto XIT
 02950 ! ______________________________________________________________________
@@ -376,10 +376,10 @@
 03010   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$,1)
 03040   goto XIT
 03050 ! ______________________________________________________________________
-03060 XIT: let fnxit
+03060 XIT: fnxit
 03070 ! ______________________________________________________________________
 03080 ! <Updateable Region: ERTN>
-03090 ERTN: let fnerror(program$,err,line,act$,"xit")
+03090 ERTN: fnerror(program$,err,line,act$,"xit")
 03100   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03110   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 03120   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

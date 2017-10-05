@@ -8,17 +8,17 @@
 00080   dim a$*416,n$*40,cap$*128,resp$(2)*80
 00090 ! ______________________________________________________________________
 00100   cap$="Consolidate Companies"
-00110   let dcno=99
+00110   dcno=99
 00120 MAIN: ! 
 00130   fntos(sn$='Combgl') !:
         lc=rc=0 !:
-        let mylen=29 : let mypos=mylen+2
+        mylen=29 : mypos=mylen+2
 00140   fnlbl(lc+=1,1,"&Source Company Number:",mylen,1)
 00150   fncmbcno(lc,mypos) !:
-        let resp$(rc+=1)=''
+        resp$(rc+=1)=''
 00160   fnlbl(lc+=1,1,"&Destination Company Number:",mylen,1)
 00170   fntxt(lc,mypos,5,0,0,'30') !:
-        let resp$(rc+=1)=str$(dcno)
+        resp$(rc+=1)=str$(dcno)
 00180   if hcno>0 then let fnlbl(lc+=1,1,"Last Company Selected: "&str$(hcno),mylen,1)
 00190   lc+=1
 00200   fnlbl(lc+=1,1,"Warning",80,2,1)
@@ -35,8 +35,8 @@
 00270   if ck=5 then goto XIT
 00280   if ck=2 then goto END1
 00290   cno=val(resp$(1)(43:47)) !:
-        let dcno=val(resp$(2)) !:
-        let hcno=cno
+        dcno=val(resp$(2)) !:
+        hcno=cno
 00300   if cno=0 or ckey=5 then goto END1
 00310   ctr+=1
 00320   if ctr>1 then goto L390
@@ -44,7 +44,7 @@
 00340   execute "Copy "&env$('Q')&"\GLmstr\*.H"&str$(cno1)&' '&env$('Q')&"\GLmstr\*.H"&str$(dcno)&" -n" ioerr MAIN
 00350   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(dcno)&"",internal,outin  !:
         read #1,using ' Form POS 1,C 40': n$ !:
-        let n$(25:40)=" (Consolidated)" !:
+        n$(25:40)=" (Consolidated)" !:
         rewrite #1,using ' Form POS 1,C 40': n$ !:
         close #1: 
 00360   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&str$(dcno)&"",internal,output 
@@ -61,10 +61,10 @@
 00470 L470: execute "Index "&env$('Q')&"\GLmstr\GLmstr.H"&str$(dcno)&' '&env$('Q')&"\GLmstr\GLIndex.H"&str$(dcno)&" 1 12 Replace DupKeys" ioerr XIT
 00480   execute "Index "&env$('Q')&"\GLmstr\GLmstr.H"&str$(dcno)&' '&env$('Q')&"\GLmstr\glIndx2.H"&str$(dcno)&" 13 30 Replace DupKeys"
 00490   fnputcno(cno=dcno)
-00500 XIT: let fnxit
+00500 XIT: fnxit
 00510 ! ______________________________________________________________________
 00520 ! <Updateable Region: ERTN>
-00530 ERTN: let fnerror(program$,err,line,act$,"xit")
+00530 ERTN: fnerror(program$,err,line,act$,"xit")
 00540   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00550   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00560   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

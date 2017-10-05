@@ -52,11 +52,11 @@
 00510 L510: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&str$(cno)&",RecL=64,Replace",internal,outin,relative 
 00520   write #2,using L850,rec=1: "",0,0,"","",1
 00530 L530: pr newpage
-00540   if fnprocess=1 then let ti=4 else goto MENU1
+00540   if fnprocess=1 then ti=4 else goto MENU1
 00550   goto L600
 00560 ! ______________________________________________________________________
 00570 MENU1: ! 
-00580   let ti=6
+00580   ti=6
 00590   if ti>3 then restore #1,key>="        ",release: nokey L600 eof L600
 00600 L600: goto L3330
 00610   pr newpage
@@ -84,10 +84,10 @@
 00830 L830: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&str$(cno)&",RecL=64,Replace",internal,outin,relative ioerr L840
 00840 L840: write #2,using L850,rec=1: "",0,0,"","",1
 00850 L850: form pos 1,c 8,n 6,pd 5.2,c 12,c 30,pd 3
-00860   let new1=1
+00860   new1=1
 00870   goto L2600
 00880 L880: form pos 1,c 8,c 35,3*c 20,pd 5.2,n 2,c 11,2*pd 3
-00890   let new1=1
+00890   new1=1
 00900 L900: pr newpage
 00910   close #101: ioerr L920
 00920 L920: open #101: "SROW=3,SCOL=8,EROW=15,ECOL=66,BORDER=SR,Caption=<"&cap$,display,outin 
@@ -99,12 +99,12 @@
 00980   if ti=3 or ce>0 then goto L1070
 00990 L990: input fields "5,30,C 8,UT,N": vcode$ conv L990
 01000   if ltrm$(rtrm$(vcode$))="0" or rtrm$(vcode$)="" then goto L530
-01010   let vcode$=lpad$(rtrm$(vcode$),8)
+01010   vcode$=lpad$(rtrm$(vcode$),8)
 01020   read #1,using L880,key=vcode$: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat adr nokey L1080
 01030   oldti=2
-01040   let ti=3
-01050   let holdvn$=vn$
-01060   let holdytdp=ytdp
+01040   ti=3
+01050   holdvn$=vn$
+01060   holdytdp=ytdp
 01070 L1070: if ti=3 or ce>0 then pr f mat sc$: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$
 01080 L1080: pr f "16,25,C 09,B,1": "Next (F1)"
 01090   pr f "16,35,C 09,B,5": "Stop (F5)"
@@ -118,7 +118,7 @@
 01170   ce=cnt+1
 01180 ERRC: pr f "24,78,C 1": bell : goto L1140
 01190 L1190: if cmdkey=5 then goto MENU1
-01200   let vn$=lpad$(rtrm$(vn$),8)
+01200   vn$=lpad$(rtrm$(vn$),8)
 01210   if ti=3 then goto L1460
 01220   if rtrm$(vn$)="" or ltrm$(rtrm$(vn$))="0" then goto L530
 01230   read #1,using L1240,key=vn$: vn$ nokey L1270
@@ -127,7 +127,7 @@
 01260   goto ERRC
 01270 L1270: mat adr=(0)
 01280   if ytdp=0 then goto L1320
-01290   let rec2=lrec(2)+1
+01290   rec2=lrec(2)+1
 01300   write #2,using L850,rec=rec2: vn$,dat,ytdp,"","Beginning Balance",0
 01310   mat adr=(rec2)
 01320 L1320: write #1,using L880: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat adr
@@ -136,10 +136,10 @@
 01350   pr f "10,15,C 37,N": "Vendor Number (blank when completed):"
 01360 L1360: input fields "10,60,C 8,UT,N": vcode$ conv L1360
 01370   if ltrm$(rtrm$(vcode$))="0" or rtrm$(vcode$)="" then goto L530
-01380   let vcode$=lpad$(rtrm$(vcode$),8)
+01380   vcode$=lpad$(rtrm$(vcode$),8)
 01390   read #1,using L880,key=vcode$: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat adr nokey L1360
-01400 L1400: let holdvn$=vn$
-01410   let holdytdp=ytdp
+01400 L1400: holdvn$=vn$
+01410   holdytdp=ytdp
 01420 L1420: pr newpage
 01430   pr f "2,13,C 45,N": "*** Review Vendor Records ***"
 01440   pr f "3,10,c 60,n": "Enter Vendor Number as blank to Delete"
@@ -151,30 +151,30 @@
 01500 L1500: input fields "12,43,Cu 1,UT,N": yn$ conv L1500
 01510   if yn$="Y" then goto L1550
 01520   if yn$><"N" then goto L1500
-01530   let vn$=holdvn$
+01530   vn$=holdvn$
 01540   goto L1420
 01550 L1550: delete #1,key=holdvn$: 
-01560   let new1=1
-01570   let rec4=adr(1)
+01560   new1=1
+01570   rec4=adr(1)
 01580   if adr(1)=0 then goto L1340
 01590 L1590: read #2,using L1610,rec=rec4: tvn$, am,nta
 01600   rewrite #2,using L1610,rec=rec4: "", 0,nta
 01610 L1610: form pos 1,c 8,pos 15,pd 5.2,pos 62,pd 3
 01620   if nta=0 then goto L1340
-01630   let rec4=nta
+01630   rec4=nta
 01640   goto L1590
 01650 L1650: if holdvn$=vn$ then goto L1780 else goto L1660
 01660 L1660: read #1,using L1240,key=vn$: vn$ nokey L1680
 01670   goto L1340
 01680 L1680: delete #1,key=holdvn$: 
-01690   let new1=1
-01700   let rec5=adr(1)
+01690   new1=1
+01700   rec5=adr(1)
 01710   if adr(1)=0 then goto L1780
 01720 L1720: read #2,using L1730,rec=rec5: holdvn$,nta
 01730 L1730: form pos 1,c 8,pos 62,pd 3
 01740   rewrite #2,using L1730,rec=rec5: vn$,nta
 01750   if nta=0 then goto L1780
-01760   let rec5=nta
+01760   rec5=nta
 01770   goto L1720
 01780 L1780: if holdytdp=ytdp then goto L1800
 01790   goto L2710
@@ -188,13 +188,13 @@
 01870 L1870: if holdvn$=vn$ then goto L1890
 01880   goto L1320
 01890 L1890: rewrite #1,using L880,key=vn$: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat adr
-01900   if oldti=2 then let ti=2
+01900   if oldti=2 then ti=2
 01910   oldti=0
 01920   goto L600
 01930 ! ______________________________________________________________________
 01940   pr newpage
-01950   let namtab=66-int(len(rtrm$(cnam$))/2)
-01960   let dattab=66-int(len(rtrm$(dat$))/2)
+01950   namtab=66-int(len(rtrm$(cnam$))/2)
+01960   dattab=66-int(len(rtrm$(dat$))/2)
 01970   if fnprocess<>1 then gosub ASKDAT
 01980   goto L2130
 01990 ! _________________________
@@ -207,7 +207,7 @@
 02060   pr f "14,34,C 11,B,5": "Cancel (F5)"
 02070 L2070: rinput #102,fields "2,23,C 20,UT,N": dat$ conv L2070
 02080   if cmdkey=5 then goto MENU1
-02090   let dattab=66-int(len(rtrm$(dat$))/2)
+02090   dattab=66-int(len(rtrm$(dat$))/2)
 02100   close #102: ioerr L2120
 02110   return 
 02120 L2120: ! ______________________________________________________________________
@@ -221,18 +221,18 @@
 02200   pr f "13,34,C 11,B,5": "Cancel (F5)"
 02210   on fkey 5 goto L2560
 02220   fnopenprn
-02230 L2230: let j=0
+02230 L2230: j=0
 02240   eofc=0
 02250 L2250: read #1,using L880,release: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat adr eof L2530
-02260   let j=j+1
-02270   let pl$(1,j)=vn$
-02280   let pl$(2,j)=nam$
-02290   let pl$(3,j)=ad1$
-02300   let pl$(4,j)=ad2$
-02310   let pl$(5,j)=csz$
-02320   let pl$(6,j)=str$(ytdp)
-02330   let pl$(7,j)=str$(typ)
-02340   let pl$(8,j)=ss$
+02260   j=j+1
+02270   pl$(1,j)=vn$
+02280   pl$(2,j)=nam$
+02290   pl$(3,j)=ad1$
+02300   pl$(4,j)=ad2$
+02310   pl$(5,j)=csz$
+02320   pl$(6,j)=str$(ytdp)
+02330   pl$(7,j)=str$(typ)
+02340   pl$(8,j)=ss$
 02350   if j=2 then goto L2370
 02360   goto L2250
 02370 L2370: if pcnt><0 then goto L2400
@@ -245,16 +245,16 @@
 02440   pr #255: 
 02450   mat pl$=(" ")
 02460   if eofc=1 then goto L2560
-02470   let pcnt=pcnt+1
+02470   pcnt=pcnt+1
 02480   if pcnt=6 then goto L2500
 02490   goto L2230
 02500 L2500: pr #255: newpage
-02510   let pcnt=0
+02510   pcnt=0
 02520   goto L2230
 02530 L2530: if j=0 then goto L2560
 02540   eofc=1
 02550   goto L2370
-02560 L2560: let fncloseprn
+02560 L2560: fncloseprn
 02570   on fkey 5 ignore 
 02580   if fnprocess=1 then goto XIT
 02590   goto L530
@@ -267,13 +267,13 @@
 02660 L2660: execute "Index "&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&' '&env$('Q')&"\GLmstr\GL109IDX.h"&str$(cno)&" 1 8 Replace DupKeys -n"
 02670   execute "Index "&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&' '&env$('Q')&"\GLmstr\VNINDX2.h"&str$(cno)&" 9 25 Replace DupKeys -n"
 02680   if i2=1 then goto L2690 else goto XIT
-02690 L2690: let fnchain("S:\acsGL\GLBld109")
+02690 L2690: fnchain("S:\acsGL\GLBld109")
 02700   goto L2710
-02710 L2710: let tt=0
-02720   let rec3=adr(1)
+02710 L2710: tt=0
+02720   rec3=adr(1)
 02730   if adr(1)=0 then goto L3010
 02740 L2740: read #2,using L2760,rec=rec3: tvn$,dt,am,rn$,de$,nta
-02750   let tt=tt+am
+02750   tt=tt+am
 02760 L2760: form pos 1,c 8,n 6,pd 5.2,c 12,c 30,pd 3
 02770   scid$="Vendor #: "&ltrm$(vn$)&"   Balance: "&str$(ytdp)&"   Transactions: "&str$(tt)
 02780   pr newpage
@@ -297,7 +297,7 @@
 02960 L2960: ! 
 02970   rewrite #2,using L2760,rec=rec3: tvn$,dt,am,rn$,de$,nta
 02980   if nta=0 then goto L3010
-02990   let rec3=nta
+02990   rec3=nta
 03000   goto L2740
 03010 L3010: if tt><ytdp then goto L3030
 03020   goto L1870
@@ -308,10 +308,10 @@
 03070   pr f "10,40,N 12.2,N": ytdp
 03080   pr f "11,18,C 60": "Total Transactions:  "
 03090   pr f "11,40,N 12.2,N": tt
-03100   let iox$(1)="13,28,C 24,N"
-03110   let iox$(2)="14,28,C 24,N"
+03100   iox$(1)="13,28,C 24,N"
+03110   iox$(2)="14,28,C 24,N"
 03120 L3120: rinput select mat iox$,attr "H": "1. Correct YTD Purchases","2. Correct Transactions"
-03130   let j1=curfld
+03130   j1=curfld
 03140   on j1 goto L3150,L2710 none L3120
 03150 L3150: pr newpage
 03160   pr f "10,2,c 25,n": "New YTD Purchases:"
@@ -322,10 +322,10 @@
 03210   flit$(2)="8,30,n 10.2,UT,N"
 03220   flit$(3)="10,30,C 12,UT,N"
 03230   flit$(4)="12,30,c 30,UT,N"
-03240   let desc$(1)="6,9,Cr 20"
-03250   let desc$(2)="8,9,Cr 20"
-03260   let desc$(3)="10,9,Cr 20"
-03270   let desc$(4)="12,9,Cr 20"
+03240   desc$(1)="6,9,Cr 20"
+03250   desc$(2)="8,9,Cr 20"
+03260   desc$(3)="10,9,Cr 20"
+03270   desc$(4)="12,9,Cr 20"
 03280   scrt$(1)="Date:"
 03290   scrt$(2)="Amount:"
 03300   scrt$(3)="Reference Number:"
@@ -368,12 +368,12 @@
 03670 L3670: form pos 1,c 8,c 35,pos 104,pd 5.2,pos 122,2*pd 3
 03680   let fst=0
 03690   ec$=""
-03700   let tot=0
+03700   tot=0
 03710   if adr(1)=0 and ytdp=0 then goto L3660
-03720   let nta=adr(1)
+03720   nta=adr(1)
 03730 L3730: read #2,using L3740,rec=nta,release: dt,am,rn$,de$,nta norec L3660
 03740 L3740: form pos 9,n 6,pd 5.2,c 12,c 30,pd 3
-03750   let tot=tot+am
+03750   tot=tot+am
 03760   if nta=0 then goto L3770 else goto L3780
 03770 L3770: if ytdp=tot then goto L3780 else ec$="ERROR"
 03780 L3780: if fst=0 then pr #255,using L3790: vn$,nam$,dt,rn$,de$,am,ytdp,ec$ pageoflow L3820 else pr #255,using L3800: dt,rn$,de$,am,ec$ pageoflow L3820
@@ -385,10 +385,10 @@
 03840   if nta=0 then pr #255: else goto L3730
 03850   goto L3660
 03860 L3860: pr #255: newpage
-03870 L3870: let p2=p2+1
+03870 L3870: p2=p2+1
 03880   pr #255,using L3890: date$('mm/dd/yy'),cnam$,time$,"Vendor Transaction Listing"
 03890 L3890: form skip 1,pos 1,c 8,pos 41,cc 40,skip 1,pos 1,c 8,pos 53,c 40,skip 1
-03900   let p1=66-int((len(rtrm$(dat$))+6)/2)
+03900   p1=66-int((len(rtrm$(dat$))+6)/2)
 03910   pr #255,using L3920: rtrm$("As of "&dat$),"Page",p2
 03920 L3920: form pos p1,c 30,pos 110,c 4,n 5,skip 2
 03930   pr #255,using L3940: "Vendor #","Vendor Name","Date","Reference #","Description","Amount","YTD Purchases"
@@ -421,7 +421,7 @@
 04200   pr #101,fields "2,2,C,N": "Search by: "
 04210   pr f "14,35,C 09,B,5": "Stop (F5)"
 04220 L4220: rinput #101,select "2,13,C 13,N;3,13,C 13,N",attr "H": "Vendor Name","Vendor Number"
-04230   let ti2=curfld
+04230   ti2=curfld
 04240   if cmdkey=5 then close #101: : goto MENU1
 04250 L4250: on ti2 goto L4260,L4370 none L4220
 04260 L4260: close #101: ioerr L4270
@@ -430,7 +430,7 @@
 04290   pr f "13,35,C 09,B,5": "Stop (F5)"
 04300 L4300: input #101,fields "2,35,C 25,UE,N": id1$
 04310   if cmdkey=5 then close #101: : goto MENU1
-04320   let id1$=rtrm$(id1$)
+04320   id1$=rtrm$(id1$)
 04330   l1=len(id1$)
 04340   s1=11
 04350   restore #s1,search>=id1$,release: nokey L4300
@@ -442,7 +442,7 @@
 04410   pr f "13,35,C 09,B,5": "Stop (F5)"
 04420 L4420: input #101,fields "2,43,Nz 8,UT,N": vn1 conv L4420
 04430   if cmdkey=5 then close #101: : goto MENU1
-04440   let vn$=lpad$(str$(vn1),8)
+04440   vn$=lpad$(str$(vn1),8)
 04450   restore #1,search>=vn$,release: nokey L4420
 04460   s1=1
 04470   l1=0
@@ -468,16 +468,16 @@
 04670 L4670: input fields "23,47,Cu 8,UT,N": vcode$ conv L4670
 04680   if cmdkey=5 then goto L4250
 04690   if rtrm$(vcode$)="" then goto L4730
-04700   let vcode$=lpad$(rtrm$(vcode$),8)
+04700   vcode$=lpad$(rtrm$(vcode$),8)
 04710   read #1,using L880,key=vcode$,release: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat adr nokey L4670
-04720   let ti=3: goto L1400
+04720   ti=3: goto L1400
 04730 L4730: if ln<20 then goto L4250
 04740   goto L4480
 04750 L4750: if err=4152 then goto L790
-04760 XIT: let fnxit
+04760 XIT: fnxit
 04770 ! ______________________________________________________________________
 04780 ! <Updateable Region: ERTN>
-04790 ERTN: let fnerror(program$,err,line,act$,"xit")
+04790 ERTN: fnerror(program$,err,line,act$,"xit")
 04800   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 04810   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 04820   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

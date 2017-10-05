@@ -28,7 +28,7 @@
 30100   fnCopy(env$('Q')&"\UBmstr\Note2.h"&str$(cno),env$('Q')&"\UBmstr\Note2.h"&str$(cno),73) 
 30140   fnindex_it(env$('Q')&"\UBmstr\Note1.h"&str$(cno),env$('Q')&"\UBmstr\NoteIdx1.h"&str$(cno),"1 10")
 30160   open #note1=1: "Name="&env$('Q')&"\UBmstr\Note1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&str$(cno),internal,outin,keyed 
-30180   let version(note1,1)
+30180   version(note1,1)
 30200   close #note1: 
 30220   fnstatus(env$('Q')&"\UBmstr\Note1.h"&str$(cno)&" converted successfully to version 1.")
 30240   goto EOPHASE1
@@ -47,17 +47,17 @@
 40200   fnstatus("Initial Record Len of "&file$(note2)&" is "&str$(rln(note2))&".")
 40220 READ_NOTE1_PHASE2: ! 
 40240   read #note1,using 'Form POS 1,C 10,2*PD 3': rk$,mat ra eof EO3
-40260   let r32=ra(1)
+40260   r32=ra(1)
 40280 READ_NOTE2_PHASE2: ! 
 40300   if r32<1 then goto READ_NOTE1_PHASE2
 40320   read #note2,using 'Form POS 1,C 07,C 60,PD 3',rec=r32: k32$,rm$,n32 conv READ_NOTE1_PHASE2
 40340   rewrite #note2,using 'Form POS 1,C 10,C 60,PD 3',rec=r32: rk$,rm$,n32
-40360   let r32=n32
+40360   r32=n32
 40380   goto READ_NOTE2_PHASE2
 40400 ! ______________________________________________________________________
 50000 EO3: ! /r
-50020   let version(note1,1)
-50040   let version(note2,1)
+50020   version(note1,1)
+50040   version(note2,1)
 50060   close #note1: 
 50080   close #note2: 
 50100   fnstatus(env$('Q')&"\UBmstr\Note2.h"&str$(cno)&" converted successfully to version 1")
@@ -78,15 +78,15 @@
 60260 mat newra=(0)
 60280 read #3,using 'Form POS 1,C 10,2*PD 3',key=x$: rk$,mat ra nokey L50100
 60300 write #3,using 'Form POS 1,C 10,2*PD 3': z$,0,0
-60320 let r32=ra(1)
+60320 r32=ra(1)
 60340 do
 60360   if r32<1 then goto L50100
 60380   read #4,using 'Form POS 1,C 10,C 60,PD 3',rec=r32: rk$,rm$,r32
-60400   let n32=lrec(4)+1
-60420   if r32>0 then let ntr=n32+1 else let ntr=0
+60400   n32=lrec(4)+1
+60420   if r32>0 then ntr=n32+1 else ntr=0
 60440   write #4,using 'Form POS 1,C 10,C 60,PD 3',rec=n32: z$,rm$,ntr
-60460   if newra(1)=0 then let newra(1)=n32
-60480   let newra(2)=n32
+60460   if newra(1)=0 then newra(1)=n32
+60480   newra(2)=n32
 60500   rewrite #3,using 'form pos 11,2*pd 3',key=z$: mat newra
 60520 loop
 70000 EO4: !

@@ -24,16 +24,16 @@
 00460   fl2$(6)="14,10,c 60,h,n"
 00470   fl2$(7)="15,10,c 60,h,n"
 00480   fl2$(8)="24,2,c 60,h,n"
-00490   let io1$(1)="4,25,N 5,UE,N"
-00500   let io1$(2)="5,25,N 1,UE,N"
-00510   let io1$(3)="6,25,N 6,UE,N"
-00520   let io1$(4)="7,25,C 12,UE,N"
+00490   io1$(1)="4,25,N 5,UE,N"
+00500   io1$(2)="5,25,N 1,UE,N"
+00510   io1$(3)="6,25,N 6,UE,N"
+00520   io1$(4)="7,25,C 12,UE,N"
 00530   for j=1 to 10
-00540     let io1$(4+j)=str$(j+9)&",1,C 6,UE,N"
-00550     let io1$(14+j)=str$(j+9)&",8,C 55,UE,N"
-00560     let io1$(24+j)=str$(j+9)&",64,N 10.2,UE,N"
-00570     let io1$(34+j)=str$(j+9)&",75,N 2,UE,N"
-00580     let io1$(44+j)=str$(j+9)&",78,N 2,UE,N"
+00540     io1$(4+j)=str$(j+9)&",1,C 6,UE,N"
+00550     io1$(14+j)=str$(j+9)&",8,C 55,UE,N"
+00560     io1$(24+j)=str$(j+9)&",64,N 10.2,UE,N"
+00570     io1$(34+j)=str$(j+9)&",75,N 2,UE,N"
+00580     io1$(44+j)=str$(j+9)&",78,N 2,UE,N"
 00590   next j
 00600   for j=1 to 4
 00610     fl1$(j)=str$(j+3)&",8,c 20"
@@ -51,7 +51,7 @@
 00780   pr f "8,30,c 16,r,n": " pr Invoices"
 00790   pr f "10,5,c 70": "Enter 1 for regular or 2 if Reprinting previously entered invoices:"
 00800   pr f "12,32,Cc 16,B,5": "Cancel (F5)"
-00810   if f1=0 then let f1=1
+00810   if f1=0 then f1=1
 00820 L820: rinput fields "10,73,N 1,UE,N": f1 conv L820
 00830   if cmdkey=5 then goto XIT
 00840   on f1 goto REGULAR_ENTRY,L880 none L820
@@ -69,12 +69,12 @@
 00930   scrid$(3)="-Code- ---------Invoice Descriptions-------------------------  --Amount-- CT SC"
 00940   scrid$(4)="  Press F1 when completed with this screen"
 00950 L950: ! 
-00952   let inp3=inp(3)
+00952   inp3=inp(3)
 00960   mat inp=(0)
-00970   let inp(3)=inp3
-00990   let iv$=str$(iv1+1)
+00970   inp(3)=inp3
+00990   iv$=str$(iv1+1)
 01000 ! on conv goto L1020
-01010   let iv$=str$(iv1+1) conv ignore
+01010   iv$=str$(iv1+1) conv ignore
 01020 ! L1020: !
 01022 ! on conv system
 01030   mat id$=(" ")
@@ -93,33 +93,33 @@
 01150 L1150: ! 
 01152   input fields mat io1$,attr "R": mat inp,iv$,mat cde$(1:10),mat id$(1:10),mat da(1:10),mat ct(1:10),mat sc(1:10) conv CONV1
 01160   cp1=currow
-01170   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+01170   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 01180   if cmdkey>0 then goto L1260 else ce=curfld
 01190   goto L1260
 01200 L1200: ! 
 01202   ce=ce+1
 01204   if ce>udim(io1$) then ce=1
 01210 CT1: ! 
-01212   let io1$(ce)=rtrm$(uprc$(io1$(ce)))
+01212   io1$(ce)=rtrm$(uprc$(io1$(ce)))
 01214   ce1=pos(io1$(ce),"U",9)
 01216   if ce1=0 then goto L1200
 01220   ce2=ce1+1
-01222   let io1$(ce)(ce1:ce1)="UC"
+01222   io1$(ce)(ce1:ce1)="UC"
 01224   goto L1150
 01230 CONV1: ! 
-01232   if ce>0 then let io1$(ce)(ce1:ce2)="U"
+01232   if ce>0 then io1$(ce)(ce1:ce2)="U"
 01240   ce=cnt+1
 01250 ERR1: ! 
 01252   pr f "24,78,C 1": bell
 01254   goto CT1
 01260 L1260: ! 
-01262   let de=cp1-9
-01270   if de<1 or de>10 then let de=1
+01262   de=cp1-9
+01270   if de<1 or de>10 then de=1
 01280   if cmdkey=6 then goto HELP1
 01290   if chg=2 and inp(1)=0 then goto L1720
 01300   if cmdkey=1 or inp(1)=0 then goto L1710
 01310   if ce><1 then goto L1370
-01320   let k$=lpad$(str$(inp(1)),5)
+01320   k$=lpad$(str$(inp(1)),5)
 01330   read #1,using 'form pos 6,c 30',key=k$: a1$ nokey ERR1
 01350   pr f "4,35,C 40,H,N": a1$
 01360   goto L1200
@@ -174,22 +174,22 @@
 01720 L1720: ! 
 01722   if inp(1)=0 then mat inp=(0)
 01730   if inp(1)=0 then goto L1900
-01740   let pt(1)=pt(1)+inp(1)
+01740   pt(1)=pt(1)+inp(1)
 01750   for j=1 to 10
-01760     let pt(2)=pt(2)+da(j)
-01770     let pt(3)=pt(3)+ct(j)
-01780     let pt(4)=pt(4)+sc(j)
+01760     pt(2)=pt(2)+da(j)
+01770     pt(3)=pt(3)+ct(j)
+01780     pt(4)=pt(4)+sc(j)
 01790   next j
 01800   if chg=2 then goto L1900
-01810   let rw=lrec(2)+1
+01810   rw=lrec(2)+1
 01820   write #h_tmwk1,using F_TMWK1: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
-01830   let iv1=val(iv$) conv L1850
+01830   iv1=val(iv$) conv L1850
 01840   fncreg_write('Last Invoice Number',str$(iv1))
 01850 L1850: ! 
 01852   if x9=0 then goto L950
-01860   let inp(3)=0
-01870   let inp(5)=0
-01880   let inp(6)=0
+01860   inp(3)=0
+01870   inp(5)=0
+01880   inp(6)=0
 01890   goto L1080
 01900 L1900: ! 
 01902   rewrite #h_tmwk1,using F_TMWK1,rec=rr: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$
@@ -198,11 +198,11 @@
 01930 L1930: input fields "10,60,N 5,UE,N": rr conv L1930
 01940   if rr=0 then goto SCR_FINAL
 01950   read #h_tmwk1,using F_TMWK1,rec=rr: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ norec SCR_ADDEDIT ioerr ERTN
-01960   let pt(1)=pt(1)-inp(1)
+01960   pt(1)=pt(1)-inp(1)
 01970   for j=1 to 10
-01980     let pt(2)=pt(2)-da(j)
-01990     let pt(3)=pt(3)-ct(j)
-02000     let pt(4)=pt(4)-sc(j)
+01980     pt(2)=pt(2)-da(j)
+01990     pt(3)=pt(3)-ct(j)
+02000     pt(4)=pt(4)-sc(j)
 02010   next j
 02020   goto L1080
 02030 ! ______________________________________________________________________
@@ -277,7 +277,7 @@
 02690 PR_SELECTED_INVOICE: ! 
 02692     read #h_tmwk1,using F_TMWK1: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc,mat gl$ eof PRI_EOF norec L2870 ioerr ERTN
 02700     if inp(1)=0 then goto L2840
-02710     let k$=lpad$(str$(inp(1)),5)
+02710     k$=lpad$(str$(inp(1)),5)
 02720     read #1,using L2730,key=k$: mat a$ ioerr ERTN
 02730 L2730: form pos 6,3*c 30
 02750     fnprint_invoice(align, k$, mat a$, iv$, inp(3),mat id$, mat da,0)
@@ -301,15 +301,15 @@
 02960     read #h_tmwk1,using F_TMWK1,rec=rw: mat inp,iv$,mat cde$,mat id$,mat da,mat ct,mat sc norec L3050 ioerr ERTN
 02970 F_TMWK1: form pos 1,n 5,n 1,n 6,c 12,30*c 6,30*c 55,30*pd 5.2,30*n 2,30*n 2,30*c 12
 02980     if inp(1)=0 then goto L2840
-02990     let pt(1)=pt(1)+inp(1)
+02990     pt(1)=pt(1)+inp(1)
 03000     for j=1 to 10
-03010       let pt(2)=pt(2)+da(j)
-03020       let pt(3)=pt(3)+ct(j)
-03030       let pt(4)=pt(4)+sc(j)
+03010       pt(2)=pt(2)+da(j)
+03020       pt(3)=pt(3)+ct(j)
+03030       pt(4)=pt(4)+sc(j)
 03040     next j
 03050 L3050: next rw
 03060   return 
-03070 XIT: let fnxit
+03070 XIT: fnxit
 03080 ERTN: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN Use!" else goto L3100
 03090   goto L3140
 03100 L3100: pr newpage
@@ -328,12 +328,12 @@
 03230 L3230: pr #127: newpage
 03240   close #101: ioerr ignore
 03250   open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=BUsiness Name Search",display,outin 
-03260   let prtall=0
+03260   prtall=0
 03270   pr f "7,4,C 55,H,N": "Enter beginning search info. or blank for all:"
 03280   pr f "9,32,C 16,R,N": "Press F5 to stop"
 03290 L3290: input fields "7,50,C 25,UE,N": nam$
 03300   if cmdkey=5 then goto SRCHEND
-03310   let nam$=rtrm$(nam$)
+03310   nam$=rtrm$(nam$)
 03320   l1=len(nam$)
 03330   restore #32,search>=nam$: nokey L3290
 03340   close #101: ioerr ignore
@@ -353,13 +353,13 @@
 03480     if bk>20 then bk=1
 03490     bk$(bk)=a1$
 03500 L3500: next j
-03510 L3510: if j>1 then let j=j-1
+03510 L3510: if j>1 then j=j-1
 03520   mat in2$(j)
 03530   pr f "24,08,C 60,R,N": "Enter to continue; F5 to stop or enter ACCOUNT #:"
 03540 L3540: input fields "24,58,C 14,RE,N": k$
 03550   alp=0
 03560   if cmdkey=5 then goto SRCHEND
-03570   if rtrm$(k$)><"" then let inp(1)=val(k$) conv L3540 : goto SRCHEND
+03570   if rtrm$(k$)><"" then inp(1)=val(k$) conv L3540 : goto SRCHEND
 03580   if cmdkey><2 then goto L3630
 03590   bk=bk-1
 03600   if bk<1 then goto L3650
@@ -383,15 +383,15 @@
 03750 !    open #99: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,outin
 03760 !    pr #99: newpage
 03770 !  L3770: !
-03772 !    let j1=int(rnd*22+1)
-03780 !    let j2=int(rnd*54+1)
+03772 !    j1=int(rnd*22+1)
+03780 !    j2=int(rnd*54+1)
 03790 !    for n=1 to 24 : pr f str$(n)&",1,C 80,B,N": "" : next n
 03800 !    pr f str$(j1)&","&str$(j2)&",C 25,R,N": "   A.C.S. Screen Saver"
 03810 !    pr f str$(j1+2)&","&str$(j2)&",C 25,R,N": "PRESS ANY KEY TO CONTINUE"
 03820 !    pr f str$(j1+1)&","&str$(j2)&",C 25,R,N": "   "&date$&"   "&time$
-03830 !    let t1=val(time$(7:8))
+03830 !    t1=val(time$(7:8))
 03840 !  L3840: !
-03842 !    let t2=val(time$(7:8))
+03842 !    t2=val(time$(7:8))
 03850 !    let x$=kstat$: if x$><"" then goto OVER
 03860 !    if t1=t2 then goto L3840
 03870 !    pr f str$(j1)&","&str$(j2)&",C 25,B,N": ""
@@ -412,13 +412,13 @@
 03992   pr #127: newpage
 04000   close #101: ioerr ignore
 04010   open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=CODE SEARCH",display,outin 
-04020   let prtall=0
+04020   prtall=0
 04030   pr f "7,4,C 55,H,N": "Enter beginning search info. or blank for all:"
 04040   pr f "9,32,C 16,R,N": "Press F5 to stop"
 04050 L4050: ! 
 04052   input fields "7,50,C 6,UE,N": nam$
 04060   if cmdkey=5 then goto SRCHEND
-04070   let nam$=lpad$(rtrm$(nam$),6)
+04070   nam$=lpad$(rtrm$(nam$),6)
 04080   restore #3,search>=nam$: nokey L4050
 04090   close #101: ioerr ignore
 04100 L4100: ! 
@@ -440,13 +440,13 @@
 04260     if bk>20 then bk=1
 04270     bk$(bk)=cdk$
 04280 L4280: next j
-04290 L4290: if j>1 then let j=j-1
+04290 L4290: if j>1 then j=j-1
 04300   mat in2$(j)
 04310   pr f "24,08,C 60,R,N": "Enter to continue; F5 to stop or enter ACCOUNT #:"
 04320 L4320: input fields "24,58,C 6,RE,N": k$
 04330   alp=0
 04340   if cmdkey=5 then goto SRCHEND
-04350   if rtrm$(k$)><"" then let inp(1)=val(k$) conv L4320 : goto SRCHEND
+04350   if rtrm$(k$)><"" then inp(1)=val(k$) conv L4320 : goto SRCHEND
 04360   if cmdkey><2 then goto L4410
 04370   bk=bk-1
 04380   if bk<1 then goto L4430

@@ -16,12 +16,12 @@
 00160   read #1,using L180: dno,ano,sno,d$,mat rf eof END1
 00170   if ano<1000 then goto READ_GLMSTR
 00180 L180: form pos 1,n 3,n 6,n 3,c 50,6*pd 3,42*pd 6.2,2*pd 3
-00190   let rno=rno+10
+00190   rno=rno+10
 00200   ac(1)=3
 00210   if ano<2000 then ac(5)=1 else ac(5)=0
 00220   write #2,using L230: rno,d$,"D",mat ac
 00230 L230: form pos 1,n 5,c 50,c 1,2*n 2,15*n 1,n 3
-00240   let rf(2)=rno
+00240   rf(2)=rno
 00250   rewrite #1,using L180: dno,ano,sno,d$,mat rf
 00260   goto READ_GLMSTR
 00270 END1: ! 
@@ -30,7 +30,7 @@
 00300 XIT: stop 
 00310 ! ______________________________________________________________________
 00320 ! <Updateable Region: ERTN>
-00330 ERTN: let fnerror(program$,err,line,act$,"xit")
+00330 ERTN: fnerror(program$,err,line,act$,"xit")
 00340   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00350   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

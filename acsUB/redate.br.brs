@@ -11,19 +11,19 @@
 11200   fntos(sn$)
 11600   fnlbl(1,1,"Wrong Date:",22,1)
 11800   fntxt(1,23,8,0,0,"1")
-12000   let resp$(1)='' ! '120101' ! '012011'
+12000   resp$(1)='' ! '120101' ! '012011'
 12400   fnlbl(2,1,"Correct Date:",22,1)
 12600   fntxt(2,23,8,0,0,"1")
-12800   let resp$(2)='' ! '120102' ! '012012'
+12800   resp$(2)='' ! '120102' ! '012012'
 13200   fnlbl(4,1,"Lowest Record Number:",22,1)
 13400   fntxt(4,23,8,0,0,"0")
-13600   let resp$(3)='0' ! str$(33430) ! str$(88000)
+13600   resp$(3)='0' ! str$(33430) ! str$(88000)
 13800   fncmdset(2)
 14000   fnacs(sn$,0,mat resp$,ckey)
 14200   if ckey=5 then goto XIT
-14400   let date_bad=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
-14600   let date_good=fndate_mmddyy_to_ccyymmdd(val(resp$(2)))
-14800   let rec_low=val(resp$(3))
+14400   date_bad=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
+14600   date_good=fndate_mmddyy_to_ccyymmdd(val(resp$(2)))
+14800   rec_low=val(resp$(3))
 15000   open #h_trans:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
 15200   do 
 15400     read #h_trans,using 'form pos 11,N 8': trans_date eof EO_TRANS
@@ -42,7 +42,7 @@
 30000   fnxit
 80380 ! ______________________________________________________________________
 80390 ! <Updateable Region: ERTN>
-80400 ERTN: let fnerror(program$,err,line,act$,"xit")
+80400 ERTN: fnerror(program$,err,line,act$,"xit")
 80410   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 80420   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 80430   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

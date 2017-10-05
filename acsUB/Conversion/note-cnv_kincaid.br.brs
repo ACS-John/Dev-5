@@ -14,7 +14,7 @@
 00130   pr f "8,20,Cc 30,R,N": "Convert Notes "
 00140   pr f "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
 00150 ! 
-00160   let io1$(1)="10,40,N 2,UT,N"
+00160   io1$(1)="10,40,N 2,UT,N"
 00170 L170: rinput fields mat io1$: cno conv L170
 00180   if cno=0 or cmdkey=5 or cmdkey=99 then goto XIT
 00190 L190: execute "Index "&env$('Q')&"\UBmstr\Note1.h"&str$(cno)&' '&env$('Q')&"\UBmstr\NoteIdx1.h"&str$(cno)&" 1 10 Replace DupKeys -n"
@@ -40,7 +40,7 @@
 00370 XIT: chain "S:\acsUB\conversion\ubadrbil-cnv"
 00380 ! ______________________________________________________________________
 00390 ! <Updateable Region: ERTN>
-00400 ERTN: let fnerror(program$,err,line,act$,"xit")
+00400 ERTN: fnerror(program$,err,line,act$,"xit")
 00410   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00420   goto L270
 00430   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT

@@ -8,10 +8,10 @@
 00100   fntos(sn$="Endorse")
 00110   fnlbl(1,1,"Number of Endorsements:",25,1,0)
 00120   fntxt(1,28,6,0,0,"30",0,"You can guess. Too many will only cause you to have to cancel print.") 
-00122   let resp$(1)=""
+00122   resp$(1)=""
 00130   fnlbl(2,1,"Bank Account:",25,1,0)
 00140   fntxt(2,28,15,0,0,"30",0,"Enter your bank account number if you want it shown on the back of the check.") 
-00142   let resp$(2)=""
+00142   resp$(2)=""
 00150   fncmdkey("&Next",1,1,0,"Proceed with printing.")
 00160   fncmdkey("&Cancel",5,0,1,"Cancel printing any check endorsments.")
 00170   fnacs(sn$,0,mat resp$,ckey) ! endorse check
@@ -26,9 +26,9 @@
 00260   next j
 00270   fncloseprn
 00280   goto XIT
-00290 XIT: let fnxit
+00290 XIT: fnxit
 78000 ! <updateable region: ertn>
-78020 ERTN: let fnerror(program$,err,line,act$,"xit")
+78020 ERTN: fnerror(program$,err,line,act$,"xit")
 78040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 78060   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 78080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

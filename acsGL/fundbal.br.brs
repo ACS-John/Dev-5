@@ -37,7 +37,7 @@
 00350   bank$(acct)=d$(1:25)
 00360   begb(acct)=bb
 00370   endb(acct)=cb
-00380   let nta=ta(1)
+00380   nta=ta(1)
 00390 L390: if nta=0 then goto L310
 00400   read #2,using L410,rec=nta: mat tr,tr$,td$,nta norec L310
 00410 L410: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
@@ -47,12 +47,12 @@
 00450 ! ______________________________________________________________________
 00460 L460: if fund=0 then goto L310
 00470   if fund<>1 then goto L510
-00480   if acct<140 then let inc(fund)=inc(fund)+cb-bb else !:
-          let disb(fund)=disb(fund)+cb-bb
+00480   if acct<140 then inc(fund)=inc(fund)+cb-bb else !:
+          disb(fund)=disb(fund)+cb-bb
 00490   goto L530
 00500 ! ______________________________________________________________________
-00510 L510: if fp(acct*.01)*100<20 then let inc(fund)=inc(fund)+cb-bb else !:
-          let disb(fund)=disb(fund)+cb-bb
+00510 L510: if fp(acct*.01)*100<20 then inc(fund)=inc(fund)+cb-bb else !:
+          disb(fund)=disb(fund)+cb-bb
 00520 L520: form pos 1,c 12,c 50,pos 81,2*pd 6.2,pos 333,2*pd 3
 00530 L530: goto L310
 00540 ! ______________________________________________________________________
@@ -60,14 +60,14 @@
 00560   pr newpage
 00570   gosub L1020
 00580   gosub L750
-00590 XIT: let fnxit
+00590 XIT: fnxit
 00600 ! ______________________________________________________________________
 00610   pr #255: newpage
 00620 L620: pr #255,using L630: date$('mm/dd/yy'),cnam$
 00630 L630: form pos 1,c 8,cc 74
 00640   pr #255,using L650: time$,"Fund Balance Report"
 00650 L650: form pos 1,c 8,pos 31,c 28,skip 1
-00660   let p1=p1+1
+00660   p1=p1+1
 00670   pr #255,using L680: rtrm$(pedat$),"PAGE ",p1
 00680 L680: form pos 20,cc 40,pos 70,c 5,n 4,skip 2
 00690   pr #255,using L700: "  BEGINNING"," "," ","     ENDING"
@@ -110,16 +110,16 @@
 01060   pr f "5,20,c 45,n": "ENTER THE FUND BALANCE AT BEGINNING OF MONTH"
 01070   for j=1 to 10
 01080     pr f str$(j+6)&",25,C 20,N": desc$(j) !:
-          let io1$(j)=str$(j+6)&",45,N 12.2,UT,N"
+          io1$(j)=str$(j+6)&",45,N 12.2,UT,N"
 01090   next j
 01100 L1100: input fields mat io1$,attr "R": mat beg conv L1100
-01110   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+01110   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 01120   if cmdkey>0 then goto L1190 else ce=curfld
 01130 L1130: ce=ce+1: if ce>udim(io1$) then ce=1
-01140 L1140: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1) !:
+01140 L1140: io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1) !:
         if ce1=0 then goto L1130
-01150   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L1100
-01160 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+01150   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L1100
+01160 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 01170   ce=cnt+1
 01180 ERR1: pr f "24,78,C 1": bell : goto L1140
 01190 L1190: ! 
@@ -127,7 +127,7 @@
 01210   return 
 01220 ! ______________________________________________________________________
 01230 ! <Updateable Region: ERTN>
-01240 ERTN: let fnerror(program$,err,line,act$,"xit")
+01240 ERTN: fnerror(program$,err,line,act$,"xit")
 01250   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01260   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01270   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

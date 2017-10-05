@@ -16,9 +16,9 @@
 00032   dim abbrev$*20,open_read$*80,tg(11)
 00039 ! /r
 00040   fntop(program$,cap$="Print Flex")
-00050   let programfolder$=env$('cursys')&"mstr"
-00060   let datafolder$=env$('Q')&'\'&env$('cursys')&"mstr"
-00062   let dataext$='.h'&env$('cno')
+00050   programfolder$=env$('cursys')&"mstr"
+00060   datafolder$=env$('Q')&'\'&env$('cursys')&"mstr"
+00062   dataext$='.h'&env$('cno')
 00122   dim saddr$*40,scity$*20,sstate$*2,szip$*11,msgnum$*12,maddr$*39,mcity$*20,mstate$*2,mzip$*11,atime$*8,crn$*9,dtl$*8,name$(3)*25,ss$*11,race$*18,sex$*1
 00123   dim tg(11),p$*10
 00124   dim ck1$*1,ck2$*1,ck3$*1,ck4$*1,ck5$*1,ck5d$*60,amt(7),amt2(5),cksa$*1,eshome$*1,esstreet$*30,weather$*1,sign$*1,signhelp$*30,witname$*30
@@ -57,11 +57,11 @@
 04120   fnflexadd1(mat item$)
 04130   goto READ_NEXT
 04140 EOFONREAD: ! Complete the grid once all data has been read
-04144 ! Let FNLBL(15,1,"Export the grid to a fixed width file, for later use.")
-04145   fncmdset(52): let fnacs(sn$,win,mat response$,ckey) ! CALL items selected
+04144 ! fnLBL(15,1,"Export the grid to a fixed width file, for later use.")
+04145   fncmdset(52): fnacs(sn$,win,mat response$,ckey) ! CALL items selected
 04146   lastgridresponse$=response$(1)
 04160   if ckey=5 then chain "S:\Core\prtflex\PRTFLEX1",programfolder$,datafolder$
-04170 ! Let FNXIT(CURSYS$)
+04170 ! fnXIT(CURSYS$)
 04180 ! /r
 07999 ! __________________ this is 7999 next is 8000 _________________________
 08000 OPENFILES: ! r: The following lines will be proc in from a display file                          you have created. They are in the same file as the read                         statements explained above.  Don't forget the del lines to
@@ -78,14 +78,14 @@
 10010   colhdr$(1)="Name" : colmask$(1)="80"
 10499   return  ! /r
 10500 GRIDDETAILS: ! r: The following lines are generated lines.  They will be                          removed and added back just before each grid is printed
-10510   let item$(1)=e$(2)
+10510   item$(1)=e$(2)
 10990   return  ! /r
 10999 ! __________________ this is 10999 next is 11000 ________________________
 11000 DONE: close #1: ioerr ignore
-11010 XIT: let fnxit
+11010 XIT: fnxit
 11020 IGNORE: continue 
 11021 ! <Updateable Region: ERTN>
-11022 ERTN: let fnerror(program$,err,line,act$,"xit")
+11022 ERTN: fnerror(program$,err,line,act$,"xit")
 11023   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 11024   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 11025   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -93,68 +93,68 @@
 11027 ! /region
 11028 ! _______________________________________________________________________
 12000 ASKTRANSET: ! r:
-12010   let transtype$(1)="Charge"
-12011   let transtype$(2)="Penalty"
-12012   let transtype$(3)="Collection"
-12013   let transtype$(4)="Credit Memo"
-12014   let transtype$(5)="Debit Memo"
+12010   transtype$(1)="Charge"
+12011   transtype$(2)="Penalty"
+12012   transtype$(3)="Collection"
+12013   transtype$(4)="Credit Memo"
+12014   transtype$(5)="Debit Memo"
 12030   fntos(sn$="Gridtrans-1")
-12032   let rc=cf=0
+12032   rc=cf=0
 12040   fnfra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
 12042   cf+=1 : let fratype=cf
 12050   fnopt(1,3,"[All]",0,fratype)
 12051   if sel_code=1 or sel_code=0 then 
-12052     let resp$(rc+=1)="True"
+12052     resp$(rc+=1)="True"
 12053   else 
-12054     let resp$(rc+=1)="False"
+12054     resp$(rc+=1)="False"
 12055   end if 
 12060   fnopt(2,3,"Charges",0,fratype)
 12061   if sel_code=2 then 
-12062     let resp$(rc+=1)="True"
+12062     resp$(rc+=1)="True"
 12063   else 
-12064     let resp$(rc+=1)="False"
+12064     resp$(rc+=1)="False"
 12065   end if 
 12070   fnopt(3,3,"Penalties",0,fratype)
 12071   if sel_code=3 then 
-12072     let resp$(rc+=1)="True"
+12072     resp$(rc+=1)="True"
 12073   else 
-12074     let resp$(rc+=1)="False"
+12074     resp$(rc+=1)="False"
 12075   end if 
 12080   fnopt(4,3,"Collections",0,fratype)
 12081   if sel_code=4 then 
-12082     let resp$(rc+=1)="True"
+12082     resp$(rc+=1)="True"
 12083   else 
-12084     let resp$(rc+=1)="False"
+12084     resp$(rc+=1)="False"
 12085   end if 
 12090   fnopt(5,3,"Credit Memos",0,fratype)
 12091   if sel_code=5 then 
-12092     let resp$(rc+=1)="True"
+12092     resp$(rc+=1)="True"
 12093   else 
-12094     let resp$(rc+=1)="False"
+12094     resp$(rc+=1)="False"
 12095   end if 
 12100   fnopt(6,3,"Debit Memos",0,fratype)
 12101   if sel_code=6 then 
-12102     let resp$(rc+=1)="True"
+12102     resp$(rc+=1)="True"
 12103   else 
-12104     let resp$(rc+=1)="False"
+12104     resp$(rc+=1)="False"
 12105   end if 
 12110   fnfra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
-12112   cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
+12112   cf+=1 : let fradate=cf : mylen=26 : mypos=mylen+2
 12120   fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
 12130   fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
-12132   let resp$(rc+=1)=str$(beg_date)
+12132   resp$(rc+=1)=str$(beg_date)
 12140   fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
 12150   fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
-12152   let resp$(rc+=1)=str$(end_date)
+12152   resp$(rc+=1)=str$(end_date)
 12160   fnfra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
 12162   cf+=1 : let fraaccount=cf
 12170   fnlbl(1,1,"Account:",8,1,0,fraaccount)
 12180   fncmbact(1,10,1,fraaccount)
-12182   let rc+=1
+12182   rc+=1
 12183   if trim$(hact$)<>"" then 
-12184     let resp$(rc)=hact$
+12184     resp$(rc)=hact$
 12185   else if resp$(rc)="" then 
-12186     let resp$(rc)="[All]"
+12186     resp$(rc)="[All]"
 12187   end if 
 12190   fncmdkey("&Display",1,1,0,"Displays a list of transactions on the screen")
 12210   fncmdkey("&Cancel",5,0,1,"Returns to customer record")

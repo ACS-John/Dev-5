@@ -7,7 +7,7 @@
 00080   fnopenprn
 00090   dim cat$(30)*30
 00100   dim sc$*4,ds$*30,catno$*2,cnam$*40,cap$*128
-00110   let namtab=41-int(len(rtrm$(cnam$))/2)
+00110   namtab=41-int(len(rtrm$(cnam$))/2)
 00120   open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&str$(cno)&",Shr",internal,input,keyed ioerr L920
 00130   open #2: "Name="&env$('Q')&"\TMmstr\TMCat.h"&str$(cno)&",Shr",internal,input,relative ioerr L920
 00140   read #2,using L150: mat cat$ ioerr L920
@@ -44,11 +44,11 @@
 00450   goto L320
 00460 L460: gosub L700
 00470 L470: close #1: ioerr L480
-00480 L480: let fncloseprn
-00490 XIT: let fnxit
+00480 L480: fncloseprn
+00490 XIT: fnxit
 00500 L500: pr #255,using L510: catno*100,cat$(catno)
 00510 L510: form pos 2,pic(zzzz),pos 8,c 30,skip 1
-00520   let hcatno=catno
+00520   hcatno=catno
 00530   return 
 00540 L540: if th><0 then goto L600
 00550   pr #255,using L640: sc$,ds$,th,sf,0 pageoflow L570
@@ -63,8 +63,8 @@
 00640 L640: form pos 5,c 4,pos 14,c 30,pos 53,n 13.2,n 13.2,n 13.2,skip 1
 00650 L650: b1=b1+th
 00660   b2=b2+sf
-00670   let m$=r$
-00680   let hcatno=catno
+00670   m$=r$
+00680   hcatno=catno
 00690   return 
 00700 L700: if b1=0 then goto L730
 00710   b0=b2/b1
@@ -76,7 +76,7 @@
 00770   b2=0
 00780   pr #255: 
 00790   return 
-00800 L800: let p1=p1+1
+00800 L800: p1=p1+1
 00810   pr #255,using L820: date$,cnam$,"PAGE",p1
 00820 L820: form skip 3,pos 1,c 8,pos namtab,c 40,pos 75,c 5,pic(zzz),skip 1
 00830   pr #255,using L840: time$,"SERVICE PRODUCTION REPORT"

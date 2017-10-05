@@ -8,14 +8,14 @@
 20200     if fncursys$="PR" and fnprocess=1 then let fnchain("S:\acsPR\newprAuto")
 25000     if env$("xit_override")<>'' then 
 25020       dim tmp$*1024
-25040       let tmp$=env$("xit_override")
+25040       tmp$=env$("xit_override")
 25060       setenv("xit_override","")
 25080       fnchain(tmp$)
 25100     end if 
 30000     fnchain('S:\Core\Menu.br',0,1)
 50120 ! ______________________________________________________________________
 50130 ! <Updateable Region: ERTN>
-50140 ERTN: let fnerror(program$,err,line,act$,"xit")
+50140 ERTN: fnerror(program$,err,line,act$,"xit")
 50150     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 50160     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 50170     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

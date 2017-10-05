@@ -13,20 +13,20 @@
 00110 ! ______________________________________________________________________
 00120   sn$="ubCass2" !:
         fntos(sn$) !:
-        let respc = 0
+        respc = 0
 00130   fnlbl(1,1,"Path to Returned Postal Diskette:",33,1)
 00140   opt1$(1)="A:\" !:
         opt1$(2)="C:\" !:
         opt1$(3)="E:\" !:
         opt1$(4)="F:\" !:
         fncomboa("AB",1,35,mat opt1$) !:
-        let resp$(respc+=1)=opt1$(1)
+        resp$(respc+=1)=opt1$(1)
 00150   fnlbl(3,1,"This program prints:")
 00160   fnlbl(4,1,"Listing of Customer Addresses that could not be certified",58,2)
 00170   fncmdset(2)
-00180 L180: let fnacs(sn$,0,mat resp$,ckey)
+00180 L180: fnacs(sn$,0,mat resp$,ckey)
 00190   if ckey=5 then goto XIT
-00200   let dv$=resp$(1)
+00200   dv$=resp$(1)
 00210 ! ______________________________________________________________________
 00220 ! Open #1: "Name="&DV$&"Cass1.Dat,RecL=223",External,Input Ioerr 180
 00221   open #1: "Name="&dv$&"Cass1.Dat,RecL=113",external,input ioerr L180
@@ -60,7 +60,7 @@
 00410   close #2: 
 00420   execute "Index "&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&","&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",1,10,Replace,DupKeys -n"
 00430   fncloseprn
-00440 XIT: let fnxit
+00440 XIT: fnxit
 00450 ! ______________________________________________________________________
 00460 CREATE_CHECK_DIGIT: ! 
 00470   bc$=rtrm$(bc$)
@@ -86,7 +86,7 @@
 00640 L640: return 
 00650 ! ______________________________________________________________________
 00660 ! <Updateable Region: ERTN>
-00670 ERTN: let fnerror(program$,err,line,act$,"xit")
+00670 ERTN: fnerror(program$,err,line,act$,"xit")
 00680   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00690   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00700   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

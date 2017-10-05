@@ -19,19 +19,19 @@
 18100   fnget_services(mat servicename$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 18120   for j=1 to 10
 18140     if uprc$(penalty$(j))="Y" then 
-18160       let pencount=pencount+1 ! count number of penalty columns needed
+18160       pencount=pencount+1 ! count number of penalty columns needed
 18180       column(pencount)=j
 18200       columnhead$(pencount)=lpad$(rtrm$(servicename$(j)(1:10)),10)
 18220     end if 
 18240   next j
-18260   if pencount<1 then let pencount=1
+18260   if pencount<1 then pencount=1
 18280   mat pencolumn(pencount)
 18300   mat columnhead$(pencount)
 18320   mat coltot(pencount)
 18340 ! 
-18360   fncreg_read('Second Penalty Calculation Min Balance',minimumbal$) : let minimumbal=val(minimumbal$) conv ignore
-18380   fncreg_read('Second Penalty Calculation Penalty Amount',penaltyamt$) : let penaltyamt=val(penaltyamt$) conv ignore
-18400   fncreg_read('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$) ! : let penaltyamt=val(penaltyamt$) conv ignore
+18360   fncreg_read('Second Penalty Calculation Min Balance',minimumbal$) : minimumbal=val(minimumbal$) conv ignore
+18380   fncreg_read('Second Penalty Calculation Penalty Amount',penaltyamt$) : penaltyamt=val(penaltyamt$) conv ignore
+18400   fncreg_read('Second Penalty Calculation Skip Service 10 Rate 9 Customers',skip_s10r9$) ! : penaltyamt=val(penaltyamt$) conv ignore
 18420   if minimumbal=0 then 
 18440     open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&str$(cno)&",Shr",internal,outin,relative ioerr ignore
 18460     read #minbal,using 'Form POS 1,n 10.2',rec=1,release: minimumbal ioerr ignore
@@ -40,49 +40,49 @@
 18520 ! 
 28000 SCREEN1: ! 
 28020   fntos(sn$="ubPenCa2")
-28040   let mylen=29 : let mypos=mylen+2
+28040   mylen=29 : mypos=mylen+2
 28060   fnlbl(1,1,"Penalty Date:",mylen,1)
 28080   fntxt(1,mypos,10,0,1,"1003")
-28100   let resp$(1)=str$(pendat)
+28100   resp$(1)=str$(pendat)
 28120   fnlbl(2,1,"Last Billing Date:",mylen,1)
 28140   fntxt(2,mypos,10,0,1,"1003")
-28160   let resp$(2)=str$(bildat)
+28160   resp$(2)=str$(bildat)
 28180   fnlbl(3,1,"Report Heading Date:",mylen,1)
 28200   fntxt(3,mypos,20)
-28220   let resp$(3)=dat$
+28220   resp$(3)=dat$
 28240   fnchk(4,31,"Print Meter Address:",1)
-28260   let resp$(4)="False"
+28260   resp$(4)="False"
 28280   fnchk(5,31,"Print Mailing Address:",1)
-28300   let resp$(5)="False"
+28300   resp$(5)="False"
 28320   fnlbl(6,1,"Minimum Balance:",mylen,1)
 28340   fntxt(6,mypos,8,0,1,"10",0,"The customer's balance must be at least this amount before a penalty will be calculated.")
-28360   let resp$(6)=str$(minimumbal)
+28360   resp$(6)=str$(minimumbal)
 28380   fnlbl(7,1,"Penalty Amount:",mylen,1)
 28400   fntxt(7,mypos,8,0,1,"10",0,"Amount of penalty.")
-28420   let resp$(7)=str$(penaltyamt)
+28420   resp$(7)=str$(penaltyamt)
 28440   fnchk(9,31,"Skip Customers with a "&trim$(servicename$(10))&" Rate Code of 9",1)
-28460   let resp$(8)=skip_s10r9$
+28460   resp$(8)=skip_s10r9$
 28480   fncmdset(2)
 28500   fnacs(sn$,0,mat resp$,ck)
 32000   if ck=5 then goto XIT
-32020   let pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
+32020   pendat=val(resp$(1)(5:6)&resp$(1)(7:8)&resp$(1)(3:4))
 32040   bildat=val(resp$(2)(5:6)&resp$(2)(7:8)&resp$(2)(3:4))
-32060   let dat$=resp$(3)
-32080   if resp$(4)="True" then let printadr=1 ! wants meter address printed
-32100   if resp$(5)="True" then let printmail=1 ! wants meter mailing address
-32120   let minimumbal=val(resp$(6))
-32140   let penaltyamt=val(resp$(7))
+32060   dat$=resp$(3)
+32080   if resp$(4)="True" then printadr=1 ! wants meter address printed
+32100   if resp$(5)="True" then printmail=1 ! wants meter mailing address
+32120   minimumbal=val(resp$(6))
+32140   penaltyamt=val(resp$(7))
 32160   skip_s10r9$=resp$(8)
 32180 ! 
 34000   if pendat=0 then 
-34020     let msgline$(1)="You must enter a valid Penalty Date"
+34020     msgline$(1)="You must enter a valid Penalty Date"
 34040     fnmsgbox(mat msgline$,pause$,cap$,48)
 34060     goto SCREEN1
 34080   else 
-34100     let pendat=fndate_mmddyy_to_ccyymmdd(pendat)
+34100     pendat=fndate_mmddyy_to_ccyymmdd(pendat)
 34120   end if 
 34140   if bildat=0 then 
-34160     let msgline$(1)="You must enter a valid Last Billing Date."
+34160     msgline$(1)="You must enter a valid Last Billing Date."
 34180     fnmsgbox(mat msgline$,pause$,cap$,48)
 34200     goto SCREEN1
 34220   end if 
@@ -120,20 +120,20 @@
 46040   column=0
 46060   for j=1 to 10
 46080     if uprc$(penalty$(j))="Y" then ! place first penalty in first column, column totals, etc
-46100       let tg(j)=penaltyamt
+46100       tg(j)=penaltyamt
 46120       column+=1
-46140       let pencolumn(column)=tg(j)
+46140       pencolumn(column)=tg(j)
 46160       coltot(column)=coltot(column)+tg(j)
 46200     end if 
 46220   next j
 46240   bal+=sum(tg)
-46260 ! let tot+=sum(tg)
-46280   let tcode=2 ! penalty trans code
+46260 ! tot+=sum(tg)
+46280   tcode=2 ! penalty trans code
 46300   for j=1 to 10
 46320     if tg(j)<>0 then let gb(j)+=tg(j) ! add new penalties into balance breakdown if here is a penalty
 46340   next j
-46360   let transkey$=z$&cnvrt$("pic(########)",pendat)&cnvrt$("pic(#)",tcode)
-46380   let tamount=sum(tg)
+46360   transkey$=z$&cnvrt$("pic(########)",pendat)&cnvrt$("pic(#)",tcode)
+46380   tamount=sum(tg)
 46400 ! add all penalties into total transaction amount
 46420   read #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=transkey$: y$,olddate,oldcode,oldamount,mat oldtg nokey L990 ! check for recalk
 46440   bal=bal-oldamount
@@ -146,10 +146,10 @@
 46580 L990: ! 
 46600   write #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 46620 L1000: ! 
-46640   let totb+=bal
+46640   totb+=bal
 46660   rewrite #customer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2': bal,mat gb
 46680   if extra(1)<0 or extra(1)>99 then extra(1)=99
-46700   let route(extra(1))+=sum(pencolumn)
+46700   route(extra(1))+=sum(pencolumn)
 46720 ! pr extra(1)
 46740   if printadr<>1 then 
 46760     pr #255,using F_PRINT_LINE: z$,e$(2),mat pencolumn,bal pageoflow PGOF
@@ -165,15 +165,15 @@
 46960   goto READ_CUSTOMER
 46980 ! ______________________________________________________________________
 48000 EO_CUSTOMER: ! 
-48020   let tmp$= rpt$(" ",52)&"{\ul"&rpt$(" ",12)&"}"
+48020   tmp$= rpt$(" ",52)&"{\ul"&rpt$(" ",12)&"}"
 48040   for j=1 to udim(columnhead$)
-48060     let tmp$=tmp$&" {\ul"&rpt$(" ",12)&"}"
+48060     tmp$=tmp$&" {\ul"&rpt$(" ",12)&"}"
 48080   next j
 48100   pr #255: tmp$
 48120   pr #255,using "Form POS 17,C 30,x 5,pencount*N 12.2,N 12.2": "Overall Totals",mat coltot,totb
-48140   let tmp$= rpt$(" ",52)&"{\ul \strike"&rpt$(" ",12)&"}"
+48140   tmp$= rpt$(" ",52)&"{\ul \strike"&rpt$(" ",12)&"}"
 48160   for j=1 to udim(columnhead$)
-48180     let tmp$=tmp$&" {\ul \strike"&rpt$(" ",12)&"}"
+48180     tmp$=tmp$&" {\ul \strike"&rpt$(" ",12)&"}"
 48200   next j
 48220   pr #255: tmp$
 48240   pr #255,using 'form skip 2,c 20': "Totals by Route"
@@ -194,21 +194,21 @@
 51020   pr #255: newpage
 51060   continue  ! /r
 52000 HDR: ! r:
-52020 ! let p+=1
+52020 ! p+=1
 52040   pr #255: "\qc "&cnam$
 52060   pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&" - Listing}"
 52080   pr #255: dat$
 52100   pr #255: "\ql   "
-52120   let tmp$="{\ul Account No  } {\ul Customer Name and Address      }         {\ul "
+52120   tmp$="{\ul Account No  } {\ul Customer Name and Address      }         {\ul "
 52140   for j=1 to udim(columnhead$)
-52160     let tmp$=tmp$&columnhead$(j)&"} { \ul "
+52160     tmp$=tmp$&columnhead$(j)&"} { \ul "
 52180   next j
-52200   if printadr=1 then let tmp$=tmp$&"} {\ul   Balance}  {\ul  Meter Address}" else let tmp$=tmp$&"} {\ul   Balance}"
+52200   if printadr=1 then tmp$=tmp$&"} {\ul   Balance}  {\ul  Meter Address}" else tmp$=tmp$&"} {\ul   Balance}"
 52220   pr #255: tmp$
 52240   pr #255: ""
 52260   return  ! /r
 54000 IGNORE: continue 
-56000 XIT: let fnxit
+56000 XIT: fnxit
 58000 BUD1: ! r:
 58020   bud1=0
 58040   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&str$(cno)&",Shr",internal,outin,keyed ioerr EO_BUD1
@@ -217,13 +217,13 @@
 58100 EO_BUD1: ! 
 58120   return  ! /r
 60000 BUD2: ! r:
-60020   let totba=bd1=bd2=0
+60020   totba=bd1=bd2=0
 60040   mat bd1(5) : mat bd1=(0) : mat bd2=(0)
 60060   if bud1=0 then goto EO_BUD2
 60080   read #81,using L1520,key=z$: z$,mat ba,mat badr nokey EO_BUD2
-60100   for j=2 to 12: let totba=totba+ba(j): next j
+60100   for j=2 to 12: totba=totba+ba(j): next j
 60120 L1520: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-60140   let ta1=badr(1)
+60140   ta1=badr(1)
 60160 L1540: if ta1=0 then goto EO_BUD2
 60180   read #82,using L1560,rec=ta1: z$,mat bt1,nba norec EO_BUD2
 60200 L1560: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
@@ -231,11 +231,11 @@
 60240   if bt1(12,1)=0 then goto L1600 ! don't allow blank records to go thru routine
 60260   bd1=bd1+1
 60280 L1600: if bd1>5 then goto EO_BUD2
-60300 L1610: let ta1=nba : goto L1540
+60300 L1610: ta1=nba : goto L1540
 60320 EO_BUD2: ! 
 60340   return  ! /r
 62000 ! <Updateable Region: ERTN>
-62020 ERTN: let fnerror(program$,err,line,act$,"xit")
+62020 ERTN: fnerror(program$,err,line,act$,"xit")
 62040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 62060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 62080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -245,20 +245,20 @@
 64020   fntos(sn$="ubPenCal22")
 64040   fnlbl(1,1,"First Route #:",27,1)
 64060   fntxt(1,29,2,0,1,"30",0,"Enter the first route number that is subject to a penalty on this penalty date")
-64080   let resp$(1)=str$(prtbkno1)
+64080   resp$(1)=str$(prtbkno1)
 64100   fnlbl(2,1,"Last Route #:",27,1)
 64120   fntxt(2,29,2,0,1,"30")
-64140   let resp$(2)=str$(prtbkno2)
+64140   resp$(2)=str$(prtbkno2)
 64160   fncmdset(2)
 64180   fnacs(sn$,0,mat resp$,ck)
 64200   if ck=5 then goto XIT
-64220   let prtbkno1=val(resp$(1))
-64240   let prtbkno2=val(resp$(2))
+64220   prtbkno1=val(resp$(1))
+64240   prtbkno2=val(resp$(2))
 64260   return  ! /r
 66000 ! WORRYABOUT: ! r:
 66010 !   dim basepenalty(10)
 66020 !   if sum(basepenalty)<>0 then
-66040 !     let negativepercent=round((sum(basepenalty)+negatives)/sum(basepenalty),2)
+66040 !     negativepercent=round((sum(basepenalty)+negatives)/sum(basepenalty),2)
 66060 !     for j=1 to 10
 66080 !       basepenalty(j)=round(basepenalty(j)*negativepercent,2)
 66100 !     next j
@@ -275,11 +275,11 @@
 68140 !   else 
 68160 !     goto EO_CHECK_ROUNDING
 68180 !   end if
-68200 !   let penx=0
+68200 !   penx=0
 68220 !   for j=1 to 10 ! put rounding adjustment in first service that has a penalty
 68240 !     if basepenalty(j)>0 then
-68260 !       let tg(j)=tg(j)+adjustment
-68280 !       let penx+=1
+68260 !       tg(j)=tg(j)+adjustment
+68280 !       penx+=1
 68300 !       coltot(penx)=coltot(penx)+adjustment
 68320 !       goto EO_CHECK_ROUNDING
 68340 !     end if

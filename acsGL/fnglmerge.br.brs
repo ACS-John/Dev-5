@@ -10,14 +10,14 @@
 00100     dim ml$(10)*80 ! for fnMsgBox
 00110     dim resp$(10)*80 ! for Screen Ace
 00120 ! ______________________________________________________________________
-00130     on=1 : off=0 : cancel=5 : let delete=4 : selbyrow=1 !:
-          limit_to_list=1 : add_all=2 : let right=1 : let disable=1 !:
-          center=2 : let pointtwo$='32' : let mmddyy$='1'
+00130     on=1 : off=0 : cancel=5 : delete=4 : selbyrow=1 !:
+          limit_to_list=1 : add_all=2 : right=1 : disable=1 !:
+          center=2 : pointtwo$='32' : mmddyy$='1'
 00140     fntop(program$,cap$="GL Merge")
 00150     if fncursys$='GL' then let fncno(cno) else gosub ASK_GLCNO
 00160     fnprg(prg$)
 00170     if fnstyp=99 then goto L200
-00180     if fnstyp=9 then let prg$="S:\acsTM\tmMenu" else let prg$="S:\acsGL\acGLAuto"
+00180     if fnstyp=9 then prg$="S:\acsTM\tmMenu" else prg$="S:\acsGL\acGLAuto"
 00190     fnprg(prg$,2)
 00200 L200: open #glmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&str$(cno)&",Shr",internal,outin,keyed ioerr GLMSTR_OPEN_ERR
 00210     open #gltrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&str$(cno)&",Shr",internal,outin,relative 
@@ -32,17 +32,17 @@
 00300 HERE_A: ! 
 00310     if val(t$(1:3))=0 and val(t$(4:9))=0 and val(t$(10:12))=0 and k=0 then !:
             goto READ_GLWK1
-00320     if t$(3:3)=" " then let t$(3:3)="0"
-00330     if t$(12:12)=" " then let t$(12:12)="0"
+00320     if t$(3:3)=" " then t$(3:3)="0"
+00330     if t$(12:12)=" " then t$(12:12)="0"
 00340     read #glmstr,using 'Form POS 87,PD 6.2,POS 333,2*PD 3',key=t$: cb,mat ta nokey REJECT_GL
 00350 READ_GLTRANS: ! 
 00360 ! READ #gltrans,USING 460,REC=1: LR2
 00370     lr2=lrec(gltrans)+1
 00380     write #gltrans,using 'Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,PD 3',rec=lr2: t$,s,k,mat n,l$,p$,0 duprec READ_GLTRANS
-00390     if ta(1)=0 then let ta(1)=lr2
+00390     if ta(1)=0 then ta(1)=lr2
 00400     if ta(2)>0 then !:
             rewrite #gltrans,using 'Form POS 71,PD 3',rec=ta(2): lr2
-00410     let ta(2)=lr2
+00410     ta(2)=lr2
 00420     cb+=k
 00430     rewrite #glmstr,using 'Form POS 87,PD 6.2,POS 333,2*PD 3',key=t$: cb,mat ta
 00440 ! REWRITE #gltrans,USING 460,REC=1,RELEASE: LR2
@@ -62,56 +62,56 @@
 00560 ! ______________________________________________________________________
 00570 REJECT_GL: ! 
 00580     fntos(sn$='GLMerge-Reject_GL') !:
-          lc=0 : let mylen=20 : let mypos=mylen+2
+          lc=0 : mylen=20 : mypos=mylen+2
 00590     fnlbl(lc+=1,1,'GL Account Reject',80,center)
 00600     fnlbl(lc+=1,1,'Account Number:',mylen,right)
 00610     fntxt(lc,mypos,12,0,right,'',disable) !:
-          let resp$(1)=t$
+          resp$(1)=t$
 00620     fnlbl(lc+=1,1,'Date:',mylen,right)
 00630     fntxt(lc,mypos,0,0,right,mmddyy$,disable) !:
-          let resp$(2)=str$(s)
+          resp$(2)=str$(s)
 00640     fnlbl(lc+=1,1,'Amount:',mylen,right)
 00650     fntxt(lc,mypos,11,0,right,pointtwo$,disable) !:
-          let resp$(3)=str$(k)
+          resp$(3)=str$(k)
 00660     fnlbl(lc+=1,1,'Reference Number:',mylen,right)
 00670     fntxt(lc,mypos,8,0,right,'',disable) !:
-          let resp$(4)=l$
+          resp$(4)=l$
 00680     fnlbl(lc+=1,1,'Description:',mylen,right)
 00690     fntxt(lc,mypos,30,0,right,'',disable) !:
-          let resp$(5)=p$
+          resp$(5)=p$
 00700     fnlbl(lc+=1,1,"Account Number "&trim$(t$)&" is not in the GL Master File",80,center) !:
           fnlbl(lc+=1,1,'Do you wish to add this account now?',80,center)
 00710     fncmdkey('&Yes',1,1,0) !:
           fncmdkey('&No',5,0,1)
 00720     fnacs(sn$,0,mat resp$,ckey) !:
-          if ckey=1 then let in1$='Yes' else if ckey=5 then let in1$='No'
+          if ckey=1 then in1$='Yes' else if ckey=5 then in1$='No'
 00730   if in1$="Yes" then goto ADD_GL else goto CORRECT_GL
 00740 ! ______________________________________________________________________
 00750 CORRECT_GL: ! 
 00760   fntos(sn$='GLMerge-Correct_GL') !:
-        lc=0 : let mylen=31 : let mypos=mylen+2
+        lc=0 : mylen=31 : mypos=mylen+2
 00770   fnlbl(lc+=1,1,'GL Account Reject',80,center)
 00780   fnlbl(lc+=1,1,'Correct General Ledger Account:',mylen,right)
 00790   fncombof("gla-"&str$(cno),lc,mypos,0,env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),13,20,1,12,env$('Q')&"\GLmstr\glIndx2.h"&str$(cno),limit_to_list) !:
-        let resp$(1)=''
+        resp$(1)=''
 00800   fncmdkey('&Okay',1,1,1)
 00810   fnacs(sn$,0,mat resp$,ckey)
-00820   let t$=resp$(1)(22:33)
+00820   t$=resp$(1)(22:33)
 00830   goto HERE_A
 00840 ! ______________________________________________________________________
 00850 ADD_GL: ! 
 00860   fntos(sn$='GLMerge-Add_GL') !:
-        lc=0 : let mylen=32 : let mypos=mylen+2
+        lc=0 : mylen=32 : mypos=mylen+2
 00870   fnlbl(lc+=1,1,'GL Account Reject',80,center)
 00880   fnlbl(lc+=1,1,'New General Ledger Account Name:',mylen,right)
 00890   fntxt(lc,mypos,30) !:
-        let resp$(1)=''
+        resp$(1)=''
 00900   fncmdkey('&Okay',1,1,1)
 00910   fnacs(sn$,0,mat resp$,ckey)
-00920   let d$=resp$(1)
+00920   d$=resp$(1)
 00930   mat ta=(0) : cb=0
 00940   write #glmstr,using 'Form POS 1,C 12,C 50,6*PD 3,42*PD 6.2,2*PD 3': t$,d$,mat zo
-00950   let new1=1
+00950   new1=1
 00960   goto READ_GLTRANS
 00970 ! ______________________________________________________________________
 00980 EO_GLWK1: ! 
@@ -171,7 +171,7 @@
 01360   pr #win,fields "4,2,C 22,N": "Correct Vendor Number:"
 01370 L1370: input #win,fields "4,25,Cu 8,UT,N": ven$ conv L1370
 01380   close #win: 
-01390   let ven$=lpad$(trim$(ven$),8)
+01390   ven$=lpad$(trim$(ven$),8)
 01400   goto L460
 01410 ! ______________________________________________________________________
 01420 L1420: cap$="Vendor Information" !:
@@ -204,19 +204,19 @@
 01610   rewrite #gltr1099,using 'Form POS 62,PD 3',rec=1,release: lr5
 01620   mat adr=(lr5)
 01630 L1630: write #gl1099,using 'Form POS 1,C 8,C 35,3*C 20,PD 5.2,N 2,C 11,2*PD 3': ven$,nam$,ad1$,ad2$,csz$,k,typ,ss$,mat adr
-01640   let new2=1
+01640   new2=1
 01650   goto READ_GLWK1
 01660 ! ______________________________________________________________________
 01670 GLMSTR_OPEN_ERR: ! 
 01690   mat ml$(3) !:
-        let ml$(1)='Company Number '&str$(cno)&' does not exists!' !:
-        let ml$(2)='Please try again.' !:
-        let ml$(3)='Nothing Posted.' !:
+        ml$(1)='Company Number '&str$(cno)&' does not exists!' !:
+        ml$(2)='Please try again.' !:
+        ml$(3)='Nothing Posted.' !:
         fnmsgbox(mat ml$,ok$,cap$,16)
 01700   goto XIT
 01710 ! ______________________________________________________________________
 01720 ! <updateable region: ertn>
-01730 ERTN: let fnerror(program$,err,line,act$,"xit")
+01730 ERTN: fnerror(program$,err,line,act$,"xit")
 01740   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01750   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01760   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

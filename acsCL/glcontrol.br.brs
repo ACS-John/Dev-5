@@ -23,7 +23,7 @@
 00200 BUILD_LAYOUT: ! 
 00210   fncno(cno)
 00220 ! ** Field Labels    ** !:
-        let ic=0 ! temporary Item Counter
+        ic=0 ! temporary Item Counter
 00230   lbl$(ic+=1)="Fund Number" !:
         lbl$(ic+=1)="Description" !:
         lbl$(ic+=1)="General Ledger Number Due To" !:
@@ -31,17 +31,17 @@
         lbl$(ic+=1)="General Ledger Number Accounts Payable" !:
         lbl$(ic+=1)="General Ledger Number for Discounts"
 00240 ! ** Text Box / Field Display   Lengths   ** !:
-        let ic=0 ! temporary Item Counter !:
-        let mmddyy=8 !:
+        ic=0 ! temporary Item Counter !:
+        mmddyy=8 !:
         ccyymmdd=10
-00250   let tln(ic+=1)=3 !:
-        let tln(ic+=1)=30 !:
-        let tln(ic+=1)=9 !:
-        let tln(ic+=1)=9 !:
-        let tln(ic+=1)=12 !:
-        let tln(ic+=1)=12
+00250   tln(ic+=1)=3 !:
+        tln(ic+=1)=30 !:
+        tln(ic+=1)=9 !:
+        tln(ic+=1)=9 !:
+        tln(ic+=1)=12 !:
+        tln(ic+=1)=12
 00260 ! ** Field Types ** !:
-        let ic=0
+        ic=0
 00270   fltyp$(ic+=1)='N' !:
         fltyp$(ic+=1)='C' !:
         fltyp$(ic+=1)='C' !:
@@ -49,8 +49,8 @@
         fltyp$(ic+=1)='C' !:
         fltyp$(ic+=1)='C'
 00280 ! ** Field Storage Lengths ** !:
-        let ic=0 !:
-        let mmddyy=6 : ccyymmdd=8
+        ic=0 !:
+        mmddyy=6 : ccyymmdd=8
 00290   sln(ic+=1)=3 !:
         sln(ic+=1)=30 !:
         sln(ic+=1)=9 !:
@@ -58,15 +58,15 @@
         sln(ic+=1)=12 !:
         sln(ic+=1)=12
 00300 ! ** Field Masks ** !:
-        let ic=0 !:
-        let pointtwo=32 : let number=30 !:
-        ccyymmdd=3 : let mmddyy=1 : let glnumber=53
-00310   let mask(ic+=1)=1000+number !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0
+        ic=0 !:
+        pointtwo=32 : number=30 !:
+        ccyymmdd=3 : mmddyy=1 : let glnumber=53
+00310   mask(ic+=1)=1000+number !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=0
 00320 ! ** Combo Boxes **                                                   !:
         ! CL=Field Number  : C$(CL,1)='ComboF'                                !:
         ! C$(CL,2)=Linked File Name                                           !:
@@ -101,10 +101,10 @@
 00390   fnhamster("GLControl",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00400   return 
 00410 ! ______________________________________________________________________
-00420 XIT: let fnxit
+00420 XIT: fnxit
 00430 ! ______________________________________________________________________
 00440 ! <Updateable Region: ERTN>
-00450 ERTN: let fnerror(program$,err,line,act$,"xit")
+00450 ERTN: fnerror(program$,err,line,act$,"xit")
 00460   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00470   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00480   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

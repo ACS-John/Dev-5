@@ -28,14 +28,14 @@
 00240 ! ______________________________________________________________________
 00250 MAIN: ! 
 00260   fntos(sn$="autoproc") !:
-        let respc=0
+        respc=0
 00270   fnlbl(1,20,"Select From the Following Companies:",50,1)
 00280   fnlbl(2,1,"Company:",10,1)
 00290   for j=1 to udim(opt$)
-00300     if trim$(oldcnam$)=trim$(opt$(j)(1:30)) then let resp$(1)=opt$(j): goto L330
+00300     if trim$(oldcnam$)=trim$(opt$(j)(1:30)) then resp$(1)=opt$(j): goto L330
 00310   next j
-00320   let resp$(1)=opt$(1) ! default to 1st in none found
-00330 L330: let fncomboa('CmbAuto',2,13,mat opt$,'Select the companies that should be included in this automatic processing run. Highlite and press enter or Next to register your selection.',55) ! Let FNCMBCNO(1, 13)
+00320   resp$(1)=opt$(1) ! default to 1st in none found
+00330 L330: fncomboa('CmbAuto',2,13,mat opt$,'Select the companies that should be included in this automatic processing run. Highlite and press enter or Next to register your selection.',55) ! fnCMBCNO(1, 13)
 00340   fnlbl(4,30,"Selected Companies:")
 00350   mat chdr$(2) : mat cmask$(2) : mat item$(2) !:
         chdr$(1)='Company #' !:
@@ -44,8 +44,8 @@
         cmask$(2)='' !:
         fnflexinit1('autoproc',5,25,15,35,mat chdr$,mat cmask$,1,0,frame)
 00370   for j=1 to max(count,1)
-00380     let item$(1)=str$(clnum(j)) !:
-          let item$(2)=clnam$(j) !:
+00380     item$(1)=str$(clnum(j)) !:
+          item$(2)=clnam$(j) !:
           fnflexadd1(mat item$)
 00390   next j
 00400   fncmdkey("&Select",1,1,0,"Selects the highlited company to be included in automatic processing.") !:
@@ -60,7 +60,7 @@
 00470 L470: goto WRITE_EM
 00480 ! ______________________________________________________________________
 00490 BLD_ACNO: ! 
-00500   let dir$=fncursys$&"mstr" !:
+00500   dir$=fncursys$&"mstr" !:
         let filter$="Company.*" !:
         fngetdir(dir$,mat filename$,empty$,filter$)
 00510   mat acno(99): cav=0
@@ -90,10 +90,10 @@
         ! resets the last program processed back to 0 befor going to acglauto
 00700   fnchain("S:\acsGL\acglAuto")
 00710 ! ______________________________________________________________________
-00720 XIT: let fnxit
+00720 XIT: fnxit
 00730 ! ______________________________________________________________________
 00740 ! <Updateable Region: ERTN>
-00750 ERTN: let fnerror(program$,err,line,act$,"xit")
+00750 ERTN: fnerror(program$,err,line,act$,"xit")
 00760   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00770   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00780   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

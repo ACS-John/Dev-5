@@ -15,7 +15,7 @@
 32100       if ytdp=>minamt then 
 32120         if seltp=0 or seltp=typ then 
 32140           mat box=(0)
-32160           if typ<1 or typ>8 then let typ=1
+32160           if typ<1 or typ>8 then typ=1
 32180           box(typ)=ytdp
 32200           fn1099print(vn$,nam$,mat ad$,ss$,mat box)
 32220         end if
@@ -26,9 +26,9 @@
 36020   close #payee: ioerr ignore
 36040   close #trans: ioerr ignore
 36060   fn1099print_close
-36080 XIT: let fnxit
+36080 XIT: fnxit
 38000 ! <Updateable Region: ERTN>
-38020 ERTN: let fnerror(program$,err,line,act$,"xit")
+38020 ERTN: fnerror(program$,err,line,act$,"xit")
 38040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 38060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 38080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

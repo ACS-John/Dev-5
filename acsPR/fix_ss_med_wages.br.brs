@@ -7,15 +7,15 @@
 00130   fntop(program$,cap$="Fix WH Wages in Check History")
 00150 ! 
 00160   gosub READ_COMPANY_INFO
-00162   let mcr=mcr*.01
+00162   mcr=mcr*.01
 00170   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00180 RD_HIST: read #4,using F_HIST: heno,tdn,prdate,ckno,mat tdc,mat tcp eof END_HIST
 00190 F_HIST: form pos 1,n 8,n 3,pd 6,n 7,5*pd 3.2,37*pd 5.2
-00192   if tcp(2)=round(tcp(31)*ssrate1,2) then let tdc(7)=tcp(31) else let tdc(7)=round(tcp(2)/ssrate1,2)
-00210   if tcp(3)=round(tcp(31)*mcr,2) then let tdc(8)=tcp(31) else let tdc(8)=round(tcp(3)/mcr,2) ! calculate medicare wages
+00192   if tcp(2)=round(tcp(31)*ssrate1,2) then tdc(7)=tcp(31) else tdc(7)=round(tcp(2)/ssrate1,2)
+00210   if tcp(3)=round(tcp(31)*mcr,2) then tdc(8)=tcp(31) else tdc(8)=round(tcp(3)/mcr,2) ! calculate medicare wages
 00220   rewrite #4,using F_HIST: heno,tdn,prdate,ckno,mat tdc,mat tcp
 00230   goto RD_HIST
-00240 ERTN: let fnerror(program$,err,line,act$,"xit")
+00240 ERTN: fnerror(program$,err,line,act$,"xit")
 00250   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00260   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00270   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -27,4 +27,4 @@
 00330   close #1: 
 00340   return 
 00350 END_HIST: stop 
-00360 XIT: let fnxit
+00360 XIT: fnxit

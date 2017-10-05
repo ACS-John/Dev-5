@@ -19,18 +19,18 @@
 24020 ! /r
 30000 SCREEN1: ! r:
 30020   fntos(sn$="UBUsage")
-30040   let respc=0
+30040   respc=0
 30120   fnlbl(2,1,"Billing Date:",32,1)
 30140   fntxt(2,34,8,0,1,"1")
-30160   let resp$(resp_billingDate:=respc+=1)=str$(filterBillingDate)
+30160   resp$(resp_billingDate:=respc+=1)=str$(filterBillingDate)
 30180   fnlbl(3,1,"Route Number:",32,1)
 30200   fncmbrt2(3,34)
-30220   let resp$(respc_routeFilter:=respc+=1)="[All]"
+30220   resp$(respc_routeFilter:=respc+=1)="[All]"
 30240   fnlbl(5,1,"Sequence:",32,1)
 30260   fnopt(5,34,'Route/Sequence  (includes totals by route)')
-30280   let resp$(respc_sequenceRoute:=respc+=1)='True'
+30280   resp$(respc_sequenceRoute:=respc+=1)='True'
 30300   fnopt(6,34,'Account')
-30320   let resp$(respc_sequenceAccount:=respc+=1)='False'
+30320   resp$(respc_sequenceAccount:=respc+=1)='False'
 30340   fncmdset(3)
 30360   fnacs(sn$,0,mat resp$,ck)
 30380   if ck=5 then goto XIT
@@ -41,8 +41,8 @@
 30500     let filterRoute=val(resp$(respc_routeFilter))
 30520   end if 
 30540   if filterBillingDate<10100 or filterBillingDate>123199 then goto SCREEN1
-30600   if resp$(respc_sequenceRoute)='True' then let reportSequence=sequenceRoute
-30620   if resp$(respc_sequenceAccount)='True' then let reportSequence=sequenceAccount
+30600   if resp$(respc_sequenceRoute)='True' then reportSequence=sequenceRoute
+30620   if resp$(respc_sequenceAccount)='True' then reportSequence=sequenceAccount
 30630   let filterBillingDateCcyymdd=fndate_mmddyy_to_ccyymmdd(filterBillingDate)
 30640   if reportSequence=sequenceAccount then 
 30660     open #hCustomerForReport:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -61,7 +61,7 @@
 48040   F_Customer: form pos 1,c 10,4*c 30,pos 217,15*pd 5,pos 296,pd 4,pos 1741,n 2
 48050   if reportSequence=sequenceAccount and filterRoute and route<>filterRoute then goto NextCustomer
 48060   !  enable prior billing dates !  if CustomerLastBillingDate=filterBillingDate then goto L570
-48080   let d(1)=d(3)=d(5)=d(7)=d(9)=d(11)=0
+48080   d(1)=d(3)=d(5)=d(7)=d(9)=d(11)=0
 48100   restore #h_trans,key>=z$&"         ": nokey L570
 48120   do ! L520: ! 
 48130     ! read #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': transAcct$,transDate,tcode,tamount,mat tg,s1read,s1use,s3read,s3usage,s5read,s5use,tbal,pcode eof L570
@@ -69,12 +69,12 @@
 48160     if transAcct$<>z$ then goto L570
 48210   loop until transDate=filterBillingDateCcyymdd
 48220   ! L560: ! 
-48240   let d(1)=s1read
-48260   let d(3)=s1use
-48280   let d(5)=s3read
-48300   let d(7)=s3usage
-48320   let d(9)=s5read
-48340   let d(11)=s5use
+48240   d(1)=s1read
+48260   d(3)=s1use
+48280   d(5)=s3read
+48300   d(7)=s3usage
+48320   d(9)=s5read
+48340   d(11)=s5use
 48360   L570: ! 
 48380   if filterRoute and route<>filterRoute then 
 48400       goto TOTAL_AND_FINISH
@@ -101,26 +101,26 @@
 56080     dim heading$*212
 56100     dim heading2$*212
 56120     if service1enabled+service3enabled+service4enabled=1 then
-56140     let heading$=rpt$(' ',16+7)   !  i don't know why, but it works.
+56140     heading$=rpt$(' ',16+7)   !  i don't know why, but it works.
 56160     else
-56180     let heading$=rpt$(' ',16)
+56180     heading$=rpt$(' ',16)
 56200     end if
-56220     let heading2$=""
-56240     let reportWidth=32
+56220     heading2$=""
+56240     reportWidth=32
 56260     if service1enabled then 
-56280       let heading$=heading$&" {\ul            Water           }"
-56300       let heading2$=heading2$&" {\ul   Reading   Current       YTD}"
-56320       let reportWidth+=30
+56280       heading$=heading$&" {\ul            Water           }"
+56300       heading2$=heading2$&" {\ul   Reading   Current       YTD}"
+56320       reportWidth+=30
 56340     end if 
 56360     if service3enabled then 
-56380       let heading$=heading$&"   {\ul       "&serviceName$(3)(1:12)&"         }"
-56400       let heading2$=heading2$&" {\ul   Reading   Current       YTD}"
-56420       let reportWidth+=30
+56380       heading$=heading$&"   {\ul       "&serviceName$(3)(1:12)&"         }"
+56400       heading2$=heading2$&" {\ul   Reading   Current       YTD}"
+56420       reportWidth+=30
 56440     end if 
 56460     if service4enabled then 
-56480       let heading$=heading$&"   {\ul       "&serviceName$(4)(1:12)&"         }"
-56500       let heading2$=heading2$&" {\ul   Reading   Current       YTD}" ! gas used for something other than gas
-56520       let reportWidth+=30
+56480       heading$=heading$&"   {\ul       "&serviceName$(4)(1:12)&"         }"
+56500       heading2$=heading2$&" {\ul   Reading   Current       YTD}" ! gas used for something other than gas
+56520       reportWidth+=30
 56540     end if 
 56560     ! /r
 56580   end if
@@ -146,12 +146,12 @@
 58420     end if 
 58460     pr #255: line$ pageoflow NEWPGE
 58480     oldroute=route
-58500     let t(1,1)=t(1,1)+d(3)
-58520     let t(1,2)=t(1,2)+d(4)
-58540     let t(2,1)=t(2,1)+d(7)
-58560     let t(2,2)=t(2,2)+d(8)
-58580     let t(3,1)=t(3,1)+d(11)
-58600     let t(3,2)=t(3,2)+d(12)
+58500     t(1,1)=t(1,1)+d(3)
+58520     t(1,2)=t(1,2)+d(4)
+58540     t(2,1)=t(2,1)+d(7)
+58560     t(2,2)=t(2,2)+d(8)
+58580     t(3,1)=t(3,1)+d(11)
+58600     t(3,2)=t(3,2)+d(12)
 58610   end if
 58620 return  ! /r
 58640 TOTAL_AND_FINISH: ! r:
@@ -200,9 +200,9 @@
 61820   mat t=(0)
 61860   s9=0
 61900 return  ! /r
-62000 XIT: let fnxit
+62000 XIT: fnxit
 66000 ! <Updateable Region: ERTN>
-66020 ERTN: let fnerror(program$,err,line,act$,"xit")
+66020 ERTN: fnerror(program$,err,line,act$,"xit")
 66040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 66060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 66080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

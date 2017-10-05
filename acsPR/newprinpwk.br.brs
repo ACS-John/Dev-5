@@ -37,7 +37,7 @@
 00400   close #2: ioerr L430
 00410   pr #255,using L420: "Totals",rpt$("  ==========",3)
 00420 L420: form pos 11,c 33,skip 1,pos 57,c 36,skip 1
-00430 L430: let fncloseprn
+00430 L430: fncloseprn
 00440   fnxit
 00450 ! ______________________________________________________________________
 00460 HDR: ! 
@@ -52,12 +52,12 @@
 00550   return 
 00560 ! ______________________________________________________________________
 00570 ! <Updateable Region: ERTN>
-00580 ERTN: let fnerror(program$,err,line,act$,"xit")
+00580 ERTN: fnerror(program$,err,line,act$,"xit")
 00590   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00610   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00620 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00630 ! /region
 00640 ! ______________________________________________________________________
-00650 XIT: let fnxit
+00650 XIT: fnxit
 00660 ! ______________________________________________________________________

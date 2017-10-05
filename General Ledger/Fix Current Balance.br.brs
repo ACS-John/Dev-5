@@ -11,7 +11,7 @@
 00320   fnGetFundList(mat fund_list)
 28000   ! r: debug setup
 28020              if env$('acsdeveloper')<>'' then 
-28040                let debug=1
+28040                debug=1
 28060                debug_gl$=' 51   830  0'
 28080              end if
 28100   ! /r
@@ -80,11 +80,11 @@
 52180     end if 
 52200     if gl$<=trim$(last_retained_earnings_acct$(fund_which)) then 
 52220 !     pr '"'&gl$&'"<="'&trim$(last_retained_earnings_acct$(fund_which))&'" so it IS a retained earnings account - fund:'&str$(fund_which)
-52240       let iarea_return=1
+52240       iarea_return=1
 52260 !     pause
 52280     else 
 52300 !     pr '"'&gl$&'">"'&trim$(last_retained_earnings_acct$(fund_which))&'" so it is NOT a retained earnings account - fund:'&str$(fund_which)
-52320       let iarea_return=0
+52320       iarea_return=0
 52340 !     pause
 52360     end if 
 52380     fn_is_a_retained_earn_account=iarea_return
@@ -108,28 +108,28 @@
 54310 lc+=1
 54320   fnlbl(lc+=1,1,'Starting Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
 54340   fntxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
-54360   let resp$(resp_dateStart=rc+=1)=date$(dayStart,'ccyymmdd')
+54360   resp$(resp_dateStart=rc+=1)=date$(dayStart,'ccyymmdd')
 54380   fnlbl(lc+=1,1,'Ending Date:',mylen,1,0,0,0,"Enter a date to filter results or blank for all")
 54400   fntxt(lc,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",0) 
-54420   let resp$(resp_dateEnd=rc+=1)=date$(dayEnd,'ccyymmdd')
+54420   resp$(resp_dateEnd=rc+=1)=date$(dayEnd,'ccyymmdd')
 56000 ! 
 56020     lc+=1 : col3_pos=mypos+20
-56410     let resp_lrea_fund_1=rc+1
+56410     resp_lrea_fund_1=rc+1
 56420     if use_dept then 
 56440       col4_pos=col3_pos+10
 56460       fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account(s)')
 56500       for fund_item=1 to udim(mat fund_list)
 56520         fnlbl(lc+=1,col3_pos,"Fund "&str$(fund_list(fund_item))&":",9,1)
 56540         fnqgl(lc,col4_pos)
-56560         let rc+=1
-56580         fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(rc)) : let resp$(rc)=fnrgl$(resp$(rc))
+56560         rc+=1
+56580         fncreg_read("last retained earnings account - fund "&str$(fund_list(fund_item)),resp$(rc)) : resp$(rc)=fnrgl$(resp$(rc))
 56600       next fund_item
 56620     else 
 56630       col4_pos=col3_pos+32
 56640       fnlbl(lc+=1,col3_pos,'Last Retained Earnings Account:',31,1)
 56660       fnqgl(lc,col4_pos)
-56680       let rc+=1
-56700       fncreg_read("last retained earnings account - no fund ",resp$(rc)) : let resp$(rc)=fnrgl$(resp$(rc))
+56680       rc+=1
+56700       fncreg_read("last retained earnings account - no fund ",resp$(rc)) : resp$(rc)=fnrgl$(resp$(rc))
 56720     end if 
 58000   fncmdset(2)
 58020   fnacs(sn$,0,mat resp$,ckey)
@@ -143,7 +143,7 @@
 58180     fncreg_write(cap$&': enableProcessAccumulatedTrans',enableProcessAccumulatedTrans$)
 58200     fncreg_write(cap$&': dayStart',str$(dayStart))
 58220     fncreg_write(cap$&': dayEnd',str$(dayEnd))
-59000     let rc=resp_lrea_fund_1-1
+59000     rc=resp_lrea_fund_1-1
 59020     if use_dept then 
 59030       mat last_retained_earnings_acct$(udim(mat fund_list))
 59040       for fund_item=1 to udim(mat fund_list)
@@ -158,7 +158,7 @@
 59220   fn_theScreen=theScreenReturn
 59920 fnend
 65000 ! <Updateable Region: ERTN>
-65020 ERTN: let fnerror(program$,err,line,act$,"xit")
+65020 ERTN: fnerror(program$,err,line,act$,"xit")
 65040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 65060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 65080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -169,9 +169,9 @@
 70040   restore #hGlTrans:
 71000   do 
 71020     read #hGlTrans,using fTransBoth: trgl$,tr_date,tr_amt eof caFinis
-71080     if trgl$(1:3)  ="   " then let trgl$(1:3)  ="  0"
-71100     if trgl$(4:9)  ="   " then let trgl$(4:9)  ="  0"
-71120     if trgl$(10:12)="   " then let trgl$(10:12)="  0"
+71080     if trgl$(1:3)  ="   " then trgl$(1:3)  ="  0"
+71100     if trgl$(4:9)  ="   " then trgl$(4:9)  ="  0"
+71120     if trgl$(10:12)="   " then trgl$(10:12)="  0"
 73000     if trgl$=gln$ then 
 73020         if debug and gln$=debug_gl$ then
 73040           pr 'adding $'&str$(tr_amt)&' from '&date$(dayTran,'mm/dd/ccyy')&' from Current Transactions'
@@ -189,9 +189,9 @@
 81020     read #hAcTrans,using fTransBoth: trgl$,tr_date,tr_amt eof aaFinis
 81040     dayTran=days(tr_Date,'mmddyy')
 81060     if (dayStart=0 or dayTran=>dayStart) and (dayEnd=0 or dayTran<=dayEnd) then
-81080       if trgl$(1:3)  ="   " then let trgl$(1:3)  ="  0"
-81100       if trgl$(4:9)  ="   " then let trgl$(4:9)  ="  0"
-81120       if trgl$(10:12)="   " then let trgl$(10:12)="  0"
+81080       if trgl$(1:3)  ="   " then trgl$(1:3)  ="  0"
+81100       if trgl$(4:9)  ="   " then trgl$(4:9)  ="  0"
+81120       if trgl$(10:12)="   " then trgl$(10:12)="  0"
 83000       if trgl$=gln$ then 
 83020         if debug and gln$=debug_gl$ then
 83040           pr 'adding $'&str$(tr_amt)&' from '&date$(dayTran,'mm/dd/ccyy')&' from Accumulated Transactions'

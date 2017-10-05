@@ -16,7 +16,7 @@
 00140 ! ______________________________________________________________________
 00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00160   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
-00170   let prtcat$="N"
+00170   prtcat$="N"
 00180   if fnprocess=1 then goto L460
 00190 ! ______________________________________________________________________
 00200   pr newpage
@@ -27,27 +27,27 @@
 00250   pr #101,fields "2,1,Cc 53,R,N": "Company Number "&str$(cno)
 00260   pr #101,fields "4,2,Cr 30,N": "Report Heading Date:"
 00270   pr #101,fields "5,2,Cr 30,n": "Print Category Names (Y/N):"
-00280   let io1$(1)="4,33,C 20,UT,N"
-00290   let io1$(2)="5,33,Cu 1,UT,N"
+00280   io1$(1)="4,33,C 20,UT,N"
+00290   io1$(2)="5,33,Cu 1,UT,N"
 00300   pr f "15,30,C 10,B,1": "Print (F1)"
 00310   pr f "15,41,C 09,B,5": "Exit (F5)"
 00320 L320: rinput #101,fields mat io1$: dat$,prtcat$ conv L320
-00330   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+00330   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 00340   if cmdkey>0 then goto L410 else ce=curfld
 00350 L350: ce=ce+1: if ce>udim(io1$) then ce=1
-00360 L360: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",9) !:
+00360 L360: io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",9) !:
         if ce1=0 then goto L350
-00370   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L320
-00380 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+00370   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L320
+00380 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 00390   ce=cnt+1
 00400 ERR1: pr f "24,78,C 1": bell : goto L360
 00410 L410: if cmdkey=5 then goto XIT
 00420   if prtcat$<>"Y" and prtcat$<>"N" then ce=2: goto ERR1
-00430   let dattab=60-len(rtrm$(dat$))/2
+00430   dattab=60-len(rtrm$(dat$))/2
 00440   fndat(dat$,2)
 00450 ! ______________________________________________________________________
 00460 L460: pr newpage
-00470   let message$="Printing: please wait"
+00470   message$="Printing: please wait"
 00480   fnwait (102,cap$,message$,1)
 00490   on fkey 5 goto L710
 00500   fnopenprn
@@ -71,7 +71,7 @@
 00680 L680: exit eof L690,nokey L690
 00690 L690: close #1: 
 00700   close #2: 
-00710 L710: let fncloseprn
+00710 L710: fncloseprn
 00720   goto XIT
 00730 ! ______________________________________________________________________
 00740 HDR: ! 
@@ -93,10 +93,10 @@
 00880   gosub HDR
 00890 L890: return 
 00900 ! ______________________________________________________________________
-00910 XIT: let fnxit
+00910 XIT: fnxit
 00920 ! ______________________________________________________________________
 00930 ! <Updateable Region: ERTN>
-00940 ERTN: let fnerror(program$,err,line,act$,"xit")
+00940 ERTN: fnerror(program$,err,line,act$,"xit")
 00950   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00960   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00970   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

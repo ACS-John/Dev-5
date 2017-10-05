@@ -37,53 +37,53 @@
 00230   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.H"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00240 ! 
 00250 SCREEN1: ! 
-00260   a$="" : let prtbkno=0
+00260   a$="" : prtbkno=0
 00270   fntos(sn$="PrtBl35x75") !:
-        let pf=26 : ll=24 !:
-        let respc=0
+        pf=26 : ll=24 !:
+        respc=0
 00280   fnlbl(1,1,"Service From:",ll,1)
 00290   fntxt(1,pf,8,8,1,"1",0,tt$) !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d2)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d2)
 00300   fnlbl(2,1,"Service To:",ll,1)
 00310   fntxt(2,pf,8,8,1,"1") !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d3)
 00320   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00330   fntxt(3,pf,8,8,1,"1",0,tt$) !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 00340   fnlbl(4,1,"Message on Bill:",ll,1)
 00350   fntxt(4,pf,50) !:
-        let resp$(respc+=1)=mg$(1)
+        resp$(respc+=1)=mg$(1)
 00360   fntxt(5,pf,50) !:
-        let resp$(respc+=1)=mg$(2)
+        resp$(respc+=1)=mg$(2)
 00370   fntxt(6,pf,50) !:
-        let resp$(respc+=1)=mg$(3)
+        resp$(respc+=1)=mg$(3)
 00380   fnlbl(7,1,"Date of Billing:",ll,1)
 00390   fntxt(7,pf,8,8,1,"1") !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00400   fnlbl(8,1,"Starting Route/Sequence:",ll,1)
 00410   fncombof("ubm-act-nam",8,pf,40,env$('Q')&"\UBmstr\Customer.h"&str$(cno),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&str$(cno),2) !:
-        let resp$(respc+=1)="[All]"
+        resp$(respc+=1)="[All]"
 00420   fnlbl(9,1,"Route Number:",ll,1)
 00430   fncmbrt2(9,pf) !:
-        let resp$(respc+=1)="[All]"
+        resp$(respc+=1)="[All]"
 00440   fnchk(10,pf,"Select Accounts to Print",1) !:
-        let resp$(respc+=1)="False"
+        resp$(respc+=1)="False"
 00450   fncmdset(3)
 00460   fnacs(sn$,0,mat resp$,ck)
 00470   if ck=5 then goto XIT
-00480   let d1 = val(resp$(7)) !:
-        let d2x=val(resp$(1)) !:
-        let d3x= val(resp$(2)) !:
-        let d4 = val(resp$(3)) !:
-        let mg$(1) = resp$(4) !:
-        let mg$(2) = resp$(5) !:
-        let mg$(3) = resp$(6)
+00480   d1 = val(resp$(7)) !:
+        d2x=val(resp$(1)) !:
+        d3x= val(resp$(2)) !:
+        d4 = val(resp$(3)) !:
+        mg$(1) = resp$(4) !:
+        mg$(2) = resp$(5) !:
+        mg$(3) = resp$(6)
 00490   if resp$(8)="[All]" then !:
           a$="" else !:
           a$ = lpad$(trim$(resp$(8)(1:9)),9)
 00500   if resp$(9)="[All]" then !:
-          let prtbkno=0 else !:
-          let prtbkno = val(resp$(9))
+          prtbkno=0 else !:
+          prtbkno = val(resp$(9))
 00510   if resp$(10)="True" then sl1=1 else sl1=0
 00520   if trim$(a$)<>"" then !:
           read #2,using L530,key=a$: holdz$,route,sequence nokey SCREEN1 !:
@@ -110,8 +110,8 @@
 00680   read #2,using L690: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,escrow,d2,d3 eof F5_CANCEL
 00690 L690: form pos 1,c 10,4*c 30,c 12,pos 147,pd 2,pos 157,11*pd 4.2,pos 1821,n 1,pos 217,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 385,pd 3,pos 388,10*pd 5.2,pos 1741,n 2,pos 1859,pd 5.2,pos 1750,2*n 6
 00700   mat ba=(0): budget=0
-00710   if d2=0 and d2x>0 then let d2=d2x
-00720   if d3=0 and d3x>0 then let d3=d3x
+00710   if d2=0 and d2x>0 then d2=d2x
+00720   if d3=0 and d3x>0 then d3=d3x
 00730   read #81,using 'Form POS 1,C 10,PD 4,12*PD 5.2',key=z$: x$,mat ba nokey L750
 00740   for j=2 to 12: budget=budget+ba(j): next j ! get total budget amount
 00750 L750: if prtbkno=0 then goto L770
@@ -127,25 +127,25 @@
 00850   e1=0 : mat pe$=("")
 00860   for j=1 to 4
 00870     if trim$(ba$(j))<>"" then !:
-            let pe$(e1+=1)=ba$(j)
+            pe$(e1+=1)=ba$(j)
 00880   next j
 00890   goto L1030
 00900 ! ______________________________________________________________________
 00910 L910: e1=0 : mat pe$=("")
 00920   for j=2 to 4
 00930     if rtrm$(e$(j))<>"" then !:
-            e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : pe$(e1)=e$(j)
 00940   next j
 00950   goto L1030
 00960 ! ______________________________________________________________________
 00970 F5_CANCEL: ! 
 00980   close #1: ioerr L990
 00990 L990: close #3: ioerr L1000
-01000 L1000: let fncloseprn
+01000 L1000: fncloseprn
 01010   goto ENDSCR
 01020 ! ______________________________________________________________________
 01030 L1030: ! 
-01040   let pb=bal-g(11)
+01040   pb=bal-g(11)
 01050 ! ______________print bill routine______________________________________
 01060   gosub PRINTBILL
 01070 ! _____________end of pr routine______________________________________
@@ -159,7 +159,7 @@
 01140   if z$<>"" then !:
           fnlbl(3,1,"Last Account entered was "&z$,44,1)
 01150   fncmbact(1,17) ! !:
-        let resp$(1)=a$
+        resp$(1)=a$
 01160   fncmdkey("Add",1,1,0) !:
         fncmdkey("Print",5,0,1)
 01170   fnacs(sn$,0,mat resp$,ck)
@@ -183,21 +183,21 @@
 01330   return 
 01340 ! ______________________________________________________________________
 01350 ENDSCR: ! pr totals screen
-01360   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
+01360   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01370   fntos(sn$="Bills-Total") !:
-        let mylen=23 : let mypos=mylen+2 !:
-        let respc=0
+        mylen=23 : mypos=mylen+2 !:
+        respc=0
 01380   fnlbl(1,1,"Total Bills Printed:",mylen,1)
 01390   fntxt(1,mypos,8,0,1,"",1) !:
-        let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
+        resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 01400   fncmdset(52) !:
         fnacs(sn$,0,mat resp$,ck)
 01410   goto XIT
 01420 ! ______________________________________________________________________
-01430 XIT: let fnxit
+01430 XIT: fnxit
 01440 ! ______________________________________________________________________
 01450 ! <Updateable Region: ERTN>
-01460 ERTN: let fnerror(program$,err,line,act$,"xit")
+01460 ERTN: fnerror(program$,err,line,act$,"xit")
 01470   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01480   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01490   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -205,7 +205,7 @@
 01510 ! /region
 01520 ! ______________________________________________________________________
 01530 PRINTBILL: ! 
-01540   let pb=bal-g(11)
+01540   pb=bal-g(11)
 01550   pr #255: ""
 01560   pr #255,using 'Form POS 43,C 30': e$(1) !:
         pr #255: "" !:
@@ -236,8 +236,8 @@
 01660   pr #255,using "form pos 12,c 30,pos 51,c 10,pos 64,pic(zz/zz/zz)": pe$(2),z$,d4
 01670   pr #255,using "form pos 12,c 30": pe$(3)
 01680   pr #255,using "form pos 12,c 30,pos 51,n 10.2,pos 62,n 10.2": pe$(4),bal+g(10),bal
-01690   if trim$(mg$(1))="" then let mg$(1)="Emergency vehicles need house numbers-please help"
-01700   if trim$(mg$(2))="" then let mg$(2)="If you smell gas call 472-6556 or 472-3535"
+01690   if trim$(mg$(1))="" then mg$(1)="Emergency vehicles need house numbers-please help"
+01700   if trim$(mg$(2))="" then mg$(2)="If you smell gas call 472-6556 or 472-3535"
 01710   pr #255,using "Form pos 1,c 60,skip 1,pos 1,c 60,skip 1,pos 1,c 60": mg$(1),mg$(2)
 01720   pr #255: newpage
 01730   return  ! read next record

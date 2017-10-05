@@ -15,16 +15,16 @@
 00142   read #20,using "Form POS 1,10*C 20",rec=1: mat servicename$
 00144   close #20: 
 00150   gosub SCREEN1
-00160   let hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
+00160   hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
 00170   for j=1 to 10
 00180     let x2=pos(trim$(servicename$(j))," ",1)
 00182     if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
 00190     if trim$(servicename$(j))<>"" then 
 00192       scr1$(sz1+=1)=servicename$(j)
-00194       let hd1$=hd1$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:7)),7)&"}"
+00194       hd1$=hd1$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:7)),7)&"}"
 00196     end if 
 00200   next j
-00210   let hd1$=hd1$&"  {\ul Customer Name               }"
+00210   hd1$=hd1$&"  {\ul Customer Name               }"
 00220   mat scr1$(sz1)
 00230   mat alloc(sz1)
 00240   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -43,17 +43,17 @@
 40140   if hd1<>0 and tdate>hd1 then goto READ_TRANS
 40160   if tamount=0 then goto READ_TRANS
 40180   if tcode<3 or tcode>5 then goto READ_TRANS ! don't pr charges or penalties
-40200   if tcode=3 then let ti2=1 ! REG.COLLECTION
-40220   if tcode=4 then let ti2=2 ! CREDIT MEMO
-40240   if tcode=5 then let ti2=3 ! DEBIT MEMO
-40260   if ti2=3 then let r(1,1)-=tamount else let r(1,1)+=tamount
-40280   let r(1,ti2+1)+=tamount
+40200   if tcode=3 then ti2=1 ! REG.COLLECTION
+40220   if tcode=4 then ti2=2 ! CREDIT MEMO
+40240   if tcode=5 then ti2=3 ! DEBIT MEMO
+40260   if ti2=3 then r(1,1)-=tamount else r(1,1)+=tamount
+40280   r(1,ti2+1)+=tamount
 40300   let x=0
 40320   for j=1 to 10
 40340     if trim$(servicename$(j))<>"" then 
 40360       alloc(x+=1)=tg(j)
-40380       if ti2=3 then let r(x+3,1)-=tg(j) else let r(x+3,1)+=tg(j)
-40400       let r(x+3,ti2+1)+=tg(j)
+40380       if ti2=3 then r(x+3,1)-=tg(j) else r(x+3,1)+=tg(j)
+40400       r(x+3,ti2+1)+=tg(j)
 40420     end if 
 40440   next j
 40460   c$=" "
@@ -68,12 +68,12 @@
 40640   if extra1<0 or extra1>200 then extra1=200
 40660   if sum(alloc)<>tamount then 
 40700     mat ml$(3)
-40720     let ml$(1)="The breakdown on a collection transaction dated "&str$(tdate)& " for customer "&z$
-40740     let ml$(2)="does not balance.  Your totals will be off by "& trim$(cnvrt$("pic($$$,$$$.## cr)",tamount-sum(alloc)))&"."
-40750     let ml$(3)="(transaction record number: "&str$(rec(h_trans))&')'
+40720     ml$(1)="The breakdown on a collection transaction dated "&str$(tdate)& " for customer "&z$
+40740     ml$(2)="does not balance.  Your totals will be off by "& trim$(cnvrt$("pic($$$,$$$.## cr)",tamount-sum(alloc)))&"."
+40750     ml$(3)="(transaction record number: "&str$(rec(h_trans))&')'
 40760     fnmsgbox(mat ml$,resp$,cap$,49)
 40780   end if 
-40800   let route(extra1)+=tamount
+40800   route(extra1)+=tamount
 40820   if resp$="Cancel" then goto XIT
 40840   goto READ_TRANS
 40860 ! ______________________________________________________________________
@@ -100,32 +100,32 @@
 66320   end if 
 66330   fncloseprn
 66340   goto XIT ! /r
-66350 XIT: let fnxit
+66350 XIT: fnxit
 66360 IGNORE: continue 
 68000 SCREEN1: ! r:
 68020   fntos(sn$="UBColPrn")
-68040   let mylen=33 : let mypos=mylen+2
+68040   mylen=33 : mypos=mylen+2
 68060   fnlbl(1,1,"Report Heading Date:",mylen,1)
 68080   fntxt(1,mypos,20)
-68100   let resp$(1)=dat$
+68100   resp$(1)=dat$
 68120   fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
 68140   fntxt(2,mypos,10,0,1,"3",0,"First day of the period to be printed. (ccyymmdd format)")
-68160   let resp$(2)=str$(ld1)
+68160   resp$(2)=str$(ld1)
 68180   fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
 68200   fntxt(3,mypos,10,0,1,"3",0,"Last day of the period to be printed. (ccyymmdd format)")
-68220   let resp$(3)=str$(hd1)
+68220   resp$(3)=str$(hd1)
 68240   fnchk(4,mypos,"Include Details:",1)
-68260   let resp$(4)="True"
+68260   resp$(4)="True"
 68280   fnchk(5,mypos,"Show Totals by Route:",1)
-68300   let resp$(5)="False"
+68300   resp$(5)="False"
 68320   fncmdset(3)
 68340   fnacs(sn$,win,mat resp$,ck)
 68360   if ck=5 then goto XIT
-68380   let dat$=resp$(1)
+68380   dat$=resp$(1)
 68400   ld1=val(resp$(2))
-68420   let hd1=val(resp$(3))
-68440   let ti1$=resp$(4)
-68460   if resp$(5)="True" then let routetotals=1
+68420   hd1=val(resp$(3))
+68440   ti1$=resp$(4)
+68460   if resp$(5)="True" then routetotals=1
 68480   fndat(dat$,2)
 68500   return  ! /r
 70000 HDR: ! r:
@@ -141,7 +141,7 @@
 70162   end if 
 70180   return  ! /r
 72000 ! <Updateable Region: ERTN>
-72020 ERTN: let fnerror(program$,err,line,act$,"xit")
+72020 ERTN: fnerror(program$,err,line,act$,"xit")
 72040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 72060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 72080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

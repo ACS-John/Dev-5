@@ -12,10 +12,10 @@
 00120   if fnprocess=1 then goto GET_GOING
 00130 SCREEN1: ! 
 00140   fntos(sn$='Close_Month')
-00142   lc=0 : let mylen=22 : let mypos=mylen+2
+00142   lc=0 : mylen=22 : mypos=mylen+2
 00150   fnlbl(lc+=1,1,"Closing Period Number:",mylen,right)
 00160   fntxt(lc,mypos,2,0,0,'number')
-00162   let resp$(1)=str$(fnactpd)
+00162   resp$(1)=str$(fnactpd)
 00170   fncmdset(2)
 00180   fnacs(sn$,0,mat resp$,ckey)
 00190   if ckey=5 then goto XIT
@@ -89,10 +89,10 @@
 03160     fnindex_it(env$('Q')&"\GLmstr\ACTRANS.h"&str$(cno),env$('Q')&"\GLmstr\ACTRIDX.h"&str$(cno),"1/71/17/13 12/2/2/4")
 03180   fnend 
 03200 ! ______________________________________________________________________
-50830 XIT: let fnxit
+50830 XIT: fnxit
 50840 ! ______________________________________________________________________
 50850 ! <Updateable Region: ERTN>
-50860 ERTN: let fnerror(program$,err,line,act$,"NO")
+50860 ERTN: fnerror(program$,err,line,act$,"NO")
 50870   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 50880   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 50890   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

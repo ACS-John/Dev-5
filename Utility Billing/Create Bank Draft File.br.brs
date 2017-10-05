@@ -21,27 +21,27 @@
 18260 goto SCREEN1 ! /r
 22000 SCREEN1: ! r:
 22020   fntos(sn$="BKDraft")
-22040   let mylen=13 
-22060   let mypos=mylen+2
-22080   let respc=0
+22040   mylen=13 
+22060   mypos=mylen+2
+22080   respc=0
 22100   fnlbl(1,1,"Billing Date:",mylen,1)
 22120   fntxt(1,mypos,8,0,1,"1")
-22140   let resp$(respc+=1)=str$(d1)
+22140   resp$(respc+=1)=str$(d1)
 22160   fnlbl(2,1,"Payment Date:",mylen,1)
 22180   fntxt(2,mypos,8,0,1,"1")
-22200   let resp$(respc+=1)=""
+22200   resp$(respc+=1)=""
 22220   fnlbl(3,1,"File:",mylen,1)
 22240   fntxt(3,mypos,30,128,0,"70",0,"Destination and file name.",0)
-22260   let resp$(respc_bankDraftFile:=respc+=1)=pth$
+22260   resp$(respc_bankDraftFile:=respc+=1)=pth$
 22280   fnchk(4,mypos,"Post Collections:",1)
 22300   fncmdset(2)
 22320   fnacs(sn$,0,mat resp$,ck)
 22340   if ck=5 then goto XIT
-22360   let d1=val(resp$(1))
-22380   let d2=val(resp$(2))
-22400   let pth$=trim$(resp$(respc_bankDraftFile))
+22360   d1=val(resp$(1))
+22380   d2=val(resp$(2))
+22400   pth$=trim$(resp$(respc_bankDraftFile))
 22420   fnureg_write('Bank Draft File',pth$)
-22440   if resp$(4)="True" then let postub=1
+22440   if resp$(4)="True" then postub=1
 22460 goto initialization ! /r
 26000 initialization: ! r: initialization
 26020   open #22: "Name="&env$('temp')&"\BkDraft_Tmp_22."&session$&",RecL=94,Replace",display,output
@@ -61,36 +61,36 @@
 28100   if uprc$(df$)="Y" then gosub DETAIL1
 28120 goto READ_CUSTOMER ! /r
 32000 HDR1: ! r: ! FILE HEADER RECORD
-32020   let pcde=01 ! PRIORITY CODE
+32020   pcde=01 ! PRIORITY CODE
 32040   ! will need simular lines for anyone using this option; actually need to be moved to company information
-32060   if env$('client')="Sangamon" then let imd$=" 071000301" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)
-32080   if env$('client')="Monticello" then let imd$=" 071121963" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)
-32100   if env$('client')="Franklinton" then let imd$=" 061000146" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)0610001
-32120   if env$('client')="Billings" then let imd$=" 071000301" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)0610001
-32140   if env$('client')="Thomasboro" then let imd$="          " ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator) (don't know on Thomasboro
-32160   ! if env$('client')="Ashland" then let imd$=" 084000039" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator) (don't know on Thomasboro
-32180   if env$('client')="Sangamon" then let imo$=" 071102076" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
-32200   if env$('client')="Monticello" then let imo$=" 071121963" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
-32220   if env$('client')="Franklinton" then let imo$=" 065201611" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
-32240   if env$('client')="Billings" then let imo$=" 071000301" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
-32260   if env$('client')="Thomasboro" then let imo$=" 071113175" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
-32280   ! if env$('client')="Ashland" then let imo$=" 084201676" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
+32060   if env$('client')="Sangamon" then imd$=" 071000301" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)
+32080   if env$('client')="Monticello" then imd$=" 071121963" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)
+32100   if env$('client')="Franklinton" then imd$=" 061000146" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)0610001
+32120   if env$('client')="Billings" then imd$=" 071000301" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator)0610001
+32140   if env$('client')="Thomasboro" then imd$="          " ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator) (don't know on Thomasboro
+32160   ! if env$('client')="Ashland" then imd$=" 084000039" ! IMMEDIATE DESTINATION (party to which delivered - routing # of ach operator) (don't know on Thomasboro
+32180   if env$('client')="Sangamon" then imo$=" 071102076" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
+32200   if env$('client')="Monticello" then imo$=" 071121963" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
+32220   if env$('client')="Franklinton" then imo$=" 065201611" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
+32240   if env$('client')="Billings" then imo$=" 071000301" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
+32260   if env$('client')="Thomasboro" then imo$=" 071113175" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
+32280   ! if env$('client')="Ashland" then imo$=" 084201676" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
 32300   let fcd$=date$(1:2)&date$(4:5)&date$(7:8) ! FILE CREATION DATE
 32320   if env$('client')="Depoe Bay" then let fcd$=str$(d2)
 32340   if len(fcd$)=5 then let fcd$="0"&fcd$
 32360   let fct$=time$(1:2)&time$(4:5) ! FILE CREATION TIME
 32380   let fidm$="A" ! FILE ID MODIFIER
-32400   let rsz$="094" ! RECORD SIZE
+32400   rsz$="094" ! RECORD SIZE
 32420   bf$="10" ! BLOCKING FACTOR
-32440   if env$('client')="Billings" then let ion$="                      " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
-32460   if env$('client')="Thomasboro" then let ion$="Gifford State Bank    " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
-32480   ! if env$('client')="Ashland" then let ion$="Merchants & Farmers    " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
+32440   if env$('client')="Billings" then ion$="                      " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
+32460   if env$('client')="Thomasboro" then ion$="Gifford State Bank    " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
+32480   ! if env$('client')="Ashland" then ion$="Merchants & Farmers    " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32500   let fc$="1" ! FORMAT CODE
-32520   let idn$="                       " ! (23) IMMEDIATE DESTINATION NAME
-32540   if env$('client')="Sangamon" then let ion$="First Med Illinois     " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
-32560   if env$('client')="Monticello" then let ion$="First State Bank       " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
-32580   if env$('client')="Franklinton" then let ion$="Parish National Bank  " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
-32600   let rc$="0000000" ! REFERENCE CODE
+32520   idn$="                       " ! (23) IMMEDIATE DESTINATION NAME
+32540   if env$('client')="Sangamon" then ion$="First Med Illinois     " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
+32560   if env$('client')="Monticello" then ion$="First State Bank       " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
+32580   if env$('client')="Franklinton" then ion$="Parish National Bank  " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
+32600   rc$="0000000" ! REFERENCE CODE
 32620   pr #22,using L690: 1,pcde,imd$,imo$,fcd$,fct$,fidm$,rsz$,bf$,fc$,idn$,ion$,rc$,"0"
 32640   L690: form pos 1,g 1,pic(##),c 10,c 10,g 6,g 4,c 1,c 3,c 2,c 1,c 23,c 23,c 7,c 1
 32660   ! COMPANY/BATCH HEADER RECORD
@@ -126,31 +126,31 @@
 38000 DETAIL1: ! r:
 38020   pr #255,using L900: z$,e$(2),d2,bal pageoflow NEWPGE
 38040   L900: form pos 1,c 12,c 32,pic(zz/zz/zz),n 13.2,skip 1
-38060   let t1=t1+bal
-38080   let tc=bc ! TRANSACTION CODE
+38060   t1=t1+bal
+38080   tc=bc ! TRANSACTION CODE
 38100   ! l1=LEN(RTRM$(BA$))
 38120   ! cD=VAL(BA$(L1:L1)) ! CHECK DIGIT
 38140   ari=0 ! ADDENDA RECORD INDICATOR
-38160   let tn1=tn1+1
-38180   let tn$=br$&cnvrt$("PIC(#######)",tn1) ! TRACE NUMBER
+38160   tn1=tn1+1
+38180   tn$=br$&cnvrt$("PIC(#######)",tn1) ! TRACE NUMBER
 38200   pr #22,using L1000: 6,tc,dr$,da$,bal*100,z$,e$(2)(1:22),"",ari,odi$&tn$
 38220   if postub=1 then gosub WRITE_POSTING_ENTRIES
 38240   L1000: form pos 1,g 1,g 2,c 9,c 17,pic(##########),c 15,c 22,g 2,n 1,c 15
-38260   let td1=td1+bal
-38280   if env$('client')<>"Billings" then let tc1=tc1+bal
+38260   td1=td1+bal
+38280   if env$('client')<>"Billings" then tc1=tc1+bal
 38300   eh=eh+val(dr$(1:8)) ! ENTRY HASH
 38320 return  ! /r
 42000 CTRL1: ! r: COMPANY/BATCH CONTROL RECORD
 42020   scc=225 ! SERVICE CLASS CODE
 42040   eac=tn1 ! ENTRY ADDENDA COUNT
-42060   let n=d2: let m=bal: o(1)=3: let rcpt$= "BkDraft"
+42060   n=d2: m=bal: o(1)=3: rcpt$= "BkDraft"
 42080   eh$=str$(eh): let x=len(eh$): eh=val(eh$(max(1,x-9):x))
 42100   ! TD1=TOTAL DEBIT AMOUNT
 42120   ! TC1=TOTAL CREDIT AMOUNT
 42140   ! CID$=COMPANY IDENTIFICATION
-42160   let tn1=tn1+1 : let tn$=br$&cnvrt$("PIC(#######)",tn1) ! TRACE NUMBER
+42160   tn1=tn1+1 : tn$=br$&cnvrt$("PIC(#######)",tn1) ! TRACE NUMBER
 42180   if env$('client')="Billings" then 
-42200     let tn1-=1
+42200     tn1-=1
 42220   else 
 42240     pr #22,using L1126: 6,22,imo$(2:9),imo$(10:10),trim$(odi$),td1*100,"",env$('cnam')(1:22),"",0,odi$&tn$ ! putting total deposit in city's bank account ! Billings does not offset the withdrawls with a deposit.  The banker does that manually.
 42260     L1126: form pos 1,g 1,g 2,c 8,c 1,c 17,pic(##########),c 15,c 22,g 2,n 1,c 15
@@ -159,7 +159,7 @@
 42320   L1140: form pos 1,g 1,pic(###),pic(######),pic(##########),2*pic(############),c 10,c 19,c 6,c 8,pic(#######)
 42340   ! FILE CONTROL RECORD
 42360   bactr=1 ! BATCH COUNT
-42380   let tn2=tn1+4 ! total # records (all 6 records plus the 1&5 plus 8&9)
+42380   tn2=tn1+4 ! total # records (all 6 records plus the 1&5 plus 8&9)
 42400   if fp(tn2/10)>0 then blctr=int(tn2/10)+1: bkfactor=blctr*10-tn2 ! block counter and block factor
 42420   if fp(tn2/10)=0 then blctr=int(tn2/10): bkfactor=0
 42440   eac=tn1 ! entry/adgenda count (number of 6 records)
@@ -182,12 +182,12 @@
 46140 ! /r
 48000 L1370: ! r:
 48020   mat ml$(3) 
-48040   let ml$(1)="You have indicated you want to post the drafts" 
-48060   let ml$(2)="as collections to each customers account." 
-48080   let ml$(3)="Click OK to continue else Cancel to skip posting." 
+48040   ml$(1)="You have indicated you want to post the drafts" 
+48060   ml$(2)="as collections to each customers account." 
+48080   ml$(3)="Click OK to continue else Cancel to skip posting." 
 48100   fnmsgbox(mat ml$,resp$,'',1)
 48120 if resp$="OK" then gosub MERGE else goto XIT ! /r
-50000 XIT: let fnxit
+50000 XIT: fnxit
 51000 NEWPGE: pr #255: newpage : gosub HDRP1: continue 
 52000 HDRP1: ! r:
 52020   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
@@ -215,14 +215,14 @@
 56100 return  ! /r
 58000 L1640: ! r:
 58020   mat msgline$(3)
-58040   let msgline$(1)="Unable to create file: "
-58060   let msgline$(2)=pth$
-58080   let msgline$(3)='Select OK to retry.'
+58040   msgline$(1)="Unable to create file: "
+58060   msgline$(2)=pth$
+58080   msgline$(3)='Select OK to retry.'
 58100   fnmsgbox(mat msgline$,resp$,'',65)
 58120   if resp$="OK" then goto COPY_TO_DESTINATION
 58140 goto XIT  ! /r
 60000 ! <Updateable Region: ERTN>
-60020 ERTN: let fnerror(program$,err,line,act$,"xit")
+60020 ERTN: fnerror(program$,err,line,act$,"xit")
 60040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 60060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 60080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -235,11 +235,11 @@
 64060   for j=1 to 10
 64080     if order(j)=1 then alloc(x+=1)=gb(j)
 64100   next j
-64120   let m=bal : let n=d2 : o(1)=3
+64120   m=bal : n=d2 : o(1)=3
 64140   write #6,using "Form POS 1,C 10,PD 4.2,PD 4,2*N 1,POS 24,C 9,SZ1*PD 4.2,5*PD 3,PD 4.2": z$,m,n,mat o,rcpt$,mat alloc,mat bd2
 64160 return ! /r
 68000 MERGE: ! r:
-68020   let r6=0
+68020   r6=0
 68040   do
 68060     L1860: !
 68080     r6+=1
@@ -248,20 +248,20 @@
 68140     L1890: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pos 24,c 9,sz1*pd 4.2,5*pd 3,pd 4.2
 68160     if p$(1:2)="  " and m=0 then goto L1860
 68180     read #1,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=z$: bal,mat gb nokey L1860
-68200     if o(1)=3 then let tcode=3 ! collection
-68220     if o(1)=4 then let tcode=4 ! credit memo
-68240     if o(1)=5 then let tcode=5 ! debit memo
+68200     if o(1)=3 then tcode=3 ! collection
+68220     if o(1)=4 then tcode=4 ! credit memo
+68240     if o(1)=5 then tcode=5 ! debit memo
 68260     if o(1)=5 then bal+=m else bal-=m
-68280     let tmp=fndate_mmddyy_to_ccyymmdd(n)
+68280     tmp=fndate_mmddyy_to_ccyymmdd(n)
 68300     mat tg=(0): let x=0
 68320     for j=1 to 10
-68340       if trim$(srvname$(j))<>"" then let tg(j)=alloc(x+=1)
+68340       if trim$(srvname$(j))<>"" then tg(j)=alloc(x+=1)
 68360     next j
 68380     write #7,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,tmp,tcode,m,mat tg,0,0,0,0,0,0,bal,pcode
-68400     let j2=0
+68400     j2=0
 68420     for j=1 to 10
 68440       if trim$(srvname$(j))<>'' then
-68460         let j2=j2+1
+68460         j2=j2+1
 68480         if o(1)=5 then 
 68500           let gb(j)=gb(j)+alloc(j2) 
 68520         else 

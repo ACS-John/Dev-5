@@ -23,7 +23,7 @@
 00110 ! defaults
 00112 cursys$=fncursys$ : cursys_origional$=cursys$
 00120 fnreg_read(cap$&'.'&cursys$&'.'&env$('cno')&'.company_file',company_file$)
-00130 fnreg_read(cap$&'.'&cursys$&'.'&env$('cno')&'.destination_company_number',destination_company_number$) : let destination_company_number=val(destination_company_number$) conv ignore
+00130 fnreg_read(cap$&'.'&cursys$&'.'&env$('cno')&'.destination_company_number',destination_company_number$) : destination_company_number=val(destination_company_number$) conv ignore
 00140 ! /r
 00170 SCREEN1: ! r:
 00180 fntos(sn$="Company_Import_1")
@@ -40,7 +40,7 @@
 00320 company_file$=resp$(1)
 00330 destination_company_number=val(resp$(2)) : destination_company_number$=str$(destination_company_number)
 00340 cursys$=env$('cursys') ! resp$(3)
-00360 import_only=0 ! if resp$(4)='True' then let import_only=1 else let import_only=0
+00360 import_only=0 ! if resp$(4)='True' then import_only=1 else import_only=0
 00500 fnreg_write(cap$&'.'&cursys$&'.'&env$('cno')&'.company_file',company_file$)
 00520 fnreg_write(cap$&'.'&cursys$&'.'&env$('cno')&'.destination_company_number',destination_company_number$)
 00522 ! /r
@@ -51,17 +51,17 @@
 00580 fnputcno(destination_company_number) : cno=destination_company_number
 00600 fnstatus('Set active Company Number to: '&str$(destination_company_number))
 00620 ! 
-10000 let pos_point_h=pos(lwrc$(company_file$),'.h',-1)
+10000 pos_point_h=pos(lwrc$(company_file$),'.h',-1)
 10020 if ~exists(env$('at')&company_file$) then 
 10040   mat message$(2)
-10060   let message$(1)='the company_file$ ('&company_file$&') does not exist'
-10080   let message$(2)="Please correct the selected path"
+10060   message$(1)='the company_file$ ('&company_file$&') does not exist'
+10080   message$(2)="Please correct the selected path"
 10100   fnmsgbox(mat message$, response$, cap$)
 10120   goto SCREEN1
 10140 else if pos_point_h<=0 then 
 10160   mat message$(2)
-10180   let message$(1)="the source company_file$ ("&company_file$&") does not contain a .h"
-10200   let message$(2)="It must be a zip or rar file type archive, please enhance code to handle such things."
+10180   message$(1)="the source company_file$ ("&company_file$&") does not contain a .h"
+10200   message$(2)="It must be a zip or rar file type archive, please enhance code to handle such things."
 10220   fnmsgbox(mat message$, response$, cap$)
 10240   goto SCREEN1
 10260 else 
@@ -101,7 +101,7 @@
 18160     !     if env$('client')="West Accounting" then pause ! dir '&env$('Q')&'\PRmstr\dednames.h4560
 19000     if cnv_pr then 
 19020       if ~exists(env$('Q')&"\PRmstr\dednames.h"&str$(cno)) then 
-19040         if env$('client')="Merriam Woods" then let pr_cnv_medicare_is_seperated=0
+19040         if env$('client')="Merriam Woods" then pr_cnv_medicare_is_seperated=0
 19060         fnpr_conversion_department(cno, pr_cnv_medicare_is_seperated)
 19080         fnpr_conversion_add_missing(cno)
 19100       end if 
@@ -132,17 +132,17 @@
 21140   end if 
 21160   ! /r
 21180   ! r: set is_[client]
-21200   let is_french_settlement=is_merriam_woods=is_west_accounting=is_exeter=0
+21200   is_french_settlement=is_merriam_woods=is_west_accounting=is_exeter=0
 21220   if ((env$('ACSDeveloper')<>'' and destination_company_number=1880) or (env$('client')="French Settlement" and serial=33380)) then 
-21240     let is_french_settlement=1
+21240     is_french_settlement=1
 21242   else if ((env$('ACSDeveloper')<>'' and destination_company_number=1615) or (env$('client')="Exeter" and serial=31210)) then 
-21244     let is_exeter=1
+21244     is_exeter=1
 21260   else if ((env$('ACSDeveloper')<>'' and destination_company_number=2900) or (env$('client')="Merriam Woods" and serial=31702)) then 
-21280     let is_merriam_woods=1
+21280     is_merriam_woods=1
 21282   else if ((env$('ACSDeveloper')<>'' and destination_company_number=4560) or (env$('client')="West Accounting" and serial=30176)) then 
-21284     let is_west_accounting=1
+21284     is_west_accounting=1
 21286   else if ((env$('ACSDeveloper')<>'' and destination_company_number=700) or (env$('client')="Campbell")) then 
-21288     let is_campbell=1
+21288     is_campbell=1
 21300   end if 
 21320   ! /r
 21340   ! r: set cnv_[cursys]_[client]
@@ -243,9 +243,9 @@
 30310   !   it is a UB system but no ubdata directory exists - so get the rate files from ACSUB
 30320   !   copy in rates from acsUB
 32000     dim import_install_path$*256
-32020     let import_install_path$=company_import_path$(1:len(company_import_path$))
-32040     let import_install_path$=rtrm$(import_install_path$,'\')
-32060     let import_install_path$=import_install_path$(1:pos(import_install_path$,'\',-1))
+32020     import_install_path$=company_import_path$(1:len(company_import_path$))
+32040     import_install_path$=rtrm$(import_install_path$,'\')
+32060     import_install_path$=import_install_path$(1:pos(import_install_path$,'\',-1))
 32080   !  pause
 32100     if exists(env$('at')&import_install_path$&'S:\acsUB\ratemst'&company_import_extension$) then 
 32120       fnCopy(env$('at')&import_install_path$&'S:\acsUB\ratemst'&company_import_extension$,env$('Q')&'\'&cursys$&'mstr\ubdata\*.h'&str$(destination_company_number))
@@ -322,8 +322,8 @@
 54040   do 
 54060     read #h_customer,using 'Form Pos 1,C 10,pos 1741,n 2,n 7': z$,route_number,sequence_number eof UCRFA_CUSTOMER_EOF
 54080     if route_number=0 then 
-54090       let route_number=sequence_number=0
-54100       let route_number=val(z$(1:2)) conv UCRFA_SKIP_IT
+54090       route_number=sequence_number=0
+54100       route_number=val(z$(1:2)) conv UCRFA_SKIP_IT
 54110       sequence_number=val(z$(3:7)) conv ignore
 54120       rewrite #h_customer,using 'Form Pos 1,C 10,pos 1741,n 2,n 7': z$,route_number,sequence_number
 54140     end if 
@@ -355,8 +355,8 @@
 56400   do 
 56420     read #h_ubtrans,using 'form pos 1,c 10,x 8,x 1,x 4,12*pd 4.2': x$,mat tg eof UCCS_TRANS_EOF
 56440     if tg(service_from)<>0 then 
-56460       let tg(service_to)+=tg(service_from)
-56480       let tg(service_from)=0
+56460       tg(service_to)+=tg(service_from)
+56480       tg(service_from)=0
 56500       rewrite #h_ubtrans,using 'Form Pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': x$,mat tg
 56520     end if 
 56540   loop 

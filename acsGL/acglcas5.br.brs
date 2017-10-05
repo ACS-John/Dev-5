@@ -15,18 +15,18 @@
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00160   actpd$=fnactpd$
-00170   let pedat$=fnpedat$
+00170   pedat$=fnpedat$
 00180   actpd$=fnactpd$
 00190   actpd=fnactpd
 00200   let fscode=fnfscode
-00210   let priorcd=fnpriorcd
+00210   priorcd=fnpriorcd
 00220   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
-00230   if nap<12 or nap> 13 then let nap=12
-00240   let in3$(1)="8,5,N 12.2,UT,N" : let in3$(2)="8,25,N 12.2,UT,N" !:
-        let in3$(3)="8,45,N 12.2,UT,N" : let in3$(4)="8,65,N 12.2,UT,N"
-00250   let mp1=75
-00260   if ps=2 then let mp1=mp1+3
+00230   if nap<12 or nap> 13 then nap=12
+00240   in3$(1)="8,5,N 12.2,UT,N" : in3$(2)="8,25,N 12.2,UT,N" !:
+        in3$(3)="8,45,N 12.2,UT,N" : in3$(4)="8,65,N 12.2,UT,N"
+00250   mp1=75
+00260   if ps=2 then mp1=mp1+3
 00270   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
 00280   if ps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
 00290   pr newpage
@@ -75,13 +75,13 @@
 00720   goto L740
 00730 L730: if fscode>1 then bb=bp(fscode-1) else bb=0
 00740 L740: form pos mp1,pd 3,pos 81,41*pd 6.2
-00750 L750: if ir=val(r$) then let total=total+(cb-bb) else goto L930
-00760   if te$="B" then let total=total-(cb-bb): let total=total - bb: let total2=total2-bp(nap) : goto L780
-00770   let total2=total2+cb
+00750 L750: if ir=val(r$) then total=total+(cb-bb) else goto L930
+00760   if te$="B" then total=total-(cb-bb): total=total - bb: total2=total2-bp(nap) : goto L780
+00770   total2=total2+cb
 00780 L780: for z=1 to 13
 00790     annualb=annualb+bm(z)
 00800   next z
-00810   if fscode=0 then let monthb=monthb+bm(actpd) else let monthb=monthb+bm(fscode)
+00810   if fscode=0 then monthb=monthb+bm(actpd) else monthb=monthb+bm(fscode)
 00820   if fscode=0 then goto L830 else goto L880
 00830 L830: for j=1 to actpd
 00840     let ytdb=ytdb+bm(j)
@@ -95,7 +95,7 @@
 00920 ! ______________________________________________________________________
 00930 L930: if ir<val(r$) then goto L640
 00940   if ir>val(r$) then goto L960
-00950 L950: let notrans=1
+00950 L950: notrans=1
 00960 L960: overundr=ytdb-total2
 00970   let unexpend=annualb-total2
 00980   for j=1 to 9
@@ -108,25 +108,25 @@
 01050     accum(j,6)=accum(j,6)+overundr
 01060     accum(j,7)=accum(j,7)+unexpend
 01070 L1070: next j
-01080   if rs=1 then let total=-total else goto L1150
-01090   let total2=-total2
+01080   if rs=1 then total=-total else goto L1150
+01090   total2=-total2
 01100   annualb=-annualb
-01110   let monthb=-monthb
+01110   monthb=-monthb
 01120   let ytdb=-ytdb
 01130   overundr=overundr
 01140   let unexpend=unexpend
-01150 L1150: if ds=1 then let dollar$="$" else let dollar$=" "
+01150 L1150: if ds=1 then dollar$="$" else dollar$=" "
 01160   if annualb><0 or total2><0 then goto L1190
 01170   if total<>0 then goto L1190
 01180   if ls+ds+ul+ic>0 then goto L1190 else goto L470
 01190 L1190: sp2=24-sp-1
-01200   if te$="B" then let total=-total: let total2=-total2 ! REVERSE SIGN ON BEGINNING BANK BALANCE
+01200   if te$="B" then total=-total: total2=-total2 ! REVERSE SIGN ON BEGINNING BANK BALANCE
 01210   pr #255,using L1220: d$(1:sp2),dollar$,monthb,dollar$,total,dollar$,total2,dollar$,ytdb,dollar$,annualb
 01220 L1220: form pos sp,c sp2,pos 24,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),skip 0
-01230   let total=0
-01240   let total2=0
+01230   total=0
+01240   total2=0
 01250   annualb=0
-01260   let monthb=0
+01260   monthb=0
 01270   let ytdb=0
 01280   overundr=0
 01290   let unexpend=0
@@ -143,7 +143,7 @@
 01400   if rs=1 then accum5=-accum(ap,5) else accum5=accum(ap,5)
 01410   if rs=1 then accum6=accum(ap,6) else accum6=accum(ap,6)
 01420   if rs=1 then accum7=accum(ap,7) else accum7=accum(ap,7)
-01430   if ds=1 then let dollar$="$" else let dollar$=" "
+01430   if ds=1 then dollar$="$" else dollar$=" "
 01440   sp2=24-sp-1
 01450   if te$="B" then accum3=accum4=0
 01460   pr #255,using L1220: d$(1:sp2),dollar$,accum4,dollar$,accum1,dollar$,accum2,dollar$,accum5,dollar$,accum3
@@ -152,13 +152,13 @@
 01490   gosub L1720
 01500   goto L470
 01510 ! ______________________________________________________________________
-01520 L1520: if te$="R" then let report$=d$
+01520 L1520: if te$="R" then report$=d$
 01530   if te$="S" then secondr$=d$
 01540   gosub L1720
 01550   goto L470
 01560 ! ______________________________________________________________________
 01570 L1570: if foot1=1 then goto L1630
-01580   let tabnote=sp
+01580   tabnote=sp
 01590   let foot1=1
 01600   let foot$=d$
 01610   goto L470
@@ -199,7 +199,7 @@
 01950 L1950: form skip 1,c 1,skip 0
 01960   return 
 01970 ! ______________________________________________________________________
-01980 L1980: let heading=1
+01980 L1980: heading=1
 01990   pr #255: ""
 02000   pr #255,using L2020: cnam$
 02010   pr #255,using L2020: rtrm$(report$)
@@ -227,10 +227,10 @@
 02230   pr newpage
 02240   goto L960
 02250 ! ______________________________________________________________________
-02260 XIT: let fnxit
+02260 XIT: fnxit
 02270 ! ______________________________________________________________________
 02280 ! <Updateable Region: ERTN>
-02290 ERTN: let fnerror(program$,err,line,act$,"xit")
+02290 ERTN: fnerror(program$,err,line,act$,"xit")
 02300   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02310   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02320   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

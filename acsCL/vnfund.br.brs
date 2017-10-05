@@ -12,22 +12,22 @@
 00120   cancel=99
 00130 ! ______________________________________________________________________
 00140   fntos(sn$="vnfund") !:
-        let respc=0
+        respc=0
 00150   fnlbl(1,40,"",1,1)
 00160   fnlbl(1,1,"Starting Date:",25,1)
 00170   fntxt(1,27,8,0,1,"1") !:
-        let resp$(respc+=1)=""
+        resp$(respc+=1)=""
 00180   fnlbl(2,1,"Ending Date:",25,1)
 00190   fntxt(2,27,8,0,1,"1") !:
-        let resp$(respc+=1)=""
+        resp$(respc+=1)=""
 00200   fnlbl(3,1,"Minimum Amount to Print:",25,1)
 00210   fntxt(3,27,10,0,1,"10") !:
-        let resp$(respc+=1)=""
-00220   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+        resp$(respc+=1)=""
+00220   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
-00240   let in1(1)=val(resp$(1))
-00250   let in1(2)=val(resp$(2))
-00260   let in1(3)=val(resp$(3))
+00240   in1(1)=val(resp$(1))
+00250   in1(2)=val(resp$(2))
+00260   in1(3)=val(resp$(3))
 00270   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00280   open #trmstr1=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00290   open #trmstr2=2: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx2.H"&str$(cno)&",Shr",internal,outin,keyed 
@@ -36,26 +36,26 @@
 00320   gosub HDR
 00330 READ_TRMSTR2: ! 
 00340   read #trmstr2,using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof END1 !:
-        let tr$(3)=str$(tr3)
+        tr$(3)=str$(tr3)
 00345   if tcde=1 or tcde=4 then goto L350 else goto READ_TRMSTR2
 00350 L350: if scd=1 or scd=8 then goto L360 else goto READ_TRMSTR2
-00360 L360: let d1=fndate_mmddyy_to_ccyymmdd(val(tr$(2)))
+00360 L360: d1=fndate_mmddyy_to_ccyymmdd(val(tr$(2)))
 00365 ! If BANK_CODE=77 Then Pause
 00370   if d1<fndate_mmddyy_to_ccyymmdd(in1(1)) or d1>fndate_mmddyy_to_ccyymmdd(in1(2)) then goto READ_TRMSTR2
 00380   if trim$(tr$(4))="" then goto READ_TRMSTR2 !:
           ! don't try to analyze any transaction that does not have a vendor #
 00390   if rtrm$(vn$)="" then goto L410
 00400   if vn$><tr$(4) then gosub PRINTARRAY
-00410 L410: let vn$=tr$(4)
-00420   let p1$=tr$(5)(1:30)
-00430   let key$=cnvrt$("Pic(zz)",bank_code)&str$(tcde)&tr$(1) !:
+00410 L410: vn$=tr$(4)
+00420   p1$=tr$(5)(1:30)
+00430   key$=cnvrt$("Pic(zz)",bank_code)&str$(tcde)&tr$(1) !:
         restore #tralloc,key>=key$: nokey READ_TRMSTR2
 00440 READ_TRALLOC: ! 
 00450   read #tralloc,using 'Form Pos 1,C 11,N 3,N 6,N 3,PD 5.2': newkey$,mat gl,amt eof READ_TRMSTR2 !:
         if newkey$<>key$ then goto READ_TRMSTR2
 00460   if gl(1)=0 then !:
-          let f1(1000)+=amt else !:
-          let f1(gl(1))+=amt
+          f1(1000)+=amt else !:
+          f1(gl(1))+=amt
 00470   goto READ_TRALLOC
 00480 ! ______________________________________________________________________
 00490 PRINTARRAY: ! pr ARRAY
@@ -93,10 +93,10 @@
 00780   fncloseprn
 00790   goto XIT
 00800 ! ______________________________________________________________________
-00810 XIT: let fnxit
+00810 XIT: fnxit
 00820 ! ______________________________________________________________________
 00830 ! <Updateable Region: ERTN>
-00840 ERTN: let fnerror(program$,err,line,act$,"xit")
+00840 ERTN: fnerror(program$,err,line,act$,"xit")
 00850   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00860   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00870   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

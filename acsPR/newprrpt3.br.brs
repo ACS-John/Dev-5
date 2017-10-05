@@ -20,10 +20,10 @@
 00200 SCR1: ! 
 00210 ASKREPORT: ! 
 00220   fntos(sn$="Report-ask")
-00222   let respc=0
+00222   respc=0
 00230   fnlbl(1,1,"Report:",11,1)
 00240   fncombof("Report",1,14,43,env$('Q')&"\PRmstr\prreport.h"&env$('cno'),1,2,3,30,env$('Q')&"\PRmstr\prrptidx.h"&env$('cno'),1+addall,0,"Select from the list of reports. To add a report, click the Add button.",container)
-00242   let resp$(respc+=1)=""
+00242   resp$(respc+=1)=""
 00250   fncmdkey("&Add",1,0,0,"Add a new employee" )
 00252   fncmdkey("E&dit",2,0,0,"Modify the selected report")
 00254   fncmdkey("Print",4,1,0,"Run the selected report")
@@ -31,10 +31,10 @@
 00260   fnacs(sn$,0,mat resp$,ckey) ! ask report #
 00270   if ckey=5 then goto XIT
 00280   editrec=addone=0
-00292   let rptn=val(resp$(1)(1:2))
+00292   rptn=val(resp$(1)(1:2))
 00294   if ckey=1 then 
 00296     addone=1
-00298     let rptn=0
+00298     rptn=0
 00302     goto CONTINUE_FOR_ADD_AND_EDIT
 00304   else if ckey=2 then 
 00306     editrec=1
@@ -44,7 +44,7 @@
 00328   end if 
 00330   goto ASKREPORT
 00340 CONTINUE_FOR_ADD_AND_EDIT: ! 
-00350   let rptn$=lpad$(str$(rptn),2)
+00350   rptn$=lpad$(str$(rptn),2)
 00360   if addone=1 then 
 00362     read #h_prreport,using F_PRREPORT,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti nokey SCR2
 00370   else if editrec=1 then 
@@ -53,94 +53,94 @@
 00380   goto L400
 00384 EDIT_READ_NOKEY: ! r:
 00386   mat ml$(2)
-00388   let ml$(1)="A record with this number does not exist!"
-00390   let ml$(2)="Select a different numbe if you wish to add a new report."
+00388   ml$(1)="A record with this number does not exist!"
+00390   ml$(2)="Select a different numbe if you wish to add a new report."
 00392   fnmsgbox(mat ml$,resp$,cap$,48)
 00394   goto ASKREPORT ! /r
 00400 L400: ! 
-00402   let holdrn=rn
+00402   holdrn=rn
 00410 ! 
 00412 SCR2: ! 
 00414   if addone=1 then ! r: initialize variables to 0 or blank
-00416     let rn=0
-00418     let rt$=""
+00416     rn=0
+00418     rt$=""
 00420     mat ch$=("")
 00422 !   mat tempch$=("")
-00424     let ips=0
+00424     ips=0
 00426     sd$=""
 00428     sd=cp=0
 00430     mat psc=(0)
 00432     mat pp=(0)
 00434     mat ti=(0)
-00436     let holdrn=0
+00436     holdrn=0
 00438   end if  ! /r
 00440   fntos(sn$="Report-add")
-00442   let respc=0: let mylen=15: let mypos=mylen+3
+00442   respc=0: mylen=15: mypos=mylen+3
 00450   fnlbl(1,1,"Report #:",mylen,1)
 00460   fntxt(1,mypos,2,2,0,"30",0,"")
-00462   let resp$(respc+=1)=str$(rn)
+00462   resp$(respc+=1)=str$(rn)
 00470   fnlbl(2,1,"Report Title:",mylen,1)
 00480   fntxt(2,mypos,78,0,0,"",0,"")
-00482   let resp$(respc+=1)=rt$
+00482   resp$(respc+=1)=rt$
 00490   fnlbl(3,1,"Column Headings:",mylen,1)
 00500   fnlbl(4,7,"1    2    3    4    5    6    7    8    9    0    1    2    3 ",132,0)
 00510   fntxt(5,1,132,0,0,"",0,"The heading can be two lines.  This will be the 1st line.")
-00512   let resp$(respc+=1)=ch$(1)
+00512   resp$(respc+=1)=ch$(1)
 00520   fnlbl(6,7,"1    2    3    4    5    6    7    8    9    0    1    2    3 ",132,0)
 00530   fntxt(7,1,132,0,0,"",0,"This is the 2nd line of the heading line.")
-00532   let resp$(respc+=1)=ch$(2)
-00540   let mylen=50
+00532   resp$(respc+=1)=ch$(2)
+00540   mylen=50
 00550   fnlbl(12,1,"Item for pr Selection (blank for all):",mylen,1)
-00560   if ips>0 and ips=<udim(code$) then let resp$(respc+=1)=code$(ips+1) else let resp$(respc+=1)=""
+00560   if ips>0 and ips=<udim(code$) then resp$(respc+=1)=code$(ips+1) else resp$(respc+=1)=""
 00570   fncomboa("DataNames2",12,mylen+3,mat code$,"If you want limit the report to a value in a particular field in the employee record, Indicate which field it is by locatiing the ID number of the field using Help button.",25,0)
 00580 !  fnTXT(12,MYLEN+3,3,0,0,"30",0,"If you want limit the report to a value in a particular field in the employee record, Indicate which field it is by locatiing the ID number of the field using Help button.")
-00582 ! Let RESP$(RESPC+=1)=STR$(IPS)
+00582 ! rESP$(RESPC+=1)=STR$(IPS)
 00590   fnchk(13,mylen+3,"Summarize Departmental Records:",1)
-00600   if sd= 1 then let resp$(respc+=1)="TRUE" else let resp$(respc+=1)="FALSE"
+00600   if sd= 1 then resp$(respc+=1)="TRUE" else resp$(respc+=1)="FALSE"
 00610   fncmdkey("&Next",1,1,0,"Save changes and move to next questions" )
 00612   fncmdkey("&Delete",4,0,0,"Deletes this report from your system.")
 00614   fncmdkey("&Cancel",5,0,1,"Return to selection screen.")
 00620   fnacs(sn$,0,mat resp$,ckey) ! ask report #
 00630   addone=0
 00640   if ckey=5 then goto SCR1
-00650   let rn=val(resp$(1)(1:2))
+00650   rn=val(resp$(1)(1:2))
 00660   if holdrn>0 and rn<>holdrn then 
 00664 ! r: confirm_key_change
 00666     mat ml$(3)
-00668     let ml$(1)="You are attempting to change report number"
-00670     let ml$(2)="from "&str$(holdrn)& " to "&str$(rn)&"."
-00672     let ml$(3)="Take OK to continue, else Cancel."
+00668     ml$(1)="You are attempting to change report number"
+00670     ml$(2)="from "&str$(holdrn)& " to "&str$(rn)&"."
+00672     ml$(3)="Take OK to continue, else Cancel."
 00674     fnmsgbox(mat ml$,resp$,cap$,49)
 00676     if resp$="OK" then 
-00678       let holdrn=rn
+00678       holdrn=rn
 00682     else 
 00684       goto SCR2
 00686     end if  ! /r
 00690   end if 
-00692   let rt40$=resp$(2)(1:40)
+00692   rt40$=resp$(2)(1:40)
 00700   ch$(1)=resp$(3)
 00710   ch$(2)=resp$(4)
-00720   let ips=0
+00720   ips=0
 00730   for j=1 to udim(code$)
-00740     if resp$(5)=code$(j) then let ips=j-1: goto L760
+00740     if resp$(5)=code$(j) then ips=j-1: goto L760
 00750   next j
 00760 L760: ! 
 00762   if resp$(6)(1:1)="T" then sd$="Y": sd=1 else sd$="N": sd=0
 00770   if ips<0 or ips>126 or (ips>1 and ips<6) then 
 00772     mat ml$(2)
-00774     let ml$(1)="You can not use "&code$(ips+1)&" as selection criteria!"
-00776     let ml$(2)=" Take OK to select a different item."
+00774     ml$(1)="You can not use "&code$(ips+1)&" as selection criteria!"
+00776     ml$(2)=" Take OK to select a different item."
 00778     fnmsgbox(mat ml$,resp$,cap$,48)
 00780     goto SCR2
 00782   end if 
 00800   if sd$="Y" then sd=1 else sd=0
-00810   let rt$=rt40$
+00810   rt$=rt40$
 00820   if ckey=4 then 
 00822     goto DELETEIT
 00824 DELETEIT: ! 
 00826     mat ml$(2)
-00828     let ml$(1)="You have chosen to delete report # "&rptn$
-00830     let ml$(2)="Take Ok to continue, else Cancel to keep the report."
+00828     ml$(1)="You have chosen to delete report # "&rptn$
+00830     ml$(2)="Take Ok to continue, else Cancel to keep the report."
 00832     fnmsgbox(mat ml$,resp$,cap$,49)
 00834     if resp$="OK" then 
 00836       delete #h_prreport,key=rptn$: 
@@ -153,13 +153,13 @@
 00910 ! If RN=0 Then Goto DONE  ! ain't this just redundant?
 00920   if ips=0 then goto SCR4
 00930   fntos(sn$="Report-sel")
-00932   let respc=0: let mylen=15: let mypos=mylen+3
+00932   respc=0: mylen=15: mypos=mylen+3
 00940   fnlbl(1,1,"Print Selection Criteria:",30,1)
 00950   let z=0
 00960   for x=1 to 5
 00970     for j=2 to 21
 00980       fntxt(j,x*16,12,0,0,"33",0,"If you chosen to limit the report to certain criteria, enter the values here that should match information in the employee's record.")
-00982       let resp$(respc+=1)=str$(psc(z+=1))
+00982       resp$(respc+=1)=str$(psc(z+=1))
 00990     next j
 01000   next x
 01010   fncmdkey("&Next",1,1,0,"Save changes and move to next questions" )
@@ -168,24 +168,24 @@
 01020   fnacs(sn$,0,mat resp$,ckey) ! ask matching criteria
 01030   if ckey=5 then goto SCR1
 01040   for j=1 to 100
-01050     let psc(j)=val(resp$(j))
+01050     psc(j)=val(resp$(j))
 01060   next j
 01070   if ckey=6 then goto SCR2
 01080   goto SCR4
 01090 ! ______________________________________________________________________
 01100 SCR4: ! 
 01110   fntos(sn$="Report-scr4") !:
-        let respc=0: let mylen=15: let mypos=mylen+3
+        respc=0: mylen=15: mypos=mylen+3
 01120   fnfra(1,1,23,90,"Selection of Column Information","Select the informatin that should be printed in each column of your report.")
 01130   fnlbl(1,1,"Print       Want ",50,1,0,1)
 01140   fnlbl(2,1,"Item to pr                 Position    A Total",52,1,0,1)
 01150   for j=1 to 20
-01160     if inp(j)>0 and inp(j)=<udim(code$) then let resp$(respc+=1)=code$(inp(j)+1) else let resp$(respc+=1)=" "
-01170 ! If INP(J)>0 AND INP(J)=<UDIM(CODE$) Then Let RESP$(RESPC+=1)=CODE$(INP(J)) Else Let RESP$(RESPC+=1)=" "
+01160     if inp(j)>0 and inp(j)=<udim(code$) then resp$(respc+=1)=code$(inp(j)+1) else resp$(respc+=1)=" "
+01170 ! If INP(J)>0 AND INP(J)=<UDIM(CODE$) Then rESP$(RESPC+=1)=CODE$(INP(J)) Else rESP$(RESPC+=1)=" "
 01180     fncomboa("DataNames",j+2,1,mat code$,"",25,1)
 01190     fntxt(j+2,37,3,0,0,"30",0,"The position is the starting position acress the page where this column should print.",1) !:
-          let resp$(respc+=1)=str$(pp(j))
-01200     if ti(j)=1 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+          resp$(respc+=1)=str$(pp(j))
+01200     if ti(j)=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 01210     fnchk(j+2,48,"",1,1) ! total the column
 01220   next j
 01230   fncmdkey("&Next",1,1,0,"Save changes on this report design." ) !:
@@ -198,11 +198,11 @@
 01270   for j=3 to 60 step 3
 01280     let x+=1
 01290     for j1=1 to udim(code$)
-01300       if resp$(j-2)=code$(j1) then let inp(x)=j1-1: goto L1330
-01310 ! If RESP$(J-2)=CODE$(J1) Then Let INP(X)=J1+1: Goto 1310
+01300       if resp$(j-2)=code$(j1) then inp(x)=j1-1: goto L1330
+01310 ! If RESP$(J-2)=CODE$(J1) Then iNP(X)=J1+1: Goto 1310
 01320     next j1
-01330 L1330: let pp(x)=val(resp$(j-1))
-01340     if resp$(j)="True" then let ti(x)=1 else let ti(x)=0
+01330 L1330: pp(x)=val(resp$(j-1))
+01340     if resp$(j)="True" then ti(x)=1 else ti(x)=0
 01350   next j
 01360   if rptn=rn then goto L1370 else goto L1390
 01370 L1370: rewrite #h_prreport,using F_PRREPORT,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti
@@ -227,8 +227,8 @@
 01560 !   pr #105: newpage
 01580 !   pr #105,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
 01590 !   pr #105,fields "4,2,Cc 38,N": "Report Number "&str$(rptn)&" does not exist."
-01600 !   let io5$(1)="6,2,Cc 38,N"
-01610 !   let io5$(2)="7,2,Cc 38,N"
+01600 !   io5$(1)="6,2,Cc 38,N"
+01610 !   io5$(2)="7,2,Cc 38,N"
 01620 !   let wrd5$(1)="Reselect Report Number"
 01630 !   let wrd5$(2)="Add Reports"
 01640 !   pr f "16,35,C 09,B,5": "Exit (F5)"
@@ -237,7 +237,7 @@
 01670 !   if curfld=2 then goto L1770 else goto SCR1 ! /r
 01680 ! ______________________________________________________________________
 01690 ! <Updateable Region: ERTN>
-01700 ERTN: let fnerror(program$,err,line,act$,"xit")
+01700 ERTN: fnerror(program$,err,line,act$,"xit")
 01710   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01720   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01730   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -245,22 +245,22 @@
 01750 ! /region
 01760 IGNORE: continue 
 01770 ! L1770: ! r: ADD NEW RECORD
-01780 !   let rt$="": mat ch$=("")
-01790 !   let ips=sd=cp=0
+01780 !   rt$="": mat ch$=("")
+01790 !   ips=sd=cp=0
 01800 !   mat psc=(0): mat inp=(0): mat pp=(0): mat ti=(0)
 01810 !   write #h_prreport,using F_PRREPORT: rptn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti
-01820 !   let rptn$=lpad$(str$(rptn),2)
+01820 !   rptn$=lpad$(str$(rptn),2)
 01830 !   read #h_prreport,using F_PRREPORT,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti ! nokey L1530
 01840 !   goto L400 ! /r
 62000   def fn_add_dn(dn_x_1$*30,dn_x_2$*30,dn_x_3$*30)
-62020     let dn_counter+=1
-62040     let datanames$(dn_counter,1)=dn_x_1$
-62060     let datanames$(dn_counter,2)=dn_x_2$
-62080     let datanames$(dn_counter,3)=dn_x_3$
+62020     dn_counter+=1
+62040     datanames$(dn_counter,1)=dn_x_1$
+62060     datanames$(dn_counter,2)=dn_x_2$
+62080     datanames$(dn_counter,3)=dn_x_3$
 62100   fnend 
 64000 DATANAMES: ! r:
 64020   dim datanames$(104,3)*30
-64040   let dn_counter=0
+64040   dn_counter=0
 64060   fn_add_dn('Employee Number','eno','N 8')
 64080   fn_add_dn('Name','EM$(1)','C 30')
 64100   fn_add_dn('Address','EM$(2)','C 30')

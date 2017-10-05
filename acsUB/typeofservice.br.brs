@@ -29,9 +29,9 @@
 00370     resp$(a*6-4)=servicecode$(a)
 00380     fntxt(a+2,34,3)
 00390     fnchk(a+2,41,"",align=0,container=0,tabcon=0)
-00400     if tax_code$(a)="Y" then let resp$(a*6-3)="True" else let resp$(a*6-3)="False"
+00400     if tax_code$(a)="Y" then resp$(a*6-3)="True" else resp$(a*6-3)="False"
 00410     fnchk(a+2,49,"",align=0,container=0,tabcon=0)
-00420     if penalty$(a)="Y" then let resp$(a*6-2)="True" else let resp$(a*6-2)="False"
+00420     if penalty$(a)="Y" then resp$(a*6-2)="True" else resp$(a*6-2)="False"
 00430     resp$(a*6-1)=str$(subjectto(a))
 00440     fntxt(a+2,58,2,0,0,"30")
 00450     resp$(a*6)=str$(ordertoapply(a))

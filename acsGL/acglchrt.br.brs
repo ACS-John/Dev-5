@@ -10,25 +10,25 @@
 00100   fntop(program$,cap$="Chart of Accounts")
 00110   fncno(cno,cnam$)
 00120   fndat(dat$)
-00130   let process=fnprocess
+00130   process=fnprocess
 00140 ! ______________________________________________________________________
 00150   cap$="General Ledger Chart of Accounts"
 00160   if process=1 then sel=1 : goto L330
 00170 ! ______________________________________________________________________
 00180   pr newpage
 00190   fntos(sn$="ChartAccoutnts") !:
-        let mylen=50: let mypos=mylen+3 : let right=1
+        mylen=50: mypos=mylen+3 : right=1
 00200   fnfra(1,1,2,70,"Chart of Accounts"," ",0)
 00210   fnopt(1,3,"Print Financial Statement Reference Numbers",0,1) !:
-        let resp$(rc+=1)="False"
+        resp$(rc+=1)="False"
 00220   fnopt(2,3,"Print Account Numbers and Names only",0,1) !:
-        let resp$(rc+=1)="True"
+        resp$(rc+=1)="True"
 00230   fnlbl(5,1,"Beginning General Ledger Number (blank for all):",mylen,right)
 00240   fnqgl(5,mypos,0,2) !:
-        let resp$(1)=""
+        resp$(1)=""
 00250   fnlbl(6,1,"Ending General Ledger Number (blank for all):",mylen,right)
 00260   fnqgl(6,mypos,0,2) !:
-        let resp$(1)=""
+        resp$(1)=""
 00270   fncmdset(2)
 00280   fnacs(sn$,0,mat resp$,ckey)
 00290   if ckey=5 then goto XIT
@@ -68,7 +68,7 @@
 00620   gosub L680
 00630   goto L420
 00640 ! ______________________________________________________________________
-00650 L650: let fncloseprn
+00650 L650: fncloseprn
 00660   goto XIT
 00670 ! ______________________________________________________________________
 00680 L680: if sel=2 then goto L730
@@ -87,10 +87,10 @@
 00800 L800: form pos 2,c 9,pos 38,c 11,pos 71,c 9,x 1,c 9,x 1,c 8,x 4,c 9,x 1,c 9,x 1,c 8
 00810 L810: return 
 00820 ! ______________________________________________________________________
-00830 XIT: let fnxit
+00830 XIT: fnxit
 00840 ! ______________________________________________________________________
 00850 ! <Updateable Region: ERTN>
-00860 ERTN: let fnerror(program$,err,line,act$,"xit")
+00860 ERTN: fnerror(program$,err,line,act$,"xit")
 00870   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00880   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00890   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

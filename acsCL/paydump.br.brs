@@ -7,7 +7,7 @@
 00070   dim nam$*30,cnam$*40,dat$*20,gl(3),tr$(5)*35,cap$*128
 00080 ! ______________________________________________________________________
 00090   fntop(program$,cap$="Remove Payee Records")
-00100   cancel=99 : let right=1
+00100   cancel=99 : right=1
 00110   fncno(cno,cnam$) !:
         fndat(dat$)
 00120 ! ______________________________________________________________________
@@ -18,10 +18,10 @@
 00160   open #paymstr2=2: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx2.H"&str$(cno)&",Shr",internal,outin,keyed 
 00170   open #payeeglbreakdown:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayeeGLBkdidx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00180   fntos(sn$="PayDump") !:
-        let respc=0 : let mylen=21 : let mypos=mylen+2
+        respc=0 : mylen=21 : mypos=mylen+2
 00190   fnlbl(1,1,"Oldest retained Date:",mylen,right)
 00200   fntxt(1,mypos,10,0,1,"1003",0,"This program will dump payee records who have not received a check since a certain date.") !:
-        let resp$(respc+=1)=str$(date('ccyymmdd')-50000)
+        resp$(respc+=1)=str$(date('ccyymmdd')-50000)
 00210   fnlbl(1,46,"",1,1)
 00220   fncmdset(2) !:
         fnacs(sn$,0,mat resp$,ckey)
@@ -34,7 +34,7 @@
 00280   read #paymstr1,using 'Form POS 1,C 8,C 30': vn$,nam$ eof DONE
 00290   restore #trmstr2,search>=vn$: nokey PRINT_IT
 00300 READ_TRMSTR2: ! 
-00310   read #trmstr2,using 'Form POS 1,N 2,N 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',release: bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof READ_PAYMSTR1 : let tr$(3)=str$(tr3)
+00310   read #trmstr2,using 'Form POS 1,N 2,N 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',release: bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof READ_PAYMSTR1 : tr$(3)=str$(tr3)
 00320   if vn$><tr$(4) then goto PRINT_IT !:
           ! moved thru all checks without finding a check with date !:
           ! later than one entered above
@@ -64,7 +64,7 @@
 00520   fncloseprn !:
         goto XIT
 00530 ! ______________________________________________________________________
-00540 XIT: let fnxit
+00540 XIT: fnxit
 00550 ! ______________________________________________________________________
 00560 NEWPGE: pr #255: newpage : gosub HDR : continue 
 00570 ! ______________________________________________________________________
@@ -75,7 +75,7 @@
 00600   return 
 00610 ! ______________________________________________________________________
 00620 ! <Updateable Region: ERTN>
-00630 ERTN: let fnerror(program$,err,line,act$,"NOt")
+00630 ERTN: fnerror(program$,err,line,act$,"NOt")
 00640   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00650   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00660   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

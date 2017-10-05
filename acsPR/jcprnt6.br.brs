@@ -15,25 +15,25 @@
         fndat(dh$)
 00038 ! 
 00040 ! ______________________________________________________________________
-00051   let rn$=" 6"
+00051   rn$=" 6"
 00055   if fnprocess=1 then goto L103
 00056 ! ______________________________________________________________________
 00059 MAIN_SCREEN: ! 
 00060   fntos(sn$="namlst1") !:
-        let mylen=25 : let mypos=mylen+2: let resp=0: left=1
+        mylen=25 : mypos=mylen+2: resp=0: left=1
 00062   fnlbl(1,1,"Report Heading Date:",23,left)
 00063   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
-        let resp$(resp+=1)=dh$
+        resp$(resp+=1)=dh$
 00064   fncmdset(2)
 00065   fnacs(sn$,0,mat resp$,ck)
 00066   if ck=5 then goto XIT
-00067   let dat$=dh$=resp$(1) ! heading date
+00067   dat$=dh$=resp$(1) ! heading date
 00068   close #win: ioerr L69
-00069 L69: let fndat(dh$,put=2)
+00069 L69: fndat(dh$,put=2)
 00075 ! ______________________________________________________________________
 00080   fndat(dh$,2)
 00088 ! ______________________________________________________________________
-00103 L103: let fnopenprn
+00103 L103: fnopenprn
 00141 ! ______________________________________________________________________
 00150   open #1: "Name=S:\acsPR\JCReport.MST,KFName=S:\acsPR\jcReport.Idx,Shr",internal,input,keyed 
 00160   read #1,using L170,key=rn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
@@ -65,12 +65,12 @@
 00430   fnxit
 19799 ! ______________________________________________________________________
 19800 PRTRPT: read #1,using L19810: jn$,n$,mat a$,x6,x7,x8,x9 eof SND
-19805   let jn1$=jn$
+19805   jn1$=jn$
 19806   on conv goto L25010
-19807   let jn=val(jn$)
+19807   jn=val(jn$)
 19810 L19810: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2
 19820   if sd=2 then goto L19900
-19825   let jobcat$=jn$&"     "
+19825   jobcat$=jn$&"     "
 19830   read #2,using L19831,key>=jobcat$: cn$,k$,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24 nokey PRTRPT
 19831 L19831: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2
 19832   goto L19834
@@ -101,8 +101,8 @@
 19920   mat t=t+c
 19930   mat s=s+c
 19940   mat c=(0)
-19941   let jn$=""
-19942   let n$=""
+19941   jn$=""
+19942   n$=""
 19945   if sd><0 then goto PRTRPT
 19950   if cn$(1:6)=jn1$ and sd=0 then goto L19833
 20000 L20000: pr #255,using L20020: "_________","_________","_________","_________"
@@ -119,7 +119,7 @@
 20160   goto EOF1
 25000 L25000: continue 
 25001 ! ______________________________________________________________________
-25010 L25010: let jn=0
+25010 L25010: jn=0
 25020   cn=0
 25030   continue 
 25031 ! ______________________________________________________________________
@@ -128,12 +128,12 @@
 25061 ! ______________________________________________________________________
 49849 ! ______________________________________________________________________
 50000 ! <Updateable Region: ERTN>
-50001 ERTN: let fnerror(program$,err,line,act$,"xit")
+50001 ERTN: fnerror(program$,err,line,act$,"xit")
 50002   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 50003   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 50004   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50005 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50006 ! /region
 50007 ! ______________________________________________________________________
-50120 XIT: let fnxit
+50120 XIT: fnxit
 50121 ! ______________________________________________________________________

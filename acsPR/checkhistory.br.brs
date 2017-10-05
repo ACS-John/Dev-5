@@ -14,11 +14,11 @@
 00135   if exists(env$('Q')&"\PRmstr\checkidx.h"&str$(cno)&",Shr")=0 then goto L280
 00140 L140: open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00141   open #44: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&str$(cno)&",Shr",internal,outin,keyed 
-00150   let hact$="": let filnum=44
+00150   hact$="": let filnum=44
 00160   fncheckfile(hact$,filnum)
-00170 XIT: let fnxit
+00170 XIT: fnxit
 00180 ! <Updateable Region: ERTN>
-00190 ERTN: let fnerror(program$,err,line,act$,"xit")
+00190 ERTN: fnerror(program$,err,line,act$,"xit")
 00200   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00210   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00220   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

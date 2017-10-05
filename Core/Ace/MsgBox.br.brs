@@ -11,7 +11,7 @@
 10200 XIT: ! 
 10220   fnend 
 20000 ! <updateable region: ertn>
-20020 ERTN: let fnerror(program$,err,line,act$,"xit")
+20020 ERTN: fnerror(program$,err,line,act$,"xit")
 20040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 20060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 20080   pr "program pause: type go and press [enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -73,13 +73,13 @@
 32220       pause 
 32240       bm_response=4
 32260     end if 
-32280     if bm_response=1 then let response$="OK"
-32300     if bm_response=2 then let response$="Yes"
-32320     if bm_response=3 then let response$="No"
-32340     if bm_response=4 then let response$="Cancel"
+32280     if bm_response=1 then response$="OK"
+32300     if bm_response=2 then response$="Yes"
+32320     if bm_response=3 then response$="No"
+32340     if bm_response=4 then response$="Cancel"
 32360     if response$="Cancel" and bm_type<>5 and bm_type<>3 and bm_type<>1 then ! only allow cancel on messageboxes that have a cancel option
 32380       if bm_type=0 then ! If there was only an OK button, just assume they meant that
-32400         let response$="OK"
+32400         response$="OK"
 32420       else 
 32440         goto BM_ASK
 32460       end if 
@@ -87,20 +87,20 @@
 32500 BM_XIT: ! 
 32520   fnend 
 60000   def fn_ace_messagebox(&mat mg$, &response$; cap$*128, mt)
-60020     let mat_mg_len=0 : for j=1 to udim(mat mg$) : let mat_mg_len+=len(mg$(j)) : next j
+60020     mat_mg_len=0 : for j=1 to udim(mat mg$) : mat_mg_len+=len(mg$(j)) : next j
 60040     fntos(sn$="mb"&str$(udim(mat mg$))&'-'&str$(mat_mg_len))
 60060     for mg_item=1 to udim(mat mg$)
 60080       fnlbl(mg_item,1,mg$(mg_item))
 60100     next mg_item
 60120     mat btn_default=(0)
-60140     if mt=>768 then let mt-=768 : btn_default(4)=1
-60160     if mt=>512 then let mt-=512 : btn_default(3)=1
-60180     if mt=>256 then let mt-=256 : btn_default(2)=1
+60140     if mt=>768 then mt-=768 : btn_default(4)=1
+60160     if mt=>512 then mt-=512 : btn_default(3)=1
+60180     if mt=>256 then mt-=256 : btn_default(2)=1
 60200 ! if sum(mat btn_default)=0 then btn_default(1)=1
-60220     if mt=>064 then let mt-=064
-60240     if mt=>048 then let mt-=048 ! 
-60260     if mt=>032 then let mt-=032 ! 
-60280     if mt=>016 then let mt-=016 ! (X) Critical
+60220     if mt=>064 then mt-=064
+60240     if mt=>048 then mt-=048 ! 
+60260     if mt=>032 then mt-=032 ! 
+60280     if mt=>016 then mt-=016 ! (X) Critical
 60300     if mt=5 then ! retry/cancel
 60320       fncmdkey("&Retry",4)
 60340       fncmdkey("&Cancel",99,btn_default(2),1)
@@ -122,11 +122,11 @@
 60660       fncmdkey("&Ok",1,1,1)
 60680     end if 
 60700     fnacs(sn$,0,mat resp$,ckey,0,0,1,1)
-60720     if ckey=1 then let response$="OK"
-60740     if ckey=99 then let response$="Cancel"
-60760     if ckey=3 then let response$="Abort"
-60780     if ckey=4 then let response$="Retry"
-60800     if ckey=5 then let response$="Ignore"
-60820     if ckey=6 then let response$="Yes"
-60840     if ckey=7 then let response$="No"
+60720     if ckey=1 then response$="OK"
+60740     if ckey=99 then response$="Cancel"
+60760     if ckey=3 then response$="Abort"
+60780     if ckey=4 then response$="Retry"
+60800     if ckey=5 then response$="Ignore"
+60820     if ckey=6 then response$="Yes"
+60840     if ckey=7 then response$="No"
 60900   fnend 

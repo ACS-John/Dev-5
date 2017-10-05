@@ -10,13 +10,13 @@
 00100   fndat(resp$(1))
 00110 ! 
 00120   fntos(sn$="escrow1") !:
-        let mylen=20 : let mypos=mylen+2 : lc=0
+        mylen=20 : mypos=mylen+2 : lc=0
 00130   fnlbl(lc+=1,1,"Report Heading Date:",mylen,1)
 00140   fntxt(lc,mypos,20)
 00150   fnlbl(lc+=1,1,"Sort by:",mylen,1)
 00160   opt$(1)="1. Account" : opt$(2)="2. Name" : mat opt$(2) !:
         fncomboa("acc_or_nam",lc,mypos,mat opt$) !:
-        let resp$(2)=opt$(1)
+        resp$(2)=opt$(1)
 00170   fncmdset(3)
 00180   fnacs(sn$,0,mat resp$,ck)
 00190   if ck=5 then goto XIT
@@ -33,7 +33,7 @@
 00260   read #customer,using 'Form POS 1,C 10,pos 41,C 30,POS 1859,PD 5.2': z$, customer_name$, escrow_bal eof DONE
 00270   if escrow_bal=0 then goto READ_CUSTOMER
 00280   pr #255,using 'Form POS 1,C 12,C 30,N 12.2': z$,customer_name$,escrow_bal
-00290   let total_escrow+=escrow_bal
+00290   total_escrow+=escrow_bal
 00300   goto READ_CUSTOMER
 00310 ! ______________________________________________________________________
 00320 PGOF: pr #255: newpage : gosub HDR : continue 
@@ -53,10 +53,10 @@
 00460   fncloseprn
 00470   goto XIT
 00480 ! ______________________________________________________________________
-00490 XIT: let fnxit
+00490 XIT: fnxit
 00500 ! ______________________________________________________________________
 00510 ! <Updateable Region: ERTN>
-00520 ERTN: let fnerror(program$,err,line,act$,"xit")
+00520 ERTN: fnerror(program$,err,line,act$,"xit")
 00530   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00540   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00550   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

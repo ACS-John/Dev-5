@@ -13,16 +13,16 @@
 00130 ! ______________________________________________________________________
 00140   pr newpage
 00150   on fkey 5 goto L1930
-00160   let message$="Printing: please wait..."
+00160   message$="Printing: please wait..."
 00170   fnwait(101,cap$,message$,1)
 00180   fnopenprn(cp,58,220,process)
-00190   if file$(255)(1:3)<>"PRN" then let jbskip=1
+00190   if file$(255)(1:3)<>"PRN" then jbskip=1
 00200 ! ______________________________________________________________________
-00210   let pl2$(1)="FICA"
-00220   let pl2$(2)="Fed"
-00230   let pl2$(3)="State"
-00240   let pl2$(4)="Union"
-00250   let pl2$(5)="Other"
+00210   pl2$(1)="FICA"
+00220   pl2$(2)="Fed"
+00230   pl2$(3)="State"
+00240   pl2$(4)="Union"
+00250   pl2$(5)="Other"
 00260 ! ______________________________________________________________________
 00270   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #1,using 'Form POS 618,10*N 1,POS 758,N 2',rec=1: mat dedcode,un !:
@@ -48,13 +48,13 @@
 00460   next j
 00470   goto L360
 00480 ! ______________________________________________________________________
-00490 L490: let hr1(j)=hr1(j)+tr1(5)
-00500   let hr1(8)=hr1(8)+tr1(5)
-00510   let hr2(j)=hr2(j)+tr1(6)
-00520   let hr2(8)=hr2(8)+tr1(6)
+00490 L490: hr1(j)=hr1(j)+tr1(5)
+00500   hr1(8)=hr1(8)+tr1(5)
+00510   hr2(j)=hr2(j)+tr1(6)
+00520   hr2(8)=hr2(8)+tr1(6)
 00530   let gp1=gp1+tr1(5)*tdet2
 00540   let gp2=gp2+tr1(6)*tdet3
-00550   let tr(3)=tr1(3)
+00550   tr(3)=tr1(3)
 00560   goto L360
 00570 ! ______________________________________________________________________
 00580 L580: if rtrm$(jn$)="" then goto L620
@@ -62,8 +62,8 @@
 00600   gosub TOTALS
 00610   pr #255: newpage
 00620 L620: en$=en1$
-00630   let jn$=jn1$
-00640   let n$=""
+00630   jn$=jn1$
+00640   n$=""
 00650   read #2,using L660,key=jn$: n$ nokey L670
 00660 L660: form pos 7,c 40
 00670 L670: if end4=0 then gosub L1240
@@ -81,41 +81,41 @@
 00790 L790: form pos 9,3*c 30,c 11,x 4,n 2,pos 162,n 6,pd 5.2,pd 3
 00800 L800: adr=ta1
 00810   mat ded=(0)
-00820   let tdet2=0
-00830   let tgp=tdet3=0
+00820   tdet2=0
+00830   tgp=tdet3=0
 00840 L840: if adr=0 then goto MOVEINFO
 00850   read #5,using L860,rec=adr: tdn,tdt4,mat tdet,mat tdc,mat tcp,adr
 00860 L860: form pos 9,n 3,pos 42,n 6,pos 58,3*pd 4.2,pos 150,5*pd 3.2,pos 358,22*pd 5.2,pd 3
 00870   if tdn><tr1(3) then goto L900
-00880   let tdet2=tdet(2)
-00890   let tdet3=tdet(3)
+00880   tdet2=tdet(2)
+00890   tdet3=tdet(3)
 00900 L900: if lpd><tdt4 then goto L1040
-00910   let tgp=tgp+tcp(21)
+00910   tgp=tgp+tcp(21)
 00920   for j=1 to 5
-00930     let tcd1=tcd1+tdc(j)
+00930     tcd1=tcd1+tdc(j)
 00940   next j
-00950   let ded(1)=ded(1)+tcp(2)+tcp(15)
-00960   let ded(2)=ded(2)+tcp(1)
-00970   let ded(3)=ded(3)+tcp(3)
-00980   if un>0 and un<11 then let ded(4)=ded(4)+tcp(un+3)
+00950   ded(1)=ded(1)+tcp(2)+tcp(15)
+00960   ded(2)=ded(2)+tcp(1)
+00970   ded(3)=ded(3)+tcp(3)
+00980   if un>0 and un<11 then ded(4)=ded(4)+tcp(un+3)
 00990   for j=1 to 10
 01000     if j=un then goto L1020
-01010     if dedcode(j)=2 then let ded(5)=ded(5)-tcp(j+3) else let ded(5)=ded(5)+tcp(j+3)
+01010     if dedcode(j)=2 then ded(5)=ded(5)-tcp(j+3) else ded(5)=ded(5)+tcp(j+3)
 01020 L1020: next j
-01030   let tcp22=tcp22+tcp(22)
+01030   tcp22=tcp22+tcp(22)
 01040 L1040: goto L840
 01050 ! ______________________________________________________________________
 01060 L1060: mat em$=("")
 01070   ss$=""
 01080   em2=0
-01090   let ta1=0
+01090   ta1=0
 01100 MOVEINFO: ! 
-01110   let pl1$(1)=em$(1)
-01120   let pl1$(2)=em$(2)
-01130   let pl1$(3)=em$(3)
-01140   let pl1$(4)=ss$
-01150 ! LET PL1$(5)=LPAD$(STR$(TDN),6)
-01160   let pl1$(5)=lpad$(str$(em2),6)
+01110   pl1$(1)=em$(1)
+01120   pl1$(2)=em$(2)
+01130   pl1$(3)=em$(3)
+01140   pl1$(4)=ss$
+01150 ! pL1$(5)=LPAD$(STR$(TDN),6)
+01160   pl1$(5)=lpad$(str$(em2),6)
 01170   goto L440
 01180 ! ______________________________________________________________________
 01190 PGOF: ! 
@@ -123,9 +123,9 @@
 01210   gosub L1240
 01220   continue 
 01230 ! ______________________________________________________________________
-01240 L1240: let p1=59-int(len(rtrm$(cnam$)))/2
+01240 L1240: p1=59-int(len(rtrm$(cnam$)))/2
 01250   a2$="Job # "&ltrm$(jn$)&"  Job Name "&rtrm$(n$)
-01260   let p2=59-int(len(rtrm$(a2$)))/2
+01260   p2=59-int(len(rtrm$(a2$)))/2
 01270   pr #255,using L1280: cnam$,a2$
 01280 L1280: form skip 2,pos p1,c 70,skip 1,pos p2,c 70,skip 1
 01290   pr #255: tab(40);"****  Certified Payroll Register  ****"
@@ -149,7 +149,7 @@
 01470   if lnp>5 then lnp=6
 01480   if hr1(8)=0 then pr #255,using L1440: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF else pr #255,using L1490: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PGOF
 01490 L1490: form pos 1,c 30,9*n 6.2,c 6
-01500 L1500: let hr8=hr8+hr1(8)+hr2(8)
+01500 L1500: hr8=hr8+hr1(8)+hr2(8)
 01510   mat hr1=(0)
 01520   mat hr2=(0)
 01530   return 
@@ -162,17 +162,17 @@
 01600 L1600: form pos 1,c 30,skip 1
 01610   next j
 01620 L1620: let gded= gded+(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5)))
-01630   let jgp=jgp+gp1+gp2 ! TOTAL GROSS FOR JOB
+01630   jgp=jgp+gp1+gp2 ! TOTAL GROSS FOR JOB
 01640   mat tded=tded+ded ! TOTAL DEDUCTION
-01650   let tcdt=tcdt+tcd1 ! TOTAL HOURS FOR ALL JOBS
-01660   let thr=thr+hr8 ! TOTAL HOURS FOR JOB
-01670   let tgp=0
+01650   tcdt=tcdt+tcd1 ! TOTAL HOURS FOR ALL JOBS
+01660   thr=thr+hr8 ! TOTAL HOURS FOR JOB
+01670   tgp=0
 01680   let gp1=0
 01690   let gp2=0
 01700   mat ded=(0)
-01710   let tcd1=0
-01720   let hr8=0
-01730   let tcp22=0
+01710   tcd1=0
+01720   hr8=0
+01730   tcp22=0
 01740   lnp=0
 01750   return 
 01760 ! ______________________________________________________________________
@@ -183,8 +183,8 @@
 01810   pr #255: tab(31);"Deductions     Net-Pay" pageoflow PGOF
 01820   pr #255,using L1830: thr,jgp,gded,jgp-gded pageoflow PGOF
 01830 L1830: form pos 5,4*n 12.2,skip 2
-01840   let thr=0
-01850   let jgp=0
+01840   thr=0
+01850   jgp=0
 01860   let gded=0
 01870   return 
 01880 ! ______________________________________________________________________
@@ -192,16 +192,16 @@
 01900   gosub TOTALS
 01910   close #1: 
 01920   close #5: 
-01930 L1930: let fncloseprn
+01930 L1930: fncloseprn
 01940   goto XIT
 01950 ! ______________________________________________________________________
 01960 ! <Updateable Region: ERTN>
-01970 ERTN: let fnerror(program$,err,line,act$,"xit")
+01970 ERTN: fnerror(program$,err,line,act$,"xit")
 01980   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01990   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02000   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02010 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02020 ! /region
 02030 ! ______________________________________________________________________
-02040 XIT: let fnxit
+02040 XIT: fnxit
 02050 ! ______________________________________________________________________

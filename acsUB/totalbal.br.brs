@@ -3,7 +3,7 @@
 00110 fntop(program$,"View Total Accounts Receivable")
 11000 do 
 12000   fntos(sn$="totalBal")
-12020   mylen=28 : let mypos=mylen+2
+12020   mylen=28 : mypos=mylen+2
 12040   fnlbl(1,1,"Total Accounts Receivable:",28,1)
 12060   fntxt(1,mypos,18,0,1,"10",1)
 12080   resp$(1)=str$(fn_total_ar)
@@ -15,7 +15,7 @@
 12180   excludeFinalBilled$=resp$(2)
 12200   fncreg_write(env$('program_caption')&' - '&'Exclude Final Billed',excludeFinalBilled$)
 13000 loop until ck=5
-14000 XIT: let fnxit
+14000 XIT: fnxit
 16000 def fn_setup
 16010   if ~setup then 
 16020     setup=1
@@ -29,7 +29,7 @@
 16540   ! if env$('client')='French Settlement' then filterByBillingDate=1 else filterByBillingDate=0
 16900 fnend 
 18000 ! <Updateable Region: ERTN>
-18010 ERTN: let fnerror(program$,err,line,act$,"xit")
+18010 ERTN: fnerror(program$,err,line,act$,"xit")
 18020   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 18030   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 18040   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -40,7 +40,7 @@
 22020   fntotal_ar=fn_total_ar
 22030 fnend 
 24000 def fn_total_ar
-24020   let totalBal=0
+24020   totalBal=0
 24060   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",Shr",internal,input
 25000   do 
 25020     read #h_customer,using "Form POS 292,PD 4.2,PD 4,pos 1821,N 1": bal,customerBillingDate,finalBillingCode eof TA_FINIS

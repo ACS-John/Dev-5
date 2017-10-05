@@ -13,14 +13,14 @@
         fndat(dat$)
 00130 ! ______________________________________________________________________
 00140   fntos(sn$="OtherDed") !:
-        let rc=cf=0: let mylen=22: let mypos=mylen+3: let frameno=1
+        rc=cf=0: mylen=22: mypos=mylen+3: let frameno=1
 00150   fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included in this report.")
 00160   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
 00170   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno) !:
-        let resp$(rc+=1)=str$(beg_date)
+        resp$(rc+=1)=str$(beg_date)
 00180   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
 00190   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this report. ",frameno) !:
-        let resp$(rc+=1)=str$(end_date)
+        resp$(rc+=1)=str$(end_date)
 00200   fncmdkey("Next",1,1,0,"Print report.")
 00210   fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
 00220   fnacs(sn$,0,mat resp$,ckey)
@@ -30,12 +30,12 @@
 00250   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode !:
         close #1: 
 00260   for j=1 to 10
-00270     let miscname$(j)=lpad$(rtrm$(miscname$(j)(1:9)),9)
+00270     miscname$(j)=lpad$(rtrm$(miscname$(j)(1:9)),9)
 00280   next j
-00290   let nametab=66-int(len(rtrm$(cnam$))/2)
+00290   nametab=66-int(len(rtrm$(cnam$))/2)
 00300   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00310   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno)&",Shr",internal,outin,relative 
-00320   let report$="Other Deductions Register"
+00320   report$="Other Deductions Register"
 00330   fnopenprn
 00340   gosub L620
 00350 L350: if d(1)>0 then goto L360 else goto L400
@@ -58,10 +58,10 @@
 00520 HEADER: ! 
 00530   pr #255,using L540: date$('mm/dd/yy'),time$,cnam$
 00540 L540: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,pos nametab,c 40,skip 1
-00550   let p1=66-int(len(rtrm$(report$))/2)
+00550   p1=66-int(len(rtrm$(report$))/2)
 00560   pr #255,using L570: rtrm$(report$)
 00570 L570: form pos p1,c 50
-00580   let p1=66-int(len(rtrm$(dat$))/2)
+00580   p1=66-int(len(rtrm$(dat$))/2)
 00590   pr #255,using L570: rtrm$(fnpedat$)
 00600   return 
 00610 ! ______________________________________________________________________
@@ -84,16 +84,16 @@
 00780   fncloseprn : goto XIT
 00790 L790: ! ACCUMULATE TOTALS
 00800   for j=1 to 10
-00810     let totalded(j)+=d(j+8)
+00810     totalded(j)+=d(j+8)
 00820   next j
 00830   return 
 00840   pr #255: newpage
 00850   gosub L620
 00860   continue 
-00870 XIT: let fnxit
+00870 XIT: fnxit
 00880 ! ______________________________________________________________________
 00890 ! <updateable region: ertn>
-00900 ERTN: let fnerror(program$,err,line,act$,"xit")
+00900 ERTN: fnerror(program$,err,line,act$,"xit")
 00910   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00920   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00930   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -33,7 +33,7 @@
 00330   goto L100
 00340 ! ________________________________________________________________
 00350 DONE: close #101: ioerr XIT
-00360 XIT: let fnxit
+00360 XIT: fnxit
 00370 ! ________________________________________________________________
 00380 WIN: close #101: ioerr L390
 00390 L390: open #101: "SRow=10,SCol=18,ERow=12,ECol=61,Border=DR,Caption=PayMstr Record Length Conversion",display,outin 
@@ -41,7 +41,7 @@
 00410   return 
 00420 ! ________________________________________________________________
 00430 ! <Updateable Region: ERTN>
-00440 ERTN: let fnerror(program$,err,line,act$,"xit")
+00440 ERTN: fnerror(program$,err,line,act$,"xit")
 00450   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00460   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00470   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

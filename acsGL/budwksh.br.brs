@@ -7,7 +7,7 @@
 00070   dim cnam$*40,d$*50,n$*12,bp(13),bm(13),name$*30,gln1$*12,gln2$*12
 00080   dim cap$*128,resp$(10)*80,revb(13)
 00090 ! ______________________________________________________________________
-00100   let right=1 : center=2 : left=0
+00100   right=1 : center=2 : left=0
 00110   fntop(program$,cap$="Budget Worksheet")
 00120   fnconsole(off=0)
 00130   fncno(cno,cnam$)
@@ -17,46 +17,46 @@
 00170   open #12: "Name="&env$('Q')&"\GLmstr\BudgetInfo.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\BudIndx.h"&str$(cno)&",Use,RecL=28,KPs=1,KLn=14,Shr",internal,outin,keyed 
 00180   if fnprocess=1 then goto L440
 00190 ! defaults !:
-        let pba$='False' : bud$="False"
+        pba$='False' : bud$="False"
 00200 SCREEN1: ! 
 00210   fntos(sn$='BudgetWksht') !:
-        lc=0 : let mylen=40 : let mypos=mylen+2
+        lc=0 : mylen=40 : mypos=mylen+2
 00220   fnlbl(lc+=1,1,'Fund:',mylen,right)
 00230   fntxt(lc,mypos,40) !:
-        let resp$(1)=name$
+        resp$(1)=name$
 00240   fnlbl(lc+=1,1,'Starting Account:',mylen,right)
 00250   fnqgl(lc,mypos) !:
-        let resp$(2)=fnrgl$(gln1$)
+        resp$(2)=fnrgl$(gln1$)
 00260   fnlbl(lc+=1,1,'Ending Account:',mylen,right)
 00270   fnqgl(lc,mypos) !:
-        let resp$(3)=fnrgl$(gln2$)
+        resp$(3)=fnrgl$(gln2$)
 00280   fnchk(lc+=1,mypos,'Enter proposed budget amounts',right) !:
-        let resp$(4)=pba$
+        resp$(4)=pba$
 00290   fnchk(lc+=1,mypos,'Revised Budget instead of Origional',right) !:
-        let resp$(5)=bud$
+        resp$(5)=bud$
 00300   fnlbl(lc+=1,1,'Closing date for previous budget year:',mylen,right)
 00310   fntxt(lc,mypos,8,8,right,"1",0,"Reqired for prior year's budget to appear on worksheet.") !:
-        let resp$(6)=str$(priordate) ! previous year end
+        resp$(6)=str$(priordate) ! previous year end
 00320   fnlbl(lc+=1,1,'Closing date for two years ago:',mylen,right)
 00330   fntxt(lc,mypos,8,8,right,"1",0,"Reqired only if you want balance and budget from two years ago.") !:
-        let resp$(7)=str$(priorpriordate) ! two years ago
+        resp$(7)=str$(priorpriordate) ! two years ago
 00340   fnchk(lc+=1,mypos,"Year Already Closed:",right)
-00350   let resp$(8)="False"
+00350   resp$(8)="False"
 00360   fncmdset(3)
 00370   fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
-00390   let name$=resp$(1) !:
+00390   name$=resp$(1) !:
         let gln1$=fnagl$(resp$(2)) !:
         let gln2$=fnagl$(resp$(3)) !:
-        let pba$=resp$(4) !:
+        pba$=resp$(4) !:
         bud$=resp$(5)
-00400   let priordate=val(resp$(6)) !:
-        let priorpriordate=val(resp$(7))
+00400   priordate=val(resp$(6)) !:
+        priorpriordate=val(resp$(7))
 00410   if resp$(8)="True" then let yearclosed=1
 00420   let yr1$=resp$(6)(5:6) !:
         let yr2$=resp$(7)(5:6)
 00430   read #1,using L530,key>=gln1$: n$,d$,cb,mat bp,mat bm,mat revb nokey L440
-00440 L440: let namtab=66-int(len(rtrm$(name$))/2)
+00440 L440: namtab=66-int(len(rtrm$(name$))/2)
 00450   fnopenprn
 00460   gosub HEADING
 00470   goto L540
@@ -66,25 +66,25 @@
 00510 L510: if trim$(gln2$)="" then goto L530
 00520   if n$>gln2$ then goto L760
 00530 L530: form pos 1,c 12,c 50,pos 87,pd 6.2,pos 171,26*pd 6.2,pos 339,13*pd 6.2
-00540 L540: let dno=val(n$(1:3))
+00540 L540: dno=val(n$(1:3))
 00550   ano=val(n$(4:9))
 00560   sno=val(n$(10:12))
 00570   if yearclosed=1 then cb=bp(12) ! use last year end balance if year already closed.
 00580   if uprc$(bud$)="R" then mat bm=revb
 00590   cyb=bm(1)+bm(2)+bm(3)+bm(4)+bm(5)+bm(6)+bm(7)+bm(8)+bm(9)+bm(10)+bm(11)+bm(12)
-00600   let tpriorcb+=priorcb
-00610   let tpriorbud+=priorbud
-00620   let toldcb+=oldcb
-00630   let toldbud+=oldbud
-00640   let tpyb=tpyb+bp(12)
-00650   let tcb=tcb+cb
-00660   let tcyb=tcyb+cyb
+00600   tpriorcb+=priorcb
+00610   tpriorbud+=priorbud
+00620   toldcb+=oldcb
+00630   toldbud+=oldbud
+00640   tpyb=tpyb+bp(12)
+00650   tcb=tcb+cb
+00660   tcyb=tcyb+cyb
 00670   if yr1$="" then goto L710
 00680   budkey$=n$&yr1$ ! gl number plus year for last year
 00690   budacno$="": let yr$="": oldcb=oldbud=0
 00700   read #12,using "form pos 1,c 12,c 2,2*pd 6.2",key=budkey$: budacno$,yr$,oldcb,oldbud nokey L720 ! read old budget history record
 00710 L710: if yr2$="" then goto L740
-00720 L720: let priorbudkey$=n$&yr2$ ! get two years ago
+00720 L720: priorbudkey$=n$&yr2$ ! get two years ago
 00730   read #12,using "form pos 1,c 12,c 2,2*pd 6.2",key=priorbudkey$: budacno$,prioryr$,priorcb,priorbud nokey L740 ! read old budget history record from two years ago
 00740 L740: gosub PRINT_MASTER_RECORD
 00750   goto L480
@@ -95,11 +95,11 @@
 00800   if priordate>0 and priorpriordate>0 then pr #255,using L820: "Totals",tpriorcb,tpriorbud,toldcb,toldbud,tcb,tcyb,tbud
 00810 L810: form pos 38,c 6,pos 45,pic(---,---,---.##),pos 73,pic(---,---,---.##),pos 102,pic(---,---,---.##),pos 123,pic(----,---,---.zz),skip 2
 00820 L820: form pos 25,c 6,pos 34,7*pic(----,---,---.##),skip 1
-00830   let tpyb=0
-00840   let tcb=0
-00850   let tcyb=0
-00860   let tbud=0
-00870   let tpriorcb=tpriorcb=toldcb=toldbud=0
+00830   tpyb=0
+00840   tcb=0
+00850   tcyb=0
+00860   tbud=0
+00870   tpriorcb=tpriorcb=toldcb=toldbud=0
 00880   fncloseprn
 00890   goto SCREEN1
 00900   goto XIT
@@ -137,17 +137,17 @@
 01220 PRINT_MASTER_RECORD: ! 
 01230   if pba$="True" then 
 01240     fntos(sn$='Budwksh-add-ba') !:
-          lc=0 : let mylen=50 : let mypos=mylen+2
+          lc=0 : mylen=50 : mypos=mylen+2
 01250     fnlbl(lc+=1,1,'Enter Proposed Budget',40,center,+2)
 01260     lc+=1
 01270     fnlbl(lc+=1,1,"Proposed Budget for Account "&str$(dno)&"-"&str$(ano)&"-"&str$(sno)&":",mylen,right)
 01280     fntxt(lc,mypos,12,0,0,'currency') !:
-          let resp$=''
+          resp$=''
 01290     fnlbl(lc+=1,1,d$,mylen,right)
 01300     fncmdset(3)
 01310     fnacs(sn$,0,mat resp$,ckey)
 01320     if ckey=5 then goto XIT
-01330     bud=val(resp$(1)) : let tbud+=bud
+01330     bud=val(resp$(1)) : tbud+=bud
 01340   end if 
 01350   if priordate=0 and priorpriordate=0 then goto L1360 else goto L1430
 01360 L1360: if pba$="True" then goto L1400
@@ -179,10 +179,10 @@
 01620   gosub HEADING
 01630   continue 
 01640 ! ______________________________________________________________________
-01650 XIT: let fnxit
+01650 XIT: fnxit
 01660 ! ______________________________________________________________________
 01670 ! <Updateable Region: ERTN>
-01680 ERTN: let fnerror(program$,err,line,act$,"xit")
+01680 ERTN: fnerror(program$,err,line,act$,"xit")
 01690   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01710   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -192,18 +192,18 @@
 01750 DETERMINE_DATE: ! 
 01760   endingdate$=rtrm$(fnpedat$)
 01770   let x=pos(endingdate$," ",1)
-01780   let month$=endingdate$(1:x-1)
-01790   let day=val(endingdate$(x+1:x+2)) conv L1800
-01800 L1800: let year=val(endingdate$(len(endingdate$)-1:len(endingdate$))) : let prioryear=year-1
+01780   month$=endingdate$(1:x-1)
+01790   day=val(endingdate$(x+1:x+2)) conv L1800
+01800 L1800: let year=val(endingdate$(len(endingdate$)-1:len(endingdate$))) : prioryear=year-1
 01810   dim month$(12),payrolldate$*20
-01820   let month$(1)="January": let month$(2)="February" !:
-        let month$(3)="March": let month$(4)="April": let month$(5)="May" !:
-        let month$(6)="June" : let month$(7)="July" !:
-        let month$(8)="August": let month$(9)="September" !:
-        let month$(10)="October": let month$(11)="November": let month$(12)="December"
+01820   month$(1)="January": month$(2)="February" !:
+        month$(3)="March": month$(4)="April": month$(5)="May" !:
+        month$(6)="June" : month$(7)="July" !:
+        month$(8)="August": month$(9)="September" !:
+        month$(10)="October": month$(11)="November": month$(12)="December"
 01830   for j=1 to 12
-01840     if uprc$(month$)=uprc$(month$(j)) then let month=j: goto L1860
+01840     if uprc$(month$)=uprc$(month$(j)) then month=j: goto L1860
 01850   next j
-01860 L1860: let priordate=(month*10000)+day*100+prioryear
-01870   let priorpriordate=priordate-1
+01860 L1860: priordate=(month*10000)+day*100+prioryear
+01870   priorpriordate=priordate-1
 01880   return 

@@ -35,33 +35,33 @@
 00330 BUILD_LAYOUT: ! 
 00340   fncno(cno)
 00350 ! ** Field Labels    ** !:
-        let ic=0 ! temporary Item Counter
+        ic=0 ! temporary Item Counter
 00360   lbl$(ic+=1)="Trans Code" !:
         lbl$(ic+=1)="Description"
 00370 ! ** Text Box / Field Display   Lengths   ** !:
-        let ic=0 ! temporary Item Counter !:
-        let mmddyy=8 !:
+        ic=0 ! temporary Item Counter !:
+        mmddyy=8 !:
         ccyymmdd=10
-00380   let tln(ic+=1)=2 !:
-        let tln(ic+=1)=20
+00380   tln(ic+=1)=2 !:
+        tln(ic+=1)=20
 00390 ! ** Field Types ** !:
-        let ic=0
+        ic=0
 00400   fltyp$(ic+=1)='n' !:
         fltyp$(ic+=1)='C'
 00410 ! ** Field Storage Lengths ** !:
-        let ic=0 !:
-        let mmddyy=6 : ccyymmdd=8
+        ic=0 !:
+        mmddyy=6 : ccyymmdd=8
 00420   sln(ic+=1)=2 !:
         sln(ic+=1)=20
 00430 ! ** Field Masks ** !:
-        let ic=0 !:
-        let pointtwo=32 : let number=30 !:
-        ccyymmdd=3 : let mmddyy=1 : let glnumber=53
-00440   let mask(ic+=1)=number !:
-        let mask(ic+=1)=0
+        ic=0 !:
+        pointtwo=32 : number=30 !:
+        ccyymmdd=3 : mmddyy=1 : let glnumber=53
+00440   mask(ic+=1)=number !:
+        mask(ic+=1)=0
 00450 ! ** Storage Positions ** !:
         ! starting field position - default to the same as order displayed !:
-        let ic=0
+        ic=0
 00460   sp(ic+=1)=1 !:
         sp(ic+=1)=3
 00470 ! ** Combo Boxes **
@@ -77,10 +77,10 @@
 00520   fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00530   return 
 00540 ! ______________________________________________________________________
-00550 XIT: let fnxit
+00550 XIT: fnxit
 00560 ! ______________________________________________________________________
 00570 ! <Updateable Region: ERTN>
-00580 ERTN: let fnerror(program$,err,line,act$,"xit")
+00580 ERTN: fnerror(program$,err,line,act$,"xit")
 00590   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00610   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

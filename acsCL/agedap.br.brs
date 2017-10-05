@@ -11,35 +11,35 @@
 00110   fncno(cno,cnam$)
 00120   fntop(program$,cap$="Accounts Payable Listing (Aged)")
 00130   cancel=99
-00140   let mo(01)=000 : let mo(02)=031 : let mo(03)=059 : let mo(04)=090 !:
-        let mo(05)=120 : let mo(06)=151 : let mo(07)=181 : let mo(08)=212 !:
-        let mo(09)=243 : let mo(10)=273 : let mo(11)=304 : let mo(12)=334 !:
-        let mo(13)=365
+00140   mo(01)=000 : mo(02)=031 : mo(03)=059 : mo(04)=090 !:
+        mo(05)=120 : mo(06)=151 : mo(07)=181 : mo(08)=212 !:
+        mo(09)=243 : mo(10)=273 : mo(11)=304 : mo(12)=334 !:
+        mo(13)=365
 00150 ! ______________________________________________________________________
 00160   def fnjd(x)
-00170     let jd0=mo(int(x*.0001))+(int(x*.01)-int(x*.0001)*100)+int(fndate_mmddyy_to_ccyymmdd(x)*.0001)*365+int(int(fndate_mmddyy_to_ccyymmdd(x)*.0001)/4)
-00180     if int(fndate_mmddyy_to_ccyymmdd(x*.0001))/4=int(int(fndate_mmddyy_to_ccyymmdd(x*.0001))/4) and int(x*.0001)<3 then let jd0=jd0-1
+00170     jd0=mo(int(x*.0001))+(int(x*.01)-int(x*.0001)*100)+int(fndate_mmddyy_to_ccyymmdd(x)*.0001)*365+int(int(fndate_mmddyy_to_ccyymmdd(x)*.0001)/4)
+00180     if int(fndate_mmddyy_to_ccyymmdd(x*.0001))/4=int(int(fndate_mmddyy_to_ccyymmdd(x*.0001))/4) and int(x*.0001)<3 then jd0=jd0-1
 00190     fnjd=jd0
 00200   fnend 
 00210 ! ______________________________________________________________________
 00220   fntos(sn$="agedap") !:
-        let respc=0
+        respc=0
 00230   fnlbl(1,38,"",1,1)
 00240   fnlbl(1,1,"Aging Date:",23,1)
 00250   fntxt(1,25,10,0,1,"1001") !:
-        let resp$(respc+=1)=str$(d1)
+        resp$(respc+=1)=str$(d1)
 00260   fnlbl(3,1,"Aging Break 1:",23,1)
 00270   fntxt(3,25,3,0,1,"30",0,"Aging break 1 is the maximum age of an invoice (in days) to be grouped in the first category") !:
-        let resp$(respc+=1)="30"
+        resp$(respc+=1)="30"
 00280   fnlbl(4,1,"Aging Break 2:",23,1)
 00290   fntxt(4,25,3,0,1,"30") !:
-        let resp$(respc+=1)="60"
+        resp$(respc+=1)="60"
 00300   fnlbl(5,1,"Aging Break 3:",23,1)
 00310   fntxt(5,25,3,0,1,"30") !:
-        let resp$(respc+=1)="90"
-00320   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+        resp$(respc+=1)="90"
+00320   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
-00340   let d1=val(resp$(1))
+00340   d1=val(resp$(1))
 00350   bk(1,2)=val(resp$(2))
 00360   bk(2,2)=val(resp$(3))
 00370   bk(3,2)=val(resp$(4))
@@ -54,14 +54,14 @@
 00460   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1': vn$,iv$,ivd,dd,po$,de$,upa,cde eof END1
 00470   if upa=0 then goto READ_PAYTRANS
 00480   if hvn$<>"" and hvn$><vn$ then gosub VNTOT
-00490   let hvn$=vn$
+00490   hvn$=vn$
 00500   gosub AGE2
 00510   pr #255,using 'Form POS 1,C 10,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS P1,N 12.2,POS 111,N 12.2': vn$,iv$,ivd,dd,de$,upa,upa pageoflow NEWPGE
 00520   goto READ_PAYTRANS
 00530 ! ______________________________________________________________________
 00540 NEWPGE: pr #255: newpage: gosub HDR : continue 
 00550 ! ______________________________________________________________________
-00560 HDR: let f1=1
+00560 HDR: f1=1
 00570   pr #255,using 'Form POS 1,C 8,Cc 86': date$,cnam$
 00580   pr #255,using 'Form POS 1,C 8,Cc 86': time$,cap$
 00590   pr #255,using 'Form POS 1,C 4,N 4,POS 9,Cc 86': "Page",pg+=1,"As of "&cnvrt$("pic(zz/zz/zz)",d1) !:
@@ -84,10 +84,10 @@
 00750   fncloseprn
 00760   goto XIT
 00770 ! ______________________________________________________________________
-00780 XIT: let fnxit
+00780 XIT: fnxit
 00790 ! ______________________________________________________________________
 00800 VNTOT: ! 
-00810   let vnam$=""
+00810   vnam$=""
 00820   if hvn$<>"" then !:
           read #paymstr,using 'Form POS 9,C 30',key=hvn$: vnam$ nokey L830
 00830 L830: pr #255: tab(63);rpt$("  ----------",5)
@@ -98,15 +98,15 @@
 00880 ! ______________________________________________________________________
 00890 AGE2: ! 
 00895   if ivd=0 then goto L950
-00900   let das=max(0,int(fnjd(d1)-fnjd(ivd)))
+00900   das=max(0,int(fnjd(d1)-fnjd(ivd)))
 00910   for j=1 to 3
 00920     if das>=bk(j,1) and das<=bk(j,2) then goto L940
 00930   next j
-00940 L940: let p1=j*12+51 : let t1(j)+=upa : let t1(5)+=upa
+00940 L940: p1=j*12+51 : t1(j)+=upa : t1(5)+=upa
 00950 L950: return 
 00960 ! ______________________________________________________________________
 00970 ! <Updateable Region: ERTN>
-00980 ERTN: let fnerror(program$,err,line,act$,"xit")
+00980 ERTN: fnerror(program$,err,line,act$,"xit")
 00990   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01000   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01010   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

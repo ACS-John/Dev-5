@@ -19,7 +19,7 @@
 10260   goto SCREEN_GRID ! program starts with flex grid of all rates currently in file
 20000 SCREEN_GRID: ! r:
 20020   fntos(sn$="rateflex")
-20040   let myline=1 : let mypos=1 : let height=10 : let width=50
+20040   myline=1 : mypos=1 : height=10 : let width=50
 20060   colhdr$(1)="Code"
 20080   colhdr$(2)="Description"
 20100   colhdr$(3)="Minimum"
@@ -33,10 +33,10 @@
 20260   restore #1: 
 20280   do 
 20300     read #1,using 'Form POS 1,C 2,G 2,C 50,32*G 10': mat rt$ eof L1010
-20320     let item$(1)=rt$(1)&rt$(2)
-20340     let item$(2)=rt$(3)(1:30)
-20360     let item$(3)=rt$(4)
-20380     let item$(4)=rt$(8)
+20320     item$(1)=rt$(1)&rt$(2)
+20340     item$(2)=rt$(3)(1:30)
+20360     item$(3)=rt$(4)
+20380     item$(4)=rt$(8)
 20400     fnflexadd1(mat item$)
 20420   loop 
 20440 L1010: ! 
@@ -47,7 +47,7 @@
 20540   fncmdkey("&Print",3,0,0,"Prints rate file proof list")
 20560   fncmdkey("&Complete",5,0,1,"Return to menu")
 20580   fnacs(sn$,0,mat resp$,ckey) ! CALL FLEXGRID
-21000   let k$=rpad$(resp$(1),4)
+21000   k$=rpad$(resp$(1),4)
 21020   if ckey=5 then 
 21040     goto XIT
 21060   else if ckey=2 then 
@@ -64,8 +64,8 @@
 21280 ! /r
 30000 DELETEREC: ! r:
 30020   mat msgline$(2)
-30040   let msgline$(1)="Delete this rate record?"
-30060   let msgline$(2)=k$ ! rt$(1)&rt$(2)
+30040   msgline$(1)="Delete this rate record?"
+30060   msgline$(2)=k$ ! rt$(1)&rt$(2)
 30080   fnmsgbox(mat msgline$,resp$,'',36)
 30120   if uprc$(resp$)(1:1)="Y" then 
 30140     delete #1,key=k$: ! rt$(1)&rt$(2):
@@ -78,15 +78,15 @@
 40060   fnlbl(1,1,"Service Type:",20,1)
 40080   fnlbl(1,29,"Rate Code:",10,1)
 40100   fncomboa("rate_type",1,22,mat option$,"All codes must be between 1 and 99",2)
-40120   let resp$(1)=""
+40120   resp$(1)=""
 40140   fntxt(1,40,2,0,0,"",0,"All codes must be between 1 and 99")
 40160   fncmdset(2)
 40180   fnacs(sn$,0,mat resp$,ckey) ! CALL ADD NEW RECORD
 40200   if ckey=5 then goto SCREEN_GRID
-40220   let rt$=uprc$(resp$(1)) ! service type
+40220   rt$=uprc$(resp$(1)) ! service type
 40240   if rtrm$(rt$)="" then 
 40260     mat msgline$(1)
-40280     let msgline$(1)="Invalid Service Type"
+40280     msgline$(1)="Invalid Service Type"
 40300     fnmsgbox(mat msgline$,resp$,'',16)
 40320     goto ADDNEWRECORD
 40340   end if 
@@ -94,25 +94,25 @@
 40380   let g1=0 : let g1=val(resp$(2)) conv ignore ! rate code
 40420   if g1=0 then 
 40440     mat msgline$(1)
-40460     let msgline$(1)="Rate codes must be from 1 to 99!"
+40460     msgline$(1)="Rate codes must be from 1 to 99!"
 40480     fnmsgbox(mat msgline$,resp$,'',16)
 40500     goto ADDNEWRECORD
 40520   end if 
 40540 ! 
-40560   let rt$=rt$
+40560   rt$=rt$
 40580   mat rt$=("")
-40600   let rt$(1)=rt$
+40600   rt$(1)=rt$
 40620   for j=1 to udim(option$)
 40640     if rt$(1)=option$(j) then goto ANR_SERVICE_TYPE_IS_VALID
 40660   next j
 40680   mat msgline$(1)
-40700   let msgline$(1)="Invalid Service Type"
+40700   msgline$(1)="Invalid Service Type"
 40720   fnmsgbox(mat msgline$,resp$,'',16)
 40740   goto ADDNEWRECORD
 40760 ANR_SERVICE_TYPE_IS_VALID: ! 
 40780 ! 
-40800   let rt$(2)=lpad$(str$(g1),2)
-40820   let k$=rt$(1)&rt$(2)
+40800   rt$(2)=lpad$(str$(g1),2)
+40820   k$=rt$(1)&rt$(2)
 40840   read #1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$ nokey L470
 40860   goto RATEMAINT ! existing record
 40880 L470: ! 
@@ -124,7 +124,7 @@
 50040   fntos(sn$="ratemaint")
 50060   c1=20 : c2=32 : c3=44
 50080   fnlbl(1,1,"Service Type:",20,1)
-50100 ! let fncomboa("ubrate3",1,22,mat option$,"All codes must be between 1 and 99",2)
+50100 ! fncomboa("ubrate3",1,22,mat option$,"All codes must be between 1 and 99",2)
 50120   fntxt(1,22,2,0,0,"",1)
 50140   fnlbl(1,29,"Rate Code:",10,1)
 50160   fntxt(1,40,2,0,0,"30",1)
@@ -165,10 +165,10 @@
 50784   mat rt$=resp$
 50800   if ckey=5 then goto SCREEN_GRID
 60000 ! 
-60020   let rt$(1)=uprc$(rt$(1)) ! service type
+60020   rt$(1)=uprc$(rt$(1)) ! service type
 60040   if rtrm$(rt$(1))="" then 
 60060     mat msgline$(1)
-60080     let msgline$(1)="Invalid Service Type: "&rt$(1)
+60080     msgline$(1)="Invalid Service Type: "&rt$(1)
 60100     fnmsgbox(mat msgline$,resp$,'',16)
 60120     goto RATEMAINT
 60140   end if 
@@ -176,7 +176,7 @@
 60180   let g1=0 : let g1=val(rt$(2)) conv ignore ! rate code
 60200   if g1=0 then 
 60220     mat msgline$(1)
-60240     let msgline$(1)="Rate codes must be from 1 to 99!"
+60240     msgline$(1)="Rate codes must be from 1 to 99!"
 60260     fnmsgbox(mat msgline$,resp$,'',48)
 60280     goto RATEMAINT
 60300   end if 
@@ -185,30 +185,30 @@
 60360     if rt$(1)=uprc$(option$(j)) then goto RM_SERVICE_TYPE_VALID
 60380   next j
 60400   mat msgline$(1)
-60420   let msgline$(1)="Invalid Service Type: "&rt$(1)
+60420   msgline$(1)="Invalid Service Type: "&rt$(1)
 60440   fnmsgbox(mat msgline$,resp$,'',16)
 60460 RM_SERVICE_TYPE_VALID: ! 
 60480 ! 
-60500   let rt$(2)=lpad$(str$(g1),2)
-60520   let k$=rt$(1)&rt$(2)
+60500   rt$(2)=lpad$(str$(g1),2)
+60520   k$=rt$(1)&rt$(2)
 60560   rewrite #1,using 'Form POS 1,C 2,G 2,C 50,32*G 10',key=k$: mat rt$
 60580   goto SCREEN_GRID
 60600 ! /r
 70000 PRINTPROOF: ! r:
 70020   fntos(sn$="RateProof")
 70040   fnopt(1,14,"Code Sequence")
-70060   let resp$(1)="True"
+70060   resp$(1)="True"
 70080   fnopt(2,14,"Name Sequence")
-70100   let resp$(2)="False"
+70100   resp$(2)="False"
 70120   fncmdset(2)
 70140   fnacs(sn$,0,mat resp$,ckey) ! CALLS PROOF LIST
 70160   if ckey=5 then goto SCREEN_GRID
-70180   let ti2=1 ! default to code sequence
-70200   if uprc$(resp$(1))=uprc$("True") then let ti2=1: let k$="    " ! code sequence
-70220   if uprc$(resp$(2))=uprc$("True") then let ti2=2: let k$=rpt$(chr$(0),25) ! name sequence
+70180   ti2=1 ! default to code sequence
+70200   if uprc$(resp$(1))=uprc$("True") then ti2=1: k$="    " ! code sequence
+70220   if uprc$(resp$(2))=uprc$("True") then ti2=2: k$=rpt$(chr$(0),25) ! name sequence
 70240   restore #ti2,key>=k$: ! Nokey SCREEN_GRID
 70260   fnopenprn
-70280   let pg=0
+70280   pg=0
 70300   do 
 70320     read #ti2,using 'Form POS 1,C 2,G 2,C 50,32*G 10',release: mat rt$ eof PRINT_PROOF_FINIS
 70340     gosub PRINT_ONE_RATE
@@ -232,13 +232,13 @@
 70700   pr #255: ""
 70720   if pg+=1<3 then goto P1R_FINIS
 70740   pr #255: newpage
-70760   let pg=0
+70760   pg=0
 70780 P1R_FINIS: ! 
 70800   return  ! /r
-80000 XIT: let fnxit
+80000 XIT: fnxit
 80020 IGNORE: continue 
 80040 ! <Updateable Region: ERTN>
-80060 ERTN: let fnerror(program$,err,line,act$,"xit")
+80060 ERTN: fnerror(program$,err,line,act$,"xit")
 80080   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 80100   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 80120   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

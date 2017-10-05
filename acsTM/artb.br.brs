@@ -43,8 +43,8 @@
 00410   if am6=0 then goto L400
 00420 L420: form pos 1,c 5,c 30,pos 283,pd 5.2,pos 298,n 1,pos 299,2*pd 3
 00430   if am6<=0 then goto L450
-00440   let tam6=tam6+am6
-00450 L450: if am6<0 then cb1=cb1+(-am6) else let db1=db1+am6
+00440   tam6=tam6+am6
+00450 L450: if am6<0 then cb1=cb1+(-am6) else db1=db1+am6
 00460   if am6<=0 then goto L400
 00470   gosub L1000
 00480   mat s=s+e
@@ -54,13 +54,13 @@
 00520 L520: pr #255: newpage
 00530   gosub L550
 00540   goto L400
-00550 L550: let p2=p2+1
+00550 L550: p2=p2+1
 00560   pr #255,using L570: date$,cnam$,"PAGE ",p2
 00570 L570: form skip 1,pos 1,c 8,pos at,c 40,pos 120,c 5,n 4,skip 1
 00580   pr #255,using L590: time$,"A/R AGED TRIAL BALANCE"
 00590 L590: form pos 1,c 8,pos 55,c 22,skip 1
 00600   let q$=rtrm$("As of "&dat$)
-00610   let tabq=int(66-len(q$)/2)
+00610   tabq=int(66-len(q$)/2)
 00620   pr #255,using L630: q$
 00630 L630: form pos tabq,c 26,skip 0
 00640   if v9=9 then goto L690
@@ -79,7 +79,7 @@
 00770   pr #255: 
 00780   pr #255,using L500: "","   COMPANY TOTALS",tam6,mat s
 00790 L790: pr #255: newpage
-00800   let v9=9
+00800   v9=9
 00810   gosub L550
 00820   pr #255,using L830: "A/R AGING SUMMARY"
 00830 L830: form skip 2,pos 58,c 40,skip 2
@@ -96,13 +96,13 @@
 00940 L940: form pos 30,c 30,n 14.2,skip 2
 00950   pr #255,using L940: "LESS CREDIT BALANCE ACCOUNTS",cb1
 00960   pr #255,using L940: "NET TOTAL ACCOUNTS RECEIVABLE",db1-cb1
-00970 L970: let fncloseprn
+00970 L970: fncloseprn
 00980   close #1: ioerr XIT
-00990 XIT: let fnxit
+00990 XIT: fnxit
 01000 L1000: ! AGING ROUTINE
 01010   mat e=(0)
 01020   if ta(1)=0 then goto L1500
-01030   let ta1=ta(1)
+01030   ta1=ta(1)
 01040 L1040: read #2,using L1050,rec=ta1: iv$,mm,dd,yy,tr3,tr5,nta ioerr L1570
 01050 L1050: form pos 6,c 12,3*n 2,x 5,pd 5.2,x 2,n 1,x 21,pd 3
 01060   if tr5=4 or tr5=6 then goto L1210
@@ -123,18 +123,18 @@
 01210 L1210: if ar(5)=2 then goto L1240
 01220   e(5)=e(5)-tr3
 01230   goto L1340
-01240 L1240: let tr3=-tr3
-01250   let ta1=ta(1)
+01240 L1240: tr3=-tr3
+01250   ta1=ta(1)
 01260 L1260: read #2,using L1270,rec=ta1: hv$,mm,dd,yy,tr5,cta ioerr L1570
 01270 L1270: form pos 6,c 12,pos 18,3*n 2,pos 36,n 1,pos 58,pd 3
 01280   if tr5=4 or tr5=6 then goto L1300
 01290   if iv$=hv$ then goto L1070
 01300 L1300: if cta=0 then goto L1330
-01310   let ta1=cta
+01310   ta1=cta
 01320   goto L1260
 01330 L1330: e(5)=e(5)+tr3
 01340 L1340: if nta=0 then goto L1370
-01350   let ta1=nta
+01350   ta1=nta
 01360   goto L1040
 01370 L1370: if e(5)>=0 then goto L1400
 01380   e(4)=e(4)+e(5)
@@ -148,10 +148,10 @@
 01460 L1460: if e(2)>=0 then goto L1500
 01470   e(1)=e(1)+e(2)
 01480   e(2)=0
-01490   if e(1)<0 then let v6=v6+(-e(1))
+01490   if e(1)<0 then v6=v6+(-e(1))
 01500 L1500: return 
-01510 L1510: let mm=int(d1/10000)
-01520   let dd=int((d1-mm*10000)/100)
+01510 L1510: mm=int(d1/10000)
+01520   dd=int((d1-mm*10000)/100)
 01530   let yy=d1-(mm*10000+dd*100)
 01540   ag0=mo(mm)+dd+yy*365+int(yy/4)
 01550   if yy-int(yy/4)*4=0 and mm>2 then ag0=ag0+1

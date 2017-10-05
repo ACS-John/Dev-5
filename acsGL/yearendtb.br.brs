@@ -8,7 +8,7 @@
 00080   dim a$(9)*3,cogl$(2)*12,u$*12,c$*5,d(2),ta(2)
 00090   dim wrddetail$(2),p$(20)*50,resp$(10)*80,bp(13),cap$*128
 00100 ! ______________________________________________________________________
-00110   let right=1
+00110   right=1
 00120   fntop(program$,cap$="Reprint Year End Trial Balance")
 00140   fncno(cno,cnam$)
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno),internal,input,relative  !:
@@ -22,26 +22,26 @@
 00180   goto START_REPORT
 00190 SCREEN1: ! 
 00200   fntos(sn$="GLTB") !:
-        lc=0 : let mylen=25 : let mypos=mylen+2
+        lc=0 : mylen=25 : mypos=mylen+2
 00210   fnchk(lc+=1,mypos,"List All Details",right) !:
-        let resp$(1)="True"
+        resp$(1)="True"
 00220   fnlbl(lc+=1,1,"Cost Center:",mylen,right)
 00230   fntxt(lc,mypos,5,0,0,'number') !:
-        let resp$(2)=""
+        resp$(2)=""
 00240   fnchk(lc+=1,mypos,"Subtotal after each fund",right) !:
-        let resp$(3)="True"
+        resp$(3)="True"
 00250   fnlbl(lc+=1,1,"Starting Account:",mylen,right)
 00260   fnqgl(lc,mypos,0,1) !:
-        let resp$(4)="[All]"
+        resp$(4)="[All]"
 00270   fnlbl(lc+=1,1,"Ending Account:",mylen,right)
 00280   fnqgl(lc,mypos,0,1) !:
-        let resp$(5)="[All]"
+        resp$(5)="[All]"
 00290   fncmdset(3)
 00300   fnacs(sn$,0,mat resp$,ckey)
 00310   if ckey=5 then goto XIT
-00320   if resp$(1)="True" then let pt=0 else let pt=1
+00320   if resp$(1)="True" then pt=0 else pt=1
 00330   costcent=val(resp$(2)) !:
-        let n$=lpad$(str$(costcent),3)&"     0  0"
+        n$=lpad$(str$(costcent),3)&"     0  0"
 00340   if resp$(3)="True" then subt=1 else subt=0
 00350   sl1$=fnagl$(resp$(4)) !:
         sl2$=fnagl$(resp$(5))
@@ -55,7 +55,7 @@
 00430   if costcent><0 and val(n$(1:3))><costcent then goto READ_1
 00440   if sgl(4)=0 and sgl(5)=0 and sgl(6)=0 then goto L460
 00450   if n$>sl2$ then goto L590
-00460 L460: let dno=val(n$(1:3))
+00460 L460: dno=val(n$(1:3))
 00470   if subt=1 and olddno>0 and olddno<>dno then pr #255,using L480: "FUND "&str$(olddno)&" TOTALS",fundt3 else goto L500
 00480 L480: form skip 1,pos 30,c 20,pos 80,pic(zz,zzz,zzz.## cr),skip 2
 00490   let fundt1=fundt2=fundt3=0
@@ -76,7 +76,7 @@
 00630 L630: form pos 80,pic(zz,zzz,zzz.## cr)
 00640   close #1: ioerr L650
 00650 L650: close #2: ioerr L660
-00660 L660: let fncloseprn
+00660 L660: fncloseprn
 00670 ! 
 00680   goto XIT
 00690 ! ______________________________________________________________________
@@ -103,10 +103,10 @@
 00900   gosub HDR2
 00910   continue 
 00920 ! ______________________________________________________________________
-00930 XIT: let fnxit
+00930 XIT: fnxit
 00940 ! ______________________________________________________________________
 00950 ! <Updateable Region: ERTN>
-00960 ERTN: let fnerror(program$,err,line,act$,"xit")
+00960 ERTN: fnerror(program$,err,line,act$,"xit")
 00970   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00980   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

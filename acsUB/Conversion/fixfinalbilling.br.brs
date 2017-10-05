@@ -17,10 +17,10 @@
 00180   goto L130
 00190 L190: close #1: 
 00200   execute "Index "&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&' '&env$('Q')&"\UBmstr\UBIndx2.h"&env$('cno')&" 354 7 Replace DupKeys"
-00210 XIT: let fnxit
+00210 XIT: fnxit
 00220 ! __________________________________________________
 00230 ! <Updateable Region: ERTN>
-00240 ERTN: let fnerror(program$,err,line,act$,"xit")
+00240 ERTN: fnerror(program$,err,line,act$,"xit")
 00250   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00260   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00270   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

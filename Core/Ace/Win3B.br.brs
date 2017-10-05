@@ -1,7 +1,7 @@
 20000 library 's:\core\library': fnoldmsgbox
 20020 dim msgline$(2)*128
-20040     let msgline$(1)="Do you wish to accrue part of this Payroll"
-20060     let msgline$(2)="in the previous month? (Y/N)"
+20040     msgline$(1)="Do you wish to accrue part of this Payroll"
+20060     msgline$(2)="in the previous month? (Y/N)"
 20080     fnoldmsgbox(mat response$,cap$,mat msgline$,mtype=2)
 20100 end
 20120 !
@@ -77,7 +77,7 @@
 51380     return  ! ____________
 51400 L490: ! past win_align(s)
 51420 ! 
-51440     let temp_file$=env$('temp')&"\Win-"&cnvrt$("pic(###)",win)&".tmp"
+51440     temp_file$=env$('temp')&"\Win-"&cnvrt$("pic(###)",win)&".tmp"
 51460     close #win: ioerr ignore
 51480     open #win: "Name="&temp_file$&",Size=0,RecL=80,Replace",internal,outin 
 51500     write #win,using 'Form POS 1,5*N 4': win,sc,ec,sr,er
@@ -112,7 +112,7 @@
 52080     goto XIT
 52100 ! ______________________________________________________________________
 52120 ! <Updateable Region: ERTN>
-52140 ERTN: let fnerror(program$,err,line,act$,"xit")
+52140 ERTN: fnerror(program$,err,line,act$,"xit")
 52160     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 52180     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 52200     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -130,17 +130,17 @@
 60140 ! ______________________________________________________________________
 60160     dim temp_file$*80
 60180 ! ______________________________________________________________________
-60200     let totallen=startpos=0
+60200     totallen=startpos=0
 60220     for j=1 to udim(fkey$) ! add ' (Fx)' to each button
 60240       if fkey$(j)<>"" then 
 60260         let fkey$(j)=fkey$(j)&" (F"&str$(j)&")"  ! add ' (Fx)' to each button
-60280         let totallen+=len(fkey$(j))+1
+60280         totallen+=len(fkey$(j))+1
 60290       end if
 60300     next j
-60320     let totallen+=len(rtrm$(em$))+min(len(rtrm$(em$)),1)+es
-60340     let totallen-=1
+60320     totallen+=len(rtrm$(em$))+min(len(rtrm$(em$)),1)+es
+60340     totallen-=1
 60360     if win=0 then goto NO_TEMP_FILE
-60380     let temp_file$=env$('temp')&'\'&"Win-"&cnvrt$("pic(###)",win)&".tmp"
+60380     temp_file$=env$('temp')&'\'&"Win-"&cnvrt$("pic(###)",win)&".tmp"
 60400     open #tfn:=fngethandle: "Name="&temp_file$&",RecL=80,use",internal,outin ioerr NO_TEMP_FILE
 60420     read #tfn,using 'Form POS 1,5*N 4': win_align,sc,ec,sr,er ioerr NO_TEMP_FILE
 60440     startpos=int((ec-sc-totallen)/2+sc)+1

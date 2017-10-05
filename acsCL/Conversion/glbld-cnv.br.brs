@@ -19,10 +19,10 @@
 00190   execute "Index "&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\GLINDEX.h"&str$(cno)&" 1 12 Replace DupKeys -n"
 00200   goto XIT
 00210 ! ______________________________________________________________________
-00220 XIT: let fnxit
+00220 XIT: fnxit
 00230 ! ______________________________________________________________________
 00240 ! <Updateable Region: ERTN>
-00250 ERTN: let fnerror(program$,err,line,act$,"xit")
+00250 ERTN: fnerror(program$,err,line,act$,"xit")
 00260   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00270   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00280   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

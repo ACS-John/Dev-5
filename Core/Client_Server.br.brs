@@ -10,29 +10,29 @@
 14140     else if server_name$='' then 
 14160       server_name$=env$('computername')
 14180     end if 
-14200     let resp$(1)=server_name$
+14200     resp$(1)=server_name$
 14220 ! 
 14240     fnlbl(4,2,'Port:',19,1)
 14260     fntxt(4,22,4,0,0,'number',0,'Default is 8555')
 14280     fnureg_read('CS Server Port',cs_port$) : if cs_port$='' or cs_port$='0' then cs_port$='8555'
-14300     let resp$(2)=cs_port$
+14300     resp$(2)=cs_port$
 14320     fnlbl(6,2,'Anonymous User:',19,1)
 14340     fntxt(6,22,20,128,0,'',0,'leave blank to disable')
 14360     fnureg_read('CS Anonymous User',anon_user$)
-14380     let resp$(3)=anon_user$
+14380     resp$(3)=anon_user$
 14400     fnlbl(7,2,'Anonymous Password:',19,1)
 14420     fntxt(7,22,20,128,0,'',0,'leave blank to disable')
 14440     fnureg_read('CS Anonymous Password',anon_pass$)
-14460     let resp$(4)=anon_pass$
+14460     resp$(4)=anon_pass$
 14480 ! 
 15000     fncmdkey("Install Server",2,1,0)
 15020     fncmdkey("Uninstall Server",3,0,0)
 15040     fncmdkey('&Back',5,0,1)
 15060     fnacs(sn$,0,mat resp$,ck)
-16000     server_name$=resp$(1) : let fnureg_write('CS Server Name',server_name$)
-16020     cs_port$=resp$(2) : let fnureg_write('CS Server Port',cs_port$)
-16040     anon_user$=resp$(3) : let fnureg_write('CS Anonymous User',anon_user$)
-16060     anon_pass$=resp$(4) : let fnureg_write('CS Anonymous Password',anon_pass$)
+16000     server_name$=resp$(1) : fnureg_write('CS Server Name',server_name$)
+16020     cs_port$=resp$(2) : fnureg_write('CS Server Port',cs_port$)
+16040     anon_user$=resp$(3) : fnureg_write('CS Anonymous User',anon_user$)
+16060     anon_pass$=resp$(4) : fnureg_write('CS Anonymous Password',anon_pass$)
 16080     if ck=5 then goto XIT
 16100     if ck=2 then let fn_server_install
 16120     if ck=3 then let fn_server_uninstall
@@ -116,7 +116,7 @@
 42180   fnend 
 53000   execute 'Sy -w '&os_filename$('S:\Core\ACS_PrAce_Support_Install_ocx.exe')
 53020   execute 'Sy '&os_filename$('S:\Core\ACS_PrAce_Reg.cmd')&' /s'
-60000 XIT: let fnxit
+60000 XIT: fnxit
 62000   def fn_setup
 62020     if ~setup then 
 62040       setup=1
@@ -131,7 +131,7 @@
 70990   fnend 
 72000 IGNORE: continue 
 74000 ! <Updateable Region: ERTN>
-74040 ERTN: let fnerror(program$,err,line,act$,"xit")
+74040 ERTN: fnerror(program$,err,line,act$,"xit")
 74060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 74080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 74100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

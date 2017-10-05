@@ -12,14 +12,14 @@
 12400   fndat(dat$)
 12600 ! ______________________________________________________________________
 12800   fntos(sn$="PayrollReg")
-13000   let rc=cf=0: let mylen=22: let mypos=mylen+3: let frameno=1
+13000   rc=cf=0: mylen=22: mypos=mylen+3: let frameno=1
 13200   fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included.")
 13400   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
 13600   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno)
-13800   let resp$(rc+=1)=str$(beg_date)
+13800   resp$(rc+=1)=str$(beg_date)
 14000   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
 14200   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this report. ",frameno)
-14400   let resp$(rc+=1)=str$(end_date)
+14400   resp$(rc+=1)=str$(end_date)
 14600   fncmdkey("Next",1,1,0,"Calculate tax deposit.")
 14800   fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
 15000   fnacs(sn$,0,mat resp$,ckey)
@@ -29,11 +29,11 @@
 15800   end_date=val(resp$(2))
 16000 ! 
 16200   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : close #1: 
-16400   let ficarate=ficarate/100 : let feducrat=feducrat/100 : let mcr=mcr/100
+16400   let ficarate=ficarate/100 : let feducrat=feducrat/100 : mcr=mcr/100
 16800   open #h_prmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 16900   fPrmstr: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
 17000   open #h_acprcks:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outin,relative 
-17200   let report$="Payroll Check Register"
+17200   report$="Payroll Check Register"
 17400   fnopenprn(cp,58,220,0)
 17600   fn_hdr1
 17800 L350: if d(1)>0 then goto L360 else goto L390
@@ -62,14 +62,14 @@
 22200   goto FINIS
 22400 ! ______________________________________________________________________
 22600 def fn_header
-22610   let nametab=66-int(len(env$('cnam'))/2)
+22610   nametab=66-int(len(env$('cnam'))/2)
 22800   pr #255,using L530: date$('mm/dd/yy'),time$,env$('cnam')
 23000   L530: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,pos nametab,c 40,skip 1
-23200   let p1=66-int(len(rtrm$(report$))/2)
+23200   p1=66-int(len(rtrm$(report$))/2)
 23400   pr #255,using L560: rtrm$(report$)
 23600   L560: form pos p1,c 50
 23800   if report$="Payroll Check Register" then pr #255,using "form pos 40,cc 50": "From "&cnvrt$("pic(zzzz/zz/zz)",beg_date)&" To "&cnvrt$("pic(zzzz/zz/zz)",end_date): goto L590
-24000   let p1=66-int(len(rtrm$(dat$))/2)
+24000   p1=66-int(len(rtrm$(dat$))/2)
 24200   pr #255,using L560: rtrm$(fnpedat$)
 24300   L590: ! 
 24400 fnend 
@@ -80,19 +80,19 @@
 25040   pr #255:''
 25400 fnend 
 25600 def fn_accumulate_totals
-25800   let t1=t1+d(4) ! ACCUMULATE TOTALS
-26000   let t2=t2+d(5)
-26200   let t3=t3+d(6)
-26400   let t4=t4+d(7)
-26600   let d9=0
+25800   t1=t1+d(4) ! ACCUMULATE TOTALS
+26000   t2=t2+d(5)
+26200   t3=t3+d(6)
+26400   t4=t4+d(7)
+26600   d9=0
 26800   for j=9 to 18
-27000     if dedcode(j-8)=2 then let d9=d9-d(j) else let d9=d9+d(j)
+27000     if dedcode(j-8)=2 then d9=d9-d(j) else d9=d9+d(j)
 27200   next j
-27400   let t5=t5+d9
-27600   let t6=t6+d(8)
-27800   let t7=t7+d(22)
-28000   let t8=t8+d(19)
-28200   let t9=t9+d(21)
+27400   t5=t5+d9
+27600   t6=t6+d(8)
+27800   t7=t7+d(22)
+28000   t8=t8+d(19)
+28200   t9=t9+d(21)
 28400   at8=at8+d(20)
 28600 fnend 
 28800 def fn_print_1
@@ -112,15 +112,15 @@
 31600   L960: form pos 1,c 21,pos 48,pic(---,---.##)
 31800 fnend 
 32000 def fn_report3
-32200   let t1=0
-32400   let t2=0
-32600   let t3=0
-32800   let t4=0
-33000   let t5=0
-33200   let t6=0
-33400   let t7=0
-33600   let t8=0
-33800   let t9=0
+32200   t1=0
+32400   t2=0
+32600   t3=0
+32800   t4=0
+33000   t5=0
+33200   t6=0
+33400   t7=0
+33600   t8=0
+33800   t9=0
 34000   fn_hdr3
 34200   restore #h_prmstr: 
 34220   ! restore #h_PRmstr,key>="    ": nokey L1140 eof L1140 ! nokey FINIS eof L1090
@@ -133,7 +133,7 @@
 35800   L1140: ! 
 36000 fnend 
 36200   def fn_hdr3
-36400     let report$="PAYROLL REGISTER - EARNINGS TO DATE"
+36400     report$="PAYROLL REGISTER - EARNINGS TO DATE"
 36600     fn_header
 36800     pr #255,using L1180: "*********************** Y.T.D. ***************************    **************** Q.T.D *******************"
 37000 L1180: form skip 1,pos 23,c 105,skip 1
@@ -147,17 +147,17 @@
 38600   fncloseprn
 38800   goto XIT
 39000   def fn_calk_3b
-39200     let t1=t1+m(1)
-39400     let t2=t2+m(3)
-39600     let t3=t3+m(5)
-39800     let t4=t4+m(7)
+39200     t1=t1+m(1)
+39400     t2=t2+m(3)
+39600     t3=t3+m(5)
+39800     t4=t4+m(7)
 40000     l1=l1+m(9)
 40200     l3=l3+m(31)
 40400     l5=l5+m(35)
-40600     let t5=t5+m(2)
-40800     let t6=t6+m(4)
-41000     let t7=t7+m(6)
-41200     let t8=t8+m(8)
+40600     t5=t5+m(2)
+40800     t6=t6+m(4)
+41000     t7=t7+m(6)
+41200     t8=t8+m(8)
 41400     l2=l2+m(10)
 41600     l4=l4+m(32)
 41800     l6=l6+m(36)
@@ -172,7 +172,7 @@
 43600 PAST_PGOF3: ! 
 43800     fn_calc_3
 44000     at6=at6+at5
-44200     let mcw2=mcw2+mcw1
+44200     mcw2=mcw2+mcw1
 44400     if m(1)-m(2)>=feducwag then goto L1550
 44600     if m(1)<=feducwag then let fuc1=m(2) else let fuc1=feducwag-(m(1)-m(2))
 44800     let fuc2=fuc2+fuc1
@@ -194,11 +194,11 @@
 48000     ck$=lpad$(str$(d(2)),6)
 48200     ckdat=val(ck$(3:4))
 48400     if ckdat>0 and ckdat<32 then let x=ckdat else let x=31
-48600     let deposit(x,1)=deposit(x,1)+d(4)
-48800     let deposit(x,2)=deposit(x,2)+d(5)+d(6)+d(6)-d(21) ! FEDERAL + DOUBLE SS - EIC
+48600     deposit(x,1)=deposit(x,1)+d(4)
+48800     deposit(x,2)=deposit(x,2)+d(5)+d(6)+d(6)-d(21) ! FEDERAL + DOUBLE SS - EIC
 49000   fnend 
 49200   def fn_941_summary
-49400     let report$="941 BREAKDOWN"
+49400     report$="941 BREAKDOWN"
 49600     fn_header
 49800     pr #255: 
 50000     pr #255: tab(43);"GROSS";tab(63);"TAXES"
@@ -206,28 +206,28 @@
 50400     for j=1 to 31
 50600       pr #255,using L1790: "DAY "&str$(j),deposit(j,1),deposit(j,2)
 50800       let gross=gross + deposit(j,1)
-51000       let taxes=taxes+deposit(j,2)
+51000       taxes=taxes+deposit(j,2)
 51200     next j
 51400     pr #255,using L1860: "----------","----------","       TOTALS",gross,taxes,"==========","=========="
 51600 L1860: form pos 38,c 10,pos 58,c 10,skip 1,pos 5,c 25,pos 38,n 10.2,pos 58,n 10.2,skip 1,pos 38,c 10,pos 58,c 10,skip 1
 51800     pr #255: newpage
 52000   fnend 
 52200   def fn_calc_3
-52400     let twy=m(1)
-52600     let twq=m(2)
+52400     twy=m(1)
+52600     twq=m(2)
 52800     if twy<ficawage then at5=twq : goto L1940
 53000     if twy-twq>ficawage then at5=0 : goto L1940
 53200     at5=ficawage-(twy-twq)
 53400 L1940: ! 
-53600     if twy<mcm then let mcw1=twq : goto L1970
-53800     if twy-twq>mcm then let mcw1=0 : goto L1970
-54000     let mcw1=mcm-(twy-twq)
+53600     if twy<mcm then mcw1=twq : goto L1970
+53800     if twy-twq>mcm then mcw1=0 : goto L1970
+54000     mcw1=mcm-(twy-twq)
 54200 L1970: ! 
 54400   fnend 
-54600 XIT: let fnxit
+54600 XIT: fnxit
 54800 ! ______________________________________________________________________
 55000 ! <updateable region: ertn>
-55200 ERTN: let fnerror(program$,err,line,act$,"xit")
+55200 ERTN: fnerror(program$,err,line,act$,"xit")
 55400   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 55600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 55800   pr "program pause: type go and press [enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

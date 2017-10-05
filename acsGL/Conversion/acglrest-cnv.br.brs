@@ -16,7 +16,7 @@
 00170   goto L140
 00180 L180: close #1: : close #2: 
 00190   execute "copy test "&env$('Q')&"\GLmstr\AcGLStmt.h"&str$(cno)
-00200 L200: let fnxit
+00200 L200: fnxit
 00210   goto L260
 00220   pr newpage
 00230   if err=4148 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A FILE THAT IS IN USE AND CANNOT BE SHARED!" else goto L250
@@ -28,4 +28,4 @@
 00290   pr f "23,1,C 80,N": ""
 00300   pr f "24,1,C 80,N": ""
 00310   retry 
-00320 L320: let fnxit
+00320 L320: fnxit

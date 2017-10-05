@@ -11,9 +11,9 @@
 20200   fncno(cno)
 20220 ! ______________________________________________________________________
 20240 ! r: a screen
-20260 ! let fntos(sn$:="ubCass1")
-20280 ! let respc=0
-20300 ! let fnlbl(1,1,"Destination Path for Cass file:",33,1)
+20260 ! fntos(sn$:="ubCass1")
+20280 ! respc=0
+20300 ! fnlbl(1,1,"Destination Path for Cass file:",33,1)
 20320 ! opt1$(1)="A:\"
 20340 ! opt1$(2)="B:\"
 20360 ! opt1$(3)="C:\"
@@ -21,12 +21,12 @@
 20400 ! opt1$(5)="F:\"
 20420 ! opt1$(6)="G:\"
 20440 ! opt1$(7)="H:\"
-20460 ! let fncomboa("AB",1,35,mat opt1$)
-20480 ! let resp$(respc+=1)=opt1$(1)
-20500 ! let fncmdset(2)
-20520 ! L170: let fnacs(sn$,0,mat resp$,ckey)
+20460 ! fncomboa("AB",1,35,mat opt1$)
+20480 ! resp$(respc+=1)=opt1$(1)
+20500 ! fncmdset(2)
+20520 ! L170: fnacs(sn$,0,mat resp$,ckey)
 20540 ! if ckey=5 then goto XIT
-20560 ! let dv$=resp$(1)
+20560 ! dv$=resp$(1)
 25000 ! /r
 25020   open #h_out:=fngethandle: "Name=SAVE:ubCass1.dat,RecL=112,EOL=None,Replace",external,output ioerr XIT
 25040 !  pr file$(h_tmp);" ";lrec(h_tmp)
@@ -47,15 +47,15 @@
 28160 L300: csz$=trim$(csz$)
 28180     if csz$(len(csz$)-5:len(csz$)-5) =" " then goto L330
 28200     if csz$(len(csz$)-5:len(csz$)-5) < "0" or csz$(len(csz$)-5:len(csz$)-5)>"9" then csz$=csz$(1:len(csz$)-5) &" "&csz$((len(csz$)-4):len(csz$))
-28220 L330: let fncsz(csz$,city$,state$,zip$)
+28220 L330: fncsz(csz$,city$,state$,zip$)
 28240     let zip$=trim$(zip$)(1:5)
 28260 L350: write #h_out,using F_OUT_FIXED: z$,nam$,sta$,city$,state$,zip$,chr$(10)
 28280 F_OUT_FIXED: form pos 1,c 10,c 30,c 30,c 23,c 2,c 5,pos 112,c 1
 28300   loop 
 28320 ! /r
-28340 XIT: let fnxit
+28340 XIT: fnxit
 30000 ! <Updateable Region: ERTN>
-30020 ERTN: let fnerror(program$,err,line,act$,"xit")
+30020 ERTN: fnerror(program$,err,line,act$,"xit")
 30040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 30060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 30080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

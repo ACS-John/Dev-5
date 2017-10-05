@@ -21,10 +21,10 @@
 42000   if ck<>5 then 
 54000     gosub COMPANY_SAVE
 58000   end if
-59000 XIT: let fnxit
+59000 XIT: fnxit
 59500 IGNORE: continue 
 60640 ! <Updateable Region: ERTN>
-60660 ERTN: let fnerror(program$,err,line,act$,"xit")
+60660 ERTN: fnerror(program$,err,line,act$,"xit")
 60680   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 60700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 60720   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

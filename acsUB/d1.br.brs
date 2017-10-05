@@ -16,7 +16,7 @@
 10320     if get_or_put=0 then 
 10340       fncreg_read('Current Billing Date',d1$)
 10350       if d1$='' then let fnreg_read('UB.Current Billing Date.Company '&env$('cno'),d1$)
-10360       let d1=val(d1$)
+10360       d1=val(d1$)
 10380       if d1=0 or env$('ACSDeveloper')<>'' then 
 10400         open #20: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
 10420         read #20,using "Form POS 121,N 6",rec=1: d1
@@ -32,7 +32,7 @@
 10560     goto XIT
 10580 ! ______________________________________________________________________
 10600 ! <Updateable Region: ERTN>
-10620 ERTN: let fnerror(program$,err,line,act$,"xit")
+10620 ERTN: fnerror(program$,err,line,act$,"xit")
 10640     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 10660     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 10680     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -28,12 +28,12 @@
         lbl$(3)="Date Paid" !:
         lbl$(4)="Check Number"
 00250 ! ** Field Display Lengths ** !:
-        let mmddyy=8 : ccyymmdd=10 !:
+        mmddyy=8 : ccyymmdd=10 !:
         ! TC=0 ! Text Box Length Item Coutner
-00260   let tln(tc+=1)=8 !:
-        let tln(tc+=1)=12 !:
-        let tln(tc+=1)=mmddyy !:
-        let tln(tc+=1)=8
+00260   tln(tc+=1)=8 !:
+        tln(tc+=1)=12 !:
+        tln(tc+=1)=mmddyy !:
+        tln(tc+=1)=8
 00270 ! ** Field Types ** !:
         ! Valid are C, G, N, PD, !:
         ! Default is 'G' !:
@@ -49,14 +49,14 @@
         sln(sc+=1)=6 !:
         sln(sc+=1)=8
 00310 ! ** Field Mask ** !:
-        let number=30 !:
-        let pointtwo=32 ! number with 2 decimal places (no commas)!:
-        let mmddyy=1 : ccyymmdd=3 !:
-        let mc=0 ! mask item counter
-00320   let mask(mc+=1)=none !:
-        let mask(mc+=1)=none !:
-        let mask(mc+=1)=mmddyy !:
-        let mask(mc+=1)=number
+        number=30 !:
+        pointtwo=32 ! number with 2 decimal places (no commas)!:
+        mmddyy=1 : ccyymmdd=3 !:
+        mc=0 ! mask item counter
+00320   mask(mc+=1)=none !:
+        mask(mc+=1)=none !:
+        mask(mc+=1)=mmddyy !:
+        mask(mc+=1)=number
 00330 ! ** Storage Position ** !:
         sc=0 ! Storage Position Item Counter
 00340 ! ** Let's Make Some Combo Boxes ** !:
@@ -95,10 +95,10 @@
 00450   fnhamster("PaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00460   return 
 00470 ! ______________________________________________________________________
-00480 XIT: let fnxit
+00480 XIT: fnxit
 00490 ! ______________________________________________________________________
 00500 ! <Updateable Region: ERTN>
-00510 ERTN: let fnerror(program$,err,line,act$,"xit")
+00510 ERTN: fnerror(program$,err,line,act$,"xit")
 00520   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00530   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00540   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

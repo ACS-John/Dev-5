@@ -30,52 +30,52 @@
 00200   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence #
 00220 ! ______________________________________________________________________
 00230 SCREEN1: ! 
-00240   a$="" : let prtbkno=0
+00240   a$="" : prtbkno=0
 00250   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : ll=24 !:
-        let respc=0
+        pf=26 : ll=24 !:
+        respc=0
 00260   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00270   fntxt(3,pf,8,8,1,"1",0,tt$) !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 00280   fnlbl(4,1,"Message on Bill:",ll,1)
 00290   fntxt(4,pf,30,30) !:
-        let resp$(respc+=1)=mg$(1)
+        resp$(respc+=1)=mg$(1)
 00300   fntxt(5,pf,30,30) !:
-        let resp$(respc+=1)=mg$(2)
+        resp$(respc+=1)=mg$(2)
 00310   fntxt(6,pf,30,30) !:
-        let resp$(respc+=1)=mg$(3)
+        resp$(respc+=1)=mg$(3)
 00320   fnlbl(7,1,"Date of Billing:",ll,1)
 00330   fntxt(7,pf,8,8,1,"1") !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00340   fnlbl(8,1,"Starting Account:",ll,1)
 00350   let fe$="ubm-act-nam" !:
-        let datafile$=env$('Q')&"\UBmstr\Customer.h"&env$('cno') !:
-        let indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&env$('cno') !:
-        let kp=1741: let kl=9 : let dp=41 : let dl=30 !:
+        datafile$=env$('Q')&"\UBmstr\Customer.h"&env$('cno') !:
+        indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&env$('cno') !:
+        kp=1741: kl=9 : dp=41 : dl=30 !:
         fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) !:
-        let resp$(respc+=1)="[All]"
+        resp$(respc+=1)="[All]"
 00360   fnlbl(9,1,"Route Number:",ll,1)
 00370   fncmbrt2(9,pf) !:
-        let resp$(respc+=1)="[All]"
+        resp$(respc+=1)="[All]"
 00380   fnchk(10,pf,"Select Accounts to Print",1) !:
-        let resp$(respc+=1)="False"
+        resp$(respc+=1)="False"
 00390   fncmdset(3) !:
         fnacs(sn$,0,mat resp$,ck)
 00400   if ck=5 then goto ENDSCR
-00410   let d1 = val(resp$(5)) !:
-        let d4 = val(resp$(1)) !:
-        let mg$(1) = resp$(2) !:
-        let mg$(2) = resp$(3) !:
-        let mg$(3) = resp$(4)
+00410   d1 = val(resp$(5)) !:
+        d4 = val(resp$(1)) !:
+        mg$(1) = resp$(2) !:
+        mg$(2) = resp$(3) !:
+        mg$(3) = resp$(4)
 00420   if resp$(6)="[All]" then !:
           a$="" else !:
           a$ = lpad$(trim$(resp$(6)(1:9)),9)
 00430   if resp$(7)="[All]" then !:
-          let prtbkno=0 else !:
-          let prtbkno = val(resp$(7))
+          prtbkno=0 else !:
+          prtbkno = val(resp$(7))
 00440   if resp$(8)="True" then sl1=1: let z$="" else sl1=0
 00450   if trim$(a$)<>"" then read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1 !:
-          let holdz$=z$: begin=1 !:
+          holdz$=z$: begin=1 !:
           st1=1
 00460 L460: form pos 1,c 10,pos 1741,n 2,n 7
 00470   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
@@ -105,26 +105,26 @@
 00710   e1=0 : mat pe$=("")
 00720   for j=1 to 4
 00730     if rtrm$(ba$(j))<>"" then !:
-            e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : pe$(e1)=ba$(j)
 00740   next j
 00750   goto L920
 00760 ! ______________________________________________________________________
 00770 L770: e1=0 : mat pe$=("")
 00780   for j=2 to 4
 00790     if rtrm$(e$(j))<>"" then !:
-            e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : pe$(e1)=e$(j)
 00800   next j
-00810   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
+00810   if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 00820   goto L920
 00830 ! ______________________________________________________________________
 00840 RELEASE_PRINT: ! 
 00850   close #1: ioerr L860
 00860 L860: close #3: ioerr L870
-00870 L870: let fnpa_finis
+00870 L870: fnpa_finis
 00900   goto ENDSCR
 00910 ! ______________________________________________________________________
 00920 L920: ! 
-00930   let pb=bal-g(11)
+00930   pb=bal-g(11)
 00940   if bal<=0 then let g(5)=g(6)=g(7)=0 ! don't show penalty if balance 0 or less
 00950 ! ______________print bill routine______________________________________
 00960   gosub VBPRINT
@@ -136,17 +136,17 @@
 01010 SCREEN3: ! 
 01020   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
-01030   let txt$="Account (blank to stop)" !:
+01030   txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
 01040 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
 01050   if trim$(z$)<>"" then !:
-          let txt$="Last Account entered was "&z$ !:
+          txt$="Last Account entered was "&z$ !:
           fnlbl(3,1,txt$,44,1) else !:
-          let txt$="" !:
+          txt$="" !:
           fnlbl(3,1,txt$,44,1)
 01060   fncmbact(1,17) ! !:
-        let resp$(1)=a$
-01070   fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
+        resp$(1)=a$
+01070   fncmdset(3): fnacs(sn$,0,mat resp$,ck)
 01080   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
         if trim$(a$)="" then goto RELEASE_PRINT
 01090   if ck=5 then goto RELEASE_PRINT
@@ -157,8 +157,8 @@
 01140   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1390
 01150   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
 01160   s5=1
-01170   if prtbkno=0 then let routekey$="" else !:
-          let routekey$=cnvrt$("N 2",prtbkno)&"       " !:
+01170   if prtbkno=0 then routekey$="" else !:
+          routekey$=cnvrt$("N 2",prtbkno)&"       " !:
           ! key off first record in route (route # no longer part of customer #)
 01180   restore #2,search>=routekey$: 
 01190 L1190: read #2,using L1200: z$,f,route eof END5
@@ -184,27 +184,27 @@
 01390 L1390: return 
 01400 ! ______________________________________________________________________
 01410 ENDSCR: ! pr totals screen
-01420   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
+01420   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01430   fntos(sn$="Bills-Total") !:
-        let mylen=23 : let mypos=mylen+2 !:
-        let respc=0
+        mylen=23 : mypos=mylen+2 !:
+        respc=0
 01440   fnlbl(1,1,"Total Bills Printed:",mylen,1)
 01450   fntxt(1,mypos,8,0,1,"",1) !:
-        let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-01460 ! Let FNLBL(2,1,"Total  Bills  Coded:",MYLEN,1)
-01470 ! Let FNTXT(2,MYPOS,8,0,1,"",1) !:
-        ! Let RESP$(RESPC+=1)=CNVRT$("N 8",BCT(2))
-01480 ! Let FNLBL(3,1,"Total Bills Not Coded:",MYLEN,1)
-01490 ! Let FNTXT(3,MYPOS,8,0,1,"",1) !:
-        ! Let RESP$(RESPC+=1)=CNVRT$("N 8",BCT(1))
-01500 ! Let FNLBL(4,1,"Percent of Bills Coded:",MYLEN,1)
-01510 ! Let FNTXT(4,MYPOS,8,0,1,"",1) !:
-        ! Let RESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
+        resp$(respc+=1)=cnvrt$("N 8",sum(bct))
+01460 ! fnLBL(2,1,"Total  Bills  Coded:",MYLEN,1)
+01470 ! fnTXT(2,MYPOS,8,0,1,"",1) !:
+        ! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(2))
+01480 ! fnLBL(3,1,"Total Bills Not Coded:",MYLEN,1)
+01490 ! fnTXT(3,MYPOS,8,0,1,"",1) !:
+        ! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(1))
+01500 ! fnLBL(4,1,"Percent of Bills Coded:",MYLEN,1)
+01510 ! fnTXT(4,MYPOS,8,0,1,"",1) !:
+        ! rESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
 01520   fncmdset(52) !:
         fnacs(sn$,0,mat resp$,ck)
-01530 XIT: let fnxit
+01530 XIT: fnxit
 01540 ! ______________________________________________________________________
-01550 ERTN: let fnerror(program$,err,line,act$,"xit")
+01550 ERTN: fnerror(program$,err,line,act$,"xit")
 01560   if uprc$(act$)<>"PAUSE" then goto L1590
 01570   execute "list -"&str$(line) !:
         pause  !:
@@ -247,7 +247,7 @@
 01970   pr #20: 'Call Print.AddText("Usage",'&str$(xmargin+33)&','&str$(lyne*13+ymargin)&')'
 01980   pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+50)&','&str$(lyne*13+ymargin)&')'
 01990 ! ______________________________________________________________________
-02000 PRINTGRID: let meter=14 !:
+02000 PRINTGRID: meter=14 !:
         pr #20: 'Call Print.MyFontSize(8)'
 02010   if g(1)=0 then goto L2020 else !:
           pr #20: 'Call Print.AddText("WTR",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:

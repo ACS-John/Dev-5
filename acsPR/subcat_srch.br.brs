@@ -29,7 +29,7 @@
           read #subcat,release: !:
           goto READ_FILE
 00270 ! ______________________________________________________________________
-00280 L280: let fncmdkey("&Add",97,0,0,"Add a new sub-category record." ) !:
+00280 L280: fncmdkey("&Add",97,0,0,"Add a new sub-category record." ) !:
           fncmdkey("E&dit",98,1,0,"Access the highlited record") !:
           fncmdkey("&Delete",96,0,0,"Deletes the highlited record") !:
           fncmdkey("&Listing",94,0,0,"Print a list of sub-category records") !:
@@ -41,7 +41,7 @@
 00320     goto XIT
 00330 ! ______________________________________________________________________
 00340 ! <Updateable Region: ERTN>
-00350 ERTN: let fnerror(program$,err,line,act$,"xit")
+00350 ERTN: fnerror(program$,err,line,act$,"xit")
 00360     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00370     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00380     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

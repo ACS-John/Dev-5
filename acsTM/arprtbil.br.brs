@@ -46,10 +46,10 @@
 00480   if ar(1)<=0 then goto L450
 00490   gosub L1430 ! AGING
 00500 L500: gosub L890
-00510   let prebal=0
+00510   prebal=0
 00520   bal=0
-00530   let pbf=0
-00540   let ta=ta(1)
+00530   pbf=0
+00540   ta=ta(1)
 00550 L550: if ta=0 then goto L1130
 00560 L560: read #2,using L580,rec=ta: p$,iv$,mat tr,id$,ta ioerr L2020
 00570   if tr(3)=0 then goto L550
@@ -57,34 +57,34 @@
 00590   if tr(6)><5 and pbf=0 then gosub L1010
 00600   if tr(6)><5 then goto L690
 00610   if tr(5)=4 or tr(5)=6 then goto L650
-00620   let prebal=prebal+tr(3)
+00620   prebal=prebal+tr(3)
 00630   if all=0 then bal=bal+tr(3) else goto L690
 00640   goto L670
-00650 L650: let prebal=prebal-tr(3)
+00650 L650: prebal=prebal-tr(3)
 00660   if all=0 then bal=bal-tr(3) else goto L690
 00670 L670: if ta=0 then goto L1010 ! 10/19/87
 00680   if all=0 then goto L560
-00690 L690: let iv$=ltrm$(iv$)
+00690 L690: iv$=ltrm$(iv$)
 00700   if tr(5)=4 or tr(5)=6 then bal=bal-tr(3) else bal=bal+tr(3)
-00710   if tr(5)=4 or tr(5)=6 then let pap=63 else let pap=48
-00720   if tr(5)=4 or tr(5)=6 then let tr3=-tr(3) else let tr3=tr(3)
+00710   if tr(5)=4 or tr(5)=6 then pap=63 else pap=48
+00720   if tr(5)=4 or tr(5)=6 then tr3=-tr(3) else tr3=tr(3)
 00730   if rtrm$(id$)><"" then goto L800
-00740   if tr(5)=1 then let id$="CHARGE"
-00750   if tr(5)=2 then let id$="FINANCE CHARGE"
-00760   if tr(5)=3 then let id$="STANDARD CHARGE"
-00770   if tr(5)=4 then let id$="COLLECTION"
-00780   if tr(5)=5 then let id$="DEBIT MEMO"
-00790   if tr(5)=6 then let id$="CREDIT MEMO"
+00740   if tr(5)=1 then id$="CHARGE"
+00750   if tr(5)=2 then id$="FINANCE CHARGE"
+00760   if tr(5)=3 then id$="STANDARD CHARGE"
+00770   if tr(5)=4 then id$="COLLECTION"
+00780   if tr(5)=5 then id$="DEBIT MEMO"
+00790   if tr(5)=6 then id$="CREDIT MEMO"
 00800 L800: pr #255,using L810: tr(1),iv$(1:8),id$,tr(3),bal
 00810 L810: form pos 1,pic(zz/zz/zz),x 4,c 10,c 20,pos pap,n 10.2,pos 77,n 12.2
-00820   let p=p+1
+00820   p=p+1
 00830   if ta=0 then goto L1130
 00840   if p<38 then goto L560
 00850   pr #255: newpage
 00860   gosub L890
 00870   form pos 124,n 6
 00880   goto L560
-00890 L890: let fnopenprn(cp,58,220,process)
+00890 L890: fnopenprn(cp,58,220,process)
 00900   form pos 9,c 40,pos 71,c 24,skip 1
 00905   pr #255: !                                                                  pr #255:
 00910   pr #255,using L920: z$,d1,ar(1)
@@ -95,20 +95,20 @@
 00960 L960: form pos 10,c 30,skip 1
 00970   pr #255,using L980: " "
 00980 L980: form pos 1,c 1,skip 9
-00990   let p=23
+00990   p=23
 01000   return 
 01010 L1010: if all=1 or prebal=0 then goto L1050
 01020   pr #255,using L1030: " BALANCE  FORWARD",prebal
 01030 L1030: form pos 25,c 17,pos 77,n 12.2,skip 1
-01040   let p=p+1
-01050 L1050: let pbf=1
+01040   p=p+1
+01050 L1050: pbf=1
 01060   if tr(6)><5 then goto L1080
 01070   if ta=0 then goto L1130
 01080 L1080: return 
 01090 L1090: close #1: ioerr L1100
 01100 L1100: close #2: ioerr L1110
-01110 L1110: let fncloseprn
-01120 XIT: let fnxit
+01110 L1110: fncloseprn
+01120 XIT: fnxit
 01130 L1130: sk=37-p
 01140   pr #255,using L1150: "CURRENT","PAST",age(1),"PAST",age(2),"PAST",age(3)
 01150 L1150: form skip sk,pos 15,c 7,x 10,c 4,pic(zzzz),x 11,c 4,pic(zzzz),x 10,c 4,pic(zzzz),skip 2
@@ -129,7 +129,7 @@
 01300   fnopenprn(cp,58,220,process)
 01310   on align goto L500,L1330,L1330 none L1280
 01320 ! ______________________________________________________________________
-01330 L1330: let p=0
+01330 L1330: p=0
 01340   pr newpage
 01350   pr f "10,20,c 40,h,n": "STATEMENT pr IN PROCESS"
 01360   pr f "23,2,C 30,N": "Press F5 to stop"
@@ -139,12 +139,12 @@
 01400 ! ______________________________________________________________________
 01410 L1410: read #1,using L460,key=lpad$(rtrm$(st1$),5): z$,mat e$,mat ar,mat ta nokey L370 ioerr L2020
 01420   goto L470
-01430 L1430: let tam1=tam1+am1
-01440   let tam6=tam6+ar(1)
-01450   if ar(1)<0 then cb1=cb1+(-ar(1)) else let db1=db1+ar(1)
+01430 L1430: tam1=tam1+am1
+01440   tam6=tam6+ar(1)
+01450   if ar(1)<0 then cb1=cb1+(-ar(1)) else db1=db1+ar(1)
 01460   mat e=(0)
 01470   if ta(1)=0 then goto L1950
-01480   let ta1=ta(1)
+01480   ta1=ta(1)
 01490 L1490: read #2,using L1500,rec=ta1: iv$,mm,dd,yy,tr3,tr5,nta ioerr L2020
 01500 L1500: form pos 6,c 12,3*n 2,x 5,pd 5.2,x 2,n 1,x 21,pd 3
 01510   if tr5=4 or tr5=6 then goto L1660
@@ -165,18 +165,18 @@
 01660 L1660: if ar(5)=2 then goto L1690
 01670   e(5)=e(5)-tr3
 01680   goto L1790
-01690 L1690: let tr3=-tr3
-01700   let ta1=ta(1)
+01690 L1690: tr3=-tr3
+01700   ta1=ta(1)
 01710 L1710: read #2,using L1720,rec=ta1: hv$,mm,dd,yy,tr5,cta ioerr L2020
 01720 L1720: form pos 6,c 12,pos 18,3*n 2,pos 36,n 1,pos 58,pd 3
 01730   if tr5=4 or tr5=6 then goto L1750
 01740   if iv$=hv$ then goto L1520
 01750 L1750: if cta=0 then goto L1780
-01760   let ta1=cta
+01760   ta1=cta
 01770   goto L1710
 01780 L1780: e(5)=e(5)+tr3
 01790 L1790: if nta=0 then goto L1820
-01800   let ta1=nta
+01800   ta1=nta
 01810   goto L1490
 01820 L1820: if e(5)>=0 then goto L1850
 01830   e(4)=e(4)+e(5)
@@ -190,10 +190,10 @@
 01910 L1910: if e(2)>=0 then goto L1950
 01920   e(1)=e(1)+e(2)
 01930   e(2)=0
-01940   if e(1)<0 then let v6=v6+(-e(1))
+01940   if e(1)<0 then v6=v6+(-e(1))
 01950 L1950: return 
-01960 L1960: let mm=int(d1/10000)
-01970   let dd=int((d1-mm*10000)/100)
+01960 L1960: mm=int(d1/10000)
+01970   dd=int((d1-mm*10000)/100)
 01980   let yy=d1-(mm*10000+dd*100)
 01990   ag0=mo(mm)+dd+yy*365+int(yy/4)
 02000   if yy-int(yy/4)*4=0 and mm>2 then ag0=ag0+1

@@ -10,7 +10,7 @@
 12960   end if
 12980 fnend
 14000 ! <Updateable Region: ERTN>
-14020 ERTN: let fnerror(program$,err,line,act$,"xit")
+14020 ERTN: fnerror(program$,err,line,act$,"xit")
 14040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 14060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 14080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -67,7 +67,7 @@
 38060   company_count=filename_item=0
 38080   mat cno_list(99999)
 38100   for filename_item=1 to udim(mat filename$)
-38120     let tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
+38120     tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
 38140     if tmp_cno<>99999 and filename$(filename_item)<>'' then ! don't display company 99999
 38160       company_count+=1
 38180       cno_list(company_count)=tmp_cno
@@ -174,9 +174,9 @@
 51080   ! Get_or_Put=2 then REWRITE Dat$
 51100   if get_or_put=0 or get_or_put=1 then 
 51120     fnreg_read('Report Heading Date',dat$)
-51140     let dat$=trim$(dat$)
+51140     dat$=trim$(dat$)
 51160     if dat$="" then 
-51180       let dat$=date$("Month DD, CCYY")
+51180       dat$=date$("Month DD, CCYY")
 51200       fnreg_write('Report Heading Date',dat$)
 51220     end if 
 51240   else if get_or_put=2 then 

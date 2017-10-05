@@ -35,22 +35,22 @@
         lbl$(10)="Statement Date Cleared"
 00260   lbl$(11)="Source Code"
 00270 ! ** Text Box / Field Display   Lengths   ** !:
-        let ic=0 ! temporary Item Counter !:
-        let mmddyy=8 !:
+        ic=0 ! temporary Item Counter !:
+        mmddyy=8 !:
         ccyymmdd=10
-00280   let tln(ic+=1)=2 !:
-        let tln(ic+=1)=1 !:
-        let tln(ic+=1)=8 !:
-        let tln(ic+=1)=mmddyy !:
-        let tln(ic+=1)=19
-00290   let tln(ic+=1)=8 !:
-        let tln(ic+=1)=34 !:
-        let tln(ic+=1)=1 !:
-        let tln(ic+=1)=1 !:
-        let tln(ic+=1)=mmddyy
-00300   let tln(ic+=1)=1
+00280   tln(ic+=1)=2 !:
+        tln(ic+=1)=1 !:
+        tln(ic+=1)=8 !:
+        tln(ic+=1)=mmddyy !:
+        tln(ic+=1)=19
+00290   tln(ic+=1)=8 !:
+        tln(ic+=1)=34 !:
+        tln(ic+=1)=1 !:
+        tln(ic+=1)=1 !:
+        tln(ic+=1)=mmddyy
+00300   tln(ic+=1)=1
 00310 ! ** Field Types ** !:
-        let ic=0
+        ic=0
 00320   fltyp$(ic+=1)='N' !:
         fltyp$(ic+=1)='N' !:
         fltyp$(ic+=1)='Cr' !:
@@ -63,8 +63,8 @@
         fltyp$(ic+=1)='N'
 00340   fltyp$(ic+=1)='N'
 00350 ! ** Field Storage Lengths ** !:
-        let ic=0 !:
-        let mmddyy=6 : ccyymmdd=8
+        ic=0 !:
+        mmddyy=6 : ccyymmdd=8
 00360   sln(ic+=1)=2 !:
         sln(ic+=1)=1 !:
         sln(ic+=1)=8 !:
@@ -77,23 +77,23 @@
         sln(ic+=1)=mmddyy
 00380   sln(ic+=1)=1
 00390 ! ** Field Masks ** !:
-        let ic=0 !:
-        let pointtwo=32 : let number=30 !:
-        ccyymmdd=3 : let mmddyy=1
-00400   let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=mmddyy !:
-        let mask(ic+=1)=pointtwo
-00410   let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=number !:
-        let mask(ic+=1)=mmddyy
-00420   let mask(ic+=1)=number
+        ic=0 !:
+        pointtwo=32 : number=30 !:
+        ccyymmdd=3 : mmddyy=1
+00400   mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=mmddyy !:
+        mask(ic+=1)=pointtwo
+00410   mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=number !:
+        mask(ic+=1)=mmddyy
+00420   mask(ic+=1)=number
 00430 ! ** Storage Positions ** !:
         ! default to the same as order displayed !:
-        let ic=0
+        ic=0
 00440 ! ** Combo Boxes **                                                   !:
         ! CL=Field Number  : C$(CL,1)='ComboF'                                !:
         ! C$(CL,2)=Linked File Name                                           !:
@@ -138,10 +138,10 @@
 00530   fnhamster("Transaction",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00540   return 
 00550 ! ______________________________________________________________________
-00560 XIT: let fnxit
+00560 XIT: fnxit
 00570 ! ______________________________________________________________________
 00580 ! <Updateable Region: ERTN>
-00590 ERTN: let fnerror(program$,err,line,act$,"xit")
+00590 ERTN: fnerror(program$,err,line,act$,"xit")
 00600   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00610   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00620   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

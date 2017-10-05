@@ -25,10 +25,10 @@
 13200     if x(12)>0 then let usage_water=x(12) ! water usage entered
 13300     if x(9)><0 then let w(1)=x(9) : goto WATER_END ! water charge entered
 13400     if b(1)><0 then let w(1)=b(1) : goto WATER_END ! standard water charge
-13500     if d(13)<1 then let d(13)=1
+13500     if d(13)<1 then d(13)=1
 13600     read #ratemst,using FORM_RATEMSTR, key="WA"&lpad$(str$(a(1)),2): mc1,mu1,mat rt nokey WATER_END
-13700     let mu1=mu1*max(1,d(13))
-13800     let mc1=mc1*max(1,d(13))
+13700     mu1=mu1*max(1,d(13))
+13800     mc1=mc1*max(1,d(13))
 13900     let w(1)=mc1
 14000     if usage_water>mu1 then let w(1)=w(1)+(usage_water-mu1)*rt(1,3)
 14100 WATER_END: let g(1)=round(w(1),2)
@@ -39,8 +39,8 @@
 15040     if x(5)><0 then let w(2)=x(5) : goto SEWER_COMPLETED
 15060     if b(2)><0 then let w(2)=b(2) : goto SEWER_COMPLETED
 15080     read #ratemst,using FORM_RATEMSTR, key="SW"&lpad$(str$(a(2)),2): mc1,mu1,mat rt nokey SEWER_COMPLETED
-15100     let mu1=mu1*max(1,d(13))
-15120     let mc1=mc1*max(1,d(13))
+15100     mu1=mu1*max(1,d(13))
+15120     mc1=mc1*max(1,d(13))
 15140 ! r: old chatom sewer calculation
 15160 !   if usage_water=>mu1 then
 15180 !     let w(2)=mc1+(usage_water-mu1)*rt(a(2),3)
@@ -51,13 +51,13 @@
 15280 ! r: new chatom sewer calculation - more standard... i hope
 15300     let usage_sewer=usage_water
 15310     let w(2)=mc1*max(1,extra(14)) ! units per meter - sewer (default to one)
-15320     if usage_sewer<=mu1 then goto L3300 else let mu2=mu1
+15320     if usage_sewer<=mu1 then goto L3300 else mu2=mu1
 15340     for j=1 to 10
 15360       if rt(j,1)>usage_sewer then goto L3300
 15380       if usage_sewer<rt(j,2) then let w1=usage_sewer-mu2 else let w1=rt(j,2)-mu2
 15400       let w(2)=w(2)+round(w1*rt(j,3),2)
 15420       if rt(j,2)>usage_sewer then goto L3300
-15440       let mu2=rt(j,2)
+15440       mu2=rt(j,2)
 15460     next j
 15480 L3300: ! 
 15500 ! /r
@@ -107,28 +107,28 @@
 19900     next j
 20000     return  ! /r
 20100 WATER_USED: ! r: updates water readings & usages
-20200     if d1><f then let d(2)=d(1)
-20300     let d(1)=x(1)
+20200     if d1><f then d(2)=d(1)
+20300     d(1)=x(1)
 20400     let w8=d(3)
-20500     let d(3)=usage_water
-20600     let d(4)=d(4)+d(3)
-20700     if d1=f then let d(4)=d(4)-w8
+20500     d(3)=usage_water
+20600     d(4)=d(4)+d(3)
+20700     if d1=f then d(4)=d(4)-w8
 20800     return  ! /r
 20900 ELECTRIC_USED: ! r: updates electric readings & usages
-21000     if d1><f then let d(6)=d(5)
-21100     let d(5)=x(3)
+21000     if d1><f then d(6)=d(5)
+21100     d(5)=x(3)
 21200     let w8=d(7)
-21300     let d(7)=x2
-21400     let d(8)=d(8)+d(7)
-21500     if d1=f then let d(8)=d(8)-w8
+21300     d(7)=x2
+21400     d(8)=d(8)+d(7)
+21500     if d1=f then d(8)=d(8)-w8
 21600     return  ! /r
 21700 GAS_USED: ! r: updates gas readings & usages
-21800     if d1><f then let d(10)=d(9)
-21900     let d(9)=x(2)
+21800     if d1><f then d(10)=d(9)
+21900     d(9)=x(2)
 22000     let w8=d(11)
-22100     let d(11)=x3
-22200     let d(12)=d(12)+d(11)
-22300     if d1=f then let d(12)=d(12)-w8
+22100     d(11)=x3
+22200     d(12)=d(12)+d(11)
+22300     if d1=f then d(12)=d(12)-w8
 22400     return  ! /r
 22500 CALK_EXIT: ! 
 22600   fnend 

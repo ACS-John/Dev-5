@@ -34,11 +34,11 @@
 56020 fnend 
 58000 def fn_program_ini_filename$*256(pif_program$*256; doNotCreate)
 58020   dim pif_return$*256
-58060   let pif_return$=''
-58080   let pif_program$=trim$(pif_program$)
+58060   pif_return$=''
+58080   pif_program$=trim$(pif_program$)
 59020     posDotBr=pos(pif_program$,'.br')
 59040     if posDotBr>0 then pif_program$(posDotBr:posDotBr+2)=''
-60020   let pif_return$=env$('Q')&'\INI\'&pif_program$&'.ini'
+60020   pif_return$=env$('Q')&'\INI\'&pif_program$&'.ini'
 62000   ! if env$('ACSDeveloper')<>'' then pr 'fn_program_ini_filename$ > pif_return$="'&pif_return$&'"' : pause
 62020   fn_program_ini_filename$=pif_return$ ! pr pif_return$ : pause
 62040 fnend 

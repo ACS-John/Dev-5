@@ -17,15 +17,15 @@
 00160   open #bankmstr=4: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00170   open #work=5: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=76,Replace",internal,output 
 00180 READ_TRMSTR: ! 
-00190   let holdck$=ck$
+00190   holdck$=ck$
 00200 L200: read #trmstr,using 'Form POS 1,n 2,n 1,C 8,N 6,PD 10.2,POS 28,C 8,C 30,POS 71,N 1,X 6,N 1': trbank_code,trtcde,ck$,pd,ca1,vn$,de$,pcde,scd eof END1
 00210   if ck$=holdck$ then delete #trmstr: : goto L200
 00220   restore #tralloc,key>=cnvrt$("pic(zz)",trbank_code)&cnvrt$("pic(#)",trtcde)&ck$: ! Nokey 210
-00230   let totalalloc=0
+00230   totalalloc=0
 00240 READ_TRALLOC: ! 
 00250 L250: read #tralloc,using 'Form POS 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,N 6,POS 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd,gde eof READ_TRMSTR
 00260   if trbank_code=bank_code and tcde=trtcde and ck$=trck$ then goto L270 else goto L300
-00270 L270: let totalalloc+=amt
+00270 L270: totalalloc+=amt
 00280   if amt=ca1 then let foundone=1
 00290   goto L250
 00300 L300: if totalalloc<>ca1 and foundone=1 then ca1=totalalloc
@@ -33,4 +33,4 @@
 00320   let foundone=0
 00330   goto READ_TRMSTR
 00340 END1: ! 
-00350 XIT: let fnxit
+00350 XIT: fnxit

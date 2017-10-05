@@ -39,10 +39,10 @@
 00390   data "X24"
 00400   read mat ty$
 00410 ! ___________________________
-00420   let rn=fnrx
+00420   rn=fnrx
 00430   let underlin$="______________________________"
 00440   cap$="Create Job Cost Report Program"
-00450   let rn$=lpad$(str$(rn),2)
+00450   rn$=lpad$(str$(rn),2)
 00460 ! ______________________________________________________________________
 00470   open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx",internal,input,keyed 
 00480   read #1,using L490,key=rn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs nokey XIT
@@ -59,12 +59,12 @@
         ! this program is dynamicaly created by S:\acsPR\jcRptS1 and !:
         ! uses S:\acsPR\newJCRpt-Mod as a base"
 00620   pr #11: '00051 RN$="';rn$;'"'
-00630   let pf$="19900 pr #255, USING 19910: "
+00630   pf$="19900 pr #255, USING 19910: "
 00640   af$="19910 FORM SKIP 1"
 00650   let gpf$="20140 pr #255, USING 20150: "
 00660   let gaf$="20150 FORM SKIP 2,""Grand Totals"""
-00670   let jpf$="20025 pr #255, USING 20026: "
-00680   let jaf$="20026 FORM SKIP 1,""Job Totals"""
+00670   jpf$="20025 pr #255, USING 20026: "
+00680   jaf$="20026 FORM SKIP 1,""Job Totals"""
 00690   let upf$="20000 pr #255,using 20020: "
 00700   let uaf$="20020 form skip 0"
 00710   pr #11: "19850 on zdiv goto 25000"
@@ -87,7 +87,7 @@
 00880     pr #11: str$(19850+j*2+1);" c(";str$(j);")=c(";str$(j);")+";f$(j)
 00890     goto L910
 00900 L900: pr #11: str$(19850+j*2+1);" c("&str$(j);")=";f$(j)
-00910 L910: let j1=j1+1
+00910 L910: j1=j1+1
 00920 L920: next j
 00930   pr #11: "19895 x6=0"
 00940   pr #11: "19896 x7=0"
@@ -99,23 +99,23 @@
 01000     if f$(j)(3:3)>="0" and f$(j)(3:3)<="9" then goto L1060 !:
             ! Search Category Record
 01010     if f$(j)(1:2)="x1" or f$(j)(1:2)="X1" then !:
-            let i$="jn$(1:"&str$(ppr(j))&")"
+            i$="jn$(1:"&str$(ppr(j))&")"
 01020     if f$(j)(1:2)="x2" or f$(j)(1:2)="X2" then !:
-            let i$="n$(1:"&str$(ppr(j))&")"
+            i$="n$(1:"&str$(ppr(j))&")"
 01030     if f$(j)(1:2)="x3" or f$(j)(1:2)="X3" then !:
-            let i$="a$(1)  (1:"&str$(ppr(j))&")"
+            i$="a$(1)  (1:"&str$(ppr(j))&")"
 01040     if f$(j)(1:2)="x4" or f$(j)(1:2)="X4" then !:
-            let i$="a$(2)  (1:"&str$(ppr(j))&")"
+            i$="a$(2)  (1:"&str$(ppr(j))&")"
 01050     if f$(j)(1:2)="x5" or f$(j)(1:2)="X5" then !:
-            let i$="a$(3)  (1:"&str$(ppr(j))&")"
+            i$="a$(3)  (1:"&str$(ppr(j))&")"
 01060 L1060: if f$(j)(1:3)="x10" or f$(j)(1:3)="X10" then !:
-            let i$="cn$(7:11)"
+            i$="cn$(7:11)"
 01070     if f$(j)(1:3)="x11" or f$(j)(1:3)="X11" then !:
-            let i$="k$(1:"&str$(ppr(j))&")"
+            i$="k$(1:"&str$(ppr(j))&")"
 01080     if rtrm$(i$)="" then cn=1 else cn=0
-01090     if rtrm$(i$)="" then let i$="c("&str$(j)&")"
+01090     if rtrm$(i$)="" then i$="c("&str$(j)&")"
 01100     if fc(j)=1 then goto L1170 ! Skip Detail Print
-01110     let pf$=rtrm$(pf$)&","&i$ ! pr Statement
+01110     pf$=rtrm$(pf$)&","&i$ ! pr Statement
 01120     if j=<1 then goto L1150
 01130     if fc(j-1)=1 then goto L1150
 01140     if pp(j)<pp(j-1)+ppr(j-1) then af$=af$&",skip 1"
@@ -126,14 +126,14 @@
             af$=rtrm$(af$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) !:
             ! Form Statement
 01170 L1170: if tcs(j)=0 then goto L1210
-01180     let i$(1:1)="t"
+01180     i$(1:1)="t"
 01190     let gpf$=rtrm$(gpf$)&","&i$ ! pr Stmt-Grand Totals
 01200     let gaf$=rtrm$(gaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) !:
           ! Form Statement Grand Totals
 01210 L1210: if tcj(j)=0 then goto L1270
-01220     let i$(1:1)="s"
-01230     let jpf$=rtrm$(jpf$)&","&i$ ! pr Stmt-Job Totals
-01240     let jaf$=rtrm$(jaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) !:
+01220     i$(1:1)="s"
+01230     jpf$=rtrm$(jpf$)&","&i$ ! pr Stmt-Job Totals
+01240     jaf$=rtrm$(jaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) !:
           ! Form Statement Job Totals
 01250     let upf$=rtrm$(upf$)&","""&underlin$(1:ppr(j))&""""
 01260     let uaf$=rtrm$(uaf$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) !:
@@ -145,11 +145,11 @@
 01310     let gaf$=rtrm$(gaf$)&"."&str$(dp(j)) !:
           ! Add Decimal Points-Grand Totals
 01320 L1320: if tcj(j)=0 then goto L1340
-01330     let jaf$=rtrm$(jaf$)&"."&str$(dp(j)) ! ADD DECIMAL POINTS-JOB TOTALS
-01340 L1340: let i$=" "
+01330     jaf$=rtrm$(jaf$)&"."&str$(dp(j)) ! ADD DECIMAL POINTS-JOB TOTALS
+01340 L1340: i$=" "
 01350 L1350: next j
-01360   let pf$(31:31)=" "
-01370   let pf$=rtrm$(pf$)&" pageoflow 300"
+01360   pf$(31:31)=" "
+01370   pf$=rtrm$(pf$)&" pageoflow 300"
 01380   pr #11: pf$
 01390   af$(11:11)=" "
 01400   af$=rtrm$(af$)&",skip 0"
@@ -170,8 +170,8 @@
 01550   goto L1570
 01560 L1560: pr #11: "20105 goto 390"
 01570 L1570: if rtrm$(jpf$(31:255))="" then goto L1700
-01580   let jpf$(31:31)=" "
-01590   let jaf$=rtrm$(jaf$)&",skip 1"
+01580   jpf$(31:31)=" "
+01590   jaf$=rtrm$(jaf$)&",skip 1"
 01600   pr #11: jpf$
 01610   pr #11: jaf$
 01620   let upf$(30:30)=" "
@@ -232,12 +232,12 @@
 02170   chain "Proc=Proc."&session$
 02180 ! ______________________________________________________________________
 02190 ! <Updateable Region: ERTN>
-02200 ERTN: let fnerror(program$,err,line,act$,"xit")
+02200 ERTN: fnerror(program$,err,line,act$,"xit")
 02210   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02220   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02240 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02250 ! /region
 02260 ! ______________________________________________________________________
-02270 XIT: let fnxit
+02270 XIT: fnxit
 02280 ! ______________________________________________________________________

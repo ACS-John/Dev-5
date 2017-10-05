@@ -9,8 +9,8 @@
 00090 ! ______________________________________________________________________
 00100   fncno(cno,cnam$)
 00110   if fnprocess=1 then goto L300
-00120 L120: let fntos(sn$="PrZqtr") !:
-        let mylen=42: let mypos=mylen+3 : let right=2
+00120 L120: fntos(sn$="PrZqtr") !:
+        mylen=42: mypos=mylen+3 : right=2
 00130   fnlbl(1,1,"* * * * *   WARNING   * * * * *",mylen,right)
 00140   fnlbl(3,1,"This program zeroes all year to date",mylen,right)
 00150   fnlbl(4,1,"information. It should be run at",mylen,right)
@@ -18,17 +18,17 @@
 00170   fnlbl(6,1,"quarterly and annual reports have been run.",mylen,right)
 00180   fnlbl(8,1,"Enter 'ZERO' to continue:",mylen,right)
 00190   fntxt(8,mypos,4,0,right,"",0,"You must type the word 'Zero' to indicate that you for sure want to zero the year.",0 ) !:
-        let resp$(1)=""
+        resp$(1)=""
 00200   fncmdset(2)
 00210   fnacs(sn$,0,mat resp$,ckey)
 00220 ! 
 00230   if ckey=5 then goto XIT
-00240   let pas$=uprc$(resp$(1))
+00240   pas$=uprc$(resp$(1))
 00250   if pas$="ZERO" then goto L300
 00260 MSGBOX1: ! 
 00270   mat ml$(2) !:
-        let ml$(1)="          Incorrect password! " !:
-        let ml$(2)="Click OK to try again; else Cancel to stop." !:
+        ml$(1)="          Incorrect password! " !:
+        ml$(2)="Click OK to try again; else Cancel to stop." !:
         fnmsgbox(mat ml$,resp$,cap$,49)
 00280   if resp$="OK" then goto L120 else goto XIT
 00290 ! ______________________________________________________________________
@@ -44,12 +44,12 @@
 00390   goto XIT
 00400 ! ______________________________________________________________________
 00410 ! <Updateable Region: ERTN>
-00420 ERTN: let fnerror(program$,err,line,act$,"xit")
+00420 ERTN: fnerror(program$,err,line,act$,"xit")
 00430   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00440   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00470 ! /region
 00480 ! ______________________________________________________________________
-00490 XIT: let fnxit
+00490 XIT: fnxit
 00500 ! ______________________________________________________________________

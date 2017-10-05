@@ -28,24 +28,24 @@
 19200   if filter_default$='' then let filter_default$=filter_option$(1)
 19220 ! /r
 32000   fntos(sn$="ubcustdp_1" )
-32020   let rc=0 : let mylen=30 : let mypos=mylen+3
+32020   rc=0 : mylen=30 : mypos=mylen+3
 32040   fnlbl(1,1,"Report Heading Date:",mylen,1)
 32060   fntxt(1,mypos,20)
-32080   let resp$(1)=trim$(dat$)
+32080   resp$(1)=trim$(dat$)
 32082   fnlbl(3,1,"Sequence:",mylen,1)
 32100   fnopt(3,mypos,"Name")
-32120   if seq=1 then let resp$(2)="True" else let resp$(2)="False"
+32120   if seq=1 then resp$(2)="True" else resp$(2)="False"
 32140   fnopt(4,mypos,"Route and Sequence Number")
-32160   if seq<>1 then let resp$(3)="True" else let resp$(3)="False"
+32160   if seq<>1 then resp$(3)="True" else resp$(3)="False"
 32180   fnchk(6,mylen+4,"Subtotal By Route:",1)
-32200   if subtotal$='True' then let resp$(resp_subtotal:=4)='True' else let resp$(resp_subtotal:=4)="False"
+32200   if subtotal$='True' then resp$(resp_subtotal:=4)='True' else resp$(resp_subtotal:=4)="False"
 32220   fnlbl(8,1,"Final Billing Code:",mylen,1)
 32380   fncomboa("final_bill",8,mypos,mat filter_option$,"",25)
-32400   let resp$(resp_filter:=5)=filter_default$
+32400   resp$(resp_filter:=5)=filter_default$
 32420   fncmdset(3)
 32440   fnacs(sn$,0,mat resp$,ckey)
 32460   if ckey=5 then goto XIT
-32480   let dat$=resp$(1)
+32480   dat$=resp$(1)
 32520   if resp$(2)="True" then seq=1 else seq=2 ! 1=name sequence  2= route sequence
 32540   subtotal$=resp$(resp_subtotal)
 32560   let filter_choice=srch(mat filter_option$,resp$(resp_filter))
@@ -65,7 +65,7 @@
 50000 F_CUSTOMER: form pos 1,c 10,2*c 30,pos 157,11*pd 4.2,4*pd 4,pos 1741,n 2,n 7,pos 1821,n 1
 52000   do 
 52010 CUSTOMER_READ: ! 
-52020     let holdroute=route
+52020     holdroute=route
 52040     read #1,using F_CUSTOMER: z$,mat e$,mat b,mat c,route,sequence,final_billing_code eof PRINT_GRAND_TOTALS
 52060     if c(3)=1 or c(3)=2 then c(3)=0 ! if deposit date previously used for final billing code, set it to zero
 52080     if c(4)=1 or c(4)=2 then c(4)=0
@@ -90,7 +90,7 @@
 56120   loop 
 56140 ! ______________________________________________________________________
 58000 HEADER: ! r:
-58020   let p2=p2+1
+58020   p2=p2+1
 58040   lnpg=0
 58060   pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
 58080   pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
@@ -98,8 +98,8 @@
 58120   pr #255,using L540: "\ql ","Page "&str$(p2)
 58140 L540: form pos 1,c 5,pos 110,c 10
 58160   pr #255: ""
-58180   let jp=0
-58200   let date_amount$=""
+58180   jp=0
+58200   date_amount$=""
 58220   mat services$=("")
 58240   for j=1 to 3
 58260     let x=pos(servicename$(j),":",1)
@@ -110,9 +110,9 @@
 58360     if j=2 and trim$(servicename$(j))<>"Sewer" then goto L730
 58380     if j=3 and trim$(servicename$(j))<>"Electric" then goto L730
 58400     if j=4 and trim$(servicename$(j))<>"Gas" then goto L730
-58420     let jp=jp+1
-58440     let p1=jp*19+40
-58460     let date_amount$=date_amount$&"  --Date--  Amount"
+58420     jp=jp+1
+58440     p1=jp*19+40
+58460     date_amount$=date_amount$&"  --Date--  Amount"
 58480     let x=pos(trim$(servicename$(j))," ",1)
 58500     if x=0 then let x=len(servicename$(j))
 58520     services$(jp)=trim$(servicename$(j))(1:x)
@@ -122,19 +122,19 @@
 58600   pr #255,using 'form pos 60,c 80': date_amount$
 58640   return  ! /r
 62000 PRINT_DETAILS: ! r:
-62020   let jp=0
+62020   jp=0
 62040   for j=1 to 4
 62060     if j=1 and trim$(servicename$(j))<>"Water" then goto L930
 62080     if j=2 and trim$(servicename$(j))<>"Sewer" then goto L930
 62100     if j=3 and trim$(servicename$(j))<>"Electric" then goto L930
 62120     if j=4 and trim$(servicename$(j))<>"Gas" then goto L930
-62140     let jp=jp+1
-62160     let p1=jp*19+40
-62180     let depdate(jp)=c(j)
+62140     jp=jp+1
+62160     p1=jp*19+40
+62180     depdate(jp)=c(j)
 62200     amount(jp)=b(j+7)
-62220     let r(j)=r(j)+b(j+7)
+62220     r(j)=r(j)+b(j+7)
 62240     s(j)=s(j)+b(j+7)
-62260     let deposit$(jp)=cnvrt$("pic(zzz/zz/zz)",depdate(jp))&" "&cnvrt$("nz 8.2",amount(jp))
+62260     deposit$(jp)=cnvrt$("pic(zzz/zz/zz)",depdate(jp))&" "&cnvrt$("nz 8.2",amount(jp))
 62280 L930: ! 
 62282   next j
 62300   mat deposit$(jp)
@@ -159,7 +159,7 @@
 66120   close #1: ioerr ignore
 66140   fncloseprn
 66160   goto XIT ! /r
-66180 XIT: let fnxit
+66180 XIT: fnxit
 66200 ! ______________________________________________________________________
 68000 NEWPGE: ! r:
 68020   pr #255: newpage
@@ -167,7 +167,7 @@
 68060   continue  ! /r
 68080 ! ______________________________________________________________________
 70000 ! <Updateable Region: ERTN>
-70020 ERTN: let fnerror(program$,err,line,act$,"xit")
+70020 ERTN: fnerror(program$,err,line,act$,"xit")
 70040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 70060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 70080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

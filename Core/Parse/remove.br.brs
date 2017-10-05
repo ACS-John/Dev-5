@@ -9,7 +9,7 @@
 00090     if x>0 then let word$(x:x)="": goto BAK else goto XIT
 00100 ! ______________________________________________________________________
 00110 ! <Updateable Region: ERTN>
-00120 ERTN: let fnerror(program$,err,line,act$,"xit")
+00120 ERTN: fnerror(program$,err,line,act$,"xit")
 00130     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00140     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00150     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

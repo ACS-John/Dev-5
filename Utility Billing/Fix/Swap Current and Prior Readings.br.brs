@@ -23,15 +23,15 @@
 14600   next j
 14800 ! ______________________________________________________________________
 15000   fntos(sn$='SwapCurPri1')
-15200   let mylen=22 : let mypos=mylen+2
+15200   mylen=22 : mypos=mylen+2
 15400   fnlbl(1,1,"Billing Date (mmddyy):",mylen,1)
 15600   fntxt(1,mypos,8,0,1,"1001")
-15800   let resp$(1)=str$(d1)
+15800   resp$(1)=str$(d1)
 16000 L440: ! 
 16200   fncmdset(2)
 16400   fnacs(sn$,0,mat resp$,ck)
 16600   if ck=5 then goto XIT
-16800   let d1=val(resp$(1))
+16800   d1=val(resp$(1))
 17000   open #customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 17200 F_CUSTOMER: form pos 11,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 17400 ! ______________________________________________________________________
@@ -40,8 +40,8 @@
 18000     if f=d1 then ! else recalculation reduce balances
 18200       let water_reading_prior=min(d(1),d(2))
 18400       let water_reading_cur=max(d(1),d(2))
-18600       let d(1)=water_reading_cur
-18800       let d(2)=water_reading_prior
+18600       d(1)=water_reading_cur
+18800       d(2)=water_reading_prior
 18900       rewrite #customer,using F_CUSTOMER: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra
 19000     end if  ! f=d1
 19400   loop 
@@ -49,7 +49,7 @@
 19800   fnxit
 20000 ! ______________________________________________________________________
 20200 ! <Updateable Region: ERTN>
-20400 ERTN: let fnerror(program$,err,line,act$,"NO")
+20400 ERTN: fnerror(program$,err,line,act$,"NO")
 20600   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20800   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 21000   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

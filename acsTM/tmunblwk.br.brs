@@ -8,7 +8,7 @@
 00120   dim z$*5,cliname$*30,ca(10),ta(25,2),fb(25),empname$*25,scdesc$*30
 00130   dim cno$*5,cna$*30,en$*9,d(8)
 00140   dim k$*5,e$*9,b(8),sc$*4,sc2$*6,iv$*12
-00150   let namtab=66-int(len(rtrm$(cnam$))/2)
+00150   namtab=66-int(len(rtrm$(cnam$))/2)
 00160   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&str$(cno)&",Shr",internal,input,relative ioerr L2780
 00170   read #1,using L180,rec=1: mat cat$ ioerr L2780
 00180 L180: form pos 1,30*c 30
@@ -50,8 +50,8 @@
 00540   close #6,free: 
 00550 L550: open #6: "Name="&env$('Q')&"\TMmstr\Work2.H"&wsid$&",SIZE=0,RecL=76",internal,output ioerr L2780
 00560 L560: pr newpage
-00570   let in1$(1)="10,46,n 6,ute,n"
-00580   let in1$(2)="11,46,n 6,ute,n"
+00570   in1$(1)="10,46,n 6,ute,n"
+00580   in1$(2)="11,46,n 6,ute,n"
 00590   pr f "10,10,cR 34,n": "ENTER AGING DATE IN MMDDYY FORMAT:"
 00600   pr f "11,10,cR 34,n": "ENTER OLDEST DATE TO PRINT:"
 00610   pr f mat in1$: dat,olddat
@@ -63,9 +63,9 @@
 00670   if olddat<10100 or olddat>123199 then goto L560
 00680   rewrite #8,using "form pos 1,n 6",rec=1: dat
 00690   close #8: 
-00700   let d7=int(dat/10000)
-00710   let d5=int((dat-d7*10000)/100)
-00720   let d8=dat-(d5*100+d7*10000)
+00700   d7=int(dat/10000)
+00710   d5=int((dat-d7*10000)/100)
+00720   d8=dat-(d5*100+d7*10000)
 00730   if d7>=1 and d7<=12 then goto L750
 00740   goto L560
 00750 L750: if d5>=1 and d5<=31 then goto L770
@@ -118,7 +118,7 @@
 01220     if p1=0 then goto L1250
 01230     gosub L1740 ! pr SECTION HEADING
 01240     gosub L2100 ! CATEGORY HEADING
-01250 L1250: let nta=ta(j2,1)
+01250 L1250: nta=ta(j2,1)
 01260 L1260: read #3,using L1280,rec=nta: k$,e$,mat b,sc$,iv$,nta,scdesc$ ioerr L2780 ! READ DETAIL TRANS.
 01270     if fndate_mmddyy_to_ccyymmdd(b(4))<fndate_mmddyy_to_ccyymmdd(olddat) then goto L1410
 01280 L1280: form pos 1,c 5,c 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,c 4,c 12,pd 3,c 30
@@ -147,7 +147,7 @@
 01510   close #4: 
 01520   if prtcli=1 then goto L1540
 01530   close #7,free: 
-01540 L1540: let fncloseprn
+01540 L1540: fncloseprn
 01550   chain "S:\acsTM\TMUNAGPT",dat
 01560   close #1: ioerr L1570
 01570 L1570: close #2: ioerr L1580
@@ -157,7 +157,7 @@
 01610 L1610: close #6: ioerr L1620
 01620 L1620: close #7: ioerr L1630
 01630 L1630: goto XIT
-01640 L1640: let p1=p1+1 ! pr PAGE HEADING
+01640 L1640: p1=p1+1 ! pr PAGE HEADING
 01650   pr #255,using L1660: date$,cnam$
 01660 L1660: form pos 1,c 8,pos namtab,c 40,skip 1
 01670   pr #255,using L1680: time$,"UNBILLED WORK IN PROCESS REGISTER",p1
@@ -167,7 +167,7 @@
 01710   pr #255: 
 01720   pr #255,using L1730: "       EMPLOYEE","DATE     RATE","HOURS     CHARGE"," CATEGORY  SERVICE CODE / DESCRIPTION"
 01730 L1730: form pos 12,c 15,pos 40,c 13,pos 56,c 16,pos 73,c 40,skip 1
-01740 L1740: let numb1=len(rtrm$(cliname$))+at+11
+01740 L1740: numb1=len(rtrm$(cliname$))+at+11
 01750   clen=len(rtrm$(cliname$))
 01760   pr #255,using L1770: z$,rtrm$(cliname$) pageoflow L1830
 01770 L1770: form skip 1,pos 1,"*** ",c 5,"-",c clen,pos numb1," ***",skip 1
@@ -187,12 +187,12 @@
 01910 L1910: form pos 1,c 5,c 30,c 9,n 2,n 6,pd 4.2,5*pd 4.2
 01920 L1920: mat d=(0)
 01930   return 
-01940 L1940: let d3=int(b(4)/100)+(b(4)-int(b(4)/100)*100)*10000 ! DETERMINE OLDEST DATE
+01940 L1940: d3=int(b(4)/100)+(b(4)-int(b(4)/100)*100)*10000 ! DETERMINE OLDEST DATE
 01950   if d(2)><0 then goto L1980
-01960   let d(2)=d3
+01960   d(2)=d3
 01970   goto L2000
 01980 L1980: if d(2)<=d3 then goto L2000
-01990   let d(2)=d3
+01990   d(2)=d3
 02000 L2000: return 
 02010 L2010: pr #255,using L2020: "TOTAL ",cat$(j1),g1,g2 pageoflow L2040 ! pr TOTAL CATEGORY
 02020 L2020: form skip 1,pos 12,c 6,c 30,pos 53,n 8.2,pos 61,n 11.2,skip 1
@@ -239,19 +239,19 @@
 02430   if f6>30 and f6<=60 then goto L2480
 02440   if f6>60 and f6<=90 then goto L2500
 02450   if f6>90 then goto L2520
-02460 L2460: let d(5)=d(5)+b(3)
+02460 L2460: d(5)=d(5)+b(3)
 02470   goto L2530
-02480 L2480: let d(6)=d(6)+b(3)
+02480 L2480: d(6)=d(6)+b(3)
 02490   goto L2530
-02500 L2500: let d(7)=d(7)+b(3)
+02500 L2500: d(7)=d(7)+b(3)
 02510   goto L2530
-02520 L2520: let d(8)=d(8)+b(3)
-02530 L2530: let d(4)=d(4)+b(3)
-02540   let d(3)=d(3)+b(1)
+02520 L2520: d(8)=d(8)+b(3)
+02530 L2530: d(4)=d(4)+b(3)
+02540   d(3)=d(3)+b(1)
 02550   cno$=z$
 02560   cna$=cliname$
 02570   en$=lpad$(rtrm$(str$(pno)),5)
-02580   let d(1)=j1
+02580   d(1)=j1
 02590   return 
 02600 L2600: if int(d8/4)*100=int(d8/4*100) then goto L2630 ! INITIAL AGING PERIOD SETUP
 02610   at3=0
@@ -283,7 +283,7 @@
 02870   pr f "23,3,C 78,N": ""
 02880   pr f "24,3,C 78,N": ""
 02890   retry 
-02900 XIT: let fnxit
+02900 XIT: fnxit
 02910   def fndate_mmddyy_to_ccyymmdd(x)
 02920     let x2=(x-int(x*.01)*100)*10000+int(x*.01)
 02930     if int(x2*.0001)<90 then let x2=x2+20000000 else let x2=x2+19000000

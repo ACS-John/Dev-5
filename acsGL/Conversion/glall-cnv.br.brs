@@ -28,9 +28,9 @@
 00290   open #2: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=280,REPLACE",internal,output 
 00300 L300: read #1,using L310: pr1$,mat pr1 eof END3
 00310 L310: form pos 1,c 90,18*pd 5.2,2*n 5
-00320   for j=1 to 11: let pr2(j)=pr1(j): next j
-00330   let pr2(13)=pr1(12)
-00340   for j=13 to 18: let pr2(j+18)=pr1(j): next j
+00320   for j=1 to 11: pr2(j)=pr1(j): next j
+00330   pr2(13)=pr1(12)
+00340   for j=13 to 18: pr2(j+18)=pr1(j): next j
 00350   write #2,using L360: pr1$,mat pr2
 00360 L360: form pos 1,c 90,36*pd 5.2,2*n 5
 00370   goto L300
@@ -54,12 +54,12 @@
 00550   close #1: 
 00560 L560: ! S:\acsGL\FINSTMT.CNV
 00570   dim cnam$*40,id$(6)*40,fil$(6),idx$(6)
-00580   let id$(1)=" 1 = BALANCE SHEET FILE": let fil$(1)="ACGLFNSB": let idx$(1)="FNSBINDX"
-00590   let id$(2)=" 2 = INCOME STATEMENT FILE": let fil$(2)="ACGLFNSI": let idx$(2)="FNSIINDX"
-00600   let id$(3)=" 3 = FUND STMT / CASH FLOW FILE": let fil$(3)="ACGLFNSF": let idx$(3)="FNSFINDX"
-00610   let id$(4)=" 4 = SECONDARY BALANCE SHEET FILE": let fil$(4)="ACGLFNSC": let idx$(4)="FNSCINDX"
-00620   let id$(5)=" 5 = SECONDARY INCOME STATEMENT FILE": let fil$(5)="ACGLFNSJ": let idx$(5)="FNSJINDX"
-00630   let id$(6)=" 6 = SECONDARY FUND / CASH FLOW FILE": let fil$(6)="ACGLFNSG": let idx$(6)="FNSGINDX"
+00580   id$(1)=" 1 = BALANCE SHEET FILE": let fil$(1)="ACGLFNSB": idx$(1)="FNSBINDX"
+00590   id$(2)=" 2 = INCOME STATEMENT FILE": let fil$(2)="ACGLFNSI": idx$(2)="FNSIINDX"
+00600   id$(3)=" 3 = FUND STMT / CASH FLOW FILE": let fil$(3)="ACGLFNSF": idx$(3)="FNSFINDX"
+00610   id$(4)=" 4 = SECONDARY BALANCE SHEET FILE": let fil$(4)="ACGLFNSC": idx$(4)="FNSCINDX"
+00620   id$(5)=" 5 = SECONDARY INCOME STATEMENT FILE": let fil$(5)="ACGLFNSJ": idx$(5)="FNSJINDX"
+00630   id$(6)=" 6 = SECONDARY FUND / CASH FLOW FILE": let fil$(6)="ACGLFNSG": idx$(6)="FNSGINDX"
 00640   pr newpage
 00650   for j=1 to 6
 00660     execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&" "&env$('Temp')&"\Work."&session$&" -83" ioerr L950
@@ -72,16 +72,16 @@
 00730 L730: read #1,using L830: rno,ic eof END2
 00740     if rno<st2 then goto L780
 00750     if end1=1 then goto END2
-00760     let rnp=0
+00760     rnp=0
 00770     goto L710
 00780 L780: rewrite #1,using L790: rnp
 00790 L790: form pos 79,n 5
 00800     goto L730
-00810 FIND1: st1=rno : st2=99999 : let rnp=0
+00810 FIND1: st1=rno : st2=99999 : rnp=0
 00820 L820: read #1,using L830: rno,ic eof END1,conv L880
 00830 L830: form pos 1,g 5,pos 75,n 1
 00840     if ic=0 then goto L820
-00850     if ic=1 then let rnp=rno
+00850     if ic=1 then rnp=rno
 00860     if ic=2 then st2=rno : goto L930
 00870     goto L820
 00880 L880: read #1,using L900: rno$ eof END1

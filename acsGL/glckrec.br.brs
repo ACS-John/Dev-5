@@ -12,35 +12,35 @@
 00120   fnconsole(off=0)
 00130   fncno(cno,cnam$)
 00140   fndat(dat$)
-00150   let right=1 : center=2 : let pointtwo$="32"
+00150   right=1 : center=2 : pointtwo$="32"
 00160   fntos(sn$="glCkRec") !:
-        lc=0 : let mylen=40 : let mypos=mylen+2
+        lc=0 : mylen=40 : mypos=mylen+2
 00170   fnlbl(lc+=1,1,"General Ledger Bank Account Number:",mylen,right)
 00180   fnqgl(lc,mypos) !:
-        let resp$(1)=fnrgl$(resp$(1))
-00190 ! Let IO1$(1)="2,43,Nz 3,UT,N" : Let IO1$(2)="2,47,Nz 6,UT,N" !:
-        ! Let IO1$(3)="2,54,Nz 3,UT,N" : Let IO1$(4)="3,43,c 20,UT,N" !:
-        ! Let IO1$(5)="4,43,Nz 12.2,UT,N" : Let IO1$(6)="5,43,Nz 6,UT,N"
+        resp$(1)=fnrgl$(resp$(1))
+00190 ! iO1$(1)="2,43,Nz 3,UT,N" : iO1$(2)="2,47,Nz 6,UT,N" !:
+        ! iO1$(3)="2,54,Nz 3,UT,N" : iO1$(4)="3,43,c 20,UT,N" !:
+        ! iO1$(5)="4,43,Nz 12.2,UT,N" : iO1$(6)="5,43,Nz 6,UT,N"
 00200 ! pr f "15,29,C 10,B,1": "Print (F1)" !:
         ! pr f "15,41,C 09,B,5": "Exit (F5)"
 00210   fnlbl(lc+=1,1,"Report Heading Date:",mylen,right)
 00220   fntxt(lc,mypos,20) !:
-        let resp$(2)=dat$
+        resp$(2)=dat$
 00230   fnlbl(lc+=1,1,"Balance per Bank Statement:",mylen,right)
 00240   fntxt(lc,mypos,12,0,0,'PointTwo') !:
-        let resp$(3)=str$(bankbal)
+        resp$(3)=str$(bankbal)
 00250   fnlbl(lc+=1,1,"Last Check Date for Reconciliation:",mylen,right)
 00260   fntxt(lc,mypos,0,0,0,'CCYYMMDD') !:
-        let resp$(4)=str$(lcd)
+        resp$(4)=str$(lcd)
 00270   fncmdset(3)
 00280 ! Rinput #101,Fields MAT IO1$: GL1,GL2,GL3,DAT$,BANKBAL,LCD !:
         fnacs(sn$,0,mat resp$,ckey)
 00290   if ckey=5 then goto XIT
-00300   let resp$(1)=fnagl$(resp$(1)) !:
+00300   resp$(1)=fnagl$(resp$(1)) !:
         let gl1=val(resp$(1)(1:3)) !:
         let gl2=val(resp$(1)(4:9)) !:
         let gl3=val(resp$(1)(10:12)) !:
-        let dat$=resp$(2) !:
+        dat$=resp$(2) !:
         bankbal=val(resp$(3)) !:
         lcd=val(resp$(4))
 00310   currgl$=resp$(1)
@@ -62,7 +62,7 @@
 00440 RD_NXT: ! 
 00450   if a(3)<>0 then goto READ_GLBREC
 00460   pr #255,using 'Form POS 1,C 12,POS 15,C 30,POS 48,PIC(ZZ/ZZ/ZZ),POS 58,N 13.2': c$,p$,a(1),a(2) pageoflow PGOF
-00470   let tot+=a(2)
+00470   tot+=a(2)
 00480   goto READ_GLBREC
 00490 ! ______________________________________________________________________
 00500 PGOF: pr #255: newpage !:
@@ -85,12 +85,12 @@
 00630   pr #255: ""
 00640   return 
 00650 ! ______________________________________________________________________
-00660 DONE: let fncloseprn
+00660 DONE: fncloseprn
 00670   close #glbrec: 
-00680 XIT: let fnxit
+00680 XIT: fnxit
 00690 ! ______________________________________________________________________
 00700 ! <Updateable Region: ERTN>
-00710 ERTN: let fnerror(program$,err,line,act$,"xit")
+00710 ERTN: fnerror(program$,err,line,act$,"xit")
 00720   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00730   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00740   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

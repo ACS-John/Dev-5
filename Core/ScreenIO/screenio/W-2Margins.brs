@@ -16,10 +16,10 @@
 00600 !
 01000 Main: ! If you run me as a program, I run the w-2margins screen
 01010    library "S:\Core\ScreenIO\Screenio" : fnfm$
-01020    let Key$=""
-01030    let ParentKey$=""
-01040    let Record=0
-01050    let Path$=""
+01020    key$=""
+01030    parentKey$=""
+01040    record=0
+01050    path$=""
 01060    screenCode$="W-2MARGINS"
 01070    chain "s:\core\screenio\screeniosaveandtest.br",mat PassedData$,Key$,ParentKey$,Record,Path$,ScreenCode$
 01080    if len(trim$(Ret$)) then
@@ -94,9 +94,9 @@
 05063   ! 2500+ is reserved for screenio
 05064   if fkey=1 or fkey=1504 then
 05065     if env$('Program_Caption')='Select Company' then
-05066       let help_cursys$='co'
+05066       help_cursys$='co'
 05067     else
-05068       let help_cursys$=lwrc$(env$('CurSys'))
+05068       help_cursys$=lwrc$(env$('CurSys'))
 05069     end if
 05070     ! pr 'help_cursys$='&help_cursys$ : pause
 05071     execute 'system -M start http://planetacs.net/help/'&help_cursys$&'/'&srep$(env$('Program_Caption'),' ','%20')&'.html'
@@ -196,7 +196,7 @@
 92001 !
 92002    if ~DataIsInside then
 92003       fnPopData(2)
-92004       if Function$="{{SetData}}" then let DataIsInside=1
+92004       if Function$="{{SetData}}" then dataIsInside=1
 92005    end if
 92006 !
 92007    if ~FileIOLinkageSet then
@@ -208,17 +208,17 @@
 92013    end if
 92014 !
 92015    if Function$ = "{co_w2_margins_btn_ok}" then
-92016       let ReturnValue = fnco_w2_margins_btn_ok
+92016       returnValue = fnco_w2_margins_btn_ok
 92017    else if Function$ = "{co_w2_margins_enter}" then
-92018       let ReturnValue = fnco_w2_margins_enter
+92018       returnValue = fnco_w2_margins_enter
 92019    else if Function$ = "{co_w2_margins_main_loop}" then
-92020       let ReturnValue = fnco_w2_margins_main_loop
+92020       returnValue = fnco_w2_margins_main_loop
 92021    else if Function$ = "{defaults\enter}" then
-92022       let ReturnValue = fnEnterDefault
+92022       returnValue = fnEnterDefault
 92023    else if Function$ = "{defaults\mainloop}" then
-92024       let ReturnValue = fnMainLoop
+92024       returnValue = fnMainLoop
 92025    else if Function$ = "{defaults\exit}" then
-92026       let ReturnValue = fnExitDefault
+92026       returnValue = fnExitDefault
 92027    else
 92028       if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
 92029          pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
@@ -227,7 +227,7 @@
 92032 !
 92033    if ~DataIsInside or Function$="{{GetData}}" then
 92034       fnPushData(2)
-92035       let DataIsInside=0
+92035       dataIsInside=0
 92036    end if
 92037 return
 92038 !

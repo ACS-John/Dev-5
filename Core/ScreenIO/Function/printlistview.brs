@@ -30,23 +30,23 @@
     if ~exists(env$("pd")&"temp") then execute "mkdir "&env$("pd")&"temp"
     library env$("pd")&"vol002\RTFLIB.DLL" : fnListPrint
 
-    let TotalSupp$=Title$=TargetField$=""
+    totalSupp$=Title$=TargetField$=""
     if pos(UserData$(ControlIndex),"|") then
-       let Title$=UserData$(ControlIndex)(pos(UserData$(ControlIndex),"|")+1:999)
-       let TargetField$=UserData$(ControlIndex)(1:pos(UserData$(ControlIndex),"|")-1)
+       title$=UserData$(ControlIndex)(pos(UserData$(ControlIndex),"|")+1:999)
+       targetField$=UserData$(ControlIndex)(1:pos(UserData$(ControlIndex),"|")-1)
        if pos(Title$,"|") then
-          let TotalSupp$=Title$(pos(Title$,"|")+1:999)
-          let Title$=Title$(1:pos(Title$,"|")-1)
+          totalSupp$=Title$(pos(Title$,"|")+1:999)
+          title$=Title$(1:pos(Title$,"|")-1)
        end if
     else
-       let Title$=uprc$(ScreenIO$(si_ScreenCode)(1:1))&lwrc$(ScreenIO$(si_ScreenCode)(2:999))&" List Print"
-       let TargetField$=UserData$(ControlIndex)
+       title$=uprc$(ScreenIO$(si_ScreenCode)(1:1))&lwrc$(ScreenIO$(si_ScreenCode)(2:999))&" List Print"
+       targetField$=UserData$(ControlIndex)
     end if
     
     listviewSubscript=fnFindSubscript(mat Subscripts$,"ctl_",TargetField$)
     if ListviewSubscript then
        fnListPrint(Window,fnListSpec$(ControlSpec$(ListviewSubscript)),"","","",mat S,1,0,totalsupp$)
     else
-       let msgbox("Couldn't find the target listview. Please ensure a valid listview is selected for the pr button, or contact the programmer who worked on your system to fix this error.")
+       msgbox("Couldn't find the target listview. Please ensure a valid listview is selected for the pr button, or contact the programmer who worked on your system to fix this error.")
     end if
  fnend

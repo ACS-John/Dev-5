@@ -16,16 +16,16 @@
 00150   open #payee=1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PayIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00160   open #payee2=11: "Name="&env$('Q')&"\GLmstr\paymstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\payidx2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00170   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\gltridx1.h"&str$(cno)&",Shr",internal,outin,keyed 
-00180   let namtab=66-int(len(rtrm$(cnam$))/2)
-00190   let dattab=66-int(len(rtrm$(dat$))/2)
+00180   namtab=66-int(len(rtrm$(cnam$))/2)
+00190   dattab=66-int(len(rtrm$(dat$))/2)
 00200 ! _________________________
 00210 MENU1: ! 
 00220 ASKDAT: ! 
 00230   fntos(sn$="DumpVendorTrans") !:
-        let mylen=35 : let mypos=mylen+2
+        mylen=35 : mypos=mylen+2
 00240   fnlbl(1,1,"Oldest Transaction Date to Retain:",mylen,right)
 00250   fntxt(1,mypos,8,0,left,'CCYYMMDD',0,'All payee transactions older than the date you enter here will be removed.') !:
-        let resp$(1)=str$(oldestdate)
+        resp$(1)=str$(oldestdate)
 00255   fnlbl(1,50,"")
 00260   fncmdset(2)
 00270   fnacs(sn$,0,mat resp$,ckey)
@@ -38,10 +38,10 @@
 00340 DELETEIT: ! 
 00350 L350: delete #trans: 
 00360   goto L300
-00370 XIT: let fnxit
+00370 XIT: fnxit
 00380 ! ______________________________________________________________________
 00390 ! <Updateable Region: ERTN>
-00400 ERTN: let fnerror(program$,err,line,act$,"xit")
+00400 ERTN: fnerror(program$,err,line,act$,"xit")
 00410   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00420   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00430   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

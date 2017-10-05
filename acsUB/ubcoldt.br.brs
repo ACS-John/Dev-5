@@ -15,15 +15,15 @@
         read #20,using "Form POS 1,10*C 20",rec=1: mat servicename$ !:
         close #20: 
 00150   gosub SCREEN1
-00160   let hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
+00160   hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
 00170   for j=1 to 10
 00180     let x2=pos(trim$(servicename$(j))," ",1) !:
           if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
 00190     if trim$(servicename$(j))<>"" then !:
             scr1$(sz1+=1)=servicename$(j) !:
-            let hd1$=hd1$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:7)),7)&"}"
+            hd1$=hd1$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:7)),7)&"}"
 00200   next j
-00210   let hd1$=hd1$&"  {\ul Customer Name               }"
+00210   hd1$=hd1$&"  {\ul Customer Name               }"
 00220   mat scr1$(sz1)
 00230   mat alloc(sz1)
 00240   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -50,17 +50,17 @@
 00470   if tamount=0 then goto L430
 00480   if tcode<3 or tcode>5 then goto L430 !:
           ! don't pr charges or penalties
-00490   if tcode=3 then let ti2=1 ! REG.COLLECTION
-00500   if tcode=4 then let ti2=2 ! CREDIT MEMO
-00510   if tcode=5 then let ti2=3 ! DEBIT MEMO
-00520   if ti2=3 then let r(1,1)-=tamount else let r(1,1)+=tamount
-00530   let r(1,ti2+1)+=tamount
+00490   if tcode=3 then ti2=1 ! REG.COLLECTION
+00500   if tcode=4 then ti2=2 ! CREDIT MEMO
+00510   if tcode=5 then ti2=3 ! DEBIT MEMO
+00520   if ti2=3 then r(1,1)-=tamount else r(1,1)+=tamount
+00530   r(1,ti2+1)+=tamount
 00540   let x=0
 00550   for j=1 to 10
 00560     if trim$(servicename$(j))="" then goto L600
 00570     alloc(x+=1)=tg(j)
-00580     if ti2=3 then let r(x+3,1)-=tg(j) else let r(x+3,1)+=tg(j)
-00590     let r(x+3,ti2+1)+=tg(j)
+00580     if ti2=3 then r(x+3,1)-=tg(j) else r(x+3,1)+=tg(j)
+00590     r(x+3,ti2+1)+=tg(j)
 00600 L600: next j
 00610   c$=" "
 00620   if tcode=4 then c$="CM" else !:
@@ -69,8 +69,8 @@
           pr #255,using 'Form POS 1,C 10,N 10.2,C 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 9.2': p$,tamount,c$,tdate,mat alloc pageoflow PGOF
 00641   if sum(alloc)<>tamount then goto L642 else goto L655
 00642 L642: mat ml$(3) !:
-        let ml$(1)="The breakdown on a collection transation dated "&str$(tdate)& " for customer # "&p$ !:
-        let ml$(2)="does not balance.  Your totals will be off by "& trim$(cnvrt$("pic($$$,$$$.## cr)",tamount-sum(alloc)))&"." !:
+        ml$(1)="The breakdown on a collection transation dated "&str$(tdate)& " for customer # "&p$ !:
+        ml$(2)="does not balance.  Your totals will be off by "& trim$(cnvrt$("pic($$$,$$$.## cr)",tamount-sum(alloc)))&"." !:
         fnmsgbox(mat ml$,resp$,cap$,49)
 00655 L655: if resp$="Cancel" then goto XIT
 00660   goto L430
@@ -89,34 +89,34 @@
 00770   pr #255: ""
 00780   pr #255,using 'Form POS 4,C 30,N 11.2,3*N 12.2': "Total      ",r(1,1),r(1,2),r(1,3),r(1,4)
 00850   fncloseprn
-00860 XIT: let fnxit
+00860 XIT: fnxit
 00870 ! ______________________________________________________________________
 00880 SCREEN1: ! 
 00890   fntos(sn$="UBColPrn") !:
-        let mylen=33 : let mypos=mylen+2
+        mylen=33 : mypos=mylen+2
 00900   fnlbl(1,1,"Report Heading Date:",mylen,1)
 00910   fntxt(1,mypos,20) !:
-        let resp$(1)=dat$
+        resp$(1)=dat$
 00920   fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
 00930   fntxt(2,mypos,10,0,1,"3",0,"First day of the period to be printed. (ccyymmdd format)") !:
-        let resp$(2)=str$(ld1)
+        resp$(2)=str$(ld1)
 00940   fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
 00950   fntxt(3,mypos,10,0,1,"3",0,"Last day of the period to be printed. (ccyymmdd format)") !:
-        let resp$(3)=str$(hd1)
+        resp$(3)=str$(hd1)
 00960   fnchk(4,mypos,"Include Details:",1) !:
-        let resp$(4)="True"
+        resp$(4)="True"
 00980   fncmdset(3)
 00990   fnacs(sn$,win,mat resp$,ck)
 00992   if ck=5 then goto XIT
-01000   let dat$=resp$(1) !:
+01000   dat$=resp$(1) !:
         ld1=val(resp$(2)) !:
-        let hd1=val(resp$(3)) !:
-        let ti1$=resp$(4)
+        hd1=val(resp$(3)) !:
+        ti1$=resp$(4)
 01030   fndat(dat$,2)
 01040   return 
 01050 ! ______________________________________________________________________
 01060 ! <Updateable Region: ERTN>
-01070 ERTN: let fnerror(program$,err,line,act$,"xit")
+01070 ERTN: fnerror(program$,err,line,act$,"xit")
 01080   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01090   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

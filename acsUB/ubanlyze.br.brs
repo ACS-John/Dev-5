@@ -14,24 +14,24 @@
 00150 MAIN: ! 
 00160   sn$ = "UBAnalyze" !:
         fntos(sn$) !:
-        let mylen=20 !:
-        let mypos=mylen+2
-00170   let text$="Billing Date:" !:
+        mylen=20 !:
+        mypos=mylen+2
+00170   text$="Billing Date:" !:
         fnlbl(1,1,text$,mylen,1)
 00180   fntxt(1,mypos,8,8,0,"1") !:
-        let resp$(1)=str$(bdate)
-00190   let text$="Type of Service:" !:
+        resp$(1)=str$(bdate)
+00190   text$="Type of Service:" !:
         fnlbl(2,1,text$,mylen,1)
 00200   code$(1)="Water" !:
         code$(2)="Sewer" !:
         code$(3)="Electric" !:
         code$(4)="Gas" !:
         fncomboa("Service",2,mylen+3,mat code$,"",16)
-00204   let text$="Rate Code" !:
+00204   text$="Rate Code" !:
         fnlbl(2,1,text$,mylen,1)
 00205   fntxt(3,mypos,3,3,0,"30") !:
-        let resp$(3)=""
-00210   fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
+        resp$(3)=""
+00210   fncmdset(3): fnacs(sn$,0,mat resp$,ck)
 00220   if ck=5 then goto XIT
 00230   bdate= val(resp$(1))
 00240   if resp$(2)="Water" then !:
@@ -62,30 +62,30 @@
 00680     pr f "3,47,C 27,H,N": "  Beginning Usage   Rate"
 00690     for j=1 to 18
 00700       pr f str$(j+4)&",47,C 4,N": str$(j)&"."
-00710       let io2$(j*2-1)=str$(j+4)&",53,N 6,UT,N"
-00720       let io2$(j*2)=str$(j+4)&",65,N 9.5,UT,N"
+00710       io2$(j*2-1)=str$(j+4)&",53,N 6,UT,N"
+00720       io2$(j*2)=str$(j+4)&",65,N 9.5,UT,N"
 00730     next j
 00740     pr f "24,43,C 09,B,1": "Next (F1)"
 00750     pr f "24,53,C 09,B,5": "Exit (F5)"
 00760 L760: input fields mat io2$: mat t conv CONV2
-00770     if ce>0 then let io2$(ce)(ce1:ce2)="U": ce=0
+00770     if ce>0 then io2$(ce)(ce1:ce2)="U": ce=0
 00780     if cmdkey>0 or curfld>36 then goto L850 else ce=curfld
 00790 L790: ce=ce+1: if ce>udim(io2$) then ce=1
-00800 L800: let io2$(ce)=rtrm$(uprc$(io2$(ce))) : ce1=pos(io2$(ce),"U",1) !:
+00800 L800: io2$(ce)=rtrm$(uprc$(io2$(ce))) : ce1=pos(io2$(ce),"U",1) !:
           if ce1=0 then goto L790
-00810     ce2=ce1+1 : let io2$(ce)(ce1:ce1)="UC" : goto L760
-00820 CONV2: if ce>0 then let io2$(ce)(ce1:ce2)="U"
+00810     ce2=ce1+1 : io2$(ce)(ce1:ce1)="UC" : goto L760
+00820 CONV2: if ce>0 then io2$(ce)(ce1:ce2)="U"
 00830     ce=cnt+1
 00840 ERR2: pr f "24,78,C 1": bell : goto L800
 00850 L850: if cmdkey=5 then goto XIT
 00860     close #105: ioerr L870
 00870 L870: for k8=1 to 18
 00880       let usage(k8,k9)=t(k8,1)
-00890       let rate(k8,k9)=t(k8,2)
+00890       rate(k8,k9)=t(k8,2)
 00900     next k8
 00910     mat t=(0)
 00920   next k9
-00930 L930: let message$="Printing: Please wait..." !:
+00930 L930: message$="Printing: Please wait..." !:
         fnwait(106,cap$,message$,1)
 00940   on fkey 5 goto DONE
 00950   fnopenprn(cp,58,220,process)
@@ -93,7 +93,7 @@
 00970 L970: form pos 143,4*pd 2,pos 217,12*pd 5,pos 296,pd 4
 00980   if f<>bdate then goto L960
 00990   if a(svce)<>cde(1) then goto L960
-01000   let numbcust=numbcust+1
+01000   numbcust=numbcust+1
 01010   s9=3
 01020   if svce<3 then goto L1060
 01030   s9=s9+4
@@ -108,11 +108,11 @@
 01120     if d(s9)>=usage(k7,k9) and d(s9)<usage(k7+1,k9) then goto L1160
 01130     if d(s9)>=usage(k7,k9) and usage(k7+1,k9)=0 then goto L1160
 01140   next k7
-01150   let k7=18
-01160 L1160: let ds9=d(s9)
+01150   k7=18
+01160 L1160: ds9=d(s9)
 01170   for j7=1 to k7-1
 01180     let usagtot(j7,k9)=usagtot(j7,k9)+(usage(j7+1,k9)-usage(j7,k9))
-01190     let ds9=ds9-(usage(j7+1,k9)-usage(j7,k9))
+01190     ds9=ds9-(usage(j7+1,k9)-usage(j7,k9))
 01200   next j7
 01210   let usagtot(k7,k9)=usagtot(k7,k9)+ds9
 01220 L1220: customer(k7,k9)=customer(k7,k9)+1
@@ -120,7 +120,7 @@
 01240 ! ______________________________________________________________________
 01250 L1250: for k5=1 to 18
 01260     for k3=1 to 20
-01270       let ratetot(k5,k3)=usagtot(k5,k3)*rate(k5,k3)
+01270       ratetot(k5,k3)=usagtot(k5,k3)*rate(k5,k3)
 01280     next k3
 01290   next k5
 01300   for k2=1 to 20
@@ -160,10 +160,10 @@
 01560   pr #255,using L1570: "Number of Customers under Minumum Usage",mincust
 01570 L1570: form skip 1,c 40,pos 45,pic(zzz,zzz,zzz),skip 1
 01580 DONE: close #1: ioerr L1590
-01590 L1590: let fncloseprn
-01600 XIT: let fnxit
+01590 L1590: fncloseprn
+01600 XIT: fnxit
 01610 ! ______________________________________________________________________
-01620 ERTN: let fnerror(program$,err,line,act$,"xit")
+01620 ERTN: fnerror(program$,err,line,act$,"xit")
 01630   if uprc$(act$)<>"PAUSE" then goto L1660
 01640   execute "list -"&str$(line) !:
         pause  !:

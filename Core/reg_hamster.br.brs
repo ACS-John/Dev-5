@@ -7,7 +7,7 @@
 21200   fntop(program$,cap$='Reg Hamster')
 21400   fncno(cno)
 21600   fn_setup_hamster
-21800   fn_open_file : let fn_close_file : let fn_open_file
+21800   fn_open_file : fn_close_file : fn_open_file
 22000   gosub HAMSTER
 22200   fn_close_file
 22400   goto XIT
@@ -26,10 +26,10 @@
 25000   fnhamster("Reg_Hamster",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 25200   return 
 25400 ! ______________________________________________________________________
-25600 XIT: let fnxit
+25600 XIT: fnxit
 25800 ! ______________________________________________________________________
 26000 ! <Updateable Region: ERTN>
-26200 ERTN: let fnerror(program$,err,line,act$,"xit")
+26200 ERTN: fnerror(program$,err,line,act$,"xit")
 26400   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 26600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 26800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -42,11 +42,11 @@
 28200 ! storage_length_prior=storage_length
 28400     add_rec_item=udim(mat lbl$)+1
 28600     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$
-28800     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
+28800     mat tln(add_rec_item) : tln(add_rec_item)=textbox_len
 29000     mat p$(add_rec_item)
 29200     mat fltyp$(add_rec_item) : fltyp$(add_rec_item)=field_type$
 29400     mat sln(add_rec_item) : sln(add_rec_item)=storage_length
-29600     mat mask(add_rec_item) : let mask(add_rec_item)=ar_mask
+29600     mat mask(add_rec_item) : mask(add_rec_item)=ar_mask
 29800 ! if storage_position=0 then
 30000 !   storage_position=1
 30200 !   auto_storage_position=1
@@ -58,9 +58,9 @@
 31400     mat c$(add_rec_item,8)
 31600   fnend  ! fn_add_rec
 31800   def fn_setup_hamster
-32000     let mask_pointtwo=32 : let mask_number=30
-32200     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
-32400     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
+32000     mask_pointtwo=32 : mask_number=30
+32200     mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
+32400     textlen_mmddyy=8 : textlen_ccyymmdd=10
 32600     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 32800 ! 
 33000     dim lbl$(1)*38,tln(1),p$(1)*256,fltyp$(1),sln(1),mask(1),c$(1,8)*40,sp(1)

@@ -32,31 +32,31 @@
 22080 !  else 
 22100     dim cap$*128
 22120     dim index_execute_text$*512
-22140     let data_file$=trim$(data_file$)
+22140     data_file$=trim$(data_file$)
 22160     cap$='fnindex_it for '&data_file$(1:128) ! data_file$(len(data_file$)-80:len(data_file$)) ! cap$ is just for the error routine anyway
-22180     let is_index_statement=1
-22200     let is_index_file=2
+22180     is_index_statement=1
+22200     is_index_file=2
 22220 !   /r
 22240     let fail=0
-22260     if index_parameters$='' then let index_statement_or_file=is_index_statement else let index_statement_or_file=is_index_file
+22260     if index_parameters$='' then index_statement_or_file=is_index_statement else index_statement_or_file=is_index_file
 25000     if exists(data_file$) then 
 26000       if index_statement_or_file=is_index_statement then 
 26010         fnstatus(index_statement_or_file$)
-26012         let index_execute_text$=index_statement_or_file$
+26012         index_execute_text$=index_statement_or_file$
 26020         execute index_execute_text$ ioerr EXE_INDEX_ERR
 27000       else ! index_statement_or_file=is_index_file
 27010         fnstatus(os_filename$(index_statement_or_file$))
-27020         let index_parameters$=lwrc$(index_parameters$)
-27040         let index_parameters$=' '&index_parameters$&' '
-27050         let index_parameters$=srep$(index_parameters$,',',' ')
-27060         let index_parameters$=srep$(index_parameters$,' replace',' ')
-27080         let index_parameters$=srep$(index_parameters$,' dupkeys',' ')
-27100         let index_parameters$=srep$(index_parameters$,' -n',' ')
-27140         let index_parameters$=trim$(index_parameters$)&' Replace DupKeys Shr' ! -N
+27020         index_parameters$=lwrc$(index_parameters$)
+27040         index_parameters$=' '&index_parameters$&' '
+27050         index_parameters$=srep$(index_parameters$,',',' ')
+27060         index_parameters$=srep$(index_parameters$,' replace',' ')
+27080         index_parameters$=srep$(index_parameters$,' dupkeys',' ')
+27100         index_parameters$=srep$(index_parameters$,' -n',' ')
+27140         index_parameters$=trim$(index_parameters$)&' Replace DupKeys Shr' ! -N
 27141 ! 
 27145 ! 
 27150 !       pr 'index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$ : pause
-27154         let index_execute_text$='index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$
+27154         index_execute_text$='index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$
 27156 !       if env$('ACSDeveloper')='' then execute 'CD '&env$('temp')(1:2)
 27158 !       if env$('ACSDeveloper')='' then execute 'CD '&env$('temp')(3:len(env$('temp')))
 27160         execute index_execute_text$ ioerr EXE_INDEX_ERR
@@ -84,13 +84,13 @@
 32000 INDEX_XIT: ! 
 32020     if fail then 
 32040 !     fnstatus_pause
-32060       let index_it_return=0
+32060       index_it_return=0
 32080     else 
-32100       let index_it_return=1
+32100       index_it_return=1
 32120     end if 
 32140     fn_index_it=index_it_return
 32160   fnend 
-34000 XIT: let fnxit
+34000 XIT: fnxit
 44000 ! <Updateable Region: ERTN>
 44020 ERTN: ! 
 44040   library 'S:\Core\Library': fnerror

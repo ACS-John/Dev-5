@@ -31,21 +31,21 @@
         sc3$(5)=" Total of all unpaid Invoices (less credits) on file:"
 00240   read #bankmstr,using 'Form Pos 45,PD 6.2,PD 6.2,G 8',key=bc$,release: bal,upi,lcn$ nokey L250
 00250 L250: sc3$(1)=" Bank Code "&bc$&" Current Bank Balance:"
-00260   let t1(1)=bal
+00260   t1(1)=bal
 00270   fnopenprn !:
         ! fnwait !:
         pr f "13,34,C 12,B,99": "Cancel (Esc)" !:
         on fkey 99 goto EO_PAYTRANS
 00280   restore #paytrans,key>="                    ": nokey EO_PAYTRANS !:
-        let hvn$="" : let t1=pg1=0
+        hvn$="" : t1=pg1=0
 00290   gosub HEADER
 00300 READ_PAYTRANS: ! 
 00310   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,N 1': vn$,iv$,mat up$,upa,pcde,bc,ck$,dp,gde eof EO_PAYTRANS !:
         bank_code=bc
-00320   if rtrm$(vn$)="" or pcde><1 or bc<>bankcode then let t1(4)+=upa: goto READ_PAYTRANS ! reject and add invoices not selected or for other bank accounts
+00320   if rtrm$(vn$)="" or pcde><1 or bc<>bankcode then t1(4)+=upa: goto READ_PAYTRANS ! reject and add invoices not selected or for other bank accounts
 00330   if hvn$<>"" and hvn$><vn$ then gosub READ_AND_PRINT
 00340   gosub BREAKDOWN
-00350   let t1+=upa : let hvn$=vn$ : let t1(2)+=upa
+00350   t1+=upa : hvn$=vn$ : t1(2)+=upa
 00360   goto READ_PAYTRANS
 00370 ! ______________________________________________________________________
 00380 NEWPGE: pr #255: newpage: gosub HDR : continue 
@@ -65,7 +65,7 @@
 00510   close #paytrans: 
 00520   goto XIT
 00530 ! ______________________________________________________________________
-00540 XIT: let fnxit
+00540 XIT: fnxit
 00550 ! ______________________________________________________________________
 00560 PGOF: pr #255: newpage : gosub HEADER : continue 
 00570 ! ______________________________________________________________________
@@ -78,16 +78,16 @@
 00640   return 
 00650 ! ______________________________________________________________________
 00660 READ_AND_PRINT: ! 
-00670   let nam$="" !:
+00670   nam$="" !:
         read #paymstr1,using 'Form POS 9,C 30',key=hvn$,release: nam$ nokey L680
 00680 L680: pr #255,using 'Form POS 65,C 14,SKIP 1,POS 30,C 33,PIC(ZZZ,ZZZ,ZZZ.##CR)': "____________",nam$,t1 pageoflow PGOF !:
         pr #255: "" pageoflow PGOF
-00690   let t1=0
+00690   t1=0
 00700   return 
 00710 ! ______________________________________________________________________
 00720 EO_PAYTRANS: ! 
 00730   if hvn$<>"" then gosub READ_AND_PRINT
-00740   let t1(3)=t1(1)-t1(2): let t1(5)=t1(4)+t1(2)
+00740   t1(3)=t1(1)-t1(2): t1(5)=t1(4)+t1(2)
 00750   for j=1 to 5 !:
           pr #255,using 'Form POS 5,C 55,PIC($$$$,$$$,$$$,$$$.##CR)': sc3$(j),t1(j) !:
         next j
@@ -115,7 +115,7 @@
 00920   return 
 00930 ! ______________________________________________________________________
 00940 ! <Updateable Region: ERTN>
-00950 ERTN: let fnerror(program$,err,line,act$,"xit")
+00950 ERTN: fnerror(program$,err,line,act$,"xit")
 00960   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00970   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00980   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

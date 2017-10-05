@@ -20,9 +20,9 @@
 00150 ! r: prepare arrays
 00160     mat flxitm$(199) : mat flxhdr$(199) : mat sln2(199) : mat fltyp2$(199)
 00170     mat mask2(199) : mat startpos2(199) : mat option$(199) : mat control$(60,26)
-00180     let row_select=1 : opt_cancel=5 : opt_add=4 : opt_edit=3
-00190     opt_delete=7 : let right=1
-00200     let itemcount=udim(p$)
+00180     row_select=1 : opt_cancel=5 : opt_add=4 : opt_edit=3
+00190     opt_delete=7 : right=1
+00200     itemcount=udim(p$)
 00202     mat hcombof(itemcount)
 00210 ! 
 00220     if udim(incontrol$,1)<>0 then 
@@ -55,9 +55,9 @@
 00460         sln2(j)=sln(j)
 00470       end if 
 00480       if udim(mask)<>itemcount then 
-00490         let mask2(j)=0
+00490         mask2(j)=0
 00500       else 
-00510         let mask2(j)=mask(j)
+00510         mask2(j)=mask(j)
 00520       end if 
 00530       if mask2(j)=1 then fln(j)=8
 00540       if j=1 then goto SKIP_STARTPOS
@@ -87,8 +87,8 @@
 00770     for j=2 to itemcount+1
 00780       if mask2(j-1)<20000 then flxhdr$(fhc+=1)=lbl$(j-1)
 00790       controlx=j-1
-00800       let testmask=mask2(controlx)
-00810       if testmask=>1000 and testmask<2000 then let testmask-=1000
+00800       testmask=mask2(controlx)
+00810       if testmask=>1000 and testmask<2000 then testmask-=1000
 00812       if lwrc$(control$(controlx,1))='combof' and control$(controlx,7)<>'' then 
 00820       else if testmask=>1 and testmask<=29 then 
 00830         cmask$(fhc)=str$(testmask)
@@ -117,10 +117,10 @@
 01060 ! this section is not used currently
 01070 ! if later we want to add an option to force keys to be unique,
 01080 ! than I'll probably want to resurect and test this section
-01090     let j=0 : mat keyorder=(0) : bowman=0
+01090     j=0 : mat keyorder=(0) : bowman=0
 01100     do while kps(fin,j+=1)>0
 01110       for j=1 to udim(startpos2)
-01120         if startpos2=kps(fin,j) then let keyorder(j)=bowman+=1
+01120         if startpos2=kps(fin,j) then keyorder(j)=bowman+=1
 01130       next j
 01140     loop 
 01150     return 
@@ -129,7 +129,7 @@
 01180     fntos(sn$=uw$&"1b")
 01190     fnflexinit1(uw$&"2b",1,1,20,108,mat flxhdr$,mat cmask$,row_select)
 01200     for j1=1 to lrec(fin)
-01210       let prec=j1
+01210       prec=j1
 01212       gosub READ_P ! Read #FIN,Using FRM$,Rec=J1: MAT P$ Norec (just past fnflexadd1)
 01220       if pnorec<>1 then 
 01230         let fic=0 : flxitm$(fic+=1)=str$(rec(fin))
@@ -137,11 +137,11 @@
 01242           controlx=j2-1
 01244           if mask2(controlx)<20000 then 
 01246             dim hcfdesc$*128,hcfkey$*128
-01248             let hcfdesc$='' ! p$(controlx)
+01248             hcfdesc$='' ! p$(controlx)
 01250             if lwrc$(control$(controlx,1))='combof' and control$(controlx,7)<>'' then 
-01251               let hcfkey$=rpad$(trim$(p$(controlx))(1:kln(hcombof(controlx))),kln(hcombof(controlx)))
+01251               hcfkey$=rpad$(trim$(p$(controlx))(1:kln(hcombof(controlx))),kln(hcombof(controlx)))
 01252               read #hcombof(controlx),using 'form pos '&control$(controlx,5)&',c '&control$(controlx,6),key=hcfkey$: hcfdesc$ nokey ignore
-01253               let hcfdesc$=rtrm$(hcfdesc$)
+01253               hcfdesc$=rtrm$(hcfdesc$)
 01254             end if 
 01255             flxitm$(fic+=1)=p$(controlx)&' '&hcfdesc$
 01256 !           if hcfDesc$<>'' then pr 'flxitm$('&str$(fic)&')="'&flxitm$(fic)&'" hcfDesc$="'&hcfDesc$&'"' : pause
@@ -153,7 +153,7 @@
 01274     for hcombofitem=1 to hcombofcount
 01275       if hcombof(hcombofitem) then 
 01276         close #hcombof(hcombofitem): ioerr ignore
-01277         let hcombof(hcombofitem)=0
+01277         hcombof(hcombofitem)=0
 01278       end if 
 01279     next hcombofitem
 01280     fnlbl(21,20," ") ! move command buttons down one line so search box ok
@@ -162,7 +162,7 @@
 01295     fncmdkey("&Delete",opt_delete)
 01300     fncmdkey("E&xit",opt_cancel,0,1)
 01305     fnacs(sn$,0,mat resp$,menu1_opt)
-01310     let prec=val(resp$(1)) conv MENU1
+01310     prec=val(resp$(1)) conv MENU1
 01315     if prec=0 and menu1_opt=opt_edit then let menu1_opt=opt_add
 01320     if menu1_opt=opt_cancel then 
 01325       goto XIT
@@ -185,33 +185,33 @@
 01410 TO_ADD: ! 
 01415     if menu1_opt=opt_add then mat p$=("")
 01420     if itemcount>30 then 
-01425       let j2=int(itemcount/2) : let myflen=0
+01425       j2=int(itemcount/2) : myflen=0
 01430       for j=1 to j2
-01435         let myflen=max(myflen,fln(j))
+01435         myflen=max(myflen,fln(j))
 01440       next j
 01445     end if 
-01450 ! \Print MYFLEN : Let FNPAUSE ! XXX
-01455     let mylen=0
+01450 ! \Print MYFLEN : fnPAUSE ! XXX
+01455     mylen=0
 01460     for j=1 to itemcount
-01465       let mylen=max(mylen,len(lbl$(j)))
+01465       mylen=max(mylen,len(lbl$(j)))
 01470     next j
 01475     mat p2$(alana=udim(p$)+1) : mat p2$(1:udim(p$))=p$(1:udim(p$))
 01480     fntos(sn$=uw$&"3")
-01485     let mypos=mylen+3 : lc=ic=0 : col=1 : colpos=1
+01485     mypos=mylen+3 : lc=ic=0 : col=1 : colpos=1
 01490     for j=1 to itemcount
 01495       if itemcount>30 and j>(itemcount/2) and col=1 then 
 01500         lc=0 : colpos=mypos+myflen+4 : col+=1
-01505         let mypos=colpos+mylen+2
+01505         mypos=colpos+mylen+2
 01510       end if 
-01515       if mask2(ic+1)=>20000 then let ic+=1 : goto SKIP_LABEL_AND_CONTROL
+01515       if mask2(ic+1)=>20000 then ic+=1 : goto SKIP_LABEL_AND_CONTROL
 01520       fnlbl(lc+=1,colpos,lbl$(ic+=1)&":",mylen,right)
 01525       if mask2(ic)>10000 then 
-01530         let disable=1
-01535         let mask2(ic)-=10000
+01530         disable=1
+01535         mask2(ic)-=10000
 01540       else 
-01545         let disable=0
+01545         disable=0
 01550       end if 
-01555       if j<udim(mxl) then let maxlen=mxl(j) else let maxlen=0
+01555       if j<udim(mxl) then maxlen=mxl(j) else maxlen=0
 01560       if j>udim(control$,1) or trim$(control$(j,1))="" or lwrc$(control$(j,1))="txt" then 
 01565         fntxt(lc,mypos,fln(j),maxlen,0,str$(mask2(ic)),disable) ! p$(j)
 01570         goto BROWN
@@ -232,15 +232,15 @@
 01609         fncombof(uw$&"F"&str$(j),lc,mypos,val(control$(j,4))+val(control$(j,6))+3,control$(j,2),val(control$(j,3)),val(control$(j,4)),val(control$(j,5)),val(control$(j,6)),control$(j,7),val(control$(j,8)))
 01611       end if 
 01613 BROWN: ! done adding control and label
-01615       if disable=1 then let mask2(ic)+=10000
+01615       if disable=1 then mask2(ic)+=10000
 01617 SKIP_LABEL_AND_CONTROL: ! 
 01619     next j
 01621     fnlbl(lc+1,20," ") ! move command buttons down one line so search box ok
 01623     if menu1_opt=opt_add then 
 01625       fnchk(lc+=1,mypos,'Add Loop',right)
-01627       let p2$(alana)='False'
+01627       p2$(alana)='False'
 01629     end if 
-01631     if addloop$='' then let p2$(alana)='False' else let p2$(alana)=addloop$
+01631     if addloop$='' then p2$(alana)='False' else p2$(alana)=addloop$
 01633     fncmdkey("&Save",1,1)
 01635     fncmdkey("&Cancel",opt_cancel,0,1)
 01637 ! 
@@ -251,7 +251,7 @@
 01647     if lwrc$(addloop$)=lwrc$('True') then goto TO_ADD else goto MENU1
 01649 ! /r
 01651 ! <Updateable Region: ERTN>
-01653 ERTN: let fnerror(program$,err,line,act$,"xit")
+01653 ERTN: fnerror(program$,err,line,act$,"xit")
 01655     if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01657     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01659     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -262,69 +262,69 @@
 01669 ! Pnorec (returned value)= 0 = ok    = 1 = NoRec error encountered
 01671 ! Peof (returned value)  = 0 = ok    = 1 = EOF   error encountered
 01673 ! PRec (sent value)= record number to read
-01675     let pnorec=0 : let peof=0
+01675     pnorec=0 : peof=0
 01677 ! Read 1st Item
-01679     let j=1
+01679     j=1
 01681     if fltyp2$(j)="c" or fltyp2$(j)="cr" then 
-01683       let tmp$="Form Pos "&str$(startpos2(j))&",c "&str$(sln2(j))
+01683       tmp$="Form Pos "&str$(startpos2(j))&",c "&str$(sln2(j))
 01685       read #fin,using tmp$,rec=prec,reserve: p$(j) norec PNOREC eof PEOF
 01687     else if fltyp2$(j)="g" then 
-01691       let tmp$="Form Pos "&str$(startpos2(j))&",g "&str$(sln2(j))
+01691       tmp$="Form Pos "&str$(startpos2(j))&",g "&str$(sln2(j))
 01693       read #fin,using tmp$,rec=prec,reserve: p$(j) norec PNOREC eof PEOF
 01695     else if fltyp2$(j)="n" or fltyp2$(j)="pd" then 
-01699       let tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
+01699       tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
 01701       read #fin,using tmp$,rec=prec,reserve: t norec PNOREC eof PEOF
-01703       let p$(j)=str$(t)
+01703       p$(j)=str$(t)
 01704     else if fltyp2$(j)="pd" and ord(p$(j))=15 then 
-01705       let p$(j)=""
+01705       p$(j)=""
 01708     end if 
 01709 ! Read 2nd to Last Item
 01711     for j=2 to itemcount-1
 01713       if fltyp2$(j)="c" or fltyp2$(j)="cr" then 
-01715         let tmp$="Form Pos "&str$(startpos2(j))&",c "&str$(sln2(j))
+01715         tmp$="Form Pos "&str$(startpos2(j))&",c "&str$(sln2(j))
 01717         reread #fin,using tmp$,reserve: p$(j) norec PNOREC eof PEOF
 01719       else if fltyp2$(j)="g" then 
-01723         let tmp$="Form Pos "&str$(startpos2(j))&",g "&str$(sln2(j))
+01723         tmp$="Form Pos "&str$(startpos2(j))&",g "&str$(sln2(j))
 01725         reread #fin,using tmp$,reserve: p$(j) norec PNOREC eof PEOF
 01727       else if fltyp2$(j)="n" or fltyp2$(j)="pd" then 
-01731         let tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
+01731         tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
 01733         reread #fin,using tmp$,reserve: t norec PNOREC eof PEOF
-01735         let p$(j)=str$(t)
+01735         p$(j)=str$(t)
 01737       else if fltyp2$(j)="pd" and ord(p$(j))=15 then 
-01739         let p$(j)=""
+01739         p$(j)=""
 01740       end if 
 01741     next j
 01743 ! read Last Item
-01745     let j=itemcount
+01745     j=itemcount
 01747     if fltyp2$(j)="c" or fltyp2$(j)="cr" then 
-01749       let tmp$="Form Pos "&str$(startpos2(j))&",c "&str$(sln2(j))
+01749       tmp$="Form Pos "&str$(startpos2(j))&",c "&str$(sln2(j))
 01751       reread #fin,using tmp$,release: p$(j) norec PNOREC eof PEOF
 01753     else if fltyp2$(j)="g" then 
-01757       let tmp$="Form Pos "&str$(startpos2(j))&",g "&str$(sln2(j))
+01757       tmp$="Form Pos "&str$(startpos2(j))&",g "&str$(sln2(j))
 01759       reread #fin,using tmp$,release: p$(j) norec PNOREC eof PEOF
 01761     else if fltyp2$(j)="n" or fltyp2$(j)="pd" then 
-01765       let tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
+01765       tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "&str$(sln2(j))
 01767       reread #fin,using tmp$,release: t norec PNOREC eof PEOF
-01769       let p$(j)=str$(t)
+01769       p$(j)=str$(t)
 01773     else if fltyp2$(j)="pd" and ord(p$(j))=15 then 
-01774       let p$(j)=""
+01774       p$(j)=""
 01775     end if 
 01776     goto READ_P_XIT
-01777 PNOREC: let pnorec=1 : goto READ_P_XIT
-01779 PEOF: let peof=1 : goto READ_P_XIT
+01777 PNOREC: pnorec=1 : goto READ_P_XIT
+01779 PEOF: peof=1 : goto READ_P_XIT
 01781 READ_P_XIT: return 
 01783 ! /r
 01785 SET_KEY_FORM: ! r:
 01787 ! uses: Fin
 01789 ! returns: mat blank, keyForm$, key$
-01791     let keyform$='Form ' : let key$='' : let j=0
+01791     keyform$='Form ' : key$='' : j=0
 01793     do while kps(fin,j+=1)>0
-01795       let keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
-01797       let keyform$=keyform$&'C '&str$(kln(fin,j))&','
+01795       keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
+01797       keyform$=keyform$&'C '&str$(kln(fin,j))&','
 01799       blank$(j)=rpt$(chr$(48),kln(fin,j))
-01801       let key$=key$&blank$(j)
+01801       key$=key$&blank$(j)
 01803     loop 
-01805     let keyform$=keyform$(1:len(keyform$)-1) ! remove the trailing comma
+01805     keyform$=keyform$(1:len(keyform$)-1) ! remove the trailing comma
 01807     mat blank$(j-1)
 01809 ! pr 'KeyForm$='&KEYFORM$ ! XXX
 01811     return 
@@ -337,15 +337,15 @@
 01823 ! /r
 01825 SPECIAL_NOKEY: ! r:
 01827 ! pr 'Special Nokey routine' ! XXX
-01829     let key$=""
+01829     key$=""
 01831     read #fin,using keyform$,rec=prec: mat blank$
-01833     for j=1 to udim(blank$) : let key$=key$&blank$(j) : next j
+01833     for j=1 to udim(blank$) : key$=key$&blank$(j) : next j
 01835     continue  ! not Return  ! not Retry
 01837 ! /r
 01839 REWR_P: ! r:
 01841 ! spos=1
 01843     if menu1_opt=opt_add then 
-01845       let prec=lrec(fin)+1
+01845       prec=lrec(fin)+1
 01847       gosub SET_KEY_FORM
 01849       write #fin,using keyform$,reserve: mat blank$
 01851 ! .! pr 'write using KeyFormS,Reserve: Mat Blank$   - keyform$='&KEYFORM$
@@ -353,9 +353,9 @@
 01855     else 
 01857       gosub SET_KEY_FORM
 01859       reread #fin,using keyform$: mat blank$
-01861       let j=0 : let key$=''
+01861       j=0 : key$=''
 01863       do while kps(fin,j+=1)>0
-01865         let key$=key$&blank$(j)
+01865         key$=key$&blank$(j)
 01867       loop 
 01869       read #fin,key=key$: nokey SPECIAL_NOKEY
 01871       if rec(fin)<>prec then 
@@ -364,25 +364,25 @@
 01877     end if 
 01879     for j=1 to itemcount
 01881       if j<=udim(control$,1) and lwrc$(control$(j,1))="combof" then 
-01883         let p$(j)=p$(j)(1:val(control$(j,4)))
+01883         p$(j)=p$(j)(1:val(control$(j,4)))
 01885       end if 
 01887       crflag=0
 01889       if fltyp2$(j)="cr" then 
-01891         let p$(j)=lpad$(trim$(p$(j)),sln2(j))
+01891         p$(j)=lpad$(trim$(p$(j)),sln2(j))
 01893         fltyp2$(j)="c"
 01895         crflag=1
 01897       end if 
-01899       if lwrc$(fltyp2$(j))<>"pd" then let p$(j)=p$(j)(1:sln2(j))
+01899       if lwrc$(fltyp2$(j))<>"pd" then p$(j)=p$(j)(1:sln2(j))
 01901       if fltyp2$(j)="c" or fltyp2$(j)="g" or fltyp2$(j)="cr" then 
-01903         let tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "
-01905         let tmp$=tmp$&str$(sln2(j))
+01903         tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "
+01905         tmp$=tmp$&str$(sln2(j))
 01907         rewrite #fin,using tmp$,same,reserve: p$(j)
 01909 ! .! pr 'Rewr$ - '&TMP$&"   P$("&STR$(J)&")="&P$(J)
 01911       end if 
 01913       if crflag=1 then fltyp2$(j)="cr" : crflag=0
 01915       if fltyp2$(j)="n" or fltyp2$(j)="pd" then 
-01917         let tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "
-01919         let tmp$=tmp$&str$(sln2(j)) : let t=val(p$(j))
+01917         tmp$="Form Pos "&str$(startpos2(j))&","&fltyp2$(j)&" "
+01919         tmp$=tmp$&str$(sln2(j)) : t=val(p$(j))
 01921         rewrite #fin,using tmp$,same,reserve: t
 01923       end if 
 01925     next j

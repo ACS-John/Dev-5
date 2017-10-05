@@ -24,10 +24,10 @@
 00240   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00250   input fields "13,40,C 1,IAE,N": pause$
 00260   goto L110
-00270 XIT: let fnxit
+00270 XIT: fnxit
 00280 ! ______________________________
 00290 ! <Updateable Region: ERTN>
-00300 ERTN: let fnerror(program$,err,line,act$,"xit")
+00300 ERTN: fnerror(program$,err,line,act$,"xit")
 00310   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00320   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00330   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

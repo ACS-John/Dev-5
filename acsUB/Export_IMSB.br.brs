@@ -43,9 +43,9 @@
 28340     pr #h_out,using F_OUT_FIXED: z$,nam$,sta$,city$,state$,zip$,chr$(10)
 28360   loop 
 28380 ! /r
-29000 XIT: let fnxit
+29000 XIT: fnxit
 30000 ! <Updateable Region: ERTN>
-30020 ERTN: let fnerror(program$,err,line,act$,"xit")
+30020 ERTN: fnerror(program$,err,line,act$,"xit")
 30040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 30060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 30080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

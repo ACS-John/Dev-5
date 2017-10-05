@@ -39,81 +39,81 @@
 00228 L228: next j
 00230   def fnc(x)=int(100*(x+sgn(x)*.0001))
 00240 ! ______________________________________________________________________
-00250   let prebal$="10:00 AM, xxxxxxx  xx"
+00250   prebal$="10:00 AM, xxxxxxx  xx"
 00260 SCREEN1: ! 
-00270   a$="" : let prtbkno=0
+00270   a$="" : prtbkno=0
 00280   fntos(sn$="UBPrtBl1-1") !:
-        let pf=26 : ll=24 !:
-        let respc=0
+        pf=26 : ll=24 !:
+        respc=0
 00290   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00300   fntxt(3,pf,8,8,1,"1",0,tt$) !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 00310   fnlbl(4,1,"Message on Bill:",ll,1)
 00320   fntxt(4,pf,60,60) !:
-        let resp$(respc+=1)=mg$(1)
+        resp$(respc+=1)=mg$(1)
 00330   fntxt(5,pf,60,60) !:
-        let resp$(respc+=1)=mg$(2)
+        resp$(respc+=1)=mg$(2)
 00340   fntxt(6,pf,60,60) !:
-        let resp$(respc+=1)=mg$(3)
+        resp$(respc+=1)=mg$(3)
 00350   fntxt(7,pf,60,60) !:
-        let resp$(respc+=1)=mg$(4)
+        resp$(respc+=1)=mg$(4)
 00360   fntxt(8,pf,60,60) !:
-        let resp$(respc+=1)=mg$(5)
+        resp$(respc+=1)=mg$(5)
 00370   fntxt(9,pf,60,60) !:
-        let resp$(respc+=1)=mg$(6)
+        resp$(respc+=1)=mg$(6)
 00380   fntxt(10,pf,60,60) !:
-        let resp$(respc+=1)=mg$(7)
+        resp$(respc+=1)=mg$(7)
 00390   fntxt(11,pf,60,60) !:
-        let resp$(respc+=1)=mg$(8)
+        resp$(respc+=1)=mg$(8)
 00400   fntxt(12,pf,60,60) !:
-        let resp$(respc+=1)=mg$(9)
+        resp$(respc+=1)=mg$(9)
 00410   fntxt(13,pf,60,60) !:
-        let resp$(respc+=1)=mg$(10)
+        resp$(respc+=1)=mg$(10)
 00411   fntxt(14,pf,60,60) !:
-        let resp$(respc+=1)=mg$(11)
+        resp$(respc+=1)=mg$(11)
 00412   fntxt(15,pf,60,60) !:
-        let resp$(respc+=1)=mg$(12)
+        resp$(respc+=1)=mg$(12)
 00413   fntxt(16,pf,60,60) !:
-        let resp$(respc+=1)=mg$(13)
+        resp$(respc+=1)=mg$(13)
 00420   fnlbl(17,1,"Date of Billing:",ll,1)
 00430   fntxt(17,pf,8,8,1,"1") !:
-        let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
+        resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00440   fnlbl(18,1,"Starting Account:",ll,1)
 00450   let fe$="ubm-act-nam" !:
-        let datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
-        let indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
-        let kp=1741: let kl=9 : let dp=41 : let dl=30 !:
+        datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
+        indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
+        kp=1741: kl=9 : dp=41 : dl=30 !:
         fncombof(fe$,18,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) !:
-        let resp$(respc+=1)="[All]"
+        resp$(respc+=1)="[All]"
 00460   fnlbl(19,1,"Route Number:",ll,1)
 00470   fncmbrt2(19,pf) !:
-        let resp$(respc+=1)="[All]"
+        resp$(respc+=1)="[All]"
 00480   fnchk(20,pf,"Select Accounts to Print",1) !:
-        let resp$(respc+=1)="False"
-00490 ! Let FNLBL(18,1,"Previous Balance Due By:",LL,1)
-00500 ! Let FNTXT(18,PF,35,35,0,"",0,"Example: 10:00AM, August 30") !:
-        ! Let RESP$(RESPC+=1)=PREBAL$
-00510 ! Let FNLBL(19,1,"If not paid by::",LL,1)
+        resp$(respc+=1)="False"
+00490 ! fnLBL(18,1,"Previous Balance Due By:",LL,1)
+00500 ! fnTXT(18,PF,35,35,0,"",0,"Example: 10:00AM, August 30") !:
+        ! rESP$(RESPC+=1)=PREBAL$
+00510 ! fnLBL(19,1,"If not paid by::",LL,1)
 00520 !  fnTXT(19,PF,25,25,0,"",0,"Example: September 4, 2007") !:
-        !  Let RESP$(RESPC+=1)=DUEBY$
+        !  rESP$(RESPC+=1)=DUEBY$
 00530   fncmdset(3) !:
         fnacs(sn$,0,mat resp$,ck)
 00540   if ck=5 then goto ENDSCR
-00550   let d1 = val(resp$(15)) !:
-        let d4 = val(resp$(1)) !:
-        let mg$(1) = resp$(2) !:
-        let mg$(2) = resp$(3) !:
-        let mg$(3) = resp$(4) !:
-        let mg$(4) = resp$(5) !:
-        let mg$(5) = resp$(6) !:
-        let mg$(6) = resp$(7) !:
-        let mg$(7) = resp$(8) !:
-        let mg$(8) = resp$(9)
-00560   let mg$(9) = resp$(10) !:
-        let mg$(10) = resp$(11) !:
-        let mg$(11) = resp$(12) !:
-        let mg$(12) = resp$(13) !:
-        let mg$(13) = resp$(14)
+00550   d1 = val(resp$(15)) !:
+        d4 = val(resp$(1)) !:
+        mg$(1) = resp$(2) !:
+        mg$(2) = resp$(3) !:
+        mg$(3) = resp$(4) !:
+        mg$(4) = resp$(5) !:
+        mg$(5) = resp$(6) !:
+        mg$(6) = resp$(7) !:
+        mg$(7) = resp$(8) !:
+        mg$(8) = resp$(9)
+00560   mg$(9) = resp$(10) !:
+        mg$(10) = resp$(11) !:
+        mg$(11) = resp$(12) !:
+        mg$(12) = resp$(13) !:
+        mg$(13) = resp$(14)
 00565   for j=1 to 13
 00566     rewrite #16,using "form pos 1,c 60",rec=j: mg$(j) norec L568 : lastj=j
 00567   next j
@@ -127,19 +127,19 @@
           a$="" else !:
           a$ = lpad$(trim$(resp$(16)(1:9)),9)
 00580   if resp$(17)="[All]" then !:
-          let prtbkno=0 else !:
-          let prtbkno = val(resp$(17))
+          prtbkno=0 else !:
+          prtbkno = val(resp$(17))
 00590   if resp$(18)="True" then sl1=1: let z$="" else sl1=0
-00600   let prebal$=resp$(19)
-00610   let dueby$=resp$(20)
+00600   prebal$=resp$(19)
+00610   dueby$=resp$(20)
 00620   goto L640 ! If TRIM$(PREBAL$)="" OR TRIM$(DUEBY$)="" Then Goto 550 Else Goto 560
 00630   mat ml$(2) !:
-        let ml$(1)="You must answer the last two questions!" !:
-        let ml$(2)="Click OK to enter this informatio." !:
+        ml$(1)="You must answer the last two questions!" !:
+        ml$(2)="Click OK to enter this informatio." !:
         fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto SCREEN1
 00640 L640: if trim$(a$)<>"" then read #2,using L650,key=a$: z$,route,sequence nokey SCREEN1 !:
-          let holdz$=z$: begin=1 !:
+          holdz$=z$: begin=1 !:
           st1=1
 00650 L650: form pos 1,c 10,pos 1741,n 2,n 7
 00660   if trim$(a$)="" and prtbkno=0 then restore #2,key>="         ": ! if no beginning account or starting route #, start at beginning of file
@@ -168,28 +168,28 @@
 00890   e1=0 : mat pe$=("")
 00900   for j=1 to 4
 00910     if rtrm$(ba$(j))<>"" then !:
-            e1=e1+1 : let pe$(e1)=ba$(j)
+            e1=e1+1 : pe$(e1)=ba$(j)
 00920   next j
-00930   if trim$(pe$(2))="" then let pe$(2)=pe$(3): let pe$(3)=""
-00940   if trim$(pe$(3))="" then let pe$(3)=pe$(4): let pe$(4)=""
+00930   if trim$(pe$(2))="" then pe$(2)=pe$(3): pe$(3)=""
+00940   if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
 00950   goto L1120
 00960 ! ______________________________________________________________________
 00970 L970: e1=0 : mat pe$=("")
 00980   for j=2 to 4
 00990     if rtrm$(e$(j))<>"" then !:
-            e1=e1+1 : let pe$(e1)=e$(j)
+            e1=e1+1 : pe$(e1)=e$(j)
 01000   next j
-01010   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
+01010   if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 01020   goto L1120
 01030 ! ______________________________________________________________________
 01040 RELEASE_PRINT: ! 
 01050   close #1: ioerr L1060
 01060 L1060: close #3: ioerr L1070
-01070 L1070: let fnpa_finis
+01070 L1070: fnpa_finis
 01100   goto ENDSCR
 01110 ! ______________________________________________________________________
 01120 L1120: ! 
-01130   let pb=bal-g(11)
+01130   pb=bal-g(11)
 01140   if bal<=0 then let g(9)=g(10)=0 ! don't show penalty if balance 0 or less
 01150 ! ______________print bill routine______________________________________
 01160   gosub VBPRINT
@@ -201,16 +201,16 @@
 01210 SCREEN3: ! 
 01220   sn$ = "UBPrtBl1-2" !:
         fntos(sn$)
-01230   let txt$="Account (blank to stop)" !:
+01230   txt$="Account (blank to stop)" !:
         fnlbl(1,1,txt$,31,1)
 01240 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
 01250   if trim$(z$)<>"" then !:
-          let txt$="Last Account entered was "&z$ !:
+          txt$="Last Account entered was "&z$ !:
           fnlbl(3,1,txt$,44,1) else !:
-          let txt$="" !:
+          txt$="" !:
           fnlbl(3,1,txt$,44,1)
 01260   fncmbact(1,17) ! !:
-        let resp$(1)=""
+        resp$(1)=""
 01270   fncmdkey("&Print",1,1) !:
         fncmdkey("&Finish",5,0,1)
 01280   fnacs(sn$,0,mat resp$,ck)
@@ -224,8 +224,8 @@
 01350   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1600
 01360   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
 01370   s5=1
-01380   if prtbkno=0 then let routekey$="" else !:
-          let routekey$=cnvrt$("N 2",prtbkno)&"       " !:
+01380   if prtbkno=0 then routekey$="" else !:
+          routekey$=cnvrt$("N 2",prtbkno)&"       " !:
           ! key off first record in route (route # no longer part of customer #)
 01390   restore #2,search>=routekey$: 
 01400 L1400: read #2,using L1410: z$,f,route eof END5
@@ -251,27 +251,27 @@
 01600 L1600: return 
 01610 ! ______________________________________________________________________
 01620 ENDSCR: ! pr totals screen
-01630   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
+01630   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01640   fntos(sn$="Bills-Total") !:
-        let mylen=23 : let mypos=mylen+2 !:
-        let respc=0
+        mylen=23 : mypos=mylen+2 !:
+        respc=0
 01650   fnlbl(1,1,"Total Bills Printed:",mylen,1)
 01660   fntxt(1,mypos,8,0,1,"",1) !:
-        let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
-01670 ! Let FNLBL(2,1,"Total  Bills  Coded:",MYLEN,1)
-01680 ! Let FNTXT(2,MYPOS,8,0,1,"",1) !:
-        ! Let RESP$(RESPC+=1)=CNVRT$("N 8",BCT(2))
-01690 ! Let FNLBL(3,1,"Total Bills Not Coded:",MYLEN,1)
-01700 ! Let FNTXT(3,MYPOS,8,0,1,"",1) !:
-        ! Let RESP$(RESPC+=1)=CNVRT$("N 8",BCT(1))
-01710 ! Let FNLBL(4,1,"Percent of Bills Coded:",MYLEN,1)
-01720 ! Let FNTXT(4,MYPOS,8,0,1,"",1) !:
-        ! Let RESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
+        resp$(respc+=1)=cnvrt$("N 8",sum(bct))
+01670 ! fnLBL(2,1,"Total  Bills  Coded:",MYLEN,1)
+01680 ! fnTXT(2,MYPOS,8,0,1,"",1) !:
+        ! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(2))
+01690 ! fnLBL(3,1,"Total Bills Not Coded:",MYLEN,1)
+01700 ! fnTXT(3,MYPOS,8,0,1,"",1) !:
+        ! rESP$(RESPC+=1)=CNVRT$("N 8",BCT(1))
+01710 ! fnLBL(4,1,"Percent of Bills Coded:",MYLEN,1)
+01720 ! fnTXT(4,MYPOS,8,0,1,"",1) !:
+        ! rESP$(RESPC+=1)=CNVRT$("N 8.2",PCT)
 01730   fncmdset(52) !:
         fnacs(sn$,0,mat resp$,ck)
-01740 XIT: let fnxit
+01740 XIT: fnxit
 01750 ! ______________________________________________________________________
-01760 ERTN: let fnerror(program$,err,line,act$,"xit")
+01760 ERTN: fnerror(program$,err,line,act$,"xit")
 01770   if uprc$(act$)<>"PAUSE" then goto L1800
 01780   execute "list -"&str$(line) !:
         pause  !:
@@ -292,18 +292,18 @@
 01970   addy=20
 01980   pr #20: 'Call Print.MyFontSize(12)'
 01990   if pe$(1)<>"" then !:
-          let txt$=trim$(pe$(1)) !:
+          txt$=trim$(pe$(1)) !:
           pr #20: 'Call Print.AddText("'&txt$&'",'&str$(18)&','&str$(52)&')'
 02000   if pe$(2)<>"" then !:
-          let txt$=trim$(pe$(2)) !:
+          txt$=trim$(pe$(2)) !:
           pr #20: 'Call Print.AddText("'&txt$&'",'&str$(18)&','&str$(57)&')'
 02010 ! 
-02020   if trim$(pe$(3))="" then let pe$(3)=pe$(4): let pe$(4)=""
+02020   if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
 02030   if pe$(3)<>"" then !:
-          let txt$=trim$(pe$(3)) !:
+          txt$=trim$(pe$(3)) !:
           pr #20: 'Call Print.AddText("'&txt$&'",'&str$(18)&','&str$(62)&')'
 02040   if pe$(4)<>"" then !:
-          let txt$=trim$(pe$(4)) !:
+          txt$=trim$(pe$(4)) !:
           pr #20: 'Call Print.AddText("'&txt$&'",'&str$(18)&','&str$(67)&')'
 02050   pr #20: 'Call Print.MyFontSize(24)'
 02060   pr #20: 'Call Print.AddText("'&"City of Ash Grove"&'",'&str$(65)&','&str$(10)&')'
@@ -316,7 +316,7 @@
 02130   pr #20: 'Call Print.MyFontSize(9)'
 02140   pr #20: 'Call Print.AddLine('&str$(135)&','&str$(40)&',52,22,1)'
 02150   pr #20: 'Call Print.AddText("Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&'",'&str$(140)&','&str$(42)&')'
-02160   let txt$="       Account:"&trim$(z$) !:
+02160   txt$="       Account:"&trim$(z$) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(140)&','&str$(46)&')'
 02170   pr #20: 'Call Print.AddText("Service From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)&'",'&str$(140)&','&str$(50)&')'
 02180   pr #20: 'Call Print.AddText("Service To: '&cnvrt$("PIC(zzZZ/ZZ/ZZ)",d3)&'",'&str$(140)&','&str$(54)&')'
@@ -337,7 +337,7 @@
 02300 L2300: ! pr #20: 'Call Print.AddLine('&STR$(109)&','&STR$(115)&',65,0)'
 02310   pr #20: 'Call Print.MyFontItalic(1)'
 02320   pr #20: 'Call Print.MyFontBold(1)'
-02330   let txt$=trim$(e$(1)) !:
+02330   txt$=trim$(e$(1)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(135)&','&str$(65)&')'
 02340   pr #20: 'Call Print.AddText("Current Charges",'&str$(110)&','&str$(78)&")"
 02350   pr #20: 'Call Print.MyFontBold(0)'
@@ -352,7 +352,7 @@
           a$=cnvrt$("pic(zzzzzzzz#)",d(1)) !:
           b$=cnvrt$("pic(zzzzzzzz#)",d(3)) !:
           c$=cnvrt$("pic(--------.##)",g(1)) !:
-          let d$=cnvrt$("pic(zzzzzzzz#)",d(2))
+          d$=cnvrt$("pic(zzzzzzzz#)",d(2))
 02440   pr #20: 'Call Print.AddText("Water",'&str$(26)&','&str$(lyne+=adder)&')' !:
         pr #20: 'Call Print.AddText("'&a$&'",'&str$(70)&','&str$(lyne)&')' !:
         pr #20: 'Call Print.AddText("'&d$&'",'&str$(102)&','&str$(lyne)&')' !:
@@ -417,30 +417,30 @@
 02840   pr #20: 'Call Print.AddText("Make checks payable to City of Ash Grove.",'&str$(72)&','&str$(195)&')'
 02850   pr #20: 'Call Print.AddText("A 10% penalty if not paid by the due date.",'&str$(72)&','&str$(199)&')'
 02860   pr #20: 'Call Print.MyFontSize(10)'
-02870   let txt$="        Account:"&trim$(z$) !:
+02870   txt$="        Account:"&trim$(z$) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(130)&','&str$(223)&')'
 02880   pr #20: 'Call Print.AddText("Due Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&'",'&str$(130)&','&str$(227)&')'
 02890   c$=cnvrt$("pic(--------.##)",bal) !:
         pr #20: 'Call Print.AddText("Total Due:",'&str$(130)&','&str$(231)&')' !:
         pr #20: 'Call Print.AddText("'&c$&'",'&str$(171)&','&str$(231)&')'
-02900   let txt$="After "&cnvrt$("pic(##/##/##)",d4)&" Pay: "&cnvrt$("pic(-------.##)",bal+g(10)) !:
+02900   txt$="After "&cnvrt$("pic(##/##/##)",d4)&" Pay: "&cnvrt$("pic(-------.##)",bal+g(10)) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(130)&','&str$(235)&')'
 02910   if trim$(bc$)<>"" then pr #20: 'Call Print.DisplayBarCode('&str$(.82)&','&str$(2.75)&',"'&bc$&'")'
 02920   pr #20: 'Call Print.AddText("'&"City of Ash Grove"&'",'&str$(30)&','&str$(246)&')'
 02930   pr #20: 'Call Print.AddText("'&"P O Box 235"&'",'&str$(30)&','&str$(250)&')'
 02940   pr #20: 'Call Print.AddText("'&"Ash Grove, Mo 65604"&'",'&str$(30)&','&str$(254)&')'
 02950   if pe$(1)<>"" then !:
-          let txt$=trim$(pe$(1)) !:
+          txt$=trim$(pe$(1)) !:
           pr #20: 'Call Print.AddText("'&txt$&'",'&str$(130)&','&str$(248)&')'
 02960   if pe$(2)<>"" then !:
-          let txt$=trim$(pe$(2)) !:
+          txt$=trim$(pe$(2)) !:
           pr #20: 'Call Print.AddText("'&txt$&'",'&str$(130)&','&str$(252)&')'
-02970   if trim$(pe$(3))="" then let pe$(3)=pe$(4): let pe$(4)=""
+02970   if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
 02980   if pe$(3)<>"" then !:
-          let txt$=trim$(pe$(3)) !:
+          txt$=trim$(pe$(3)) !:
           pr #20: 'Call Print.AddText("'&txt$&'",'&str$(130)&','&str$(256)&')'
 02990   if pe$(4)<>"" then !:
-          let txt$=trim$(pe$(4)) !:
+          txt$=trim$(pe$(4)) !:
           pr #20: 'Call Print.AddText("'&txt$&'",'&str$(130)&','&str$(260)&')'
 03000   fnpa_newpage
 03010   return 

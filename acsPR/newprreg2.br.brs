@@ -1,9 +1,9 @@
 08000 ! Replace S:\acsPR\newprReg2
 08020 ! Payroll Register (Part 2 of 2)
 08040   fn_setup
-08060   let det=0
+08060   det=0
 08080   fn_payroll_register_2(det)
-08100 XIT: let fnxit
+08100 XIT: fnxit
 10000   def fn_setup
 10020     if ~setup then 
 10040       setup=1
@@ -37,8 +37,8 @@
 18020     let founddept=1
 18040     L220X: !
 18050     fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d$)
-18100     let d1$=cnvrt$("pic(zzzzzzzz)",d1)
-18120     let ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
+18100     d1$=cnvrt$("pic(zzzzzzzz)",d1)
+18120     ppd=val(d1$(5:6))*10000+val(d1$(7:8))*100+val(d1$(3:4))
 18140     fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 18200     ! ______________________________________________________________________
 18220     ssr1=fnss_employee*.01
@@ -74,15 +74,15 @@
 22300     gosub PRINTDEPARTMENTTOTALS
 22320     pr #255: newpage
 22340     L550: ! 
-22360     let deptname$=""
+22360     deptname$=""
 22380     if founddept=1 then 
 22400       read #9,using "form pos 4,c 20",key=rpad$(ltrm$(str$(dep1)),3): deptname$ nokey ignore
 22420     end if 
 22440     gosub HDR
-22460     let dep2=dep1
+22460     dep2=dep1
 22480     L580: ! 
 22500     oi=cp(27)+cp(28)+cp(29)+cp(30)
-22520     let t3=t4=0
+22520     t3=t4=0
 22540     for j=5 to 24
 22560       if newdedcode(j-4)=3 then goto L680
 22580       if newdedcode(j-4)=2 then 
@@ -91,51 +91,51 @@
 22586         other_wh=other_wh+cp(j) ! if break_is_on and cp(j)<>0 then pr 'cp('&str$(j)&')    adds '&str$(cp(j))
 22588       end if 
 22600       if newdedfed(j-4)=2 and newdedcode(j-4)=1 then goto L630 else goto L660
-22620 L630: let t3=t3+cp(j) : let tt3=tt3+cp(j): let gtt3=gtt3+cp(j) ! cafiteria
-22640 !     if client$="Washington Parrish" and j=5 then let totaldef=totaldef+cp(5) ! add deferred comp match and to later add to medicare wages
+22620 L630: t3=t3+cp(j) : tt3=tt3+cp(j): let gtt3=gtt3+cp(j) ! cafiteria
+22640 !     if client$="Washington Parrish" and j=5 then totaldef=totaldef+cp(5) ! add deferred comp match and to later add to medicare wages
 22660       goto L680
 22680 L660: if newdedfed(j-4)=1 and newdedcode(j-4)=1 then goto L670 else goto L680
-22700 L670: let t4=t4+cp(j) ! retirement only
+22700 L670: t4=t4+cp(j) ! retirement only
 22720 L680: next j
 22740     other_wh=other_wh-cp(24)
 22750 !   if include_tips_in_other_wh then other_wh+=tcp(30) ! include tips in Other Withholdings added for West Accounting on 1/18/2016
-22760     let taxwg1=taxwg1+cp(31)-t3-t4
-22780     let taxwg2=taxwg2+cp(31)-t3
-22800     let tothc=0
+22760     taxwg1=taxwg1+cp(31)-t3-t4
+22780     taxwg2=taxwg2+cp(31)-t3
+22800     tothc=0
 22820     for j=1 to 5
-22840       let hc(j)=tdc(j)
-22860       let tothc=tothc+hc(j)
+22840       hc(j)=tdc(j)
+22860       tothc=tothc+hc(j)
 22880     next j
 22900     for j=1 to 5
-22920       let tothrs=tothrs+tdc(j)
+22920       tothrs=tothrs+tdc(j)
 22940       let grandtothrs=grandtothrs+tdc(j)
 22960     next j
-22980     let ntc=ntc+1
+22980     ntc=ntc+1
 23000     if det=1 or det=2 then goto L760
 23020     pr #255,using F_PR_LINE: dep1,eno,em$(1:11),mat hc,tothc,cp(31),cp(3),cp(2),cp(1),cp(4),other_wh,cp(32) pageoflow NWPG
 23040 F_PR_LINE: form pos 1,n 4,n 8,x 2,c 12,6*n 7.2,7*n 9.2,skip 1
 23060 L760: ! 
 23070     sswg=ficawag=tdet(1)
 23080     let ficawage=ficawage+ficawag
-23100     let totalfi=totalfi+ficawag
+23100     totalfi=totalfi+ficawag
 23120     sswh1=sswh1+cp(2)
 23140     sswh2=sswh2+cp(2)
-23160     let mcwh1=mcwh1+cp(3)
-23180     let mcwh2=mcwh2+cp(3)
-23200     let mcwg=tdc(8)
+23160     mcwh1=mcwh1+cp(3)
+23180     mcwh2=mcwh2+cp(3)
+23200     mcwg=tdc(8)
 23220     sswg=tdc(7)
-23240 !   if client$="Washington Parrish" and mcwh>0 then let mcwg=cp(31)-t3+cp(15) ! add deferred comp match to medicare wages  (always must be misc 2 deduction)
+23240 !   if client$="Washington Parrish" and mcwh>0 then mcwg=cp(31)-t3+cp(15) ! add deferred comp match to medicare wages  (always must be misc 2 deduction)
 23260     sswg1=sswg1+sswg
 23280     sswg2=sswg2+sswg
-23300     let mcwg1=mcwg1+mcwg
-23320     let mcwg2=mcwg2+mcwg
+23300     mcwg1=mcwg1+mcwg
+23320     mcwg2=mcwg2+mcwg
 23340     stateuc+=round(tdc(10)*sucrat(statecode)*.01,2)
 23360     let feduc+=round(tdc(9)*feducrat*.01,2)
 23380 !   if client$="Washington Parrish" then let feducwg=tdc(9)+tcp(5): goto L870
 23400     let feducwg=tdc(9)
 23420 ! L870: ! 
 23430     let fedwages=fedwages+feducwg
-23440     let totalfuc=totalfuc+feducwg
+23440     totalfuc=totalfuc+feducwg
 23460 !   if client$="Washington Parrish" then stucwg=tdc(10)+tcp(5): goto L900
 23480     stucwg=tdc(10)
 23500 ! L900: ! 
@@ -160,7 +160,7 @@
 26160     other_wh=other_wh-tcp(25)
 26180     pr #255: "                   ________________________________________________________________________________________________________________" pageoflow NWPG
 26200     pr #255,using F_PR_DTOTALS_1: " Department Totals:",thc(2),thc(4),tothrs,tcp(3),tcp(1),other_wh pageoflow NWPG
-26220     let tothrs=0
+26220     tothrs=0
 26240     pr #255,using F_PR_DTOTALS_2: thc(1),thc(3),thc(5),tcp(31),tcp(2),tcp(4),tcp(32) pageoflow NWPG
 26260     pr #255: "                   ================================================================================================================" pageoflow NWPG
 26280 F_PR_DTOTALS_1: form pos 1,c 26,n 14.2,n 14.2,n 14.2,n 18.2,n 18.2,n 18.2,n 10.2,skip 1
@@ -186,17 +186,17 @@
 26660     pr #255: ""
 26680     pr #255,using F_PR_DTOTALS_4: "Taxable Wages",taxwg1
 26700 F_PR_DTOTALS_4: form pos 10,c 20,n 10.2,skip 1
-26720     let tfw=ficawage
+26720     tfw=ficawage
 26740     if tfw>=tcp(31)-tt3-.1 and tfw<=tcp(31)-tt3+.1 then goto L1310
 26760     goto L1320
 26780 L1310: ! 
-26800     let tfw=tcp(31)
+26800     tfw=tcp(31)
 26820 L1320: ! 
 26840 ! pr #255,using 1100: "FICA Wages",tfw ! use same form as "Taxable wages"
-26860     let tucw=fedwages
+26860     tucw=fedwages
 26880     if tucw>=tcp(31)-tt3-.1 and tucw<=tcp(31)-tt3+.1 then goto L1350 else goto L1360
 26900 L1350: ! 
-26920     let tucw=tcp(31)-tt3
+26920     tucw=tcp(31)-tt3
 26940 L1360: ! 
 26960     pr #255,using F_PR_DTOTALS_4: "SS Wages",sswg1
 26980     pr #255,using F_PR_DTOTALS_4: "MC Wages",mcwg1
@@ -238,10 +238,10 @@
 27700 ! ASDF: !
 27720 !  goto L1700
 27740 ! L1700: !
-27760     let ntc=0 : mat tcp=(0) : let tt3=0
+27760     ntc=0 : mat tcp=(0) : tt3=0
 27780     mat thc=(0) : let ficawage=0 : let fedwages=0
-27800     mat stuc1=(0) : let taxwg1=sswh1=mcwh1=sswg1=mcwg1=stateuc=feduc=0
-27820     let dep=dep+1 ! count # of departments used
+27800     mat stuc1=(0) : taxwg1=sswh1=mcwh1=sswg1=mcwg1=stateuc=feduc=0
+27820     dep=dep+1 ! count # of departments used
 27840 PRINTDEPARTMENTTOTALS_XIT: ! 
 27860     return  ! /r
 27880 ! ______________________________________________________________________
@@ -284,10 +284,10 @@
 34160     pr #255: "\qc  {\f201 \fs20 \b Payroll Register - Departmental Totals}"
 34180     pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zz/zz/zz)",ppd)&"}"
 34200     pr #255: "\ql   "
-34220     mat tcp=totaltcp : mat thc=totalthc : let tt3=gtt3
+34220     mat tcp=totaltcp : mat thc=totalthc : tt3=gtt3
 34240     let ficawage=totalfi : let fedwages=totalfuc : mat stuc1=stuc2
-34260     sswh1=sswh2 : let mcwh1=mcwh2 : sswg1=sswg2
-34280     let mcwg1=mcwg2 : let taxwg1=taxwg2 : let tothrs=grandtothrs
+34260     sswh1=sswh2 : mcwh1=mcwh2 : sswg1=sswg2
+34280     mcwg1=mcwg2 : taxwg1=taxwg2 : tothrs=grandtothrs
 34300     pr #255: ""
 34320     pr #255,using 'form pos 52,c 40': "Summary for all Departments"
 34340     gosub L1860
@@ -310,7 +310,7 @@
 36120   fnend 
 38000 IGNORE: continue 
 40000 ! <Updateable Region: ERTN>
-40020 ERTN: let fnerror(program$,err,line,act$,"xit")
+40020 ERTN: fnerror(program$,err,line,act$,"xit")
 40040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 40060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 40080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

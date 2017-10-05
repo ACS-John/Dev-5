@@ -4,7 +4,7 @@
 00050   on fkey 5 goto L1530
 00060   fntop(program$,"Preprinted Invoices")
 00080   fnopenprn
-00090   let namtab=int(66-(len(rtrm$(env$('Program_Caption')))/2))
+00090   namtab=int(66-(len(rtrm$(env$('Program_Caption')))/2))
 00100   dim scr1$(8),fl1$(11),in1$(10),ot1$(10),scrid$(3)*80,inp(9),iv$*12,a1$*30
 00110   dim m$*11,fm$*54,fp$*80,pt(4),fl2$(7),scr2$(4),ot2$(4)
 00120   open #1: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno')&",Shr",internal,input ioerr L1770
@@ -12,10 +12,10 @@
 00140 L140: form pos 162,2*n 1
 00150   close #1: 
 00160   let x8=8+subac+dept
-00170   if subac=0 and dept=0 then let m$="x 3,n 6,x 3"
-00180   if subac=1 and dept=0 then let m$="x 3,n 6,n 3"
-00190   if subac=1 and dept=1 then let m$="n 3,n 6,n 3"
-00200   if subac=0 and dept=1 then let m$="n 3,n 6,x 3"
+00170   if subac=0 and dept=0 then m$="x 3,n 6,x 3"
+00180   if subac=1 and dept=0 then m$="x 3,n 6,n 3"
+00190   if subac=1 and dept=1 then m$="n 3,n 6,n 3"
+00200   if subac=0 and dept=1 then m$="n 3,n 6,x 3"
 00210   let fm$="FORM POS 1,n 5,n 1,pd 4.2,n 6,n 2,"&m$&",n 2,c 12"
 00220   let fp$="form pos 1,n 5,n 10,n 10,n 15.2,n 8,n 8,x 7,"&m$&",n 10,x 7,c 12,skip 1"
 00230   fl1$(9)="2,10,c 60,h,n"
@@ -24,16 +24,16 @@
 00260   fl2$(5)="2,10,c 60,h,n"
 00270   fl2$(6)="14,10,c 60,h,n"
 00280   fl2$(7)="15,10,c 70,h,n"
-00290   let in1$(1)="5,25,n 5,ut,n"
-00300   let in1$(2)="6,25,n 1,ut,n"
-00310   let in1$(3)="7,25,n 10.2,Cu,n"
-00320   let in1$(4)="8,25,n 6,ut,n"
-00330   let in1$(5)="9,25,n 2,ut,n"
-00340   if dept=1 then let in1$(6)="10,20,n 3,ut,n"
-00350   let in1$(6+dept)="10,25,n 6,ut,n"
-00360   if subac=1 then let in1$(7+dept)="10,34,n 3,ut,n"
-00370   let in1$(7+subac+dept)="11,25,n 2,ut,n"
-00380   let in1$(8+subac+dept)="12,25,c 12,ut,n"
+00290   in1$(1)="5,25,n 5,ut,n"
+00300   in1$(2)="6,25,n 1,ut,n"
+00310   in1$(3)="7,25,n 10.2,Cu,n"
+00320   in1$(4)="8,25,n 6,ut,n"
+00330   in1$(5)="9,25,n 2,ut,n"
+00340   if dept=1 then in1$(6)="10,20,n 3,ut,n"
+00350   in1$(6+dept)="10,25,n 6,ut,n"
+00360   if subac=1 then in1$(7+dept)="10,34,n 3,ut,n"
+00370   in1$(7+subac+dept)="11,25,n 2,ut,n"
+00380   in1$(8+subac+dept)="12,25,c 12,ut,n"
 00390   for j=1 to x8
 00400     if j<9 then fl1$(j)=str$(j+4)&",2,c 20"
 00410     if j<5 then ot2$(j)=str$(j+4)&",25,n 10.2,ut,n"
@@ -64,12 +64,12 @@
 00650   scrid$(2)="Enter CLIENT # as 0 when completed."
 00660   scrid$(3)="PRESS F1 IF YOU HAVE ANOTHER ALLOCATION FOR THE SAME INVOICE"
 00670 L670: mat inp=(0)
-00680   let iv=val(iv$)+1 conv L710
-00690   let iv$=str$(iv)
+00680   iv=val(iv$)+1 conv L710
+00690   iv$=str$(iv)
 00700   goto L720
-00710 L710: let iv$=""
-00720 L720: let inp(4)=inp4
-00730   let inp(2)=inp2
+00710 L710: iv$=""
+00720 L720: inp(4)=inp4
+00730   inp(2)=inp2
 00740 L740: pr newpage
 00750   pr f mat fl1$: mat scr1$,mat scrid$
 00760   pr f mat ot1$: mat inp," " ! IV$
@@ -79,21 +79,21 @@
 00790 L790: if cmdkey=1 then goto L800 else input fields "5,25,N 5,UE,N": inp(1) conv L790
 00795   if cmdkey=4 then goto TMSRCH
 00800 L800: if inp(1)=0 or cmdkey=5 then goto L1360
-00810   let k$=lpad$(str$(inp(1)),5)
+00810   k$=lpad$(str$(inp(1)),5)
 00820   read #1,using L970,key=k$,release: a1$ nokey L850
 00830   pr f "5,45,C 30,N": a1$
 00840   goto L870
 00850 L850: pr f "5,45,C 18,R,N": "CLIENT NOT ON FILE"
 00860   goto L790
 00870 L870: input fields mat in1$: mat inp,iv$ conv L1690
-00880   if cv>0 then let in1$(cv)(cv1:cv2)="U"
+00880   if cv>0 then in1$(cv)(cv1:cv2)="U"
 00890   if inp(1)=0 and chg><2 then goto L1360
-00900   let inp4=inp(4)
-00910   let inp2=inp(2)
+00900   inp4=inp(4)
+00910   inp2=inp(2)
 00920   if inp(1)=0 then mat inp=(0)
-00930   if inp(1)=0 then let iv$=""
+00930   if inp(1)=0 then iv$=""
 00940   if inp(1)=0 then goto L1240
-00950   let k$=lpad$(str$(inp(1)),5)
+00950   k$=lpad$(str$(inp(1)),5)
 00960   read #1,using L970,key=k$,release: a1$ nokey L990 ioerr L1770
 00970 L970: form pos 6,c 30
 00980   goto L1010
@@ -108,20 +108,20 @@
 01070 L1070: if env$('client')<>"ACS" then goto L1090
 01072   if inp(x8-1)<0 or inp(x8-1)>24 then cv=(x8-1) else goto L1090
 01080   goto L1710
-01090 L1090: let pt(1)=pt(1)+inp(1)
-01100   let pt(2)=pt(2)+inp(3)
-01110   let pt(3)=pt(3)+inp(5)
-01120   let pt(4)=pt(4)+inp(x8-1)
+01090 L1090: pt(1)=pt(1)+inp(1)
+01100   pt(2)=pt(2)+inp(3)
+01110   pt(3)=pt(3)+inp(5)
+01120   pt(4)=pt(4)+inp(x8-1)
 01130   if chg=2 then goto L1240
-01140   let rw=rw+1
+01140   rw=rw+1
 01150   write #2,using fm$,rec=rw: mat inp,iv$
 01160   if cmdkey=1 then goto L1170 else goto L670
-01170 L1170: let inp(3)=0
-01180   let inp(5)=0
-01190   let inp(6)=0
-01200   let inp(6+subac)=0
-01210   let inp(6+subac+dept)=0
-01220   let inp(7+subac+dept)=0
+01170 L1170: inp(3)=0
+01180   inp(5)=0
+01190   inp(6)=0
+01200   inp(6+subac)=0
+01210   inp(6+subac+dept)=0
+01220   inp(7+subac+dept)=0
 01230   goto L740
 01240 L1240: rewrite #2,using fm$,rec=rr: mat inp,iv$
 01250 L1250: pr newpage
@@ -130,10 +130,10 @@
 01280   if rr=0 then goto L1360
 01290   if rr>rw or rr<1 then goto L1270
 01300   read #2,using fm$,rec=rr: mat inp,iv$ ioerr L1770
-01310   let pt(1)=pt(1)-inp(1)
-01320   let pt(2)=pt(2)-inp(3)
-01330   let pt(3)=pt(3)-inp(5)
-01340   let pt(4)=pt(4)-inp(x8-1)
+01310   pt(1)=pt(1)-inp(1)
+01320   pt(2)=pt(2)-inp(3)
+01330   pt(3)=pt(3)-inp(5)
+01340   pt(4)=pt(4)-inp(x8-1)
 01350   goto L740
 01360 L1360: pr newpage
 01370   scrid$(1)="TIME MANAGEMENT INPUT PROOF TOTALS"
@@ -152,7 +152,7 @@
 01500     if inp(1)=0 then goto L1520
 01510     pr #255,using fp$: j,mat inp,iv$ pageoflow L1590
 01520 L1520: next j
-01530 L1530: let fncloseprn
+01530 L1530: fncloseprn
 01540   goto L1360
 01550 L1550: pr #255,using L1560: date$,env$('Program_Caption'),time$
 01560 L1560: form skip 2,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,skip 2
@@ -168,14 +168,14 @@
 01660 L1660: close #1: 
 01670   close #2: 
 01680 L1680: chain "S:\acsTM\TMMRGMAN"
-01685 XIT: let fnxit
-01690 L1690: if cv>0 then let in1$(cv)(cv1:cv2)="U"
+01685 XIT: fnxit
+01690 L1690: if cv>0 then in1$(cv)(cv1:cv2)="U"
 01700   cv=cnt+1
 01710 L1710: pr f "24,78,C 1": bell
-01720   let in1$(cv)=rtrm$(in1$(cv))
+01720   in1$(cv)=rtrm$(in1$(cv))
 01730   cv1=pos(uprc$(in1$(cv)),"U",1)
 01740   cv2=cv1+1
-01750   let in1$(cv)(cv1:cv1)="CR"
+01750   in1$(cv)(cv1:cv1)="CR"
 01760   goto L870
 01770 L1770: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1790
 01780   goto L1830
@@ -194,11 +194,11 @@
 04810   dim heading$*70,form$*80,numeric_format$*20,selection$*70
 04820   let file_num=11 ! alpha index on clients
 04830   let form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
-04840   let numeric_format$='pic($$$,$$$.##)'
-04850   let key_length=5
-04860   let heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"
+04840   numeric_format$='pic($$$,$$$.##)'
+04850   key_length=5
+04860   heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"
 04870   fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
-04880   let k$=z$=selection$ ! pull key from first field in search line
-04890   let inp(1)=0
-04900   let inp(1)=val(selection$) conv L4910
+04880   k$=z$=selection$ ! pull key from first field in search line
+04890   inp(1)=0
+04900   inp(1)=val(selection$) conv L4910
 04910 L4910: goto L740

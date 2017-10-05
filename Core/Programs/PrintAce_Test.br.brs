@@ -143,11 +143,11 @@
 66040   y=0
 66060   for yp=y to y+270
 66080     if yp/10=int(yp/10) then 
-66100       let prLength=6 
+66100       prLength=6 
 66120     else if yp/5=int(yp/5) then 
-66140       let prLength=4 
+66140       prLength=4 
 66160     else 
-66180       let prLength=2
+66180       prLength=2
 66200     end if
 66220     fnpa_line(yp,x-prLength,0,prLength)
 66240   nex yp
@@ -157,17 +157,17 @@
 68040   y=0
 68060   for xp=x to x+194 ! (194 is max for PDF, 207 for PrintAce) (going over max for PDF makes extra pages, but for PrintAce it is ignored)
 68080     if xp/10=int(xp/10) then 
-68100       let prLength=6 
+68100       prLength=6 
 68120     else if xp/5=int(xp/5) then 
-68140       let prLength=4 
+68140       prLength=4 
 68160     else 
-68180       let prLength=2
+68180       prLength=2
 68200     end if
 68220     fnpa_line(y,xp,prLength,0)
 68240   nex xp
 68260 fnend
 70000 ! <Updateable Region: ERTN>
-70020 ERTN: let fnerror(program$,err,line,act$,"xit")
+70020 ERTN: fnerror(program$,err,line,act$,"xit")
 70040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 70060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 70080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

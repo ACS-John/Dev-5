@@ -28,7 +28,7 @@
 10540   optNameFormat$(2)='Last Name First'  : nameFormat_sf$(2)='S'
 10560   !
 10580   disable=1 ! 
-10600   let med$="Y"
+10600   med$="Y"
 10620 ! /r
 11000   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 11020   open #hEmployee:=fngethandle: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -48,12 +48,12 @@
 12240   fncreg_read('W-2 Company State',st$)
 12260   fncreg_read('W-2 Company Zip',zip$)
 12280   if ct$='' or st$='' or zip$='' then
-12300     let p1=pos(a$(3),",",1): comma=1
-12320     if p1=0 then let p1=pos(a$(3)," ",1): comma=0
+12300     p1=pos(a$(3),",",1): comma=1
+12320     if p1=0 then p1=pos(a$(3)," ",1): comma=0
 12340     ct$=a$(3)(1:p1-1)
 12360     if comma=1 then st$=a$(3)(p1+2:p1+3) else st$=a$(3)(p1+1:p1+2)
-12380     let p2=len(rtrm$(a$(3)))
-12400     let p1=p2-4
+12380     p2=len(rtrm$(a$(3)))
+12400     p1=p2-4
 12420     let zip$=a$(3)(p1:p2)
 12440   end if
 12460   fncreg_read('Employee Name Format',tmp$,optNameFormat$(1)) : nameFormat=max(1,srch(mat optNameFormat$,tmp$))
@@ -80,17 +80,17 @@
 12880 ! /r
 14000 SCREEN1_NEW: ! r:
 14020   fntos(sn$="W2-1") 
-14040   let rc=lyne=0: mylen=17 : mypos=mylen+2
+14040   rc=lyne=0: mylen=17 : mypos=mylen+2
 14060   fnlbl(lyne+=1,1,"Starting Date:",mylen,1,0,0)
 14080   fntxt(lyne,mypos,10,0,1,"3",0,"First day of calendar year",0) 
-14100   let resp$(respc_dateStart:=rc+=1)=str$(beg_date)
+14100   resp$(respc_dateStart:=rc+=1)=str$(beg_date)
 14120   fnlbl(lyne+=1,1,"Ending Date:",mylen,1,0,0)
 14140   fntxt(lyne,mypos,10,0,1,"3",0,"Last day of calendar year",0) 
-14160   let resp$(respc_dateEnd:=rc+=1)=str$(end_date)
+14160   resp$(respc_dateEnd:=rc+=1)=str$(end_date)
 14180   lyne+=1
 14200   fnlbl(lyne+=1,1,"Output File Name:",mylen,1,0,0)
 14220   fntxt(lyne,mypos,30,0,0,'70',0,"Destination and file name you wish to use.",0) 
-14240   let resp$(respc_path:=rc+=1)=path$
+14240   resp$(respc_path:=rc+=1)=path$
 14260   lyne+=1
 14280   fnlbl(lyne+=1,1,"Company Name:",mylen,1,0,0)
 14300   fntxt(lyne,mypos,40,0,0,"",0,"Enter the name of the company submitting",0) 
@@ -277,14 +277,14 @@
 34040   read #hEmployee,using fEmployee: eno,mat em$,ss$,em6,ta eof FINIS
 34060   fEmployee: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3
 34080   gosub NameParse
-34100   let p1=pos(em$(3),",",1) : comma=1
-34120   if p1=0 then let p1=pos(em$(3)," ",1): comma=0
+34100   p1=pos(em$(3),",",1) : comma=1
+34120   if p1=0 then p1=pos(em$(3)," ",1): comma=0
 34140   emct$=em$(3)(1:p1-1)
 34160   gosub EXTRACT_STATE : emst$=holdst$ ! If COMMA=1 Then eMST$=EM$(3)(P1+2:P1+3) Else eMST$=EM$(3)(P1+1:P1+2)
-34180   let p2=len(rtrm$(em$(3)))
-34200   let p1=p2-4
+34180   p2=len(rtrm$(em$(3)))
+34200   p1=p2-4
 34220   emzip$=em$(3)(p1:p2)
-34240 L2070: let p1=pos(ss$,"-",1)
+34240 L2070: p1=pos(ss$,"-",1)
 34260   if p1>0 then ss$(p1:p1)="": goto L2070 else ssn=val(ss$)
 34280   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 34300   restore #hChecks,key>=checkkey$: nokey NEXT_EMPLOYEE
@@ -292,13 +292,13 @@
 34340   if heno<>eno then goto L2480
 34360   if prd<beg_date or prd>end_date then goto L2120 ! not this year
 34380 ! form pos 1,n 8,pos 48,n 2,pos 168,21*pd 5.2,pos 468,pd 3
-34400   if tcd<1 or tcd>10 then let tcd=1
+34400   if tcd<1 or tcd>10 then tcd=1
 34420 ! FILE_SHUFFLEh with this employee
-34440   let dedret=0
+34440   dedret=0
 34460   cafded=0
 34480   for j=1 to 20
 34500     if newdedfed(j)=1 then 
-34520       let dedret=dedret+tcp(j+4)
+34520       dedret=dedret+tcp(j+4)
 34540     end if
 34560     if dedfica(j)=1 then 
 34580       cafded=cafded+tcp(j+4)
@@ -328,8 +328,8 @@
 35060   let w2(7)=w2(7)+0 ! UNCOLLECTED EMPLOYEE FICA TAX ON TIPS
 35080   let w2(8)=w2(8)+tcp(24) ! EIC TOTAL
 35100   let w2(9)=w2(9)+0 ! ALLOCATED TIPS
-35120   if dfc>0 then let dc1=dc1+tcp(4+dfc)*100 ! DEFERRED COMPENSATION
-35140   if dcan>0 then let dca=dca+tcp(4+dcan)*100 ! DEPENDENT CARE ASSISTANCE
+35120   if dfc>0 then dc1=dc1+tcp(4+dfc)*100 ! DEFERRED COMPENSATION
+35140   if dcan>0 then dca=dca+tcp(4+dcan)*100 ! DEPENDENT CARE ASSISTANCE
 35160   if sr1><tcd then goto L2470
 35180   s2(1)=s2(1)+((tcp(31)-dedret)*100)
 35200   s2(2)=s2(2)+(tcp(4)*100)
@@ -343,10 +343,10 @@
 35360     ! Gosub RecRE   kj 22610
 35380     gosub RecRW
 35400     gosub RecRS
-35420     let tw1=tw1+1
-35440     let tw2=tw2+1
+35420     tw1=tw1+1
+35440     tw2=tw2+1
 35460     ! Gosub RecRT   ! KJ 22610
-35480     ! Let TW2=0  kj 22610
+35480     ! tW2=0  kj 22610
 35500   end if
 35520 goto NEXT_EMPLOYEE ! /r
 35540 ! ______________________________________________________________________
@@ -368,8 +368,8 @@
 46000 RecRW: ! r:
 46020   for j=1 to 9: let w2(j)=w2(j)*100: next j
 46040   for j=1 to 2: let w3(j)=w3(j)*100 : next j
-46060   if pen=0 then let pen$="0" else let pen$="1"
-46080   if dfc=0 then let dfc$="" else let dfc$="D"
+46060   if pen=0 then pen$="0" else pen$="1"
+46080   if dfc=0 then dfc$="" else dfc$="D"
 46100   pr #hOut,using fRecRW: "RW",ssn,first$,mid$,last$,"","",em$(2)(1:22),emct$,emst$,emzip$,"","","","","",w2(3),w2(5),w2(1),w2(4),w3(1),w3(2),w2(2),w2(8),dca,dc1,0,0,0,0,0,0,0,0,0,"",w2(6),0,0,0,0,"",0,"",pen$,0,""
 46120   fRecRW: form pos 1,c 2,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,19*pic(###########),c 11,5*pic(###########),c 23,n 1,c 1,c 1,n 1,c 23
 46140   ! pr #hOut,USING 2270: "RO","",W2(9),W2(7),0,0,0,0,0,"","","",0,0,0,0,0,0,0,"",0,0,""
@@ -378,33 +378,33 @@
 48000 RecRS: ! r: STATE RECORD
 48020 ! if sr1=0 then goto 2880 ! NO STATE SELECTED
 48040   if s2(1)<>0 or s2(2)<>0 then ! NO STATE WAGES
-48060     ! let totrsrecs+=1
+48060     ! totrsrecs+=1
 48080     pr #hOut,using fRecRS: "RS",sr2,"",ssn,first$,mid$,last$,"","",em$(2)(1:22),emct$,emst$,emzip$,"","","","","","","",0,0,0,0,0,"","","",sr2,s2(1),s2(2),"","",0,0,"","","",""
 48100     fRecRS: form pos 1,c 2,g 2,c 5,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 2,c 6,2*pic(###########),pic(##),2*pic(########),c 5,c 20,c 6,g 2,2*pic(###########),c 10,c 1,2*pic(###########),c 7,c 75,c 75,c 25
 48120   end if
-48140   let t1=t1+1: mat t1=t1+w2
+48140   t1=t1+1: mat t1=t1+w2
 48160   mat i1=i1+w2
 48180   mat i2=i2+w3
 48200   mat t2=t2+w3
-48220   let dc2=dc2+dc1
-48240   let dc3=dc3+dc1
-48260   let dca2=dca2+dca
-48280   let dca3=dca3+dca
+48220   dc2=dc2+dc1
+48240   dc3=dc3+dc1
+48260   dca2=dca2+dca
+48280   dca3=dca3+dca
 48300   let w2=w3=dca=dc1=0
 48320   mat w2=(0)
 48340   mat w3=(0)
-48360 ! let totalstatewages+=s2(1)
-48380 ! let totalstatewh+=s2(2)
-48400 ! let totalpeople+=1
+48360 ! totalstatewages+=s2(1)
+48380 ! totalstatewh+=s2(2)
+48400 ! totalpeople+=1
 48420   mat s2=(0)
 48440 return ! /r
 50000 RecRT: ! r:
 50020   pr #hOut,using L3050: "RT",tw2,t1(3),t1(5),t1(1),t1(4),t2(1),t2(2),t1(2),t1(8),dca3,dc3,0,0,0,0,0,0,0,0,0,"",t1(6),0,0,0,0,0,""
-50040   let dc3=0 ! kj 120805
+50040   dc3=0 ! kj 120805
 50060 L3050: form pos 1,c 2,pic(#######),16*pic(###############),3*pic(###############),c 15,6*pic(###############),c 113
 50080 ! pr #hOut,USING 2520: "RU",TW2,T1(9),T1(7),0,0,0,0,0,"",0,0,0,0,0,0,0,0,0,""
 50100 ! form pos 1,c 2,pic(#######),7*pic(###############),c 240,9*pic(###############),c 23
-50120   let t1=0: mat t1=(0)
+50120   t1=0: mat t1=(0)
 50140   mat t2=(0)
 50160   return ! /r
 52000 ! RecRV: ! r:
@@ -419,7 +419,7 @@
 58020   gosub RecRT ! kj 22610
 58060   gosub RecRF
 58080   gosub FILE_SHUFFLE
-58100 XIT: let fnxit
+58100 XIT: fnxit
 58120 ! /r
 62000 FILE_SHUFFLE: ! r:
 62020   dim a$*512
@@ -438,29 +438,29 @@
 62280 return ! /r
 72000 NameParse: ! r:
 72020   dim first$*15,mid$*15,last$*20,em$(3)*30
-72040   em$(1)=uprc$(rtrm$(em$(1))): ! Let nameFormat$="s"
+72040   em$(1)=uprc$(rtrm$(em$(1))): ! nameFormat$="s"
 72060   let x1=pos(em$(1)," ",1)
 72080   let x2=pos(em$(1)," ",x1+1)
 72100   ! let x3=pos(em$(1)," ",x2+1)
 72120   if uprc$(nameFormat_sf$(nameFormat))="S" then ! last name first
 72140     if x1=0 then let x1=pos(em$(1),",",1)
 72160     if x1>0 and em$(1)(x1-1:x1-1)="," then last$=em$(1)(1:x1-2) else last$=em$(1)(1:max(x1-1,1))
-72180     if x2>0 then let first$=em$(1)(x1+1:x2-1): let mid$=em$(1)(x2+1:len(em$(1)))
-72200     if x2=0 then let first$=em$(1)(x1+1:len(em$(1)))(1:15): let mid$=""
+72180     if x2>0 then let first$=em$(1)(x1+1:x2-1): mid$=em$(1)(x2+1:len(em$(1)))
+72200     if x2=0 then let first$=em$(1)(x1+1:len(em$(1)))(1:15): mid$=""
 72220     let x=pos(first$,",",1): if x>0 then let first$(x:x)=""
 72240   else
 72260     let first$=em$(1)(1:min(15,max(x1-1,1)))
-72280     if x2>0 then let mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
-72300     if x2=0 then last$=em$(1)(x1+1:len(em$(1))): let mid$=""
+72280     if x2>0 then mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
+72300     if x2=0 then last$=em$(1)(x1+1:len(em$(1))): mid$=""
 72320   end if
 72340   ! pr FIRST$,MID$,LAST$
 72360 return ! /r
 76000 EXTRACT_STATE: ! r: extract state name
-76020   let holdst$="          "
-76040   let p3=oldp3=0
-76060   let p4=10
+76020   holdst$="          "
+76040   p3=oldp3=0
+76060   p4=10
 76080   for j=1 to 10
-76100     let p3=pos(rtrm$(em$(3))," ",p3+1)
+76100     p3=pos(rtrm$(em$(3))," ",p3+1)
 76120     if oldp3>p3 then 
 76140       goto L5110 ! end of address reached
 76160     end if
@@ -475,15 +475,15 @@
 76340         goto L5150
 76360       end if
 76380     else 
-76400       let p4=p4-1: let holdst$(p4:p4)=em$(3)(oldp3-j:oldp3-j)
+76400       p4=p4-1: holdst$(p4:p4)=em$(3)(oldp3-j:oldp3-j)
 76420     end if
 76440   next j
 76460     L5150: !
-76480     let holdst$=ltrm$(holdst$)(1:2)
-76500   if holdst$="TE" then let holdst$="TX"
+76480     holdst$=ltrm$(holdst$)(1:2)
+76500   if holdst$="TE" then holdst$="TX"
 76520 return ! /r
 78000 ! <Updateable Region: ERTN>
-78020 ERTN: let fnerror(program$,err,line,act$,"xit")
+78020 ERTN: fnerror(program$,err,line,act$,"xit")
 78040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 78060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 78080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -491,24 +491,24 @@
 78120 ! /region
 80000 ! SCREEN1OLD: ! r:
 80020 !   dim io1$(18)
-80040 !   let io1$(1)="5,25,C 40,UT,N"
-80060 !   let io1$(2)="6,25,C 40,UT,N"
-80080 !   let io1$(3)="7,25,C 20,UT,N"
-80100 !   let io1$(4)="8,25,C 2,UT,N"
-80120 !   let io1$(5)="9,25,C 5,UT,N"
-80140 !   let io1$(6)="10,25,N 9,UT,N"
-80160 !   let io1$(7)="11,25,N 4,UT,N"
-80180 !   let io1$(8)="12,25,N 10.2,UT,N"
-80200 !   let io1$(9)="13,25,N 10.4,UT,N"
-80220 !   let io1$(10)="14,25,N 10.2,UT,N"
-80240 !   let io1$(11)="15,25,N 10.4,UT,N"
-80260 !   let io1$(12)="16,75,N 2,UT,N"
-80280 !   let io1$(13)="17,47,N 2,UT,N"
-80300 !   let io1$(14)="18,61,N 2,UT,N"
-80320 !   let io1$(15)="19,65,N 2,UT,N"
-80340 !   let io1$(16)="20,35,C 8,UT,N"
-80360 !   let io1$(17)="21,52,C 1,UT,N"
-80380 !   let io1$(18)="22,38,C 1,UT,N"
+80040 !   io1$(1)="5,25,C 40,UT,N"
+80060 !   io1$(2)="6,25,C 40,UT,N"
+80080 !   io1$(3)="7,25,C 20,UT,N"
+80100 !   io1$(4)="8,25,C 2,UT,N"
+80120 !   io1$(5)="9,25,C 5,UT,N"
+80140 !   io1$(6)="10,25,N 9,UT,N"
+80160 !   io1$(7)="11,25,N 4,UT,N"
+80180 !   io1$(8)="12,25,N 10.2,UT,N"
+80200 !   io1$(9)="13,25,N 10.4,UT,N"
+80220 !   io1$(10)="14,25,N 10.2,UT,N"
+80240 !   io1$(11)="15,25,N 10.4,UT,N"
+80260 !   io1$(12)="16,75,N 2,UT,N"
+80280 !   io1$(13)="17,47,N 2,UT,N"
+80300 !   io1$(14)="18,61,N 2,UT,N"
+80320 !   io1$(15)="19,65,N 2,UT,N"
+80340 !   io1$(16)="20,35,C 8,UT,N"
+80360 !   io1$(17)="21,52,C 1,UT,N"
+80380 !   io1$(18)="22,38,C 1,UT,N"
 80400 !   pr newpage
 80420 !   close #101: ioerr ignore
 80440 !   open #101: "SROW=2,SCOL=3,EROW=23,ECOL=80,BORDER=DR,CAPTION=<Create Electronic W2 for I.R.S.",display,outin 
@@ -535,12 +535,12 @@
 80860 !   pr f "24,39,C 11,B,5": "Cancel (F5)"
 80880 !   pr #101,fields mat io1$: a$(1),a$(2),ct$,st$,zip$,federal_id_val,yr,87900,.062,999999,.0145,ins,pen,dfc,dcan,ibm$,nameFormat$,typemp$
 80900 ! L1260: rinput #101,fields mat io1$,attr "R": a$(1),a$(2),ct$,st$,zip$,federal_id_val,yr,ssmax,ssrate,mcmax,mcrate,ins,pen,dfc,dcan,ibm$,nameFormat$,typemp$ conv CONV1
-80920 !   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+80920 !   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 80940 !   if cmdkey>0 then goto L1350 else ce=curfld+1
 80960 !   if ce>udim(io1$) then ce=1
-80980 ! L1300: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
-81000 !   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L1260
-81020 ! CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+80980 ! L1300: io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
+81000 !   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L1260
+81020 ! CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 81040 !   ce=cnt+1
 81060 ! ERR1: pr f "24,78,C 1": bell : goto L1300
 81080 ! L1350: ! 

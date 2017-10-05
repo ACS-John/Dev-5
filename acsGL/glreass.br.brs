@@ -11,11 +11,11 @@
 00110   fncno(cno)
 00120 ! 
 00130   cap$="Backup Restore or Reorganize"
-00140   let h$=".H"&str$(cno)
+00140   h$=".H"&str$(cno)
 00150 ! ______________________________________________________________________
 00160 MENU1: ! 
 00170   fntos(sn$="glreorg") !:
-        let mylen=20: let mypos=mylen+3 : let right=1
+        mylen=20: mypos=mylen+3 : right=1
 00180   fnlbl(1,1,"If you get errors trying to access general ledger")
 00190   fnlbl(2,1,"transaction, this option might help.  It")
 00200   fnlbl(3,1,"will reassign all transactions back to the ")
@@ -40,19 +40,19 @@
 00390     read #2,using L400,rec=j: k$,nta norec L480
 00400 L400: form pos 1,c 12,pos 71,pd 3
 00410     read #1,using L330,key=k$: mat ta nokey L480
-00420     if ta(1)=0 then let ta(1)=j
+00420     if ta(1)=0 then ta(1)=j
 00430     if ta(2)>0 then rewrite #2,using L470,rec=ta(2): j
-00440     let ta(2)=j
+00440     ta(2)=j
 00450     rewrite #1,using L330,key=k$: mat ta
 00460     rewrite #2,using L470,rec=j: 0
 00470 L470: form pos 71,pd 3
 00480 L480: next j
 00490   return 
 00500 ! ______________________________________________________________________
-00510 XIT: let fnxit
+00510 XIT: fnxit
 00520 ! ______________________________________________________________________
 00530 ! 
-00540 ERTN: let fnerror(program$,err,line,act$,er_out$)
+00540 ERTN: fnerror(program$,err,line,act$,er_out$)
 00550   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00560   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00570   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

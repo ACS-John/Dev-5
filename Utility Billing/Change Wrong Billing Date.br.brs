@@ -11,26 +11,26 @@
 24020   fntos(sn$:="DatFix2")
 24040   fnlbl(1,1,'Bad Billing Date:',24,1)
 24060   fntxt(1,26,8,0,0,"1") 
-24080   let resp$(1)=str$(d1)
+24080   resp$(1)=str$(d1)
 24100   fnlbl(2,1,'Good Billing Date:',24,1)
 24120   fntxt(2,26,8,0,0,"1") 
-24140   let resp$(2)=str$(d2)
+24140   resp$(2)=str$(d2)
 24160   fnlbl(4,1,"Starting Account:",24,1)
 24180   fncmbact(4,26)
-24200   let resp$(3)="[All]"
+24200   resp$(3)="[All]"
 24220   fnlbl(5,1,"Ending Account:",24,1)
 24240   fncmbact(5,26)
-24260   let resp$(4)="[All]"
+24260   resp$(4)="[All]"
 24280   fncmdset(2)
 24300   fnacs(sn$,0,mat resp$,ckey)
 24320   if ckey=5 then goto XIT
-24340   let d1=val(resp$(1))
-24360   let d2=val(resp$(2))
+24340   d1=val(resp$(1))
+24360   d2=val(resp$(2))
 24380   let z_start$=resp$(3)(1:10) : if trim$(z_start$)='[All]' then let z_start$=''
 24400   let z_end$=resp$(4)(1:10) : if trim$(z_end$)='[All]' then let z_end$=''
 24420   if d1=0 or d2=0 then goto SCREEN1 ! require a date in both fields
-24440   let hd1=d1: let d1=fndate_mmddyy_to_ccyymmdd(d1)
-24460   let hd2=d2: let d2=fndate_mmddyy_to_ccyymmdd(d2)
+24440   hd1=d1: d1=fndate_mmddyy_to_ccyymmdd(d1)
+24460   hd2=d2: d2=fndate_mmddyy_to_ccyymmdd(d2)
 24480 goto Initialize ! /r
 28000 Initialize: ! r:
 28010   fnAutomatedSavePoint('before')
@@ -75,7 +75,7 @@
 38040   if bud1=0 then goto XIT_BUD2
 38060   read #81,using L550,key=p$: x$,mat ba,mat badr nokey XIT_BUD2
 38080   L550: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-38100   let ta1=badr(1)
+38100   ta1=badr(1)
 38120   do until ta1=0
 38140     read #82,using L590,rec=ta1: x$,mat bt1,nba norec XIT_BUD2
 38160     L590: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
@@ -85,12 +85,12 @@
 38240       L610: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
 38260       goto XIT_BUD2
 38280     end if
-38300     let ta1=nba
+38300     ta1=nba
 38320   loop
 38340   XIT_BUD2: ! 
 38360 return ! /r
 42000 ! <Updateable Region: ERTN>
-42020 ERTN: let fnerror(program$,err,line,act$,"xit")
+42020 ERTN: fnerror(program$,err,line,act$,"xit")
 42040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 42060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 42080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

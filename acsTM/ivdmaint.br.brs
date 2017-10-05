@@ -5,10 +5,10 @@
 00060   fntop(program$,cap$="Invoice Description")
 00070   fncno(cno,cnam$)
 00075   fnconsole(1)
-00080   let hp1=43-int(len(rtrm$(cnam$))/2)
+00080   hp1=43-int(len(rtrm$(cnam$))/2)
 00090 ! 
-00100   let io1$(1)="14,5,C 55,U,N": let io1$(2)="16,40,N 10.2,U,N"
-00110   let io1$(3)="18,33,N 3,U,N": let io1$(4)="18,38,N 6,U,N": let io1$(5)="18,46,N 3,U,N"
+00100   io1$(1)="14,5,C 55,U,N": io1$(2)="16,40,N 10.2,U,N"
+00110   io1$(3)="18,33,N 3,U,N": io1$(4)="18,38,N 6,U,N": io1$(5)="18,46,N 3,U,N"
 00120   open #1: "Name="&env$('Q')&"\TMmstr\IVDesc.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\IVDIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L980
 00130 L130: pr newpage
 00140   pr f "3,9,C 50,N": "INVOICE DESCRIPTION FILE MENU"
@@ -34,8 +34,8 @@
 00340 L340: open #1: "Name="&env$('Q')&"\TMmstr\IVDesc.h"&str$(cno)&",NoShr",internal,outin ioerr L360
 00350   close #1,free: 
 00360 L360: open #1: "Name="&env$('Q')&"\TMmstr\IVDesc.h"&str$(cno)&",Replace,RecL=84",internal,output ioerr L990
-00370   let ti=1
-00380   let new1=1
+00370   ti=1
+00380   new1=1
 00390 L390: close #1: 
 00400   if new1=0 then goto XIT
 00470   execute "Index "&env$('Q')&"\TMmstr\IVDesc.h"&str$(cno)&","&env$('Q')&"\TMmstr\IVDIndex.h"&str$(cno)&",1,6,REPLACE,DupKeys" ioerr L480
@@ -47,8 +47,8 @@
 00530   input fields "10,50,C 6,UE,N": cde$
 00540   if rtrm$(cde$)="" then goto L130
 00550   cde$=uprc$(lpad$(rtrm$(cde$),6))
-00560   let des$=""
-00570   let da=0
+00560   des$=""
+00570   da=0
 00580   mat gl=(0)
 00590   read #1,using L600,key=cde$: cde$,des$,da,mat gl nokey L630 ioerr L990
 00600 L600: form pos 1,c 6,c 55,pd 5.2,n 3,n 6,n 3
@@ -60,10 +60,10 @@
 00660   pr f "18,9,C 60": "GENERAL LEDGER NUMBER:"
 00670   pr f mat io1$: des$,da,mat gl
 00680 L680: input fields mat io1$: des$,da,mat gl conv L680
-00690   if rtrm$(des$)="" then delete #1,key=cde$: nokey L510: let new1=1: goto L510
+00690   if rtrm$(des$)="" then delete #1,key=cde$: nokey L510: new1=1: goto L510
 00700   rewrite #1,using L600,key=cde$: cde$,des$,da,mat gl nokey L720
 00710   goto L510
-00720 L720: write #1,using L600: cde$,des$,da,mat gl: let new1=1
+00720 L720: write #1,using L600: cde$,des$,da,mat gl: new1=1
 00730   goto L510
 00740 L740: pr newpage
 00750   fnopenprn
@@ -79,7 +79,7 @@
 00850 L850: pr #255: newpage
 00860   gosub L910
 00870   continue 
-00880 L880: let fncloseprn
+00880 L880: fncloseprn
 00890   on fkey 5 ignore 
 00900   goto L130
 00910 L910: pr #255,using L920: date$,cnam$
@@ -102,5 +102,5 @@
 01080   pr f "23,3,C 78,N": ""
 01090   pr f "24,3,C 78,N": ""
 01100   retry 
-01110 XIT: let fnxit
+01110 XIT: fnxit
 01120 IGNORE: continue 

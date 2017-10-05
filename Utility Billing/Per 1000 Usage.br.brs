@@ -67,7 +67,7 @@
 26020   close #1: ioerr ignore
 26040   fncloseprn
 26060 goto XIT ! /r
-28000 XIT: let fnxit
+28000 XIT: fnxit
 28020 IGNORE: continue 
 34000 USAGE_CHART_ASK_RANGE: ! r:
 34020   fncreg_read('Per 1000 Usage - Rate Code ',weg$, 'W')
@@ -76,52 +76,52 @@
 34080     fncreg_read('Per 1000 Usage - Range '&str$(rangeItem),tmp$) : range(rangeItem)=val(tmp$)
 34100   nex rangeItem
 34120   if sum(mat range)=0 then 
-34140     let range(1) =    0 : let range(2) = 1000 : let range(3) = 2000
-34160     let range(4) = 3000 : let range(5) = 4000 : let range(6) = 5000
-34180     let range(7) = 6000 : let range(8) = 7000 : let range(9) = 8000
-34200     let range(10)= 9000 : let range(11)=10000 : let range(12)=15000
-34220     let range(13)=20000 : let range(14)=30000 : let range(15)=40000
-34240     let range(16)=50000
+34140     range(1) =    0 : range(2) = 1000 : range(3) = 2000
+34160     range(4) = 3000 : range(5) = 4000 : range(6) = 5000
+34180     range(7) = 6000 : range(8) = 7000 : range(9) = 8000
+34200     range(10)= 9000 : range(11)=10000 : range(12)=15000
+34220     range(13)=20000 : range(14)=30000 : range(15)=40000
+34240     range(16)=50000
 34260   end if
 34280 ! /r
 42000 MENU1: ! r:
 42020   fntos(sn$:="Per1000")
-42040   let mylen=22
-42060   let mypos=mylen+2
-42080   let respc=0
-42100   fnlbl(2,1,"Billing Date:" ,mylen,1) : let fnlbl(2,36,"(most recent billing date only)") ! ,31,0)
+42040   mylen=22
+42060   mypos=mylen+2
+42080   respc=0
+42100   fnlbl(2,1,"Billing Date:" ,mylen,1) : fnlbl(2,36,"(most recent billing date only)") ! ,31,0)
 42120   fntxt(2,mypos,8,0,1,"1")
-42140   let resp$(respc+=1)=str$(d1)
-42160   let text$="Service for Analysis:"
+42140   resp$(respc+=1)=str$(d1)
+42160   text$="Service for Analysis:"
 42180   fnlbl(3,1,text$,mylen,1)
 42200   fncomboa(stfn$,3,mypos,mat opt$)
-42220   let resp$(respc+=1)=opt$(1)
+42220   resp$(respc+=1)=opt$(1)
 42260   fnlbl(4,1,"Rate Code:",mylen,1)
 42280   fntxt(4,mypos,2,0,1,"30")
-42300   let resp$(respc+=1)="0"
-42320   let text$="Usage Break Points:"
+42300   resp$(respc+=1)="0"
+42320   text$="Usage Break Points:"
 42340   fnlbl(6,1,text$,mylen,1)
 42360   for a = 1 to 16
-42380     let resp$(respc+=1) = str$(range(a))
+42380     resp$(respc+=1) = str$(range(a))
 42400   next a
-42420   let mypos(1)=mylen+2 : let mypos(2)=mypos(1)+9
-42440   let mypos(3)=mypos(2)+9 : let mypos(4)=mypos(3)+9
-42460   fntxt(6,mypos(1),7) : let fntxt(6,mypos(2),7)
-42480   fntxt(6,mypos(3),7) : let fntxt(6,mypos(4),7)
-42500   fntxt(7,mypos(1),7) : let fntxt(7,mypos(2),7)
-42520   fntxt(7,mypos(3),7) : let fntxt(7,mypos(4),7)
-42540   fntxt(8,mypos(1),7) : let fntxt(8,mypos(2),7)
-42560   fntxt(8,mypos(3),7) : let fntxt(8,mypos(4),7)
-42580   fntxt(9,mypos(1),7) : let fntxt(9,mypos(2),7)
-42600   fntxt(9,mypos(3),7) : let fntxt(9,mypos(4),7)
+42420   mypos(1)=mylen+2 : mypos(2)=mypos(1)+9
+42440   mypos(3)=mypos(2)+9 : mypos(4)=mypos(3)+9
+42460   fntxt(6,mypos(1),7) : fntxt(6,mypos(2),7)
+42480   fntxt(6,mypos(3),7) : fntxt(6,mypos(4),7)
+42500   fntxt(7,mypos(1),7) : fntxt(7,mypos(2),7)
+42520   fntxt(7,mypos(3),7) : fntxt(7,mypos(4),7)
+42540   fntxt(8,mypos(1),7) : fntxt(8,mypos(2),7)
+42560   fntxt(8,mypos(3),7) : fntxt(8,mypos(4),7)
+42580   fntxt(9,mypos(1),7) : fntxt(9,mypos(2),7)
+42600   fntxt(9,mypos(3),7) : fntxt(9,mypos(4),7)
 42620   fncmdset(3)
 42640   fnacs(sn$,win,mat resp$,ck)
 44000   if ck=5 then goto XIT
-44020   let d1=val(resp$(1))
+44020   d1=val(resp$(1))
 44040   let weg$=resp$(2)(1:1)
 44060   let wrate=val(resp$(3))
 44080   for a = 1 to 16
-44100     let range(a) = val(resp$(a+3))
+44100     range(a) = val(resp$(a+3))
 44120   next a
 48000   if weg$<>"W" and weg$<>"E" and weg$<>"G" and weg$<>"L" then ce=3 : goto MENU1
 48020   fncreg_write('Per 1000 Usage - Rate Code ',weg$)
@@ -130,13 +130,13 @@
 48080     fncreg_write('Per 1000 Usage - Range '&str$(rangeItem),str$(range(rangeItem)))
 48100   nex rangeItem
 48120   if weg$="W" then 
-48140     let rtype$="Water"
+48140     rtype$="Water"
 48160   else if weg$="E" then 
-48180     let rtype$="Electric"
+48180     rtype$="Electric"
 48200   else if weg$="L" then 
-48220     let rtype$="Lawn Meter"
+48220     rtype$="Lawn Meter"
 48240   else if weg$="G" then 
-48260     let rtype$="Gas"
+48260     rtype$="Gas"
 48280   end if 
 48300 return  ! /r
 52000 USAGE_CHART_ACCUMULATE: ! r:
@@ -212,7 +212,7 @@
 58300 return ! /r
 62000 PGOF: pr #255: newpage : continue 
 66000 ! <Updateable Region: ERTN>
-66020 ERTN: let fnerror(program$,err,line,act$,"xit")
+66020 ERTN: fnerror(program$,err,line,act$,"xit")
 66040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 66060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 66080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

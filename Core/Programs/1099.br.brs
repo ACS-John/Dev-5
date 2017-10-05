@@ -31,7 +31,7 @@
 12500   end if
 12520 fnend
 16000 ! <Updateable Region: ERTN>
-16020 ERTN: let fnerror(program$,err,line,act$,"xit")
+16020 ERTN: fnerror(program$,err,line,act$,"xit")
 16040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 16060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 16080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -127,7 +127,7 @@
 27020     column1=15 +left 
 27040     column2=85+left+17
 27060     column3=119 +left+18
-27080     let ten99Count+=1
+27080     ten99Count+=1
 27100     if ten99Count=1 then let yOffset=topmargin 
 27120     if ten99Count=2 then let yOffset=bottom
 27140     if enableBackground$='True' and ten99Count=1 then
@@ -166,7 +166,7 @@
 28540     fnpa_txt(vn$,column1,fn_line(8))
 29000     if twoPerPage$='False' or ten99Count=2 then 
 29020        fnpa_newpage
-29040        let ten99Count=0
+29040        ten99Count=0
 29060      end if
 29080     ! /r
 29100   end if
@@ -232,7 +232,7 @@
 42140       next j
 42160       mat deductionOption$(deductionOptionCount)
 42180       for j=1 to 8
-42200         let typeOption$(j)=str$(j)
+42200         typeOption$(j)=str$(j)
 42220       next j
 42230     end if
 42240     !
@@ -254,7 +254,7 @@
 43000   awiReturn=0 
 44000   ASK_INFO: !
 44020   fntos(sn$="pr1099-1")
-44040   let rc=lc=0 : let mylen=40 : let mypos=mylen+3
+44040   rc=lc=0 : mylen=40 : mypos=mylen+3
 44060   fnlbl(lc+=1,1,"Tax Year:",mylen,1)
 44080   fntxt(lc,mypos,4,0,1,"",1,"Year to pr 1099s for")
 44100   resp$(resc_taxYear:=rc+=1)=taxYear$
@@ -262,38 +262,38 @@
 44140     lc+=1
 44160     fnlbl(lc+=1,1,"Miscellaneous Deduction to Print:",mylen,1)
 44180     fncomboa("deductions",lc,mypos,mat deductionOption$,"Select the deduction you want printed.") 
-44200     let resp$(respc_deduction:=rc+=1)=seltp$
+44200     resp$(respc_deduction:=rc+=1)=seltp$
 44220     fnlbl(lc+=1,1,"1099 Type to Print:",mylen,1)
 44260     fncomboa('type',lc,mypos,mat typeOption$,"Select the code for the 1099 vendor type.") 
-44280     let resp$(respc_type:=rc+=1)=""
+44280     resp$(respc_type:=rc+=1)=""
 44300   else if env$('cursys')='GL' then
 44310     fnlbl(lc+=1,1,"Payee Type to Print:",mylen,1)
 44320     fncombof("PayeeType",lc,mypos,27,env$('Q')&"\GLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.") 
-44340     let resp$(respc_deduction:=rc+=1)=seltp$
+44340     resp$(respc_deduction:=rc+=1)=seltp$
 44342   else if env$('cursys')='CL' then
 44344     fnlbl(lc+=1,1,"Payee Type to Print:",mylen,1)
 44346     fncombof("Payeetype",lc,mypos,27,env$('Q')&"\CLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Enter the code for the payee type to print.")
-44348     let resp$(respc_deduction:=rc+=1)=seltp$
+44348     resp$(respc_deduction:=rc+=1)=seltp$
 44360 !
 44380   end if
 44400   lc+=1
 44420   fnlbl(lc+=1,1,"Minimum Amount to Print:",mylen,1)
 44440   fntxt(lc,mypos,12,0,1,"10",0,'Enter the minimum amount that should be printed."') 
-44460   let resp$(respc_min1:=rc+=1)=str$(min1)
+44460   resp$(respc_min1:=rc+=1)=str$(min1)
 44480   fnlbl(lc+=1,1,"Your Telephone Number:",mylen,1)
 44500   fntxt(lc,mypos,12,0,1,"",0,'You can use dashes, etc."') 
-44520   let resp$(respc_phone:=rc+=1)=ph$
+44520   resp$(respc_phone:=rc+=1)=ph$
 44540   lc+=1
 44560   fnopt(lc+=1,3,"Print 1099")
-44580   let resp$(respc_Print1099:=rc+=1)=destinationOpt$(1)
+44580   resp$(respc_Print1099:=rc+=1)=destinationOpt$(1)
 44600   fnlbl(lc+=1,5,"Copy:",12,1,0)
 44620   fncomboa('Copy',lc,19,mat optCopy$, '',20)
-44640   let resp$(respc_copyCurrent:=rc+=1)=copyCurrent$
+44640   resp$(respc_copyCurrent:=rc+=1)=copyCurrent$
 44660   fnlbl(lc+=1,20,"(2 per page is not yet available with Backgrounds)",50,0)
 44680   fnchk(lc+=1,20,'Enable Background',1)
-44700   let resp$(respc_enableBackground:=rc+=1)=enableBackground$
+44700   resp$(respc_enableBackground:=rc+=1)=enableBackground$
 44720   fnchk(lc+=1,20,'2 Per Page',1)
-44740   let resp$(respc_twoPerPage:=rc+=1)=twoPerPage$
+44740   resp$(respc_twoPerPage:=rc+=1)=twoPerPage$
 44760   lc+=1
 44780   fnopt(lc+=1,3,"Export for Advanced Micro Solutions")
 44800   resp$(respc_export_ams:=rc+=1)=destinationOpt$(2)
@@ -331,15 +331,15 @@
 47000     ! r: validate, respond and/or reject 
 47020     if env$('cursys')='PR' and seltp=0 then 
 47040       mat ml$(2) 
-47060       let ml$(1)="You must indicate which deduction you want printed." 
-47080       let ml$(2)="        Click OK to correct." 
+47060       ml$(1)="You must indicate which deduction you want printed." 
+47080       ml$(2)="        Click OK to correct." 
 47100       fnmsgbox(mat ml$,resp$,cap$,0)
 47120       goto ASK_INFO
 47140     end if
 47160     if env$('cursys')='PR' and (type=0 or type>8) then 
 47180       mat ml$(2) 
-47200       let ml$(1)="You must enter a valid 1099 type." 
-47220       let ml$(2)="        Click OK to correct." 
+47200       ml$(1)="You must enter a valid 1099 type." 
+47220       ml$(2)="        Click OK to correct." 
 47240       fnmsgbox(mat ml$,resp$,cap$,0)
 47260       goto ASK_INFO
 47280     end if

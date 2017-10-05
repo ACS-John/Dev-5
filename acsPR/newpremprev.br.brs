@@ -16,15 +16,15 @@
 00180 ! ______________________________________________________________________
 00190 MENU1: ! 
 00200   fntos(sn$="premprev")
-00202   let respc=0
+00202   respc=0
 00210   fnlbl(1,47," ",1,1)
 00220   fnlbl(1,1,"Beginning Date of Tax Year:",30,1)
 00230   fntxt(1,34,12,0,0,"3",0,"") 
-00232   let resp$(respc+=1)=str$(beg_date)
+00232   resp$(respc+=1)=str$(beg_date)
 00240   fnlbl(2,1,"Last Payroll Date to Analyze:",30,1)
 00250   fntxt(2,34,12,0,0,"3",0,"") 
-00252   let resp$(respc+=1)=str$(end_date)
-00260   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+00252   resp$(respc+=1)=str$(end_date)
+00260   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
 00280   beg_date=val(resp$(1)) ! beginning of year
 00300   end_date=val(resp$(2)) ! ending day of year
@@ -45,7 +45,7 @@
 00460   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey L390
 00480 L480: read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof L390
 00490   if teno<>eno then goto L390
-00500   if tdet(1)> 0 then let payrate=tdet(1) else let payrate=tdet(2) ! set payrate as salary or hourly
+00500   if tdet(1)> 0 then payrate=tdet(1) else payrate=tdet(2) ! set payrate as salary or hourly
 00520   mat ytdtotal=(0) : mat ytdtdc=(0)
 00530   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 00540   restore #4,key>=checkkey$: nokey L480
@@ -96,26 +96,26 @@
 00980   return 
 00990 ! ______________________________________________________________________
 01000 ! <Updateable Region: ERTN>
-01010 ERTN: let fnerror(program$,err,line,act$,"xit")
+01010 ERTN: fnerror(program$,err,line,act$,"xit")
 01020   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01030   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01040   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01050 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01060 ! /region
 01070 ! ______________________________________________________________________
-01080 XIT: let fnxit
+01080 XIT: fnxit
 01090 ! ______________________________________________________________________
 01100 ! CHECK_PASSWORD: ! 
 01110 !   library 'S:\Core\Library': fntos,fnlbl,fntxt,fnacs,fncmdkey,fncmdset
 01120 !   return ! if env$('client')="Washington Parrish" then goto L1130 else return 
 01130 ! L1130: if wsid$="09" or wsid$="99" then return 
-01140 ! L1140: let fntos(sn$="WpTrap") !:
-      !   let respc=0 : let mylen=25 : let mypos=mylen+2
+01140 ! L1140: fntos(sn$="WpTrap") !:
+      !   respc=0 : mylen=25 : mypos=mylen+2
 01150 !   fnlbl(1,1,"         Quit!      ",mylen,2)
 01160 !   fnlbl(2,1,"Stay out of Payroll!",mylen,2)
 01170 !   fnlbl(3,1,"Call Brenda for Password",mylen,2)
 01180 !   fntxt(3,mylen+3,8,8,1,"",0,"You must have a password to get out.") !:
-      !   let resp$(respc+=1)=""
+      !   resp$(respc+=1)=""
 01190 !   fncmdkey("E&xit",5,1,1,"Returns to menu")
 01200 !   fnacs(sn$,0,mat resp$,ckey)
 01210 !   if trim$(uprc$(resp$(1)))="GETMEOUT" then goto XIT else goto L1140

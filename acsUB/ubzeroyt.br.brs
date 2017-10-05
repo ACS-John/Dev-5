@@ -12,7 +12,7 @@
 20220   fntos(sn$:="ubZeroYt")
 20240   fnlbl(1,1,'Type "ZERO" to Zero all Year To Date Usages:',48,1)
 20260   fntxt(1,50,5)
-20280   let resp$(1)=""
+20280   resp$(1)=""
 20300   fncmdset(2)
 20320   fnacs(sn$,0,mat resp$,ck)
 20340   if ck=5 then goto XIT
@@ -25,10 +25,10 @@
 20480 DONE: close #1: 
 20500   goto XIT
 20520 ! <Updateable Region: ERTN>
-20540 ERTN: let fnerror(program$,err,line,act$,"xit")
+20540 ERTN: fnerror(program$,err,line,act$,"xit")
 20560   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20580   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 20600   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 20620 ERTN_EXEC_ACT: execute act$ : goto ERTN
 20640 ! /region
-20660 XIT: let fnxit
+20660 XIT: fnxit

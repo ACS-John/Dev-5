@@ -69,12 +69,12 @@
 00690 L690: input #101,fields "8,27,Cu 5,UT,N": pas$
 00700   if cmdkey=5 then goto L480
 00710   if pas$><"ERASE" then goto L690
-00720   let new1=1
+00720   new1=1
 00730   close #1: ioerr L740
 00740 L740: open #1: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&str$(cno)&",Size=0,RecL=68,Replace",internal,outin,relative 
 00750   goto L2620
 00760 L760: form pos 1,n 3,n 6,n 3,c 12,c 30,c 2,n 6,pd 5.2,n 1
-00770 L770: let new1=1
+00770 L770: new1=1
 00780   goto L1000
 00790 ! ______________________________________________________________________
 00800 L800: form pos 1,c 12,c 12
@@ -93,10 +93,10 @@
 00930 L930: input fields mat sf$: gl1,gl2,gl3,c$ conv L930
 00940   if cmdkey=5 then goto L480
 00950   c$=lpad$(rtrm$(c$),12)
-00960   let dcode$=lpad$(str$(gl1),3)&lpad$(str$(gl2),6)&lpad$(str$(gl3),3)&c$
+00960   dcode$=lpad$(str$(gl1),3)&lpad$(str$(gl2),6)&lpad$(str$(gl3),3)&c$
 00970   read #1,using L980,key=dcode$: gl$,c$,p$,s$,mat a nokey L930
 00980 L980: form pos 1,c 12,c 12,c 30,c 2,n 6,pd 5.2,n 1
-00990   let holdgc$=gl$&c$
+00990   holdgc$=gl$&c$
 01000 L1000: pr newpage
 01010   close #101: ioerr L1020
 01020 L1020: open #101: "SROW=2,SCOL=8,EROW=12,ECOL=49,Border=Sr,Caption=<Maintain Bank Reconciliation Records",display,outin 
@@ -135,13 +135,13 @@
 01350 L1350: if holdgc$=lpad$(str$(gl1),3)&lpad$(str$(gl2),6)&lpad$(str$(gl3),3)&c$ then goto L1360 else goto L1380
 01360 L1360: rewrite #1,using L760,key=gl$&c$: gl1,gl2,gl3,c$,p$,s$,mat a
 01370   goto L570
-01380 L1380: let dcode$=lpad$(str$(gl1),3)&lpad$(str$(gl2),6)&lpad$(str$(gl3),3)&c$
+01380 L1380: dcode$=lpad$(str$(gl1),3)&lpad$(str$(gl2),6)&lpad$(str$(gl3),3)&c$
 01390   read #1,using L800,key=dcode$: gl$,c$ nokey L1410
 01400   ce=3: goto ERRC
 01410 L1410: if scode=2 then goto L1430
 01420   delete #1,key=holdgc$: 
 01430 L1430: write #1,using L760: gl1,gl2,gl3,c$,p$,s$,mat a
-01440 L1440: let new1=1
+01440 L1440: new1=1
 01450   goto L570
 01460 L1460: sa$(1)="10,43,C 12,UT,N"
 01470   sa$(2)="12,43,N 12.2,UT,N"
@@ -173,7 +173,7 @@
 01730   goto L1480
 01740 L1740: pr f "16,10,C 69,R,N": hex$("07")&" Check Number "&rtrm$(c$)&" in Bank Number "&ltrm$(currgl$)&" is not on file"
 01750   goto L1550
-01760 L1760: let fnchain("S:\acsGL\glCkRec")
+01760 L1760: fnchain("S:\acsGL\glCkRec")
 01770 L1770: pr newpage
 01780   sb$(1)="2,23,C 20,UT,N"
 01790   sb$(2)="3,37,Nz 6,UT,N"
@@ -197,8 +197,8 @@
 01970 ERRB: pr f "24,78,C 1": bell : goto L1930
 01980 L1980: if cmdkey=5 then goto L480
 01990   if fndate_mmddyy_to_ccyymmdd(begdat)>fndate_mmddyy_to_ccyymmdd(enddat) then goto L1890
-02000   let namtab=66-int(len(rtrm$(cnam$))/2)
-02010   let dattab=66-int(len(rtrm$(dat$))/2)
+02000   namtab=66-int(len(rtrm$(cnam$))/2)
+02010   dattab=66-int(len(rtrm$(dat$))/2)
 02020   pr newpage
 02030   close #101: ioerr L2040
 02040 L2040: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDeR=SR,CAPTION=<Print Listing of Checks",display,outin 
@@ -216,7 +216,7 @@
 02160 L2160: if fndate_mmddyy_to_ccyymmdd(a(1))<fndate_mmddyy_to_ccyymmdd(begdat) or fndate_mmddyy_to_ccyymmdd(a(1))>fndate_mmddyy_to_ccyymmdd(enddat) then goto L2140
 02170   if a(3)=1 then pr #255,using L2180: c$,p$,a(2),a(1),s$,"Yes" pageoflow L2210 else pr #255,using L2180: c$,p$,a(2),a(1),s$,"No" pageoflow L2210
 02180 L2180: form pos 1,c 12,pos 15,c 30,pos 48,n 11.2,pos 65,pic(zz/zz/zz),pos 75,c 2,pos 83,c 3,skip 1
-02190 L2190: let tot=tot+a(2)
+02190 L2190: tot=tot+a(2)
 02200   goto L2140
 02210 L2210: pr #255: newpage
 02220   gosub L2290
@@ -232,9 +232,9 @@
 02320 L2320: form pos 1,c 12,pos 15,c 5,pos 53,c 6,pos 67,c 4,pos 73,c 6,pos 81,c 7,skip 2
 02330   return 
 02340 ! ______________________________________________________________________
-02350 L2350: let fncloseprn
+02350 L2350: fncloseprn
 02360   on fkey 5 ignore 
-02370 L2370: let tot=0
+02370 L2370: tot=0
 02380   goto L480
 02390 L2390: pr newpage
 02400   sb$(1)="2,31,N 3,UT,N"
@@ -265,10 +265,10 @@
 02650 ! ______________________________________________________________________
 02660 L2660: if err=4152 then goto L740 else goto ERTN
 02670 ! ______________________________________________________________________
-02680 XIT: let fnxit
+02680 XIT: fnxit
 02690 ! ______________________________________________________________________
 02700 ! <Updateable Region: ERTN>
-02710 ERTN: let fnerror(program$,err,line,act$,"xit")
+02710 ERTN: fnerror(program$,err,line,act$,"xit")
 02720   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02730   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02740   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

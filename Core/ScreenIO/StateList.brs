@@ -15,7 +15,7 @@
 00600 !
 01000 Main: ! If you run me as a program, I run the statelist screen
 01010    library "S:\Core\ScreenIO" : fnfm$
-01020    let Ret$=fnfm$("statelist","",0,0,"",0,0,0,0,mat PassedData$)
+01020    ret$=fnfm$("statelist","",0,0,"",0,0,0,0,mat PassedData$)
 01030    if len(trim$(Ret$)) then
 01040       pr Ret$
 01050    end if
@@ -44,10 +44,10 @@
 05019  !
 05020  def fndeletelistviewrecord(&ExitMode,DataFile,mat f$,&RepopulateListview;___,Recorddescription$*255)
 05021     if udim(f$)>1 then
-05022        let RecordDescription$=f$(1)
+05022        recordDescription$=f$(1)
 05023     end if
 05024     if udim(f$)>2 then
-05025        let RecordDescription$=RecordDescription$&","&f$(2)
+05025        recordDescription$=RecordDescription$&","&f$(2)
 05026     end if
 05027     if 2=msgbox("Are you sure you wish to delete the current record?: "&RecordDescription$,"Delete Record?","yN","EXCL") then
 05028        read #datafile, using form$(DataFile), rec=rec(datafile) : mat F$, mat F norec ignore
@@ -55,7 +55,7 @@
 05030           delete #DataFile:
 05031           RepopulateListviews=1
 05032        else
-05033           let msgbox("I can no longer find the record in question.","Something went wrong")
+05033           msgbox("I can no longer find the record in question.","Something went wrong")
 05034        end if
 05035     end if
 05036  fnend
@@ -138,7 +138,7 @@
 92001 !
 92002    if ~DataIsInside then
 92003       fnPopData(2)
-92004       if Function$="{{SetData}}" then let DataIsInside=1
+92004       if Function$="{{SetData}}" then dataIsInside=1
 92005    end if
 92006 !
 92007    if ~FileIOLinkageSet then
@@ -150,7 +150,7 @@
 92013    end if
 92014 !
 92015    if Function$ = "{deletelistviewrecord}" then
-92016       let ReturnValue = fndeletelistviewrecord(ExitMode,DataFile,mat f$,RepopulateListview)
+92016       returnValue = fndeletelistviewrecord(ExitMode,DataFile,mat f$,RepopulateListview)
 92017    else
 92018       if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
 92019          pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
@@ -159,7 +159,7 @@
 92022 !
 92023    if ~DataIsInside or Function$="{{GetData}}" then
 92024       fnPushData(2)
-92025       let DataIsInside=0
+92025       dataIsInside=0
 92026    end if
 92027 return
 92028 !

@@ -54,10 +54,10 @@
 00490   fnhamster("GLTrans",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00500   return 
 00510 ! ______________________________________________________________________
-00520 XIT: let fnxit
+00520 XIT: fnxit
 00530 ! ______________________________________________________________________
 00540 ! <Updateable Region: ERTN>
-00550 ERTN: let fnerror(program$,err,line,act$,"xit")
+00550 ERTN: fnerror(program$,err,line,act$,"xit")
 00560   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00570   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00580   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -68,17 +68,17 @@
 70020     if storage_length=0 then storage_length=textbox_len
 70040     add_rec_item=udim(mat lbl$)+1
 70060     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$
-70080     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
+70080     mat tln(add_rec_item) : tln(add_rec_item)=textbox_len
 70100     mat p$(add_rec_item)
 70120     mat fltyp$(add_rec_item) : fltyp$(add_rec_item)=field_type$
 70140     mat sln(add_rec_item) : sln(add_rec_item)=storage_length
-70150     mat mask(add_rec_item) : let mask(add_rec_item)=ar_mask
+70150     mat mask(add_rec_item) : mask(add_rec_item)=ar_mask
 70160     mat c$(add_rec_item,8)
 70180   fnend  ! fn_add_rec
 80000   def fn_setup_hamster
-80200     let mask_pointtwo=32 : let mask_number=30
-80400     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
-80600     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
+80200     mask_pointtwo=32 : mask_number=30
+80400     mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
+80600     textlen_mmddyy=8 : textlen_ccyymmdd=10
 80800     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 81000 ! 
 81200     dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40 ! SP(1) - not used

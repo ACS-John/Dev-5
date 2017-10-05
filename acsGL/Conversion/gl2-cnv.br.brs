@@ -98,7 +98,7 @@
 00990 L990: read #3,using L980: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$ eof L1070
 01000   mat adr=(0)
 01010   if ytdp=0 then goto L1050
-01020   let rec2=lrec(2)+1
+01020   rec2=lrec(2)+1
 01030   write #2,using L970,rec=rec2: vn$,dat,ytdp,"","BEGINNING BALANCE",0
 01040   mat adr=(rec2)
 01050 L1050: write #1,using L980: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat adr
@@ -121,9 +121,9 @@
 01220     read #2,using L1230,rec=j: k$,nta norec L1310
 01230 L1230: form pos 1,c 12,pos 71,pd 3
 01240     read #1,using L1180,key=k$: mat ta nokey L1310
-01250     if ta(1)=0 then let ta(1)=j
+01250     if ta(1)=0 then ta(1)=j
 01260     if ta(2)>0 then rewrite #2,using L1300,rec=ta(2): j
-01270     let ta(2)=j
+01270     ta(2)=j
 01280     rewrite #1,using L1180,key=k$: mat ta
 01290     rewrite #2,using L1300,rec=j: 0
 01300 L1300: form pos 71,pd 3
@@ -141,9 +141,9 @@
 01420     read #2,using L1430,rec=j: en$,nta norec L1510,conv L1510
 01430 L1430: form pos 1,c 4,pos 68,pd 3
 01440     read #1,using L1380,key=en$: mat ta nokey L1510,conv L1510
-01450     if ta(1)=0 then let ta(1)=j
+01450     if ta(1)=0 then ta(1)=j
 01460     if ta(2)>0 then rewrite #2,using L1500,rec=ta(2): j
-01470     let ta(2)=j
+01470     ta(2)=j
 01480     rewrite #1,using L1380,key=en$: mat ta
 01490     rewrite #2,using L1500,rec=j: 0
 01500 L1500: form pos 68,pd 3
@@ -171,9 +171,9 @@
 01720   open #2: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=280,REPLACE",internal,output 
 01730 L1730: read #1,using L1740: pr1$,mat pr1 eof END1
 01740 L1740: form pos 1,c 90,18*pd 5.2,2*n 5
-01750   for j=1 to 11: let pr2(j)=pr1(j): next j
-01760   let pr2(13)=pr1(12)
-01770   for j=13 to 18: let pr2(j+18)=pr1(j): next j
+01750   for j=1 to 11: pr2(j)=pr1(j): next j
+01760   pr2(13)=pr1(12)
+01770   for j=13 to 18: pr2(j+18)=pr1(j): next j
 01780   write #2,using L1790: pr1$,mat pr2
 01790 L1790: form pos 1,c 90,36*pd 5.2,2*n 5
 01800   goto L1730
@@ -194,12 +194,12 @@
 01950   close #1: 
 01960 L1960: end1=0 ! 
 01970   dim id$(6)*40,fil$(6),idx$(6)
-01980   let id$(1)=" 1 = BALANCE SHEET FILE": let fil$(1)="ACGLFNSB": let idx$(1)="FNSBINDX"
-01990   let id$(2)=" 2 = INCOME STATEMENT FILE": let fil$(2)="ACGLFNSI": let idx$(2)="FNSIINDX"
-02000   let id$(3)=" 3 = FUND STMT / CASH FLOW FILE": let fil$(3)="ACGLFNSF": let idx$(3)="FNSFINDX"
-02010   let id$(4)=" 4 = SECONDARY BALANCE SHEET FILE": let fil$(4)="ACGLFNSC": let idx$(4)="FNSCINDX"
-02020   let id$(5)=" 5 = SECONDARY INCOME STATEMENT FILE": let fil$(5)="ACGLFNSJ": let idx$(5)="FNSJINDX"
-02030   let id$(6)=" 6 = SECONDARY FUND / CASH FLOW FILE": let fil$(6)="ACGLFNSG": let idx$(6)="FNSGINDX"
+01980   id$(1)=" 1 = BALANCE SHEET FILE": let fil$(1)="ACGLFNSB": idx$(1)="FNSBINDX"
+01990   id$(2)=" 2 = INCOME STATEMENT FILE": let fil$(2)="ACGLFNSI": idx$(2)="FNSIINDX"
+02000   id$(3)=" 3 = FUND STMT / CASH FLOW FILE": let fil$(3)="ACGLFNSF": idx$(3)="FNSFINDX"
+02010   id$(4)=" 4 = SECONDARY BALANCE SHEET FILE": let fil$(4)="ACGLFNSC": idx$(4)="FNSCINDX"
+02020   id$(5)=" 5 = SECONDARY INCOME STATEMENT FILE": let fil$(5)="ACGLFNSJ": idx$(5)="FNSJINDX"
+02030   id$(6)=" 6 = SECONDARY FUND / CASH FLOW FILE": let fil$(6)="ACGLFNSG": idx$(6)="FNSGINDX"
 02040   for j=1 to 6
 02050     execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&" "&env$('Temp')&"\Work."&session$&" -83" ioerr L2300
 02060     execute "COPY  "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)
@@ -211,16 +211,16 @@
 02120 L2120: read #1,using L2220: rno,ic eof END2
 02130     if rno<st2 then goto L2170
 02140     if end1=1 then goto END2
-02150     let rnp=0
+02150     rnp=0
 02160     goto L2100
 02170 L2170: rewrite #1,using L2180: rnp
 02180 L2180: form pos 79,n 5
 02190     goto L2120
-02200 FIND1: st1=rno : st2=99999 : let rnp=0
+02200 FIND1: st1=rno : st2=99999 : rnp=0
 02210 L2210: read #1,using L2220: rno,ic eof END21
 02220 L2220: form pos 1,g 5,pos 75,n 1
 02230     if ic=0 then goto L2210
-02240     if ic=1 then let rnp=rno
+02240     if ic=1 then rnp=rno
 02250     if ic=2 then st2=rno : goto L2280
 02260     goto L2210
 02270 END21: end1=1

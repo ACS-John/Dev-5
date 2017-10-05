@@ -7,8 +7,8 @@
 00070   dim k$*20,gl(3),ta(2),de$*30
 00080 ! ______________________________________________________________________
 00090 ! fntop
-00100   let io1$(1)="10,51,N 2,U,N"
-00110   let io1$(2)="12,52,N 6,U,N"
+00100   io1$(1)="10,51,N 2,U,N"
+00110   io1$(2)="12,52,N 6,U,N"
 00120 L120: pr newpage
 00130   close #101: ioerr L140
 00140 L140: open #101: "SROW=9,SCOL=4,EROW=13,ECOL=65,BORDER=DR,CAPTION=CONVERT UNPAID INVOICE FILE",display,outin 
@@ -22,7 +22,7 @@
 00220   open #1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno),internal,outin,relative 
 00230   for j=1 to lrec(1)
 00240     read #1,using 'Form POS 96,N 1,N 6',rec=j: pcde
-00250     if pcde=0 then let pdte=0 else let pdte=lpd
+00250     if pcde=0 then pdte=0 else pdte=lpd
 00260     rewrite #1,using 'Form POS 96,N 1,N 6',rec=j: pcde,pdte
 00270   next j
 00280   close #1: 
@@ -38,12 +38,12 @@
 00380   goto L120
 00390 ! ______________________________________________________________________
 00400 ! <Updateable Region: ERTN>
-00410 ERTN: let fnerror(program$,err,line,act$,"xit")
+00410 ERTN: fnerror(program$,err,line,act$,"xit")
 00420   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00430   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00440   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00450 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00460 ! /region
 00470 ! ______________________________________________________________________
-00480 XIT: let fnxit
+00480 XIT: fnxit
 00490 ! ______________________________________________________________________

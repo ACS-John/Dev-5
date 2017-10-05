@@ -25,10 +25,10 @@
 00240   pr #win,fields "5,2,Cr 14,N": "Amount:"
 00250   pr #win,fields "6,2,Cr 14,N": "Date (mmddyy):"
 00260   pr #win,fields "7,2,Cr 14,N": "Status:"
-00270   let io1$(1)="4,17,C 6,UT,N"
-00280   let io1$(2)="5,17,N 10.2,UT,N"
-00290   let io1$(3)="6,17,Nz 6,UT,N"
-00300   let io1$(4)="7,17,N 2,UT,N"
+00270   io1$(1)="4,17,C 6,UT,N"
+00280   io1$(2)="5,17,N 10.2,UT,N"
+00290   io1$(3)="6,17,Nz 6,UT,N"
+00300   io1$(4)="7,17,N 2,UT,N"
 00310   if c1=2 then pr #win,fields mat io1$: jn$,mat inp
 00320   if shoption=1 then pr f "17,24,C 09,B,1": "Next (F1)"
 00330   if shoption=1 then pr f "17,34,C 09,B,5": "Done (F5)"
@@ -38,18 +38,18 @@
 00370   if shoption=2 then pr f "17,39,C 11,B,5": "Cancel (F5)"
 00380   if shoption=2 then pr f "17,51,C 11,B,6": "Search (F6)"
 00390 L390: input #win,fields mat io1$: jn$,mat inp conv L390
-00400   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+00400   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 00410   if cmdkey>0 then goto L510 else ce=curfld
 00420   if ce<>1 then goto L450
-00430   let jn$=lpad$(rtrm$(jn$),6) !:
+00430   jn$=lpad$(rtrm$(jn$),6) !:
         read #1,using L440,key=jn$: n$ nokey L600 !:
         pr #win,fields "4,24,C 40,H,N": n$
 00440 L440: form pos 7,c 40
 00450 L450: ce=ce+1 : if ce>udim(io1$) then ce=1
-00460 L460: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1) !:
+00460 L460: io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1) !:
         if ce1=0 then goto L450
-00470   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L390
-00480 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+00470   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L390
+00480 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 00490   ce=cnt+1
 00500 ERR1: pr f "24,78,C 1": bell : goto L460
 00510 L510: if cmdkey=5 then goto L730
@@ -58,19 +58,19 @@
 00530   if c1=2 and cmdkey=4 then goto L1150
 00540   if inp(2)<10100 or inp(2)>123199 then ce=3: goto ERR1
 00550   if inp(1)=0 then ce=2: goto ERR1
-00560   let jn$=lpad$(rtrm$(jn$),6)
+00560   jn$=lpad$(rtrm$(jn$),6)
 00570   read #1,using 'Form POS 150,PD 7.2,N 2',key=jn$: b3 nokey L600
 00580   goto L660
 00590 ! ______________________________________________________________________
-00600 L600: let msgline$(1)="Job Number not found."
-00610   let msgline$(2)="Please reselect."
+00600 L600: msgline$(1)="Job Number not found."
+00610   msgline$(2)="Please reselect."
 00620   fnoldmsgbox(mat response$,cap$,mat msgline$,1)
 00630   ce=1
 00640   goto ERR1
 00650 ! ______________________________________________________________________
-00660 L660: let ta=ta+inp(1)
+00660 L660: ta=ta+inp(1)
 00670   if c1=2 then goto L1120
-00680 L680: let rw=lrec(2)+1
+00680 L680: rw=lrec(2)+1
 00690   write #2,using L700,rec=rw: jn$,mat inp duprec L680
 00700 L700: form pos 1,c 6,pd 5.2,pd 4,n 2
 00710   goto L200
@@ -85,7 +85,7 @@
 00800   let wrd2$(3)="3. Additional Entries"
 00810   let wrd2$(4)="4. Post to Job Cost File"
 00820   for j=1 to udim(wrd2$)
-00830     let io2$(j)=str$(j+3)&",2,C 38,N"
+00830     io2$(j)=str$(j+3)&",2,C 38,N"
 00840   next j
 00850   pr f "16,27,C 25,B,5": "Exit without posting (F5)"
 00860 L860: rinput #win,select mat io2$,attr "H": mat wrd2$
@@ -95,7 +95,7 @@
 00900 ! ______________________________________________________________________
 00910 PROOFLIST: ! 
 00920   pr newpage
-00930   let message$="Printing Proof List..."
+00930   message$="Printing Proof List..."
 00940   fnwait(103,cap$,message$,1)
 00950   on fkey 5 goto L1080
 00960   fnopenprn(cp,58,220,process)
@@ -110,7 +110,7 @@
 01050     pr #255,using L1060: j,jn$,mat inp
 01060 L1060: form pos 1,n 5,x 2,c 8,n 10.2,2*n 10,skip 1
 01070 L1070: next j
-01080 L1080: let fncloseprn
+01080 L1080: fncloseprn
 01090   on fkey 5 ignore 
 01100 L1100: goto L730
 01110 ! ______________________________________________________________________
@@ -128,7 +128,7 @@
 01230   if rr=0 then goto L1210
 01240   if rr<1 or rr>rw then goto L1210
 01250   read #2,using L700,rec=rr: jn$,mat inp
-01260   let ta=ta-inp(1)
+01260   ta=ta-inp(1)
 01270   shoption=2
 01280   goto L200
 01290 ! ______________________________________________________________________
@@ -142,23 +142,23 @@
 01370 L1370: next j
 01380   goto XIT
 01390 ! ______________________________________________________________________
-01400 XIT: let fnxit
+01400 XIT: fnxit
 01410 ! ______________________________________________________________________
 01420 SRCH: ! 
 01430   bk=0
-01440   let hce=ce
+01440   hce=ce
 01450   close #103: ioerr L1460
 01460 L1460: open #103: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,output 
 01470   pr #103: newpage
 01480 L1480: pr newpage
 01490   let win=102
 01500   fnopenwin(win,06,10,10,69,wrds$(1))
-01510   let prtall=0
+01510   prtall=0
 01520   pr #win,fields "4,2,C 38,N": "Beginning Search Data (blank for all):"
 01530   pr f "11,34,C 11,B,5": "Cancel (F5)"
 01540 L1540: input #win,fields "4,41,C 6,UT,N": nam$
 01550   if cmdkey=5 then goto SEARCHEND
-01560   let nam$=lpad$(rtrm$(nam$),6)
+01560   nam$=lpad$(rtrm$(nam$),6)
 01570   restore #1,search>=nam$: nokey L1540
 01580 ! Close #WIN: Ioerr 1790
 01590 L1590: pr newpage
@@ -182,18 +182,18 @@
 01770     if bk>20 then bk=1
 01780     bk$(bk)=bl$(2)(1:28)
 01790 L1790: next j
-01800 SREND: if j>1 then let j=j-1
+01800 SREND: if j>1 then j=j-1
 01810   mat in2$(j)
 01820   pr f "24,09,C 09,B,1": "Next (F1)"
 01830   pr f "24,19,C 09,B,2": "Back (F2)"
 01840   pr f "24,29,C 09,B,5": "Stop (F5)"
 01850   pr f "24,39,C 25,R,N": "or Select Account Number:"
-01860   let k$=""
+01860   k$=""
 01870   rinput fields "24,65,C 6,UT,N": k$
 01880   alp=0
 01890   if cmdkey=5 then goto SEARCHEND
-01900   if cmdkey=1 then let k$=""
-01910   if rtrm$(k$)><"" then let jn$=k$ : goto SEARCHEND
+01900   if cmdkey=1 then k$=""
+01910   if rtrm$(k$)><"" then jn$=k$ : goto SEARCHEND
 01920   if cmdkey><2 then goto L1970
 01930   bk=bk-1
 01940   if bk<1 then goto L2000
@@ -209,7 +209,7 @@
 02040 L2040: return 
 02050 ! ______________________________________________________________________
 02060 ! <Updateable Region: ERTN>
-02070 ERTN: let fnerror(program$,err,line,act$,"xit")
+02070 ERTN: fnerror(program$,err,line,act$,"xit")
 02080   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02090   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

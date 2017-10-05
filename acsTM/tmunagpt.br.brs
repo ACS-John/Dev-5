@@ -7,7 +7,7 @@
 00080   dim cno$*5,cna$*30,en$*9,e$*25,l$(50)*9,d(8),l(50,6),t(6)
 00090   dim cat$(30)*30,cnam$*40,cap$*128
 00100   fncno(cno,cnam$)
-00110   let namtab=66-int(len(rtrm$(cnam$))/2)
+00110   namtab=66-int(len(rtrm$(cnam$))/2)
 00120 ! ______________________________________________________________________
 00130   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&str$(cno)&",Shr",internal,input,relative ioerr ERTN
 00140   read #1,using L150,rec=1: mat cat$ ioerr ERTN
@@ -44,8 +44,8 @@
 00450 L450: close #1: ioerr L460
 00460 L460: close #2: ioerr L470
 00470 L470: close #6: ioerr L480
-00480 L480: let fncloseprn
-00490 XIT: let fnxit
+00480 L480: fncloseprn
+00490 XIT: fnxit
 00500 ! ______________________________________________________________________
 00510 L510: pr #255: newpage
 00520 L520: pr #255,using L530: date$,cnam$
@@ -71,16 +71,16 @@
 00720   pr #255: 
 00730   return 
 00740 ! ______________________________________________________________________
-00750 L750: let d7=int(d(2)/10000)
-00760   let d8=int((d(2)-d7*10000)/100)
-00770   let d9=d(2)-d7*10000-d8*100
-00775   if d(1)=0 then let d(1)=1 ! to prevent error
+00750 L750: d7=int(d(2)/10000)
+00760   d8=int((d(2)-d7*10000)/100)
+00770   d9=d(2)-d7*10000-d8*100
+00775   if d(1)=0 then d(1)=1 ! to prevent error
 00780   pr #255,using L790: cno$,cna$,d(3),d(4),d(5),d(6),d(7),d(8),d8,"/",d9,"/",d7,cat$(d(1))(1:22) pageoflow L810
 00790 L790: form pos 2,c 5,pos 8,c 30,pos 38,n 7.2,pos 46,5*n 11.2,x 1,n 2,c 1,pic(##),c 1,n 2,x 1,c 22,skip 1
 00800   goto L820
 00810 L810: gosub L510
 00820 L820: for j=1 to 6
-00830     let t(j)=t(j)+d(j+2)
+00830     t(j)=t(j)+d(j+2)
 00840   next j
 00850   return 
 00860 ! ______________________________________________________________________
@@ -105,13 +105,13 @@
 01050 L1050: pr #255,using L1060: e$,l(j,1),l(j,2),l(j,3),l(j,4),l(j,5),l(j,6)
 01060 L1060: form pos 5,c 25,pos 38,n 7.2,x 1,5*n 11.2,skip 1
 01070     for j1=1 to 6
-01080       let t(j1)=t(j1)+l(j,j1)
+01080       t(j1)=t(j1)+l(j,j1)
 01090     next j1
 01100   next j
 01110 L1110: return 
 01120 ! ______________________________________________________________________
 01130 ! <Updateable Region: ERTN>
-01140 ERTN: let fnerror(program$,err,line,act$,"xit")
+01140 ERTN: fnerror(program$,err,line,act$,"xit")
 01150   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01160   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01170   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

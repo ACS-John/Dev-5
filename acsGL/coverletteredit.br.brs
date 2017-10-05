@@ -8,9 +8,9 @@
 00121   execute 'SY -w '&atlantis$&' "'&os_filename$(env$('Q')&"\GLmstr\ACGLCovF.h"&env$('cno'))&'" -n'
 00130   goto XIT
 00140 ! ______________________________________________________________________
-00150 XIT: let fnxit
+00150 XIT: fnxit
 00170 ! <Updateable Region: ERTN>
-00180 ERTN: let fnerror(program$,err,line,act$,"xit")
+00180 ERTN: fnerror(program$,err,line,act$,"xit")
 00190   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00200   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00210   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

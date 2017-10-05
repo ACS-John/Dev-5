@@ -10,8 +10,8 @@
 20040     option$(a) = "Option #"&str$(a)
 20060   next a
 20080   let filename$="ComboA-tst"
-20100   let test$ = "I'm a test of tool tip text.  Does it work?"
-20120 ! let fncomboa(filename$,1,1,mat option$,test$)
+20100   test$ = "I'm a test of tool tip text.  Does it work?"
+20120 ! fncomboa(filename$,1,1,mat option$,test$)
 20140 ! 
 20160   mat opt$(3)
 20180   opt$(1)="Regular Collection"
@@ -23,4 +23,4 @@
 20300 ! 
 20320   fnacs("ComboA",0,mat resp$,ckey)
 20340 ! 
-20360   pr resp$(1) : let key$ = resp$(1)(32:41) : pr key$
+20360   pr resp$(1) : key$ = resp$(1)(32:41) : pr key$

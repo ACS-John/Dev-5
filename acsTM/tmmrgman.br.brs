@@ -21,12 +21,12 @@
 00220 L220: read #3,using L230: k$,b(7),b(3),b(4),b(5),gl$,b(8),iv$ eof L780 
 00230 L230: form pos 1,c 5,n 1,pd 4.2,n 6,n 2,c 12,n 2,c 12
 00240   if rtrm$(k$)="0" or rtrm$(k$)="" then goto L220
-00250   if b(7)=3 and rtrm$(iv$)="" then let iv$="WRITE OFF"
-00260   let iv$=lpad$(rtrm$(iv$),12)
+00250   if b(7)=3 and rtrm$(iv$)="" then iv$="WRITE OFF"
+00260   iv$=lpad$(rtrm$(iv$),12)
 00270   b(7)=-b(7)
-00280   if b(7)=-1 then let des$="PARTIAL BILLING"
-00290   if b(7)=-2 then let des$="FINAL BILLING"
-00300   if b(7)=-3 then let des$="WRITE-OFF"
+00280   if b(7)=-1 then des$="PARTIAL BILLING"
+00290   if b(7)=-2 then des$="FINAL BILLING"
+00300   if b(7)=-3 then des$="WRITE-OFF"
 00310   if b(8)=0 then b8=25 else b8=b(8)
 00320   read #1,using L330,key=k$: e$,mat sc,mat ca,ar1,mat arta nokey L770 
 00330 L330: form pos 179,c 9,pos 220,10*n 1,10*pd 3,pos 283,pd 5.2,pos 299,2*pd 3
@@ -44,28 +44,28 @@
 00450 L450: form pos 58,pd 3
 00460   ar1=ar1+b(3)
 00470   if ca(b(5))=0 then goto L570
-00480   let p1=1+(b8-1)*6
-00490   let p2=150+b8
+00480   p1=1+(b8-1)*6
+00490   p2=150+b8
 00500   read #4,using L510,rec=ca(b(5)),reserve: ta1,ta2,fb1 norec L770 
 00510 L510: form pos p1,2*pd 3,pos p2,n 1
-00520   if ta2><0 then rewrite #2,using L130,rec=ta2: lta else let ta1=lta
+00520   if ta2><0 then rewrite #2,using L130,rec=ta2: lta else ta1=lta
 00530   if fb1<2 then let fb1=abs(b(7))
-00540   if ta1=0 then let ta1=lta
+00540   if ta1=0 then ta1=lta
 00550   rewrite #4,using L510,rec=ca(b(5)),release: ta1,lta,fb1
 00560   goto L690 ! 6/24/87
 00570 L570: lta4=lrec(4)+1
 00580   mat ta=(0)
 00590   mat fb=(0)
 00600   ca(b(5))=lta4
-00610   let ta(b8,1)=lta
-00620   let ta(b8,2)=lta
+00610   ta(b8,1)=lta
+00620   ta(b8,2)=lta
 00630   if b(7)=-2 then let fb(b8)=2
 00640   if fb(b8)=2 then goto L660
 00650   if b(7)=-1 then let fb(b8)=1
 00660 L660: write #4,using L670,rec=lta4,reserve: mat ta,mat fb duprec L570
 00670 L670: form pos 1,50*pd 3,25*n 1
 00680   rewrite #4,using L210,rec=1,release: lta4
-00690 L690: let igl$(1)=gl$
+00690 L690: igl$(1)=gl$
 00700   let ga(1)=b(3)
 00710 ! write #h_armotran,using F_armotran: k$,iv$,b(4),b(3),b(3),0,1,0,des$,pgl$,mat igl$,mat ga
 00720 ! F_armotran: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,11*c 12,10*pd 5.2
@@ -78,7 +78,7 @@
 00790   close #2: 
 00800   close #3: 
 00810   close #4: 
-00820 XIT: let fnxit
+00820 XIT: fnxit
 00830 ERTN: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L850
 00840   goto L890
 00850 L850: pr newpage

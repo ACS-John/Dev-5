@@ -13,17 +13,17 @@
 00120   sh$="2,10,C 60,H,N"
 00130   for j=1 to 10 : fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
 00140   fli1$(1)="5,2,C 78,UT,N" : fli1$(2)="8,2,C 78,UT,N"
-00150   if fnprocess=1 then let t=2 : goto L240
+00150   if fnprocess=1 then t=2 : goto L240
 00160 ! ______________________________________________________________________
 00170 MENU1: ! 
 00180   fnwin3(win=101,cap$,6,40,1,1,5)
 00190   sc2$(1)="1. Edit" : sc2$(2)="2. Print"
 00200   for j=1 to 2 : fl2$(j)=str$(j+3)&",02,C 08,N" : next j
 00210   rinput #win,select mat fl2$,attr "H": mat sc2$ !:
-        let t=curfld
+        t=curfld
 00220   close #win: 
 00230   if cmdkey=5 or cmdkey=99 then goto XIT
-00240 L240: let j=0
+00240 L240: j=0
 00250   on t goto EDIT,L300 none MENU1
 00260 ! ______________________________________________________________________
 00270 EDIT: ! 
@@ -61,12 +61,12 @@
 00510   if fnprocess=1 then goto XIT else goto MENU1
 00520 ! ______________________________________________________________________
 00530 ! <Updateable Region: ERTN>
-00540 ERTN: let fnerror(program$,err,line,act$,"xit")
+00540 ERTN: fnerror(program$,err,line,act$,"xit")
 00550   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00560   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00570   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00580 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00590 ! /region
 00600 ! ______________________________________________________________________
-00610 XIT: let fnxit
+00610 XIT: fnxit
 00620 ! ______________________________________________________________________

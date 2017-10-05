@@ -47,14 +47,14 @@
 00480   pr f "13,20,c 23,n": "RETURN TO THE SUB-MENU."
 00490 L490: input fields "13,50,C 5,IE,n": a$ conv L490
 00500   if uprc$(a$)="THINK" then goto L510 else goto L260
-00510 L510: let i2=1
+00510 L510: i2=1
 00520   close #1: ioerr L530
 00530 L530: open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&str$(cno),internal,outin,keyed ioerr L550
 00540   close #1,free: ioerr L550
 00550 L550: open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&",SIZE=0,RecL=43,NoShr",internal,outin,relative ioerr L2010
 00560   goto L1700
 00570 L570: form pos 1,c 4,c 30,pd 4.2,pd 5.2
-00580 L580: let new1=1
+00580 L580: new1=1
 00590 L590: pr newpage
 00600   pr f "2,15,c 40,n": "*** ADD SERVICE CODE RECORDS ***"
 00610   pr f "3,10,c 60,n": "ENTER SERVICE CODE NUMBER AS BLANK WHEN COMPLETED"
@@ -65,8 +65,8 @@
 00660   scode$=lpad$(rtrm$(scode$),4)
 00670   read #1,using L570,key=scode$: sc$,ds$,th,sf nokey L730 ioerr L2010
 00680   oldti=2
-00690   let ti=3
-00700   let holdsc$=sc$
+00690   ti=3
+00700   holdsc$=sc$
 00710 L710: if ti=3 or convc>0 then pr f mat sb$: sc$,ds$,th,sf
 00720   pr f "23,5,C 60,H,N": "F6=HELP"
 00730 L730: input fields mat sb$: sc$,ds$,th,sf conv L740
@@ -95,7 +95,7 @@
 00960   if ltrm$(rtrm$(scode$))="0" or rtrm$(scode$)="" then goto L260
 00970   scode$=lpad$(rtrm$(scode$),4)
 00980   read #1,using L570,key=scode$: sc$,ds$,th,sf nokey L950 ioerr L2010
-00990   let holdsc$=sc$
+00990   holdsc$=sc$
 01000 L1000: pr newpage
 01010   pr f "2,13,c 45,n": "*** REVIEW SERVICE CODE RECORDS ***"
 01020   pr f "3,10,c 60,n": "ENTER SERVICE CODE NUMBER AS BLANK TO DELETE"
@@ -110,16 +110,16 @@
 01110   sc$=holdsc$
 01120   goto L1000
 01130 L1130: delete #1,key=holdsc$: 
-01140   let new1=1
+01140   new1=1
 01150   goto L930
 01160 L1160: if holdsc$=sc$ then goto L1220
 01170   read #1,using L880,key=sc$: sc$ nokey L1190 ioerr L2010
 01180   goto L930
 01190 L1190: delete #1,key=holdsc$: 
-01200   let new1=1
+01200   new1=1
 01210   goto L910
 01220 L1220: rewrite #1,using L570,key=sc$: sc$,ds$,th,sf
-01230   if oldti=2 then let ti=2
+01230   if oldti=2 then ti=2
 01240   oldti=0
 01250   goto L390
 01260 L1260: pr newpage
@@ -127,21 +127,21 @@
 01280   pr f "8,10,c 50,n": "POSITION PAPER FOR SERVICE CODE PROOF LIST"
 01290   pr f "12,10,c 25,n": "ENTER DATE FOR PROOF LIST"
 01300 L1300: rinput fields "12,40,c 20,uE,n": dat$ conv L1300
-01310   let namtab=66-int(len(rtrm$(cnam$))/2)
-01320   let dattab=66-int(len(rtrm$(dat$))/2)
+01310   namtab=66-int(len(rtrm$(cnam$))/2)
+01320   dattab=66-int(len(rtrm$(dat$))/2)
 01330   pr newpage
 01340 L1340: pr f "10,10,c 50,n": "PRINT SERVICE CODE PROOF LIST IN PROCESS"
 01350   pr f "23,2,C 30,N": "Press F5 to stop"
 01360   on fkey 5 goto L1670
 01370   fnopenprn(cp,58,220,process)
-01380 L1380: let j=0
+01380 L1380: j=0
 01390   eofc=0
 01400 L1400: read #1,using L570: sc$,ds$,th,sf eof L1640 ioerr L2010
-01410   let j=j+1
-01420   let pl$(1,j)=sc$
-01430   let pl$(2,j)=ds$
-01440   let pl$(3,j)=str$(th)
-01450   let pl$(4,j)=str$(sf)
+01410   j=j+1
+01420   pl$(1,j)=sc$
+01430   pl$(2,j)=ds$
+01440   pl$(3,j)=str$(th)
+01450   pl$(4,j)=str$(sf)
 01460   if j=3 then goto L1480
 01470   goto L1400
 01480 L1480: if pcnt><0 then goto L1510
@@ -154,16 +154,16 @@
 01550   pr #255: 
 01560   mat pl$=(" ")
 01570   if eofc=1 then goto L1670
-01580   let pcnt=pcnt+1
+01580   pcnt=pcnt+1
 01590   if pcnt=11 then goto L1610
 01600   goto L1380
 01610 L1610: pr #255: newpage
-01620   let pcnt=0
+01620   pcnt=0
 01630   goto L1380
 01640 L1640: if j=0 then goto L1670
 01650   eofc=1
 01660   goto L1480
-01670 L1670: let fncloseprn
+01670 L1670: fncloseprn
 01680   on fkey 5 ignore 
 01690   goto L260
 01700 L1700: close #1: 
@@ -209,4 +209,4 @@
 02100   pr f "23,3,C 78,N": ""
 02110   pr f "24,3,C 78,N": ""
 02120   retry 
-02130 XIT: let fnxit
+02130 XIT: fnxit

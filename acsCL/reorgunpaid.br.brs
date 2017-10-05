@@ -27,10 +27,10 @@
 00280   fnIndex_it(env$('Q')&'\CLmstr\PayTrans.H'&env$('cno'),env$('Q')&'\CLmstr\UnPdIdx1.H'&env$('cno'),"1,20")
 00290   fnIndex_it(env$('Q')&'\CLmstr\unpdaloc.H'&env$('cno'),env$('Q')&'\CLmstr\Uaidx2.H'&env$('cno'),"1,20")
 00300   fnIndex_it(env$('Q')&'\CLmstr\unpdaloc.H'&env$('cno'),env$('Q')&'\CLmstr\Uaidx1.H'&env$('cno'),"9,12")
-00310 XIT: let fnxit
+00310 XIT: fnxit
 00320 ! ______________________________________________________________________
 00330 ! <Updateable Region: ERTN>
-00340 ERTN: let fnerror(program$,err,line,act$,"xit")
+00340 ERTN: fnerror(program$,err,line,act$,"xit")
 00350   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00360   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00370   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

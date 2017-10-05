@@ -13,16 +13,16 @@
 44000 SCR1: ! 
 44020   fntos(sn$='AP-Import')
 44040   lc=0
-44060   let mylen=40
-44080   let mypos=mylen+2
+44060   mylen=40
+44080   mypos=mylen+2
 44100   fnlbl(lc+=1,1,'Path to Accounts Payable Data Files:',mylen,1,0,0,0,'without trailing backslash')
 44120   fntxt(lc,mypos,40,58,0,'70',0,"Pick any file in the directory, it doesn't matter which one - Only the directory name matters")
-44140   let resp$(1)='C:\vol002\APmstr'
+44140   resp$(1)='C:\vol002\APmstr'
 44160   fnlbl(lc+=1,1,'Old Accounts Payable Company Number:',mylen,1)
 44180   fnlbl(2,90,'') ! work around to make the little button show up
 44200   fnlbl(3,80,'') ! work around to make the little button show up
 44220   fntxt(lc,mypos,2,0,1,'30')
-44240   let resp$(2)='1'
+44240   resp$(2)='1'
 44260   fncmdset(5)
 44280   fnacs(sn$,0,mat resp$,ckey)
 46000   if ckey=5 then goto XIT
@@ -99,8 +99,8 @@
 60560   XC: ! 
 60580   a(2)=-a(2)
 60600   XD: ! 
-60620   if dt(1)=0 then let dt(1)=dt(5)
-60640   let vn$=v$
+60620   if dt(1)=0 then dt(1)=dt(5)
+60640   vn$=v$
 60660   let upa=a(2) ! unpaid amount
 60680   let up$(1)=str$(dt(1)) ! invoice date
 60700   let up$(2)=str$(dt(2)) ! due date
@@ -114,7 +114,7 @@
 60860   EO_UNPDMSTR: ! 
 60880 return  ! /r
 70000 ! <Updateable Region: ERTN>
-70020 ERTN: let fnerror(program$,err,line,act$,"xit")
+70020 ERTN: fnerror(program$,err,line,act$,"xit")
 70040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 70060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 70080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

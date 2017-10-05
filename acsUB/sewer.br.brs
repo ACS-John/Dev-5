@@ -17,16 +17,16 @@
 00420   read #h_trans,using F_TRANS: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L220
 00440   if p$<>x$ then goto L220 ! history record must belong to this customer
 00460   if tcode<>1 then goto L160 ! charge transaction
-00480   let j=j+1
+00480   j=j+1
 00500   if j>8 then goto L220
-00520   let resp$(j)=str$(tdate)
+00520   resp$(j)=str$(tdate)
 00540   goto L160
 00560 L220: ! 
 00580   restore #h_customer: 
 00600 ! ______________________________________________________________________
 00620 SCR1: ! 
 00640   fntos(sn$:="ubsewer-1b")
-00660   let mylen=47 : let mypos=49
+00660   mylen=47 : mypos=49
 00680   fnlbl(1,1,"Billing Dates for Months to Average:",mylen,1)
 00700   for j=1 to 8
 00720     fntxt(j,mypos,10,0,0,"3")
@@ -35,7 +35,7 @@
 00780   fnlbl(10,1,"Sewer code to average:",mylen,1)
 00800   fntxt(10,mypos,2,2,0,"20")
 00820   fncreg_read(sn$&'.sewer code to average',resp$(9))
-00840 ! let fncmdset(2)
+00840 ! fncmdset(2)
 00842   fncmdkey("&Clear Sewer Code Averages",3,0)
 00843   fncmdkey("&Next",1,1)
 00844   fncmdkey("&Cancel",5,0,1)
@@ -46,14 +46,14 @@
 00920 L310: ! 
 00940     let x=pos(resp$(j),"/",1)
 00960     if x>0 then 
-00980       let resp$(j)(x:x)=""
+00980       resp$(j)(x:x)=""
 01000       goto L310
 01020     end if 
 01040   next j
 01060   let filter_sewer_code=val(resp$(9)) conv SCR1
 01080   if filter_sewer_code=0 and ~clear_averages then 
 01100     mat message$(1)
-01120     let message$(1)="You must enter at least one date!"
+01120     message$(1)="You must enter at least one date!"
 01140     fnmsgbox(mat message$,resp$,cap$,0)
 01160     goto SCR1
 01180   end if 
@@ -64,13 +64,13 @@
 01280   fncreg_write(sn$&'.sewer code to average',resp$(9))
 01300   if cd1(1)=0 and ~clear_averages then 
 01320     mat message$(1)
-01340     let message$(1)="You must enter at least one date!"
+01340     message$(1)="You must enter at least one date!"
 01360     fnmsgbox(mat message$,resp$,cap$,0)
 01380     goto SCR1
 01400   end if 
 01420 ! ______________________________________________________________________
 01440   fnopenprn
-01460   let message$="Calculating: please wait..."
+01460   message$="Calculating: please wait..."
 01480   fnwait(0,cap$,message$,1)
 01500   gosub HDR
 01520 L480: ! 
@@ -80,9 +80,9 @@
 01580 L500: form pos 1,c 10,pos 145,pd 2,pos 1822,n 9
 01582 ! r: calculate average
 01584   if clear_averages then 
-01586     let t3=0
+01586     t3=0
 01588   else 
-01600     let t1=t2=t3=x=0
+01600     t1=t2=t3=x=0
 01620     mat x=(0)
 01640     restore #h_trans,key>=x$&"         ": nokey L480
 01660 READ_TRANS: ! 
@@ -93,8 +93,8 @@
 01760 ! if trim$(x$)='306100.00' then pause
 01780     for j1=1 to 8
 01800       if cd1(j1)=tdate then 
-01820         let t1=t1+1
-01840         let t2=t2+wu
+01820         t1=t1+1
+01840         t2=t2+wu
 01860         let x=x+1
 01880         let x(x)=wu
 01900         goto READ_TRANS
@@ -103,9 +103,9 @@
 01960     goto READ_TRANS
 01980 ! ______________________________________________________________________
 02000 EO_TRANS: ! 
-02020     if t1>0 then let t3=int((t2+.5)/t1) else let t3=0
+02020     if t1>0 then t3=int((t2+.5)/t1) else t3=0
 02040     if env$('client')="Monticello" and t3=0 then goto L670 ! skip record if no dates found  (multiple cycles)
-02060     if t1=1 and env$('client')="Monticello" then let t3=8 ! if only one month use 8
+02060     if t1=1 and env$('client')="Monticello" then t3=8 ! if only one month use 8
 02062   end if 
 02070 ! /r
 02080   rewrite #h_customer,using "Form POS 1822,N 9": t3
@@ -117,14 +117,14 @@
 02200 DONE: ! 
 02220   close #h_customer: 
 02240   fncloseprn
-02260 XIT: let fnxit
+02260 XIT: fnxit
 02280 ! ______________________________________________________________________
 02300 PAGE: pr #255: newpage
 02320   gosub HDR
 02340   continue 
 02360 ! ______________________________________________________________________
 02380 HDR: ! 
-02400   let p1=p1+1
+02400   p1=p1+1
 02420   pr #255,using "Form POS 20,CC 40,POS 70,C 5,N 4": env$('cnam'),"Page ",p1
 02430   pr #255,using "Form POS 20,CC 40": "Calculate Sewer Average"
 02440   pr #255,using "Form POS 20,CC 40": "Sewer Averages for Sewer Code "&ltrm$(str$(filter_sewer_code))
@@ -134,7 +134,7 @@
 02500   return 
 02520 ! ______________________________________________________________________
 02540 ! <Updateable Region: ERTN>
-02560 ERTN: let fnerror(program$,err,line,act$,"NO")
+02560 ERTN: fnerror(program$,err,line,act$,"NO")
 02580   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02620   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

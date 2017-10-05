@@ -19,10 +19,10 @@
 36040     linput #h_brsfiles: filename$ eof DONE
 36050     ! pr filename$ : pause
 36060     if env$('compile_without_asking')='Yes' then 
-36080       let docompile=2
+36080       docompile=2
 36100       setenv('compile_without_asking','')
 36120     else 
-36140       let docompile=msgbox("You have uncompiled source files!  Recompile?", "ACS 5 - "&os_filename$(program$), "Yn", "Qst")
+36140       docompile=msgbox("You have uncompiled source files!  Recompile?", "ACS 5 - "&os_filename$(program$), "Yn", "Qst")
 36160     end if 
 36180     if docompile=2 then 
 36200       setenv("AfterRecompile", "S:\Core\Start")
@@ -34,7 +34,7 @@
 42060 fnend 
 52000 IGNORE: continue 
 62000 CC_ERR: ! r:
-62002   let mb_response=msgbox(program$&' encountered an error '&str$(err)&' on line '&str$(line)&'.'&chr$(13)&'Close ACS?'&chr$(13)&'(Choose Cancel for developer pause.)','ACS 5 - S:\Core\CheckCompiled - Error','OKc','Excl')
+62002   mb_response=msgbox(program$&' encountered an error '&str$(err)&' on line '&str$(line)&'.'&chr$(13)&'Close ACS?'&chr$(13)&'(Choose Cancel for developer pause.)','ACS 5 - S:\Core\CheckCompiled - Error','OKc','Excl')
 62004   if mb_response=1 then execute 'system'
 62006   pause 
 62008   retry  ! /r

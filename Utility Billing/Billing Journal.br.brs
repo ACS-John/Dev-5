@@ -18,17 +18,17 @@
 00170   fnd1(billing_date)
 00200   fncreg_read('Route Low',bkno1$) : route_number=val(bkno1$)
 00230   fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$)
-00260   let hd1$="Account                             "
-00270   let hd2$="{\ul Number   }  {\ul Name                   }  "
+00260   hd1$="Account                             "
+00270   hd2$="{\ul Number   }  {\ul Name                   }  "
 00280   for j=1 to 10
 00290     let x2=pos(trim$(servicename$(j))," ",1)
 00300     if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j)))
 00310     if trim$(servicename$(j))<>"" then 
 00320       let x1=pos (servicename$(j)," ",1)
 00330       let x1=min(x1,7)
-00340       let hd1$=hd1$&"---------"
-00350       let hd2$=hd2$&"{\ul "&lpad$(trim$(servicename$(j)(1:x1)),8)&"} "
-00360       sz1=sz1+1 : let px$(sz1)=servicename$(j)
+00340       hd1$=hd1$&"---------"
+00350       hd2$=hd2$&"{\ul "&lpad$(trim$(servicename$(j)(1:x1)),8)&"} "
+00360       sz1=sz1+1 : px$(sz1)=servicename$(j)
 00370     end if 
 00380   next j
 00390   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -40,22 +40,22 @@
 00410 ! /r
 00420 MAIN: ! r: Screen 1
 00430   fntos(sn$="UBBilJrn")
-00440   let respc=0
+00440   respc=0
 00480   fnlbl(2,1,"Billing Date:",25,1)
 00490   fntxt(2,27,8,0,1,"1")
-00500   let resp$(respc+=1)=str$(billing_date)
+00500   resp$(respc+=1)=str$(billing_date)
 00510   fnfra(3,1,4,65,"Sort Order","The billing journal can be printed if route number sequence, account sequence or Alpha Sort Sequence.",0)
 00520   fnopt(1,2,"Route/Sequence Number (includes Subtotals by Route)",0,1)
-00530   if seq=1 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+00530   if seq=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00540   fnopt(2,2,"Account",0,1)
-00550   if seq=2 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+00550   if seq=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00560   fnopt(3,2,"Alpha Sort",0,1)
-00570   if seq=3 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+00570   if seq=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00572   fnopt(4,2,"Customer Name",0,1)
-00574   if seq=4 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+00574   if seq=4 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00580   fnlbl(9,1,"Route Number:",25,1)
 00590   fncmbrt2(9,27)
-00600   let resp$(resp_route:=respc+=1)="[All]"
+00600   resp$(resp_route:=respc+=1)="[All]"
 00610   fnchk(10,27,"Print Usages:",1)
 00612   fncreg_read('ubBilJrn.Print Usages',resp$(resp_print_usages:=respc+=1))
 00620   fncmdset(3)
@@ -66,9 +66,9 @@
 00690   if resp$(3)="True" then seq=2 ! account sequence
 00700   if resp$(4)="True" then seq=3 ! Alpha Sort Sequence
 00701   if resp$(5)="True" then seq=4 ! Customer Name Sequence
-00702   if uprc$(resp$(resp_route)) = uprc$("[All]") then let resp$(resp_route) = "0"
-00710   let prtbkno=val(resp$(resp_route))
-00720   let prtusage$=resp$(resp_print_usages)(1:1)
+00702   if uprc$(resp$(resp_route)) = uprc$("[All]") then resp$(resp_route) = "0"
+00710   prtbkno=val(resp$(resp_route))
+00720   prtusage$=resp$(resp_print_usages)(1:1)
 00722   fncreg_write('ubBilJrn.Sort_Option',str$(seq))
 00726   fncreg_write('ubBilJrn.Print Usages',resp$(resp_print_usages))
 00732 ! /r
@@ -84,26 +84,26 @@
 00760   end if
 00770   if trim$(servicename$(1))="Water" then services=services+1 : let water=1
 00780   if trim$(servicename$(3))="Electric" or trim$(service$(3))="LM" then services=services+1
-00782   if servicename$(3)(1:5)="Re-Se" then let reduc=1 : services+=1
+00782   if servicename$(3)(1:5)="Re-Se" then reduc=1 : services+=1
 00790   if trim$(servicename$(4))="Gas" then services=services+1 : let gas=1
 00800   mat usages(services)
-00810   let hd1$=hd1$&"---------    Prior  Current"
-00820   let hd2$=hd2$&"{\ul    Total} {\ul  Balance} {\ul  Balance}  "
+00810   hd1$=hd1$&"---------    Prior  Current"
+00820   hd2$=hd2$&"{\ul    Total} {\ul  Balance} {\ul  Balance}  "
 00830   let x1=int((len(hd1$)-43)/2)+27
-00840   let hd1$(x1:x1+17)=" Current Billing "
-00850   let px$(sz1+=1)="   Total"
-00860   let px$(sz1+=1)="Previous Balance"
-00870   let px$(sz1+=1)="Current Balance"
+00840   hd1$(x1:x1+17)=" Current Billing "
+00850   px$(sz1+=1)="   Total"
+00860   px$(sz1+=1)="Previous Balance"
+00870   px$(sz1+=1)="Current Balance"
 00880   mat px$(sz1) : mat tx(sz1) : mat gx(sz1) : mat px(sz1)
-00890   if prtusage$="T" and trim$(servicename$(1))="Water" then let hd2$=hd2$&" {\ul  W-Usage}"
-00900   if prtusage$="T" and trim$(servicename$(3))="Electric" then let hd2$=hd2$&" {\ul  E-Usage}"
-00910   if prtusage$="T" and trim$(service$(3))="LM" then let hd2$=hd2$&" {\ul LM-Usage}"
-00920   if prtusage$="T" and trim$(servicename$(4))="Gas" then let hd2$=hd2$&"{ \ul  G-Usage}"
-00930   if prtusage$="T" then let hd2$=hd2$&"{ \ul Meter Address}"
+00890   if prtusage$="T" and trim$(servicename$(1))="Water" then hd2$=hd2$&" {\ul  W-Usage}"
+00900   if prtusage$="T" and trim$(servicename$(3))="Electric" then hd2$=hd2$&" {\ul  E-Usage}"
+00910   if prtusage$="T" and trim$(service$(3))="LM" then hd2$=hd2$&" {\ul LM-Usage}"
+00920   if prtusage$="T" and trim$(servicename$(4))="Gas" then hd2$=hd2$&"{ \ul  G-Usage}"
+00930   if prtusage$="T" then hd2$=hd2$&"{ \ul Meter Address}"
 00950   fnopenprn
 00952   gosub HDR
 00954   if prtbkno<>0 and seq=1 then 
-00956     let prtbkno$=rpad$(lpad$(str$(prtbkno),2),kln(1))
+00956     prtbkno$=rpad$(lpad$(str$(prtbkno),2),kln(1))
 00958     startcd=1
 00960     restore #1,key>=prtbkno$: nokey MAIN
 00962   end if
@@ -124,10 +124,10 @@
 01030     gosub TOTAL_BOOK
 01032     pr #255: newpage : gosub HDR
 01033     L790: !
-01034     let route_number=route
+01034     route_number=route
 01036   end if
 01037   gosub L910
-01038   let tbp=tbp+1
+01038   tbp=tbp+1
 01040   goto READ_CUSTOMER
 01044 HDR: ! r:
 01046   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
@@ -139,11 +139,11 @@
 01058   pr #255: hd2$
 01060   return  ! /r
 01064 L910: ! r:
-01066   e=bal-g(11) : let j1=0
+01066   e=bal-g(11) : j1=0
 01068   for j=1 to 10
-01070     if trim$(servicename$(j))<>"" then let px(j1+=1)=g(j)
+01070     if trim$(servicename$(j))<>"" then px(j1+=1)=g(j)
 01072   next j
-01074   let px(j1+1)=g(11) : let px(j1+2)=e : let px(j1+3)=bal
+01074   px(j1+1)=g(11) : px(j1+2)=e : px(j1+3)=bal
 01076   mat tx=tx+px : mat gx=gx+px
 01078   let x=0
 01080   if water=1 then let x=x+1 : let usages(x)=d(3)
@@ -192,7 +192,7 @@
 01275   goto DONE ! /r
 01285 DONE: close #1: ioerr ignore
 01310   fncloseprn
-01320 XIT: let fnxit
+01320 XIT: fnxit
 01330 IGNORE: continue 
 01420 TOT1: ! r: ACCUMULATE TOTALS BY CODE
 01430   for j=1 to 10
@@ -250,9 +250,9 @@
 01700     if x2>200 then let x2=200
 01702     if env$('client')="Billings" and j>5 and j<9 then goto L1720
 01704     if x2<>0 then 
-01706       let t1(j,x2,1)=t1(j,x2,1)+1
-01708       let t1(j,x2,2)=t1(j,x2,2)+g(j)
-01710       let t1(j,x2,3)=t1(j,x2,3)+u2 : let u2=0
+01706       t1(j,x2,1)=t1(j,x2,1)+1
+01708       t1(j,x2,2)=t1(j,x2,2)+g(j)
+01710       t1(j,x2,3)=t1(j,x2,3)+u2 : let u2=0
 01712     end if 
 01714 L1720: ! 
 01716   next j
@@ -266,10 +266,10 @@
 01760   for j1=1 to 9
 01765     for j2=1 to 200
 01770       if t1(j1,j2,1)=0 and t1(j1,j2,3)=0 then goto L1960
-01775       let de$=""
+01775       de$=""
 01780       if j2>99 then goto L1930 ! no codes >99
-01785       let k$=st$(j1)(1:2)&cnvrt$("N 2",j2)
-01790       let de$=""
+01785       k$=st$(j1)(1:2)&cnvrt$("N 2",j2)
+01790       de$=""
 01795       read #8,using "Form POS 5,C 40",key=k$,release: de$ nokey L1890,ioerr L1890
 01800       if env$('client')="Carrizo" and j1=3 then goto L1930
 01805       if j1>4 then goto L1930
@@ -298,7 +298,7 @@
 02040   return  ! /r
 02060 def fn_pull_from_history
 02070   mat g=(0) : mat d=(0) : bal=0
-02072   let pfh_return=0
+02072   pfh_return=0
 02080   restore #h_trans,key>=z$&"         ": nokey PFH_XIT
 02085   do
 02086     read #h_trans,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PFH_XIT
@@ -309,16 +309,16 @@
 02132     end if
 02140   loop
 02150 PFH_MATCH_FOUND: !
-02152   let pfh_return=1
-02160   let d(1)=wr : let d(3)=wu : let d(5)=er
-02162   let d(7)=eu : let d(9)=gr : let d(11)=gu 
+02152   pfh_return=1
+02160   d(1)=wr : d(3)=wu : d(5)=er
+02162   d(7)=eu : d(9)=gr : d(11)=gu 
 02164   bal=tbal
 02170   for j=1 to 11 : let g(j)=tg(j) : next j
 02180 PFH_XIT: !
 02182   fn_pull_from_history=pfh_return
 02190 fnend
 02200 ! <Updateable Region: ERTN>
-02210 ERTN: let fnerror(program$,err,line,act$,"xit")
+02210 ERTN: fnerror(program$,err,line,act$,"xit")
 02220   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02230   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02240   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

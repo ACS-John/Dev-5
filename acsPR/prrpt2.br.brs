@@ -14,9 +14,9 @@
 00140     let z$=str$(z+1)
 00150     c$=str$(z+1)
 00160     let fb$(z)=z$&",40,N 13.3,UT,N"
-00170     let io2$((z-1)*3+1)=c$&",15,Nz 3,UT,N"
-00180     let io2$((z-1)*3+2)=c$&",38,Nz 3,UT,N"
-00190     let io2$((z-1)*3+3)=c$&",62,N 1,UT,N"
+00170     io2$((z-1)*3+1)=c$&",15,Nz 3,UT,N"
+00180     io2$((z-1)*3+2)=c$&",38,Nz 3,UT,N"
+00190     io2$((z-1)*3+3)=c$&",62,N 1,UT,N"
 00200   next z
 00210   open #1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\prrptidx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00220 ! ______________________________________________________________________
@@ -33,32 +33,32 @@
 00330   pr #101,fields "16,2,Cr 48,N": "Item Number for pr Selection (blank for all):"
 00340   pr #101,fields "17,2,Cr 50,N": "Summarize Departmental Records (Y/N): N"
 00350   pr #101,fields "18,2,Cr 50,N": "Use Condensed pr (Y/N): N"
-00360   let io1$(1)="02,17,Nz 2,UT,N"
-00370   let io1$(2)="03,17,C 40,UT,N" ! used to be 78... but john decided no one ever need one that long!
-00380   let io1$(3)="07,2,C 66,UT,N"
-00390   let io1$(4)="09,2,C 66,UT,N"
-00400   let io1$(5)="11,2,C 66,UT,N"
-00410   let io1$(6)="13,2,C 66,UT,N"
-00420   let io1$(7)="16,51,N 3,UT,N"
-00430   let io1$(8)="17,51,Cu 1,UT,N"
-00440   let io1$(9)="18,51,Cu 1,UT,N"
+00360   io1$(1)="02,17,Nz 2,UT,N"
+00370   io1$(2)="03,17,C 40,UT,N" ! used to be 78... but john decided no one ever need one that long!
+00380   io1$(3)="07,2,C 66,UT,N"
+00390   io1$(4)="09,2,C 66,UT,N"
+00400   io1$(5)="11,2,C 66,UT,N"
+00410   io1$(6)="13,2,C 66,UT,N"
+00420   io1$(7)="16,51,N 3,UT,N"
+00430   io1$(8)="17,51,Cu 1,UT,N"
+00440   io1$(9)="18,51,Cu 1,UT,N"
 00450   pr f "23,30,C 09,B,1": "Next (F1)"
 00460   pr f "23,41,C 09,B,5": "Exit (F5)"
 00470 L470: input #101,fields mat io1$: rn,rt$,mat tempch$,ips,sd$,cp$ conv L470
-00480   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+00480   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 00490   if cmdkey>0 then goto L560 else ce=curfld
 00500 L500: ce=ce+1: if ce>udim(io1$) then ce=1
-00510 L510: let io1$(ce)=rtrm$(io1$(ce)) : ce1=pos(io1$(ce),"U",1) : if ce1=0 then goto L500
-00520   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L470
-00530 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+00510 L510: io1$(ce)=rtrm$(io1$(ce)) : ce1=pos(io1$(ce),"U",1) : if ce1=0 then goto L500
+00520   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L470
+00530 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 00540   ce=cnt+1
 00550 ERR1: pr f "24,78,C 1": bell : goto L510
 00560 L560: if cmdkey=5 then goto DONE
 00570   read #1,using L580,key=lpad$(str$(rn),2),release: rn nokey L640
 00580 L580: form pos 1,n 2
 00590 ! pr f "2,40,C 35,N": "This Report Number Already Exists"
-00600   let msgline$(1)="Report Number "&str$(rn)&" already exists"
-00610   let msgline$(2)="Please use a different Report Number."
+00600   msgline$(1)="Report Number "&str$(rn)&" already exists"
+00610   msgline$(2)="Please use a different Report Number."
 00620   fnoldmsgbox(mat resonse$,cap$,mat msgline$,1)
 00630   ce=1 : goto ERR1
 00640 L640: if ips<0 or ips>126 then goto L470
@@ -80,12 +80,12 @@
 00800     next j
 00810 L810: input fields mat fb$: mat rptemp conv L810
 00820     on w goto L830,L850,L850,L850,L850
-00830 L830: let k=0
+00830 L830: k=0
 00840     goto L860
-00850 L850: let k=k+20
+00850 L850: k=k+20
 00860 L860: for q=1 to 20
 00870       if rptemp(q)=0 then goto L930
-00880       let psc(q+k)=rptemp(q)
+00880       psc(q+k)=rptemp(q)
 00890     next q
 00900     mat rptemp=(0)
 00910     pr newpage
@@ -102,12 +102,12 @@
 01020   pr f "24,30,C 09,B,1": "Save (F1)"
 01030   pr f "24,40,C 11,B,5": "Cancel (F5)"
 01040 L1040: input #102,fields mat io2$: mat temp conv CONV2
-01050   if ce>0 then let io2$(ce)(ce1:ce2)="U": ce=0
+01050   if ce>0 then io2$(ce)(ce1:ce2)="U": ce=0
 01060   if cmdkey>0 then goto L1130 else ce=curfld
 01070 L1070: ce=ce+1: if ce>udim(io2$) then ce=1
-01080 L1080: let io2$(ce)=rtrm$(io2$(ce)) : ce1=pos(io2$(ce),"U",1) : if ce1=0 then goto L1070
-01090   ce2=ce1+1 : let io2$(ce)(ce1:ce1)="UC" : goto L1040
-01100 CONV2: if ce>0 then let io2$(ce)(ce1:ce2)="U"
+01080 L1080: io2$(ce)=rtrm$(io2$(ce)) : ce1=pos(io2$(ce),"U",1) : if ce1=0 then goto L1070
+01090   ce2=ce1+1 : io2$(ce)(ce1:ce1)="UC" : goto L1040
+01100 CONV2: if ce>0 then io2$(ce)(ce1:ce2)="U"
 01110   ce=cnt+1
 01120 ERR2: pr f "24,78,C 1": bell : goto L1080
 01130 L1130: ! 
@@ -116,9 +116,9 @@
 01160     if temp(j,1)>126 then ce=j*3+1 : goto CONV2 ! Goto 1040 ! j*3+1
 01170     if temp(j,2)>132 then ce=j*3+2 : goto CONV2 ! Goto 1040 ! j*3+2
 01180     if temp(j,3)<0 or temp(j,3)>1 then ce=j*3+3 : goto CONV2 ! Goto 1040
-01190     let inp(j)=temp(j,1)
-01200     let pp(j)=temp(j,2)
-01210     let ti(j)=temp(j,3)
+01190     inp(j)=temp(j,1)
+01200     pp(j)=temp(j,2)
+01210     ti(j)=temp(j,3)
 01220   next j
 01230   write #1,using L1240: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti
 01240 L1240: form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1
@@ -134,10 +134,10 @@
 01340   close #99: 
 01350   chain "proc=PROC."&wsid$&""
 01360 ! ______________________________________________________________________
-01370 XIT: let fnxit
+01370 XIT: fnxit
 01380 ! ______________________________________________________________________
 01390 ! <Updateable Region: ERTN>
-01400 ERTN: let fnerror(program$,err,line,act$,"xit")
+01400 ERTN: fnerror(program$,err,line,act$,"xit")
 01410   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01420   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01430   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

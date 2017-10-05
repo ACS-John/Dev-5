@@ -28,20 +28,20 @@
 12700     pr #255: "\ql             Account Number:  {\b "&trim$(actnum$)&"}"
 12800     pr #255: "\ql               Invoice Date:  {\b "&cnvrt$("pic(##/##/##)",inv_date)&"}"
 12900     pr #255: ""
-13000     let total_amt=0
+13000     total_amt=0
 13100     pr #255: ""
 13200     pr #255,using "Form pos 1,C 73,C 12": "\qc {\b Description","Amount}"
 13300     pr #255: "*INSERT FILE:S:\acsTM\black line - six inch.rtf.txt"
 13400     for j1=1 to udim(mat desc$)
 13500       pr #255,using "Form POS 1,C 55,X 3,PIC(---,---,---.--)": desc$(j1),amt(j1)
-13600       let total_amt=total_amt+amt(j1)
+13600       total_amt=total_amt+amt(j1)
 13700     next j1
 13800     if pbal=0 then goto P_TOTAL
 13900     pr #255,using "Form POS 1,C 55,X 3,PIC(---,---,---.--)": "Previous Balance",pbal
-14000     let total_amt=total_amt+pbal
+14000     total_amt=total_amt+pbal
 14100 P_TOTAL: pr #255,using "Form POS 59,C 28": "{\strike             }"
 14200     pr #255,using "Form POS 51,Cr 13,PIC($-,---,---.##)": "{\b Total:}",total_amt
 14300     pr #255,using "Form POS 59,C 28": "{\ul \strike "&rpt$(" ",12)&"}"
 14400     pr #255: "*INSERT FILE:S:\acsTM\black line - six inch.rtf.txt"
-14500     let total_amt=0
+14500     total_amt=0
 14600   fnend 

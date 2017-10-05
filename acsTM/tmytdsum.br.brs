@@ -15,15 +15,15 @@
 00160   if cmdkey=5 then goto XIT
 00170   fndat(dat$,put=2)
 00180   pr newpage
-00190   let dattab=66-int(len(rtrm$(dat$))/2)
+00190   dattab=66-int(len(rtrm$(dat$))/2)
 00200   pr f "10,25,c 40,n": "YTD BILLING SUMMARY IN PROCESS"
 00210   pr f "23,2,c 30,n": "Press F5 to stop"
 00220   fnopenprn
 00230   gosub L2080 ! sort
-00240   let dattab=66-int(len(rtrm$(dat$))/2)
-00250   let dattab2=43-int(len(rtrm$(dat$))/2)
-00260   let namtab=66-int(len(rtrm$(cnam$))/2)
-00270   let namtab2=43-int(len(rtrm$(cnam$))/2)
+00240   dattab=66-int(len(rtrm$(dat$))/2)
+00250   dattab2=43-int(len(rtrm$(dat$))/2)
+00260   namtab=66-int(len(rtrm$(cnam$))/2)
+00270   namtab2=43-int(len(rtrm$(cnam$))/2)
 00280   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&str$(cno)&",Shr",internal,input,relative ioerr L1950
 00290   read #1,using L300,rec=1: mat cat$ ioerr L1950
 00300 L300: form pos 1,30*c 30
@@ -51,12 +51,12 @@
 00520 L520: form pos 1,c 5,c 9,c 12,c 4,n 6,2*n 2,pd 2,pd 4.2,2*pd 5.2
 00530   if fst=1 then goto L560
 00540   let fst=1
-00550   let hcn$=cn$
+00550   hcn$=cn$
 00560 L560: if hcn$=cn$ then goto L590
 00570   gosub L1900
-00580   let hcn$=cn$
-00590 L590: let tbil=tbil+y(7)
-00600   let tgy=tgy+(y(7)-y(6))
+00580   hcn$=cn$
+00590 L590: tbil=tbil+y(7)
+00600   tgy=tgy+(y(7)-y(6))
 00610   gosub L350
 00620   gosub L440
 00630   gosub L920
@@ -77,8 +77,8 @@
 00780 L780: close #2: ioerr L790
 00790 L790: close #3: ioerr L800
 00800 L800: close #4: ioerr L810
-00810 L810: let fncloseprn
-00820 XIT: let fnxit
+00810 L810: fncloseprn
+00820 XIT: fnxit
 00830 L830: pr #255,using L840: date$,cnam$,time$,"YTD BILLING SUMMARY"
 00840 L840: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 57,c 23,skip 1
 00850   pr #255,using L860: dat$
@@ -98,8 +98,8 @@
 00990 L990: if y(3)= 0 then let y(3)=1
 01000   pr #255,using L940: cliname$(1:26),y(3),"-",y(2),y(5),y(6),y(7),y(7),0," ",y(1),cat$(y(3))(1:22),enam$(1:22) pageoflow L960
 01010 L1010: l1=l1+y(5)
-01020   let m1=m1+y(6)
-01030   let n1=n1+y(7)
+01020   m1=m1+y(6)
+01030   n1=n1+y(7)
 01040   return 
 01050 L1050: for y3=1 to 50
 01060     if rtrm$(c$(y3))="" then goto L1190
@@ -146,7 +146,7 @@
 01470   goto L1520
 01480 L1480: c$(y2)=enam$
 01490 L1490: let f(y2)=f(y2)+y(7)
-01500   let d(y2)=d(y2)+y(5)
+01500   d(y2)=d(y2)+y(5)
 01510   e(y2)=e(y2)+y(6)
 01520 L1520: return 
 01530 L1530: if rtrm$(cat$(y(3)))><"" then goto L1550
@@ -158,8 +158,8 @@
 01590   goto L1640
 01600 L1600: let x$(x7)=cat$(y(3))
 01610 L1610: let g(x7)=g(x7)+y(7)
-01620   let h(x7)=h(x7)+y(5)
-01630   let i(x7)=i(x7)+y(6)
+01620   h(x7)=h(x7)+y(5)
+01630   i(x7)=i(x7)+y(6)
 01640 L1640: return 
 01650 L1650: pr #255: newpage
 01660   pr #255,using L1330: cnam$,"BILLING ANALYSIS BY CATEGORY"
@@ -188,8 +188,8 @@
 01890 L1890: return 
 01900 L1900: pr #255,using L1910: "---------","---------",tbil,tgy
 01910 L1910: form pos 52,c 9,pos 62,c 9,skip 1,pos 51,2*n 10.2,skip 2
-01920   let tbil=0
-01930   let tgy=0
+01920   tbil=0
+01930   tgy=0
 01940   return 
 01950 L1950: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L1970
 01960   goto L2010

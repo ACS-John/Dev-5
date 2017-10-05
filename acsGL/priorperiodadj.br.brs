@@ -11,7 +11,7 @@
 00110   fnconsole(off=0)
 00120   fncno(cno,cnam$) !:
         fndat(dat$)
-00130   let right=1 : center=2 : limit_to_list=1
+00130   right=1 : center=2 : limit_to_list=1
 00140   ac1=1
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using "Form pos 384,N 2",rec=1: nap !:
         close #20: 
@@ -19,13 +19,13 @@
 00170   open #2: "Name="&env$('Q')&"\GLmstr\ACTRANS.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\ACTRIDX.h"&str$(cno)&",Shr",internal,outin,keyed 
 00175   fnopenprn
 00180 MENU1: ! 
-00185   let resp$(2)=""
+00185   resp$(2)=""
 00190   fntos(sn$='Prior_Period_Adj') !:
         lc=0 !:
-        let mylen=40 : let mypos=mylen+2
+        mylen=40 : mypos=mylen+2
 00200   fnlbl(lc+=1,1,"General Ledger Number:",mylen,right)
 00210   fnqgl(lc,mypos,0,2) !:
-        let resp$(1)=""
+        resp$(1)=""
 00220   fnlbl(lc+=1,1,"Adjustment Amount:",mylen,right)
 00230   fntxt(lc,mypos,12,0,0,'pointtwo')
 00240   fnlbl(lc+=1,1,"Date:",mylen,right)
@@ -43,9 +43,9 @@
 00360   fncmdset(2)
 00370   fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto L690
-00390   let k$=fnagl$(resp$(1)) !:
+00390   k$=fnagl$(resp$(1)) !:
         am=val(resp$(2)) !:
-        let d1=val(resp$(3)) !:
+        d1=val(resp$(3)) !:
         let fm(1)=val(resp$(4)(1:2)) !:
         let fm(2)=val(resp$(5)(1:2)) !:
         let fm(3)=val(resp$(6)(1:2)) !:
@@ -102,12 +102,12 @@
 00860   continue 
 00870 ! ______________________________________________________________________
 00880 ! <updateable region: ertn>
-00890 ERTN: let fnerror(program$,err,line,act$,"xit")
+00890 ERTN: fnerror(program$,err,line,act$,"xit")
 00900   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00910   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00920   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00930 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00940 ! /region
 00950 ! ______________________________________________________________________
-00960 XIT: let fncloseprn: let fnxit
+00960 XIT: fncloseprn: fnxit
 00970 ! ______________________________________________________________________

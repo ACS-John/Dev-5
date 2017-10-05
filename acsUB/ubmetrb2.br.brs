@@ -19,19 +19,19 @@
 00180 ! ______________________________________________________________________
 00190 ! this section+the comboA on the first screen is just what you need !:
         ! for a fnCurrently availableServiceTypeComboBox
-00200   let ms$(1)="DEC"
-00210   let ms$(2)="NOV"
-00220   let ms$(3)="OCT"
-00230   let ms$(4)="SEP"
-00240   let ms$(5)="AUG"
-00250   let ms$(6)="JUL"
-00260   let ms$(7)="JUN"
-00270   let ms$(8)="MAY"
-00280   let ms$(9)="APR"
-00290   let ms$(10)="MAR"
-00300   let ms$(11)="FEB"
-00310   let ms$(12)="JAN"
-00320   let ms$(13)="DEC"
+00200   ms$(1)="DEC"
+00210   ms$(2)="NOV"
+00220   ms$(3)="OCT"
+00230   ms$(4)="SEP"
+00240   ms$(5)="AUG"
+00250   ms$(6)="JUL"
+00260   ms$(7)="JUN"
+00270   ms$(8)="MAY"
+00280   ms$(9)="APR"
+00290   ms$(10)="MAR"
+00300   ms$(11)="FEB"
+00310   ms$(12)="JAN"
+00320   ms$(13)="DEC"
 00330   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using "Form POS 1,10*C 20,10*C 2",rec=1: mat snm$,mat srv$ !:
         close #20: 
@@ -53,36 +53,36 @@
 00450 ! ______________________________________________________________________
 00460 MENU1: ! 
 00470   fntos(sn$="ubMetrRt") !:
-        let mylen=35 : let mypos=mylen+3 : let respc=lc=0
+        mylen=35 : mypos=mylen+3 : respc=lc=0
 00480   fnlbl(lc+=1,1,"Route Number:",mylen,1)
 00490   fncmbrt2(lc,mypos) !:
-        let resp$(1)="1"
+        resp$(1)="1"
 00500   fnlbl(lc+=1,1,"Service Type - 1st Service:",mylen,1)
 00510   fncomboa("ubrate3",lc,mypos,mat option$) !:
-        let resp$(2)=option$(1)
+        resp$(2)=option$(1)
 00520   fnlbl(lc+=1,1,"Service Type - 2nd Service:",mylen,1)
 00530   fncomboa("ubrate3",lc,mypos,mat option$) !:
-        let resp$(3)=option$(1)
+        resp$(3)=option$(1)
 00540   fnfra(5,1,4,45,"Single Wide or Double Wide","Allow one or two customers per page.",0)
 00550   fnopt(1,2,"Singe Wide",0,1) !:
-        let resp$(4)="True"
+        resp$(4)="True"
 00560   fnopt(2,2,"Double Wide - Different customers",0,1) !:
-        let resp$(5)="False"
+        resp$(5)="False"
 00570   fnopt(3,2,"Double Wide - Different services",0,1) !:
-        let resp$(6)="False"
-00580   if env$('client')="Franklinton" or env$('client')="Divernon" then let resp$(4)="False": let resp$(6)="True"
+        resp$(6)="False"
+00580   if env$('client')="Franklinton" or env$('client')="Divernon" then resp$(4)="False": resp$(6)="True"
 00590   fnchk(11,28,"Select Accounts to Print:",1) !:
-        let resp$(7)="False"
+        resp$(7)="False"
 00600   fnfra(13,1,2,45,"Option for printing","The system can pr the actual form or just fill in the blanks on a pre-printed form.",0)
 00610   fnopt(1,2,"Print complete form",0,2) !:
-        let resp$(8)="True"
+        resp$(8)="True"
 00620   fnopt(2,2,"Fill in the blanks",0,2)
-00625   if env$('client')="Carrizo" then let resp$(9)="True" else let resp$(9)="False"
+00625   if env$('client')="Carrizo" then resp$(9)="True" else resp$(9)="False"
 00630   fncmdset(3) !:
         fnacs(sn$,0,mat resp$,ck)
 00640   if ck=5 then goto XIT
-00650   if uprc$(resp$(1))=uprc$("[All]") then let route=0 else !:
-          let route=val(resp$(1))
+00650   if uprc$(resp$(1))=uprc$("[All]") then route=0 else !:
+          route=val(resp$(1))
 00660   svt$=resp$(2)
 00670   svt2$=resp$(3)
 00680   if resp$(4)="True" then let width=1
@@ -105,24 +105,24 @@
 00850   let x=0
 00860 ! print
 00870 L870: read #1,using L1060: z$,mat e$,f1$,d1,d3,f3$,c4,f2$,d5,d7,d9,d11,book1,mat a,d13,extra16,b2,b5 eof DONE
-00880   let z2$=f12$="" : let d12=d32=d52=d72=d92=d112=c42=0 : mat e2$=("")
+00880   let z2$=f12$="" : d12=d32=d52=d72=d92=d112=c42=0 : mat e2$=("")
 00890   if route>0 and book1<>route then goto L870
 00900   if width=1 or width=3 then goto L920
 00910   read #1,using L1060: z2$,mat e2$,f12$,d12,d32,f32$,c42,f22$,d52,d72,d92,d112,book2,mat a2 eof L1060
-00920 L920: if svt$=srv$(1) and width=1 then let previous=d1: columnonename$=srv$(1): let firstmeter$=f1$: secondmeter$="": let firstcode$=str$(a(1)): secondcode$="" ! water only service
-00930   if svt$=srv$(1) and width=2 then let previous=d1: let previous2=d12: let firstmeter$=f1$: secondmeter$=f12$: let firstcode$=str$(a(1)): secondcode$=str$(a2(1)) ! two different water customers
-00940   if svt$=srv$(1) and svt2$=srv$(3) and width=3 then let previous=d1: let previous2=d5 : let firstmeter$=f1$: secondmeter$=f2$: let firstcode$=str$(a(1)): secondcode$=str$(a(3)) ! water and electric
-00950   if svt$=srv$(1) and svt2$=srv$(4) and width=3 then let previous=d1: let previous2=d9 : let firstmeter$=f1$: secondmeter$=f3$: let firstcode$=str$(a(1)): secondcode$=str$(a(4)) ! water and gas
-00960   if svt$=srv$(3) and width=1 then let previous=d5: let firstmeter$=f2$: secondmeter$="": let firstcode$=str$(a(3)): secondcode$="" ! electric only
-00970   if svt$=srv$(3) and width=2 then let previous=d5: let previous2=d52: let firstmeter$=f2$: secondmeter$=f22$: let firstcode$=str$(a(3)): secondcode$=str$(a2(3)) ! electric or lawn meter
-00980   if svt$=srv$(3) and svt2$=srv$(1) and width=3 then let previous=d5: let previous2=d1: let firstmeter$=f2$: secondmeter$=f1$: let firstcode$=str$(a(3)): secondcode$=str$(a(1)) ! electric or lawn meter  and water
-00990   if svt$=srv$(3) and svt2$=srv$(4) and width=3 then let previous=d5: let previous2=d9: let firstmeter$=f2$: secondmeter$=f3$: let firstcode$=str$(a(3)): secondcode$=str$(a(4)) ! electric or lawn meter  and gas
-01000   if svt$=srv$(4) and width=1 then let previous=d9: let firstmeter$=f3$: secondmeter$="": let firstcode$=str$(a(4)): secondcode$="" ! gas only
-01010   if svt$=srv$(4) and width=2 then let previous=d9: let previous2=d92: let firstmeter$=f3$: secondmeter$=f32$: let firstcode$=str$(a(4)): secondcode$=str$(a2(4)) ! gas
-01020   if svt$=srv$(4) and svt2$=srv$(1) and width=3 then let previous=d9: let previous2=d1: let firstmeter$=f3$: secondmeter$=f1$: let firstcode$=str$(a(4)): secondcode$=str$(a(1)) ! gas and water
-01030   if svt$=srv$(4) and svt2$=srv$(3) and width=3 then let previous=d9: let previous2=d5: let firstmeter$=f3$: secondmeter$=f2$: let firstcode$=str$(a(4)): secondcode$=str$(a(3)) ! gas and electric
+00920 L920: if svt$=srv$(1) and width=1 then previous=d1: columnonename$=srv$(1): let firstmeter$=f1$: secondmeter$="": let firstcode$=str$(a(1)): secondcode$="" ! water only service
+00930   if svt$=srv$(1) and width=2 then previous=d1: previous2=d12: let firstmeter$=f1$: secondmeter$=f12$: let firstcode$=str$(a(1)): secondcode$=str$(a2(1)) ! two different water customers
+00940   if svt$=srv$(1) and svt2$=srv$(3) and width=3 then previous=d1: previous2=d5 : let firstmeter$=f1$: secondmeter$=f2$: let firstcode$=str$(a(1)): secondcode$=str$(a(3)) ! water and electric
+00950   if svt$=srv$(1) and svt2$=srv$(4) and width=3 then previous=d1: previous2=d9 : let firstmeter$=f1$: secondmeter$=f3$: let firstcode$=str$(a(1)): secondcode$=str$(a(4)) ! water and gas
+00960   if svt$=srv$(3) and width=1 then previous=d5: let firstmeter$=f2$: secondmeter$="": let firstcode$=str$(a(3)): secondcode$="" ! electric only
+00970   if svt$=srv$(3) and width=2 then previous=d5: previous2=d52: let firstmeter$=f2$: secondmeter$=f22$: let firstcode$=str$(a(3)): secondcode$=str$(a2(3)) ! electric or lawn meter
+00980   if svt$=srv$(3) and svt2$=srv$(1) and width=3 then previous=d5: previous2=d1: let firstmeter$=f2$: secondmeter$=f1$: let firstcode$=str$(a(3)): secondcode$=str$(a(1)) ! electric or lawn meter  and water
+00990   if svt$=srv$(3) and svt2$=srv$(4) and width=3 then previous=d5: previous2=d9: let firstmeter$=f2$: secondmeter$=f3$: let firstcode$=str$(a(3)): secondcode$=str$(a(4)) ! electric or lawn meter  and gas
+01000   if svt$=srv$(4) and width=1 then previous=d9: let firstmeter$=f3$: secondmeter$="": let firstcode$=str$(a(4)): secondcode$="" ! gas only
+01010   if svt$=srv$(4) and width=2 then previous=d9: previous2=d92: let firstmeter$=f3$: secondmeter$=f32$: let firstcode$=str$(a(4)): secondcode$=str$(a2(4)) ! gas
+01020   if svt$=srv$(4) and svt2$=srv$(1) and width=3 then previous=d9: previous2=d1: let firstmeter$=f3$: secondmeter$=f1$: let firstcode$=str$(a(4)): secondcode$=str$(a(1)) ! gas and water
+01030   if svt$=srv$(4) and svt2$=srv$(3) and width=3 then previous=d9: previous2=d5: let firstmeter$=f3$: secondmeter$=f2$: let firstcode$=str$(a(4)): secondcode$=str$(a(3)) ! gas and electric
 01040   if route=0 or route=book2 then goto L1060
-01050   let z2$=f12$="" : let d12=d32=d52=d72=d92=d112=c42=0 : mat e2$=("")
+01050   let z2$=f12$="" : d12=d32=d52=d72=d92=d112=c42=0 : mat e2$=("")
 01060 L1060: form pos 1,c 10,4*c 30,c 12,pos 217,pd 5,pos 227,pd 5,pos 373,c 12,pos 213,pd 4,pos 361,c 12,pos 237,pd 5,pos 247,pd 5,pos 257,pd 5,pos 267,pd 5,pos 1741,n 2,pos 143,7*pd 2,pos 277,pd 5,pos 1818,n 3,pos 161,pd 4.2,pos 173,pd 4.2
 01070   if formoption=2 then gosub BLANKS : goto L1700
 01080   if width=2 or width=3 then for j=1 to 2: pr #255,using L1320: "|": next j
@@ -193,16 +193,16 @@
 01730 SELECTONE: ! 
 01740   sn$ = "Selectone" !:
         fntos(sn$)
-01750   let txt$="Account:" !:
+01750   txt$="Account:" !:
         fnlbl(1,1,txt$,16,1)
 01760 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040
 01770   if trim$(z$)<>"" then !:
-          let txt$="Last Account entered was "&z$ !:
+          txt$="Last Account entered was "&z$ !:
           fnlbl(3,1,txt$,44,1) else !:
-          let txt$="" !:
+          txt$="" !:
           fnlbl(3,1,txt$,44,1)
 01780   fncmbact(1,18) ! !:
-        let resp$(1)=a$
+        resp$(1)=a$
 01790   fncmdkey("&Next",1,1,0,"Accept this record for printing") !:
         fncmdkey("&Complete",5,0,1,"Print all selected records")
 01800   fnacs(sn$,0,mat resp$,ck)
@@ -218,12 +218,12 @@
 01890 DONE: ! 
 01900   close #1: ioerr L1910
 01905   if formoption=2 then gosub RELEASE_PRINT: goto XIT
-01910 L1910: let fncloseprn
+01910 L1910: fncloseprn
 01920 XIT: ! 
 01930   fnxit
 01940 ! ______________________________________________________________________
 01950 ! <Updateable Region: ERTN>
-01960 ERTN: let fnerror(program$,err,line,act$,"xit")
+01960 ERTN: fnerror(program$,err,line,act$,"xit")
 01970   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01980   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -242,35 +242,35 @@
         column2=90 !:
         column3=150
 02240   lyne=137
-02250   let txt$=f1$ !:
+02250   txt$=f1$ !:
         lyne+=8.5 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
-02260   let txt$=f3$ !:
+02260   txt$=f3$ !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
-02270   let txt$=cnvrt$("pic(ZZZZZZ)",d13) !:
+02270   txt$=cnvrt$("pic(ZZZZZZ)",d13) !:
         lyne+=8.5 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+11)&','&str$(lyne)&')'
-02280   let txt$=cnvrt$("pic(zzz)",extra16) !:
+02280   txt$=cnvrt$("pic(zzz)",extra16) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
-02290   let txt$=cnvrt$("pic(zzzzzzZZZZZZZZZ.zz)",b2) !:
+02290   txt$=cnvrt$("pic(zzzzzzZZZZZZZZZ.zz)",b2) !:
         lyne+=8.5 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
-02300   let txt$=cnvrt$("pic(zZZZZZZZZZ.zz)",b5) !:
+02300   txt$=cnvrt$("pic(zZZZZZZZZZ.zz)",b5) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column2)&','&str$(lyne)&')'
 02305   pr #20: 'Call Print.MyFontSize(14)'
-02310   let txt$=e$(2) !:
+02310   txt$=e$(2) !:
         lyne+=52 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
-02320   let txt$=e$(3) !:
+02320   txt$=e$(3) !:
         lyne+=20 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
-02330   let txt$=e$(4) !:
+02330   txt$=e$(4) !:
         lyne+=5 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
-02335   let txt$=e$(1) !:
+02335   txt$=e$(1) !:
         lyne+=14 !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1+8)&','&str$(lyne)&')'
-02340   let txt$=z$ !:
+02340   txt$=z$ !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3-16)&','&str$(lyne-36)&')'
 02342   pr #20: 'Call Print.MyFontSize(10)'
 02350   fnpa_newpage

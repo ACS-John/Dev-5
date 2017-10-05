@@ -8,7 +8,7 @@
 00080   dim a$(9)*3,cogl$(2)*12,u$*12,d(2),ta(2)
 00090   dim resp$(10)*80
 00100 ! ______________________________________________________________________
-00110   let right=1
+00110   right=1
 00120   fntop(program$,cap$="Trial Balance")
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno'),internal,input,relative 
 00151   read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2) 
@@ -22,26 +22,26 @@
 00190   if fnprocess=1 then goto START_REPORT
 00200 SCREEN1: ! 
 00210   fntos(sn$="GLTB") 
-00220   lc=0 : let mylen=25 : let mypos=mylen+2
+00220   lc=0 : mylen=25 : mypos=mylen+2
 00230   fnchk(lc+=1,mypos,"List All Details",right) 
-00240   let resp$(1)="True"
+00240   resp$(1)="True"
 00250   fnlbl(lc+=1,1,"Cost Center:",mylen,right)
 00260   fntxt(lc,mypos,5,0,0,'number') 
-00270   let resp$(2)=""
+00270   resp$(2)=""
 00280   fnchk(lc+=1,mypos,"Subtotal after each fund",right) 
-00290   let resp$(3)="True"
+00290   resp$(3)="True"
 00300   fnlbl(lc+=1,1,"Starting Account:",mylen,right)
 00310   fnqgl(lc,mypos,0,1) 
-00320   let resp$(4)="[All]"
+00320   resp$(4)="[All]"
 00330   fnlbl(lc+=1,1,"Ending Account:",mylen,right)
 00340   fnqgl(lc,mypos,0,1) 
-00350   let resp$(5)="[All]"
+00350   resp$(5)="[All]"
 00360   fncmdset(3)
 00370   fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
-00390   if resp$(1)="True" then let pt=0 else let pt=1
+00390   if resp$(1)="True" then pt=0 else pt=1
 00400   costcent=val(resp$(2)) 
-00410   let n$=lpad$(str$(costcent),3)&"     0  0"
+00410   n$=lpad$(str$(costcent),3)&"     0  0"
 00420   if resp$(3)="True" then subt=1 else subt=0
 00430   sl1$=fnagl$(resp$(4)) 
 00440   sl2$=fnagl$(resp$(5))
@@ -61,7 +61,7 @@
 00710   if costcent><0 and val(n$(1:3))><costcent then goto READ_1
 00720   if sgl(4)=0 and sgl(5)=0 and sgl(6)=0 then goto L740
 00730   if n$>sl2$ then goto L950
-00740   L740: let dno=val(n$(1:3))
+00740   L740: dno=val(n$(1:3))
 00750   if subt=1 and olddno>0 and olddno<>dno then pr #255,using L760: "FUND "&str$(olddno)&" TOTALS",fundt1,fundt2,fundt3 else goto L780
 00760   L760: form skip 1,pos 30,c 20,pos 80,pic(zz,zzz,zzz.## cr),pic(z,zzz,zzz.## cr),pic(zz,zzz,zzz.## cr),skip 2
 00770   let fundt1=fundt2=fundt3=0
@@ -127,12 +127,12 @@
 01310   if t$>=cogl$(1) and t$<=cogl$(2) then goto L1320 else goto L1360
 01320   L1320: !
 01322   if tr(5)>0 then goto L1360
-01330   let u0+=tr(5) : let trtotal+=tr(5): let fundt2+=tr(5) : let u$=t$
+01330   let u0+=tr(5) : trtotal+=tr(5): let fundt2+=tr(5) : let u$=t$
 01340   goto L1500
 01360   L1360: ! 
-01362   if tr$="999999999999" then let tr$=" "
-01364   let rn=73-int(len(ltrm$(tr$))/2)
-01366   if tr(5)<0 then let tcr1+=tr(5) else let tdr1+=tr(5)
+01362   if tr$="999999999999" then tr$=" "
+01364   rn=73-int(len(ltrm$(tr$))/2)
+01366   if tr(5)<0 then tcr1+=tr(5) else tdr1+=tr(5)
 01368   if adr=0 and u0=0 then goto L1400 else goto L1460
 01370   L1400: !
 01372   if pt=0 then 
@@ -140,7 +140,7 @@
 01376   end if
 01378   L1410: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos rn,c 12,pos 95,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
 01380   ! pr #255,Using 'form pos 40,2*c 35,skip 2': "Total Debits: "&LTRM$(CNVRT$("PIC(ZZZZ,ZZZ,ZZZ,ZZ#.##)",TDR1)),"Total Credits: "&LTRM$(CNVRT$("PIC(ZZZZ,ZZZ,ZZZ,ZZ#.##)",ABS(TCR1)))
-01382   let tdr1=tcr1=0
+01382   tdr1=tcr1=0
 01384   goto L1480
 01386   L1460: !
 01388   if pt=0 then 
@@ -148,7 +148,7 @@
 01392   end if
 01394   L1470: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos rn,c 12,pos 95,pic(zz,zzz,zzz.## cr)
 01396   L1480: !
-01398   let trtotal+=tr(5) : let fundt2+=tr(5)
+01398   trtotal+=tr(5) : let fundt2+=tr(5)
 01400   let u$=t$
 01402   L1500: ! 
 01404 return ! /r
@@ -164,9 +164,9 @@
 01592   pr #255: newpage
 01600   gosub HDR2
 01610 continue ! /r
-01670 XIT: let fnxit
+01670 XIT: fnxit
 01690 ! <Updateable Region: ERTN>
-01700 ERTN: let fnerror(program$,err,line,act$,"xit")
+01700 ERTN: fnerror(program$,err,line,act$,"xit")
 01710   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01720   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01730   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -7,7 +7,7 @@
 00060   form pos 1,n 2,c 40,c 20,pos 83,n 6,pos 89,2*n 1
 00070   fnopenprn
 00100   dim z$*5,a$*30,cnam$*40,prg$*20,app(20),ma(20),a3$*30
-00110   let namtab=42-int(len(rtrm$(cnam$))/2)
+00110   namtab=42-int(len(rtrm$(cnam$))/2)
 00120   pr newpage
 00130   pr f "10,10,c 52,n": "ENTER 1 FOR NUMERIC LISTING, ENTER 2 FOR ALPHABETIC"
 00140 L140: input fields "10,65,n 1,eu,n": numalp conv L230
@@ -44,7 +44,7 @@
 00340 L340: pr #255: newpage
 00350   gosub L370
 00360   continue 
-00370 L370: let p1=p1+1
+00370 L370: p1=p1+1
 00380   pr #255,using L390: date$,cnam$,"PAGE",p1
 00390 L390: form skip 3,pos 1,c 8,pos namtab,c 40,pos 76,c 5,n 4,skip 1
 00400   pr #255,using L410: time$,"CLIENT LISTING"
@@ -57,7 +57,7 @@
 00470 L470: form pos 2,c 6,pos 14,c 26,c 60,skip 2
 00480   return 
 00490 L490: close #1: ioerr L500
-00500 L500: let fncloseprn
+00500 L500: fncloseprn
 00510   if uprc$(rtrm$(prg$))="S:\Time Management\Client Legacy" then chain prg$
 00520   goto XIT
 00530 L530: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L550
@@ -72,4 +72,4 @@
 00620   pr f "23,3,C 78,N": ""
 00630   pr f "24,3,C 78,N": ""
 00640   retry 
-00650 XIT: let fnxit
+00650 XIT: fnxit

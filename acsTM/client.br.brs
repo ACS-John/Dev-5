@@ -10,7 +10,7 @@
 21000 ! 
 21200   fn_hamster_setup_1
 21300   fn_hamster_setup_2
-21400   fn_open_file : let fn_close_file : let fn_open_file
+21400   fn_open_file : fn_close_file : fn_open_file
 21500   gosub HAMSTER
 21600   fn_close_file
 21700   goto XIT
@@ -75,10 +75,10 @@
 27600   fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 27700   return 
 27800 ! ______________________________________________________________________
-27900 XIT: let fnxit
+27900 XIT: fnxit
 28000 ! ______________________________________________________________________
 28100 ! <Updateable Region: ERTN>
-28200 ERTN: let fnerror(program$,err,line,act$,"xit")
+28200 ERTN: fnerror(program$,err,line,act$,"xit")
 28300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 28400   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 28500   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -86,9 +86,9 @@
 28700 ! /region
 28800 ! ______________________________________________________________________
 28900   def fn_hamster_setup_1
-29000     let mask_pointtwo=32 : let mask_number=30
-29100     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
-29200     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
+29000     mask_pointtwo=32 : mask_number=30
+29100     mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
+29200     textlen_mmddyy=8 : textlen_ccyymmdd=10
 29300     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 29400 ! 
 29500     fn_hamster_field_reset
@@ -104,128 +104,128 @@
 30400     fn_hamster_field_add("Business Type",30,'C')
 30500     fn_hamster_field_add("Phone",12,'C') ! ph$
 30600     fn_hamster_field_add("Federal ID",11,'c') ! ss$
-30700 ! let fn_hamster_field_add("Partner #",9,'n',0,mask_number) ! pno
-30800 ! let fn_hamster_field_add("Month of Year-End",2,'n',0,mask_number) ! mye
-30900 ! let fn_hamster_field_add("dd(01)",4,"PD", 3,mask_number) ! due date
-31000 ! let fn_hamster_field_add("dd(02)",4,"PD", 3,mask_number)
-31100 ! let fn_hamster_field_add("dd(03)",4,"PD", 3,mask_number)
-31200 ! let fn_hamster_field_add("dd(04)",4,"PD", 3,mask_number)
-31300 ! let fn_hamster_field_add("dd(05)",4,"PD", 3,mask_number)
-31400 ! let fn_hamster_field_add("dd(06)",4,"PD", 3,mask_number)
-31500 ! let fn_hamster_field_add("dd(07)",4,"PD", 3,mask_number)
-31600 ! let fn_hamster_field_add("dd(08)",4,"PD", 3,mask_number)
-31700 ! let fn_hamster_field_add("dd(09)",4,"PD", 3,mask_number)
-31800 ! let fn_hamster_field_add("dd(10)",4,"PD", 3,mask_number)
-31900 ! let fn_hamster_field_add("sc(01)",1,"N") ! status
-32000 ! let fn_hamster_field_add("sc(02)",1,"N")
-32100 ! let fn_hamster_field_add("sc(03)",1,"N")
-32200 ! let fn_hamster_field_add("sc(04)",1,"N")
-32300 ! let fn_hamster_field_add("sc(05)",1,"N")
-32400 ! let fn_hamster_field_add("sc(06)",1,"N")
-32500 ! let fn_hamster_field_add("sc(07)",1,"N")
-32600 ! let fn_hamster_field_add("sc(08)",1,"N")
-32700 ! let fn_hamster_field_add("sc(09)",1,"N")
-32800 ! let fn_hamster_field_add("sc(10)",1,"N")
-32900 ! let fn_hamster_field_add("ca(01)" ,5,"PD", 3)
-33000 ! let fn_hamster_field_add("ca(02)" ,5,"PD", 3)
-33100 ! let fn_hamster_field_add("ca(03)" ,5,"PD", 3)
-33200 ! let fn_hamster_field_add("ca(04)" ,5,"PD", 3)
-33300 ! let fn_hamster_field_add("ca(05)" ,5,"PD", 3)
-33400 ! let fn_hamster_field_add("ca(06)" ,5,"PD", 3)
-33500 ! let fn_hamster_field_add("ca(07)" ,5,"PD", 3)
-33600 ! let fn_hamster_field_add("ca(08)" ,5,"PD", 3)
-33700 ! let fn_hamster_field_add("ca(09)" ,5,"PD", 3)
-33800 ! let fn_hamster_field_add("ca(10)" ,5,"PD", 3)
+30700 ! fn_hamster_field_add("Partner #",9,'n',0,mask_number) ! pno
+30800 ! fn_hamster_field_add("Month of Year-End",2,'n',0,mask_number) ! mye
+30900 ! fn_hamster_field_add("dd(01)",4,"PD", 3,mask_number) ! due date
+31000 ! fn_hamster_field_add("dd(02)",4,"PD", 3,mask_number)
+31100 ! fn_hamster_field_add("dd(03)",4,"PD", 3,mask_number)
+31200 ! fn_hamster_field_add("dd(04)",4,"PD", 3,mask_number)
+31300 ! fn_hamster_field_add("dd(05)",4,"PD", 3,mask_number)
+31400 ! fn_hamster_field_add("dd(06)",4,"PD", 3,mask_number)
+31500 ! fn_hamster_field_add("dd(07)",4,"PD", 3,mask_number)
+31600 ! fn_hamster_field_add("dd(08)",4,"PD", 3,mask_number)
+31700 ! fn_hamster_field_add("dd(09)",4,"PD", 3,mask_number)
+31800 ! fn_hamster_field_add("dd(10)",4,"PD", 3,mask_number)
+31900 ! fn_hamster_field_add("sc(01)",1,"N") ! status
+32000 ! fn_hamster_field_add("sc(02)",1,"N")
+32100 ! fn_hamster_field_add("sc(03)",1,"N")
+32200 ! fn_hamster_field_add("sc(04)",1,"N")
+32300 ! fn_hamster_field_add("sc(05)",1,"N")
+32400 ! fn_hamster_field_add("sc(06)",1,"N")
+32500 ! fn_hamster_field_add("sc(07)",1,"N")
+32600 ! fn_hamster_field_add("sc(08)",1,"N")
+32700 ! fn_hamster_field_add("sc(09)",1,"N")
+32800 ! fn_hamster_field_add("sc(10)",1,"N")
+32900 ! fn_hamster_field_add("ca(01)" ,5,"PD", 3)
+33000 ! fn_hamster_field_add("ca(02)" ,5,"PD", 3)
+33100 ! fn_hamster_field_add("ca(03)" ,5,"PD", 3)
+33200 ! fn_hamster_field_add("ca(04)" ,5,"PD", 3)
+33300 ! fn_hamster_field_add("ca(05)" ,5,"PD", 3)
+33400 ! fn_hamster_field_add("ca(06)" ,5,"PD", 3)
+33500 ! fn_hamster_field_add("ca(07)" ,5,"PD", 3)
+33600 ! fn_hamster_field_add("ca(08)" ,5,"PD", 3)
+33700 ! fn_hamster_field_add("ca(09)" ,5,"PD", 3)
+33800 ! fn_hamster_field_add("ca(10)" ,5,"PD", 3)
 33900     fn_hamster_field_add("Home Phone",12,'c',0,0,260) ! ph2$
-34000 ! let fn_hamster_field_add("Spouse SSN",11,'c') ! ss2$
-34100 ! let fn_hamster_field_add("Balance",12,'pd',5.2,mask_pointtwo,283) ! ar(1)
-34200 ! let fn_hamster_field_add("ar(2)",12,'pd',5.2,mask_pointtwo)
-34300 ! let fn_hamster_field_add("ar(3)",12,'pd',4.3,mask_pointtwo)
-34400 ! let fn_hamster_field_add("ar(4)",1,'n')
-34500 ! let fn_hamster_field_add("ar(5)",1,'n')
-34600 ! let fn_hamster_field_add("arta(1)",5,'pd',3)
-34700 ! let fn_hamster_field_add("arta(2)",5,'pd',3)
-34800 ! let fn_hamster_field_add("cm$",70,'c')
-34900 ! let fn_hamster_field_add("app(01)",1,'N')
-35000 ! let fn_hamster_field_add("app(02)",1,'N')
-35100 ! let fn_hamster_field_add("app(03)",1,'N')
-35200 ! let fn_hamster_field_add("app(04)",1,'N')
-35300 ! let fn_hamster_field_add("app(05)",1,'N')
-35400 ! let fn_hamster_field_add("app(06)",1,'N')
-35500 ! let fn_hamster_field_add("app(07)",1,'N')
-35600 ! let fn_hamster_field_add("app(08)",1,'N')
-35700 ! let fn_hamster_field_add("app(09)",1,'N')
-35800 ! let fn_hamster_field_add("app(10)",1,'N')
-35900 ! let fn_hamster_field_add("app(11)",1,'N')
-36000 ! let fn_hamster_field_add("app(12)",1,'N')
-36100 ! let fn_hamster_field_add("app(13)",1,'N')
-36200 ! let fn_hamster_field_add("app(14)",1,'N')
-36300 ! let fn_hamster_field_add("app(15)",1,'N')
-36400 ! let fn_hamster_field_add("app(16)",1,'N')
-36500 ! let fn_hamster_field_add("app(17)",1,'N')
-36600 ! let fn_hamster_field_add("app(18)",1,'N')
-36700 ! let fn_hamster_field_add("app(19)",1,'N')
-36800 ! let fn_hamster_field_add("app(20)",1,'N')
-36900 ! let fn_hamster_field_add("ma(01)",6,'pd',3.2)
-37000 ! let fn_hamster_field_add("ma(02)",6,'pd',3.2)
-37100 ! let fn_hamster_field_add("ma(03)",6,'pd',3.2)
-37200 ! let fn_hamster_field_add("ma(04)",6,'pd',3.2)
-37300 ! let fn_hamster_field_add("ma(05)",6,'pd',3.2)
-37400 ! let fn_hamster_field_add("ma(06)",6,'pd',3.2)
-37500 ! let fn_hamster_field_add("ma(07)",6,'pd',3.2)
-37600 ! let fn_hamster_field_add("ma(08)",6,'pd',3.2)
-37700 ! let fn_hamster_field_add("ma(09)",6,'pd',3.2)
-37800 ! let fn_hamster_field_add("ma(10)",6,'pd',3.2)
-37900 ! let fn_hamster_field_add("ma(11)",6,'pd',3.2)
-38000 ! let fn_hamster_field_add("ma(12)",6,'pd',3.2)
-38100 ! let fn_hamster_field_add("ma(13)",6,'pd',3.2)
-38200 ! let fn_hamster_field_add("ma(14)",6,'pd',3.2)
-38300 ! let fn_hamster_field_add("ma(15)",6,'pd',3.2)
-38400 ! let fn_hamster_field_add("ma(16)",6,'pd',3.2)
-38500 ! let fn_hamster_field_add("ma(17)",6,'pd',3.2)
-38600 ! let fn_hamster_field_add("ma(18)",6,'pd',3.2)
-38700 ! let fn_hamster_field_add("ma(19)",6,'pd',3.2)
-38800 ! let fn_hamster_field_add("ma(20)",6,'pd',3.2)
-38900 ! let fn_hamster_field_add("app2(01)",1,'n')
-39000 ! let fn_hamster_field_add("app2(02)",1,'n')
-39100 ! let fn_hamster_field_add("app2(03)",1,'n')
-39200 ! let fn_hamster_field_add("app2(04)",1,'n')
-39300 ! let fn_hamster_field_add("app2(05)",1,'n')
-39400 ! let fn_hamster_field_add("app2(06)",1,'n')
-39500 ! let fn_hamster_field_add("app2(07)",1,'n')
-39600 ! let fn_hamster_field_add("app2(08)",1,'n')
-39700 ! let fn_hamster_field_add("app2(09)",1,'n')
-39800 ! let fn_hamster_field_add("app2(10)",1,'n')
-39900 ! let fn_hamster_field_add("app2(11)",1,'n')
-40000 ! let fn_hamster_field_add("app2(12)",1,'n')
-40100 ! let fn_hamster_field_add("app2(13)",1,'n')
-40200 ! let fn_hamster_field_add("app2(14)",1,'n')
-40300 ! let fn_hamster_field_add("app2(15)",1,'n')
-40400 ! let fn_hamster_field_add("app2(16)",1,'n')
-40500 ! let fn_hamster_field_add("app2(17)",1,'n')
-40600 ! let fn_hamster_field_add("app2(18)",1,'n')
-40700 ! let fn_hamster_field_add("app2(19)",1,'n')
-40800 ! let fn_hamster_field_add("app2(20)",1,'n')
-40900 ! let fn_hamster_field_add("ma2(01)",6,'pd',3.2)
-41000 ! let fn_hamster_field_add("ma2(02)",6,'pd',3.2)
-41100 ! let fn_hamster_field_add("ma2(03)",6,'pd',3.2)
-41200 ! let fn_hamster_field_add("ma2(04)",6,'pd',3.2)
-41300 ! let fn_hamster_field_add("ma2(05)",6,'pd',3.2)
-41400 ! let fn_hamster_field_add("ma2(06)",6,'pd',3.2)
-41500 ! let fn_hamster_field_add("ma2(07)",6,'pd',3.2)
-41600 ! let fn_hamster_field_add("ma2(08)",6,'pd',3.2)
-41700 ! let fn_hamster_field_add("ma2(09)",6,'pd',3.2)
-41800 ! let fn_hamster_field_add("ma2(10)",6,'pd',3.2)
-41900 ! let fn_hamster_field_add("ma2(11)",6,'pd',3.2)
-42000 ! let fn_hamster_field_add("ma2(12)",6,'pd',3.2)
-42100 ! let fn_hamster_field_add("ma2(13)",6,'pd',3.2)
-42200 ! let fn_hamster_field_add("ma2(14)",6,'pd',3.2)
-42300 ! let fn_hamster_field_add("ma2(15)",6,'pd',3.2)
-42400 ! let fn_hamster_field_add("ma2(16)",6,'pd',3.2)
-42500 ! let fn_hamster_field_add("ma2(17)",6,'pd',3.2)
-42600 ! let fn_hamster_field_add("ma2(18)",6,'pd',3.2)
-42700 ! let fn_hamster_field_add("ma2(19)",6,'pd',3.2)
-42800 ! let fn_hamster_field_add("ma2(20)",6,'pd',3.2)
+34000 ! fn_hamster_field_add("Spouse SSN",11,'c') ! ss2$
+34100 ! fn_hamster_field_add("Balance",12,'pd',5.2,mask_pointtwo,283) ! ar(1)
+34200 ! fn_hamster_field_add("ar(2)",12,'pd',5.2,mask_pointtwo)
+34300 ! fn_hamster_field_add("ar(3)",12,'pd',4.3,mask_pointtwo)
+34400 ! fn_hamster_field_add("ar(4)",1,'n')
+34500 ! fn_hamster_field_add("ar(5)",1,'n')
+34600 ! fn_hamster_field_add("arta(1)",5,'pd',3)
+34700 ! fn_hamster_field_add("arta(2)",5,'pd',3)
+34800 ! fn_hamster_field_add("cm$",70,'c')
+34900 ! fn_hamster_field_add("app(01)",1,'N')
+35000 ! fn_hamster_field_add("app(02)",1,'N')
+35100 ! fn_hamster_field_add("app(03)",1,'N')
+35200 ! fn_hamster_field_add("app(04)",1,'N')
+35300 ! fn_hamster_field_add("app(05)",1,'N')
+35400 ! fn_hamster_field_add("app(06)",1,'N')
+35500 ! fn_hamster_field_add("app(07)",1,'N')
+35600 ! fn_hamster_field_add("app(08)",1,'N')
+35700 ! fn_hamster_field_add("app(09)",1,'N')
+35800 ! fn_hamster_field_add("app(10)",1,'N')
+35900 ! fn_hamster_field_add("app(11)",1,'N')
+36000 ! fn_hamster_field_add("app(12)",1,'N')
+36100 ! fn_hamster_field_add("app(13)",1,'N')
+36200 ! fn_hamster_field_add("app(14)",1,'N')
+36300 ! fn_hamster_field_add("app(15)",1,'N')
+36400 ! fn_hamster_field_add("app(16)",1,'N')
+36500 ! fn_hamster_field_add("app(17)",1,'N')
+36600 ! fn_hamster_field_add("app(18)",1,'N')
+36700 ! fn_hamster_field_add("app(19)",1,'N')
+36800 ! fn_hamster_field_add("app(20)",1,'N')
+36900 ! fn_hamster_field_add("ma(01)",6,'pd',3.2)
+37000 ! fn_hamster_field_add("ma(02)",6,'pd',3.2)
+37100 ! fn_hamster_field_add("ma(03)",6,'pd',3.2)
+37200 ! fn_hamster_field_add("ma(04)",6,'pd',3.2)
+37300 ! fn_hamster_field_add("ma(05)",6,'pd',3.2)
+37400 ! fn_hamster_field_add("ma(06)",6,'pd',3.2)
+37500 ! fn_hamster_field_add("ma(07)",6,'pd',3.2)
+37600 ! fn_hamster_field_add("ma(08)",6,'pd',3.2)
+37700 ! fn_hamster_field_add("ma(09)",6,'pd',3.2)
+37800 ! fn_hamster_field_add("ma(10)",6,'pd',3.2)
+37900 ! fn_hamster_field_add("ma(11)",6,'pd',3.2)
+38000 ! fn_hamster_field_add("ma(12)",6,'pd',3.2)
+38100 ! fn_hamster_field_add("ma(13)",6,'pd',3.2)
+38200 ! fn_hamster_field_add("ma(14)",6,'pd',3.2)
+38300 ! fn_hamster_field_add("ma(15)",6,'pd',3.2)
+38400 ! fn_hamster_field_add("ma(16)",6,'pd',3.2)
+38500 ! fn_hamster_field_add("ma(17)",6,'pd',3.2)
+38600 ! fn_hamster_field_add("ma(18)",6,'pd',3.2)
+38700 ! fn_hamster_field_add("ma(19)",6,'pd',3.2)
+38800 ! fn_hamster_field_add("ma(20)",6,'pd',3.2)
+38900 ! fn_hamster_field_add("app2(01)",1,'n')
+39000 ! fn_hamster_field_add("app2(02)",1,'n')
+39100 ! fn_hamster_field_add("app2(03)",1,'n')
+39200 ! fn_hamster_field_add("app2(04)",1,'n')
+39300 ! fn_hamster_field_add("app2(05)",1,'n')
+39400 ! fn_hamster_field_add("app2(06)",1,'n')
+39500 ! fn_hamster_field_add("app2(07)",1,'n')
+39600 ! fn_hamster_field_add("app2(08)",1,'n')
+39700 ! fn_hamster_field_add("app2(09)",1,'n')
+39800 ! fn_hamster_field_add("app2(10)",1,'n')
+39900 ! fn_hamster_field_add("app2(11)",1,'n')
+40000 ! fn_hamster_field_add("app2(12)",1,'n')
+40100 ! fn_hamster_field_add("app2(13)",1,'n')
+40200 ! fn_hamster_field_add("app2(14)",1,'n')
+40300 ! fn_hamster_field_add("app2(15)",1,'n')
+40400 ! fn_hamster_field_add("app2(16)",1,'n')
+40500 ! fn_hamster_field_add("app2(17)",1,'n')
+40600 ! fn_hamster_field_add("app2(18)",1,'n')
+40700 ! fn_hamster_field_add("app2(19)",1,'n')
+40800 ! fn_hamster_field_add("app2(20)",1,'n')
+40900 ! fn_hamster_field_add("ma2(01)",6,'pd',3.2)
+41000 ! fn_hamster_field_add("ma2(02)",6,'pd',3.2)
+41100 ! fn_hamster_field_add("ma2(03)",6,'pd',3.2)
+41200 ! fn_hamster_field_add("ma2(04)",6,'pd',3.2)
+41300 ! fn_hamster_field_add("ma2(05)",6,'pd',3.2)
+41400 ! fn_hamster_field_add("ma2(06)",6,'pd',3.2)
+41500 ! fn_hamster_field_add("ma2(07)",6,'pd',3.2)
+41600 ! fn_hamster_field_add("ma2(08)",6,'pd',3.2)
+41700 ! fn_hamster_field_add("ma2(09)",6,'pd',3.2)
+41800 ! fn_hamster_field_add("ma2(10)",6,'pd',3.2)
+41900 ! fn_hamster_field_add("ma2(11)",6,'pd',3.2)
+42000 ! fn_hamster_field_add("ma2(12)",6,'pd',3.2)
+42100 ! fn_hamster_field_add("ma2(13)",6,'pd',3.2)
+42200 ! fn_hamster_field_add("ma2(14)",6,'pd',3.2)
+42300 ! fn_hamster_field_add("ma2(15)",6,'pd',3.2)
+42400 ! fn_hamster_field_add("ma2(16)",6,'pd',3.2)
+42500 ! fn_hamster_field_add("ma2(17)",6,'pd',3.2)
+42600 ! fn_hamster_field_add("ma2(18)",6,'pd',3.2)
+42700 ! fn_hamster_field_add("ma2(19)",6,'pd',3.2)
+42800 ! fn_hamster_field_add("ma2(20)",6,'pd',3.2)
 42900   fnend  ! fn_hamster_setup_1
 43000   def fn_hamster_field_reset
 43100     dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40,sp(1)
@@ -236,11 +236,11 @@
 43600     if storage_length=0 then storage_length=textbox_len
 43700     add_rec_item=udim(mat lbl$)+1
 43800     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$
-43900     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
+43900     mat tln(add_rec_item) : tln(add_rec_item)=textbox_len
 44000     mat p$(add_rec_item)
 44100     mat fltyp$(add_rec_item) : fltyp$(add_rec_item)=field_type$
 44200     mat sln(add_rec_item) : sln(add_rec_item)=storage_length
-44300     mat mask(add_rec_item) : let mask(add_rec_item)=ar_mask
+44300     mat mask(add_rec_item) : mask(add_rec_item)=ar_mask
 44400     mat sp(add_rec_item) : sp(add_rec_item)=storage_position
 44500     if storage_position=0 then 
 44600       if add_rec_item=1 then 

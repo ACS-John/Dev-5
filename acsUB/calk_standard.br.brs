@@ -21,8 +21,8 @@
 09990 fnend 
 09992 Ignore: continue
 10010 def library fncalk(x$,d1,f,usage_water,x2,x3,mc1,mu1,mat rt,mat a,mat b,mat c,mat d,mat g,mat w,mat x,mat extra,mat gb,h_ratemst,deposit2,btu; calc_interest_on_deposit,charge_inspection_fee,interest_credit_rate)
-10011   let debug_account=0
-10013   ! if trim$(x$)='405051.00' and env$('acsdeveloper')<>'' then let debug_account=1 ! pause
+10011   debug_account=0
+10013   ! if trim$(x$)='405051.00' and env$('acsdeveloper')<>'' then debug_account=1 ! pause
 10015   ! if trim$(x$)='300485.00' then pause
 10018   ! 
 10020   if ~setup_calk then let fn_setup_calk
@@ -53,14 +53,14 @@
 30100   if fn_PassesOnlyMonthFilter(3) and servicename$(3)="Electric" and service$(3)="EL" then let fn_calk_electric ! must always use EL for the rate code for electric
 30120   if fn_PassesOnlyMonthFilter(3) and servicename$(3)<>"Electric" and trim$(servicename$(3))<>"" and trim$(service$(3))="EL" then let fn_calk_electric !  allow electric go thru usage calculation if beign as another type of meter other that electric
 30140   if fn_PassesOnlyMonthFilter(3) and servicename$(3)<>"Electric" and trim$(servicename$(3))<>"" and trim$(service$(3))<>"" then 
-30160     let j=3
+30160     j=3
 30180     let g(3)=fn_calk_non_metered(j) ! go thru non-metered if using electric for something else 
 30200   end if 
 30220   ! If SERVICENAME$(3)<>"" AND SERVICE$(3)="AD" Then let fn_calk_administrative_fee ! electric service used of administrative fee
 30240   if fn_PassesOnlyMonthFilter(4) and trim$(servicename$(4))="Gas" and trim$(service$(4))="GA" then let fn_calk_gas
 30260   if fn_PassesOnlyMonthFilter(4) and servicename$(4)<>"Gas" and trim$(servicename$(4))<>"" and trim$(service$(4))="GA" then let fn_calk_gas !  allow gas go thru usage calculation if being usd as another type of meter other that gas
 30280   if fn_PassesOnlyMonthFilter(4) and servicename$(4)<>"Gas" and trim$(servicename$(4))<>"" and trim$(service$(4))<>"" then 
-30300     let j=4
+30300     j=4
 30320     let g(4)=fn_calk_non_metered(j) ! go thru non-metered if using gas for something else 
 30340   end if 
 30360   if fn_PassesOnlyMonthFilter(5) and btu and trim$(service$(5))="GP" then 
@@ -115,13 +115,13 @@
 34300   !   if env$('client')="Riverside" and usage_water>0 then goto LX2770 ! minimum not in total
 34320   let w(1)=mc1*max(1,d(13))
 34340   ! LX2770: ! if env$('client')="Albany" and (a(1)=3 or a(1)=6) then let usage_water=usage_water/2
-34360   if usage_water<=mu1*max(1,d(13)) then goto WATER_COMPLETED else let mu2=mu1*max(1,d(13))
+34360   if usage_water<=mu1*max(1,d(13)) then goto WATER_COMPLETED else mu2=mu1*max(1,d(13))
 34380   for j=1 to 10
 34400     if rt(j,1)>usage_water then goto WATER_COMPLETED
 34420     if usage_water<rt(j,2) then let w1=usage_water-mu2 else let w1=rt(j,2)-mu2
 34440     let w(1)=w(1)+round(w1*rt(j,3),2)
 34460     if rt(j,2)>usage_water then goto WATER_COMPLETED
-34480     let mu2=rt(j,2)
+34480     mu2=rt(j,2)
 34500   next j
 34520   goto WATER_COMPLETED
 34540   ! ______________________________________________________________________
@@ -131,12 +131,12 @@
 34620   !   if env$('client')="Riverside" and w(1)<mc1 then let w(1)=mc1
 34640   !   if env$('client')="Albany" and (a(1)=3 or a(1)=6) then let usage_water=usage_water*2 ! correct usage after using 1/2 of it
 34660   if env$('client')="Brier Lake" and usage_water>mu1 then let w(1)=w(1)+2
-34680   if d1<>f then let d(2)=d(1)
-34700   let d(1)=x(1)
+34680   if d1<>f then d(2)=d(1)
+34700   d(1)=x(1)
 34720   let w8=d(3)
-34740   let d(3)=usage_water
-34760   let d(4)=d(4)+d(3)
-34780   if d1=f then let d(4)=d(4)-w8
+34740   d(3)=usage_water
+34760   d(4)=d(4)+d(3)
+34780   if d1=f then d(4)=d(4)-w8
 34800   WATER_END: let g(1)=w(1)
 34820 fnend  ! fn_calk_water
 36000 def fn_calk_sewer
@@ -159,13 +159,13 @@
 36360   if servicename$(3)(1:5)="Reduc" and service$(3)="SW" then let usage_sewer=usage_sewer-x2 ! reduce sewer usage by Reduce Sewer usage
 36380   if env$('client')="Kimberling" then let usage_sewer=usage_sewer-x2-x3 : eu1=x2
 36400   let w(2)=mc1*max(1,extra(14)) ! units per meter - sewer (default to one)
-36420   if usage_sewer<=mu1 then goto L3300 else let mu2=mu1
+36420   if usage_sewer<=mu1 then goto L3300 else mu2=mu1
 36440   for j=1 to 10
 36460     if rt(j,1)>usage_sewer then goto L3300
 36480     if usage_sewer<rt(j,2) then let w1=usage_sewer-mu2 else let w1=rt(j,2)-mu2
 36500     let w(2)=w(2)+round(w1*rt(j,3),2)
 36520     if rt(j,2)>usage_sewer then goto L3300
-36540     let mu2=rt(j,2)
+36540     mu2=rt(j,2)
 36560   next j
 36580   L3300: ! 
 36600   goto SEWER_COMPLETED
@@ -202,42 +202,42 @@
 38020   if j=3 then ! electric fields used for a non         -metered service
 38040     entered_amt=x(10)
 38060     standard_amt=b(j)
-38080     let rate_code=a(j)
+38080     rate_code=a(j)
 38100     service_code$=service$(j)
 38120   else if j=4 then ! gas used for non=metered                service
 38140     entered_amt=x(11)
 38160     standard_amt=b(j)
-38180     let rate_code=a(j)
+38180     rate_code=a(j)
 38200     service_code$=service$(j)
 38220   else if j=5 then 
 38240     entered_amt=x(6)
 38260     standard_amt=b(j)
-38280     let rate_code=a(j)
+38280     rate_code=a(j)
 38300     service_code$=service$(j)
 38320   else if j=6 then 
 38340     entered_amt=x(7)
 38360     standard_amt=b(j)
-38380     let rate_code=extra(11)
+38380     rate_code=extra(11)
 38400     service_code$=service$(j)
 38420   else if j=7 then 
 38440     entered_amt=0
 38460     standard_amt=0
-38480     let rate_code=extra(12)
+38480     rate_code=extra(12)
 38500     service_code$=service$(j)
 38520   else if j=8 then 
 38540     entered_amt=x(8)
 38560     standard_amt=b(7)
-38580     let rate_code=extra(13)
+38580     rate_code=extra(13)
 38600     service_code$=service$(j)
 38620   else if j=9 then 
 38640     entered_amt=0
 38660     standard_amt=0
-38680     let rate_code=a(6)
+38680     rate_code=a(6)
 38700     service_code$=service$(j)
 38720   else if j=10 then 
 38740     entered_amt=0
 38760     standard_amt=0
-38780     let rate_code=a(7)
+38780     rate_code=a(7)
 38800     service_code$=service$(j)
 38820   else 
 38840     let g(j)=0
@@ -277,7 +277,7 @@
 40000 def fn_calk_reduc
 40020   if service$(3)="SW" then 
 40040     let x2=x(13)
-40060     let d(7)=x(13)
+40060     d(7)=x(13)
 40080   end if 
 40100 fnend  ! fn_calk_reduc
 42000 def fn_calk_lawnmeter
@@ -301,14 +301,14 @@
 42360   ! wrong If env$('client')="Findlay" Then Let X2=X(3) ! findlay actually turns in a usage instead of a reading
 42380   lmu1=x2
 42400   let w(3)=mc1*(max(1,extra(15))) !  units per meter
-42420   if lmu1<=mu1 then goto L3640 else let mu2=mu1
+42420   if lmu1<=mu1 then goto L3640 else mu2=mu1
 42440   for j=1 to 10
 42460     if rt(j,1)>lmu1 then goto L3640
 42480     if lmu1<rt(j,2) then let w1=lmu1-mu2 else let w1=rt(j,2)-mu2
 42500     ! 
 42520     let w(3)=w(3)+round(w1*rt(j,3),2)
 42540     if rt(j,2)>lmu1 then goto L3640
-42560     let mu2=rt(j,2)
+42560     mu2=rt(j,2)
 42580   next j
 42600   L3640: ! 
 42620   let w(3)=max(mc1,w(3))
@@ -319,15 +319,15 @@
 42720   LAWNMETER_COMPLETED: ! 
 42740   if env$('client')="Findlay" then let x2=x(3) ! findlay actually turns in a usage instead of a reading
 42760   if d1<>f then 
-42780     let d(6)=d(5)
+42780     d(6)=d(5)
 42800   end if 
-42820   let d(5)=x(3)
+42820   d(5)=x(3)
 42840   let w8=d(7)
-42860   let d(7)=x2
+42860   d(7)=x2
 42880   if d1=f then 
-42900     let d(8)=d(8)+d(7)-w8
+42900     d(8)=d(8)+d(7)-w8
 42920   else 
-42940     let d(8)=d(8)+d(7)
+42940     d(8)=d(8)+d(7)
 42960   end if 
 42980   let g(3)=w(3)
 43000 fnend  ! fn_calk_lawnmeter
@@ -355,13 +355,13 @@
 44420   if env$('client')="Bethany" then goto L4050 ! minimum not used in calculation
 44440   let w(3)=mc1*(max(1,extra(15))) ! electric units per meter
 44460   L4050: ! 
-44480   if eu1<=mu1 then goto L4130 else let mu2=mu1
+44480   if eu1<=mu1 then goto L4130 else mu2=mu1
 44500   for j=1 to 10
 44520     if rt(j,1)>eu1 then goto L4130
 44540     if eu1<rt(j,2) then let w1=eu1-mu2 else let w1=rt(j,2)-mu2
 44560     let w(3)=w(3)+round(w1*rt(j,3),2)
 44580     if rt(j,2)>eu1 then goto L4130
-44600     let mu2=rt(j,2)
+44600     mu2=rt(j,2)
 44620   next j
 44640   L4130: ! 
 44660   let w(3)=max(mc1*extra(15),w(3))
@@ -371,15 +371,15 @@
 44740   let w(3)=b(3)
 44760   ELECTRIC_COMPLETED: ! 
 44780   if d1<>f then 
-44800     let d(6)=d(5)
+44800     d(6)=d(5)
 44820   end if 
-44822   let d(5)=x(3)
+44822   d(5)=x(3)
 44840   let w8=d(7)
-44860   let d(7)=eu1 ! X2  kj 72109
+44860   d(7)=eu1 ! X2  kj 72109
 44880   if d1<>f then 
-44900     let d(8)=d(8)+d(7)
+44900     d(8)=d(8)+d(7)
 44930   else 
-44940     let d(8)=d(8)+d(7)-w8
+44940     d(8)=d(8)+d(7)-w8
 44960   end if 
 44980   L4290: ! 
 44990   let g(3)=w(3)
@@ -413,14 +413,14 @@
 48172     end if
 48180   next j
 48200   for j=1 to 10
-48220     if uprc$(penalty$(j))="Y" then let penaltycode$=uprc$(service$(j)) else goto CP_NEXT_J
-48240     if j<6 then let pencode=a(j) ! rate codes in customer layout are not in           order.  The first 5 a( match the services. The next three services are          pulled from mat extra. 9 and 10 use a(6)&a(7)
-48260     if j=6 then let pencode=extra(11)
-48280     if j=7 then let pencode=extra(12)
-48300     if j=8 then let pencode=extra(13)
-48320     if j=9 then let pencode=a(6)
-48340     if j=10 then let pencode=a(7)
-48360     ! If PENCODE=0 OR PENCODE>99 Then Let PENCODE=1 ! default to one so codes don't have to be added to old customer records
+48220     if uprc$(penalty$(j))="Y" then penaltycode$=uprc$(service$(j)) else goto CP_NEXT_J
+48240     if j<6 then pencode=a(j) ! rate codes in customer layout are not in           order.  The first 5 a( match the services. The next three services are          pulled from mat extra. 9 and 10 use a(6)&a(7)
+48260     if j=6 then pencode=extra(11)
+48280     if j=7 then pencode=extra(12)
+48300     if j=8 then pencode=extra(13)
+48320     if j=9 then pencode=a(6)
+48340     if j=10 then pencode=a(7)
+48360     ! If PENCODE=0 OR PENCODE>99 Then pENCODE=1 ! default to one so codes don't have to be added to old customer records
 48380     read #h_ratemst,using FORM_RATEMSTR,key=penaltycode$&lpad$(str$(pencode),2): mc1,mu1,mat rt nokey CP_NEXT_J
 48385     if mc1>0 and env$('client')<>"Millry" then ! penalty is a fixed amount
 48390       let g(j)=mc1
@@ -493,44 +493,44 @@
 52060   if env$('client')="White Hall" then goto WHITEHALL_TAX
 52080   ! r: normal tax
 52100   for j=1 to 10 ! determine which service is tax   (rate code abbreviation must always be TX
-52120     if service$(j)="TX" then let taxservice=j
+52120     if service$(j)="TX" then taxservice=j
 52140   next j
 52160   if taxservice=0 then 
-52180     let taxcode=0
+52180     taxcode=0
 52200   else if taxservice<6 then ! note - No one has a TX code in anything except 9 or 10
-52220     pr ' faulty logic here - call ACS' : pause : let taxcode=a(j)
+52220     pr ' faulty logic here - call ACS' : pause : taxcode=a(j)
 52240   else if taxservice=6 then 
-52260     let taxcode=extra(11)
+52260     taxcode=extra(11)
 52280   else if taxservice=7 then 
-52300     let taxcode=extra(12)
+52300     taxcode=extra(12)
 52320   else if taxservice=8 then 
-52340     let taxcode=extra(13)
+52340     taxcode=extra(13)
 52360   else if taxservice=9 then 
-52380     let taxcode=a(6)
+52380     taxcode=a(6)
 52400   else if taxservice=10 then 
-52420     let taxcode=a(7)
+52420     taxcode=a(7)
 52440   end if 
 52460   ! L5300: ! 
 52470   ! if debug_account then pr x$; 'taxcode=';taxcode;'    taxservice=';taxservice : pause
-52480   let taxable=0
-52500   if env$('client')="Pennington" and taxcode=0 then let taxcode=1 ! default to tax code 1 on Pennington
+52480   taxable=0
+52500   if env$('client')="Pennington" and taxcode=0 then taxcode=1 ! default to tax code 1 on Pennington
 52520   read #h_ratemst,using FORM_RATEMSTR,key="TX"&lpad$(str$(taxcode),2): mc1,mu1,mat rt nokey SALES_TAX_XIT
 52540   !   if env$('client')="Divernon" then ! tax is % of usage
-52560   !     let taxable=x3
+52560   !     taxable=x3
 52580   !   else 
 52600     for j=1 to 8
-52620       if uprc$(tax_code$(j))="Y" then let taxable=taxable+g(j) ! determine total      taxable sales
+52620       if uprc$(tax_code$(j))="Y" then taxable=taxable+g(j) ! determine total      taxable sales
 52640     next j
 52660   !   end if 
-52680   if taxservice>0 and taxservice <=10 then let g(taxservice)=round(taxable*rt(1,3),2) ! let holdtaxrate=rt(1,3)
+52680   if taxservice>0 and taxservice <=10 then let g(taxservice)=round(taxable*rt(1,3),2) ! holdtaxrate=rt(1,3)
 52700   if env$('client')="Edinburg" and btu<>0 then let g(taxservice)=min(g(taxservice),round(x3*btu*.024,2)) ! env$('client')="Edinburg"   !! BUT DEFINATELY  NOT French Settlement
 52720   goto SALES_TAX_XIT ! /r SALES_TAX
 52740   ! 
 52760   FRANKLINTON_TAX: ! r:
-52780     let taxcode=extra(12) ! water
+52780     taxcode=extra(12) ! water
 52800     read #h_ratemst,using FORM_RATEMSTR,key="TW"&lpad$(str$(taxcode),2): mc1,mu1,mat rt nokey SALES_TAX_XIT
 52820     let g(7)=round(g(1)*rt(1,3),2)
-52840     let taxcode=a(6) ! gas
+52840     taxcode=a(6) ! gas
 52860     read #h_ratemst,using FORM_RATEMSTR,key="TG"&lpad$(str$(taxcode),2): mc1,mu1,mat rt nokey SALES_TAX_XIT
 52880     let g(9)=round(g(4)*rt(1,3),2)
 52900   goto SALES_TAX_XIT ! /r
@@ -539,10 +539,10 @@
 52960     let g(9)=round(usage_gas*rt(1,3),2) ! tax on gas usage
 52980   goto SALES_TAX_XIT ! /r
 53000   BETHANY_TAX: ! r:
-53020     let taxcode=extra(12) ! electric
+53020     taxcode=extra(12) ! electric
 53040     read #h_ratemst,using FORM_RATEMSTR,key="ET"&lpad$(str$(taxcode),2): mc1,mu1,mat rt nokey L5600
 53060     let g(7)=round(eu1*rt(1,3),2)
-53080     L5600: let taxcode=a(6) ! gas
+53080     L5600: taxcode=a(6) ! gas
 53100     read #h_ratemst,using FORM_RATEMSTR,key="GT"&lpad$(str$(taxcode),2): mc1,mu1,mat rt nokey SALES_TAX_XIT
 53120     let g(9)=round(g(4)*rt(1,3),2)
 53140   goto SALES_TAX_XIT ! /r
@@ -564,13 +564,13 @@
 54220   if env$('client')="Bethany" then goto L4590 ! mimimum not included in price
 54240   let w(4)=mc1*(max(1,extra(16))) ! gas units per meter
 54260   L4590: !
-54261   if usage_gas<=mu1 then goto L4670 else let mu2=mu1
+54261   if usage_gas<=mu1 then goto L4670 else mu2=mu1
 54280   for j=1 to 10
 54300     if rt(j,1)>usage_gas then goto L4670
 54320     if usage_gas<rt(j,2) then let w1=usage_gas-mu2 else let w1=rt(j,2)-mu2
 54340     let w(4)=w(4)+round(w1*rt(j,3),2)
 54360     if rt(j,2)>usage_gas then goto L4670
-54380     let mu2=rt(j,2)
+54380     mu2=rt(j,2)
 54400   next j
 54420   L4670: let w(4)=max(mc1*max(1,extra(16)),w(4))
 54440   ! if env$('client')="Eldorado" and w(4)<((rt(1,3)*10)*2) then let w(4)=((rt(1,3)*10)*2)
@@ -580,14 +580,14 @@
 54520   let w(4)=b(4)
 54540   GAS_COMPLETED: ! 
 54560   if d1=f then goto L4750
-54580   let d(10)=d(9)
-54600   L4750: let d(9)=x(2)
+54580   d(10)=d(9)
+54600   L4750: d(9)=x(2)
 54620   let w8=d(11)
-54640   let d(11)=x3
+54640   d(11)=x3
 54660   if d1=f then goto L4810
-54680   let d(12)=d(12)+d(11)
+54680   d(12)=d(12)+d(11)
 54700   goto L4820
-54720   L4810: let d(12)=d(12)+d(11)-w8
+54720   L4810: d(12)=d(12)+d(11)-w8
 54740   L4820: let g(4)=w(4)
 54760   if env$('client')="Franklinton" and a(4)=3 and g(4)<20 then let g(4)=20
 54780 fnend  ! fn_calk_gas
@@ -620,8 +620,8 @@
 58060   ! dim da(2)
 58080   ! if debug_account then pr rk$&' entered fn_depr'
 58100   if rk$<>"" then 
-58120     let dt1=fncd(d1)
-58140     if int(dt1*.0001)<97 then let dt1=dt1+20000000 else let dt1=dt1+19000000
+58120     dt1=fncd(d1)
+58140     if int(dt1*.0001)<97 then dt1=dt1+20000000 else dt1=dt1+19000000
 58200     read #deposit2,using FORM_DEPOSIT2,key=>rk$,release: rkRead$,olddt1,dp$,odp,ndp nokey DEPR_XIT
 58220     FORM_DEPOSIT2: form pos 1,c 10,n 8,c 32,2*n 10.2 ! ,pd 3
 58240     do while rkRead$=rk$
@@ -655,7 +655,7 @@
 60060   L6360: if env$('client')="Bethany" then let g(6)=mc1: goto L6380
 60080   if env$('client')="Lovington" then goto L6380
 60100   let g(6)=round(x(4)*d(14)*.001*rt(1,3),2)
-60120   L6380: let d(15)=x(4)
+60120   L6380: d(15)=x(4)
 60180   L6390: ! 
 60200 fnend  ! fn_calk_demand
 64000 def fn_calk_purcahsed_gas_cost_adj(btu,usage_gas)
@@ -670,10 +670,10 @@
 66120   cd2=date(days(c(4),'mmddyy'),'ccyymmdd')
 66140   cy1=int(cd1*.0001)
 66160   cy2=int(cd2*.0001)
-66180   let m1=(cy1-cy2)*12
+66180   m1=(cy1-cy2)*12
 66200   if m1>12 then goto IC_FINIS
-66220   let m2=int(d1*.0001)-int(c(4)*.0001)
-66240   let m1=m1+m2
+66220   m2=int(d1*.0001)-int(c(4)*.0001)
+66240   m1=m1+m2
 66260   let w6=round(((w6/12)*m1),2)
 66280   if m1<12 then goto L3140 ! don't allow a credit if less than 12 months
 66300   IC_FINIS: ! 

@@ -17,7 +17,7 @@
 00140 ! ___________________________
 00150     dim frm$*999,choice$(20)*80,header$*80,cap$*128,fio1$(20)
 00160 ! ___________________________
-00170     let max_size=20 ! should be the same as xx in dim choice$(xx)
+00170     max_size=20 ! should be the same as xx in dim choice$(xx)
 00180 ! Let WIN_WIDTH=0 obsoluete
 00190     let filnum=val(file_number_or_name$) conv OPEN20
 00200     if file(filnum)=-1 then goto XIT
@@ -38,10 +38,10 @@
 00330     return 
 00340 ! ___________________________
 00350 BUILD_HEADER: ! 
-00360     let header$=""
+00360     header$=""
 00370     for j=1 to udim(label$)
-00380       let header$=header$&(label$(j)(1:field_len(j)))
-00390       if j<>1 and j<>udim(label$) then let header$=header$&"³"
+00380       header$=header$&(label$(j)(1:field_len(j)))
+00390       if j<>1 and j<>udim(label$) then header$=header$&"³"
 00400       let win_width+=field_len(j)+1
 00410 ! If J<>1 AND J<>UDIM(LABEL$) Then Let WIN_WIDTH+=1
 00420     next j
@@ -52,7 +52,7 @@
 00470     goto PAST_READ_LOOP
 00480 ! ___________________________
 00490 START: ! 
-00500     let hit_count=0 !:
+00500     hit_count=0 !:
           eofile=0
 00510 NXT: ! 
 00520     mat choice$(max_size)
@@ -62,7 +62,7 @@
             gosub FILTER !:
             if filter_pass=1 then goto L560 !:
             else goto L540
-00560 L560: let hit_count+=1 !:
+00560 L560: hit_count+=1 !:
             choice$(j)=cb_response$(1)
 00570       for k=2 to udim(cb_response$)
 00580         choice$(j)=rtrm$(choice$(j)&"³"&cb_response$(k))
@@ -120,7 +120,7 @@
 00960 ! ___________________________
 00970 OPEN20: ! 
 00980     let filnum=20
-00990     let iopenedthis=1
+00990     iopenedthis=1
 01000     open #filnum: "Name="&file_number_or_name$,internal,input,keyed ioerr XIT
 01010     goto CONTINUE_AFTER_OPEN20
 01020 ! ___________________________
@@ -131,7 +131,7 @@
 01070 XIT: ! 
 01080   fnend 
 01090 ! ___________________________
-01100 ERTN: let fnerror(program$,err,line,act$,"xit")
+01100 ERTN: fnerror(program$,err,line,act$,"xit")
 01110   if lwrc$(act$)<>"pause" then goto L1140
 01120   execute "list -"&str$(line) !:
         pause  !:

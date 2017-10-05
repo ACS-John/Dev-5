@@ -31,9 +31,9 @@
 00310     clientid=val(z$) ! CLIENT ID TO CUSTOMER NUMBER
 00320     systemid$=cd$(j) ! SET SYSTEM ID TO "ub" ETC
 00330     stardingdate=0
-00340     if ma(j)>1.00 then let timeframe$="Mo"
-00350     if ma(j)=-.01 then let timeframe$="An"
-00360     if ma(j)=0 then let timeframe$="Na"
+00340     if ma(j)>1.00 then timeframe$="Mo"
+00350     if ma(j)=-.01 then timeframe$="An"
+00360     if ma(j)=0 then timeframe$="Na"
 00370     endingdate=0
 00380     cost=ma(j)
 00390     contact$(1)=a$(1) ! name
@@ -46,9 +46,9 @@
 00460     supportid$=z$&cnvrt$("PIC(#####)",j)
 00470     systemid$=cd$(j) ! SET SYSTEM ID TO "ub" ETC
 00480     stardingdate=0
-00490     if ma2(j-20)>1.00 then let timeframe$="Mo"
-00500     if ma2(j-20)=-.01 then let timeframe$="An"
-00510     if ma2(j-20)=0 then let timeframe$="NA"
+00490     if ma2(j-20)>1.00 then timeframe$="Mo"
+00500     if ma2(j-20)=-.01 then timeframe$="An"
+00510     if ma2(j-20)=0 then timeframe$="NA"
 00520     endingdate=0
 00530     cost=ma(j-20)
 00540     contact$(1)=a$(1) ! name
@@ -64,7 +64,7 @@
 00640   write #client,using "form pos 1,n 6,8*c 50": val(z$),a$(1),a$(2),"",a$(3),e_mail$,a$(4),ph$,""
 00641   pr z$
 00650   return 
-00660 XIT: let fnxit
+00660 XIT: fnxit
 00670 READ_NAMES: ! 
 00680   data " 1. GENERAL LEDGER"
 00690   data " 2. ACCOUNTS RECEIVABLE"
@@ -150,7 +150,7 @@
 01490   read mat cd$
 01500   return 
 01510 ! <Updateable Region: ERTN>
-01520 ERTN: let fnerror(program$,err,line,act$,"xit")
+01520 ERTN: fnerror(program$,err,line,act$,"xit")
 01530   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01540   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01550   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

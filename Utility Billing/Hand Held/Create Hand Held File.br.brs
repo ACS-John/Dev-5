@@ -22,32 +22,32 @@
 08240   fn_constants_setup
 08260   fnget_services(mat servicename$, mat servicecode$)
 08280   dim device$*20
-08300   let device$=fnhand_held_device$
+08300   device$=fnhand_held_device$
 08320 fnend
 08340 def fn_constants_setup
 08360   dim drive$(22)*3
-08380   let drive$(1)="E:\"
-08400   let drive$(2)="F:\"
-08420   let drive$(3)="G:\"
-08440   let drive$(4)="H:\"
-08460   let drive$(5)="I:\"
-08480   let drive$(6)="J:\"
-08500   let drive$(7)="K:\"
-08520   let drive$(8)="L:\"
-08540   let drive$(9)="M:\"
-08560   let drive$(10)="N:\"
-08580   let drive$(11)="O:\"
-08600   let drive$(12)="P:\"
-08620   let drive$(13)="Q:\"
-08640   let drive$(14)="R:\"
-08660   let drive$(15)="S:\"
-08680   let drive$(16)="T:\"
-08700   let drive$(17)="U:\"
-08720   let drive$(18)="V:\"
-08740   let drive$(19)="W:\"
-08760   let drive$(20)="X:\"
-08780   let drive$(21)="Y:\"
-08800   let drive$(22)="Z:\"
+08380   drive$(1)="E:\"
+08400   drive$(2)="F:\"
+08420   drive$(3)="G:\"
+08440   drive$(4)="H:\"
+08460   drive$(5)="I:\"
+08480   drive$(6)="J:\"
+08500   drive$(7)="K:\"
+08520   drive$(8)="L:\"
+08540   drive$(9)="M:\"
+08560   drive$(10)="N:\"
+08580   drive$(11)="O:\"
+08600   drive$(12)="P:\"
+08620   drive$(13)="Q:\"
+08640   drive$(14)="R:\"
+08660   drive$(15)="S:\"
+08680   drive$(16)="T:\"
+08700   drive$(17)="U:\"
+08720   drive$(18)="V:\"
+08740   drive$(19)="W:\"
+08760   drive$(20)="X:\"
+08780   drive$(21)="Y:\"
+08800   drive$(22)="Z:\"
 08860   crlf$=chr$(13)&chr$(10)
 08880 fnend  ! fn_constants_setup
 10370 SEL_ACT: ! r:
@@ -70,20 +70,20 @@
 10535   fntos(sn$="Ask_Book")
 10540   if hbk<>0 then 
 10545     fnlbl(1,1,"Last Route Number Selected: "&str$(hbk))
-10550     let myline=3
+10550     myline=3
 10555   else 
-10560     let myline=1
+10560     myline=1
 10565   end if 
 10570   fnlbl(myline,1,"Route Number to Read:")
 10575   fncmbrt2(myline,22,0)
-10580   let resp$(1)=""
+10580   resp$(1)=""
 10585   fncmdkey("&Next",1,1,0,"Add the selected route" )
 10590   fncmdkey("&Finish",2,0,1,"Completed with all routes")
 10595   fncmdkey("&Cancel",5,0,0,"Don't sent to Hand Held")
 10600   fnacs(sn$,0,mat resp$, ckey)
 10605   if resp$(1)="[All]" and ckey=1 then selection_method=1 : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
 10610   bk1=val(resp$(1)) conv L850
-10615   let resp$(1)=""
+10615   resp$(1)=""
 10620 L850: ! 
 10625   if ckey=1 then 
 10630     goto SELECT_ALL
@@ -111,18 +111,18 @@
 11000   if device$='Itron FC300' then let fn_itron_close
 11010 ! close #h_customer_i5: ioerr IGNORE ! was close #111: ioerr IGNORE
 11020   if selection_method=1 then goto TRANSFER
-11030   if selection_method=2 then let hbk=bk1 : goto ASK_BOOK ! /r
+11030   if selection_method=2 then hbk=bk1 : goto ASK_BOOK ! /r
 11040 ASK_ACT: ! r:
 11050   fntos(sn$="Ask_Act")
 11060   if z$<>"" then 
 11070     fnlbl(1,1,"Last Account Selected: "&z$,40,2)
-11080     let myline=3
+11080     myline=3
 11090   else 
-11100     let myline=1
+11100     myline=1
 11110   end if 
 11120   fnlbl(myline,1,"Account:",15,1)
 11130   fncmbact(myline,16)
-11140   let resp$(1)=z$
+11140   resp$(1)=z$
 11150   fncmdset(5)
 11160   fnacs(sn$,0,mat resp$,ckey)
 11170   if ckey=6 then let fncustomer_search(resp$(1))
@@ -164,17 +164,17 @@
 11530     ! ___________________________
 11540     WORKABOUT_WATER: ! 
 11550       if a(1)=0 then goto WORKABOUT_NEXT_SEQUENCE
-11560       let m$=ltrm$(f$(1))(1:10)
+11560       m$=ltrm$(f$(1))(1:10)
 11570       pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (W)",e$(1)(1:20),d(1),d(3),1,m$,ft$
 11580     goto WORKABOUT_NEXT_SEQUENCE
 11590     ! ___________________________
 11600     WORKABOUT_ELECTRIC: ! 
 11610       if a(3)=0 or trim$(servicename$(3))<>"Electric" then goto WORKABOUT_LAWNMETER
-11620       let m$=ltrm$(f$(2))(1:10)
+11620       m$=ltrm$(f$(2))(1:10)
 11630       pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (E)",e$(1)(1:20),d(5),d(7),3,m$,ft$
 11640       WORKABOUT_LAWNMETER: ! 
 11650       if a(3)=0 or trim$(servicename$(3))<>"Lawn Meter" then goto WORKABOUT_NEXT_SEQUENCE
-11660       let m$=ltrm$(f$(2))(1:10)
+11660       m$=ltrm$(f$(2))(1:10)
 11670       pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (L)",e$(1)(1:20),d(5),d(7),3,m$,ft$
 11680     goto WORKABOUT_NEXT_SEQUENCE
 11690     ! ___________________________
@@ -183,7 +183,7 @@
 11750     ! ___________________________
 11760     WORKABOUT_GAS: ! 
 11770       if a(4)=0 or trim$(servicename$(4))<>"Gas" then goto WORKABOUT_NEXT_SEQUENCE
-11780       let m$=ltrm$(f$(3))(1:10)
+11780       m$=ltrm$(f$(3))(1:10)
 11790       pr #h_out,using FM_WORKABOUT: z$,e$(2)(1:16)&" (G)",e$(1)(1:20),d(9),d(11),2,m$,ft$
 11800     goto WORKABOUT_NEXT_SEQUENCE
 11810     ! ___________________________
@@ -207,14 +207,14 @@
 11990     on val(seq$(j:j)) goto BADGER_WATER,BADGER_ELECTRIC,BADGER_DEMAND,BADGER_GAS none BADGER_NEXT_SEQUENCE
 12000     BADGER_WATER: ! 
 12010     if a(1)=0 then goto BADGER_NEXT_SEQUENCE
-12020     let m$=ltrm$(f$(1))(1:10)
-12030     if env$('client')="Moweaqua" then let manual_or_dialog$=extra$(3)
+12020     m$=ltrm$(f$(1))(1:10)
+12030     if env$('client')="Moweaqua" then manual_or_dialog$=extra$(3)
 12040     if env$('client')="Moweaqua" then extra$(3)=f$(1) ! they have meter number in first water meter number and a code in the second number
-12050     if env$('client')="Moweaqua" then let d(1)=d(1): let d(2)=d(2): let d(3)=d(3)
-12060     if env$('client')="Sangamon" then let manual_or_dialog$=f$(1)(1:1)
+12050     if env$('client')="Moweaqua" then d(1)=d(1): d(2)=d(2): d(3)=d(3)
+12060     if env$('client')="Sangamon" then manual_or_dialog$=f$(1)(1:1)
 12070     if env$('client')='Sangamon' then let z$=trim$(z$)
-12080     let rt$=cnvrt$("pic(##)",extra(1))&"  "
-12081     if env$('client')='Raymond' then let manual_or_dialog$="N"
+12080     rt$=cnvrt$("pic(##)",extra(1))&"  "
+12081     if env$('client')='Raymond' then manual_or_dialog$="N"
 12082     if env$('client')='Raymond' and trim$(extra$(7))='' then extra$(7)='54'
 12090     pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': "",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9),"","A","","1 ","  ","        "," ",d(1)+(d(3)*2),d(1),0,"        ","  ","  ",rt$,z$,"        ",manual_or_dialog$(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 12100     ! serial # can be extra$(3) rather than f$(1)
@@ -223,20 +223,20 @@
 12130     ! ___________________________
 12140     BADGER_ELECTRIC: ! 
 12150     if a(3)=0 or trim$(servicename$(3))<>"Electric" then goto BADGER_NEXT_SEQUENCE
-12160     let m$=ltrm$(f$(2))(1:10)
+12160     m$=ltrm$(f$(2))(1:10)
 12170     pr #h_out,using 'Form POS 1,C 8,2*C 20,C 9,C 4,C 1,C 1,C 2,C 2,C 9,C 1,3*PIC(#########),C 8,C 2,C 2,C 4,C 15,C 8,C 1,3*C 6,C 2,PIC(######),C 20,C 30,C 3,C 2,C 2,C 2,C 6,C 18,C 1': " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","3 "," ",f$(2)(1:9)," ",d(5)+(d(7)*1.5),d(5),0," "," "," "," ",z$," ",uprc$(trim$(f1$))(1:1)," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 12180     L2010: form pos 1,c 8,2*c 20,c 9,c 4,c 1,c 1,c 2,c 2,c 9,c 1,3*pic(#########),c 8,c 2,c 2,c 4,c 15,c 8,c 1,3*c 6,c 2,pic(######),c 20,c 30,c 3,c 2,c 2,c 2,c 6,c 18,c 1
 12190     goto BADGER_NEXT_SEQUENCE
 12200     ! ___________________________
 12210     BADGER_DEMAND: ! 
 12220     goto BADGER_NEXT_SEQUENCE
-12230     let m$=""
+12230     m$=""
 12240     pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","4 "," ",f$(2)(1:9)," ",d(15)+(d(15)*.5),d(15)-(d(15)*.5),0," "," "," "," ",z$," ",manual_or_dialog$," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 12250     goto BADGER_NEXT_SEQUENCE
 12260     ! ___________________________
 12270     BADGER_GAS: ! 
 12280     if a(4)=0 or trim$(servicename$(4))<>"Gas" then goto BADGER_NEXT_SEQUENCE
-12290     let m$=ltrm$(f$(3))(1:10)
+12290     m$=ltrm$(f$(3))(1:10)
 12300     pr #h_out,using L2010: " ",e$(2)(1:20),e$(1)(1:20),trim$(extra$(3))(1:9)," ","A"," ","2 "," ",f$(2)(1:9)," ",d(9)+(d(11)*1.5),d(9),0," "," "," "," ",z$," ","D"," "," "," ",extra$(7)(1:2),sequence," "," "," "," "," "," "," "," ","X"
 12310     goto BADGER_NEXT_SEQUENCE
 12320     ! ___________________________
@@ -254,13 +254,13 @@
 12950   if a(3)>0 then c$=c$&"3"
 12960   L2590: if a(4)>0 then c$=c$&"4"
 12970   goto L2610
-12980   L2610: let j=0
+12980   L2610: j=0
 12990   if rtrm$(f$)="" then let f$=z$
-13000   L2630: let j=j+1
+13000   L2630: j=j+1
 13010   if j>len(c$) then goto L2710
 13020   on val(c$(j:j)) goto SENSUSWATER,L2630,SENSUSELECTRIC,SENSUSGAS,SENSUSDEMAND none L2630
 13030   SENSUSWATER: pr #h_out,using L2520: z$,e$(2)(1:18)&"-W",e$(1)(1:20),d(1),d(3),1,extra$(3)(1:10),cd$: goto L2630
-13040   SENSUSELECTRIC: if d(14)<>0 then let d(7)=d(7)/(d(14)*.01) ! COMPARE USAGE BEFORE MULTIPLIER
+13040   SENSUSELECTRIC: if d(14)<>0 then d(7)=d(7)/(d(14)*.01) ! COMPARE USAGE BEFORE MULTIPLIER
 13050   pr #h_out,using L2520: z$,e$(2)(1:18)&"-E",e$(1)(1:20),d(5),d(7),3,extra$(3)(1:10),cd$ : goto L2630
 13060   SENSUSGAS: goto L2630 ! pr #h_out,USING 470: Z$,E$(2)(1:18)&"-G",E$(1)(1:20),D(9),D(11),2 : GOTO 760
 13070   SENSUSDEMAND: pr #h_out,using L2520: z$,e$(2)(1:18)&"-D",e$(1)(1:20),d(15),d(7),4,extra$(3)(1:9)&"D",cd$ : goto L2630
@@ -277,9 +277,9 @@
 13180   L2820: if a(4)>0 then c$=c$&"4"
 13190   ! 
 13200   goto L2850
-13210   L2850: let j=0
+13210   L2850: j=0
 13220   if rtrm$(f$)="" then let f$=z$
-13230   let j=j+1
+13230   j=j+1
 13240   if j>len(c$) then goto L2920
 13250   on val(c$(j:j)) goto GREENTREEWATER none L2920 ! only water
 13260   GREENTREEWATER: pr #h_out,using L2910: z$,e$(2)(1:18)&"-W",e$(1)(1:20),d(1),d(3),1,extra$(3)(1:10),cd$
@@ -298,9 +298,9 @@
 13390   ! 
 13400   ! 
 13410   goto L3060
-13420   L3060: let j=0
+13420   L3060: j=0
 13430   if rtrm$(f$)="" then let f$=z$
-13440   let j=j+1
+13440   j=j+1
 13450   if j>len(c$) then goto L3140
 13460   on val(c$(j:j)) goto HERSEYWATER none L3140 ! only water
 13470   HERSEYWATER: ! 
@@ -312,8 +312,8 @@
 13530 def fn_amr ! amr software solutions  ! same as ezreader, but specifically for Albany (who no longer uses ACS UB)
 13540   if header=0 then 
 13550     if alp$(1:1)<>"*" then 
-13560       if bk1>0 then let route=bk1 else let route=1 ! if they selected all for route number, make route number =1 else use the actual route number
-13570       pr #h_out,using "form pos 1,c 2,pic(##),pic(######),c 2": "R1",1,route,crlf$ : let header=1 ! create header record
+13560       if bk1>0 then route=bk1 else route=1 ! if they selected all for route number, make route number =1 else use the actual route number
+13570       pr #h_out,using "form pos 1,c 2,pic(##),pic(######),c 2": "R1",1,route,crlf$ : header=1 ! create header record
 13580     end if
 13590   else 
 13600     if final=0 then
@@ -331,9 +331,9 @@
 13710   if a(1)>0 then c$="1"
 13720   if a(3)>0 then c$=c$&"3"
 13730   if a(4)>0 then c$=c$&"4"
-13740   let j=0
+13740   j=0
 13750   if rtrm$(f$)="" then let f$=z$
-13760   let j=j+1
+13760   j=j+1
 13770   if j>len(c$) then goto L3430
 13780   on val(c$(j:j)) goto L3400 none L3430 ! only water
 13790   L3400: ! EZReaderWater
@@ -345,7 +345,7 @@
 14020   fncustomer_search(x$)
 14040   if x$<>"" then 
 14060     read #h_customer_i1,using "Form POS 1,C 10,x 30,c 30",key=x$: z$,e2$
-14080     let res$=rpad$(trim$(z$),10)&" "&trim$(e2$)
+14080     res$=rpad$(trim$(z$),10)&" "&trim$(e2$)
 14100   end if 
 14120 fnend
 14290 RANGE: ! r:
@@ -353,9 +353,9 @@
 14320   fnfra(1,1,1,57,"Starting Account:")
 14330   fnfra(4,1,1,57,"Ending Account:")
 14340   fncmbact(1,1,0,1)
-14350   let text$="Search"
+14350   text$="Search"
 14360   fnbutton(1,48,text$,6,blank$,0,7,1)
-14370   let resp$(1)=resp$(2)=""
+14370   resp$(1)=resp$(2)=""
 14380   fncmbact(1,1,0,2)
 14390   fnbutton(1,48,text$,7,blank$,0,7,2)
 14400   fncmdkey("&Finish",2,1,0,"Completed with all routes")
@@ -385,7 +385,7 @@
 14640   goto FINAL_BILLING_CODE ! /r
 14650 ! 
 14720 ! <Updateable Region: ERTN>
-14730 ERTN: let fnerror(program$,err,line,act$,"xit")
+14730 ERTN: fnerror(program$,err,line,act$,"xit")
 14740   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 14750   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 14760   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -394,8 +394,8 @@
 14810 def fn_rmk1
 14820   let ft$="                    "
 14830   ! read the footnote from the note file  (any note with * as first character
-14840   let notedir$=env$('Q')&"\UBmstr\notes.h"&env$('cno')
-14850   let notefile$=notedir$&"\"&trim$(z$)&".txt"
+14840   notedir$=env$('Q')&"\UBmstr\notes.h"&env$('cno')
+14850   notefile$=notedir$&"\"&trim$(z$)&".txt"
 14860   if exists(notedir$)=0 then goto L4000
 14870   open #20: "Name="&notefile$,display,input ioerr L4010
 14880   L3960: linput #20: rm$ eof L4000
@@ -455,12 +455,12 @@
 16110       if a(a_item)>0 then 
 16120         if servicecode$(a_item)='WA' then 
 16130           let usage_current=d(3) ! Water usage - current
-16140           let reading_current=d(1)
+16140           reading_current=d(1)
 16150         else if servicecode$(a_item)='GA' then 
 16160           let usage_current=d(11) ! Gas usage - curent
-16170           let reading_current=d(9)
+16170           reading_current=d(9)
 16180         else ! if servicecode$(a_item)='EL' then
-16190           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : let fnpause
+16190           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : fnpause
 16200         end if 
 16210         let unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
 16220         let unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
@@ -486,12 +486,12 @@
 16420       if a(a_item)>0 then 
 16430         if servicecode$(a_item)='WA' then 
 16440           let usage_current=d(3) ! Water usage - current
-16450           let reading_current=d(1)
+16450           reading_current=d(1)
 16460         else if servicecode$(a_item)='GA' then 
 16470           let usage_current=d(11) ! Gas usage - curent
-16480           let reading_current=d(9)
+16480           reading_current=d(9)
 16490         else ! if servicecode$(a_item)='EL' then
-16500           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : let fnpause
+16500           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : fnpause
 16510         end if 
 16520         let unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
 16530         let unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
@@ -503,12 +503,12 @@
 16590 fnend  ! fn_acs_meter_reader
 16600 def fn_pcent
 16620   if ~pcent_setup then 
-16630     let pcent_setup=1
+16630     pcent_setup=1
 16640     open #h_company:=fngethandle: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,input 
 16650     read #h_company,using "Form POS 130,n 4": pcent_return
 16660     close #h_company: 
-16670     if pcent_return=0 then let pcent_return=100
-16680     let pcent_return=pcent_return*.01 ! convert to percent
+16670     if pcent_return=0 then pcent_return=100
+16680     pcent_return=pcent_return*.01 ! convert to percent
 16690   end if  ! ~pcent_setup
 16700   fn_pcent=pcent_return
 16710 fnend  ! fn_pcent
@@ -516,66 +516,66 @@
 17650 def fn_itron_open
 17660   open #h_out:=fngethandle: "Name="&env$('Q')&"\HH"&ssession$&".int,RecL=128,EoL=None,Replace",internal,outin,relative 
 17670   fn_itron_record_fhd
-17680   let itron_rdg_count=0
-17690   let itron_cus_count=0
-17700   let itron_mtr_count=0
-17710   let itron_rtr_count=0
-17730   let itron_chd_count=0
+17680   itron_rdg_count=0
+17690   itron_cus_count=0
+17700   itron_mtr_count=0
+17710   itron_rtr_count=0
+17730   itron_chd_count=0
 17740 fnend 
 17750 def fn_itron_close
 17760   fn_itron_route_trailer
 17770   fn_itron_record_ftr
 17780   ! 
-17790   let rec_current=0 ! restore #h_out:
+17790   rec_current=0 ! restore #h_out:
 17800   do 
-17810     let rec_current+=1
+17810     rec_current+=1
 17820     if rec_current>lrec(h_out) then goto IC_EOF_1
 17830     read #h_out,using 'form pos 1,C 126',rec=rec_current: rec_line$
-17840     let rec_type$=rec_line$(1:3)
+17840     rec_type$=rec_line$(1:3)
 17850     if rec_type$='RHD' then ! route header
 17860       ! itron_rhd_current=rec(h_out)
 17870     else if rec_type$='RTR' then ! route trailer
-17880       let itron_rtr_current=rec(h_out)
+17880       itron_rtr_current=rec(h_out)
 17900       rewrite #h_out,using 'form pos 18,n 4,pos 34,N 4,N 4,N 4,Pos 52,3*N 4',rec=itron_rtr_current: itron_rdg_count,itron_rff_count,itron_cus_count,itron_mtr_count,itron_mtr_g_count,itron_mtr_w_count,itron_mtr_e_count norec ignore
-17910       let itron_rdg_count=0
-17920       let itron_rdg_count=0
-17930       let itron_rff_count=0
-17940       let itron_cus_count=0
-17950       let itron_mtr_count=0
-17960       let itron_mtr_e_count=0
-17970       let itron_mtr_g_count=0
-17980       let itron_mtr_i_count=0
-17990       let itron_mtr_s_count=0
-18000       let itron_mtr_w_count=0
+17910       itron_rdg_count=0
+17920       itron_rdg_count=0
+17930       itron_rff_count=0
+17940       itron_cus_count=0
+17950       itron_mtr_count=0
+17960       itron_mtr_e_count=0
+17970       itron_mtr_g_count=0
+17980       itron_mtr_i_count=0
+17990       itron_mtr_s_count=0
+18000       itron_mtr_w_count=0
 18010     else if rec_type$='RFF' then 
-18020       let itron_rff_count+=1
+18020       itron_rff_count+=1
 18030     else if rec_type$='CUS' then 
-18040       let itron_cus_count+=1
+18040       itron_cus_count+=1
 18050     else if rec_type$='MTR' then 
-18060       let itron_mtr_count+=1
-18070       let itron_meter_category$=rec_line$(102:102)
+18060       itron_mtr_count+=1
+18070       itron_meter_category$=rec_line$(102:102)
 18080       if itron_meter_category$="E" then 
-18090         let itron_mtr_e_count+=1
+18090         itron_mtr_e_count+=1
 18100       else if itron_meter_category$="G" then 
-18110         let itron_mtr_g_count+=1
+18110         itron_mtr_g_count+=1
 18120       else if itron_meter_category$="I" then 
-18130         let itron_mtr_i_count+=1
+18130         itron_mtr_i_count+=1
 18140       else if itron_meter_category$="S" then 
-18150         let itron_mtr_s_count+=1
+18150         itron_mtr_s_count+=1
 18160       else if itron_meter_category$="W" then 
-18170         let itron_mtr_w_count+=1
+18170         itron_mtr_w_count+=1
 18180       end if 
 18190     else if rec_type$='RDG' then 
-18200       let itron_rdg_count+=1
+18200       itron_rdg_count+=1
 18210     else if rec_type$='FTR' then 
-18220       let itron_ftr_current=rec(h_out)
+18220       itron_ftr_current=rec(h_out)
 18230       rewrite #h_out,using 'form pos 14,n 2',rec=itron_fhd_current: itron_chd_count
 18240       rewrite #h_out,using 'form pos 14,n 2',rec=itron_ftr_current: itron_chd_count
-18250       let itron_chd_count=0
+18250       itron_chd_count=0
 18260     else if rec_type$='FHD' then 
-18270       let itron_fhd_current=rec(h_out)
+18270       itron_fhd_current=rec(h_out)
 18280     else if rec_type$='CHD' then 
-18290       let itron_chd_count+=1
+18290       itron_chd_count+=1
 18300     end if  ! rec_type$=...
 18310   loop 
 18320   IC_EOF_1: ! 
@@ -616,7 +616,7 @@
 18580 def fn_itron_route_trailer
 18590   fn_itron_record_rtr
 18600   fn_itron_record_ctr
-18610   let itron_rtr_count+=1
+18610   itron_rtr_count+=1
 18620 fnend  ! fn_itron_route_trailer
 18630 def fn_itron
 18640   for a_item=1 to udim(mat a)
@@ -624,15 +624,15 @@
 18660       if a(a_item)>0 then 
 18670         if servicecode$(a_item)='WA' then 
 18680           let usage_current=d(3) ! Water usage - current
-18690           let reading_current=d(1)
+18690           reading_current=d(1)
 18700         else if servicecode$(a_item)='GA' then 
 18710           let usage_current=d(11) ! Gas usage - curent
-18720           let reading_current=d(9)
+18720           reading_current=d(9)
 18730         else if servicecode$(a_item)='EL' then 
 18740           let usage_current=d(7) ! KWH usage - curent
-18750           let reading_current=d(5)
+18750           reading_current=d(5)
 18760         else ! if servicecode$(a_item)='EL' then
-18770           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : let fnpause
+18770           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : fnpause
 18780         end if 
 18790         let unusual_usage_low=int(usage_current-usage_current*fn_pcent) : if unusual_usage_low<0 then let unusual_usage_low=0
 18800         let unusual_usage_high=int(usage_current+usage_current*fn_pcent)
@@ -642,9 +642,9 @@
 18840             if route_prior<>0 then 
 18850               fn_itron_route_trailer
 18860             end if  ! route_prior<>0
-18870             let route_prior=route
+18870             route_prior=route
 18880             fn_itron_record_chd
-18890             let route_itron$=cnvrt$('pic(##)',route)&cnvrt$('pic(######)',route)
+18890             route_itron$=cnvrt$('pic(##)',route)&cnvrt$('pic(######)',route)
 18900             fn_itron_record_rhd
 18910           end if  ! route<>route_prior
 18920           fn_itron_record_cus
@@ -671,11 +671,11 @@
 19106   fn_record_addx(1)
 19108   fn_record_addn(2,0)
 19110   ! 
-19112   let itron_number_of_dials=val(fn_meter_info$('Number of Dials',z$,servicecode$(a_item)))
-19114   if itron_number_of_dials=0 then let itron_number_of_dials=6
+19112   itron_number_of_dials=val(fn_meter_info$('Number of Dials',z$,servicecode$(a_item)))
+19114   if itron_number_of_dials=0 then itron_number_of_dials=6
 19150   fn_record_addn(2,itron_number_of_dials) ! field 10  -  number of dials
 19160   fn_record_addn(2,0) ! 
-19170   let transmitter_number$=fn_meter_info$('transmitter number',z$,servicecode$(a_item))
+19170   transmitter_number$=fn_meter_info$('transmitter number',z$,servicecode$(a_item))
 19180   if transmitter_number$<>'' then let fn_record_addc(1,'R') else let fn_record_addc(1,'K') : skip_next_rff_record=1
 19190   fn_record_addn(10,reading_current)
 19200   fn_record_addn(10,unusual_usage_high)
@@ -687,8 +687,8 @@
 19260   fn_record_addn(1,0) ! field 20
 19270   fn_record_addx(1)
 19272   ! 
-19274   let itron_read_type=val(fn_meter_info$('Read Type',z$,servicecode$(a_item)))
-19276   if itron_read_type=0 then let itron_read_type=a_item ! gas, water, electric a unique number for each - a_item (service number) is as good as any
+19274   itron_read_type=val(fn_meter_info$('Read Type',z$,servicecode$(a_item)))
+19276   if itron_read_type=0 then itron_read_type=a_item ! gas, water, electric a unique number for each - a_item (service number) is as good as any
 19280   fn_record_addc(2,cnvrt$('pic(##)',itron_read_type))
 19290   fn_record_addn(6,0)
 19300   fn_record_addn(6,0)
@@ -787,11 +787,11 @@
 20230   fn_record_addc(8,route_itron$)
 20240   fn_record_addc(12,fn_meter_info$('meter number',z$,servicecode$(a_item)))
 20250   dim irm_tmp$*20
-20260   let irm_tmp$=lwrc$(fn_meter_info$('longitude',z$,servicecode$(a_item)))
-20270   if irm_tmp$(1:1)="n" or irm_tmp$(1:1)="s" or irm_tmp$(1:1)="e" or irm_tmp$(1:1)="w" then let irm_tmp$=str$(fn_dms_to_dec(irm_tmp$))
+20260   irm_tmp$=lwrc$(fn_meter_info$('longitude',z$,servicecode$(a_item)))
+20270   if irm_tmp$(1:1)="n" or irm_tmp$(1:1)="s" or irm_tmp$(1:1)="e" or irm_tmp$(1:1)="w" then irm_tmp$=str$(fn_dms_to_dec(irm_tmp$))
 20280   fn_record_addc(17,irm_tmp$)
-20290   let irm_tmp$=lwrc$(fn_meter_info$('latitude',z$,servicecode$(a_item)))
-20300   if irm_tmp$(1:1)="n" or irm_tmp$(1:1)="s" or irm_tmp$(1:1)="e" or irm_tmp$(1:1)="w" then let irm_tmp$=str$(fn_dms_to_dec(irm_tmp$))
+20290   irm_tmp$=lwrc$(fn_meter_info$('latitude',z$,servicecode$(a_item)))
+20300   if irm_tmp$(1:1)="n" or irm_tmp$(1:1)="s" or irm_tmp$(1:1)="e" or irm_tmp$(1:1)="w" then irm_tmp$=str$(fn_dms_to_dec(irm_tmp$))
 20310   fn_record_addc(17,irm_tmp$)
 20320   fn_record_addc(12,'')
 20330   fn_record_addx(57)
@@ -800,22 +800,22 @@
 20360 fnend  ! fn_itron_record_mtx
 20370 def fn_dms_to_dec(dtd_in$*20) ! for longitude and latitude
 20380 ! N31 35 47.8
-20390   if dtd_in$(1:1)="n" then let dtd_sign$='+' : let dtd_in$(1:1)=''
-20400   if dtd_in$(1:1)="e" then let dtd_sign$='+' : let dtd_in$(1:1)=''
-20410   if dtd_in$(1:1)="s" then let dtd_sign$='-' : let dtd_in$(1:1)=''
-20420   if dtd_in$(1:1)="w" then let dtd_sign$='-' : let dtd_in$(1:1)=''
+20390   if dtd_in$(1:1)="n" then dtd_sign$='+' : dtd_in$(1:1)=''
+20400   if dtd_in$(1:1)="e" then dtd_sign$='+' : dtd_in$(1:1)=''
+20410   if dtd_in$(1:1)="s" then dtd_sign$='-' : dtd_in$(1:1)=''
+20420   if dtd_in$(1:1)="w" then dtd_sign$='-' : dtd_in$(1:1)=''
 20430   ! 
-20440   let dtd_pos_space=pos(dtd_in$,' ')
-20450   let dtd_degrees=val(dtd_in$(1:dtd_pos_space))
-20460   let dtd_in$(1:dtd_pos_space)=''
+20440   dtd_pos_space=pos(dtd_in$,' ')
+20450   dtd_degrees=val(dtd_in$(1:dtd_pos_space))
+20460   dtd_in$(1:dtd_pos_space)=''
 20470   ! 
-20480   let dtd_pos_space=pos(dtd_in$,' ')
-20490   let dtd_minutes=val(dtd_in$(1:dtd_pos_space))
-20500   let dtd_in$(1:dtd_pos_space)=''
+20480   dtd_pos_space=pos(dtd_in$,' ')
+20490   dtd_minutes=val(dtd_in$(1:dtd_pos_space))
+20500   dtd_in$(1:dtd_pos_space)=''
 20510   ! 
-20520   let dtd_seconds=val(dtd_in$) conv ignore
-20540   let dtd_return=dtd_degrees+dtd_minutes/60+dtd_seconds/3600
-20550   if dtd_sign$='-' then let dtd_return=-dtd_return
+20520   dtd_seconds=val(dtd_in$) conv ignore
+20540   dtd_return=dtd_degrees+dtd_minutes/60+dtd_seconds/3600
+20550   if dtd_sign$='-' then dtd_return=-dtd_return
 20560   fn_dms_to_dec=dtd_return
 20570 fnend  ! fn_dms_to_dec
 20580 def fn_itron_record_rff ! off-site (Radio) reads - pg 22
@@ -978,7 +978,7 @@
 25172   ! pr 'BBB - '&srep$(rec_line$,chr$(9),'>') : pause
 25180   fn_record_addc(17,fn_meter_info$('latitude',z$,'WA'))           ! Meter.Latitude
 25190   fn_record_addc(40,fn_meter_info$('Meter Type',z$,'WA'))         ! Meter Model/Type           
-25200   tmp$=fn_meter_info$('reading multipler',z$,'WA') : if tmp$='' then let tmp$='1'
+25200   tmp$=fn_meter_info$('reading multipler',z$,'WA') : if tmp$='' then tmp$='1'
 25210   fn_record_addc(40,tmp$)                                           ! Meter Reading Multiplier (default to 1 if blank)
 25220   fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading – Bring Back (leave an empty column for it
 25230   fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading Date – Bring Back (leave an empty column for it
@@ -1007,17 +1007,17 @@
 25820 fnend
 26000 def fn_record_init(; setDelimiter$)
 26020   dim rec_line$*512
-26040   let rec_line$=''
+26040   rec_line$=''
 26050   gRecordDelimiter$=setDelimiter$
 26060 fnend  ! fn_record_init
 26080 def fn_record_addc(rac_field_length,rac_field_text$*256)
-26100   let rec_line$=rec_line$&rpad$(rac_field_text$(1:rac_field_length),rac_field_length)&gRecordDelimiter$
+26100   rec_line$=rec_line$&rpad$(rac_field_text$(1:rac_field_length),rac_field_length)&gRecordDelimiter$
 26120 fnend
 26140 def fn_record_addn(ran_field_length,ran_field_value)
-26160   let rec_line$=rec_line$&lpad$(str$(ran_field_value)(1:ran_field_length),ran_field_length)&gRecordDelimiter$
+26160   rec_line$=rec_line$&lpad$(str$(ran_field_value)(1:ran_field_length),ran_field_length)&gRecordDelimiter$
 26180 fnend
 26200 def fn_record_addx(ran_field_length)
-26220   let rec_line$=rec_line$&rpt$(' ',ran_field_length)&gRecordDelimiter$
+26220   rec_line$=rec_line$&rpt$(' ',ran_field_length)&gRecordDelimiter$
 26240 fnend  ! fn_record_addx
 27000 def fn_record_write(h_out)
 27020   if gRecordDelimiter$<>'' then ! remove trailing delimiter
@@ -1044,30 +1044,30 @@
 28320     let z_out$=trim$(z$)&svc_flag$
 28340     on val(seq$(j:j)) goto WATER_BOSON,ELECTRIC_BOSON,DEMAND_BOSON,GAS_BOSON none BOSON_NEXT_SEQUENCE
 28360     WATER_BOSON: if a(1)=0 or final<>0 then goto BOSON_NEXT_SEQUENCE
-28380     let x$=cnvrt$("pic(######)",d(5)) : let readdate$=x$(1:2)&"-"&x$(3:4)&"-"&x$(5:6)
+28380     let x$=cnvrt$("pic(######)",d(5)) : readdate$=x$(1:2)&"-"&x$(3:4)&"-"&x$(5:6)
 28400     if env$('client')='Kincaid' then 
-28420       let readingt$="S"
+28420       readingt$="S"
 28440     else if env$('client')="Moweaqua" then 
 28460       if trim$(f$(1))="" then 
-28480         let readingt$="S"
+28480         readingt$="S"
 28500       else 
-28520         let readingt$="P"
+28520         readingt$="P"
 28540       end if 
 28560     else if trim$(extra$(3))="" then 
-28580       let readingt$="S" 
+28580       readingt$="S" 
 28600     else 
-28620       let readingt$="P"
+28620       readingt$="P"
 28640     end if
-28660     if env$('client')="Purdy" or env$('client')="Billings" or env$('client')="Cerro Gordo" then let readingt$="S"
-28680     let metertag=0: let metertag=val(extra$(3)) conv ignore
-28700     if env$('client')="Moweaqua" then let metertag=0: let metertag=val(f$(1)) conv ignore
-28720     if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then let d(1)=d(1): let d(2)=d(2): let d(3)=d(3)
-28740     if env$('client')="Monticello" and trim$(extra$(7))="22" then let d(1)=d(1)*100: let d(2)=d(2)*100: let d(3)=d(3)*100
-28760     if env$('client')="Monticello" and trim$(extra$(7))="23" then let d(1)=d(1)*10: let d(2)=d(2)*10: let d(3)=d(3)*10
+28660     if env$('client')="Purdy" or env$('client')="Billings" or env$('client')="Cerro Gordo" then readingt$="S"
+28680     metertag=0: metertag=val(extra$(3)) conv ignore
+28700     if env$('client')="Moweaqua" then metertag=0: metertag=val(f$(1)) conv ignore
+28720     if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then d(1)=d(1): d(2)=d(2): d(3)=d(3)
+28740     if env$('client')="Monticello" and trim$(extra$(7))="22" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
+28760     if env$('client')="Monticello" and trim$(extra$(7))="23" then d(1)=d(1)*10: d(2)=d(2)*10: d(3)=d(3)*10
 28780     ! If env$('client')="Monticello" AND (TRIM$(EXTRA$(7))="24" then don't do anything
-28800     if env$('client')="Monticello" and trim$(extra$(7))="65" then let d(1)=d(1)*100: let d(2)=d(2)*100: let d(3)=d(3)*100
-28820     if env$('client')="Monticello" and trim$(extra$(7))="66" then let d(1)=d(1)*100: let d(2)=d(2)*100: let d(3)=d(3)*100
-28840     let meterdials=0 ! if env$('client')="Purdy" or env$('client')="Billings" then let meterdials=0 else let meterdials=7
+28800     if env$('client')="Monticello" and trim$(extra$(7))="65" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
+28820     if env$('client')="Monticello" and trim$(extra$(7))="66" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
+28840     meterdials=0 ! if env$('client')="Purdy" or env$('client')="Billings" then meterdials=0 else meterdials=7
 28860     if trim$(z_out$)='200670' then pause 
 28880     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,route,"",sequence,meterdials,d(1),readingt$,metertag
 28900     !     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,val(z$(1:2)),"",val(z$(3:7)),meterdials,d(1),readingt$,metertag
@@ -1083,7 +1083,7 @@
 29100     goto BOSON_NEXT_SEQUENCE
 29120     ! ___________________________
 29140     GAS_BOSON: if a(4)=0 or trim$(servicename$(4))<>"Gas" then goto BOSON_NEXT_SEQUENCE
-29160     let readingt$="R"
+29160     readingt$="R"
 29180     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),route,"",sequence,0,d(9),readingt$,f$(2)
 29200     !     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),val(z$(1:2)),"",val(z$(3:7)),0,d(9),readingt$,f$(2)
 29220     goto BOSON_NEXT_SEQUENCE
@@ -1099,19 +1099,19 @@
 58100   fn_report_created_file(out_filename_report$)
 58120   fn_transfer
 58200 goto XIT ! /r
-60000 XIT: let fnxit
+60000 XIT: fnxit
 60010 IGNORE: continue 
 62000 def fn_transfer
 62020   if device$="ACS Meter Reader" then 
 62040     fntos(sn$="ACSMR_ASK_DEST")
 62060     mat resp$=("")
 62080     fnlbl(1,1,"Android Drive:",20,1)
-62100     let tip$="Drive letter of the destination android device."
+62100     tip$="Drive letter of the destination android device."
 62120     fncomboa("USB-Drive",1,23,mat drive$,tip$)
 62140     fncmdset(2)
 62160     fnacs(sn$,0,mat resp$,ckey)
 62180     if ckey<>5 then 
-62200       let dest$=resp$(1)
+62200       dest$=resp$(1)
 62220       execute "copy "&out_filename$&" "&trim$(dest$)&"acs_meter_data.txt"
 62240     end if  ! ckey<>5
 62260     goto TRANSFER_XIT
@@ -1132,16 +1132,16 @@
 63020   fntos(sn$="trtolaptop")
 63040   mat resp$=("")
 63060   fnlbl(1,1,"Destination Drive:",20,1)
-63080   let tip$="Destination can be a drive designation including folders"
+63080   tip$="Destination can be a drive designation including folders"
 63100   fntxt(1,23,20,100,0,"",0,tip$)
-63120   if resp$(1)="" then let resp$(1)="A:\"
+63120   if resp$(1)="" then resp$(1)="A:\"
 63140   fncmdset(2)
 63160   fnacs(sn$,0,mat resp$,ckey) ! 
 63180   if ckey=5 then goto TRANSFER_XIT
-63200   let dest$=resp$(1)
+63200   dest$=resp$(1)
 63220   if len(dest$)=0 then goto TRANSFER_TO_LAPTOP
-63240   if len(dest$)=1 then let dest$=dest$=":"
-63260   if len(dest$)=3 and dest$(3:3)="/" then let dest$(3:3)=""
+63240   if len(dest$)=1 then dest$=dest$=":"
+63260   if len(dest$)=3 and dest$(3:3)="/" then dest$(3:3)=""
 63280   execute "Copy "&env$('Q')&"\UBmstr\laptop.out "&trim$(dest$)&"\laptop.out"
 63300   goto TRANSFER_XIT ! /r
 63320   TRANSFER_XIT: ! 
@@ -1153,17 +1153,17 @@
 64060   fntos(sn$="hhto1")
 64080   fnlbl(2,1,"Hand Held model:",16,1)
 64100   !   fncomboa("HH-FroCBox",1,18,mat ctext$)
-64120   !   let resp$(0)=device$
+64120   !   resp$(0)=device$
 64140   fnlbl(2,18,device$)
 64160   fnlbl(4,1,"Select:",16,1)
 64180   fnopt(4,18,"[All]")
-64200   if selection_method=1 then let resp$(1)='True' else let resp$(1)='False'
+64200   if selection_method=1 then resp$(1)='True' else resp$(1)='False'
 64220   fnopt(5,18,"An Entire Route")
-64240   if selection_method=2 then let resp$(2)='True' else let resp$(2)='False'
+64240   if selection_method=2 then resp$(2)='True' else resp$(2)='False'
 64260   fnopt(6,18,"A Range of Accounts")
-64280   if selection_method=3 then let resp$(3)='True' else let resp$(3)='False'
+64280   if selection_method=3 then resp$(3)='True' else resp$(3)='False'
 64300   fnopt(7,18,"Specific Accounts")
-64320   if selection_method=4 then let resp$(4)='True' else let resp$(4)='False'
+64320   if selection_method=4 then resp$(4)='True' else resp$(4)='False'
 64340   if lrec(2)>0 then 
 64360     fncmdset(19)
 64380     fnlbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
@@ -1182,70 +1182,70 @@
 64640     else if resp$(4)='True' then 
 64660       selection_method=4
 64680     end if 
-64690     selection_method$=str$(selection_method) : let fncreg_write('hhto.selection_method',selection_method$)
+64690     selection_method$=str$(selection_method) : fncreg_write('hhto.selection_method',selection_method$)
 64700   end if 
 64720   mat resp$=("")
 64740 fnend 
 65000 def fn_report_created_file(out_filename_report$*512)
 65100   if out_filename_report$<>'' and out_filename_report$<>':CON:' and device$<>'Psion Workabout' and device$<>'LapTop' then 
 65120     mat m$(2)
-65140     let m$(1)="Hand Held File created:"
-65160     let m$(2)=os_filename$(out_filename_report$)
+65140     m$(1)="Hand Held File created:"
+65160     m$(2)=os_filename$(out_filename_report$)
 65180     fnmsgbox(mat m$, response$, cap$,64)
 65200   end if 
 65240 fnend 
 68000 def fn_cnt_of_metered_svcs_active
 68020   ! this function should return the number of metered services the customer has that have a non 0 rate code.
 68040   if env$('client')='Bethany' then ! the new way
-68060     let nomsa_return=0
-68080     if a(1)<>0 then let nomsa_return+=1 ! service1  WA
-68100     if a(3)<>0 then let nomsa_return+=1 ! service3  EL
-68120     if a(4)<>0 then let nomsa_return+=1 ! service4  GA
+68060     nomsa_return=0
+68080     if a(1)<>0 then nomsa_return+=1 ! service1  WA
+68100     if a(3)<>0 then nomsa_return+=1 ! service3  EL
+68120     if a(4)<>0 then nomsa_return+=1 ! service4  GA
 68140   else ! the old way
-68160     let nomsa_return=max(1,d(13))
+68160     nomsa_return=max(1,d(13))
 68180   end if 
 68200   fn_cnt_of_metered_svcs_active=nomsa_return
 68220 fnend 
 70000 def fn_meter_info$*20(mi_field$,z$*10,servicecode$)
 70020   if ~mi_setup then 
-70060     let mi_setup=1
+70060     mi_setup=1
 70080     dim mi_data$(7)*20
 70100     dim mt_data$(5)*40
 70120     dim mi_return$*20
-70140     open #mi_h_meter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Shr",internal,input,keyed  ! let mi_h_meter=fnopen_meter ! open #mi_h_meter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Shr",internal,input,keyed
+70140     open #mi_h_meter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Shr",internal,input,keyed  ! mi_h_meter=fnopen_meter ! open #mi_h_meter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Shr",internal,input,keyed
 70160     F_METER: form pos 1,c 10,c 2,c 17,c 17,c 12,c 20,c 5
 70180     open #mi_h_metertype:=fngethandle: "Name="&env$('Q')&"\UBmstr\MeterType.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\MeterTypeIdx.h"&env$('cno')&",Shr",internal,input,keyed 
 70200     F_METER_TYPE: form pos 1,c 5,c 40,c 9,c 2,c 2
 70220   end if  ! ~mi_setup
-70240   let mi_return$=''
+70240   mi_return$=''
 70260   if z$<>mi_z_prior$ or mi_servicecode_prior$<>servicecode$ then 
-70280     let mi_z_prior$=z$ : let mi_servicecode_prior$=servicecode$
+70280     mi_z_prior$=z$ : mi_servicecode_prior$=servicecode$
 70300     mat mi_data$=("")
 70320     read #mi_h_meter,using F_METER,key=rpad$(trim$(z$),10)&rpad$(servicecode$,2),release: mat mi_data$ nokey MI_FINIS
 70340   end if  ! z$<>mi_z_prior$
-70360   let mi_field$=lwrc$(trim$(mi_field$))
+70360   mi_field$=lwrc$(trim$(mi_field$))
 70380   if mi_field$='longitude' then 
-70400     let mi_return$=rtrm$(mi_data$(3))
+70400     mi_return$=rtrm$(mi_data$(3))
 70420   else if mi_field$='latitude' then 
-70440     let mi_return$=rtrm$(mi_data$(4))
+70440     mi_return$=rtrm$(mi_data$(4))
 70460   else if mi_field$='meter number' then 
-70480     let mi_return$=rtrm$(mi_data$(5))
+70480     mi_return$=rtrm$(mi_data$(5))
 70500   else if mi_field$='transmitter number' then 
-70520     let mi_return$=rtrm$(mi_data$(6))
+70520     mi_return$=rtrm$(mi_data$(6))
 70540   else if mi_field$='meter type' then 
-70560     let mi_return$=rtrm$(mi_data$(7))
+70560     mi_return$=rtrm$(mi_data$(7))
 70580   else ! it's probably a MeterType field
 70600     if mt_key_prior$<>mi_data$(7) then 
-70620       let mt_key_prior$=mi_data$(7)
+70620       mt_key_prior$=mi_data$(7)
 70640       mat mt_data$=("")
 70660       read #mi_h_metertype,using F_METER_TYPE,key=rpad$(trim$(mi_data$(7)),kln(mi_h_metertype)): mat mt_data$ nokey MI_FINIS
 70680     end if  ! z$<>mi_z_prior$
 70720     if mi_field$='reading multipler' then 
-70740       let mi_return$=rtrm$(mt_data$(3))
+70740       mi_return$=rtrm$(mt_data$(3))
 70760     else if mi_field$='number of dials' then 
-70780       let mi_return$=rtrm$(mt_data$(4))
+70780       mi_return$=rtrm$(mt_data$(4))
 70800     else if mi_field$='read type' then 
-70820       let mi_return$=rtrm$(mt_data$(5))
+70820       mi_return$=rtrm$(mt_data$(5))
 70840     end if 
 70860   end if 
 70880   MI_FINIS: ! 

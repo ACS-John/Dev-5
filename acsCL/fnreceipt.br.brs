@@ -14,7 +14,7 @@
 00140 ! ______________________________________________________________________
 00150     fncno(cno)
 00155     execute "Index "&env$('Q')&"\CLmstr\Recmstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\Recidx1.h"&str$(cno)&" 1 8 Replace DupKeys,Shr" ioerr ignore
-00160     left=0: let right=1
+00160     left=0: right=1
 00170     open #trmstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
 00180     if exists(env$('Q')&"\CLmstr\RECmstr.H"&str$(cno))=0 then gosub CREATERECEIPTFILE
 00190     open #receipt:=fngethandle: "Name="&env$('Q')&"\CLmstr\recmstr.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\CLmstr\recidx1.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -23,7 +23,7 @@
 00220 ! 
 00230 MENU1: ! 
 00240     fntos(sn$="Receipt1") !:
-          let respc=0
+          respc=0
 00250     mat chdr$(3) : mat cmask$(3) : mat item$(3) !:
           chdr$(1)='Rec' !:
           chdr$(2)='Receipt Type' : chdr$(3)='Description'
@@ -34,8 +34,8 @@
 00270     restore #receipt: 
 00280 READ_RECEIPT_1: ! 
 00290     read #receipt,using 'Form Pos 1,C 8,c 30,',release: rec$,nam$ eof EO_FLEX1
-00300     let item$(1)=str$(rec(receipt)) !:
-          let item$(2)=rec$ : let item$(3)=nam$ !:
+00300     item$(1)=str$(rec(receipt)) !:
+          item$(2)=rec$ : item$(3)=nam$ !:
           fnflexadd1(mat item$)
 00310     goto READ_RECEIPT_1
 00320 EO_FLEX1: ! 
@@ -62,8 +62,8 @@
 00470   read #paytrans,using 'Form Pos 1,C 8': x$
 00480   if x$=rec$ then !:
           mat ml$(2) !:
-          let ml$(1)="A Unpaid Invoice for this Receipt exists" !:
-          let ml$(2)="You may not delete it." !:
+          ml$(1)="A Unpaid Invoice for this Receipt exists" !:
+          ml$(2)="You may not delete it." !:
           fnmsgbox(mat ml$,resp$,cap$,0) !:
           goto EO_DELETE
 00490 L490: ! 
@@ -87,21 +87,21 @@
 00630 EO_DELETE: return 
 00640 ! ______________________________________________________________________
 00650 ADD_NEW_RECEIPT: ! 
-00660   let rec$=nam$=""
+00660   rec$=nam$=""
 00670   goto EDIT_RECEIPT
 00680 ! ______________________________________________________________________
 46000 EDIT_RECEIPT: ! 
-46020   let holdrec$=rec$
+46020   holdrec$=rec$
 46040   fntos(sn$="Receipt2")
-46060   let respc=0
-46080   let mylen=28 : let mypos=mylen+2
+46060   respc=0
+46080   mylen=28 : mypos=mylen+2
 46100   fnfra(1,1,12,70,"Receipt Information"," ")
 46120   fnlbl(1,1,"Receipt Type:",mylen,1,0,1)
 46140   fntxt(1,mypos,8,0,1,"",0,"If a deposit ticket normally contains the same general breakdowns, you can create a receipt record for quickly displaying the breakdowns.  Assign each type of deposit a receipt type code.",1)
-46160   let resp$(respc+=1)=rec$
+46160   resp$(respc+=1)=rec$
 46180   fnlbl(2,1,"Description:",mylen,1,0,1)
 46200   fntxt(2,mypos,30,0,0,"",0,"",1)
-46220   let resp$(respc+=1)=nam$
+46220   resp$(respc+=1)=nam$
 46240   fnlbl(15,20,"Standard General Ledger Breakdowns",40,2,0,0)
 46260 ! General Ledger Breakdown GridPE)
 46280   mat chdr$(5)
@@ -126,7 +126,7 @@
 48120   fnflexadd1(mat glitem$)
 48140   goto READ_RECEIPT_GL
 50000 EO_FLEX3: ! 
-50020   let pas=1 ! don't redo combo boxes on gl
+50020   pas=1 ! don't redo combo boxes on gl
 50040   fnlbl(16,1,"",1,0,0,0) ! add space before buttons
 50060   fnbutton(16,61,"Add",2,"Add a standard general ledger breakdown",0,4)
 50080   fnbutton(16,67,"Edit",7,"Edit or Delete a standard general ledger breakdown")
@@ -134,30 +134,30 @@
 50120   fncmdkey("&Cancel",5,0,1,"Return to Receipt selection")
 50140   fnacs(sn$,0,mat resp$,ck)
 50160   if ck=5 then goto MENU1
-50180   let rec$=lpad$(trim$(resp$(1)(1:8)),8)
-50200   let nam$=resp$(2) ! name
+50180   rec$=lpad$(trim$(resp$(1)(1:8)),8)
+50200   nam$=resp$(2) ! name
 50220   let gldistrec=val(resp$(3)) ! record number of gl distribution entry
 50240   if ck=2 then 
-50260     let percent=gldistrec=0: let receiptkey$=gldesc$=receiptgl$=""
+50260     percent=gldistrec=0: receiptkey$=gldesc$=receiptgl$=""
 50280     goto GL_BREAKDOWNS ! add gl breakdown
 50300   else if ck=7 then 
 50320     read #receiptgl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec: receiptkey$,receiptgl$,percent,gldesc$
 50340     goto GL_BREAKDOWNS ! edit gl breakdown
 50360   end if 
-52000   let tac=0
+52000   tac=0
 52020 READ_STANDARD_BREAKDOWNS: ! 
 52040   restore #receiptgl,key>=rec$: nokey EO_TEST
 52060 L1020: read #receiptgl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': receiptkey$,receiptgl$,percent,gldesc$ eof EO_TEST
 52080   if rec$<>receiptkey$ then goto EO_TEST
-52100   let tac+=percent
+52100   tac+=percent
 52120   goto L1020
 52140 EO_TEST: ! 
 52160   if tac=100 or tac=0 then goto SAVE_RECEIPT
 54000 MSGBOX4: ! percent breakdown doesn't add to 100 %
 54020   mat ml$(3)
-54040   let ml$(1)="Your percentage breakdowns total "&str$(tac)&"."
-54060   let ml$(2)="The percentage breakdown must add to 100%."
-54080   let ml$(3)="Correct the percentages."
+54040   ml$(1)="Your percentage breakdowns total "&str$(tac)&"."
+54060   ml$(2)="The percentage breakdown must add to 100%."
+54080   ml$(3)="Correct the percentages."
 54100   fnmsgbox(mat ml$,resp$,cap$,16)
 54120   goto EDIT_RECEIPT
 56000 SAVE_RECEIPT: ! 
@@ -221,13 +221,13 @@
 58940 ! ______________________________________________________________________
 60000 MSGBOX3: ! r: dupkey
 60020   mat ml$(2)
-60040   let ml$(1)="A record for receipt type "&rec$&" already exists"
-60060   let ml$(2)="You must select a different receipt type."
+60040   ml$(1)="A record for receipt type "&rec$&" already exists"
+60060   ml$(2)="You must select a different receipt type."
 60080   fnmsgbox(mat ml$,resp$,cap$,16)
 60100   goto EDIT_RECEIPT ! /r
 60120 ! ______________________________________________________________________
 62000 ! <Updateable Region: ERTN>
-62020 ERTN: let fnerror(program$,err,line,act$,"xit")
+62020 ERTN: fnerror(program$,err,line,act$,"xit")
 62040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 62060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 62080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -235,23 +235,23 @@
 62120 ! /region
 64000 GL_BREAKDOWNS: ! r:
 64020   fntos(sn$='receipt_gl_dist')
-64040   let respc=0 : let mylen=28 : let mypos=mylen+2
+64040   respc=0 : mylen=28 : mypos=mylen+2
 64060   fnlbl(1,25,"Breakdown for "&nam$(1:20),40)
 64080   fnlbl(3,1,"General Ledger Number:",mylen,right)
 64100   fnqgl(3,mypos)
-64120   let resp$(respc+=1)=fnrgl$(receiptgl$) ! think maybe here kj
+64120   resp$(respc+=1)=fnrgl$(receiptgl$) ! think maybe here kj
 64140   fnlbl(4,1,'Percent:',mylen,right)
 64160   fntxt(4,mypos,6,0,0,'32',0,"Percent of total check to be charged to this g/l account.  Enter 25% as 25.00!")
-64180   let resp$(respc+=1)=str$(percent)
+64180   resp$(respc+=1)=str$(percent)
 64200   fnlbl(5,1,"Description:",mylen,right)
 64220   fntxt(5,mypos,30)
-64240   let resp$(respc+=1)=gldesc$
+64240   resp$(respc+=1)=gldesc$
 64260   fncmdset(7)
 64280   fnacs(sn$,0,mat resp$,ck)
 64300   if ck=5 then goto EDIT_RECEIPT
-64320   let receiptkey$=rec$
-64340   let receiptgl$=fnagl$(resp$(1))
-64360   let percent=val(resp$(2)) ! percent
+64320   receiptkey$=rec$
+64340   receiptgl$=fnagl$(resp$(1))
+64360   percent=val(resp$(2)) ! percent
 64380   let gldesc$=resp$(3)
 64400   if ck=4 and gldistrec>0 then 
 64420     delete #receiptgl,rec=gldistrec: 

@@ -22,7 +22,7 @@
 00200   if cmdkey=5 or cmdkey=99 then goto XIT
 00210 ! ______________________________________________________________________
 00220 L220: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-00230   let message$="Printing: please wait..." !:
+00230   message$="Printing: please wait..." !:
         fnwait(102,cap$,message$,1)
 00240   on fkey 5 goto XIT
 00250   fnopenprn
@@ -35,17 +35,17 @@
 00320   pr #255: newpage
 00330   gosub L400
 00340 L340: gosub L530
-00350   let t1=t1+m(2)
-00360   let t2=t2+h3
-00370   let t3=t3+h2
+00350   t1=t1+m(2)
+00360   t2=t2+h3
+00370   t3=t3+h2
 00380 L380: goto L270
 00390 ! ______________________________________________________________________
-00400 L400: let p2=p2+1
+00400 L400: p2=p2+1
 00410   pr #255,using L420: b$(2)(1:11),b$(1)(1:11),m$
 00420 L420: form skip 6,pos 5,c 11,pos 49,c 11,pos 60,c 5,skip 4
 00430   pr #255,using L440: a$(1),p2
 00440 L440: form pos 5,c 40,pos 51,n 3,skip 6
-00450   let p1=16
+00450   p1=16
 00460   return 
 00470 ! ______________________________________________________________________
 00480 L480: gosub L620
@@ -53,30 +53,30 @@
 00500   fncloseprn
 00510   fnchain("S:\acsGL\PRSTATUC")
 00520 ! ______________________________________________________________________
-00530 L530: let p3=p3+1
+00530 L530: p3=p3+1
 00540   for ln=len(rtrm$(k$(1))) to 1 step -1
 00550     if k$(1)(ln:ln)=" " then goto L570
 00560   next ln
 00570 L570: pr #255,using L580: l$(1),k$(1)(1:1),k$(1)(ln+1:ln+17),m(2)
 00580 L580: form pos 6,c 11,pos 20,c 1,pos 27,c 17,pos 46,n 10.2,skip 2
-00590   let p1=p1+2
+00590   p1=p1+2
 00600   return 
 00610 ! ______________________________________________________________________
-00620 L620: let p1=p1+1
+00620 L620: p1=p1+1
 00630   for j1=1 to 63-p1
 00640     pr #255: 
-00650     let p1=p1-1
+00650     p1=p1-1
 00660   next j1
 00670   pr #255,using L680: t1
 00680 L680: form pos 46,n 10.2
 00690   pr #255: newpage
-00700   let t1=0
+00700   t1=0
 00710   return 
 00720 ! ______________________________________________________________________
-00730 XIT: let fnxit
+00730 XIT: fnxit
 00740 ! ______________________________________________________________________
 00750 ! <Updateable Region: ERTN>
-00760 ERTN: let fnerror(program$,err,line,act$,"xit")
+00760 ERTN: fnerror(program$,err,line,act$,"xit")
 00770   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00780   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

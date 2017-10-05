@@ -2,14 +2,14 @@
 00020   dim b$*40,keyform$*80,blank$(10)
 00030   open #fin:=1: "Name=Test\Temp.dat,KFName=Test\Temp.idx,Replace,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outin,keyed 
 00040   open #fish:=2: "Name=Test\Temp.dat,KFName=Test\TempFish.idx,Use,RecL=64,KPs=10,KLn=10,Shr",internal,outin,keyed 
-00050   let keyform$='Form ' : let key$=''
+00050   keyform$='Form ' : key$=''
 00060   do while kps(fin,j+=1)>0
-00070     let keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
-00080     let keyform$=keyform$&'C '&str$(kln(fin,j))&','
+00070     keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
+00080     keyform$=keyform$&'C '&str$(kln(fin,j))&','
 00090     blank$(j)=rpt$(chr$(0),kln(fin,j))
-00100     let key$=key$&blank$(j)
+00100     key$=key$&blank$(j)
 00110   loop 
-00120   let keyform$=keyform$(1:len(keyform$)-1) ! remove the trailing comma
+00120   keyform$=keyform$(1:len(keyform$)-1) ! remove the trailing comma
 00130   mat blank$(j-1)
 00140   write #fin,using keyform$,reserve: mat blank$
 00150   read #fin,key=key$: 
@@ -22,9 +22,9 @@
 00200   close #fin: 
 00210   close #fish: ioerr L220
 00220 L220: open #tmpfile:=12: "Name=TEST\Temp.dat,KFName=TEST\Temp.idx,Shr",internal,outin,keyed 
-00230   let key$=lpad$(str$(8),2)&lpad$(str$(9),2) !:
+00230   key$=lpad$(str$(8),2)&lpad$(str$(9),2) !:
         read #tmpfile,using 'Form Pos 1,N 2,N 2,C 40',key=key$,reserve: a,b,b$
-00231 ! Let KEY$=CNVRT$("PIC(##)",8)&CNVRT$("PIC(##)",9) !:
+00231 ! kEY$=CNVRT$("PIC(##)",8)&CNVRT$("PIC(##)",9) !:
         ! Read #TMPFILE,Using 'Form Pos 1,N 2,N 2,C 40',Key=KEY$,Reserve: A,B,B$ !:
         ! Rick Graham's suggestion
 00240   rewrite #tmpfile,using 'form pos 1,n 2,n 2,c 40',reserve: a,b,b$

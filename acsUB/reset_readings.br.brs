@@ -22,23 +22,23 @@
 14200 ! ______________________________________________________________________
 14400 SCREEN1: ! 
 14600   fntos(sn$='resetreadings3')
-14800   let mylen=22 : let mypos=mylen+2
+14800   mylen=22 : mypos=mylen+2
 15000   fnlbl(1,1,"Transaction Date (mmddyy):",mylen,1)
-15200   fntxt(1,mypos,8,0,1,"1001") : let resp$(1)='' ! '070611'
+15200   fntxt(1,mypos,8,0,1,"1001") : resp$(1)='' ! '070611'
 15400   fnlbl(3,1,"Reading to Reset:",mylen,1)
-15600   fnopt(3,mypos,"Current") : let resp$(2)='True'
-15800   fnopt(4,mypos,"Prior") : let resp$(3)='False'
-16000   fnchk(6,mypos,srvnam$(1),1) : let resp$(4)='True'
-16200   fnchk(7,mypos,srvnam$(4),1) : let resp$(5)='True'
-16400   fnchk(9,mypos,"Update Usages",1) : let resp$(6)='False'
+15600   fnopt(3,mypos,"Current") : resp$(2)='True'
+15800   fnopt(4,mypos,"Prior") : resp$(3)='False'
+16000   fnchk(6,mypos,srvnam$(1),1) : resp$(4)='True'
+16200   fnchk(7,mypos,srvnam$(4),1) : resp$(5)='True'
+16400   fnchk(9,mypos,"Update Usages",1) : resp$(6)='False'
 16600   fncmdset(2)
 16800   fnacs(sn$,0,mat resp$,ck)
 17000   if ck=5 then goto XIT
-17200   let d1=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
-17400   if resp$(2)='True' then let do_current=1 else let do_current=0
-17600   if resp$(4)='True' then let do_water=1 else let do_water=0
-17800   if resp$(5)='True' then let do_gas=1 else let do_gas=0
-18000   if resp$(6)='True' then let do_usages=1 else let do_usages=0
+17200   d1=fndate_mmddyy_to_ccyymmdd(val(resp$(1)))
+17400   if resp$(2)='True' then do_current=1 else do_current=0
+17600   if resp$(4)='True' then do_water=1 else do_water=0
+17800   if resp$(5)='True' then do_gas=1 else do_gas=0
+18000   if resp$(6)='True' then do_usages=1 else do_usages=0
 18200   execute "Index "&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&' '&env$('Q')&"\UBmstr\UTV_Date.h"&str$(cno)&" 11 8 Replace DupKeys -n"
 18400   open #h_trans=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UTV_Date.h"&str$(cno)&",Shr",internal,input,keyed 
 18600   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -60,7 +60,7 @@
 21800   fnxit
 22000 ! ______________________________________________________________________
 22200 ! <Updateable Region: ERTN>
-22400 ERTN: let fnerror(program$,err,line,act$,"NO")
+22400 ERTN: fnerror(program$,err,line,act$,"NO")
 22600   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 22800   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 23000   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -68,15 +68,15 @@
 23400 ! /region
 23600 ! ______________________________________________________________________
 23800   def fn_reading_fix(&reading_current,&reading_prior,&usage_current,&usage_ytd,reading_new)
-24000     let rf_reading_prior=reading_prior
-24200     let rf_reading_cur=reading_current
+24000     rf_reading_prior=reading_prior
+24200     rf_reading_cur=reading_current
 24400     if do_current then 
-24600       let rf_reading_cur=reading_new
+24600       rf_reading_cur=reading_new
 24800     else 
-25000       let rf_reading_prior=reading_new
+25000       rf_reading_prior=reading_new
 25200     end if 
-25400     let reading_current=rf_reading_cur
-25600     let reading_prior=rf_reading_prior
+25400     reading_current=rf_reading_cur
+25600     reading_prior=rf_reading_prior
 25800     if do_usages then 
 26000       let usage_ytd-=usage_current
 26200       let usage_current=max(0,reading_current-reading_prior)

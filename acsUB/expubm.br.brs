@@ -24,16 +24,16 @@
 34020   fntos(sn$="expubm")
 34040   fnlbl(1,1,"Destination Path and File Name:",34,1)
 34060   fntxt(1,36,40,256,0,"71")
-34080   fnreg_read('exp_ubm.path',resp$(1)) : if resp$(1)='' then let resp$(1)=os_filename$(env$('userprofile')&'\Desktop')&"\ubm.txt"
+34080   fnreg_read('exp_ubm.path',resp$(1)) : if resp$(1)='' then resp$(1)=os_filename$(env$('userprofile')&'\Desktop')&"\ubm.txt"
 34100   fnlbl(2,1,"Delimiter (ASCII Code):" ,34,1)
 34120   fntxt(2,36,3,0,0,"30")
-34140   let resp$(2)="9"
+34140   resp$(2)="9"
 34160   fnlbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
 34180   fncmdset(2)
 34200   fnacs(sn$,0,mat resp$,ckey)
 38000   if ckey=5 then goto XIT
-38020   let dest$=resp$(1)
-38040   let delas=val(resp$(2))
+38020   dest$=resp$(1)
+38040   delas=val(resp$(2))
 38060   fnreg_write('exp_ubm.path',dest$)
 38080   goto OPENS
 38100 ! /r
@@ -41,7 +41,7 @@
 42020   goto MENU1
 42040 ! /r
 46000 OPENS: ! 
-46020   let delim$=chr$(delas)
+46020   delim$=chr$(delas)
 46030   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&',shr',internal,outin,relative 
 46040   ! open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno'),internal,input,relative 
 46060   open #2: "Name="&br_filename$(dest$)&",Size=0,RecL=2500,Replace,EOL=CRLF",display,output ioerr OP2ERR
@@ -83,7 +83,7 @@
 54060 return  ! /r
 56000 IGNORE: continue 
 58000 ! <Updateable Region: ERTN>
-58020 ERTN: let fnerror(program$,err,line,act$,"xit")
+58020 ERTN: fnerror(program$,err,line,act$,"xit")
 58040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 58060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 58080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

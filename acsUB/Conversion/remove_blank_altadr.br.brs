@@ -21,9 +21,9 @@
 00210   goto L130
 00220 L220: delete #3,key=z$: 
 00230   goto L130
-00240 XIT: let fnxit
+00240 XIT: fnxit
 00250 ! ______________________________________________________________________
-00260 ERTN: let fnerror(program$,err,line,act$,"xit")
+00260 ERTN: fnerror(program$,err,line,act$,"xit")
 00270   if uprc$(act$)<>"PAUSE" then goto L300
 00280   execute "list -"&str$(line) !:
         pause  !:

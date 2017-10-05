@@ -10,5 +10,5 @@
         fnacs(sn$,0,mat response$,ckey)
 00110   pr response$(1)
 00111 ! 
-00120   let key$=response$(1)(32:41) !:
+00120   key$=response$(1)(32:41) !:
         pr "the key is "&key$

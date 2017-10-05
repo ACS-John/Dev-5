@@ -11,15 +11,15 @@
 01270 ! ______________________________________________________________________
 01280 MENU1: ! 
 01290   fntos(sn$="PrintReport-ask")
-01292   let respc=0
+01292   respc=0
 01300   fnlbl(1,1,"Report:",11,1)
 01310   fncombof("Report",1,14,43,env$('Q')&"\PRmstr\prreport.h"&str$(cno),1,2,3,30,env$('Q')&"\PRmstr\prrptidx.h"&str$(cno),1+addall,1,"Select from the list of reports. You can only select one report at a time.",0)
-01312   let resp$(respc+=1)=""
+01312   resp$(respc+=1)=""
 01320   fncmdkey("&Next",1,1,0,"Prints the highlighted report." )
 01322   fncmdkey("&Complete",5,0,1,"Returns to menu")
 01330   fnacs(sn$,0,mat resp$,ckey) ! ask report #
 01332   if ckey=5 then goto XIT
-01334   let rn=val(resp$(1)(1:2))
+01334   rn=val(resp$(1)(1:2))
 01336   fn_print_designed_report(rn,3)
 01338   goto OPEN3
 01340 ! 
@@ -28,7 +28,7 @@
 01344     fnprint_designed_report=fn_print_designed_report(rn)
 01346   fnend 
 01354   def fn_print_designed_report(rn)
-01358     let rn$=lpad$(str$(rn),2)
+01358     rn$=lpad$(str$(rn),2)
 01360 ! 
 01361     open #h_prreport:=fngethandle: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRRptIdx.h"&env$('cno')&",Shr",internal,input,keyed ioerr PDR_XIT
 01362     read #h_prreport,using 'form pos 3,c 78',key=rn$: rt$ nokey NORECORDSONFILE
@@ -36,8 +36,8 @@
 01366     close #h_prreport: 
 01368     if sum(a)=0 then 
 01370       mat ml$(2)
-01372       let ml$(1)="The report you have selected has no fields selected to print."
-01374       let ml$(2)="Click OK to contine."
+01372       ml$(1)="The report you have selected has no fields selected to print."
+01374       ml$(2)="Click OK to contine."
 01376       fnmsgbox(mat ml$,resp$,cap$,48)
 01378       goto PDR_XIT
 01380     end if 
@@ -46,18 +46,18 @@
 01464 ! 
 01472     open #h_tmp_dr:=fngethandle: "Name="&env$('Q')&"\PRmstr\Tmp_Designed_Report-"&session$&"-brs.h"&env$('cno')&",RecL=255",display,output 
 01474     pr #h_tmp_dr,using F_C255: "00081 RN$="""&rn$&""""
-01520     let pf$="19900 pr #255, USING F_PR_OUT: "
-01530     let pfd$="20010 pr #255, USING F_PR_OUT: "
+01520     pf$="19900 pr #255, USING F_PR_OUT: "
+01530     pfd$="20010 pr #255, USING F_PR_OUT: "
 01540     af$="19910 F_PR_OUT: form"
 01550     let gpf$="21000 pr #255, using 21010: "
 01560     let gaf$="21010 form skip 2,""Totals"""
 01570     for j=1 to 20
 01580       if a(j)=0 then goto L1770
 01590       if a(j)<30 then goto L1620
-01600 ! Let PF$=RTRM$(PF$)&TY$(A(J),1)&"," : Let PFD$=RTRM$(PFD$)&TY$(A(J),4)&","
-01601       let pf$=rtrm$(pf$)&ty$(a(j),1) : let pfd$=rtrm$(pfd$)&ty$(a(j),4)&","
+01600 ! pF$=RTRM$(PF$)&TY$(A(J),1)&"," : pFD$=RTRM$(PFD$)&TY$(A(J),4)&","
+01601       pf$=rtrm$(pf$)&ty$(a(j),1) : pfd$=rtrm$(pfd$)&ty$(a(j),4)&","
 01610       goto L1630
-01620 L1620: let pf$=rtrm$(pf$)&ty$(a(j),1) : let pfd$=rtrm$(pfd$)&ty$(a(j),1)
+01620 L1620: pf$=rtrm$(pf$)&ty$(a(j),1) : pfd$=rtrm$(pfd$)&ty$(a(j),1)
 01630 L1630: ! 
 01632       af$=rtrm$(af$)&",POS "&str$(pp(j))&ty$(a(j),3)
 01640       if tdep=1 and a(j)>29 then goto L1660
@@ -76,16 +76,16 @@
 01740       let gaf$=rtrm$(gaf$)&",pos "&str$(pp(j))&ty$(a(j),3)
 01750       let gpf$=rtrm$(gpf$)&ty$(a(j),5)&","
 01760 L1760: ! 
-01762       let ti1=1
+01762       ti1=1
 01770 L1770: ! 
 01772     next j
 01780     af$=srep$(af$,'form,','form ') ! af$(11:11)=" "
 01790     lf1=len(rtrm$(pf$))
 01792     lf2=len(rtrm$(pfd$))
-01800     let pf$(lf1:lf1)=" "
-01802     let pfd$(lf2:lf2)=" "
-01810     let pf$=rtrm$(pf$)&" pageoflow pgof"
-01812     let pfd$=rtrm$(pfd$)&" pageoflow pgof"
+01800     pf$(lf1:lf1)=" "
+01802     pfd$(lf2:lf2)=" "
+01810     pf$=rtrm$(pf$)&" pageoflow pgof"
+01812     pfd$=rtrm$(pfd$)&" pageoflow pgof"
 01820     lf1=len(rtrm$(gpf$))
 01830     let gpf$(lf1:lf1)=" "
 01840     let gpf$=rtrm$(gpf$)&" pageoflow pgof"
@@ -110,7 +110,7 @@
 02020     pr #h_tmp_dr,using F_C255: "19899 L19899: if tdep=1 then goto F_PR_OUT"
 02030     if ips=0 then goto L2210
 02040     lf1=len(rtrm$(ty$(ips,1)))-1 : lf2=len(rtrm$(ty$(ips,4)))-1
-02050 ! pr #h_tmp_dr,using F_C255: "19801 let ipsw=0"
+02050 ! pr #h_tmp_dr,using F_C255: "19801 ipsw=0"
 02060     if ips>24 and ips<104 then goto L2140
 02070     pr #h_tmp_dr,using F_C255: "19811 For j=1 to 100"
 02075     pr #h_tmp_dr,using F_C255: "19812 if psc(1)=-1 and TY$(IPS,1)(1:LF1)<>'' then L19817"
@@ -142,17 +142,17 @@
 02290 NORECORDSONFILE: ! r: no records on file
 02300 ! if rn=0 then goto XIT_PRAUTO
 02310   mat ml$(2)
-02312   let ml$(1)="It appears this report is not in the report file!"
-02314   let ml$(2)="Click OK to contine."
+02312   ml$(1)="It appears this report is not in the report file!"
+02314   ml$(2)="Click OK to contine."
 02318   fnmsgbox(mat ml$,resp$,cap$,48)
 02320   goto PDR_XIT ! /r
 02330 ! ______________________________________________________________________
-02340 ! XIT_PRAUTO: let fnxit
+02340 ! XIT_PRAUTO: fnxit
 02350 ! ______________________________________________________________________
-02360 XIT: let fnxit
+02360 XIT: fnxit
 02370 IGNORE: continue 
 02380 ! <Updateable Region: ERTN>
-02390 ERTN: let fnerror(program$,err,line,act$,"xit")
+02390 ERTN: fnerror(program$,err,line,act$,"xit")
 02400   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02410   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02420   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -161,8 +161,8 @@
 02450 ! ______________________________________________________________________
 02500 NO_PRREPORT: ! r:
 02510   mat ml$(2)
-02512   let ml$(1)="No reports have been designed in the User Designed"
-02514   let ml$(2)="Reports file.  Click OK to go there now."
+02512   ml$(1)="No reports have been designed in the User Designed"
+02514   ml$(2)="Reports file.  Click OK to go there now."
 02516   fnmsgbox(mat ml$,resp$,cap$,48)
 02520   fnchain("S:\acsPR\newprRpt3") ! /r
 22000   def fn_setup

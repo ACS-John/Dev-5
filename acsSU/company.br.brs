@@ -15,10 +15,10 @@
 00150 ! ______________________________________________________________________
 00160   fntop("S:\acsSU\Company",cap$="Company Information")
 00170   fncno(cno)
-00180   cancel=99 : let right=1 : center=2 : left=0 !:
-        ccyymmdd$='3' : let mmddyy$='1' : on=1 : off=0 !:
-        cancel=5 : save=1 : limit_to_list=1 : let pointtwo$='32' !:
-        let pointthree$='33'
+00180   cancel=99 : right=1 : center=2 : left=0 !:
+        ccyymmdd$='3' : mmddyy$='1' : on=1 : off=0 !:
+        cancel=5 : save=1 : limit_to_list=1 : pointtwo$='32' !:
+        pointthree$='33'
 00190   open #company=1: "Name="&env$('Q')&"\"&fncursys$&"mstr\Company.h"&str$(cno)&",Shr",internal,outin,relative ioerr BUILD_COMPANY
 00200   goto READ_COMPANY
 00210 ! ______________________________________________________________________
@@ -31,10 +31,10 @@
         if ckey=save then gosub SAVE : goto XIT else !:
           if ckey=cancel then goto XIT !:
             ! to do it the old way change this whole line to read  GoTo Screen1
-00270   if ckey=page1 then let page=1 : gosub NEWSCREEN else !:
-          if ckey=page2 then let page=2 : gosub NEWSCREEN else !:
-            if ckey=page3 then let page=3 : gosub NEWSCREEN else !:
-              if ckey=page4 then let page=4 : gosub NEWSCREEN else !:
+00270   if ckey=page1 then page=1 : gosub NEWSCREEN else !:
+          if ckey=page2 then page=2 : gosub NEWSCREEN else !:
+            if ckey=page3 then page=3 : gosub NEWSCREEN else !:
+              if ckey=page4 then page=4 : gosub NEWSCREEN else !:
                 if ckey=save then gosub SAVE : goto XIT else !:
                   if ckey=cancel then goto XIT !:
                     ! to do it the old way change this whole line to read  GoTo Screen1
@@ -42,8 +42,8 @@
 00290 NEWSCREEN: ! 
 00300   fntos(sn$='Company-Pg'&str$(page)) !:
         lc=0
-00310   let page1=6 : let page2=07 : let page3=08 : let page4=09
-00320   let page=1 : gosub PAGE1
+00310   page1=6 : page2=07 : page3=08 : page4=09
+00320   page=1 : gosub PAGE1
 00330   fncmdset(4) ! Save and Cancel
 00340   fnacs(sn$,0,mat resp$,ckey)
 00350   if page=1 then 
@@ -52,38 +52,38 @@
           a$(3)=resp$(3) !:
           b$(1)=resp$(4) !:
           b$(2)=resp$(5) !:
-          let tb$=resp$(6) !:
-          let nap=val(resp$(7)) !:
+          tb$=resp$(6) !:
+          nap=val(resp$(7)) !:
           let wbc=val(resp$(8)(1:2))
-00370     if resp$(9)='True' then let prenum=1 else let prenum=0
-00380     if resp$(10)='True' then let reccode=1 else let reccode=0
+00370     if resp$(9)='True' then prenum=1 else prenum=0
+00380     if resp$(10)='True' then reccode=1 else reccode=0
 00390   end if 
 00400   if ckey=save then gosub SAVE : goto XIT else !:
           if ckey=cancel then goto XIT
 00410   goto NEWSCREEN
 00420 PAGE1: ! _____________________________________________________________ !:
-        lc=3 : let mylen=40 : let mypos=mylen+2
+        lc=3 : mylen=40 : mypos=mylen+2
 00430   fnlbl(lc+=1,1,'Company Name:',mylen,right)
 00440   fntxt(lc,mypos,40,0,left) !:
-        let resp$(1)=a$(1)
+        resp$(1)=a$(1)
 00450   fnlbl(lc+=1,1,'Address:',mylen,right)
 00460   fntxt(lc,mypos,40,0,left) !:
-        let resp$(2)=a$(2)
+        resp$(2)=a$(2)
 00470   fnlbl(lc+=1,1,'City State and Zip Code:',mylen,right)
 00480   fntxt(lc,mypos,40,0,left) !:
-        let resp$(3)=a$(3)
+        resp$(3)=a$(3)
 00490   fnlbl(lc+=1,1,'Federal Identification Number:',mylen,right)
 00500   fntxt(lc,mypos,12,0,left) !:
-        let resp$(4)=b$(1)
+        resp$(4)=b$(1)
 00510   fnlbl(lc+=1,1,'State Identification Number:',mylen,right)
 00520   fntxt(lc,mypos,12,0,left) !:
-        let resp$(5)=b$(2)
+        resp$(5)=b$(2)
 00530   fnlbl(lc+=1,1,'Type of Business:',mylen,right)
 00540   fntxt(lc,mypos,30,0,left) !:
-        let resp$(6)=tb$
+        resp$(6)=tb$
 00550   fnlbl(lc+=1,1,'Number of Periods:',mylen,right)
 00560   fntxt(lc,mypos,30,0,left,number$) !:
-        let resp$(7)=str$(nap)
+        resp$(7)=str$(nap)
 00570   return 
 00580 ! ______________________________________________________________________
 00590 BUILD_COMPANY: ! 
@@ -100,7 +100,7 @@
 00700   fnxit
 00710 ! ______________________________________________________________________
 00720 ! <Updateable Region: ERTN>
-00730 ERTN: let fnerror(program$,err,line,act$,"xit")
+00730 ERTN: fnerror(program$,err,line,act$,"xit")
 00740   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00750   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00760   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -3,7 +3,7 @@
 10300   fnupdatesource
 10400   def fndatetime
 10500     dim tm$*8
-10600     let tm$=time$
+10600     tm$=time$
 10700     fndatetime=val(date$("CCYYMMDD")&tm$(1:2)&tm$(4:5))
 10800   fnend 
 10900   def fnfiledatetime(filename$*255)
@@ -15,9 +15,9 @@
 11500       if infoline$(3:3)="/" then goto PARSEDATE
 11600     loop 
 11700 PARSEDATE: ! 
-11800     let hh=val(infoline$(13:14))
-11900     if infoline$(19:20)="PM" then let hh+=12
-12000     if hh<10 then let hh$="0"&str$(hh) else let hh$=str$(hh)
+11800     hh=val(infoline$(13:14))
+11900     if infoline$(19:20)="PM" then hh+=12
+12000     if hh<10 then hh$="0"&str$(hh) else hh$=str$(hh)
 12100     fnfiledatetime=val(infoline$(7:10)&infoline$(1:2)&infoline$(4:5)&hh$&infoline$(16:17))
 12200     goto GOTDATE
 12300 NODATE: ! 
@@ -59,7 +59,7 @@
 16000       pr #proc_file: 'chain "'&env$("AfterRecompile")&'"'
 16100     end if 
 16200     close #dirfile: ioerr ignore
-16300     let msr_file$=file$(proc_file)
+16300     msr_file$=file$(proc_file)
 16400     close #proc_file: 
 16500     execute "subproc "&msr_file$
 16600   fnend 

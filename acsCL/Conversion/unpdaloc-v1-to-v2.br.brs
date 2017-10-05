@@ -12,7 +12,7 @@
 00180     open #unpdaloc=1: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UAIdx1.h"&str$(cno),internal,outin,keyed 
 00182 !      close #unpdaloc:
 00190     if version(unpdaloc)=2 then let fnstatus("UnPdAloc is already version 2") : goto XIT
-00200     let version(unpdaloc,2)
+00200     version(unpdaloc,2)
 00210     close #unpdaloc: 
 00220 ! 
 00230 ! change the record length
@@ -22,7 +22,7 @@
 00290     open #unpdaloc=1: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UAIdx1.h"&str$(cno),internal,outin,keyed 
 00300     for j=1 to lrec(unpdaloc)
 00310       read #unpdaloc,using 'Form Pos 1,C 8,c 12',rec=j: vn$,iv$ norec L330
-00315       let vn$=lpad$(rtrm$(vn$),8): let iv$=lpad$(rtrm$(iv$),12)
+00315       vn$=lpad$(rtrm$(vn$),8): iv$=lpad$(rtrm$(iv$),12)
 00320       rewrite #unpdaloc,using 'Form Pos 1,Cr 8,c 12',rec=j: vn$,iv$
 00330 L330: next j
 00340     close #unpdaloc: 
@@ -31,7 +31,7 @@
 00370     goto XIT
 00380 ! ______________________________________________________________________
 00390 ! <Updateable Region: ERTN>
-00400 ERTN: let fnerror(program$,err,line,act$,"xit")
+00400 ERTN: fnerror(program$,err,line,act$,"xit")
 00410     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00420     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00430     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

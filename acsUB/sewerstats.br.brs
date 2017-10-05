@@ -16,28 +16,28 @@
 10150     fnfra(1,1,3,40,"Date Range for Statistics","Enter the range of dates for which you want to calculate sewer charge statistics")
 10160     fnlbl(1,1,"Beginning Date:",22,1,0,1)
 10170     fntxt(1,25,12,0,1,"3",0,"Enter the date of the first billing cycle to be included. ",1)
-10180     let resp$(1)=str$(date("mmddyy")-3)
+10180     resp$(1)=str$(date("mmddyy")-3)
 10190     fnlbl(2,1,"Ending Date:",22,1,0,1)
 10200     fntxt(2,25,12,0,1,"3",0,"Enter the date of the last billing cycle to be included. ",1)
-10210     let resp$(2)=str$(date("mmddyy"))
+10210     resp$(2)=str$(date("mmddyy"))
 10220     fncmdkey("Next",1,1,0,"Calculate sewer statistics.")
 10230     fncmdkey("Cancel",5,0,1,"Returns to menu.")
 10240     fnacs("sewerstats-1",0,mat resp$,ckey)
 10250     if ckey=5 then let fnxit
-10260     let d1=val(resp$(1)) : let d2=val(resp$(2)) : let yrend=d1+10000 : let yrcnt=1
+10260     d1=val(resp$(1)) : d2=val(resp$(2)) : let yrend=d1+10000 : let yrcnt=1
 10270     do while yrend<d2
 10280       mat dt(yrcnt)=dt
-10290       let dt(yrcnt)=yrend
+10290       dt(yrcnt)=yrend
 10300       let yrend+=10000 : let yrcnt+=1
 10310     loop 
-10320     mat dt(yrcnt)=dt : let dt(yrcnt)=d2 : mat chg(yrcnt) : mat ccnt(yrcnt) : mat cycle(yrcnt,1) : mat cyclecnt(yrcnt) : mat avg(2,yrcnt+1)
+10320     mat dt(yrcnt)=dt : dt(yrcnt)=d2 : mat chg(yrcnt) : mat ccnt(yrcnt) : mat cycle(yrcnt,1) : mat cyclecnt(yrcnt) : mat avg(2,yrcnt+1)
 10330   fnend 
 10340   def fn_calculate
-10350     let totcust=lrec(h_ubmstr) : custidx=0
+10350     totcust=lrec(h_ubmstr) : custidx=0
 10360     do 
 10370 NEXTCUST: read #h_ubmstr,using CUSTFORM: z$ eof ENDOFCUST
 10380       custidx+=1 : pr f "10,10,C 35": "Reading customer "&str$(custidx)&" of "&str$(totcust)
-10390       let transkey$=z$&cnvrt$("N 8",0)&cnvrt$("N 1",0)
+10390       transkey$=z$&cnvrt$("N 8",0)&cnvrt$("N 1",0)
 10400       read #h_ubtrans,using TRANSFORM,key>=transkey$: a$,tdate,tcode,seweramt nokey NEXTCUST : goto PROCESSTRANS
 10410 NEXTTRANS: read #h_ubtrans,using TRANSFORM: a$,tdate,tcode,seweramt eof NEXTCUST
 10420 PROCESSTRANS: ! 
@@ -86,8 +86,8 @@
 10850     pr #h_prn: 'Call Print.AddText("Avg. Bill",120,20)'
 10860     pr #h_prn: 'Call Print.MyFontBold(False)'
 10870     for j = 1 to udim(avg,2)
-10880       if j=1 then let dtstart=d1 else let dtstart=dt(j-1)+1
-10890       if j=udim(avg,2) then let txt$="Total Avg" else let txt$=str$(dtstart)&"-"&str$(dt(j))
+10880       if j=1 then dtstart=d1 else dtstart=dt(j-1)+1
+10890       if j=udim(avg,2) then txt$="Total Avg" else txt$=str$(dtstart)&"-"&str$(dt(j))
 10900       fnlbl(j+1,1,txt$,19)
 10910       fnlbl(j+1,22,str$(avg(1,j)),23)
 10920       fnlbl(j+1,47,str$(avg(2,j)),12)

@@ -19,7 +19,7 @@
 00140   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&str$(cno)&",RecL=150,USE",internal,outin 
 00150 L150: read #4,using L160: d1 eof L230,conv L210
 00160 L160: form pos 9,n 6
-00170   let d1=fndate_mmddyy_to_ccyymmdd(d1) ! LET D1=19000000+FNCD(D1)
+00170   d1=fndate_mmddyy_to_ccyymmdd(d1) ! d1=19000000+FNCD(D1)
 00180   rewrite #4,using L190: d1
 00190 L190: form pos 9,pd 6
 00200   goto L150
@@ -34,7 +34,7 @@
 00290   goto L40
 01800 ! ______________________________________________________________________
 01801 ! <updateable region: ertn>
-01802 ERTN: let fnerror(program$,err,line,act$,"xit")
+01802 ERTN: fnerror(program$,err,line,act$,"xit")
 01803   if uprc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01804   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01805   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

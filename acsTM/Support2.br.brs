@@ -5,7 +5,7 @@
 00700   fntop(program$)
 00900   fn_setup_hamster
 01000   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE
-01100   ! let fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
+01100   ! fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 01110   fnhamster_2("ARTrans")
 01200   gosub CLOSE_FILE
 01300   goto XIT
@@ -17,26 +17,26 @@
 01900 ! ______________________________________________________________________
 02000 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 02100 ! ______________________________________________________________________
-02200 XIT: let fnxit
+02200 XIT: fnxit
 02300 ! ______________________________________________________________________
 02400 ! <Updateable Region: ERTN>
-02500 ERTN: let fnerror(program$,err,line,act$,"xit")
+02500 ERTN: fnerror(program$,err,line,act$,"xit")
 02600   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02900 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03000 ! /region
 35000   def fn_setup_hamster
-35020     let mask_pointtwo=32 : let mask_number=30
-35040     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
-35060     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
+35020     mask_pointtwo=32 : mask_number=30
+35040     mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
+35060     textlen_mmddyy=8 : textlen_ccyymmdd=10
 35080     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 35100 ! 
 35120     dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40 ! SP(1) - not used
 35140     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
-35160     let mask_pointtwo=32 : let mask_number=30
-35180     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
-35200     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
+35160     mask_pointtwo=32 : mask_number=30
+35180     mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
+35200     textlen_mmddyy=8 : textlen_ccyymmdd=10
 35220     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 35240     fnhamster_field_reset
 35260  !
@@ -49,9 +49,9 @@
 35400   fnhamster_field_add("Ending Date"     ,textlen_ccyymmdd,'N',storage_len_ccyymmdd,mask_ccyymmdd )
 35420   fnhamster_field_add("Cost to User"    ,10              ,'N'                                    )
 35440   fnhamster_field_add("Name"            ,50              ,'C'                                    )     
-35460 ! let fnhamster_field_add("Contact (1)"     ,50              ,'C'                                    )           
-35480 ! let fnhamster_field_add("Contact (2)"     ,50              ,'C'                                    )           
-35500 ! let fnhamster_field_add("Contact (3)"     ,50              ,'C'                                    )           
+35460 ! fnhamster_field_add("Contact (1)"     ,50              ,'C'                                    )           
+35480 ! fnhamster_field_add("Contact (2)"     ,50              ,'C'                                    )           
+35500 ! fnhamster_field_add("Contact (3)"     ,50              ,'C'                                    )           
 35520  !
 35540     fnhamster_add_combof(1,env$('Q')&'\TMmstr\Clmstr.h420',1,5,6,30,env$('Q')&'\TMmstr\CLIndex.h420',1)
 35560  !
@@ -90,7 +90,7 @@
 55400 ! old program !  ! ______________________________________________________________________
 55420 ! old program !  BUILD_LAYOUT: ! 
 55440 ! old program !  ! ** Field Labels    **
-55460 ! old program !    let ic=0 ! temporary Item Counter
+55460 ! old program !    ic=0 ! temporary Item Counter
 55480 ! old program !    lbl$(ic+=1)="Client ID"
 55500 ! old program !    lbl$(ic+=1)="Sys#"
 55520 ! old program !    lbl$(ic+=1)="System ID"
@@ -103,22 +103,22 @@
 55660 ! old program !    lbl$(ic+=1)="Contact (2)"
 55680 ! old program !    lbl$(ic+=1)="Contact (3)"
 55700 ! old program !  ! ** Text Box / Field Display   Lengths   **
-55720 ! old program !    let ic=0 ! temporary Item Counter
-55740 ! old program !    let mmddyy=8
+55720 ! old program !    ic=0 ! temporary Item Counter
+55740 ! old program !    mmddyy=8
 55760 ! old program !    ccyymmdd=10
-55780 ! old program !    let tln(ic+=1)=6
-55800 ! old program !    let tln(ic+=1)=2
-55820 ! old program !    let tln(ic+=1)=2
-55840 ! old program !    let tln(ic+=1)=ccyymmdd
-55860 ! old program !    let tln(ic+=1)=2
-55880 ! old program !    let tln(ic+=1)=ccyymmdd
-55900 ! old program !    let tln(ic+=1)=10
-55920 ! old program !    let tln(ic+=1)=50
-55940 ! old program !    let tln(ic+=1)=50
-55960 ! old program !    let tln(ic+=1)=50
-55980 ! old program !    let tln(ic+=1)=50
+55780 ! old program !    tln(ic+=1)=6
+55800 ! old program !    tln(ic+=1)=2
+55820 ! old program !    tln(ic+=1)=2
+55840 ! old program !    tln(ic+=1)=ccyymmdd
+55860 ! old program !    tln(ic+=1)=2
+55880 ! old program !    tln(ic+=1)=ccyymmdd
+55900 ! old program !    tln(ic+=1)=10
+55920 ! old program !    tln(ic+=1)=50
+55940 ! old program !    tln(ic+=1)=50
+55960 ! old program !    tln(ic+=1)=50
+55980 ! old program !    tln(ic+=1)=50
 56000 ! old program !  ! ** Field Types **
-56020 ! old program !    let ic=0
+56020 ! old program !    ic=0
 56040 ! old program !    fltyp$(ic+=1)='N'
 56060 ! old program !    fltyp$(ic+=1)='N'
 56080 ! old program !    fltyp$(ic+=1)='C'
@@ -131,8 +131,8 @@
 56220 ! old program !    fltyp$(ic+=1)='C'
 56240 ! old program !    fltyp$(ic+=1)='C'
 56260 ! old program !  ! ** Field Storage Lengths **
-56280 ! old program !    let ic=0
-56300 ! old program !    let mmddyy=6 : ccyymmdd=8
+56280 ! old program !    ic=0
+56300 ! old program !    mmddyy=6 : ccyymmdd=8
 56320 ! old program !    sln(ic+=1)=6
 56340 ! old program !    sln(ic+=1)=2
 56360 ! old program !    sln(ic+=1)=2
@@ -145,20 +145,20 @@
 56500 ! old program !    sln(ic+=1)=50
 56520 ! old program !    sln(ic+=1)=50
 56540 ! old program !  ! ** Field Masks **
-56560 ! old program !    let ic=0
-56580 ! old program !    let pointtwo=32 : let number=30
-56600 ! old program !    ccyymmdd=3 : let mmddyy=1 : let glnumber=53
-56620 ! old program !    let mask(ic+=1)=number
-56640 ! old program !    let mask(ic+=1)=number
-56660 ! old program !    let mask(ic+=1)=0
-56680 ! old program !    let mask(ic+=1)=ccyymmdd
-56700 ! old program !    let mask(ic+=1)=0
-56720 ! old program !    let mask(ic+=1)=ccyymmdd
-56740 ! old program !    let mask(ic+=1)=pointtwo
-56760 ! old program !    let mask(ic+=1)=0
-56780 ! old program !    let mask(ic+=1)=0
-56800 ! old program !    let mask(ic+=1)=0
-56820 ! old program !    let mask(ic+=1)=0
+56560 ! old program !    ic=0
+56580 ! old program !    pointtwo=32 : number=30
+56600 ! old program !    ccyymmdd=3 : mmddyy=1 : let glnumber=53
+56620 ! old program !    mask(ic+=1)=number
+56640 ! old program !    mask(ic+=1)=number
+56660 ! old program !    mask(ic+=1)=0
+56680 ! old program !    mask(ic+=1)=ccyymmdd
+56700 ! old program !    mask(ic+=1)=0
+56720 ! old program !    mask(ic+=1)=ccyymmdd
+56740 ! old program !    mask(ic+=1)=pointtwo
+56760 ! old program !    mask(ic+=1)=0
+56780 ! old program !    mask(ic+=1)=0
+56800 ! old program !    mask(ic+=1)=0
+56820 ! old program !    mask(ic+=1)=0
 56840 ! old program !  ! ** Combo Boxes **
 56860 ! old program !  ! CL=Field Number  : C$(CL,1)='ComboF'
 56880 ! old program !  ! C$(CL,2)=Linked File Name
@@ -193,10 +193,10 @@
 57460 ! old program !    fnhamster("Support",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 57480 ! old program !    return 
 57500 ! old program !  ! ______________________________________________________________________
-57520 ! old program !  XIT: let fnxit
+57520 ! old program !  XIT: fnxit
 57540 ! old program !  ! ______________________________________________________________________
 57560 ! old program !  ! <Updateable Region: ERTN>
-57580 ! old program !  ERTN: let fnerror(program$,err,line,act$,"xit")
+57580 ! old program !  ERTN: fnerror(program$,err,line,act$,"xit")
 57600 ! old program !    if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 57620 ! old program !    execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 57640 ! old program !    pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

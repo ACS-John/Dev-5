@@ -10,7 +10,7 @@
 00120   for j=1 to lrec(1)
 00130     read #trmstr,using L140,rec=j: d1 norec NEXT_J
 00140 L140: form pos 12,n 6
-00150     let d1=fncd(d1)
+00150     d1=fncd(d1)
 00160     rewrite #trmstr,using 'Form POS 85,N 2,N 6',rec=j: 19,d1
 00162 NEXT_J: ! 
 00170   next j

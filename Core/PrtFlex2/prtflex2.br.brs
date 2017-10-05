@@ -17,8 +17,8 @@
 00032   dim abbrev$*20,open_read$*80,tg(11)
 00039 ! ______________________________________________________________________
 00040   fntop("Core\Programs\PrtFlex2",cap$="Print Flex")
-00099   let programfolder$=fncursys$&"mstr" !:
-        let datafolder$=env$('Q')&'\'&fncursys$&"mstr" 
+00099   programfolder$=fncursys$&"mstr" !:
+        datafolder$=env$('Q')&'\'&fncursys$&"mstr" 
 00102 ! 
 00122   dim saddr$*40,scity$*20,sstate$*2,szip$*11,msgnum$*12,maddr$*39,mcity$*20,mstate$*2,mzip$*11,atime$*8,crn$*9,dtl$*8,name$(3)*25,ss$*11,race$*18,sex$*1
 00123   dim tr(7),tr$*12,td$*30
@@ -53,12 +53,12 @@
 04120   fnflexadd1(mat item$)
 04130   goto L4096
 04140 EOFONREAD: ! Complete the grid once all data has been read
-04144 ! Let FNLBL(15,1,"Export the grid to a fixed width file, for later use.")
-04145   fncmdset(52): let fnacs(sn$,win,mat response$,ckey) !:
+04144 ! fnLBL(15,1,"Export the grid to a fixed width file, for later use.")
+04145   fncmdset(52): fnacs(sn$,win,mat response$,ckey) !:
         ! CALL items selected
 04146   lastgridresponse$=response$(1)
 04160   if ckey=5 then chain "Core\prtflex\PRTFLEX1",programfolder$,datafolder$
-04170 ! Let FNXIT(CURSYS$)
+04170 ! fnXIT(CURSYS$)
 04180 ! ____________________________________________________________________
 07999 ! __________________ this is 7999 next is 8000 _________________________
 08000 OPENFILES: ! The following lines will be proc in from a display file                          you have created. They are in the same file as the read                         statements explained above.  Don't forget the del lines to
@@ -88,20 +88,20 @@
         colmask$(7)="30"
 10499   return 
 10500 GRIDDETAILS: ! The following lines are generated lines.  They will be                          removed and added back just before each grid is printed
-10510   let item$(1)= str$(tr(1))
-10520   let item$(2)= str$(tr(2))
-10530   let item$(3)= str$(tr(4))
-10540   let item$(4)=td$
-10550   let item$(5)= str$(tr(5))
-10560   let item$(6)=tr$
-10570   let item$(7)= str$(tr(6))
+10510   item$(1)= str$(tr(1))
+10520   item$(2)= str$(tr(2))
+10530   item$(3)= str$(tr(4))
+10540   item$(4)=td$
+10550   item$(5)= str$(tr(5))
+10560   item$(6)=tr$
+10570   item$(7)= str$(tr(6))
 10990   return 
 10999 ! __________________ this is 10999 next is 11000 ________________________
 11000 DONE: close #1: ioerr XIT
-11010 XIT: let fnxit(cursys$)
+11010 XIT: fnxit(cursys$)
 11020 ! _______________________________________________________________________
 11021 ! <Updateable Region: ERTN>
-11022 ERTN: let fnerror(program$,err,line,act$,"xit")
+11022 ERTN: fnerror(program$,err,line,act$,"xit")
 11023   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 11024   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 11025   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

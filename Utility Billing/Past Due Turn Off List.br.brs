@@ -28,44 +28,44 @@
 27100 ! /r
 32000 ! r: SCREEN1
 32020   fntos(sn$="UBPdTnOf")
-32040   let mylen=21 : let mypos=mylen+2
+32040   mylen=21 : mypos=mylen+2
 32060   fnfra(1,1,3,40,"Aging Dates","Use the last day of each month for your aging dates (Use ccyymmdd format).")
 32080 ! 
 32100   fnlbl(1,1,"Current Month:",mylen,1,0,1)
 32120   fntxt(1,mypos,10,10,1,"3",0,"Use the last day of your current mongh for the best aging results.",1)
-32140   let resp$(1)=""
+32140   resp$(1)=""
 32160   fnlbl(2,1,"Last Month:",mylen,1,0,1)
 32180   fntxt(2,mypos,10,10,1,"3",0,"Use the last day of last month.",1)
-32200   let resp$(2)=""
+32200   resp$(2)=""
 32220   fnlbl(3,1,"Month Before That:",mylen,1,0,1)
 32240   fntxt(3,mypos,10,10,1,"3",0,"Equivalent date from two months ago.",1)
-32260   let resp$(3)=""
+32260   resp$(3)=""
 32280   fnlbl(6,1,"Billing Date:",mylen,1)
 32300   fntxt(6,mypos,8,8,1,"1")
-32320   let resp$(4)=str$(lbill)
+32320   resp$(4)=str$(lbill)
 32340   fnlbl(7,1,"Final Billing Code:" ,mylen,1)
 32360   fncomboa("aai",7,mypos,mat opt_aai$)
-32380   let resp$(5)=aai$
+32380   resp$(5)=aai$
 32400   fnchk(9,40,"Print Meter Address:",1)
-32420   let resp$(6)=printadr$
+32420   resp$(6)=printadr$
 32440   fnchk(10,40,"Exclude Current Month:",1)
-32460   let resp$(7)=excludecurrent$
+32460   resp$(7)=excludecurrent$
 32480   fnchk(11,40,"Exclude Last Month:",1)
-32500   let resp$(8)=excludelast$
+32500   resp$(8)=excludelast$
 32520   fnchk(12,40,"Print Past Due Balance:",1)
-32540   let resp$(9)=pastduebalance$
+32540   resp$(9)=pastduebalance$
 32542   fnchk(13,40,"Print "&trim$(srvnam$(4))&" Meter Number:",1)
-32544   let resp$(10)=pr_s4_meter_number$
+32544   resp$(10)=pr_s4_meter_number$
 32546   fnchk(15,40,"Print blank lines for notes:",1)
-32548   let resp$(11)=pr_blank_lines_for_notes$
+32548   resp$(11)=pr_blank_lines_for_notes$
 32550   fnchk(17,40,"Account Sequence",1)
-32552   let resp$(rc_accountSequence:=12)=accountSequence$
+32552   resp$(rc_accountSequence:=12)=accountSequence$
 32560   fncmdset(3)
 32580   fnacs(sn$,0,mat resp$,ck)
 32600   if ck=5 then goto XIT
 32620   for j=1 to 3
 32640 L400: let x=pos(resp$(j),"/",1)
-32660     if x>0 then let resp$(j)(x:x)="" : goto L400
+32660     if x>0 then resp$(j)(x:x)="" : goto L400
 32680   next j
 32700   lastday(1)=val(resp$(1))
 32720   let firstday(1)=(val(resp$(1)(1:6))*100)+1
@@ -75,12 +75,12 @@
 32800   let firstday(3)=(val(resp$(3)(1:6))*100)+1
 32820   lbill=val(resp$(4))
 32840   aai$=printal$=resp$(5)
-32860   let printadr$=resp$(6) : if printadr$="True" then let printadr=1 ! wants meter address printed
+32860   printadr$=resp$(6) : if printadr$="True" then printadr=1 ! wants meter address printed
 32880   excludecurrent$=resp$(7) : if excludecurrent$="True" then excludecurrent=1 ! do not list those owing just the current month
 32900   excludelast$=resp$(8) : if excludelast$="True" then excludelast=1 ! do not list those owing just the current month and last month
-32920   let pastduebalance$=resp$(9) : if pastduebalance$="True" then let pastduebalance=1 ! only show past due amount in balance column
-32925   let pr_s4_meter_number$=resp$(10) : if pr_s4_meter_number$="True" then let pr_s4_meter_number=1 ! only show past due amount in balance column
-32926   let pr_blank_lines_for_notes$=resp$(11)
+32920   pastduebalance$=resp$(9) : if pastduebalance$="True" then pastduebalance=1 ! only show past due amount in balance column
+32925   pr_s4_meter_number$=resp$(10) : if pr_s4_meter_number$="True" then pr_s4_meter_number=1 ! only show past due amount in balance column
+32926   pr_blank_lines_for_notes$=resp$(11)
 32928   accountSequence$=resp$(rc_accountSequence)
 32930   fncreg_write('ubpdtnof.aai',aai$)
 32940   fncreg_write('ubpdtnof.printadr',printadr$)
@@ -159,15 +159,15 @@
 45560 F_REPORT_LINE: form pos 1,c 12,c 25,n 12.2,pic(bbzz/zz/zzbb),x 3,c 4,x 1,c 1,x 2,c 25,x 2,c 25
 45580 ! 
 45600   s2=s2+bal
-45620   let t2=t2+bal
-45640   let t1=t1+g(10)
+45620   t2=t2+bal
+45640   t1=t1+g(10)
 45660   s1=s1+g(10)
-45680   let holdrt=route
+45680   holdrt=route
 45700 L880: ! 
 45720   goto MAIN_LOOP_TOP
 45740 ! /r
 50000 HDR1: ! r:
-50020   let p2=p2+1
+50020   p2=p2+1
 50040   pr #255: "\qc "&env$('cnam')
 50060   pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
 50080 ! pr #255: "As of "&CNVRT$("pic(zzzz/zz/zz)",LASTDAY(1))
@@ -198,7 +198,7 @@
 52120   pr #255: "" pageoflow PGOF
 52140   s1=0
 52160   s2=0
-52180   let holdrt=route
+52180   holdrt=route
 52200   return  ! /r
 54000 TOTAL_FINAL: ! r:
 54020   gosub TOTAL_BOOK
@@ -218,7 +218,7 @@
 56120   pr #255: newpage
 56140   gosub HDR1
 56160   continue  ! /r
-58000 XIT: let fnxit
+58000 XIT: fnxit
 60000 IGNORE: continue 
 62000 BUD1: ! r:
 62020   bud1=0
@@ -231,9 +231,9 @@
 64040   mat bd1(5) : mat bd1=(0) : mat bd2=(0)
 64060   if bud1=0 then goto L1580
 64080   read #81,using L1470,key=z$: z$,mat ba,mat badr nokey L1580
-64100   for j=2 to 12: let totba=totba+ba(j): next j
+64100   for j=2 to 12: totba=totba+ba(j): next j
 64120 L1470: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-64140   let ta1=badr(1)
+64140   ta1=badr(1)
 64160 L1490: if ta1=0 then goto L1580
 64180   read #82,using L1510,rec=ta1: z$,mat bt1,nba norec L1580
 64200 L1510: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
@@ -242,43 +242,43 @@
 64260   if bd1>5 then goto L1580
 64280   bd1(bd1)=bt1(1,2)
 64300   bd2(bd1)=ta1
-64320 L1570: let ta1=nba : goto L1490
+64320 L1570: ta1=nba : goto L1490
 64340 L1580: ! 
 64360   return  ! /r
 66000 ! <Updateable Region: ERTN>
-66020 ERTN: let fnerror(program$,err,line,act$,"xit")
+66020 ERTN: fnerror(program$,err,line,act$,"xit")
 66040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 66060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 66080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 66100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 66120 ! /region
 67000 PR_TRAN_DEBUG_DATA: ! r:
-67020   if debug_this_tran then pr '                            tdate=';tdate;' tcode=';tcode;' tamount=';tamount : let debug_this_tran=1 else let debug_this_tran=0 ! pause
+67020   if debug_this_tran then pr '                            tdate=';tdate;' tcode=';tcode;' tamount=';tamount : debug_this_tran=1 else debug_this_tran=0 ! pause
 67040   return  ! /r
 68000 TRANS_ACCUMULATE: ! r:
 68040   mat month=(0)
 68042   dim trans_accumulate_execption$*24
-68044   let trans_accumulate_execption$=''
+68044   trans_accumulate_execption$=''
 68046 ! if trim$(z$)='100093.57' then pause
 68060   restore #hTrans,key>=z$&"         ": nokey TA_NO_TRANS
-68070   let ta_p1_read_count=0
+68070   ta_p1_read_count=0
 68080 TA_TRANS_READ: ! 
 68100   read #hTrans,using 'form pos 1,c 10,n 8,n 1,pd 4.2': p$,tdate,tcode,tamount eof TA_PHASE_2
-68101   let ta_p1_read_count+=1
-68102 ! if env$('ACSDeveloper')<>'' and trim$(z$)='100780.00' then let debug_this_account=1 else debug_this_account=0 ! pause
+68101   ta_p1_read_count+=1
+68102 ! if env$('ACSDeveloper')<>'' and trim$(z$)='100780.00' then debug_this_account=1 else debug_this_account=0 ! pause
 68104 ! if debug_this_account and str$(tdate)(1:4)='2015' then debug_this_tran=1 else debug_this_tran=0 ! pause
-68106   if p$<>z$ and ta_p1_read_count=1 then let trans_accumulate_execption$='(no transaction history)'
+68106   if p$<>z$ and ta_p1_read_count=1 then trans_accumulate_execption$='(no transaction history)'
 68120   if p$<>z$ then goto TA_PHASE_2
 68140   for j=1 to 3
 68160     if tdate<firstday(3) then ! older than we want to analyze
 68180 !     if debug_this_tran then pr '  A  older than what we want to analyze'
 68182       goto TA_TRANS_READ
 68200     else if tdate>=firstday(j) and tdate<=lastday(j) and (tcode = 1 or tcode=2 or tcode=5) then 
-68220       let month(j)=month(j)+tamount
+68220       month(j)=month(j)+tamount
 68240 !      if debug_this_tran then gosub PR_TRAN_DEBUG_DATA : pr '  B  month(';j;')=';month(j);'    because ';tdate;' =/between >';firstday(j);' - ';lastday(j);' and tcode=';tcode
 68242       goto TA_TRANS_READ
 68260     else if tdate>lastday(j) and (tcode = 1 or tcode=2 or tcode=5) then ! accumulate all collections in month 4
-68280       let month(j)=month(j)+tamount
+68280       month(j)=month(j)+tamount
 68300 !      if debug_this_tran then gosub PR_TRAN_DEBUG_DATA : pr '  C  month(';j;')=';month(j);'    because ';tdate;'>';lastday(j);' and tcode=';tcode
 68302       goto TA_TRANS_READ
 68320     end if 
@@ -286,22 +286,22 @@
 68360   goto TA_TRANS_READ
 70000 TA_PHASE_2: ! 
 70020   if debug_this_account then pr ' the month accumulators before pahse 2' : pr mat month ! pause
-70040   let holdbal=bal
+70040   holdbal=bal
 70060   for j=1 to 4 ! find oldest month still owed
 70080     if holdbal<=0 then 
 70100 !     if debug_this_account then pr '  AA  changing month(';j;') from ';month(j);' to 0 because holdbal<=0'
-70120       let month(j)=0
+70120       month(j)=0
 70140 !   else if env$('client')="Albany" and holdbal<10.50 then ! don't any balance less than a minimum bill cause a month to show delinquent
-70180 !     let month(j)=0
+70180 !     month(j)=0
 70200     else if holdbal>0 then 
 70220 !     if debug_this_account then pr '  CC  changing holdbal from (';holdbal;') to ';holdbal-month(j)
-70240       let holdbal=holdbal-month(j)
+70240       holdbal=holdbal-month(j)
 70260     end if 
 70280 !   if debug_this_account then pause
 70300   next j
 70320   goto TA_FINIS
 72000 TA_NO_TRANS: ! 
-72020   let trans_accumulate_execption$='(no transaction history)'
+72020   trans_accumulate_execption$='(no transaction history)'
 72040   goto TA_PHASE_2 ! TA_FINIS
 74000 TA_FINIS: ! 
 74020   if debug_this_account then 

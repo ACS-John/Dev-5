@@ -28,7 +28,7 @@
 16040     pr 'write_count=';write_count : pause
 18000   xit: fnxit
 28000 ! <Updateable Region: ERTN>
-28060 ERTN: let fnerror(program$,err,line,act$,"xit")
+28060 ERTN: fnerror(program$,err,line,act$,"xit")
 28080   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 28100   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 28120   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -43,8 +43,8 @@
 32120   linput #2: ln$ eof OWFFL_Finis
 32140   ! Let Z$=LPAD$(RTRM$(LN$(17:26)),10)
 32160   let z$=lpad$(rtrm$(ln$(1:9)),10)
-32180   ! Let ROUTE=VAL(LN$(1:7))
-32200   let route=val(ln$(81:87))
+32180   ! rOUTE=VAL(LN$(1:7))
+32200   route=val(ln$(81:87))
 32220   ! sEQUENCE=VAL(LN$(9:15))
 32240   sequence=val(ln$(73:79))
 32260   read #1,using "Form POS 1,c 10,pos 1741,n 2,pos 1743,n 7",key=z$: oldz$,oldroute,oldsequence nokey L250

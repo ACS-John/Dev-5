@@ -8,7 +8,7 @@
 00080 ! ______________________________________________________________________
 00090   fncno(cno)
 00100   fntop(program$,"Remove Old Transactions")
-00110   cancel=99 : let right=1 : center=2 : on=1 : off=0 !:
+00110   cancel=99 : right=1 : center=2 : on=1 : off=0 !:
         left=0
 00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #20,using 'Form POS 417,N 1': rcn !:
@@ -18,10 +18,10 @@
 00150   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&str$(cno),internal,input,keyed 
 00160   open #work2=4: "Name="&env$('Q')&"\CLmstr\Work2."&wsid$&",version=2,Size=0,RecL=80,Replace",internal,outin,relative 
 00170   fntos(sn$='RmTrans-'&str$(rcn)) !:
-        let mylen=21 : let mypos=mylen+2 : lc=0
+        mylen=21 : mypos=mylen+2 : lc=0
 00180   fnlbl(lc+=1,1,"Oldest Retained Date:",mylen,right)
 00190   fntxt(lc,mypos,10,0,0,'1003') !:
-        let resp$(1)=str$(date('ccyymmdd')-50000)
+        resp$(1)=str$(date('ccyymmdd')-50000)
 00200   lc+=1
 00210   if rcn=1 then !:
           fnlbl(lc+=1,1,"All cleared transactions with a",mylen*2,center)
@@ -31,7 +31,7 @@
 00240   fncmdset(2)
 00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 or ckey=cancel then goto XIT else !:
-          let rd1=val(resp$(1))
+          rd1=val(resp$(1))
 00270 ! fnwait
 00280 READ_TRMSTR: ! 
 00290   read #trmstr,using 'Form POS 1,G 2,G 1,C 8,G 6,PD 10.2,C 8,C 35,G 1,G 6,G 1': bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof END1
@@ -44,7 +44,7 @@
 00360 KEEP: ! 
 00370   write #work1,using 'Form POS 1,G 2,G 1,C 8,G 6,pd 10.2,C 8,C 35,G 1,G 6,G 1,2*PD 3': bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd
 00380   restore #tralloc: 
-00390   let key$=cnvrt$('Pic(ZZ)',bank_code)&str$(tcde)&tr$(1) !:
+00390   key$=cnvrt$('Pic(ZZ)',bank_code)&str$(tcde)&tr$(1) !:
         restore #tralloc,key>=key$: nokey EO_TRALLOC
 00400 READ_TRALLOC: ! 
 00410   read #tralloc,using 'Form POS 1,C 11,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1': newkey$,gl$,amt,de$,ivd,po$,postd eof EO_TRALLOC !:
@@ -67,10 +67,10 @@
 00570   execute "Index "&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TrAlloc-idx.H"&str$(cno)&" 1 11 Replace DupKeys -n"
 00580   goto XIT
 00590 ! ______________________________________________________________________
-00600 XIT: let fnxit
+00600 XIT: fnxit
 00610 ! ______________________________________________________________________
 00620 ! <Updateable Region: ERTN>
-00630 ERTN: let fnerror(program$,err,line,act$,"xit")
+00630 ERTN: fnerror(program$,err,line,act$,"xit")
 00640   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00650   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00660   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -13,7 +13,7 @@
 00120   close #fin: 
 00121 ! Execute 'Index Temp.dat Temp.idx 1/3 2/2 Replace,DupKeys'
 00130   open #tmpfile:=12: "Name=Temp.dat,KFName=Temp.idx,Shr",internal,outin,keyed 
-00140   let key$=rpad$(str$(8),2)&rpad$(str$(9),2) !:
+00140   key$=rpad$(str$(8),2)&rpad$(str$(9),2) !:
         read #tmpfile,using 'Form Pos 1,C 2,C 2,C 40',key=key$,reserve: a$,b$,c$ !:
         ! br 4.03jy gives and error 4272 on this line !:
         ! so does 4.03k

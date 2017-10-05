@@ -18,7 +18,7 @@
 10180   dim tr$(5)*35,sn$*30,dtr$(5)*35,payeegl$*12,gldesc$*30
 10190 ! ______________________________________________________________________
 10200   fntop(program$)
-10230   let prd=val(date$(4:5)&date$(7:8)&date$(1:2))
+10230   prd=val(date$(4:5)&date$(7:8)&date$(1:2))
 10240   open #bankmstr:=12: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 10250   open #h_paymstr1:=13: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 10260   open #paymstr2:=14: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -34,17 +34,17 @@
 10360   fn_get_coinfo
 10370 MENU1: ! 
 10380   read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey MAIN_QUESTIONS
-10390   let t1(1)=bal
+10390   t1(1)=bal
 10400   let upi=t1(5)
-10410   let t1(3)=t1(1)-t1(2)
+10410   t1(3)=t1(1)-t1(2)
 10420   ckn=val(lcn$)+1 conv ignore
 10430   bn$=rtrm$(bn$)
 10440 MAIN_QUESTIONS: ! 
 10450   if fn_scr_main_questions=5 then goto XIT
 10460 ! 
-10470   let tac=0
-10480   if ti1=3 and pri=1 then let h_vf1=23 else let h_vf1=h_paymstr1
-10490   if ti1=1 then let h_vf1=13
+10470   tac=0
+10480   if ti1=3 and pri=1 then h_vf1=23 else h_vf1=h_paymstr1
+10490   if ti1=1 then h_vf1=13
 10500   allign=0
 10510   if ti1=3 then goto REPRINT_CHECKS
 10520   open #company=15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
@@ -59,7 +59,7 @@
 10610   mat amt=(0) : mat de$=("")
 10620 READ_4: ! 
 10630   read #h_paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,n 1,n 6,n 10.2,n 8',release: vn$,iv$,mat up$,upa,pcde,bc,ck$,dp,gde,pdate,disamt,ddate eof EOF_ROUTINE
-10640   let vn$=lpad$(rtrm$(vn$),8)
+10640   vn$=lpad$(rtrm$(vn$),8)
 10650   if rtrm$(vn$)="" then goto READ_4
 10660   if pcde=0 then goto READ_4
 10670   if bc=0 then bc=bankcode ! if coded for payment with no bank code, pay from the  current bank account
@@ -73,16 +73,16 @@
 10750     if y>2 then let y=1
 10760     if y=1 then let x+=1
 10770     if x>15 then gosub SUB_PRINT_CHECK
-10780     let iv$(x,y)=iv$(1:12)
-10790     let de$(x,y)=up$(4)(1:13) ! this one for printing from unpaid file
+10780     iv$(x,y)=iv$(1:12)
+10790     de$(x,y)=up$(4)(1:13) ! this one for printing from unpaid file
 10800   end if 
 10810   amt(x,y)=amt(x,y)+upa
-10820   let ivdate(x,y)=dp
-10830   let disamt(x,y)=disamt
+10820   ivdate(x,y)=dp
+10830   disamt(x,y)=disamt
 10840   arec+=1
 10850   arec(arec)=lr4
-10860   let holdvn$=vn$
-10870   let hiv$=iv$
+10860   holdvn$=vn$
+10870   hiv$=iv$
 10880   amt=sum(amt)
 10890   st1=1
 10900   goto READ_4
@@ -95,11 +95,11 @@
 10980 !   on ckoption goto L1360,L1360 none L1360 ! L1390
 10990 ! L1360: ! 
 11000   if amt<=0 then goto L2420
-11020   if scc$="CSS" then let fn_portion_check : let fn_portion_stub(1) : let fn_portion_stub(2)
+11020   if scc$="CSS" then let fn_portion_check : fn_portion_stub(1) : fn_portion_stub(2)
 11030 ! L1390: ! 
-11040   if scc$="SCS" then let fn_portion_stub(1) : let fn_portion_check : let fn_portion_stub(2)
-11060   if scc$="SSC" then let fn_portion_stub(1) : let fn_portion_stub(2) : let fn_portion_check
-11070   if scc$="SCC" then let fn_portion_stub(1) : let fn_portion_check : let fn_portion_check
+11040   if scc$="SCS" then let fn_portion_stub(1) : fn_portion_check : fn_portion_stub(2)
+11060   if scc$="SSC" then let fn_portion_stub(1) : fn_portion_stub(2) : fn_portion_check
+11070   if scc$="SCC" then let fn_portion_stub(1) : fn_portion_check : fn_portion_check
 11090   gosub UPDATEINVOICE
 11100 return ! /r
 11110 ! ______________________________________________________________________
@@ -107,50 +107,50 @@
 11130   for j=1 to arec
 11140     rewrite #h_paytrans,using 'Form POS 76,N 8,N 6',rec=arec(j): ckn,prdmmddyy
 11150   next j
-11160   let idx=1
+11160   idx=1
 11170   ! allign=3  !  remove allign routine alltogether   <-- that did not work.
 11180   if allign=3 then pr #255: newpage : goto ALIGN_COMPLETED
 11190   pr #255: newpage
 11200   fncloseprn
 11210 ! if env$('client')="Washington Parrish" then let fnprocess(0)
-11220   let holdpayee$=""
+11220   holdpayee$=""
 11230   if ti1=1 then ckoption=1 : allign=2 : goto L2300 ! skip the continue routine when entering and printing checks
 11240   if ~allign then 
 11250     if ckoption=1 or ckoption=3 then 
 11260       mat inl$(4)
-11270       let inl$(4)="4. Void previous check    "
+11270       inl$(4)="4. Void previous check    "
 11280     else if ckoption=2 then 
 11290       mat inl$(3)
 11300     end if 
-11310     let inl$(1)="1. Reprint the same check    "
+11310     inl$(1)="1. Reprint the same check    "
 11320     if ckoption=1 or ckoption=3 then 
-11330       let inl$(2)="2. Continue with next check    "
+11330       inl$(2)="2. Continue with next check    "
 11340     else 
-11350       let inl$(2)="2. pr next check and Stop   "
+11350       inl$(2)="2. pr next check and Stop   "
 11360     end if 
 11370     if ckoption=1 or ckoption=3 then 
-11380       let inl$(3)="3. Completed with checks"
+11380       inl$(3)="3. Completed with checks"
 11390     else 
-11400       let inl$(3)="3. pr All remaining checks  "
+11400       inl$(3)="3. pr All remaining checks  "
 11410     end if 
 11420   end if  ! ~allign
 11430 SCR_CKPRT7: ! 
 11440   fntos(sn$="ckprt-7")
-11450   let respc=0
+11450   respc=0
 11460   fnlbl(1,1,"",40,0)
 11470   fnlbl(1,1,"Print Options:",38,0)
 11480   fnopt(2,3,inl$(1),0)
-11490   let resp$(respc+=1)="False"
+11490   resp$(respc+=1)="False"
 11500   fnopt(3,3,inl$(2),0)
-11510   let resp$(respc+=1)="True" !  if ckoption=1 or ckoption=3 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+11510   resp$(respc+=1)="True" !  if ckoption=1 or ckoption=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 11520   fnopt(4,3,inl$(3),0)
 11530   if ckoption=2 then 
-11540     let resp$(respc+=1)="True"
+11540     resp$(respc+=1)="True"
 11550   else 
-11560     let resp$(respc+=1)="False"
+11560     resp$(respc+=1)="False"
 11570     if trim$(inl$(4))<>"" then 
 11580       fnopt(5,3,inl$(4),0)
-11590       let resp$(respc+=1)="False"
+11590       resp$(respc+=1)="False"
 11600     end if 
 11610   end if 
 11620   fncmdset(2)
@@ -170,7 +170,7 @@
 11760   if prenum=1 then 
 11770     write #trmstr1,using 'Form POS 1,N 2,N 1,G 8,g 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankcode,1,ckn,prdmmddyy,0,"","VOID",1,dp,1
 11780     ckn=ckn+1
-11790     let tr$(1)=str$(ckn)
+11790     tr$(1)=str$(ckn)
 11800   end if 
 11810   goto SUB_PRINT_CHECK
 11820 ALIGN_COMPLETED: ! 
@@ -186,10 +186,10 @@
 11920   amt=arec=x=y=0
 11930   let x=y=1
 11940   st1=0
-11950   let holdvn$=vn$
-11960   let tr$(3)=tr$(4)=tr$(5)=""
-11970   let hiv$=""
-11980   let tac=0
+11950   holdvn$=vn$
+11960   tr$(3)=tr$(4)=tr$(5)=""
+11970   hiv$=""
+11980   tac=0
 11990   if (ckoption=1 or ckoption=3) and allign=3 then goto MENU1
 12000   return ! /r
 12020 EOF_ROUTINE: ! r:
@@ -197,46 +197,46 @@
 12040   fncloseprn
 12050 ! if env$('client')="Washington Parrish" then let fnprocess(0)
 12060   mat amt=(0) : mat de$=("") : mat iv$=("") : mat de$=("") : let x=y=1
-12070   st1=0 : let holdvn$=""
+12070   st1=0 : holdvn$=""
 12080   goto MENU3
 12090 ! /r
 12100 MENU3: ! r: (reprint or transfer to history)
 12110   fntos(sn$="ckprt-4")
-12120   let respc=0
+12120   respc=0
 12130   fnlbl(1,1,"Reprint Options:",38)
-12140   let item5$(1)="Reprint Checks"
-12150   let item5$(2)="Transfer to Check History"
+12140   item5$(1)="Reprint Checks"
+12150   item5$(2)="Transfer to Check History"
 12160   fncomboa("ckprt-cmb1",1,40,mat item5$,tt$)
-12170   let resp$(respc+=1)=item5$(2)
-12180   fncmdset(41): let fnacs(sn$,0,mat resp$,ck)
-12190   if resp$(1)=item5$(1) then let ti2=1 else let ti2=2
+12170   resp$(respc+=1)=item5$(2)
+12180   fncmdset(41): fnacs(sn$,0,mat resp$,ck)
+12190   if resp$(1)=item5$(1) then ti2=1 else ti2=2
 12200   allign=0
 12210   on ti2 goto MENU4,TRANS_TO_CK_HIST none MENU3
 12220 ! /r
 12250 MENU4: ! r: (Reprint Options)
 12260   fntos(sn$="ckprt-reprint")
-12270   let respc=0
+12270   respc=0
 12280   fnlbl(1,1,"Reprint Options:",38)
-12290   let item4$(1)="Reprint all checks"
-12300   let item4$(2)="Begin with specific Payee"
+12290   item4$(1)="Reprint all checks"
+12300   item4$(2)="Begin with specific Payee"
 12310   fncomboa("ckprt-cmb2",1,40,mat item4$,tt$)
-12320   let resp$(respc+=1)=item4$(1)
+12320   resp$(respc+=1)=item4$(1)
 12330   fnlbl(3,1,"Beginning payee number:",38)
 12340   fncombof("Paymstr",3,10,30,env$('Q')&"\CLmstr\paymstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\Payidx1.h"&env$('cno'),0,pas, "Enter the beginning payee number if you wish to only reprint part of the checks")
-12350   let resp$(respc+=1)=holdpayee$
+12350   resp$(respc+=1)=holdpayee$
 12360   fncmdset(2)
 12370   fnacs(sn$,0,mat resp$,ck)
 12380   if ck=5 then goto XIT
-12390   if resp$(1)=item4$(1) then let ti2=1 else let ti2=2
+12390   if resp$(1)=item4$(1) then ti2=1 else ti2=2
 12400   begvn$=resp$(2)(1:8) ! beginning payee to start reprint
 12410   on ti2 goto L3430,L3470
 12420 L3430: ! REPRINT ALL
 12430   restore #h_paytrans,key>="                    ": 
-12440   let hiv$="" : let de$="" ! ???
+12440   hiv$="" : de$="" ! ???
 12450   goto MAIN_QUESTIONS
 12460 L3470: ! reprint beginning with specific payee
 12470   restore #h_paytrans,key>=lpad$(rtrm$(begvn$),8)&"            ": nokey MENU4
-12480   let hiv$="" : let de$=""
+12480   hiv$="" : de$=""
 12490   goto MAIN_QUESTIONS
 12500 ! /r
 12510 TRANS_TO_CK_HIST: ! r: TRANSFER TO CHECK HISTORY
@@ -257,7 +257,7 @@
 12660     close #h_closeme: ioerr CLOSE_IGNORE
 12670 CLOSE_IGNORE: ! 
 12680   fnend  ! fn_close
-12700 XIT: let fnxit
+12700 XIT: fnxit
 12710 IGNORE: continue 
 12730 CKOPTION1_CHECK_ENTRY: ! r:
 12740   mat resp$=("")
@@ -272,16 +272,16 @@
 12830   end if 
 12840 ! /r
 12850 STORE_GL_BREAKDOWNS: ! r: store general ledger breakdowns
-12860   let x=0 : let tac=0
+12860   let x=0 : tac=0
 12870   for j=1 to 146 step 5
 12880     let x=x+3
 12890     if x=33 then let x=35 ! skip check# and date (resp$(33)&34
-12900     let in3$(j)=holdresp$(x)(1:3) ! gl$(1)
-12910     let in3$(j+1)=holdresp$(x)(4:9) ! gl$(2)
-12920     let in3$(j+2)=holdresp$(x)(10:12) ! gl$(3)
-12930     let in3$(j+3)=holdresp$(x+1) ! amount
-12940     let in3$(j+4)=holdresp$(x+2)(1:30) ! description  kj 081507
-12950     let tac+=val(in3$(j+3))
+12900     in3$(j)=holdresp$(x)(1:3) ! gl$(1)
+12910     in3$(j+1)=holdresp$(x)(4:9) ! gl$(2)
+12920     in3$(j+2)=holdresp$(x)(10:12) ! gl$(3)
+12930     in3$(j+3)=holdresp$(x+1) ! amount
+12940     in3$(j+4)=holdresp$(x+2)(1:30) ! description  kj 081507
+12950     tac+=val(in3$(j+3))
 12960   next j
 12970   if ck=20 or ck=21 then 
 12980     goto ASSIGN_SCREENS
@@ -301,7 +301,7 @@
 13120     if screen=1 then let x=j+2
 13130     if screen=2 then let x=j+34
 13140     if screen=3 then let x=j+64
-13150     if int(j+2/3)=(j+2/3) then let resp$(j+2)=holdresp$(x) else let resp$(j+2)=holdresp$(x)
+13150     if int(j+2/3)=(j+2/3) then resp$(j+2)=holdresp$(x) else resp$(j+2)=holdresp$(x)
 13160   next j
 13170   goto CKOPTION1_CHECK_ENTRY_2 ! /r
 13180 COMPLETED_WITH_SCREEN: ! r:
@@ -319,12 +319,12 @@
 13300     if in3$(j*5)=hiv$ and rtrm$(hiv$)<>"" then goto L5460
 13310     let y=y+1: if y>2 then let y=1
 13320     if y=1 then let x=x+1
-13330     let de$(x,y)=in3$(j*5)(1:13)
+13330     de$(x,y)=in3$(j*5)(1:13)
 13340 L5460: ! 
 13350     amt(x,y)=amt(x,y)+val(in3$(j*5-1))
-13360     let hiv$=in3$(j*5)(1:15)
+13360     hiv$=in3$(j*5)(1:15)
 13370   next j
-13380   amt=val(tr$(3)) : let vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
+13380   amt=val(tr$(3)) : vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
 13390   gosub SUB_PRINT_CHECK
 13400   mat holdresp$=("")
 13410   goto CKOPTION1_CHECK_ENTRY
@@ -337,15 +337,15 @@
 13470 ! /r
 13480 REPRINT_CHECKS: ! r:
 13490   fntos(sn$="reprintnumber")
-13500   let respc=0
+13500   respc=0
 13510   fnlbl(1,1,"First Check Number to Reprint:",38,1)
 13520   fntxt(1,40,8,0,1,"30",0,"")
-13530   let resp$(respc+=1)=str$(firstckn)
+13530   resp$(respc+=1)=str$(firstckn)
 13540   fnlbl(2,1,"Last Check Number to Reprint:",38,1)
 13550   fntxt(2,40,8,0,1,"30",0,"")
-13560   let resp$(respc+=1)=str$(lastckn)
+13560   resp$(respc+=1)=str$(lastckn)
 13570   if reprintckn>0 then let fnlbl(4,1,"Last Check Number Reprinted "&str$(reprintckn)&":",38,1)
-13580   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+13580   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
 13590   if ck=5 then goto XIT
 13600   let firstckn=ckn1=reprintckn=val(resp$(1))
 13610   lastckn=val(resp$(2)) : if lastckn=0 then lastckn=firstckn
@@ -354,30 +354,30 @@
 13640   check_ref$=cnvrt$("pic(ZZ)",bankcode)&str$(1)&cnvrt$("n 8",reprintckn)
 13650   read #trmstr1,using 'Form Pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey L7780
 13660 ! pr 'key=';check_ref$ : pause
-13670   let prdmmddyy=val(tr$(2)) ! use old check date
-13680   let vn$=lpad$(trim$(tr$(4)),8)
+13670   prdmmddyy=val(tr$(2)) ! use old check date
+13680   vn$=lpad$(trim$(tr$(4)),8)
 13690   amt=tr3 ! set amount for check
 13700   mat amt=(0) : mat de$=("") : mat iv$=("") : let x=1: let y=0
-13710   st1=0 : let holdvn$="        ": amt=0
-13720   let vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
+13710   st1=0 : holdvn$="        ": amt=0
+13720   vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
 13730   goto L7790
 13740 L7780: ! 
 13750   if firstckn=reprintckn then goto L7785
 13760   if reprintckn>=lastckn then goto L7970 ! complete
 13770   mat ml$(2)
-13780   let ml$(1)="Could not locate check number "&str$(reprintckn)&" for bank number "&str$(bankcode)&"."
-13790   let ml$(2)="This check will be skipped."
-13800   let reprintckn+=1
+13780   ml$(1)="Could not locate check number "&str$(reprintckn)&" for bank number "&str$(bankcode)&"."
+13790   ml$(2)="This check will be skipped."
+13800   reprintckn+=1
 13810   fnmsgbox(mat ml$,resp$)
 13820   goto REPRINT_CHECK_LOOP_TOP
 13830 L7785: ! 
 13840   mat ml$(2)
-13850   let ml$(1)="Cannot locate the first check (number "&str$(reprintckn)&" for bank number "&str$(bankcode)&".)"
-13860   let ml$(2)="You must choose another check number."
+13850   ml$(1)="Cannot locate the first check (number "&str$(reprintckn)&" for bank number "&str$(bankcode)&".)"
+13860   ml$(2)="You must choose another check number."
 13870   fnmsgbox(mat ml$,resp$)
 13880   goto REPRINT_CHECKS
 13890 L7790: ! 
-13900   let key$=cnvrt$('pic(ZZ)',bankcode)&str$(1)&cnvrt$("n 8",reprintckn)
+13900   key$=cnvrt$('pic(ZZ)',bankcode)&str$(1)&cnvrt$("n 8",reprintckn)
 13910   restore #tralloc,key>=key$: nokey L7780
 13920   do 
 13930 READ_DETAILS: ! 
@@ -391,21 +391,21 @@
 14010     let y=y+1: if y>2 then let y=1
 14020     if y=1 then let x+=1
 14030     if x>15 then gosub SUB_PRINT_CHECK
-14040     let iv$(x,y)=cnvrt$("pic(zzzzzz)",allocdate) ! IV$(1:12)
-14050     let de$(x,y)=allocde$(1:13) ! this one for printing from unpaid file
+14040     iv$(x,y)=cnvrt$("pic(zzzzzz)",allocdate) ! IV$(1:12)
+14050     de$(x,y)=allocde$(1:13) ! this one for printing from unpaid file
 14060     amt(x,y)=amt(x,y)+alloc
-14070     let ivdate(x,y)=0
-14080     let disamt(x,y)=0 ! already out of net check
+14070     ivdate(x,y)=0
+14080     disamt(x,y)=0 ! already out of net check
 14090   loop 
 14100 L7910: ! 
 14110   fnopenprn
 14120   ckn1=reprintckn: amt=tr3
-14130   if scc$="CSS" then let fn_portion_check   : let fn_portion_stub(1) : let fn_portion_stub(2)
-14140   if scc$="CSS" then let fn_portion_check   : let fn_portion_stub(1) : let fn_portion_stub(2)
-14150   if scc$="SCS" then let fn_portion_stub(1) : let fn_portion_check   : let fn_portion_stub(2)
-14160   if scc$="SSC" then let fn_portion_stub(1) : let fn_portion_stub(2) : let fn_portion_check
-14170   if scc$="SCC" then let fn_portion_stub(1) : let fn_portion_check    : let fn_portion_check
-14180   if lastckn>0 and reprintckn<lastckn then let reprintckn+=1 : pr #255: newpage : goto REPRINT_CHECK_LOOP_TOP
+14130   if scc$="CSS" then let fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2)
+14140   if scc$="CSS" then let fn_portion_check   : fn_portion_stub(1) : fn_portion_stub(2)
+14150   if scc$="SCS" then let fn_portion_stub(1) : fn_portion_check   : fn_portion_stub(2)
+14160   if scc$="SSC" then let fn_portion_stub(1) : fn_portion_stub(2) : fn_portion_check
+14170   if scc$="SCC" then let fn_portion_stub(1) : fn_portion_check    : fn_portion_check
+14180   if lastckn>0 and reprintckn<lastckn then reprintckn+=1 : pr #255: newpage : goto REPRINT_CHECK_LOOP_TOP
 14190 L7970: ! 
 14200   fncloseprn
 14210   if firstckn<>lastckn then goto XIT
@@ -413,7 +413,7 @@
 14230 def fn_get_coinfo
 14240   open #company=15: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
 14250   read #company,using 'Form POS 1,C 40,POS 150,2*N 1,N 2,POS 418,10*C 20,POS 668,10*C 12,POS 298,15*PD 4,POS 618,10*N 1,POS 406,N 1,POS 788,N 1',rec=1,release: cnam$,mat d,bankcode ,mat misc$,mat miscgl$,mat whgl,mat dedcode,prenum,port
-14260   let method$="C" ! temporary kJ  ! Read #COMPANY,Using 'Form POS 789,c 1',Rec=1,Release: method$
+14260   method$="C" ! temporary kJ  ! Read #COMPANY,Using 'Form POS 789,c 1',Rec=1,Release: method$
 14270   close #company: 
 14280   for j=1 to 5
 14290     let whgl$(j)=lpad$(str$(whgl(j,1)),3)&lpad$(str$(whgl(j,2)),6)&lpad$(str$(whgl(j,3)),3)
@@ -424,36 +424,36 @@
 14340   ! 
 14350   do 
 14360     read #h_paytrans,using 'Form POS 63,N 10.2,N 1',release: upa,pcde eof EO_PAYTRANS_1
-14370     if pcde=1 then let t1(2)+=upa else let t1(4)+=upa
-14380     let t1(5)+=upa
+14370     if pcde=1 then t1(2)+=upa else t1(4)+=upa
+14380     t1(5)+=upa
 14390   loop 
 14400   EO_PAYTRANS_1: ! 
 14410 fnend 
 14910 def fn_scr_check_entry
 14930   fntos(sn$="ckprt-3")
-14940   let respc=0
+14940   respc=0
 14950   fnfra(1,1,6,87,"Check"," ")
 14960   fnlbl(1,1,env$('cnam'),40,2,0,1)
 14970   fnlbl(2,1,bn$,40,2,0,1)
 14980   fnlbl(3,55,"Amount:",10,1,0,1)
 14990   fntxt(3,67,12,0,1,"10",0,"",1)
-15000   let resp$(respc+=1)=tr$(3)
+15000   resp$(respc+=1)=tr$(3)
 15010   fnlbl(5,1,"Payee:",8,1,0,1)
 15020   fncombof("Paymstr",5,10,30,env$('Q')&"\CLmstr\paymstr.h"&env$('cno'),1,8,9,30,env$('Q')&"\CLmstr\Payidx1.h"&env$('cno'),0,pas, "Enter the payee number or simply enter the payee name if no vendor record exits",1)
-15030   let resp$(respc+=1)=holdpayee$
+15030   resp$(respc+=1)=holdpayee$
 15040   fnfra(9,1,12,96,"Breakdown Information"," ")
 15050   fnlbl(1,1,"General Ledger",30,0,0,2)
 15052   fnlbl(1,41,"Amount             Description",12,0,0,2)
 15054   fnlbl(1,56,"Description",30,0,0,2)
 15060   for j=1 to 10
 15070     fnqgl(j+1,1,2,2)
-15080     let resp$(respc+=1)=fnrgl$(resp$(respc))
+15080     resp$(respc+=1)=fnrgl$(resp$(respc))
 15082     ! 
 15090     fntxt(j+1,41,12,0,1,"currency",0,"",2)
-15100     let resp$(respc+=1)=resp$(respc)
+15100     resp$(respc+=1)=resp$(respc)
 15102     ! 
 15110     fntxt(j+1,56,30,0,0,"",0,"",2)
-15120     let resp$(respc+=1)=resp$(respc)
+15120     resp$(respc+=1)=resp$(respc)
 15122     ! 
 15130   next j
 15140   if screen=2 or screen=3 then 
@@ -462,13 +462,13 @@
 15170   if screen=0 or screen=1 or screen=2 then 
 15180     fnbutton(12,82,"More",20,"Allows another screen of breakdowns",1,4,2)
 15190   end if 
-15200   let pas=1 ! don't redo combo boxes
+15200   pas=1 ! don't redo combo boxes
 15210   fnlbl(1,45,"Check Number:",15,1,0,1)
 15220   fntxt(1,62,8,0,1,"30",0,"",1)
-15230   let resp$(respc+=1)=str$(ckn)
+15230   resp$(respc+=1)=str$(ckn)
 15240   fnlbl(3,30,"Check Date:",12,1,0,1)
 15250   fntxt(3,44,10,0,1,"3",0,"",1)
-15260   let resp$(respc+=1)=str$(prd)
+15260   resp$(respc+=1)=str$(prd)
 15270   fnbutton(5,52,"Add Payee",50,"Click to add a new payee record",0,0,1)
 15280   fncmdkey("Print",1,1,0,"Prnt this check and advance to next check")
 15290   fncmdkey("&Allocate",2,0,0,"Automatically allocates the general ledger breakdown if payee record contains the breakdown information")
@@ -478,39 +478,39 @@
 15340   if ck=5 then screen=0 : goto SCE_XIT
 15350   ! 
 15360   for j=3 to 30, step 3
-15370     let resp$(j)=fnagl$(resp$(j))
+15370     resp$(j)=fnagl$(resp$(j))
 15380   next j
 15390   ! 
 15400   if ck=50 then let fn_payee_add : goto CKOPTION1_CHECK_ENTRY_2
-15410   let tr$(3)=resp$(1) ! amount
-15420   let vn$=tr$(4)=lpad$(rtrm$(resp$(2)(1:8)),8) ! payee number
+15410   tr$(3)=resp$(1) ! amount
+15420   vn$=tr$(4)=lpad$(rtrm$(resp$(2)(1:8)),8) ! payee number
 15430   read #h_paymstr1,using "Form pos 1,c 8",key=vn$,release: vn$ nokey SCE_L4640
-15440   let tr$(5)=resp$(2)(9:30) ! payee name
+15440   tr$(5)=resp$(2)(9:30) ! payee name
 15450   goto SCE_L4650
 15460   SCE_L4640: ! 
-15470   let tr$(5)=resp$(2)(1:30)
-15480   let vn$=tr$(4)="": b$(1)=tr$(5) ! payee name without vendor record
+15470   tr$(5)=resp$(2)(1:30)
+15480   vn$=tr$(4)="": b$(1)=tr$(5) ! payee name without vendor record
 15490   SCE_L4650: ! 
 15500   ckn=val(resp$(33)) ! ck number
-15510   let holdpayee$=resp$(2)
-15520   let prd=val(resp$(34)): ! date
-15530   let prdmmddyy=val(resp$(34)(5:6))*10000+val(resp$(34)(7:8))*100+val(resp$(34)(3:4)) ! convert date back to mmddyy format
-15540   let tr$(2)=cnvrt$("pic(######)",prdmmddyy)
+15510   holdpayee$=resp$(2)
+15520   prd=val(resp$(34)): ! date
+15530   prdmmddyy=val(resp$(34)(5:6))*10000+val(resp$(34)(7:8))*100+val(resp$(34)(3:4)) ! convert date back to mmddyy format
+15540   tr$(2)=cnvrt$("pic(######)",prdmmddyy)
 15550   ! STORE_RESPONSES: ! hold all 94 possible responses in holdresp$
 15560   let x=0
 15570   if screen=0 then screen=1
 15580   for j=1 to 34
-15590     if j=1 then let holdresp$(j)=resp$(j): goto SCE_L4820 ! amount
-15600     if j=2 then let holdresp$(j)=resp$(j): goto SCE_L4820 ! vendor
-15610     if j=33 then let holdresp$(j)=resp$(j): goto SCE_L4820 ! checknumber
-15620     if j=34 then let holdresp$(j)=resp$(j): goto SCE_L4820 ! date
+15590     if j=1 then holdresp$(j)=resp$(j): goto SCE_L4820 ! amount
+15600     if j=2 then holdresp$(j)=resp$(j): goto SCE_L4820 ! vendor
+15610     if j=33 then holdresp$(j)=resp$(j): goto SCE_L4820 ! checknumber
+15620     if j=34 then holdresp$(j)=resp$(j): goto SCE_L4820 ! date
 15630     if screen=1 then let x=j ! (3-32)
 15640     if screen=2 then let x=j+32 ! (35-64)
 15650     if screen=3 then let x=j+62 ! (65-94)
 15660     if int(j+2/3)=(j+2/3) then 
-15670       let holdresp$(x)=resp$(j)
+15670       holdresp$(x)=resp$(j)
 15680     else 
-15690       let holdresp$(x)=resp$(j) ! hold all general ledger breakdowns
+15690       holdresp$(x)=resp$(j) ! hold all general ledger breakdowns
 15700     end if 
 15710   SCE_L4820: ! 
 15720   next j
@@ -521,7 +521,7 @@
 15770   read #h_paymstr1,using "Form POS 1,C 8,4*C 30,PD 5.2,N 2,C 11,X 6,C 12,C 30,C 50,C 12,C 20",key=lpad$(rtrm$(vn$),8),release: vn$,mat pr$,ytdp,typ,ss$,ph$,contact$,email$,fax$,myact$ nokey RSB_XIT
 15780   mat holdresp$=("")
 15790   restore #payeegl,key>=vn$: nokey RSB_EO_READSTGL
-15800   let totalalloc=0
+15800   totalalloc=0
 15810   for j=3 to 92 step 3
 15820     if j=33 or j=34 then goto RSB_L5310 ! skip ck num and date  (resp$(33)&34)
 15830   RSB_L5240: ! 
@@ -529,21 +529,21 @@
 15850     if vn$<>payeekey$ then goto RSB_EO_READSTGL
 15860     if trim$(payeegl$)="" or payeegl$="  0     0   0" then goto RSB_L5310
 15870     read #glmstr18,using 'Form POS 13,C 30',key=payeegl$,release: de$ nokey RSB_L5240
-15880     let resp$(j)=payeegl$
-15890     let resp$(j+1)=str$(round(val(tr$(3))*percent*.01,2))
-15900     let totalalloc+=val(resp$(j+1))
-15910     let resp$(j+2)=gldesc$ ! description
+15880     resp$(j)=payeegl$
+15890     resp$(j+1)=str$(round(val(tr$(3))*percent*.01,2))
+15900     totalalloc+=val(resp$(j+1))
+15910     resp$(j+2)=gldesc$ ! description
 15920   RSB_L5310: ! 
 15930   next j
 15940   RSB_EO_READSTGL: ! 
 15950   if val(tr$(3))<>totalalloc then 
-15960     let resp$(4)=str$(val(resp$(4))+val(tr$(3))-totalalloc)
+15960     resp$(4)=str$(val(resp$(4))+val(tr$(3))-totalalloc)
 15970   end if 
 15980   RSB_XIT: ! 
 15990 fnend 
 16000 def fn_write_history
-16010   let holdvn$=""
-16020   let hck=0
+16010   holdvn$=""
+16020   hck=0
 16030   fn_close(h_paytrans:=4)
 16040   open #h_paytrans: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 16050   WH_LOOP_TOP: ! 
@@ -553,7 +553,7 @@
 16090   if dp=0 and ckpay=0 then goto WH_LOOP_TOP
 16100   if bc=0 then bc=bankcode ! IF CODED FOR PAYMENT WITH NO BANK CODE, PAY FROM THE CURRENT BANK ACCOUNT
 16110   if bc<>bankcode then goto WH_LOOP_TOP
-16120   let iv$=rpad$(ltrm$(iv$),12)
+16120   iv$=rpad$(ltrm$(iv$),12)
 16130   read #ivpaid,using 'form pos 1,c 8,c 12,n 6,n 8',key=vn$&iv$,release: vn$ nokey WH_L3650
 16140   goto WH_L3660
 16150   WH_L3650: ! 
@@ -561,8 +561,8 @@
 16170   WH_L3660: ! 
 16180   if vn$=holdvn$ and hck=ckpay then goto WH_L3770
 16190   mat tr=(0)
-16200   let totalupa=0
-16210   let vn$=lpad$(rtrm$(vn$),8)
+16200   totalupa=0
+16210   vn$=lpad$(rtrm$(vn$),8)
 16220   read #h_paymstr1,using 'form pos 9,c 30',key=vn$,release: b$(1) nokey WH_L3740 ! PAYEE FILE
 16230   if ltrm$(vn$)(1:2)="T-" then 
 16240     delete #h_paymstr1,key=vn$: nokey ignore
@@ -571,8 +571,8 @@
 16280   if holdvn$<>vn$ or (hck<>ck and hck>0) then 
 16290     write #trmstr1,using 'Form POS 1,N 2,N 1,G 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1': bc,1,ckpay,dp,upa,vn$,b$(1),0,0,1
 16300   end if  ! holdvn$<>vn$ or (hck<>ck and hck>0)
-16310   let holdvn$=vn$
-16320   let hck=ck
+16310   holdvn$=vn$
+16320   hck=ck
 16330   WH_L3770: ! 
 16340   read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey WH_L3800
 16350   bal=bal-upa
@@ -584,9 +584,9 @@
 16410   if trim$(allockey$(1:8))<>trim$(vn$) or trim$(allockey$(9:20))<>trim$(iv$) then goto WH_EO_UNPDALOC ! if ALLOCKEY$<>VN$&IV$ Then Goto 3690
 16420   if sum(agl)=0 and aamt=0 then goto WH_L3820 ! don't allow zero allocations to write
 16430   write #tralloc,using 'Form POS 1,N 2,N 1,G 8,G 3,G 6,G 3,PD 5.2,C 30,G 6,x 3,C 12,N 1': bc,1,ckpay,mat agl,aamt,ltrm$(rtrm$(iv$))&" "&ade$(1:17),up$(1),up$(3),gde
-16440   ! Let HOLDVN$=VN$
-16450   let hck=ckpay
-16460   let totalupa+=aamt
+16440   ! hOLDVN$=VN$
+16450   hck=ckpay
+16460   totalupa+=aamt
 16470   goto WH_L3820
 16480   WH_EO_UNPDALOC: ! 
 16490   rewrite #trmstr1,using 'Form POS 18,pd 10.2',key=lpad$(rtrm$(str$(bc)),2)&"1"&lpad$(rtrm$(str$(ckpay)),8): totalupa
@@ -607,8 +607,8 @@
 16640     data Twenty,Thirty,Forty,Fifty,Sixty,Seventy,Eighty,Ninety
 16650     read mat wording$
 16660   end if  ! ~setup_englishdollar
-16670   let dol=dolamt ! ENGLISH DOLLAR ROUTINE
-16680   let n=64
+16670   dol=dolamt ! ENGLISH DOLLAR ROUTINE
+16680   n=64
 16690   if dol<1000000 and dol>=0 then goto L2760
 16700   eng$="Value too big for editing or was less than zero"
 16710   goto ENGLISHDOLLAR_XIT
@@ -659,7 +659,7 @@
 17160   L3120: ! 
 17170   if len(rtrm$(eng$))<64 then goto L3170
 17180   for j=1 to 9
-17190     let n=65-j
+17190     n=65-j
 17200     if eng$(n:n)=" " then goto L3170
 17210   next j
 17220   L3170: ! 
@@ -681,9 +681,9 @@
 17380 fnend 
 17390 def fn_msg_allocations_off
 17400   mat ml$(3)
-17410   let ml$(1)="The net check ("&tr$(3)&") must agree with the total"
-17420   let ml$(2)="allocations ("&str$(tac)&").  Correct the allocation"
-17430   let ml$(3)="amounts or the net check to proceed."
+17410   ml$(1)="The net check ("&tr$(3)&") must agree with the total"
+17420   ml$(2)="allocations ("&str$(tac)&").  Correct the allocation"
+17430   ml$(3)="amounts or the net check to proceed."
 17440   fnmsgbox(mat ml$,resp$,'',16)
 17450 fnend 
 17460 def fn_checkdiscount ! check for any discounts
@@ -703,82 +703,82 @@
 17600   goto DISCOUNTRETURN
 17610   MSGBOX6: ! 
 17620   mat ml$(5)
-17630   let ml$(1)="Invoice # "&trim$(iv$)&" on payee # "&trim$(vn$)&" quallifies for a discount of "&trim$(cnvrt$("pic($$$$$$.##)",disamt))&","
-17640   let ml$(2)="but you have not entered the discount G/L # in the G/L control file."
-17650   let ml$(3)="The discount will be taken, but the entry in check history will not"
-17660   let ml$(4)="contain a G/L number.  Fix the GL # in the transaction file and place the "
-17670   let ml$(5)="discount G/L #s in the G/L control file."
+17630   ml$(1)="Invoice # "&trim$(iv$)&" on payee # "&trim$(vn$)&" quallifies for a discount of "&trim$(cnvrt$("pic($$$$$$.##)",disamt))&","
+17640   ml$(2)="but you have not entered the discount G/L # in the G/L control file."
+17650   ml$(3)="The discount will be taken, but the entry in check history will not"
+17660   ml$(4)="contain a G/L number.  Fix the GL # in the transaction file and place the "
+17670   ml$(5)="discount G/L #s in the G/L control file."
 17680   fnmsgbox(mat ml$,resp$,'',16)
 17690   goto L6410
 17700   DISCOUNTRETURN: ! 
 17710 fnend 
 17720 def fn_write_ck_hist_1 ! WRITE TRANSACTION FOR SINGLE CHECK ENTRY
 17730   mat tr=(0)
-17740   let tr$(1)=lpad$(str$(ckn),8)
-17750   let tr$(4)=lpad$(rtrm$(tr$(4)),8)
-17760   ! let k$=lpad$(str$(bankcode),2)&"1"&tr$(1)
-17770   let tr$(1)=lpad$(str$(ckn),8)
-17780   let tr3=val(tr$(3))
+17740   tr$(1)=lpad$(str$(ckn),8)
+17750   tr$(4)=lpad$(rtrm$(tr$(4)),8)
+17760   ! k$=lpad$(str$(bankcode),2)&"1"&tr$(1)
+17770   tr$(1)=lpad$(str$(ckn),8)
+17780   tr3=val(tr$(3))
 17790   write #trmstr1,using 'Form POS 1,N 2,N 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1': bankcode,1,tr$(1),prdmmddyy,tr3,tr$(4),tr$(5),0,clr,1
 17800   read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey WCH1_AFTER_WRITE
 17810   bn$=rtrm$(bn$)
 17820   bal=bal-val(tr$(3)) conv ignore
 17830   rewrite #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2): bn$,bal,upi,ckn nokey WCH1_AFTER_WRITE
-17840   WCH1_AFTER_WRITE: ! LET K$=LPAD$(RTRM$(STR$(BANKCODE)),2)&LPAD$(STR$(1),1)&LPAD$(TR$(1),8)
+17840   WCH1_AFTER_WRITE: ! k$=LPAD$(RTRM$(STR$(BANKCODE)),2)&LPAD$(STR$(1),1)&LPAD$(TR$(1),8)
 17850   for j=1 to 30
 17860     if val(in3$(j*5-1))<>0 then 
 17870       let gl$=""
 17880       let gl$=cnvrt$("N 3",val(in3$(j*5-4)))&cnvrt$("N 6",val(in3$(j*5-3)))&cnvrt$("N 3",val(in3$(j*5-2)))
 17890       alloc=val(in3$(j*5-1))
-17900       let de$=in3$(j*5) ! de$=rtrm$(tr$(5)(1:17))&"-"&in3$(j*5)(1:12)
-17910       let tr$(1)=lpad$(str$(ckn),8)
+17900       de$=in3$(j*5) ! de$=rtrm$(tr$(5)(1:17))&"-"&in3$(j*5)(1:12)
+17910       tr$(1)=lpad$(str$(ckn),8)
 17920       write #tralloc,using 'Form POS 1,N 2,N 1,C 8,C 12,PD 5.2,C 30,N 6,x 3,C 12,N 1': bankcode,1,tr$(1),gl$,alloc,de$,0,"",0
 17930     end if 
 17940   next j
-17950   let tr$(2)
+17950   tr$(2)
 17960   mat tr$=("")
 17970   mat in3$=("")
 17980   if ltrm$(vn$)(1:2)="T-" then delete #h_paymstr1,key=vn$: nokey ignore 
 18000 fnend 
 18010 def fn_payee_add
-18020   let vn$=tr$(4)
+18020   vn$=tr$(4)
 18030   mat pr$=("")
 18040   mat desc$=("")
 18050   mat gl$=("")
 18060   contact$=email$=fax$=myact$=ss$=ph$=""
 18070   fnaddpayee
-18080   let pas=0
+18080   pas=0
 18090 fnend 
 18100 def fn_cknum ! CHECK FOR DUPLICATE CHECK NUMBERS
 18110   CKNUM_TOP: ! CHECK FOR DUPLICATE CHECK NUMBERS
-18120   let dk$=lpad$(str$(bankcode),2)&"1"&lpad$(str$(ckn),8)
+18120   dk$=lpad$(str$(bankcode),2)&"1"&lpad$(str$(ckn),8)
 18130   read #trmstr1,using 'Form POS 4,C 8,G 6,pd 10.2,C 8,C 35',key=dk$: dtr$(1),dtr$(2),dtr3,dtr$(4),dtr$(5) nokey CKNUM_XIT
-18140   let dtr$(3)=str$(dtr3)
+18140   dtr$(3)=str$(dtr3)
 18150   SCR_CKPRT6: ! 
 18160   fntos(sn$="ckprt-6")
-18170   let respc=0
+18170   respc=0
 18180   fnlbl(1,1,"Check number "&str$(ckn)&" has been previously used.",45,1)
 18190   fnlbl(2,10," Date: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",val(dtr$(2))),45,0)
 18200   fnlbl(3,10," Amount: "&dtr$(3),45,0)
 18210   fnlbl(4,10," To: "&dtr$(5),45,0)
 18220   fnchk(6,48,"Delete the previous entry:",1)
-18230   let resp$(respc+=1)="False"
+18230   resp$(respc+=1)="False"
 18240   fnlbl(8,1,"New check number (if applicable):",45,1)
 18250   fntxt(8,48,8,0,1,"30",0,"You will never enter the new check number if you are deleting the old check.")
-18260   let resp$(respc+=1)=""
+18260   resp$(respc+=1)=""
 18270   ! ______________________________________________________________________
-18280   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+18280   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
 18290   ckn2=val(resp$(2))
 18300   if resp$(1)(1:1)="T" then goto CKNUM_DEL_PRV ! delete previous check
 18310   if ckn2<=0 then 
 18320     mat ml$(2)
-18330     let ml$(1)="You must supply the new check number any time"
-18340     let ml$(2)="you choose not to delete the old check."
+18330     ml$(1)="You must supply the new check number any time"
+18340     ml$(2)="you choose not to delete the old check."
 18350     fnmsgbox(mat ml$,resp$,'',16)
 18360     goto SCR_CKPRT6
 18370   end if 
 18380   ckn=ckn2
-18390   let tr$(1)=lpad$(str$(ckn2),8)
+18390   tr$(1)=lpad$(str$(ckn2),8)
 18400   goto CKNUM_TOP ! ***********************
 18410   CKNUM_DEL_PRV: ! 
 18420   bal=bal+val(dtr$(3))
@@ -799,8 +799,8 @@
 18580   goto L4080
 18590   L4070: ! 
 18600   mat ml$(2)
-18610   let ml$(1)="You must get everyone out of the Unpaid Invoice File"
-18620   let ml$(2)="before you can continue!  Press OK when ready."
+18610   ml$(1)="You must get everyone out of the Unpaid Invoice File"
+18620   ml$(2)="before you can continue!  Press OK when ready."
 18630   fnmsgbox(mat ml$,resp$,'',16)
 18640   goto L4050
 18650   L4080: ! 
@@ -843,7 +843,7 @@
 18990   pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
 19000   pr #255: ""
 19010   mat b$=(" ") : b$(1)=tr$(5)(1:30)
-19020   if h_vf1=23 then let vp1=173 else let vp1=147
+19020   if h_vf1=23 then vp1=173 else vp1=147
 19030   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 19050   pr #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
 19060   pr #255: "_______________________________________ _______________________________________"
@@ -857,7 +857,7 @@
 19140   pr #255: ""
 19150   pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
 19160   mat b$=(" ") : b$(1)=tr$(5)(1:30)
-19170   if h_vf1=23 then let vp1=173 else let vp1=147
+19170   if h_vf1=23 then vp1=173 else vp1=147
 19180   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 19190   pr #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
 19200   pr #255: "_______________________________________ _______________________________________"
@@ -877,7 +877,7 @@
 19330   pr #255,using 'Form POS 19,C 30,POS 50,C 12,PIC(ZZ/ZZ/ZZ),POS 74,N 6': b$(1),holdvn$,prdmmddyy,ckn1
 19340   pr #255: ""
 19350   mat b$=(" ") : b$(1)=tr$(5)(1:30)
-19360   if h_vf1=23 then let vp1=173 else let vp1=147
+19360   if h_vf1=23 then vp1=173 else vp1=147
 19370   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 19380   pr #255: "Invoice Number   Amount   Description   Invoice Number   Amount   Description"
 19390   pr #255: "_______________________________________ _______________________________________"
@@ -888,10 +888,10 @@
 19440 def fn_portion_stub_eldorado
 19450   if trim$(holdvn$)<>"" then read #h_vf1,using 'Form POS 9,4*C 30',key=holdvn$,release: mat b$ nokey ignore
 19460   mat b$=(" ") : b$(1)=tr$(5)(1:30)
-19470   if h_vf1=23 then let vp1=173 else let vp1=147
+19470   if h_vf1=23 then vp1=173 else vp1=147
 19480   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 19490   if ckn1<>psb_ckn1_prior then ! it's the first stub on a check
-19500     let psb_ckn1_prior=ckn1
+19500     psb_ckn1_prior=ckn1
 19510     pr #255,using 'Form POS 74,N 6': ckn1 : pr ckn1
 19520     pr #255: ""
 19530     pr #255: ""
@@ -962,7 +962,7 @@
 41040   end if
 41060   pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
 41080   pr #255: "" ! line 13
-41082   let normal4=4
+41082   normal4=4
 41084   if posDate then
 41086     a=posDate
 41088   else
@@ -1010,7 +1010,7 @@
 41920   if prenum=2 then skipline=max(skipline-3,1)
 41940   pr #255,using 'Form SKIP SKIPLINE,POS 9,C 80,SKIP 1,POS 9,C 70': eng$(1:n), eng$(n+1:128)
 41980   a=65
-42000   let normal4=4
+42000   normal4=4
 42020   pr #255,using 'Form POS A,PIC(ZZ/ZZ/ZZ),X normal4,C 18': prdmmddyy,ca$
 42060   pr #255: ""
 42080   if trim$(b$(2))="" then 
@@ -1073,7 +1073,7 @@
 43920   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey L6480
 43940   goto L6490
 43960   L6480: mat b$=("")
-43980   L6490: let fn_englishdollar(dolamt)
+43980   L6490: fn_englishdollar(dolamt)
 44000   let x=1
 44020   for j=1 to x
 44040     pr #255: ""
@@ -1106,7 +1106,7 @@
 44580   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey L6690
 44600   goto L6700
 44620   L6690: mat b$=("")
-44640   L6700: let fn_englishdollar(dolamt)
+44640   L6700: fn_englishdollar(dolamt)
 44660   let x=1
 44680   for j=1 to x
 44700     pr #255: ""
@@ -1296,37 +1296,37 @@
 64160     fncreg_read('Check Layout Option',layoutOptionSelected$, layoutOption$(1))
 64180   end if
 64200   fntos(sn$="ckprt1a")
-64220   let respc=0
+64220   respc=0
 64240   fnlbl(1,1,"Method of Printing checks:",38,1)
 64260   fnopt(1,40,"Enter and pr Checks",0)
-64280   if ckoption<=1 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+64280   if ckoption<=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 64300   fnopt(2,40,"Print Checks for Selected Invoices",0)
-64320   if ckoption=2 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+64320   if ckoption=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 64340   fnopt(3,40,"Reprint from Check History",0)
-64360   if ckoption=3 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+64360   if ckoption=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 64380   fnlbl(5,1,"Date of Checks:",38,1)
 64400   fntxt(5,40,10,0,1,"3",0,"")
-64420   let resp$(respc+=1)=date$("ccYYMMDD")
+64420   resp$(respc+=1)=date$("ccYYMMDD")
 64440   fnlbl(6,1,"Beginning check number:",38,1)
 64460   fntxt(6,40,8,0,1,"30",0,"Next available check #. If reprinting checks from history, this check # is not applicable.")
-64480   let resp$(respc+=1)=str$(ckn)
+64480   resp$(respc+=1)=str$(ckn)
 64500   fnlbl(7,1,"Bank Account:",38,1)
 64520   fncombof("Bankmstr",7,40,20,env$('Q')&"\CLmstr\bankmstr.h"&env$('cno'),1,2,3,15,env$('Q')&"\CLmstr\Bankidx1.h"&env$('cno'),1,0, "Select bank account for printing")
-64540   let resp$(respc+=1)=str$(bankcode)
+64540   resp$(respc+=1)=str$(bankcode)
 64560   fnlbl(8,1,"Check Format:",38,1)
 64580   fncomboa("ckprt-2",8,40,mat layoutOption$)
-64600   let resp$(respc+=1)=layoutOptionSelected$
-64620   !   if env$('client')="Washington Parrish" then let resp$(respc)=layoutOption$(4)
-64640   if env$('client')="Billings" or (env$('client')="ACS"and bankcode=2) then let resp$(respc)=layoutOption$(2)
+64600   resp$(respc+=1)=layoutOptionSelected$
+64620   !   if env$('client')="Washington Parrish" then resp$(respc)=layoutOption$(4)
+64640   if env$('client')="Billings" or (env$('client')="ACS"and bankcode=2) then resp$(respc)=layoutOption$(2)
 64660   ! need button to show totals
 64680   fncmdset(2)
 64700   fnacs(sn$,0,mat resp$,ck)
 64720   if ck<>5 then 
 64740     for j=1 to 3
-64760       if resp$(j)='True' then let ti1=j : ckoption=j
+64760       if resp$(j)='True' then ti1=j : ckoption=j
 64780     next j
-64800     let prd=val(resp$(4)) ! date of checks
-64820     let prdmmddyy=val(resp$(4)(5:6))*10000+val(resp$(4)(7:8))*100+val(resp$(4)(3:4)) ! convert date back to mmddyy format
+64800     prd=val(resp$(4)) ! date of checks
+64820     prdmmddyy=val(resp$(4)(5:6))*10000+val(resp$(4)(7:8))*100+val(resp$(4)(3:4)) ! convert date back to mmddyy format
 64840     ckn=val(resp$(5)) ! beginning ck number
 64860     bankcode=val(resp$(6)(1:3))
 64880     layoutOptionSelected$=resp$(7)

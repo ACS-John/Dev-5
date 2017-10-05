@@ -10,7 +10,7 @@
  !
  def fnEnforceRecord1
     ! Set it to read Record 1
-    let Record=1
+    record=1
     
     ! Make sure Record 1 Exists
     restore #Datafile, rec=Record : norec Ignore

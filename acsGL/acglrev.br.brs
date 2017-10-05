@@ -24,19 +24,19 @@
 00210 L210: read #2,using L220,rec=j: t$,s,k,mat n,l$,p$,ven$ eof L420 norec L410
 00220 L220: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8
 00230     if s=yourdate and n(1)=3 and rtrm$(ltrm$(tr$))="yourref#" then goto L240 else goto L410
-00240 L240: let k=-k
+00240 L240: k=-k
 00250     s=newdate
 00260     if k=0 and uprc$(ltrm$(rtrm$(p$)))<>"VOID" then goto L210
 00270     if val(t$(1:3))=0 and val(t$(4:9))=0 and val(t$(10:12))=0 and k=0 then goto L210
-00280     if t$(3:3)=" " then let t$(3:3)="0"
-00290     if t$(12:12)=" " then let t$(12:12)="0"
+00280     if t$(3:3)=" " then t$(3:3)="0"
+00290     if t$(12:12)=" " then t$(12:12)="0"
 00300     read #1,using L310,key=t$: cb,mat ta nokey L410
 00310 L310: form pos 87,pd 6.2,pos 333,2*pd 3
 00320 L320: lr2=lrec(2)+1
 00330     write #2,using L390,rec=lr2: t$,s,k,mat n,l$,p$,0 duprec L320
-00340     if ta(1)=0 then let ta(1)=lr2
+00340     if ta(1)=0 then ta(1)=lr2
 00350     if ta(2)>0 then rewrite #2,using L400,rec=ta(2): lr2
-00360     let ta(2)=lr2
+00360     ta(2)=lr2
 00370     cb=cb+k
 00380     rewrite #1,using L310,key=t$: cb,mat ta
 00390 L390: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
@@ -46,27 +46,27 @@
 00430 L430: read #3,using L440: t$,s,k,mat n,l$,p$,ven$ eof XIT
 00440 L440: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8
 00450   if s=yourdate and n(1)=3 and rtrm$(ltrm$(tr$))="yourref#" then goto L460 else goto L630
-00460 L460: let k=-k
+00460 L460: k=-k
 00470   s=newdate
 00480   if k=0 and uprc$(ltrm$(rtrm$(p$)))<>"VOID" then goto L430
 00490   if val(t$(1:3))=0 and val(t$(4:9))=0 and val(t$(10:12))=0 and k=0 then goto L430
-00500   if t$(3:3)=" " then let t$(3:3)="0"
-00510   if t$(12:12)=" " then let t$(12:12)="0"
+00500   if t$(3:3)=" " then t$(3:3)="0"
+00510   if t$(12:12)=" " then t$(12:12)="0"
 00520   read #1,using L530,key=t$: cb,mat ta nokey L630
 00530 L530: form pos 87,pd 6.2,pos 333,2*pd 3
 00540 L540: lr2=lrec(2)+1
 00550   write #2,using L610,rec=lr2: t$,s,k,mat n,l$,p$,0 duprec L540
-00560   if ta(1)=0 then let ta(1)=lr2
+00560   if ta(1)=0 then ta(1)=lr2
 00570   if ta(2)>0 then rewrite #2,using L620,rec=ta(2): lr2
-00580   let ta(2)=lr2
+00580   ta(2)=lr2
 00590   cb=cb+k
 00600   rewrite #1,using L530,key=t$: cb,mat ta
 00610 L610: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,pd 3
 00620 L620: form pos 71,pd 3
 00630 L630: goto L430
-00640 XIT: let fnxit
+00640 XIT: fnxit
 00650 ! ______________________________________________________________________
-00660 ERTN: let fnerror(program$,err,line,act$,"NO")
+00660 ERTN: fnerror(program$,err,line,act$,"NO")
 00670   if lwrc$(act$)<>"pause" then goto L700
 00680   execute "list -"&str$(line) !:
         pause  !:

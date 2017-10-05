@@ -9,30 +9,30 @@
 00100   fntos(sn$="billingrpt")
 00110   fnlbl(1,1,"First Account:",25,1)
 00120   fncmbact(1,28) !:
-        let resp$(1)=selz$
+        resp$(1)=selz$
 00130   fnlbl(2,1,"Last Account:",25,1)
 00140   fncmbact(2,28) !:
-        let resp$(2)=selz$
+        resp$(2)=selz$
 00150   fnchk(3,29,"Print Grand Totals:",1)
-00160   let resp$(3)="True"
+00160   resp$(3)="True"
 00170   fnchk(4,29,"Print Details:",1)
-00180   let resp$(4)="True"
+00180   resp$(4)="True"
 00190   fnlbl(5,1,"Billing Date:",25,1)
 00200   fntxt(5,28,8,0,right,"1001",0,"Enter the last billing date.",0 ) !:
-        let resp$(5)=str$(d1)
+        resp$(5)=str$(d1)
 00210   fncmdset(2)
 00220   fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   let fan$=lpad$(rtrm$(resp$(1)(1:10)),10)
 00250   lan$=lpad$(rtrm$(resp$(2)(1:10)),10)
-00260   if resp$(3)="True" then let print_grand_totals$="Y"
-00270   if resp$(4)="True" then let print_details$="Y"
-00280   let d1=val(resp$(5))
+00260   if resp$(3)="True" then print_grand_totals$="Y"
+00270   if resp$(4)="True" then print_details$="Y"
+00280   d1=val(resp$(5))
 00290   goto STARTREPORT
 00300 ! ______________________________________________________________________
 00310 DONE: ! 
 00320   fncloseprn
-00330 XIT: let fnxit
+00330 XIT: fnxit
 00340 ! ______________________________________________________________________
 00350 STARTREPORT: ! 
 00370   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -62,9 +62,9 @@
 00610   goto REPORT
 00620 ! ______________________________________________________________________
 00630 HEADER_PAGE: ! 
-00640   let pg=pg+1
-00650   if print_details$="N" then let temp$(1)="No Details"
-00660   if print_grand_totals$="N" then let temp$(3)="No Usage Totals"
+00640   pg=pg+1
+00650   if print_details$="N" then temp$(1)="No Details"
+00660   if print_grand_totals$="N" then temp$(3)="No Usage Totals"
 00670 L670: form pos 1,c 20,x 5,cc 40,cr 20,skip 1
 00680 L680: form pos 1,cc 30,cc 30,cc 30,skip 1
 00690 L690: form pos 1,cc 10,x 1,cc 30,x 1,cc 10
@@ -86,7 +86,7 @@
 00850 PGOF: ! 
 00860   pr #255: newpage
 00870   if no_more_header=0 then gosub HEADER_PAGE
-00880   let no_more_header=0
+00880   no_more_header=0
 00890   continue 
 00900 ! ______________________________________________________________________
 00910 REPORT: ! 
@@ -98,7 +98,7 @@
 00970   subtotal_d3+=d3
 00980   if print_details$="Y" then gosub DETAILS
 00990   subtotal_break_check=d3 ! vaL(Z$(1:2))
-01000   let not_first_rec=1
+01000   not_first_rec=1
 01010   goto REPORT
 01020 ! ______________________________________________________________________
 01030 DETAILS: ! 
@@ -124,7 +124,7 @@
 01230   return 
 01240 ! ______________________________________________________________________
 01250 GRANDTOTAL: ! 
-01260   let no_more_header=1
+01260   no_more_header=1
 01270   gosub SUBTOTAL
 01280   if print_grand_totals$="N" then goto L1340
 01290   pr #255,using L1150: "____________________________________________________" pageoflow PGOF

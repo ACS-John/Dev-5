@@ -18,7 +18,7 @@
 00180 ! ______________________________________________________________________
 00190   on fkey 5 goto L1990
 00200   fnopenprn
-00210   if file$(255)(1:3)<>"PRN" then let jbskip=1
+00210   if file$(255)(1:3)<>"PRN" then jbskip=1
 00280 ! ______________________________________________________________________
 00290   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #1,using 'Form POS 618,10*N 1,POS 758,N 2',rec=1: mat dedcode,un !:
@@ -51,13 +51,13 @@
 00540   next j
 00550   goto L440
 00560 ! ______________________________________________________________________
-00570 L570: let hr1(j)=hr1(j)+tr1(5)
-00580   let hr1(8)=hr1(8)+tr1(5)
-00590   let hr2(j)=hr2(j)+tr1(6)
-00600   let hr2(8)=hr2(8)+tr1(6)
+00570 L570: hr1(j)=hr1(j)+tr1(5)
+00580   hr1(8)=hr1(8)+tr1(5)
+00590   hr2(j)=hr2(j)+tr1(6)
+00600   hr2(8)=hr2(8)+tr1(6)
 00610   let gp1=gp1+tr1(5)*tdet2
 00620   let gp2=gp2+tr1(6)*tdet3
-00630   let tr(3)=tr1(3)
+00630   tr(3)=tr1(3)
 00640   goto L440
 00650 ! ______________________________________________________________________
 00660 L660: if rtrm$(jn$)="" then goto L700
@@ -65,8 +65,8 @@
 00680   gosub TOTALS
 00690   pr #255: newpage
 00700 L700: en$=en1$
-00710   let jn$=jn1$
-00720   let n$=""
+00710   jn$=jn1$
+00720   n$=""
 00730   read #2,using L740,key=jn$: n$ nokey L750
 00740 L740: form pos 7,c 40
 00750 L750: if end4=0 then gosub L1300
@@ -83,36 +83,36 @@
 00860 L860: read #1,using L870,key=en$: mat em$,ss$,em2,lpd,tgp nokey L1120
 00870 L870: form pos 9,3*c 30,c 11,x 4,n 2,pos 162,n 6,pd 5.2,pd 3
 00880 L880: mat ded=(0)
-00890   let tdet2=0
-00900   let tgp=tdet3=0
+00890   tdet2=0
+00900   tgp=tdet3=0
 00930   gosub DETERMINE_EARNINGS
-00940   let tdet2=ttdc(1): let tdet3=ttdc(2) ! regular and ot hours
-00970   let tgp=tgp+ttc(21)
+00940   tdet2=ttdc(1): tdet3=ttdc(2) ! regular and ot hours
+00970   tgp=tgp+ttc(21)
 00980   for j=1 to 5
-00990     let tcd1=tcd1+ttdc(j)
+00990     tcd1=tcd1+ttdc(j)
 01000   next j
-01010   let ded(1)=ded(1)+ttc(2)+ttc(15)
-01020   let ded(2)=ded(2)+ttc(1)
-01030   let ded(3)=ded(3)+ttc(3)
-01040   if un>0 and un<21 then let ded(4)=ded(4)+ttc(un+4)
+01010   ded(1)=ded(1)+ttc(2)+ttc(15)
+01020   ded(2)=ded(2)+ttc(1)
+01030   ded(3)=ded(3)+ttc(3)
+01040   if un>0 and un<21 then ded(4)=ded(4)+ttc(un+4)
 01050   for j=1 to 20
 01060     if j=un then goto L1080
-01070     if dedcode(j)=2 then let ded(5)=ded(5)-ttc(j+3) else let ded(5)=ded(5)+ttc(j+3)
+01070     if dedcode(j)=2 then ded(5)=ded(5)-ttc(j+3) else ded(5)=ded(5)+ttc(j+3)
 01080 L1080: next j
-01090   let tcp22=tcp22+ttc(22)
+01090   tcp22=tcp22+ttc(22)
 01100   goto MOVEINFO
 01110 ! ______________________________________________________________________
 01120 L1120: mat em$=("")
 01130   ss$=""
 01140   em2=0
-01150   let ta1=0
+01150   ta1=0
 01160 MOVEINFO: ! 
-01170   let pl1$(1)=em$(1)
-01180   let pl1$(2)=em$(2)
-01190   let pl1$(3)=em$(3)
-01200   let pl1$(4)=ss$
-01210 ! LET PL1$(5)=LPAD$(STR$(TDN),6)
-01220   let pl1$(5)=lpad$(str$(em2),6)
+01170   pl1$(1)=em$(1)
+01180   pl1$(2)=em$(2)
+01190   pl1$(3)=em$(3)
+01200   pl1$(4)=ss$
+01210 ! pL1$(5)=LPAD$(STR$(TDN),6)
+01220   pl1$(5)=lpad$(str$(em2),6)
 01230   goto L520
 01240 ! ______________________________________________________________________
 01250 PGOF: ! 
@@ -120,9 +120,9 @@
 01270   gosub L1300
 01280   continue 
 01290 ! ______________________________________________________________________
-01300 L1300: let p1=59-int(len(rtrm$(cnam$)))/2
+01300 L1300: p1=59-int(len(rtrm$(cnam$)))/2
 01310   a2$="Job # "&ltrm$(jn$)&"  Job Name "&rtrm$(n$)
-01320   let p2=59-int(len(rtrm$(a2$)))/2
+01320   p2=59-int(len(rtrm$(a2$)))/2
 01330   pr #255,using L1340: cnam$,a2$
 01340 L1340: form skip 2,pos p1,c 70,skip 1,pos p2,c 70,skip 1
 01350   pr #255: tab(40);"****  Certified Payroll Register  ****"
@@ -146,7 +146,7 @@
 01530   if lnp>5 then lnp=6
 01540   if hr1(8)=0 then pr #255,using L1500: pl1$(lnp),mat hr2,tdet3," OVT",gp1+gp2,x3*ded(1),x3*ded(2),x3*(ded(3)+ded(4)+ded(5)),gp1+gp2-(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5))) pageoflow PGOF else pr #255,using L1550: pl1$(lnp),mat hr2,tdet3," OVT" pageoflow PGOF
 01550 L1550: form pos 1,c 30,9*n 6.2,c 6
-01560 L1560: let hr8=hr8+hr1(8)+hr2(8)
+01560 L1560: hr8=hr8+hr1(8)+hr2(8)
 01570   mat hr1=(0)
 01580   mat hr2=(0)
 01590   return 
@@ -159,17 +159,17 @@
 01660 L1660: form pos 1,c 30,skip 1
 01670   next j
 01680 L1680: let gded= gded+(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5)))
-01690   let jgp=jgp+gp1+gp2 ! TOTAL GROSS FOR JOB
+01690   jgp=jgp+gp1+gp2 ! TOTAL GROSS FOR JOB
 01700   mat tded=tded+ded ! TOTAL DEDUCTION
-01710   let tcdt=tcdt+tcd1 ! TOTAL HOURS FOR ALL JOBS
-01720   let thr=thr+hr8 ! TOTAL HOURS FOR JOB
-01730   let tgp=0
+01710   tcdt=tcdt+tcd1 ! TOTAL HOURS FOR ALL JOBS
+01720   thr=thr+hr8 ! TOTAL HOURS FOR JOB
+01730   tgp=0
 01740   let gp1=0
 01750   let gp2=0
 01760   mat ded=(0)
-01770   let tcd1=0
-01780   let hr8=0
-01790   let tcp22=0
+01770   tcd1=0
+01780   hr8=0
+01790   tcp22=0
 01800   lnp=0
 01810   return 
 01820 ! ______________________________________________________________________
@@ -180,32 +180,32 @@
 01870   pr #255: tab(31);"Deductions     Net-Pay" pageoflow PGOF
 01880   pr #255,using L1890: thr,jgp,gded,jgp-gded pageoflow PGOF
 01890 L1890: form pos 5,4*n 12.2,skip 2
-01900   let thr=0
-01910   let jgp=0
+01900   thr=0
+01910   jgp=0
 01920   let gded=0
 01930   return 
 01940 ! ______________________________________________________________________
 01950 L1950: gosub L1610
 01960   gosub TOTALS
-01990 L1990: let fncloseprn
+01990 L1990: fncloseprn
 02000   goto XIT
 02010 ! ______________________________________________________________________
 02020 ! <Updateable Region: ERTN>
-02030 ERTN: let fnerror(program$,err,line,act$,"xit")
+02030 ERTN: fnerror(program$,err,line,act$,"xit")
 02040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 02050   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02060   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02070 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02080 ! /region
 02090 ! ______________________________________________________________________
-02100 XIT: let fnxit
+02100 XIT: fnxit
 02110 ! ______________________________________________________________________
 02120 DETERMINE_EARNINGS: ! 
-02130   let tfd=tmd=td14=tdw=0: mat caf=(0): mat ttc=(0): mat ttdc=(0)
+02130   tfd=tmd=td14=tdw=0: mat caf=(0): mat ttc=(0): mat ttdc=(0)
 02140   mat tcp=(0): mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0) !:
         mat qtr4tcp=(0): mat ytdtotal=(0): mat tdc=(0): mat tty=(0)
 02150   let fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0 !:
-        let medqtr=eicyr=eicqtr=wagesqtr=0
+        medqtr=eicyr=eicqtr=wagesqtr=0
 02160   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 02170   restore #7,key>=checkkey$: nokey L2500
 02180 L2180: read #7,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,oldckno,mat tdc,mat tcp eof STORE_VARIABLES : lastrec=rec(3)
@@ -224,7 +224,7 @@
 02310   let wagesyr=ytdtotal(31) ! total wages
 02320   let fedyr=ytdtotal(1) ! ytdl fed
 02330   let ficayr=ytdtotal(2) ! fica year to date
-02340   let medyr=ytdtotal(3) ! medicare year to date
+02340   medyr=ytdtotal(3) ! medicare year to date
 02350   stateyr=ytdtotal(4) ! total state  quarter
 02360   eicyr=ytdtotal(25) ! eic
 02370   if prd>=qtr1 and prd<qtr2 then mat quartertotals=qtr1tcp
@@ -234,11 +234,11 @@
 02410   let wagesqtr=quartertotals(31) ! total wages quarter
 02420   let fedqtr=quartertotals(1) ! total fed  quarter
 02430   let ficaqtr=quartertotals(2) ! total fica quarter
-02440   let medqtr=quartertotals(3) ! total medicare quarter
+02440   medqtr=quartertotals(3) ! total medicare quarter
 02450   stateqtr=quartertotals(4) ! total state  quarter
 02460   eicqtr=quartertotals(25) ! eic qtr
 02470   for j=1 to 20
-02480     if dedfed(j)=1 then let dedfedyr+=ytdtotal(j+4) ! deduct for federal wh
+02480     if dedfed(j)=1 then dedfedyr+=ytdtotal(j+4) ! deduct for federal wh
 02490   next j
 02500 L2500: return 
 02510 ACCUMULATE_DEPT_TOTALS: ! 
@@ -247,29 +247,29 @@
 02540   for j2=1 to tdep
 02550     if tdep(j2,5)=tdn then goto L2590
 02560   next j2
-02570 L2570: let tdep=tdep+1
-02580   let j2=tdep
-02590 L2590: let tdep(j2,1)=tdep(j2,1)+tcp(31)-tcp(30) ! total wage less tips
-02600   let deptgl$="" !:
+02570 L2570: tdep=tdep+1
+02580   j2=tdep
+02590 L2590: tdep(j2,1)=tdep(j2,1)+tcp(31)-tcp(30) ! total wage less tips
+02600   deptgl$="" !:
         read #8,using "Form pos 12,c 12,pos 62,2*pd 4.2",key=cnvrt$("pic(ZZZZZZZ#)",eno)&cnvrt$("pic(ZZ#)",tdn): deptgl$,tdet(2),tdet(3) ! Nokey 1660
-02610   let tdep(j2,2)=val(deptgl$(1:3)) ! salary for this department
-02620   let tdep(j2,3)=val(deptgl$(4:9))
-02630   let tdep(j2,4)=val(deptgl$(10:12))
-02640   let tdep(j2,5)=tdn
-02650   let tdep(j2,6)=tdep(j2,6)+tcp(2)+tcp(3)
+02610   tdep(j2,2)=val(deptgl$(1:3)) ! salary for this department
+02620   tdep(j2,3)=val(deptgl$(4:9))
+02630   tdep(j2,4)=val(deptgl$(10:12))
+02640   tdep(j2,5)=tdn
+02650   tdep(j2,6)=tdep(j2,6)+tcp(2)+tcp(3)
 02660   for j3=1 to 20
-02670     let tdep(j2,j3+6)=tdep(j2,j3+6)+tcp(j3+4)
+02670     tdep(j2,j3+6)=tdep(j2,j3+6)+tcp(j3+4)
 02680   next j3
 02690   if s1><1 then goto L2720
-02700   if rate=0 then let rate=tdet(2)
-02710   if rate>0 then let rt$="PAY RATE"&cnvrt$("N 10.2",rate) else let rt$=""
-02720 L2720: let tpd3=tpd3+round(tdc(3)*tdet(2),2) ! sick pay
-02730   let tpd4=tpd4+round(tdc(4)*tdet(2),2) ! vacation pay
-02740   let tpd5=tpd5+round(tdc(5)*tdet(2),2)
-02750   let tdc1=ttdc(1) ! Regular Hours
-02760   let tdc2=ttdc(2) ! OverTime Hours
-02770   let tdc3=ttdc(3)
-02780   let tdc4=ttdc(4)
-02790   let tdc5=ttdc(5)
-02800   let ttdct=ttdc(1)+ttdc(2)+ttdc(3)+ttdc(4)+ttdc(5) ! Total Hours
+02700   if rate=0 then rate=tdet(2)
+02710   if rate>0 then rt$="PAY RATE"&cnvrt$("N 10.2",rate) else rt$=""
+02720 L2720: tpd3=tpd3+round(tdc(3)*tdet(2),2) ! sick pay
+02730   tpd4=tpd4+round(tdc(4)*tdet(2),2) ! vacation pay
+02740   tpd5=tpd5+round(tdc(5)*tdet(2),2)
+02750   tdc1=ttdc(1) ! Regular Hours
+02760   tdc2=ttdc(2) ! OverTime Hours
+02770   tdc3=ttdc(3)
+02780   tdc4=ttdc(4)
+02790   tdc5=ttdc(5)
+02800   ttdct=ttdc(1)+ttdc(2)+ttdc(3)+ttdc(4)+ttdc(5) ! Total Hours
 02810   return  ! If TA>0 Then Goto 1460

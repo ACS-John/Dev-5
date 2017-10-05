@@ -57,4 +57,4 @@
 40380     pr 'trans_change_count=';trans_change_count
 40400   ! /r
 50000   pr 'go' : pause
-55000 XIT: end ! let fnxit
+55000 XIT: end ! fnxit

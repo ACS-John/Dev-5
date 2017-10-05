@@ -14,8 +14,8 @@
 00135   fnconsole(1)
 00140 ! ______________________________________________________________________
 00150   pr newpage
-00160   let msgline$(1)="Are you sure you wish to zero all"
-00170   let msgline$(2)="current period information? (Y/N)"
+00160   msgline$(1)="Are you sure you wish to zero all"
+00170   msgline$(2)="current period information? (Y/N)"
 00180   fnoldmsgbox(mat response$,cap$,mat msgline$,2)
 00190   if response$(1)="N" then goto XIT
 00200 ! ______________________________________________________________________
@@ -48,10 +48,10 @@
 00470 ! ______________________________________________________________________
 00480 DONE: ! 
 00490   close #2: 
-00520 XIT: let fnxit
+00520 XIT: fnxit
 00530 ! ______________________________________________________________________
 00540 ! <Updateable Region: ERTN>
-00550 ERTN: let fnerror(program$,err,line,act$,"xit")
+00550 ERTN: fnerror(program$,err,line,act$,"xit")
 00560   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00570   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00580   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

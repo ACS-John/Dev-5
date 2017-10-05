@@ -111,11 +111,11 @@ return ! /r
     longestElement=(int((LongestElement-1)/256)+1)*256
     mat NumberList$(udim(mat KeyDescription$))
     for Index=1 to udim(mat NumberList$)
-       let NumberList$(Index)=str$(Index)
+       numberList$(Index)=str$(Index)
     next Index
 
-    let KeyGiven=0
-    let KeyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
+    keyGiven=0
+    keyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
     if KeyGiven and KeyGiven<=udim(mat KeyDescription$) then
        str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
 
@@ -128,20 +128,20 @@ return ! /r
        fnReturnCode(' dim KeyNumber')
 
        codeLine$=" dim "
-       let KeyLength=0
+       keyLength=0
 
        for Index=1 to udim(Mat KeyFields$)
           sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              length=fnLength(SSpec$(Sub))
              codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
-             let KeyLength+=Length
+             keyLength+=Length
           else
              sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
                 length=fnLength(NSpec$(Sub))
                 codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
-                let KeyLength+=Length
+                keyLength+=Length
              end if
           end if
        next Index
@@ -153,7 +153,7 @@ return ! /r
        fnReturnCode(' dim '&FileLay$&'Key$*'&str$(KeyLength)&', This'&FileLay$&'$*'&str$(KeyLength))
        fnReturnCode(' ')
        fnReturnCode(' ! Initialize Key Information Here')
-       fnReturnCode(' let KeyNumber='&str$(KeyGiven))
+       fnReturnCode(' keyNumber='&str$(KeyGiven))
        for Index=1 to udim(Mat KeyFields$)
           sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
@@ -184,7 +184,7 @@ return ! /r
        fnReturnCode(' ')
        fnReturnCode(' do until File('&FileLay$&')')
        fnReturnCode('    read #'&FileLay$&', using Form$('&FileLay$&') : Mat '&FileLay$&'$,Mat '&FileLay$&' eof IGNORE')
-       fnReturnCode('    let This'&FileLay$&'$=fnBuildKey$("'&FileLay$&'",mat '&FileLay$&'$,mat '&FileLay$&',KeyNumber)')
+       fnReturnCode('    this'&FileLay$&'$=fnBuildKey$("'&FileLay$&'",mat '&FileLay$&'$,mat '&FileLay$&',KeyNumber)')
        fnReturnCode('    if File('&FileLay$&')=0 And rtrm$('&FileLay$&'Key$)=This'&FileLay$&'$(1:len(rtrm$('&FileLay$&'Key$))) then')
        fnReturnCode('       ! Found Something')
        fnReturnCode(' ')
@@ -224,11 +224,11 @@ return ! /r
     ! Dim at next largest multiple of 256
     mat NumberList$(udim(mat KeyDescription$))
     for Index=1 to udim(mat NumberList$)
-       let NumberList$(Index)=str$(Index)
+       numberList$(Index)=str$(Index)
     next Index
 
-    let KeyGiven=0
-    let KeyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
+    keyGiven=0
+    keyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
     if KeyGiven and KeyGiven<=udim(mat KeyDescription$) then
        str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
 
@@ -237,20 +237,20 @@ return ! /r
        fnReturnCode(' dim KeyNumber')
 
        codeLine$=" dim "
-       let KeyLength=0
+       keyLength=0
 
        for Index=1 to udim(Mat KeyFields$)
           sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              length=fnLength(SSpec$(Sub))
              codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
-             let KeyLength+=Length
+             keyLength+=Length
           else
              sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
                 length=fnLength(NSpec$(Sub))
                 codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
-                let KeyLength+=Length
+                keyLength+=Length
              end if
           end if
        next Index
@@ -262,7 +262,7 @@ return ! /r
        fnReturnCode(' dim '&FileLay$&'Key$*'&str$(KeyLength)&', This'&FileLay$&'$*'&str$(KeyLength))
        fnReturnCode(' ')
        fnReturnCode(' ! Initialize Key Information Here')
-       fnReturnCode(' let KeyNumber='&str$(KeyGiven))
+       fnReturnCode(' keyNumber='&str$(KeyGiven))
        for Index=1 to udim(Mat KeyFields$)
           sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
@@ -290,7 +290,7 @@ return ! /r
        fnReturnCode(' ')
        fnReturnCode(' do until File('&FileLay$&')')
        fnReturnCode('    read #'&FileLay$&', using Form$('&FileLay$&') : Mat '&FileLay$&'$,Mat '&FileLay$&' eof IGNORE')
-       fnReturnCode('    let This'&FileLay$&'$=fnBuildKey$("'&FileLay$&'",mat '&FileLay$&'$,mat '&FileLay$&',KeyNumber)')
+       fnReturnCode('    this'&FileLay$&'$=fnBuildKey$("'&FileLay$&'",mat '&FileLay$&'$,mat '&FileLay$&',KeyNumber)')
        fnReturnCode('    if File('&FileLay$&')=0 And rtrm$('&FileLay$&'Key$)=This'&FileLay$&'$(1:len(rtrm$('&FileLay$&'Key$))) then')
        fnReturnCode('       ! Found Something')
        fnReturnCode(' ')
@@ -323,11 +323,11 @@ return ! /r
     longestElement=(int((LongestElement-1)/256)+1)*256
     mat NumberList$(udim(mat KeyDescription$))
     for Index=1 to udim(mat NumberList$)
-       let NumberList$(Index)=str$(Index)
+       numberList$(Index)=str$(Index)
     next Index
 
-    let KeyGiven=0
-    let KeyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
+    keyGiven=0
+    keyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
     if KeyGiven and KeyGiven<=udim(mat KeyDescription$) then
        str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
 
@@ -340,19 +340,19 @@ return ! /r
        fnReturnCode(' dim KeyNumber')
 
        codeLine$=" dim "
-       let KeyLength=0
+       keyLength=0
        for Index=1 to udim(Mat KeyFields$)
           sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              length=fnLength(SSpec$(Sub))
              codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
-             let KeyLength+=Length
+             keyLength+=Length
           else
              sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
                 length=fnLength(NSpec$(Sub))
                 codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
-                let KeyLength+=Length
+                keyLength+=Length
              end if
           end if
        next Index
@@ -364,7 +364,7 @@ return ! /r
        fnReturnCode(' dim '&FileLay$&'Key$*'&str$(KeyLength)&', This'&FileLay$&'$*'&str$(KeyLength))
        fnReturnCode(' ')
        fnReturnCode(' ! Initialize Key Information Here')
-       fnReturnCode(' let KeyNumber='&str$(KeyGiven))
+       fnReturnCode(' keyNumber='&str$(KeyGiven))
        for Index=1 to udim(Mat KeyFields$)
           sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
@@ -449,11 +449,11 @@ return ! /r
     ! Dim at next largest multiple of 256
     mat NumberList$(udim(mat KeyDescription$))
     for Index=1 to udim(mat NumberList$)
-       let NumberList$(Index)=str$(Index)
+       numberList$(Index)=str$(Index)
     next Index
 
-    let KeyGiven=0
-    let KeyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
+    keyGiven=0
+    keyGiven=val(fnAskcombo$(mat NumberList$,"Select Key")) conv Ignore
     if KeyGiven and KeyGiven<=udim(mat KeyDescription$) then
        str2mat(lwrc$(KeyDescription$(KeyGiven)),mat KeyFields$,"/")
 
@@ -462,20 +462,20 @@ return ! /r
        fnReturnCode(' dim KeyNumber')
 
        codeLine$=" dim "
-       let KeyLength=0
+       keyLength=0
 
        for Index=1 to udim(Mat KeyFields$)
           sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
              length=fnLength(SSpec$(Sub))
              codeLine$=CodeLine$&Trim$(KeyFields$(Index))&"$*"&str$(Length)&", "
-             let KeyLength+=Length
+             keyLength+=Length
           else
              sub=srch(Mat NSubs$,trim$(KeyFields$(Index)))
              if Sub>0 then
                 length=fnLength(NSpec$(Sub))
                 codeLine$=CodeLine$&Trim$(KeyFields$(Index))&", "
-                let KeyLength+=Length
+                keyLength+=Length
              end if
           end if
        next Index
@@ -487,7 +487,7 @@ return ! /r
        fnReturnCode(' dim '&FileLay$&'Key$*'&str$(KeyLength)&', This'&FileLay$&'$*'&str$(KeyLength))
        fnReturnCode(' ')
        fnReturnCode(' ! Initialize Key Information Here')
-       fnReturnCode(' let KeyNumber='&str$(KeyGiven))
+       fnReturnCode(' keyNumber='&str$(KeyGiven))
        for Index=1 to udim(Mat KeyFields$)
           sub=srch(mat SSubs$,trim$(KeyFields$(Index)))
           if Sub>0 then
@@ -570,11 +570,11 @@ return ! /r
 
  dim ReturnCode$*20000
  def fnReturnCode(String$*512)
-    let ReturnCode$=ReturnCode$&String$&chr$(13)&chr$(10)
+    returnCode$=ReturnCode$&String$&chr$(13)&chr$(10)
  fnend
 def library fnRunTemplate(Template,FileLay$;___,Index)
   fnEstablishLinkage
-  let ReturnCode$=""
+  returnCode$=""
   fnReadEntireLayout(FileLay$,Filename$,Prefix$,Mat Keys$,Mat KeyDescription$,Mat Ssubs$,Mat Nsubs$,Mat Sspec$,Mat Nspec$,Mat Sdescription$,Mat Ndescription$,Mat Spos,Mat Npos)
   longestElement=0
   for Index=1 to udim(mat SSpec$)
@@ -587,9 +587,9 @@ def library fnRunTemplate(Template,FileLay$;___,Index)
      sSubs$(Index)=lwrc$(SSubs$(Index))
   next Index
   for Index=1 to udim(mat NSubs$)
-     let NSubs$(Index)=lwrc$(NSubs$(Index))
+     nSubs$(Index)=lwrc$(NSubs$(Index))
   next Index
-  let Prefix$=trim$(Prefix$)
+  prefix$=trim$(Prefix$)
   gosub RunTemplate
 
   if len(ReturnCode$) then let setenv("CLIPBOARD",ReturnCode$)

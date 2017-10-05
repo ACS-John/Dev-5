@@ -14,10 +14,10 @@
 00131   close #1: 
 00132   open #1: "Name=S:\Core\Data\1099Type.dat,KFName=S:\Core\Data\1099Type.idx,Use,RecL=26,KPs=1,KLn=1,Shr",internal,outin,keyed 
 00140   fnhamster("1099Type",mat lbl$,mat fln,1,mat p$)
-00150 XIT: let fnxit
+00150 XIT: fnxit
 00160 ! ______________________________________________________________________
 00170 ! <Updateable Region: ERTN>
-00180 ERTN: let fnerror(program$,err,line,act$,"xit")
+00180 ERTN: fnerror(program$,err,line,act$,"xit")
 00190   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00200   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00210   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -4,7 +4,7 @@
 00040     library 'S:\Core\Library': fncno,fngethandle
 00050     fncno(cno)
 00060     open #bankmstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
-00070     let key$=lpad$(str$(bank_code),2) ! cNVRT$('Pic(99)',BANK_CODE) !:
+00070     key$=lpad$(str$(bank_code),2) ! cNVRT$('Pic(99)',BANK_CODE) !:
           read #bankmstr,using 'Form Pos 45,PD 6.2',key=key$,reserve: bankbal nokey XIT
 00080 ! pr ' modification amount is +'&STR$(MODIFICATION)
 00090     bankbal=bankbal+modification

@@ -16,7 +16,7 @@
 00600 !
 01000 Main: ! If you run me as a program, I run the statelist screen
 01010    library "S:\Core\ScreenIO\Screenio" : fnfm$
-01020    let Ret$=fnfm$("statelist","",0,0,"",0,0,0,0,mat PassedData$)
+01020    ret$=fnfm$("statelist","",0,0,"",0,0,0,0,mat PassedData$)
 01030    if len(trim$(Ret$)) then
 01040       pr Ret$
 01050    end if
@@ -44,10 +44,10 @@
 05018  !
 05019  def fndeletelistviewrecord(&ExitMode,DataFile,mat f$,&RepopulateListview;___,Recorddescription$*255)
 05020     if udim(f$)>1 then
-05021        let RecordDescription$=f$(1)
+05021        recordDescription$=f$(1)
 05022     end if
 05023     if udim(f$)>2 then
-05024        let RecordDescription$=RecordDescription$&","&f$(2)
+05024        recordDescription$=RecordDescription$&","&f$(2)
 05025     end if
 05026     if 2=msgbox("Are you sure you wish to delete the current record?: "&RecordDescription$,"Delete Record?","yN","EXCL") then
 05027        reread #Datafile, using form$(Datafile) : mat f$, mat f
@@ -83,9 +83,9 @@
 05057   ! 2500+ is reserved for screenio
 05058   if fkey=1 or fkey=1504 then
 05059     if env$('Program_Caption')='Select Company' then
-05060       let help_cursys$='co'
+05060       help_cursys$='co'
 05061     else
-05062       let help_cursys$=lwrc$(env$('CurSys'))
+05062       help_cursys$=lwrc$(env$('CurSys'))
 05063     end if
 05064     ! pr 'help_cursys$='&help_cursys$ : pause
 05065     execute 'system -M start http://planetacs.net/help/'&help_cursys$&'/'&srep$(env$('Program_Caption'),' ','%20')&'.html'
@@ -181,7 +181,7 @@
 92001 !
 92002    if ~DataIsInside then
 92003       fnPopData(2)
-92004       if Function$="{{SetData}}" then let DataIsInside=1
+92004       if Function$="{{SetData}}" then dataIsInside=1
 92005    end if
 92006 !
 92007    if ~FileIOLinkageSet then
@@ -193,13 +193,13 @@
 92013    end if
 92014 !
 92015    if Function$ = "{deletelistviewrecord}" then
-92016       let ReturnValue = fndeletelistviewrecord(ExitMode,DataFile,mat f$,RepopulateListview)
+92016       returnValue = fndeletelistviewrecord(ExitMode,DataFile,mat f$,RepopulateListview)
 92017    else if Function$ = "{defaults\enter}" then
-92018       let ReturnValue = fnEnterDefault
+92018       returnValue = fnEnterDefault
 92019    else if Function$ = "{defaults\mainloop}" then
-92020       let ReturnValue = fnMainLoop
+92020       returnValue = fnMainLoop
 92021    else if Function$ = "{defaults\exit}" then
-92022       let ReturnValue = fnExitDefault
+92022       returnValue = fnExitDefault
 92023    else
 92024       if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
 92025          pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
@@ -208,7 +208,7 @@
 92028 !
 92029    if ~DataIsInside or Function$="{{GetData}}" then
 92030       fnPushData(2)
-92031       let DataIsInside=0
+92031       dataIsInside=0
 92032    end if
 92033 return
 92034 !

@@ -4,8 +4,8 @@
 94000   def fn_key_change(h_filehandle,f_fileform_key_only$*128,key_from$*128,key_to$*128)
 94020 ! account must be indexed by account key primarily, other stuff may follow
 94040     dim tmp_key$*128
-94060 !   let debug=1
-94080 ! if debug then    let rwcnt=0
+94060 !   debug=1
+94080 ! if debug then    rwcnt=0
 94100     let f_fileform_key_only$=srep$(lwrc$(f_fileform_key_only$),'n ','g ')
 94120     restore #h_filehandle,key>=rpad$(key_from$,kln(h_filehandle)): nokey KC_FINIS
 94140     do 

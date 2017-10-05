@@ -40,7 +40,7 @@
 20780 XIT: fnend  ! chain "S:\acsUB\conversion\ubadrbil-cnv"
 20800 ! ______________________________________________________________________
 20820 ! <updateable region: ertn>
-20840 ERTN: let fnerror(program$,err,line,act$,"xit")
+20840 ERTN: fnerror(program$,err,line,act$,"xit")
 20860   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20880   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 20900   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

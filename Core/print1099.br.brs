@@ -35,7 +35,7 @@
 00270 ! ___________________________
 00280 ADD1099DONE: close #dave: 
 00290 ! reset all variables (used in this function) !:
-          mat einfo$=('') : mat box=(0) : let dave=0 : mat oldbox=(0) !:
+          mat einfo$=('') : mat box=(0) : dave=0 : mat oldbox=(0) !:
           ! don't reset Mat cInfo$, because it's annoying to loose these values
 00300   fnend 
 00310 ! _______________________________________________________________________
@@ -176,7 +176,7 @@
 01370     pr #exportfile: "*"
 01380     return 
 01390 ! ______________________________________________________________________
-01400 PRINT1099ERTN: let fnerror(program$,err,line,act$,"xit")
+01400 PRINT1099ERTN: fnerror(program$,err,line,act$,"xit")
 01410     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01420     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01430     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

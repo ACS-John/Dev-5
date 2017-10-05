@@ -9,8 +9,8 @@
 00100   dim z$*5,ca(10),ta(25,2),fb(25),dat$*20,cap$*128
 00110   dim k$*5,e$*9,b(8),sc$*4,iv$*12,tempiv$*12
 00120   dim x$(10)*30,c$(50)*25,d(50),e(50),f(50),g(10),h(10),i(10)
-00130   let io1$(1)="10,44,C 20,U,N"
-00140   let io1$(2)="12,58,N 6,U,N"
+00130   io1$(1)="10,44,C 20,U,N"
+00140   io1$(2)="12,58,N 6,U,N"
 00150   pr newpage
 00160   pr f "10,5,c 35,n": "ENTER MONTHLY BILLING SUMMARY DATE:"
 00170   pr f "12,5,C 60": "ENTER THE OLDEST BILLING DATE TO pr OR 0 FOR ALL:"
@@ -20,15 +20,15 @@
 00210   if cmdkey=5 then goto XIT
 00220   fndat(dat$,put=2)
 00230   if od=0 or (od>10111 and od<123200) then goto L240 else goto L200
-00240 L240: let fnopenprn
+00240 L240: fnopenprn
 00250   pr newpage
-00260   let dattab=66-int(len(rtrm$(dat$))/2)
+00260   dattab=66-int(len(rtrm$(dat$))/2)
 00270   pr f "10,20,c 60,n": "MONTHLY BILLING SUMMARY IN PROCESS"
 00280   pr f "23,2,c 30,n": "Press F5 to stop"
-00290   let dattab=66-int(len(rtrm$(dat$))/2)
-00300   let dattab2=43-int(len(rtrm$(dat$))/2)
-00310   let namtab=66-int(len(rtrm$(cnam$))/2)
-00320   let namtab2=43-int(len(rtrm$(cnam$))/2)
+00290   dattab=66-int(len(rtrm$(dat$))/2)
+00300   dattab2=43-int(len(rtrm$(dat$))/2)
+00310   namtab=66-int(len(rtrm$(cnam$))/2)
+00320   namtab2=43-int(len(rtrm$(cnam$))/2)
 00330   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&str$(cno)&",Shr",internal,input,relative ioerr L2080
 00340   read #1,using L350,rec=1: mat cat$ ioerr L2080
 00350 L350: form pos 1,30*c 30
@@ -56,14 +56,14 @@
 00570   for j2=1 to 25
 00580     if fb(j2)>=1 and fb(j2)<=3 then goto L600
 00590     goto L800
-00600 L600: let nta=ta(j2,1)
-00610     let iv$=" "
-00620     let hrs=0
+00600 L600: nta=ta(j2,1)
+00610     iv$=" "
+00620     hrs=0
 00630     std=0
 00640     bil=0
 00650 L650: read #3,using L680,rec=nta: k$,e$,mat b,sc$,tempiv$,nta ioerr L2080
 00660     if b(7)=-1 and fncd(b(4))<fncd(od) then goto L800
-00670     if b(7)<0 then let iv$=tempiv$
+00670     if b(7)<0 then iv$=tempiv$
 00680 L680: form pos 1,c 5,c 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,c 4,c 12,pd 3
 00690     if fb(j2)=2 or fb(j2)=3 then goto L720
 00700     ast$="*"
@@ -72,7 +72,7 @@
 00730 L730: if b(7)>=0 then goto L760
 00740     bil=bil+b(3)
 00750     if b(7)<0 then goto L780
-00760 L760: let hrs=hrs+b(1)
+00760 L760: hrs=hrs+b(1)
 00770     std=std+b(3)
 00780 L780: if nta><0 then goto L650
 00790     gosub L820
@@ -96,8 +96,8 @@
 00970 L970: close #2: ioerr L980
 00980 L980: close #3: ioerr L990
 00990 L990: close #4: ioerr L1000
-01000 L1000: let fncloseprn
-01010 XIT: let fnxit
+01000 L1000: fncloseprn
+01010 XIT: fnxit
 01020 L1020: pr #255,using L1030: date$,cnam$,time$,"MONTHLY BILLING SUMMARY"
 01030 L1030: form skip 3,pos 1,c 8,pos namtab,c 40,skip 1,pos 1,c 8,pos 55,c 23,skip 1
 01040   pr #255,using L1050: dat$
@@ -116,8 +116,8 @@
 01170   goto L1190
 01180 L1180: pr #255,using L1130: cliname$(1:26),b(5),"-",b(8),hrs,std,bil,bil-std,0," ",ast$,cat$(j1)(1:17),enam$(1:17),iv$ pageoflow L1150
 01190 L1190: l1=l1+hrs
-01200   let m1=m1+std
-01210   let n1=n1+bil
+01200   m1=m1+std
+01210   n1=n1+bil
 01220   return 
 01230 L1230: for y=1 to 50
 01240     if rtrm$(c$(y))="" then goto L1370
@@ -164,7 +164,7 @@
 01650   goto L1700
 01660 L1660: c$(y)=enam$
 01670 L1670: let f(y)=f(y)+bil
-01680   let d(y)=d(y)+hrs
+01680   d(y)=d(y)+hrs
 01690   e(y)=e(y)+std
 01700 L1700: return 
 01710 L1710: if rtrm$(cat$(j1))><"" then goto L1730
@@ -176,8 +176,8 @@
 01770   goto L1820
 01780 L1780: let x$(x7)=cat$(j1)
 01790 L1790: let g(x7)=g(x7)+bil
-01800   let h(x7)=h(x7)+hrs
-01810   let i(x7)=i(x7)+std
+01800   h(x7)=h(x7)+hrs
+01810   i(x7)=i(x7)+std
 01820 L1820: return 
 01830 L1830: pr #255: newpage
 01840   pr #255,using L1510: cnam$,"BILLING ANALYSIS BY CATEGORY"

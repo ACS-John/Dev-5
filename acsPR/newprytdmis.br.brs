@@ -18,15 +18,15 @@
 00190 ! ______________________________________________________________________
 00200 MENU1: ! 
 00210   fntos(sn$="prytdmis")
-00212   let respc=0
+00212   respc=0
 00220   fnlbl(1,43," ",1,1)
 00230   fnlbl(1,1,"Beginning Date of Tax Year:",26,1)
 00240   fntxt(1,30,12,0,0,"3",0,"") 
-00242   let resp$(respc+=1)=str$(beg_date)
+00242   resp$(respc+=1)=str$(beg_date)
 00250   fnlbl(2,1,"Ending Date of Tax Year:",26,1)
 00260   fntxt(2,30,12,0,0,"3",0,"") 
-00262   let resp$(respc+=1)=str$(end_date)
-00270   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+00262   resp$(respc+=1)=str$(end_date)
+00270   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
 00280   if ck=5 then goto XIT
 00290   beg_date=val(resp$(1)) ! beginning of year
 00310   end_date=val(resp$(2)) ! ending day of year
@@ -58,7 +58,7 @@
 00560 ! ______________________________________________________________________
 00570 PRINT_INFO: ! 
 00580   for j=1 to 20
-00590     let t1(j)=ytdtotal(j+4)
+00590     t1(j)=ytdtotal(j+4)
 00600   next j
 00610   pr #255,using L660: eno,em$(1:18),t1(1),t1(2),t1(3),t1(4),t1(5),t1(6),t1(7),t1(8),t1(9),t1(10) pageoflow NEWPGE
 00620   for j=1 to 10
@@ -85,7 +85,7 @@
 00830   fncloseprn
 00840   close #1: ioerr L850
 00850 L850: close #2: ioerr L860
-00860 L860: let fnxit
+00860 L860: fnxit
 00870 ! ______________________________________________________________________
 00880 NEWPGE: pr #255: newpage : gosub HDR : continue 
 00890 ! ______________________________________________________________________
@@ -107,10 +107,10 @@
 01050 L1050: form pos 38,10*c 10
 01060   pr #255: "                                 ";rpt$("  ________",10)
 01070 L1070: return 
-01080 XIT: let fnxit
+01080 XIT: fnxit
 01090 ! ______________________________________________________________________
 01100 ! <Updateable Region: ERTN>
-01110 ERTN: let fnerror(program$,err,line,act$,"xit")
+01110 ERTN: fnerror(program$,err,line,act$,"xit")
 01120   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01130   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01140   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

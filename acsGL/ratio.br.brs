@@ -12,7 +12,7 @@
 00120   fntop(program$,cap$="Ratio")
 00130   fncno(cno,cnam$) !:
         fndat(dat$)
-00142   let ratiomst=10
+00142   ratiomst=10
 00150   if exists(env$('Q')&"\GLmstr\ratiomst.h"&str$(cno))=0 then gosub CREATE_FILES
 00160   if exists(env$('Q')&"\GLmstr\ratioidx.h"&str$(cno))=0 then gosub INDEX
 00170   if exists(env$('Q')&"\GLmstr\schindx2.h"&str$(cno))=0 then gosub INDEX
@@ -23,7 +23,7 @@
 00220   goto L180
 00230 RATIOMSTGRID: ! 
 00240   fntos(sn$="Ratiomst") !:
-        let respc=0
+        respc=0
 00250   mat chdr$(3) : mat cmask$(3) : mat flxitm$(3) !:
         chdr$(1)="Rec" !:
         chdr$(2)="Ratio #" : chdr$(3)="Ratio Name" !:
@@ -33,8 +33,8 @@
         fnflexinit1('Ratiomst1',lc=1,1,10,50,mat chdr$,mat cmask$,1)
 00280 READ_RATIOMST: ! read Ratiomst file
 00290   read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12': hac$,na$,mat gl$ eof EO_RATIOMST_GRID
-00300   let item$(1)=str$(rec(ratiomst)) !:
-        let item$(2)=hac$: let item$(3)=na$ !:
+00300   item$(1)=str$(rec(ratiomst)) !:
+        item$(2)=hac$: item$(3)=na$ !:
         fnflexadd1(mat item$)
 00310   goto READ_RATIOMST
 00320 EO_RATIOMST_GRID: ! 
@@ -44,7 +44,7 @@
 00360   fncmdkey("&Edit",2,1,0,"Highlight any record and press Enter or click Edit to change any existing Ratio.")
 00370   fncmdkey("&Review G/L #",4,0,0,"Click to review the general ledger numbers used in this ratio.")
 00380   fncmdkey("&Delete",8,0,0,"Highlight any record and click Delete to remove the Ratio.")
-00390 ! Let FNCMDKEY("&Print",3,0,0,"Takes you directly to the pr Ratios option")
+00390 ! fnCMDKEY("&Print",3,0,0,"Takes you directly to the pr Ratios option")
 00400   fncmdkey("E&xit",5,0,1,"Exits to main menu")
 00410   fnacs(sn$,0,mat resp$,ckey)
 00420   if ckey=5 then goto XIT
@@ -54,13 +54,13 @@
 00460   if ckey=4 then goto GL_NUMBERS
 00470 ! If CKEY=3 Then Chain "S:\acsGL\acglschp" ! prints prints a Ratiomst
 00480   if ckey=1 then add=1 !:
-          let hac$=na$="" !:
+          hac$=na$="" !:
           mat gl$=("") !:
           goto ADD_EDIT_RATIOMST ! add
 00490 ! to ADD_EDIT_Ratiomst ! add
 00500   if ckey=2 then !:
           read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$ norec RATIOMSTGRID !:
-          let holdsn=sn !:
+          holdsn=sn !:
           goto ADD_EDIT_RATIOMST
 00510   if ckey=8 then !:
           read #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec,release: hac$,na$,mat gl$ norec RATIOMSTGRID !:
@@ -70,20 +70,20 @@
 00530 ! 
 00540 ADD_EDIT_RATIOMST: ! 
 00550   fntos(sn$="Ratiomst2") !:
-        let mylen=20: let mypos=mylen+3 : let right=1
+        mylen=20: mypos=mylen+3 : right=1
 00560   fnlbl(1,1,"Ratio Number:",mylen,right)
 00570   fncombof('glRatiomst',1,mypos,0,env$('Q')&"\GLmstr\ratiomst.h"&str$(cno),1,3,4,40,env$('Q')&"\GLmstr\ratioidx.h"&str$(cno),add_all)
-00580   if edit=1 then let resp$(1)=hac$
-00590   if add=1 then let resp$(1)=""
+00580   if edit=1 then resp$(1)=hac$
+00590   if add=1 then resp$(1)=""
 00600   fnlbl(2,1,"Ratio Nane::",mylen,right)
 00610   fntxt(2,mypos,40,0,left,"",0,"",0 ) !:
-        let resp$(2)=na$
+        resp$(2)=na$
 00620   fncmdkey("&Next",1,1,0,"Save the ratio.")
 00630   fncmdkey("&Cancel",5,0,1,"Returns to list of Ratios withouit saving any changes.")
 00640   fnacs(sn$,0,mat resp$,ckey)
 00650   if ckey=5 then goto RATIOMSTGRID
-00660   let hac$=resp$(1)(1:3) conv ADD_EDIT_RATIOMST
-00670   let na$=resp$(2)
+00660   hac$=resp$(1)(1:3) conv ADD_EDIT_RATIOMST
+00670   na$=resp$(2)
 00680   if edit=1 then goto REWRITE_EXISTING_RATIOMST
 00690   if add=1 then goto WRITE_NEW_RATIOMST
 00700   pause 
@@ -93,16 +93,16 @@
 00740   if holdhac$<>hac$ and holdhac$<>"" then goto MSGBOX1 else goto L780
 00750 MSGBOX1: ! 
 00760   mat ml$(3) !:
-        let ml$(1)="You are changing Ratio # "&holdhac$&" to " !:
-        let ml$(2)="Ratio # "&hac$&".  Click OK to continue, " !:
-        let ml$(3)="else Cancel to prevent changing the #." !:
+        ml$(1)="You are changing Ratio # "&holdhac$&" to " !:
+        ml$(2)="Ratio # "&hac$&".  Click OK to continue, " !:
+        ml$(3)="else Cancel to prevent changing the #." !:
         fnmsgbox(mat ml$,resp$,cap$,49)
 00770   if resp$="OK" then goto L780 else goto ADD_EDIT_RATIOMST
 00780 L780: rewrite #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
 00790   goto L830
 00800 ! ______________________________________________________________________
 00810 WRITE_NEW_RATIOMST: write #ratiomst,using 'Form POS 1,G 3,C 40,80*c 12',rec=editrec: hac$,na$,mat gl$
-00820   let new1=1
+00820   new1=1
 00830 L830: goto RATIOMSTGRID
 00840 ! ______________________________________________________________________
 00850   close #ratiomst: 
@@ -147,24 +147,24 @@
 01240     goto L1270
 01250 L1250: pr #255,using L1260: "G/L Account Number",gl$(j)(1:3),gl$(j)(4:9),gl$(j)(10:12)
 01260 L1260: form pos 1,c 18,pos 30,c 3,x 2,c 6,x 2,c 3,skip 1
-01270 L1270: let j1=j1+1
+01270 L1270: j1=j1+1
 01280   next j
-01290   let j1=0
+01290   j1=0
 01300   pr #255: newpage
 01310   goto L1030
 01320 ! ______________________________________________________________________
-01330 L1330: let fncloseprn
+01330 L1330: fncloseprn
 01340   on fkey 5 ignore 
 01350   if fnprocess=1 then goto XIT
 01360   goto ADD_EDIT_RATIOMST
 01370 ! ______________________________________________________________________
 01380 L1380: if err=4152 then goto L930 else goto ERTN
 01390 ! ______________________________________________________________________
-01400 XIT: let fnxit
+01400 XIT: fnxit
 01410 ! ______________________________________________________________________
 01420 ! ______________________________________________________________________
 01430 ! <Updateable Region: ERTN>
-01440 ERTN: let fnerror(program$,err,line,act$,"xit")
+01440 ERTN: fnerror(program$,err,line,act$,"xit")
 01450   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01460   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01470   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -174,13 +174,13 @@
 01510 GL_NUMBERS: ! 
 01520 LEFT_SIDE: ! 
 01530   fntos(sn$="Ratiomst3") !:
-        let resp=0
+        resp=0
 01540   fnlbl(1,35,"Left Side Of Ratio",30,0)
-01550   let mypos(1)=1: let mypos (2)=50
+01550   mypos(1)=1: mypos (2)=50
 01560   for j=2 to 40 step 2
 01570     for x=1 to 2
 01580       fnqgl(j/2+1,mypos(x),0,2,pas) !:
-            if x =1 then let resp$(resp+=1)=fnrgl$(gl$(j-1)) else let resp$(resp+=1)=fnrgl$(gl$(j))
+            if x =1 then resp$(resp+=1)=fnrgl$(gl$(j-1)) else resp$(resp+=1)=fnrgl$(gl$(j))
 01590     next x
 01600   next j
 01610   fncmdkey("&Left Side",2,0,0,"Enter all G/L Numbers to be used on the left side of the ratio.")
@@ -195,14 +195,14 @@
 01700   if ckey=2 then goto LEFT_SIDE
 01710   if ckey=3 then goto RIGHT_SIDE
 01720   if ckey=6 then goto REWRITE_EXISTING_RATIOMST
-01730 RIGHT_SIDE: : let resp=0
+01730 RIGHT_SIDE: : resp=0
 01740   fntos(sn$="Ratiomst4")
-01750   let mypos(1)=1: let mypos (2)=50
+01750   mypos(1)=1: mypos (2)=50
 01760   fnlbl(1,35,"Right Side Of Ratio",30,0)
 01770   for j=2 to 40 step 2
 01780     for x=1 to 2
 01790       fnqgl(j/2+1,mypos(x),0,2,pas) !:
-            if x=1 then let resp$(resp+=1)=fnrgl$(gl$(40+j-1)) else let resp$(resp+=1)=fnrgl$(gl$(40+j))
+            if x=1 then resp$(resp+=1)=fnrgl$(gl$(40+j-1)) else resp$(resp+=1)=fnrgl$(gl$(40+j))
 01800     next x
 01810   next j
 01820   fncmdkey("&Left Side",2,0,0,"Enter all G/L Numbers to be used on the left side of the ratio.")

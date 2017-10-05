@@ -17,10 +17,10 @@
 00250   fntop(program$,cap$="Payroll Calculation")
 00525   gosub ASKDATES
 00527   if ckey=5 then goto XIT
-00530   let dat$=lpad$(str$(d1),6)
-00535   let mo1=val(dat$(5:6)) : let da=val(dat$(7:8)) : let yr=val(dat$(3:4))
-00540   let ppd=round(yr*365+int(yr/4)+motab(mo1)+da,2)
-00545   let d1=mo1*10000+da*100+yr
+00530   dat$=lpad$(str$(d1),6)
+00535   mo1=val(dat$(5:6)) : da=val(dat$(7:8)) : let yr=val(dat$(3:4))
+00540   ppd=round(yr*365+int(yr/4)+motab(mo1)+da,2)
+00545   d1=mo1*10000+da*100+yr
 00550   gosub ASKSKIPWH
 00560   if ckey=5 then goto XIT
 00562   fnAutomatedSavePoint('before')
@@ -29,18 +29,18 @@
 00568   read #h_rpwork,using F_RPWORK: x$,dep,mat inp,gpd,mat hr eof EO_RPWORK
 00569   if env$('client')='West Accounting' then gosub WEST_ACC_WORKMANSCOMP
 00571   ! pr 'FIRST READ OF RPWORK right after read rpwork inp(6)=';inp(6) : pause
-00572   let newdeptkey$=cnvrt$("pic(zzzzzzz#)",val(x$))&cnvrt$("pic(zz#)",dep)
-00573   ! let totaldef=0
+00572   newdeptkey$=cnvrt$("pic(zzzzzzz#)",val(x$))&cnvrt$("pic(zz#)",dep)
+00573   ! totaldef=0
 00575   ! Form POS 1,C 8,N 3,5*PD 4.2,15*PD 5.2,2*PD 4.2,PD 3
 00577   eno=val(x$)
 00579   if eno=0 then goto ReadRpWork
 00581   if n$=x$ then goto L1540
-00583   let twc=twy=tfy=cafy=eicytd=deducy=0
+00583   twc=twy=tfy=cafy=eicytd=deducy=0
 00585   if rtrm$(n$)<>"" then gosub SUBROUTINE2
 00589 goto L1010
 00591 ! ______________________________________________________________________
 00593 SUBROUTINE2: ! r: (reallocate state taxes based on earnings by dept and state
-00595   s3=0 : let tcp(4)=0 : let tcp4=0
+00595   s3=0 : tcp(4)=0 : tcp4=0
 00597   oldeno=val(n$)
 00599   restore #h_department,key>=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",0): 
 00601   if em(14)=-1 then goto L960
@@ -50,13 +50,13 @@
 00674   if debug then let fnstatus('department read employee '&str$(eno)&' department '&str$(tdn))
 00680   if teno<>oldeno then goto L960
 00690   if d1><tdt(4) then goto L670
-00700   let holdtdn=tdn
+00700   holdtdn=tdn
 00710   olddeptkey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)
 00720   read #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2",key=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",tdn)&cnvrt$("pd 6",prd): heno,tdn,prdate,ckno,mat tdc,mat tcp nokey L670
 00722   if debug then let fnstatus('read check history: heno='&str$(heno)&',tdn='&str$(tdn)&',prdate='&str$(prdate)&',ckno='&str$(ckno)&'...')
-00740   let dst3=0
+00740   dst3=0
 00750   for j=1 to 20
-00760     if dedst(j)>0 then let dst3=dst3+tcp(j+4)
+00760     if dedst(j)>0 then dst3=dst3+tcp(j+4)
 00770   next j
 00780   ! sTWH(tcd(1),1)=STWH(tcd(1),1)-DST3
 00790   if stwh(tcd(1),1)=0 then goto L670
@@ -71,34 +71,34 @@
 00862   stwh(tcd(1),2)=s3
 00870   L870: ! 
 00872   if env$('client')="Lamar" then 
-00873     let tcp4=(stwh(tcd(1),2))*((tcp(31)-dst3)/stwh(tcd(1),1))
+00873     tcp4=(stwh(tcd(1),2))*((tcp(31)-dst3)/stwh(tcd(1),1))
 00874   else 
-00875     let tcp4=(stwh(tcd(1),2)+em(15))*((tcp(31)-dst3)/stwh(tcd(1),1))
+00875     tcp4=(stwh(tcd(1),2)+em(15))*((tcp(31)-dst3)/stwh(tcd(1),1))
 00876   end if 
-00880   let tcp4=round(tcp4,2)
-00890   if in2$(2)="Y" then let tcp4=0
-00900   let tcp(32)-=tcp4: let tcp(4)=tcp4
-00920   let rewritekey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)&cnvrt$("pd 6",prd) ! index employee#,department# and payroll date
+00880   tcp4=round(tcp4,2)
+00890   if in2$(2)="Y" then tcp4=0
+00900   tcp(32)-=tcp4: tcp(4)=tcp4
+00920   rewritekey$=cnvrt$("pic(zzzzzzz#)",oldeno)&cnvrt$("pic(zz#)",holdtdn)&cnvrt$("pd 6",prd) ! index employee#,department# and payroll date
 00930   rewrite #h_payrollchecks,using 'Form pos 80,pd 5.2,poS 220,pd 5.2',key=rewritekey$: tcp(4),tcp(32)
 00936   fn_report_stuff
 00940   rewrite #h_department,using 'Form pos 42,n 6',key=olddeptkey$: tdt(4)
 00952   goto L670
 00960   L960: ! 
 00962   rewrite #hEmployee,using F_RPMSTR,key=n$: mat em,d1,tgp
-00970   if fp(d1*.01)>.9 then let hd1=19000000+fncd(d1) else let hd1=20000000+fncd(d1)
+00970   if fp(d1*.01)>.9 then hd1=19000000+fncd(d1) else hd1=20000000+fncd(d1)
 00980   mat stwh=(0)
 00990 return ! /r
 01010 L1010: ! r: read employee, call calc deduction etc  basically beginning of main loop i think
 01012   read #hEmployee,using F_RPMSTR,key=x$: mat em,lpd,tgp nokey EMPLOYEE_NOT_FOUND
 01014   F_RPMSTR: form pos 112,7*n 2,2*pd 3.3,6*pd 4.2,2*n 6,pd 5.2
 01020   gosub CALK_ALL_DEDUCTIONS_ALL_DEPT
-01040   let n$=x$
+01040   n$=x$
 01050   if d3$><"Y" then goto L1170 ! Accrue Sick and Vacation
 01060   if em(8)><-1 then goto L1110 ! Check for elgibility
 01070   if em(16)<10100 or em(16)>123199 then goto L1110
-01080   let dat$=lpad$(str$(em(16)),6) : let mo=val(dat$(1:2))
-01090   let da=val(dat$(3:4)) : let yr=val(dat$(5:6))
-01100   let dh=round(yr*365+int(yr/4)+motab(mo)+da,2)
+01080   dat$=lpad$(str$(em(16)),6) : mo=val(dat$(1:2))
+01090   da=val(dat$(3:4)) : let yr=val(dat$(5:6))
+01100   dh=round(yr*365+int(yr/4)+motab(mo)+da,2)
 01110   if ppd-dh<sck(1) then goto L1110
 01120   em(8)=sck(3) : em(10)=sck(2)
 01125 L1110: ! 
@@ -110,11 +110,11 @@
 01150   ! if env$('client')='Battlefield' then goto L1170
 01160   if em(9)>0 then write #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2": eno,"Vac",prd,em(9),0 ioerr ignore
 01170   L1170: ! 
-01172   let twy=0
-01180   let tf4_a=0 ! Calculate Total Federal WithHoldings
+01172   twy=0
+01180   tf4_a=0 ! Calculate Total Federal WithHoldings
 01190   let fed_wh_annual_estimate=0
 01200 ! IF in2$(1)="Y" THEN GOTO 1420
-01202   ! if em(1)=2 then let j2=4 else let j2=round(1+em(1)*3,2) ! 2=HEAD OF HOUSEHOLD
+01202   ! if em(1)=2 then j2=4 else j2=round(1+em(1)*3,2) ! 2=HEAD OF HOUSEHOLD
 01204   if em(1)=0 then ! 0 - Single
 01210     j2=1
 01212   else if em(1)=1 then ! 1 - Married
@@ -132,38 +132,38 @@
 01248 ! /r
 01250 BAD_PAY_CODE: ! r:
 01252   mat ml$(1)
-01254   let ml$(1)="Incorrect Pay Code "&str$(em(5))&" on Employee Number "&trim$(x$)&". Did not calculate pay on this Employee"
+01254   ml$(1)="Incorrect Pay Code "&str$(em(5))&" on Employee Number "&trim$(x$)&". Did not calculate pay on this Employee"
 01256   fnmsgbox(mat ml$,resp$,cap$,0)
 01270 goto ReadRpWork ! /r
 01280 ! ______________________________________________________________________
-01285 PAYCODE_1: let t6=12 : let g_pay_periods_per_year=12 : goto PAST_PAYCODE
-01287 PAYCODE_2: let t6=24 : let g_pay_periods_per_year=24 : goto PAST_PAYCODE
-01290 PAYCODE_3: let t6=26 : let g_pay_periods_per_year=26 : goto PAST_PAYCODE
-01300 PAYCODE_4: let t6=52 : let g_pay_periods_per_year=52
+01285 PAYCODE_1: t6=12 : let g_pay_periods_per_year=12 : goto PAST_PAYCODE
+01287 PAYCODE_2: t6=24 : let g_pay_periods_per_year=24 : goto PAST_PAYCODE
+01290 PAYCODE_3: t6=26 : let g_pay_periods_per_year=26 : goto PAST_PAYCODE
+01300 PAYCODE_4: t6=52 : let g_pay_periods_per_year=52
 01310 PAST_PAYCODE: ! r: continues here
 01311 ! pr '@ PAST_PAYCODE' : pause
 01312   if in2$(1)="Y" then goto L1470
 01320   if fedpct>0 then 
-01330     let tf4_a=round((tgp-ded)*fedpct,2) : let fed_wh_annual_estimate=tf4_a
+01330     tf4_a=round((tgp-ded)*fedpct,2) : let fed_wh_annual_estimate=tf4_a
 01340     goto L1470
 01350   end if 
 01360   if em(12)=0 then goto L1370
-01370   let tf4_a=0
+01370   tf4_a=0
 01380   if em(12)=-1 then goto L1470
-01390   let tf4_a=em(12) : goto L1470
+01390   tf4_a=em(12) : goto L1470
 01395   L1370: ! 
-01400   let t2=round(em(2)*(fed_annual_wh_allowance/g_pay_periods_per_year),2) ! this is one of the lines that change every year (line 1240)
+01400   t2=round(em(2)*(fed_annual_wh_allowance/g_pay_periods_per_year),2) ! this is one of the lines that change every year (line 1240)
 01405   let g2=tgp-t2-ded
 01410   if g2>0 then 
 01425     let g2=round(g2*g_pay_periods_per_year,2) ! g2 - becomes estimated annual net pay
-01430     let j1=fn_table_line(mat ft,g2, j2)
+01430     j1=fn_table_line(mat ft,g2, j2)
 01460     let fed_wh_annual_estimate=tf4_a=round(ft(j1,j2+1)+(g2-ft(j1,j2))*ft(j1,j2+2),2)
 01465     ! table total federal w/h used in some state routines
-01470     let tf4_a=round(tf4_a/g_pay_periods_per_year,2)
+01470     tf4_a=round(tf4_a/g_pay_periods_per_year,2)
 01475   else 
 01480     let g2=0
 01482   end if 
-01485   if in2$(1)><"Y" then let tf4_a=tf4_a+em(13)
+01485   if in2$(1)><"Y" then tf4_a=tf4_a+em(13)
 01487   L1470: ! 
 01488   mat stuc=(0)
 01489   read #h_department,using "form pos 48,n 2",key=newdeptkey$: tcd(1) ! get state code
@@ -174,41 +174,41 @@
 01499       cafd+=caf(j)
 01501     end if 
 01503   next j
-01505   let twy+=twd : let tfy+=(ytdFICA+tmd) : let ficatfy=tfy
+01505   twy+=twd : tfy+=(ytdFICA+tmd) : let ficatfy=tfy
 01507   oldsswg=twy-cafy : eicytd+=td14 : stuc(tcd(1))+=twd-cafd
 01509   cafd=0
 01540   L1540: ! 
 01542   read #h_department,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',key=newdeptkey$: teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet ! Nokey X
-01550   if tgp=0 then let pog=1: goto L1620 ! Allow checks to calculate with no gross pay
-01560   if tgp=gpd then let pog=1 : goto L1620
+01550   if tgp=0 then pog=1: goto L1620 ! Allow checks to calculate with no gross pay
+01560   if tgp=gpd then pog=1 : goto L1620
 01570   if tgp<>0 then goto L1610
 01572   mat ml$(1)
-01574   let ml$(1)="Employee Number "&trim$(x$)&" skipped Total Gross Pay = 0, Must be Re-entered"
+01574   ml$(1)="Employee Number "&trim$(x$)&" skipped Total Gross Pay = 0, Must be Re-entered"
 01576   fnmsgbox(mat ml$,resp$,cap$,0)
 01600   goto ReadRpWork
 01610   L1610: !
-01612   let pog=gpd/tgp
+01612   pog=gpd/tgp
 01620   L1620: ! 
 01622   for j=1 to 20
 01630     if env$('client')="Franklinton" then 
 01632       if j=1 and em(4)=3 then ! retirement of firemen  ! franklinton
-01634         let inp(j+7)=round(inp(j+7)*gpd/100,2)
+01634         inp(j+7)=round(inp(j+7)*gpd/100,2)
 01650         goto L1710 ! franklinton
 01652       else 
 01654         if j=2 then ! retirement of police !franklinton
-01656           let inp(j+7)=round(inp(j+7)*((hr(1)*(inp(1)+inp(3)+inp(4))+inp(6)+inp(17))/100),2)
+01656           inp(j+7)=round(inp(j+7)*((hr(1)*(inp(1)+inp(3)+inp(4))+inp(6)+inp(17))/100),2)
 01660           goto L1710 ! franklinton
 01662         end if 
 01664       end if 
 01666       !   else if env$('client')="Washington Parrish" and j=3 and newcalcode(j)=2 then
-01668       !     let inp(j+7)=round(inp(j+9)*(gpd+defcompmatch)/100,2)
+01668       !     inp(j+7)=round(inp(j+9)*(gpd+defcompmatch)/100,2)
 01670       !     goto L1700
 01672       !   else if env$('client')="West Accounting" and j=10 and inp(17)<>0 then
 01673       !     gosub WEST_ACC_WORKMANSCOMP
 01678     end if 
-01690     if newcalcode(j)=2 then let inp(j+9)=round(inp(j+9)*gpd/100,2)
+01690     if newcalcode(j)=2 then inp(j+9)=round(inp(j+9)*gpd/100,2)
 01700   ! L1700: ! 
-01702     if in2$(4)="Y" then let inp(j+9)=0
+01702     if in2$(4)="Y" then inp(j+9)=0
 01710   L1710: ! 
 01712   next j
 01720   em(10)-=inp(3) : em(11)-=inp(4)
@@ -232,7 +232,7 @@
 01814   if inp(9)=0 then 
 01816     goto NO_EXCESS_TIPS
 01818   else 
-01820     let tr=round(inp(1)*MinHourlyWage+inp(2)*MinHourlyWage*1.5,2)
+01820     tr=round(inp(1)*MinHourlyWage+inp(2)*MinHourlyWage*1.5,2)
 01821     let g1=gpd-inp(9)
 01822     ext=0
 01823     if g1>=tr then 
@@ -242,10 +242,10 @@
 01830     end if 
 01832   end if 
 01840 NO_EXCESS_TIPS: ! 
-01842   let deduc=ficat3=f3=0 ! FICA
+01842   deduc=ficat3=f3=0 ! FICA
 01850   for j=1 to 20
 01860     if dedfica(j)=1 and newdedcode(j)=1 then let ficat3+=inp(j+9)
-01870     if deduc(j)=1 then let deduc+=inp(j+9): let deducy+=caf(j) ! total deductions for unemployment for current period and year to date
+01870     if deduc(j)=1 then deduc+=inp(j+9): deducy+=caf(j) ! total deductions for unemployment for current period and year to date
 01880   next j
 01890   sswg=sswh=mcwh=0
 01900   if tgp=0 then let f3=0: goto CALC_NO_GROSS ! calculate checks w/ no gross pay
@@ -254,29 +254,29 @@
 01930 ! ______________________________________________________________________
 01935 L1930: ! 
 01940 ! if env$('client')="Washington Parrish" then
-01941 !   let tf0=tgp-t3+totaldef ! add deferred in taxable wages for washington parrish
+01941 !   tf0=tgp-t3+totaldef ! add deferred in taxable wages for washington parrish
 01942 !   goto L1950
 01944 ! end if
-01945   let tf0=tgp-t3 ! if over both max else if over both max this time else if over max-1
+01945   tf0=tgp-t3 ! if over both max else if over both max this time else if over max-1
 01950 ! L1950: !
 01951   if ficatfy>=ficamxr+ficamx2 then 
 01952     goto FICAEND
 01953   else if (ficatfy-ficamxr)+(tf0*ficar2)>=ficamx2 then 
-01954     let mcwh=ficamxr+ficamx2-ficatfy
+01954     mcwh=ficamxr+ficamx2-ficatfy
 01955     goto FICAEND
 01956   else if ficatfy>=ficamxr then 
-01957     let mcwh=tf0*ficar2 : sswg=0
+01957     mcwh=tf0*ficar2 : sswg=0
 01958     goto FICAEND
 01959   end if 
 01960 ! if went over first max this time else Under 1st Max 
 01961   if ficatfy+(tf0*ficarate)>=ficamxr then 
-01962     let tf1=ficamax-ficatfy/ficarate : let tf2=tgp-t3 
+01962     tf1=ficamax-ficatfy/ficarate : tf2=tgp-t3 
 01963     sswh=(tf1*ficar1) 
-01964     let mcwh=(tf2*ficar2) 
+01964     mcwh=(tf2*ficar2) 
 01965     sswg=tf1 
 01966   else 
 01967     sswh=tf0*ficar1 
-01968     let mcwh=tf0*ficar2
+01968     mcwh=tf0*ficar2
 01969     sswg=tf0
 01970   end if
 01971 FICAEND: ! 
@@ -289,9 +289,9 @@
 01996     let ficapog=1
 01998   end if
 02000   sswh=round(sswh*ficapog,2) 
-02002   let mcwh=round(mcwh*ficapog,2) 
+02002   mcwh=round(mcwh*ficapog,2) 
 02004   let f3=sswh+mcwh : oldsswg+=sswg
-02010 CALC_NO_GROSS: let tfy+=f3
+02010 CALC_NO_GROSS: tfy+=f3
 02020 FEDWH_DEPT: ! Fed WH for Dept ! Federal Withholding for Department
 02021   if debug then let fnstatus('federal  withholding for department calculating')
 02022   let f4=round(tf4_a*pog,2)
@@ -306,54 +306,54 @@
 02110   if ytdtotal(25)+eic4<0 then eic4=-ytdtotal(25)
 02120   eic4=round(eic4*pog,2)
 02130 CURRENT_PERIOD: ! 
-02132   let tcp(1)=f4 : let tcp(2)=sswh : let tcp(3)=mcwh: let tcp(4)=tcp4
+02132   tcp(1)=f4 : tcp(2)=sswh : tcp(3)=mcwh: tcp(4)=tcp4
 02140   for j=5 to 24
-02144     let tcp(j)=inp(j+5)
+02144     tcp(j)=inp(j+5)
 02148   next j
-02150   let tcp(25)=min(eic4,tcp(1))
-02152   let tcp(27)=round(inp(2)*hr(2),2)
-02160   let tcp(28)=inp(7)
-02161   let tcp(29)=inp(8)
-02162   let tcp(30)=inp(9)
-02163   let tcp(26)=gpd-tcp(27)-tcp(28)-tcp(29)-tcp(30)
-02164   let tcp(31)=gpd
-02166   let tcp(32)=gpd-tcp(1)-tcp(2)-tcp(3) ! -TCP(4)
+02150   tcp(25)=min(eic4,tcp(1))
+02152   tcp(27)=round(inp(2)*hr(2),2)
+02160   tcp(28)=inp(7)
+02161   tcp(29)=inp(8)
+02162   tcp(30)=inp(9)
+02163   tcp(26)=gpd-tcp(27)-tcp(28)-tcp(29)-tcp(30)
+02164   tcp(31)=gpd
+02166   tcp(32)=gpd-tcp(1)-tcp(2)-tcp(3) ! -TCP(4)
 02170   for j=5 to 24
 02180     if newdedcode(j-4)=3 then goto L2200
-02190     if newdedcode(j-4)=2 then let tcp(32)+=tcp(j) else let tcp(32)-=tcp(j)
+02190     if newdedcode(j-4)=2 then tcp(32)+=tcp(j) else tcp(32)-=tcp(j)
 02200 L2200: ! 
 02202   next j
-02210   for j=1 to 31 : let tcp(j)=round(tcp(j),2): next j
-02220   let tcp(32)+=tcp(25)-tcp(29)-tcp(30)
-02230 ! if env$('client')="Washington Parrish" then let tcp(32)=tcp(32)+tcp(30) ! add tips which is really an other compensation back to net
+02210   for j=1 to 31 : tcp(j)=round(tcp(j),2): next j
+02220   tcp(32)+=tcp(25)-tcp(29)-tcp(30)
+02230 ! if env$('client')="Washington Parrish" then tcp(32)=tcp(32)+tcp(30) ! add tips which is really an other compensation back to net
 02240 ! the following commented lines may have to be put back in and the tdet array extended to hold them  ???  kj
 02250 ! SS_WAGE: !
 02260   if em(6)=9 then 
-02262     let tdc(7)=0
+02262     tdc(7)=0
 02264   else 
-02266     let tdc(7)=round(sswg*ficapog,2)
+02266     tdc(7)=round(sswg*ficapog,2)
 02268   end if 
 02270 ! MEDICARE_WAGE: !
-02280   let tdc(8)=round((tgp-t3)*ficapog,2)
-02290   let tdc(10)=0 ! State U/C Wage
+02280   tdc(8)=round((tgp-t3)*ficapog,2)
+02290   tdc(10)=0 ! State U/C Wage
 02300 ! if stuc(tcd(1))>=sucw(tcd(1)) then goto L2300
 02305 ! L2300: !
 02306   if stuc(tcd(1))+(gpd-ext-deduc)>sucw(tcd(1)) then 
-02307     let tdc(10)=sucw(tcd(1))-stuc(tcd(1))
+02307     tdc(10)=sucw(tcd(1))-stuc(tcd(1))
 02308   else 
-02309     let tdc(10)=gpd-ext-deduc
+02309     tdc(10)=gpd-ext-deduc
 02310   end if 
-02311   if tdc(10)<0 then let tdc(10)=0 ! if don't have maximum uc wage in company it will come up with negatives
-02315   let tdc(9)=0 ! Fed U/C Wage
+02311   if tdc(10)<0 then tdc(10)=0 ! if don't have maximum uc wage in company it will come up with negatives
+02315   tdc(9)=0 ! Fed U/C Wage
 02320   if feducmax=0 then goto FEDERAL_UC_WAGE
 02325   if twy-deducy>=feducmax then goto L2370
 02330   if twy-deducy+(gpd-ext-deduc)>feducmax then goto FEDERAL_UC_WAGE
 02335 FEDERAL_UC_WAGE: ! 
-02336   let tdc(9)=gpd-ext-deduc
+02336   tdc(9)=gpd-ext-deduc
 02338   goto L2370
 02370 L2370: ! 
-02372   let tdc(9)=min(max(feducmax-(twy-deducy),0),gpd-ext-deduc)
-02380   for j=1 to 5 : let tdc(j)=inp(j) : next j ! Hours
+02372   tdc(9)=min(max(feducmax-(twy-deducy),0),gpd-ext-deduc)
+02380   for j=1 to 5 : tdc(j)=inp(j) : next j ! Hours
 02382 ! pause ! WORKMANS_COMP: !
 02384 ! em(5) is paycode
 02386 ! mat wcm is workman's comp maximum
@@ -363,12 +363,12 @@
 02394 ! wc is (temp variable only used here)
 02396 ! tdc(6) is Workman's Comp Wages
 02397 ! if env$('client')="West Accounting" then ! perhaps everyone should be doing it this way -prd 01/06/2016
-02398 !   let tcp(14)=tdc(1)*inp(19)*.01 ! base on regular hours times w/c rate
+02398 !   tcp(14)=tdc(1)*inp(19)*.01 ! base on regular hours times w/c rate
 02400 !   fnstatus('tcp(14) was set to '&str$(tcp(14))&' by tcp(14) = tdc(1)('&str$(tdc(1))&' * inp(19)('&str$(inp(19))&') * .01')
 02401 !   inp(19)=0   ! <-- nice idea but it does not make a difference
 02402 !   fnstatus_pause
 02404 ! end if  ! else 
-02406   let trp=tcp(26)+tcp(27) ! base on wages
+02406   trp=tcp(26)+tcp(27) ! base on wages
 02408 ! end if
 02410   let wc=0
 02420   if wcm(em(5))=0 or twc+trp<wcm(em(5)) then 
@@ -376,20 +376,20 @@
 02422   else 
 02423     let wc=wcm(em(5))-twc
 02424   end if 
-02430   let twc=twc+wc : let tdc(6)=wc
+02430   twc=twc+wc : tdc(6)=wc
 02440   rewrite #h_department,using "form pos 42,n 6,pos 58,23*pd 4.2",key=newdeptkey$: d1,mat tdet
-02460   let tcp(4)=0
+02460   tcp(4)=0
 02462   write #h_payrollchecks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": eno,tdn,prd,0,mat tdc,mat tcp
 02463 ! fnstatus('WRITING payroll check with tcp(4)='&str$(tcp(4))&' and tcp(32)='&str$(tcp(32)))
 02464 ! fnstatus_pause
-02470   let twy+=gpd : cafy+=ficat3 : eicytd+=ytdtotal(25)
+02470   twy+=gpd : cafy+=ficat3 : eicytd+=ytdtotal(25)
 02480   if tdet(16)<>0 then stuc(tcd(1))+=tdet(16) ! ??? kj
 02490   goto ReadRpWork
 02500 ! /r
 02502 EMPLOYEE_NOT_FOUND: ! r:
-02504   let n$=" "
+02504   n$=" "
 02506   mat ml$(1)
-02508   let ml$(1)="Employee Number "&x$&" is not on file. No check calculated."
+02508   ml$(1)="Employee Number "&x$&" is not on file. No check calculated."
 02510   fnmsgbox(mat ml$,resp$,cap$,0)
 02514   goto ReadRpWork
 02518 ! /r
@@ -402,15 +402,15 @@
 02572     execute "Free "&env$('Q')&"\PRmstr\jcprh1.h"&env$('cno') ! get rid of jobcost time entry file if exists
 02574   end if 
 02580   goto XIT ! /r
-02590 XIT: let fnxit
+02590 XIT: fnxit
 02600 IGNORE: continue 
 02840 CALK_ALL_DEDUCTIONS_ALL_DEPT: ! r:
 02842 ! Calculate all deduct for federal for all departments
-02850   let tgp=t3=ded=0
-02860 ! let defcompmatch=0
+02850   tgp=t3=ded=0
+02860 ! defcompmatch=0
 02862 ! if env$('client')="Washington Parrish" then
-02864 !   let defcompmatch=round(gpd*inp(9)/100,2)
-02866 !   let totaldef=totaldef+defcompmatch ! deferred comp match is taxable for medicare and gross pension (must calculate it first)  (deferred comp match must be misc ded #2) (need total for medicare)
+02864 !   defcompmatch=round(gpd*inp(9)/100,2)
+02866 !   totaldef=totaldef+defcompmatch ! deferred comp match is taxable for medicare and gross pension (must calculate it first)  (deferred comp match must be misc ded #2) (need total for medicare)
 02868 ! end if
 02870 ! 
 03020 L3020: ! 
@@ -422,28 +422,28 @@
 03036       goto L3060
 03038     end if 
 03040 !   if env$('client')="Washington Parrish" and j=3 then
-03042 !     let ded=ded+inp(j+9)*(gpd+defcomp)/100
+03042 !     ded=ded+inp(j+9)*(gpd+defcomp)/100
 03044 !     goto L3060
 03046 !   end if
 03050     if newcalcode(j)=1 then 
-03052       let ded=ded+inp(j+9)
+03052       ded=ded+inp(j+9)
 03054     else 
-03056       let ded=ded+inp(j+9)*gpd/100
+03056       ded=ded+inp(j+9)*gpd/100
 03058     end if 
 03060 L3060: ! 
 03062     if newdedfed(j)><2 then goto L3090
 03070 !   if env$('client')="Washington Parrish" and j=3 then
-03072 !     let t3=t3+inp(j+9)*(gpd+defcompmatch)/100
+03072 !     t3=t3+inp(j+9)*(gpd+defcompmatch)/100
 03074 !     goto L3090
 03076 !   end if
 03078     if newcalcode(j)=1 then 
-03080       let t3=t3+inp(j+9)
+03080       t3=t3+inp(j+9)
 03082     else 
-03084       let t3=t3+inp(j+9)*gpd/100
+03084       t3=t3+inp(j+9)*gpd/100
 03086     end if 
 03090 L3090: ! 
 03092   next j
-03110   let tgp=tgp+gpd
+03110   tgp=tgp+gpd
 03130   read #h_rpwork,using F_RPWORK: newx$,newdep,mat inp,gpd,mat hr eof L3150
 03132   if env$('client')='West Accounting' then gosub WEST_ACC_WORKMANSCOMP
 03133 ! pr 'A right after read rpwork inp(6)=';inp(6) : pause
@@ -456,7 +456,7 @@
 03174 ! pr 'B right after read rpwork  inp(6)=';inp(6) : pause
 03180   return  ! /r
 03200 SS_TAX_ONLY: ! r: SOC-SEC-TAX ONLY
-03202   let tf0=tgp-t3
+03202   tf0=tgp-t3
 03210   if ficatfy>=ssmax then 
 03212     sswg=0
 03214     goto FICAEND ! OVER MAX
@@ -471,17 +471,17 @@
 03238   goto FICAEND ! UNDER MAX /r
 03240 L3240: ! r: MEDICARE-TAX ONLY??
 03242 ! if env$('client')="Washington Parrish" then ! MEDICARE-TAX ONLY  (add deferred comp match to medicare wages)
-03244 !   let tf0=tgp-t3+totaldef
+03244 !   tf0=tgp-t3+totaldef
 03246 !   goto L3260
 03248 ! end if
-03250   let tf0=tgp-t3 ! MEDICARE-TAX ONLY
+03250   tf0=tgp-t3 ! MEDICARE-TAX ONLY
 03260 ! L3260: ! 
 03262   if ficatfy>=mcmax then goto FICAEND ! OVER MAX
 03270   if ficatfy+tf0>=mcmax then ! Went over max this time
-03272     let mcwh=(mcmax-ficatfy)*ficar2
+03272     mcwh=(mcmax-ficatfy)*ficar2
 03274     goto FICAEND
 03276   end if 
-03280   let mcwh=tf0*ficar2
+03280   mcwh=tf0*ficar2
 03282   goto FICAEND ! UNDER MAX  /r
 03290 SUBROUTINE6: ! r:
 03292   sc1=1
@@ -494,30 +494,30 @@
 03360 ! ______________________________________________________________________
 03370 ASKSKIPWH: ! r:
 03380   fntos(sn$="Skipdeductions")
-03382   let rc=cf=0: let mylen=42: let mypos=45
+03382   rc=cf=0: mylen=42: mypos=45
 03390   fnchk(1,46,"Skip Federal Withholdings:",1)
-03392   let resp$(rc+=1)="False"
+03392   resp$(rc+=1)="False"
 03400   fnchk(2,46,"Skip State Withholdings:",1)
-03402   let resp$(rc+=1)="False"
+03402   resp$(rc+=1)="False"
 03410   fnchk(3,46,"Skip Fica Withholdings:",1)
-03412   let resp$(rc+=1)="False"
+03412   resp$(rc+=1)="False"
 03420   fnchk(4,46,"Skip Standard Withholdings:",1)
-03422   let resp$(rc+=1)="False"
+03422   resp$(rc+=1)="False"
 03430   fnlbl(6,1,"Standard Federal % Override:",mylen,1,0)
 03440   fntxt(6,mypos,4,0,1,"32",0,"Normally zero. The government allows you to use a standard percent on bonuses, etc. See Circular E for allowable %.")
-03442   let resp$(rc+=1)=""
+03442   resp$(rc+=1)=""
 03450   fncmdkey("Next",1,1,0,"Proceed with calculations.")
 03460   fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
 03470   fnacs(sn$,0,mat resp$,ckey) ! skip deductions & std %
 03480   if ckey<>5 then 
-03490     if resp$(1)(1:1)="T" then let in2$(1)="Y" else let in2$(1)="N"
-03500     if resp$(2)(1:1)="T" then let in2$(2)="Y" else let in2$(2)="N"
-03510     if resp$(3)(1:1)="T" then let in2$(3)="Y" else let in2$(3)="N"
-03520     if resp$(4)(1:1)="T" then let in2$(4)="Y" else let in2$(4)="N"
+03490     if resp$(1)(1:1)="T" then in2$(1)="Y" else in2$(1)="N"
+03500     if resp$(2)(1:1)="T" then in2$(2)="Y" else in2$(2)="N"
+03510     if resp$(3)(1:1)="T" then in2$(3)="Y" else in2$(3)="N"
+03520     if resp$(4)(1:1)="T" then in2$(4)="Y" else in2$(4)="N"
 03530     let fedpct=val(resp$(5)) ! federal wh percent
 03532   end if
 03540 return  ! /r
-03580 ERTN: let fnerror(program$,err,line,act$,"NO") ! r:
+03580 ERTN: fnerror(program$,err,line,act$,"NO") ! r:
 03590   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 03610   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -553,29 +553,29 @@
 09280     mo(10,1)=9000 : mo(10,2)=315  : mo(10,3)=0.06
 09300   end if ! /r
 09320   ! MARITAL STATUS =2 IF HEAD OF HOUSEHOLD
-09340   let numb4=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
-09360   if em(1)=0 or em(1)=2 then let numb6=min(5000,fed_wh_annual_estimate) ! FEDERAL DED LIMITED TO 5000 FOR SINGLE
-09380   if em(1)<>0 then let numb6=min(10000,fed_wh_annual_estimate) ! FEDERAL DED LIMITED TO 10000 FOR MARRIED OR HEAD OF HOUSEHOLD
-09400   if em(1)=1 or em(1)=3 or em(1)=4 or em(1)=5 then let h1=3925 : goto L4110
-09420   if em(1)=2 then let h1=7850 : goto L4110
-09440   let h1=4700
+09340   numb4=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
+09360   if em(1)=0 or em(1)=2 then numb6=min(5000,fed_wh_annual_estimate) ! FEDERAL DED LIMITED TO 5000 FOR SINGLE
+09380   if em(1)<>0 then numb6=min(10000,fed_wh_annual_estimate) ! FEDERAL DED LIMITED TO 10000 FOR MARRIED OR HEAD OF HOUSEHOLD
+09400   if em(1)=1 or em(1)=3 or em(1)=4 or em(1)=5 then h1=3925 : goto L4110
+09420   if em(1)=2 then h1=7850 : goto L4110
+09440   h1=4700
 09460   goto L4110
 09480   L4110: ! 
-09500   let h2=0
+09500   h2=0
 09510   ! on em(1)+1 goto L4160,L4140,L4180 none L4190
 09520   if em(3)<>0 then 
 09530     !
 09540     if em(1)=0 then 
-09550       let h2=1200+(em(3)-1)*1200 ! SINGLE
+09550       h2=1200+(em(3)-1)*1200 ! SINGLE
 09560     else if em(1)=1 or em(1)=3 or em(1)=4 or em(1)=5 then 
-09570       let h2=min(em(3),2)*1200+max(em(3)-2,0)*1200 ! MARRIED
+09570       h2=min(em(3),2)*1200+max(em(3)-2,0)*1200 ! MARRIED
 09580     else if em(1)=2 then 
-09590       let h2=3500+max(em(3)-4,0)*1200 ! HEAD OF HOUSE HOLD
+09590       h2=3500+max(em(3)-4,0)*1200 ! HEAD OF HOUSE HOLD
 09600     end if
 09610   end if
-09700   let h3=numb4-h1-h2-numb6
-09720   if h3<0 then let h3=0
-09740   let j1=fn_table_line(mat mo,h3)
+09700   h3=numb4-h1-h2-numb6
+09720   if h3<0 then h3=0
+09740   j1=fn_table_line(mat mo,h3)
 09860   s3=(mo(j1,2)+(h3-mo(j1,1))*mo(j1,3))/g_pay_periods_per_year
 09880   s3=round(s3,0)
 09900   if s3<.1 then s3=0
@@ -594,10 +594,10 @@
 10220     ar(5,1)=21000 : ar(5,2)= 649.5  :  ar(5,3)=0.059
 10240     ar(6,1)=35100 : ar(6,2)=1481.4  :  ar(6,3)=0.069
 10260   end if ! /r
-10280   let t1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
-10300   let t2=2000
-10320   let t3=t1-t2
-10340   let j1=fn_table_line(mat ar,t3)
+10280   t1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
+10300   t2=2000
+10320   t3=t1-t2
+10340   j1=fn_table_line(mat ar,t3)
 10360   s1=round(ar(j1,2)+(t3-ar(j1,1))*ar(j1,3),2)
 10380   s2=em(3)*20
 10400   s3=round((s1-s2)/g_pay_periods_per_year,2)
@@ -613,7 +613,7 @@
 11140   if em(3)=5 then stp=.042
 11160   if em(3)=6 then stp=.0510
 11180   s3=round(stwh(tcd(1),1)*stp,2)
-11200   let h3=min(h3,1200)
+11200   h3=min(h3,1200)
 11220 return  ! /r
 12000 MSWH: ! r: REPLACE ACSWRK\MISISIPI.WH,SOURCE ! MISSISSIPPI  NO TABLE
 12020   ! **********  REMOVE THE EM(15) FROM LINE 740 **********
@@ -621,8 +621,8 @@
 12060   ! THE EXEMPTIONS MUST BE ENTERED IN DOLLARS AND THE STANDARD DEDUCTION
 12080   ! MUST BE ADDED TO THE EXEMPTIONS.
 12100   ! SINGLE =2300, MARRIED=3400, MARRIED BOTH WORKING=1700
-12120   let h1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
-12140   let h3=h1-em(15)
+12120   h1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
+12140   h3=h1-em(15)
 12160   if h3<=0 then s3=0 : goto L4481
 12180   if h3<10000 then goto L4474
 12200   s3=350+.05*(h3-10000)
@@ -665,8 +665,8 @@
 13500   end if ! /r
 13520   let g2=stwh(tcd(1),1)*g_pay_periods_per_year
 13540   let g2=g2-em(3)*1000
-13560   if em(1)=0 or em(1)=2 then let j2=1 else let j2=4 ! single of married
-13580   let j1=fn_table_line(mat ok,g2)
+13560   if em(1)=0 or em(1)=2 then j2=1 else j2=4 ! single of married
+13580   j1=fn_table_line(mat ok,g2)
 13600   s3=ok(j1,j2+1)+(g2-ok(j1,j2))*ok(j1,j2+2)
 13620   s3=s3/g_pay_periods_per_year
 13640   s3=round(s3,2)
@@ -681,32 +681,32 @@
 14100   write #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1: beg_date,end_date,d1,d1$
 14120   ASKDATES_SCREEN: ! 
 14140   fntos(sn$="Calculation-1")
-14160   let rc=cf=0: let mylen=42: let mypos=45: let frameno=1
+14160   rc=cf=0: mylen=42: mypos=45: let frameno=1
 14180   gosub GET_ALPHA_DATE ! get alpha date
 14200   fnfra(1,1,4,66,"Payroll Date","Enter the payroll date.")
 14220   fnlbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
 14240   fntxt(1,mypos,10,0,1,"3",0,"Enter the date which you want used for your earnings records. ",frameno)
-14260   let resp$(rc+=1)=str$(d1)
+14260   resp$(rc+=1)=str$(d1)
 14280   fnlbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
 14300   fntxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report headings, etc." ,frameno)
-14320   let resp$(rc+=1)= d1$
+14320   resp$(rc+=1)= d1$
 14340   fnchk(3,46,"Accrue Vacation and Sick Leave this period:",1,frameno)
-14360   let resp$(rc+=1)="False"
+14360   resp$(rc+=1)="False"
 14380   fnfra(7,25,2,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.")
-14400   let frameno=2 : let mylen=26 : let mypos=mylen+2
+14400   let frameno=2 : mylen=26 : mypos=mylen+2
 14420   fnlbl(1,1,"Starting Date:",mylen,1,0,frameno)
 14440   fntxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno)
-14460   let resp$(rc+=1)=str$(beg_date)
+14460   resp$(rc+=1)=str$(beg_date)
 14480   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
 14500   fntxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno)
-14520   let resp$(rc+=1)=str$(end_date)
+14520   resp$(rc+=1)=str$(end_date)
 14540   fncmdkey("Next",1,1,0,"Proceed with calculations.")
 14560   fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
 14580   fnacs(sn$,0,mat resp$,ckey)
 14600   if ckey<>5 then 
-14620     let prd=d1=val(resp$(1))
-14640     let d1$=resp$(2)
-14660     if resp$(3)(1:1)="T" then let d3$="Y" else let d3$="N"
+14620     prd=d1=val(resp$(1))
+14640     d1$=resp$(2)
+14660     if resp$(3)(1:1)="T" then d3$="Y" else d3$="N"
 14680     beg_date=val(resp$(4))
 14700     end_date=val(resp$(5))
 14720     rewrite #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1: beg_date,end_date,d1,d1$
@@ -727,9 +727,9 @@
 15240   loop while heno=eno
 15260   dePrCkEof: ! 
 15280   let ytdFICA=ytdtotal(2) ! fica year to date
-15300   let tmd=ytdtotal(3) ! medicare year to date
-15320   let td14=ytdtotal(25) ! eic
-15340   let twd=ytdtotal(31) ! total wages
+15300   tmd=ytdtotal(3) ! medicare year to date
+15320   td14=ytdtotal(25) ! eic
+15340   twd=ytdtotal(31) ! total wages
 15360   for j=1 to 20
 15380     caf(j)=ytdtotal(j+4) ! total miscellaneous deductions for year
 15400   next j
@@ -738,7 +738,7 @@
 16000 def fn_setup
 16020   library 'S:\Core\Library': fntop, fnerror, fnxit,fntos,fnfra,fnchk,fnlbl,fntxt,fncmdkey,fnacs,fncd,fnpayroll_client_state$,fnmsgbox,fnstatus,fngethandle,fnstatus_pause,fnDedNames,fnAutomatedSavePoint
 16040   on error goto ERTN
-16060   let debug=0 ! if env$('ACSDeveloper')<>'' then let debug=1 else let debug=0
+16060   debug=0 ! if env$('ACSDeveloper')<>'' then debug=1 else debug=0
 16080   ! ______________________________________________________________________
 16100   dim sck(4),motab(12),stwh(10,2),sucw(10),sucr(10)
 16140   dim inp(29),dat$*20,cap$*128,caf(20)
@@ -753,11 +753,11 @@
 16380   ! 
 16400   let fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
 16420   ! 
-16460   let mtc=0 ! motab counter
-16480   let motab(mtc+=1)=0   : let motab(mtc+=1)=31  : let motab(mtc+=1)=59
-16500   let motab(mtc+=1)=90  : let motab(mtc+=1)=120 : let motab(mtc+=1)=151
-16520   let motab(mtc+=1)=181 : let motab(mtc+=1)=212 : let motab(mtc+=1)=243
-16540   let motab(mtc+=1)=273 : let motab(mtc+=1)=304 : let motab(mtc+=1)=334
+16460   mtc=0 ! motab counter
+16480   motab(mtc+=1)=0   : motab(mtc+=1)=31  : motab(mtc+=1)=59
+16500   motab(mtc+=1)=90  : motab(mtc+=1)=120 : motab(mtc+=1)=151
+16520   motab(mtc+=1)=181 : motab(mtc+=1)=212 : motab(mtc+=1)=243
+16540   motab(mtc+=1)=273 : motab(mtc+=1)=304 : motab(mtc+=1)=334
 17040   dim ft(8,6)
 17060   ! Page 46 from   https://www.irs.gov/pub/irs-pdf/p15.pdf
 17080   ! r: Federal - SINGLE person (including head of household)
@@ -786,7 +786,7 @@
 18040   close #20: 
 18060   let ficamax=ficamax*10
 18080   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-18100   ssmax=ficamax : let mcmax=ficamx2 : let ficar1=ficarate*.01
+18100   ssmax=ficamax : mcmax=ficamx2 : let ficar1=ficarate*.01
 18120   let ficar2=ficar2*.01 : let ficarate=ficar1+ficar2
 18140   let ficamxr=ficamax*ficarate : let ficamx2=(ficamx2-ficamax)*ficar2
 19100   ! 
@@ -808,34 +808,34 @@
 30160 fnend
 32000 GET_ALPHA_DATE: ! r:
 32010   dim month$(12),payrolldate$*20
-32020   let payrolldate$=cnvrt$("pic(########)",d1)
+32020   payrolldate$=cnvrt$("pic(########)",d1)
 32040   let year=val(payrolldate$(1:4))
-32060   let month=val(payrolldate$(5:6))
-32080   let day=val(payrolldate$(7:8))
-32100   let month$(1)="January"
-32120   let month$(2)="February"
-32140   let month$(3)="March"
-32160   let month$(4)="April"
-32180   let month$(5)="May"
-32200   let month$(6)="June"
-32220   let month$(7)="July"
-32240   let month$(8)="August"
-32260   let month$(9)="September"
-32280   let month$(10)="October"
-32300   let month$(11)="November"
-32320   let month$(12)="December"
-32340   let d1$=month$(month)&" "&str$(day)&", "&str$(year)
+32060   month=val(payrolldate$(5:6))
+32080   day=val(payrolldate$(7:8))
+32100   month$(1)="January"
+32120   month$(2)="February"
+32140   month$(3)="March"
+32160   month$(4)="April"
+32180   month$(5)="May"
+32200   month$(6)="June"
+32220   month$(7)="July"
+32240   month$(8)="August"
+32260   month$(9)="September"
+32280   month$(10)="October"
+32300   month$(11)="November"
+32320   month$(12)="December"
+32340   d1$=month$(month)&" "&str$(day)&", "&str$(year)
 32360 return  ! /r
 36000 def fn_table_line(mat tl_table,tl_seek_amount; tl_second_dimension)
 36002   ! this function finds where [tl_seek_amount] falls within a range in a singe row (1st element) of a 2 dimensional array)
 36004   ! this function identifies which column (2nd element) of the 2d array to search with [tl_second_dimension] which defaults to the first 
-36010   if tl_second_dimension=0 then let tl_second_dimension=1
+36010   if tl_second_dimension=0 then tl_second_dimension=1
 36020   for tl_item=1 to udim(mat tl_table,1)-1
 36040     if tl_seek_amount>tl_table(tl_item,tl_second_dimension) and tl_seek_amount<=tl_table(tl_item+1,tl_second_dimension) then 
 36060       goto TL_XIT
 36080     end if 
 36100   next tl_item
-36120   let tl_item=udim(mat tl_table,1)
+36120   tl_item=udim(mat tl_table,1)
 36140   TL_XIT: ! 
 36160   fn_table_line=tl_item
 36180 fnend 
@@ -888,9 +888,9 @@
 37920 ST09: s3=0 : return 
 37940 ST10: s3=0 : return 
 38000 LAWH: ! r: REPLACE ACSWRK\LOUSIANA.WH,SOURCE ! LOUISANA: NO TABLE: LA(5): revised 1/01/03
-38020   let h1=0
-38040   let h2=0
-38060   let h3=0
+38020   h1=0
+38040   h2=0
+38060   h3=0
 38080   mat la=(0)
 38100   s=round(stwh(tcd(1),1),2)
 38120   if em(1)=0 or em(1)=2 then 
@@ -905,13 +905,13 @@
 38300   if em(3)=1 then let y=0 : let x=1
 38320   if em(3)>=2 then let y=em(3)-2 : let x=2
 38340   L3800: ! 
-38360   if x<2 then let m1=12500 : let m2=25000
-38380   if x>=2 then let m1=25000 : let m2=50000
-38400   let n=g_pay_periods_per_year
+38360   if x<2 then m1=12500 : m2=25000
+38380   if x>=2 then m1=25000 : m2=50000
+38400   n=g_pay_periods_per_year
 38420   if s>0 then a=(s*.021) else a=0
 38440   if s>(m1/n) then b=.0135*(s-(m1/n)) else b=0
 38460   if s>(m2/n) then c=.0135*(s-(m2/n)) else c=0
-38480   let d=.021*(((x*4500)+(y*1000))/n)
+38480   d=.021*(((x*4500)+(y*1000))/n)
 38500   if ((x*4500)+(y*1000))>m1 then 
 38520     e=.0135*(((x*4500)+(y*1000)-m1)/n)
 38540   else 
@@ -927,10 +927,10 @@
 38740 return  ! /r
 39000 INWH: ! r: INDIANA    NO TABLE   07/01/2000  ! still in effect 71508, changed on 1/1/2016, but I didn't bother to update it because no one is using it.
 39020   ! Indiana tax table is out of date...  and looks pretty complicated:  http://www.in.gov/dor/reference/files/dn01.pdf
-39040   let h1=h2=h3=0
-39060   let h1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
-39080   let h2=em(3)*1000
-39100   let h3=h1-h2
+39040   h1=h2=h3=0
+39060   h1=round(stwh(tcd(1),1)*g_pay_periods_per_year,2)
+39080   h2=em(3)*1000
+39100   h3=h1-h2
 39120   if h3>0 then 
 39140     s3=h3*.034 ! +H3*.003  SOME COUNTIES HAVE WH
 39160     s3=round(s3/g_pay_periods_per_year,2)
@@ -1080,9 +1080,9 @@
 46300     ky(6,1)=75000 : ky(6,2)=4166 : ky(6,3)=0.06
 46340     ! /r
 46360   end if 
-46380   let h1=(wky_wages_taxable_current)*g_pay_periods_per_year
-46400   let h2=h1-1970
-46420   let j1=fn_table_line(mat ky,h2)
+46380   h1=(wky_wages_taxable_current)*g_pay_periods_per_year
+46400   h2=h1-1970
+46420   j1=fn_table_line(mat ky,h2)
 46440   s3=ky(j1,2)+(h2-ky(j1,1))*ky(j1,3)
 46460   s3=s3-20*wky_allowances
 46480   s3=s3/g_pay_periods_per_year
@@ -1127,7 +1127,7 @@
 47330   end if 
 47340   Ga_StateDeduction=fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
 47350   Ga_StatePersonalAllowance=fn_statePersonalAllowance('GA',wga_is_married,wga_eicCode)
-47360   if env$('acsDeveloper')<>'' then let dev=1 else dev=0
+47360   if env$('acsDeveloper')<>'' then dev=1 else dev=0
 47370   ! if dev then pr 'wga_wages_taxable_current=';wga_wages_taxable_current
 47380   ! if dev then pr '   g_pay_periods_per_year=';g_pay_periods_per_year
 47382   ! if dev then pr '   Ga_StatePersonalAllowance=';Ga_StatePersonalAllowance
@@ -1203,11 +1203,11 @@
 66000 def fn_test_state_calk
 66020   fn_setup
 66040   ! show the state you are assined  to and let you change it if you like.
-66060   let pay_periods_per_year=52
+66060   pay_periods_per_year=52
 66080   let wages_taxable_current=399.60
 66100   let fed_wh=7.75
 66120   allowances=2
-66140   let is_married=4  ! is_married = 0 - Single
+66140   is_married=4  ! is_married = 0 - Single
 66180                     ! is_married = 1 - Married
 66200                     ! is_married = 2 - Single - Head of Household
 66220                     ! is_married = 3 - Married - filing joint return - only one working
@@ -1227,29 +1227,29 @@
 66460   if env$('ACSdeveloper')<>'' then pause 
 66480 fnend 
 68000 def fn_report_stuff
-68020   ! let fnstatus('check completely calcualated for eno '&str$(eno))
-68040   ! let fnstatus('tcp(1)='&str$(tcp(1)))
-68060   ! let fnstatus('tcp(2)='&str$(tcp(2)))
-68080   ! let fnstatus('tcp(3)='&str$(tcp(3)))
-68100   ! let fnstatus('tcp(4)='&str$(tcp(4)))
-68120   ! let fnstatus('tcp(13)='&str$(tcp(13)))
-68140   ! let fnstatus('tcp(14)='&str$(tcp(14)))
-68160   ! let fnstatus('tcp(32)='&str$(tcp(32)))
-68180   ! let fnstatus_pause
+68020   ! fnstatus('check completely calcualated for eno '&str$(eno))
+68040   ! fnstatus('tcp(1)='&str$(tcp(1)))
+68060   ! fnstatus('tcp(2)='&str$(tcp(2)))
+68080   ! fnstatus('tcp(3)='&str$(tcp(3)))
+68100   ! fnstatus('tcp(4)='&str$(tcp(4)))
+68120   ! fnstatus('tcp(13)='&str$(tcp(13)))
+68140   ! fnstatus('tcp(14)='&str$(tcp(14)))
+68160   ! fnstatus('tcp(32)='&str$(tcp(32)))
+68180   ! fnstatus_pause
 68200 fnend 
 69000 WEST_ACC_WORKMANSCOMP: ! r:
 69001   ! inp(6) Other Compensation
 69002   ! em(5)  Pay Code
 69003   ! if other compensation > 0 then
-69004   !   if pay code is 1 let hours = 173.33
-69005   !   if pay code is 2 let hours = 86.66
-69006   !   if pay code is 3 let hours = 80
-69007   !   if pay code is 4 let hours = 40
+69004   !   if pay code is 1 hours = 173.33
+69005   !   if pay code is 2 hours = 86.66
+69006   !   if pay code is 3 hours = 80
+69007   !   if pay code is 4 hours = 40
 69008   ! else 
-69009   !   let hours = regular hours + overtime hours
+69009   !   hours = regular hours + overtime hours
 69010   ! end if
-69020   let tmphrs=inp(1)+inp(2) ! if inp(6)>0 then let tmphrs=saif(em(5)) else let tmphrs=inp(1)+inp(2)
+69020   tmphrs=inp(1)+inp(2) ! if inp(6)>0 then tmphrs=saif(em(5)) else tmphrs=inp(1)+inp(2)
 69040   !     fnstatus('inp(17) changed to '&str$(round(tmphrs*inp(17)*.01,2))&' round('&str$(tmphrs)&' * inp(17)('&str$(inp(17))&' * .01)',2)
 69060   !     fnstatus_pause
-69080   let inp(17)=round(tmphrs*inp(17)*.01,2) ! let inp(17)=round(tmphrs*inp(17)*.01,2)
+69080   inp(17)=round(tmphrs*inp(17)*.01,2) ! inp(17)=round(tmphrs*inp(17)*.01,2)
 69100 return  ! /r

@@ -22,7 +22,7 @@
 00190     if usefile>0 then goto L300 ! file already exists, do not recreate
 00200 READ_FILE: ! 
 00210     read #file_num,using 'Form POS 1,c 8,c 30,n 6.3': item$(1),item$(2),rate eof L300 ioerr ERR_READ
-00220     let item$(3)=cnvrt$("pic(zzz.###)",rate)
+00220     item$(3)=cnvrt$("pic(zzz.###)",rate)
 00230     fnflexadd1(mat item$)
 00240     goto READ_FILE
 00250 ! ______________________________________________________________________
@@ -43,7 +43,7 @@
 00340     goto XIT
 00350 ! ______________________________________________________________________
 00360 ! <Updateable Region: ERTN>
-00370 ERTN: let fnerror(program$,err,line,act$,"xit")
+00370 ERTN: fnerror(program$,err,line,act$,"xit")
 00380     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00390     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00400     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
