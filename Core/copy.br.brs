@@ -164,11 +164,11 @@
 80522 fnend 
 82000 def library fnFree(fileToDelete$*256)
 82020   fileToDelete$=trim$(fileToDelete$,'"')
-82040   execute 'Free "'&fileToDelete$&'"' ioerr ignore
+82040   execute 'Free "'&fileToDelete$&'" -n' ioerr ignore
 82060 fnend
 84000 def library fnRename(from$*256,to$*256)
 84020   from$=trim$(from$,'"')
 84040   to$=trim$(to$,'"')
-84060   execute 'Rename "'&from$&'" "'&to$&'"'
+84060   execute 'Rename "'&from$&'" "'&to$&'" -n'
 84080 fnend
 
