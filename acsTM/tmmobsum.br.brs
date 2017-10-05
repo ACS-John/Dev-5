@@ -163,7 +163,7 @@
 01640   next y
 01650   goto L1700
 01660 L1660: c$(y)=enam$
-01670 L1670: let f(y)=f(y)+bil
+01670 L1670: f(y)=f(y)+bil
 01680   d(y)=d(y)+hrs
 01690   e(y)=e(y)+std
 01700 L1700: return 

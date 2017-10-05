@@ -125,7 +125,7 @@
        fnReturnCode('       f$('&Prefix$&Ssubs$(Index)&')='&ssubs$(Index)&'$')
     next Index
     for Index=1 to udim(mat NSubs$)
-       fnReturnCode('       let f('&Prefix$&Nsubs$(Index)&')='&Nsubs$(Index))
+       fnReturnCode('       f('&Prefix$&Nsubs$(Index)&')='&Nsubs$(Index))
     next Index
 
     fnReturnCode ('       fnPack'&trim$(FileLay$)&'=1 ! Return True')
@@ -146,7 +146,7 @@
     !    read #Datafile, using form$(DataFile), key=CurrentKey$ : mat F$, mat F
     !    if sio_name then f$(ac_name)=s$(sio_name)
     !    if sio_add1 then f$(ac_add1)=s$(sio_add1)
-    !    if sio_price then let f(ac_price)=val(s$(sio_price)) conv Ignore
+    !    if sio_price then f(ac_price)=val(s$(sio_price)) conv Ignore
     !    rewrite #Datafile, using form$(datafile) : mat f$, mat f
 
     fnReturnCode('    read #DataFile, using form$(DataFile), key=CurrentKey$ : mat F$, mat F')
@@ -155,7 +155,7 @@
        fnReturnCode('    if sio_field_'&Ssubs$(Index)&' then f$('&prefix$&ssubs$(Index)&')=s$(sio_field_'&Ssubs$(Index)&')')
     next Index
     for Index=1 to udim(mat NSubs$)
-       fnReturnCode('    if sio_field_'&Nsubs$(Index)&' then let f('&prefix$&Nsubs$(Index)&')=val(s$(sio_field_'&Nsubs$(Index)&')) conv Ignore')
+       fnReturnCode('    if sio_field_'&Nsubs$(Index)&' then f('&prefix$&Nsubs$(Index)&')=val(s$(sio_field_'&Nsubs$(Index)&')) conv Ignore')
     next Index
     fnReturnCode(' ')
     fnReturnCode('    rewrite #DataFile, using form$(DataFile) : mat F$, mat F')

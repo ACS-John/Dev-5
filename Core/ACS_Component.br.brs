@@ -1091,7 +1091,7 @@
 31400   if udim(control$)>=6 then 
 31420     tt$=control$(6)
 31440   end if 
-31460   if cancel then let fkey_cancel=returnkey
+31460   if cancel then fkey_cancel=returnkey
 31480   txt$=srep$(txt$,'&','') ! remove underlined letters...   would be nice to use them. xxx
 31500   width=len(txt$)
 31520   spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
