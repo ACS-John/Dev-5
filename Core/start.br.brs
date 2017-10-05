@@ -7,7 +7,7 @@
 01040 fnend
 02000 def fn_acsSystemInitialize(; isScreenIOtest)
 02020   if ~isScreenIOtest or env$('acsVersion')='' then
-02040     startStatusLine=0
+02040     startStatusLine=0 : pr newpage
 02050     fn_startStatus("Loading ACS System..." )
 02060     if env$('ACSDeveloper')='' and login_name$<>'niceguywinning@gmail.com' then execute "config statusline off"
 03000     ! r: set envirnoment variables based on login_name$ and/or BR_MODEL
