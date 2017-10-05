@@ -169,14 +169,14 @@
 44020   if ~setup then let fn_setup
 44040   fnOpenPartial=fn_openPartial
 44060 fnend
-46000 def fn_7zFileListFromArchive(file_open$*512,mat filename$)
+46000 def fn_7zFileListFromArchive(zFileOpen$*512,mat filename$)
 46020   dim gflfaTmpFile$*512
 46040   gflfaTmpFile$=env$('temp')&'\acs\7zGetFileList'&session$&'.txt'
 46060   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\ACS\Open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
 46080   pr #h_tmp: '@echo off'
 46100   pr #h_tmp: '@echo Advanced Computer Services LLC'
-46120   pr #h_tmp: '@echo Reading file list from "'&file_open$&'"'
-46140   pr #h_tmp: env$('path_to_7z_exe')&' l "'&file_open$&'" > "'&gflfaTmpFile$&'"'
+46120   pr #h_tmp: '@echo Reading file list from "'&zFileOpen$&'"'
+46140   pr #h_tmp: env$('path_to_7z_exe')&' l "'&zFileOpen$&'" > "'&gflfaTmpFile$&'"'
 46160   close #h_tmp: 
 46180   execute 'sy -s '&env$('temp')&'\ACS\Open_as_'&session$&'.cmd'
 46200   open #h_tmp:=fngethandle: 'Name='&gflfaTmpFile$,display,input
@@ -218,10 +218,10 @@
 47240   fn_fileListToArchiveList=archiveCount
 47260 fnend
 48000 def fn_openPartial
-48020   dim file_open$*256
+48020   dim opFileOpen$*256
 48040   execute 'free '&br_filename$(env$('temp')&'\acs\Open_Log.txt') ioerr ignore
 48060   open #h_tmp:=fngethandle: "Name=OPEN:"&env$('at')&"ACS Data Set (*.zip) |"&fnsave_as_path$&"\*.zip,RecL=1,Shr",external,input ioerr OP_OP_ERR
-48080   file_open$=os_filename$(file$(h_tmp))
+48080   opFileOpen$=os_filename$(file$(h_tmp))
 48100   close #h_tmp: 
 48120   dim fileList$(0)*256,archiveList$(0)*50
 48140   dim tmpFileOpen$*256
@@ -229,12 +229,12 @@
 48170     tmpFileOpen$=env$('temp')&'\acs\OpenPartial\tmpFileOpen'&session$&'.zip'
 48172     fnmakesurepathexists(tmpFileOpen$)
 48174     if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
-48180     fnCopyFile(env$('at')&file_open$,tmpFileOpen$)
+48180     fnCopyFile(env$('at')&br_filename$(opFileOpen$),tmpFileOpen$)
 48182     SKIPFORDEV: ! XXX DELETE ME
 48190   else
-48200     tmpFileOpen$=file_open$
+48200     tmpFileOpen$=opFileOpen$
 48260   end if
-48280   fnstatus('Getting list of companies from "'&file_open$&'"...')
+48280   fnstatus('Getting list of companies from "'&opFileOpen$&'"...')
 48300   fn_7zFileListFromArchive(tmpFileOpen$,mat fileList$)
 48320   fn_fileListToArchiveList(mat fileList$,mat archiveList$)
 48340   fnstatus_close
@@ -254,14 +254,14 @@
 48620   end if 
 48640   OP_XIT: ! 
 48660 fnend
-52000 def fn_opMain(file_open$*256)
+52000 def fn_opMain(omFileOpen$*256)
 52020   destination_company_number=val(env$('cno'))
 52040   OpmAskWhichToOpen: ! r: screen
 52060   fntos(sn$="Open Partial")
 52080   col1_width=27 : col2_pos=col1_width+2 : lc=rc=0
 52100   fnlbl(lc+=1,1,"Source File:",col1_width,1)
 52120   fntxt(lc,col2_pos,30,256,0,'',1,'select any data file from the data set to be imported.  i.e. Z:\vol002\CLmstr\BankIdx.h2')
-52140   resp$(rc+=1)=file_open$
+52140   resp$(rc+=1)=omFileOpen$
 52160   fnlbl(lc+=1,1,"Source Company:",col1_width,1)
 52180   fncomboa('compList',lc,col2_pos,mat archiveList$)
 52200   resp$(resp_fileSource:=rc+=1)=archiveList$(1)
@@ -279,14 +279,14 @@
 52480     opScreenReturn=0
 52500   else
 52520     if selectedSource$='(All Companies)' then
-52540       fn_fileOpenEverything( file_open$)
+52540       fn_fileOpenEverything( omFileOpen$)
 52560       opScreenReturn=1 
 52580     else 
 54000       source_company_number=archiveCNo(sourceWhich)
 54020       destination_company_number=val(resp$(resp_cnoDestination))
 54040       cursys$=archiveSysAbbr$(sourceWhich)
 54060       fnstatus('** Open Partial Settings **')
-54080       fnstatus('Source File: '&file_open$)
+54080       fnstatus('Source File: '&omFileOpen$)
 54100       fnstatus('Source System: '&cursys$)
 54120       fnstatus('Source Company Number: '&str$(source_company_number))
 54140       fnstatus('Destination Company Number: '&str$(destination_company_number))
@@ -305,10 +305,10 @@
 54400         omSourceFilter$(1)='*.h'&str$(source_company_number)
 54420       end if
 54440       fn_extract_appropriate_files(tmpFileOpen$,mat omSourceFilter$,env$('temp')&'\acs\OpenPartial\')
-56000       if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemName$&' company '&env$('cno')&' from ',file_open$, 1) then 
+56000       if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemName$&' company '&env$('cno')&' from ',omFileOpen$, 1) then 
 56020         fnreg_write('Last Open Partial Date',date$('ccyy/mm/dd'))
-56040         fnreg_write('Last Open Partial File',file_open$(pos(file_open$,'\',-1)+1:len(file_open$)))
-56060         fnreg_write('Last Open Partial Path',file_open$(1:pos(file_open$,'\',-1)))
+56040         fnreg_write('Last Open Partial File',omFileOpen$(pos(omFileOpen$,'\',-1)+1:len(omFileOpen$)))
+56060         fnreg_write('Last Open Partial Path',omFileOpen$(1:pos(omFileOpen$,'\',-1)))
 56080         fnreg_write('Last Open Partial System',env$('cursys'))
 56100         fnreg_write('Last Open Partial Company Number',env$('cno'))
 56120         fn_copy_files_in(env$('temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),val(env$('cno')))
@@ -320,7 +320,7 @@
 56220         dim msgTmp$(0)*128
 56240         fnaddonec(mat msgTmp$,'Completed.')
 56260         fnaddonec(mat msgTmp$,'Company '&env$('cno')&' created from copy of company '&str$(source_company_number))
-56280         fnaddonec(mat msgTmp$,'from the file: '&file_open$)
+56280         fnaddonec(mat msgTmp$,'from the file: '&omFileOpen$)
 56300         fnmsgbox(mat msgTmp$)
 56320       end if 
 56340       goto OpmAskWhichToOpen
@@ -354,7 +354,7 @@
 58640   pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&foeSource$&'" -o"'&foeDestinationFolder$&'\" > "'&env$('temp')&'\ACS\Open_Log.txt"'
 58660   ! pr #h_tmp: 'pause'
 58680   close #h_tmp: 
-58700   execute 'sy '&env$('temp')&'\ACS\Open_as_'&session$&'.cmd'
+58700   execute 'sy -s '&env$('temp')&'\ACS\Open_as_'&session$&'.cmd'
 58720   ! /r
 58740   if fn_analyze_7zip_compresslog(env$('temp')&'\ACS\Open_Log.txt','Successfully Opened',foeSource$,1) then 
 58760     fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
