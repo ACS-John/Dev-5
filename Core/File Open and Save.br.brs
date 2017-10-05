@@ -219,14 +219,15 @@
 47260 fnend
 48000 def fn_openPartial
 48020   dim file_open$*256
-48040   execute 'free '&br_filename$(env$('temp')&'\ACS\Open_Log.txt') ioerr ignore
+48040   execute 'free '&br_filename$(env$('temp')&'\acs\Open_Log.txt') ioerr ignore
 48060   open #h_tmp:=fngethandle: "Name=OPEN:"&env$('at')&"ACS Data Set (*.zip) |"&fnsave_as_path$&"\*.zip,RecL=1,Shr",external,input ioerr OP_OP_ERR
 48080   file_open$=os_filename$(file$(h_tmp))
 48100   close #h_tmp: 
 48120   dim fileList$(0)*256,archiveList$(0)*50
 48140   dim tmpFileOpen$*256
 48160   if clientServer then
-48170     tmpFileOpen$=env$('temp')&'\OpenPartial\tmpFileOpen'&session$&'.zip'
+48170     tmpFileOpen$=env$('temp')&'\acs\OpenPartial\tmpFileOpen'&session$&'.zip'
+48172     fnmakesurepathexists(tmpFileOpen$)
 48180     fnCopyFile(env$('at')&file_open$,tmpFileOpen$)
 48190   else
 48200     tmpFileOpen$=file_open$
