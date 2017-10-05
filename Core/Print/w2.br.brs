@@ -45,8 +45,8 @@
 14460     else ! if taxYear$='2017' then
 14480         ssmax=127200 ! 2017
 14500     end if
-14520     let mcrate=.0145
-14540     let mcmax=999999
+14520     mcrate=.0145
+14540     mcmax=999999
 14550     fncreg_read('W-2 - cLocality',cLocality$,'NO')
 14560     fnreg_read('Print W-2'                          ,w2destinationOpt$(1),'True' )
 14580     fnreg_read('Export for Advanced Micro Solutions',w2destinationOpt$(2),'False')
@@ -84,7 +84,7 @@
 17000   ASK_INFO: !
 17020   ! r: build and display the ASK_INFO screen
 17040   fntos(sn$="Prw2-2")
-17060   let rc=cf=0: let mylen=21: let mypos=mylen+2 
+17060   rc=cf=0: mylen=21: mypos=mylen+2 
 17080    if enableAskCLocality then 
 17100      fraWidth=94
 17120    else
@@ -129,36 +129,36 @@
 17900   end if
 17920   fnlbl(lc+=1,1,"Employee Name Format:",mylen,1,0,franum)
 17940   fncomboa('nameFormat',lc,mypos,mat optNameFormat$, '',20,franum)
-17960   let resp$(resp_namcde:=rc+=1)=nameFormat$
+17960   resp$(resp_namcde:=rc+=1)=nameFormat$
 17980   !
 18000   fra2Height=5 : fra2Y=fraGeneralHeight+3
 18020   fnfra(fra2Y,1,fra2Height,fraWidth,"Print W-2s","",0)
 18040   cf+=1 : let franum=cf : lc=0
-18060   mylen=46: let mypos=mylen+2
+18060   mylen=46: mypos=mylen+2
 18080   fnlbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
 18100   fntxt(1,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .062.",franum)
-18120   let resp$(respc_ssrate:=rc+=1)=str$(ssrate)
+18120   resp$(respc_ssrate:=rc+=1)=str$(ssrate)
 18140   fnlbl(2,1,"Maximum Wage Subject to SS Withholdings:",mylen,1,0,franum)
 18160   fntxt(2,mypos,10,0,1,"10",disableSSMCedit,"Enter the maximum wage subject to social security withholdings for the current year just ended.",franum)
-18180   let resp$(respc_ssmax:=rc+=1)=str$(ssmax)
+18180   resp$(respc_ssmax:=rc+=1)=str$(ssmax)
 18200   fnlbl(4,1,"Medicare Withholding Rate:",mylen,1,0,franum)
 18220   fntxt(4,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .0145 .",franum)
-18240   let resp$(respc_mcrate:=rc+=1)=str$(mcrate)
+18240   resp$(respc_mcrate:=rc+=1)=str$(mcrate)
 18260   fnlbl(5,1,"Maximum Wage Subject to Medicare Withholdings:",mylen,1,0,franum)
 18280   fntxt(5,mypos,10,0,1,"10",disableSSMCedit,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum)
-18300   let resp$(respc_mcmax:=rc+=1)=str$(mcmax)
+18300   resp$(respc_mcmax:=rc+=1)=str$(mcmax)
 18320   !
 18340   fra3Y=fra2Y+fra2Height+2 : fra3Height=6
 18360   fnfra(fra3Y,1,fra3Height,fraWidth,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.")
-18380   cf+=1 : let franum=cf : let mylen=26 : let mypos=mylen+2
+18380   cf+=1 : let franum=cf : mylen=26 : mypos=mylen+2
 18400   fnopt(1,3,"Print W-2",0,franum)
-18420   let resp$(respc_PrintW2:=rc+=1)=w2destinationOpt$(1)
+18420   resp$(respc_PrintW2:=rc+=1)=w2destinationOpt$(1)
 18440   fnlbl(1,fraWidth-50,"(2 per page is not yet available with Backgrounds)",50,1,0,franum)
 18460   fnlbl(2,5,"Copy:",12,1,0,franum)
 18480   fncomboa('w2Copy',2,19,mat optW2Copy$, '',20,franum)
-18500   let resp$(respc_w2copy:=rc+=1)=w2Copy$
+18500   resp$(respc_w2copy:=rc+=1)=w2Copy$
 18520   fnchk(2,68,'W-2 - Enable Background',1,franum)
-18540   let resp$(respc_enableBackground:=rc+=1)=enableBackground$
+18540   resp$(respc_enableBackground:=rc+=1)=enableBackground$
 18560   ! fnchk(3,68,'2 Per Page',1,franum)
 18600   fnchk(4,68,'Print W-3 also',1,franum)
 18620   resp$(respc_w3:=rc+=1)=enableW3$
@@ -178,17 +178,17 @@
 18900     cf+=1 : let franum=cf
 18920     fnlbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
 18940     fntxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
-18960     let resp$(respc_qpenplan:=rc+=1)=str$(pn1)
+18960     resp$(respc_qpenplan:=rc+=1)=str$(pn1)
 18980     fnlbl(2,1,"Dependent Care Benefits:",mylen,1,0,franum)
 19000     fntxt(2,mypos,2,0,1,"30",0,"If you have dependent care benefits that should be identifies on the W-2, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
-19020     let resp$(respc_depCareBen:=rc+=1)=str$(dc1)
+19020     resp$(respc_depCareBen:=rc+=1)=str$(dc1)
 19040   else if enableAskState then
 19060     fra4Y=fra3y+fra3Height+2 ! 25
 19080     fnfra(fra4Y,1,2,fraWidth,"State","")
 19100     cf+=1 : let franum=cf
 19120     fnlbl(1,1,"State Name:",mylen,1,0,franum)
 19140     fntxt(1,mypos,2,0,1,"",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
-19160     let resp$(respc_state:=rc+=1)=state$
+19160     resp$(respc_state:=rc+=1)=state$
 19180   end if
 19200   fncmdkey("&Margins",ckey_margins:=1021,0,0,"Manually adjust margins for hitting forms")
 19220   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
@@ -325,19 +325,19 @@
 38080   ! returns: nameFirst$,nameMiddle$,nameLast$
 38100   ! calling program should include:  dim nameFirst$*15,nameMiddle$*15,nameLast$*20
 38120   fncreg_read('Employee Name Format',nameFormat$,optNameFormat$(1))
-38140   let fullname$=uprc$(rtrm$(fullname$)): ! Let nameFormat$="s"
-38160   let npPosSpace1=pos(fullname$," ",1)
-38180   let npPosSpace2=pos(fullname$," ",npPosSpace1+1)
+38140   let fullname$=uprc$(rtrm$(fullname$)): ! nameFormat$="s"
+38160   npPosSpace1=pos(fullname$," ",1)
+38180   npPosSpace2=pos(fullname$," ",npPosSpace1+1)
 38200   if nameFormat$=optNameFormat$(1) then 
 38220     ! r: first name first
-38240     let nameFirst$=fullname$(1:max(min(15,npPosSpace1-1),1))
+38240     nameFirst$=fullname$(1:max(min(15,npPosSpace1-1),1))
 38260     if npPosSpace2>0 then 
-38280       let nameMiddle$=fullname$(npPosSpace1+1:npPosSpace2-1)
-38300       let nameLast$=fullname$(npPosSpace2+1:len(fullname$))
+38280       nameMiddle$=fullname$(npPosSpace1+1:npPosSpace2-1)
+38300       nameLast$=fullname$(npPosSpace2+1:len(fullname$))
 38320     end if
 38340     if npPosSpace2=0 then
-38360       let nameLast$=fullname$(npPosSpace1+1:len(fullname$))
-38380       let nameMiddle$=""
+38360       nameLast$=fullname$(npPosSpace1+1:len(fullname$))
+38380       nameMiddle$=""
 38400     end if
 38420     ! /r
 38440   else  ! last name first
@@ -351,7 +351,7 @@
 38600     !   fullNameCopy$(1:npPosComma)=''
 38620     !   fullNameCopy$=trim$(fullNameCopy$)
 38640     !   npFncPosSpace1=pos(fullNameCopy$,' ')
-38660     !   if npFncPosSpace1<=0 then let npFncPosSpace1=len(fullNameCopy$)
+38660     !   if npFncPosSpace1<=0 then npFncPosSpace1=len(fullNameCopy$)
 38680     !   nameFirst$=trim$(fullNameCopy$(1:npFncPosSpace1))
 38700     !   fullNameCopy$(1:npFncPosSpace1)=''
 38720     !   nameMiddle$=trim$(fullNameCopy$)
@@ -362,14 +362,14 @@
 38820     !   ! /r
 38840     ! ! end if
 38860     if npPosSpace1>0 and fullname$(npPosSpace1-1:npPosSpace1-1)="," then 
-38880       let nameLast$=fullname$(1:npPosSpace1-2) 
+38880       nameLast$=fullname$(1:npPosSpace1-2) 
 38900     else 
-38920       let nameLast$=fullname$(1:max(npPosSpace1-1,1))
+38920       nameLast$=fullname$(1:max(npPosSpace1-1,1))
 38930     end if
 38940     if npPosSpace2>0 then 
-38960       let nameFirst$=fullname$(npPosSpace1+1:npPosSpace2-1): let nameMiddle$=fullname$(npPosSpace2+1:len(fullname$))
+38960       nameFirst$=fullname$(npPosSpace1+1:npPosSpace2-1): nameMiddle$=fullname$(npPosSpace2+1:len(fullname$))
 38980     else ! if npPosSpace2=0 then 
-39000       let nameFirst$=fullname$(npPosSpace1+1:len(fullname$)): let nameMiddle$=""
+39000       nameFirst$=fullname$(npPosSpace1+1:len(fullname$)): nameMiddle$=""
 39020     end if
 39040     ! /r
 39060   end if
@@ -396,7 +396,7 @@
 39480   ! pr nameFirst$,nameMiddle$,nameLast$
 39500 fnend
 76000 ! <updateable region: ertn>
-76040 ERTN: let fnerror(program$,err,line,act$,"xit")
+76040 ERTN: fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -8,11 +8,11 @@
 00080     if storage_length=0 then storage_length=textbox_len
 00090     add_rec_item=udim(mat lbl$)+1
 00100     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$
-00110     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
+00110     mat tln(add_rec_item) : tln(add_rec_item)=textbox_len
 00120     mat p$(add_rec_item)
 00130     mat fltyp$(add_rec_item) : fltyp$(add_rec_item)=field_type$
 00140     mat sln(add_rec_item) : sln(add_rec_item)=storage_length
-00150     mat mask(add_rec_item) : let mask(add_rec_item)=ar_mask
+00150     mat mask(add_rec_item) : mask(add_rec_item)=ar_mask
 00160     mat sp(add_rec_item) : sp(add_rec_item)=storage_position
 00170     if storage_position=0 then 
 00180       if add_rec_item=1 then 
@@ -44,7 +44,7 @@
 00430     next hac_item
 00440   fnend 
 00450   def library fnhamster_2(h2_name$*20; h2_file)
-00452     if h2_file=0 then let h2_file=1
+00452     if h2_file=0 then h2_file=1
 00460     fnhamster(h2_name$,mat lbl$,mat tln,h2_file,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00470 ! fnhamster(uw$*20,mat lbl$,mat fln,fin,mat p$; mat fltyp$,mat sln,mat mask,mat startpos,mat incontrol$,mat mxl)
 00480   fnend 

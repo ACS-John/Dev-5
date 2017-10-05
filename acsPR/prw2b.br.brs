@@ -32,7 +32,7 @@
 00320   if read1=1 then goto L360
 00330   oldeno=eno
 00340   oldtcd=tcd
-00350   let read1=1
+00350   read1=1
 00360   L360: !
 00362   if oldeno=eno and oldtcd=tcd then goto L380
 00370   if oldeno><eno or oldtcd><tcd then goto EMP_READ
@@ -89,13 +89,13 @@
 01070   gosub NEWPGE
 01180 return ! /r
 01210 NEWPGE: ! r:
-01212   let pl=33 ! INSERT PAGE LENGTH IN LINES
+01212   pl=33 ! INSERT PAGE LENGTH IN LINES
 01220   sk=pl-(krec(255)-int(krec(255)/pl)*pl)
 01230   pr #255,using L1240: ""
 01240   L1240: form c 1,skip sk
 01250 return ! /r
 01270 ! <Updateable Region: ERTN>
-01280 ERTN: let fnerror(program$,err,line,act$,"xit")
+01280 ERTN: fnerror(program$,err,line,act$,"xit")
 01290   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01300   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01310   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

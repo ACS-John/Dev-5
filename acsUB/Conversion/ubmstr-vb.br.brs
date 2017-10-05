@@ -9,7 +9,7 @@
 00090     dim x$*10,p$*10,rw4(22,13)
 00100     fnstatus('Customer File Conversion (S:\acsUB\conversion\ubmstr-vb)')
 00120 ! 
-00122 ! let fnCopy(env$('Q')&"\UBmstr\ubcoinfo.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'),133) ! this should already be done.
+00122 ! fnCopy(env$('Q')&"\UBmstr\ubcoinfo.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'),133) ! this should already be done.
 00132     if exists(env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')) then 
 00133       execute 'free "'&env$('Q')&"\UBmstr\customer.h"&env$('cno')&'"' ioerr ignore
 00134       fnCopy(env$('Q')&"\UBmstr\ubMaster.h"&env$('cno'),env$('Q')&"\UBmstr\Customer.h"&env$('cno'))
@@ -32,19 +32,19 @@
 00350     extra$(3)=f$(2) : let f$(2)="" ! meter module #  (water meter serial)
 00360 ! eXTRA(11)=B(6): b(6)=0 ! note payable amount
 00370 ! extra(17)=c(4) : c(4)=0 ! final billing code
-00380 ! extra(3)=d(5) : let d(5)=0 ! date meter read current
-00390 ! extra(4)=d(6): let d(6)=0 ! date meter read prior
-00400 ! Let D(7)=0
-00410 ! eXTRA$(2)=STR$(D(8)): Let D(8)=0 ! phone #
-00420 ! Let D(11)=0 ! city bank account will be in bank draft program
-00430 ! Let DA$=STR$(D(12)): Let D(12)=0 ! customer bank account
-00440 ! eXTRA$(7)=STR$(D(15)): Let D(15)=0 ! test cycle code
-00444     let d(13)=0 ! set # units to 0 if not used xxx-prb 05/18/11
-00450     let d(14)=0 ! don't know but has value on old system
+00380 ! extra(3)=d(5) : d(5)=0 ! date meter read current
+00390 ! extra(4)=d(6): d(6)=0 ! date meter read prior
+00400 ! d(7)=0
+00410 ! eXTRA$(2)=STR$(D(8)): d(8)=0 ! phone #
+00420 ! d(11)=0 ! city bank account will be in bank draft program
+00430 ! dA$=STR$(D(12)): d(12)=0 ! customer bank account
+00440 ! eXTRA$(7)=STR$(D(15)): d(15)=0 ! test cycle code
+00444     d(13)=0 ! set # units to 0 if not used xxx-prb 05/18/11
+00450     d(14)=0 ! don't know but has value on old system
 00460 ! Let GB(5)=GB(3)+GB(4): Let GB(3)=GB(4)=0 ! add rep parts and rep labor together
 00470 ! If G(5)=9.25 Then Let G(6)=9.25: Let GB(6)=GB(5): Let G(5)=0: Let GB(5)=0 ! KINCAID ONLY
 00480 ! Let GB(9)=GB(7): Let GB(7)=0 ! move sfc for service 7 to service 9
-00490 ! eXTRA(18)=D(7): Let D(7)=0 ! average sewer usage
+00490 ! eXTRA(18)=D(7): d(7)=0 ! average sewer usage
 00495 ! If env$('client')="Monticello" AND A(2)>9 Then eXTRA(18)=D(7)=0 ! don't average sewer rate codes 10 or greater
 00500 ! a(6)=A(7) ! penalty codes (was only 1 code but charges listed seperate
 00510 ! If A(2)>0 Then eXTRA(14)=D(13) ! make sewer units same as water units if have sewer
@@ -58,18 +58,18 @@
 00560     write #81,using L570: z$,mat ba,mat badr
 00570 L570: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 00580 L580: goto L290
-00590 L590: let version(1,1)
-00592     let version(81,1)
-00594     let version(82,1)
+00590 L590: version(1,1)
+00592     version(81,1)
+00594     version(82,1)
 00600     close #1: 
 00610     close #81: ioerr ignore
 00620     close #82: ! ioerr L640
 00630     fnindex_it(env$('Q')&"\UBmstr\BudMstr.h"&env$('cno'),env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno'), '1 10')
 00640 ! L640: ! Goto 70
-00650 XIT: fnend  ! chain "S:\acsUB\conversion\note-cnv" ! Let fnxit
+00650 XIT: fnend  ! chain "S:\acsUB\conversion\note-cnv" ! fnxit
 00660 IGNORE: continue 
 76220 ! <updateable region: ertn>
-76240 ERTN: let fnerror(program$,err,line,act$,"xit")
+76240 ERTN: fnerror(program$,err,line,act$,"xit")
 76260   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76280   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

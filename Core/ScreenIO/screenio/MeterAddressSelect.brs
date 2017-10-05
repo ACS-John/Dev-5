@@ -16,10 +16,10 @@
 00600 !
 01000 Main: ! If you run me as a program, I run the meteraddressselect screen
 01010    library "S:\Core\ScreenIO\Screenio" : fnfm$
-01020    let Key$=""
-01030    let ParentKey$=""
-01040    let Record=0
-01050    let Path$=""
+01020    key$=""
+01030    parentKey$=""
+01040    record=0
+01050    path$=""
 01060    screenCode$="METERADDRESSSELECT"
 01070    chain "s:\core\screenio\screeniosaveandtest.br",mat PassedData$,Key$,ParentKey$,Record,Path$,ScreenCode$
 01080    if len(trim$(Ret$)) then
@@ -82,9 +82,9 @@
 05051   ! 2500+ is reserved for screenio
 05052   if fkey=1 or fkey=1504 then
 05053     if env$('Program_Caption')='Select Company' then
-05054       let help_cursys$='co'
+05054       help_cursys$='co'
 05055     else
-05056       let help_cursys$=lwrc$(env$('CurSys'))
+05056       help_cursys$=lwrc$(env$('CurSys'))
 05057     end if
 05058     ! pr 'help_cursys$='&help_cursys$ : pause
 05059     execute 'system -M start http://planetacs.net/help/'&help_cursys$&'/'&srep$(env$('Program_Caption'),' ','%20')&'.html'
@@ -180,7 +180,7 @@
 92001 !
 92002    if ~DataIsInside then
 92003       fnPopData(2)
-92004       if Function$="{{SetData}}" then let DataIsInside=1
+92004       if Function$="{{SetData}}" then dataIsInside=1
 92005    end if
 92006 !
 92007    if ~FileIOLinkageSet then
@@ -192,13 +192,13 @@
 92013    end if
 92014 !
 92015    if Function$ = "{ub_meter_address_main_loop}" then
-92016       let ReturnValue = fnub_meter_address_main_loop
+92016       returnValue = fnub_meter_address_main_loop
 92017    else if Function$ = "{defaults\enter}" then
-92018       let ReturnValue = fnEnterDefault
+92018       returnValue = fnEnterDefault
 92019    else if Function$ = "{defaults\mainloop}" then
-92020       let ReturnValue = fnMainLoop
+92020       returnValue = fnMainLoop
 92021    else if Function$ = "{defaults\exit}" then
-92022       let ReturnValue = fnExitDefault
+92022       returnValue = fnExitDefault
 92023    else
 92024       if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
 92025          pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
@@ -207,7 +207,7 @@
 92028 !
 92029    if ~DataIsInside or Function$="{{GetData}}" then
 92030       fnPushData(2)
-92031       let DataIsInside=0
+92031       dataIsInside=0
 92032    end if
 92033 return
 92034 !

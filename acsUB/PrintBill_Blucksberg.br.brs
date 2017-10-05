@@ -47,60 +47,60 @@
 14720     fncreg_read('print bill message board line '&str$(mg_item),mg$(mg_item))
 14740   next mg_item
 16000 SCREEN1: ! r:
-16020   a$="" : let prtbkno=0
+16020   a$="" : prtbkno=0
 16040   fntos(sn$="UBPrtBl1-1")
-16060   let pf=26 : ll=24
-16080   let respc=0
+16060   pf=26 : ll=24
+16080   respc=0
 16100   fnlbl(3,1,"Due Date:",ll,1)
 16120   fntxt(3,pf,8,8,1,"1",0,tt$)
-16140   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
+16140   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 16160   fnlbl(5,1,"Service From Date:",ll,1)
 16180   fntxt(5,pf,8,8,1,"1",0,tt$)
-16200   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d5)
+16200   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d5)
 16220   fnlbl(6,1,"Service To Date:",ll,1)
 16240   fntxt(6,pf,8,8,1,"1",0,tt$)
-16260   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d6)
+16260   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d6)
 16280   scr_line=7
 16300   fnlbl(scr_line+1,1,"Message on Bill:",ll,1)
-16320   let mg_len=95 : let mg_display_len=60
+16320   mg_len=95 : mg_display_len=60
 16340   for mg_item=1 to udim(mat mg$)
 16360     scr_line+=1
 16380     fntxt(scr_line,pf,mg_len,mg_display_len,2)
-16400     let resp$(respc+=1)=mg$(mg_item)(1:mg_len)
+16400     resp$(respc+=1)=mg$(mg_item)(1:mg_len)
 16420   next mg_item
 16440   scr_line+=1
 16460   fnlbl(scr_line+=1,1,"Date of Billing:",ll,1)
 16480   fntxt(scr_line,pf,8,8,1,"1")
-16500   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
+16500   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 16520   fnlbl(scr_line+=1,1,"Prior Date of Billing:",ll,1)
 16540   fntxt(scr_line,pf,8,8,1,"1")
-16560   let resp$(resp_billing_date_prior:=respc+=1)=cnvrt$("pic(zzzzzz)",billing_date_prior)
+16560   resp$(resp_billing_date_prior:=respc+=1)=cnvrt$("pic(zzzzzz)",billing_date_prior)
 16580   scr_line+=1
 16600   fnlbl(scr_line+=1,1,"Starting Account:",ll,1)
 16620   fncombof("ubm-act-nam",scr_line,pf,40,env$('Q')&"\UBmstr\Customer.h"&str$(cno),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&str$(cno),2)
-16640   let resp$(resp_start:=respc+=1)="[All]"
+16640   resp$(resp_start:=respc+=1)="[All]"
 16660   fnlbl(scr_line+=1,1,"Route Number:",ll,1)
 16680   fncmbrt2(scr_line,pf)
-16700   let resp$(resp_route:=respc+=1)="[All]"
+16700   resp$(resp_route:=respc+=1)="[All]"
 16720   fnchk(scr_line+=1,pf,"Select Accounts to Print",1)
-16740   let resp$(resp_select_accounts:=respc+=1)="False"
+16740   resp$(resp_select_accounts:=respc+=1)="False"
 16760   fncmdset(3)
 16780   fnacs(sn$,0,mat resp$,ck)
 18000   if ck=5 then goto XIT
-18020   let d1=val(resp$(17))
-18040   let d4=val(resp$(1))
-18060   let d5=val(resp$(2))
-18080   let d6=val(resp$(3))
+18020   d1=val(resp$(17))
+18040   d4=val(resp$(1))
+18060   d5=val(resp$(2))
+18080   d6=val(resp$(3))
 18100 ! 
-18120   let mg_len_max=mg_len
+18120   mg_len_max=mg_len
 18140 ! for mg_item=1 to udim(mat mg$)
 18160 !   tmp_which_resp=mg_item+3
 18180 !   mg_len_max=max(mg_len_max,len(trim$(resp$(tmp_which_resp))))
 18200 ! nex mg_item
 18220 ! !
 18240   for mg_item=1 to udim(mat mg$)
-18260     let tmp_which_resp=mg_item+3
-18280     let mg$(mg_item)=rpt$(" ",(mg_len_max - len(trim$(resp$(tmp_which_resp)))) / 2)&trim$(resp$(tmp_which_resp))
+18260     tmp_which_resp=mg_item+3
+18280     mg$(mg_item)=rpt$(" ",(mg_len_max - len(trim$(resp$(tmp_which_resp)))) / 2)&trim$(resp$(tmp_which_resp))
 18300   next mg_item
 18320 ! 
 18340   for mg_item=1 to udim(mg$)
@@ -110,14 +110,14 @@
 18420   billing_date_prior=val(resp$(resp_billing_date_prior))
 18440   billing_date_prior=date(days(billing_date_prior,'mmddyy'),'ccyymmdd')
 18460   if resp$(resp_start)="[All]" then a$="" else a$=lpad$(trim$(resp$(6)(1:9)),9)
-18480   if resp$(resp_route)="[All]" then let prtbkno=0 else let prtbkno=val(resp$(7))
+18480   if resp$(resp_route)="[All]" then prtbkno=0 else prtbkno=val(resp$(7))
 18500   if resp$(resp_select_accounts)="True" then sl1=1: let z$="" else sl1=0
 18520   goto GET_STARTED
 18540 ! /r
 24000 GET_STARTED: ! r:
 24020   if trim$(a$)<>"" then 
 24040     read #2,using L570,key=a$: z$,route,sequence nokey SCREEN1
-24060     let holdz$=z$
+24060     holdz$=z$
 24080     begin=1
 24100   end if 
 24120 L570: form pos 1,c 10,pos 1741,n 2,n 7
@@ -142,19 +142,19 @@
 24500   if f><d1 then goto NEXT_CUSTOMER
 24520 AFTER_READ_CUSTOMER: ! 
 24540   gosub READALTADR
-24560   let pb=bal-g(11)
+24560   pb=bal-g(11)
 24580   if bal<=0 then let g(9)=0 ! don't show penalty if balance 0 or less
 24600   activity_charge=fntrans_total_as_of(z$,billing_date_prior,1)
 24620   activity_penalty=fntrans_total_as_of(z$,billing_date_prior,2)
 24640   activity_payment=fntrans_total_as_of(z$,billing_date_prior,3)
 24660   activity_credit=fntrans_total_as_of(z$,billing_date_prior,4)
 24680   activity_debit=fntrans_total_as_of(z$,billing_date_prior,5)
-24700   let prior_prior_balance=bal ! -g(11)
-24720   let prior_prior_balance=prior_prior_balance-activity_charge
-24740   let prior_prior_balance=prior_prior_balance-activity_penalty
-24760   let prior_prior_balance=prior_prior_balance+activity_payment
-24780   let prior_prior_balance=prior_prior_balance+activity_credit
-24800   let prior_prior_balance=prior_prior_balance-activity_debit
+24700   prior_prior_balance=bal ! -g(11)
+24720   prior_prior_balance=prior_prior_balance-activity_charge
+24740   prior_prior_balance=prior_prior_balance-activity_penalty
+24760   prior_prior_balance=prior_prior_balance+activity_payment
+24780   prior_prior_balance=prior_prior_balance+activity_credit
+24800   prior_prior_balance=prior_prior_balance-activity_debit
 24820 ! ______________print bill routine______________________________________
 24840   gosub VBPRINT
 24860 ! _____________end of pr routine______________________________________
@@ -168,7 +168,7 @@
 28080     fnlbl(3,1,"Last Account entered was "&z$,44,1)
 28100   end if 
 28120   fncmbact(1,17)
-28140   let resp$(1)=z$
+28140   resp$(1)=z$
 28160   fncmdset(3)
 28180   fnacs(sn$,0,mat resp$,ck)
 28200   a$=lpad$(trim$(resp$(1)(1:10)),10)
@@ -182,16 +182,16 @@
 32030   fnpa_finis
 32040   goto ENDSCR ! /r
 34000 ENDSCR: ! r: pr totals screen
-34020   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
+34020   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 34040   fntos(sn$="Bills-Total")
-34060   let mylen=23 : let mypos=mylen+2
-34080   let respc=0
+34060   mylen=23 : mypos=mylen+2
+34080   respc=0
 34100   fnlbl(1,1,"Total Bills Printed:",mylen,1)
 34120   fntxt(1,mypos,8,0,1,"",1)
-34140   let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
+34140   resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 34160   fncmdset(52)
 34180   fnacs(sn$,0,mat resp$,ck) ! /r
-34200 XIT: let fnxit
+34200 XIT: fnxit
 34220 ! 
 38000 VBPRINT: ! r:
 38040 ! -- Printer Program for Laser 1-Per Page Utility Bills
@@ -202,7 +202,7 @@
 38200 ! fnpa_txt("Sturgis, SD 57785",15,18)
 38220   fnpa_txt(trim$(pe$(1)),22,49)
 38240   fnpa_txt(trim$(pe$(2)),22,54)
-38260   if trim$(pe$(3))="" then let pe$(3)=pe$(4): let pe$(4)=""
+38260   if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
 38280   fnpa_txt(trim$(pe$(3)),22,59)
 38300   fnpa_txt(trim$(pe$(4)),22,64)
 39000 ! fnpa_fontsize(18)
@@ -212,14 +212,14 @@
 39060   fnpa_elipse(147,24,37,.5)
 39080 ! fnpa_fontbold
 39100 ! fnpa_fontitalic(1)
-39120 ! let fnpa_txt("Blucksberg Mtn",119,14)
+39120 ! fnpa_txt("Blucksberg Mtn",119,14)
 39140 ! fnpa_fontsize(34)
-39160 ! let fnpa_txt("Water",126,20)
+39160 ! fnpa_txt("Water",126,20)
 39180 ! fnpa_fontsize(14)
-39200 ! let fnpa_txt("Association",128,31)
+39200 ! fnpa_txt("Association",128,31)
 39220   fnpa_fontitalic(0)
 39240   fnpa_fontsize(9)
-40000   let tmp_box_top=55
+40000   tmp_box_top=55
 40010   fnpa_line(tmp_box_left_pos=115,tmp_box_top,70,24, 1)
 40020   fnpa_txt('Billing Date:            '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1),tmp_box_left_pos+5,tmp_box_top+4)
 40030   fnpa_txt("Account:      "&lpad$(trim$(z$),19),tmp_box_left_pos+5,tmp_box_top+8)
@@ -239,7 +239,7 @@
 41000 ! 
 41060   lyne=81
 41080   adder=4.5
-41100   fnpa_fontbold(1) : let fnpa_fontitalic
+41100   fnpa_fontbold(1) : fnpa_fontitalic
 41120   fnpa_txt("Activity Since "&date$(days(billing_date_prior,'ccyymmdd'),'mm/dd/yy'),80,lyne+=adder)
 41140   fnpa_fontbold(0)
 41160   fnpa_txt("Amount",170,lyne)
@@ -253,10 +253,10 @@
 41292   fnpa_fontbold(1) ! on
 41300   fn_add_activity_line("Balance Forward",pb,1,110)
 41660   lyne+=adder
-41680 ! let fnpa_fontbold(1) ! on
+41680 ! fnpa_fontbold(1) ! on
 41700   fnpa_line(26,lyne+=adder,157)
 41720   fnpa_txt("Current Charges",90,lyne+=1)
-41740 ! let fnpa_txt("Current Charges",30,lyne+=8)
+41740 ! fnpa_txt("Current Charges",30,lyne+=8)
 41750   fnpa_fontbold
 41760 ! adder=5
 41770   fnpa_fontitalic
@@ -322,8 +322,8 @@
 44020   fnpa_line(162,lyne+4,22) : lyne+=1
 44030   fnpa_fontbold(1)
 44050   fn_add_activity_line("Total Current Charges",g(11), 1,110)
-44060 ! lyne+=adder ! let fnpa_txt("Total Current Charges",110,lyne+=adder)
-44080 ! let fnpa_txt(cnvrt$("pic(--------.##)",g(11)),160,lyne)
+44060 ! lyne+=adder ! fnpa_txt("Total Current Charges",110,lyne+=adder)
+44080 ! fnpa_txt(cnvrt$("pic(--------.##)",g(11)),160,lyne)
 44090   fnpa_fontbold(0)
 44100   lyne+=adder
 44110   fnpa_line(162,lyne+3,22)
@@ -368,7 +368,7 @@
 54840   end if 
 54860   fnpa_txt(trim$(pe$(1)),130,243)
 54880   fnpa_txt(trim$(pe$(2)),130,247)
-54900   if trim$(pe$(3))="" then let pe$(3)=pe$(4) : let pe$(4)=""
+54900   if trim$(pe$(3))="" then pe$(3)=pe$(4) : pe$(4)=""
 54920   fnpa_txt(trim$(pe$(3)),130,251)
 54940   fnpa_txt(trim$(pe$(4)),130,255)
 54960   fnpa_newpage
@@ -402,14 +402,14 @@
 73170 L3170: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 73180   if p$<>z$ then goto PU_XIT
 73190   if tcode<>1 then goto L3160 ! only charge transactions
-73200   let usage(3)=usage(2): billdate(3)=billdate(2) : let reads(3)=reads(2)
-73210   let usage(2)=usage(1): billdate(2)=billdate(1) : let reads(2)=reads(1)
-73220   let usage(1)=wu: billdate(1)=tdate : let reads(1)=wr
+73200   let usage(3)=usage(2): billdate(3)=billdate(2) : reads(3)=reads(2)
+73210   let usage(2)=usage(1): billdate(2)=billdate(1) : reads(2)=reads(1)
+73220   let usage(1)=wu: billdate(1)=tdate : reads(1)=wr
 73230   goto L3160
 73240 PU_XIT: ! 
 73260   return  ! /r
 76000 ! <updateable region: ertn>
-76040 ERTN: let fnerror(program$,err,line,act$,"xit")
+76040 ERTN: fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -421,18 +421,18 @@
 80080   for j=1 to 4
 80100     if rtrm$(ba$(j))<>"" then 
 80120       e1=e1+1
-80140       let pe$(e1)=ba$(j)
+80140       pe$(e1)=ba$(j)
 80160     end if 
 80180   next j
-80200   if trim$(pe$(2))="" then let pe$(2)=pe$(3): let pe$(3)=""
-80220   if trim$(pe$(3))="" then let pe$(3)=pe$(4): let pe$(4)=""
+80200   if trim$(pe$(2))="" then pe$(2)=pe$(3): pe$(3)=""
+80220   if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
 80240   goto XIT_READALTADR
 80260 ! 
 80280 RAA_2: ! 
 80300   e1=0 : mat pe$=("")
 80320   for j=2 to 4
-80340     if rtrm$(e$(j))<>"" then e1=e1+1 : let pe$(e1)=e$(j)
+80340     if rtrm$(e$(j))<>"" then e1=e1+1 : pe$(e1)=e$(j)
 80360   next j
-80380   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
+80380   if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 80400 XIT_READALTADR: ! 
 80420   return  ! /r

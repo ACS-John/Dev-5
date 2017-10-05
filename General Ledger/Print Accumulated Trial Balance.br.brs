@@ -28,8 +28,8 @@
 14140   fncreg_Read('Print Ending Balance on First Line',petro_opt$,'False')
 14160   fncreg_Read(cap$&': DayStart',tmp$) : startday=val(tmp$)
 14180   fncreg_Read(cap$&': DayEnd'  ,tmp$) : endday=val(tmp$)
-14200   let m2GlmCbAmtPos=87
-14220   if nap=13 then let m1GlmBbAmtPos=171-6 else let m1GlmBbAmtPos=171-12 ! 171 was 249
+14200   m2GlmCbAmtPos=87
+14220   if nap=13 then m1GlmBbAmtPos=171-6 else m1GlmBbAmtPos=171-12 ! 171 was 249
 14240   ! last=val(lastCapitalAccount$(4:9))
 14260   open #h_glmstr:=1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 14280   open #h_actrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -37,51 +37,51 @@
 14320 goto SCREEN1
 16000 SCREEN1: ! r:
 16020   fntos(sn$="Acglactb")
-16040   let mylen=53: let mypos=mylen+3 : rc=0 : let right=1
+16040   mylen=53: mypos=mylen+3 : rc=0 : right=1
 16060   fnlbl(1,1,'General ledger number for the last "Capital" account:',mylen,right)
 16080   fnqgl(1,mypos,0,2)
-16100   let resp$(respc_lastCapitalAccount:=rc+=1)=lastCapitalAccount$
+16100   resp$(respc_lastCapitalAccount:=rc+=1)=lastCapitalAccount$
 16120   fnchk(2,mypos,"Print Ending Balance on First Line:",1,0)
-16140   let resp$(respc_prBalFirst:=rc+=1)=petro_opt$
+16140   resp$(respc_prBalFirst:=rc+=1)=petro_opt$
 16160   fnlbl(3,1,"Period Code to pr (blank for all):",mylen,right)
 16180   fntxt(3,mypos,2,0,1,"30",0,"You can pr any month or the entire year.")
-16200   let resp$(respc_periodCode:=rc+=1)="" ! STR$(LMU)
+16200   resp$(respc_periodCode:=rc+=1)="" ! STR$(LMU)
 16220   fnfra(5,1,5,90,"Selection Type"," ",0) : frameno=1
 16240   fnopt(1,3,"Print All GL Accounts",0,frameno)
-16260   let resp$(respc_printAll:=rc+=1)="True"
+16260   resp$(respc_printAll:=rc+=1)="True"
 16280   fnopt(2,3,"Print Selected GL Accounts",0,frameno)
-16300   let resp$(respc_printSelected:=rc+=1)="False"
+16300   resp$(respc_printSelected:=rc+=1)="False"
 16320   fnopt(3,3,"Print a Range of Accounts",0,frameno)
-16340   let resp$(respc_printRange:=rc+=1)="False"
-16380   let mylen=6 : let mypos=mylen+2
+16340   resp$(respc_printRange:=rc+=1)="False"
+16380   mylen=6 : mypos=mylen+2
 16400   fnlbl(4,1+10,'First:',mylen,right,0,frameno)
 16420   fnqgl(4,mypos+10,frameno,2)
-16440   let resp$(respc_rangeStart:=rc+=1)=""
+16440   resp$(respc_rangeStart:=rc+=1)=""
 16460   fnlbl(5,1+10,'Last:',mylen,right,0,frameno)
 16480   fnqgl(5,mypos+10,frameno,2)
-16500   let resp$(respc_rangeEnd:=rc+=1)=""
+16500   resp$(respc_rangeEnd:=rc+=1)=""
 16520   fnfra(12,1,4,90,"Filters"," ",0) : frameno=2
 16540   mylen=14 : mypos=mylen+2
 16560   fnlbl(1,1,'Starting Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
 16580   fntxt(1,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
-16600   let resp$(resp_dateStart:=rc+=1)=date$(startday,'ccyymmdd')
+16600   resp$(resp_dateStart:=rc+=1)=date$(startday,'ccyymmdd')
 16620   fnlbl(2,1,'Ending Date:',mylen,right,0,frameno,0,"Enter a date to filter results or blank for all")
 16640   fntxt(2,mypos,10,0,1,"3",0,"Enter a date to filter results or blank for all",frameno) 
-16660   let resp$(resp_dateEnd:=rc+=1)=date$(endday,'ccyymmdd')
+16660   resp$(resp_dateEnd:=rc+=1)=date$(endday,'ccyymmdd')
 16680   fnlbl(4,1,'Fund Number:',mylen,right,0,frameno,0,"Select a Cost Center to filter results or blank for all") ! costCenterFilter
 16700   fntxt(4,mypos,2,0,1,"30",0,"Select a Cost Center to filter results or blank for all",frameno)
-16720   let resp$(resp_costCenter:=rc+=1)=""
+16720   resp$(resp_costCenter:=rc+=1)=""
 16740   fncmdset(2)
 16760   fnacs(sn$,0,mat resp$,ckey)
 22000   if ckey=5 then goto XIT
 22020   lastCapitalAccount$=cogl$(3)=fnagl$(resp$(respc_lastCapitalAccount))
 22060   petro_opt$=resp$(respc_prBalFirst)
-22080   let periodToPrint=val(resp$(respc_periodCode)) ! period code to print
+22080   periodToPrint=val(resp$(respc_periodCode)) ! period code to print
 22100   if resp$(respc_printAll)="True" then s1=1 ! method of selecting
 22120   if resp$(respc_printSelected)="True" then s1=2
 22140   if resp$(respc_printRange)="True" then s1=3
-22160   let n1$=fnagl$(resp$(respc_rangeStart))
-22180   let n2$=fnagl$(resp$(respc_rangeEnd))
+22160   n1$=fnagl$(resp$(respc_rangeStart))
+22180   n2$=fnagl$(resp$(respc_rangeEnd))
 22200   startday=days(resp$(resp_dateStart),'ccyymmdd')
 22220   endday=days(resp$(resp_dateEnd),'ccyymmdd')
 22240   costCenterFilter=val(resp$(resp_costCenter))
@@ -90,16 +90,16 @@
 24040   fncreg_write(cap$&': DayStart',str$(startday)) 
 24060   fncreg_write(cap$&': DayEnd'  ,str$(endday)) 
 24080   fncreg_write('Print Ending Balance on First Line',petro_opt$)
-26000   if periodToPrint>1 then let m1GlmBbAmtPos=periodToPrint*6+81
-26020   let m2GlmCbAmtPos=periodToPrint*6+87
+26000   if periodToPrint>1 then m1GlmBbAmtPos=periodToPrint*6+81
+26020   m2GlmCbAmtPos=periodToPrint*6+87
 26040   if periodToPrint><1 then goto L640
-26060   if nap=13 then let m1GlmBbAmtPos=171-6 else let m1GlmBbAmtPos=171-12 ! 171 was 249
+26060   if nap=13 then m1GlmBbAmtPos=171-6 else m1GlmBbAmtPos=171-12 ! 171 was 249
 26080 L640: if s1=3 and n2$<n1$ then goto SCREEN1
 26100 ! Read #h_GLmstr,Using 880,Key=N1$: N$,D$,BB,CB Nokey 670
 26120   if f1=1 then goto AfterReadGlmstr
-26140   let f1=1
+26140   f1=1
 26160   ! if fnUseDeptNo=0 or fnprocess=1 then goto READ_GLMSTR ! L840
-28200   let n$=cnvrt$("N 3",costCenterFilter)&"         "
+28200   n$=cnvrt$("N 3",costCenterFilter)&"         "
 28220   restore #h_glmstr,key>=n$: nokey SCREEN1
 28240   on pageoflow goto PGOF
 28260   on fkey 5 goto TOTALS
@@ -123,7 +123,7 @@
 34200   end if
 34220   if costCenterFilter><0 and val(n$(1:3))><costCenterFilter then goto TOTALS
 34240 AfterReadGlmstr: !
-34260   let dno=val(n$(1:3))
+34260   dno=val(n$(1:3))
 34280   ano=val(n$(4:9))
 34300   sno=val(n$(10:12))
 34320   if (periodToPrint=0 or periodToPrint=1) and (dno>val(lastCapitalAccount$(1:3)) or ano>val(lastCapitalAccount$(4:9))) then  ! added the dno logic on 2/4/2017
@@ -141,7 +141,7 @@
 34440     L1390: form pos 1,pic(zzz),x 1,pic(------),x 1,pic(---),x 2,c 50,pos 80,pic(--,---,--z.## cr)
 34460   end if 
 34480   restore #h_actrans,key>=n$&cnvrt$("N 2",periodToPrint)&"      ": nokey END_OF_TRANS
-34500   let t9=0
+34500   t9=0
 34520   do
 34540     gosub READ_TR
 34560     if t9=9 then goto END_OF_TRANS
@@ -159,7 +159,7 @@
 38100   close #h_actrans: 
 38120   fncloseprn
 38140   goto XIT ! /r
-39000 XIT: let fnxit
+39000 XIT: fnxit
 41000 PGOF: ! r:
 41020   pr #255: newpage
 41040   gosub HDR
@@ -188,10 +188,10 @@
 46140     goto ReadTrFinisT9
 46160   end if
 46180   if tr(5)=0 then goto READ_TR
-46200   if tr(6)><0 then goto ReadTrXit else let tr(6)=9
+46200   if tr(6)><0 then goto ReadTrXit else tr(6)=9
 46220   goto ReadTrXit
 46240   ReadTrFinisT9: ! r:
-46260     let t9=9
+46260     t9=9
 46280   goto ReadTrXit ! /r 
 46300   ReadTrXit: !
 46320 return ! /r
@@ -201,16 +201,16 @@
 48060   if t$>=cogl$(1) and t$<=cogl$(2) then 
 48080       if tr(5)>0 then goto PRINT_TRANS
 48100       let u0=u0+tr(5)
-48120       let trtotal=trtotal+tr(5)
+48120       trtotal=trtotal+tr(5)
 48140       let u$=t$
 48160       goto L1630
 48180   end if
-48200   if tr$="999999999999" then let tr$=" "
+48200   if tr$="999999999999" then tr$=" "
 48220   PRINT_TRANS: ! 
 48240   ! 
 48260   pr #255,using L1610: td$,tr(4),x$,lpad$(rtrm$(tr$),12),tr(5)
 48280   L1610: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos 67,c 12,pos 95,pic(zz,zzz,zzz.## cr)
-48300   let trtotal=trtotal+tr(5)
+48300   trtotal=trtotal+tr(5)
 48320   let u$=t$
 48340   L1630: ! 
 48360 return ! /r
@@ -227,7 +227,7 @@
 52220   begbal=begbal+bb
 52240 return ! /r
 56000 ! <Updateable Region: ERTN>
-56020 ERTN: let fnerror(program$,err,line,act$,"xit")
+56020 ERTN: fnerror(program$,err,line,act$,"xit")
 56040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 56060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 56080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -235,14 +235,14 @@
 56120 ! /region
 58000 SELECT_ACCOUNT: ! r:
 58020   fntos(sn$="Acglactb3")
-58040   let mylen=38: let mypos=mylen+3 : let right=1
+58040   mylen=38: mypos=mylen+3 : right=1
 58060   fnlbl(1,1,'General ledger # to print:',mylen,right,0,0)
 58080   fnqgl(1,mypos,0,2)
-58100   let resp$(1)=""
+58100   resp$(1)=""
 58120   fncmdset(2)
 58140   fnacs(sn$,0,mat resp$,ckey)
 58160   if ckey=5 then goto TOTALS
-58180   let n$=fnagl$(resp$(1))
+58180   n$=fnagl$(resp$(1))
 58200   read #h_glmstr,using F_GLMSTR,key=n$: n$,d$,bb,cb,mat bp nokey SELECT_ACCOUNT
 58220   bb=bp(nap)
 58240 return ! /r

@@ -13,7 +13,7 @@
         fndat(dat$)
 00130 ! 
 00135   fnconsole(1)
-00140   let prtjob$="N" : let perpag$="N"
+00140   prtjob$="N" : perpag$="N"
 00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00160   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00170 ! ______________________________________________________________________
@@ -23,20 +23,20 @@
 00210   pr #win,fields "4,2,Cr 29,N": "Report Heading Date:"
 00220   pr #win,fields "5,2,Cr 29,N": "Print All Jobs (Y/N):"
 00230   pr #win,fields "6,2,Cr 29,N": "Print One Job Per Page (Y/N):"
-00240   let io1$(1)="4,32,C 20,UT,N"
-00250   let io1$(2)="5,32,Cu 1,UT,N"
-00260   let io1$(3)="6,32,Cu 1,UT,N"
+00240   io1$(1)="4,32,C 20,UT,N"
+00250   io1$(2)="5,32,Cu 1,UT,N"
+00260   io1$(3)="6,32,Cu 1,UT,N"
 00270   pr f "16,30,C 09,B,1": "Next (F1)"
 00280   pr f "16,41,C 09,B,5": "Exit (F5)"
-00290   let prtjob$="Y"
-00300   let perpag$="Y"
+00290   prtjob$="Y"
+00300   perpag$="Y"
 00310 L310: rinput #win,fields mat io1$: dat$,prtjob$,perpag$ conv CONV1
-00320   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+00320   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 00330   if cmdkey>0 then goto L400 else ce=curfld
 00340 L340: ce=ce+1: if ce>udim(io1$) then ce=1
-00350 L350: let io1$(ce)=rtrm$(io1$(ce)) : ce1=pos(io1$(ce),"U",1) : if ce1=0 then goto L340
-00360   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L310
-00370 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+00350 L350: io1$(ce)=rtrm$(io1$(ce)) : ce1=pos(io1$(ce),"U",1) : if ce1=0 then goto L340
+00360   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L310
+00370 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 00380   ce=cnt+1
 00390 ERR1: pr f "24,78,C 1": bell : goto L350
 00400 L400: if cmdkey=5 then goto XIT
@@ -47,14 +47,14 @@
 00450 L450: ce=3
 00460   goto CONV1
 00470 ! ______________________________________________________________________
-00480 L480: let fndat(dat$,2)
+00480 L480: fndat(dat$,2)
 00490   form pos 63,c 20
 00500   if prtjob$="N" then goto L590 ! "asdf"
 00510   if fnprocess=1 then goto L580
 00520 ! ______________________________________________________________________
 00530   pr newpage
-00540   let msgline$(1)="Do you wish to skip all"
-00550   let msgline$(2)="completed Jobs? (Y/N)"
+00540   msgline$(1)="Do you wish to skip all"
+00550   msgline$(2)="completed Jobs? (Y/N)"
 00560   fnoldmsgbox(mat response$,cap$,mat msgline$,2)
 00570   skpcom$=response$(1)
 00580 L580: goto L730
@@ -67,16 +67,16 @@
 00650 L650: input #win,fields "4,23,C 6,UT,N": prtj$(j) conv L650
 00660     if cmdkey=2 then goto L710
 00670     if rtrm$(prtj$(j))="" or ltrm$(rtrm$(prtj$(j)))="0" then goto L650
-00680     let prtj$(j)=lpad$(rtrm$(prtj$(j)),6)
+00680     prtj$(j)=lpad$(rtrm$(prtj$(j)),6)
 00690   next j
 00700   goto L730
-00710 L710: let j=j-1
+00710 L710: j=j-1
 00720 ! ______________________________________________________________________
 00730 L730: pr newpage
 00740   on fkey 5 goto DONE
 00750   fnwait(104,cap$,message$,1)
 00760   fnopenprn !:
-        if file$(255)(1:3)<>"PRN" then let jbskip=1
+        if file$(255)(1:3)<>"PRN" then jbskip=1
 00770   gosub HDR
 00780 L780: if prtjob$="Y" then goto L830
 00790 L790: if j1+=1>j then goto DONE
@@ -129,10 +129,10 @@
 01260   gosub HDR
 01270 L1270: return 
 01280 ! ______________________________________________________________________
-01290 XIT: let fnxit
+01290 XIT: fnxit
 01300 ! ______________________________________________________________________
 01310 ! <Updateable Region: ERTN>
-01320 ERTN: let fnerror(program$,err,line,act$,"xit")
+01320 ERTN: fnerror(program$,err,line,act$,"xit")
 01330   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01340   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01350   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

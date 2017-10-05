@@ -7,7 +7,7 @@
 20080   ! ______________________________________________________________________
 20100   library 'S:\Core\Library': fngethandle
 20120   on error goto XIT
-20140   let delim$=chr$(9)
+20140   delim$=chr$(9)
 20160   if ~exists(env$('Temp')&'\acs\Log.txt') then
 20180     needsHeader=1
 20200   else

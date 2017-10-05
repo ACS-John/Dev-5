@@ -10,21 +10,21 @@
 00100   fntop(program$,cap$="Payables Listing (Any Time)")
 00120   cancel=99
 00130   fntos("cpinvlst") !:
-        let respc=0
+        respc=0
 00140   fnlbl(1,1,"Period Ending Date:",23,1)
 00150   fntxt(1,25,10,0,1,"3") !:
-        let resp$(respc+=1)=str$(ped)
+        resp$(respc+=1)=str$(ped)
 00160   fnlbl(2,1,"Print Order:",23,1)
-00170   let item1$(1)="General Ledger" !:
-        let item1$(2)="Vendor"
+00170   item1$(1)="General Ledger" !:
+        item1$(2)="Vendor"
 00180   fncomboa("ubnamlst-srt",2,25,mat item1$,tt$) !:
-        let resp$(respc+=1)=item1$(1)
+        resp$(respc+=1)=item1$(1)
 00190   fnlbl(3,1,"Fund Number to Print:",23,1)
 00200   fntxt(3,25,3,0,1,"30") !:
-        let resp$(respc+=1)=str$(fund)
-00210   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+        resp$(respc+=1)=str$(fund)
+00210   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 00220   if ckey=5 then goto XIT
-00230   let ped=val(resp$(1))
+00230   ped=val(resp$(1))
 00240   sq1$=resp$(2)(1:1)
 00250   let fund=val(resp$(3))
 00260 ! ___________________________
@@ -38,7 +38,7 @@
 00340 READ_PAYTRANS: ! 
 00350   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6',release: vn$,iv$,ivd,dd eof END1
 00360   if fndate_mmddyy_to_ccyymmdd(ivd)>ped then goto READ_PAYTRANS
-00370   let de$=""
+00370   de$=""
 00380   read #paymstr,using 'Form POS 9,C 30',key=vn$: de$ nokey RESTORE_UNPDALOC
 00390 RESTORE_UNPDALOC: ! 
 00400   restore #unpdaloc,key>=vn$&iv$: 
@@ -58,7 +58,7 @@
 00540   if ped=>fndate_mmddyy_to_ccyymmdd(pd) then goto READ_TRMSTR
 00550   adr=ta(1)
 00560 READ_TRALLOC: ! 
-00570   let key$=cnvrt$("Pic(zz)",bank_code)&str$(tcde)&tr$(1) !:
+00570   key$=cnvrt$("Pic(zz)",bank_code)&str$(tcde)&tr$(1) !:
         restore #tralloc,key=key$: nokey READ_TRMSTR
 00580 L580: read #tralloc,using 'Form POS 1,C 11,C 12,PD 5.2,X 30,N 6': newkey$,gl$,amt,ivd eof READ_TRMSTR !:
         if key$<>newkey$ then goto READ_TRMSTR
@@ -99,11 +99,11 @@
 00910   pr #255: "                                  ______________________________  __________"
 00920   pr #255,using 'Form POS 35,CR 30,N 12.2': "GL # "&hgl$&" Total",t1
 00930 L930: pr #255: "                                  ______________________________  __________" pageoflow NEWPGE
-00940   let t1=0
+00940   t1=0
 00950   if amt=0 then goto READ_ADDR
 00960 PRINT_LINE: ! 
 00970   pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 10,C 30,N 12.2': gl$,ivd,vn$,de$,amt pageoflow NEWPGE
-00980   let t1+=amt : let t2+=amt : let hgl$=gl$ : let hvn$=vn$
+00980   t1+=amt : t2+=amt : hgl$=gl$ : hvn$=vn$
 00990   goto READ_ADDR
 01000 ! ______________________________________________________________________
 01010 NEWPGE: pr #255: newpage: gosub HDR : continue 
@@ -128,10 +128,10 @@
 01170   pr #255,using 'Form POS 35,CR 30,N 12.2': "Final Total",t2
 01180   pr #255: "                                  =========================================="
 01190   fncloseprn
-01200 XIT: let fnxit
+01200 XIT: fnxit
 01210 ! ______________________________________________________________________
 01220 ! <Updateable Region: ERTN>
-01230 ERTN: let fnerror(program$,err,line,act$,"xit")
+01230 ERTN: fnerror(program$,err,line,act$,"xit")
 01240   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01250   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01260   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

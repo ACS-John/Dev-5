@@ -230,14 +230,10 @@
 44112     library 'S:\Core\File Open and Save.br': fnFileSaveAs
 44114     fnFileSaveAs=fnFileSaveAs(save_what$)
 44116   fnend 
-44120   def library fnFileOpen
-44122     library 'S:\Core\File Open and Save.br': fnFileOpen
-44124     fnFileOpen=fnFileOpen
+44120   def library fnAutomatedSavePoint(fileNameAddition$*128)
+44122     library 'S:\Core\File Open and Save.br': fnAutomatedSavePoint
+44124     fnAutomatedSavePoint=fnAutomatedSavePoint(fileNameAddition$)
 44126   fnend 
-44130   def library fnAutomatedSavePoint(fileNameAddition$*128)
-44132     library 'S:\Core\File Open and Save.br': fnAutomatedSavePoint
-44134     fnAutomatedSavePoint=fnAutomatedSavePoint(fileNameAddition$)
-44136   fnend 
 44198 ! /r
 45000 ! r: core   all the libraries that aren't filed anywhere else 
 45010   def library fnWindowsStart(wsFile$*1024)

@@ -4,7 +4,7 @@
 00050   fncno(cno,cnam$)
 00060   form pos 1,n 2,c 40,c 20,pos 83,n 6
 00070   dim z$*5,a$*30,sc(10),cnam$*40,cat$(30)*30,prg$*20
-00080   let namtab=43-int(len(rtrm$(cnam$))/2)
+00080   namtab=43-int(len(rtrm$(cnam$))/2)
 00090   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&str$(cno)&",Shr",internal,input,relative ioerr L770
 00100   read #1,using L110,rec=1: mat cat$ ioerr L770
 00110 L110: form pos 1,30*c 30
@@ -25,11 +25,11 @@
 00260   gosub L450
 00270 L270: read #1,using L280: z$,a$,mat sc eof L570 ioerr L770
 00280 L280: form pos 1,c 5,c 30,pos 220,10*n 1
-00290   let namcd=0
+00290   namcd=0
 00300   for j=1 to 10
 00310     if sc(j)=2 then goto L320 else goto L430
 00320 L320: if namcd=1 then goto L380
-00330     let namcd=1
+00330     namcd=1
 00340     pr #255: 
 00350     pr #255,using L360: z$,a$,j,cat$(j)
 00360 L360: form pos 1,c 5,pos 10,c 30,pos 50,n 2,pos 55,c 30,skip 1
@@ -41,7 +41,7 @@
 00420     gosub L450
 00430 L430: next j
 00440   goto L270
-00450 L450: let p1=p1+1
+00450 L450: p1=p1+1
 00460   pr #255,using L470: cnam$,"PAGE ",p1
 00470 L470: form skip 3,pos namtab,c 40,pos 76,c 5,n 4,skip 1
 00480   pr #255,using L490: "LISTING OF COMPLETED JOBS"
@@ -85,4 +85,4 @@
 00860   pr f "23,3,C 78,N": ""
 00870   pr f "24,3,C 78,N": ""
 00880   retry 
-00890 XIT: let fnxit
+00890 XIT: fnxit

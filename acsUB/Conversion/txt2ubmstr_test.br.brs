@@ -15,8 +15,8 @@
 00150   pr f "10,20,Cc 40,R,N": cap$
 00160   pr f "12,2,Cr 27,N": "Destination Company Number:"
 00170   pr f "13,2,Cr 27,N": "Source File Path and Name:"
-00180   let io1$(1)="12,30,Nz 3,UT,N" !:
-        let io1$(2)="13,30,C 40,UT,N"
+00180   io1$(1)="12,30,Nz 3,UT,N" !:
+        io1$(2)="13,30,C 40,UT,N"
 00190   pr f "15,21,Cc 19,B,1": "Start (F1)"
 00200   pr f "15,41,Cc 19,B,99": "Exit (Esc)"
 00210   pr f "18,01,Cc 80,R,N": "WARNING:  All Files in the Destination Company Number will"
@@ -28,7 +28,7 @@
 00270   if cmdkey=1 then goto START
 00280   goto MENU1
 00290 ! ______________________________________________________________________
-00300 XIT: let fnxit
+00300 XIT: fnxit
 00310 ! ______________________________________________________________________
 00320 START: ! 
 00330 ! 
@@ -53,7 +53,7 @@
 00490   extra(1)=val(line$(102:104))
 00500   extra(2)=val(line$(110:114))
 00510   let f=22810 ! ALWAYS FIX
-00520   let rate$=trim$(line$(147:153))
+00520   rate$=trim$(line$(147:153))
 00530   if rate$(1:3)="PKU" or rate$(1:3)="PKE" then goto L790 ! handle cannister pick up seperately
 00550   if rate$(1:3)="SCH" then a(2)=4: goto L790 ! handle school sewer seperately
 00560   if rate$(1:3)="CME" then a(4)=2: a(6)=9: goto L790 ! handle school sewer seperately as tax exempt commercial
@@ -74,32 +74,32 @@
 00705   if rate$(1:3)="TCE" then a(5)=2: extra(12)=9: goto L790 ! handle cannister pick up seperately
 00710   extra(4)=013110
 00720   extra(3)=22810
-00730   if rate$(1:2)="WR" or rate$(1:2)="WC" then let d(2)=val(line$(171:178)) ! prior water reading
-00740   if rate$(1:2)="MR" or rate$(1:2)="MC" then let d(10)=val(line$(171:178)) ! prior gas reading
-00750   if rate$(1:2)="WR" or rate$(1:2)="WC" then let d(1)=val(line$(179:177)) ! current water reading
-00760   if rate$(1:2)="MR" or rate$(1:2)="MC" then let d(9)=val(line$(179:177)) ! current gas reading
-00770   if rate$(1:2)="WR" or rate$(1:2)="WC" then let d(3)=val(line$(187:194)) ! current water usage
-00780   if rate$(1:2)="MR" or rate$(1:2)="MC" then let d(11)=val(line$(187:194)) ! current gas usage
-00790 L790: let today=22810
+00730   if rate$(1:2)="WR" or rate$(1:2)="WC" then d(2)=val(line$(171:178)) ! prior water reading
+00740   if rate$(1:2)="MR" or rate$(1:2)="MC" then d(10)=val(line$(171:178)) ! prior gas reading
+00750   if rate$(1:2)="WR" or rate$(1:2)="WC" then d(1)=val(line$(179:177)) ! current water reading
+00760   if rate$(1:2)="MR" or rate$(1:2)="MC" then d(9)=val(line$(179:177)) ! current gas reading
+00770   if rate$(1:2)="WR" or rate$(1:2)="WC" then d(3)=val(line$(187:194)) ! current water usage
+00780   if rate$(1:2)="MR" or rate$(1:2)="MC" then d(11)=val(line$(187:194)) ! current gas usage
+00790 L790: today=22810
 00810   gosub LAST_PART_OF_RECORD
 00820   goto LOOP_TOP
 00830 L830: let gb(9)=gb(9)+g(9): let g(11)=sum(g): let g(12)=g(11)
 00840   bal=sum(gb) ! balance
 00850   write #2,using L860: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
 00851   write #21,using "form pos 1,c 10,n 10.2": z$,total_balance
-00852   let total_balance=0
+00852   total_balance=0
 00860 L860: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,2*pd 3,c 7,2*c 12,pd 3,10*pd 5.2,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2,c 1,c 9,c 2,c 17,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
-00870   let tdate=20100228: let tcode=1: let tamount=g(12)
+00870   tdate=20100228: tcode=1: tamount=g(12)
 00880   for j=1 to 10
-00890     let tg(j)=g(j)
+00890     tg(j)=g(j)
 00900   next j
 00910   write #15,using L1000: z$,tdate,tcode,tamount,mat tg,d(1),d(3),0,0,d(9),d(11),bal,pcode
 00920   if bal>g(12) then goto L930 else goto L1010
 00930 L930: for j=1 to 10
-00940     let tg(j)=gb(j)-g(j)
+00940     tg(j)=gb(j)-g(j)
 00950   next j
-00960   let tdate=20100228
-00970   let tamount=bal-g(11)
+00960   tdate=20100228
+00970   tamount=bal-g(11)
 00980   write #15,using L1000: z$,tdate,tcode,tamount,mat tg,0,0,0,0,0,0,bal-g(11),pcode
 00990 L990: form pos 1,c 10,4*pd 5,7*pd 4.2,3*pd 5,n 1
 01000 L1000: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
@@ -137,7 +137,7 @@
 01300 L1300: return 
 01310 ! ______________________________________________________________________
 01320 ! <Updateable Region: ERTN>
-01330 ERTN: let fnerror(program$,err,line,act$,"xit")
+01330 ERTN: fnerror(program$,err,line,act$,"xit")
 01340   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01350   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -190,5 +190,5 @@
 01810   if rate$(1:2)="MC" then let g(9)=g(9)+val(line2$(1:9)): a(6)=2 ! commercial tax on gas
 01820   if rate$(1:2)="TR" or rate$(1:2)="TC" then let g(7)=g(7)+val(line2$(1:9)): extra(12)=1 ! tax on trash
 01830   if rate$(1:3)="TCE" or rate$(1:3)="CNE" then extra(12)=9 ! tax exempt commercial trash
-01835   let total_balance+=val(line2$(17:25)) ! get net bill
+01835   total_balance+=val(line2$(17:25)) ! get net bill
 01840 L1840: return 

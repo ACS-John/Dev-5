@@ -14,28 +14,28 @@
 00140   fncno(cno,cnam$)
 00150   let udf$=env$('temp')&'\'
 00155   let fscode=fnfscode
-00156   let priorcd=fnpriorcd
+00156   priorcd=fnpriorcd
 00160   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00170   cch$=fncch$
-00180   let pedat$=fnpedat$
+00180   pedat$=fnpedat$
 00190   actpd=fnactpd
 00200   actpd$=fnactpd$
 00210   let fscode=fnfscode
-00220   let priorcd=fnpriorcd
+00220   priorcd=fnpriorcd
 00230 ! ______________________________________________________________________
-00250   let pors=1
+00250   pors=1
 00260   fnopenprn(cp,58,220,process)
-00270   let redir=0: if file$(255)(1:4)<>"PRN:" then let redir=1
-00280   let mp1=69
-00290   if fnps=2 then let mp1=mp1+3
+00270   redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
+00280   mp1=69
+00290   if fnps=2 then mp1=mp1+3
 00300   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
 00310   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
 00320   form c 9,skip 0
 00330 L330: form pos mp1,pd 3,pos 81,41*pd 6.2
 00340   form c 7,skip 0
-00350   let nametab=int(44-len(rtrm$(cnam$))/2)
-00360   let pas=1 : open #4: "Name="&env$('temp')&"\Work."&session$&",KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outin,keyed 
+00350   nametab=int(44-len(rtrm$(cnam$))/2)
+00360   pas=1 : open #4: "Name="&env$('temp')&"\Work."&session$&",KFName=IDX."&wsid$&",Replace,RecL=33,KPS=1,KLN=5",internal,outin,keyed 
 00370   if actpd>0 and actpd<14 then goto L430
 00390   pr f "10,2,C 78": "THIS PROGRAM CANNOT PROCESS WITHOUT THE NUMBER OF THE ACCOUNTING PERIOD END"
 00400   pr f "12,2,C 60,N": "USE OPTION 1 ON THE MENU TO ENTER THIS INFORMATION"
@@ -45,10 +45,10 @@
 00440   if fnprocess=1 or fnUseDeptNo=0 then goto L550
 00450   if percent=1 then goto L550
 00460   fntos(sn$="ACGlinyy") !:
-        let mylen=30: let mypos=mylen+3 : let right=1
+        mylen=30: mypos=mylen+3 : right=1
 00470   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
 00480   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
-        let resp$(1)=""
+        resp$(1)=""
 00490   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
 00500   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
 00510   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
@@ -56,7 +56,7 @@
 00530   if ckey=5 then goto XIT
 00540   costcntr=val(resp$(1))
 00550 L550: cnam$=rtrm$(cnam$)
-00560   let pf1=len(cnam$)+int((43-len(cnam$))/2)
+00560   pf1=len(cnam$)+int((43-len(cnam$))/2)
 00570   close #101: ioerr L580
 00580 L580: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= COMPARATIVE INCOME STATEMENT ",display,outin 
 00590   pr f "08,18,C 41,H,N": lpad$(cnam$,pf1)
@@ -64,9 +64,9 @@
 00610   pr f "11,18,C 41,R,N": "              IN PROCESS"
 00620   pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
 00630   if cmdkey=5 then goto L2610
-00640   let report$="STATEMENT OF INCOME AND EXPENSES"
+00640   report$="STATEMENT OF INCOME AND EXPENSES"
 00650   fnopenprn(cp,58,220,process)
-00660   let redir=0: if file$(255)(1:4)<>"PRN:" then let redir=1
+00660   redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 00670   if fnps=2 then goto L700 ! secondary
 00680   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
 00690   goto L710
@@ -101,17 +101,17 @@
 00980   if fscode>1 then bb=by(fscode-1) else bb=0
 00990   goto L1010
 01000 L1000: if fscode>1 then bb=bp(fscode-1) else bb=0
-01010 L1010: if ir=val(r$) then let total=total+(cb-bb) else goto L1090
-01020   let total2=total2+cb
+01010 L1010: if ir=val(r$) then total=total+(cb-bb) else goto L1090
+01020   total2=total2+cb
 01030   if fscode>1 then goto L1040 else goto L1060
-01040 L1040: let total3=total3+(bp(fscode)-bp(fscode-1))
+01040 L1040: total3=total3+(bp(fscode)-bp(fscode-1))
 01050   goto L1070
-01060 L1060: let total3=total3+bp(fscode)
-01070 L1070: let total4=total4+bp(fscode)
+01060 L1060: total3=total3+bp(fscode)
+01070 L1070: total4=total4+bp(fscode)
 01080   goto L900
 01090 L1090: if ir<val(r$) then goto L900
 01100   if ir>val(r$) then goto L1120
-01110 L1110: let notrans=1
+01110 L1110: notrans=1
 01120 L1120: for j=1 to 9
 01130     if ac(j)=9 then goto L1180 ! 10/14/87
 01140     accum(j,1)=accum(j,1)+total
@@ -119,39 +119,39 @@
 01160     accum(j,3)=accum(j,3)+total3
 01170     accum(j,4)=accum(j,4)+total4
 01180 L1180: next j
-01190   if rs=1 then let total=-total else goto L1230
-01200   let total2=-total2
-01210   let total3=-total3
-01220   let total4=-total4
-01230 L1230: if ds=1 then let dollar$="$" else let dollar$=" "
-01240   if ds=1 then let percent$="%" else let percent$=" "
+01190   if rs=1 then total=-total else goto L1230
+01200   total2=-total2
+01210   total3=-total3
+01220   total4=-total4
+01230 L1230: if ds=1 then dollar$="$" else dollar$=" "
+01240   if ds=1 then percent$="%" else percent$=" "
 01250   if total2><0 or total4><0 then goto L1280
 01260   if total><0 or total3><0 then goto L1280
 01270   if ls+ds+ul>0 then goto L1280 else goto L730
 01280 L1280: if percent=0 then goto L1450
 01290   sp2=31-sp-1
 01300   if pas=2 then gosub PAS2
-01310   if percent1=0 then let pdpct=0 else let pdpct=total/percent1*100
+01310   if percent1=0 then pdpct=0 else pdpct=total/percent1*100
 01320   if percent2=0 then let ytdpct=0 else let ytdpct=total2/percent2*100
-01330   if percent3=0 then let pppd=0 else let pppd=total3/percent3*100
-01340   if percent4=0 then let ppyear=0 else let ppyear=total4/percent4*100
-01350   if pdpct<-999.99 then let pdpct=-999.99
-01360   if pdpct>999.99 then let pdpct=999.99
+01330   if percent3=0 then pppd=0 else pppd=total3/percent3*100
+01340   if percent4=0 then ppyear=0 else ppyear=total4/percent4*100
+01350   if pdpct<-999.99 then pdpct=-999.99
+01360   if pdpct>999.99 then pdpct=999.99
 01370   if ytdpct<-999.99 then let ytdpct=-999.99
 01380   if ytdpct>999.99 then let ytdpct=999.99
-01390   if ppyear<-999.99 then let ppyear=-999.99
-01400   if ppyear>999.99 then let ppyear=999.99
-01410   if pppd<-999.99 then let pppd=-999.99
-01420   if pppd>999.99 then let pppd=999.99
+01390   if ppyear<-999.99 then ppyear=-999.99
+01400   if ppyear>999.99 then ppyear=999.99
+01410   if pppd<-999.99 then pppd=-999.99
+01420   if pppd>999.99 then pppd=999.99
 01425   if ul=1 then pr #255,using L1441: d$(1:sp2),dollar$,"{\ul ",total2,"}",ytdpct,percent$,dollar$,"{\ul ",total4,"}",ppyear,percent$ pageoflow L2170 : goto L1440
 01430   pr #255,using L1440: d$(1:sp2),dollar$,total2,ytdpct,percent$,dollar$,total4,ppyear,percent$ pageoflow L2170
 01440 L1440: form pos sp,c sp2,pos 31,c 1,pic(---,---,---.##),pic(----.##),c 2,c 1,pic(---,---,---.##),pic(----.##),c 2,skip redir
 01441 L1441: form pos sp,c sp2,pos 31,c 1,c 5,pic(---,---,---.##),c 1,pic(----.##),c 2,c 1,c 5,pic(---,---,---.##),c 1,pic(----.##),c 2,skip redir
-01450 L1450: if pas=1 then let tp1=total : let tp2=total2 : let tp3=total3 : let tp4=total4 : gosub PAS1
-01460   let total=0
-01470   let total2=0
-01480   let total3=0
-01490   let total4=0
+01450 L1450: if pas=1 then tp1=total : tp2=total2 : tp3=total3 : tp4=total4 : gosub PAS1
+01460   total=0
+01470   total2=0
+01480   total3=0
+01490   total4=0
 01500   gosub L1930
 01505   if ul=1 then goto L1520
 01510   gosub L2180
@@ -162,37 +162,37 @@
 01560   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
 01570   if rs=1 then accum3=-accum(ap,3) else accum3=accum(ap,3)
 01580   if rs=1 then accum4=-accum(ap,4) else accum4=accum(ap,4)
-01590   if ds=1 then let dollar$="$" else let dollar$=" "
-01600   if ds=1 then let percent$="%" else let percent$=" "
+01590   if ds=1 then dollar$="$" else dollar$=" "
+01600   if ds=1 then percent$="%" else percent$=" "
 01610   if pas=2 then gosub PAS2
 01620   if percent=0 then goto L1770
-01630   if percent1=0 then let pdpct=0 else let pdpct=accum1/percent1*100
+01630   if percent1=0 then pdpct=0 else pdpct=accum1/percent1*100
 01640   if percent2=0 then let ytdpct=0 else let ytdpct=accum2/percent2*100
-01650   if percent3=0 then let pppd=0 else let pppd=accum3/percent3*100
-01660   if percent4=0 then let ppyear=0 else let ppyear=accum4/percent4*100
-01670   if pdpct<-999.99 then let pdpct=-999.99
-01680   if pdpct>999.99 then let pdpct=999.99
+01650   if percent3=0 then pppd=0 else pppd=accum3/percent3*100
+01660   if percent4=0 then ppyear=0 else ppyear=accum4/percent4*100
+01670   if pdpct<-999.99 then pdpct=-999.99
+01680   if pdpct>999.99 then pdpct=999.99
 01690   if ytdpct<-999.99 then let ytdpct=-999.99
 01700   if ytdpct>999.99 then let ytdpct=999.99
-01710   if pppd<-999.99 then let pppd=-999.99
-01720   if pppd>999.99 then let pppd=999.99
-01730   if ppyear<-999.99 then let ppyear=-999.99
-01740   if ppyear>999.99 then let ppyear=999.99
+01710   if pppd<-999.99 then pppd=-999.99
+01720   if pppd>999.99 then pppd=999.99
+01730   if ppyear<-999.99 then ppyear=-999.99
+01740   if ppyear>999.99 then ppyear=999.99
 01750   sp2=31-sp-1
 01759   if ul=1 then pr #255,using L1441: d$(1:sp2),dollar$,"{\ul ",accum2,"}",ytdpct,percent$,dollar$,"{\ul ",accum4,"}",ppyear,percent$ pageoflow L2170 : goto L1770
 01760   pr #255,using L1440: d$(1:sp2),dollar$,accum2,ytdpct,percent$,dollar$,accum4,ppyear,percent$ pageoflow L2170
-01770 L1770: if pas=1 then let tp1=accum1: let tp2=accum2 : let tp3=accum3 : let tp4=accum4 : gosub PAS1
+01770 L1770: if pas=1 then tp1=accum1: tp2=accum2 : tp3=accum3 : tp4=accum4 : gosub PAS1
 01780   gosub L1930
 01785   if ul=1 then goto L1800
 01790   gosub L2180
 01800 L1800: gosub L2010
 01810   goto L720
-01820 L1820: if te$="R" then let report$=d$
+01820 L1820: if te$="R" then report$=d$
 01830   if te$="S" then secondr$=d$
 01840   gosub L2010
 01850   goto L720
 01860 L1860: if foot1=1 then goto L1910
-01870   let tabnote=sp
+01870   tabnote=sp
 01880   let foot1=1
 01890   let foot$=d$
 01900   goto L720
@@ -212,8 +212,8 @@
 02040   pr #255,using L2050: " "
 02050 L2050: form pos 1,c 1,skip ls
 02060   goto L2160
-02070 L2070: let fnpglen(pglen)
-02080 ! If PGLEN<>42 Then Let PGLEN=58
+02070 L2070: fnpglen(pglen)
+02080 ! If PGLEN<>42 Then pGLEN=58
 02090   sk=pglen-krec(255): fl=len(rtrm$(foot$))
 02100 ! If PGLEN=42 Then sK=SK+1
 02110   pr #255,using L2120: rtrm$(foot$),"Page "&str$(pt1)
@@ -236,8 +236,8 @@
 02280 L2280: if redir=0 then pr #255,using L2290: " "
 02290 L2290: form skip 1,c 1,skip 0
 02300 L2300: return 
-02310 L2310: let heading=1
-02311   let pt1+=1
+02310 L2310: heading=1
+02311   pt1+=1
 02312   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 02313   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 02314   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs24 \b "&trim$(secondr$)&"}"
@@ -253,12 +253,12 @@
 02490   return 
 02500 ! ______________________________________________________________________
 02510 L2510: if pas=2 then goto L2590
-02520   let pas=2
-02530   let percent=1
-02540   let percent1=0
-02550   let percent2=0
-02560   let percent3=0
-02570   let percent4=0
+02520   pas=2
+02530   percent=1
+02540   percent1=0
+02550   percent2=0
+02560   percent3=0
+02570   percent4=0
 02580   goto L2670
 02590 L2590: eofcode=1
 02600   gosub L2070
@@ -272,40 +272,40 @@
 02660 ! ______________________________________________________________________
 02670 L2670: close #1: ioerr L2680
 02680 L2680: close #3: ioerr L2690
-02690 L2690: let total=0
-02700   let total2=0
-02710   let total3=0
-02720   let total4=0
+02690 L2690: total=0
+02700   total2=0
+02710   total3=0
+02720   total4=0
 02730   mat accum=(0)
 02740   let foot1=0
 02750   let foot$=" "
-02760   let notrans=ir=0
+02760   notrans=ir=0
 02770   goto L430
 02780 PAS1: if rnp=0 then goto L2890
 02790   mat tp1=(0)
 02800   read #4,using L2810,key=r$: k4$,mat tp1 nokey L2880
 02810 L2810: form pos 1,g 5,4*pd 7.2
-02820   let tp1(1)=tp1(1)+tp1
-02830   let tp1(2)=tp1(2)+tp2
-02840   let tp1(3)=tp1(3)+tp3
-02850   let tp1(4)=tp1(4)+tp4
+02820   tp1(1)=tp1(1)+tp1
+02830   tp1(2)=tp1(2)+tp2
+02840   tp1(3)=tp1(3)+tp3
+02850   tp1(4)=tp1(4)+tp4
 02860   rewrite #4,using L2810: k4$,mat tp1
 02870   goto L2890
 02880 L2880: write #4,using L2810: r$,tp1,tp2,tp3,tp4
 02890 L2890: return 
 02900 PAS2: mat tp1=(0)
 02910   if rnp=0 then goto L2980
-02920   let k4$=lpad$(str$(rnp),5)
+02920   k4$=lpad$(str$(rnp),5)
 02930   read #4,using L2810,key=k4$: k4$,mat tp1 nokey L2940
-02940 L2940: let percent1=tp1(1)
-02950   let percent2=tp1(2)
-02960   let percent3=tp1(3)
-02970   let percent4=tp1(4)
+02940 L2940: percent1=tp1(1)
+02950   percent2=tp1(2)
+02960   percent3=tp1(3)
+02970   percent4=tp1(4)
 02980 L2980: return 
-02990 XIT: let fnxit
+02990 XIT: fnxit
 03000 ! ______________________________________________________________________
 03010 ! <updateable region: ertn>
-03020 ERTN: let fnerror(program$,err,line,act$,"xit")
+03020 ERTN: fnerror(program$,err,line,act$,"xit")
 03030   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 03040   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 03050   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

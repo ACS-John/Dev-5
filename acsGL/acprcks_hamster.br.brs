@@ -21,10 +21,10 @@
 14400   def fn_close_file
 14600     for j=1 to open_file_count : close #j: : next j
 14800   fnend  ! fn_close_file
-15000 XIT: let fnxit
+15000 XIT: fnxit
 15200 ! ______________________________________________________________________
 15400 ! <Updateable Region: ERTN>
-15600 ERTN: let fnerror(program$,err,line,act$,"xit")
+15600 ERTN: fnerror(program$,err,line,act$,"xit")
 15800   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 16000   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 16200   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -32,9 +32,9 @@
 16600 ! /region
 16800 ! ______________________________________________________________________
 17000   def fn_setup_hamster
-17200     let mask_pointtwo=32 : let mask_number=30
-17400     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
-17600     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
+17200     mask_pointtwo=32 : mask_number=30
+17400     mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
+17600     textlen_mmddyy=8 : textlen_ccyymmdd=10
 17800     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 18000 ! 
 18200     dim lbl$(1)*38,tln(1),p$(1)*160,fltyp$(1),sln(1),mask(1),c$(1,8)*40,sp(1)
@@ -54,11 +54,11 @@
 21000 ! storage_length_prior=storage_length
 21200     add_rec_item=udim(mat lbl$)+1
 21400     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$
-21600     mat tln(add_rec_item) : let tln(add_rec_item)=textbox_len
+21600     mat tln(add_rec_item) : tln(add_rec_item)=textbox_len
 21800     mat p$(add_rec_item)
 22000     mat fltyp$(add_rec_item) : fltyp$(add_rec_item)=field_type$
 22200     mat sln(add_rec_item) : sln(add_rec_item)=storage_length
-22400     mat mask(add_rec_item) : let mask(add_rec_item)=ar_mask
+22400     mat mask(add_rec_item) : mask(add_rec_item)=ar_mask
 22600 ! if storage_position=0 then
 22800 !   storage_position=1
 23000 !   auto_storage_position=1

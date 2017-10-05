@@ -4,12 +4,12 @@
 00080   dim fl1$(7),flo1$(11),pgl(3),gl(10,4),sc3$(5),pt(5),flo3$(6)
 00090   dim fli2$(49),ot2$(49),fli3$(49),ot3$(49),fli4$(49),ot4$(49)
 00100   dim f1$*255,f2$*255,f3$*255,f4$*255
-00110   let f1$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,n 3,n 6,n 3"
+00110   f1$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,n 3,n 6,n 3"
 00120   let f2$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,n 3"
 00130   let f3$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,n 3,n 6,x 3"
 00140   let f4$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,x 3"
 00150   for j=1 to 10
-00160     let f1$=rtrm$(f1$)&",n 3,n 6,n 3,pd 5.2"
+00160     f1$=rtrm$(f1$)&",n 3,n 6,n 3,pd 5.2"
 00170     let f2$=rtrm$(f2$)&",x 3,n 6,n 3,pd 5.2"
 00180     let f3$=rtrm$(f3$)&",n 3,n 6,x 3,pd 5.2"
 00190     let f4$=rtrm$(f4$)&",x 3,n 6,x 3,pd 5.2"

@@ -21,20 +21,20 @@
 00153   ! fnpriorcd
 00160   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #1,using "Form pos 384,N 2",rec=1: nap : close #1: 
 00170   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #1,using "Form pos 296,N 2",rec=1: lmu : close #1: 
-00180   let m1$(1)="  January" : let m1$(2)=" February" !:
-        let m1$(3)="    March" : let m1$(4)="    April" !:
-        let m1$(5)="      May" : let m1$(6)="     June" !:
-        let m1$(7)="     July" : let m1$(8)="   August" !:
-        let m1$(9)="September" : let m1$(10)="  October" !:
-        let m1$(11)=" November" : let m1$(12)=" December" !:
-        let m1$(13)=""
-00190   let m2$(1)="     One" : let m2$(2)="     Two" : let m2$(3)="   Three" !:
-        let m2$(4)="    Four" : let m2$(5)="    Five": let m2$(6)="     Six" !:
-        let m2$(7)="   Seven": let m2$(8)="   Eight": let m2$(9)="    Nine" !:
-        let m2$(10)="     Ten": let m2$(11)="  Eleven": let m2$(12)="  Twelve" !:
-        let m2$(13)="Thirteen"
-00200   let mp1=63
-00210   if fnps=2 then let mp1=mp1+3
+00180   m1$(1)="  January" : m1$(2)=" February" !:
+        m1$(3)="    March" : m1$(4)="    April" !:
+        m1$(5)="      May" : m1$(6)="     June" !:
+        m1$(7)="     July" : m1$(8)="   August" !:
+        m1$(9)="September" : m1$(10)="  October" !:
+        m1$(11)=" November" : m1$(12)=" December" !:
+        m1$(13)=""
+00190   m2$(1)="     One" : m2$(2)="     Two" : m2$(3)="   Three" !:
+        m2$(4)="    Four" : m2$(5)="    Five": m2$(6)="     Six" !:
+        m2$(7)="   Seven": m2$(8)="   Eight": m2$(9)="    Nine" !:
+        m2$(10)="     Ten": m2$(11)="  Eleven": m2$(12)="  Twelve" !:
+        m2$(13)="Thirteen"
+00200   mp1=63
+00210   if fnps=2 then mp1=mp1+3
 00220   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FnSBIndx.h"&env$('cno')&",Shr"
 00230   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&env$('cno')&",Shr"
 00240   open #1: fl1$,internal,input,keyed 
@@ -50,14 +50,14 @@
 00340   pr f "10,10,Cc 60,n": " BALANCE SHEET IN PROCESS"
 00350   pr f "12,34,C 11,B,5": "Cancel (F5)"
 00360   on fkey 5 goto L2120
-00370 L370: let fnopenprn !:
-        if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
+00370 L370: fnopenprn !:
+        if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00380   if fnps=2 then goto L410 ! secondary
 00390   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&env$('temp')&'\'&"fsindex.H"&env$('cno')&" 63 3 Replace DupKeys -N"
 00400   goto L420
 00410 L410: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&env$('temp')&'\'&"fsindex.H"&env$('cno')&" 66 3 Replace DupKeys -N"
 00420 L420: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('temp')&'\'&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
-00430   let report$=env$('program_caption')
+00430   report$=env$('program_caption')
 00440 L440: read #1,using L480: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2120
 00450   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L440
 00460   if costcntr=0 then goto L480
@@ -80,36 +80,36 @@
 00630 L630: if br=val(r$) then goto L640 else goto L790
 00640 L640: if fnpriorcd=2 then goto L770
 00650   for j=1 to 13
-00660     if j=1 and actpd=1 then let total(j)+=cb else goto L680
+00660     if j=1 and actpd=1 then total(j)+=cb else goto L680
 00670     goto L740 ! 2/15/89
-00680 L680: if j=1 then let total(j)=total(j)+by(j) else goto L700
+00680 L680: if j=1 then total(j)=total(j)+by(j) else goto L700
 00690     goto L740
 00700 L700: if j>nap then goto L740 ! 7/21/88
-00710     if j<=lmu then let total(j)=total(j)+by(j) else goto L730
+00710     if j<=lmu then total(j)=total(j)+by(j) else goto L730
 00720     goto L740
 00730 L730: if actpd<>lmu and j=actpd then !:
-            let total(j)+=cb
+            total(j)+=cb
 00740 L740: next j
 00750   goto L600
 00760 ! ______________________________________________________________________
-00770 L770: for j=1 to 13 : let total(j)+=bp(j) : next j
+00770 L770: for j=1 to 13 : total(j)+=bp(j) : next j
 00780   goto L600
 00790 L790: if br<val(r$) then goto L600
 00800   if br>val(r$) then goto L860
-00810 L810: let notrans=1
+00810 L810: notrans=1
 00820 L820: if te$="E" then goto L830 else goto L860 ! 8/4/88
 00830 L830: for k=1 to 13 ! 8/4/88
-00840     let total(k)=-accum(ap,k) ! 8/4/88
+00840     total(k)=-accum(ap,k) ! 8/4/88
 00850   next k ! 8/4/88
 00860 L860: for j=1 to 9
 00870     if ac(j)<>9 then !:
             for k=1 to 13 : accum(j,k)=accum(j,k)+total(k) : next k
 00880   next j
 00890   for j=1 to 13
-00900     if rs=1 then let total(j)=-total(j)
+00900     if rs=1 then total(j)=-total(j)
 00910   next j
-00920   if ds=1 then let dollar$="$" else let dollar$=" "
-00930   let dollar=27+14*bc
+00920   if ds=1 then dollar$="$" else dollar$=" "
+00930   dollar=27+14*bc
 00940   goto L960
 00950   if ls+ul+ds+ic>0 then goto L960 else goto L440
 00960 L960: sp2=dollar-sp-1
@@ -128,7 +128,7 @@
 01060 L1060: gosub L1600
 01070   goto L440
 01080 L1080: if ap=0 then ap=1
-01090   let dollar=27+14*bc
+01090   dollar=27+14*bc
 01100   sp2=dollar-sp-1
 01110   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 01120   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
@@ -159,13 +159,13 @@
 01350     next k
 01360   next j
 01370 L1370: goto L440
-01380 L1380: if te$="R" then let report$=d$
+01380 L1380: if te$="R" then report$=d$
 01390   if te$="S" then secondr$=d$
 01400   gosub L1600
 01410   goto L440
 01420 ! ______________________________________________________________________
 01430 L1430: if foot1=1 then goto L1490
-01440   let tabnote=sp
+01440   tabnote=sp
 01450   let foot1=1
 01460   let foot$=d$
 01470   goto L440
@@ -186,8 +186,8 @@
 01620   pr #255,using L1630: " "
 01630 L1630: form pos 1,c 1,skip ls
 01640   goto L1740
-01650 L1650: let fnpglen(pglen)
-01660   if pglen<>42 then let pglen=58
+01650 L1650: fnpglen(pglen)
+01660   if pglen<>42 then pglen=58
 01670   sk=pglen-krec(255): fl=len(rtrm$(foot$))
 01680   if pglen=42 then sk=sk+1
 01690   pr #255,using L1700: rtrm$(foot$)
@@ -218,7 +218,7 @@
 01940 L1940: form skip 1,c 1,skip 0
 01950   return 
 01960 ! ______________________________________________________________________
-01970 L1970: let heading=1
+01970 L1970: heading=1
 01980   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01990   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 02000   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
@@ -240,10 +240,10 @@
 02140   fncloseprn
 02150   goto XIT
 02160 ! ______________________________________________________________________
-02170 XIT: let fnxit
+02170 XIT: fnxit
 02180 ! ______________________________________________________________________
 02190 ! <Updateable Region: ERTN>
-02200 ERTN: let fnerror(program$,err,line,act$,"xit")
+02200 ERTN: fnerror(program$,err,line,act$,"xit")
 02210   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02220   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

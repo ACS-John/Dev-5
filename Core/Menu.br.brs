@@ -49,7 +49,7 @@
 11800     library 'S:\Core\Library': fnHamsterFio
 11820     library 'S:\Core\Library': fnxit
 11840     library 'S:\Core\Library': fnFavoriteAdd,fnFavoriteList,fnFavoriteDel
-11860     library 'S:\Core\Library': fnFileSaveAs,fnOpenPartial,fnFileOpen
+11860     library 'S:\Core\Library': fnFileSaveAs,fnOpenPartial
 11880     library 'S:\Core\Library': fnClearLayoutCache
 11900     library 'S:\Core\Library': fnClientSelect
 11920     library 'S:\Core\Programs\PrintAce_Test': fnPrintAceTest
@@ -144,7 +144,7 @@
 17250     program_grid_col=info_col_width+2
 17260   end if
 17262   favorite_left=info_col_width+2
-17270   if dashboard_height>0 then let program_grid_line=program_grid_line+1
+17270   if dashboard_height>0 then program_grid_line=program_grid_line+1
 17280   ! program_grid_spec$=str$(program_grid_line)&','&str$(program_grid_col)&',List '&grid_height$&'/63'
 17290   mat headings$(5)
 17300   headings$(1)='Selection'
@@ -303,9 +303,7 @@
 21460       else if lwrc$(menu_option$(1:5))='file:' then
 21480         menu_option$(1:5)=''
 21490         if menu_option$='Open' then
-21510           fnOpenPartial ! fnFileOpen
-21520         ! else if menu_option$='Open Partial' then
-21530         !   fnOpenPartial
+21510           fnOpenPartial
 21540         else if menu_option$='Save All Data As' then
 21560           fnclear_menu
 21580           fnFileSaveAs('*.*')
@@ -500,7 +498,7 @@
 26360     dhReturn=2
 26380   end if
 26400   !
-26410   if env$('ACSDeveloper')<>'' then let dhReturn=5
+26410   if env$('ACSDeveloper')<>'' then dhReturn=5
 26420   fn_dashboard_height=dhReturn
 26440 fnend
 27000 def fn_ddAddButton(buttonText$,btnFkey,btnItem,tmp_btn_width; buttonLine,tooltip$*150) ! buttons are added and counted (btnItem) from right to left
@@ -561,7 +559,7 @@
 29240       fnlbl(1,26,'Pay Ending Date:',16,1,0,fraDashboard)
 29250       dim pedat$*20
 29260       pedat$=fnpedat$
-29270       if pedat$='' then let pedat$='(not set)'
+29270       if pedat$='' then pedat$='(not set)'
 29380       fnbutton(1,44,pedat$,fkey_gl_periodEndingDate:=5003,'',1,20,fraDashboard) ! fnlbl(1,47,fnpedat$,4,0,0,1)
 29400     DD_GL_XIT: !
 29420       tmp_btn_width=10 : tmpBtnItem=0
@@ -675,7 +673,7 @@
 46860         program_name$(glpa_program_count)=srep$(rtrm$(program_item$(1)),'>','         ')
 46870         program_name_trim$(glpa_program_count)=trim$(program_name$(glpa_program_count))
 46880         !
-46900         if program_item_count>1 then let program_file$(glpa_program_count)=trim$(program_item$(2))
+46900         if program_item_count>1 then program_file$(glpa_program_count)=trim$(program_item$(2))
 46920         !
 46940         if trim$(program_file$(glpa_program_count))='' then
 46960           program_plus$(glpa_program_count)='**' ! fn_get_one_plus$(h_plus,env$('cursys'),program_file$(glpa_program_count))

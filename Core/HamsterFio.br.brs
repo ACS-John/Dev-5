@@ -30,7 +30,7 @@
 24100   mat hfDataAll$(0) : mat hfLabel$(0) : mat hfFieldType$(0) : mat hfStorageLen(0) : mat hfMask(0) : mat hfFieldLen(0) 
 24120   do
 24140     linput #hlay: tmp$ 
-24160     if tmp$(1:6)='======' then let past_header=1
+24160     if tmp$(1:6)='======' then past_header=1
 24180   loop until past_header
 24200   do
 24220     linput #hlay: tmp$ eof hfEofhlay
@@ -54,7 +54,7 @@
 24580         hfitem$(4)=srep$(hfitem$(4),'= ','=')
 24600       loop 
 24620       hfitem$(4)=trim$(hfitem$(4))
-24640       if hfitem$(4)(1:1)='!' then let hfitem$(4)(1:1)=''
+24640       if hfitem$(4)(1:1)='!' then hfitem$(4)(1:1)=''
 24660       hfitem$(4)=' '&trim$(hfitem$(4))&' '
 24680       posMask=pos(lwrc$(hfitem$(4)),' mask=')
 24700       if posMask>0 then
@@ -100,7 +100,7 @@
 76220 fnend
 76240 ! </updateable region: fnopen>
 78000 ! <updateable region: ertn>
-78020 ERTN: let fnerror(program$,err,line,act$,"xit")
+78020 ERTN: fnerror(program$,err,line,act$,"xit")
 78040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 78060   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 78080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

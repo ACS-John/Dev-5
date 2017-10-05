@@ -13,83 +13,6 @@
 18070   end if
 18080 fnend
 19000 ignore: continue
-22000 def library fnFileOpen
-22020   if ~setup then let fn_setup
-22040   fnFileOpen=fn_fileOpen
-22060 fnend
-24000 def fn_fileOpen(; file_open$*256)
-24010   if file_open$='' then
-24020     execute 'free '&br_filename$(env$('temp')&'\Open_Log.txt') ioerr ignore
-24030     open #h_tmp:=fngethandle: "Name=OPEN:"&env$('at')&"ACS Data Set (*.zip) |"&fnsave_as_path$&"\*.zip,RecL=1,Shr",external,input ioerr OPEN_OPEN_ERR
-24040     let file_open$=os_filename$(file$(h_tmp))
-24050     close #h_tmp: 
-24060   end if
-24070   fnreg_close
-24080   ! r: new way 12/4/2015
-24090   dim fileOpenDestination$*256
-24100   if env$('BR_MODEL')='CLIENT/SERVER' then 
-24110     fileOpenDestination$=env$('temp')&'\acs\OpenPartial\'
-24120     fnmakesurepathexists(fileOpenDestination$)
-24130   else
-24140     fileOpenDestination$=os_filename$(env$('Q')&'\')
-24150   end if
-24300   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
-24320   pr #h_tmp: '@echo off'
-24340   pr #h_tmp: '@echo Advanced Computer Services LLC'
-24360   pr #h_tmp: '@echo Opening: "'&file_open$&'"'
-24380   pr #h_tmp: '@echo.'
-24400   pr #h_tmp: '@echo.'
-24420   pr #h_tmp: '@echo Command: '&env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('temp')&'\Open_Log.txt"'
-24440   pr #h_tmp: '@echo.'
-24460   pr #h_tmp: '@echo.'
-24480   pr #h_tmp: '@echo Relative To: '&fileOpenDestination$
-24500   pr #h_tmp: '@echo.'
-24520   pr #h_tmp: '@echo.'
-24540   pr #h_tmp: '@echo Output Log: "'&env$('temp')&'\Open_Log.txt"'
-24560   pr #h_tmp: '@echo.'
-24580   pr #h_tmp: '@echo.'
-24600   pr #h_tmp: '@echo OPEN PROCESSING...'
-24620   pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&file_open$&'" -o"'&fileOpenDestination$&'" > "'&env$('temp')&'\Open_Log.txt"'
-24640   ! pr #h_tmp: 'pause'
-24660   close #h_tmp: 
-24680   execute 'sy '&env$('client_temp')&'\open_as_'&session$&'.cmd'
-24700   ! /r
-24720   if fn_analyze_7zip_compresslog(env$('temp')&'\Open_Log.txt','Successfully Opened',file_open$,1) then 
-24740     fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
-24760     fnreg_write('Last Open File',file_open$(pos(file_open$,'\',-1)+1:len(file_open$)))
-24780     fnreg_write('Last Open Path',file_open$(1:pos(file_open$,'\',-1)))
-25000     if env$('BR_MODEL')='CLIENT/SERVER' then
-25020       if filter$='' then
-25040       else
-25060         for company=1 to udim(mat archiveCNo)
-25080         nex company
-25100       end if
-25120       fnStatus('Copying Files in...')
-25140       fnCopy(env$('at')&env$('client_temp')&'\acs\OpenPartial\*.*',env$('q')&'\*.*',0,'recursive')
-25160       opScreenReturn=1 
-25180       setenv('force_reindex','yes') 
-25200     end if
-25220     fncheckfileversion
-25240     fnindex_sys(cno)
-25260     fnstatus_close
-25280   else if env$('acsDebug')='Yes' then
-25290     pr 'fn_analyze_7zip_compresslog failed.'
-25300     pause
-25310   end if 
-25320   goto OPEN_XIT
-26000   OPEN_OPEN_ERR: ! 
-26010   if err=622 then ! it was just cancelled
-26020     pr 'cancelled' : goto OPEN_XIT
-26030   else 
-26040     mat ml$(2)
-26050     let ml$(1)='Select a different file name.'
-26060     let ml$(2)='Error: '&str$(err)
-26070     fnmsgbox(mat ml$)
-26080     !     if err=4150 then pr "Could not create file:";file$(1) : let fnpause ! file$(1) is blank!
-26090     pr "Err:";err;" Line:";line
-26100   end if 
-26110   OPEN_XIT: ! 
-26120 fnend
 36000 def library fnFileSaveAs(save_what$)
 36020   if ~setup then let fn_setup
 36040   fnFileSaveAs=fn_FileSaveAs(save_what$)
@@ -174,17 +97,17 @@
 39540   SAVE_AS_OPEN_ERR: ! there was a problem opening the file.
 39560   if fsa_automatedSaveFileName$<>'' then
 39580     mat ml$(3)
-39600     let ml$(1)='Automated save failed'
-39620     let ml$(2)='Error: '&str$(err)
-39640     let ml$(3)='File: '&fsa_automatedSaveFileName$
+39600     ml$(1)='Automated save failed'
+39620     ml$(2)='Error: '&str$(err)
+39640     ml$(3)='File: '&fsa_automatedSaveFileName$
 39660     fnmsgbox(mat ml$)
 39680     ! goto SAVE_AS_XIT
 39700   ! else if err=622 then ! it was just cancelled
 39720   !   goto SAVE_AS_XIT
 39740   else if err<>622 then
 39760     mat ml$(2)
-39780     let ml$(1)='Select a different file name.'
-39800     let ml$(2)='Error: '&str$(err)
+39780     ml$(1)='Select a different file name.'
+39800     ml$(2)='Error: '&str$(err)
 39820     fnmsgbox(mat ml$)
 39840     pr "Err:";err;" Line:";line
 39860   end if 
@@ -210,10 +133,10 @@
 42320       fnstatus('Automated Save Point log file made: "'&save_name$&'(failureLog).txt"')
 42340     else
 42360       mat ml$(4)
-42380       let ml$(1)='An error occurred during the process.'
-42400       let ml$(2)='The following log was created:'
-42420       let ml$(3)=arc_filename$
-42440       let ml$(4)='Display the log now?'
+42380       ml$(1)='An error occurred during the process.'
+42400       ml$(2)='The following log was created:'
+42420       ml$(3)=arc_filename$
+42440       ml$(4)='Display the log now?'
 42460       fnmsgbox(mat ml$,resp$,"ACS",4+64)
 42480       if resp$="Yes" then 
 42500         fntext_editor(arc_filename$)
@@ -226,8 +149,8 @@
 42640       fnstatus(save_name$)
 42660     else
 42680       mat ml$(2)
-42700       let ml$(1)=success_text_line1$
-42720       let ml$(2)=save_name$
+42700       ml$(1)=success_text_line1$
+42720       ml$(2)=save_name$
 42740       fnmsgbox(mat ml$,resp$,"ACS",0)
 42760     end if
 42780   end if 
@@ -247,15 +170,15 @@
 44060 fnend
 46000 def fn_7zFileListFromArchive(file_open$*512,mat filename$)
 46020   dim gflfaTmpFile$*512
-46040   gflfaTmpFile$=env$('client_temp')&'\acs\7zGetFileList'&session$&'.txt'
-46060   open #h_tmp:=fngethandle: 'Name= '&env$('at')&br_filename$(env$('client_temp')&'\open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+46040   gflfaTmpFile$=env$('temp')&'\acs\7zGetFileList'&session$&'.txt'
+46060   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\ACS\Open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
 46080   pr #h_tmp: '@echo off'
 46100   pr #h_tmp: '@echo Advanced Computer Services LLC'
 46120   pr #h_tmp: '@echo Reading file list from "'&file_open$&'"'
 46140   pr #h_tmp: env$('path_to_7z_exe')&' l "'&file_open$&'" > "'&gflfaTmpFile$&'"'
 46160   close #h_tmp: 
-46180   execute 'sy '&env$('client_temp')&'\open_as_'&session$&'.cmd'
-46200   open #h_tmp:=fngethandle: 'Name=@:'&gflfaTmpFile$,display,input
+46180   execute 'sy '&env$('temp')&'\ACS\Open_as_'&session$&'.cmd'
+46200   open #h_tmp:=fngethandle: 'Name='&gflfaTmpFile$,display,input
 46220   do 
 46240     linput #h_tmp: ln$
 46260   loop until ln$='------------------- ----- ------------ ------------  ------------------------'
@@ -295,31 +218,34 @@
 47260 fnend
 48000 def fn_openPartial
 48020   dim file_open$*256
-48040   execute 'free '&br_filename$(env$('client_temp')&'\Open_Log.txt') ioerr ignore
+48040   execute 'free '&br_filename$(env$('temp')&'\ACS\Open_Log.txt') ioerr ignore
 48060   open #h_tmp:=fngethandle: "Name=OPEN:"&env$('at')&"ACS Data Set (*.zip) |"&fnsave_as_path$&"\*.zip,RecL=1,Shr",external,input ioerr OP_OP_ERR
 48080   file_open$=os_filename$(file$(h_tmp))
 48100   close #h_tmp: 
 48120   dim fileList$(0)*256,archiveList$(0)*50
-48140   fnstatus('Getting list of companies from "'&file_open$&'"...')
-48160   fn_7zFileListFromArchive(file_open$,mat fileList$)
-48180   fn_fileListToArchiveList(mat fileList$,mat archiveList$)
-48200   fnstatus_close
-48220   fnreg_close
-48240   fn_opMain(file_open$)
-48260   goto OP_XIT
-48280   OP_OP_ERR: ! 
-48300   if err=622 then ! it was just cancelled
-48320     pr 'cancelled' : goto OP_XIT
-48340   else 
-48360     mat ml$(2)
-48380     ml$(1)='Select a different file name.'
-48400     ml$(2)='Error: '&str$(err)
-48420     fnmsgbox(mat ml$,resp$)
-48440     !     if err=4150 then pr "Could not create file:";file$(1) : let fnpause ! file$(1) is blank!
-48460     pr "Err:";err;" Line:";line
-48480   end if 
-48500   OP_XIT: ! 
-48520 fnend
+48140   dim tmpFileOpen$*256
+48160   tmpFileOpen$=env$('temp')&'\OpenPartial\tmpFileOpen'&session$&'.zip'
+48180   fnCopyFile(file_open$,tmpFileOpen$)
+48200   fnstatus('Getting list of companies from "'&file_open$&'"...')
+48220   fn_7zFileListFromArchive(tmpFileOpen$,mat fileList$)
+48240   fn_fileListToArchiveList(mat fileList$,mat archiveList$)
+48260   fnstatus_close
+48280   fnreg_close
+48300   fn_opMain(file_open$)
+48320   goto OP_XIT
+48340   OP_OP_ERR: ! 
+48360   if err=622 then ! it was just cancelled
+48380     pr 'cancelled' : goto OP_XIT
+48400   else 
+48420     mat ml$(2)
+48440     ml$(1)='Select a different file name.'
+48460     ml$(2)='Error: '&str$(err)
+48480     fnmsgbox(mat ml$,resp$)
+48500     !     if err=4150 then pr "Could not create file:";file$(1) : fnpause ! file$(1) is blank!
+48520     pr "Err:";err;" Line:";line
+48540   end if 
+48560   OP_XIT: ! 
+48580 fnend
 52000 def fn_opMain(file_open$*256)
 52020   destination_company_number=val(env$('cno'))
 52040   OpmAskWhichToOpen: ! r: screen
@@ -330,14 +256,11 @@
 52140   resp$(rc+=1)=file_open$
 52160   fnlbl(lc+=1,1,"Source Company:",col1_width,1)
 52180   fncomboa('compList',lc,col2_pos,mat archiveList$)
-52200   let resp$(resp_fileSource:=rc+=1)=archiveList$(1)
+52200   resp$(resp_fileSource:=rc+=1)=archiveList$(1)
 52220   fnlbl(lc+=1,1,"Destination Company Number:",col1_width,1)
 52240   fntxt(lc,col2_pos,5,5,0,'1030',0,'')
 52250   fnlbl(lc,col2_pos+7,"(only applies if a specific Source Company is selected)")
-52260   let resp$(resp_cnoDestination:=rc+=1)=str$(destination_company_number)
-52280   ! let fnlbl(lc+=1,1,"System Abbreviation:",col1_width,1)
-52300   ! let fntxt(lc,col2_pos,2,2,0)
-52320   ! let resp$(resp_SystemAbbr:=rc+=1)=cursys$
+52260   resp$(resp_cnoDestination:=rc+=1)=str$(destination_company_number)
 52340   fncmdset(2)
 52360   fnacs(sn$,0,mat resp$,ckey)
 52380   ! /r
@@ -348,7 +271,7 @@
 52480     opScreenReturn=0
 52500   else
 52520     if selectedSource$='(All Companies)' then
-52540       fn_fileOpen( file_open$)
+52540       fn_fileOpenEverything( file_open$)
 52560       opScreenReturn=1 
 52580     else 
 54000       source_company_number=archiveCNo(sourceWhich)
@@ -373,14 +296,14 @@
 54380         mat omSourceFilter$(1)
 54400         omSourceFilter$(1)='*.h'&str$(source_company_number)
 54420       end if
-54440       fn_extract_appropriate_files(file_open$,mat omSourceFilter$,env$('client_temp')&'\acs\OpenPartial\')
-56000       if fn_analyze_7zip_compresslog(env$('client_temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemName$&' company '&env$('cno')&' from ',file_open$, 1) then 
+54440       fn_extract_appropriate_files(tmpFileOpen$,mat omSourceFilter$,env$('temp')&'\acs\OpenPartial\')
+56000       if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemName$&' company '&env$('cno')&' from ',file_open$, 1) then 
 56020         fnreg_write('Last Open Partial Date',date$('ccyy/mm/dd'))
 56040         fnreg_write('Last Open Partial File',file_open$(pos(file_open$,'\',-1)+1:len(file_open$)))
 56060         fnreg_write('Last Open Partial Path',file_open$(1:pos(file_open$,'\',-1)))
 56080         fnreg_write('Last Open Partial System',env$('cursys'))
 56100         fnreg_write('Last Open Partial Company Number',env$('cno'))
-56120         fn_copy_files_in(env$('at')&env$('client_temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),val(env$('cno')))
+56120         fn_copy_files_in(env$('temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),val(env$('cno')))
 56140         opScreenReturn=1 
 56160         setenv('force_reindex','yes') 
 56180         fncheckfileversion
@@ -397,6 +320,65 @@
 56380   end if
 56400   fn_opMain=opScreenReturn
 56420 fnend
+58000 def fn_fileOpenEverything(foeSource$*256)
+58140   fnreg_close
+58160   ! r: new way 12/4/2015
+58180   dim foeDestinationFolder$*256
+58180   dim foeLogFile$*256
+58280   foeDestinationFolder$=os_filename$(env$('Q'))
+58280   foeLogFile$=env$('temp')&'\ACS\Open_Log.txt'
+58320   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\ACS\Open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+58340   pr #h_tmp: '@echo off'
+58360   pr #h_tmp: '@echo Advanced Computer Services LLC'
+58380   pr #h_tmp: '@echo Opening: "'&foeSource$&'"'
+58400   pr #h_tmp: '@echo.'
+58420   pr #h_tmp: '@echo.'
+58440   pr #h_tmp: '@echo Command: '&env$('path_to_7z_exe')&' x -r -aoa "'&foeSource$&'" -o"'&foeDestinationFolder$&'\" > "'&foeLogFile$&'"'
+58460   pr #h_tmp: '@echo.'
+58480   pr #h_tmp: '@echo.'
+58500   pr #h_tmp: '@echo Relative To: '&foeDestinationFolder$&'\'
+58520   pr #h_tmp: '@echo.'
+58540   pr #h_tmp: '@echo.'
+58560   pr #h_tmp: '@echo Output Log: "'&env$('temp')&'\ACS\Open_Log.txt"'
+58580   pr #h_tmp: '@echo.'
+58600   pr #h_tmp: '@echo.'
+58620   pr #h_tmp: '@echo OPEN PROCESSING...'
+58640   pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&foeSource$&'" -o"'&foeDestinationFolder$&'\" > "'&env$('temp')&'\ACS\Open_Log.txt"'
+58660   ! pr #h_tmp: 'pause'
+58680   close #h_tmp: 
+58700   execute 'sy '&env$('temp')&'\ACS\Open_as_'&session$&'.cmd'
+58720   ! /r
+58740   if fn_analyze_7zip_compresslog(env$('temp')&'\ACS\Open_Log.txt','Successfully Opened',foeSource$,1) then 
+58760     fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
+58780     fnreg_write('Last Open File',foeSource$(pos(foeSource$,'\',-1)+1:len(foeSource$)))
+58800     fnreg_write('Last Open Path',foeSource$(1:pos(foeSource$,'\',-1)))
+58820     if env$('BR_MODEL')='CLIENT/SERVER' then
+58940       fnStatus('Copying Files in...')
+58960       fnCopy(foeDestinationFolder$&'\*.*',env$('q')&'\*.*',0,'recursive')
+58980       opScreenReturn=1 
+59000       setenv('force_reindex','yes') 
+59020     end if
+59040     fncheckfileversion
+59060     fnindex_sys(cno)
+59080     fnstatus_close
+59100   else if env$('acsDebug')='Yes' then
+59120     pr 'fn_analyze_7zip_compresslog failed.'
+59140     pause
+59160   end if 
+59180   goto OPEN_XIT
+59200   OPEN_OPEN_ERR: ! 
+59220   if err=622 then ! it was just cancelled
+59240     pr 'cancelled' : goto OPEN_XIT
+59260   else 
+59280     mat ml$(2)
+59300     ml$(1)='Select a different file name.'
+59320     ml$(2)='Error: '&str$(err)
+59340     fnmsgbox(mat ml$)
+59360     !     if err=4150 then pr "Could not create file:";file$(1) : fnpause ! file$(1) is blank!
+59380     pr "Err:";err;" Line:";line
+59400   end if 
+59420   OPEN_XIT: ! 
+59440 fnend
 62000 def fn_extract_appropriate_files(eafSourceFile$*256,mat eafSourceFilter$,eafDestinationFolder$*256)
 62020   ! pr 'eafSourceFile$="'&eafSourceFile$&'"'
 62040   ! pr 'eafSourceFilter$="'&eafSourceFilter$&'"'

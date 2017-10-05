@@ -8,12 +8,12 @@
 00110   open #fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
 00120   open #h_trans1:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,input,relative 
 00130   open #h_trans2:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
-00140   let trans1_lrec=lrec(h_trans1)
+00140   trans1_lrec=lrec(h_trans1)
 00150   F_TRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 00160   ! 
-00170   let del_dupe=1
+00170   del_dupe=1
 00180   ! 
-00190   fntos(sn$='DupTr3') : let respc=lc=0
+00190   fntos(sn$='DupTr3') : respc=lc=0
 00200   fn_filter_add_chk('Account','True')
 00210   fn_filter_add_chk('Transaction Date','False')
 00220   fn_filter_add_chk('Amount','True')
@@ -21,27 +21,27 @@
 00240   lc+=1
 00250   fnlbl(lc+=1,1,"Starting Record:",16,1)
 00260   fntxt(lc,18,10,0,0,'30')
-00270   let resp$(respc+=1)=str$(max(1,trans1_lrec-1000))
+00270   resp$(respc+=1)=str$(max(1,trans1_lrec-1000))
 00280   fnlbl(lc+=1,1,"Ending Record:",16,1)
 00290   fntxt(lc,18,10,0,0,'30')
-00300   let resp$(respc+=1)=str$(trans1_lrec)
+00300   resp$(respc+=1)=str$(trans1_lrec)
 00310   fncmdset(2)
 00320   fnacs(sn$,0,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
-00340   let respc=0
-00350   let dupe(1)=fn_filter_get_chk('Account',resp$(respc+=1))
-00360   let dupe(2)=fn_filter_get_chk('Transaction Date',resp$(respc+=1))
-00370   let dupe(3)=fn_filter_get_chk('Amount',resp$(respc+=1))
-00380   let dupe(4)=fn_filter_get_chk('Transaction Code',resp$(respc+=1))
-00390   let rec_start=val(resp$(respc+=1))
-00400   let rec_end=val(resp$(respc+=1))
+00340   respc=0
+00350   dupe(1)=fn_filter_get_chk('Account',resp$(respc+=1))
+00360   dupe(2)=fn_filter_get_chk('Transaction Date',resp$(respc+=1))
+00370   dupe(3)=fn_filter_get_chk('Amount',resp$(respc+=1))
+00380   dupe(4)=fn_filter_get_chk('Transaction Code',resp$(respc+=1))
+00390   rec_start=val(resp$(respc+=1))
+00400   rec_end=val(resp$(respc+=1))
 00410   fnopenprn
 00420   fn_header
 00430   ! restore #h_trans1,rec=rec_start: norec NEXT_REC
-00440   let trans1_rec=rec_start-1
+00440   trans1_rec=rec_start-1
 00450   do 
 00460     NEXT_REC: ! 
-00470     let trans1_rec+=1
+00470     trans1_rec+=1
 00480     if trans1_rec>trans1_lrec or (rec_end>0 and rec_end<trans1_rec) then goto FINIS
 00490     read #h_trans1,using F_TRANS,rec=trans1_rec: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode norec NEXT_REC
 00500     pr trans1_rec
@@ -65,7 +65,7 @@
 00690   library 'S:\Core\Library': fnxit,fnacs,fnlbl,fnwait,fntos,fntxt,fnerror,fndate_mmddyy_to_ccyymmdd,fncmdset,fntop,fncmbact,fngethandle,fncloseprn,fnopenprn,fnchk,fnreg_read,fnreg_write,fnmsgbox
 00700 fnend  ! fn_setup_library
 00710 def fn_has_dupe
-00720   let hd_return=0
+00720   hd_return=0
 00730   dim hd_tg(11)
 00740   if del_dupe then 
 00750     restore #h_trans2: 
@@ -76,7 +76,7 @@
 00800           if ~dupe(3) or tamount=hd_tamount then 
 00810             if ~dupe(4) or tcode=hd_tcode then 
 00820               if trans1_rec<>rec(h_trans2) then 
-00830                 let hd_return=1
+00830                 hd_return=1
 00840                 fn_trans_delete(rec(h_trans2))
 00850               end if 
 00860             end if 
@@ -93,7 +93,7 @@
 00970           if ~dupe(3) or tamount=hd_tamount then 
 00980             if ~dupe(4) or tcode=hd_tcode then 
 00990               if trans1_rec<>rec(h_trans2) then 
-01000                 let hd_return=1
+01000                 hd_return=1
 01010                 goto HD_EOF
 01020               end if 
 01030             end if 
@@ -111,7 +111,7 @@
 01150 fnend 
 01160 def fn_trans_delete(td_rec)
 01170   if ~td_setup then 
-01180     let td_setup=1
+01180     td_setup=1
 01190     open #h_td_trans1:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,outin,relative 
 01200     open #h_td_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 01210     dim td_msg$(1)*90
@@ -121,48 +121,48 @@
 01250   read #h_td_trans1,using F_TRANS,rec=td_rec: td_customer_key$,td_tdate,td_trans_code,td_trans_amt,mat tdt_tg,td_wr,td_wu,td_er,td_eu,td_gr,td_gu,td_tbal,td_pcode norec TD_XIT
 01260   if td_pcode<>0 then 
 01270     mat td_msg$(4)
-01280     let td_msg$(1)='This transaction has already been posted (Posting Code='&str$(td_pcode)&') to General Ledger'
-01290     let td_msg$(2)='The General Ledger must also be manually corrected.'
-01300     let td_msg$(3)='You may instead consider a credit or debit memo.'
-01310     let td_msg$(4)='Are you sure you want to delete it?'
+01280     td_msg$(1)='This transaction has already been posted (Posting Code='&str$(td_pcode)&') to General Ledger'
+01290     td_msg$(2)='The General Ledger must also be manually corrected.'
+01300     td_msg$(3)='You may instead consider a credit or debit memo.'
+01310     td_msg$(4)='Are you sure you want to delete it?'
 01320     fnmsgbox(mat txt$,resp$,cap$,52)
 01330     if resp$<>'Yes' then 
 01340       goto TD_XIT
 01350     end if 
 01360   end if 
 01370   if td_trans_code=1 then ! Charge
-01380     let td_sign$='-' ! subtract it from balance
+01380     td_sign$='-' ! subtract it from balance
 01390   else if td_trans_code=2 then ! Penalty
-01400     let td_sign$='-' ! subtract it from balance
+01400     td_sign$='-' ! subtract it from balance
 01410   else if td_trans_code=3 then ! Collection
-01420     let td_sign$='+' ! add it to balance
+01420     td_sign$='+' ! add it to balance
 01430   else if td_trans_code=4 then ! Credit Memo
-01440     let td_sign$='+' ! add it to balance
+01440     td_sign$='+' ! add it to balance
 01450   else if td_trans_code=5 then ! Debit Memo
-01460     let td_sign$='-' ! subtract it from balance
+01460     td_sign$='-' ! subtract it from balance
 01470   else 
 01480     mat td_msg$(2)
-01490     let td_msg$(1)='Unknown transaction code ('&str$(td_trans_code)&')'
-01500     let td_msg$(2)='Transaction may not be deleted'
+01490     td_msg$(1)='Unknown transaction code ('&str$(td_trans_code)&')'
+01500     td_msg$(2)='Transaction may not be deleted'
 01510     fnmsgbox(mat txt$,resp$,cap$,16)
 01520     goto TD_XIT
 01530   end if 
 01540   read #h_td_customer,using F_TB_CUSTOMER,key=td_customer_key$: tb_bal,mat tb_gb
 01550   F_TB_CUSTOMER: form pos 292,pd 4.2,pos 388,10*pd 5.2
 01560   if td_sign$='+' then 
-01570     let tb_bal+=td_trans_amt
+01570     tb_bal+=td_trans_amt
 01580     for tb_item=1 to 10
-01590       let tb_gb(tb_item)=tb_gb(tb_item)+tdt_tg(tb_item)
-01600       let tdt_tg(tb_item)=0
+01590       tb_gb(tb_item)=tb_gb(tb_item)+tdt_tg(tb_item)
+01600       tdt_tg(tb_item)=0
 01610     next tb_item
 01620   else ! if td_sign$='-' then
-01630     let tb_bal-=td_trans_amt
+01630     tb_bal-=td_trans_amt
 01640     for tb_item=1 to 10
-01650       let tb_gb(tb_item)=tb_gb(tb_item)-tdt_tg(tb_item)
-01660       let tdt_tg(tb_item)=0
+01650       tb_gb(tb_item)=tb_gb(tb_item)-tdt_tg(tb_item)
+01660       tdt_tg(tb_item)=0
 01670     next tb_item
 01680   end if 
-01690   let td_trans_amt=0
+01690   td_trans_amt=0
 01700   ! .! rewrite #h_td_customer,using F_TB_CUSTOMER,key=td_customer_key$: tb_bal,mat tb_gb
 01710   pr #255: 'would delete rec '&str$(td_rec)
 01720   ! .! rewrite #h_td_trans1,using F_TRANS,rec=td_rec: td_customer_key$,td_tdate,td_trans_code,td_trans_amt,mat tdt_tg,td_wr,td_wu,td_er,td_eu,td_gr,td_gu,td_tbal,td_pcode
@@ -179,16 +179,16 @@
 01830 def fn_filter_add_chk(txt$*80,default_answer$; protected)
 01840   fnchk(lc+=1,1,txt$)
 01850   fnreg_read(sn$&'.'&txt$,resp$(respc+=1))
-01860   if resp$(respc)='' then let resp$(respc)=default_answer$
+01860   if resp$(respc)='' then resp$(respc)=default_answer$
 01870 fnend 
 01880 def fn_filter_get_chk(txt$,tf$)
-01890   let dgc_return=0
-01900   if tf$='True' then let dgc_return=1
+01890   dgc_return=0
+01900   if tf$='True' then dgc_return=1
 01910   fnreg_write(sn$&'.'&txt$,tf$)
 01920   fn_filter_get_chk=dgc_return
 01930 fnend  ! fn_filter_get_chk
 01950 ! <Updateable Region: ERTN>
-01960 ERTN: let fnerror(program$,err,line,act$,"xit")
+01960 ERTN: fnerror(program$,err,line,act$,"xit")
 01970   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01980   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

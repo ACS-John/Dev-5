@@ -3,7 +3,7 @@
 28000   def library fnrgl$*60(x$; ReturnMaxLength)
 28020     library 'S:\Core\Library': fngethandle,fnerror,fnpause
 28040     on error goto ERTN
-28060     if ReturnMaxLength=0 then let ReturnMaxLength=35
+28060     if ReturnMaxLength=0 then returnMaxLength=35
 28080 ! _______________________________________________________________________
 28100 ! X$ should be formatted as though it were just read in and is ready 
 28120 !    for a read Key=...   ie "  0   100  0"
@@ -52,11 +52,11 @@
 32080 ! _______________________________________________________________________
 34000 NOKEYGLMSTR: ! 
 34020     close #glmstr: 
-34040     let x$="": let desc$=""
+34040     let x$="": desc$=""
 34060     goto DONE
 48000 XIT: fnend 
 62000 ! <Updateable Region: ERTN>
-62020 ERTN: let fnerror(program$,err,line,act$,"xit")
+62020 ERTN: fnerror(program$,err,line,act$,"xit")
 62040     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 62060     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 62080     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

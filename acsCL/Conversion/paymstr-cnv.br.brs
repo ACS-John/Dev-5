@@ -20,12 +20,12 @@
 00200 ! OPEN #4: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno),INTERNAL,OUTIN,RELATIVE
 00210   open #6: "Name="&env$('Q')&"\CLmstr\IvPaid.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\IVINDEX.H"&str$(cno)&"",internal,outin,keyed 
 00220   pr f "14,32,C 16,RB,N": "  IN PROCESS"
-00230   let nk=10
+00230   nk=10
 00240 L240: read #1,using L250: k1$,ad1 eof END1
 00250 L250: form pos 1,c 8,pos 147,pd 3
-00260   let k2$=lpad$(str$(nk),8)
+00260   k2$=lpad$(str$(nk),8)
 00270   rewrite #1,using L250: k2$
-00280   let nk=nk+5
+00280   nk=nk+5
 00290   ad2=ad1
 00300 L300: if ad2=0 then goto END2
 00310   read #2,using L320,rec=ad2: p$,nta
@@ -55,9 +55,9 @@
 00550   execute "Index "&env$('Q')&"\CLmstr\IvPaid.H"&str$(cno)&","&env$('Q')&"\CLmstr\IVINDEX.H"&str$(cno)&",1,20,Replace,DupKeys"
 00560   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TRIDX1.H"&str$(cno)&" 1 11 Replace DupKeys"
 00570   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TRIDX2.H"&str$(cno)&" 28/1 8/11 Replace DupKeys"
-00580 XIT: let fnxit
+00580 XIT: fnxit
 00590 ! <Updateable Region: ERTN>
-00600 ERTN: let fnerror(program$,err,line,act$,"xit")
+00600 ERTN: fnerror(program$,err,line,act$,"xit")
 00610   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00620   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00630   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

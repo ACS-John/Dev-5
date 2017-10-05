@@ -25,16 +25,16 @@
 00250   form pos 1,c 20,c 35,n 3,3*n 1
 00260   close #1: 
 00270 MAIN: ! 
-00280 L280: let fntos(sn$="GLInput") !:
-        let mylen=20: let mypos=mylen+3 : let right=1
-00290   let item=0: let resp=0
+00280 L280: fntos(sn$="GLInput") !:
+        mylen=20: mypos=mylen+3 : right=1
+00290   item=0: resp=0
 00300   fnlbl(1,1,"Selected Items          Primary=1 Secondary=2        Menu Options to Select From",80,0)
 00310   for j=1 to 20
 00320     fntxt(j+1,1,35,0,left,"",0,"Items select for automatic processing.",0 ) !:
-          let resp$(resp+=1)=nxtdesc$(j)
+          resp$(resp+=1)=nxtdesc$(j)
 00330     fntxt(j+1,39,1,0,right,"",0,"Should the primary or secondary format be used?",0 )
-00340     if prim(j)=0 then let prim(j)=1
-00350     let resp$(resp+=1)=str$(prim(j))
+00340     if prim(j)=0 then prim(j)=1
+00350     resp$(resp+=1)=str$(prim(j))
 00360   next j
 00370   mat chdr$(2) : mat cmask$(2) : mat item$(2) !:
         chdr$(1)='Item #' !:
@@ -51,13 +51,13 @@
 00440   if ln$(1:1)=">" then ln$(1:1)="" ! delete up to two >>
 00450   let x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
 00460   if x=0 then goto L410 ! skip headings
-00470   let desc$=ln$(1:x-1)(1:35)
-00480   let item+=1
+00470   desc$=ln$(1:x-1)(1:35)
+00480   item+=1
 00490   let y=pos(srep$(ln$,'^','~'),'~',x) ! pos(ln$,"^",x)
-00500   let prg$(item)=ln$(x+1:len(ln$))
-00510   let nam$(item)=ln$(1:x-1)(1:35)
-00520   let item$(1)=str$(item) !:
-        let item$(2)=desc$ !:
+00500   prg$(item)=ln$(x+1:len(ln$))
+00510   nam$(item)=ln$(1:x-1)(1:35)
+00520   item$(1)=str$(item) !:
+        item$(2)=desc$ !:
         fnflexadd1(mat item$)
 00530   goto L410
 00540 L540: close #1: ioerr ignore
@@ -68,17 +68,17 @@
 00590   if ln$(1:1)=">" then ln$(1:1)="" ! delete up to two >>
 00600   let x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
 00610   if x=0 then goto L560 ! skip headings
-00620   let desc$=ln$(1:x-1)(1:35)
-00630   let item+=1
+00620   desc$=ln$(1:x-1)(1:35)
+00630   item+=1
 00640   let y=pos(srep$(ln$,'^','~'),'~',x) ! pos(ln$,"^",x)
-00650   let prg$(item)=ln$(x+1:len(ln$))
-00660   let nam$(item)=ln$(1:x-1)(1:35)
-00670   let item$(1)=str$(item) !:
-        let item$(2)=desc$ !:
+00650   prg$(item)=ln$(x+1:len(ln$))
+00660   nam$(item)=ln$(1:x-1)(1:35)
+00670   item$(1)=str$(item) !:
+        item$(2)=desc$ !:
         fnflexadd1(mat item$)
 00680   goto L560
-00690 L690: let fnlbl(22,1," ")
-00700 L700: let fncmdkey("&Next",1,1,0,"Selects the highlited option for automatic processing.")
+00690 L690: fnlbl(22,1," ")
+00700 L700: fncmdkey("&Next",1,1,0,"Selects the highlited option for automatic processing.")
 00710   fncmdkey("&Save",2,0,0,"Saves the selections and returns to menu.")
 00720   fncmdkey("&Delete All",4,0,0,"Deletes all selections.")
 00730   fncmdkey("&Cancel",5,0,1,"Returns to main menu without saving the selections.")
@@ -92,10 +92,10 @@
           goto MAIN
 00780   sel=val(resp$(41))
 00790   for j=1 to 20
-00800     let prim(j)=val(resp$(j*2))
+00800     prim(j)=val(resp$(j*2))
 00810   next j
 00820   for j=1 to 20
-00830     if trim$(nxtdesc$(j))="" then let nxtdesc$(j)=nam$(sel): let nxtpgm$(j)=prg$(sel): goto L850
+00830     if trim$(nxtdesc$(j))="" then nxtdesc$(j)=nam$(sel): nxtpgm$(j)=prg$(sel): goto L850
 00840   next j
 00850 L850: if ckey=1 then goto L280
 00860 L860: goto L1640
@@ -184,10 +184,10 @@
 01690 L1690: form pos 1,c 35,c 35,n 3,3*n 1
 01700   close #1: ioerr ignore
 01710   close #3: ioerr XIT
-01720 XIT: let fnxit
+01720 XIT: fnxit
 01730 ! ______________________________________________________________________
 01740 ! <Updateable Region: ERTN>
-01750 ERTN: let fnerror(program$,err,line,act$,"xit")
+01750 ERTN: fnerror(program$,err,line,act$,"xit")
 01760   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01770   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01780   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

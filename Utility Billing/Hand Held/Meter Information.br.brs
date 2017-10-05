@@ -5,8 +5,8 @@
 00110 ! 
 00130   if fnhand_held_device$<>'Itron FC300' and fnhand_held_device$<>'Aclara' and fnhand_held_device$<>'Master Meter' then 
 00140     dim msg_text$(2)*256
-00150     let msg_text$(1)='The '&env$('program_caption')&' file is not necessary'
-00160     let msg_text$(2)="for your hand held device type."
+00150     msg_text$(1)='The '&env$('program_caption')&' file is not necessary'
+00160     msg_text$(2)="for your hand held device type."
 00170     fnmsgbox(mat msg_text$, response$,'',64)
 00190   end if 
 00200   fnget_services(mat srvnam$,mat srv$)
@@ -16,7 +16,7 @@
 00260   fnhamster_2("Meter_Hamster",open_file(1))
 00270   fn_close_file
 00280   goto XIT
-00290 XIT: let fnxit
+00290 XIT: fnxit
 10000 ! ______________________________________________________________________
 10020   def fn_setup
 10040     library 'S:\Core\Library': fntop,fnxit,fnerror,fnmsgbox,fngethandle,fnhand_held_device$,fnget_services
@@ -48,9 +48,9 @@
 18200   fnend  ! fn_close_file
 18220 ! 
 20400   def fn_hamster_setup
-20410     let mask_pointtwo=32 : let mask_number=30
-20420     let mask_ccyymmdd=3 : let mask_mmddyy=1 : let mask_glnumber=53
-20430     let textlen_mmddyy=8 : let textlen_ccyymmdd=10
+20410     mask_pointtwo=32 : mask_number=30
+20420     mask_ccyymmdd=3 : mask_mmddyy=1 : mask_glnumber=53
+20430     textlen_mmddyy=8 : textlen_ccyymmdd=10
 20440     storage_len_mmddyy=6 : storage_len_ccyymmdd=8
 20450 ! 
 20460     fnhamster_field_reset
@@ -77,7 +77,7 @@
 20670     fnhamster_add_combof(7,env$('Q')&"\UBmstr\MeterType.h"&env$('cno'),1,5,6,40,env$('Q')&"\UBmstr\MeterTypeIdx.h"&env$('cno'),1)
 20680   fnend 
 20700 ! <Updateable Region: ERTN>
-20710 ERTN: let fnerror(program$,err,line,act$,"xit")
+20710 ERTN: fnerror(program$,err,line,act$,"xit")
 20720   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20730   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 20740   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

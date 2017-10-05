@@ -9,7 +9,7 @@
 00130   fntop(program$,cap$="Update Checkbook From Check History")
 00150 ! 
 00160   gosub READ_COMPANY_INFO
-00170   let mcr=mcr*.01
+00170   mcr=mcr*.01
 00180   ssrate1=fnss_employee*.01
 00190   ssrate2=fnss_employer*.01
 00200   open #1: "Name="&env$('Q')&"\PRmstr\RPMstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -20,8 +20,8 @@
 00250   do 
 00260     read #4,using F_HIST: heno,tdn,prd,ckno,mat tdc,mat tcp eof END_HIST
 00270 F_HIST: form pos 1,n 8,n 3,pd 6,n 7,5*pd 3.2,37*pd 5.2
-00280     if tcp(2)=round(tcp(31)*ssrate1,2) then let tdc(7)=tcp(31) else let tdc(7)=round(tcp(2)/ssrate1,2)
-00290     if tcp(3)=round(tcp(31)*mcr,2) then let tdc(8)=tcp(31) else let tdc(8)=round(tcp(3)/mcr,2) ! calculate medicare wages
+00280     if tcp(2)=round(tcp(31)*ssrate1,2) then tdc(7)=tcp(31) else tdc(7)=round(tcp(2)/ssrate1,2)
+00290     if tcp(3)=round(tcp(31)*mcr,2) then tdc(8)=tcp(31) else tdc(8)=round(tcp(3)/mcr,2) ! calculate medicare wages
 00300     if prd=20120224 then gosub BUILD_CHECK_RECORD
 00310   loop 
 00320 CHECK_ACSCL: ! r:
@@ -40,10 +40,10 @@
 00450   em$(1)=''
 00460   read #1,using FM_PRMSTR,key=eno$: em$(1) nokey FM_PRMSTR
 00470 FM_PRMSTR: form pos 9,c 30
-00480   let tr$(1)=cnvrt$("n 8",ckno)
-00490   let dat$=str$(prd)
-00500   let dat=val(dat$(5:6)&dat$(7:8)&dat$(3:4))
-00510   let tdn$=cnvrt$("n 3",tdn)
+00480   tr$(1)=cnvrt$("n 8",ckno)
+00490   dat$=str$(prd)
+00500   dat=val(dat$(5:6)&dat$(7:8)&dat$(3:4))
+00510   tdn$=cnvrt$("n 3",tdn)
 00520   read #3,using FM_DEPT,key=eno$&tdn$: pgl$
 00530 FM_DEPT: form pos 12,c 12
 00540 DELETE_ACSCL: ! delete old check records
@@ -55,39 +55,39 @@
 00600 RD_TRALLOC: read #tralloc,using 'Form Pos 1,C 11': newkey$ eof WRITE_ACSCL
 00610   if newkey$=clk$ then delete #tralloc: : goto RD_TRALLOC
 00620 WRITE_ACSCL: ! 
-00630   let tr$(2)=lpad$(str$(dat),6)
-00640   let tr3=tcp(32)
-00650   let tr$(4)=eno$
-00660   let tr$(5)=em$(1)
+00630   tr$(2)=lpad$(str$(dat),6)
+00640   tr3=tcp(32)
+00650   tr$(4)=eno$
+00660   tr$(5)=em$(1)
 00670   write #8,using F_TRMSTR: bankcode,1,tr$(1),tr$(2),tr3,tr$(4),tr$(5),0,0,4
 00680 F_TRMSTR: form pos 1,g 2,g 1,c 8,g 6,pd 10.2,c 8,c 35,n 1,n 6,n 1
 00690   bal=bal+tr3
-00700   let tragl$=pgl$
-00710   let traamt=tcp(31)
-00720   let tradesc$="Gross Pay"
-00730   let traivd$=str$(dat)
+00700   tragl$=pgl$
+00710   traamt=tcp(31)
+00720   tradesc$="Gross Pay"
+00730   traivd$=str$(dat)
 00740   write #tralloc,using FM_TRALLOC: clk$,tragl$,traamt,tradesc$,traivd$,"",trapos$,tragde
 00750 WRITE_TRALLOC: ! 
 00760   for j=1 to 25
-00770     if j=1 then let tragl$=gln$(1): let tradesc$="Federal WH"
-00780     if j=2 then let tragl$=gln$(2): let tradesc$="Soc-Sec WH"
-00790     if j=3 then let tragl$=gln$(2): let tradesc$="Medicare WH"
-00800     if j=4 then let tragl$=gln$(3): let tradesc$="State WH"
-00810     if j>4 and j<25 then let tragl$=gl$(j-4): let tradesc$=fullname$(j-4)
-00820     if j=25 then let tragl$=gln$(14) : let tradesc$="EIC"
-00830     let traamt=-tcp(j)
-00840     if j>4 and j<25 and newdedcode(j-4)>1 then let traamt=-traamt
+00770     if j=1 then tragl$=gln$(1): tradesc$="Federal WH"
+00780     if j=2 then tragl$=gln$(2): tradesc$="Soc-Sec WH"
+00790     if j=3 then tragl$=gln$(2): tradesc$="Medicare WH"
+00800     if j=4 then tragl$=gln$(3): tradesc$="State WH"
+00810     if j>4 and j<25 then tragl$=gl$(j-4): tradesc$=fullname$(j-4)
+00820     if j=25 then tragl$=gln$(14) : tradesc$="EIC"
+00830     traamt=-tcp(j)
+00840     if j>4 and j<25 and newdedcode(j-4)>1 then traamt=-traamt
 00850     if traamt=0 then goto NXTJ
 00860     write #tralloc,using FM_TRALLOC: clk$,tragl$,traamt,tradesc$,traivd$,"",trapos$,tragde
 00870 FM_TRALLOC: form pos 1,c 11,c 12,pd 5.2,c 30,g 6,c 3,c 12,n 1
 00880 NXTJ: next j
-00890   let tragl$=gln$(2): let tradesc$="Employer's Soc-Sec Match" : let traamt=-round(tdc(7)*ssrate2,2)
+00890   tragl$=gln$(2): tradesc$="Employer's Soc-Sec Match" : traamt=-round(tdc(7)*ssrate2,2)
 00900   write #tralloc,using FM_TRALLOC: clk$,tragl$,traamt,tradesc$,traivd$,"",trapos$,tragde
-00910   let traamt2=traamt
-00920   let tragl$=gln$(2): let tradesc$="Employer's Medicare Match" : let traamt=-round(tdc(8)*mcr,2)
+00910   traamt2=traamt
+00920   tragl$=gln$(2): tradesc$="Employer's Medicare Match" : traamt=-round(tdc(8)*mcr,2)
 00930   write #tralloc,using FM_TRALLOC: clk$,tragl$,traamt,tradesc$,traivd$,"",trapos$,tragde
-00940   let traamt2=-(traamt2+traamt)
-00950   let tragl$=gln$(2): let tradesc$="Off Set SS & Medicare Match" : let traamt=traamt2
+00940   traamt2=-(traamt2+traamt)
+00950   tragl$=gln$(2): tradesc$="Off Set SS & Medicare Match" : traamt=traamt2
 00960   read #7,using FM_MGLMSTR,key=tdn$: tragl$ nokey WR_SSMATCH
 00970 FM_MGLMSTR: form pos 4,11*c 12
 00980 WR_SSMATCH: write #tralloc,using FM_TRALLOC: clk$,tragl$,traamt,tradesc$,traivd$,"",trapos$,tragde
@@ -106,7 +106,7 @@
 01120   return 
 01130 END_HIST: stop 
 01140 XIT: stop  ! fnxit
-01150 ERTN: let fnerror(program$,err,line,act$,"xit")
+01150 ERTN: fnerror(program$,err,line,act$,"xit")
 01160   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01170   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01180   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

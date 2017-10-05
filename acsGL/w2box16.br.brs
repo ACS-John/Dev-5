@@ -4,17 +4,17 @@
 00060   fn_wesupSetup
 00080   dim  cap$*128,io1$(30)*64,in1$(30)
 00090   fntop(program$,cap$:="W-2 Supplemental Information")
-00106   let io1$(1)="7,11,C 12,[screen]" 
-00108   let io1$(2)="7,25,G 10.2,[screen]" 
-00110   let io1$(3)="7,37,G 1,[screen]" 
-00112   let io1$(4)="7,43,G 1,[screen]" 
-00114   let io1$(5)="7,49,G 1,[screen]"
+00106   io1$(1)="7,11,C 12,[screen]" 
+00108   io1$(2)="7,25,G 10.2,[screen]" 
+00110   io1$(3)="7,37,G 1,[screen]" 
+00112   io1$(4)="7,43,G 1,[screen]" 
+00114   io1$(5)="7,49,G 1,[screen]"
 00116   for j=1 to 5
-00118     let io1$(j+05)="08"&io1$(j)(2:inf)
-00120     let io1$(j+10)="10"&io1$(j)(2:inf) 
-00122     let io1$(j+15)="11"&io1$(j)(2:inf)
-00124     let io1$(j+20)="12"&io1$(j)(2:inf) 
-00126     let io1$(j+25)="13"&io1$(j)(2:inf)
+00118     io1$(j+05)="08"&io1$(j)(2:inf)
+00120     io1$(j+10)="10"&io1$(j)(2:inf) 
+00122     io1$(j+15)="11"&io1$(j)(2:inf)
+00124     io1$(j+20)="12"&io1$(j)(2:inf) 
+00126     io1$(j+25)="13"&io1$(j)(2:inf)
 00128   next j
 00196   mat m1ColHeading$(1)
 00198   mat m1ColMask$(1)
@@ -78,7 +78,7 @@
 34120     fnacs(sn$,0,mat resp$,ckey)
 34140     if ckey=5 then goto w2eFinis
 34160     empNo$=resp$(1)(1:4)
-34180     let t$=uprc$(lpad$(rtrm$(t$),8))
+34180     t$=uprc$(lpad$(rtrm$(t$),8))
 34200     mat in1$=('')
 34220     read #hw2box16,using fw2box16$,key=t$: t$,mat in1$ nokey ignore
 34240   end if
@@ -152,7 +152,7 @@
 42180 fnend
 52000 PrintProofList: ! r:
 52020   restore #hw2box16: 
-52040   let pg=0
+52040   pg=0
 52060   fnopenprn
 52080   gosub HEADER
 52100   do
@@ -172,13 +172,13 @@
 52380 goto MENU1 ! /r
 52400 HEADER: ! r:
 52420   pr #255,using 'pos 1,c 10,cc 51': date$("mm/dd/ccyy"),env$('cnam')
-52440   let pg=pg+1
+52440   pg=pg+1
 52460   pr #255,using L2040: time$,"W-2 Supplemental Information Proof List","Page",pg,date$("Month DD, CCYY")
 52480   L2040: form pos 1,c 8,cc 52,skip 1,pos 1,c 5,n 3,cc 52,skip 1
 52500 return ! /r
-52520 XIT: let fnxit
+52520 XIT: fnxit
 68000 ! <Updateable Region: ERTN>
-68020 ERTN: let fnerror(program$,err,line,act$,"xit")
+68020 ERTN: fnerror(program$,err,line,act$,"xit")
 68040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 68060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 68080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

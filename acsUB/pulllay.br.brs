@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\PullLay   ! only use for utility billing  (need to send out S:\acsUB\Layouts\UBmstr-vb.lay to any one trying to use this
 00020 ! ______________________________________________________________________
 00030   library 'S:\Core\Library': fnerror,fnsetmonth,fncno,fnxit,fnremove,fnrights_test,fntop,fnbooktitle$
-00032 ! let msgbox("Reverse Billing Cycle is currently under construction.","Reverse Billing Cycle Unavailable","OK","Inf") : if env$('ACSDeveloper')='' then goto XIT
+00032 ! msgbox("Reverse Billing Cycle is currently under construction.","Reverse Billing Cycle Unavailable","OK","Inf") : if env$('ACSDeveloper')='' then goto XIT
 00033   fntop(program$,cap$="Main menu")
 00034   if ~fnrights_test('',"Try Run As Administrator.",'Program','This program must write data into the working (program) directory.') then goto XIT
 00040 ! This program will read a standard ACS layout and pull the data names for use in the user designed grid features of any ACS system
@@ -14,12 +14,12 @@
 00110   dim servicename$(10)*20,servicecode$(10)*2,textfile$*87,abbrev$*30
 00120   fnsetmonth(mat mo$)
 00130   fncno(cno)
-00160   let dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
+00160   dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
 00180   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative ioerr L190
 00182   read #20,using "Form POS 1,10*C 20,10*c 2",rec=1: mat servicename$,mat srv$
 00184   close #20: 
-00190 L190: let io1$(1)="10,34,c 45,UT,N"
-00192   let io1$(2)="12,34,C 45,UT,N"
+00190 L190: io1$(1)="10,34,c 45,UT,N"
+00192   io1$(2)="12,34,C 45,UT,N"
 00200   outputfile$="S:\acsUB\grid\Customer\Customer.fil"
 00210   ev$="S:\acsUB\Layouts\UBmstr-vb.LAY"
 00220 !  goto L320 ! for utility billing automatically from menu
@@ -42,12 +42,12 @@
 00346     ln$=srep$(ln$,'^','~')
 00350     fnremove(chr$(9),ln$)
 00360     if uprc$(ln$(7:10))<>"DATA" then goto READ_TEMP
-00370 DATALN: let j3=1
-00380     let p1=11
-00390     let p2=pos(ln$,"~",p1+1)
-00400     let p3=pos(ln$,"~",p2+1)
-00410     let p4=pos(ln$,"~",p3+1)
-00420     let p5=len(rtrm$(ln$))
+00370 DATALN: j3=1
+00380     p1=11
+00390     p2=pos(ln$,"~",p1+1)
+00400     p3=pos(ln$,"~",p2+1)
+00410     p4=pos(ln$,"~",p3+1)
+00420     p5=len(rtrm$(ln$))
 00430     a$(j3,1)=ln$(p1+1:p2-1) ! pr 'line:'&ln$ : pr 'a$(j3,1)='&a$(j3,1) : pause
 00440     a$(j3,1)=fnbooktitle$(a$(j3,1))
 00450     a$(j3,2)=ln$(p2+1:p3-1)
@@ -58,21 +58,21 @@
 00476       abbrev$=ln$(p4+1:len(ln$))(1:20)
 00478     end if 
 00490 ! If RTRM$(A$(J3,3))="" Then Goto 850
-00500     let p1=pos(a$(j3,3)," ",1)+1
-00510     let p2=pos(a$(j3,3),".",1)+1
-00520     let p3=len(rtrm$(a$(j3,3))) ! was standard
-00530 ! Let P3=POS(A$(J3,3),"~",1)-1 ! for acsea and acscl only  (way John does layouts)
-00540     let p4=pos(a$(j3,3),"*",1)
-00550     if p4=0 then let m1=1 else let m1=val(a$(j3,3)(1:p4-1))
+00500     p1=pos(a$(j3,3)," ",1)+1
+00510     p2=pos(a$(j3,3),".",1)+1
+00520     p3=len(rtrm$(a$(j3,3))) ! was standard
+00530 ! p3=POS(A$(J3,3),"~",1)-1 ! for acsea and acscl only  (way John does layouts)
+00540     p4=pos(a$(j3,3),"*",1)
+00550     if p4=0 then m1=1 else m1=val(a$(j3,3)(1:p4-1))
 00560     l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
-00570     if p2>1 then let dp=val(a$(j3,3)(p2:p3)) else let dp=0 ! DECIMAL POSITIONS
+00570     if p2>1 then dp=val(a$(j3,3)(p2:p3)) else dp=0 ! DECIMAL POSITIONS
 00580     if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !   ACTUAL FIELD LENGTH
 00590     if uprc$(a$(j3,3)(1:1))="X" then goto READ_TEMP ! skip any formats of "x"
 00600     l=l*m1 ! TOTAL STORAGE LENGTH
 00610     b=a+l
 00620     a=a+1
-00630     let ino=ino+1
-00640     let j3=1
+00630     ino=ino+1
+00640     j3=1
 00650     a(j3,1)=ino
 00660     a(j3,2)=al
 00670     a(j3,3)=dp
@@ -80,7 +80,7 @@
 00690     a(j3,5)=a
 00700     a(j3,6)=b
 00710     a=b
-00720     let rl=rl+int(val(a$(j3,3)(p1:p3)))*m1
+00720     rl=rl+int(val(a$(j3,3)(p1:p3)))*m1
 00725 ! pr ln$ : pause
 00730 ! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAMEON EACH SERVICE IN UTILITY BILLING
 00740     if uprc$(a$(j3,1)(1:7))<>"SERVICE" then goto L850
@@ -110,10 +110,10 @@
 00952   close #2: ioerr ignore
 00960   close #h_temp: ioerr ignore
 00970   gosub MOVEITTOTEXT
-00980 XIT: let fnxit
+00980 XIT: fnxit
 18000 IGNORE: continue 
 20000 ! <Updateable Region: ERTN>
-20020 ERTN: let fnerror(program$,err,line,act$,"xit")
+20020 ERTN: fnerror(program$,err,line,act$,"xit")
 20040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 20080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -10,24 +10,24 @@
 00100 ! ______________________________________________________________________
 00110   fncno(cno,cnam$)
 00150 ! ______________________________________________________________________
-00160   let dv$="A"
+00160   dv$="A"
 00170 MENU1: ! 
 00180   fntos(sn$="ClBld") !:
-        let mylen=50: let mypos=mylen+3 : let right=1
+        mylen=50: mypos=mylen+3 : right=1
 00190   fnlbl(1,1,"Insert Blank Formatted Diskette In Selected Drive:",mylen,right)
 00200   fntxt(1,mypos,1,0,right,"",0,"The information needs to be placed on a diskette.  If you do not have a diskette drive, use your C: drive and transfer the information to a CD.",0 ) !:
-        let resp$(1)= dv$
+        resp$(1)= dv$
 00210   option$(1)="Build G/L Master File" !:
         option$(2)="Build Payee File"
 00220   fncomboa("TypeOfFile",3,25,mat option$,"You must indicate the type of entry you will be entering.",25)
-00230   let resp$(2)=str$(sel)
+00230   resp$(2)=str$(sel)
 00240   fncmdkey("&Next",1,1,0,"Allows you to enter transactions.")
 00250   fncmdkey("&Cancel",5,0,1,"Returns to menu without transferring files.")
 00260   fnacs(sn$,0,mat resp$,ckey)
 00270   if ckey=5 then goto XIT
-00280   let dv$=resp$(1)
-00290   if trim$(resp$(2))="Build G/L Master File" then let ti1=1 else let ti1=2
-00300   let dv$=dv$&":"
+00280   dv$=resp$(1)
+00290   if trim$(resp$(2))="Build G/L Master File" then ti1=1 else ti1=2
+00300   dv$=dv$&":"
 00310   on ti1 goto L330,END1
 00320 ! ______________________________________________________________________
 00330 L330: open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -50,7 +50,7 @@
 00500 EOF_GL1099: ! 
 00510   close #1: 
 00520   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr L410
-00530   let vn$(3)=""
+00530   vn$(3)=""
 00540 L540: read #1,using 'Form POS 1,N 4,3*C 25,C 11,PD 5.2': eno,vn$(1),vn$(2),vn$(4),ss$,ytdp eof L580
 00550   write #2,using 'Form POS 1,G 8,4*C 30,PD 5.2,N 2,C 11': eno,mat vn$,ytdp,0,ss$
 00560   goto L540
@@ -60,10 +60,10 @@
 00600   execute "Copy "&env$('Q')&"\GLmstr\PayeeGLBreakdown.h"&str$(cno)&" a:"
 00610   goto XIT
 00620 ! ______________________________________________________________________
-00630 XIT: let fnxit
+00630 XIT: fnxit
 00640 ! ______________________________________________________________________
 00650 ! <Updateable Region: ERTN>
-00660 ERTN: let fnerror(program$,err,line,act$,"xit")
+00660 ERTN: fnerror(program$,err,line,act$,"xit")
 00670   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00680   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00690   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

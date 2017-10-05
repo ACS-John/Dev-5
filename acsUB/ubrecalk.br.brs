@@ -53,7 +53,7 @@
 00270 ! synchronize this setting with S:\Utility Billing\Enter Readings and Charges (Enter Readings and Charges)
 00280 ! ______________________________________________________________________
 00290 ! get date meter read
-00300   fncreg_read('Meter Reading Date Current',tmp$) : let dateread=val(tmp$)
+00300   fncreg_read('Meter Reading Date Current',tmp$) : dateread=val(tmp$)
 00330 ! 
 00340   fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto)
 00380   for j=1 to udim(servicename$)
@@ -61,7 +61,7 @@
 00390   next j
 00400   fn_ask_billing_date
 00420   if ck=5 then goto XIT
-00462 ! Let FNWAIT(0,'',"Calculating: please wait...",0)
+00462 ! fnWAIT(0,'',"Calculating: please wait...",0)
 00480   fnAutomatedSavePoint('before')
 00500   fnopenprn
 00505 ! 
@@ -113,7 +113,7 @@
 00940   let usage_srv1=0 ! WATER USAGE
 00950   let usage_srv3=0 ! ELECTRIC USAGE / lawn meter usage
 00960   let usage_srv4=0 ! GAS USAGE
-00980   let r9_usage_is_zero=0
+00980   r9_usage_is_zero=0
 00990   mat w=(0) ! mat w appears to never be set - never be used, but is passed to fncalk
 01000   gosub CHECK_UNUSUAL_USAGE
 01010   if r9_usage_is_zero=1 then goto TOP
@@ -126,7 +126,7 @@
 01070   pr #255: "Net or Gross Bill too large on Account: ";x$
 01080   pr #255: "   Net Bill: "&str$(g(11))&"  Gross Bill: "&str$(g(12))
 01090   pr #255: "   Action: RECORD SKIPPED."
-01092   let print_count_skip+=1
+01092   print_count_skip+=1
 01100   fn_cuu_report_usage
 01110   goto TOP ! /r
 01120 ! ______________________________________________________________________
@@ -147,24 +147,24 @@
 30060   pr #255: "the system to handle.  This record is being skipped. "
 30080   pr #255: 'You must determine what is wrong and re-enter the reading."'
 30090   pr #255: 'ACTION: RECORD SKIPPED'
-30100   let print_count_skip+=1
+30100   print_count_skip+=1
 30120   ! 
-30140   let txt$(1)="The bill ("&str$(g(12))&") on account "&x$&" is too large for"
-30160   let txt$(2)="the system to handle.  This record is being skipped. "
-30180   let txt$(3)='You must determine what is wrong and re-enter the reading."'
+30140   txt$(1)="The bill ("&str$(g(12))&") on account "&x$&" is too large for"
+30160   txt$(2)="the system to handle.  This record is being skipped. "
+30180   txt$(3)='You must determine what is wrong and re-enter the reading."'
 30200   fnmsgbox(mat txt$,resp$(1),'',48)
 30220   goto TOP ! /r
 31900 ! /r
 32000 def fn_write_new_trans
 32020   dim transkey$*19
-32040   let tamount=g(11)
-32060   let tdate=d1
-32080   let tdate=fndate_mmddyy_to_ccyymmdd(tdate)
-32100   let tcode=1
+32040   tamount=g(11)
+32060   tdate=d1
+32080   tdate=fndate_mmddyy_to_ccyymmdd(tdate)
+32100   tcode=1
 32120   let wr=d(1): let wu=d(3): er=d(5): eu=d(7): let gr=d(9)
 32140   let gu=d(11)
-32160   for j=1 to 11 : let tg(j)=g(j) : next j
-32180   let transkey$=x$&cnvrt$("pic(########)",tdate)&cnvrt$("pic(#)",tcode)
+32160   for j=1 to 11 : tg(j)=g(j) : next j
+32180   transkey$=x$&cnvrt$("pic(########)",tdate)&cnvrt$("pic(#)",tcode)
 32200   read #h_ubtrans,using FORM_UBTRANS,key=transkey$: y$ nokey UBTRANS_NOKEY ! check for recalk
 32220   rewrite #h_ubtrans,using FORM_UBTRANS,key=transkey$: x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,bal,pcode
 32240   goto WNT_XIT
@@ -182,12 +182,12 @@
 36090 ! pr 'print_count_unusual=';print_count_unusual : pr 'print_count_skip=';print_count_skip
 36100   if print_count_unusual or print_count_skip then let fncloseprn
 36120 ! /r
-38000 XIT: let fnxit
+38000 XIT: fnxit
 40000   def fn_t9notification
 40020     if t9 then 
-40040       let txt$(1)="One or more reading(s) were encounterd for an account(s) that could not be located."
-40050       let txt$(2)="Set up the UB Accounts indicated on the report."
-40060       let txt$(3)='Then re-enter and calculate the readings for those customers.' !  by using "Enter Readings and Charges"'
+40040       txt$(1)="One or more reading(s) were encounterd for an account(s) that could not be located."
+40050       txt$(2)="Set up the UB Accounts indicated on the report."
+40060       txt$(3)='Then re-enter and calculate the readings for those customers.' !  by using "Enter Readings and Charges"'
 40100       fnmsgbox(mat txt$,resp$(1),'',48)
 40120     end if 
 40140   fnend 
@@ -198,16 +198,16 @@
 42080         pr #255: "Unusual "&unusual_service$&" Usage on Customer "&trim$(x$)&".  Bill was calculated."
 42100         pr #255,using 'form pos 1,c 30,x 2,c 30': custname$,meteradr$
 42120         fn_cuu_report_usage
-42130         let print_count_unusual+=1
+42130         print_count_unusual+=1
 42140       end if 
 42160     end if 
 42180   fnend 
 44000 NKT9: ! r: NOKEY ROUTINE CODE T9=9
-44020   let t9=9
+44020   t9=9
 44040   pr #255: ""
 44060   pr #255: "Could not locate an account for Account: "&x$
 44080   pr #255: "   Action: RECORD SKIPPED."
-44100   let print_count_skip+=1
+44100   print_count_skip+=1
 44120   goto TOP ! /r
 58000 CHECK_UNUSUAL_USAGE: ! r:
 58020   let unusual_service$=''
@@ -220,7 +220,7 @@
 58160     pr #255: ""
 58180     pr #255: "Negative usage on Account: "&x$
 58200     pr #255: "   Action: RECORD SKIPPED."
-58210     let print_count_skip+=1
+58210     print_count_skip+=1
 58220     if d1<>f then 
 58240       fn_cuu_report_usage
 58260     end if 
@@ -283,7 +283,7 @@
 61260     end if  ! dateread<>0
 61280   fnend 
 62000   def fn_updtbal
-62020     let d2=f : let f=d1
+62020     d2=f : let f=d1
 62040     if d1=d2 then bal=bal+g(11)-w7 else bal=bal+g(11)
 62060   fnend 
 64000   def fn_demand
@@ -300,7 +300,7 @@
 64220     if env$('client')="Lovington" then goto DEMAND_FINIS
 64240     let g(6)=round(x(4)*d(14)*.001*rt(1,3),2)
 64260 DEMAND_FINIS: ! 
-64280     let d(15)=x(4)
+64280     d(15)=x(4)
 64300 DEMAND_XIT: ! 
 64320   fnend  ! return
 68000   def fn_bud_open
@@ -322,12 +322,12 @@
 70100     if sum(ba)=0 then goto L7110 ! if first screen of budget is blank, then skip budget information  kj 10/20/09
 70120 FORM_BUDMSTR: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 70140 ! TRANS ROUTINE
-70160     let ta1=badr(1)
+70160     ta1=badr(1)
 70180 L6840: if ta1=0 then goto UPDATE_BUDGET_FILE
 70200     read #budtrans,using L6860,rec=ta1: z$,mat bt1,nba norec UPDATE_BUDGET_FILE
 70220 L6860: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 70240     if bt1(1,2)=d1 then bud2=1 : goto UPDATE_BUDGET_FILE
-70260     let ta1=nba : goto L6840
+70260     ta1=nba : goto L6840
 70280 ! 
 70300 UPDATE_BUDGET_FILE: ! 
 70320 ! IF BUD2=1 THEN RE-CALCULATION
@@ -339,7 +339,7 @@
 70440       if ba(12)>0 then bn1=ba(12) : goto L7020 ! TOTAL BILL BUDGETED
 70460       if ba(j)=0 then bt2(j,1)=bt2(j,2) else bt2(j,1)=ba(j)
 70480       if j>11 then goto L7010 ! only 1st 10 can be charges
-70500       if penalty$(j-1)="Y" then let totpen+=bt2(j,1): goto L7020
+70500       if penalty$(j-1)="Y" then totpen+=bt2(j,1): goto L7020
 70520 L7010: if j<11 then bn1=bn1+bt2(j,1)
 70540 L7020: ! 
 70560     next j
@@ -350,7 +350,7 @@
 70660       goto L7100
 70680     end if 
 70700     write #budtrans,using L6860: x$,mat bt2,badr(1)
-70720     let r82=lrec(budtrans)
+70720     r82=lrec(budtrans)
 70740     badr(1)=r82
 70760     if badr(2)=0 then badr(2)=r82
 70780 L7100: ! 
@@ -358,7 +358,7 @@
 70820 L7110: ! 
 70840   fnend 
 72000 ! <Updateable Region: ERTN>
-72020 ERTN: let fnerror(program$,err,line,act$,"NO")
+72020 ERTN: fnerror(program$,err,line,act$,"NO")
 72040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 72060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 72080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -407,7 +407,7 @@
 76260           cuu_water_return=1
 76280         end if 
 76300       else 
-76320         if x(12)=0 then let r9_usage_is_zero=1
+76320         if x(12)=0 then r9_usage_is_zero=1
 76340       end if 
 76360     end if 
 76380 CUU_WATER_XIT: ! 
@@ -429,7 +429,7 @@
 78260           cuu_electric_return=1
 78280         end if 
 78300       else 
-78320         if x(13)=0 then let r9_usage_is_zero=1
+78320         if x(13)=0 then r9_usage_is_zero=1
 78340       end if 
 78360     end if 
 78380 CUU_ELEC_XIT: ! 
@@ -451,7 +451,7 @@
 80260           cuu_gas_return=1
 80280         end if 
 80300       else 
-80320         if x(14)=0 then let r9_usage_is_zero=1
+80320         if x(14)=0 then r9_usage_is_zero=1
 80340       end if 
 80360     end if 
 80380 CUU_GAS_XIT: ! 
@@ -461,18 +461,18 @@
 82020 ! returns ck (if ck=5 upon return then cancel  was selected)
 82040 ASK_BILLING_DATE: ! 
 82060     fntos(sn$='ubCalk_'&str$(btu_factor_enabled)&'_'&env$('client')(1:1))
-82080     let mylen=24 : let mypos=mylen+2
+82080     mylen=24 : mypos=mylen+2
 82090     respc=0 : linec=0
 82100     fnlbl(linec+=1,1,"Billing Date:",mylen,1)
-82120 ! let fnlbl(1,1,"",34,1)
+82120 ! fnlbl(1,1,"",34,1)
 82140     fntxt(linec,mypos,8,0,1,"1001")
-82160     let resp$(respc_billing_date:=respc+=1)=str$(d1)
+82160     resp$(respc_billing_date:=respc+=1)=str$(d1)
 82180     if env$('client')='Campbell' then
 82190         linec+=1
 82200         fnlbl(linec+=1,1,"Sewer Cap Date:",mylen,1)
 82220         fntxt(linec,mypos,8,0,1,"1")
 82260         fncreg_read('ubcalk-sewer_cap_date',sewer_cap_date$)
-82280         let resp$(resp_sewer_cap_date:=respc+=1)=sewer_cap_date$
+82280         resp$(resp_sewer_cap_date:=respc+=1)=sewer_cap_date$
 82300     end if 
 82320     if btu_factor_enabled=1 then ! ask BTU question on Edinburg and French Settlement
 82340       if env$('client')='French Settlement' then 
@@ -481,17 +481,17 @@
 82400         fnlbl(linec+=1,1,"Current BTU Factor:",mylen,1)
 82420       end if 
 82440       fntxt(linec,mypos,10,0,1,"1045")
-82460       let resp$(resp_btu_factor:=respc+=1)=str$(btu)
+82460       resp$(resp_btu_factor:=respc+=1)=str$(btu)
 82480     end if 
 82500     if env$('client')='French Settlement' then 
 82510       linec+=1
 82520       fnchk(linec+=1,1,"Calculate Interest on Deposit")
-82540       let resp$(resp_calc_interest_on_deposit:=respc+=1)='False'
+82540       resp$(resp_calc_interest_on_deposit:=respc+=1)='False'
 82560       fnchk(linec+=1,1,"Charge Inspection Fee")
-82580       let resp$(resp_charge_inspection_fee:=respc+=1)='False'
+82580       resp$(resp_charge_inspection_fee:=respc+=1)='False'
 82600       fnlbl(linec-2,35,"Interest Credit Rate:",21,1)
 82620       fntxt(linec-2,58,10,0,1,"44")
-82640       let resp$(resp_interest_credit_rate:=respc+=1)='.0500' ! str$(.05)
+82640       resp$(resp_interest_credit_rate:=respc+=1)='.0500' ! str$(.05)
 82660     end if 
 83000 ! r: unusual usage report qusetion
 83020     dim unusual_usage_report_opt$(3)*52,unusual_usage_report$*52
@@ -503,16 +503,16 @@
 83360     fncreg_read('ubcalk-unusal_usage_report',unusual_usage_report$,unusual_usage_report_opt$(2))
 83380     let unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
 83400     if unusual_usage_report=0 then let unusual_usage_report=1 : let unusual_usage_report$=unusual_usage_report_opt$(unusual_usage_report)
-83420     let resp$(resp_unusual_usage_report:=respc+=1)=unusual_usage_report$
+83420     resp$(resp_unusual_usage_report:=respc+=1)=unusual_usage_report$
 83440 ! /r
 83460     fncmdset(2)
 83480     fnacs(sn$,0,mat resp$,ck)
 83500     if ck<>5 then 
-83520       let d1=val(resp$(respc_billing_date))
+83520       d1=val(resp$(respc_billing_date))
 83540       if btu_factor_enabled then btu=val(resp$(resp_btu_factor)) ! Edinburg requires a monthly BTU factor for calculating taxes
 83560       if resp_calc_interest_on_deposit and resp$(resp_calc_interest_on_deposit)='True' then calc_interest_on_deposit=1 else calc_interest_on_deposit=0
 83580       if resp_charge_inspection_fee and resp$(resp_charge_inspection_fee)='True' then charge_inspection_fee=1 else charge_inspection_fee=0
-83600       if resp_interest_credit_rate then let interest_credit_rate=val(resp$(resp_interest_credit_rate))
+83600       if resp_interest_credit_rate then interest_credit_rate=val(resp$(resp_interest_credit_rate))
 83620       let unusual_usage_report$=resp$(resp_unusual_usage_report)
 83640       let unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
 83660       fncreg_write('ubcalk-unusal_usage_report',unusual_usage_report$)

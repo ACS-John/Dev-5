@@ -78,7 +78,7 @@
 63100   fnend 
 80000 IGNORE: continue 
 80100 ! <Updateable Region: ERTN>
-80120 ERTN: let fnerror(program$,err,line,act$,"xit")
+80120 ERTN: fnerror(program$,err,line,act$,"xit")
 80140   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 80160   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 80230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

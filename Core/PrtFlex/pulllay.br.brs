@@ -13,9 +13,9 @@
 00130   fncno(cno)
 00140 ! 
 00150   gosub L1090
-00160   let dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
-00190   let io1$(1)="10,34,c 45,UT,N" !:
-        let io1$(2)="12,34,C 45,UT,N"
+00160   dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
+00190   io1$(1)="10,34,c 45,UT,N" !:
+        io1$(2)="12,34,C 45,UT,N"
 00200   outputfile$="S:\acsPR\grid\checks\checkhistory"
 00210   ev$="S:\acsPR\Layouts\checkhistory.LAY"
 00220   pr newpage
@@ -34,12 +34,12 @@
 00341   fnremove(chr$(9),ln$)
 00350   pr ln$
 00360   if uprc$(ln$(7:10))<>"DATA" then goto L340
-00370 DATALN: let j3=1
-00380   let p1=11
-00390   let p2=pos(srep$(ln$,'^','~'),'~',p1+1) ! pos(ln$,"^",p1+1)
-00400   let p3=pos(srep$(ln$,'^','~'),'~',p2+1) ! pos(ln$,"^",p2+1)
-00410   let p4=pos(srep$(ln$,'^','~'),'~',p3+1) ! pos(ln$,"^",p3+1)
-00420   let p5=len(rtrm$(ln$))
+00370 DATALN: j3=1
+00380   p1=11
+00390   p2=pos(srep$(ln$,'^','~'),'~',p1+1) ! pos(ln$,"^",p1+1)
+00400   p3=pos(srep$(ln$,'^','~'),'~',p2+1) ! pos(ln$,"^",p2+1)
+00410   p4=pos(srep$(ln$,'^','~'),'~',p3+1) ! pos(ln$,"^",p3+1)
+00420   p5=len(rtrm$(ln$))
 00430   a$(j3,1)=ln$(p1+1:p2-1)
 00440   a$(j3,1)=fnbooktitle$(a$(j3,1))
 00450   a$(j3,2)=ln$(p2+1:p3-1)
@@ -48,15 +48,15 @@
           goto L490 ! if layout does not contail abbreviated name, then use first                     12 characters of real name
 00480   abbrev$=ln$(p4+1:len(ln$))(1:20)
 00490 L490: ! If RTRM$(A$(J3,3))="" Then Goto 850
-00500   let p1=pos(a$(j3,3)," ",1)+1
-00510   let p2=pos(a$(j3,3),".",1)+1
-00520   let p3=len(rtrm$(a$(j3,3))) ! was standard
-00521 ! Let P3=pos(srep$(a$(j3,3),'^','~'),'~',1)-1 ! for acsea and acscl only  (way John does layouts)
-00530   let p4=pos(a$(j3,3),"*",1)
-00540   if p4=0 then let m1=1 else let m1=val(a$(j3,3)(1:p4-1))
+00500   p1=pos(a$(j3,3)," ",1)+1
+00510   p2=pos(a$(j3,3),".",1)+1
+00520   p3=len(rtrm$(a$(j3,3))) ! was standard
+00521 ! p3=pos(srep$(a$(j3,3),'^','~'),'~',1)-1 ! for acsea and acscl only  (way John does layouts)
+00530   p4=pos(a$(j3,3),"*",1)
+00540   if p4=0 then m1=1 else m1=val(a$(j3,3)(1:p4-1))
 00550   l=int(val(a$(j3,3)(p1:p3))) ! FIELD STORAGE LENGTH
 00551   pr ln$
-00560   if p2>1 then let dp=val(a$(j3,3)(p2:p3)) else let dp=0 !:
+00560   if p2>1 then dp=val(a$(j3,3)(p2:p3)) else dp=0 !:
           ! DECIMAL POSITIONS
 00570   if uprc$(a$(j3,3)(1:p1-2))="PD" then al=l*2-1 else al=l !:
           !   ACTUAL FIELD LENGTH
@@ -64,8 +64,8 @@
 00580   l=l*m1 ! TOTAL STORAGE LENGTH
 00590   b=a+l
 00600   a=a+1
-00610   let ino=ino+1
-00620   let j3=1
+00610   ino=ino+1
+00620   j3=1
 00630   a(j3,1)=ino
 00640   a(j3,2)=al
 00650   a(j3,3)=dp
@@ -73,7 +73,7 @@
 00670   a(j3,5)=a
 00680   a(j3,6)=b
 00690   a=b
-00700   let rl=rl+int(val(a$(j3,3)(p1:p3)))*m1
+00700   rl=rl+int(val(a$(j3,3)(p1:p3)))*m1
 00710 ! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAME !:
         ! ON EACH SERVICE IN UTILITY BILLING
 00720   if uprc$(a$(j3,1)(1:7))<>"SERVICE" then goto L770
@@ -109,7 +109,7 @@
 01000 L1000: return 
 01010 ! ______________________________________________________________________
 01020 ! <Updateable Region: ERTN>
-01030 ERTN: let fnerror(program$,err,line,act$,"xit")
+01030 ERTN: fnerror(program$,err,line,act$,"xit")
 01040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01050   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01060   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -33,15 +33,15 @@
 28030   !  r: add that company grid to the screen
 28160   fnflexinit1(sn$&'_flex',3,42,10,60,mat colhdr$,mat colmask$,1)
 34000   ! 
-34020   ! let temp$=env$('Q')&'\'&env$('cursys')&"mstr"
+34020   ! temp$=env$('Q')&'\'&env$('cursys')&"mstr"
 34040   fngetdir2(env$('Q')&'\'&env$('cursys')&"mstr",mat filename$,'/od /ta',"Company.*") ! fngetdir(temp$,mat filename$,empty$,"Company.*") ! /oe
 34060   company_count=filename_item=0
 34080   for filename_item=1 to udim(mat filename$)
-34100     let tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
+34100     tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
 34120     if tmp_cno<>99999 and filename$(filename_item)<>'' then ! don't display company 99999
 34140       company_count+=1
-34160       let item$(1)=str$(tmp_cno)
-34180       let item$(2)=fn_cname_of_cno$(tmp_cno)
+34160       item$(1)=str$(tmp_cno)
+34180       item$(2)=fn_cname_of_cno$(tmp_cno)
 34200       fnflexadd1(mat item$)
 34220       if tmp_cno=cno then 
 34240         setenv('current_grid_row',str$(company_count))
@@ -51,9 +51,9 @@
 34320   next filename_item
 34340   ! /r
 35000   fnlbl(1,42,"Company:",9,0)
-36000   fnbutton(2,52,"Con&figure",14,'Select highlighted company and go to configure it.  Returns here upon exit.',1,9) ! ,0,0,1)  ! let fncmdkey("&Select",1,1)
-36010   fnbutton(2,62,"&Select",10,'',1,9) ! ,0,0,1)  ! let fncmdkey("&Select",1,1)
-36020   fnbutton(2,72,"&Add",2,'',1,9) ! let fncmdkey("&Add",2)
+36000   fnbutton(2,52,"Con&figure",14,'Select highlighted company and go to configure it.  Returns here upon exit.',1,9) ! ,0,0,1)  ! fncmdkey("&Select",1,1)
+36010   fnbutton(2,62,"&Select",10,'',1,9) ! ,0,0,1)  ! fncmdkey("&Select",1,1)
+36020   fnbutton(2,72,"&Add",2,'',1,9) ! fncmdkey("&Add",2)
 36040   fnbutton(2,82,"Co&py",3,'',1,9)
 36060   if company_count=>2 then ! Delete only allowed if there are 2 or more companies on the list
 36080     fnbutton(2,92,"&Delete",4,'',1,9)
@@ -117,11 +117,11 @@
 43000 ! ______________________________________________________________________
 44000 COMPANY_ADD: ! r:
 44020   fntos(sn$='selcno-'&env$('cursys')&'-2')
-44040   let mylen=25 : let mypos=mylen+2
-44060   let respc=0
+44040   mylen=25 : mypos=mylen+2
+44060   respc=0
 44080   fnlbl(1,1,"Company Number to add:",mylen,1)
 44100   fntxt(1,mypos,5,0,0,"30")
-44120   let resp$(respc+=1)="0"
+44120   resp$(respc+=1)="0"
 44140   fncmdset(2)
 44160   fnacs(sn$,0,mat resp$,ck)
 44180   if ck=5 then goto MENU1
@@ -137,9 +137,9 @@
 45140     end if
 45160     if env$('cursys')='CL' then ! r: special processing for CL
 45180       mat ml$(5)
-45200       let ml$(1)='Would you like to import data from an old'
-45220       let ml$(2)='ACS Accounts Payable system?'
-45240       let ml$(3)='This is only chance.'
+45200       ml$(1)='Would you like to import data from an old'
+45220       ml$(2)='ACS Accounts Payable system?'
+45240       ml$(3)='This is only chance.'
 45260       fnmsgbox(mat ml$,resp$,'',36)
 45280       if resp$='Yes' then 
 45300         fnApMstrConversion
@@ -155,10 +155,10 @@
 45500     fnchain(txt$="S:\acs"&env$('cursys')&"\AddCNo")
 45520   end if 
 45540 ! /r
-46000 XIT: let fnxit
+46000 XIT: fnxit
 47000 IGNORE: continue 
 48000 ! <Updateable Region: ERTN>
-48020 ERTN: let fnerror(program$,err,line,act$,"xit")
+48020 ERTN: fnerror(program$,err,line,act$,"xit")
 48040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 48060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 48080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -170,7 +170,7 @@
 50060     cae_return=1
 50080     ! mat mg$(3)
 50100     mat mg$(2)
-50120     let mg$(1)="Company number "&str$(cae_cno)&". "&rtrm$(fn_cname_of_cno$(cae_cno))&" already exist!"
+50120     mg$(1)="Company number "&str$(cae_cno)&". "&rtrm$(fn_cname_of_cno$(cae_cno))&" already exist!"
 50140     mg$(2)="Would you like to erase it first?"
 50160      fnmsgbox(mat mg$,response$,'',32+4+256) ! (i)+(yn)+(secondButtonDefault)
 50180     if response$='Yes' then
@@ -222,21 +222,21 @@
 66080 fnend 
 72000 def fn_company_copy(scno)
 72020   dim dcnam$*40
-72040   let dcno=0
-72050   let dcnam$=fn_cname_of_cno$(scno)
+72040   dcno=0
+72050   dcnam$=fn_cname_of_cno$(scno)
 72060   CC_SCREEN1: ! 
 72080   fntos(sn$='CopyCNo3')
 72100   lc=0
-72120   let mylen=29 : let mypos=mylen+2
+72120   mylen=29 : mypos=mylen+2
 72140   fnlbl(lc+=1,1,"Source Company:",mylen,1)
 72160   fnlbl(lc,mypos,str$(scno)&'. '&fn_cname_of_cno$(scno),50)
 72180   lc+=1
 72200   fnlbl(lc+=1,1,"&Destination Company Number:",mylen,1)
 72220   fntxt(lc,mypos,5,0,0,'30')
-72240   let resp$(1)=str$(dcno)
+72240   resp$(1)=str$(dcno)
 72260   fnlbl(lc+=1,1,"Destination Company Name:",mylen,1)
 72280   fntxt(lc,mypos,40,40)
-72300   let resp$(2)=dcnam$
+72300   resp$(2)=dcnam$
 72320   lc+=1
 72340   fnlbl(lc+=1,1,"Warning",80,2,1)
 72360   fnlbl(lc+=1,1,"Please make sure no one else is",80,2)
@@ -246,8 +246,8 @@
 72440   fncmdset(2)
 72460   fnacs(sn$,0,mat resp$,ck)
 72480   if ck<>5 then 
-72500     let dcno=val(resp$(1))
-72520     let dcnam$=resp$(2)
+72500     dcno=val(resp$(1))
+72520     dcnam$=resp$(2)
 72540     if fn_company_already_exists(dcno)=1 then goto CC_SCREEN1
 72560     fnCopy(env$('Q')&"\"&env$('cursys')&"mstr"&"\*.h"&str$(scno),env$('Q')&"\"&env$('cursys')&"mstr"&"\*.h"&str$(dcno))
 72580     ! fnCopy("S:\acs"&env$('cursys')&"\*.h"&str$(scno),"S:\acs"&env$('cursys')&"\*.h"&str$(dcno))

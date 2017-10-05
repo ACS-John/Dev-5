@@ -6,12 +6,12 @@
 11000   dim cnam$*40
 11020   dim sage_code$*128
 11400 ! constants
-11600   cr$=chr$(13) : lf$=chr$(10) : let tab$=chr$(9)
+11600   cr$=chr$(13) : lf$=chr$(10) : tab$=chr$(9)
 11800   crlf$=cr$&lf$
 12000   fncno(cno,cnam$)
 12400 ! 
 12600   fntop(program$,cap$="Import CSV to Time Sheets")
-12800   if wbversion$(1:4)<"4.30" then pr "WBVersion is "&wbversion$&" and it must be 4.30 or higher for this program to run" : let fnpause
+12800   if wbversion$(1:4)<"4.30" then pr "WBVersion is "&wbversion$&" and it must be 4.30 or higher for this program to run" : fnpause
 12820   client_id_sage_ax=3811
 12822   client_id_brc=90
 13000 ! ______________________________________________________________________
@@ -35,20 +35,20 @@
 16600   fn_get_next_line(line$) : line_count+=1 ! consume headings
 16800   do 
 17000     fn_get_next_line(line$) : line_count+=1
-17064     let the_date_prior=the_date
+17064     the_date_prior=the_date
 17200     if line$<>'' and line$<>chr$(13) then 
 17400       str2mat(line$,mat item$,',',"QUOTES:TRIM")
-17600       if item$(1)<>'' then let the_date=fn_get_the_date(item$(1))
+17600       if item$(1)<>'' then the_date=fn_get_the_date(item$(1))
 17602       if the_date<the_date_prior and the_date_prior>20151218 then pr 'the_date('&str$(the_date)&')<the_date_prior('&str$(the_date_prior)&') - that indicates a problem on line '&str$(line_count) : pause 
 17800       if the_date=>filter_date(1) and the_date<=filter_date(2) then 
 18000         if udim(mat item$)>9 and item$(4)<>'#N/A' and val(item$(7))>0 then ! entry
 18020 !       pr the_date;item$(4);' ';item$(7);' ';item$(9);' ';item$(10)
 18040           client_id=val(item$(4))
 18042 ! if client_id=970 then pause
-18060           let hours=val(item$(7))
+18060           hours=val(item$(7))
 18080           if rtrm$(item$(13),cr$)<>'' then sage_code$=rtrm$(item$(13),cr$)
 18100           dim description$*512
-18120           let description$=item$(12)
+18120           description$=item$(12)
 18130 !         if client_id=3811 and the_date=20160716 then pr 'sage_code$='&sage_code$&' date:';the_date : pause
 18140           fn_acs_write_out(the_date,client_id,hours,val(item$(9)),val(item$(10)),item$(11)(1:30),sage_code$)
 18160           if client_id=client_id_sage_ax then 
@@ -63,17 +63,17 @@
 19600 ! THE_END: !
 19800   close #h_in: 
 20000   fncloseprn
-20200 XIT: let fnxit
+20200 XIT: fnxit
 20400   def fn_acs_write_out(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30; wo_sage_code$*128)
 20600     dim inp(7)
-20800     let inp(1)=wo_client
-21000     let inp(2)=1 ! employee number
-21200     let inp(3)=wo_time
+20800     inp(1)=wo_client
+21000     inp(2)=1 ! employee number
+21200     inp(3)=wo_time
 21202 !         if wo_client=3811 and wo_date=20160716 then pr 'wo_sage_code$=';wo_sage_code$ : pause
-21400     let inp(4)=fn_acs_hourly_rate(wo_client,the_date,wo_month, wo_cat,wo_sage_code$) ! hourly rate
-21600     let inp(5)=wo_time*inp(4)
-21800     let inp(6)=date(days(wo_date,'ccyymmdd'),'mmddyy') ! mmddyy
-22000     let inp(7)=wo_cat
+21400     inp(4)=fn_acs_hourly_rate(wo_client,the_date,wo_month, wo_cat,wo_sage_code$) ! hourly rate
+21600     inp(5)=wo_time*inp(4)
+21800     inp(6)=date(days(wo_date,'ccyymmdd'),'mmddyy') ! mmddyy
+22000     inp(7)=wo_cat
 22200     b6=0 ! ???
 22400     b7=1 ! ???
 22800     if wo_cat=6 then 
@@ -98,7 +98,7 @@
 28600       read #h_in,using 'form pos 1,C 100': gnl_block$ ioerr GNL_H_IN_READ_IOERR
 28800       let gnl_buffer$=gnl_buffer$&gnl_block$
 29000     loop 
-29200     let pos_crlf=pos(gnl_buffer$,crlf$)
+29200     pos_crlf=pos(gnl_buffer$,crlf$)
 29400     line$=gnl_buffer$(1:pos_crlf)
 29600     let gnl_buffer$(1:pos_crlf+1)=''
 29800 ! line$=srep$(line$,cr$,'^') : line$=srep$(line$,lf$,'~')
@@ -202,7 +202,7 @@
 44600     fn_get_the_date=gtd_return
 44800   fnend  ! fn_get_the_date
 45000 ! region: ertn
-45200 ERTN: let fnerror(program$,err,line,act$,"xit")
+45200 ERTN: fnerror(program$,err,line,act$,"xit")
 45400   if uprc$(act$)<>"PAUSE" then goto L1710
 45600   if env$("ACSDeveloper")<>"" then execute "list -"&str$(line) : pause : goto L1710
 45800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
@@ -211,11 +211,11 @@
 46400 ! /region
 46600   def fn_ask_dates(mat label$,mat filter_date)
 46800     fntos(sn$="ask_"&str$(udim(mat label$))&'_dates')
-47000     let respc=0
+47000     respc=0
 47200     for ad_line=1 to udim(mat label$)
 47400       fnlbl(ad_line+1,1,label$(ad_line),25,1)
 47600       fntxt(ad_line+1,27,8,0,1,"3")
-47800       let resp$(respc+=1)=str$(filter_date(ad_line))
+47800       resp$(respc+=1)=str$(filter_date(ad_line))
 48000     next ad_line
 48200     fncmdset(3)
 48400     fnacs(sn$,0,mat resp$,ckey)
@@ -226,19 +226,19 @@
 49400   fnend  ! fn_ask_dates
 51000   def fn_acs_hourly_rate(wo_client,the_date,wo_month; hr_category,wo_sage_code$*128) ! inherrits client_id_sage_ax and client_id_brc
 51040     if hr_category=23 or hr_category=11 then 
-51060       let hr_return=0
+51060       hr_return=0
 51072     else if wo_client=client_id_brc then 
-51074       let hr_return=60
+51074       hr_return=60
 51080     else if wo_client=client_id_sage_ax then 
-51100       let hr_return=fn_sage_hourly_rate(wo_sage_code$)
+51100       hr_return=fn_sage_hourly_rate(wo_sage_code$)
 51120     else if fn_onsupport(wo_client,wo_month,the_date) then 
 51140       if hr_category=6 then 
-51160         let hr_return=0
+51160         hr_return=0
 51180       else 
-51200         let hr_return=125
+51200         hr_return=125
 51220       end if 
 51240     else 
-51260       let hr_return=250
+51260       hr_return=250
 51280     end if 
 51300     fn_acs_hourly_rate=hr_return
 51320   fnend 

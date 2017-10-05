@@ -10,32 +10,32 @@
 00100   fncno(cno)
 00110   let wait_message$="Generating Reversing Entries"
 00120 ! 
-00130   let my_p$="Generated Reversing Entry"
+00130   my_p$="Generated Reversing Entry"
 00140 ! ______________________________________________________________________
 00150 MENU1: ! 
 00160   fntos(sn$="Reverse") !:
-        let mylen=20: let mypos=mylen+3 : let right=1
+        mylen=20: mypos=mylen+3 : right=1
 00170   fnlbl(1,10,"Search For (blank for all)")
 00180   fnlbl(2,1,"Adjustment Date:",mylen,right)
 00190   fntxt(2,mypos,8,0,right,"1",0,"If you are wanting to reverse some specific adjustments and can identify them by date, use that date.",0 ) !:
-        let resp$(1)=str$(s_ad)
+        resp$(1)=str$(s_ad)
 00200   fnlbl(3,1,"Reference Number:",mylen,right)
 00210   fntxt(3,mypos,12,0,right,"",0,"Enter the reference # of the adjustment to reverse a specific adjustment.",0 ) !:
-        let resp$(2)=s_rn$
+        resp$(2)=s_rn$
 00220   fnlbl(4,1,"Transaction Code:",mylen,right)
 00230   fntxt(4,mypos,1,0,right,"30",0,"If you wish to reverse all adjustments, you can enter a transaction code of 3.",0 ) !:
-        let resp$(3)=str$(s_tc)
+        resp$(3)=str$(s_tc)
 00240   fnchk(6,mypos,"Search History Also:",right) !:
-        let resp$(4)=sh$
+        resp$(4)=sh$
 00250   fnlbl(8,5,"Reverse With (blank for no change)")
 00260   fnlbl(9,1,"Adjustment Date:",mylen,right)
 00270   fntxt(9,mypos,8,0,right,"1",0,"",0 ) !:
-        let resp$(5)=str$(r_ad)
+        resp$(5)=str$(r_ad)
 00280   fnlbl(10,1,"Reference Number:",mylen,right)
 00290   fntxt(10,mypos,12,0,right,"",0,"",0 ) !:
-        let resp$(6)=r_rn$
+        resp$(6)=r_rn$
 00300   fnchk(11,mypos,"Reverse Entry Now:",right) !:
-        let resp$(7)="True"
+        resp$(7)="True"
 00310   fncmdkey("&Next",1,1,0,"Proceed with reversing adjustments.")
 00320   fncmdkey("&Cancel",5,0,1,"Return to menu without reversing.")
 00330   fnacs(sn$,0,mat resp$,ckey)
@@ -44,9 +44,9 @@
 00360   s_rn$=resp$(2)
 00370   s_tc=val(resp$(3))
 00380   if resp$(4)="True" then sh$="Y" else sh$="N"
-00390   let r_ad=val(resp$(5))
-00400   let r_rn$=resp$(6)
-00410   if resp$(7)="True" then let re$="Y" else let re$="N"
+00390   r_ad=val(resp$(5))
+00400   r_rn$=resp$(6)
+00410   if resp$(7)="True" then re$="Y" else re$="N"
 00420   s_rn$=uprc$(rtrm$(ltrm$(s_rn$)))
 00430 ! ______________________________________________________________________
 00440   let glmstr=1 !:
@@ -67,10 +67,10 @@
 00560 L560: form pos 87,pd 6.2,pos 333,2*pd 3
 00570 L570: lr2=lrec(2)+1
 00580     write #gltrans,using L520,rec=lr2: t$,s,k,mat n,l$,mp_p$,0 duprec L570
-00590     if ta(1)=0 then let ta(1)=lr2
+00590     if ta(1)=0 then ta(1)=lr2
 00600     if ta(2)>0 then !:
             rewrite #gltrans,using L640,rec=ta(2): lr2
-00610     let ta(2)=lr2
+00610     ta(2)=lr2
 00620     cb=cb+k
 00630     rewrite #glmstr,using L560,key=t$: cb,mat ta
 00640 L640: form pos 71,pd 3
@@ -83,9 +83,9 @@
 00710   read #glmstr,using L560,key=t$: cb,mat ta nokey NXT_HIST
 00720 L720: lr2=lrec(2)+1
 00730   write #gltrans,using L520,rec=lr2: t$,s,k,mat n,l$,my_p$,0 duprec L720
-00740   if ta(1)=0 then let ta(1)=lr2
+00740   if ta(1)=0 then ta(1)=lr2
 00750   if ta(2)>0 then rewrite #gltrans,using L640,rec=ta(2): lr2
-00760   let ta(2)=lr2
+00760   ta(2)=lr2
 00770   cb=cb+k
 00780   rewrite #glmstr,using L560,key=t$: cb,mat ta
 00790 NXT_HIST: goto READ_ACTRANS
@@ -94,10 +94,10 @@
 00820   close #win: ioerr L830
 00830 L830: goto XIT
 00840 ! ______________________________________________________________________
-00850 XIT: let fnxit
+00850 XIT: fnxit
 00860 ! ______________________________________________________________________
 00870 ! <Updateable Region: ERTN>
-00880 ERTN: let fnerror(program$,err,line,act$,"xit")
+00880 ERTN: fnerror(program$,err,line,act$,"xit")
 00890   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00900   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00910   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -106,8 +106,8 @@
 00940 ! ______________________________________________________________________
 00950 SEARCH_FOR: ! 
 00960 ! 
-00970   let test_p$=uprc$(rtrm$(ltrm$(p$)))
-00980   let test_l$=uprc$(rtrm$(ltrm$(l$)))
+00970   test_p$=uprc$(rtrm$(ltrm$(p$)))
+00980   test_l$=uprc$(rtrm$(ltrm$(l$)))
 00990 ! 
 01000   if test_p$<>uprc$(rtrm$(ltrm$(my_p$))) then s_test_p=1
 01010   if test_p$=uprc$(rtrm$(ltrm$(my_p$))) then s_test_p=0
@@ -126,10 +126,10 @@
 01120   return 
 01130 ! ______________________________________________________________________
 01140 REVERSE_WITH: ! 
-01150   if re$="Y" then let k=-k
+01150   if re$="Y" then k=-k
 01160   if r_ad<>0 then s=r_ad
 01170   if r_rn$<>"" then l$=r_rn$
-01180   if t$(3:3)=" " then let t$(3:3)="0"
-01190   if t$(12:12)=" " then let t$(12:12)="0"
+01180   if t$(3:3)=" " then t$(3:3)="0"
+01190   if t$(12:12)=" " then t$(12:12)="0"
 01200   return 
 01210 ! ______________________________________________________________________

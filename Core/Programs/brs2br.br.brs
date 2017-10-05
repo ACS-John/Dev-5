@@ -16,13 +16,13 @@
 00160   if cmdkey=5 or cmdkey=99 or warn$="Q" or warn$="X" or warn$="N" then !:
           goto XIT
 00170 ! ______________________________________________________________________
-00180   let rpl$='Save'
+00180   rpl$='Save'
 00190   if uprc$(rpl$)<>uprc$("SAVE") and uprc$(rpl$)<>uprc$("Replace") then !:
-          let rpl$="Replace" ! default to Replace unless correctly specified
+          rpl$="Replace" ! default to Replace unless correctly specified
 00200   if dir$="" then !:
-          let dir$="\\DISKSTATION\public\ACS\acs.402\" !:
+          dir$="\\DISKSTATION\public\ACS\acs.402\" !:
           pr "Directory not set default used (Default Dir: "&dir$&" )"
-00210   if dir$(len(dir$):len(dir$))="\" then let dir$=dir$(1:len(dir$)-1)
+00210   if dir$(len(dir$):len(dir$))="\" then dir$=dir$(1:len(dir$)-1)
 00220   if exists(dir$)=0 then !:
           pr "Directory not found..." !:
           goto XIT
@@ -38,7 +38,7 @@
 00320 ! __
 00330   for j=1 to udim(filename$)
 00340     if filename$(j)="" then goto AFT_LOOP1
-00350     let tmpa$=uprc$(filename$(j)(len(filename$(j))-3:len(filename$(j)))) !:
+00350     tmpa$=uprc$(filename$(j)(len(filename$(j))-3:len(filename$(j)))) !:
           if tmpa$<>uprc$(".brs") then goto LOOP1_NEXT
 00360     pr #20: ' ! Begin process of file ( '&filename$(j)&' ) '
 00370     pr #20: ' ! '
@@ -65,7 +65,7 @@
 00570 XIT: stop 
 00580 ! ______________________________________________________________________
 00590 ! <Updateable Region: ERTN>
-00600 ERTN: let fnerror(program$,err,line,act$,"xit")
+00600 ERTN: fnerror(program$,err,line,act$,"xit")
 00610   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00620   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00630   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

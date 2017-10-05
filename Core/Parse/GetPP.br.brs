@@ -19,12 +19,12 @@
 20340   ! ext$:   the input progams extension (period included) (i.e. ".wb")
 20360   ! The -1 in pos(x,y,-1) causes search to run backwards from end to front
 20380   ! ______________________________________________________________________
-20400   let input$=trim$(input$) : let path$=prog$=ext$=""
+20400   input$=trim$(input$) : path$=prog$=ext$=""
 20420   let fslash_pos=pos(input$,"/",1) : bslash_pos=pos(input$,"\",-1)
 20440   if fslash_pos>0 then gosub FSLASH_PARSE
 20460   if bslash_pos>0 then gosub BSLASH_PARSE
 20480   if fslash_pos<=0 and bslash_pos<=0 then gosub NOSLASH_PARSE
-20500   let dot_pos=pos(prog$,".",-1)
+20500   dot_pos=pos(prog$,".",-1)
 20520   if dot_pos>0 then gosub RIP_EXT
 20540   goto XIT
 20560   ! 

@@ -30,17 +30,17 @@
 00350   if bal<0 and a(3)>0 then mat gb=(0) : let gb(3)=bal : cause$="three": goto REW
 00360   if bal<0 and a(4)>0 then mat gb=(0) : let gb(4)=bal : cause$="three": goto REW
 00370   if bal<0 then mat gb=(0) : let gb(5)=bal : cause$="three": goto REW ! if credit balance and no water,sewer,elec,or gas then credit show in gb(5)
-00380   let runtotal=0
+00380   runtotal=0
 00390   mat gb=(0)
 00400   for j=1 to 10 ! types of charges  (OWE CURRENT BILL)
 00410     if penalty$(j)="Y" and tcode=1 then goto L450 ! SKIP PENALTY RECORDS
 00420     let gb(j)=min(g(j),(bal-runtotal))
 00430     if sum(gb)=bal then goto REW
-00440     let runtotal=runtotal+gb(j)
+00440     runtotal=runtotal+gb(j)
 00450 L450: next j
 00460   if sum(gb)= bal then goto REW
 00470   restore #2,key>=z$&"         ": nokey L570 ! FIND IN TRANSACTION HISTORY
-00480   mat answer=(0): mat gb=(0): let runtotal=0
+00480   mat answer=(0): mat gb=(0): runtotal=0
 00490 L490: read #2,using L500: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L650
 00500 L500: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 00510   if p$<>z$ then goto L650 !:
@@ -63,7 +63,7 @@
 00670     if apply(k)=0 then goto L710
 00680     let gb(k)+=min(answer(k,x),max(0,(bal-runtotal)))
 00690     if sum(gb)=bal then goto REW
-00700     let runtotal=runtotal+min(answer(k,x),max(0,(bal-runtotal)))
+00700     runtotal=runtotal+min(answer(k,x),max(0,(bal-runtotal)))
 00710 L710: next k
 00720   if x<3 then let x+=1: goto L660
 00730   cause$="four"
@@ -80,8 +80,8 @@
 00840   pr #255: "Account    Balance   TotBrk   "&servicename$(1)(1:8)&" "&servicename$(2)(1:8)&" "&servicename$(3)(1:8)&" "&servicename$(4)(1:8)&" "&servicename$(5)(1:8)&" "&servicename$(6)(1:8)&" "&servicename$(7)(1:8)&" "&servicename$(8)(1:8)&" "&servicename$(9)(1:8)&" "&servicename$(10)(1:8)&" "
 00850   pr #255: "__________ _________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________ ________"
 00860   return 
-00870 DONE: let fncloseprn
-00880 XIT: let fnxit
+00870 DONE: fncloseprn
+00880 XIT: fnxit
 00890 REW: ! 
 00900   rewrite #1,using L910,key=z$: mat gb
 00910 L910: form pos 388,10*pd 5.2
@@ -90,31 +90,31 @@
 00940 SCR1: ! 
 00950   sn$="balbrkfix" !:
         fntos(sn$) !:
-        let mylen=62 : let mypos=50
-00960   let txt$="Billing Dates for last three months:" !:
+        mylen=62 : mypos=50
+00960   txt$="Billing Dates for last three months:" !:
         fnlbl(1,1,txt$,mylen,1)
 00970   for j=1 to 3 !:
           fntxt(j+1,mypos,10,0,0,"3",0,"Put your most recent billing date first and then in order from there.") !:
-          let resp$(j)="" !:
+          resp$(j)="" !:
         next j
-00980   let txt$="Penalty Dates for last three months:" !:
+00980   txt$="Penalty Dates for last three months:" !:
         fnlbl(5,1,txt$,mylen,1)
 00990   for j=1 to 3 !:
           fntxt(j+5,mypos,10,0,0,"3",0,"Put your most recent penalty date first and then in order from there.") !:
-          let resp$(j+3)="" !:
+          resp$(j+3)="" !:
         next j
-01000   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+01000   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 01010   if ckey=5 then goto XIT
 01020   for j=1 to 6
 01030 L1030: let x=pos(resp$(j),"/",1)
-01040     if x>0 then let resp$(j)(x:x)="": goto L1030
+01040     if x>0 then resp$(j)(x:x)="": goto L1030
 01050   next j
 01060   for j=1 to 6 !:
           cd1(j)=val(resp$(j)) conv SCR1 !:
         next j
 01070   if cd1(1)=0 then !:
-          mat message$(1): let mytype=0 !:
-          let message$(1)="You must enter at least one date!" !:
+          mat message$(1): mytype=0 !:
+          message$(1)="You must enter at least one date!" !:
           fnmsgbox(mat message$,resp$,cap$,mytype) !:
           goto SCR1
 01080   return 

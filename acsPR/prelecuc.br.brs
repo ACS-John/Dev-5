@@ -35,36 +35,36 @@
 00270 L270: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2,pos 247,10*pd 4.2,10*pd 3.3,10*c 12,pos 618,10*n 1
 00280   close #1: 
 00290 ! ______________________________________________________________________
-00300 L300: let p1=pos(b$,"-",1)
+00300 L300: p1=pos(b$,"-",1)
 00310   if p1=0 then goto L340
 00320   b$(p1:p1)=""
 00330   goto L300
 00340 L340: b1=val(b$)
-00350   let p1=pos(a$(3),",",1): comma=1
-00360   if p1=0 then let p1=pos(a$(3)," ",1): comma=0
+00350   p1=pos(a$(3),",",1): comma=1
+00360   if p1=0 then p1=pos(a$(3)," ",1): comma=0
 00370   ct$=a$(3)(1:p1-1)
 00380   if comma=1 then st$=a$(3)(p1+2:p1+3) else st$=a$(3)(p1+1:p1+2)
 00390   if uprc$(a$(3)(p1+2:p1+4))="TEX" then st$="Tx"
-00400   let p2=len(rtrm$(a$(3)))
-00410   let p1=p2-4
+00400   p2=len(rtrm$(a$(3)))
+00410   p1=p2-4
 00420   let zip$=a$(3)(p1:p2)
-00430   let io1$(1)="5,25,C 40,UT,N"
-00440   let io1$(2)="6,25,C 40,UT,N"
-00450   let io1$(3)="7,25,C 20,UT,N"
-00460   let io1$(4)="8,25,c 2,UT,N"
-00470   let io1$(5)="9,25,C 5,UT,N"
-00480   let io1$(6)="10,25,N 9,UT,N"
-00490   let io1$(7)="11,25,N 6,UT,N"
-00500   let io1$(8)="12,52,C 1,UT,N"
-00510   let io1$(9)="13,38,C 1,UT,N"
-00520   let io1$(10)="14,68,n 2,UT,N"
-00530   let io1$(11)="15,43,n 2,UT,N"
-00540   let io1$(12)="17,25,c 3,UT,N"
-00550   let io1$(13)="18,25,c 6,UT,N"
-00560   let io1$(14)="19,57,c 1,UT,N"
-00570   let io1$(15)="20,49,c 1,UT,N"
-00580   let namcde$="F"
-00590   let typemp$="R"
+00430   io1$(1)="5,25,C 40,UT,N"
+00440   io1$(2)="6,25,C 40,UT,N"
+00450   io1$(3)="7,25,C 20,UT,N"
+00460   io1$(4)="8,25,c 2,UT,N"
+00470   io1$(5)="9,25,C 5,UT,N"
+00480   io1$(6)="10,25,N 9,UT,N"
+00490   io1$(7)="11,25,N 6,UT,N"
+00500   io1$(8)="12,52,C 1,UT,N"
+00510   io1$(9)="13,38,C 1,UT,N"
+00520   io1$(10)="14,68,n 2,UT,N"
+00530   io1$(11)="15,43,n 2,UT,N"
+00540   io1$(12)="17,25,c 3,UT,N"
+00550   io1$(13)="18,25,c 6,UT,N"
+00560   io1$(14)="19,57,c 1,UT,N"
+00570   io1$(15)="20,49,c 1,UT,N"
+00580   namcde$="F"
+00590   typemp$="R"
 00600 ! ______________________________________________________________________
 00610 SCR1: ! 
 00620   pr newpage
@@ -92,12 +92,12 @@
 00835   if b1>999999999 then b1=0
 00840   pr f mat io1$: a$(1),a$(2),ct$,st$,zip$,b1,yr,namcde$,typemp$,1,48
 00850 L850: input fields mat io1$,attr "R": a$(1),a$(2),ct$,st$,zip$,b1,endingdate,namcde$,typemp$,sr1,sr2,country$,naics$,cafiteria$,pension$ conv CONV1
-00860   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+00860   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 00870   if cmdkey>0 then goto L940 else ce=curfld+1
 00880   if ce>udim(io1$) then ce=1
-00890 L890: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
-00900   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L850
-00910 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+00890 L890: io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
+00900   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L850
+00910 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 00920   ce=cnt+1
 00930 ERR1: pr f "24,78,C 1": bell : goto L890
 00940 L940: ! 
@@ -111,17 +111,17 @@
 01020   if endingdate<010100 or endingdate>123199 then ce=7: goto ERR1
 01030   if sr1<0 or sr1>10 then ce=10: goto ERR1
 01040   if sr2<0 or sr1>99 then ce=11: goto ERR1
-01050   cafiteria$=uprc$(cafiteria$): let pension$=uprc$(pension$)
+01050   cafiteria$=uprc$(cafiteria$): pension$=uprc$(pension$)
 01060   if cafiteria$="Y" or cafiteria$="N" then goto L1070 else ce=14: goto ERR1
 01070 L1070: if pension$="Y" or pension$="N" then goto L1080 else ce=15: goto ERR1
-01080 L1080: let monthyr$=cnvrt$("pic(######)",endingdate)(1:2)&"20"&cnvrt$("pic(######)",endingdate)(5:6)
+01080 L1080: monthyr$=cnvrt$("pic(######)",endingdate)(1:2)&"20"&cnvrt$("pic(######)",endingdate)(5:6)
 01090   let yr=endingdate-(int(endingdate/100)*100)+2000
 01100 ! ______________________________________________________________________
 01110   gosub SCR2
 01120   pr newpage
 01130   let win=101
-01140   let message$=""
-01150   stopable=1: gosub L3370 ! Let FNWAIT(WIN,CAP$,MESSAGE$,1)
+01140   message$=""
+01150   stopable=1: gosub L3370 ! fnWAIT(WIN,CAP$,MESSAGE$,1)
 01160 ! ______________________________________________________________________
 01170   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
 01180   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno)&",Shr",internal,input,relative 
@@ -129,36 +129,36 @@
 01200 ! ______________________________________________________________________
 01210   goto BEGINNING_OF_FILE
 01220   pr newpage
-01230   let msgline$(1)="Insert Diskette"
-01240   let mtype=1
+01230   msgline$(1)="Insert Diskette"
+01240   mtype=1
 01250   if err=4221 then gosub L3020
 01260   goto L1190
 01270 ! ______________________________________________________________________
-01280 BEGINNING_OF_FILE: gosub RECRA : gosub RECRE: let fnopenprn
+01280 BEGINNING_OF_FILE: gosub RECRA : gosub RECRE: fnopenprn
 01290   pr #255,using "form pos 20,cc 40,skip 1,pos 20,cc 40": "Electronic Edit List",cnvrt$("pic(zz/zz/zzzz",endingdate)
 01300 READ_EMPLOYEE: read #1,using L1330: eno,mat em$,ss$,em6,em16,ta eof END1
-01310   let m1=m2=m3=m4=0
+01310   m1=m2=m3=m4=0
 01320   gosub NAME_BREAKDOWN
 01330 L1330: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 156,n 6,pos 173,pd 3
-01340   let r1=r1+1
-01350   let p1=pos(em$(3),",",1) : comma=1
-01360   if p1=0 then let p1=pos(em$(3)," ",1): comma=0
+01340   r1=r1+1
+01350   p1=pos(em$(3),",",1) : comma=1
+01360   if p1=0 then p1=pos(em$(3)," ",1): comma=0
 01370   emct$=em$(3)(1:p1-1)
 01380   gosub STATE_BREAKDOWN: emst$=holdst$ ! If COMMA=1 Then eMST$=EM$(3)(P1+2:P1+3) Else eMST$=EM$(3)(P1+1:P1+2)
-01390   let p2=len(rtrm$(em$(3)))
-01400   let p1=p2-4
+01390   p2=len(rtrm$(em$(3)))
+01400   p1=p2-4
 01410   emzip$=em$(3)(p1:p2)
-01420 L1420: let p1=pos(ss$,"-",1)
+01420 L1420: p1=pos(ss$,"-",1)
 01430   if p1>0 then ss$(p1:p1)="": goto L1420 else ssn=val(ss$)
 01440 READ_DEPARTMENT: read #2,using L1460,rec=ta: teno,tcd,mat ty,mat tqm,ta
 01450 ! If SS$="459499366" Then Pause
 01460 L1460: form pos 1,n 8,pos 48,n 2,pos 168,38*pd 5.2,pos 468,pd 3
-01470   if tcd<1 or tcd>10 then let tcd=1
+01470   if tcd<1 or tcd>10 then tcd=1
 01480   gosub CALCULATEUC ! determine wages for quarter
 01510   if ta>0 then goto READ_DEPARTMENT
 01520 ! Gosub RECRE
 01530   gosub RECRS
-01540   let tw1=tw1+1 ! counter
+01540   tw1=tw1+1 ! counter
 01550   goto READ_EMPLOYEE
 01560 ! ______________________________________________________________________
 01570 RECRA: pr #22,using L1580: "RA",b1,"","98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","",country$(1:2),contact$,contactph$,phoneext$,"",email$,"","",""
@@ -182,15 +182,15 @@
 01750 L1750: form pos 1,c 2,g 2,c 5,pic(#########),c 15,c 15,c 20,c 4,c 124,c 6,2*pic(###########),n 2,n 8,n 8,c 5,c 9,c 81,c 3,c 3,c 1,c 6,c 1,c 10,c 1,c 5,c 145
 01760   pr #255,using L1770: ssn,trim$(first$)&trim$(last$),m1,h2
 01770 L1770: form pos 1,n 12,x 2,c 25,2*pic(zz,zzz,zzz.##)
-01780   let totwage+=m1: let tottaxable+=h2: let totemployees+=1
-01790 L1790: let t1=t1+1: mat t1=t1+w2
+01780   totwage+=m1: tottaxable+=h2: totemployees+=1
+01790 L1790: t1=t1+1: mat t1=t1+w2
 01800   mat i1=i1+w2
 01810   mat i2=i2+w3
 01820   mat t2=t2+w3
-01830   let dc2=dc2+dc1
-01840   let dc3=dc3+dc1
-01850   let dca2=dca2+dca
-01860   let dca3=dca3+dca
+01830   dc2=dc2+dc1
+01840   dc3=dc3+dc1
+01850   dca2=dca2+dca
+01860   dca3=dca3+dca
 01870   let w2=w3=dca=dc1=0
 01880   mat w2=(0)
 01890   mat w3=(0)
@@ -206,7 +206,7 @@
 01990   pr #255,using "form pos 1,c 16,pic(zz,zzz,zzz)": "Total employees:",totemployees
 02000   fncloseprn
 02010   gosub L2040
-02020 XIT: let fnxit
+02020 XIT: fnxit
 02030 ! ______________________________________________________________________
 02040 L2040: close #24: ioerr L2060
 02050   dim a$*512
@@ -227,7 +227,7 @@
 02180 SCR2: ! 
 02190   dim contact$*27,email$*40,savelocation$*40
 02200   let win=101
-02210   let win_height=13: let win_width=75: let display_cnam=1: button_option=2: gosub L2650 ! Let fnWin3b(WIN,CAP$,12,62,1,2)
+02210   let win_height=13: let win_width=75: display_cnam=1: button_option=2: gosub L2650 ! fnWin3b(WIN,CAP$,12,62,1,2)
 02220   pr #win,fields "04,2,Cr 31,N": "Personal ID Number:" !:
         pr #win,fields "05,2,Cr 31,N": "Resub Indicator:" !:
         pr #win,fields "06,2,Cr 31,N": "Resub TLCN:" !:
@@ -248,10 +248,10 @@
         scr2_io$(8)="11,34,C 01,UT,N" !:
         scr2_io$(9)="12,68,Cu 01,UT,N" !:
         scr2_io$(10)="13,27,C 40,UT,N"
-02240   if resub$="" then let resub$="0"
-02250 ! If TLCN$="" Then Let TLCN$="0"
-02260   if terminat$="" then let terminat$="0"
-02270   let med$="Y" : savelocation$="A:\"
+02240   if resub$="" then resub$="0"
+02250 ! If TLCN$="" Then tLCN$="0"
+02260   if terminat$="" then terminat$="0"
+02270   med$="Y" : savelocation$="A:\"
 02280 L2280: rinput #win,fields mat scr2_io$: emppin$,resub$,tlcn$,contact$,contactph$,phoneext$,email$,terminat$,med$,savelocation$ conv CONV_SCR2
 02290   if ce>0 then scr2_io$(ce)(ce1:ce2)="U": ce=0
 02300   if cmdkey>0 then goto L2370 else ce=curfld
@@ -274,20 +274,20 @@
 02440 ! ______________________________________________________________________
 02450 NAME_BREAKDOWN: ! 
 02460   dim first$*15,mid$*15,last$*20,em$(3)*30
-02470   em$(1)=uprc$(rtrm$(em$(1))): ! Let NAMCDE$="s"
+02470   em$(1)=uprc$(rtrm$(em$(1))): ! nAMCDE$="s"
 02480   let x1=pos(em$(1)," ",1)
 02490   let x2=pos(em$(1)," ",x1+1)
 02500   let x3=pos(em$(1)," ",x2+1)
 02510   if uprc$(namcde$)="S" or uprc$(namcde$)="L" then goto L2560
 02520   let first$=em$(1)(1:min(15,max(x1-1,1)))
-02530   if x2>0 then let mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
-02540   if x2=0 then last$=em$(1)(x1+1:len(em$(1))): let mid$=""
+02530   if x2>0 then mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
+02540   if x2=0 then last$=em$(1)(x1+1:len(em$(1))): mid$=""
 02550   goto L2610
 02560 L2560: ! last name first
 02570   if x1=0 then let x1=pos(em$(1),",",1)
 02580   if x1>0 and em$(1)(x1-1:x1-1)="," then last$=em$(1)(1:x1-2) else last$=em$(1)(1:max(x1-1,1))
-02590   if x2>0 then let first$=em$(1)(x1+1:x2-1): let mid$=em$(1)(x2+1:len(em$(1)))
-02600   if x2=0 then let first$=em$(1)(x1+1:len(em$(1)))(1:15): let mid$=""
+02590   if x2>0 then let first$=em$(1)(x1+1:x2-1): mid$=em$(1)(x2+1:len(em$(1)))
+02600   if x2=0 then let first$=em$(1)(x1+1:len(em$(1)))(1:15): mid$=""
 02610 L2610: let x=pos(first$,",",1): if x>0 then let first$(x:x)=""
 02620   let x=pos(last$,",",1): if x>0 then last$(x:x)=""
 02630 ! pr FIRST$,MID$,LAST$
@@ -363,7 +363,7 @@
 03120   next j
 03130   open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&cap$,display,outin 
 03140   pr #104: newpage
-03150   let mglinerow=2
+03150   mglinerow=2
 03160   for j=1 to udim(msgline$)
 03170     pr #104,fields str$(mglinerow+j-1)&",2,Cc 60,N": msgline$(j)
 03180   next j
@@ -372,16 +372,16 @@
 03210   if mtype=2 then pr f str$(endrow+1)&",35,Cc 4,B,21": "Yes"
 03220   if mtype=2 then pr f str$(endrow+1)&",40,Cc 4,B,22": "No"
 03230 L3230: if mtype=2 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
-03240   if mtype=2 and cmdkey=22 then let response$(1)="N"
-03250   if mtype=2 and cmdkey=21 then let response$(1)="Y"
+03240   if mtype=2 and cmdkey=22 then response$(1)="N"
+03250   if mtype=2 and cmdkey=21 then response$(1)="Y"
 03260   if mtype=2 and response$(1)<>"Y" and response$(1)<>"N" then pr f "24,1,C 7,N": bell$ : goto L3230
 03270   if mtype=3 then pr f str$(endrow+1)&",29,Cc 4,B,21": "Yes"
 03280   if mtype=3 then pr f str$(endrow+1)&",34,Cc 4,B,22": "No"
 03290   if mtype=3 then pr f str$(endrow+1)&",39,C 12,B,22": "Cancel (Esc)"
 03300   if mtype=3 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
-03310   if mtype=3 and cmdkey=22 then let response$(1)="N"
-03320   if mtype=3 and cmdkey=21 then let response$(1)="Y"
-03330   if mtype=3 and cmdkey=99 then let response$(1)=""
+03310   if mtype=3 and cmdkey=22 then response$(1)="N"
+03320   if mtype=3 and cmdkey=21 then response$(1)="Y"
+03330   if mtype=3 and cmdkey=99 then response$(1)=""
 03340   if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr f "24,1,C 7,N": bell$ : goto L3230
 03350   close #104: ioerr L3360
 03360 L3360: return  ! Fnend
@@ -415,16 +415,16 @@
 03640 ! 
 03650   return  ! Fnend
 03660 L3660: ! Def Library FNFKEY(SCRLINE,MAT FKEY$,MAT DISFK,&EM$,ES)
-03670   let totallen=0 !:
+03670   totallen=0 !:
         startpos=0
 03680   for j=1 to udim(fkey$) ! add ' (Fx)' to each button
 03690     if fkey$(j)="" then goto L3720
 03700     let fkey$(j)=fkey$(j)&" (F"&str$(j)&")" !:
           ! add ' (Fx)' to each button
-03710     let totallen=totallen+len(fkey$(j))+1
+03710     totallen=totallen+len(fkey$(j))+1
 03720 L3720: next j
-03730   let totallen=totallen+len(rtrm$(em$))+min(len(rtrm$(em$)),1)+es
-03740   let totallen=totallen-1
+03730   totallen=totallen+len(rtrm$(em$))+min(len(rtrm$(em$)),1)+es
+03740   totallen=totallen-1
 03750   startpos=int((80-totallen)/2)+1
 03760   pr f str$(scrline)&","&str$(startpos)&",C "&str$(totallen)&",N": rpt$("Ä",totallen)
 03770   for j=1 to udim(fkey$)
@@ -438,24 +438,24 @@
 03850   pr f str$(scrline)&","&str$(startpos)&",C "&str$(len(rtrm$(em$))+es)&",R,N": rtrm$(em$)
 03860 L3860: return  ! Fnend
 03870 STATE_BREAKDOWN: ! extract state name
-03880   let holdst$="          "
-03890   let p3=oldp3=0
-03900   let p4=10
+03880   holdst$="          "
+03890   p3=oldp3=0
+03900   p4=10
 03910   for j=1 to 10
-03920     let p3=pos(rtrm$(em$(3))," ",p3+1)
+03920     p3=pos(rtrm$(em$(3))," ",p3+1)
 03930     if oldp3>p3 then goto L3960 ! end of address reached
 03940     if p3>0 then oldp3=p3 else goto L3950
 03950 L3950: next j
 03960 L3960: for j=1 to 10
-03970     if rtrm$(em$(3)(oldp3-j:oldp3-j))="" or em$(3)(oldp3-j:oldp3-j)="," then goto L3980 else let p4=p4-1: let holdst$(p4:p4)=em$(3)(oldp3-j:oldp3-j): goto L3990
+03970     if rtrm$(em$(3)(oldp3-j:oldp3-j))="" or em$(3)(oldp3-j:oldp3-j)="," then goto L3980 else p4=p4-1: holdst$(p4:p4)=em$(3)(oldp3-j:oldp3-j): goto L3990
 03980 L3980: if rtrm$(holdst$)="" then goto L3990 else goto L4000
 03990 L3990: next j
-04000 L4000: let holdst$=ltrm$(holdst$)(1:2)
-04010   if holdst$="TE" then let holdst$="TX"
+04000 L4000: holdst$=ltrm$(holdst$)(1:2)
+04010   if holdst$="TE" then holdst$="TX"
 04020   return 
 04030 ! ______________________________________________________________________
 04040 ! <Updateable Region: ERTN>
-04050 ERTN: let fnerror(program$,err,line,act$,"xit")
+04050 ERTN: fnerror(program$,err,line,act$,"xit")
 04060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 04070   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 04080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -463,28 +463,28 @@
 04100 ! /region
 04110 ! ______________________________________________________________________
 04120 CALCULATEUC: ! determine quarterly wages
-04122   let dcy=dcq=0
+04122   dcy=dcq=0
 04130   for j=1 to 10
 04140     if dedfed(j)=2 and dedcode(j)=1 and cafiteria$="Y" then !:
-            let dcy=dcy+ty(j+3): let dcq=dcq+tqm(j+3)
+            dcy=dcy+ty(j+3): dcq=dcq+tqm(j+3)
 04150     if dedfed(j)=1 and dedcode(j)=1 and pension$="Y" then !:
-            let dcy=dcy+ty(j+3): let dcq=dcq+tqm(j+3)
+            dcy=dcy+ty(j+3): dcq=dcq+tqm(j+3)
 04160   next j
-04170   let m2=m2+ty(21)-dcy
-04180   let m1=m1+tqm(16)-dcq
+04170   m2=m2+ty(21)-dcy
+04180   m1=m1+tqm(16)-dcq
 04190   if ta=0 then goto L4200 else goto L4340 ! read_DEPARTMENT
 04200 L4200: if m2=0 then goto L4340 ! skip if total wage =0
 04210   if m1=0 then goto L4340 ! SKIP IF QUARTERLY WAGE=0
-04220   let p3=p3+1
+04220   p3=p3+1
 04230   if m2<m(sr1) then goto L4290
 04240   if m2-m1>m(sr1) then goto L4270
-04250   let h2=m(sr1)-(m2-m1)
+04250   h2=m(sr1)-(m2-m1)
 04260   goto L4300
-04270 L4270: let h2=0
+04270 L4270: h2=0
 04280   goto L4300
-04290 L4290: let h2=m1
-04300 L4300: let h3=m1-h2
-04310   let t1=t1+m1
-04320   let t2=t2+h3
-04330   let t3=t3+h2
+04290 L4290: h2=m1
+04300 L4300: h3=m1-h2
+04310   t1=t1+m1
+04320   t2=t2+h3
+04330   t3=t3+h2
 04340 L4340: return 

@@ -23,22 +23,22 @@
 00200 BUILD_LAYOUT: ! 
 00210   fncno(cno)
 00220 ! ** Field Labels    ** !:
-        let ic=0 ! temporary Item Counter
+        ic=0 ! temporary Item Counter
 00230   lbl$(ic+=1)="Time Frame ID" !:
         lbl$(ic+=1)="Description"
 00250 ! ** Text Box / Field Display   Lengths   ** !:
-        let ic=0 ! temporary Item Counter !:
-        let mmddyy=8 !:
+        ic=0 ! temporary Item Counter !:
+        mmddyy=8 !:
         ccyymmdd=10
-00260   let tln(ic+=1)=2 !:
-        let tln(ic+=1)=50
+00260   tln(ic+=1)=2 !:
+        tln(ic+=1)=50
 00280 ! ** Field Types ** !:
-        let ic=0
+        ic=0
 00290   fltyp$(ic+=1)='C' !:
         fltyp$(ic+=1)='C'
 00310 ! ** Field Storage Lengths ** !:
-        let ic=0 !:
-        let mmddyy=6 : ccyymmdd=8
+        ic=0 !:
+        mmddyy=6 : ccyymmdd=8
 00320   sln(ic+=1)=2 !:
         sln(ic+=1)=50
 00420   return 
@@ -47,10 +47,10 @@
 00450   fnhamster("TimeFrame",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln)
 00460   return 
 00470 ! ______________________________________________________________________
-00480 XIT: let fnxit
+00480 XIT: fnxit
 00490 ! ______________________________________________________________________
 00500 ! <Updateable Region: ERTN>
-00510 ERTN: let fnerror(program$,err,line,act$,"xit")
+00510 ERTN: fnerror(program$,err,line,act$,"xit")
 00520   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00530   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00540   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -9,8 +9,8 @@
 00075   sn$ = "SignatureMain"
 00076   mat comboa$(99)
 00080   fntos(sn$)
-00082   let mylen = 17: let myalign = 1
-00085   let mytext$ = "Document Name:" : let fnlbl(1,1,mytext$,mylen,myalign)
+00082   mylen = 17: myalign = 1
+00085   mytext$ = "Document Name:" : fnlbl(1,1,mytext$,mylen,myalign)
 00088   a = 0
 00090   restore #1: 
 00094 L94: read #1,using L60: docname$,docline,docposition,docsigchoice,cddrive$ eof L105
@@ -19,17 +19,17 @@
 00105 L105: a=max(1,a)
 00106   mat comboa$(a) : let filename$="DocNames" !:
         fncomboa(filename$,1,18,mat comboa$,ttt$,25)
-00110   let mytext$="Number of Copies:": let fnlbl(2,1,mytext$,mylen,myalign)
-00120   let response$(2)=str$(1) !:
+00110   mytext$="Number of Copies:": fnlbl(2,1,mytext$,mylen,myalign)
+00120   response$(2)=str$(1) !:
         fntxt(2,18,2)
-00130   fncmdset(14): let fnacs(sn$,0,mat response$,ckey)
-00140   let docname$=response$(1)
+00130   fncmdset(14): fnacs(sn$,0,mat response$,ckey)
+00140   docname$=response$(1)
 00150   copies=max(1,val(response$(2)))
 00160   if ckey=5 then goto XIT
 00165   if ckey=10 then goto XIT
-00175   let docline=docposition=0 !:
-        let docsigchoice=1
-00176   if ckey=1 then let docname$="": goto EDITSCREEN
+00175   docline=docposition=0 !:
+        docsigchoice=1
+00176   if ckey=1 then docname$="": goto EDITSCREEN
 00180   if ckey=2 then read #1,using L60,key=rpad$(docname$,30): docname$,docline,docposition,docsigchoice,cddrive$ nokey EDITSCREEN !:
           goto EDITSCREEN
 00190   if ckey=4 then read #1,using L60,key=rpad$(docname$,30): docname$,docline,docposition,docsigchoice,cddrive$ nokey EDITSCREEN !:
@@ -40,60 +40,60 @@
 00230 ! 
 00240 ! 
 00250 EDITSCREEN: ! 
-00260   sn$ = "SignatureEdit": let fntos(sn$)
-00265   let mylen = 17: let myalign = 1
-00270   let mytext$ = "Document Name:" : let fnlbl(1,1,mytext$,mylen,myalign)
-00275   let response$(1)=docname$ !:
-        let tt$="Choose a name that you will remember, such as Payroll Check" !:
-        let mask$="" !:
+00260   sn$ = "SignatureEdit": fntos(sn$)
+00265   mylen = 17: myalign = 1
+00270   mytext$ = "Document Name:" : fnlbl(1,1,mytext$,mylen,myalign)
+00275   response$(1)=docname$ !:
+        tt$="Choose a name that you will remember, such as Payroll Check" !:
+        mask$="" !:
         fntxt(1,mylen+1,30,30,0,mask$,0,tt$)
-00280   let mytext$ = "Line on Form:" : let fnlbl(2,1,mytext$,mylen,myalign)
-00285   let response$(2)=str$(docline) !:
-        let tt$="This is the distance from the top of the form where the signature shold print. (Normally about 6 lines per inch)" !:
-        let mask$="30" !:
+00280   mytext$ = "Line on Form:" : fnlbl(2,1,mytext$,mylen,myalign)
+00285   response$(2)=str$(docline) !:
+        tt$="This is the distance from the top of the form where the signature shold print. (Normally about 6 lines per inch)" !:
+        mask$="30" !:
         fntxt(2,mylen+1,4,3,0,mask$,0,tt$)
-00290   let mytext$="Position on Form:": let fnlbl(3,1,mytext$,mylen,myalign)
-00295   let response$(3)=str$(docposition) !:
-        let tt$="This is the number of characters from the left side of the form.       (Normally about 10 characters per inch)" !:
-        let mask$="30" !:
+00290   mytext$="Position on Form:": fnlbl(3,1,mytext$,mylen,myalign)
+00295   response$(3)=str$(docposition) !:
+        tt$="This is the number of characters from the left side of the form.       (Normally about 10 characters per inch)" !:
+        mask$="30" !:
         fntxt(3,mylen+1,4,3,0,mask$,0,tt$)
-00300   let mytext$="Signature Choice:": let fnlbl(4,1,mytext$,mylen,myalign)
-00305   let response$(4)=str$(docsigchoice) !:
-        let tt$="You can have up to 10 different signatures.  Choose the one you want printed on this document." !:
-        let mask$="30" !:
+00300   mytext$="Signature Choice:": fnlbl(4,1,mytext$,mylen,myalign)
+00305   response$(4)=str$(docsigchoice) !:
+        tt$="You can have up to 10 different signatures.  Choose the one you want printed on this document." !:
+        mask$="30" !:
         fntxt(4,mylen+1,3,2,0,mask$,0,tt$)
-00310   let mytext$="CD Drive:": let fnlbl(5,1,mytext$,mylen,myalign)
-00315   let response$(5)=cddrive$ !:
-        let tt$="Your signature is stored on a cd.  What is the drive designation used on this computer for the cd drive?" !:
-        let mask$="" !:
+00310   mytext$="CD Drive:": fnlbl(5,1,mytext$,mylen,myalign)
+00315   response$(5)=cddrive$ !:
+        tt$="Your signature is stored on a cd.  What is the drive designation used on this computer for the cd drive?" !:
+        mask$="" !:
         fntxt(5,mylen+1,1,1,0,mask$,0,tt$)
-00320   fncmdset(4): let fnacs(sn$,0,mat response$,ckey)
+00320   fncmdset(4): fnacs(sn$,0,mat response$,ckey)
 00330   if ckey=5 then goto MAINSCREEN
-00340   let docname$=response$(1)(1:30)
-00350   let docline=val(response$(2)) conv BADLINE
-00360   let docposition=val(response$(3)) conv BADPOSITION
-00370   let docsigchoice=val(response$(4)) conv BADSIGCHOICE
+00340   docname$=response$(1)(1:30)
+00350   docline=val(response$(2)) conv BADLINE
+00360   docposition=val(response$(3)) conv BADPOSITION
+00370   docsigchoice=val(response$(4)) conv BADSIGCHOICE
 00380   cddrive$=uprc$(response$(5))
-00390   if cddrive$<"A" or cddrive$>"Z" then mat msgline$(2): let msgline$(1)="The drive designation you used is invalid!" !:
-          let msgline$(2) =" Normal designations would be D or E, but can be other letters" !:
-          cap$="Bad CD Drive designation" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
+00390   if cddrive$<"A" or cddrive$>"Z" then mat msgline$(2): msgline$(1)="The drive designation you used is invalid!" !:
+          msgline$(2) =" Normal designations would be D or E, but can be other letters" !:
+          cap$="Bad CD Drive designation" : mtype=48: gosub MSGBOX : goto EDITSCREEN
 00400   rewrite #1,using L60,key=rpad$(docname$,30): docname$,docline,docposition,docsigchoice,cddrive$ nokey L415
 00410   goto MAINSCREEN
 00415 L415: write #1,using L60: docname$,docline,docposition,docsigchoice,cddrive$
 00420   goto MAINSCREEN
 00500 BADLINE: ! 
-00510   mat msgline$(1): let msgline$(1)="You have entered an invalid line #. Must be a number from 1 to 200!" !:
-        cap$="Bad line number" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
+00510   mat msgline$(1): msgline$(1)="You have entered an invalid line #. Must be a number from 1 to 200!" !:
+        cap$="Bad line number" : mtype=48: gosub MSGBOX : goto EDITSCREEN
 00520 BADPOSITION: ! 
-00530   mat msgline$(1): let msgline$(1)="You have entered an invalid position. Your answer must be from 1 to 200!" !:
-        cap$="Bad position" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
+00530   mat msgline$(1): msgline$(1)="You have entered an invalid position. Your answer must be from 1 to 200!" !:
+        cap$="Bad position" : mtype=48: gosub MSGBOX : goto EDITSCREEN
 00535 BADSIGCHOICE: ! 
-00540   mat msgline$(1): let msgline$(1)="You can have up to 10 different signatures.  You may just one.  Choose an answer from 1 to 10" !:
-        cap$="Bad position" : let mtype=48: gosub MSGBOX : goto EDITSCREEN
+00540   mat msgline$(1): msgline$(1)="You can have up to 10 different signatures.  You may just one.  Choose an answer from 1 to 10" !:
+        cap$="Bad position" : mtype=48: gosub MSGBOX : goto EDITSCREEN
 01000 PRINTSIGNATURE: ! 
 01020   fnopenprn
-01025   if docline = 0 then let docline = 1
-01026   if docposition = 0 then let docposition = 1
+01025   if docline = 0 then docline = 1
+01026   if docposition = 0 then docposition = 1
 01030   for j=1 to copies
 01040     pr #255,using L1050: " "
 01050 L1050: form skip docline,pos docposition,c 50,skip 1

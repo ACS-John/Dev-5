@@ -41,10 +41,10 @@
 00360   if eno2=0 then goto ABC else !:
           en$=lpad$(str$(eno2),8) !:
           rewrite #rpmstr,using 'Form POS 173,2*PD 3',key=en$: mat ta nokey ABC
-00370 ABC: let ta(1)=r1
-00380 DEG: let ta(2)=r1 : eno2=eno
+00370 ABC: ta(1)=r1
+00380 DEG: ta(2)=r1 : eno2=eno
 00390   if lta<r1 then lta=r1
-00400   let r2=r1
+00400   r2=r1
 00410   goto READ_ADDR
 00420 ! ______________________________________________________________________
 00430 EOF_ADDR: ! 
@@ -56,10 +56,10 @@
 00490 L490: close #addr: 
 00500   close #rpmstr: 
 00510   close #rptrail: 
-00520 XIT: let fnxit
+00520 XIT: fnxit
 00530 ! ______________________________________________________________________
 00540 ! <Updateable Region: ERTN>
-00550 ERTN: let fnerror(program$,err,line,act$,"xit")
+00550 ERTN: fnerror(program$,err,line,act$,"xit")
 00560   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00570   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00580   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

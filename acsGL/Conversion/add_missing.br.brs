@@ -10,7 +10,7 @@
 00170 ! r: main loop
 02000   cno_origional=cno
 02020   dim company_file$(1)*128
-02040   let tmp$=env$('Q')&"\GLmstr"
+02040   tmp$=env$('Q')&"\GLmstr"
 02060   fngetdir2(tmp$,mat company_file$, option$,'Company.h*')
 02080   for company_item=1 to udim(mat company_file$)
 02100     cno_current=val(company_file$(company_item)(10:len(company_file$(company_item))))
@@ -34,11 +34,11 @@
 02400   fnputcno(cno_origional)
 02420   goto XIT ! /r
 03410 ! <Updateable Region: ERTN>
-03420 ERTN: let fnerror(program$,err,line,act$,"xit")
+03420 ERTN: fnerror(program$,err,line,act$,"xit")
 03430   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03440   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 03450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 03460 ERTN_EXEC_ACT: execute act$ : goto ERTN
 03470 ! /region
-03490 XIT: let fnxit
+03490 XIT: fnxit
 03500 ! ______________________________________________________________________

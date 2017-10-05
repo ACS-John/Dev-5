@@ -21,9 +21,9 @@
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00165   fnfscode !:
         fnpriorcd
-00170   let pors=1
+00170   pors=1
 00180   if fnprocess=0 then gosub L2010
-00190   let mp1=63 : if fnps=2 then let mp1=mp1+3
+00190   mp1=63 : if fnps=2 then mp1=mp1+3
 00200   if fnps=2 then !:
           fl1$="Name="&env$('Q')&"\GLmstr\AcGLFnSc.h"&str$(cno)&"," !:
           fl1$=fl1$&"KFName="&env$('Q')&"\GLmstr\FnScIndx.h"&str$(cno)&",Shr" else !:
@@ -43,15 +43,15 @@
 00320 L320: pr newpage
 00330   pr f "10,20,c 34,h,n": " BALANCE SHEET IN PROCESS"
 00340   pr f "12,2,C 18,B,5": " Press F5 to stop"
-00350 L350: let fnopenprn
+00350 L350: fnopenprn
 00360   if fnps=2 then goto L390 ! secondary
 00370   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 63 3 Replace DupKeys -N"
 00380   goto L400
 00390 L390: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 66 3 Replace DupKeys -N"
 00400 L400: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
-00410   if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
+00410   if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00420   on fkey 5 goto L1940
-00430   let report$=cap$
+00430   report$=cap$
 00440 L440: read #1,using L480: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1940
 00450   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L440
 00460   if costcntr=0 then goto L480
@@ -75,15 +75,15 @@
 00650   if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 00660 L660: for x=1 to 10
 00670     if dno=fundnum(x) then let fund=x ! put in certain column
-00680     if fundnum(x)>0 then let totcol=x ! total columns needed
+00680     if fundnum(x)>0 then totcol=x ! total columns needed
 00690   next x
-00700   if br=val(r$) then let total(fund)=total(fund)+cb else goto L720
+00700   if br=val(r$) then total(fund)=total(fund)+cb else goto L720
 00710   goto L590
 00720 L720: if br<val(r$) then goto L590
 00730   if br>val(r$) then goto L750
-00740 L740: let notrans=1
+00740 L740: notrans=1
 00750 L750: for j=1 to 10
-00760     if te$="E" then let total(j)=-accum(j,ap,1)
+00760     if te$="E" then total(j)=-accum(j,ap,1)
 00770   next j
 00780   for j=1 to 9
 00790     if ac(j)=9 then goto L830 ! 10/14/87
@@ -93,18 +93,18 @@
 00830 L830: next j
 00840   if rs=1 then goto L850 else goto L880
 00850 L850: for j=1 to 10
-00860     let total(j)=-total(j)
+00860     total(j)=-total(j)
 00870   next j
-00880 L880: if ds=1 then let dollar$="$" else let dollar$=" "
-00890 ! If CP=1 Then Let DOLLAR=50+14*BC Else Let DOLLAR=24+14*BC
+00880 L880: if ds=1 then dollar$="$" else dollar$=" "
+00890 ! If CP=1 Then dOLLAR=50+14*BC Else dOLLAR=24+14*BC
 00900   if sum(total)><0 then goto L920
 00910   if ls+ul+ds+ic>0 then goto L920 else goto L440
 00920 L920: sp2=49-sp-1
 00930 ! pr #255,Using 990: D$(1:SP2),DOLLAR$,TOTAL(FUND) Pageoflow 1470
-00940   let dolcol$=""
+00940   dolcol$=""
 00950   for j=1 to totcol
-00955     if ul=1 then let dolcol$=dolcol$&" "&dollar$&"{\ul "&cnvrt$("PIC(-,---,---.##)",total(j))&" }" : goto L970
-00960     let dolcol$=dolcol$&" "&dollar$&cnvrt$("PIC(-,---,---.##)",total(j))
+00955     if ul=1 then dolcol$=dolcol$&" "&dollar$&"{\ul "&cnvrt$("PIC(-,---,---.##)",total(j))&" }" : goto L970
+00960     dolcol$=dolcol$&" "&dollar$&cnvrt$("PIC(-,---,---.##)",total(j))
 00970 L970: next j
 00975   if ul=1 then pr #255,using L991: d$(1:sp2),rtrm$(dolcol$) pageoflow L1640 : goto L990
 00980   pr #255,using L990: d$(1:sp2),rtrm$(dolcol$) pageoflow L1640
@@ -123,7 +123,7 @@
 01090   accumcol$=""
 01100   for j=1 to totcol
 01110     if rs=1 then accum1=-accum(j,ap,1) else accum1=accum(j,ap,1)
-01120     if ds=1 then let dollar$="$" else let dollar$=" "
+01120     if ds=1 then dollar$="$" else dollar$=" "
 01125     if ul=1 then accumcol$=accumcol$&" "&dollar$&"{\ul "&cnvrt$("pic(-,---,---.##)",accum1)&"}" : goto L1140
 01130     accumcol$=accumcol$&" "&dollar$&cnvrt$("pic(-,---,---.##)",accum1)
 01140 L1140: next j
@@ -143,13 +143,13 @@
 01260   next j
 01270 L1270: goto L440
 01280 ! ______________________________________________________________________
-01290 L1290: if te$="R" then let report$=d$
+01290 L1290: if te$="R" then report$=d$
 01300   if te$="S" then secondr$=d$
 01310   gosub L1480
 01320   goto L440
 01330 ! ______________________________________________________________________
 01340 L1340: if foot1=1 then goto L1390
-01350   let tabnote=sp
+01350   tabnote=sp
 01360   let foot1=1
 01370   let foot$=d$
 01380   goto L440
@@ -168,8 +168,8 @@
 01510 L1510: form pos 1,c 1,skip ls
 01520   goto L1630
 01530 ! ______________________________________________________________________
-01540 L1540: let fnpglen(pglen)
-01550 ! If PGLEN<>42 Then Let PGLEN=58
+01540 L1540: fnpglen(pglen)
+01550 ! If PGLEN<>42 Then pGLEN=58
 01560   sk=pglen-krec(255): fl=len(rtrm$(foot$))
 01570 ! If PGLEN=42 Then sK=SK+1
 01580   pr #255,using L1590: rtrm$(foot$)
@@ -196,7 +196,7 @@
 01790 L1790: form skip 1,c 1,skip redir
 01800 L1800: return 
 01810 ! ______________________________________________________________________
-01820 L1820: let heading=1
+01820 L1820: heading=1
 01830   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01840   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01850   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
@@ -211,7 +211,7 @@
 01940 L1940: eofcode=1
 01950   gosub L1540
 01960   if pors=2 then goto XIT else goto DONE
-01970 XIT: let fnxit
+01970 XIT: fnxit
 01980 DONE: ! 
 01982   fnfscode(actpd)
 01983   fnpriorcd(1)
@@ -220,20 +220,20 @@
 02000 ! ______________________________________________________________________
 02010 L2010: pr newpage ! determine fund #s
 02020   for j=1 to 10
-02030     let io1$(j*2-1)=str$(j+4)&",22,NZ 3,UT,n" !:
-          let io1$(j*2)=str$(j+4)&",28,C 20,UT,N"
+02030     io1$(j*2-1)=str$(j+4)&",22,NZ 3,UT,n" !:
+          io1$(j*2)=str$(j+4)&",28,C 20,UT,N"
 02040   next j
 02050   open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&str$(cno)&",RecL=230,use",internal,outin,relative 
 02060   read #5,using L2070: mat fundnum,mat funddesc$ ioerr L2080
 02070 L2070: form pos 1,10*n 3,10*c 20
-02080 L2080: let fntos(sn$="ACglcasf3") !:
-        let mylen=1: let mypos=mylen+3
+02080 L2080: fntos(sn$="ACglcasf3") !:
+        mylen=1: mypos=mylen+3
 02090   fnlbl(1,4,"Fund                 Description ")
 02100   for j=1 to 10
 02110     fntxt(j+1,mypos,3,0,right,"30",0,"Enter the fund number.") !:
-          let resp$(j*2-1)=str$(fundnum(j))
+          resp$(j*2-1)=str$(fundnum(j))
 02120     fntxt(j+1,mypos+10,20,0,0,"",0,"Enter the fund description.") !:
-          let resp$(j*2)=funddesc$(j)
+          resp$(j*2)=funddesc$(j)
 02130   next j
 02140   fncmdkey("&Next",1,1,0,"Continues with financial statement.")
 02150   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
@@ -249,14 +249,14 @@
 02250 L2250: close #5: 
 02260   for j=1 to 10
 02270     if fundnum(j)>0 then !:
-            let heading$=heading$&" "&lpad$(rtrm$(funddesc$(j)(1:13)),13) !:
-            let totcol+=1
+            heading$=heading$&" "&lpad$(rtrm$(funddesc$(j)(1:13)),13) !:
+            totcol+=1
 02280   next j
 02290   big=totcol*14
 02300   return 
 02310 ! ______________________________________________________________________
 02320 ! <Updateable Region: ERTN>
-02330 ERTN: let fnerror(program$,err,line,act$,"xit")
+02330 ERTN: fnerror(program$,err,line,act$,"xit")
 02340   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02350   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02360   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

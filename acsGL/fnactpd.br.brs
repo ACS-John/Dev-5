@@ -3,7 +3,7 @@
 00030 ! ______________________________________________________________________
 20000 def library fnactpd(;actpd)
 20020   library 'S:\Core\Library': fngethandle,fncno
-20040   let get=1 : let put=2
+20040   let get=1 : put=2
 20060   if actpd=0 then let get_or_put=get else let get_or_put=put
 20080   open #tmp=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
 20100   if get_or_put=get then 

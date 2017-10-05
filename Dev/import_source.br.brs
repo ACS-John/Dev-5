@@ -3,18 +3,18 @@
 10040   dim filename$(1)*256,prg_list$(1)*256,dir_destination$*128,dir_source$*128,ext$*128
 10060   fn_import_source_init
 10080   fn_import_source('','', 1)
-10100 ! let fn_import_source('\\DISKSTATION\public\ACS\Client','\\DISKSTATION\public\ACS\Source\Client')
+10100 ! fn_import_source('\\DISKSTATION\public\ACS\Client','\\DISKSTATION\public\ACS\Source\Client')
 10120   fn_import_source_run
 10140   end 
 10160   def fn_import_source(dir_source$*128,dir_destination$*128; skip_asci_files)
-10180     let dir_source$=rtrm$(dir_source$,'\')
-10200     let dir_destination$=rtrm$(dir_destination$,'\')
+10180     dir_source$=rtrm$(dir_source$,'\')
+10200     dir_destination$=rtrm$(dir_destination$,'\')
 10220     execute 'sy -M xcopy '&dir_source$&'\*.* '&dir_destination$&'\*.* /t /y'
 10240 ! fn_import_source_init
 10260     fn_getdir2(dir_source$,mat filename$,'/s') ! option$)
 10280     for file_item=1 to udim(mat filename$)
 10300       pr f '10,10,Cc 60': 'phase 1 of 2: processing '&str$(file_item)&' of '&str$(udim(mat filename$))
-10320       let dot_pos=pos(filename$(file_item),'.',-1)
+10320       dot_pos=pos(filename$(file_item),'.',-1)
 10340       backslash_pos=pos(filename$(file_item),'\',-1)
 10360       ext$=''
 10380       if backslash_pos<=0 or dot_pos>backslash_pos then 
@@ -31,13 +31,13 @@
 10600 ! fn_import_source_run
 10620   fnend 
 10640   def fn_import_source_init
-10660     let prg_list_count=0
+10660     prg_list_count=0
 10680     mat prg_list$(prg_list_count)
 10700     open #proc_file:=1: 'Name=tmp'&session$&'.prc,RecL=1024,Replace',display,output 
 10720   fnend  ! fn_import_source_init
 10740   def fn_import_source_add(msa_item$*256)
 10760     mat prg_list$(prg_list_count+=1)
-10780     let prg_list$(prg_list_count)=msa_item$
+10780     prg_list$(prg_list_count)=msa_item$
 10800     if exists(srep$(msa_item$(1:len(msa_item$)-4),dir_source$,dir_destination$)) then 
 10820       brs_date_modified=fn_datetime_modified(msa_item$)
 10840       br_date_modified=fn_datetime_modified(srep$(msa_item$(1:len(msa_item$)-4),dir_source$,dir_destination$))
@@ -59,23 +59,23 @@
 11140     linput #h_dm: dm_line$ ! consume header
 11160     linput #h_dm: dm_line$
 11180     close #h_dm,free: 
-11200     let dm_mm=val(dm_line$(27:28))
-11220     let dm_dd=val(dm_line$(30:31))
-11240     let dm_yy=val(dm_line$(33:34))
-11260     let dm_hh=val(dm_line$(37:38))
-11280     let dm_nn=val(dm_line$(40:41))
-11300     if lwrc$(dm_line$(42:42))='p' then let dm_hh+=12
-11320     if dm_yy>80 then let dm_cc=19 else let dm_cc=20
-11340     let dm_cc=dm_cc*10000000000
-11360     let dm_yy=dm_yy*100000000
-11380     let dm_mm=dm_mm*1000000
-11400     let dm_dd=dm_dd*10000
-11420     let dm_hh=dm_hh*100
-11440     let dm_nn=dm_nn*1
+11200     dm_mm=val(dm_line$(27:28))
+11220     dm_dd=val(dm_line$(30:31))
+11240     dm_yy=val(dm_line$(33:34))
+11260     dm_hh=val(dm_line$(37:38))
+11280     dm_nn=val(dm_line$(40:41))
+11300     if lwrc$(dm_line$(42:42))='p' then dm_hh+=12
+11320     if dm_yy>80 then dm_cc=19 else dm_cc=20
+11340     dm_cc=dm_cc*10000000000
+11360     dm_yy=dm_yy*100000000
+11380     dm_mm=dm_mm*1000000
+11400     dm_dd=dm_dd*10000
+11420     dm_hh=dm_hh*100
+11440     dm_nn=dm_nn*1
 11460     fn_datetime_modified=dm_cc+dm_yy+dm_mm+dm_dd+dm_hh+dm_nn
 11480   fnend 
 11500   def fn_import_source_run
-11520     let msr_file$=file$(proc_file)
+11520     msr_file$=file$(proc_file)
 11540     close #proc_file: 
 11560     pr msr_file$ : pause  ! execute 'subproc '&msr_file$
 11580   fnend  ! fn_import_source_run
@@ -95,11 +95,11 @@
 11860     mat filename$(0)
 11880     let filter$=trim$(filter$) : if filter$="" then let filter$="*.*"
 11900     option$=trim$(option$)
-11920     let dir$=trim$(dir$)
-11940     if dir$(len(dir$):len(dir$))<>"\" then let dir$=dir$&"\"
+11920     dir$=trim$(dir$)
+11940     if dir$(len(dir$):len(dir$))<>"\" then dir$=dir$&"\"
 11960 ! _____________
 11980     execute 'free '&env$('temp')&'\GetDir'&session$&'.tmp -n' ioerr ignore
-12000     let tmp$='Sy -M Dir '&os_filename$(rtrm$(dir$,'\'))&'\'&filter$&' /b '&option$&' >"'&os_filename$(env$('temp')&'\GetDir'&session$&'.tmp"')
+12000     tmp$='Sy -M Dir '&os_filename$(rtrm$(dir$,'\'))&'\'&filter$&' /b '&option$&' >"'&os_filename$(env$('temp')&'\GetDir'&session$&'.tmp"')
 12020     execute tmp$ ioerr XIT
 12040     open #tf1:=20: "Name="&env$('temp')&"\GetDir"&session$&".tmp",display,input 
 12060     let filename_count=0

@@ -16,17 +16,17 @@
 00150 ! ______________________________________________________________________
 00160   sn$="RmBudget" !:
         fntos(sn$)
-00170   let txt$="All paid budget records with a date prior" !:
+00170   txt$="All paid budget records with a date prior" !:
         fnlbl(1,1,txt$,44,2)
-00180   let txt$="to this date will be removed." !:
+00180   txt$="to this date will be removed." !:
         fnlbl(2,1,txt$,44,2)
-00190   let txt$="Oldest Date to Retain (MMDDYY):" !:
+00190   txt$="Oldest Date to Retain (MMDDYY):" !:
         fnlbl(4,1,txt$,33,1)
 00200   fntxt(4,35,8,0,0,"1") !:
-        let resp$(1)=""
+        resp$(1)=""
 00210   fncmdset(2)
 00220   fnacs(sn$,0,mat resp$,ckey)
-00230   let rd1=val(resp$(1))
+00230   rd1=val(resp$(1))
 00240   if ckey=5 then goto XIT
 00250   open #2: "Name="&udf$&"Work1.dat,Size=0,RecL=149,Replace",internal,outin,relative 
 00260 L260: read #81,using L270: z$,mat ba,mat tr eof END1
@@ -35,20 +35,20 @@
 00290   mat tr=(0)
 00300 L300: if adr=0 then goto L450
 00310   read #82,using L370,rec=adr,release: z$,mat bt1,nba norec L450
-00320   let d1=bt1(1,1) ! transaction date
-00330   let d2=rd1 ! cutoff date
+00320   d1=bt1(1,1) ! transaction date
+00330   d2=rd1 ! cutoff date
 00340   if sum(bt1)=0 then goto L440
 00350   if bt1(14,1)=0 then goto L370
-00360   let d1=fndate_mmddyy_to_ccyymmdd(d1) !:
-        let d2=fndate_mmddyy_to_ccyymmdd(d2) !:
+00360   d1=fndate_mmddyy_to_ccyymmdd(d1) !:
+        d2=fndate_mmddyy_to_ccyymmdd(d2) !:
         if d1<d2 then goto L440
 00370 L370: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
 00380   lr2=lrec(2)+1
 00390   write #2,using L370,rec=lr2: z$,mat bt1,0
 00400   if tr(2)>0 then rewrite #2,using L410,rec=tr(2): lr2
 00410 L410: form pos 147,pd 3
-00420   if tr(1)=0 then let tr(1)=lr2
-00430   let tr(2)=lr2
+00420   if tr(1)=0 then tr(1)=lr2
+00430   tr(2)=lr2
 00440 L440: adr=nba: goto L300
 00450 L450: rewrite #81,using L460: mat tr
 00460 L460: form pos 75,2*pd 3
@@ -62,7 +62,7 @@
 00540   execute "Free "&udf$&"Work1.dat -n"
 00550   goto XIT
 00560 ! ______________________________________________________________________
-00570 XIT: let fnxit
+00570 XIT: fnxit
 00580 ! ______________________________________________________________________
 00590 BUD1: bud1=0
 00600   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L630
@@ -71,7 +71,7 @@
 00630 L630: return 
 00640 ! ______________________________________________________________________
 00650 ! <Updateable Region: ERTN>
-00660 ERTN: let fnerror(program$,err,line,act$,"xit")
+00660 ERTN: fnerror(program$,err,line,act$,"xit")
 00670   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00680   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00690   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -29,7 +29,7 @@
 40240 RIF_EOF: ! 
 40260     pr 'from file: '&file$(h_file)
 40280     pr ' new file: '&file$(h_out)
-40290     let tmp$='copy '&file$(h_out)&' '&file$(h_file)
+40290     tmp$='copy '&file$(h_out)&' '&file$(h_file)
 40300     close #h_out: 
 40320     close #h_file: 
 40360     execute tmp$
@@ -37,7 +37,7 @@
 40400   fnend 
 50000   def fn_get_variable_value$*256(var$,program_file$*256)
 50020 ! 
-50040     let h_file=101
+50040     h_file=101
 50060     close #h_file: ioerr ignore
 50080     open #h_file: 'name='&program_file$,display,input 
 50100     dim gvv_return$*256
@@ -49,7 +49,7 @@
 50220       do while pos(line$,' =')>0
 50240         line$=srep$(line$,' =','=')
 50260       loop 
-50280       let var_set_pos=pos(lwrc$(line$),' '&lwrc$(var$)&'=')
+50280       var_set_pos=pos(lwrc$(line$),' '&lwrc$(var$)&'=')
 50300       if var_set_pos>0 then 
 50320         let gvv_return$=line$(var_set_pos+len(' '&lwrc$(var$)&'='):len(line$))
 50340         goto GV_EOF

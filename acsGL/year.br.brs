@@ -22,40 +22,40 @@
 00200 BUILD_LAYOUT: ! 
 00210   fncno(cno)
 00220 ! ** Field Labels    ** !:
-        let ic=0 ! temporary Item Counter
+        ic=0 ! temporary Item Counter
 00230   lbl$(ic+=1)="Year Code" !:
         lbl$(ic+=1)="Name"
 00240 ! ** Text Box / Field Display   Lengths   ** !:
-        let ic=0 ! temporary Item Counter !:
-        let mmddyy=8 !:
+        ic=0 ! temporary Item Counter !:
+        mmddyy=8 !:
         ccyymmdd=10
-00250   let tln(ic+=1)=1 !:
-        let tln(ic+=1)=7
+00250   tln(ic+=1)=1 !:
+        tln(ic+=1)=7
 00260 ! ** Field Types ** !:
-        let ic=0
+        ic=0
 00270   fltyp$(ic+=1)='N' !:
         fltyp$(ic+=1)='C'
 00280 ! ** Field Storage Lengths ** !:
-        let ic=0 !:
-        let mmddyy=6 : ccyymmdd=8
+        ic=0 !:
+        mmddyy=6 : ccyymmdd=8
 00290   sln(ic+=1)=1 !:
         sln(ic+=1)=7
 00300 ! ** Field Masks ** !:
-        let ic=0 !:
-        let pointtwo=32 : let number=30 !:
-        ccyymmdd=3 : let mmddyy=1 : let glnumber=53
-00310   let mask(ic+=1)=number !:
-        let mask(ic+=1)=0
+        ic=0 !:
+        pointtwo=32 : number=30 !:
+        ccyymmdd=3 : mmddyy=1 : let glnumber=53
+00310   mask(ic+=1)=number !:
+        mask(ic+=1)=0
 00320   return 
 00330 ! ______________________________________________________________________
 00340 HAMSTER: ! 
 00350   fnhamster("Year",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00360   return 
 00370 ! ______________________________________________________________________
-00380 XIT: let fnxit
+00380 XIT: fnxit
 00390 ! ______________________________________________________________________
 00400 ! <Updateable Region: ERTN>
-00410 ERTN: let fnerror(program$,err,line,act$,"xit")
+00410 ERTN: fnerror(program$,err,line,act$,"xit")
 00420   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00430   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00440   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

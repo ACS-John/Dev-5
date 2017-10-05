@@ -32,10 +32,10 @@
 00330   goto SCREEN1
 00340 ! ______________________________________________________________________
 00350 SCREEN2: ! 
-00360   let respc=x=0
+00360   respc=x=0
 00370   fntos(sn$="Postgl-2")
-00372   let mylen=10: let mypos=mylen+3 : let right=1 : let respc=0
-00380   let fram1=1: let fnfra(1,1,12,100,"General Ledger Information","For each service, choose the appropriate g/l# for the bank, for the revenue, and possoibly the receivalbe account if using the accrual method.")
+00372   mylen=10: mypos=mylen+3 : right=1 : respc=0
+00380   let fram1=1: fnfra(1,1,12,100,"General Ledger Information","For each service, choose the appropriate g/l# for the bank, for the revenue, and possoibly the receivalbe account if using the accrual method.")
 00390   fnlbl(2,20,"Cash In Bank",12,right,0,fram1)
 00400   fnlbl(2,45,"Receivable",12,right,0,fram1)
 00410   fnlbl(2,75,"Revenue",12,right,0,fram1)
@@ -43,11 +43,11 @@
 00430   for j=1 to 10
 00440     fnlbl(j+2,1,servicename$(j),mylen,right,0,fram1)
 00450     fnqgl25(j+2,12,fram1,2,pas)
-00452     let resp$(respc+=1)=fnrgl$(gln$(x+=1))
+00452     resp$(respc+=1)=fnrgl$(gln$(x+=1))
 00460     fnqgl25(j+2,42,fram1,2,pas)
-00462     let resp$(respc+=1)=fnrgl$(gln$(x+=1))
+00462     resp$(respc+=1)=fnrgl$(gln$(x+=1))
 00470     fnqgl25(j+2,72,fram1,2,pas)
-00472     let resp$(respc+=1)=fnrgl$(gln$(x+=1))
+00472     resp$(respc+=1)=fnrgl$(gln$(x+=1))
 00480   next j
 00490   fncmdkey("&Save",1,1,0,"Saves any changes and returns to menu.")
 00500   fncmdkey("&Create Accounts",3,0,0,"Allows you to create a chart of account (limited to the accounts you need) if general ledger or checkbook is not installed.")
@@ -62,44 +62,44 @@
 00590   goto SCREEN1
 00600 SCREEN1: ! 
 00610   fntos(sn$='Postub2')
-00612   let mylen=36 : let mypos=mylen+2
+00612   mylen=36 : mypos=mylen+2
 00620   fnlbl(1,1,"Report Heading Date:",mylen,1,0)
 00630   fntxt(1,mypos,20) 
-00632   let resp$(1)=dat$
+00632   resp$(1)=dat$
 00640   fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
 00650   fntxt(2,mypos,10,0,1,"3",0,"Enter the first day of the period being posted.")
-00652   let resp$(2)=str$(ld1)
+00652   resp$(2)=str$(ld1)
 00660   fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
 00670   fntxt(3,mypos,10,0,1,"3",0,"Enter the Last day of the period being posted.")
-00672   let resp$(3)=str$(hd1)
+00672   resp$(3)=str$(hd1)
 00680   fnchk(4,30,"General Ledger Installed:",1,0)
-00682   if gli=1 then let resp$(4)="True" else let resp$(4)="False"
+00682   if gli=1 then resp$(4)="True" else resp$(4)="False"
 00690   fnchk(5,30,"Print Report:",1,0)
-00692   if printreport=1 then let resp$(5)="True" else let resp$(5)="False"
+00692   if printreport=1 then resp$(5)="True" else resp$(5)="False"
 00700   fnchk(6,30,"Show Details:",1,0)
-00702   if showdetails=1 then let resp$(6)="True" else let resp$(6)="False"
+00702   if showdetails=1 then resp$(6)="True" else resp$(6)="False"
 00710   fnfra(8,1,2,60,"Method of Posting","You can either post on a Cash basis which only effects Cash and Revenues or you can post on an accrual method also effecting receivables.")
 00720   fnopt(1,3,"Cash Basis",0,1) !:
-        if basis=0 or basis=1 then let resp$(7)="True"
+        if basis=0 or basis=1 then resp$(7)="True"
 00730   fnopt(2,3,"Accrual Method",0,1) !:
-        if basis=2 then let resp$(8)="False"
+        if basis=2 then resp$(8)="False"
 00740   fncmdkey("&Post",1,1,0,"Begins the posting process.")
 00750   fncmdkey("&Assign GL Numbers",2,0,0,"Assign general ledger numbers to the various revenue accounts.")
 00760   fncmdkey("&Cancel",5,0,1,"Returns to menu without saving any changes on the screen.")
 00770   fnacs(sn$,0,mat resp$,ckey)
 00780   if ckey=5 then goto XIT
-00790   let dat$=resp$(1) : ld1=val(resp$(2)) : let hd1=val(resp$(3))
-00800   let postingdate=val(resp$(3)(5:8))*100+val(resp$(3)(3:4))
+00790   dat$=resp$(1) : ld1=val(resp$(2)) : hd1=val(resp$(3))
+00800   postingdate=val(resp$(3)(5:8))*100+val(resp$(3)(3:4))
 00810   if resp$(4)="True" then let gli=1 else let gli=0
-00820   if resp$(5)="True" then let printreport=1 else let printreport=0
+00820   if resp$(5)="True" then printreport=1 else printreport=0
 00830   if resp$(6)="True" then showdetails=1
 00840   basis=0 : if resp$(7)="True" then basis=cash=1
 00850   if resp$(8)="True" then basis=accrual=2
 00860   if ld1>hd1 and ld1>0 and hd1>0 then !:
-          mat msgline$(1): let msgline$(1)="Ending Date Before Starting Date!" !:
+          mat msgline$(1): msgline$(1)="Ending Date Before Starting Date!" !:
           fnmsgbox(mat msgline$,resp$,cap$,48) : goto SCREEN1
 00870   if basis=0 then !:
-          mat msgline$(1): let msgline$(1)="You must enter the basis for accounting!" !:
+          mat msgline$(1): msgline$(1)="You must enter the basis for accounting!" !:
           fnmsgbox(mat msgline$,resp$,cap$,48) : goto SCREEN1
 00880   if ckey=2 then goto GL_INFORMATION
 00890   fnopenprn
@@ -116,8 +116,8 @@
 01000   if tdate<ld1 or tdate>hd1 then goto L990
 01010   read #1,using 'form pos 143,7*pd 2,pos 1806,3*n 2',key=p$: mat a,extra11,extra12,extra13 nokey L1030
 01020   goto L1040
-01030 L1030: mat msgline$(2): let msgline$(1)="You have tranactions on customer # "&p$ !:
-        let msgline$(2)="but the customer record no longer exists. "&p$ !:
+01030 L1030: mat msgline$(2): msgline$(1)="You have tranactions on customer # "&p$ !:
+        msgline$(2)="but the customer record no longer exists. "&p$ !:
         fnmsgbox(mat msgline$,resp$,cap$,48)
 01040 L1040: ! 1=charge,2=penalty,3=collection,4=credit memo, 5=debit memo
 01050   for j =1 to 10
@@ -148,16 +148,16 @@
 01150   goto L990
 01160 CREATE_ENTRIES: ! 
 01170   for j=1 to 10
-01180     if j=1 then let ratecode=a(1)
-01190     if j=2 then let ratecode=a(2)
-01200     if j=3 then let ratecode=a(3)
-01210     if j=4 then let ratecode=a(4)
-01220     if j=5 then let ratecode=a(5)
-01230     if j=6 then let ratecode=extra11
-01240     if j=7 then let ratecode=extra12
-01250     if j=8 then let ratecode=extra13
-01260     if j=9 then let ratecode=a(6)
-01270     if j=10 then let ratecode=a(7)
+01180     if j=1 then ratecode=a(1)
+01190     if j=2 then ratecode=a(2)
+01200     if j=3 then ratecode=a(3)
+01210     if j=4 then ratecode=a(4)
+01220     if j=5 then ratecode=a(5)
+01230     if j=6 then ratecode=extra11
+01240     if j=7 then ratecode=extra12
+01250     if j=8 then ratecode=extra13
+01260     if j=9 then ratecode=a(6)
+01270     if j=10 then ratecode=a(7)
 01280     read #15,using "form pos 24,3*c 12",key=service$(j)&cnvrt$("pic(zz#)",ratecode): mat gl$ nokey L1300
 01290     let gln$(j,1)=gl$(1): let gln$(j,2)=gl$(2): let gln$(j,3)=gl$(3) ! substitute individual breakdown based on water codes, etc into 30 item array used in entry generation
 01300 L1300: next j
@@ -174,13 +174,13 @@
 01410 L1410: let x+=1: if x>3 then let x=0 : goto L1460
 01420     if amount(j,x)=0 then goto L1450
 01430     if amount(j,x)>0 then pr #255,using "form pos 1,c 12,x 7,n 13.2": gln$(j,x),amount(j,x) else pr #255,using "form pos 1,c 12,x 20,n 13.2": gln$(j,x),amount(j,x) pageoflow PAGE_OVER_FLOW
-01440     if amount(j,x)>0 then let totaldebits+=amount(j,x) else let totalcredits+=amount(j,x)
+01440     if amount(j,x)>0 then totaldebits+=amount(j,x) else totalcredits+=amount(j,x)
 01450 L1450: goto L1410
 01460 L1460: next j
 01470   pr #255,using "form pos 20,n 13.2,n 13.2": totaldebits,totalcredits
 01480   fncloseprn
 01490   if gli=1 then let fnchain("S:\acsGL\acglMrge")
-01500 XIT: let fnxit
+01500 XIT: fnxit
 01510 HDR: ! 
 01520   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 01530   pr #255: "\qc {\f181 \fs24 \b UB Posting Recap}"
@@ -189,11 +189,11 @@
           pr #255: "\qc {\f181 \fs18 \b "&trim$("From "&cnvrt$("pic(zzzz/zz/zz)",ld1)&" to "&cnvrt$("pic(zzzz/zz/zz)",hd1))&"}"
 01560   pr #255,using 'Form POS 1,C 20,POS 110,C 12': "\ql","Page "&str$(p2+=1)
 01570   pr #255: 
-01580   let heading$="Account      Date     Cd"
+01580   heading$="Account      Date     Cd"
 01590   for h=1 to 10
-01600     let heading$=heading$&lpad$(servicename$(h)(1:19),9)
+01600     heading$=heading$&lpad$(servicename$(h)(1:19),9)
 01610     a=pos(heading$,":",1)
-01620     if a>0 then let heading$(a:a)=" "
+01620     if a>0 then heading$(a:a)=" "
 01630   next h
 01640   pr #255,using "form pos 1,c 130": heading$
 01650   return 
@@ -203,7 +203,7 @@
 01690   continue 
 01700 ! ______________________________________________________________________
 01710 ! <Updateable Region: ERTN>
-01720 ERTN: let fnerror(program$,err,line,act$,"xit")
+01720 ERTN: fnerror(program$,err,line,act$,"xit")
 01730   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01740   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01750   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -212,7 +212,7 @@
 01780 ! ______________________________________________________________________
 01790 GL_INFORMATION: ! 
 01800   fntos(sn$="Breakdown") !:
-        let respc=0
+        respc=0
 01810   mat chdr$(6) : mat cmask$(6) : mat item$(6) !:
         chdr$(1)='Rec' !:
         chdr$(2)='Service Name' : chdr$(3)='Rate Code' !:
@@ -225,11 +225,11 @@
 01830   restore #15: 
 01840 READ_GLINFO_1: ! 
 01850   read #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2": service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar eof EO_FLEX1
-01860   let item$(1)=str$(rec(15)) !:
-        let item$(2)=service$ : let item$(3)=str$(ratecode) !:
-        let item$(4)=gl$(1) !:
-        let item$(5)=gl$(2) !:
-        let item$(6)=gl$(3) !:
+01860   item$(1)=str$(rec(15)) !:
+        item$(2)=service$ : item$(3)=str$(ratecode) !:
+        item$(4)=gl$(1) !:
+        item$(5)=gl$(2) !:
+        item$(6)=gl$(3) !:
         fnflexadd1(mat item$)
 01870   goto READ_GLINFO_1
 01880 EO_FLEX1: ! 
@@ -238,20 +238,20 @@
         fncmdkey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing record.") !:
         fncmdkey("E&xit",5,0,1,"Exit to menu")
 01900   fnacs(sn$,0,mat resp$,ck)
-01910   addone=edit=0: let holdvn$=""
+01910   addone=edit=0: holdvn$=""
 01920   if ck=5 then goto SCREEN1 !:
-        else if ck=1 then addone=1: service$="": let ratecode=0: mat gl$=("") !:
+        else if ck=1 then addone=1: service$="": ratecode=0: mat gl$=("") !:
           goto MAINTAIN_GLINFO
 01930 if ck=2 or ck=3 then editrec=val(resp$(1))
 01940 if editrec=0 then goto GL_INFORMATION
 01950 if ck=2 or ck=3 then !:
         read #15,using "form pos 1,c 20,n 3,3*c 12,3*n 10.2",rec=editrec: service$,ratecode,gl$(1),gl$(2),gl$(3),mat dollar
-01960 if ck=2 then edit=1 : let holdvn$=vn$: goto MAINTAIN_GLINFO
+01960 if ck=2 then edit=1 : holdvn$=vn$: goto MAINTAIN_GLINFO
 01970 if ck=3 then gosub DELETE_GLINFO : goto GL_INFORMATION
 01980 ! ______________________________________________________________________
 01990 DELETE_GLINFO: ! 
-01995 mat msgline$(2): let msgline$(1)="You have chosen to delete a record." !:
-      let msgline$(2)="Take OK to delete, Cancel to retain." !:
+01995 mat msgline$(2): msgline$(1)="You have chosen to delete a record." !:
+      msgline$(2)="Take OK to delete, Cancel to retain." !:
       fnmsgbox(mat msgline$,resp$,cap$,49)
 01996 if resp$="OK" then goto L2000 else goto L2010
 02000 L2000: delete #15,rec=editrec: 
@@ -260,25 +260,25 @@
 02030 execute "Index "&env$('Q')&"\UBmstr\Ubinfo.h"&env$('cno')&' '&env$('Q')&"\UBmstr\ubinfoidx.h"&env$('cno')&" 1 23 Replace DupKeys -n" ioerr L2040
 02040 L2040: return 
 02050 MAINTAIN_GLINFO: ! 
-02060 let right=1: let mylen=25: let mypos=mylen+3
+02060 right=1: mylen=25: mypos=mylen+3
 02070 let fntos(sn$="Glinfo2")
 02080 let fnlbl(1,1,"Service:",mylen,right)
 02090 let fncomboa("GLCmbSrv",1,mypos,mat option2$,"Set up records for every service and all rate codes within that service",20)
 02100 for j=1 to udim(optio2$)
-02110   if option2$(j)=service$ then let resp$(1)=option2$(j)
+02110   if option2$(j)=service$ then resp$(1)=option2$(j)
 02120 next j
 02130 let fnlbl(2,1,"Rate Code:",mylen,right)
 02140 let fntxt(2,mypos,3,0,0,"30",0,"Set up the general ledger informatin for each rate code you have for each service.") !:
-      let resp$(2)=str$(ratecode)
+      resp$(2)=str$(ratecode)
 02150 let fnlbl(3,1,"Cash G/L Number:",mylen,right)
 02160 let fnqgl(3,mylen,0,2,pas) !:
-      let resp$(3)=fnrgl$(gl$(1))
+      resp$(3)=fnrgl$(gl$(1))
 02170 let fnlbl(4,1,"Receivable G/L Number:",mylen,right)
 02180 let fnqgl(4,mylen,0,2,pas) !:
-      let resp$(4)=fnrgl$(gl$(2))
+      resp$(4)=fnrgl$(gl$(2))
 02190 let fnlbl(5,1,"Revenue G/L Number:",mylen,right)
 02200 let fnqgl(5,mylen,0,2,pas) !:
-      let resp$(5)=fnrgl$(gl$(3))
+      resp$(5)=fnrgl$(gl$(3))
 02210 let fncmdkey("&Save",1,1,0,"Saves any changes and returns to gl breakdown screen.")
 02220 let fncmdkey("&Create Accounts",3,0,0,"Allows you to create a chart of account (limited to the accounts you need) if general ledger or checkbook is not installed.")
 02230 let fncmdkey("&Cancel",5,0,1,"Return to main screen without saving any changes.")
@@ -286,7 +286,7 @@
 02250 if ckey=5 then goto GL_INFORMATION
 02260 if ckey=3 then chain "S:\acsUB\chartofaccounts"
 02270 service$=resp$(1)
-02280 let ratecode=val(resp$(2))
+02280 ratecode=val(resp$(2))
 02290 let gl$(1)=fnagl$(resp$(3))
 02300 let gl$(2)=fnagl$(resp$(4))
 02310 let gl$(3)=fnagl$(resp$(5))

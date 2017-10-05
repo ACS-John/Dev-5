@@ -59,12 +59,12 @@
 00059 ! 
 00060   dim returncode$*20000
 00061   def fnreturncode(string$*512)
-00062     let returncode$=returncode$&string$&chr$(13)&chr$(10)
+00062     returncode$=returncode$&string$&chr$(13)&chr$(10)
 00063   fnend 
 00064 ! 
 00065   def library fnruntemplate(template,filelay$;___,index)
 00066     fnestablishlinkage
-00067     let returncode$=""
+00067     returncode$=""
 00068     fnreadentirelayout(filelay$,filename$,prefix$,mat keys$,mat keydescription$,mat ssubs$,mat nsubs$,mat sspec$,mat nspec$,mat sdescription$,mat ndescription$,mat spos,mat npos)
 00069     longestelement=0
 00070     for index=1 to udim(mat sspec$)
@@ -77,9 +77,9 @@
 00077       ssubs$(index)=lwrc$(ssubs$(index))
 00078     next index
 00079     for index=1 to udim(mat nsubs$)
-00080       let nsubs$(index)=lwrc$(nsubs$(index))
+00080       nsubs$(index)=lwrc$(nsubs$(index))
 00081     next index
-00082     let prefix$=trim$(prefix$)
+00082     prefix$=trim$(prefix$)
 00083     gosub RUNTEMPLATE
 00084 ! 
 00085     if len(returncode$) then let setenv("CLIPBOARD",returncode$)

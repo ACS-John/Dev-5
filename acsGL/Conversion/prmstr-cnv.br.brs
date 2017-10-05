@@ -19,9 +19,9 @@
 00180   open #2: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=280,Replace",internal,output 
 00190 L190: read #1,using L200: pr1$,mat pr1 eof END1
 00200 L200: form pos 1,c 90,18*pd 5.2,2*n 5
-00210   for j=1 to 11: let pr2(j)=pr1(j): next j
-00220   let pr2(13)=pr1(12)
-00230   for j=13 to 18: let pr2(j+18)=pr1(j): next j
+00210   for j=1 to 11: pr2(j)=pr1(j): next j
+00220   pr2(13)=pr1(12)
+00230   for j=13 to 18: pr2(j+18)=pr1(j): next j
 00240   write #2,using L250: pr1$,mat pr2
 00250 L250: form pos 1,c 90,36*pd 5.2,2*n 5
 00260   goto L190
@@ -36,7 +36,7 @@
 00350 XIT: stop 
 00360 ! ______________________________________________________________________
 00370 ! <Updateable Region: ERTN>
-00380 ERTN: let fnerror(program$,err,line,act$,"xit")
+00380 ERTN: fnerror(program$,err,line,act$,"xit")
 00390   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00400   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00410   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

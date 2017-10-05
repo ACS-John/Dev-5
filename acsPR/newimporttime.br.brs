@@ -11,18 +11,18 @@
 00110   dim ln$*76,filename$*40
 00120 ! ______________________________________________________________________
 00130   fntop(program$,cap$="Import Time from Time Clock System")
-00150   let pathtotimecard$="c:\progra~1\acs\"
+00150   pathtotimecard$="c:\progra~1\acs\"
 00160 ! 
 00170   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
 00180   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outin,relative 
 00190 ! ______________________________________________________________________
 00200 ASK_PAYROLL_DATE: ! 
 00210   fntos(sn$="Importtime") !:
-        let respc=0
+        respc=0
 00220   fnlbl(1,1,"",34,1) ! bigger screen
 00230   fnlbl(2,1,"Payroll Date:",20,1)
 00240   fntxt(2,23,10,0,1,"3",0,"Always use the calculation date.")
-00250   let resp$(respc+=1)=str$(ppd)
+00250   resp$(respc+=1)=str$(ppd)
 00260   fncmdkey("&Next",1,1,0,"Proceed with importing time." ) !:
         fncmdkey("E&xit",5,0,1,"Returns to menu")
 00270   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
@@ -41,13 +41,13 @@
 00400   open #5: "Name="&simple$&",RecL=76",display,input 
 00410 L410: linput #5: ln$ eof L570
 00420   eno=val(ln$(1:8)) conv MESSAGE1
-00430   let dep=val(ln$(39:41)) conv L440
-00440 L440: let reghrs=val(ln$(42:48)) conv L450
+00430   dep=val(ln$(39:41)) conv L440
+00440 L440: reghrs=val(ln$(42:48)) conv L450
 00450 L450: othrs=val(ln$(49:55)) conv L460
-00460 L460: let vachrs=val(ln$(56:62)) conv L470
+00460 L460: vachrs=val(ln$(56:62)) conv L470
 00470 L470: sickhrs=val(ln$(63:69)) conv L480
-00480 L480: let holhrs=val(ln$(70:76)) conv L490
-00490 L490: let name$=ln$(9:38)
+00480 L480: holhrs=val(ln$(70:76)) conv L490
+00490 L490: name$=ln$(9:38)
 00500   write #3,using L530: eno,dep,val(env$('cno')),reghrs,othrs,vachrs,sickhrs,holhrs,0
 00510   read #1,using L520,key=lpad$(str$(eno),8): prname$ nokey MESSAGE2
 00520 L520: form pos 9,c 30
@@ -61,28 +61,28 @@
 00600   goto XIT
 00610 ! ______________________________________________________________________
 00620 ! <Updateable Region: ERTN>
-00630 ERTN: let fnerror(program$,err,line,act$,"xit")
+00630 ERTN: fnerror(program$,err,line,act$,"xit")
 00640   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00650   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00660   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00670 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00680 ! /region
 00690 ! ______________________________________________________________________
-00700 XIT: let fncloseprn: let fnxit
+00700 XIT: fncloseprn: fnxit
 00710 MESSAGE1: ! bad data
 00720   mat ml$(4) !:
-        let ml$(1)="Cannot read the data! It must be a corrupted" !:
-        let ml$(2)="file or in the wrong format.  You must export" !:
-        let ml$(3)="the time from your time clock system before" !:
-        let ml$(4)="attempting to run this menu option." !:
+        ml$(1)="Cannot read the data! It must be a corrupted" !:
+        ml$(2)="file or in the wrong format.  You must export" !:
+        ml$(3)="the time from your time clock system before" !:
+        ml$(4)="attempting to run this menu option." !:
         fnmsgbox(mat ml$,resp$,cap$,48)
 00730   goto XIT
 00740 MESSAGE2: ! bad employee number
 00750   mat ml$(4) !:
-        let ml$(1)="Employee # "&str$(eno)&" has time imported" !:
-        let ml$(2)="from the time clock, but does not have a matching" !:
-        let ml$(3)="employee number in the payroll system.  This" !:
-        let ml$(4)="person will be skipped.   "&name$ !:
+        ml$(1)="Employee # "&str$(eno)&" has time imported" !:
+        ml$(2)="from the time clock, but does not have a matching" !:
+        ml$(3)="employee number in the payroll system.  This" !:
+        ml$(4)="person will be skipped.   "&name$ !:
         fnmsgbox(mat ml$,resp$,cap$,48)
 00760   goto L410
 00770 HDR: ! 

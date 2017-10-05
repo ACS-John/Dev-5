@@ -16,8 +16,8 @@
 00160 ! ______________________________________________________________________
 00170   if exists("jcbillings."&wsid$) >0 then goto L180 else goto L200
 00180 L180: mat ml$(2) !:
-        let ml$(1)="An unposted file appears to exist! " !:
-        let ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries." !:
+        ml$(1)="An unposted file appears to exist! " !:
+        ml$(2)="Enter Yes to work with this file, else No to create a new batch of entries." !:
         fnmsgbox(mat ml$,resp$,cap$,52)
 00190   if resp$="Yes" then goto L220 else goto L200
 00200 L200: open #3: "Name=jcbillings."&wsid$&",SIZE=0,RecL=84,Replace",internal,outin,relative 
@@ -31,22 +31,22 @@
 00280   addone=1 ! set code as adding when first entering
 00290 ! ______________________________________________________________________
 00300 TRANSACTION_ENTRY: ! 
-00310   if addone=1 then let inp(1)=inp(3)=0
+00310   if addone=1 then inp(1)=inp(3)=0
 00320   fntos(sn$="billinginput") !:
-        let respc=0 : let frac=0 !:
-        let mylen=28 : let mypos=mylen+3
+        respc=0 : let frac=0 !:
+        mylen=28 : mypos=mylen+3
 00330   fnlbl(1,1,"Job Number:",mylen,1)
 00340   fncmbjob(1,mypos) !:
-        let resp$(respc+=1)=jn$
+        resp$(respc+=1)=jn$
 00350   fnlbl(2,1,"Amount:",mylen,1)
 00360   fntxt(2,mypos,10,10,0,"10",0,"Amount to be charged to job.") !:
-        let resp$(respc+=1)=str$(inp(1))
+        resp$(respc+=1)=str$(inp(1))
 00370   fnlbl(3,1,"Date:",mylen,1)
 00380   fntxt(3,mypos,8,8,0,"1",0,"Date of transaction") !:
-        let resp$(respc+=1)=str$(inp(2))
+        resp$(respc+=1)=str$(inp(2))
 00390   fnlbl(4,1,"Status:",mylen,1)
 00400   fntxt(4,mypos,2,2,0,"30",0,"") !:
-        let resp$(respc+=1)=str$(inp(3))
+        resp$(respc+=1)=str$(inp(3))
 00410   fncmdkey("&Save",1,1,0,"Saves all changes.")
 00420   fncmdkey("Co&rrection",7,0,0,"Make a correction to any entry.")
 00430   fncmdkey("&LIsting",9,0,0,"Print a listing of all entries.")
@@ -56,21 +56,21 @@
 00470   fnacs(sn$,0,mat resp$,ckey) ! detail job screen     editrec
 00480   if ckey=5 then goto L490 else goto L510
 00490 L490: mat ml$(2) !:
-        let ml$(1)="You have chosen to cancel without postng these entries!  " !:
-        let ml$(2)="Take Yes to Exit, else take No to return to the entry screens." !:
+        ml$(1)="You have chosen to cancel without postng these entries!  " !:
+        ml$(2)="Take Yes to Exit, else take No to return to the entry screens." !:
         fnmsgbox(mat ml$,resp$,cap$,52)
 00500   if resp$="Yes" then goto XIT else goto TRANSACTION_ENTRY
 00510 L510: if ckey=7 then goto CORRECTIONS
 00520   if ckey=8 then goto POSTTOJOBS
 00530   if ckey=9 then goto PRINTPROOFLIST
-00540   let jn$=lpad$(trim$(resp$(1)(1:6)),6) ! job #
-00550   let inp(1)=val(resp$(2)) ! amount
-00560   let inp(2)=val(resp$(3)) ! date
-00570   let inp(3)=val(resp$(4)) ! status
+00540   jn$=lpad$(trim$(resp$(1)(1:6)),6) ! job #
+00550   inp(1)=val(resp$(2)) ! amount
+00560   inp(2)=val(resp$(3)) ! date
+00570   inp(3)=val(resp$(4)) ! status
 00580   if trim$(jn$)="" then goto L590 else goto L610
 00590 L590: mat ml$(2) !:
-        let ml$(1)="You failed to enter a job number. Take Yes to continue;" !:
-        let ml$(2)="else take No to return to previous screen and enter the job number." !:
+        ml$(1)="You failed to enter a job number. Take Yes to continue;" !:
+        ml$(2)="else take No to return to previous screen and enter the job number." !:
         fnmsgbox(mat ml$,resp$,cap$,52)
 00600   if resp$="Yes" then goto L610 else goto TRANSACTION_ENTRY
 00610 L610: if addone=1 then goto L620 else goto L650
@@ -97,10 +97,10 @@
 00820   for j=1 to lrec(3)
 00830     read #3,using L640,rec=j: jn$,mat inp
 00840     form pos 10,c 9,skip 1,pos 10,pic(-----,---.##),skip 1
-00850     let t1=0
+00850     t1=0
 00860     pr #255,using L870: jn$,mat inp pageoflow PROOF_LIST_NWPG
 00870 L870: form pos 1,c 6,x 1,pic(----,---.##),x 2,pic(zz/zz/zz),x 2,n 2,skip 1
-00880     let t1=t1+inp(1)
+00880     t1=t1+inp(1)
 00890   next j
 00900   pr #255,using L910: " __________",t1
 00910 L910: form pos 8,c 11,skip 1,pos 7,pic(-----,---.##),skip 1
@@ -127,7 +127,7 @@
 01120   continue 
 01130 ! ______________________________________________________________________
 01140 ! <Updateable Region: ERTN>
-01150 ERTN: let fnerror(program$,err,line,act$,"xit")
+01150 ERTN: fnerror(program$,err,line,act$,"xit")
 01160   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01170   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01180   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -136,7 +136,7 @@
 01210 ! ______________________________________________________________________
 01220   if err=61 then goto TRANSACTION_ENTRY
 01230 ! ______________________________________________________________________
-01240 XIT: let fnxit
+01240 XIT: fnxit
 01250 ! ______________________________________________________________________
 01260 ! INPUT FROM DISKETTE FILE    ! took this option out on new system
 01270 ! ______________________________________________________________________
@@ -149,17 +149,17 @@
 01320   cm2$(1)="30": cm2$(2)="": cm2$(3)="10" !:
         cm2$(4)="1" !:
         cm2$(5)="30" !:
-        cm2$(5): ch2$(5): let item2$(5)
+        cm2$(5): ch2$(5): item2$(5)
 01330   fnflexinit1('Cat',1,1,10,70,mat ch2$,mat cm2$,1,usefile)
 01340   restore #3: 
 01350 READ_FILE: ! 
 01360   read #3,using L640: jn$,mat inp eof L1400
-01370   let item2$(1)=str$(rec(3)): let item2$(2)=jn$ !:
-        let item2$(3)=str$(inp(1)): let item2$(4)=str$(inp(2)) !:
-        let item2$(5)=str$(inp(3))
+01370   item2$(1)=str$(rec(3)): item2$(2)=jn$ !:
+        item2$(3)=str$(inp(1)): item2$(4)=str$(inp(2)) !:
+        item2$(5)=str$(inp(3))
 01380   fnflexadd1(mat item2$)
 01390   goto READ_FILE
-01400 L1400: let fncmdkey("&Add",1,0,0,"Add a new transaction." ) !:
+01400 L1400: fncmdkey("&Add",1,0,0,"Add a new transaction." ) !:
         fncmdkey("E&dit",2,1,0,"Edit the highlited record") !:
         fncmdkey("&Delete",4,0,0,"Deletes the highlited record") !:
         fncmdkey("&Refresh",7,0,0,"Updates search grids and combo boxes with new transaction information") !:
@@ -167,7 +167,7 @@
 01410   fnacs(sn$,0,mat resp$,ckey) ! review_details  grid of transactions
 01420   if ckey=5 then goto TRANSACTION_ENTRY
 01430   editrec=val(resp$(1))
-01440   if ckey=1 then addone=1: mat inp=(0): let jn$="": goto TRANSACTION_ENTRY
+01440   if ckey=1 then addone=1: mat inp=(0): jn$="": goto TRANSACTION_ENTRY
 01450   if ckey=2 then read #3,using L640,rec=editrec: jn$,mat inp: editone=1 : goto TRANSACTION_ENTRY
 01460   if ckey=4 then delete #3,rec=editrec: : goto CORRECTIONS
 01470   goto CORRECTIONS

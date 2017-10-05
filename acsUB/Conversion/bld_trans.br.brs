@@ -17,18 +17,18 @@
 00180 ! ______________________________________________________________________
 00190   fntop("S:\acsUB\Conversion\Bld_Trans",cap$="Build Transactions")
 00210 LOOP_STEP_1: ! 
-00220   let delubtransvb$="True"
-00230 ! let removebaddates$="True" ! Gosub MENU1
+00220   delubtransvb$="True"
+00230 ! removebaddates$="True" ! Gosub MENU1
 00240   fn_ub_build_transactions
 00250   goto XIT
 26000 MENU1: ! r:
 26020   fntos(sn$="bldtrans")
 26040   fnlbl(1,1,"Convert Transactions")
-26060   fnchk(4,1,"Delete existing transaction file before conversion") : let resp$(1)="True"
-26080   fnchk(5,1,"Remove Transactions with Bad Dates") : let resp$(2)="False"
+26060   fnchk(4,1,"Delete existing transaction file before conversion") : resp$(1)="True"
+26080   fnchk(5,1,"Remove Transactions with Bad Dates") : resp$(2)="False"
 26100   fncmdset(2)
 26120   fnacs(sn$,0,mat resp$,ck)
-26140   let delubtransvb$=resp$(1) : let removebaddates$=resp$(2)
+26140   delubtransvb$=resp$(1) : removebaddates$=resp$(2)
 26160   if ck=5 then pr 'cancel selected.  end reached - call support - conversion incomplete' : pause
 26180 ! 
 26200   return  ! /r
@@ -36,8 +36,8 @@
 27010 IGNORE: continue 
 28000   def library fnub_cnv_build_transactions
 28020     library 'S:\Core\Library': fnerror,fntop,fntos,fnacs,fncmdset,fnlbl,fndate_mmddyy_to_ccyymmdd,fnchk,fnxit,fnpause,fngethandle,fnub_index_customer,fnstatus,fnindex_it
-28060     let delubtransvb$="True"
-28080 ! let removebaddates$="True" ! Gosub MENU1
+28060     delubtransvb$="True"
+28080 ! removebaddates$="True" ! Gosub MENU1
 28100     fnub_cnv_build_transactions=fn_ub_build_transactions
 28120   fnend 
 40000   def fn_ub_build_transactions
@@ -63,7 +63,7 @@
 46180     else if rln(h_ubacctrn)=68 then 
 46200       acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2'
 46220     else ! seems to be a problem
-46240       pr 'unrecognised ubacctrn record length' : let fnpause
+46240       pr 'unrecognised ubacctrn record length' : fnpause
 46260     end if 
 46280     fn_transaction_conv(h_ubacctrn)
 46300 ! /r
@@ -78,7 +78,7 @@
 50060     do 
 50080       read #master,using 'form pos 1,c 10,pos 438,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2': p$,mat rw4 eof PHASE4
 50100       for month=1 to 13
-50120         let tdate=fndate_mmddyy_to_ccyymmdd(rw4(8,month))
+50120         tdate=fndate_mmddyy_to_ccyymmdd(rw4(8,month))
 50140         if tdate<>0 and tdate<>20000000 then 
 50160           let g(01)=rw4(09,month)
 50180           let g(02)=rw4(10,month)
@@ -92,18 +92,18 @@
 50340           let g(10)=rw4(18,month)
 50360           let g(11)=rw4(19,month)
 50380           if transcode=1 then let g(10)=0 ! don't include penalties unless they are needed to total to the transaction amount
-50400           let ru(1)=rw4(1,month)
-50420           let ru(2)=rw4(2,month)
-50440           let ru(3)=rw4(3,month)
-50460           let ru(4)=rw4(4,month)
-50480           let ru(5)=rw4(5,month)
-50500           let ru(6)=rw4(6,month)
+50400           ru(1)=rw4(1,month)
+50420           ru(2)=rw4(2,month)
+50440           ru(3)=rw4(3,month)
+50460           ru(4)=rw4(4,month)
+50480           ru(5)=rw4(5,month)
+50500           ru(6)=rw4(6,month)
 50520           bal=rw4(7,month)
-50540           let postcode=9
-50560           let transcode=1
-50580           let tamt=rw4(19,month) ! <--rw4(19,month) is amount billed that month, rw4(22,month) is the total amount collected that month
-50600           let ru(3)=ru(4)=0 !  (no electric)
-50620           let key$=p$&lpad$(str$(tdate),8)&str$(transcode)
+50540           postcode=9
+50560           transcode=1
+50580           tamt=rw4(19,month) ! <--rw4(19,month) is amount billed that month, rw4(22,month) is the total amount collected that month
+50600           ru(3)=ru(4)=0 !  (no electric)
+50620           key$=p$&lpad$(str$(tdate),8)&str$(transcode)
 51000 ! r:         delete previously converted matching transaction(s)
 51020 !         delete the first matching (charge) transaction
 51040 !         do
@@ -145,22 +145,22 @@
 54140   fnend  ! fn_ub_build_transactions
 56000   def fn_translate_transcode
 56020     if transcode=1 and postcode=4 then 
-56040       let transcode=5 ! Debit Memo
+56040       transcode=5 ! Debit Memo
 56060     else if transcode=1 and postcode<>4 then 
-56080       let transcode=1 ! charge
+56080       transcode=1 ! charge
 56100     else if transcode=2 then 
-56120       let transcode=2 ! penalty
+56120       transcode=2 ! penalty
 56140     else if transcode=3 then 
-56160       let transcode=3 ! collection
+56160       transcode=3 ! collection
 56180     else if transcode=4 then 
-56200       let transcode=4 ! Credit Memo
+56200       transcode=4 ! Credit Memo
 56220     end if  ! end of translate transcode
 56240   fnend  ! fn_translate_transcode
 58000   def fn_removebaddates
 58020     open #transvb=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&env$('cno')&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outin,keyed 
 58040     do 
 58060       read #transvb,using "Form Pos 11,N 8": tdate eof TRANSVB_EOF
-58080       let tdate$=str$(tdate)
+58080       tdate$=str$(tdate)
 58100       if val(tdate$(1:4))<1950 or val(tdate$(1:4))>2049 or val(tdate$(5:6))<1 or val(tdate$(5:6))>12 or val(tdate$(7:8))<1 or val(tdate$(7:8))>31 then 
 58120         delete #transvb: 
 58140       end if 
@@ -172,8 +172,8 @@
 60020     do 
 60040 READ_TRANS: ! 
 60060       mat g=(0)
-60080       let tamt=tdate=transcode=postcode=0
-60100       let p$=''
+60080       tamt=tdate=transcode=postcode=0
+60100       p$=''
 60120       if rln(h_trans)=23 then 
 60140         read #h_trans,using 'form pos 1,c 10,pd 4.2,pd 4,2*n 1': p$,tamt,tdate,transcode,postcode eof TC_FINIS
 60160       else 
@@ -185,12 +185,12 @@
 60260       if transcode=2 and g(10)=tamt then let g(1)=g(2)=g(3)=g(4)=g(5)=g(6)=g(7)=g(8)=g(9)=0 ! make sure all other charges are zero on penalty records where g(10) is the penalty field
 60280       fn_translate_transcode
 60282       if postcode=5 then goto READ_TRANS ! Skip all transaction code 5s.
-60300       if len(str$(tdate))<=6 then let tdate=fndate_mmddyy_to_ccyymmdd(tdate)
+60300       if len(str$(tdate))<=6 then tdate=fndate_mmddyy_to_ccyymmdd(tdate)
 60320       if len(str$(fdate))<=6 then let fdate=fndate_mmddyy_to_ccyymmdd(fdate)
 60340 ! 
 60360 ! if tdate=20415 then pause
 60380 ! 
-60400       let postcode=9
+60400       postcode=9
 60420       if tdate=fdate and transcode=1 then mat tg=g(1:10) else mat tg=(0)
 60440 !     read #transvb,using 'form pos 1,C 10,pos 20,pd 4.2',key=rpad$(p$&str$(tdate)&str$(transcode),kln(transvb)): p$,tamt_compare nokey TC_MATCHING_TRAN_NOKEY
 60460 !     if tamt_compare=tamt  then goto READ_TRANS  ! skip if trans already exists (matches on transcode, account, date and amount)
@@ -207,7 +207,7 @@
 60680     reread #h_ubacctrn,using acctrn_form$: p$
 60700     continue 
 60720 TC_FINIS: ! 
-60740 ! let fnpause
+60740 ! fnpause
 60760     close #h_trans,free: 
 60780   fnend 
 62000   def fn_fix_trans_breakdown(mat g,tamt)
@@ -220,7 +220,7 @@
 62140     end if 
 62160   fnend 
 76220 ! <updateable region: ertn>
-76240 ERTN: let fnerror(program$,err,line,act$,"xit")
+76240 ERTN: fnerror(program$,err,line,act$,"xit")
 76260   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76280   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

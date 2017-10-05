@@ -11,9 +11,9 @@
 12112     ! library 'S:\Core\Library': fntos,fnlbl,fntxt,fnacs,fnopt,fncmdset
 12120     ! 
 12140     fnreg_read('Report_Cache',report_cache$,'True')
-12160     if report_cache$='True' then let print_report_caching=1 else let print_report_caching=0
+12160     if report_cache$='True' then print_report_caching=1 else print_report_caching=0
 12180     fnureg_read('wait_wp_close',wait_wp_close$,'True')
-12200     if wait_wp_close$='False' then let print_report_nowait=1 else let print_report_nowait=0
+12200     if wait_wp_close$='False' then print_report_nowait=1 else print_report_nowait=0
 12260   end if 
 12340 fnend 
 22000 def library fnprint_file_name$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$,programCaptionOverride$*256)
@@ -22,19 +22,19 @@
 22060 fnend 
 24000 def fn_print_file_name$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$,programCaptionOverride$*256)
 24010   dim pfnReturn$*1024
-24020   let pfn_extension$=trim$(pfn_extension$,'.')
-24040   if pfn_extension$='' then let pfn_extension$='rtf'
+24020   pfn_extension$=trim$(pfn_extension$,'.')
+24040   if pfn_extension$='' then pfn_extension$='rtf'
 24060   if print_report_caching then 
-24070     if programCaptionOverride$='' then let programCaptionOverride$=env$('Program_Caption')
-24200     let pfnReturn$=fn_report_cache_folder_current$&'\'&fn_safe_filename$(programCaptionOverride$)
+24070     if programCaptionOverride$='' then programCaptionOverride$=env$('Program_Caption')
+24200     pfnReturn$=fn_report_cache_folder_current$&'\'&fn_safe_filename$(programCaptionOverride$)
 24210     pfn_sendto_base_name_addition$=trim$(fn_safe_filename$(pfn_sendto_base_name_addition$))
 24220     if pfn_sendto_base_name_addition$<>'' then 
-24240       let pfnReturn$=pfnReturn$&' '&pfn_sendto_base_name_addition$
+24240       pfnReturn$=pfnReturn$&' '&pfn_sendto_base_name_addition$
 24260     end if 
-24280     let pfnReturn$=pfnReturn$&' - '&date$('ccyy-mm-dd')&' '&fn_safe_filename$(time$)
-24300     let pfnReturn$=pfnReturn$&'.'&pfn_extension$
+24280     pfnReturn$=pfnReturn$&' - '&date$('ccyy-mm-dd')&' '&fn_safe_filename$(time$)
+24300     pfnReturn$=pfnReturn$&'.'&pfn_extension$
 24320   else 
-24340     let pfnReturn$=env$('temp')&'\ACS-'&session$&'.'&pfn_extension$
+24340     pfnReturn$=env$('temp')&'\ACS-'&session$&'.'&pfn_extension$
 24360   end if 
 24380   fn_print_file_name$=pfnReturn$
 24400 fnend 
@@ -54,10 +54,10 @@
 25260   else
 25280     report_cache_base$=os_filename$(env$('Q')&'\Report Cache')
 25300   end if
-25320   if report_cache_base$='' then let report_cache_base$=os_filename$(env$('Q')&'\Report Cache')
+25320   if report_cache_base$='' then report_cache_base$=os_filename$(env$('Q')&'\Report Cache')
 25340   dim tmp_dir$*512
-25360   let tmp_dir$=report_cache_base$&'\'&fnSystemName$
-25380   let tmp_dir$=tmp_dir$&'\'&fn_safe_filename$(env$('cnam'))&' ('&env$('cno')&')'
+25360   tmp_dir$=report_cache_base$&'\'&fnSystemName$
+25380   tmp_dir$=tmp_dir$&'\'&fn_safe_filename$(env$('cnam'))&' ('&env$('cno')&')'
 25400   ! pr 'report_cache_base$='&report_cache_base$ : pr 'tmp_dir$='&tmp_dir$ : pause
 25420   if env$('enableReportCacheOnClient')='Yes' then
 25440     fnmakesurepathexists(env$('at')&tmp_dir$&'\tmp.txt')
@@ -163,7 +163,7 @@
 42420     else if osver$=winxp$ or osver$=win2k$ or osver$=winnt2kxp$ then 
 42440       fn_start_winxp
 42460     else 
-42480       pr 'win 98 no longer supported.' : pause ! let fn_start_win9x
+42480       pr 'win 98 no longer supported.' : pause ! fn_start_win9x
 42500     end if 
 42520 DROPIT: ! 
 42540     if ~print_report_nowait and ~print_report_caching and nodrop<>1 then 
@@ -318,19 +318,19 @@
 52000   def fn_start_read_properties
 52020     fnread_program_print_property('Orientation',orientation$, g_prgCapForSettingsOverride$)
 52040     if orientation$="Landscape" then landscape$="Y" else landscape$="N"
-52060     fnread_program_print_property('Height',pgh$, g_prgCapForSettingsOverride$) : let pgh=val(pgh$)
-52080     if pgh=0 then let pgh=11
+52060     fnread_program_print_property('Height',pgh$, g_prgCapForSettingsOverride$) : pgh=val(pgh$)
+52080     if pgh=0 then pgh=11
 52100     fninch2twip(pgh)
-52120     fnread_program_print_property('Width',pgw$, g_prgCapForSettingsOverride$) : let pgw=val(pgw$)
-52140     if pgw=0 then let pgw=8.5
+52120     fnread_program_print_property('Width',pgw$, g_prgCapForSettingsOverride$) : pgw=val(pgw$)
+52140     if pgw=0 then pgw=8.5
 52160     fninch2twip(pgw)
-52180     fnread_program_print_property('TopMargin',temp$, g_prgCapForSettingsOverride$) : let marg(1)=val(temp$)
+52180     fnread_program_print_property('TopMargin',temp$, g_prgCapForSettingsOverride$) : marg(1)=val(temp$)
 52200     fninch2twip(marg(1))
-52220     fnread_program_print_property('BottomMargin',temp$, g_prgCapForSettingsOverride$) : let marg(2)=val(temp$)
+52220     fnread_program_print_property('BottomMargin',temp$, g_prgCapForSettingsOverride$) : marg(2)=val(temp$)
 52240     fninch2twip(marg(2))
-52260     fnread_program_print_property('LeftMargin',temp$, g_prgCapForSettingsOverride$) : let marg(3)=val(temp$)
+52260     fnread_program_print_property('LeftMargin',temp$, g_prgCapForSettingsOverride$) : marg(3)=val(temp$)
 52280     fninch2twip(marg(3))
-52300     fnread_program_print_property('RightMargin',temp$, g_prgCapForSettingsOverride$) : let marg(4)=val(temp$)
+52300     fnread_program_print_property('RightMargin',temp$, g_prgCapForSettingsOverride$) : marg(4)=val(temp$)
 52320     fninch2twip(marg(4))
 52340     fnread_program_print_property('FontSize',temp$, g_prgCapForSettingsOverride$) : let fsize=val(temp$)
 52360   fnend 
@@ -340,12 +340,12 @@
 54060     input fields "11,10,C 1,N": pause$
 54080   fnend 
 58000 def fn_start_winxp
-58020   let temp$='Sy -w NotePad "'&serverSendto$&'"'
+58020   temp$='Sy -w NotePad "'&serverSendto$&'"'
 58040   execute temp$
 58060 fnend 
 60000 IGNORE: continue 
 60020 ! <Updateable Region: ERTN>
-60040 ERTN: let fnerror(program$,err,line,act$,"xit")
+60040 ERTN: fnerror(program$,err,line,act$,"xit")
 60060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 60080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 60100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -9,18 +9,18 @@
 00130   fnd1(d1)
 00180 SCR1: ! 
 00190   fntos(sn$="ubnotes") 
-00192   let respc=0
+00192   respc=0
 00200   fnlbl(1,1,"Route Number:",31,1)
 00210   fncmbrt2(1,33) 
-00212   let resp$(respc+=1)="1"
+00212   resp$(respc+=1)="1"
 00220   fnlbl(2,1,"Billing Date (Blank for all):",31,1)
 00230   fntxt(2,33,8,0,0,"1") 
-00232   let resp$(respc+=1)=str$(d1)
+00232   resp$(respc+=1)=str$(d1)
 00240   fncmdset(3) 
 00242   fnacs(sn$,0,mat resp$,ckey)
 00250   if ckey=5 then goto XIT
-00260   if resp$(1)="[All]" then let rt1=0 else let rt1=val(resp$(1))
-00270   let d1=val(resp$(2))
+00260   if resp$(1)="[All]" then rt1=0 else rt1=val(resp$(1))
+00270   d1=val(resp$(2))
 00280 ! 
 00290   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
 00300   fnopenprn
@@ -46,17 +46,17 @@
 00460 ! 
 00470 DONE: ! 
 00480   fncloseprn
-00490 XIT: let fnxit
+00490 XIT: fnxit
 00500 ignore: continue
 00510 ! <Updateable Region: ERTN>
-00520 ERTN: let fnerror(program$,err,line,act$,"xit")
+00520 ERTN: fnerror(program$,err,line,act$,"xit")
 00530   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00540   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00550   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00560 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00570 ! /region
 00590 HEADER: ! r:
-00600   let p2=p2+1
+00600   p2=p2+1
 00610   pr #255: "\qc  {\f181 \fs22 \b "&env$('cnam')&"}"
 00620   pr #255: "\qc  {\f181 \fs28 \b "&env$('program_caption')&"}"
 00630   pr #255: "\qc  {\f181 \fs18 \b "&date$("Month DD, CCYY")&"}"

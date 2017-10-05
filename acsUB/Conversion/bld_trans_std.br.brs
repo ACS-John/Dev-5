@@ -26,7 +26,7 @@
         ! If CNO<>0 Then Gosub CONVERT_CNO : Goto LOOP_STEP_1 Else Goto XIT
 00150 ! ______________________________________________________________________
 00160 ! <Updateable Region: ERTN>
-00170 ERTN: let fnerror(program$,err,line,act$,"xit")
+00170 ERTN: fnerror(program$,err,line,act$,"xit")
 00180   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00190   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00200   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -39,13 +39,13 @@
 00270   fntos(sn$="bldtrans")
 00280   fnlbl(1,1,"Convert Transactions")
 00290   fnchk(4,1,"Delete existing transaction file before conversion") !:
-        let resp$(1)="True"
+        resp$(1)="True"
 00300   fnchk(5,1,"Remove Transactions with Bad Dates") !:
-        let resp$(2)="False"
+        resp$(2)="False"
 00310   fncmdset(2)
 00320   fnacs(sn$,0,mat resp$,ck)
-00330   let delubtransvb$=resp$(1) !:
-        let removebaddates$=resp$(2)
+00330   delubtransvb$=resp$(1) !:
+        removebaddates$=resp$(2)
 00340   if ck=5 then cno=0
 00350 ! 
 00360   return 
@@ -76,7 +76,7 @@
 00550   read #master,using 'form pos 1,c 10',key=p$: z$ nokey READ_ACCTRN
 00560   gosub TRANSLATE_TRANSCODE
 00570   if len(str$(tdate))<=6 then goto L530
-00580   let postcode=9
+00580   postcode=9
 00590   write #transvb,using 'form pos 1,C 10,N 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat g,d1,d3,d5,d7,d9,d11,bal,postcode
 00600   goto READ_ACCTRN
 00610 PHASE2: ! 
@@ -92,7 +92,7 @@
 00700   read #master,using 'form pos 1,c 10,pos 300,11*pd 4.2',key=p$: z$,mat g nokey READ_TRANS
 00710   if transcode<>1 then mat g=(0) ! only pull mat g from main record if charge transaction in current file
 00720   gosub TRANSLATE_TRANSCODE
-00730   if len(str$(tdate))<=6 then let tdate=fndate_mmddyy_to_ccyymmdd(tdate)
+00730   if len(str$(tdate))<=6 then tdate=fndate_mmddyy_to_ccyymmdd(tdate)
 00740   write #transvb,using 'form pos 1,C 10,N 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat g,d1,d3,d5,d7,d9,d11,bal,postcode
 00750   goto READ_TRANS
 00760 PHASE3: ! 
@@ -104,7 +104,7 @@
 00820 READ_MASTER: ! 
 00830   read #master,using 'form pos 1,c 10,pos 438,78*pd 5,13*pd 4.2,13*n 6,156*pd 4.2,13*n 6,13*pd 4.2': p$,mat rw4 eof PHASE4
 00840   for month=1 to 13
-00850     let tdate=fndate_mmddyy_to_ccyymmdd(rw4(8,month))
+00850     tdate=fndate_mmddyy_to_ccyymmdd(rw4(8,month))
 00860     if tdate=0 or tdate=20000000 then goto NEXT_MONTH
 00870     let g(01)=rw4(09,month) : let g(02)=rw4(10,month) !:
           let g(03)=rw4(11,month) : let g(04)=rw4(12,month) !:
@@ -112,12 +112,12 @@
           let g(07)=rw4(15,month) : let g(08)=rw4(16,month) !:
           let g(09)=rw4(17,month) : let g(10)=rw4(18,month) !:
           let g(11)=rw4(19,month)
-00880     let ru(1)=rw4(1,month) : let ru(2)=rw4(2,month) !:
-          let ru(3)=rw4(3,month) : let ru(4)=rw4(4,month) !:
-          let ru(5)=rw4(5,month) : let ru(6)=rw4(6,month) !:
-          bal=rw4(7,month) : let postcode=9 !:
-          let transcode=1 : let tamt=rw4(19,month)
-00890     let key$=p$&lpad$(str$(tdate),8)&str$(transcode) !:
+00880     ru(1)=rw4(1,month) : ru(2)=rw4(2,month) !:
+          ru(3)=rw4(3,month) : ru(4)=rw4(4,month) !:
+          ru(5)=rw4(5,month) : ru(6)=rw4(6,month) !:
+          bal=rw4(7,month) : postcode=9 !:
+          transcode=1 : tamt=rw4(19,month)
+00890     key$=p$&lpad$(str$(tdate),8)&str$(transcode) !:
           read #transvb,using 'form pos 1,C 10',key=key$: p$ nokey WRITE_A_RECORD
 00900     rewrite #transvb,using 'form pos 24,11*pd 4.2,6*pd 5,pd 4.2,n 1',key=key$: mat g,mat ru,bal,postcode
 00910     goto NEXT_MONTH
@@ -138,12 +138,12 @@
 01060   return 
 01070 ! ______________________________________________________________________
 01080 TRANSLATE_TRANSCODE: ! 
-01090   if transcode=1 and postcode=4 then let transcode=5 : goto EOTT !:
+01090   if transcode=1 and postcode=4 then transcode=5 : goto EOTT !:
           ! Debit Memo
-01100   if transcode=1 and postcode<>4 then let transcode=1 : goto EOTT ! charge
-01110   if transcode=2 then let transcode=2 : goto EOTT ! penalty
-01120   if transcode=3 then let transcode=3 : goto EOTT ! collection
-01130   if transcode=4 then let transcode=4 : goto EOTT ! Credit Memo
+01100   if transcode=1 and postcode<>4 then transcode=1 : goto EOTT ! charge
+01110   if transcode=2 then transcode=2 : goto EOTT ! penalty
+01120   if transcode=3 then transcode=3 : goto EOTT ! collection
+01130   if transcode=4 then transcode=4 : goto EOTT ! Credit Memo
 01140 EOTT: return  ! end of translate transcode
 01150 ! ______________________________________________________________________
 01160 R68F: ! 
@@ -152,13 +152,13 @@
           acctrn_form$='Form Pos 1,C 10,pd 4.2,n 8,n 1,n 1,10*pd 4.2' !:
         else !:
           acctrn_form$='Form Pos 1,C 10,pd 4.2,x 2,n 6,n 1,n 1,10*pd 4.2'
-01190   if r68f=1 then let r68f=0 else let r68f=1
+01190   if r68f=1 then r68f=0 else r68f=1
 01200   continue 
 01210 ! ______________________________________________________________________
 01220 REMOVEBADDATES: ! 
 01230   open #transvb=11: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr,RecL=102,KPs=1,KLn=19,Use",internal,outin,keyed 
 01240 L1240: read #transvb,using "Form Pos 11,N 8": tdate eof L1270
-01250   let tdate$=str$(tdate) !:
+01250   tdate$=str$(tdate) !:
         if val(tdate$(1:4))<1950 or val(tdate$(1:4))>2049 or val(tdate$(5:6))<1 or val(tdate$(5:6))>12 or val(tdate$(7:8))<1 or val(tdate$(7:8))>31 then !:
           delete #transvb: 
 01260   goto L1240

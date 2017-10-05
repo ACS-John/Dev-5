@@ -34,13 +34,13 @@
 27800   continue 
 28000 ! ______________________________________________________________________
 28200   def fn_has_dupe(z$)
-28400     let hd_return=0
+28400     hd_return=0
 28600     let z_one$=z_two$=''
 28700     restore #2: 
 28800     read #2,using FORM_CUSTOMER,key=z$: z_one$
 29000     read #2,using FORM_CUSTOMER: z_two$ eof HD_EOF
 29200 HD_EOF: ! 
-29400     if z_one$=z_two$ then let hd_return=1
+29400     if z_one$=z_two$ then hd_return=1
 29600     fn_has_dupe=hd_return
 29800   fnend  ! fn_has_dupe
 30000   def fn_header
@@ -53,7 +53,7 @@
 31400   fnend 
 50970 ! ______________________________________________________________________
 50980 ! <Updateable Region: ERTN>
-50990 ERTN: let fnerror(program$,err,line,act$,"xit")
+50990 ERTN: fnerror(program$,err,line,act$,"xit")
 51000   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 51010   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 51020   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

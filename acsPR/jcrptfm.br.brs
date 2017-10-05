@@ -13,7 +13,7 @@
 00130   fntop("S:\acsPR\JCRptFM",cap$="User Designed Reports")
 00140   fncno(cno)
 00145   fnconsole(1)
-00150   let pg=3
+00150   pg=3
 00160 ! ______________________________________________________________________
 00170   open #1: "Name=S:\acsPR\JCREPORT.MST,KFName=S:\acsPR\JCREPORT.idx,Shr",internal,outin,keyed 
 00180 ! ______________________________________________________________________
@@ -22,10 +22,10 @@
 00210   scm$(1)="1. Add or Edit" !:
         scm$(2)="2. pr Proof List" !:
         scm$(3)="3. Search"
-00220   for j=1 to udim(scm$) : let iom$(j)=str$(j+3)&",2,C 38,N" : next j
+00220   for j=1 to udim(scm$) : iom$(j)=str$(j+3)&",2,C 38,N" : next j
 00230   pr f "16,35,C 09,B,5": "Exit (F5)"
 00240 L240: rinput #win,select mat iom$,attr "H": mat scm$ !:
-        let ti=curfld
+        ti=curfld
 00250   if cmdkey=5 then goto XIT
 00260   on ti+1 goto XIT,L290,L2180,SRCH none L240
 00270   goto XIT
@@ -36,29 +36,29 @@
 00320   pr #win,fields "4,02,C 23,N": "Job Cost Report Number:"
 00330   pr f "15,35,C 09,B,5": "Done (F5)"
 00340 L340: input #win,fields "4,26,Nz 2,UT,N": rptn conv L340
-00350   let rx=rptn
+00350   rx=rptn
 00360   if cmdkey=5 then goto XIT
 00370   if rptn=0 then goto L340
-00380   let rn=rptn
-00390   let rptn$=lpad$(str$(rptn),2)
+00380   rn=rptn
+00390   rptn$=lpad$(str$(rptn),2)
 00400   read #1,using L410,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs nokey L440
 00410 L410: form pos 1,n 2,c 51,x 27,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
 00420   goto L520
 00430 ! ______________________________________________________________________
-00440 L440: let msgline$(1)="Report Number "&ltrm$(rptn$)&" was not found."
-00450   let msgline$(2)="Do you wish to add it now? (Y/N)"
+00440 L440: msgline$(1)="Report Number "&ltrm$(rptn$)&" was not found."
+00450   msgline$(2)="Do you wish to add it now? (Y/N)"
 00460   fnoldmsgbox(mat response$,cap$,mat msgline$,2)
 00470   if response$(1)="Y" then goto L500
 00480   if response$(1)="N" then goto L290
 00490 ! ______________________________________________________________________
-00500 L500: let rt$="" : mat ch$=("") : let ips=sd=cp=sc=0 : mat ps=(0) !:
+00500 L500: rt$="" : mat ch$=("") : ips=sd=cp=sc=0 : mat ps=(0) !:
         mat f$=("") : mat pp=(0) : mat ppr=(0) : mat dp=(0) : mat fc=(0) !:
         mat tcj=(0) : mat tcs=(0)
 00510   write #1,using L410: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
-00520 L520: let tempch$(1)=ch$(1)(1:66)
-00530   let tempch$(2)=ch$(1)(67:132)
-00540   let tempch$(3)=ch$(2)(1:66)
-00550   let tempch$(4)=ch$(2)(67:132)
+00520 L520: tempch$(1)=ch$(1)(1:66)
+00530   tempch$(2)=ch$(1)(67:132)
+00540   tempch$(3)=ch$(2)(1:66)
+00550   tempch$(4)=ch$(2)(67:132)
 00560 L560: pr newpage
 00570   fnopenwin(win=103,2,6,22,73,cap$)
 00580   pr #win: newpage
@@ -74,16 +74,16 @@
 00680   pr #win,fields "18,2,Cr 51,N": "Summarize Category Records (1=Y):"
 00690   pr #win,fields "19,2,Cr 51,N": "Use Condensed pr (1=Y):"
 00700   pr #win,fields "20,2,Cr 51,N": "Selection Codes: (1.=  2.>=  3.<=  4.number range):"
-00710   let io1$(01)="02,17,Nz 2,UT,N"
-00720   let io1$(02)="03,17,C 51,CUT,N"
-00730   let io1$(03)="07,02,C 66,UT,N"
-00740   let io1$(04)="09,02,C 66,UT,N"
-00750   let io1$(05)="12,02,C 66,UT,N"
-00760   let io1$(06)="14,02,C 66,UT,N"
-00770   let io1$(07)="17,54,Nz 3,UT,N"
-00780   let io1$(08)="18,54,Cu 1,UT,N"
-00790   let io1$(09)="19,54,Cu 1,UT,N"
-00800   let io1$(10)="20,54,Nz 1,UT,N"
+00710   io1$(01)="02,17,Nz 2,UT,N"
+00720   io1$(02)="03,17,C 51,CUT,N"
+00730   io1$(03)="07,02,C 66,UT,N"
+00740   io1$(04)="09,02,C 66,UT,N"
+00750   io1$(05)="12,02,C 66,UT,N"
+00760   io1$(06)="14,02,C 66,UT,N"
+00770   io1$(07)="17,54,Nz 3,UT,N"
+00780   io1$(08)="18,54,Cu 1,UT,N"
+00790   io1$(09)="19,54,Cu 1,UT,N"
+00800   io1$(10)="20,54,Nz 1,UT,N"
 00810 L810: mat fkey$=("") !:
         let fkey$(1)="Next" !:
         let fkey$(4)="Delete" !:
@@ -93,13 +93,13 @@
 00820   if sd=1 then sd$="Y" else sd$="N"
 00830   if cp=1 then cp$="Y" else cp$="N"
 00840 L840: rinput #win,fields mat io1$: rn,rt$,mat tempch$,ips,sd$,cp$,sc conv CONV1
-00850   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+00850   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 00860   if cmdkey>0 then goto L930 else ce=curfld
 00870 L870: ce=ce+1: if ce>udim(io1$) then ce=1
-00880 L880: let io1$(ce)=rtrm$(io1$(ce)) : ce1=pos(io1$(ce),"U",1) !:
+00880 L880: io1$(ce)=rtrm$(io1$(ce)) : ce1=pos(io1$(ce),"U",1) !:
         if ce1=0 then goto L870
-00890   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L840
-00900 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+00890   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L840
+00900 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 00910   ce=cnt+1
 00920 ERR1: pr f "24,78,C 1": bell : goto L880
 00930 L930: if cmdkey=5 then goto MENU1
@@ -110,14 +110,14 @@
 00980   if rn<1 then ce=1 : goto ERR1
 00990   if cmdkey=4 then goto L1080
 01000   if rn=rptn then goto L1120
-01010   let rnew$=lpad$(str$(rn),2)
+01010   rnew$=lpad$(str$(rn),2)
 01020   read #1,using L1030,key=rnew$: rnew nokey L1120
 01030 L1030: form pos 1,n 2
 01040   pr f "2,40,C 38,N": "DUPLICATE REPORT NUMBER.  PRESS ENTER."
 01050 L1050: input fields "2,79,C 1,N": cnt$ conv L1050
 01060   goto L810
 01070 ! ______________________________________________________________________
-01080 L1080: let rptn$=lpad$(str$(rptn),2)
+01080 L1080: rptn$=lpad$(str$(rptn),2)
 01090   delete #1,key=rptn$: 
 01100   goto L290
 01110 ! ______________________________________________________________________
@@ -150,15 +150,15 @@
 01380       pr f str$(j)&",5,C 30,N": "Print Selection Criteria"
 01390     next j
 01400     if w=1 then goto L1410 else goto L1430
-01410 L1410: let k=0
+01410 L1410: k=0
 01420     goto L1440
-01430 L1430: let k=k+20
+01430 L1430: k=k+20
 01440 L1440: for q=1 to 20
-01450       let rptemp(q)=psc(q+k)
+01450       rptemp(q)=psc(q+k)
 01460     next q
 01470 L1470: rinput fields mat fd$: mat rptemp conv L1470
 01480     for q=1 to 20
-01490       let psc(q+k)=rptemp(q)
+01490       psc(q+k)=rptemp(q)
 01500     next q
 01510     if rptemp(20)><0 then goto L1530
 01520     lst=1
@@ -188,31 +188,31 @@
           let fkey$(4)="Completed" !:
           em$="" !:
           fnfkey(20,mat fkey$,mat disfk,em$,0)
-01710     let io2$(1)="06,24,C 50,UT,N"
-01720     let io2$(2)="07,24,Nz 3,UT,N"
-01730     let io2$(3)="08,24,Nz 3,UT,N"
-01740     let io2$(4)="09,24,N 01,UT,N"
-01750     let io2$(5)="10,24,Cu 1,UT,N"
-01760     let io2$(6)="11,24,Cu 1,UT,N"
-01770     let io2$(7)="12,24,Cu 1,UT,N"
-01780     if fc(j)=1 then let detailprint$="N" else let detailprint$="Y"
-01790     if tcj(j)=1 then let totalbyjob$="Y" else let totalbyjob$="N"
+01710     io2$(1)="06,24,C 50,UT,N"
+01720     io2$(2)="07,24,Nz 3,UT,N"
+01730     io2$(3)="08,24,Nz 3,UT,N"
+01740     io2$(4)="09,24,N 01,UT,N"
+01750     io2$(5)="10,24,Cu 1,UT,N"
+01760     io2$(6)="11,24,Cu 1,UT,N"
+01770     io2$(7)="12,24,Cu 1,UT,N"
+01780     if fc(j)=1 then detailprint$="N" else detailprint$="Y"
+01790     if tcj(j)=1 then totalbyjob$="Y" else totalbyjob$="N"
 01800     if tcs(j)=1 then let grandtotal$="Y" else let grandtotal$="N"
 01810 L1810: rinput #win,fields mat io2$: f$(j),pp(j),ppr(j),dp(j),detailprint$,totalbyjob$,grandtotal$ conv CONV2
-01820     if ce>0 then let io2$(ce)(ce1:ce2)="U": ce=0
+01820     if ce>0 then io2$(ce)(ce1:ce2)="U": ce=0
 01830     if cmdkey>0 then goto L1900 else ce=curfld
 01840 L1840: ce=ce+1: if ce>udim(io2$) then ce=1
-01850 L1850: let io2$(ce)=rtrm$(io2$(ce)) !:
+01850 L1850: io2$(ce)=rtrm$(io2$(ce)) !:
           ce1=pos(io2$(ce),"U",1) !:
           if ce1=0 then goto L1840
-01860     ce2=ce1+1 : let io2$(ce)(ce1:ce1)="UC" : goto L1810
-01870 CONV2: if ce>0 then let io2$(ce)(ce1:ce2)="U"
+01860     ce2=ce1+1 : io2$(ce)(ce1:ce1)="UC" : goto L1810
+01870 CONV2: if ce>0 then io2$(ce)(ce1:ce2)="U"
 01880     ce=cnt+1
 01890 ERR2: pr f "24,78,C 1": bell : goto L1850
 01900 L1900: if rtrm$(f$(j))="" then goto L2020
 01910     if detailprint$="Y" then let fc(j)=0 else let fc(j)=1
-01920     if totalbyjob$="Y" then let tcj(j)=1 else let tcj(j)=0
-01930     if grandtotal$="Y" then let tcs(j)=1 else let tcs(j)=0
+01920     if totalbyjob$="Y" then tcj(j)=1 else tcj(j)=0
+01930     if grandtotal$="Y" then tcs(j)=1 else tcs(j)=0
 01940     if detailprint$<>"Y" and detailprint$<>"N" then ce=5 : goto ERR2
 01950     if totalbyjob$<>"Y" and totalbyjob$<>"N" then ce=6 : goto ERR2
 01960     if grandtotal$<>"Y" and grandtotal$<>"N" then ce=7 : goto ERR2
@@ -223,7 +223,7 @@
 02010     if tcs(j)<0 or tcs(j)>1 then ce=7: goto L3000
 02020 L2020: if cmdkey=4 then goto L2080
 02030     if cmdkey=3 then goto L560
-02040     if cmdkey=2 then let j=j-1 else goto L2060
+02040     if cmdkey=2 then j=j-1 else goto L2060
 02050     if j>0 then goto L1580
 02060 L2060: if cmdkey=1 then goto L2070
 02070 L2070: next j
@@ -242,11 +242,11 @@
 02200   fnopenwin(win=102,10,28,15,52,cap$)
 02210   let wrd3$(1)="Print All Report Files"
 02220   let wrd3$(2)="Select Reports to Print"
-02230   let io3$(1)="4,2,C 23,N"
-02240   let io3$(2)="5,2,C 23,N"
+02230   io3$(1)="4,2,C 23,N"
+02240   io3$(2)="5,2,C 23,N"
 02250   pr f "16,34,C 11,B,5": "Cancel (F5)"
 02260   rinput #win,select mat io3$,attr "H": mat wrd3$
-02270   let prtall=curfld-1
+02270   prtall=curfld-1
 02280   close #win: ioerr L2290
 02290 L2290: if cmdkey=5 then goto MENU1
 02300   if prtall=0 then goto L2400
@@ -256,16 +256,16 @@
 02340     pr #win,fields "4,2,C 23,N": "Report Number to Print:"
 02350     pr f "16,35,C 09,B,5": "Done (F5)"
 02360 L2360: input #win,fields "4,26,N 2,UET,N": rno(j) conv L2360
-02370     let rno$(j)=lpad$(str$(rno(j)),2)
+02370     rno$(j)=lpad$(str$(rno(j)),2)
 02380     if cmdkey=5 or rno(j)=0 then goto L2400
 02390   next j
 02400 L2400: pr newpage
 02410   fnwait(104,cap$,message$="Printing Proof List...",1)
 02420   on fkey 5 goto L2850
 02430   fnopenprn(cp,58,220,process)
-02440   let k=0
+02440   k=0
 02450 L2450: if prtall=0 then goto L2500
-02460 L2460: let k=k+1
+02460 L2460: k=k+1
 02470   if val(rno$(k))=0 then goto L2850
 02480   read #1,using L2510,key=rno$(k): rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs nokey L2460
 02490   goto L2520
@@ -304,38 +304,38 @@
 02820   pr #255: newpage
 02830   goto L2450
 02840 ! ______________________________________________________________________
-02850 L2850: let fncloseprn
+02850 L2850: fncloseprn
 02860   on fkey 5 ignore 
 02870   goto MENU1
 02880 ! ______________________________________________________________________
-02890   if ce>0 then let io1$(ce)(ce1:ce2)="U"
+02890   if ce>0 then io1$(ce)(ce1:ce2)="U"
 02900   ce=cnt+1
 02910 L2910: pr f "24,80,C 1,N": bell
-02920   let io1$(ce)=rtrm$(io1$(ce))
+02920   io1$(ce)=rtrm$(io1$(ce))
 02930   ce1=pos(uprc$(io1$(ce)),"U",1)
 02940   ce2=ce1+1
-02950   let io1$(ce)(ce1:ce1)="RC"
+02950   io1$(ce)(ce1:ce1)="RC"
 02960   goto L840
 02970 ! ______________________________________________________________________
-02980   if ce>0 then let io2$(ce)(ce1:ce2)="U"
+02980   if ce>0 then io2$(ce)(ce1:ce2)="U"
 02990   ce=cnt+1
 03000 L3000: pr f "24,80,C 1,N": bell
-03010   let io2$(ce)=rtrm$(io2$(ce))
+03010   io2$(ce)=rtrm$(io2$(ce))
 03020   ce1=pos(io2$(ce),"U",1)
 03030   ce2=ce1+1
-03040   let io2$(ce)(ce1:ce1)="RC"
+03040   io2$(ce)(ce1:ce1)="RC"
 03050   goto L1810
 03060 ! ______________________________________________________________________
 03070 SRCH: ! 
 03080   bk=0
 03090 L3090: pr newpage
 03100   fnopenwin(win=102,10,15,14,65,cap$)
-03110   let prtall=0
+03110   prtall=0
 03120   pr #win,fields "4,2,C 39,N": "Starting Report Number (blank for all):"
 03130   pr f "15,34,C 11,B,5": "Cancel (F5)"
 03140 L3140: input #win,fields "4,42,C 2,UT,N": nam$
 03150   if cmdkey=5 then goto SRCHEND
-03160   let nam$=lpad$(rtrm$(nam$),2)
+03160   nam$=lpad$(rtrm$(nam$),2)
 03170   restore #1,search>=nam$: nokey L3140
 03180   close #win: ioerr L3190
 03190 L3190: pr newpage
@@ -352,7 +352,7 @@
 03300     if bk>20 then bk=1
 03310     bk$(bk)=bl$(2)(1:28)
 03320 L3320: next j
-03330 SREND: if j>1 then let j=j-1
+03330 SREND: if j>1 then j=j-1
 03340   mat in2$(j)
 03350   mat fkey$=("") !:
         let fkey$(1)="Next" !:
@@ -375,17 +375,17 @@
 03470   goto L3090
 03480 ! ______________________________________________________________________
 03490 SRCHEND: if rtrm$(k$)="" then goto L3550
-03500   let rn=rx=rptn=val(k$) conv L3550
-03510   let rptn$=lpad$(rtrm$(k$),2)
+03500   rn=rx=rptn=val(k$) conv L3550
+03510   rptn$=lpad$(rtrm$(k$),2)
 03520   read #1,using L410,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs nokey L3360
-03530   let ti=1 : goto L520
+03530   ti=1 : goto L520
 03540   close #101: ioerr L3550
 03550 L3550: goto MENU1
 03560 ! ______________________________________________________________________
-03570 XIT: let fnxit
+03570 XIT: fnxit
 03580 ! ______________________________________________________________________
 03590 ! <Updateable Region: ERTN>
-03600 ERTN: let fnerror(program$,err,line,act$,"xit")
+03600 ERTN: fnerror(program$,err,line,act$,"xit")
 03610   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03620   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 03630   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

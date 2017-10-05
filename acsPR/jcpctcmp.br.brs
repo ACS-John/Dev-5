@@ -22,16 +22,16 @@
 00210   pr #win,fields "6,2,Cr 25,N": "Percent Complete (Labor):"
 00220   pr #win,fields "7,2,Cr 25,N": "Percent Complete (Other):"
 00230   pr #win,fields "8,2,Cr 25,N": "Total Units Complete:"
-00240   let io1$(1)="4,28,C 6,UT,N"
-00250   let io1$(2)="5,28,N 5,UT,N"
-00260   let io1$(3)="6,28,N 3,UT,N"
-00270   let io1$(4)="7,28,N 3,UT,N"
-00280   let io1$(5)="8,28,N 7,UT,N"
+00240   io1$(1)="4,28,C 6,UT,N"
+00250   io1$(2)="5,28,N 5,UT,N"
+00260   io1$(3)="6,28,N 3,UT,N"
+00270   io1$(4)="7,28,N 3,UT,N"
+00280   io1$(5)="8,28,N 7,UT,N"
 00290   pr f "17,30,C 09,B,1": "Next (F1)"
 00300   pr f "17,41,C 09,B,5": "Exit (F5)"
 00310 L310: input #win,fields mat io1$: jn$,cn,l12,l13,l10 conv CONV1
 00320   if rtrm$(jn$)="" or ltrm$(rtrm$(jn$))="0" then goto DONE
-00330   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+00330   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 00340   if cmdkey>0 then goto L490 else ce=curfld
 00350   if ce<>1 then goto L390
 00360   read #1,using L370,key=lpad$(rtrm$(jn$),6): n$ nokey L630
@@ -42,10 +42,10 @@
 00410   read #2,using L600,key=cn$: k$,rl10,rl12,rl13 nokey L630
 00420   pr #win,fields "5,36,C 25,N": k$
 00430 L430: ce=ce+1: if ce>udim(io1$) then ce=1
-00440 L440: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1) !:
+00440 L440: io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1) !:
         if ce1=0 then goto L430
-00450   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L310
-00460 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+00450   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L310
+00460 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 00470   ce=cnt+1
 00480 ERR1: pr f "24,78,C 1": bell : goto L440
 00490 L490: if cndkey=5 then goto DONE
@@ -62,8 +62,8 @@
 00600 L600: form pos 12,c 25,pos 100,pd 7.2,pos 114,2*pd 2
 00610   goto L170
 00620 ! ______________________________________________________________________
-00630 L630: let msgline$(1)="Invalid Job Number or Category Number"
-00640   let msgline$(2)="Please reselect."
+00630 L630: msgline$(1)="Invalid Job Number or Category Number"
+00640   msgline$(2)="Please reselect."
 00650   fnoldmsgbox(mat response$,cap$,mat msgline$,1)
 00660   ce=1
 00670   goto ERR1
@@ -75,12 +75,12 @@
 00730   goto XIT
 00740 ! ______________________________________________________________________
 00750 ! <Updateable Region: ERTN>
-00760 ERTN: let fnerror(program$,err,line,act$,"xit")
+00760 ERTN: fnerror(program$,err,line,act$,"xit")
 00770   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00780   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00800 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00810 ! /region
 00820 ! ______________________________________________________________________
-00830 XIT: let fnxit
+00830 XIT: fnxit
 00840 ! ______________________________________________________________________

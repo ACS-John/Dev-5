@@ -25,15 +25,15 @@
 00215   if fndate_mmddyy_to_ccyymmdd(pd)<20050530 then goto L210 ! skip everything before this year
 00216 ! If fndate_mmddyy_to_ccyymmdd(PD)<20050701 or fndate_mmddyy_to_ccyymmdd(pd)>20050731 Then Goto 210 ! skip everything before this year
 00220   restore #tralloc,key>=cnvrt$("pic(zz)",trbank_code)&cnvrt$("pic(#)",trtcde)&ck$: ! Nokey 210
-00230   let totalalloc=0
+00230   totalalloc=0
 00240 READ_TRALLOC: ! 
 00250 L250: read #tralloc,using 'Form POS 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,N 6,POS 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd,gde eof READ_TRMSTR
 00254 ! pr TRBANK_CODE,BANK_CODE,TCDE,TRTCDE,CK$,TRCK$
 00260   if trbank_code=bank_code and tcde=trtcde and ck$=trck$ then goto L270 else goto L290
-00270 L270: let totalalloc+=amt
+00270 L270: totalalloc+=amt
 00280   goto L250
 00290 L290: if totalalloc<>ca1 then pr #255: "Check # "&ck$ &"  total check="&str$(ca1)&" total allocations ="&str$(totalalloc)&" date: "&str$(pd)
 00300   goto L210
 00310 END1: ! 
 00320   fncloseprn
-00330 XIT: let fnxit
+00330 XIT: fnxit

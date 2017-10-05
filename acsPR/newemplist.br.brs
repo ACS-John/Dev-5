@@ -54,7 +54,7 @@
 00550   return 
 00560 DONE: ! 
 00570   close #5: ioerr L580
-00580 L580: let fncloseprn
+00580 L580: fncloseprn
 00590   goto XIT
 00600 ! ______________________________________________________________________
 00610 ERTN: ! 
@@ -71,7 +71,7 @@
 00720   pr f "24,1,C 80,N": ""
 00730   retry 
 00740 ! ______________________________________________________________________
-00750 XIT: let fnxit
+00750 XIT: fnxit
 00760 ! ______________________________________________________________________
 00770 L770: dim first$*15,mid$*15,last$*20,item1$(2)*30
 00780   em$(1)=uprc$(rtrm$(em$(1)))
@@ -80,30 +80,30 @@
 00810   let x3=pos(em$(1)," ",x2+1)
 00820   if uprc$(namcde$)="L" then goto L870
 00830   let first$=trim$(em$(1)(1:max(x1-1,1)))
-00840   if x2>0 then let mid$=trim$(em$(1)(x1+1:x2-1)): last$=trim$(em$(1)(x2+1:len(em$(1))))
-00850   if x2=0 then last$=trim$(em$(1)(x1+1:len(em$(1)))): let mid$=""
+00840   if x2>0 then mid$=trim$(em$(1)(x1+1:x2-1)): last$=trim$(em$(1)(x2+1:len(em$(1))))
+00850   if x2=0 then last$=trim$(em$(1)(x1+1:len(em$(1)))): mid$=""
 00860   goto L910
 00870 L870: ! last name first
 00880   if x1>0 and em$(1)(x1-1:x1-1)="," then last$=trim$(em$(1)(1:x1-2)) else last$=trim$(em$(1)(1:max(x1-1,1)))
-00890   if x2>0 then let first$=trim$(em$(1)(x1+1:x2-1)): let mid$=trim$(em$(1)(x2+1:len(em$(1))))
-00900   if x2=0 then let first$=trim$(em$(1)(x1+1:len(em$(1)))): let mid$=""
+00890   if x2>0 then let first$=trim$(em$(1)(x1+1:x2-1)): mid$=trim$(em$(1)(x2+1:len(em$(1))))
+00900   if x2=0 then let first$=trim$(em$(1)(x1+1:len(em$(1)))): mid$=""
 00910 L910: ! pr FIRST$,MID$,LAST$
 00920   return 
 00930 ASKFORMAT: ! 
 00940   fntos(sn$="Emplist") !:
-        let respc=0
+        respc=0
 00950   fnlbl(1,1,"Order for Printing Name:",28,1)
 00960   let fi$="Emplist1" !:
-        let item1$(1)="First Name First" !:
-        let item1$(2)="Last Name First": let fncomboa(fi$,1,31,mat item1$,"How is the employee name entered in the employee record?).") !:
-        let resp$(respc+=1)=item1$(1)
+        item1$(1)="First Name First" !:
+        item1$(2)="Last Name First": fncomboa(fi$,1,31,mat item1$,"How is the employee name entered in the employee record?).") !:
+        resp$(respc+=1)=item1$(1)
 00970   fnlbl(2,1,"Status Code:",28,1)
 00980   fncombof("EmpStatus",2,30,25,env$('Q')&"\PRmstr\EmpStatus.dat",1,2,3,25,env$('Q')&"\PRmstr\EmpStatus.idx",0,0, "Indicate the code used for terminated employees",fracustinfo,0) !:
-        let resp$(respc+=1)=str$(status)
+        resp$(respc+=1)=str$(status)
 00990   fncmdkey("&Next",1,1,0,"Proceed with printing." ) !:
         fncmdkey("E&xit",5,0,1,"Returns to menu")
 01000   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 01010   if ckey=5 then goto XIT
-01020   let namcde$=resp$(1)(1:1)
+01020   namcde$=resp$(1)(1:1)
 01030   status=val(resp$(2)(1:2))
 01040   return 

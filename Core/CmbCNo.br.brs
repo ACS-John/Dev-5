@@ -30,9 +30,9 @@
 00300         read #x,using "Form pos 1,c 40": cnam$
 00310         close #x: 
 00320         if val(opt$(a))=99999 then 
-00330           let kill99999=1
+00330           kill99999=1
 00340         else 
-00350           let kill99999=0
+00350           kill99999=0
 00360         end if 
 00370         opt$(a)=cnam$&" ("&cnvrt$("pic(#####)",val(opt$(a)))&")"
 00380       else 
@@ -49,7 +49,7 @@
 00520     fncomboa('CmbCNo-'&fncursys$,myline,mypos,mat opt$,'Select from currently installed companies for the '&fncursys$&' system.',55)
 00530     goto XIT
 00550 ! <Updateable Region: ERTN>
-00560 ERTN: let fnerror(program$,err,line,act$,"xit")
+00560 ERTN: fnerror(program$,err,line,act$,"xit")
 00570     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00580     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00590     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

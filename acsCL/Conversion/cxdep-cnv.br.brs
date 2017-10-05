@@ -11,8 +11,8 @@
 00110   if ty$="C2" then goto L140
 00120   if ty$="C3" then goto L140
 00130   goto L170
-00140 L140: let d1=val(d$) conv L170
-00150   let d2=fncd(d1)
+00140 L140: d1=val(d$) conv L170
+00150   d2=fncd(d1)
 00160   rewrite #fln,using 'Form POS 6,N 6': d2
 00170 L170: goto L80
 00180 END1: if fln=2 then goto L200

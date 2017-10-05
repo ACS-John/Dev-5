@@ -9,44 +9,44 @@
 00090   dim ty$(3)*20
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Transfer to Accountant")
-00120   cancel=99 : let right=1
+00120   cancel=99 : right=1
 00130   fncno(cno,cnam$)
 00140   fndat(dat$,1)
-00150   let ty$(1)=" Check Number:" !:
-        let ty$(2)=" Deposit Number:" !:
-        let ty$(3)=" Adjustment Number: "
+00150   ty$(1)=" Check Number:" !:
+        ty$(2)=" Deposit Number:" !:
+        ty$(3)=" Adjustment Number: "
 00160 ! ______________________________________________________________________
 00170 MAIN: ! 
 00180   fntos(sn$="Tr2cpa") !:
-        let mylen=40 : let mypos=mylen+2 : lc=0
+        mylen=40 : mypos=mylen+2 : lc=0
 00190   fnlbl(lc+=1,1,"Starting Date:",mylen,right)
 00200   fntxt(lc,mypos,10,0,1,"1003",0,"Earliest transation date to be transferred") !:
-        ! Let RESP$(1)=""
+        ! rESP$(1)=""
 00210   fnlbl(lc+=1,1,"Ending Date:",mylen,right)
 00220   fntxt(lc,mypos,10,0,1,"1003",0,"Last transation date to be transferred") !:
-        ! Let RESP$(2)=""
+        ! rESP$(2)=""
 00230   lc+=1
 00240   fnchk(lc+=1,mypos,"Transfer previously posted transactions:",1) !:
-        if resp$(3)="" then let resp$(3)="False"
+        if resp$(3)="" then resp$(3)="False"
 00250   lc+=1
 00260   fnlbl(lc+=1,1,"Destination Path:",mylen,right)
 00270   fntxt(lc,mypos,66) !:
-        if resp$(4)="" then let resp$(4)="A:\"
+        if resp$(4)="" then resp$(4)="A:\"
 00280   fncmdset(2) !:
         fnacs(sn$,0,mat resp$,ck)
 00290   if ck=5 then goto XIT
-00300   let d1=val(resp$(1)(5:6))*10000+val(resp$(1)(7:8))*100+val(resp$(1)(3:4)) ! beginning date !:
-        let d2=val(resp$(2)(5:6))*10000+val(resp$(2)(7:8))*100+val(resp$(2)(3:4)) ! ending date  ! convert dates back to mmddyy
-00310   if resp$(3)(1:1)="T" then let pvt$="Y": else let pvt$="N" !:
+00300   d1=val(resp$(1)(5:6))*10000+val(resp$(1)(7:8))*100+val(resp$(1)(3:4)) ! beginning date !:
+        d2=val(resp$(2)(5:6))*10000+val(resp$(2)(7:8))*100+val(resp$(2)(3:4)) ! ending date  ! convert dates back to mmddyy
+00310   if resp$(3)(1:1)="T" then pvt$="Y": else pvt$="N" !:
           ! post previously entries
-00320   let dv$=resp$(4)
+00320   dv$=resp$(4)
 00330   gosub GETPRC
 00340 ! ______________________________________________________________________
 00350   fnwait
 00360   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative  !:
         read #20,using 'Form POS 618,10*N 1': mat dedcode !:
         close #20: 
-00370   let d2$=cnvrt$("PIC(######)",d2)
+00370   d2$=cnvrt$("PIC(######)",d2)
 00380   open #20: "Name="&env$('Q')&"\GLmstr\glBucket.H"&str$(cno)&",Shr",internal,input,relative ioerr L400 !:
         read #20,using 'Form POS 1,N 1',rec=1: glb norec L390
 00390 L390: close #20: 
@@ -63,12 +63,12 @@
 00500 READ_TRMSTR: ! 
 00510   read #trmstr,using 'Form POS 1,G 2,N 1,C 8,N 6,pd 10.2,C 8,C 35,N 1,X 6,N 1': bk$,cde,tr$,tr4,amt,ven$,de$,pcde,scd eof ENDALL
 00520   if bk$><hbk$ then gosub CONTRA
-00530   let hbk$=bk$
+00530   hbk$=bk$
 00540 ! IF SCD=2 THEN GOTO 'ASDF2'
 00550   if amt=0 then goto READ_TRMSTR
-00560   let tr$=lpad$(rtrm$(tr$),12)
-00570   let pr1=0
-00580   if scd=4 then let pr1=val(ven$) conv L590
+00560   tr$=lpad$(rtrm$(tr$),12)
+00570   pr1=0
+00580   if scd=4 then pr1=val(ven$) conv L590
 00590 L590: if pvt$="Y" then goto L610
 00600   if pcde=1 then goto READ_TRMSTR
 00610 L610: if fndate_mmddyy_to_ccyymmdd(tr4)<fndate_mmddyy_to_ccyymmdd(d1) then goto READ_TRMSTR
@@ -78,18 +78,18 @@
 00650   pr #255: "Bank Code: "&bk$&ty$(cde)&ltrm$(tr$)&" Total: "&ltrm$(cnvrt$("N 10.2",amt))&" Allocations: "&ltrm$(cnvrt$("N 10.2",tal))&" Entry Skipped"
 00660 L660: amt=typ=0
 00670   read #paymstr,using 'Form POS 134,N 2',key=ven$: typ nokey L680
-00680 L680: if typ=0 then let ven$=""
+00680 L680: if typ=0 then ven$=""
 00690   bgl$=""
 00700   read #bankmstr,using 'Form POS 33,C 12',key=bk$: bgl$ nokey L710
-00710 L710: let key$=bk$&str$(cde)&tr$(5:12) !:
+00710 L710: key$=bk$&str$(cde)&tr$(5:12) !:
         restore #tralloc,key=key$: nokey EO_TRALLOC
 00720 READ_TRALLOC: ! 
 00730   read #tralloc,using 'Form POS 1,C 11,C 12,PD 5.2,C 30,G 6': newkey$,gl$,tr5,td$,ivd eof EO_TRALLOC !:
         if key$<>newkey$ then goto EO_TRALLOC
-00740   let td$=de$(1:30) ! SEND NAME TO GL INSTEAD OF DESCRIPTION
+00740   td$=de$(1:30) ! SEND NAME TO GL INSTEAD OF DESCRIPTION
 00750   if tr5=0 then goto READ_TRALLOC
-00760   let tr6=cde
-00770   if tr6>1 then let tr5=-tr5
+00760   tr6=cde
+00770   if tr6>1 then tr5=-tr5
 00780   if prc$="Y" and scd=4 then goto COMBINEPR
 00790 WRITE_GLWK101: ! 
 00800   write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$,tr4,tr5,tr6,0,tr$,td$,ven$,"","","",bgl$
@@ -98,34 +98,34 @@
 00830   if tr6=3 then !:
           write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$,tr4,-tr5,tr6,0,tr$,td$,ven$,"","","",bgl$
 00840   if pr1=0 then goto L920
-00850   if ivd=1 then let prd(4)+=tr5
-00860   if ivd>1 and ivd<5 then let prd(ivd+3)=-tr5
-00870   if ivd=15 then let prd(8)=-tr5
-00880   if ivd>4 and ivd<15 and dedcode(ivd-4)=2 then let tr5=-tr5
-00890   if ivd>4 and ivd<15 then let prd(ivd+4)=-tr5
-00900   if ivd=16 then let prd(19)=-tr5
-00910   if fp(ivd*.01)=.19 then let prd(20)=int(ivd*.01)
+00850   if ivd=1 then prd(4)+=tr5
+00860   if ivd>1 and ivd<5 then prd(ivd+3)=-tr5
+00870   if ivd=15 then prd(8)=-tr5
+00880   if ivd>4 and ivd<15 and dedcode(ivd-4)=2 then tr5=-tr5
+00890   if ivd>4 and ivd<15 then prd(ivd+4)=-tr5
+00900   if ivd=16 then prd(19)=-tr5
+00910   if fp(ivd*.01)=.19 then prd(20)=int(ivd*.01)
 00920 L920: goto READ_TRALLOC
 00930 ! ______________________________________________________________________
 00940 EO_TRALLOC: ! 
 00950   rewrite #trmstr,using 'Form POS 71,N 1': 1
 00960   if pr1=0 then goto L1010
-00970   let prd(1)=pr1 : let prd(2)=tr4
-00980   let prd(3)=val(tr$) conv L990
-00990 L990: let prd(22)=amt
+00970   prd(1)=pr1 : prd(2)=tr4
+00980   prd(3)=val(tr$) conv L990
+00990 L990: prd(22)=amt
 01000   write #glwk201,using 'Form POS 1,N 4,2*PD 4,19*PD 5.2,PD 3': mat prd
 01010 L1010: mat prd=(0)
-01020   if cde=2 then let p1=68 else let p1=56
-01030   if cde=3 and amt>0 then let t1+=amt: let t2=t2-amt: goto L1080
-01040   if cde=3 and amt<0 then let t2+=amt: let t1=t1-amt: goto L1110
+01020   if cde=2 then p1=68 else p1=56
+01030   if cde=3 and amt>0 then t1+=amt: t2=t2-amt: goto L1080
+01040   if cde=3 and amt<0 then t2+=amt: t1=t1-amt: goto L1110
 01050   if cde=2 then !:
-          c2+=amt: let t2+=amt else c1+=amt: let t1+=amt
+          c2+=amt: t2+=amt else c1+=amt: t1+=amt
 01060   pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE
 01070   goto THERE
-01080 L1080: pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE: let p1=68
+01080 L1080: pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE: p1=68
 01090   pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,-amt pageoflow NEWPGE
 01100   goto THERE
-01110 L1110: pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,-amt pageoflow NEWPGE: let p1=68
+01110 L1110: pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,-amt pageoflow NEWPGE: p1=68
 01120   pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(tr$),tr4,de$,amt pageoflow NEWPGE
 01130 THERE: ! 
 01140   goto READ_TRMSTR
@@ -161,7 +161,7 @@
 01430   execute "Copy "&env$('Q')&"\CLmstr\GLWk201.h"&str$(cno)&" "&dv$&" -n"
 01440   execute "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&" "&dv$&" -n"
 01450   execute "Copy "&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno)&" "&dv$&" -n"
-01460 XIT: let fnxit
+01460 XIT: fnxit
 01470 ! ______________________________________________________________________
 01480 TRY_TO_SEND_TO_GL: ! 
 01490   if glb=2 then goto BUCKET
@@ -171,38 +171,38 @@
 01530   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L1550
 01540   fnprg("S:\acsGL\PRMerge",2) !:
         fnstyp(99)
-01550 L1550: let fnchain("S:\acsGL\acglMrge")
+01550 L1550: fnchain("S:\acsGL\acglMrge")
 01560 ! ______________________________________________________________________
-01570 CONTRA: let t9$="999999999999"
+01570 CONTRA: t9$="999999999999"
 01580   if trim$(dv$)><"" then goto L1670
 01590   if c1=0 then goto L1630
-01600   let td$="CHECKS   "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&" - "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
+01600   td$="CHECKS   "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&" - "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
 01610   write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$,d2,-c1,1,0,t9$,td$,"","","","",bgl$
-01620   let p1=68: let t2=t2-c1: !:
+01620   p1=68: t2=t2-c1: !:
         pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(t9$)(1:10),d2,td$(1:35),-c1 pageoflow NEWPGE
 01630 L1630: if c2=0 then goto L1670
-01640   let td$="DEPOSITS "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&" - "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
+01640   td$="DEPOSITS "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&" - "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
 01650   write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': bgl$,d2,-c2,2,0,t9$,td$,"","","","",bgl$
-01660   let p1=56: let t1=t1-c2: !:
+01660   p1=56: t1=t1-c2: !:
         pr #255,using 'Form POS 1,C 10,PIC(ZZ/ZZ/ZZ),X 2,C 35,POS P1,N 13.2': ltrm$(t9$)(1:10),d2,td$(1:35),-c2 pageoflow NEWPGE
 01670 L1670: c1=c2=0
 01680   return 
 01690 ! ______________________________________________________________________
 01700 GETPRC: ! 
-01710   let pri1=0
+01710   pri1=0
 01720   open #7: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input ioerr L1830 !:
         read #7,using 'Form POS 437,15*C 12': mat prgln$ !:
         close #7: 
-01730   let pri1=1
+01730   pri1=1
 01740   pr newpage
 01750   close #103: ioerr L1760
 01760 L1760: open #103: "SROW=9,SCOL=09,EROW=14,ECOL=70,BORDER=SR,Caption=<"&cap$,display,outin 
 01770   mat ml$(4) : mat ml$=("")
-01780   let ml$(1)="This program can combine all like General Ledger Numbers for"
-01790   let ml$(2)="Payroll Withholding Accounts as they are transferred to GL."
-01800   let ml$(4)="Do you wish to combine these accounts?"
+01780   ml$(1)="This program can combine all like General Ledger Numbers for"
+01790   ml$(2)="Payroll Withholding Accounts as they are transferred to GL."
+01800   ml$(4)="Do you wish to combine these accounts?"
 01810   fnmsgbox(mat ml$,resp$,cap$,3)
-01820   if resp$='Cancel' then goto XIT else let prc$=resp$(1:1)
+01820   if resp$='Cancel' then goto XIT else prc$=resp$(1:1)
 01830 L1830: return 
 01840 ! ______________________________________________________________________
 01850 COMBINEPR: ! 
@@ -210,11 +210,11 @@
 01870     if prgln$(j)=gl$ then goto L1900
 01880   next j
 01890   goto WRITE_GLWK101
-01900 L1900: let pra(j)=pra(j)+tr5
+01900 L1900: pra(j)=pra(j)+tr5
 01910   goto AFTER_WRITE_GLWK101
 01920 ! ______________________________________________________________________
 01930 PRWRITE: ! 
-01940   let td$="PR-WH: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&" - "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
+01940   td$="PR-WH: "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&" - "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
 01950   for j=1 to 15
 01960     if pra(j)=0 then goto L1980
 01970     write #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': prgln$(j),d2,pra(j),1,0,str$(d2),td$,"","","","",bgl$
@@ -222,14 +222,14 @@
 01990   return 
 02000 ! ______________________________________________________________________
 02010 CKALLOC: ! 
-02020   let tal=0
-02030   let key$=bk$&str$(cde)&tr$(5:12) !:
+02020   tal=0
+02030   key$=bk$&str$(cde)&tr$(5:12) !:
         restore #tralloc,key=key$: nokey EO_CKALLOC
 02040 CKALLOC_READ_TRALLOC: ! 
 02050   read #tralloc,using 'Form Pos 1,C 11,C 12,PD 5.2,C 30,G 6': newkey$,gl$,tr5,td$,ivd eof EO_CKALLOC
 02060   if key$<>newkey$ then !:
           goto EO_CKALLOC else !:
-          let tal+=tr5 !:
+          tal+=tr5 !:
           goto CKALLOC_READ_TRALLOC
 02070 EO_CKALLOC: ! 
 02080   return 
@@ -244,7 +244,7 @@
 02170   fnchain("S:\acsGL\PRMerge")
 02180 ! ______________________________________________________________________
 02190 ! <Updateable Region: ERTN>
-02200 ERTN: let fnerror(program$,err,line,act$,"xit")
+02200 ERTN: fnerror(program$,err,line,act$,"xit")
 02210   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02220   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -253,8 +253,8 @@
 02260 ! ______________________________________________________________________
 02270 MSGBOX1: ! 
 02280   mat ml$(2) !:
-        let ml$(1)="Make sure the diskette is properly inserted " !:
-        let ml$(2)="and the proper device has been selected." !:
+        ml$(1)="Make sure the diskette is properly inserted " !:
+        ml$(2)="and the proper device has been selected." !:
         fnmsgbox(mat ml$,resp$,cap$,16) !:
         goto MAIN
 02290 ! ______________________________________________________________________

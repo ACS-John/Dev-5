@@ -16,7 +16,7 @@
 00600 !
 01000 Main: ! If you run me as a program, I run the stateedit screen
 01010    library "S:\Core\ScreenIO\Screenio" : fnfm$
-01020    let Ret$=fnfm$("stateedit","",0,0,"",0,0,0,0,mat PassedData$)
+01020    ret$=fnfm$("stateedit","",0,0,"",0,0,0,0,mat PassedData$)
 01030    if len(trim$(Ret$)) then
 01040       pr Ret$
 01050    end if
@@ -52,9 +52,9 @@
 05026   ! 2500+ is reserved for screenio
 05027   if fkey=1 or fkey=1504 then
 05028     if env$('Program_Caption')='Select Company' then
-05029       let help_cursys$='co'
+05029       help_cursys$='co'
 05030     else
-05031       let help_cursys$=lwrc$(env$('CurSys'))
+05031       help_cursys$=lwrc$(env$('CurSys'))
 05032     end if
 05033     ! pr 'help_cursys$='&help_cursys$ : pause
 05034     execute 'system -M start http://planetacs.net/help/'&help_cursys$&'/'&srep$(env$('Program_Caption'),' ','%20')&'.html'
@@ -148,7 +148,7 @@
 92001 !
 92002    if ~DataIsInside then
 92003       fnPopData(2)
-92004       if Function$="{{SetData}}" then let DataIsInside=1
+92004       if Function$="{{SetData}}" then dataIsInside=1
 92005    end if
 92006 !
 92007    if ~FileIOLinkageSet then
@@ -160,11 +160,11 @@
 92013    end if
 92014 !
 92015    if Function$ = "{defaults\enter}" then
-92016       let ReturnValue = fnEnterDefault
+92016       returnValue = fnEnterDefault
 92017    else if Function$ = "{defaults\mainloop}" then
-92018       let ReturnValue = fnMainLoop
+92018       returnValue = fnMainLoop
 92019    else if Function$ = "{defaults\exit}" then
-92020       let ReturnValue = fnExitDefault
+92020       returnValue = fnExitDefault
 92021    else
 92022       if Function$<>"{{GetData}}" and Function$<>"{{SetData}}" then
 92023          pr "Function ("&function$&") Not Supported: The library is out of date or fn not found."
@@ -173,7 +173,7 @@
 92026 !
 92027    if ~DataIsInside or Function$="{{GetData}}" then
 92028       fnPushData(2)
-92029       let DataIsInside=0
+92029       dataIsInside=0
 92030    end if
 92031 return
 92032 !

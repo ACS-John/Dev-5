@@ -14,14 +14,14 @@
 09000 goto SCR1
 20000 SCR1: ! r:
 20010   fntos(sn$="Anlyze-1") 
-20020   let rc=0 : let mylen=20 : let mypos=mylen+2
+20020   rc=0 : mylen=20 : mypos=mylen+2
 20030   fnlbl(1,1,"Last Billing Date:",mylen,1)
 20040   fntxt(1,mypos,8,0,0,"1") 
-20050   let resp$(rc+=1)=str$(bdate)
+20050   resp$(rc+=1)=str$(bdate)
 20060   fnlbl(2,1,"Rate for Analysis:",mylen,1)
 20070   fncombof("nerd",2,mypos,55,env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno'),1,4,5,50,env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno'),1,usa) 
 20080   let usa+=1 
-20090   let resp$(rc+=1)="" ! just default to the first one
+20090   resp$(rc+=1)="" ! just default to the first one
 20100   fncmdset(2)
 20110   fnacs(sn$,0,mat resp$,ckey)
 20120   if ckey=5 then goto XIT 
@@ -38,16 +38,16 @@
 20900 goto SCR2 ! /r
 24000 SCR2: ! r:
 24010   fntos(sn$:="Anlyze-2b") 
-24020   let rc=rtc=0 : let mylen=20 : let mypos=mylen+2
+24020   rc=rtc=0 : mylen=20 : mypos=mylen+2
 24030   fnlbl(1,1,"Analysis Based On:",mylen,1)
 24040   fntxt(1,mypos,55,0,0,"",1) 
-24050   let resp$(rc+=1)=bla3$
+24050   resp$(rc+=1)=bla3$
 24060   fnlbl(2,1,"Minimum Charge:",mylen,1)
 24070   fntxt(2,mypos,9,0,1,"10") 
-24080   let resp$(rc+=1)=rt$(rtc+=1)
+24080   resp$(rc+=1)=rt$(rtc+=1)
 24090   fnlbl(3,1,"Minimum Usage:",mylen,1)
 24100   fntxt(3,mypos,9,0,1,"30") 
-24110   let resp$(rc+=1)=rt$(rtc+=1)
+24110   resp$(rc+=1)=rt$(rtc+=1)
 24120   fnfra(4,1,12,45,"Rate Breakdown")
 24130   fnlbl(1,5,"Usage",10,2,0,1) 
 24140   fnlbl(1,17,"Usage",10,2,0,1) 
@@ -56,13 +56,13 @@
 24170   fnlbl(2,17,"To",10,2,0,1) 
 24180   fnlbl(2,32,"Per Unit",15,2,0,1)
 24190   for j=1 to 10
-24200     let txt$=str$(j)&"." : let fnlbl(j+2,1,txt$,3,1,0,1)
+24200     txt$=str$(j)&"." : fnlbl(j+2,1,txt$,3,1,0,1)
 24210     fntxt(j+2,05,10,0,1,"30",0,mt$,1) 
-24220     let resp$(rc+=1)=rt$(rtc+=1)
+24220     resp$(rc+=1)=rt$(rtc+=1)
 24230     fntxt(j+2,17,10,0,1,"30",0,mt$,1) 
-24240     let resp$(rc+=1)=rt$(rtc+=1)
+24240     resp$(rc+=1)=rt$(rtc+=1)
 24250     fntxt(j+2,34,10,0,1,"46",0,mt$,1) 
-24260     let resp$(rc+=1)=rt$(rtc+=1)
+24260     resp$(rc+=1)=rt$(rtc+=1)
 24270   next j
 24280   fncmdset(8)
 24290   fnacs(sn$,0,mat resp$,ckey)
@@ -71,7 +71,7 @@
 24320   else if ckey=5 then 
 24330     goto XIT
 24340   end if
-24350   let rate(1)=val(resp$(2)) ! minimum charge
+24350   rate(1)=val(resp$(2)) ! minimum charge
 24360   let use_to(1)=val(resp$(3)) ! minimum usage
 24370   let use_from(2)=val(resp$(4))  
 24380   let use_from(3)=val(resp$(7))  
@@ -83,16 +83,16 @@
 24440   let use_from(9)=val(resp$(25))  
 24450   let use_from(10)=val(resp$(28)) 
 24460   let use_from(11)=val(resp$(31))
-24470   let rate(2)=val(resp$(6))  
-24480   let rate(3)=val(resp$(9))  
-24490   let rate(4)=val(resp$(12)) 
-24500   let rate(5)=val(resp$(15)) 
-24510   let rate(6)=val(resp$(18)) 
-24520   let rate(7)=val(resp$(21)) 
-24530   let rate(8)=val(resp$(24)) 
-24540   let rate(9)=val(resp$(27)) 
-24550   let rate(10)=val(resp$(30))
-24560   let rate(11)=val(resp$(33))
+24470   rate(2)=val(resp$(6))  
+24480   rate(3)=val(resp$(9))  
+24490   rate(4)=val(resp$(12)) 
+24500   rate(5)=val(resp$(15)) 
+24510   rate(6)=val(resp$(18)) 
+24520   rate(7)=val(resp$(21)) 
+24530   rate(8)=val(resp$(24)) 
+24540   rate(9)=val(resp$(27)) 
+24550   rate(10)=val(resp$(30))
+24560   rate(11)=val(resp$(33))
 24570   let use_to(2)=val(resp$(5))  
 24580   let use_to(3)=val(resp$(8))  
 24590   let use_to(4)=val(resp$(11)) 
@@ -108,11 +108,11 @@
 26010   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 26020   fnopenprn
 26030   mat customer=(0) 
-26040   let numbcust=0   
-26050   let totdol=0     
+26040   numbcust=0   
+26050   totdol=0     
 26060   mat ratetot=(0)  
 26070   mat usagtot=(0)  
-26080   let ds9=0
+26080   ds9=0
 26900 goto READ_CUSTOMER ! /r
 32000 READ_CUSTOMER: ! r:
 32010   read #1,using L590: mat a,mat d,f eof L840
@@ -130,7 +130,7 @@
 34000   L690: !
 34010   if d(s9)<=0 then goto READ_CUSTOMER
 34020   let usagtot(1)=usagtot(1)+min(d(s9),use_to(1)) ! add usage for minimun usages
-34030   let ratetot(1)=ratetot(1)+rate(1) ! add minimum charges
+34030   ratetot(1)=ratetot(1)+rate(1) ! add minimum charges
 34040   if d(s9)<=use_to(1) then  ! add mimimum customer user to first array item
 34050     customer(1)=customer(1)+1 
 34060     goto L810
@@ -145,20 +145,20 @@
 34150       let usagtot(k7)=usagtot(k7)+use_to(k7)-use_from(k7)+1
 34160     end if
 34170     L770: !
-34180     let ds9=ds9+usagtot(k7)
+34180     ds9=ds9+usagtot(k7)
 34190   next k7
 34200   L790: ! 
-34210   let ds9+=usagtot(1)
+34210   ds9+=usagtot(1)
 34220   customer(k7-1)+=1 ! add customers by rate break
 34230   L810: !
-34240   let numbcust+=1
+34240   numbcust+=1
 34250 goto READ_CUSTOMER ! /r
 44000 L840: ! r:
 44010   for k5=2 to 11 
-44020     let ratetot(k5)=usagtot(k5)*rate(k5) 
-44030     let totdol=totdol+ratetot(k5) 
+44020     ratetot(k5)=usagtot(k5)*rate(k5) 
+44030     totdol=totdol+ratetot(k5) 
 44040   next k5
-44050   let totdol=totdol+ratetot(1) ! add minimum bills to total dollars
+44050   totdol=totdol+ratetot(1) ! add minimum bills to total dollars
 44060   if cde=0 then goto L960
 44070   pr #255: "\qc {\b Utility Billing  - Rate Analysis}" 
 44080   pr #255: "Analysis for Rate Code: "&bla3$ 
@@ -180,9 +180,9 @@
 48010   close #1: ioerr ignore
 48020   fncloseprn
 48030 goto SCR1 ! /r
-52000 XIT: let fnxit
+52000 XIT: fnxit
 54000 ! <Updateable Region: ERTN>
-54010 ERTN: let fnerror(program$,err,line,act$,"xit")
+54010 ERTN: fnerror(program$,err,line,act$,"xit")
 54020   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 54030   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 54040   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

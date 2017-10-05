@@ -46,43 +46,43 @@
 00410 BUILD_LAYOUT: ! 
 00420   fncno(cno)
 00430 ! ** Field Labels    ** !:
-        let ic=0 ! temporary Item Counter
+        ic=0 ! temporary Item Counter
 00440   lbl$(ic+=1)="Reference" !:
         lbl$(ic+=1)="Description" !:
         lbl$(ic+=1)="G/L Number" !:
         lbl$(ic+=1)="Amount"
 00460 ! ** Text Box / Field Display   Lengths   ** !:
-        let ic=0 ! temporary Item Counter !:
-        let mmddyy=8 !:
+        ic=0 ! temporary Item Counter !:
+        mmddyy=8 !:
         ccyymmdd=10
-00470   let tln(ic+=1)=12 !:
-        let tln(ic+=1)=30 !:
-        let tln(ic+=1)=12 !:
-        let tln(ic+=1)=10.2
+00470   tln(ic+=1)=12 !:
+        tln(ic+=1)=30 !:
+        tln(ic+=1)=12 !:
+        tln(ic+=1)=10.2
 00500 ! ** Field Types ** !:
-        let ic=0
+        ic=0
 00510   fltyp$(ic+=1)='C' !:
         fltyp$(ic+=1)='C' !:
         fltyp$(ic+=1)='C' !:
         fltyp$(ic+=1)='PD'
 00530 ! ** Field Storage Lengths ** !:
-        let ic=0 !:
-        let mmddyy=6 : ccyymmdd=8
+        ic=0 !:
+        mmddyy=6 : ccyymmdd=8
 00540   sln(ic+=1)=12 !:
         sln(ic+=1)=30 !:
         sln(ic+=1)=12 !:
         sln(ic+=1)=5.2
 00570 ! ** Field Masks ** !:
-        let ic=0 !:
-        let pointtwo=32 : let number=30 !:
-        ccyymmdd=3 : let mmddyy=1 : let glnumber=53
-00580   let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=pointtwo
+        ic=0 !:
+        pointtwo=32 : number=30 !:
+        ccyymmdd=3 : mmddyy=1 : let glnumber=53
+00580   mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=pointtwo
 00610 ! ** Storage Positions ** !:
         ! starting field position - default to the same as order displayed !:
-        let ic=0
+        ic=0
 00620   sp(ic+=1)=1 !:
         sp(ic+=1)=13 !:
         sp(ic+=1)=43 !:
@@ -101,10 +101,10 @@
 00700   fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00710   return 
 00720 ! ______________________________________________________________________
-00730 XIT: let fnxit
+00730 XIT: fnxit
 00740 ! ______________________________________________________________________
 00750 ! <Updateable Region: ERTN>
-00760 ERTN: let fnerror(program$,err,line,act$,"xit")
+00760 ERTN: fnerror(program$,err,line,act$,"xit")
 00770   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00780   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -20,16 +20,16 @@
 00190 ! ______________________________________________________________________
 00200 MENU1: ! 
 00210   fntos(sn$="AccessDate") !:
-        let mylen=34 : let mypos=mylen+2
+        mylen=34 : mypos=mylen+2
 00220   fnlbl(1,1,"Last Date Customer Files Accessed:",34,1)
 00230   fntxt(1,mypos,20,0,0,"",1) !:
-        let resp$(1)=access_date$
+        resp$(1)=access_date$
 00240   fncmdset(41)
 00250   fnacs(sn$,0,mat resp$,ck)
-00260 XIT: let fnxit
+00260 XIT: fnxit
 00270 ! ______________________________________________________________________
 00280 ! <Updateable Region: ERTN>
-00290 ERTN: let fnerror(program$,err,line,act$,"xit")
+00290 ERTN: fnerror(program$,err,line,act$,"xit")
 00300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00310   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00320   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

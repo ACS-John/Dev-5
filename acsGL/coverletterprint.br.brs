@@ -13,8 +13,8 @@
 00130   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #1,using 'Form POS 195,C 30',rec=1: tb$ !:
         close #1: !:
-        let tb$="("&trim$(tb$)&")"
-00140   let tempx=val(fnactpd$) conv L180
+        tb$="("&trim$(tb$)&")"
+00140   tempx=val(fnactpd$) conv L180
 00150   if tempx=1 then actpd$="one" else !:
           if tempx=2 then actpd$="two" else !:
             if tempx=3 then actpd$="three" else !:
@@ -55,10 +55,10 @@
 00370   fncloseprn
 00380   goto XIT
 00390 ! ______________________________________________________________________
-00400 XIT: let fnxit
+00400 XIT: fnxit
 00410 ! ______________________________________________________________________
 00420 ! <Updateable Region: ERTN>
-00430 ERTN: let fnerror(program$,err,line,act$,"xit")
+00430 ERTN: fnerror(program$,err,line,act$,"xit")
 00440   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00450   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00460   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

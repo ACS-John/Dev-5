@@ -20,48 +20,48 @@
 18030 ! r: company information portion of screen
 18040   fnlbl(1,1,"Company Name:",35,1)
 18060   fntxt(1,37,40)
-18080   let resp$(1)=at$(1)
+18080   resp$(1)=at$(1)
 18100   fnlbl(2,1,"Company Address:",35,1)
 18120   fntxt(2,37,40)
-18140   let resp$(2)=at$(2)
+18140   resp$(2)=at$(2)
 18160   fnlbl(3,1,"Company City,State and Zip:",35,1)
 18180   fntxt(3,37,40)
-18200   let resp$(3)=at$(3)
+18200   resp$(3)=at$(3)
 18220   fnlbl(4,1,"Last Billing Date:",35,1)
 18240   fntxt(4,37,8,0,1,"1")
-18260   let resp$(resp_d1:=4)=str$(d1)
+18260   resp$(resp_d1:=4)=str$(d1)
 18280   fnchk(6,1,"Require Receipt Number on Collections")
-18300   let resp$(resp_require_receipt:=5)=rcpt$
+18300   resp$(resp_require_receipt:=5)=rcpt$
 18320   fnlbl(8,1,"Unusual Usage Percent:",35,1)
 18340   fntxt(8,37,4,0,1,"30",0,"Percent to use for determining unusual usage   (Example: 50% as 50)")
-18360   let resp$(resp_pcent:=6)=str$(pcent)
+18360   resp$(resp_pcent:=6)=str$(pcent)
 20000 ! 
 20020   fnlbl(8,44,"Water Unusual Usage Minimum:",31,1)
 20040   fntxt(8,76,4,0,1,"30",0,"Do not report unusual usage if below this minimum.")
-20060   let resp$(resp_uum_water:=7)=uum_water$
+20060   resp$(resp_uum_water:=7)=uum_water$
 20080 ! 
 20100   fnlbl(9,44,"Electric Unusual Usage Minimum:",31,1)
 20120   fntxt(9,76,4,0,1,"30",0,"Do not report unusual usage if below this minimum.")
-20140   let resp$(resp_uum_gas:=8)=uum_gas$
+20140   resp$(resp_uum_gas:=8)=uum_gas$
 20160 ! 
 20200   fnlbl(10,44,"Gas Unusual Usage Minimum:",31,1)
 20220   fntxt(10,76,4,0,1,"30",0,"Do not report unusual usage if below this minimum.")
-20240   let resp$(resp_uum_electric:=9)=uum_electric$
+20240   resp$(resp_uum_electric:=9)=uum_electric$
 21000 ! 
-21020   let mylen=35 : let mypos=mylen+2
+21020   mylen=35 : mypos=mylen+2
 21040   fnlbl(12,1,"Starting Route Number:",mylen,1)
 21060   fntxt(12,mypos,2,0,1,"30") 
-21080   let resp$(resp_route_low:=10)=str$(bkno1)
+21080   resp$(resp_route_low:=10)=str$(bkno1)
 21100   fnlbl(13,1,"Ending Route Number:",mylen,1)
 21120   fntxt(13,mypos,2,0,1,"30") 
-21140   let resp$(resp_route_high:=11)=str$(bkno2)
+21140   resp$(resp_route_high:=11)=str$(bkno2)
 22000 ! 
-22020   let respc=11 ! criticial (for the next section) that this is the last resp$ used (above)
+22020   respc=11 ! criticial (for the next section) that this is the last resp$ used (above)
 22040 ! 
 23000 ! /r
 24000 ! r: TYPEOSERVICE portion of screen
-24020   let disable_for_client=1
-24040   if env$('ACSDeveloper')<>'' then let disable_for_client=0
+24020   disable_for_client=1
+24040   if env$('ACSDeveloper')<>'' then disable_for_client=0
 24050   srv_input_col_count=6
 24060   fnfra(15,1,12,113, 'Type of Service') : let fra=1
 24080   fnlbl(2,13,"Full Name",20,2,0,fra)
@@ -76,33 +76,33 @@
 24202   fnlbl(2,75,"Month",5,2,0,fra)
 24224   fnlbl(1,82,"Default",9,2,0,fra)
 24228   fnlbl(2,82,"Rate Code",9,2,0,fra)
-24240   let respc_service_base=respc
+24240   respc_service_base=respc
 24260   for service_item=1 to 10
 24280     fnlbl(service_item+2,1,"Service "&str$(service_item)&":",11,1,0,fra)
 24300     fntxt(service_item+2,13,20,0,0,'',disable_for_client,'',fra)
-24320     let resp$(respc+=1)=servicename$(service_item) ! let resp$(respc_service_base+service_item*6-5)=servicename$(service_item)
+24320     resp$(respc+=1)=servicename$(service_item) ! resp$(respc_service_base+service_item*6-5)=servicename$(service_item)
 24340     fntxt(service_item+2,34,3,0,0,'',disable_for_client,'',fra)
-24360     let resp$(respc+=1)=servicecode$(service_item) ! let resp$(respc_service_base+service_item*6-4)=servicecode$(service_item)
+24360     resp$(respc+=1)=servicecode$(service_item) ! resp$(respc_service_base+service_item*6-4)=servicecode$(service_item)
 24380     fnchk(service_item+2,41,"",align=0,fra,tabcon=0,disable_for_client)
 24400     if tax_code$(service_item)="Y" then 
-24420       let resp$(respc+=1)="True" ! let resp$(respc_service_base+service_item*6-3)="True"
+24420       resp$(respc+=1)="True" ! resp$(respc_service_base+service_item*6-3)="True"
 24440     else 
-24460       let resp$(respc+=1)="False" ! let resp$(respc_service_base+service_item*6-3)="False"
+24460       resp$(respc+=1)="False" ! resp$(respc_service_base+service_item*6-3)="False"
 24480     end if 
 24500     fnchk(service_item+2,49,"",align=0,fra,tabcon=0,disable_for_client)
 24520     if penalty$(service_item)="Y" then 
-24540       let resp$(respc+=1)="True" ! let resp$(respc_service_base+service_item*6-2)="True"
+24540       resp$(respc+=1)="True" ! resp$(respc_service_base+service_item*6-2)="True"
 24560     else 
-24580       let resp$(respc+=1)="False" ! let resp$(respc_service_base+service_item*6-2)="False"
+24580       resp$(respc+=1)="False" ! resp$(respc_service_base+service_item*6-2)="False"
 24600     end if 
 24620     fntxt(service_item+2,58,2,0,0,"30",disable_for_client,'',fra)
-24640     let resp$(respc+=1)=str$(subjectto(service_item)) ! let resp$(respc_service_base+service_item*6-1)=str$(subjectto(service_item))
+24640     resp$(respc+=1)=str$(subjectto(service_item)) ! resp$(respc_service_base+service_item*6-1)=str$(subjectto(service_item))
 24660     fntxt(service_item+2,68,2,0,0,"30",disable_for_client,'',fra)
-24680     let resp$(respc+=1)=str$(ordertoapply(service_item)) ! let resp$(respc_service_base+service_item*6)=str$(ordertoapply(service_item))
+24680     resp$(respc+=1)=str$(ordertoapply(service_item)) ! resp$(respc_service_base+service_item*6)=str$(ordertoapply(service_item))
 24700     fntxt(service_item+2,76,2,0,0,"30",0,'',fra)
-24720     let resp$(respc+=1)=str$(onlyMonth(service_item))
+24720     resp$(respc+=1)=str$(onlyMonth(service_item))
 24760     fn_cmb_rate(servicecode$(service_item),service_item+2,82,'Select Default or 0 for None',fra)
-24780     let resp$(respc+=1)=default_rate$(service_item)
+24780     resp$(respc+=1)=default_rate$(service_item)
 24800   next service_item
 24900 ! /r
 40000   fncmdset(4)
@@ -112,9 +112,9 @@
 42040   at$(1)=resp$(1)
 42060   at$(2)=resp$(2)
 42080   at$(3)=resp$(3)
-42100   let d1=val(resp$(resp_d1))
-42120   let rcpt$=resp$(resp_require_receipt)
-42140   let pcent=val(resp$(resp_pcent))
+42100   d1=val(resp$(resp_d1))
+42120   rcpt$=resp$(resp_require_receipt)
+42140   pcent=val(resp$(resp_pcent))
 42160 ! 
 42180   let uum_water$=resp$(resp_uum_water)
 42200   let uum_gas$=resp$(resp_uum_gas)
@@ -123,33 +123,33 @@
 42260   bkno2=val(resp$(resp_route_high))
 42280 ! /r
 45000 ! r: RESP$ to Service variables
-45002   let respc=respc_service_base
+45002   respc=respc_service_base
 45510   for service_item=1 to 10
 45520     servicename$(service_item)=resp$(respc+=1) ! resp$(respc_service_base+service_item*6-5)
 45530     servicecode$(service_item)=uprc$(resp$(respc+=1)) ! uprc$(resp$(respc_service_base+service_item*6-4))
 45540     if resp$(respc+=1)="True" then ! resp$(respc_service_base+service_item*6-3)="True" then
-45550       let tax_code$(service_item)="Y"
+45550       tax_code$(service_item)="Y"
 45560     else 
-45570       let tax_code$(service_item)="N"
+45570       tax_code$(service_item)="N"
 45580     end if 
 45590     if resp$(respc+=1)="True" then ! resp$(respc_service_base+service_item*6-2)="True" then
-45600       let penalty$(service_item)="Y"
+45600       penalty$(service_item)="Y"
 45610     else 
-45620       let penalty$(service_item)="N"
+45620       penalty$(service_item)="N"
 45630     end if 
 45640     subjectto(service_item)=val(resp$(respc+=1)) ! respc_service_base+service_item*6-1))
 45660     ordertoapply(service_item)=val(resp$(respc+=1)) ! resp$(respc_service_base+service_item*6))
 45680     onlyMonth(service_item)=val(resp$(respc+=1))
-45700     let default_rate$(service_item)=resp$(respc+=1)
+45700     default_rate$(service_item)=resp$(respc+=1)
 45720   next service_item
 45900 ! /r
 54000   gosub COMPANY_SAVE
 56000   gosub SERVICE_SAVE
 58000   goto XIT
-59000 XIT: let fnxit
+59000 XIT: fnxit
 59500 IGNORE: continue 
 60640 ! <Updateable Region: ERTN>
-60660 ERTN: let fnerror(program$,err,line,act$,"xit")
+60660 ERTN: fnerror(program$,err,line,act$,"xit")
 60680   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 60700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 60720   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -185,8 +185,8 @@
 82040   read #h_company,using "Form POS 1,3*C 40,X 6,N 1,C 1,c 1,n 4": mat at$,maintac,rcpt$,escrow$,pcent ioerr COMPANY_READ_ERR
 82060   close #h_company: 
 82080   fnd1(d1)
-82090   if pcent=0 then let pcent=100
-82100   if uprc$(rcpt$)=uprc$("Y") then let rcpt$="True" else let rcpt$="False"
+82090   if pcent=0 then pcent=100
+82100   if uprc$(rcpt$)=uprc$("Y") then rcpt$="True" else rcpt$="False"
 82120   if uprc$(escrow$)=uprc$("Y") then escrow$="True" else escrow$="False"
 82140   fncreg_read('unusual usage minimum water',uum_water$)
 82160   fncreg_read('unusual usage minimum gas',uum_gas$)
@@ -204,9 +204,9 @@
 83140   fnCopy(env$('Q')&"\UBmstr\Company.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'), 133)
 83160 goto COMPANY_LOAD ! /r
 84000 COMPANY_SAVE: ! r:
-84020   if rcpt$="True" then let rcpt$="Y" else let rcpt$="N"
+84020   if rcpt$="True" then rcpt$="Y" else rcpt$="N"
 84040   if escrow$="True" then escrow$="Y" else escrow$="N"
-84060   let maintac=1 ! maintac was variable used for maintaining accumulated transaction file, no longer used but be want history to be retained no matter what (so set it to 1)
+84060   maintac=1 ! maintac was variable used for maintaining accumulated transaction file, no longer used but be want history to be retained no matter what (so set it to 1)
 84080   close #1,free: ioerr ignore
 84100   open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Size=0,RecL=133,Replace",internal,outin 
 84120   write #1,using "Form POS 1,3*C 40,x 6,N 1,C 1,c 1,n 4": mat at$,maintac,rcpt$,escrow$,pcent
@@ -226,18 +226,18 @@
 86100   restore #h_rate1: 
 86120   cr_rate_item=1: mat rates$=("")
 86140   mat rates$(50)
-86160   let rates$(1)=" 0=Not applicable"
+86160   rates$(1)=" 0=Not applicable"
 86180   do 
 86200     CR_READ_RATE: ! 
 86220     read #h_rate1,using "Form POS 1,C 54",release: rt$ eof CR_EO_RATE
 86240     if trim$(rt$(1:2))<>searchcode$ then goto CR_READ_RATE
 86260     cr_rate_item+=1
-86280     let rates$(cr_rate_item)=rt$(3:4)&"="&rt$(5:25)
-86300     if ratecode=val(rt$(3:4)) then let rateinfo$(3)=rt$(3:4)&"="&rt$(5:25)
+86280     rates$(cr_rate_item)=rt$(3:4)&"="&rt$(5:25)
+86300     if ratecode=val(rt$(3:4)) then rateinfo$(3)=rt$(3:4)&"="&rt$(5:25)
 86320   loop 
 86340   CR_EO_RATE: ! 
 86360   if cr_rate_item>0 then mat rates$(cr_rate_item) else mat rates$(1)
-86380   if ratecode=0 then let rateinfo$(3)=" 0=Not applicable"
+86380   if ratecode=0 then rateinfo$(3)=" 0=Not applicable"
 86400   ! 
 86420   close #h_rate1: 
 86440   ! /r

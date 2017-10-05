@@ -8,17 +8,17 @@
 00100   fntop(program$, cap$="Worksheet")
 00110 ! ______________________________________________________________________
 00120   fnget_services(mat servicename$,mat service$)
-00130   let hdr$="{\ul  Date   }"
+00130   hdr$="{\ul  Date   }"
 00140   let underline$="          "
 00150   for j=1 to 10
 00160     if trim$(servicename$(j))<>"" then !:
-            let hdr$=hdr$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:8)),8)&"}" !:
+            hdr$=hdr$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:8)),8)&"}" !:
             let underline$=underline$&"{\ul         }  " !:
-            let totserv=totserv+1
+            totserv=totserv+1
 00170   next j
-00180   let hdr$=hdr$&"  {\ul Net Bill}" !:
+00180   hdr$=hdr$&"  {\ul Net Bill}" !:
         let underline$=underline$&"{\ul         }  " !:
-        let totserv1=totserv+2 !:
+        totserv1=totserv+2 !:
         mat t1(totserv1) : mat t2(totserv1) : mat t3(totserv1)
 00190 ! ______________________________________________________________________
 00200 BUD1: ! INITILIZE BUDGET FILE
@@ -29,20 +29,20 @@
 00250   bud1=1
 00260   sn$="BudRpt1" !:
         fntos(sn$) !:
-        let mylen=32 : let mypos=mylen+2
-00270   let txt$="Starting Date (blank for all):" !:
+        mylen=32 : mypos=mylen+2
+00270   txt$="Starting Date (blank for all):" !:
         fnlbl(1,1,txt$,mylen,1)
 00280   fntxt(1,mypos,8,0,0,"1") !:
-        let resp$(1)=""
-00290   let txt$="Ending Date (blank for all):" !:
+        resp$(1)=""
+00290   txt$="Ending Date (blank for all):" !:
         fnlbl(2,1,txt$,mylen,1)
 00300   fntxt(2,mypos,8,0,0,"1") !:
-        let resp$(2)=""
+        resp$(2)=""
 00310   fncmdset(3)
 00320   fnacs(sn$,0,mat resp$,ckey)
 00330   if ckey=5 then goto XIT
-00340   let d1=val(resp$(1)) conv L350
-00350 L350: let d2=val(resp$(2)) conv L360
+00340   d1=val(resp$(1)) conv L350
+00350 L350: d2=val(resp$(2)) conv L360
 00360 L360: ! ______________________________________________________________________
 00370   on fkey 5 goto XIT
 00380 ! On Pageoflow Goto NEWPGE
@@ -53,16 +53,16 @@
 00430 READ_BUDMSTR: ! 
 00440   read #81,using L490: z$,mat ba,mat badr eof DONE
 00450   if env$('client')="Findlay" then ba(8)=0 ! don't show the penalty budget on form
-00460   let totba=totalbudget=totactual=0
-00470   if ba(12)>0 then let totba=ba(12): goto L490 ! if net bill in budget, use it
-00480   for j=2 to 11: let totba=totba+ba(j): next j
+00460   totba=totalbudget=totactual=0
+00470   if ba(12)>0 then totba=ba(12): goto L490 ! if net bill in budget, use it
+00480   for j=2 to 11: totba=totba+ba(j): next j
 00490 L490: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
 00500   read #1,using L510,key=z$: n$,bal nokey READ_BUDMSTR
 00510 L510: form pos 26,c 25,pos 292,pd 4.2
 00520   pr #255,using "Form POS 1,C 12,C 25": z$,n$ pageoflow NEWPGE !:
         pr #255: "" pageoflow NEWPGE
 00530   pr #255: hdr$ pageoflow NEWPGE
-00540   let ta1=badr(1)
+00540   ta1=badr(1)
 00550   mat badr=(0)
 00560   bt1=btdue=0
 00570 L570: if ta1=0 then goto L810
@@ -75,28 +75,28 @@
 00640   let x=0: if d2>0 then let x=d2 : let x=fndate_mmddyy_to_ccyymmdd(x) else goto L660
 00650   if y>x then goto L800
 00660 L660: service=1
-00670   let t1(1)=bt1(1,1) ! date
+00670   t1(1)=bt1(1,1) ! date
 00680   for j=1 to 10
 00690     if trim$(servicename$(j))="" then goto L720
 00700     service=service+1
-00710     let t1(service)=bt1(j+1,2) !:
-          let totalbudget=totalbudget+bt1(j+1,1) !:
-          let totactual=totactual+bt1(j+1,2)
+00710     t1(service)=bt1(j+1,2) !:
+          totalbudget=totalbudget+bt1(j+1,1) !:
+          totactual=totactual+bt1(j+1,2)
 00720 L720: next j
-00730   let t1(service+1)=bt1(12,2)
+00730   t1(service+1)=bt1(12,2)
 00740   pr #255,using "Form POS 1,PIC(ZZ/ZZ/ZZ),TOTSERV1*N 10.2": mat t1 pageoflow NEWPGE
-00750   let t1(1)=0
+00750   t1(1)=0
 00760   mat t2=t2+t1 : mat t3=t3+t1
-00770   let t2+=1 : let t3+=1
+00770   t2+=1 : t3+=1
 00780   if bt1(14,1)=0 then bt1=bt1+1: else goto L800 !:
           ! Total Budget Bills Not Paid
 00790   for j=1 to 10 : btdue=btdue+bt1(j+1,1) : next j
-00800 L800: let ta1=nba : goto L570
+00800 L800: ta1=nba : goto L570
 00810 L810: pr #255: underline$ ! "{\ul         }  {\ul         }  {\ul         }  {\ul         }  {\ul         }  {\ul         }" Pageoflow NEWPGE
 00820   pr #255,using "Form POS 1,C 7,PIC(Z),TOTSERV1*N 10.2": "Total",mat t2 pageoflow NEWPGE
 00830   if t2<2 then goto L870
 00840   for j=1 to udim(t2)
-00850     if t2(j)>0 then let t2(j)=t2(j)/t2
+00850     if t2(j)>0 then t2(j)=t2(j)/t2
 00860   next j
 00870 L870: pr #255: underline$ ! "{\ul         }  {\ul         }  {\ul         }  {\ul         }  {\ul         }  {\ul         }" Pageoflow NEWPGE
 00880   pr #255,using "Form POS 1,C 7,PIC(Z),TOTSERV1*N 10.2": "Average",mat t2 pageoflow NEWPGE
@@ -113,7 +113,7 @@
 00990   pr #255: "Total Budget Payments Not Received:"&cnvrt$("PIC($$$,$$$.$$ CR",btdue) pageoflow NEWPGE
 01000   pr #255: "Excess Budget Billings Over Actual Billing (Under=Cr):"&cnvrt$("PIC($$$,$$$.$$ CR",(totalbudget-totactual)) pageoflow NEWPGE
 01010   pr #255, using "Form Pos 1,C 78": "{\ul \strike "&rpt$(" ",58)&"}" pageoflow NEWPGE
-01020   mat t2=(0) : let t2=0
+01020   mat t2=(0) : t2=0
 01030   goto READ_BUDMSTR
 01040 ! ______________________________________________________________________
 01050 NEWPGE: ! !:
@@ -131,10 +131,10 @@
 01140 ! ______________________________________________________________________
 01150 DONE: ! 
 01160   fncloseprn
-01170 XIT: let fnxit
+01170 XIT: fnxit
 01180 ! ______________________________________________________________________
 01190 ! <Updateable Region: ERTN>
-01200 ERTN: let fnerror(program$,err,line,act$,"xit")
+01200 ERTN: fnerror(program$,err,line,act$,"xit")
 01210   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01220   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01230   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

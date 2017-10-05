@@ -12,60 +12,60 @@
 00120   fncno(cno,cnam$) !:
         fndat(dat$)
 00130 ! 
-00140   let prtjob$="N" : let perpag$="N"
+00140   prtjob$="N" : perpag$="N"
 00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00160   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00170 ! ______________________________________________________________________
 00180   if fnprocess=1 then goto ASKJOB
 00190 MAIN_SCREEN: ! 
 00200   fntos(sn$="namlst1") !:
-        let mylen=25 : let mypos=mylen+2: let resp=0: left=1
+        mylen=25 : mypos=mylen+2: resp=0: left=1
 00210   fnlbl(1,1,"Report Heading Date:",23,left)
 00220   fntxt(1,mypos,20,0,0,"",0,"Recommended to use full alpha date format.") !:
-        let resp$(resp+=1)=dat$
+        resp$(resp+=1)=dat$
 00230   fnchk(2,mypos,"Print All Jobs:",left) !:
-        let resp$(resp+=1)="False"
+        resp$(resp+=1)="False"
 00240   fnchk(3,mypos,"Print One Job Per Page:",left) !:
-        let resp$(resp+=1)="False"
+        resp$(resp+=1)="False"
 00250   fncmdset(2)
 00260   fnacs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
-00280   let dat$=resp$(1) ! heading date
-00290   if resp$(2)="True" then let prtjob$="Y" else let prtjob$="N"
-00300   if resp$(3)="True" then let perpag$="Y" else let perpad$="N"
+00280   dat$=resp$(1) ! heading date
+00290   if resp$(2)="True" then prtjob$="Y" else prtjob$="N"
+00300   if resp$(3)="True" then perpag$="Y" else perpad$="N"
 00310 ! ______________________________________________________________________
 00320   fndat(dat$,2)
 00330   if prtjob$="N" then goto ASKJOB
 00340   if fnprocess=1 then goto L510
 00350 ! ______________________________________________________________________
 00360   mat ml$(1) !:
-        let ml$(1)="Do you wish to skip all completed jobs?" !:
+        ml$(1)="Do you wish to skip all completed jobs?" !:
         fnmsgbox(mat ml$,resp$,cap$,4)
 00370   if resp$="Yes" then skpcom$="Y" else skpcom$="N"
 00380   goto L510
 00390 ASKJOB: ! 
 00400   for j=1 to 100
 00410     fntos(sn$="prtdet2") !:
-          let mylen=12 : let mypos=mylen+3: let resp=0: left=1 !:
+          mylen=12 : mypos=mylen+3: resp=0: left=1 !:
           fnlbl(1,1,"Job Number:",mylen,1) !:
           fncmbjob(1,mypos) !:
-          let resp$(respc+=1)=jn$
-00420     let prtj$(j)=lpad$(rtrm$(prtj$(j)),6)
+          resp$(respc+=1)=jn$
+00420     prtj$(j)=lpad$(rtrm$(prtj$(j)),6)
 00430     fncmdkey("&Next",1,1,0,"Print this job." ) !:
           fncmdkey("&Complete",5,0,1,"No more jobs. Release the print.")
 00440     fnacs(sn$,0,mat resp$,ck)
 00450     if ck=5 then goto L490
-00460     let prtj$(j)=lpad$(rtrm$(resp$(1)(1:6)),6)
+00460     prtj$(j)=lpad$(rtrm$(resp$(1)(1:6)),6)
 00470   next j
 00480   goto L510
-00490 L490: let j=j-1
+00490 L490: j=j-1
 00500 ! ______________________________________________________________________
 00510 L510: on fkey 5 goto DONE
 00520   fnopenprn !:
-        if file$(255)(1:3)<>"PRN" then let jbskip=1
+        if file$(255)(1:3)<>"PRN" then jbskip=1
 00530   gosub HDR
 00540 L540: if prtjob$="Y" then goto L590
-00550 L550: let j1+=1: if j1>j then goto DONE
+00550 L550: j1+=1: if j1>j then goto DONE
 00560   read #1,using L570,key=prtj$(j1): jn$,n$,b4 nokey L550
 00570 L570: form pos 1,c 6,c 40,pos 157,n 2
 00580   goto L600
@@ -118,10 +118,10 @@
 01050   gosub HDR
 01060 L1060: return 
 01070 ! ______________________________________________________________________
-01080 XIT: let fnxit
+01080 XIT: fnxit
 01090 ! ______________________________________________________________________
 01100 ! <Updateable Region: ERTN>
-01110 ERTN: let fnerror(program$,err,line,act$,"xit")
+01110 ERTN: fnerror(program$,err,line,act$,"xit")
 01120   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01130   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01140   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

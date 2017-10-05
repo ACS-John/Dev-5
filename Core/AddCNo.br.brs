@@ -14,18 +14,18 @@
 12100 ! 
 18000   if env$('cursys')='CL' then ! r:
 18020     mat ml$(5)
-18040     let ml$(1)='Would you like to import data from an old'
-18060     let ml$(2)='ACS Accounts Payable system?'
-18080     let ml$(3)='This is only chance.'
+18040     ml$(1)='Would you like to import data from an old'
+18060     ml$(2)='ACS Accounts Payable system?'
+18080     ml$(3)='This is only chance.'
 18100     fnmsgbox(mat ml$,resp$,cap$,36)
 18120     if resp$='Yes' then let fnchain("S:\acsCL\Conversion\APmstr-Cnv")
 18140 ! /r
 20000   else if env$('cursys')='UB' then ! r:
 20020     fntos(sn$="ub_add_cno")
-20040     let mylen=32 : let mypos=mylen+2 : lc=0
+20040     mylen=32 : mypos=mylen+2 : lc=0
 20180     fnlbl(lc+=1,1,"Copy Service Types from Company:",mylen,1)
 20200     fncmbcno(lc,mypos)
-20220     let resp$(1)=''
+20220     resp$(1)=''
 20240     fncmdkey("&Next",1,1,1)
 20280     fnacs(sn$,0,mat resp$,ckey)
 20300     if ck=5 then goto XIT
@@ -65,7 +65,7 @@
 22020     dim zer(57)
 22040 MENU1: ! 
 22060     fntos(sn$="GLAddCNo")
-22080     let mylen=37 : let mypos=mylen+2
+22080     mylen=37 : mypos=mylen+2
 22100     fnlbl(1,1,"Copy Chart of Accounts from Company:",mylen,1)
 22120     fncmbcno(1,mypos)
 22140     fncmdset(2)
@@ -95,11 +95,11 @@
 52060     fnchain('S:\acs'&env$('cursys')&'\Company')
 52080   end if
 80110 ! <Updateable Region: ERTN>
-80120 ERTN: let fnerror(program$,err,line,act$,"xit")
+80120 ERTN: fnerror(program$,err,line,act$,"xit")
 80130   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 80140   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 80150   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 80160 ERTN_EXEC_ACT: execute act$ : goto ERTN
 80170 ! /region
 80180 ! ______________________________________________________________________
-80640 XIT: let fnchain("S:\Core\Programs\Select Company")
+80640 XIT: fnchain("S:\Core\Programs\Select Company")

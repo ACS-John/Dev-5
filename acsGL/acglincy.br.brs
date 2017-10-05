@@ -28,22 +28,22 @@
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00270   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20: 
 00280 ! ______________________________________________________________________
-00290   let pors=1
-00300   let mp1=69
-00310   if fnps=2 then let mp1=mp1+3
+00290   pors=1
+00300   mp1=69
+00310   if fnps=2 then mp1=mp1+3
 00320   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
 00330   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
 00340   form c 9,skip 0
 00350 L350: form pos mp1,pd 3,pos 81,41*pd 6.2
 00360   form c 7,skip 0
-00370   let nametab=int(95-len(rtrm$(cnam$))/2)
+00370   nametab=int(95-len(rtrm$(cnam$))/2)
 00380   open #1: fl1$,internal,input,keyed 
 00390   if fnprocess=1 or fnUseDeptNo=0 then goto L490
 00400   fntos(sn$="Acglincy") !:
-        let mylen=30: let mypos=mylen+3 : let right=1
+        mylen=30: mypos=mylen+3 : right=1
 00410   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
 00420   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
-        let resp$(1)=""
+        resp$(1)=""
 00430   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
 00440   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
 00450   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
@@ -51,7 +51,7 @@
 00470   if ckey=5 then goto XIT
 00480   costcntr=val(resp$(1))
 00490 L490: cnam$=rtrm$(cnam$)
-00500   let pf1=len(cnam$)+int((43-len(cnam$))/2)
+00500   pf1=len(cnam$)+int((43-len(cnam$))/2)
 00510   close #101: ioerr L520
 00520 L520: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= INCOME STATEMENT WITH MONTHLY COMPARISONS ",display,outin 
 00530   pr f "08,18,C 41,H,N": lpad$(cnam$,pf1)
@@ -59,14 +59,14 @@
 00550   pr f "11,18,C 41,R,N": "              IN PROCESS"
 00560   pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
 00570   if cmdkey=5 then goto L2380 ! jb
-00580   let report$="STATEMENT OF INCOME AND EXPENSES"
+00580   report$="STATEMENT OF INCOME AND EXPENSES"
 00590   fnopenprn
 00600   if fnps=2 then goto L630 ! secondary
 00610   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
 00620   goto L640
 00630 L630: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
 00640 L640: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
-00650   let redir=0: if file$(255)(1:4)<>"PRN:" then let redir=1
+00650   redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 00660 L660: read #1,using L710: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2360
 00670   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L660
 00680   if costcntr=0 then goto L710
@@ -90,29 +90,29 @@
 00860 L860: if ir=val(r$) then goto L870 else goto L1090
 00870 L870: if fnpriorcd=2 then goto L1020
 00880   for j=1 to 13
-00890     if j=1 and actpd=1 then let total(j)=total(j)+cb else goto L910
+00890     if j=1 and actpd=1 then total(j)=total(j)+cb else goto L910
 00900     goto L1000
-00910 L910: if j=1 then let total(j)=total(j)+by(j) else goto L930
+00910 L910: if j=1 then total(j)=total(j)+by(j) else goto L930
 00920     goto L1000
 00930 L930: if j>actpd then goto L1000
-00940     if j=<lmu then let total(j)=total(j)+by(j)-by(j-1) else goto L960
+00940     if j=<lmu then total(j)=total(j)+by(j)-by(j-1) else goto L960
 00950     goto L1000
 00960 L960: if lmu=actpd then goto L970 else goto L990
-00970 L970: let total(j)=total(j)+by(j)-by(j-1)
+00970 L970: total(j)=total(j)+by(j)-by(j-1)
 00980     goto L1000
-00990 L990: let total(j)=total(j)+cb-by(j-1)
+00990 L990: total(j)=total(j)+cb-by(j-1)
 01000 L1000: next j
 01010   goto L830
 01020 L1020: for j=1 to 13
 01030     if j>nap then goto L1070
-01040     if j=1 then let total(j)=total(j)+bp(j) else goto L1060
+01040     if j=1 then total(j)=total(j)+bp(j) else goto L1060
 01050     goto L1070
-01060 L1060: let total(j)=total(j)+bp(j)-bp(j-1)
+01060 L1060: total(j)=total(j)+bp(j)-bp(j-1)
 01070 L1070: next j
 01080   goto L830
 01090 L1090: if ir<val(r$) then goto L830
 01100   if ir>val(r$) then goto L1120
-01110 L1110: let notrans=1
+01110 L1110: notrans=1
 01120 L1120: for j=1 to 9
 01130     if ac(j)=9 then goto L1170
 01140     for k=1 to 13
@@ -120,7 +120,7 @@
 01160     next k
 01170 L1170: next j
 01180   for j=1 to 13
-01190     if rs=1 then let total(j)=-total(j)
+01190     if rs=1 then total(j)=-total(j)
 01200   next j
 01210   goto L1230 ! IF SUM(TOTAL)><0 THEN GOTO 920
 01220   if ls+ul+ds+ic>0 then goto L1230 else goto L660
@@ -164,12 +164,12 @@
 01600   gosub L1970
 01610   gosub L1810
 01620   goto L660
-01630 L1630: if te$="R" then let report$=d$
+01630 L1630: if te$="R" then report$=d$
 01640   if te$="S" then secondr$=d$
 01650   gosub L1810
 01660   goto L660
 01670 L1670: if foot1=1 then goto L1720
-01680   let tabnote=sp
+01680   tabnote=sp
 01690   let foot1=1
 01700   let foot$=d$
 01710   goto L660
@@ -187,8 +187,8 @@
 01830   pr #255,using L1840: " "
 01840 L1840: form pos 1,c 1,skip ls
 01850   goto L1950
-01860 L1860: let fnpglen(pglen)
-01870 ! If PGLEN<>42 Then Let PGLEN=58
+01860 L1860: fnpglen(pglen)
+01870 ! If PGLEN<>42 Then pGLEN=58
 01880   sk=pglen-krec(255): fl=len(rtrm$(foot$))
 01890 ! If PGLEN=42 Then sK=SK+1
 01900   pr #255,using L1910: rtrm$(foot$)
@@ -217,16 +217,16 @@
 02130 L2130: form skip 1,c 1,skip 0
 02140   return 
 02150 ! ______________________________________________________________________
-02160 L2160: let heading=1
+02160 L2160: heading=1
 02170   pr #255,using L2180: cnam$
 02180 L2180: form skip 2,pos 10,cc 70,skip 1
-02190   let p1=95-len(rtrm$(report$))/2
+02190   p1=95-len(rtrm$(report$))/2
 02200   pr #255,using L2210: rtrm$(report$)
 02210 L2210: form pos 10,cc 70
 02220   if rtrm$(secondr$)="" then goto L2250
-02230   let p1=95-len(rtrm$(secondr$))/2
+02230   p1=95-len(rtrm$(secondr$))/2
 02240   pr #255,using L2210: rtrm$(secondr$)
-02250 L2250: let p1=81-len(rtrm$(actpd$))/2-len(rtrm$(pedat$))/2
+02250 L2250: p1=81-len(rtrm$(actpd$))/2-len(rtrm$(pedat$))/2
 02260   pr #255,using L2210: "For the "&rtrm$(actpd$)&" month period ended "&rtrm$(fnpedat$)
 02270   pr #255: 
 02280   pr #255: 
@@ -245,10 +245,10 @@
 02410 ! 
 02420   goto XIT
 02430 ! ______________________________________________________________________
-02440 XIT: let fnxit
+02440 XIT: fnxit
 02450 ! ______________________________________________________________________
 02460 ! <updateable region: ertn>
-02470 ERTN: let fnerror(program$,err,line,act$,"xit")
+02470 ERTN: fnerror(program$,err,line,act$,"xit")
 02480   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02490   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02500   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

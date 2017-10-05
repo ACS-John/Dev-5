@@ -8,13 +8,13 @@
 00080 ! note message$(4) is not dimmed long enough
 00090 ! ______________________________________________________________________
 00100   pr #0,using 'form pos 1,7*N 3,C 2,C 2': 1,2,3,4,5,6,7,"s",5,5
-00110 ! let fntop(prg$="Test\Error",cap$="Test Error")
-00120 ! let message$(1)="This is my message"
-00130 ! let message$(2)="It can be asdfjfdskljfsdalkjfdsalkjsfdalkjfsdmany lines long"
-00140 ! let message$(3)="This is "
-00150 ! let message$(4)="This is j"
-00160 ! let mt=4
-00170 ! let fnmsgbox(mat message$, response$, cap$, mt)
+00110 ! fntop(prg$="Test\Error",cap$="Test Error")
+00120 ! message$(1)="This is my message"
+00130 ! message$(2)="It can be asdfjfdskljfsdalkjfdsalkjsfdalkjfsdmany lines long"
+00140 ! message$(3)="This is "
+00150 ! message$(4)="This is j"
+00160 ! mt=4
+00170 ! fnmsgbox(mat message$, response$, cap$, mt)
 00180 ! pr "The answer is "&response$
 00190 XIT: ! 
 00200   pr "Exit Successful"

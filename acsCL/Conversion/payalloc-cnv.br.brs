@@ -7,7 +7,7 @@
 00060   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,holdvn$*8,vcode$*8
 00070   dim cnam$*40,dat$*20,gl(3),sf1$*28,sn$*30,de$*30
 00080   dim rn$*12,de$*30,ta(2),tvn$*8,tr$(5)*35,tr(2),de$*30
-00090   let io1$(1)="10,51,N 2,U,N"
+00090   io1$(1)="10,51,N 2,U,N"
 00100   fncno(cno)
 00110   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno),internal,outin,keyed 
 00120   open #2: "Name="&env$('Q')&"\CLmstr\X.H"&str$(cno)&",RecL=164,Replace",internal,outin,relative 
@@ -22,4 +22,4 @@
 00210   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno)&" 1 8 Replace DupKeys"
 00220   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\PayIdx2.H"&str$(cno)&" 9 30 Replace DupKeys"
 00230   pr "COMPLETED CONVERTING PAYEE FILE FOR COMPANY #: "&str$(cno)
-00240 XIT: let fnxit
+00240 XIT: fnxit

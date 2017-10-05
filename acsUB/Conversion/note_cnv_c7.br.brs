@@ -31,7 +31,7 @@
 00250   execute "Copy X "&env$('Q')&"\UBmstr\Note2.h"&str$(cno)&" -n"
 00260   execute "Free X -n"
 00270   open #note1=1: "Name="&env$('Q')&"\UBmstr\Note1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&str$(cno),internal,outin,keyed 
-00280   let version(note1,1)
+00280   version(note1,1)
 00290   close #note1: 
 00300   pr env$('Q')&"\UBmstr\Note1.h"&str$(cno)&" converted successfully to version 1."
 00310   goto EOPHASE1
@@ -47,17 +47,17 @@
 00380   pr "Initial Record Len of "&file$(note2)&" is "&str$(rln(note2))&"."
 00400 READ_NOTE1_PHASE2: ! 
 00410   read #note1,using 'Form POS 1,C 10,2*PD 3': rk$,mat ra eof EO3
-00420   let r32=ra(1)
+00420   r32=ra(1)
 00430 READ_NOTE2_PHASE2: ! 
 00440   if r32<1 then goto READ_NOTE1_PHASE2
 00450   read #note2,using 'Form POS 1,C 07,C 60,PD 3',rec=r32: k32$,rm$,n32 conv READ_NOTE1_PHASE2
 00460   rewrite #note2,using 'Form POS 1,C 10,C 60,PD 3',rec=r32: rk$,rm$,n32
-00470   let r32=n32
+00470   r32=n32
 00480   goto READ_NOTE2_PHASE2
 00490 ! ______________________________________________________________________
 00500 EO3: ! 
-00510   let version(note1,1)
-00520   let version(note2,1)
+00510   version(note1,1)
+00520   version(note2,1)
 00530   close #note1: 
 00540   close #note2: 
 00550   pr env$('Q')&"\UBmstr\Note2.h"&str$(cno)&" converted successfully to version 1"
@@ -75,14 +75,14 @@
 50140   mat newra=(0)
 50150   read #3,using 'Form POS 1,C 10,2*PD 3',key=x$: rk$,mat ra nokey L50100
 50160   write #3,using 'Form POS 1,C 10,2*PD 3': z$,0,0
-50180   let r32=ra(1)
+50180   r32=ra(1)
 50190 L50190: if r32<1 then goto L50100
 50200   read #4,using 'Form POS 1,C 10,C 60,PD 3',rec=r32: rk$,rm$,r32
-50210   let n32=lrec(4)+1
-50220   if r32>0 then let ntr=n32+1 else let ntr=0
+50210   n32=lrec(4)+1
+50220   if r32>0 then ntr=n32+1 else ntr=0
 50230   write #4,using 'Form POS 1,C 10,C 60,PD 3',rec=n32: z$,rm$,ntr
-50240   if newra(1)=0 then let newra(1)=n32
-50250   let newra(2)=n32
+50240   if newra(1)=0 then newra(1)=n32
+50250   newra(2)=n32
 50260   rewrite #3,using 'form pos 11,2*pd 3',key=z$: mat newra
 50270   goto L50190
 50280 EO4: close #3: 

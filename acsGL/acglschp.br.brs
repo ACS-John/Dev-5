@@ -14,7 +14,7 @@
 00140   open #20: "Name=CNO.H"&wsid$,internal,input,relative  !:
         read #20,using 'Form POS 141,6*N 1,3*N 2,C 6,POS 195,2*C 20',rec=1: process,ps,filno,priorcd,mat d,fscode,lmu,actpd,actpd$,pedat$,cch$ !:
         close #20: 
-00150   if process=1 then let prtall=1 : goto L320
+00150   if process=1 then prtall=1 : goto L320
 00160 L160: pr newpage
 00170   pr f "5,25,c 50,h,n": "SELECTION OF SCHEDULES TO PRINT"
 00180   pr f "10,5,C 60,N": "ENTER 1 TO pr ALL SCHEDULES  "
@@ -30,7 +30,7 @@
 00280 L280: input fields fb$: prtsch(j) conv L280
 00290     if prtsch(j)=0 then goto L310
 00300   next j
-00310 L310: let j=0
+00310 L310: j=0
 00320 L320: open #1: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\schindex.h"&str$(cno)&",Shr",internal,input,keyed ioerr DONE
 00330   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00340   pr newpage
@@ -40,12 +40,12 @@
 00380 L380: if prtall=1 then goto L440
 00390 L390: let g=g+1
 00400   if prtsch(g)=0 then goto DONE
-00410   let k$=lpad$(str$(prtsch(g)),2)
+00410   k$=lpad$(str$(prtsch(g)),2)
 00420   read #1,using L450,key=k$: sn,sn$,ft$,dp,rs,cm,mat gl$ nokey L390
 00430   goto L460
 00440 L440: read #1,using L450: sn,sn$,ft$,dp,rs,cm,mat gl$ eof DONE
 00450 L450: form pos 1,n 2,2*c 78,3*n 1,80*c 12
-00460 L460: if dp=1 then let dollar$="$" else let dollar$=" "
+00460 L460: if dp=1 then dollar$="$" else dollar$=" "
 00470   gosub L1130
 00480   for j=1 to 80
 00490     if gl$(j)="  0     0  0" then goto L830
@@ -73,23 +73,23 @@
 00710     if rs=1 then curmo=-curmo
 00720     if cm=1 then goto L780
 00730     pr #255,using L750: d$,dollar$,cb
-00740     let dollar$=" "
+00740     dollar$=" "
 00750 L750: form pos 1,c 50,pos 67,c 1,pic(--,---,---.##),skip 1
 00760     goto L820
 00770 ! ______________________________________________________________________
 00780 L780: pr #255,using L810: d$,dollar$,curmo,dollar$,cb
-00790     let j1=j1+1
-00800     let dollar$=" "
+00790     j1=j1+1
+00800     dollar$=" "
 00810 L810: form pos 1,c 50,pos 51,c 1,pic(--,---,---.##),pos 67,c 1,pic(--,---,---.##),skip 1
 00820 L820: gosub L1330
 00830 L830: next j
-00840   let j1=0
+00840   j1=0
 00850   gosub L890
 00860   gosub L1060
 00870   goto L380
 00880 ! ______________________________________________________________________
 00890 L890: ! TOTAL PRINT
-00900   if dp=1 then let dollar$="$" else let dollar$=" "
+00900   if dp=1 then dollar$="$" else dollar$=" "
 00910   if cm=1 then goto L980
 00920   pr #255,using L930: "______________"
 00930 L930: form pos 67,c 14,skip 1
@@ -118,7 +118,7 @@
 01160   sntab=int(43-len(rtrm$(sn$))/2)
 01170   pr #255,using L1180: sn$
 01180 L1180: form pos sntab,c 80,skip 1
-01190   let dattab=int(43-len(rtrm$(pedat$))/2)
+01190   dattab=int(43-len(rtrm$(pedat$))/2)
 01200   pr #255,using L1210: pedat$
 01210 L1210: form pos dattab,c 80,skip 2
 01220   if cm><1 then goto L1250
@@ -130,7 +130,7 @@
 01280   fncloseprn
 01290   goto XIT
 01300 ! ______________________________________________________________________
-01310 XIT: let fnxit
+01310 XIT: fnxit
 01320 ! ______________________________________________________________________
 01330 L1330: let ytdtot=ytdtot+cb
 01340   if cm><1 then goto L1360
@@ -138,7 +138,7 @@
 01360 L1360: return 
 01370 ! ______________________________________________________________________
 01380 ! <Updateable Region: ERTN>
-01390 ERTN: let fnerror(program$,err,line,act$,"xit")
+01390 ERTN: fnerror(program$,err,line,act$,"xit")
 01400   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01410   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01420   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -15,31 +15,31 @@
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00160   cch$=fncch$
-00170   let pedat$=fnpedat$
+00170   pedat$=fnpedat$
 00180   actpd=fnactpd
 00190   actpd$=fnactpd$
 00200   let fscode=fnfscode
-00210   let priorcd=fnpriorcd
+00210   priorcd=fnpriorcd
 00220 ! ______________________________________________________________________
-00230   let pors=1
-00240   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" : let mp1=72 else !:
-          fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr" : let mp1=69
+00230   pors=1
+00240   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" : mp1=72 else !:
+          fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr" : mp1=69
 00250   open #1: fl1$,internal,input,keyed 
 00260   if fnprocess=1 or fnUseDeptNo=0 then goto L360
 00270   fntos(sn$="ACglinco") !:
-        let mylen=30: let mypos=mylen+3 : let right=1
+        mylen=30: mypos=mylen+3 : right=1
 00280   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
 00290   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
-        let resp$(1)=""
+        resp$(1)=""
 00300   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
 00310   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
 00320   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
 00330   fnacs(sn$,0,mat resp$,ckey)
 00340   if ckey=5 then goto XIT
 00350   costcntr=val(resp$(1))
-00360 L360: let fnopenprn !:
-        if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
-00370   let report$="Budgetary Comparison Schedule"
+00360 L360: fnopenprn !:
+        if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
+00370   report$="Budgetary Comparison Schedule"
 00380   if fnps=2 then goto L410 ! secondary
 00390   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
 00400   goto L420
@@ -73,12 +73,12 @@
 00680 L680: if fscode>1 then bb=bp(fscode-1) else bb=0
 00690 L690: form pos mp1,pd 3,pos 81,41*pd 6.2,pos 339,13*pd 6.2
 00700 L700: if ir=val(r$) then goto L710 else goto L860
-00710 L710: let total2=total2+cb
+00710 L710: total2=total2+cb
 00720   for z=1 to 13
 00730     annualb=annualb+bm(z)
 00740     let finalb=finalb+revb(z)
 00750   next z
-00760   if fscode=0 then let monthb=monthb+bm(actpd) else let monthb=monthb+bm(fscode) ! 11/24/86
+00760   if fscode=0 then monthb=monthb+bm(actpd) else monthb=monthb+bm(fscode) ! 11/24/86
 00770   if fscode=0 then goto L780 else goto L820 ! 11/24/86
 00780 L780: for j=1 to actpd
 00790     let ytdb=ytdb+bm(j)
@@ -90,7 +90,7 @@
 00850   goto L590 ! 11/24/86
 00860 L860: if ir<val(r$) then goto L590
 00870   if ir>val(r$) then goto L890
-00880 L880: let notrans=1
+00880 L880: notrans=1
 00890 L890: let unexpend=finalb-total2
 00900   for j=1 to 9
 00910     if ac(j)=9 then goto L960 ! 10/14/87
@@ -100,10 +100,10 @@
 00950     accum(j,4)=accum(j,4)+unexpend
 00960 L960: next j
 00970   if rs=1 then let finalb=-finalb else goto L1010
-00980   let total2=-total2
+00980   total2=-total2
 00990   annualb=-annualb
 01000   let unexpend=unexpend
-01010 L1010: if ds=1 then let dollar$="$" else let dollar$=" "
+01010 L1010: if ds=1 then dollar$="$" else dollar$=" "
 01020   if annualb><0 or total2><0 then goto L1050
 01030   if finalb<>0 then goto L1050
 01040   if ls+ds+ul+ic>0 then goto L1050 else goto L430
@@ -113,7 +113,7 @@
 01070 L1070: form pos sp,c sp2,pos 22,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),skip redir
 01071 L1071: form pos sp,c sp2,pos 22,c 1,c 5,pic(--,---,---.##),c 1,x 1,c 1,c 5,pic(--,---,---.##),c 1,x 1,c 1,c 5,pic(--,---,---.##),c 1,x 1,c 1,c 5,pic(--,---,---.##),c 1,skip redir
 01080   let finalb=0
-01090   let total2=0
+01090   total2=0
 01100   annualb=0
 01110   let unexpend=0
 01120   gosub L1390
@@ -126,7 +126,7 @@
 01180   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
 01190   if rs=1 then accum3=-accum(ap,3) else accum3=accum(ap,3)
 01200   if rs=1 then accum4=accum(ap,4) else accum4=accum(ap,4)
-01210   if ds=1 then let dollar$="$" else let dollar$=" "
+01210   if ds=1 then dollar$="$" else dollar$=" "
 01220   sp2=22-sp-1
 01228   if ul=1 then pr #255,using L1071: d$(1:sp2),dollar$,"{\ul ",accum1,"}",dollar$,"{\ul ",accum2,"}",dollar$,"{\ul ",accum3,"}",dollar$,"{\ul ",accum4,"}" pageoflow L1620 : goto L1240
 01230   pr #255,using L1070: d$(1:sp2),dollar$,accum1,dollar$,accum2,dollar$,accum3,dollar$,accum4 pageoflow L1620
@@ -135,12 +135,12 @@
 01250   gosub L1630
 01260 L1260: gosub L1470
 01270   goto L430
-01280 L1280: if te$="R" then let report$=d$
+01280 L1280: if te$="R" then report$=d$
 01290   if te$="S" then secondr$=d$
 01300   gosub L1470
 01310   goto L430
 01320 L1320: if foot1=1 then goto L1370
-01330   let tabnote=sp
+01330   tabnote=sp
 01340   let foot1=1
 01350   let foot$=d$
 01360   goto L430
@@ -159,8 +159,8 @@
 01490   pr #255,using L1500: " "
 01500 L1500: form pos 1,c 1,skip ls
 01510   goto L1610
-01520 L1520: let fnpglen(pglen)
-01530 ! If PGLEN<>42 Then Let PGLEN=58
+01520 L1520: fnpglen(pglen)
+01530 ! If PGLEN<>42 Then pGLEN=58
 01540   sk=pglen-krec(255): fl=len(rtrm$(foot$))
 01550 ! If PGLEN=42 Then sK=SK+1
 01560   pr #255,using L1570: rtrm$(foot$),"Page "&str$(pt1)
@@ -182,8 +182,8 @@
 01720 L1720: if redir=0 then pr #255,using L1730: " "
 01730 L1730: form skip 1,c 1,skip 0
 01740   return 
-01750 L1750: let heading=1
-01760   let pt1+=1
+01750 L1750: heading=1
+01760   pt1+=1
 01770   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01780   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01790   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
@@ -207,10 +207,10 @@
 01950   fncloseprn
 01960   goto XIT
 01970 ! ______________________________________________________________________
-01980 XIT: let fnxit
+01980 XIT: fnxit
 01990 ! ______________________________________________________________________
 02000 ! <updateable region: ertn>
-02010 ERTN: let fnerror(program$,err,line,act$,"xit")
+02010 ERTN: fnerror(program$,err,line,act$,"xit")
 02020   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02030   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02040   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

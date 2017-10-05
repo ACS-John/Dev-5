@@ -10,12 +10,12 @@
 00100     cap$="Checkbook update PayTrans from v1 to v2"
 00110 ! ______________________________________________________________________
 00120     fnstatus('updating Unpaid Invoice file')
-00160 ! let fnwait(101,cap$,message$="Converting: please wait...",0)
+00160 ! fnwait(101,cap$,message$="Converting: please wait...",0)
 00170 ! 
 00180     open #paytrans1=1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&str$(cno),internal,outin,keyed 
 00190     if version(paytrans1)=2 then !:
-            let msgline$(4)="PayTrans is already version 2" !:
-            let msgline$(5)="press enter to continue" : let msgline$(6)="" !:
+            msgline$(4)="PayTrans is already version 2" !:
+            msgline$(5)="press enter to continue" : msgline$(6)="" !:
             fnmsgbox(mat msgline$,response$,cap$,1) !:
             close #paytrans1: !:
             goto XIT
@@ -28,14 +28,14 @@
 00290       read #paytrans1,using 'Form Pos 96,N 1,N 6': gde,pdte eof L320
 00300       rewrite #paytrans1,using 'Form Pos 90,N 1,N 6,N 10.2,N 8': gde,pdte,disamt=0,ddate=0
 00310     next j
-00320 L320: let version(paytrans1,2)
+00320 L320: version(paytrans1,2)
 00330     close #paytrans1: 
 00340     fnindex_it(env$('Q')&"\CLmstr\PayTrans.H"&str$(cno),env$('Q')&"\CLmstr\UnPdIdx1.H"&str$(cno),"1 20")
 00350     fnindex_it(env$('Q')&"\CLmstr\PayTrans.h"&str$(cno),env$('Q')&"\CLmstr\UnPdIdx2.h"&str$(cno),"31/27/1 2/4/26")
 00360     goto XIT
 00370 ! ______________________________________________________________________
 00380 ! <Updateable Region: ERTN>
-00390 ERTN: let fnerror(program$,err,line,act$,"xit")
+00390 ERTN: fnerror(program$,err,line,act$,"xit")
 00400     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00410     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00420     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

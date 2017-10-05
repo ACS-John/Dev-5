@@ -3,24 +3,24 @@
 10600 MENU1: ! r:
 10800   fntos(sn$="bldtrans") : chk_align=0
 11000   fnlbl(1,1,"Scan:")
-11200   fnchk(2,5,"Scan Customer Balance Breakdowns",chk_align) : let resp$(1)="True"
-11400   fnchk(3,5,"Scan Transaction Breakdowns",chk_align)      : let resp$(2)="True"
+11200   fnchk(2,5,"Scan Customer Balance Breakdowns",chk_align) : resp$(1)="True"
+11400   fnchk(3,5,"Scan Transaction Breakdowns",chk_align)      : resp$(2)="True"
 11600   fnlbl(5,1,"Error Handling:")
-11800   fnchk(6,5,"Report Erroneous Transactions",chk_align)    : let resp$(3)="True"
-12000   fnchk(7,5,"Fix Erroneous Transactions",chk_align)       : let resp$(4)="False"
+11800   fnchk(6,5,"Report Erroneous Transactions",chk_align)    : resp$(3)="True"
+12000   fnchk(7,5,"Fix Erroneous Transactions",chk_align)       : resp$(4)="False"
 12100   fnlbl(9,1,"Miscellaneous:")
-12200   fnchk(10,5,"Move Credit Balnces to Other",chk_align)    : let resp$(5)="False"
-12220   fnchk(11,5,"  and apply credits",chk_align)             : let resp$(6)="False"
+12200   fnchk(10,5,"Move Credit Balnces to Other",chk_align)    : resp$(5)="False"
+12220   fnchk(11,5,"  and apply credits",chk_align)             : resp$(6)="False"
 12300   fncmdset(2)
 12400   fnacs(sn$,0,mat resp$,ck)
 12500   if ck<>5 then 
-12600     if resp$(1)='True' then let do_fix_balance_breakdowns=1 else let do_fix_balance_breakdowns=0
-12800     if resp$(2)='True' then let do_fix_trans_breakdowns=1 else let do_fix_trans_breakdowns=0
-13000     if resp$(3)='True' then let do_report=1 else let do_report=0
-13200     if resp$(4)='True' then let do_fix=1 else let do_fix=0
-13300     if resp$(5)='True' then let do_move_credit=1 else let do_move_credit=0
-13320     if resp$(6)='True' then let do_apply_credit=1 else let do_apply_credit=0
-13800     let print_count=0
+12600     if resp$(1)='True' then do_fix_balance_breakdowns=1 else do_fix_balance_breakdowns=0
+12800     if resp$(2)='True' then do_fix_trans_breakdowns=1 else do_fix_trans_breakdowns=0
+13000     if resp$(3)='True' then do_report=1 else do_report=0
+13200     if resp$(4)='True' then do_fix=1 else do_fix=0
+13300     if resp$(5)='True' then do_move_credit=1 else do_move_credit=0
+13320     if resp$(6)='True' then do_apply_credit=1 else do_apply_credit=0
+13800     print_count=0
 14000     if do_fix_balance_breakdowns then let fn_fix_balance_breakdowns(do_fix,do_report)
 14200     if do_fix_trans_breakdowns then let fn_fix_trans_breakdowns(do_fix,do_report)
 14300     if do_move_credit then let fn_move_credit(do_move_credit)
@@ -41,7 +41,7 @@
 17600   end if 
 17800 fnend 
 18000 ! <Updateable Region: ERTN>
-18200 ERTN: let fnerror(program$,err,line,act$,"xit")
+18200 ERTN: fnerror(program$,err,line,act$,"xit")
 18400   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 18600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 18800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -58,7 +58,7 @@
 20700       F_HDR2: form pos 1,13*(cc 12,',')
 20800       F_BODY: form pos 1,c 12,',',12*(n 12.2,',')
 21000     end if  ! ~setup_report_it
-21200     let print_count+=1
+21200     print_count+=1
 21400     pr #255,using F_BODY: z$,bal,report_g(1),report_g(2),report_g(3),report_g(4),report_g(5),report_g(6),report_g(7),report_g(8),report_g(9),report_g(10),bal_breakdown
 21600     ! pr #255: z$&' has a balance of '&str$(gb(10))&' but the breakdowns add up to '&str$(bal_breakdown)
 21800   end if 
@@ -84,7 +84,7 @@
 25000   do 
 25200     read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof CUSTOMER_EOF
 25400     F_CUSTOMER: form pos 1,c 10,pos 143,7*pd 2,pos 292,pd 4.2,pos 300,10*pd 4.2,pos 388,10*pd 5.2
-25600     let read_count+=1
+25600     read_count+=1
 25800     for gb_item=1 to udim(mat servicename$) ! udim(mat gb)
 26000       if trim$(servicename$(gb_item))='' then let gb(gb_item)=0
 26200     next gb_item
@@ -148,9 +148,9 @@
 35180     do 
 35200       read #h_trans,using F_TRANS: p$,tdate,transcode,tamt,mat trans_g,mat ru,bal,postcode eof TRANS_EOF
 35220 F_TRANS: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-35240       let read_count+=1
+35240       read_count+=1
 36000       for g_item=1 to udim(mat servicename$) ! udim(mat trans_g)
-36200         if trim$(servicename$(g_item))='' then let trans_g(g_item)=0
+36200         if trim$(servicename$(g_item))='' then trans_g(g_item)=0
 36400       next g_item
 36500 ! r: get bal_breakdown (requires sz1)
 36520       bal_breakdown=0
@@ -162,7 +162,7 @@
 36800       if tamt<>bal_breakdown then 
 37000         fn_report_it(mat trans_g,bal_breakdown,"Transaction Breakdowns",'T Amount')
 37200         if do_fix then 
-37400           let trans_g(gb_other)-=(bal_breakdown-tamt)
+37400           trans_g(gb_other)-=(bal_breakdown-tamt)
 37600           rewrite #h_trans,using F_TRANS: p$,tdate,transcode,tamt,mat trans_g,mat ru,bal,postcode
 37800         end if 
 38000       end if  ! gb(10)<>FICTIONAL_gb10
@@ -182,7 +182,7 @@
 42120     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 42140     do 
 42160       read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof MC_CUSTOMER_EOF
-42200       let read_count+=1
+42200       read_count+=1
 42220       if fn_any_gb_negative then 
 42240         fn_report_it(mat gb,bal,"Customer Balance Breakdowns Before Credits Moved to Other",'Balance')
 42280         for gb_item=1 to 10
@@ -209,7 +209,7 @@
 44120     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 44140     do 
 44160       read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof ACFO_CUSTOMER_EOF
-44180       let read_count+=1
+44180       read_count+=1
 44200       if gb(gb_other)<0 then 
 44220         fn_report_it(mat gb,bal,"Customer Balance Breakdowns Before Credits Moved to Other",'Balance')
 44240         for gb_item=1 to 10

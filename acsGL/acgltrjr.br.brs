@@ -44,7 +44,7 @@
 20140   if prior_period>0 and prior_period<>pcode then goto PJ_READ_1
 20160 L370: ! 
 20180   if tr(6)=0 and tr(5)=0 then goto PJ_READ_1
-20200   if tr(6)>1 and tr(6)<9 then goto L390 else let tr(6)=1
+20200   if tr(6)>1 and tr(6)<9 then goto L390 else tr(6)=1
 20220 L390: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 20240   if journal_to_print(tr(6))><1 then goto PJ_READ_1 ! JOURNAL NOT SELECTED
 20260   oldtrans$=a$(tr(6))(1:21)
@@ -58,11 +58,11 @@
 20420     read #3,using L390: mat tr,tr$,td$ eof EO_JOURNAL
 20440     goto L490 ! don't check period code if current files
 20460   end if 
-20480   if tr(6)>1 and tr(6)<9 then goto L490 else let tr(6)=1
+20480   if tr(6)>1 and tr(6)<9 then goto L490 else tr(6)=1
 20500 L490: ! 
 20520   if journal_to_print(tr(6))><1 then goto PJ_READ_2
 20540   if a$(tr(6))(1:21)><oldtrans$ then gosub JOURNAL_TOTALS
-20560   let tr6=tr(6)
+20560   tr6=tr(6)
 20580   if tr$=oldtr$ and tr$><"999999999999" then 
 20600     goto PJ_PRINT_REC
 20620   else 
@@ -70,7 +70,7 @@
 20660   end if 
 20680 ! 
 22000 PJ_PRINT_REC: ! 
-22020   if tr$="999999999999" then let tr$=" "
+22020   if tr$="999999999999" then tr$=" "
 22040   if tr(5)>0 then 
 22060     pr #255,using L550: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
 22080   else 
@@ -95,20 +95,20 @@
 24060     if tr(1)=tgl(j,1) and tr(2)=tgl(j,2) and tr(3)=tgl(j,3) then goto L680
 24080   next j
 24100 L670: ! 
-24120   let j=tg1=tg1+1
+24120   j=tg1=tg1+1
 24140 L680: ! 
-24160   let tgl(j,1)=tr(1): let tgl(j,2)=tr(2): let tgl(j,3)=tr(3)
-24180   let tgl(j,4)=tgl(j,4)+tr(5)
+24160   tgl(j,1)=tr(1): tgl(j,2)=tr(2): tgl(j,3)=tr(3)
+24180   tgl(j,4)=tgl(j,4)+tr(5)
 24200 ! /r
 26000 L690: ! 
 26020   if tr(5)<0 then goto L720 ! CREDITS
-26040   let total1+=tr(5)
+26040   total1+=tr(5)
 26060   goto L740
 26080 L720: ! 
-26100   let total2+=tr(5)
+26100   total2+=tr(5)
 26120 L740: ! 
 26140   if uprc$(td$(1:6))="CONTRA" then goto L760 ! NO CONTRA ENTRIES IN NET
-26160   let net+=tr(5)
+26160   net+=tr(5)
 26180 L760: ! 
 26200   oldtr$=tr$ : oldtd$=td$
 26220   goto PJ_READ_2
@@ -122,7 +122,7 @@
 28140   if uprc$(a$(tr(6))(1:21))><uprc$(oldtrans$) or t9=9 then goto L830
 28160   pr #255: pageoflow PGOF
 28180 L830: ! 
-28200   let net=0
+28200   net=0
 28220   return  ! /r
 30000 HDR: ! r:
 30020   pr #255,using L890: date$('mm/dd/yy'),cnam$
@@ -152,7 +152,7 @@
 32080 L1060: form pos 55,c 14,pos 70,pic(----,---,---.##),pic(----,---,---.##)
 32100   pr #255: tab(72);"=============";tab(86);"=============="
 32120 ! IF TR6=1 THEN GOSUB 1230
-32140   let total1=total2=net=0
+32140   total1=total2=net=0
 32160   if t9=9 then goto L1150
 32180   pr #255: newpage
 32200   gosub HDR
@@ -161,10 +161,10 @@
 32260 L1150: return  ! /r
 34000 EO_JOURNAL: ! r:
 34020   if tr(5)=0 and tr(6)=0 then goto L1210
-34040   let t9=9
+34040   t9=9
 34060   gosub PJ_SOME_TOTAL
 34080   gosub JOURNAL_TOTALS
-34100 L1210: let fncloseprn
+34100 L1210: fncloseprn
 34120   goto XIT ! /r
 36000 PGOF: ! r:
 36020   pr #255: newpage
@@ -172,7 +172,7 @@
 36060   continue  ! /r
 38000 ! ______________________________________________________________________
 38020 !       pr #255: newpage
-38040 !       let p1=p1+1
+38040 !       p1=p1+1
 38060 !       pr #255,using L890: date$('mm/dd/yy'),cnam$,time$
 38080 !       pr #255,using L890: oldtrans$
 38100 !       pr #255,using L890: fnpedat$
@@ -183,56 +183,56 @@
 38200 !     L1370: form pos 50,pic(zzz),pic(zzzzzz),pic(zzz),n 14.2
 38220 !       next j
 38240 !       mat tgl=(0)
-38260 !       let tg1=0
+38260 !       tg1=0
 38280 !       return
 38300 ! ______________________________________________________________________
 38320 ! <Updateable Region: ERTN>
-38340 ERTN: let fnerror(program$,err,line,act$,"xit")
+38340 ERTN: fnerror(program$,err,line,act$,"xit")
 38360   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 38380   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 38400   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 38420 ERTN_EXEC_ACT: execute act$ : goto ERTN
 38440 ! /region
 38460 ! ______________________________________________________________________
-38480 XIT: let fnxit
+38480 XIT: fnxit
 38500 ! ______________________________________________________________________
 40000 ASK_PERIOD: ! r:
 40020 ! pr newpage
 40040   fntos(sn$="TRJR")
-40060   let respc=0
+40060   respc=0
 40080   fnfra(1,1,2,50,"Print from current month files or history"," ")
 40100   fnopt(1,3,"Current Period Transactions",0,1)
-40120   let resp$(respc+=1)="True"
+40120   resp$(respc+=1)="True"
 40140   fnopt(2,3,"Prior Period Transactions",0,1)
-40160   let resp$(respc+=1)="False"
+40160   resp$(respc+=1)="False"
 40180   fnfra(5,1,8,50,"Select Journals to Print"," ")
 40200   fnchk(1,3,"Disbursements Journal",0,2)
-40220   let resp$(respc+=1)="True"
+40220   resp$(respc+=1)="True"
 40240   fnchk(2,3,"Receipts Journal",0,2)
-40260   let resp$(respc+=1)="True"
+40260   resp$(respc+=1)="True"
 40280   fnchk(3,3,"General Journal (Adj)",0,2)
-40300   let resp$(respc+=1)="True"
+40300   resp$(respc+=1)="True"
 40320   fnchk(4,3,"General Journal (A/P)",0,2)
-40340   let resp$(respc+=1)="False"
+40340   resp$(respc+=1)="False"
 40360   fnchk(5,3,"General Journal (Payroll)",0,2)
-40380   let resp$(respc+=1)="False"
+40380   resp$(respc+=1)="False"
 40400   fnchk(6,3,"General Journal (A/R)",0,2)
-40420   let resp$(respc+=1)="False"
+40420   resp$(respc+=1)="False"
 40440   fnchk(7,3,"Sales Journal",0,2)
-40460   let resp$(respc+=1)="False"
+40460   resp$(respc+=1)="False"
 40480   fnchk(8,3,"Purchases Journal",0,2)
-40500   let resp$(respc+=1)="False"
+40500   resp$(respc+=1)="False"
 40520   fnlbl(16,1,"Prior period code (blank for all):",35,0)
 40540   fntxt(16,37,2,0,1,"30",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
-40560   let resp$(respc+=1)=" "
+40560   resp$(respc+=1)=" "
 40580   fncmdset(2)
 40590   fnacs(sn$,0,mat resp$,ck)
 40600   if ck=5 then goto XIT
 40620   if resp$(1)="True" then cur_prior=1 else cur_prior=2
 40640   mat journal_to_print=(0)
 40660   for j=1 to 8
-40680     if resp$(j+2)="True" then let journal_to_print(j)=1
+40680     if resp$(j+2)="True" then journal_to_print(j)=1
 40700   next j
-40720   let prior_period=val(resp$(11)) ! prior period code
-40740   if prior_period<0 or prior_period>13 then let prior_period=0
+40720   prior_period=val(resp$(11)) ! prior period code
+40740   if prior_period<0 or prior_period>13 then prior_period=0
 40760   return  ! /r

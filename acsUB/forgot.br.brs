@@ -9,15 +9,15 @@
 10900 MAIN: ! 
 11000   sn$="forgot"
 11100   fntos(sn$)
-11200   let txt$="First Billing Date of New Year (MMDDYY):"
+11200   txt$="First Billing Date of New Year (MMDDYY):"
 11300   fnlbl(1,1,txt$,42,1)
 11400   fntxt(1,44,8,0,0,"1")
-11500   let resp$(1)=str$(fbd)
-11600   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+11500   resp$(1)=str$(fbd)
+11600   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 11700   let fbd$=lpad$(str$(val(resp$(1))),6)
 11800   let fbd=val(resp$(1)) conv MAIN
 11900   if ckey=5 then goto XIT
-12000   let txt$="Reconstructing Year-To-Date Usage beginning with "&fbd$(1:2)&"/"&fbd$(3:4)&"/"&fbd$(5:6)&"."
+12000   txt$="Reconstructing Year-To-Date Usage beginning with "&fbd$(1:2)&"/"&fbd$(3:4)&"/"&fbd$(5:6)&"."
 12100   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 12200   open #2: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",Shr",internal,input,keyed 
 12300 READ_CUSTOMER: ! 
@@ -39,10 +39,10 @@
 13900 L340: form pos 232,pd 5,pos 252,pd 5,pos 272,pd 5
 14000   goto READ_CUSTOMER
 14100 ! ______________________________________________________________________
-14200 XIT: let fnxit
+14200 XIT: fnxit
 14300 ! ______________________________________________________________________
 14400 ! <Updateable Region: ERTN>
-14500 ERTN: let fnerror(program$,err,line,act$,"xit")
+14500 ERTN: fnerror(program$,err,line,act$,"xit")
 14600   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 14700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 14800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

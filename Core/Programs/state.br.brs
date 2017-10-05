@@ -27,15 +27,15 @@
 40200   fln(1)=2 
 40220   fln(2)=25
 40240   fln(3)=2
-40260   let mask(1)=2000 
-40280   let mask(3)=30
+40260   mask(1)=2000 
+40280   mask(3)=30
 40300   hState=fnOpenFile(layoutName$,mat statedata$,mat statedatan,mat form$)
 40320   ! open #1: "Name=S:\Core\Data\State.dat,KFName=S:\Core\Data\State.Idx,Use,RecL=29,KPs=1,KLn=2,Shr",internal,outin,keyed 
 40340   fnhamster(layoutName$,mat lbl$,mat fln,hState,mat p$,mat fltyp$,mat sln,mat mask)
 40360 goto XIT ! /r
-70000 XIT: let fnxit
+70000 XIT: fnxit
 80000 ! <Updateable Region: ERTN>
-80020 ERTN: let fnerror(program$,err,line,act$,"xit")
+80020 ERTN: fnerror(program$,err,line,act$,"xit")
 80040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 80060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 80080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -51,7 +51,7 @@
 00470 L470: if nw<>1 then pr #255: newpage
 00480   close #255: 
 00490 L490: goto DONE
-00500 L500: let pb=bal-g(11)
+00500 L500: pb=bal-g(11)
 00505   if g(2)=0 then let x$="" else let x$="Sewer" ! only show sewer if have charge
 00510   pr #255,using L520: 'Water',g(1)+g(9),x$,g(2),d3,d4,d2,bal,bal+g(10)+g(7)
 00520 L520: form skip 3,pos 45,c 9,n 10.2,skip 1,pos 45,c 9,pic(zzz,zzz.zz),skip 1,pos 11,pic(zzbzz),pos 20,pic(zzbzz),pos 30,pic(zzbzzbzz),skip 2,pos 48,n 9.2,n 10.2,skip 1
@@ -78,10 +78,10 @@
 00720 L720: pr newpage
 00730   pr f "12,14,c 40,N": "Starting Account (Blank for All):"
 00740 L740: input fields "12,55,C 10,U,N": a$
-00750   let numb=val(a$) conv L740
+00750   numb=val(a$) conv L740
 00760   if numb=0 then goto L840
 00770   a$=lpad$(str$(numb),10)
-00780   let ppos=pos (a$,".",1)
+00780   ppos=pos (a$,".",1)
 00790   if ppos<1 or ppos>7 then goto L800 else goto L740
 00800 L800: if ppos=8 then goto L830
 00810   if ppos=9 then a$=a$(2:10)&"0"
@@ -98,7 +98,7 @@
 00920   pr newpage
 00930   pr f "10,20,Cc 40,R,N": "Printing Utility Bills: Please wait..."
 00940   pr f "12,20,Cc 40,R,N": "Press F5 to stop"
-00950   let prtbkno$=lpad$(str$(prtbkno),2)&"00000.00"
+00950   prtbkno$=lpad$(str$(prtbkno),2)&"00000.00"
 00960   startcd=1
 00970   read #1,using L360,key>=prtbkno$: z$,mat e$,f$,a4,mat b,mat d,bal,f,mat g,bkno nokey L450
 00980   goto L390
@@ -114,4 +114,4 @@
 01080   pr f "23,3,C 78,N": ""
 01090   pr f "24,3,C 78,N": ""
 01100   retry 
-01110 DONE: let fnxit
+01110 DONE: fnxit

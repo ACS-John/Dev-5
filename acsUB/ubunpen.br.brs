@@ -11,10 +11,10 @@
 20200   fntop(program$,cap$="Undo Penalty Calculation")
 20220 ! ______________________________________________________________________
 20240   fntos(sn$="ubUnPen") 
-20260   let mylen=26 : let mypos=mylen+2
+20260   mylen=26 : mypos=mylen+2
 20280   fnlbl(1,1,"Penalty Date:",mylen,1)
 20300   fntxt(1,mypos,10,0,0,"3") 
-20320   let resp$(1)=""
+20320   resp$(1)=""
 20340   fnlbl(1,40,"")
 20360   fncmdset(2) 
 20380   fnacs(sn$,win,mat resp$,ckey)
@@ -38,9 +38,9 @@
 20740     delete #2: 
 20760   end if
 20780 loop 
-20800 XIT: let fnxit
+20800 XIT: fnxit
 20820 ! <Updateable Region: ERTN>
-20840 ERTN: let fnerror(program$,err,line,act$,"NO")
+20840 ERTN: fnerror(program$,err,line,act$,"NO")
 20860   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20880   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 20900   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

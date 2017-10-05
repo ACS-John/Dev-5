@@ -3,14 +3,14 @@
 00030   open #fin:=1: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outin,keyed 
 00040   close #fin: 
 00050   open #fin: "Name=Temp.dat,KFName=Temp.idx,Use,RecL=64,KPs=1/3,KLn=2/2,Shr",internal,outin,keyed 
-00060   let keyform$='Form ' : let key$=''
+00060   keyform$='Form ' : key$=''
 00070   do while kps(fin,j+=1)>0
-00080     let keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
-00090     let keyform$=keyform$&'C '&str$(kln(fin,j))&','
+00080     keyform$=keyform$&'Pos '&str$(kps(fin,j))&','
+00090     keyform$=keyform$&'C '&str$(kln(fin,j))&','
 00100     blank$(j)=rpt$(chr$(0),kln(fin,j))
-00110     let key$=key$&blank$(j)
+00110     key$=key$&blank$(j)
 00120   loop 
-00130   let keyform$=keyform$(1:len(keyform$)-1) ! remove the trailing comma
+00130   keyform$=keyform$(1:len(keyform$)-1) ! remove the trailing comma
 00140   mat blank$(j-1)
 00150   write #fin,using keyform$,reserve: mat blank$
 00160   read #fin,key=key$: 
@@ -20,7 +20,7 @@
 00200   release #fin: 
 00210   close #fin: 
 00220   open #tmpfile:=12: "Name=Temp.dat,KFName=Temp.idx,Shr",internal,outin,keyed 
-00230   let key$=lpad$(str$(8),2)&lpad$(str$(9),2) !:
+00230   key$=lpad$(str$(8),2)&lpad$(str$(9),2) !:
         read #tmpfile,using 'Form Pos 1,N 2,N 2,C 40',key=key$,reserve: a,b,b$
 00231   rewrite #tmpfile,using 'form pos 1,n 2,n 2,c 40',reserve: a,b,b$
 00232   reread #tmpfile,using 'form pos 1,n 2,n 2,c 40',reserve: a,b,b$

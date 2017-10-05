@@ -16,24 +16,24 @@
 00148   ! priorcd=fnpriorcd
 00150   if fnglfs=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00155   let fscode=fnfscode 
-00156   let priorcd=fnpriorcd 
-00160   let pors=1
-00170   let mp1=69
+00156   priorcd=fnpriorcd 
+00160   pors=1
+00170   mp1=69
 00200   if fnps=2 then 
-00202     let mp1=mp1+3
-00204     let mp2=78
+00202     mp1=mp1+3
+00204     mp2=78
 00206     fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&env$('cno')&",Shr"
 00208   else 
-00210     let mp2=75
+00210     mp2=75
 00212     fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr"
 00214   end if 
 00216   open #h_acglfnx:=1: fl1$,internal,input,keyed 
 00220   if fnprocess=1 or fnUseDeptNo=0 then goto L320
 00230   fntos(sn$="GLInput")
-00232   let mylen=30: let mypos=mylen+3 : let right=1
+00232   mylen=30: mypos=mylen+3 : right=1
 00240   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
 00250   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 )
-00252   let resp$(1)=""
+00252   resp$(1)=""
 00260   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
 00270   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
 00280   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
@@ -50,7 +50,7 @@
 00370   open #h_glmstr:=3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('temp')&"\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 00372 F_GLMSTR_A: form pos mp1,pd 3,pos 81,2*pd 6.2
 00374 F_GLMSTR_B: form pos 1,c 12,pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
-00380   let report$="Statement of Income and Expenses"
+00380   report$="Statement of Income and Expenses"
 00390 ! GOSUB BLDPCT1 ! BUILD % BASED ON REF # IN PRIMARY FUND # IN G/L ACCOUNT
 00400 READ_ACGLFNS: ! 
 00402   read #h_acglfnx,using 'form pos 1,c 5,c 50,c 1,2*n 2,5*n 1,9*n 1,n 1,n 3': r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L1650
@@ -85,17 +85,17 @@
 00680 L680: ! 
 00682   if ir=val(r$) then 
 00683 !  if debug_this then pr gl_number$;'  total(';total;')+=(cb(';cb;')-bb(';bb;'))'
-00684     let total=total+(cb-bb)
+00684     total=total+(cb-bb)
 00685 !  if debug_this then pr gl_number$;'  so now total=';total: pause
 00686   else 
 00688     goto L720
 00690   end if 
-00692   let total2=total2+cb
-00700   let k$=cnvrt$("N 5",pcr)
+00692   total2=total2+cb
+00700   k$=cnvrt$("N 5",pcr)
 00710   goto L570
 00720 L720: if ir<val(r$) then goto L570
 00730   if ir>val(r$) then goto L750
-00740 L740: let notrans=1
+00740 L740: notrans=1
 00750 L750: ! 
 00752   for j=1 to 9
 00760     if ac(j)=9 then goto L790 ! 10/14/87
@@ -104,21 +104,21 @@
 00790 L790: ! 
 00792   next j
 00800   if rs=1 then 
-00802     let total=-total
+00802     total=-total
 00804   else 
 00806     goto L820
 00808   end if 
-00810   let total2=-total2
+00810   total2=-total2
 00820 L820: ! 
 00822   if ds=1 then 
-00824     let dollar$="$"
+00824     dollar$="$"
 00826   else 
-00828     let dollar$=" "
+00828     dollar$=" "
 00830   end if 
 00832   if total><0 or total2><0 then goto L850
 00840   if ls+ul+ds+ic>0 then goto L850 else goto READ_ACGLFNS
 00850 L850: sp2=49-sp-1
-00852 ! If DS=1 Then Let DOLLAR$="": Let FORM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($$$$,$$$,$$$.##),C 1,POS 74,C 1,C 5,PIC($$$$$$,$$$,$$$.##),C 1,skip 1" Else Let FORM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
+00852 ! If DS=1 Then dOLLAR$="": Let FORM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($$$$,$$$,$$$.##),C 1,POS 74,C 1,C 5,PIC($$$$$$,$$$,$$$.##),C 1,skip 1" Else Let FORM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
 00853 ! if debug_this then pr #255: '***'
 00854   if ul=1 then 
 00856     pr #255,using L856: d$(1:sp2),dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}" pageoflow PGOF
@@ -131,8 +131,8 @@
 00880   if pc0=1 then gosub BLDPCT2
 00890   if pc3>0 or pc4>0 then pr #255,using L900: pc3,pc4
 00900 L900: form pos 63,n 4,pos 82,n 4,skip 1
-00910   let total=0
-00920   let total2=0
+00910   total=0
+00920   total2=0
 00930   gosub RESET_ACCUM_ARRAY
 00935   if ul=1 then goto L950
 00940   gosub L1410
@@ -142,10 +142,10 @@
 00970 L970: if ap=0 then ap=1
 00980   if rs=1 then accum1=-accum(ap,1) else accum1=accum(ap,1)
 00990   if rs=1 then accum2=-accum(ap,2) else accum2=accum(ap,2)
-01000   if ds=1 then let dollar$="$" else let dollar$=" "
+01000   if ds=1 then dollar$="$" else dollar$=" "
 01002   sp2=49-sp-1
 01004   if ds=1 then 
-01006     let dollar$=""
+01006     dollar$=""
 01008     let form$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($---,---,---.##),C 1,POS 74,C 1,C 5,PIC($-----,---,---.##),C 1,skip 1"
 01010   else 
 01012     let form$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
@@ -163,13 +163,13 @@
 01052   gosub HDR_COLUMN_A
 01060   goto READ_ACGLFNS
 01070 L1070: ! r:
-01072   if te$="R" then let report$=d$
+01072   if te$="R" then report$=d$
 01080   if te$="S" then secondr$=d$
 01090   gosub HDR_COLUMN_A
 01100   goto READ_ACGLFNS ! /r
 01110 L1110: ! 
 01112   if foot1=1 then goto L1160
-01120   let tabnote=sp
+01120   tabnote=sp
 01130   let foot1=1
 01140   let foot$=d$
 01150   goto READ_ACGLFNS
@@ -192,7 +192,7 @@
 01280   goto HDR_COLUMN_XIT
 01290 HDR_COLUMN_B: ! 
 01292   fnpglen(pglen)
-01300 ! If PGLEN<>42 Then Let PGLEN=58
+01300 ! If PGLEN<>42 Then pGLEN=58
 01310   sk=pglen-krec(255): fl=len(rtrm$(foot$))
 01320 ! If PGLEN=42 Then sK=SK+1
 01330   pr #255,using L1340: rtrm$(foot$),"Page "&str$(pt1)
@@ -216,8 +216,8 @@
 01500 L1500: ! 
 01520   return  ! /r
 01530 HDR_REPORT: ! r:
-01532   let heading=1
-01540   if pt1=0 then let pt1=1 else let pt1=pt1+1
+01532   heading=1
+01540   if pt1=0 then pt1=1 else pt1=pt1+1
 01550   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 01560   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01570   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs24 \b "&trim$(secondr$)&"}"
@@ -240,35 +240,35 @@
 01712   open #10: "Name="&env$('temp')&"\Work."&session$&",KFName="&env$('Temp')&"\Addr."&session$&",Replace,RecL=17,KPS=1,KLN=5",internal,outin,keyed 
 01720   for j=1 to lrec(3)
 01730     read #h_glmstr,using F_GLMSTR_A,rec=j: pc1,bb,cb norec L1830
-01750     let k$=cnvrt$("N 5",pc1)
+01750     k$=cnvrt$("N 5",pc1)
 01760     read #10,using L1770,key=k$: pc1,pc2,yt2 nokey L1820
 01770 L1770: form pos 1,g 5,2*pd 6.2
-01780     let pc2=pc2+cb-bb
+01780     pc2=pc2+cb-bb
 01790     let yt2=yt2+cb
 01800     rewrite #10,using L1770: pc1,pc2,yt2
 01810     goto L1830
 01820 L1820: write #10,using L1770: pc1,cb-bb,cb
 01830 L1830: next j
-01840   let pc0=1
+01840   pc0=1
 01850   return  ! /r
 01860 ! ______________________________________________________________________
 01870 BLDPCT2: ! r:
-01880   let pc3=pc4=0
+01880   pc3=pc4=0
 01890   if val(k$)=0 then goto L1970
 01900   read #10,using L1770,key=k$: pc1,pc2,yt2 nokey L1970
 01910   if total=0 then goto L1940
-01920   let pc3=round(((total-pc2)/total)*100,0)
-01930   if pc3<-999 or pc3>9999 then let pc3=0
+01920   pc3=round(((total-pc2)/total)*100,0)
+01930   if pc3<-999 or pc3>9999 then pc3=0
 01940 L1940: if total2=0 then goto L1970
-01950   let pc4=round(((total2-yt2)/total2)*100,0)
-01960   if pc4<-999 or pc4>9999 then let pc4=0
+01950   pc4=round(((total2-yt2)/total2)*100,0)
+01960   if pc4<-999 or pc4>9999 then pc4=0
 01970 L1970: ! 
 01972   return  ! /r
 01980 ! ______________________________________________________________________
-01990 XIT: let fnxit
+01990 XIT: fnxit
 02000 ! ______________________________________________________________________
 02010 ! <Updateable Region: ERTN>
-02020 ERTN: let fnerror(program$,err,line,act$,"xit")
+02020 ERTN: fnerror(program$,err,line,act$,"xit")
 02030   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02040   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02050   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

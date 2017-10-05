@@ -29,17 +29,17 @@
 80000 def library fnWorkOrderList(; z$*10)
 80010   if ~setup then let fn_setup
 80020   fntos(sn$="workorder")
-80040   let respc=0
+80040   respc=0
 80060   fnlbl(1,43," ",1,1)
 80080   fnlbl(1,1,"Beginning Date to Review:",32,1)
 80100   fntxt(1,35,12,0,0,"3",0,"")
-80120   let resp$(respc+=1)=str$(beg_date)
+80120   resp$(respc+=1)=str$(beg_date)
 80140   fnlbl(2,1,"Ending Date to Review:",32,1)
 80160   fntxt(2,35,12,0,0,"3",0,"")
-80180   let resp$(respc+=1)=str$(end_date)
+80180   resp$(respc+=1)=str$(end_date)
 80200   fnlbl(3,1,"Customer to Print:",32,1)
 80220   fncmbact(3,35,1)
-80240   let resp$(respc+=1)=z$
+80240   resp$(respc+=1)=z$
 80260   fncmdset(2)
 80270   fnacs(sn$,0,mat resp$,ck)
 80280   if ck=5 then goto PWL_XIT
@@ -73,7 +73,7 @@
 80800 PWL_FINIS: ! 
 80820   fncloseprn
 80840 PWL_XIT: ! 
-80860   let pgno=0
+80860   pgno=0
 80880   close #h_workorder: 
 80900 fnend
 82000 PWL_HDR: ! r:

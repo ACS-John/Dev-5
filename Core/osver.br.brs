@@ -49,13 +49,13 @@
 00344     gosub OSV_READ
 00348     return 
 00350 OSV_RIP_RELEASE: ! 
-00352     let tmp=pos(osver$,"[",1)
+00352     tmp=pos(osver$,"[",1)
 00354     if tmp>1 then osver$(tmp-1:len(osver$))=""
 00360     return 
 00370 ! ______________________________________________________________________
 00380 OSV_ERTN: ! 
 00390 ! <Updateable Region: ERTN>
-00400 ERTN: let fnerror(program$,err,line,act$,"xit")
+00400 ERTN: fnerror(program$,err,line,act$,"xit")
 00410     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00420     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00430     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

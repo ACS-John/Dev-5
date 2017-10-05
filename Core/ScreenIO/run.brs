@@ -56,7 +56,7 @@
        mat PredrawWindows(udim(mat screen$))
        mat PredrawMessage(udim(mat screen$))
 
-       if ParentWindow then let ParentWindow$=",parent="&Str$(ParentWindow)
+       if ParentWindow then parentWindow$=",parent="&Str$(ParentWindow)
 
        if DisplayOnly then
           open #(HiddenWindow:=fnGetFileNumber): "srow=3,scol=3,rows=1,cols=1"&ParentWindow$,display,outin
@@ -75,9 +75,9 @@
              if ScreenIO(si_vsize)>BigRow then bigRow=ScreenIO(si_vsize)
 
              if pos(ScreenIO$(si_attributes),"N=") then
-                let NAttr$=screenIO$(si_attributes)(pos(ScreenIO$(si_attributes),"N="):9999)
+                nAttr$=screenIO$(si_attributes)(pos(ScreenIO$(si_attributes),"N="):9999)
                 if pos(NAttr$,",") then
-                   let NAttr$=NAttr$(1:pos(NAttr$,",")-1)
+                   nAttr$=NAttr$(1:pos(NAttr$,",")-1)
                 end if
                 attribute$(Index)=","&NAttr$
              else if len(trim$(ScreenIO$(si_bgcolor))) then
@@ -90,7 +90,7 @@
        next Index
        close #ScreenIO:
 
-       if Rows=0 then let Rows=BigRow
+       if Rows=0 then rows=BigRow
        if Cols=0 then cols=BigCol
 
        for Index=1 to udim(mat Screen$)
@@ -107,16 +107,16 @@
 
        if Predraw or DisplayOnly then
           startTime=timer
-          let PredrawWindows(Currentscreen)=fnfm(Screen$(Currentscreen),Key$,1,1,ParentKey$,InputWindows(Currentscreen),1,1,RecordVal)
+          predrawWindows(Currentscreen)=fnfm(Screen$(Currentscreen),Key$,1,1,ParentKey$,InputWindows(Currentscreen),1,1,RecordVal)
           if Debug then pr Screen$(Currentscreen)&": "&str$(timer-StartTime)&" second(s)."
 
           if MsgScreen$<>"" then
-             let PredrawMessage(Currentscreen)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,PredrawWindows(Currentscreen),1,1,RecordVal)
+             predrawMessage(Currentscreen)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,PredrawWindows(Currentscreen),1,1,RecordVal)
           end if
           scr_freeze
        else
           if MsgScreen$<>"" then
-             let PredrawMessage(Currentscreen)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,InputWindows(Currentscreen),1,1,RecordVal)
+             predrawMessage(Currentscreen)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,InputWindows(Currentscreen),1,1,RecordVal)
              scr_freeze
           end if
        end if
@@ -125,15 +125,15 @@
           if Index<>CurrentScreen then ! Skip the one we already did
              if Predraw or DisplayOnly then
                 startTime=timer
-                let PredrawWindows(Index)=fnfm(Screen$(Index),Key$,1,1,ParentKey$,InputWindows(Index),1,1,RecordVal)
+                predrawWindows(Index)=fnfm(Screen$(Index),Key$,1,1,ParentKey$,InputWindows(Index),1,1,RecordVal)
                 if Debug then pr Screen$(Index)&": "&str$(timer-StartTime)&" second(s)."
                 if MsgScreen$<>"" then
-                   let PredrawMessage(Index)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,PreDrawWindows(Index),1,1,RecordVal)
+                   predrawMessage(Index)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,PreDrawWindows(Index),1,1,RecordVal)
                 end if
                 scr_freeze
              else
                 if MsgScreen$<>"" then
-                   let PredrawMessage(Index)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,InputWindows(Index),1,1,RecordVal)
+                   predrawMessage(Index)=fnfm(MsgScreen$,Key$,MsgRow,MsgCol,ParentKey$,InputWindows(Index),1,1,RecordVal)
                    scr_freeze
                 end if
              end if
@@ -156,7 +156,7 @@
                 read #FileNumber, using form$(Filenumber), key=Key$ : mat F$, mat F nokey Ignore locked ErrorFileLocked
                 close #WarnWindow:
                 if ~Skip and File(FileNumber) then ! key not found
-                   let msgbox("The Key "&trim$(Key$)&" could not be found.")
+                   msgbox("The Key "&trim$(Key$)&" could not be found.")
                    skip=1
                 else
                    saveKey$=Key$
@@ -166,7 +166,7 @@
                 read #FileNumber, using form$(Filenumber), rec=RecordVal : mat F$, mat F nokey Ignore locked ErrorFileLocked
                 close #WarnWindow:
                 if ~Skip and File(FileNumber) then ! key not found
-                   let msgbox("The Record "&str$(RecordVal)&" could not be found.")
+                   msgbox("The Record "&str$(RecordVal)&" could not be found.")
                    skip=1
                 else
                    saveRecord=RecordVal
@@ -185,10 +185,10 @@
                 if len(FileLay$) then
                    ! If filelay is given, then they wanted to read the file first. Use mat MyF$ and mat MyF
                    !  no key or record value is given because ScreenIO won't be reading the file, instead it'll be using MyF
-                   let ReturnValue$=fnfm$(Screen$(CurrentScreen),"",1,1,ParentKey$,InputWindows(CurrentScreen),0,1,0,Dummy$,1,mat F$,mat F,"",0,AskSaveTogether)
+                   returnValue$=fnfm$(Screen$(CurrentScreen),"",1,1,ParentKey$,InputWindows(CurrentScreen),0,1,0,Dummy$,1,mat F$,mat F,"",0,AskSaveTogether)
                 else
-                   ! If filelay not given, just call the screens and let them handle it how they may.
-                   let ReturnValue$=fnfm$(Screen$(CurrentScreen),Key$,1,1,ParentKey$,InputWindows(CurrentScreen),0,1,RecordVal)
+                   ! If filelay not given, just call the screens and them handle it how they may.
+                   returnValue$=fnfm$(Screen$(CurrentScreen),Key$,1,1,ParentKey$,InputWindows(CurrentScreen),0,1,RecordVal)
                 end if
 
                 if CurrentScreen=1 and fkey<>92 then
@@ -211,13 +211,13 @@
                             if Choice=2 then  ! They said YES
                                ! Leave things alone
                             else if Choice=3 then ! They said NO
-                               let ReturnValue$="" ! As if they said NO, don't save
+                               returnValue$="" ! As if they said NO, don't save
                             else ! They said CANCEL
                                let fkey(0) ! Cancel the exit
                                cancelledExit=1
                             end if
                          else                   ! if they haven't changed
-                            let ReturnValue$="" ! As if they said NO, don't save
+                            returnValue$="" ! As if they said NO, don't save
                          end if
                       end if
                    end if
@@ -303,23 +303,23 @@
     dim PushValue$(1)*2047,PushValue(1)
     def fnPushValue$(&Var$;Altstack,Wipe)
        mat PushValue$(1)
-       let PushValue$(1)=Var$
+       pushValue$(1)=Var$
        fnPush$(mat PushValue$,AltStack,Wipe)
-       if Wipe then let Var$=""
+       if Wipe then var$=""
     fnend
     def fnPopValue$(&Var$;Altstack)
        fnPop$(mat PushValue$,AltStack)
-       let Var$=PushValue$(1)
+       var$=PushValue$(1)
     fnend
     def fnPushValue(&Var;Altstack,Wipe)
        mat PushValue(1)
-       let PushValue(1)=Var
+       pushValue(1)=Var
        fnPush(mat PushValue,Altstack,Wipe)
-       if Wipe then let Var=0
+       if Wipe then var=0
     fnend
     def fnPopValue(&Var;Altstack)
        fnPop(mat PushValue,Altstack)
-       let Var=PushValue(1)
+       var=PushValue(1)
     fnend
 
     dim PushWorkArray$(1)*4000
@@ -329,7 +329,7 @@
           if Len(PushWorkArray$(Index))>255 then
              mat Longstack$(Udim(Mat Longstack$)+1)
              longstack$(Udim(Mat Longstack$))=PushWorkArray$(Index)
-             let PushWorkArray$(Index)="[[[loNgsTaCk]]]"
+             pushWorkArray$(Index)="[[[loNgsTaCk]]]"
           end if
        next Index
  !
@@ -431,8 +431,8 @@
     fnend
  !
     def Fnreturnvalue(Value$*1000;___,Number)
-       let Number=1 ! If Conversion Failed, Then Its A Non-Null String, Return True
-       let Number=Val(Value$) conv IGNORE
+       number=1 ! If Conversion Failed, Then Its A Non-Null String, Return True
+       number=Val(Value$) conv IGNORE
        fnreturnvalue=Number
     fnend
  !

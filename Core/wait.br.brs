@@ -6,7 +6,7 @@
 10100 ! ______________________________________________________________________
 10120     library 'S:\Core\Library': fnstatus,fnerror ! ,fncno
 10140     on error goto ERTN
-10160     if trim$(message$)="" then let message$="Please wait..."
+10160     if trim$(message$)="" then message$="Please wait..."
 10180 ! 
 10200 ! close #win: ioerr 200
 10220 ! open #win: "Srow=10,SCol=20,ERow=14,ECol=59,Border=Sr,Caption=<"&cap$,display,outin
@@ -21,7 +21,7 @@
 10400 ! end if
 10420     goto XIT
 10440 ! ______________________________________________________________________
-10460 ERTN: let fnerror(program$,err,line,act$,"xit")
+10460 ERTN: fnerror(program$,err,line,act$,"xit")
 10480     if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 10500     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 10520     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

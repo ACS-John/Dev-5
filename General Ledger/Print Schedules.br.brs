@@ -10,7 +10,7 @@
 00100   dim text$*45,resp$(45)*50
 00110 ! ______________________________________________________________________
 00120   fntop(program$)
-00124   let pedat=fnactpd
+00124   pedat=fnactpd
 00125   fnfscode
 00126   fnpriorcd
 00130   if fnglfs=5 then goto XIT
@@ -20,7 +20,7 @@
 00170   open #hAcGlSchs1:=1: "Name="&env$('Q')&"\GLmstr\ACGLSCHS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schindex.h"&env$('cno')&",Shr",internal,input,keyed ioerr DONE
 00180   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 24000   if fnprocess=1 then 
-24020     let prtall=1 
+24020     prtall=1 
 24040   else
 24060     if ~fn_selectSchedules(mat prtsch) then goto XIT
 24080   end if
@@ -31,11 +31,11 @@
 24220         read #hAcGlSchs1,using L270: sn,sn$,ft$,dp,rs,cm eof DONE
 24240         L270: form pos 1,n 3,2*c 78,3*n 1
 24260       else
-24280         let k$=lpad$(str$(prtsch(prtSchItem)),3) 
+24280         k$=lpad$(str$(prtsch(prtSchItem)),3) 
 24300         read #hAcGlSchs1,using L270,key=k$: sn,sn$,ft$,dp,rs,cm nokey NextSchedule
 24340       end if
 24350       ! pr 'SN=';sn : pause
-24360       if dp=1 then let dollar$="$" else let dollar$=" "
+24360       if dp=1 then dollar$="$" else dollar$=" "
 24380       gosub PrintHeadings
 24400       open #hSchedule:=fngethandle: "Name="&env$('Q')&"\GLmstr\schedule"&str$(sn)&".H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\schedule_idx"&str$(sn)&".H"&env$('cno')&",Shr",internal,outin,keyed 
 26000       do 
@@ -68,38 +68,38 @@
 28400         L580: ! 
 32000         if cm=1 then
 32020           pr #255,using L660: d$,dollar$,curmo,dollar$,cb pageoflow PGOF
-32040           let j1=j1+1
-32060           let dollar$=" "
+32040           j1=j1+1
+32060           dollar$=" "
 32080           L660: form pos 1,c 50,pos 51,c 1,pic(--,---,---.##),pos 67,c 1,pic(--,---,---.##)
 32100         else if cm=2 then
 32120           if lmu<2 or lmu>13 then goto L700
 32140           for l=lmu to 2 step -1 : by(l)=by(l)-by(l-1) : next l
 32160           L700: !
 32180           if dp=1 then 
-32200             let dol$="FORM POS 1,C 32,14*PIC(---,---,--$.##)" 
+32200             dol$="FORM POS 1,C 32,14*PIC(---,---,--$.##)" 
 32220           else 
-32240             let dol$="FORM POS 1,C 32,14*PIC(---,---,---.##)"
+32240             dol$="FORM POS 1,C 32,14*PIC(---,---,---.##)"
 32260           end if
 32280           pr #255,using dol$: d$(1:30),mat by,cb pageoflow PGOF
 32300           mat byt=byt+by
 32320         else if cm=3 then
 32340           if dp=1 then 
-32360             let dol$="FORM POS 1,C 42,13*PIC(---,---,--$.##)" 
+32360             dol$="FORM POS 1,C 42,13*PIC(---,---,--$.##)" 
 32380           else 
-32400             let dol$="FORM POS 1,C 42,13*PIC(---,---,---.##)"
+32400             dol$="FORM POS 1,C 42,13*PIC(---,---,---.##)"
 32420           end if
 32440           pr #255,using dol$: d$(1:40),mat by pageoflow PGOF
 32460           mat byt=byt+by
 32480         else
 32500           pr #255,using L610: d$,dollar$,cb pageoflow PGOF
 32520           L610: form pos 1,c 50,pos 67,c 1,pic(--,---,---.##)
-32540           let dollar$=" "
+32540           dollar$=" "
 32560         end if
 32580         gosub AccumulateTotals
 32600         NextGLinSchedule: !
 32620       loop
 34000       EoSchedule: !
-34020       let j1=0
+34020       j1=0
 34040       gosub PrintTotals
 34060       gosub PrintPageFooter
 34080     end if
@@ -107,7 +107,7 @@
 34980   next prtSchItem
 34990   goto DONE
 38000 PrintTotals: ! r: 
-38020   if dp=1 then let dollar$="$" else let dollar$=" "
+38020   if dp=1 then dollar$="$" else dollar$=" "
 38040   if cm=0 then
 38060     pr #255,using L610: "    Total",dollar$,ytdtot
 38080     pr #255,using 'form pos 67,c 14': "=============="
@@ -117,26 +117,26 @@
 38160     pr #255,using L660: "    Total",dollar$,cmtot,dollar$,ytdtot
 38180     pr #255,using L920: "==============","=============="
 38200   else if cm=2 then
-38220     let dol$="FORM POS 1,C 32,14*'  ------------'"
+38220     dol$="FORM POS 1,C 32,14*'  ------------'"
 38240     pr #255,using dol$: ""
 38260     if dp=1 then 
-38280       let dol$="FORM POS 1,C 32,14*PIC(---,---,--$.##)" 
+38280       dol$="FORM POS 1,C 32,14*PIC(---,---,--$.##)" 
 38300     else
-38320       let dol$="FORM POS 1,C 32,14*PIC(---,---,---.##)"
+38320       dol$="FORM POS 1,C 32,14*PIC(---,---,---.##)"
 38340     end if
 38360     pr #255,using dol$: "  Totals",mat byt,ytdtot pageoflow PGOF
-38380     let dol$="FORM POS 1,C 32,14*'  ============'"
+38380     dol$="FORM POS 1,C 32,14*'  ============'"
 38400     pr #255,using dol$: ""
 38420   else if cm=3 then
-38440     let dol$="FORM POS 1,C 42,13*'  ------------'"
+38440     dol$="FORM POS 1,C 42,13*'  ------------'"
 38460     pr #255,using dol$: ""
 38480     if dp=1 then 
-38500       let dol$="FORM POS 1,C 42,13*PIC(---,---,--$.##)" 
+38500       dol$="FORM POS 1,C 42,13*PIC(---,---,--$.##)" 
 38520     else 
-38540       let dol$="FORM POS 1,C 42,13*PIC(---,---,---.##)"
+38540       dol$="FORM POS 1,C 42,13*PIC(---,---,---.##)"
 38560     end if
 38580     pr #255,using dol$: "  Totals",mat byt pageoflow PGOF
-38600     let dol$="FORM POS 1,C 42,13*'  ============'"
+38600     dol$="FORM POS 1,C 42,13*'  ============'"
 38620     pr #255,using dol$: ""
 38640   else
 38660     pr #255,using 'form pos 67,c 14': "______________"
@@ -186,19 +186,19 @@
 52060     cmtot+=curmo
 52080   end if
 52100 return ! /r
-54000 XIT: let fnxit
+54000 XIT: fnxit
 58000 def fn_selectSchedules(mat prtsch)
 58020   selectSchedulesReturn=0
 58040   restore #hAcGlSchs1,key>="   ": nokey SelectSchedulesXit
-58060   ln=1 : let totallisted=0
+58060   ln=1 : totallisted=0
 58080   fntos(sn$="GLschprt") 
 58100   fnlbl(1,15,"Select Schedules to Be Printed")
 58120   do
 58140     read #hAcGlSchs1,using L270: sn,sn$,ft$,dp,rs,cm eof L1720
 58160     ln=ln+1
-58180     let text$=cnvrt$("pic(zzz)",sn)&"  "&sn$(1:40)
+58180     text$=cnvrt$("pic(zzz)",sn)&"  "&sn$(1:40)
 58200     fnchk(ln,1,text$,0)
-58220     let totallisted+=1
+58220     totallisted+=1
 58240     scheduleno(totallisted)=val(text$(1:3))
 58260     ! if ln>21 and 1>1 then goto L1720 ! quit if more than two columns
 58280     ! if ln>21 then ln=1: let 1+=52
@@ -213,7 +213,7 @@
 58460     mat prtsch(totallisted)
 58480     for j=1 to totallisted
 58500       if resp$(j)="True" then 
-58520         let prtsch(j)=scheduleno(j)
+58520         prtsch(j)=scheduleno(j)
 58540       end if
 58560     next j
 58580     selectSchedulesReturn=totallisted
@@ -222,7 +222,7 @@
 58640   fn_selectSchedules=selectSchedulesReturn
 58660 fnend
 64000 ! <Updateable Region: ERTN>
-64020 ERTN: let fnerror(program$,err,line,act$,"xit")
+64020 ERTN: fnerror(program$,err,line,act$,"xit")
 64040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 64060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 64080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

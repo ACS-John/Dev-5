@@ -2,19 +2,19 @@ def fnco_properties_btn_ok
   ! library 'S:\Core\Library': fnIniSet,fnIniWrite
   library 'S:\Core\Library': fnwrite_program_print_property
   ! r: if Landscape/Portrait, than switch height and width if necessary
-    let tmp_height=val(s$(sio_txtHeight))
-    let tmp_width=val(s$(sio_txtWidth))
+    tmp_height=val(s$(sio_txtHeight))
+    tmp_width=val(s$(sio_txtWidth))
     if s$(sio_cmbOrientation)='Landscape' then 
       if tmp_height>tmp_width then ! and it's taller than it is wide
-        let tmp_hold=tmp_height
-        let tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
-        let tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
+        tmp_hold=tmp_height
+        tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
+        tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
       end if 
     else if s$(sio_cmbOrientation)='Portrait' then
       if tmp_width>tmp_height then ! and it's wider than it is tall
-        let tmp_hold=tmp_height
-        let tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
-        let tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
+        tmp_hold=tmp_height
+        tmp_height=tmp_width : s$(sio_txtHeight)=str$(tmp_height)
+        tmp_width=tmp_hold : s$(sio_txtWidth)=str$(tmp_width)
       end if 
     end if 
   ! /r

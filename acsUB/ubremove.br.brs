@@ -6,7 +6,7 @@
 20100   dim cap$*128
 20120 ! ______________________________________________________________________
 20140   fntop("S:\acsUB\ubRemove",cap$="Remove Old Transactions")
-20160   cancel=5 : left=0 : let right=1 : center=2
+20160   cancel=5 : left=0 : right=1 : center=2
 20180   fncno(cno)
 20200 SCREEN1: ! 
 20220   fntos(sn$="ubRemove")
@@ -19,13 +19,13 @@
 20360   fnlbl(flc+=1,1,"from the Customer Transaction History File.  ",fraonewidth,center,0,fraone)
 20380   fnlbl(flc+=1,1,"Enter the oldest date to be retained (mm/dd/yy):",55,right,0,fraone)
 20400   fntxt(flc,58,8,8,1,"1",0,"",fraone)
-20420   let resp$(1)=""
+20420   resp$(1)=""
 20440   fnlbl(flc+=2,1,"Transactions older than this date will be deleted!",fraonewidth,center,2,fraone)
 20460   fncmdset(2)
 20480   fnacs(sn$,0,mat resp$,ck)
 20500   if ck=cancel then goto XIT
-20520   let rd1=val(resp$(1))
-20540   let rd1=fndate_mmddyy_to_ccyymmdd(rd1)
+20520   rd1=val(resp$(1))
+20540   rd1=fndate_mmddyy_to_ccyymmdd(rd1)
 20560   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
 20580 READ_TRANS: ! 
 20600   read #h_trans,using 'Form POS 1,C 10,N 8,N 1,PD 4.2': p$,tdate,tcode,tamount eof END1
@@ -36,10 +36,10 @@
 20700   execute "Index "&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&' '&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&" 1 19 Replace DupKeys -n"
 20720   goto XIT
 20740 ! ______________________________________________________________________
-20760 XIT: let fnxit
+20760 XIT: fnxit
 20780 ! ______________________________________________________________________
 20800 ! <Updateable Region: ERTN>
-20820 ERTN: let fnerror(program$,err,line,act$,"xit")
+20820 ERTN: fnerror(program$,err,line,act$,"xit")
 20840   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 20860   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 20880   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

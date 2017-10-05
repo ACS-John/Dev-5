@@ -12,40 +12,40 @@
 00140   fntop(program$,"Locate 1")
 00150   let filter$="*.br"
 00160   cancel=5
-00170   let report$=env$('temp')&"\LocRpt-"&session$&".txt" !:
+00170   report$=env$('temp')&"\LocRpt-"&session$&".txt" !:
         subprocfile$=env$('temp')&"\loc3-"&session$&".tmp" !:
-        let procfile$=env$('temp')&"\Loc0-"&session$&".prc" !:
-        let tempfile1$=env$('temp')&"\Loc1-"&session$&".tmp" !:
-        let tempfile2$=env$('temp')&"\Loc2-"&session$&".tmp"
+        procfile$=env$('temp')&"\Loc0-"&session$&".prc" !:
+        tempfile1$=env$('temp')&"\Loc1-"&session$&".tmp" !:
+        tempfile2$=env$('temp')&"\Loc2-"&session$&".tmp"
 00180 ! ______________________________________________________________________
 00190 MAIN: ! 
 00200   fntos("Locate") !:
-        lngth=17 : let ps=lngth+2 : let rc=lc=0
+        lngth=17 : ps=lngth+2 : rc=lc=0
 00210   fnlbl(lc+=1,1,'Find:',lngth,1)
 00220   fntxt(lc,ps,16,63) !:
-        let resp$(rc+=1)=lc$
+        resp$(rc+=1)=lc$
 00230   fnlbl(lc,ps+18,'and',lngth)
 00240   fntxt(lc,ps+22,16,40) !:
-        let resp$(rc+=1)=lc2$
+        resp$(rc+=1)=lc2$
 00250   fnlbl(lc+=1,1,'Path:',lngth,1)
 00260   fntxt(lc,ps,38,66,0,'72') !:
-        let resp$(rc+=1)=dur$
+        resp$(rc+=1)=dur$
 00270   lc+=1 ! blank line
 00280   fnlbl(lc+=1,1,'Replace:',lngth,1)
 00290   fntxt(lc,ps,38) !:
-        let resp$(rc+=1)=rep$
+        resp$(rc+=1)=rep$
 00300   fnlbl(lc,ps+40,"Leave Replace blank to locate only" )
 00310   fnlbl(lc+=1,1,"Filter:",lngth,1)
 00320   fntxt(lc,ps,38) !:
-        let resp$(rc+=1)=filter$
+        resp$(rc+=1)=filter$
 00330   fnchk(lc+=1,ps,'Append Previous Report',0) !:
-        let resp$(rc+=1)="False"
+        resp$(rc+=1)="False"
 00340   fnchk(lc+=1,ps,'Renumber all Programs',0) !:
-        let resp$(rc+=1)="False"
+        resp$(rc+=1)="False"
 00350   lc+=1 ! blank line
 00360   fnlbl(lc+=1,1,"Insert this Line:",lngth,1)
 00370   fntxt(lc,ps,40,78,0,"",0,"This will be executed after Renumber, if you choose to, a good example is '45 ! this is a dumb comment'" ) !:
-        let resp$(rc+=1)=""
+        resp$(rc+=1)=""
 00380   lc+=1 ! blank line
 00390   fnlbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
 00400   fncmdset(2)
@@ -53,12 +53,12 @@
 00420   if ck=cancel then goto XIT
 00430   lc$=trim$(resp$(1)) !:
         lc2$=trim$(resp$(2)) !:
-        let dur$=trim$(resp$(3)) !:
-        let rep$=trim$(resp$(4)) !:
+        dur$=trim$(resp$(3)) !:
+        rep$=trim$(resp$(4)) !:
         let filter$=trim$(resp$(5)) !:
         app_prev$=resp$(6) !:
-        let rnm$=resp$(7) !:
-        let insline$=trim$(resp$(8))
+        rnm$=resp$(7) !:
+        insline$=trim$(resp$(8))
 00440   if lc2$<>"" and rep$<>"" then goto MAIN
 00450 ! 
 00460   fngetdir(dur$,mat brfn$," /s ",filter$)
@@ -100,7 +100,7 @@
 00660   next j
 00670   pr #2: "Print Border: 'Location Complete'"
 00680   pr #2: "sy -w Notepad "&report$
-00690   let prg$="S:\Core\Locate" !:
+00690   prg$="S:\Core\Locate" !:
         pr #2: "Load "&prg$ !:
         pr #2: "Load "&prg$ !:
         pr #2: "Load "&prg$ !:
@@ -114,7 +114,7 @@
 00760   fnxit
 00770 ! ______________________________________________________________________
 00780 ! <Updateable Region: ERTN>
-00790 ERTN: let fnerror(program$,err,line,act$,"xit")
+00790 ERTN: fnerror(program$,err,line,act$,"xit")
 00800   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00810   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00820   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

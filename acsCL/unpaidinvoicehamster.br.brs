@@ -39,23 +39,23 @@
         lbl$(14)="Discount Amount" !:
         lbl$(15)="Discount Due Date"
 00270 ! ** Field Display Lengths ** !:
-        let mmddyy=8 : ccyymmdd=10 !:
+        mmddyy=8 : ccyymmdd=10 !:
         ! TC=0 ! Text Box Length Item Coutner
-00280   let tln(tc+=1)=8 !:
-        let tln(tc+=1)=12 !:
-        let tln(tc+=1)=mmddyy !:
-        let tln(tc+=1)=mmddyy !:
-        let tln(tc+=1)=12
-00290   let tln(tc+=1)=18 !:
-        let tln(tc+=1)=10 !:
-        let tln(tc+=1)=1 !:
-        let tln(tc+=1)=2 !:
-        let tln(tc+=1)=8
-00300   let tln(tc+=1)=mmddyy !:
-        let tln(tc+=1)=1 !:
-        let tln(tc+=1)=6 !:
-        let tln(tc+=1)=10 !:
-        let tln(tc+=1)=ccyymmdd
+00280   tln(tc+=1)=8 !:
+        tln(tc+=1)=12 !:
+        tln(tc+=1)=mmddyy !:
+        tln(tc+=1)=mmddyy !:
+        tln(tc+=1)=12
+00290   tln(tc+=1)=18 !:
+        tln(tc+=1)=10 !:
+        tln(tc+=1)=1 !:
+        tln(tc+=1)=2 !:
+        tln(tc+=1)=8
+00300   tln(tc+=1)=mmddyy !:
+        tln(tc+=1)=1 !:
+        tln(tc+=1)=6 !:
+        tln(tc+=1)=10 !:
+        tln(tc+=1)=ccyymmdd
 00310 ! ** Field Types ** !:
         ! Valid are C, G, N, PD, !:
         ! Default is 'G' !:
@@ -93,25 +93,25 @@
         sln(sc+=1)=10.2 !:
         sln(sc+=1)=8
 00390 ! ** Field Mask ** !:
-        let number=30 !:
-        let pointtwo=32 ! number with 2 decimal places (no commas)!:
-        let mmddyy=1 : ccyymmdd=3 !:
-        let mc=0 ! mask item counter
-00400   let mask(mc+=1)=none !:
-        let mask(mc+=1)=none !:
-        let mask(mc+=1)=mmddyy !:
-        let mask(mc+=1)=mmddyy !:
-        let mask(mc+=1)=none
-00410   let mask(mc+=1)=none !:
-        let mask(mc+=1)=pointtwo !:
-        let mask(mc+=1)=number !:
-        let mask(mc+=1)=number !:
-        let mask(mc+=1)=number
-00420   let mask(mc+=1)=mmddyy !:
-        let mask(mc+=1)=number !:
-        let mask(mc+=1)=mmddyy !:
-        let mask(mc+=1)=pointtwo !:
-        let mask(mc+=1)=mmddyy
+        number=30 !:
+        pointtwo=32 ! number with 2 decimal places (no commas)!:
+        mmddyy=1 : ccyymmdd=3 !:
+        mc=0 ! mask item counter
+00400   mask(mc+=1)=none !:
+        mask(mc+=1)=none !:
+        mask(mc+=1)=mmddyy !:
+        mask(mc+=1)=mmddyy !:
+        mask(mc+=1)=none
+00410   mask(mc+=1)=none !:
+        mask(mc+=1)=pointtwo !:
+        mask(mc+=1)=number !:
+        mask(mc+=1)=number !:
+        mask(mc+=1)=number
+00420   mask(mc+=1)=mmddyy !:
+        mask(mc+=1)=number !:
+        mask(mc+=1)=mmddyy !:
+        mask(mc+=1)=pointtwo !:
+        mask(mc+=1)=mmddyy
 00430 ! ** Storage Position ** !:
         sc=0 ! Storage Position Item Counter
 00440 ! ** Let's Make Some Combo Boxes ** !:
@@ -150,10 +150,10 @@
 00550   fnhamster("UnpaidInvoice",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00560   return 
 00570 ! ______________________________________________________________________
-00580 XIT: let fnxit
+00580 XIT: fnxit
 00590 ! ______________________________________________________________________
 00600 ! <Updateable Region: ERTN>
-00610 ERTN: let fnerror(program$,err,line,act$,"xit")
+00610 ERTN: fnerror(program$,err,line,act$,"xit")
 00620   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00630   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00640   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

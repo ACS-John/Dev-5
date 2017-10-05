@@ -18,20 +18,20 @@
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00146   fnfscode
 00147   fnpriorcd
-00150   if fnps=2 then let mp1=66 !:
+00150   if fnps=2 then mp1=66 !:
           fl1$="Name="&env$('Q')&"\GLmstr\acglFnSC.h"&env$('cno') !:
           fl1$=fl1$&",KFName="&env$('Q')&"\GLmstr\fnSCIndx.h"&env$('cno')&",Shr" else !:
-          let mp1=63 !:
+          mp1=63 !:
           fl1$="Name="&env$('Q')&"\GLmstr\acglFnSB.h"&env$('cno') !:
           fl1$=fl1$&",KFName="&env$('Q')&"\GLmstr\FNSBIndx.h"&env$('cno')&",Shr"
 00160   open #1: fl1$,internal,input,keyed 
 00170   if fnprocess=1 or fnUseDeptNo=0 then goto L280 else goto L190
 00180 ! ______________________________________________________________________
-00190 L190: let fntos(sn$="GLInput") !:
-        let mylen=30: let mypos=mylen+3 : let right=1
+00190 L190: fntos(sn$="GLInput") !:
+        mylen=30: mypos=mylen+3 : right=1
 00200   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
 00210   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
-        let resp$(1)=""
+        resp$(1)=""
 00220   fnlbl(2,1,"(Blank for all Departments)",mylen,right)
 00230   fncmdkey("&Next",1,1,0,"Prints the financial statement.")
 00240   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
@@ -44,8 +44,8 @@
 00310 L310: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\fsindex.H"&env$('cno')&" 66 3 Replace DupKeys -N"
 00320 L320: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 00330   fnopenprn
-00340   if file$(255)(1:4)<>"PRN:" then let redir=1 else let redir=0
-00350   let report$="Balance Sheet"
+00340   if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
+00350   report$="Balance Sheet"
 00360 READ_TOP: ! 
 00370   read #1,using L380: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof DONE
 00380 L380: form pos 1,c 5,c 50,c 1,2*n 2,5*n 1,9*n 1,n 1,n 3
@@ -71,18 +71,18 @@
 00580   if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto L610
 00590   if fnfscode<1 or fnfscode>12 then let fnfscode(1)
 00600   if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
-00610 L610: if br=val(r$) then let total=total+cb else goto L630
+00610 L610: if br=val(r$) then total=total+cb else goto L630
 00620   goto L540
 00630 L630: if br<val(r$) then goto L540
 00640   if br>val(r$) then goto L660
-00650 L650: let notrans=1
-00660 L660: if te$="E" then let total=-accum(ap)
+00650 L650: notrans=1
+00660 L660: if te$="E" then total=-accum(ap)
 00670   for j=1 to 9
 00680     if ac(j)=9 then goto L690 else accum(j)=accum(j)+total
 00690 L690: next j
-00700   if rs=1 then let total=-total
-00710   if ds=1 then let dollar$="$" else let dollar$=" "
-00720   let dollar=24+14*bc ! If CP=1 Then Let DOLLAR=50+14*BC Else Let DOLLAR=24+14*BC
+00700   if rs=1 then total=-total
+00710   if ds=1 then dollar$="$" else dollar$=" "
+00720   dollar=24+14*bc ! If CP=1 Then dOLLAR=50+14*BC Else dOLLAR=24+14*BC
 00730   if total><0 then goto L750
 00740   if ls+ul+ds+ic>0 then goto L750 else goto READ_TOP
 00750 L750: sp2=dollar-sp-1
@@ -90,7 +90,7 @@
 00760   pr #255,using L770: d$(1:sp2),dollar$,total pageoflow PGOF
 00761 L761: form pos sp,c sp2,pos dollar,c 1,c 5,pic(---,---,---.##),c 2,skip redir  ! ! atlantis underline
 00770 L770: form pos sp,c sp2,pos dollar,c 1,pic(---,---,---.##),skip redir
-00780   let total=0
+00780   total=0
 00790   gosub SET_ACCUM
 00795   if ul=1 then goto L810 ! atlantis underline
 00800   gosub UNDERLINE
@@ -99,8 +99,8 @@
 00830 ! ______________________________________________________________________
 00840 L840: if ap=0 then ap=1
 00850   if rs=1 then accum1=-accum(ap) else accum1=accum(ap)
-00860   if ds=1 then let dollar$="$" else let dollar$=" "
-00870   let dollar=24+14*bc ! if  CP=1 Then Let DOLLAR=50+14*BC Else Let DOLLAR=24+14*BC
+00860   if ds=1 then dollar$="$" else dollar$=" "
+00870   dollar=24+14*bc ! if  CP=1 Then dOLLAR=50+14*BC Else dOLLAR=24+14*BC
 00880   sp2=dollar-sp-1
 00885   if ul=1 then pr #255,using L761: d$(1:sp2),dollar$,"{\ul ",accum1,"}" pageoflow PGOF : goto L900
 00890   pr #255,using L770: d$(1:sp2),dollar$,accum1 pageoflow PGOF
@@ -114,12 +114,12 @@
         next j
 00950 L950: goto READ_TOP
 00960 ! ______________________________________________________________________
-00970 L970: if te$="R" then let report$=d$
+00970 L970: if te$="R" then report$=d$
 00980   if te$="S" then secondr$=d$
 00990   gosub FOOTER
 01000   goto READ_TOP
 01010 L1010: if foot1=1 then goto L1070
-01020   let tabnote=sp
+01020   tabnote=sp
 01030   let foot1=1
 01040   let foot$=d$
 01050   goto READ_TOP
@@ -139,8 +139,8 @@
 01190   pr #255,using L1200: " "
 01200 L1200: form pos 1,c 1,skip ls
 01210   goto EO_FOOTER
-01220 L1220: let fnpglen(pglen)
-01230 ! If PGLEN<>42 Then Let PGLEN=58
+01220 L1220: fnpglen(pglen)
+01230 ! If PGLEN<>42 Then pGLEN=58
 01240   sk=pglen-krec(255): fl=len(rtrm$(foot$))
 01250 ! If PGLEN=42 Then sK+=1
 01260   pr #255,using L1270: rtrm$(foot$)
@@ -170,7 +170,7 @@
 01500   return 
 01510 ! ______________________________________________________________________
 01520 HEADER: ! 
-01530   let heading=1
+01530   heading=1
 01540   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01543   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01544   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
@@ -187,12 +187,12 @@
 01650   goto XIT
 01660 ! ______________________________________________________________________
 01670 ! <Updateable Region: ERTN>
-01680 ERTN: let fnerror(program$,err,line,act$,"xit")
+01680 ERTN: fnerror(program$,err,line,act$,"xit")
 01690   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01700   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01710   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01720 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01730 ! /region
 01740 ! ______________________________________________________________________
-01750 XIT: let fnxit
+01750 XIT: fnxit
 01760 ! ______________________________________________________________________

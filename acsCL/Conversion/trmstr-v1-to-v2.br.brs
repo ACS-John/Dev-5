@@ -14,11 +14,11 @@
 00190     open #trmstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\TRmstr.h"&str$(cno),internal,outin,relative 
 00200     if version(trmstr)<>1 and version(trmstr)<>2 then let fnstatus("TRmstr is not version 1.  You must update it to version 1 before running this conversion program") : goto XIT
 00210     if version(trmstr)=2 then let fnstatus("TRmstr is already version 2") : goto XIT
-00220     let version(trmstr,2)
+00220     version(trmstr,2)
 00230     goto XIT
 00240 ! ______________________________________________________________________
 00250 ! <Updateable Region: ERTN>
-00260 ERTN: let fnerror(program$,err,line,act$,"NO")
+00260 ERTN: fnerror(program$,err,line,act$,"NO")
 00270     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00280     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00290     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

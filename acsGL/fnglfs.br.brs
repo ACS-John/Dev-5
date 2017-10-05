@@ -13,10 +13,10 @@
 14200     dim formatOption$(2)
 14220     dim priorOrCurrentOption$(2)
 14260     let formatOption$(1)="Primary" : let formatOption$(2)="Secondary" 
-14280     let priorOrCurrentOption$(1)="Current" : let priorOrCurrentOption$(2)="Prior" 
+14280     priorOrCurrentOption$(1)="Current" : priorOrCurrentOption$(2)="Prior" 
 14300     dim periodOption$(13)
 14320     mat periodOption$(nap)
-14340     for j=1 to nap : let periodOption$(j)=str$(j): next j 
+14340     for j=1 to nap : periodOption$(j)=str$(j): next j 
 14980   end if ! /r
 16000   actpd$=fnactpd$ 
 16020   actpd=fnactpd
@@ -25,16 +25,16 @@
 16080     fnpriorcd(1)
 16100   else
 22000     fntos(sn$="glFS-lib") 
-22020     lc=rc=0 : let mylen=23 : let mypos=mylen+3
+22020     lc=rc=0 : mylen=23 : mypos=mylen+3
 22040     fnlbl(lc+=1,1,"Statement Format:",mylen,1)
 22060     fncomboa("ps",lc,mypos,mat formatOption$) 
-22080     let resp$(resp_format:=rc+=1)=formatOption$(1)
+22080     resp$(resp_format:=rc+=1)=formatOption$(1)
 22100     fnlbl(lc+=1,1,"Year:",mylen,1)
 22120     fncomboa("PriorCD",lc,mypos,mat priorOrCurrentOption$) 
-22140     let resp$(resp_priorOrCurrent:=rc+=1)=priorOrCurrentOption$(1)
+22140     resp$(resp_priorOrCurrent:=rc+=1)=priorOrCurrentOption$(1)
 22160     fnlbl(lc+=1,1,"Period to Print:",mylen,1)
 22180     fncomboa("FSCode",lc,mypos,mat periodOption$) 
-22200     let resp$(resp_period:=rc+=1)=str$(actpd) ! periodOption$(1)
+22200     resp$(resp_period:=rc+=1)=str$(actpd) ! periodOption$(1)
 22220     fncmdset(3)
 22240     fnacs(sn$,0,mat resp$,ckey)
 32000     if ckey=5 then 
@@ -55,7 +55,7 @@
 34460   XIT: ! 
 34480 fnend 
 87000 ! <Updateable Region: ERTN>
-87020 ERTN: let fnerror(program$,err,line,act$,"xit")
+87020 ERTN: fnerror(program$,err,line,act$,"xit")
 87040     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 87060     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 87080     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

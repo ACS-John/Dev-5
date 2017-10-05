@@ -32,45 +32,45 @@
 00330   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.H"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence #
 00340 ! ______________________________________________________________________
 00350 SCREEN1: ! 
-00360   a$="" : let prtbkno=0
+00360   a$="" : prtbkno=0
 00370   fntos(sn$="UBPrtBl1-1")
-00380   let pf=26 : ll=24
-00390   let respc=0
+00380   pf=26 : ll=24
+00390   respc=0
 00400   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00410   fntxt(3,pf,8,8,1,"1",0,tt$)
-00420   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
+00420   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 00430   fnlbl(4,1,"Message on Bill:",ll,1)
 00440   fntxt(4,pf,30,30)
-00450   let resp$(respc+=1)=mg$(1)
+00450   resp$(respc+=1)=mg$(1)
 00460   fntxt(5,pf,30,30)
-00470   let resp$(respc+=1)=mg$(2)
+00470   resp$(respc+=1)=mg$(2)
 00480   fntxt(6,pf,30,30)
-00490   let resp$(respc+=1)=mg$(3)
+00490   resp$(respc+=1)=mg$(3)
 00500   fnlbl(7,1,"Date of Billing:",ll,1)
 00510   fntxt(7,pf,8,8,1,"1")
-00520   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
+00520   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00530   fnlbl(8,1,"Starting Account:",ll,1)
 00540   let fe$="ubm-act-nam"
-00550   let datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno)
-00560   let indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno)
-00570   let kp=1741: let kl=9 : let dp=41 : let dl=30
+00550   datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno)
+00560   indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno)
+00570   kp=1741: kl=9 : dp=41 : dl=30
 00580   fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
-00590   let resp$(respc+=1)="[All]"
+00590   resp$(respc+=1)="[All]"
 00600   fnlbl(9,1,"Route Number:",ll,1)
 00610   fncmbrt2(9,pf)
-00620   let resp$(respc+=1)="[All]"
+00620   resp$(respc+=1)="[All]"
 00630   fnchk(10,pf,"Select Accounts to Print",1)
-00640   let resp$(respc+=1)="False"
+00640   resp$(respc+=1)="False"
 00650   fncmdset(3)
 00660   fnacs(sn$,0,mat resp$,ck)
 00670   if ck=5 then goto XIT
-00680   let d1=val(resp$(5))
-00690   let d4=val(resp$(1))
-00700   let mg$(1)=resp$(2)
-00710   let mg$(2)=resp$(3)
-00720   let mg$(3)=resp$(4)
+00680   d1=val(resp$(5))
+00690   d4=val(resp$(1))
+00700   mg$(1)=resp$(2)
+00710   mg$(2)=resp$(3)
+00720   mg$(3)=resp$(4)
 00730   if resp$(6)="[All]" then a$="" else a$=lpad$(trim$(resp$(6)(1:9)),9)
-00740   if resp$(7)="[All]" then let prtbkno=0 else let prtbkno=val(resp$(7))
+00740   if resp$(7)="[All]" then prtbkno=0 else prtbkno=val(resp$(7))
 00750   if resp$(8)="True" then sl1=1: let z$="" else sl1=0
 00760   if trim$(a$)<>"" then 
 00770     read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1
@@ -101,16 +101,16 @@
 00881   read #3,using 'form pos 11,4*c 30',key=z$: mat ba$ nokey L750
 00885   e1=0 : mat pe$=("")
 00887   for j=1 to 4
-00889     if rtrm$(ba$(j))<>"" then e1=e1+1 : let pe$(e1)=ba$(j)
+00889     if rtrm$(ba$(j))<>"" then e1=e1+1 : pe$(e1)=ba$(j)
 00891   next j
 00893   goto PRINT_IT
 00895 ! ______________________________________________________________________
 00897 L750: ! 
 00898   e1=0 : mat pe$=("")
 00899   for j=2 to 4
-00901     if rtrm$(e$(j))<>"" then e1=e1+1 : let pe$(e1)=e$(j)
+00901     if rtrm$(e$(j))<>"" then e1=e1+1 : pe$(e1)=e$(j)
 00903   next j
-00905   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
+00905   if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 00907   goto PRINT_IT
 00909 ! /r
 00911 RELEASE_PRINT: ! 
@@ -121,7 +121,7 @@
 00921 ! ______________________________________________________________________
 00923 PRINT_IT: ! r:
 00924   if bal<>0 then 
-00925     let pb=bal-g(11)
+00925     pb=bal-g(11)
 00927     if bal<=0 then let g(10)=0 ! don't show penalty if balance 0 or less
 00929 ! ______________print bill routine______________________________________
 00931     fn_vbprint
@@ -133,14 +133,14 @@
 00941 SCR_ASK_CUSTOMER: ! r:
 00943   sn$="UBPrtBl1-2"
 00945   fntos(sn$)
-00947   let txt$="Account (blank to stop)"
+00947   txt$="Account (blank to stop)"
 00949   fnlbl(1,1,txt$,31,1)
 00951 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
 00953   if trim$(z$)<>"" then 
 00957     fnlbl(3,1,"Last Account entered was "&z$,44,1)
 00965   end if 
 00967   fncmbact(1,17) ! 
-00969   let resp$(1)=a$
+00969   resp$(1)=a$
 00971   fncmdset(3)
 00972   fnacs(sn$,0,mat resp$,ck)
 00973   a$=lpad$(trim$(resp$(1)(1:10)),10)
@@ -149,17 +149,17 @@
 00979   read #1,using F_CUSTOMER,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,sequence nokey SCR_ASK_CUSTOMER
 00981   goto AFTER_CUSTOMER_READ ! /r
 01390 ENDSCR: ! r: pr totals screen
-01400   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
+01400   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01410   fntos(sn$="Bills-Total")
-01420   let mylen=23 : let mypos=mylen+2
-01430   let respc=0
+01420   mylen=23 : mypos=mylen+2
+01430   respc=0
 01440   fnlbl(1,1,"Total Bills Printed:",mylen,1)
 01450   fntxt(1,mypos,8,0,1,"",1)
-01460   let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
+01460   resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 01580   fncmdset(52)
 01590   fnacs(sn$,0,mat resp$,ck)
 01592   goto XIT ! /r
-01600 XIT: let fnxit
+01600 XIT: fnxit
 01670   def fn_vbprint
 01675 ! -- Standard 4 Per Page Even Perferated Card Stock Bills
 01680     checkcounter+=1
@@ -189,7 +189,7 @@
 01805     fnpa_txt("Charge",xmargin+50,lyne*13+ymargin)
 01810 ! ______________________________________________________________________
 01815 ! PRINTGRID:
-01816     let meter=14
+01816     meter=14
 01820     fnpa_fontsize(8)
 01825     if g(1) then 
 01830       fnpa_txt("WTR",xmargin+1,lyne*(meter+=1)+ymargin)
@@ -324,7 +324,7 @@
 03127   fnend 
 76000 IGNORE: continue 
 76020 ! <updateable region: ertn>
-76040 ERTN: let fnerror(program$,err,line,act$,"xit")
+76040 ERTN: fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

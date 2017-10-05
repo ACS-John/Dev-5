@@ -27,12 +27,12 @@
 00280 L280: form pos 1,c 10,pd 4.2,pd 4,2*n 1,pd 3,c 9,10*pd 4.2
 00310   if m=0 then goto L230
 00320   if o(1)<1 or o(1)>4 then o(1)=1
-00330   if o(1)=3 then let ti2=1 : let tcode=3 ! REG.COLLECTION
-00340   if o(1)=4 then let ti2=2 : let tcode=5 ! CREDIT MEMO
-00350   if o(1)=1 and o(2)=4 then let ti2=3 : let tocde=6 ! DEBIT MEMO
-00360   let tdate=fndate_mmddyy_to_ccyymmdd(n)
-00370   let tamount=m
-00380   for j=1 to 10 : let tg(j)=alloc(j): next j
+00330   if o(1)=3 then ti2=1 : tcode=3 ! REG.COLLECTION
+00340   if o(1)=4 then ti2=2 : tcode=5 ! CREDIT MEMO
+00350   if o(1)=1 and o(2)=4 then ti2=3 : tocde=6 ! DEBIT MEMO
+00360   tdate=fndate_mmddyy_to_ccyymmdd(n)
+00370   tamount=m
+00380   for j=1 to 10 : tg(j)=alloc(j): next j
 00390   read #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=x$&cnvrt$("pic(########)",tdate)&str$(tcode): p$ nokey L420
 00400   rewrite #2,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=x$&cnvrt$("pic(########)",tdate)&str$(tcode): x$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
 00410   goto L430
@@ -40,4 +40,4 @@
 00430 L430: goto L240
 00440 L440: close #2: 
 00450   fnindex_it(env$('Q')&"\UBmstr\UBTransvb.h"&str$(cno),env$('Q')&"\UBmstr\UBTrindx.h"&str$(cno),"1 19")
-00460 XIT: let fnxit
+00460 XIT: fnxit

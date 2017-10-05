@@ -16,14 +16,14 @@
 00160     goto L120
 00170 L170: close #13: 
 00180     pause 
-00190     if j<=0 then let j=1
+00190     if j<=0 then j=1
 00200     mat options$(j)
 00210     let fen$="CBud.h"&str$(cno)
 00220     fncomboa(fen$,1,1,mat option$,"Select from the list of budget files. To add a new budget file, take the Add option.",20,container)
 00230     goto XIT
 00240 ! ______________________________________________________________________
 00250 ! <Updateable Region: ERTN>
-00260 ERTN: let fnerror(program$,err,line,act$,"xit")
+00260 ERTN: fnerror(program$,err,line,act$,"xit")
 00270     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00280     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00290     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -7,7 +7,7 @@
 00070 ! ______________________________________________________________________
 00080     dim item$(4)*40,resp$(30)*80
 00090 ! ______________________________________________________________________
-00100     let jn$=lpad$(rtrm$(cn$),6) ! pass job over in category #, but pass back the category
+00100     jn$=lpad$(rtrm$(cn$),6) ! pass job over in category #, but pass back the category
 00110     fncno(cno)
 00120     open #category:=fngethandle: "Name="&env$('Q')&"\PRmstr\Jccat.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\catindx.h"&str$(cno)&",Shr",internal,input,keyed ioerr ERTN
 00130 ! ______________________________________________________________________
@@ -24,7 +24,7 @@
 00210 READ_FILE: ! 
 00220     read #category,using 'Form POS 1,c 11,c 25': mat item$ eof L310 ioerr ERR_READ
 00230     if item$(1)(1:6)=jn$ then goto L240 else goto L310
-00240 L240: let fnflexadd1(mat item$)
+00240 L240: fnflexadd1(mat item$)
 00250     goto READ_FILE
 00260 ! ______________________________________________________________________
 00270 ERR_READ: ! 
@@ -35,14 +35,14 @@
           goto READ_FILE
 00300 ! ______________________________________________________________________
 00310 L310: ! If FIXGRID=99 Then Goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
-00320     fncmdset(2): let fnacs(sn$,0,mat resp$,ckey) !:
+00320     fncmdset(2): fnacs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
 00330     cn$=lpad$(resp$(1),11)
 00340     if ckey=5 then cn$=cn$(1:6)&"     " ! no one selected
 00350     goto XIT
 00360 ! ______________________________________________________________________
 00370 ! <Updateable Region: ERTN>
-00380 ERTN: let fnerror(program$,err,line,act$,"xit")
+00380 ERTN: fnerror(program$,err,line,act$,"xit")
 00390     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00400     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00410     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

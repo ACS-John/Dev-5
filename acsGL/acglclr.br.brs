@@ -6,24 +6,24 @@
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,tr(7),tr$*12,td$*30,cap$*128
 00080 ! ______________________________________________________________________
-00090   let right=1 : center=2 : left=0
+00090   right=1 : center=2 : left=0
 00100   fntop(program$,cap$="Clear Accumulated Transactions")
 00110   fnconsole(off=0)
 00120   fncno(cno,cnam$)
 00130   fntos(sn$='ClrAccTrans') !:
         lc=0 !:
-        let mylen=50 : let mypos=mylen+2 : let width=80
+        mylen=50 : mypos=mylen+2 : let width=80
 00140   fnlbl(lc+=1,1,"* * *   Warning   * * *",width,center)
 00150   fnlbl(lc+=1,1,"This selection will remove all records from the",width,center)
 00160   fnlbl(lc+=1,1,"General Ledger Accumulated Transactions File ",width,center)
 00170   fnlbl(lc+=1,1,"older than the date entered.",width,center)
 00180   fnlbl(lc+=1,1,"Enter the Removal Date:",mylen,right)
 00190   fntxt(lc,mypos,8,0,0,'ccyymmdd') !:
-        let resp$=''
+        resp$=''
 00200   fncmdset(2)
 00210   fnacs(sn$,0,mat resp$,ckey)
 00220   if ckey=5 then goto XIT
-00230   let rd1=val(resp$(1))
+00230   rd1=val(resp$(1))
 00240 ! 
 00250   open #2: "Name="&env$('temp')&"\Work."&session$&",RecL=72,Replace",internal,output 
 00260   open #1: "Name="&env$('Q')&"\GLmstr\ACTRANS.H"&str$(cno),internal,input 
@@ -40,10 +40,10 @@
 00370   execute "free "&env$('temp')&"\Work."&session$
 00380   goto XIT
 00390 ! ______________________________________________________________________
-00400 XIT: let fnxit
+00400 XIT: fnxit
 00410 ! ______________________________________________________________________
 00420 ! <updateable region: ertn>
-00430 ERTN: let fnerror(program$,err,line,act$,"xit")
+00430 ERTN: fnerror(program$,err,line,act$,"xit")
 00440   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00450   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00460   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

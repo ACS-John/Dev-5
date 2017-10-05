@@ -17,4 +17,4 @@
 00180   goto L150
 00190 L190: delete #1: 
 00200   goto L150
-00210 L210: let fnxit
+00210 L210: fnxit

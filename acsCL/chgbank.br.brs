@@ -8,16 +8,16 @@
 00080 ! ______________________________________________________________________
 00090   fncno(cno)
 00100   fntop(program$, cap$="Select Bank Account")
-00110   cancel=99 : let right=1 : left=0 : center=2 !:
+00110   cancel=99 : right=1 : left=0 : center=2 !:
         limit_to_list=1
 00120 ! ______________________________________________________________________
 00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative: read #20,using 'Form POS 152,N 2',rec=1,release: wbc : close #20: 
 00140 ASK1: ! 
 00150   fntos(sn$='ChgBank') !:
-        lc=0 : let mylen=20 : let mypos=mylen+2
+        lc=0 : mylen=20 : mypos=mylen+2
 00160   fnlbl(lc+=1,1,"Working Bank:",mylen,right)
 00170   fncombof('bank',lc,mypos,33,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list) !:
-        let resp$(1)=str$(wbc)
+        resp$(1)=str$(wbc)
 00180   fncmdkey('&Save',2,1,0) !:
         fncmdkey('&Add',1,0,0,'This takes you to the Bank File') !:
         fncmdkey('&Cancel',5,0,1)
@@ -28,10 +28,10 @@
 00210   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative: rewrite #20,using 'Form POS 152,N 2',rec=1: wbc : close #20: 
 00220   goto XIT
 00230 ! ______________________________________________________________________
-00240 XIT: let fnxit
+00240 XIT: fnxit
 00250 ! ______________________________________________________________________
 00260 ! <Updateable Region: ERTN>
-00270 ERTN: let fnerror(program$,err,line,act$,"xit")
+00270 ERTN: fnerror(program$,err,line,act$,"xit")
 00280   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00290   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

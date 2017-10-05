@@ -9,7 +9,7 @@
 10800   dim line$*256
 10900   batch_name$=env$('temp')&'\update'&session$&'.cmd'
 11000   script_name$=env$('temp')&'\ftp_script'&session$&'.txt'
-11100   let return_name$=env$('temp')&'\return'&session$&'.txt'
+11100   return_name$=env$('temp')&'\return'&session$&'.txt'
 11110   let grace_days=45
 11120   fnclient_support(mat system_id$,mat system_support_end_date,mat on_support,grace_days)
 11200 ! /r
@@ -24,7 +24,7 @@
 20120     fn_update_license
 20140     fn_update
 20160   end if
-20180 XIT: let fnxit
+20180 XIT: fnxit
 20200 ! /r
 25000   def fn_setup
 25020     setup=1
@@ -33,7 +33,7 @@
 25060   fnend
 26000 IGNORE: continue
 26020 ! <updateable region: ertn>
-26040 ERTN: let fnerror(program$,err,line,act$,"xit")
+26040 ERTN: fnerror(program$,err,line,act$,"xit")
 26060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 26080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 26100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -287,8 +287,8 @@
 62080 MMF_FAIL: !
 62100     dim mg$(2)*80
 62120     mat mg$(2)
-62140     let mg$(1)='Failed to create'
-62160     let mg$(2)=os_filename$(mmf_file$)
+62140     mg$(1)='Failed to create'
+62160     mg$(2)=os_filename$(mmf_file$)
 62180     fnmsgbox(mat mg$,response$, cap$,48+0)
 62200 MMF_XIT: !
 62220   fnend
@@ -302,7 +302,7 @@
 80060       dim headings$(1)*40,widths(1),forms$(1)*40,status_gridspec$*80
 80080       open #h_status_win:=fngethandle: 'SRow=1,SCol=1,Rows=20,Cols=80,Parent=None,Caption=Status',display,output
 80100       status_gridspec$='#'&str$(h_status_win)&',1,1,List 20/80'
-80120       let headings$(1)='Status'
+80120       headings$(1)='Status'
 80140       let widths(1)=80
 80160       let forms$(1)='C 512'
 80180       pr f status_gridspec$&",headers,[gridheaders]": (mat headings$,mat widths, mat forms$)
@@ -323,7 +323,7 @@
 81040   fnend
 82000   def fn_status_pause
 82020     fn_status('Press any key to continue.')
-82040     let kstat$(1)
+82040     kstat$(1)
 82060   fnend
 86000   def fn_execute(flags$*128,exe_what$*256)
 86020     if env$('ACSDeveloper')<>'' then
@@ -344,6 +344,6 @@
 87060   fnend
 87080   def fn_status_close
 87100     close #h_status_win: ioerr ignore
-87120     let h_status_win=0
+87120     h_status_win=0
 87140     status_initialized=0
 87160   fnend

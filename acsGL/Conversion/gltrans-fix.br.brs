@@ -40,9 +40,9 @@
 00370     read #2,using L380,rec=j: k$,nta norec L460
 00380 L380: form pos 1,c 12,pos 71,pd 3
 00390     read #1,using L310,key=k$: mat ta nokey L460
-00400     if ta(1)=0 then let ta(1)=j
+00400     if ta(1)=0 then ta(1)=j
 00410     if ta(2)>0 then rewrite #2,using L450,rec=ta(2): j
-00420     let ta(2)=j
+00420     ta(2)=j
 00430     rewrite #1,using L310,key=k$: mat ta
 00440     rewrite #2,using L450,rec=j: 0
 00450 L450: form pos 71,pd 3

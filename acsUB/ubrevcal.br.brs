@@ -23,7 +23,7 @@
 00125 ALLOW_PROGRAM: ! 
 00130 ! ______________________________________________________________________
 00135   fnd1(d1)
-00140   if d1=0 then let d1=val(date$(4:5)&date$(7:8)&date$(1:2))
+00140   if d1=0 then d1=val(date$(4:5)&date$(7:8)&date$(1:2))
 00145 ! ______________________________________________________________________
 00170   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00180   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&str$(cno)&",Shr",internal,outin,keyed 
@@ -33,34 +33,34 @@
 00220 ASK1: ! 
 00230   let x=6
 00240   close #111: ioerr L250
-00250 L250: let fntos(sn$="ubrevcal")
-00252   let respc=0
+00250 L250: fntos(sn$="ubrevcal")
+00252   respc=0
 00260   fnlbl(1,1,"You may limit the customers to reverse by changing the options below.",73,2)
 00270   fnlbl(2,1,"You may only reverse calculations for the most recent Billing Date!",73,2)
 00280   fnlbl(4,1,"Account:",27,1)
 00290   fncmbact(4,29,1)
-00292   let resp$(respc+=1)="[All]"
+00292   resp$(respc+=1)="[All]"
 00300   fnlbl(5,1,"Current Billing Date:",27,1)
 00310   fntxt(5,29,8,0,0,"1")
-00312   let resp$(respc+=1)=str$(d1)
+00312   resp$(respc+=1)=str$(d1)
 00320   fnlbl(6,1,"Previous Billing Date:",27,1)
 00330   fntxt(6,29,8,0,0,"1")
-00332   let resp$(respc+=1)=""
+00332   resp$(respc+=1)=""
 00340   fnlbl(7,1,"Route Number:",27,1)
 00350   fncmbrt2(7,29)
-00352   let resp$(respc+=1)="[All]"
+00352   resp$(respc+=1)="[All]"
 00360   fnchk(8,29,"Print Status Report")
-00362   let resp$(respc+=1)="True"
+00362   resp$(respc+=1)="True"
 00370   fncmdset(2)
 00372   fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00410   if trim$(reqz$)="" and trim$(holdreqz$)<>"" then goto XIT ! if they ever select a customer and then accidently take f1 to continue, it will stop instead of reversing everyone else in file
-00420   let reqz$=lpad$(rtrm$(resp$(1)(1:10)),10)
-00421   if trim$(reqz$)='[All]' then let reqz$=''
-00422   let reqf=val(resp$(2))
+00420   reqz$=lpad$(rtrm$(resp$(1)(1:10)),10)
+00421   if trim$(reqz$)='[All]' then reqz$=''
+00422   reqf=val(resp$(2))
 00423   olddat=val(resp$(3))
-00424   let reqz12$=resp$(4)
-00425   if reqz12$="[All]" then let reqz12$=""
+00424   reqz12$=resp$(4)
+00425   if reqz12$="[All]" then reqz12$=""
 00430   if uprc$(resp$(5))=uprc$("True") then sr$="Y" else sr$="N"
 00440   if sr$="Y" then let fnopenprn
 00450   if sr$="Y" and secondpass<>1 then let fn_srhdr
@@ -86,37 +86,37 @@
 00560   for j=1 to 9 : let gb(j)=gb(j)-g(j): bal=bal-g(j): next j ! subtract out current bill from breakdown
 00570 ! bal=bal-g(11)  moved above 06/01/12
 00580   let x=fndate_mmddyy_to_ccyymmdd(olddat)
-00590   let key$=z$&cnvrt$("n 8",x)&"1"
+00590   key$=z$&cnvrt$("n 8",x)&"1"
 00600   let wr=wu=er=eu=gr=gu=0 ! set all previous readings to zero
 00610   read #2,using L810,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L620 ! read previous months history to pull old readings and usages
 00620 L620: ! 
-00622   let d(1)=d(2) ! set current water reading to last month
-00630   let d(2)=wr ! set prior reading to month before last
-00640   let d(4)=d(4)-d(3) ! subtract out current usage from year to date
-00650   let d(3)=wu ! set usage to amount in history
-00660   let d(5)=d(6) ! set current electric reading to last month
-00670   let d(6)=er ! set prior reading to month before last
-00680   let d(8)=d(8)-d(7) ! subtract out current usage from year to date
-00690   let d(7)=eu ! set usage to amount in history
-00700   let d(9)=d(10) ! set current gas reading to last month
-00710   let d(10)=gr ! set prior reading to month before last
-00720   let d(12)=d(12)-d(11) ! subtract out current usage from year to date
-00730   let d(11)=gu ! set usage to amount in history
+00622   d(1)=d(2) ! set current water reading to last month
+00630   d(2)=wr ! set prior reading to month before last
+00640   d(4)=d(4)-d(3) ! subtract out current usage from year to date
+00650   d(3)=wu ! set usage to amount in history
+00660   d(5)=d(6) ! set current electric reading to last month
+00670   d(6)=er ! set prior reading to month before last
+00680   d(8)=d(8)-d(7) ! subtract out current usage from year to date
+00690   d(7)=eu ! set usage to amount in history
+00700   d(9)=d(10) ! set current gas reading to last month
+00710   d(10)=gr ! set prior reading to month before last
+00720   d(12)=d(12)-d(11) ! subtract out current usage from year to date
+00730   d(11)=gu ! set usage to amount in history
 00740   let f=0 !  f=olddat   ! set billing date to zero
 00745   extra3=extra4 : extra4=0
 00750   mat g=(0) ! SET ALL LAST TIME BILL TO ZERO
 00760   rewrite #1,using L770: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4
 00770 L770: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 354,c 7,2*c 12,pd 3,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6
 00780   let x=fndate_mmddyy_to_ccyymmdd(reqf)
-00790   let key$=z$&cnvrt$("n 8",x)&"1"
+00790   key$=z$&cnvrt$("n 8",x)&"1"
 00800   read #2,using L810,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L480
 00810 L810: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 00820   delete #2: 
 00830   goto L480
 00850   if bud1=1 then let fn_bud2
 00860   if rtrm$(reqz$)<>"" then 
-00861     let holdreqz$=reqz$
-00862     let reqz$=""
+00861     holdreqz$=reqz$
+00862     reqz$=""
 00863     goto ASK1
 00864   else 
 00866     goto L480
@@ -125,10 +125,10 @@
 00880 FINIS: ! 
 00890   if sr$<>"Y" then goto XIT
 00900   fncloseprn
-00910 XIT: let fnxit
+00910 XIT: fnxit
 00920 ! ______________________________________________________________________
 00930   def fn_srhdr
-00940     let pg+=1
+00940     pg+=1
 00950     pr #255: "Reverse Calculation Status Report"
 00960     pr #255: "Page "&str$(pg)
 00970     pr #255: ""
@@ -155,7 +155,7 @@
 01160     if bud1=0 then goto L1260
 01170     read #81,using L1180,key=z$: x$,mat ba,mat badr nokey L1260
 01180 L1180: form pos 1,c 10,pd 4,12*pd 5.2,2*pd 3
-01190     let ta1=badr(1)
+01190     ta1=badr(1)
 01200 L1200: if ta1=0 then goto L1260
 01210     read #82,using L1220,rec=ta1: x$,mat bt1,nba norec L1260
 01220 L1220: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
@@ -164,12 +164,12 @@
 01234       rewrite #82,using L1240,rec=ta1: mat bt1
 01238     end if 
 01240 L1240: form pos 11,2*pd 4,24*pd 5.2,2*pd 4
-01250     let ta1=nba: goto L1200
+01250     ta1=nba: goto L1200
 01260 L1260: ! 
 01262   fnend 
 01270 ! ______________________________________________________________________
 01280 ! <Updateable Region: ERTN>
-01290 ERTN: let fnerror(program$,err,line,act$,"NO")
+01290 ERTN: fnerror(program$,err,line,act$,"NO")
 01300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01310   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01320   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

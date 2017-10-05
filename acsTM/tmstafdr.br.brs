@@ -6,7 +6,7 @@
 00070   fncno(cno,cnam$)
 00080   fnopenprn
 00090   dim eno$*9,e$*25,r(11),cnam$*40,prg$*20
-00100   let namtab=66-int(len(rtrm$(cnam$))/2)
+00100   namtab=66-int(len(rtrm$(cnam$))/2)
 00110   open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr L440
 00120 L120: pr newpage
 00130   pr f "10,10,c 48,n": "ENTER DATE FOR STAFF DIRECTORY IN MMDDYY FORMAT"
@@ -37,7 +37,7 @@
 00380 L380: form pos 4,c 6,pos 24,c 4,pos 38,c 4,pos 44,c 88,skip 2
 00390   return 
 00400 L400: close #1: ioerr L410
-00410 L410: let fncloseprn
+00410 L410: fncloseprn
 00420   if uprc$(rtrm$(prg$))="S:\acsTM\EMAINT" then chain prg$
 00430   goto XIT
 00440 L440: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L460
@@ -52,4 +52,4 @@
 00530   pr f "23,3,C 78,N": ""
 00540   pr f "24,3,C 78,N": ""
 00550   retry 
-00560 XIT: let fnxit
+00560 XIT: fnxit

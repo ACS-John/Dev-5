@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\fnActPd$
 33000 def library fnactpd$(;actpd$)
 33020   library 'S:\Core\Library': fncno,fngethandle
-33040   let get=1 : let put=2
+33040   let get=1 : put=2
 33060   if trim$(actpd$)="" then let get_or_put=1 else let get_or_put=2
 33080   open #tmp=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative 
 33100   if get_or_put=get then 

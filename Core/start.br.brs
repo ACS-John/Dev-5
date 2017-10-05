@@ -138,7 +138,7 @@
 13280     close #hEd:
 14000   ! setenv("PD",os_filename$('S:\Core\ScreenIO\')) ! for (screenio's version) fnsnap compatibility 
 14020     setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
-14040     ! if isScreenIOtest then let disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
+14040     ! if isScreenIOtest then disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
 14050     fn_startStatus('Identifying your system...')
 14060     fn_uniqueComputerId_initialize ! called to initialize env$('unique_computer_id')
 14080     if env$('unique_computer_id')='42601D50-D3A4-81E4-29A3-605718581E48' then ! little koi
@@ -283,7 +283,7 @@
 29000 def fn_rights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
 29020   rt_return=1 ! returns 1 if passed test or 0 if failed.
 29040   rt_folder$=trim$(rt_folder$)
-29060   if rt_folder$<>'' and rt_folder$(len(rt_folder$):len(rt_folder$))<>'\' then let rt_folder$=rt_folder$&'\'
+29060   if rt_folder$<>'' and rt_folder$(len(rt_folder$):len(rt_folder$))<>'\' then rt_folder$=rt_folder$&'\'
 29080   ! 
 29100   open #h_test:=fn_gethandle: 'Name='&rt_folder$&'tmp_rights_test'&session$&'.dat,Replace,RecL=384',internal,outin,relative ioerr RT_FAIL
 29120   close #h_test: 

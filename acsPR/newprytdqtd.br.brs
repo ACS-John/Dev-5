@@ -24,7 +24,7 @@
 00210   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,input,keyed 
 00220   if fnprocess=1 then goto L240
 00230   gosub ASK_DATES
-00240 L240: let fnopenprn
+00240 L240: fnopenprn
 00250 ! ______________________________________________________________________
 00260   gosub HDR
 00270   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -36,51 +36,51 @@
 00330   em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
 00340   mat qtr1tcp=(0) : mat qt2tcp=(0): mat qtr3tcp=(0): mat qtr4tcp=(0)
 00350   let fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=medqtr=0
-00360   mat quartertotals=(0): mat ytdtotal=(0): let dedfedyr=dedficayr=0 !:
-        let dedstateyr=deducyr=wagesyr=0
+00360   mat quartertotals=(0): mat ytdtotal=(0): dedfedyr=dedficayr=0 !:
+        dedstateyr=deducyr=wagesyr=0
 00370   mat rptemp=(0) ! L370:
-00380   let twy=tty=twq=ttq=tficawy=tficawq=0
+00380   twy=tty=twq=ttq=tficawy=tficawq=0
 00390   gosub DETERMINE_EARNINGS
-00400   let rptemp(1)=rptemp(1)+wagesyr ! total wages ytd
-00410   let tx1=tx1+wagesyr-dedfedyr ! taxable ytd
-00420   let rptemp(2)=rptemp(2)+fedyr ! federal wh ytd
-00430   let rptemp(3)=rptemp(3)+ficayr ! fica wh ytd
-00440   let rptemp(4)=rptemp(4)+stateyr ! state wh ytd
-00450   let rptemp(5)=rptemp(5)+wagesqtr ! total wages quarter
-00460   let rptemp(6)=rptemp(6)+fedqtr ! federal wh quarter
-00470   let rptemp(7)=rptemp(7)+ficaqtr ! fica quarter
-00480   let rptemp(8)=rptemp(8)+stateqtr ! state wh quarter
-00490   let rptemp(9)=rptemp(9)+medyr ! medicare  wh year
-00500   let rptemp(10)=rptemp(10)+medqtr ! medicare qtr
+00400   rptemp(1)=rptemp(1)+wagesyr ! total wages ytd
+00410   tx1=tx1+wagesyr-dedfedyr ! taxable ytd
+00420   rptemp(2)=rptemp(2)+fedyr ! federal wh ytd
+00430   rptemp(3)=rptemp(3)+ficayr ! fica wh ytd
+00440   rptemp(4)=rptemp(4)+stateyr ! state wh ytd
+00450   rptemp(5)=rptemp(5)+wagesqtr ! total wages quarter
+00460   rptemp(6)=rptemp(6)+fedqtr ! federal wh quarter
+00470   rptemp(7)=rptemp(7)+ficaqtr ! fica quarter
+00480   rptemp(8)=rptemp(8)+stateqtr ! state wh quarter
+00490   rptemp(9)=rptemp(9)+medyr ! medicare  wh year
+00500   rptemp(10)=rptemp(10)+medqtr ! medicare qtr
 00510   for k2=1 to 20
-00520     let rptot(k2,1)=rptot(k2,1)+ytdtotal(k2+4) ! deductions
-00530     let rptot(k2,2)=rptot(k2,2)+quartertotals(k2+4) ! deductions qtr
+00520     rptot(k2,1)=rptot(k2,1)+ytdtotal(k2+4) ! deductions
+00530     rptot(k2,2)=rptot(k2,2)+quartertotals(k2+4) ! deductions qtr
 00540   next k2
-00550   let rptot(21,1)=rptot(21,1)+eicytd ! eic  ytd
-00560   let rptot(21,2)=rptot(21,2)+eicqtr ! eic qtr
-00570   let twy=twy+wagesyr-dedfedyr: let twq=twq+wagesqtr-dedfedqtr ! taxable wages year and quarter
-00580 ! If EM(6)=9 Then Let TFICAWY=TFICAWY+wagesyr: Let TFICAWQ=TFICAWQ+WAGESQTR : Goto 610
-00590   let ttips=ttips+ytdtotal(30) ! tips
+00550   rptot(21,1)=rptot(21,1)+eicytd ! eic  ytd
+00560   rptot(21,2)=rptot(21,2)+eicqtr ! eic qtr
+00570   twy=twy+wagesyr-dedfedyr: twq=twq+wagesqtr-dedfedqtr ! taxable wages year and quarter
+00580 ! If EM(6)=9 Then tFICAWY=TFICAWY+wagesyr: tFICAWQ=TFICAWQ+WAGESQTR : Goto 610
+00590   ttips=ttips+ytdtotal(30) ! tips
 00600 ! Goto 280
-00610 ! Let MCW1=TFW=0 ! mcw1=total medicare wages for this employee  tfw = totoal ss wage for this employee
+00610 ! mCW1=TFW=0 ! mcw1=total medicare wages for this employee  tfw = totoal ss wage for this employee
 00620   let ficawagesyr=wagesyr- dedficayr !:
         let ficawagesqtr=quartertotals(31)- dedficaqtr
 00640   on em(6)+1 goto L650,L690,L650 none L770
 00645 ! determine medicare maximum wages
-00650 L650: let mcw1+=ficawagesqtr ! mo maximum mc wage
-00655   let mcw2+=ficawagesyr ! total year to date medicare wages
+00650 L650: mcw1+=ficawagesqtr ! mo maximum mc wage
+00655   mcw2+=ficawagesyr ! total year to date medicare wages
 00680   if em(6)=2 then goto L770
 00685 ! determine fica taxable wages
-00690 L690: if ficawagesyr<ficamaxw then let tfwy+=ficawagesyr : let tfq+=ficawagesqtr: goto L770
-00710   let tfwy+=ficawagesyr-(ficawagesyr-ficamaxw)
-00715   let tfq+=ficawagesqtr-(min(ficawagesyr-ficamaxw,ficawagesqtr))
+00690 L690: if ficawagesyr<ficamaxw then tfwy+=ficawagesyr : tfq+=ficawagesqtr: goto L770
+00710   tfwy+=ficawagesyr-(ficawagesyr-ficamaxw)
+00715   tfq+=ficawagesqtr-(min(ficawagesyr-ficamaxw,ficawagesqtr))
 00770 L770: gosub L790
 00780   goto L280
 00790 L790: mat tot=tot+rptemp
-00800   let tx2=tx2+tx1
+00800   tx2=tx2+tx1
 00810 L810: pr #255,using L890: eno,em$(1:19),rptemp(1),tx1,rptemp(3),rptemp(2),rptemp(4),rptemp(5),rptemp(7),rptemp(6),rptemp(8) pageoflow PGOF
 00820   pr #255,using L900: rptemp(9),rptemp(10) pageoflow PGOF
-00830   let tx1=0
+00830   tx1=0
 00840   return 
 00850 ! ______________________________________________________________________
 00860 PGOF: ! 
@@ -94,7 +94,7 @@
 00940   eno=0
 00950   em$="Final Totals"
 00960   mat rptemp=tot
-00970   let tx1=tx2
+00970   tx1=tx2
 00980   gosub L810
 00990   pr #255,using L1000: "YTD","QTD"
 01000 L1000: form skip 2,pos 29,c 3,pos 39,c 3,skip 2
@@ -114,7 +114,7 @@
 01140   fncloseprn
 01150   close #1: ioerr L1160
 01160 L1160: close #2: ioerr L1170
-01170 L1170: let fnxit
+01170 L1170: fnxit
 01180 ! ______________________________________________________________________
 01190 HDR: ! 
 01200   pr #255,using "form pos 1,c 25": "Page "&str$(pgno+=1)&" "&date$
@@ -129,65 +129,65 @@
 01290   return 
 01300 ! ______________________________________________________________________
 01310 ! <Updateable Region: ERTN>
-01320 ERTN: let fnerror(program$,err,line,act$,"xit")
+01320 ERTN: fnerror(program$,err,line,act$,"xit")
 01330   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01340   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01350   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 01360 ERTN_EXEC_ACT: execute act$ : goto ERTN
 01370 ! /region
 01380 ! ______________________________________________________________________
-01390 XIT: let fnxit
+01390 XIT: fnxit
 01400 ! ______________________________________________________________________
 01410 ! CHECK_PASSWORD: ! 
 01420 !   return ! if env$('client')="Washington Parrish" then goto L1430 else return 
 01430 ! L1430: if wsid$="09" or wsid$="99" then return 
 01440 !   fntos(sn$="WpTrap") !:
-      !   let respc=0 : let mylen=25 : let mypos=mylen+2
+      !   respc=0 : mylen=25 : mypos=mylen+2
 01450 !   fnlbl(1,1,"         Quit!      ",mylen,2)
 01460 !   fnlbl(2,1,"Stay out of Payroll!",mylen,2)
 01470 !   fnlbl(3,1,"Call Brenda for Password",mylen,2)
 01480 !   fntxt(3,mylen+3,8,8,1,"",0,"You must have a password to get out.") !:
-      !   let resp$(respc+=1)=""
+      !   resp$(respc+=1)=""
 01490 !   fncmdkey("E&xit",5,1,1,"Returns to menu")
 01500 !   fnacs(sn$,0,mat resp$,ckey)
 01510 !   if trim$(uprc$(resp$(1)))="GETMEOUT" then goto XIT else goto L1430
 01520 ASK_DATES: ! 
 01530   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,dat$)
 01580   fntos(sn$="YtdQtdReg-1") !:
-        let rc=cf=0: let mylen=42: let mypos=45: let frameno=1
+        rc=cf=0: mylen=42: mypos=45: let frameno=1
 01590   fnfra(1,1,4,66,"Payroll Date","Enter the payroll date.")
 01600   fnlbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
 01610   fntxt(1,mypos,10,0,1,"3",0,"Normally the last payroll date, but can beny point in time. ",frameno) !:
-        let resp$(rc+=1)=str$(d1)
+        resp$(rc+=1)=str$(d1)
 01620   fnlbl(2,1,"Report Heading Date:",mylen,1,0,frameno)
 01630   fntxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report heading." ,frameno) !:
-        let resp$(rc+=1)= dat$
+        resp$(rc+=1)= dat$
 01640   fnfra(7,25,6,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") !:
-        let frameno=2 : let mylen=26 : let mypos=mylen+2
+        let frameno=2 : mylen=26 : mypos=mylen+2
 01650   fnlbl(1,1,"Starting Date:",mylen,1,0,frameno)
 01660   fntxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno) !:
-        let resp$(rc+=1)=str$(beg_date)
+        resp$(rc+=1)=str$(beg_date)
 01670   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
 01680   fntxt(2,mypos,10,0,1,"3",0,"Enter the last payroll date of the year",frameno) !:
-        let resp$(rc+=1)=str$(end_date)
+        resp$(rc+=1)=str$(end_date)
 01690   fnlbl(3,1,"1st Day of 1st quarter:",mylen,1,0,frameno)
 01700   fntxt(3,mypos,10,0,1,"3",0,"Enter the first day of the first quarter. Could be something other than January 1st if your last payroll of the previous year should be included in this year",frameno) !:
-        let resp$(rc+=1)=str$(qtr1)
+        resp$(rc+=1)=str$(qtr1)
 01710   fnlbl(4,1,"1st Day of 2nd quarter:",mylen,1,0,frameno)
 01720   fntxt(4,mypos,10,0,1,"3",0,"Normally would be April 1st, but could be different if your payroll dates and check dates are not the same.",frameno) !:
-        let resp$(rc+=1)=str$(qtr2)
+        resp$(rc+=1)=str$(qtr2)
 01730   fnlbl(5,1,"1st Day of 3rd quarter:",mylen,1,0,frameno)
 01740   fntxt(5,mypos,10,0,1,"3",0,"Normally would be July 1st",frameno) !:
-        let resp$(rc+=1)=str$(qtr3)
+        resp$(rc+=1)=str$(qtr3)
 01750   fnlbl(6,1,"1st Day of 4th quarter:",mylen,1,0,frameno)
 01760   fntxt(6,mypos,10,0,1,"3",0,"Normally would be October 1st.",frameno) !:
-        let resp$(rc+=1)=str$(qtr4)
+        resp$(rc+=1)=str$(qtr4)
 01770   fncmdkey("Next",1,1,0,"Proceed with calculations.")
 01780   fncmdkey("Cancel",5,0,1,"Returns to menu without calculating")
 01790   fnacs(sn$,0,mat resp$,ckey)
 01800   if ckey=5 then goto XIT
-01810   let dat=prdate=d1=val(resp$(1))
-01820   let dat$=resp$(2)
+01810   dat=prdate=d1=val(resp$(1))
+01820   dat$=resp$(2)
 01830   beg_date=val(resp$(3)) !:
         end_date=val(resp$(4)) !:
         let qtr1=val(resp$(5)) !:
@@ -202,11 +202,11 @@
 01890   close #11: 
 01900   return 
 01910 DETERMINE_EARNINGS: ! 
-01920   let tfd=tmd=td14=tdw=0: mat caf=(0)
+01920   tfd=tmd=td14=tdw=0: mat caf=(0)
 01930   mat tcp=(0): mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0) !:
         mat qtr4tcp=(0): mat ytdtotal=(0): mat tdc=(0)
 01940   let fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0 !:
-        let medqtr=eicyr=eicqtr=wagesqtr=0
+        medqtr=eicyr=eicqtr=wagesqtr=0
 01950   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 01960   restore #4,key>=checkkey$: nokey L2290
 01970 L1970: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof STORE_VARIABLES
@@ -222,7 +222,7 @@
 02070   let wagesyr=ytdtotal(31) ! total wages
 02080   let fedyr=ytdtotal(1) ! ytdl fed
 02090   let ficayr=ytdtotal(2) ! fica year to date
-02100   let medyr=ytdtotal(3) ! medicare year to date
+02100   medyr=ytdtotal(3) ! medicare year to date
 02110   stateyr=ytdtotal(4) ! total state  quarter
 02120   eicyr=ytdtotal(25) ! eic
 02130   if prdate>=qtr1 and prdate<qtr2 then mat quartertotals=qtr1tcp
@@ -232,14 +232,14 @@
 02170   let wagesqtr=quartertotals(31) ! total wages quarter
 02180   let fedqtr=quartertotals(1) ! total fed  quarter
 02190   let ficaqtr=quartertotals(2) ! total fica quarter
-02200   let medqtr=quartertotals(3) ! total medicare quarter
+02200   medqtr=quartertotals(3) ! total medicare quarter
 02210   stateqtr=quartertotals(4) ! total state  quarter
 02220   eicqtr=quartertotals(25) ! eic qtr
 02230   for j=1 to 20
-02240     if newdedfed(j)=1 then let dedfedyr+=ytdtotal(j+4) ! deduct for federal wh
-02250     if dedfica(j)=1 then let dedficayr+=ytdtotal(j+4) !:
-            let dedficaqtr+=quartertotals(j+4) ! deduct for fica
-02260     if dedst(j)=1 then let dedstateyr+=ytdtotal(j+4) ! deduct for state
-02270     if deduc(j)=1 then let deducyr+=ytdtotal(j+4) ! deduct for unemployment
+02240     if newdedfed(j)=1 then dedfedyr+=ytdtotal(j+4) ! deduct for federal wh
+02250     if dedfica(j)=1 then dedficayr+=ytdtotal(j+4) !:
+            dedficaqtr+=quartertotals(j+4) ! deduct for fica
+02260     if dedst(j)=1 then dedstateyr+=ytdtotal(j+4) ! deduct for state
+02270     if deduc(j)=1 then deducyr+=ytdtotal(j+4) ! deduct for unemployment
 02280   next j
 02290 L2290: return 

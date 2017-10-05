@@ -12,14 +12,14 @@
 13000 ! ______________________________________________________________________
 13200 MENU1: ! 
 13400   fntos(sn$="prwkmcmp")
-13600   let respc=0
+13600   respc=0
 13800   fnlbl(1,47," ",1,1)
 14000   fnlbl(1,1,"Beginning Date to Analyze:",30,1)
 14200   fntxt(1,34,12,0,0,"3",0,"")
-14400   let resp$(respc+=1)=str$(beg_date)
+14400   resp$(respc+=1)=str$(beg_date)
 14600   fnlbl(2,1,"Ending Date to Analyze:",30,1)
 14800   fntxt(2,34,12,0,0,"3",0,"")
-15000   let resp$(respc+=1)=str$(end_date)
+15000   resp$(respc+=1)=str$(end_date)
 15200   fncmdset(2)
 15400   fnacs(sn$,0,mat resp$,ck)
 15600   if ck=5 then goto XIT
@@ -36,9 +36,9 @@
 18200     read #h_department,using 'form pos 1,n 8,n 3,pos 50,n 2': teno,tdept,workman_comp eof EO_DEPARTMENT
 18300 ! pr #255: '     *Read h_department: teno='&str$(teno)&', workman_comp='&str$(workman_comp)
 18302 !  if teno=13 and tdept=21 then pause
-18400     let is_first=1
+18400     is_first=1
 18600     if workman_comp=0 then let workman_comp=99 ! default to 99 if no code entered
-18650     if prev_comp<>0 and prev_comp<>workman_comp then let fn_sub_total : let prev_comp=workman_comp : let heno=teno ! subtotal any time codes change !
+18650     if prev_comp<>0 and prev_comp<>workman_comp then let fn_sub_total : prev_comp=workman_comp : heno=teno ! subtotal any time codes change !
 18800     checkkey$=cnvrt$("pic(zzzzzzz#)",teno)&cnvrt$("pic(zz#)",tdept)&cnvrt$("pd 6",beg_date) ! index employee#,department# and payroll date
 18810 ! checkkey$=cnvrt$("pic(zzzzzzz#)",teno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 19000     restore #h_payrollchecks,key>=checkkey$: nokey NEXT_DEPARTMENT
@@ -62,9 +62,9 @@
 21000 !         fn_print_accumulated ! goto NEXT_DEPARTMENT ! same employee and same code else pr it
 21200           end if 
 21400         else 
-21600           let is_first=0
-21800           let prev_comp=workman_comp
-22000           let holdeno=teno
+21600           is_first=0
+21800           prev_comp=workman_comp
+22000           holdeno=teno
 22020 !        pr #255: ' *(d) read h_payrollchecks: heno='&str$(heno)&',tdn='&str$(tdn)&',prd='&str$(prd)&',ckno='&str$(ckno)
 22200           fn_add_wages
 22400         end if  ! is_first=0   /   else 
@@ -91,11 +91,11 @@
 26200   fn_hdr
 26400   continue 
 26600   def fn_add_wages
-26800     let totwage=totwage+tcp(31) ! TOTAL WAGES FOR period
+26800     totwage=totwage+tcp(31) ! TOTAL WAGES FOR period
 27000     let wcwage=wcwage+tdc(6) ! TOTAL W/C WAGES FOR period
 27200   fnend 
 27400   def fn_print_accumulated
-27600     let pe_eno$=lpad$(str$(holdeno),8)
+27600     pe_eno$=lpad$(str$(holdeno),8)
 27800     form pos 1,n 8
 27802     if totwage=0 and wcwage=0 then goto SET_NEXT
 28004     ename$=''
@@ -105,10 +105,10 @@
 28400 L620: form pos 1,c 30,pos 31,pic(zz#),pos 36,pic(zz),pos 38,pic(--,---,---.##),pos 52,pic(--,---,---.##)
 28600     subtot(1)=subtot(1)+totwage
 28800     subtot(2)=subtot(2)+wcwage
-29000 SET_NEXT: let totwage=0
+29000 SET_NEXT: totwage=0
 29200     let wcwage=0
-29400     let prev_comp=workman_comp
-29600     let holdeno=teno
+29400     prev_comp=workman_comp
+29600     holdeno=teno
 29800   fnend 
 30000 ! ______________________________________________________________________
 30200   def fn_sub_total
@@ -133,7 +133,7 @@
 34000   fnend 
 81140 ! ______________________________________________________________________
 81150 ! <Updateable Region: ERTN>
-81160 ERTN: let fnerror(program$,err,line,act$,"xit")
+81160 ERTN: fnerror(program$,err,line,act$,"xit")
 81170   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 81180   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 81190   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

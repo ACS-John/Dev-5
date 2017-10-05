@@ -11,7 +11,7 @@
 00110         bankbal+=bal
 00120 L120: next j
 00130     else 
-00140       let key$=cnvrt$('Pic(zz)',bank_code) !:
+00140       key$=cnvrt$('Pic(zz)',bank_code) !:
             read #bankmstr,using 'Form Pos 45,PD 6.2',key=key$: bankbal
 00150     end if 
 00160     close #bankmstr: 

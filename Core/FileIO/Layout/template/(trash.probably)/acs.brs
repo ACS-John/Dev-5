@@ -59,12 +59,12 @@
 00059  !
 00060  dim ReturnCode$*20000
 00061  def fnReturnCode(String$*512)
-00062     let ReturnCode$=ReturnCode$&String$&chr$(13)&chr$(10)
+00062     returnCode$=ReturnCode$&String$&chr$(13)&chr$(10)
 00063  fnend
 00064  !
 00065  def library fnRunTemplate(Template,FileLay$;___,Index)
 00066     fnEstablishLinkage
-00067     let ReturnCode$=""
+00067     returnCode$=""
 00068     fnReadEntireLayout(FileLay$,Filename$,Prefix$,Mat Keys$,Mat KeyDescription$,Mat Ssubs$,Mat Nsubs$,Mat Sspec$,Mat Nspec$,Mat Sdescription$,Mat Ndescription$,Mat Spos,Mat Npos)
 00069     longestElement=0
 00070     for Index=1 to udim(mat SSpec$)
@@ -77,9 +77,9 @@
 00077        sSubs$(Index)=lwrc$(SSubs$(Index))
 00078     next Index
 00079     for Index=1 to udim(mat NSubs$)
-00080        let NSubs$(Index)=lwrc$(NSubs$(Index))
+00080        nSubs$(Index)=lwrc$(NSubs$(Index))
 00081     next Index
-00082     let Prefix$=trim$(Prefix$)
+00082     prefix$=trim$(Prefix$)
 00083     gosub RunTemplate
 00084  !
 00085     if len(ReturnCode$) then let setenv("CLIPBOARD",ReturnCode$)

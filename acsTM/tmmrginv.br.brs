@@ -1,7 +1,7 @@
 00010 ! REPLACE S:\acsTM\TMMRGINV
 00030   on error goto ERTN
 00040   library 'S:\Core\Library': fnerror,fnxit
-00050 ! let fntop(program$,cap$="Merge Invoices written to temp file "&env$('Q')&"\TMmstr\TMWk1.h"&env$('cno') ")
+00050 ! fntop(program$,cap$="Merge Invoices written to temp file "&env$('Q')&"\TMmstr\TMWk1.h"&env$('cno') ")
 00070   dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4
 00071   dim arta(2) ! ,ga(10)
 00072 ! clmstr dims
@@ -22,8 +22,8 @@
 00230     if rtrm$(k$)="" or rtrm$(k$)="0" then goto READ_TMWK1
 00240     read #h_clmstr,using F_CLMSTR,key=k$: e$,mat sc,mat ca,ar1,mat arta nokey READ_TMWK1
 00250 F_CLMSTR: form pos 179,c 9,pos 220,10*n 1,10*pd 3,pos 283,pd 5.2,pos 299,2*pd 3
-00260     if b(7)=3 and rtrm$(iv$)="" then let iv$="WRITE OFF"
-00270     let iv$=lpad$(rtrm$(iv$),12)
+00260     if b(7)=3 and rtrm$(iv$)="" then iv$="WRITE OFF"
+00270     iv$=lpad$(rtrm$(iv$),12)
 00280     b(7)=-b(7)
 00290 !   mat ga=(0) ! 8/18/88
 00300     for j=1 to udim(mat id$)
@@ -40,15 +40,15 @@
 00420       rewrite #h_tmtrans,using 'form pos 54,pd 3',rec=1,release: lta
 00440       if b(5)=0 or ca(b(5))=0 then goto THAT_STEP ! added b(5)=0 on 2/1/2012
 00442       if b8>25 then b8=25 ! goto NEXT_ONE
-00450       let p1=1+(b8-1)*6
-00460       let p2=150+b8
-00470 !     if ta2<0 then let ta2=0
-00471 !     if ta1<0 then let ta1=0
+00450       p1=1+(b8-1)*6
+00460       p2=150+b8
+00470 !     if ta2<0 then ta2=0
+00471 !     if ta1<0 then ta1=0
 00472       read #h_tmtraddr,using F_TMTRADDR,rec=ca(b(5)),reserve: ta1,ta2,fb1 norec NEXT_ONE
 00480 F_TMTRADDR: form pos p1,2*pd 3,pos p2,n 1
-00490       if ta2><0 then rewrite #h_tmtrans,using 'form pos 54,pd 3',rec=ta2: lta else let ta1=lta
+00490       if ta2><0 then rewrite #h_tmtrans,using 'form pos 54,pd 3',rec=ta2: lta else ta1=lta
 00500       if fb1<2 then let fb1=abs(b(7))
-00510       if ta1=0 then let ta1=lta
+00510       if ta1=0 then ta1=lta
 00520       rewrite #h_tmtraddr,using F_TMTRADDR,rec=ca(b(5)),release: ta1,lta,fb1
 00530       goto NEXT_ONE
 00532 THAT_STEP: ! 
@@ -56,8 +56,8 @@
 00550       mat ta=(0)
 00560       mat fb=(0)
 00570       if b(5)>0 then ca(b(5))=lta4 ! added b(5)>0 on 2/1/2012
-00580       let ta(b8,1)=lta
-00590       let ta(b8,2)=lta
+00580       ta(b8,1)=lta
+00590       ta(b8,2)=lta
 00600       if b(7)=-2 then let fb(b8)=2
 00610       if fb(b8)=2 then goto L630
 00620       if b(7)=-1 then let fb(b8)=1
@@ -83,10 +83,10 @@
 00870   close #h_tmwk1: 
 00880   close #h_tmtraddr: 
 00890 ! close #h_armotran:
-00900 XIT: let fnxit ! /r
+00900 XIT: fnxit ! /r
 75060 IGNORE: continue 
 76020 ! <updateable region: ertn>
-76040 ERTN: let fnerror(program$,err,line,act$,"xit")
+76040 ERTN: fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

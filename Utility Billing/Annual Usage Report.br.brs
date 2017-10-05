@@ -19,7 +19,7 @@
 14120 ! 
 14180 ! 
 14200   fnd1(d1)
-14220   let magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000
+14220   magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000
 14240 ! 
 14260   dim servicename$(10)*20
 14280   dim srv$(10)*2
@@ -56,7 +56,7 @@
 25260     if tcode<>1 then goto L230 ! charge transaction
 25280     if tdate<magicdate then goto L230 ! only last two years
 25300 ! L270: !
-25320     let j=j+1
+25320     j=j+1
 25340     if j>12 then goto EO_BUILD_DEFAULT_RESP
 25360     scr1_resp$(j)=str$(tdate)
 25380     goto L230
@@ -68,39 +68,39 @@
 28000 SCREEN1: ! r:
 28020   restore #h_customer: 
 28040   fntos(sn$="ubusage2")
-28060   let rc=0
+28060   rc=0
 28080   fnlbl(1,1,"Billing dates to be printed:",35,1)
 28100   fntxt(2,1,10,10,0,"3")
-28120   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28120   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28140   fntxt(2,15,10,10,0,"3")
-28160   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28160   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28180   fntxt(2,29,10,10,0,"3")
-28200   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28200   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28220   fntxt(2,43,10,10,0,"3")
-28240   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28240   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28260   fntxt(2,57,10,10,0,"3")
-28280   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28280   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28300   fntxt(2,71,10,10,0,"3")
-28320   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28320   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28340   fntxt(4,1,10,10,0,"3")
-28360   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28360   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28380   fntxt(4,15,10,10,0,"3")
-28400   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28400   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28420   fntxt(4,29,10,10,0,"3")
-28440   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28440   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28460   fntxt(4,43,10,10,0,"3")
-28480   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28480   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28500   fntxt(4,57,10,10,0,"3")
-28520   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28520   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28540   fntxt(4,71,10,10,0,"3")
-28560   let rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
+28560   rc+=1 : scr1_resp$(rc)=scr1_resp$(rc)
 28580   fnlbl(6,1,"Service to Analyze:",24,1,0)
 28600   fncomboa("ubusage21",6,26,mat opt_service_to_analyze$,"",13)
-28620   let rc+=1
+28620   rc+=1
 28640   if trim$(scr1_resp$(rc))='' then scr1_resp$(rc)=opt_service_to_analyze$(1)
 28660   fnlbl(8,1,"Accumulation Type:",24,1,0)
 28680   fncomboa("ubusage21",8,26,mat opt_accum_type$)
-28700   let rc+=1
+28700   rc+=1
 28720   if trim$(scr1_resp$(rc))='' then scr1_resp$(rc)=opt_accum_type$(1)
 28740   fncmdset(2)
 28760   fnacs(sn$,0,mat scr1_resp$,ckey)
@@ -136,7 +136,7 @@
 40140       mat total_count_route(13)=(0)
 40160       mat total_count_route_code_date(10,13)=(0)
 40180     end if 
-40200     let route_prior=route
+40200     route_prior=route
 40220 F_CUSTOMER: form pos 1,c 10,x 30,c 30,pos 213,pd 4,pos codepos,pd 2,pos 1741,n 2
 40240 !   restore #h_trans,key>=z$&"         ": nokey TRANS_NOKEY
 40260     restore #h_trans,key>=z$&rpt$(chr$(0),9): nokey TRANS_NOKEY
@@ -165,8 +165,8 @@
 46120       end if 
 46140 ! 
 48000       if usage<>0 then 
-48020         let total_count_grand(cd1_which)=total_count_grand(cd1_which)+1
-48040         let total_count_grand(13)=total_count_grand(13)+1
+48020         total_count_grand(cd1_which)=total_count_grand(cd1_which)+1
+48040         total_count_grand(13)=total_count_grand(13)+1
 48060         let u1(cd1_which)=u1(cd1_which)+usage
 48080         let u1(13)=u1(13)+usage
 48100       end if 
@@ -175,27 +175,27 @@
 48160     goto READ_TRANSACTION
 48180 CUSTOMER_RECORD_FINIS: ! 
 60000     if accum_type=accum_type_average then 
-60020 !     let math$=str$(u1(13))&'/'&str$(max(1,accum_average_divider))
+60020 !     math$=str$(u1(13))&'/'&str$(max(1,accum_average_divider))
 60040       let u1(13)=u1(13)/max(1,accum_average_divider)
 60060     end if 
 60070     if sum(u1)<>0 then 
 60080 !     cd1_which=srch(mat cd1,tdate)
 60100       for cd1_item=1 to 12
-60140         let total_usage_grand(cd1_item)+=u1(cd1_item) ! usage
-60160         let total_usage_grand(13)+=u1(cd1_item) ! usage
-60180         let total_usage_route(cd1_item)+=u1(cd1_item) ! usage
-60200         let total_usage_route(13)+=u1(cd1_item) ! usage
+60140         total_usage_grand(cd1_item)+=u1(cd1_item) ! usage
+60160         total_usage_grand(13)+=u1(cd1_item) ! usage
+60180         total_usage_route(cd1_item)+=u1(cd1_item) ! usage
+60200         total_usage_route(13)+=u1(cd1_item) ! usage
 60240         if servicecode<1 or servicecode>9 then servicecode=10
 60260 ! 
-60280         let total_count_route_code_date(servicecode,13)+=1
-60300         let total_count_route_code_date(servicecode,cd1_item)+=1
-60320         let total_usage_route_code_date(servicecode,13)+=u1(cd1_item) ! usage
-60340         let total_usage_route_code_date(servicecode,cd1_item)+=u1(cd1_item) ! usage
+60280         total_count_route_code_date(servicecode,13)+=1
+60300         total_count_route_code_date(servicecode,cd1_item)+=1
+60320         total_usage_route_code_date(servicecode,13)+=u1(cd1_item) ! usage
+60340         total_usage_route_code_date(servicecode,cd1_item)+=u1(cd1_item) ! usage
 60360 ! 
-60380         let total_count_grand_code_date(servicecode,13)+=1
-60400         let total_count_grand_code_date(servicecode,cd1_item)+=1
-60420         let total_usage_grand_code_date(servicecode,13)+=u1(cd1_item) ! usage
-60440         let total_usage_grand_code_date(servicecode,cd1_item)+=u1(cd1_item) ! usage
+60380         total_count_grand_code_date(servicecode,13)+=1
+60400         total_count_grand_code_date(servicecode,cd1_item)+=1
+60420         total_usage_grand_code_date(servicecode,13)+=u1(cd1_item) ! usage
+60440         total_usage_grand_code_date(servicecode,cd1_item)+=u1(cd1_item) ! usage
 60480       next cd1_item
 62020       pr #255,using F_OUT: z$,e$(1:25),mat u1 pageoflow NEWPGE
 62040     end if 
@@ -209,7 +209,7 @@
 68040   gosub HDR
 68060   continue  ! /r
 70000 HDR: ! r:
-70020   let pg=pg+1
+70020   pg=pg+1
 70040   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 70060   pr #255: "\qc  {\f181 \fs22 \b "&env$('Program_Caption')&" - "&scr1_resp$(13)&"}"
 70080   pr #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
@@ -240,16 +240,16 @@
 74060   fn_print_total("Grand Totals",mat total_usage_grand,mat total_usage_grand_code_date,mat total_count_grand,mat total_count_grand_code_date)
 74080   fncloseprn
 74100   goto XIT ! /r
-74120 XIT: let fnxit
+74120 XIT: fnxit
 76000 ! <Updateable Region: ERTN>
-76020 ERTN: let fnerror(program$,err,line,act$,"xit")
+76020 ERTN: fnerror(program$,err,line,act$,"xit")
 76040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 76100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 76120 ! /region
 78000 INVALID_DATES_MSGBOX: ! r:
-78020   let msgline$(1)="You have entered dates in an"
-78040   let msgline$(2)="invalid format.  Use mmddyy format."
+78020   msgline$(1)="You have entered dates in an"
+78040   msgline$(2)="invalid format.  Use mmddyy format."
 78060   fnmsgbox(mat msgline$,resp$,'',1)
 78080   goto SCREEN1 ! /r

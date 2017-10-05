@@ -20,7 +20,7 @@
 00190   for j=1 to lrec(2)
 00200     read #2,using L210,rec=j: jn$,n$,mat a$,mat b
 00210 L210: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 5.2,n 2
-00220     if pcde=0 then let pdte=0 else let pdte=lpd
+00220     if pcde=0 then pdte=0 else pdte=lpd
 00230     write #1,using L231: jn$,n$,mat a$,mat b,contact$,ph$,email$
 00231 L231: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2,c 30,c 12,c 60
 00250   next j
@@ -45,12 +45,12 @@
 00440   goto L80
 00450 ! ______________________________________________________________________
 00460 ! <updateable region: ertn>
-00470 ERTN: let fnerror(program$,err,line,act$,"xit")
+00470 ERTN: fnerror(program$,err,line,act$,"xit")
 00480   if uprc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00490   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00500   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00510 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00520 ! /region
 00530 ! ______________________________________________________________________
-00540 XIT: let fnxit
+00540 XIT: fnxit
 00550 ! ______________________________________________________________________

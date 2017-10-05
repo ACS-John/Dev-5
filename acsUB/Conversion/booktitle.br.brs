@@ -38,13 +38,13 @@
 00270 L270: pr f "8,20,C 30,R,N": "Book Title Capital"
 00280   pr f "10,1,Cr 38": "Company Number to Convert (0 to Stop):"
 00290 ! 
-00300   let io1$(1)="10,40,N 2,UT,N"
+00300   io1$(1)="10,40,N 2,UT,N"
 00310 L310: rinput fields mat io1$: cno conv L310
 00320   if cno=0 or cmdkey=5 or cmdkey=99 then goto XIT
 00330   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00340   for j=1 to lrec(1)
 00350     read #1,using "Form Pos 71,c 30",rec=j: nam$ norec L390
-00360     let nam$=fnbooktitle$(nam$)
+00360     nam$=fnbooktitle$(nam$)
 00370     pr nam$
 00380     rewrite #1,using "Form Pos 71,c 30",rec=j: nam$ norec L390
 00390 L390: next j
@@ -56,7 +56,7 @@
 00450 XIT: stop 
 00460 ! ______________________________________________________________________
 00470 ! <Updateable Region: ERTN>
-00480 ERTN: let fnerror(program$,err,line,act$,"xit")
+00480 ERTN: fnerror(program$,err,line,act$,"xit")
 00490   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00500   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00510   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -13,9 +13,9 @@
 00130   cancel=99
 00140 ! ______________________________________________________________________
 00150   fncno(cno,cnam$)
-00160   let ti$(1)="Checks" !:
-        let ti$(2)="Deposits" !:
-        let ti$(3)="Adjustments"
+00160   ti$(1)="Checks" !:
+        ti$(2)="Deposits" !:
+        ti$(3)="Adjustments"
 00170 ! ______________________________________________________________________
 00180   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #20,using 'form POS 152,N 2': wbc !:
@@ -23,33 +23,33 @@
 00190 ! ______________________________________________________________________
 00200 MAIN: ! 
 00210   fntos(sn$="Trjr") !:
-        let respc=0
+        respc=0
 00220   fnlbl(1,1,"Beginning Date:",38,1)
 00230   fntxt(1,40,10,0,1,"3",0,"Earliest transation date to be shown on journals!") !:
-        let resp$(respc+=1)=""
+        resp$(respc+=1)=""
 00240   fnlbl(2,1,"Ending Date:",38,1)
 00250   fntxt(2,40,10,0,1,"3",0,"Last transation date to be shown on journals!") !:
-        let resp$(respc+=1)=""
+        resp$(respc+=1)=""
 00260   fnlbl(4,1,"Information to Print:",38,1)
-00270   let item2$(1)="Details" !:
-        let item2$(2)="Totals Only"
+00270   item2$(1)="Details" !:
+        item2$(2)="Totals Only"
 00280   fncomboa("claims-act",4,40,mat item2$) !:
-        let resp$(respc+=1)=item2$(1)
+        resp$(respc+=1)=item2$(1)
 00290   fnchk(7,40,"Print Disbursments Journal:",1) !:
-        let resp$(respc+=1)="True"
+        resp$(respc+=1)="True"
 00300   fnchk(8,40,"Print Receipts Journal:",1) !:
-        let resp$(respc+=1)="True"
+        resp$(respc+=1)="True"
 00310   fnchk(9,40,"Print Adjustments Journal:",1) !:
-        let resp$(respc+=1)="False"
+        resp$(respc+=1)="False"
 00320   fnlbl(11,1,"Bank Account:",38,1)
 00330   fncombof("Bankmstr",11,40,20,env$('Q')&"\CLmstr\bankmstr.h"&str$(cno),1,2,3,15,env$('Q')&"\CLmstr\Bankidx1.h"&str$(cno),1,0, "Select bank account for printing") !:
-        let resp$(respc+=1)=str$(wbc)
+        resp$(respc+=1)=str$(wbc)
 00340   fncmdset(2) !:
         fnacs(sn$,0,mat resp$,ck)
 00350   if ck=5 then goto XIT
-00360   let dt1=val(resp$(1)) ! beginning date !:
-        let dt2=val(resp$(2)) ! ending date !:
-        let td1yn$=resp$(3)(1:1) !  detail
+00360   dt1=val(resp$(1)) ! beginning date !:
+        dt2=val(resp$(2)) ! ending date !:
+        td1yn$=resp$(3)(1:1) !  detail
 00370   if resp$(4)(1:1)="T" then sltyn$(1)="Y": slt(1)=1 !:
         else sltyn$(1)="N" ! disb jrn
 00380   if resp$(5)(1:1)="T" then sltyn$(2)="Y" : slt(2)=1 !:
@@ -72,18 +72,18 @@
 00520   if wcd=0 or td1yn$="T" then goto HERE
 00530   pr #255,using 'Form POS 52,G 12.2': "  __________"
 00540   pr #255,using 'Form POS 52,G 12.2': t1(wcd)
-00550   let npg=1
+00550   npg=1
 00560 HERE: if wcd>2 then goto ENDALL
 00570   let wcd+=1
 00580   if slt(wcd)<>1 then goto HERE
 00590   if npg=1 then !:
           pr #255: newpage
-00600   let npg=0
+00600   npg=0
 00610   if td1yn$="D" then gosub HDR
 00620   restore #trmstr,key>=lpad$(str$(wbc),2)&str$(wcd)&"        ": nokey END1
 00630 READ_TRMSTR: ! 
 00640   read #trmstr,using 'Form POS 1,N 2,N 1,C 8,G 6,pd 10.2,C 8,C 35': bank_code,tcde,ck$,tr2,amt,vn$,de$ eof ENDALL
-00650   if tcde=1 then let de$=rpad$(ltrm$(vn$),8)&" "&de$(1:26)
+00650   if tcde=1 then de$=rpad$(ltrm$(vn$),8)&" "&de$(1:26)
 00660   if bank_code><wbc then goto ENDALL
 00670   if tcde><wcd then goto END1
 00680   if fndate_mmddyy_to_ccyymmdd(tr2)<dt1 or fndate_mmddyy_to_ccyymmdd(tr2)>dt2 then !:
@@ -96,16 +96,16 @@
 00740 L740: ck2=ck1
 00750 L750: if td1yn$="D" then !:
           pr #255,using 'Form POS 1,C 2,C 10,PIC(ZZ/ZZ/ZZBB),C 29,N 12.2': sq$,ck$,tr2,de$(1:29),amt pageoflow NEWPGE
-00760   let t1(wcd)+=amt
+00760   t1(wcd)+=amt
 00770 RESTORE_TRALLOC: ! 
-00775   let totalalloc=0 ! kj 52307
-00780   let key$=cnvrt$("Pic(zz)",bank_code)&str$(tcde)&ck$ !:
+00775   totalalloc=0 ! kj 52307
+00780   key$=cnvrt$("Pic(zz)",bank_code)&str$(tcde)&ck$ !:
         restore #tralloc,key>=key$: nokey PRINT_D_NEWPAGE
 00790 READ_TRALLOC: ! 
 00800   read #tralloc,using 'Form POS 1,C 11,C 12,PD 5.2,C 30,G 6': newkey$,gl$,am2,tr5$,ivd$ eof PRINT_D_NEWPAGE !:
         if newkey$<>key$ then goto PRINT_D_NEWPAGE else !:
           if am2=0 then goto READ_TRALLOC
-00805   let totalalloc+=am2 ! kj 52307
+00805   totalalloc+=am2 ! kj 52307
 00810   if wcd=2 then am2=-am2
 00820   if td1yn$="D" then !:
           pr #255,using 'Form POS 66,C 12,N 11.2,X 2,C 32,c 6': gl$,am2,tr5$,ivd$ pageoflow NEWPGE
@@ -132,7 +132,7 @@
 00950   pr #255,using 'Form POS 1,C 26,C 60': "Page "&str$(pg+=1),"Date From: "&cnvrt$("PIC(ZZZZ/ZZ/ZZ)",dt1)&" Date To: "&cnvrt$("PIC(ZZZZ/ZZ/ZZ)",dt2)
 00960   if end3=1 then goto EOHDR
 00970   pr #255: "                                                                                  Item                                    Invoice "
-00980   if wcd=1 then let ref$="   Check # " else let ref$="   Ref #   "
+00980   if wcd=1 then ref$="   Check # " else ref$="   Ref #   "
 00990   pr #255: ref$& "   Date    Payee/Description                  Amount   GL Number      Amount   Item Description                  Date  "
 01000   pr #255: "  ________  ________  _______________________________ __________ ____________ __________  _______________________________ ________"
 01010 EOHDR: return 
@@ -158,7 +158,7 @@
 01110   fncloseprn
 01120   goto XIT
 01130 ! ______________________________________________________________________
-01140 XIT: let fnxit
+01140 XIT: fnxit
 01150 ! ______________________________________________________________________
 01160 SUMMARY_MAYBE: ! 
 01170   mat glt=(0)
@@ -183,9 +183,9 @@
         pr #255,using 'Form POS 13,3*N 14.2': mat glts !:
         pr #255: ""
 01340   mat glts=(0)
-01350 L1350: let hgl$=gl$ : mat glts=glts+glt
+01350 L1350: hgl$=gl$ : mat glts=glts+glt
 01360   if subcode=1 then goto END3B
-01370   let des$=""
+01370   des$=""
 01380   read #glmstr,using 'Form POS 13,C 30',key=gl$: des$ nokey L1390
 01390 L1390: pr #255,using 'Form POS 1,C 12,3*N 14.2,X 2,C 30': gl$,mat glt,des$
 01400   goto READ_WORK
@@ -198,7 +198,7 @@
 01470   return 
 01480 ! ______________________________________________________________________
 01490 ! <Updateable Region: ERTN>
-01500 ERTN: let fnerror(program$,err,line,act$,"xit")
+01500 ERTN: fnerror(program$,err,line,act$,"xit")
 01510   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01520   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01530   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

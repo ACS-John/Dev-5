@@ -11,25 +11,25 @@
 00120 ! ______________________________________________________________________
 00130 MAIN: ! 
 00140   fntos(sn$:="UBUnBill") 
-00150   let mylen=20 
-00160   let mypos=mylen+2
+00150   mylen=20 
+00160   mypos=mylen+2
 00170   fnlbl(1,1,"Report Heading Date:" ,mylen,1)
 00180   fntxt(1,mypos,20) 
-00190   let resp$(1) = dat$
+00190   resp$(1) = dat$
 00200   fnlbl(2,1,"Billing Date:" ,mylen,1)
 00202   fntxt(2,mypos,8,8,0,"1") 
-00204   let resp$(2)=str$(d1)
+00204   resp$(2)=str$(d1)
 00206   fnlbl(3,1,"Route Number:" ,mylen,1)
 00208   fncmbrt2(3,mypos) 
-00209   let resp$(3)="[All]"
+00209   resp$(3)="[All]"
 00210   fnchk(4,23,"Print Meter Address:",1)
-00220   let resp$(4)="True"
-00230   fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
+00220   resp$(4)="True"
+00230   fncmdset(3): fnacs(sn$,0,mat resp$,ck)
 00240   if ck=5 then goto XIT
-00250   let dat$ = resp$(1) 
-00252   let d1 = val(resp$(2))
-00260   if resp$(3)="[All]" then let prtbkno=0 else let prtbkno = val(resp$(3))
-00270   if resp$(4)="True" then let printadr=1 ! wants meter address printed
+00250   dat$ = resp$(1) 
+00252   d1 = val(resp$(2))
+00260   if resp$(3)="[All]" then prtbkno=0 else prtbkno = val(resp$(3))
+00270   if resp$(4)="True" then printadr=1 ! wants meter address printed
 00280   if d1<10100 or d1>123199 then goto MAIN
 00290   fndat(dat$,2)
 00300   on fkey 5 goto DONE
@@ -37,7 +37,7 @@
 00320   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
 00330   gosub HDR
 00340   if prtbkno=0 then goto READ_CUSTOMER
-00350   let prtbkno$=lpad$(str$(prtbkno),2)&"       "
+00350   prtbkno$=lpad$(str$(prtbkno),2)&"       "
 00360   startcd=1
 00370   restore #1,key>=prtbkno$: nokey TOTALS
 00380   goto L410
@@ -55,11 +55,11 @@
 00480   if printadr=1 then pr #255,using L490: z$,e$(2),f,bal,e$(1)(1:25),final$ pageoflow PGOF else pr #255,using L491: z$,e$(2),f,bal,final$ pageoflow PGOF
 00490 L490: form pos 1,c 10,pos 13,c 30,pos 45,pic(zz/zz/zz),n 15.2,x 2,c 25,x 2,c 8
 00491 L491: form pos 1,c 10,pos 13,c 30,pos 45,pic(zz/zz/zz),n 15.2,x 2,c 8
-00500   let tbal=tbal+bal
+00500   tbal=tbal+bal
 00510   goto READ_CUSTOMER
 00520 ! ______________________________________________________________________
 00530 HDR: ! 
-00540   let p2=p2+1
+00540   p2=p2+1
 00550   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 00560   pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
 00570   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
@@ -79,11 +79,11 @@
 00702   pr #255,using "Form POS 56,N 12.2": tbal 
 00704   pr #255: rpt$(" ",55)&"{\ul \strike             }"
 00710 DONE: close #1: ioerr L720
-00720 L720: let fncloseprn
-00730 XIT: let fnxit
+00720 L720: fncloseprn
+00730 XIT: fnxit
 00740 ! ______________________________________________________________________
 00750 ! <Updateable Region: ERTN>
-00760 ERTN: let fnerror(program$,err,line,act$,"xit")
+00760 ERTN: fnerror(program$,err,line,act$,"xit")
 00770   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00780   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

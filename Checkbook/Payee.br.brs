@@ -3,9 +3,9 @@
 00090   fntop(program$,"Payee")
 00100   fn_addpayee
 00110   goto XIT
-00130 XIT: let fnxit
+00130 XIT: fnxit
 00150 ! <Updateable Region: ERTN>
-00160 ERTN: let fnerror(program$,err,line,act$,"xit")
+00160 ERTN: fnerror(program$,err,line,act$,"xit")
 00170   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00180   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00190   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -32,7 +32,7 @@
 16120   dim ml$(3)*70,citystzip$*30,glitem$(5)*30,payeekey$*8,payeegl$*12
 16130   dim gldesc$*30,resp$(60)*50
 16140   ! ______________________________________________________________________
-18020   left=0: let right=1
+18020   left=0: right=1
 18040   open #trmstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
 18060   open #paymstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 18080   open #paymstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -41,7 +41,7 @@
 18140   ! 
 22000   MENU1: ! 
 22020   fntos(sn$="payee-1") 
-22040   let respc=0
+22040   respc=0
 22050   fnlbl(1,1,'Payee')
 22060   mat chdr$(12) : mat cmask$(12) : mat item$(12) 
 22080   chdr$(1)='Rec' 
@@ -63,18 +63,18 @@
 22400   restore #paymstr: 
 22420   READ_PAYMSTR_1: ! 
 22440   read #paymstr,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',release: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof EO_FLEX1
-22460   let item$(1)=str$(rec(paymstr)) 
-22480   let item$(2)=vn$
-22500   let item$(3)=nam$ 
-22520   let item$(4)=ad1$ 
-22540   let item$(5)=ad2$ 
-22560   let item$(6)=csz$ 
-22580   let item$(7)=str$(typ) 
-22600   let item$(8)=ss$ 
-22620   let item$(9)=ph$ 
-22640   let item$(10)=contact$ 
-22660   let item$(11)=email$ 
-22680   let item$(12)=fax$ 
+22460   item$(1)=str$(rec(paymstr)) 
+22480   item$(2)=vn$
+22500   item$(3)=nam$ 
+22520   item$(4)=ad1$ 
+22540   item$(5)=ad2$ 
+22560   item$(6)=csz$ 
+22580   item$(7)=str$(typ) 
+22600   item$(8)=ss$ 
+22620   item$(9)=ph$ 
+22640   item$(10)=contact$ 
+22660   item$(11)=email$ 
+22680   item$(12)=fax$ 
 22700   fnflexadd1(mat item$)
 22720   goto READ_PAYMSTR_1
 24000   EO_FLEX1: ! 
@@ -83,7 +83,7 @@
 24060   fncmdkey("&Delete",3,0,0,"Highlight any record and press Alt+D or click Delete to remove any existing payee record.") 
 24080   fncmdkey("E&xit",5,0,1,"Exit to menu")
 24100   fnacs(sn$,0,mat resp$,ck)
-24120   add=edit=0: let holdvn$=""
+24120   add=edit=0: holdvn$=""
 24140   if ck=5 then 
 24160     goto PayeeXIT 
 24180   else if ck=1 then 
@@ -95,7 +95,7 @@
 24300   if ck=2 or ck=3 then 
 24320     read #paymstr,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',rec=editrec: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
 24340   end if
-24360   if ck=2 then edit=1 : let holdvn$=vn$: goto EDIT_PAYEE
+24360   if ck=2 then edit=1 : holdvn$=vn$: goto EDIT_PAYEE
 24380   if ck=3 then gosub DELETE_PAYEE : goto MENU1
 24400   ! ______________________________________________________________________
 26000   DELETE_PAYEE: ! r:
@@ -106,8 +106,8 @@
 26100   read #paytrans,using 'Form Pos 1,C 8',release: x$
 26120   if x$=vn$ then 
 26140     mat ml$(2) 
-26160     let ml$(1)="A Unpaid Invoice for this payee exists" 
-26180     let ml$(2)="You may not delete it." 
+26160     ml$(1)="A Unpaid Invoice for this payee exists" 
+26180     ml$(2)="You may not delete it." 
 26200     fnmsgbox(mat ml$,resp$,cap$,0) 
 26220     goto EO_DELETE
 26240   end if
@@ -136,50 +136,50 @@
 26700   return ! /r
 26720   ! ______________________________________________________________________
 28000   ADD_NEW_PAYEE: ! r:
-28020   let vn$=nam$=ad1$=ad2$=csz$=ss$=ph$=contact$=email$=fax$=myact$="" 
-28040   let typ=0
+28020   vn$=nam$=ad1$=ad2$=csz$=ss$=ph$=contact$=email$=fax$=myact$="" 
+28040   typ=0
 28060   goto EDIT_PAYEE ! /r
 32000   EDIT_PAYEE: ! r:
 32020   fntos(sn$="payee-2") 
-32040   let respc=0 
-32060   let mylen=28 : let mypos=mylen+2
+32040   respc=0 
+32060   mylen=28 : mypos=mylen+2
 32080   fnfra(1,1,12,70,"Payee Information"," ")
 32100   fnlbl(1,1,"Payee Number:",mylen,1,0,1)
 32120   fntxt(1,mypos,8,0,1,"",0,"",1) 
-32140   let resp$(respc+=1)=vn$
+32140   resp$(respc+=1)=vn$
 32160   fnlbl(2,1,"Payee Name:",mylen,1,0,1)
 32180   fntxt(2,mypos,30,0,0,"",0,"",1) 
-32200   let resp$(respc+=1)=nam$
+32200   resp$(respc+=1)=nam$
 32220   fnlbl(3,1,"Address:",mylen,1,0,1)
 32240   fntxt(3,mypos,30,0,0,"",0,"",1) 
-32260   let resp$(respc+=1)=ad1$
+32260   resp$(respc+=1)=ad1$
 32280   fnlbl(4,1,"Address:",mylen,1,0,1)
 32300   fntxt(4,mypos,30,0,0,"",0,"",1) 
-32320   let resp$(respc+=1)=ad2$
+32320   resp$(respc+=1)=ad2$
 32340   fnlbl(5,1,"City, St. Zip:",mylen,1,0,1)
 32360   fncombof("CityStZip",5,mypos,30,env$('Q')&"\Data\CityStZip.dat",1,30,0,0,env$('Q')&"\Data\CityStZip.idx",0,0, " ",1,0) 
-32380   let resp$(respc+=1)=csz$
+32380   resp$(respc+=1)=csz$
 32400   fnlbl(6,1,"Type:",mylen,1,0,1)
 32420   fncombof("Payeetype",6,mypos,27,env$('Q')&"\CLmstr\PayeeType.dat",1,2,3,25,"",0,0, "The payee type is a code used to detemine which box should be used on a 1099 misc form.  Only enter a type code if the payee should get a 1099",1) 
-32440   let resp$(respc+=1)=str$(typ)
+32440   resp$(respc+=1)=str$(typ)
 32460   fnlbl(7,1,"Federal ID or SS No.",mylen,1,0,1)
 32480   fntxt(7,mypos,11,0,0,"",0,"",1) 
-32500   let resp$(respc+=1)=ss$
+32500   resp$(respc+=1)=ss$
 32520   fnlbl(8,1,"Phone Number:",mylen,1,0,1)
 32540   fntxt(8,mypos,12,0,0,"",0,"",1) 
-32560   let resp$(respc+=1)=ph$
+32560   resp$(respc+=1)=ph$
 32580   fnlbl(9,1,"Contact Name:",mylen,1,0,1)
 32600   fntxt(9,mypos,30,0,0,"",0,"",1) 
-32620   let resp$(respc+=1)=contact$
+32620   resp$(respc+=1)=contact$
 32640   fnlbl(10,1,"E-mail Address:",mylen,1,0,1)
 32660   fntxt(10,mypos,30,50,0,"",0,"",1) 
-32680   let resp$(respc+=1)=email$
+32680   resp$(respc+=1)=email$
 32700   fnlbl(11,1,"Fax Number:",mylen,1,0,1)
 32720   fntxt(11,mypos,12,0,0,"",0,"",1) 
-32740   let resp$(respc+=1)=fax$
+32740   resp$(respc+=1)=fax$
 32760   fnlbl(12,1,"My Account Number:",mylen,1,0,1)
 32780   fntxt(12,mypos,20,0,0,"",0,"",1) 
-32800   let resp$(respc+=1)=myact$
+32800   resp$(respc+=1)=myact$
 32820   fnlbl(17,20,"Standard General Ledger Breakdowns",40,2,0,0)
 32840   ! General Ledger Breakdown Grid
 32860   mat chdr$(5) : mat cmask$(5) : mat glitem$(5) 
@@ -212,8 +212,8 @@
 34140   fncmdkey("&Cancel",5,0,1,"Return to Vendor selection")
 34160   fnacs(sn$,0,mat resp$,ck)
 34180   if ck=5 then goto MENU1
-34200   let vn$=lpad$(trim$(resp$(1)(1:8)),8) 
-34220   let nam$=resp$(2) ! name 
+34200   vn$=lpad$(trim$(resp$(1)(1:8)),8) 
+34220   nam$=resp$(2) ! name 
 34240   ad1$=resp$(3) ! address 
 34260   ad2$=resp$(4) ! address 
 34280   csz$=resp$(5) ! city state zip
@@ -223,21 +223,21 @@
 34360   L1190: read #paymstr,using 'Form Pos 1,C 8',key=vn$: oldvn$ nokey L1210
 34380   if add=1 then goto L1205
 34400   mat ml$(2) 
-34420   let ml$(1)="You already have a payee number "&vn$ 
-34440   let ml$(2)="Click ok to Cancel." 
+34420   ml$(1)="You already have a payee number "&vn$ 
+34440   ml$(2)="Click ok to Cancel." 
 34460   fnmsgbox(mat ml$,resp$,cap$,16) 
 34480   goto MENU1
 36000   L1205: ! r:
 36020   mat ml$(2) 
-36040   let ml$(1)="You already have a payee number "&vn$ 
-36060   let ml$(2)="Click ok to Change the number." 
+36040   ml$(1)="You already have a payee number "&vn$ 
+36060   ml$(2)="Click ok to Change the number." 
 36080   fnmsgbox(mat ml$,resp$,cap$,16) 
 36100   goto EDIT_PAYEE ! /r
 36120   L1210: if trim$(vn$)="" then goto L1220 else goto L1230
 38000   L1220: ! r:
 38020   mat ml$(2) 
-38040   let ml$(1)="You must have a unique payee number for ." 
-38060   let ml$(2)="each vendor.  Click ok to assign a payee number" 
+38040   ml$(1)="You must have a unique payee number for ." 
+38060   ml$(2)="each vendor.  Click ok to assign a payee number" 
 38080   fnmsgbox(mat ml$,resp$,cap$,16) 
 38100   goto EDIT_PAYEE ! /r
 42000   L1230: !
@@ -246,39 +246,39 @@
 42060   L1240: !
 42080   write #citystzip,using 'Form POS 1,C 30': csz$
 42100   L1250: !
-42120   let typ=val(resp$(6)(1:2)) ! type 
+42120   typ=val(resp$(6)(1:2)) ! type 
 42140   ss$=resp$(7) ! ss or fed id 
-42160   let ph$=resp$(8) ! phone 
+42160   ph$=resp$(8) ! phone 
 42180   contact$=resp$(9) ! contact name 
 42200   email$=resp$(10) ! email address
 42220   let fax$=resp$(11) ! fax number 
-42240   let myact$=resp$(12) ! my account number with this vendor 
+42240   myact$=resp$(12) ! my account number with this vendor 
 42260   let gldistrec=val(resp$(13)) ! record number of gl distribution entry
 42280   if ck=4 then 
 42300     gosub CHECK_HISTORY 
 42320     goto EDIT_PAYEE
 42340   else if ck=2 then 
-42360     let percent=gldistrec=0
-42380     let payeekey$=gldesc$=payeegl$="" 
+42360     percent=gldistrec=0
+42380     payeekey$=gldesc$=payeegl$="" 
 42400     goto GL_BREAKDOWNS ! add gl breakdown
 42420   else if ck=7 then 
 42440     read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',rec=gldistrec,release: payeekey$,payeegl$,percent,gldesc$ 
 42460     goto GL_BREAKDOWNS ! edit gl breakdown
 42480   end if
-42500   let tac=0
+42500   tac=0
 44000   ! READ_STANDARD_BREAKDOWNS: ! 
 44020   restore #payeegl,key>=vn$: nokey EO_TEST
 44040   do
 44042     read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,gldesc$ eof EO_TEST
-44060     if vn$=payeekey$ then let tac+=percent
+44060     if vn$=payeekey$ then tac+=percent
 44100   loop while vn$=payeekey$
 44120   EO_TEST: ! 
 44140   if tac=100 or tac=0 then goto SAVE_PAYEE
 46000   ! MSGBOX4: ! percent breakdown doesn't add to 100 %
 46020   mat ml$(3) 
-46040   let ml$(1)="Your percentage breakdowns total "&str$(tac)&"." 
-46060   let ml$(2)="The percentage breakdown must add to 100%." 
-46080   let ml$(3)="Correct the percentages." 
+46040   ml$(1)="Your percentage breakdowns total "&str$(tac)&"." 
+46060   ml$(2)="The percentage breakdown must add to 100%." 
+46080   ml$(3)="Correct the percentages." 
 46100   fnmsgbox(mat ml$,resp$,cap$,16) 
 46120   goto EDIT_PAYEE ! /r
 48000   SAVE_PAYEE: ! r:
@@ -336,22 +336,22 @@
 52880   return ! /r
 54000   MSGBOX3: ! r: dupkey
 54020   mat ml$(2) 
-54040   let ml$(1)="A record for payee number "&vn$&" already exists" 
-54060   let ml$(2)="You must select a different payee number." 
+54040   ml$(1)="A record for payee number "&vn$&" already exists" 
+54060   ml$(2)="You must select a different payee number." 
 54080   fnmsgbox(mat ml$,resp$,cap$,16) 
 54100   goto EDIT_PAYEE ! /r
 58000   CHECK_HISTORY: ! r:
 58020   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,input,keyed 
 58040   fntos(sn$='payee_hist') 
-58060   lc=0 : let mylen=25 : let mypos=mylen+2 : let width=50
+58060   lc=0 : mylen=25 : mypos=mylen+2 : let width=50
 58080   lc+=1
 58100   fnlbl(lc+=1,30,'Check History Selection Criteria',width,center)
 58120   fnlbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
 58140   fntxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All') 
-58160   let resp$(1)=''
+58160   resp$(1)=''
 58180   fnlbl(lc+=1,1,"Transaction Ending Date:",mylen,right)
 58200   fntxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All') 
-58220   let resp$(2)=''
+58220   resp$(2)=''
 58240   let wbc=0
 58320   fnlbl(lc=6,40,'Transaction Grid')
 58340   mat chdr$(11) : mat cmask$(11) : mat item6$(11) 
@@ -371,33 +371,33 @@
 58600   cmask$(4)='10' 
 58620   cmask$(8)='1' 
 58640   fnflexinit1('Gayee-'&str$(wbc)&'-'&str$(wtt),7,1,10,85,mat chdr$,mat cmask$,1,0,frame)
-58660   let key$=vn$&cnvrt$('pic(Z#)',wbc)&cnvrt$("pic(#)",wtt)&rpt$(chr$(0),8) 
+58660   key$=vn$&cnvrt$('pic(Z#)',wbc)&cnvrt$("pic(#)",wtt)&rpt$(chr$(0),8) 
 58680   restore #trans,key>=key$: nokey EO_FLEX2 
-58700   let transactionstotal=0
+58700   transactionstotal=0
 58720   READ_TRANS: ! 
 58740   read #trans,using 'Form Pos 1,n 2,n 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',release: bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof EO_FLEX2
 58760   if trim$(vn$)<>trim$(tr$(4)) then goto EO_FLEX2
 58780   if transactionstartingdate<>0 and transactionstartingdate>fndate_mmddyy_to_ccyymmdd(val(tr$(2))) then goto READ_TRANS
 58800   if transactionendingdate<>0 and transactionendingdate<fndate_mmddyy_to_ccyymmdd(val(tr$(2))) then goto READ_TRANS
-58820   let item6$(1)=str$(rec(trans)) : let item6$(2)=tr$(1) 
-58840   let item6$(3)=tr$(2) : let item6$(4)=str$(tr3) 
-58860   let item6$(5)=tr$(4) : let item6$(6)=tr$(5) 
-58880   let item6$(7)=str$(pcde) : let item6$(8)=str$(clr) 
-58900   let item6$(9)=str$(scd) : let item6$(10)=str$(bank_code) 
-58920   let item6$(11)=str$(tcde) 
+58820   item6$(1)=str$(rec(trans)) : item6$(2)=tr$(1) 
+58840   item6$(3)=tr$(2) : item6$(4)=str$(tr3) 
+58860   item6$(5)=tr$(4) : item6$(6)=tr$(5) 
+58880   item6$(7)=str$(pcde) : item6$(8)=str$(clr) 
+58900   item6$(9)=str$(scd) : item6$(10)=str$(bank_code) 
+58920   item6$(11)=str$(tcde) 
 58940   fnflexadd1(mat item6$) 
-58960   let transactionstotal+=tr3
+58960   transactionstotal+=tr3
 58980   goto READ_TRANS
 59000   EO_FLEX2: ! 
 59020   fnlbl(5,1,'Transactions Total:',mylen,right)
 59040   fntxt(5,mypos,12,0,right,"10",1,'This is the total of only the transactions shown in the Transaction Grid above. ') 
-59060   let resp$(3)=str$(transactionstotal)
+59060   resp$(3)=str$(transactionstotal)
 59080   fncmdkey('&Refresh',2,1,0,"If you select a date range, you must refresh the screen to see the transactions for that date range.") 
 59100   fncmdkey('&Close',5,0,1)
 59120   fnacs(sn$,0,mat resp$,ck)
 59140   if ck=5 or ck=cancel then goto EO_CHECK_HISTORY
-59160   let transactionstartingdate=val(resp$(1)) 
-59180   let transactionendingdate=val(resp$(2))
+59160   transactionstartingdate=val(resp$(1)) 
+59180   transactionendingdate=val(resp$(2))
 59200   if ck=2 then goto CHECK_HISTORY ! goto the top of this function
 59220   EO_CHECK_HISTORY: ! 
 59240   close #trans: 
@@ -405,23 +405,23 @@
 59280   ! ______________________________________________________________________
 62000   GL_BREAKDOWNS: ! r:
 62020   fntos(sn$='payee_gl_dist') 
-62040   let respc=0 : let mylen=28 : let mypos=mylen+2
+62040   respc=0 : mylen=28 : mypos=mylen+2
 62060   fnlbl(1,25,"Breakdown for "&nam$(1:20),40)
 62080   fnlbl(3,1,"General Ledger Number:",mylen,right)
 62100   fnqgl(3,mypos) 
-62120   let resp$(respc+=1)=fnrgl$(payeegl$) ! think maybe here kj
+62120   resp$(respc+=1)=fnrgl$(payeegl$) ! think maybe here kj
 62140   fnlbl(4,1,'Percent:',mylen,right)
 62160   fntxt(4,mypos,6,0,0,'32',0,"Percent of total check to be charged to this g/l account.  Enter 25% as 25.00!") 
-62180   let resp$(respc+=1)=str$(percent)
+62180   resp$(respc+=1)=str$(percent)
 62200   fnlbl(5,1,"Description:",mylen,right)
 62220   fntxt(5,mypos,30) 
-62240   let resp$(respc+=1)=gldesc$
+62240   resp$(respc+=1)=gldesc$
 62260   fncmdset(7)
 62280   fnacs(sn$,0,mat resp$,ck)
 62300   if ck=5 then goto EDIT_PAYEE
-62320   let payeekey$=vn$
-62340   let payeegl$=fnagl$(resp$(1))
-62360   let percent=val(resp$(2)) ! percent
+62320   payeekey$=vn$
+62340   payeegl$=fnagl$(resp$(1))
+62360   percent=val(resp$(2)) ! percent
 62380   let gldesc$=resp$(3)
 62400   if ck=4 and gldistrec>0 then 
 62420     delete #payeegl,rec=gldistrec:

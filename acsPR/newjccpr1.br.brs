@@ -17,35 +17,35 @@
 00170 ! ______________________________________________________________________
 00180 MENU1: ! 
 00190   fntos(sn$="jccpr1") !:
-        let respc=0
+        respc=0
 00200   fnlbl(1,47," ",1,1)
 00210   fnlbl(1,1,"Beginning Date:",20,1)
 00220   fntxt(1,23,8,0,0,"1",0,"First day of week being printed.") !:
-        let resp$(respc+=1)=str$(df)
+        resp$(respc+=1)=str$(df)
 00230   fnlbl(2,1,"Ending Date:",20,1)
 00240   fntxt(2,23,8,0,0,"1",0,"Week ending date.") !:
-        let resp$(respc+=1)=str$(dt)
-00250   fncmdset(2): let fnacs(sn$,0,mat resp$,ck)
+        resp$(respc+=1)=str$(dt)
+00250   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
 00255   if ck=5 then goto XIT
-00260   let df=val(resp$(1)) ! beginning date
-00270   let dt=val(resp$(2)) ! ending date
+00260   df=val(resp$(1)) ! beginning date
+00270   dt=val(resp$(2)) ! ending date
 00280 ! ______________________________________________________________________
 00290   mat dr=(0)
-00300   let dr(1)=int(df*.01)
-00310   let dr(7)=int(dt*.01)
-00320   let df1=df
-00330   let dt1=dt
-00340   let df=fndate_mmddyy_to_ccyymmdd(df)
-00350   let dt=fndate_mmddyy_to_ccyymmdd(dt)
+00300   dr(1)=int(df*.01)
+00310   dr(7)=int(dt*.01)
+00320   df1=df
+00330   dt1=dt
+00340   df=fndate_mmddyy_to_ccyymmdd(df)
+00350   dt=fndate_mmddyy_to_ccyymmdd(dt)
 00360   if dt<df then goto MENU1
 00370   for j=2 to 7
 00380     if dr(9-j)-int(dr(9-j)*.01)*100-1=0 then goto L410
-00390     let dr(8-j)=dr(7)-j+1
+00390     dr(8-j)=dr(7)-j+1
 00400   next j
-00410 L410: if dr(1)=0 then let dr(1)=int(df1*.01)
+00410 L410: if dr(1)=0 then dr(1)=int(df1*.01)
 00420   for j=2 to 6
 00430     if dr(j)>0 then goto L460
-00440     let dr(j)=dr(1)+j-1
+00440     dr(j)=dr(1)+j-1
 00450   next j
 00460 L460: write #4,using L470: df1,dt1,mat dr
 00470 L470: form pos 1,2*n 6,7*pd 3
@@ -53,25 +53,25 @@
 00490 ! ______________________________________________________________________
 00500 ASKJOB: ! 
 00510   fntos(sn$="jccpr1J") !:
-        let respc=0
+        respc=0
 00520   fnlbl(1,1,"Job #:",8,1)
 00530   fncmbjob(1,11) !:
-        let resp$(respc+=1)=jn$
+        resp$(respc+=1)=jn$
 00540   if trim$(jn$)<>"" then let fnlbl(3,1,"Last job processed:"&trim$(jn$),35,1)
 00550   fncmdkey("&Next",1,1,0,"Process the job" ) !:
         fncmdkey("&Complete",2,0,0,"Start printing")
 00560   fnacs(sn$,0,mat resp$,ck)
 00570   if ck=2 then goto PRINT_REPORT
-00580   let jn$=lpad$(trim$(resp$(1)(1:6)),6)
-00590   let rw=0
+00580   jn$=lpad$(trim$(resp$(1)(1:6)),6)
+00590   rw=0
 00600   cn$=jn$&"     "
 00610   read #2,using L620,key>=cn$: cn$,mat ta nokey L640
 00620 L620: form pos 1,c 11,pos 118,2*pd 3
 00630   goto L670
 00640 L640: if rw>0 then goto ASKJOB
 00650   mat ml$(2) !:
-        let ml$(1)="No Transactions exist for Job Number "&ltrm$(jn$) !:
-        let ml$(2)="within the specified date range." !:
+        ml$(1)="No Transactions exist for Job Number "&ltrm$(jn$) !:
+        ml$(2)="within the specified date range." !:
         fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto ASKJOB
 00660 L660: read #2,using L620: cn$,mat ta eof L640
@@ -81,11 +81,11 @@
 00700 L700: read #3,using L710,rec=adr: en$,tn$,mat tr,nta
 00710 L710: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,x 30,pd 3
 00720   if tr(5)+tr(6)=0 then goto L780
-00730   let tr4=fndate_mmddyy_to_ccyymmdd(tr(4))
+00730   tr4=fndate_mmddyy_to_ccyymmdd(tr(4))
 00740   if tr4<df or tr4>dt then goto L780
 00750   write #4,using L760: en$,tn$,mat tr
 00760 L760: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2
-00770   let rw=rw+1
+00770   rw=rw+1
 00780 L780: if nta=0 then goto L660
 00790   adr=nta
 00800   goto L700
@@ -104,10 +104,10 @@
 00930   execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 00940   fnchain ("S:\acsPR\newJCCPR2")
 00950 ! ______________________________________________________________________
-00960 XIT: let fnxit
+00960 XIT: fnxit
 00970 ! ______________________________________________________________________
 00980 ! <Updateable Region: ERTN>
-00990 ERTN: let fnerror(program$,err,line,act$,"xit")
+00990 ERTN: fnerror(program$,err,line,act$,"xit")
 01000   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01010   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01020   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

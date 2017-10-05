@@ -18,7 +18,7 @@
 00190 L190: form pos 1,pd 3
 00200 L200: read #3,using L280: k$,e$,mat b,sc$,iv$,nta,des$ eof L750 ioerr L820
 00210   if b(7)=0 then goto L200
-00220   let iv$=lpad$(rtrm$(iv$),12)
+00220   iv$=lpad$(rtrm$(iv$),12)
 00230   if b(8)=0 then b8=25 else b8=b(8)
 00240   if rtrm$(des$)="" then read #6,using L250,key=sc$: des$ nokey L260 ioerr L820
 00250 L250: form pos 5,c 30
@@ -31,21 +31,21 @@
 00320   read #1,using L330,key=k$: mat scc,mat ca nokey L580 ioerr L820
 00330 L330: form pos 220,10*n 1,10*pd 3
 00340   if ca(b(5))=0 then goto L440
-00350   let p1=1+(b8-1)*6
-00360   let p2=150+b8
+00350   p1=1+(b8-1)*6
+00360   p2=150+b8
 00370   read #4,using L380,rec=ca(b(5)): ta1,ta2,fb1 norec L580 ioerr L820
 00380 L380: form pos p1,2*pd 3,pos p2,n 1
 00390   if ta2>0 then rewrite #2,using L140,rec=ta2: lta
 00400   if b(7)=-2 then let fb1=1
-00410   if ta1=0 then let ta1=lta
+00410   if ta1=0 then ta1=lta
 00420   rewrite #4,using L380,rec=ca(b(5)): ta1,lta,fb1
 00430   if scc(b(5))=0 and b(7)>0 then goto L560 else goto L580
 00440 L440: lta4=lrec(4)+1
 00450   mat ta=(0)
 00460   mat fb=(0)
 00470   ca(b(5))=lta4
-00480   let ta(b8,1)=lta
-00490   let ta(b8,2)=lta
+00480   ta(b8,1)=lta
+00490   ta(b8,2)=lta
 00500   if b(7)=-2 then let fb(b8)=2
 00510   if fb(b8)=2 then goto L530
 00520   if b(7)=-1 then let fb(b8)=1
@@ -77,7 +77,7 @@
 00780   close #4: 
 00790   close #5: 
 00800   close #6: 
-00810 XIT: let fnxit
+00810 XIT: fnxit
 00820 L820: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L840
 00830   goto L880
 00840 L840: pr newpage

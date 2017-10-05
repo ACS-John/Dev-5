@@ -11,13 +11,13 @@
 00110   lbl$(1)="Bank Code" : lbl$(2)="Bank Name" !:
         lbl$(3)="General Ledger Number" : lbl$(4)="Bank Balance" !:
         lbl$(5)="Unpaid Invoices" : lbl$(6)="Last Check Number"
-00120   let tln(1)=2 : let tln(2)=30 : let tln(3)=12 : let tln(4)=11 !:
-        let tln(5)=11 : let tln(6)=8
+00120   tln(1)=2 : tln(2)=30 : tln(3)=12 : tln(4)=11 !:
+        tln(5)=11 : tln(6)=8
 00130   fltyp$(1)="N" : fltyp$(2)="C" : fltyp$(3)="C" !:
         fltyp$(4)="PD" : fltyp$(5)="PD" : fltyp$(6)="C"
 00140   sln(3)=12 : sln(4)=sln(5)=6.2
-00150   let mask(1)=1030 !:
-        let mask(4)=32 : let mask(5)=30 : let mask(6)=30
+00150   mask(1)=1030 !:
+        mask(4)=32 : mask(5)=30 : mask(6)=30
 00160   cl=3: c$(cl,1)='ComboF' !:
         c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
         c$(cl,3)='1' : c$(cl,4)='12' !:
@@ -30,10 +30,10 @@
 00210   close #1: 
 00220   execute "Index "&env$('Q')&"\CLmstr\BankMstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno)&" 1 2 DupKeys Replace Shr -n" ioerr XIT
 00230   gosub FIX_GL_NUMBERS
-00240 XIT: let fnxit
+00240 XIT: fnxit
 00250 ! ______________________________________________________________________
 00260 ! <Updateable Region: Ertn>
-00270 ERTN: let fnerror(program$,err,line,act$,"xit")
+00270 ERTN: fnerror(program$,err,line,act$,"xit")
 00280   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00290   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -12,8 +12,8 @@
  dim ChangedRead
  !
  def fnListviewComboRead
-    let TTT = LastReadRecord
-    let TT=ChangedRead
+    tTT = LastReadRecord
+    tT=ChangedRead
     if LastReadRecord><rec(DataFile) then
        lastReadRecord=rec(Datafile)
        changedRead=1

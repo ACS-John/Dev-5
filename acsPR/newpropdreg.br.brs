@@ -14,37 +14,37 @@
 00170   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1)
 00200   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
 00201 ! r: setup mat name$, mat dedname$, numberded1, numberded2
-00202   let name$(1)="O/T"
-00203   let name$(2)="Other"
-00204   let name$(3)="Meals"
-00205   let name$(4)="Tips"
-00206   let name$(5)="Total"
-00207   let name$(26)="EIC"
-00208   let name$(27)="Total"
-00209   let numberded=0
+00202   name$(1)="O/T"
+00203   name$(2)="Other"
+00204   name$(3)="Meals"
+00205   name$(4)="Tips"
+00206   name$(5)="Total"
+00207   name$(26)="EIC"
+00208   name$(27)="Total"
+00209   numberded=0
 00210   for j=6 to 25
 00211     if trim$(abbrevname$(j-5))<>"" then 
-00212       let dedname$(numberded+=1)=abbrevname$(j-5)(1:5)
+00212       dedname$(numberded+=1)=abbrevname$(j-5)(1:5)
 00213     end if 
 00214   next j
 00215   mat dedname$(numberded)
-00216   let numberded1=max(round(numberded/2,0),1) ! # of deductions listed on line 1
-00217   let numberded2=max(int(numberded/2),1) ! # of deductions listed on line 2
+00216   numberded1=max(round(numberded/2,0),1) ! # of deductions listed on line 1
+00217   numberded2=max(int(numberded/2),1) ! # of deductions listed on line 2
 00218 ! /r
 00219   if fnprocess=1 then goto START_REPORT
 00220 ! /r
 00230 ASK_PAYROLL_DATE: ! r:
 00240   fntos(sn$="OtherPayded") !:
-        let respc=0
+        respc=0
 00250   fnlbl(1,1,"",34,1) ! bigger screen
 00260   fnlbl(2,1,"Payroll Date:",20,1)
 00270   fntxt(2,23,10,0,1,"3",0,"You can pr or reprint for any pay period.  Normally you would use the last payroll date.")
-00280   let resp$(respc+=1)=str$(d1)
+00280   resp$(respc+=1)=str$(d1)
 00290   fncmdkey("&Next",1,1,0,"Proceed with importing time." ) !:
         fncmdkey("E&xit",5,0,1,"Returns to menu")
 00300   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 00310   if ckey=5 then goto XIT
-00320   let ppd=val(resp$(1))
+00320   ppd=val(resp$(1))
 00330 ! /r
 00340 START_REPORT: !  r: main report loop
 00480 ! 
@@ -65,41 +65,41 @@
 00620 L620: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat cp eof L680
 00630   if heno<>eno then goto L680
 00640   if prd><ppd then goto L620
-00650   let holdckno=ckno
+00650   holdckno=ckno
 00660   mat tcp=tcp+cp : mat ttdc=ttdc+tdc
 00670   goto L620
 00680 L680: if sum(tcp)=0 and sum(ttdc)=0 then goto L530 ! no pay on this person for this payroll date
 00690   for j=1 to 25
 00700     if j>4 then goto L730
-00710     let rptemp(j)=rptemp(j)+tcp(j+26)
+00710     rptemp(j)=rptemp(j)+tcp(j+26)
 00720     goto L740
-00730 L730: let rptemp(j)=rptemp(j)+tcp(j)
+00730 L730: rptemp(j)=rptemp(j)+tcp(j)
 00740 L740: next j
 00750   eic+=tcp(25)
-00760   let totaleic+=tcp(25)
+00760   totaleic+=tcp(25)
 00770   gosub L790
 00780   goto L530
 00790 L790: mat rptot=rptot+rptemp
 00800   for j=1 to 15
 00810     if rptemp(j)><0 then goto L830
 00820   next j
-00830 L830: let tottemp=0
+00830 L830: tottemp=0
 00840   for j=1 to 20
 00850     if newdedcode(j)=3 then goto L900
 00860     if newdedcode(j)=1 then goto L890
-00870     let tottemp=tottemp-rptemp(j+4)
+00870     tottemp=tottemp-rptemp(j+4)
 00880     goto L900
-00890 L890: let tottemp=tottemp+rptemp(j+4)
+00890 L890: tottemp=tottemp+rptemp(j+4)
 00900 L900: next j
-00910   let tottemp=tottemp-rptemp(25)
-00920   let totded=totded+tottemp
-00930   let rpxxxx=rptemp(1)+rptemp(2)+rptemp(3)+rptemp(4)
+00910   tottemp=tottemp-rptemp(25)
+00920   totded=totded+tottemp
+00930   rpxxxx=rptemp(1)+rptemp(2)+rptemp(3)+rptemp(4)
 00940   let w=x=z=0: let y=4: for j=1 to 20
 00950     if trim$(abbrevname$(j))="" then goto L1000
 00960     let w+=1: if int(w/2)=w/2 then goto L990 else goto L970
-00970 L970: let printline1(x+=1)=rptemp(j+4) ! set variables to pr line
+00970 L970: printline1(x+=1)=rptemp(j+4) ! set variables to pr line
 00980     goto L1000
-00990 L990: let printline2(z+=1)=rptemp(j+4) ! set line two
+00990 L990: printline2(z+=1)=rptemp(j+4) ! set line two
 01000 L1000: next j
 01010   mat printline1(numberded1): mat printline2(numberded2)
 01020   if int(numberded1/2)=numberded1/2 then pr #255,using L1040: eno,em$(1:15),rptemp(1),rptemp(2),rptemp(3),rptemp(4),rpxxxx,mat printline1,tottemp pageoflow PGOF else pr #255,using L1050: eno,em$(1:15),rptemp(1),rptemp(2),rptemp(3),rptemp(4),rpxxxx,mat printline1,tottemp pageoflow PGOF
@@ -116,8 +116,8 @@
 01150 FINALTOTALS: ! r:
 01160   pr #255,using 'form skip 2,pos 10,c 12,skip 2': "Final Totals"
 01180   mat rptemp=rptot
-01190   let tottemp=totded
-01200   let rpxxxx=rptemp(1)+rptemp(2)+rptemp(3)+rptemp(4)
+01190   tottemp=totded
+01200   rpxxxx=rptemp(1)+rptemp(2)+rptemp(3)+rptemp(4)
 01210   for j=1 to 27
 01220     if j=5 then goto L1320
 01230     if j=26 then goto L1340
@@ -140,7 +140,7 @@
 01410   close #1: ioerr ignore
 01420   close #2: ioerr ignore
 01430   fncloseprn
-01440 XIT: let fnxit ! /r
+01440 XIT: fnxit ! /r
 01450 IGNORE: continue 
 01460 HDR: ! r:
 01470 ! pr #255,Using 1380: DATE$,TIME$,CAP$
@@ -155,12 +155,12 @@
 01560 L1560: form pos dattab,c 20,skip 2
 01570   pr #255,using L1580: "<------------Other Pay------------>","     Other Deductions-->"
 01580 L1580: form pos 25,c 35,pos 60,c 34,pos 94,c 39,skip 1
-01590   if int(numberded1/2)=numberded1/2 then let total$=" Total" else let total$="       Total"
+01590   if int(numberded1/2)=numberded1/2 then total$=" Total" else total$="       Total"
 01600   pr #255,using L1610: "Number","Name",name$(1),name$(2),name$(3),name$(4),name$(5),mat dedname$,total$
 01610 L1610: form pos 2,c 6,pos 14,c 4,pos 29,c 6,c 6,c 7,c 7,c 7,pos 66,numberded*c 6,c 12,skip 1
 01620   return  ! /r
 01640 ! <Updateable Region: ERTN>
-01650 ERTN: let fnerror(program$,err,line,act$,"xit")
+01650 ERTN: fnerror(program$,err,line,act$,"xit")
 01660   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01670   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01680   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

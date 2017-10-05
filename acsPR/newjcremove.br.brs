@@ -22,10 +22,10 @@
 00220 ! ______________________________________________________________________
 00230 ASKJOB: ! 
 00240   fntos(sn$="jccpr1J") !:
-        let respc=0
+        respc=0
 00250   fnlbl(1,1,"Job #:",8,1)
 00260   fncmbjob(1,11) !:
-        let resp$(respc+=1)=jn$
+        resp$(respc+=1)=jn$
 00270   if trim$(jn$)<>"" then let fnlbl(3,1,"Last job processed:"&trim$(jn$),35,1)
 00280   fncmdkey("&Next",1,1,0,"Process the job" ) !:
         fncmdkey("Com&plete",2,0,0,"Finished with all jobs.") !:
@@ -33,9 +33,9 @@
 00290   fnacs(sn$,0,mat resp$,ck)
 00300   if ck=5 then goto XIT
 00310   if ck=2 then goto DELETE_THEM
-00320   let jn$=lpad$(trim$(resp$(1)(1:6)),6)
+00320   jn$=lpad$(trim$(resp$(1)(1:6)),6)
 00330   mat ml$(1) !:
-        let ml$(1)="Do you really want to delete job # "&jn$ !:
+        ml$(1)="Do you really want to delete job # "&jn$ !:
         fnmsgbox(mat ml$,resp$,cap$,36)
 00340   if resp$="Yes" then goto L350 else goto ASKJOB
 00350 L350: rewrite #1,using 'Form POS 157,N 2',key=jn$: 9 nokey ASKJOB
@@ -75,8 +75,8 @@
 00690   write #13,using L530,rec=ot4: eno$,jno$,mat tr,pd$,ota
 00700   rewrite #13,using L710,rec=1: ot4
 00710 L710: form pos 86,pd 3
-00720   if ta(1)=0 then let ta(1)=ot4
-00730   let ta(2)=ot4
+00720   if ta(1)=0 then ta(1)=ot4
+00730   ta(2)=ot4
 00740   if nta=0 then goto L770
 00750   adr=nta
 00760   goto L660
@@ -93,14 +93,14 @@
 00870   close #13: 
 00880   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&","&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",1,6,Replace,DupKeys -n"
 00890   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&","&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",1,11,Replace,DupKeys -n"
-00895   let df$=env$('Q')&"\PRmstr\jcmstr.h"&str$(cno) : let if$=env$('Q')&"\PRmstr\jcindx.h"&str$(cno) !:
+00895   df$=env$('Q')&"\PRmstr\jcmstr.h"&str$(cno) : if$=env$('Q')&"\PRmstr\jcindx.h"&str$(cno) !:
         fncombof("CJob.h"&str$(cno),lyne,mypos,43,df$,1,6,7,25,if$,1)
 00900   goto XIT
 00910 ! ______________________________________________________________________
-00920 XIT: let fnxit
+00920 XIT: fnxit
 00930 ! ______________________________________________________________________
 00940 ! <Updateable Region: ERTN>
-00950 ERTN: let fnerror(program$,err,line,act$,"xit")
+00950 ERTN: fnerror(program$,err,line,act$,"xit")
 00960   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00970   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00980   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

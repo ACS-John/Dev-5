@@ -40,4 +40,4 @@
 00410   pr f "23,3,C 78,N": ""
 00420   pr f "24,3,C 78,N": ""
 00430   retry 
-00440 XIT: let fnxit
+00440 XIT: fnxit

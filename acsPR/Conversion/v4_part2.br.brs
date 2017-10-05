@@ -6,11 +6,11 @@
 10240   fngetdir2(env$('Q')&'\'&fncursys$&"mstr",mat filename$,'/od /ta',"Company.*")
 10260   company_count=filename_item=0
 10280   for filename_item=1 to udim(mat filename$)
-10300     let tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
+10300     tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
 10320     if tmp_cno<>99999 and filename$(filename_item)<>'' then ! don't display company 99999
 10340       cno=tmp_cno
 10360 ! 
-10380 ! let fncno(cno)
+10380 ! fncno(cno)
 10400 ! 
 10420 ! /r
 10440       fn_pr_conversion_add_missing(cno)
@@ -37,7 +37,7 @@
 40020 !   pr 'all files should be closed now' : pause
 40080     fnstatus('PR adding missing files and indexes - Company Number '&str$(cno))
 40160     dim company_file$(1)*128,tmp$*256
-40180     let tmp$=env$('Q')&"\PRmstr"
+40180     tmp$=env$('Q')&"\PRmstr"
 40320     open #14: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&str$(cno),internal,outin,keyed ioerr L2180
 40340     goto L2200
 40360 L2180: ! 
@@ -59,7 +59,7 @@
 40720 XIT: ! 
 40740   fnend 
 50000 ! <Updateable Region: ERTN>
-50020 ERTN: let fnerror(program$,err,line,act$,"xit")
+50020 ERTN: fnerror(program$,err,line,act$,"xit")
 50040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 50060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 50080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

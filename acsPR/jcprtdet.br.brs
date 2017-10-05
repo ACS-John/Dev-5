@@ -14,18 +14,18 @@
 00140   fntop(program$,cap$="Job Cost Report")
 00150   fncno(cno)
 00155   fnconsole(1)
-00160   let dat1=date("mmddyy")
+00160   dat1=date("mmddyy")
 00170 ! 
-00180   let prtjob$="N" : let prtdet$="N" : sumcat$="N" : sumjob$="N" !:
-        let prtpag$="N" ! setup defaults to answers (also used by fnprocess=1)
+00180   prtjob$="N" : prtdet$="N" : sumcat$="N" : sumjob$="N" !:
+        prtpag$="N" ! setup defaults to answers (also used by fnprocess=1)
 00190 ! ______________________________________________________________________
 00200   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00210   for j=1 to 100
 00220     read #1,using 'Form POS 1,C 3,C 30': dcode$(j),desc$(100) eof L250
-00230     let desc$(val(dcode$(j)))=desc$(100) conv L240
+00230     desc$(val(dcode$(j)))=desc$(100) conv L240
 00240 L240: next j
 00250 L250: close #1: 
-00260   let desc$(100)="Unassigned"
+00260   desc$(100)="Unassigned"
 00270 ! ______________________________________________________________________
 00280   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form POS 1,C 40,POS 746,2*C 6',rec=1: cnam$,mat npj$ !:
@@ -43,20 +43,20 @@
 00390   pr #win,fields "7,2,Cr 42,N": "Summarize by Category (Y/N):"
 00400   pr #win,fields "8,2,Cr 42,N": "Summarize by Job (Y/N):"
 00410   pr #win,fields "9,2,Cr 42,N": "Start Jobs on a new page (Y/N):"
-00420   let io1$(1)="4,45,pic(zzzzzz),UT,N"
+00420   io1$(1)="4,45,pic(zzzzzz),UT,N"
 00430   for j=2 to 6
-00440     let io1$(j)=str$(j+3)&",45,Cu 1,UT,N"
+00440     io1$(j)=str$(j+3)&",45,Cu 1,UT,N"
 00450   next j
 00460   pr f "17,30,C 09,B,1": "Next (F1)"
 00470   pr f "17,41,C 09,B,5": "Exit (F5)"
 00480 L480: rinput #win,fields mat io1$: dat1,prtjob$,prtdet$,sumcat$,sumjob$,prtpag$ conv CONV1
-00490   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+00490   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 00500   if cmdkey>0 then goto L570 else ce=curfld
 00510 L510: ce=ce+1: if ce>udim(io1$) then ce=1
-00520 L520: let io1$(ce)=rtrm$(io1$(ce)) : ce1=pos(io1$(ce),"U",1) !:
+00520 L520: io1$(ce)=rtrm$(io1$(ce)) : ce1=pos(io1$(ce),"U",1) !:
         if ce1=0 then goto L510
-00530   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L480
-00540 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+00530   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L480
+00540 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 00550   ce=cnt+1
 00560 ERR1: pr f "24,78,C 1": bell : goto L520
 00570 L570: if cmdkey=5 then goto XIT
@@ -66,7 +66,7 @@
 00610   if sumcat$<>"Y" and sumcat$<>"N" then ce=4: goto ERR1
 00620   if sumjob$<>"Y" and sumjob$<>"N" then ce=5: goto ERR1
 00630   if prtpag$<>"Y" and prtpag$<>"N" then ce=6: goto ERR1
-00640 L640: if prtdet$="N" and sumcat$="N" and sumjob$="N" then goto L650 else let noread=1
+00640 L640: if prtdet$="N" and sumcat$="N" and sumjob$="N" then goto L650 else noread=1
 00650 L650: if prtjob$="Y" then goto L810
 00660   for k=1 to 100
 00670     pr newpage
@@ -78,17 +78,17 @@
 00730 L730: input #win,fields "4,23,C 6,UT,N": prtj$(k) conv L730
 00740     if cmdkey=2 then goto L800
 00750     if rtrm$(prtj$(k))="" or ltrm$(rtrm$(prtj$(k)))="0" then goto L730
-00760     let prtj$(k)=lpad$(rtrm$(prtj$(k)),6)
+00760     prtj$(k)=lpad$(rtrm$(prtj$(k)),6)
 00770   next k
 00780   goto L810
 00790 ! ______________________________________________________________________
-00800 L800: let k=k-1
+00800 L800: k=k-1
 00810 L810: pr newpage
 00820   fnwait(103,cap$,message$="Printing: please wait...",1)
 00830   on fkey 5 goto DONE
 00840   fnopenprn
 00850 L850: if prtjob$="Y" then goto L940
-00860 L860: let j1=j1+1
+00860 L860: j1=j1+1
 00870   if j1<=k then goto L910
 00880   eofc=2
 00890   goto L1890
@@ -100,25 +100,25 @@
 00950   if jn$>=npj$(1) and jn$<=npj$(2) then goto L940
 00960 L960: if hd=1 then goto L1010
 00970   gosub HDR
-00980   let hd=1
+00980   hd=1
 00990   goto L1090
 01000 ! ______________________________________________________________________
 01010 L1010: if prtpag$="N" then goto L1080
 01020   pr #255: newpage
-01030   let hd=0
+01030   hd=0
 01040   gosub HDR
-01050   let hd=1
+01050   hd=1
 01060   goto L1090
 01070 ! ______________________________________________________________________
 01080 L1080: gosub HDR
 01090 L1090: cnt$="    0"
 01100 L1100: read #2,using L1120,key>=jn$&cnt$: cn$,k$,mat l,mat ta nokey L1860
-01110   let detcd=0
+01110   detcd=0
 01120 L1120: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2,2*pd 3
-01130   let tr56=0
-01140   let tr8=0
-01150   let tr9=0
-01160   let tr89=0
+01130   tr56=0
+01140   tr8=0
+01150   tr9=0
+01160   tr89=0
 01170   let fstdet=0
 01180   if prtjob$="Y" then goto L1220
 01190   if cn$(1:6)><prtj$(j1) then goto L1670
@@ -127,16 +127,16 @@
 01220 L1220: if cn$(1:6)><jn$ then goto L1670
 01230 L1230: if noread=0 then goto L1330
 01240   if ta(1)=0 and ta(2)=0 then goto L1510
-01250   let nta=ta(1)
+01250   nta=ta(1)
 01260 L1260: read #3,using L1280,rec=nta: eno$,jno$,mat tr,pd$,nta
-01270   if tr(2)=0 then let tr(2)=100
+01270   if tr(2)=0 then tr(2)=100
 01280 L1280: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 01290   if prtdet$="N" then goto L1330
 01300   gosub PRINTDETAILLINE
 01310   goto L1360
 01320 ! ______________________________________________________________________
 01330 L1330: if detcd=1 then goto L1360
-01340   let detcd=1
+01340   detcd=1
 01350   gosub TOTALLINEWITHOUTDETAILS
 01360 L1360: if sumcat$="N" and subjob$="N" then goto L1390
 01370   if noread=0 then goto L1530
@@ -155,13 +155,13 @@
 01500   goto L1530
 01510 L1510: pr #255,using L1520: cn$(7:11)&"   "&k$(1:20),l(5),l(4),l(6),l(1),l(3),l(1)-l(4),l(3)-l(6) pageoflow NWPGE
 01520 L1520: form pos 1,c 28,pos 36,n 9.2,2*n 14.2,pos 82,4*n 14.2,skip 2
-01530 L1530: let totjob(1)=totjob(1)+l(5)
-01540   let totjob(2)=totjob(2)+l(4)
-01550   let totjob(3)=totjob(3)+l(6)
-01560   let totjob(4)=totjob(4)+l(1)
-01570   let totjob(5)=totjob(5)+l(3)
-01580   let totjob(6)=totjob(6)+(l(1)-l(4))
-01590   let totjob(7)=totjob(7)+(l(3)-l(6))
+01530 L1530: totjob(1)=totjob(1)+l(5)
+01540   totjob(2)=totjob(2)+l(4)
+01550   totjob(3)=totjob(3)+l(6)
+01560   totjob(4)=totjob(4)+l(1)
+01570   totjob(5)=totjob(5)+l(3)
+01580   totjob(6)=totjob(6)+(l(1)-l(4))
+01590   totjob(7)=totjob(7)+(l(3)-l(6))
 01600   if noread=0 then goto L1640
 01610   form pos 9,c 26,pos 36,n 9.2,2*n 14.2,pos 82,4*n 14,skip 2
 01620   if ta(1)=0 and ta(2)=0 then goto L1640
@@ -172,7 +172,7 @@
 01670 L1670: if eofc=2 then goto L1690
 01680   goto L1720
 01690 L1690: pr #255: newpage
-01700   let hd=0
+01700   hd=0
 01710   gosub HDR
 01720 L1720: pr #255,using L1790: "---------","-----------","-----------","------------","------------","------------","------------"
 01730   if eofc=2 then goto L1760
@@ -230,15 +230,15 @@
 02240   goto L2260
 02250 L2250: pr #255,using L2260: eno$,tr(4),0,0,tr(8)+tr(9),tr(2)," - "&desc$(tr(2))(1:25) pageoflow NWPGE
 02260 L2260: form skip 1,pos 15,c 12,pos 28,pic(zz/zz/zz),pos 36,n 9.2,2*n 14.2,pos 74,n 4,c 28,skip 1
-02270   let tr89=tr89+tr(8)+tr(9)
+02270   tr89=tr89+tr(8)+tr(9)
 02280   goto L2360
 02290 L2290: if rtrm$(pd$)="" then goto L2320
 02300   pr #255,using L2260: eno$,tr(4),tr(5)+tr(6),tr(9),tr(8),tr(2)," - "&pd$(1:25) pageoflow NWPGE
 02310   goto L2330
 02320 L2320: pr #255,using L2260: eno$,tr(4),tr(5)+tr(6),tr(9),tr(8),tr(2)," - "&desc$(tr(2))(1:25) pageoflow NWPGE
-02330 L2330: let tr56=tr56+tr(5)+tr(6)
-02340   let tr9=tr9+tr(9)
-02350   let tr8=tr8+tr(8)
+02330 L2330: tr56=tr56+tr(5)+tr(6)
+02340   tr9=tr9+tr(9)
+02350   tr8=tr8+tr(8)
 02360 L2360: return 
 02370 ! ______________________________________________________________________
 02380 ACCUMULATEFORCATEGORYSUMMARY: ! 
@@ -246,10 +246,10 @@
 02400   cdesc$(tr(2))=desc$(tr(2))
 02410   if lcat=0 and hcat=0 then goto L2420 else goto L2450
 02420 L2420: lcat=tr(2)
-02430   let hcat=lcat
+02430   hcat=lcat
 02440   goto L2470
 02450 L2450: if tr(2)<lcat then lcat=tr(2)
-02460   if tr(2)>hcat then let hcat=tr(2)
+02460   if tr(2)>hcat then hcat=tr(2)
 02470 L2470: return 
 02480 ! ______________________________________________________________________
 02490 PRINTCATEGORYSUMMARY: ! 
@@ -265,11 +265,11 @@
 02590 L2590: mat jobtot=jobtot+cattot
 02600   for j=lcat to hcat
 02610     if rtrm$(cdesc$(j))="" then goto L2630
-02620     let jtot$(j)=cdesc$(j)
+02620     jtot$(j)=cdesc$(j)
 02630 L2630: next j
 02640   mat cattot=(0)
 02650   lcat=0
-02660   let hcat=0
+02660   hcat=0
 02670   return 
 02680 ! ______________________________________________________________________
 02690 PRINTSUMMARYBYJOB: ! 
@@ -285,7 +285,7 @@
 02790 L2790: mat tottot=tottot+jobtot
 02800   for j=1 to 100
 02810     if rtrm$(jtot$(j))="" then goto L2830
-02820     let tottot$(j)=jtot$(j)
+02820     tottot$(j)=jtot$(j)
 02830 L2830: next j
 02840   mat jobtot=(0)
 02850   return 
@@ -309,15 +309,15 @@
 03030 ! ______________________________________________________________________
 03040 NWPGE: ! 
 03050   pr #255: newpage
-03060   let hd=0
+03060   hd=0
 03070   gosub HDR
-03080   let hd=1
+03080   hd=1
 03090   continue 
 03100 ! ______________________________________________________________________
-03110 XIT: let fnxit
+03110 XIT: fnxit
 03120 ! ______________________________________________________________________
 03130 ! <Updateable Region: ERTN>
-03140 ERTN: let fnerror(program$,err,line,act$,"xit")
+03140 ERTN: fnerror(program$,err,line,act$,"xit")
 03150   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 03160   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 03170   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

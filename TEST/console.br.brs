@@ -7,7 +7,7 @@
 00070 ! ***********************************************************************
 00080   pr "I'm about to hide the console for 5 seconds"
 00090   pr "press any key to begin"
-00100   let kstat$(1)
+00100   kstat$(1)
 00110   fnconsole ! should turn console off
 00111   fnconsole ! should turn console off
 00112   fnconsole ! should turn console off
@@ -21,6 +21,6 @@
 00160 ! ***********************************************************************
 00170   pr 'how you like that?' !:
         pr 'Press any key to continue' !:
-        let kstat$(1)
+        kstat$(1)
 00180 ! Chain "Tease\Menu"
 00185   stop 

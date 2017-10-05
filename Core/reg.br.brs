@@ -31,7 +31,7 @@
 16000 def fn_sreg_read(field_name$*128,&field_value$; default_if_not_read$*128)
 16020   dim tmpfield_value$*256,key_compare$*128
 16040   let field_name$=rpad$(lwrc$(trim$(field_name$)),128)
-16060   let tmpfield_value$=field_value$=''
+16060   tmpfield_value$=field_value$=''
 16080   ! pr 'read #reg_h'
 16100   read #sreg_h,using 'form pos 1,C 128,v 256',key=field_name$,release: key_compare$,tmpfield_value$ ioerr SREG_LOAD_IOERR ! XXX
 16120   SREG_LOAD_IOERR: ! 
@@ -64,33 +64,33 @@
 19260 ! /r
 20000 ! r: Regurlar Registry - tied to Client only - saves their settings
 20020 def library fnreg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128)
-20040   if ~reg_setup then let reg_setup=fn_reg_setup
+20040   if ~reg_setup then reg_setup=fn_reg_setup
 20060   fnreg_read=fn_reg_read(rr_field_name$,rr_field_value$, rr_default_if_not_read$)
 20080 fnend 
 20100 def library fnreg_write(rw_field_name$*128,rw_field_value$*256)
-20120   if ~reg_setup then let reg_setup=fn_reg_setup
+20120   if ~reg_setup then reg_setup=fn_reg_setup
 20140   fnreg_write=fn_reg_write(rw_field_name$,rw_field_value$)
 20160 fnend 
 20180 def library fnreg_rename(field_name_old$*128,fieldNameNew$*128)
-20200   if ~reg_setup then let reg_setup=fn_reg_setup
+20200   if ~reg_setup then reg_setup=fn_reg_setup
 20220   fnreg_rename=fn_reg_rename(field_name_old$,fieldNameNew$)
 20240 fnend 
 20260 def fn_reg_read(rr_field_name$*128,&rr_field_value$; rr_default_if_not_read$*128)
 20280   dim rr_tmpfield_value$*256,rr_key_compare$*128
-20300   let rr_field_name$=rpad$(lwrc$(trim$(rr_field_name$)),128)
-20320   let rr_tmpfield_value$=rr_field_value$=''
+20300   rr_field_name$=rpad$(lwrc$(trim$(rr_field_name$)),128)
+20320   rr_tmpfield_value$=rr_field_value$=''
 20340   ! pr 'read #reg_h'
 20360   read #reg_h,using 'form pos 1,C 128,v 256',key=rr_field_name$,release: rr_key_compare$,rr_tmpfield_value$ ioerr REG_LOAD_IOERR ! XXX
 20380   REG_LOAD_IOERR: ! 
 20400   if rr_key_compare$=rr_field_name$ then 
-20420     let rr_field_value$=rtrm$(rr_tmpfield_value$)
+20420     rr_field_value$=rtrm$(rr_tmpfield_value$)
 20440   else 
-20460     let rr_field_value$=rr_default_if_not_read$ ! ''
+20460     rr_field_value$=rr_default_if_not_read$ ! ''
 20480   end if 
 20500   ! pr 'load ';trim$(rr_field_name$);'=';rr_field_value$
 20520 fnend 
 20540 def fn_reg_write(rw_field_name$*128,rw_field_value$*256)
-20560   let rw_field_name$=rpad$(lwrc$(trim$(rw_field_name$)),128)
+20560   rw_field_name$=rpad$(lwrc$(trim$(rw_field_name$)),128)
 20580   rewrite #reg_h,using 'form pos 1,c 128,c 256',key=rw_field_name$: rw_field_name$,rw_field_value$ nokey REG_WRITE ! XXX
 20600   ! pr 'rewrite #reg_h'
 20620   goto REG_SAVE_XIT
@@ -114,10 +114,10 @@
 30000 ! r: GLOBAL - affects ALL registries
 30020 def library fnreg_close ! closes all registries (sreg, creg and reg)
 30040   close #reg_h: ioerr ignore
-30060   let reg_setup=0
+30060   reg_setup=0
 30080   fn_creg_close
 30100   fn_sreg_close
-30120   XIT: ! This XIT label is only for use by ERTN - fnerror - if they try to exit a failed read or write to the registry, let them just skip on past
+30120   XIT: ! This XIT label is only for use by ERTN - fnerror - if they try to exit a failed read or write to the registry, them just skip on past
 30140 fnend 
 30160 def fn_creg_close
 30180   close #creg_h: ioerr ignore
@@ -125,7 +125,7 @@
 30220 fnend 
 30240 IGNORE: continue 
 30260 ! <updateable region: ertn>
-30280 ERTN: let fnerror(program$,err,line,act$,"xit")
+30280 ERTN: fnerror(program$,err,line,act$,"xit")
 30300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 30320   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 30340   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -187,11 +187,11 @@
 41040 ! /r
 50000 ! r: User Registry - tied to Unique_Computer_Id (stored in regurlar registry with key prepended)
 50020 def library fnureg_read(ur_field_name$*128,&ur_field_value$; ur_default_if_not_read$*128)
-50040   if ~reg_setup then let reg_setup=fn_reg_setup
+50040   if ~reg_setup then reg_setup=fn_reg_setup
 50060   fnureg_read=fn_reg_read(env$('Unique_Computer_Id')&'.'&ur_field_name$,ur_field_value$, ur_default_if_not_read$)
 50080 fnend 
 50100 def library fnureg_write(uw_field_name$*128,uw_field_value$*256)
-50120   if ~reg_setup then let reg_setup=fn_reg_setup
+50120   if ~reg_setup then reg_setup=fn_reg_setup
 50140   fnureg_write=fn_reg_write(env$('Unique_Computer_Id')&'.'&uw_field_name$,uw_field_value$)
 50160 fnend 
 50180 ! /r
@@ -217,7 +217,7 @@
 80380 fnend
 82000 def library fnIniToReg
 82010   if ~setup then let fn_setup
-82020   if ~reg_setup then let reg_setup=fn_reg_setup
+82020   if ~reg_setup then reg_setup=fn_reg_setup
 82030   if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
 82040   fnIniToReg=fn_IniToReg
 82060 fnend
@@ -271,18 +271,18 @@
 86290 fnhamsterfio('CO System Registry')
 86300 ! /r
 88000 def library fnread_program_print_property(key$*80,&value$; prgCapForSettingsOverride$*256)
-88020   if ~reg_setup then let reg_setup=fn_reg_setup
+88020   if ~reg_setup then reg_setup=fn_reg_setup
 88040   if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
 88060   on error goto ERTN
 88080   dim prg$*256
 88100   if prgCapForSettingsOverride$='' then
-88120     let prg$=env$('Program_Caption')
+88120     prg$=env$('Program_Caption')
 88140   else 
 88160     prg$=prgCapForSettingsOverride$
 88180   end if
 88200   len_prg=len(prg$)
-88220   ! if lwrc$(prg$(len_prg-2:len_prg))='.br' then let prg$(len_prg-2:len_prg)='' ! remove the .br ending, if it is there
-88240   ! if lwrc$(trim$(prg$))=lwrc$("acspr\checkfile") then let prg$="acspr\checkhistory"
+88220   ! if lwrc$(prg$(len_prg-2:len_prg))='.br' then prg$(len_prg-2:len_prg)='' ! remove the .br ending, if it is there
+88240   ! if lwrc$(trim$(prg$))=lwrc$("acspr\checkfile") then prg$="acspr\checkhistory"
 88260   if env$('ACSDeveloper')<>'' then !  if it is a developer
 88280     fn_sreg_read(env$('cursys')&'.'&prg$&'.Print.'&key$,value$)
 88300   else
@@ -309,12 +309,12 @@
 88720   ! pause
 88760 fnend 
 90000 def library fnwrite_program_print_property(key$*80,value$*256; prgCapForSettingsOverride$*256)
-90020   if ~reg_setup then let reg_setup=fn_reg_setup
+90020   if ~reg_setup then reg_setup=fn_reg_setup
 90040   if env$('ACSDeveloper')<>'' and ~sreg_setup then sreg_setup=fn_sreg_setup
 90060   on error goto ERTN
 90080   dim prg$*256
 90100   if prgCapForSettingsOverride$='' then
-90120     let prg$=env$('Program_Caption')
+90120     prg$=env$('Program_Caption')
 90140   else 
 90160     prg$=prgCapForSettingsOverride$
 90180   end if

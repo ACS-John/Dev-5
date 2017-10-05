@@ -14,5 +14,5 @@
 00130 RELEASE_PRINT: library 'S:\Core\Library': fnpa_finis
 00140   close #1: ioerr L150
 00150 L150: close #3: ioerr L160
-00160 L160: let fnpa_finis
+00160 L160: fnpa_finis
 00180   return 

@@ -19,42 +19,42 @@
         close #1: 
 00190   on fkey 5 goto XIT
 00200 ! ______________________________________________________________________
-00210 L210: let p1=pos(b$,"-",1)
+00210 L210: p1=pos(b$,"-",1)
 00220   if p1=0 then goto L260
 00230   b$(p1:p1)=""
 00240   goto L210
 00250 ! ______________________________________________________________________
 00260 L260: b1=val(b$)
-00270   let p1=pos(a$(3),",",1): comma=1
-00280   if p1=0 then let p1=pos(a$(3)," ",1): comma=0
+00270   p1=pos(a$(3),",",1): comma=1
+00280   if p1=0 then p1=pos(a$(3)," ",1): comma=0
 00290   ct$=a$(3)(1:p1-1)
 00300   if comma=1 then st$=a$(3)(p1+2:p1+3) else st$=a$(3)(p1+1:p1+2)
-00310   let p2=len(rtrm$(a$(3)))
-00320   let p1=p2-4
+00310   p2=len(rtrm$(a$(3)))
+00320   p1=p2-4
 00330   let zip$=a$(3)(p1:p2)
 00340   if val(date$(1:2))-1 <70 then let yr=2000+val(date$(1:2))-1 else let yr=1900+val(date$(1:2))-1
 00350   if date$(4:5)="12" then let yr=yr+1 ! add one to year if run in december
-00360   let io1$(1)="5,25,C 40,UT,N"
-00370   let io1$(2)="6,25,C 40,UT,N"
-00380   let io1$(3)="7,25,C 20,UT,N"
-00390   let io1$(4)="8,25,C 2,UT,N"
-00400   let io1$(5)="9,25,C 5,UT,N"
-00410   let io1$(6)="10,25,N 9,UT,N"
-00420   let io1$(7)="11,25,N 4,UT,N"
-00430   let io1$(8)="12,25,N 10.2,UT,N"
-00440   let io1$(9)="13,25,N 10.4,UT,N"
-00450   let io1$(10)="14,25,N 10.2,UT,N"
-00460   let io1$(11)="15,25,N 10.4,UT,N"
-00470   let io1$(12)="16,75,N 2,UT,N"
-00480   let io1$(13)="17,47,N 2,UT,N"
-00490   let io1$(14)="18,61,N 2,UT,N"
-00500   let io1$(15)="19,65,N 2,UT,N"
-00510   let io1$(16)="20,35,C 8,UT,N"
-00520   let io1$(17)="21,52,C 1,UT,N"
-00530   let io1$(18)="22,38,C 1,UT,N"
-00540   let ibm$="IBM"
-00550   let namcde$="F"
-00560   let typemp$="R"
+00360   io1$(1)="5,25,C 40,UT,N"
+00370   io1$(2)="6,25,C 40,UT,N"
+00380   io1$(3)="7,25,C 20,UT,N"
+00390   io1$(4)="8,25,C 2,UT,N"
+00400   io1$(5)="9,25,C 5,UT,N"
+00410   io1$(6)="10,25,N 9,UT,N"
+00420   io1$(7)="11,25,N 4,UT,N"
+00430   io1$(8)="12,25,N 10.2,UT,N"
+00440   io1$(9)="13,25,N 10.4,UT,N"
+00450   io1$(10)="14,25,N 10.2,UT,N"
+00460   io1$(11)="15,25,N 10.4,UT,N"
+00470   io1$(12)="16,75,N 2,UT,N"
+00480   io1$(13)="17,47,N 2,UT,N"
+00490   io1$(14)="18,61,N 2,UT,N"
+00500   io1$(15)="19,65,N 2,UT,N"
+00510   io1$(16)="20,35,C 8,UT,N"
+00520   io1$(17)="21,52,C 1,UT,N"
+00530   io1$(18)="22,38,C 1,UT,N"
+00540   ibm$="IBM"
+00550   namcde$="F"
+00560   typemp$="R"
 00570 ! ______________________________________________________________________
 00580 SCR1: ! 
 00590   pr newpage
@@ -83,12 +83,12 @@
 00820   pr f "24,39,C 11,B,5": "Cancel (F5)"
 00830   pr f mat io1$: a$(1),a$(2),ct$,st$,zip$,b1,yr,87900,.062,999999,.0145,ins,pen,dfc,dcan,ibm$,namcde$,typemp$
 00840 L840: input fields mat io1$,attr "R": a$(1),a$(2),ct$,st$,zip$,b1,yr,ssmax,ssrate,mcmax,mcrate,ins,pen,dfc,dcan,ibm$,namcde$,typemp$ conv CONV1
-00850   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+00850   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 00860   if cmdkey>0 then goto L930 else ce=curfld+1
 00870   if ce>udim(io1$) then ce=1
-00880 L880: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
-00890   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L840
-00900 CONV1: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+00880 L880: io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
+00890   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L840
+00900 CONV1: if ce>0 then io1$(ce)(ce1:ce2)="U"
 00910   ce=cnt+1
 00920 ERR1: pr f "24,78,C 1": bell : goto L880
 00930 L930: ! 
@@ -107,8 +107,8 @@
 01060   if dfc<0 or dfc>10 then ce=11: goto ERR1
 01070 ! ______________________________________________________________________
 01080   mat io1$(2)
-01090   let io1$(1)="12,71,N 2,UT,N"
-01100   let io1$(2)="14,71,N 2,UT,N"
+01090   io1$(1)="12,71,N 2,UT,N"
+01100   io1$(2)="14,71,N 2,UT,N"
 01110   close #101: ioerr L1120
 01120 L1120: pr newpage
 01130   open #101: "SROW=7,SCOL=2,EROW=15,ECOL=79,BORDER=DR,CAPTION=<Electronic W-2   State Reporting Information",display,outin 
@@ -119,12 +119,12 @@
 01180   pr f "16,28,C 9,B,1": "Next (F1)"
 01190   pr f "16,39,C 11,B,5": "Cancel (F5)"
 01200 L1200: input fields mat io1$: sr1,sr2 conv L1200
-01210   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+01210   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 01220   if cmdkey>0 then goto L1290 else ce=curfld+1
 01230   if ce>udim(io1$) then ce=1
-01240 L1240: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
-01250   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L1200
-01260 CONV2: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+01240 L1240: io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
+01250   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L1200
+01260 CONV2: if ce>0 then io1$(ce)(ce1:ce2)="U"
 01270   ce=cnt+1
 01280 ERR2: pr f "24,78,C 1": bell : goto L1240
 01290 L1290: if cmdkey=5 then goto XIT
@@ -134,16 +134,16 @@
 01330   gosub SCR2
 01340   pr newpage
 01350   let win=101
-01360   let message$=""
-01370   stopable=1: gosub L3970 ! Let FNWAIT(WIN,CAP$,MESSAGE$,1)
+01360   message$=""
+01370   stopable=1: gosub L3970 ! fnWAIT(WIN,CAP$,MESSAGE$,1)
 01380 ! ______________________________________________________________________
 01390   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 01400 L1400: open #22: "Name=W2REPORT,RecL=512,eol=crlf,replace",display,output 
 01410   goto L1480
 01420 ! ______________________________________________________________________
 01430   pr newpage
-01440   let msgline$(1)="Insert Diskette"
-01450   let mtype=1
+01440   msgline$(1)="Insert Diskette"
+01450   mtype=1
 01460   if err=4221 then gosub L3610 ! fnOldMsgBox(MAT RESPONSE$,CAP$,MAT MSGLINE$,MTYPE)
 01470   goto L1400
 01480 L1480: gosub RECRA
@@ -152,23 +152,23 @@
 01510   pr f "12,32,N 3,N": r1/lrec(1)*100
 01520   read #1,using L1610: eno,mat em$,ss$,mat m eof END1
 01530   gosub L3030
-01540   let dedfed=dedfica=dedst=0
+01540   dedfed=dedfica=dedst=0
 01550   for j=1 to 10
 01560     if dedcode(j)><1 then goto L1600
-01570     if dedfed(j)=1 then let dedfed=dedfed+m(j*2+9)
-01580     if dedfica(j)=1 then let dedfica=dedfica+m(j*2+9)
-01590     if dedst(j)=1 then let dedst=dedst+m(j*2+9)
+01570     if dedfed(j)=1 then dedfed=dedfed+m(j*2+9)
+01580     if dedfica(j)=1 then dedfica=dedfica+m(j*2+9)
+01590     if dedst(j)=1 then dedst=dedst+m(j*2+9)
 01600 L1600: next j
 01610 L1610: form pos 1,n 4,3*c 25,c 11,36*pd 5.2
-01620   let p1=pos(em$(3),",",1) : comma=1
-01630   if p1=0 then let p1=pos(em$(3)," ",1): comma=0
+01620   p1=pos(em$(3),",",1) : comma=1
+01630   if p1=0 then p1=pos(em$(3)," ",1): comma=0
 01640   emct$=em$(3)(1:p1-1)
 01650   if comma=1 then emst$=em$(3)(p1+2:p1+3) else emst$=em$(3)(p1+1:p1+2)
 01660   emst$=em$(3)(p1+2:p1+3)
-01670   let p2=len(rtrm$(em$(3)))
-01680   let p1=p2-4
+01670   p2=len(rtrm$(em$(3)))
+01680   p1=p2-4
 01690   emzip$=em$(3)(p1:p2)
-01700 L1700: let p1=pos(ss$,"-",1)
+01700 L1700: p1=pos(ss$,"-",1)
 01710   if p1>0 then ss$(p1:p1)="": goto L1700 else ssn=val(ss$)
 01720   let w2(1)=min(w2(1)+m(1)-m(31)-dedfica,ssmax-m(31)) ! TOTAL SOC-SEC WAGES
 01730   let w3=w3+m(5) ! TOTAL FICA WITHHELD
@@ -185,8 +185,8 @@
 01840   let w2(7)=w2(7)+0 ! uncollected employee fica tax on tips
 01850   let w2(8)=w2(8)+m(35) ! EIC TOTAL
 01860   let w2(9)=w2(9)+0 ! ALLOCATED TIPS
-01870   if dfc>0 then let dc1=dc1+m(9+(dfc*2))*100 ! DEFERRED COMPENSATION
-01880   if dcan>0 then let dca=dca+m(9+(dcan*2))*100 ! Dependent care assistance
+01870   if dfc>0 then dc1=dc1+m(9+(dfc*2))*100 ! DEFERRED COMPENSATION
+01880   if dcan>0 then dca=dca+m(9+(dcan*2))*100 ! Dependent care assistance
 01890   if sr1=0 then goto L1920
 01900   s2(1)=s2(1)+(m(1)*100)
 01910   s2(2)=s2(2)+(m(7)*100)
@@ -194,10 +194,10 @@
 01930   gosub RECRE
 01940   gosub RECRW
 01950   gosub RECRS
-01960   let tw1=tw1+1
-01970   let tw2=tw2+1
+01960   tw1=tw1+1
+01970   tw2=tw2+1
 01980   gosub RECRT
-01990   let tw2=0
+01990   tw2=0
 02000   goto L1500
 02010 ! ______________________________________________________________________
 02020 RECRA: pr #22,using L2030: "RA",rpad$(ltrm$(str$(b1)),9),emppin$,resub$,tlcn$,"98",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","","",a$(1),"",a$(2)(1:22),ct$,st$,zip$,"","","","","",contact$,contactph$,phoneext$,"",email$,"","","2","L",""
@@ -215,8 +215,8 @@
 02140 ! ______________________________________________________________________
 02150 RECRW: for j=1 to 9: let w2(j)=w2(j)*100: next j
 02160   for j=1 to 2: let w3(j)=w3(j)*100 : next j
-02170   if pen=0 then let pen$="0" else let pen$="1"
-02180   if dfc=0 then let dfc$="" else let dfc$="D"
+02170   if pen=0 then pen$="0" else pen$="1"
+02180   if dfc=0 then dfc$="" else dfc$="D"
 02190   pr #22,using L2200: "RW",ssn,first$,mid$,last$,"","",em$(2)(1:22),emct$,emst$,emzip$,"","","","","",w2(3),w2(5),w2(1),w2(4),w3(1),w3(2),w2(2),w2(8),dca,dc1,0,0,0,0,0,0,0,0,0,"",w2(6),0,0,0,0,"",0,"",pen$,0,""
 02200 L2200: form pos 1,c 2,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,19*pic(###########),c 11,5*pic(###########),c 23,pic(#),c 1,c 1,pic(#),c 23
 02210 ! pr #22,Using 2270: "RO","",W2(9),W2(7),0,0,0,0,0,"","","",0,0,0,0,0,0,0,"",0,0,""
@@ -228,14 +228,14 @@
 02270   if s2(1)=0 and s2(2)=0 then goto L2300 ! NO STATE WAGES
 02280   pr #22,using L2290: "RS",sr2,"",ssn,first$,mid$,last$,"","",em$(2)(1:22),emct$,emst$,emzip$,"","","","","","","",0,0,0,0,0,"","","",sr2,s2(1),s2(2),"","",0,0,"","","",""
 02290 L2290: form pos 1,c 2,g 2,c 5,pic(#########),c 15,c 15,c 20,c 4,c 22,c 22,c 22,c 2,c 5,c 4,c 5,c 23,c 15,c 2,c 2,c 6,2*pic(###########),pic(##),2*pic(########),c 5,c 20,c 6,g 2,2*pic(###########),c 10,c 1,2*pic(###########),c 7,c 75,c 75,c 25
-02300 L2300: let t1=t1+1: mat t1=t1+w2
+02300 L2300: t1=t1+1: mat t1=t1+w2
 02310   mat i1=i1+w2
 02320   mat i2=i2+w3
 02330   mat t2=t2+w3
-02340   let dc2=dc2+dc1
-02350   let dc3=dc3+dc1
-02360   let dca2=dca2+dca
-02370   let dca3=dca3+dca
+02340   dc2=dc2+dc1
+02350   dc3=dc3+dc1
+02360   dca2=dca2+dca
+02370   dca3=dca3+dca
 02380   let w2=w3=dca=dc1=0
 02390   mat w2=(0)
 02400   mat w3=(0)
@@ -247,7 +247,7 @@
 02460 L2460: form pos 1,c 2,pic(#######),19*pic(###############),c 15,6*pic(###############),c 113
 02470 ! pr #22,Using 2520: "RU",TW2,T1(9),T1(7),0,0,0,0,0,"",0,0,0,0,0,0,0,0,0,""
 02480   form pos 1,c 2,pic(#######),7*pic(###############),c 240,9*pic(###############),c 23
-02490   let t1=0: mat t1=(0)
+02490   t1=0: mat t1=(0)
 02500   mat t2=(0)
 02510   return 
 02520 ! ______________________________________________________________________
@@ -259,7 +259,7 @@
 02580 ! Gosub RECRT
 02590   gosub RECRF
 02600   gosub L2630
-02610 XIT: let fnxit
+02610 XIT: fnxit
 02620 ! ______________________________________________________________________
 02630 L2630: close #24: ioerr L2650
 02640   dim a$*512
@@ -279,7 +279,7 @@
 02780 SCR2: ! 
 02790   dim contact$*27,email$*40
 02800   let win=101
-02810   let win_height=12: let win_width=75: let display_cnam=1: button_option=2: gosub L3200
+02810   let win_height=12: let win_width=75: display_cnam=1: button_option=2: gosub L3200
 02820   pr #win,fields "04,2,Cr 31,N": "Personal ID Number:" !:
         pr #win,fields "05,2,Cr 31,N": "Resub Indicator:" !:
         pr #win,fields "06,2,Cr 31,N": "Resub TLCN:" !:
@@ -296,9 +296,9 @@
         scr2_io$(6)="09,34,C 05,UT,N" !:
         scr2_io$(7)="10,34,C 40,UT,N" !:
         scr2_io$(8)="11,34,C 01,UT,N"
-02840   if resub$="" then let resub$="0"
-02850 ! If TLCN$="" Then Let TLCN$="0"
-02860   if terminat$="" then let terminat$="0"
+02840   if resub$="" then resub$="0"
+02850 ! If TLCN$="" Then tLCN$="0"
+02860   if terminat$="" then terminat$="0"
 02870 L2870: rinput #win,fields mat scr2_io$: emppin$,resub$,tlcn$,contact$,contactph$,phoneext$,email$,terminat$ conv CONV_SCR2
 02880   if ce>0 then scr2_io$(ce)(ce1:ce2)="U": ce=0
 02890   if cmdkey>0 then goto L2960 else ce=curfld
@@ -319,19 +319,19 @@
 03010   return 
 03020 ! ______________________________________________________________________
 03030 L3030: dim first$*15,mid$*15,last$*20,em$(3)*30
-03040   em$(1)=uprc$(rtrm$(em$(1))): ! Let NAMCDE$="s"
+03040   em$(1)=uprc$(rtrm$(em$(1))): ! nAMCDE$="s"
 03050   let x1=pos(em$(1)," ",1)
 03060   let x2=pos(em$(1)," ",x1+1)
 03070   let x3=pos(em$(1)," ",x2+1)
 03080   if uprc$(namcde$)="S" then goto L3130
 03090   let first$=em$(1)(1:max(x1-1,1))
-03100   if x2>0 then let mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
-03110   if x2=0 then last$=em$(1)(x1+1:len(em$(1))): let mid$=""
+03100   if x2>0 then mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
+03110   if x2=0 then last$=em$(1)(x1+1:len(em$(1))): mid$=""
 03120   goto L3170
 03130 L3130: ! last name first
 03140   if x1>0 and em$(1)(x1-1:x1-1)="," then last$=em$(1)(1:x1-2) else last$=em$(1)(1:max(x1-1,1))
-03150   if x2>0 then let first$=em$(1)(x1+1:x2-1): let mid$=em$(1)(x2+1:len(em$(1)))
-03160   if x2=0 then let first$=em$(1)(x1+1:len(em$(1))): let mid$=""
+03150   if x2>0 then let first$=em$(1)(x1+1:x2-1): mid$=em$(1)(x2+1:len(em$(1)))
+03160   if x2=0 then let first$=em$(1)(x1+1:len(em$(1))): mid$=""
 03170 L3170: ! pr FIRST$,MID$,LAST$
 03180   return 
 03190 ! ______________________________________________________________________
@@ -391,7 +391,7 @@
 03710   next j
 03720   open #104: "SRow=10,SCol=09,ERow="&str$(endrow)&",ECol=70,Border=SR,Caption=<"&cap$,display,outin 
 03730   pr #104: newpage
-03740   let mglinerow=2
+03740   mglinerow=2
 03750   for j=1 to udim(msgline$)
 03760     pr #104,fields str$(mglinerow+j-1)&",2,Cc 60,N": msgline$(j)
 03770   next j
@@ -400,16 +400,16 @@
 03800   if mtype=2 then pr f str$(endrow+1)&",35,Cc 4,B,21": "Yes"
 03810   if mtype=2 then pr f str$(endrow+1)&",40,Cc 4,B,22": "No"
 03820 L3820: if mtype=2 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
-03830   if mtype=2 and cmdkey=22 then let response$(1)="N"
-03840   if mtype=2 and cmdkey=21 then let response$(1)="Y"
+03830   if mtype=2 and cmdkey=22 then response$(1)="N"
+03840   if mtype=2 and cmdkey=21 then response$(1)="Y"
 03850   if mtype=2 and response$(1)<>"Y" and response$(1)<>"N" then pr f "24,1,C 7,N": bell$ : goto L3820
 03860   if mtype=3 then pr f str$(endrow+1)&",29,Cc 4,B,21": "Yes"
 03870   if mtype=3 then pr f str$(endrow+1)&",34,Cc 4,B,22": "No"
 03880   if mtype=3 then pr f str$(endrow+1)&",39,C 12,B,22": "Cancel (Esc)"
 03890   if mtype=3 then input fields str$(endrow)&",09,Cu 1,AE,N": response$(1)
-03900   if mtype=3 and cmdkey=22 then let response$(1)="N"
-03910   if mtype=3 and cmdkey=21 then let response$(1)="Y"
-03920   if mtype=3 and cmdkey=99 then let response$(1)=""
+03900   if mtype=3 and cmdkey=22 then response$(1)="N"
+03910   if mtype=3 and cmdkey=21 then response$(1)="Y"
+03920   if mtype=3 and cmdkey=99 then response$(1)=""
 03930   if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr f "24,1,C 7,N": bell$ : goto L3820
 03940   close #104: ioerr L3950
 03950 L3950: return  ! Fnend
@@ -442,16 +442,16 @@
 04300 ! ______________________________________________________________________
 04310   return  ! Fnend
 04320 L4320: ! Def Library FNFKEY(SCRLINE,MAT FKEY$,MAT DISFK,&EM$,ES)
-04330   let totallen=0 !:
+04330   totallen=0 !:
         startpos=0
 04340   for j=1 to udim(fkey$) ! add ' (Fx)' to each button
 04350     if fkey$(j)="" then goto L4380
 04360     let fkey$(j)=fkey$(j)&" (F"&str$(j)&")" !:
           ! add ' (Fx)' to each button
-04370     let totallen=totallen+len(fkey$(j))+1
+04370     totallen=totallen+len(fkey$(j))+1
 04380 L4380: next j
-04390   let totallen=totallen+len(rtrm$(em$))+min(len(rtrm$(em$)),1)+es
-04400   let totallen=totallen-1
+04390   totallen=totallen+len(rtrm$(em$))+min(len(rtrm$(em$)),1)+es
+04400   totallen=totallen-1
 04410   startpos=int((80-totallen)/2)+1
 04420   pr f str$(scrline)&","&str$(startpos)&",C "&str$(totallen)&",N": rpt$("Ä",totallen)
 04430   for j=1 to udim(fkey$)
@@ -466,7 +466,7 @@
 04520 L4520: return  ! Fnend
 04530 ! ______________________________________________________________________
 04540 ! <Updateable Region: ERTN>
-04550 ERTN: let fnerror(program$,err,line,act$,"xit")
+04550 ERTN: fnerror(program$,err,line,act$,"xit")
 04560   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 04570   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 04580   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -7,7 +7,7 @@
 00070 ! ______________________________________________________________________
 00080     dim item$(2)*40,resp$(30)*80
 00090 ! ______________________________________________________________________
-00100     let jn$=lpad$(rtrm$(cn$),6) ! pass job over in category #, but pass back the category
+00100     jn$=lpad$(rtrm$(cn$),6) ! pass job over in category #, but pass back the category
 00110     fncno(cno)
 00120     category=16 ! category file in jcmaint
 00130 ! ______________________________________________________________________
@@ -43,7 +43,7 @@
 00320     goto XIT
 00330 ! ______________________________________________________________________
 00340 ! <Updateable Region: ERTN>
-00350 ERTN: let fnerror(program$,err,line,act$,"xit")
+00350 ERTN: fnerror(program$,err,line,act$,"xit")
 00360     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00370     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00380     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

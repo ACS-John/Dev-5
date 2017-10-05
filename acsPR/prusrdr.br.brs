@@ -16,8 +16,8 @@
         fnopenwin(win=101,3,2,22,79,cap$)
 00130   pr #win: newpage
 00140   for j=1 to 20 !:
-          let jcs$(j)=str$(j)&",2,Pic(ZZ),N" !:
-          let jcs$(j+20)=str$(j)&",5,C 74,N" !:
+          jcs$(j)=str$(j)&",2,Pic(ZZ),N" !:
+          jcs$(j+20)=str$(j)&",5,C 74,N" !:
         next j
 00150   pr #win,fields mat jcs$: mat rn,mat rn$
 00160   pr f "23,22,C 09,B,5": "Exit (F5)"
@@ -31,10 +31,10 @@
 00240 ! ______________________________________________________________________
 00250 JCPRNT: chain "S:\acsPR\jcPrnt"&str$(rno)
 00260 ! ______________________________________________________________________
-00270 XIT: let fnxit
+00270 XIT: fnxit
 00280 ! ______________________________________________________________________
 00290 ! <Updateable Region: ERTN>
-00300 ERTN: let fnerror(program$,err,line,act$,"xit")
+00300 ERTN: fnerror(program$,err,line,act$,"xit")
 00310   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00320   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00330   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

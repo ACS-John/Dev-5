@@ -26,16 +26,16 @@
 12700   let filter_date(2)=20121231
 12800   let file_import$=env$('userprofile')&'\Downloads\transactions.csv'
 12900   fntos(sn$="ask_fdd"&str$(udim(mat label$))&'_dates')
-13000   let respc=0 : ad_line=0 : col1_len=36 : col2_pos=col1_len+2
+13000   respc=0 : ad_line=0 : col1_len=36 : col2_pos=col1_len+2
 13100   fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right:=1)
 13200   fntxt(ad_line,col2_pos,8,0,1,"3")
-13300   let resp$(respc+=1)=str$(filter_date(ad_line))
+13300   resp$(respc+=1)=str$(filter_date(ad_line))
 13400   fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right)
 13500   fntxt(ad_line,col2_pos,8,0,1,"3")
-13600   let resp$(respc+=1)=str$(filter_date(ad_line))
+13600   resp$(respc+=1)=str$(filter_date(ad_line))
 13700   fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right)
 13800   fntxt(ad_line,col2_pos,40,256,1,"70")
-13900   let resp$(respc+=1)=file_import$
+13900   resp$(respc+=1)=file_import$
 14000   fncmdset(3)
 14100   fnacs(sn$,0,mat resp$,ckey)
 14200   if ckey=5 then 
@@ -51,7 +51,7 @@
 15200 L630: ! 
 15300 ! 
 15400   input fields "13,29,n 1,eu,n": transaction_type conv L630
-15500   if transaction_type=0 then let vf=1 : goto SCREEN_PROOF_TOTALS
+15500   if transaction_type=0 then vf=1 : goto SCREEN_PROOF_TOTALS
 15600   if transaction_type<1 or transaction_type>4 then goto L630
 15700 ! /r
 15800 SCREENS_TRANS_ENTRY_A: ! r: old
@@ -61,7 +61,7 @@
 16200 SCREENS_TRANS_ENTRY_B: ! 
 16300   pr newpage
 16400   pr f mat flo1$: mat sc2$,"A/R Input "&sc1$(transaction_type+1)(5:18),"Client Number as 0 to stop"
-16500   let ps1=0
+16500   ps1=0
 16600   if vf=0 then goto L790
 16700   if gx><0 then goto L780
 16800 L760: ! 
@@ -76,7 +76,7 @@
 17700 L820: ! 
 17800   input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2) conv L870
 17900   if cmdkey=4 then let fn_tmsrch : goto L760
-18000   let p$=uprc$(lpad$(rtrm$(p$),5))
+18000   p$=uprc$(lpad$(rtrm$(p$),5))
 18100   if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
 18200   ce=0
 18300   goto L1280
@@ -90,17 +90,17 @@
 19100 L920: ! 
 19200   rinput fields "3,30,C 5,EU,n": p$ conv L920
 19300   if cmdkey=4 then let fn_tmsrch : goto L920
-19400   let p$=uprc$(lpad$(rtrm$(p$),5))
+19400   p$=uprc$(lpad$(rtrm$(p$),5))
 19500   if ltrm$(p$)="-1" then pr f mat otgl$: mat gln1 else pr f mat otgl$: mat gln2
 19600   if ltrm$(p$)="0" or ltrm$(p$)="" and vf=0 then goto SCREEN_1
 19700   if ltrm$(p$)="0" or ltrm$(p$)="" and vf=1 then goto L1630
-19800   if ltrm$(p$)="-1" then let name$="CASH SALE" else goto L990
+19800   if ltrm$(p$)="-1" then name$="CASH SALE" else goto L990
 19900   goto L1050
 20000 L990: ! 
 20100   read #h_clmstr,using 'form pos 6,c 25',key=p$,release: name$ nokey L1020 ioerr ERR_FILE
 20200   goto L1050
 20300 L1020: ! 
-20400   let name$="INVALID CLIENT NUMBER"
+20400   name$="INVALID CLIENT NUMBER"
 20500   pr f "3,40,C 25,R,N": name$
 20600   goto L920
 20700 L1050: ! 
@@ -121,7 +121,7 @@
 22200   rinput fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
 22300   if cmdkey=2 then goto L920
 22400 L1200: ! 
-22500   let p$=uprc$(lpad$(rtrm$(p$),5))
+22500   p$=uprc$(lpad$(rtrm$(p$),5))
 22600   if ce>0 then fli1$(ce)=srep$(fli1$(ce),1,"RC","U")
 22700   ce=0
 22800   goto L1280
@@ -133,7 +133,7 @@
 23400 L1280: ! 
 23500   if ltrm$(p$)="0" or ltrm$(p$)="" and vf=0 then goto SCREEN_1
 23600   if ltrm$(p$)="0" or ltrm$(p$)="" and vf=1 then goto L1630
-23700   let ps1=1
+23700   ps1=1
 23800   if tr(1)<10100 or tr(1)>123199 then goto L1320 else goto L1340
 23900 L1320: ! 
 24000   pr f "5,48,c 20": "INVALID DATE"
@@ -162,26 +162,26 @@
 26300   goto L790
 26400 L1520: ! 
 26500   if ltrm$(p$)="-1" then goto L1540
-26600   let pt(1)=pt(1)+val(p$) conv L1540
+26600   pt(1)=pt(1)+val(p$) conv L1540
 26700 L1540: ! 
-26800   let pt(transaction_type+1)=pt(transaction_type+1)+tr(3)
-26900   if transaction_type=3 then let tdt=tdt+tr(2)
-27000   if ltrm$(p$)="-1" then let pt(6)=pt(6)+tr(3)
+26800   pt(transaction_type+1)=pt(transaction_type+1)+tr(3)
+26900   if transaction_type=3 then tdt=tdt+tr(2)
+27000   if ltrm$(p$)="-1" then pt(6)=pt(6)+tr(3)
 27100   if vf=1 then goto L1670
-27200   let r3=r3+1
-27300   let tr(5)=transaction_type
+27200   r3=r3+1
+27300   tr(5)=transaction_type
 27400   write #h_addr,using f3$,rec=r3: p$,iv$,mat tr,id$,mat pgl,mat gl
-27500   let p$=""
+27500   p$=""
 27600   let q2=0
 27700   goto SCREENS_TRANS_ENTRY_B
 27800 L1630: ! 
-27900   let iv$=" "
+27900   iv$=" "
 28000   mat tr=(0)
-28100   let id$=" "
+28100   id$=" "
 28200   mat gl=(0)
 28300 L1670: ! 
 28400   rewrite #h_addr,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl
-28500   let p$=""
+28500   p$=""
 28600   goto SCREEN_ASK_REF_TO_FIX ! /r
 28700 SCREEN_PROOF_TOTALS: ! r: old
 28800   pr newpage
@@ -199,7 +199,7 @@
 30000   goto L1790
 30100 ! /r
 30200   def fn_print_proof_list
-30300     let r=0
+30300     r=0
 30400     fnopenprn
 30500     pr newpage
 30600     on fkey 5 goto L2040
@@ -211,11 +211,11 @@
 31200     pr #255: "Ref #  Cl #  Invoice #";
 31300     pr #255: tab(34);"Date     Amount             Description           Discount          Tr Code"
 31400 L1960: ! 
-31500     let r=r+1
+31500     r=r+1
 31600     read #h_addr,using L2110,rec=r: p$,iv$,mat tr,id$ eof L2040,norec L2040 ioerr ERR_FILE
 31700 L2110: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20
 31800     if ltrm$(p$)="0" or ltrm$(p$)="" then goto L1960
-31900     let name$=""
+31900     name$=""
 32000     read #h_clmstr,using 'form pos 6,c 25',key=p$,release: name$ nokey L2010
 32100 L2010: ! 
 32200     pr #255,using L2020: r,p$,iv$,tr(1),tr(3),tr(4),name$(1:22),tr(2),tr(5)
@@ -232,19 +232,19 @@
 33300   if r1=0 then goto SCREEN_ASK_ADD_MORE
 33400   read #h_addr,using f3$,rec=r1: p$,iv$,mat tr,id$,mat pgl,mat gl norec SCREEN_ASK_REF_TO_FIX ioerr ERR_FILE
 33500   if ltrm$(p$)="0" or ltrm$(p$)="" then goto SCREEN_ASK_REF_TO_FIX
-33600   let transaction_type=tr(5)
-33700   if p><-1 then let pt(1)=pt(1)-val(p$) conv L2150
-33800 L2150: let pt(transaction_type+1)=pt(transaction_type+1)-tr(3)
-33900   if ltrm$(p$)="-1" then let pt(6)=pt(6)-tr(3)
-34000   if transaction_type=3 then let tdt=tdt-tr(2)
-34100   let hd$(1)="A/R Correct "&sc1$(transaction_type+1)(5:18)
-34200   let hd$(2)="Enter Client # As 0 To Delete This Entry"
-34300   let vf=1
+33600   transaction_type=tr(5)
+33700   if p><-1 then pt(1)=pt(1)-val(p$) conv L2150
+33800 L2150: pt(transaction_type+1)=pt(transaction_type+1)-tr(3)
+33900   if ltrm$(p$)="-1" then pt(6)=pt(6)-tr(3)
+34000   if transaction_type=3 then tdt=tdt-tr(2)
+34100   hd$(1)="A/R Correct "&sc1$(transaction_type+1)(5:18)
+34200   hd$(2)="Enter Client # As 0 To Delete This Entry"
+34300   vf=1
 34400   goto SCREENS_TRANS_ENTRY_A
 34500 ! /r
 34600 SCREEN_ASK_ADD_MORE: ! r:
 34700   pr newpage
-34800   let vf=0
+34800   vf=0
 34900   pr f "10,10,c 50": "ENTER 1 TO MAKE ADDITIONAL ENTRIES; ELSE ENTER 2"
 35000 L2250: ! 
 35100   input fields "10,61,N 1,EU,N": j conv L2250
@@ -272,11 +272,11 @@
 37300     dim heading$*70,form$*80,numeric_format$*20,selection$*70
 37400     let file_num=11 ! alpha index on clients
 37500     let form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
-37600     let numeric_format$='pic($$$,$$$.##)'
-37700     let key_length=5
-37800     let heading$="Acct #-Name--------------------Address--------Balance"
+37600     numeric_format$='pic($$$,$$$.##)'
+37700     key_length=5
+37800     heading$="Acct #-Name--------------------Address--------Balance"
 37900     fnsearch(cap$,file_num,heading$,form$,numeric_format$,selection$,key_length)
-38000     let p$=selection$ ! pull key from first field in search line
+38000     p$=selection$ ! pull key from first field in search line
 38100     ano=0
 38200     ano=val(selection$) conv L4910
 38300 L4910: ! 
@@ -284,10 +284,10 @@
 38500   def fn_get_old_setup
 38600     open #h_company:=1: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno')&",Shr",internal,input ioerr ERR_FILE
 38700     read #h_company,using L130: i3,i4,i5,mat gln1,mat gln2 ioerr ERR_FILE
-38800 ! Let I3=1 ! ENTER G/L #'S
+38800 ! i3=1 ! ENTER G/L #'S
 38900 L130: form pos 161,3*n 1,pos 178,n 3,n 6,n 3,n 3,n 6,n 3
 39000     close #h_company: 
-39100     let namtab=66-int(len(rtrm$(env$('cnam')))/2)
+39100     namtab=66-int(len(rtrm$(env$('cnam')))/2)
 39200     otgl$(1)="9,30,pic(zzz)"
 39300     otgl$(2)="9,34,pic(zzzzzz)"
 39400     otgl$(3)="9,41,pic(zzz)"
@@ -443,7 +443,7 @@
 54400       read #h_in,using 'form pos 1,C 100': gnl_block$ ioerr GNL_H_IN_READ_IOERR
 54500       let gnl_buffer$=gnl_buffer$&gnl_block$
 54600     loop 
-54700     let pos_crlf=pos(gnl_buffer$,lf$)
+54700     pos_crlf=pos(gnl_buffer$,lf$)
 54800     line$=gnl_buffer$(1:pos_crlf)
 54900     let gnl_buffer$(1:pos_crlf+1)=''
 55000 ! line$=srep$(line$,cr$,'^') : line$=srep$(line$,lf$,'~')
@@ -479,14 +479,14 @@
 58000       fn_get_next_line(line$) : line_count+=1
 58100       if line$<>'' then 
 58200         str2mat(line$,mat item$,',',"QUOTES:TRIM")
-58300         if item$(csv_date)<>'' then let the_date=fn_get_the_date(item$(csv_date))
+58300         if item$(csv_date)<>'' then the_date=fn_get_the_date(item$(csv_date))
 58400         if the_date=>filter_date(1) and the_date<=filter_date(2) then 
 58500           pr the_date,val(item$(csv_amt)),item$(csv_desc),item$(csv_odesc)
 58600 !       r: translate from csv to acs tranaction thing
 58700           if item$(csv_type)='credit' then 
-58800             let transaction_type=2 ! deposit
+58800             transaction_type=2 ! deposit
 58900           else if item$(csv_type)='debit' then 
-59000             let transaction_type=1 ! check
+59000             transaction_type=1 ! check
 59100           else 
 59200             pr 'unhandled transaction_type!  item$(csv_type)='&item$(csv_type)
 59300             pause 
@@ -508,18 +508,18 @@
 61400     fncloseprn
 61500   fnend 
 61600   def fn_get_the_date(the_date$)
-61700     let the_date=date(days(the_date$,'m/dd/ccyy'),'ccyymmdd')
+61700     the_date=date(days(the_date$,'m/dd/ccyy'),'ccyymmdd')
 61800     fn_get_the_date=the_date
 61900   fnend 
 62000   def fn_write_out(wo_date,wo_client,wo_time,wo_cat,wo_month,wo_desc$*30)
 62100     dim des$*30,inp(7)
-62200     let inp(1)=wo_client
-62300     let inp(2)=1 ! employee number
-62400     let inp(3)=wo_time
-62500     let inp(4)=150.00 ! hourly rate
-62600     let inp(5)=wo_time*inp(4)
-62700     let inp(6)=date(days(wo_date,'ccyymmdd'),'mmddyy') ! mmddyy
-62800     let inp(7)=wo_cat
+62200     inp(1)=wo_client
+62300     inp(2)=1 ! employee number
+62400     inp(3)=wo_time
+62500     inp(4)=150.00 ! hourly rate
+62600     inp(5)=wo_time*inp(4)
+62700     inp(6)=date(days(wo_date,'ccyymmdd'),'mmddyy') ! mmddyy
+62800     inp(7)=wo_cat
 62900     b6=0 ! ???
 63000     b7=1 ! ???
 63100     b8=wo_month

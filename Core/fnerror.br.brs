@@ -2,9 +2,9 @@
 02010   library : fnerror
 02020   on error goto ERTN
 02040   pr 1/0
-03000 XIT: let fnxit
+03000 XIT: fnxit
 08000 ! <updateable region: ertn>
-08040 ERTN: let fnerror(program$,err,line,act$,"xit")
+08040 ERTN: fnerror(program$,err,line,act$,"xit")
 08060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 08080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 08100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -22,7 +22,7 @@
 10180     dim caption$*42
 10200 ! ______________________________________________________________________
 10220 ! act$  =  the returning action to be executed
-10240 ! stopable$  =  if it is "no" or "NO" etc it'll not let them stop
+10240 ! stopable$  =  if it is "no" or "NO" etc it'll not them stop
 10260 ! otherwise it should be the paragraph heading of where to goto on
 10280 ! a selected exit (must be 15 characters or less)
 10300 ! ______________________________________________________________________
@@ -75,38 +75,38 @@
 12760 ERR_INP: ! 
 14000     input #0,fields "4,4,C 1,AE,N": pause$
 14020     if cmdkey=0 then 
-14040       log$="action taken = Retry" : let fnlog(log$,2)
+14040       log$="action taken = Retry" : fnlog(log$,2)
 14060       act$="Go "&str$(linenumber)
 14080       goto ERROR_XIT
 14100     else if cmdkey=5 or cmdkey=99 then 
-14120       log$="action taken = Quit" : let fnlog(log$,2)
+14120       log$="action taken = Quit" : fnlog(log$,2)
 14140       goto ERR_QUITER
 14160     else if cmdkey=8 then 
-14180       log$="action taken = BRWiki Help" : let fnlog(log$,2)
+14180       log$="action taken = BRWiki Help" : fnlog(log$,2)
 14200       gosub BRWIKIHELP
 14220 !   else if cmdkey=9 then
-14240 !     log$="action taken = ACS Help" : let fnlog(log$,2)
+14240 !     log$="action taken = ACS Help" : fnlog(log$,2)
 14260 !     gosub ACSHELP
 14280 !   else if cmdkey=10 then
-14300 !     log$="action taken = WB Help" : let fnlog(log$,2)
+14300 !     log$="action taken = WB Help" : fnlog(log$,2)
 14320 !     gosub ERR_WBHELP
 14340     else if cmdkey=12 then 
 14360       act$="PAUSE"
-14380       log$="action taken = Program Pause" : let fnlog(log$,2)
+14380       log$="action taken = Program Pause" : fnlog(log$,2)
 14400       goto ERROR_XIT
 14420     end if 
 14440     goto ERR_INP
 14460 ! ______________________________________________________________________
 16000 ! ERR_WBHELP: ! r:
 16020 !     on error goto NO_ERR_WBHELP
-16040 !     let help$("ERR"&cnvrt$("PIC(####)",errornumber)&",WBCmd")
+16040 !     help$("ERR"&cnvrt$("PIC(####)",errornumber)&",WBCmd")
 16060 !     goto ERR_WBHELP_RETURN ! /r
 16080 ! NO_ERR_WBHELP: ! r:
 16100 !     mat msgline$(2)
-16120 !     let msgline$(1)="Sorry, No Workstation Basic Help "
-16140 !     let msgline$(2)="is available for this Error Number."
+16120 !     msgline$(1)="Sorry, No Workstation Basic Help "
+16140 !     msgline$(2)="is available for this Error Number."
 16160 !     fnmsgbox(mat msgline$,response$(1),env$('program_caption'),0)
-16180 !     let response$(1)=response$(1)(1:1)
+16180 !     response$(1)=response$(1)(1:1)
 16200 ! ERR_WBHELP_RETURN: !
 16220 !     return  ! /r
 18000 BRWIKIHELP: ! r:
@@ -121,10 +121,10 @@
 20700     if uprc$(rtrm$(stopable$))="NO" then 
 20710       setenv('ExitNow','no')
 20800       mat msgline$(2)
-20900       let msgline$(1)="Do not stop the processing of this program."
-21000       let msgline$(2)="Please contact ACS Technical Support."
+20900       msgline$(1)="Do not stop the processing of this program."
+21000       msgline$(2)="Please contact ACS Technical Support."
 21100       fnmsgbox(mat msgline$,response$(1),env$('program_caption'),0)
-21200       let response$(1)=response$(1)(1:1)
+21200       response$(1)=response$(1)(1:1)
 21300       goto MENU1
 21400     end if 
 21500     act$="go "&stopable$

@@ -18,14 +18,14 @@
 00243   ssr2=fnss_employer
 00250 ! If FNPROCESS=1 Then Goto 410
 00260   fntos(sn$="TaxDeposit") !:
-        let rc=0: let mylen=22: let mypos=mylen+3: let frameno=1
+        rc=0: mylen=22: mypos=mylen+3: let frameno=1
 00270   fnfra(1,1,3,40,"Date Range of Deposit","Enter the date range for the payrolls to be included.")
 00280   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
 00290   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this deposit. ",frameno) !:
-        let resp$(rc+=1)=str$(beg_date)
+        resp$(rc+=1)=str$(beg_date)
 00300   fnlbl(2,1,"Ending Date:",mylen,1,0,frameno)
 00310   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this deposit. ",frameno) !:
-        let resp$(rc+=1)=str$(end_date)
+        resp$(rc+=1)=str$(end_date)
 00320   fncmdkey("Next",1,1,0,"Calculate tax deposit.")
 00330   fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
 00340   fnacs(sn$,0,mat resp$,ckey)
@@ -50,8 +50,8 @@
 00540 L540: read #h_checks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,dep,prd,ckno,mat tdc,mat cp eof READ_AGAIN
 00550   if heno<>eno then goto READ_AGAIN
 00560   if prd<beg_date or prd>end_date then goto L540
-00570   let deptot(dep,1)=deptot(dep,1)+cp(31)
-00580   let deptot(dep,2)=deptot(dep,2)+cp(2)+cp(3)
+00570   deptot(dep,1)=deptot(dep,1)+cp(31)
+00580   deptot(dep,2)=deptot(dep,2)+cp(2)+cp(3)
 00582 !  pr #255: 'employee number: '&str$(heno)&' employee record: '&str$(rec(h_employee))&' check number: '&str$(ckno)&' check history record number: '&str$(rec(h_checks))
 00590   pr #255,using L650: prd,cp(31),cp(2)+cp(3),cp(1),cp(4),cp(5),cp(6),cp(7),cp(8),cp(9),cp(10),cp(11),cp(12),cp(13),cp(14),cp(32),cp(2)+cp(3) pageoflow PGOF
 00600   if cp(15)+cp(16)+cp(17)+cp(18)+cp(19)+cp(20)+cp(21)+cp(22)+cp(23)+cp(24) =0 then goto L640
@@ -60,9 +60,9 @@
 00630   pr #255,using L640: cp(15),cp(16),cp(17),cp(18),cp(19),cp(20),cp(21),cp(22),cp(23),cp(24) pageoflow PGOF
 00640 L640: form pos 59,10*n 10.2
 00650 L650: form pos 1,pic(zzzz/zz/zz),pos 11,19*n 10.2,n 4
-00660   for j=1 to 32: let t(j)=t(j)+cp(j) : next j
-00670   let t(34)=t(34)+tdc(10): let t(35)=t(35)+tdc(9)
-00680   if foundone=1 then let foundone=0: let t(36)=t(36)+1
+00660   for j=1 to 32: t(j)=t(j)+cp(j) : next j
+00670   t(34)=t(34)+tdc(10): t(35)=t(35)+tdc(9)
+00680   if foundone=1 then let foundone=0: t(36)=t(36)+1
 00690   goto L540
 00700 ! ______________________________________________________________________
 00710 PGOF: ! 
@@ -106,10 +106,10 @@
 01080 L1080: form pos 3,c 4,pos 11,4*c 10,x 2,10*c 10,x 2,c 6,c 10,c 5,skip 2
 01090   return 
 01100 ! ______________________________________________________________________
-01110 XIT: let fnxit
+01110 XIT: fnxit
 01120 IGNORE: continue 
 01130 ! <Updateable Region: ERTN>
-01140 ERTN: let fnerror(program$,err,line,act$,"xit")
+01140 ERTN: fnerror(program$,err,line,act$,"xit")
 01150   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01160   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01170   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

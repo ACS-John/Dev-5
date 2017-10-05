@@ -16,7 +16,7 @@
 00160   for j=1 to 13
 00170     pr #101: "                                 "
 00180   next j
-00190 L190: let k$=kstat$
+00190 L190: k$=kstat$
 00200   if k$="" then goto L190
 00210   pr #101: " UnHex: "&unhex$(k$)
 00220   pr #101: "   Hex: "&k$
@@ -25,7 +25,7 @@
 00240   goto L190
 00250 ! ______________________________________________________________________
 00260 ! <Updateable Region: ERTN>
-00270 ERTN: let fnerror(program$,err,line,act$,"xit")
+00270 ERTN: fnerror(program$,err,line,act$,"xit")
 00280   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00290   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

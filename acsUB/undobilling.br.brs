@@ -1,12 +1,12 @@
 00001 forceRollBackNotMostRecentRec=0
 00010 library 'S:\Core\Library': fnxit,fnopenprn,fncloseprn,fnerror,fnd1,fngethandle,fntop,fntos,fnlbl,fntxt,fncmbact,fncmbrt2,fncmdset,fnacs,fnmsgbox,fnopt,fnget_services,fnAutomatedSavePoint
 00040 on error goto ERTN
-00080 ! let msgbox("Reverse Billing Cycle is currently under construction.","Reverse Billing Cycle Unavailable","OK","Inf") : if env$('ACSDeveloper')='' then goto XIT
+00080 ! msgbox("Reverse Billing Cycle is currently under construction.","Reverse Billing Cycle Unavailable","OK","Inf") : if env$('ACSDeveloper')='' then goto XIT
 00120 let fn_undobilling
 00140 goto XIT
 00160 def fn_undobilling ! main
 00180   dim program_caption$*80,billingdate$*10,msgtext$(1)*1000,readings(12),charges(12),breakdown(10),readingdates(2),servicename$(10)*20
-00200   let do_all=1 : let do_route=2 : let do_individual=3
+00200   do_all=1 : do_route=2 : do_individual=3
 00220   fntop(program$,program_caption$="Reverse Billing Cycle")
 00230   fnget_services(mat servicename$,mat servicecode$,mat tax_code$,mat penalty$,mat subjectto,mat ordertoapply)
 00240   ! 
@@ -15,15 +15,15 @@
 06040   if ckey=5 then goto XIT_FN_UNDOBILLING
 06060   if trim$(billingdate$)="0" then 
 06080     mat msgtext$(1)
-06100     let msgtext$(1)=("You must enter a billing date")
+06100     msgtext$(1)=("You must enter a billing date")
 06120     fnmsgbox(mat msgtext$,answer$,"Invalid Entry",0)
 06140     goto ASK_OPTIONS
 06160   end if 
 08000  ! 
 08020   mat msgtext$(3)
-08040   let msgtext$(1) = "Warning: this action will reduce the balance and balance breakdown of all selected customers"
-08060   let msgtext$(2) = "with a matching billing date by the amount of the billing on that date."
-08080   let msgtext$(3) = "Are you sure?"
+08040   msgtext$(1) = "Warning: this action will reduce the balance and balance breakdown of all selected customers"
+08060   msgtext$(2) = "with a matching billing date by the amount of the billing on that date."
+08080   msgtext$(3) = "Are you sure?"
 08100   fnmsgbox(mat msgtext$,answer$,"Confirm Action",4)
 08120   if (answer$<>"Yes") then cont=0
 08140   ! 
@@ -34,7 +34,7 @@
 12060     TRANSFORM: form c 10,n 8,x 1,12*pd 4.2,6*pd 5,pd 4.2
 12070     fnAutomatedSavePoint('before')
 12080     fn_openfiles ! open data files
-12100     fnopenprn : let fn_printheader
+12100     fnopenprn : fn_printheader
 12120     do 
 14000       NEXT_CUSTOMER: ! 
 14020       if filter=do_individual then 
@@ -56,19 +56,19 @@
 16160           read #h_trans,using TRANSFORM,key=lpad$(acct$,10)&str$(lastdate)&"1": trcust$(1),trdate(1),tramt(1),mat srvamt1,mat srvread1,trbal(1)
 16180           if priordate>0 then 
 18000             ! update readings
-18020             let readings(4)-=readings(3) ! roll back YTD usage
-18040             let readings(8)-=readings(7)
-18060             let readings(12)-=readings(11)
-18080             let readings(1)=srvread2(1) ! update all current readings and usage
-18100             let readings(3)=srvread2(2)
-18120             let readings(5)=srvread2(3)
-18140             let readings(7)=srvread2(4)
-18160             let readings(9)=srvread2(5)
-18180             let readings(11)=srvread2(6)
+18020             readings(4)-=readings(3) ! roll back YTD usage
+18040             readings(8)-=readings(7)
+18060             readings(12)-=readings(11)
+18080             readings(1)=srvread2(1) ! update all current readings and usage
+18100             readings(3)=srvread2(2)
+18120             readings(5)=srvread2(3)
+18140             readings(7)=srvread2(4)
+18160             readings(9)=srvread2(5)
+18180             readings(11)=srvread2(6)
 18200             if priordate2>0 then ! update all prior readings
-18220               let readings(2)=srvread3(1)
-18240               let readings(6)=srvread3(3)
-18260               let readings(10)=srvread3(5)
+18220               readings(2)=srvread3(1)
+18240               readings(6)=srvread3(3)
+18260               readings(10)=srvread3(5)
 18280             end if 
 19000             ! update charge date
 19020             chargedate=val(date$(days(trdate(2),"ccyymmdd"),"mmddyy"))
@@ -86,8 +86,8 @@
 24820             ! update current balance
 24840             balance-=srvamt1(11)
 24860             ! update reading dates; guess at prior reading date
-24880             let readingdates(2)=readingdates(1)
-24900             let readingdates(1)=val(date$(days(priordate2,"ccyymmdd"),"mmddyy"))
+24880             readingdates(2)=readingdates(1)
+24900             readingdates(1)=val(date$(days(priordate2,"ccyymmdd"),"mmddyy"))
 24920             ! update last billing date
 24940             if priordate>lastbilling then lastbilling=priordate
 24960           else 
@@ -120,22 +120,22 @@
 28220   ! 
 28240   XIT_FN_UNDOBILLING: ! 
 28260 fnend  ! fn_UndoBilling
-30000 XIT: let fnxit
+30000 XIT: fnxit
 44000   def fn_options(&route,&billingdate$) ! show options dialog to user and return selections
 44020     dim screen_name$*100,resp$(20)*255
 44040     fnd1(lastbilling) ! get last billing date and use it for the default
-44060     let filter=0 : let route=0 : cust$=''
+44060     let filter=0 : route=0 : cust$=''
 44080 OPTIONS_TOS: ! 
 44100     fntos(screen_name$="UndoBillingOptions")
-44120     let rcnt=0 : lc=0 : let pos_col2=16
+44120     rcnt=0 : lc=0 : pos_col2=16
 44140     lc+=1
 44160     fnlbl(lc+=1,2,"Warning: only the most recent billing date can be reversed for any account(s).")
 44180     lc+=1
 44200 ! billing date text box
 44220     fnlbl(lc+=1,2,"Billing Date:",13,1)
 44240     fntxt(lc,pos_col2,8,0,0,"1001")
-44260     let resp_billing_date=rcnt+=1
-44280     if resp$(resp_billing_date)='' then let resp$(resp_billing_date)=str$(lastbilling)
+44260     resp_billing_date=rcnt+=1
+44280     if resp$(resp_billing_date)='' then resp$(resp_billing_date)=str$(lastbilling)
 44300 ! 
 44320     lc+=1
 44340     lc+=1
@@ -143,22 +143,22 @@
 44380     lc+=1
 44400 ! 
 44420     fnopt(lc+=1,1,'All') ! fnopt(lyne,ps, txt$*196; align,contain,tabcon)
-44440     let resp_opt_all=rcnt+=1
-44460     if resp$(resp_opt_all)='' then let resp$(resp_opt_all)='True'
+44440     resp_opt_all=rcnt+=1
+44460     if resp$(resp_opt_all)='' then resp$(resp_opt_all)='True'
 44480 ! 
 44500     fnopt(lc+=1,1,'Route:')
-44520     let resp_opt_route=rcnt+=1
-44540     if resp$(resp_opt_route)='' then let resp$(resp_opt_route)='False'
+44520     resp_opt_route=rcnt+=1
+44540     if resp$(resp_opt_route)='' then resp$(resp_opt_route)='False'
 44560     fncmbrt2(lc,pos_col2,1)
-44580     let resp_route=rcnt+=1
-44600 ! if resp$(resp_route)='' then let resp$(resp_route)="[All]"
+44580     resp_route=rcnt+=1
+44600 ! if resp$(resp_route)='' then resp$(resp_route)="[All]"
 44620 ! 
 44640     fnopt(lc+=1,1,'Individual:')
-44660     let resp_opt_individual=rcnt+=1
-44680     if resp$(resp_opt_individual)='' then let resp$(resp_opt_individual)='False'
+44660     resp_opt_individual=rcnt+=1
+44680     if resp$(resp_opt_individual)='' then resp$(resp_opt_individual)='False'
 44700     fncmbact(lc,pos_col2) ! fncmbact(lyne,mypos; addall,c,a$*25)
-44720     let resp_individual=rcnt+=1
-44740 ! if resp$(resp_individual)='' then let resp$(resp_individual)="[All]"
+44720     resp_individual=rcnt+=1
+44740 ! if resp$(resp_individual)='' then resp$(resp_individual)="[All]"
 44760 ! 
 44780     fncmdset(2) ! show "Next" and "Cancel" buttons
 44800     fnacs(screen_name$,0,mat resp$,ckey) ! run the screen
@@ -171,7 +171,7 @@
 44940         let filter=do_all
 44960       else if resp$(resp_opt_route)='True' then 
 44980         let filter=do_route
-45000         let route=val(resp$(resp_route))
+45000         route=val(resp$(resp_route))
 45020         if route=0 then pr bell;'please select a route' : goto OPTIONS_TOS
 45040       else if resp$(resp_opt_individual)='True' then 
 45060         let filter=do_individual
@@ -194,8 +194,8 @@
 52020   dim transacct$*10,transacct2$*10
 52040   CUSTTRANSFORM: form c 10,n 8,n 1
 52060   ! 
-52080   lastdate=0 : let priordate=0 : let priordate2=0
-52100   let dateshouldbe=date(days(val(billingdate$),"mmddyy"),"ccyymmdd") : if str$(dateshouldbe)(1:2)="19" then let dateshouldbe+=1000000
+52080   lastdate=0 : priordate=0 : priordate2=0
+52100   dateshouldbe=date(days(val(billingdate$),"mmddyy"),"ccyymmdd") : if str$(dateshouldbe)(1:2)="19" then dateshouldbe+=1000000
 52120   ! 
 52140   ! first, check for the transaction for this customer on the date specified for rollback; if not found, exit
 52160   read #h_trans,using CUSTTRANSFORM,key=lpad$(acct$,10)&str$(dateshouldbe)&"1": transacct$,transdate,transcode eof GOTTRANS nokey GOTTRANS
@@ -210,9 +210,9 @@
 52300     read #h_trans,using CUSTTRANSFORM,prior: transacct2$,transdate,transcode eof GOTTRANS
 52320     if transacct2$=transacct2$ and transcode=1 and transdate<lastdate then 
 52340       if priordate=0 then 
-52360         let priordate=transdate
+52360         priordate=transdate
 52380       else if priordate2=0 then 
-52400         let priordate2=transdate
+52400         priordate2=transdate
 52420       else 
 52440         goto GOTTRANS
 52460       end if 
@@ -223,7 +223,7 @@
 52550   if lastdate=0 then let fn_get3trans=0 else let fn_get3trans=1
 52560 fnend 
 55000   def fn_printheader
-55020     let pg+=1
+55020     pg+=1
 55040     pr #255: "Reverse Calculation Status Report"
 55060     pr #255: "Page "&str$(pg)
 55080     pr #255: ""
@@ -234,7 +234,7 @@
 55180   fnend 
 59000 IGNORE: continue 
 60000 ! <Updateable Region: ERTN>
-60020 ERTN: let fnerror(program$,err,line,act$,"NO")
+60020 ERTN: fnerror(program$,err,line,act$,"NO")
 60040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 60060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 60080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

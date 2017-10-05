@@ -20,9 +20,9 @@
 00210   open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outin,keyed 
 00220   goto SCREEN1
 00230 ! ______________________________________________________________________
-00240 XIT: let fnxit
+00240 XIT: fnxit
 00250 ! ______________________________________________________________________
-00260 ERTN: let fnerror(program$,err,line,act$,"XIT")
+00260 ERTN: fnerror(program$,err,line,act$,"XIT")
 00270   if uprc$(act$)<>"PAUSE" then goto L300
 00280   execute "list -"&str$(line) : pause : goto L300
 00290   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." !:
@@ -30,18 +30,18 @@
 00300 L300: execute act$ : goto ERTN
 00310 ! ______________________________________________________________________
 00320 SCREEN1: ! 
-00330   let mypos=20
+00330   mypos=20
 00340 ASK_INFO: ! 
 00350   fntos(sn$="DD")
 00360   fnlbl(1,35,"",1,1) ! bigger screen
 00370   fnlbl(2,1,"As of Date:",mypos,1)
 00380   fntxt(2,mypos+3,10,0,1,"3",0,"This report will list any employees who direct deposit on the date the report is printed.")
-00390   let resp$(1)=str$(d1)
+00390   resp$(1)=str$(d1)
 00400   fncmdkey("&Print",1,1,0,"Print the direct deposit listing." ) !:
         fncmdkey("E&xit",5,0,1,"Returns to menu")
 00410   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 00420   if ckey=5 then goto XIT
-00430   let ppd=val(resp$(1))
+00430   ppd=val(resp$(1))
 00440   open #ddout=22: "Name=DDout"&wsid$&".txt,RecL=96,EOL=CRLF,Replace",external,output 
 00450   fnopenprn
 00460   gosub HDR ! pr header
@@ -49,7 +49,7 @@
 00480 L480: read #dd,using "Form pos 1,C 10,C 1,N 9,N 2,N 17": key$,dd$,rtn,acc,acn eof DONE
 00490   if uprc$(dd$)<>"Y" then goto READ_DD !:
           ! Y means Yes Direct Deposit is active for this person
-00500   let key$=lpad$(rtrm$(ltrm$(key$)),8) !:
+00500   key$=lpad$(rtrm$(ltrm$(key$)),8) !:
         read #mstr,using 'Form pos 9,3*C 30,Pos 162,N 6,Pos 173',key=key$: mat em$,em17 nokey L480
 00510   pr #255,using "form pos 1,c 40,n 14,n 4,n 17": key$&" "&em$(1),rtn,acc,acn pageoflow PRINT_NEWPAGE
 00520   goto READ_DD

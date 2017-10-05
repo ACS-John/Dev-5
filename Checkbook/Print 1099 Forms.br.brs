@@ -16,7 +16,7 @@
 36060       if typ<>0 and ytdp>minamt then 
 36080         if seltp=0 or seltp=typ then 
 36100           mat box=(0)
-36120           if typ<1 or typ>8 then let typ=1
+36120           if typ<1 or typ>8 then typ=1
 36140           box(typ)=ytdp
 36145 ! pr mat ad$ : pause
 36160           fn1099print(vn$,nam$,mat ad$,ss$,mat box)
@@ -29,9 +29,9 @@
 44060     fn1099print_close  !  if lz1$="E" then close #5: else    gosub RELEASE_PRINT
 44080   end if
 44900 goto XIT ! /r
-48000 XIT: let fnxit
+48000 XIT: fnxit
 50000 ! <Updateable Region: ERTN>
-50020 ERTN: let fnerror(program$,err,line,act$,"xit")
+50020 ERTN: fnerror(program$,err,line,act$,"xit")
 50040   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 50060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 50080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -40,7 +40,7 @@
 54000 READ_TRANSACTIONS: ! r: passed trmstr2,vn$,beg_date,end_date    returns ytdp
 54010   let ytdp=0
 54020   let wbc=0: let wtt=1 ! all banks and only checks
-54040   let key$=vn$&cnvrt$('pic(Z#)',wbc)&cnvrt$("pic(#)",wtt)&rpt$(chr$(0),8) 
+54040   key$=vn$&cnvrt$('pic(Z#)',wbc)&cnvrt$("pic(#)",wtt)&rpt$(chr$(0),8) 
 54060   restore #trmstr2,key>=key$: nokey rtFinis 
 54100   do
 54120     read #trmstr2,using 'Form Pos 1,n 2,n 1,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',release: bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof rtFinis

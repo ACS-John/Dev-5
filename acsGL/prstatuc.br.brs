@@ -16,36 +16,36 @@
 00170   if fnprocess=1 then goto L240
 00180 ! 
 00190   fntos(sn$="Prstatuc")
-00200   let mylen=35: let mypos=mylen+3 : let right=1
+00200   mylen=35: mypos=mylen+3 : right=1
 00210   fnlbl(1,1,"Quarterly Period Ending Date:",mylen,right)
 00220   fntxt(1,mypos,20,0,left,"",0,"Enter the last day of the quarter.",0 )
-00230   let resp$(1)=""
+00230   resp$(1)=""
 00240   fncmdset(2)
 00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
-00270   let pedat$=resp$(1)
+00270   pedat$=resp$(1)
 00275 L240: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00280   fnopenprn
 00285   gosub HDR
 00340 L340: read #2,using L350: mat k,mat k$,mat l$,mat m eof L720
 00350 L350: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
 00360   if m(2)=0 or k(1)=0 then goto L530
-00370   let deducy=deducq=0
+00370   deducy=deducq=0
 00380   for j=1 to 10
-00390     if deduc(j)=1 then let deducy=deducy+m(j*2+9)
-00400     if deduc(j)=1 then let deducq=deducq+m(j*2+10)
+00390     if deduc(j)=1 then deducy=deducy+m(j*2+9)
+00400     if deduc(j)=1 then deducq=deducq+m(j*2+10)
 00410   next j
-00420   let m(1)=m(1)-deducy
-00430   let m(2)=m(2)-deducq
+00420   m(1)=m(1)-deducy
+00430   m(2)=m(2)-deducq
 00440   if p1<57 then goto L480
 00450   gosub L920
 00460   pr #255: newpage
 00470   gosub HDR
 00480 L480: gosub L790
-00490   let t1=t1+m(2)
-00500   let t2=t2+h3
-00510   let t3=t3+h2
-00520   let t4=t4+m(34)
+00490   t1=t1+m(2)
+00500   t2=t2+h3
+00510   t3=t3+h2
+00520   t4=t4+m(34)
 00530 L530: goto L340
 00540 ! ______________________________________________________________________
 00550 HDR: ! 
@@ -62,7 +62,7 @@
 00660   pr #255: tab(39);"TOTAL WAGES  EXCESS WAGES    TAXABLE   WEEKS"
 00670   pr #255,using L680: "SS NUMBER   NAME                      FOR QUARTER   OVER  $"&ltrm$(str$(ucm)),"WAGES   WORKED"
 00680 L680: form pos 1,c 68,pos 69,c 18
-00690   let p1=16
+00690   p1=16
 00700   return 
 00710 ! ______________________________________________________________________
 00720 L720: gosub L920
@@ -70,35 +70,35 @@
 00740   fncloseprn
 00750   goto XIT
 00760 ! ______________________________________________________________________
-00770 XIT: let fnxit
+00770 XIT: fnxit
 00780 ! ______________________________________________________________________
-00790 L790: let p3=p3+1
+00790 L790: p3=p3+1
 00800   if m(1)<ucm then goto L860
 00810   if m(1)-m(2)>ucm then goto L840
-00820   let h2=ucm-(m(1)-m(2))
+00820   h2=ucm-(m(1)-m(2))
 00830   goto L870
-00840 L840: let h2=0
+00840 L840: h2=0
 00850   goto L870
-00860 L860: let h2=m(2)
-00870 L870: let h3=m(2)-h2
+00860 L860: h2=m(2)
+00870 L870: h3=m(2)-h2
 00880   pr #255,using L890: l$(1),k$(1),m(2),h3,h2,m(34)
 00890 L890: form pos 1,c 11,pos 13,c 25,pos 39,n 11.2,pos 53,n 11.2,n 11.2,n 8,skip 2
-00900   let p1=p1+2
+00900   p1=p1+2
 00910   return 
-00920 L920: let j1=58-p1
+00920 L920: j1=58-p1
 00930   pr #255,using L940: "----------   -----------  ---------  ------"
 00940 L940: form skip j1,pos 40,c 48
 00950   pr #255,using L960: "EMPLOYEES ON THIS PAGE "&ltrm$(str$(p3))&"    PAGE TOTALS",t1,t2,t3,t4
 00960 L960: form pos 1,c 42,pos 39,n 11.2,pos 53,n 11.2,n 11.2,n 8.2
-00970   let p3=0
-00980   let t1=0
-00990   let t2=0
-01000   let t3=0
-01010   let t4=0
+00970   p3=0
+00980   t1=0
+00990   t2=0
+01000   t3=0
+01010   t4=0
 01020   return 
 01030 ! ______________________________________________________________________
 01040 ! <Updateable Region: ERTN>
-01050 ERTN: let fnerror(program$,err,line,act$,"xit")
+01050 ERTN: fnerror(program$,err,line,act$,"xit")
 01060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 01070   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

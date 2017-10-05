@@ -31,8 +31,8 @@
 40080     dim ini_section$(1)*1024, ini_field$(1)*256, ini_value$(1)*256
 40100     setup_fnIniOpen=1
 40120   end if 
-40140   let ini_file$=trim$(ii_file$)
-40160   let ini_field_len_longest=0
+40140   ini_file$=trim$(ii_file$)
+40160   ini_field_len_longest=0
 40180   mat ii_line$(0)
 40200   mat ini_section$(0) : mat ini_field$(0) : mat ini_value$(0)
 40220   open #h_ini:=fngethandle: 'Name='&ini_file$,display,input ioerr INI_OPEN_FAIL
@@ -46,21 +46,21 @@
 40380   mat ii_section$(udim(ii_line$))=("")
 40400   for ii_item=1 to udim(mat ii_line$)
 40420     if ii_line$(ii_item)(1:1)='[' then 
-40440       let ii_line$(ii_item)=trim$(ii_line$(ii_item))
-40460       let ii_section$=uprc$(trim$(trim$(trim$(ii_line$(ii_item)),"["),"]"))
-40480       let ii_section$(ii_item)=ii_section$
+40440       ii_line$(ii_item)=trim$(ii_line$(ii_item))
+40460       ii_section$=uprc$(trim$(trim$(trim$(ii_line$(ii_item)),"["),"]"))
+40480       ii_section$(ii_item)=ii_section$
 40500     else if ii_line$(ii_item)(1:1)='!' or ii_line$(ii_item)(1:1)=';' or ii_line$(ii_item)(1:1)='#' then 
-40520       let ii_section$(ii_item)=ii_section$
+40520       ii_section$(ii_item)=ii_section$
 40540     else 
-40560       let ii_section$(ii_item)=ii_section$
+40560       ii_section$(ii_item)=ii_section$
 40580       fnAddOneC(mat ini_section$,ii_section$)
-40600       let ii_pos_equal=pos(ii_line$(ii_item),"=")
-40620       if ii_pos_equal=-1 then let ii_pos_equal=pos(ii_line$(ii_item),tab$) ! if no equals sign than use a tab instead
-40640       let ini_field$=trim$(trim$(trim$(trim$(ii_line$(ii_item)(1:ii_pos_equal-1),tab$),'"')),tab$)
+40600       ii_pos_equal=pos(ii_line$(ii_item),"=")
+40620       if ii_pos_equal=-1 then ii_pos_equal=pos(ii_line$(ii_item),tab$) ! if no equals sign than use a tab instead
+40640       ini_field$=trim$(trim$(trim$(trim$(ii_line$(ii_item)(1:ii_pos_equal-1),tab$),'"')),tab$)
 40660       fnAddOneC(mat ini_field$,ini_field$)
-40680       let ini_field_len_longest=max(ini_field_len_longest,ii_pos_equal-1)
-40700       let ii_value$=trim$(trim$(ii_line$(ii_item)(ii_pos_equal+1:len(ii_line$(ii_item)))),tab$)
-40720       if lwrc$(ii_value$)="blank" then let ii_value$=''
+40680       ini_field_len_longest=max(ini_field_len_longest,ii_pos_equal-1)
+40700       ii_value$=trim$(trim$(ii_line$(ii_item)(ii_pos_equal+1:len(ii_line$(ii_item)))),tab$)
+40720       if lwrc$(ii_value$)="blank" then ii_value$=''
 40740       fnAddOneC(mat ini_value$,ii_value$)
 40760     end if  ! II_Line$(II_Item)(1:1)=     '['     /  '!'   /     else 
 40780   next ii_item
@@ -68,7 +68,7 @@
 40820 fnend 
 42000 def library fnIniRead$*256(il_section$*256,il_field$*256) ! shares MAT INI_Section$, MAT INI_Field$, MAT INI_Value$ with fnIniOpen
 42020   if ~setup then let fn_setup
-42040   let tab$=chr$(9)
+42040   tab$=chr$(9)
 42060   mat empty$(0)
 42080   fnIniRead$=fn_iniRead$(il_section$,il_field$)
 42100 fnend  ! fnIniRead$
@@ -100,7 +100,7 @@
 48000 def fn_iniSet(inis_section$*256,inis_field$*256,inis_value$*256)
 48020   ! shares MAT INI_Section$, MAT INI_Field$, MAT INI_Value$, Mat II_Section$, INI_Field_Len_Longest with fnIniOpen
 48040   inis_field$=trim$(inis_field$)
-48060   if inis_field$="" then let inis_field$=''
+48060   if inis_field$="" then inis_field$=''
 48080   inis_section$=trim$(trim$(inis_section$,"]"),"[")
 48100   inis_section_first=fnsrch_case_insensitive(mat ini_section$, inis_section$)
 48120   if inis_section_first>0 then 
@@ -142,7 +142,7 @@
 50100   dim inir_section$*1024
 50120   dim inir_temp_file$*1024
 50140   open #inir_temp_handle:=fngethandle: "Name="&env$("Temp")&"\inir-"&session$&".ini,RecL=2048,Replace",display,output 
-50160   let inir_temp_file$=file$(inir_temp_handle)
+50160   inir_temp_file$=file$(inir_temp_handle)
 50180   if ini_file$="" then 
 50200     if env$('ACSDeveloper')<>'' then 
 50220       pr "INI_File$ is empty.  fn_ini_write will abort.  You must specifying a file via fnIniOpen, before calling this function."
@@ -152,20 +152,20 @@
 50300   end if  ! INI_File$=""
 50320   for ii_item=1 to udim(mat ii_line$)
 50340     if ii_line$(ii_item)(1:1)='[' then 
-50360       let inir_section$=uprc$(trim$(trim$(trim$(ii_line$(ii_item)),"["),"]"))
-50380       let inir_line$=ii_line$(ii_item)
+50360       inir_section$=uprc$(trim$(trim$(trim$(ii_line$(ii_item)),"["),"]"))
+50380       inir_line$=ii_line$(ii_item)
 50400       gosub INIR_WRITE
 50420     else if ii_line$(ii_item)(1:1)='!' or ii_line$(ii_item)(1:1)=';' or ii_line$(ii_item)(1:1)='#' or trim$(ii_line$(ii_item))="" then 
-50440       let inir_line$=ii_line$(ii_item)
+50440       inir_line$=ii_line$(ii_item)
 50460       gosub INIR_WRITE
 50480     else 
 50500       fnAddOneC(mat ini_section$,ii_section$)
-50520       let ii_pos_equal=pos(ii_line$(ii_item),"=")
-50540       if ii_pos_equal=-1 then let ii_pos_equal=pos(ii_line$(ii_item),tab$) ! if no equals sign than use a tab instead
-50560       let inir_field$=trim$(trim$(ii_line$(ii_item)(1:ii_pos_equal-1),'"'))
-50580       let inir_value$=fn_iniRead$(inir_section$,inir_field$)
-50600       if inir_value$='' then let inir_value$=""
-50620       let inir_line$=ii_line$(ii_item)(1:ii_pos_equal)&' '&inir_value$
+50520       ii_pos_equal=pos(ii_line$(ii_item),"=")
+50540       if ii_pos_equal=-1 then ii_pos_equal=pos(ii_line$(ii_item),tab$) ! if no equals sign than use a tab instead
+50560       inir_field$=trim$(trim$(ii_line$(ii_item)(1:ii_pos_equal-1),'"'))
+50580       inir_value$=fn_iniRead$(inir_section$,inir_field$)
+50600       if inir_value$='' then inir_value$=""
+50620       inir_line$=ii_line$(ii_item)(1:ii_pos_equal)&' '&inir_value$
 50640       gosub INIR_WRITE
 50660       fnAddOneC(mat ini_value$,ii_value$)
 50680     end if  ! II_Line$(II_Item)(1:1)=     '['     /  '!'...   /     else 

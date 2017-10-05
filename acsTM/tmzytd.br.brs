@@ -36,7 +36,7 @@
 00370   goto L340
 00380 L380: close #1: 
 00390 END1: if uprc$(rtrm$(prg$))="S:\acsTM\EMAINT" then chain prg$
-00400 XIT: let fnxit
+00400 XIT: fnxit
 00410 L410: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L430
 00420   goto L470
 00430 L430: pr newpage

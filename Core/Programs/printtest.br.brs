@@ -9,13 +9,13 @@
 00070   fntop(prg$='S:\Core\Programs\PrintTest',cap$='Print Test')
 00080 ! ___________________
 00090   fntos(sn$='PrintTest') !:
-        let rc=0
+        rc=0
 00100   fnlbl(1,1,'Characters Per Line:',40,2)
 00110   fntxt(1,42,3,0,0,'30') !:
-        let resp$(rc+=1)='80'
+        resp$(rc+=1)='80'
 00120   fnlbl(2,1,'Lines to print:',40,2)
 00130   fntxt(2,42,3,0,0,'30') !:
-        let resp$(rc+=1)='54'
+        resp$(rc+=1)='54'
 00140   fncmdset(2)
 00150   fnacs(sn$,0,mat resp$,ck)
 00160   if ck=cancel then goto XIT
@@ -31,7 +31,7 @@
 00240   fnxit
 00250 ! ______________________________________________________________________
 00260 ! <Updateable Region: ERTN>
-00270 ERTN: let fnerror(program$,err,line,act$,"xit")
+00270 ERTN: fnerror(program$,err,line,act$,"xit")
 00280   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00290   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00300   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

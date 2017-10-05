@@ -1,7 +1,7 @@
 12000 def fn_pa_setup
 12020   on error goto ERTN
 12040   if ~pa_setup then 
-12060     let pa_setup=1
+12060     pa_setup=1
 12080     !
 12100     debug_pdf=0  ! turn on to pause everytime a unhandled pdf call occurs
 12120     !
@@ -19,7 +19,7 @@
 12360     library 'S:\Core\PrintPdf': fnpdf_fontsize
 12380     library 'S:\Core\PrintPdf': fnpdf_background
 12400     fnreg_read('Report_Cache',report_cache$)
-12420     if report_cache$='True' then let print_report_caching=1 else let print_report_caching=0
+12420     if report_cache$='True' then print_report_caching=1 else print_report_caching=0
 12440     fnreg_read('PrintAce.Max Pages',max_pages$)
 12460     fnreg_read('formsFormat',formsFormat$)
 12480     let g_pa_max_pages=val(max_pages$) conv ignore
@@ -29,7 +29,7 @@
 12560 fnend  ! fn_pa_setup
 16000 IGNORE: continue 
 16020 ! <updateable region: ertn>
-16040 ERTN: let fnerror(program$,err,line,act$,"xit")
+16040 ERTN: fnerror(program$,err,line,act$,"xit")
 16060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 16080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 16100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -55,9 +55,9 @@
 22020   fnstatus('Sending PrintAce Batch '&str$(g_pa_batch)&' to the printer.')
 22030   fnstatus('When the messagebox (labeled Print) says "Sending to Printer" click "Okay" to continue.')
 22040   dim pa_filename$*256
-22060   if h_printace=0 then let h_printace=20
+22060   if h_printace=0 then h_printace=20
 22080   pr #h_printace: "Print.EndDoc" ioerr ignore
-22100   if pa_filename$='' then let pa_filename$=file$(h_printace) ! this is now set in fnpa_open, but it may not be called.
+22100   if pa_filename$='' then pa_filename$=file$(h_printace) ! this is now set in fnpa_open, but it may not be called.
 22120    !   fnstatus('            pa_filename$='&pa_filename$)
 22140   close #h_printace: ioerr ignore
 22160   if pa_filename$<>'' then 
@@ -68,7 +68,7 @@
 22240       execute 'System -W "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(pa_filename$)
 22260     end if 
 22280   end if 
-22300   let pa_filename$=''
+22300   pa_filename$=''
 22320 fnend 
 24000 def library fnpa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$)
 24020   fn_pa_setup
@@ -89,18 +89,18 @@
 26040   let g_pa_batch+=1
 26060   fnstatus('Iniating a PrintAce Batch '&str$(g_pa_batch))
 26070   if g_pa_max_pages then let fnstatus('     (up to '&str$(g_pa_max_pages)&' pages per batch)')
-26080   let h_printace=20
+26080   h_printace=20
 26100   if file(h_printace)=-1 then 
 26120     dim pa_o_filename$*1024
 26140     if print_report_caching then 
-26160       let pa_o_filename$=fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
+26160       pa_o_filename$=fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
 26170       fnstatus('  Report Cache Name: '&pa_o_filename$)
 26180     else 
-26200       let pa_o_filename$=env$('temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
+26200       pa_o_filename$=env$('temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
 26220     end if 
-26260     if pa_orientation$='' then let pa_orientation$='Portrait'
+26260     if pa_orientation$='' then pa_orientation$='Portrait'
 26280     open #h_printace: "Name="&pa_o_filename$&",Replace,RecL=5000",display,output 
-26300     let pa_filename$=pa_o_filename$
+26300     pa_filename$=pa_o_filename$
 26320     pr #h_printace: 'Call Print.MyOrientation("'&pa_orientation$&'")'
 26340    !  pr #h_printace: 'Call Print.NewPaperBin(1)'
 26360     let g_pa_pagecount=1
@@ -125,7 +125,7 @@
 28022   if formsFormat$="PDF" then
 28024     fnpa_newpage=fnpdf_Newpage
 28026   else
-28040     if h_printace=0 then let h_printace=20
+28040     if h_printace=0 then h_printace=20
 28060     if g_pa_max_pages=0 then 
 28080       pr #h_printace: 'Call Print.NewPage'
 28100     else ! if g_pa_max_pages<>0 then
@@ -162,8 +162,8 @@
 32380     !   if debug_pdf then pause
 32400     end if
 32420   else
-32440     if pl_box_instead_of_line=1 then let pl_box_instead_of_line_text$=',1' else let pl_box_instead_of_line_text$=''
-32460     if h_printace=0 then let h_printace=20
+32440     if pl_box_instead_of_line=1 then pl_box_instead_of_line_text$=',1' else pl_box_instead_of_line_text$=''
+32460     if h_printace=0 then h_printace=20
 32480     pr #h_printace: 'Call Print.AddLine('&str$(pl_left_pos)&','&str$(pl_top_pos)&','&str$(pl_width)&','&str$(pl_height)&pl_box_instead_of_line_text$&')'
 32500   end if
 32520   fnpa_line=pl_return
@@ -173,9 +173,9 @@
 34040   if formsFormat$="PDF" then
 34060     fnpa_txt=fnpdf_text(pt_text$,pt_x, pt_y)
 34080   else
-34100     if h_printace=0 then let h_printace=20
+34100     if h_printace=0 then h_printace=20
 34120     if trim$(pt_text$)<>'' then 
-34140       let pt_text$=srep$(pt_text$,'"',"'")
+34140       pt_text$=srep$(pt_text$,'"',"'")
 34160       pr #h_printace: 'Call Print.AddText("'&pt_text$&'",'&str$(pt_x)&','&str$(pt_y)&')'
 34180     end if  ! trim$(pt_text$)<>''
 34200   end if
@@ -185,9 +185,9 @@
 36022   if formsFormat$="PDF" then
 36024     fnpa_text=fnpdf_text(pt_text$,pt_x, pt_y)
 36026   else
-36040     if h_printace=0 then let h_printace=20
+36040     if h_printace=0 then h_printace=20
 36060     if trim$(pt_text$)<>'' then 
-36080       let pt_text$=srep$(pt_text$,'"',"'")
+36080       pt_text$=srep$(pt_text$,'"',"'")
 36100       pr #h_printace: 'Call Print.AddText("'&pt_text$&'",'&str$(pt_x)&','&str$(pt_y)&')'
 36120     end if  ! trim$(pt_text$)<>''
 36130   end if
@@ -198,7 +198,7 @@
 38024     pr 'add PDF elipse here'
 38025     if debug_pdf then pause
 38026   else
-38040     if h_printace=0 then let h_printace=20
+38040     if h_printace=0 then h_printace=20
 38060     pr #h_printace: 'Call Print.AddElipse('&str$(pe_a)&','&str$(pe_b)&','&str$(pe_c)&','&str$(pe_d)&')'
 38070   end if
 38080 fnend 
@@ -218,7 +218,7 @@
 39260       fnpa_pic=fnpdf_pic(pp_pic$,pp_x,pp_y,imgWidth,imgHeight, style$)
 39280     end if
 39300   else
-39320     if h_printace=0 then let h_printace=20
+39320     if h_printace=0 then h_printace=20
 39340     pr #h_printace: 'Call Print.AddPicture("'&os_filename$(pp_pic$)&'",'&str$(pp_x)&','&str$(pp_y)&')'
 39360   end if
 39380 fnend 
@@ -227,8 +227,8 @@
 40040   if formsFormat$="PDF" then
 40060     fnpa_font=fnpdf_font( pf_fontname$)
 40080   else
-40100     if h_printace=0 then let h_printace=20
-40120     if pf_fontname$='' then let pf_fontname$='Courier New'
+40100     if h_printace=0 then h_printace=20
+40120     if pf_fontname$='' then pf_fontname$='Courier New'
 40140     pr #h_printace: 'Call Print.MyFont("'&pf_fontname$&'")'
 40160   end if
 40180 fnend 
@@ -237,8 +237,8 @@
 42040   if formsFormat$="PDF" then
 42060     fnpa_fontsize=fnpdf_fontsize( pfs_fontsize)
 42080   else
-42100     if h_printace=0 then let h_printace=20
-42120     if pfs_fontsize=0 then let pfs_fontsize=10
+42100     if h_printace=0 then h_printace=20
+42120     if pfs_fontsize=0 then pfs_fontsize=10
 42140     pr #h_printace: 'Call Print.MyFontSize('&str$(pfs_fontsize)&')'
 42160   end if
 42180 fnend 
@@ -247,9 +247,9 @@
 44040   if formsFormat$="PDF" then
 44060     fnpa_fontbold=fnpdf_fontbold( pfb_off_or_on)
 44080   else
-44100     if h_printace=0 then let h_printace=20
-44120     if pfb_off_or_on<0 then let pfb_off_or_on=0
-44140     if pfb_off_or_on>1 then let pfb_off_or_on=1
+44100     if h_printace=0 then h_printace=20
+44120     if pfb_off_or_on<0 then pfb_off_or_on=0
+44140     if pfb_off_or_on>1 then pfb_off_or_on=1
 44160     pr #h_printace: 'Call Print.MyFontBold('&str$(pfb_off_or_on)&')'
 44180   end if
 44200 fnend 
@@ -258,9 +258,9 @@
 45040   if formsFormat$="PDF" then
 45060     fnpa_fontitalic=fnpdf_fontitalic( pfi_off_or_on)
 45080   else
-45100     if h_printace=0 then let h_printace=20
-45120     if pfi_off_or_on<0 then let pfi_off_or_on=0
-45140     if pfi_off_or_on>1 then let pfi_off_or_on=1
+45100     if h_printace=0 then h_printace=20
+45120     if pfi_off_or_on<0 then pfi_off_or_on=0
+45140     if pfi_off_or_on>1 then pfi_off_or_on=1
 45160     pr #h_printace: 'Call Print.MyFontItalic('&str$(pfi_off_or_on)&')'
 45180   end if
 45200 fnend 
@@ -272,9 +272,9 @@
 46100     pr 'add pdf fnpa_barcode logic'
 46120     if debug_pdf then pause
 46140   else
-46160     if h_printace=0 then let h_printace=20
+46160     if h_printace=0 then h_printace=20
 46180     if trim$(pb_bc$)<>'' then 
-46200       let pb_bc$=srep$(pb_bc$,'"',"'")
+46200       pb_bc$=srep$(pb_bc$,'"',"'")
 46220       pr #h_printace: 'Call Print.DisplayBarCode('&str$(pb_a)&','&str$(pb_b)&',"'&pb_bc$&'")'
 46240     end if 
 46260   end if
@@ -294,13 +294,13 @@
 48120     let z=6 ! height of line
 48130     blankline=2.0
 48140     let q=p=0
-48150     let double=.12
+48150     double=.12
 48160     ! /r
 48170     ! bARCODE$="123567890" ! 345" !67890" ! =z$  kj ! 1,2,3,4,5,6,7,8,9,0 ok
 48180     gosub BCW_QUIET
 48190     for a=1 to 10
 48200       barcode=val(barcode$(a:a))
-48210       let p=pos(barcode$,".",a) : if p=a then goto BCW_PERIOD ! searching for period
+48210       p=pos(barcode$,".",a) : if p=a then goto BCW_PERIOD ! searching for period
 48220       let q=pos(barcode$,"0",a) : if q=a then goto BCW_0 ! searching for BCW_0
 48230       on barcode goto BCW_1,BCW_2,BCW_3,BCW_4,BCW_5,BCW_6,BCW_7,BCW_8,BCW_9,BCW_0 none BCW_NEXT_A
 48240     BCW_NEXT_A: ! 
@@ -673,14 +673,14 @@
 58120     let z=6 ! height of line
 58130     blankline=2.0
 58140     let q=p=0
-58150     let double=.12
+58150     double=.12
 58160     ! /r
 58170     ! bARCODE$="123567890" ! 345" !67890" ! =z$  kj ! 1,2,3,4,5,6,7,8,9,0 ok
 58180     pr #20: 'Call Print.MyFontBold(1)'
 58190     gosub BC_QUIET
 58200     for a=1 to 10
 58210       barcode=val(barcode$(a:a))
-58220       let p=pos(barcode$,".",a) : if p=a then goto BC_PERIOD ! searching for period
+58220       p=pos(barcode$,".",a) : if p=a then goto BC_PERIOD ! searching for period
 58230       let q=pos(barcode$,"0",a) : if q=a then goto BC_0 ! searching for BC_0
 58240       on barcode goto BC_1,BC_2,BC_3,BC_4,BC_5,BC_6,BC_7,BC_8,BC_9,BC_0 none BC_NEXT_A
 58250     BC_NEXT_A: ! 

@@ -12,7 +12,7 @@
 08200   dim _program$(1)*255
 08220   dim _menu$(1)*255
 08222   dim combooptionsetlist$(0)*256
-08240   let tab$=hex$('09')
+08240   tab$=hex$('09')
 08260   setup=1
 08280 fnend 
 09000 def library fntop(;prg$*256,cap$*128)
@@ -20,14 +20,14 @@
 09040   if ~setup then let fn_setup
 09060   pr newpage
 09080   cap$=trim$(cap$)
-09100   let prg$=trim$(prg$)
+09100   prg$=trim$(prg$)
 09120   if cap$='' and prg$<>'' then 
 09140     cap$=prg$(pos(prg$,'\',-1)+1:pos(prg$,'.',-1)-1)
 09160   else if cap$='' then 
 09180     cap$="(untitled)"
 09200   end if 
 09220   if prg$='' then 
-09240     let prg$="(unknown)"
+09240     prg$="(unknown)"
 09260     if env$('acsDeveloper')<>'' then pr 'fnTop called but program was not set.' : pause 
 09280   end if 
 09300   fnprg(prg$,put=2)
@@ -45,7 +45,7 @@
 10020   ! screen ace top of screen function
 10040   if ~setup then let fn_setup
 10060   sn$=trim$(sn$&session$)
-10080   let tmp_combo_count_for_set=0
+10080   tmp_combo_count_for_set=0
 10100   combooptionsetlistcount=combooption_which_prior=combooption_which=0
 10120   combokeycurrent$=combokeyprior$=''
 10140   if len(sn$)>100 then : pr "INVALID FILE NAME: Too Long" : input fields "1,1,C 1,N": pause$ : goto XIT
@@ -64,7 +64,7 @@
 11140   ! myalign  alignment of the text within the label
 11160   !          0=left,  1=right,  2=center
 11180   if ~setup then let fn_setup
-11200   if mylen=0 then let mylen=len(txt$)
+11200   if mylen=0 then mylen=len(txt$)
 11220   setenv('control'&str$(fn_control_count), "LABEL|"&str$(myline)&"|"&str$(mypos)&"|"&str$(mylen)&"|"&str$(myalign)&"|"&txt$&"|"&str$(container)&"|"&str$(tabcon)&"|"&str$(font_mod)&"|"&lbl_tooltip$)
 11240 fnend 
 12000 def library fnpic(lyne,ps,height,width,picture$*300;con,tabcon)
@@ -76,15 +76,15 @@
 12162   if ~setup then let fn_setup
 12180   ! screen ace text box
 12200   if lwrc$(mask$)='mmddyy' then 
-12220     let mask$='1'
+12220     mask$='1'
 12240   else if lwrc$(mask$)='ccyymmdd' then 
-12260     let mask$='3'
+12260     mask$='3'
 12280   else if lwrc$(mask$)='pointtwo' then 
-12300     let mask$='32'
+12300     mask$='32'
 12320   else if lwrc$(mask$)='number' then 
-12340     let mask$='30'
+12340     mask$='30'
 12360   else if lwrc$(mask$)='currency' then 
-12380     let mask$='10'
+12380     mask$='10'
 12400   end if 
 12420   if mask$='1' then 
 12440     let width=8
@@ -98,7 +98,7 @@
 12600     let width=8
 12620   end if 
 12640   if val(mask$)>=10 and val(mask$)<=49 then ali=1
-12660   if maxlen=0 then let maxlen=width
+12660   if maxlen=0 then maxlen=width
 12680   setenv('control'&str$(fn_control_count), "TEXT|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|"&str$(maxlen)&"|"&str$(ali)&"|"&str$(disable)&"|"&mask$&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&addtomask$&"|")
 12700 fnend 
 12720 def library fnmultiline(lyne,ps,height,width;contain,tabcon,tooltip$*200)
@@ -106,7 +106,7 @@
 12760   if ~setup then let fn_setup
 12780   setenv('control'&str$(fn_control_count), "MULTILINE|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&tooltip$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 12800   lyne=ps=height=width=contain=tabcon=0
-12820   let tooltip$=""
+12820   tooltip$=""
 12840 fnend 
 12860 def library fnopt(lyne,ps, txt$*196; align,contain,tabcon)
 12880   ! lyne      vertical (that's up and down) Position of the Option.
@@ -115,13 +115,13 @@
 12940   ! align     0=left,  1=right
 12960   ! contain   container number (for containers like frames and tab strips)
 12980   if ~setup then let fn_setup
-13000   if align=1 then let ps=ps-len(trim$(txt$))
+13000   if align=1 then ps=ps-len(trim$(txt$))
 13020   setenv('control'&str$(fn_control_count), "OPTION|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|")
 13040 fnend 
 13060 def library fnchk(lyne,ps,txt$*196; align,contain,tabcon,chk_disable)
 13080   ! add a screen ace check box
 13100   if ~setup then let fn_setup
-13120   if align=1 then let ps=ps-len(trim$(txt$))-2
+13120   if align=1 then ps=ps-len(trim$(txt$))-2
 13140   setenv('control'&str$(fn_control_count), "CHECK|"&str$(lyne)&"|"&str$(ps)&"|"&str$(align)&"|"&txt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&str$(chk_disable)&"|")
 13160 fnend 
 13180 def library fncomboa(sfn$*256,lyne,ps,mat opt$;ttt$*200,width,contain,tabcon)
@@ -138,7 +138,7 @@
 13300   !           may not be larger than 81
 13360   ! __________________________________________________
 13380   ! ** get/set constants ********
-13400   ! let fncno(cno)
+13400   ! fncno(cno)
 13420   sfn$=trim$(sfn$)&env$('cno')
 13440   if width=0 then 
 13460     for j=1 to udim(mat opt$)
@@ -172,11 +172,11 @@
 14420   ! __________________________________________________
 14440   ! **** get/set constants **********
 14500   lnk=min(lnk,30) : lnd=min(lnd,60)
-14520   let width=min(width,81) : sfn$=trim$(sfn$) : let df$=trim$(df$)
-14540   let if$=trim$(if$)
-14560   let form$="Form Pos "&str$(psk)&",C "&str$(lnk) : let nodesc=1
+14520   let width=min(width,81) : sfn$=trim$(sfn$) : df$=trim$(df$)
+14540   if$=trim$(if$)
+14560   let form$="Form Pos "&str$(psk)&",C "&str$(lnk) : nodesc=1
 14580   if psd<>0 and lnd<>0 then 
-14600     let form$=form$&",Pos "&str$(psd)&",C "&str$(lnd) : let nodesc=0
+14600     let form$=form$&",Pos "&str$(psd)&",C "&str$(lnd) : nodesc=0
 14620   end if 
 14640   becky$=sfn$&env$('cno')&"[SESSION].tmp" ! combof_whr$=env$('temp')&'\'&becky$
 14660   ! __________________________________________________
@@ -204,7 +204,7 @@
 15260       read #df,using form$: key$,desc$ eof EODF ioerr ERR_READ
 15290       fn_add_combo_option_list(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk)&" "&desc$)
 15300     else 
-15320       let desc$=''
+15320       desc$=''
 15340       read #df,using form$: key$ eof EODF ioerr ERR_READ
 15370       fn_add_combo_option_list(rpad$(trim$(key$),lnk),rpad$(trim$(key$),lnk))
 15380     end if 
@@ -216,8 +216,8 @@
 15500   ! just comment in the ioerrs on the reads in read_df above
 15520   if err=61 then 
 15540     mat ml$(2)
-15560     let ml$(1)='Combo Box creation has encountered a locked record'
-15580     let ml$(2)='The locked record ('&str$(rec(df))&'will be skipped.'
+15560     ml$(1)='Combo Box creation has encountered a locked record'
+15580     ml$(2)='The locked record ('&str$(rec(df))&'will be skipped.'
 15600     fnmsgbox(mat ml$, resp$, 'ComboBox Record Lock Error',0)
 15620   else 
 15640     goto ERTN
@@ -252,8 +252,8 @@
 15897   !   comboOptionItemList(comboOptionSetListCount)=tmp_combo_count_for_set ! control_count
 15898 fnend 
 15900 def fn_add_combo_option_list(key$*81,txt$*81; reset_only)
-15902   let key$=trim$(key$)
-15904   let txt$=trim$(txt$)
+15902   key$=trim$(key$)
+15904   txt$=trim$(txt$)
 15910   if reset_only then 
 15912     acol_env_variable$='tmp_combo'&str$(tmp_combo_count_for_set+=1) ! control_count is not right - it's a response count
 15915     setenv(acol_env_variable$,'') ! PR 'setting up '&acol_env_variable$
@@ -293,12 +293,12 @@
 16290     goto FLEXINIT1_COMPLETE
 16300   end if 
 16320   if ~setup then let fn_setup
-16340   ! let fncno(cno)
+16340   ! fncno(cno)
 16360   all_hdr$=all_mask$=""
-16380   ! let fn_get_flexhandle
+16380   ! fn_get_flexhandle
 16400   let filenumber=fn_get_flexhandle(1)
 16420   sfn$=trim$(sfn$)&env$('cno') : optfile$=sfn$&"[SESSION].tmp"
-16440   let hdr_count=udim(ch$) : let hdrfile$=sfn$&".hdr"
+16440   hdr_count=udim(ch$) : hdrfile$=sfn$&".hdr"
 16460   if usr<>0 then goto USEPREVIOUS
 16480   XRETRY: ! !print "Retrying delete here! (If you see this twice)"
 16500   if exists(env$('temp')&'\'&optfile$) then execute '*free "'&env$('temp')&'\'&optfile$&'" -n' ioerr ignore ! retry
@@ -344,7 +344,7 @@
 17282   if env$('exitnow')='yes' then goto FLEXADD1_COMPLETE ! special processing to increase speed for exitnow
 17320   if ~setup then let fn_setup
 17340   dim all_item$*6491
-17360   let mat2str(mat item$,all_item$,hex$('09'))
+17360   mat2str(mat item$,all_item$,hex$('09'))
 17380   flexhandle=fn_get_flexhandle
 17382   let grid_populated+=1
 17400   pr #flexhandle,using "Form pos 1,C "&str$(len(all_item$)): all_item$ ioerr ignore
@@ -461,7 +461,7 @@
 19620   ! txt$     button.caption
 19640   ! tt$      button.tooltiptext
 19660   if ~setup then let fn_setup
-19680   let height=max(height,1) ! button height is at least 1
+19680   height=max(height,1) ! button height is at least 1
 19700   if width=0 then let width=len(txt$)
 19720   setenv('control'&str$(fn_control_count),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(cancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
 19740 fnend 
@@ -478,7 +478,7 @@
 19940 def library fndisplay_menu (mat _menu$,mat _program$,mat _status$;___,menu_string$*10000,index_)
 19950   if ~setup then let fn_setup
 19960   for index_=1 to udim(mat _menu$)
-19980     let menu_string$(inf:inf)=_menu$(index_)&'~~~'&_program$(index_)&'~~~'&_status$(index_)&'###'
+19980     menu_string$(inf:inf)=_menu$(index_)&'~~~'&_program$(index_)&'~~~'&_status$(index_)&'###'
 20000   next index_
 20020   setenv('control'&str$(fn_control_count),"menu|"&menu_string$(1:len(menu_string$)-3))
 20040 fnend 
@@ -499,10 +499,10 @@
 20280   ! on=1
 20300   ! ****************
 20320   acs=1
-20340   let tabcon=0
+20340   tabcon=0
 20360   ! if debug=1 then pr newpage
 20380   ! ****************
-20400   for j=1 to udim(mat resp$) : let resp$(j)=rtrm$(resp$(j)) : next j ! was trim$ before 4/25/2017
+20400   for j=1 to udim(mat resp$) : resp$(j)=rtrm$(resp$(j)) : next j ! was trim$ before 4/25/2017
 20420   cap$=env$('Program_Caption')
 20440   fn_get_flexhandle(1)
 20460   ! do we even need this line - it screws up other things.
@@ -524,13 +524,13 @@
 20940 def fn_ace_init
 20950   ace_io_count=ace_lyne_max=ace_column_max=grid_present=tmp_combo_count_for_read=0
 20960   let grid_index=date_boxes=respc=dropdown_menu_present=0 ! response counter
-20970   let date_fkey_base=2600 : let file_select_fkey_base=2700 : let txtbox_fkey=300
+20970   date_fkey_base=2600 : let file_select_fkey_base=2700 : txtbox_fkey=300
 20980   mat ace_io$(0) : mat ace_typ$(0) : mat ace_resp$(0) : mat tabs(0,3)
 20990   mat text_masks(0) : mat control$(0) : mat return_keys(0) : mat frames(0,4)
 21000   mat date_fielddata(0,6) : mat file_select_data(0,2)
 21010   let grid_filter$=''
 21020   scr_freeze
-21030   let resp_size=udim(mat resp$)
+21030   resp_size=udim(mat resp$)
 21040   button_win_width=0
 21050   control_count=val(env$('control_count'))
 21060   if udim(mat resp$)<control_count then mat resp$(control_count)
@@ -557,17 +557,17 @@
 21250   end if 
 21260   pr #0, border: borderText$
 21270     ! 
-21280   fn_company_name(0,acs_win_cols) ! let fn_company_name(0,acs_win_cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemName$(cursys$))
+21280   fn_company_name(0,acs_win_cols) ! fn_company_name(0,acs_win_cols,trim$(cap$(1:pos(cap$,'(')-1))) ! fnSystemName$(cursys$))
 21290     ! 
 21300   if not grid_present then 
-21310     let row=ceil((acs_win_rows-ace_lyne_max)/2 )
+21310     row=ceil((acs_win_rows-ace_lyne_max)/2 )
 21320     col=ceil((acs_win_cols-ace_column_max)/2 )
-21330     let rows=ace_lyne_max
+21330     rows=ace_lyne_max
 21340     cols=max(ace_column_max+2,button_win_width+2)
 21350   else 
-21360     let row= 3
+21360     row= 3
 21370     col= 2
-21380     let rows=acs_win_rows-6
+21380     rows=acs_win_rows-6
 21390     cols=acs_win_cols-2
 21400   end if 
 21410   if parent_none then 
@@ -588,10 +588,10 @@
 21560     str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)&'_key'),mat tmp_combo_key$,'|')
 21570     str2mat( env$('tmp_combo'&str$(tmp_combo_key_item)),mat tmp_combo_item$,'|')
 21580     ! 
-21590     let tck_response_item=val(env$('tmp_combo'&str$(tmp_combo_key_item)&'_response_item'))
-21600     let tck_which=srch(mat tmp_combo_key$,trim$(resp$(tck_response_item)))
+21590     tck_response_item=val(env$('tmp_combo'&str$(tmp_combo_key_item)&'_response_item'))
+21600     tck_which=srch(mat tmp_combo_key$,trim$(resp$(tck_response_item)))
 21610     if tck_which>0 and tck_which<=udim(mat tmp_combo_item$) then 
-21620       let resp$(tck_response_item)=tmp_combo_item$(tck_which)
+21620       resp$(tck_response_item)=tmp_combo_item$(tck_which)
 21630     end if 
 21640   next tmp_combo_key_item
 21650 fnend 
@@ -634,12 +634,12 @@
 22920   next index_
 22940 fnend 
 22960 def fn_equalize_resp_arrays
-22980   let respc=0
+22980   respc=0
 23000   dim ace_resp$(1)*1000, grid_filter$*1000
 23020   if ace_io_count>udim(mat resp$) then mat resp$(ace_io_count)
 23040   if ace_io_count then 
 23060     if grid_present then 
-23080       let resp_size+=1
+23080       resp_size+=1
 23100       let grid_index=fn_grid_index
 23120       mat ace_resp$(ace_io_count)
 23140       if grid_index=1 then 
@@ -657,7 +657,7 @@
 23380 def fn_string_array_empty (mat arr$; ___,index_,nonempty)
 23400   for index_=1 to udim(mat arr$)
 23420     if trim$(arr$(index_))<>'' then 
-23440       let nonempty=1
+23440       nonempty=1
 23460     end if 
 23480   next index_
 23500   fn_string_array_empty=~ nonempty
@@ -669,12 +669,12 @@
 23620       if row_count then 
 23640         if udim(ace_io$)=2 then 
 23660           if fn_string_array_empty(mat ace_resp$) then 
-23680             let msgbox("Please, click on a row to select it and repeat your attempt.")
+23680             msgbox("Please, click on a row to select it and repeat your attempt.")
 23700             let grid_selection_valid=0
 23720           end if 
 23740         else 
 23760           if fn_string_array_empty(mat grid_row$) then 
-23780             let msgbox("Please, click on a row to select it and repeat your attempt.")
+23780             msgbox("Please, click on a row to select it and repeat your attempt.")
 23800             let grid_selection_valid=0
 23820           end if 
 23840         end if 
@@ -699,7 +699,7 @@
 24220     !     let fkey(-1) : let goto_main_input=1
 24240   else if fkey > date_fkey_base and fkey < date_fkey_base+100 then 
 24260     let _date$=ace_resp$( date_fielddata(fkey-date_fkey_base,5))
-24300     let row=date_fielddata(fkey-date_fkey_base,2)
+24300     row=date_fielddata(fkey-date_fkey_base,2)
 24320     column=date_fielddata(fkey-date_fkey_base,3)+date_fielddata(fkey-date_fkey_base,4)+1
 24340     ace_resp$(date_fielddata(fkey-date_fkey_base,5))=fndate_picker$ (_date$,'mdy',row,column)
 24360     let fkey(-1) : let goto_main_input=1
@@ -715,9 +715,9 @@
 24540     ckey=fkey_cancel
 24542   else if fkey=1504 then ! 2504 then
 24544     if cap$='Select Company' then 
-24546       let help_cursys$='co'
+24546       help_cursys$='co'
 24548     else 
-24550       let help_cursys$=lwrc$(env$('CurSys'))
+24550       help_cursys$=lwrc$(env$('CurSys'))
 24552     end if 
 24580     execute 'system -M start http://planetacs.net/help/'&help_cursys$&'/'&srep$(trim$(cap$),' ','%20')&'.html'
 24600     let goto_main_input=1
@@ -741,31 +741,31 @@
 24882     if ace_resp_item<=udim(mat ace_resp$) and ace_resp_item<=udim(mat resp$) then 
 24900       if pos(ace_io$(ace_resp_item),'check ')>0 or pos(ace_io$(ace_resp_item),'radio ')>0 then 
 24920         if ace_resp$(ace_resp_item)(1:1)='^' then 
-24940           let resp$(ace_resp_item)='True'
+24940           resp$(ace_resp_item)='True'
 24960         else 
-24980           let resp$(ace_resp_item)='False'
+24980           resp$(ace_resp_item)='False'
 25000         end if 
 25020       else if date_index := fn_is_date(mat date_fielddata,ace_resp_item) > 0 then 
 25040         let _mask=date_fielddata(date_index,6)
 25060         if _mask=1 then 
-25080           let date_format$="mdy"
+25080           date_format$="mdy"
 25100         else if _mask=2 then 
-25120           let date_format$="mdcy"
+25120           date_format$="mdcy"
 25140         else if _mask=3 then 
-25160           let date_format$="cymd"
+25160           date_format$="cymd"
 25180         else if _mask=4 then 
-25200           let date_format$="dmcy"
+25200           date_format$="dmcy"
 25220         else if _mask=5 then 
-25240           let date_format$="dmy"
+25240           date_format$="dmy"
 25260         end if 
 25280         if date_format$<>'mdy' then 
 25300           let _days=days(lpad$(trim$(ace_resp$(ace_resp_item)),6,'0'),'mdy')
-25320           let resp$(ace_resp_item)=date$(_days,date_format$)
+25320           resp$(ace_resp_item)=date$(_days,date_format$)
 25340         else 
-25360           let resp$(ace_resp_item)=ace_resp$(ace_resp_item)
+25360           resp$(ace_resp_item)=ace_resp$(ace_resp_item)
 25380         end if 
 25400       else 
-25420         let resp$(ace_resp_item)=rtrm$(ace_resp$(ace_resp_item))
+25420         resp$(ace_resp_item)=rtrm$(ace_resp$(ace_resp_item))
 25440       end if 
 25450     end if 
 25460   next ace_resp_item
@@ -899,7 +899,7 @@
 27840 CONV_HANDLER: ! r:
 27860   dim message$(1)*255, response$*255,temp_io$(1)*255
 27880   bad_field=cnt+1
-27900   let message$(1)='You have entered an incorrect value at field number '&str$(bad_field)
+27900   message$(1)='You have entered an incorrect value at field number '&str$(bad_field)
 27920   mat temp_io$(udim(ace_io$))=ace_io$
 27940   fnmsgbox(mat message$, response$, "Error!",0)
 27950   fnpause
@@ -908,10 +908,10 @@
 28000   curfld(bad_field)
 28020 retry  ! /r
 28040 def fn_is_date (mat date_data,ace_item;___,index_,isdate)
-28060   let isdate=0
+28060   isdate=0
 28080   for index_=1 to udim(mat date_data)
 28100     if date_data(index_,5)=ace_item then 
-28120       let isdate=index_ : goto DATESEARCH_COMPLETE
+28120       isdate=index_ : goto DATESEARCH_COMPLETE
 28140     end if 
 28160   next index_
 28180   DATESEARCH_COMPLETE: ! 
@@ -923,7 +923,7 @@
 28320   mat temp_io$(udim(ace_io$))=ace_io$
 28340   mat temp_resp$(udim(resp$))=resp$
 28360   mat temp_ace_resp$(udim(ace_resp$))=ace_resp$
-28380   let temp_io_count=ace_io_count
+28380   temp_io_count=ace_io_count
 28400   fnprogram_properties
 28420   mat ace_io$ (udim(temp_io$))=temp_io$
 28440   mat resp$(udim(temp_resp$))=temp_resp$
@@ -947,7 +947,7 @@
 28722     setenv('tmp_combo'&str$(tmp_combo_count_for_read)&'_response_item','')
 28724     setenv('tmp_combo'&str$(tmp_combo_count_for_read)&'_key','')
 28730   next tmp_combo_item
-28740   let tmp_combo_count_for_set=tmp_combo_count_for_read=0
+28740   tmp_combo_count_for_set=tmp_combo_count_for_read=0
 28750   setenv('control_count',0)
 28760 fnend 
 28800 def fn_window_size
@@ -983,7 +983,7 @@
 29380       ace_lyne_max=max(ace_lyne_max,val(control$(2)))
 29400       ace_column_max=max( ace_column_max, val(control$(3))+val(control$(6)) )
 29420     else if typ$="MENU" then 
-29440       let dropdown_menu_present=1
+29440       dropdown_menu_present=1
 29460     end if 
 29480   next index_
 29500 fnend 
@@ -993,17 +993,17 @@
 29580       if ace_resp$(_idx)<>'0' then 
 29600         if not fn_validate_mdy(ace_resp$(_idx)) then 
 29620           if val(resp$(_idx)) then 
-29640             let msgbox('Date '&ace_resp$(_idx)&' at field #'&str$(curfld)&' is invalid. Previous value of '&resp$(_idx)&' will be restored')
+29640             msgbox('Date '&ace_resp$(_idx)&' at field #'&str$(curfld)&' is invalid. Previous value of '&resp$(_idx)&' will be restored')
 29660             ace_resp$(_idx)=resp$(_idx)
 29680           else 
-29700             let msgbox('Date '&ace_resp$(_idx)&' at field #'&str$(curfld)&' is invalid.')
+29700             msgbox('Date '&ace_resp$(_idx)&' at field #'&str$(curfld)&' is invalid.')
 29720           end if 
 29740           let found_invalid=1
 29760           curfld(_idx) : let fkey(-1)
 29780         end if 
 29800       end if 
 29820     else if text_masks(_idx)>1000 and (trim$(ace_resp$(_idx))='' or trim$(ace_resp$(_idx))='0') then 
-29840       let msgbox('Field '&str$(_idx)&' is required.')
+29840       msgbox('Field '&str$(_idx)&' is required.')
 29860       let found_invalid=1
 29880       curfld(_idx) : let fkey(-1)
 29882       !     else if text_masks(_idx)>1000 then
@@ -1019,8 +1019,8 @@
 29980 def fn_validate_mdy (_date$;separator$,___,month,day,year)
 30000   fn_validate_mdy=1
 30020   let _date$=lpad$(_date$,6,'0')
-30040   let month=val(_date$(1:2))
-30060   let day=val(_date$(3:4))
+30040   month=val(_date$(1:2))
+30060   day=val(_date$(3:4))
 30080   let year=val(_date$(5:6))
 30100   if not (fn_validate_month(month) and fn_validate_day(day,month,year) and fn_validate_year(year)) then let fn_validate_mdy=0
 30120  ! FINISHEDVALIDATE_MDY: !
@@ -1043,7 +1043,7 @@
 30460 def fn_ace_rd_menu (;___,index_,item_count)
 30480   dim menu_items$(1)*1023,menu_sub_items$(1)*255,_menu$(1)*255,_program$(1)*255,_status$(1)*255
 30500   str2mat(control$(2),mat menu_items$,'###')
-30520   let item_count=udim(mat menu_items$)
+30520   item_count=udim(mat menu_items$)
 30540   mat _menu$(item_count)=(''): mat _program$(item_count)=(''): mat _status$(item_count)=('')
 30560   for index_=1 to udim(mat menu_items$)
 30580     str2mat(menu_items$(index_),mat menu_sub_items$,'~~~')
@@ -1054,49 +1054,49 @@
 30680   display menu: mat _menu$,mat _program$,mat _status$
 30700 fnend 
 30720 def fn_ace_rd_multiline
-30740   let respc+=1
+30740   respc+=1
 30760   lyne=val(control$(2))
-30780   let ps=val(control$(3))
-30800   let height=val(control$(4))
+30780   ps=val(control$(3))
+30800   height=val(control$(4))
 30820   let width=val(control$(5))
-30840   let tt$=control$(6)
+30840   tt$=control$(6)
 30860   container=val(control$(7))
-30880   let tabcon=val(control$(8))
+30880   tabcon=val(control$(8))
 30900   fn_remove_crlf(resp$(respc))
-30910    !   let resp$(respc)=srep$(resp$(respc),'"','""') ! let fn2quote(resp$(respc))
+30910    !   resp$(respc)=srep$(resp$(respc),'"','""') ! fn2quote(resp$(respc))
 30920 fnend 
 30940 def fn_ace_rd_picbut
 30960   lyne=val(control$(2))
-30980   let ps=val(control$(3))
+30980   ps=val(control$(3))
 31000   comkey=val(control$(4))
-31020   let height=val(control$(5))
+31020   height=val(control$(5))
 31040   let width=val(control$(6))
 31060   container=val(control$(7))
-31080   let tabcon=val(control$(8))
-31100   let default=val(control$(9))
+31080   tabcon=val(control$(8))
+31100   default=val(control$(9))
 31120   cancel=val(control$(10))
-31140   let txt$=control$(11)
-31160   let path1$=control$(12)
-31180   ! let path2$=control$(13)
-31200   let tt$=control$(14)
+31140   txt$=control$(11)
+31160   path1$=control$(12)
+31180   ! path2$=control$(13)
+31200   tt$=control$(14)
 31220 fnend 
 31240 def fn_ace_rd_cmdkey
 31260   dim spec$*255
 31280   spec$=''
-31300   let txt$=control$(2)
+31300   txt$=control$(2)
 31320   mat return_keys(udim(return_keys)+1)
-31340   let returnkey=return_keys(udim(return_keys))=val(control$(3))
-31360   let default=val(control$(4))
+31340   returnkey=return_keys(udim(return_keys))=val(control$(3))
+31360   default=val(control$(4))
 31380   cancel=val(control$(5))
 31400   if udim(control$)>=6 then 
-31420     let tt$=control$(6)
+31420     tt$=control$(6)
 31440   end if 
 31460   if cancel then let fkey_cancel=returnkey
-31480   let txt$=srep$(txt$,'&','') ! remove underlined letters...   would be nice to use them. xxx
+31480   txt$=srep$(txt$,'&','') ! remove underlined letters...   would be nice to use them. xxx
 31500   let width=len(txt$)
 31520   spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
 31540   if default then 
-31560     let default_button_fkey=returnkey
+31560     default_button_fkey=returnkey
 31580     spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',[buttons],B'&str$(returnkey)
 31600     pr #0, fields "1,5,P 1/2,[buttons],"&str$(returnkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
 31610   else if cancel then 
@@ -1131,35 +1131,35 @@
 32140 fnend 
 32160 def fn_ace_rd_tab
 32180   lyne=val(control$(2))
-32200   let ps=val(control$(3))
-32220   let height=val(control$(4))
+32200   ps=val(control$(3))
+32220   height=val(control$(4))
 32240   let width=val(control$(5))
-32260   let path1$=control$(6) & control$(7)
+32260   path1$=control$(6) & control$(7)
 32280   open #tab_file:=fngethandle: "Name="&path1$,internal,outin 
-32300   let tabline$=""
+32300   tabline$=""
 32320   for j=1 to min(lrec(tab_file),99)
 32340     read #tab_file,using "Form Pos 1,C 80": txt$
-32360     let tabline$=tabline$&trim$(txt$)&tab$
+32360     tabline$=tabline$&trim$(txt$)&tab$
 32380     open #tab:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height+1)&',cols='&str$(width+1)&',tab='&trim$(txt$)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen]',display,outin 
 32400     mat tabs(udim(tabs)+1,3)
-32420     let tabs(udim(tabs),1)=tab
-32440     let tabs(udim(tabs),2)=lyne+1
-32460     let tabs(udim(tabs),3)=ps+1
+32420     tabs(udim(tabs),1)=tab
+32440     tabs(udim(tabs),2)=lyne+1
+32460     tabs(udim(tabs),3)=ps+1
 32480   next j
 32500   close #tab_file: 
 32520 fnend 
 32540 def fn_ace_rd_frame
 32560   lyne=val(control$(2))
-32580   let ps=val(control$(3))
-32600   let height=val(control$(4))
+32580   ps=val(control$(3))
+32600   height=val(control$(4))
 32620   let width=val(control$(5))
-32640   let txt$=control$(6)
-32660   let tt$=control$(7)
+32640   txt$=control$(6)
+32660   tt$=control$(7)
 32680   container=val(control$(8))
-32700   let tabcon=val(control$(9))
-32720   let height+=1
-32740   let txt$=trim$(txt$)
-32760   ! txt$=srep$(txt$,'"','""') ! let fn2quote(txt$)
+32700   tabcon=val(control$(9))
+32720   height+=1
+32740   txt$=trim$(txt$)
+32760   ! txt$=srep$(txt$,'"','""') ! fn2quote(txt$)
 32780   mat frames(udim(frames)+1,4)
 32800   if tabcon then 
 32820     open #frame:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(tabs(tabcon,1))&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outin 
@@ -1173,15 +1173,15 @@
 32980 fnend 
 33000 def fn_ace_rd_flex(;___,index_)
 33040   lyne=val(control$(2))
-33060   let ps=val(control$(3))
-33080   let height= rows - lyne ! val(control$(4))
+33060   ps=val(control$(3))
+33080   height= rows - lyne ! val(control$(4))
 33100   let width= cols - ps -2 ! val(control$(5))
 33120   seltype=val(control$(7))
 33140   sorttype=val(control$(8))
-33160   let path1$=control$(9)
-33180   let hdr_count=val(control$(10))
+33160   path1$=control$(9)
+33180   hdr_count=val(control$(10))
 33200   container=val(control$(11))
-33220   let tabcon=val(control$(12))
+33220   tabcon=val(control$(12))
 33240   dim _headings$(1)*1000,_line$*10000,_chunks$(1)*1000,_forms$(1)*1000,filterspec$*255,gridspec$*255,loading_spec$*50
 33250   ! pr env$('temp')&'\'&trim$(path1$)&'.hdr' : pause
 33260   open #grid_headers:=fngethandle: 'Name='&env$('temp')&'\'&trim$(path1$)&'.hdr',display,input 
@@ -1200,7 +1200,7 @@
 33520   end if 
 33540   ! this is done when there is a grid to the right of a frame, so they don't overlap
 33560   if udim(frames) and not container and ps > 2 then 
-33580     let ps+=1
+33580     ps+=1
 33600   end if 
 33620   ! 
 33640   let filterspec$=str$(lyne)&","&str$(ps)&","&str$(width+2)&"/filter "&str$(width)&",[textboxes],"&str$(lyne+1)&","&str$(ps)&",1,word"
@@ -1229,10 +1229,10 @@
 34100   clearflag$="="
 34120   ! 
 34140   dim long_row$(1)*1024
-34160   let rows=2000
+34160   rows=2000
 34180   mat long_row$(rows * udim(_headings$))
-34200   let row_count=1 : let record_count=1
-34220   let printed=0
+34200   row_count=1 : record_count=1
+34220   printed=0
 34240   ! 
 34260   scr_thaw
 34280   ! 
@@ -1243,9 +1243,9 @@
 34400     !   let _line$=srep$(_line$,'-','')
 34420     ! 
 34440     if file(grid_data)<>0 then exit do 
-34460     let record_count += 1
+34460     record_count += 1
 34480     if record_count=30000 then 
-34500       let value= msgbox( "30,000 records have been loaded. Do you wish to continue loading?", "Message", "YN", "INF")
+34500       value= msgbox( "30,000 records have been loaded. Do you wish to continue loading?", "Message", "YN", "INF")
 34520       if value=3 then goto GRID_DATA_LOAD_COMPLETE
 34540     end if 
 34560     ! 
@@ -1255,7 +1255,7 @@
 34640     end if 
 34660     ! 
 34680     ! if env$('ACSDeveloper')<>'' then
-34700     let mat2str(mat _chunks$,_line$," ")
+34700     mat2str(mat _chunks$,_line$," ")
 34720     ! else 
 34740     !   let _line$=''
 34760     !   for index_=1 to udim(mat _chunks$)
@@ -1280,25 +1280,25 @@
 35140     ! CHECK_JULIAN_DATES: ! Convert dates to julain format for BR internal date specs
 35160     dim datemask$,masknumber
 35180     for index_=1 to udim(mat _mask$)
-35200       let masknumber=val(_mask$(index_)) conv NOT_JULIAN_DATE
-35220       if masknumber>=1000 then let masknumber-=1000
+35200       masknumber=val(_mask$(index_)) conv NOT_JULIAN_DATE
+35220       if masknumber>=1000 then masknumber-=1000
 35240       if masknumber>=01 and masknumber<=05 then 
 35260     !         if masknumber=01 then !    date format : mm/dd/yy
-35280     !           let datemask$="ccyymmdd" ! "mmddyy" ! Expected programs sending dates like mddyy
+35280     !           datemask$="ccyymmdd" ! "mmddyy" ! Expected programs sending dates like mddyy
 35300     !         else if masknumber=02 then !    date format : mm/dd/ccyy
-35320     !           let datemask$="ccyymmdd" ! "mmddccyy" ! Expected programs sending dates like mmddccyy
+35320     !           datemask$="ccyymmdd" ! "mmddccyy" ! Expected programs sending dates like mmddccyy
 35340     !         else if masknumber=03 then !    date format : ccyy/mm/dd
-35360     !           let datemask$="ccyymmdd"
+35360     !           datemask$="ccyymmdd"
 35380     !         else if masknumber=04 then !    date format : dd/mm/ccyy
-35400     !           let datemask$="ccyymmdd" ! "ddmmccyy"
+35400     !           datemask$="ccyymmdd" ! "ddmmccyy"
 35420     !         else if masknumber=05 then !    date format : dd/mm/yy
-35440         let datemask$="ccyymmdd" ! "ddmmyy"
+35440         datemask$="ccyymmdd" ! "ddmmyy"
 35460     !         end if
 35480     !         let _chunks$(index_+1)=srep$(lpad$(_chunks$(index_+1),len(datemask$))," ","0") ! pause ! lpad with zeros to the right size
 35482         let quick_len=len(trim$(srep$(_chunks$(index_+1),'/',''))) ! pr quick_len
 35483         if quick_len=5 then let quick_len=6 : let _chunks$(index_+1)='0'&trim$(_chunks$(index_+1))
-35484         if quick_len=6 then let _chunks$(index_+1)=date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! let datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
-35498     !         pr _chunks$(index_+1),quick_len : pause ! =date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! let datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
+35484         if quick_len=6 then let _chunks$(index_+1)=date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
+35498     !         pr _chunks$(index_+1),quick_len : pause ! =date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
 35500         let _chunks$(index_+1)=str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
 35520       end if 
 35540       NOT_JULIAN_DATE: ! Not a julian date field, leave it alone
@@ -1311,14 +1311,14 @@
 35680         scr_freeze
 35700         clearflag$="+"
 35720         mat long_row$=('')
-35740         let row_count=1
-35760         let printed=1
+35740         row_count=1
+35760         printed=1
 35780       else 
-35800         let row_count += 1
+35800         row_count += 1
 35820       end if 
 35840     end if 
 35860   loop 
-35880   let row_count -= 1
+35880   row_count -= 1
 35900   if row_count<>0 then 
 35920     if not printed then 
 35940       pr f gridspec$&",=L": mat long_row$(1:(row_count)*udim(_chunks$))
@@ -1348,8 +1348,8 @@
 36420 def fn_alpha_mask_indices (mat alpha_mask_indices;___,index_,mask)
 36440   mat alpha_mask_indices(0)
 36460   for index_=1 to udim(mat _mask$)
-36480     let mask=val(_mask$(index_)) conv ignore
-36500     if mask >=1000 then let mask-=1000
+36480     mask=val(_mask$(index_)) conv ignore
+36500     if mask >=1000 then mask-=1000
 36520     if mask<>0 and mask<>80 and mask<>81 then ! is numeric
 36540       mat alpha_mask_indices(udim(mat alpha_mask_indices)+1)
 36560       alpha_mask_indices(udim(mat alpha_mask_indices))=index_
@@ -1357,7 +1357,7 @@
 36600   next index_
 36620 fnend 
 36640 def fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$;___,index_)
-36660   let data_file_nonempty=0
+36660   data_file_nonempty=0
 36680   mat _headings$(udim(_headings$)+1)
 36700   mat _headings$(2:udim(_headings$))=_headings$(1:udim(_headings$)-1)
 36720   let _headings$(1)="Combined"
@@ -1371,12 +1371,12 @@
 36880     if udim(_chunks$)<> udim(_headings$)-1 then ! truncate extra columns, which are there by mistake or are missing
 36900       mat _chunks$( udim(_headings$)-1 )
 36920     end if 
-36940     let mat2str(mat _chunks$,_line$," ")
+36940     mat2str(mat _chunks$,_line$," ")
 36960     let _widths(1)=max(_widths(1),len(_line$)+udim(_chunks$)-1)
 36980     for _index=1 to udim(mat _chunks$)
 37000       let _widths(_index+1)=max(_widths(_index+1),len(_chunks$(_index))+1)
 37020       let _widths(_index+1)=max(_widths(_index+1),len(_headings$(_index+1))+4)
-37040       if _widths(_index+1) then let data_file_nonempty=1
+37040       if _widths(_index+1) then data_file_nonempty=1
 37060       let _forms$(_index+1)="C "&str$(_widths(_index+1))&',L'
 37080     next _index
 37100   next count
@@ -1390,11 +1390,11 @@
 37260   fn_gridform=data_file_nonempty
 37280 fnend 
 37300 def fn_column_mask(&form$,&width,mask$;___,invisible)
-37320   let maxlen=width + 10 ! to deal with bad data
-37340   let mask=val(mask$) conv ignore
+37320   maxlen=width + 10 ! to deal with bad data
+37340   mask=val(mask$) conv ignore
 37360   if mask >= 1000 then 
-37380     let mask -= 1000
-37400     let invisible=1
+37380     mask -= 1000
+37400     invisible=1
 37420   end if 
 37440   if mask=1 then ! date format : mm/dd/yy
 37460     let form$=str$(width)&'/date(m/d/yy)' ! 
@@ -1485,18 +1485,18 @@
 39160 fnend 
 39720 def fn_print_grid
 39721   ! library 'S:\Core\fnsnap\rtflib_dll.br': fnlistprint
-39722   ! LET FNLISTPRINT(LISTWIN,LISTSPEC$,"Selected Clients","","Selected clients  for "&CLNR$,MAT DUMMY,0,0,"11111",0) : GOTO 5290
+39722   ! fnLISTPRINT(LISTWIN,LISTSPEC$,"Selected Clients","","Selected clients  for "&CLNR$,MAT DUMMY,0,0,"11111",0) : GOTO 5290
 39723   fnlistprint(0,gridspec$,"","","Grid Print",mat dummy,0,0,"000000",0)
 39724   !   goto PRINT_GRID_XIT
 39740   !   fnopenprn
-39750   !   let mat2str(mat _headings$(2:udim(_headings$)),_line$,tab$)
+39750   !   mat2str(mat _headings$(2:udim(_headings$)),_line$,tab$)
 39752   !   pr #255: _line$
 39760   !   input fields gridspec$&",rowcnt,all,nowait": grid_rows
 39780   !   input fields gridspec$&",colcnt,all,nowait": grid_columns
 39800   !   mat _chunks$(grid_columns)
 39820   !   for rowindex_=1 to grid_rows
 39840   !     input fields gridspec$&",row,range,nowait": rowindex_, rowindex_, mat _chunks$
-39860   !     let mat2str(mat _chunks$,_line$," ")
+39860   !     mat2str(mat _chunks$,_line$," ")
 39880   !     pr #255: _line$
 39900   !   next rowindex_
 39920   !   fncloseprn
@@ -1504,33 +1504,33 @@
 39940 fnend 
 39960 def fn_ace_rd_pic
 39980   lyne=val(control$(2))
-40000   let ps=val(control$(3))
+40000   ps=val(control$(3))
 40020   let width=val(control$(4))
-40040   let height=val(control$(5))
-40060   let path1$=control$(6)
+40040   height=val(control$(5))
+40060   path1$=control$(6)
 40080 fnend 
 40100 def fn_ace_rd_button
 40120   lyne=val(control$(2))
-40140   let ps=val(control$(3))
-40160   let height=val(control$(4))
+40140   ps=val(control$(3))
+40160   height=val(control$(4))
 40180   let width=val(control$(5))
 40200   comkey=val(control$(6))
 40220   ! 
 40240   mat return_keys(udim(return_keys)+1)
-40260   let return_keys(udim(return_keys))=comkey
+40260   return_keys(udim(return_keys))=comkey
 40280   ! 
-40300   let txt$=srep$(trim$(control$(7)),chr$(38),"")
-40320   let tt$=control$(8) error ignore
-40340   let default=val(control$(9)) error ignore
+40300   txt$=srep$(trim$(control$(7)),chr$(38),"")
+40320   tt$=control$(8) error ignore
+40340   default=val(control$(9)) error ignore
 40360   cancel=val(control$(10)) error ignore
 40380   container=val(control$(11)) error ignore
-40400   let tabcon=val(control$(12)) error ignore
+40400   tabcon=val(control$(12)) error ignore
 40420   dim spec$*255
 40422   spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',,B'&str$(comkey)
 40424   ! r: new logic 10/19/2015
 40426   !   spec$=str$(lyne)&','&str$(ps)&',CC '&str$(width)&',,B'&str$(comkey)
 40428   if default then 
-40430     let default_button_fkey=comkey
+40430     default_button_fkey=comkey
 40432     spec$=str$(lyne)&','&str$(ps)&','&str$(width)&'/CC '&str$(len(txt$))&',[buttons],B'&str$(comkey)
 40434     pr #0, fields "1,5,P 1/2,[buttons],"&str$(comkey): "S:\Core\Icon\forward-icon.png" ioerr ignore
 40436   else if cancel then 
@@ -1545,11 +1545,11 @@
 40454   end if 
 40456   ! /r
 40460   if container then 
-40480     let tmp_win=frames(container,1) ! pr #frames(container,1), fields spec$: txt$
+40480     tmp_win=frames(container,1) ! pr #frames(container,1), fields spec$: txt$
 40500   else if tabcon then 
-40520     let tmp_win=tabs(tabcon,1) ! pr #tabs(tabcon,1), fields spec$: txt$
+40520     tmp_win=tabs(tabcon,1) ! pr #tabs(tabcon,1), fields spec$: txt$
 40540   else 
-40560     let tmp_win=acs_win ! pr #acs_win, fields spec$: txt$
+40560     tmp_win=acs_win ! pr #acs_win, fields spec$: txt$
 40580   end if 
 40582   ! r: new help logic 10/19/2015
 40584   dim _help$*255
@@ -1572,17 +1572,17 @@
 40618   pr #tmp_win, fields spec$, help _help$: txt$
 40619 fnend 
 40620 def fn_ace_rd_option
-40640   let respc+=1
+40640   respc+=1
 40660   lyne=val(control$(2))
-40680   let ps=val(control$(3))
+40680   ps=val(control$(3))
 40700   align=val(control$(4))
-40720   let txt$=control$(5)
+40720   txt$=control$(5)
 40740   container=val(control$(6))
-40760   let tabcon=val(control$(7))
-40780   ! txt$=srep$(txt$,'"','""') ! let fn2quote(txt$)
-40800   if trim$(uprc$(resp$(respc)))<>"TRUE" and trim$(uprc$(resp$(respc)))<>"FALSE" then let resp$(respc)="FALSE"
-40820   let txt$=ltrm$(txt$,'^')
-40840   if trim$(uprc$(resp$(respc)))="TRUE" then let resp$(respc)='^'&trim$(txt$) else let resp$(respc)=trim$(txt$)
+40760   tabcon=val(control$(7))
+40780   ! txt$=srep$(txt$,'"','""') ! fn2quote(txt$)
+40800   if trim$(uprc$(resp$(respc)))<>"TRUE" and trim$(uprc$(resp$(respc)))<>"FALSE" then resp$(respc)="FALSE"
+40820   txt$=ltrm$(txt$,'^')
+40840   if trim$(uprc$(resp$(respc)))="TRUE" then resp$(respc)='^'&trim$(txt$) else resp$(respc)=trim$(txt$)
 40860   if container then 
 40880     fn_ace_io_add('#'&str$(frames(container,1))&','&str$(lyne)&','&str$(ps)&',radio '&str$(len(trim$(txt$))+4)&',T') ! tab order
 40900   else if tabcon then 
@@ -1592,18 +1592,18 @@
 40980   end if 
 41000 fnend 
 41020 def fn_ace_rd_check
-41040   let respc+=1
+41040   respc+=1
 41060   lyne=val(control$(2))
-41080   let ps=val(control$(3))
-41100   if ps<=0 then let ps=1
+41080   ps=val(control$(3))
+41100   if ps<=0 then ps=1
 41120   align=val(control$(4))
-41140   let txt$=control$(5)
+41140   txt$=control$(5)
 41160   container=val(control$(6))
-41180   let tabcon=val(control$(7))
+41180   tabcon=val(control$(7))
 41190   chk_disable=val(control$(8))
-41200   ! txt$=srep$(txt$,'"','""') ! let fn2quote(txt$)
-41220   let txt$=ltrm$(txt$,'^')
-41240   if trim$(uprc$(resp$(respc)))="TRUE" then let resp$(respc)='^' else let resp$(respc)=''
+41200   ! txt$=srep$(txt$,'"','""') ! fn2quote(txt$)
+41220   txt$=ltrm$(txt$,'^')
+41240   if trim$(uprc$(resp$(respc)))="TRUE" then resp$(respc)='^' else resp$(respc)=''
 41260   spec$=','&str$(lyne)&','&str$(ps+len(txt$)+1)&',check 2'
 41280   if align then 
 41300     align$='CR'
@@ -1624,19 +1624,19 @@
 41580 fnend 
 41600 def fn_ace_rd_label
 41620   lyne=val(control$(2))
-41640   let ps=val(control$(3))
-41660   let mylen=val(control$(4))
+41640   ps=val(control$(3))
+41660   mylen=val(control$(4))
 41680   align=val(control$(5))
-41700   let txt$=control$(6)
+41700   txt$=control$(6)
 41720   container=val(control$(7))
-41740   let tabcon=val(control$(8))
+41740   tabcon=val(control$(8))
 41760   let font_mod=val(control$(9))
-41780   let txt$=srep$(trim$(txt$),'&','')
+41780   txt$=srep$(trim$(txt$),'&','')
 41790   dim lbl_tooltip$*256
 41792   if udim(control$)>=10 then lbl_tooltip$=control$(10) else lbl_tooltip$=''
 41800   if txt$<>'' then 
-41820   ! txt$=srep$(txt$,'"','""') ! let fn2quote(txt$)
-41840     let mylen=max(mylen,len(txt$))
+41820   ! txt$=srep$(txt$,'"','""') ! fn2quote(txt$)
+41840     mylen=max(mylen,len(txt$))
 41860     if align=1 then ace_rd_label_align$='r' else if align=2 then ace_rd_label_align$='c' else ace_rd_label_align$='l'
 41880     if container then 
 41890       lbl_win=frames(container,1)
@@ -1656,25 +1656,25 @@
 42030   end if 
 42040 fnend 
 42060 def fn_ace_rd_text
-42080   let respc+=1
+42080   respc+=1
 42100   lyne=val(control$(2))
-42120   let ps=val(control$(3)) ! -.6
+42120   ps=val(control$(3)) ! -.6
 42140   let width=val(control$(4))
-42160   let maxlen=max(val(control$(5)),width)
-42180   if maxlen=1 then let maxlen=2
+42160   maxlen=max(val(control$(5)),width)
+42180   if maxlen=1 then maxlen=2
 42200   align=val(control$(6))
-42220   let disable=val(control$(7))
-42240   let mask$=control$(8)
-42260   let tt$=control$(9)
+42220   disable=val(control$(7))
+42240   mask$=control$(8)
+42260   tt$=control$(9)
 42280   container=val(control$(10))
-42300   let tabcon=val(control$(11))
+42300   tabcon=val(control$(11))
 42320   addtomask$=control$(12)
-42340 ! let resp$(respc)=srep$(resp$(respc),'"','""') soflow ignore ! let fn2quote(resp$(respc))
-42350 ! tt$=srep$(tt$,'"','""') soflow ignore ! let fn2quote(tt$)
+42340 ! resp$(respc)=srep$(resp$(respc),'"','""') soflow ignore ! fn2quote(resp$(respc))
+42350 ! tt$=srep$(tt$,'"','""') soflow ignore ! fn2quote(tt$)
 42360   dim spec$*255
 42380   spec$=fn_textmask$(mask$,lyne,ps,width,container,maxlen)
 42400   mat text_masks(respc)
-42420   let text_masks(respc)=val(mask$)
+42420   text_masks(respc)=val(mask$)
 42440   if container then 
 42460     fn_ace_io_add('#'&str$(frames(container,1))&','&str$(lyne)&','&str$(ps)&','&spec$)
 42480   else if tabcon then 
@@ -1687,40 +1687,40 @@
 42620   dim attr$*255
 42640   attr$=''
 42660   ! 
-42680   let mask=0
-42700   let mask=val(mask$) conv MASK_VAL_CONV
+42680   mask=0
+42700   mask=val(mask$) conv MASK_VAL_CONV
 42720   MASK_VAL_CONV: ! 
 42960   ! 
-42980   if mask>1000 then let mask-=1000
+42980   if mask>1000 then mask-=1000
 43000   if mask>=1 and mask<=5 then 
 43020     fn_datetextbox(mask,lyne,ps,width,container,disable)
 43040     ! 
 43060     attr$="9/#PIC(--/--/--)" ! attr$="9/DATE(m/d/y)"
 43080     if mask=1 then 
-43100       let resp$(respc)=lpad$(trim$(resp$(respc)),6,'0')
-43120       let date_format$='mdy'
+43100       resp$(respc)=lpad$(trim$(resp$(respc)),6,'0')
+43120       date_format$='mdy'
 43140     else if mask=2 then 
-43160       let date_format$='mdcy'
-43180       let resp$(respc)=lpad$(trim$(resp$(respc)),8,'0')
+43160       date_format$='mdcy'
+43180       resp$(respc)=lpad$(trim$(resp$(respc)),8,'0')
 43200     else if mask=3 then 
-43220       let date_format$='cymd'
+43220       date_format$='cymd'
 43240       if len(trim$(resp$(respc)))<=6 then 
-43260         let resp$(respc)=date$(days(val(lpad$(trim$(resp$(respc)),6,'0')),'mdy'),'cymd')
-43280         if val(resp$(respc)(1:2))=19 and val(resp$(respc)(3:4)) < 20 then let resp$(respc)(1:2)="20"
+43260         resp$(respc)=date$(days(val(lpad$(trim$(resp$(respc)),6,'0')),'mdy'),'cymd')
+43280         if val(resp$(respc)(1:2))=19 and val(resp$(respc)(3:4)) < 20 then resp$(respc)(1:2)="20"
 43300       end if 
 43320     else if mask=4 then 
-43340       let date_format$='dmcy'
-43360       let resp$(respc)=lpad$(trim$(resp$(respc)),8,'0')
+43340       date_format$='dmcy'
+43360       resp$(respc)=lpad$(trim$(resp$(respc)),8,'0')
 43380     else if mask=5 then 
-43400       let date_format$='dmy'
-43420       let resp$(respc)=lpad$(trim$(resp$(respc)),6,'0')
+43400       date_format$='dmy'
+43420       resp$(respc)=lpad$(trim$(resp$(respc)),6,'0')
 43440     end if 
 43460     ! 
-43480     let resp$(respc)=date$(days(trim$(resp$(respc)),date_format$),'mdy')
+43480     resp$(respc)=date$(days(trim$(resp$(respc)),date_format$),'mdy')
 43500     ! 
 43520   else if mask=9 then ! defaults 100 to 1.00
 43540     attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
-43560     let resp$(respc)=str$(val(resp$(respc))/100)
+43560     resp$(respc)=str$(val(resp$(respc))/100)
 43580   else if mask=10 then ! dollars, 2 decimals, commas
 43600     let form$=''
 43620     for tm_char_index=1 to maxlen-4
@@ -1773,25 +1773,25 @@
 44520     attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
 44540   else if mask=40 then ! defaults 1 to 0.1
 44560     attr$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
-44580 !   let resp$(respc)=str$(val(resp$(respc))/10)
+44580 !   resp$(respc)=str$(val(resp$(respc))/10)
 44600   else if mask=41 then ! defaults 1 to 0.10
 44620     attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
-44640 !   let resp$(respc)=str$(val(resp$(respc))/10)
+44640 !   resp$(respc)=str$(val(resp$(respc))/10)
 44660   else if mask=42 then ! defaults 1 to 0.100
 44680     attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
-44700 !   let resp$(respc)=str$(val(resp$(respc))/10)
+44700 !   resp$(respc)=str$(val(resp$(respc))/10)
 44720   else if mask=43 then ! defaults 1 to 0.1000
 44740     attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-4)&".---)"
-44760 !   let resp$(respc)=str$(val(resp$(respc))/10)
+44760 !   resp$(respc)=str$(val(resp$(respc))/10)
 44780   else if mask=44 then ! defaults 1 to 0.10000
 44800     attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-5)&".----)"
-44820 !   let resp$(respc)=str$(val(resp$(respc))/10)
+44820 !   resp$(respc)=str$(val(resp$(respc))/10)
 44840   else if mask=45 then ! defaults 1 to 0.100000
 44860     attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
-44880 !   let resp$(respc)=str$(val(resp$(respc))/10)
+44880 !   resp$(respc)=str$(val(resp$(respc))/10)
 44900   else if mask=46 then ! defaults 1 to 0.1000000
 44920     attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
-44940 !   let resp$(respc)=str$(val(resp$(respc))/10)
+44940 !   resp$(respc)=str$(val(resp$(respc))/10)
 44960   else if mask=50 then 
 44980     attr$=str$(width)&"/#PIC(------)" ! ######
 45000   else if mask=51 then 
@@ -1815,7 +1815,7 @@
 45360     end if 
 45380   end if 
 45400 ! 
-45420   if disable then let protected$='P' else let protected$='T' ! either Protect the field or force it to be in the tab order
+45420   if disable then protected$='P' else protected$='T' ! either Protect the field or force it to be in the tab order
 45440   attr$(inf:inf)= ','&protected$&'[textboxes]' &','&str$(txtbox_fkey)
 45450   attr$=srep$(attr$,'PIC(,','PIC(')
 45460   fn_textmask$=attr$
@@ -1863,61 +1863,61 @@
 46080 fnend 
 46100 def fn_datetextbox (mask,lyne,ps,&width,container;disable)
 46120   dim date_button_spec$*255
-46140   let date_button_spec$=''
-46160   let date_boxes+=1
+46140   date_button_spec$=''
+46160   date_boxes+=1
 46180   if disable then 
-46200     let date_button_spec$=str$(lyne)&','&str$(ps+width+1)&',P 1/2,P,'&str$(date_fkey_base+date_boxes)
+46200     date_button_spec$=str$(lyne)&','&str$(ps+width+1)&',P 1/2,P,'&str$(date_fkey_base+date_boxes)
 46220   else 
-46240     let date_button_spec$=str$(lyne)&','&str$(ps+width+1)&',P 1/2,,'&str$(date_fkey_base+date_boxes)
+46240     date_button_spec$=str$(lyne)&','&str$(ps+width+1)&',P 1/2,,'&str$(date_fkey_base+date_boxes)
 46260   end if 
 46280   mat date_fielddata(date_boxes,6)
 46300   if container then 
-46320     let date_fielddata(date_boxes,1)=container
-46340     let date_fielddata(date_boxes,2)=lyne+frames(container,2)
-46360     let date_fielddata(date_boxes,3)=ps+frames(container,3)
-46380     let date_button_spec$(0:0)='#'&str$(frames(container,1))&','
+46320     date_fielddata(date_boxes,1)=container
+46340     date_fielddata(date_boxes,2)=lyne+frames(container,2)
+46360     date_fielddata(date_boxes,3)=ps+frames(container,3)
+46380     date_button_spec$(0:0)='#'&str$(frames(container,1))&','
 46400   else if tabcon then 
-46420     let date_fielddata(date_boxes,1)=tabcon
-46440     let date_fielddata(date_boxes,2)=lyne+tabs(tabcon,2)
-46460     let date_fielddata(date_boxes,3)=ps+tabs(tabcon,3)
-46480     let date_button_spec$(0:0)='#'&str$(tabs(tabcon,1))&','
+46420     date_fielddata(date_boxes,1)=tabcon
+46440     date_fielddata(date_boxes,2)=lyne+tabs(tabcon,2)
+46460     date_fielddata(date_boxes,3)=ps+tabs(tabcon,3)
+46480     date_button_spec$(0:0)='#'&str$(tabs(tabcon,1))&','
 46500   else 
-46520     let date_fielddata(date_boxes,2)=lyne
-46540     let date_fielddata(date_boxes,3)=ps
-46560     let date_button_spec$(0:0)='#'&str$(acs_win)&','
+46520     date_fielddata(date_boxes,2)=lyne
+46540     date_fielddata(date_boxes,3)=ps
+46560     date_button_spec$(0:0)='#'&str$(acs_win)&','
 46580   end if 
 46600   pr f date_button_spec$: "S:\Core\Icon\calendar_icon.png" ioerr ignore
-46620   let date_fielddata(date_boxes,4)=width
-46640   let date_fielddata(date_boxes,5)=respc ! parent textbox number
-46660   let date_fielddata(date_boxes,6)=mask
+46620   date_fielddata(date_boxes,4)=width
+46640   date_fielddata(date_boxes,5)=respc ! parent textbox number
+46660   date_fielddata(date_boxes,6)=mask
 46680 fnend 
 48000 def fn_ace_rd_combo(combo$*1)
 48020   dim ace_combo_io$*255
 48040   ace_combo_io$=''
 48060 ! combo_count=0
-48080   let respc+=1
+48080   respc+=1
 48100   lyne=val(control$(2))
-48120   let ps=val(control$(3))
+48120   ps=val(control$(3))
 48140   let width=val(control$(4))
-48160 ! let keylen=val(control$(5))
-48180   let path1$=control$(6)
+48160 ! keylen=val(control$(5))
+48180   path1$=control$(6)
 48200   limittolist=val(control$(7))
-48220   let tt$=control$(8)
+48220   tt$=control$(8)
 48240   container=val(control$(9))
-48260   let tabcon=val(control$(10))
+48260   tabcon=val(control$(10))
 48280   dim combooptionset$*256
 48300   combooptionset$=control$(11)
 48320 ! 
-48340   let tmp_combo_count_for_read+=1
+48340   tmp_combo_count_for_read+=1
 48360 ! 
 48380   if width<=2 then 
 48400     let width=4
 48420   end if 
 48422   if combo$='F' then 
-48424     let poskeylen=pos(combooptionset$,'lnk=')
-48426     let keylen=val(combooptionset$(poskeylen+4:pos(combooptionset$,',',poskeylen)-1))
-48428     let posdesclen=pos(combooptionset$,'lnd=')
-48430     let desclen=val(combooptionset$(posdesclen+4:pos(combooptionset$,',',posdesclen)-1))
+48424     poskeylen=pos(combooptionset$,'lnk=')
+48426     keylen=val(combooptionset$(poskeylen+4:pos(combooptionset$,',',poskeylen)-1))
+48428     posdesclen=pos(combooptionset$,'lnd=')
+48430     desclen=val(combooptionset$(posdesclen+4:pos(combooptionset$,',',posdesclen)-1))
 48431     if desclen>0 then spacerlen=1 else spacerlen=0
 48432     if (keylen+desclen+spacerlen)>width then 
 48434       let width=keylen+desclen+spacerlen
@@ -1929,7 +1929,7 @@
 48500 !   ace_combo_io$=str$(lyne)&','&str$(ps)&','&str$(width)&'/combo 128,+'
 48502     ace_combo_io$=str$(lyne)&','&str$(ps)&','&str$(width)&'/combo '&str$(width)&',+'
 48520   end if 
-48540 ! tt$=srep$(tt$,'"','""') ! let fn2quote(tt$)
+48540 ! tt$=srep$(tt$,'"','""') ! fn2quote(tt$)
 48560 ! r: test for invalid containter and/or tabcon
 48580   if container>udim(mat frames,1) then 
 48600     pr 'invalid container ('&str$(container)&') specified for combobox (type '&combo$&')'
@@ -1939,7 +1939,7 @@
 48680   if tabcon>udim(mat tabs,1) then 
 48700     pr 'invalid tab container (tabcon='&str$(container)&') specified for combobox (type '&combo$&')'
 48720     fnpause
-48740     let tabcon=0
+48740     tabcon=0
 48760   end if 
 48780 ! /r
 48800   if container then 
@@ -2001,7 +2001,7 @@
 54020   if qgllength=0 then let qgllength=35
 54030 ! _______________________________________________________________________
 54040 ! the response$ for this - should be gotten with fnAGL
-54050 ! Let FNCOMBOA("XXX",MYLINE,MYPOS,MAT OPT$,"Select from your Chart of Accounts ("&qgl_cursys$&").",WIDTH=35)
+54050 ! fnCOMBOA("XXX",MYLINE,MYPOS,MAT OPT$,"Select from your Chart of Accounts ("&qgl_cursys$&").",WIDTH=35)
 54060 ! this function has an integrated fnComboA - similar to the one above
 54070 ! _______________________________________________________________________
 54080   dim qglopt$*60
@@ -2098,14 +2098,14 @@
 54990 QGLFINIS: ! WRITE_QGL_ACE: ! add it to the screen ace script file
 55000   let qgloptfile$=qgl_cursys$&"GLNumber"
 55010   fn_comboa(qgloptfile$,myline,mypos,mat qgloption$, "Select from the Chart of Accounts ("&qgl_cursys$&").",qgllength,qglcontainer,qgltabcon,qglsetupkeycurrent$)
-55020   let myline=mypos=con=0
+55020   myline=mypos=con=0
 55030 fnend 
 56000 def fn_remove_crlf(&txt$)
 56020   lastx=x=0
 56040   do 
 56060     let x=pos(txt$,hex$("0D0A"),lastx)
 56080     if x>0 then 
-56100       let txt$=txt$(1:x-1)&"HEX$(0D0A)"&txt$(x+2:len(trim$(txt$)))
+56100       txt$=txt$(1:x-1)&"HEX$(0D0A)"&txt$(x+2:len(trim$(txt$)))
 56120       lastx=x
 56140     end if 
 56160   loop while x>0
@@ -2121,7 +2121,7 @@
 60160   input fields gridspec$&",RowCnt,all,nowait": grid_rows
 60180   input fields gridspec$&",ColCnt,all,nowait": grid_columns
 60200   mat _chunks$(grid_columns)
-60220   let mat2str(mat _headings$(2:udim(_headings$)),_line$,tab$)
+60220   mat2str(mat _headings$(2:udim(_headings$)),_line$,tab$)
 60240   pr #export_file: _line$
 60260   for index_=1 to grid_rows
 60280     input fields gridspec$&",row,range,nowait": index_, index_, mat _chunks$
@@ -2130,15 +2130,15 @@
 60340       if eg_tmp_mask=>1 and eg_tmp_mask<=5 then 
 60360 ! r: get date_format$
 60380         if eg_tmp_mask=1 then 
-60400           let date_format$='mdy'
+60400           date_format$='mdy'
 60420         else if eg_tmp_mask=2 then 
-60440           let date_format$='mdcy'
+60440           date_format$='mdcy'
 60460         else if eg_tmp_mask=3 then 
-60480           let date_format$='cymd'
+60480           date_format$='cymd'
 60500         else if eg_tmp_mask=4 then 
-60520           let date_format$='dmcy'
+60520           date_format$='dmcy'
 60540         else if eg_tmp_mask=5 then 
-60560           let date_format$='dmy'
+60560           date_format$='dmy'
 60580         end if 
 60600 ! /r
 60620 !         pr _chunks$(eg_grid_line_item);'  date format is '&date_format$ : pause
@@ -2148,14 +2148,14 @@
 60700       end if 
 60720     next eg_grid_line_item
 60730 ! 
-60740     let mat2str(mat _chunks$(2:udim(_chunks$)),_line$,tab$)
+60740     mat2str(mat _chunks$(2:udim(_chunks$)),_line$,tab$)
 60760     pr #export_file: _line$ ! pr _line$ : pause
 60780   next index_
 60800   close #export_file: 
 60820 ! GRID_EXPORT_COMPLETE: !
 60840   mat ml$(2)
-60860   let ml$(1)='Grid successfully exported to:'
-60880   let ml$(2)=os_filename$(filename$)
+60860   ml$(1)='Grid successfully exported to:'
+60880   ml$(2)=os_filename$(filename$)
 60900   fnmsgbox(mat ml$,resp$,"ACS",0)
 60910 GRID_EXPORT_XIT: ! 
 60920 fnend 

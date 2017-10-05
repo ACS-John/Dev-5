@@ -8,7 +8,7 @@
 20060 ! ______________________________________________________________________
 20080   fntop(program$,cap$="Print Retained Earnings Statement")
 20100   fndat(dat$)
-20120   let tempx=val(fnactpd$) conv L180
+20120   tempx=val(fnactpd$) conv L180
 20140   if tempx=1 then 
 20160     actpd$="one" 
 20180   else if tempx=2 then 
@@ -74,10 +74,10 @@
 21380   fncloseprn
 21400   goto XIT
 21420 ! ______________________________________________________________________
-21440 XIT: let fnxit
+21440 XIT: fnxit
 21460 ! ______________________________________________________________________
 21480 ! <Updateable Region: ERTN>
-21500 ERTN: let fnerror(program$,err,line,act$,"xit")
+21500 ERTN: fnerror(program$,err,line,act$,"xit")
 21520   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 21540   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 21560   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

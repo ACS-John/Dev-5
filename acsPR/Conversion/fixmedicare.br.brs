@@ -19,15 +19,15 @@
 00190   open #4: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&str$(cno),internal,outin,keyed 
 00200 ! 
 00210 L210: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof XIT
-00220   if tcp(3)=0 and tcp(2)>0 then let tcp(3)=round(tcp(2)*.189542,2): let tcp(2)=tcp(2)-tcp(3) : goto L240
+00220   if tcp(3)=0 and tcp(2)>0 then tcp(3)=round(tcp(2)*.189542,2): tcp(2)=tcp(2)-tcp(3) : goto L240
 00230   goto L210
 00240 L240: rewrite #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp
 00250   goto L210
 00260 ! ______________________________________________________________________
-00270 XIT: let fnxit
+00270 XIT: fnxit
 00280 ! ______________________________________________________________________
 00290 ! <Updateable Region: ERTN>
-00300 ERTN: let fnerror(program$,err,line,act$,"xit")
+00300 ERTN: fnerror(program$,err,line,act$,"xit")
 00310   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00320   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00330   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

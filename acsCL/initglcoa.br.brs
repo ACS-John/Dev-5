@@ -7,26 +7,26 @@
 00070   dim cnam$*40,dat$*20,cap$*128,item1$(2)*45,resp$(10)*25,ml$(3)*70,de$*50
 00080 ! ______________________________________________________________________
 00090   fntop(program$,cap$="Import GL Chart of Accounts")
-00100   cancel=99 : let right=1 : left=0 : center=2 : let number$='30'
+00100   cancel=99 : right=1 : left=0 : center=2 : number$='30'
 00110   fncno(cno,cnam$) !:
         fndat(dat$)
 00120 L120: open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&str$(cno)&",Shr",internal,outin,keyed 
 00130 MENU1: ! 
 00140   fntos(sn$="InitGLCoA") !:
-        let mylen=38 : let mypos=mylen+2 : lc=0
+        mylen=38 : mypos=mylen+2 : lc=0
 00150   fnlbl(lc+=1,1,"Extract general ledger accounts from:",38,right)
-00160   let item1$(1)="ACS G/L system" !:
-        let item1$(2)="Accountant's Diskette"
+00160   item1$(1)="ACS G/L system" !:
+        item1$(2)="Accountant's Diskette"
 00170   fncomboa("claims-srt",lc,mypos,mat item1$,tt$) !:
-        let resp$(1)=item1$(1)
+        resp$(1)=item1$(1)
 00180   fnlbl(lc+=1,1,"General Ledger Company Number:",mylen,right)
 00190   fntxt(lc,mypos,5,0,left,number$) !:
-        let resp$(2)=str$(cno)
+        resp$(2)=str$(cno)
 00200   fncmdset(2) !:
         fnacs(sn$,0,mat resp$,ck)
 00210   if ck=5 then goto XIT else !:
-          if resp$(1)=item1$(1) then let pas$="BUILD" else !:
-            if resp$(1)=item1$(2) then let pas$="COPY"
+          if resp$(1)=item1$(1) then pas$="BUILD" else !:
+            if resp$(1)=item1$(2) then pas$="COPY"
 00220   let glcno=val(resp$(2))
 00230   if pas$><"COPY" then goto L270
 00240   close #1: ioerr L250
@@ -53,7 +53,7 @@
 00440   if ck=5 or eof1=1 then goto MENU1
 00450   goto L420
 00460 ! ______________________________________________________________________
-00470 XIT: let fnxit
+00470 XIT: fnxit
 00480 ! ______________________________________________________________________
 00490   close #1: ioerr L500
 00500 L500: execute "Copy "&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&" "&env$('Temp')&"\WORK -D"
@@ -63,7 +63,7 @@
 00540   goto L120
 00550 ! ______________________________________________________________________
 00560 ! <Updateable Region: ERTN>
-00570 ERTN: let fnerror(program$,err,line,act$,"xit")
+00570 ERTN: fnerror(program$,err,line,act$,"xit")
 00580   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00590   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00600   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -72,12 +72,12 @@
 00630 ! ______________________________________________________________________
 00640 MSGBOX1: ! 
 00650   mat ml$(2) !:
-        let ml$(1)="A general ledger chart of accounts has not been set up" !:
-        let ml$(2)="for this company.  You must choose a different option" !:
+        ml$(1)="A general ledger chart of accounts has not been set up" !:
+        ml$(2)="for this company.  You must choose a different option" !:
         fnmsgbox(mat ml$,resp$,cap$,16) !:
         goto MENU1
 00660 MSGBOX2: ! 
 00670   mat ml$(1) !:
-        let ml$(1)="Be sure the diskette is properly inserted and try again" !:
+        ml$(1)="Be sure the diskette is properly inserted and try again" !:
         fnmsgbox(mat ml$,resp$,cap$,16) !:
         goto MENU1

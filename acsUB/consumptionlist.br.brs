@@ -18,16 +18,16 @@
 38040   fntop("S:\acsUB\Consumptionlist",cap$="Consumption List")
 44000 MAIN: ! 
 44020   fntos(sn$:="UBAnalyze")
-44040   let mylen=20
-44060   let mypos=mylen+2
+44040   mylen=20
+44060   mypos=mylen+2
 44080   fnlbl(1,1,"Billing Date:",mylen,1)
 44100   fntxt(1,mypos,8,8,0,"1")
-44120   let resp$(1)=str$(bdate)
+44120   resp$(1)=str$(bdate)
 44140   fnlbl(2,1,"Type of Service:",mylen,1)
 44160   fncomboa("Service",2,mylen+3,mat code$,"",16)
 44180   fnlbl(3,1,"Rate Code",mylen,1)
 44200   fntxt(3,mypos,3,3,0,"1030")
-44220   let resp$(3)=""
+44220   resp$(3)=""
 44240   fncmdset(3)
 44260   fnacs(sn$,0,mat resp$,ck)
 48000   if ck=5 then goto XIT
@@ -43,17 +43,17 @@
 48190   else 
 48192     goto MAIN
 48200   end if 
-48220   let rcode=val(resp$(3))
+48220   rcode=val(resp$(3))
 54000   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 54040   fnopenprn
 54060   gosub PRINTIT
 58000 DONE: close #1: ioerr ignore
-58020 L370: let fncloseprn
-58040 XIT: let fnxit
+58020 L370: fncloseprn
+58040 XIT: fnxit
 58060 IGNORE: continue 
 58080 ! ______________________________________________________________________
 64000 PRINTIT: ! r:
-64020   let p2=0
+64020   p2=0
 64040   count=0
 64060   gosub HDR
 64080 READ_CUSTOMER: ! 
@@ -63,16 +63,16 @@
 64140   if a(srvc)=0 then goto READ_CUSTOMER ! no service
 64160   if a(srvc)<>rcode then goto READ_CUSTOMER
 64180   let usage=0
-64200   if srvc=1 then let usage=d(3): amount=g(1): let meter$=f$(1) ! water
-64220   if srvc=2 then let usage=d(3): amount=g(2): let meter$="" ! sewer
-64240   if srvc=3 then let usage=d(7): amount=g(3): let meter$=f$(2) ! electric
-64260   if srvc=4 then let usage=d(11): amount=g(4): let meter$=f$(3) ! gas
+64200   if srvc=1 then let usage=d(3): amount=g(1): meter$=f$(1) ! water
+64220   if srvc=2 then let usage=d(3): amount=g(2): meter$="" ! sewer
+64240   if srvc=3 then let usage=d(7): amount=g(3): meter$=f$(2) ! electric
+64260   if srvc=4 then let usage=d(11): amount=g(4): meter$=f$(3) ! gas
 64280   if a(srvc)=tc or tc=0 then 
 64300     pr #255,using F_PR_LINE: z$,e$(2),e$(1),meter$,usage,amount pageoflow PGOF
 64320 F_PR_LINE: form x 5,c 10,x 5,c 30,x 7,c 30,x 2,c 12,x 2,pic(zzzzzzzzz),x 2,n 12.2
 64340     count+=1
-64360     let totusage=totusage+usage
-64380     let totamount=totamount+amount
+64360     totusage=totusage+usage
+64380     totamount=totamount+amount
 64400   end if 
 64420   goto READ_CUSTOMER
 66000 PR_TOTALS: ! 
@@ -89,7 +89,7 @@
 68040   gosub HDR
 68060   continue  ! /r
 70000 HDR: ! r:
-70020   let p2=p2+1
+70020   p2=p2+1
 70040   pr #255,using "Form POS 1,CC 80": cnam$
 70060   pr #255,using "Form POS 1,CC 80": "Consumption List - "&srvc$
 70080   pr #255,using " Form POS 1,CC 80": "Rate Code "&str$(rcode)
@@ -101,7 +101,7 @@
 70200   pr #255: tab(7);"__________";tab(21);"________________________________";tab(58);"______________________________  ____________  ___________  __________"
 70220   return  ! /r
 76020 ! <updateable region: ertn>
-76040 ERTN: let fnerror(program$,err,line,act$,"xit")
+76040 ERTN: fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

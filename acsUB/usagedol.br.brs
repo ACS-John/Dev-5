@@ -18,35 +18,35 @@
 00150 SCREEN1: ! 
 00160   sn$ = "ubAccTr" !:
         fntos(sn$) !:
-        let mylen=23 !:
-        let mypos=mylen+2
-00170   let text$="Report Heading Date:" !:
+        mylen=23 !:
+        mypos=mylen+2
+00170   text$="Report Heading Date:" !:
         fnlbl(1,1,text$,mylen,1)
 00180   fntxt(1,mypos,20) !:
-        let resp$(1)=dat$
-00190   let text$="Starting Date (mmddyy):" !:
+        resp$(1)=dat$
+00190   text$="Starting Date (mmddyy):" !:
         fnlbl(2,1,text$,mylen,1)
 00200   fntxt(2,mypos,8,0,0,"1") !:
-        let resp$(2)=""
-00210   let text$="Ending Date (mmddyy):" !:
+        resp$(2)=""
+00210   text$="Ending Date (mmddyy):" !:
         fnlbl(3,1,text$,mylen,1)
 00220   fntxt(3,mypos,8,0,0,"1") !:
-        let resp$(3)=""
+        resp$(3)=""
 00230   fnlbl(4,1,"Rate for Analysis:",mylen,1)
 00240   fncombof("nerd",4,mypos,40,env$('Q')&"\UBmstr\ubData\RateMst.h"&str$(cno),1,4,5,50,env$('Q')&"\UBmstr\ubData\RateIdx1.h"&str$(cno),1,usa) !:
         let usa+=1 !:
-        let resp$(4)="" ! just default to the first one
+        resp$(4)="" ! just default to the first one
 00250   fncmdset(3)
 00260   fnacs(sn$,0,mat resp$,ck)
 00270   if ck=5 then goto XIT
-00280   let dat$=resp$(1) !:
-        let d(1)=val(resp$(2)) !:
-        let d(2)=val(resp$(3))
+00280   dat$=resp$(1) !:
+        d(1)=val(resp$(2)) !:
+        d(2)=val(resp$(3))
 00290   svce$=resp$(4)(1:4) !:
         cde=val(resp$(4)(3:4))
 00300   pause 
-00310   if d(1)<>0 then let d(1)=fndate_mmddyy_to_ccyymmdd(d(1))
-00320   if d(2)<>0 then let d(2)=fndate_mmddyy_to_ccyymmdd(d(2))
+00310   if d(1)<>0 then d(1)=fndate_mmddyy_to_ccyymmdd(d(1))
+00320   if d(2)<>0 then d(2)=fndate_mmddyy_to_ccyymmdd(d(2))
 00330   fndat(d$(1),2)
 00340   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00350   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -73,11 +73,11 @@
 00550   close #1: ioerr L560
 00560 L560: close #2: ioerr L570
 00570 L570: close #3: ioerr L580
-00580 L580: let fncloseprn
+00580 L580: fncloseprn
 00590   goto XIT
 00600 ! ______________________________________________________________________
 00610 HDR: ! 
-00620   let p2=p2+1
+00620   p2=p2+1
 00630   pr #255: "\qc {\b "&cnam$ !:
         pr #255: cap$ !:
         pr #255: dat$
@@ -90,10 +90,10 @@
 00680   return 
 00690 ! ______________________________________________________________________
 00700 PRINT_TRANS: ! 
-00710   if tcode<1 or tcode>5 then let tcode=6
+00710   if tcode<1 or tcode>5 then tcode=6
 00720   if first_trans_per_act=1 then !:
-          let pz$=z$ : let pe2$=e2$ else !:
-          let pz$="" : let pe2$=""
+          pz$=z$ : pe2$=e2$ else !:
+          pz$="" : pe2$=""
 00730   pr #255,using L740: pz$,pe2$,code$(tcode),tdate,tamount,tbal pageoflow PGOF
 00740 L740: form pos 1,c 10,x 1,c 30,cr 11,nz 9,n 13.2,n 14.2
 00750   return 
@@ -103,10 +103,10 @@
         gosub HDR !:
         continue 
 00780 ! ______________________________________________________________________
-00790 XIT: let fnxit
+00790 XIT: fnxit
 00800 ! ______________________________________________________________________
 00810 ! <Updateable Region: ERTN>
-00820 ERTN: let fnerror(program$,err,line,act$,"xit")
+00820 ERTN: fnerror(program$,err,line,act$,"xit")
 00830   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00840   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00850   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

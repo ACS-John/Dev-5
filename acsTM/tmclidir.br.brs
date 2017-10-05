@@ -15,7 +15,7 @@
 00160   next j
 00170   dim z$*5,a$(5)*30,ph$*12,cnam$*40,prg$*20,cm$*70
 00180   dim cat$(10)*30,flo$(10),fli$(10),catcode(10),dd(10),ph2$*12
-00190   let namtab=44-len(rtrm$(cnam$))/2
+00190   namtab=44-len(rtrm$(cnam$))/2
 00200   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr L860
 00210 L210: pr newpage
 00230   pr f "10,10,c 48,n": "ENTER DATE FOR CLIENT DIRECTORY IN MMDDYY FORMAT"
@@ -29,7 +29,7 @@
 00320   pr f "5,10,c 70,n": "items blank for numeric order."
 00330   pr f mat flo$: mat cat$
 00340 L340: input fields mat fli$: mat catcode conv L340
-00350   if sum(catcode)=0 then let numprint=1
+00350   if sum(catcode)=0 then numprint=1
 00360   pr newpage
 00370   pr f "10,25,c 48,n": "CLIENT DIRECTORY IN PROCESS"
 00380   pr f "23,2,c 30,n": "Press F5 to stop"
@@ -55,7 +55,7 @@
 00580 L580: pr #255: newpage
 00590     gosub L610
 00600     goto L450
-00610 L610: let p1=p1+1
+00610 L610: p1=p1+1
 00620     pr #255,using L630: date$,cnam$,"PAGE",p1
 00630 L630: form skip 3,pos 1,c 8,pos namtab,c 40,pos 76,c 5,n 4,skip 1
 00640     pr #255,using L650: time$,"CLIENT DIRECTORY"
@@ -77,7 +77,7 @@
 00800 L800: close #1: ioerr L830
 00810   if numprint =1 then goto L830 else let fncloseprn
 00820   goto L840
-00830 L830: let fncloseprn
+00830 L830: fncloseprn
 00840 L840: if uprc$(rtrm$(prg$))="S:\Time Management\Client Legacy" then chain prg$
 00850   goto XIT
 00860 L860: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L880
@@ -92,4 +92,4 @@
 00950   pr f "23,3,C 78,N": ""
 00960   pr f "24,3,C 78,N": ""
 00970   retry 
-00980 XIT: let fnxit
+00980 XIT: fnxit

@@ -7,12 +7,12 @@
 00070 ! ______________________________________________________________________
 00080   dim zer(57),resp$(10)*80
 00090 ! ___________________________
-00100   let right=1
+00100   right=1
 00120   fncno(to_cno)
 00130 ! ___________________________
 00140 MENU1: ! 
 00150   fntos(sn$="GLAddCNo") !:
-        let mylen=37 : let mypos=mylen+2
+        mylen=37 : mypos=mylen+2
 00160   fnlbl(1,1,"Copy Chart of Accounts from Company:",mylen,right)
 00170   fncmbcno(1,mypos)
 00180   fncmdset(2)
@@ -33,10 +33,10 @@
 00350   execute "Free "&env$('Q')&"\GLmstr\ACTrans.h"&str$(to_cno)&" -n" ioerr ignore
 00360   open #1: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&str$(to_cno)&",Size=0,RecL=72,NoShr",internal,output 
 00370   close #1: 
-00380 XIT: let fnchain("S:\acsGL\Company")
+00380 XIT: fnchain("S:\acsGL\Company")
 00390 IGNORE: continue 
 00400 ! <Updateable Region: ERTN>
-00410 ERTN: let fnerror(program$,err,line,act$,"xit")
+00410 ERTN: fnerror(program$,err,line,act$,"xit")
 00420   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00430   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00440   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

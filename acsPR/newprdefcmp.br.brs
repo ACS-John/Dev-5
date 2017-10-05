@@ -24,14 +24,14 @@
 00270   a=pos (rtrm$(em$)," ",1)
 00280   b=pos (rtrm$(em$)," ",a+1)
 00290   em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
-00300   let reg_earnings=deferred_comp_wh=deferred_comp_match=0
+00300   reg_earnings=deferred_comp_wh=deferred_comp_match=0
 00310   goto L560
 00320 L320: if deferred_comp_wh=0 and deferred_comp_match=0 then goto L360 ! skip if no deferred comp
 00330   pr #255,using L340: em$(1:24),ss$,reg_earnings,deferred_comp_wh,deferred_comp_match pageoflow L1020
 00340 L340: form pos 1,c 24,c 12,4*n 12.2
-00350   let total_salary+=reg_earnings !:
-        let total_wh+=deferred_comp_wh !:
-        let total_deferred_comp+=deferred_comp_match
+00350   total_salary+=reg_earnings !:
+        total_wh+=deferred_comp_wh !:
+        total_deferred_comp+=deferred_comp_match
 00360 L360: goto L250
 00370 END1: close #1: ioerr L380
 00380 L380: close #2: ioerr L400
@@ -42,10 +42,10 @@
 00430   form pos 1,c 1,c 32,n 6,3*n 9,c 14,c 2
 00440   fncloseprn
 00450   close #25: ioerr XIT
-00460 XIT: let fnxit
+00460 XIT: fnxit
 00470 ! ______________________________________________________________________
 00480 ! <Updateable Region: ERTN>
-00490 ERTN: let fnerror(program$,err,line,act$,"xit")
+00490 ERTN: fnerror(program$,err,line,act$,"xit")
 00500   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00510   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00520   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -61,34 +61,34 @@
 00620   if prd<beg_date or prd>end_date then goto L600
 00630   mat tcp=tcp+cp : mat ttdc=ttdc+tdc
 00640   for j=1 to 20
-00650     if sel_ded(j)=1 and dedcode(j)=1 then let deferred_comp_wh+=cp(j+4) ! Deferred_Comp wH
-00660     if sel_ded(j)=1 and dedcode(j)>1 then let deferred_comp_wh-=cp(j+4) ! Deferred_Comp wH
-00670     if sel_pen(j)=1 then let deferred_comp_match+=cp(j+4) ! Deferred_Comp match
+00650     if sel_ded(j)=1 and dedcode(j)=1 then deferred_comp_wh+=cp(j+4) ! Deferred_Comp wH
+00660     if sel_ded(j)=1 and dedcode(j)>1 then deferred_comp_wh-=cp(j+4) ! Deferred_Comp wH
+00670     if sel_pen(j)=1 then deferred_comp_match+=cp(j+4) ! Deferred_Comp match
 00680   next j
-00690   let reg_earnings+=cp(31) ! REGULAR EARNINGS
+00690   reg_earnings+=cp(31) ! REGULAR EARNINGS
 00700   goto L600
-00710 L710: let fntos(sn$="Deferred-1") !:
-        let rc=cf=0
+00710 L710: fntos(sn$="Deferred-1") !:
+        rc=cf=0
 00720   fnfra(1,1,20,23,"Deferred Comp W/H","Mark the Deferred Comp Withholding deduction",0) !:
         cf+=1 : let fratype=cf
 00730   for j=1 to 20
 00740     fnchk(j,3,fullname$(j),0,fratype) !:
-          let resp$(rc+=1)="False"
+          resp$(rc+=1)="False"
 00750   next j
 00760   fnfra(1,30,20,23,"Deferred Comp Match","Mark the deferred compensation match.",0) !:
         cf+=1 : let fratype=cf
 00770   for j=1 to 20
 00780     fnopt(j,3,fullname$(j),0,fratype) !:
-          let resp$(rc+=1)="False"
+          resp$(rc+=1)="False"
 00790   next j
 00800   fnfra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.") !:
-        cf+=1 : let fradate=cf : let mylen=26 : let mypos=mylen+2
+        cf+=1 : let fradate=cf : mylen=26 : mypos=mylen+2
 00810   fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
 00820   fntxt(1,mypos,10,0,1,"3",0,empty$,fradate) !:
-        let resp$(rc+=1)=str$(beg_date)
+        resp$(rc+=1)=str$(beg_date)
 00830   fnlbl(2,1,"Ending Date:",mylen,1,0,fradate)
 00840   fntxt(2,mypos,10,0,1,"3",0,empty$,fradate) !:
-        let resp$(rc+=1)=str$(end_date)
+        resp$(rc+=1)=str$(end_date)
 00850   fncmdkey("Next",1,1,0,"Prints the report")
 00860   fncmdkey("Cancel",5,0,1,"Returns to menu")
 00870   fnacs(sn$,0,mat resp$,ckey) !:

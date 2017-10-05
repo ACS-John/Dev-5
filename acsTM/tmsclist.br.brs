@@ -7,7 +7,7 @@
 00090   dim sc$*4,ds$*30
 00100   dim cnam$*40,prg$*20
 00110   open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&str$(cno),internal,input,keyed ioerr L550
-00120   let namtab=43-int(len(rtrm$(cnam$))/2)
+00120   namtab=43-int(len(rtrm$(cnam$))/2)
 00130 L130: pr newpage
 00140   pr f "7,10,c 60,n": "POSITION PAPER IN PRINTER FOR SERVICE CODE LISTING"
 00150   pr f "10,10,c 52,n": "ENTER DATE FOR SERVICE CODE LISTING IN MMDDYY FORMAT"
@@ -23,18 +23,18 @@
 00270 L270: form pos 1,c 4,c 30
 00280   sc=int(val(sc$)/100)
 00290   if fst=1 then goto L320
-00300   let holdsc=sc
+00300   holdsc=sc
 00310   let fst=1
 00320 L320: if holdsc=sc then goto L350
 00330   pr #255: 
-00340   let holdsc=sc
+00340   holdsc=sc
 00350 L350: pr #255,using L360: sc$,ds$ pageoflow L380
 00360 L360: form pos 1,c 4,pos 9,c 30,skip 1
 00370   goto L260
 00380 L380: pr #255: newpage
 00390   gosub L410
 00400   goto L260
-00410 L410: let p1=p1+1
+00410 L410: p1=p1+1
 00420   pr #255,using L430: cnam$,"PAGE",p1
 00430 L430: form skip 3,pos namtab,c 40,pos 76,c 5,n 4,skip 1
 00440   pr #255,using L450: "SERVICE CODE LISTING"
@@ -45,7 +45,7 @@
 00490 L490: form pos 2,c 4,pos 14,c 11,skip 2
 00500   return 
 00510 L510: close #1: ioerr L520
-00520 L520: let fncloseprn
+00520 L520: fncloseprn
 00530   if uprc$(rtrm$(prg$))="S:\acsTM\SVMAINT" then chain prg$
 00540   goto XIT
 00550 L550: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L570
@@ -60,4 +60,4 @@
 00640   pr f "23,3,C 78,N": ""
 00650   pr f "24,3,C 78,N": ""
 00660   retry 
-00670 XIT: let fnxit
+00670 XIT: fnxit

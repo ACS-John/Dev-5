@@ -10,9 +10,9 @@
 00100   fntop(program$,cap$="Reassign Deposit Change Addresses")
 00110 ! ______________________________________________________________________
 00120 MAIN: ! 
-00130   let msgline$(1)="No other users may be using the Deposit file" !:
-        let msgline$(2)="while this option is running.  Do you want to run" !:
-        let msgline$(3)="Reassign Deposit Change Addresses now?" !:
+00130   msgline$(1)="No other users may be using the Deposit file" !:
+        msgline$(2)="while this option is running.  Do you want to run" !:
+        msgline$(3)="Reassign Deposit Change Addresses now?" !:
         fnmsgbox(mat msgline$,resp$,cap$,49)
 00140   if uprc$(resp$)=uprc$("CANCEL") then goto XIT
 00150 ! ______________________________________________________________________
@@ -30,19 +30,19 @@
 00270   for j=1 to lr2
 00280     read #2,using "Form POS 1,C 10,POS 71,PD 3",rec=j: k$,nta norec L350
 00290     read #1,using "Form POS 11,2*PD 3",key=k$: mat ta nokey L350
-00300     if ta(1)=0 then let ta(1)=j
+00300     if ta(1)=0 then ta(1)=j
 00310     if ta(2)>0 then !:
             rewrite #2,using "Form POS 71,PD 3",rec=ta(2): j
-00320     let ta(2)=j
+00320     ta(2)=j
 00330     rewrite #1,using "Form POS 11,2*PD 3",key=k$: mat ta
 00340     rewrite #2,using "Form POS 71,PD 3",rec=j: 0
 00350 L350: next j
 00360   goto XIT
 00370 ! ______________________________________________________________________
-00380 XIT: let fnxit
+00380 XIT: fnxit
 00390 ! ______________________________________________________________________
 00400 ! <Updateable Region: ERTN>
-00410 ERTN: let fnerror(program$,err,line,act$,"xit")
+00410 ERTN: fnerror(program$,err,line,act$,"xit")
 00420   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00430   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00440   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

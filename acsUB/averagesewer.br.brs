@@ -9,20 +9,20 @@
 00110   fnlbl(1,5,"Show Customers who have sewer usage")
 00120   fnlbl(2,1,"Less than:",20,1)
 00130   fntxt(2,23,9,0,right,"30",0,"Enter the minimum usage you want cosidered in your report. (Blank for all)",0 ) !:
-        let resp$(2)=""
+        resp$(2)=""
 00140   fnlbl(3,1,"Greater than:",20,1)
 00150   fntxt(3,23,9,0,right,"30",0,"Enter the maximum usage you want cosidered in your report (Blank for all).",0 ) !:
-        let resp$(3)=""
+        resp$(3)=""
 00160   fncmdset(2)
 00170   fnacs(sn$,0,mat resp$,ckey)
 00180   if ckey=5 then goto XIT
-00190   let minu=val(resp$(1))
-00200   let maxu=val(resp$(2))
+00190   minu=val(resp$(1))
+00200   maxu=val(resp$(2))
 00210   goto STARTREPORT
 00220 ! ______________________________________________________________________
 00230 DONE: ! 
 00240   fncloseprn
-00250 XIT: let fnxit
+00250 XIT: fnxit
 00260 ! ______________________________________________________________________
 00270 STARTREPORT: ! 
 00280 ! maybe a printing please wait screen here would be nice.
@@ -32,7 +32,7 @@
 00320   goto REPORT
 00330 ! ______________________________________________________________________
 00340 HEADER: ! 
-00350   let pg=pg+1
+00350   pg=pg+1
 00360 L360: form pos 1,c 20,cc 40,cr 20,skip 1
 00370   form pos 1,cc 26,cc 26,cc 26,skip 1
 00380 L380: form pos 1,cc 10,x 1,cc 30,x 1,cc 10,x 1,cc 17,x 1,cc 10,skip 1

@@ -14,7 +14,7 @@
 11300 CHECKSFORM: form pos 1,n 8,n 3,pd 6
 11400       do 
 11500         read #h_prchecks,using CHECKSFORM: eno,tdn,prd eof CHECKSDONE
-11600         if prd=val(prdate$(1)) then let prd=val(prdate$(2))
+11600         if prd=val(prdate$(1)) then prd=val(prdate$(2))
 11700         rewrite #h_prchecks,using CHECKSFORM: eno,tdn,prd
 11800       loop 
 11900 CHECKSDONE: ! 
@@ -25,13 +25,13 @@
 12400 ! gets the old and new payroll dates
 12500     dim prdate$(2)*8
 12600     fntos(sn$="getpradjustdates")
-12700     let mylen=42 : let mypos=45
+12700     mylen=42 : mypos=45
 12800     fnlbl(1,1,"Payroll Date to Adjust:",mylen)
 12900     fntxt(1,mypos,10,0,1,"3",0,"Enter the payroll date you want to change.")
-13000     let prdate$(1)=""
+13000     prdate$(1)=""
 13100     fnlbl(2,1,"New Payroll Date:",mylen)
 13200     fntxt(2,mypos,10,0,1,"3",0,"To reset checks on the above date to a new payroll date, enter it here.")
-13300     let prdate$(2)=""
+13300     prdate$(2)=""
 13400     fncmdkey("Next",1,1,0,"Proceed with date adjustment.")
 13500     fncmdkey("Cancel",5,0,1,"Return to menu without changing the payroll date as indicated.")
 13600     fnacs(sn$,0,mat prdate$,ckey)
@@ -41,8 +41,8 @@
 14000       if prdate$(1)="00000000" or prdate$(2)="00000000" then let fn_getdates=fn_getdates else let fn_getdates=1
 14100     end if 
 14200   fnend  ! fn_getdates
-14300 XIT: let fnxit
-14400 ERTN: let fnerror(program$,err,line,act$,"NO")
+14300 XIT: fnxit
+14400 ERTN: fnerror(program$,err,line,act$,"NO")
 14500   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 14600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 14700   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

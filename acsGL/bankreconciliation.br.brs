@@ -31,7 +31,7 @@
 00290   restore #open_file_count: 
 00300 L300: read #open_file_count, using "form pos 43,c 12,pos 4,c 8": gl$,tr$ eof L340
 00310   let gl$=lpad$(rtrm$(gl$),12)
-00311   let tr$=lpad$(rtrm$(tr$),8)
+00311   tr$=lpad$(rtrm$(tr$),8)
 00320   rewrite #open_file_count, using "form pos 43,c 12,pos 4,c 8": gl$,tr$
 00330   goto L300
 00340 L340: return 
@@ -44,7 +44,7 @@
 00410 BUILD_LAYOUT: ! 
 00420   fncno(cno)
 00430 ! ** Field Labels    ** !:
-        let ic=0 ! temporary Item Counter
+        ic=0 ! temporary Item Counter
 00440   lbl$(ic+=1)="Bank G/L" !:
         lbl$(ic+=1)="T/C" !:
         lbl$(ic+=1)="Ref #" !:
@@ -56,21 +56,21 @@
 00444   lbl$(ic+=1)="Cleared" !:
         lbl$(ic+=1)="S/C"
 00460 ! ** Text Box / Field Display   Lengths   ** !:
-        let ic=0 ! temporary Item Counter !:
-        let mmddyy=8 !:
+        ic=0 ! temporary Item Counter !:
+        mmddyy=8 !:
         ccyymmdd=10
-00470   let tln(ic+=1)=12 !:
-        let tln(ic+=1)=1 !:
-        let tln(ic+=1)=8 !:
-        let tln(ic+=1)=8
-00472   let tln(ic+=1)=10.2 !:
-        let tln(ic+=1)=8 !:
-        let tln(ic+=1)=35 !:
-        let tln(ic+=1)=1
-00474   let tln(ic+=1)=8 !:
-        let tln(ic+=1)=1
+00470   tln(ic+=1)=12 !:
+        tln(ic+=1)=1 !:
+        tln(ic+=1)=8 !:
+        tln(ic+=1)=8
+00472   tln(ic+=1)=10.2 !:
+        tln(ic+=1)=8 !:
+        tln(ic+=1)=35 !:
+        tln(ic+=1)=1
+00474   tln(ic+=1)=8 !:
+        tln(ic+=1)=1
 00500 ! ** Field Types ** !:
-        let ic=0
+        ic=0
 00510   fltyp$(ic+=1)='CR' !:
         fltyp$(ic+=1)='N' !:
         fltyp$(ic+=1)='C' !:
@@ -82,8 +82,8 @@
 00514   fltyp$(ic+=1)='N' !:
         fltyp$(ic+=1)='N'
 00530 ! ** Field Storage Lengths ** !:
-        let ic=0 !:
-        let mmddyy=6 : ccyymmdd=8
+        ic=0 !:
+        mmddyy=6 : ccyymmdd=8
 00540   sln(ic+=1)=12 !:
         sln(ic+=1)=1 !:
         sln(ic+=1)=8 !:
@@ -95,22 +95,22 @@
 00544   sln(ic+=1)=6 !:
         sln(ic+=1)=1
 00570 ! ** Field Masks ** !:
-        let ic=0 !:
-        let pointtwo=32 : let number=30 !:
-        ccyymmdd=3 : let mmddyy=1 : let glnumber=53
-00580   let mask(ic+=1)=0 !:
-        let mask(ic+=1)=30 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=1
-00582   let mask(ic+=1)=10 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=30
-00584   let mask(ic+=1)=1 !:
-        let mask(ic+=1)=30
+        ic=0 !:
+        pointtwo=32 : number=30 !:
+        ccyymmdd=3 : mmddyy=1 : let glnumber=53
+00580   mask(ic+=1)=0 !:
+        mask(ic+=1)=30 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=1
+00582   mask(ic+=1)=10 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=30
+00584   mask(ic+=1)=1 !:
+        mask(ic+=1)=30
 00610 ! ** Storage Positions ** !:
         ! starting field position - default to the same as order displayed !:
-        let ic=0
+        ic=0
 00620   sp(ic+=1)=79 !:
         sp(ic+=1)=3 !:
         sp(ic+=1)=4 !:
@@ -143,10 +143,10 @@
 00700   fnhamster("TrAlloc",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask,mat sp,mat c$)
 00710   return 
 00720 ! ______________________________________________________________________
-00730 XIT: let fnxit
+00730 XIT: fnxit
 00740 ! ______________________________________________________________________
 00750 ! <Updateable Region: ERTN>
-00760 ERTN: let fnerror(program$,err,line,act$,"xit")
+00760 ERTN: fnerror(program$,err,line,act$,"xit")
 00770   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00780   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

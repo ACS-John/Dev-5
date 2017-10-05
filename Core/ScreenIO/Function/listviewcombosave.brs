@@ -21,5 +21,5 @@
        currentRec=LastReadRecord=rec(DataFile)
     end if
 
-    let RepopulateListviews=1
+    repopulateListviews=1
  fnend

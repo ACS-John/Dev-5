@@ -53,10 +53,10 @@
 00562   close #1: ioerr ignore
 00570 L570: ! 
 00580   fncloseprn
-00590 XIT: let fnxit
+00590 XIT: fnxit
 00600 IGNORE: continue 
 00610 ! <Updateable Region: ERTN>
-00620 ERTN: let fnerror(program$,err,line,act$,"xit")
+00620 ERTN: fnerror(program$,err,line,act$,"xit")
 00630   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00640   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00650   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

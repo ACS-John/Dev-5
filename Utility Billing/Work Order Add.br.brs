@@ -65,7 +65,7 @@
 
 34000   WO_TOS: !
 34020   fntos(sn$="workorder")
-34040   let respc=0
+34040   respc=0
 34060   fnlbl(1,30,"WORK ORDER",20,0,4)
 34080   fnlbl(2,1,"Account:",10,1)
 34160   fntxt(2,12,10,0,1,"",1)
@@ -120,12 +120,12 @@
 38000   if ckey=5 then goto woaXIT
 38020   z$=workinfo$(respc_accont)(1:10) ! lpad$(trim$(workinfo$(respc_accont)(1:10)),10)
 38160   if ckey=8 then let fnWorkOrderList(z$) : goto WO_TOS
-38180   for j=3 to 15 : let i$(j-2)=workinfo$(j) : next j
+38180   for j=3 to 15 : i$(j-2)=workinfo$(j) : next j
 38200   for j=1 to 12
-38220     if trim$(workinfo$(j+2))="" then let i$(j)="________________"
+38220     if trim$(workinfo$(j+2))="" then i$(j)="________________"
 38240   next j
 38260   for j=2 to 12
-38280     if i$(j)(1:5)<>"_____" then let i$(j)="{\ul "&i$(j)&"}" ! underline the answer if there was one
+38280     if i$(j)(1:5)<>"_____" then i$(j)="{\ul "&i$(j)&"}" ! underline the answer if there was one
 38300   next j
 38320   let y=55: let z=1
 38340   for j=1 to 5
@@ -143,7 +143,7 @@
 38580   next j
 
 40000   fnWorkOrderPrint(z$,mat e$,mat i$,mat line$,mat a,mat b,mat d,mat f$,mat extra$)
-40020 ! let fn_workorder_print_legacy
+40020 ! fn_workorder_print_legacy
 
 43000    ! r: write to WorkOrder History file (z$)
 43020     open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outin,keyed

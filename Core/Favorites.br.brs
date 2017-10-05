@@ -75,7 +75,7 @@
 76220 fnend
 76240 ! </updateable region: fnopen>
 76260 ! <updateable region: ertn>
-76280 ERTN: let fnerror(program$,err,line,act$,"xit")
+76280 ERTN: fnerror(program$,err,line,act$,"xit")
 76300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76320   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT 
 76340   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

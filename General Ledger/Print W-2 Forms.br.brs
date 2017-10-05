@@ -78,14 +78,14 @@
 30060   if endnumb>0 and eno>endnumb then goto FINIS ! past ending #
 30080   ! L870: !
 30100   fnNameParse(k$(1),nameFirst$,nameMiddle$,nameLast$,nameSuffix$)
-30120   let kz$=lpad$(str$(eno),8)
+30120   kz$=lpad$(str$(eno),8)
 30140   if m(1)=0 then goto READ_EMPLOYEE
-30160   let dedfed=dedfica=dedst=0
+30160   dedfed=dedfica=dedst=0
 30180   for j=1 to 10
 30200     if dedcode(j)=1 then 
-30220       if dedfed(j)=1 then let dedfed=dedfed+m(j*2+9)
-30240       if dedfica(j)=1 then let dedfica=dedfica+m(j*2+9)
-30260       if dedst(j)=1 then let dedst=dedst+m(j*2+9)
+30220       if dedfed(j)=1 then dedfed=dedfed+m(j*2+9)
+30240       if dedfica(j)=1 then dedfica=dedfica+m(j*2+9)
+30260       if dedst(j)=1 then dedst=dedst+m(j*2+9)
 30280     end if
 30300   next j
 30320   if eno=0 then goto READ_EMPLOYEE
@@ -103,12 +103,12 @@
 30560   let w(7)=m(7) ! STATE WH
 30580   let w(9)=m(1)-dedst ! STATE WAGES
 30600   if m(9)=0 then ! NO LOCAL WH
-30610     let printLocality$=""  
+30610     printLocality$=""  
 30612   else
 30620     let w(8)=m(9) ! LOCAL WITHHOLDING
 30640     let w(10)=m(1)-dedst ! LOCAL WAGES
 30660     if uprc$(cLocality$)="YES" then gosub ASK_EMP_LOCALITY
-30680     let printLocality$=empLocality$ ! LOCALITY NAME
+30680     printLocality$=empLocality$ ! LOCALITY NAME
 30700   end if
 30720   if box16=1 then gosub BOX16_process
 30740   let w(5)=min(ssmax-w(6),w(5)) ! SS WAGES CANNOT EXCEED MAXIMUM
@@ -141,7 +141,7 @@
 37130     box12aAmt$=cnvrt$("Nz 10.2",t(13))
 37135     mat w=t
 37140     controlNumber$="FINAL TOTAL"
-37160     let nameFirst$=nameMiddle$=nameLast$=""
+37160     nameFirst$=nameMiddle$=nameLast$=""
 37180     mat k$=("")
 37182     ss$=stcode$=printLocality$=""
 37190     let x$=" "
@@ -151,23 +151,23 @@
 37320   if enableW3$="True" then let fnw3(empId$,mat a$,mat w,dcb,state$,stcode$)
 37340   if exportFormatID then 
 37360       mat tmpMsgLine$(2)
-37380       let tmpMsgLine$(1)='Export file created:'
-37400       let tmpMsgLine$(2)=os_filename$(file$(hExport))
+37380       tmpMsgLine$(1)='Export file created:'
+37400       tmpMsgLine$(2)=os_filename$(file$(hExport))
 37420       close #hExport:
 37440       fnmsgbox(mat tmpMsgLine$,resp$,cap$) ! ,16+4)
 37460     goto XIT
 37500   end if
 37520 goto XIT ! /r
-38000 XIT: let fnxit
+38000 XIT: fnxit
 52000 ASK_EMP_LOCALITY: ! r:
 52020   fntos(sn$="Prw2-5")
-52040   let rc=0
-52060   let mylen=30
-52080   let mypos=mylen+3
+52040   rc=0
+52060   mylen=30
+52080   mypos=mylen+3
 52100   fnlbl(1,1,k$(1),mylen,1,0,0)
 52120   fnlbl(2,1,"Locality Name:",mylen,1,0,0)
 52140   fntxt(2,mypos,12,0,1,"",0,"Enter the Locality for this employee.",0)
-52160   let resp$(rc+=1)=empLocality$
+52160   resp$(rc+=1)=empLocality$
 52180   fncmdkey("&Next",1,1,0,"Proceed to next screen.")
 52200   fncmdkey("E&xit",5,0,1,"Returns to menu")
 52220   fnacs(sn$,0,mat resp$,ckey)
@@ -289,7 +289,7 @@
 67400 return ! /r
 75000 IGNORE: continue 
 76000 ! <updateable region: ertn>
-76040 ERTN: let fnerror(program$,err,line,act$,"xit")
+76040 ERTN: fnerror(program$,err,line,act$,"xit")
 76060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 76080   if uprc$(act$)="PAUSE" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT ! if env$("ACSDeveloper")<>"" then execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 76100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

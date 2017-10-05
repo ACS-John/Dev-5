@@ -16,12 +16,12 @@
 00320        for I=1 to L
 00340           bl$=Bl$&Bt$(Ord(Line$(I:I)))
 00360        next I
-00380        l=Len(Bl$): let Nullcount=Mod(L,3)
+00380        l=Len(Bl$): nullcount=Mod(L,3)
 00400        if Nullcount=2 then l=L+16
 00420        if Nullcount=1 then l=L+8
 00440        bl$=Rpad$(Bl$,L,"0")
 00460        l=Len(Bl$)
-00480        let D=Int(L/6): e=D*6
+00480        d=Int(L/6): e=D*6
 00500        b64=0: for I=1 to E step 6
 00520           let F$=Bl$(I:I+5)
 00540           if F$(1:1)="1" then b64=B64+32
@@ -40,13 +40,13 @@
 00800     def library Fn_Decodebase64(&Content$)
 00820        if Trim$(Content$)="" then goto RT_DECODE
 00840        dim Bl$*1200000,Line$*1200000,B64$*1200000,Id(1200000)
-00860        let Decode=1
+00860        decode=1
 00880        gosub RD_ROUTINE
 00900        line$=Content$
 00920        l=Len(Line$)
 00940        for I=1 to L
 00960           for Q=0 to 63
-00980              if Line$(I:I)=B64t$(Q) then let Id(I)=Q
+00980              if Line$(I:I)=B64t$(Q) then id(I)=Q
 01000           next Q
 01020        next I
 01040        for I=1 to L
@@ -61,7 +61,7 @@
 01220           bl$=Bl$&Bt$
 01240        next I
 01260        l=Len(Bl$)
-01280        let D=Int(L/8): e=D*8
+01280        d=Int(L/8): e=D*8
 01300        line$="" : for I=1 to E step 8
 01320           for Q=0 to 255
 01340              let F$=Bl$(I:I+7)

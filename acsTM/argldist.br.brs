@@ -5,8 +5,8 @@
 00060   fncno(cno,cnam$)
 00070   fndat(dat$)
 00080   dim p$*5,iv$*12,gl(3),gh(3),td$*30,tr$*12,a$*40,cap$*128,dat$*20
-00090   let td$="AR SUMMARY"
-00100   let tr6=5
+00090   td$="AR SUMMARY"
+00100   tr6=5
 00110   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&str$(cno)&",RecL=20,use,Shr",internal,outin,relative 
 00120   if lrec(8)=0 then write #8,using "form pos 1,n 6": dat else read #8,using "form pos 1,n 6",rec=1,release: dat
 00130   pr newpage
@@ -16,7 +16,7 @@
 00170 L170: input fields "12,53,n 6,ue": tr4 conv L170
 00180   if tr4<10100 or tr4>123199 then goto L170
 00190   rewrite #8,using "form pos 1,n 6",rec=1: d1
-00200   let pa=43-int(len(rtrm$(a$))/2)
+00200   pa=43-int(len(rtrm$(a$))/2)
 00210   open #1: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr L730
 00220   open #2: "Name="&env$('temp')&"\Work."&session$,internal,input,relative ioerr L730
 00230   pr newpage
@@ -32,12 +32,12 @@
 00330 L330: if gh(2)=gl(2) or gh(2)=0 then goto L420
 00340 L340: pr #255,using L350: mat gh,"TOTAL ",tdb,tcr
 00350 L350: form skip 1,pic(zzzz),pic(zzzzzzz),pic(zzzz),x 5,c 27,2*n 15.2,skip 2
-00360   let tt=tdb-tcr
+00360   tt=tdb-tcr
 00370   if tt=0 then goto L400
 00380   let gtdb=gtdb+tdb
 00390   let gtcr=gtcr+tcr
-00400 L400: let tdb=0
-00410   let tcr=0
+00400 L400: tdb=0
+00410   tcr=0
 00420 L420: return 
 00430 L430: adb=0
 00440   acr=0
@@ -48,8 +48,8 @@
 00490   goto L520
 00500 L500: pr #255,using L510: mat gl,p$,iv$,tr1,acr pageoflow L560
 00510 L510: form pos 1,pic(zzzz),n 7,pic(zzzz),x 2,c 8,c 14,pic(zz/zz/zz),x 15,n 15.2
-00520 L520: let tdb=tdb+adb
-00530   let tcr=tcr+acr
+00520 L520: tdb=tdb+adb
+00530   tcr=tcr+acr
 00540   mat gh=gl
 00550   goto L270
 00560 L560: pr #255: newpage
@@ -68,7 +68,7 @@
 00690 L690: close #1: ioerr L700
 00700 L700: close #2: ioerr L710
 00710 L710: if nw=1 then close #255: else pr #255: newpage
-00720 XIT: let fnxit
+00720 XIT: fnxit
 00730 L730: if err=61 then pr f "23,3,C 75,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L750
 00740   goto L790
 00750 L750: pr newpage

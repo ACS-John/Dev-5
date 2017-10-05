@@ -12,7 +12,7 @@
 00160 ! ______________________________________________________________________
 00171     fnstatus('updating Payee file format.')
 00210     open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),internal,outin,keyed ioerr ignore
-00215     if exists(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'))=0 then open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx1.h"&env$('cno')&",RecL=276,kps=1,kln=8,replace",internal,outin,keyed: let version(2,1): close #2: 
+00215     if exists(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'))=0 then open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx1.h"&env$('cno')&",RecL=276,kps=1,kln=8,replace",internal,outin,keyed: version(2,1): close #2: 
 00220     open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),internal,outin,relative  ! open #2: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx1.h"&env$('cno'),internal,outin,keyed
 00221     if rln(2)<>276 then 
 00222       close #2: 
@@ -25,7 +25,7 @@
 00240       write #2,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20',release: vn$,nam$(1:30),ad1$,ad2$,csz$,typ,ss$,ph$,contact$,email$,fax$,myact$
 00250     loop 
 00252 EOD_GL1099: ! 
-00260     let version(2,1)
+00260     version(2,1)
 00270     close #1,free: ioerr ignore
 00280     close #2: ioerr ignore
 00290     fnindex_it(env$('Q')&"\GLmstr\paymstr.h"&env$('cno'),env$('Q')&"\GLmstr\payidx1.h"&env$('cno'),"1 8")
@@ -36,7 +36,7 @@
 00320     goto XIT
 00330 ! ______________________________________________________________________
 00340 ! <Updateable Region: ERTN>
-00350 ERTN: let fnerror(program$,err,line,act$,"xit")
+00350 ERTN: fnerror(program$,err,line,act$,"xit")
 00360     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00370     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00380     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

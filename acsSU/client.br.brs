@@ -24,7 +24,7 @@
 00220 BUILD_LAYOUT: ! 
 00230   fncno(cno)
 00240 ! ** Field Labels    ** !:
-        let ic=0 ! temporary Item Counter
+        ic=0 ! temporary Item Counter
 00250   lbl$(ic+=1)="Client ID" !:
         lbl$(ic+=1)="Company Name" !:
         lbl$(ic+=1)="Company Address (1)" !:
@@ -35,20 +35,20 @@
         lbl$(ic+=1)="Phone Number" !:
         lbl$(ic+=1)="x"
 00270 ! ** Text Box / Field Display   Lengths   ** !:
-        let ic=0 ! temporary Item Counter !:
-        let mmddyy=8 !:
+        ic=0 ! temporary Item Counter !:
+        mmddyy=8 !:
         ccyymmdd=10
-00280   let tln(ic+=1)=6 !:
-        let tln(ic+=1)=50 !:
-        let tln(ic+=1)=50 !:
-        let tln(ic+=1)=50 !:
-        let tln(ic+=1)=50
-00290   let tln(ic+=1)=50 !:
-        let tln(ic+=1)=50 !:
-        let tln(ic+=1)=50 !:
-        let tln(ic+=1)=50
+00280   tln(ic+=1)=6 !:
+        tln(ic+=1)=50 !:
+        tln(ic+=1)=50 !:
+        tln(ic+=1)=50 !:
+        tln(ic+=1)=50
+00290   tln(ic+=1)=50 !:
+        tln(ic+=1)=50 !:
+        tln(ic+=1)=50 !:
+        tln(ic+=1)=50
 00300 ! ** Field Types ** !:
-        let ic=0
+        ic=0
 00310   fltyp$(ic+=1)='N' !:
         fltyp$(ic+=1)='C' !:
         fltyp$(ic+=1)='C' !:
@@ -59,28 +59,28 @@
         fltyp$(ic+=1)='C' !:
         fltyp$(ic+=1)='C'
 00330 ! ** Field Masks ** !:
-        let ic=0 !:
-        let pointtwo=32 : let number=30 !:
-        ccyymmdd=3 : let mmddyy=1 : let glnumber=53
-00340   let mask(ic+=1)=80 !:
-        let mask(ic+=1)=80 !:
-        let mask(ic+=1)=80 !:
-        let mask(ic+=1)=80 !:
-        let mask(ic+=1)=80
-00350   let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0
+        ic=0 !:
+        pointtwo=32 : number=30 !:
+        ccyymmdd=3 : mmddyy=1 : let glnumber=53
+00340   mask(ic+=1)=80 !:
+        mask(ic+=1)=80 !:
+        mask(ic+=1)=80 !:
+        mask(ic+=1)=80 !:
+        mask(ic+=1)=80
+00350   mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=0 !:
+        mask(ic+=1)=0
 00360   return 
 00370 ! ______________________________________________________________________
 00380 HAMSTER: ! 
 00390   fnhamster("Client",mat lbl$,mat tln,1,mat p$,mat fltyp$,mat sln,mat mask)
 00400   return 
 00410 ! ______________________________________________________________________
-00420 XIT: let fnxit
+00420 XIT: fnxit
 00430 ! ______________________________________________________________________
 00440 ! <Updateable Region: ERTN>
-00450 ERTN: let fnerror(program$,err,line,act$,"xit")
+00450 ERTN: fnerror(program$,err,line,act$,"xit")
 00460   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00470   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00480   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

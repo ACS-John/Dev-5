@@ -26,14 +26,14 @@
 00250 ! ______________________________________________________________________
 00260 MAIN: ! 
 00270   fntos(sn$="autoproc") !:
-        let respc=0
+        respc=0
 00280   fnlbl(1,20,"Select From the Following Companies:",50,1)
 00290   fnlbl(2,1,"Company:",10,1)
 00300   for j=1 to udim(opt$)
-00310     if trim$(oldcnam$)=trim$(opt$(j)(1:30)) then let resp$(respc+=1)=opt$(j): goto L340
+00310     if trim$(oldcnam$)=trim$(opt$(j)(1:30)) then resp$(respc+=1)=opt$(j): goto L340
 00320   next j
-00330   let resp$(1)=opt$(1) ! default to 1st in none found
-00340 L340: let fncomboa('CmbAuto',2,13,mat opt$,'Select the companies that should be included in this automatic processing run. Highlite and press enter or Next to register your selection.',55) ! Let FNCMBCNO(1, 13)
+00330   resp$(1)=opt$(1) ! default to 1st in none found
+00340 L340: fncomboa('CmbAuto',2,13,mat opt$,'Select the companies that should be included in this automatic processing run. Highlite and press enter or Next to register your selection.',55) ! fnCMBCNO(1, 13)
 00350   fnlbl(4,30,"Selected Companies:")
 00360   mat chdr$(2) : mat cmask$(2) : mat item$(2) !:
         chdr$(1)='Company #' !:
@@ -42,17 +42,17 @@
         cmask$(2)='' !:
         fnflexinit1('autoproc',5,25,15,35,mat chdr$,mat cmask$,1,0,frame)
 00380   for j=1 to max(count,1)
-00390     let item$(1)=str$(clnum(j)) !:
-          let item$(2)=clnam$(j) !:
+00390     item$(1)=str$(clnum(j)) !:
+          item$(2)=clnam$(j) !:
           fnflexadd1(mat item$)
 00400   next j
 00410   fnfra(22,1,4,30,"Period to Print","Select the type of processing.")
 00420   fnopt(1,3,"Weekly",0,1) !:
-        if wmq=1 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+        if wmq=1 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00430   fnopt(2,3,"Monthly",0,1) !:
-        if wmq=2 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+        if wmq=2 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00440   fnopt(3,3,"Quarterly",0,1) !:
-        if wmq=3 then let resp$(respc+=1)="True" else let resp$(respc+=1)="False"
+        if wmq=3 then resp$(respc+=1)="True" else resp$(respc+=1)="False"
 00450   fncmdkey("&Next",1,1,0,"Selects the highlited company to be included in automatic processing.") !:
         fncmdkey("C&omplete",2,0,0,"Finished selecting companies; begin porcessing.") !:
         fncmdkey("&Cancel",5,0,1)
@@ -62,13 +62,13 @@
 00490   clnam$(count+=1)=resp$(1)(1:30)
 00500   clnum(count)=val(resp$(1)(33:37))
 00510   if resp$(3)="True" then let wk(count)=1: let wmq=1
-00520   if resp$(4)="True" then let mo(count)=1: let wmq=2
+00520   if resp$(4)="True" then mo(count)=1: let wmq=2
 00530   if resp$(5)="True" then let qt(count)=1: let wmq=3
 00540   if ckey=1 then goto MAIN
 00550 L550: goto WRITE_EM
 00560 ! ______________________________________________________________________
 00570 BLD_ACNO: ! 
-00580   let dir$=env$('Q')&'\&'&fncursys$&"mstr"
+00580   dir$=env$('Q')&'\&'&fncursys$&"mstr"
 00582   let filter$="Company.*"
 00584   fngetdir(dir$,mat filename$,empty$,filter$)
 00590   mat acno(99999): cav=0
@@ -96,10 +96,10 @@
 00760   fnprocess(1)
 00770   fnputcno(clnum(1))
 00774   fnpgnum(-1) ! resets the last program processed back to 0 befor going to NEWPRauto
-00800 XIT: let fnxit
+00800 XIT: fnxit
 00810 ! ______________________________________________________________________
 00820 ! <Updateable Region: ERTN>
-00830 ERTN: let fnerror(program$,err,line,act$,"xit")
+00830 ERTN: fnerror(program$,err,line,act$,"xit")
 00840   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00850   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00860   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

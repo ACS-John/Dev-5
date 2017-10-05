@@ -12,44 +12,44 @@
 00150 L150: open #4: "Name="&env$('Q')&"\TMmstr\WORK1.H"&str$(cno)&",Replace,RecL=86",internal,outin,relative ioerr L690
 00160   write #4,using L170,rec=1: k$,e$,mat b,sc$,iv$,1,id$
 00170 L170: form pos 1,c 5,c 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,c 4,c 12,pd 3,c 30
-00180   let r4=1
+00180   r4=1
 00190   fl5$="Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&str$(cno)
 00200   exec$="FREE "&fl5$(6:len(fl5$))
 00210   execute exec$
 00220   open #5: fl5$&",Replace,RecL=175",internal,outin,relative ioerr L690
 00230   write #5,using L240,rec=1: mat ta,mat fb
 00240 L240: form pos 1,50*pd 3,25*n 1
-00250   let r5=1
+00250   r5=1
 00260   rewrite #5,using L270,rec=r5: r5
 00270 L270: form pos 1,pd 3
 00280 L280: form pos 230,10*pd 3
-00290 L290: let r2=r2+1
+00290 L290: r2=r2+1
 00300   read #2,using L170,rec=r2: k$,e$,mat b,sc$,iv$,nta,id$ norec L620,eof L620 ioerr L690
 00310   if b(4)=0 or b(5)<1 or b(5)>25 then goto L290
 00320   read #1,using L280,key=k$: mat ca nokey L290 ioerr L690
-00330   let r4=r4+1
+00330   r4=r4+1
 00340   write #4,using L170,rec=r4: k$,e$,mat b,sc$,iv$,0,id$
 00350   rewrite #4,using L360,rec=1: r4
 00360 L360: form pos 54,pd 3
 00370   if b(5)>10 then goto L290
 00380   if b(8)=0 then b8=25 else b8=b(8)
 00390   if ca(b(5))=0 then goto L490
-00400   let p1=1+(b8-1)*6
-00410   let p2=150+b8
+00400   p1=1+(b8-1)*6
+00410   p2=150+b8
 00420   read #5,using L430,rec=ca(b(5)): ta1,ta2,fb1 norec L490 ioerr L690
 00430 L430: form pos p1,2*pd 3,pos p2,n 1
-00440   if ta2<>0 then rewrite #4,using L360,rec=ta2: r4 else let ta1=lta
+00440   if ta2<>0 then rewrite #4,using L360,rec=ta2: r4 else ta1=lta
 00442   if b(7)>0 then goto L460
 00450   if fb1<2 then let fb1=abs(b(7))
-00460 L460: if ta1=0 then let ta1=r4
+00460 L460: if ta1=0 then ta1=r4
 00470   rewrite #5,using L430,rec=ca(b(5)): ta1,r4,fb1
 00480   goto L290
-00490 L490: let r5=r5+1
+00490 L490: r5=r5+1
 00500   mat ta=(0)
 00510   mat fb=(0)
 00520   ca(b(5))=r5
-00530   let ta(b8,1)=r4
-00540   let ta(b8,2)=r4
+00530   ta(b8,1)=r4
+00540   ta(b8,2)=r4
 00550   if b(7)=-2 then let fb(b8)=2
 00560   if fb(b8)=2 then goto L580
 00570   if b(7)=-1 then let fb(b8)=1

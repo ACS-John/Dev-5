@@ -10,14 +10,14 @@
 00100   dim name$*30,vname$*20,colmask$*3,tt$*200,colhdr$(80)*30,colmask$(80)*3
 00110   dim open_read$*80,abbrev$*20,filename$*40
 00120 ! ______________________________________________________________________
-00130   let datafolder$=uprc$(trim$(fncursys$))&"mstr" !:
-        let programfolder$=uprc$(trim$(fncursys$))&"mstr"
+00130   datafolder$=uprc$(trim$(fncursys$))&"mstr" !:
+        programfolder$=uprc$(trim$(fncursys$))&"mstr"
 00150   fntop(program$,cap$="Grids")
 00160 SELECTDATABASE: ! !:
         !  allows you to search the grid folder for any subfolders !:
         ! (You must create a sub-folder for each data base you can !:
         !  access)
-00170   mat resp$=("") : mat options$(300) : mat options$=("") : let j=0
+00170   mat resp$=("") : mat options$(300) : mat options$=("") : j=0
 00180   if exists(programfolder$&"\Grid")=0 then !:
           execute "MkDir "&programfolder$&"\Grid"
 00190   execute "Dir "&programfolder$&"\grid\*.* >FlexWork.tmp" ! Ioerr 271
@@ -28,7 +28,7 @@
 00240 L240: options$(j+=1)=ln$(46:len(trim$(ln$)))
 00250   goto L210
 00260 L260: close #13: 
-00270 L270: if j<=0 then let j=1
+00270 L270: if j<=0 then j=1
 00280   mat options$(j)
 00290 ! currently you cannot have more than 8 character database names !:
         ! error 4323 avoided !:
@@ -39,11 +39,11 @@
 00310   fnlbl(1,1,"Data Base Name:",16,1)
 00320   fnlbl(2,1,"Current System: "&fncursys$)
 00330   fncomboa("OTHER",1,18,mat options$,empty$,20) !:
-        let resp$(1)=options$(1)
+        resp$(1)=options$(1)
 00340   fncmdset(2) !:
         fnacs(sn$,0,mat resp$,ckey)
 00350   if ckey=5 then goto XIT
-00360   let database$=resp$(1)
+00360   database$=resp$(1)
 00370 ! ______________________________________________________________________
 00380 GRIDSELECTION: ! !:
         ! Allows you to select any grid that previously been created !:
@@ -54,13 +54,13 @@
 00400   mat options$=("") !:
         mat resp$=("")
 00410 ! sN$ = "flexselect" !:
-        ! Let FNtos(SN$)
-00420   let j=0
+        ! fntos(SN$)
+00420   j=0
 00430 ! 
-00440   let txt$=programfolder$&"\grid\"&database$ !:
+00440   txt$=programfolder$&"\grid\"&database$ !:
         let filter$="*.grd" !:
         fngetdir(txt$,mat options$,empty$,filter$)
-00450   let txt$=programfolder$&"\grid\"&database$ !:
+00450   txt$=programfolder$&"\grid\"&database$ !:
         let filter$="*.FIL" !:
         fngetdir(txt$,optionfile$,empty$,filter$)
 00460 ! Execute "Dir "&PROGRAMFOLDER$&"\grid\"&DATABASE$&"\*.* >flexwork."&WSID$ Ioerr 540
@@ -72,13 +72,13 @@
         ! oPTIONFILE$=LN$(46:LEN(LN$)) : Goto 450
 00510 ! lN$=TRIM$(UPRC$(LN$)) !:
         ! If LN$(LEN(LN$)-3:LEN(LN$))<>".GRD" Then Goto 450
-00520 ! Let J=J+1
+00520 ! j=J+1
 00530 ! oPTIONS$(J)=LN$(46:LEN(TRIM$(LN$))-4)
 00540 ! oPTIONS$(J)=TRIM$(OPTIONS$(J))
 00550 ! Write #12,Using 520: OPTIONS$(J)(1:20)
 00560 ! Form POS 1,C 20
 00570 ! Goto 450
-00580 ! If J<=0 Then Let J=1
+00580 ! If J<=0 Then j=1
 00590   for j=1 to udim(options$)
 00600     if options$(j)="" then goto L630
 00610     options$(j)=options$(j)(1:pos(options$(j),".")-1)
@@ -89,17 +89,17 @@
 00660 ! __
 00670   fntos(sn$="flexselect")
 00680   fnlbl(1,1,"Flexgrid name:",16,1)
-00690   let tt$="Choose a grid or click add to add a new grid" !:
+00690   tt$="Choose a grid or click add to add a new grid" !:
         fncomboa("GridNames",1,18,mat options$,tt$,20) !:
-        let resp$(1)=options$(1)
+        resp$(1)=options$(1)
 00700 ! Let FILENAME$="gridnames."&WSID$ !:
-        ! let DATAFILE$="flexwork2."&WSID$ !:
-        ! Let IndexFILE$="" !:
-        ! Let TT$="Choose a grid or enter the name of a new grid" !:
-        ! Let FNComboF(FILENAME$,1,18,20,DATAFILE$,0,0,1,20,IndexFILE$,1)!:
+        ! dATAFILE$="flexwork2."&WSID$ !:
+        ! indexFILE$="" !:
+        ! tT$="Choose a grid or enter the name of a new grid" !:
+        ! fnComboF(FILENAME$,1,18,20,DATAFILE$,0,0,1,20,IndexFILE$,1)!:
         ! if choose 2 item the answer is there twice  (sample           sample)
 00710 ! For J=1 To UDIM(OPTIONS$) !:
-        ! Let RESP$(J)=OPTIONS$(J)(1:20) !:
+        ! rESP$(J)=OPTIONS$(J)(1:20) !:
         ! Next J
 00720   fncmdkey("&Next",1,1) !:
         fncmdkey("&Back",2) !:
@@ -107,7 +107,7 @@
         fncmdkey("&Delete Grid",4) !:
         fncmdkey("&Cancel",5,0,1)
 00730   fnacs(sn$,0,mat resp$,ckey)
-00740   let resp$(1)=trim$(resp$(1)(1:20))
+00740   resp$(1)=trim$(resp$(1)(1:20))
 00750   if ckey=5 then goto XIT
 00760   if ckey=3 then goto ADDGRIDNAME
 00770   if ckey=2 or trim$(resp$(1))="" then goto SELECTDATABASE ! back or no grid name
@@ -129,7 +129,7 @@
 00920 L920: open #15: "Name="&fullgridname$&",KFName="&fullgridindx$&",RecL=80,KPs=1,KLn=3,use",internal,outin,keyed ioerr SELECTDATABASE
 00930   sn$="mstrflex" !:
         fntos(sn$)
-00940   let txt$=uprc$(gridname$) !:
+00940   txt$=uprc$(gridname$) !:
         fnlbl(1,1,txt$,20,2,3)
 00950   mat colhdr$(2) !:
         colhdr$(1)="Column #" !:
@@ -141,12 +141,12 @@
 00980   fnflexinit1(filename$,2,1,10,72,mat colhdr$,mat colmask$,1)
 00990   if lrec(15)=0 then goto DISPLAYOPTIONS
 01000 L1000: read #15,using L1020: columnnum,name$,vname$,fieldlen,colmask$,abbrev$ eof L1050
-01010   let item$(1)=str$(columnnum) !:
-        let item$(2)=name$
+01010   item$(1)=str$(columnnum) !:
+        item$(2)=name$
 01020 L1020: form pos 1,n 3,c 30,c 20,n 4,c 3,c 20
 01030   fnflexadd1(mat item$)
 01040   goto L1000
-01050 L1050: let fnlbl(12,1," ")
+01050 L1050: fnlbl(12,1," ")
 01052   fncmdkey("&Add Column",1,1) !:
         fncmdkey("&Delete Column",2) !:
         fncmdkey("Display &Grid",3) !:
@@ -157,12 +157,12 @@
 01080   if ckey=1 then goto DISPLAYOPTIONS
 01090   if ckey=3 then goto PRINTGRID
 01100   if ckey=4 then goto SELECTDATABASE ! select a different grid
-01110   if ckey=2 then let deletekey$=cnvrt$("n 3",val(resp$(1))): !:
+01110   if ckey=2 then deletekey$=cnvrt$("n 3",val(resp$(1))): !:
           delete #15,key=deletekey$: ioerr GRIDCOLUMNS
 01120   if ckey<>2 then goto L1190
-01130   restore #15: : let newcolumn=0
+01130   restore #15: : newcolumn=0
 01140 L1140: read #15,using L1020: columnnum eof L1180
-01150   let newcolumn=newcolumn+1
+01150   newcolumn=newcolumn+1
 01160   rewrite #15,using L1020: newcolumn
 01170   goto L1140
 01180 L1180: goto GRIDCOLUMNS
@@ -172,8 +172,8 @@
 01220   restore #15: ! determine next available column number
 01230 L1230: read #15,using L1020: lastcolumn eof L1250
 01240   goto L1230
-01250 L1250: let fntos(sn$="options") !:
-        let respc=0
+01250 L1250: fntos(sn$="options") !:
+        respc=0
 01260   fnlbl(1,1,"Data Base File:",20,1)
 01270   fntxt(1,22,20,20,0,"",1) !:
         let gridinfo$(respc+=1)=database$
@@ -181,7 +181,7 @@
 01290   fntxt(2,22,20,20,0,"",1) !:
         let gridinfo$(respc+=1)=gridname$
 01300   fnlbl(3,1,"Column Number:",20,1)
-01310   let tt$="Change column # if default not acceptable" !:
+01310   tt$="Change column # if default not acceptable" !:
         fntxt(3,22,2,2,0,"30",0,tt$) !:
         let gridinfo$(respc+=1)=str$(lastcolumn+1)
 01320   fnlbl(5,1,"Grid Options:",14,1)
@@ -196,7 +196,7 @@
 01410   goto L1380
 01420 L1420: mat options$(x)
 01430   close #16: ioerr L1440
-01440 L1440: let tt$="Highlite any column heading you wish to add to your grid" !:
+01440 L1440: tt$="Highlite any column heading you wish to add to your grid" !:
         fncomboa("Grrr",5,16,mat options$,tt$,80) !:
         let gridinfo$(respc+=1)=options$(1)
 01450   fncmdkey("&Add Column",1,1) !:
@@ -207,16 +207,16 @@
 01490   goto GRIDCOLUMNS
 01500 ADDTOGRID: ! add items to individual grids
 01510   columnnum=val(gridinfo$(3)(1:3)) !:
-        let name$=gridinfo$(4)(1:30) !:
-        let vname$=gridinfo$(4)(31:50) !:
+        name$=gridinfo$(4)(1:30) !:
+        vname$=gridinfo$(4)(31:50) !:
         let fieldlen=val(gridinfo$(4)(51:54)) !:
-        let maskinfo$=gridinfo$(4)(55:67) !:
+        maskinfo$=gridinfo$(4)(55:67) !:
         abbrev$=trim$(gridinfo$(4)(68:87))
-01520   let maskinfo$=uprc$(maskinfo$)
-01530   let maskformat$=maskinfo$(3:4) ! determine if pd,c,n etc format
-01540   let decimalposition=val(maskinfo$(1:2))
+01520   maskinfo$=uprc$(maskinfo$)
+01530   maskformat$=maskinfo$(3:4) ! determine if pd,c,n etc format
+01540   decimalposition=val(maskinfo$(1:2))
 01550   let x=pos(uprc$(name$),"DATE",1) !:
-        if x>0 then let itisadate$="Y" else let itisadate$="N"
+        if x>0 then itisadate$="Y" else itisadate$="N"
 01560   if trim$(maskformat$)="N" and fieldlen<8 and itisadate$="Y" then colmask$="1" !:
           goto L1650 ! DATE IN MMDDYY FORMAT
 01570   if trim$(maskformat$)="N" and fieldlen>7 and itisadate$="Y" then colmask$="3"
@@ -239,7 +239,7 @@
 01670 L1670: write #15,using L1020: columnnum,name$,vname$,fieldlen,colmask$,abbrev$
 01680   goto DISPLAYGRID
 01690 ! ______________________________________________________________________
-01700 ERTN: let fnerror(program$,err,line,act$,"xit")
+01700 ERTN: fnerror(program$,err,line,act$,"xit")
 01710   if uprc$(act$)<>"PAUSE" then goto L1740
 01720   execute "list -"&str$(line) !:
         pause  !:
@@ -253,7 +253,7 @@
 01790 L1790: read #15,using L1020: lastcolumn eof L1810
 01800   goto L1790
 01810 L1810: read #15,using L1020,key=cnvrt$("pic(zzz)",lastcolumn): newcolumn nokey ADDTOGRID eof ADDTOGRID
-01820   let newcolumn=newcolumn+1
+01820   newcolumn=newcolumn+1
 01830   rewrite #15,using L1020: newcolumn
 01840   lastcolumn=lastcolumn-1
 01850   if lastcolumn>0 and lastcolumn>=columnnum then goto L1810
@@ -268,7 +268,7 @@
 01940   mat colmask$=("")
 01950   columns=0
 01960   specline=10010 !:
-        let dataline=10510
+        dataline=10510
 01970 ! ____________________________________________________________________
 01980 ! This section generates the program lines needed to create the column            headings and column masks
 01990   close #15: ioerr L2000
@@ -288,10 +288,10 @@
 02100   specline=specline+10
 02110   let x=pos(vname$,"$",1): if x>0 then goto L2120 else goto L2130 !:
           ! determine if numeric or character
-02120 L2120: pr #10,using L2090: str$(dataline)& " LET ITEM$("&str$(columns)&")="&trim$(vname$) !:
+02120 L2120: pr #10,using L2090: str$(dataline)& " iTEM$("&str$(columns)&")="&trim$(vname$) !:
         goto L2140
-02130 L2130: pr #10,using L2090: str$(dataline)& " LET ITEM$("&str$(columns)&")= str$("&trim$(vname$)&")"
-02140 L2140: let dataline=dataline+10
+02130 L2130: pr #10,using L2090: str$(dataline)& " iTEM$("&str$(columns)&")= str$("&trim$(vname$)&")"
+02140 L2140: dataline=dataline+10
 02150   goto L2060
 02160 L2160: close #10: ioerr L2180
 02170   if columns=0 then goto DISPLAYOPTIONS
@@ -318,17 +318,17 @@
 02380   mat resp$=("")
 02390   sn$="addgrid" !:
         fntos(sn$)
-02400   let txt$="Grid Name:" !:
+02400   txt$="Grid Name:" !:
         fnlbl(1,1,txt$,20,1)
 02410   let gridinfo$(2)=gridname$ !:
-        let tt$="Limited to 11 characters!" !:
+        tt$="Limited to 11 characters!" !:
         fntxt(1,22,11,11,0,"",0,tt$)
-02420   fncmdset(2): let fnacs(sn$,0,mat resp$,ckey)
+02420   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 02430   if ckey=5 then goto GRIDSELECTION
-02440   let resp$(1)=trim$(resp$(1))
-02450   let resp$(1)=trim$(resp$(1))(1:20)
+02440   resp$(1)=trim$(resp$(1))
+02450   resp$(1)=trim$(resp$(1))(1:20)
 02460   close #15: ioerr L2470
 02470 L2470: ckey=1 : goto L780
 02480 ! ____________________________________________________________________
 02490 DONE: close #1: ioerr XIT
-02500 XIT: let fnxit
+02500 XIT: fnxit

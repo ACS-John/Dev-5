@@ -20,14 +20,14 @@
 12040 ! 
 14000   if ~fnclient_has('U5') then 
 14020     mat m$(2)
-14040     let m$(1)="You must purchase the ACS Utility Billing External Collections Processing"
-14060     let m$(2)="module to access these features"
+14040     m$(1)="You must purchase the ACS Utility Billing External Collections Processing"
+14060     m$(2)="module to access these features"
 14080     fnmsgbox(mat m$, response$, cap$,64)
 14100     goto XIT
 14120   end if 
 14140 ! 
 14160   fnget_services(mat servicename$) : for servicename_item=1 to udim(mat servicename$) : servicename$(servicename_item)=trim$(servicename$(servicename_item)) : next servicename_item
-14180   let delim$=chr$(9)
+14180   delim$=chr$(9)
 14200 ! 
 16000   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 16020   open #h_alt_bill:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -39,7 +39,7 @@
 20020   fntos(sn$="ecp_export")
 20040   fnlbl(1,1,"Destination Path and File Name:",34,1)
 20060   fntxt(1,36,40,256,0,"71")
-20080   let resp$(1)=exp_filename$
+20080   resp$(1)=exp_filename$
 20100   fnlbl(5,1,"NOTE: If Destination exists it will be overwritten.",76,2)
 20120   fncmdset(2)
 20140   fnacs(sn$,0,mat resp$,ckey)
@@ -214,7 +214,7 @@
 33480   pr #h_ecp: 'CSZ - Alternate Billing'&delim$ ! ab$(3)
 33500   return  ! /r
 50000 ! <Updateable Region: ERTN>
-50020 ERTN: let fnerror(program$,err,line,act$,"xit")
+50020 ERTN: fnerror(program$,err,line,act$,"xit")
 50040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 50060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 50080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
@@ -227,14 +227,14 @@
 58060   close #h_ecp: ioerr ignore
 58080   fn_report_created_file(exp_filename$)
 58100   goto XIT ! /r
-60000 XIT: let fnxit
+60000 XIT: fnxit
 60010 ! IGNORE: continue
 65000   def fn_report_created_file(exp_filename_report$*512)
 65090     dim m$(2)*512
 65100     if exp_filename_report$<>'' and exp_filename_report$<>':CON:' then 
 65120       mat m$(2)
-65140       let m$(1)="External Collections File created:"
-65160       let m$(2)=os_filename$(exp_filename_report$)
+65140       m$(1)="External Collections File created:"
+65160       m$(2)=os_filename$(exp_filename_report$)
 65180       fnmsgbox(mat m$, response$, cap$,64)
 65200     end if 
 65240   fnend 

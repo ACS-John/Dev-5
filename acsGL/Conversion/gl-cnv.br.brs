@@ -102,7 +102,7 @@
 01020 L1020: read #3,using L1010: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$ eof L1100
 01030   mat adr=(0)
 01040   if ytdp=0 then goto L1080
-01050   let rec2=lrec(2)+1
+01050   rec2=lrec(2)+1
 01060   write #2,using L1000,rec=rec2: vn$,dat,ytdp,"","BEGINNING BALANCE",0
 01070   mat adr=(rec2)
 01080 L1080: write #1,using L1010: vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat adr
@@ -126,9 +126,9 @@
 01260     read #2,using L1270,rec=j: k$,nta norec L1350
 01270 L1270: form pos 1,c 12,pos 71,pd 3
 01280     read #1,using L1220,key=k$: mat ta nokey L1350
-01290     if ta(1)=0 then let ta(1)=j
+01290     if ta(1)=0 then ta(1)=j
 01300     if ta(2)>0 then rewrite #2,using L1340,rec=ta(2): j
-01310     let ta(2)=j
+01310     ta(2)=j
 01320     rewrite #1,using L1220,key=k$: mat ta
 01330     rewrite #2,using L1340,rec=j: 0
 01340 L1340: form pos 71,pd 3
@@ -146,9 +146,9 @@
 01460     read #2,using L1470,rec=j: en$,nta norec L1550,conv L1550
 01470 L1470: form pos 1,c 4,pos 68,pd 3
 01480     read #1,using L1420,key=en$: mat ta nokey L1550,conv L1550
-01490     if ta(1)=0 then let ta(1)=j
+01490     if ta(1)=0 then ta(1)=j
 01500     if ta(2)>0 then rewrite #2,using L1540,rec=ta(2): j
-01510     let ta(2)=j
+01510     ta(2)=j
 01520     rewrite #1,using L1420,key=en$: mat ta
 01530     rewrite #2,using L1540,rec=j: 0
 01540 L1540: form pos 68,pd 3
@@ -177,9 +177,9 @@
 01770   open #2: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=280,Replace",internal,output 
 01780 L1780: read #1,using L1790: pr1$,mat pr1 eof END1
 01790 L1790: form pos 1,c 90,18*pd 5.2,2*n 5
-01800   for j=1 to 11: let pr2(j)=pr1(j): next j
-01810   let pr2(13)=pr1(12)
-01820   for j=13 to 18: let pr2(j+18)=pr1(j): next j
+01800   for j=1 to 11: pr2(j)=pr1(j): next j
+01810   pr2(13)=pr1(12)
+01820   for j=13 to 18: pr2(j+18)=pr1(j): next j
 01830   write #2,using L1840: pr1$,mat pr2
 01840 L1840: form pos 1,c 90,36*pd 5.2,2*n 5
 01850   goto L1780
@@ -198,12 +198,12 @@
 01980   close #1: 
 01990 L1990: end1=0 ! 
 02000   dim id$(6)*40,fil$(6),idx$(6)
-02010   let id$(1)=" 1 = BALANCE SHEET FILE" : let fil$(1)="ACGLFNSB" : let idx$(1)="FNSBINDX"
-02020   let id$(2)=" 2 = INCOME STATEMENT FILE" : let fil$(2)="ACGLFNSI" : let idx$(2)="FNSIINDX"
-02030   let id$(3)=" 3 = FUND STMT / CASH FLOW FILE" : let fil$(3)="ACGLFNSF" : let idx$(3)="FNSFINDX"
-02040   let id$(4)=" 4 = SECONDARY BALANCE SHEET FILE" : let fil$(4)="ACGLFNSC" : let idx$(4)="FNSCINDX"
-02050   let id$(5)=" 5 = SECONDARY INCOME STATEMENT FILE" : let fil$(5)="ACGLFNSJ" : let idx$(5)="FNSJINDX"
-02060   let id$(6)=" 6 = SECONDARY FUND / CASH FLOW FILE" : let fil$(6)="ACGLFNSG" : let idx$(6)="FNSGINDX"
+02010   id$(1)=" 1 = BALANCE SHEET FILE" : let fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
+02020   id$(2)=" 2 = INCOME STATEMENT FILE" : let fil$(2)="ACGLFNSI" : idx$(2)="FNSIINDX"
+02030   id$(3)=" 3 = FUND STMT / CASH FLOW FILE" : let fil$(3)="ACGLFNSF" : idx$(3)="FNSFINDX"
+02040   id$(4)=" 4 = SECONDARY BALANCE SHEET FILE" : let fil$(4)="ACGLFNSC" : idx$(4)="FNSCINDX"
+02050   id$(5)=" 5 = SECONDARY INCOME STATEMENT FILE" : let fil$(5)="ACGLFNSJ" : idx$(5)="FNSJINDX"
+02060   id$(6)=" 6 = SECONDARY FUND / CASH FLOW FILE" : let fil$(6)="ACGLFNSG" : idx$(6)="FNSGINDX"
 02070   for j=1 to 6
 02080     execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&" "&env$('Temp')&"\Work."&session$&" -83" ioerr L2360
 02090     execute "COPY  "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&""
@@ -215,18 +215,18 @@
 02150 L2150: read #1,using L2270: rno,ic eof END2
 02160     if rno<st2 then goto L2210
 02170     if end1=1 then goto END2
-02180     let rnp=0
+02180     rnp=0
 02190     goto L2130
 02200 ! ______________________________________________________________________
 02210 L2210: rewrite #1,using L2220: rnp
 02220 L2220: form pos 79,n 5
 02230     goto L2150
 02240 ! ______________________________________________________________________
-02250 FIND1: st1=rno : st2=99999 : let rnp=0
+02250 FIND1: st1=rno : st2=99999 : rnp=0
 02260 L2260: read #1,using L2270: rno,ic eof END21
 02270 L2270: form pos 1,g 5,pos 75,n 1
 02280     if ic=0 then goto L2260
-02290     if ic=1 then let rnp=rno
+02290     if ic=1 then rnp=rno
 02300     if ic=2 then st2=rno : goto L2330
 02310     goto L2260
 02320 END21: end1=1
@@ -239,7 +239,7 @@
 02390 XIT: stop 
 02400 ! ______________________________________________________________________
 02410 ! <Updateable Region: ERTN>
-02420 ERTN: let fnerror(program$,err,line,act$,"xit")
+02420 ERTN: fnerror(program$,err,line,act$,"xit")
 02430   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02440   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02450   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

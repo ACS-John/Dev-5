@@ -13,21 +13,21 @@
 12400   fndat(dat$)
 12600 ! ______________________________________________________________________
 12800   fntos(sn$="PayrollReg")
-13000   let rc=cf=0: let mylen=22: let mypos=mylen+3: let frameno=1
+13000   rc=cf=0: mylen=22: mypos=mylen+3: let frameno=1
 13200   fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included.")
 13400   fnlbl(1,1,"Bad Date:",mylen,1,0,frameno)
 13600   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno)
-13800   let resp$(rc+=1)=str$(date_bad)
+13800   resp$(rc+=1)=str$(date_bad)
 14000   fnlbl(2,1,"Good Date:",mylen,1,0,frameno)
 14200   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this report. ",frameno)
-14400   let resp$(rc+=1)=str$(date_good)
+14400   resp$(rc+=1)=str$(date_good)
 14600   fncmdkey("Next",1,1,0,"Calculate tax deposit.")
 14800   fncmdkey("Cancel",5,0,1,"Returns to menu without printing.")
 15000   fnacs(sn$,0,mat resp$,ckey)
 15200   if ckey=5 then goto XIT
 15400 ! 
-15600   let date_bad=val(resp$(1))
-15800   let date_good=val(resp$(2))
+15600   date_bad=val(resp$(1))
+15800   date_good=val(resp$(2))
 16000 ! 
 16800   open #h_prmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 17000   open #h_acprcks:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno)&",Shr",internal,outin,relative 
@@ -41,7 +41,7 @@
 19400   do 
 19600     read #h_acprcks,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca conv L350
 19800     if fndate_mmddyy_to_ccyymmdd(d(2))=date_bad then 
-20420       let d(2)=date(days(date_good,'ccyymmdd'),'mmddyy')
+20420       d(2)=date(days(date_good,'ccyymmdd'),'mmddyy')
 20440       rewrite #h_acprcks,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca
 20480       fn_print_1
 20500     end if 
@@ -51,10 +51,10 @@
 22200   goto FINIS
 22400 ! ______________________________________________________________________
 22600   def fn_header
-22620     let nametab=66-int(len(rtrm$(cnam$))/2)
+22620     nametab=66-int(len(rtrm$(cnam$))/2)
 22800     pr #255,using L530: date$,time$,cnam$
 23000 L530: form pos 1,c 8,skip 1,pos 1,c 8,pos nametab,c 40,skip 1
-23200     let p1=66-int(len(rtrm$(cap$))/2)
+23200     p1=66-int(len(rtrm$(cap$))/2)
 23400     pr #255,using L560: rtrm$(cap$)
 23600 L560: form pos p1,c 50
 24400   fnend 
@@ -75,11 +75,11 @@
 37800   close #h_acprcks: ioerr ignore
 38600   fncloseprn
 38800   goto XIT
-38900 XIT: let fnxit
+38900 XIT: fnxit
 39000 IGNORE: continue 
 54800 ! ______________________________________________________________________
 55000 ! <updateable region: ertn>
-55200 ERTN: let fnerror(program$,err,line,act$,"xit")
+55200 ERTN: fnerror(program$,err,line,act$,"xit")
 55400   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 55600   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 55800   pr "program pause: type go and press [enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

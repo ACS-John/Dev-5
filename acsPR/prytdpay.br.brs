@@ -53,13 +53,13 @@
 00480   if nta<>0 then goto L370
 00490   read #1,using L390,key=lpad$(str$(teno),8): em1$ nokey LYNES
 00500 ! calc total(s)
-00510   let tc3=tc3+c3
-00520   let tc4=tc4+c4
-00530   let tc5=tc5+c5
-00540   let tc6=tc6+c6
-00550   let tc7=tc7+c7
-00560   let tc8=tc8+c8
-00570   let tc9=tc9+c9
+00510   tc3=tc3+c3
+00520   tc4=tc4+c4
+00530   tc5=tc5+c5
+00540   tc6=tc6+c6
+00550   tc7=tc7+c7
+00560   tc8=tc8+c8
+00570   tc9=tc9+c9
 00580   pr #255,using L260: teno,em1$,round(c3,2),round(c4,2),round(c5,2),round(c6,2),round(c7,2),round(c8,2),round(c9,2) pageoflow NPG
 00590   goto LYNES
 00600 ! ______________________________________________________________________
@@ -76,10 +76,10 @@
 00710 L710: form pos 10,c 25,pos 37,n 19.2
 00720 DONE: ! 
 00730   fncloseprn
-00740 XIT: let fnxit
+00740 XIT: fnxit
 00750 ! ______________________________________________________________________
 00760 ! <Updateable Region: ERTN>
-00770 ERTN: let fnerror(program$,err,line,act$,"xit")
+00770 ERTN: fnerror(program$,err,line,act$,"xit")
 00780   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00790   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00800   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

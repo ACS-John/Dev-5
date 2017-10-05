@@ -8,33 +8,33 @@
 00080 ! ______________________________________________________________________
 00090   fncno(cno)
 00100   fntop(program$,"Renumber Checks")
-00110   cancel=99 : let right=1 : center=2 : on=1 : off=0 !:
+00110   cancel=99 : right=1 : center=2 : on=1 : off=0 !:
         left=0
 00120   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #20,using 'Form POS 417,N 1': rcn !:
         close #20: 
 00130   open #trmstr:=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno),internal,outin,keyed 
 00140   open #tralloc:=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-idx.h"&str$(cno),internal,outin,keyed 
-00150 L150: let fntos(sn$='RmTrans-'&str$(rcn)) !:
-        let mylen=30 : let mypos=mylen+3 : lc=0
+00150 L150: fntos(sn$='RmTrans-'&str$(rcn)) !:
+        mylen=30 : mypos=mylen+3 : lc=0
 00160   fnlbl(lc+=1,1,"First Check Number to Renumber:",mylen,right)
 00170   fntxt(lc,mypos,10,0,0,'30') !:
-        let resp$(1)=""
+        resp$(1)=""
 00180   fnlbl(lc+=1,1,"Last Check Number to Renumber:",mylen,right)
 00190   fntxt(lc,mypos,10,0,0,'30') !:
-        let resp$(2)=""
+        resp$(2)=""
 00200   fnlbl(lc+=1,1,"First New Check Number to Use:",mylen,right)
 00210   fntxt(lc,mypos,10,0,0,'30') !:
-        let resp$(3)=""
+        resp$(3)=""
 00220   fnlbl(lc+=1,1,"Bank Account Number:",mylen,right)
 00230   fntxt(lc,mypos,2,0,0,'30') !:
-        let resp$(4)=""
+        resp$(4)=""
 00240   fncmdset(2)
 00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 or ckey=cancel then goto XIT else !:
           let firstold=val(resp$(1)) !:
           lastold=val(resp$(2)) !:
-          let newnumber=firstnew=val(resp$(3)) !:
+          newnumber=firstnew=val(resp$(3)) !:
           bankaccount=val(resp$(4))
 00270   if firstold=0 or lastold=0 or newnumber=0 or bankaccount=0 then goto L150
 00280 READ_TRMSTR: ! 
@@ -46,7 +46,7 @@
 00340   if tcde<>1 then goto L300
 00350   rewrite #trmstr,using 'Form POS 1,G 2,G 1,n 8': bank_code,tcde,newnumber
 00360   restore #tralloc: 
-00370   let key$=cnvrt$('Pic(ZZ)',bank_code)&str$(tcde)&tr$(1) !:
+00370   key$=cnvrt$('Pic(ZZ)',bank_code)&str$(tcde)&tr$(1) !:
         restore #tralloc,key>=key$: nokey EO_TRALLOC
 00380 READ_TRALLOC: ! 
 00390   read #tralloc,using 'Form POS 1,C 11,C 12,PD 5.2,C 30,G 6,X 3,C 12,N 1': newkey$,gl$,amt,de$,ivd,po$,postd eof EO_TRALLOC
@@ -54,7 +54,7 @@
 00410 L410: rewrite #tralloc,using 'Form POS 4,n 8': newnumber
 00420   goto READ_TRALLOC
 00430 EO_TRALLOC: ! 
-00440   let newnumber+=1
+00440   newnumber+=1
 00450   goto READ_TRMSTR
 00460 ! ______________________________________________________________________
 00470 END1: ! 
@@ -66,10 +66,10 @@
 00530   execute "Index "&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TrAlloc-idx.H"&str$(cno)&" 1 11 Replace DupKeys -n"
 00540   goto XIT
 00550 ! ______________________________________________________________________
-00560 XIT: let fnxit
+00560 XIT: fnxit
 00570 ! ______________________________________________________________________
 00580 ! <Updateable Region: ERTN>
-00590 ERTN: let fnerror(program$,err,line,act$,"xit")
+00590 ERTN: fnerror(program$,err,line,act$,"xit")
 00600   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00610   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00620   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

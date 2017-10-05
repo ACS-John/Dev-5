@@ -16,10 +16,10 @@
  !
  def fndeletelistviewrecord(&ExitMode,DataFile,mat f$,&RepopulateListview;___,Recorddescription$*255)
     if udim(f$)>1 then
-       let RecordDescription$=f$(1)
+       recordDescription$=f$(1)
     end if
     if udim(f$)>2 then
-       let RecordDescription$=RecordDescription$&","&f$(2)
+       recordDescription$=RecordDescription$&","&f$(2)
     end if
     if 2=msgbox("Are you sure you wish to delete the current record?: "&RecordDescription$,"Delete Record?","yN","EXCL") then
        reread #Datafile, using form$(Datafile) : mat f$, mat f

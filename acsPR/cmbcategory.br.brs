@@ -12,10 +12,10 @@
 12180     let fen$="CcategoryALL.h"&env$('cno')
 12200   end if 
 12220   if indexfile$="" then 
-12240     let if$=env$('Q')&"\PRmstr\categoryidx.h"&env$('cno') 
+12240     if$=env$('Q')&"\PRmstr\categoryidx.h"&env$('cno') 
 12260   else 
-12280     let if$=indexfile$
+12280     if$=indexfile$
 12300   end if
 12320   fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\category.h"&env$('cno'),1,5,6,30,if$,1+addall,0,"Select from the list of Category records. To add a Category record, take the Add option.",container)
-12340   let indexfile$=""
+12340   indexfile$=""
 12360 fnend 

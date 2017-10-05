@@ -7,7 +7,7 @@
 00100     dim fio1$(22)*76,header$*80
 00110     let q$=rtrm$(q$)
 00120     for j=1 to udim(option$)
-00130       let mxwo=max(mxwo,len(option$(j)))
+00130       mxwo=max(mxwo,len(option$(j)))
 00140     next j
 00150     let win_width=mxwo+len(q$)+3
 00160     let win_height=udim(option$)+2
@@ -20,10 +20,10 @@
 00230     fnwin3b(win,cap$,win_height,win_width,display_cnam,button_option,win_align,pr_newpg)
 00240     pr #win,fields str$(wline+1)&",2,C "&str$(len(q$))&",N": q$
 00250     rinput #win,select mat fio1$,attr "H": mat option$
-00260     let response$=str$(curfld)
+00260     response$=str$(curfld)
 00270     if cmdkey=1 and button_option<=1 then goto L310
 00280     for j=1 to 100
-00290       if cmdkey=j then let response$="F"&str$(curfld)
+00290       if cmdkey=j then response$="F"&str$(curfld)
 00300     next j
 00310 L310: close #win: ioerr L320
 00320 L320: fnend 

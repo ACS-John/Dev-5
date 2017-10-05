@@ -48,26 +48,26 @@
 00390   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno')&",Shr",internal,input,relative 
 00400   read #11,using "form pos 1,x 16,x 32,n 8",rec=1: d1 norec ignore
 00410   close #11: 
-00420   let dat$=cnvrt$("pic(########)",d1)
-00430   let dat=val(dat$(5:6))*10000 +val(dat$(7:8))*100 +val(dat$(3:4)) ! set payroll date back to mmddyy format for some files
+00420   dat$=cnvrt$("pic(########)",d1)
+00430   dat=val(dat$(5:6))*10000 +val(dat$(7:8))*100 +val(dat$(3:4)) ! set payroll date back to mmddyy format for some files
 00440 ! ______________________________________________________________________
 00450 ASK_EMPLOYEE_NO: ! 
 00460   if reverse_all=1 then goto L730
 00470   fntos(sn$="Prrevcal")
-00472   let respc=0
+00472   respc=0
 00480   fnlbl(1,1,"Employee to Reverse:",25,1)
 00490   fncombof("Employee",1,28,0,env$('Q')&"\PRmstr\rpmstr.h"&env$('cno'),1,8,9,20,env$('Q')&"\PRmstr\Rpindex.h"&env$('cno'),2,0, "Select the employee to reverse.")
-00492   let resp$(respc+=1)="[All]"
+00492   resp$(respc+=1)="[All]"
 00500   fnlbl(2,1,"Payroll Date:",25,1)
 00510   fntxt(2,28,12,0,1,"3",0,"You can reverse a check from any pay period.  Be sure the payroll date is correct.")
-00520   let resp$(respc+=1)=str$(d1)
+00520   resp$(respc+=1)=str$(d1)
 00530   fnlbl(3,1,"Check Number:",25,1)
 00540   fntxt(3,28,8,0,1,"30",0,"Only applicable if checks have been printed. ")
-00550   let resp$(respc+=1)= ""
+00550   resp$(respc+=1)= ""
 00560   if exists(env$('Q')&'\CLmstr\BankMstr.h'&env$('cno')) then 
 00570     fnlbl(4,1,"Bank Code for Checkbook:",25,1)
 00580     fncombof('Bank',4,28,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list,0,'',frame)
-00582     let resp$(resp_cl_bank_code=respc+=1)=str$(bcde)
+00582     resp$(resp_cl_bank_code=respc+=1)=str$(bcde)
 00584   end if 
 00590   if success=1 then 
 00592     fnlbl(6,1,"Employee Number "&str$(eno)&" successfully reversed!",40,1)
@@ -78,12 +78,12 @@
 00620   fnacs(sn$,0,mat resp$,ckey) ! ask employee #
 00630   if ckey=5 then goto XIT
 00640   success=0
-00650   if resp$(1)="[All]" then let reverse_all=1 : goto L670
+00650   if resp$(1)="[All]" then reverse_all=1 : goto L670
 00660   eno=val(resp$(1)(1:8))
-00670 L670: let d1=val(resp$(2))
+00670 L670: d1=val(resp$(2))
 00680   if d1=0 then 
 00682     mat ml$(2)
-00684     let ml$(1)="You must enter the payroll date!"
+00684     ml$(1)="You must enter the payroll date!"
 00686     fnmsgbox(mat ml$,resp$,cap$,0)
 00688     goto ASK_EMPLOYEE_NO
 00689   end if 
@@ -132,34 +132,34 @@
 01080  goto XIT
 01090 ! /r
 01100 REVERSE_BANK_REC: ! r:
-01110   let hw1=0
+01110   hw1=0
 01120   if gli<>1 then goto L1170
 01130   bk$=bankgl$&lpad$(str$(w1),12)
 01140   rewrite #14,using L1150,key=bk$: 0 nokey L1170
 01150 L1150: form pos 63,pd 5.2
-01160   let hw1=w1
+01160   hw1=w1
 01170 L1170: ! 
 01180   return  ! /r
 01190 L1190: mat ml$(2) 
-01192   let ml$(1)="Employee Number "&ltrm$(x$)&" does not exist!" 
-01194   let ml$(2)="Please select a different Employee Number." 
+01192   ml$(1)="Employee Number "&ltrm$(x$)&" does not exist!" 
+01194   ml$(2)="Please select a different Employee Number." 
 01196   fnmsgbox(mat ml$,resp$,cap$,0)
 01200   goto ASK_EMPLOYEE_NO
 01210 ! ______________________________________________________________________
 01220 L1220: mat ml$(2) 
-01222   let ml$(1)="No information found for Employee Number "&ltrm$(x$) 
-01224   let ml$(2)="Please select a different Employee Number." 
+01222   ml$(1)="No information found for Employee Number "&ltrm$(x$) 
+01224   ml$(2)="Please select a different Employee Number." 
 01226   fnmsgbox(mat ml$,resp$,cap$,0)
 01230   goto ASK_EMPLOYEE_NO
 01240 ! ______________________________________________________________________
 01250 UPDATE_CHECKBOOK: ! r:
 01260   if bcde=0 and w1=0 then goto L1510 ! no bank info
-01270   let k$=cnvrt$("N 2",bcde)&"1"&lpad$(str$(w1),8)
+01270   k$=cnvrt$("N 2",bcde)&"1"&lpad$(str$(w1),8)
 01280   read #6,using L1320,key=k$: bcde,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd nokey L1300
 01290   goto L1320
 01300 L1300: mat ml$(2) 
-01302   let ml$(1)="Did not find check # "&str$(w1)&" in the Check " 
-01304   let ml$(2)="Book system. Will proceed without voiding." 
+01302   ml$(1)="Did not find check # "&str$(w1)&" in the Check " 
+01304   ml$(2)="Book system. Will proceed without voiding." 
 01306   fnmsgbox(mat ml$,resp$,cap$,0)
 01310   goto L1510
 01320 L1320: form pos 1,n 2,n 1,c 8,g 6,pd 10.2,c 8,c 35,n 1,n 6,n 1
@@ -168,9 +168,9 @@
 01350 L1350: form pos 45,2*pd 6.2
 01360   bal=bal+tr3
 01370   rewrite #9,using L1350,key=cnvrt$("N 2",bcde): bal
-01380   let tr3=0
-01390 L1390: let tr$(3)=tr$(4)=""
-01400   let tr$(5)="VOID"
+01380   tr3=0
+01390 L1390: tr$(3)=tr$(4)=""
+01400   tr$(5)="VOID"
 01410   adr=tr(1)
 01420   mat tr=(0)
 01430   if clr=0 then clr=cd1
@@ -190,10 +190,10 @@
 01580 ! /r
 01590 POSTGL0: ! r:
 01600   mat ml$(2) 
-01602   let ml$(1)="Do you wish to create reversing" 
-01604   let ml$(2)="General Ledger entries? (Y/N)?" 
+01602   ml$(1)="Do you wish to create reversing" 
+01604   ml$(2)="General Ledger entries? (Y/N)?" 
 01606   fnmsgbox(mat ml$,resp$,cap$,292)
-01610   if resp$(1:1)="Y" then let pgl1=1 else let pgl1=0
+01610   if resp$(1:1)="Y" then pgl1=1 else pgl1=0
 01620   if pgl1=1 then gosub POSTGL1
 01630   return  ! /r
 01640 ! ______________________________________________________________________
@@ -208,14 +208,14 @@
 01730   if glb=2 then gosub L3690
 01740   L1740: !
 01780   fntos(sn$="Prrevcal2")
-01782   let respc=0
+01782   respc=0
 01790   fnlbl(1,1,"General Ledger Posting Date:",25,1)
 01800   fntxt(1,28,12,0,1,"3",0,"If this revesing entry should be posted to the general ledger, what date should be used?")
 01810   fncmdkey("&Next",1,1,0,"Proceed with reversing entry." )
 01812   fncmdkey("E&xit",5,0,1,"Don't Post")
 01820   fnacs(sn$,0,mat resp$,ckey) ! posting date
 01830   if ckey<>5 then 
-01840     let dat1=val(resp$(1))
+01840     dat1=val(resp$(1))
 01850     if glb=2 then let glwk$=env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dat1)&".H"&env$('cno')
 01860     if glb><2 then let glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
 01870     if glb=2 and uprc$(rtrm$(accrue$))="Y" then open #11: "Name="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",d2)&".H"&env$('cno')&",RecL=104,USE",internal,output 
@@ -223,25 +223,25 @@
 01890     read #1,using 'form pos 1,c 40,pos 437,15*c 12': a$,mat prgl$
 01910     close #1: 
 01920     for j=1 to 15
-01930       let prgl(j,1)=val(prgl$(j)(1:3))
-01940       let prgl(j,2)=val(prgl$(j)(4:9))
-01950       let prgl(j,3)=val(prgl$(j)(10:12))
+01930       prgl(j,1)=val(prgl$(j)(1:3))
+01940       prgl(j,2)=val(prgl$(j)(4:9))
+01950       prgl(j,3)=val(prgl$(j)(10:12))
 01960     next j
-01970     let nametab=36-len(rtrm$(a$))/2
+01970     nametab=36-len(rtrm$(a$))/2
 01980     fnopenprn
 01990     gosub glDistHeaders
 02000   end if
 02010 return  ! /r
 02020 POSTGL2: ! r:
 02030   oldteno=teno
-02040   let rec1=ta(1)
+02040   rec1=ta(1)
 02050   L2050: if rec1=0 then goto L2340
 02060   read #2,using L2070,rec=rec1: teno,mat tgl,dat,mat tcp,nta
 02070   L2070: form pos 1,n 8,x 3,n 3,n 6,n 3,pos 42,n 6,pos 358,22*pd 5.2,pos 468,pd 3
 02080   if dat><d1 then goto L2340
 02090   if tgl(2)=0 then goto L2340
 02100   if mastercd=0 then gosub OPNWORK_DUESTUFF
-02110   let tgl$=lpad$(str$(tgl(1)),3)&lpad$(str$(tgl(2)),6)&lpad$(str$(tgl(3)),3)
+02110   tgl$=lpad$(str$(tgl(1)),3)&lpad$(str$(tgl(2)),6)&lpad$(str$(tgl(3)),3)
 02120   if tgl(1)=0 or tgl(1)=oldtgl then goto L2130 else gosub OPNWORK_DUESTUFF
 02130   L2130: if oldteno=teno then goto L2160
 02140   eno$=lpad$(str$(teno),8)
@@ -252,28 +252,28 @@
 02190   for j=1 to 24 ! ACCUMULATE 24 WITHHOLDINGS
 02200     if j<=4 then goto L2240
 02210     if dedcode(j-4)=1 then goto L2240
-02220     let t(j)=t(j)+tcp(j)
+02220     t(j)=t(j)+tcp(j)
 02230     goto L2250
-02240   L2240: let t(j)=t(j)-tcp(j)
+02240   L2240: t(j)=t(j)-tcp(j)
 02250   L2250: next j
-02260   let t(25)=t(25)+tcp(25) ! EIC
-02270   let t(26)=t(26)-tcp(32) ! ACCUMULATE NET
+02260   t(25)=t(25)+tcp(25) ! EIC
+02270   t(26)=t(26)-tcp(32) ! ACCUMULATE NET
 02280   subtotal=subtotal+tcp(31)-tcp(29)-tcp(30) ! ACCUMULATE TOTAL BY ACCT TO BE POSTED TO GL
-02290   let totaldue=totaldue-tcp(31)+tcp(29)+tcp(30) ! DUE TO PAYROLL CLEARING
-02300   let totaldr=totaldr+tcp(31)-tcp(29)-tcp(30)
-02310   let totalrec=totalrec+tcp(31)-tcp(29)-tcp(30) ! TOTAL DUE FRO OTHER FUNDS
+02290   totaldue=totaldue-tcp(31)+tcp(29)+tcp(30) ! DUE TO PAYROLL CLEARING
+02300   totaldr=totaldr+tcp(31)-tcp(29)-tcp(30)
+02310   totalrec=totalrec+tcp(31)-tcp(29)-tcp(30) ! TOTAL DUE FRO OTHER FUNDS
 02320   mat ttgl=tgl : gosub POSTGL3
-02330   let rec1=nta: goto L2050
+02330   rec1=nta: goto L2050
 02340   L2340: ! 
 02350 return  ! /r
 02360 POSTGL3: ! r: SUBTOTAL ROUTINE AND WRITE GL TRANS
 02370   if glinstal=0 then goto L2460
 02380   if diskin=0 then gosub L3340
-02390   let td$="Payroll summary"
+02390   td$="Payroll summary"
 02400   if uprc$(accrue$)<>"Y" then goto L2440
 02410   accrued=round(subtotal/day*dayslm,2)
 02420   write #11,using L2450: mat ttgl,d2,accrued,5,0,tr$,"Payroll accrual",prgl$(15)
-02430   let totacc=totacc+accrued
+02430   totacc=totacc+accrued
 02440 L2440: write #3,using L2450: mat ttgl,dat,-subtotal+accrued,5,0,tr$,"Reversing "&em$,prgl$(15)
 02450 L2450: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,n 2,n 2,c 12,c 52,c 12
 02460 L2460: pr #255,using L2470: "-----------",-subtotal
@@ -283,7 +283,7 @@
 02500   subtotal=0
 02510   return  ! /r
 02530 glDistHeaders: ! r: headers for General Ledger Distribution for Payroll
-02532   let p1=p1+1
+02532   p1=p1+1
 02540   pr #255,using L2550: date$,a$,"PAGE",p1
 02550 L2550: form skip 1,pos 1,c 8,pos nametab,c 40,pos 77,c 5,pic(zzz),skip 1
 02560   pr #255,using L2570: time$,"General Ledger Distribution for Payroll",dat1
@@ -305,7 +305,7 @@
 02720   if glinstal=0 then goto XIT
 02730   if glb=2 then goto XIT
 02740 let fnchain("S:\acsGL\ACGLMRGE") ! /r
-02750 XIT: let fnxit
+02750 XIT: fnxit
 02760 PGOF: ! r:
 02762   pr #255: newpage
 02770   gosub glDistHeaders
@@ -328,12 +328,12 @@
 02912     pr #255,using L2920: 0," ",gl$(j-11),-t(j) pageoflow PGOF
 02920     L2920: form pos 1,pic(zzzzzzzz),pos 15,c 30,pos 50,c 12,n 12.2,skip 1
 02930     L2930: ! 
-02932     let totaldr=totaldr+t(j)
+02932     totaldr=totaldr+t(j)
 02940     goto L2980
 02950     L2950: ! 
 02952     pr #255,using L2960: 0," ",prgl(j,1),prgl(j,2),prgl(j,3),-t(j) pageoflow PGOF
 02960     L2960: form pos 1,pic(zzzzzzzz),pos 15,c 30,pos 50,pic(zzz),x 1,pic(zzzzz#),x 1,pic(zzz),x 12,n 12.2,skip 1
-02970     let totalcr=totalcr+t(j)
+02970     totalcr=totalcr+t(j)
 02980     L2980: ! 
 02982     if glinstal=0 then goto L3030
 02990     if j<=4 then write #3,using L2450: prgl(j,1),prgl(j,2),prgl(j,3),dat,-t(j),5,0,tr$,td$,prgl$(15)
@@ -351,10 +351,10 @@
 03100   if tgl(1)=0 then goto L3330
 03110   if mastercd=1 then goto L3160
 03120   mat ml$(2) 
-03122   let ml$(1)="The G/L accounts you are using indicate you have seperate funds or" 
-03124   let ml$(2)="cost centers on the system.  Enter yes if you have more than one fund." 
+03122   ml$(1)="The G/L accounts you are using indicate you have seperate funds or" 
+03124   ml$(2)="cost centers on the system.  Enter yes if you have more than one fund." 
 03126   fnmsgbox(mat ml$,resp$,cap$,4)
-03130   if resp$(1:1)="T" then let multigl=1
+03130   if resp$(1:1)="T" then multigl=1
 03140   if multigl><1 then goto L3160
 03160   L3160: if multigl=2 then goto L3330
 03170   ! CREATE DUE TO PAYROLL FUND ENTRIES
@@ -363,18 +363,18 @@
 03200   pr f "11,2,c 60": "ON FUND # "&tgl$(1:3)
 03210   L3210: input fields mat fli2$: mat ttgl conv L3210
 03220   pr #255,using L2960: 0," ",mat ttgl,-totaldue
-03230   let totalcr=totalcr+totaldue
+03230   totalcr=totalcr+totaldue
 03240   gosub PRINT_TOTALS
 03250   gosub glDistHeaders
 03260   if glinstal=0 then goto L3290
 03270   write #3,using L2450: mat ttgl,dat,-totaldue,5,0," ","Reversing Payroll summary",prgl$(15)
 03280   close #3: 
-03290   L3290: let totaldue=0
-03300   let totalcr=0
-03310   let totaldr=0
-03330   L3330: let mastercd=1
+03290   L3290: totaldue=0
+03300   totalcr=0
+03310   totaldr=0
+03330   L3330: mastercd=1
 03340   L3340: if glinstal=0 then goto L3490
-03380   let diskin=1
+03380   diskin=1
 03390   open #3: "Name="&glwk$,internal,outin ioerr L3450
 03400   read #3,using L3410: dat2,trcode eof L3410
 03410   L3410: form pos 13,n 6,pos 25,n 2
@@ -392,7 +392,7 @@
 03540   pr f "11,2,c 60": "ON YOUR CONTROL SET OF BOOKS"
 03550   input fields mat fli2$: mat ttgl conv L3210
 03560   pr #255,using L2180: 0," ",mat ttgl,-totalrec
-03570   let totaldr=totaldr+totalrec
+03570   totaldr=totaldr+totalrec
 03580   if glinstal=0 then goto L3600
 03590   write #3,using L2450: mat ttgl,dat,-totalrec,5,0," ","Reversing Payroll summary",prgl$(15)
 03600 L3600: ! 
@@ -407,35 +407,35 @@
 03692   close #101: ioerr ignore
 03700   open #12: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.H"&env$('cno')&",Shr",internal,input,keyed ioerr ignore
 03720   mat ml$(2) 
-03722   let ml$(1)="Did you accrue part of this payroll" 
-03724   let ml$(2)="in the previous month? (Y/N)" 
+03722   ml$(1)="Did you accrue part of this payroll" 
+03724   ml$(2)="in the previous month? (Y/N)" 
 03726   fnmsgbox(mat ml$,resp$,cap$,36)
 03730   accrue$=resp$(1)(1:1)
 03740   return  ! /r
 03760 ! ACCRUAL: ! r:
 03770 !   fntos(sn$="Prrevcal3") 
-03772   !   let respc=0: let mypos=50
+03772   !   respc=0: mypos=50
 03780 !   fnlbl(1,1,"Number of Days in this Pay Period:",mypos,1)
 03790 !   fntxt(1,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.") 
-03792   !   let resp$(1)=str$(day)
+03792   !   resp$(1)=str$(day)
 03800 !   fnlbl(2,1,"Number of Days to Expense in Last Month:",mypos,1)
 03810 !   fntxt(2,mypos+3,10,0,1,"30",0,"In order to know how much to accure, the system needs to know the days to accure.") 
-03812   !   let resp$(2)=str$(dayslm)
+03812   !   resp$(2)=str$(dayslm)
 03820 !   fnlbl(3,1,"G/L # for Due From Other Funds on Fund # "&oldtgl$(1:3)&":",mypos,1)
 03830 !   fnqgl(3,mypos+3,0,2,pas) 
-03832   !   let resp$(3)=fnrgl$(bankgl$)
+03832   !   resp$(3)=fnrgl$(bankgl$)
 03840 !   fnlbl(4,1,"Last Day of Previous Month:",mypos,1)
 03850 !   fntxt(4,mypos+3,10,0,1,"1",0,"Enter the month end date.") 
-03852   !   let resp$(4)=str$(d2)
+03852   !   resp$(4)=str$(d2)
 03860 !   fncmdkey("&Next",1,1,0,"Continue posting." ) 
 03862   !   fncmdkey("E&xit",5,0,1,"Returns to menu")
 03870 !   fnacs(sn$,0,mat resp$,ckey) ! ask accrual info
 03880 !   if ckey=5 then goto XIT
-03890 !   let day=val(resp$(1)) ! days in pay period
-03900 !   let dayslm=val(resp$(2)) ! days last month
-03910 !   let key$=fnagl$(resp$(3))
+03890 !   day=val(resp$(1)) ! days in pay period
+03900 !   dayslm=val(resp$(2)) ! days last month
+03910 !   key$=fnagl$(resp$(3))
 03920 !   let g1=val(key$(1:3)): let g2=val(key$(4:9)) : let g3=val(key$(10:12))
-03930 !   let d2=val(resp$(4)) ! last day previous month
+03930 !   d2=val(resp$(4)) ! last day previous month
 03940 !   acgl$=cnvrt$("N 3",g1)&cnvrt$("N 6",g2)&cnvrt$("N 3",g3)
 03950 !   if trim$(acgl$)<>"" then read #12,using L3960,key=acgl$: desc$ nokey L3970
 03960 ! L3960: form pos 13,c 30
@@ -456,7 +456,7 @@
 04110   return  ! /r
 04120 IGNORE: continue 
 04130 ! <Updateable Region: ERTN>
-04140 ERTN: let fnerror(program$,err,line,act$,"xit")
+04140 ERTN: fnerror(program$,err,line,act$,"xit")
 04150   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 04160   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 04170   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

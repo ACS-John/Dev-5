@@ -13,23 +13,23 @@
 00130   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00140 ! ______________________________________________________________________
 00150 ASKSUBCAT: ! 
-00160 L160: let fnsubcat_srch(cde$,ckey,fixgrid)
+00160 L160: fnsubcat_srch(cde$,ckey,fixgrid)
 00170   cde$=lpad$(rtrm$(cde$),3)
-00180   if ckey=97 then let ti1=addsubcat=1 : goto ADDREC else !:
+00180   if ckey=97 then ti1=addsubcat=1 : goto ADDREC else !:
           if ckey=98 then goto EDITREC else !:
-            if ckey=3 then read #1,using "Form POS 1,C 3,C 25": cde$,des$ eof L160: cde$=uprc$(lpad$(rtrm$(cde$),3)): let holdcde$=cde$: goto EDITREC
+            if ckey=3 then read #1,using "Form POS 1,C 3,C 25": cde$,des$ eof L160: cde$=uprc$(lpad$(rtrm$(cde$),3)): holdcde$=cde$: goto EDITREC
 00190   if ckey=96 then goto DELETE_RECORD
 00200   if ckey=94 then gosub SUBCAT_LISTING
 00210   if ckey=5 then goto XIT
 00220   goto ASKSUBCAT
 00230 ! ______________________________________________________________________
 00240 ADDREC: ! 
-00250   cde$="": let des$=""
+00250   cde$="": des$=""
 00260   fntos(sn$="Ask-sub-cat") !:
-        let respc=0
+        respc=0
 00270   fnlbl(1,1,"Sub-category #:",16,right)
 00280   fntxt(1,19,3,3,0,"30",0,"Assign any number that has not been used before.") !:
-        let resp$(respc+=1)=""
+        resp$(respc+=1)=""
 00290   fncmdkey("&Next",1,1,0,"Record this sub category record.") !:
         fncmdkey("E&xit",5,0,1,"Returns to main screen.")
 00300   fnacs(sn$,0,mat resp$,ckey) ! add sub-category #
@@ -37,25 +37,25 @@
 00320   cde$=lpad$(rtrm$(resp$(1)),3)
 00330   read #1,using L760,key=cde$: cde$,des$ nokey L350
 00340   goto EDITREC
-00350 L350: write #1,using L760: cde$,des$: let new1=1
+00350 L350: write #1,using L760: cde$,des$: new1=1
 00360   goto EDITREC
 00370   mat ml$(2) !:
-        let ml$(1)="A record with this number already exists!" !:
-        let ml$(2)="Select a different subcategory number." !:
+        ml$(1)="A record with this number already exists!" !:
+        ml$(2)="Select a different subcategory number." !:
         fnmsgbox(mat ml$,resp$,cap$,48) !:
         goto ADDREC
 00380 ! ______________________________________________________________________
 00390 EDITREC: ! 
-00400   let holdcde$=cde$
+00400   holdcde$=cde$
 00410   read #1,using L760,key=cde$: cde$,des$ nokey L420
-00420 L420: let fntos(sn$="Edit-sub-cat") !:
-        let respc=0
+00420 L420: fntos(sn$="Edit-sub-cat") !:
+        respc=0
 00430   fnlbl(1,1,"Sub-category #:",16,right)
 00440   fntxt(1,19,3,3,0,"30",0,"Can be any three digit number.") !:
-        let resp$(respc+=1)=cde$
+        resp$(respc+=1)=cde$
 00450   fnlbl(2,1,"Description:",16,right)
 00460   fntxt(2,19,30,30,0,"",0,"") !:
-        let resp$(respc+=1)=des$
+        resp$(respc+=1)=des$
 00470   fncmdkey("&Next",1,1,0,"Record any changes & return to main screen.") !:
         fncmdkey("&Add",2,0,0,"Save these changes and then add a new record." ) !:
         fncmdkey("&Delete",4,0,0,"Delete this sub-category record." ) !:
@@ -63,12 +63,12 @@
 00480   fnacs(sn$,0,mat resp$,ckey) ! edit sub-category
 00490   if ckey=5 then goto ASKSUBCAT
 00500   cde$=lpad$(rtrm$(resp$(1)),3)
-00510   let des$=resp$(2)
+00510   des$=resp$(2)
 00520   if ckey=4 then goto DELETE_RECORD
 00530   if holdcde$<>cde$ then goto L540 else goto L560
 00540 L540: mat ml$(2) !:
-        let ml$(1)="You are attempting to change the sub-category # from "&holdcde$ !:
-        let ml$(2)="to "&cde$&".  Take OK to continue, else cancel." !:
+        ml$(1)="You are attempting to change the sub-category # from "&holdcde$ !:
+        ml$(2)="to "&cde$&".  Take OK to continue, else cancel." !:
         fnmsgbox(mat ml$,resp$,cap$,48)
 00550   if resp$="OK" then goto L560 else goto EDITREC
 00560 L560: rewrite #1,using L760,key=cde$: cde$,des$ nokey L590
@@ -118,7 +118,7 @@
 01000   pr #255: tab(15);"____  ______________________________"
 01010   return 
 01020 ! ______________________________________________________________________
-01030 XIT: let fnxit
+01030 XIT: fnxit
 01040 ! ______________________________________________________________________
 01050 SRCHEND: ! 
 01060   close #win: ioerr L1070
@@ -127,7 +127,7 @@
 01090   goto ASKSUBCAT
 01100 ! ______________________________________________________________________
 01110 ! <Updateable Region: ERTN>
-01120 ERTN: let fnerror(program$,err,line,act$,"xit")
+01120 ERTN: fnerror(program$,err,line,act$,"xit")
 01130   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01140   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01150   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

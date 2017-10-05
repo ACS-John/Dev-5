@@ -11,14 +11,14 @@
 00110     fncno(cno)
 00120     if addall=0 then let fen$="Csubcat.h"&str$(cno) else !:
             let fen$="CsubcatALL.h"&str$(cno)
-00130     if indexfile$="" then let if$=env$('Q')&"\PRmstr\scindex.h"&str$(cno) else !:
-            let if$=indexfile$
+00130     if indexfile$="" then if$=env$('Q')&"\PRmstr\scindex.h"&str$(cno) else !:
+            if$=indexfile$
 00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\scmstr.h"&str$(cno),1,3,4,25,if$,1+addall,1,"Select from the list of sub-categories. To add a sub-category record, go to the Sub-Category File.",container)
-00150     let indexfile$=""
+00150     indexfile$=""
 00160     goto XIT
 00170 ! ______________________________________________________________________
 00180 ! <Updateable Region: ERTN>
-00190 ERTN: let fnerror(program$,err,line,act$,"xit")
+00190 ERTN: fnerror(program$,err,line,act$,"xit")
 00200     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00210     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00220     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

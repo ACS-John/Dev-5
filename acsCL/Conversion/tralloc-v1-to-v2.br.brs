@@ -10,24 +10,24 @@
 00100     cap$="Checkbook update Trans from v1 to v2"
 00110 ! ______________________________________________________________________
 00120     fnstatus("Updating Checkbook Transaction Allocation from v1 to v2")
-00180 ! let fnwait(101,cap$,message$="Converting: please wait...",0)
+00180 ! fnwait(101,cap$,message$="Converting: please wait...",0)
 00190     fnindex_it(env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno),env$('Q')&"\CLmstr\TrAlloc-Idx.H"&str$(cno),"1 11")
 00200     open #tralloc=1: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno),internal,outin,keyed 
 00210     close #tralloc: 
 00220     open #tralloc: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno),internal,outin,keyed 
 00240     if version(tralloc)=2 then let fnstatus("TrAlloc is already version 2") : goto XIT
-00250     let version(tralloc,2)
+00250     version(tralloc,2)
 00260     goto XIT
 00270 ! ______________________________________________________________________
 00280 ! <Updateable Region: ERTN>
-00290 ERTN: let fnerror(program$,err,line,act$,"NO")
+00290 ERTN: fnerror(program$,err,line,act$,"NO")
 00300     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00310     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00320     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00330 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00340 ! /region
 00350 ! ______________________________________________________________________
-00360 CANCEL: let fnchain('S:\Core\Exit')
+00360 CANCEL: fnchain('S:\Core\Exit')
 00370 ! ______________________________________________________________________
 00380 XIT: ! 
 00390     close #tralloc: 

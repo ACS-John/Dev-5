@@ -10,10 +10,10 @@
 00100   fnaddreceipt
 00110   goto XIT
 00120 ! ______________________________________________________________________
-00130 XIT: let fnxit
+00130 XIT: fnxit
 00140 ! ______________________________________________________________________
 00150 ! <Updateable Region: ERTN>
-00160 ERTN: let fnerror(program$,err,line,act$,"xit")
+00160 ERTN: fnerror(program$,err,line,act$,"xit")
 00170   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00180   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00190   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

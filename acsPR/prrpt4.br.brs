@@ -11,10 +11,10 @@
 00110   fncno(cno,cnam$)
 00120   open #1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\prrptidx.h"&str$(cno)&",Shr",internal,input,keyed 
 00130   fnopenprn(cp,58,220,process)
-00140   let nametab=66-len(rtrm$(cnam$))/2
+00140   nametab=66-len(rtrm$(cnam$))/2
 00150 ! ______________________________________________________________________
 00160   pr newpage
-00170   let message$="Printing:  please wait..."
+00170   message$="Printing:  please wait..."
 00180   on fkey 5 goto L560
 00190   fnwait(101,cap$,message$,1)
 00200 ! ______________________________________________________________________
@@ -54,12 +54,12 @@
 00540 L540: pr #255: newpage
 00550   goto L210
 00560 L560: close #1: ioerr L570
-00570 L570: let fncloseprn
+00570 L570: fncloseprn
 00580 ! ______________________________________________________________________
-00590 XIT: let fnxit
+00590 XIT: fnxit
 00600 ! ______________________________________________________________________
 00610 ! <Updateable Region: ERTN>
-00620 ERTN: let fnerror(program$,err,line,act$,"xit")
+00620 ERTN: fnerror(program$,err,line,act$,"xit")
 00630   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00640   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00650   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -59,13 +59,13 @@
 00590   read #1,using L600,key=eno$: eno$,e$,mat d,mat s,mat w,mat t,mat x,mat u,mat y,mat v,mat z,mat r nokey L540 ioerr L2380
 00600 L600: form pos 1,c 9,c 25,pd 2,n 1,60*pd 4.2,60*pd 5.2,11*pd 3.2
 00610   eno=val(eno$)
-00620   let holdeno$=eno$
+00620   holdeno$=eno$
 00630 L630: pr newpage
 00640   pr f mat fl3$: mat scr3$,mat scrid3$
 00650   pr f mat ot3$: eno$,e$,mat d,mat r
 00660   pr f "24,1,C 80,H,N": "F1=SCREEN 1, F2=SCREEN 2, F3=SCREEN 3, F4=SCREEN 4, F5=COMPLETED"
 00670 L670: input fields mat in3$: x1,e$,mat d,mat r conv L1400
-00680   if cv>0 then let in3$(cv)(cv1:cv2)="U": cv=0
+00680   if cv>0 then in3$(cv)(cv1:cv2)="U": cv=0
 00690   if ti=2 and x1=0 then goto L300
 00700   eno$=lpad$(str$(x1),9)
 00710   if x1=eno or ti>2 then goto L880
@@ -83,7 +83,7 @@
 00830   if ans=2 then goto L1260
 00840   if ans><1 then goto L790
 00850   delete #1,key=holdeno$: nokey L870
-00860   let new1=1
+00860   new1=1
 00870 L870: goto L1260
 00880 L880: on cmdkey goto L630,L890,L990,L1080,L1170 none L890
 00890 L890: scrid4$(1)="EMPLOYEE:"&ltrm$(eno$)&" * "&rtrm$(e$)&" * SCREEN 2 * "&date$&" * "&time$
@@ -94,7 +94,7 @@
 00940   pr f mat ot4$: mat s,mat t,mat u,mat v
 00950   pr f "24,1,C 80,H,N": "F1=SCREEN 1, F2=SCREEN 2, F3=SCREEN 3, F4=SCREEN 4, F5=COMPLETED"
 00960 L960: input fields mat in4$: mat s,mat t,mat u,mat v conv L1480
-00970   if cv>0 then let in4$(cv)(cv1:cv2)="U": cv=0
+00970   if cv>0 then in4$(cv)(cv1:cv2)="U": cv=0
 00980   on cmdkey goto L630,L890,L990,L1080,L1170 none L990
 00990 L990: scrid5$(1)="EMPLOYEE:"&ltrm$(eno$)&" * "&rtrm$(e$)&" * SCREEN 3 * "&date$&" * "&time$
 01000   scrid5$(2)="           NON-CHARGEABLE HOURS - CURRENT           NON-CHARGEABLE HOURS- YTD"
@@ -103,7 +103,7 @@
 01030   pr f mat ot5$: mat w,mat x
 01040   pr f "24,1,C 80,H,N": "F1=SCREEN 1, F2=SCREEN 2, F3=SCREEN 3, F4=SCREEN 4, F5=COMPLETED"
 01050 L1050: input fields mat in5$: mat w,mat x conv L1560
-01060   if cv>0 then let in5$(cv)(cv1:cv2)="U": cv=0
+01060   if cv>0 then in5$(cv)(cv1:cv2)="U": cv=0
 01070   on cmdkey goto L630,L890,L990,L1080,L1170 none L1080
 01080 L1080: scrid6$(1)="EMPLOYEE:"&ltrm$(eno$)&" * "&rtrm$(e$)&" * SCREEN 4 * "&date$&" * "&time$
 01090   scrid6$(2)="         NON-CHARGEABLE AMOUNT - CURRENT           NON-CHARGEABLE AMOUNT - YTD"
@@ -112,7 +112,7 @@
 01120   pr f mat ot6$: mat y,mat z
 01130   pr f "24,1,C 80,H,N": "F1=SCREEN 1, F2=SCREEN 2, F3=SCREEN 3, F4=SCREEN 4, F5=COMPLETED"
 01140 L1140: input fields mat in6$: mat y,mat z conv L1640
-01150   if cv>0 then let in6$(cv)(cv1:cv2)="U": cv=0
+01150   if cv>0 then in6$(cv)(cv1:cv2)="U": cv=0
 01160   on cmdkey goto L630,L890,L990,L1080,L1170 none L1170
 01170 L1170: if ti=2 then goto L1200
 01180   if x1=eno then goto L1250
@@ -120,7 +120,7 @@
 01200 L1200: write #1,using L600: eno$,e$,mat d,mat s,mat w,mat t,mat x,mat u,mat y,mat v,mat z,mat r
 01210   mat d=(0): mat s=(0): mat w=(0): mat t=(0): mat x=(0): mat u=(0): mat y=(0): mat v=(0): mat z=(0): mat r=(0)
 01220   eno$=" ": e$=" "
-01230   let new1=1
+01230   new1=1
 01240   goto L1260
 01250 L1250: rewrite #1,using L600,key=eno$: eno$,e$,mat d,mat s,mat w,mat t,mat x,mat u,mat y,mat v,mat z,mat r
 01260 L1260: goto L440
@@ -130,44 +130,44 @@
 01300   scr3$(4)="EMPLOYEE STATUS"
 01310   for j=1 to 10
 01320     if rtrm$(ccat$(j))="" then goto L1360
-01330     let tcat$=rtrm$(ccat$(j)(1:20))
+01330     tcat$=rtrm$(ccat$(j)(1:20))
 01340     scr3$(j+4)=tcat$&" RATE"
 01350     goto L1370
 01360 L1360: scr3$(j+4)=" "
 01370 L1370: next j
 01380   scr3$(15)="NON - CHARGEABLE RATE"
 01390   return 
-01400 L1400: if cv>0 then let in3$(cv)(cv1:cv2)="U"
+01400 L1400: if cv>0 then in3$(cv)(cv1:cv2)="U"
 01410   cv=cnt+1
 01420   pr f "24,78,C 1": bell
-01430   let in3$(cv)=rtrm$(in3$(cv))
+01430   in3$(cv)=rtrm$(in3$(cv))
 01440   cv1=pos(uprc$(in3$(cv)),"U",1)
 01450   cv2=cv1+1
-01460   let in3$(cv)(cv1:cv1)="CR"
+01460   in3$(cv)(cv1:cv1)="CR"
 01470   goto L670
-01480 L1480: if cv>0 then let in4$(cv)(cv1:cv2)="U"
+01480 L1480: if cv>0 then in4$(cv)(cv1:cv2)="U"
 01490   cv=cnt+1
 01500   pr f "24,78,C 1": bell
-01510   let in4$(cv)=rtrm$(in4$(cv))
+01510   in4$(cv)=rtrm$(in4$(cv))
 01520   cv1=pos(uprc$(in4$(cv)),"U",1)
 01530   cv2=cv1+1
-01540   let in4$(cv)(cv1:cv1)="RC"
+01540   in4$(cv)(cv1:cv1)="RC"
 01550   goto L960
-01560 L1560: if cv>0 then let in5$(cv)(cv1:cv2)="U"
+01560 L1560: if cv>0 then in5$(cv)(cv1:cv2)="U"
 01570   cv=cnt+1
 01580   pr f "24,78,C 1": bell
-01590   let in5$(cv)=rtrm$(in5$(cv))
+01590   in5$(cv)=rtrm$(in5$(cv))
 01600   cv1=pos(uprc$(in5$(cv)),"U",1)
 01610   cv2=cv1+1
-01620   let in5$(cv)(cv1:cv1)="RC"
+01620   in5$(cv)(cv1:cv1)="RC"
 01630   goto L1050
-01640 L1640: if cv>0 then let in6$(cv)(cv1:cv2)="U"
+01640 L1640: if cv>0 then in6$(cv)(cv1:cv2)="U"
 01650   cv=cnt+1
 01660   pr f "24,78,C 1": bell
-01670   let in6$(cv)=rtrm$(in6$(cv))
+01670   in6$(cv)=rtrm$(in6$(cv))
 01680   cv1=pos(uprc$(in6$(cv)),"U",1)
 01690   cv2=cv1+1
-01700   let in6$(cv)(cv1:cv1)="RC"
+01700   in6$(cv)(cv1:cv1)="RC"
 01710   goto L1140
 01720 L1720: pr newpage
 01725   fnopenprn
@@ -175,7 +175,7 @@
 01740   pr f "10,10,c 40,n": "ENTER AS OF DATE FOR EMPLOYEE PROOF LIST"
 01750   pr f "10,52,c 20,n": dat$
 01760 L1760: input fields "10,52,c 20,eu,n": dat$ conv L1760
-01770   let dattab=66-int(len(rtrm$(dat$))/2)
+01770   dattab=66-int(len(rtrm$(dat$))/2)
 01780   pr newpage
 01790   on fkey 5 goto L2140
 01800   pr f "10,20,c 50,h,n": "EMPLOYEE PROOF LIST IN PROCESS"
@@ -213,7 +213,7 @@
 02120   pr #255: newpage
 02130   goto L1830
 02140 L2140: pr #255: newpage
-02150 L2150: let fncloseprn
+02150 L2150: fncloseprn
 02152   goto L300
 02160 L2160: pr #255,using L2161: cnam$
 02161 L2161: form pos 47,cc 40,skip 1
@@ -251,4 +251,4 @@
 02470   pr f "23,3,C 78,N": ""
 02480   pr f "24,3,C 78,N": ""
 02490   retry 
-02500 XIT: let fnxit
+02500 XIT: fnxit

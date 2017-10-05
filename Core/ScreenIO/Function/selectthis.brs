@@ -10,7 +10,7 @@
     let FileSubscript=fnFindSubscript(mat Subscripts$,prefix$,controlname$(controlIndex))
     screenSubscript=fnFindSubscript(mat Subscripts$,"sio_",controlname$(controlIndex))
 
-    let Return$=fnCallScreen$("["&trim$(controlname$(controlindex))&"]")
+    return$=fnCallScreen$("["&trim$(controlname$(controlindex))&"]")
     if len(trim$(Return$)) then
        let f$(FileSubscript)=Return$
        s$(ScreenSubscript)=fnReadUnopenedDescription$(trim$(controlname$(controlindex)),Return$)

@@ -10,13 +10,13 @@
 00100     let z=6 ! height of line
 00110     blankline=2.0
 00120     let q=p=0
-00130     let double=.12
+00130     double=.12
 00140 ! bARCODE$="123567890" ! 345" !67890" ! =z$  kj ! 1,2,3,4,5,6,7,8,9,0 ok
 00145     pr #20: 'Call Print.MyFontBold(1)'
 00150     gosub QUIET
 00160     for a=1 to 10
 00170       barcode=val(barcode$(a:a))
-00180       let p=pos(barcode$,".",a) : if p=a then goto PERIOD ! searching for period
+00180       p=pos(barcode$,".",a) : if p=a then goto PERIOD ! searching for period
 00190       let q=pos(barcode$,"0",a) : if q=a then goto ZERO ! searching for zero
 00200       on barcode goto ONE ,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,ZERO none L210
 00210 L210: next a

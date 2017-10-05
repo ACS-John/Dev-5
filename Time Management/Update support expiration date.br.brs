@@ -109,10 +109,10 @@
 48160   tab$=chr$(9)
 48180   buttonYN=4 : iconQuestion=32 : iconInformation=64 : buttonDefaultTwo=256 
 48200 fnend
-48220 XIT: let fnxit
+48220 XIT: fnxit
 48240 IGNORE: continue 
 48260 ! <Updateable Region: ERTN>
-48280 ERTN: let fnerror(program$,err,line,act$,"xit")
+48280 ERTN: fnerror(program$,err,line,act$,"xit")
 48300   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 48320   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 48340   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

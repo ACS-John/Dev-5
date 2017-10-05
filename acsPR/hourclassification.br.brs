@@ -22,33 +22,33 @@
 00200 BUILD_LAYOUT: ! 
 00210   fncno(cno)
 00220 ! ** Field Labels    ** !:
-        let ic=0 ! temporary Item Counter
+        ic=0 ! temporary Item Counter
 00230   lbl$(ic+=1)="Classication Code" !:
         lbl$(ic+=1)="Classification Name"
 00250 ! ** Text Box / Field Display   Lengths   ** !:
-        let ic=0 ! temporary Item Counter !:
-        let mmddyy=8 !:
+        ic=0 ! temporary Item Counter !:
+        mmddyy=8 !:
         ccyymmdd=10
-00260   let tln(ic+=1)=5 !:
-        let tln(ic+=1)=30
+00260   tln(ic+=1)=5 !:
+        tln(ic+=1)=30
 00280 ! ** Field Types ** !:
-        let ic=0
+        ic=0
 00290   fltyp$(ic+=1)='C' !:
         fltyp$(ic+=1)='C'
 00310 ! ** Field Storage Lengths ** !:
-        let ic=0 !:
-        let mmddyy=6 : ccyymmdd=8
+        ic=0 !:
+        mmddyy=6 : ccyymmdd=8
 00320   sln(ic+=1)=5 !:
         sln(ic+=1)=30
 00340 ! ** Field Masks ** !:
-        let ic=0 !:
-        let pointtwo=32 : let number=30 !:
-        ccyymmdd=3 : let mmddyy=1 : let glnumber=53
-00350   let mask(ic+=1)=0 !:
-        let mask(ic+=1)=0
+        ic=0 !:
+        pointtwo=32 : number=30 !:
+        ccyymmdd=3 : mmddyy=1 : let glnumber=53
+00350   mask(ic+=1)=0 !:
+        mask(ic+=1)=0
 00370 ! ** Storage Positions ** !:
         ! default to the same as order displayed !:
-        let ic=0
+        ic=0
 00380   sp(ic+=1)=1 !:
         sp(ic+=1)=6
 00420   return 
@@ -59,11 +59,11 @@
 00470 ! ______________________________________________________________________
 00490 ! ______________________________________________________________________
 00500 ! <Updateable Region: ERTN>
-00510 ERTN: let fnerror(program$,err,line,act$,"xit")
+00510 ERTN: fnerror(program$,err,line,act$,"xit")
 00520   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00530   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00540   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00550 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00560 ! /region
 00570 ! ______________________________________________________________________
-00600 XIT: let fnxit
+00600 XIT: fnxit

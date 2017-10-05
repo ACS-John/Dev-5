@@ -14,16 +14,16 @@
 20040   fntop(program$)
 20060   let ubstd$="Form Pos 1,C 10,4*C 30,C 12,7*PD 2,11*PD 4.2,4*PD 4,15*PD 5,PD 4.2,PD 4,12*PD 4.2,2*PD 3,C 7,2*C 12,PD 3,10*PD 5.2,78*PD 5,13*PD 4.2,13*N 6,156*PD 4.2,13*N 6,13*PD 4.2,C 1,C 9,C 2,C 17"
 20080   let ubextra$=",n 2,n 7,n 6,n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30"
-20100   let mstrform$=rtrm$(ubstd$)&rtrm$(ubextra$)
+20100   mstrform$=rtrm$(ubstd$)&rtrm$(ubextra$)
 30000 MENU1: ! 
 30020   fntos(sn$="CoTr-1")
-30040   let mylen=5 : let mypos=mylen+2
+30040   mylen=5 : mypos=mylen+2
 30060   fnlbl(1,1,"From:",mylen,1)
-30080   fntxt(1,mypos+.4,50, 0,0,'',1) ! let fncmbcno(1,mypos)
-30100   let resp$(1)=env$('cnam')&' ('&str$(cno)&')'
+30080   fntxt(1,mypos+.4,50, 0,0,'',1) ! fncmbcno(1,mypos)
+30100   resp$(1)=env$('cnam')&' ('&str$(cno)&')'
 30120   fnlbl(2,1,"To:",mylen,1)
 30140   fncmbcno(2,mypos)
-30160   let resp$(2)=''
+30160   resp$(2)=''
 30180   fnlbl(4,10,"(Both companies must be set up in advance)",49,0)
 30200   fncmdset(2)
 30220   fnacs(sn$,0,mat resp$,ck)
@@ -58,11 +58,11 @@
 32740   fnopenprn
 32760   gosub HDR
 34000 MENU2: ! 
-34020   let hcno=cno
-34040 L700: let fntos(sn$="CoTr-2")
+34020   hcno=cno
+34040 L700: fntos(sn$="CoTr-2")
 34060   fnlbl(1,1,"Customer to Transfer:",28,1)
 34080   fncmbact(1,30)
-34100   let resp$(1)=""
+34100   resp$(1)=""
 34120   fncmdset(2)
 34140   fnacs(sn$,0,mat resp$,ck)
 34200   if ck=5 then goto DONE
@@ -73,11 +73,11 @@
 36000 MENU3: ! 
 36020   sn$="CoTr-3"
 36040   fntos(sn$)
-36060   let mylen=28
-36080   let mypos=mylen+2
+36060   mylen=28
+36080   mypos=mylen+2
 36100   fnlbl(3,1,"New Account:",mylen,1)
 36120   fntxt(3,30,10)
-36140   let resp$(1)=z2$
+36140   resp$(1)=z2$
 36180   fnlbl(1,1,"Account "&z2$&" already exists!",0,2)
 36200   fncmdset(2)
 36220   fnacs(sn$,0,mat resp$,ck)
@@ -134,7 +134,7 @@
 50300   close #52: ioerr ignore
 50320   fnindex_sys(co1)
 50340   fnindex_sys(co2)
-61770 XIT: let fnxit ! /r
+61770 XIT: fnxit ! /r
 61790 HDR: ! r:
 61800   pr #255,using "Form POS 1,Cc 80": "Accounts Transferred from Company Number "&str$(co1)&" to Company Number "&str$(co2)
 61810   pr #255,using "Form POS 5,CC 70": date$
@@ -150,7 +150,7 @@
 61920   gosub HDR
 61930 continue  ! /r
 71950 ! <Updateable Region: ERTN>
-71960 ERTN: let fnerror(program$,err,line,act$,"xit")
+71960 ERTN: fnerror(program$,err,line,act$,"xit")
 71970   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 71980   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 71990   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

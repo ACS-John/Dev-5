@@ -13,7 +13,7 @@
           mat X(udim(mat F))
           read #DataFile, using form$(DataFile), rec=LastReadRecord : mat X$, mat X
           delete #DataFile:
-          let RepopulateListviews=1
+          repopulateListviews=1
           currentRec=-1
        end if
     else

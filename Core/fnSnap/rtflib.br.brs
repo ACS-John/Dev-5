@@ -1,28 +1,28 @@
 00010 ! REPLACE RTFLIB_dll.br
 00019   library program$: fnrtf,fnamt$,fntext$ ! library "RTFLIB_dll.br": fnrtf,fnamt$,fntext$
 00020   dim types$(4)*2,styles$(4)*1000,data$(20)*1200,sub$(1)*1000
-00030   let rtffile=126 !:
+00030   rtffile=126 !:
         open #rtffile: "name="&env$('temp')&"\temp.rtf,recl=1000,replace",display,output 
-00040   let types$(1)="H" !:
-        let types$(2)="F" !:
-        let types$(3)="D" !:
-        let types$(4)="T"
+00040   types$(1)="H" !:
+        types$(2)="F" !:
+        types$(3)="D" !:
+        types$(4)="T"
 00050   styles$(1)="li0|ri0|fs18|cfBlue|tc3.25|Header"
 00060   styles$(2)="li0|ri0|fs8|cfRed|tc3.25|Footer"
 00070   styles$(3)="li0.25|ri0|fs10||tl2.5|td3|tl3.2|td4.0|tl4.2|td4.6|tl4.8|td5.4|Data"
-00075   let mask$="pic(ZZZ,ZZ#)"
+00075   mask$="pic(ZZZ,ZZ#)"
 00080   styles$(4)="li0.5|ri0|fs10|tl2.5|td3|tl3.2|td4.0|tl4.2|td4.6|tl4.8|td5.4|Totals"
-00090   let data$(1)="H|\b\tab Title Of Report"
-00100   let data$(2)="F|\tab Page Footer"
-00105   let data$(3)="D|Description |"&fnamt$(1000,mask$,"$")&"|"&fnamt$(2000,mask$,"$")&"|"&fnamt$(3000,mask$,"$")&"|"&fnamt$(4000,mask$,"$")
+00090   data$(1)="H|\b\tab Title Of Report"
+00100   data$(2)="F|\tab Page Footer"
+00105   data$(3)="D|Description |"&fnamt$(1000,mask$,"$")&"|"&fnamt$(2000,mask$,"$")&"|"&fnamt$(3000,mask$,"$")&"|"&fnamt$(4000,mask$,"$")
 00110   for a=4 to 17
-00120     if mod(a,2) then let data$(a)="D|Description |"&fnamt$(1000,mask$)&"|"&fnamt$(2000,mask$)&"|"&fnamt$(3000,mask$)&"|"&fnamt$(4000,mask$) else let data$(a)="D|Description |"&fnamt$(-1000,mask$)&"|"&fnamt$(-2000,mask$)&"|"&fnamt$(-3000,mask$)&"|"&fnamt$(-4000,mask$)
+00120     if mod(a,2) then data$(a)="D|Description |"&fnamt$(1000,mask$)&"|"&fnamt$(2000,mask$)&"|"&fnamt$(3000,mask$)&"|"&fnamt$(4000,mask$) else data$(a)="D|Description |"&fnamt$(-1000,mask$)&"|"&fnamt$(-2000,mask$)&"|"&fnamt$(-3000,mask$)&"|"&fnamt$(-4000,mask$)
 00130   next a
-00135   let data$(18)="D|"&fntext$("Description that is longer than the allowed size of the data space and needs to be out on multiple lines",30)&"|"&fnamt$(1000,mask$," ","s")&"|"&fnamt$(2000,mask$," ","s")&"|"&fnamt$(3000,mask$," ","s")&"|"&fnamt$(4000,mask$," ","s")
-00140   let data$(19)="T|Total|"&fnamt$(18000,mask$,"$","d")&"|"&fnamt$(36000,mask$,"$","d")&"|\cfRed "&fnamt$(54000,mask$,"$","d")&"|"&fnamt$(72000,mask$,"$","d")
+00135   data$(18)="D|"&fntext$("Description that is longer than the allowed size of the data space and needs to be out on multiple lines",30)&"|"&fnamt$(1000,mask$," ","s")&"|"&fnamt$(2000,mask$," ","s")&"|"&fnamt$(3000,mask$," ","s")&"|"&fnamt$(4000,mask$," ","s")
+00140   data$(19)="T|Total|"&fnamt$(18000,mask$,"$","d")&"|"&fnamt$(36000,mask$,"$","d")&"|\cfRed "&fnamt$(54000,mask$,"$","d")&"|"&fnamt$(72000,mask$,"$","d")
 00150   fnrtf(mat types$,mat styles$,mat data$,rtffile)
 00157   dim rtffile$*250
-00158   let rtffile$=file$(rtffile)
+00158   rtffile$=file$(rtffile)
 00159   close #rtffile: 
 00160   execute "sys "&env$("PD")&"spoolbat.bat "&rtffile$&" WORD"
 00170   stop 
@@ -30,22 +30,22 @@
 00199 ! 
 00200 ! 
 00201 ! 
-00210   let datfmt$="MM-DD-CCYY" !:
-        let maxsrows=22 !:
+00210   datfmt$="MM-DD-CCYY" !:
+        maxsrows=22 !:
         ssav=103 !:
         let windev=owindev=69 !:
-        let mga$="24,2,c 78," !:
-        let pfk=23 !:
+        mga$="24,2,c 78," !:
+        pfk=23 !:
         ! Common Variables Almost Always Required By Fnsnap
-00220   let pgup=90 : let pgdn=91 : event=98 !:
+00220   pgup=90 : pgdn=91 : event=98 !:
         esc=99 : let up=102 : left=103 !:
-        let dn=104 : let home=112 !:
+        dn=104 : home=112 !:
         end=113
-00221   click=201 : let dblclick=202 !:
-        let help=100 : let rtclick=100 !:
-        let rtdblclick=100
-00222   let upfld=105 : let dnfld=106 : let foflow=107 !:
-        let right=109 : left=108 : let home=112 !:
+00221   click=201 : dblclick=202 !:
+        help=100 : rtclick=100 !:
+        rtdblclick=100
+00222   let upfld=105 : dnfld=106 : let foflow=107 !:
+        right=109 : left=108 : home=112 !:
         end=113 : fldplus=114 : fldminus=115
 00500   return 
 50000 ! DEF LIBRARY FNRTF(MAT TYPES$,MAT STYLES$,MAT CELLS$,TXTFILE,RTFFILE;LMARGIN,RMARGIN,LEFTTEXT$,NUME,LANDSCAPE)
@@ -68,9 +68,9 @@
           ! this file should be a display file with an ".rtf" suffix
 50050     library env$("PD")&"Core\fnsnap\RTFLIB_dll.br": fnamt$,fntext$,fntype
 50051     orientation$="PORTRAIT" !:
-          let paper$="LETTER" !:
+          paper$="LETTER" !:
           lmargin=rmargin=tmargin=bmargin=0.5 !:
-          let nume=0
+          nume=0
 50052     mat styles$(1)=("") !:
           mat cells$(1)=("") !:
           mat types$(1)=("") !:
@@ -82,7 +82,7 @@
 50056     execute "proc *"&specfile$
 50057     setspec=0
 50058     if uprc$(trim$(orientation$))="LANDSCAPE" then landscape=1 else landscape=0
-50060     let t=udim(mat types$) !:
+50060     t=udim(mat types$) !:
           crlf$=chr$(13)&chr$(10)
 50070     dim s$(1)*2000,se$(1)*1000,colors$(19),data$*32000,bold$(1),fs$*100,fc$*100,sa$*100
 50071     dim types$(1)*2,styles$(1)*1000,cells$(1)*1000,lefttext$*100,papersize$*100
@@ -125,31 +125,31 @@
             let xe=pos(data$,")",xs)-1 !:
             let x=val(data$(xs:xe)) !:
             pr #rtffile: "\sect \sectd \sbknone\linex0\cols"&str$(x)&"\sectdefaultcl " !:
-            let data$=srep$(data$,"[RTFCOL("&str$(x)&")]","")
+            data$=srep$(data$,"[RTFCOL("&str$(x)&")]","")
 50127     if pos(data$,"[RTFCOLL(") then let xs=pos(data$,"[RTFCOLL(")+9 !:
             let xe=pos(data$,")",xs)-1 !:
             let x=val(data$(xs:xe)) !:
             pr #rtffile: "\sect \sectd \sbknone\linex0\cols"&str$(x)&"\linebetcol\sectdefaultcl " !:
-            let data$=srep$(data$,"[RTFCOLL("&str$(x)&")]","")
+            data$=srep$(data$,"[RTFCOLL("&str$(x)&")]","")
 50128     if pos(data$,"[WD(") then let xs=pos(data$,"[WD(")+4 !:
             let xe=pos(data$,")]",xs)-1 !:
             let x=val(data$(xs:xe)) !:
-            let data$=srep$(data$,"[WD("&str$(x)&")]",'{{\field{\*\fldinst SYMBOL '&str$(x)&' \\f "Wingdings" \\s 17}{\fldrslt\f14}}}') !:
+            data$=srep$(data$,"[WD("&str$(x)&")]",'{{\field{\*\fldinst SYMBOL '&str$(x)&' \\f "Wingdings" \\s 17}{\fldrslt\f14}}}') !:
             ! Insert WingDing symbol
 50130     if trim$(data$)<="" then pr #rtffile: "\par " !:
             goto BUILD_RTF
-50135     let data$=srep$(data$,chr$(9),"|")
+50135     data$=srep$(data$,chr$(9),"|")
 50140     if data$(1:1)="N" and pos(data$,"|")=3 then !:
-            let newdata=1 !:
-            let data$=data$(2:len(data$)) !:
+            newdata=1 !:
+            data$=data$(2:len(data$)) !:
           else !:
-            let newdata=0
+            newdata=0
 50142     if laststyle=1 and pos("0123456789",data$(1:1)) then pr #prntfil: "\pard \ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0"&crlf$
-50150     let data$=fnrtfcolor$(data$)
+50150     data$=fnrtfcolor$(data$)
 50160     if data$(1:2)="D|" then 
 50170       let x=len(data$)
 50180       if x<30 and data$(x:x)=":" then !:
-              let data$=data$(1:2)&"{\b "&data$(3:len(data$))&"}"
+              data$=data$(1:2)&"{\b "&data$(3:len(data$))&"}"
 50190     end if 
 50200 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
           ! ?Format Detail Step Section Code E                            ?:
@@ -157,77 +157,77 @@
 50212       if checklist>0 then 
 50213         linecnt+=1 !:
               if pos(data$(1:7),".")>1 or pos(data$(1:7),")")>1 then !:
-                let numplc=pos(data$," ") else !:
-                let numplc=0
+                numplc=pos(data$," ") else !:
+                numplc=0
 50214         if nume then !:
-                let data$=data$(1:2)&"\tab "&str$(linecnt)&".)"&"\tab "&fntext$(data$(3:len(data$)),50)&"\tab "&lefttext$&"[RTFLINE]" !:
-              else if numplc>0 then let data$=data$(1:numplc-1)&"\tab    "&fntext$(ltrm$(data$(numplc:len(data$))),50)&"\tab "&lefttext$&"[RTFLINE]" !:
-              else let data$=fntext$(ltrm$(data$),50)&"\tab "&lefttext$&"[RTFLINE]"
+                data$=data$(1:2)&"\tab "&str$(linecnt)&".)"&"\tab "&fntext$(data$(3:len(data$)),50)&"\tab "&lefttext$&"[RTFLINE]" !:
+              else if numplc>0 then data$=data$(1:numplc-1)&"\tab    "&fntext$(ltrm$(data$(numplc:len(data$))),50)&"\tab "&lefttext$&"[RTFLINE]" !:
+              else data$=fntext$(ltrm$(data$),50)&"\tab "&lefttext$&"[RTFLINE]"
 50219     else 
 50220       let x=0 !:
             let x=val(data$(3:7)) conv L50240
 50230       if x>0 then !:
-              let data$=data$(1:2)&"{\par\b "&data$(3:6)&"}"&data$(7:len(data$))
+              data$=data$(1:2)&"{\par\b "&data$(3:6)&"}"&data$(7:len(data$))
 50240 L50240: if data$(3:len(data$))="Cause" then !:
-              let data$(3:len(data$))="  "&data$(3:len(data$)) else !:
-              let data$=srep$(data$,"Cause ","  Cause [RTFLINE]")
+              data$(3:len(data$))="  "&data$(3:len(data$)) else !:
+              data$=srep$(data$,"Cause ","  Cause [RTFLINE]")
 50250       if data$(3:len(data$))="Remedy" then !:
-              let data$(3:len(data$))="  "&data$(3:len(data$)) else !:
-              let data$=srep$(data$,"Remedy ","  Remedy [RTFLINE]")
+              data$(3:len(data$))="  "&data$(3:len(data$)) else !:
+              data$=srep$(data$,"Remedy ","  Remedy [RTFLINE]")
 50300     end if 
 50310   else linecnt=0 ! END IF
 50319 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?Create special processing for PROGRAM G lines                ?:
 50320   if uprc$(data$(1:1))="G" then 
-50330     let data$=srep$(data$,"!:","!:[RTFLINE]")
+50330     data$=srep$(data$,"!:","!:[RTFLINE]")
 50340   end if 
 50349 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?Perform bracket replacement parameters                       ?:
-50350   let data$=srep$(data$,"[RTFPAGE]","\page ")
-50360   let data$=srep$(data$,"[RTFLINE]","\line ")
-50370   let data$=srep$(data$,"[RTFDATE]",date$("Month DD, CCYY"))
+50350   data$=srep$(data$,"[RTFPAGE]","\page ")
+50360   data$=srep$(data$,"[RTFLINE]","\line ")
+50370   data$=srep$(data$,"[RTFDATE]",date$("Month DD, CCYY"))
 50380 ! 
 50390 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?Draw box around text following this point                    ?:
 50400   if pos(data$,"[RTFBOX]")>0 then !:
-          let rtfbox=1 !:
-          let data$=srep$(data$,"[RTFBOX]","") !:
-          let d$=""
+          rtfbox=1 !:
+          data$=srep$(data$,"[RTFBOX]","") !:
+          d$=""
 50410 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?End the box started by prior line                            ?:
 50420   if pos(data$,"[\RTFBOX]")>0 then !:
-          let rtfbox=0 !:
-          let data$=srep$(data$,"[\RTFBOX]","") !:
-          let d$=""
+          rtfbox=0 !:
+          data$=srep$(data$,"[\RTFBOX]","") !:
+          d$=""
 50430 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?Create a line above text                                     ?:
 50440   if pos(data$,"[TOPLINE]")>0 then !:
-          let data$=srep$(data$,"[TOPLINE]","") !:
-          let topline=1 !:
-          let d$=""
+          data$=srep$(data$,"[TOPLINE]","") !:
+          topline=1 !:
+          d$=""
 50450   if pos(data$,"[\TOPLINE]")>0 then !:
-          let data$=srep$(data$,"[\TOPLINE]","") !:
-          let topline=0 !:
-          let d$=""
+          data$=srep$(data$,"[\TOPLINE]","") !:
+          topline=0 !:
+          d$=""
 50460 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?Create a line below text                                     ?:
 50470   if pos(data$,"[BOTLINE]")>0 then !:
-          let data$=srep$(data$,"[BOTLINE]","") !:
+          data$=srep$(data$,"[BOTLINE]","") !:
           botline=1 !:
-          let d$=""
+          d$=""
 50480   if pos(data$,"[\BOTLINE]")>0 then !:
-          let data$=srep$(data$,"[\BOTLINE]","") !:
+          data$=srep$(data$,"[\BOTLINE]","") !:
           botline=0 !:
-          let d$=""
+          d$=""
 50490 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?Create a line in the middle of a box. Verticle lines are     ?:
 50500   if pos(data$,"[MIDLINE]")>0 then !:
-          let midline=1 !:
-          let data$=srep$(data$,"[MIDLINE]","") !:
-          let d$=""
+          midline=1 !:
+          data$=srep$(data$,"[MIDLINE]","") !:
+          d$=""
 50510   if pos(data$,"[\MIDLINE]")>0 then !:
-          let midline=0 !:
-          let data$=srep$(data$,"[\MIDLINE]","") : let d$=""
+          midline=0 !:
+          data$=srep$(data$,"[\MIDLINE]","") : d$=""
 50520 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ? Create a header to appear at the top of every page          ?:
 50530   if uprc$(data$(1:1))="H" then 
@@ -242,10 +242,10 @@
 50610   end if 
 50620   if not uprc$(data$(1:1))=d$ then gosub NEW_STYLE
 50630   gosub PICTURE ! pr #RTFFILE: "{\par "&SREP$(DATA$(3:LEN(DATA$)),"|","}{\tab}{ ")&"}"
-50640 L50640: let d$=uprc$(data$(1:1))
+50640 L50640: d$=uprc$(data$(1:1))
 50650   goto BUILD_RTF
 50660 ZBUILD_RTF: pr #rtffile: "}"
-50665   let header=0
+50665   header=0
 50670 fnend 
 50680 ! ==========================================================
 50690 HEADER: ! 
@@ -266,12 +266,12 @@
 50750 else 
 50760   pr #rtffile: "{\header \pard \plain "&s$(srch(mat types$,"H"))&" {"&srep$(srep$(data$(3:len(data$)),"|","}{\tab}{"),"[RTFBAR]","|")&" \par }}"&crlf$
 50770 end if 
-50780 let header+=1
+50780 header+=1
 50790 return 
 50800 FOOTER: ! 
 50810 if topline then 
 50820   pr #rtffile: "{\footer \pard \plain "&srep$(srep$(srep$(s$(srch(mat types$,"F")),"widctlpar","widctlpar\brdrt\brdrs\brdrw10\brsp20 ")&" {"&srep$(data$(3:len(data$)),"[PAGE]","  {{\field{\*\fldinst{\f4  PAGE }}{\fldrslt{\f4 2}}}}"),"|","}{\tab}{ "),"[RTFBAR]","|")&" \par }}"&crlf$
-50830   let topline=0
+50830   topline=0
 50840 else 
 50850   pr #rtffile: "{\footer \pard \plain "&s$(srch(mat types$,"F"))&" {"&srep$(srep$(srep$(data$(3:len(data$)),"[PAGE]","  {{\field{\*\fldinst{\f4  PAGE }}{\fldrslt{\f4 2}}}}"),"|","}{\tab}{"),"[RTFBAR]","|")&" \par }}"&crlf$
 50860 end if 
@@ -297,19 +297,19 @@
 51010     if srch(mat types$,uprc$(data$(1:1)))>0 then pr #rtffile: "\pard \plain "&s$(srch(mat types$,uprc$(data$(1:1))))&crlf$
 51020   end if 
 51030 end if 
-51040 let d$=uprc$(data$(1:1))
+51040 d$=uprc$(data$(1:1))
 51050 return 
 51060 SET_STYLES: ! 
-51070 let perin=1440
+51070 perin=1440
 51080 for a=1 to t
-51090   let text$=trim$(text$)
+51090   text$=trim$(text$)
 51100   ap=0
 51110 ! s$(A)="\s"&STR$(A+10)&"\q1 "
 51120   s$(a)="\s"&str$(a+10)&"\ql "
 51130 ! ----------------------------------
 51140 SET_STYLES_1: ap+=1
-51150   let tx=pos(styles$(a),"|")
-51160   if tx<0 then let tx=len(styles$(a))+1
+51150   tx=pos(styles$(a),"|")
+51160   if tx<0 then tx=len(styles$(a))+1
 51170   ap+=1
 51180 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?First line indent                                            ?:
@@ -452,33 +452,33 @@
 52222 if tmargin>0 then pr #rtffile: "\margt"&str$(ip(tmargin*1440))&crlf$
 52224 if bmargin>0 then pr #rtffile: "\margb"&str$(ip(bmargin*1440))&crlf$
 52230 pr #rtffile: "}"&crlf$ !:
-      let papersize$="\paperw12240\paperh15840"
+      papersize$="\paperw12240\paperh15840"
 52231 if uprc$(trim$(paper$))="LETTER" or paper$<="" then 
 52232   if uprc$(trim$(orientation$))="LANDSCAPE" then !:
-          let papersize$="\paperw15840\paperh12240" else !:
-          let papersize$="\paperw12240\paperh15840"
+          papersize$="\paperw15840\paperh12240" else !:
+          papersize$="\paperw12240\paperh15840"
 52233 end if 
 52234 ! 
 52235 if uprc$(trim$(paper$))="LEGAL" then 
 52236   if uprc$(trim$(orientation$))="LANDSCAPE" then !:
-          let papersize$="\paperw20160\paperh12240" else !:
-          let papersize$="\paperw12240\paperh20160"
+          papersize$="\paperw20160\paperh12240" else !:
+          papersize$="\paperw12240\paperh20160"
 52237 end if 
 52238 pr #rtffile: papersize$&crlf$
 52239 ! IF UPRC$(TRIM$(ORIENTATION$))="LANDSCAPE" THEN pr #RTFFILE: PAPERSIZE$&CRLF$
 52240 pr #rtffile: "\widowctrl\ftnbj\aenddoc\noxlattoyen\expshrtn\noultrlspc\dntblnsbdb\nospaceforul\hyphcaps0\formshade\horzdoc\dgmargin\dghspace180\dgvspace180\dghorigin720\dgvorigin720\dghshow1\dgvshow1"&crlf$
 52245 dim theader$*100
 52246 if theader>0 and tfooter>0 then !:
-        let theader$="\headery"&fntwips$(theader)&"\footery"&fntwips$(tfooter) else if theader>0 then !:
-        let theader$="\headery"&fntwips$(theader) else if tfooter>0 then let theader$="\footery"&fntwips$(tfooter) else !:
-        let theader$=""
+        theader$="\headery"&fntwips$(theader)&"\footery"&fntwips$(tfooter) else if theader>0 then !:
+        theader$="\headery"&fntwips$(theader) else if tfooter>0 then theader$="\footery"&fntwips$(tfooter) else !:
+        theader$=""
 52250 pr #rtffile: "\jexpand\viewkind4\viewscale100\pgbrdrhead\pgbrdrfoot\splytwnine\ftnlytwnine\htmautsp\nolnhtadjtbl\useltbaln\alntblind\lytcalctblwd\lyttblrtgr\lnbrkrule \fet0\sectd \linex0"&theader$&"\endnhere\sectlinegrid360\sectdefaultcl "&crlf$
 52255 ! IF LANDSCAPE=1 THEN pr #RTFFILE: "\lndscpsxn\psz1"
 52256 if landscape=1 then pr #rtffile: "\landscape"
 52260 return 
 52270 def library fnamt$*50(value,mask$*20;sign$,underline$,reverse)
 52280   dim av$*30
-52290   if reverse>0 then let reverse=-1 else let reverse=1
+52290   if reverse>0 then reverse=-1 else reverse=1
 52300   let underline$=uprc$(underline$)
 52310   on pos("SD",underline$) goto SINGLE,DOUBLE none NO_UNDERLINE
 52320 NO_UNDERLINE: ! 
@@ -490,14 +490,14 @@
 52380 DOUBLE: ! 
 52390   if value*reverse<0 then av$=sign$&"(\uldb\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{)" else av$=sign$&"\uldb\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{ "
 52400   goto ZAMT
-52410 ZAMT: let fnamt$=av$
+52410 ZAMT: fnamt$=av$
 52420 fnend 
 52430 def library fntext$*4000(text$*4000,alen)
 52440   dim t$*4000
-52450   let t$=""
-52460 L52460: let text$=trim$(text$)
+52450   t$=""
+52460 L52460: text$=trim$(text$)
 52461   pr text$
-52462   if text$(1:9)="[RTFLINE]" then let text$(1:9)=""
+52462   if text$(1:9)="[RTFLINE]" then text$(1:9)=""
 52463   let xl=min(pos(text$,"[RTFLINE]",9)-1,alen) !:
         if xl<1 then let xl=alen else !:
           if xl>alen then let xl=alen
@@ -505,11 +505,11 @@
 52465 ! PAUSE
 52470   let x=pos(text$&" "," ",xl)
 52480   if x<2 then goto L52520
-52490   if len(t$) then let t$=t$&"\line "&text$(1:x) else let t$=text$(1:x)
-52500   let text$=trim$(text$(x:len(text$)))
+52490   if len(t$) then t$=t$&"\line "&text$(1:x) else t$=text$(1:x)
+52500   text$=trim$(text$(x:len(text$)))
 52510   if len(trim$(text$))>xl then goto L52460
-52520 L52520: ! IF LEN(TEXT$) THEN LET T$=T$&"\line "&TEXT$
-52530   if len(t$)>0 and len(text$) then let t$=t$&"\line "&text$ else if len(text$)>0 then let t$=t$&text$
+52520 L52520: ! IF LEN(TEXT$) THEN t$=T$&"\line "&TEXT$
+52530   if len(t$)>0 and len(text$) then t$=t$&"\line "&text$ else if len(text$)>0 then t$=t$&text$
 52540 let fntext$=t$
 52545 pr t$
 52546 pr "*********************************************"
@@ -525,34 +525,34 @@
 52640 fnend 
 52700 ! --------------------------------
 52710 SET_NEWCELL: ! 
-52720 let ncs=pos(data$,"[NEWCELL(")+9
-52730 let nce=pos(data$,")]",ncs)-1
+52720 ncs=pos(data$,"[NEWCELL(")+9
+52730 nce=pos(data$,")]",ncs)-1
 52735 ! PAUSE
 52740 if exists(picpath$&trim$(data$(ncs:nce))) then execute "proc *"&picpath$&trim$(data$(ncs:nce)) else input fields "10,10,c 10": pause$
-52750 let data$=srep$(data$,"[NEWCELL("&data$(ncs:nce)&")]","")
+52750 data$=srep$(data$,"[NEWCELL("&data$(ncs:nce)&")]","")
 52755 ! PAUSE
 52760 return 
 52770 ! ---------------------------------
 52780 SET_FONT: ! 
-52782 let nfs=pos(data$,"[FONT(")+6 !:
-      let nfe=pos(data$,")]",nfs)-1
+52782 nfs=pos(data$,"[FONT(")+6 !:
+      nfe=pos(data$,")]",nfs)-1
 52784 if nfs>0 then !:
-        let data$=srep$(data$,"[FONT(ARIAL)]","\f1 ") !:
-        let data$=srep$(data$,"[FONT(COURIER)]","\f2 ") !:
-        let data$=srep$(data$,"[FONT(FRITZ)]","\f28 ") !:
-        let data$=srep$(data$,"[FONT(PALATINO)]","\f29 ") !:
-        let data$=srep$(data$,"[FONT(LUCIDA)]","\f69 ")
+        data$=srep$(data$,"[FONT(ARIAL)]","\f1 ") !:
+        data$=srep$(data$,"[FONT(COURIER)]","\f2 ") !:
+        data$=srep$(data$,"[FONT(FRITZ)]","\f28 ") !:
+        data$=srep$(data$,"[FONT(PALATINO)]","\f29 ") !:
+        data$=srep$(data$,"[FONT(LUCIDA)]","\f69 ")
 52786 return 
 52800 SET_SUB: ! substitute values
-52802 let nss=pos(data$,"[SUB(")+5 !:
-      let nse=pos(data$,")]",nss)-1
+52802 nss=pos(data$,"[SUB(")+5 !:
+      nse=pos(data$,")]",nss)-1
 52804 if nse>0 then 
 52806   execute "let subx="&data$(nss:nse)
 52808   if subx<1 then !:
-          let msgbox("The replaceable parameter "&data$(nss-1:nse+1)&" was not found in the data-set. The parameter will be ommitted") !:
-          let data$(nss-5:nse+2)="" !:
+          msgbox("The replaceable parameter "&data$(nss-1:nse+1)&" was not found in the data-set. The parameter will be ommitted") !:
+          data$(nss-5:nse+2)="" !:
         else subx$=data$(nss-5:nse+2)
-52810   if subx>0 then let data$=srep$(data$,subx$,sub$(subx))
+52810   if subx>0 then data$=srep$(data$,subx$,sub$(subx))
 52812   goto SET_SUB
 52814 end if 
 52816 return 
@@ -564,12 +564,12 @@
         ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?Sets text of newlines to BLUE                                ?:
 53010 if pos(data$,"[PICT(") >0 then 
-53020   let pict_start=pos(data$,"[PICT(")
-53030   let pict_end=pos(data$,")]",pict_start)
+53020   pict_start=pos(data$,"[PICT(")
+53030   pict_end=pos(data$,")]",pict_start)
 53040   pr #rtffile: "{\par \qc "&srep$(data$(3:pict_start-1),"|","}{\tab}{")
 53050   if picpath$>"" then !:
-          let pict_name$=picpath$&"\"&trim$(data$(pict_start+6:pict_end-1)) else !:
-          let pict_name$=trim$(data$(pict_start+6:pict_end-1))
+          pict_name$=picpath$&"\"&trim$(data$(pict_start+6:pict_end-1)) else !:
+          pict_name$=trim$(data$(pict_start+6:pict_end-1))
 53060   fntype(pict_name$,rtffile)
 53065   let x=pos(pict_name$,"\",-1)+1 !:
         pr #rtffile: "{\par \fs16 Figure: "&pict_name$(x:len(pict_name$))&" \par }"
@@ -785,9 +785,9 @@
 55050   if btype$="d" then let fnbrdr$="\brdrdb"
 55060 fnend 
 55100 def fntwips$(inch)
-55110   if inch>0 then let twips$=str$(round(inch*1440,0))
-55112   if inch<0 then let twips$="-"&str$(round(abs(inch)*1440,0))
-55114   if inch=0 then let twips$=""
+55110   if inch>0 then twips$=str$(round(inch*1440,0))
+55112   if inch<0 then twips$="-"&str$(round(abs(inch)*1440,0))
+55114   if inch=0 then twips$=""
 55120   fntwips$=twips$
 55130 fnend 
 55200 ! --------------------------------
@@ -795,33 +795,33 @@
 55220 sps=pos(data$,"[SPEC(")+6
 55230 spe=pos(data$,")]",sps)-1
 55240 if not setspec then goto L55260
-55250 if exists(picpath$&trim$(data$(sps:spe))) then specfile$=picpath$&trim$(data$(sps:spe)) else let pause : let msgbox("Designated SPEC file does not exist.") : input fields "10,10,c 10": pause$
-55260 L55260: let data$=srep$(data$,"[SPEC("&data$(sps:spe)&")]","")
+55250 if exists(picpath$&trim$(data$(sps:spe))) then specfile$=picpath$&trim$(data$(sps:spe)) else pause : msgbox("Designated SPEC file does not exist.") : input fields "10,10,c 10": pause$
+55260 L55260: data$=srep$(data$,"[SPEC("&data$(sps:spe)&")]","")
 55270 ! PAUSE
 55280 return 
 60000 def library fntype(infile$*100,outfile) !:
         ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
         ! ?Moves the contents of one file into another without using      ?:
 60010 ! INPUT FIELDS "23,60, C1": PAUSE$
-60020   let infile=30
+60020   infile=30
 60030 L60030: if file(infile)<0 then goto L60050
-60040   let infile+=1 !:
+60040   infile+=1 !:
         goto L60030
 60050 L60050: open #infile: "name="&infile$&",recl=1",external,input 
-60060   let infile_lrec=lrec(infile)
+60060   infile_lrec=lrec(infile)
 60070   close #infile: 
-60080   let infile_recl=min(32000,infile_lrec)
+60080   infile_recl=min(32000,infile_lrec)
 60090   open #infile: "name="&infile$&",RECL="&str$(infile_recl),external,input,relative 
-60100   let infile_rec=0
-60110   let infile_frm$="FORM C "&str$(infile_recl)
+60100   infile_rec=0
+60110   infile_frm$="FORM C "&str$(infile_recl)
 60120   if infile_recl=32000 then 
 60130 L60130: if infile_rec*infile_recl+infile_recl<=infile_lrec then 
 60140       read #infile,using infile_frm$: inrec$ !:
             pr #outfile: inrec$ !:
-            let infile_rec+=1
+            infile_rec+=1
 60150       goto L60130
 60160     else 
-60170       let infile_frm$="FORM C "&str$(infile_lrec-infile_rec*32000)
+60170       infile_frm$="FORM C "&str$(infile_lrec-infile_rec*32000)
 60180       close #infile: 
 60190       open #infile: "name="&infile$&",RECL="&str$(infile_lrec-infile_rec*32000),external,input,relative 
 60200     end if 
@@ -830,5 +830,5 @@
         pr #outfile: inrec$
 60230   dim inrec$*32000
 60240 ZTYPE: close #infile: !:
-        let infile=0
+        infile=0
 60250 fnend 

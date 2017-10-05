@@ -24,7 +24,7 @@
 00260   open #3: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno'),internal,output ioerr L280
 00270   close #3,free: 
 00280 L280: open #3: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",SIZE=0,RecL=175",internal,output 
-00290   let ta(1,1)=1
+00290   ta(1,1)=1
 00300   write #3,using L310: mat ta,mat fb
 00310 L310: form pos 1,50*pd 3,25*n 1
 00320   close #3: 
@@ -69,4 +69,4 @@
 00710   pr f "23,3,C 78,N": ""
 00720   pr f "24,3,C 78,N": ""
 00730   retry 
-00740 XIT: let fnxit
+00740 XIT: fnxit

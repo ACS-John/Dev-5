@@ -10,7 +10,7 @@
 00024   dim fc(20),tcj(20),tcs(20),dt(125),gt(125),dh$*20,aa$*40,jn1$*6
 00025   dim cap$*128,message$*40
 00030 ! ______________________________________________________________________
-00031 ! Let FNTOP("S:\acsPR\jcRpt-MOD",CAP$="User Designed Reports (2)")
+00031 ! fnTOP("S:\acsPR\jcRpt-MOD",CAP$="User Designed Reports (2)")
 00032   fncno(cno) !:
         fndat(dh$)
 00038 ! 
@@ -23,7 +23,7 @@
 00064   pr f "15,34,C 09,B,5": "Exit (F5)"
 00066   rinput #win, fields "4,23,C 20,UT,N": dh$
 00068   close #win: ioerr L69
-00069 L69: let fndat(dh$,put=2)
+00069 L69: fndat(dh$,put=2)
 00070   if cmdkey=5 then goto XIT
 00075 ! ______________________________________________________________________
 00080   fndat(dh$,2)
@@ -33,7 +33,7 @@
         pr f "15,34,C 09,B,5": "Exit (F5)" !:
         on fkey 5 goto EOF1
 00103   fnopenprn !:
-        if file$(255)(1:3)<>"PRN" then let jbskip=1
+        if file$(255)(1:3)<>"PRN" then jbskip=1
 00105 ! ______________________________________________________________________
 00110   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #1,using 'Form POS 1,C 40': aa$ !:
@@ -44,8 +44,8 @@
 00170 L170: form pos 1,n 2,c 78,2*c 132,n 3,3*n 1,100*pd 6.3,20*c 50,40*pd 2,80*n 1
 00180   close #1: 
 00181 ! ______________________________________________________________________
-00190   let h1=66-len(rtrm$(aa$))/2 : let h2=66-len(rtrm$(rt$))/2 !:
-        let h3=66-len(rtrm$(dh$))/2 : let i2=len(rtrm$(rt$))
+00190   h1=66-len(rtrm$(aa$))/2 : h2=66-len(rtrm$(rt$))/2 !:
+        h3=66-len(rtrm$(dh$))/2 : i2=len(rtrm$(rt$))
 00260   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00270   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
 00280   gosub HDR
@@ -67,12 +67,12 @@
 00430   goto XIT
 19799 ! ______________________________________________________________________
 19800 PRTRPT: read #1,using L19810: jn$,n$,mat a$,x6,x7,x8,x9 eof L20100
-19805   let jn1$=jn$
+19805   jn1$=jn$
 19806   on conv goto L25010
-19807   let jn=val(jn$)
+19807   jn=val(jn$)
 19810 L19810: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 7.2,n 2
 19820   if sd=2 then goto L19900
-19825   let jobcat$=jn$&"     "
+19825   jobcat$=jn$&"     "
 19830   read #2,using L19831,key>=jobcat$: cn$,k$,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24 nokey PRTRPT
 19831 L19831: form pos 1,c 11,c 25,11*pd 7.2,2*pd 2
 19832   goto L19834
@@ -89,12 +89,12 @@
 25050 L25050: ! this section of lines will be replaced during dynamics
 49849 ! ______________________________________________________________________
 50000 ! <Updateable Region: ERTN>
-50001 ERTN: let fnerror(program$,err,line,act$,"xit")
+50001 ERTN: fnerror(program$,err,line,act$,"xit")
 50002   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 50003   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 50004   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 50005 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50006 ! /region
 50007 ! ______________________________________________________________________
-50120 XIT: let fnxit
+50120 XIT: fnxit
 50121 ! ______________________________________________________________________

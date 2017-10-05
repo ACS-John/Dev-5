@@ -11,8 +11,8 @@
 00110   fncno(cno,cnam$)
 00120   fndat(dat$)
 00130 ! 
-00140   let hp1=26-int(len(ltrm$(rtrm$(cnam$)))/2) !:
-        let hp2=26-int(len(ltrm$(rtrm$(dat$)))/2)
+00140   hp1=26-int(len(ltrm$(rtrm$(cnam$)))/2) !:
+        hp2=26-int(len(ltrm$(rtrm$(dat$)))/2)
 00150   flo$(1)="8,07,C 64,R,N" : flo$(2)="10,17,C 20" !:
         flo$(3)="10,32,C 20" : flo$(4)="11,08,C 20"
 00160   fli$(1)="10,25,N 3,UT,N"
@@ -22,17 +22,17 @@
 00200   scr$(2)="Dept #:"
 00210   scr$(3)="Department Name:"
 00220 ! 
-00230   for j=1 to 22 : let ins$(j)=str$(j+1)&",2,C 42,H,N" : next j
+00230   for j=1 to 22 : ins$(j)=str$(j+1)&",2,C 42,H,N" : next j
 00240 L240: open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L1800
-00250   let hd$(1)="     **ENTER FUND & DEPT # AS 0 OR BLANK TO STOP**"
-00260   let hd$(2)="     **ENTER FUND & DEPT  # AS 0 OR BLANK TO DELETE**"
+00250   hd$(1)="     **ENTER FUND & DEPT # AS 0 OR BLANK TO STOP**"
+00260   hd$(2)="     **ENTER FUND & DEPT  # AS 0 OR BLANK TO DELETE**"
 00270   for j=1 to 6
 00280     sf1$(j)=str$(j+5)&",11,C 37"
 00290   next j
 00300   sf1$(3)="8,11,C 37,C,N"
 00310   cap$="Department"
 00320 MENU1: pr newpage
-00330   if process=1 then let ti=4 : goto L450
+00330   if process=1 then ti=4 : goto L450
 00340   cnam$=rtrm$(cnam$)
 00350   close #101: ioerr L360
 00360 L360: open #101: "SROW=5,SCOL=10,EROW=12,ECOL=48,BORDER=DR,CAPTION=Department File",display,outin 
@@ -47,7 +47,7 @@
 00400   pr f "13,25,C 09,B,5": "Exit (F5)"
 00410 L410: rinput select mat sf1$,attr "H": mat sm1$
 00420   if cmdkey=5 then goto L1270
-00430   let ti0=ti=curfld
+00430   ti0=ti=curfld
 00440   mat ta=(0)
 00450 L450: on ti goto L460,L790,L800,L1530,L1810,L2070 none L410
 00460 L460: pr newpage
@@ -83,7 +83,7 @@
 00760   close #1: 
 00770 L770: execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys"
 00780   goto L240
-00790 L790: let new1=1
+00790 L790: new1=1
 00800 L800: pr newpage
 00810   pr f mat flo$: hd$(1),mat scr$
 00820   pr f "13,20,C 25,R,N": " F1=CONTINUE, F5=STOP"
@@ -99,9 +99,9 @@
 00920 L920: ! 
 00930   if hfun<0 or hdpt<0 then goto L830
 00940   if hfun+hdpt=0 then goto MENU1
-00950   let key$=cnvrt$("N 3",hfun)&cnvrt$("N 2",hdpt)
+00950   key$=cnvrt$("N 3",hfun)&cnvrt$("N 2",hdpt)
 00960   read #1,using L1250,key=key$: fun,dpt,d$ nokey L980
-00970   let ti=3: goto L990
+00970   ti=3: goto L990
 00980 L980: if ti=2 then goto L1050 else goto L830
 00990 L990: pr newpage
 01000   close #101: ioerr L1010
@@ -125,12 +125,12 @@
 01180 ! IF TI=2 AND DPT=0 THEN GOTO 470
 01190   if fun<0 then convc=1: goto ERR1
 01200   if dpt<0 then convc=2: goto ERR1
-01210   let nkey$=cnvrt$("N 3",fun)&cnvrt$("N 2",dpt)
+01210   nkey$=cnvrt$("N 3",fun)&cnvrt$("N 2",dpt)
 01220   if ti=2 then goto L1450
 01230   if nkey$><key$ then goto L1310
 01240 L1240: rewrite #1,using L1250,key=nkey$: fun,dpt,d$
 01250 L1250: form pos 1,n 3,n 2,c 30
-01260   let ti=ti0: goto L450
+01260   ti=ti0: goto L450
 01270 L1270: close #1: 
 01280   if new1=1 then goto L1760
 01290   goto XIT
@@ -155,7 +155,7 @@
 01480 L1480: read #1,using L1250,key=nkey$: fun nokey L1500
 01490   goto L1240
 01500 L1500: write #1,using L1250: fun,dpt,d$
-01510 L1510: let new1=1
+01510 L1510: new1=1
 01520   goto L450
 01530 L1530: restore #1,search>="": eof L1540
 01540 L1540: pr newpage
@@ -176,7 +176,7 @@
 01690 L1690: pr #255,using L1700: date$('mm/dd/yy'),time$,cnam$,"Department File Listing",dat$
 01700 L1700: form skip 1,pos 1,c 8,skip 1,pos 1,c 8,pos hp1,c 40,skip 1,pos 18,c 50,skip 1,pos hp2,c 20,skip 2
 01710   return 
-01720 L1720: let fncloseprn
+01720 L1720: fncloseprn
 01730   on fkey 5 ignore 
 01740   if process=1 then goto XIT else goto MENU1
 01750   goto XIT
@@ -205,9 +205,9 @@
 01980   mat ink$(ln)
 01990 L1990: input fields mat ins$,attr "R": mat ink$
 02000   if cmdkey>0 then goto L2040
-02010   let key$=ink$(curfld)(1:3)&ink$(curfld)(7:8)
+02010   key$=ink$(curfld)(1:3)&ink$(curfld)(7:8)
 02020   read #1,using L1250,key=key$: fun,dpt,d$ nokey L1990
-02030   let ti=3: goto L990
+02030   ti=3: goto L990
 02040 L2040: if cmdkey=5 or eof1=1 then goto MENU1
 02050   goto L1820
 02060 ! ______________________________________________________________________
@@ -219,12 +219,12 @@
 02120   goto L240
 02130 ! ______________________________________________________________________
 02140 ! <Updateable Region: ERTN>
-02150 ERTN: let fnerror(program$,err,line,act$,"xit")
+02150 ERTN: fnerror(program$,err,line,act$,"xit")
 02160   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 02170   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 02180   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 02190 ERTN_EXEC_ACT: execute act$ : goto ERTN
 02200 ! /region
 02210 ! ______________________________________________________________________
-02220 XIT: let fnxit
+02220 XIT: fnxit
 02230 ! ______________________________________________________________________

@@ -20,24 +20,24 @@
 00210 L210: form pos 1,n 8,n 1,pd 4,pd 2,2*pd 4.2,c 6,2*pd 3,pd 5.2,n 2,2*pd 4.2,c 30,pd 4.2
 00220   if ji1(1)=-1 then goto L190
 00230   if ji2(4)<1 or ji2(4)>20 then goto L260
-00240   let ji2(6)=ji2(3)
-00250   let ji2(3)=0
-00260 L260: let jn$=lpad$(rtrm$(jn$),6)
+00240   ji2(6)=ji2(3)
+00250   ji2(3)=0
+00260 L260: jn$=lpad$(rtrm$(jn$),6)
 00270   if h(7)<1 or h(7)>11 then goto L280 else goto L320
 00280 L280: if h(1)=ji1(1) and h(3)=ji1(4) and dt2=ji1(3) then goto L380
 00290   if h(1)=0 then goto L340
-00300   let h(6)=sal
-00310   let dt2=fndate_mmddyy_to_ccyymmdd(ji1(3))
+00300   h(6)=sal
+00310   dt2=fndate_mmddyy_to_ccyymmdd(ji1(3))
 00320 L320: write #4,using L330: mat h,dt2,jn$
 00330 L330: form pos 1,n 8,n 1,pd 2,2*pd 4.2,pd 5.2,n 2,n 8,c 6
 00340 L340: mat h=(0)
-00350   let h(1)=ji1(1)
-00360   let h(2)=ji1(2)
-00370   let h(3)=ji1(4)
-00380 L380: let h(4)=h(4)+ji1(5)
-00390   let h(5)=h(5)+ji1(6)
-00400   if ji2(4)<1 or ji2(4)>20 then let h(6)=ji2(3) else let h(6)=ji2(6)
-00410   let h(7)=ji2(4)
+00350   h(1)=ji1(1)
+00360   h(2)=ji1(2)
+00370   h(3)=ji1(4)
+00380 L380: h(4)=h(4)+ji1(5)
+00390   h(5)=h(5)+ji1(6)
+00400   if ji2(4)<1 or ji2(4)>20 then h(6)=ji2(3) else h(6)=ji2(6)
+00410   h(7)=ji2(4)
 00420   if ltrm$(jn$)="" or rtrm$(ltrm$(jn$))="0" then goto L190
 00430   cn$=jn$&lpad$(str$(ji2(1)),5)
 00440   read #9,using 'form pos 6,c 25',key=cnvrt$("pic(zzzzz)",val(cn$(7:11))): k$ nokey L450
@@ -66,25 +66,25 @@
 00660 L660: ot5=lrec(5)+1
 00670   write #5,using L680,rec=ot5,reserve: empnum$,jn$,ji2(1),ji2(2),ji1(4),ji1(3),ji1(5),ji1(6),ji2(5),ji2(6),ji2(3),empnam$,0 duprec L660
 00680 L680: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
-00690   if ta(2)=0 then let ta(1)=ot5 else rewrite #5,using L640,rec=ta(2),reserve: ot5
+00690   if ta(2)=0 then ta(1)=ot5 else rewrite #5,using L640,rec=ta(2),reserve: ot5
 00700   rewrite #5,using L640,rec=1,release: ot5
-00710   let ta(2)=ot5
+00710   ta(2)=ot5
 00720   rewrite #2,using L500,key=cn$: cn$,k$,mat l,mat ta
 00730   goto L190
 00740 ! ______________________________________________________________________
-00750 L750: let dt2=fndate_mmddyy_to_ccyymmdd(ji1(3))
+00750 L750: dt2=fndate_mmddyy_to_ccyymmdd(ji1(3))
 00760   if h(1)><0 then write #4,using L330: mat h,dt2,jn$
 00770   goto XIT
 00780 ! ______________________________________________________________________
 00790 ! <Updateable Region: ERTN>
-00800 ERTN: let fnerror(program$,err,line,act$,"xit")
+00800 ERTN: fnerror(program$,err,line,act$,"xit")
 00810   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00820   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00830   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 00840 ERTN_EXEC_ACT: execute act$ : goto ERTN
 00850 ! /region
 00860 ! ______________________________________________________________________
-00870 XIT: ! Let FNXIT
+00870 XIT: ! fnXIT
 00880   close #3,free: 
 00890   fnxit
 00900 ! ______________________________________________________________________

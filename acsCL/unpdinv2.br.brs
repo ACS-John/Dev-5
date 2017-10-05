@@ -23,7 +23,7 @@
 00220   read #paymstr,using 'Form POS 9,C 30',key=vn$: vnam$ nokey L230
 00230 L230: pr #255,using 'Form POS 1,2*C 31,N 10.2': vnam$,de$,upa !:
         ! this line would love to be a skip 0 one day
-00240   let t1+=upa
+00240   t1+=upa
 00250   restore #unpdaloc,key>=vn$&iv$: nokey READ_PAYTRANS
 00260 READ_UNPDALOC: ! 
 00270   read #unpdaloc,using 'Form Pos 1,C 8,c 12,N 3,N 6,N 3,PD 5.2,C 30': unvn$,univ$,mat gl,amt,ade$ eof READ_PAYTRANS !:
@@ -62,13 +62,13 @@
 00570   read #work,using 'FORM POS 1,C 12,C 50,PD 6.2': gl$,gd$,ga eof L600
 00580   pr #255,using 'FORM POS 1,C 14,C 50,N 12.2': gl$,gd$,ga
 00590   goto READ_WORK
-00600 L600: let fncloseprn
+00600 L600: fncloseprn
 00610   goto XIT
 00620 ! ______________________________________________________________________
-00630 XIT: let fnxit
+00630 XIT: fnxit
 00640 ! ______________________________________________________________________
 00650 ! <Updateable Region: ERTN>
-00660 ERTN: let fnerror(program$,err,line,act$,"xit")
+00660 ERTN: fnerror(program$,err,line,act$,"xit")
 00670   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00680   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00690   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

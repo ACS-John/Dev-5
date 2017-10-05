@@ -30,25 +30,25 @@
 24120   col_amt_form$(2)='pic(---,---,---.zz) '
 24140   col_amt_form$(3)='pic(-,---,---.zz) '
 24160   col_amt_form$(4)='pic(--,---,---.zz)'
-24180   let total_underline$(1)="___________   "
-24200   let total_underline$(2)=" ___________ "
-24220   let total_underline$(3)="__________   "
-24240   let total_underline$(4)="__________   "
+24180   total_underline$(1)="___________   "
+24200   total_underline$(2)=" ___________ "
+24220   total_underline$(3)="__________   "
+24240   total_underline$(4)="__________   "
 24260   dim heading_1$(4)*20
 24280   dim heading_2$(4)*20
 24300   dim heading_3$(4)*20
-24320   let heading_1$(1)="Total Wages"
-24340   let heading_2$(1)="           "
-24360   let heading_3$(1)="___________"
-24380   let heading_1$(2)="   Excess Wages"
-24400   let heading_2$(2)="   Over $"&cnvrt$("pic(zzzzz)",0)&' '
-24420   let heading_3$(2)="   ____________"
-24440   let heading_1$(3)="    Taxable"
-24460   let heading_2$(3)="     Wages "
-24480   let heading_3$(3)="   ________"
-24500   let heading_1$(4)="     State   "
-24520   let heading_2$(4)="      W/H    "
-24540   let heading_3$(4)="  ___________"
+24320   heading_1$(1)="Total Wages"
+24340   heading_2$(1)="           "
+24360   heading_3$(1)="___________"
+24380   heading_1$(2)="   Excess Wages"
+24400   heading_2$(2)="   Over $"&cnvrt$("pic(zzzzz)",0)&' '
+24420   heading_3$(2)="   ____________"
+24440   heading_1$(3)="    Taxable"
+24460   heading_2$(3)="     Wages "
+24480   heading_3$(3)="   ________"
+24500   heading_1$(4)="     State   "
+24520   heading_2$(4)="      W/H    "
+24540   heading_3$(4)="  ___________"
 28990 ! ______________________________________________________________________
 32000   fntop(program$,cap$="State UnEmp Report")
 32080   fncreg_read('calculation date text',quarter_ending_date$)
@@ -73,38 +73,38 @@
 32590 ! /r
 32600 ! r: main screen (falls through to next section)
 34000   fntos(sn$="pruc1b")
-34020   let respc=0: let x=0
+34020   respc=0: let x=0
 34040   fnlbl(1,1,"Quarter Ending Date:",26,1)
 34060   fntxt(1,30,20,0,0,"",0,"Use alpha format (eg. March 31, 20xx)")
-34080   if trim$(quarter_ending_date$)='' then let resp$(respc+=1)=date$("Month DD, CCYY") else let resp$(respc+=1)=quarter_ending_date$
+34080   if trim$(quarter_ending_date$)='' then resp$(respc+=1)=date$("Month DD, CCYY") else resp$(respc+=1)=quarter_ending_date$
 34100   fnlbl(2,1,"State Code:",26,1)
 34120   fncomboa("pruc1-2",2,30,mat option1$,"Enter the state code from the company information file for the state being processed.")
-34140   let resp$(respc+=1)=option1$(1)
+34140   resp$(respc+=1)=option1$(1)
 34180   fnlbl(3,1,"Quarter Code:",26,1)
 34200   fncomboa("pruc1-3",3,30,mat qtr_option$,"Enter the quarter you are processing.")
-34220   let resp$(respc+=1)=quarter$
+34220   resp$(respc+=1)=quarter$
 34240   fnchk(5,40,"Round to Whole Dollars:",1)
-34260   let resp$(respc+=1)="False"
+34260   resp$(respc+=1)="False"
 34280   fnchk(6,40,"Show Total Column:",1)
-34300   let resp$(respc+=1)=column$(1)
+34300   resp$(respc+=1)=column$(1)
 34320   fnchk(7,40,"Show Excess Wage Column:",1)
-34340   let resp$(respc+=1)=column$(2)
+34340   resp$(respc+=1)=column$(2)
 34360   fnchk(8,40,"Show Taxable Column:",1)
-34380   let resp$(respc+=1)=column$(3)
+34380   resp$(respc+=1)=column$(3)
 34400   fnchk(8,40,"Show State Tax Withheld:",1)
-34420   let resp$(respc+=1)=column$(4)
+34420   resp$(respc+=1)=column$(4)
 34440   fnlbl(10,1,"Payroll Department:",26,1)
 34460   fncombof("DeptName",10,30,29,env$('Q')&"\PRmstr\DeptName.h"&env$('cno'),1,3,4,25,env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno'),2,0, " ",0,0)
-34480   let resp$(respc+=1)='[All]'
+34480   resp$(respc+=1)='[All]'
 34580   fncmdset(2)
 34600   fnacs(sn$,0,mat resp$,ck)
 36000   if ck=5 then goto XIT
 36020   let quarter_ending_date$=resp$(1) ! quarter ending date
 36040   stcode=val(resp$(2)(1:2)) ! state code
-36050   let heading_2$(2)="   Over $"&cnvrt$("pic(zzzzz)",m(stcode))&' '
+36050   heading_2$(2)="   Over $"&cnvrt$("pic(zzzzz)",m(stcode))&' '
 36060   let quarter_code=val(resp$(3)) ! quarter to analyze earnings
 36080   fncreg_write('uc1 - quarter',resp$(3))
-36100   if resp$(4)(1:1)="T" then let round$="Y"
+36100   if resp$(4)(1:1)="T" then round$="Y"
 36120   column$(1)=resp$(5) ! want total wage column
 36140   column$(2)=resp$(6) ! want excess wage column
 36160   column$(3)=resp$(7) ! want taxable wage column
@@ -113,8 +113,8 @@
 36220   fncreg_write('uc1 - show excess wage',column$(2))
 36240   fncreg_write('uc1 - show taxable wage',column$(3))
 36260   fncreg_write('uc1 - show state tax withheld',column$(4))
-36280   let department$=resp$(9)
-36300   if round$="Y" then let m(stcode)=round(m(stcode),0)
+36280   department$=resp$(9)
+36300   if round$="Y" then m(stcode)=round(m(stcode),0)
 36320   if quarter_code=1 then ending_date=qtr2
 36340   if quarter_code=2 then ending_date=qtr3
 36360   if quarter_code=3 then ending_date=qtr4
@@ -122,7 +122,7 @@
 38000 ! /r
 38020   on fkey 5 goto FINIS
 38040   fnopenprn
-38060   if file$(255)(1:3)="PRN" then let redir=0 else let redir=1
+38060   if file$(255)(1:3)="PRN" then redir=0 else redir=1
 38080 ! ______________________________________________________________________
 38100   open #2: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 38120   open #h_department:=3: "Name="&env$('Q')&"\PRmstr\Department.h"&env$('cno')&",Shr, KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
@@ -130,7 +130,7 @@
 38160   gosub HDR
 42000 TOP: ! 
 42020   read #2,using "Form POS 1,N 8,3*C 30,C 11": eno,mat em$,ss$ eof DONE
-42040   let m1=m2=h2=h3=dcq=dcy=0 : mat ytdtotal=(0)
+42040   m1=m2=h2=h3=dcq=dcy=0 : mat ytdtotal=(0)
 42060   mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0): mat qtr4tcp=(0)
 42080   mat ytdtota(0)
 42100   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
@@ -140,7 +140,7 @@
 46040   if heno<>eno then goto ANALYZE_WAGES
 46060   if prd<beg_date or prd>end_date then goto MAIN_LOOP ! not this year
 46080   if department$<>'[All]' and tdn<>val(department$(1:3)) then goto MAIN_LOOP
-46100   let deptkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn)
+46100   deptkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn)
 46120   read #h_department,using L810,key=deptkey$: sc1 nokey L830 ! no state code (assume this state)
 46140 L810: form pos 48,n 2
 46160   if sc1<>stcode then goto MAIN_LOOP ! must be right state code
@@ -155,24 +155,24 @@
 48040   if quarter_code=2 then mat qtr=qtr2tcp
 48060   if quarter_code=3 then mat qtr=qtr3tcp
 48080   if quarter_code=4 then mat qtr=qtr4tcp
-48100   let dcq=0 ! total wage for quarter
+48100   dcq=0 ! total wage for quarter
 48140   for j=1 to 20
 48160     if dedcode(j)=1 and deduc(j)=1 then 
-48180       let dcy=dcy+ytdtotal(j+4)
-48200       let dcq=dcq+qtr(j+4)
+48180       dcy=dcy+ytdtotal(j+4)
+48200       dcq=dcq+qtr(j+4)
 48220     end if 
 48240   next j
 48260 ! if env$('client')="Washington Parrish" then
-48280 !   let m2=m2+ytdtotal(31)-dcy+ytdtotal(6)
+48280 !   m2=m2+ytdtotal(31)-dcy+ytdtotal(6)
 48300 !   goto L1010 ! add deferred comp match to uc wages on Wash Par
 48320 ! end if
-48340   let m2=m2+ytdtotal(31)-dcy
+48340   m2=m2+ytdtotal(31)-dcy
 48360 ! L1010: !
 48380 ! if env$('client')="Washington Parrish" then
-48400 !   let m1=m1+qtr(31)-dcq+qtr(6)
+48400 !   m1=m1+qtr(31)-dcq+qtr(6)
 48420 !   goto L1030 ! add deferred comp to qtr uc wages
 48440 ! end if
-48460   let m1=m1+qtr(31)-dcq
+48460   m1=m1+qtr(31)-dcq
 48480 ! L1030: !
 48482   if m2=0 then goto TOP
 48500   state_wh=qtr(4)
@@ -193,24 +193,24 @@
 52220   fnxit ! /r
 54000 SUBTOTALS: ! r:
 54020   if m1=0 then goto L1780 ! SKIP IF QUARTERLY WAGE=0
-54040   let p3=p3+1
-54060   if round$="Y" then let m1=round(m1,0)
+54040   p3=p3+1
+54060   if round$="Y" then m1=round(m1,0)
 54080   if m2<m(stcode) then goto L1640
 54100   if m2-m1>m(stcode) then goto L1620
-54120   let h2=m(stcode)-(m2-m1)
-54140   if round$="Y" then let h2=round(h2,0)
+54120   h2=m(stcode)-(m2-m1)
+54140   if round$="Y" then h2=round(h2,0)
 54160   goto L1650
 54180 L1620: ! 
-54200   let h2=0
+54200   h2=0
 54220   goto L1650
 54240 L1640: ! 
-54260   let h2=m1
+54260   h2=m1
 54280 L1650: ! 
-54300   let h3=m1-h2
-54320   if round$="Y" then let h3=round(h3,0)
-54340   if column$(1)<>"True" then let m1=0 ! no total column
-54360   if column$(2)<>"True" then let h3=0 ! no excess column
-54380   if column$(3)<>"True" then let h2=0 ! no taxable column
+54300   h3=m1-h2
+54320   if round$="Y" then h3=round(h3,0)
+54340   if column$(1)<>"True" then m1=0 ! no total column
+54360   if column$(2)<>"True" then h3=0 ! no excess column
+54380   if column$(3)<>"True" then h2=0 ! no taxable column
 54400   if column$(4)<>"True" then state_wh=0 ! no state withholding column
 54420 ! pr #255,using L1710: ss$,em$(1)(1:28),m1,h3,h2,state_wh
 54440 ! L1710: form pos 1,c 11,pos 14,c 28,pos 42,pic(--,---,---.zz),pos 57,pic(--,---,---.zz),pos 70,pic(----,---.zz),pos 83,pic(----,---.zz),skip 1
@@ -221,11 +221,11 @@
 54540   col_amt(4)=state_wh
 54560   fn_print_line_amt(mat col_amt,mat col_amt_form$)
 54580   for col_item=1 to udim(mat column$)
-54600     let ptotal(col_item)+=col_amt(col_item)
+54600     ptotal(col_item)+=col_amt(col_item)
 54620     let grand_total(col_item)+=col_amt(col_item) ! grand totals
 54640   next col_item
 54660   pr #255: pageoflow PGOF
-54680   let p1=p1+2
+54680   p1=p1+2
 54700 L1780: ! 
 54720   return  ! /r
 56000 PAGE_TOTALS: ! r:
@@ -235,7 +235,7 @@
 56260   fn_print_line_amt(mat ptotal,mat col_amt_form$)
 56360   if nw=1 and eofcode=1 then goto L1910
 56380   pr #255: newpage
-56400 L1910: let p3=0
+56400 L1910: p3=0
 56420   mat ptotal=(0)
 56440   return  ! /r
 58000 PGOF: ! r:
@@ -243,14 +243,14 @@
 58040   gosub HDR
 58060   continue  ! /r
 61020 ! <Updateable Region: ERTN>
-61040 ERTN: let fnerror(program$,err,line,act$,"xit")
+61040 ERTN: fnerror(program$,err,line,act$,"xit")
 61060   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 61080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 61100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 61120 ERTN_EXEC_ACT: execute act$ : goto ERTN
 61140 ! /region
 61160 ! ______________________________________________________________________
-61180 XIT: let fnxit
+61180 XIT: fnxit
 61190 IGNORE: continue 
 64000 HDR: ! r:
 64020 ! r: page heading
@@ -282,21 +282,21 @@
 65440   return  ! /r
 68000   def fn_print_line_str(mat pl_str$; pl_pos)
 68002     dim pl_line$*256
-68010     let pl_line$=''
-68020     if pl_pos=0 then let pl_pos=42
+68010     pl_line$=''
+68020     if pl_pos=0 then pl_pos=42
 68040     for pl_item=1 to udim(mat column$)
 68060       if column$(pl_item)="True" then 
-68080         let pl_line$=pl_line$&pl_str$(pl_item)
+68080         pl_line$=pl_line$&pl_str$(pl_item)
 68100       end if 
 68120     next pl_item
 68140     pr #255,using 'form pos pl_pos,c': pl_line$
 68180   fnend 
 68200   def fn_print_line_amt(mat pl_amt,mat pl_form$; pl_pos)
-68210     let pl_line$=''
-68220     if pl_pos=0 then let pl_pos=42
+68210     pl_line$=''
+68220     if pl_pos=0 then pl_pos=42
 68240     for pl_item=1 to udim(mat column$)
 68260       if column$(pl_item)="True" then 
-68280         let pl_line$=pl_line$&cnvrt$(pl_form$(pl_item),pl_amt(pl_item))
+68280         pl_line$=pl_line$&cnvrt$(pl_form$(pl_item),pl_amt(pl_item))
 68300       end if 
 68320     next pl_item
 68340     pr #255,using 'form pos pl_pos,c': pl_line$

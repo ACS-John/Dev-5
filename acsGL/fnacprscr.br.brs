@@ -52,25 +52,25 @@
 00520     read mat b$
 00530     for j=1 to 5
 00540       floa$(j)=str$(j+3)&",10,C 20,N"
-00550       if j>1 and j<5 then let io1$(j)=str$(j+3)&",32,C 25,UT,N"
-00560       if j=1 then let io1$(j)="4,32,N 4,UT,N"
-00570       if j=5 then let io1$(j)="8,32,C 11,UT,N"
+00550       if j>1 and j<5 then io1$(j)=str$(j+3)&",32,C 25,UT,N"
+00560       if j=1 then io1$(j)="4,32,N 4,UT,N"
+00570       if j=5 then io1$(j)="8,32,C 11,UT,N"
 00580     next j
 00590     let x=6
 00600     for j=6 to 22 step 2
 00610       let x=x+1
 00620       floa$(j)=str$(x+3)&",3,C 20,N"
 00630       floa$(j+1)=str$(x+3)&",41,C 20,N"
-00640       let io1$(j)=str$(x+3)&",23,N 11.2,UT,N"
-00650       let io1$(j+1)=str$(x+3)&",62,N 11.2,UT,N"
+00640       io1$(j)=str$(x+3)&",23,N 11.2,UT,N"
+00650       io1$(j+1)=str$(x+3)&",62,N 11.2,UT,N"
 00660     next j
 00670     for j=1 to 14
 00680       flob$(j)=str$(j+3)&",2,C 20,N"
 00690       if j>3 then goto L720
-00700       if j=1 then let io2$(j)="4,22,N 4,UT,N" else !:
-              let io2$(j)=str$(j+3)&",22,N 6,UT,N"
+00700       if j=1 then io2$(j)="4,22,N 4,UT,N" else !:
+              io2$(j)=str$(j+3)&",22,N 6,UT,N"
 00710       goto L730
-00720 L720: let io2$(j)=str$(j+3)&",22,N 11.2,UT,N"
+00720 L720: io2$(j)=str$(j+3)&",22,N 11.2,UT,N"
 00730 L730: next j
 00740     open #1: "Name="&env$('Q')&"\GLmstr\ACPRSCF.h"&str$(cno)&",NoShr",internal,output ioerr L760
 00750     close #1,free: 
@@ -81,11 +81,11 @@
 00800     open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",Shr",internal,outin ioerr L830
 00810     close #1: 
 00820     goto XIT
-00830 L830: let fnacglblds
+00830 L830: fnacglblds
 00840     goto XIT
 00850 ! ______________________________________________________________________
 00860 ! <updateable region: ertn>
-00870 ERTN: let fnerror(program$,err,line,act$,"xit")
+00870 ERTN: fnerror(program$,err,line,act$,"xit")
 00880     if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00890     execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00900     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -11,32 +11,32 @@
 16160   fnget_services(mat servicename$)
 24000 MAIN: ! 
 24040   fntos(sn$:="UBNOUsage")
-24060   let mylen=20
-24080   let mypos=mylen+2
+24060   mylen=20
+24080   mypos=mylen+2
 24120   fnlbl(2,1,"Billing Date:",mylen,1)
 24140   fntxt(2,mypos,8,8,0,"1")
-24160   let resp$(1)=str$(d1)
+24160   resp$(1)=str$(d1)
 24200   fnlbl(3,1,"Route Number:",mylen,1)
 24220   fncmbrt2(3,mypos)
-24240   let resp$(2)="[All]"
+24240   resp$(2)="[All]"
 24260   fnchk(4,23,"Print Meter Address:",1)
-24280   let resp$(3)="True"
+24280   resp$(3)="True"
 24300   fncmdset(3)
 24320   fnacs(sn$,0,mat resp$,ck)
 28000   if ck=5 then goto XIT
-28020   let d1 = val(resp$(1))
+28020   d1 = val(resp$(1))
 28040   if resp$(2)="[All]" then 
-28060     let prtbkno=0 
+28060     prtbkno=0 
 28080   else 
-28100     let prtbkno=val(resp$(2))
+28100     prtbkno=val(resp$(2))
 28120   end if
-28140   if resp$(3)="True" then let printadr=1 ! wants meter address printed
+28140   if resp$(3)="True" then printadr=1 ! wants meter address printed
 28160   if d1<10100 or d1>123199 then goto MAIN
 36000   fnopenprn
 36020   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
 36040   gosub HDR
 36060   if prtbkno=0 then goto READ_CUSTOMER
-36080   let prtbkno$=lpad$(str$(prtbkno),2)&"       "
+36080   prtbkno$=lpad$(str$(prtbkno),2)&"       "
 36100   startcd=1
 36120   restore #1,key>=prtbkno$: nokey TOTALS
 36140   goto READ_CUSTOMER
@@ -47,13 +47,13 @@
 42060   if f<>d1 then goto READ_CUSTOMER
 42080   if a(1)>0 and trim$(servicename$(1))="Water" and d(3)=0 then ! if have water and zero usage then list
 42100     currentread=d(1)
-42120     let priorread=d(2)
+42120     priorread=d(2)
 42140   else if a(3)>0 and trim$(servicename$(3))="Electric" and d(7)=0 then  ! if have electric and zero usage then list
 42160     currentread=d(5)
-42180     let priorread=d(6)
+42180     priorread=d(6)
 42200   else if a(4)>0 and trim$(servicename$(4))="Gas" and d(11)=0 then ! if have gas and zero usage then list
 42220     currentread=d(9)
-42240     let priorread=d(10)
+42240     priorread=d(10)
 42260   else
 42280     goto READ_CUSTOMER
 42300   end if
@@ -64,11 +64,11 @@
 42440   else 
 42460     pr #255,using L550: z$,e$(2),currentread,priorread pageoflow PGOF
 42480   end if
-42500   let tbal=tbal+bal
+42500   tbal=tbal+bal
 42520   goto READ_CUSTOMER
 42540 ! ______________________________________________________________________
 48000 HDR: ! r:
-48020   let p2=p2+1
+48020   p2=p2+1
 48040   pr #255: "\qc  {\f181 \fs18 \b "&env$('cnam')&"}"
 48060   pr #255: "\qc  {\f181 \fs24 \b "&env$('program_caption')&"}"
 48080   pr #255: "\qc  {\f181 \fs16 \b "&date$("Month DD, CCYY")&"}"
@@ -92,9 +92,9 @@
 58020   close #1: ioerr ignore
 58040   fncloseprn
 58060 goto XIT ! /r
-61000 XIT: let fnxit
+61000 XIT: fnxit
 63000 ! <Updateable Region: ERTN>
-63020 ERTN: let fnerror(program$,err,line,act$,"xit")
+63020 ERTN: fnerror(program$,err,line,act$,"xit")
 63040   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 63060   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 63080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -37,69 +37,69 @@
 00370   read #20,using 'Form POS 1,10*C 20,10*C 2',rec=1: mat servicename$,mat service$
 00380   close #20: 
 00390 ! default message
-00400   let mg$(1)="If you smell gas call"
-00410   let mg$(2)="472-6556 or 472-3535."
+00400   mg$(1)="If you smell gas call"
+00410   mg$(2)="472-6556 or 472-3535."
 00420 SCREEN1: ! 
-00430   a$="" : let prtbkno=0
+00430   a$="" : prtbkno=0
 00440   fntos(sn$="UBPrtBl1-1")
-00450   let pf=26 : ll=24
-00460   let respc=0
+00450   pf=26 : ll=24
+00460   respc=0
 00470   fnlbl(1,1,"Current Reading Date:",ll,1)
 00480   fntxt(1,pf,8,8,1,"1",0,tt$)
-00490   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",reading_date_cur)
+00490   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",reading_date_cur)
 00500   fnlbl(2,1,"Previous Reading Date:",ll,1)
 00510   fntxt(2,pf,8,8,1,"1",0,tt$)
-00520   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",reading_date_prior_s1)
+00520   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",reading_date_prior_s1)
 00530   fnlbl(3,1,"Penalty Due Date:",ll,1)
 00540   fntxt(3,pf,8,8,1,"1",0,tt$)
-00550   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
+00550   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 00560   fnlbl(4,1,"Message on Bill:",ll,1)
 00570   fntxt(4,pf,30,30)
-00580   let resp$(respc+=1)=mg$(1)
+00580   resp$(respc+=1)=mg$(1)
 00590   fntxt(5,pf,30,30)
-00600   let resp$(respc+=1)=mg$(2)
+00600   resp$(respc+=1)=mg$(2)
 00610   fntxt(6,pf,30,30)
-00620   let resp$(respc+=1)=mg$(3)
+00620   resp$(respc+=1)=mg$(3)
 00630   fnlbl(7,1,"Date of Billing:",ll,1)
 00640   fntxt(7,pf,8,8,1,"1")
-00650   let resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
+00650   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00660   fnlbl(8,1,"Starting Account:",ll,1)
 00670 ! let fe$="ubm-act-nam"
-00680 ! let datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno)
-00690 ! let indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno)
-00700 ! let kp=1741: let kl=9 : let dp=41 : let dl=30
-00710 ! let fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
+00680 ! datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno)
+00690 ! indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno)
+00700 ! kp=1741: kl=9 : dp=41 : dl=30
+00710 ! fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2)
 00712   fncmbact(8,pf, 1) ! ,container,indexfile$*200)
-00720   let resp$(respc+=1)="[All]"
+00720   resp$(respc+=1)="[All]"
 00730   fnlbl(9,1,"Route Number:",ll,1)
 00740   fncmbrt2(9,pf)
-00750   let resp$(respc+=1)="[All]"
+00750   resp$(respc+=1)="[All]"
 00760   fnchk(10,pf,"Select Accounts to Print",1)
-00770   let resp$(respc+=1)="False"
+00770   resp$(respc+=1)="False"
 00780   fncmdset(3)
 00790   fnacs(sn$,0,mat resp$,ck)
 00800   if ck=5 then goto ENDSCR
-00810   let reading_date_cur_s1=val(resp$(1))
-00820   let reading_date_prior_s1=val(resp$(2))
-00830   let d4 =val(resp$(3))
-00840   let mg$(1)=resp$(4)
-00850   let mg$(2)=resp$(5)
-00860   let mg$(3)=resp$(6)
-00870   let d1=val(resp$(7))
+00810   reading_date_cur_s1=val(resp$(1))
+00820   reading_date_prior_s1=val(resp$(2))
+00830   d4 =val(resp$(3))
+00840   mg$(1)=resp$(4)
+00850   mg$(2)=resp$(5)
+00860   mg$(3)=resp$(6)
+00870   d1=val(resp$(7))
 00880   if resp$(8)="[All]" then 
 00890     a$=""
 00900   else 
 00910     a$=lpad$(trim$(resp$(8)(1:10)),10)
 00920   end if 
 00930   if resp$(9)="[All]" then 
-00940     let prtbkno=0
+00940     prtbkno=0
 00950   else 
-00960     let prtbkno = val(resp$(9))
+00960     prtbkno = val(resp$(9))
 00970   end if 
 00980   if resp$(10)="True" then sl1=1: let z$="" else sl1=0
 00990   if trim$(a$)<>"" then 
 01000     read #1,using 'form pos 1,c 10,pos 1741,n 2,n 7',key=a$: z$,route,sequence nokey SCREEN1
-01010     let holdz$=z$: begin=1
+01010     holdz$=z$: begin=1
 01020     st1=1
 01030   end if 
 01035 ! 
@@ -128,7 +128,7 @@
 01108   for j=2 to 4
 01110     if rtrm$(e$(j))<>"" then 
 01112       e1=e1+1
-01114       let pe$(e1)=e$(j)
+01114       pe$(e1)=e$(j)
 01116     end if 
 01118   next j
 01120   if st1=0 then goto READALTADR
@@ -142,15 +142,15 @@
 01136   for j=1 to 4
 01138     if rtrm$(ba$(j))<>"" then 
 01140       e1=e1+1
-01142       let pe$(e1)=ba$(j)
+01142       pe$(e1)=ba$(j)
 01144     end if 
 01146   next j
-01148   if trim$(pe$(2))="" then let pe$(2)=pe$(3): let pe$(3)=""
-01150   if trim$(pe$(3))="" then let pe$(3)=pe$(4): let pe$(4)=""
+01148   if trim$(pe$(2))="" then pe$(2)=pe$(3): pe$(3)=""
+01150   if trim$(pe$(3))="" then pe$(3)=pe$(4): pe$(4)=""
 01152   goto L1070
 01154 ! ______________________________________________________________________
 01156 L950: ! 
-01158   if trim$(extra1$)<>"" then let pe$(4)=pe$(3): let pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
+01158   if trim$(extra1$)<>"" then pe$(4)=pe$(3): pe$(3)=extra1$ ! set third address line to extra1$ (2nd address)
 01160   goto L1070
 01162 ! ______________________________________________________________________
 01164 RELEASE_PRINT: ! 
@@ -161,7 +161,7 @@
 01174   goto ENDSCR
 01176 ! ______________________________________________________________________
 01178 L1070: ! 
-01180   let pb=bal-g(11)
+01180   pb=bal-g(11)
 01182 ! if bal<=0 then let g(9)=g(10)=0 ! don't show penalty if balance 0 or less
 01184   let fb$(1)=mg$(1)
 01186   let fb$(2)=mg$(2)
@@ -176,18 +176,18 @@
 01204 ! ______________________________________________________________________
 01206 SCREEN3: ! r:
 01208   fntos(sn$:="UBPrtBl1-2")
-01210   let txt$="Account (blank to stop)"
+01210   txt$="Account (blank to stop)"
 01212   fnlbl(1,1,txt$,31,1)
 01214   if trim$(z$)<>"" then 
-01216     let txt$="Last Account entered was "&z$
+01216     txt$="Last Account entered was "&z$
 01218     fnlbl(3,1,txt$,44,1)
 01220   else 
-01222     let txt$=""
+01222     txt$=""
 01224     fnlbl(3,1,txt$,44,1)
 01226   end if 
 01228   fncmbact(1,17)
-01230   let resp$(1)=a$
-01232   fncmdset(3): let fnacs(sn$,0,mat resp$,ck)
+01230   resp$(1)=a$
+01232   fncmdset(3): fnacs(sn$,0,mat resp$,ck)
 01234   a$=lpad$(trim$(resp$(1)(1:10)),10)
 01236   if trim$(a$)="" then goto RELEASE_PRINT
 01238   if ck=5 then goto RELEASE_PRINT
@@ -196,9 +196,9 @@
 01244 ! ______________________________________________________________________
 01246 ENDSCR: ! 
 01248   fn_screen_totals
-01250   : let fnxit
+01250   : fnxit
 01252 ! ______________________________________________________________________
-01254 ERTN: let fnerror(program$,err,line,act$,"xit")
+01254 ERTN: fnerror(program$,err,line,act$,"xit")
 01256   if uprc$(act$)<>"PAUSE" then goto L1780
 01258   execute "List -"&str$(line) : pause : goto L1780
 01260   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
@@ -206,13 +206,13 @@
 01790   goto ERTN
 01800 ! ______________________________________________________________________
 01810   def fn_screen_totals
-01820     if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
+01820     if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 01830     fntos(sn$="Bills-Total")
-01840     let mylen=23 : let mypos=mylen+2
-01850     let respc=0
+01840     mylen=23 : mypos=mylen+2
+01850     respc=0
 01860     fnlbl(1,1,"Total Bills Printed:",mylen,1)
 01870     fntxt(1,mypos,8,0,1,"",1)
-01880     let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
+01880     resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 02000     fncmdset(52)
 02010     fnacs(sn$,0,mat resp$,ck)
 02020   fnend 
@@ -221,9 +221,9 @@
 02050     open #h_temp:=6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=22",internal,output 
 02060     s5=1
 02070     if prtbkno=0 then 
-02080       let routekey$=""
+02080       routekey$=""
 02090     else 
-02100       let routekey$=cnvrt$("N 2",prtbkno)&"       "
+02100       routekey$=cnvrt$("N 2",prtbkno)&"       "
 02110 ! .    ! key off first record in route (route # no longer part of customer #)
 02120     end if 
 02130     restore #2,search>=routekey$: 
@@ -277,11 +277,11 @@
 03220   fnend 
 03230   def fn_vbprint
 03240 ! -- Printer Program for three per page  Utility Bills
-03250     if reading_date_cur_s1=0 then let reading_date_cur=d3 else let reading_date_cur=reading_date_cur_s1
-03260     if reading_date_prior_s1=0 then let reading_date_prior=d2 else let reading_date_prior=reading_date_prior_s1
+03250     if reading_date_cur_s1=0 then reading_date_cur=d3 else reading_date_cur=reading_date_cur_s1
+03260     if reading_date_prior_s1=0 then reading_date_prior=d2 else reading_date_prior=reading_date_prior_s1
 03270     line_height=3
-03280     let pos_column_column=5 ! 20 !  pos_column_column=remit side position
-03290     let pos_right_column=120 ! pos_right_column=customer side position
+03280     pos_column_column=5 ! 20 !  pos_column_column=remit side position
+03290     pos_right_column=120 ! pos_right_column=customer side position
 03300     fnpa_line(pos_right_column+12,factor+0,62,line_height+12,1) ! the box around the company name and address
 03310 ! pr #20: 'Call Print.AddLine('&STR$(4)&','&STR$(factor+2)&',64,'&str$(line_height*3+1)&',True)'
 03320     pr #20: "Call Print.MyFontBold(True)"
@@ -317,7 +317,7 @@
 03620     fnpa_txt(fnformnumb$(bal,2,9),pos_column_column+30,factor+line_height*11)
 03630     fnpa_txt('After  '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',pos_column_column-2,factor+(line_height*12)+1)
 03640     fnpa_txt(fnformnumb$(bal+g(12)-g(11),2,9),pos_column_column+30,factor+(line_height*12)+1)
-03650 ! let penbal=bal ! If BAL>0 Then Let PENBAL=BAL+MIN(ROUND(BAL*.10,2),g(10)) Else Let PENBAL=0  ! don't know what the penalty rate is
+03650 ! penbal=bal ! If BAL>0 Then pENBAL=BAL+MIN(ROUND(BAL*.10,2),g(10)) Else pENBAL=0  ! don't know what the penalty rate is
 03660 ! if bal>0 then
 03670 !  fnpa_txt(fnformnumb$(penbal,2,9),pos_column_column+30,factor+(line_height*12)+1)
 03680 ! else 
@@ -330,7 +330,7 @@
 03750     pr #20: 'Call Print.MyFontsize(9)'
 03760     fn_print_serivce_metered(1,d(2),d(1),d(3)) ! Water
 03770     fn_print_serivce_metered(2) ! Sewer
-03780 ! let fn_print_serivce_metered(3,d(6),d(5),d(7)) ! Electric
+03780 ! fn_print_serivce_metered(3,d(6),d(5),d(7)) ! Electric
 03790     fn_print_serivce_metered(4,d(10),d(9),d(11)) ! Gas
 03800     if g(5)>0 then let fn_print_serivce_metered(5) ! Service 5
 03810     if g(6)>0 then let fn_print_serivce_metered(6) ! Service 6
@@ -347,21 +347,21 @@
 03920       line_height=242
 03930     end if 
 03940     fnpa_txt(z$,pos_column_column,factor+52)
-03950 ! let fnbarcode(z$,103,factor+45)
+03950 ! fnbarcode(z$,103,factor+45)
 03960     if pb><0 then 
-03970       let de2$="Prior Balance"
-03980       let txt$=de2$&"          "&cnvrt$("pic(-----.--)",pb)
+03970       de2$="Prior Balance"
+03980       txt$=de2$&"          "&cnvrt$("pic(-----.--)",pb)
 03990       fnpa_txt(txt$,pos_right_column+6,factor+line_height)
 04000     else 
-04010       let de2$="             "
+04010       de2$="             "
 04020     end if 
-04030     if est=1 then let de2$="BILL ESTIMATED" : goto L2710 else let de2$="              "
-04040     if final>0 then let de2$="   Final Bill  " : goto L2710 else let de2$="               "
-04050     if df$="Y" then let de2$="   DRAFTED     ": goto L2710 else let de2$="               " : goto L2720
-04055 L2710: let txt$=de2$
+04030     if est=1 then de2$="BILL ESTIMATED" : goto L2710 else de2$="              "
+04040     if final>0 then de2$="   Final Bill  " : goto L2710 else de2$="               "
+04050     if df$="Y" then de2$="   DRAFTED     ": goto L2710 else de2$="               " : goto L2720
+04055 L2710: txt$=de2$
 04060     fnpa_txt(txt$,pos_right_column+6,factor+line_height+=7.0)
 04062 L2720: pr #20: 'Call Print.MyFontSize(12)'
-04064     let txt$=pe$(1)
+04064     txt$=pe$(1)
 04066     fnpa_txt(txt$,pos_column_column,factor+58)
 04068     pr #20: 'Call Print.MyFontsize(10)'
 04070     pr #20: 'Call Print.AddLine('&str$(pos_right_column)&','&str$(factor+line_height+=3.5)&',79,0)'
@@ -393,15 +393,15 @@
 04122   def fn_print_serivce_metered(service_number; service_reading_prior,service_reading_current,service_usage)
 04124     dim psm_txt$*512
 04126     if g(service_number)>0 and service_reading_current=0 and service_reading_prior=0 then 
-04128       let psm_txt$=rpad$(servicename$(service_number)(1:23),23)
+04128       psm_txt$=rpad$(servicename$(service_number)(1:23),23)
 04130     else if g(service_number)>0 and service_reading_current=0 then 
-04132       let psm_txt$=rpad$(servicename$(service_number)(1:14),14)&cnvrt$("pic(zzzzzzzzz)",service_reading_prior)
+04132       psm_txt$=rpad$(servicename$(service_number)(1:14),14)&cnvrt$("pic(zzzzzzzzz)",service_reading_prior)
 04134     else if g(service_number)>0 then 
-04136       let psm_txt$=rpad$(servicename$(service_number)(1:5),5)&cnvrt$("pic(zzzzzzzzz)",service_reading_prior)&cnvrt$("pic(zzzzzzzzz)",service_reading_current)
+04136       psm_txt$=rpad$(servicename$(service_number)(1:5),5)&cnvrt$("pic(zzzzzzzzz)",service_reading_prior)&cnvrt$("pic(zzzzzzzzz)",service_reading_current)
 04138     else 
-04140       let psm_txt$='  '
+04140       psm_txt$='  '
 04142     end if 
-04143 ! if service_reading_prior>service_reading_current then let psm_temp=service_reading_current : service_reading_current=service_reading_prior : service_reading_prior=psm_temp
+04143 ! if service_reading_prior>service_reading_current then psm_temp=service_reading_current : service_reading_current=service_reading_prior : service_reading_prior=psm_temp
 04144     fnpa_txt(psm_txt$&cnvrt$("pic(zzzzzzzz)",service_usage)&cnvrt$("pic(-----z.zz)",g(service_number)),pos_right_column,factor+line_height+=3.5)
 04146     fnpa_txt(servicename$(service_number)(1:5)&cnvrt$("pic(-----z.zz)",g(service_number)),pos_column_column+55,factor+line_height)
 04148   fnend  ! fn_print_serivce_metered

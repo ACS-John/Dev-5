@@ -20,12 +20,12 @@
 00180   scm$(2)="2. Add or Edit"
 00190   scm$(3)="3. pr Proof List"
 00200   scm$(4)="4. Search"
-00210   for j=1 to 4: let iom$(j)=str$(j+3)&",2,C 38,N": next j !:
-        let iom$(2)="5,2,C 38,C,N"
+00210   for j=1 to 4: iom$(j)=str$(j+3)&",2,C 38,N": next j !:
+        iom$(2)="5,2,C 38,C,N"
 00220   pr f "16,34,C 09,B,5": "Exit (F5)"
 00230 L230: rinput #win,select mat iom$,attr "H": mat scm$
 00240   alp=0
-00250   let ti=curfld
+00250   ti=curfld
 00260   if cmdkey=5 then goto L470
 00270   if ti=0 then goto L470
 00280   on ti goto L300,L600,L950,SRCH3 none L230
@@ -39,7 +39,7 @@
 00360   pr #win,fields "8,2,C 24,N": "Enter ERASE to continue:"
 00370   pr f "17,34,C 11,B,5": "Cancel (F5)"
 00380 L380: input #win,fields "8,27,Cu 5,UT,N": cont$ conv L380
-00390   if cont$="ERASE" then let new1=1 else let new1=2
+00390   if cont$="ERASE" then new1=1 else new1=2
 00400   if new1=2 then goto MENU1
 00410   if new1<>1 then goto L380
 00420   close #1: ioerr L430
@@ -71,8 +71,8 @@
 00670 L670: input #win,fields "4,20,Nz 2,UT,N": cde conv L670
 00680   if cmdkey=5 or cde=0 then goto MENU1
 00690   cde$=uprc$(lpad$(rtrm$(str$(cde)),3))
-00700   let des$=""
-00710   let da=0
+00700   des$=""
+00710   da=0
 00720 L720: close #win: ioerr L740
 00730   pr newpage
 00740 L740: let win=103
@@ -90,10 +90,10 @@
 00860   pr #win,fields "5,15,C 3,N": ltrm$(cde$)
 00870 L870: rinput #win,fields "6,15,C 30,UT,N": des$ conv L870
 00880   if cmdkey=5 then goto MENU1
-00890   if cmdkey=4 then delete #1,key=cde$: nokey L600: let new1=1 : goto L600
+00890   if cmdkey=4 then delete #1,key=cde$: nokey L600: new1=1 : goto L600
 00900   rewrite #1,using L770,key=cde$: cde$,des$ nokey L920
 00910   if ti=4 then goto SRCH3 else goto L600
-00920 L920: write #1,using L770: cde$,des$: let new1=1
+00920 L920: write #1,using L770: cde$,des$: new1=1
 00930   goto L600
 00940 ! ______________________________________________________________________
 00950 L950: pr newpage
@@ -125,7 +125,7 @@
 01210 ERTN2: ! 
 01220 L1220: if err=4152 then goto L450 else goto ERTN
 01230 ! ______________________________________________________________________
-01240 XIT: let fnxit
+01240 XIT: fnxit
 01250 ! ______________________________________________________________________
 01260 SRCHEND: ! 
 01270   close #win: ioerr L1280
@@ -135,7 +135,7 @@
 01310   bk=0
 01320   let win=102
 01330   fnopenwin(win,02,47,23,79,cap$)
-01340 ! LET JN$=LPAD$(RTRM$(JCI$(HCE-2)),6)
+01340 ! jN$=LPAD$(RTRM$(JCI$(HCE-2)),6)
 01350 ! READ #41,USING 12500,KEY=JN$: JN$,N$,MAT A$,MAT B NOKEY (list 'asdf')
 01360   restore #1,search>="": nokey L1370
 01370 L1370: pr #win: newpage
@@ -155,7 +155,7 @@
 01510   goto L1370
 01520 ! ______________________________________________________________________
 01530 ! <Updateable Region: ERTN>
-01540 ERTN: let fnerror(program$,err,line,act$,"xit")
+01540 ERTN: fnerror(program$,err,line,act$,"xit")
 01550   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01560   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01570   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

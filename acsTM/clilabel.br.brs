@@ -25,7 +25,7 @@
 00500   pr f "15,22,C 32,B,10": "Print all (F10)"
 00520 L250: input fields "11,46,C 5,UE,N": k$
 00540   if cmdkey=99 or cmdkey=5 then goto XIT
-00560   if cmdkey=10 then let prtall=1 : goto PRINT_EM
+00560   if cmdkey=10 then prtall=1 : goto PRINT_EM
 00580   if cmdkey=6 then goto SRCH1
 00600   let z$=lpad$(rtrm$(k$),5)
 00620   read #1,using F_CLIENT,key=z$: z$,mat a$,mat app,mat ma nokey L250
@@ -36,14 +36,14 @@
 00720 PRINT_EM: pr newpage
 00740   pr f "10,25,c 50,n": "PRINT CLIENT LABELS IN PROCESS"
 00760   pr f "12,34,C 11,B,5": "Cancel (F5)"
-00780   let j=1
+00780   j=1
 00800 READ_CLIENT: ! 
 00820   read #1,using F_CLIENT: z$,mat a$,mat app,mat ma,mat ap2,mat ma2 eof L710 ioerr L850
 00840   if trim$(a$(3))='' then goto READ_CLIENT ! skip clients with no CSZ
 00860 ! If APP(4)<1 Then Goto 440
 00880   for j=1 to min(20, udim(app))
-00900     if app(j)<>0 then let totalapp(j)+=1
-00920     if ma(j)<>0 then let totalma(j)+=1
+00900     if app(j)<>0 then totalapp(j)+=1
+00920     if ma(j)<>0 then totalma(j)+=1
 00940   next j
 00960 ! if ma(14)<>0 then goto L470 else goto READ_CLIENT
 00980 !     ONLY pr CERTAIN TYPES OF MAINTENANCE - type 16=MC
@@ -52,7 +52,7 @@
 01040 ! end if
 01060 F_CLIENT: form pos 1,c 5,3*c 30,pos 375,20*n 1,20*pd 3.2,20*n 1,20*pd 3.2
 01080 L470: ! 
-01100   let p1=pos(a$(3),",",1)
+01100   p1=pos(a$(3),",",1)
 01120   if p1=0 then goto L520
 01140   st$=uprc$(ltrm$(rtrm$(a$(3)(p1+1:p1+3))))
 01160   if st$="MO" then goto L520
@@ -66,9 +66,9 @@
 01320   c$=a$(1)(l1:l2)
 01340   if c$="CPA." or c$=" CPA" then goto L640
 01360   if c$="INC." or c$=" INC" then goto L640
-01380   let p1=pos(a$(1),",",1)
+01380   p1=pos(a$(1),",",1)
 01400   if p1=0 then goto L640
-01420   if a$(1)(p1+1:p1+1)=" " then let p2=2 else let p2=1
+01420   if a$(1)(p1+1:p1+1)=" " then p2=2 else p2=1
 01440   a$(1)=rtrm$(a$(1)(p1+p2:30))&" "&a$(1)(1:p1-1)
 01460 L640: ! 
 01480   mat label_text$=("")
@@ -103,12 +103,12 @@
 02060 L990: pr #127: newpage
 02080   close #101: ioerr L1010
 02100 L1010: open #101: "SROW=6,SCOL=3,EROW=08,ECOL=78,BORDER=DR,CAPTION=BUSINESS NAME SEARCH",display,outin 
-02120   let prtall=0
+02120   prtall=0
 02140   pr f "7,4,C 55,H,N": "Enter beginning search info. or blank for all:"
 02160   pr f "9,32,C 16,R,N": "Press F5 to stop"
 02180 L1050: input fields "7,50,C 25,UE,N": nam$
 02200   if cmdkey=5 then goto SRCHEND
-02220   let nam$=rtrm$(nam$)
+02220   nam$=rtrm$(nam$)
 02240   l1=len(nam$)
 02260   restore #32,search>=nam$: nokey L1050
 02280   close #101: ioerr L1110
@@ -129,7 +129,7 @@
 02580     if bk>20 then bk=1
 02600     bk$(bk)=a1$
 02620 L1270: next j
-02640 L1280: if j>1 then let j=j-1
+02640 L1280: if j>1 then j=j-1
 02660   mat in2$(j)
 02680 L1300: pr f "24,08,C 60,R,N": "Enter to continue; F5 to stop or enter ACCOUNT #:"
 02700 L1310: input fields "24,58,C 5,RE,N": k$

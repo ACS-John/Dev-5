@@ -39,13 +39,13 @@
 01150   close #hrpmstr: ioerr ignore
 01152   close #hChecks: ioerr ignore
 01162   seltp=type=min1=0 
-01164   let vn$=nam$="" 
+01164   vn$=nam$="" 
 01166   mat a$=(""): mat ad$=(""): mat box=(0) 
 01168   fn1099print_close
 01170   goto XIT ! /r
-01190 XIT: let fnxit
+01190 XIT: fnxit
 01740 ! <Updateable Region: ERTN>
-01750 ERTN: let fnerror(program$,err,line,act$,"xit")
+01750 ERTN: fnerror(program$,err,line,act$,"xit")
 01760   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 01770   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 01780   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

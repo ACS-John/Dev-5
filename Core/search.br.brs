@@ -22,14 +22,14 @@
 00210     fnwin3b(win,cap$,4,45,0,2,5,2)
 00220     bk1=prtall=0
 00230     pr #win,fields "2,2,Cc 40,N": "Enter Search Criteria (blank for all):"
-00240     let key_position=22-round((alpha_key_length/2),0)
-00250     let na$(1)="3,"&str$(key_position)&",C "&str$(alpha_key_length)&",UT,N"
+00240     key_position=22-round((alpha_key_length/2),0)
+00250     na$(1)="3,"&str$(key_position)&",C "&str$(alpha_key_length)&",UT,N"
 00260     input #win,fields mat na$: na1$
 00270     if cmdkey=5 then goto CANCEL_OUT
 00280 ! If CMDKEY><1 Then Goto 260
 00290     close #win: 
-00300     if len(rtrm$(na1$))=0 and len(rtrm$(na2$))=0 then let prtall=1
-00320 L320: let fnwin3b(win,heading$,22,70,0,2,5,2)
+00300     if len(rtrm$(na1$))=0 and len(rtrm$(na2$))=0 then prtall=1
+00320 L320: fnwin3b(win,heading$,22,70,0,2,5,2)
 00330     cde=0
 00340     mat fs_sw$(22)
 00350     for j=1 to 20
@@ -40,7 +40,7 @@
 00400       if len(rtrm$(na1$))=0 then goto L420
 00410       if fs_info$(1)(1:len(rtrm$(na1$)))>na1$(1:len(rtrm$(na1$))) then goto L490
 00420 L420: cde=cde+1
-00425       let numeric_value$="": let numeric_value$=cnvrt$(numeric_format$,fs_info) conv L430
+00425       numeric_value$="": numeric_value$=cnvrt$(numeric_format$,fs_info) conv L430
 00430 L430: let fs_sw$(j)=(fs_info$(1)(1:key_length)&" "&fs_info$(2)(1:25)&" "&fs_info$(3)(1:12)&" "&numeric_value$)(1:70)
 00440       let fs_sk$(j)=fs_info$(1)
 00450       if j>1 then goto L480

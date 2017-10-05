@@ -201,99 +201,99 @@
 02020   data 9
 02030   read mat amt$
 02040 ! ______________________________________________________________________
-02050   let tr$(1)="3 1098"
-02060   let tr$(2)="4 1099-A"
-02070   let tr$(3)="B 1099-B"
-02080   let tr$(4)="1 1099-DIV"
-02090   let tr$(5)="F 1099-G"
-02100   let tr$(6)="6 1099-INT"
-02110   let tr$(7)="A 1099-MISC"
-02120   let tr$(8)="D 1099-OID"
-02130   let tr$(9)="7 1099-PATR"
-02140   let tr$(10)="9 1099-R"
-02150   let tr$(11)="L 5498"
-02160   let tr$(12)="W W-2G"
+02050   tr$(1)="3 1098"
+02060   tr$(2)="4 1099-A"
+02070   tr$(3)="B 1099-B"
+02080   tr$(4)="1 1099-DIV"
+02090   tr$(5)="F 1099-G"
+02100   tr$(6)="6 1099-INT"
+02110   tr$(7)="A 1099-MISC"
+02120   tr$(8)="D 1099-OID"
+02130   tr$(9)="7 1099-PATR"
+02140   tr$(10)="9 1099-R"
+02150   tr$(11)="L 5498"
+02160   tr$(12)="W W-2G"
 02170 ! ______________________________________________________________________
 02180   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
         read #20,using 'Form POS 1,3*C 40,C 12': mat a$,b$ !:
         close #20: 
 02190 ! ______________________________________________________________________
 02200   let ficamax=oldmax
-02210 L2210: let p1=pos(b$,"-",1)
+02210 L2210: p1=pos(b$,"-",1)
 02220   if p1=0 then goto L2250
 02230   b$(p1:p1)=""
 02240   goto L2210
 02250 L2250: b1=0 : b1=val(b$) conv L2260
-02260 L2260: let p1=pos(a$(3),",",1)
-02270   if p1=0 then let p1=pos(a$(3)," ",1)
+02260 L2260: p1=pos(a$(3),",",1)
+02270   if p1=0 then p1=pos(a$(3)," ",1)
 02280   ct$=a$(3)(1:p1-1)
 02290   st$=a$(3)(p1+2:p1+3)
-02300   let p2=len(rtrm$(a$(3)))
-02310   let p1=p2-4
+02300   p2=len(rtrm$(a$(3)))
+02310   p1=p2-4
 02320   let zip$=a$(3)(p1:p2)
 02330   if val(date$(1:2))-1 <70 then !:
           let yr=2000+val(date$(1:2))-1 else !:
           let yr=1900+val(date$(1:2))-1
-02340 L2340: let io1$(01)="04,36,C 40,UT,N"
-02350   let io1$(02)="05,36,C 40,UT,N"
-02360   let io1$(03)="06,36,C 40,UT,N"
-02370   let io1$(04)="08,40,N 09,UT,N"
-02380   let io1$(05)="09,40,N 04,UT,N"
-02390   let io1$(06)="10,40,C 04,UT,N"
-02400   let io1$(07)="11,40,Cu 1,UT,N"
-02410   let io1$(08)="12,40,C 05,UT,N"
-02420   let io1$(09)="13,40,Cu 1,UT,N"
-02430   let io1$(10)="15,36,C 40,UT,N"
-02440   let io1$(11)="16,36,Nz 10,UT,N"
-02450   let io1$(12)="18,58,Cu 1,UT,N"
-02460   let io1$(13)="19,58,Nz 10,UT,N"
-02470   let ibm$="IBM"
-02480   let namcde$="F"
-02490   let typemp$="R"
+02340 L2340: io1$(01)="04,36,C 40,UT,N"
+02350   io1$(02)="05,36,C 40,UT,N"
+02360   io1$(03)="06,36,C 40,UT,N"
+02370   io1$(04)="08,40,N 09,UT,N"
+02380   io1$(05)="09,40,N 04,UT,N"
+02390   io1$(06)="10,40,C 04,UT,N"
+02400   io1$(07)="11,40,Cu 1,UT,N"
+02410   io1$(08)="12,40,C 05,UT,N"
+02420   io1$(09)="13,40,Cu 1,UT,N"
+02430   io1$(10)="15,36,C 40,UT,N"
+02440   io1$(11)="16,36,Nz 10,UT,N"
+02450   io1$(12)="18,58,Cu 1,UT,N"
+02460   io1$(13)="19,58,Nz 10,UT,N"
+02470   ibm$="IBM"
+02480   namcde$="F"
+02490   typemp$="R"
 02500   pr newpage
 02510 MAIN: ! 
 02520   fntos(sn$="Elec1099") !:
-        let mylen=30: let mypos=mylen+3 : let right=1
+        mylen=30: mypos=mylen+3 : right=1
 02530   fnlbl(1,15,"Insert Diskette for Electronic 1099s in Drive A",55,0)
 02540   fnlbl(3,1,"Company Namme:",mylen,right)
 02550   fntxt(3,mypos,40,0,0,"",0,"The filer's company name.",0 ) !:
-        let resp$(1)=a$(1)
+        resp$(1)=a$(1)
 02560   fnlbl(4,1,"Address:",mylen,right)
 02570   fntxt(4,mypos,40,0,0,"",0,"The filer's address.",0 ) !:
-        let resp$(2)=a$(2)
+        resp$(2)=a$(2)
 02580   fnlbl(5,1,"City State Zip:",mylen,right)
 02590   fntxt(5,mypos,40,0,0,"",0,"The filer's city state zip.",0 ) !:
-        let resp$(3)=a$(3)
-02600   let mylen=40: let mypos=mylen+3
+        resp$(3)=a$(3)
+02600   mylen=40: mypos=mylen+3
 02610   fnlbl(7,1,"Federal ID Number:",mylen,right)
 02620   fntxt(7,mypos,12,0,0,"",0,"Enter the Federal ID number without slashes,dashes, or spaces.",0 ) !:
-        let resp$(4)=str$(b1)
+        resp$(4)=str$(b1)
 02630   fnlbl(8,1,"Payment Year:",mylen,right)
 02640   fntxt(8,mypos,4,0,0,"1030",0,"The payment year must be entered and will be in ccyy format.",0 ) !:
-        let resp$(5)=str$(yr)
+        resp$(5)=str$(yr)
 02650   fnlbl(9,1,"4 Character Payer Name Control Code:",mylen,right)
 02660   fntxt(9,mypos,4,0,0,"",0,"The Payer Name Control Code can be obtained from the mail label on the 1099 Package that you received from IRS.",0 ) !:
-        let resp$(6)=pnc$
+        resp$(6)=pnc$
 02670   fnchk(11,mypos,"Combined Federal/State Filer:",1) !:
-        let resp$(7)=cfsy$
+        resp$(7)=cfsy$
 02680   fnlbl(12,1,"5 Character Transmitter Code:",mylen,right)
 02690   fntxt(12,mypos,5,0,0,"",0,"When you apply with the IRS to submit by magnetic media, you will be issued a five character transmitter code.",0 ) !:
-        let resp$(8)=pnc$
+        resp$(8)=pnc$
 02700   fnchk(13,mypos,"Is Payer a Foreign Corporation:",1) !:
-        let resp$(9)=tcc$
+        resp$(9)=tcc$
 02710   fnlbl(14,1,"Contact Name:",mylen,right)
 02720   fntxt(14,mypos,40,0,0,"",0,"",0 ) !:
-        let resp$(10)=cn$
+        resp$(10)=cn$
 02730   fnlbl(15,1,"Contact Phone Number:",mylen,right)
 02740   fntxt(15,mypos,10,0,0,"30",0,"",0 ) !:
-        let resp$(11)=str$(cpn)
-02750   let mylen=60: let mypos=mylen+3
+        resp$(11)=str$(cpn)
+02750   mylen=60: mypos=mylen+3
 02760   fnlbl(17,1,"(O)riginal, (R)eplacdment or (C)orrection file (O/R/C):",mylen,right)
 02770   fntxt(17,mypos,1,0,0,"",0,"",0 ) !:
-        let resp$(12)=orc$
+        resp$(12)=orc$
 02780   fnlbl(18,1,"Payer Phone Number:",mylen,right)
 02790   fntxt(18,mypos,10,0,0,"30",0,"",0 ) !:
-        let resp$(13)=str$(ppn)
+        resp$(13)=str$(ppn)
 02800   fncmdkey("&Next",1,1,0,"Moves to next questions.")
 02810   fncmdkey("&Cancel",5,0,1,"Returns to menu.")
 02820   fnacs(sn$,0,mat resp$,ckey)
@@ -315,14 +315,14 @@
 02990   if cfs$=" " then goto L3180
 03000   if cfs$><"1" then goto MAIN
 03010 SELECT_ST: ! 
-03015   let resp=0
+03015   resp=0
 03020   fntos(sn$="elec10992") !:
-        let mylen=28 : let mypos=mylen+3
+        mylen=28 : mypos=mylen+3
 03035   fnlbl(1,1,"Place a 1 by each State participating in the combined Federal/State Filer",80,0)
 03040   for j=1 to 17
 03060     for x=1 to 3
-03070 ! Let FNCHK(J+1,X*20,ST$(STOP2),1) !:
-            ! Let RESP$(RESP+=1)=ST$(J*3-2)
+03070 ! fnCHK(J+1,X*20,ST$(STOP2),1) !:
+            ! rESP$(RESP+=1)=ST$(J*3-2)
 03080     next x
 03090   next j
 03100   fncmdkey("&Next",1,1,0,"Moves to next questions.")
@@ -339,13 +339,13 @@
 03220   pr #102,fields "2,2,C 17,N": "Select Form Type:"
 03230   for j=1 to 13
 03240     let wrd2$(j)=cnvrt$("N 2",j)&".  "&tr$(j)(3:18)
-03250     let io2$(j)=str$(j+1)&",20,C 18"
+03250     io2$(j)=str$(j+1)&",20,C 18"
 03260   next j
 03270   pr f "21,35,C 09,B,5": "Exit (F5)"
 03280 L3280: rinput #102,select mat io2$,attr "H": mat wrd2$
-03290   let ti1=curfld
+03290   ti1=curfld
 03300   if ti1<1 or ti1>udim(tr$) then goto L3280
-03310   let ti$=tr$(ti1)(1:1)
+03310   ti$=tr$(ti1)(1:1)
 03320   close #101: ioerr L3330
 03330 L3330: open #101: "SROW=3,SCOL=3,ERow=22,ECOL=78,Border=DR,Caption=<"&cap$,display,outin 
 03340   pr #101: newpage
@@ -353,18 +353,18 @@
 03360   pr f "4,11,C 40,R,N": "Category"
 03370   for j=1 to 14
 03380     if j<10 then pr f str$(j+4)&",11,C 65": amt$(ti1,j)(8:70)
-03390     let io1$(j)=str$(j+4)&",7,N 2,UT,N"
+03390     io1$(j)=str$(j+4)&",7,N 2,UT,N"
 03400   next j
 03410   pr f "17,5,C 65,R,N": "Vendor Type in your file that matches each category:"
 03420   pr f "23,30,C 09,B,1": "Next (F1)"
 03430   pr f "23,41,C 09,B,5": "Exit (F5)"
 03440 L3440: input fields mat io1$: mat ti2 conv L3440
-03450   if ce>0 then let io1$(ce)(ce1:ce2)="U": ce=0
+03450   if ce>0 then io1$(ce)(ce1:ce2)="U": ce=0
 03460   if cmdkey>0 then goto L3530 else ce=curfld+1
 03470   if ce>udim(io1$) then ce=1
-03480 L3480: let io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
-03490   ce2=ce1+1 : let io1$(ce)(ce1:ce1)="UC" : goto L3440
-03500 CONV2: if ce>0 then let io1$(ce)(ce1:ce2)="U"
+03480 L3480: io1$(ce)=rtrm$(uprc$(io1$(ce))) : ce1=pos(io1$(ce),"U",1)
+03490   ce2=ce1+1 : io1$(ce)(ce1:ce1)="UC" : goto L3440
+03500 CONV2: if ce>0 then io1$(ce)(ce1:ce2)="U"
 03510   ce=cnt+1
 03520 ERR2: pr f "24,78,C 1": bell : goto L3480
 03530 L3530: if cmdkey=5 then goto XIT
@@ -377,19 +377,19 @@
 03600   gosub PROCESS
 03610 ASKDAT: ! 
 03620   fntos(sn$="VendorTransList") !:
-        let mylen=28 : let mypos=mylen+3
+        mylen=28 : mypos=mylen+3
 03630   fnlbl(1,1,"Transaction Starting Date:",mylen,1)
 03640   fntxt(1,mypos,8,0,0,'CCYYMMDD',0,'Normally you would enter the first day of the calendar year.') !:
-        let resp$(1)=str$(transactionstartingdate)
+        resp$(1)=str$(transactionstartingdate)
 03650   fnlbl(2,1,"Transaction Ending Date:",mylen,1)
 03660   fntxt(2,mypos,8,0,0,'CCYYMMDD',0,'You should enter the last day of the calendar year.') !:
-        let resp$(2)=str$(transactionendingdate)
+        resp$(2)=str$(transactionendingdate)
 03670   fnlbl(2,1,"",45,1)
 03680   fncmdset(2)
 03690   fnacs(sn$,0,mat resp$,ckey)
 03700 ! 
-03710   let transactionstartingdate=val(resp$(1))
-03720   let transactionendingdate=val(resp$(2))
+03710   transactionstartingdate=val(resp$(1))
+03720   transactionendingdate=val(resp$(2))
 03730   open #paymstr=1: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 03740   open #trans=2: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 03750   if ct1=0 then open #22: "Name=IRSTAX,RecL=750,eol=crlf,Replace",display,output 
@@ -407,7 +407,7 @@
 03870   if x>transactionendingdate then goto L3830
 03880   let ytdp+=am
 03890   goto L3830
-03900 L3900: ! LET VN$="12345678": LET NAM$="JOE JONES": aD1$="11014 HWY 206": aD2$="PO BOX 925": cSZ$="HARRISON, AR 72601": LET YTDP=655.55: LET TYP=7: sS$="123456789"
+03900 L3900: ! vN$="12345678": nAM$="JOE JONES": aD1$="11014 HWY 206": aD2$="PO BOX 925": cSZ$="HARRISON, AR 72601": LET YTDP=655.55: tYP=7: sS$="123456789"
 03910   form pos 1,c 8,c 35,3*c 20,pd 5.2,n 2,c 11
 03920   for j=1 to 12
 03930     if typ=0 then goto L3980
@@ -416,19 +416,19 @@
 03960     amt(j)=ytdp*100 : goto L3990
 03970 L3970: next j
 03980 L3980: goto L3790
-03990 L3990: let r1=r1+1
-04000   let p1=pos(csz$,",",1)
-04010   if p1=0 then let p1=pos(csz$," ",1)
+03990 L3990: r1=r1+1
+04000   p1=pos(csz$,",",1)
+04010   if p1=0 then p1=pos(csz$," ",1)
 04020   c$=csz$(1:p1-1)
 04030   s$=uprc$(csz$(p1+2:p1+3))
-04040   let p2=len(rtrm$(csz$))
-04050   let p1=p2-4
+04040   p2=len(rtrm$(csz$))
+04050   p1=p2-4
 04060   let z$=csz$(p1:p2)
-04070   ssn=0: let tin$=" "
+04070   ssn=0: tin$=" "
 04080   for j=1 to 11
 04090     if ss$(j:j)=>"0" and ss$(j:j)<="9" then goto L4130
-04100     if j=3 then let tin$="1"
-04110     if j=4 or j=7 then let tin$="2"
+04100     if j=3 then tin$="1"
+04110     if j=4 or j=7 then tin$="2"
 04120     ss$(j:j)=""
 04130 L4130: next j
 04140   if len(ss$)><9 then goto L4180
@@ -438,8 +438,8 @@
 04180 L4180: pr newpage
 04190   close #103: ioerr L4200
 04200 L4200: open #103: "SROW=7,SCOL=8,EROW=15,ECOL=72,Border=Sr,Caption=<"&cap$,display,outin 
-04210   let io3$(1)="7,55,Cu 1,UT,N"
-04220   let io3$(2)="8,55,C 9,UT,N"
+04210   io3$(1)="7,55,Cu 1,UT,N"
+04220   io3$(2)="8,55,C 9,UT,N"
 04230   pr #103,fields "4,2,C 60,N": "Vendor Number: "&ltrm$(vn$)
 04240   pr #103,fields "5,2,C 60,N": "         Name: "&nam$
 04250   pr #103,fields "2,2,Cc 63,H": "Unable to determine Federal ID or Social Security Number."
@@ -448,13 +448,13 @@
 04280   ss$=ss$(1:9)
 04290   pr #103,fields "1,1,C 7,N": hex$("07")
 04300 L4300: pr f "16,35,C 09,B,5": "Stop (F5)"
-04310   if tin$="1" then let tinfs$="F"
-04320   if tin$="2" then let tinfs$="S"
-04330   if tin$=" " then let tinfs$="N"
+04310   if tin$="1" then tinfs$="F"
+04320   if tin$="2" then tinfs$="S"
+04330   if tin$=" " then tinfs$="N"
 04340 L4340: rinput #103,fields mat io3$: tinfs$,ss$ conv L4300
-04350   if tinfs$="F" then let tin$="1"
-04360   if tinfs$="S" then let tin$="2"
-04370   if tinfs$="N" then let tin$=" "
+04350   if tinfs$="F" then tin$="1"
+04360   if tinfs$="S" then tin$="2"
+04370   if tinfs$="N" then tin$=" "
 04380   if tinfs$<>"F" and tinfs$<>"S" and tinfs$<>"N" then goto L4340
 04390   ssn=val(ss$) conv L4340
 04400   if tin$><" " and len(rtrm$(ss$))><9 then goto L4340
@@ -464,7 +464,7 @@
 04440   close #103: 
 04450 L4450: gosub PROCESS
 04460 L4460: if tin$="1" then ln4$=uprc$(nam$(1:4)) : goto L4530
-04470   let p1=len(rtrm$(nam$))
+04470   p1=len(rtrm$(nam$))
 04480   if p1=0 then ln4$="": goto L4530
 04490   for j=p1 to 1 step -1
 04500     if nam$(j:j)=" " then goto L4520
@@ -472,11 +472,11 @@
 04520 L4520: ln4$=nam$(j+1:j+4)
 04530 L4530: for j=1 to 51
 04540     if s$><st$(j)(1:2) then goto L4610
-04550     if stu(j)=1 then let ps$=st$(j)(4:5) else let ps$="  "
+04550     if stu(j)=1 then ps$=st$(j)(4:5) else ps$="  "
 04560     for j1=1 to 12
-04570       let kamt(j,j1)=kamt(j,j1)+amt(j1)
+04570       kamt(j,j1)=kamt(j,j1)+amt(j1)
 04580     next j1
-04590     let knp(j)=knp(j)+1
+04590     knp(j)=knp(j)+1
 04600     goto L4750
 04610 L4610: next j
 04620   pr newpage
@@ -507,12 +507,12 @@
 04870   return 
 04880 ! ______________________________________________________________________
 04890 RECB: ! 
-04900   let totalb=totalb+1
+04900   totalb=totalb+1
 04910   seq=seq+1: pr #22,using L4920: "B",yr,cri$," ",tin$,ss$,vn$," "," ",mat amt,"",fci$,nam$,"","",ad1$,"",c$,s$,z$,"",seq,"","","",0,0,"",""
 04920 L4920: form pos 1,c 1,n 4,c 1,c 4,c 1,c 9,c 20,c 4,c 10,12*pic(############),c 48,c 1,6*c 40,c 2,c 9,c 1,pic(########),pos 508,c 36,pos 544,c 119,c 60,2*pic(##########),c 2,c 2
 04930   mat camt=camt+amt
 04940   cnp=cnp+1
-04950   let tnp=tnp+1
+04950   tnp=tnp+1
 04960   mat amt=(0)
 04970   return 
 04980 ! ______________________________________________________________________
@@ -556,7 +556,7 @@
 05360   gosub L5600
 05370 L5370: goto XIT
 05380 ! ______________________________________________________________________
-05390 XIT: let fnxit
+05390 XIT: fnxit
 05400 ! ______________________________________________________________________
 05410 PROCESS: pr newpage
 05420   close #101: ioerr L5430
@@ -567,11 +567,11 @@
 05470   return 
 05480 ! ______________________________________________________________________
 05490 CSZ: ! EXTRACT  CITY$,STATE$,ZIP$ FORM CSZ$
-05500 L5500: let p1=pos(csz$,".",1)
+05500 L5500: p1=pos(csz$,".",1)
 05510   if p1>0 then csz$(p1:p1)="": goto L5500
-05520   let p1=pos(csz$,",",1)-1
-05530   if p1=-1 then let p1=pos(csz$," ",1)-1
-05540   let p2=pos(csz$," ",p1+3)
+05520   p1=pos(csz$,",",1)-1
+05530   if p1=-1 then p1=pos(csz$," ",1)-1
+05540   p2=pos(csz$," ",p1+3)
 05550   city$=uprc$(rtrm$(csz$(1:p1))(1:15))
 05560   state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2))
 05570   let zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:25)))(1:9))
@@ -593,7 +593,7 @@
 05730   return 
 05740 ! ______________________________________________________________________
 05750 ! <Updateable Region: ERTN>
-05760 ERTN: let fnerror(program$,err,line,act$,"xit")
+05760 ERTN: fnerror(program$,err,line,act$,"xit")
 05770   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 05780   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 05790   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

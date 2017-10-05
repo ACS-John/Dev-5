@@ -13,8 +13,8 @@
 00140   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #1,using 'Form POS 195,C 30',rec=1: tb$ !:
         close #1: !:
-        let tb$="("&trim$(tb$)&")"
-00150   let tempx=val(fnactpd$) conv L190
+        tb$="("&trim$(tb$)&")"
+00150   tempx=val(fnactpd$) conv L190
 00160   if tempx=1 then actpd$="one" else !:
           if tempx=2 then actpd$="two" else !:
             if tempx=3 then actpd$="three" else !:
@@ -31,7 +31,7 @@
               if tempx=14 then actpd$="fourteen"
 00190 L190: sh$="1,10,C 60,H,N"
 00200   for j=1 to 20 : fli$(j)=str$(j+2)&",2,C 78,UT,N" : next j
-00210   if fnprocess=1 then let t=2 : goto L320 else goto MENU1
+00210   if fnprocess=1 then t=2 : goto L320 else goto MENU1
 00220 ! _____________________________________________________________________
 00230 MENU1: pr newpage
 00240   close #101: ioerr L250
@@ -43,7 +43,7 @@
 00280   for j=1 to 2: fl2$(j)=str$(j+5)&",15,C 46": next j
 00290   pr f "10,35,Cc 09,B,5": "Exit (F5)"
 00300 L300: rinput select mat fl2$,attr "H": mat sc2$ !:
-        let t=curfld
+        t=curfld
 00310   if cmdkey=5 then goto XIT
 00320 L320: on t goto L370,L390 none L300
 00330 ! _____________________________________________________________________
@@ -78,10 +78,10 @@
 00550 L550: close #1: 
 00555   pr newpage
 00560   fncloseprn
-00570 XIT: let fnchain("S:\acsGL\acglAuto")
+00570 XIT: fnchain("S:\acsGL\acglAuto")
 00580 ! ______________________________________________________________________
 00590 ! <Updateable Region: ERTN>
-00600 ERTN: let fnerror(program$,err,line,act$,"xit")
+00600 ERTN: fnerror(program$,err,line,act$,"xit")
 00610   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 00620   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00630   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

@@ -21,27 +21,27 @@
 00200   next j
 00210 OUT_THE_LOOP: ! 
 00220   fntos(sn$="flexdir") !:
-        let mylen=20 : let mypos=mylen+2
+        mylen=20 : mypos=mylen+2
 00230   fnlbl(1,1,"Filter:",mylen,1)
 00240   fntxt(1,mypos,18) !:
-        let resp$(1)=filter$
+        resp$(1)=filter$
 00250   fnlbl(2,1,"Directory:",mylen,1)
 00260   fntxt(2,mypos,40,255) !:
-        let resp$(2)=dur$
+        resp$(2)=dur$
 00270   ch$(1)="File Name" : ch$(2)="Ext" : ch$(3)="Path" !:
         mat item$(3) : mat ch$(3) : mat cm$(3) !:
         fnflexinit1("loc-br",3,1,15,90,mat ch$,mat cm$,1)
 00280   for j=1 to udim(brfn$)
-00290     let item$(1) = prog$(1,j)
-00300     let item$(2) = ext$(1,j)
-00310     let item$(3) = path$(1,j)
+00290     item$(1) = prog$(1,j)
+00300     item$(2) = ext$(1,j)
+00310     item$(3) = path$(1,j)
 00320     fnflexadd1(mat item$)
 00330   next j
 00340   fncmdset(102)
-00350 L350: let fnacs(sn$,0,mat resp$,ck)
+00350 L350: fnacs(sn$,0,mat resp$,ck)
 00360   if ck=5 then goto DONE
 00370   let filter$=resp$(1) !:
-        let dur$=resp$(2)
+        dur$=resp$(2)
 00380   if ck=6 then goto REFREASH
 00390 ! 
 00400   goto L350
@@ -51,7 +51,7 @@
 00440   stop 
 00450 ! ______________________________________________________________________
 00460 ! <Updateable Region: ERTN>
-00470 ERTN: let fnerror(program$,err,line,act$,"xit")
+00470 ERTN: fnerror(program$,err,line,act$,"xit")
 00480   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00490   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00500   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

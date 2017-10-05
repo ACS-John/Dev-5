@@ -8,8 +8,8 @@
 10140   dim tr(7),tr$*12,td$*30,oldtr$*12
 10160   dim cap$*128,resp$(50)*50
 10180   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*21,tgl(200,4)
-10200   let period_current=1
-10220   let period_prior=2
+10200   period_current=1
+10220   period_prior=2
 10240   a$(1)="Disbursements Journal"
 10260   a$(2)="Receipts Journal"
 10280   a$(3)="General Journal      (Adj)"
@@ -35,11 +35,11 @@
 20040     do 
 20060       read #h_gltrans,using F_GLTRANS: mat tr,tr$,td$ eof EO_JOURNAL
 20080     loop until tr(4)=date_bad
-20100     let tr(4)=date_good
+20100     tr(4)=date_good
 20120     rewrite #h_gltrans,using F_GLTRANS: mat tr,tr$,td$
 20140 ! 
 22000 PJ_PRINT_REC: ! 
-22020     if tr$="999999999999" then let tr$=" "
+22020     if tr$="999999999999" then tr$=" "
 22040     if tr(5)>0 then 
 22060       pr #255,using L550: ltrm$(tr$),tr(4),td$,tr(1),tr(2),tr(3),tr(5) pageoflow PGOF
 22080     else 
@@ -64,20 +64,20 @@
 24060       if tr(1)=tgl(j,1) and tr(2)=tgl(j,2) and tr(3)=tgl(j,3) then goto L680
 24080     next j
 24100 L670: ! 
-24120     let j=tg1=tg1+1
+24120     j=tg1=tg1+1
 24140 L680: ! 
-24160     let tgl(j,1)=tr(1): let tgl(j,2)=tr(2): let tgl(j,3)=tr(3)
-24180     let tgl(j,4)=tgl(j,4)+tr(5)
+24160     tgl(j,1)=tr(1): tgl(j,2)=tr(2): tgl(j,3)=tr(3)
+24180     tgl(j,4)=tgl(j,4)+tr(5)
 24200 ! /r
 26000 L690: ! 
 26020     if tr(5)<0 then goto L720 ! CREDITS
-26040     let total1+=tr(5)
+26040     total1+=tr(5)
 26060     goto L740
 26080 L720: ! 
-26100     let total2+=tr(5)
+26100     total2+=tr(5)
 26120 L740: ! 
 26140     if uprc$(td$(1:6))="CONTRA" then goto L760 ! NO CONTRA ENTRIES IN NET
-26160     let net+=tr(5)
+26160     net+=tr(5)
 26180 L760: ! 
 26200     oldtr$=tr$
 26220   loop 
@@ -91,7 +91,7 @@
 28140   if uprc$(a$(tr(6))(1:21))><uprc$(oldtrans$) or t9=9 then goto L830
 28160   pr #255: pageoflow PGOF
 28180 L830: ! 
-28200   let net=0
+28200   net=0
 28220   return  ! /r
 30000 HDR: ! r:
 30020   pr #255,using F_HDR_1: date$('mm/dd/yy'),cnam$
@@ -118,7 +118,7 @@
 32060   pr #255,using 'form pos 55,c 14,pos 70,pic(----,---,---.##),pic(----,---,---.##)': "Journal Totals",total1,total2
 32100   pr #255: tab(72);"=============";tab(86);"=============="
 32120 ! IF TR6=1 THEN GOSUB 1230
-32140   let total1=total2=net=0
+32140   total1=total2=net=0
 32160   if t9=9 then goto L1150
 32180   pr #255: newpage
 32200   gosub HDR
@@ -127,10 +127,10 @@
 32260 L1150: return  ! /r
 34000 EO_JOURNAL: ! r:
 34020   if tr(5)=0 and tr(6)=0 then goto L1210
-34040   let t9=9
+34040   t9=9
 34060   gosub PJ_SOME_TOTAL
 34080   gosub JOURNAL_TOTALS
-34100 L1210: let fncloseprn
+34100 L1210: fncloseprn
 34120   goto XIT ! /r
 36000 PGOF: ! r:
 36020   pr #255: newpage
@@ -138,40 +138,40 @@
 36060   continue  ! /r
 38300 ! ______________________________________________________________________
 38320 ! <Updateable Region: ERTN>
-38340 ERTN: let fnerror(program$,err,line,act$,"xit")
+38340 ERTN: fnerror(program$,err,line,act$,"xit")
 38360   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
 38380   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 38400   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 38420 ERTN_EXEC_ACT: execute act$ : goto ERTN
 38440 ! /region
 38460 ! ______________________________________________________________________
-38480 XIT: let fnxit
+38480 XIT: fnxit
 38500 ! ______________________________________________________________________
 40000 ASK_PERIOD: ! r:
 40020 ! pr newpage
 40040   fntos(sn$="fix_trans_dates")
-40060   let respc=0
-40080 ! let fnfra(1,1,5,50,"Print from current month files or history"," ")
-40100 ! let fnopt(1,3,"Current Period Transactions",0,1)
-40120 ! let resp$(respc+=1)="True"
-40140 ! let fnopt(3,3,"Prior Period Transactions",0,1)
-40160 ! let resp$(respc+=1)="False"
-40180 ! let fnlbl(4,1,"Prior period code (blank for all):",35,0,0,1)
+40060   respc=0
+40080 ! fnfra(1,1,5,50,"Print from current month files or history"," ")
+40100 ! fnopt(1,3,"Current Period Transactions",0,1)
+40120 ! resp$(respc+=1)="True"
+40140 ! fnopt(3,3,"Prior Period Transactions",0,1)
+40160 ! resp$(respc+=1)="False"
+40180 ! fnlbl(4,1,"Prior period code (blank for all):",35,0,0,1)
 40200   fnlbl(1,1,"Only Current Period transactions will be processed.",51,2)
 40220   fnlbl(2,1,"All matching dates will be changed.",51,2)
-40240   let resp$(respc+=1)=" "
-40260 ! let fnfra(7,1,4,50,"Date Correction"," ")
+40240   resp$(respc+=1)=" "
+40260 ! fnfra(7,1,4,50,"Date Correction"," ")
 40280   fnlbl(4,1,"Bad Date:",12,1) ! ,0,0,2)
 40300   fntxt(4,14,2,0,1,"1",0,"Prior period code is only applicable if printing from history.  Enter the period code for the month you want printed. Use blank for all and also if you chose current period transactions.")
-40320   let resp$(respc+=1)=" "
+40320   resp$(respc+=1)=" "
 40340   fnlbl(5,1,"Good Date:",12,1) ! ,0,0,2)
 40360   fntxt(5,14,2,0,1,"1",0,"")
-40380   let resp$(respc+=1)=" "
+40380   resp$(respc+=1)=" "
 40400   fncmdset(2)
 40420   fnacs(sn$,0,mat resp$,ck)
 40440   if ck<>5 then 
-40460     let date_bad=val(resp$(1))
-40480     let date_good=val(resp$(2))
+40460     date_bad=val(resp$(1))
+40480     date_good=val(resp$(2))
 40490     if date_bad=0 or date_good=0 then goto ASK_PERIOD
 40500   end if 
 40520   return  ! /r

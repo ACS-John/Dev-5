@@ -11,37 +11,37 @@
 00140   fntop(program$,'Locate2')
 00150   let filter$="*.br, *.br"
 00160   cancel=5
-00170   let report$=env$('temp')&"\LocRpt-"&session$&".txt" !:
+00170   report$=env$('temp')&"\LocRpt-"&session$&".txt" !:
         subprocfile$=env$('temp')&"\loc3-"&session$&".tmp" !:
-        let procfile$=env$('temp')&"\Loc0-"&session$&".prc" !:
-        let tempfile1$=env$('temp')&"\Loc1-"&session$&".tmp" !:
-        let tempfile2$=env$('temp')&"\Loc2-"&session$&".tmp"
+        procfile$=env$('temp')&"\Loc0-"&session$&".prc" !:
+        tempfile1$=env$('temp')&"\Loc1-"&session$&".tmp" !:
+        tempfile2$=env$('temp')&"\Loc2-"&session$&".tmp"
 00180 ! ______________________________________________________________________
 00190 MAIN: ! 
 00200   fntos("Locate") !:
-        lngth=8 : let ps=lngth+2 : let rc=lc=0
+        lngth=8 : ps=lngth+2 : rc=lc=0
 00210   fnlbl(lc+=1,1,'Find:',lngth,1)
 00220   fntxt(lc,ps,16,40) !:
-        let resp$(rc+=1)=lc$
+        resp$(rc+=1)=lc$
 00230   fnlbl(lc,ps+18,'and',lngth)
 00240   fntxt(lc,ps+22,16,40) !:
-        let resp$(rc+=1)=lc2$
+        resp$(rc+=1)=lc2$
 00250   fnlbl(lc+=1,1,'Path:',lngth,1)
 00260   fntxt(lc,ps,38,66,0,'72') !:
-        let resp$(rc+=1)=dur$
+        resp$(rc+=1)=dur$
 00270   lc+=1 ! blank line
 00280   fnlbl(lc+=1,1,'Replace:',lngth,1)
 00290   fntxt(lc,ps,38) !:
-        let resp$(rc+=1)=rep$
+        resp$(rc+=1)=rep$
 00300   fnlbl(lc+=1,1,"Filter:",lngth,1)
 00310   fntxt(lc,ps,38) !:
-        let resp$(rc+=1)=filter$
+        resp$(rc+=1)=filter$
 00320   fnchk(lc+=1,ps,'Append Previous Report',0) !:
-        let resp$(rc+=1)="FALSE"
+        resp$(rc+=1)="FALSE"
 00330   fnchk(lc+=1,ps,'Renumber all Programs',0) !:
-        let resp$(rc+=1)="FALSE"
+        resp$(rc+=1)="FALSE"
 00340 !  fnTXT(LC,PS,18,40) !:
-        !  Let RESP$(RC+=1)=LC2$
+        !  rESP$(RC+=1)=LC2$
 00350   lc+=1 ! blank line
 00360   fnlbl(lc+=1,1,"Leave Replace blank to locate only" )
 00370   fnlbl(lc+=1,1,"Do NOT try to use Secondary Find if using Replace")
@@ -51,8 +51,8 @@
 00410   if ck=cancel then goto XIT
 00420   lc$=trim$(resp$(1)) !:
         lc2$=trim$(resp$(2)) !:
-        let dur$=trim$(resp$(3)) !:
-        let rep$=trim$(resp$(4)) !:
+        dur$=trim$(resp$(3)) !:
+        rep$=trim$(resp$(4)) !:
         let filter$=trim$(resp$(5)) !:
         app_prev$=resp$(6)
 00430   if lc2$<>"" and rep$<>"" then goto MAIN
@@ -100,10 +100,10 @@
 00680 ! ______________________________________________________________________
 00690 XIT: ! 
 00700 ! 
-00710   stop  ! Let FNXIT("")
+00710   stop  ! fnXIT("")
 00720 ! ______________________________________________________________________
 00730 ! <Updateable Region: ERTN>
-00740 ERTN: let fnerror(program$,err,line,act$,"xit")
+00740 ERTN: fnerror(program$,err,line,act$,"xit")
 00750   if uprc$(act$)<>"PAUSE" then goto ERTN_EXEC_ACT
 00760   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
 00770   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT

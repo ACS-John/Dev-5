@@ -30,48 +30,48 @@
 10290   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence
 10300 ! ______________________________________________________________________
 10310 SCREEN1: ! 
-10320   a$="" : let prtbkno=0
+10320   a$="" : prtbkno=0
 10330   fntos(sn$="UBPrtBl1-1")
-10340   let pf=26 : ll=24 : let respc=0
-10350 ! Let FNLBL(1,1,"Service From:",LL,1)
+10340   pf=26 : ll=24 : respc=0
+10350 ! fnLBL(1,1,"Service From:",LL,1)
 10360 !  fnTXT(1,PF,8,8,1,"1",0,TT$)
-10370 !  Let RESP$(RESPC+=1)=CNVRT$("pic(zzzzzz)",D2)
-10380 ! Let FNLBL(2,1,"Service To:",LL,1)
+10370 !  rESP$(RESPC+=1)=CNVRT$("pic(zzzzzz)",D2)
+10380 ! fnLBL(2,1,"Service To:",LL,1)
 10390 !  fnTXT(2,PF,8,8,1,"1")
-10400 !  Let RESP$(RESPC+=1)=CNVRT$("pic(zzzzzz)",D3)
+10400 !  rESP$(RESPC+=1)=CNVRT$("pic(zzzzzz)",D3)
 10410   fnlbl(1,1,"Penalty Due Date:",ll,1)
 10420   fntxt(1,pf,8,8,1,"1",0,tt$)
-10430   let resp$(d4_i=respc+=1)=cnvrt$("pic(zzzzzz)",d4)
+10430   resp$(d4_i=respc+=1)=cnvrt$("pic(zzzzzz)",d4)
 10440   fnlbl(2,1,"Meter Reading Date:",ll,1)
 10450   fntxt(2,pf,8,8,1,"1",0,tt$)
-10460   let resp$(d5_i=respc+=1)=cnvrt$("pic(zzzzzz)",d5)
+10460   resp$(d5_i=respc+=1)=cnvrt$("pic(zzzzzz)",d5)
 10470   fnlbl(4,1,"Message on Bill:",ll,1)
 10480   fntxt(4,pf,30,30)
-10490   let resp$(mg1_i=respc+=1)=mg$(1)
+10490   resp$(mg1_i=respc+=1)=mg$(1)
 10500   fntxt(5,pf,30,30)
-10510   let resp$(mg2_i=respc+=1)=mg$(2)
+10510   resp$(mg2_i=respc+=1)=mg$(2)
 10520   fntxt(6,pf,30,30)
-10530   let resp$(mg3_i=respc+=1)=mg$(3)
+10530   resp$(mg3_i=respc+=1)=mg$(3)
 10540   fnlbl(7,1,"Date of Billing:",ll,1)
 10550   fntxt(7,pf,8,8,1,"1")
-10560   let resp$(d1_i=respc+=1)=cnvrt$("pic(zzzzzz)",d1)
+10560   resp$(d1_i=respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 10570   fnlbl(8,1,"Starting Account:",ll,1)
 10580   fncombof("ubm-act-nam",8,pf,40,env$('Q')&"\UBmstr\Customer.h"&str$(cno),1,10,41,30,env$('Q')&"\UBmstr\ubindx5.h"&str$(cno),2)
-10590   let resp$(acct_i=respc+=1)="[All]"
+10590   resp$(acct_i=respc+=1)="[All]"
 10600   fnlbl(9,1,"Route Number:",ll,1)
 10610   fncmbrt2(9,pf)
-10620   let resp$(rt_i=respc+=1)="[All]"
+10620   resp$(rt_i=respc+=1)="[All]"
 10630   fnchk(10,pf,"Select Accounts to Print",1)
-10640   let resp$(selacct_i=respc+=1)="False"
+10640   resp$(selacct_i=respc+=1)="False"
 10650   fncmdset(3)
 10660   fnacs(sn$,0,mat resp$,ck)
 10670   if ck=5 then goto ENDSCR
-10680   let d1=val(resp$(d1_i))
-10690   let d4=val(resp$(d4_i))
-10700   let d5=val(resp$(d5_i))
-10710   let mg$(1)=resp$(mg1_i)
-10720   let mg$(2)=resp$(mg2_i)
-10730   let mg$(3)=resp$(mg3_i)
+10680   d1=val(resp$(d1_i))
+10690   d4=val(resp$(d4_i))
+10700   d5=val(resp$(d5_i))
+10710   mg$(1)=resp$(mg1_i)
+10720   mg$(2)=resp$(mg2_i)
+10730   mg$(3)=resp$(mg3_i)
 10740   if resp$(acct_i)="[All]" then 
 10750     a$=""
 10760   else 
@@ -79,9 +79,9 @@
 10780     st1$=a$
 10790   end if 
 10800   if resp$(rt_i)="[All]" then 
-10810     let prtbkno=0
+10810     prtbkno=0
 10820   else 
-10830     let prtbkno=val(resp$(rt_i))
+10830     prtbkno=val(resp$(rt_i))
 10840   end if 
 10850   if resp$(selacct_i)="True" then sl1=1 else sl1=0
 10860   if trim$(a$)<>"" then 
@@ -94,7 +94,7 @@
 10930   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 10940 ! ______________________________________________________________________
 10950   open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-10960 ! Let FNOPENPRN
+10960 ! fnOPENPRN
 10970 ! ______________________________________________________________________
 10980 ! IF SL1=0 THEN GOSUB SORT1
 10990 L570: if sl1=1 then goto SCREEN3
@@ -120,7 +120,7 @@
 11190   for j=2 to 4
 11200     if rtrm$(e$(j))<>"" then 
 11210       e1=e1+1
-11220       let pe$(e1)=e$(j)
+11220       pe$(e1)=e$(j)
 11230     end if 
 11240   next j
 11250   goto L950
@@ -129,11 +129,11 @@
 11280   close #1: ioerr L890
 11290 L890: close #3: ioerr L900
 11300 L900: ! 
-11320 L920: let fnpa_finis
+11320 L920: fnpa_finis
 11330   goto ENDSCR
 11340 ! ______________________________________________________________________
 11350 L950: ! 
-11360   let pb=bal-g(11)
+11360   pb=bal-g(11)
 11370 ! ______________print bill routine______________________________________
 11380   fn_vbprint
 11390 ! _____________end of pr routine______________________________________
@@ -144,19 +144,19 @@
 11440 SCREEN3: ! 
 11450   sn$="UBPrtBl1-2"
 11460   fntos(sn$)
-11470   let txt$="Account (blank to stop)"
+11470   txt$="Account (blank to stop)"
 11480   fnlbl(1,1,txt$,31,1)
 11490   if trim$(a$)="" then goto L1070 else goto L1080
 11500 L1070: if z$<>"" then 
-11510     let txt$="Last Account entered was "&z$
+11510     txt$="Last Account entered was "&z$
 11520     fnlbl(3,1,txt$,44,1)
 11530   else 
-11540     let txt$=""
+11540     txt$=""
 11550     fnlbl(3,1,txt$,44,1)
 11560   end if 
-11570 L1080: let fncmbact(1,17) ! 
-11580   let resp$(1)=a$
-11590   fncmdset(11): let fnacs(sn$,0,mat resp$,ck)
+11570 L1080: fncmbact(1,17) ! 
+11580   resp$(1)=a$
+11590   fncmdset(11): fnacs(sn$,0,mat resp$,ck)
 11600   if ck=5 then goto F5_CANCEL
 11610   a$=lpad$(trim$(resp$(1)(1:10)),10)
 11620   if trim$(a$)="" then goto F5_CANCEL
@@ -167,7 +167,7 @@
 11670   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1410
 11680   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
 11690   s5=1
-11700   if prtbkno=0 then let routekey$="" else let routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
+11700   if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)
 11710   restore #2,search>=routekey$: 
 11720 L1210: read #2,using L1220: z$,f,route eof END5
 11730 L1220: form pos 1,c 10,pos 296,pd 4,pos 1741
@@ -192,18 +192,18 @@
 11920 L1410: return 
 11930 ! ______________________________________________________________________
 11940 ENDSCR: ! pr totals screen
-11950   if sum(bct)=0 then let pct=0 else let pct=bct(2)/sum(bct)*100
+11950   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
 11960   fntos(sn$="Bills-Total")
-11970   let mylen=23 : let mypos=mylen+2
-11980   let respc=0
+11970   mylen=23 : mypos=mylen+2
+11980   respc=0
 11990   fnlbl(1,1,"Total Bills Printed:",mylen,1)
 12000   fntxt(1,mypos,8,0,1,"",1)
-12010   let resp$(respc+=1)=cnvrt$("N 8",sum(bct))
+12010   resp$(respc+=1)=cnvrt$("N 8",sum(bct))
 12040   fncmdset(52)
 12050   fnacs(sn$,0,mat resp$,ck)
-12060 XIT: let fnxit
+12060 XIT: fnxit
 12070 ! ______________________________________________________________________
-12080 ERTN: let fnerror(program$,err,line,act$,"xit")
+12080 ERTN: fnerror(program$,err,line,act$,"xit")
 12090   if uprc$(act$)<>"PAUSE" then goto L1550
 12100   execute "List -"&str$(line) : pause : goto L1550
 12110   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause 
@@ -223,21 +223,21 @@
 12290     if billcounter=4 then let xmargin=140 : let ymargin=118 : billcounter=0
 12300 ! ______________________________________________________________________
 12310 ! pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',57,'&str$(lyne*3+3)&',True)'
-12320     if reading_date_cur_s1=0 then let reading_date_cur=d3 else let reading_date_cur=reading_date_cur_s1
-12330     if reading_date_prior_s1=0 then let reading_date_prior=d2 else let reading_date_prior=reading_date_prior_s1
-12340 ! let fnpa_txt('#'&trim$(z$),xmargin+4,lyne*5+ymargin)
+12320     if reading_date_cur_s1=0 then reading_date_cur=d3 else reading_date_cur=reading_date_cur_s1
+12330     if reading_date_prior_s1=0 then reading_date_prior=d2 else reading_date_prior=reading_date_prior_s1
+12340 ! fnpa_txt('#'&trim$(z$),xmargin+4,lyne*5+ymargin)
 12350 ! pr #20: 'Call Print.AddText("'&e$(1)&'",'&str$(xmargin+4)&','&str$(lyne*6+ymargin)&')'
 12360 ! pr #20: 'Call Print.AddText("From: '&cnvrt$("PIC(ZZ/ZZ)",int(reading_date_prior/100))&'  To: '&cnvrt$("PIC(ZZ/ZZ)",int(reading_date_cur/100))&'",'&str$(xmargin+2)&','&str$(lyne*7+ymargin)&')'
 12370 ! pr #20: 'Call Print.AddText("Is due now and payable.",'&str$(xmargin+2)&','&str$(lyne*8+ymargin)&')'
 12380 ! pr #20: 'Call Print.AddText("Billing Date: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d1)&'",'&str$(xmargin+2)&','&str$(lyne*11+ymargin)&')'
 12390 ! pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*12+1+ymargin)&',62,0)'
-12400 ! let fnpa_line(xmargin+1,lyne*12+1+ymargin,62,0)
+12400 ! fnpa_line(xmargin+1,lyne*12+1+ymargin,62,0)
 12410 ! pr #20: 'Call Print.AddText("Reading",'&str$(xmargin+10)&','&str$(lyne*13+ymargin)&')'
 12420 ! pr #20: 'Call Print.AddText("Usage",'&str$(xmargin+33)&','&str$(lyne*13+ymargin)&')'
 12430 ! pr #20: 'Call Print.AddText("Charge",'&str$(xmargin+50)&','&str$(lyne*13+ymargin)&')'
 12440 ! ______________________________________________________________________
 12450 PRINTGRID: ! 
-12460     let meter=3
+12460     meter=3
 12470     pr #20: 'Call Print.MyFontSize(8)'
 12480     pr #20: 'Call Print.AddText("Reading Date",'&str$(xmargin+1)&','&str$(-1*lyne+ymargin)&')'
 12490     pr #20: 'Call Print.AddText("'&trim$(cnvrt$("PIC(ZZ/ZZ/ZZ",d5))&'",'&str$(xmargin+1)&','&str$(ymargin)&')'
@@ -316,7 +316,7 @@
 13160     pr #20: 'Call Print.MyFontSize(9)'
 13170 ! ______________________________________________________________________
 13180 ! if estimatedate=d1 then let fnpa_line("Bill estimated!",xmargin+1,lyne*29+ymargin)
-13190 ! let fnpa_line(xmargin+1,lyne*25+1+ymargin,63,0)
+13190 ! fnpa_line(xmargin+1,lyne*25+1+ymargin,63,0)
 13200     if bal>0 then 
 13210       fnpa_txt(fnformnumb$(round(bal*1.1,2),2,8),xmargin-4,lyne*19.5+ymargin)
 13220     else 
@@ -343,7 +343,7 @@
 13430 ! ______________________________________________________________________
 13440     pr #20: 'Call Print.MyFontSize(10)'
 13450     if bal>0 then 
-13460 ! let fnpa_txt('3Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',csp-2,factor+line_height*11)
+13460 ! fnpa_txt('3Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',csp-2,factor+line_height*11)
 13470       fnpa_txt(fnformnumb$(round(bal*1.1,2),2,9),xmargin+68,lyne*7+ymargin)
 13480     else 
 13490       fnpa_txt(fnformnumb$(bal,2,9),xmargin+68,lyne*7+ymargin)
