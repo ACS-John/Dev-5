@@ -178,7 +178,7 @@
 46120   pr #h_tmp: '@echo Reading file list from "'&file_open$&'"'
 46140   pr #h_tmp: env$('path_to_7z_exe')&' l "'&file_open$&'" > "'&gflfaTmpFile$&'"'
 46160   close #h_tmp: 
-46180   execute 'sy '&env$('temp')&'\ACS\Open_as_'&session$&'.cmd'
+46180   execute 'sy -s '&env$('temp')&'\ACS\Open_as_'&session$&'.cmd'
 46200   open #h_tmp:=fngethandle: 'Name='&gflfaTmpFile$,display,input
 46220   do 
 46240     linput #h_tmp: ln$
@@ -226,10 +226,10 @@
 48120   dim fileList$(0)*256,archiveList$(0)*50
 48140   dim tmpFileOpen$*256
 48160   if clientServer then
-48180     tmpFileOpen$=file_open$
-48200   else
-48220     tmpFileOpen$=env$('temp')&'\OpenPartial\tmpFileOpen'&session$&'.zip'
-48240     fnCopyFile(env$('at')&file_open$,tmpFileOpen$)
+48170     tmpFileOpen$=env$('temp')&'\OpenPartial\tmpFileOpen'&session$&'.zip'
+48180     fnCopyFile(env$('at')&file_open$,tmpFileOpen$)
+48190   else
+48200     tmpFileOpen$=file_open$
 48260   end if
 48280   fnstatus('Getting list of companies from "'&file_open$&'"...')
 48300   fn_7zFileListFromArchive(tmpFileOpen$,mat fileList$)
