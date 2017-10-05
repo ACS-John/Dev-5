@@ -10,6 +10,7 @@
 18040     dim company_import_path$*256
 18050     dim resp$(5)*256
 18060     dim ml$(0)*128
+18062     if env$('BR_MODEL')='CLIENT/SERVER' then clientServer=1 else clientServer=0
 18070   end if
 18080 fnend
 19000 ignore: continue
@@ -38,7 +39,7 @@
 38360   if enableBackupReportCache$='True' then
 38380     tmp7zipcommand$=env$('path_to_7z_exe')&' a -r -tzip "'&save_name$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\*"'
 38400   else
-38420     if env$('BR_MODEL')='CLIENT/SERVER' then
+38420     if clientServer then
 38440       dim serverTempSaveFile$*256
 38460       serverTempSaveFile$=env$('temp')&'\save_'&session$&'.zip'
 38480       tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\*" -xr!"Report Cache\*"'
@@ -49,7 +50,7 @@
 38580   pr #h_tmp: '@echo off'
 38600   pr #h_tmp: '@echo Advanced Computer Services LLC'
 38620   pr #h_tmp: '@echo Saving to: "'&save_name$&'"'
-38640   if env$('BR_MODEL')='CLIENT/SERVER' then
+38640   if clientServer then
 38660     pr #h_tmp: '@echo temp on server: "'&serverTempSaveFile$&'"'
 38680   end if
 38700   pr #h_tmp: '@echo.'
@@ -71,7 +72,7 @@
 39020   pr #h_tmp: '@echo SAVE PROCESSING...'
 39040   pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
 39060   close #h_tmp: 
-39080   if env$('BR_MODEL')='CLIENT/SERVER' then
+39080   if clientServer then
 39100     execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
 39120     fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
 39140   else
@@ -224,28 +225,32 @@
 48100   close #h_tmp: 
 48120   dim fileList$(0)*256,archiveList$(0)*50
 48140   dim tmpFileOpen$*256
-48160   tmpFileOpen$=env$('temp')&'\OpenPartial\tmpFileOpen'&session$&'.zip'
-48180   fnCopyFile(file_open$,tmpFileOpen$)
-48200   fnstatus('Getting list of companies from "'&file_open$&'"...')
-48220   fn_7zFileListFromArchive(tmpFileOpen$,mat fileList$)
-48240   fn_fileListToArchiveList(mat fileList$,mat archiveList$)
-48260   fnstatus_close
-48280   fnreg_close
-48300   fn_opMain(file_open$)
-48320   goto OP_XIT
-48340   OP_OP_ERR: ! 
-48360   if err=622 then ! it was just cancelled
-48380     pr 'cancelled' : goto OP_XIT
-48400   else 
-48420     mat ml$(2)
-48440     ml$(1)='Select a different file name.'
-48460     ml$(2)='Error: '&str$(err)
-48480     fnmsgbox(mat ml$,resp$)
-48500     !     if err=4150 then pr "Could not create file:";file$(1) : fnpause ! file$(1) is blank!
-48520     pr "Err:";err;" Line:";line
-48540   end if 
-48560   OP_XIT: ! 
-48580 fnend
+48160   if clientServer then
+48180     tmpFileOpen$=file_open$
+48200   else
+48220     tmpFileOpen$=env$('temp')&'\OpenPartial\tmpFileOpen'&session$&'.zip'
+48240     fnCopyFile(env$('at')&file_open$,tmpFileOpen$)
+48260   end if
+48280   fnstatus('Getting list of companies from "'&file_open$&'"...')
+48300   fn_7zFileListFromArchive(tmpFileOpen$,mat fileList$)
+48320   fn_fileListToArchiveList(mat fileList$,mat archiveList$)
+48340   fnstatus_close
+48360   fnreg_close
+48380   fn_opMain(file_open$)
+48400   goto OP_XIT
+48420   OP_OP_ERR: ! 
+48440   if err=622 then ! it was just cancelled
+48460     pr 'cancelled' : goto OP_XIT
+48480   else 
+48500     mat ml$(2)
+48520     ml$(1)='Select a different file name.'
+48540     ml$(2)='Error: '&str$(err)
+48560     fnmsgbox(mat ml$,resp$)
+48580     !     if err=4150 then pr "Could not create file:";file$(1) : fnpause ! file$(1) is blank!
+48600     pr "Err:";err;" Line:";line
+48620   end if 
+48640   OP_XIT: ! 
+48660 fnend
 52000 def fn_opMain(file_open$*256)
 52020   destination_company_number=val(env$('cno'))
 52040   OpmAskWhichToOpen: ! r: screen
@@ -352,7 +357,7 @@
 58760     fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
 58780     fnreg_write('Last Open File',foeSource$(pos(foeSource$,'\',-1)+1:len(foeSource$)))
 58800     fnreg_write('Last Open Path',foeSource$(1:pos(foeSource$,'\',-1)))
-58820     if env$('BR_MODEL')='CLIENT/SERVER' then
+58820     if clientServer then
 58940       fnStatus('Copying Files in...')
 58960       fnCopy(foeDestinationFolder$&'\*.*',env$('q')&'\*.*',0,'recursive')
 58980       opScreenReturn=1 
