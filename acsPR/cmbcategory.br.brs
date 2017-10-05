@@ -7,9 +7,9 @@
 12080   ! ____________________________________________________________________
 12100   if addall<>1 then addall=0
 12120   if addall=0 then 
-12140     let fen$="Ccategory.h"&env$('cno') 
+12140     fen$="Ccategory.h"&env$('cno') 
 12160   else 
-12180     let fen$="CcategoryALL.h"&env$('cno')
+12180     fen$="CcategoryALL.h"&env$('cno')
 12200   end if 
 12220   if indexfile$="" then 
 12240     if$=env$('Q')&"\PRmstr\categoryidx.h"&env$('cno') 

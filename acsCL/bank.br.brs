@@ -43,8 +43,8 @@
 00340 FIX_GL_NUMBERS: ! 
 00350   open #1: "Name="&env$('Q')&"\CLmstr\BankMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
 00360 L360: read #1,using "form pos 33,c 12": gl$ eof L410
-00370   let gl$=lpad$(rtrm$(gl$),12)
-00380   let gl$(1:3)=lpad$(rtrm$(gl$(1:3)),3)
+00370   gl$=lpad$(rtrm$(gl$),12)
+00380   gl$(1:3)=lpad$(rtrm$(gl$(1:3)),3)
 00390   rewrite #1,using "form pos 33,c 12": gl$
 00400   goto L360
 00410 L410: close #1: 

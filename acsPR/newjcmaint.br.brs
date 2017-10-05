@@ -61,7 +61,7 @@
 00440   addjob=1: mat ta=(0): dup=0: jn$="": n$="": mat a$=(''): mat b=(0) !:
         contact$="": ph$="": email$=""
 00450   fntos(sn$="jobfm") !:
-        respc=0 : let frac=0 !:
+        respc=0 : frac=0 !:
         mylen=25 : mypos=mylen+2
 00460   fnlbl(1,1,"Job Number:",mylen,1)
 00470   fntxt(1,mylen+3,6,6,1,"",0,"Enter the job number to be assigned to this new job.") !:
@@ -94,7 +94,7 @@
         fnmsgbox(mat ml$,resp$,cap$,48) !:
         goto ASKJOB
 00670 L670: fntos(sn$="jobedit") !:
-        respc=0 : let frac=0 !:
+        respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+2
 00680   fnlbl(1,1,"Job Number:",mylen,1)
 00690 L690: fntxt(1,mylen+3,6,6,1,"",0,"") !:
@@ -167,7 +167,7 @@
 01230   if ckey=12 then gosub DUPLICATE_CATEGORIES: goto GET_CATEGORY_LISTING
 01240   if ckey=6 then goto EDITREC
 01250 L1250: goto ASKJOB
-01260 ! Let WRD1$(5)="5. Reassign Transaction Addresses"  KJ  what to do with this
+01260 ! wRD1$(5)="5. Reassign Transaction Addresses"  KJ  what to do with this
 01270 ! ______________________________________________________________________
 01280 DONE: ! 
 01290   close #1: ioerr L1300
@@ -231,20 +231,20 @@
 01850   goto XIT
 01860 ! ______________________________________________________________________
 01870 JOB_LISTING: ! 
-01880   let fst=0
+01880   fst=0
 01890   fnopenprn
 01900 L1900: read #1,using L1350,release: jn$,n$,mat a$,mat b,contact$,ph$,email$ eof L2620
 01910   if fst=1 then goto L1940
-01920   let fst=1
+01920   fst=1
 01930   goto L1950
 01940 L1940: pr #255: newpage
 01950 L1950: jcp=1
-01960   let x2=0
+01960   x2=0
 01970   gosub L2330
 01980   restore #2,key>=jn$&"     ": nokey L2080
 01990 L1990: read #2,using L1370,release: cn$,k$,mat l eof L1900
 02000   if cn$(1:6)><jn$ then goto L2080
-02010   let x1=x1+1
+02010   x1=x1+1
 02020   ln$(1,x1)=cn$(7:11)
 02030   ln$(2,x1)=k$
 02040   for j=1 to 13
@@ -254,7 +254,7 @@
 02080 L2080: if x1=0 then goto L2260
 02090   gosub L2110
 02100   goto L2260
-02110 L2110: let x1=0
+02110 L2110: x1=0
 02120   for j=1 to 2
 02130     pr #255,using L2140: sc2$(j),ln$(j,1),ln$(j,2),ln$(j,3)
 02140 L2140: form pos 1,c 20,pos 23,3*c 35,skip 1
@@ -264,14 +264,14 @@
 02180 L2180: form pos 1,c 20,pos 23,n 10.2,pos 58,n 10.2,pos 93,n 10.2,skip 1
 02190   next j
 02200   pr #255: 
-02210   let x2=x2+1
+02210   x2=x2+1
 02220   mat ln$=("")
 02230   mat ln=(0)
 02240   return 
 02250 ! ______________________________________________________________________
 02260 L2260: if x2<3 then goto L2310
 02270   pr #255: newpage
-02280   let x2=0
+02280   x2=0
 02290   jcp=0
 02300   gosub L2330
 02310 L2310: if cn$(1:6)<=jn$ then goto L1990
@@ -422,7 +422,7 @@
 03440   cnkey$=cn$
 03450   read #2,using L1370,key=cnkey$: cn$,k$,mat l,mat ta eof EDITCAT nokey EDITCAT
 03460   fntos(sn$="catedit") !:
-        respc=0 : let frac=0 !:
+        respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+2
 03470   holdcn$=cn$
 03480   fnlbl(1,1,"Category Number:",mylen,1)
@@ -555,7 +555,7 @@
 04310   goto GET_CATEGORY_LISTING
 04320 EDIT_DETAILS: ! 
 04330   fntos(sn$="detailedit") !:
-        respc=0 : let frac=0 !:
+        respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+2
 04340   holdcn$=cn$
 04350   fnlbl(1,1,"Ref/Employee #:",mylen,1)

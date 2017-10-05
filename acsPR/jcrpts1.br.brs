@@ -40,7 +40,7 @@
 00400   read mat ty$
 00410 ! ___________________________
 00420   rn=fnrx
-00430   let underlin$="______________________________"
+00430   underlin$="______________________________"
 00440   cap$="Create Job Cost Report Program"
 00450   rn$=lpad$(str$(rn),2)
 00460 ! ______________________________________________________________________
@@ -64,12 +64,12 @@
 00620   pr #11: '00051 RN$="';rn$;'"'
 00630   pf$="19900 pr #255, USING 19910: "
 00640   af$="19910 FORM SKIP 1"
-00650   let gpf$="20140 pr #255, USING 20150: "
-00660   let gaf$="20150 FORM SKIP 2,""Grand Totals"""
+00650   gpf$="20140 pr #255, USING 20150: "
+00660   gaf$="20150 FORM SKIP 2,""Grand Totals"""
 00670   jpf$="20025 pr #255, USING 20026: "
 00680   jaf$="20026 FORM SKIP 1,""Job Totals"""
-00690   let upf$="20000 pr #255,using 20020: "
-00700   let uaf$="20020 form skip 0"
+00690   upf$="20000 pr #255,using 20020: "
+00700   uaf$="20020 form skip 0"
 00710   pr #11: "19850 on zdiv goto 25000"
 00720   pr #11: "19851 on uflow goto 25000"
 00730   pr #11: "19852 on oflow goto 25000"
@@ -130,22 +130,22 @@
             ! Form Statement
 01170 L1170: if tcs(j)=0 then goto L1210
 01180     i$(1:1)="t"
-01190     let gpf$=rtrm$(gpf$)&","&i$ ! pr Stmt-Grand Totals
-01200     let gaf$=rtrm$(gaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) !:
+01190     gpf$=rtrm$(gpf$)&","&i$ ! pr Stmt-Grand Totals
+01200     gaf$=rtrm$(gaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) !:
           ! Form Statement Grand Totals
 01210 L1210: if tcj(j)=0 then goto L1270
 01220     i$(1:1)="s"
 01230     jpf$=rtrm$(jpf$)&","&i$ ! pr Stmt-Job Totals
 01240     jaf$=rtrm$(jaf$)&",pos "&str$(pp(j))&",N "&str$(ppr(j)) !:
           ! Form Statement Job Totals
-01250     let upf$=rtrm$(upf$)&","""&underlin$(1:ppr(j))&""""
-01260     let uaf$=rtrm$(uaf$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) !:
+01250     upf$=rtrm$(upf$)&","""&underlin$(1:ppr(j))&""""
+01260     uaf$=rtrm$(uaf$)&",pos "&str$(pp(j))&",C "&str$(ppr(j)) !:
           ! Underline Form Statement
 01270 L1270: if dp(j)=0 then goto L1340
 01280     if fc(j)=1 then goto L1300
 01290     af$=rtrm$(af$)&"."&str$(dp(j)) ! Add Decimal Points
 01300 L1300: if tcs(j)=0 then goto L1320
-01310     let gaf$=rtrm$(gaf$)&"."&str$(dp(j)) !:
+01310     gaf$=rtrm$(gaf$)&"."&str$(dp(j)) !:
           ! Add Decimal Points-Grand Totals
 01320 L1320: if tcj(j)=0 then goto L1340
 01330     jaf$=rtrm$(jaf$)&"."&str$(dp(j)) ! ADD DECIMAL POINTS-JOB TOTALS
@@ -166,8 +166,8 @@
 01480   pr #11: "19945 if sd><0 then 19800"
 01490   pr #11: "19950 IF CN$(1:6)=JN1$ and sd=0 then 19833"
 01500   if rtrm$(gpf$(31:255))="" then goto L1560
-01510   let gpf$(31:31)=" "
-01520   let gaf$=rtrm$(gaf$)&",skip 1"
+01510   gpf$(31:31)=" "
+01520   gaf$=rtrm$(gaf$)&",skip 1"
 01530   pr #11: gpf$
 01540   pr #11: gaf$
 01550   goto L1570
@@ -177,10 +177,10 @@
 01590   jaf$=rtrm$(jaf$)&",skip 1"
 01600   pr #11: jpf$
 01610   pr #11: jaf$
-01620   let upf$(30:30)=" "
-01630   let uaf$(11:11)=" "
+01620   upf$(30:30)=" "
+01630   uaf$(11:11)=" "
 01640   pr #11: upf$
-01650   let uaf$=rtrm$(uaf$)&",skip 0"
+01650   uaf$=rtrm$(uaf$)&",skip 0"
 01660   pr #11: uaf$
 01670   pr #11: "20030 mat s=(0)"
 01680   pr #11: "20040 goto 19800"

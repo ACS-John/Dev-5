@@ -9,7 +9,7 @@
 00090   dim udf$*256
 00100 ! ______________________________________________________________________
 00110   fntop(program$, cap$="Transaction Journals")
-00120   let udf$=env$('temp')&'\'
+00120   udf$=env$('temp')&'\'
 00130   cancel=99
 00140 ! ______________________________________________________________________
 00150   fncno(cno,cnam$)
@@ -56,7 +56,7 @@
         else sltyn$(2)="N" ! rec jrn
 00390   if resp$(6)(1:1)="T" then sltyn$(3)="Y" : slt(3)=1 !:
         else sltyn$(3)="N" ! adj jrn
-00400   let wbc=val(resp$(7)(1:2))
+00400   wbc=val(resp$(7)(1:2))
 00410 ! FNWAIT
 00420   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&str$(cno)&",Shr",internal,input,keyed 
 00430   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -74,7 +74,7 @@
 00540   pr #255,using 'Form POS 52,G 12.2': t1(wcd)
 00550   npg=1
 00560 HERE: if wcd>2 then goto ENDALL
-00570   let wcd+=1
+00570   wcd+=1
 00580   if slt(wcd)<>1 then goto HERE
 00590   if npg=1 then !:
           pr #255: newpage
@@ -163,10 +163,10 @@
 01160 SUMMARY_MAYBE: ! 
 01170   mat glt=(0)
 01180   read #work,using 'Form POS 1,C 12,3*PD 6.2',key=gl$: gl$,mat glt nokey READ_WORK_NOKEY
-01190   let glt(wcd)+=am2
+01190   glt(wcd)+=am2
 01200   rewrite #work,using 'Form POS 1,C 12,3*PD 6.2': gl$,mat glt
 01210   goto READ_TRALLOC ! was restore_tralloc
-01220 READ_WORK_NOKEY: let glt(wcd)=am2
+01220 READ_WORK_NOKEY: glt(wcd)=am2
 01230   write #work,using 'Form POS 1,C 12,3*PD 6.2': gl$,mat glt
 01240   goto READ_TRALLOC ! was RESTORE_TRALLOC (2)
 01250 RESTORE_WORK: ! 

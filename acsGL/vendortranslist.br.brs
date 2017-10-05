@@ -43,9 +43,9 @@
 00380 L380: fnopenprn
 00390   gosub L630
 00400 L400: read #1,using L420: vn$,nam$,ytdp eof L730
-00410   if ytdp<-200000 then let ytdp=0
+00410   if ytdp<-200000 then ytdp=0
 00420 L420: form pos 1,c 8,c 30,pos 129,pd 5.2
-00430   let fst=0
+00430   fst=0
 00440   ec$=""
 00450   tot=0
 00460   restore #trans,key>=vn$: nokey L400
@@ -61,7 +61,7 @@
 00560 L560: form pos 46,pic(zz/zz/zz),pos 56,c 12,pos 69,c 30,pos 100,n 10.2,pos 115,n 10.2,pos 127,c 5
 00570   goto L590
 00580 L580: gosub L620
-00590 L590: let fst=1
+00590 L590: fst=1
 00600   if nomore=1 then pr #255,using "form pos 50,c 20,n 10.2": "Total Transactions",tot: nomore=0 else goto L470
 00610   goto L400
 00620 L620: pr #255: newpage

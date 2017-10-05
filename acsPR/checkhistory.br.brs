@@ -14,7 +14,7 @@
 00135   if exists(env$('Q')&"\PRmstr\checkidx.h"&str$(cno)&",Shr")=0 then goto L280
 00140 L140: open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00141   open #44: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\checkidx3.h"&str$(cno)&",Shr",internal,outin,keyed 
-00150   hact$="": let filnum=44
+00150   hact$="": filnum=44
 00160   fncheckfile(hact$,filnum)
 00170 XIT: fnxit
 00180 ! <Updateable Region: ERTN>

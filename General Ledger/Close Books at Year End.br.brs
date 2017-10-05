@@ -14,7 +14,7 @@
 24220 ! /r
 30000 do ! r: the first screen
 30020   fntos(sn$="CloseYear1") 
-30040   lc=rc=frame=0 : mylen=30 : mypos=mylen+2 : let width=0
+30040   lc=rc=frame=0 : mylen=30 : mypos=mylen+2 : width=0
 30060   fnlbl(lc+=1,1,"* * *   Warning   * * *",width,2)
 30080   fnlbl(lc+=1,1,"This program is to be used only at the end of the",width,2)
 30100   fnlbl(lc+=1,1,"year, after all reports have been processed.",width,2)
@@ -40,7 +40,7 @@
 32200     ! next fund_item
 
 34000       lc+=1
-34020       mylen=30 : mypos=mylen+3 : let width=0
+34020       mylen=30 : mypos=mylen+3 : width=0
 34040       fnfra(lc+=1,1,2,70,"Method of Closing","You must indicate if you will be closing to one equity account or to multiple accounts.",0)
 34060       frame+=1
 34080       fnopt(1,3,"Close each fund to a separate account",0,frame) 
@@ -59,7 +59,7 @@
 36020   fnacs(sn$,0,mat resp$,ckey)
 36040   if ckey=5 then goto XIT
 36060   pas$=resp$(rc_erase)
-36080   let yr$=cnvrt$("pic(##)",val(resp$(rc_year)))
+36080   yr$=cnvrt$("pic(##)",val(resp$(rc_year)))
 36100   if fnUseDeptNo then
 36120     !   for fund_item=1 to udim(mat fund_list)
 36140     !     last_retained_earnings_acct$(fund_item)=fnagl$(resp$(rc+=1))
@@ -97,7 +97,7 @@
 44000 SCR2: ! 
 44020   t5=0
 44040   fntos(sn$='CloseYear3')
-44060   lc=0 : mylen=30 : mypos=mylen+2 : let width=80
+44060   lc=0 : mylen=30 : mypos=mylen+2 : width=80
 44080   fnlbl(lc+=1,1,"Enter the Last Retained Earnings Account or Equity Account.",width,2)
 44100   fnlbl(lc+=1,1,"The account that dividend, income, and expenses will be closed to.",width,2)
 44120   lc+=1 
@@ -114,7 +114,7 @@
 44440   fncmdset(11)
 44460   fnacs(sn$,0,mat resp$,ckey)
 44480   if ckey=5 then goto XIT
-44500   let glnumber$=fnagl$(resp$(1))
+44500   glnumber$=fnagl$(resp$(1))
 44520   if closeDeptToRetainedEarnings then 
 44540     fncreg_write("last retained earnings account - fund "&str$(val(glnumber$(1:3))),resp$(1))
 44560   else 

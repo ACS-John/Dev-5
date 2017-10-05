@@ -22,18 +22,18 @@
 00140     if uprc$(city$(1:3))="FT " then city$(1:3)="Fort " else !:
             if uprc$(city$(1:3))="FT." then city$(1:3)="Fort "
 00150     state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2)) !:
-          let zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:l1)))) !:
-          let zip5$=zip$(1:5) !:
-          let zip4$="" !:
+          zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:l1)))) !:
+          zip5$=zip$(1:5) !:
+          zip4$="" !:
           l2=len(zip$)
 00160     if l2<9 then goto XIT
 00165     on error goto MESSAGEBOX
 00170     p2=pos(csz$," ",p1+3) !:
           city$=rtrm$(csz$(1:p1))(1:15) !:
           state$=rtrm$(csz$(p2-2:p2))(1:2) !:
-          let zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:l1)))) !:
-          let zip5$=zip$(1:5) !:
-          let zip4$="" !:
+          zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:l1)))) !:
+          zip5$=zip$(1:5) !:
+          zip4$="" !:
           l2=len(zip$)
 00175     goto L180
 00176 MESSAGEBOX: ! 

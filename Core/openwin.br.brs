@@ -14,7 +14,7 @@
 00130     if sc<1 then sc=20
 00140     if er<1 then er=14
 00150     if ec<1 then ec=59
-00160     let win_width=ec-sc+1
+00160     win_width=ec-sc+1
 00170     close #win: ioerr L180
 00180 L180: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
 00190     pr #win: newpage

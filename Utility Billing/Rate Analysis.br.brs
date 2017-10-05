@@ -20,7 +20,7 @@
 20050   resp$(rc+=1)=str$(bdate)
 20060   fnlbl(2,1,"Rate for Analysis:",mylen,1)
 20070   fncombof("nerd",2,mypos,55,env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno'),1,4,5,50,env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno'),1,usa) 
-20080   let usa+=1 
+20080   usa+=1 
 20090   resp$(rc+=1)="" ! just default to the first one
 20100   fncmdset(2)
 20110   fnacs(sn$,0,mat resp$,ckey)
@@ -72,17 +72,17 @@
 24330     goto XIT
 24340   end if
 24350   rate(1)=val(resp$(2)) ! minimum charge
-24360   let use_to(1)=val(resp$(3)) ! minimum usage
-24370   let use_from(2)=val(resp$(4))  
-24380   let use_from(3)=val(resp$(7))  
-24390   let use_from(4)=val(resp$(10))  
-24400   let use_from(5)=val(resp$(13))  
-24410   let use_from(6)=val(resp$(16))  
-24420   let use_from(7)=val(resp$(19))  
-24430   let use_from(8)=val(resp$(22))  
-24440   let use_from(9)=val(resp$(25))  
-24450   let use_from(10)=val(resp$(28)) 
-24460   let use_from(11)=val(resp$(31))
+24360   use_to(1)=val(resp$(3)) ! minimum usage
+24370   use_from(2)=val(resp$(4))  
+24380   use_from(3)=val(resp$(7))  
+24390   use_from(4)=val(resp$(10))  
+24400   use_from(5)=val(resp$(13))  
+24410   use_from(6)=val(resp$(16))  
+24420   use_from(7)=val(resp$(19))  
+24430   use_from(8)=val(resp$(22))  
+24440   use_from(9)=val(resp$(25))  
+24450   use_from(10)=val(resp$(28)) 
+24460   use_from(11)=val(resp$(31))
 24470   rate(2)=val(resp$(6))  
 24480   rate(3)=val(resp$(9))  
 24490   rate(4)=val(resp$(12)) 
@@ -93,16 +93,16 @@
 24540   rate(9)=val(resp$(27)) 
 24550   rate(10)=val(resp$(30))
 24560   rate(11)=val(resp$(33))
-24570   let use_to(2)=val(resp$(5))  
-24580   let use_to(3)=val(resp$(8))  
-24590   let use_to(4)=val(resp$(11)) 
-24600   let use_to(5)=val(resp$(14))  
-24610   let use_to(6)=val(resp$(17))  
-24620   let use_to(7)=val(resp$(20))  
-24630   let use_to(8)=val(resp$(23))  
-24640   let use_to(9)=val(resp$(26))  
-24650   let use_to(10)=val(resp$(29)) 
-24660   let use_to(11)=val(resp$(32))
+24570   use_to(2)=val(resp$(5))  
+24580   use_to(3)=val(resp$(8))  
+24590   use_to(4)=val(resp$(11)) 
+24600   use_to(5)=val(resp$(14))  
+24610   use_to(6)=val(resp$(17))  
+24620   use_to(7)=val(resp$(20))  
+24630   use_to(8)=val(resp$(23))  
+24640   use_to(9)=val(resp$(26))  
+24650   use_to(10)=val(resp$(29)) 
+24660   use_to(11)=val(resp$(32))
 24900   goto initialize ! /r
 26000 initialize: ! r: initialize
 26010   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
@@ -129,7 +129,7 @@
 32120   goto READ_CUSTOMER
 34000   L690: !
 34010   if d(s9)<=0 then goto READ_CUSTOMER
-34020   let usagtot(1)=usagtot(1)+min(d(s9),use_to(1)) ! add usage for minimun usages
+34020   usagtot(1)=usagtot(1)+min(d(s9),use_to(1)) ! add usage for minimun usages
 34030   ratetot(1)=ratetot(1)+rate(1) ! add minimum charges
 34040   if d(s9)<=use_to(1) then  ! add mimimum customer user to first array item
 34050     customer(1)=customer(1)+1 
@@ -138,11 +138,11 @@
 34080   for k7=2 to 11
 34090     if use_from(k7)=0 then goto L790 ! no table
 34100     if d(s9)>=use_from(k7) and d(s9)<=use_to(k7) then  ! accumulate usage when usage stops between breaks
-34110       let usagtot(k7)=usagtot(k7)+max(0,(min(d(s9)-use_from(k7)+1,use_to(k7)-use_from(k7)))) 
+34110       usagtot(k7)=usagtot(k7)+max(0,(min(d(s9)-use_from(k7)+1,use_to(k7)-use_from(k7)))) 
 34120       goto L770
 34130     end if
 34140     if d(s9)>use_to(k7) then  ! accumulate                 useage between breaks
-34150       let usagtot(k7)=usagtot(k7)+use_to(k7)-use_from(k7)+1
+34150       usagtot(k7)=usagtot(k7)+use_to(k7)-use_from(k7)+1
 34160     end if
 34170     L770: !
 34180     ds9=ds9+usagtot(k7)

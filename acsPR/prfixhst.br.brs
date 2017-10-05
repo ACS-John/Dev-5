@@ -65,7 +65,7 @@
 00620   io5$(2)="5,41,Cu 1,UET,N"
 00630   pr f "16,30,C 09,B,1": "Next (F1)" !:
         pr f "16,41,C 09,B,5": "Exit (F5)"
-00640   let ytd$="N" : let qtd$="N"
+00640   ytd$="N" : qtd$="N"
 00650 L650: input #win,fields mat io5$: ytd$,qtd$ conv CONV1
 00660   if ce>0 then io5$(ce)(ce1:ce2)="U": ce=0
 00670   if cmdkey>0 then goto L740 else ce=curfld+1
@@ -101,8 +101,8 @@
 00960 L960: if cmdkey=5 then goto XIT
 00970   if yd1=0 then ce=1 : goto ERR2
 00980   if yd2=0 then ce=2 : goto ERR2
-00990   let yd1=fndate_mmddyy_to_ccyymmdd(yd1)
-01000   let yd2=fndate_mmddyy_to_ccyymmdd(yd2)
+00990   yd1=fndate_mmddyy_to_ccyymmdd(yd1)
+01000   yd2=fndate_mmddyy_to_ccyymmdd(yd2)
 01010   if yd2<yd1 then ce=1 : goto ERR2
 01020 L1020: ! UPDATE QTR
 01030   if qtd$="N" then goto L1260
@@ -127,8 +127,8 @@
 01200 L1200: if cmdkey=5 then goto XIT
 01210   if qd1=0 then ce=1 : goto ERR2
 01220   if qd2=0 then ce=2 : goto ERR2
-01230   let qd1=fndate_mmddyy_to_ccyymmdd(qd1)
-01240   let qd2=fndate_mmddyy_to_ccyymmdd(qd2)
+01230   qd1=fndate_mmddyy_to_ccyymmdd(qd1)
+01240   qd2=fndate_mmddyy_to_ccyymmdd(qd2)
 01250   if qd2<qd1 then ce=1 : goto ERR2
 01260 L1260: return 
 01270 ! ______________________________________________________________________

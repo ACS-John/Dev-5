@@ -70,7 +70,7 @@
 00440 pr #255: tab(10);ln$
 00450 goto L370
 00460 L460: close #1: 
-00470 let fncloseprn
+00470 fncloseprn
 00480 on fkey 5 ignore 
 00490 if fnprocess=1 then goto XIT else goto MENU1
 00500 goto XIT

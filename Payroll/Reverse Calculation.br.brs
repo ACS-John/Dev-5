@@ -25,7 +25,7 @@
 00224     open #14: "Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L250
 00226     goto L260
 00228 L250: ! 
-00230     let gli=0
+00230     gli=0
 00260 L260: ! 
 00262   end if 
 00264   open #6: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX1.H"&env$('cno')&",Shr",internal,outin,keyed ioerr L330
@@ -87,7 +87,7 @@
 00686     fnmsgbox(mat ml$,resp$,cap$,0)
 00688     goto ASK_EMPLOYEE_NO
 00689   end if 
-00690   let w1=val(resp$(3))
+00690   w1=val(resp$(3))
 00700   if resp_cl_bank_code then bcde=val(resp$(resp_cl_bank_code)(1:2))
 00710   mat tcp=(0)
 00720   if reverse_all=1 then gosub CREATE_LIST
@@ -95,7 +95,7 @@
 00732   if reverse_all=1 then read #13,using "form pos 1,n 8,n 7": eno,w1 eof FINIS
 00740   gosub REVERSE_BANK_REC
 00750   if cli=1 then gosub UPDATE_CHECKBOOK ! update checkbook
-00760   let x$=lpad$(str$(eno),8)
+00760   x$=lpad$(str$(eno),8)
 00770   read #1,using L780,key=x$,release: em10,em11 nokey L1190
 00780 L780: form pos 132,2*pd 4.2
 00790   if pgl1=1 then gosub POSTGL2
@@ -198,7 +198,7 @@
 01630   return  ! /r
 01640 ! ______________________________________________________________________
 01650 POSTGL1: ! r:
-01652   let glinstal=1
+01652   glinstal=1
 01660   fli2$(1)="11,64,n 3,u"
 01670   fli2$(2)="11,68,n 6,u"
 01680   fli2$(3)="11,75,n 3,u"
@@ -216,8 +216,8 @@
 01820   fnacs(sn$,0,mat resp$,ckey) ! posting date
 01830   if ckey<>5 then 
 01840     dat1=val(resp$(1))
-01850     if glb=2 then let glwk$=env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dat1)&".H"&env$('cno')
-01860     if glb><2 then let glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
+01850     if glb=2 then glwk$=env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dat1)&".H"&env$('cno')
+01860     if glb><2 then glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
 01870     if glb=2 and uprc$(rtrm$(accrue$))="Y" then open #11: "Name="&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",d2)&".H"&env$('cno')&",RecL=104,USE",internal,output 
 01880     open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 01890     read #1,using 'form pos 1,c 40,pos 437,15*c 12': a$,mat prgl$
@@ -304,7 +304,7 @@
 02710   fncloseprn
 02720   if glinstal=0 then goto XIT
 02730   if glb=2 then goto XIT
-02740 let fnchain("S:\acsGL\ACGLMRGE") ! /r
+02740 fnchain("S:\acsGL\ACGLMRGE") ! /r
 02750 XIT: fnxit
 02760 PGOF: ! r:
 02762   pr #255: newpage
@@ -434,7 +434,7 @@
 03890 !   day=val(resp$(1)) ! days in pay period
 03900 !   dayslm=val(resp$(2)) ! days last month
 03910 !   key$=fnagl$(resp$(3))
-03920 !   let g1=val(key$(1:3)): let g2=val(key$(4:9)) : let g3=val(key$(10:12))
+03920 !   g1=val(key$(1:3)): g2=val(key$(4:9)) : g3=val(key$(10:12))
 03930 !   d2=val(resp$(4)) ! last day previous month
 03940 !   acgl$=cnvrt$("N 3",g1)&cnvrt$("N 6",g2)&cnvrt$("N 3",g3)
 03950 !   if trim$(acgl$)<>"" then read #12,using L3960,key=acgl$: desc$ nokey L3970

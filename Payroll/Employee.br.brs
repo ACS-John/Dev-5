@@ -64,7 +64,7 @@
 14880   goto ADDREC ! /r
 16000 ADDREC: ! r:
 16020   fntos(sn$="Employeefm")
-16040   respc=0 : let frac=0
+16040   respc=0 : frac=0
 16060   mylen=25 : mypos=mylen+2
 16080   fnlbl(1,1,"Employee Number:",mylen,1)
 16100   fntxt(1,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
@@ -117,7 +117,7 @@
 22100   goto ASKEMPLOYEE ! /r
 26000 SCR_EMPLOYEE: ! r:
 26020   fntos(sn$="Employeeedit")
-26040   respc=0 : let frac=0 ! 
+26040   respc=0 : frac=0 ! 
 26060   mylen=28 : mypos=mylen+2
 26080   fnlbl(1,1,"Employee Number:",mylen,1)
 26100   fntxt(1,mylen+3,8,8,1,"30",0,"Employee numbers must be numeric.")
@@ -270,7 +270,7 @@
 29800   goto REVIEW_DEPARTMENT
 29820 ! /r
 30000 REVIEW_DEPARTMENT: ! r:
-30020   let firstread=1
+30020   firstread=1
 30040   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey DEPARTMENT_ADD
 30060 L2400: ! 
 30080   read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof SCR_EMPLOYEE
@@ -278,7 +278,7 @@
 30120   if teno<>eno then goto SCR_EMPLOYEE
 30140 SCR_DEPARTMENT: ! 
 30160   fntos(sn$="EmployeeDep")
-30180   respc=0 : let fram1=1
+30180   respc=0 : fram1=1
 30200   mylen=20 : mypos=mylen+2 : mat resp$=("")
 30220   fnfra(1,1,6,97,"Departmental Information - "&trim$(em$(1)))
 30240   fnlbl(1,1,"Employee Number:",mylen,1,0,fram1)
@@ -316,7 +316,7 @@
 30880   fnlbl(6,35,"Union Code:",mylen,1,0,fram1)
 30900   fntxt(6,58,2,2,1,"30",0,"You union code is used for grouping employees for the union report.",fram1)
 30920   resp$(respc+=1)=str$(tcd(3))
-30940   let fram2=2: fnfra(9,1,3,97,"Salary and Pay Rates")
+30940   fram2=2: fnfra(9,1,3,97,"Salary and Pay Rates")
 30960   fnlbl(1,1,"Salary:",mylen,1,0,fram2)
 30980   fntxt(1,mylen+3,12,12,1,"10",0,"Enter the salary for the pay period.",fram2)
 31000   resp$(respc+=1)=str$(tdet(1))
@@ -326,7 +326,7 @@
 31080   fnlbl(2,35,"O/T Hourly Rate:",mylen,1,0,fram2)
 31100   fntxt(2,58,12,12,1,"10",0,"Enter the overtime hourly rate.",fram2)
 31120   resp$(respc+=1)=str$(tdet(3))
-31140   let fram3=3: fnfra(14,1,10,97,"Deductions and Additions")
+31140   fram3=3: fnfra(14,1,10,97,"Deductions and Additions")
 31160   for j=1 to 10
 31180     fnlbl(j,1,dednames$(j*2-1),mylen,1,0,fram3)
 31200     fntxt(j,mylen+3,12,12,1,"10",0,"Enter the standard amount or the percent.",fram3)
@@ -347,7 +347,7 @@
 32040   tdn=val(resp$(2)) ! department #
 32060   if ckey=9 then delete #2,key=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",tdn): : goto EDITREC
 32080   if resp$(3)="combos" then resp$(3)=""
-32100   let gl$=fnagl$(resp$(3))
+32100   gl$=fnagl$(resp$(3))
 32120   tdt(1)=val(resp$(4)) ! last review date
 32140   tdt(2)=val(resp$(5)) ! next review date
 32160   tdt(3)=val(resp$(6)) ! last increase date
@@ -377,7 +377,7 @@
 32640     if eno<>ent then goto CHGENO
 32660     rewrite #2,using "Form POS 1,N 8,N 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2": teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet
 32680   end if 
-32700   let firstread=0
+32700   firstread=0
 32720   ndep=0
 32740   if ckey=4 then goto DEPARTMENT_ADD ! add new department
 32760   if ckey=3 then goto L2400 ! move to next departmental record
@@ -388,12 +388,12 @@
 34000 DEPARTMENT_ADD: ! r: new department
 34020   ndep=1
 34040   tdn=0
-34060   let gl$=""
+34060   gl$=""
 34080   mat tdt=(0)
 34100   mat tcd=(0)
 34120   tli=0
 34140   mat tdet=(0)
-34160   let firstread=0
+34160   firstread=0
 34180   goto SCR_DEPARTMENT ! /r
 36000 ! r: unreferenced code
 36020   if ti1=2 then goto L3370
@@ -488,7 +488,7 @@
 46580   fnkey_change(h_checkhistory,'form pos 1,n 8',heno$,lpad$(str$(eno),8)) ! change employee number in check history
 46720   ! r: change employee number in any and all rpwork files.
 46740   for wsid_item=1 to 99
-46760     let wsid_item$=cnvrt$('pic(##)',wsid_item)
+46760     wsid_item$=cnvrt$('pic(##)',wsid_item)
 46780     if exists(env$('Q')&'\PRmstr\rpwork'&wsid_item$&'.h'&env$('cno')) then 
 46800       open #h_rpwork:=fngethandle: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid_item$&".h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpwork"&wsid_item$&"idx.H"&env$('cno')&',shr',internal,outin,keyed ioerr RPWORK_OPEN_ERR
 46820       fnkey_change(h_rpwork,'form pos 1,n 8',heno$,lpad$(str$(eno),8))
@@ -527,9 +527,9 @@
 48400   race_option$(7)="6 - Indochines"
 48420   ! 
 48440   dim gender_option$(3)*11
-48460   let gender_option$(1)="0 - Unknown"
-48480   let gender_option$(2)="1 - Male"
-48500   let gender_option$(3)="2 - Female"
+48460   gender_option$(1)="0 - Unknown"
+48480   gender_option$(2)="1 - Male"
+48500   gender_option$(3)="2 - Female"
 48520   ! 
 48530   dim married_option$(0)*58
 48540   mat married_option$(0)
@@ -542,9 +542,9 @@
 48600  ! 
 48620   dim fed_exemption_option$(22)
 48640   for j=1 to 21
-48660     let fed_exemption_option$(j)=str$(j-1)
+48660     fed_exemption_option$(j)=str$(j-1)
 48680   next j
-48700   let fed_exemption_option$(22)="99"
+48700   fed_exemption_option$(22)="99"
 48720   ! 
 48740   dim payperiod_option$(4)
 48760   payperiod_option$(1)="1 - Monthly"
@@ -701,6 +701,6 @@
 80120   return  ! /r
 82000 CHECK_INFORMATION: ! r:
 82020   hact$=str$(eno)
-82040   let filnum=44 ! 44 for date sequence
+82040   filnum=44 ! 44 for date sequence
 82060   fncheckfile(hact$,filnum)
 82080   goto EDITREC ! /r

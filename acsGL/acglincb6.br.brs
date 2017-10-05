@@ -12,11 +12,11 @@
 00120   fntop(program$,cap$="Six Column Income Statement with Budget")
 00130   on fkey 5 goto L2350
 00140   fncno(cno,cnam$)
-00150   let udf$=env$('temp')&'\'
+00150   udf$=env$('temp')&'\'
 00160   actpd=fnactpd
 00170   actpd$=fnactpd$
 00180   pedat$=rtrm$(fnpedat$)
-00190   let x=pos(pedat$," ",1)
+00190   x=pos(pedat$," ",1)
 00200   curmonth$=pedat$(1:x)
 00210   curyear$=pedat$(len(rtrm$(pedat$))-4:len(rtrm$(pedat$)))
 00220   curyear=val(curyear$) conv L230
@@ -102,7 +102,7 @@
 00990   if ir>val(r$) then goto L1010
 01000 L1000: notrans=1
 01010 L1010: overundr=lastyr-total2
-01020   let unexpend=annualb-total2
+01020   unexpend=annualb-total2
 01030   for j=1 to 9
 01040     if ac(j)=9 then goto L1120 ! 10/14/87
 01050     accum(j,1)=accum(j,1)+total
@@ -119,7 +119,7 @@
 01160   pmonth=-pmonth
 01170   lastyr=-lastyr
 01180   overundr=overundr
-01190   let unexpend=unexpend
+01190   unexpend=unexpend
 01200 L1200: if ds=1 then dollar$="$" else dollar$=" "
 01210   goto L1250 ! pr all accounts even if zero balance  (if budget ever nets to zero, it messes the monthly budget column up
 01220   if annualb><0 or total2><0 then goto L1250
@@ -136,7 +136,7 @@
 01340   pmonth=0
 01350   lastyr=0
 01360   overundr=0
-01370   let unexpend=0
+01370   unexpend=0
 01380   gosub L1750
 01390   if ul=1 then goto L1410
 01400   gosub L2050
@@ -157,7 +157,7 @@
 01550   pr #255,using L1560: d$(1:sp2),dollar$,accum3,dollar$,accum1,dollar$,accum4,dollar$,accum2,dollar$,accum5,dollar$,accum7 pageoflow L2040
 01560 L1560: form pos sp,c sp2,pos 26,c 1,n 13.2,x 1,c 1,n 11.2,x 1,c 1,n 11.2,x 1,c 1,n 13.2,x 1,c 1,n 13.2,x 1,c 1,n 13.2,x 1
 01570 L1570: form pos sp,c sp2,pos 26,c 1,c 5,n 13.2,c 1,x 1,c 1,c 5,n 11.2,c 1,x 1,c 1,c 5,n 11.2,c 1,x 1,c 1,c 5,n 13.2,c 1,x 1,c 1,c 5,n 13.2,c 1,x 1,c 1,c 5,n 13.2,c 1,x 1
-01580 L1580: let ft1=0
+01580 L1580: ft1=0
 01590   gosub L1750
 01600   if ul=1 then goto L1620
 01610   gosub L2050
@@ -169,10 +169,10 @@
 01670   goto L560
 01680 L1680: if foot1=1 then goto L1730
 01690   tabnote=sp
-01700   let foot1=1
-01710   let foot$=d$
+01700   foot1=1
+01710   foot$=d$
 01720   goto L560
-01730 L1730: let foot$=rtrm$(foot$)&d$
+01730 L1730: foot$=rtrm$(foot$)&d$
 01740   goto L560
 01750 L1750: for j=1 to 9
 01760     if ac(j)=0 or ac(j)=9 then goto L1840 ! 10/14/87
@@ -197,7 +197,7 @@
 01950 ! If PGLEN=42 Then sK=SK+1
 01960   pr #255,using L1970: rtrm$(foot$),"Page "&str$(pt1)
 01970 L1970: form skip sk,pos tabnote,c fl,pos 115,c 8,skip 1
-01980 ! Let FT1=1
+01980 ! ft1=1
 01990   if eofcode=1 then goto L2020
 02000   pr #255: newpage
 02010   gosub L2190
@@ -206,10 +206,10 @@
 02040 L2040: gosub L1910: continue 
 02050 L2050: if ul=0 then goto L2150
 02060   if ul=1 then goto L2100
-02070   let underlin$="=============="
+02070   underlin$="=============="
 02080   goto L2110
 02090   goto L2150
-02100 L2100: let underlin$="______________"
+02100 L2100: underlin$="______________"
 02110 L2110: ! pr #255,Using 1980: UNDERLIN$,UNDERLIN$(1:12),UNDERLIN$(1:12),UNDERLIN$,UNDERLIN$,UNDERLIN$,UNDERLIN$
 02120   pr #255,using L2130: underlin$,underlin$(1:12),underlin$(1:12),underlin$,underlin$,underlin$
 02130 L2130: form pos 30,c 15,2*c 13,4*c 15,skip 0

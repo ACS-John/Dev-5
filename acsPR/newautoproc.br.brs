@@ -61,21 +61,21 @@
 00480   if ckey=2 and count>0 then goto L550
 00490   clnam$(count+=1)=resp$(1)(1:30)
 00500   clnum(count)=val(resp$(1)(33:37))
-00510   if resp$(3)="True" then let wk(count)=1: let wmq=1
-00520   if resp$(4)="True" then mo(count)=1: let wmq=2
-00530   if resp$(5)="True" then let qt(count)=1: let wmq=3
+00510   if resp$(3)="True" then wk(count)=1: wmq=1
+00520   if resp$(4)="True" then mo(count)=1: wmq=2
+00530   if resp$(5)="True" then qt(count)=1: wmq=3
 00540   if ckey=1 then goto MAIN
 00550 L550: goto WRITE_EM
 00560 ! ______________________________________________________________________
 00570 BLD_ACNO: ! 
 00580   dir$=env$('Q')&'\&'&fncursys$&"mstr"
-00582   let filter$="Company.*"
+00582   filter$="Company.*"
 00584   fngetdir(dir$,mat filename$,empty$,filter$)
 00590   mat acno(99999): cav=0
 00600 L600: if trim$(filename$(fx+=1))="" then goto L660
 00610   acno(cav+=1)=val(filename$(fx)(10:14)) conv L600
 00620   end=len(filename$(fx))
-00630   let x=115
+00630   x=115
 00631   open #x: "Name="&sys$&"\Company.h"&filename$(fx)(10:14),internal,input ioerr L650
 00632   read #x,using "Form pos 1,c 40": cnam$
 00633   close #x: 

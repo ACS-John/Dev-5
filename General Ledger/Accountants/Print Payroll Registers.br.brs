@@ -12,7 +12,7 @@
 12400   fndat(dat$)
 12600 ! ______________________________________________________________________
 12800   fntos(sn$="PayrollReg")
-13000   rc=cf=0: mylen=22: mypos=mylen+3: let frameno=1
+13000   rc=cf=0: mylen=22: mypos=mylen+3: frameno=1
 13200   fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included.")
 13400   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
 13600   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno)
@@ -29,7 +29,7 @@
 15800   end_date=val(resp$(2))
 16000 ! 
 16200   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode : close #1: 
-16400   let ficarate=ficarate/100 : let feducrat=feducrat/100 : mcr=mcr/100
+16400   ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
 16800   open #h_prmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 16900   fPrmstr: form pos 1,n 4,3*c 25,c 11,36*pd 5.2,2*n 5
 17000   open #h_acprcks:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outin,relative 
@@ -107,7 +107,7 @@
 30600 def fn_totals_1
 30800   pr #255,using L930: "TOTALS",t1,t2,t3,t4,t5,t6,t7,t8,t9
 31000   L930: form skip 1,pos 15,c 6,pos 27,7*n 10.2,pic(------.##),pic(----.##),skip 3
-31200   let u1=t2+round(t3*2,2)-t9 ! 2013
+31200   u1=t2+round(t3*2,2)-t9 ! 2013
 31400   pr #255,using L960: "TOTAL TAX DEPOSIT DUE", u1
 31600   L960: form pos 1,c 21,pos 48,pic(---,---.##)
 31800 fnend 
@@ -174,8 +174,8 @@
 44000     at6=at6+at5
 44200     mcw2=mcw2+mcw1
 44400     if m(1)-m(2)>=feducwag then goto L1550
-44600     if m(1)<=feducwag then let fuc1=m(2) else let fuc1=feducwag-(m(1)-m(2))
-44800     let fuc2=fuc2+fuc1
+44600     if m(1)<=feducwag then fuc1=m(2) else fuc1=feducwag-(m(1)-m(2))
+44800     fuc2=fuc2+fuc1
 45000 L1550: ! 
 45200   fnend 
 45400   def fn_totals_3
@@ -193,7 +193,7 @@
 47800   def fn_941_breakdown
 48000     ck$=lpad$(str$(d(2)),6)
 48200     ckdat=val(ck$(3:4))
-48400     if ckdat>0 and ckdat<32 then let x=ckdat else let x=31
+48400     if ckdat>0 and ckdat<32 then x=ckdat else x=31
 48600     deposit(x,1)=deposit(x,1)+d(4)
 48800     deposit(x,2)=deposit(x,2)+d(5)+d(6)+d(6)-d(21) ! FEDERAL + DOUBLE SS - EIC
 49000   fnend 
@@ -205,7 +205,7 @@
 50200 L1790: form pos 5,c 30,pos 38,n 10.2,pos 58,n 10.2,skip 1
 50400     for j=1 to 31
 50600       pr #255,using L1790: "DAY "&str$(j),deposit(j,1),deposit(j,2)
-50800       let gross=gross + deposit(j,1)
+50800       gross=gross + deposit(j,1)
 51000       taxes=taxes+deposit(j,2)
 51200     next j
 51400     pr #255,using L1860: "----------","----------","       TOTALS",gross,taxes,"==========","=========="

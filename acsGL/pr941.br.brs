@@ -19,7 +19,7 @@
 00200 ! ______________________________________________________________________
 00280   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
 00290   read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,2*N 1,2*C 12,N 3,N 6,N 3,PD 7.2,C 30,POS 298,15*PD 4,POS 382,N 2,N 2,PD 5.3,PD 5.2,PD 5.3,PD 5.2,G 1,PD 5.3,PD 5.2,N 1,10*C 20,50*N 1,10*C 12',rec=1: mat a$,mat b$,c$,mat d,mat e$,a1,a2,a3,ucm,tb$,mat prgl,jccode,nap,ficarate,ficawage,feducrat,feducwag,actr$,mcr,mcm,reccode,mat miscname$,mat dedcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat miscgl$
-00300   let ficarate=ficarate/100
+00300   ficarate=ficarate/100
 00310   mcr=mcr*.01
 00320 ! Close #20:
 00330 ! ______________________________________________________________________
@@ -82,13 +82,13 @@
 00740   if ck=5 then goto XIT
 00750   taxyear$=resp$(1) ! tax year
 00760   for j=1 to 4
-00770     if resp$(2)=option1$(j) then let qtr=j: m$=option1$(j): goto L790 ! quarter ending date
+00770     if resp$(2)=option1$(j) then qtr=j: m$=option1$(j): goto L790 ! quarter ending date
 00780   next j
 00790 L790: if qtr=1 then begdate=val(taxyear$)*10000+0312: enddate=val(taxyear$)*10000+0318
 00800   if qtr=2 then begdate=val(taxyear$)*10000+0612: enddate=val(taxyear$)*10000+0618
 00810   if qtr=3 then begdate=val(taxyear$)*10000+0912: enddate=val(taxyear$)*10000+0918
 00820   if qtr=4 then begdate=val(taxyear$)*10000+1212: enddate=val(taxyear$)*10000+1218
-00830   if resp$(3)="True" then let frm=2 else let frm=1 ! need a worksheet
+00830   if resp$(3)="True" then frm=2 else frm=1 ! need a worksheet
 00840   box15a=val(resp$(4)) ! first month liability
 00850   box15b=val(resp$(5))
 00860   box15c=val(resp$(6))
@@ -221,10 +221,10 @@
 02110 L2110: form pos 41,pic(----,---.##),pos 56,pic(----,---.##),pos 67,pic(---,---,---.##),skip 1
 02120   fncloseprn
 02130 L2130: p3=0
-02140   let gt1=gt1+t5-dwq
-02160   let gt2=gt2+t2
-02170   let gt3=gt3+t3
-02180   let gt4=gt4+t4
+02140   gt1=gt1+t5-dwq
+02160   gt2=gt2+t2
+02170   gt3=gt3+t3
+02180   gt4=gt4+t4
 02190   t1=t2=t3=t4=t5=0
 02200   return 
 02210 ! ______________________________________________________________________
@@ -236,7 +236,7 @@
 02270 SUMMARY: ! 
 02280   fnopenprn
 02290   eof=1: gosub WK_HEADER
-02300   let wagefica=fna((gt2-m(32))*(ficarate+ficarate+.02)) ! FICARATE*2) ! pull tips out  2011
+02300   wagefica=fna((gt2-m(32))*(ficarate+ficarate+.02)) ! FICARATE*2) ! pull tips out  2011
 02310   taxfica=fna(m(32)*(ficarate+ficarate+.02)) ! FICARATE*2)  2011
 02320   tipfica= fna((m(2)-m(32))*ficarate)
 02330   mcwh=fna((gt3)*mcr*2)
@@ -275,7 +275,7 @@
 02610   return 
 02620 ! ______________________________________________________________________
 02630 BUILD_941: ! 
-02640   let wagefica=fna((gt2-tpt(20))*(ficarate+ficarate+.02)) ! FICARATE*2)  2011
+02640   wagefica=fna((gt2-tpt(20))*(ficarate+ficarate+.02)) ! FICARATE*2)  2011
 02650   taxfica=fna(tpt(20)*(ficarate+ficarate+.02)) ! FICARATE*2) 2011
 02660   tipfica= fna((tpt(20)-tpt(15))*ficarate)
 02670   mcwh=fna((gt3)*mcr*2)
@@ -326,7 +326,7 @@
 03130   pr #20: 'Call Print.addPicture("S:\acsGL\941.bmp",1,1)'
 03140   pr #20: 'Call Print.MyFont("Courier New")'
 03150   for j=1 to 10
-03160     let x=val(b$(1)(j:j)) conv L3180 ! pull any spaces or non-numeric characters out of federal id#
+03160     x=val(b$(1)(j:j)) conv L3180 ! pull any spaces or non-numeric characters out of federal id#
 03170     goto L3190
 03180 L3180: b$(1)(j:j)=""
 03190 L3190: if b$(1)(j:j)=" " then b$(1)(j:j)=""
@@ -349,10 +349,10 @@
 03360   pr #20: 'Call Print.AddText("'&trim$(city$)&'",'&str$(35)&','&str$(48)&')'
 03370   pr #20: 'Call Print.AddText("'&trim$(state$)&'",'&str$(93)&','&str$(48)&')'
 03380   pr #20: 'Call Print.AddText("'&trim$(zip$)&'",'&str$(108)&','&str$(48)&')'
-03390   if qtr=1 then let quarter=29 ! 1st quarter
-03400   if qtr=2 then let quarter=35 ! 2nd quarter
-03410   if qtr=3 then let quarter=41 ! 3rd quarter
-03420   if qtr=4 then let quarter=47 ! 4rd quarter
+03390   if qtr=1 then quarter=29 ! 1st quarter
+03400   if qtr=2 then quarter=35 ! 2nd quarter
+03410   if qtr=3 then quarter=41 ! 3rd quarter
+03420   if qtr=4 then quarter=47 ! 4rd quarter
 03430   pr #20: 'Call Print.AddText("X",'&str$(143)&','&str$(quarter)&')'
 03440   tab1=63: tab2=113: tab3=160 ! WAS 62,112,159  ! 76,126,173 WORKED WHEN TO FAR RIGHT
 03450   pr #20: 'Call Print.AddText("'&cnvrt$("pic(zzzzzzzzzzzzzz)",box1)&'",'&str$(tab3)&','&str$(72)&')'
@@ -408,8 +408,8 @@
 03960 L3960: p1=pos(rtrm$(csz$),"  ",1)
 03970   if p1>0 then csz$(p1+1:p1+1)="" : goto L3960
 03980   csz$=ltrm$(rtrm$(csz$)): p1=pos(csz$," ",-1)
-03990   let x$=csz$(p1+1:len(csz$)): let zip$=ltrm$(rtrm$(zip$))
-03992   let zip$=x$(1:5)
+03990   x$=csz$(p1+1:len(csz$)): zip$=ltrm$(rtrm$(zip$))
+03992   zip$=x$(1:5)
 04000   p2=pos(csz$(1:p1-1)," ",-1) : state$=csz$(p2+1:p1-1)(1:2) : state$=ltrm$(rtrm$(state$))
 04010   city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 04020   return 

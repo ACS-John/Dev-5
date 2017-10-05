@@ -10,7 +10,7 @@
 11800   fncno(cno,cnam$)
 12000   fntop(program$, cap$="Change GL Numbers in ACTrans")
 12200 ! 
-13000   let gln_from$=' 12   101  0' : let gln_to$='  1   101  0'
+13000   gln_from$=' 12   101  0' : gln_to$='  1   101  0'
 13800   if fn_screen_1(gln_from$,gln_to$)=5 then goto XIT
 14000   fn_report(cap$)
 14200   fn_report(date$('mm/dd/ccyy'))
@@ -23,7 +23,7 @@
 15600     if gl$>gln_from$ then goto EO_ACTRANS
 15800     if gl$=gln_from$ then 
 16000       fn_report('rec '&str$(rec(h_actrans)))
-16200       let gl$=gln_to$
+16200       gl$=gln_to$
 16400       rewrite #h_actrans,using F_ACTRANS: gl$
 16600     end if  ! gln_period_did_change>0
 16800   loop 
@@ -45,8 +45,8 @@
 20200     fncmdset(2)
 20400     fnacs(sn$,0,mat resp$,ck)
 20600     if ck<>5 then 
-20800       let gln_from$=lpad$(resp$(1),12)
-21000       let gln_to$=lpad$(resp$(2),12)
+20800       gln_from$=lpad$(resp$(1),12)
+21000       gln_to$=lpad$(resp$(2),12)
 21200     end if  ! ck<>5 then
 21400     fn_screen_1=ck
 21600   fnend  ! fn_screen_1

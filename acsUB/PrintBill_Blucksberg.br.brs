@@ -14,14 +14,14 @@
 14060   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 14080   close #21: 
 14100   at$(1)=cnam$
-14120   let z=21
+14120   z=21
 14140   at$(1)=trim$(at$(1))(1:z)
-14160   let x=len(at$(1)) : let y=z-x
+14160   x=len(at$(1)) : y=z-x
 14180   at$(1)=rpt$(" ",int(y/2))&at$(1)
-14200   let z=26
+14200   z=26
 14220   for j=2 to udim(at$)
 14240     at$(j)=trim$(at$(j))(1:z)
-14260     let x=len(at$(j)) : let y=z-x
+14260     x=len(at$(j)) : y=z-x
 14280     at$(j)=rpt$(" ",int(y/2))&at$(j)
 14300   next j
 14320   dim servicename$(10)*20
@@ -111,7 +111,7 @@
 18440   billing_date_prior=date(days(billing_date_prior,'mmddyy'),'ccyymmdd')
 18460   if resp$(resp_start)="[All]" then a$="" else a$=lpad$(trim$(resp$(6)(1:9)),9)
 18480   if resp$(resp_route)="[All]" then prtbkno=0 else prtbkno=val(resp$(7))
-18500   if resp$(resp_select_accounts)="True" then sl1=1: let z$="" else sl1=0
+18500   if resp$(resp_select_accounts)="True" then sl1=1: z$="" else sl1=0
 18520   goto GET_STARTED
 18540 ! /r
 24000 GET_STARTED: ! r:
@@ -143,7 +143,7 @@
 24520 AFTER_READ_CUSTOMER: ! 
 24540   gosub READALTADR
 24560   pb=bal-g(11)
-24580   if bal<=0 then let g(9)=0 ! don't show penalty if balance 0 or less
+24580   if bal<=0 then g(9)=0 ! don't show penalty if balance 0 or less
 24600   activity_charge=fntrans_total_as_of(z$,billing_date_prior,1)
 24620   activity_penalty=fntrans_total_as_of(z$,billing_date_prior,2)
 24640   activity_payment=fntrans_total_as_of(z$,billing_date_prior,3)
@@ -351,7 +351,7 @@
 44520     fnpa_txt(mg$(j),5,lyne+=4)
 44540   next j
 44560   fnpa_fontitalic
-44580   let x=0
+44580   x=0
 44600   for j=1 to 39
 44620     fnpa_line(x+=5,234,3,0) ! pr #20: 'Call Print.AddLine('&str$(x+=5)&','&str$(234)&',3,0)'
 44640   next j
@@ -402,9 +402,9 @@
 73170 L3170: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 73180   if p$<>z$ then goto PU_XIT
 73190   if tcode<>1 then goto L3160 ! only charge transactions
-73200   let usage(3)=usage(2): billdate(3)=billdate(2) : reads(3)=reads(2)
-73210   let usage(2)=usage(1): billdate(2)=billdate(1) : reads(2)=reads(1)
-73220   let usage(1)=wu: billdate(1)=tdate : reads(1)=wr
+73200   usage(3)=usage(2): billdate(3)=billdate(2) : reads(3)=reads(2)
+73210   usage(2)=usage(1): billdate(2)=billdate(1) : reads(2)=reads(1)
+73220   usage(1)=wu: billdate(1)=tdate : reads(1)=wr
 73230   goto L3160
 73240 PU_XIT: ! 
 73260   return  ! /r

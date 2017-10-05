@@ -4,8 +4,8 @@
 00040     library 'S:\Core\Library': fncno,fngethandle
 00050     dim cch$*20
 00060     fncno(cno)
-00070     let get=1 : put=2
-00080     if trim$(cch$)="" then let get_or_put=get else let get_or_put=put
+00070     get=1 : put=2
+00080     if trim$(cch$)="" then get_or_put=get else get_or_put=put
 00090     open #tmp=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative 
 00100     if get_or_put=get then !:
             read #tmp,using "Form POS 276,C 20",rec=1: cch$ norec CLOSE_TMP

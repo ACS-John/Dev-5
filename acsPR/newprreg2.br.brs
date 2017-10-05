@@ -34,7 +34,7 @@
 16140     if ~append_reg1 then let fnopenprn( 0,0,0,fnprocess,' (Departmental Register)')
 16160     ! ______________________________________________________________________
 18000     open #9: "Name="&env$('Q')&"\PRmstr\DeptName.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\DeptNameIdx.h"&env$('cno')&",Shr",internal,input,keyed ioerr L220X
-18020     let founddept=1
+18020     founddept=1
 18040     L220X: !
 18050     fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d$)
 18100     d1$=cnvrt$("pic(zzzzzzzz)",d1)
@@ -48,9 +48,9 @@
 18300     F_COMPANY: form pos 1,c 40,pos 133,pd 6.3,pos 145,pd 5.2,pos 150,10*c 8,pos 236,pd 3.3,pos 287,10*pd 3.3,pos 618,30*n 1,pos 648,10*c 6
 18320     close #1: ioerr ignore
 18340     ! 
-18380     let ficar1=ficar1*.01
-18400     let ficar2=ficar2*.01
-18420     let ficarate=ficar1+ficar2
+18380     ficar1=ficar1*.01
+18400     ficar2=ficar2*.01
+18420     ficarate=ficar1+ficar2
 18440     fnindex_it(env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno'),env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno'),"9/12/1 3/6/8")
 18460     ! execute "Index "&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&","&env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno')&" 9/12/1 3/6/8,replace,DupKeys -n"
 18480     open #h_payrollchecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CheckIdx2.h"&env$('cno'),internal,input,keyed 
@@ -91,7 +91,7 @@
 22586         other_wh=other_wh+cp(j) ! if break_is_on and cp(j)<>0 then pr 'cp('&str$(j)&')    adds '&str$(cp(j))
 22588       end if 
 22600       if newdedfed(j-4)=2 and newdedcode(j-4)=1 then goto L630 else goto L660
-22620 L630: t3=t3+cp(j) : tt3=tt3+cp(j): let gtt3=gtt3+cp(j) ! cafiteria
+22620 L630: t3=t3+cp(j) : tt3=tt3+cp(j): gtt3=gtt3+cp(j) ! cafiteria
 22640 !     if client$="Washington Parrish" and j=5 then totaldef=totaldef+cp(5) ! add deferred comp match and to later add to medicare wages
 22660       goto L680
 22680 L660: if newdedfed(j-4)=1 and newdedcode(j-4)=1 then goto L670 else goto L680
@@ -108,7 +108,7 @@
 22880     next j
 22900     for j=1 to 5
 22920       tothrs=tothrs+tdc(j)
-22940       let grandtothrs=grandtothrs+tdc(j)
+22940       grandtothrs=grandtothrs+tdc(j)
 22960     next j
 22980     ntc=ntc+1
 23000     if det=1 or det=2 then goto L760
@@ -116,7 +116,7 @@
 23040 F_PR_LINE: form pos 1,n 4,n 8,x 2,c 12,6*n 7.2,7*n 9.2,skip 1
 23060 L760: ! 
 23070     sswg=ficawag=tdet(1)
-23080     let ficawage=ficawage+ficawag
+23080     ficawage=ficawage+ficawag
 23100     totalfi=totalfi+ficawag
 23120     sswh1=sswh1+cp(2)
 23140     sswh2=sswh2+cp(2)
@@ -130,11 +130,11 @@
 23300     mcwg1=mcwg1+mcwg
 23320     mcwg2=mcwg2+mcwg
 23340     stateuc+=round(tdc(10)*sucrat(statecode)*.01,2)
-23360     let feduc+=round(tdc(9)*feducrat*.01,2)
-23380 !   if client$="Washington Parrish" then let feducwg=tdc(9)+tcp(5): goto L870
-23400     let feducwg=tdc(9)
+23360     feduc+=round(tdc(9)*feducrat*.01,2)
+23380 !   if client$="Washington Parrish" then feducwg=tdc(9)+tcp(5): goto L870
+23400     feducwg=tdc(9)
 23420 ! L870: ! 
-23430     let fedwages=fedwages+feducwg
+23430     fedwages=fedwages+feducwg
 23440     totalfuc=totalfuc+feducwg
 23460 !   if client$="Washington Parrish" then stucwg=tdc(10)+tcp(5): goto L900
 23480     stucwg=tdc(10)
@@ -239,7 +239,7 @@
 27720 !  goto L1700
 27740 ! L1700: !
 27760     ntc=0 : mat tcp=(0) : tt3=0
-27780     mat thc=(0) : let ficawage=0 : let fedwages=0
+27780     mat thc=(0) : ficawage=0 : fedwages=0
 27800     mat stuc1=(0) : taxwg1=sswh1=mcwh1=sswg1=mcwg1=stateuc=feduc=0
 27820     dep=dep+1 ! count # of departments used
 27840 PRINTDEPARTMENTTOTALS_XIT: ! 
@@ -285,13 +285,13 @@
 34180     pr #255: "\qc  {\f181 \fs16 \b Payroll Date: "&cnvrt$("pic(zz/zz/zz)",ppd)&"}"
 34200     pr #255: "\ql   "
 34220     mat tcp=totaltcp : mat thc=totalthc : tt3=gtt3
-34240     let ficawage=totalfi : let fedwages=totalfuc : mat stuc1=stuc2
+34240     ficawage=totalfi : fedwages=totalfuc : mat stuc1=stuc2
 34260     sswh1=sswh2 : mcwh1=mcwh2 : sswg1=sswg2
 34280     mcwg1=mcwg2 : taxwg1=taxwg2 : tothrs=grandtothrs
 34300     pr #255: ""
 34320     pr #255,using 'form pos 52,c 40': "Summary for all Departments"
 34340     gosub L1860
-34360     let final=1
+34360     final=1
 34380     gosub PRINTDEPARTMENTTOTALS
 34400     pr #255,using 'form skip 1,pos 12,c 30': "State W/H Breakdown"
 34420     for j=1 to 10

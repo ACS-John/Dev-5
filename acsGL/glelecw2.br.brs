@@ -31,9 +31,9 @@
 00300   if comma=1 then st$=a$(3)(p1+2:p1+3) else st$=a$(3)(p1+1:p1+2)
 00310   p2=len(rtrm$(a$(3)))
 00320   p1=p2-4
-00330   let zip$=a$(3)(p1:p2)
-00340   if val(date$(1:2))-1 <70 then let yr=2000+val(date$(1:2))-1 else let yr=1900+val(date$(1:2))-1
-00350   if date$(4:5)="12" then let yr=yr+1 ! add one to year if run in december
+00330   zip$=a$(3)(p1:p2)
+00340   if val(date$(1:2))-1 <70 then yr=2000+val(date$(1:2))-1 else yr=1900+val(date$(1:2))-1
+00350   if date$(4:5)="12" then yr=yr+1 ! add one to year if run in december
 00360   io1$(1)="5,25,C 40,UT,N"
 00370   io1$(2)="6,25,C 40,UT,N"
 00380   io1$(3)="7,25,C 20,UT,N"
@@ -100,7 +100,7 @@
 00990   if rtrm$(zip$)="" then ce=5: goto ERR1
 01000   if b1=0 then ce=6: goto ERR1
 01010   if yr<2001 then ce=7: goto ERR1
-01020   let ficarate=ssrate+mcrate
+01020   ficarate=ssrate+mcrate
 01030   if ssmax<53400 then ce=8: goto ERR1
 01040   if ins<0 or ins>10 then ce=9: goto ERR1
 01050   if pen<0 or pen>10 then ce=10: goto ERR1
@@ -133,7 +133,7 @@
 01320 ! ______________________________________________________________________
 01330   gosub SCR2
 01340   pr newpage
-01350   let win=101
+01350   win=101
 01360   message$=""
 01370   stopable=1: gosub L3970 ! fnWAIT(WIN,CAP$,MESSAGE$,1)
 01380 ! ______________________________________________________________________
@@ -170,27 +170,27 @@
 01690   emzip$=em$(3)(p1:p2)
 01700 L1700: p1=pos(ss$,"-",1)
 01710   if p1>0 then ss$(p1:p1)="": goto L1700 else ssn=val(ss$)
-01720   let w2(1)=min(w2(1)+m(1)-m(31)-dedfica,ssmax-m(31)) ! TOTAL SOC-SEC WAGES
-01730   let w3=w3+m(5) ! TOTAL FICA WITHHELD
-01740   let w3(1)=w3(1)+m(1)-dedfica ! TOTAL MEDICARE WAGES & TIPS
-01750   let w3(1)=min(mcmax,w3(1)) ! MC wages cannot exceen maximum
-01760   let w2=round(min(w3/(ssrate+mcrate)*ssrate,ssmax*ssrate),2) ! SS WH
-01770   let w3(2)=w3-w2 ! Medicare withheld
-01780   let w2(2)=w2(2)+m(31) ! FICA tips YTD
-01790   let w2(3)=w2(3)+m(1)-dedfed ! TOTAL FEDERAL WAGES
-01800   let w2(4)=w2(4)+w2 ! FICA W/H YTD
-01810 ! LET W2(4)=W2 ! SS WH only in W-2 record ( EXCLUDE MEDICARE W/H)
-01820   let w2(5)=w2(5)+m(3) ! FED W/H YTD
-01830   if ins>0 then let w2(6)=w2(6)+m(9+(ins*2)) ! EMPLOYER COST GROUP LIFE INS
-01840   let w2(7)=w2(7)+0 ! uncollected employee fica tax on tips
-01850   let w2(8)=w2(8)+m(35) ! EIC TOTAL
-01860   let w2(9)=w2(9)+0 ! ALLOCATED TIPS
+01720   w2(1)=min(w2(1)+m(1)-m(31)-dedfica,ssmax-m(31)) ! TOTAL SOC-SEC WAGES
+01730   w3=w3+m(5) ! TOTAL FICA WITHHELD
+01740   w3(1)=w3(1)+m(1)-dedfica ! TOTAL MEDICARE WAGES & TIPS
+01750   w3(1)=min(mcmax,w3(1)) ! MC wages cannot exceen maximum
+01760   w2=round(min(w3/(ssrate+mcrate)*ssrate,ssmax*ssrate),2) ! SS WH
+01770   w3(2)=w3-w2 ! Medicare withheld
+01780   w2(2)=w2(2)+m(31) ! FICA tips YTD
+01790   w2(3)=w2(3)+m(1)-dedfed ! TOTAL FEDERAL WAGES
+01800   w2(4)=w2(4)+w2 ! FICA W/H YTD
+01810 ! w2(4)=W2 ! SS WH only in W-2 record ( EXCLUDE MEDICARE W/H)
+01820   w2(5)=w2(5)+m(3) ! FED W/H YTD
+01830   if ins>0 then w2(6)=w2(6)+m(9+(ins*2)) ! EMPLOYER COST GROUP LIFE INS
+01840   w2(7)=w2(7)+0 ! uncollected employee fica tax on tips
+01850   w2(8)=w2(8)+m(35) ! EIC TOTAL
+01860   w2(9)=w2(9)+0 ! ALLOCATED TIPS
 01870   if dfc>0 then dc1=dc1+m(9+(dfc*2))*100 ! DEFERRED COMPENSATION
 01880   if dcan>0 then dca=dca+m(9+(dcan*2))*100 ! Dependent care assistance
 01890   if sr1=0 then goto L1920
 01900   s2(1)=s2(1)+(m(1)*100)
 01910   s2(2)=s2(2)+(m(7)*100)
-01920 L1920: if em6=9 then let w2(1)=w2(4)=w3(1)=w3(2)=0
+01920 L1920: if em6=9 then w2(1)=w2(4)=w3(1)=w3(2)=0
 01930   gosub RECRE
 01940   gosub RECRW
 01950   gosub RECRS
@@ -213,8 +213,8 @@
 02120 L2120: form pos 1,c 2,g 25,g 10,2*g 5,2*g 1,g 2,g 4,g 2,c 71
 02130   return 
 02140 ! ______________________________________________________________________
-02150 RECRW: for j=1 to 9: let w2(j)=w2(j)*100: next j
-02160   for j=1 to 2: let w3(j)=w3(j)*100 : next j
+02150 RECRW: for j=1 to 9: w2(j)=w2(j)*100: next j
+02160   for j=1 to 2: w3(j)=w3(j)*100 : next j
 02170   if pen=0 then pen$="0" else pen$="1"
 02180   if dfc=0 then dfc$="" else dfc$="D"
 02190   pr #22,using L2200: "RW",ssn,first$,mid$,last$,"","",em$(2)(1:22),emct$,emst$,emzip$,"","","","","",w2(3),w2(5),w2(1),w2(4),w3(1),w3(2),w2(2),w2(8),dca,dc1,0,0,0,0,0,0,0,0,0,"",w2(6),0,0,0,0,"",0,"",pen$,0,""
@@ -236,7 +236,7 @@
 02350   dc3=dc3+dc1
 02360   dca2=dca2+dca
 02370   dca3=dca3+dca
-02380   let w2=w3=dca=dc1=0
+02380   w2=w3=dca=dc1=0
 02390   mat w2=(0)
 02400   mat w3=(0)
 02410   mat s2=(0)
@@ -278,8 +278,8 @@
 02770 ! ______________________________________________________________________
 02780 SCR2: ! 
 02790   dim contact$*27,email$*40
-02800   let win=101
-02810   let win_height=12: let win_width=75: display_cnam=1: button_option=2: gosub L3200
+02800   win=101
+02810   win_height=12: win_width=75: display_cnam=1: button_option=2: gosub L3200
 02820   pr #win,fields "04,2,Cr 31,N": "Personal ID Number:" !:
         pr #win,fields "05,2,Cr 31,N": "Resub Indicator:" !:
         pr #win,fields "06,2,Cr 31,N": "Resub TLCN:" !:
@@ -320,18 +320,18 @@
 03020 ! ______________________________________________________________________
 03030 L3030: dim first$*15,mid$*15,last$*20,em$(3)*30
 03040   em$(1)=uprc$(rtrm$(em$(1))): ! nAMCDE$="s"
-03050   let x1=pos(em$(1)," ",1)
-03060   let x2=pos(em$(1)," ",x1+1)
-03070   let x3=pos(em$(1)," ",x2+1)
+03050   x1=pos(em$(1)," ",1)
+03060   x2=pos(em$(1)," ",x1+1)
+03070   x3=pos(em$(1)," ",x2+1)
 03080   if uprc$(namcde$)="S" then goto L3130
-03090   let first$=em$(1)(1:max(x1-1,1))
+03090   first$=em$(1)(1:max(x1-1,1))
 03100   if x2>0 then mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
 03110   if x2=0 then last$=em$(1)(x1+1:len(em$(1))): mid$=""
 03120   goto L3170
 03130 L3130: ! last name first
 03140   if x1>0 and em$(1)(x1-1:x1-1)="," then last$=em$(1)(1:x1-2) else last$=em$(1)(1:max(x1-1,1))
-03150   if x2>0 then let first$=em$(1)(x1+1:x2-1): mid$=em$(1)(x2+1:len(em$(1)))
-03160   if x2=0 then let first$=em$(1)(x1+1:len(em$(1))): mid$=""
+03150   if x2>0 then first$=em$(1)(x1+1:x2-1): mid$=em$(1)(x2+1:len(em$(1)))
+03160   if x2=0 then first$=em$(1)(x1+1:len(em$(1))): mid$=""
 03170 L3170: ! pr FIRST$,MID$,LAST$
 03180   return 
 03190 ! ______________________________________________________________________
@@ -358,22 +358,22 @@
           pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
 03480 L3480: if button_option=0 then goto L3590
 03490   mat fkey$=("") : em$="" : es=0
-03500   let fkey$(5)="Cancel" ! included by default
+03500   fkey$(5)="Cancel" ! included by default
 03510   if button_option=2 then !:
-          let fkey$(1)="Next"
+          fkey$(1)="Next"
 03520   if button_option=3 then !:
-          let fkey$(1)="Print"
+          fkey$(1)="Print"
 03530   if button_option=4 then !:
-          let fkey$(1)="Save"
+          fkey$(1)="Save"
 03540   if button_option=5 then !:
-          let fkey$(1)="Next" !:
-          let fkey$(6)="Search"
+          fkey$(1)="Next" !:
+          fkey$(6)="Search"
 03550   if button_option=6 then !:
-          let fkey$(1)="Next" !:
-          let fkey$(2)="Back"
+          fkey$(1)="Next" !:
+          fkey$(2)="Back"
 03560   if button_option=7 then !:
-          let fkey$(1)="Save" !:
-          let fkey$(4)="Delete"
+          fkey$(1)="Save" !:
+          fkey$(4)="Delete"
 03570   scrline=er+1: gosub L4320 !  fnFKEY(ER+1,MAT FKEY$,MAT DISFK,EM$,ES)
 03580 ! 
 03590 L3590: return  ! Fnend
@@ -432,7 +432,7 @@
 04200   if sc<1 then sc=20
 04210   if er<1 then er=14
 04220   if ec<1 then ec=59
-04230   let win_width=ec-sc+1
+04230   win_width=ec-sc+1
 04240   close #win: ioerr L4250
 04250 L4250: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
 04260   pr #win: newpage
@@ -446,7 +446,7 @@
         startpos=0
 04340   for j=1 to udim(fkey$) ! add ' (Fx)' to each button
 04350     if fkey$(j)="" then goto L4380
-04360     let fkey$(j)=fkey$(j)&" (F"&str$(j)&")" !:
+04360     fkey$(j)=fkey$(j)&" (F"&str$(j)&")" !:
           ! add ' (Fx)' to each button
 04370     totallen=totallen+len(fkey$(j))+1
 04380 L4380: next j

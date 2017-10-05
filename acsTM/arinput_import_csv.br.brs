@@ -22,9 +22,9 @@
 12300   label$(1)='Starting Date:'
 12400   label$(2)='Ending Date:'
 12500   label$(3)='Mint Transaction CSV File To Import:'
-12600   let filter_date(1)=20120101
-12700   let filter_date(2)=20121231
-12800   let file_import$=env$('userprofile')&'\Downloads\transactions.csv'
+12600   filter_date(1)=20120101
+12700   filter_date(2)=20121231
+12800   file_import$=env$('userprofile')&'\Downloads\transactions.csv'
 12900   fntos(sn$="ask_fdd"&str$(udim(mat label$))&'_dates')
 13000   respc=0 : ad_line=0 : col1_len=36 : col2_pos=col1_len+2
 13100   fnlbl(ad_line+=1,1,label$(ad_line),col1_len,align_right:=1)
@@ -39,11 +39,11 @@
 14000   fncmdset(3)
 14100   fnacs(sn$,0,mat resp$,ckey)
 14200   if ckey=5 then 
-14300     let fkey(99)
+14300     fkey(99)
 14400   else 
-14500     let filter_date(1)=val(srep$(resp$(1),'/',''))
-14600     let filter_date(2)=val(srep$(resp$(2),'/',''))
-14700     let file_import$=resp$(3)
+14500     filter_date(1)=val(srep$(resp$(1),'/',''))
+14600     filter_date(2)=val(srep$(resp$(2),'/',''))
+14700     file_import$=resp$(3)
 14800   end if 
 14900   fn_import_it(file_import$)
 15000   end  ! pr newpage
@@ -113,10 +113,10 @@
 21400   if cmdkey=2 then goto L920
 21500   if transaction_type<>3 then goto L1200
 21600   fli1$(4)="6,30,n 11.2,ut,n"
-21700   if sz=4 then let gl(1,2)=gln1(2): let gl(1,1)=gln1(1): let gl(1,3)=tr(3)
-21800   if sz=3 then let gl(1,1)=gln1(2): let gl(1,2)=gln1(3): let gl(1,3)=tr(3)
-21900   if sz=2 then let gl(1,2)=gln1(2): let gl(1,1)=gln1(1): let gl(1,3)=gln1(3): let gl(1,4)=tr(3)
-22000   if sz=5 then let gl(1,1)=gln1(2): let gl(1,2)=tr(3)
+21700   if sz=4 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=tr(3)
+21800   if sz=3 then gl(1,1)=gln1(2): gl(1,2)=gln1(3): gl(1,3)=tr(3)
+21900   if sz=2 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=gln1(3): gl(1,4)=tr(3)
+22000   if sz=5 then gl(1,1)=gln1(2): gl(1,2)=tr(3)
 22100 L1180: ! 
 22200   rinput fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
 22300   if cmdkey=2 then goto L920
@@ -148,13 +148,13 @@
 24900   pr f "9,45,c 30": "G/L # REQUIRED"
 25000   goto L790
 25100 L1410: ! 
-25200   let gla=0
+25200   gla=0
 25300   for j=1 to 10
 25400     if gl(j,gx)=0 then goto L1460
-25500     let gla=gla+gl(j,gx)
+25500     gla=gla+gl(j,gx)
 25600   next j
 25700 L1460: ! 
-25800   if transaction_type=3 then let gla=gla-tr(2)
+25800   if transaction_type=3 then gla=gla-tr(2)
 25900   if gla=tr(3) then goto L1520
 26000   pr f "11,2,c 75,h,n": " G/L ALLOCATIONS DO NOT AGREE WITH TOTAL AMOUNT.  PRESS ENTER TO CONTINUE."
 26100   input fields "11,78,c 1,EU,n": pause$
@@ -172,7 +172,7 @@
 27300   tr(5)=transaction_type
 27400   write #h_addr,using f3$,rec=r3: p$,iv$,mat tr,id$,mat pgl,mat gl
 27500   p$=""
-27600   let q2=0
+27600   q2=0
 27700   goto SCREENS_TRANS_ENTRY_B
 27800 L1630: ! 
 27900   iv$=" "
@@ -270,8 +270,8 @@
 37100 ! /r
 37200   def fn_tmsrch !  search for customer #
 37300     dim heading$*70,form$*80,numeric_format$*20,selection$*70
-37400     let file_num=11 ! alpha index on clients
-37500     let form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
+37400     file_num=11 ! alpha index on clients
+37500     form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
 37600     numeric_format$='pic($$$,$$$.##)'
 37700     key_length=5
 37800     heading$="Acct #-Name--------------------Address--------Balance"
@@ -297,35 +297,35 @@
 39800     if i4=1 and i5=0 then goto L420
 39900 ! NO DEPT    NO SUBACCOUNT
 40000     sz=5
-40100     let gx=2
+40100     gx=2
 40200     mat gl(10,2)=(0)
 40300     mat pgl(1)=(0)
-40400     let gpx=1
+40400     gpx=1
 40500     goto L510
 40600 L300: ! YES DEPT   YES SUBACCOUNT
 40700     sz=2
-40800     let gx=4
-40900     let gpx=2
+40800     gx=4
+40900     gpx=2
 41000     goto L510
 41100 L350: ! NO DEPT    YES SUBACCOUNT
 41200     sz=3
-41300     let gx=3
+41300     gx=3
 41400     mat gl(10,3)=(0)
 41500     mat pgl(2)=(0)
-41600     let gpx=1
+41600     gpx=1
 41700     goto L510
 41800 L420: ! YES DEPT    NO SUB ACCOUNT
 41900     sz=4
-42000     let gx=3
+42000     gx=3
 42100     mat gl(10,3)=(0)
 42200     mat pgl(2)=(0)
-42300     let gpx=2
+42300     gpx=2
 42400     goto L510
 42500 L490: ! NO GL TO BE ENTERED
 42600     sz=6
 42700 L510: ! 
 42800 !        if sz=5 then
-42900 !         let f3$='FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,x 3,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2'
+42900 !         f3$='FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,x 3,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2,x 3,n 6,x 3,pd 5.2'
 43000 !         sc1$(1)="0 = Completed"
 43100 !         sc1$(2)="1 = Invoices"
 43200 !         sc1$(3)="2 = Debit Memos"
@@ -439,19 +439,19 @@
 54000     dim gnl_block$*512
 54100     dim gnl_buffer$*32767
 54200     do until pos(gnl_buffer$,lf$)>0 or gnl_eof
-54300       let gnl_block$=''
+54300       gnl_block$=''
 54400       read #h_in,using 'form pos 1,C 100': gnl_block$ ioerr GNL_H_IN_READ_IOERR
-54500       let gnl_buffer$=gnl_buffer$&gnl_block$
+54500       gnl_buffer$=gnl_buffer$&gnl_block$
 54600     loop 
 54700     pos_crlf=pos(gnl_buffer$,lf$)
 54800     line$=gnl_buffer$(1:pos_crlf)
-54900     let gnl_buffer$(1:pos_crlf+1)=''
+54900     gnl_buffer$(1:pos_crlf+1)=''
 55000 ! line$=srep$(line$,cr$,'^') : line$=srep$(line$,lf$,'~')
 55100 ! pr 'line='&line$ : pause
 55200     goto GNL_XIT
 55300 GNL_H_IN_READ_IOERR: ! 
-55400     let gnl_block$=gnl_block$&lf$
-55500     let gnl_eof=1
+55400     gnl_block$=gnl_block$&lf$
+55500     gnl_eof=1
 55600     continue  ! gnl_h_in_read_ioerr
 55700 GNL_XIT: ! 
 55800   fnend  ! fn_get_next_line

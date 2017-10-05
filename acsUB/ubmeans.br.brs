@@ -38,7 +38,7 @@
 00290   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 00300   if ckey=5 then goto XIT
 00310   for j=1 to 8
-00320 L320: let x=pos(resp$(j),"/",1)
+00320 L320: x=pos(resp$(j),"/",1)
 00330     if x>0 then resp$(j)(x:x)="": goto L320
 00340   next j
 00350   for j=1 to 8 !:
@@ -78,7 +78,7 @@
 00560   if tcode<>1 then goto L530 ! only charge transactions
 00570   for j1=1 to 8
 00580     if cd1(j1)=tdate then t1=t1+1: t2=t2+wu !:
-            let x=x+1: let x(x)=wu : goto L530
+            x=x+1: x(x)=wu : goto L530
 00590   next j1
 00600   goto L530
 00610 ! ______________________________________________________________________
@@ -109,7 +109,7 @@
 00860   gosub HEADER
 00870   means=int(lrec(5)/2)
 00880 L880: read #5,using "Form POS 1,C 10,N 12.2": z$,t3 eof L940
-00890   let x=x+1
+00890   x=x+1
 00900   pr #255,using L910: z$,t3 pageoflow L950
 00910 L910: form pos 11,c 10,x 3,n 12.2,skip 1
 00920   if means=x then pr #255: "This should be the halfway point"

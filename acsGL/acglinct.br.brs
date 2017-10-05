@@ -11,7 +11,7 @@
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Income Statement")
 00120   fncno(cno,cnam$)
-00130   let udf$=env$('temp')&'\'
+00130   udf$=env$('temp')&'\'
 00140   actpd$=fnactpd$
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
@@ -117,10 +117,10 @@
 01100   goto L400
 01110 L1110: if foot1=1 then goto L1160
 01120   tabnote=sp
-01130   let foot1=1
-01140   let foot$=d$
+01130   foot1=1
+01140   foot$=d$
 01150   goto L400
-01160 L1160: let foot$=rtrm$(foot$)&d$
+01160 L1160: foot$=rtrm$(foot$)&d$
 01170   goto L400
 01180 L1180: for j=1 to 9
 01190     if ac(j)=0 or ac(j)=9 then goto L1220 ! 10/14/87
@@ -147,11 +147,11 @@
 01400   continue 
 01410 L1410: if ul=0 then goto L1500
 01420   if ul=1 then goto L1470
-01430   let underlin$="============="
+01430   underlin$="============="
 01440   pr #255,using L1450: underlin$&"====",underlin$&"======"
 01450 L1450: form skip 1,pos 49,c 17,pos 67,c 19,skip redir
 01460   goto L1500
-01470 L1470: let underlin$="______________"
+01470 L1470: underlin$="______________"
 01480   pr #255,using L1490: underlin$&"___",underlin$&"_____"
 01490 L1490: form skip redir,pos 49,c 18,pos 67,c 19,skip redir
 01500 L1500: if redir=0 then pr #255,using L1510: " "
@@ -184,7 +184,7 @@
 01760     read #10,using L1770,key=k$: pc1,pc2,yt2 nokey L1820
 01770 L1770: form pos 1,g 5,2*pd 6.2
 01780     pc2=pc2+cb-bb
-01790     let yt2=yt2+cb
+01790     yt2=yt2+cb
 01800     rewrite #10,using L1770: pc1,pc2,yt2
 01810     goto L1830
 01820 L1820: write #10,using L1770: pc1,cb-bb,cb

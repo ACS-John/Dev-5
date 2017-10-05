@@ -17,7 +17,7 @@
 00160   cch$=fncch$
 00180   actpd$=fnactpd$
 00190   actpd=fnactpd
-00200   let fscode=fnfscode
+00200   fscode=fnfscode
 00210   priorcd=fnpriorcd
 00220 ! ______________________________________________________________________
 00240   if fnps=2 then 
@@ -57,7 +57,7 @@
 00530   read #hGlMstr,using fHlMstr: ir,bb,cb,mat by,mat bp,mat bm eof L710
 00540   if ir=0 then goto FdReadGlMstr
 00550   if fscode=0 or (fscode=actpd and priorcd=1) then goto L620
-00560   if fscode<1 or fscode>13 then let fscode=1
+00560   if fscode<1 or fscode>13 then fscode=1
 00570   if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00580   if priorcd=2 then goto L610
 00590   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -73,9 +73,9 @@
 00658     monthb=monthb+bm(fscode)
 00660   end if
 00662   if fscode=0 then 
-00664     for j=1 to actpd : let ytdb+=bm(j) : next j 
+00664     for j=1 to actpd : ytdb+=bm(j) : next j 
 00666   else 
-00668     for j=1 to fscode : let ytdb+=bm(j) : next j 
+00668     for j=1 to fscode : ytdb+=bm(j) : next j 
 00670   end if
 00672 goto FdReadGlMstr
 
@@ -85,7 +85,7 @@
 00710   L710: !
 00712   notrans=1
 00720   L720: !
-00722   let unexpend=annualb-total2
+00722   unexpend=annualb-total2
 00730   for j=1 to 9
 00740     if ac(j)<>9 then 
 00742       accum(j,1)+=annualb : accum(j,2)+=total 
@@ -94,7 +94,7 @@
 00750   next j
 00760   if rs=1 then 
 00762     total=-total 
-00770     total2=-total2 : annualb=-annualb : let unexpend=unexpend
+00770     total2=-total2 : annualb=-annualb : unexpend=unexpend
 00776   end if
 00778   if ds=1 then dollar$="$" else dollar$=" "
 00790   if annualb><0 or total2><0 or total<>0 or ls+ds+ul+ic>0 then 
@@ -136,7 +136,7 @@
 01060 goto ReadFinStmtLayout ! /r
 01080 FinRecF: ! r:
 01082   if foot1=1 then 
-01084     let foot$=rtrm$(foot$)&d$
+01084     foot$=rtrm$(foot$)&d$
 01086   else
 01090     tabnote=sp
 01100     foot1=1
@@ -174,10 +174,10 @@
 01410 PrUnderlines: ! r:
 01412   if ul=0 then goto L1500
 01420   if ul=1 then goto L1470
-01430   let underlin$="=============="
+01430   underlin$="=============="
 01450   goto L1480
 01460   ! 
-01470   L1470: let underlin$="______________"
+01470   L1470: underlin$="______________"
 01480   L1480: pr #255,using L1490: underlin$,underlin$,underlin$,underlin$
 01490   L1490: form pos 22,3*c 15,x 1,c 15,skip 1
 01500   L1500: ! if redir=0 then pr #255: ""

@@ -12,8 +12,8 @@
 00140 ! 
 00150 ! ______________________________________________________________________
 00160   fntos(sn$="ubowed")
-00162   respc=0 : mylen=29 : mypos=mylen+2 : let frac=0
-00170   fnfra(1,1,3,mypos+14,"Aging Dates","Use the last day of each month for your aging dates.") : let fraaging=frac+=1
+00162   respc=0 : mylen=29 : mypos=mylen+2 : frac=0
+00170   fnfra(1,1,3,mypos+14,"Aging Dates","Use the last day of each month for your aging dates.") : fraaging=frac+=1
 00180   fnlbl(1,1,"Last Day of Current Month:",mylen,1,0,fraaging)
 00190   fntxt(1,mypos,10,10,0,"3",0,"ccyymmdd",fraaging) !:
         resp$(respc+=1)=''
@@ -32,10 +32,10 @@
         fnacs(sn$,0,mat resp$,ckey,1)
 00280   if ckey=5 then goto XIT
 00290   for j=1 to 3
-00300 ! Let X=POS(RESP$(J),"/",1)
+00300 ! x=POS(RESP$(J),"/",1)
 00310 ! If X>0 Then rESP$(J)(X:X)="": Goto 300
 00320     lastday(j)=val(resp$(j))
-00330     let firstday(j)=(val(resp$(j)(1:6))*100)+1
+00330     firstday(j)=(val(resp$(j)(1:6))*100)+1
 00340   next j
 00350   dat$=resp$(4) !:
         fndat(dat$,2)

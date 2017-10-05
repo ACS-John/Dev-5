@@ -62,11 +62,11 @@
 64130   if bdate<>0 and bdate<>last_billing_date then goto READ_CUSTOMER
 64140   if a(srvc)=0 then goto READ_CUSTOMER ! no service
 64160   if a(srvc)<>rcode then goto READ_CUSTOMER
-64180   let usage=0
-64200   if srvc=1 then let usage=d(3): amount=g(1): meter$=f$(1) ! water
-64220   if srvc=2 then let usage=d(3): amount=g(2): meter$="" ! sewer
-64240   if srvc=3 then let usage=d(7): amount=g(3): meter$=f$(2) ! electric
-64260   if srvc=4 then let usage=d(11): amount=g(4): meter$=f$(3) ! gas
+64180   usage=0
+64200   if srvc=1 then usage=d(3): amount=g(1): meter$=f$(1) ! water
+64220   if srvc=2 then usage=d(3): amount=g(2): meter$="" ! sewer
+64240   if srvc=3 then usage=d(7): amount=g(3): meter$=f$(2) ! electric
+64260   if srvc=4 then usage=d(11): amount=g(4): meter$=f$(3) ! gas
 64280   if a(srvc)=tc or tc=0 then 
 64300     pr #255,using F_PR_LINE: z$,e$(2),e$(1),meter$,usage,amount pageoflow PGOF
 64320 F_PR_LINE: form x 5,c 10,x 5,c 30,x 7,c 30,x 2,c 12,x 2,pic(zzzzzzzzz),x 2,n 12.2

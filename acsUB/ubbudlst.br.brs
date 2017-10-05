@@ -20,9 +20,9 @@
 00180   mylen=22 !:
         mypos=mylen+2
 00190   fnlbl(1,1,"Sort by:",mylen,1)
-00200   let wrd2$(1)="Account" !:
-        let wrd2$(2)="Customer Name" !:
-        let wrd2$(3)="Street" !:
+00200   wrd2$(1)="Account" !:
+        wrd2$(2)="Customer Name" !:
+        wrd2$(3)="Street" !:
         fncomboa("bs",1,mypos,mat wrd2$) !:
         resp$(respc+=1)=wrd2$(1)
 00210   fnlbl(2,1,"Report Heading Date:",mylen,1)
@@ -37,9 +37,9 @@
 00250   fncmdset(2)
 00260   fnacs(sn$,0,mat resp$,ckey)
 00270   if ckey=5 then goto XIT
-00280   if resp$(1)=wrd2$(1) then let q0=1 else !:
-          if resp$(1)=wrd2$(2) then let q0=2 else !:
-            if resp$(1)=wrd2$(3) then let q0=3 ! sort by
+00280   if resp$(1)=wrd2$(1) then q0=1 else !:
+          if resp$(1)=wrd2$(2) then q0=2 else !:
+            if resp$(1)=wrd2$(3) then q0=3 ! sort by
 00290   dat$=resp$(2) !:
         fndat(dat$,2)
 00300   if resp$(3)=sel$(1) then ti2=1 else !:

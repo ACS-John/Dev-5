@@ -8,28 +8,28 @@
 00070   dim nam$*30
 00080 ! ______________________________________________________________________
 00090   def fnbooktitle$*80(x$*80)
-00100     let x$=lwrc$(trim$(x$)) : olda=0
-00110     let x$(1:1)=uprc$(x$(1:1))
+00100     x$=lwrc$(trim$(x$)) : olda=0
+00110     x$(1:1)=uprc$(x$(1:1))
 00120 ! capitalize anthing after a SPACE
 00130 L130: a=pos(x$," ",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L130
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L130
 00140     a=olda=0
 00150 L150: a=pos(x$,"-",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L150
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L150
 00160     a=olda=0
 00170 L170: a=pos(x$,"/",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L170
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L170
 00180     a=olda=0
 00190 L190: a=pos(x$,"\",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L190
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L190
 00200     a=olda=0
 00210 L210: a=pos(x$,".",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L210
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L210
 00220     fnbooktitle$=x$
 00230   fnend 
 00240 ! ______________________________________________________________________

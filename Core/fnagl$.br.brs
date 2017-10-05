@@ -23,10 +23,10 @@
 00230       read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub
 00240     end if 
 00250 COMPANY_POST_READ: ! 
-00260     if tmp_cursys$="PR" or tmp_cursys$="UB" or tmp_cursys$="CR" then let use_dept=use_sub=1
+00260     if tmp_cursys$="PR" or tmp_cursys$="UB" or tmp_cursys$="CR" then use_dept=use_sub=1
 00270     close #company: ioerr ignore
 00275 ! strip off any description
-00280     let x$=x$(1:14)
+00280     x$=x$(1:14)
 00285 ! find the position of the "-"s
 00290     dash1=pos(x$,"-")
 00295     dash2=pos(x$,"-",-1)
@@ -34,24 +34,24 @@
 00301     if dash1=0 and dash2=0 and len(x$)=12 then 
 00302 ! do nothing - it is already formatted properly
 00305     else if use_dept<>0 and use_sub<>0 then 
-00310       let x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3)
+00310       x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3)
 00315     else if use_dept =0 and use_sub<>0 then 
-00320       let x$="  0"&lpad$(trim$(x$(1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3)
+00320       x$="  0"&lpad$(trim$(x$(1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3)
 00325     else if use_dept =0 and use_sub =0 then 
-00330       let x$="  0"&lpad$(trim$(x$),6)&"  0"
+00330       x$="  0"&lpad$(trim$(x$),6)&"  0"
 00335     else if use_dept<>0 and use_sub =0 then 
-00340       let x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:len(x$))),6)&"  0"
+00340       x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:len(x$))),6)&"  0"
 00345     end if 
 00350 ! If USE_DEPT =0 AND USE_SUB =0 Then Goto 350 Else Goto 370
-00355 ! If X$(1:3)="  0" Then Let X$(1:3)="   " ! kj
-00360 ! If X$(10:12)="  0" Then Let X$(10:12)="   " ! kj
-00365 ! Let X$="  0"&LPAD$(TRIM$(X$),6)&"  0": Goto 390 ! kj
+00355 ! If X$(1:3)="  0" Then x$(1:3)="   " ! kj
+00360 ! If X$(10:12)="  0" Then x$(10:12)="   " ! kj
+00365 ! x$="  0"&LPAD$(TRIM$(X$),6)&"  0": Goto 390 ! kj
 00368 FINIS: ! 
-00370     let x$=lpad$(trim$(x$),12)
+00370     x$=lpad$(trim$(x$),12)
 00432     fnagl$=x$(1:12)
 00440     goto XIT
 00450 COMPANY_OPEN_IOERR: ! r:
-00452     let x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3) ! default if gl or cl not installed
+00452     x$=lpad$(trim$(x$(1:dash1-1)),3)&lpad$(trim$(x$(dash1+1:dash2-1)),6)&lpad$(trim$(x$(dash2+1:len(x$))),3) ! default if gl or cl not installed
 00460     goto FINIS ! /r
 00470 ! _______________________________________________________________________
 00480 ! <Updateable Region: ERTN>

@@ -90,10 +90,10 @@
 19863   c(6)=c(6)+x18+x20
 19865   c(7)=c(7)+x15+x17
 19867   c(8)=c(5)-c(7)
-19895   let x6=0
-19896   let x7=0
-19897   let x8=0
-19898   let x9=0
+19895   x6=0
+19896   x7=0
+19897   x8=0
+19898   x9=0
 19899   if sd = 1 then goto L19833
 19900 L19900: pr #255, using L19910: jn$(1:6),n$(1:40),cn$(7:11),k$(1:25),c(5),c(6),c(7),c(8) pageoflow PGOF
 19910 L19910: form skip 1,pos 1,c 6,pos 14,c 40,skip 1,pos 6,c 11,pos 20,c 25,pos 53,n 9.2,pos 72,n 9.2,pos 84,n 9.2,pos 102,n 9.2,skip 0

@@ -106,12 +106,12 @@
 00840   for month=1 to 13
 00850     tdate=fndate_mmddyy_to_ccyymmdd(rw4(8,month))
 00860     if tdate=0 or tdate=20000000 then goto NEXT_MONTH
-00870     let g(01)=rw4(09,month) : let g(02)=rw4(10,month) !:
-          let g(03)=rw4(11,month) : let g(04)=rw4(12,month) !:
-          let g(05)=rw4(13,month) : let g(06)=rw4(14,month) !:
-          let g(07)=rw4(15,month) : let g(08)=rw4(16,month) !:
-          let g(09)=rw4(17,month) : let g(10)=rw4(18,month) !:
-          let g(11)=rw4(19,month)
+00870     g(01)=rw4(09,month) : g(02)=rw4(10,month) !:
+          g(03)=rw4(11,month) : g(04)=rw4(12,month) !:
+          g(05)=rw4(13,month) : g(06)=rw4(14,month) !:
+          g(07)=rw4(15,month) : g(08)=rw4(16,month) !:
+          g(09)=rw4(17,month) : g(10)=rw4(18,month) !:
+          g(11)=rw4(19,month)
 00880     ru(1)=rw4(1,month) : ru(2)=rw4(2,month) !:
           ru(3)=rw4(3,month) : ru(4)=rw4(4,month) !:
           ru(5)=rw4(5,month) : ru(6)=rw4(6,month) !:

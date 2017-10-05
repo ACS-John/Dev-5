@@ -71,7 +71,7 @@
 50090   open #4: "Name="&env$('Q')&"\UBmstr\Note2.h"&str$(cno),internal,outin,relative 
 50100 L50100: read #1,using 'Form POS 1,C 10': z$ eof EO4
 50120   if z$(8:10)=".00" then goto L50100 ! skip base records
-50130   let x$=z$(1:7)&".00"
+50130   x$=z$(1:7)&".00"
 50140   mat newra=(0)
 50150   read #3,using 'Form POS 1,C 10,2*PD 3',key=x$: rk$,mat ra nokey L50100
 50160   write #3,using 'Form POS 1,C 10,2*PD 3': z$,0,0

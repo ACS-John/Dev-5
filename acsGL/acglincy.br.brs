@@ -18,7 +18,7 @@
 00180   data "     ONE","     TWO","   THREE","    FOUR","    FIVE","     SIX","   SEVEN","   EIGHT","    NINE","     TEN","  ELEVEN","  TWELVE","THIRTEEN"
 00190   read mat m2$
 00200 ! 
-00210   let udf$=env$('temp')&'\'
+00210   udf$=env$('temp')&'\'
 00220   actpd=fnactpd
 00230   actpd$=fnactpd$
 00240 ! 
@@ -170,10 +170,10 @@
 01660   goto L660
 01670 L1670: if foot1=1 then goto L1720
 01680   tabnote=sp
-01690   let foot1=1
-01700   let foot$=d$
+01690   foot1=1
+01700   foot$=d$
 01710   goto L660
-01720 L1720: let foot$=rtrm$(foot$)&d$
+01720 L1720: foot$=rtrm$(foot$)&d$
 01730   goto L660
 01740 L1740: for j=1 to 9
 01750     if ac(j)=0 or ac(j)=9 then goto L1790
@@ -200,14 +200,14 @@
 01960 L1960: gosub L1860: continue 
 01970 L1970: if ul=0 then goto L2120
 01980   if ul=1 then goto L2060
-01990   let underlin$=" ==========="
+01990   underlin$=" ==========="
 02000   if nap=13 then goto L2030
 02010   pr #255,using L2040: underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,""
 02020   goto L2120
 02030 L2030: pr #255,using L2040: underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$
 02040 L2040: form skip 1,pos 38,14*c 12,skip redir
 02050   goto L2120
-02060 L2060: let underlin$=" ___________"
+02060 L2060: underlin$=" ___________"
 02070   if nap=13 then goto L2100
 02080   pr #255,using L2110: underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,""
 02090   goto L2120

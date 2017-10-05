@@ -15,14 +15,14 @@
 00150   fntop(program$,cap$="Income Statemet - Fund Comparison")
 00160   on fkey 5 goto L2170
 00170   fncno(cno,cnam$)
-00180   let udf$=env$('temp')&'\'
+00180   udf$=env$('temp')&'\'
 00190   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00200   actpd$=fnactpd$
 00210   pedat$=fnpedat$
 00220   actpd$=fnactpd$
 00230   actpd=fnactpd
-00240   let fscode=fnfscode
+00240   fscode=fnfscode
 00250   priorcd=fnpriorcd
 00260 ! ______________________________________________________________________
 00270   monthly=1 ! use 2 for ytd figures (set default for automatic processing to monthly information
@@ -77,7 +77,7 @@
 00740 L740: read #3,using L340: dno,ano,sno,ir,pcr,bb,cb,mat by,mat bp eof L940
 00750   if ir=0 then goto L740
 00760   if fscode=0 then goto L830
-00770   if fscode<1 or fscode>13 then let fscode=1
+00770   if fscode<1 or fscode>13 then fscode=1
 00780   if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00790   if priorcd=2 then goto L820
 00800   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -85,7 +85,7 @@
 00820 L820: if fscode>1 then bb=bp(fscode-1) else bb=0
 00830 L830: if ir=val(r$) then goto L840 else goto L880
 00840 L840: for x=1 to 10
-00850     if dno=fundnum(x) then let fund=x ! put in certain column
+00850     if dno=fundnum(x) then fund=x ! put in certain column
 00860     if fundnum(x)>0 then totcol=x ! total columns needed
 00870   next x
 00880 L880: if ir=val(r$) then total(fund)=total(fund)+(cb-bb) else goto L920
@@ -149,10 +149,10 @@
 01460   goto L560
 01470 L1470: if foot1=1 then goto L1520
 01480   tabnote=sp
-01490   let foot1=1
-01500   let foot$=d$
+01490   foot1=1
+01500   foot$=d$
 01510   goto L560
-01520 L1520: let foot$=rtrm$(foot$)&d$
+01520 L1520: foot$=rtrm$(foot$)&d$
 01530   goto L560
 01540 L1540: for j=1 to 9
 01550     if ac(j)=0 or ac(j)=9 then goto L1620 ! 10/14/87
@@ -183,9 +183,9 @@
 01800   continue 
 01810 L1810: if ul=0 then goto L1940
 01820   if ul=1 then goto L1850
-01830   let underlin$="  ============"
+01830   underlin$="  ============"
 01840   goto L1860
-01850 L1850: let underlin$="  ____________"
+01850 L1850: underlin$="  ____________"
 01860 L1860: bigul$=""
 01870   for j=1 to totcol
 01880     bigul$=bigul$&underlin$
@@ -234,7 +234,7 @@
 02310     read #10,using L2320,key=k$: pc1,pc2,yt2 nokey L2370
 02320 L2320: form pos 1,g 5,2*pd 6.2
 02330     pc2=pc2+cb-bb
-02340     let yt2=yt2+cb
+02340     yt2=yt2+cb
 02350     rewrite #10,using L2320: pc1,pc2,yt2
 02360     goto L2380
 02370 L2370: write #10,using L2320: pc1,cb-bb,cb
@@ -268,8 +268,8 @@
 02620   fnacs(sn$,0,mat resp$,ckey)
 02630   if ckey=5 then goto XIT
 02640   for j=1 to 10
-02650     let fundnum(j)=val(resp$(j*2-1))
-02660     let funddesc$(j)=resp$(j*2)
+02650     fundnum(j)=val(resp$(j*2-1))
+02660     funddesc$(j)=resp$(j*2)
 02670   next j
 02680   rewrite #5,using L2530: mat fundnum,mat funddesc$ ioerr L2700
 02690   goto L2710

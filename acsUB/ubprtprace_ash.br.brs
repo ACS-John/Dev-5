@@ -17,14 +17,14 @@
         close #21: 
 00150   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00160   at$(1)=cnam$ !:
-        let z=21 !:
+        z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
-        let x=len(at$(1)) : let y=z-x !:
+        x=len(at$(1)) : y=z-x !:
         at$(1)=rpt$(" ",int(y/2))&at$(1)
-00170   let z=26 !:
+00170   z=26 !:
         for j=2 to udim(at$) !:
           at$(j)=trim$(at$(j))(1:z) !:
-          let x=len(at$(j)) : let y=z-x !:
+          x=len(at$(j)) : y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00180   linelength=62
@@ -64,7 +64,7 @@
 00430   fntxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00440   fnlbl(8,1,"Starting Account:",ll,1)
-00450   let fe$="ubm-act-nam" !:
+00450   fe$="ubm-act-nam" !:
         datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
         indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
@@ -91,7 +91,7 @@
 00530   if resp$(9)="[All]" then !:
           prtbkno=0 else !:
           prtbkno = val(resp$(9))
-00540   if resp$(10)="True" then sl1=1: let z$="" else sl1=0
+00540   if resp$(10)="True" then sl1=1: z$="" else sl1=0
 00550   if trim$(a$)<>"" then read #2,using L560,key=a$: z$,route,sequence nokey SCREEN1 !:
           holdz$=z$: begin=1 !:
           st1=1
@@ -149,11 +149,11 @@
 01060 ! ______________________________________________________________________
 01070 L1070: ! 
 01080   pb=bal-g(11)
-01090   if bal<=0 then let g(9)=g(10)=0 ! don't show penalty if balance 0 or less
-01100   let fb$(1)=mg$(1)
-01110   let fb$(2)=mg$(2)
-01120   let fb$(3)=mg$(3)
-01130 ! If C4>0 Then Let FB$(1)="          Final Bill" : Let FB$(2)="": Let FB$(3)=""
+01090   if bal<=0 then g(9)=g(10)=0 ! don't show penalty if balance 0 or less
+01100   fb$(1)=mg$(1)
+01110   fb$(2)=mg$(2)
+01120   fb$(3)=mg$(3)
+01130 ! If C4>0 Then fb$(1)="          Final Bill" : fb$(2)="": fb$(3)=""
 01140 ! ______________print bill routine______________________________________
 01150   gosub VBPRINT
 01160 ! _____________end of pr routine______________________________________
@@ -302,9 +302,9 @@
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(6)&','&str$(lyne+=3.5)&')'
 02320   txt$=mg$(3) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(6)&','&str$(lyne+=3.5)&')'
-02330   if lyne<90 then let updown=3
-02340   if lyne>90 and lyne<180 then let updown=6.5
-02350   if lyne>180 and lyne<270 then let updown=10
+02330   if lyne<90 then updown=3
+02340   if lyne>90 and lyne<180 then updown=6.5
+02350   if lyne>180 and lyne<270 then updown=10
 02360   if trim$(cr$)<>"" then pr #20: 'Call Print.DisplayBarCode('&str$(3)&','&str$(updown)&',"'&cr$&'")'
 02370   bills+=1
 02380   if int(bills/3)=bills/3 then let fnpa_newpage: lyne=0: goto L2410
@@ -329,8 +329,8 @@
 02570 L2570: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 02580   if p$<>z$ then goto L2640
 02590   if tcode<>1 then goto L2560 ! only charge transactions
-02600   let usage(3)=usage(2): billdate(3)=billdate(2)
-02610   let usage(2)=usage(1): billdate(2)=billdate(1)
-02620   let usage(1)=wu: billdate(1)=tdate
+02600   usage(3)=usage(2): billdate(3)=billdate(2)
+02610   usage(2)=usage(1): billdate(2)=billdate(1)
+02620   usage(1)=wu: billdate(1)=tdate
 02630   goto L2560
 02640 L2640: return 

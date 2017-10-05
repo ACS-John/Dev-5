@@ -24,7 +24,7 @@
 00280   sc=int(val(sc$)/100)
 00290   if fst=1 then goto L320
 00300   holdsc=sc
-00310   let fst=1
+00310   fst=1
 00320 L320: if holdsc=sc then goto L350
 00330   pr #255: 
 00340   holdsc=sc

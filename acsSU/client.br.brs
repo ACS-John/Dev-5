@@ -61,7 +61,7 @@
 00330 ! ** Field Masks ** !:
         ic=0 !:
         pointtwo=32 : number=30 !:
-        ccyymmdd=3 : mmddyy=1 : let glnumber=53
+        ccyymmdd=3 : mmddyy=1 : glnumber=53
 00340   mask(ic+=1)=80 !:
         mask(ic+=1)=80 !:
         mask(ic+=1)=80 !:

@@ -34,8 +34,8 @@
 00350 L350: form skip 1,pic(zzzz),pic(zzzzzzz),pic(zzzz),x 5,c 27,2*n 15.2,skip 2
 00360   tt=tdb-tcr
 00370   if tt=0 then goto L400
-00380   let gtdb=gtdb+tdb
-00390   let gtcr=gtcr+tcr
+00380   gtdb=gtdb+tdb
+00390   gtcr=gtcr+tcr
 00400 L400: tdb=0
 00410   tcr=0
 00420 L420: return 

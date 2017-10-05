@@ -19,11 +19,11 @@
 00170   pr f "5,25,c 50,h,n": "SELECTION OF SCHEDULES TO PRINT"
 00180   pr f "10,5,C 60,N": "ENTER 1 TO pr ALL SCHEDULES  "
 00190   pr f "11,5,c 60,n": "ENTER 0 TO SELECT SPECIFIC SCHEDULES TO PRINT"
-00200   let fa$="11,65,N 1,uE,N"
+00200   fa$="11,65,N 1,uE,N"
 00210 L210: input fields fa$: prtall conv L210
 00220   if prtall=1 then goto L320
 00230   if prtall><0 then goto L160
-00240   let fb$="10,65,N 2,uE,N"
+00240   fb$="10,65,N 2,uE,N"
 00250   for j=1 to 99
 00260     pr newpage
 00270     if j=1 then pr f "10,5,C 60,N": "ENTER SCHEDULE NUMBER TO PRINT" else pr f "10,5,c 75,n": "ENTER NEXT SCHEDULE TO PRINT, ELSE ENTER 0 WHEN COMPLETE"
@@ -38,7 +38,7 @@
 00360   pr f "12,2,C 30,B,5": "Press F5 to stop"
 00370   fnopenprn(cp,58,220,process)
 00380 L380: if prtall=1 then goto L440
-00390 L390: let g=g+1
+00390 L390: g=g+1
 00400   if prtsch(g)=0 then goto DONE
 00410   k$=lpad$(str$(prtsch(g)),2)
 00420   read #1,using L450,key=k$: sn,sn$,ft$,dp,rs,cm,mat gl$ nokey L390
@@ -61,7 +61,7 @@
 00590     goto L550
 00600 L600: form pos 13,c 50,pos 81,41*pd 6.2
 00610     if fscode=0 then goto L690 ! CURRENT OR PRIOR
-00620     if fscode<0 or fscode>12 then let fscode=1
+00620     if fscode<0 or fscode>12 then fscode=1
 00630     if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00640     if priorcd=2 then goto L680
 00650     if fscode>1 then bb=by(fscode-1) else bb=0
@@ -102,10 +102,10 @@
 01000   pr #255,using L810: "    TOTAL",dollar$,cmtot,dollar$,ytdtot
 01010   pr #255,using L990: "==============","=============="
 01020 L1020: cmtot=0
-01030   let ytdtot=0
+01030   ytdtot=0
 01040   return 
 01050 ! ______________________________________________________________________
-01060 L1060: let fttab=int(43-len(rtrm$(ft$))/2)
+01060 L1060: fttab=int(43-len(rtrm$(ft$))/2)
 01070   sk=58-krec(255): fl=len(rtrm$(ft$))
 01080   pr #255,using L1090: rtrm$(ft$)
 01090 L1090: form skip sk,pos fttab,c fl,skip 1
@@ -132,7 +132,7 @@
 01300 ! ______________________________________________________________________
 01310 XIT: fnxit
 01320 ! ______________________________________________________________________
-01330 L1330: let ytdtot=ytdtot+cb
+01330 L1330: ytdtot=ytdtot+cb
 01340   if cm><1 then goto L1360
 01350   cmtot=cmtot+curmo
 01360 L1360: return 

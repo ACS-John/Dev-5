@@ -54,7 +54,7 @@
 12360     if comma=1 then st$=a$(3)(p1+2:p1+3) else st$=a$(3)(p1+1:p1+2)
 12380     p2=len(rtrm$(a$(3)))
 12400     p1=p2-4
-12420     let zip$=a$(3)(p1:p2)
+12420     zip$=a$(3)(p1:p2)
 12440   end if
 12460   fncreg_read('Employee Name Format',tmp$,optNameFormat$(1)) : nameFormat=max(1,srch(mat optNameFormat$,tmp$))
 12480   fncreg_read('Miscellaneous Deduction Containing Employer Cost Group-Term Life Ins',tmp$) : ins=val(tmp$)
@@ -304,30 +304,30 @@
 34580       cafded=cafded+tcp(j+4)
 34600     end if
 34620   next j
-34640   let w2(1)=min(w2(1)+tcp(31)-tcp(30)-cafded,ssmax-tcp(30)) ! TOTAL SOC-SEC WAGES
-34660   let w3=w3+tcp(2) ! TOTAL FICA WITHHELD
-34680   let w3(1)=w3(1)+tcp(31)-cafded ! TOTAL MEDICARE WAGES & TIPS
-34700 ! if client$="Washington Parrish" then let w3(1)=w3(1)+tcp(5) ! add deferred comp match to medicare wages
-34720   let w3(1)=min(mcmax,w3(1)) ! MC WAGES CANNOT EXCEED MAXIMUM
+34640   w2(1)=min(w2(1)+tcp(31)-tcp(30)-cafded,ssmax-tcp(30)) ! TOTAL SOC-SEC WAGES
+34660   w3=w3+tcp(2) ! TOTAL FICA WITHHELD
+34680   w3(1)=w3(1)+tcp(31)-cafded ! TOTAL MEDICARE WAGES & TIPS
+34700 ! if client$="Washington Parrish" then w3(1)=w3(1)+tcp(5) ! add deferred comp match to medicare wages
+34720   w3(1)=min(mcmax,w3(1)) ! MC WAGES CANNOT EXCEED MAXIMUM
 34740   if uprc$(med$)="Y" then  ! SS WH
-34760     let w2=w2+tcp(2) 
+34760     w2=w2+tcp(2) 
 34780   else 
-34800     let w2=round(min(w3/(ssrate+mcrate)*ssrate,ssmax*ssrate),2)
+34800     w2=round(min(w3/(ssrate+mcrate)*ssrate,ssmax*ssrate),2)
 34820   end if
 34840   if uprc$(med$)="Y" then  ! MEDICARE WITHHELD
-34860     let w3(2)=w3(2)+tcp(3) 
+34860     w3(2)=w3(2)+tcp(3) 
 34880     else 
-34900     let w3(2)=w3-w2
+34900     w3(2)=w3-w2
 34920   end if
-34940   let w2(2)=w2(2)+tcp(30) ! FICA TIPS YTD
-34960   let w2(3)=w2(3)+tcp(31)-dedret ! TOTAL FEDERAL WAGES
-34980   let w2(4)=w2 ! W2(4)+tcp(2) ! FICA W/H YTD       (COULD BE +W2 INSTEAD OF +tcp(2)IF ONLY FICA PORTION GOES INTO W2 RECORD)
-35000 ! LET W2(4)=W2 ! PUT SS W/H ONLY IN 2-W RECORD (EXCLUDE MEDICARE W/H)
-35020   let w2(5)=w2(5)+tcp(1) ! FED W/H YTD
-35040   if ins>0 then let w2(6)=w2(6)+tcp(4+ins) ! EMPLOYER COST GROUP LIFE INS.
-35060   let w2(7)=w2(7)+0 ! UNCOLLECTED EMPLOYEE FICA TAX ON TIPS
-35080   let w2(8)=w2(8)+tcp(24) ! EIC TOTAL
-35100   let w2(9)=w2(9)+0 ! ALLOCATED TIPS
+34940   w2(2)=w2(2)+tcp(30) ! FICA TIPS YTD
+34960   w2(3)=w2(3)+tcp(31)-dedret ! TOTAL FEDERAL WAGES
+34980   w2(4)=w2 ! W2(4)+tcp(2) ! FICA W/H YTD       (COULD BE +W2 INSTEAD OF +tcp(2)IF ONLY FICA PORTION GOES INTO W2 RECORD)
+35000 ! w2(4)=W2 ! PUT SS W/H ONLY IN 2-W RECORD (EXCLUDE MEDICARE W/H)
+35020   w2(5)=w2(5)+tcp(1) ! FED W/H YTD
+35040   if ins>0 then w2(6)=w2(6)+tcp(4+ins) ! EMPLOYER COST GROUP LIFE INS.
+35060   w2(7)=w2(7)+0 ! UNCOLLECTED EMPLOYEE FICA TAX ON TIPS
+35080   w2(8)=w2(8)+tcp(24) ! EIC TOTAL
+35100   w2(9)=w2(9)+0 ! ALLOCATED TIPS
 35120   if dfc>0 then dc1=dc1+tcp(4+dfc)*100 ! DEFERRED COMPENSATION
 35140   if dcan>0 then dca=dca+tcp(4+dcan)*100 ! DEPENDENT CARE ASSISTANCE
 35160   if sr1><tcd then goto L2470
@@ -336,9 +336,9 @@
 35220 L2470: !
 35240   goto L2120
 35260 L2480: !
-35280   if em6=9 then let w2(1)=w2(4)=w3(1)=w3(2)=0 ! NO SS OR MC
-35300   if em6=1 then let w3(1)=w3(2)=0 ! NO MEDICARE
-35320   if em6=2 then let w2(1)=w2(4)=0 ! NO SOC-SEC
+35280   if em6=9 then w2(1)=w2(4)=w3(1)=w3(2)=0 ! NO SS OR MC
+35300   if em6=1 then w3(1)=w3(2)=0 ! NO MEDICARE
+35320   if em6=2 then w2(1)=w2(4)=0 ! NO SOC-SEC
 35340   if w2(3)<>0 or w2(1)<>0 then 
 35360     ! Gosub RecRE   kj 22610
 35380     gosub RecRW
@@ -366,8 +366,8 @@
 44080 !   return 
 44100 ! /r
 46000 RecRW: ! r:
-46020   for j=1 to 9: let w2(j)=w2(j)*100: next j
-46040   for j=1 to 2: let w3(j)=w3(j)*100 : next j
+46020   for j=1 to 9: w2(j)=w2(j)*100: next j
+46040   for j=1 to 2: w3(j)=w3(j)*100 : next j
 46060   if pen=0 then pen$="0" else pen$="1"
 46080   if dfc=0 then dfc$="" else dfc$="D"
 46100   pr #hOut,using fRecRW: "RW",ssn,first$,mid$,last$,"","",em$(2)(1:22),emct$,emst$,emzip$,"","","","","",w2(3),w2(5),w2(1),w2(4),w3(1),w3(2),w2(2),w2(8),dca,dc1,0,0,0,0,0,0,0,0,0,"",w2(6),0,0,0,0,"",0,"",pen$,0,""
@@ -390,7 +390,7 @@
 48240   dc3=dc3+dc1
 48260   dca2=dca2+dca
 48280   dca3=dca3+dca
-48300   let w2=w3=dca=dc1=0
+48300   w2=w3=dca=dc1=0
 48320   mat w2=(0)
 48340   mat w3=(0)
 48360 ! totalstatewages+=s2(1)
@@ -439,17 +439,17 @@
 72000 NameParse: ! r:
 72020   dim first$*15,mid$*15,last$*20,em$(3)*30
 72040   em$(1)=uprc$(rtrm$(em$(1))): ! nameFormat$="s"
-72060   let x1=pos(em$(1)," ",1)
-72080   let x2=pos(em$(1)," ",x1+1)
-72100   ! let x3=pos(em$(1)," ",x2+1)
+72060   x1=pos(em$(1)," ",1)
+72080   x2=pos(em$(1)," ",x1+1)
+72100   ! x3=pos(em$(1)," ",x2+1)
 72120   if uprc$(nameFormat_sf$(nameFormat))="S" then ! last name first
-72140     if x1=0 then let x1=pos(em$(1),",",1)
+72140     if x1=0 then x1=pos(em$(1),",",1)
 72160     if x1>0 and em$(1)(x1-1:x1-1)="," then last$=em$(1)(1:x1-2) else last$=em$(1)(1:max(x1-1,1))
-72180     if x2>0 then let first$=em$(1)(x1+1:x2-1): mid$=em$(1)(x2+1:len(em$(1)))
-72200     if x2=0 then let first$=em$(1)(x1+1:len(em$(1)))(1:15): mid$=""
-72220     let x=pos(first$,",",1): if x>0 then let first$(x:x)=""
+72180     if x2>0 then first$=em$(1)(x1+1:x2-1): mid$=em$(1)(x2+1:len(em$(1)))
+72200     if x2=0 then first$=em$(1)(x1+1:len(em$(1)))(1:15): mid$=""
+72220     x=pos(first$,",",1): if x>0 then first$(x:x)=""
 72240   else
-72260     let first$=em$(1)(1:min(15,max(x1-1,1)))
+72260     first$=em$(1)(1:min(15,max(x1-1,1)))
 72280     if x2>0 then mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
 72300     if x2=0 then last$=em$(1)(x1+1:len(em$(1))): mid$=""
 72320   end if
@@ -552,7 +552,7 @@
 81200 !   if rtrm$(zip$)="" then ce=5: goto ERR1
 81220 !   if federal_id_val=0 then ce=6: goto ERR1
 81240 !   if yr<2001 then ce=7: goto ERR1
-81260 ! ! let ficarate=ssrate+mcrate
+81260 ! ! ficarate=ssrate+mcrate
 81280 !   if ssmax<53400 then ce=8: goto ERR1
 81300 !   if ins<0 or ins>10 then ce=9: goto ERR1
 81320 !   if pen<0 or pen>10 then ce=10: goto ERR1

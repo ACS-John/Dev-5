@@ -77,12 +77,12 @@
 00710 ! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAME !:
         ! ON EACH SERVICE IN UTILITY BILLING
 00720   if uprc$(a$(j3,1)(1:7))<>"SERVICE" then goto L770
-00730   let x=val(a$(j3,1)(9:10)) conv L770
+00730   x=val(a$(j3,1)(9:10)) conv L770
 00740   if trim$(servicename$(x))="" then goto L850 ! SERVICE NOT USED
 00750   a$(j3,1)(1:9)=""
 00760   a$(j3,1)=trim$(servicename$(x))&" "&trim$(a$(j3,1))
 00770 L770: if uprc$(abbrev$)(1:7)<>"SERVICE" then goto L810
-00780   let x=val(abbrev$(9:10)) conv L810
+00780   x=val(abbrev$(9:10)) conv L810
 00790   abbrev$(1:9)=""
 00800   abbrev$=trim$(servicename$(x))&" "&trim$(abbrev$)
 00810 L810: if rtrm$(a$(j3,1))="" or rtrm$(uprc$(a$(j3,1)))='UNUSED' or rtrm$(uprc$(a$(j3,1)))(1:5)='EXTRA' or trim$(abbrev$)="" then goto L850
@@ -119,28 +119,28 @@
 01100   dim nam$*30
 01110 ! ______________________________________________________________________
 01120   def fnbooktitle$*80(x$*80)
-01130     let x$=lwrc$(trim$(x$)) : olda=0
-01140     let x$(1:1)=uprc$(x$(1:1))
+01130     x$=lwrc$(trim$(x$)) : olda=0
+01140     x$(1:1)=uprc$(x$(1:1))
 01150 ! capitalize anthing after a SPACE
 01160 L1160: a=pos(x$," ",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1160
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1160
 01170     a=olda=0
 01180 L1180: a=pos(x$,"-",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1180
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1180
 01190     a=olda=0
 01200 L1200: a=pos(x$,"/",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1200
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1200
 01210     a=olda=0
 01220 L1220: a=pos(x$,"\",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1220
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1220
 01230     a=olda=0
 01240 L1240: a=pos(x$,".",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1240
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1240
 01250     fnbooktitle$=x$
 01260   fnend 
 01270   return 

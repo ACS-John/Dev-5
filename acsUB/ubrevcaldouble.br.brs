@@ -21,7 +21,7 @@
 00200   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00210   gosub BUD1
 00220 ASK1: ! 
-00230   let x=6
+00230   x=6
 00240   close #111: ioerr L250
 00250 L250: fntos(sn$="ubrevcal") !:
         respc=0
@@ -69,19 +69,19 @@
           goto L510
 00530 ! If TRIM$(Z$)="210008.02" Then Pause
 00540 ! If REQF<>0 AND F<>REQF Then Goto 510
-00550   let x=fndate_mmddyy_to_ccyymmdd(reqf)
+00550   x=fndate_mmddyy_to_ccyymmdd(reqf)
 00560   key$=z$&cnvrt$("n 8",x)&"1"
-00570   let wr=wu=er=eu=gr=gu=0 ! set all previous readings to zero
+00570   wr=wu=er=eu=gr=gu=0 ! set all previous readings to zero
 00580   read #2,using L870,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L510 ! read history to pull new mat g
-00590   for j=1 to 11: let g(j)=tg(j): next j ! set array g in customer to array tg in matching transaction
+00590   for j=1 to 11: g(j)=tg(j): next j ! set array g in customer to array tg in matching transaction
 00600 L600: if sr$="Y" then !:
           pr #255,using L470: z$,f pageoflow SRPGOF
-00610   for j=1 to 9 : let gb(j)=gb(j)-g(j) : next j !:
+00610   for j=1 to 9 : gb(j)=gb(j)-g(j) : next j !:
         ! subtract out current bill from breakdown except for penalty
 00620   bal=bal-g(11)
-00630   let x=fndate_mmddyy_to_ccyymmdd(olddat)
+00630   x=fndate_mmddyy_to_ccyymmdd(olddat)
 00640   key$=z$&cnvrt$("n 8",x)&"1"
-00650   let wr=wu=er=eu=gr=gu=0 ! set all previous readings to zero
+00650   wr=wu=er=eu=gr=gu=0 ! set all previous readings to zero
 00660   read #2,using L870,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L670 ! read previous months history to pull old readings and usages
 00670 L670: d(1)=d(2) ! set current water reading to last month
 00680   d(2)=wr ! set prior reading to month before last
@@ -95,17 +95,17 @@
 00760   d(10)=gr ! set prior reading to month before last
 00770   d(12)=d(12)-d(11) ! subtract out current usage from year to date
 00780   d(11)=gu ! set usage to amount in history
-00790   let f=0 ! set billing date to zero
+00790   f=0 ! set billing date to zero
 00800   extra3=extra4: extra4=0
 00810   mat g=(0) ! SET ALL LAST TIME BILL TO ZERO
 00820   rewrite #1,using L830: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4
 00830 L830: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 354,c 7,2*c 12,pd 3,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6
-00840   let x=fndate_mmddyy_to_ccyymmdd(reqf)
+00840   x=fndate_mmddyy_to_ccyymmdd(reqf)
 00850   key$=z$&cnvrt$("n 8",x)&"1"
 00860   read #2,using L870,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L480
 00870 L870: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 00880   delete #2: 
-00890   let x=fndate_mmddyy_to_ccyymmdd(reqf)
+00890   x=fndate_mmddyy_to_ccyymmdd(reqf)
 00900   key$=z$&cnvrt$("n 8",0)&" "
 00910 L910: read #2,using L870,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L480
 00920   if p$<>z$ then goto L950

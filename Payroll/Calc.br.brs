@@ -18,7 +18,7 @@
 00525   gosub ASKDATES
 00527   if ckey=5 then goto XIT
 00530   dat$=lpad$(str$(d1),6)
-00535   mo1=val(dat$(5:6)) : da=val(dat$(7:8)) : let yr=val(dat$(3:4))
+00535   mo1=val(dat$(5:6)) : da=val(dat$(7:8)) : yr=val(dat$(3:4))
 00540   ppd=round(yr*365+int(yr/4)+motab(mo1)+da,2)
 00545   d1=mo1*10000+da*100+yr
 00550   gosub ASKSKIPWH
@@ -97,7 +97,7 @@
 01060   if em(8)><-1 then goto L1110 ! Check for elgibility
 01070   if em(16)<10100 or em(16)>123199 then goto L1110
 01080   dat$=lpad$(str$(em(16)),6) : mo=val(dat$(1:2))
-01090   da=val(dat$(3:4)) : let yr=val(dat$(5:6))
+01090   da=val(dat$(3:4)) : yr=val(dat$(5:6))
 01100   dh=round(yr*365+int(yr/4)+motab(mo)+da,2)
 01110   if ppd-dh<sck(1) then goto L1110
 01120   em(8)=sck(3) : em(10)=sck(2)
@@ -112,7 +112,7 @@
 01170   L1170: ! 
 01172   twy=0
 01180   tf4_a=0 ! Calculate Total Federal WithHoldings
-01190   let fed_wh_annual_estimate=0
+01190   fed_wh_annual_estimate=0
 01200 ! IF in2$(1)="Y" THEN GOTO 1420
 01202   ! if em(1)=2 then j2=4 else j2=round(1+em(1)*3,2) ! 2=HEAD OF HOUSEHOLD
 01204   if em(1)=0 then ! 0 - Single
@@ -136,15 +136,15 @@
 01256   fnmsgbox(mat ml$,resp$,cap$,0)
 01270 goto ReadRpWork ! /r
 01280 ! ______________________________________________________________________
-01285 PAYCODE_1: t6=12 : let g_pay_periods_per_year=12 : goto PAST_PAYCODE
-01287 PAYCODE_2: t6=24 : let g_pay_periods_per_year=24 : goto PAST_PAYCODE
-01290 PAYCODE_3: t6=26 : let g_pay_periods_per_year=26 : goto PAST_PAYCODE
-01300 PAYCODE_4: t6=52 : let g_pay_periods_per_year=52
+01285 PAYCODE_1: t6=12 : g_pay_periods_per_year=12 : goto PAST_PAYCODE
+01287 PAYCODE_2: t6=24 : g_pay_periods_per_year=24 : goto PAST_PAYCODE
+01290 PAYCODE_3: t6=26 : g_pay_periods_per_year=26 : goto PAST_PAYCODE
+01300 PAYCODE_4: t6=52 : g_pay_periods_per_year=52
 01310 PAST_PAYCODE: ! r: continues here
 01311 ! pr '@ PAST_PAYCODE' : pause
 01312   if in2$(1)="Y" then goto L1470
 01320   if fedpct>0 then 
-01330     tf4_a=round((tgp-ded)*fedpct,2) : let fed_wh_annual_estimate=tf4_a
+01330     tf4_a=round((tgp-ded)*fedpct,2) : fed_wh_annual_estimate=tf4_a
 01340     goto L1470
 01350   end if 
 01360   if em(12)=0 then goto L1370
@@ -153,15 +153,15 @@
 01390   tf4_a=em(12) : goto L1470
 01395   L1370: ! 
 01400   t2=round(em(2)*(fed_annual_wh_allowance/g_pay_periods_per_year),2) ! this is one of the lines that change every year (line 1240)
-01405   let g2=tgp-t2-ded
+01405   g2=tgp-t2-ded
 01410   if g2>0 then 
-01425     let g2=round(g2*g_pay_periods_per_year,2) ! g2 - becomes estimated annual net pay
+01425     g2=round(g2*g_pay_periods_per_year,2) ! g2 - becomes estimated annual net pay
 01430     j1=fn_table_line(mat ft,g2, j2)
-01460     let fed_wh_annual_estimate=tf4_a=round(ft(j1,j2+1)+(g2-ft(j1,j2))*ft(j1,j2+2),2)
+01460     fed_wh_annual_estimate=tf4_a=round(ft(j1,j2+1)+(g2-ft(j1,j2))*ft(j1,j2+2),2)
 01465     ! table total federal w/h used in some state routines
 01470     tf4_a=round(tf4_a/g_pay_periods_per_year,2)
 01475   else 
-01480     let g2=0
+01480     g2=0
 01482   end if 
 01485   if in2$(1)><"Y" then tf4_a=tf4_a+em(13)
 01487   L1470: ! 
@@ -174,7 +174,7 @@
 01499       cafd+=caf(j)
 01501     end if 
 01503   next j
-01505   twy+=twd : tfy+=(ytdFICA+tmd) : let ficatfy=tfy
+01505   twy+=twd : tfy+=(ytdFICA+tmd) : ficatfy=tfy
 01507   oldsswg=twy-cafy : eicytd+=td14 : stuc(tcd(1))+=twd-cafd
 01509   cafd=0
 01540   L1540: ! 
@@ -233,22 +233,22 @@
 01816     goto NO_EXCESS_TIPS
 01818   else 
 01820     tr=round(inp(1)*MinHourlyWage+inp(2)*MinHourlyWage*1.5,2)
-01821     let g1=gpd-inp(9)
+01821     g1=gpd-inp(9)
 01822     ext=0
 01823     if g1>=tr then 
-01824       let g2=inp(9)
+01824       g2=inp(9)
 01826     else 
-01828       let g2=gpd-tr
+01828       g2=gpd-tr
 01830     end if 
 01832   end if 
 01840 NO_EXCESS_TIPS: ! 
 01842   deduc=ficat3=f3=0 ! FICA
 01850   for j=1 to 20
-01860     if dedfica(j)=1 and newdedcode(j)=1 then let ficat3+=inp(j+9)
+01860     if dedfica(j)=1 and newdedcode(j)=1 then ficat3+=inp(j+9)
 01870     if deduc(j)=1 then deduc+=inp(j+9): deducy+=caf(j) ! total deductions for unemployment for current period and year to date
 01880   next j
 01890   sswg=sswh=mcwh=0
-01900   if tgp=0 then let f3=0: goto CALC_NO_GROSS ! calculate checks w/ no gross pay
+01900   if tgp=0 then f3=0: goto CALC_NO_GROSS ! calculate checks w/ no gross pay
 01910   if in2$(3)="Y" then goto FEDWH_DEPT
 01920   on em(6)+1 goto L1930,SS_TAX_ONLY,L3240 none FEDWH_DEPT
 01930 ! ______________________________________________________________________
@@ -284,19 +284,19 @@
 01982     sswg=ficamax-oldsswg
 01984   end if
 01990   if tgp-t3>0 then 
-01992     let ficapog=((gpd-ficat3)/(tgp-t3)) 
+01992     ficapog=((gpd-ficat3)/(tgp-t3)) 
 01994   else 
-01996     let ficapog=1
+01996     ficapog=1
 01998   end if
 02000   sswh=round(sswh*ficapog,2) 
 02002   mcwh=round(mcwh*ficapog,2) 
-02004   let f3=sswh+mcwh : oldsswg+=sswg
+02004   f3=sswh+mcwh : oldsswg+=sswg
 02010 CALC_NO_GROSS: tfy+=f3
 02020 FEDWH_DEPT: ! Fed WH for Dept ! Federal Withholding for Department
 02021   if debug then let fnstatus('federal  withholding for department calculating')
-02022   let f4=round(tf4_a*pog,2)
+02022   f4=round(tf4_a*pog,2)
 02030   stwh(tcd(1),1)+=gpd : eic4=0 ! Calculate EIC
-02040   if em(7)=0 then goto CURRENT_PERIOD else let g2=tgp
+02040   if em(7)=0 then goto CURRENT_PERIOD else g2=tgp
 02050   eic1=round(8970/em(7)/g_pay_periods_per_year,2)                ! this is one of the lines that change every year (formerly line 1800)
 02060   eic2=round(16450/em(7)/g_pay_periods_per_year,2)               ! this is one of the lines that change every year (formerly line 1810)
 02070   eic3=round(1830/em(7)/g_pay_periods_per_year,2)                ! this is one of the lines that change every year (formerly line 1820)
@@ -370,11 +370,11 @@
 02404 ! end if  ! else 
 02406   trp=tcp(26)+tcp(27) ! base on wages
 02408 ! end if
-02410   let wc=0
+02410   wc=0
 02420   if wcm(em(5))=0 or twc+trp<wcm(em(5)) then 
-02421     let wc=trp
+02421     wc=trp
 02422   else 
-02423     let wc=wcm(em(5))-twc
+02423     wc=wcm(em(5))-twc
 02424   end if 
 02430   twc=twc+wc : tdc(6)=wc
 02440   rewrite #h_department,using "form pos 42,n 6,pos 58,23*pd 4.2",key=newdeptkey$: d1,mat tdet
@@ -449,7 +449,7 @@
 03133 ! pr 'A right after read rpwork inp(6)=';inp(6) : pause
 03140   if newx$=x$ then goto L3020
 03150 L3150: ! 
-03152   let workkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)
+03152   workkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)
 03160   restore #h_rpwork,key>=workkey$: 
 03170   read #h_rpwork,using F_RPWORK: x$,dep,mat inp,gpd,mat hr eof EO_RPWORK
 03172   if env$('client')='West Accounting' then gosub WEST_ACC_WORKMANSCOMP
@@ -514,7 +514,7 @@
 03500     if resp$(2)(1:1)="T" then in2$(2)="Y" else in2$(2)="N"
 03510     if resp$(3)(1:1)="T" then in2$(3)="Y" else in2$(3)="N"
 03520     if resp$(4)(1:1)="T" then in2$(4)="Y" else in2$(4)="N"
-03530     let fedpct=val(resp$(5)) ! federal wh percent
+03530     fedpct=val(resp$(5)) ! federal wh percent
 03532   end if
 03540 return  ! /r
 03580 ERTN: fnerror(program$,err,line,act$,"NO") ! r:
@@ -527,11 +527,11 @@
 08040   ! line 2 allowances = +1 for each other (not you nor spouse) dependant
 08060   ! em(3) - number of allowances
 08080   ! g_pay_periods_per_year = number of pay periods (formerly b8)
-08100   let g2=round((stwh(tcd(1),1))*g_pay_periods_per_year,2)
+08100   g2=round((stwh(tcd(1),1))*g_pay_periods_per_year,2)
 08120   !  new way needs awesome function !    allowances_line_1=fn_allowances_spouse_and_self
 08140   !  new way needs awesome function !    allowances_line_2=em(3)-allowances_line_1
 08160   !  new way needs awesome function !    g2=g2-(allowances_line_1*2175+allowances_line_2*1000)
-08180   let g2=g2-1000*em(3)
+08180   g2=g2-1000*em(3)
 08200   s3=g2*.0495 ! changed from .0375 on 7/10/17  ! changed from .03 to .05 1/1/11, changed from .05 to .0375 1/1/15, ok as of 1/6/16
 08220   s3=round(s3/g_pay_periods_per_year,2)
 08240   if s3<.1 then s3=0 ! do not withhold less than 10 cents.
@@ -663,8 +663,8 @@
 13460     ok(8,4)=27600  : ok(8,5)=395 : ok(8,6)=0.0525
 13480     ! /r
 13500   end if ! /r
-13520   let g2=stwh(tcd(1),1)*g_pay_periods_per_year
-13540   let g2=g2-em(3)*1000
+13520   g2=stwh(tcd(1),1)*g_pay_periods_per_year
+13540   g2=g2-em(3)*1000
 13560   if em(1)=0 or em(1)=2 then j2=1 else j2=4 ! single of married
 13580   j1=fn_table_line(mat ok,g2)
 13600   s3=ok(j1,j2+1)+(g2-ok(j1,j2))*ok(j1,j2+2)
@@ -681,7 +681,7 @@
 14100   write #h_dates,using "form pos 1,2*n 8,x 32,n 8,c 20",rec=1: beg_date,end_date,d1,d1$
 14120   ASKDATES_SCREEN: ! 
 14140   fntos(sn$="Calculation-1")
-14160   rc=cf=0: mylen=42: mypos=45: let frameno=1
+14160   rc=cf=0: mylen=42: mypos=45: frameno=1
 14180   gosub GET_ALPHA_DATE ! get alpha date
 14200   fnfra(1,1,4,66,"Payroll Date","Enter the payroll date.")
 14220   fnlbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
@@ -693,7 +693,7 @@
 14340   fnchk(3,46,"Accrue Vacation and Sick Leave this period:",1,frameno)
 14360   resp$(rc+=1)="False"
 14380   fnfra(7,25,2,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.")
-14400   let frameno=2 : mylen=26 : mypos=mylen+2
+14400   frameno=2 : mylen=26 : mypos=mylen+2
 14420   fnlbl(1,1,"Starting Date:",mylen,1,0,frameno)
 14440   fntxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno)
 14460   resp$(rc+=1)=str$(beg_date)
@@ -714,7 +714,7 @@
 14760   end if
 14780 return  ! /r
 15000 DETERMINE_EARNINGS: ! r: passed eno, dep,beg_date, end_date, returns mat ytdtotal,ytdFICA,tmd,td14,twd,mat caf
-15020   let ytdFICA=tmd=td14=0: mat caf=(0)
+15020   ytdFICA=tmd=td14=0: mat caf=(0)
 15040   mat tcp=(0)
 15060   mat ytdtotal=(0) : mat tdc=(0)
 15080   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
@@ -726,7 +726,7 @@
 15220     end if
 15240   loop while heno=eno
 15260   dePrCkEof: ! 
-15280   let ytdFICA=ytdtotal(2) ! fica year to date
+15280   ytdFICA=ytdtotal(2) ! fica year to date
 15300   tmd=ytdtotal(3) ! medicare year to date
 15320   td14=ytdtotal(25) ! eic
 15340   twd=ytdtotal(31) ! total wages
@@ -751,7 +751,7 @@
 16300   dim dedfica(20),dedst(20),deduc(20)
 16320   dim ml$(1)*256
 16380   ! 
-16400   let fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
+16400   fed_annual_wh_allowance=4050 ! (was 4000)   Withholding allowance. The 2016 amount for one withholding allowance on an annual basis is $4,050
 16420   ! 
 16460   mtc=0 ! motab counter
 16480   motab(mtc+=1)=0   : motab(mtc+=1)=31  : motab(mtc+=1)=59
@@ -784,11 +784,11 @@
 18000   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 18020   read #20,using 'Form POS 145,PD 5.2,POS 230,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,POS 618,30*N 1,POS 708,3*PD 4.3,3*PD 3.2,4*PD 4.2,POS 133,PD 6.3,PD 6.2': fucr,loccode,feducmax,ficarate,ficamax,ficamxr,mat sucw,mat sucr,mat dedcode,mat calcode,mat dedfed,mat sck,vacm,MinHourlyWage,mat wcm,ficar2,ficamx2
 18040   close #20: 
-18060   let ficamax=ficamax*10
+18060   ficamax=ficamax*10
 18080   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
-18100   ssmax=ficamax : mcmax=ficamx2 : let ficar1=ficarate*.01
-18120   let ficar2=ficar2*.01 : let ficarate=ficar1+ficar2
-18140   let ficamxr=ficamax*ficarate : let ficamx2=(ficamx2-ficamax)*ficar2
+18100   ssmax=ficamax : mcmax=ficamx2 : ficar1=ficarate*.01
+18120   ficar2=ficar2*.01 : ficarate=ficar1+ficar2
+18140   ficamxr=ficamax*ficarate : ficamx2=(ficamx2-ficamax)*ficar2
 19100   ! 
 19120   ! if env$('client')="West Accounting" then 
 19140   !   saif(1)=173.33
@@ -809,7 +809,7 @@
 32000 GET_ALPHA_DATE: ! r:
 32010   dim month$(12),payrolldate$*20
 32020   payrolldate$=cnvrt$("pic(########)",d1)
-32040   let year=val(payrolldate$(1:4))
+32040   year=val(payrolldate$(1:4))
 32060   month=val(payrolldate$(5:6))
 32080   day=val(payrolldate$(7:8))
 32100   month$(1)="January"
@@ -894,16 +894,16 @@
 38080   mat la=(0)
 38100   s=round(stwh(tcd(1),1),2)
 38120   if em(1)=0 or em(1)=2 then 
-38140     let y=em(3)-1
-38160     let x=1
+38140     y=em(3)-1
+38160     x=1
 38180     if y>=0 then goto L3800
-38200     let x=0
-38220     let y=0
+38200     x=0
+38220     y=0
 38240     goto L3800
 38260   end if
-38280   if em(3)=0 then let y=0 : let x=0
-38300   if em(3)=1 then let y=0 : let x=1
-38320   if em(3)>=2 then let y=em(3)-2 : let x=2
+38280   if em(3)=0 then y=0 : x=0
+38300   if em(3)=1 then y=0 : x=1
+38320   if em(3)>=2 then y=em(3)-2 : x=2
 38340   L3800: ! 
 38360   if x<2 then m1=12500 : m2=25000
 38380   if x>=2 then m1=25000 : m2=50000
@@ -959,44 +959,44 @@
 41040     ! Oregon  !  rec=40
 41060     ! 
 41120     ! RECALK: ! used only for debugging purposes
-41140   let wor_allowances_effective=wor_allowances
+41140   wor_allowances_effective=wor_allowances
 41160     ! 
-41180   let wor_they_are_single=wor_they_are_married=0
-41200   if wor_is_married=0 or wor_is_married=2 then let wor_they_are_single=1
-41220   if wor_is_married=1 or wor_is_married=3 or wor_is_married=4 or wor_is_married=5 then let wor_they_are_married=1
+41180   wor_they_are_single=wor_they_are_married=0
+41200   if wor_is_married=0 or wor_is_married=2 then wor_they_are_single=1
+41220   if wor_is_married=1 or wor_is_married=3 or wor_is_married=4 or wor_is_married=5 then wor_they_are_married=1
 41240     ! 
-41260   if wor_wages_taxable_current>100000 and wor_they_are_single then let wor_allowances_effective=0
-41280   if wor_wages_taxable_current>200000 and wor_they_are_married then let wor_allowances_effective=0
+41260   if wor_wages_taxable_current>100000 and wor_they_are_single then wor_allowances_effective=0
+41280   if wor_wages_taxable_current>200000 and wor_they_are_married then wor_allowances_effective=0
 41300     ! 
 41320   if wor_they_are_married or (wor_they_are_single and wor_allowances_effective>=3) then ! (married or more than 3 allowances)
-41340     let wor_table=2
+41340     wor_table=2
 41360   else ! (single and less than 3 allowances)
-41380     let wor_table=1
+41380     wor_table=1
 41400   end if 
 41420     ! 
 41440   if wor_table=2 then ! wor_they_are_married then
-41460     let wor_standard_deduction=4350
+41460     wor_standard_deduction=4350
 41480   else ! if wor_table=1 then ! if wor_they_are_single then
-41500     let wor_standard_deduction=2175
+41500     wor_standard_deduction=2175
 41520   end if 
 41540     ! 
-41560   let wor_wages_annual_estimate=wor_wages_taxable_current*wor_pay_periods_per_year
+41560   wor_wages_annual_estimate=wor_wages_taxable_current*wor_pay_periods_per_year
 41580     ! 
-41600   let wor_phase_out=fn_or_phase_out(wor_wages_annual_estimate,wor_fed_wh_annual_estimate,wor_table,wor_they_are_single,wor_they_are_married)
+41600   wor_phase_out=fn_or_phase_out(wor_wages_annual_estimate,wor_fed_wh_annual_estimate,wor_table,wor_they_are_single,wor_they_are_married)
 41620     ! 
-41640     ! let wor_base=wor_wages_taxable_current*wor_pay_periods_per_year-min(wor_fed_wh_annual_estimate,8550)-(wor_allowances_effective*2250)
-41660   let wor_base=wor_wages_annual_estimate-wor_phase_out-wor_standard_deduction
+41640     ! wor_base=wor_wages_taxable_current*wor_pay_periods_per_year-min(wor_fed_wh_annual_estimate,8550)-(wor_allowances_effective*2250)
+41660   wor_base=wor_wages_annual_estimate-wor_phase_out-wor_standard_deduction
 41680     ! 
 41700   if wor_table=2 then 
-41720     let wor_table_line=fn_table_line(mat or2,wor_base)
-41740     let wor_pre_base=or2(wor_table_line,2)
-41760     let wor_tax_rate=or2(wor_table_line,3)
-41780     let wor_remove_prev=or2(wor_table_line,1)
+41720     wor_table_line=fn_table_line(mat or2,wor_base)
+41740     wor_pre_base=or2(wor_table_line,2)
+41760     wor_tax_rate=or2(wor_table_line,3)
+41780     wor_remove_prev=or2(wor_table_line,1)
 41800   else ! wor_table=1
-41820     let wor_table_line=fn_table_line(mat or1,wor_base)
-41840     let wor_pre_base=or1(wor_table_line,2)
-41860     let wor_tax_rate=or1(wor_table_line,3)
-41880     let wor_remove_prev=or1(wor_table_line,1)
+41820     wor_table_line=fn_table_line(mat or1,wor_base)
+41840     wor_pre_base=or1(wor_table_line,2)
+41860     wor_tax_rate=or1(wor_table_line,3)
+41880     wor_remove_prev=or1(wor_table_line,1)
 41900   end if 
 42000   if debug then let fnstatus('-------------------------------------------')
 42020   if wor_they_are_single then 
@@ -1023,12 +1023,12 @@
 42440   if debug then let fnstatus('                                   WH = '&str$(wor_pre_base)&' + [('&str$(wor_base)&' - '&str$(wor_remove_prev)&')] x '&str$(wor_tax_rate)&'] - (195 x '&str$(wor_allowances_effective)&')')
 42460     ! 
 42480     ! WH = 1,244 + [(BASE – 16,900        ) * 0.09] – (195 * allowances)
-42500     ! let wor_return=or2(wor_table_line,2)+(wor_base-or2(wor_table_line,1))*or2(wor_table_line,3)
-42520   let wor_return = wor_pre_base +(( wor_base - wor_remove_prev) * wor_tax_rate) - (195 * wor_allowances_effective)
+42500     ! wor_return=or2(wor_table_line,2)+(wor_base-or2(wor_table_line,1))*or2(wor_table_line,3)
+42520   wor_return = wor_pre_base +(( wor_base - wor_remove_prev) * wor_tax_rate) - (195 * wor_allowances_effective)
 42540   fnstatus('withholding before dividing by pay periods = '&str$(wor_return))
-42560   let wor_return=wor_return/wor_pay_periods_per_year
-42580   let wor_return=round(wor_return,2)
-42600   if wor_return<.1 then let wor_return=0
+42560   wor_return=wor_return/wor_pay_periods_per_year
+42580   wor_return=round(wor_return,2)
+42600   if wor_return<.1 then wor_return=0
 42620   fnstatus('calculated withholding ='&str$(wor_return))
 42640   if debug then let fnstatus_pause ! pause
 42660   fn_wh_oregon=wor_return
@@ -1133,10 +1133,10 @@
 47382   ! if dev then pr '   Ga_StatePersonalAllowance=';Ga_StatePersonalAllowance
 47390   ! if dev then pr '   fn_standardStateDeduction=';Ga_StateDeduction
 47410   ! if dev then pr '   wga_allowances=';wga_allowances
-47420   let Ga_WagesAnnual=(wga_wages_taxable_current)*g_pay_periods_per_year
+47420   ga_WagesAnnual=(wga_wages_taxable_current)*g_pay_periods_per_year
 47430   ! if dev then pr '   Ga_WagesAnnual=';Ga_WagesAnnual
-47440   let Ga_WagesAnnualTaxable=Ga_WagesAnnual-Ga_StateDeduction ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
-47450   let Ga_WagesAnnualTaxable-=Ga_StatePersonalAllowance ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
+47440   ga_WagesAnnualTaxable=Ga_WagesAnnual-Ga_StateDeduction ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
+47450   ga_WagesAnnualTaxable-=Ga_StatePersonalAllowance ! fn_standardStateDeduction('GA',wga_is_married,wga_eicCode)
 47460   ! if dev then pr '   Annual Wages (less state deduction and personal allowance)=';Ga_WagesAnnualTaxable
 47480   if wga_is_married=0 then ! SINGLE INDIVIDUAL 
 47490     mat gawh(udim(mat gawhTableH,1),udim(mat gawhTableH,2))
@@ -1202,10 +1202,10 @@
 65900 fnend
 66000 def fn_test_state_calk
 66020   fn_setup
-66040   ! show the state you are assined  to and let you change it if you like.
+66040   ! show the state you are assined  to and you change it if you like.
 66060   pay_periods_per_year=52
-66080   let wages_taxable_current=399.60
-66100   let fed_wh=7.75
+66080   wages_taxable_current=399.60
+66100   fed_wh=7.75
 66120   allowances=2
 66140   is_married=4  ! is_married = 0 - Single
 66180                     ! is_married = 1 - Married

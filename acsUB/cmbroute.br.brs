@@ -9,8 +9,8 @@
 00090 ! ______________________________________________________________________
 00100     if addall<>1 then addall=0
 00110     fncno(cno)
-00120     if addall=0 then let fen$="CRte" else !:
-            let fen$="CRteALL"
+00120     if addall=0 then fen$="CRte" else !:
+            fen$="CRteALL"
 00130     if indexfile$="" then if$=env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno) else !:
             if$=indexfile$
 00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\UBmstr\Customer.h"&str$(cno),1,10,41,30,if$,1+addall,1,"Select from the list of accounts, to add an account go to the Customer File.",container)

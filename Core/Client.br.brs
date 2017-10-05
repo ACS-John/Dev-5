@@ -589,7 +589,7 @@
 52082   dim u4_device$*20,u4_deviceDefault$*20
 52084   u4_deviceDefault$=u4_device$
 52090   fnreg_read('Hand Held Device',u4_device$,u4_deviceDefault$)
-52092   if u4_device$='' then let u4_device$=u4_deviceDefault$ ! in case it's been set and then blanked out to force default for client
+52092   if u4_device$='' then u4_device$=u4_deviceDefault$ ! in case it's been set and then blanked out to force default for client
 52560   fn_hand_held_device$=u4_device$
 52580 fnend 
 54000 def fn_set_ub_limit(x)

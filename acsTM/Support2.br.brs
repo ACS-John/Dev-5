@@ -147,7 +147,7 @@
 56540 ! old program !  ! ** Field Masks **
 56560 ! old program !    ic=0
 56580 ! old program !    pointtwo=32 : number=30
-56600 ! old program !    ccyymmdd=3 : mmddyy=1 : let glnumber=53
+56600 ! old program !    ccyymmdd=3 : mmddyy=1 : glnumber=53
 56620 ! old program !    mask(ic+=1)=number
 56640 ! old program !    mask(ic+=1)=number
 56660 ! old program !    mask(ic+=1)=0

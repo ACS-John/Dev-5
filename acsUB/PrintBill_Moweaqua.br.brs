@@ -14,14 +14,14 @@
 00140   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 00150   close #21: 
 00160   at$(1)=cnam$
-00170   let z=21
+00170   z=21
 00180   at$(1)=trim$(at$(1))(1:z)
-00190   let x=len(at$(1)) : let y=z-x
+00190   x=len(at$(1)) : y=z-x
 00200   at$(1)=rpt$(" ",int(y/2))&at$(1)
-00210   let z=26
+00210   z=26
 00220   for j=2 to udim(at$)
 00230     at$(j)=trim$(at$(j))(1:z)
-00240     let x=len(at$(j)) : let y=z-x
+00240     x=len(at$(j)) : y=z-x
 00250     at$(j)=rpt$(" ",int(y/2))&at$(j)
 00260   next j
 00270 ! linelength=62
@@ -50,7 +50,7 @@
 00510   fntxt(7,pf,8,8,1,"1")
 00520   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00530   fnlbl(8,1,"Starting Account:",ll,1)
-00540   let fe$="ubm-act-nam"
+00540   fe$="ubm-act-nam"
 00550   datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno)
 00560   indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno)
 00570   kp=1741: kl=9 : dp=41 : dl=30
@@ -71,7 +71,7 @@
 00720   mg$(3)=resp$(4)
 00730   if resp$(6)="[All]" then a$="" else a$=lpad$(trim$(resp$(6)(1:9)),9)
 00740   if resp$(7)="[All]" then prtbkno=0 else prtbkno=val(resp$(7))
-00750   if resp$(8)="True" then sl1=1: let z$="" else sl1=0
+00750   if resp$(8)="True" then sl1=1: z$="" else sl1=0
 00760   if trim$(a$)<>"" then 
 00770     read #2,using L460,key=a$: z$,route,sequence nokey SCREEN1
 00780     st1=1
@@ -122,7 +122,7 @@
 00923 PRINT_IT: ! r:
 00924   if bal<>0 then 
 00925     pb=bal-g(11)
-00927     if bal<=0 then let g(10)=0 ! don't show penalty if balance 0 or less
+00927     if bal<=0 then g(10)=0 ! don't show penalty if balance 0 or less
 00929 ! ______________print bill routine______________________________________
 00931     fn_vbprint
 00933 ! _____________end of pr routine______________________________________
@@ -163,10 +163,10 @@
 01670   def fn_vbprint
 01675 ! -- Standard 4 Per Page Even Perferated Card Stock Bills
 01680     checkcounter+=1
-01685     if checkcounter=1 then let xmargin=0 : let ymargin=0
-01690     if checkcounter=2 then let xmargin=139 : let ymargin=0
-01695     if checkcounter=3 then let xmargin=0 : let ymargin=108
-01700     if checkcounter=4 then let xmargin=139 : let ymargin=108 : checkcounter=0
+01685     if checkcounter=1 then xmargin=0 : ymargin=0
+01690     if checkcounter=2 then xmargin=139 : ymargin=0
+01695     if checkcounter=3 then xmargin=0 : ymargin=108
+01700     if checkcounter=4 then xmargin=139 : ymargin=108 : checkcounter=0
 01710 ! ______________________________________________________________________
 01715     fnpa_line(xmargin+5,ymargin+2,55,lyne*3+3,1)
 01720     fnpa_fontbold(1)
@@ -207,13 +207,13 @@
 01900     end if 
 02020 ! L2020: !
 02030     if a4=1 then 
-02040       let gcode$="RSGS"
+02040       gcode$="RSGS"
 02050     else if a4=2 then 
-02060       let gcode$="CMGS"
+02060       gcode$="CMGS"
 02070     else if a4=3 then 
-02080       let gcode$="INGS"
+02080       gcode$="INGS"
 02090     else 
-02100       let gcode$="GAS"
+02100       gcode$="GAS"
 02110     end if 
 02120     if g(4) then 
 02130       fnpa_txt(gcode$,xmargin+1,lyne*(meter+=1)+ymargin)

@@ -49,11 +49,11 @@
 00420   if ln$(1:1)<>">" then goto L410 ! skip headings
 00430   if ln$(1:1)=">" then ln$(1:1)=""
 00440   if ln$(1:1)=">" then ln$(1:1)="" ! delete up to two >>
-00450   let x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
+00450   x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
 00460   if x=0 then goto L410 ! skip headings
 00470   desc$=ln$(1:x-1)(1:35)
 00480   item+=1
-00490   let y=pos(srep$(ln$,'^','~'),'~',x) ! pos(ln$,"^",x)
+00490   y=pos(srep$(ln$,'^','~'),'~',x) ! pos(ln$,"^",x)
 00500   prg$(item)=ln$(x+1:len(ln$))
 00510   nam$(item)=ln$(1:x-1)(1:35)
 00520   item$(1)=str$(item) !:
@@ -66,11 +66,11 @@
 00570   if ln$(1:1)<>">" then goto L560 ! skip headings
 00580   if ln$(1:1)=">" then ln$(1:1)=""
 00590   if ln$(1:1)=">" then ln$(1:1)="" ! delete up to two >>
-00600   let x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
+00600   x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
 00610   if x=0 then goto L560 ! skip headings
 00620   desc$=ln$(1:x-1)(1:35)
 00630   item+=1
-00640   let y=pos(srep$(ln$,'^','~'),'~',x) ! pos(ln$,"^",x)
+00640   y=pos(srep$(ln$,'^','~'),'~',x) ! pos(ln$,"^",x)
 00650   prg$(item)=ln$(x+1:len(ln$))
 00660   nam$(item)=ln$(1:x-1)(1:35)
 00670   item$(1)=str$(item) !:

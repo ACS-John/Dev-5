@@ -17,7 +17,7 @@
 20200     mat txt$(txt_item+=1) : txt$(txt_item)
 20220     txt$(txt_item)=chr$(9)&rpad$(fnSystemName$(c_has$(c_has_item)),40)
 22000 ! r: add support information
-22020     let which=srch(mat system_id$,c_has$(c_has_item))
+22020     which=srch(mat system_id$,c_has$(c_has_item))
 22030     mat txt$(txt_item+=1) : txt$(txt_item)
 22040     if which>0 then 
 22080       if days(date('ccyymmdd'),'ccyymmdd')<=days(system_support_end_date(which),'ccyymmdd') then 

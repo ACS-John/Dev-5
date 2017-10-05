@@ -12,7 +12,7 @@
 14180     close #company: 
 14200     dim formatOption$(2)
 14220     dim priorOrCurrentOption$(2)
-14260     let formatOption$(1)="Primary" : let formatOption$(2)="Secondary" 
+14260     formatOption$(1)="Primary" : formatOption$(2)="Secondary" 
 14280     priorOrCurrentOption$(1)="Current" : priorOrCurrentOption$(2)="Prior" 
 14300     dim periodOption$(13)
 14320     mat periodOption$(nap)

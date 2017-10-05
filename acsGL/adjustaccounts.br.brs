@@ -25,13 +25,13 @@
 10240           if date(days(trdate,'mmddyy'),'ccyymmdd')>date(days(adjustdate,'mmddyy'),'ccyymmdd') then 
 10250             if oldpcode>pcode then ! this means we're going back to the first period, so move our period values back into the previous yrmo and clear out current
 10260               for period=1 to 13
-10270                 priorym(period)=ymbal(period) : let ymbal(period)=0
+10270                 priorym(period)=ymbal(period) : ymbal(period)=0
 10280               next period
 10290               startbal=priorym(oldpcode)
 10300             end if 
 10310             oldpcode=pcode
 10320             balance+=tramt
-10330             let ymbal(pcode)=balance
+10330             ymbal(pcode)=balance
 10340           end if 
 10350           read #h_actrans,using ACTRANS,next: trdept,trmajor,trsub,trdate,tramt,pcode eof ACTRANSDONE
 10360         loop 
@@ -63,9 +63,9 @@
 10620     fncmdset(11)
 10630     fnacs("accountadjust",0,mat resp$,ckey)
 10640     if ckey=1 then 
-10650       let gl$=fnagl$(resp$(1)) : adjustdate=val(resp$(2)) : adjustamt=val(resp$(3))
+10650       gl$=fnagl$(resp$(1)) : adjustdate=val(resp$(2)) : adjustamt=val(resp$(3))
 10660     else 
-10670       let gl$=''
+10670       gl$=''
 10680     end if 
 10690   fnend 
 10700   def fn_confirmadjustment
@@ -89,11 +89,11 @@
 10880     fnacs("adjustconfirm",0,mat resp$,ckey)
 10890     if ckey=1 then 
 10900       balance=val(resp$(1))
-10910       for period=1 to 13 : let ymbal(period)=val(resp$(period+1)) : priorym(period)=val(resp$(period+14)) : next period
+10910       for period=1 to 13 : ymbal(period)=val(resp$(period+1)) : priorym(period)=val(resp$(period+14)) : next period
 10920       fn_confirmadjustment=1
 10930     else if ckey=2 then 
 10940       for period=1 to 13
-10950         priorym(period)=ymbal(period) : let ymbal(period)=0
+10950         priorym(period)=ymbal(period) : ymbal(period)=0
 10960       next period
 10970       startbal=priorym(oldpcode)
 10980       fn_confirmadjustment=fn_confirmadjustment

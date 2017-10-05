@@ -5,7 +5,7 @@
 20020     linput #h_filelist: program_file$ eof FILELIST_EOF
 20022     if program_file$(1:1)<>'!' then 
 20030 !     pr 'File: '&program_file$ : pause
-20060       let xcv$=fn_get_variable_value$('cv$',program_file$)
+20060       xcv$=fn_get_variable_value$('cv$',program_file$)
 20100       pr xcv$
 20120       if xcv$<>'' then 
 20140         fn_replace_in_file(program_file$,'cv$',xcv$)
@@ -41,7 +41,7 @@
 50060     close #h_file: ioerr ignore
 50080     open #h_file: 'name='&program_file$,display,input 
 50100     dim gvv_return$*256
-50120     let gvv_return$=''
+50120     gvv_return$=''
 50140     restore #h_file: 
 50160     do 
 50180       linput #h_file: line$ eof GV_EOF
@@ -51,7 +51,7 @@
 50260       loop 
 50280       var_set_pos=pos(lwrc$(line$),' '&lwrc$(var$)&'=')
 50300       if var_set_pos>0 then 
-50320         let gvv_return$=line$(var_set_pos+len(' '&lwrc$(var$)&'='):len(line$))
+50320         gvv_return$=line$(var_set_pos+len(' '&lwrc$(var$)&'='):len(line$))
 50340         goto GV_EOF
 50360       end if 
 50380     loop 

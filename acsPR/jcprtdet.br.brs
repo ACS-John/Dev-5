@@ -119,7 +119,7 @@
 01140   tr8=0
 01150   tr9=0
 01160   tr89=0
-01170   let fstdet=0
+01170   fstdet=0
 01180   if prtjob$="Y" then goto L1220
 01190   if cn$(1:6)><prtj$(j1) then goto L1670
 01200   goto L1230
@@ -221,7 +221,7 @@
 02150 ! ______________________________________________________________________
 02160 PRINTDETAILLINE: ! 
 02170   if fstdet=1 then goto L2210
-02180   let fstdet=1
+02180   fstdet=1
 02190   pr #255,using L2200: tr(1),k$(1:20)
 02200 L2200: form pos 1,n 5,pos 9,c 20,skip 1
 02210 L2210: if tr(5)+tr(6)><0 then goto L2290

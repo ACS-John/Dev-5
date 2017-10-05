@@ -34,7 +34,7 @@
         resp$(3)=""
 00230   fnlbl(4,1,"Rate for Analysis:",mylen,1)
 00240   fncombof("nerd",4,mypos,40,env$('Q')&"\UBmstr\ubData\RateMst.h"&str$(cno),1,4,5,50,env$('Q')&"\UBmstr\ubData\RateIdx1.h"&str$(cno),1,usa) !:
-        let usa+=1 !:
+        usa+=1 !:
         resp$(4)="" ! just default to the first one
 00250   fncmdset(3)
 00260   fnacs(sn$,0,mat resp$,ck)
@@ -57,7 +57,7 @@
 00400   read #1,using L410: z$,e2$,bal eof DONE
 00410 L410: form pos 1,c 10,pos 41,c 30,pos 292,pd 4.2
 00420   restore #2,key>=z$&"         ": nokey READ_CUSTOMER
-00430   let first_trans_per_act=1 ! True
+00430   first_trans_per_act=1 ! True
 00440 READ_TRANS: ! 
 00450   read #2,using L470: p$,tdate,tcode,tamount,tbal eof READ_CUSTOMER
 00460 ! If TRIM$(P$)="100550.00" Then Let FNPAUSE
@@ -66,7 +66,7 @@
 00490   if (d(1)<>0 and tdate<d(1)) or (d(2)<>0 and tdate>d(2)) then !:
           goto READ_TRANS
 00500   gosub PRINT_TRANS
-00510   let first_trans_per_act=0 ! false
+00510   first_trans_per_act=0 ! false
 00520   goto READ_TRANS
 00530 ! ______________________________________________________________________
 00540 DONE: ! 

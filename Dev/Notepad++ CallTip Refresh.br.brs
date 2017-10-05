@@ -1,10 +1,10 @@
-10000 let fn_setup
+10000 fn_setup
 10020 fntop(program$)
 10040 fn_gatherLibraryFunctions
 10060 fn_gatherLibraryKeywords
 10080 fn_sortFunctions
 
-10100 let fn_updateNppCallTipFile
+10100 fn_updateNppCallTipFile
 10120 xit: fnxit
 16000 def fn_setup
 16020   library 'S:\Core\Library': fngethandle,fntop,fnxit,fnAddOneC,fnCopy
@@ -156,7 +156,7 @@
 30100   mat functionsTmp$=functions$
 30120   mat Sorted=aidx(functions$)
 30140   for Index=1 to udim(mat functions$)
-30160      let functions$(Index)=functionsTmp$(Sorted(Index))
+30160      functions$(Index)=functionsTmp$(Sorted(Index))
 30180   next Index
 30240 fnend
 42000 def fn_updateNppCallTipFile

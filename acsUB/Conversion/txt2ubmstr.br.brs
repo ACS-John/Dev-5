@@ -8,7 +8,7 @@
 00080 ! ______________________________________________________________________
 00090   cap$="Convert from text file to Customer file"
 00100   fncno(cno,cnam$)
-00110   let udf$=env$('temp')&'\'
+00110   udf$=env$('temp')&'\'
 00120 ! ______________________________________________________________________
 00130 MENU1: ! 
 00140   pr newpage
@@ -37,8 +37,8 @@
 00360   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",RecL=2067,replace",internal,output 
 00370   open #19: "Name="&env$('Q')&"\UBmstr\test.h"&str$(cno)&",RecL=132,replace",internal,output 
 00380   open #15: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&str$(cno)&",Shr,Replace,RecL=102,KPs=1,KLn=19",internal,outin,keyed 
-00390   let work$=env$('Q')&"\UBmstr\Reads_and_Chgs.h"&str$(cno) !:
-        let work_addr$=env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h"&str$(cno) !:
+00390   work$=env$('Q')&"\UBmstr\Reads_and_Chgs.h"&str$(cno) !:
+        work_addr$=env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h"&str$(cno) !:
         ! synconrize these settings with S:\acsUB\ubCalk
 00400   open #work=4: "Name="&work$&",KFName="&work_addr$&",RecL=74,KPs=1,KLn=10,Replace",internal,outin,keyed 
 00410 LOOP_TOP: ! 
@@ -46,24 +46,24 @@
 00430   if line$(1:7)='company' then goto L420
 00440   if line$(1:3)="tax" then goto DONE
 00500   if trim$(z$)<>"" and lpad$(trim$(line$(19:28)),10)<>z$ then goto L950 ! write this record  (there is a seperate record for each serice in the text file)
-00510 L510: let z$=lpad$(trim$(line$(19:28)),10)
+00510 L510: z$=lpad$(trim$(line$(19:28)),10)
 00520   e$(2)=trim$(rtrm$(rtrm$(line$(31:43))&" "&rtrm$(line$(44:71)))(1:30)) ! Name
 00530   e$(1)=e$(3)=rtrm$(rtrm$(line$(72:79))&" "&rtrm$(line$(80:100))) ! street
 00540   e$(4)="CARRIZO SPRINGS, TX 78834"
 00550   extra(1)=val(line$(102:104))
 00560   extra(2)=val(line$(110:114))
 00570   if extra(2)=0 then extra(2)=1 ! INACTIVE ACCOUNTS WHO DON'T HAVE A SEQUENCE #
-00580   let f=22810 ! ALWAYS FIX
+00580   f=22810 ! ALWAYS FIX
 00590   rate$=trim$(line$(147:153))
 00600   if rate$(1:3)="PKU" or rate$(1:3)="PKE" then goto L920 ! handle cannister pick up seperately
-00610   if rate$(1:3)="SCH" then a(2)=19: let g(2)=val(line$(227:234)) !:
-          let gb(2)=val(line$(219:226))+g(2): goto L920 ! handle school sewer seperately
-00620   if rate$(1:3)="HS1" then a(5)=0: let g(5)=val(line$(227:234)) !:
-          let gb(5)=val(line$(219:226))+g(5): b(5)=val(line$(227:234)): goto L920 ! handle school trash
-00630   if rate$(1:3)="MES" then a(5)=0: let g(5)=val(line$(227:234)) !:
-          let gb(5)=val(line$(219:226))+g(5): b(5)=val(line$(227:234)): goto L920 ! MIDDLE SCHOOL TRASH
-00640   if rate$(1:3)="NES" then a(5)=0: let g(5)=val(line$(227:234)) !:
-          let gb(5)=val(line$(219:226))+g(5): b(5)=val(line$(227:234)): goto L920 ! NORTH ELEMENTRY TRASH
+00610   if rate$(1:3)="SCH" then a(2)=19: g(2)=val(line$(227:234)) !:
+          gb(2)=val(line$(219:226))+g(2): goto L920 ! handle school sewer seperately
+00620   if rate$(1:3)="HS1" then a(5)=0: g(5)=val(line$(227:234)) !:
+          gb(5)=val(line$(219:226))+g(5): b(5)=val(line$(227:234)): goto L920 ! handle school trash
+00630   if rate$(1:3)="MES" then a(5)=0: g(5)=val(line$(227:234)) !:
+          gb(5)=val(line$(219:226))+g(5): b(5)=val(line$(227:234)): goto L920 ! MIDDLE SCHOOL TRASH
+00640   if rate$(1:3)="NES" then a(5)=0: g(5)=val(line$(227:234)) !:
+          gb(5)=val(line$(219:226))+g(5): b(5)=val(line$(227:234)): goto L920 ! NORTH ELEMENTRY TRASH
 00650   if rate$(1:3)="CME" then a(4)=2: a(6)=9: goto L920 ! handle exempt commercial sewer seperately as tax exempt commercial
 00660   if rate$(1:3)="MHT" then a(5)=4: extra(12)=1: goto L920 ! handle mobile home trash seperately as taxable
 00670   if rate$(1:3)="ASF" then goto L920 ! handle assessmemt seperately
@@ -82,8 +82,8 @@
 00800   if rate$(1:2)="SC" then a(2)=2 ! commercial sewer
 00810   if rate$(1:2)="TR" then a(5)=1: extra(12)=1 ! assume taxable on trash unless changed to not taxable - residential trash
 00820   if rate$(1:2)="TC" then a(5)=2: extra(12)=1 ! assume taxable on trash unless changed to not taxable - commercial trash
-00830   if rate$(1:3)="TCE" or rate$(1:3)="CNE" then a(5)=2: extra(12)=9: let g(2)=val(line$(227:234)) !:
-          let gb(2)=val(line$(219:226))+g(2) : goto L920 ! handle cannister pick up seperately
+00830   if rate$(1:3)="TCE" or rate$(1:3)="CNE" then a(5)=2: extra(12)=9: g(2)=val(line$(227:234)) !:
+          gb(2)=val(line$(219:226))+g(2) : goto L920 ! handle cannister pick up seperately
 00840   extra(4)=013110
 00850   extra(3)=22810
 00860   if rate$(1:2)="WR" or rate$(1:2)="WC" then d(2)=val(line$(171:178)) ! prior water reading
@@ -95,7 +95,7 @@
 00920 L920: today=22810
 00930   gosub LAST_PART_OF_RECORD
 00940   goto LOOP_TOP
-00950 L950: let g(11)=sum(g): let g(12)=g(11)
+00950 L950: g(11)=sum(g): g(12)=g(11)
 00960   bal=sum(gb) ! balance
 00970   if sum(g)=(0) then extra(17)=1 ! IF NO CHARGES ASSUME FINALED BILLED
 00980   write #2,using L1030: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
@@ -117,7 +117,7 @@
 01150   write #15,using L1170: z$,tdate,tcode,tamount,mat tg,0,0,0,0,0,0,bal-g(11),pcode
 01160 L1160: form pos 1,c 10,4*pd 5,7*pd 4.2,3*pd 5,n 1
 01170 L1170: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-01180 L1180: let x(1)=d(1) : let x(2)=d(9)
+01180 L1180: x(1)=d(1) : x(2)=d(9)
 01190   if extra(17)>0 then goto L1210 ! SKIP FINAL BILLS
 01200   write #work,using L1160,rec=rctr: z$,mat x
 01210 L1210: mat a=(0): mat d =(0): extra(11)=extra(12)=0: mat g=(0): mat gb=(0): mat b=(0): extra(14)=0
@@ -146,8 +146,8 @@
 01440 ! ______________________________________________________________________
 01450 METER_ADDRESS: ! 
 01460   e$(1)=rtrm$(line$(93:117))(1:30)
-01470   let x=pos(e$(1)," ",1)
-01480   let x2=val(e$(1)(1:x)) conv L1500
+01470   x=pos(e$(1)," ",1)
+01480   x2=val(e$(1)(1:x)) conv L1500
 01490   e$(1)=rtrm$(e$(1)(x+1:30))&" "&e$(1)(1:x-1)
 01500 L1500: return 
 01510 ! ______________________________________________________________________
@@ -162,12 +162,12 @@
 01600 L1600: linput #11: line2$ eof L2180
 01610   if trim$(line2$(1:20))="" then goto L1600
 01620   if line2$(1:3)="tax" then goto L1600
-01630   if rate$(1:2)="WR" or rate$(1:2)="WC" then let g(1)=val(line$(227:234)): let gb(1)=val(line$(219:227))+g(1) ! previous balance of water plus current charge
-01640   if rate$(1:3)="WR5" then let g(1)=round(val(line$(227:234))*.75,2): let gb(1)=val(line$(219:227))+g(1) ! previous balance of water plus current charge
-01650   if rate$(1:3)="CME" or rate$(1:2)="MR" or rate$(1:2)="MC" then let g(4)=val(line$(227:234)): let gb(4)=val(line$(219:227))+g(4) ! previous balance of gas plus current charge
-01660   if rate$(1:2)="SR" or rate$(1:2)="SC" then let g(2)=val(line$(227:234)): let gb(2)=val(line$(219:227))+g(2) ! previous balance of sewer plus current charge
-01670   if rate$(1:2)="SR" or rate$(1:2)="SC" then let g(2)=val(line$(227:234)): let gb(2)=val(line$(219:227))+g(2) ! previous balance of sewer plus current charge
-01671   if rate$(1:3)="MHS" then let g(2)=val(line$(227:234)): let gb(2)=val(line$(219:227))+g(2): b(2)=val(line$(227:234)) ! previous balance of sewer plus current charge  AND STANDARD CHARGE ON MOBILE HOMES
+01630   if rate$(1:2)="WR" or rate$(1:2)="WC" then g(1)=val(line$(227:234)): gb(1)=val(line$(219:227))+g(1) ! previous balance of water plus current charge
+01640   if rate$(1:3)="WR5" then g(1)=round(val(line$(227:234))*.75,2): gb(1)=val(line$(219:227))+g(1) ! previous balance of water plus current charge
+01650   if rate$(1:3)="CME" or rate$(1:2)="MR" or rate$(1:2)="MC" then g(4)=val(line$(227:234)): gb(4)=val(line$(219:227))+g(4) ! previous balance of gas plus current charge
+01660   if rate$(1:2)="SR" or rate$(1:2)="SC" then g(2)=val(line$(227:234)): gb(2)=val(line$(219:227))+g(2) ! previous balance of sewer plus current charge
+01670   if rate$(1:2)="SR" or rate$(1:2)="SC" then g(2)=val(line$(227:234)): gb(2)=val(line$(219:227))+g(2) ! previous balance of sewer plus current charge
+01671   if rate$(1:3)="MHS" then g(2)=val(line$(227:234)): gb(2)=val(line$(219:227))+g(2): b(2)=val(line$(227:234)) ! previous balance of sewer plus current charge  AND STANDARD CHARGE ON MOBILE HOMES
 01680   if (rate$(1:2)="SR" or rate$(1:2)="SC") and val(line$(227:234))= 11.25 then a(2)=2 ! residentisl 5 fixtures
 01690   if (rate$(1:2)="SR" or rate$(1:2)="SC") and val(line$(227:234))= 11.85 then a(2)=3 ! residentisl 6 fixtures
 01700   if (rate$(1:2)="SR" or rate$(1:2)="SC") and val(line$(227:234))= 12.37 then a(2)=4 ! residentisl 7 fixtures
@@ -178,14 +178,14 @@
 01750   if (rate$(1:2)="SR" or rate$(1:2)="SC") and val(line$(227:234))= 52.50 then a(2)=14 ! courthouse
 01760   if (rate$(1:2)="SR" or rate$(1:2)="SC") and val(line$(227:234))= 17.55 then a(2)=15 ! churches   (cant tell difference in small business
 01770   if (rate$(1:3)="HOS" or rate$(1:2)="SR" or rate$(1:2)="SC") and val(line$(227:234))= 192.98 then a(2)=16 !:
-          let g(2)=val(line$(227:234)) !:
-          let gb(2)=val(line$(219:226))+g(2) ! dcm hospital
+          g(2)=val(line$(227:234)) !:
+          gb(2)=val(line$(219:226))+g(2) ! dcm hospital
 01771   if trim$(z$)="0121046800" and val(line$(227:234))= 348.30 then a(2)=19 !:
-          let g(2)=val(line$(227:234)) !:
-          let gb(2)=val(line$(219:226))+g(2): b(2)=val(line$(227:234)) ! HIGFHSCHOOL SEWER
+          g(2)=val(line$(227:234)) !:
+          gb(2)=val(line$(219:226))+g(2): b(2)=val(line$(227:234)) ! HIGFHSCHOOL SEWER
 01780   if rate$(1:3)="HSA" and val(line$(227:234))>0 then a(5)=0 !:
-          let g(5)=val(line$(227:234)) !:
-          let gb(5)=val(line$(219:226))+g(5): b(5)=val(line$(227:234)) ! 
+          g(5)=val(line$(227:234)) !:
+          gb(5)=val(line$(219:226))+g(5): b(5)=val(line$(227:234)) ! 
 01790   if (rate$(1:2)="SR" or rate$(1:2)="SC") and val(line$(227:234))= 224.70 then a(2)=17 ! nursing home
 01800   if (rate$(1:2)="SR" or rate$(1:2)="SC") and val(line$(227:234))= 87.75 then a(2)=18 ! junior high
 01810   if (rate$(1:2)="SR" or rate$(1:2)="SC") and val(line$(227:234))= 131.63 then a(2)=19 ! senior high high
@@ -204,29 +204,29 @@
 01940   next j
 01950   if rate$(1:2)="SC" and a(2)=1 and val(line$(227:234))<>10.50 and val(line$(227:234))>0 then a(2)=5: b(2)=val(line$(227:234)) ! if sewer code 1 and not a normal charge the use as a standard chargerge
 01960   if (rate$(1:3)="BPS" or rate$(1:3)="APT") and val(line$(227:234))<>10.50 and val(line$(227:234))>0 then a(2)=0: b(2)=val(line$(227:234)) !:
-          let g(2)=val(line$(227:234)) !:
-          let gb(2)=val(line$(219:226))+g(2) ! if sewer not a normal charge theN USe as a standard charge
+          g(2)=val(line$(227:234)) !:
+          gb(2)=val(line$(219:226))+g(2) ! if sewer not a normal charge theN USe as a standard charge
 01970 ! If TRIM$(Z$)="0121045200" Then Pause
 01980   if rate$(1:2)="SR" and a(2)=2 and val(line$(227:234))<>17.55 and val(line$(227:234))>0 then a(2)=5: b(2)=val(line$(227:234)) ! if sewer code 2 and not a normal charge the use as a standard charge
 01990   if rate$(1:2)="MT" and val(line$(227:234))>0 then a(2)=41: b(2)=val(line$(227:234)) !:
-          let g(2)=val(line$(227:234)) !:
-          let gb(2)=val(line$(219:226))+g(2) ! motels have a special sewer code
-02000   if rate$(1:2)="TR" or rate$(1:2)="TC" then let g(5)=val(line$(227:234)): let gb(5)=val(line$(219:227))+g(5) ! previous balance of trash plus  current charge
-02010   if rate$(1:3)="MHT" then let g(5)=val(line$(227:234)): let gb(5)=val(line$(219:227))+g(5): b(5)=val(line$(227:234)) ! previous balance of trash plus  current charge
+          g(2)=val(line$(227:234)) !:
+          gb(2)=val(line$(219:226))+g(2) ! motels have a special sewer code
+02000   if rate$(1:2)="TR" or rate$(1:2)="TC" then g(5)=val(line$(227:234)): gb(5)=val(line$(219:227))+g(5) ! previous balance of trash plus  current charge
+02010   if rate$(1:3)="MHT" then g(5)=val(line$(227:234)): gb(5)=val(line$(219:227))+g(5): b(5)=val(line$(227:234)) ! previous balance of trash plus  current charge
 02020   if rate$(1:3)="MHT" or rate$(1:2)="TR" or rate$(1:2)="TC" and g(5)>0 then extra(12)=1 ! trash taxable
-02030   if rate$(1:2)="CN" then let g(3)=val(line$(227:234)): let gb(3)=val(line$(219:227))+g(3): extra(12)=1: a(3)=int(g(3)/15) ! previous balance of cannister plus current charge--set tax code to 1
-02040   if rate$(1:3)="PKU" then let g(6)=val(line$(227:234)): let gb(6)=val(line$(219:227))+g(6): extra(11)=int(g(6)/35) : extra(12)=1 ! previous balance of cannister pickup plus current charge and also assign a code for cannister pickup and tax
-02050   if rate$(1:3)="PK2" then let g(6)=val(line$(227:234)): let gb(6)=val(line$(219:227))+g(6): extra(11)=int(g(6)/8.75) : extra(12)=2 ! previous balance of cannister pickup plus current charge and also assign a code for cannister pickup and tax
-02060   if rate$(1:3)="PKE" then let g(6)=val(line$(227:234)): let gb(6)=val(line$(219:227))+g(6): extra(11)=int(g(6)/35): extra(12)=1 ! previous balance of cannister pickup plus current charge and also assign a code 1 since no code # in code-- also set sales tax code
-02070   if rate$(1:3)="ASF" then let g(8)=val(line$(227:234)): let gb(8)=val(line$(219:227))+g(8) ! assessment to other
-02080   if rate$(1:2)="MR" then let g(9)=g(9)+val(line2$(1:9)): a(6)=1 : let gb(9)+=val(line2$(1:9)) ! residential tax on gas
-02090   if rate$(1:2)="MC" then let g(9)=g(9)+val(line2$(1:9)): a(6)=2 : let gb(9)+=val(line2$(1:9)) ! commercial tax on gas
-02100   if rate$(1:2)="CN" or rate$(1:3)="PKU" or rate$(1:3)="PK2" or rate$(1:3)="APT" or rate$(1:3)="MHT" or rate$(1:2)="TR" or rate$(1:2)="TC" then let g(7)=g(7)+val(line2$(1:9)): extra(12)=1 : let gb(7)+=val(line2$(1:9)) ! tax on trash AND CANISTER
+02030   if rate$(1:2)="CN" then g(3)=val(line$(227:234)): gb(3)=val(line$(219:227))+g(3): extra(12)=1: a(3)=int(g(3)/15) ! previous balance of cannister plus current charge--set tax code to 1
+02040   if rate$(1:3)="PKU" then g(6)=val(line$(227:234)): gb(6)=val(line$(219:227))+g(6): extra(11)=int(g(6)/35) : extra(12)=1 ! previous balance of cannister pickup plus current charge and also assign a code for cannister pickup and tax
+02050   if rate$(1:3)="PK2" then g(6)=val(line$(227:234)): gb(6)=val(line$(219:227))+g(6): extra(11)=int(g(6)/8.75) : extra(12)=2 ! previous balance of cannister pickup plus current charge and also assign a code for cannister pickup and tax
+02060   if rate$(1:3)="PKE" then g(6)=val(line$(227:234)): gb(6)=val(line$(219:227))+g(6): extra(11)=int(g(6)/35): extra(12)=1 ! previous balance of cannister pickup plus current charge and also assign a code 1 since no code # in code-- also set sales tax code
+02070   if rate$(1:3)="ASF" then g(8)=val(line$(227:234)): gb(8)=val(line$(219:227))+g(8) ! assessment to other
+02080   if rate$(1:2)="MR" then g(9)=g(9)+val(line2$(1:9)): a(6)=1 : gb(9)+=val(line2$(1:9)) ! residential tax on gas
+02090   if rate$(1:2)="MC" then g(9)=g(9)+val(line2$(1:9)): a(6)=2 : gb(9)+=val(line2$(1:9)) ! commercial tax on gas
+02100   if rate$(1:2)="CN" or rate$(1:3)="PKU" or rate$(1:3)="PK2" or rate$(1:3)="APT" or rate$(1:3)="MHT" or rate$(1:2)="TR" or rate$(1:2)="TC" then g(7)=g(7)+val(line2$(1:9)): extra(12)=1 : gb(7)+=val(line2$(1:9)) ! tax on trash AND CANISTER
 02110   if rate$(1:3)="TCE" or rate$(1:3)="CNE" then extra(12)=9 ! tax exempt commercial trash
-02120   if val(line$(227:234))=0 and val(line$(219:227))<>0 and trim$(line$(139:143))="WATER" then let gb(1)=val(line$(219:227))
-02130   if val(line$(227:234))=0 and val(line$(219:227))<>0 and trim$(line$(139:143))="SEWER" then let gb(2)=val(line$(219:227))
-02140   if val(line$(227:234))=0 and val(line$(219:227))<>0 and trim$(line$(139:143))="GAS" then let gb(4)=val(line$(219:227))
-02150   if val(line$(227:234))=0 and val(line$(219:227))<>0 and trim$(line$(139:143))="TRASH" then let gb(5)=val(line$(227:234))
-02160   if val(line$(227:234))=0 and val(line$(219:227))<>0 and trim$(line$(139:146))="ASSESMEN" then let gb(8)=val(line$(219:227)) ! PLUG ASSESMENT TO OTHER
+02120   if val(line$(227:234))=0 and val(line$(219:227))<>0 and trim$(line$(139:143))="WATER" then gb(1)=val(line$(219:227))
+02130   if val(line$(227:234))=0 and val(line$(219:227))<>0 and trim$(line$(139:143))="SEWER" then gb(2)=val(line$(219:227))
+02140   if val(line$(227:234))=0 and val(line$(219:227))<>0 and trim$(line$(139:143))="GAS" then gb(4)=val(line$(219:227))
+02150   if val(line$(227:234))=0 and val(line$(219:227))<>0 and trim$(line$(139:143))="TRASH" then gb(5)=val(line$(227:234))
+02160   if val(line$(227:234))=0 and val(line$(219:227))<>0 and trim$(line$(139:146))="ASSESMEN" then gb(8)=val(line$(219:227)) ! PLUG ASSESMENT TO OTHER
 02170   total_balance+=val(line2$(17:25)) ! get net bill
 02180 L2180: return 

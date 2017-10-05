@@ -18,7 +18,7 @@
         fnpriorcd
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00151   let fscode=fnfscode !:
+00151   fscode=fnfscode !:
         priorcd=fnpriorcd
 00160   on fkey 5 goto L1870
 00170   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative  !:
@@ -84,11 +84,11 @@
 00740   if fnfscode=0 then monthb+=bm(fnactpd) else monthb+=bm(fnfscode)
 00750   if fnfscode=0 then goto L760 else goto L800
 00760 L760: for j=1 to fnactpd
-00770     let ytdb=ytdb+bm(j)
+00770     ytdb=ytdb+bm(j)
 00780   next j
 00790   goto L840
 00800 L800: for j=1 to fnfscode
-00810     let ytdb=ytdb+bm(j)
+00810     ytdb=ytdb+bm(j)
 00820   next j
 00830   goto L840
 00840 L840: ! pr DETAILS
@@ -109,7 +109,7 @@
 00990 L990: next j
 01000   if rs=1 then total=-total else goto L1030
 01010   total2=-total2
-01020   let ytdb=-ytdb
+01020   ytdb=-ytdb
 01030 L1030: if ds=1 then dollar$="$" else dollar$=" "
 01040   if total><0 or total2><0 then goto L1070
 01050   if total<>0 then goto L1070
@@ -140,10 +140,10 @@
 01300   goto L410
 01310 L1310: if foot1=1 then goto L1360
 01320   tabnote=sp
-01330   let foot1=1
-01340   let foot$=d$
+01330   foot1=1
+01340   foot$=d$
 01350   goto L410
-01360 L1360: let foot$=rtrm$(foot$)&d$
+01360 L1360: foot$=rtrm$(foot$)&d$
 01370   goto L410
 01380 L1380: for j=1 to 9
 01390     if ac(j)=0 or ac(j)=9 then goto L1420
@@ -170,11 +170,11 @@
 01600 L1600: gosub L1500: continue 
 01610 L1610: if ul=0 then goto L1700
 01620   if ul=1 then goto L1670
-01630   let underlin$="=============="
+01630   underlin$="=============="
 01640   pr #255: 
 01650   goto L1680
 01660   goto L1700
-01670 L1670: let underlin$="______________"
+01670 L1670: underlin$="______________"
 01680 L1680: pr #255,using L1690: underlin$
 01690 L1690: form skip 1,pos 52,2*c 15,skip 1
 01700 L1700: ! f REDIR=0 Then pr #255,Using 1560: " "

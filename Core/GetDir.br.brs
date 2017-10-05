@@ -15,7 +15,7 @@
 20280     dim tmp$*255
 20300 ! ______________________________________________________________________
 20320     mat filename$=("")
-20360     let filter$=trim$(filter$) : if filter$="" then let filter$="*.*"
+20360     filter$=trim$(filter$) : if filter$="" then filter$="*.*"
 20380     option$=trim$(option$)
 20400     dir$=trim$(dir$)
 20420     if dir$(len(dir$):len(dir$))<>"\" then dir$=dir$&"\"
@@ -27,9 +27,9 @@
 20540     open #tf1:=fngethandle: "Name="&env$('temp')&'\'&"GetDir"&session$&".tmp",display,input 
 20560     for x=1 to udim(filename$)
 20580       linput #tf1: tmp$ eof XIT
-20600       let filename$(x)=rtrm$(tmp$)
+20600       filename$(x)=rtrm$(tmp$)
 20620       if filename$(x)=uprc$(filename$(x)) then ! never all caps-anything but
-20640         let filename$(x)=lwrc$(filename$(x))
+20640         filename$(x)=lwrc$(filename$(x))
 20660       end if 
 20680     next x
 20700     goto XIT

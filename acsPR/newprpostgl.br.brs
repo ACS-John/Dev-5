@@ -53,8 +53,8 @@
 24020   dat1=d1=val(resp$(1))
 24040   dat2=d2=val(resp$(2))
 24060   if resp$(3)="True" then skipposting=1
-24080   if glb=2 then let glwk$=env$('Q')&"\GLmstr\GL"&date$(days(dat1,'ccyymmdd'),'mmddyy')&".h"&env$('cno')
-24100   if glb><2 then let glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
+24080   if glb=2 then glwk$=env$('Q')&"\GLmstr\GL"&date$(days(dat1,'ccyymmdd'),'mmddyy')&".h"&env$('cno')
+24100   if glb><2 then glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
 24120   if glb=2 and accrue$="Yes" then 
 24140     open #11: "Name="&env$('Q')&"\GLmstr\GL"&date$(days(d2,'ccyymmdd'),'mmddyy')&".h"&env$('cno')&",RecL=104,Use",internal,output 
 24160   end if 
@@ -293,7 +293,7 @@
 52120 fnend 
 56000 def fn_askaccrue
 56020   open #12: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLindex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2500
-56040   let glthere=1
+56040   glthere=1
 56060   L2500: ! 
 56080   msgline$(1)="Do you wish to accrue part of this Payroll"
 56100   msgline$(2)="in the previous month?"
@@ -323,7 +323,7 @@
 56580   day=val(resp$(1)) ! days in pay period
 56600   dayslm=val(resp$(2)) ! days last month
 56620   key$=fnagl$(resp$(3))
-56640   let g1=val(key$(1:3)): let g2=val(key$(4:9)) : let g3=val(key$(10:12))
+56640   g1=val(key$(1:3)): g2=val(key$(4:9)) : g3=val(key$(10:12))
 56660   d2=val(resp$(4)) ! last day previous month
 56680   acgl$=cnvrt$("N 3",g1)&cnvrt$("N 6",g2)&cnvrt$("N 3",g3)
 56700   if glthere=1 then 

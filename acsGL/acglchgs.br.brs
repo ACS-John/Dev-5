@@ -14,9 +14,9 @@
 00130   fntop(program$,cap$="Change Amount")
 00140   fncno(cno,cnam$)
 00150   if fnglfs=5 then goto XIT
-00160   let udf$=env$('temp')&'\'
+00160   udf$=env$('temp')&'\'
 00170   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20: 
-00180   let fscode=fnfscode
+00180   fscode=fnfscode
 00190   pors=1
 00200   mp1=75
 00210   if fnps=2 then mp1=mp1+3
@@ -80,7 +80,7 @@
 00750   if fr=0 then goto L740
 00760 L760: form pos mp1,pd 3,pos 81,28*pd 6.2,pos 327,pd 6.2
 00770   if fscode=0 then goto L800
-00780   if fscode<1 or fscode>12 then let fscode=1
+00780   if fscode<1 or fscode>12 then fscode=1
 00790   if fnpriorcd=2 then cb=bp(fscode) else cb=by(fscode)
 00800 L800: if fr=val(r$) then goto L810 else goto L830
 00810 L810: if fnpriorcd=2 then total+=(cb-pbp) else total+=(cb-bp(12))
@@ -136,10 +136,10 @@
 01280 ! ______________________________________________________________________
 01290 L1290: if foot1=1 then goto L1340
 01300   tabnote=sp
-01310   let foot1=1
-01320   let foot$=d$
+01310   foot1=1
+01320   foot$=d$
 01330   goto L560
-01340 L1340: let foot$=rtrm$(foot$)&d$
+01340 L1340: foot$=rtrm$(foot$)&d$
 01350   goto L560
 01360 ! ______________________________________________________________________
 01370 L1370: for j=1 to 9
@@ -169,12 +169,12 @@
 01610 ! ______________________________________________________________________
 01620 L1620: if ul=0 then goto L1720
 01630   if ul=1 then goto L1690
-01640   let underlin$="=============="
+01640   underlin$="=============="
 01650   pr #255,using L1660: underlin$
 01660 L1660: form skip 1,pos 67,c 14,skip redir
 01670   goto L1720
 01680 ! ______________________________________________________________________
-01690 L1690: let underlin$="______________"
+01690 L1690: underlin$="______________"
 01700   pr #255,using L1710: underlin$
 01710 L1710: form pos 67,c 14,skip redir
 01720 L1720: if redir=0 then pr #255,using L1730: " "

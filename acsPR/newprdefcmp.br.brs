@@ -4,8 +4,8 @@
 00050   fntop(program$,cap$="Deferred Compensation Report")
 00070 ! 
 00080   def fndate_mmddyy_to_ccyymmdd(x)
-00090     let x2=(x-int(x*.01)*100)*10000+int(x*.01)
-00100     if int(x2*.0001)<90 then let x2=x2+20000000 else let x2=x2+19000000
+00090     x2=(x-int(x*.01)*100)*10000+int(x*.01)
+00100     if int(x2*.0001)<90 then x2=x2+20000000 else x2=x2+19000000
 00110     fndate_mmddyy_to_ccyymmdd=x2
 00120   fnend 
 00130   dim em$*30,tcp(32),tdc(10),cp(32),ttdc(10)
@@ -70,19 +70,19 @@
 00710 L710: fntos(sn$="Deferred-1") !:
         rc=cf=0
 00720   fnfra(1,1,20,23,"Deferred Comp W/H","Mark the Deferred Comp Withholding deduction",0) !:
-        cf+=1 : let fratype=cf
+        cf+=1 : fratype=cf
 00730   for j=1 to 20
 00740     fnchk(j,3,fullname$(j),0,fratype) !:
           resp$(rc+=1)="False"
 00750   next j
 00760   fnfra(1,30,20,23,"Deferred Comp Match","Mark the deferred compensation match.",0) !:
-        cf+=1 : let fratype=cf
+        cf+=1 : fratype=cf
 00770   for j=1 to 20
 00780     fnopt(j,3,fullname$(j),0,fratype) !:
           resp$(rc+=1)="False"
 00790   next j
 00800   fnfra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.") !:
-        cf+=1 : let fradate=cf : mylen=26 : mypos=mylen+2
+        cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
 00810   fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
 00820   fntxt(1,mypos,10,0,1,"3",0,empty$,fradate) !:
         resp$(rc+=1)=str$(beg_date)

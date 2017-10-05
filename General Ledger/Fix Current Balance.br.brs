@@ -71,12 +71,12 @@
 52000   def fn_is_a_retained_earn_account(gl$)
 52020 ! pr 'gl number passed is *'&gl$&'*'
 52040 ! pr 'gl number last retained earnings *'&last_retained_earnings_acct$&'*'
-52060     let gl$=trim$(fnagl$(gl$))
+52060     gl$=trim$(fnagl$(gl$))
 52080     if use_dept then 
-52100       let fund_compare=val(gl$(1:3))
-52120       let fund_which=srch(mat fund_list,fund_compare)
+52100       fund_compare=val(gl$(1:3))
+52120       fund_which=srch(mat fund_list,fund_compare)
 52140     else 
-52160       let fund_which=1
+52160       fund_which=1
 52180     end if 
 52200     if gl$<=trim$(last_retained_earnings_acct$(fund_which)) then 
 52220 !     pr '"'&gl$&'"<="'&trim$(last_retained_earnings_acct$(fund_which))&'" so it IS a retained earnings account - fund:'&str$(fund_which)

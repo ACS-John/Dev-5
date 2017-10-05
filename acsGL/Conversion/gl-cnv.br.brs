@@ -198,12 +198,12 @@
 01980   close #1: 
 01990 L1990: end1=0 ! 
 02000   dim id$(6)*40,fil$(6),idx$(6)
-02010   id$(1)=" 1 = BALANCE SHEET FILE" : let fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
-02020   id$(2)=" 2 = INCOME STATEMENT FILE" : let fil$(2)="ACGLFNSI" : idx$(2)="FNSIINDX"
-02030   id$(3)=" 3 = FUND STMT / CASH FLOW FILE" : let fil$(3)="ACGLFNSF" : idx$(3)="FNSFINDX"
-02040   id$(4)=" 4 = SECONDARY BALANCE SHEET FILE" : let fil$(4)="ACGLFNSC" : idx$(4)="FNSCINDX"
-02050   id$(5)=" 5 = SECONDARY INCOME STATEMENT FILE" : let fil$(5)="ACGLFNSJ" : idx$(5)="FNSJINDX"
-02060   id$(6)=" 6 = SECONDARY FUND / CASH FLOW FILE" : let fil$(6)="ACGLFNSG" : idx$(6)="FNSGINDX"
+02010   id$(1)=" 1 = BALANCE SHEET FILE" : fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
+02020   id$(2)=" 2 = INCOME STATEMENT FILE" : fil$(2)="ACGLFNSI" : idx$(2)="FNSIINDX"
+02030   id$(3)=" 3 = FUND STMT / CASH FLOW FILE" : fil$(3)="ACGLFNSF" : idx$(3)="FNSFINDX"
+02040   id$(4)=" 4 = SECONDARY BALANCE SHEET FILE" : fil$(4)="ACGLFNSC" : idx$(4)="FNSCINDX"
+02050   id$(5)=" 5 = SECONDARY INCOME STATEMENT FILE" : fil$(5)="ACGLFNSJ" : idx$(5)="FNSJINDX"
+02060   id$(6)=" 6 = SECONDARY FUND / CASH FLOW FILE" : fil$(6)="ACGLFNSG" : idx$(6)="FNSGINDX"
 02070   for j=1 to 6
 02080     execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&" "&env$('Temp')&"\Work."&session$&" -83" ioerr L2360
 02090     execute "COPY  "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&""

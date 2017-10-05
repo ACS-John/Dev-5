@@ -15,14 +15,14 @@
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
 00140   at$(1)=cnam$ !:
-        let z=21 !:
+        z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
-        let x=len(at$(1)) : let y=z-x !:
+        x=len(at$(1)) : y=z-x !:
         at$(1)=rpt$(" ",int(y/2))&at$(1)
-00150   let z=26 !:
+00150   z=26 !:
         for j=2 to udim(at$) !:
           at$(j)=trim$(at$(j))(1:z) !:
-          let x=len(at$(j)) : let y=z-x !:
+          x=len(at$(j)) : y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00160   linelength=62
@@ -79,7 +79,7 @@
 00430   fntxt(17,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00440   fnlbl(18,1,"Starting Account:",ll,1)
-00450   let fe$="ubm-act-nam" !:
+00450   fe$="ubm-act-nam" !:
         datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
         indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
@@ -129,7 +129,7 @@
 00580   if resp$(17)="[All]" then !:
           prtbkno=0 else !:
           prtbkno = val(resp$(17))
-00590   if resp$(18)="True" then sl1=1: let z$="" else sl1=0
+00590   if resp$(18)="True" then sl1=1: z$="" else sl1=0
 00600   prebal$=resp$(19)
 00610   dueby$=resp$(20)
 00620   goto L640 ! If TRIM$(PREBAL$)="" OR TRIM$(DUEBY$)="" Then Goto 550 Else Goto 560
@@ -190,7 +190,7 @@
 01110 ! ______________________________________________________________________
 01120 L1120: ! 
 01130   pb=bal-g(11)
-01140   if bal<=0 then let g(9)=g(10)=0 ! don't show penalty if balance 0 or less
+01140   if bal<=0 then g(9)=g(10)=0 ! don't show penalty if balance 0 or less
 01150 ! ______________print bill routine______________________________________
 01160   gosub VBPRINT
 01170 ! _____________end of pr routine______________________________________
@@ -233,7 +233,7 @@
 01420   if prtbkno=0 then goto L1440
 01430   if prtbkno><route then goto END5
 01440 L1440: if f><d1 then goto L1400
-01450   let zip5$=cr$=""
+01450   zip5$=cr$=""
 01460   read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1470
 01470 L1470: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 01480   goto L1400
@@ -408,7 +408,7 @@
 02750     fnpa_text(20,mg$(j),40,lyne+=4) ! pr #20: 'Call Print.AddText("'&mg$(j)&'",'&str$(40)&','&str$(lyne+=4)&')'
 02760   next j
 02770   pr #20: 'Call Print.MyFontItalic(0)'
-02780   let x=0
+02780   x=0
 02790 ! For J=1 To 38
 02800 ! pr #20: 'Call Print.AddLine('&STR$(X+=5)&','&STR$(208)&',3,0)'
 02810 ! Next J
@@ -462,9 +462,9 @@
 03170 L3170: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 03180   if p$<>z$ then goto L3240
 03190   if tcode<>1 then goto L3160 ! only charge transactions
-03200   let usage(3)=usage(2): billdate(3)=billdate(2)
-03210   let usage(2)=usage(1): billdate(2)=billdate(1)
-03220   let usage(1)=wu: billdate(1)=tdate
+03200   usage(3)=usage(2): billdate(3)=billdate(2)
+03210   usage(2)=usage(1): billdate(2)=billdate(1)
+03220   usage(1)=wu: billdate(1)=tdate
 03230   goto L3160
 03240 L3240: return 
 03250 L3250: open #16: "Name="&env$('Q')&"\UBmstr\message.h"&str$(cno)&",RecL=132,replace",internal,outin,relative 

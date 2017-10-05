@@ -38,8 +38,8 @@
 00305     fncmdkey("E&xit",5,0,1,"Returns to main screen.")
 00310     fnacs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
-00320     let x$=lpad$(resp$(1)(1:8),8)
-00330     if ckey=5 then let x$="        " ! no one selected
+00320     x$=lpad$(resp$(1)(1:8),8)
+00330     if ckey=5 then x$="        " ! no one selected
 00340     goto XIT
 00350 ! ______________________________________________________________________
 00360 ! <Updateable Region: ERTN>

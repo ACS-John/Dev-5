@@ -78,8 +78,8 @@
 25400     reading_current=rf_reading_cur
 25600     reading_prior=rf_reading_prior
 25800     if do_usages then 
-26000       let usage_ytd-=usage_current
-26200       let usage_current=max(0,reading_current-reading_prior)
-26400       let usage_ytd+=usage_current
+26000       usage_ytd-=usage_current
+26200       usage_current=max(0,reading_current-reading_prior)
+26400       usage_ytd+=usage_current
 26600     end if  ! do_usages
 26800   fnend  ! fn_reading_fix

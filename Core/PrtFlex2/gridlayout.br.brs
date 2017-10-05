@@ -39,11 +39,11 @@
 00300   fncmdset(11)
 00310   fnacs(sn$,0,mat resp$,ckey)
 00320   if ckey=5 then goto XIT
-00330   let fieldnam$=trim$(resp$(1))
+00330   fieldnam$=trim$(resp$(1))
 00340   vn$=trim$(resp$(2))
 00350   fl=val(resp$(3))
 00360   dp=val(resp$(4))
-00370   let ft$=trim$(resp$(5))
+00370   ft$=trim$(resp$(5))
 00380   an$=trim$(resp$(6))
 00390   pr #10,using 'Form POS 1,C 30,C 20,N 4,N 2,C 11,C 20': fieldnam$,vn$,fl,dp,ft$,an$
 00400   goto L170

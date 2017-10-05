@@ -115,7 +115,7 @@
 30120   fnread_program_print_property("Lines",lpp$, g_prgCapForSettingsOverride$) ! lpp=val(lpp$)
 30140   if lpp$='' then gosub SET_DEFAULTS
 30180   dim g_prn_destination_name$*1024
-30200   let g_prn_destination_name$=op_printFileName$
+30200   g_prn_destination_name$=op_printFileName$
 30220   open #255: 'Name='&env$('Q')&'\tmp_'&session$&'.prn,PageOFlow='&lpp$&',RecL=512,Replace',display,output 
 30240   goto XIT
 30260   SET_DEFAULTS: ! r:
@@ -153,9 +153,9 @@
 42180     dim wordprocessor_exe$*512 ! full path and executable for wordprocessor_exe
 42200 ! ______________________________________________________________________
 42260     start_destinationFilename$=trim$(start_destinationFilename$)
-42280     let winxp$="Microsoft Windows XP"
-42300     let win2k$="Microsoft Windows 2000"
-42320     let winnt2kxp$="Microsoft Windows NT/2000/XP"
+42280     winxp$="Microsoft Windows XP"
+42300     win2k$="Microsoft Windows 2000"
+42320     winnt2kxp$="Microsoft Windows NT/2000/XP"
 42340     fnosver(osver$,1)
 42360 ! if  start_destinationFilename$='CANCELED' then goto START_XIT
 42380     if lwrc$(start_destinationFilename$(len(start_destinationFilename$)-3:len(start_destinationFilename$)))=".rtf" then 
@@ -195,7 +195,7 @@
 46140     open #20: "Name="&serverSendto$,display,input
 46160     ! end if
 46180     lrec20=lrec(20)
-46200     let y=0
+46200     y=0
 46220     open #21: "Name="&env$('temp')&"\acs_print_tmp"&session$&".rtf,Size=0,RecL=800,Replace",display,output 
 46240     pr #21: "{\rtf1\ansi\deflang1033";
 46260     pr #21: "{\fonttbl";
@@ -249,25 +249,25 @@
 47220     ! 
 47240     ! 
 47260     L730: ! 
-47280     let z=pos(line$,"\",z)
+47280     z=pos(line$,"\",z)
 47300     if z=>1 and line$(z-1:z-1)<>"{" and uprc$(line$(z+1:z+1))<>"Q" then 
-47320       line$(z:z)="\\" : let z=z+2
+47320       line$(z:z)="\\" : z=z+2
 47340       goto L730
 47360     else 
 47380     L18700: !
-47390       let z=pos(line$,"/fcode/",z)
+47390       z=pos(line$,"/fcode/",z)
 47400       if z=>1 then 
-47420         line$(z:z+6)="\" : let z=z+1
+47420         line$(z:z+6)="\" : z=z+1
 47440         goto L18700
 47460       else 
-47480         let z=0
+47480         z=0
 47500       end if 
 47520      !  look for \s and replace with double \\s
 47540      !  so they will display correctly in rtf
 47560      !  "{" was added to allow support for bold, italic, underline, etc.
 47580      !  "q" was added to allow support for alignment.
 47600     end if 
-47620     let y=y+len(line$)+2
+47620     y=y+len(line$)+2
 47640     if line$(1:1)=chr$(12) then ! and y<lrec20 then   !  shifted this on 1/13/2017 due to strange _ showing up in ms word
 47660       if y<lrec20 then  
 47680         pr #21: "\page"
@@ -332,7 +332,7 @@
 52280     fninch2twip(marg(3))
 52300     fnread_program_print_property('RightMargin',temp$, g_prgCapForSettingsOverride$) : marg(4)=val(temp$)
 52320     fninch2twip(marg(4))
-52340     fnread_program_print_property('FontSize',temp$, g_prgCapForSettingsOverride$) : let fsize=val(temp$)
+52340     fnread_program_print_property('FontSize',temp$, g_prgCapForSettingsOverride$) : fsize=val(temp$)
 52360   fnend 
 54000   def fn_start_workaround_4591
 54020     pr newpage

@@ -28,8 +28,8 @@
 00310     extra(1)=val(z$(1:2)) conv L290 ! route
 00320     extra(2)=val(z$(3:7)) conv L290 ! sequence
 00330     if extra(2)=0 then extra(2)=1 ! don't allow zero sequence #
-00340     extra$(6)=f$(3) : let f$(3)="" ! bulk sort code
-00350     extra$(3)=f$(2) : let f$(2)="" ! meter module #  (water meter serial)
+00340     extra$(6)=f$(3) : f$(3)="" ! bulk sort code
+00350     extra$(3)=f$(2) : f$(2)="" ! meter module #  (water meter serial)
 00360 ! eXTRA(11)=B(6): b(6)=0 ! note payable amount
 00370 ! extra(17)=c(4) : c(4)=0 ! final billing code
 00380 ! extra(3)=d(5) : d(5)=0 ! date meter read current
@@ -41,9 +41,9 @@
 00440 ! eXTRA$(7)=STR$(D(15)): d(15)=0 ! test cycle code
 00444     d(13)=0 ! set # units to 0 if not used xxx-prb 05/18/11
 00450     d(14)=0 ! don't know but has value on old system
-00460 ! Let GB(5)=GB(3)+GB(4): Let GB(3)=GB(4)=0 ! add rep parts and rep labor together
-00470 ! If G(5)=9.25 Then Let G(6)=9.25: Let GB(6)=GB(5): Let G(5)=0: Let GB(5)=0 ! KINCAID ONLY
-00480 ! Let GB(9)=GB(7): Let GB(7)=0 ! move sfc for service 7 to service 9
+00460 ! gB(5)=GB(3)+GB(4): gB(3)=GB(4)=0 ! add rep parts and rep labor together
+00470 ! If G(5)=9.25 Then g(6)=9.25: gB(6)=GB(5): g(5)=0: gB(5)=0 ! KINCAID ONLY
+00480 ! gB(9)=GB(7): gB(7)=0 ! move sfc for service 7 to service 9
 00490 ! eXTRA(18)=D(7): d(7)=0 ! average sewer usage
 00495 ! If env$('client')="Monticello" AND A(2)>9 Then eXTRA(18)=D(7)=0 ! don't average sewer rate codes 10 or greater
 00500 ! a(6)=A(7) ! penalty codes (was only 1 code but charges listed seperate

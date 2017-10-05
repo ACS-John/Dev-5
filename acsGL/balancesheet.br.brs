@@ -120,11 +120,11 @@
 01000   goto READ_TOP
 01010 L1010: if foot1=1 then goto L1070
 01020   tabnote=sp
-01030   let foot1=1
-01040   let foot$=d$
+01030   foot1=1
+01040   foot$=d$
 01050   goto READ_TOP
 01060 ! ______________________________________________________________________
-01070 L1070: let foot$=rtrm$(foot$)&d$
+01070 L1070: foot$=rtrm$(foot$)&d$
 01080   goto READ_TOP
 01090 ! ______________________________________________________________________
 01100 SET_ACCUM: ! 
@@ -156,13 +156,13 @@
 01360 ! ______________________________________________________________________
 01370 UNDERLINE: ! 
 01380   if ul=0 then goto L1480
-01390   let underlin=25+14*bc ! if CP=1 Then Let UNDERLIN=51+14*BC Else Let UNDERLIN=25+14*BC
+01390   underlin=25+14*bc ! if CP=1 Then uNDERLIN=51+14*BC Else uNDERLIN=25+14*BC
 01400   if ul=1 then goto L1450
-01410   let underlin$="=============="
+01410   underlin$="=============="
 01420   pr #255,using L1430: underlin$
 01430 L1430: form pos underlin,c 14,skip redir  ! atlantis underline
 01440   goto L1480
-01450 L1450: let underlin$="______________"
+01450 L1450: underlin$="______________"
 01460   pr #255,using L1470: underlin$
 01470 L1470: form pos underlin,c 14,skip redir
 01480 L1480: if redir=0 then pr #255,using L1490: " "

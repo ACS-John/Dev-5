@@ -1,6 +1,6 @@
 0020 library program$: fnDedNames
 0040 dim xa$(20)*20,xb$(20)*8,xc(20)
-0060 let fnDedNames(mat xa$,mat xb$) ! , mat xc) ! ,mat xd,mat xe,mat xf,mat xg,mat xh,mat xi$)
+0060 fnDedNames(mat xa$,mat xb$) ! , mat xc) ! ,mat xd,mat xe,mat xf,mat xg,mat xh,mat xi$)
 0080 pr 'fullname','abbrName','dedcode'
 0100 for x=1 to 20
 0120   pr xa$(x),xb$(x),xc(x)

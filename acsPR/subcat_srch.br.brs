@@ -16,7 +16,7 @@
 00160     ch$(1)="Sub-Category #" : !:
           ch$(2)="Description" : !:
           mat ch$(2) : mat cm$(2) : mat cm$=("2")
-00170     let usefile=fnflexinit1('SubCat',1,1,20,40,mat ch$,mat cm$,1,usefile)
+00170     usefile=fnflexinit1('SubCat',1,1,20,40,mat ch$,mat cm$,1,usefile)
 00190 READ_FILE: ! 
 00200     read #subcat,using 'Form POS 1,c 3,c 25': mat item$ eof L280 ioerr ERR_READ
 00210     fnflexadd1(mat item$)
@@ -36,7 +36,7 @@
           fncmdkey("E&xit",5,0,1,"Returns to main menu.")
 00290     fnacs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
-00300     let x$=cde$=lpad$(resp$(1),3)
+00300     x$=cde$=lpad$(resp$(1),3)
 00310     if ckey=5 then cde$="   " ! no one selected
 00320     goto XIT
 00330 ! ______________________________________________________________________

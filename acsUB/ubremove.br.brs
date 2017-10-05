@@ -10,10 +10,10 @@
 20180   fncno(cno)
 20200 SCREEN1: ! 
 20220   fntos(sn$="ubRemove")
-20240   let frac=0
+20240   frac=0
 20260   fnfra(1,1,10,fraonewidth=70,'') ! cap$)
-20280   let fraone=frac+=1 : flc=0
-20300   let fraonewidth-=2
+20280   fraone=frac+=1 : flc=0
+20300   fraonewidth-=2
 20320   fnlbl(flc+=1,1,"Warning",fraonewidth,center,3,fraone)
 20340   fnlbl(flc+=2,1,"This program will erase old transactions ",fraonewidth,center,0,fraone)
 20360   fnlbl(flc+=1,1,"from the Customer Transaction History File.  ",fraonewidth,center,0,fraone)

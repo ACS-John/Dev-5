@@ -181,7 +181,7 @@
 01800 L1800: pr newpage
 01810   if adr(1)=0 then goto L2710
 01820   pr f "10,10,C 33,N": "Review Detail Transactions (Y/N):"
-01830   let yn$="N"
+01830   yn$="N"
 01840 L1840: rinput fields "10,45,Cu 1,UT,N": yn$ conv L1840
 01850   if yn$="Y" then goto L2710
 01860   if yn$<>"N" then goto L1840
@@ -315,7 +315,7 @@
 03140   on j1 goto L3150,L2710 none L3120
 03150 L3150: pr newpage
 03160   pr f "10,2,c 25,n": "New YTD Purchases:"
-03170   let ytdp=tt
+03170   ytdp=tt
 03180 L3180: rinput fields "10,35,Nz 11.2,UT,N": ytdp conv L3180
 03190   goto L3010
 03200 L3200: flit$(1)="6,30,Nz 6,UT,N"
@@ -366,7 +366,7 @@
 03650   gosub L3870
 03660 L3660: read #1,using L3670: vn$,nam$,ytdp,mat adr eof L2560
 03670 L3670: form pos 1,c 8,c 35,pos 104,pd 5.2,pos 122,2*pd 3
-03680   let fst=0
+03680   fst=0
 03690   ec$=""
 03700   tot=0
 03710   if adr(1)=0 and ytdp=0 then goto L3660
@@ -381,7 +381,7 @@
 03800 L3800: form pos 46,pic(zz/zz/zz),pos 56,c 12,pos 69,c 30,pos 100,n 10.2,pos 127,c 5,skip 1
 03810   goto L3830
 03820 L3820: gosub L3860
-03830 L3830: let fst=1
+03830 L3830: fst=1
 03840   if nta=0 then pr #255: else goto L3730
 03850   goto L3660
 03860 L3860: pr #255: newpage

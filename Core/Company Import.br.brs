@@ -17,7 +17,7 @@
 00060 dim cap$*128
 00062 dim message$(1)*256
 00070 ! ______________________________________________________________________
-00080 let fntop(program$)
+00080 fntop(program$)
 00090 dim company_file$*256,company_import_path$*256
 00100 dim resp$(5)*256
 00110 ! defaults
@@ -302,9 +302,9 @@
 50206     ! 
 50207     extra(1)=val(z$(1:2))
 50208     extra(2)=val(f$(2))*10 ! in new system    extra(2) is the sequence number
-50210     let f$(2)='' ! in new system    f$(2) = service 3 meter number
+50210     f$(2)='' ! in new system    f$(2) = service 3 meter number
 50212     extra$(2)=f$(1) !   extra$(2)  is the phone number
-50214     let f$(1)='' ! f$(1)  is the service 1 meter number
+50214     f$(1)='' ! f$(1)  is the service 1 meter number
 50216     ! 
 50220     write #h_new,using F_CUSTOMER_NEW: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$
 50240   loop 
@@ -339,10 +339,10 @@
 56080   do 
 56100     read #h_customer,using 'Form Pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': z$,mat g,mat gb eof UCCS_CUSTOMER_EOF
 56120     if g(service_from)<>0 or gb(service_from)<>0 then 
-56140       let g(service_to)+=g(service_from)
-56160       let gb(service_to)+=gb(service_from)
-56180       let g(service_from)=0
-56200       let gb(service_from)=0
+56140       g(service_to)+=g(service_from)
+56160       gb(service_to)+=gb(service_from)
+56180       g(service_from)=0
+56200       gb(service_from)=0
 56220       rewrite #h_customer,using 'Form Pos 1,C 10,pos 300,12*pd 4.2,pos 388,10*pd 5.2': z$,mat g,mat gb
 56240     end if 
 56260   loop 

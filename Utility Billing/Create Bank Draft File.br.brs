@@ -75,17 +75,17 @@
 32240   if env$('client')="Billings" then imo$=" 071000301" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
 32260   if env$('client')="Thomasboro" then imo$=" 071113175" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
 32280   ! if env$('client')="Ashland" then imo$=" 084201676" ! IMMEDIATE ORIGIN (routing number of the bank  which the city uses)
-32300   let fcd$=date$(1:2)&date$(4:5)&date$(7:8) ! FILE CREATION DATE
-32320   if env$('client')="Depoe Bay" then let fcd$=str$(d2)
-32340   if len(fcd$)=5 then let fcd$="0"&fcd$
-32360   let fct$=time$(1:2)&time$(4:5) ! FILE CREATION TIME
-32380   let fidm$="A" ! FILE ID MODIFIER
+32300   fcd$=date$(1:2)&date$(4:5)&date$(7:8) ! FILE CREATION DATE
+32320   if env$('client')="Depoe Bay" then fcd$=str$(d2)
+32340   if len(fcd$)=5 then fcd$="0"&fcd$
+32360   fct$=time$(1:2)&time$(4:5) ! FILE CREATION TIME
+32380   fidm$="A" ! FILE ID MODIFIER
 32400   rsz$="094" ! RECORD SIZE
 32420   bf$="10" ! BLOCKING FACTOR
 32440   if env$('client')="Billings" then ion$="                      " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32460   if env$('client')="Thomasboro" then ion$="Gifford State Bank    " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32480   ! if env$('client')="Ashland" then ion$="Merchants & Farmers    " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
-32500   let fc$="1" ! FORMAT CODE
+32500   fc$="1" ! FORMAT CODE
 32520   idn$="                       " ! (23) IMMEDIATE DESTINATION NAME
 32540   if env$('client')="Sangamon" then ion$="First Med Illinois     " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
 32560   if env$('client')="Monticello" then ion$="First State Bank       " ! (23) IMMEDIATE ORIGIN NAME  (name of bank the city uses)
@@ -144,7 +144,7 @@
 42020   scc=225 ! SERVICE CLASS CODE
 42040   eac=tn1 ! ENTRY ADDENDA COUNT
 42060   n=d2: m=bal: o(1)=3: rcpt$= "BkDraft"
-42080   eh$=str$(eh): let x=len(eh$): eh=val(eh$(max(1,x-9):x))
+42080   eh$=str$(eh): x=len(eh$): eh=val(eh$(max(1,x-9):x))
 42100   ! TD1=TOTAL DEBIT AMOUNT
 42120   ! TC1=TOTAL CREDIT AMOUNT
 42140   ! CID$=COMPANY IDENTIFICATION
@@ -231,7 +231,7 @@
 60140 IGNORE: continue 
 64000 WRITE_POSTING_ENTRIES: ! r:
 64020   mat alloc(sz1)
-64040   let x=0
+64040   x=0
 64060   for j=1 to 10
 64080     if order(j)=1 then alloc(x+=1)=gb(j)
 64100   next j
@@ -253,7 +253,7 @@
 68240     if o(1)=5 then tcode=5 ! debit memo
 68260     if o(1)=5 then bal+=m else bal-=m
 68280     tmp=fndate_mmddyy_to_ccyymmdd(n)
-68300     mat tg=(0): let x=0
+68300     mat tg=(0): x=0
 68320     for j=1 to 10
 68340       if trim$(srvname$(j))<>"" then tg(j)=alloc(x+=1)
 68360     next j
@@ -263,9 +263,9 @@
 68440       if trim$(srvname$(j))<>'' then
 68460         j2=j2+1
 68480         if o(1)=5 then 
-68500           let gb(j)=gb(j)+alloc(j2) 
+68500           gb(j)=gb(j)+alloc(j2) 
 68520         else 
-68540           let gb(j)=gb(j)-alloc(j2)
+68540           gb(j)=gb(j)-alloc(j2)
 68560         end if
 68580       end if
 68600     next j

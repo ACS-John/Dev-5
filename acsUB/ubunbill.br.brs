@@ -50,8 +50,8 @@
 00450   if startcd=1 then goto L460 else goto PRINT_IT
 00460 L460: if prtbkno=route then goto PRINT_IT else goto TOTALS
 00470 PRINT_IT: ! 
-00475   if final=3 then let final$="Final=3" else let final$=""
-00476   if final=4 then let final$="Final=4"
+00475   if final=3 then final$="Final=3" else final$=""
+00476   if final=4 then final$="Final=4"
 00480   if printadr=1 then pr #255,using L490: z$,e$(2),f,bal,e$(1)(1:25),final$ pageoflow PGOF else pr #255,using L491: z$,e$(2),f,bal,final$ pageoflow PGOF
 00490 L490: form pos 1,c 10,pos 13,c 30,pos 45,pic(zz/zz/zz),n 15.2,x 2,c 25,x 2,c 8
 00491 L491: form pos 1,c 10,pos 13,c 30,pos 45,pic(zz/zz/zz),n 15.2,x 2,c 8

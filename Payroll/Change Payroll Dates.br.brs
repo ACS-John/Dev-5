@@ -1,15 +1,15 @@
 00010 ! formerly S:\acsPR\newprchangedate
 00020 ! this program changes the default date of a payroll.  Can be used if you need to reprint some old registers, etc
-00030 let fn_setup
+00030 fn_setup
 00080 dim cap$*128
-00050 let fntop(program$,cap$="Change Payroll Date")
+00050 fntop(program$,cap$="Change Payroll Date")
 20000 fn_ChangePayrollDates
 20020 goto XIT 
 32000 def fn_ChangePayrollDates
 32020   dim d1$*20,resp$(10)*60
 32040   fn_getPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)
 34000   fntos(sn$="Calculation-1") 
-34020   rc=cf=0: mylen=42: mypos=45: let frameno=1
+34020   rc=cf=0: mylen=42: mypos=45: frameno=1
 34040   fnfra(1,1,4,66,"Payroll Date","Enter the payroll date.")
 34060   fnlbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
 34080   fntxt(1,mypos,10,0,1,"3",0,"Enter the date which you want used for your earnings records. ",frameno) 
@@ -18,7 +18,7 @@
 34140   fntxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report headings, etc." ,frameno) 
 34160   resp$(rc+=1)= d1$
 34180   fnfra(7,25,6,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") 
-34200   let frameno=2 : mylen=26 : mypos=mylen+2
+34200   frameno=2 : mylen=26 : mypos=mylen+2
 34220   fnlbl(1,1,"Starting Date:",mylen,1,0,frameno)
 34240   fntxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno) 
 34260   resp$(rc+=1)=str$(beg_date)
@@ -45,11 +45,11 @@
 36040     d1$=resp$(2)
 36080     beg_date=val(resp$(3)) 
 36100     end_date=val(resp$(4)) 
-36120     let qtr1=val(resp$(5)) 
-36140     let qtr2=val(resp$(6)) 
-36160     let qtr3=val(resp$(7)) 
-36180     let qtr4=val(resp$(8))
-36200     let qtr5=val(resp$(8)(1:4))*10000+1231
+36120     qtr1=val(resp$(5)) 
+36140     qtr2=val(resp$(6)) 
+36160     qtr3=val(resp$(7)) 
+36180     qtr4=val(resp$(8))
+36200     qtr5=val(resp$(8)(1:4))*10000+1231
 36220     begin_year=val(resp$(8)(1:4))*10000+0101
 36240     end_year=val(resp$(8)(1:4))*10000+1231
 36260     fn_putPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,d1$)

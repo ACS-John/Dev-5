@@ -49,11 +49,11 @@
 00420   if ln$(1:1)<>">" then goto L410 ! skip headings
 00430   if ln$(1:1)=">" then ln$(1:1)=""
 00440   if ln$(1:1)=">" then ln$(1:1)="" ! delete up to two >>
-00450   let x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
+00450   x=pos(srep$(ln$,'^','~'),'~',1) ! pos(ln$,"^",1)
 00460   if x=0 then goto L410 ! skip headings
 00470   desc$=ln$(1:x-1)(1:35)
 00480   item+=1
-00490   let y=pos(srep$(ln$,'^','~'),'~',x) ! pos(ln$,"^",x)
+00490   y=pos(srep$(ln$,'^','~'),'~',x) ! pos(ln$,"^",x)
 00500   prg$(item)=ln$(x+1:len(ln$))
 00510   nam$(item)=ln$(1:x-1)(1:35)
 00520   item$(1)=str$(item) !:
@@ -76,14 +76,14 @@
           execute "drop "&env$('Q')&"\PRmstr\NewPrPgmn.h"&str$(cno)&" -n" !:
           goto MAIN
 00630 L630: sel=val(resp$(81))
-00640   let x=0
+00640   x=0
 00650   for j=1 to 20
-00660     if resp$(j+(x+=1))="True" then let wk(j)=1 else let wk(j)=0
+00660     if resp$(j+(x+=1))="True" then wk(j)=1 else wk(j)=0
 00670     if resp$(j+(x+=1))="True" then mo(j)=1 else mo(j)=0
-00680     if resp$(j+(x+=1))="True" then let qt(j)=1 else let qt(j)=0
+00680     if resp$(j+(x+=1))="True" then qt(j)=1 else qt(j)=0
 00690   next j
 00700   for j=1 to 20
-00710     if trim$(nxtdesc$(j))="Employee" then nxtdesc$(j)="": nxtpgm$(j)="": let wk(j)=0: mo(j)=0: let qt(j)=0: goto L740
+00710     if trim$(nxtdesc$(j))="Employee" then nxtdesc$(j)="": nxtpgm$(j)="": wk(j)=0: mo(j)=0: qt(j)=0: goto L740
 00720     if sel=1 then goto L740
 00730     if trim$(nxtdesc$(j))="" then nxtdesc$(j)=nam$(sel): nxtpgm$(j)=prg$(sel): goto L750
 00740 L740: next j

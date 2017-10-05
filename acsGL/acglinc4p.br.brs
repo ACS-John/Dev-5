@@ -11,8 +11,8 @@
 00110 ! ______________________________________________________________________
 00120   fntop(program$,cap$="Four Column Budget With Percent")
 00130   fncno(cno,cnam$)
-00140   let udf$=env$('temp')&'\'
-00141   let fscode=fnfscode
+00140   udf$=env$('temp')&'\'
+00141   fscode=fnfscode
 00142   priorcd=fnpriorcd
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
@@ -20,7 +20,7 @@
 00170   pedat$=fnpedat$
 00180   actpd$=fnactpd$
 00190   actpd=fnactpd
-00200   let fscode=fnfscode
+00200   fscode=fnfscode
 00210   priorcd=fnpriorcd
 00220 ! ______________________________________________________________________
 00230   pors=1
@@ -60,7 +60,7 @@
 00530 L530: read #3,using L620: ir,bb,cb,mat by,mat bp,mat bm eof L710
 00540   if ir=0 then goto L530
 00550   if fscode=0 or (fscode=actpd and priorcd=1) then goto L620
-00560   if fscode<1 or fscode>13 then let fscode=1
+00560   if fscode<1 or fscode>13 then fscode=1
 00570   if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00580   if priorcd=2 then goto L610
 00590   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -73,21 +73,21 @@
 00660   if fscode=0 then monthb=monthb+bm(actpd) else !:
           monthb=monthb+bm(fscode)
 00670   if fscode=0 then !:
-          for j=1 to actpd : let ytdb+=bm(j) : next j : goto L520 !:
+          for j=1 to actpd : ytdb+=bm(j) : next j : goto L520 !:
         else !:
-          for j=1 to fscode : let ytdb+=bm(j) : next j : goto L520
+          for j=1 to fscode : ytdb+=bm(j) : next j : goto L520
 00680   goto L520
 00690 L690: if ir<val(r$) then goto L520
 00700   if ir>val(r$) then goto L720
 00710 L710: notrans=1
-00720 L720: let unexpend=annualb-total2
+00720 L720: unexpend=annualb-total2
 00730   for j=1 to 9
 00740     if ac(j)<>9 then !:
             accum(j,1)+=annualb : accum(j,2)+=total !:
             accum(j,3)+=total2 : accum(j,4)+=unexpend
 00750   next j
 00760   if rs=1 then total=-total else goto L780
-00770   total2=-total2 : annualb=-annualb : let unexpend=unexpend
+00770   total2=-total2 : annualb=-annualb : unexpend=unexpend
 00780 L780: if ds=1 then dollar$="$" else dollar$=" "
 00790   if annualb><0 or total2><0 then goto L820
 00800   if total<>0 then goto L820
@@ -125,11 +125,11 @@
 01070 ! ______________________________________________________________________
 01080 L1080: if foot1=1 then goto L1140
 01090   tabnote=sp
-01100   let foot1=1
-01110   let foot$=d$
+01100   foot1=1
+01110   foot$=d$
 01120   goto L350
 01130 ! ______________________________________________________________________
-01140 L1140: let foot$=rtrm$(foot$)&d$
+01140 L1140: foot$=rtrm$(foot$)&d$
 01150   goto L350
 01160 ! ______________________________________________________________________
 01170 L1170: for j=1 to 9
@@ -158,11 +158,11 @@
 01400 L1400: gosub L1290: continue 
 01410 L1410: if ul=0 then goto L1500
 01420   if ul=1 then goto L1470
-01430   let underlin$="=============="
+01430   underlin$="=============="
 01440   pr #255: 
 01450   goto L1480
 01460 ! ______________________________________________________________________
-01470 L1470: let underlin$="______________"
+01470 L1470: underlin$="______________"
 01480 L1480: pr #255,using L1490: underlin$,underlin$,underlin$,underlin$ ! ,UNDERLIN$(1:10)
 01490 L1490: form pos 22,3*c 15,x 1,c 15,c 15,skip redir
 01500 L1500: if redir=0 then pr #255: ""

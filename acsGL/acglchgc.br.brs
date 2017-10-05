@@ -10,10 +10,10 @@
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Comparative Change Amount")
 00120   if fnglfs=5 then goto XIT
-00130   let udf$=env$('temp')&'\'
+00130   udf$=env$('temp')&'\'
 00140   fncno(cno,cnam$)
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20: 
-00160   actpd=fnactpd : let fscode=fnfscode : priorcd=fnpriorcd
+00160   actpd=fnactpd : fscode=fnfscode : priorcd=fnpriorcd
 00170   on fkey 5 goto L2060
 00180   mp1=75
 00190   if fnps=2 then mp1=mp1+3
@@ -82,7 +82,7 @@
 00730   if fr=0 then goto L720
 00740 L740: form pos mp1,pd 3,pos 81,28*pd 6.2,pos 327,pd 6.2
 00750   if fscode=0 then goto L780
-00760   if fscode<1 or fscode>12 then let fscode=1
+00760   if fscode<1 or fscode>12 then fscode=1
 00770   if priorcd=2 then cb=bp(fscode) else cb=by(fscode)
 00780 L780: if fr=val(r$) then goto L790 else goto L840
 00790 L790: if priorcd=2 then total=total+(cb-pbp) !:
@@ -150,11 +150,11 @@
 01350 ! ______________________________________________________________________
 01360 L1360: if foot1=1 then goto L1420
 01370   tabnote=sp
-01380   let foot1=1
-01390   let foot$=d$
+01380   foot1=1
+01390   foot$=d$
 01400   goto L550
 01410 ! ______________________________________________________________________
-01420 L1420: let foot$=rtrm$(foot$)&d$
+01420 L1420: foot$=rtrm$(foot$)&d$
 01430   goto L550
 01440 L1440: for j=1 to 9
 01450     if ac(j)=0 then goto L1480
@@ -184,12 +184,12 @@
 01690 ! ______________________________________________________________________
 01700 L1700: if ul=0 then goto L1800
 01710   if ul=1 then goto L1770
-01720   let underlin$="=============="
+01720   underlin$="=============="
 01730   pr #255,using L1740: underlin$,underlin$
 01740 L1740: form skip 1,pos 49,c 14,pos 67,c 14,skip redir
 01750   goto L1800
 01760 ! ______________________________________________________________________
-01770 L1770: let underlin$="______________"
+01770 L1770: underlin$="______________"
 01780   pr #255,using L1790: underlin$,underlin$
 01790 L1790: form pos 49,c 14,pos 67,c 14,skip redir
 01800 L1800: if redir=0 then pr #255,using L1810: " "

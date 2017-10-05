@@ -120,9 +120,9 @@
 48000 READ_RECEIPT_GL: ! 
 48020   read #receiptgl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': receiptkey$,receiptgl$,percent,gldesc$ eof EO_FLEX3
 48040   if rec$<>receiptkey$ then goto EO_FLEX3
-48060   let glitem$(1)=str$(rec(receiptgl)) : let glitem$(2)=receiptkey$
-48080   let glitem$(3)=receiptgl$ : let glitem$(4)=str$(percent)
-48100   let glitem$(5)=gldesc$
+48060   glitem$(1)=str$(rec(receiptgl)) : glitem$(2)=receiptkey$
+48080   glitem$(3)=receiptgl$ : glitem$(4)=str$(percent)
+48100   glitem$(5)=gldesc$
 48120   fnflexadd1(mat glitem$)
 48140   goto READ_RECEIPT_GL
 50000 EO_FLEX3: ! 
@@ -136,7 +136,7 @@
 50160   if ck=5 then goto MENU1
 50180   rec$=lpad$(trim$(resp$(1)(1:8)),8)
 50200   nam$=resp$(2) ! name
-50220   let gldistrec=val(resp$(3)) ! record number of gl distribution entry
+50220   gldistrec=val(resp$(3)) ! record number of gl distribution entry
 50240   if ck=2 then 
 50260     percent=gldistrec=0: receiptkey$=gldesc$=receiptgl$=""
 50280     goto GL_BREAKDOWNS ! add gl breakdown
@@ -252,7 +252,7 @@
 64320   receiptkey$=rec$
 64340   receiptgl$=fnagl$(resp$(1))
 64360   percent=val(resp$(2)) ! percent
-64380   let gldesc$=resp$(3)
+64380   gldesc$=resp$(3)
 64400   if ck=4 and gldistrec>0 then 
 64420     delete #receiptgl,rec=gldistrec: 
 64460   else if ck=1 and gldistrec=0 then 

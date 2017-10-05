@@ -80,7 +80,7 @@
 00850 L850: if cmdkey=5 then goto XIT
 00860     close #105: ioerr L870
 00870 L870: for k8=1 to 18
-00880       let usage(k8,k9)=t(k8,1)
+00880       usage(k8,k9)=t(k8,1)
 00890       rate(k8,k9)=t(k8,2)
 00900     next k8
 00910     mat t=(0)
@@ -111,10 +111,10 @@
 01150   k7=18
 01160 L1160: ds9=d(s9)
 01170   for j7=1 to k7-1
-01180     let usagtot(j7,k9)=usagtot(j7,k9)+(usage(j7+1,k9)-usage(j7,k9))
+01180     usagtot(j7,k9)=usagtot(j7,k9)+(usage(j7+1,k9)-usage(j7,k9))
 01190     ds9=ds9-(usage(j7+1,k9)-usage(j7,k9))
 01200   next j7
-01210   let usagtot(k7,k9)=usagtot(k7,k9)+ds9
+01210   usagtot(k7,k9)=usagtot(k7,k9)+ds9
 01220 L1220: customer(k7,k9)=customer(k7,k9)+1
 01230   goto L960
 01240 ! ______________________________________________________________________

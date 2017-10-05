@@ -54,20 +54,20 @@
 00540   accum(3)=accum(3)+other
 00550   accum(4)=accum(4)+bonus
 00560   pr #255,using L710: eno,em$,tgl(1),tgl(2),tgl(3),reg pageoflow L730
-00570   let gl$=cnvrt$("N 3",tgl(1))&cnvrt$("N 6",tgl(2))&cnvrt$("N 3",tgl(3))
-00580   let ga0=reg : gosub TOTGL
+00570   gl$=cnvrt$("N 3",tgl(1))&cnvrt$("N 6",tgl(2))&cnvrt$("N 3",tgl(3))
+00580   ga0=reg : gosub TOTGL
 00590   if ot=0 then goto L630
 00600   pr #255,using L710: eno,em$,tgl(1),tgl(2)+1,tgl(3),ot pageoflow L730
-00610   let gl$=cnvrt$("N 3",tgl(1))&cnvrt$("N 6",tgl(2)+1)&cnvrt$("N 3",tgl(3))
-00620   let ga0=ot : gosub TOTGL
+00610   gl$=cnvrt$("N 3",tgl(1))&cnvrt$("N 6",tgl(2)+1)&cnvrt$("N 3",tgl(3))
+00620   ga0=ot : gosub TOTGL
 00630 L630: if other=0 then goto L670
 00640   pr #255,using L710: eno,em$,tgl(1),tgl(2)+2,tgl(3),other pageoflow L730
-00650   let gl$=cnvrt$("N 3",tgl(1))&cnvrt$("N 6",tgl(2)+2)&cnvrt$("N 3",tgl(3))
-00660   let ga0=other : gosub TOTGL
+00650   gl$=cnvrt$("N 3",tgl(1))&cnvrt$("N 6",tgl(2)+2)&cnvrt$("N 3",tgl(3))
+00660   ga0=other : gosub TOTGL
 00670 L670: if bonus=0 then goto L710
 00680   pr #255,using L710: eno,em$,tgl(1),tgl(2)+3,tgl(3),bonus pageoflow L730
-00690   let gl$=cnvrt$("N 3",tgl(1))&cnvrt$("N 6",tgl(2)+3)&cnvrt$("N 3",tgl(3))
-00700   let ga0=bonus : gosub TOTGL
+00690   gl$=cnvrt$("N 3",tgl(1))&cnvrt$("N 6",tgl(2)+3)&cnvrt$("N 3",tgl(3))
+00700   ga0=bonus : gosub TOTGL
 00710 L710: form pos 1,pic(zzzzzzzz),pos 15,c 30,pos 50,pic(zzz),x 1,pic(zzzzz#),x 1,pic(zzz),n 12.2,skip 1
 00720   goto L390
 00730 L730: pr #255: newpage
@@ -84,7 +84,7 @@
 00840   return 
 00850 TOTGL: read #5,using L860,key=gl$: gl$,ga1 nokey L900
 00860 L860: form pos 1,c 12,pd 5.2
-00870   let ga1=ga1+ga0
+00870   ga1=ga1+ga0
 00880   rewrite #5,using L860: gl$,ga1
 00890   goto L910
 00900 L900: write #5,using L860: gl$,ga0

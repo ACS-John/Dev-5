@@ -32,7 +32,7 @@
 00240   fncmdset(2)
 00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 or ckey=cancel then goto XIT else !:
-          let firstold=val(resp$(1)) !:
+          firstold=val(resp$(1)) !:
           lastold=val(resp$(2)) !:
           newnumber=firstnew=val(resp$(3)) !:
           bankaccount=val(resp$(4))
@@ -40,7 +40,7 @@
 00280 READ_TRMSTR: ! 
 00290   restore #trmstr,key>=cnvrt$("pic(zz)",bankaccount)&"1"&cnvrt$("pic(zzzzzzzz",firstold): nokey L150
 00300 L300: read #trmstr,using 'Form POS 1,G 2,G 1,C 8,G 6,PD 10.2,C 8,C 35,G 1,G 6,G 1': bank_code,tcde,tr$(1),tr$(2),tr3,tr$(4),tr$(5),pcde,clr,scd eof END1
-00310   let x=val(tr$(1)) conv L300
+00310   x=val(tr$(1)) conv L300
 00320   if x<firstold or x>lastold then goto END1
 00330   if bank_code<>bankaccount then goto L300
 00340   if tcde<>1 then goto L300

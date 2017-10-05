@@ -14,14 +14,14 @@
         close #21: 
 00122   penalty_rate=.1 ! if env$('client')='Findlay' then penalty_rate=.1 else penalty_rate=.05
 00130   at$(1)=env$('cnam') !:
-        let z=21 !:
+        z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
-        let x=len(at$(1)) : let y=z-x !:
+        x=len(at$(1)) : y=z-x !:
         at$(1)=rpt$(" ",int(y/2))&at$(1)
-00140   let z=26 !:
+00140   z=26 !:
         for j=2 to udim(at$) !:
           at$(j)=trim$(at$(j))(1:z) !:
-          let x=len(at$(j)) : let y=z-x !:
+          x=len(at$(j)) : y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00150   linelength=62
@@ -49,7 +49,7 @@
 00330   fntxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00340   fnlbl(8,1,"Starting Route/Sequence:",ll,1)
-00350   let fe$="ubm-act-nam" !:
+00350   fe$="ubm-act-nam" !:
         datafile$=env$('Q')&"\UBmstr\Customer.h"&env$('cno') !:
         indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&env$('cno') !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
@@ -78,7 +78,7 @@
 00414   d3_override=val(resp$(10))
 00420   if resp$(6)="[All]" then a$="" else a$ = lpad$(trim$(resp$(6)(1:9)),9)
 00430   if resp$(7)="[All]" then prtbkno=0 else prtbkno = val(resp$(7))
-00440   if resp$(8)="True" then sl1=1: let z$="" else sl1=0
+00440   if resp$(8)="True" then sl1=1: z$="" else sl1=0
 00450   if trim$(a$)<>"" then read #2,using 'form pos 1,c 10,pos 1741,n 2,n 7',key=a$: z$,route,sequence nokey SCREEN1
 00452   holdz$=z$: begin=1
 00454   st1=1
@@ -102,7 +102,7 @@
 00640   if prtbkno><route then goto RELEASE_PRINT
 00650 L650: if f><d1 then goto L560
 00660 L660: gosub BUD2 ! determine if budget customer
-00670   let gas=0
+00670   gas=0
 00680   energy=0: energy=val(energy$) conv L690
 00690 L690: if st1=0 then goto READALTADR
 00700 ! If ST1$=Z$ Then sT1=0 Else Goto 560
@@ -134,7 +134,7 @@
 00950 ! ______________________________________________________________________
 00960 L960: ! 
 00970   pb=bal-g(11)
-00980   if bal<=0 then let g(5)=g(6)=g(7)=0 ! don't show penalty if balance 0 or less
+00980   if bal<=0 then g(5)=g(6)=g(7)=0 ! don't show penalty if balance 0 or less
 00982   if d2_override<>0 then d2=d2_override
 00984   if d3_override<>0 then d3=d3_override
 00990 ! ______________print bill routine______________________________________
@@ -177,7 +177,7 @@
 01250   if prtbkno=0 then goto L1270
 01260   if prtbkno><route then goto END5
 01270 L1270: if f><d1 then goto L1230
-01280   let zip5$=cr$=""
+01280   zip5$=cr$=""
 01290   read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1300
 01300 L1300: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 01310   goto L1230
@@ -223,10 +223,10 @@
 01760 VBPRINT: ! 
 01770 ! -- Standard 4 Per Page Even Perferated Card Stock Bills
 01780   checkcounter+=1
-01790   if checkcounter=1 then let xmargin=0 : let ymargin=0
-01800   if checkcounter=2 then let xmargin=139 : let ymargin=0
-01810   if checkcounter=3 then let xmargin=0 : let ymargin=108
-01820   if checkcounter=4 then let xmargin=139 : let ymargin=108 !:
+01790   if checkcounter=1 then xmargin=0 : ymargin=0
+01800   if checkcounter=2 then xmargin=139 : ymargin=0
+01810   if checkcounter=3 then xmargin=0 : ymargin=108
+01820   if checkcounter=4 then xmargin=139 : ymargin=108 !:
           checkcounter=0
 01830 ! ______________________________________________________________________
 01840   pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',57,'&str$(lyne*3+3)&',True)'
@@ -252,7 +252,7 @@
 02040 PRINTGRID: meter=14 !:
         pr #20: 'Call Print.MyFontSize(8)'
 02050   if havebudget=1 then payby=bal-gb(4)+budgetpb
-02060   if havebudget=1 then let gas=ba(5) else let gas=g(4)
+02060   if havebudget=1 then gas=ba(5) else gas=g(4)
 02070   if havebudget=1 then currentcharges=g(1)+g(2)+g(3)+gas+g(8)+g(9)
 02080   if havebudget=0 then currentcharges=g(1)+g(2)+g(3)+g(4)+g(8)+g(9)
 02090   if havebudget=1 then pb=payby-currentcharges
@@ -273,10 +273,10 @@
           ! pr #20: 'Call Print.AddText("'&FNFORMNUMB$(D(5),0,9)&'",'&STR$(XMARGIN+6)&','&STR$(LYNE*METER+YMARGIN)&')' !:
           pr #20: 'Call Print.AddText("'&fnformnumb$(d(7),0,9)&'",'&str$(xmargin+25)&','&str$(lyne*meter+ymargin)&')'
 02140 !  pr #20: 'Call Print.AddText("'&FNFORMNUMB$(G(3),2,9)&'",'&STR$(XMARGIN+45)&','&STR$(LYNE*METER+YMARGIN)&')'
-02150 L2150: if a4=1 then let gcode$="RSGS" else !:
-          if a4=2 then let gcode$="CMGS" else !:
-            if a4=3 then let gcode$="INGS" else !:
-              let gcode$="GAS"
+02150 L2150: if a4=1 then gcode$="RSGS" else !:
+          if a4=2 then gcode$="CMGS" else !:
+            if a4=3 then gcode$="INGS" else !:
+              gcode$="GAS"
 02160   if g(4)=0 then goto L2230 else !:
           pr #20: 'Call Print.AddText("'&gcode$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')' !:
           pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')' !:

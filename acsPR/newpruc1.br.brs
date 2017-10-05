@@ -16,10 +16,10 @@
 22220   dim tcp(32),tdc(10)
 22240   dim qtr1tcp(32),qtr2tcp(32),qtr3tcp(32),qtr4tcp(32)
 23000   dim qtr_option$(4)*3
-23020   let qtr_option$(1)="1"
-23040   let qtr_option$(2)="2"
-23060   let qtr_option$(3)="3"
-23080   let qtr_option$(4)="4"
+23020   qtr_option$(1)="1"
+23040   qtr_option$(2)="2"
+23060   qtr_option$(3)="3"
+23080   qtr_option$(4)="4"
 23100   dim quarter_ending_date$*20
 24000 ! 
 24020   dim column$(4) ! columns to include on the report (True or False)
@@ -56,16 +56,16 @@
 32220   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 32240   read #1,using 'Form POS 1,3*C 40,2*C 12,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,PD 4.2,PD 4.2,10*PD 4.2,10*PD 3.3,10*C 12,POS 618,30*N 1': mat a$,mat b$,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
 32260   close #1: 
-32280   let ficamaxw=ficamaxw*10
+32280   ficamaxw=ficamaxw*10
 32300   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc)
 32360   for j=1 to 10
 32380     if trim$(e$(j))<>"" then 
-32400       let x+=1
+32400       x+=1
 32420       option1$(x)=str$(j)&" = "&d$(j)
 32440     end if 
 32460   next j
 32480   mat option1$(max(1,x))
-32500   fncreg_read('uc1 - quarter',quarter$) : if quarter$='' then let quarter$='1'
+32500   fncreg_read('uc1 - quarter',quarter$) : if quarter$='' then quarter$='1'
 32520   fncreg_read('uc1 - show total wage',column$(1)) : if column$(1)='' then column$(1)='True'
 32540   fncreg_read('uc1 - show excess wage',column$(2)) : if column$(2)='' then column$(2)='True'
 32560   fncreg_read('uc1 - show taxable wage',column$(3)) : if column$(3)='' then column$(3)='True'
@@ -73,7 +73,7 @@
 32590 ! /r
 32600 ! r: main screen (falls through to next section)
 34000   fntos(sn$="pruc1b")
-34020   respc=0: let x=0
+34020   respc=0: x=0
 34040   fnlbl(1,1,"Quarter Ending Date:",26,1)
 34060   fntxt(1,30,20,0,0,"",0,"Use alpha format (eg. March 31, 20xx)")
 34080   if trim$(quarter_ending_date$)='' then resp$(respc+=1)=date$("Month DD, CCYY") else resp$(respc+=1)=quarter_ending_date$
@@ -99,10 +99,10 @@
 34580   fncmdset(2)
 34600   fnacs(sn$,0,mat resp$,ck)
 36000   if ck=5 then goto XIT
-36020   let quarter_ending_date$=resp$(1) ! quarter ending date
+36020   quarter_ending_date$=resp$(1) ! quarter ending date
 36040   stcode=val(resp$(2)(1:2)) ! state code
 36050   heading_2$(2)="   Over $"&cnvrt$("pic(zzzzz)",m(stcode))&' '
-36060   let quarter_code=val(resp$(3)) ! quarter to analyze earnings
+36060   quarter_code=val(resp$(3)) ! quarter to analyze earnings
 36080   fncreg_write('uc1 - quarter',resp$(3))
 36100   if resp$(4)(1:1)="T" then round$="Y"
 36120   column$(1)=resp$(5) ! want total wage column
@@ -222,7 +222,7 @@
 54560   fn_print_line_amt(mat col_amt,mat col_amt_form$)
 54580   for col_item=1 to udim(mat column$)
 54600     ptotal(col_item)+=col_amt(col_item)
-54620     let grand_total(col_item)+=col_amt(col_item) ! grand totals
+54620     grand_total(col_item)+=col_amt(col_item) ! grand totals
 54640   next col_item
 54660   pr #255: pageoflow PGOF
 54680   p1=p1+2

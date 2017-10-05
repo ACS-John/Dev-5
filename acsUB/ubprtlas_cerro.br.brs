@@ -49,7 +49,7 @@
 00450   fntxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00460   fnlbl(8,1,"Starting Account:",ll,1)
-00470   let fe$="ubm-act-nam" !:
+00470   fe$="ubm-act-nam" !:
         datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
         indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
@@ -184,11 +184,11 @@
 01452 let fnxit
 01470 PRINTBILL: ! r:
 01480   if final=2 then !:
-          let g(8)-=b(8): let g(11)=g(12)+g(8): bal+=g(8)
+          g(8)-=b(8): g(11)=g(12)+g(8): bal+=g(8)
 01490   penalty=0
 01500   for j=1 to 10
 01510     if penalty$(j)="Y" then penalty+=g(j) !:
-            let g(j)=0 ! accumulate all penalties and set charge to zero
+            g(j)=0 ! accumulate all penalties and set charge to zero
 01520   next j
 01530   pb=bal-g(11)
 01540   pr #255: "" !:
@@ -217,10 +217,10 @@
 01750   if g(8)=0 then t$="" else t$=service$(8)
 01760   pr #255,using L1610: t$,0,0,0,g(8)
 01770   if est=1 then est$="BILL ESTIMATED" else est$=""
-01780   if c4>0 then let final$="FINAL BILL" else let final$=""
-01790   if df$="Y" then let final$="DRAFTED"
+01780   if c4>0 then final$="FINAL BILL" else final$=""
+01790   if df$="Y" then final$="DRAFTED"
 01800   if bal<=0 then penalty=0
-01810   if env$('client')="Cerro Gordo" and bal<0 then let g(5)=0
+01810   if env$('client')="Cerro Gordo" and bal<0 then g(5)=0
 01820   pr #255: ""
 01830   pr #255,using 'Form POS 7,C 20,POS 38,C 25': est$,pe$(1)(1:25)
 01840   pr #255,using 'Form POS 1,CR 7,X 1,PIC(ZZ/ZZ/ZZ),NZ 13.2,POS 38,C 25': 'DUE BY:',d4,bal,pe$(2)(1:25)

@@ -33,7 +33,7 @@
 00340   catno$=sc$(1:2)
 00350   catno=val(catno$)
 00360   if fst=1 then goto L390
-00370   let fst=1
+00370   fst=1
 00380   gosub L500
 00390 L390: if hcatno><catno then goto L420
 00400   gosub L540

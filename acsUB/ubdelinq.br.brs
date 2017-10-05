@@ -17,7 +17,7 @@
 00154   fncreg_read('Route High',bkno2$) : bkno2=val(bkno2$)
 00155   if trim$(servicename$(3))<>"Electric" and trim$(srv$(3))="EL" then needelecused=1
 00156   if trim$(servicename$(4))<>"Gas" and trim$(srv$(4))="GA" then needgasused=1
-00160   let x=0
+00160   x=0
 00170   hdr$="{\ul Account No}  {\ul Customer Name }       "
 00180   for j=1 to 10
 00181     if j=3 and needelecused=1 then goto L200
@@ -80,10 +80,10 @@
 00630   if pastdueonly=1 then goto L640 else goto L690
 00640 L640: for j=1 to 10 ! subtract current bill out of balance breakdown
 00650     if penalty$(j)="Y" then goto L680 ! skip penalties
-00660     if gb(j)=0 and j<10 then let g(j+1)=g(j+1)+g(j) : let g(j)=0 ! try to prevent negative amounts in columns
-00670     let gb(j)=gb(j)-g(j)
+00660     if gb(j)=0 and j<10 then g(j+1)=g(j+1)+g(j) : g(j)=0 ! try to prevent negative amounts in columns
+00670     gb(j)=gb(j)-g(j)
 00680 L680: next j
-00690 L690: let x=0
+00690 L690: x=0
 00700   if pastdueonly=1 and skipzero=1 and sum(gb)=0 then goto L570 ! if only owe the current bill then consider it zero for the skipzero test and pastdueonly test
 00710   for j=1 to 10
 00714     if j=3 and needelecused=1 then goto L730

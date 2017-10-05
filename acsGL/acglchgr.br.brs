@@ -12,13 +12,13 @@
 00110 ! ______________________________________________________________________
 00120   fntop(program$,cap$="Change in Financial Position")
 00130   fncno(cno,cnam$)
-00140   let udf$=env$('temp')&'\'
+00140   udf$=env$('temp')&'\'
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00160   pedat$=fnpedat$
 00170   actpd$=fnactpd$
 00180   actpd=fnactpd
-00190   let fscode=fnfscode
+00190   fscode=fnfscode
 00200   priorcd=fnpriorcd
 00210 ! ______________
 00220   mp1=75
@@ -83,7 +83,7 @@
 00760   if fr=0 then goto L750
 00770 L770: form pos mp1,pd 3,pos 81,28*pd 6.2,pos 327,pd 6.2
 00780   if fscode=0 then goto L810
-00790   if fscode<1 or fscode>12 then let fscode=1
+00790   if fscode<1 or fscode>12 then fscode=1
 00800   if priorcd=2 then cb=bp(fscode) else cb=by(fscode)
 00810 L810: if fr=val(r$) then goto L820 else goto L850
 00820 L820: if priorcd=2 then total+=(cb-pbp) else total+=(cb-bp(12))
@@ -123,11 +123,11 @@
 01160 ! ______________________________________________________________________
 01170 L1170: if foot1=1 then goto L1230
 01180   tabnote=sp
-01190   let foot1=1
-01200   let foot$=d$
+01190   foot1=1
+01200   foot$=d$
 01210   goto L570
 01220 ! ______________________________________________________________________
-01230 L1230: let foot$=rtrm$(foot$)&d$
+01230 L1230: foot$=rtrm$(foot$)&d$
 01240   goto L570
 01250 ! ______________________________________________________________________
 01260 L1260: for j=1 to 9
@@ -154,11 +154,11 @@
 01470 L1470: gosub L1360: continue 
 01480 L1480: if ul=0 then goto L1570
 01490   if ul=1 then goto L1540
-01500   let underlin$="=============="
+01500   underlin$="=============="
 01510   pr #255,using L1520: underlin$
 01520 L1520: form skip 1,pos 67,c 14,skip redir
 01530   goto L1570
-01540 L1540: let underlin$="______________"
+01540 L1540: underlin$="______________"
 01550   pr #255,using L1560: underlin$
 01560 L1560: form pos 67,c 14,skip redir
 01570 L1570: if redir=0 then pr #255,using L1580: " "

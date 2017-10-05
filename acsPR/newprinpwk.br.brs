@@ -18,7 +18,7 @@
 00210 L210: read #1,using L220: eno,em$,em4,mat em eof DONE
 00220 L220: form pos 1,n 8,c 30,pos 118,n 2,pos 132,2*pd 4.2,pos 156,n 6,pos 173,2*pd 3
 00230   if em4=9 then goto L210
-00240   let fsttrl=1
+00240   fsttrl=1
 00250   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey READ_EMPLOYEE
 00260 L260: read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof L210
 00270   if teno<>eno then pr #255: pageoflow NEWPGE: goto READ_EMPLOYEE
@@ -28,7 +28,7 @@
 00310   goto L350
 00320 L320: pr #255,using L330: eno,em$,tdn,tdet(2),rpt$("  __________",3) pageoflow NEWPGE
 00330 L330: form pos 1,pic(zzzzzzzz),x 2,c 33,n 3,n 10.2,c 36,skip 1
-00340   let fsttrl=0
+00340   fsttrl=0
 00350 L350: goto L260
 00360 ! ______________________________________________________________________
 00370 NEWPGE: pr #255: newpage : gosub HDR : continue 

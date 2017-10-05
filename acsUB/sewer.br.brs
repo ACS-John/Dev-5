@@ -44,13 +44,13 @@
 00880   if ckey=3 then clear_averages=1 else clear_averages=0
 00900   for j=1 to 8
 00920 L310: ! 
-00940     let x=pos(resp$(j),"/",1)
+00940     x=pos(resp$(j),"/",1)
 00960     if x>0 then 
 00980       resp$(j)(x:x)=""
 01000       goto L310
 01020     end if 
 01040   next j
-01060   let filter_sewer_code=val(resp$(9)) conv SCR1
+01060   filter_sewer_code=val(resp$(9)) conv SCR1
 01080   if filter_sewer_code=0 and ~clear_averages then 
 01100     mat message$(1)
 01120     message$(1)="You must enter at least one date!"
@@ -95,8 +95,8 @@
 01800       if cd1(j1)=tdate then 
 01820         t1=t1+1
 01840         t2=t2+wu
-01860         let x=x+1
-01880         let x(x)=wu
+01860         x=x+1
+01880         x(x)=wu
 01900         goto READ_TRANS
 01920       end if 
 01940     next j1

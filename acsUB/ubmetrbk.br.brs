@@ -14,29 +14,29 @@
 02260   if env$('client')="Gilbertown" then seq=2
 02280 ! r: this section+the comboA on the first screen is just what you need  for a fnCurrently availableServiceTypeComboBox
 02300   fnget_services(mat snm$,mat srv$)
-02360   let x=0
+02360   x=0
 02380   option$(x+=1)="[All]"
 02400   for j=1 to 4
 02420     if j=1 and trim$(snm$(j))="Water" then 
 02440       option$(x+=1)=srv$(j)&"-"&snm$(j)(1:20)
-02460       let x_service=x_service+1
+02460       x_service=x_service+1
 02480       mat service$(x_service)=service$
 02500       service$(x_service)="WA"
 02520     else if j=3 and (trim$(snm$(j))="Electric" or trim$(srv$(3)))="EL" then 
 02540       option$(x+=1)=srv$(j)&"-"&snm$(j)(1:20)
-02560       let x_service=x_service+1
+02560       x_service=x_service+1
 02580       mat service$(x_service)=service$
 02600       service$(x_service)="EL"
 02620     else if j=4 and (trim$(snm$(j))="Gas" or trim$(srv$(4))="GA") then 
 02640       option$(x+=1)=srv$(j)&"-"&snm$(j)(1:20)
-02660       let x_service=x_service+1
+02660       x_service=x_service+1
 02680       mat service$(x_service)=service$
 02700       service$(x_service)="GA"
 02720     end if 
 02740   next j
 02760   mat option$(x)
 02780   mat x_service$(x_service)
-02800   let x_service =udim(x_service$)
+02800   x_service =udim(x_service$)
 02820 ! /r
 02900   if env$('client')='Campbell' then let fn_campbell_meter_book : goto XIT
 08000 MENU1: ! r:
@@ -76,10 +76,10 @@
 10000   if ck=5 then goto XIT
 10020   if uprc$(resp$(1))=uprc$("[All]") then route=0 else route=val(resp$(1))
 10040   svt$=resp$(2)
-10060   if resp$(2)<>"[All]" then let x_service=1 ! only printing one service if not answered as all
+10060   if resp$(2)<>"[All]" then x_service=1 ! only printing one service if not answered as all
 10080   if resp$(3)(1:1)="T" then remark=1 ! yes want remarks printed
 10100   if resp$(4)(1:1)="T" then double=1 ! yes want to double space
-10120   if resp$(5)(1:1)="T" then let usedcolumn=1 ! yes want a gallons used column
+10120   if resp$(5)(1:1)="T" then usedcolumn=1 ! yes want a gallons used column
 10140   if resp$(6)(1:1)="T" then skipdisconnects=1 ! yes want show disconnects
 10160   if resp$(7)(1:1)="T" then printprior=1 ! pr prior months usage
 10180   if resp$(8)(1:1)="T" then skipmeter=1 ! don't pr meter number
@@ -116,58 +116,58 @@
 15100   if extra(1)<>route then goto LOOP_TOP
 15120   if env$('client')="Gilbertown" then goto L790
 15140   if a(1)=0 and a(3)=0 and a(4)=0 then goto LOOP_TOP ! don't have any services
-15160 L790: let x=0
+15160 L790: x=0
 15180   for j=1 to udim(x_service$)
 15200     if usedcolumn=1 then 
-15260       let ul$="  {\ul          }  {\ul          }"
+15260       ul$="  {\ul          }  {\ul          }"
 15280     else 
-15300       let ul$="  {\ul          }"
+15300       ul$="  {\ul          }"
 15320     end if 
-15340     if printprior=1 then let ul$="  {\ul          }"
+15340     if printprior=1 then ul$="  {\ul          }"
 15360     if printprior=1 and resp$(2)="[All]" and option$(j+1)(1:2)="WA" then 
 15380       prior=d(3)
-15400       let x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(1))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
+15400       x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(1))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
 15420     end if 
 15440     if printprior=0 and resp$(2)="[All]" and option$(j+1)(1:2)="WA" then 
-15520       let x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(1))&ul$
+15520       x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(1))&ul$
 15560     end if 
 15580     if printprior=1 and resp$(2)(1:2)="WA" then 
 15600       prior=d(3)
-15620       let x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(1))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
+15620       x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(1))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
 15640       mat x_service$(1)
 15660       goto L940
 15680     end if 
 15700     if printprior=1 and resp$(2)="[All]" and option$(j+1)(1:2)="EL" then 
 15720       prior=d(7)
-15740       let x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(5))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
+15740       x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(5))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
 15760     end if 
 15780     if printprior=0 and resp$(2)="[All]" and option$(j+1)(1:2)="EL" then 
 15800       prior=d(7)
-15820       let x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(5))&ul$
+15820       x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(5))&ul$
 15840     end if 
 15860     if printprior=1 and resp$(2)(1:2)="EL" then 
 15880       prior=d(7)
-15900       let x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(5))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
+15900       x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(5))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
 15920       mat x_service$(1)
 15940       goto L940
 15960     end if 
 15980     if printprior=1 and resp$(2)="[All]" and option$(j+1)(1:2)="GA" then 
 16000       prior=d(11)
-16020       let x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(9))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
+16020       x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(9))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
 16040     end if 
 16060     if printprior=0 and resp$(2)="[All]" and option$(j+1)(1:2)="GA" then 
 16140       prior = d(11)
-16160       let x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(9))&ul$
+16160       x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(9))&ul$
 16200     end if 
 16220     if printprior=1 and resp$(2)(1:2)="GA" and option$(j+1)(1:2)="GA" then 
 16240       prior=d(11)
-16260       let x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(9))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
+16260       x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(9))&ul$&cnvrt$("pic(zzzzzzzzz)",prior)
 16280       mat x_service$(1)
 16300       goto L940
 16320     end if 
 16340     if printprior=0 and resp$(2)(1:2)="GA" and option$(j+1)(1:2)="GA" then 
 16360       prior=d(11)
-16380       let x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(9))&ul$: mat x_service$(1)
+16380       x_service$(x+=1)=cnvrt$("pic(zzzzzzzzz)",d(9))&ul$: mat x_service$(1)
 16400       goto L940
 16420     end if 
 16440   next j
@@ -261,7 +261,7 @@
 27000   end if 
 27020   return  ! /r
 32000 REMARK: ! r: ! read the footnote from the note file  (any note with * as first character
-32020   let ft$="                    "
+32020   ft$="                    "
 32040   notedir$=env$('Q')&"\UBmstr\notes.h"&env$('cno')
 32060   notefile$=notedir$&"\"&trim$(z$)&".txt"
 32080   if exists(notedir$)=0 then goto L1510
@@ -269,7 +269,7 @@
 32120   do 
 32140     linput #20: rm$ eof L1510
 32160   loop until rm$(1:1)="*"
-32200   let ft$=rpad$(rm$(2:60),60)
+32200   ft$=rpad$(rm$(2:60),60)
 32220 L1510: ! 
 32240   close #20: ioerr ignore
 32260 L1520: ! 
@@ -287,21 +287,21 @@
 36040 cap$="Print Meter Reading Books"
 36060 fntos(sn$='umbc')
 36080 mylen=22 : mypos=mylen+2 : respc=lc=0
-36100 let fnlbl(lc+=1,1,"Route Number:",mylen,1)
-36120 let fncmbrt2(lc,mypos)
+36100 fnlbl(lc+=1,1,"Route Number:",mylen,1)
+36120 fncmbrt2(lc,mypos)
 36140   resp$(1)=fn_reg_try$(sn$&'.route',"[All]")
 36160 ! fnlbl(lc+=1,1,"Service Type:",mylen,1)
 36180 ! fntxt(lc,mypos,2, 0,0,'',1)
 36200 ! resp$(2)='WA'
 36220 ! fncomboa("ubrate3",lc,mypos,mat option$)
-36240 let fncmdset(3)
-36260 let fnacs(sn$,0,mat resp$,ck)
+36240 fncmdset(3)
+36260 fnacs(sn$,0,mat resp$,ck)
 36280 if ck=5 then goto CAMPBELL_XIT
 36300 if uprc$(resp$(1))=uprc$("[All]") then route=0 else route=val(resp$(1))
 36320 service$="W"
-36340 let fnreg_write(sn$&'.route',resp$(1))
+36340 fnreg_write(sn$&'.route',resp$(1))
 36360 open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
-36380 let fnopenprn
+36380 fnopenprn
 38000 do
 38010 CAMPBELL_LOOP_TOP: ! 
 38012   dim g(12)

@@ -34,16 +34,16 @@
 30340   fncmdset(3)
 30360   fnacs(sn$,0,mat resp$,ck)
 30380   if ck=5 then goto XIT
-30420   let filterBillingDate=val(resp$(resp_billingDate))
+30420   filterBillingDate=val(resp$(resp_billingDate))
 30440   if trim$(resp$(respc_routeFilter))="[All]" then 
-30460     let filterRoute=0
+30460     filterRoute=0
 30480   else 
-30500     let filterRoute=val(resp$(respc_routeFilter))
+30500     filterRoute=val(resp$(respc_routeFilter))
 30520   end if 
 30540   if filterBillingDate<10100 or filterBillingDate>123199 then goto SCREEN1
 30600   if resp$(respc_sequenceRoute)='True' then reportSequence=sequenceRoute
 30620   if resp$(respc_sequenceAccount)='True' then reportSequence=sequenceAccount
-30630   let filterBillingDateCcyymdd=fndate_mmddyy_to_ccyymmdd(filterBillingDate)
+30630   filterBillingDateCcyymdd=fndate_mmddyy_to_ccyymmdd(filterBillingDate)
 30640   if reportSequence=sequenceAccount then 
 30660     open #hCustomerForReport:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 30700   else ! if reportSequence=sequenceRoute then

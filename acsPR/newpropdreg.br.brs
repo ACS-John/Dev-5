@@ -94,9 +94,9 @@
 00910   tottemp=tottemp-rptemp(25)
 00920   totded=totded+tottemp
 00930   rpxxxx=rptemp(1)+rptemp(2)+rptemp(3)+rptemp(4)
-00940   let w=x=z=0: let y=4: for j=1 to 20
+00940   w=x=z=0: y=4: for j=1 to 20
 00950     if trim$(abbrevname$(j))="" then goto L1000
-00960     let w+=1: if int(w/2)=w/2 then goto L990 else goto L970
+00960     w+=1: if int(w/2)=w/2 then goto L990 else goto L970
 00970 L970: printline1(x+=1)=rptemp(j+4) ! set variables to pr line
 00980     goto L1000
 00990 L990: printline2(z+=1)=rptemp(j+4) ! set line two

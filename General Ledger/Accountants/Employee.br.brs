@@ -299,15 +299,15 @@
 02530   for j=1 to 21
 02540     prd(j)=val(resp$(j))
 02550   next j
-02560   let wh=0
+02560   wh=0
 02570   for j=3 to 21
 02580     if j=3 then goto L2650 ! gross
-02590     if j<8 then let wh=wh+prd(j) ! fed,fica,state,local
-02600     if j>7 and j<18 and dedcode(j-7)=2 then let wh=wh-prd(j)
-02610     if j>7 and j<18 and dedcode(j-7)<>2 then let wh=wh+prd(j)
-02620     if j=18 then let wh=wh+prd(18) ! tips
+02590     if j<8 then wh=wh+prd(j) ! fed,fica,state,local
+02600     if j>7 and j<18 and dedcode(j-7)=2 then wh=wh-prd(j)
+02610     if j>7 and j<18 and dedcode(j-7)<>2 then wh=wh+prd(j)
+02620     if j=18 then wh=wh+prd(18) ! tips
 02630     if j=19 then goto L2650 ! weeks worked
-02640     if j=20 then let wh=wh-prd(j) ! eic
+02640     if j=20 then wh=wh-prd(j) ! eic
 02650 L2650: next j
 02660   if prd(3)<>prd(21)+wh then goto MSGBOX4 else goto L2700
 02670 MSGBOX4: ! 

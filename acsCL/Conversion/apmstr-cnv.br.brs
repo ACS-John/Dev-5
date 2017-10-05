@@ -80,7 +80,7 @@
 60180     if gla(j)=0 then goto NXJ
 60200     on cd(2) goto XB,XA,XA,XB,XA,XA none XB
 60220     XA: ! 
-60240     let gla(j)=-gla(j)
+60240     gla(j)=-gla(j)
 60260     XB: ! 
 60280     lr4=lrec(unpdaloc)+1
 60300     write #unpdaloc,using 'Form POS 1,C 8,2*C 12,PD 5.2,C 30,PD 3',rec=lr4: vn$,iv$,gl$(j),gla(j),gld$(j),0
@@ -101,11 +101,11 @@
 60600   XD: ! 
 60620   if dt(1)=0 then dt(1)=dt(5)
 60640   vn$=v$
-60660   let upa=a(2) ! unpaid amount
-60680   let up$(1)=str$(dt(1)) ! invoice date
-60700   let up$(2)=str$(dt(2)) ! due date
-60720   let up$(3)="" ! po #
-60740   let up$(4)=id$(1:18)
+60660   upa=a(2) ! unpaid amount
+60680   up$(1)=str$(dt(1)) ! invoice date
+60700   up$(2)=str$(dt(2)) ! due date
+60720   up$(3)="" ! po #
+60740   up$(4)=id$(1:18)
 60760   lr3=lrec(paytrans)+1
 60780   write #paytrans,using 'Form POS 1,C 8,c 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8': vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
 60800   UNPDMSTR_ATZ: ! 

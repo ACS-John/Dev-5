@@ -9,8 +9,8 @@
 00090 ! ______________________________________________________________________
 00100     if addall<>1 then addall=0
 00110     fncno(cno)
-00120     if addall=0 then let fen$="Csubcat.h"&str$(cno) else !:
-            let fen$="CsubcatALL.h"&str$(cno)
+00120     if addall=0 then fen$="Csubcat.h"&str$(cno) else !:
+            fen$="CsubcatALL.h"&str$(cno)
 00130     if indexfile$="" then if$=env$('Q')&"\PRmstr\scindex.h"&str$(cno) else !:
             if$=indexfile$
 00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\scmstr.h"&str$(cno),1,3,4,25,if$,1+addall,1,"Select from the list of sub-categories. To add a sub-category record, go to the Sub-Category File.",container)

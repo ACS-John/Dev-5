@@ -218,7 +218,7 @@
         read #20,using 'Form POS 1,3*C 40,C 12': mat a$,b$ !:
         close #20: 
 02190 ! ______________________________________________________________________
-02200   let ficamax=oldmax
+02200   ficamax=oldmax
 02210 L2210: p1=pos(b$,"-",1)
 02220   if p1=0 then goto L2250
 02230   b$(p1:p1)=""
@@ -230,10 +230,10 @@
 02290   st$=a$(3)(p1+2:p1+3)
 02300   p2=len(rtrm$(a$(3)))
 02310   p1=p2-4
-02320   let zip$=a$(3)(p1:p2)
+02320   zip$=a$(3)(p1:p2)
 02330   if val(date$(1:2))-1 <70 then !:
-          let yr=2000+val(date$(1:2))-1 else !:
-          let yr=1900+val(date$(1:2))-1
+          yr=2000+val(date$(1:2))-1 else !:
+          yr=1900+val(date$(1:2))-1
 02340 L2340: io1$(01)="04,36,C 40,UT,N"
 02350   io1$(02)="05,36,C 40,UT,N"
 02360   io1$(03)="06,36,C 40,UT,N"
@@ -300,7 +300,7 @@
 02830   if ckey=5 then goto XIT
 02850 ! Input #101,Fields MAT IO1$: MAT A$,B1,YR,PNC$,CFSYN$,TCC$,FCIYN$,CN$,CPN,ORC$,PPN Conv CONV1
 02860   if cfsyn$="Y" then cfs$="1" else cfs$=" "
-02870   if fciyn$="Y" then let fci$="1" else let fci$=" "
+02870   if fciyn$="Y" then fci$="1" else fci$=" "
 02880   if yr<1000 then goto MAIN
 02890   if b1=0 then goto MAIN
 02900   if rtrm$(pnc$)="" then goto MAIN
@@ -338,7 +338,7 @@
 03210   pr #102: newpage
 03220   pr #102,fields "2,2,C 17,N": "Select Form Type:"
 03230   for j=1 to 13
-03240     let wrd2$(j)=cnvrt$("N 2",j)&".  "&tr$(j)(3:18)
+03240     wrd2$(j)=cnvrt$("N 2",j)&".  "&tr$(j)(3:18)
 03250     io2$(j)=str$(j+1)&",20,C 18"
 03260   next j
 03270   pr f "21,35,C 09,B,5": "Exit (F5)"
@@ -399,15 +399,15 @@
 03790 L3790: pr f "12,32,N 3,UT,N": r1/lrec(1)*100
 03800 L3800: read #1,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12',release: vn$,nam$,ad1$,ad2$,csz$,typ,ss$,ph$ eof END1
 03810   restore #2,key>=vn$: nokey L3800
-03820   let ytdp=0 ! do not use ytdp from payee record
+03820   ytdp=0 ! do not use ytdp from payee record
 03830 L3830: read #trans,using 'Form POS 1,c 8,N 6,PD 5.2,C 12,C 30,PD 3',release: trvn$,dt,am,rn$,de$,nta eof L3900
 03840   if trim$(trvn$)<>trim$(vn$) then goto L3900
-03850   let x=fndate_mmddyy_to_ccyymmdd(dt)
+03850   x=fndate_mmddyy_to_ccyymmdd(dt)
 03860   if x<transactionstartingdate then goto L3830
 03870   if x>transactionendingdate then goto L3830
-03880   let ytdp+=am
+03880   ytdp+=am
 03890   goto L3830
-03900 L3900: ! vN$="12345678": nAM$="JOE JONES": aD1$="11014 HWY 206": aD2$="PO BOX 925": cSZ$="HARRISON, AR 72601": LET YTDP=655.55: tYP=7: sS$="123456789"
+03900 L3900: ! vN$="12345678": nAM$="JOE JONES": aD1$="11014 HWY 206": aD2$="PO BOX 925": cSZ$="HARRISON, AR 72601": yTDP=655.55: tYP=7: sS$="123456789"
 03910   form pos 1,c 8,c 35,3*c 20,pd 5.2,n 2,c 11
 03920   for j=1 to 12
 03930     if typ=0 then goto L3980
@@ -423,7 +423,7 @@
 04030   s$=uprc$(csz$(p1+2:p1+3))
 04040   p2=len(rtrm$(csz$))
 04050   p1=p2-4
-04060   let z$=csz$(p1:p2)
+04060   z$=csz$(p1:p2)
 04070   ssn=0: tin$=" "
 04080   for j=1 to 11
 04090     if ss$(j:j)=>"0" and ss$(j:j)<="9" then goto L4130
@@ -545,7 +545,7 @@
 05250   close #104: ioerr L5260
 05260 L5260: open #104: "SROW=7,SCOL=8,EROW=09,ECOL=72,Border=SR,Caption=<"&cap$,display,outin 
 05270   pr #104,fields "2,2,C 58,N": "Do you have another type of return for this company (Y/N):"
-05280   let yn$="N" ! default
+05280   yn$="N" ! default
 05290 L5290: rinput #104,fields "2,61,Cu 1,UT,N": yn$ conv L5290
 05300   if yn$="Y" then ct1=1
 05310   if yn$="N" then ct1=0
@@ -574,7 +574,7 @@
 05540   p2=pos(csz$," ",p1+3)
 05550   city$=uprc$(rtrm$(csz$(1:p1))(1:15))
 05560   state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2))
-05570   let zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:25)))(1:9))
+05570   zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:25)))(1:9))
 05580   return 
 05590 ! ______________________________________________________________________
 05600 L5600: close #24: ioerr L5620

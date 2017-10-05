@@ -34,7 +34,7 @@
 00390   if uprc$(a$(3)(p1+2:p1+4))="TEX" then st$="Tx"
 00400   p2=len(rtrm$(a$(3)))
 00410   p1=p2-4
-00420   let zip$=a$(3)(p1:p2)
+00420   zip$=a$(3)(p1:p2)
 00430   io1$(1)="5,25,C 40,UT,N"
 00440   io1$(2)="6,25,C 40,UT,N"
 00450   io1$(3)="7,25,C 20,UT,N"
@@ -102,11 +102,11 @@
 01060   if cafiteria$="Y" or cafiteria$="N" then goto L1070 else ce=14: goto ERR1
 01070 L1070: if pension$="Y" or pension$="N" then goto L1080 else ce=15: goto ERR1
 01080 L1080: monthyr$=cnvrt$("pic(######)",endingdate)(1:2)&"20"&cnvrt$("pic(######)",endingdate)(5:6)
-01090   let yr=endingdate-(int(endingdate/100)*100)+2000
+01090   yr=endingdate-(int(endingdate/100)*100)+2000
 01100 ! ______________________________________________________________________
 01110   gosub SCR2
 01120   pr newpage
-01130   let win=101
+01130   win=101
 01140   message$=""
 01150   stopable=1: gosub L3370 ! fnWAIT(WIN,CAP$,MESSAGE$,1)
 01160 ! ______________________________________________________________________
@@ -164,7 +164,7 @@
 01700 RECRS: ! STATE RECORD
 01710   if sr1=0 then goto L1790 ! NO STATE SELECTED
 01720   if m1=0 then goto L1790 ! NO quarterly wages
-01730   bd=fndate_mmddyy_to_ccyymmdd(em16): let y=int(bd/10000): let x=bd-y*10000: let z=x*10000+y
+01730   bd=fndate_mmddyy_to_ccyymmdd(em16): y=int(bd/10000): x=bd-y*10000: z=x*10000+y
 01740   pr #22,using L1750: "RS",sr2,"UTAX",ssn,first$,mid$,last$,"","",monthyr$,m1*100,h2*100,0,z,0,"",e$(sr1)(1:9),"","",country$(1:2),"",naics$,"","","","",""
 01750 L1750: form pos 1,c 2,g 2,c 5,pic(#########),c 15,c 15,c 20,c 4,c 124,c 6,2*pic(###########),n 2,n 8,n 8,c 5,c 9,c 81,c 3,c 3,c 1,c 6,c 1,c 10,c 1,c 5,c 145
 01760   pr #255,using L1770: ssn,trim$(first$)&trim$(last$),m1,h2
@@ -178,7 +178,7 @@
 01840   dc3=dc3+dc1
 01850   dca2=dca2+dca
 01860   dca3=dca3+dca
-01870   let w2=w3=dca=dc1=0
+01870   w2=w3=dca=dc1=0
 01880   mat w2=(0)
 01890   mat w3=(0)
 01900   mat s2=(0)
@@ -213,8 +213,8 @@
 02170   return 
 02180 SCR2: ! 
 02190   dim contact$*27,email$*40,savelocation$*40
-02200   let win=101
-02210   let win_height=13: let win_width=75: display_cnam=1: button_option=2: gosub L2650
+02200   win=101
+02210   win_height=13: win_width=75: display_cnam=1: button_option=2: gosub L2650
 02220   pr #win,fields "04,2,Cr 31,N": "Personal ID Number:" !:
         pr #win,fields "05,2,Cr 31,N": "Resub Indicator:" !:
         pr #win,fields "06,2,Cr 31,N": "Resub TLCN:" !:
@@ -262,21 +262,21 @@
 02450 NAME_BREAKDOWN: ! 
 02460   dim first$*15,mid$*15,last$*20,em$(3)*30
 02470   em$(1)=uprc$(rtrm$(em$(1))): ! nAMCDE$="s"
-02480   let x1=pos(em$(1)," ",1)
-02490   let x2=pos(em$(1)," ",x1+1)
-02500   let x3=pos(em$(1)," ",x2+1)
+02480   x1=pos(em$(1)," ",1)
+02490   x2=pos(em$(1)," ",x1+1)
+02500   x3=pos(em$(1)," ",x2+1)
 02510   if uprc$(namcde$)="S" or uprc$(namcde$)="L" then goto L2560
-02520   let first$=em$(1)(1:min(15,max(x1-1,1)))
+02520   first$=em$(1)(1:min(15,max(x1-1,1)))
 02530   if x2>0 then mid$=em$(1)(x1+1:x2-1): last$=em$(1)(x2+1:len(em$(1)))
 02540   if x2=0 then last$=em$(1)(x1+1:len(em$(1))): mid$=""
 02550   goto L2610
 02560 L2560: ! last name first
-02570   if x1=0 then let x1=pos(em$(1),",",1)
+02570   if x1=0 then x1=pos(em$(1),",",1)
 02580   if x1>0 and em$(1)(x1-1:x1-1)="," then last$=em$(1)(1:x1-2) else last$=em$(1)(1:max(x1-1,1))
-02590   if x2>0 then let first$=em$(1)(x1+1:x2-1): mid$=em$(1)(x2+1:len(em$(1)))
-02600   if x2=0 then let first$=em$(1)(x1+1:len(em$(1)))(1:15): mid$=""
-02610 L2610: let x=pos(first$,",",1): if x>0 then let first$(x:x)=""
-02620   let x=pos(last$,",",1): if x>0 then last$(x:x)=""
+02590   if x2>0 then first$=em$(1)(x1+1:x2-1): mid$=em$(1)(x2+1:len(em$(1)))
+02600   if x2=0 then first$=em$(1)(x1+1:len(em$(1)))(1:15): mid$=""
+02610 L2610: x=pos(first$,",",1): if x>0 then first$(x:x)=""
+02620   x=pos(last$,",",1): if x>0 then last$(x:x)=""
 02630 ! pr FIRST$,MID$,LAST$
 02640   return 
 02650 L2650: ! 
@@ -302,22 +302,22 @@
           pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
 02900 L2900: if button_option=0 then goto L3010
 02910   mat fkey$=("") : em$="" : es=0
-02920   let fkey$(5)="Cancel" ! included by default
+02920   fkey$(5)="Cancel" ! included by default
 02930   if button_option=2 then !:
-          let fkey$(1)="Next"
+          fkey$(1)="Next"
 02940   if button_option=3 then !:
-          let fkey$(1)="Print"
+          fkey$(1)="Print"
 02950   if button_option=4 then !:
-          let fkey$(1)="Save"
+          fkey$(1)="Save"
 02960   if button_option=5 then !:
-          let fkey$(1)="Next" !:
-          let fkey$(6)="Search"
+          fkey$(1)="Next" !:
+          fkey$(6)="Search"
 02970   if button_option=6 then !:
-          let fkey$(1)="Next" !:
-          let fkey$(2)="Back"
+          fkey$(1)="Next" !:
+          fkey$(2)="Back"
 02980   if button_option=7 then !:
-          let fkey$(1)="Save" !:
-          let fkey$(4)="Delete"
+          fkey$(1)="Save" !:
+          fkey$(4)="Delete"
 02990   scrline=er+1: gosub L3660
 03000 ! 
 03010 L3010: return  ! Fnend
@@ -374,7 +374,7 @@
 03540   if sc<1 then sc=20
 03550   if er<1 then er=14
 03560   if ec<1 then ec=59
-03570   let win_width=ec-sc+1
+03570   win_width=ec-sc+1
 03580   close #win: ioerr L3590
 03590 L3590: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
 03600   pr #win: newpage
@@ -388,7 +388,7 @@
         startpos=0
 03680   for j=1 to udim(fkey$) ! add ' (Fx)' to each button
 03690     if fkey$(j)="" then goto L3720
-03700     let fkey$(j)=fkey$(j)&" (F"&str$(j)&")" !:
+03700     fkey$(j)=fkey$(j)&" (F"&str$(j)&")" !:
           ! add ' (Fx)' to each button
 03710     totallen=totallen+len(fkey$(j))+1
 03720 L3720: next j

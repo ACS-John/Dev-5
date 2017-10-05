@@ -54,7 +54,7 @@
     ! Dim at next largest multiple of 255
     longestElement=(int((LongestElement-1)/255)+1)*255
 
-    let FileLay$=Trim$(FileLay$)
+    fileLay$=Trim$(FileLay$)
     
     fnReturnCode(' ')
     fnReturnCode(' ! FileIO Dimensions')
@@ -68,8 +68,8 @@
     fnReturnCode(' mat Form$(max(udim(mat Form$),'&FileLay$&')) ! Make room in forms array')
     fnReturnCode(' mat '&FileLay$&'('&str$(udim(mat NSubs$))&') : mat '&FileLay$&'$('&str$(udim(mat SSubs$))&')')
     fnReturnCode(' ')
-    fnReturnCode(' let Form$('&FileLay$&')="'&RawForm$&'"')
-    fnReturnCode(' let Form$('&FileLay$&')=cform$(form$('&FileLay$&'))')
+    fnReturnCode(' form$('&FileLay$&')="'&RawForm$&'"')
+    fnReturnCode(' form$('&FileLay$&')=cform$(form$('&FileLay$&'))')
 
     if udim(mat Keys$) then
        for Index=1 to udim(mat Keys$)
@@ -122,7 +122,7 @@
     fnReturnCode('    def fnPack'&trim$(FileLay$)&'(mat F$, mat F)')
 
     for Index=1 to udim(mat SSubs$)
-       fnReturnCode('       let f$('&Prefix$&Ssubs$(Index)&')='&ssubs$(Index)&'$')
+       fnReturnCode('       f$('&Prefix$&Ssubs$(Index)&')='&ssubs$(Index)&'$')
     next Index
     for Index=1 to udim(mat NSubs$)
        fnReturnCode('       let f('&Prefix$&Nsubs$(Index)&')='&Nsubs$(Index))
@@ -144,15 +144,15 @@
     ! Get code from making one and trying it.
     !  but it should be something like:
     !    read #Datafile, using form$(DataFile), key=CurrentKey$ : mat F$, mat F
-    !    if sio_name then let F$(ac_name)=s$(sio_name)
-    !    if sio_add1 then let F$(ac_add1)=s$(sio_add1)
+    !    if sio_name then f$(ac_name)=s$(sio_name)
+    !    if sio_add1 then f$(ac_add1)=s$(sio_add1)
     !    if sio_price then let f(ac_price)=val(s$(sio_price)) conv Ignore
     !    rewrite #Datafile, using form$(datafile) : mat f$, mat f
 
     fnReturnCode('    read #DataFile, using form$(DataFile), key=CurrentKey$ : mat F$, mat F')
     fnReturnCode(' ')
     for Index=1 to udim(mat SSubs$)
-       fnReturnCode('    if sio_field_'&Ssubs$(Index)&' then let f$('&prefix$&ssubs$(Index)&')=s$(sio_field_'&Ssubs$(Index)&')')
+       fnReturnCode('    if sio_field_'&Ssubs$(Index)&' then f$('&prefix$&ssubs$(Index)&')=s$(sio_field_'&Ssubs$(Index)&')')
     next Index
     for Index=1 to udim(mat NSubs$)
        fnReturnCode('    if sio_field_'&Nsubs$(Index)&' then let f('&prefix$&Nsubs$(Index)&')=val(s$(sio_field_'&Nsubs$(Index)&')) conv Ignore')
@@ -713,7 +713,7 @@
     fnReturnCode('       def Fnopen(Filename$*255, Mat F$, Mat F, Mat Form$; Inputonly, Keynum, Dont_Sort_Subs, Path$*255, Mat Descr$, Mat Field_Widths,Supress_Prompt,Ignore_Errors,___,Index)')
     fnReturnCode('          dim _FileIOSubs$(1)*800, _Loadedsubs$(1)*80')
     fnReturnCode('          fnopen=Fnopenfile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)')
-    fnReturnCode('          if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : let _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index')
+    fnReturnCode('          if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index')
     fnReturnCode('       fnend')
     fnReturnCode('')
     fnReturnCode(' Ignore: Continue')
@@ -789,7 +789,7 @@
        def Fnopen(Filename$*255, Mat F$, Mat F, Mat Form$; Inputonly, Keynum, Dont_Sort_Subs, Path$*255, Mat Descr$, Mat Field_Widths,Supress_Prompt,Ignore_Errors,___,Index)
           dim _FileIOSubs$(1)*800, _Loadedsubs$(1)*80
           fnopen=Fnopenfile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)
-          if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : let _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index
+          if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index
        fnend
 
  Ignore: Continue

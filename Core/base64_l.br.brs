@@ -23,7 +23,7 @@
 00460        l=Len(Bl$)
 00480        d=Int(L/6): e=D*6
 00500        b64=0: for I=1 to E step 6
-00520           let F$=Bl$(I:I+5)
+00520           f$=Bl$(I:I+5)
 00540           if F$(1:1)="1" then b64=B64+32
 00560           if F$(2:2)="1" then b64=B64+16
 00580           if F$(3:3)="1" then b64=B64+8
@@ -32,7 +32,7 @@
 00640           if F$(6:6)="1" then b64=B64+1
 00660           b64$=B64$&B64t$(B64) : b64=0
 00680        next I
-00700        let X=Len(B64$)
+00700        x=Len(B64$)
 00720        if Nullcount=2 then b64$=B64$(1:X-2)&"==" : goto RT_ENCODE
 00740        if Nullcount=1 then b64$=B64$(1:X-1)&"="
 00760  RT_ENCODE: content$=B64$
@@ -64,11 +64,11 @@
 01280        d=Int(L/8): e=D*8
 01300        line$="" : for I=1 to E step 8
 01320           for Q=0 to 255
-01340              let F$=Bl$(I:I+7)
-01360              if F$=Bt$(Q) then line$=Line$&Chr$(Q) : let Q=255
+01340              f$=Bl$(I:I+7)
+01360              if F$=Bt$(Q) then line$=Line$&Chr$(Q) : q=255
 01380           next Q
 01400        next I
-01420        let X=Len(Line$) : if Line$(X-1:X)=Chr$(0)&Chr$(0) then line$=Line$(1:X-2)
+01420        x=Len(Line$) : if Line$(X-1:X)=Chr$(0)&Chr$(0) then line$=Line$(1:X-2)
 01440        if Line$(X:X)=Chr$(0) then line$=Line$(1:X-1)
 01460  RT_DECODE: content$=Trim$(Line$)
 01480     fnend

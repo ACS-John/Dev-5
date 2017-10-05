@@ -12,12 +12,12 @@
 00120   fntop(program$,cap$="Income Statement with Varience")
 00130   on fkey 5 goto L2500
 00140   fncno(cno,cnam$)
-00150   let udf$=env$('temp')&'\'
+00150   udf$=env$('temp')&'\'
 00155   fnfscode
 00156   fnpriorcd
 00160   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00165   let fscode=fnfscode
+00165   fscode=fnfscode
 00166   fnpriorcd
 00170   cch$=fncch$
 00180   pedat$=fnpedat$
@@ -83,7 +83,7 @@
 00730 L730: read #3,using L270: ir,bb,cb,mat by,mat bp eof L940
 00740   if ir=0 then goto L730
 00750   if fscode=0 or (fscode=actpd and fnpriorcd=1) then goto L820
-00760   if fscode<1 or fscode>13 then let fscode=1 ! 6/8/88
+00760   if fscode<1 or fscode>13 then fscode=1 ! 6/8/88
 00770   if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00780   if priorcd=2 then goto L810
 00790   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -126,15 +126,15 @@
 01160   sp2=31-sp-1
 01170   if percent=2 and ic=1 then gosub L2560
 01180   if percent1=0 then pdpct=0 else pdpct=total/percent1*100
-01190   if percent2=0 then let ytdpct=0 else let ytdpct=total2/percent2*100
+01190   if percent2=0 then ytdpct=0 else ytdpct=total2/percent2*100
 01200   if percent3=0 then pppd=0 else pppd=total3/percent3*100
 01210   if percent4=0 then ppyear=0 else ppyear=total4/percent4*100
 01220   if percent5=0 then ppcvar=0 else ppcvar=total5/percent5*100
 01230   if percent6=0 then ppyvar=0 else ppyvar=total6/percent6*100
 01240   if pdpct<-999.99 then pdpct=-999.99
 01250   if pdpct>999.99 then pdpct=999.99
-01260   if ytdpct<-999.99 then let ytdpct=-999.99
-01270   if ytdpct>999.99 then let ytdpct=999.99
+01260   if ytdpct<-999.99 then ytdpct=-999.99
+01270   if ytdpct>999.99 then ytdpct=999.99
 01280   if ppyear<-999.99 then ppyear=-999.99
 01290   if ppyear>999.99 then ppyear=999.99
 01300   if pppd<-999.99 then pppd=-999.99
@@ -171,15 +171,15 @@
 01600   if percent=2 and ic=1 then gosub L2640
 01610   if percent=0 then goto L1830
 01620   if percent1=0 then pdpct=0 else pdpct=accum1/percent1*100
-01630   if percent2=0 then let ytdpct=0 else let ytdpct=accum2/percent2*100
+01630   if percent2=0 then ytdpct=0 else ytdpct=accum2/percent2*100
 01640   if percent3=0 then pppd=0 else pppd=accum3/percent3*100
 01650   if percent4=0 then ppyear=0 else ppyear=accum4/percent4*100
 01660   if percent5=0 then ppcvar=0 else ppcvar=accum5/percent5*100
 01670   if percent6=0 then ppyvar=0 else ppyvar=accum6/percent6*100
 01680   if pdpct<-999.99 then pdpct=-999.99
 01690   if pdpct>999.99 then pdpct=999.99
-01700   if ytdpct<-999.99 then let ytdpct=-999.99
-01710   if ytdpct>999.99 then let ytdpct=999.99
+01700   if ytdpct<-999.99 then ytdpct=-999.99
+01710   if ytdpct>999.99 then ytdpct=999.99
 01720   if pppd<-999.99 then pppd=-999.99
 01730   if pppd>999.99 then pppd=999.99
 01740   if ppyear<-999.99 then ppyear=-999.99
@@ -202,8 +202,8 @@
           if te$="S" then secondr$=d$
 01890   gosub EOPAGE : goto TOP_OF_LOOP
 01900 ! ______________________________________________________________________
-01910 L1910: if foot1=1 then let foot$=rtrm$(foot$)&d$ else !:
-          tabnote=sp : let foot1=1 : let foot$=d$
+01910 L1910: if foot1=1 then foot$=rtrm$(foot$)&d$ else !:
+          tabnote=sp : foot1=1 : foot$=d$
 01920   goto TOP_OF_LOOP
 01930 ! ______________________________________________________________________
 01940 L1940: for j=1 to 9
@@ -232,11 +232,11 @@
 02160 L2160: if percent=0 then goto L2280
 02170   if ul=0 then goto L2260
 02180   if ul=1 then goto L2230
-02190   let underlin$="============== ======="
+02190   underlin$="============== ======="
 02200   pr #255,using L2210: underlin$,underlin$,underlin$,underlin$,underlin$,underlin$
 02210 L2210: form pos 31,c 22,pos 55,c 22,pos 79,c 22,pos 103,c 22,pos 127,c 22,pos 151,c 22,skip redir
 02220   goto L2260
-02230 L2230: let underlin$="______________ _______"
+02230 L2230: underlin$="______________ _______"
 02240   pr #255,using L2250: underlin$,underlin$,underlin$,underlin$,underlin$,underlin$
 02250 L2250: form skip redir,pos 31,c 22,pos 55,c 22,pos 79,c 22,pos 103,c 22,pos 127,c 22,pos 151,c 22,skip redir
 02260 L2260: if redir=0 then pr #255,using L2270: " "
@@ -295,8 +295,8 @@
 02770   total5=0
 02780   total6=0
 02790   mat accum=(0)
-02800   let foot1=0
-02810   let foot$=" "
+02800   foot1=0
+02810   foot$=" "
 02820   ir=0
 02830   goto L330
 02840 ! ______________________________________________________________________

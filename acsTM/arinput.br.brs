@@ -21,29 +21,29 @@
 00220   if i4=1 and i5=0 then goto L420
 00230 ! NO DEPT    NO SUBACCOUNT
 00240   sz=5
-00250   let gx=2
+00250   gx=2
 00260   mat gl(10,2)=(0)
 00270   mat pgl(1)=(0)
-00280   let gpx=1
+00280   gpx=1
 00290   goto L510
 00300 L300: ! YES DEPT   YES SUBACCOUNT
 00310   sz=2
-00320   let gx=4
-00330   let gpx=2
+00320   gx=4
+00330   gpx=2
 00340   goto L510
 00350 L350: ! NO DEPT    YES SUBACCOUNT
 00360   sz=3
-00370   let gx=3
+00370   gx=3
 00380   mat gl(10,3)=(0)
 00390   mat pgl(2)=(0)
-00400   let gpx=1
+00400   gpx=1
 00410   goto L510
 00420 L420: ! YES DEPT    NO SUB ACCOUNT
 00430   sz=4
-00440   let gx=3
+00440   gx=3
 00450   mat gl(10,3)=(0)
 00460   mat pgl(2)=(0)
-00470   let gpx=2
+00470   gpx=2
 00480   goto L510
 00490 L490: ! NO GL TO BE ENTERED
 00500   sz=6
@@ -112,10 +112,10 @@
 01100   if cmdkey=2 then goto L920
 01110   if tr5<>3 then goto L1200
 01120   fli1$(4)="6,30,n 11.2,ut,n"
-01130   if sz=4 then let gl(1,2)=gln1(2): let gl(1,1)=gln1(1): let gl(1,3)=tr(3)
-01140   if sz=3 then let gl(1,1)=gln1(2): let gl(1,2)=gln1(3): let gl(1,3)=tr(3)
-01150   if sz=2 then let gl(1,2)=gln1(2): let gl(1,1)=gln1(1): let gl(1,3)=gln1(3): let gl(1,4)=tr(3)
-01160   if sz=5 then let gl(1,1)=gln1(2): let gl(1,2)=tr(3)
+01130   if sz=4 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=tr(3)
+01140   if sz=3 then gl(1,1)=gln1(2): gl(1,2)=gln1(3): gl(1,3)=tr(3)
+01150   if sz=2 then gl(1,2)=gln1(2): gl(1,1)=gln1(1): gl(1,3)=gln1(3): gl(1,4)=tr(3)
+01160   if sz=5 then gl(1,1)=gln1(2): gl(1,2)=tr(3)
 01170 L1170: pr f mat ot1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl
 01180 L1180: input fields mat fli1$: p$,iv$,tr(1),tr(3),id$,tr(2),mat pgl,mat gl conv L1240
 01190   if cmdkey=2 then goto L920
@@ -141,12 +141,12 @@
 01380   if pgl(gpx)>0 then goto L1410
 01390   pr f "9,45,c 30": "G/L # REQUIRED"
 01400   goto L790
-01410 L1410: let gla=0
+01410 L1410: gla=0
 01420   for j=1 to 10
 01430     if gl(j,gx)=0 then goto L1460
-01440     let gla=gla+gl(j,gx)
+01440     gla=gla+gl(j,gx)
 01450   next j
-01460 L1460: if tr5=3 then let gla=gla-tr(2)
+01460 L1460: if tr5=3 then gla=gla-tr(2)
 01470   if gla=tr(3) then goto L1520
 01480   pr f "11,2,c 75,h,n": " G/L allocations do not agree with total amount.  Press enter to continue."
 01490   input fields "11,78,c 1,EU,n": pause$
@@ -162,7 +162,7 @@
 01590   tr(5)=tr5
 01600   write #h_addr,using f3$,rec=r3: p$,iv$,mat tr,id$,mat pgl,mat gl
 01605   p$=""
-01610   let q2=0
+01610   q2=0
 01620   goto L710
 01630 L1630: iv$=" "
 01640   mat tr=(0)
@@ -247,8 +247,8 @@
 02410 L2410: goto XIT
 04800 TMSRCH: ! search for customer #
 04810   dim heading$*70,form$*80,numeric_format$*20,selection$*70
-04820   let file_num=11 ! alpha index on clients
-04830   let form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
+04820   file_num=11 ! alpha index on clients
+04830   form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
 04840   numeric_format$='pic($$$,$$$.##)'
 04850   key_length=5
 04860   heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"

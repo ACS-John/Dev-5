@@ -17,9 +17,9 @@
 11600 ! constants
 11700   cancel=99 : right=1 : limit_to_list=1 : center=2
 11800   ccyymmdd$='3' : mmddyy$='1' : number$='30'
-11900   pointtwo$='32' : disable=1 : add_all=2 : let false=0
+11900   pointtwo$='32' : disable=1 : add_all=2 : false=0
 12000   true=1
-12100   true$='True' : let false$='False'
+12100   true$='True' : false$='False'
 12200 ! defaults
 12300   addloop$='True'
 12400   fncno(cno)
@@ -36,7 +36,7 @@
 13500 SCREEN1: ! r:
 13600 ! select limitations for the menu1's record selection grid
 13700   fntos(sn$='Trans-Screen1')
-13800   lc=0 : mylen=25 : mypos=mylen+2 : let width=100
+13800   lc=0 : mylen=25 : mypos=mylen+2 : width=100
 13900   fnlbl(lc+=1,1,'Transaction Grid Selection Criteria',width,center)
 14000   lc+=1
 14100   fnlbl(lc+=1,1,"Working Bank:",mylen,right)
@@ -72,14 +72,14 @@
 17100   fnacs(sn$,0,mat resp$,ckey)
 17200   if ckey=5 or ckey=cancel then goto XIT
 17300   if resp$(1)='[All]' then 
-17400     let wbc=0 : bn$='[All]'
+17400     wbc=0 : bn$='[All]'
 17500   else 
-17600     let wbc=val(resp$(1)(1:2))
+17600     wbc=val(resp$(1)(1:2))
 17700     bn$=resp$(1)(4:len(resp$(1)))
 17800   end if 
-17900   if resp$(2)='[All]' then let wtt=0 else let wtt=tcdekey=val(resp$(2)(1:1))
+17900   if resp$(2)='[All]' then wtt=0 else wtt=tcdekey=val(resp$(2)(1:1))
 18000   if wtt=0 then tcde$='[All]' else tcde$=resp$(2)(3:len(resp$(2)))
-18100   if resp$(3)='[All]' then let wpayee$=resp$(3) else let wpayee$=resp$(3)(1:8)
+18100   if resp$(3)='[All]' then wpayee$=resp$(3) else wpayee$=resp$(3)(1:8)
 18200   transstartdate=val(resp$(4))
 18300   transenddate=val(resp$(5))
 18400   statementdatecleared=val(resp$(6))
@@ -87,7 +87,7 @@
 18600   sourcecode$=resp$(8)
 18700   if trim$(resp$(9))<>"" then selectedck=1 else selectedck=0
 18800   if trim$(resp$(9))="" then goto MENU1
-18900   if wbc=0 then let wbc=1
+18900   if wbc=0 then wbc=1
 19000   if trim$(tcde$)="" or trim$(tcde$)="[All]" then tcde$="1" : tcdekey=1 ! try defaulting to check
 19100   check_ref$=cnvrt$("pic(ZZ)",wbc)&str$(tcdekey)&lpad$(rtrm$(resp$(9)),8)
 19200   read #h_trmstr(1),using 'Form Pos 1,C 3,C 8,G 6,PD 10.2,C 8,C 35,N 1,N 6,N 1',key=check_ref$: newkey$,tr$(1),tr$(2),tr3,tr$(4),tr$(5),posting_code,clr,scd nokey TRY_RECEIPT
@@ -104,9 +104,9 @@
 20500 MENU1: ! r:
 20600   fntos(sn$='Transaction-Menu1')
 20700   lc=0 : mylen=30 : mypos=mylen+2
-20800   let fc=0 ! frame count
+20800   fc=0 ! frame count
 20900   fnfra(1,1,10,100,'Transaction Grid Selection Criteria')
-21000   let frame=fc+=1
+21000   frame=fc+=1
 21100   lc=0
 21200   fnlbl(lc+=1,1,'Bank:',mylen,right,0,frame)
 21300   fntxt(lc,mypos,3,0,center,'',disable,'',frame)
@@ -204,7 +204,7 @@
 28900   if ckey=2 or ckey=8 then addloopcode=1 else addloopcode=0
 29000 ! pas=1
 29100   if ckey=6 then pas=0: goto SCREEN1
-29200   let wbc=val(resp$(1)(1:2)) ! working bank(s) code
+29200   wbc=val(resp$(1)(1:2)) ! working bank(s) code
 29300   bn$=resp$(2) ! bank name
 29400   bankbalance=val(resp$(3)) ! bank balance
 29500   tcde =val(resp$(4)) ! transaction type
@@ -445,7 +445,7 @@
 53600   return  ! /r
 53800 DELETE_TRANSACTION: ! r:
 53900   fntos(sn$='Trans-Delete')
-54000   lc=0 : let width=50
+54000   lc=0 : width=50
 54100   fnlbl(lc+=1,1,'Delete Transaction Options',width,center)
 54200   ln+=1
 54300   fnchk(lc+=1,1,'Update Bank Balance')
@@ -455,7 +455,7 @@
 54700   fncmdset(2)
 54800   fnacs(sn$,0,mat resp$,ckey)
 54900   if ckey=5 or ckey=cancel then goto DELETE_TRANSACTION_DONE
-55000   let updatebankbalance$=resp$(1)
+55000   updatebankbalance$=resp$(1)
 55100   deletetransactionallocation$=resp$(2)
 55200   if updatebankbalance$='True' then 
 55300     if tcde=1 or tcde=4 then 
@@ -579,10 +579,10 @@
 67800 FM_SCREEN: ! r:
 67900   fntos(sn$='transfm2b'&str$(typeofentry))
 68000   lc=0 ! line count
-68100   let fc=0 ! frame count
-68200   let width=120 ! screen width
+68100   fc=0 ! frame count
+68200   width=120 ! screen width
 68300   fnfra(1,1,10,width,'Transaction Data')
-68400   let frame=fc+=1
+68400   frame=fc+=1
 68500   lc=0 : mylen=23 : mypos=mylen+2
 68600   fnlbl(lc+=1,1,'Bank:',mylen,right,0,frame)
 68700   fncombof('Bank',lc,mypos,0,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list,0,'',frame)

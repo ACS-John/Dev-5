@@ -8,7 +8,7 @@
 00080   dim t$*12,n(2),l$*12,adr(2),ta(2),p$*30,my_p$*30,test_p$*30,io1$(7)*25
 00090 ! ______________________________________________________________________
 00100   fncno(cno)
-00110   let wait_message$="Generating Reversing Entries"
+00110   wait_message$="Generating Reversing Entries"
 00120 ! 
 00130   my_p$="Generated Reversing Entry"
 00140 ! ______________________________________________________________________
@@ -49,13 +49,13 @@
 00410   if resp$(7)="True" then re$="Y" else re$="N"
 00420   s_rn$=uprc$(rtrm$(ltrm$(s_rn$)))
 00430 ! ______________________________________________________________________
-00440   let glmstr=1 !:
+00440   glmstr=1 !:
         open #glmstr: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
-00450   let gltrans=2 !:
+00450   gltrans=2 !:
         open #gltrans: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,outin,relative 
 00460   actrans=3 !:
         open #actrans: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&str$(cno)&",Shr",internal,outin,keyed 
-00470   let x=lrec(2)
+00470   x=lrec(2)
 00480 ! ____
 00490   for j=1 to x
 00500 READ_GLTRANS: ! 

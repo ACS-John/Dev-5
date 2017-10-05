@@ -14,10 +14,10 @@
 00075 ! ______________________________________________________________________
 00080   goto ALLOW_PROGRAM ! if env$('client')="Ash Grove" then goto ALLOW_PROGRAM
 00085   dim _msg$(4)*80
-00095   let _msg$(1)="This program has been removed due to heavy misuse."
-00100   let _msg$(2)="To recalculate bills simply use Enter Readings and Charges"
-00105   let _msg$(3)="with the same billing date as used previously."
-00110   let _msg$(4)="If you feel you need to use this legacy program, please contact ACS."
+00095   _msg$(1)="This program has been removed due to heavy misuse."
+00100   _msg$(2)="To recalculate bills simply use Enter Readings and Charges"
+00105   _msg$(3)="with the same billing date as used previously."
+00110   _msg$(4)="If you feel you need to use this legacy program, please contact ACS."
 00115   fnmsgbox(mat _msg$,resp$(1),cap$,16)
 00120   goto XIT
 00125 ALLOW_PROGRAM: ! 
@@ -31,7 +31,7 @@
 00200   open #2: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
 00210   fn_bud1
 00220 ASK1: ! 
-00230   let x=6
+00230   x=6
 00240   close #111: ioerr L250
 00250 L250: fntos(sn$="ubrevcal")
 00252   respc=0
@@ -83,11 +83,11 @@
 00551   if sr$="Y" then 
 00552     pr #255,using L470: z$,f pageoflow SRPGOF
 00554   end if 
-00560   for j=1 to 9 : let gb(j)=gb(j)-g(j): bal=bal-g(j): next j ! subtract out current bill from breakdown
+00560   for j=1 to 9 : gb(j)=gb(j)-g(j): bal=bal-g(j): next j ! subtract out current bill from breakdown
 00570 ! bal=bal-g(11)  moved above 06/01/12
-00580   let x=fndate_mmddyy_to_ccyymmdd(olddat)
+00580   x=fndate_mmddyy_to_ccyymmdd(olddat)
 00590   key$=z$&cnvrt$("n 8",x)&"1"
-00600   let wr=wu=er=eu=gr=gu=0 ! set all previous readings to zero
+00600   wr=wu=er=eu=gr=gu=0 ! set all previous readings to zero
 00610   read #2,using L810,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L620 ! read previous months history to pull old readings and usages
 00620 L620: ! 
 00622   d(1)=d(2) ! set current water reading to last month
@@ -102,12 +102,12 @@
 00710   d(10)=gr ! set prior reading to month before last
 00720   d(12)=d(12)-d(11) ! subtract out current usage from year to date
 00730   d(11)=gu ! set usage to amount in history
-00740   let f=0 !  f=olddat   ! set billing date to zero
+00740   f=0 !  f=olddat   ! set billing date to zero
 00745   extra3=extra4 : extra4=0
 00750   mat g=(0) ! SET ALL LAST TIME BILL TO ZERO
 00760   rewrite #1,using L770: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,alp$,f$(2),f$(3),bra,mat gb,route,extra3,extra4
 00770 L770: form pos 1,c 10,4*c 30,c 12,7*pd 2,11*pd 4.2,4*pd 4,15*pd 5,pd 4.2,pd 4,12*pd 4.2,pos 354,c 7,2*c 12,pd 3,10*pd 5.2,pos 1741,n 2,pos 1750,2*n 6
-00780   let x=fndate_mmddyy_to_ccyymmdd(reqf)
+00780   x=fndate_mmddyy_to_ccyymmdd(reqf)
 00790   key$=z$&cnvrt$("n 8",x)&"1"
 00800   read #2,using L810,key=key$: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode nokey L480
 00810 L810: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1

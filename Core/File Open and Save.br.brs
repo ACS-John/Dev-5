@@ -20,7 +20,7 @@
 38000 def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog)
 38020   dim save_name$*256,ln$*512
 38040   dim save_log_filename$*256
-38060   let failure=0
+38060   failure=0
 38080   save_log_filename$=env$('temp')&'\Save_As_Log.txt'
 38100   execute 'free '&br_filename$(save_log_filename$) ioerr ignore
 38120   if fsa_automatedSaveFileName$<>'' then
@@ -116,11 +116,11 @@
 39920 fnend 
 42000 def fn_analyze_7zip_compresslog(arc_filename$*256,success_text_line1$*256,save_name$*256; statusInsteadOfMsgBox,suppressErrorLog)
 42020   open #h_compresslog:=fngethandle: 'Name='&arc_filename$,display,input ioerr A7C_OPEN_ERR
-42040   let failure=1
+42040   failure=1
 42060   do 
 42080     linput #h_compresslog: ln$ eof ARC_EO_COMPRESSLOG
 42100     if lwrc$(ln$)='everything is ok' then 
-42120       let failure=0
+42120       failure=0
 42140     end if 
 42160   loop 
 42180   ARC_EO_COMPRESSLOG: ! 

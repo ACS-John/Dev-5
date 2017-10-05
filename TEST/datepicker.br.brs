@@ -73,7 +73,7 @@
 05107 let fnlbl(11,2,"Payee #:",8,1,0,1)
 05109 let fntxt(11,11,8,0,1,"",0,"Enter payee # to approve all invoices on that payee",1)
 05111 resp$(respc+=1)=""
-05113 if displayunpaid=1 or displayunpaid=0 then let wording$="Total Selected:" else let wording$= "Total Unapproved:"
+05113 if displayunpaid=1 or displayunpaid=0 then wording$="Total Selected:" else wording$= "Total Unapproved:"
 05115 let fnlbl(2,28,wording$,18,1)
 05117 let fntxt(2,49,12,0,1,"10",0," ")
 05119 resp$(respc+=1)=str$(total)

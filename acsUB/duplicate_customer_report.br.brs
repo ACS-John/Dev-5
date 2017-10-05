@@ -35,7 +35,7 @@
 28000 ! ______________________________________________________________________
 28200   def fn_has_dupe(z$)
 28400     hd_return=0
-28600     let z_one$=z_two$=''
+28600     z_one$=z_two$=''
 28700     restore #2: 
 28800     read #2,using FORM_CUSTOMER,key=z$: z_one$
 29000     read #2,using FORM_CUSTOMER: z_two$ eof HD_EOF

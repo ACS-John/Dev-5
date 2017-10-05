@@ -8,12 +8,12 @@
 18100   dim cap$*128,message$*40,services$(4)*16,date_amount$*60
 18120   dim servicename$(10)*20,tt$*160,resp$(10)*80,sn$*30,date_amount$*80
 18140   dim filter_option$(6)*31,filter_default$*31
-18160   let filter_option$(1)="[All]"
-18180   let filter_option$(2)="0 - Active"
-18200   let filter_option$(3)="1 - Inactive / Final Billed"
-18220   let filter_option$(4)="2 - Inactive / Deposit Refunded"
-18240   let filter_option$(5)="3 - Active / but Do Not Bill"
-18260   let filter_option$(6)="4 - Finaled / but Not Billed"
+18160   filter_option$(1)="[All]"
+18180   filter_option$(2)="0 - Active"
+18200   filter_option$(3)="1 - Inactive / Final Billed"
+18220   filter_option$(4)="2 - Inactive / Deposit Refunded"
+18240   filter_option$(5)="3 - Active / but Do Not Bill"
+18260   filter_option$(6)="4 - Finaled / but Not Billed"
 18280 ! ______________________________________________________________________
 19000   fntop(program$,cap$="Deposit List")
 19020   fncno(cno,cnam$)
@@ -25,7 +25,7 @@
 19140   fncreg_read('ubcustdp.sequence',seq$) : seq=val(seq$)
 19160   fncreg_read('ubcustdp.subtotal by route',subtotal$)
 19180   fncreg_read('ubcustdp.filter choice',filter_default$)
-19200   if filter_default$='' then let filter_default$=filter_option$(1)
+19200   if filter_default$='' then filter_default$=filter_option$(1)
 19220 ! /r
 32000   fntos(sn$="ubcustdp_1" )
 32020   rc=0 : mylen=30 : mypos=mylen+3
@@ -48,7 +48,7 @@
 32480   dat$=resp$(1)
 32520   if resp$(2)="True" then seq=1 else seq=2 ! 1=name sequence  2= route sequence
 32540   subtotal$=resp$(resp_subtotal)
-32560   let filter_choice=srch(mat filter_option$,resp$(resp_filter))
+32560   filter_choice=srch(mat filter_option$,resp$(resp_filter))
 36000 ! r: save answers
 36020   fndat(dat$,2)
 36040   fncreg_write('ubcustdp.sequence',str$(seq))
@@ -102,7 +102,7 @@
 58200   date_amount$=""
 58220   mat services$=("")
 58240   for j=1 to 3
-58260     let x=pos(servicename$(j),":",1)
+58260     x=pos(servicename$(j),":",1)
 58280     if x>0 then servicename$(j)(x:x)=""
 58300   next j
 58320   for j=1 to 4
@@ -113,8 +113,8 @@
 58420     jp=jp+1
 58440     p1=jp*19+40
 58460     date_amount$=date_amount$&"  --Date--  Amount"
-58480     let x=pos(trim$(servicename$(j))," ",1)
-58500     if x=0 then let x=len(servicename$(j))
+58480     x=pos(trim$(servicename$(j))," ",1)
+58500     if x=0 then x=len(servicename$(j))
 58520     services$(jp)=trim$(servicename$(j))(1:x)
 58540 L730: ! 
 58542   next j

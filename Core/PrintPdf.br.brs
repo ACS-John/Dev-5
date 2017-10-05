@@ -170,7 +170,7 @@
 56040   fnpdf_font=fn_pdf_font( fontname$)
 56060 fnend
 57000 def fn_pdf_font(; fontname$)
-57020   if fontname$='' then let fontname$='Courier New'
+57020   if fontname$='' then fontname$='Courier New'
 57040   if ~setup_font_list then
 57060     setup_font_list=1
 57080     dim fontSupported$(3) ! contains a list of supported font face names
@@ -200,7 +200,7 @@
 58060   fnpdf_fontsize=fn_pdf_fontsize( fontsize)
 58080 fnend
 59000 def fn_pdf_fontsize(; fontsize)
-59020   if fontsize=0 then let fontsize=10
+59020   if fontsize=0 then fontsize=10
 59060   if gFontName$='Courier New' or gFontName$='Lucida Console' then ! is a Fixed Width Font
 59080     cpi=24-fontsize
 59120     fn_phe('(s'&str$(cpi)&'H') ! pr 'fixed width font (height) CPI=';cpi 

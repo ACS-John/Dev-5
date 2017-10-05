@@ -5,7 +5,7 @@
 10220   fntop(program$,cap$="Department Conversion")
 12000 ! r: do every company - loop top
 12020   fngetdir2(env$('Q')&'\'&fncursys$&"mstr",mat filename$,'/od /ta',"Company.*")
-12040   let filename_item=0
+12040   filename_item=0
 12060   for filename_item=1 to udim(mat filename$)
 12080     tmp_cno=val(filename$(filename_item)(10:14)) conv ACNO_CONV
 12100     if tmp_cno<>99999 and filename$(filename_item)<>'' then ! don't display company 99999
@@ -70,9 +70,9 @@
 32120 ! 
 32140     if fnindex_it(env$('Q')&"\PRmstr\PRCkHist.h"&str$(cno),env$('Q')&"\PRmstr\PRCKINDX.h"&str$(cno),"1 14") then 
 32160       open #h_prckhist:=fngethandle: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\PRCkIndx.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L320
-32180       let foundhistory=1 ! pr 'foundhistory : lrec(h_prckhist)='&str$(lrec(h_prckhist)) : pause
+32180       foundhistory=1 ! pr 'foundhistory : lrec(h_prckhist)='&str$(lrec(h_prckhist)) : pause
 32182     else 
-32184       let foundhistory=0 ! pr 'was not able to index it - setting foundhistory to ZERO - history will not be created' : pause
+32184       foundhistory=0 ! pr 'was not able to index it - setting foundhistory to ZERO - history will not be created' : pause
 32200     end if 
 32220 L320: ! 
 32240     open #12: "Name="&env$('Q')&"\PRmstr\Department.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\DeptIdx.h"&str$(cno)&",RecL=149,kps=1,kln=11,replace",internal,outin,keyed 
@@ -132,7 +132,7 @@
 46640     cp(30)=ty(20) ! tips
 46660     cp(31)=ty(21) ! total wage
 46680     cp(32)=0 ! don't have net
-46700     let gl$=cnvrt$("pic(zz#)",gl1)&cnvrt$("pic(zzzzz#)",gl2)&cnvrt$("pic(zz#)",gl3)
+46700     gl$=cnvrt$("pic(zz#)",gl1)&cnvrt$("pic(zzzzz#)",gl2)&cnvrt$("pic(zz#)",gl3)
 46720     write #12,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': eno,tdn,gl$,mat tdt,mat tcd,tli,mat newtdet ! department record
 46740     if ~foundhistory then ! else  write check file later
 46760       fn_payrollchecks_write
@@ -219,11 +219,11 @@
 58220     newdedcode(j)=dedcode(j)
 58240     if dedfed(j)>0 then newdedfed(j)=1
 58260     newcalcode(j)=calcode(j)
-58280     let fullname$(j)=rpnames2$(j)
+58280     fullname$(j)=rpnames2$(j)
 58300     abrevname$(j)=fullname$(j)(1:6)
 58320     if dedfed(j)=1 then dedst(j)=1 ! if pension type code make deductible for state
 58340     if dedfed(j)=2 then dedfica(j)=1 ! if pension type code =2 then cafiteria
-58360     let gl$(j)=gln$(j+3)
+58360     gl$(j)=gln$(j+3)
 58380   next j
 58400   close #h_rptrail: ioerr ignore
 58440   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$,1)

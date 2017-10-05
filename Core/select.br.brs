@@ -5,17 +5,17 @@
 00070 ! response$  = the number of the answer selected or value "F1"-"F100"
 00090     library 'S:\Core\Library': fnwin3b,fnerror
 00100     dim fio1$(22)*76,header$*80
-00110     let q$=rtrm$(q$)
+00110     q$=rtrm$(q$)
 00120     for j=1 to udim(option$)
 00130       mxwo=max(mxwo,len(option$(j)))
 00140     next j
-00150     let win_width=mxwo+len(q$)+3
-00160     let win_height=udim(option$)+2
-00170     let wline=1
-00180     if display_cnam=1 then let win_height+=2 : let wline+=2
-00190     if display_cnam=2 then let win_height+=1 : let wline+=1
+00150     win_width=mxwo+len(q$)+3
+00160     win_height=udim(option$)+2
+00170     wline=1
+00180     if display_cnam=1 then win_height+=2 : wline+=2
+00190     if display_cnam=2 then win_height+=1 : wline+=1
 00200     for j=1 to udim(option$)
-00210       let fio1$(j)=str$(j+wline)&","&str$(len(q$)+3)&",C "&str$(mxwo)&",N"
+00210       fio1$(j)=str$(j+wline)&","&str$(len(q$)+3)&",C "&str$(mxwo)&",N"
 00220     next j
 00230     fnwin3b(win,cap$,win_height,win_width,display_cnam,button_option,win_align,pr_newpg)
 00240     pr #win,fields str$(wline+1)&",2,C "&str$(len(q$))&",N": q$

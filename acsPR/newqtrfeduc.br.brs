@@ -20,7 +20,7 @@
 00210   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4)
 00220   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00230   read #20,using L250: mat a$,b$(1),mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
-00240   let ficamaxw=ficamaxw*10
+00240   ficamaxw=ficamaxw*10
 00250 L250: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,pd 4.2,pd 4.2,10*pd 4.2,10*pd 3.3,10*c 12
 00260   close #20: 
 00270 ! ______________________________________________________________________
@@ -55,7 +55,7 @@
         fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto MENU1
 00520 L520: for j=1 to 4
-00530     if resp$(2)=option1$(j) then let qtr=j: m$=option1$(j): goto L550 ! quarter ending date
+00530     if resp$(2)=option1$(j) then qtr=j: m$=option1$(j): goto L550 ! quarter ending date
 00540   next j
 00550 L550: if qtr=1 then begdate=taxyear*10000+0312: enddate=val(taxyear$)*10000+0318
 00560   if qtr=2 then begdate=taxyear*10000+0612: enddate=val(taxyear$)*10000+0618

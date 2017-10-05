@@ -33,7 +33,7 @@
 00300 TRANSACTION_ENTRY: ! 
 00310   if addone=1 then inp(1)=inp(3)=0
 00320   fntos(sn$="billinginput") !:
-        respc=0 : let frac=0 !:
+        respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+3
 00330   fnlbl(1,1,"Job Number:",mylen,1)
 00340   fncmbjob(1,mypos) !:
@@ -105,7 +105,7 @@
 00900   pr #255,using L910: " __________",t1
 00910 L910: form pos 8,c 11,skip 1,pos 7,pic(-----,---.##),skip 1
 00920 PROOF_LIST_DONE: ! 
-00930   let gt1=0
+00930   gt1=0
 00940   fncloseprn
 00950   goto TRANSACTION_ENTRY
 00960 ! ______________________________________________________________________

@@ -24,7 +24,7 @@
 00190   fnacs(sn$,0,mat resp$,ckey)
 00200   if ckey=5 or ckey=cancel then goto XIT else !:
           if ckey=1 then let fnchain("S:\acsCL\Bank") else !:
-            if ckey=2 then let wbc=val(resp$(1)(1:2))
+            if ckey=2 then wbc=val(resp$(1)(1:2))
 00210   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative: rewrite #20,using 'Form POS 152,N 2',rec=1: wbc : close #20: 
 00220   goto XIT
 00230 ! ______________________________________________________________________

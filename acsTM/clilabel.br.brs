@@ -27,7 +27,7 @@
 00540   if cmdkey=99 or cmdkey=5 then goto XIT
 00560   if cmdkey=10 then prtall=1 : goto PRINT_EM
 00580   if cmdkey=6 then goto SRCH1
-00600   let z$=lpad$(rtrm$(k$),5)
+00600   z$=lpad$(rtrm$(k$),5)
 00620   read #1,using F_CLIENT,key=z$: z$,mat a$,mat app,mat ma nokey L250
 00640   gosub PRINT_LABEL : goto L190
 00660 ! ______________________________________________________________________
@@ -136,7 +136,7 @@
 02720   alp=0
 02740   if cmdkey=5 then goto SRCHEND
 02760   if rtrm$(k$)="" then goto L1380
-02780   let z$=lpad$(rtrm$(k$),5)
+02780   z$=lpad$(rtrm$(k$),5)
 02800   read #1,using F_CLIENT,key=z$: z$,mat a$,mat app,mat ma nokey L1310
 02820   gosub PRINT_LABEL : goto L1300
 02840 L1380: if cmdkey><2 then goto L1430

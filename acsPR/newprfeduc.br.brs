@@ -64,12 +64,12 @@
 00560   deposits=val(resp$(3))
 00570   topmargin=val(resp$(4))
 00580   leftmargin=val(resp$(5))
-00590   let futaqtr1=val(resp$(6))
-00600   let futaqtr2=val(resp$(7))
-00610   let futaqtr3=val(resp$(8))
-00620   let futaqtr4=val(resp$(9))
-00630   if resp$(10)="True" then let fullform=1 ! pr full form
-00640   if resp$(11)="True" then let fullform=2 ! fill in blanks
+00590   futaqtr1=val(resp$(6))
+00600   futaqtr2=val(resp$(7))
+00610   futaqtr3=val(resp$(8))
+00620   futaqtr4=val(resp$(9))
+00630   if resp$(10)="True" then fullform=1 ! pr full form
+00640   if resp$(11)="True" then fullform=2 ! fill in blanks
 00650   fnopenprn
 00660 ! ______________________________________________________________________
 00670   on pageoflow goto PGOF
@@ -165,7 +165,7 @@
 01560 ! fnpa_pic("S:\acsPR\2014.bmp",34+leftmargin,5)
 01570 L1570: fnpa_fontsize(12)
 01580   for j=1 to 10
-01590     let x=val(b$(1)(j:j)) conv L1610 ! pull any spaces or non-numeric characters out of federal id#
+01590     x=val(b$(1)(j:j)) conv L1610 ! pull any spaces or non-numeric characters out of federal id#
 01600     goto L1620
 01610 L1610: b$(1)(j:j)=""
 01620 L1620: if b$(1)(j:j)=" " then b$(1)(j:j)=""
@@ -204,7 +204,7 @@
 01950   fnpa_newpage
 01955   fnpa_pic("S:\acsPR\Form 940 pg2.bmp",1,1)
 01960   column4=119.5
-01965   if fullform=1 then let x=2.5: let y=1 else let x=0: let y=0 ! adjust for bad alignment
+01965   if fullform=1 then x=2.5: y=1 else x=0: y=0 ! adjust for bad alignment
 01970   lyne=26.4 +topmargin-x : leftmargin=leftmargin-y
 01980   fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",futaqtr1),column4+leftmargin,lyne+=8.2) ! tax liability for 1st qtr
 01990   fnpa_txt(cnvrt$("pic(zzzzzzzzzzz.##)",futaqtr2),column4+leftmargin,lyne+=8.2) ! tax liability for 2nd qtr
@@ -235,7 +235,7 @@
 02260 L2260: p1=pos(rtrm$(csz$),"  ",1)
 02270   if p1>0 then csz$(p1+1:p1+1)="" : goto L2260
 02280   csz$=ltrm$(rtrm$(csz$)): p1=pos(csz$," ",-1)
-02290   let zip$=csz$(p1+1:len(csz$)): let zip$=ltrm$(rtrm$(zip$))
+02290   zip$=csz$(p1+1:len(csz$)): zip$=ltrm$(rtrm$(zip$))
 02300   p2=pos(csz$(1:p1-1)," ",-1) : state$=csz$(p2+1:p1-1)(1:2) : state$=ltrm$(rtrm$(state$))
 02310   city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 02320   return 

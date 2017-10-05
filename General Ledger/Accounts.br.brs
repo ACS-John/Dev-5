@@ -81,7 +81,7 @@
 00660     fntxt(10,33,12,0,right,"10",0,"In order to pr prior year's cash flow and fund statements, the final balance from two years ago must be retained.",0)
 00662     resp$(10)=str$(pbp)
 00670     fnfra(12,1,14,105,"History and Budget Information"," ",0)
-00680     let x=11
+00680     x=11
 00690     fnlbl(1,14,"Balance This Yr",15,0,0,2)
 00691     fnlbl(1,34,"Balance Last Yr",15,0,0,2)
 00692     fnlbl(1,54,"Original Budget",15,0,0,2)
@@ -90,16 +90,16 @@
 00710       fnlbl(j+1,1,"Period "&str$(j),90,0,0,2)
 00712       fntxt(j+1,14,14,0,right,"10",0,"",2 )
 00714       resp$(x)=str$(bc(j))
-00716       let x=x+1
+00716       x=x+1
 00718       fntxt(j+1,34,14,0,right,"10",0,"",2 )
 00720       resp$(x)=str$(bp(j))
-00722       let x=x+1
+00722       x=x+1
 00724       fntxt(j+1,54,14,0,right,"10",0,"",2 )
 00726       resp$(x)=str$(bm(j))
-00728       let x=x+1
+00728       x=x+1
 00730       fntxt(j+1,74,14,0,right,"10",0,"",2 )
 00732       resp$(x)=str$(revb(j))
-00734       let x=x+1
+00734       x=x+1
 00736     next j
 00740   end if 
 00770   if edit_mode=1 then 
@@ -116,7 +116,7 @@
 00850   fnacs(sn$,0,mat resp$,ckey)
 00870   if ckey=5 then goto XIT
 00880 ! If edit_mode=1 Then kEY$=GL$=LPAD$(RESP$(1)(1:12),12): Goto 885
-00890   let gl$=fnagl$(resp$(1)) : key$=gl$
+00890   gl$=fnagl$(resp$(1)) : key$=gl$
 00900   if ckey=7 then gosub DELETE_ACCT : goto L1780
 00910   if edit_mode=1 and gl$<>holdgl$ then goto MSGBOX4 else goto L960
 00960 L960: ! 
@@ -128,12 +128,12 @@
 01010       rf(j)=val(resp$(j+3)(1:5)) ! incomestatement reference numbers
 01020     next j
 01030     pbp=val(resp$(10)) ! prior years 2 years ago
-01040     let x=11
+01040     x=11
 01050     for j=1 to 13
-01060       bc(j)=val(resp$(x)): let x+=1
-01070       bp(j)=val(resp$(x)): let x+=1
-01080       bm(j)=val(resp$(x)): let x+=1
-01090       revb(j)=val(resp$(x)): let x+=1
+01060       bc(j)=val(resp$(x)): x+=1
+01070       bp(j)=val(resp$(x)): x+=1
+01080       bm(j)=val(resp$(x)): x+=1
+01090       revb(j)=val(resp$(x)): x+=1
 01100     next j
 01102   end if 
 01104   if ckey<>3 then edit_mode=0
@@ -166,7 +166,7 @@
 01330   fncmdset(2)
 01340   fnacs(sn$,0,mat resp$,ckey)
 01360   if ckey=5 then goto MAIN
-01370   let fixgrid=99
+01370   fixgrid=99
 01380   dno=ano=sno=0
 01390   if use_dept=1 then dno=val(resp$(1)) : ano=val(resp$(2))
 01400   if use_dept=0 then ano=val(resp$(1))
@@ -183,7 +183,7 @@
 01541   bb=cb=pbp=0
 01542   mat bc=(0): mat bp=(0): mat bm=(0): mat revb=(0): mat ta=(0): mat rf=(0)
 01543   edit_mode=1
-01544   let gl$=key$
+01544   gl$=key$
 01550 ! write_new_record
 01560   write #1,using L1740: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
 01562   if cl1=1 then 
@@ -228,7 +228,7 @@
 01781   bb=cb=pbp=0
 01782   mat bc=(0) : mat bp=(0) : mat bm=(0) : mat revb=(0) : mat ta=(0) : mat rf=(0)
 01784   edit_mode=0
-01786   let gl$=""
+01786   gl$=""
 01790   goto MAIN
 01800 ! /r
 01810 DELETE_ACCT: ! r:
@@ -427,7 +427,7 @@
 03370 ! /r
 03630 SEARCH_GRID: ! r:
 03640   fnaccount_search(gl$,fixgrid)
-03650   let fixgrid=0
+03650   fixgrid=0
 03660   read #1,using L1740,key=gl$: gl$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb nokey MAIN
 03670   goto MAIN ! need search grid here   KJ
 03680 ! /r
@@ -476,7 +476,7 @@
 03990   fncmdset(2)
 04000   fnacs(sn$,0,mat resp$,ckey)
 04020   if ckey=5 then goto MAIN
-04030   let fixgrid=99
+04030   fixgrid=99
 04040   dno=ano=sno=0
 04050   if use_dept=1 then dno=val(resp$(1)) : ano=val(resp$(2))
 04060   if use_dept=0 then ano=val(resp$(1))
@@ -497,7 +497,7 @@
 04178   fnmsgbox(mat ml$,resp$,cap$,49)
 04180   if resp$="OK" then goto DO_EDIT else goto MAIN
 04190 L4190: !
-04192   let gl$=key$
+04192   gl$=key$
 04200 L4200: !
 04202   rewrite #1,using L4210,key=holdgl$: key$,d$,mat rf,bb,cb,mat bc,mat bp,mat bm,pbp,mat ta,mat revb
 04210 L4210: form pos 1,c 12,c 50,6*pd 3,42*pd 6.2,2*pd 3,13*pd 6.2
@@ -516,4 +516,4 @@
 20100   ml$(4)="Click OK to access the new account; else Cancel to quit."
 20120   fnmsgbox(mat ml$,resp$,cap$,49)
 20140   if resp$='OK' then goto DO_EDIT
-20160   if resp$='Cancel' then let gl$=key$=holdgl$: goto MAIN ! /r
+20160   if resp$='Cancel' then gl$=key$=holdgl$: goto MAIN ! /r

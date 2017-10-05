@@ -15,7 +15,7 @@
 00147   ! fscode=fnfscode
 00148   ! priorcd=fnpriorcd
 00150   if fnglfs=5 then goto XIT ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00155   let fscode=fnfscode 
+00155   fscode=fnfscode 
 00156   priorcd=fnpriorcd 
 00160   pors=1
 00170   mp1=69
@@ -75,7 +75,7 @@
 00580 L580: read #h_glmstr,using F_GLMSTR_B: gl_number$,ir,pcr,bb,cb,mat by,mat bp eof L740
 00590   if ir=0 then goto L580 ! skip any gl accounts not pointed to ic
 00610   if fscode=0 or (fscode=actpd and priorcd=1) then goto L680
-00620   if fscode<1 or fscode>13 then let fscode=1
+00620   if fscode<1 or fscode>13 then fscode=1
 00630   if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00640   if priorcd=2 then goto L670
 00650   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -118,7 +118,7 @@
 00832   if total><0 or total2><0 then goto L850
 00840   if ls+ul+ds+ic>0 then goto L850 else goto READ_ACGLFNS
 00850 L850: sp2=49-sp-1
-00852 ! If DS=1 Then dOLLAR$="": Let FORM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($$$$,$$$,$$$.##),C 1,POS 74,C 1,C 5,PIC($$$$$$,$$$,$$$.##),C 1,skip 1" Else Let FORM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
+00852 ! If DS=1 Then dOLLAR$="": foRM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($$$$,$$$,$$$.##),C 1,POS 74,C 1,C 5,PIC($$$$$$,$$$,$$$.##),C 1,skip 1" Else foRM$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
 00853 ! if debug_this then pr #255: '***'
 00854   if ul=1 then 
 00856     pr #255,using L856: d$(1:sp2),dollar$,"{\ul ",total,"}",dollar$,"{\ul ",total2,"}" pageoflow PGOF
@@ -146,9 +146,9 @@
 01002   sp2=49-sp-1
 01004   if ds=1 then 
 01006     dollar$=""
-01008     let form$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($---,---,---.##),C 1,POS 74,C 1,C 5,PIC($-----,---,---.##),C 1,skip 1"
+01008     form$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC($---,---,---.##),C 1,POS 74,C 1,C 5,PIC($-----,---,---.##),C 1,skip 1"
 01010   else 
-01012     let form$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
+01012     form$="Form POS SP,C SP2,POS 50,C 1,C 5,PIC(----,---,---.##),C 1,POS 74,C 1,C 5,PIC(------,---,---.##),C 1,skip 1"
 01014   end if 
 01015 ! pr some sub total like thingies
 01016   if ul=1 then 
@@ -170,11 +170,11 @@
 01110 L1110: ! 
 01112   if foot1=1 then goto L1160
 01120   tabnote=sp
-01130   let foot1=1
-01140   let foot$=d$
+01130   foot1=1
+01140   foot$=d$
 01150   goto READ_ACGLFNS
 01160 L1160: ! 
-01162   let foot$=rtrm$(foot$)&d$
+01162   foot$=rtrm$(foot$)&d$
 01170   goto READ_ACGLFNS
 01180 RESET_ACCUM_ARRAY: ! r:
 01182   for j=1 to 9
@@ -244,7 +244,7 @@
 01760     read #10,using L1770,key=k$: pc1,pc2,yt2 nokey L1820
 01770 L1770: form pos 1,g 5,2*pd 6.2
 01780     pc2=pc2+cb-bb
-01790     let yt2=yt2+cb
+01790     yt2=yt2+cb
 01800     rewrite #10,using L1770: pc1,pc2,yt2
 01810     goto L1830
 01820 L1820: write #10,using L1770: pc1,cb-bb,cb

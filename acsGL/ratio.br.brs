@@ -28,7 +28,7 @@
         chdr$(1)="Rec" !:
         chdr$(2)="Ratio #" : chdr$(3)="Ratio Name" !:
         cmask$(1)='30' : cmask$(2)='': cmask$(3)=''
-00260   let frame=0
+00260   frame=0
 00270   restore #ratiomst: !:
         fnflexinit1('Ratiomst1',lc=1,1,10,50,mat chdr$,mat cmask$,1)
 00280 READ_RATIOMST: ! read Ratiomst file
@@ -190,7 +190,7 @@
 01650   fnacs(sn$,0,mat resp$,ckey)
 01660   if ckey=5 then goto RATIOMSTGRID
 01670   for j=1 to 40
-01680     let gl$(j)=fnagl$(resp$(j))
+01680     gl$(j)=fnagl$(resp$(j))
 01690   next j
 01700   if ckey=2 then goto LEFT_SIDE
 01710   if ckey=3 then goto RIGHT_SIDE
@@ -212,7 +212,7 @@
 01860   fnacs(sn$,0,mat resp$,ckey)
 01870   if ckey=5 then goto RATIOMSTGRID
 01880   for j=1 to 40
-01890     let gl$(j+40)=fnagl$(resp$(j))
+01890     gl$(j+40)=fnagl$(resp$(j))
 01900   next j
 01910   if ckey=2 then goto LEFT_SIDE
 01920   if ckey=3 then goto RIGHT_SIDE

@@ -1,4 +1,4 @@
-10000 let fn_setup
+10000 fn_setup
 10020 fntop(program$)
 12010 activeOnly=1
 12020 if u4_meterAddress$='False' then

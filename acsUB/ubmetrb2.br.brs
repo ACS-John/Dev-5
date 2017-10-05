@@ -35,7 +35,7 @@
 00330   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using "Form POS 1,10*C 20,10*C 2",rec=1: mat snm$,mat srv$ !:
         close #20: 
-00340   let x=0
+00340   x=0
 00350   for j=1 to 4
 00360     if j=1 and trim$(snm$(j))="Water" then option$(x+=1)=srv$(j) !:
             service=service+1
@@ -85,12 +85,12 @@
           route=val(resp$(1))
 00660   svt$=resp$(2)
 00670   svt2$=resp$(3)
-00680   if resp$(4)="True" then let width=1
-00690   if resp$(5)="True" then let width=2
-00700   if resp$(6)="True" then let width=3
+00680   if resp$(4)="True" then width=1
+00690   if resp$(5)="True" then width=2
+00700   if resp$(6)="True" then width=3
 00710   if resp$(7)="True" then selectone=1 else selectone=0
-00720   if resp$(8)="True" then let formoption=1 ! complete form
-00730   if resp$(9)="True" then let formoption=2 ! fill in blanks
+00720   if resp$(8)="True" then formoption=1 ! complete form
+00730   if resp$(9)="True" then formoption=2 ! fill in blanks
 00740   service=1 ! only printing one service if not                                                answered as all
 00750   for j=1 to 10
 00760     if svt$=trim$(srv$(j)) then service$=snm$(j)(1:10)
@@ -102,27 +102,27 @@
 00820   fnopenprn
 00830 L830: if selectone=1 then goto SELECTONE
 00840 LOOP_TOP: ! 
-00850   let x=0
+00850   x=0
 00860 ! print
 00870 L870: read #1,using L1060: z$,mat e$,f1$,d1,d3,f3$,c4,f2$,d5,d7,d9,d11,book1,mat a,d13,extra16,b2,b5 eof DONE
-00880   let z2$=f12$="" : d12=d32=d52=d72=d92=d112=c42=0 : mat e2$=("")
+00880   z2$=f12$="" : d12=d32=d52=d72=d92=d112=c42=0 : mat e2$=("")
 00890   if route>0 and book1<>route then goto L870
 00900   if width=1 or width=3 then goto L920
 00910   read #1,using L1060: z2$,mat e2$,f12$,d12,d32,f32$,c42,f22$,d52,d72,d92,d112,book2,mat a2 eof L1060
-00920 L920: if svt$=srv$(1) and width=1 then previous=d1: columnonename$=srv$(1): let firstmeter$=f1$: secondmeter$="": let firstcode$=str$(a(1)): secondcode$="" ! water only service
-00930   if svt$=srv$(1) and width=2 then previous=d1: previous2=d12: let firstmeter$=f1$: secondmeter$=f12$: let firstcode$=str$(a(1)): secondcode$=str$(a2(1)) ! two different water customers
-00940   if svt$=srv$(1) and svt2$=srv$(3) and width=3 then previous=d1: previous2=d5 : let firstmeter$=f1$: secondmeter$=f2$: let firstcode$=str$(a(1)): secondcode$=str$(a(3)) ! water and electric
-00950   if svt$=srv$(1) and svt2$=srv$(4) and width=3 then previous=d1: previous2=d9 : let firstmeter$=f1$: secondmeter$=f3$: let firstcode$=str$(a(1)): secondcode$=str$(a(4)) ! water and gas
-00960   if svt$=srv$(3) and width=1 then previous=d5: let firstmeter$=f2$: secondmeter$="": let firstcode$=str$(a(3)): secondcode$="" ! electric only
-00970   if svt$=srv$(3) and width=2 then previous=d5: previous2=d52: let firstmeter$=f2$: secondmeter$=f22$: let firstcode$=str$(a(3)): secondcode$=str$(a2(3)) ! electric or lawn meter
-00980   if svt$=srv$(3) and svt2$=srv$(1) and width=3 then previous=d5: previous2=d1: let firstmeter$=f2$: secondmeter$=f1$: let firstcode$=str$(a(3)): secondcode$=str$(a(1)) ! electric or lawn meter  and water
-00990   if svt$=srv$(3) and svt2$=srv$(4) and width=3 then previous=d5: previous2=d9: let firstmeter$=f2$: secondmeter$=f3$: let firstcode$=str$(a(3)): secondcode$=str$(a(4)) ! electric or lawn meter  and gas
-01000   if svt$=srv$(4) and width=1 then previous=d9: let firstmeter$=f3$: secondmeter$="": let firstcode$=str$(a(4)): secondcode$="" ! gas only
-01010   if svt$=srv$(4) and width=2 then previous=d9: previous2=d92: let firstmeter$=f3$: secondmeter$=f32$: let firstcode$=str$(a(4)): secondcode$=str$(a2(4)) ! gas
-01020   if svt$=srv$(4) and svt2$=srv$(1) and width=3 then previous=d9: previous2=d1: let firstmeter$=f3$: secondmeter$=f1$: let firstcode$=str$(a(4)): secondcode$=str$(a(1)) ! gas and water
-01030   if svt$=srv$(4) and svt2$=srv$(3) and width=3 then previous=d9: previous2=d5: let firstmeter$=f3$: secondmeter$=f2$: let firstcode$=str$(a(4)): secondcode$=str$(a(3)) ! gas and electric
+00920 L920: if svt$=srv$(1) and width=1 then previous=d1: columnonename$=srv$(1): firstmeter$=f1$: secondmeter$="": firstcode$=str$(a(1)): secondcode$="" ! water only service
+00930   if svt$=srv$(1) and width=2 then previous=d1: previous2=d12: firstmeter$=f1$: secondmeter$=f12$: firstcode$=str$(a(1)): secondcode$=str$(a2(1)) ! two different water customers
+00940   if svt$=srv$(1) and svt2$=srv$(3) and width=3 then previous=d1: previous2=d5 : firstmeter$=f1$: secondmeter$=f2$: firstcode$=str$(a(1)): secondcode$=str$(a(3)) ! water and electric
+00950   if svt$=srv$(1) and svt2$=srv$(4) and width=3 then previous=d1: previous2=d9 : firstmeter$=f1$: secondmeter$=f3$: firstcode$=str$(a(1)): secondcode$=str$(a(4)) ! water and gas
+00960   if svt$=srv$(3) and width=1 then previous=d5: firstmeter$=f2$: secondmeter$="": firstcode$=str$(a(3)): secondcode$="" ! electric only
+00970   if svt$=srv$(3) and width=2 then previous=d5: previous2=d52: firstmeter$=f2$: secondmeter$=f22$: firstcode$=str$(a(3)): secondcode$=str$(a2(3)) ! electric or lawn meter
+00980   if svt$=srv$(3) and svt2$=srv$(1) and width=3 then previous=d5: previous2=d1: firstmeter$=f2$: secondmeter$=f1$: firstcode$=str$(a(3)): secondcode$=str$(a(1)) ! electric or lawn meter  and water
+00990   if svt$=srv$(3) and svt2$=srv$(4) and width=3 then previous=d5: previous2=d9: firstmeter$=f2$: secondmeter$=f3$: firstcode$=str$(a(3)): secondcode$=str$(a(4)) ! electric or lawn meter  and gas
+01000   if svt$=srv$(4) and width=1 then previous=d9: firstmeter$=f3$: secondmeter$="": firstcode$=str$(a(4)): secondcode$="" ! gas only
+01010   if svt$=srv$(4) and width=2 then previous=d9: previous2=d92: firstmeter$=f3$: secondmeter$=f32$: firstcode$=str$(a(4)): secondcode$=str$(a2(4)) ! gas
+01020   if svt$=srv$(4) and svt2$=srv$(1) and width=3 then previous=d9: previous2=d1: firstmeter$=f3$: secondmeter$=f1$: firstcode$=str$(a(4)): secondcode$=str$(a(1)) ! gas and water
+01030   if svt$=srv$(4) and svt2$=srv$(3) and width=3 then previous=d9: previous2=d5: firstmeter$=f3$: secondmeter$=f2$: firstcode$=str$(a(4)): secondcode$=str$(a(3)) ! gas and electric
 01040   if route=0 or route=book2 then goto L1060
-01050   let z2$=f12$="" : d12=d32=d52=d72=d92=d112=c42=0 : mat e2$=("")
+01050   z2$=f12$="" : d12=d32=d52=d72=d92=d112=c42=0 : mat e2$=("")
 01060 L1060: form pos 1,c 10,4*c 30,c 12,pos 217,pd 5,pos 227,pd 5,pos 373,c 12,pos 213,pd 4,pos 361,c 12,pos 237,pd 5,pos 247,pd 5,pos 257,pd 5,pos 267,pd 5,pos 1741,n 2,pos 143,7*pd 2,pos 277,pd 5,pos 1818,n 3,pos 161,pd 4.2,pos 173,pd 4.2
 01070   if formoption=2 then gosub BLANKS : goto L1700
 01080   if width=2 or width=3 then for j=1 to 2: pr #255,using L1320: "|": next j

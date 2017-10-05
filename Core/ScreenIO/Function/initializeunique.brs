@@ -7,6 +7,6 @@
  def fnInitializeUnique(mat Subscripts$,mat f$,prefix$,DataFile;___,Subscript)
     subscript=fnFindSubscript(mat Subscripts$,prefix$,"id")
     if Subscript then
-       let f$(Subscript)=fnMakeUniqueKey$(DataFile)
+       f$(Subscript)=fnMakeUniqueKey$(DataFile)
     end if
  fnend

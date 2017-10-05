@@ -1,6 +1,6 @@
 18000 library program$: fnworkOrderAdd
 18010 library 'S:\Core\Library': fnxit,fntop,fnask_account,fngethandle
-18020 let fntop(program$)
+18020 fntop(program$)
 18030 open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 18040 do
 18050   if fnask_account('Work Order',z$,h_customer)=5 then 
@@ -11,7 +11,7 @@
 18100 loop
 18110 XIT: !
 18120 close #h_customer:
-18130 let fnxit
+18130 fnxit
 32000 def library fnworkOrderAdd(z$*10)
 32020   if ~wo_setup then ! r:
 32040     wo_setup=1
@@ -23,19 +23,19 @@
 32140     dim workinfo$(15)*512
 32160     dim i$(16)*320
 32180     dim line$(5)*100
-32200     let ws$(1)="Date Order Taken:"
-32220     let ws$(2)="Taken by:"
-32240     let ws$(3)="Date Last Reading:"
-32260     let ws$(4)="Date to be Completed:"
-32280     let ws$(5)="Request made by:"
-32300     let ws$(6)="Phone:"
-32320     let ws$(7)="Name In:"
-32340     let ws$(8)="Turn On:"
-32360     let ws$(9)="Turn Off:"
-32380     let ws$(10)="Leave On:"
-32400     let ws$(11)="Forwarding Address:"
-32420     let ws$(12)="Forwarding City St Zip:"
-32440     let ws$(13)="Comments:"
+32200     ws$(1)="Date Order Taken:"
+32220     ws$(2)="Taken by:"
+32240     ws$(3)="Date Last Reading:"
+32260     ws$(4)="Date to be Completed:"
+32280     ws$(5)="Request made by:"
+32300     ws$(6)="Phone:"
+32320     ws$(7)="Name In:"
+32340     ws$(8)="Turn On:"
+32360     ws$(9)="Turn Off:"
+32380     ws$(10)="Leave On:"
+32400     ws$(11)="Forwarding Address:"
+32420     ws$(12)="Forwarding City St Zip:"
+32440     ws$(13)="Comments:"
 32460     dim customer_name$*30
 32480     dim customer_phone_number$*12
 32500     dim z$*10
@@ -69,49 +69,49 @@
 34060   fnlbl(1,30,"WORK ORDER",20,0,4)
 34080   fnlbl(2,1,"Account:",10,1)
 34160   fntxt(2,12,10,0,1,"",1)
-34200   let workinfo$(respc_accont=respc+=1)=z$
+34200   workinfo$(respc_accont=respc+=1)=z$
 34220   fnlbl(2,24,"Name:",5,1)
 34240   fntxt(2,31,25,30,0,"",1)
-34260   let workinfo$(respc+=1)=customer_name$
+34260   workinfo$(respc+=1)=customer_name$
 34280   fnlbl(4,1,"Date Order Taken:",23,1)
 34300   fntxt(4,25,25)
-34320   let workinfo$(respc+=1)=dat$
+34320   workinfo$(respc+=1)=dat$
 34340   fnlbl(5,1,ws$(2),23,1)
 34360   fntxt(5,25,25)
-34380   let workinfo$(respc+=1)=""
+34380   workinfo$(respc+=1)=""
 34400   fnlbl(6,1,ws$(3),23,1)
 34420   fntxt(6,25,25)
-34440   let workinfo$(respc+=1)=""
+34440   workinfo$(respc+=1)=""
 34460   fnlbl(7,1,ws$(4),23,1)
 34480   fntxt(7,25,25)
-34500   let workinfo$(respc+=1)=""
+34500   workinfo$(respc+=1)=""
 34520   fnlbl(8,1,ws$(5),23,1)
 34540   fntxt(8,25,25)
-34560   let workinfo$(respc+=1)=""
+34560   workinfo$(respc+=1)=""
 34580   fnlbl(9,1,ws$(6),23,1)
 34600   fntxt(9,25,14)
-34620   let workinfo$(respc+=1)=customer_phone_number$
+34620   workinfo$(respc+=1)=customer_phone_number$
 34640   fnlbl(10,1,ws$(7),23,1)
 34660   fntxt(10,25,25)
-34680   let workinfo$(respc+=1)=""
+34680   workinfo$(respc+=1)=""
 34700   fnlbl(11,1,ws$(8),23,1)
 34720   fntxt(11,25,8,0,0,"1")
-34740   let workinfo$(respc+=1)=""
+34740   workinfo$(respc+=1)=""
 34760   fnlbl(12,1,ws$(9),23,1)
 34780   fntxt(12,25,8,0,0,"1")
-34800   let workinfo$(respc+=1)=""
+34800   workinfo$(respc+=1)=""
 34820   fnlbl(13,1,ws$(10),23,1)
 34840   fntxt(13,25,8)
-34860   let workinfo$(respc+=1)=""
+34860   workinfo$(respc+=1)=""
 34880   fnlbl(14,1,ws$(11),23,1)
 34900   fntxt(14,25,30)
-34920   let workinfo$(respc+=1)=""
+34920   workinfo$(respc+=1)=""
 34940   fnlbl(15,1,ws$(12),23,1)
 34960   fntxt(15,25,30)
-34980   let workinfo$(respc+=1)=""
+34980   workinfo$(respc+=1)=""
 35000   fnlbl(16,1,ws$(13),23,1)
 35020   fntxt(16,25,50,280)
-35040   let workinfo$(respc+=1)=""
+35040   workinfo$(respc+=1)=""
 35060   fncmdkey("Print History",8,0,0,"This allows you to review the description of any work order issued in the past")
 35080   fncmdkey("&Print",1,1,0,"Prints a workorder on this customer for the information entered above.")
 35100   fncmdkey("&Cancel",5,0,1,"Returns to main customer record.")
@@ -127,18 +127,18 @@
 38260   for j=2 to 12
 38280     if i$(j)(1:5)<>"_____" then i$(j)="{\ul "&i$(j)&"}" ! underline the answer if there was one
 38300   next j
-38320   let y=55: let z=1
+38320   y=55: z=1
 38340   for j=1 to 5
-38360     let x=pos(i$(13)," ",y)
+38360     x=pos(i$(13)," ",y)
 38380     if x>0 and x<=j*70 then 
 38400       line$(j)=i$(13)(z:x)
-38420       let z=x+1
-38440       let y=x+55
+38420       z=x+1
+38440       y=x+55
 38460     end if 
 38480     if x=0 or x>j*70 then 
 38500       line$(j)=i$(13)(z:j*70)
-38520       let y=z+70
-38540       let z=z+70
+38520       y=z+70
+38540       z=z+70
 38560     end if 
 38580   next j
 

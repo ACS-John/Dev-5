@@ -67,7 +67,7 @@
         fncmdkey("&Cancel",5,0,1,"Returns to main menu")
 00490   fnacs(sn$,0,mat resp$,ck)
 00500   if ck=5 then goto XIT
-00510   let wbc$=fnagl$(resp$(1)) ! working bank account
+00510   wbc$=fnagl$(resp$(1)) ! working bank account
 00520   rewrite #82,using "Form pos 1,c 12",rec=1: resp$(1)
 00530   if ck=3 then goto MENU1 ! redisplay balances
 00540   bn$=resp$(1)(13:30)
@@ -84,7 +84,7 @@
 00650   if lrec(81)=0 then write #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt : goto L670
 00660   rewrite #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt
 00670 L670: close #81: ioerr L680
-00680 L680: if ti3<3 then let wtt=ti3
+00680 L680: if ti3<3 then wtt=ti3
 00690   on ti3 goto CLEARING_OPTIONS,CLEARING_OPTIONS,CLEARING_ADJUSTMENTS,CALCULATE_TOTALS,PRINT_LISTINGS none MENU1
 00700 ! ______________________________________________________________________
 00710 CLEARING_ADJUSTMENTS: ! 
@@ -177,19 +177,19 @@
 01400   amt=val(tr$(3)) conv L1380
 01410   if amt=0 then goto L1380
 01420   if codt=0 then goto L1450
-01430   let x=val(tr$(2)) conv L1380
+01430   x=val(tr$(2)) conv L1380
 01440   if fndate_mmddyy_to_ccyymmdd(x)>fndate_mmddyy_to_ccyymmdd(codt) then goto L1380
 01450 L1450: if stmtdt=clr then goto L1530
 01460   if clr=0 then goto L1480
 01470   if fndate_mmddyy_to_ccyymmdd(clr)<fndate_mmddyy_to_ccyymmdd(stmtdt) then goto L1380
 01480 L1480: on tcde goto L1490,L1500,L1510,L1490 none L1580 ! NOT CLEARED
-01490 L1490: t1(8)=t1(8)+1: t1(9)=t1(9)+amt : let w0=2 : goto L1580 ! NOT CLEARED CHECKS
-01500 L1500: t1(6)=t1(6)+1: t1(7)=t1(7)+amt : let w0=1 : goto L1580 ! NOT CLEARED DEPOSITS
+01490 L1490: t1(8)=t1(8)+1: t1(9)=t1(9)+amt : w0=2 : goto L1580 ! NOT CLEARED CHECKS
+01500 L1500: t1(6)=t1(6)+1: t1(7)=t1(7)+amt : w0=1 : goto L1580 ! NOT CLEARED DEPOSITS
 01510 L1510: if amt>0 then goto L1500
 01520   amt=-amt : goto L1490
 01530 L1530: on tcde goto L1540,L1550,L1560,L1540 none L1580
-01540 L1540: t1(1)=t1(1)+1: t1(2)=t1(2)+amt : let w0=4: goto L1580 ! CLEARED CHECKS
-01550 L1550: t1(3)=t1(3)+1: t1(4)=t1(4)+amt : let w0=3: goto L1580 ! CLEARED DEPOSTIS
+01540 L1540: t1(1)=t1(1)+1: t1(2)=t1(2)+amt : w0=4: goto L1580 ! CLEARED CHECKS
+01550 L1550: t1(3)=t1(3)+1: t1(4)=t1(4)+amt : w0=3: goto L1580 ! CLEARED DEPOSTIS
 01560 L1560: if amt>0 then goto L1550
 01570   amt=-amt: goto L1540
 01580 L1580: if ti3=5 then gosub L2570
@@ -197,7 +197,7 @@
 01600 L1600: if ti3><5 then goto BANKTOTALSCREEN
 01610   fnopenprn
 01620   for j=1 to 4
-01630     let wp=j+50
+01630     wp=j+50
 01640     if w(j)=0 then goto WPNEXTJ
 01650     pr #wp,using L1660: t2(j)
 01660 L1660: form pos 19,"  ----------",skip 1,pos 19,n 12.2,skip 1
@@ -238,7 +238,7 @@
 01990 L1990: read #bankrec1,using 'Form POS 79,c 12,pos 3,N 1,C 8,G 6,pd 10.2,C 8,C 35,N 1,N 6,N 1': bankgl$,tcde,tr$(1),tr$(2),tx3,tr$(4),tr$(5),pcde,clr,scd eof EO_ADDING_BALANCE !:
         tr$(3)=str$(tx3)
 02000   if bankgl$><wbc$ then goto L1990
-02010   let x=val(tr$(2)) conv L1990
+02010   x=val(tr$(2)) conv L1990
 02020   if fndate_mmddyy_to_ccyymmdd(x)=<fndate_mmddyy_to_ccyymmdd(codt) then goto L1990
 02030   if tcde=1 then cutoffbal=cutoffbal+val(tr$(3)) ! add checks back
 02040   if tcde=2 then cutoffbal=cutoffbal-val(tr$(3)) ! subtract deposits
@@ -287,20 +287,20 @@
         resp$(respc+=1)=""
 02430   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
 02440   if ck=5 or ck=cancel then goto MENU1
-02450   if resp$(1)(1:1)="T" then let w(1)=1 else let w(1)=0
-02460   if resp$(2)(1:1)="T" then let w(2)=1 else let w(2)=0
-02470   if resp$(3)(1:1)="T" then let w(3)=1 else let w(3)=0
-02480   if resp$(4)(1:1)="T" then let w(4)=1 else let w(4)=0
+02450   if resp$(1)(1:1)="T" then w(1)=1 else w(1)=0
+02460   if resp$(2)(1:1)="T" then w(2)=1 else w(2)=0
+02470   if resp$(3)(1:1)="T" then w(3)=1 else w(3)=0
+02480   if resp$(4)(1:1)="T" then w(4)=1 else w(4)=0
 02490   fnopenprn
 02500   for j=1 to 4
 02510     if w(j)=0 then goto L2540
-02520     let wp=j+50
+02520     wp=j+50
 02530     open #wp: "Name=Rpt"&str$(j)&"."&wsid$&",Size=0,RecL=132,Replace",display,output 
 02540 L2540: next j
 02550   mat t2=(0)
 02560   goto CALCULATE_TOTALS
 02570 L2570: if w(w0)=0 then goto L2630
-02580   let wp=w0+50
+02580   wp=w0+50
 02590   if w(w0)=1 then gosub L2690
 02600   pr #wp,using L2610: tr$(1),val(tr$(2)),amt,tr$(5),clr pageoflow L2650
 02610 L2610: form pos 1,c 10,pic(zz/zz/zz),n 12.2,x 2,c 37,pic(zz/zz/zz),skip 1
@@ -319,7 +319,7 @@
 02740   pr #wp: "Check or                                                              Date"
 02750   pr #wp: "Ref Numb    Date       Amount   Name or Description                  Cleared"
 02760   pr #wp: "________  ________  __________  ___________________________________  ________"
-02770   let w(w0)=w(w0)+1
+02770   w(w0)=w(w0)+1
 02780   return 
 02790 ! ______________________________________________________________________
 02800 ! ______________________________________________________________________
@@ -405,7 +405,7 @@
 03510   fntos(sn$="bankrec-5") !:
         respc=0
 03520   fnfra(1,1,9,60,"Reconciliation Options","Used to clear deposita by amounts and not by reference number",0) !:
-        let frame=1
+        frame=1
 03530   fnopt(1,3,"Erase Previous Amounts & Dates",0,frame) !:
         if sel_code=1 or sel_code=0 then resp$(respc+=1)="True" else !:
           resp$(respc+=1)="False"
@@ -545,7 +545,7 @@
 04700 L4700: dpd$=cnvrt$("PIC(######)",stmtdt)
 04710   mo2=val(dpd$(1:2))
 04720   da2=val(dpd$(3:4))
-04730   let yr2=val(dpd$(5:6))
+04730   yr2=val(dpd$(5:6))
 04740   for ce=1 to 25
 04750     j1=int((ce-1)/5)+1
 04760     j2=ce-(j1-1)*5
@@ -553,7 +553,7 @@
 04780     dpd$=cnvrt$("PIC(######)",dpd(j1,j2))
 04790     mo1=val(dpd$(1:2))
 04800     da1=val(dpd$(3:4))
-04810     let yr1=val(dpd$(5:6))
+04810     yr1=val(dpd$(5:6))
 04820     if mo1<01 or mo1>12 then goto ERR8
 04830     if mo1=mo2 and yr1=yr2 then goto L4870 ! SAME MONTH SAME YEAR
 04840     if yr1=yr2 and mo1+1=mo2 then goto L4870 ! PREVIOUS MONTH SAME YEAR
@@ -637,7 +637,7 @@
 05540   fnlbl(1,1,trim$(bn$(1:30))&"-"&type$,65,2)
 05550   fnflexinit1('Deposit-1',2,3,15,55,mat chdr$,mat cmask$,1)
 05560   restore #clearing: 
-05570   let x=lrec(89): if nextrec>0 and x>1 and displayattop$="True" then goto L5580 else goto L5670
+05570   x=lrec(89): if nextrec>0 and x>1 and displayattop$="True" then goto L5580 else goto L5670
 05580 L5580: for j=nextrec to lrec(clearing) ! read starting with next record
 05590     read #clearing,using 'Form POS 1,C 21,G 6,pd 10.2,c 6',rec=j: flxitm$(2),flxitm$(3),amount,flxitm$(5) norec L5610 !:
           flxitm$(1)=str$(rec(clearing)) !:

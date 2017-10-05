@@ -37,7 +37,7 @@
 22180     is_index_statement=1
 22200     is_index_file=2
 22220 !   /r
-22240     let fail=0
+22240     fail=0
 22260     if index_parameters$='' then index_statement_or_file=is_index_statement else index_statement_or_file=is_index_file
 25000     if exists(data_file$) then 
 26000       if index_statement_or_file=is_index_statement then 
@@ -63,14 +63,14 @@
 27162 !       if env$('ACSDeveloper')='' then execute 'CD S:'
 27180       end if 
 28000     else 
-28020       let fail=1
+28020       fail=1
 28040       fnstatus("Could not find data file:")
 28060       fnstatus("     "&os_filename$(data_file$))
 28080     end if 
 28090 !   end if
 28100     goto INDEX_XIT
 30000 EXE_INDEX_ERR: ! 
-30020     let fail=1
+30020     fail=1
 30040     fnstatus("Encountered error "&str$(err)&" executing index:")
 30060     fnstatus("     ("&index_execute_text$&")") ! pause
 30100     if err=7600 then 

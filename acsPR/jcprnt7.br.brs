@@ -97,10 +97,10 @@
 19892   c(13)=c(13)+x13*x23/100
 19894   c(14)=c(14)+max((x12-x15),((x15/x23/100)-x15))
 19896   c(15)=c(15)+max((x13-x16),((x16/x23/100)-x16))
-19898   let x6=0
-19900   let x7=0
-19902   let x8=0
-19904   let x9=0
+19898   x6=0
+19900   x7=0
+19902   x8=0
+19904   x9=0
 19906   if sd = 1 then goto L19833
 19908 L19900: pr #255, using L19910: jn$(1:6),n$(1:40),cn$(7:11),k$(1:19),c(5),c(6),c(7),c(8),c(9),c(10),c(11),c(12),c(13),c(14),c(15) pageoflow PGOF
 19910 L19910: form skip 1,pos 5,c 6,pos 16,c 40,skip 1,pos 1,c 5,pos 11,c 19,pos 31,n 7,pos 43,n 7,pos 53,n 3,pos 58,n 7,pos 66,n 7,pos 74,n 7,pos 82,n 7,pos 93,n 5,pos 101,n 5,pos 107,n 7,pos 115,n 7,skip 0

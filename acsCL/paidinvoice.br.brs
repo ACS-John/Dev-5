@@ -37,7 +37,7 @@
 00270 ! ** Field Types ** !:
         ! Valid are C, G, N, PD, !:
         ! Default is 'G' !:
-        let fc=0 ! Field Type Item Counter
+        fc=0 ! Field Type Item Counter
 00280   fltyp$(fc+=1)='C' !:
         fltyp$(fc+=1)='C' !:
         fltyp$(fc+=1)='G' !:

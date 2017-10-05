@@ -118,8 +118,8 @@
 42640   fnacs(sn$,win,mat resp$,ck)
 44000   if ck=5 then goto XIT
 44020   d1=val(resp$(1))
-44040   let weg$=resp$(2)(1:1)
-44060   let wrate=val(resp$(3))
+44040   weg$=resp$(2)(1:1)
+44060   wrate=val(resp$(3))
 44080   for a = 1 to 16
 44100     range(a) = val(resp$(a+3))
 44120   next a
@@ -153,7 +153,7 @@
 52220     end if
 52240   next j
 52260   cust(16)+=1
-52280   let x+=1 
+52280   x+=1 
 52300   excess(x,1)=val(z$)
 52320   if weg$="W" then 
 52340     excess(x,2)=d(3) 

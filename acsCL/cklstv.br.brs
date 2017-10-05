@@ -61,7 +61,7 @@
 00560   goto BODY
 00570 ! ______________________________________________________________________
 00580 SUBHEADING: ! 
-00590   let ytdp=typ=ta(1)=ta(2)=0 : vn$=nam$=ad1$=ad2$=csz$=ss$=ph$=""
+00590   ytdp=typ=ta(1)=ta(2)=0 : vn$=nam$=ad1$=ad2$=csz$=ss$=ph$=""
 00600   read #paymstr,using 'Form POS 1,C 8,4*C 30,PD 5.2,N 2,C 11,2*PD 3,C 12',key=tr$(4): vn$,nam$,ad1$,ad2$,csz$,ytdp,typ,ss$,mat ta,ph$ nokey PR_NOKEY
 00610   pr #255,using 'Form POS 1,C 80': "Vendor: "&trim$(vn$)&". "&nam$ pageoflow PGOF : goto PAST_PR_NOKEY
 00620 PR_NOKEY: ! 

@@ -69,7 +69,7 @@
 21130   dim gridname_list$(300)*87
 21140   fngetdir2(datafolder$&"\Grid\"&database$ ,mat gridname_list$, '','*.grd') ! ,mat gd2_date$,mat gd2_time$,gd2_full_path)
 21150   for gridname_list_item=1 to udim(mat gridname_list$) ! remove all the .grd extensions
-21160     let gridname_list$(gridname_list_item)=gridname_list$(gridname_list_item)(1:len(gridname_list$(gridname_list_item))-4)
+21160     gridname_list$(gridname_list_item)=gridname_list$(gridname_list_item)(1:len(gridname_list$(gridname_list_item))-4)
 21170   next gridname_list_item
 21200   fntos(sn$="flexselect")
 21220   fnlbl(1,1,"Flexgrid name:",16,1)
@@ -85,9 +85,9 @@
 22240   if ckey=5 then goto SELECTDATABASE
 22260   if ckey=3 then goto ADDGRIDNAME
 22280 ! if ckey=2 or trim$(resp$(1))="" then goto SELECTDATABASE ! back or no grid name
-22300 L780: let fullgridname$=datafolder$&"\Grid\"&database$&"\"&resp$(1)&".grd"
-22320   let fullgridindx$=datafolder$&"\Grid\"&database$&"\"&resp$(1)&".idx"
-22340   let gridname$=resp$(1)
+22300 L780: fullgridname$=datafolder$&"\Grid\"&database$&"\"&resp$(1)&".grd"
+22320   fullgridindx$=datafolder$&"\Grid\"&database$&"\"&resp$(1)&".idx"
+22340   gridname$=resp$(1)
 22360   open_read$=datafolder$&"\Grid\"&database$&"\"&database$&"_info"
 22380   if ckey=4 then 
 22390     close #hgridfile: ioerr ignore
@@ -115,7 +115,7 @@
 22760   mat colmask$(2)
 22780   colmask$(1)="30"
 22800   colmask$(2)=""
-22820   let filename$="flexreview"
+22820   filename$="flexreview"
 22840   fnflexinit1(filename$,2,1,10,72,mat colhdr$,mat colmask$,1)
 22860   if lrec(hgridfile)=0 then goto DISPLAYOPTIONS
 22870   do 
@@ -155,23 +155,23 @@
 23540   respc=0
 23560   fnlbl(1,1,"Data Base File:",20,1)
 23580   fntxt(1,22,20,20,0,"",1)
-23600   let gridinfo$(respc+=1)=database$
+23600   gridinfo$(respc+=1)=database$
 23620   fnlbl(2,1,"Grid Name:",20,1)
 23640   fntxt(2,22,20,20,0,"",1)
-23660   let gridinfo$(respc+=1)=gridname$
+23660   gridinfo$(respc+=1)=gridname$
 23680   fnlbl(3,1,"Column Number:",20,1)
 23700   tt$="Change column # if default not acceptable"
 23720   fntxt(3,22,2,2,0,"30",0,tt$)
-23740   let gridinfo$(respc+=1)=str$(lastcolumn+1)
+23740   gridinfo$(respc+=1)=str$(lastcolumn+1)
 23760   fnlbl(5,1,"Grid Options:",14,1)
-23780   let x=0
+23780   x=0
 23800   mat gridname_list$(300)
 23820   mat gridname_list$=("")
 23840   close #16: ioerr ignore
 23860   open #16: 'Name=S:\acs'&uprc$(trim$(fncursys$))&"\Grid\"&database$&"\"&database$&'.fil',display,input 
 23880 L1380: linput #16: ln$ eof L1420
-23900   let x=x+1
-23920   let gridname_list$(x)=trim$(ln$)
+23900   x=x+1
+23920   gridname_list$(x)=trim$(ln$)
 23940   goto L1380
 23960 L1420: ! 
 23980   mat gridname_list$(x)
@@ -179,7 +179,7 @@
 24020   tt$="Highlite any column heading you wish to add to your grid"
 24040   fncomboa("Grrr",5,16,mat gridname_list$,tt$,80)
 24060   mat gridinfo$(respc+=1)
-24062   if udim(mat gridname_list$)=>1 then let gridinfo$(respc)=gridname_list$(1) else let gridinfo$(respc)=''
+24062   if udim(mat gridname_list$)=>1 then gridinfo$(respc)=gridname_list$(1) else gridinfo$(respc)=''
 24080   fncmdkey("&Add Column",1,1)
 24100   fncmdkey("&Finish",5,0,1)
 24120   fnacs(sn$,0,mat gridinfo$,ckey) ! data options available
@@ -190,13 +190,13 @@
 24220   columnnum=val(gridinfo$(3)(1:3))
 24240   name$=gridinfo$(4)(1:30)
 24260   vname$=gridinfo$(4)(31:50)
-24280   let fieldlen=val(gridinfo$(4)(51:54))
+24280   fieldlen=val(gridinfo$(4)(51:54))
 24300   maskinfo$=gridinfo$(4)(55:67)
 24320   abbrev$=trim$(gridinfo$(4)(68:87))
 24340   maskinfo$=uprc$(maskinfo$)
 24360   maskformat$=maskinfo$(3:4) ! determine if pd,c,n etc format
 24380   decimalposition=val(maskinfo$(1:2))
-24400   let x=pos(uprc$(name$),"DATE",1)
+24400   x=pos(uprc$(name$),"DATE",1)
 24420   if x>0 then itisadate$="Y" else itisadate$="N"
 24440   if trim$(maskformat$)="N" and fieldlen<8 and itisadate$="Y" then 
 24460     colmask$="1"
@@ -325,7 +325,7 @@
 26820   sn$="addgrid"
 26840   fntos(sn$)
 26880   fnlbl(1,1,"Grid Name:" ,20,1)
-26900   let gridinfo$(2)=gridname$
+26900   gridinfo$(2)=gridname$
 26940   fntxt(1,22,11,11,0,"",0,"Limited to 11 characters!" )
 26960   fncmdset(2)
 26962   fnacs(sn$,0,mat resp$,ckey)

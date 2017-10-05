@@ -129,9 +129,9 @@
 01300 L1300: form pos 1,c 25,pos 26,n 10.2,pos 36,n 12.2,pos 49,n 11.2,pos 60,n 10.2,pos 70,n 6,pos 77,c 1,skip 1 ! 2/17/88
 01310     goto L1330
 01320 L1320: pr #255,using L1300: c$(y),d(y),e(y),f(y),f(y),0,"%"
-01330 L1330: let w=w+d(y)
-01340     let x=x+e(y)
-01350     let z=z+f(y)
+01330 L1330: w=w+d(y)
+01340     x=x+e(y)
+01350     z=z+f(y)
 01360   next y
 01370 L1370: if x=0 then goto L1410
 01380   pr #255,using L1390: "  FINAL TOTALS",w,x,z,z-x,(z-x)/x*100,"%"
@@ -174,8 +174,8 @@
 01750     if rtrm$(x$(x7))="" then goto L1780
 01760   next x7
 01770   goto L1820
-01780 L1780: let x$(x7)=cat$(j1)
-01790 L1790: let g(x7)=g(x7)+bil
+01780 L1780: x$(x7)=cat$(j1)
+01790 L1790: g(x7)=g(x7)+bil
 01800   h(x7)=h(x7)+hrs
 01810   i(x7)=i(x7)+std
 01820 L1820: return 
@@ -190,14 +190,14 @@
 01910     if rtrm$(x$(x7))="" then goto L2030
 01920     if x$(x7)="-1" then goto L1940
 01930     goto L1950
-01940 L1940: let x$(x7)="UNASSIGNED"
+01940 L1940: x$(x7)="UNASSIGNED"
 01950 L1950: if i(x7)><0 then goto L1980
 01960     pr #255,using L1300: x$(x7)(1:25),h(x7),i(x7),g(x7),g(x7),0,"%"
 01970     goto L1990
 01980 L1980: pr #255,using L1300: x$(x7)(1:25),h(x7),i(x7),g(x7),g(x7)-i(x7),(g(x7)-i(x7))/i(x7)*100,"%"
-01990 L1990: let w1=w1+g(x7)
-02000     let x1=x1+h(x7)
-02010     let y1=y1+i(x7)
+01990 L1990: w1=w1+g(x7)
+02000     x1=x1+h(x7)
+02010     y1=y1+i(x7)
 02020   next x7
 02030 L2030: if y1=0 then goto L2060
 02040   pr #255,using L1390: "   FINAL TOTALS",x1,y1,w1,w1-y1,(w1-y1)/y1*100,"%"

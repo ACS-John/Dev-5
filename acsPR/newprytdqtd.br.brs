@@ -19,7 +19,7 @@
 00180 L180: open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
         read #1,using 'Form POS 133,PD 6.3,PD 6.2,POS 239,PD 4.2,POS 618,30*N 1,10*C 6': mcr,mcm,ficamaxw !:
         close #1: 
-00190   let ficamaxw=ficamaxw*10
+00190   ficamaxw=ficamaxw*10
 00200   fnDedNames(mat fullname$,mat abbrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc)
 00210   open #4: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,input,keyed 
 00220   if fnprocess=1 then goto L240
@@ -35,7 +35,7 @@
 00320   ! if env$('client')="West Rest Haven" then goto L370 ! don't turn name around
 00330   em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
 00340   mat qtr1tcp=(0) : mat qt2tcp=(0): mat qtr3tcp=(0): mat qtr4tcp=(0)
-00350   let fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=medqtr=0
+00350   fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=medqtr=0
 00360   mat quartertotals=(0): mat ytdtotal=(0): dedfedyr=dedficayr=0 !:
         dedstateyr=deducyr=wagesyr=0
 00370   mat rptemp=(0) ! L370:
@@ -63,8 +63,8 @@
 00590   ttips=ttips+ytdtotal(30) ! tips
 00600 ! Goto 280
 00610 ! mCW1=TFW=0 ! mcw1=total medicare wages for this employee  tfw = totoal ss wage for this employee
-00620   let ficawagesyr=wagesyr- dedficayr !:
-        let ficawagesqtr=quartertotals(31)- dedficaqtr
+00620   ficawagesyr=wagesyr- dedficayr !:
+        ficawagesqtr=quartertotals(31)- dedficaqtr
 00640   on em(6)+1 goto L650,L690,L650 none L770
 00645 ! determine medicare maximum wages
 00650 L650: mcw1+=ficawagesqtr ! mo maximum mc wage
@@ -154,7 +154,7 @@
 01520 ASK_DATES: ! 
 01530   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1,dat$)
 01580   fntos(sn$="YtdQtdReg-1") !:
-        rc=cf=0: mylen=42: mypos=45: let frameno=1
+        rc=cf=0: mylen=42: mypos=45: frameno=1
 01590   fnfra(1,1,4,66,"Payroll Date","Enter the payroll date.")
 01600   fnlbl(1,1,"Payroll Period Ending Date:",mylen,1,0,frameno)
 01610   fntxt(1,mypos,10,0,1,"3",0,"Normally the last payroll date, but can beny point in time. ",frameno) !:
@@ -163,7 +163,7 @@
 01630   fntxt(2,mypos,20,0,0," ",0,"Enter the date in alpha format for use in report heading." ,frameno) !:
         resp$(rc+=1)= dat$
 01640   fnfra(7,25,6,42,"Date Range","In order to Identify earnings and deductions, these answers must be correct.") !:
-        let frameno=2 : mylen=26 : mypos=mylen+2
+        frameno=2 : mylen=26 : mypos=mylen+2
 01650   fnlbl(1,1,"Starting Date:",mylen,1,0,frameno)
 01660   fntxt(1,mypos,10,0,1,"3",0,"Enter the beginning date of your payrll year.",frameno) !:
         resp$(rc+=1)=str$(beg_date)
@@ -190,11 +190,11 @@
 01820   dat$=resp$(2)
 01830   beg_date=val(resp$(3)) !:
         end_date=val(resp$(4)) !:
-        let qtr1=val(resp$(5)) !:
-        let qtr2=val(resp$(6)) !:
-        let qtr3=val(resp$(7)) !:
-        let qtr4=val(resp$(8))
-01840   let qtr5=val(resp$(9)(1:4))*10000+1231
+        qtr1=val(resp$(5)) !:
+        qtr2=val(resp$(6)) !:
+        qtr3=val(resp$(7)) !:
+        qtr4=val(resp$(8))
+01840   qtr5=val(resp$(9)(1:4))*10000+1231
 01850   begin_year=val(resp$(9)(1:4))*10000+0101
 01860   end_year=val(resp$(9)(1:4))*10000+1231
 01870   open #11: "Name="&env$('Q')&"\PRmstr\Dates.h"&env$('cno'),internal,outin,relative 
@@ -205,7 +205,7 @@
 01920   tfd=tmd=td14=tdw=0: mat caf=(0)
 01930   mat tcp=(0): mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0) !:
         mat qtr4tcp=(0): mat ytdtotal=(0): mat tdc=(0)
-01940   let fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0 !:
+01940   fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0 !:
         medqtr=eicyr=eicqtr=wagesqtr=0
 01950   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 01960   restore #4,key>=checkkey$: nokey L2290
@@ -219,9 +219,9 @@
 02040   mat ytdtotal=ytdtotal+tcp
 02050   goto L1970
 02060 STORE_VARIABLES: ! 
-02070   let wagesyr=ytdtotal(31) ! total wages
-02080   let fedyr=ytdtotal(1) ! ytdl fed
-02090   let ficayr=ytdtotal(2) ! fica year to date
+02070   wagesyr=ytdtotal(31) ! total wages
+02080   fedyr=ytdtotal(1) ! ytdl fed
+02090   ficayr=ytdtotal(2) ! fica year to date
 02100   medyr=ytdtotal(3) ! medicare year to date
 02110   stateyr=ytdtotal(4) ! total state  quarter
 02120   eicyr=ytdtotal(25) ! eic
@@ -229,9 +229,9 @@
 02140   if prdate>=qtr2 and prdate<qtr3 then mat quartertotals=qtr2tcp
 02150   if prdate>=qtr3 and prdate<qtr4 then mat quartertotals=qtr3tcp
 02160   if prdate>=qtr4 and prdate=<end_date then mat quartertotals=qtr4tcp
-02170   let wagesqtr=quartertotals(31) ! total wages quarter
-02180   let fedqtr=quartertotals(1) ! total fed  quarter
-02190   let ficaqtr=quartertotals(2) ! total fica quarter
+02170   wagesqtr=quartertotals(31) ! total wages quarter
+02180   fedqtr=quartertotals(1) ! total fed  quarter
+02190   ficaqtr=quartertotals(2) ! total fica quarter
 02200   medqtr=quartertotals(3) ! total medicare quarter
 02210   stateqtr=quartertotals(4) ! total state  quarter
 02220   eicqtr=quartertotals(25) ! eic qtr

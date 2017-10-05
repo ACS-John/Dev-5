@@ -88,7 +88,7 @@
 00740 L740: h2=m(2)
 00750 L750: h3=m(2)-h2
 00760   gosub L1000 ! break name down
-00770   let f$=first$(1:1): m$=mid$(1:1)
+00770   f$=first$(1:1): m$=mid$(1:1)
 00790   pr #255,using L790: l$(1),f$,m$,last$,m(2)
 00800   pr #h_csv: l$(1)&","""&srep$(first$,"""","""""")&""","&m$&","""&srep$(last$,"""","""""")&""","&str$(m(2))
 00805 L790: form pos 4,c 11,pos 21,c 1,pos 24,c 1,pos 27,c 16,pos 51,pic(zzz,zzz.##),skip 2
@@ -114,17 +114,17 @@
 00990 ! ______________________________________________________________________
 01000 L1000: dim first$*15,mid$*15,last$*20,em$(3)*30
 01010   k$(1)=uprc$(rtrm$(k$(1))): ! nAMCDE$="s"
-01020   let x1=pos(k$(1)," ",1)
-01030   let x2=pos(k$(1)," ",x1+1)
-01040   let x3=pos(k$(1)," ",x2+1)
+01020   x1=pos(k$(1)," ",1)
+01030   x2=pos(k$(1)," ",x1+1)
+01040   x3=pos(k$(1)," ",x2+1)
 01050   if uprc$(namcde$)="L" then goto L1100
-01060   let first$=k$(1)(1:max(min(15,x1-1),1))
+01060   first$=k$(1)(1:max(min(15,x1-1),1))
 01070   if x2>0 then mid$=k$(1)(x1+1:x2-1): last$=k$(1)(x2+1:len(k$(1)))
 01080   if x2=0 then last$=k$(1)(x1+1:len(k$(1))): mid$=""
 01090   goto L1140
 01100 L1100: ! last name first
 01110   if x1>0 and k$(1)(x1-1:x1-1)="," then last$=k$(1)(1:x1-2) else last$=k$(1)(1:max(x1-1,1))
-01120   if x2>0 then let first$=k$(1)(x1+1:x2-1): mid$=k$(1)(x2+1:len(k$(1)))
-01130   if x2=0 then let first$=k$(1)(x1+1:len(k$(1))): mid$=""
+01120   if x2>0 then first$=k$(1)(x1+1:x2-1): mid$=k$(1)(x2+1:len(k$(1)))
+01130   if x2=0 then first$=k$(1)(x1+1:len(k$(1))): mid$=""
 01140 L1140: ! pr FIRST$,MID$,LAST$
 01150   return 

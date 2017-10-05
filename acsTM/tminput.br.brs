@@ -345,8 +345,8 @@
 03350 L3350: on sno goto L970,L1320
 04800 TMSRCH: ! search for customer #
 04810   dim heading$*70,form$*80,numeric_format$*20,selection$*70
-04820   let file_num=32 ! alpha index on clients
-04830   let form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
+04820   file_num=32 ! alpha index on clients
+04830   form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
 04840   numeric_format$='pic($$$,$$$.##)'
 04850   key_length=5
 04860   heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"

@@ -30,7 +30,7 @@
 00220   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   for j=1 to 8
-00250 L250: let x=pos(resp$(j),"/",1)
+00250 L250: x=pos(resp$(j),"/",1)
 00260     if x>0 then resp$(j)(x:x)="": goto L250
 00270   next j
 00280   sd1=val(resp$(1)) : sd2=val(resp$(2))
@@ -62,9 +62,9 @@
 00480   for j=1 to 9
 00490 ! if trim$(servicename$(j))="" then goto L520
 00500     j2=j2+1
-00510     let g1(j2)=ttg(j)/ttg
+00510     g1(j2)=ttg(j)/ttg
 00520 L520: next j
-00530 ! let g1(sz1)=ttg(11)/ttg
+00530 ! g1(sz1)=ttg(11)/ttg
 00532   su1=twu/ttg
 00534   gosub SEWER_CALK
 00540   pr #255,using L550: x$,e2$(1:24),g1(1),g1(2),su1,swchg pageoflow NEWPGE
@@ -118,7 +118,7 @@
 01120   if su1<=mu1 then goto SEWER_COMPLETED else mu2=mu1
 01150   for j=1 to 10
 01160     if rt(j,1)>su1 then goto SEWER_COMPLETED
-01180     if su1<rt(j,2) then let w1=su1-mu2 else let w1=rt(j,2)-mu2
+01180     if su1<rt(j,2) then w1=su1-mu2 else w1=rt(j,2)-mu2
 01200     swchg=swchg+round(w1*rt(j,3),2)
 01220     if rt(j,2)>su1 then goto SEWER_COMPLETED
 01240     mu2=rt(j,2)

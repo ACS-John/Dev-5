@@ -37,9 +37,9 @@
         fnacs(sn$,0,mat resp$,ckey)
 00290   if ckey=5 then goto XIT
 00300   resp$(1)=fnagl$(resp$(1)) !:
-        let gl1=val(resp$(1)(1:3)) !:
-        let gl2=val(resp$(1)(4:9)) !:
-        let gl3=val(resp$(1)(10:12)) !:
+        gl1=val(resp$(1)(1:3)) !:
+        gl2=val(resp$(1)(4:9)) !:
+        gl3=val(resp$(1)(10:12)) !:
         dat$=resp$(2) !:
         bankbal=val(resp$(3)) !:
         lcd=val(resp$(4))

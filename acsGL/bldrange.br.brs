@@ -13,8 +13,8 @@
 00140   read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read fund and sub codes from general
 00150   close #company: 
 00160   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
-00170   let fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
-00180   let fil$(2)="ACGLFNSI" : idx$(2)="FNSIINDX"
+00170   fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
+00180   fil$(2)="ACGLFNSI" : idx$(2)="FNSIINDX"
 00190 ! ______________________________________________________________________
 00210 MAIN: ! 
 00230   fntos(sn$="Bldrange") 
@@ -56,39 +56,39 @@
 00490   fnacs(sn$,0,mat resp$,ckey)
 00500   pas=0 ! rebuild each time
 00510   if ckey=5 then goto XIT
-00520   let gl$=fnagl$(resp$(1))
-00530   let gln(1,1)=val(gl$(1:3))
-00540   let gln(1,2)=val(gl$(4:9))
-00550   let gln(1,3)=val(gl$(10:12))
-00560   let gl$=fnagl$(resp$(2))
-00570   let gln(2,1)=val(gl$(1:3))
-00580   let gln(2,2)=val(gl$(4:9))
-00590   let gln(2,3)=val(gl$(10:12))
-00600   let gl$=cnvrt$("pic(Zz#)",val(resp$(3)))&cnvrt$("pic(zzzZz#)",val(resp$(4)))&cnvrt$("PIC(ZZ#)",val(resp$(5)))
-00610   let gln(3,1)=val(gl$(1:3))
-00620   let gln(3,2)=val(gl$(4:9))
-00630   let gln(3,3)=val(gl$(10:12))
-00640   if val(resp$(6)(1:6))> 0 then let fin(1)=val(resp$(6)(1:6))
-00650   if val(resp$(7)(1:6))> 0 then let fin(2)=val(resp$(7)(1:6))
-00660   if val(resp$(8)(1:6))> 0 then let fin(1)=val(resp$(8)(1:6))
-00670   if val(resp$(9)(1:6))> 0 then let fin(2)=val(resp$(9)(1:6))
-00680   let fin(3)=val(resp$(10))
-00690   let gl1=val(cnvrt$("PIC(###)",gln(1,1))&cnvrt$("PIC(######)",gln(1,2))&cnvrt$("PIC(###)",gln(1,3)))
-00700   let gl2=val(cnvrt$("PIC(###)",gln(2,1))&cnvrt$("PIC(######)",gln(2,2))&cnvrt$("PIC(###)",gln(2,3)))
-00710   let gl3=val(cnvrt$("PIC(###)",gln(3,1))&cnvrt$("PIC(######)",gln(3,2))&cnvrt$("PIC(###)",gln(3,3)))
+00520   gl$=fnagl$(resp$(1))
+00530   gln(1,1)=val(gl$(1:3))
+00540   gln(1,2)=val(gl$(4:9))
+00550   gln(1,3)=val(gl$(10:12))
+00560   gl$=fnagl$(resp$(2))
+00570   gln(2,1)=val(gl$(1:3))
+00580   gln(2,2)=val(gl$(4:9))
+00590   gln(2,3)=val(gl$(10:12))
+00600   gl$=cnvrt$("pic(Zz#)",val(resp$(3)))&cnvrt$("pic(zzzZz#)",val(resp$(4)))&cnvrt$("PIC(ZZ#)",val(resp$(5)))
+00610   gln(3,1)=val(gl$(1:3))
+00620   gln(3,2)=val(gl$(4:9))
+00630   gln(3,3)=val(gl$(10:12))
+00640   if val(resp$(6)(1:6))> 0 then fin(1)=val(resp$(6)(1:6))
+00650   if val(resp$(7)(1:6))> 0 then fin(2)=val(resp$(7)(1:6))
+00660   if val(resp$(8)(1:6))> 0 then fin(1)=val(resp$(8)(1:6))
+00670   if val(resp$(9)(1:6))> 0 then fin(2)=val(resp$(9)(1:6))
+00680   fin(3)=val(resp$(10))
+00690   gl1=val(cnvrt$("PIC(###)",gln(1,1))&cnvrt$("PIC(######)",gln(1,2))&cnvrt$("PIC(###)",gln(1,3)))
+00700   gl2=val(cnvrt$("PIC(###)",gln(2,1))&cnvrt$("PIC(######)",gln(2,2))&cnvrt$("PIC(###)",gln(2,3)))
+00710   gl3=val(cnvrt$("PIC(###)",gln(3,1))&cnvrt$("PIC(######)",gln(3,2))&cnvrt$("PIC(###)",gln(3,3)))
 00720   if gl1=0 then goto MAIN
 00730   if gl2=0 then goto MAIN
 00740   if gl3=0 then goto MAIN
-00750   let gf=gl3-gl1
-00760   let glk$=lpad$(str$(gln(1,1)),3)&lpad$(str$(gln(1,2)),6)&lpad$(str$(gln(1,3)),3)
+00750   gf=gl3-gl1
+00760   glk$=lpad$(str$(gln(1,1)),3)&lpad$(str$(gln(1,2)),6)&lpad$(str$(gln(1,3)),3)
 00770   if fin(1)=0 then goto L990
 00780   if fin(2)=0 then goto MAIN
 00790   if fin(3)=0 then goto MAIN
 00800 ! ______________________________________________________________________
-00810   let ff=fin(3)-fin(1)
+00810   ff=fin(3)-fin(1)
 00820   restore #1,key=glk$: nokey MAIN
 00830 L830: read #1,using L1030: dno,ano,sno,d$,mat rf eof MAIN
-00840   let gl=val(cnvrt$("PIC(###)",dno)&cnvrt$("PIC(######)",ano)&cnvrt$("PIC(###)",sno))
+00840   gl=val(cnvrt$("PIC(###)",dno)&cnvrt$("PIC(######)",ano)&cnvrt$("PIC(###)",sno))
 00850   if gl>gl2 then goto MAIN
 00860   if rf(1)>0 then fln=1: goto L890
 00870   if rf(3)>0 then fln=2: goto L890
@@ -108,10 +108,10 @@
 01010 L1010: goto MAIN
 01020 L1020: read #1,using L1030: dno,ano,sno,d$,mat rf eof END1
 01030 L1030: form pos 1,n 3,n 6,n 3,c 50,6*pd 3,42*pd 6.2,2*pd 3
-01040   let gl=val(cnvrt$("PIC(###)",dno)&cnvrt$("PIC(######)",ano)&cnvrt$("PIC(###)",sno))
+01040   gl=val(cnvrt$("PIC(###)",dno)&cnvrt$("PIC(######)",ano)&cnvrt$("PIC(###)",sno))
 01050   if gl>gl2 then goto END1
-01060   let gl=gl+gf
-01070   let gl$=lpad$(str$(gl),12)
+01060   gl=gl+gf
+01070   gl$=lpad$(str$(gl),12)
 01080   dno=val(gl$(1:3))
 01090   ano=val(gl$(4:9))
 01100   sno=val(gl$(10:12))

@@ -66,11 +66,11 @@
 00530   gosub HDR
 00540 L540: read #1,using L610: z$,mat e$,mat a,mat f$,mat d,mat g eof L810 ! READ MASTER RECORD
 00550   if a(srvc)=0 then goto L540 ! no service
-00560   let usage=0
-00570   if srvc=1 then let usage=d(3): amount=g(1): meter$=f$(1) ! water
-00580   if srvc=2 then let usage=d(3): amount=g(2): meter$="" ! sewer
-00590   if srvc=3 then let usage=d(7): amount=g(3): meter$=f$(2) ! electric
-00600   if srvc=4 then let usage=d(11): amount=g(4): meter$=f$(3) ! gas
+00560   usage=0
+00570   if srvc=1 then usage=d(3): amount=g(1): meter$=f$(1) ! water
+00580   if srvc=2 then usage=d(3): amount=g(2): meter$="" ! sewer
+00590   if srvc=3 then usage=d(7): amount=g(3): meter$=f$(2) ! electric
+00600   if srvc=4 then usage=d(11): amount=g(4): meter$=f$(3) ! gas
 00610 L610: form pos 1,c 10,pos 11,4*c 30,pos 143,7*pd 2,pos 131,c 12,pos 361,c 12,pos 373,c 12,pos 217,15*pd 5,pos 300,10*pd 4.2
 00620   if a(srvc)=tc or tc=0 then goto L630 else goto L540
 00630 L630: pr #255,using L660: z$,e$(2),e$(1),meter$,usage,amount pageoflow PGOF

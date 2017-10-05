@@ -74,10 +74,10 @@
         pr f "7,10,c 25": "Address" !:
         pr f "9,10,c 25": "City, State, Zip Code" !:
         pr f "11,10,c 25": "Social Security Number"
-00710   let fb$(1)="5,40,C 25,UT,N" !:
-        let fb$(2)="7,40,C 25,UT,N" !:
-        let fb$(3)="9,40,C 25,UT,N" !:
-        let fb$(4)="11,40,C 11,UT,N"
+00710   fb$(1)="5,40,C 25,UT,N" !:
+        fb$(2)="7,40,C 25,UT,N" !:
+        fb$(3)="9,40,C 25,UT,N" !:
+        fb$(4)="11,40,C 11,UT,N"
 00720 L720: input fields mat fb$: k$(1),k$(2),k$(3),ss$ conv L720
 00730 L730: mat m=(0)
 00740   mat adr=(0)

@@ -110,7 +110,7 @@
 48560   if ckey=5 then goto SCHEDULEGRID
 48580   sn=val(resp$(1)(1:3)) conv ADD_EDIT_SCHEDULES
 48600   schnam$=resp$(2)
-48620   let ft$=resp$(3)
+48620   ft$=resp$(3)
 48640   if resp$(4)="True" then dp=1 else dp=0
 48660   if resp$(5)="True" then rs=1 else rs=0
 48680   for j=1 to j
@@ -154,7 +154,7 @@
 57040 return ! /r
 58000 ! PROOF: ! r:
 58020 !   restore #10,key>="  ": eof ignore ioerr ADD_EDIT_SCHEDULES
-58040 !   ! let win=102 
+58040 !   ! win=102 
 58060 !   ! message$="Printing: Please wait..." 
 58080 !   ! fnwait(win,env$('program_caption'),message$,1)
 58100 !   ! on fkey 5 goto L1530
@@ -233,7 +233,7 @@
 74020   restore #open_file_count: 
 74040   do
 74060     read #open_file_count, using "form pos 1,c 12": gl$ eof L1990
-74080     let gl$=lpad$(rtrm$(gl$),12)
+74080     gl$=lpad$(rtrm$(gl$),12)
 74100     rewrite #open_file_count, using "form pos 1,c 12": gl$
 74120   loop
 74140   L1990: !
@@ -262,7 +262,7 @@
 78320 ! ** Field Masks ** 
 78340   ic=0 
 78360   pointtwo=32 : number=30 
-78380   ccyymmdd=3 : mmddyy=1 : let glnumber=53
+78380   ccyymmdd=3 : mmddyy=1 : glnumber=53
 78400   mask(ic+=1)=0
 78420 ! ** Storage Positions ** 
 78440   ! starting field position - default to the same as order displayed 

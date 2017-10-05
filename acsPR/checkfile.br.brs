@@ -34,7 +34,7 @@
 00370     justopen=1: gosub SELECT_COLUMNS: justopen=0
 00380 ! ___________________________________________________________________
 00390 SCREEN1: ! 
-00400     let qtr1printed=qtr2printed=qtr3printed=qtr4printed=0
+00400     qtr1printed=qtr2printed=qtr3printed=qtr4printed=0
 00410     mat annualtdc=(0): mat annualtcp=(0): mat employeetdc=(0): mat employeetcp=(0)
 00420     mat qtr1tcp=(0): mat qtr2tcp= (0): mat qtr3tcp=(0): mat qtr4tcp=(0)
 00430     mat tcp=(0): mat tdc=(0) 
@@ -231,14 +231,14 @@
 01810     fntos(sn$="CHECKhISTORY") !:
           rc=cf=0
 01820     fnfra(1,1,3,26,"Informatin to be Shown","You can choose to have the checks listed as one total or have the department breakdowns shown.  You cannot select both!",0) !:
-          cf+=1 : let fratype=cf
+          cf+=1 : fratype=cf
 01830     fnopt(1,3,"Departmental Details",0,fratype)
 01832     if checkonly=1 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
 01840     fnopt(2,3,"Check only",0,fratype)
 01842     if details=1 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
 01845     if details=0 and checkonly=0 then resp$(rc)="True"
 01850     fnfra(6,1,6,26,"Print options","You can get totals by any combination of the following options.",0) !:
-          cf+=1 : let fratype=cf
+          cf+=1 : fratype=cf
 01860     fnchk(1,3,"Grand Totals",0,fratype) !:
           if grand=1 then resp$(rc+=1)="True" else !:
             resp$(rc+=1)="False"
@@ -252,7 +252,7 @@
           if employee=1 then resp$(rc+=1)="True" else !:
             resp$(rc+=1)="False"
 01900     fnfra(1,30,6,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.") !:
-          cf+=1 : let fradate=cf : mylen=26 : mypos=mylen+2
+          cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
 01910     fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
 01920     fntxt(1,mypos,10,0,1,"3",0,empty$,fradate) !:
           resp$(rc+=1)=str$(beg_date)
@@ -272,7 +272,7 @@
 02020     fntxt(6,mypos,10,0,1,"3",0,empty$,fradate) !:
           resp$(rc+=1)=str$(qtr4)
 02030     fnfra(10,30,2,60,"Employee","You can review check information for all employees or for an individual.") !:
-          cf+=1 : let fraaccount=cf
+          cf+=1 : fraaccount=cf
 02040     fnlbl(1,1,"Employee:",8,1,0,fraaccount)
 02050     fncmbemp(1,10,1,fraaccount) !:
           rc+=1 !:
@@ -292,21 +292,21 @@
 02160     eno=holdeno=printeno=holdckno=printckno=0 : mat cp1=(0)
 02170     if resp$(1)="True" then checkonly=1
 02180     if resp$(2)="True" then details=1
-02190     if resp$(3)="True" then let grand=1
-02200     if resp$(4)="True" then let quarterly=1
+02190     if resp$(3)="True" then grand=1
+02200     if resp$(4)="True" then quarterly=1
 02210     if resp$(5)="True" then annual=1
 02220     if resp$(6)="True" then employee=1
 02230     beg_date=val(resp$(7)) !:
           end_date=val(resp$(8)) !:
-          let qtr1=val(resp$(9)) !:
-          let qtr2=val(resp$(10)) !:
-          let qtr3=val(resp$(11)) !:
-          let qtr4=val(resp$(12)) !:
-          let z$=holdz$=hact$=resp$(13)(1:8) : let z$=holdz$=hact$=lpad$(trim$(z$),8)
-02240     let qtr5=val(resp$(12)(1:4))*10000+1231
+          qtr1=val(resp$(9)) !:
+          qtr2=val(resp$(10)) !:
+          qtr3=val(resp$(11)) !:
+          qtr4=val(resp$(12)) !:
+          z$=holdz$=hact$=resp$(13)(1:8) : z$=holdz$=hact$=lpad$(trim$(z$),8)
+02240     qtr5=val(resp$(12)(1:4))*10000+1231
 02250     begin_year=val(resp$(12)(1:4))*10000+0101
 02260     end_year=val(resp$(12)(1:4))*10000+1231
-02270     let gridname$=rpad$(trim$(resp$(14)),30) : rewrite #9,using "form pos 1,c 30",rec=1: gridname$
+02270     gridname$=rpad$(trim$(resp$(14)),30) : rewrite #9,using "form pos 1,c 30",rec=1: gridname$
 02280     if checkonly=1 and details=1 then goto L2290 else goto L2300
 02290 L2290: mg$(1)="You cannot select 'Checkonly' and Details " !:
           mg$(2)="at the same time. Click OK to correct." !:
@@ -390,32 +390,32 @@
           if ckey=5 then goto L3150 ! select columns
 02860     addone=0
 02870     if ckey=2 then addone=1: gosub ADD_GRID: goto L2690
-02880     let gridname$=rpad$(trim$(resp$(1)),30)
+02880     gridname$=rpad$(trim$(resp$(1)),30)
 02890     if oldgridname$<>gridname$ then read #29,using "form pos 1,c 30,46*n 1",key=gridname$: gridname$,mat hf nokey L3150 : oldgridname$=gridname$: goto L2630
 02900     for j=1 to 46
 02910       if resp$(j+1)="True" then hf(j)=1 else hf(j)=0
 02920     next j
 02930 L2930: hfm$="FORM POS 1,c 12"
-02940     let ul$=hd$="            "
+02940     ul$=hd$="            "
 02950     hs1=0: hs2=0
 02960     for j=1 to udim(hf$)
 02970       if hf(j)=0 then goto L3070
 02980       hs2=hs2+1
 02990       if j=1 then hfm$=hfm$&",NZ 8" : hs1=hs1+8 : hz1=hs2 !:
-              let ul$=ul$&" -------": hs3=8 ! employee #
+              ul$=ul$&" -------": hs3=8 ! employee #
 03000       if j=2 then hfm$=hfm$&",NZ 5" : hs1=hs1+5 : hz1=hs2 !:
-              let ul$=ul$&" ----": hs3=5 ! dept #
+              ul$=ul$&" ----": hs3=5 ! dept #
 03010       if j=3 then hfm$=hfm$&",pic(bzzzz/zz/zz)" : hs1=hs1+11 !:
               hz1=hs2 !:
-              let ul$=ul$&" ----------": hs3=11 ! date
+              ul$=ul$&" ----------": hs3=11 ! date
 03020       if j=4 then hfm$=hfm$&",NZ 7" : hs1=hs1+7 : hz1=hs2 !:
-              let ul$=ul$&" ------": hs3=7 ! check number
+              ul$=ul$&" ------": hs3=7 ! check number
 03030       if j>4 and j<10 then hfm$=hfm$&",G 8.2" : hs1=hs1+8 !:
-              let ul$=ul$&" -------" : hs3=8 ! hours
+              ul$=ul$&" -------" : hs3=8 ! hours
 03040       if j>9 and j<17 then hfm$=hfm$&",G 10.2" : hs1=hs1+10 !:
-              let ul$=ul$&" ---------" : hs3=10 ! wages
+              ul$=ul$&" ---------" : hs3=10 ! wages
 03050       if j>16 and j<47 then hfm$=hfm$&",G 10.2" : hs1=hs1+10 !:
-              let ul$=ul$&" ---------" : hs3=10 ! deductions
+              ul$=ul$&" ---------" : hs3=10 ! deductions
 03060       hd$=hd$&lpad$(trim$(name$(j)(1:hs3-1)),hs3)
 03070 L3070: next j
 03080     mat cp0(hs2)
@@ -521,10 +521,10 @@
 03990     dim employeetdc(10),employeetcp(32),holdtdc(10),holdtcp(32),grand2tcp(32)
 04000     dim grand2tdc(10)
 04010 ! ______________________________________________________________________
-04020     if trim$(z$)="[All]" then let z$=""
-04030     if trim$(z$)<>"" then let z$=lpad$(trim$(z$),8)
+04020     if trim$(z$)="[All]" then z$=""
+04030     if trim$(z$)<>"" then z$=lpad$(trim$(z$),8)
 04040     mat colhdr$(48) : mat colmask$(48)
-04050     let x=2
+04050     x=2
 04060     colhdr$(1)="Rec" : colhdr$(2)="Desc"
 04070     colmask$(1)="30": colmask$(2)=""
 04080     if hf(1)=1 then colhdr$(x+=1)=name$(1) : colmask$(x)="30" ! employee #
@@ -567,13 +567,13 @@
 04410     if quarterly=0 then goto L4550
 04420     mat holdtotaltcp=totaltcp: mat holdtotaltdc=totaltdc ! hold these subtotals in case the quarterly destroys them
 04430     if prd=>qtr2 and qtr1printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID : holdckno=0 ! last check not printed yet
-04440     if prd=>qtr2 and qtr1printed=0 and sum(qtr1tdc)+sum(qtr1tcp)>0 then mat totaltdc=qtr1tdc: mat totaltcp=qtr1tcp: let qtr1printed=1: desc$="1st Qtr" : gosub PRINT_GRID : holdckno=0
+04440     if prd=>qtr2 and qtr1printed=0 and sum(qtr1tdc)+sum(qtr1tcp)>0 then mat totaltdc=qtr1tdc: mat totaltcp=qtr1tcp: qtr1printed=1: desc$="1st Qtr" : gosub PRINT_GRID : holdckno=0
 04450     if prd=>qtr3 and qtr2printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID ! last check not printed yet
-04460     if prd=>qtr3 and qtr2printed=0 and sum(qtr2tdc)+sum(qtr2tcp)>0 then mat totaltdc=qtr2tdc: mat totaltcp=qtr2tcp: let qtr2printed=1: desc$="2nd Qtr" : gosub PRINT_GRID : holdckno=0
+04460     if prd=>qtr3 and qtr2printed=0 and sum(qtr2tdc)+sum(qtr2tcp)>0 then mat totaltdc=qtr2tdc: mat totaltcp=qtr2tcp: qtr2printed=1: desc$="2nd Qtr" : gosub PRINT_GRID : holdckno=0
 04470     if prd=>qtr4 and qtr3printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID ! last check not printed yet
-04480     if prd=>qtr4 and qtr3printed=0 and sum(qtr3tdc)+sum(qtr3tcp)>0 then mat totaltdc=qtr3tdc: mat totaltcp=qtr3tcp: let qtr3printed=1: desc$="3rd Qtr": gosub PRINT_GRID: holdckno=0
+04480     if prd=>qtr4 and qtr3printed=0 and sum(qtr3tdc)+sum(qtr3tcp)>0 then mat totaltdc=qtr3tdc: mat totaltcp=qtr3tcp: qtr3printed=1: desc$="3rd Qtr": gosub PRINT_GRID: holdckno=0
 04490     if prd=>qtr5 and qtr4printed=0 and sum(totaltdc)+sum(totaltcp)<>0 then gosub PRINT_GRID ! last check not printed yet
-04500     if prd>qtr5 and qtr4printed=0 and sum(qtr4tdc)+sum(qtr4tcp)>0 then mat totaltdc=qtr4tdc: mat totaltcp=qtr4tcp: let qtr4printed=1: desc$="4th Qtr": gosub PRINT_GRID : goto CONSIDER_ANNUAL
+04500     if prd>qtr5 and qtr4printed=0 and sum(qtr4tdc)+sum(qtr4tcp)>0 then mat totaltdc=qtr4tdc: mat totaltcp=qtr4tcp: qtr4printed=1: desc$="4th Qtr": gosub PRINT_GRID : goto CONSIDER_ANNUAL
 04510     if prd>=qtr1 and prd<qtr2 then mat qtr1tdc=qtr1tdc+tdc : : mat qtr1tcp=qtr1tcp+tcp
 04520     if prd>=qtr2 and prd<qtr3 then mat qtr2tdc=qtr2tdc+tdc : mat qtr2tcp=qtr2tcp+tcp
 04530     if prd>=qtr3 and prd<qtr4 then mat qtr3tdc=qtr3tdc+tdc : mat qtr3tcp=qtr3tcp+tcp
@@ -632,7 +632,7 @@
 04740     next j
 04750     item$(items+=1)=str$(totaltcp(25)) ! eic
 04760     if printit=1 then desc$=item$(2): gosub PRINT_DETAILS: goto L4840
-04770     let x=2
+04770     x=2
 04780     printitem$(1)=item$(1): printitem$(2)=item$(2)
 04790     for j=1 to 46
 04800       if hf(j)=1 then printitem$(x+=1)=item$(j+2)
@@ -650,10 +650,10 @@
             mat printitem$=(""): fnflexadd1(mat printitem$)
 04862     mat totaltdc=(0): mat totaltcp=(0)
 04870     desc$=""
-04880     if qtr1printed=1 then let qtr1printed=2: return 
-04890     if qtr2printed=1 then let qtr2printed=1: return 
-04900     if qtr3printed=1 then let qtr3printed=2: return 
-04910     if qtr4printed=1 then let qtr4printed=2: return 
+04880     if qtr1printed=1 then qtr1printed=2: return 
+04890     if qtr2printed=1 then qtr2printed=1: return 
+04900     if qtr3printed=1 then qtr3printed=2: return 
+04910     if qtr4printed=1 then qtr4printed=2: return 
 04920 L4920: return 
 04930 CONSIDER_ANNUAL_EOF: ! 
 04940     eofcode=1
@@ -664,15 +664,15 @@
 04990     if sum(totaltdc)+sum(totaltcp)<>0 and checkonly=1 then desc$="Total Ck"
 05000     if (sum(qtr1tdc)>0 or sum(qtr1tcp)>0) and qtr1printed=0 then !:
             mat totaltdc=qtr1tdc: mat totaltcp=qtr1tcp !:
-            let qtr1printed=1: desc$="1st Qtr": holdnam$="": gosub PRINT_GRID
+            qtr1printed=1: desc$="1st Qtr": holdnam$="": gosub PRINT_GRID
 05010     if (sum(qtr2tdc)>0 or sum(qtr2tcp)>0) and qtr2printed=0 then !:
-            mat totaltdc=qtr2tdc: mat totaltcp=qtr2tcp: let qtr2printed=1 !:
+            mat totaltdc=qtr2tdc: mat totaltcp=qtr2tcp: qtr2printed=1 !:
             desc$="2nd Qtr": holdnam$="": gosub PRINT_GRID
 05020     if (sum(qtr3tdc)>0 or sum(qtr3tcp)>0) and qtr3printed=0 then !:
-            mat totaltdc=qtr3tdc: mat totaltcp=qtr3tcp: let qtr3printed=1 !:
+            mat totaltdc=qtr3tdc: mat totaltcp=qtr3tcp: qtr3printed=1 !:
             desc$="3rd Qtr": holdnam$="" : gosub PRINT_GRID
 05030     if (sum(qtr4tdc)>0 or sum(qtr4tcp)>0) and qtr4printed=0 then !:
-            mat totaltdc=qtr4tdc: mat totaltcp=qtr4tcp: let qtr4printed=1 !:
+            mat totaltdc=qtr4tdc: mat totaltcp=qtr4tcp: qtr4printed=1 !:
             desc$="4th Qtr": holdnam$="": gosub PRINT_GRID
 05040     if annual=1 then enoprint=tdnprint=prdprint=cknoprint=0 !:
             mat totaltdc=annualtdc: mat totaltcp=annualtcp !:
@@ -686,7 +686,7 @@
 05080     if eofcode=1 and grand=1 then gosub GRAND_TOTAL
 05090     if eofcode=1 then eofcode=0: holdeno=0: goto L5120
 05100     if trim$(hact$)="[All]" and quarterly=1 and holdeno>0 then !:
-            let qtr1printed=qtr2printed=qtr3printed=qtr4printed=0 !:
+            qtr1printed=qtr2printed=qtr3printed=qtr4printed=0 !:
             mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0) : mat qtr4tcp=(0) !:
             mat qtr1tdc=(0): mat qtr2tdc=(0): mat qtr3tdc=(0): mat qtr4tdc=(0) !:
             mat totaltdc=(0): mat totaltcp=(0) !:

@@ -4,7 +4,7 @@
 00080   fntos(sn$="test-Button")
 00090   fnfra(1,1,17,92,cap$) : curframe=1
 00100   tooltiptext$ = "Hi, pleasure to meet you, I'm Mr. ToolTipText."
-00110 ! h=12 : Let W=90 
+00110 ! h=12 : w=90 
 00112   fnbutton_or_disabled(1,1,1,"Look, I'm a button",8,tooltiptext$,w,curframe)
 00113   fnbutton_or_disabled(0,2,1,"Look, I'm a button",8,tooltiptext$,w,curframe)
 00114   ! fnbutton(1,1,"Look, I'm a button",8,tooltiptext$,h,w,curframe)

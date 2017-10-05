@@ -96,15 +96,15 @@
 00610   respc=2 !:
         for j=1 to 10 ! udIM(SRV$)  kj
 00620     if trim$(srv$(j))<>"" then !:
-            respc+=1 : let gb(j)=val(resp$(respc)) !:
+            respc+=1 : gb(j)=val(resp$(respc)) !:
             tg(j)=val(resp$(respc)) conv L670
 00630 ! If BAL<0 Then tG(J)=-VAL(RESP$(RESPC)) Else tG(J)=VAL(RESP$(RESPC))
 00640     if trim$(srv$(j))="Water:" and (j=1) then !:
-            respc+=1 : d(1)=val(resp$(respc)): let wr=d(1)
+            respc+=1 : d(1)=val(resp$(respc)): wr=d(1)
 00650     if trim$(srv$(j))="Electric:" and (j=3) then !:
             respc+=1 : d(5)=val(resp$(respc)): er=d(5)
 00660     if trim$(srv$(j))="Gas:" and (j=4) then !:
-            respc+=1 : d(9)=val(resp$(respc)): let gr=d(9)
+            respc+=1 : d(9)=val(resp$(respc)): gr=d(9)
 00670 L670: next j
 00680 ! set T1 to total allocations !:
         t1=0 !:

@@ -32,8 +32,8 @@
 00330       b(3)=inv_amt(j)
 00340       b(5)=ct(j) ! inv_amt(j+10) ! Category i.e. 6,2
 00350       b(8)=tmwk1_sc(j) ! System Code
-00360 !     let gl$=igl$(j)
-00370 !     let ga(j)=inv_amt(j)
+00360 !     gl$=igl$(j)
+00370 !     ga(j)=inv_amt(j)
 00380       if b(8)=0 then b8=25 else b8=b(8)
 00390 L390: lta=lrec(h_tmtrans)+1
 00400       write #h_tmtrans,using 'form pos 1,c 5,c 9,2*pd 3.2,pd 4.2,n 6,n 2,pd 2,pd 1,n 2,c 4,c 12,pd 3,c 30',rec=lta,reserve: k$," ",mat b,sc$,iv$,0,id$(j)(1:30) duprec L390
@@ -47,7 +47,7 @@
 00472       read #h_tmtraddr,using F_TMTRADDR,rec=ca(b(5)),reserve: ta1,ta2,fb1 norec NEXT_ONE
 00480 F_TMTRADDR: form pos p1,2*pd 3,pos p2,n 1
 00490       if ta2><0 then rewrite #h_tmtrans,using 'form pos 54,pd 3',rec=ta2: lta else ta1=lta
-00500       if fb1<2 then let fb1=abs(b(7))
+00500       if fb1<2 then fb1=abs(b(7))
 00510       if ta1=0 then ta1=lta
 00520       rewrite #h_tmtraddr,using F_TMTRADDR,rec=ca(b(5)),release: ta1,lta,fb1
 00530       goto NEXT_ONE
@@ -58,9 +58,9 @@
 00570       if b(5)>0 then ca(b(5))=lta4 ! added b(5)>0 on 2/1/2012
 00580       ta(b8,1)=lta
 00590       ta(b8,2)=lta
-00600       if b(7)=-2 then let fb(b8)=2
+00600       if b(7)=-2 then fb(b8)=2
 00610       if fb(b8)=2 then goto L630
-00620       if b(7)=-1 then let fb(b8)=1
+00620       if b(7)=-1 then fb(b8)=1
 00630 L630: write #h_tmtraddr,using 'form pos 1,50*pd 3,25*n 1',rec=lta4,reserve: mat ta,mat fb duprec THAT_STEP
 00650       rewrite #h_tmtraddr,using 'form pos 1,pd 3',rec=1,release: lta4
 00668 NEXT_ONE: ! 

@@ -20,7 +20,7 @@
 00150   fnlbl(4,1,"without consulting ACS",mylen,1)
 00160   fnlbl(4,15,"",mylen,1)
 00170   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
-00180 L180: let x=pos(resp$(1),"/",1) !:
+00180 L180: x=pos(resp$(1),"/",1) !:
         if x>0 then resp$(1)(x:x)="": goto L180
 00190   trandate=val(resp$(1))
 00200   if ckey=5 then goto XIT
@@ -39,7 +39,7 @@
 00310     if tcode=3 then tg(j)=-tg(j)
 00320   next j
 00330   tbal=bal
-00340   let wr=d(1): let wu=d(3): er=d(5): eu=d(7): let gr=d(9): let gu=d(11)
+00340   wr=d(1): wu=d(3): er=d(5): eu=d(7): gr=d(9): gu=d(11)
 00350   write #2,using L360: z$,trandate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode
 00360 L360: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 00370   goto READ_CUSTOMER

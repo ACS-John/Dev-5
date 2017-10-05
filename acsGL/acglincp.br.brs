@@ -10,15 +10,15 @@
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Income Statement with Percents")
 00120   fncno(cno,cnam$)
-00130   let udf$=env$('temp')&'\'
+00130   udf$=env$('temp')&'\'
 00140   actpd=fnactpd
 00150   actpd$=fnactpd$
-00155   let fscode=fnfscode
+00155   fscode=fnfscode
 00156   priorcd=fnpriorcd
 00160   if fnglfs=5 then goto XIT !:
           ! sets fnps,priorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00165   priorcd=fnpriorcd
-00166   let fscode=fnfscode
+00166   fscode=fnfscode
 00170   if fnps=2 then mp1=72 else mp1=69
 00180   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr" else !:
           fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
@@ -70,7 +70,7 @@
 00600 L600: read #3,using L190: ir,bb,cb,mat by,mat bp eof L740
 00610   if ir=0 then goto L600
 00620   if fscode=0 or fscode=actpd then goto L690
-00630   if fscode<1 or fscode>13 then let fscode=1
+00630   if fscode<1 or fscode>13 then fscode=1
 00640   if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00650   if priorcd=2 then goto L680
 00660   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -97,11 +97,11 @@
 00870   if pas=2 then gosub PAS2
 00880   sp2=31-sp-1
 00890   if percent1><0 then monthpct=total/percent1*100 else monthpct=0
-00900   if percent2><0 then let ytdpct=total2/percent2*100 else let ytdpct=0
+00900   if percent2><0 then ytdpct=total2/percent2*100 else ytdpct=0
 00910   if monthpct<-999.99 then monthpct=-999.99
 00920   if monthpct>999.99 then monthpct=999.99
-00930   if ytdpct<-999.99 then let ytdpct=-999.99
-00940   if ytdpct>999.99 then let ytdpct=999.99
+00930   if ytdpct<-999.99 then ytdpct=-999.99
+00940   if ytdpct>999.99 then ytdpct=999.99
 00945   if ul=1 then pr #255,using L961: d$(1:sp2),dollar$,"{\UL ",total,"}",monthpct,percent$,dollar$,"{\UL ",total2,"}",ytdpct,percent$ pageoflow L1590 : goto L960
 00950   pr #255,using L960: d$(1:sp2),dollar$,total,monthpct,percent$,dollar$,total2,ytdpct,percent$ pageoflow L1590
 00960 L960: form pos sp,c sp2,pos 31,c 1,pic(-----,---,---.##),pic(-----.##),c 2,x 3,c 1,pic(-----,---,---.##),pic(-----.##),c 1,skip redir
@@ -121,11 +121,11 @@
 01080   if ds=1 then percent$="%" else percent$=" "
 01090   if percent=0 then goto L1180
 01100   if percent1><0 then monthpct=accum1/percent1*100 else monthpct=0
-01110   if percent2><0 then let ytdpct=accum2/percent2*100 else let ytdpct=0
+01110   if percent2><0 then ytdpct=accum2/percent2*100 else ytdpct=0
 01120   if monthpct<-999.99 then monthpct=-999.99
 01130   if monthpct>999.99 then monthpct=999.99
-01140   if ytdpct<-999.99 then let ytdpct=-999.99
-01150   if ytdpct>999.99 then let ytdpct=999.99
+01140   if ytdpct<-999.99 then ytdpct=-999.99
+01150   if ytdpct>999.99 then ytdpct=999.99
 01160   sp2=31-sp-1
 01165   if ul=1 then pr #255,using L961: d$(1:sp2),dollar$,"{\UL ",accum1,"}",monthpct,percent$,dollar$,"{\UL ",accum2,"}",ytdpct,percent$ pageoflow L1590 : goto L1180
 01170   pr #255,using L960: d$(1:sp2),dollar$,accum1,monthpct,percent$,dollar$,accum2,ytdpct,percent$ pageoflow L1590
@@ -143,10 +143,10 @@
 01280   goto READ_ACGLFNSI
 01290 ! ______________________________________________________________________
 01300 L1300: if foot1=1 then goto L1340
-01310   tabnote=sp : let foot1=1 : let foot$=d$
+01310   tabnote=sp : foot1=1 : foot$=d$
 01320   goto READ_ACGLFNSI
 01330 ! ______________________________________________________________________
-01340 L1340: let foot$=rtrm$(foot$)&d$
+01340 L1340: foot$=rtrm$(foot$)&d$
 01350   goto READ_ACGLFNSI
 01360 ! ______________________________________________________________________
 01370 L1370: ! r:
@@ -183,11 +183,11 @@
 01600 L1600: if percent=0 then goto L1710
 01610   if ul=0 then goto L1700
 01620   if ul=1 then goto L1670
-01630   let underlin$="================= ======="
+01630   underlin$="================= ======="
 01640   pr #255,using L1650: underlin$,underlin$
 01650 L1650: form pos 31,c 25,pos 61,c 25,skip redir
 01660   goto L1700
-01670 L1670: let underlin$="_________________ _______"
+01670 L1670: underlin$="_________________ _______"
 01680   pr #255,using L1690: underlin$,underlin$
 01690 L1690: form skip redir,pos 31,c 25,pos 61,c 25,skip redir
 01700 L1700: if redir=0 then pr #255: ""
@@ -223,8 +223,8 @@
 01980   close #3: 
 01990   total=total2=0
 02000   mat accum=(0)
-02010   let foot1=0
-02020   let foot$=" "
+02010   foot1=0
+02020   foot$=" "
 02030   ir=notrans=0
 02040   goto L210
 02050 ! ______________________________________________________________________

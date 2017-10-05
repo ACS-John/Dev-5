@@ -30,21 +30,21 @@
 13060 fnend 
 16000 def fn_sreg_read(field_name$*128,&field_value$; default_if_not_read$*128)
 16020   dim tmpfield_value$*256,key_compare$*128
-16040   let field_name$=rpad$(lwrc$(trim$(field_name$)),128)
+16040   field_name$=rpad$(lwrc$(trim$(field_name$)),128)
 16060   tmpfield_value$=field_value$=''
 16080   ! pr 'read #reg_h'
 16100   read #sreg_h,using 'form pos 1,C 128,v 256',key=field_name$,release: key_compare$,tmpfield_value$ ioerr SREG_LOAD_IOERR ! XXX
 16120   SREG_LOAD_IOERR: ! 
 16140   if key_compare$=field_name$ then 
-16160     let field_value$=rtrm$(tmpfield_value$)
+16160     field_value$=rtrm$(tmpfield_value$)
 16180   else 
-16200     let field_value$=default_if_not_read$ ! ''
+16200     field_value$=default_if_not_read$ ! ''
 16220   end if 
 16240   ! pr 'load ';trim$(field_name$);'=';field_value$
 16260 fnend 
 18000 def fn_sreg_write(field_name$*128,field_value$*256)
 18020    if env$('ACSDeveloper')<>'' then
-18040      let field_name$=rpad$(lwrc$(trim$(field_name$)),128)
+18040      field_name$=rpad$(lwrc$(trim$(field_name$)),128)
 18060      rewrite #sreg_h,using 'form pos 1,c 128,c 256',key=field_name$: field_name$,field_value$ nokey SREG_WRITE ! XXX
 18080      ! pr 'rewrite #reg_h'
 18100      goto SREG_SAVE_XIT
@@ -57,7 +57,7 @@
 18240 fnend
 19000 def fn_sreg_rename(field_name_old$*128,fieldNameNew$*128)
 19020    if env$('ACSDeveloper')<>'' then
-19040      let field_name_old$=rpad$(lwrc$(trim$(field_name_old$)),128)
+19040      field_name_old$=rpad$(lwrc$(trim$(field_name_old$)),128)
 19060      rewrite #sreg_h,using 'form pos 1,c 128',key=field_name_old$: fieldNameNew$ nokey ignore
 19220    end if
 19240 fnend
@@ -101,7 +101,7 @@
 20720   ! pr 'save ';trim$(rw_field_name$);'=';rw_field_value$
 20740 fnend
 20760 def fn_reg_rename(field_name_old$*128,fieldNameNew$*128)
-20780   let field_name_old$=rpad$(lwrc$(trim$(field_name_old$)),128)
+20780   field_name_old$=rpad$(lwrc$(trim$(field_name_old$)),128)
 20800   rewrite #reg_h,using 'form pos 1,c 128',key=field_name_old$: fieldNameNew$ nokey ignore
 20820 fnend
 20840 def fn_reg_setup

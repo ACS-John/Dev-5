@@ -8,9 +8,9 @@
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
 00080     and$=trim$(and$)
-00090     let x=pos(word$,and$,1)
-00100     if x=1 then let word$=word$(x+len(and$):len(word$))
-00110     if x>1 then let word$=word$(1:x-1)&word$(x+len(and$):len(word$))
+00090     x=pos(word$,and$,1)
+00100     if x=1 then word$=word$(x+len(and$):len(word$))
+00110     if x>1 then word$=word$(1:x-1)&word$(x+len(and$):len(word$))
 00120     goto XIT
 00130 ! ______________________________________________________________________
 00140 ! <Updateable Region: ERTN>

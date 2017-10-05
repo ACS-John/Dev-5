@@ -18,10 +18,10 @@
           ch$(4)="City, ST Zip" !:
           ch$(5)="SS Number" : ch$(6)="Phone" !:
           mat ch$(6) : mat cm$(6)
-00160     let usefile=0 ! if fixgrid=99 then let usefile=0 else let usefile=1 !:
+00160     usefile=0 ! if fixgrid=99 then usefile=0 else usefile=1 !:
           ! set to rebuild grid file only as you exit prfm and the !:
           ! fixgrid code has been changed to necessary
-00170     let usefile=fnflexinit1('Employee',1,1,10,70,mat ch$,mat cm$,1,usefile)
+00170     usefile=fnflexinit1('Employee',1,1,10,70,mat ch$,mat cm$,1,usefile)
 00180     if usefile>0 then goto L280 ! file already exists, do not recreate
 00190 READ_FILE: ! 
 00200     read #file_num,using 'Form POS 1,c 8,3*c 30,pos 99,c 11,pos 179,c 12': mat item$ eof L280 ioerr ERR_READ
@@ -37,8 +37,8 @@
 00280 L280: if fixgrid=99 then goto XIT ! FIXING NEW GRID FILE BEFORE LEAVING UBFM
 00290     fncmdset(2)
 00292     fnacs(sn$,0,mat resp$,ckey)
-00300     let x$=lpad$(resp$(1)(1:8),8)
-00310     if ckey=5 then let x$="        " ! no one selected
+00300     x$=lpad$(resp$(1)(1:8),8)
+00310     if ckey=5 then x$="        " ! no one selected
 00320     goto XIT
 00330 ! ______________________________________________________________________
 00340 ! <Updateable Region: ERTN>

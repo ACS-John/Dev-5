@@ -18,7 +18,7 @@
 00160   fncmdset(2)
 00170   fnacs(sn$,0,mat resp$,ckey)
 00180   if ckey=5 then goto XIT
-00185   let x$=fnagl$(resp$(1))
+00185   x$=fnagl$(resp$(1))
 00190   pr 'This is your returned value"'&x$&'".'
 00200   goto XIT
 00210 ! ______________________________________________________________________

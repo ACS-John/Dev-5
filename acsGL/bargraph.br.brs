@@ -27,7 +27,7 @@
 00260 SCR1: ! 
 00270   t5=0
 00280   fntos(sn$='CloseYear3') !:
-        lc=0 : mylen=20 : mypos=mylen+2 : let width=50
+        lc=0 : mylen=20 : mypos=mylen+2 : width=50
 00290   fnlbl(lc+=1,1,"Year to Print:",18,1)
 00300   fntxt(lc,mypos,4,0,1,"30",0,"You must choose the year to use printing a chart.") !:
         resp$(1)=""
@@ -41,10 +41,10 @@
 00350   fncmdset(2)
 00360   fnacs(sn$,0,mat resp$,ckey)
 00370   if ckey=5 then goto XIT
-00380   let year=val(resp$(1))
+00380   year=val(resp$(1))
 00390   if resp$(2)="True" then pullfrom$="Current"
 00400   if resp$(3)="True" then pullfrom$="Prior"
-00410   let glnumber$=fnagl$(resp$(4))
+00410   glnumber$=fnagl$(resp$(4))
 00420   read #1,using L430,key=glnumber$: dno$,ano$,sno$ nokey SCR1
 00430 L430: form pos 1,c 3,c 6,c 3
 00440   acno$=glnumber$(1:3)&"         "
@@ -74,11 +74,11 @@
 00680     if profit(j)<0 then maximumheight=min(profit(j),maximumheight) ! largest profit by month for either year  (profit is negative figure
 00690   next j
 00700 ! determine top line and bottom line
-00710   if maximumheight<-1000000 then top=1000000 : let x=10000: goto DETERMINE_BOTTOM_LINE
-00720   if maximumheight>-50000 and maximumheight<-10000 then top=50000: let x=500: goto DETERMINE_BOTTOM_LINE
-00730   if maximumheight<-10000 then top=100000: let x=1000: goto DETERMINE_BOTTOM_LINE
-00740   if maximumheight<-1000 then top=10000: let x=100: goto DETERMINE_BOTTOM_LINE
-00750   if maximumheight<-100 then top=1000 : let x=10: goto DETERMINE_BOTTOM_LINE
+00710   if maximumheight<-1000000 then top=1000000 : x=10000: goto DETERMINE_BOTTOM_LINE
+00720   if maximumheight>-50000 and maximumheight<-10000 then top=50000: x=500: goto DETERMINE_BOTTOM_LINE
+00730   if maximumheight<-10000 then top=100000: x=1000: goto DETERMINE_BOTTOM_LINE
+00740   if maximumheight<-1000 then top=10000: x=100: goto DETERMINE_BOTTOM_LINE
+00750   if maximumheight<-100 then top=1000 : x=10: goto DETERMINE_BOTTOM_LINE
 00760 DETERMINE_BOTTOM_LINE: ! 
 00770   if maximumdepth<1000 then bottom=-1000 : goto L800
 00780   if maximumdepth<10000 then bottom=-10000 : goto L800

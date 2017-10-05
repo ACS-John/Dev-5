@@ -5,9 +5,9 @@
 10140     dim if$*256
 20020     if addall<>1 then addall=0
 20060     if addall=0 then 
-20080       let fen$="CAct"
+20080       fen$="CAct"
 20100     else 
-20120       let fen$="CActALL"
+20120       fen$="CActALL"
 20140     end if 
 20160     if indexfile$="" then 
 20180       if$=env$('Q')&"\UBmstr\ubIndex.h"&env$('cno') ! str$(cno)

@@ -9,7 +9,7 @@
 00090   dim udf$*256
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Unpaid Invoice Listing")
-00120   let udf$=env$('temp')&'\'
+00120   udf$=env$('temp')&'\'
 00130   cancel=99
 00140   fncno(cno,cnam$) !:
         fndat (dat$)
@@ -24,8 +24,8 @@
 00190   fncmdset(2) !:
         fnacs(sn$,0,mat resp$,ck)
 00200   if ck=5 then goto XIT else !:
-          if resp$(1)=item1$(1) then let fund=1 else !:
-            let fund=2
+          if resp$(1)=item1$(1) then fund=1 else !:
+            fund=2
 00210 ! FNWAIT
 00220   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 00230   open #unpdaloc=8: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Uaidx2.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -41,7 +41,7 @@
 00330   write #clwork,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1,N 3,N 6,N 3,N 4,n 8': vn$,iv$,ivd,dd,po$,de$(1:18),amt,cde,mat gl,ivnum,ddate
 00340   goto READ_UNPDALOC
 00350 L350: close #paytrans: : close #unpdaloc: : close #clwork: 
-00360   let upa=0 ! sort ok, sorts a work file
+00360   upa=0 ! sort ok, sorts a work file
 00370   open #9: "Name="&udf$&"CONTROL,SIZE=0,RecL=128,Replace",internal,output 
 00380   write #9,using 'Form POS 1,C 128': "FILE CLWORK"&wsid$&".H"&str$(cno)&","&env$('Q')&"\CLmstr,,"&udf$&"ADDR,,,,,A,N"
 00390   if fund=2 then !:
@@ -68,9 +68,9 @@
 00580   read #clwork,using 'Form Pos 86,N 4',rec=r4: ivnum
 00590   if ivnum=hivnum or hivnum=0 then goto L600 else goto L670
 00600 L600: read #clwork,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1,N 3,N 6,N 3,N 4,n 8',rec=r4: vn$,iv$,ivd,dd,po$,ade$,amt,cde,mat gl,ivnum,ddate
-00610   let upa+=amt
+00610   upa+=amt
 00620   hivnum=ivnum
-00630   let gl$=cnvrt$("PIC(ZZ#)",gl(1))&cnvrt$("PIC(ZZZZZZ)",gl(2))&cnvrt$("PIC(ZZ#)",gl(3))
+00630   gl$=cnvrt$("PIC(ZZ#)",gl(1))&cnvrt$("PIC(ZZZZZZ)",gl(2))&cnvrt$("PIC(ZZ#)",gl(3))
 00640   if f1=0 then gosub L990
 00650   gosub L890 ! ACCUMULATE G/L TOTALS
 00660   goto L560
@@ -84,36 +84,36 @@
 00740   hvn$=vn$
 00750   if fund<>2 then goto L770
 00760   if fund$><gl$(1:3) then gosub TOTALS : pr #255: newpage : gosub L990
-00770 L770: if cde=1 then p1=97: v1=v1+upa: t1=t1+upa : let ft(1)=ft(1)+upa else p1=109: v2=v2+upa : t2=t2+upa : let ft(2)=ft(2)+upa
+00770 L770: if cde=1 then p1=97: v1=v1+upa: t1=t1+upa : ft(1)=ft(1)+upa else p1=109: v2=v2+upa : t2=t2+upa : ft(2)=ft(2)+upa
 00780   v3=v3+upa
-00790   t3=t3+upa : let ft(3)=ft(3)+upa
+00790   t3=t3+upa : ft(3)=ft(3)+upa
 00800   vnam$=""
 00810   read #paymstr,using L820,key=vn$,release: vnam$ nokey L830
 00820 L820: form pos 9,c 30
 00830 L830: discdate$=cnvrt$("pic(########)",ddate)
 00840   ddate=val(discdate$(5:8))*100+val(discdate$(3:4))
 00850   pr #255,using 'FORM POS 1,C 10,C 22,C 12,3*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS P1,N 10.2,POS 119,N 12.2': vn$,vnam$(1:20),iv$,ivd,dd,ddate,ade$(1:18),upa,upa pageoflow NEWPGE
-00860   let upa=0
+00860   upa=0
 00870   if endcode=1 then goto L1180
 00880   goto L600
-00890 L890: if gl$(3:3)=" " then let gl$(3:3)="0"
-00900   if gl$(12:12)=" " then let gl$(12:12)="0"
+00890 L890: if gl$(3:3)=" " then gl$(3:3)="0"
+00900   if gl$(12:12)=" " then gl$(12:12)="0"
 00910   read #work,using 'FORM POS 13,N 10.2',key=gl$: gla nokey L950
-00920   let gla+=amt
+00920   gla+=amt
 00930   rewrite #work,using 'FORM POS 13,N 10.2': gla
 00940   goto L960
 00950 L950: write #work,using 'FORM POS 1,C 12,N 10.2': gl$,amt
 00960 L960: return 
 00970 ! ______________________________________________________________________
 00980 NEWPGE: pr #255: newpage: gosub HDR : continue 
-00990 L990: let fd$=""
-01000   let fund$=gl$(1:3)
+00990 L990: fd$=""
+01000   fund$=gl$(1:3)
 01010   read #fundmstr,using 'FORM POS 4,C 25',key=fund$: fd$ nokey HDR
 01020 HDR: f1=1
 01030   pr #255,using 'FORM POS 1,C 8,Cc 86': date$,cnam$
 01040   pr #255,using 'FORM POS 1,C 8,cc 86': time$,"Unpaid Invoice Listing"
 01050   pr #255,using 'FORM POS 1,C 4,N 4,Cc 86': "Page",pg+=1,dat$
-01060   if fund<>2 then let fd$=""
+01060   if fund<>2 then fd$=""
 01070   pr #255,using 'FORM POS 1,Cc 86': fd$ ! ; pr #255: ""
 01080   pr #255: "                                              Invoice     Due     Discount                       Pay Now     Pay Later      Total"
 01090   pr #255: "Payee  #  Payee Name            Invoice Numb    Date      Date      Date    Description           Amount      Amount         Due"
@@ -144,7 +144,7 @@
 01340   tf1=tf1+gla
 01350   goto READ_WORK
 01360 TOTF1: pr #255: tab(78);"__________"
-01370   if val(hf$)>0 then let fd$="Total for Fund #: "&ltrm$(hf$) else let fd$="TOTAL"
+01370   if val(hf$)>0 then fd$="Total for Fund #: "&ltrm$(hf$) else fd$="TOTAL"
 01380   pr #255,using 'FORM POS 12,C 14,C 52,N 10.2': "",fd$,tf1
 01390   pr #255: pageoflow NEWPGE
 01400   tf1=0

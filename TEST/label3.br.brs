@@ -8,7 +8,7 @@
 00055 ! -------------------------------------------------------------------
 00060   fntos(sn$='label3')
 00070   myline = 1 : mypos = 5 : mylen = 10 : myalign = 2 !:
-        let font_mod=0 !:
+        font_mod=0 !:
         mytext$="This is a two Line Label, Woo Hoo."
 00075   fnlbl(myline,mypos,mytext$,mylen,myalign,font_mod)
 00080   fnacs(sn$,0,2,mat response$,ckey)

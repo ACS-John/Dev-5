@@ -13,7 +13,7 @@
 12400   fndat(dat$)
 12600 ! ______________________________________________________________________
 12800   fntos(sn$="PayrollReg")
-13000   rc=cf=0: mylen=22: mypos=mylen+3: let frameno=1
+13000   rc=cf=0: mylen=22: mypos=mylen+3: frameno=1
 13200   fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included.")
 13400   fnlbl(1,1,"Bad Date:",mylen,1,0,frameno)
 13600   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno)

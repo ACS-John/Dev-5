@@ -101,7 +101,7 @@
 00880 L880: if perpag$="N" then goto L920
 00890   pr #255: newpage
 00900   gosub HDR
-00910 L910: let fst=1
+00910 L910: fst=1
 00920 L920: pr #255,using L930: jn$,n$
 00930 L930: form pos 1,c 6,pos 8,c 40,skip jbskip
 00940   return 

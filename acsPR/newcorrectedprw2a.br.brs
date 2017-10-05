@@ -15,7 +15,7 @@
 00180   dim abrevname$(20)*8
 00190   dim fm4$*255,in4$(30),sel$(4)*40,io6$(4),dedcode$(20)*2,dedyn$(20)*1
 00200   dim miscded(20),box12(20),txt$*80,totalbox12(20)
-00210   let fm4$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
+00210   fm4$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 00220   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00230   read #1,using L240: mat a$,b$,mat d$,loccode,mat e$,mat dedcode,mat dedfed
 00240 L240: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 618,10*n 1,pos 638,10*n 1
@@ -26,7 +26,7 @@
 00290 L290: fntos(sn$="W2-1") !:
         rc=cf=0: mylen=25 : mypos=mylen+3
 00300   fnfra(1,1,3,50,"Date Range for W2's","Normally this would the first and last day of the calendar year",0) !:
-        cf+=1 : let fratype=cf
+        cf+=1 : fratype=cf
 00310   fnlbl(1,1,"Starting Date:",mylen,1,0,1)
 00320   fntxt(1,mypos,10,0,1,"3",0,"First day of calendar year",1) !:
         resp$(rc+=1)=str$(beg_date)
@@ -45,7 +45,7 @@
         ssmax=102000 !:
         mcrate=.0145 !:
         mcmax=999999 !:
-        let w1=4 !:
+        w1=4 !:
         namcde$="F" !:
         topmargin=13 !:
         bottom=141 !:
@@ -54,7 +54,7 @@
 00440   fntos(sn$="Prw2-2") !:
         rc=cf=0: mylen=46: mypos=mylen+3
 00450   fnfra(1,1,5,60,"Print W-2s","This W-2 program prints to preprinted W2 forms coded with 22222.",0) !:
-        cf+=1 : let franum=cf
+        cf+=1 : franum=cf
 00460   fnlbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
 00470   fntxt(1,mypos,10,0,1,"34",0,"Use format such as .062.",franum) !:
         resp$(rc+=1)=str$(ssrate)
@@ -68,13 +68,13 @@
 00530   fntxt(5,mypos,10,0,1,"10",0,"At the present time there is no maximum.  Enter a number larger than any one's wages can be. For example, 999999.00",franum) !:
         resp$(rc+=1)=str$(mcmax)
 00540   fnfra(8,1,3,60,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.") !:
-        cf+=1 : let franum=cf : mylen=26 : mypos=mylen+2
+        cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
 00550   fnopt(1,3,"Print W-2",0,franum) !:
         resp$(rc+=1)="True"
 00560   fnopt(2,3,"Export to another system",0,franum) !:
         resp$(rc+=1)="False"
 00570   fnfra(13,1,3,60,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.") !:
-        cf+=1 : let franum=cf
+        cf+=1 : franum=cf
 00580   fnlbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
 00590   fntxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum) !:
         resp$(rc+=1)=str$(pn1)
@@ -85,7 +85,7 @@
 00630   fntxt(18,60,1,0,1,"",0,"Is the first name shown first in the employee record or is the Last name shoun first. Indicate with an F or an L.",0) !:
         resp$(rc+=1)=namcde$
 00640   fnfra(20,1,3,60,"W-2 Alignment","You can move the pr up or down on either W-2 by increasing or decreasing the millimeters on the top margin.") !:
-        cf+=1 : let franum=cf
+        cf+=1 : franum=cf
 00650   fnlbl(1,1,"Top Margin - Top W-2:",mylen,1,0,franum)
 00660   fntxt(1,mypos,3,0,1,"30",0,"Decrease the top margin to move the pr up. Increase the top margin to move the W-2 down.",franum) !:
         resp$(rc+=1)=str$(topmargin)
@@ -103,8 +103,8 @@
 00750   ssmax=val(resp$(2))
 00760   mcrate=val(resp$(3))
 00770   mcmax=val(resp$(4))
-00780   if resp$(5)="True" then let w1=4 else let w1=3
-00790   if resp$(6)="True" then let w1=3
+00780   if resp$(5)="True" then w1=4 else w1=3
+00790   if resp$(6)="True" then w1=3
 00800   pn1=val(resp$(7))
 00810   dc1=val(resp$(8))
 00820   namcde$=resp$(9)
@@ -114,7 +114,7 @@
 00860   med$="Y"
 00870   gosub L5540
 00880   gosub VBOPENPRINT
-00890   let goproc=0
+00890   goproc=0
 00900   if w1=2 then gosub L5930
 00910   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 00920   open #2: "Name="&env$('Q')&"\PRmstr\department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\deptidx.h"&env$('cno'),internal,outin,keyed 
@@ -126,7 +126,7 @@
 00980   write #3,using L990: ssmax,w1,nw
 00990 L990: form pos 1,n 10.2,2*n 1
 01000   open #14: "Name="&env$('Q')&"\PRmstr\W2Box16.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\W2Index.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1030
-01010   let z$="NO" ! 1/12/90
+01010   z$="NO" ! 1/12/90
 01020   box16=1
 01030 L1030: if loccode=0 then goto ASK_STARTING else goto L2310
 01040 L1040: read #1,using L1130: eno,mat k$,ss$,em6,ta eof L2090
@@ -141,7 +141,7 @@
 01130 L1130: form pos 1,n 8,3*c 30,c 11,pos 122,n 2,pos 173,pd 3
 01140   if numb=0 then goto L1160
 01150   if eno<empno then goto L1040
-01160 L1160: let first=1
+01160 L1160: first=1
 01170   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 01180   restore #4,key>=checkkey$: nokey L1040
 01190 L1190: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L1650
@@ -162,31 +162,31 @@
 01340     miscded(j)=miscded(j)+tcp(j+4)
 01350   next j
 01360 ! tDEDRET=TDEDRET+DEDRET ! ACCUMULATE BOX 13 RETIREMENT; THIS LINE WILL ONLY WORK IF NO CAFETERIA; REMOVE ! OFF 861 AND 882 FOR RETIREMENT ONLY ! can change 882 only if know specific ded to show in box 13
-01370   let w(1)=w(1)+tcp(1) ! FED W/H YTD
-01380   let w(2)=w(2)+ tcp(31)-dedret ! TOTAL TAXABLE WAGES
-01390   let w3=w3+tcp(2) ! FICA W/H YTD
-01400   let w(4)=w(4)+tcp(24) ! EIC TOTAL
-01410   if em6=9 then goto L1460 else let w(5)=w(5)+tcp(31)-tcp(30)-dedfica ! TOTAL SS WAGES
-01420   let w(11)=w(11)+tcp(31)-dedfica ! TOTAL MC WAGES & TIPS
-01440   if em6=2 then let w(5)=0 ! NO SS
-01450   if em6=1 then let w(11)=0 ! NO MC
+01370   w(1)=w(1)+tcp(1) ! FED W/H YTD
+01380   w(2)=w(2)+ tcp(31)-dedret ! TOTAL TAXABLE WAGES
+01390   w3=w3+tcp(2) ! FICA W/H YTD
+01400   w(4)=w(4)+tcp(24) ! EIC TOTAL
+01410   if em6=9 then goto L1460 else w(5)=w(5)+tcp(31)-tcp(30)-dedfica ! TOTAL SS WAGES
+01420   w(11)=w(11)+tcp(31)-dedfica ! TOTAL MC WAGES & TIPS
+01440   if em6=2 then w(5)=0 ! NO SS
+01450   if em6=1 then w(11)=0 ! NO MC
 01460 L1460: ! 
-01470   if uprc$(med$)="Y" then let w(3)=w(3)+tcp(2) ! ss wh and medicare seperated in employee record
-01480   if uprc$(med$)="Y" then let w(12)=w(12)+tcp(3) ! medicare
+01470   if uprc$(med$)="Y" then w(3)=w(3)+tcp(2) ! ss wh and medicare seperated in employee record
+01480   if uprc$(med$)="Y" then w(12)=w(12)+tcp(3) ! medicare
 01490   if tcd><stcode then goto L1580
-01500   let w(7)=w(7)+tcp(4) ! STATE WH
-01510   let w(9)=w(9)+tcp(31)-dedret ! STATE WAGES
+01500   w(7)=w(7)+tcp(4) ! STATE WH
+01510   w(9)=w(9)+tcp(31)-dedret ! STATE WAGES
 01520   if loccode=0 or tcp(loccode+4)=0 then goto L1550
-01530   let w(8)=w(8)+tcp(loccode+4) ! LOCAL WITHHOLDING
-01540   let w(10)=w(10)+tcp(31)-dedret ! LOCAL WAGES
+01530   w(8)=w(8)+tcp(loccode+4) ! LOCAL WITHHOLDING
+01540   w(10)=w(10)+tcp(31)-dedret ! LOCAL WAGES
 01550 L1550: if pn1>0 and tcp(pn1+4)>0 then px$="X"
 01560   if dc1>0 and dc1<11 then dcb=dcb+tcp(dc1+4)
 01570   goto L1620
 01580 L1580: if loccode=0 then lowh=0 else lowh=tcp(loccode+4)
 01590   write #3,using L1600: eno,tcd,tcp(31)-dedret,tcp(3),lowh,f$
 01600 L1600: form pos 1,n 8,n 2,3*pd 5.2,c 8
-01610   let goproc=1
-01620 L1620: let first=0
+01610   goproc=1
+01620 L1620: first=0
 01630 ! If TA>0 Then Goto 1120
 01640   goto L1190 ! read next check record
 01650 L1650: if box16=1 then gosub L4120
@@ -204,29 +204,29 @@
 01770       goto L1790
 01780 L1780: next j2
 01790 L1790: next j
-01800   let w(5)=min(ssmax-w(6),w(5)) ! SS WAGES CANNOT EXCEED MAXIMUM
-01810   let w(11)=min(mcmax,w(11)) ! MC WAGES CANNOT EXCEED MAXIMUM
-01830   if uprc$(med$)="N" then let w(3)=round(min(w3/(ssrate+mcrate)*ssrate,ssmax*ssrate),2) ! SS WH ! change to seperate medicare
-01840   if uprc$(med$)="N" then let w(12)=w3-w(3) ! MEDICARE WITHHELD  ! change to seperate medicare
-01850   if uprc$(med$)="N" and w(5)>w(11)-1 and w(5)<w(11)+1 then let w(5)=w(11) ! set ss wages and medicare wages equal in within 1.00
-01860   if uprc$(med$)="N" and em6=1 then let w(12)=0 : let w(3)=w3 ! NO MC ALL SS ! change to seperate medicare
-01870   if uprc$(med$)="N" and em6=2 then let w(3)=0 : let w(12)=w3 ! NO SS ALL MC ! change to seperate medicare
-01880   if em6=9 then let w(3)=w(5)=w(11)=w(12)=0 ! NO SS OR MC
+01800   w(5)=min(ssmax-w(6),w(5)) ! SS WAGES CANNOT EXCEED MAXIMUM
+01810   w(11)=min(mcmax,w(11)) ! MC WAGES CANNOT EXCEED MAXIMUM
+01830   if uprc$(med$)="N" then w(3)=round(min(w3/(ssrate+mcrate)*ssrate,ssmax*ssrate),2) ! SS WH ! change to seperate medicare
+01840   if uprc$(med$)="N" then w(12)=w3-w(3) ! MEDICARE WITHHELD  ! change to seperate medicare
+01850   if uprc$(med$)="N" and w(5)>w(11)-1 and w(5)<w(11)+1 then w(5)=w(11) ! set ss wages and medicare wages equal in within 1.00
+01860   if uprc$(med$)="N" and em6=1 then w(12)=0 : w(3)=w3 ! NO MC ALL SS ! change to seperate medicare
+01870   if uprc$(med$)="N" and em6=2 then w(3)=0 : w(12)=w3 ! NO SS ALL MC ! change to seperate medicare
+01880   if em6=9 then w(3)=w(5)=w(11)=w(12)=0 ! NO SS OR MC
 01890   if w(8)=0 then pf$="" : goto L1920
 01900   if z$="YES" then gosub L2690
 01910   pf$=f$
-01920 L1920: let g$=str$(eno)
+01920 L1920: g$=str$(eno)
 01930   if w(2)=0 and w(5)=0 then goto L2060 ! skip w2 if no wages
 01940   gosub PRINTW2
 01950   mat s=s+w
-01960   let wctr=wctr+1
+01960   wctr=wctr+1
 01970   if w1=3 then goto L2060
 01980   goto L2060 ! IF WCTR<41 THEN GOTO 1310
 01990   desc$(3)=lpad$("  "&cnvrt$("Nz 10.2",s(13)),15)
-02000   mat w=s: let g$="SUB TOTAL": gosub TOT1
+02000   mat w=s: g$="SUB TOTAL": gosub TOT1
 02010   nosub=1
 02020   desc$(3)=""
-02030   let wctr=0
+02030   wctr=0
 02040   mat t=t+s
 02050   mat s=(0)
 02060 L2060: mat w=(0)
@@ -236,7 +236,7 @@
 02100   goto ASK_STARTING
 02110   if wctr=0 or nosub=0 then goto L2140
 02120   desc$(3)=lpad$("  "&cnvrt$("Nz 10.2",s(13)),15)
-02130 L2130: mat w=s: let g$="SUB TOTAL" : gosub TOT1
+02130 L2130: mat w=s: g$="SUB TOTAL" : gosub TOT1
 02140 L2140: mat t=t+s
 02150   misc=3
 02160   for j=1 to 10
@@ -245,7 +245,7 @@
 02190     misc=misc+1
 02200     if misc>7 then goto L2220 ! only allow 4 different deductions
 02210 L2210: next j
-02220 L2220: mat w=t: let g$="Final Total" : let first$=mid$=last$="" : gosub TOT1
+02220 L2220: mat w=t: g$="Final Total" : first$=mid$=last$="" : gosub TOT1
 02230 L2230: close #1: 
 02240   close #2: 
 02250   close #3: 
@@ -266,11 +266,11 @@
         fncmdkey("&Cancel",5,0,1,"Returns to menu")
 02380   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
-02390   let z$=resp$(1)
-02400   let z$=uprc$(rtrm$(z$))
-02410   if rtrm$(z$)="" then let z$="NO"
+02390   z$=resp$(1)
+02400   z$=uprc$(rtrm$(z$))
+02410   if rtrm$(z$)="" then z$="NO"
 02420   if z$="YES" or z$="NO" then goto ASK_STARTING
-02430   let f$=z$
+02430   f$=z$
 02440   if z$="" then goto L2310
 02450 ASK_STARTING: ! 
 02460   fntos(sn$="Prw2-3") !:
@@ -305,10 +305,10 @@
         fncmdkey("&Cancel",5,0,1,"Returns to menu")
 02740   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
-02750   let f$=resp$(1)
-02760   let g$=rtrm$(g$)
+02750   f$=resp$(1)
+02760   g$=rtrm$(g$)
 02770   if g$="1" then goto L2790
-02780   let f$=g$
+02780   f$=g$
 02790 L2790: return 
 02800 ! ___________________________________________
 02810 PRW2B: open #1: "Name="&env$('Temp')&"\Control."&session$,internal,output 
@@ -322,7 +322,7 @@
 02890   fnxit ! stop  ! fnCHAIN("S:\acsPR\prw2b")
 02900 ! ___________________________________________
 02910 TOT1: mat k$=(""): ss$=stcode$=state$=pf$="": eno=0: k$(1)="Total Sheet"
-02920   let x$=" ": p1=58: p2=126
+02920   x$=" ": p1=58: p2=126
 02930 PRINTW2: ! pr W2 FORM
 02940   gosub ASK_OLD_INFO
 02950   column1=15 !:
@@ -443,22 +443,22 @@
 04070   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 04080   fnpa_newpage : lyne=topmargin: count=0
 04090   goto L4110
-04100 L4100: let x$=""
+04100 L4100: x$=""
 04110 L4110: return 
 04120 L4120: read #14,using fm4$,key=kz$: kz$,mat in4$ nokey L4290
 04130   for j=1 to 6
 04140     amt(j)=val(in4$(j*5-3))
-04150     if in4$(j*5-2)="1" then let w(2)=w(2)+amt(j)
-04160     if in4$(j*5-1)="1" then let w(5)=w(5)+amt(j)
-04180     if in4$(j*5-1)="1" then let w(11)=w(11)+amt(j)
-04190 L4190: if in4$(j*5-0)="1" then let w(9)=w(9)+amt(j)
-04200     if in4$(j*5-2)="2" then let w(2)=w(2)-amt(j)
-04210     if in4$(j*5-1)="2" then let w(5)=w(5)-amt(j)
-04230     if in4$(j*5-1)="2" then let w(11)=w(11)-amt(j)
-04240 L4240: if in4$(j*5-0)="2" then let w(9)=w(9)-amt(j)
+04150     if in4$(j*5-2)="1" then w(2)=w(2)+amt(j)
+04160     if in4$(j*5-1)="1" then w(5)=w(5)+amt(j)
+04180     if in4$(j*5-1)="1" then w(11)=w(11)+amt(j)
+04190 L4190: if in4$(j*5-0)="1" then w(9)=w(9)+amt(j)
+04200     if in4$(j*5-2)="2" then w(2)=w(2)-amt(j)
+04210     if in4$(j*5-1)="2" then w(5)=w(5)-amt(j)
+04230     if in4$(j*5-1)="2" then w(11)=w(11)-amt(j)
+04240 L4240: if in4$(j*5-0)="2" then w(9)=w(9)-amt(j)
 04250     if j>1 then desc$(j)=lpad$(in4$(j*5-4)(1:1)&"  "&cnvrt$("Nz 10.2",amt(j)),15)
 04260     if j=1 then desc$(j)=lpad$(in4$(j*5-4)(1:1)&"  "&ltrm$(cnvrt$("Nz 10.2",amt(j))),15)
-04270 ! If (J=3 OR J=4) AND (IN4$(J*5-4)(1:1)="D" OR IN4$(J*5-4)(1:1)="E" OR IN4$(J*5-4)(1:1)="F" OR IN4$(J*5-4)(1:1)="H") Then Let W(13)=W(13)+AMT(J) ! SUBTOTAL BOX 17 IF D,E,F,OR H CODES
+04270 ! If (J=3 OR J=4) AND (IN4$(J*5-4)(1:1)="D" OR IN4$(J*5-4)(1:1)="E" OR IN4$(J*5-4)(1:1)="F" OR IN4$(J*5-4)(1:1)="H") Then w(13)=W(13)+AMT(J) ! SUBTOTAL BOX 17 IF D,E,F,OR H CODES
 04280   next j
 04290 L4290: return 
 04300 L4300: if err=61 then pr f "23,1,C 80,N": "THIS PROGRAM IS TRYING TO ACCESS A RECORD THAT IS IN USE!" else goto L4320
@@ -574,7 +574,7 @@
 05400 L5400: ! LAZER W2 FOR CENTER PIECE SOFTWARE
 05410   p1=pos(k$(1)," ",1)
 05420   if p1=0 then p1=len(k$(1))+1
-05430   let q1$='","'
+05430   q1$='","'
 05440   p3=pos(k$(3),",",1) : a3=2
 05450   if p3=0 then p3=pos(k$(3)," ",1): a3=1
 05460   if p3=0 then p3=len(k$(3))+1: a3=1
@@ -605,28 +605,28 @@
 05670   fncmdkey("&Cancel",5,0,1,"Returns to menu")
 05680   fnacs(sn$,0,mat resp$,ckey) !:
         if ckey=5 then goto XIT
-05690   let x=0
+05690   x=0
 05700   for j=1 to 20
-05710     let x+=1: if resp$(x)="True" then dedyn$(j)="Y"
-05720     let x+=1: box12(j)=val(resp$(x))
-05730     let x+=1: dedcode$(j)=resp$(x)
+05710     x+=1: if resp$(x)="True" then dedyn$(j)="Y"
+05720     x+=1: box12(j)=val(resp$(x))
+05730     x+=1: dedcode$(j)=resp$(x)
 05740   next j
 05750   return 
 05760 EXTRACT_NAME: ! 
 05770 L5770: dim first$*15,mid$*15,last$*20,k$(3)*30,k$(3)*30
 05780   k$(1)=uprc$(rtrm$(k$(1))): ! nAMCDE$="s"
-05790   let x1=pos(k$(1)," ",1)
-05800   let x2=pos(k$(1)," ",x1+1)
-05810   let x3=pos(k$(1)," ",x2+1)
+05790   x1=pos(k$(1)," ",1)
+05800   x2=pos(k$(1)," ",x1+1)
+05810   x3=pos(k$(1)," ",x2+1)
 05820   if uprc$(namcde$)="L" then goto L5870
-05830   let first$=k$(1)(1:max(min(15,x1-1),1))
+05830   first$=k$(1)(1:max(min(15,x1-1),1))
 05840   if x2>0 then mid$=k$(1)(x1+1:x2-1): last$=k$(1)(x2+1:len(k$(1)))
 05850   if x2=0 then last$=k$(1)(x1+1:len(k$(1))): mid$=""
 05860   goto L5910
 05870 L5870: ! last name first
 05880   if x1>0 and k$(1)(x1-1:x1-1)="," then last$=k$(1)(1:x1-2) else last$=k$(1)(1:max(x1-1,1))
-05890   if x2>0 then let first$=k$(1)(x1+1:x2-1): mid$=k$(1)(x2+1:len(k$(1)))
-05900   if x2=0 then let first$=k$(1)(x1+1:len(k$(1))): mid$=""
+05890   if x2>0 then first$=k$(1)(x1+1:x2-1): mid$=k$(1)(x2+1:len(k$(1)))
+05900   if x2=0 then first$=k$(1)(x1+1:len(k$(1))): mid$=""
 05910 L5910: ! pr FIRST$,MID$,LAST$
 05920   return 
 05930 L5930: pr newpage ! left or right stub

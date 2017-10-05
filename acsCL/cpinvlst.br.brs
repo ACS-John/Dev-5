@@ -26,7 +26,7 @@
 00220   if ckey=5 then goto XIT
 00230   ped=val(resp$(1))
 00240   sq1$=resp$(2)(1:1)
-00250   let fund=val(resp$(3))
+00250   fund=val(resp$(3))
 00260 ! ___________________________
 00270 ! ___________________________
 00280   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 

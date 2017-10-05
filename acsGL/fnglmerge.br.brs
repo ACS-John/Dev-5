@@ -49,7 +49,7 @@
 00450     rewrite #glwk1,using 'Form POS 27,N 2': 9
 00460 L460: if trim$(ven$)="" or trim$(ven$)="0" then goto READ_GLWK1
 00470     read #gl1099,using 'Form POS 104,PD 5.2,POS 122,2*PD 3',key=ven$: ytdp ,mat adr nokey L1250
-00480     let ytdp+=k
+00480     ytdp+=k
 00490 ! READ #GLTR1099,USING 260,REC=1,RESERVE: LR5
 00500 L500: lr5=lrec(gltr1099)+1 !:
           write #gltr1099,using 'Form POS 1,C 8,N 6,PD 5.2,C 12,C 30,PD 3',rec=lr5,reserve: ven$,s,k,l$,p$,0 duprec L500
@@ -121,7 +121,7 @@
         close #20: 
 01010   ckgl=0
 01020   for j=1 to 5
-01030     if val(gl$(j)(4:9))=0 then goto L1090 else let gl2=0
+01030     if val(gl$(j)(4:9))=0 then goto L1090 else gl2=0
 01040     read #glmstr,using 'Form POS 87,PD 6.2',key=gl$(j): gl2 nokey L1050
 01050 L1050: if gl1(j)=gl2 then goto L1090
 01060     if ckgl=0 then pr newpage; bell

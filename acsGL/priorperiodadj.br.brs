@@ -46,13 +46,13 @@
 00390   k$=fnagl$(resp$(1)) !:
         am=val(resp$(2)) !:
         d1=val(resp$(3)) !:
-        let fm(1)=val(resp$(4)(1:2)) !:
-        let fm(2)=val(resp$(5)(1:2)) !:
-        let fm(3)=val(resp$(6)(1:2)) !:
-        let fm(4)=val(resp$(7)(1:2))
+        fm(1)=val(resp$(4)(1:2)) !:
+        fm(2)=val(resp$(5)(1:2)) !:
+        fm(3)=val(resp$(6)(1:2)) !:
+        fm(4)=val(resp$(7)(1:2))
 00395   if val(k$)=0 and am=0 then goto XIT
-00400   if fm(2)=1 then let fm2$="C" else let fm2$="P"
-00410   if fm(4)=1 then let fm4$="C" else let fm4$="P"
+00400   if fm(2)=1 then fm2$="C" else fm2$="P"
+00410   if fm(4)=1 then fm4$="C" else fm4$="P"
 00420 ! 
 00440   gosub HDR
 00450   read #1,using 'Form POS 13,C 50,POS 81,41*PD 6.2',key=k$: d$,bb,cb,mat bc,mat bp
@@ -66,9 +66,9 @@
 00530     bp(j)=bp(j)+am
 00540   next j
 00550   if fm(4)=2 then goto L640
-00560   let first=1
+00560   first=1
 00570   goto L590
-00580 L580: let first=fm(1)
+00580 L580: first=fm(1)
 00590 L590: for j=first to fm(3)
 00600     bc(j)=bc(j)+am
 00610   next j

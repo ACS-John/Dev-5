@@ -15,7 +15,7 @@
 00130   fncno(cno,cnam$) !:
         fndat(dat$)
 00135   fnconsole(1)
-00150   let fm1$="Form  Pos 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
+00150   fm1$="Form  Pos 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 00160 ! 
 00170   io1$(1)="7,20,C 12,UT,N"
 00180   io1$(2)="7,34,G 10.2,UT,N"
@@ -38,18 +38,18 @@
 00330 ! ______________________________________________________________________
 00340 MENU1: pr newpage
 00350   if fnprocess=1 then ti=4 : goto L520
-00360   let win=101
+00360   win=101
 00370   sr=6 : sc=20 : er=14 : ec=59
 00380   gosub XNOPENWIN
 00390   for j=1 to 5
 00400     io3$(j)=str$(j+3)&",2,C 38,N"
 00410   next j
 00420   io3$(3)="6,2,C 38,C,N"
-00430   let wrd1$(1)="1. Initial File Preparation"
-00440   let wrd1$(2)="2. Add"
-00450   let wrd1$(3)="3. Edit"
-00460   let wrd1$(4)="4. pr Proof List"
-00470   let wrd1$(5)="5. Reorganize"
+00430   wrd1$(1)="1. Initial File Preparation"
+00440   wrd1$(2)="2. Add"
+00450   wrd1$(3)="3. Edit"
+00460   wrd1$(4)="4. pr Proof List"
+00470   wrd1$(5)="5. Reorganize"
 00480   pr f "15,35,C 09,B,5": "Exit (F5)"
 00490   rinput #win,select mat io3$,attr "H": mat wrd1$
 00500   ti=curfld
@@ -194,7 +194,7 @@
 01890   restore #1,key>=k$: eof L1900 nokey L1800
 01900 L1900: pr newpage
 01910   message$=""
-01920   let win =101 ! assign window #
+01920   win =101 ! assign window #
 01930   stopable=1
 01940   fnwait(win,cap$,message$,stopable)
 01950   on fkey 5 goto L2180
@@ -256,7 +256,7 @@
 03350   if sc<1 then sc=20
 03360   if er<1 then er=14
 03370   if ec<1 then ec=59
-03380   let win_width=ec-sc+1
+03380   win_width=ec-sc+1
 03390   close #win: ioerr L3400
 03400 L3400: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
 03410   pr #win: newpage

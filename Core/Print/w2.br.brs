@@ -1,5 +1,5 @@
 08000 ! r: testing zone
-08020 let fn_setup
+08020 fn_setup
 08040 library program$: fnNameParse
 08050 nameFormat$=optNameFormat$(2)
 08060 fncreg_write('Employee Name Format',nameFormat$)
@@ -53,7 +53,7 @@
 14600     ! fnreg_read('Export for Center Piece Software'   ,w2destinationOpt$(3),'False')  ! removed access 01/03/2017
 14620     fnreg_read('Print W-3 also'                     ,enableW3$           ,'True' )
 14640     fnreg_read('W-2 - Enable Background'            ,enableBackground$   ,'True' )
-14680     fncreg_read('W-2 - Copy Current',w2Copy$,optW2Copy$(1)) : w2Copy=srch(mat optW2Copy$,w2Copy$) : if w2Copy<=0 then let w2Copy=1
+14680     fncreg_read('W-2 - Copy Current',w2Copy$,optW2Copy$(1)) : w2Copy=srch(mat optW2Copy$,w2Copy$) : if w2Copy<=0 then w2Copy=1
 14700     fncreg_read('Employee Name Format',nameFormat$,optNameFormat$(1))
 14720     w2Copy$=optW2Copy$(w2Copy)
 14740     fnureg_read('W-2 - Export Filename',w2laser_output_filename$,os_filename$(env$('userprofile')&'\Desktop\ACS [TaxYear] W-2 Export (Company [CompanyNumber]).txt'))
@@ -96,7 +96,7 @@
 17240   if enableEmpRange then fraGeneralHeight+=3
 17260   if enableAskCLocality then fraGeneralHeight+=5
 17280   fnfra(1,1,fraGeneralHeight,fraWidth,"General","Normally this would the first and last day of the calendar year",0)
-17300   cf+=1 : let franum=cf : lc=0
+17300   cf+=1 : franum=cf : lc=0
 17320   fnlbl(lc+=1,1,"Tax Year:",mylen,1,0,franum)
 17340   fntxt(lc,mypos,4,0,1,"",1,"Year to pr W-2s for",franum)
 17360   resp$(resc_taxYear:=rc+=1)=taxYear$
@@ -133,7 +133,7 @@
 17980   !
 18000   fra2Height=5 : fra2Y=fraGeneralHeight+3
 18020   fnfra(fra2Y,1,fra2Height,fraWidth,"Print W-2s","",0)
-18040   cf+=1 : let franum=cf : lc=0
+18040   cf+=1 : franum=cf : lc=0
 18060   mylen=46: mypos=mylen+2
 18080   fnlbl(1,1,"Social Security Withholding Rate:",mylen,1,0,franum)
 18100   fntxt(1,mypos,10,0,1,"34",disableSSMCedit,"Use format such as .062.",franum)
@@ -150,7 +150,7 @@
 18320   !
 18340   fra3Y=fra2Y+fra2Height+2 : fra3Height=6
 18360   fnfra(fra3Y,1,fra3Height,fraWidth,"Printing or Exporting","You have the option to either pr the W-2s or export them to another system for printing.")
-18380   cf+=1 : let franum=cf : mylen=26 : mypos=mylen+2
+18380   cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
 18400   fnopt(1,3,"Print W-2",0,franum)
 18420   resp$(respc_PrintW2:=rc+=1)=w2destinationOpt$(1)
 18440   fnlbl(1,fraWidth-50,"(2 per page is not yet available with Backgrounds)",50,1,0,franum)
@@ -175,7 +175,7 @@
 18840   if enablePayrollDeductions then
 18860     fra4Y=fra3y+fra3Height+2 ! 25
 18880     fnfra(fra4Y,1,2,fraWidth,"Identify the Following Deductions","You have twenty miscellaneous deductions available to you. If you have Qualified Pension or Dependent Care, start with the first deduction and count down to identify the number of the deduction.")
-18900     cf+=1 : let franum=cf
+18900     cf+=1 : franum=cf
 18920     fnlbl(1,1,"Qualified Pension Plan:",mylen,1,0,franum)
 18940     fntxt(1,mypos,2,0,1,"30",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 18960     resp$(respc_qpenplan:=rc+=1)=str$(pn1)
@@ -185,7 +185,7 @@
 19040   else if enableAskState then
 19060     fra4Y=fra3y+fra3Height+2 ! 25
 19080     fnfra(fra4Y,1,2,fraWidth,"State","")
-19100     cf+=1 : let franum=cf
+19100     cf+=1 : franum=cf
 19120     fnlbl(1,1,"State Name:",mylen,1,0,franum)
 19140     fntxt(1,mypos,2,0,1,"",0,"If you have a qualified pension plan that requires the pension plan box to be checked, count down from your 1st miscellaneous deduction to determine the number to enter here.",franum)
 19160     resp$(respc_state:=rc+=1)=state$
@@ -252,11 +252,11 @@
 21140     end if
 21160     if ckey=14 then 
 21180 !     if exportFormatID=1 then
-21200 !       let w2laser_output_filename$=os_filename$("\1099ETC.W"&date$(days(date$)-180,'YY')&"\W2DATA\W2DAT.PRN")
+21200 !       w2laser_output_filename$=os_filename$("\1099ETC.W"&date$(days(date$)-180,'YY')&"\W2DATA\W2DAT.PRN")
 21220 !     else if exportFormatID=2 then  ! removed access 01/03/2017
-21240 !       let w2laser_output_filename$=os_filename$("\CPS04\ASCIIW2.TXT")  ! removed access 01/03/2017
+21240 !       w2laser_output_filename$=os_filename$("\CPS04\ASCIIW2.TXT")  ! removed access 01/03/2017
 21260 !     else 
-21280         let w2laser_output_filename$=os_filename$(env$('userprofile')&'\Desktop\ACS [TaxYear] W-2 Export (Company [CompanyNumber]).txt')
+21280         w2laser_output_filename$=os_filename$(env$('userprofile')&'\Desktop\ACS [TaxYear] W-2 Export (Company [CompanyNumber]).txt')
 21300 !     end if 
 21320       goto ASK_INFO
 21340     else if ckey=ckey_margins then
@@ -325,7 +325,7 @@
 38080   ! returns: nameFirst$,nameMiddle$,nameLast$
 38100   ! calling program should include:  dim nameFirst$*15,nameMiddle$*15,nameLast$*20
 38120   fncreg_read('Employee Name Format',nameFormat$,optNameFormat$(1))
-38140   let fullname$=uprc$(rtrm$(fullname$)): ! nameFormat$="s"
+38140   fullname$=uprc$(rtrm$(fullname$)): ! nameFormat$="s"
 38160   npPosSpace1=pos(fullname$," ",1)
 38180   npPosSpace2=pos(fullname$," ",npPosSpace1+1)
 38200   if nameFormat$=optNameFormat$(1) then 

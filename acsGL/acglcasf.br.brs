@@ -18,12 +18,12 @@
         fnpriorcd
 00140   if fnglfs=5 then goto XIT
 00150   fncno(cno,cnam$)
-00160   let fscode=fnfscode !:
+00160   fscode=fnfscode !:
         priorcd=fnpriorcd
-00170   let udf$=env$('temp')&'\'
+00170   udf$=env$('temp')&'\'
 00180   monthly=1 ! default to monthly information
 00190   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
-00200   let fscode=fnfscode
+00200   fscode=fnfscode
 00210   pors=1
 00220   gosub L2370
 00230   form pos 1,n 2,c 40,pos 89,2*n 1,pos 141,6*n 1,3*n 2,c 6,3*c 12,2*c 20,pos 237,n 2
@@ -77,7 +77,7 @@
 00670   if ir=0 then goto L660
 00680 !  cB=5: bB=1: bP(12)=100.00
 00690   if fscode=0 or (fscode=actpd and priorcd=1) then goto L760
-00700   if fscode<1 or fscode>13 then let fscode=1
+00700   if fscode<1 or fscode>13 then fscode=1
 00710   if fnpriorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00720   if fnpriorcd=2 then goto L750
 00730   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -85,9 +85,9 @@
 00750 L750: if fscode>1 then bb=bp(fscode-1) else bb=0
 00760 L760: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos 81,41*pd 6.2
 00770 L770: if ir=val(r$) then goto L780 else goto L840
-00780 L780: let fund=0
+00780 L780: fund=0
 00790   for x=1 to 10
-00800     if dno=fundnum(x) then let fund=x ! put in certain column
+00800     if dno=fundnum(x) then fund=x ! put in certain column
 00810     if fundnum(x)>0 then totcol=x ! total columns needed
 00820   next x
 00830   if fund=0 then goto L650 ! no matching fund # - skip
@@ -101,11 +101,11 @@
           monthb=monthb+bm(fscode)
 00910   if fscode=0 then goto L920 else goto L960
 00920 L920: for j=1 to fnactpd
-00930     let ytdb=ytdb+bm(j)
+00930     ytdb=ytdb+bm(j)
 00940   next j
 00950   goto L650
 00960 L960: for j=1 to fscode
-00970     let ytdb=ytdb+bm(j)
+00970     ytdb=ytdb+bm(j)
 00980   next j
 00990   goto L650
 01000 ! ______________________________________________________________________
@@ -170,11 +170,11 @@
 01590 ! ______________________________________________________________________
 01600 L1600: if foot1=1 then goto L1660
 01610   tabnote=sp
-01620   let foot1=1
-01630   let foot$=d$
+01620   foot1=1
+01630   foot$=d$
 01640   goto L480
 01650 ! ______________________________________________________________________
-01660 L1660: let foot$=rtrm$(foot$)&d$
+01660 L1660: foot$=rtrm$(foot$)&d$
 01670   goto L480
 01680 ! ______________________________________________________________________
 01690 L1690: for j=1 to 9
@@ -206,9 +206,9 @@
 01950 ! ______________________________________________________________________
 01960 L1960: if ul=0 then goto L2090
 01970   if ul=1 then goto L2000
-01980   let underlin$="  ============"
+01980   underlin$="  ============"
 01990   goto L2010
-02000 L2000: let underlin$="  ____________"
+02000 L2000: underlin$="  ____________"
 02010 L2010: bigul$=""
 02020   for j=1 to totcol
 02030     bigul$=bigul$&underlin$
@@ -264,8 +264,8 @@
 02490   fnacs(sn$,0,mat resp$,ckey)
 02500   if ckey=5 then goto XIT
 02510   for j=1 to 10
-02520     let fundnum(j)=val(resp$(j*2-1))
-02530     let funddesc$(j)=resp$(j*2)
+02520     fundnum(j)=val(resp$(j*2-1))
+02530     funddesc$(j)=resp$(j*2)
 02540   next j
 02550   rewrite #5,using L2390: mat fundnum,mat funddesc$ ioerr L2570
 02560   goto L2580

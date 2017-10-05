@@ -12,9 +12,9 @@
 00110   fntop(program$,cap$="Comparative (FP)")
 00120   if fnglfs=5 then goto XIT
 00130   fncno(cno,cnam$)
-00140   let udf$=env$('temp')&'\'
+00140   udf$=env$('temp')&'\'
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 152,3*C 12',rec=1: mat cogl$ : close #20: 
-00160   actpd=fnactpd : let fscode=fnfscode
+00160   actpd=fnactpd : fscode=fnfscode
 00170   pors=1
 00180   on fkey 5 goto L1830
 00190   mp1=75
@@ -78,7 +78,7 @@
 00700 L700: read #3,using L230: fr,bb,cb,mat by,mat bp,pbp eof L830
 00710   if fr=0 then goto L700
 00720   if fscode=0 then goto L750
-00730   if fscode<1 or fscode>12 then let fscode=1
+00730   if fscode<1 or fscode>12 then fscode=1
 00740   if fnpriorcd=2 then cb=bp(fscode) else cb=by(fscode)
 00750 L750: if fr=val(r$) then goto L760 else goto L810
 00760 L760: if fnpriorcd=2 then !:
@@ -127,11 +127,11 @@
 01150 ! ______________________________________________________________________
 01160 L1160: if foot1=1 then goto L1220
 01170   tabnote=sp
-01180   let foot1=1
-01190   let foot$=d$
+01180   foot1=1
+01190   foot$=d$
 01200   goto L530
 01210 ! ______________________________________________________________________
-01220 L1220: let foot$=rtrm$(foot$)&d$
+01220 L1220: foot$=rtrm$(foot$)&d$
 01230   goto L530
 01240 ! ______________________________________________________________________
 01250 L1250: for j=1 to 9
@@ -160,11 +160,11 @@
 01480 L1480: gosub L1370: continue 
 01490 L1490: if ul=0 then goto L1580
 01500   if ul=1 then goto L1550
-01510   let underlin$="=============="
+01510   underlin$="=============="
 01520   pr #255,using L1530: underlin$,underlin$
 01530 L1530: form skip 1,pos 49,c 14,pos 67,c 14,skip redir
 01540   goto L1580
-01550 L1550: let underlin$="______________"
+01550 L1550: underlin$="______________"
 01560   pr #255,using L1570: underlin$,underlin$
 01570 L1570: form pos 49,c 14,pos 67,c 14,skip redir
 01580 L1580: if redir=0 then pr #255,using L1590: " "

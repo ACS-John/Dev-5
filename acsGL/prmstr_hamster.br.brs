@@ -55,7 +55,7 @@
 20800     fn_add_rec("Last Check Address",12,'N',5,mask_number)
 21000   fnend  ! fn_setup_hamster
 21200   def fn_add_rec(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
-21400     if field_type$='' then let field_type$='C'
+21400     if field_type$='' then field_type$='C'
 21420     if storage_length=0 then storage_length=textbox_len
 21600 ! storage_length_prior=storage_length
 21800     add_rec_item=udim(mat lbl$)+1

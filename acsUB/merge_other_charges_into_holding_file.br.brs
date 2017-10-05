@@ -17,9 +17,9 @@
 00170   open #2: 'Name=C:\Users\John\Desktop\iphold9.h1',internal,outin 
 00180   do 
 00190     read #2,using 'form pos 1,cr 10,4*pd 5,7*pd 4.2,3*pd 5,n 1': x$,mat x eof IPHHOLD_EOF
-00200     let which=srch(mat acct$,trim$(x$))
+00200     which=srch(mat acct$,trim$(x$))
 00210     if which>0 then 
-00220       let x(8)+=other_charge(which)
+00220       x(8)+=other_charge(which)
 00230     end if 
 00240     rewrite #2,using 'form pos 1,cr 10,4*pd 5,7*pd 4.2,3*pd 5,n 1': x$,mat x
 00250   loop 

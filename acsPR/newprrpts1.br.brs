@@ -49,8 +49,8 @@
 01520     pf$="19900 pr #255, USING F_PR_OUT: "
 01530     pfd$="20010 pr #255, USING F_PR_OUT: "
 01540     af$="19910 F_PR_OUT: form"
-01550     let gpf$="21000 pr #255, using 21010: "
-01560     let gaf$="21010 form skip 2,""Totals"""
+01550     gpf$="21000 pr #255, using 21010: "
+01560     gaf$="21010 form skip 2,""Totals"""
 01570     for j=1 to 20
 01580       if a(j)=0 then goto L1770
 01590       if a(j)<30 then goto L1620
@@ -73,8 +73,8 @@
 01720 L1720: ! 
 01722       if ti(j)><1 then goto L1770
 01730       if a(j)=2 or a(j)=3 or a(j)=4 or a(j)=5 or a(j)=6 or a(j)=26 or a(j)=27 or a(j)=62 or a(j)=63 then goto L1760
-01740       let gaf$=rtrm$(gaf$)&",pos "&str$(pp(j))&ty$(a(j),3)
-01750       let gpf$=rtrm$(gpf$)&ty$(a(j),5)&","
+01740       gaf$=rtrm$(gaf$)&",pos "&str$(pp(j))&ty$(a(j),3)
+01750       gpf$=rtrm$(gpf$)&ty$(a(j),5)&","
 01760 L1760: ! 
 01762       ti1=1
 01770 L1770: ! 
@@ -87,8 +87,8 @@
 01810     pf$=rtrm$(pf$)&" pageoflow pgof"
 01812     pfd$=rtrm$(pfd$)&" pageoflow pgof"
 01820     lf1=len(rtrm$(gpf$))
-01830     let gpf$(lf1:lf1)=" "
-01840     let gpf$=rtrm$(gpf$)&" pageoflow pgof"
+01830     gpf$(lf1:lf1)=" "
+01840     gpf$=rtrm$(gpf$)&" pageoflow pgof"
 01850     pr #h_tmp_dr,using F_C255: rf1$
 01860 F_C255: form pos 1,c 255
 01870 ! pr #h_tmp_dr,Using 2050: AF1$

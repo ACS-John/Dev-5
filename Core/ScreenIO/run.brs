@@ -150,9 +150,9 @@
           if len(FileLay$) then
              mat f=(0)
              mat f$=("")
-             let FileNumber=fnOpen(FileLay$,mat F$,mat F,mat Form$)
+             fileNumber=fnOpen(FileLay$,mat F$,mat F,mat Form$)
              if len(trim$(Key$)) then
-                let WarnWindow=fnDisplayLoadMessage
+                warnWindow=fnDisplayLoadMessage
                 read #FileNumber, using form$(Filenumber), key=Key$ : mat F$, mat F nokey Ignore locked ErrorFileLocked
                 close #WarnWindow:
                 if ~Skip and File(FileNumber) then ! key not found
@@ -162,7 +162,7 @@
                    saveKey$=Key$
                 end if
              else if RecordVal then
-                let WarnWindow=fnDisplayLoadMessage
+                warnWindow=fnDisplayLoadMessage
                 read #FileNumber, using form$(Filenumber), rec=RecordVal : mat F$, mat F nokey Ignore locked ErrorFileLocked
                 close #WarnWindow:
                 if ~Skip and File(FileNumber) then ! key not found
@@ -213,7 +213,7 @@
                             else if Choice=3 then ! They said NO
                                returnValue$="" ! As if they said NO, don't save
                             else ! They said CANCEL
-                               let fkey(0) ! Cancel the exit
+                               fkey(0) ! Cancel the exit
                                cancelledExit=1
                             end if
                          else                   ! if they haven't changed
@@ -390,8 +390,8 @@
     fnend
  !
     def Fnretrylockederror(Key$*255,Filenumber;___,Lockfile,LockUser$*80,Choice,_ErrLine,_ErrNumber)
-       let _ErrLine=Line
-       let _ErrNumber=Err
+       _ErrLine=Line
+       _ErrNumber=Err
        if Pos("0061_4148",Cnvrt$("PIC(####)",Err)) then
           execute "Status locks >ERTMP[SESSION]"
           open #(Lockfile:=Fngetfilenumber): "NAME=ERTMP[SESSION]",display,input
@@ -441,7 +441,7 @@
        if Udim(Mat A$)=Udim(Mat B$) then
           for Index=1 to Udim(Mat A$)
              if srch(mat IgnoreThese,Index)<=0 then
-                if trim$(trim$(Trim$(A$(Index)),chr$(0)))<>trim$(trim$(Trim$(B$(Index)),chr$(0))) then let Failed=1
+                if trim$(trim$(Trim$(A$(Index)),chr$(0)))<>trim$(trim$(Trim$(B$(Index)),chr$(0))) then failed=1
              end if
           next Index
           fnsameas=(~(Failed))
@@ -453,7 +453,7 @@
        if Udim(Mat A)=Udim(Mat B) then
           for Index=1 to Udim(Mat A)
              if srch(mat IgnoreThese,Index)<=0 then
-                if A(Index)<>B(Index) then let Failed=1
+                if A(Index)<>B(Index) then failed=1
              end if
           next Index
           fnsamea=(~(Failed))
@@ -464,7 +464,7 @@
        def Fnopen(Filename$*255, Mat F$, Mat F, Mat Form$; Inputonly, Keynum, Dont_Sort_Subs, Path$*255, Mat Descr$, Mat Field_Widths,Supress_Prompt,Ignore_Errors,___,Index)
           dim _FileIOSubs$(1)*800, _Loadedsubs$(1)*32
           fnopen=Fnopenfile(Filename$, Mat F$, Mat F, Mat Form$, Inputonly, Keynum, Dont_Sort_Subs, Path$, Mat Descr$, Mat Field_Widths, Mat _FileIOSubs$, Supress_Prompt,Ignore_Errors,Program$)
-          if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : let _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index
+          if Srch(_Loadedsubs$,Uprc$(Filename$))<=0 then : mat _Loadedsubs$(Udim(_Loadedsubs$)+1) : _Loadedsubs$(Udim(_Loadedsubs$))=Uprc$(Filename$) : for Index=1 to Udim(Mat _Fileiosubs$) : execute (_Fileiosubs$(Index)) : next Index
        fnend
  !
  ! #Autonumber# 99980,10

@@ -12,7 +12,7 @@
 00120   fncno(cno,cnam$)
 00130   fntos(sn$='ClrAccTrans') !:
         lc=0 !:
-        mylen=50 : mypos=mylen+2 : let width=80
+        mylen=50 : mypos=mylen+2 : width=80
 00140   fnlbl(lc+=1,1,"* * *   Warning   * * *",width,center)
 00150   fnlbl(lc+=1,1,"This selection will remove all records from the",width,center)
 00160   fnlbl(lc+=1,1,"General Ledger Accumulated Transactions File ",width,center)

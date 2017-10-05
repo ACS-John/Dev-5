@@ -19,7 +19,7 @@
 14190   dim k$(3)*30
 14200 ! ______________________________________________________________________
 14220   fntop(program$,cap$="Print W-2 Forms")
-14240   let fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
+14240   fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 14260   !
 14280 ! ______________________________________________________________________
 14446   !
@@ -106,7 +106,7 @@
 24860     end if
 24880     goto ASK_INFO
 24900   else
-24920     let x=0
+24920     x=0
 24940     for dedItem=1 to 20
 24960       if trim$(fullname$(dedItem))<>'' then
 24980         dedyn$(dedItem)=resp$(x+=1)
@@ -124,7 +124,7 @@
 26040     fnpa_open('',w2Copy$,'PDF') 
 26060   end if
 26080 ! lyne=topmargin ! starting of 1st line
-26100   let goproc=0
+26100   goproc=0
 26120   open #hEmployee:=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 26140   open #hDepartment:=2: "Name="&env$('Q')&"\PRmstr\department.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\deptidx.h"&env$('cno'),internal,outin,keyed 
 26160   open #hChecks:=fngethandle: "Name="&env$('Q')&"\PRmstr\payrollchecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno'),internal,outin,keyed 
@@ -151,7 +151,7 @@
 30140     mat amt=(0)
 30160     mat miscded=(0)
 30180 !   tdedret=0 ! REMOVE EXPLANATION  FROM LINE 905 TO LIST RETIREMENT IN BOX 13
-30260     let first=1
+30260     first=1
 30280     ! Read #hDepartment,Using 1190,Rec=TA: TENO,TCD,MAT TY,TA
 32000     checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 32020     restore #hChecks,key>=checkkey$: nokey READ_EMPLOYEE
@@ -181,37 +181,37 @@
 32500         miscded(dedItem)=miscded(dedItem)+tcp(dedItem+4)
 32520       next dedItem
 32540       ! tDEDRET=TDEDRET+DEDRET ! ACCUMULATE BOX 13 RETIREMENT; THIS LINE WILL ONLY WORK IF NO CAFETERIA; REMOVE ! OFF 861 AND 882 FOR RETIREMENT ONLY ! can change 882 only if know specific ded to show in box 13
-32560       let w(1)+=tcp(1) ! FED W/H YTD
-32580       let w(2)+=tcp(31)-dedret ! TOTAL TAXABLE WAGES
-32600       let ytdFica+=tcp(2) ! FICA W/H YTD
-32620       let w(4)+=tcp(24) ! EIC TOTAL
+32560       w(1)+=tcp(1) ! FED W/H YTD
+32580       w(2)+=tcp(31)-dedret ! TOTAL TAXABLE WAGES
+32600       ytdFica+=tcp(2) ! FICA W/H YTD
+32620       w(4)+=tcp(24) ! EIC TOTAL
 32640       if em6<>9 then 
-32660         let w(5)+=tcp(31)-tcp(30)-dedfica ! TOTAL SS WAGES
-32680         let w(11)+=tcp(31)-dedfica ! TOTAL MC WAGES & TIPS
-32700         ! if env$('client')="Washington Parrish" then let w(11)+=tcp(6) ! add deferred comp match into medicare wages
-32720         if em6=2 then let w(5)=0 ! NO SS
-32740         if em6=1 then let w(11)=0 ! NO MC
+32660         w(5)+=tcp(31)-tcp(30)-dedfica ! TOTAL SS WAGES
+32680         w(11)+=tcp(31)-dedfica ! TOTAL MC WAGES & TIPS
+32700         ! if env$('client')="Washington Parrish" then w(11)+=tcp(6) ! add deferred comp match into medicare wages
+32720         if em6=2 then w(5)=0 ! NO SS
+32740         if em6=1 then w(11)=0 ! NO MC
 32760       end if
 32770       ! if env$('client')<>"Washington Parrish" then 
-32780         let w(6)=w(6)+tcp(30) ! FICA TIPS YTD
+32780         w(6)=w(6)+tcp(30) ! FICA TIPS YTD
 32790       ! end if
-32800       let w(3)+=tcp(2)  
-32820       let w(12)+=tcp(3) 
+32800       w(3)+=tcp(2)  
+32820       w(12)+=tcp(3) 
 32840       if tcd=stcode then 
-32860         let w(7)+=tcp(4) ! STATE WH
-32880         let w(9)+=tcp(31)-dedret ! STATE WAGES
+32860         w(7)+=tcp(4) ! STATE WH
+32880         w(9)+=tcp(31)-dedret ! STATE WAGES
 32900         if loccode=0 or tcp(loccode+4)=0 then goto L1560
-32920         let w(8)+=tcp(loccode+4) ! LOCAL WITHHOLDING
-32940         let w(10)+=tcp(31)-dedret ! LOCAL WAGES
+32920         w(8)+=tcp(loccode+4) ! LOCAL WITHHOLDING
+32940         w(10)+=tcp(31)-dedret ! LOCAL WAGES
 32960         L1560: ! 
 32980         if pn1>0 and tcp(pn1+4)>0 then retirementPlanX$="X"
 33000         if dc1>0 and dc1<11 then dcb+=tcp(dc1+4)
 33020       else
 33040         if loccode=0 then lowh=0 else lowh=tcp(loccode+4)
 33060         write #hAddr,using 'form pos 1,n 8,n 2,3*pd 5.2,c 8': eno,tcd,tcp(31)-dedret,tcp(3),lowh,empLocality$
-33080         let goproc=1
+33080         goproc=1
 33100       end if
-33120       let first=0
+33120       first=0
 33140     loop ! read next check record
 34000     EO_CHECKS_FOR_EMP: ! 
 34020     gosub BOX16_process
@@ -253,9 +253,9 @@
 34740         end if 
 34760       end if
 34780     next dedItem
-34800     let w(5)=min(ssmax-w(6),w(5)) ! SS WAGES CANNOT EXCEED MAXIMUM
-34820     let w(11)=min(mcmax,w(11)) ! MC WAGES CANNOT EXCEED MAXIMUM
-35000     if em6=9 then let w(3)=w(5)=w(11)=w(12)=0 ! NO SS OR MC
+34800     w(5)=min(ssmax-w(6),w(5)) ! SS WAGES CANNOT EXCEED MAXIMUM
+34820     w(11)=min(mcmax,w(11)) ! MC WAGES CANNOT EXCEED MAXIMUM
+35000     if em6=9 then w(3)=w(5)=w(11)=w(12)=0 ! NO SS OR MC
 35020     if w(8)=0 then 
 35040       printLocality$=""
 35060     else
@@ -272,7 +272,7 @@
 35840         gosub PrintW2
 35850       end if
 35860       mat s=s+w
-35940       let wctr=wctr+1
+35940       wctr=wctr+1
 35950     end if
 35960     mat w=(0)
 35970     nqp=dcb=ytdFica=0
@@ -351,18 +351,18 @@
 64040   read #hW2Box16,using fw2box16$,key=kz$: kz$,mat in4$ nokey B16Finis
 64060   for j=1 to 6
 64080     amt(j)=val(in4$(j*5-3))
-64100     if in4$(j*5-2)="1" then let w(2)+=amt(j)
-64120     if in4$(j*5-1)="1" then let w(5)+=amt(j)
+64100     if in4$(j*5-2)="1" then w(2)+=amt(j)
+64120     if in4$(j*5-1)="1" then w(5)+=amt(j)
 64140     !   if env$('client')="Washington Parrish" then goto L3760
-64160     if in4$(j*5-1)="1" then let w(11)+=amt(j)
+64160     if in4$(j*5-1)="1" then w(11)+=amt(j)
 64180     ! L3760: !
-64200     if in4$(j*5-0)="1" then let w(9)+=amt(j)
-64220     if in4$(j*5-2)="2" then let w(2)=w(2)-amt(j)
-64240     if in4$(j*5-1)="2" then let w(5)=w(5)-amt(j)
+64200     if in4$(j*5-0)="1" then w(9)+=amt(j)
+64220     if in4$(j*5-2)="2" then w(2)=w(2)-amt(j)
+64240     if in4$(j*5-1)="2" then w(5)=w(5)-amt(j)
 64260     !   if env$('client')="Washington Parrish" then goto L3810
-64280     if in4$(j*5-1)="2" then let w(11)=w(11)-amt(j)
+64280     if in4$(j*5-1)="2" then w(11)=w(11)-amt(j)
 64300     ! L3810: ! 
-64320     if in4$(j*5-0)="2" then let w(9)=w(9)-amt(j)
+64320     if in4$(j*5-0)="2" then w(9)=w(9)-amt(j)
 64340     if j=1 then 
 64360       desc$(j)=lpad$(in4$(j*5-4)(1:2)&"  "&ltrm$(cnvrt$("Nz 10.2",amt(j))),15)
 64380     else if j=2 then
@@ -380,7 +380,7 @@
 64620       box12dCode$=in4$(j*5-4)(1:2)
 64640       box12dAmt$=cnvrt$("Nz 10.2",amt(j))
 64660     end if
-64680     ! if (j=3 or j=4) and (in4$(j*5-4)(1:1)="D" or in4$(j*5-4)(1:1)="E" or in4$(j*5-4)(1:1)="F" or in4$(j*5-4)(1:1)="H") then let w(13)=w(13)+amt(j) ! SUBTOTAL BOX 17 IF D,E,F,OR H CODES
+64680     ! if (j=3 or j=4) and (in4$(j*5-4)(1:1)="D" or in4$(j*5-4)(1:1)="E" or in4$(j*5-4)(1:1)="F" or in4$(j*5-4)(1:1)="H") then w(13)=w(13)+amt(j) ! SUBTOTAL BOX 17 IF D,E,F,OR H CODES
 64700   next j
 64720   B16Finis: ! 
 64740 return  ! /r

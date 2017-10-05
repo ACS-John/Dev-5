@@ -46,7 +46,7 @@
 20900 ! ** Field Masks **
 20920   ic=0
 20940   pointtwo=32 : number=30
-20960   ccyymmdd=3 : mmddyy=1 : let glnumber=53
+20960   ccyymmdd=3 : mmddyy=1 : glnumber=53
 20980   mask(ic+=1)=0
 21000   mask(ic+=1)=0
 21020   mask(ic+=1)=number

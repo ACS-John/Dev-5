@@ -76,12 +76,12 @@
 00750 ! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAME !:
         ! ON EACH SERVICE IN PAYROLL
 00760   if uprc$(a$(j3,1)(1:4))<>"MISC" then goto L840
-00770   let x=val(a$(j3,1)(8:9)) conv L840
+00770   x=val(a$(j3,1)(8:9)) conv L840
 00780   if trim$(fullname$(x))="" then goto L870 ! SERVICE NOT USED
 00790   a$(j3,1)=fullname$(x)
 00795 ! If UPRC$(ABBREV$)(1:4)="MISC" Then Pause
 00800   if uprc$(abbrev$)(1:4)<>"MISC" then goto L840
-00810   let x=val(abbrev$(5:6)) conv L840
+00810   x=val(abbrev$(5:6)) conv L840
 00820   abbrev$=""
 00830   abbrev$=trim$(abbrevname$(x))(1:9)
 00840 L840: ! store as description,variable name,field length,# of deciaml points, format
@@ -115,28 +115,28 @@
 01120   dim nam$*30
 01130 ! ______________________________________________________________________
 01140   def fnbooktitle$*80(x$*80)
-01150     let x$=lwrc$(trim$(x$)) : olda=0
-01160     let x$(1:1)=uprc$(x$(1:1))
+01150     x$=lwrc$(trim$(x$)) : olda=0
+01160     x$(1:1)=uprc$(x$(1:1))
 01170 ! capitalize anthing after a SPACE
 01180 L1180: a=pos(x$," ",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1180
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1180
 01190     a=olda=0
 01200 L1200: a=pos(x$,"-",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1200
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1200
 01210     a=olda=0
 01220 L1220: a=pos(x$,"/",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1220
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1220
 01230     a=olda=0
 01240 L1240: a=pos(x$,"\",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1240
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1240
 01250     a=olda=0
 01260 L1260: a=pos(x$,".",olda) !:
           if a<>0 then !:
-            a+=1 : let x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1260
+            a+=1 : x$(a:a)=uprc$(x$(a:a)) : olda=a : goto L1260
 01270     fnbooktitle$=x$
 01280   fnend 
 01290   return 

@@ -10,12 +10,12 @@
 00100   fntop(program$,"Fix Reference Numbers")
 00110   fncno(cno)
 00120   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
-00130   let fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
-00140   let fil$(2)="ACGLFNSc" : idx$(2)="FNScINDX"
-00150   let fil$(3)="ACGLFNSi" : idx$(3)="FNSiINDX"
-00160   let fil$(4)="ACGLFNSj" : idx$(4)="FNSjINDX"
-00170   let fil$(5)="ACGLfNSf" : idx$(5)="FNSfINDX"
-00180   let fil$(6)="ACGLfNSg" : idx$(6)="FNSGINDX"
+00130   fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
+00140   fil$(2)="ACGLFNSc" : idx$(2)="FNScINDX"
+00150   fil$(3)="ACGLFNSi" : idx$(3)="FNSiINDX"
+00160   fil$(4)="ACGLFNSj" : idx$(4)="FNSjINDX"
+00170   fil$(5)="ACGLfNSf" : idx$(5)="FNSfINDX"
+00180   fil$(6)="ACGLfNSg" : idx$(6)="FNSGINDX"
 00190 ! ______________________________________________________________________
 00200   on fkey 5 goto XIT
 00210   pr newpage

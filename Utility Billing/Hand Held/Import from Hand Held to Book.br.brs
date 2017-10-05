@@ -210,7 +210,7 @@
 48120     open #3: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output 
 48150     do 
 48180       linput #2: amr$ eof ACSMR_XIT
-48210       let z$=amr$(1:10)
+48210       z$=amr$(1:10)
 48240       reading=val(amr$(133:142))
 48270       pr #3,using "form pos 1,c 10,n 10": z$,reading
 48300     loop 
@@ -221,14 +221,14 @@
 50050     open #h_itron:=fngethandle: "Name="&fn_hh_input_filename$,display,input 
 50070     open #h_itron_out:=fngethandle: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=512,replace",display,output 
 50120     pr #h_itron_out: '[ACS Hand Held File Generic Version 2]'
-50150     let z$=''
+50150     z$=''
 50180     do 
 50210       linput #h_itron: line$ eof EO_ITRON
 50240       line_type$=line$(1:3)
 50270       if line_type$="CUS" then 
 50300         if z$<>'' then let fn_itron_write ! write the previous one
 50330         reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
-50360         let z$=trim$(line$(15:34))(1:10)
+50360         z$=trim$(line$(15:34))(1:10)
 50390       else if line_type$="MTR" then 
 50420         itron_meter_category$=line$(94:94)
 50450       else if line_type$="RDG" then 
@@ -281,7 +281,7 @@
 54150     linput #2: amr$ ioerr AMR_NOTHING_TO_READ ! read header
 54160     do 
 54180       linput #2: amr$ eof AMR_XIT
-54210       let z$=lpad$(trim$(amr$(3:22)),10)
+54210       z$=lpad$(trim$(amr$(3:22)),10)
 54240       reading=val(amr$(47:56))
 54330       pr #3,using "form pos 1,c 10,n 10": z$,reading
 54360     loop 
@@ -302,7 +302,7 @@
 56090     open #2: "Name=" &fn_hh_input_filename$&",RecL=282",display,input 
 56110     do 
 56120       linput #2: hersey$ eof HERSEY_EOF
-56150       let z$=lpad$(trim$(hersey$(1:10)),10)
+56150       z$=lpad$(trim$(hersey$(1:10)),10)
 56180       reading=val(hersey$(229:238))
 56210       pr #h_out,using "form pos 1,c 10,n 10": z$,reading
 56240     loop 
@@ -317,7 +317,7 @@
 58090     open #2: "Name="&fn_hh_input_filename$&",RecL=578",display,input 
 58120     do 
 58150       linput #2: easy$ eof EXREADER_XIT
-58180       let z$=lpad$(trim$(easy$(209:228)),10)
+58180       z$=lpad$(trim$(easy$(209:228)),10)
 58210       reading=val(easy$(309:318))
 58240       pr #h_out,using "form pos 1,c 10,n 10": z$,reading
 58270     loop 
@@ -365,18 +365,18 @@
 64420 fnend 
 66000 def fn_ilrt_lineParse_BrierLake(a$*150,&z$,&reading$)
 66020   ilpblReturn=0
-66040   let x=val(a$(1:3)) conv ilpbl_finis
-66060   let z$=""
+66040   x=val(a$(1:3)) conv ilpbl_finis
+66060   z$=""
 66080   for j=1 to 8
-66100     let x=val(a$(j:j)) conv ilrt_L1060
-66120     let z$=z$&a$(j:j)
+66100     x=val(a$(j:j)) conv ilrt_L1060
+66120     z$=z$&a$(j:j)
 66140   next j
 66160   ilrt_L1060: ! 
-66180   let z=val(z$)
-66200   let z$=cnvrt$("pic(zzzzzzz.##",z)
+66180   z=val(z$)
+66200   z$=cnvrt$("pic(zzzzzzz.##",z)
 66220   reading$=""
 66240   for j1=1 to 20
-66260     let x=val(a$(j1+j:j1+j)) conv ilrt_L1120
+66260     x=val(a$(j1+j:j1+j)) conv ilrt_L1120
 66280     reading$=reading$&a$(j1+j:j1+j)
 66300     ilrt_L1120: ! 
 66320   next j1
@@ -386,7 +386,7 @@
 66400 fnend
 68000 def fn_ilrt_lineParse_READy_Water(a$*150,&z$,&reading$)
 68020   ilprwReturn=0
-68040   let z$=reading$=""
+68040   z$=reading$=""
 68060   str2mat(a$,mat ilprwItem$, chr$(9))
 68080   ! ilprwItem$(1)=account number
 68100   ! ilprwItem$(2)=meter serial number (from meter information file)
@@ -400,7 +400,7 @@
 69000 def fn_ilrt_lineParseDelimited(a$*512,&key$,item_key,&reading$,item_reading; &readingDate$,item_readingDate)
 69010   dim ilpdItem$(0)*512
 69020   ilprwReturn=0
-69040   let z$=reading$=""
+69040   z$=reading$=""
 69060   str2mat(a$,mat ilpdItem$, chr$(9))
 69080   key$=lpad$(ilpdItem$(item_key),10)
 69100   reading$=ilpdItem$(item_reading)

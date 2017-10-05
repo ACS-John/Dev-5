@@ -155,7 +155,7 @@
 00930   fntos(sn$="Report-sel")
 00932   respc=0: mylen=15: mypos=mylen+3
 00940   fnlbl(1,1,"Print Selection Criteria:",30,1)
-00950   let z=0
+00950   z=0
 00960   for x=1 to 5
 00970     for j=2 to 21
 00980       fntxt(j,x*16,12,0,0,"33",0,"If you chosen to limit the report to certain criteria, enter the values here that should match information in the employee's record.")
@@ -194,9 +194,9 @@
         fncmdkey("&Cancel",5,0,1,"Return to report selection screen without saving any changes.")
 01240   fnacs(sn$,0,mat resp$,ckey) ! enter column information
 01250   if ckey=5 then goto SCR1
-01260   let x=0
+01260   x=0
 01270   for j=3 to 60 step 3
-01280     let x+=1
+01280     x+=1
 01290     for j1=1 to udim(code$)
 01300       if resp$(j-2)=code$(j1) then inp(x)=j1-1: goto L1330
 01310 ! If RESP$(J-2)=CODE$(J1) Then iNP(X)=J1+1: Goto 1310
@@ -229,8 +229,8 @@
 01590 !   pr #105,fields "4,2,Cc 38,N": "Report Number "&str$(rptn)&" does not exist."
 01600 !   io5$(1)="6,2,Cc 38,N"
 01610 !   io5$(2)="7,2,Cc 38,N"
-01620 !   let wrd5$(1)="Reselect Report Number"
-01630 !   let wrd5$(2)="Add Reports"
+01620 !   wrd5$(1)="Reselect Report Number"
+01630 !   wrd5$(2)="Add Reports"
 01640 !   pr f "16,35,C 09,B,5": "Exit (F5)"
 01650 !   rinput #105,select mat io5$,attr "H": mat wrd5$
 01660 !   if cmdkey=5 or cmdkey=99 then goto XIT

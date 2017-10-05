@@ -84,7 +84,7 @@
 42000 def fn_CnoLegacyNtoCReg(legacyFilename$*256,legacyForm$*64,registryKey$*128; valuePassedIn)
 42040   ! Get_or_Put=1 then GET 
 42060   ! Get_or_Put=2 then PUT
-42080   if valuePassedIn>0 then let get_or_put=2 else let get_or_put=1
+42080   if valuePassedIn>0 then get_or_put=2 else get_or_put=1
 42100   if get_or_put=1 then 
 42120     fncreg_read(registryKey$,fscode$) : valuePassedIn=val(fscode$)
 42140     if valuePassedIn=0 then
@@ -103,7 +103,7 @@
 44020   if ~setup then let fn_setup
 44040   ! Get_or_Put=1 then GET 
 44060   ! Get_or_Put=2 then PUT
-44080   if trim$(pedat$)="" then let get_or_put=1 else let get_or_put=2
+44080   if trim$(pedat$)="" then get_or_put=1 else get_or_put=2
 44100   if get_or_put=1 then 
 44120     fncreg_read('Pay Period Ending Date',pedat$)
 44140     if pedat$='' then
