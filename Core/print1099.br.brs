@@ -135,8 +135,8 @@
 00990     pr #255: '' !:
           pr #255: ''
 01000     pr #255,using 'Form POS 7,C 32': einfo$(6)(1:32)
-01010     let x+=1 : if x=2 then !:
-            pr #255: newpage : let x=0 else !:
+01010     x+=1 : if x=2 then !:
+            pr #255: newpage : x=0 else !:
             for j=1 to 10 : pr #255: '' : next j
 01020     return 
 01030 ! ______________________________________________________________________

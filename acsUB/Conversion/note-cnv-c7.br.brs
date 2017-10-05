@@ -74,7 +74,7 @@
 60180 L50100: !
 60200 read #1,using 'Form POS 1,C 10': z$ eof EO4
 60220 if z$(8:10)=".00" then goto L50100 ! skip base records
-60240 let x$=z$(1:7)&".00"
+60240 x$=z$(1:7)&".00"
 60260 mat newra=(0)
 60280 read #3,using 'Form POS 1,C 10,2*PD 3',key=x$: rk$,mat ra nokey L50100
 60300 write #3,using 'Form POS 1,C 10,2*PD 3': z$,0,0

@@ -31,7 +31,7 @@
 00360 L360: if sey$="Y" then gosub ASK_EMP : goto JUST_AFTER_READ else goto READ_SEQUENTIAL
 00370 ! /r
 00380 READ_SEQUENTIAL: ! r:
-00390   let foundone=0
+00390   foundone=0
 00400 L400: read #1,using L270: eno,mat em$,ss$,mat rs,mat em eof FINIS
 00410   if prtall=2 and fndate_mmddyy_to_ccyymmdd(em(17))=d1 then goto JUST_AFTER_READ
 00420   if prtall=2 and fndate_mmddyy_to_ccyymmdd(em(17))<>d1 then goto READ_SEQUENTIAL
@@ -56,12 +56,12 @@
 00590   goto L360
 00600 ! /r
 00610 CHECK_FOR_OLD_DATE: ! r:
-00620   let foundone=0
+00620   foundone=0
 00630   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 00640   restore #4,key>=checkkey$: nokey L690
 00650 L650: read #4,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,tdn,prd,ckno,mat tdc,mat tcp eof L690
 00660   if heno<>eno then goto L690
-00670   if prd=date_to_select then let foundone=1 : goto L690 ! FOUND A MATCHING OLD PAYROLL DATE
+00670   if prd=date_to_select then foundone=1 : goto L690 ! FOUND A MATCHING OLD PAYROLL DATE
 00680   goto L650
 00690 L690: return ! /r
 00720 FINIS: ! r:
@@ -89,7 +89,7 @@
 00940   fntos(sn$="prlabel-1")
 00950   respc=0 : mylen=50 : mypos=mylen+3 : right=1
 00960   fnlbl(1,1,"Print Labels For:",mylen,right)
-00970   let fi$="cllabels" !:
+00970   fi$="cllabels" !:
         item1$(print_all=1)="[All]" : all=1 !:
         item1$(2)="Employees from last payroll only": last_payroll=2 !:
         item1$(3)="Select employees to print": select_employee=3 !:

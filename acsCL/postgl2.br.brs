@@ -11,8 +11,8 @@
 10040     on error goto ERTN
 10060 ! ______________________________________________________________________
 10080 ! GLT: 1=Post  2=Print Only
-10100     let glt_post=1
-10120     let glt_print_only=2
+10100     glt_post=1
+10120     glt_print_only=2
 10140 ! 
 10160     dim cnam$*40,de$*30,tbc(99,2),pde$*30
 10180     dim apc(99,3),td$*30,prd(23),cap$*128,glwk$*256,opt_cash_or_accrual$(2)*12,ml$(3)*100
@@ -28,13 +28,13 @@
 10380     fncno(cno,cnam$)
 10400 ! 
 12000 ! r: determine if cash or accrual by checking for any accounts payable numbers in the general ledger control file
-12160     let up1$="C"
+12160     up1$="C"
 12180     open #fundmstr=9: "Name="&env$('Q')&"\CLmstr\FundMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\FundIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
 12200 READ_FUNDMSTR: ! 
 12220     read #fundmstr,using 'Form Pos 52,C 12': gw$ eof EO_FUNDMSTR
 12240     accrual=val(gw$) conv L230
 12260     if accrual>0 then 
-12280       let up1$="A"
+12280       up1$="A"
 12300       goto EO_FUNDMSTR
 12320     end if 
 12340 L230: ! 
@@ -70,11 +70,11 @@
 14060     d1=val(resp$(1)(5:6))*10000+val(resp$(1)(7:8))*100+val(resp$(1)(3:4)) ! beginning date
 14080     d2=val(resp$(2)(5:6))*10000+val(resp$(2)(7:8))*100+val(resp$(2)(3:4)) ! ending date  ! convert dates back to mmddyy
 14100     if resp$(3)(1:1)="T" then include_prev_posted$="Y" else include_prev_posted$="N" ! include previously posted entries
-14120     if resp$(4)(1:1)="C" then let up1$="C" else let up1$="A" ! cash or accrual
+14120     if resp$(4)(1:1)="C" then up1$="C" else up1$="A" ! cash or accrual
 14140     if resp$(5)(1:1)="T" then prc$="Y" else prc$="N" ! combine payroll entries
 14160     if resp$(6)(1:1)="T" then pr1$="Y" else pr1$="N" ! pr distribution listing
 14180     if resp$(7)(1:1)="T" then pr2$="Y" else pr2$="N" ! update after fact payroll
-14200     let gl2=val(resp$(8)) ! GL company to post
+14200     gl2=val(resp$(8)) ! GL company to post
 16000     if pr2$="Y" then let fnprocess(4)
 16020     if glt=glt_print_only then pr1$="Y"
 16040     fnputcno(gl2)
@@ -96,7 +96,7 @@
 18100 READ_TRALLOC: ! 
 18120     read #tralloc,using 'Form POS 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,C 6,POS 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd$,gde eof READ_TRMSTR
 18130     ivd=val(ivd$) conv ignore
-18140     if up1$="C" and gde=2 then let gde=1 ! don't allow old accrual codes mess up cash basis
+18140     if up1$="C" and gde=2 then gde=1 ! don't allow old accrual codes mess up cash basis
 18160     if ivd=0 then ivd=pd ! kJ   10/02/06   skipping receipts w/o invoice numbers
 18180     if bank_code<>trbank_code or trtcde<>tcde or ck$<>trck$ then goto L1040 ! thru, allocation doesn/t belong to this transaction
 18200     if amt=0 then goto READ_TRALLOC ! SKIP 0
@@ -137,11 +137,11 @@
 18900     else 
 18920       write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ck$,vn$,de$,amt,0,tcde,scd
 18940     end if 
-18960     let gde=2
+18960     gde=2
 18980     goto L1020
 19000 L990: write #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1': gl$,ivd,ck$,vn$,de$,amt,bank_code,tcde,scd
 19020 L1000: if pcde=0 or pcde=2 then pcde+=1
-19040     if gde=0 or gde=2 then let gde+=1
+19040     if gde=0 or gde=2 then gde+=1
 19060 L1020: ! 
 19080     if glt=glt_post then 
 19100       rewrite #tralloc,using 'Form POS 80,N 1': gde
@@ -174,8 +174,8 @@
 19630     read #1,using 'Form POS 1,PD 3': r5 eof ENDALL
 19640     read #work,using 'Form POS 1,C 12,N 6,2*C 8,C 30,PD 5.2,N 2,2*N 1',rec=r5: gl$,ivd,ck$,vn$,de$,amt,bank_code,tcde,scd norec L1240
 19660     if amt=0 then goto L1240
-19680     if gl$(1:3)="  0" then let gl$(1:3)="   "
-19700     if gl$(10:12)="  0" then let gl$(10:12)="   "
+19680     if gl$(1:3)="  0" then gl$(1:3)="   "
+19700     if gl$(10:12)="  0" then gl$(10:12)="   "
 19720     if hgl$=gl$ then goto L1410
 19740     if prc$="N" then goto L1350
 19760     if sc2><4 then goto L1350
@@ -208,10 +208,10 @@
 20300 L1530: form pos 1,c 14,pic(zz/zz/zz),x 2,2*c 10,c 30,pos p1,g 12.2,skip 1
 20320     if cl=2 then 
 20340       tc2=tc2+abs(amt)
-20360       let gc2=gc2+abs(amt)
+20360       gc2=gc2+abs(amt)
 20380     else 
 20400       tc1=tc1+abs(amt)
-20420       let gc1=gc1+abs(amt)
+20420       gc1=gc1+abs(amt)
 20440     end if 
 20460     if tcde<>3 then goto L1590
 20480     p1=75
@@ -220,10 +220,10 @@
 20540     end if 
 20560     if cl<>2 then 
 20580       tc2=tc2+abs(amt)
-20600       let gc2=gc2+abs(amt)
+20600       gc2=gc2+abs(amt)
 20620     else 
 20640       tc1=tc1+abs(amt)
-20660       let gc1=gc1+abs(amt)
+20660       gc1=gc1+abs(amt)
 20680     end if 
 20700 L1590: ! 
 20720     if bank_code=0 then goto L1660
@@ -273,35 +273,35 @@
 26180       pr #255: "                                            ______________________________  __________  __________"
 26200     end if 
 26220     for j=1 to 99
-26240       let gl$=""
+26240       gl$=""
 26260       if tbc(j,1)=0 and tbc(j,2)=0 then goto L2130
 26280       read #bankmstr,using 'Form POS 33,C 12', key=lpad$(str$(j),2): gl$ nokey L2100
-26300       if gl$(1:3)="  0" then let gl$(1:3)="   "
-26320       if gl$(10:12)="  0" then let gl$(10:12)="   "
+26300       if gl$(1:3)="  0" then gl$(1:3)="   "
+26320       if gl$(10:12)="  0" then gl$(10:12)="   "
 26340 L2100: ! 
 26360       gosub BANKGL
 26380       if pr1$="Y" then 
 26400         pr #255,using 'Form POS 45,C 30,2*N 12.2': "Bank   "&gl$,tbc(j,2),tbc(j,1) pageoflow NEWPGE
 26420       end if 
-26440       let gc1=gc1+tbc(j,2): let gc2=gc2+tbc(j,1)
+26440       gc1=gc1+tbc(j,2): gc2=gc2+tbc(j,1)
 26460 L2130: ! 
 26480     next j
 26500     if pr1$="Y" then 
 26520       pr #255: "                                            ______________________________  __________  __________" pageoflow NEWPGE
 26540     end if 
 26560     for j=1 to 99
-26580       let gl$=""
+26580       gl$=""
 26600       if apc(j,2)=0 and apc(j,3)=0 then goto L2240
 26620       read #fundmstr,using 'Form Pos 52,C 12',key=lpad$(str$(apc(j,1)),3): gl$ nokey L2210
-26640       if gl$(1:3)="  0" then let gl$(1:3)="   "
-26660       if gl$(10:12)="  0" then let gl$(10:12)="   "
+26640       if gl$(1:3)="  0" then gl$(1:3)="   "
+26660       if gl$(10:12)="  0" then gl$(10:12)="   "
 26680 L2210: ! 
 26700       gosub APGL
 26720       if pr1$="Y" then 
 26740         pr #255,using 'Form POS 45,C 30,2*N 12.2': "A/P    "&gl$,apc(j,3),apc(j,2) pageoflow NEWPGE
 26760       end if 
-26780       let gc1=gc1+apc(j,3)
-26800       let gc2=gc2+apc(j,2)
+26780       gc1=gc1+apc(j,3)
+26800       gc2=gc2+apc(j,2)
 26820 L2240: ! 
 26840     next j
 26860     if pr1$="N" then goto L2300
@@ -383,10 +383,10 @@
 33100     close #glbucket: 
 33120 L2830: ! 
 33140     if glb=2 then 
-33160       let glwk$=env$('Q')&"\GLmstr\GL"&d2$&".H"&str$(gl2)
+33160       glwk$=env$('Q')&"\GLmstr\GL"&d2$&".H"&str$(gl2)
 33180       open #glwk=11: "Name="&glwk$&",RecL=104,Use",internal,output 
 33200     else 
-33220       let glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(gl2)
+33220       glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(gl2)
 33240       open #glwk=11: "Name="&glwk$&",Size=0,RecL=104,Replace",internal,output 
 33260     end if 
 33280 L2840: ! 
@@ -395,7 +395,7 @@
 33340     end if 
 33360     return  ! /r
 35000 REGGL: ! r:
-35020     let gw$=gl$ : let wbank_code=bank_code
+35020     gw$=gl$ : wbank_code=bank_code
 35040 REGGL2: ! 
 35060     tr4=ivd : tr5=amt : tr6=tcde
 35080     if tr6=2 or tr6=3 then tr5=-tr5
@@ -404,14 +404,14 @@
 35140     if tr6=3 then 
 35160       gosub SOMETHING
 35180       tr5=-tr5
-35200       let gw$=bgl$
-35220       let wbank_code=bank_code
+35200       gw$=bgl$
+35220       wbank_code=bank_code
 35230     end if 
 35240     goto SOMETHING
 35260 ! 
 35280 PRGL: ! 
-35300     let gw$=pgl$ : tr4=pivd : let x=pivd : pivd=x
-35320     tr$="PR "&cnvrt$("PIC(ZZ/ZZ/ZZ)",pivd) : td$=pde$ : ven$="" : let wbank_code=pbank_code
+35300     gw$=pgl$ : tr4=pivd : x=pivd : pivd=x
+35320     tr$="PR "&cnvrt$("PIC(ZZ/ZZ/ZZ)",pivd) : td$=pde$ : ven$="" : wbank_code=pbank_code
 35340     if pa1<>0 then 
 35360       tr5=pa1
 35380       tr6=1
@@ -425,7 +425,7 @@
 35540     end if 
 35560 ! 
 35580 BANKGL: ! 
-35600     let gw$=gl$ : let wbank_code=bank_code : tr4=d2 : let x=d2 : d2=x
+35600     gw$=gl$ : wbank_code=bank_code : tr4=d2 : x=d2 : d2=x
 35620     tr$="BK "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)
 35640     td$="Bank #:"&str$(j)&" Total" : ven$=""
 35660     if tbc(j,1)<>0 then 
@@ -442,7 +442,7 @@
 35880     end if 
 35900 ! 
 35920 APGL: ! 
-35940     let gw$=gl$ : let wbank_code=bank_code : tr4=d2 : let x=d2 : d2=x
+35940     gw$=gl$ : wbank_code=bank_code : tr4=d2 : x=d2 : d2=x
 35960     tr$="AP "&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2) : td$="AP Total"
 35980     ven$=""
 36000     if apc(j,2)<>0 then 
@@ -485,7 +485,7 @@
 39220 L3300: ! 
 39240   apc(j,1)=ap1
 39260   apc(j,3)+=amt
-39280   p1=75 : let gw$=""
+39280   p1=75 : gw$=""
 39300   read #fundmstr,using 'Form Pos 52,C 12',key=lpad$(str$(ap1),3): gw$ nokey L3350
 39320   goto L3360
 39340 L3350: ! 
@@ -499,11 +499,11 @@
 39500     pr #255: "____________  ________  ________  Reduce Accounts Payable for Previously Posted Invoices  ________"
 39520     ap2=1
 39540   end if 
-39560   p1=75 : let gw$=""
+39560   p1=75 : gw$=""
 39580   read #fundmstr,using 'Form Pos 52,C 12',key=lpad$(str$(ap1),3): gw$ nokey L3430
 39600 L3430: ! 
 39620   pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,ck$,"","Reverse AP",amt pageoflow NEWPGE
-39640   p1=87: let gw$=""
+39640   p1=87: gw$=""
 39660   read #bankmstr,using 'Form POS 33,C 12', key=lpad$(str$(bank_code),2): gw$ nokey L3460
 39680 L3460: ! 
 39700   pr #255,using 'Form POS 1,C 14,PIC(ZZ/ZZ/ZZ),X 2,C 12,C 8,C 30,POS P1,N 12.2': gw$,pd,ck$,"","Take Out of Bank",amt pageoflow NEWPGE
@@ -537,10 +537,10 @@
 43040   if uprc$(gw$(1:3))=uprc$(bgl$(1:3)) then goto EO_FUNDTR
 43060   if val(gw$(1:3))=0 then goto EO_FUNDTR
 43080   td$="Fund Transfer"
-43100   let gl1$=gl2$=gl3$="  0     0  0"
+43100   gl1$=gl2$=gl3$="  0     0  0"
 43120   read #fundmstr,using L4000,key=gw$(1:3): gl1$,gl2$,gl3$ nokey EO_FUNDTR
-43140   let gl1$=lpad$(rtrm$(gl1$),9)
-43160   let gl2$=lpad$(rtrm$(gl2$),9)
+43140   gl1$=lpad$(rtrm$(gl1$),9)
+43160   gl2$=lpad$(rtrm$(gl2$),9)
 43180   if val(gl1$(1:3))=0 and val(gl1$(4:9))=0 and val(gl1$(10:12))=0 then 
 43200     goto EO_FUNDTR ! no interfund entries if no gl # in i/f file
 43220   else if val(gl2$(1:3))=0 and val(gl2$(4:9))=0 and val(gl2$(10:12))=0 then 
@@ -624,7 +624,7 @@
 52180       do  ! CB_TT_READ_TRALLOC: !
 52190         read #tralloc,using 'Form POS 1,N 2,N 1,c 8,C 12,PD 5.2,C 12,X 18,C 6,POS 80,N 1': bank_code,tcde,trck$,gl$,amt,iv$,ivd$,gde eof CB_TT_FINIS ! eof EO_TRMSTR_TEST
 52192         ivd=val(ivd$) conv ignore ! ivd$ logic added 8/12/2015 to prevent merriam wood's error here from using characters in this field
-52200         if up1$="C" and gde=2 then let gde=1 ! don't allow old accrual codes mess up cash basis
+52200         if up1$="C" and gde=2 then gde=1 ! don't allow old accrual codes mess up cash basis
 52220         if ivd=0 then ivd=pd ! kJ   10/02/06   skipping receipts w/o invoice numbers
 52240         if bank_code<>trbank_code or trtcde<>tcde or ck$<>trck$ then goto CB_TT_FINIS ! thru, allocation doesn/t belong to this transaction
 52260         totalloc+=amt

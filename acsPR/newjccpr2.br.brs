@@ -27,7 +27,7 @@
 00306 ! ______________________________________________________________________
 00310   fnDedNames(mat fullname$,mat abrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 00320   for j=1 to 20
-00330     if trim$(fullname$)="Union" then let un=j ! determine union deduction
+00330     if trim$(fullname$)="Union" then un=j ! determine union deduction
 00340   next j
 00350 ! ______________________________________________________________________
 00360   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -55,8 +55,8 @@
 00580   hr1(8)=hr1(8)+tr1(5)
 00590   hr2(j)=hr2(j)+tr1(6)
 00600   hr2(8)=hr2(8)+tr1(6)
-00610   let gp1=gp1+tr1(5)*tdet2
-00620   let gp2=gp2+tr1(6)*tdet3
+00610   gp1=gp1+tr1(5)*tdet2
+00620   gp2=gp2+tr1(6)*tdet3
 00630   tr(3)=tr1(3)
 00640   goto L440
 00650 ! ______________________________________________________________________
@@ -135,7 +135,7 @@
 01420   pr #255: "______________________________ _____ _____ _____ _____ _____ _____ _____ _____  ____ ___    _______  ______  ______   _____  _______"
 01430   return 
 01440 ! ______________________________________________________________________
-01450 L1450: if tgp=0 then let x3=0 else let x3=(gp1+gp2)/tgp
+01450 L1450: if tgp=0 then x3=0 else x3=(gp1+gp2)/tgp
 01460   if hr1(8)=0 then goto L1510
 01470   lnp=lnp+1
 01480   if lnp>5 then lnp=6
@@ -158,14 +158,14 @@
 01650     pr #255,using L1660: pl1$(j) pageoflow PGOF
 01660 L1660: form pos 1,c 30,skip 1
 01670   next j
-01680 L1680: let gded= gded+(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5)))
+01680 L1680: gded= gded+(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5)))
 01690   jgp=jgp+gp1+gp2 ! TOTAL GROSS FOR JOB
 01700   mat tded=tded+ded ! TOTAL DEDUCTION
 01710   tcdt=tcdt+tcd1 ! TOTAL HOURS FOR ALL JOBS
 01720   thr=thr+hr8 ! TOTAL HOURS FOR JOB
 01730   tgp=0
-01740   let gp1=0
-01750   let gp2=0
+01740   gp1=0
+01750   gp2=0
 01760   mat ded=(0)
 01770   tcd1=0
 01780   hr8=0
@@ -182,7 +182,7 @@
 01890 L1890: form pos 5,4*n 12.2,skip 2
 01900   thr=0
 01910   jgp=0
-01920   let gded=0
+01920   gded=0
 01930   return 
 01940 ! ______________________________________________________________________
 01950 L1950: gosub L1610
@@ -204,7 +204,7 @@
 02130   tfd=tmd=td14=tdw=0: mat caf=(0): mat ttc=(0): mat ttdc=(0)
 02140   mat tcp=(0): mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0) !:
         mat qtr4tcp=(0): mat ytdtotal=(0): mat tdc=(0): mat tty=(0)
-02150   let fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0 !:
+02150   fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0 !:
         medqtr=eicyr=eicqtr=wagesqtr=0
 02160   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
 02170   restore #7,key>=checkkey$: nokey L2500
@@ -221,9 +221,9 @@
 02280   if prd=d1 then gosub ACCUMULATE_DEPT_TOTALS
 02290   goto L2180
 02300 STORE_VARIABLES: ! 
-02310   let wagesyr=ytdtotal(31) ! total wages
-02320   let fedyr=ytdtotal(1) ! ytdl fed
-02330   let ficayr=ytdtotal(2) ! fica year to date
+02310   wagesyr=ytdtotal(31) ! total wages
+02320   fedyr=ytdtotal(1) ! ytdl fed
+02330   ficayr=ytdtotal(2) ! fica year to date
 02340   medyr=ytdtotal(3) ! medicare year to date
 02350   stateyr=ytdtotal(4) ! total state  quarter
 02360   eicyr=ytdtotal(25) ! eic
@@ -231,9 +231,9 @@
 02380   if prd>=qtr2 and prd<qtr3 then mat quartertotals=qtr2tcp
 02390   if prd>=qtr3 and prd<qtr4 then mat quartertotals=qtr3tcp
 02400   if prd>=qtr4 and prd<end_date then mat quartertotals=qtr4tcp
-02410   let wagesqtr=quartertotals(31) ! total wages quarter
-02420   let fedqtr=quartertotals(1) ! total fed  quarter
-02430   let ficaqtr=quartertotals(2) ! total fica quarter
+02410   wagesqtr=quartertotals(31) ! total wages quarter
+02420   fedqtr=quartertotals(1) ! total fed  quarter
+02430   ficaqtr=quartertotals(2) ! total fica quarter
 02440   medqtr=quartertotals(3) ! total medicare quarter
 02450   stateqtr=quartertotals(4) ! total state  quarter
 02460   eicqtr=quartertotals(25) ! eic qtr

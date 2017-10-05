@@ -45,7 +45,7 @@
 00430   shoption=1
 00440 INPUTSCREEN2: ! 
 00450   pr newpage
-00460   let win=102
+00460   win=102
 00470   fnopenwin(win,08,08,18,72,cap$)
 00480   pr #win,fields mat iolabel1$: mat label1$
 00490   pr #win,fields io1$(2): dat
@@ -154,10 +154,10 @@
 01320 WHATNEXT: ! 
 01330   pr newpage
 01340   fnopenwin(win=102,09,20,16,59,cap$)
-01350   let wrd2$(1)="1. pr Input Proof List"
-01360   let wrd2$(2)="2. Corrections"
-01370   let wrd2$(3)="3. Additional Entries"
-01380   let wrd2$(4)="4. Post to Job Cost File"
+01350   wrd2$(1)="1. pr Input Proof List"
+01360   wrd2$(2)="2. Corrections"
+01370   wrd2$(3)="3. Additional Entries"
+01380   wrd2$(4)="4. Post to Job Cost File"
 01390   for j=1 to udim(wrd2$)
 01400     io2$(j)=str$(j+3)&",2,C 38,N"
 01410   next j
@@ -209,8 +209,8 @@
 01870   close #103: ioerr L1880
 01880 L1880: open #103: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,output 
 01890   pr #103: newpage
-01900   let wrds$(1)="1. JOB # SEARCH" : skl(1)=6
-01910   let wrds$(2)="2. JOB NAME SEARCH" : skl(2)=25
+01900   wrds$(1)="1. JOB # SEARCH" : skl(1)=6
+01910   wrds$(2)="2. JOB NAME SEARCH" : skl(2)=25
 01920   seq=11 : goto L2020
 01930   for j=1 to udim(ios$): ios$(j)=str$(j+12)&",25,C 30,N": next j
 01940 L1940: close #101: ioerr L1950
@@ -222,7 +222,7 @@
 02000   seq=curfld
 02010   if cmdkey=5 then goto SRCHEND
 02020 L2020: pr newpage
-02030   let win2=101
+02030   win2=101
 02040   fnwin3b(win2,wrds$(seq-10),5,41+skl(seq-10),1,1)
 02050   prtall=0
 02060   pr #win2,fields "4,2,C 38,N": "Beginning Search Data (blank for all):"

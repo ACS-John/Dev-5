@@ -154,9 +154,9 @@
 34140   goto MainRead
 34160   TypeF: !
 34180   if foot1=1 then 
-34200     let foot$=rtrm$(foot$)&d$ 
+34200     foot$=rtrm$(foot$)&d$ 
 34220   else
-34240     tabnote=sp : let foot1=1 : let foot$=d$
+34240     tabnote=sp : foot1=1 : foot$=d$
 34260   end if
 34280 goto MainRead ! /r
 38000 L1120: ! r:
@@ -192,15 +192,15 @@
 48040 continue ! /r
 52000 L1370: ! r:
 52020   if ul=0 then goto L1480
-52040   let underlin=24+14*bc
+52040   underlin=24+14*bc
 52060   if ul=1 then goto L1450
-52080   let underlin$="==============                            =============="
+52080   underlin$="==============                            =============="
 52100   pr #255,using L1420: underlin$
 52120   L1420: form pos underlin,c 56,skip 1
 52140   goto L1480
 52160   ! 
 52180   L1450: !
-52200   let underlin$="______________                            ______________"
+52200   underlin$="______________                            ______________"
 52220   pr #255,using L1470: underlin$
 52240   L1470: form pos underlin,c 56,skip 1
 52260   L1480: !

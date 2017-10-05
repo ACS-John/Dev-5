@@ -1,7 +1,7 @@
 00100 ! formerly S:\Core\Programs\SelCNo
 00200 ! Select Company Number for the current system
 00300 fn_setup
-01600 let fntop(program$)
+01600 fntop(program$)
 14000 ! r: if cursys=CO than just pick the first thing they are licensed for
 14020   if env$('cursys')='CO' and udim(mat client_has$)=>2 then
 14040     cursys$=client_has$(2)
@@ -10,7 +10,7 @@
 14100     fn_setup_on_cursys_change
 14120   end if
 14140 ! /r
-16000 let fncno(cno)
+16000 fncno(cno)
 20000 MENU1: ! r:
 20020   fntos(sn$:=env$('cursys')&"Companies")
 21000   ! r: add the system buttons to the screen

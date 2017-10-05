@@ -74,7 +74,7 @@
             read #breakdown,using "Form pos 1,n 8,c 5,n 8,2*n 9.2",rec=editrec: empno,class$,tdate,increase,decrease norec ADD_FM_DONE
 00510     fntos(sn$="Addfm") !:
           respc=0 : lc=0 : mylen=21 : mypos=mylen+2: mat resp$=(""): right=1
-00520     fnfra(1,9,8,70,"Hourly Information - "&empname$,"",0) : let frame1=1
+00520     fnfra(1,9,8,70,"Hourly Information - "&empname$,"",0) : frame1=1
 00530     fnlbl(lc+=1,1,'Employee Number:',mylen,right,0,frame1)
 00540     fncombof("PRmstr",lc,mypos,0,env$('Q')&"\PRmstr\rpmstr.h"&str$(cno),1,8,9,30,env$('Q')&"\PRmstr\Rpindex.h"&str$(cno),0,pas, "Enter the employee number to whom the time should be recorded",frame1) !:
           resp$(1)=str$(empno)

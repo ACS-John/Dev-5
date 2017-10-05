@@ -22,8 +22,8 @@
 00220   open #2: "Name="&env$('Q')&"\PRmstr\PRW2ADDR.h"&env$('cno')&",NoShr",internal,input 
 00230   open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$&",NoShr",internal,input,relative 
 00240   read #hAddr,using 'form pos 1,n 10.2,n 1',rec=1: ficamax,w1
-00245   let ficamaw=ficamax*10
-00260   let first=1
+00245   ficamaw=ficamax*10
+00260   first=1
 00270 ADDR_LOOP_TOP: ! r:
 00272   read #2,using 'form pos 1,pd 3': addr eof EO_ADDR
 00290   if addr=1 then goto ADDR_LOOP_TOP
@@ -37,18 +37,18 @@
 00362   if oldeno=eno and oldtcd=tcd then goto L380
 00370   if oldeno><eno or oldtcd><tcd then goto EMP_READ
 00380   L380: !
-00382   let w(9)=w(9)+ty21 ! STATE WAGES
-00390   let w(7)=w(7)+ty3 ! STATE WH
+00382   w(9)=w(9)+ty21 ! STATE WAGES
+00390   w(7)=w(7)+ty3 ! STATE WH
 00400   if tlwh=0 then goto L430 ! NO LOCAL WH
-00410   let w(10)=w(10)+ty21 ! LOCAL WAGES
-00420   let w(8)=w(8)+tlwh ! LOCAL WH
+00410   w(10)=w(10)+ty21 ! LOCAL WAGES
+00420   w(8)=w(8)+tlwh ! LOCAL WH
 00430 L430: oldeno=eno
 00440   oldtcd=tcd
 00450   goto ADDR_LOOP_TOP 
 00460 EMP_READ: ! 
 00462   eno$=lpad$(str$(oldeno),8)
 00470   read #1,using 'form pos 9,3*c 30,c 11',key=eno$: mat em$,ss$
-00490   let g$=ltrm$(eno$)
+00490   g$=ltrm$(eno$)
 00500   stcode$=e$(oldtcd)
 00510   state$=d$(oldtcd)(1:2)
 00520   gosub PRINTW2

@@ -21,10 +21,10 @@
           mat ch$(9) : mat cm$(9) : mat cm$(9) !:
           cm$(1)=cm$(2)="80": cm$(3)="10" !:
           cm$(4)=cm$(5)=cm$(6)=cm$(7)=cm$(8)=cm$(9)="30"
-00170     if fixgrid=99 then let usefile=0 else let usefile=1 !:
+00170     if fixgrid=99 then usefile=0 else usefile=1 !:
             ! set to rebuild grid file only as you exit ubfm and the !:
             ! fixgrid code has been changed to necessary
-00180     let usefile=fnflexinit1('Acct',1,1,10,70,mat ch$,mat cm$,1,usefile)
+00180     usefile=fnflexinit1('Acct',1,1,10,70,mat ch$,mat cm$,1,usefile)
 00190     if usefile>0 then goto L330 ! file already exists, do not recreate
 00200 READ_FILE: ! 
 00210     read #file_num,using 'Form POS 1,C 12,c 50,pos 87,pd 6.2,pos 63,6*pd 3': item$(1),item$(2),cb,mat rf eof L330 ioerr ERR_READ
@@ -45,8 +45,8 @@
 00330 L330: ! If FIXGRID=99 Then Goto XIT ! FIXING NEW GRID FILE without displaying it
 00340     fncmdset(2): fnacs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
-00350     let x$=lpad$(resp$(1),12)
-00360     if ckey=5 then let x$="            " ! no one selected
+00350     x$=lpad$(resp$(1),12)
+00360     if ckey=5 then x$="            " ! no one selected
 00370     goto XIT
 00380 ! ______________________________________________________________________
 00390 ! <Updateable Region: ERTN>

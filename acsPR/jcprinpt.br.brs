@@ -27,10 +27,10 @@
 00270   open #5: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&str$(cno),internal,input,relative 
 00280   open #6: "Name=ADDR2."&wsid$,internal,input 
 00290   f1$="FORM POS 1,C 20"
-00300   let f2$=f1$
+00300   f2$=f1$
 00310   for j=1 to 9
 00320     f1$=rtrm$(f1$)&",N 12.2"
-00330     let f2$=rtrm$(f2$)&",N 12.2"
+00330     f2$=rtrm$(f2$)&",N 12.2"
 00340   next j
 00350   for j=1 to 14
 00360     iolabel1$(j)=str$(j+6)&",2,Cr 21,N"
@@ -75,7 +75,7 @@
 00750   goto L600
 00760 ! ______________________________________________________________________
 00770 L770: pr newpage
-00780   let win=101
+00780   win=101
 00790   fnopenwin(win,10,20,14,59,cap$)
 00800   pr #win,fields "4,2,C 16,N": "Employee Number:"
 00810   pr f "15,35,c 09,B,5": "Done (F5)"
@@ -109,7 +109,7 @@
 01090     inp(j+7)=inp(j+7)+tdet(j+3)
 01100   next j
 01110 L1110: pr newpage
-01120   let win=101
+01120   win=101
 01130   fnopenwin(win,2,7,22,74,cap$)
 01140   pr #win,fields "04,02,Cr 21,N": "Employee Number:" !:
         pr #win,fields "04,24,C 08,N": ltrm$(en$)
@@ -144,7 +144,7 @@
 01400   tdet(2)=hr(1)
 01410   tdet(3)=hr(2)
 01420   rewrite #2,using L940,rec=adr: dep,mat tdet,nta
-01430 L1430: let gpd=0
+01430 L1430: gpd=0
 01440   if em8><-2 then goto L1490
 01450   if inp(3)=0 then goto L1490
 01460   pr f "5,40,c 38": "Not Eligable for Sick Leave"
@@ -156,9 +156,9 @@
 01520   goto L1230
 01530 ! ______________________________________________________________________
 01540 L1540: for j=1 to 5
-01550     if j=2 then let gpd=gpd+inp(j)*hr(2) else let gpd=gpd+inp(j)*hr(1)
+01550     if j=2 then gpd=gpd+inp(j)*hr(2) else gpd=gpd+inp(j)*hr(1)
 01560   next j
-01570   let gpd=gpd+inp(6)+inp(7)+inp(18)+inp(19)
+01570   gpd=gpd+inp(6)+inp(7)+inp(18)+inp(19)
 01580   if s9=1 then goto L2630
 01590   write #3,using L1600: eno,dep,mat inp,gpd,mat hr,adr
 01600 L1600: form pos 1,n 8,n 3,5*pd 4.2,15*pd 5.2,2*pd 4.2,pd 3
@@ -180,7 +180,7 @@
 01760 ! ______________________________________________________________________
 01770 TOTALSCREEN: ! 
 01780   pr newpage
-01790   let win=101
+01790   win=101
 01800   fnopenwin(win,2,7,22,74,cap$)
 01810   close #3: 
 01820   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&str$(cno),internal,outin,relative 
@@ -192,10 +192,10 @@
         pr #win,fields "05,37,C 10,N": str$(ent1)
 01870   pr #win,fields mat iolabel1$: mat label1$
 01880   pr #win,fields mat io1b$: mat tinp
-01890   let wrd2$(1)="1. Make Corrections"
-01900   let wrd2$(2)="2. pr Proof Listing"
-01910   let wrd2$(3)="3. Calculate Pay"
-01920   let wrd2$(4)="4. pr Daily Employee Hours"
+01890   wrd2$(1)="1. Make Corrections"
+01900   wrd2$(2)="2. pr Proof Listing"
+01910   wrd2$(3)="3. Calculate Pay"
+01920   wrd2$(4)="4. pr Daily Employee Hours"
 01930   for j=1 to udim(wrd2$)
 01940     io2$(j)=str$(j+14)&",38,C 29,N"
 01950   next j
@@ -248,7 +248,7 @@
 02420 ! ______________________________________________________________________
 02430 L2430: gosub L2240
 02440 L2440: fncloseprn
-02450 L2450: let win=101
+02450 L2450: win=101
 02460   fnopenwin(win,10,20,14,59,cap$)
 02470   pr #win,fields "4,2,C 24,N": "Record Number to Change:"
 02480   pr f "15,35,C 09,B,5": "Done (F5)"
@@ -265,7 +265,7 @@
 02590 L2590: eno=0
 02600   dep=0
 02610   mat inp=(0)
-02620   let gpd=0
+02620   gpd=0
 02630 L2630: rewrite #3,using L1600,rec=r: eno,dep,mat inp,gpd,mat hr,adr
 02640   tgp=tgp+gpd
 02650   teno=teno+eno
@@ -316,7 +316,7 @@
 03090   return 
 03100 ! ______________________________________________________________________
 03110 L3110: pr newpage
-03120   let win=101
+03120   win=101
 03130   fnopenwin(win,10,14,14,65,cap$)
 03140   pr #win,fields "4,02,C 41,N": "Employee Number to pr (blank for all):"
 03150   pr f "15,34,C 11,B,5": "Cancel (F5)"

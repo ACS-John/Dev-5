@@ -53,7 +53,7 @@
 40020   if totaldr+totalcr<>0 then gosub MSGBOX1
 40040   close #2: 
 40060   close #3: 
-40080 let fnchain("S:\acsGL\acglMrge")
+40080 fnchain("S:\acsGL\acglMrge")
 42000 XIT: fnxit
 44000 ! <Updateable Region: ERTN>
 44020 ERTN: fnerror(program$,err,line,act$,"xit")

@@ -10,7 +10,7 @@
 00100 ! ______________________________________________________________________
 00120   dur$=fnAcsInstallationPath$
 00140   fntop(program$,"Locate 1")
-00150   let filter$="*.br"
+00150   filter$="*.br"
 00160   cancel=5
 00170   report$=env$('temp')&"\LocRpt-"&session$&".txt" !:
         subprocfile$=env$('temp')&"\loc3-"&session$&".tmp" !:
@@ -55,7 +55,7 @@
         lc2$=trim$(resp$(2)) !:
         dur$=trim$(resp$(3)) !:
         rep$=trim$(resp$(4)) !:
-        let filter$=trim$(resp$(5)) !:
+        filter$=trim$(resp$(5)) !:
         app_prev$=resp$(6) !:
         rnm$=resp$(7) !:
         insline$=trim$(resp$(8))

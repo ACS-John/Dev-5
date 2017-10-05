@@ -56,9 +56,9 @@
 00560       if j=1 then io1$(j)="4,32,N 4,UT,N"
 00570       if j=5 then io1$(j)="8,32,C 11,UT,N"
 00580     next j
-00590     let x=6
+00590     x=6
 00600     for j=6 to 22 step 2
-00610       let x=x+1
+00610       x=x+1
 00620       floa$(j)=str$(x+3)&",3,C 20,N"
 00630       floa$(j+1)=str$(x+3)&",41,C 20,N"
 00640       io1$(j)=str$(x+3)&",23,N 11.2,UT,N"

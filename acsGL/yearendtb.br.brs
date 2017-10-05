@@ -58,13 +58,13 @@
 00460 L460: dno=val(n$(1:3))
 00470   if subt=1 and olddno>0 and olddno<>dno then pr #255,using L480: "FUND "&str$(olddno)&" TOTALS",fundt3 else goto L500
 00480 L480: form skip 1,pos 30,c 20,pos 80,pic(zz,zzz,zzz.## cr),skip 2
-00490   let fundt1=fundt2=fundt3=0
+00490   fundt1=fundt2=fundt3=0
 00500 L500: ano=val(n$(4:9))
 00510   sno=val(n$(10:12))
 00520   begbal=0
 00530   curbal=curbal+bp(12)
-00540   let fundt1=fundt1+0
-00550   let fundt3=fundt3+bp(12)
+00540   fundt1=fundt1+0
+00550   fundt3=fundt3+bp(12)
 00560   gosub L840
 00570   goto READ_1
 00580 L580: olddno=dno

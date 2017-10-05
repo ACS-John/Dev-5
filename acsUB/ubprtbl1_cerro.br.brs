@@ -17,14 +17,14 @@
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
 00170   at$(1)=cnam$ !:
-        let z=21 !:
+        z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
-        let x=len(at$(1)) : let y=z-x !:
+        x=len(at$(1)) : y=z-x !:
         at$(1)=rpt$(" ",int(y/2))&at$(1)
-00180   let z=26 !:
+00180   z=26 !:
         for j=2 to udim(at$) !:
           at$(j)=trim$(at$(j))(1:z) !:
-          let x=len(at$(j)) : let y=z-x !:
+          x=len(at$(j)) : y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00190   linelength=62
@@ -62,7 +62,7 @@
 00410   fntxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00420   fnlbl(8,1,"Starting Account:",ll,1)
-00430   let fe$="ubm-act-nam" !:
+00430   fe$="ubm-act-nam" !:
         datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
         indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
@@ -206,7 +206,7 @@
 01510   goto ERTN
 01520 ! ______________________________________________________________________
 01530 PRINTBILL: ! 
-01540   if final=2 then let g(8)=g(8)-b(8): let g(11)=g(12)+g(8): bal=bal +g(8)
+01540   if final=2 then g(8)=g(8)-b(8): g(11)=g(12)+g(8): bal=bal +g(8)
 01550   pb=bal-g(11)
 01560   pr #255,using L1570: int(d2*.01),int(d3*.01)
 01570 L1570: form pos 15,pic(##/##),"-",pic(##/##),skip 3
@@ -222,7 +222,7 @@
 01670   if g(8)=0 then t$="" else t$="OC"
 01680   pr #255,using L1600: t$,0,0,0,g(8),pe$(4)
 01690   pr #255: 
-01700   if final>0 then let final$="FINAL BILL" else let final$=""
+01700   if final>0 then final$="FINAL BILL" else final$=""
 01710   pr #255,using L1720: final$
 01720 L1720: form pos 11,c 20,skip 1
 01730   pn=o

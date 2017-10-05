@@ -51,7 +51,7 @@
 00440   fnlbl(3,1,label1$(1),15,1)
 00450   fnqgl(3,18,0,2,0) !:
         resp$(respc+=1)=fnrgl$(mgl$(1)) ! fica
-00460   let x=1 : let y=3
+00460   x=1 : y=3
 00470   for j=1 to 20
 00480     if dedcode(j)=3 then goto L490 else goto L510
 00490 L490: fnlbl(y+=1,1,label1$(x+=1),15,1)
@@ -65,7 +65,7 @@
 00550   dp$=resp$(1)
 00560   dp$=lpad$(uprc$(rtrm$(dp$)),3)
 00570   mgl$(1)=fnagl$(resp$(2)) ! fica
-00580   let x=2
+00580   x=2
 00590   for j=1 to 20
 00600     if dedcode(j)=3 then goto L610 else goto L620
 00610 L610: mgl$(j+1)=fnagl$(resp$(x+=1))
@@ -124,7 +124,7 @@
 01110 BLDSCR: ! 
 01120   fnDedNames(mat fullname$,mat abbrevname$,mat dedcode,mat calcode,mat dedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
 01130   label1$(1)="Fica Match"
-01140   let x=1
+01140   x=1
 01150   for j=1 to 20
 01160     if dedcode(j)=3 then goto L1170 else goto L1180
 01170 L1170: label1$(x+=1)=rtrm$(fullname$(j))

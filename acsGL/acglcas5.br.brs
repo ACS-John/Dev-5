@@ -11,14 +11,14 @@
 00110 ! ______________________________________________________________________
 00120   fntop(program$,cap$="Cash Flow with Budget")
 00130   fncno(cno,cnam$)
-00140   let udf$=env$('temp')&'\'
+00140   udf$=env$('temp')&'\'
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00160   actpd$=fnactpd$
 00170   pedat$=fnpedat$
 00180   actpd$=fnactpd$
 00190   actpd=fnactpd
-00200   let fscode=fnfscode
+00200   fscode=fnfscode
 00210   priorcd=fnpriorcd
 00220   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
@@ -68,7 +68,7 @@
 00650 L650: read #3,using L740: ir,bb,cb,mat by,mat bp,mat bm eof L950
 00660   if ir=0 then goto L650
 00670   if fscode=0 then goto L740
-00680   if fscode<1 or fscode>13 then let fscode=1
+00680   if fscode<1 or fscode>13 then fscode=1
 00690   if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00700   if priorcd=2 then goto L730
 00710   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -84,12 +84,12 @@
 00810   if fscode=0 then monthb=monthb+bm(actpd) else monthb=monthb+bm(fscode)
 00820   if fscode=0 then goto L830 else goto L880
 00830 L830: for j=1 to actpd
-00840     let ytdb=ytdb+bm(j)
+00840     ytdb=ytdb+bm(j)
 00850   next j
 00860   goto L640
 00870 ! ______________________________________________________________________
 00880 L880: for j=1 to fscode
-00890     let ytdb=ytdb+bm(j)
+00890     ytdb=ytdb+bm(j)
 00900   next j
 00910   goto L640
 00920 ! ______________________________________________________________________
@@ -97,7 +97,7 @@
 00940   if ir>val(r$) then goto L960
 00950 L950: notrans=1
 00960 L960: overundr=ytdb-total2
-00970   let unexpend=annualb-total2
+00970   unexpend=annualb-total2
 00980   for j=1 to 9
 00990     if ac(j)=9 then goto L1070
 01000     accum(j,1)=accum(j,1)+total
@@ -112,9 +112,9 @@
 01090   total2=-total2
 01100   annualb=-annualb
 01110   monthb=-monthb
-01120   let ytdb=-ytdb
+01120   ytdb=-ytdb
 01130   overundr=overundr
-01140   let unexpend=unexpend
+01140   unexpend=unexpend
 01150 L1150: if ds=1 then dollar$="$" else dollar$=" "
 01160   if annualb><0 or total2><0 then goto L1190
 01170   if total<>0 then goto L1190
@@ -127,9 +127,9 @@
 01240   total2=0
 01250   annualb=0
 01260   monthb=0
-01270   let ytdb=0
+01270   ytdb=0
 01280   overundr=0
-01290   let unexpend=0
+01290   unexpend=0
 01300   gosub L1660
 01310   gosub L1850
 01320   gosub L1720
@@ -159,11 +159,11 @@
 01560 ! ______________________________________________________________________
 01570 L1570: if foot1=1 then goto L1630
 01580   tabnote=sp
-01590   let foot1=1
-01600   let foot$=d$
+01590   foot1=1
+01600   foot$=d$
 01610   goto L470
 01620 ! ______________________________________________________________________
-01630 L1630: let foot$=rtrm$(foot$)&d$
+01630 L1630: foot$=rtrm$(foot$)&d$
 01640   goto L470
 01650 ! ______________________________________________________________________
 01660 L1660: for j=1 to 9
@@ -188,11 +188,11 @@
 01840 ! ______________________________________________________________________
 01850 L1850: if ul=0 then goto L1940
 01860   if ul=1 then goto L1910
-01870   let underlin$="=============="
+01870   underlin$="=============="
 01880   pr #255: 
 01890   goto L1920
 01900   goto L1940
-01910 L1910: let underlin$="______________"
+01910 L1910: underlin$="______________"
 01920 L1920: pr #255,using L1930: underlin$,underlin$,underlin$,underlin$,underlin$
 01930 L1930: form skip 0,pos 24,5*c 15,skip 0
 01940 L1940: pr #255,using L1950: " "

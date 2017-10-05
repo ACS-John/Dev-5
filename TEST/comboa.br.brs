@@ -9,7 +9,7 @@
 20020   for a = 1 to 9999
 20040     option$(a) = "Option #"&str$(a)
 20060   next a
-20080   let filename$="ComboA-tst"
+20080   filename$="ComboA-tst"
 20100   test$ = "I'm a test of tool tip text.  Does it work?"
 20120 ! fncomboa(filename$,1,1,mat option$,test$)
 20140 ! 

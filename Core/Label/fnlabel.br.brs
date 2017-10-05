@@ -123,7 +123,7 @@
 00930     if laby>3 then laby=1 : labx=labx+1
 00940     if labx>10 or labx<1 then labx=1
 00950     for j=1 to 5
-00952       let wabel$(labx,laby,j)=labeltext$(j)
+00952       wabel$(labx,laby,j)=labeltext$(j)
 00954     next j
 00960     if laby=>3 and labx=>10 then 
 00962       laby=0 : labx=0

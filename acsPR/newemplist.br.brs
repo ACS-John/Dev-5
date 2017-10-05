@@ -75,25 +75,25 @@
 00760 ! ______________________________________________________________________
 00770 L770: dim first$*15,mid$*15,last$*20,item1$(2)*30
 00780   em$(1)=uprc$(rtrm$(em$(1)))
-00790   let x1=pos(em$(1)," ",1)
-00800   let x2=pos(em$(1)," ",x1+1)
-00810   let x3=pos(em$(1)," ",x2+1)
+00790   x1=pos(em$(1)," ",1)
+00800   x2=pos(em$(1)," ",x1+1)
+00810   x3=pos(em$(1)," ",x2+1)
 00820   if uprc$(namcde$)="L" then goto L870
-00830   let first$=trim$(em$(1)(1:max(x1-1,1)))
+00830   first$=trim$(em$(1)(1:max(x1-1,1)))
 00840   if x2>0 then mid$=trim$(em$(1)(x1+1:x2-1)): last$=trim$(em$(1)(x2+1:len(em$(1))))
 00850   if x2=0 then last$=trim$(em$(1)(x1+1:len(em$(1)))): mid$=""
 00860   goto L910
 00870 L870: ! last name first
 00880   if x1>0 and em$(1)(x1-1:x1-1)="," then last$=trim$(em$(1)(1:x1-2)) else last$=trim$(em$(1)(1:max(x1-1,1)))
-00890   if x2>0 then let first$=trim$(em$(1)(x1+1:x2-1)): mid$=trim$(em$(1)(x2+1:len(em$(1))))
-00900   if x2=0 then let first$=trim$(em$(1)(x1+1:len(em$(1)))): mid$=""
+00890   if x2>0 then first$=trim$(em$(1)(x1+1:x2-1)): mid$=trim$(em$(1)(x2+1:len(em$(1))))
+00900   if x2=0 then first$=trim$(em$(1)(x1+1:len(em$(1)))): mid$=""
 00910 L910: ! pr FIRST$,MID$,LAST$
 00920   return 
 00930 ASKFORMAT: ! 
 00940   fntos(sn$="Emplist") !:
         respc=0
 00950   fnlbl(1,1,"Order for Printing Name:",28,1)
-00960   let fi$="Emplist1" !:
+00960   fi$="Emplist1" !:
         item1$(1)="First Name First" !:
         item1$(2)="Last Name First": fncomboa(fi$,1,31,mat item1$,"How is the employee name entered in the employee record?).") !:
         resp$(respc+=1)=item1$(1)

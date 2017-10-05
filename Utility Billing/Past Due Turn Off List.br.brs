@@ -64,15 +64,15 @@
 32580   fnacs(sn$,0,mat resp$,ck)
 32600   if ck=5 then goto XIT
 32620   for j=1 to 3
-32640 L400: let x=pos(resp$(j),"/",1)
+32640 L400: x=pos(resp$(j),"/",1)
 32660     if x>0 then resp$(j)(x:x)="" : goto L400
 32680   next j
 32700   lastday(1)=val(resp$(1))
-32720   let firstday(1)=(val(resp$(1)(1:6))*100)+1
+32720   firstday(1)=(val(resp$(1)(1:6))*100)+1
 32740   lastday(2)= val(resp$(2))
-32760   let firstday(2)=(val(resp$(2)(1:6))*100)+1
+32760   firstday(2)=(val(resp$(2)(1:6))*100)+1
 32780   lastday(3)=val(resp$(3))
-32800   let firstday(3)=(val(resp$(3)(1:6))*100)+1
+32800   firstday(3)=(val(resp$(3)(1:6))*100)+1
 32820   lbill=val(resp$(4))
 32840   aai$=printal$=resp$(5)
 32860   printadr$=resp$(6) : if printadr$="True" then printadr=1 ! wants meter address printed
@@ -112,7 +112,7 @@
 44080   if bd1>0 then goto L650 ! IF BUDGET BILLING AND HAVE NOT PAID LAST BILL, LIST ANYWAY   ( BD1=# OF BUDGET BILLS NOT PAID)
 44100   if totba>0 and bd1=0 then goto MAIN_LOOP_TOP ! DON'T LIST IF BUDGET BILL AND HAVE PAID LAST BILL (NO MATTER WHAT BALANCE)
 44120   if bal<=1 then goto MAIN_LOOP_TOP
-44140   if final=3 then let final=0 ! consider active customer who are not be billed the same as regular active customers.
+44140   if final=3 then final=0 ! consider active customer who are not be billed the same as regular active customers.
 44160   if printal$=opt_aai$(2) and final>0 then goto MAIN_LOOP_TOP
 44180   if printal$=opt_aai$(3) and final=0 then goto MAIN_LOOP_TOP
 44200 L650: ! 

@@ -18,7 +18,7 @@
 00170 ! _________________________________________
 00180 ASK_NAS: ! 
 00190     alpha_key_length=kln(file_num)
-00200     let win=104
+00200     win=104
 00210     fnwin3b(win,cap$,4,45,0,2,5,2)
 00220     bk1=prtall=0
 00230     pr #win,fields "2,2,Cc 40,N": "Enter Search Criteria (blank for all):"
@@ -41,19 +41,19 @@
 00410       if fs_info$(1)(1:len(rtrm$(na1$)))>na1$(1:len(rtrm$(na1$))) then goto L490
 00420 L420: cde=cde+1
 00425       numeric_value$="": numeric_value$=cnvrt$(numeric_format$,fs_info) conv L430
-00430 L430: let fs_sw$(j)=(fs_info$(1)(1:key_length)&" "&fs_info$(2)(1:25)&" "&fs_info$(3)(1:12)&" "&numeric_value$)(1:70)
-00440       let fs_sk$(j)=fs_info$(1)
+00430 L430: fs_sw$(j)=(fs_info$(1)(1:key_length)&" "&fs_info$(2)(1:25)&" "&fs_info$(3)(1:12)&" "&numeric_value$)(1:70)
+00440       fs_sk$(j)=fs_info$(1)
 00450       if j>1 then goto L480
 00460       bk1=bk1+1
-00470       if kps(file_num)=1 then let fs_bk$(bk1)=fs_info$(1) else let fs_bk$(bk1)=fs_info$(2) ! when backup a screen, use the numeric key if no alpha key being used for the search (eg G/L) (assuming numeric key starts in position 1)
+00470       if kps(file_num)=1 then fs_bk$(bk1)=fs_info$(1) else fs_bk$(bk1)=fs_info$(2) ! when backup a screen, use the numeric key if no alpha key being used for the search (eg G/L) (assuming numeric key starts in position 1)
 00480 L480: next j
 00490 L490: if cde=0 then goto L620
 00500     mat fs_sw$(cde)
 00510     for j=1 to 20 !:
-            let fs_sfl$(j)=str$(j)&",1,C 70,N" !:
+            fs_sfl$(j)=str$(j)&",1,C 70,N" !:
           next j
 00520     mat fkey$=("") !:
-          let fkey$(1)="Next" : let fkey$(2)="Back" : let fkey$(5)="Cancel" !:
+          fkey$(1)="Next" : fkey$(2)="Back" : fkey$(5)="Cancel" !:
           em$="": es=0 !:
           fnfkey(24,mat fkey$,mat disfk,em$,es)
 00530     rinput #win,select mat fs_sfl$,attr "H": mat fs_sw$

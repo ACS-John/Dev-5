@@ -24,14 +24,14 @@
         read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto !:
         close #20: 
 00210   at$(1)=cnam$ !:
-        let z=21 !:
+        z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
-        let x=len(at$(1)) : let y=z-x !:
+        x=len(at$(1)) : y=z-x !:
         at$(1)=rpt$(" ",int(y/2))&at$(1)
-00220   let z=26 !:
+00220   z=26 !:
         for j=2 to udim(at$) !:
           at$(j)=trim$(at$(j))(1:z) !:
-          let x=len(at$(j)) : let y=z-x !:
+          x=len(at$(j)) : y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00230   linelength=62
@@ -69,7 +69,7 @@
 00450   fntxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00460   fnlbl(8,1,"Starting Account:",ll,1)
-00470   let fe$="ubm-act-nam" !:
+00470   fe$="ubm-act-nam" !:
         datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
         indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
@@ -205,11 +205,11 @@
 01470 ! ______________________________________________________________________
 01480 PRINTBILL: ! 
 01490   if final=2 then !:
-          let g(8)-=b(8): let g(11)=g(12)+g(8): bal+=g(8)
+          g(8)-=b(8): g(11)=g(12)+g(8): bal+=g(8)
 01500   penalty=0
 01510   for j=1 to 10
 01520     if penalty$(j)="Y" then penalty+=g(j) !:
-            let g(j)=0 ! accumulate all penalties and set charge to zero
+            g(j)=0 ! accumulate all penalties and set charge to zero
 01530   next j
 01540   pb=bal-g(11)
 01550   pr #255: "" !:
@@ -238,8 +238,8 @@
 01770   pr #255,using L1590: pb$,pb,z$
 01780   form pos 1,c 3,2*nz 6,nz 5,nz 10.2,x 1,c 10,skip 1
 01790   if est=1 then est$="BILL ESTIMATED" else est$=""
-01800   if c4>0 then let final$="FINAL BILL" else let final$=""
-01810   if df$="Y" then let final$="DRAFTED"
+01800   if c4>0 then final$="FINAL BILL" else final$=""
+01810   if df$="Y" then final$="DRAFTED"
 01820   if bal<=0 then penalty=0
 01840   pr #255: ""
 01850   pr #255,using 'Form POS 7,C 20,POS 38,C 25': est$,pe$(1)(1:25)

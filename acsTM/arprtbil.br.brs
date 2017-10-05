@@ -194,7 +194,7 @@
 01950 L1950: return 
 01960 L1960: mm=int(d1/10000)
 01970   dd=int((d1-mm*10000)/100)
-01980   let yy=d1-(mm*10000+dd*100)
+01980   yy=d1-(mm*10000+dd*100)
 01990   ag0=mo(mm)+dd+yy*365+int(yy/4)
 02000   if yy-int(yy/4)*4=0 and mm>2 then ag0=ag0+1
 02010   return 

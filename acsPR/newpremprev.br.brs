@@ -41,7 +41,7 @@
 00410   b=pos (rtrm$(em$)," ",a+1)
 00420   em$=rtrm$(em$(max(a+1,b+1):30))&" "&em$(1:a)
 00430 L430: form pos 1,n 8,c 30,pos 118,n 2,pos 132,2*pd 4.2,pos 156,n 6,pos 173
-00440   let fsttrl=1
+00440   fsttrl=1
 00460   restore #2,key>=cnvrt$("pic(zzzzzzz#)",eno)&"   ": nokey L390
 00480 L480: read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,tdn,gl$,mat tdt,mat tcd,tli,mat tdet eof L390
 00490   if teno<>eno then goto L390
@@ -60,7 +60,7 @@
 00620   gosub L730 ! pr TRAILER ONLY
 00630   goto L660
 00640 L640: gosub L670 ! pr MASTER AND FIRST TRAILER
-00650   let fsttrl=0
+00650   fsttrl=0
 00660 L660: goto L480
 00670 L670: pr #255,using L710: eno,em$(1:23),tdn,em(3),tdt(1),tli,tdt(3),tdt(2),em(2),ytdtdc(4),em(1),ytdtdc(3),ytdtdc(5),payrate pageoflow L690
 00680   goto L710

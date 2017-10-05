@@ -276,10 +276,10 @@
 25740   else 
 25760     route_filter=val(resp$(respc_route))
 25780   end if 
-25800   if resp$(respc_filter_none)="True" then let filter_none=1 else let filter_none=0
-25820   if resp$(respc_filter_individuals)="True" then let filter_selected_only=1 else let filter_selected_only=0
-25840   if resp$(respc_filter_past_due)="True" then let filter_past_due_only=1 else let filter_past_due_only=0
-25860   if resp$(respc_filter_not_past_due)="True" then let filter_no_past_due=1 else let filter_no_past_due=0
+25800   if resp$(respc_filter_none)="True" then filter_none=1 else filter_none=0
+25820   if resp$(respc_filter_individuals)="True" then filter_selected_only=1 else filter_selected_only=0
+25840   if resp$(respc_filter_past_due)="True" then filter_past_due_only=1 else filter_past_due_only=0
+25860   if resp$(respc_filter_not_past_due)="True" then filter_no_past_due=1 else filter_no_past_due=0
 25880   for mg1_item=1 to message1_line_count
 25900     mg$(mg1_item)=resp$(respc_mg1(mg1_item))
 25920     fncreg_write('bill message '&str$(mg1_item),mg$(mg1_item))
@@ -478,15 +478,15 @@
 53560   read #h_company,using "Form POS 41,2*C 40": at$(2),at$(3)
 53580   close #h_company: 
 53600   at$(1)=env$('cnam')
-53620   let z=21
+53620   z=21
 53640   at$(1)=trim$(at$(1))(1:z)
-53660   let x=len(at$(1)) : let y=z-x
+53660   x=len(at$(1)) : y=z-x
 53680   at$(1)=rpt$(" ",int(y/2))&at$(1)
-53700   let z=26
+53700   z=26
 53720   for j=2 to udim(at$)
 53740     at$(j)=trim$(at$(j))(1:z)
-53760     let x=len(at$(j))
-53780     let y=z-x
+53760     x=len(at$(j))
+53780     y=z-x
 53800     at$(j)=rpt$(" ",int(y/2))&at$(j)
 53820   next j
 53840 fnend 
@@ -520,10 +520,10 @@
 60460   end if 
 60480   if g(9)=0 then t9$="" else t9$="La. Sales Tax"
 60500   ! If D(10)=1 Then eST$="Bill Estimated" Else eST$=""
-60520   if final>0 then let final$="Final Bill" else let final$=""
+60520   if final>0 then final$="Final Bill" else final$=""
 60530   if budget>0 then bud$="Budgeted Amount:"&trim$(cnvrt$("Pic($$,$$$.##",budget)) else bud$=""
-60540   if bal<=0 then let g(10)=0
-60560   let gross=max(bal+g(10),0)
+60540   if bal<=0 then g(10)=0
+60560   gross=max(bal+g(10),0)
 60580   ! ______________actual Bill Printing____________________________________
 60640   F_PR_TABLE_AND_ADDR_1: form pos 1,nz 6,nz 7,nz 7,x 2,c 3,pos 28,nz 8.2,pos 39,c 30
 60660   F_PR_TABLE_AND_ADDR_2: form pos 1,c 20,pos 28,nz 8.2,pos 39,c 52
@@ -638,10 +638,10 @@
 71080   end if 
 71100   ! -- Standard 4 Per Page Even Perferated Card Stock Bills
 71120   checkcounter+=1
-71140   if checkcounter=1 then let xmargin=0 : let ymargin=0
-71160   if checkcounter=2 then let xmargin=139 : let ymargin=0
-71180   if checkcounter=3 then let xmargin=0 : let ymargin=108
-71200   if checkcounter=4 then let xmargin=139 : let ymargin=108 : checkcounter=0
+71140   if checkcounter=1 then xmargin=0 : ymargin=0
+71160   if checkcounter=2 then xmargin=139 : ymargin=0
+71180   if checkcounter=3 then xmargin=0 : ymargin=108
+71200   if checkcounter=4 then xmargin=139 : ymargin=108 : checkcounter=0
 71220   ! ______________________________________________________________________
 71240   fnpa_line(xmargin+5,ymargin+2,57,lyne*3+3,1)
 71260   fnpa_fontbold(1)
@@ -786,7 +786,7 @@
 76140     read #h_customer_2,using 'form pos 1,c 10,pos 296,pd 4,pos 1741': z$,f,route eof END5
 76160     if route_filter and route_filter><route then goto END5
 76220     if f=d1 then 
-76240       let zip5$=cr$=""
+76240       zip5$=cr$=""
 76260       read #h_cass1,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey ignore
 76280       write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 76290     end if 
@@ -820,13 +820,13 @@
 78240   ! /r
 78260   ! r: pr that bill
 78280   if final=2 then 
-78300     let g(8)-=b(8): let g(11)=g(12)+g(8): bal+=g(8)
+78300     g(8)-=b(8): g(11)=g(12)+g(8): bal+=g(8)
 78320   end if 
 78340   penalty=0
 78360   for j=1 to 10
 78380     if penalty$(j)="Y" then ! accumulate all penalties and set charge to zero
 78400       penalty+=g(j)
-78420       let g(j)=0
+78420       g(j)=0
 78440     end if 
 78460   next j
 78480   pb=bal-g(11)
@@ -855,10 +855,10 @@
 78960   if g(8)=0 then t$="" else t$=service$(8)
 78980   pr #255,using PBC_L1610: t$,0,0,0,g(8)
 79000   if est=1 then est$="BILL ESTIMATED" else est$=""
-79020   if c4>0 then let final$="FINAL BILL" else let final$=""
-79040   if df$="Y" then let final$="DRAFTED"
+79020   if c4>0 then final$="FINAL BILL" else final$=""
+79040   if df$="Y" then final$="DRAFTED"
 79060   if bal<=0 then penalty=0
-79080   if bal<0 then let g(5)=0
+79080   if bal<0 then g(5)=0
 79100   pr #255: ""
 79120   pr #255,using 'Form POS 7,C 20,POS 38,C 25': est$,pe$(1)(1:25)
 79140   pr #255,using 'Form POS 1,CR 7,X 1,PIC(ZZ/ZZ/ZZ),NZ 13.2,POS 38,C 25': 'DUE BY:',d4,bal,pe$(2)(1:25)
@@ -887,10 +887,10 @@
 80550   fn_override_service_date(service_from,service_to,extra_3,extra_4)
 80560   ! -- Standard 4 Per Page Even Perforated Card Stock Bills
 80580   checkcounter+=1
-80600   if checkcounter=1 then let xmargin=0 : let ymargin=5
-80620   if checkcounter=2 then let xmargin=142 : let ymargin=5 ! xmargin was 137
-80640   if checkcounter=3 then let xmargin=0 : let ymargin=113 ! ymargin was 108
-80660   if checkcounter=4 then let xmargin=142 : let ymargin=113 : checkcounter=0
+80600   if checkcounter=1 then xmargin=0 : ymargin=5
+80620   if checkcounter=2 then xmargin=142 : ymargin=5 ! xmargin was 137
+80640   if checkcounter=3 then xmargin=0 : ymargin=113 ! ymargin was 108
+80660   if checkcounter=4 then xmargin=142 : ymargin=113 : checkcounter=0
 80680   ! move page down 1/2 inch
 80700   ! 
 80720   ! ______________________________________________________________________
@@ -1077,7 +1077,7 @@
 86110   ! AFTER_READ_CUSTOMER: !
 86120   ! gosub READALTADR
 86130   pb=bal-g(11)
-86140   if bal<=0 then let g(9)=0 ! don't show penalty if balance 0 or less
+86140   if bal<=0 then g(9)=0 ! don't show penalty if balance 0 or less
 86150   activity_charge=fntrans_total_as_of(z$,billing_date_prior,1)
 86160   activity_penalty=fntrans_total_as_of(z$,billing_date_prior,2)
 86170   activity_payment=fntrans_total_as_of(z$,billing_date_prior,3)
@@ -1251,7 +1251,7 @@
 87850     fnpa_txt(mg$(j),5,lyne+=4)
 87860   next j
 87870   fnpa_fontitalic
-87880   let x=0
+87880   x=0
 87890   for j=1 to 39
 87900     fnpa_line(x+=5,234,3,0) ! pr #20: 'Call Print.AddLine('&str$(x+=5)&','&str$(234)&',3,0)'
 87910   next j
@@ -1288,13 +1288,13 @@
 89100   fncustomer_address(z$,mat pe$)
 89110 ! /r
 89130   if final=2 then 
-89140     let g(8)-=b(8): let g(11)=g(12)+g(8): bal+=g(8)
+89140     g(8)-=b(8): g(11)=g(12)+g(8): bal+=g(8)
 89150   end if 
 89160   penalty=0
 89170   for j=1 to 10
 89180     if penalty$(j)="Y" then 
 89190       penalty+=g(j)
-89200       let g(j)=0 ! accumulate all penalties and set charge to zero
+89200       g(j)=0 ! accumulate all penalties and set charge to zero
 89210     end if 
 89220   next j
 89230   pb=bal-g(11)
@@ -1349,8 +1349,8 @@
 89720   if g(4)=0 then t$="" else t$="SF "
 89730   pr #255,using PBO_F_ONE: t$,0,0,0,g(4),0,0,fn_mg2$
 89740   if d(10)=1 then est$="Bill Estimated" else est$=""
-89750   if c4>0 then let final$="Final Bill" else let final$=""
-89760   if df$="Y" then let final$="Drafted"
+89750   if c4>0 then final$="Final Bill" else final$=""
+89760   if df$="Y" then final$="Drafted"
 89770   if bal<=0 then penalty=g(10)=0
 89790   pr #255,using 'form pos 10,c 20,pos 38,c 25,pos pboPosRightCol,c message2_max_len': est$,pe$(1)(1:25),fn_mg2$
 89800   if bal<=0 then 
@@ -1386,9 +1386,9 @@
 91080 L3170: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 91100   if p$<>z$ then goto PU_XIT
 91120   if tcode<>1 then goto L3160 ! only charge transactions
-91140   let usage(3)=usage(2): billdate(3)=billdate(2) : reads(3)=reads(2)
-91160   let usage(2)=usage(1): billdate(2)=billdate(1) : reads(2)=reads(1)
-91180   let usage(1)=wu: billdate(1)=tdate : reads(1)=wr
+91140   usage(3)=usage(2): billdate(3)=billdate(2) : reads(3)=reads(2)
+91160   usage(2)=usage(1): billdate(2)=billdate(1) : reads(2)=reads(1)
+91180   usage(1)=wu: billdate(1)=tdate : reads(1)=wr
 91200   goto L3160
 91220 PU_XIT: ! 
 91240   return  ! /r
@@ -1471,10 +1471,10 @@
 94052     fn_override_service_date(service_from,service_to,extra_3,extra_4)
 94055 ! /r
 94060   checkcounter+=1
-94065   if checkcounter=1 then let xmargin=0 : let ymargin=0
-94070   if checkcounter=2 then let xmargin=139 : let ymargin=0
-94075   if checkcounter=3 then let xmargin=0 : let ymargin=108
-94080   if checkcounter=4 then let xmargin=139 : let ymargin=108 : checkcounter=0
+94065   if checkcounter=1 then xmargin=0 : ymargin=0
+94070   if checkcounter=2 then xmargin=139 : ymargin=0
+94075   if checkcounter=3 then xmargin=0 : ymargin=108
+94080   if checkcounter=4 then xmargin=139 : ymargin=108 : checkcounter=0
 94085   fnpa_line(xmargin+5,ymargin+2,55,lyne*3+3,1)
 94090   fnpa_fontbold(1)
 94095   fnpa_fontsize(12)
@@ -1635,10 +1635,10 @@
 95140   end if
 95150   ! -- Standard 4 Per Page Even Perferated Card Stock Bills
 95160   checkcounter+=1
-95170   if checkcounter=1 then let xmargin=0 : let ymargin=0
-95180   if checkcounter=2 then let xmargin=139 : let ymargin=0
-95190   if checkcounter=3 then let xmargin=0 : let ymargin=108
-95200   if checkcounter=4 then let xmargin=139 : let ymargin=108 : checkcounter=0
+95170   if checkcounter=1 then xmargin=0 : ymargin=0
+95180   if checkcounter=2 then xmargin=139 : ymargin=0
+95190   if checkcounter=3 then xmargin=0 : ymargin=108
+95200   if checkcounter=4 then xmargin=139 : ymargin=108 : checkcounter=0
 95210   ! ______________________________________________________________________
 95220   fnpa_line(xmargin+5,ymargin+2,57,lyne*3+3,1)
 95230   fnpa_fontbold(1)
@@ -1804,10 +1804,10 @@
 96830 fnend 
 97000 def fn_print_bill_billings(mat mg$,mat g,mat b,bal,mat penalty$,d1,d2x,d3x,d4,mat pe$,final$,z$)
 97010   ! three per page RTF Bill
-97020   if final=2 then let g(8)-=b(8): let g(11)=g(12)+g(8): bal+=g(8)
+97020   if final=2 then g(8)-=b(8): g(11)=g(12)+g(8): bal+=g(8)
 97030   penalty=0
 97040   for j=1 to 10
-97050     if penalty$(j)="Y" then penalty+=g(j) : let g(j)=0 ! accumulate all penalties and set charge to zero
+97050     if penalty$(j)="Y" then penalty+=g(j) : g(j)=0 ! accumulate all penalties and set charge to zero
 97060   next j
 97070   pb=bal-g(11)
 97080   pr #255: ''
@@ -1837,10 +1837,10 @@
 97320     pr #255,using billings_fL1590: pb$,pb,0,bal
 97330   end if
 97340   if d(10)=1 then est$="BILL ESTIMATED" else est$=""
-97350   if c4>0 then let final$="FINAL BILL" else let final$=""
-97360   if df$="Y" then let final$="DRAFTED"
-97370   if bal>g(11) then let final$="DELINQUENT NOTICE"
-97380   if bal<=0 then let g(10)=0
+97350   if c4>0 then final$="FINAL BILL" else final$=""
+97360   if df$="Y" then final$="DRAFTED"
+97370   if bal>g(11) then final$="DELINQUENT NOTICE"
+97380   if bal<=0 then g(10)=0
 97390   if g(8)=0 then t$="" else t$="OTH"
 97400   pr #255,using billings_fL1620: t$,0,0,0,g(8)
 97410   if bal<=0 then 
@@ -1861,13 +1861,13 @@
 98010 !    Good margins in Word (5/2/2017)  Top .4", Bottom, .5", Left 1.5", Right .25"
 98020 !    Good margins in Word (5/2/2017)  Top .4", Bottom, .5", Left 1.5", Right .25"
 98030   if final=2 then 
-98040     let g(8)-=b(8): let g(11)=g(12)+g(8): bal+=g(8)
+98040     g(8)-=b(8): g(11)=g(12)+g(8): bal+=g(8)
 98050   end if
 98060   penalty=0
 98070   for j=1 to 10
 98080     if penalty$(j)="Y" then 
 98090       penalty+=g(j) 
-98100       let g(j)=0 ! accumulate all penalties and set charge to zero
+98100       g(j)=0 ! accumulate all penalties and set charge to zero
 98110     end if
 98120   next j
 98130   pb=bal-g(11)

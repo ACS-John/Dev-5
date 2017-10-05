@@ -7,23 +7,23 @@
  !
  def fnSelectFile(controlindex,mat subscripts$,mat controlname$,prefix$,mat s$,mat f$;___,Folder$*255,FileHandle)
     
-    let FileSubscript=fnFindSubscript(mat Subscripts$,prefix$,controlname$(controlIndex))
+    fileSubscript=fnFindSubscript(mat Subscripts$,prefix$,controlname$(controlIndex))
     screenSubscript=fnFindSubscript(mat Subscripts$,"sio_",controlname$(controlIndex))
 
-    let Folder$=trim$(f$(FileSubscript))
-    if Folder$="" then let Folder$=".\"
-    let Folder$=Folder$(1:pos(Folder$,"\",-1))&"*.*"
+    folder$=trim$(f$(FileSubscript))
+    if Folder$="" then folder$=".\"
+    folder$=Folder$(1:pos(Folder$,"\",-1))&"*.*"
 
     open #(filehandle:=fnGetFileNumber): "name=open:"&Folder$&", recl=80", external, input error Ignore
     if file(filehandle)=0 then
-       let folder$=trim$(file$(filehandle))
+       folder$=trim$(file$(filehandle))
        close #filehandle:
 
        if pos(lwrc$(ControlName$(ControlIndex)),"folder") then
-          let Folder$=Folder$(1:pos(Folder$,"\",-1))
+          folder$=Folder$(1:pos(Folder$,"\",-1))
        end if
 
-       if FileSubscript then let f$(FileSubscript)=folder$
+       if FileSubscript then f$(FileSubscript)=folder$
        if ScreenSubscript then s$(ScreenSubscript)=folder$
     end if
  fnend

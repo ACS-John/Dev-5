@@ -23,7 +23,7 @@
 00210   fncmdset(2)
 00220   fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
-00240   let fan$=lpad$(rtrm$(resp$(1)(1:10)),10)
+00240   fan$=lpad$(rtrm$(resp$(1)(1:10)),10)
 00250   lan$=lpad$(rtrm$(resp$(2)(1:10)),10)
 00260   if resp$(3)="True" then print_grand_totals$="Y"
 00270   if resp$(4)="True" then print_details$="Y"
@@ -117,8 +117,8 @@
 01160   pr #255,using L1150: "Customer Count: "&str$(subtotal_count) pageoflow PGOF
 01170   pr #255,using L1150: "Water Usage: "&str$(subtotal_d3) pageoflow PGOF
 01180 L1180: pr #255: "" pageoflow PGOF
-01190   let grandtotal_count+=subtotal_count
-01200   let grandtotal_d3+=subtotal_d3
+01190   grandtotal_count+=subtotal_count
+01200   grandtotal_d3+=subtotal_d3
 01210   subtotal_count=subtotal_d3=0
 01220   if no_more_header=0 then gosub HEADER_COLUMN
 01230   return 

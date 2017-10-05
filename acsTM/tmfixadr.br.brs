@@ -40,7 +40,7 @@
 00430 L430: form pos p1,2*pd 3,pos p2,n 1
 00440   if ta2<>0 then rewrite #4,using L360,rec=ta2: r4 else ta1=lta
 00442   if b(7)>0 then goto L460
-00450   if fb1<2 then let fb1=abs(b(7))
+00450   if fb1<2 then fb1=abs(b(7))
 00460 L460: if ta1=0 then ta1=r4
 00470   rewrite #5,using L430,rec=ca(b(5)): ta1,r4,fb1
 00480   goto L290
@@ -50,9 +50,9 @@
 00520   ca(b(5))=r5
 00530   ta(b8,1)=r4
 00540   ta(b8,2)=r4
-00550   if b(7)=-2 then let fb(b8)=2
+00550   if b(7)=-2 then fb(b8)=2
 00560   if fb(b8)=2 then goto L580
-00570   if b(7)=-1 then let fb(b8)=1
+00570   if b(7)=-1 then fb(b8)=1
 00580 L580: write #5,using L240,rec=r5: mat ta,mat fb
 00590   rewrite #5,using L270,rec=1: r5
 00600   rewrite #1,using L280,key=k$: mat ca

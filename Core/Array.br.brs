@@ -29,7 +29,7 @@
 31000   end if  ! Insert_Item_Number>Array_Item_Count   /   else 
 31100 fnend 
 31200 def library fnsrch_case_insensitive(mat srch_array$,srch_for$*80; srch_start_ele)
-31300   ! if ~setup the let fn_setup
+31300   ! if ~setup then let fn_setup
 31400   fnsrch_case_insensitive=fn_srch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
 31500 fnend  ! fnsrch_case_insensitive
 31600 def fn_srch_case_insensitive(mat srch_array$,srch_for$*80; srch_start_ele)

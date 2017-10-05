@@ -63,7 +63,7 @@
 24020   disable_for_client=1
 24040   if env$('ACSDeveloper')<>'' then disable_for_client=0
 24050   srv_input_col_count=6
-24060   fnfra(15,1,12,113, 'Type of Service') : let fra=1
+24060   fnfra(15,1,12,113, 'Type of Service') : fra=1
 24080   fnlbl(2,13,"Full Name",20,2,0,fra)
 24100   fnlbl(2,34,"Code",4,0,0,fra)
 24120   fnlbl(2,39,"Taxable",7,0,0,fra)
@@ -116,9 +116,9 @@
 42120   rcpt$=resp$(resp_require_receipt)
 42140   pcent=val(resp$(resp_pcent))
 42160 ! 
-42180   let uum_water$=resp$(resp_uum_water)
-42200   let uum_gas$=resp$(resp_uum_gas)
-42220   let uum_electric$=resp$(resp_uum_electric)
+42180   uum_water$=resp$(resp_uum_water)
+42200   uum_gas$=resp$(resp_uum_gas)
+42220   uum_electric$=resp$(resp_uum_electric)
 42240   bkno1=val(resp$(resp_route_low))
 42260   bkno2=val(resp$(resp_route_high))
 42280 ! /r

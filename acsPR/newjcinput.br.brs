@@ -42,7 +42,7 @@
 00400 TRANSACTION_ENTRY: ! 
 00410   if addone=1 then ji1(5)=ji1(6)=ji2(3)=0: ji1(2)=2
 00420 L420: fntos(sn$="jobinput") !:
-        respc=0 : let frac=0 !:
+        respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+3
 00430   fnlbl(1,1,"Employee #:",mylen,1)
 00440   fncmbemp(1,mypos) !:
@@ -174,15 +174,15 @@
 01610     t5=t5+ji1(5)
 01620     t6=t6+ji1(6)
 01630     t10=t10+ji2(3)
-01640     let gt5=gt5+ji1(5)
-01650     let gt6=gt6+ji1(6)
-01660     let gt10=tg10+ji2(3)
+01640     gt5=gt5+ji1(5)
+01650     gt6=gt6+ji1(6)
+01660     gt10=tg10+ji2(3)
 01670   next j
 01680   pr #255,using L1540: " ________"," ________"," ____________",t5,t6,t10
 01690   pr #255,using L1700: " ________"," ________"," ____________",gt5,gt6,gt10
 01700 L1700: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Grand Totals",pos 38,2*n 9.2,x 29,n 13.2,skip 2
 01710 PROOF_LIST_DONE: ! 
-01720   let gt5=gt6=gt10=0
+01720   gt5=gt6=gt10=0
 01730   fncloseprn
 01740   goto TRANSACTION_ENTRY
 01750 ! ______________________________________________________________________

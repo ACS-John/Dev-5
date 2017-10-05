@@ -20,9 +20,9 @@
 00210     end if 
 00220 ! 
 00230     fngetdir(sys_data_path$,mat filename$,empty$,temp$="Company.h*")
-00232     let x:=fngethandle
+00232     x:=fngethandle
 00240     for a=1 to udim(filename$)
-00250       let filename$=trim$(filename$)
+00250       filename$=trim$(filename$)
 00260       if filename$(a)<>"" then 
 00270         end=len(filename$(a))
 00280         opt$(a)=filename$(a)(10:end)

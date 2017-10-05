@@ -17,14 +17,14 @@
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
 00170   at$(1)=cnam$ !:
-        let z=21 !:
+        z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
-        let x=len(at$(1)) : let y=z-x !:
+        x=len(at$(1)) : y=z-x !:
         at$(1)=rpt$(" ",int(y/2))&at$(1)
-00180   let z=26 !:
+00180   z=26 !:
         for j=2 to udim(at$) !:
           at$(j)=trim$(at$(j))(1:z) !:
-          let x=len(at$(j)) : let y=z-x !:
+          x=len(at$(j)) : y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00190   linelength=62

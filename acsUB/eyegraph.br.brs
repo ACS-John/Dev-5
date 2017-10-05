@@ -111,10 +111,10 @@
         fnacs(sn$,0,mat resp$,ckey)
 00780   if ckey=5 then goto XIT
 00790   for j=1 to 24
-00800 L800: let x=pos(resp$(j),"/",1) !:
+00800 L800: x=pos(resp$(j),"/",1) !:
           if x>0 then resp$(j)(x:x)="": goto L800
 00810     cd1(j)=val(resp$(j)) conv MSGBOX
-00820     let y=val(resp$(j)(5:6))
+00820     y=val(resp$(j)(5:6))
 00830     if y=1 then month$(j)="Jan"
 00840     if y=2 then month$(j)="Feb"
 00850     if y=3 then month$(j)="Mar"
@@ -145,17 +145,17 @@
 01090   if tcode<>1 then goto L1070 ! charge transactions only
 01100 L1100: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 01110 ! ______________________________________________________________________
-01120   if service=1 and baseon=1 then let usage=wu ! analyzing water
-01130   if service=1 and baseon=2 then let usage=tg(1) ! analyzing water dollars
-01140   if service=3 and baseon=1 then let usage=eu ! analyzing electric
-01150   if service=3 and baseon=2 then let usage=tg(3) ! analyzing electric dollars
-01160   if service=4 and baseon=1 then let usage=gu ! analyzing gas
-01170   if service=4 and baseon=2 then let usage=tg(4) ! analyzing gas dollars
+01120   if service=1 and baseon=1 then usage=wu ! analyzing water
+01130   if service=1 and baseon=2 then usage=tg(1) ! analyzing water dollars
+01140   if service=3 and baseon=1 then usage=eu ! analyzing electric
+01150   if service=3 and baseon=2 then usage=tg(3) ! analyzing electric dollars
+01160   if service=4 and baseon=1 then usage=gu ! analyzing gas
+01170   if service=4 and baseon=2 then usage=tg(4) ! analyzing gas dollars
 01180   for j=1 to 24
 01190     if cd1(j)><tdate then goto L1210
 01200     n2(j)=n2(j)+1 !:
-          let u1(j)=u1(j)+usage !:
-          let u2(j)=u2(j)+usage
+          u1(j)=u1(j)+usage !:
+          u2(j)=u2(j)+usage
 01210 L1210: next j
 01220   goto L1070 ! read next transaction
 01230 STORE_GRAPH_INFO: ! 
@@ -184,7 +184,7 @@
 01430     toplen$=toplen$&str$(0)
 01440   next j
 01450   top=val(toplen$) : top=100 ! change top here kj
-01460   let x=top*.10
+01460   x=top*.10
 01470 DETERMINE_BOTTOM_LINE: ! 
 01480   spacing=10 : lyne=30
 01485   cnam$="Ken Johnson"

@@ -121,7 +121,7 @@
 14040     goto MENU1B
 14060   end if 
 14080   coramt=0
-14100   let x1$=z$
+14100   x1$=z$
 14120 ! r: read selected account and prepare data for SCREEN_ADD
 14140   read #h_customer,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=x1$,release: nam$,bal,db1,mat gb,escrowbal nokey SCREEN_SELECT_ACCOUNT
 14160   havebudget=0 : mat tgb=(0)
@@ -134,8 +134,8 @@
 14300   goto SCREEN_ADD ! /r
 16000 SCREEN_ADD: ! r:
 16020 ! 
-16040   if x(3)=0 then let x(3)=date('mmddyy') ! date should default to today
-16060   let x(2)=0 ! amount collected should default to zero
+16040   if x(3)=0 then x(3)=date('mmddyy') ! date should default to today
+16060   x(2)=0 ! amount collected should default to zero
 16080 ! 
 16100   fntos(sn$="ipcollAddv2")
 16120   respc=0
@@ -200,8 +200,8 @@
 17300   else if ckey=5 then 
 17320     goto MENU1B ! 5=cancel
 17340   end if 
-17360   let x(2)=val(resp$(1))
-17380   let x(3)=val(resp$(2))
+17360   x(2)=val(resp$(1))
+17380   x(3)=val(resp$(2))
 17400   rcpt$=trim$(resp$(3))(1:9)
 17420   if ckey=8 then 
 17440     fncustomer(x)
@@ -219,7 +219,7 @@
 17640   ! else if resp$(4)=coll_type_option$(3) then 
 17660   !   transType=5 : hresp1$=coll_type_option$(3)
 17680   ! end if 
-17700   let x1$=lpad$(trim$(z$),10)
+17700   x1$=lpad$(trim$(z$),10)
 17720 ! 
 17740   if ckey=7 then 
 17760     resp$(3)=rcpt$='CA'
@@ -407,7 +407,7 @@
 25320   !      ! 2="Credit Memo",transType=4
 25340   !      ! 3="Debit Memo",transType=5
 25360   !   end if 
-25380   let x$=x1$=lpad$(trim$(resp$(resp_account)(1:10)),10)
+25380   x$=x1$=lpad$(trim$(resp$(resp_account)(1:10)),10)
 25400   transAmount=x(2)=val(resp$(resp_amount))
 25420   transDate=val(resp$(resp_transDate))
 25440   rcpt$=trim$(resp$(resp_receiptNumber))
@@ -433,7 +433,7 @@
 26200   if transType=5 then tcode=5 ! debit memo
 26220   if transType=5 then bal+=transAmount else bal-=transAmount
 26240   tmp=fndate_mmddyy_to_ccyymmdd(transDate)
-26260   mat tg=(0): let x=0
+26260   mat tg=(0): x=0
 26280   for j=1 to 10
 26300     if trim$(srvname$(j))<>"" and trim$(srvname$(j)(1:5))<>"Reduc" then tg(j)=alloc(x+=1)
 26320   next j
@@ -447,7 +447,7 @@
 26480   for j=1 to 10
 26500     if trim$(srvname$(j))="" or trim$(srvname$(j)(1:5))="Reduc" then goto L4470
 26520     j2=j2+1
-26540     if transType=5 then let gb(j)=gb(j)+alloc(j2) else let gb(j)=gb(j)-alloc(j2)
+26540     if transType=5 then gb(j)=gb(j)+alloc(j2) else gb(j)=gb(j)-alloc(j2)
 26560 L4470: next j
 26580   rewrite #h_customer,using 'Form POS 292,PD 4.2,POS 388,10*PD 5.2,pos 1859,pd 5.2',key=p$: bal,mat gb,escrowbal+escrow
 26600 ! postingCodeUnused=9
@@ -499,7 +499,7 @@
 30040   for j=1 to 5
 30060     if bd3(j)<>0 then rewrite #h_budTrans,using "Form POS 139,2*PD 4",rec=bd2(j): x(3),x(3)
 30080     if bd3(j)<>0 then read #h_budTrans,using 'Form POS 1,C 10,2*PD 4,24*PD 5.2,2*PD 4,PD 3',rec=bd2(j): z$,mat bt1,nba
-30100     let x2=0
+30100     x2=0
 30120     for j3=1 to 10
 30140       if srvname$(j3)<>"" then 
 30160         if penalty$(j3)="Y" then  ! add penalties up seperat
@@ -545,12 +545,12 @@
 34180   if x(2)=tg then goto L5710
 34200   a1=tg-x(2)
 34220   if escrowbal>=a1 then a2=a1 else a2=escrowbal
-34240   let x(2)=x(2)+a2
+34240   x(2)=x(2)+a2
 34260   escrow=-a2
 34280   L5710: !
 34300 return  ! /r
 36000 def fn_print_listings
-36020   let x$=cnvrt$("pic(######)",transDate)
+36020   x$=cnvrt$("pic(######)",transDate)
 36060   ! fntos(sn$="Collections-print2")
 36080   ! respc=0
 36100   ! fnfra(1,2,3,37,"Report Type")
@@ -629,8 +629,8 @@
 44080       if ti1=2 and transType<>3 then goto PS_LOOP_TOP ! Skip all entries except receipts.
 44100       totcheck+=transAmount
 44140       fn_increaseMatR(transType,transAmount,totalCollections,totalDebitMemos,totalCreditMemos)
-44280       if env$('client')="Ash Grove" and (wcode<1 or wcode>10) then let wcode=1
-44300       if env$('client')="Ash Grove" and transType=3 then let water(wcode)=water(wcode)+alloc(1) ! TOTAL WATER BY WATER CODE
+44280       if env$('client')="Ash Grove" and (wcode<1 or wcode>10) then wcode=1
+44300       if env$('client')="Ash Grove" and transType=3 then water(wcode)=water(wcode)+alloc(1) ! TOTAL WATER BY WATER CODE
 44320       for j=1 to sz1
 44340         totalByService(j)+=alloc(j)
 44360         brk(transType,j)=brk(transType,j)+alloc(j)
@@ -1184,7 +1184,7 @@
 84160   coramt=0
 84180   ! r: read selected account and prepare data for SCREEN_ADD
 84200   read #h_customer,using 'Form Pos 41,C 28,Pos 292,PD 4.2,PD 4,Pos 388,10*PD 5.2,pos 1859,pd 5.2',key=at_customer$,release: nam$,bal,db1,mat gb,escrowbal nokey AT_NO_CUSTOMER
-84210   let x1$=at_customer$
+84210   x1$=at_customer$
 84220   havebudget=0 : mat tgb=(0)
 84240   j2=0 : escrow=0
 84260   for j=1 to 10
@@ -1193,8 +1193,8 @@
 84320   if uprc$(escrow$)="Y" and transType=3 then oldescrowbal=escrowbal ! add escrow balance into last allocation if have escrow and processing a collection transaction
 84340   ! /r
 84360   ! SCREEN_ADD: !
-84380   let x(3)=at_date_mmddyy
-84400   let x(2)=at_amount
+84380   x(3)=at_date_mmddyy
+84400   x(2)=at_amount
 84420   transType=at_trans_type
 84440   ! 
 84460   do_not_blank_rcpt=0
@@ -1266,7 +1266,7 @@
 85720   ! pr 'completed add' : pause ! goto SCREEN_SELECT_ACCOUNT ! /r
 85740   AT_NO_CUSTOMER: ! 
 85750   at_customer$=trim$(at_customer$)
-85760   let x1_len=len(at_customer$)
+85760   x1_len=len(at_customer$)
 85780   if x1_len<=9 and at_customer$(len(at_customer$)-1:len(at_customer$)-1)='.' then ! maybe excel messed it up, try adding a 0, because it has something like .1
 85800     at_customer$=at_customer$&'0'
 85820     goto AT_READ_CUSTOMER

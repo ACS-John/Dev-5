@@ -7,12 +7,12 @@
 00070 L70: input fields "10,50,N 2,UE,N": cno conv L70
 00080   if cno=0 or cmdkey=5 or cmdkey=99 then goto XIT
 00090   dim rno$*5,recno$*5,d$*50,te$*1,fil$(6)*30,idx$(6)*30,ac(9)
-00100   let fil$(1)=env$('Q')&"\GLmstr\ACGLFNSB.h"&str$(cno): idx$(1)=env$('Q')&"\GLmstr\FnSBIndx.h"&str$(cno)
-00110   let fil$(2)=env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno): idx$(2)=env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)
-00120   let fil$(3)=env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno): idx$(3)=env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)
-00130   let fil$(4)=env$('Q')&"\GLmstr\AcGLFnSc.h"&str$(cno): idx$(4)=env$('Q')&"\GLmstr\FnScIndx.h"&str$(cno)
-00140   let fil$(5)=env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno): idx$(5)=env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)
-00150   let fil$(6)=env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno): idx$(6)=env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)
+00100   fil$(1)=env$('Q')&"\GLmstr\ACGLFNSB.h"&str$(cno): idx$(1)=env$('Q')&"\GLmstr\FnSBIndx.h"&str$(cno)
+00110   fil$(2)=env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno): idx$(2)=env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)
+00120   fil$(3)=env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno): idx$(3)=env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)
+00130   fil$(4)=env$('Q')&"\GLmstr\AcGLFnSc.h"&str$(cno): idx$(4)=env$('Q')&"\GLmstr\FnScIndx.h"&str$(cno)
+00140   fil$(5)=env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno): idx$(5)=env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)
+00150   fil$(6)=env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno): idx$(6)=env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)
 00160   open #3: "Name=PROC."&wsid$,display,output ioerr L180
 00170   close #3,free: 
 00180 L180: open #3: "Name=PROC."&wsid$&",SIZE=0",display,output 

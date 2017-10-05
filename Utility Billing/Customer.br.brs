@@ -1,9 +1,9 @@
 00015 ! Customer File Editor
 00020 library program$: fncustomer
 00025 library 'S:\Core\Library': fnxit,fntop
-00030 let fntop(program$)
+00030 fntop(program$)
 00035 let fncustomer(x)
-00040 let fnxit
+00040 fnxit
 00300 def library fncustomer(x)
 00310   fn_setup
 00320   ! r: open files
@@ -103,7 +103,7 @@
 01402     if uprc$(resp$(1:1))="Y" then 
 01404       goto ACC_KEY_CHANGE_TEST_EXIST
 01406     else if uprc$(resp$(1:1))="N" then 
-01408       let z$=x$
+01408       z$=x$
 01410       goto NAMESCREEN
 01412     else 
 01414       goto ASK_CONFIRM_KEY_CHANGE
@@ -124,7 +124,7 @@
 01450       goto NAMESCREEN
 01452     end if 
 01480     ! 
-01492     rewrite #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ : if z$<>holdz$ or extra(1)<>holdroute or extra(2)>< holdseq then let fixgrid=1
+01492     rewrite #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$ : if z$<>holdz$ or extra(1)<>holdroute or extra(2)>< holdseq then fixgrid=1
 01494     fnkey_change(h_ubtransvb,'form pos 1,c 10',holdz$,z$) ! gosub REW_HIST ! change # in history transactions
 01496     open #h_workorder:=fngethandle: "Name="&env$('Q')&"\UBmstr\WorkOrder.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\wkIndex.h"&env$('cno')&",Shr",internal,outin,keyed
 01498     fnkey_change(h_workorder,'form pos 1,c 10',holdz$,z$)
@@ -193,11 +193,11 @@
 01990   goto BILLING_INFO ! /r
 02920   BUD2: ! r:
 02922     if bud1=0 then goto NAMESCREEN
-02930     let framelen=0
+02930     framelen=0
 02940     for j=1 to 10
-02950       if trim$(srvnam$(j))<>"" then let framelen=framelen+1
+02950       if trim$(srvnam$(j))<>"" then framelen=framelen+1
 02960     next j
-02970     let framelen=framelen+5
+02970     framelen=framelen+5
 02980     mat ba=(0)
 02990     mat badr=(0)
 03000     br1=0 ! NO BUDGET RECORD
@@ -211,10 +211,10 @@
 03070     fnlbl(3,1,"Date:",20,1,0,1)
 03080     fntxt(3,22,8,8,1,"1",0,"Date budget billing approved (mmddyy format)",1)
 03082     budgetinfo$(1)=str$(ba(1))
-03090     let x=1 : lyne =3
+03090     x=1 : lyne =3
 03100     for j=1 to 10
 03110       if trim$(srvnam$(j))<>"" then  ! have this service
-03120         let x+=1 : lyne+=1
+03120         x+=1 : lyne+=1
 03122         fnlbl(lyne,1,trim$(srvnam$(j))&":",20,1,0,1)
 03130         fntxt(lyne,22,10,0,1,"10",0,"Enter budget amounts where applicable.  All other services will be calculated as normal.",1)
 03132         budgetinfo$(x)=str$(ba(j+1))
@@ -230,13 +230,13 @@
 03180     fnacs(sn$,0,mat budgetinfo$,ckey) ! budget billing master record
 03190     if ckey=5 then goto NAMESCREEN
 03200     if ckey=8 then goto TRANS_ROUTINE
-03210     let x=1: ba(1)=val(budgetinfo$(1)) conv ignore
+03210     x=1: ba(1)=val(budgetinfo$(1)) conv ignore
 03220     for j=2 to 11
 03230       if trim$(srvnam$(j-1))<>"" then 
-03232         let x+=1: ba(j)=val(budgetinfo$(x))
+03232         x+=1: ba(j)=val(budgetinfo$(x))
 03234       end if 
 03240     next j
-03250     let x+=1: ba(12)=val(budgetinfo$(x))
+03250     x+=1: ba(12)=val(budgetinfo$(x))
 03260     if br1=1 and ckey=3 then goto DEL_BUDGET_HISTORY ! if they choose to delete exiting record
 03270     if br1=0 and ckey=3 then goto NAMESCREEN ! if press delete without writing a record
 03280     if br1=0 then goto L3330 ! create record if none exists
@@ -314,10 +314,10 @@
 14500       fncmdset(2)
 14510       fnacs(sn$,0,mat budgetinfo$,ckey) ! budget billing transactions
 14520       if ckey=5 then goto NAMESCREEN
-14530       let x=0
+14530       x=0
 14540       for j=1 to 14
 14550         if j<2 or j>11 or trim$(srvnam$(j-1))<>"" then 
-14560           let x=x+1
+14560           x=x+1
 14570           bt1(j,1)=val(budgetinfo$(x*2-1))
 14580           bt1(j,2)=val(budgetinfo$(x*2))
 14590         end if
@@ -374,7 +374,7 @@
 20160   return  ! /r
 25000   NAMESCREEN: ! r: the main customer screen
 25020     fntos(sn$="custinfo")
-25040     respc=0 : let frac=0
+25040     respc=0 : frac=0
 25060     mylen=25 : mylen+2
 25080     fnlbl(1,1,"Account:",15,1)
 25100     fntxt(1,17,10,10,1)
@@ -386,7 +386,7 @@
 25220     fntxt(1,58,7,7,1,"30")
 25240     custinfo$(respc+=1)=str$(extra(2))
 25260     fnfra(3,1,4,48,"Customer Information")
-25280     let fracustinfo=frac+=1
+25280     fracustinfo=frac+=1
 25300     fnlbl(1,1,"Name:",13,1,0,fracustinfo)
 25320     fntxt(1,15,25,30,0,"",0,"",fracustinfo)
 25340     custinfo$(respc+=1)=e$(2)
@@ -638,7 +638,7 @@
 32000   GET_CODES: ! fnget_codes(service_code,&ratecode,mat rates$ ) requires h_rate1 r: get applicable rate codes
 32020     ! search routine must be passed code for service (WA for water) in searchcode$
 32040     if ~gcode_setup then 
-32060       let gcode_setup=1
+32060       gcode_setup=1
 32080       open #h_rate1:=51: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Use,RecL=374,KPs=1,KLn=4,Shr",internal,outin,keyed 
 32082       open #h_rate2:=52: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx2.h"&env$('cno')&",Use,RecL=374,KPs=5,KLn=25,Shr",internal,outin,keyed 
 32100     end if 
@@ -647,18 +647,18 @@
 32160     mat rates$=("")
 32180     fncreg_read('default rate '&str$(service_code),tmp_rate$)
 32200     if tmp_rate$<>'' then 
-32240       let x=0
+32240       x=0
 32260       if ratecode=0 then 
 32280         ratecode=val(tmp_rate$(1:pos(tmp_rate$,'=')-1))
 32300       end if 
 32320     else 
-32340       let x=1
+32340       x=1
 32360       rates$(1)=" 0=Not applicable"
 32380     end if 
 32400     do 
 32420       read #h_rate1,using "Form POS 1,C 54",release: rt$ eof GCODE_FINIS
 32440       if trim$(rt$(1:2))=searchcode$ then 
-32460         let x=x+1
+32460         x=x+1
 32480         rates$(x)=rt$(3:4)&"="&rt$(5:25)
 32500         if ratecode=val(rt$(3:4)) then rateinfo$(3)=rt$(3:4)&"="&rt$(5:25)
 32520       end if 
@@ -712,18 +712,18 @@
 34840     fncmdset(2)
 34860     fnacs(sn$,0,mat bxnf$,ckey) ! billing information
 34880     if ckey=5 then goto NAMESCREEN
-34900     let f=val(bxnf$(3))
+34900     f=val(bxnf$(3))
 34920     bal=val(bxnf$(4))
 34940     if uprc$(escrow$)="Y" then extra(23)=val(bxnf$(5))
 34960     if uprc$(escrow$)="Y" then billinfo=5 else billinfo=4
 34980     for j=1 to 10
 35000       if rtrm$(srvnam$(j))<>"" then 
-35020         billinfo=billinfo+1 : let g(j)=val(bxnf$(billinfo))
-35040         billinfo=billinfo+1 : let gb(j)=val(bxnf$(billinfo))
+35020         billinfo=billinfo+1 : g(j)=val(bxnf$(billinfo))
+35040         billinfo=billinfo+1 : gb(j)=val(bxnf$(billinfo))
 35060       end if 
 35080     next j
-35100     billinfo=billinfo+1 : let g(11)=val(bxnf$(billinfo))
-35120     billinfo=billinfo+1 : let g(12)=val(bxnf$(billinfo))
+35100     billinfo=billinfo+1 : g(11)=val(bxnf$(billinfo))
+35120     billinfo=billinfo+1 : g(12)=val(bxnf$(billinfo))
 35140   goto NAMESCREEN ! /r
 36000   BANK_DRAFT: ! r:
 36020     sn$="bank_draft"
@@ -834,7 +834,7 @@
 44120     fncmdset(11)
 44140     fnacs(sn$,0,mat resp$,ckey)
 44160     if ckey=5 then goto ASKACCT
-44180     let x$=lpad$(trim$(resp$(1)),10)
+44180     x$=lpad$(trim$(resp$(1)),10)
 44200     if trim$(x$)="" then goto ADD_RECORD
 44220     read #h_customer_1,using F_CUSTOMER_1,key=x$: z$ nokey ADD_CONTINUE
 44240     mat ml$(2)
@@ -848,14 +848,14 @@
 44400   goto ADD_RECORD
 44420   ! /r
 44440   ADD_CONTINUE: ! r:
-44460     let z$=x$ : mat e$=("") : e$(4)=newe4$
+44460     z$=x$ : mat e$=("") : e$(4)=newe4$
 44480     mat f$=("") : mat a=(0) : mat b=(0) : mat c=(0) : mat d=(0)
 44500     mat g=(0) : mat adr=(0) : mat gb=(0) : bal=f=0
 44520     alp$="" : df$=dr$=dc$=da$="" : mat extra=(0) : mat extra$=("")
 44540     ad1=1 : holdz$=z$
 44550     fn_apply_default_rates(mat extra, mat a)
 44960     write #h_customer_1,using F_CUSTOMER_1: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$
-44962     let fixgrid=1
+44962     fixgrid=1
 44980     read #h_customer_1,using 'Form POS 1,C 10',key=z$: z$ ! this line should lock the record and set the SAME paramater for use in add_cancel
 45000   goto EDIT_LOADED_CUSTOMER ! /r
 45010   IGNORE: continue 
@@ -900,7 +900,7 @@
 48020   lyne=5
 48040   for j=1 to 10
 48060     if trim$(srv$(j))<>"" and trim$(srvnam$(j))<>"" then 
-48070       lyne+=1 : let funkeyval=j+20
+48070       lyne+=1 : funkeyval=j+20
 48086       fnbutton_or_disabled(trim$(srv$(j))<>searchcode$,lyne,45,srvnam$(j),funkeyval,"Allows you to assign "&lwrc$(trim$(srvnam$(j)))&" codes for this customer (service "&str$(j)&')',20)
 48200     end if
 48220   next j
@@ -973,9 +973,9 @@
 51530   fncmdset(2)
 51540   fnacs(sn$,0,mat rateinfo$,ckey) ! rate screen 1
 51550   if ckey=5 then goto NAMESCREEN
-51560   let x=pos(rateinfo$(3),"=",1)
+51560   x=pos(rateinfo$(3),"=",1)
 51570   if x=3 then a(1)=val(rateinfo$(3)(1:2)) else a(1)=val(rateinfo$(3)(1:1))
-51580   let f$(1)=rateinfo$(4)(1:12)
+51580   f$(1)=rateinfo$(4)(1:12)
 51590   extra$(3)=rateinfo$(5)(1:12)
 51600   b(8)=val(rateinfo$(6))
 51610   c(1)=val(rateinfo$(7))
@@ -1027,7 +1027,7 @@
 52700   fncmdset(2)
 52720   fnacs(sn$,0,mat rateinfo$,ckey) ! rate screen 2
 52740   if ckey=5 then goto NAMESCREEN
-52760   let x=pos(rateinfo$(3),"=",1)
+52760   x=pos(rateinfo$(3),"=",1)
 52780   if x=3 then 
 52800     a(2)=val(rateinfo$(3)(1:2))
 52820   else 
@@ -1116,13 +1116,13 @@
 55440   fncmdset(2)
 55460   fnacs(sn$,0,mat rateinfo$,ckey) ! .   ! ELECTRIC RATE SCREEN
 55480   if ckey=5 then goto NAMESCREEN
-55500   let x=pos(rateinfo$(3),"=",1)
+55500   x=pos(rateinfo$(3),"=",1)
 55520   if x=3 then 
 55540     a(3)=val(rateinfo$(3)(1:2))
 55560   else 
 55580     a(3)=val(rateinfo$(3)(1:1))
 55600   end if 
-55620   let f$(2)=rateinfo$(4)(1:12)
+55620   f$(2)=rateinfo$(4)(1:12)
 55640   extra$(4)=rateinfo$(5)(1:12)
 55660   b(10)=val(rateinfo$(6))
 55680   c(3)=val(rateinfo$(7))
@@ -1195,9 +1195,9 @@
 57020   fncmdset(2)
 57030   fnacs(sn$,0,mat rateinfo$,ckey) ! gas rate screen
 57040   if ckey=5 then goto NAMESCREEN
-57060   let x=pos(rateinfo$(3),"=",1)
+57060   x=pos(rateinfo$(3),"=",1)
 57080   if x=3 then a(4)=val(rateinfo$(3)(1:2)) else a(4)=val(rateinfo$(3)(1:1))
-57100   let f$(3)=rateinfo$(4)(1:12)
+57100   f$(3)=rateinfo$(4)(1:12)
 57120   extra$(5)=rateinfo$(5)(1:12)
 57140   b(11)=val(rateinfo$(6))
 57160   c(4)=val(rateinfo$(7))
@@ -1234,7 +1234,7 @@
 58400   fncmdset(2)
 58410   fnacs(sn$,0,mat rateinfo$,ckey) ! .   ! rate screen 5
 58420   if ckey=5 then goto NAMESCREEN
-58440   let x=pos(rateinfo$(3),"=",1)
+58440   x=pos(rateinfo$(3),"=",1)
 58460   if x=3 then a(5)=val(rateinfo$(3)(1:2)) else a(5)=val(rateinfo$(3)(1:1))
 58480   b(5)=val(rateinfo$(4))
 58500   goto SERVICE_SCREEN ! /r
@@ -1262,7 +1262,7 @@
 60400   fncmdset(2)
 60410   fnacs(sn$,0,mat rateinfo$,ckey) ! .   ! rate screen 6
 60420   if ckey=5 then goto NAMESCREEN
-60440   let x=pos(rateinfo$(3),"=",1)
+60440   x=pos(rateinfo$(3),"=",1)
 60460   if x=3 then extra(11)=val(rateinfo$(3)(1:2)) else extra(11)=val(rateinfo$(3)(1:1))
 60480   b(6)=val(rateinfo$(4))
 60500   goto SERVICE_SCREEN ! /r
@@ -1290,7 +1290,7 @@
 62400   fncmdset(2)
 62410   fnacs(sn$,0,mat rateinfo$,ckey) ! rate screen 7
 62420   if ckey=5 then goto NAMESCREEN
-62440   let x=pos(rateinfo$(3),"=",1)
+62440   x=pos(rateinfo$(3),"=",1)
 62460   if x=3 then extra(12)=val(rateinfo$(3)(1:2)) else extra(12)=val(rateinfo$(3)(1:1))
 62480 ! b(7)=VAL(RATEINFO$(4))
 62500   goto SERVICE_SCREEN ! /r
@@ -1317,7 +1317,7 @@
 64380   fncmdset(2)
 64400   fnacs(sn$,0,mat rateinfo$,ckey) ! rate screen 8
 64420   if ckey=5 then goto NAMESCREEN
-64440   let x=pos(rateinfo$(3),"=",1)
+64440   x=pos(rateinfo$(3),"=",1)
 64460   if x=3 then extra(13)=val(rateinfo$(3)(1:2)) else extra(13)=val(rateinfo$(3)(1:1))
 64480   b(7)=val(rateinfo$(4))
 64500   goto SERVICE_SCREEN ! /r
@@ -1341,7 +1341,7 @@
 66320   fncmdset(2)
 66340   fnacs(sn$,0,mat rateinfo$,ckey) ! rate screen 9
 66360   if ckey=5 then goto NAMESCREEN
-66380   let x=pos(rateinfo$(3),"=",1)
+66380   x=pos(rateinfo$(3),"=",1)
 66400   if x=3 then a(6)=val(rateinfo$(3)(1:2)) else a(6)=val(rateinfo$(3)(1:1))
 66420   goto SERVICE_SCREEN ! /r
 68000 SERVICE10: ! r:  10th SERVICE   (penalty)
@@ -1364,7 +1364,7 @@
 68320   fncmdset(2)
 68330   fnacs(sn$,0,mat rateinfo$,ckey) ! rate screen 5
 68340   if ckey=5 then goto NAMESCREEN
-68360   let x=pos(rateinfo$(3),"=",1)
+68360   x=pos(rateinfo$(3),"=",1)
 68380   if x=3 then a(7)=val(rateinfo$(3)(1:2)) else a(7)=val(rateinfo$(3)(1:1))
 68400 goto SERVICE_SCREEN ! /r
 73000 ERTN: ! r:
@@ -1386,8 +1386,8 @@
 75200       ml$(1)="A lost allocation of "&str$(gb(j))&" was found!"
 75220       ml$(2)="This amount has been moved into "&srvnam$(first_service)
 75240       fnmsgbox(mat ml$,resp$,cap$,48)
-75260       let gb(first_service)+=gb(j)
-75280       let gb(j)=0
+75260       gb(first_service)+=gb(j)
+75280       gb(j)=0
 75300     end if  ! trim$(srvnam$(j))='' and gb(j)<>0
 75320   next j
 75340 return  ! /r
@@ -1620,7 +1620,7 @@
 84690     fncmdkey("Search",6,0,0,"Search for customer record")
 84700     fncmdkey('Back',5,0,1,"Returns to previous screen")
 84710     fnacs(sn$,0,mat resp$,ckey)
-84720     let x$=trim$(resp$(1)(1:10))
+84720     x$=trim$(resp$(1)(1:10))
 84730     if account_selection_method=asm_text and ckey=1 then 
 84740       if ~fn_key_tweak(x$,h_customer_1) then 
 84750         mat ml$(2)
@@ -1630,7 +1630,7 @@
 84790         goto AAS_TOP
 84800       end if 
 84810     else 
-84820       let x$=lpad$(x$,10)
+84820       x$=lpad$(x$,10)
 84830     end if 
 84840     if ckey=1 then 
 84850       fn_record_previous_update(x$)
@@ -1650,7 +1650,7 @@
 84990     else if ckey=1000 then 
 85000       fn_record_previous_clear
 85010     else if ckey>1000 and ckey<=1000+udim(mat rp_prev$) then 
-85020       let x$=lpad$(trim$(rp_prev$(ckey-1000)(1:10)),10)
+85020       x$=lpad$(trim$(rp_prev$(ckey-1000)(1:10)),10)
 85030       fn_record_previous_update(rp_prev$(ckey-1000)(1:10))
 85040       ckey=1
 85050       goto AA_FINIS
@@ -1709,7 +1709,7 @@
 88160     if lwrc$(wtLine$(1:5))='warn:' then
 88180       wtLine$(1:5)=''
 88200       wtLine$=trim$(wtLine$)
-88220       if len(wtLine$)>(wtMaxLen) then let wtLine$(wtMaxLen-2:wtMaxLen)='...' 
+88220       if len(wtLine$)>(wtMaxLen) then wtLine$(wtMaxLen-2:wtMaxLen)='...' 
 88240       wtReturn$=wtLine$(1:wtMaxLen)
 88260     end if
 88280   loop
@@ -1789,7 +1789,7 @@
 90730   close #20: 
 90740   j=first_service=0
 90750   do until first_service<>0
-90770     if trim$(srvnam$(j+=1))<>'' then let first_service=j
+90770     if trim$(srvnam$(j+=1))<>'' then first_service=j
 90780   loop
 90782 !
 90784 fnreg_read('Meter Address Enable',u4_meterAddress$,'False')

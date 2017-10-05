@@ -14,14 +14,14 @@
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
 00130   at$(1)=cnam$ !:
-        let z=21 !:
+        z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
-        let x=len(at$(1)) : let y=z-x !:
+        x=len(at$(1)) : y=z-x !:
         at$(1)=rpt$(" ",int(y/2))&at$(1)
-00140   let z=26 !:
+00140   z=26 !:
         for j=2 to udim(at$) !:
           at$(j)=trim$(at$(j))(1:z) !:
-          let x=len(at$(j)) : let y=z-x !:
+          x=len(at$(j)) : y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00150   linelength=62
@@ -52,7 +52,7 @@
 00340   fntxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00350   fnlbl(8,1,"Starting Account:",ll,1)
-00360   let fe$="ubm-act-nam" !:
+00360   fe$="ubm-act-nam" !:
         datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
         indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
@@ -77,7 +77,7 @@
 00440   if resp$(7)="[All]" then !:
           prtbkno=0 else !:
           prtbkno = val(resp$(7))
-00450   if resp$(8)="True" then sl1=1: let z$="" else sl1=0
+00450   if resp$(8)="True" then sl1=1: z$="" else sl1=0
 00460   if trim$(a$)<>"" then read #2,using L470,key=a$: z$,route,sequence nokey SCREEN1 !:
           holdz$=z$: begin=1 !:
           st1=1
@@ -131,7 +131,7 @@
 00920 ! ______________________________________________________________________
 00930 L930: ! 
 00940   pb=bal-g(11)
-00950 ! If BAL<=0 Then Let G(10)=0 ! don't show penalty if balance 0 or less
+00950 ! If BAL<=0 Then g(10)=0 ! don't show penalty if balance 0 or less
 00960 ! ______________print bill routine______________________________________
 00970   gosub VBPRINT
 00980 ! _____________end of pr routine______________________________________
@@ -175,7 +175,7 @@
 01240   if prtbkno><route then goto END5
 01250 L1250: if bal<>0 then goto L1260
 01251   if f><d1 then goto L1210
-01260 L1260: let zip5$=cr$=""
+01260 L1260: zip5$=cr$=""
 01270   read #5,using "Form POS 96,C 12,C 4",key=z$: bc$,cr$ nokey L1280
 01280 L1280: write #6,using "Form POS 1,C 12,C 4,x 5,C 10": bc$,cr$,z$
 01290   goto L1210
@@ -229,10 +229,10 @@
 01720 VBPRINT: ! 
 01730 ! -- Standard 4 Per Page Even Perferated Card Stock Bills
 01740   checkcounter+=1
-01750   if checkcounter=1 then let xmargin=17 : let ymargin=0
-01760   if checkcounter=2 then let xmargin=169 : let ymargin=0
-01770   if checkcounter=3 then let xmargin=17 : let ymargin=108
-01780   if checkcounter=4 then let xmargin=169 : let ymargin=108 !:
+01750   if checkcounter=1 then xmargin=17 : ymargin=0
+01760   if checkcounter=2 then xmargin=169 : ymargin=0
+01770   if checkcounter=3 then xmargin=17 : ymargin=108
+01780   if checkcounter=4 then xmargin=169 : ymargin=108 !:
           checkcounter=0
 01790   adder=0
 01800 ! ______________________________________________________________________

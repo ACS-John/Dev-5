@@ -10,17 +10,17 @@
 00100   fntop(program$,cap$='Financial Statement Design')
 00110   fncno(cno)
 00120   id$(1)=" 1. Balance Sheet File" !:
-        let fil$(1)="ACGLFNSB.H"&str$(cno): idx$(1)="FNSBINDX.H"&str$(cno)
+        fil$(1)="ACGLFNSB.H"&str$(cno): idx$(1)="FNSBINDX.H"&str$(cno)
 00130   id$(2)=" 2. Income Statement File" !:
-        let fil$(2)="ACGLFNSI.H"&str$(cno): idx$(2)="FNSIINDX.H"&str$(cno)
+        fil$(2)="ACGLFNSI.H"&str$(cno): idx$(2)="FNSIINDX.H"&str$(cno)
 00140   id$(3)=" 3. Fund Statement / Cash Flow File" !:
-        let fil$(3)="ACGLFNSF.H"&str$(cno): idx$(3)="FNSFINDX.H"&str$(cno)
+        fil$(3)="ACGLFNSF.H"&str$(cno): idx$(3)="FNSFINDX.H"&str$(cno)
 00150   id$(4)=" 4. Secondary Balance Sheet File" !:
-        let fil$(4)="ACGLFNSC.H"&str$(cno): idx$(4)="FNSCINDX.H"&str$(cno)
+        fil$(4)="ACGLFNSC.H"&str$(cno): idx$(4)="FNSCINDX.H"&str$(cno)
 00160   id$(5)=" 5. Secondary Income Statement File" !:
-        let fil$(5)="ACGLFNSJ.H"&str$(cno): idx$(5)="FNSJINDX.H"&str$(cno)
+        fil$(5)="ACGLFNSJ.H"&str$(cno): idx$(5)="FNSJINDX.H"&str$(cno)
 00170   id$(6)=" 6. Secondary Fund / Cash Flow File" !:
-        let fil$(6)="ACGLFNSG.H"&str$(cno): idx$(6)="FNSGINDX.H"&str$(cno)
+        fil$(6)="ACGLFNSG.H"&str$(cno): idx$(6)="FNSGINDX.H"&str$(cno)
 00180   gosub BUILD_LAYOUT
 00190 MAIN: ! 
 00200   fntos(sn$="FsDesign") !:
@@ -165,7 +165,7 @@
 00810 ! ** Field Masks ** !:
         ic=0 !:
         pointtwo=32 : number=30 !:
-        ccyymmdd=3 : mmddyy=1 : let glnumber=53
+        ccyymmdd=3 : mmddyy=1 : glnumber=53
 00820   mask(ic+=1)=0 !:
         mask(ic+=1)=0 !:
         mask(ic+=1)=0 !:

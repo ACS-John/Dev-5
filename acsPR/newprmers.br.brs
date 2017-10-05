@@ -78,19 +78,19 @@
 60010   fntos(sn$="Pension-1")
 60020   rc=cf=0
 60040   fnfra(1,1,21,23,"Deductions Effecting Pension Wage","Mark any deduction that either needs to be added to gross wages or deducted from gross wages before calculating the Pension Wage",0)
-60060   cf+=1 : let fratype=cf
+60060   cf+=1 : fratype=cf
 60080   for j=1 to 20
 60100     fnchk(j,3,fullname$(j),0,fratype)
 60120     resp$(rc+=1)="False"
 60140   next j
 60160   fnfra(1,30,20,23,"Pension Deduction","Mark the pension deduction that you want printed on the report",0)
-60180   cf+=1 : let fratype=cf
+60180   cf+=1 : fratype=cf
 60200   for j=1 to 20
 60220     fnopt(j,3,fullname$(j),0,fratype)
 60240     resp$(rc+=1)="False"
 60260   next j
 60280   fnfra(1,60,3,42,"Date Range","Enter the beginning and ending date range covered by this report.")
-60300   cf+=1 : let fradate=cf : mylen=26 : mypos=mylen+2
+60300   cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
 60320   fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
 60340   fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
 60360   resp$(rc+=1)=str$(beg_date)

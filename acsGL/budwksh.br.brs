@@ -46,15 +46,15 @@
 00370   fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto XIT
 00390   name$=resp$(1) !:
-        let gln1$=fnagl$(resp$(2)) !:
-        let gln2$=fnagl$(resp$(3)) !:
+        gln1$=fnagl$(resp$(2)) !:
+        gln2$=fnagl$(resp$(3)) !:
         pba$=resp$(4) !:
         bud$=resp$(5)
 00400   priordate=val(resp$(6)) !:
         priorpriordate=val(resp$(7))
-00410   if resp$(8)="True" then let yearclosed=1
-00420   let yr1$=resp$(6)(5:6) !:
-        let yr2$=resp$(7)(5:6)
+00410   if resp$(8)="True" then yearclosed=1
+00420   yr1$=resp$(6)(5:6) !:
+        yr2$=resp$(7)(5:6)
 00430   read #1,using L530,key>=gln1$: n$,d$,cb,mat bp,mat bm,mat revb nokey L440
 00440 L440: namtab=66-int(len(rtrm$(name$))/2)
 00450   fnopenprn
@@ -81,7 +81,7 @@
 00660   tcyb=tcyb+cyb
 00670   if yr1$="" then goto L710
 00680   budkey$=n$&yr1$ ! gl number plus year for last year
-00690   budacno$="": let yr$="": oldcb=oldbud=0
+00690   budacno$="": yr$="": oldcb=oldbud=0
 00700   read #12,using "form pos 1,c 12,c 2,2*pd 6.2",key=budkey$: budacno$,yr$,oldcb,oldbud nokey L720 ! read old budget history record
 00710 L710: if yr2$="" then goto L740
 00720 L720: priorbudkey$=n$&yr2$ ! get two years ago
@@ -191,10 +191,10 @@
 01740 ! ______________________________________________________________________
 01750 DETERMINE_DATE: ! 
 01760   endingdate$=rtrm$(fnpedat$)
-01770   let x=pos(endingdate$," ",1)
+01770   x=pos(endingdate$," ",1)
 01780   month$=endingdate$(1:x-1)
 01790   day=val(endingdate$(x+1:x+2)) conv L1800
-01800 L1800: let year=val(endingdate$(len(endingdate$)-1:len(endingdate$))) : prioryear=year-1
+01800 L1800: year=val(endingdate$(len(endingdate$)-1:len(endingdate$))) : prioryear=year-1
 01810   dim month$(12),payrolldate$*20
 01820   month$(1)="January": month$(2)="February" !:
         month$(3)="March": month$(4)="April": month$(5)="May" !:

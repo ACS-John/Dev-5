@@ -142,7 +142,7 @@
 38660     pr #255,using 'form pos 67,c 14': "______________"
 38680   end if
 38700   cmtot=0
-38720   let ytdtot=0
+38720   ytdtot=0
 38740   mat byt=(0)
 38760 return ! /r
 42000 PrintPageFooter: ! r:
@@ -181,7 +181,7 @@
 48060   fncloseprn
 48080 goto XIT ! /r
 52000 AccumulateTotals: ! r:
-52020   let ytdtot=ytdtot+cb
+52020   ytdtot=ytdtot+cb
 52040   if cm=1 then 
 52060     cmtot+=curmo
 52080   end if

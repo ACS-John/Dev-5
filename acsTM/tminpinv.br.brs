@@ -11,13 +11,13 @@
 00130   read #1,using L140: dept,subac ioerr L1770
 00140 L140: form pos 162,2*n 1
 00150   close #1: 
-00160   let x8=8+subac+dept
+00160   x8=8+subac+dept
 00170   if subac=0 and dept=0 then m$="x 3,n 6,x 3"
 00180   if subac=1 and dept=0 then m$="x 3,n 6,n 3"
 00190   if subac=1 and dept=1 then m$="n 3,n 6,n 3"
 00200   if subac=0 and dept=1 then m$="n 3,n 6,x 3"
-00210   let fm$="FORM POS 1,n 5,n 1,pd 4.2,n 6,n 2,"&m$&",n 2,c 12"
-00220   let fp$="form pos 1,n 5,n 10,n 10,n 15.2,n 8,n 8,x 7,"&m$&",n 10,x 7,c 12,skip 1"
+00210   fm$="FORM POS 1,n 5,n 1,pd 4.2,n 6,n 2,"&m$&",n 2,c 12"
+00220   fp$="form pos 1,n 5,n 10,n 10,n 15.2,n 8,n 8,x 7,"&m$&",n 10,x 7,c 12,skip 1"
 00230   fl1$(9)="2,10,c 60,h,n"
 00240   fl1$(10)="3,10,c 60,h,n"
 00250   fl1$(11)="15,10,c 70,h,n"
@@ -192,8 +192,8 @@
 01890 L1890: goto XIT
 04800 TMSRCH: ! search for customer #
 04810   dim heading$*70,form$*80,numeric_format$*20,selection$*70
-04820   let file_num=11 ! alpha index on clients
-04830   let form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
+04820   file_num=11 ! alpha index on clients
+04830   form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
 04840   numeric_format$='pic($$$,$$$.##)'
 04850   key_length=5
 04860   heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"

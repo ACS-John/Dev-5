@@ -12,8 +12,8 @@
 00120   fntop(program$,cap$="Income Statement with Year Comparison")
 00130   on fkey 5 goto L2590
 00140   fncno(cno,cnam$)
-00150   let udf$=env$('temp')&'\'
-00155   let fscode=fnfscode
+00150   udf$=env$('temp')&'\'
+00155   fscode=fnfscode
 00156   priorcd=fnpriorcd
 00160   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
@@ -21,7 +21,7 @@
 00180   pedat$=fnpedat$
 00190   actpd=fnactpd
 00200   actpd$=fnactpd$
-00210   let fscode=fnfscode
+00210   fscode=fnfscode
 00220   priorcd=fnpriorcd
 00230 ! ______________________________________________________________________
 00250   pors=1
@@ -95,7 +95,7 @@
 00920 L920: read #3,using L330: ir,bb,cb,mat by,mat bp eof L1110
 00930   if ir=0 then goto L920
 00940   if fscode=0 or (fscode=actpd and priorcd=1) then goto L1010
-00950   if fscode<1 or fscode>13 then let fscode=1 ! 6/8/88
+00950   if fscode<1 or fscode>13 then fscode=1 ! 6/8/88
 00960   if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00970   if priorcd=2 then goto L1000
 00980   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -132,13 +132,13 @@
 01290   sp2=31-sp-1
 01300   if pas=2 then gosub PAS2
 01310   if percent1=0 then pdpct=0 else pdpct=total/percent1*100
-01320   if percent2=0 then let ytdpct=0 else let ytdpct=total2/percent2*100
+01320   if percent2=0 then ytdpct=0 else ytdpct=total2/percent2*100
 01330   if percent3=0 then pppd=0 else pppd=total3/percent3*100
 01340   if percent4=0 then ppyear=0 else ppyear=total4/percent4*100
 01350   if pdpct<-999.99 then pdpct=-999.99
 01360   if pdpct>999.99 then pdpct=999.99
-01370   if ytdpct<-999.99 then let ytdpct=-999.99
-01380   if ytdpct>999.99 then let ytdpct=999.99
+01370   if ytdpct<-999.99 then ytdpct=-999.99
+01380   if ytdpct>999.99 then ytdpct=999.99
 01390   if ppyear<-999.99 then ppyear=-999.99
 01400   if ppyear>999.99 then ppyear=999.99
 01410   if pppd<-999.99 then pppd=-999.99
@@ -167,13 +167,13 @@
 01610   if pas=2 then gosub PAS2
 01620   if percent=0 then goto L1770
 01630   if percent1=0 then pdpct=0 else pdpct=accum1/percent1*100
-01640   if percent2=0 then let ytdpct=0 else let ytdpct=accum2/percent2*100
+01640   if percent2=0 then ytdpct=0 else ytdpct=accum2/percent2*100
 01650   if percent3=0 then pppd=0 else pppd=accum3/percent3*100
 01660   if percent4=0 then ppyear=0 else ppyear=accum4/percent4*100
 01670   if pdpct<-999.99 then pdpct=-999.99
 01680   if pdpct>999.99 then pdpct=999.99
-01690   if ytdpct<-999.99 then let ytdpct=-999.99
-01700   if ytdpct>999.99 then let ytdpct=999.99
+01690   if ytdpct<-999.99 then ytdpct=-999.99
+01700   if ytdpct>999.99 then ytdpct=999.99
 01710   if pppd<-999.99 then pppd=-999.99
 01720   if pppd>999.99 then pppd=999.99
 01730   if ppyear<-999.99 then ppyear=-999.99
@@ -193,10 +193,10 @@
 01850   goto L720
 01860 L1860: if foot1=1 then goto L1910
 01870   tabnote=sp
-01880   let foot1=1
-01890   let foot$=d$
+01880   foot1=1
+01890   foot$=d$
 01900   goto L720
-01910 L1910: let foot$=rtrm$(foot$)&d$
+01910 L1910: foot$=rtrm$(foot$)&d$
 01920   goto L720
 01930 L1930: for j=1 to 9
 01940     if ac(j)=0 or ac(j)=9 then goto L1990 ! 10/14/87
@@ -226,11 +226,11 @@
 02180 L2180: if percent=0 then goto L2300
 02190   if ul=0 then goto L2280
 02200   if ul=1 then goto L2250
-02210   let underlin$="=============== ======"
+02210   underlin$="=============== ======"
 02220   pr #255,using L2230: underlin$,underlin$
 02230 L2230: form pos 31,c 22,pos 55,c 22,skip redir
 02240   goto L2280
-02250 L2250: let underlin$="_______________ ______"
+02250 L2250: underlin$="_______________ ______"
 02260   pr #255,using L2270: underlin$,underlin$
 02270 L2270: form skip redir,pos 31,c 22,pos 55,c 22,pos 79,c 22,pos 103,c 22,skip redir
 02280 L2280: if redir=0 then pr #255,using L2290: " "
@@ -277,8 +277,8 @@
 02710   total3=0
 02720   total4=0
 02730   mat accum=(0)
-02740   let foot1=0
-02750   let foot$=" "
+02740   foot1=0
+02750   foot$=" "
 02760   notrans=ir=0
 02770   goto L430
 02780 PAS1: if rnp=0 then goto L2890

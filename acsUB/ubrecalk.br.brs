@@ -47,7 +47,7 @@
 00176   dim extra(23)
 00200 ! /r
 00250   fnd1(d1)
-00260   let work$=env$('Q')&"\UBmstr\Reads_and_Chgs.h"&env$('cno')
+00260   work$=env$('Q')&"\UBmstr\Reads_and_Chgs.h"&env$('cno')
 00264   work_addr$=env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h"&env$('cno')
 00265   if env$('client')="Edinburg" or env$('client')="French Settlement" then btu_factor_enabled=1 else btu_factor_enabled=btu=0
 00270 ! synchronize this setting with S:\Utility Billing\Enter Readings and Charges (Enter Readings and Charges)
@@ -83,12 +83,12 @@
 00690   read #h_customer,using F_CUSTOMER_W_ACCT,rec=r3+=1: x$,meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra norec TOP eof FINIS
 00700   if f<>d1 then goto TOP
 00710   mat x=(0)
-00720   let x(1)=d(1) ! current water reading
-00730   let x(2)=d(9) ! current gas reading
-00740   let x(3)=d(5) !  current electric reading
-00750   if d(3)>0 and d(1)-d(2)<> d(3) then let x(12)=d(3) ! if usage was override then use
-00760   if d(7)>0 and d(5)-d(6)<> d(7) then let x(13)=d(7) ! if usage was override then use
-00770   if d(11)>0 and d(9)-d(10)<> d(11) then let x(14)=d(11) ! if usage was override then use for gas
+00720   x(1)=d(1) ! current water reading
+00730   x(2)=d(9) ! current gas reading
+00740   x(3)=d(5) !  current electric reading
+00750   if d(3)>0 and d(1)-d(2)<> d(3) then x(12)=d(3) ! if usage was override then use
+00760   if d(7)>0 and d(5)-d(6)<> d(7) then x(13)=d(7) ! if usage was override then use
+00770   if d(11)>0 and d(9)-d(10)<> d(11) then x(14)=d(11) ! if usage was override then use for gas
 00780 ! if x$(1:2)="00" or uprc$(x$)=uprc$("   DELETED") then goto TOP
 00790 ! read #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra nokey NKT9
 00792 ! r: set default rate codes
@@ -104,15 +104,15 @@
 00850       if uprc$(penalty$(j))="Y" then goto LX770 ! don't subtract penalties out on recalculation
 00860 LX760: ! 
 00870       if env$('client')="White Hall" and (j=6 or j=7 or j=10) then goto LX770
-00880       let gb(j)=gb(j)-g(j) !  if j><6 then let gb(j)=gb(j)-g(j)
+00880       gb(j)=gb(j)-g(j) !  if j><6 then gb(j)=gb(j)-g(j)
 00890 LX770: ! 
 00900     next j
 00910   end if  ! f=d1
-00920   let w7=g(11)
+00920   w7=g(11)
 00930   mat g=(0)
-00940   let usage_srv1=0 ! WATER USAGE
-00950   let usage_srv3=0 ! ELECTRIC USAGE / lawn meter usage
-00960   let usage_srv4=0 ! GAS USAGE
+00940   usage_srv1=0 ! WATER USAGE
+00950   usage_srv3=0 ! ELECTRIC USAGE / lawn meter usage
+00960   usage_srv4=0 ! GAS USAGE
 00980   r9_usage_is_zero=0
 00990   mat w=(0) ! mat w appears to never be set - never be used, but is passed to fncalk
 01000   gosub CHECK_UNUSUAL_USAGE
@@ -135,7 +135,7 @@
 01150   fn_updtbal
 01160   for j=1 to 10
 01170     if uprc$(penalty$(j))<>"Y" then  ! don't add penalties into mat gb
-01180       let gb(j)=gb(j)+g(j)
+01180       gb(j)=gb(j)+g(j)
 01190     end if
 01200   next j
 01210   rewrite #h_customer,using F_CUSTOMER,key=x$: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra conv CONV_CUSTOMER_REWRITE
@@ -161,8 +161,8 @@
 32060   tdate=d1
 32080   tdate=fndate_mmddyy_to_ccyymmdd(tdate)
 32100   tcode=1
-32120   let wr=d(1): let wu=d(3): er=d(5): eu=d(7): let gr=d(9)
-32140   let gu=d(11)
+32120   wr=d(1): wu=d(3): er=d(5): eu=d(7): gr=d(9)
+32140   gu=d(11)
 32160   for j=1 to 11 : tg(j)=g(j) : next j
 32180   transkey$=x$&cnvrt$("pic(########)",tdate)&cnvrt$("pic(#)",tcode)
 32200   read #h_ubtrans,using FORM_UBTRANS,key=transkey$: y$ nokey UBTRANS_NOKEY ! check for recalk
@@ -210,11 +210,11 @@
 44100   print_count_skip+=1
 44120   goto TOP ! /r
 58000 CHECK_UNUSUAL_USAGE: ! r:
-58020   let unusual_service$=''
+58020   unusual_service$=''
 58040   if fn_cuu_water then let fn_cuu_report_main(unusual_service$&'/'&servicename$(1))
 58060   if fn_cuu_electric then let fn_cuu_report_main(unusual_service$&'/'&servicename$(3))
 58080   if fn_cuu_gas then let fn_cuu_report_main(unusual_service$&'/'&servicename$(4))
-58100   let unusual_service$=trim$(unusual_service$,'/')
+58100   unusual_service$=trim$(unusual_service$,'/')
 58120 ! 
 58140   if r9_usage_is_zero=1 then 
 58160     pr #255: ""
@@ -230,7 +230,7 @@
 58500   return  ! /r
 60000   def fn_cuu_report_usage
 60020 ! CUU_REPORT_USAGE_MAIN: !
-60040     let x=0
+60040     x=0
 60060     mat watuse=(0) : mat watdat=(0)
 60080     mat elecuse=(0) : mat elecdat=(0)
 60100     mat gasuse=(0) : mat gasdat=(0)
@@ -242,11 +242,11 @@
 60220     if tcode<>1 then goto CUU_UBTRANS_READ ! only charge transactions
 60240     billdate=d1
 60260     if tdate<fndate_mmddyy_to_ccyymmdd(billdate)-10000 then goto CUU_UBTRANS_READ ! only list last 12 months
-60280     let x=x+1
+60280     x=x+1
 60300     if x>12 then goto CUU_REPORT_USAGE_PRINT
-60320     let watuse(x)=wu : let watdat(x)=tdate
+60320     watuse(x)=wu : watdat(x)=tdate
 60340     elecuse(x)=eu : elecdat(x)=tdate
-60360     let gasuse(x)=gu : let gasdat(x)=tdate
+60360     gasuse(x)=gu : gasdat(x)=tdate
 60380     goto CUU_UBTRANS_READ
 60400 ! 
 60420 CUU_REPORT_USAGE_PRINT: ! 
@@ -283,7 +283,7 @@
 61260     end if  ! dateread<>0
 61280   fnend 
 62000   def fn_updtbal
-62020     d2=f : let f=d1
+62020     d2=f : f=d1
 62040     if d1=d2 then bal=bal+g(11)-w7 else bal=bal+g(11)
 62060   fnend 
 64000   def fn_demand
@@ -294,11 +294,11 @@
 64100 !  Read #h_ratemst,Using 540,Key="DM"&LPAD$(STR$(B(2)),2): MC1,MU1,MAT RT Nokey 6070  ! don't have a demand code any where in record.  wlll have to customize for each client  on Bethany we used service 6 to hold demand
 64120 L6360: ! 
 64140     if env$('client')="Bethany" then 
-64160       let g(6)=mc1
+64160       g(6)=mc1
 64180       goto DEMAND_FINIS
 64200     end if 
 64220     if env$('client')="Lovington" then goto DEMAND_FINIS
-64240     let g(6)=round(x(4)*d(14)*.001*rt(1,3),2)
+64240     g(6)=round(x(4)*d(14)*.001*rt(1,3),2)
 64260 DEMAND_FINIS: ! 
 64280     d(15)=x(4)
 64300 DEMAND_XIT: ! 
@@ -367,24 +367,24 @@
 74000 IGNORE: continue 
 74020   def fn_usage(usage_service_number)
 74040 ! requires local variables: d1, f, mat x, mat d
-74060     let usage_return=0
+74060     usage_return=0
 74080     if usage_service_number=1 then 
 74100       if x(1)=0 or d1=f then 
-74120         let usage_return=x(1)-d(2)
+74120         usage_return=x(1)-d(2)
 74140       else 
-74160         let usage_return=x(1)-d(1)
+74160         usage_return=x(1)-d(1)
 74180       end if 
 74200     else if usage_service_number=3 then 
 74220       if d1=f then 
-74240         let usage_return=x(3)-d(6)
+74240         usage_return=x(3)-d(6)
 74260       else 
-74280         let usage_return=x(3)-d(5)
+74280         usage_return=x(3)-d(5)
 74300       end if 
 74320     else if usage_service_number=4 then 
 74340       if d1=f then 
-74360         let usage_return=x(2)-d(10)
+74360         usage_return=x(2)-d(10)
 74380       else 
-74400         let usage_return=x(2)-d(9)
+74400         usage_return=x(2)-d(9)
 74420       end if 
 74440     else 
 74460       pr 'usage_service_number not recognized.' : pause 
@@ -396,7 +396,7 @@
 76040     if servicename$(1)="Water" then 
 76060       if a(1)=0 and a(2)=0 then goto CUU_WATER_XIT ! skip if no water code and no sewer code
 76080 ! 
-76100       let usage_srv1=fn_usage(1)
+76100       usage_srv1=fn_usage(1)
 76120 ! 
 76140       if usage_srv1>=0 then 
 76160         if d(3)=0 then goto CUU_WATER_XIT
@@ -418,7 +418,7 @@
 78040     if servicename$(3)="Electric" or servicename$(3)="Lawn Meter" or service$(3)="EL" then 
 78060       if x(3)=0 then goto CUU_ELEC_XIT
 78080 ! 
-78100       let usage_srv3=fn_usage(3)
+78100       usage_srv3=fn_usage(3)
 78120 ! 
 78140       if usage_srv3>=0 then 
 78160         if d(7)=0 then goto CUU_ELEC_XIT
@@ -440,7 +440,7 @@
 80040     if service$(4)="GA" or servicename$(4)="Gas" then 
 80060       if x(2)=0 then goto CUU_GAS_XIT
 80080 ! 
-80100       let usage_srv4=fn_usage(4)
+80100       usage_srv4=fn_usage(4)
 80120 ! 
 80140       if usage_srv4>=0 then 
 80160         if d(11)=0 then goto CUU_GAS_XIT
@@ -495,14 +495,14 @@
 82660     end if 
 83000 ! r: unusual usage report qusetion
 83020     dim unusual_usage_report_opt$(3)*52,unusual_usage_report$*52
-83040     let unusual_usage_report_opt$(1)="Unusual and Skipped (Classic)"
-83060     let unusual_usage_report_opt$(2)="Skipped Accounts Only"
-83080     let unusual_usage_report_opt$(3)="Unusual, Skipped and Show Calculations"
+83040     unusual_usage_report_opt$(1)="Unusual and Skipped (Classic)"
+83060     unusual_usage_report_opt$(2)="Skipped Accounts Only"
+83080     unusual_usage_report_opt$(3)="Unusual, Skipped and Show Calculations"
 83320     fnlbl(linec+=1,1,"Unusual Usage Report:",mylen,1)
 83340     fncomboa('ubcalk-unusal_usage_report',linec,mypos,mat unusual_usage_report_opt$, 'Select the unusual usage report style you prefer') ! ,width,contain,tabcon)
 83360     fncreg_read('ubcalk-unusal_usage_report',unusual_usage_report$,unusual_usage_report_opt$(2))
-83380     let unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
-83400     if unusual_usage_report=0 then let unusual_usage_report=1 : let unusual_usage_report$=unusual_usage_report_opt$(unusual_usage_report)
+83380     unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
+83400     if unusual_usage_report=0 then unusual_usage_report=1 : unusual_usage_report$=unusual_usage_report_opt$(unusual_usage_report)
 83420     resp$(resp_unusual_usage_report:=respc+=1)=unusual_usage_report$
 83440 ! /r
 83460     fncmdset(2)
@@ -513,8 +513,8 @@
 83560       if resp_calc_interest_on_deposit and resp$(resp_calc_interest_on_deposit)='True' then calc_interest_on_deposit=1 else calc_interest_on_deposit=0
 83580       if resp_charge_inspection_fee and resp$(resp_charge_inspection_fee)='True' then charge_inspection_fee=1 else charge_inspection_fee=0
 83600       if resp_interest_credit_rate then interest_credit_rate=val(resp$(resp_interest_credit_rate))
-83620       let unusual_usage_report$=resp$(resp_unusual_usage_report)
-83640       let unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
+83620       unusual_usage_report$=resp$(resp_unusual_usage_report)
+83640       unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
 83660       fncreg_write('ubcalk-unusal_usage_report',unusual_usage_report$)
 83680       if d1<10101 then pr bell; : goto ASK_BILLING_DATE
 83700       fnd1(d1,1)

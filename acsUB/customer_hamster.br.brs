@@ -71,7 +71,7 @@
 35600 ! /region
 35800 ! ______________________________________________________________________
 36000   def fn_add_rec(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
-36200     if field_type$='' then let field_type$='C'
+36200     if field_type$='' then field_type$='C'
 36400     if storage_length=0 then storage_length=textbox_len
 36600 ! storage_length_prior=storage_length
 36800     add_rec_item=udim(mat lbl$)+1

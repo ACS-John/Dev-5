@@ -14,14 +14,14 @@
 00130   double=.12
 00140   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00150   at$(1)=cnam$ !:
-        let z=21 !:
+        z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
-        let x=len(at$(1)) : let y=z-x !:
+        x=len(at$(1)) : y=z-x !:
         at$(1)=rpt$(" ",int(y/2))&at$(1)
-00160   let z=26 !:
+00160   z=26 !:
         for j=2 to udim(at$) !:
           at$(j)=trim$(at$(j))(1:z) !:
-          let x=len(at$(j)) : let y=z-x !:
+          x=len(at$(j)) : y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00170   linelength=62
@@ -59,7 +59,7 @@
 00410   fntxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00420   fnlbl(8,1,"Starting Account:",ll,1)
-00430   let fe$="ubm-act-nam" !:
+00430   fe$="ubm-act-nam" !:
         datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
         indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
@@ -86,7 +86,7 @@
 00510   if resp$(9)="[All]" then !:
           prtbkno=0 else !:
           prtbkno = val(resp$(9))
-00520   if resp$(10)="True" then sl1=1: let z$="" else sl1=0
+00520   if resp$(10)="True" then sl1=1: z$="" else sl1=0
 00530   if trim$(a$)<>"" then read #2,using L540,key=a$: z$,route,sequence nokey SCREEN1 !:
           holdz$=z$: begin=1 !:
           st1=1
@@ -142,11 +142,11 @@
 01020 ! ______________________________________________________________________
 01030 L1030: ! 
 01040   pb=bal-g(11)
-01050   if bal<=0 then let g(9)=g(10)=0 ! don't show penalty if balance 0 or less
-01060   let fb$(1)=mg$(1)
-01070   let fb$(2)=mg$(2)
-01080   let fb$(3)=mg$(3)
-01090   if c4>0 then let fb$(1)="          Final Bill" : let fb$(2)="": let fb$(3)=""
+01050   if bal<=0 then g(9)=g(10)=0 ! don't show penalty if balance 0 or less
+01060   fb$(1)=mg$(1)
+01070   fb$(2)=mg$(2)
+01080   fb$(3)=mg$(3)
+01090   if c4>0 then fb$(1)="          Final Bill" : fb$(2)="": fb$(3)=""
 01100 ! ______________print bill routine______________________________________
 01110   gosub VBPRINT
 01120 ! _____________end of pr routine______________________________________
@@ -187,7 +187,7 @@
 01360   if prtbkno=0 then goto L1380
 01370   if prtbkno><route then goto END5
 01380 L1380: if f><d1 then goto L1340
-01390   let zip5$=cr$=""
+01390   zip5$=cr$=""
 01400   read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1410
 01410 L1410: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 01420   goto L1340
@@ -298,8 +298,8 @@
 02310 L2310: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 02320   if p$<>z$ then goto L2380
 02330   if tcode<>1 then goto L2300 ! only charge transactions
-02340   let usage(3)=usage(2): billdate(3)=billdate(2)
-02350   let usage(2)=usage(1): billdate(2)=billdate(1)
-02360   let usage(1)=wu: billdate(1)=tdate
+02340   usage(3)=usage(2): billdate(3)=billdate(2)
+02350   usage(2)=usage(1): billdate(2)=billdate(1)
+02360   usage(1)=wu: billdate(1)=tdate
 02370   goto L2300
 02380 L2380: return 

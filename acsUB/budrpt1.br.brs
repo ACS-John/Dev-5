@@ -9,15 +9,15 @@
 00110 ! ______________________________________________________________________
 00120   fnget_services(mat servicename$,mat service$)
 00130   hdr$="{\ul  Date   }"
-00140   let underline$="          "
+00140   underline$="          "
 00150   for j=1 to 10
 00160     if trim$(servicename$(j))<>"" then !:
             hdr$=hdr$&"  {\ul "&lpad$(rtrm$(servicename$(j)(1:8)),8)&"}" !:
-            let underline$=underline$&"{\ul         }  " !:
+            underline$=underline$&"{\ul         }  " !:
             totserv=totserv+1
 00170   next j
 00180   hdr$=hdr$&"  {\ul Net Bill}" !:
-        let underline$=underline$&"{\ul         }  " !:
+        underline$=underline$&"{\ul         }  " !:
         totserv1=totserv+2 !:
         mat t1(totserv1) : mat t2(totserv1) : mat t3(totserv1)
 00190 ! ______________________________________________________________________
@@ -69,10 +69,10 @@
 00580   read #82,using L600,rec=ta1: x$,mat bt1,nba norec L810
 00590   if sum(bt1)=0 then goto L800 ! skip any blank records
 00600 L600: form pos 1,c 10,2*pd 4,24*pd 5.2,2*pd 4,pd 3
-00610   let y=bt1(1,2) : let y=fndate_mmddyy_to_ccyymmdd(y)
-00620   let x=0: if d1>0 then let x=d1 : let x=fndate_mmddyy_to_ccyymmdd(x)
+00610   y=bt1(1,2) : y=fndate_mmddyy_to_ccyymmdd(y)
+00620   x=0: if d1>0 then x=d1 : x=fndate_mmddyy_to_ccyymmdd(x)
 00630   if y<x then goto L800
-00640   let x=0: if d2>0 then let x=d2 : let x=fndate_mmddyy_to_ccyymmdd(x) else goto L660
+00640   x=0: if d2>0 then x=d2 : x=fndate_mmddyy_to_ccyymmdd(x) else goto L660
 00650   if y>x then goto L800
 00660 L660: service=1
 00670   t1(1)=bt1(1,1) ! date

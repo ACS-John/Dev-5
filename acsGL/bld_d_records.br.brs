@@ -13,12 +13,12 @@
 00125   fnconsole(on=1)
 00130   on fkey 5 goto XIT
 00140   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
-00150   let fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
-00160   let fil$(2)="ACGLFNSc" : idx$(2)="FNScINDX"
-00170   let fil$(3)="ACGLFNSi" : idx$(3)="FNSiINDX"
-00180   let fil$(4)="ACGLFNSj" : idx$(4)="FNSjINDX"
-00190   let fil$(5)="ACGLfNSf" : idx$(5)="FNSfINDX"
-00200   let fil$(6)="ACGLfNSg" : idx$(6)="FNSGINDX"
+00150   fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
+00160   fil$(2)="ACGLFNSc" : idx$(2)="FNScINDX"
+00170   fil$(3)="ACGLFNSi" : idx$(3)="FNSiINDX"
+00180   fil$(4)="ACGLFNSj" : idx$(4)="FNSjINDX"
+00190   fil$(5)="ACGLfNSf" : idx$(5)="FNSfINDX"
+00200   fil$(6)="ACGLfNSg" : idx$(6)="FNSGINDX"
 00210   io1$(1)="5,32,Nz 3,UT,N"
 00220   io1$(2)="5,36,Nz 6,UT,N"
 00230   io1$(3)="5,43,Nz 3,UT,N"
@@ -31,7 +31,7 @@
 00300 ! ______________________________________________________________________
 00310 L310: pr newpage
 00320   close #2: ioerr L330 ! close any reference file that is opened
-00330 L330: let win=101
+00330 L330: win=101
 00340   cap$='Create Type "D" Records' ! use correct name above for printing
 00350   fnwin3b(win,cap$,14,75,0,2,5,2)
 00360   pr #win: newpage
@@ -65,19 +65,19 @@
 00640 ! ______________________________________________________________________
 00650   if gln(1,2)=0 then ce=1: goto ERR1
 00660   if gln(2,2)=0 then ce=4: goto ERR1
-00670   let gl1=val(cnvrt$("PIC(###)",gln(1,1))&cnvrt$("PIC(######)",gln(1,2))&cnvrt$("PIC(###)",gln(1,3)))
-00680   let gl2=val(cnvrt$("PIC(###)",gln(2,1))&cnvrt$("PIC(######)",gln(2,2))&cnvrt$("PIC(###)",gln(2,3)))
+00670   gl1=val(cnvrt$("PIC(###)",gln(1,1))&cnvrt$("PIC(######)",gln(1,2))&cnvrt$("PIC(###)",gln(1,3)))
+00680   gl2=val(cnvrt$("PIC(###)",gln(2,1))&cnvrt$("PIC(######)",gln(2,2))&cnvrt$("PIC(###)",gln(2,3)))
 00690   if gl1=0 then ce=1: goto ERR1
 00700   if gl2=0 then ce=4: goto ERR1
-00710   let gf=gl3-gl1
-00720   let glk$=lpad$(str$(gln(1,1)),3)&lpad$(str$(gln(1,2)),6)&lpad$(str$(gln(1,3)),3)
+00710   gf=gl3-gl1
+00720   glk$=lpad$(str$(gln(1,1)),3)&lpad$(str$(gln(1,2)),6)&lpad$(str$(gln(1,3)),3)
 00730   if fin=0 then ce=8: goto ERR1
 00740   if uprc$(type$)="A" or uprc$(type$)="L" or uprc$(type$)="Q" or uprc$(type$)="I" or uprc$(type$)="E" then goto L750 else ce=7: goto ERR1
 00750 L750: if fs<1 or fs>5 then ce=9: goto ERR1
 00760 ! ______________________________________________________________________
 00770   pr #101: newpage
 00780   pr #win,fields "5,1,Cc 75,N": "Please wait..."
-00790   let ff=20 ! incrument reference numbers
+00790   ff=20 ! incrument reference numbers
 00800   te$="D" ! all detail records
 00810   ac(1)=3 ! indent all d records to position 3
 00820   rno=fin
@@ -86,7 +86,7 @@
 00850   restore #1,key=glk$: nokey L980
 00860 L860: read #1,using L870: dno,ano,sno,d$,mat rf eof L980
 00870 L870: form pos 1,n 3,n 6,n 3,c 50,6*pd 3,42*pd 6.2,2*pd 3
-00880   let gl=val(cnvrt$("PIC(###)",dno)&cnvrt$("PIC(######)",ano)&cnvrt$("PIC(###)",sno))
+00880   gl=val(cnvrt$("PIC(###)",dno)&cnvrt$("PIC(######)",ano)&cnvrt$("PIC(###)",sno))
 00890   if gl>gl2 then goto L310
 00900   if type$="A" or type$="E" then ac(5)=0 else ac(5)=1 !:
           ! set liabilities, equity and revenue to reverse sign

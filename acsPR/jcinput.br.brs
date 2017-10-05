@@ -56,8 +56,8 @@
 00550 SCR1: ! 
 00560   pr newpage
 00570   fnopenwin(win=101,09,20,14,59,cap$)
-00580   let wrd1$(1)="1. Regular input"
-00590   let wrd1$(2)="2. Input from Diskette"
+00580   wrd1$(1)="1. Regular input"
+00590   wrd1$(2)="2. Input from Diskette"
 00600   io1$(1)="4,2,C 38,N"
 00610   io1$(2)="5,2,C 38,N"
 00620   pr f "15,35,C 09,B,5": "Exit (F5)"
@@ -185,7 +185,7 @@
 01770   goto L1790
 01780 L1780: shoption=2 ! john did this to remove some other stuff
 01790 L1790: pr newpage
-01800   let win=104
+01800   win=104
 01810   fnopenwin(win,10,20,14,59,cap$)
 01820   pr #win,fields "04,2,C 28,N": "Reference Number to correct:"
 01830   pr f "15,35,C 09,B,5": "Done (F5)"
@@ -198,12 +198,12 @@
 01900 ! ______________________________________________________________________
 01910 WHATNOWSCREEN: ! 
 01920   pr newpage
-01930   let win=103
+01930   win=103
 01940   fnopenwin(win,8,20,15,59,cap$)
-01950   let wrd3$(1)="1. pr Input Proof List"
-01960   let wrd3$(2)="2. Corrections"
-01970   let wrd3$(3)="3. Additional Entries"
-01980   let wrd3$(4)="4. Post to Job Cost File"
+01950   wrd3$(1)="1. pr Input Proof List"
+01960   wrd3$(2)="2. Corrections"
+01970   wrd3$(3)="3. Additional Entries"
+01980   wrd3$(4)="4. Post to Job Cost File"
 01990   for j=1 to udim(wrd3$)
 02000     io3$(j)=str$(j+3)&",2,C 38,N"
 02010   next j
@@ -246,15 +246,15 @@
 02380     t5=t5+ji1(5)
 02390     t6=t6+ji1(6)
 02400     t10=t10+ji2(3)
-02410     let gt5=gt5+ji1(5)
-02420     let gt6=gt6+ji1(6)
-02430     let gt10=tg10+ji2(3)
+02410     gt5=gt5+ji1(5)
+02420     gt6=gt6+ji1(6)
+02430     gt10=tg10+ji2(3)
 02440   next j
 02450   pr #255,using L2310: " ________"," ________"," ____________",t5,t6,t10
 02460   pr #255,using L2470: " ________"," ________"," ____________",gt5,gt6,gt10
 02470 L2470: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Grand Totals",pos 38,2*n 9.2,x 29,n 13.2,skip 2
 02480 PROOF_LIST_DONE: ! 
-02490   let gt5=gt6=gt10=0
+02490   gt5=gt6=gt10=0
 02500   fncloseprn
 02510   goto WHATNOWSCREEN
 02520 ! ______________________________________________________________________
@@ -328,7 +328,7 @@
 03200   goto L2790
 03210 ! ______________________________________________________________________
 03220 L3220: pr newpage ! INPUT FROM DISKETTE FILE
-03230   let win=102
+03230   win=102
 03240   fnopenwin(win,10,20,15,59,cap$)
 03250   io2b$(1)="8,42,CU 1,UET,N"
 03260   io2b$(2)="10,43,Nz 6,UET,N"
@@ -397,9 +397,9 @@
 03870   goto WHATNOWSCREEN
 03880 L3880: ! ______________________________________________________________________
 03890 SRCH: bk=0 : pr newpage
-03900   let wrds$(1)="1. JOB # SEARCH" : skl(1)=6
-03910   let wrds$(2)="2. JOB NAME SEARCH" : skl(2)=25
-03920   seq=2 : let fil=14: goto L4020
+03900   wrds$(1)="1. JOB # SEARCH" : skl(1)=6
+03910   wrds$(2)="2. JOB NAME SEARCH" : skl(2)=25
+03920   seq=2 : fil=14: goto L4020
 03930   for j=1 to udim(ios$): ios$(j)=str$(j+12)&",25,C 30,N": next j
 03940   close #101: ioerr L3950
 03950 L3950: open #101: "SROW=12,SCOL=24,EROW="&str$(udim(ios$)+13)&",ECOL=55,BORDER=SR,CAPTION=SELECT TYPE OF SEARCH",display,outin 

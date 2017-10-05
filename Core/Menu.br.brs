@@ -129,7 +129,7 @@
 16180 fnend
 17000 def fn_grid_setup
 17040   screen_height=35 : grid_height=screen_height-5-dashboard_height
-17060   if dashboard_height>0 then let grid_height=grid_height-1
+17060   if dashboard_height>0 then grid_height=grid_height-1
 17080   ! filter_line=2
 17100   ! grid_height$=str$(grid_height)
 17140   screen_width=115

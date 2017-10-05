@@ -33,18 +33,18 @@
 00210   datfmt$="MM-DD-CCYY" !:
         maxsrows=22 !:
         ssav=103 !:
-        let windev=owindev=69 !:
+        windev=owindev=69 !:
         mga$="24,2,c 78," !:
         pfk=23 !:
         ! Common Variables Almost Always Required By Fnsnap
 00220   pgup=90 : pgdn=91 : event=98 !:
-        esc=99 : let up=102 : left=103 !:
+        esc=99 : up=102 : left=103 !:
         dn=104 : home=112 !:
         end=113
 00221   click=201 : dblclick=202 !:
         help=100 : rtclick=100 !:
         rtdblclick=100
-00222   let upfld=105 : dnfld=106 : let foflow=107 !:
+00222   upfld=105 : dnfld=106 : foflow=107 !:
         right=109 : left=108 : home=112 !:
         end=113 : fldplus=114 : fldminus=115
 00500   return 
@@ -113,7 +113,7 @@
           mat bold$(t)
 50100     mat lin$=("\lin0") !:
           mat bold$=("") !:
-          let qa$="\ql "
+          qa$="\ql "
 50110     gosub SET_STYLES
 50112     if exists(subpath$&"subtext.txt")=2 then execute "proc *"&subpath$&"subtext.txt"
 50120 BUILD_RTF: linput #txtfile: data$ eof ZBUILD_RTF
@@ -121,19 +121,19 @@
 50122     if pos(data$,"[NEWCELL(")>0 then gosub SET_NEWCELL
 50123     if pos(data$,"[FONT(")>0 then gosub SET_FONT
 50124     if pos(data$,"[SUB(")>0 then gosub SET_SUB
-50126     if pos(data$,"[RTFCOL(") then let xs=pos(data$,"[RTFCOL(")+8 !:
-            let xe=pos(data$,")",xs)-1 !:
-            let x=val(data$(xs:xe)) !:
+50126     if pos(data$,"[RTFCOL(") then xs=pos(data$,"[RTFCOL(")+8 !:
+            xe=pos(data$,")",xs)-1 !:
+            x=val(data$(xs:xe)) !:
             pr #rtffile: "\sect \sectd \sbknone\linex0\cols"&str$(x)&"\sectdefaultcl " !:
             data$=srep$(data$,"[RTFCOL("&str$(x)&")]","")
-50127     if pos(data$,"[RTFCOLL(") then let xs=pos(data$,"[RTFCOLL(")+9 !:
-            let xe=pos(data$,")",xs)-1 !:
-            let x=val(data$(xs:xe)) !:
+50127     if pos(data$,"[RTFCOLL(") then xs=pos(data$,"[RTFCOLL(")+9 !:
+            xe=pos(data$,")",xs)-1 !:
+            x=val(data$(xs:xe)) !:
             pr #rtffile: "\sect \sectd \sbknone\linex0\cols"&str$(x)&"\linebetcol\sectdefaultcl " !:
             data$=srep$(data$,"[RTFCOLL("&str$(x)&")]","")
-50128     if pos(data$,"[WD(") then let xs=pos(data$,"[WD(")+4 !:
-            let xe=pos(data$,")]",xs)-1 !:
-            let x=val(data$(xs:xe)) !:
+50128     if pos(data$,"[WD(") then xs=pos(data$,"[WD(")+4 !:
+            xe=pos(data$,")]",xs)-1 !:
+            x=val(data$(xs:xe)) !:
             data$=srep$(data$,"[WD("&str$(x)&")]",'{{\field{\*\fldinst SYMBOL '&str$(x)&' \\f "Wingdings" \\s 17}{\fldrslt\f14}}}') !:
             ! Insert WingDing symbol
 50130     if trim$(data$)<="" then pr #rtffile: "\par " !:
@@ -147,7 +147,7 @@
 50142     if laststyle=1 and pos("0123456789",data$(1:1)) then pr #prntfil: "\pard \ql \li0\ri0\widctlpar\aspalpha\aspnum\faauto\adjustright\rin0\lin0"&crlf$
 50150     data$=fnrtfcolor$(data$)
 50160     if data$(1:2)="D|" then 
-50170       let x=len(data$)
+50170       x=len(data$)
 50180       if x<30 and data$(x:x)=":" then !:
               data$=data$(1:2)&"{\b "&data$(3:len(data$))&"}"
 50190     end if 
@@ -164,8 +164,8 @@
               else if numplc>0 then data$=data$(1:numplc-1)&"\tab    "&fntext$(ltrm$(data$(numplc:len(data$))),50)&"\tab "&lefttext$&"[RTFLINE]" !:
               else data$=fntext$(ltrm$(data$),50)&"\tab "&lefttext$&"[RTFLINE]"
 50219     else 
-50220       let x=0 !:
-            let x=val(data$(3:7)) conv L50240
+50220       x=0 !:
+            x=val(data$(3:7)) conv L50240
 50230       if x>0 then !:
               data$=data$(1:2)&"{\par\b "&data$(3:6)&"}"&data$(7:len(data$))
 50240 L50240: if data$(3:len(data$))="Cause" then !:
@@ -275,13 +275,13 @@
 50840 else 
 50850   pr #rtffile: "{\footer \pard \plain "&s$(srch(mat types$,"F"))&" {"&srep$(srep$(srep$(data$(3:len(data$)),"[PAGE]","  {{\field{\*\fldinst{\f4  PAGE }}{\fldrslt{\f4 2}}}}"),"|","}{\tab}{"),"[RTFBAR]","|")&" \par }}"&crlf$
 50860 end if 
-50870 let footer+=1
+50870 footer+=1
 50880 return 
 50890 NEW_STYLE: ! 
 50900 ! IF SRCH(MAT TYPES$,UPRC$(DATA$(1:1)))>0 THEN pr #RTFFILE: "\pard \plain "&S$(SRCH(MAT TYPES$,UPRC$(DATA$(1:1))))
 50910 if rtfbox then 
-50911   let xlis=pos(s$(srch(mat types$,uprc$(data$(1:1)))),"\li") !:
-        let xlie=pos(s$(srch(mat types$,uprc$(data$(1:1)))),"\",xlis+1)-1
+50911   xlis=pos(s$(srch(mat types$,uprc$(data$(1:1)))),"\li") !:
+        xlie=pos(s$(srch(mat types$,uprc$(data$(1:1)))),"\",xlis+1)-1
 50912   boxmargins$="\li"&str$(lmargin*1440)&"\ri"&str$((lmargin+rmargin)*2*1440)
 50913   oldmargins$=s$(srch(mat types$,uprc$(data$(1:1))))(xlis:xlie)
 50914   boxmarginsn$="\aspalpha\aspnum\faauto\adjustright"&srep$(srep$(boxmargins$,"\ri","\rin"),"\li","lin")&"\itap0"
@@ -365,27 +365,27 @@
 51600 end if 
 51601 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Font if other than Times new roman (Panto....)               ?:
-51604 if uprc$(styles$(a)(1:9))="FPALATINO" then let ff$="\f29" !:
+51604 if uprc$(styles$(a)(1:9))="FPALATINO" then ff$="\f29" !:
         goto ZSET_STYLES_1
-51605 if uprc$(styles$(a)(1:6))="FFRITZ" then let ff$="\f28" !:
+51605 if uprc$(styles$(a)(1:6))="FFRITZ" then ff$="\f28" !:
         goto ZSET_STYLES_1
-51606 if uprc$(styles$(a)(1:6))="FTIMES" then let ff$="\f0" !:
+51606 if uprc$(styles$(a)(1:6))="FTIMES" then ff$="\f0" !:
         goto ZSET_STYLES_1
-51607 if uprc$(styles$(a)(1:6))="FARIAL" then let ff$="\f1" !:
+51607 if uprc$(styles$(a)(1:6))="FARIAL" then ff$="\f1" !:
         goto ZSET_STYLES_1
-51608 if uprc$(styles$(a)(1:8))="FCOURIER" then let ff$="\f2" !:
+51608 if uprc$(styles$(a)(1:8))="FCOURIER" then ff$="\f2" !:
         goto ZSET_STYLES_1
 51610 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Font size                                                    ?:
 51620 if uprc$(styles$(a)(1:2))="FS" then 
-51630   let fs$=str$(round(val(styles$(a)(3:tx-1))*2,0))
+51630   fs$=str$(round(val(styles$(a)(3:tx-1))*2,0))
 51640   goto ZSET_STYLES_1
 51650 end if 
 51660 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Font color                                                   ?:
 51670 if uprc$(styles$(a)(1:2))="CF" then 
 51680 ! INPUT FIELDS "23,64,c 1": PAUSE$
-51690   let fc$="\cf"&str$(max(0,srch(mat colors$,uprc$(styles$(a)(3:tx-1)))))&" "
+51690   fc$="\cf"&str$(max(0,srch(mat colors$,uprc$(styles$(a)(3:tx-1)))))&" "
 51700   goto ZSET_STYLES_1
 51710 end if 
 51720 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
@@ -403,7 +403,7 @@
 51820 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
       ! ?Paragraph Alignment                                          ?:
 51830 if uprc$(styles$(a)(1:1))="Q" and pos("LRCJ",uprc$(styles$(a)(2:2)))>0 then 
-51840   let qa$="\q"&lwrc$(styles$(a)(2:2))&" "
+51840   qa$="\q"&lwrc$(styles$(a)(2:2))&" "
 51850   s$(a)=srep$(s$(a),"\ql ",qa$)
 51860   goto ZSET_STYLES_1
 51870 end if 
@@ -411,7 +411,7 @@
 51890 if len(styles$(a))>1 and pos(styles$(a),"|")>0 then goto SET_STYLES_1
 51900 s$(a)=s$(a)&"\aspalpha\aspnum\faauto\adjustright\rin0"&lin$(a)&"\itap0 "&bold$(a)&ff$&"\fs"&fs$&fc$&sa$&"\lang1033\langfe1033\cgrid\langnp1033\langfenp1033 " !:
       se$(a)="\sbasedon"&str$((a-1)+10)&" \snext"&str$(a+10)
-51910 let fc$=fs$=sa$=ff$=""
+51910 fc$=fs$=sa$=ff$=""
 51920 next a
 51930 pr #rtffile: "{\rtf1\ansi\ansicpg1252\uc1 \deff0\deflang1033\deflangfe1033"&crlf$
 51940 pr #rtffile: "{\fonttbl"&crlf$
@@ -479,7 +479,7 @@
 52270 def library fnamt$*50(value,mask$*20;sign$,underline$,reverse)
 52280   dim av$*30
 52290   if reverse>0 then reverse=-1 else reverse=1
-52300   let underline$=uprc$(underline$)
+52300   underline$=uprc$(underline$)
 52310   on pos("SD",underline$) goto SINGLE,DOUBLE none NO_UNDERLINE
 52320 NO_UNDERLINE: ! 
 52330   if value*reverse<0 then av$=sign$&"(\tab "&trim$(cnvrt$(mask$,abs(value)))&"}{)" else av$=sign$&" \tab "&trim$(cnvrt$(mask$,abs(value)))&"}{ "
@@ -498,19 +498,19 @@
 52460 L52460: text$=trim$(text$)
 52461   pr text$
 52462   if text$(1:9)="[RTFLINE]" then text$(1:9)=""
-52463   let xl=min(pos(text$,"[RTFLINE]",9)-1,alen) !:
-        if xl<1 then let xl=alen else !:
-          if xl>alen then let xl=alen
+52463   xl=min(pos(text$,"[RTFLINE]",9)-1,alen) !:
+        if xl<1 then xl=alen else !:
+          if xl>alen then xl=alen
 52464   pr "XL="&str$(xl),"ALEN="&str$(alen)
 52465 ! PAUSE
-52470   let x=pos(text$&" "," ",xl)
+52470   x=pos(text$&" "," ",xl)
 52480   if x<2 then goto L52520
 52490   if len(t$) then t$=t$&"\line "&text$(1:x) else t$=text$(1:x)
 52500   text$=trim$(text$(x:len(text$)))
 52510   if len(trim$(text$))>xl then goto L52460
 52520 L52520: ! IF LEN(TEXT$) THEN t$=T$&"\line "&TEXT$
 52530   if len(t$)>0 and len(text$) then t$=t$&"\line "&text$ else if len(text$)>0 then t$=t$&text$
-52540 let fntext$=t$
+52540 fntext$=t$
 52545 pr t$
 52546 pr "*********************************************"
 52547 ! PAUSE
@@ -571,7 +571,7 @@
           pict_name$=picpath$&"\"&trim$(data$(pict_start+6:pict_end-1)) else !:
           pict_name$=trim$(data$(pict_start+6:pict_end-1))
 53060   fntype(pict_name$,rtffile)
-53065   let x=pos(pict_name$,"\",-1)+1 !:
+53065   x=pos(pict_name$,"\",-1)+1 !:
         pr #rtffile: "{\par \fs16 Figure: "&pict_name$(x:len(pict_name$))&" \par }"
 53070   pr #rtffile: srep$(data$(pict_end+2:len(data$)),"|","}{\tab}{")&"}"&crlf$
 53080 else if pos("1234567890",data$(1:1))>0 then 
@@ -629,9 +629,9 @@
             goto SETCELL
 54250 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
           ! ?Set the distance between cells.  The number is 1/2 the       ?:
-54260     rem IF POS(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           LET X$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    cALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
+54260     rem IF POS(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           x$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    cALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
 54261     if pos(ccells$(cell)(css:cse-1),"tg")=1 then !:
-            let x$=fntwips$(.5*val(ccells$(cell)(css+2:cse-1))) !:
+            x$=fntwips$(.5*val(ccells$(cell)(css+2:cse-1))) !:
             call$=srep$(call$,"\trgaph108\trleft-108","\trgaph"&x$) !:
             goto SETCELL
 54269 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:

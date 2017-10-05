@@ -20,7 +20,7 @@
 14100     didChange+=fnServicesRateCodeAdjust
 14120     if didChange then
 14140       rewrite #h_customer,using F_CUSTOMER: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat adr,alp$,f$(2),f$(3),bra,mat gb,df$,dr$,dc$,da$,mat extra,mat extra$
-14160       let write_count+=1
+14160       write_count+=1
 14180     end if
 14200   loop ! /r
 16000   PrimaryFinis: !
@@ -41,8 +41,8 @@
 32080   fnopenprn
 32100   READ_CUSTOMER: ! 
 32120   linput #2: ln$ eof OWFFL_Finis
-32140   ! Let Z$=LPAD$(RTRM$(LN$(17:26)),10)
-32160   let z$=lpad$(rtrm$(ln$(1:9)),10)
+32140   ! z$=LPAD$(RTRM$(LN$(17:26)),10)
+32160   z$=lpad$(rtrm$(ln$(1:9)),10)
 32180   ! rOUTE=VAL(LN$(1:7))
 32200   route=val(ln$(81:87))
 32220   ! sEQUENCE=VAL(LN$(9:15))

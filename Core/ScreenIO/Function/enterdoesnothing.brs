@@ -6,13 +6,13 @@
  !
  def fnEnterDoesNothing
     if fkey=0 or fkey=201 then
-       let fkey(-1)
+       fkey(-1)
        exitMode=0
-       let functionkey=-1
+       functionkey=-1
     end if
     if fkey=99 then
-       let FunctionKey=-1
-       let fkey(-1)
+       functionKey=-1
+       fkey(-1)
        exitMode=QuitOnly
     end if
  fnend

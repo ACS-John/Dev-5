@@ -48,7 +48,7 @@
 28180     if csz$(len(csz$)-5:len(csz$)-5) =" " then goto L330
 28200     if csz$(len(csz$)-5:len(csz$)-5) < "0" or csz$(len(csz$)-5:len(csz$)-5)>"9" then csz$=csz$(1:len(csz$)-5) &" "&csz$((len(csz$)-4):len(csz$))
 28220 L330: fncsz(csz$,city$,state$,zip$)
-28240     let zip$=trim$(zip$)(1:5)
+28240     zip$=trim$(zip$)(1:5)
 28260 L350: write #h_out,using F_OUT_FIXED: z$,nam$,sta$,city$,state$,zip$,chr$(10)
 28280 F_OUT_FIXED: form pos 1,c 10,c 30,c 30,c 23,c 2,c 5,pos 112,c 1
 28300   loop 

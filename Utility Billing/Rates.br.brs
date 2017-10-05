@@ -9,7 +9,7 @@
 00090 ! ______________________________________________________________________
 10020   fntop(program$)
 10080   fnget_services(mat snm$,mat srv$)
-10140   let x=0
+10140   x=0
 10160   for j=1 to 10
 10180     if trim$(snm$(j))<>"" then option$(x+=1)=srv$(j)
 10200   next j
@@ -19,7 +19,7 @@
 10260   goto SCREEN_GRID ! program starts with flex grid of all rates currently in file
 20000 SCREEN_GRID: ! r:
 20020   fntos(sn$="rateflex")
-20040   myline=1 : mypos=1 : height=10 : let width=50
+20040   myline=1 : mypos=1 : height=10 : width=50
 20060   colhdr$(1)="Code"
 20080   colhdr$(2)="Description"
 20100   colhdr$(3)="Minimum"
@@ -91,7 +91,7 @@
 40320     goto ADDNEWRECORD
 40340   end if 
 40360 ! 
-40380   let g1=0 : let g1=val(resp$(2)) conv ignore ! rate code
+40380   g1=0 : g1=val(resp$(2)) conv ignore ! rate code
 40420   if g1=0 then 
 40440     mat msgline$(1)
 40460     msgline$(1)="Rate codes must be from 1 to 99!"
@@ -145,7 +145,7 @@
 50460   fnlbl(6,c1," From",9,2)
 50480   fnlbl(6,c2," To",9,2)
 50500   fnlbl(6,c3,"Per Unit",9,2)
-50520   let x=7
+50520   x=7
 50540   for lin=6 to 15
 50560     ! if env$('client')="Franklinton" and rt$(1)="GA" then ! Special Franklinton routines
 50580     !   fntxt(lin+1,c1,9,9,1,"31",0) ! 1 decimal
@@ -155,7 +155,7 @@
 50660       fntxt(lin+1,c2,9,10,1,"30",0)
 50680     ! end if 
 50700     fntxt(lin+1,c3,9,9,1,"36")
-50720     let x=x+3
+50720     x=x+3
 50740   next lin
 50760   fncmdset(4)
 50762   mat resp$(udim(mat rt$))
@@ -173,7 +173,7 @@
 60120     goto RATEMAINT
 60140   end if 
 60160 ! 
-60180   let g1=0 : let g1=val(rt$(2)) conv ignore ! rate code
+60180   g1=0 : g1=val(rt$(2)) conv ignore ! rate code
 60200   if g1=0 then 
 60220     mat msgline$(1)
 60240     msgline$(1)="Rate codes must be from 1 to 99!"

@@ -111,7 +111,7 @@
 99020   def fnopen(filename$*255, mat f$, mat f, mat form$; inputonly, keynum, dont_sort_subs, path$*255, mat descr$, mat field_widths,supress_prompt,ignore_errors,___,index)
 99030     dim _fileiosubs$(1)*800, _loadedsubs$(1)*80
 99040     fnopen=fnopenfile(filename$, mat f$, mat f, mat form$, inputonly, keynum, dont_sort_subs, path$, mat descr$, mat field_widths, mat _fileiosubs$, supress_prompt,ignore_errors,program$)
-99050     if srch(_loadedsubs$,uprc$(filename$))<=0 then : mat _loadedsubs$(udim(_loadedsubs$)+1) : let _loadedsubs$(udim(_loadedsubs$))=uprc$(filename$) : for index=1 to udim(mat _fileiosubs$) : execute (_fileiosubs$(index)) : next index
+99050     if srch(_loadedsubs$,uprc$(filename$))<=0 then : mat _loadedsubs$(udim(_loadedsubs$)+1) : _loadedsubs$(udim(_loadedsubs$))=uprc$(filename$) : for index=1 to udim(mat _fileiosubs$) : execute (_fileiosubs$(index)) : next index
 99060   fnend 
 99070 ! 
 99080 IGNORE: continue 

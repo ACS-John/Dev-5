@@ -15,7 +15,7 @@
 52120   to$=trim$(to$,'"')
 52140   options$=rtrm$(options$)&' ' 
 52160   copyRecursive=0
-52170    if from$(1:2)='@:' then let fromAt$='@:' else fromAt$=''
+52170    if from$(1:2)='@:' then fromAt$='@:' else fromAt$=''
 52172    if to$(1:2)='@:' then toAt$='@:' else toAt$=''
 52180   if pos(lwrc$(options$),'recursive ') then copyRecursive=1
 52200   fnMakeSurePathExists(to$)

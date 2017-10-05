@@ -93,7 +93,7 @@
 11820     dim tmp$*255
 11840 ! ______________________________________________________________________
 11860     mat filename$(0)
-11880     let filter$=trim$(filter$) : if filter$="" then let filter$="*.*"
+11880     filter$=trim$(filter$) : if filter$="" then filter$="*.*"
 11900     option$=trim$(option$)
 11920     dir$=trim$(dir$)
 11940     if dir$(len(dir$):len(dir$))<>"\" then dir$=dir$&"\"
@@ -102,13 +102,13 @@
 12000     tmp$='Sy -M Dir '&os_filename$(rtrm$(dir$,'\'))&'\'&filter$&' /b '&option$&' >"'&os_filename$(env$('temp')&'\GetDir'&session$&'.tmp"')
 12020     execute tmp$ ioerr XIT
 12040     open #tf1:=20: "Name="&env$('temp')&"\GetDir"&session$&".tmp",display,input 
-12060     let filename_count=0
+12060     filename_count=0
 12080     do  ! for filename_count=1 to udim(filename$)
 12100       linput #tf1: tmp$ eof XIT
 12120       mat filename$(filename_count+=1)
-12140       let filename$(filename_count)=rtrm$(tmp$)
+12140       filename$(filename_count)=rtrm$(tmp$)
 12160       if filename$(filename_count)=uprc$(filename$(filename_count)) then 
-12180         let filename$(filename_count)=lwrc$(filename$(filename_count)) ! never all caps-anything but
+12180         filename$(filename_count)=lwrc$(filename$(filename_count)) ! never all caps-anything but
 12200       end if  ! filename$(filename_count)=uprc$(filename$(filename_count))
 12220     loop  ! next filename_count
 12240     goto XIT

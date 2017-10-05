@@ -26,7 +26,7 @@
 00200   if ck=5 then goto XIT else !:
           if resp$(1)=item1$(1) then pas$="BUILD" else !:
             if resp$(1)=item1$(2) then pas$="COPY"
-00210   let glcno=val(resp$(2))
+00210   glcno=val(resp$(2))
 00220   execute "COPY A:paymstr.H"&str$(glcno)&' '&env$('Q')&"\CLmstr\*.*" ioerr MSGBOX2
 00230   execute "COPY A:payeeglbreakdown.H"&str$(glcno)&' '&env$('Q')&"\CLmstr\*.*" ioerr MSGBOX2
 00240   execute "Index "&env$('Q')&"\CLmstr\paymstr.H"&str$(glcno)&' '&env$('Q')&"\CLmstr\payidx1.H"&str$(glcno)&",1,8,replace,DupKeys"

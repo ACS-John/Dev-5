@@ -19,7 +19,7 @@
 00180 L180: open #2: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=17,Replace",internal,outin,relative 
 00190 L190: shoption=1
 00200 L200: pr newpage
-00210   let win=101
+00210   win=101
 00220   fnopenwin(win,09,08,16,71,cap$)
 00230   pr #win,fields "4,2,Cr 14,N": "Job Number:"
 00240   pr #win,fields "5,2,Cr 14,N": "Amount:"
@@ -53,7 +53,7 @@
 00490   ce=cnt+1
 00500 ERR1: pr f "24,78,C 1": bell : goto L460
 00510 L510: if cmdkey=5 then goto L730
-00520   if cmdkey=6 then gosub SRCH : let win=101 !:
+00520   if cmdkey=6 then gosub SRCH : win=101 !:
           pr #win,fields io1$(1): k$ : c1=3: goto L390
 00530   if c1=2 and cmdkey=4 then goto L1150
 00540   if inp(2)<10100 or inp(2)>123199 then ce=3: goto ERR1
@@ -76,14 +76,14 @@
 00710   goto L200
 00720 ! ______________________________________________________________________
 00730 L730: pr newpage
-00740   let win=102
+00740   win=102
 00750   fnopenwin(win,07,20,15,59,cap$)
 00760   pr #win,fields "9,1,C 40,R,N": " Total of Amounts Entered:"
 00770   pr #win,fields "9,28,N 10.2,R,N": ta
-00780   let wrd2$(1)="1. pr Billing Proof List"
-00790   let wrd2$(2)="2. Corrections"
-00800   let wrd2$(3)="3. Additional Entries"
-00810   let wrd2$(4)="4. Post to Job Cost File"
+00780   wrd2$(1)="1. pr Billing Proof List"
+00790   wrd2$(2)="2. Corrections"
+00800   wrd2$(3)="3. Additional Entries"
+00810   wrd2$(4)="4. Post to Job Cost File"
 00820   for j=1 to udim(wrd2$)
 00830     io2$(j)=str$(j+3)&",2,C 38,N"
 00840   next j
@@ -119,7 +119,7 @@
 01140 ! ______________________________________________________________________
 01150 L1150: rewrite #2,using L700,rec=rr: "",0,0,0
 01160 L1160: pr newpage
-01170   let win=103
+01170   win=103
 01180   fnopenwin(win,10,20,14,59,cap$)
 01190   pr #win,fields "4,2,C 28,N": "Reference Number to correct:"
 01200   pr f "15,35,C 09,B,5": "Done (F5)"
@@ -151,7 +151,7 @@
 01460 L1460: open #103: "SROW=1,SCOL=1,EROW=24,ECOL=80",display,output 
 01470   pr #103: newpage
 01480 L1480: pr newpage
-01490   let win=102
+01490   win=102
 01500   fnopenwin(win,06,10,10,69,wrds$(1))
 01510   prtall=0
 01520   pr #win,fields "4,2,C 38,N": "Beginning Search Data (blank for all):"

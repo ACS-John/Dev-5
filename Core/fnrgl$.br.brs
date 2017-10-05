@@ -26,7 +26,7 @@
 28460       close #company: 
 28480     else if cursys$="PR" or cursys$="UB" or cursys$="CR" then 
 28500       L260: !
-28520       let use_dept=use_sub=1 ! default both to use
+28520       use_dept=use_sub=1 ! default both to use
 28540     end if
 28560     desc$=''
 28580     open #glmstr:=fngethandle: "Name="&env$('Q')&"\"&cursys$&"mstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\"&cursys$&"mstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L_ERR_OPEN_FOR_DESC
@@ -35,15 +35,15 @@
 28640     L_ERR_OPEN_FOR_DESC: !
 28660  ! reformat it from a read key= ready format to an input ready format
 28680     if use_sub=0 then 
-28700       let x$(10:12)="" 
+28700       x$(10:12)="" 
 28720     else 
-28740       let x$(10:12)="-"&trim$(x$(10:12))
+28740       x$(10:12)="-"&trim$(x$(10:12))
 28760     end if
-28780     let x$(4:9)=trim$(x$(4:9))
+28780     x$(4:9)=trim$(x$(4:9))
 28800     if use_dept =0 then 
-28820       let x$(1:3)="" 
+28820       x$(1:3)="" 
 28840     else 
-28860       let x$(1:3)=trim$(x$(1:3))&"-"
+28860       x$(1:3)=trim$(x$(1:3))&"-"
 28880     end if
 32000 DONE: ! 
 32020 ! pr ' fnRgl$ returned "'&(trim$(rpad$(x$,14)&desc$))(1:ReturnMaxLength)&'"'
@@ -52,7 +52,7 @@
 32080 ! _______________________________________________________________________
 34000 NOKEYGLMSTR: ! 
 34020     close #glmstr: 
-34040     let x$="": desc$=""
+34040     x$="": desc$=""
 34060     goto DONE
 48000 XIT: fnend 
 62000 ! <Updateable Region: ERTN>

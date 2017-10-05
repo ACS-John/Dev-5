@@ -4,7 +4,7 @@
 00040     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
 00050   fnend  ! fn_hamster_field_reset
 00060   def library fnhamster_field_add(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position)
-00070     if field_type$='' then let field_type$='C'
+00070     if field_type$='' then field_type$='C'
 00080     if storage_length=0 then storage_length=textbox_len
 00090     add_rec_item=udim(mat lbl$)+1
 00100     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$

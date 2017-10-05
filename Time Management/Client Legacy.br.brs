@@ -40,16 +40,16 @@
 00420 L420: pr newpage
 00430   pr f "3,10,Cc 60,R,N": "Client File"
 00440   pr f "4,10,Cc 60,R,N": "Company "&env$('cno')&" - "&ltrm$(env$('cnam'))
-00450   let wrd1$(1)="1. Initial File Preparation" !:
-        let wrd1$(2)="2. Add " !:
-        let wrd1$(3)="3. Edit or View" !:
-        let wrd1$(4)="4. pr Proof List" !:
-        let wrd1$(5)="5. Reassign Transaction Addresses" !:
-        let wrd1$(6)="6. pr Directory" !:
-        let wrd1$(7)="7.       Listing" !:
-        let wrd1$(8)="8.       Labels" !:
-        let wrd1$(9)="9. Reset Status Codes" !:
-        let wrd1$(10)="" ! was 10. search by name
+00450   wrd1$(1)="1. Initial File Preparation" !:
+        wrd1$(2)="2. Add " !:
+        wrd1$(3)="3. Edit or View" !:
+        wrd1$(4)="4. pr Proof List" !:
+        wrd1$(5)="5. Reassign Transaction Addresses" !:
+        wrd1$(6)="6. pr Directory" !:
+        wrd1$(7)="7.       Listing" !:
+        wrd1$(8)="8.       Labels" !:
+        wrd1$(9)="9. Reset Status Codes" !:
+        wrd1$(10)="" ! was 10. search by name
 00460   for j=1 to 10 !:
           io1$(j)=str$(j+5)&",9,C 33,N" !:
         next j !:
@@ -79,7 +79,7 @@
 00685   if cmdkey=5 then goto L420
 00690   if cmdkey=6 then goto TMSRCH
 00700 L700: if ano=0 or cmdkey=5 or cmdkey=99 then goto L420
-00710   let z$=lpad$(str$(ano),5)
+00710   z$=lpad$(str$(ano),5)
 00720   read #1,using L730,key=z$: z$,mat a$,ph$,ss$,pno,mye,mat dd,mat sc,mat ca,ph2$,ss2$,mat ar,mat arta,cm$,mat app,mat ma,mat ap2,mat ma2 nokey L650 ioerr L4170
 00730 L730: form pos 1,c 5,5*c 30,c 12,c 11,n 9,n 2,10*pd 3,10*n 1,10*pd 3,c 12,c 11,2*pd 5.2,pd 4.3,2*n 1,2*pd 3,c 70,20*n 1,20*pd 3.2,20*n 1,20*pd 3.2
 00740   hbal=ar(1): chgbal=0
@@ -93,7 +93,7 @@
 00820   if cv>0 then oi1$(cv)(cv1:cv2)="U": cv=0
 00830   if cmdkey=6 then goto L3880
 00840   if ti=2 and x1=0 then goto L420
-00850   let z$=lpad$(str$(x1),5)
+00850   z$=lpad$(str$(x1),5)
 00860   if x1=0 then goto L1100
 00870   if mye<1 or mye>12 then cv=10: goto L3000
 00880   if ar(5)<1 or ar(5)>2 then cv=17: goto L3000
@@ -125,7 +125,7 @@
 01140   if delact=2 then goto L510
 01150   if delact><1 then goto L1100
 01160   delete #1,key=d$: 
-01170   let z$=""
+01170   z$=""
 01180   gosub L1390
 01190   new1=1
 01200   goto L510
@@ -496,8 +496,8 @@
 04830   return 
 04840 TMSRCH: ! search for customer #
 04850   dim heading$*70,form$*80,numeric_format$*20,selection$*70
-04860   let file_num=11 ! alpha index on clients
-04870   let form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
+04860   file_num=11 ! alpha index on clients
+04870   form$="form pos 1,c 5,pos 6,c 30,pos 66,c 15,pos 283,pd 5.2"
 04880   numeric_format$='pic($$$,$$$.##)'
 04890   key_length=5
 04900   heading$="Acct #횼ame컴컴컴컴컴컴컴컴컴컴Address컴컴컴컴Balance"

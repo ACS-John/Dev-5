@@ -33,7 +33,7 @@
 00250   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&',recl=759,version=0,use',internal,outin,relative 
 00260   if lrec(1)=0 then write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2': mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 00270   read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
-00280   let ficamaxw=ficamaxw*10
+00280   ficamaxw=ficamaxw*10
 00290 L290: close #1: 
 00300 READNAMES: ! 
 00310   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$)
@@ -42,7 +42,7 @@
 00400   resp=0
 00410   fntos(sn$="Company-1") !:
         mylen=30: mypos=mylen+3 : right=1
-00420   let fram1=1: fnfra(1,1,10,80,"Company # "&str$(cno))
+00420   fram1=1: fnfra(1,1,10,80,"Company # "&str$(cno))
 00430   fnlbl(1,1,"Company Name:",mylen,right,0,fram1)
 00440   fntxt(1,mypos,40,0,left,"",0,"",fram1) !:
         resp$(1)=a$(1)
@@ -73,7 +73,7 @@
 00610   fnlbl(10,1,"Medicare Maximum Wage:",mylen,right,0,fram1)
 00620   fntxt(10,mypos,12,0,left,"10",0,"Use 999999.99 since there no maximum wage at this time.",fram1) !:
         resp$(10)=str$(mcm)
-00630   let fram2=2: fnfra(13,1,8,90,"General Ledger Information")
+00630   fram2=2: fnfra(13,1,8,90,"General Ledger Information")
 00640   fnchk(1,30,"General Ledger Installed:",1,fram2)
 00650   if gli=1 then resp$(11)="True" else resp$(11)="False"
 00660   fnlbl(2,1,"Cash In Bank:",mylen,right,0,fram2)
@@ -99,19 +99,19 @@
 00810   a$(1)=resp$(1)
 00820   a$(2)=resp$(2)
 00830   a$(3)=resp$(3)
-00840   let fid$=resp$(4)
-00850   let feducrat=val(resp$(5))
-00860   let feducmax=val(resp$(6))
-00870   let ficarate=val(resp$(7))
-00880   let ficamaxw=val(resp$(8))
+00840   fid$=resp$(4)
+00850   feducrat=val(resp$(5))
+00860   feducmax=val(resp$(6))
+00870   ficarate=val(resp$(7))
+00880   ficamaxw=val(resp$(8))
 00890   mcr=val(resp$(9))
 00900   mcm=val(resp$(10))
-00910   if resp$(11)="True" then let gli=1 else let gli=0
-00920   let gln$(15)=fnagl$(resp$(12)) ! bank
-00930   let gln$(1)=fnagl$(resp$(13)) ! fed
-00940   let gln$(2)=fnagl$(resp$(14)) ! fica
-00950   let gln$(3)=fnagl$(resp$(15)) ! state
-00960   let gln$(14)=fnagl$(resp$(16)) ! eic
+00910   if resp$(11)="True" then gli=1 else gli=0
+00920   gln$(15)=fnagl$(resp$(12)) ! bank
+00930   gln$(1)=fnagl$(resp$(13)) ! fed
+00940   gln$(2)=fnagl$(resp$(14)) ! fica
+00950   gln$(3)=fnagl$(resp$(15)) ! state
+00960   gln$(14)=fnagl$(resp$(16)) ! eic
 00970   if mcr<=0 then mcr=1.45
 00980   if mcm<=0 then mcm=999999
 00990   if feducrat>5 then goto L1000 else goto L1010
@@ -190,7 +190,7 @@
 01390   if ckey=5 then goto CONFIRMEXIT
 01400   resp=0
 01410   for j=1 to 20
-01420     let fullname$(j)=resp$(resp+=1)
+01420     fullname$(j)=resp$(resp+=1)
 01430     abrevname$(j)=resp$(resp+=1)
 01440     if resp$(resp+=1)=opt_ded_or_add$(1) then newdedcode(j)=1 ! deduction
 01450     if resp$(resp)=opt_ded_or_add$(2) then newdedcode(j)=2 ! addition
@@ -201,7 +201,7 @@
 01500     if resp$(resp+=1)="True" then dedfica(j)=1 else dedfica(j)=0
 01510     if resp$(resp+=1)="True" then dedst(j)=1 else dedst(j)=0
 01520     if resp$(resp+=1)="True" then deduc(j)=1 else deduc(j)=0
-01530     let gl$(j)=fnagl$(resp$(resp+=1))
+01530     gl$(j)=fnagl$(resp$(resp+=1))
 01540   next j
 01550   if ckey=2 then goto SCREEN_1
 01560   if ckey=4 then goto DONE
@@ -246,7 +246,7 @@
 01900 SCREEN_4: ! 
 01910   fntos(sn$="Company-4") !:
         mylen=45: mypos=mylen+3 : right=1: resp=0
-01920   let fram3=1: fnfra(1,1,6,60,"Vacation and Sick Pay Information")
+01920   fram3=1: fnfra(1,1,6,60,"Vacation and Sick Pay Information")
 01930   fnlbl(1,1,"Days employed before accruing sick hours",mylen,right,0,fram3)
 01940   fntxt(1,mypos,8,0,0,"30",0,"",fram3) !:
         resp$(1)=str$(sck(1))
@@ -262,14 +262,14 @@
 02010   fnlbl(5,1,"Maximum Vacation Hours:",mylen,right,0,fram3)
 02020   fntxt(5,mypos,8,0,0,"32",0,"",fram3) !:
         resp$(5)=str$(vacm)
-02030   let fram4=2: fnfra(9,1,3,60,"Miscellaneous Payroll Information")
+02030   fram4=2: fnfra(9,1,3,60,"Miscellaneous Payroll Information")
 02040   fnlbl(1,1,"Minimum Hourly Wage:",mylen,right,0,fram4)
 02050   fntxt(1,mypos,10,0,0,"10",0,"",fram4) !:
         resp$(6)=str$(mhw)
 02060   fnlbl(2,1,"Local Withholding Code:",mylen,right,0,fram4)
 02070   fntxt(2,mypos,2,0,0,"30",0,"If one the twenty miscellaneous dedutions is used for local withholdings, then enter the number of the deduction.",fram4) !:
         resp$(7)=str$(loccode)
-02080   let fram5=3: fnfra(14,1,5,60,"Workman's Compensation Limits")
+02080   fram5=3: fnfra(14,1,5,60,"Workman's Compensation Limits")
 02090   fnlbl(1,1,"Monthly:",mylen,right,0,fram5)
 02100   fntxt(1,mypos,10,0,0,"10",0,"If you pay workman's comp and there are limits on the maximum wage subject to workman's comp, then enter that maximum wage under the proper pay period.",fram5) !:
         resp$(8)=str$(wcm(1))
@@ -295,10 +295,10 @@
 02270   vacm=val(resp$(5))
 02280   mhw=val(resp$(6))
 02290   loccode=val(resp$(7))
-02300   let wcm(1)=val(resp$(8))
-02310   let wcm(2)=val(resp$(9))
-02320   let wcm(3)=val(resp$(10))
-02330   let wcm(4)=val(resp$(11))
+02300   wcm(1)=val(resp$(8))
+02310   wcm(2)=val(resp$(9))
+02320   wcm(3)=val(resp$(10))
+02330   wcm(4)=val(resp$(11))
 02340   if ckey=2 then goto SCREEN_3
 02350   if ckey=4 then goto DONE
 02360   if ckey=1 then goto SCREEN_5
@@ -310,8 +310,8 @@
 02420 ! ______________________________________________________________________
 02430 SCREEN_6: ! 
 02440   close #106: ioerr L2450
-02450 L2450: if fnstyp=14 then let win6$="SRow=14,SCol=12,ECol=67"
-02460   if fnstyp<>14 then let win6$="SRow=09,SCol=11,ECol=69"
+02450 L2450: if fnstyp=14 then win6$="SRow=14,SCol=12,ECol=67"
+02460   if fnstyp<>14 then win6$="SRow=09,SCol=11,ECol=69"
 02470   open #106: win6$&",ERow=22,Border=SR,Caption=<"&cap$,display,outin 
 02480   pr #106: newpage
 02490   pr #106,fields "2,2,Cr 44,N": "ACS General Ledger Installed (Y/N):"
@@ -339,7 +339,7 @@
 02700 L2700: pr f "23,25,C 09,B,1": "Next (F1)"
 02710   pr f "23,35,C 09,B,2": "Back (F2)"
 02720   pr f "23,45,C 09,B,5": "Done (F5)"
-02730   if gli=1 then let gli$="Y" else let gli$="N"
+02730   if gli=1 then gli$="Y" else gli$="N"
 02740 L2740: if fnstyp=11 then !:
           rinput #106,fields mat io6$: gli$,mat sck,vacm,mhw,tc$,mat jn$,dc conv CONV7
 02750   if fnstyp<>11 then !:
@@ -353,7 +353,7 @@
 02820   ce=cnt+1
 02830 ERR7: pr f "24,78,C 1": bell : goto L2790
 02840 L2840: if gli$<>"Y" and gli$<>"N" then ce=1 : goto ERR7
-02850   if gli$="Y" then let gli=1 else let gli=0
+02850   if gli$="Y" then gli=1 else gli=0
 02860   if fnstyp=14 then goto L2900
 02870   if tc$="Y" then tc=1 else tc=0
 02880   if fnstyp=11 and tc$<>"Y" and tc$<>"N" then ce=8 : goto ERR7
@@ -370,7 +370,7 @@
 02950 ! ______________________________________________________________________
 02960 DONE: ! 
 02970   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno),internal,outin,relative 
-02980   let ficamaxw=ficamaxw*.1
+02980   ficamaxw=ficamaxw*.1
 02990   rewrite #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 03000   close #1: 
 03010   fnDedNames(mat fullname$,mat abrevname$,mat newdedcode,mat newcalcode,mat newdedfed,mat dedfica,mat dedst,mat deduc,mat gl$,1)

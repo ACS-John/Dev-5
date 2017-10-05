@@ -15,12 +15,12 @@
         fnfscode !:
         fnpriorcd
 00130   if fnglfs=5 then goto XIT
-00135   let fscode=fnfscode !:
+00135   fscode=fnfscode !:
         priorcd=fnpriorcd
 00140   fncno(cno,cnam$)
 00150   fnopenprn
 00160   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
-00170   let fscode=fnfscode
+00170   fscode=fnfscode
 00180   if nap<12 or nap>13 then nap=12
 00190   in3$(1)="8,05,N 12.2,UT,N" : in3$(2)="8,25,N 12.2,UT,N" !:
         in3$(3)="8,45,N 12.2,UT,N" : in3$(4)="8,65,N 12.2,UT,N"
@@ -62,7 +62,7 @@
 00530 READ_3: read #3,using L620: ir,bb,cb,mat by,mat bp,mat bm eof L770
 00540   if ir=0 then goto L640
 00550   if fscode=0 or (fscode=actpd and priorcd=1) then goto L620
-00560   if fscode<1 or fscode>13 then let fscode=1
+00560   if fscode<1 or fscode>13 then fscode=1
 00570   if fnpriorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00580   if fnpriorcd=2 then goto L610
 00590   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -78,17 +78,17 @@
 00670   if fnfscode=0 then monthb+=bm(fnactpd) else !:
           monthb+=bm(fnfscode)
 00680   if fscode=0 then goto L690 else goto L720
-00690 L690: for j=1 to fnactpd : let ytdb+=bm(j) : next j
+00690 L690: for j=1 to fnactpd : ytdb+=bm(j) : next j
 00700   goto READ_3
 00710 ! ______________________________________________________________________
-00720 L720: for j=1 to fscode : let ytdb+=bm(j) : next j
+00720 L720: for j=1 to fscode : ytdb+=bm(j) : next j
 00730   goto READ_3
 00740 ! ______________________________________________________________________
 00750 L750: if ir<val(r$) then goto READ_3
 00760   if ir>val(r$) then goto L780
 00770 L770: notrans=1
 00780 L780: overundr=ytdb-total2
-00790   let unexpend=annualb-total2
+00790   unexpend=annualb-total2
 00800   for j=1 to 9
 00810     if ac(j)=9 then goto L890
 00820     accum(j,1)+=total
@@ -103,24 +103,24 @@
 00910   total2=-total2
 00920   annualb=-annualb
 00930   monthb=-monthb
-00940   let ytdb=-ytdb
+00940   ytdb=-ytdb
 00950   overundr=overundr
-00960   let unexpend=unexpend
+00960   unexpend=unexpend
 00970 L970: if ds=1 then dollar$="$" else dollar$=" "
 00980   if annualb><0 or total2><0 then goto L1010
 00990   if total<>0 then goto L1010
 01000   if ls+ds+ul+ic>0 then goto L1010 else goto L350
 01010 L1010: sp2=36-sp-1
-01020   if te$="B" then total=-total: total2=-total2: let unexpend=0: ! REVERSE SIGN ON BEGINNING BANK BALANCE
+01020   if te$="B" then total=-total: total2=-total2: unexpend=0: ! REVERSE SIGN ON BEGINNING BANK BALANCE
 01030   pr #255,using L1040: d$(1:sp2),dollar$,total2,dollar$,annualb,dollar$,unexpend pageoflow L1760
 01040 L1040: form pos sp,c sp2,pos 37,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),skip redir
 01050   total=0
 01060   total2=0
 01070   annualb=0
 01080   monthb=0
-01090   let ytdb=0
+01090   ytdb=0
 01100   overundr=0
-01110   let unexpend=0
+01110   unexpend=0
 01120   gosub L1470
 01130   gosub L1770
 01140   gosub L1590
@@ -149,11 +149,11 @@
 01370 ! ______________________________________________________________________
 01380 L1380: if foot1=1 then goto L1440
 01390   tabnote=sp
-01400   let foot1=1
-01410   let foot$=d$
+01400   foot1=1
+01410   foot$=d$
 01420   goto L350
 01430 ! ______________________________________________________________________
-01440 L1440: let foot$=rtrm$(foot$)&d$
+01440 L1440: foot$=rtrm$(foot$)&d$
 01450   goto L350
 01460 ! ______________________________________________________________________
 01470 L1470: for j=1 to 9
@@ -188,11 +188,11 @@
 01760 L1760: gosub L1650: continue 
 01770 L1770: if ul=0 then goto L1860
 01780   if ul=1 then goto L1830
-01790   let underlin$="=============="
+01790   underlin$="=============="
 01800   pr #255: ""
 01810   goto L1840
 01820 ! ______________________________________________________________________
-01830 L1830: let underlin$="______________"
+01830 L1830: underlin$="______________"
 01840 L1840: pr #255,using L1850: underlin$,underlin$,underlin$
 01850 L1850: form skip redir,pos 37,3*c 15,skip redir
 01860 L1860: if redir=0 then pr #255: ""

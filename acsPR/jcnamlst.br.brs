@@ -54,7 +54,7 @@
 00510   gosub HDR
 00520 L520: read #1,using L530: jn$,n$ eof L680
 00530 L530: form pos 1,c 6,c 40
-00540   let first=0
+00540   first=0
 00550   form skip 2,pos 1,c 6,pos 10,c 40,skip 0
 00560   goto L590
 00570   pr #255: newpage
@@ -84,7 +84,7 @@
 00810   skh=1
 00820   return 
 00830 ! ______________________________________________________________________
-00840 L840: if first=0 then pr #255,using L842: jn$,n$,cn$(7:11),k$ pageoflow L870: let first =1: goto L860
+00840 L840: if first=0 then pr #255,using L842: jn$,n$,cn$(7:11),k$ pageoflow L870: first =1: goto L860
 00842 L842: form skip 2,pos 1,c 6,pos 10,c 40,x 1,c 5,pos 60,c 25,skip 1
 00845   pr #255,using L850: cn$(7:11),k$ pageoflow L870
 00850 L850: form pos 51,c 5,pos 60,c 25

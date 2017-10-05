@@ -179,8 +179,8 @@
 01830 L1830: pr #255: newpage
 01840   gosub L1640
 01850   continue 
-01860 L1860: let g1=g1+b(1)
-01870   let g2=g2+b(3)
+01860 L1860: g1=g1+b(1)
+01870   g2=g2+b(3)
 01880   return 
 01890 L1890: if fb(j2)>1 then goto L1920 ! WRITE WORK TRANSACTION
 01900   write #6,using L1910: cno$,cna$,en$,mat d
@@ -200,8 +200,8 @@
 02040 L2040: pr #255: newpage
 02050   gosub L1640
 02060   continue 
-02070 L2070: let g1=0
-02080   let g2=0
+02070 L2070: g1=0
+02080   g2=0
 02090   return 
 02100 L2100: pr #255,using L2110: cat$(j1) ! pr CATEGORY HEADING
 02110 L2110: form pos 3,c 30,skip 1
@@ -285,7 +285,7 @@
 02890   retry 
 02900 XIT: fnxit
 02910   def fndate_mmddyy_to_ccyymmdd(x)
-02920     let x2=(x-int(x*.01)*100)*10000+int(x*.01)
-02930     if int(x2*.0001)<90 then let x2=x2+20000000 else let x2=x2+19000000
+02920     x2=(x-int(x*.01)*100)*10000+int(x*.01)
+02930     if int(x2*.0001)<90 then x2=x2+20000000 else x2=x2+19000000
 02940     fndate_mmddyy_to_ccyymmdd=x2
 02950   fnend 

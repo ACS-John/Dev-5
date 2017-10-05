@@ -15,8 +15,8 @@
 12820   client_id_sage_ax=3811
 12822   client_id_brc=90
 13000 ! ______________________________________________________________________
-13200   let filter_date(1)=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)
-13400   let filter_date(2)=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
+13200   filter_date(1)=val(date$(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymm')&'01') ! low (beginning of last month)
+13400   filter_date(2)=date(days(date$('ccyymm')&'01','ccyymmdd')-1,'ccyymmdd') ! high (end of last month)
 13600 ! /r
 13800   dim label$(2)*25,filter_date(2)
 14000   label$(1)='Starting Date'
@@ -94,34 +94,34 @@
 27800     dim gnl_block$*512
 28000     dim gnl_buffer$*32767
 28200     do until pos(gnl_buffer$,crlf$)>0 or gnl_eof
-28400       let gnl_block$=''
+28400       gnl_block$=''
 28600       read #h_in,using 'form pos 1,C 100': gnl_block$ ioerr GNL_H_IN_READ_IOERR
-28800       let gnl_buffer$=gnl_buffer$&gnl_block$
+28800       gnl_buffer$=gnl_buffer$&gnl_block$
 29000     loop 
 29200     pos_crlf=pos(gnl_buffer$,crlf$)
 29400     line$=gnl_buffer$(1:pos_crlf)
-29600     let gnl_buffer$(1:pos_crlf+1)=''
+29600     gnl_buffer$(1:pos_crlf+1)=''
 29800 ! line$=srep$(line$,cr$,'^') : line$=srep$(line$,lf$,'~')
 30000 ! pr 'line='&line$ : pause
 30200     goto GNL_XIT
 30400 GNL_H_IN_READ_IOERR: ! 
-30600     let gnl_block$=gnl_block$&crlf$
-30800     let gnl_eof=1
+30600     gnl_block$=gnl_block$&crlf$
+30800     gnl_eof=1
 31000     continue  ! gnl_h_in_read_ioerr
 31200 GNL_XIT: ! 
 31400   fnend  ! fn_get_next_line
 31600   def fn_get_the_date(gtd_source$*256)
-31800     let gtd_return=0
+31800     gtd_return=0
 32000     if gtd_source$<>'' then 
 32200 !   pr 'set the_date from '&gtd_source$
-32400       let gtd_source$=srep$(gtd_source$,'Mon, ','')
-32600       let gtd_source$=srep$(gtd_source$,'Tue, ','')
-32800       let gtd_source$=srep$(gtd_source$,'Wed, ','')
-33000       let gtd_source$=srep$(gtd_source$,'Thu, ','')
-33020       let gtd_source$=srep$(gtd_source$,'Fri, ','')
-33040       let gtd_source$=srep$(gtd_source$,'Sat, ','')
-33060       let gtd_source$=srep$(gtd_source$,'Sun, ','')
-33080       let gtd_source$=srep$(gtd_source$,'Sun, ','')
+32400       gtd_source$=srep$(gtd_source$,'Mon, ','')
+32600       gtd_source$=srep$(gtd_source$,'Tue, ','')
+32800       gtd_source$=srep$(gtd_source$,'Wed, ','')
+33000       gtd_source$=srep$(gtd_source$,'Thu, ','')
+33020       gtd_source$=srep$(gtd_source$,'Fri, ','')
+33040       gtd_source$=srep$(gtd_source$,'Sat, ','')
+33060       gtd_source$=srep$(gtd_source$,'Sun, ','')
+33080       gtd_source$=srep$(gtd_source$,'Sun, ','')
 33100       cc12_pos=pos(gtd_source$,', 12')
 33120       cc13_pos=pos(gtd_source$,', 13')
 33140       cc14_pos=pos(gtd_source$,', 14')
@@ -134,70 +134,70 @@
 33280       if cc16_pos<=0 then cc16_pos=pos(gtd_source$,', 2016')
 33300       if cc17_pos<=0 then cc17_pos=pos(gtd_source$,', 2017')
 33320       if cc12_pos>0 then 
-33340         let gtd_source$(cc12_pos:len(gtd_source$))=''
-33360         let gtd_date_ccyy=2012
+33340         gtd_source$(cc12_pos:len(gtd_source$))=''
+33360         gtd_date_ccyy=2012
 33380       else if cc13_pos>0 then 
-33400         let gtd_source$(cc13_pos:len(gtd_source$))=''
-33420         let gtd_date_ccyy=2013
+33400         gtd_source$(cc13_pos:len(gtd_source$))=''
+33420         gtd_date_ccyy=2013
 33440       else if cc14_pos>0 then 
-33460         let gtd_source$(cc14_pos:len(gtd_source$))=''
-33480         let gtd_date_ccyy=2014
+33460         gtd_source$(cc14_pos:len(gtd_source$))=''
+33480         gtd_date_ccyy=2014
 33500       else if cc15_pos>0 then 
-33520         let gtd_source$(cc15_pos:len(gtd_source$))=''
-33540         let gtd_date_ccyy=2015
+33520         gtd_source$(cc15_pos:len(gtd_source$))=''
+33540         gtd_date_ccyy=2015
 33560       else if cc16_pos>0 then 
-33580         let gtd_source$(cc16_pos:len(gtd_source$))=''
-33600         let gtd_date_ccyy=2016
+33580         gtd_source$(cc16_pos:len(gtd_source$))=''
+33600         gtd_date_ccyy=2016
 33620       else if cc17_pos>0 then 
-33640         let gtd_source$(cc17_pos:len(gtd_source$))=''
-33660         let gtd_date_ccyy=2017
+33640         gtd_source$(cc17_pos:len(gtd_source$))=''
+33660         gtd_date_ccyy=2017
 33680       else 
 33700         pr 'unrecognized year - enhance code ('&gtd_source$&')' : pause 
 36000       end if  ! 
 36200       if pos(gtd_source$,'Jan ')>0 then 
-36400         let gtd_source$=srep$(gtd_source$,'Jan ','')
-36600         let gtd_date_mm=01
+36400         gtd_source$=srep$(gtd_source$,'Jan ','')
+36600         gtd_date_mm=01
 36800       else if pos(gtd_source$,'Feb ')>0 then 
-37000         let gtd_source$=srep$(gtd_source$,'Feb ','')
-37200         let gtd_date_mm=02
+37000         gtd_source$=srep$(gtd_source$,'Feb ','')
+37200         gtd_date_mm=02
 37400       else if pos(gtd_source$,'Mar ')>0 then 
-37600         let gtd_source$=srep$(gtd_source$,'Mar ','')
-37800         let gtd_date_mm=03
+37600         gtd_source$=srep$(gtd_source$,'Mar ','')
+37800         gtd_date_mm=03
 38000       else if pos(gtd_source$,'Apr ')>0 then 
-38200         let gtd_source$=srep$(gtd_source$,'Apr ','')
-38400         let gtd_date_mm=04
+38200         gtd_source$=srep$(gtd_source$,'Apr ','')
+38400         gtd_date_mm=04
 38402       else if pos(gtd_source$,'Apr, ')>0 then 
-38404         let gtd_source$=srep$(gtd_source$,'Apr, ','')
-38406         let gtd_date_mm=04
+38404         gtd_source$=srep$(gtd_source$,'Apr, ','')
+38406         gtd_date_mm=04
 38600       else if pos(gtd_source$,'May ')>0 then 
-38800         let gtd_source$=srep$(gtd_source$,'May ','')
-39000         let gtd_date_mm=05
+38800         gtd_source$=srep$(gtd_source$,'May ','')
+39000         gtd_date_mm=05
 39200       else if pos(gtd_source$,'Jun ')>0 then 
-39400         let gtd_source$=srep$(gtd_source$,'Jun ','')
-39600         let gtd_date_mm=06
+39400         gtd_source$=srep$(gtd_source$,'Jun ','')
+39600         gtd_date_mm=06
 39800       else if pos(gtd_source$,'Jul ')>0 then 
-40000         let gtd_source$=srep$(gtd_source$,'Jul ','')
-40200         let gtd_date_mm=07
+40000         gtd_source$=srep$(gtd_source$,'Jul ','')
+40200         gtd_date_mm=07
 40400       else if pos(gtd_source$,'Aug ')>0 then 
-40600         let gtd_source$=srep$(gtd_source$,'Aug ','')
-40800         let gtd_date_mm=08
+40600         gtd_source$=srep$(gtd_source$,'Aug ','')
+40800         gtd_date_mm=08
 41000       else if pos(gtd_source$,'Sep ')>0 then 
-41200         let gtd_source$=srep$(gtd_source$,'Sep ','')
-41400         let gtd_date_mm=09
+41200         gtd_source$=srep$(gtd_source$,'Sep ','')
+41400         gtd_date_mm=09
 41600       else if pos(gtd_source$,'Oct ')>0 then 
-41800         let gtd_source$=srep$(gtd_source$,'Oct ','')
-42000         let gtd_date_mm=10
+41800         gtd_source$=srep$(gtd_source$,'Oct ','')
+42000         gtd_date_mm=10
 42200       else if pos(gtd_source$,'Nov ')>0 then 
-42400         let gtd_source$=srep$(gtd_source$,'Nov ','')
-42600         let gtd_date_mm=11
+42400         gtd_source$=srep$(gtd_source$,'Nov ','')
+42600         gtd_date_mm=11
 42800       else if pos(gtd_source$,'Dec ')>0 then 
-43000         let gtd_source$=srep$(gtd_source$,'Dec ','')
-43200         let gtd_date_mm=12
+43000         gtd_source$=srep$(gtd_source$,'Dec ','')
+43200         gtd_date_mm=12
 43400       else 
 43600         pr 'unrecognized month - enhance code' : pause 
 43800       end if 
-44000       let gtd_date_dd=val(gtd_source$)
-44200       let gtd_return=val(str$(gtd_date_ccyy)&cnvrt$('pic(##)',gtd_date_mm)&cnvrt$('pic(##)',gtd_date_dd))
+44000       gtd_date_dd=val(gtd_source$)
+44200       gtd_return=val(str$(gtd_date_ccyy)&cnvrt$('pic(##)',gtd_date_mm)&cnvrt$('pic(##)',gtd_date_dd))
 44400     end if  ! gtd_source$<>''
 44600     fn_get_the_date=gtd_return
 44800   fnend  ! fn_get_the_date
@@ -221,7 +221,7 @@
 48400     fnacs(sn$,0,mat resp$,ckey)
 48600     if ckey=5 then let fkey(99)
 48800     for ad_line=1 to udim(mat label$)
-49000       let filter_date(ad_line)=val(srep$(resp$(ad_line),'/',''))
+49000       filter_date(ad_line)=val(srep$(resp$(ad_line),'/',''))
 49200     next ad_line
 49400   fnend  ! fn_ask_dates
 51000   def fn_acs_hourly_rate(wo_client,the_date,wo_month; hr_category,wo_sage_code$*128) ! inherrits client_id_sage_ax and client_id_brc
@@ -280,27 +280,27 @@
 56140       pr #255: '!!! Sage Code is blank !!!'
 56160     end if 
 56180     if wo_sage_code$='' then 
-56200       let wo_sage_code$=wo_sage_code_prior$
+56200       wo_sage_code$=wo_sage_code_prior$
 56202     else if lwrc$(wo_sage_code$)='glover' then ! Glover Oil
-56204       let wo_sage_code$='0052'
+56204       wo_sage_code$='0052'
 56220     else if lwrc$(wo_sage_code$)='pbj onsite' or lwrc$(wo_sage_code$)='pbj' then ! Payroll Based Journaling
-56240       let wo_sage_code$='004H'
+56240       wo_sage_code$='004H'
 56260     else if lwrc$(wo_sage_code$)='aca onsite' or lwrc$(wo_sage_code$)='file export' then ! ACA file exports
-56280       let wo_sage_code$='004J'
+56280       wo_sage_code$='004J'
 56300     else if lwrc$(wo_sage_code$)='onsite' or lwrc$(wo_sage_code$)='acc hourly' then ! hourly development for ACC
-56320       let wo_sage_code$='004T'
+56320       wo_sage_code$='004T'
 56340     ! removed 1/9/2017  !  else if lwrc$(wo_sage_code$)='acc training' then ! Training on ACC
-56360     ! removed 1/9/2017  !    let wo_sage_code$='004P'
+56360     ! removed 1/9/2017  !    wo_sage_code$='004P'
 56380     else if lwrc$(wo_sage_code$)='pbj offsite' then 
-56400       let wo_sage_code$='004Y'
+56400       wo_sage_code$='004Y'
 56420     else if lwrc$(wo_sage_code$)='aca offsite' or lwrc$(wo_sage_code$)='acc offsite' then 
-56440       let wo_sage_code$='004Z'
+56440       wo_sage_code$='004Z'
 56460     else if lwrc$(wo_sage_code$)='offsite' then 
-56480       let wo_sage_code$='004X'
+56480       wo_sage_code$='004X'
 56500     else 
 56520       pr #255: '!!! Sage AX Project Code ('&wo_sage_code$&') is unrecognized - enhance table in csv2tm !!!'
 56540     end if 
-56560     let wo_sage_code_prior$=wo_sage_code$
+56560     wo_sage_code_prior$=wo_sage_code$
 56580     dim sawo_line$*512
 56600     sawo_line$=''
 56620     sawo_line$(inf:inf)=date$(days(wo_date,'ccyymmdd'),'ccyy/mm/dd')&tab$

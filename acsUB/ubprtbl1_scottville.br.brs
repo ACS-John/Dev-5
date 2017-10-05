@@ -15,14 +15,14 @@
 10140   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 10150   close #21: 
 10160   at$(1)=cnam$
-10170   let z=21
+10170   z=21
 10180   at$(1)=trim$(at$(1))(1:z)
-10190   let x=len(at$(1)) : let y=z-x
+10190   x=len(at$(1)) : y=z-x
 10200   at$(1)=rpt$(" ",int(y/2))&at$(1)
-10210   let z=26
+10210   z=26
 10220   for j=2 to udim(at$)
 10230     at$(j)=trim$(at$(j))(1:z)
-10240     let x=len(at$(j)) : let y=z-x
+10240     x=len(at$(j)) : y=z-x
 10250     at$(j)=rpt$(" ",int(y/2))&at$(j)
 10260   next j
 10270   linelength=62
@@ -174,7 +174,7 @@
 11740   if prtbkno=0 then goto L1250
 11750   if prtbkno><route then goto END5
 11760 L1250: if f><d1 then goto L1210
-11770   let zip5$=cr$=""
+11770   zip5$=cr$=""
 11780   read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1280
 11790 L1280: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 11800   goto L1210
@@ -217,10 +217,10 @@
 12230     end if 
 12240 ! -- Standard 4 Per Page Even Perferated Card Stock Bills
 12250     billcounter+=1
-12260     if billcounter=1 then let xmargin=1 : let ymargin=10
-12270     if billcounter=2 then let xmargin=140 : let ymargin=10
-12280     if billcounter=3 then let xmargin=1 : let ymargin=118
-12290     if billcounter=4 then let xmargin=140 : let ymargin=118 : billcounter=0
+12260     if billcounter=1 then xmargin=1 : ymargin=10
+12270     if billcounter=2 then xmargin=140 : ymargin=10
+12280     if billcounter=3 then xmargin=1 : ymargin=118
+12290     if billcounter=4 then xmargin=140 : ymargin=118 : billcounter=0
 12300 ! ______________________________________________________________________
 12310 ! pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',57,'&str$(lyne*3+3)&',True)'
 12320     if reading_date_cur_s1=0 then reading_date_cur=d3 else reading_date_cur=reading_date_cur_s1
@@ -257,13 +257,13 @@
 12630       pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 12640     end if 
 12650     if a4=1 then 
-12660       let gcode$="RSGS"
+12660       gcode$="RSGS"
 12670     else if a4=2 then 
-12680       let gcode$="CMGS"
+12680       gcode$="CMGS"
 12690     else if a4=3 then 
-12700       let gcode$="INGS"
+12700       gcode$="INGS"
 12710     else 
-12720       let gcode$="GAS"
+12720       gcode$="GAS"
 12730     end if 
 12740     if g(4)<>0 then 
 12750       pr #20: 'Call Print.AddText("'&gcode$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'

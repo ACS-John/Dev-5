@@ -19,10 +19,10 @@
 00240   fnGetPayrollDates(beg_date,end_date,qtr1,qtr2,qtr3,qtr4,d1)
 00250   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00260   read #20,using L280: mat a$,b$(1),mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$
-00270   let ficamaxw=ficamaxw*10
+00270   ficamaxw=ficamaxw*10
 00280 L280: form pos 1,3*c 40,c 12,pd 6.3,pd 6.2,pd 5.2,10*c 8,n 2,pd 4.2,pd 3.3,pd 4.2,pd 4.2,10*pd 4.2,10*pd 3.3,10*c 12
 00290 ! ______________________________________________________________________
-00300   let ficarate=ficarate/100
+00300   ficarate=ficarate/100
 00310   mcr=mcr*.01
 00320   close #20: 
 00330 ! ______________________________________________________________________
@@ -93,13 +93,13 @@
         fnmsgbox(mat ml$,resp$,cap$,0) !:
         goto MENU1
 00820 L820: for j=1 to 4
-00830     if resp$(2)=option1$(j) then let qtr=j: m$=option1$(j): goto L850 ! quarter ending date
+00830     if resp$(2)=option1$(j) then qtr=j: m$=option1$(j): goto L850 ! quarter ending date
 00840   next j
 00850 L850: if qtr=1 then begdate=taxyear*10000+0312: enddate=val(taxyear$)*10000+0318
 00860   if qtr=2 then begdate=taxyear*10000+0612: enddate=val(taxyear$)*10000+0618
 00870   if qtr=3 then begdate=taxyear*10000+0912: enddate=val(taxyear$)*10000+0918
 00880   if qtr=4 then begdate=taxyear*10000+1212: enddate=val(taxyear$)*10000+1218
-00890   if resp$(3)="True" then let frm=2 else let frm=1 ! need a worksheet
+00890   if resp$(3)="True" then frm=2 else frm=1 ! need a worksheet
 00900   box15a=val(resp$(4)) ! first month liability
 00910   box15b=val(resp$(5))
 00920   box15c=val(resp$(6))
@@ -160,7 +160,7 @@
 10780   m2=m2+ytdtotal(31)-dedytdfica ! TOTAL WAGES less deductions FOR THIS EMPLOYEE FOR YEAR
 10800   m1=m1+qtr(31)-dedqtrfica ! TOTAL WAGES less deductions FOR QURATER
 10820   m4=m4+qtr(31)-dedqtrfederal ! TOTAL Taxable WAGES less deductions FOR QURATER
-10840   let fedwh=fedwh+qtr(1) ! FEDERAL WH FOR QUARTER
+10840   fedwh=fedwh+qtr(1) ! FEDERAL WH FOR QUARTER
 10860   eicqtr+=qtr(25) ! EIC FOR QUARTER
 10880   if m2=0 then goto L1140
 10900   fn_print_details
@@ -233,10 +233,10 @@
 12260     pr #255,using L2210: t1,t2,t3
 12280 L2210: form pos 41,pic(----,---.##),pos 56,pic(----,---.##),pos 67,pic(---,---,---.##),skip 1
 12300 L2230: p3=0
-12320     let gt1=gt1+t1
-12340     let gt2=gt2+t2
-12360     let gt3=gt3+t3
-12380     let gt4=gt4+t4
+12320     gt1=gt1+t1
+12340     gt2=gt2+t2
+12360     gt3=gt3+t3
+12380     gt4=gt4+t4
 12400     t1=0
 12420     t2=0
 12440     t3=0
@@ -248,7 +248,7 @@
 12580 continue ! /r
 12620   def fn_build_941
 12640 !   if env$('client')="Washington Parrish" then tpt(30)=0 ! used tips for something else 
-12660     let wagefica=round((gt2-tpt(30))*(ficarate*2),2) ! 2013
+12660     wagefica=round((gt2-tpt(30))*(ficarate*2),2) ! 2013
 12680     taxfica=round(tpt(30)*(ficarate*2),2) ! 2013 requirements that employee fica be 4.2 and employer be 6.2  (was ficarate*2)
 12700 !   tipfica= round((tpt(30))*(ficarate*2),2) ! 2013    FICARATE)
 12720     mcwh=round((gt3)*mcr*2,2)
@@ -294,7 +294,7 @@
 13580 ! fnpa_pic("S:\acsPR\941_2012_A.bmp",1,1)
 13600     pr #20: 'Call Print.MyFont("Courier New")'
 13620     for j=1 to 10
-13640       let x=val(b$(1)(j:j)) conv L2960 ! pull any spaces or non-numeric characters out of federal id#
+13640       x=val(b$(1)(j:j)) conv L2960 ! pull any spaces or non-numeric characters out of federal id#
 13660       goto L2970
 13680 L2960: b$(1)(j:j)=""
 13700 L2970: if b$(1)(j:j)=" " then b$(1)(j:j)=""
@@ -318,10 +318,10 @@
 14060     fnpa_txt(trim$(city$),35,48)
 14080     fnpa_txt(trim$(state$),93,48)
 14100     fnpa_txt(trim$(zip$),108,48)
-14120     if qtr=1 then let quarter=29 ! 1st quarter
-14140     if qtr=2 then let quarter=35 ! 2nd quarter
-14160     if qtr=3 then let quarter=41 ! 3rd quarter
-14180     if qtr=4 then let quarter=47 ! 4rd quarter
+14120     if qtr=1 then quarter=29 ! 1st quarter
+14140     if qtr=2 then quarter=35 ! 2nd quarter
+14160     if qtr=3 then quarter=41 ! 3rd quarter
+14180     if qtr=4 then quarter=47 ! 4rd quarter
 14200     fnpa_txt("X",143,quarter)
 14220     tab1=63: tab2=113: tab3=160 ! WAS 62,112,159  ! 76,126,173 WORKED WHEN TO FAR RIGHT
 14240     fnpa_txt(cnvrt$("pic(zzzzzzzzzzzzzz)",box1),tab3,72)
@@ -371,7 +371,7 @@
 15120 L3750: p1=pos(rtrm$(csz$),"  ",1)
 15140     if p1>0 then csz$(p1+1:p1+1)="" : goto L3750
 15160     csz$=ltrm$(rtrm$(csz$)): p1=pos(csz$," ",-1)
-15180     let zip$=csz$(p1+1:len(csz$)): let zip$=ltrm$(rtrm$(zip$))
+15180     zip$=csz$(p1+1:len(csz$)): zip$=ltrm$(rtrm$(zip$))
 15200     p2=pos(csz$(1:p1-1)," ",-1) : state$=csz$(p2+1:p1-1)(1:2) : state$=ltrm$(rtrm$(state$))
 15220     city$=csz$(1:p2-1)(1:15): city$=ltrm$(rtrm$(city$))
 15240   fnend 

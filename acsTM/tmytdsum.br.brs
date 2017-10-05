@@ -50,7 +50,7 @@
 00510   read #2,using L520,rec=addr: cn$,en$,in$,sc$,mat y ioerr L1950
 00520 L520: form pos 1,c 5,c 9,c 12,c 4,n 6,2*n 2,pd 2,pd 4.2,2*pd 5.2
 00530   if fst=1 then goto L560
-00540   let fst=1
+00540   fst=1
 00550   hcn$=cn$
 00560 L560: if hcn$=cn$ then goto L590
 00570   gosub L1900
@@ -95,7 +95,7 @@
 00960 L960: pr #255: newpage
 00970   gosub L830
 00980   goto L1010
-00990 L990: if y(3)= 0 then let y(3)=1
+00990 L990: if y(3)= 0 then y(3)=1
 01000   pr #255,using L940: cliname$(1:26),y(3),"-",y(2),y(5),y(6),y(7),y(7),0," ",y(1),cat$(y(3))(1:22),enam$(1:22) pageoflow L960
 01010 L1010: l1=l1+y(5)
 01020   m1=m1+y(6)
@@ -111,9 +111,9 @@
 01120 L1120: form pos 1,c 25,pos 28,n 8.2,pos 38,n 10.2,pos 50,n 10.2,pos 61,n 10.2,pos 72,n 5,pos 77,c 1,skip 1 ! 2/5/88
 01130     goto L1150
 01140 L1140: pr #255,using L1120: c$(y3),d(y3),e(y3),f(y3),f(y3),0,"%"
-01150 L1150: let w=w+d(y3)
-01160     let x=x+e(y3)
-01170     let z=z+f(y3)
+01150 L1150: w=w+d(y3)
+01160     x=x+e(y3)
+01170     z=z+f(y3)
 01180   next y3
 01190 L1190: if x=0 then goto L1230
 01200   pr #255,using L1210: "  FINAL TOTALS",w,x,z,z-x,(z-x)/x*100,"%"
@@ -156,8 +156,8 @@
 01570     if rtrm$(x$(x7))="" then goto L1600
 01580   next x7
 01590   goto L1640
-01600 L1600: let x$(x7)=cat$(y(3))
-01610 L1610: let g(x7)=g(x7)+y(7)
+01600 L1600: x$(x7)=cat$(y(3))
+01610 L1610: g(x7)=g(x7)+y(7)
 01620   h(x7)=h(x7)+y(5)
 01630   i(x7)=i(x7)+y(6)
 01640 L1640: return 
@@ -172,14 +172,14 @@
 01730     if rtrm$(x$(x7))="" then goto L1850
 01740     if x$(x7)="-1" then goto L1760
 01750     goto L1770
-01760 L1760: let x$(x7)="UNASSIGNED"
+01760 L1760: x$(x7)="UNASSIGNED"
 01770 L1770: if i(x7)><0 then goto L1800
 01780     pr #255,using L1120: x$(x7)(1:25),h(x7),i(x7),g(x7),g(x7),0,"%"
 01790     goto L1810
 01800 L1800: pr #255,using L1120: x$(x7)(1:25),h(x7),i(x7),g(x7),g(x7)-i(x7),(g(x7)-i(x7))/i(x7)*100,"%"
-01810 L1810: let w1=w1+g(x7)
-01820     let x1=x1+h(x7)
-01830     let y1=y1+i(x7)
+01810 L1810: w1=w1+g(x7)
+01820     x1=x1+h(x7)
+01830     y1=y1+i(x7)
 01840   next x7
 01850 L1850: if y1=0 then goto L1880
 01860   pr #255,using L1210: "   FINAL TOTALS",x1,y1,w1,w1-y1,(w1-y1)/y1*100,"%"

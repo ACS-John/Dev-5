@@ -103,7 +103,7 @@
 42020     fntos(sn$="Transaction-1")
 42040     rc=cf=0
 42060     fnfra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
-42080     cf+=1 : let fratype=cf
+42080     cf+=1 : fratype=cf
 42100     fnopt(1,3,"[All]",0,fratype)
 42120     if sel_code=1 or sel_code=0 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
 42140     fnopt(2,3,"Charges",0,fratype)
@@ -117,7 +117,7 @@
 42300     fnopt(6,3,"Debit Memos",0,fratype)
 42320     if sel_code=6 then resp$(rc+=1)="True" else resp$(rc+=1)="False"
 42340     fnfra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
-42360     cf+=1 : let fradate=cf : mylen=26 : mypos=mylen+2
+42360     cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
 42380     fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
 42400     fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
 42420     if beg_date=0 then beg_date=date('mm')*10000+100+date('yy')-1
@@ -126,7 +126,7 @@
 42480     fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
 42500     resp$(rc+=1)=str$(end_date)
 42520     fnfra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
-42540     cf+=1 : let fraaccount=cf
+42540     cf+=1 : fraaccount=cf
 42560     fnlbl(1,1,"Account:",8,1,0,fraaccount)
 42580     if trim$(hact$)='' then 
 42600       fncmbact(1,10,1,fraaccount)
@@ -157,7 +157,7 @@
 43260     end if 
 43280     beg_date=val(resp$(7))
 43300     end_date=val(resp$(8))
-43320     let z$=resp$(9)(1:10)
+43320     z$=resp$(9)(1:10)
 43340     L810: !
 43360   return  ! /r
 44000   Tf_XIT: ! 
@@ -219,11 +219,11 @@
 48500   if trim$(servicename$(4))<>"Gas" and srv$(4)="GA" then ptShowGasUsed=1 ! gas readings are being used for a reduction meter
 48520   if trim$(z$)="[All]" then hd1$="    {\ul Account        Date   }" else hd1$="    {\ul    Date   }"
 48540   sz1=0
-48560   let x=0
+48560   x=0
 48580   for j=1 to 10
 48600     if j=3 and ptShowElecUsed=1 then goto L1010 ! skp heading is electric field is used to hold other readings w/o matching changes (eg Kimberling City as reduction meters)
 48620     if j=4 and ptShowGasUsed=1 then goto L1010 ! skp heading is gas field is used to hold other readings w/o matching changes (eg Kimberling City as reduction meters)
-48640     let x2=pos(trim$(servicename$(j))," ",1)
+48640     x2=pos(trim$(servicename$(j))," ",1)
 48660     if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
 48680     if trim$(servicename$(j))<>"" then 
 48700       scr1$(sz1+=1)=servicename$(j)
@@ -237,7 +237,7 @@
 48880   else
 48900     if trim$(servicename$(1))="Water" then 
 48920       hd1$=hd1$&"  {\ul   Wa Used }" 
-48940       let water=1
+48940       water=1
 48960     end if 
 48980     if trim$(servicename$(3))="Electric" then 
 49000       hd1$=hd1$&"  {\ul   El Used }" 
@@ -248,10 +248,10 @@
 49100     end if 
 49120     if trim$(servicename$(4))="Gas" then 
 49140       hd1$=hd1$&"  {\ul   Ga Used }" 
-49160       let gas=1 
+49160       gas=1 
 49180     else if ptShowGasUsed=1 then 
 49200       hd1$=hd1$&"  {\ul      Used }" 
-49220       let gas=1
+49220       gas=1
 49240     end if
 49260   end if
 49280   mat scr1$(sz1)
@@ -281,7 +281,7 @@
 49760     if tcode=5 then ti2=3 ! DEBIT MEMO
 49780     if ti2=3 then r(1,1)-=tamount else r(1,1)+=tamount
 49800     r(1,ti2+1)+=tamount
-49820     let x=0
+49820     x=0
 49840     for j=1 to 10
 49860       if trim$(servicename$(j))="" then goto L1370
 49880       if j=3 and (trim$(servicename$(j))<>"Electric" or trim$(servicename$(j))<>"Lawn Meter") and srv$(j)="EL" then goto L1370 ! electic being used for reduction meter
@@ -298,12 +298,12 @@
 50100     if tcode=4 then c$="CM"
 50120     if tcode=5 then c$="DM"
 50140     service=0
-50160     if water=1 then service+=1: let usage(service)=wu ! water
-50180     if electric=1 then service+=1: let usage(service)=eu ! Electric
-50200     if gas=1 then service+=1: let usage(service)=gu ! Gas
+50160     if water=1 then service+=1: usage(service)=wu ! water
+50180     if electric=1 then service+=1: usage(service)=eu ! Electric
+50200     if gas=1 then service+=1: usage(service)=gu ! Gas
 50220     if print_balance then 
 50240       printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 8.2,n 10.2,3*pic(--------.--),x 1"
-50260       let usage(1)=tbal
+50260       usage(1)=tbal
 50280     else 
 50300       printlineform$="c 4,PIC(ZZZZ/ZZ/ZZ),SZ1*N 8.2,n 10.2,3*pic(zzzzzzzzzzz),x 1"
 50320     end if 
@@ -370,10 +370,10 @@
 63030   forceAllColumnsOn=0
 63040   if forceAllColumnsOn then mat colEnabled(25) : mat colEnabled=(1)
 63060   if trim$(z$)="[All]" then 
-63080     let z$=""
+63080     z$=""
 63100     colEnabled(2)=1
 63120   else if trim$(z$)<>"" then 
-63140     let z$=lpad$(trim$(z$),10)
+63140     z$=lpad$(trim$(z$),10)
 63160     colEnabled(2)=0
 63180   end if
 64000   dim colHdr_enabled$(0)*20
@@ -485,8 +485,8 @@
 72220   colmask$(4)=""
 72240   colmask$(5)="10"
 72260   headerCount=5
-72280   if trim$(servicename$(3))<>"Electric" and srv$(3)="EL" then let ftShowElecUsed=1
-72300   if trim$(servicename$(4))<>"Gas" and srv$(4)="GA" then let ftShowGasUsed=1
+72280   if trim$(servicename$(3))<>"Electric" and srv$(3)="EL" then ftShowElecUsed=1
+72300   if trim$(servicename$(4))<>"Gas" and srv$(4)="GA" then ftShowGasUsed=1
 72320   for j=1 to 10
 72340     if j=3 and ftShowElecUsed=1 then goto L220
 72360     if j=4 and ftShowGasUsed=1 then goto L220

@@ -51,7 +51,7 @@
 00360   read #1,using L370: z$,e2$,bal eof DONE
 00370 L370: form pos 1,c 10,pos 41,c 30,pos 292,pd 4.2
 00380   restore #2,key>=z$&"         ": nokey READ_CUSTOMER
-00390   let first_trans_per_act=1 ! True
+00390   first_trans_per_act=1 ! True
 00400 READ_TRANS: ! 
 00410   read #2,using L430: p$,tdate,tcode,tamount,tbal eof READ_CUSTOMER
 00420 ! If TRIM$(P$)="100550.00" Then Let FNPAUSE
@@ -60,7 +60,7 @@
 00450   if (d(1)<>0 and tdate<d(1)) or (d(2)<>0 and tdate>d(2)) then !:
           goto READ_TRANS
 00460   gosub PRINT_TRANS
-00470   let first_trans_per_act=0 ! false
+00470   first_trans_per_act=0 ! false
 00480   goto READ_TRANS
 00490 ! ______________________________________________________________________
 00500 DONE: ! 

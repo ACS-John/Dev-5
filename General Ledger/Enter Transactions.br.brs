@@ -19,14 +19,14 @@
 00126   dim pr(19)
 00128 ! ______________________________________________________________________
 00130   fntop(program$,cap$="Enter Transactions")
-00132   let gltyp=7
+00132   gltyp=7
 00135   fnreg_read('Enter Transactions - retain some fields between additions',gl_retainFieldsDuringAdd$,'False')
-00136 ! let fil$(1)="Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr"
-00138 ! let fil$(2)="Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
-00140 ! let fil$(3)="Name="&env$('Q')&"\GLmstr\GLWK2"&wsid$&".h"&env$('cno')
+00136 ! fil$(1)="Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr"
+00138 ! fil$(2)="Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
+00140 ! fil$(3)="Name="&env$('Q')&"\GLmstr\GLWK2"&wsid$&".h"&env$('cno')
 00142 ! 
-00144 ! let fil$(5)="Name="&env$('Q')&"\GLmstr\GLPT"&wsid$&".h"&env$('cno')
-00146 ! let fil$(6)="Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno')&",Shr"
+00144 ! fil$(5)="Name="&env$('Q')&"\GLmstr\GLPT"&wsid$&".h"&env$('cno')
+00146 ! fil$(6)="Name="&env$('Q')&"\GLmstr\GLBRec.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno')&",Shr"
 00148 ! 
 00150   typeofentry_option$(1)="1 = Disbursements"
 00152   typeofentry_option$(2)="2 = Receipts"
@@ -195,7 +195,7 @@
 34000 PREPARE_EDIT_SCREEN: ! r:
 34020   transactionamt=0
 34040   editmode=1
-34060   let gl$=""
+34060   gl$=""
 34080   totalalloc=0
 34100   read #h_gl_work,using fGlWork,rec=rn: mat tr,tr$,td$,vn$,mat jv$,key$ norec PES_XIT ! get basic information from record clicked to find the complete transaction
 34120   holdtr$=tr$
@@ -329,10 +329,10 @@
 43220   mat glitem$(4)
 43240   do  ! READ_GL_ALLOCATIONS: !
 43260     read #glallocations,using 'Form Pos 1,c 12,pd 10.2,c 30': allocgl$,allocamt,td$ eof EO_FLEX1
-43280     let glitem$(1)=str$(rec(glallocations))
-43300     let glitem$(2)=allocgl$
-43320     let glitem$(3)=str$(allocamt)
-43340     let glitem$(4)=td$
+43280     glitem$(1)=str$(rec(glallocations))
+43300     glitem$(2)=allocgl$
+43320     glitem$(3)=str$(allocamt)
+43340     glitem$(4)=td$
 43360     fnflexadd1(mat glitem$)
 43380   loop  !  goto READ_GL_ALLOCATIONS
 43400 EO_FLEX1: ! /r
@@ -371,7 +371,7 @@
 44060     gosub REVIEW_TRANS : goto MAIN
 44080   else if ckey=6 then 
 44100     transactionamt=0
-44120     let un$=tr$=""
+44120     un$=tr$=""
 44140     goto SCREEN_1
 44160   else if ckey=7 then 
 44180     goto DELETE_TRANS
@@ -385,7 +385,7 @@
 44340   if ckey=2 and transactionamt=0 then goto MAIN
 44360   tr$=resp$(3) ! ref #
 44380   vn$=vn$=resp$(4)(1:8) ! payee number
-44400   let glkey$=lpad$(rtrm$(vn$),8)
+44400   glkey$=lpad$(rtrm$(vn$),8)
 44420   read #paymstr, using "form pos 1,c 8",key=glkey$,release: x$ nokey PAYMSTR_GLNUM_NOKEY
 44440   goto L4130
 44460 PAYMSTR_GLNUM_NOKEY: ! 
@@ -408,7 +408,7 @@
 44800   if sel=3 and (allocamt=0 or ckey=30) then goto AFP_XIT ! don't require gl # on adjustments when amount=0 (actually changing from one adjustment to the next)
 44820   if sel=4 and edit=1 then goto AFP_XIT ! never should have an amount on payroll check. (done from another screen and edits all made from allocation screen
 44840   if ckey=17 then goto AFP_XIT
-44860   let x=val(allocgl$) conv AFP_BAD_GL
+44860   x=val(allocgl$) conv AFP_BAD_GL
 44880   if edit=1 then goto AFP_XIT ! KJ 080608   DON'T CHECK FOR GENERAL NUMBER ON EDIT
 44900   if val(allocgl$)=0 then goto AFP_BAD_GL else goto AFP_XIT
 44920 AFP_BAD_GL: ! 
@@ -483,7 +483,7 @@
 48220     gosub REVIEW_TRANS : goto MAIN
 48240   else if ckey=6 then 
 48260     transactionamt=0
-48280     let un$=tr$=vn$=""
+48280     un$=tr$=vn$=""
 48300     goto SCREEN_1
 48320   end if 
 48340   ! 
@@ -491,7 +491,7 @@
 48380   if ckey=9 then goto PROOF_TOTALS
 48400 goto MAIN ! /r
 52000 EXTRACT: ! r:
-52020   let glkey$=lpad$(rtrm$(vn$),8)
+52020   glkey$=lpad$(rtrm$(vn$),8)
 52040   restore #payeegl,key>=glkey$: nokey L4780
 52060 READPAYEEGL: ! 
 52080   read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,td$ eof L4740
@@ -535,26 +535,26 @@
 57380 L5230: read #h_gl_work,using F_2B: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,vn$,mat jv$,key$ eof L5310
 57400   if trim$(tr$)<>"" and tr$<>oldtr$ then 
 57420     mat glitem2$=("")
-57440     let glitem2$(6)=str$(net)
-57460     let glitem2$(7)="Net"
+57440     glitem2$(6)=str$(net)
+57460     glitem2$(7)="Net"
 57480     fnflexadd1(mat glitem2$)
 57500     net=0 ! add net subtotals any time reference number changes     ( AND NET<>0)was in there
 57520   end if 
-57560 ! Let GL$=CNVRT$("pic(zz#)",TR(1))&CNVRT$("pic(zzzzz#)",TR(2))&CNVRT$("pic(zz#)",TR(3))
-57580   let glitem2$(1)=str$(rec(2))
-57600   let glitem2$(2)=str$(tr(4)) ! str$(date(days(tr(4),'mmddyy'),'ccyymmdd'))
-57620   let glitem2$(3)=tr$
-57640   let glitem2$(4)=vn$
-57660   let glitem2$(5)=gl$
-57680   let glitem2$(6)=str$(tr(5))
-57700   let glitem2$(7)=td$
+57560 ! gL$=CNVRT$("pic(zz#)",TR(1))&CNVRT$("pic(zzzzz#)",TR(2))&CNVRT$("pic(zz#)",TR(3))
+57580   glitem2$(1)=str$(rec(2))
+57600   glitem2$(2)=str$(tr(4)) ! str$(date(days(tr(4),'mmddyy'),'ccyymmdd'))
+57620   glitem2$(3)=tr$
+57640   glitem2$(4)=vn$
+57660   glitem2$(5)=gl$
+57680   glitem2$(6)=str$(tr(5))
+57700   glitem2$(7)=td$
 57720   fnflexadd1(mat glitem2$)
 57740   net+=tr(5) ! add net check
 57760   oldtr$=tr$ ! hold reference numbers
 57780   goto L5230
 57800 L5310: ! 
 57820   mat glitem2$=("")
-57840   let glitem2$(6)=str$(net): let glitem2$(7)="Net"
+57840   glitem2$(6)=str$(net): glitem2$(7)="Net"
 57860   fnflexadd1(mat glitem2$)
 57880   net=0 ! add net subtotals at end of listing
 57900   fncmdkey("&Add",1,0,0,"Add additional transactions or allocations.")
@@ -577,11 +577,11 @@
 58540   do 
 58560     read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,td$ eof EO_FLEX3
 58580     if vn$<>payeekey$ then goto EO_FLEX3
-58600     let glitem$(1)=str$(rec(payeegl))
-58620     let glitem$(2)=payeekey$
-58640     let glitem$(3)=payeegl$
-58660     let glitem$(4)=str$(percent)
-58680     let glitem$(5)=td$
+58600     glitem$(1)=str$(rec(payeegl))
+58620     glitem$(2)=payeekey$
+58640     glitem$(3)=payeegl$
+58660     glitem$(4)=str$(percent)
+58680     glitem$(5)=td$
 58700     fnflexadd1(mat glitem$)
 58720   loop 
 58740   EO_FLEX3: ! /r
@@ -675,12 +675,12 @@
 71020   mat glitem3$=("")
 71040   for j=1 to 30
 71060     if trim$(k_list$(j))<>"" then ! skip blanks
-71080       let glitem3$(1)=k_list$(j)
-71100       let glitem3$(2)=str$(k(j,4))
-71120       let glitem3$(3)=str$(-k(j,5))
-71140       let glitem3$(4)=str$(k(j,6))
-71160       let glitem3$(5)=str$(k(j,7))
-71180       let glitem3$(6)=str$(k(j,8))
+71080       glitem3$(1)=k_list$(j)
+71100       glitem3$(2)=str$(k(j,4))
+71120       glitem3$(3)=str$(-k(j,5))
+71140       glitem3$(4)=str$(k(j,6))
+71160       glitem3$(5)=str$(k(j,7))
+71180       glitem3$(6)=str$(k(j,8))
 71200       fnflexadd1(mat glitem3$)
 71220     end if 
 71240   next j
@@ -724,12 +724,12 @@
 72320     mat glitem3$=("")
 72340     for j=1 to 30
 72360       if trim$(k_list$(j))<>"" then ! skip blanks
-72380         let glitem3$(1)=k_list$(j)
-72400         let glitem3$(2)=cnvrt$("Pic(-------,---,---.##)",k(j,4)) ! cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)="10"
-72420         let glitem3$(3)=cnvrt$("Pic(-------,---,---.##)",-k(j,5))
-72440         let glitem3$(4)=cnvrt$("Pic(-------,---,---.##)",k(j,6))
-72460         let glitem3$(5)=cnvrt$("Pic(-------,---,---.##)",k(j,7))
-72480         let glitem3$(6)=cnvrt$("Pic(-------,---,---.##)",k(j,8)) ! cmask3$(6)='10'
+72380         glitem3$(1)=k_list$(j)
+72400         glitem3$(2)=cnvrt$("Pic(-------,---,---.##)",k(j,4)) ! cmask3$(2)=cmask3$(3)=cmask3$(4)=cmask3$(5)="10"
+72420         glitem3$(3)=cnvrt$("Pic(-------,---,---.##)",-k(j,5))
+72440         glitem3$(4)=cnvrt$("Pic(-------,---,---.##)",k(j,6))
+72460         glitem3$(5)=cnvrt$("Pic(-------,---,---.##)",k(j,7))
+72480         glitem3$(6)=cnvrt$("Pic(-------,---,---.##)",k(j,8)) ! cmask3$(6)='10'
 72500         pr #255,using F_PPT_LINE: mat glitem3$
 72520       end if 
 72540     next j
@@ -841,17 +841,17 @@
 77860   pr(1)=val(resp$(4)(1:4)): vn$=resp$(4)(1:4) ! employee number
 77880   td$=resp$(4)(5:30) ! transaction description = employee name
 77900   empname$=td$
-77920   let gl$=fnagl$(resp$(5))
+77920   gl$=fnagl$(resp$(5))
 77940   for j=2 to 19
 77960     pr(j)=val(resp$(j+5))
 77980   next j
-78000   let wh=0
+78000   wh=0
 78020   for j=1 to 19
-78040     if j>2 and j<7 then let wh=wh+pr(j)
+78040     if j>2 and j<7 then wh=wh+pr(j)
 78060     if j<7 or j>16 then goto L7300
-78080     if dedcode(j-6)=2 then let wh=wh-pr(j) else let wh=wh+pr(j)
-78100 L7300: if j=17 then let wh=wh+pr(j)
-78120     if j=19 then let wh=wh-pr(j)
+78080     if dedcode(j-6)=2 then wh=wh-pr(j) else wh=wh+pr(j)
+78100 L7300: if j=17 then wh=wh+pr(j)
+78120     if j=19 then wh=wh-pr(j)
 78140   next j
 78160   if tr(5)=pr(2)-wh then goto WRITE_PAYROLL_TRANS
 78180   mat ml$(3)
@@ -903,14 +903,14 @@
 82060     if trim$(tr$)="999999999999" then delete #h_gl_work, rec=j: 
 82080 CFC_NEXT_J: ! 
 82100   next j
-82120   let gl$="": tr(4)=tr(5)=tr(6)=tr(7)=0: tr$=""
+82120   gl$="": tr(4)=tr(5)=tr(6)=tr(7)=0: tr$=""
 82140   return  ! /r
 82160 CHECK_FOR_DELETED: ! r:
 82180   if adr>1 then adr=adr-1: goto L400
 82200   goto L460 ! /r
 84000   def fn_increment_tr
-84020     let x=0
-84040     let x=val(tr$) conv L4580
+84020     x=0
+84040     x=val(tr$) conv L4580
 84060     if tr$<>"999999999999" then 
 84080       tr$=str$(val(tr$)+1) ! increment if possible
 84100     else 

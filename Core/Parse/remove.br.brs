@@ -5,8 +5,8 @@
 00050     library 'S:\Core\Library': fnerror
 00060     on error goto ERTN
 00070 ! ______________________________________________________________________
-00080 BAK: let x=pos(word$,and$,1)
-00090     if x>0 then let word$(x:x)="": goto BAK else goto XIT
+00080 BAK: x=pos(word$,and$,1)
+00090     if x>0 then word$(x:x)="": goto BAK else goto XIT
 00100 ! ______________________________________________________________________
 00110 ! <Updateable Region: ERTN>
 00120 ERTN: fnerror(program$,err,line,act$,"xit")

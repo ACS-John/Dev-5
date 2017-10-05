@@ -9,8 +9,8 @@
 00090 ! ______________________________________________________________________
 00100     if addall<>1 then addall=0
 00110     fncno(cno)
-00120     if addall=0 then let fen$="CeMP" else !:
-            let fen$="CEmpALL"
+00120     if addall=0 then fen$="CeMP" else !:
+            fen$="CEmpALL"
 00130     if indexfile$="" then if$=env$('Q')&"\PRmstr\rpindex.h"&str$(cno) else !:
             if$=indexfile$
 00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\rpmstr.h"&str$(cno),1,8,9,30,if$,1+addall,1,"Select from the list of employees. To add an employee, go to the Employee File.",container)

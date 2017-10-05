@@ -87,15 +87,15 @@
 12380     mask$='10'
 12400   end if 
 12420   if mask$='1' then 
-12440     let width=8
+12440     width=8
 12460   else if mask$='2' then 
-12480     let width=10
+12480     width=10
 12500   else if mask$='3' then 
-12520     let width=10
+12520     width=10
 12540   else if mask$='4' then 
-12560     let width=10
+12560     width=10
 12580   else if mask$='5' then 
-12600     let width=8
+12600     width=8
 12620   end if 
 12640   if val(mask$)>=10 and val(mask$)<=49 then ali=1
 12660   if maxlen=0 then maxlen=width
@@ -142,7 +142,7 @@
 13420   sfn$=trim$(sfn$)&env$('cno')
 13440   if width=0 then 
 13460     for j=1 to udim(mat opt$)
-13480       let width=max(width,len(opt$(j)))
+13480       width=max(width,len(opt$(j)))
 13500     next j
 13520   end if 
 13962   fn_add_combo_option_list('','',1)
@@ -151,7 +151,7 @@
 14020   next rec_count
 14060   setenv('control'&str$(fn_control_count),"COMBOA|"&str$(lyne)&"|"&str$(ps)&"|"&str$(width)&"|0|"&sfn$&"[SESSION].tmp|1|"&ttt$&"|"&str$(contain)&"|"&str$(tabcon)&"|"&comboa_combooptionset$&"|")
 14070   fn_combooptionsetlist_add(comboa_combooptionset$)
-14080   let width=contain=0
+14080   width=contain=0
 14100   COMBOA_COMPLETE: ! 
 14120 fnend 
 14140 def library fncombof(sfn$*100,lyne,ps,width,df$*200,psk,lnk,psd,lnd; if$*200,limlis,urep,ttt$*200,contain,tabcon)
@@ -172,15 +172,15 @@
 14420   ! __________________________________________________
 14440   ! **** get/set constants **********
 14500   lnk=min(lnk,30) : lnd=min(lnd,60)
-14520   let width=min(width,81) : sfn$=trim$(sfn$) : df$=trim$(df$)
+14520   width=min(width,81) : sfn$=trim$(sfn$) : df$=trim$(df$)
 14540   if$=trim$(if$)
-14560   let form$="Form Pos "&str$(psk)&",C "&str$(lnk) : nodesc=1
+14560   form$="Form Pos "&str$(psk)&",C "&str$(lnk) : nodesc=1
 14580   if psd<>0 and lnd<>0 then 
-14600     let form$=form$&",Pos "&str$(psd)&",C "&str$(lnd) : nodesc=0
+14600     form$=form$&",Pos "&str$(psd)&",C "&str$(lnd) : nodesc=0
 14620   end if 
 14640   becky$=sfn$&env$('cno')&"[SESSION].tmp" ! combof_whr$=env$('temp')&'\'&becky$
 14660   ! __________________________________________________
-14680   if width=0 then let width=lnk+lnd+1
+14680   if width=0 then width=lnk+lnd+1
 14700   dim combokeycurrent$*512,combokeyprior$*512
 14710   combokeycurrent$='df='&df$&',if='&if$&',psk='&str$(psk)&',lnk='&str$(lnk)&',psd='&str$(psd)&'lnd='&str$(lnd)&',limlis='&str$(limlis)
 14720   !     if combokeycurrent$=combokeyprior$ and combokeyprior$<>'' then
@@ -280,7 +280,7 @@
 16062   if env$('exitnow')='yes' then goto FLEXINIT1_COMPLETE ! special processing to increase speed for exitnow
 16080   dim hdrfile$*192,all_hdr$*6491,all_mask$*6491
 16081   dim optfile$*199
-16082   if usr=0 then let grid_populated=0
+16082   if usr=0 then grid_populated=0
 16100   ! __________________________________________________
 16120   ! if usr=0 then pr "USR=0-Replace"
 16140   ! if usr>0 then pr "USR>0-Use Previous USR="&str$(usr)
@@ -296,7 +296,7 @@
 16340   ! fncno(cno)
 16360   all_hdr$=all_mask$=""
 16380   ! fn_get_flexhandle
-16400   let filenumber=fn_get_flexhandle(1)
+16400   filenumber=fn_get_flexhandle(1)
 16420   sfn$=trim$(sfn$)&env$('cno') : optfile$=sfn$&"[SESSION].tmp"
 16440   hdr_count=udim(ch$) : hdrfile$=sfn$&".hdr"
 16460   if usr<>0 then goto USEPREVIOUS
@@ -336,7 +336,7 @@
 17160   WRITE_TO_ACE: ! 
 17180   sorttype=0
 17200   setenv('control'&str$(fn_control_count),"FLEX|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|2|"&str$(seltype)&"|"&str$(sorttype)&"|"&sfn$&"|"&str$(hdr_count)&"|"&str$(con)&"|"&str$(tabcon)&"|")
-17220   let usr=0
+17220   usr=0
 17240   FLEXINIT1_COMPLETE: ! 
 17260 fnend 
 17280 def library fnflexadd1(mat item$) ! this function may need to be updated to save data in a work file for re-adding later; this is due to error 980 when closing a list with all records filtered; Gordon should fix -- 5/12/14
@@ -346,7 +346,7 @@
 17340   dim all_item$*6491
 17360   mat2str(mat item$,all_item$,hex$('09'))
 17380   flexhandle=fn_get_flexhandle
-17382   let grid_populated+=1
+17382   grid_populated+=1
 17400   pr #flexhandle,using "Form pos 1,C "&str$(len(all_item$)): all_item$ ioerr ignore
 17410   FLEXADD1_COMPLETE: ! 
 17420 fnend 
@@ -462,7 +462,7 @@
 19640   ! tt$      button.tooltiptext
 19660   if ~setup then let fn_setup
 19680   height=max(height,1) ! button height is at least 1
-19700   if width=0 then let width=len(txt$)
+19700   if width=0 then width=len(txt$)
 19720   setenv('control'&str$(fn_control_count),"BUTTON|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|"&str$(comkey)&"|"&txt$&"|"&tt$&"|"&str$(default)&"|"&str$(cancel)&"|"&str$(container)&"|"&str$(tabcon)&"|")
 19740 fnend 
 19760 def library fnpicbut(lyne,ps,txt$*40,comkey,pic1$*100,btnh,btnw; pic2$*100,tt$*150,container,tabcon,default,cancel)
@@ -523,12 +523,12 @@
 20920 XIT: fnend 
 20940 def fn_ace_init
 20950   ace_io_count=ace_lyne_max=ace_column_max=grid_present=tmp_combo_count_for_read=0
-20960   let grid_index=date_boxes=respc=dropdown_menu_present=0 ! response counter
-20970   date_fkey_base=2600 : let file_select_fkey_base=2700 : txtbox_fkey=300
+20960   grid_index=date_boxes=respc=dropdown_menu_present=0 ! response counter
+20970   date_fkey_base=2600 : file_select_fkey_base=2700 : txtbox_fkey=300
 20980   mat ace_io$(0) : mat ace_typ$(0) : mat ace_resp$(0) : mat tabs(0,3)
 20990   mat text_masks(0) : mat control$(0) : mat return_keys(0) : mat frames(0,4)
 21000   mat date_fielddata(0,6) : mat file_select_data(0,2)
-21010   let grid_filter$=''
+21010   grid_filter$=''
 21020   scr_freeze
 21030   resp_size=udim(mat resp$)
 21040   button_win_width=0
@@ -640,7 +640,7 @@
 23040   if ace_io_count then 
 23060     if grid_present then 
 23080       resp_size+=1
-23100       let grid_index=fn_grid_index
+23100       grid_index=fn_grid_index
 23120       mat ace_resp$(ace_io_count)
 23140       if grid_index=1 then 
 23160         mat ace_resp$(2:ace_io_count)=resp$(1:ace_io_count-1)
@@ -663,19 +663,19 @@
 23500   fn_string_array_empty=~ nonempty
 23520 fnend 
 23540 def fn_validate_grid_selection
-23560   let grid_selection_valid=1
+23560   grid_selection_valid=1
 23580   if fkey=0 or (fkey=201 and pos(ace_io$(curfld),"list ")) or fkey=default_button_fkey then 
 23600     if grid_present then 
 23620       if row_count then 
 23640         if udim(ace_io$)=2 then 
 23660           if fn_string_array_empty(mat ace_resp$) then 
 23680             msgbox("Please, click on a row to select it and repeat your attempt.")
-23700             let grid_selection_valid=0
+23700             grid_selection_valid=0
 23720           end if 
 23740         else 
 23760           if fn_string_array_empty(mat grid_row$) then 
 23780             msgbox("Please, click on a row to select it and repeat your attempt.")
-23800             let grid_selection_valid=0
+23800             grid_selection_valid=0
 23820           end if 
 23840         end if 
 23860       end if 
@@ -684,28 +684,28 @@
 23920   fn_validate_grid_selection=grid_selection_valid
 23940 fnend 
 23960 def fn_process_user_input
-23980   let goto_main_input=0
+23980   goto_main_input=0
 24000   if fkey=0 or (fkey=201 and pos(ace_io$(curfld),"list ")) then 
-24020     let fkey(default_button_fkey) ! activate the default button when enter is pressed
+24020     fkey(default_button_fkey) ! activate the default button when enter is pressed
 24040     ckey=fkey
 24060   else if fkey=2501 then 
 24080     fn_export_grid
-24100     let fkey(-1) : let goto_main_input=1
+24100     fkey(-1) : goto_main_input=1
 24120   else if fkey=2502 then 
 24140     fn_print_grid
-24160     let fkey(-1) : let goto_main_input=1
+24160     fkey(-1) : goto_main_input=1
 24180     !   else if fkey=2503 then
 24200     !     pr f gridspec$&",sort": 1
-24220     !     let fkey(-1) : let goto_main_input=1
+24220     !     fkey(-1) : goto_main_input=1
 24240   else if fkey > date_fkey_base and fkey < date_fkey_base+100 then 
-24260     let _date$=ace_resp$( date_fielddata(fkey-date_fkey_base,5))
+24260     _date$=ace_resp$( date_fielddata(fkey-date_fkey_base,5))
 24300     row=date_fielddata(fkey-date_fkey_base,2)
 24320     column=date_fielddata(fkey-date_fkey_base,3)+date_fielddata(fkey-date_fkey_base,4)+1
 24340     ace_resp$(date_fielddata(fkey-date_fkey_base,5))=fndate_picker$ (_date$,'mdy',row,column)
-24360     let fkey(-1) : let goto_main_input=1
+24360     fkey(-1) : goto_main_input=1
 24380   else if fkey > file_select_fkey_base and fkey < file_select_fkey_base+100 then 
 24400     fn_selectfile( ace_resp$(file_select_data(fkey-file_select_fkey_base,1) ), file_select_data(fkey-file_select_fkey_base,2))
-24420     let fkey(-1) : let goto_main_input=1
+24420     fkey(-1) : goto_main_input=1
 24440   else if fkey=93 then 
 24460     if env$('ACSDeveloper')<>'' then let setenv('ExitNow','yes')
 24470     ckey=fkey_cancel
@@ -720,15 +720,15 @@
 24550       help_cursys$=lwrc$(env$('CurSys'))
 24552     end if 
 24580     execute 'system -M start http://planetacs.net/help/'&help_cursys$&'/'&srep$(trim$(cap$),' ','%20')&'.html'
-24600     let goto_main_input=1
+24600     goto_main_input=1
 24620   else if fkey=1505 then 
 24640     fn_program_properties
-24642     let goto_main_input=1
+24642     goto_main_input=1
 24660   else if (fkey=105 or fkey=124 or fkey=106 or fkey=125) and (pos(ace_io$(curfld),"list ") or pos(ace_io$(curfld),"list ")) then 
-24680     let goto_main_input=1
+24680     goto_main_input=1
 24700     if fkey=105 or fkey=124 then let setenv('current_grid_row','1')
 24720   else if not srch(mat return_keys,fkey)>0 or fkey=92 or fkey=208 or fkey=txtbox_fkey then ! this means user switched tabs (fkey 92) or picked a value from a combo box (fkey 208)
-24740     let goto_main_input=1
+24740     goto_main_input=1
 24760   else 
 24780     ckey=fkey
 24800   end if 
@@ -746,7 +746,7 @@
 24980           resp$(ace_resp_item)='False'
 25000         end if 
 25020       else if date_index := fn_is_date(mat date_fielddata,ace_resp_item) > 0 then 
-25040         let _mask=date_fielddata(date_index,6)
+25040         _mask=date_fielddata(date_index,6)
 25060         if _mask=1 then 
 25080           date_format$="mdy"
 25100         else if _mask=2 then 
@@ -759,7 +759,7 @@
 25240           date_format$="dmy"
 25260         end if 
 25280         if date_format$<>'mdy' then 
-25300           let _days=days(lpad$(trim$(ace_resp$(ace_resp_item)),6,'0'),'mdy')
+25300           _days=days(lpad$(trim$(ace_resp$(ace_resp_item)),6,'0'),'mdy')
 25320           resp$(ace_resp_item)=date$(_days,date_format$)
 25340         else 
 25360           resp$(ace_resp_item)=ace_resp$(ace_resp_item)
@@ -780,14 +780,14 @@
 25700 def fn_grid_index(;___,index_,grid_idx)
 25720   for index_=1 to udim(mat ace_io$)
 25740     if pos(ace_io$(index_),'list ') then 
-25760       let grid_idx=index_
+25760       grid_idx=index_
 25780     end if 
 25800   next index_
 25820   fn_grid_index=grid_idx
 25840 fnend 
 26000 def fn_main_input
 26010   if grid_present then 
-26020     let grid_index=fn_grid_index
+26020     grid_index=fn_grid_index
 26030     PopulateGrid: ! 
 26040     current_grid_row=val( env$('current_grid_row')) ! if current_grid_row then pr 'current_grid_row=';current_grid_row : pause
 26050     if current_grid_row then 
@@ -798,7 +798,7 @@
 26100       curfld(grid_index,row_count)
 26110     end if 
 26120     !  
-26130     let grid_filter$=''
+26130     grid_filter$=''
 26140     dim grid_row$(1)*10000
 26150     if not grid_populated then ! file_nonempty then ! if no rows have been populated, we have to create one
 26160       pr f gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
@@ -884,7 +884,7 @@
 27560     mat resp$(resp_size)
 27580   end if 
 27600   ACE_COMPLETE: ! 
-27620   let fkey(-1)
+27620   fkey(-1)
 27640   fn_close_windows ! :display menu:
 27650   if disabled_background then let fn_backgrounddisable(0)
 27660 fnend 
@@ -951,7 +951,7 @@
 28750   setenv('control_count',0)
 28760 fnend 
 28800 def fn_window_size
-28820   !   let frame_or_tab_present=0
+28820   !   frame_or_tab_present=0
 28840   for index_=1 to control_count
 28860     str2mat(env$('control'&str$(index_)),mat control$,"|")
 28880     ace_typ$(index_)=typ$=uprc$(control$(1))
@@ -966,7 +966,7 @@
 29042      ! if index_=5 then pr 'it is 5' : pause
 29060       ace_column_max=max( ace_column_max, val(control$(3))+len(control$(5))+4) ! max( ace_column_max, val(control$(3))+len(trim$(control$(5)))+4)
 29080     else if typ$="FLEX" or typ$="MULTILINE" or typ$="FRAME" or typ$="TAB" then 
-29100       if typ$="FLEX" then let grid_present=1
+29100       if typ$="FLEX" then grid_present=1
 29120       ace_lyne_max=max(ace_lyne_max,val(control$(2))+val(control$(4)))
 29140       if typ$="FRAME" or typ$="TAB" and (not save_bottom or val(control$(2))+val(control$(4))>save_bottom) then ace_lyne_max += 1
 29160       ace_column_max=max( ace_column_max, val(control$(3))+val(control$(5)) )
@@ -998,30 +998,30 @@
 29680           else 
 29700             msgbox('Date '&ace_resp$(_idx)&' at field #'&str$(curfld)&' is invalid.')
 29720           end if 
-29740           let found_invalid=1
-29760           curfld(_idx) : let fkey(-1)
+29740           found_invalid=1
+29760           curfld(_idx) : fkey(-1)
 29780         end if 
 29800       end if 
 29820     else if text_masks(_idx)>1000 and (trim$(ace_resp$(_idx))='' or trim$(ace_resp$(_idx))='0') then 
 29840       msgbox('Field '&str$(_idx)&' is required.')
-29860       let found_invalid=1
-29880       curfld(_idx) : let fkey(-1)
+29860       found_invalid=1
+29880       curfld(_idx) : fkey(-1)
 29882       !     else if text_masks(_idx)>1000 then
 29884       !       pr 'field is required - and is not blank, which is good, but it might be a date field.'
 29886       !       pr 'text_masks(_idx)=';text_masks(_idx)
 29888       !       pr 'ace_resp$(_idx)=';ace_resp$(_idx) : pause
-29890       !       curfld(_idx) : let fkey(-1)
-29892       !       let found_invalid=1
+29890       !       curfld(_idx) : fkey(-1)
+29892       !       found_invalid=1
 29900     end if 
 29920   next _idx
 29940   fn_validate_fields=~ found_invalid
 29960 fnend 
 29980 def fn_validate_mdy (_date$;separator$,___,month,day,year)
 30000   fn_validate_mdy=1
-30020   let _date$=lpad$(_date$,6,'0')
+30020   _date$=lpad$(_date$,6,'0')
 30040   month=val(_date$(1:2))
 30060   day=val(_date$(3:4))
-30080   let year=val(_date$(5:6))
+30080   year=val(_date$(5:6))
 30100   if not (fn_validate_month(month) and fn_validate_day(day,month,year) and fn_validate_year(year)) then let fn_validate_mdy=0
 30120  ! FINISHEDVALIDATE_MDY: !
 30140 fnend 
@@ -1047,9 +1047,9 @@
 30540   mat _menu$(item_count)=(''): mat _program$(item_count)=(''): mat _status$(item_count)=('')
 30560   for index_=1 to udim(mat menu_items$)
 30580     str2mat(menu_items$(index_),mat menu_sub_items$,'~~~')
-30600     let _menu$(index_)=menu_sub_items$(1)
-30620     let _program$(index_)=menu_sub_items$(2)
-30640     let _status$(index_)=menu_sub_items$(3)
+30600     _menu$(index_)=menu_sub_items$(1)
+30620     _program$(index_)=menu_sub_items$(2)
+30640     _status$(index_)=menu_sub_items$(3)
 30660   next index_
 30680   display menu: mat _menu$,mat _program$,mat _status$
 30700 fnend 
@@ -1058,7 +1058,7 @@
 30760   lyne=val(control$(2))
 30780   ps=val(control$(3))
 30800   height=val(control$(4))
-30820   let width=val(control$(5))
+30820   width=val(control$(5))
 30840   tt$=control$(6)
 30860   container=val(control$(7))
 30880   tabcon=val(control$(8))
@@ -1070,7 +1070,7 @@
 30980   ps=val(control$(3))
 31000   comkey=val(control$(4))
 31020   height=val(control$(5))
-31040   let width=val(control$(6))
+31040   width=val(control$(6))
 31060   container=val(control$(7))
 31080   tabcon=val(control$(8))
 31100   default=val(control$(9))
@@ -1093,7 +1093,7 @@
 31440   end if 
 31460   if cancel then let fkey_cancel=returnkey
 31480   txt$=srep$(txt$,'&','') ! remove underlined letters...   would be nice to use them. xxx
-31500   let width=len(txt$)
+31500   width=len(txt$)
 31520   spec$='1,'&str$(ace_cmdkey_ps)&',CC '&str$(width)&',,B'&str$(returnkey)
 31540   if default then 
 31560     default_button_fkey=returnkey
@@ -1112,19 +1112,19 @@
 31740   ! 
 31760   dim _help$*255
 31780   if tt$='' then 
-31800     let _help$="1;Press ["
+31800     _help$="1;Press ["
 31820     if default then 
-31840       let _help$(inf:inf)="Enter"
+31840       _help$(inf:inf)="Enter"
 31860     else if cancel then 
-31880       let _help$(inf:inf)="Esc"
+31880       _help$(inf:inf)="Esc"
 31900     else if returnkey >=2 and returnkey<=12 then ! because F1 will be used for Help
-31920       let _help$(inf:inf)="F"&str$(returnkey)
+31920       _help$(inf:inf)="F"&str$(returnkey)
 31940     else 
-31960       let _help$=''
+31960       _help$=''
 31980     end if 
-32000     if _help$<>'' then let _help$(inf:inf)="] to "&txt$&";"
+32000     if _help$<>'' then _help$(inf:inf)="] to "&txt$&";"
 32020   else 
-32040     let _help$='1;'&tt$&';'
+32040     _help$='1;'&tt$&';'
 32060   end if 
 32100   pr #button_win, fields spec$, help _help$: txt$
 32120   ace_cmdkey_ps+=(width+2)
@@ -1133,7 +1133,7 @@
 32180   lyne=val(control$(2))
 32200   ps=val(control$(3))
 32220   height=val(control$(4))
-32240   let width=val(control$(5))
+32240   width=val(control$(5))
 32260   path1$=control$(6) & control$(7)
 32280   open #tab_file:=fngethandle: "Name="&path1$,internal,outin 
 32300   tabline$=""
@@ -1152,7 +1152,7 @@
 32560   lyne=val(control$(2))
 32580   ps=val(control$(3))
 32600   height=val(control$(4))
-32620   let width=val(control$(5))
+32620   width=val(control$(5))
 32640   txt$=control$(6)
 32660   tt$=control$(7)
 32680   container=val(control$(8))
@@ -1163,19 +1163,19 @@
 32780   mat frames(udim(frames)+1,4)
 32800   if tabcon then 
 32820     open #frame:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(tabs(tabcon,1))&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outin 
-32840     let frames(udim(frames),4)=tabs(tabcon,1)
+32840     frames(udim(frames),4)=tabs(tabcon,1)
 32860   else 
 32880     open #frame:=fngethandle: 'srow='&str$(lyne+1)&',scol='&str$(ps+1)&',rows='&str$(height-1)&',cols='&str$(width)&',parent='&str$(acs_win)&',border=S:[screen],N=[screen],caption='&srep$(txt$,',','.'),display,outin 
 32900   end if 
-32920   let frames(udim(frames),1)=frame
-32940   let frames(udim(frames),2)=lyne+1
-32960   let frames(udim(frames),3)=ps+1
+32920   frames(udim(frames),1)=frame
+32940   frames(udim(frames),2)=lyne+1
+32960   frames(udim(frames),3)=ps+1
 32980 fnend 
 33000 def fn_ace_rd_flex(;___,index_)
 33040   lyne=val(control$(2))
 33060   ps=val(control$(3))
 33080   height= rows - lyne ! val(control$(4))
-33100   let width= cols - ps -2 ! val(control$(5))
+33100   width= cols - ps -2 ! val(control$(5))
 33120   seltype=val(control$(7))
 33140   sorttype=val(control$(8))
 33160   path1$=control$(9)
@@ -1191,11 +1191,11 @@
 33340   str2mat(_line$,mat _mask$,tab$)
 33360   mat _mask$(udim(_headings$))
 33380   close #grid_headers: 
-33400   let file_nonempty=fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$)
+33400   file_nonempty=fn_gridform(mat _widths,mat _forms$,mat _mask$,mat _headings$)
 33420   if not file_nonempty then 
 33440     for col_index_=2 to udim(mat _headings$)
-33460       let _widths (col_index_)=len(_headings$(col_index_))
-33480       let _forms$(col_index_)="C "&str$(_widths (col_index_))
+33460       _widths (col_index_)=len(_headings$(col_index_))
+33480       _forms$(col_index_)="C "&str$(_widths (col_index_))
 33500     next col_index_
 33520   end if 
 33540   ! this is done when there is a grid to the right of a frame, so they don't overlap
@@ -1203,25 +1203,25 @@
 33580     ps+=1
 33600   end if 
 33620   ! 
-33640   let filterspec$=str$(lyne)&","&str$(ps)&","&str$(width+2)&"/filter "&str$(width)&",[textboxes],"&str$(lyne+1)&","&str$(ps)&",1,word"
+33640   filterspec$=str$(lyne)&","&str$(ps)&","&str$(width+2)&"/filter "&str$(width)&",[textboxes],"&str$(lyne+1)&","&str$(ps)&",1,word"
 33660   ! 
 33680   if not container and not tabcon then 
-33700     let gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-1)&"/"&str$(width+2)
+33700     gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-1)&"/"&str$(width+2)
 33720     loading_spec$=str$(lyne + height)&","&str$(ps)&",C "
 33740   else 
-33760     let gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-2)&"/"&str$(width+2)
+33760     gridspec$=str$(lyne+1)&","&str$(ps)&",list "&str$(height-2)&"/"&str$(width+2)
 33780     loading_spec$=str$(lyne + height-1)&","&str$(ps)&",C "
 33800   end if 
 33820   ! 
 33840   if container then 
-33860     let window_prefix$='#'&str$(frames(container,1))&','
+33860     window_prefix$='#'&str$(frames(container,1))&','
 33880   else if tabcon then 
-33900     let window_prefix$='#'&str$(tabs(tabcon,1))&','
+33900     window_prefix$='#'&str$(tabs(tabcon,1))&','
 33920   else 
-33940     let window_prefix$='#'&str$(acs_win)&','
+33940     window_prefix$='#'&str$(acs_win)&','
 33960   end if 
-33980   let filterspec$(0:0)=window_prefix$
-34000   let gridspec$(0:0)=window_prefix$
+33980   filterspec$(0:0)=window_prefix$
+34000   gridspec$(0:0)=window_prefix$
 34020   loading_spec$(0:0)=window_prefix$
 34040   ! 
 34060   pr f gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
@@ -1240,7 +1240,7 @@
 34340   do while file_nonempty
 34360     linput #grid_data: _line$ eof ignore
 34380     ! remove this line after you figure out how to addtomask$ negative numbers to the #pic spec
-34400     !   let _line$=srep$(_line$,'-','')
+34400     !   _line$=srep$(_line$,'-','')
 34420     ! 
 34440     if file(grid_data)<>0 then exit do 
 34460     record_count += 1
@@ -1257,10 +1257,10 @@
 34680     ! if env$('ACSDeveloper')<>'' then
 34700     mat2str(mat _chunks$,_line$," ")
 34720     ! else 
-34740     !   let _line$=''
+34740     !   _line$=''
 34760     !   for index_=1 to udim(mat _chunks$)
 34780     !     if val(_mask$(index_)) < 1000 then
-34800     !       let _line$(inf:inf)=_chunks$(index_)&' '
+34800     !       _line$(inf:inf)=_chunks$(index_)&' '
 34820     !     end if
 34840     !   next index_
 34860     ! end if
@@ -1270,12 +1270,12 @@
 34940     next index_
 34960     goto CREATE_FILTER_COLUMN
 34980     BAD_NUMERIC_CELL: ! 
-35000     let _chunks$(alpha_mask_indices(index_))='0' : retry 
+35000     _chunks$(alpha_mask_indices(index_))='0' : retry 
 35020     ! 
 35040     CREATE_FILTER_COLUMN: ! 
 35060     mat _chunks$(udim(_chunks$)+1)
 35080     mat _chunks$(2:udim(_chunks$))=_chunks$(1:udim(_chunks$)-1)
-35100     let _chunks$(1)=_line$
+35100     _chunks$(1)=_line$
 35120     ! 
 35140     ! CHECK_JULIAN_DATES: ! Convert dates to julain format for BR internal date specs
 35160     dim datemask$,masknumber
@@ -1294,12 +1294,12 @@
 35420     !         else if masknumber=05 then !    date format : dd/mm/yy
 35440         datemask$="ccyymmdd" ! "ddmmyy"
 35460     !         end if
-35480     !         let _chunks$(index_+1)=srep$(lpad$(_chunks$(index_+1),len(datemask$))," ","0") ! pause ! lpad with zeros to the right size
-35482         let quick_len=len(trim$(srep$(_chunks$(index_+1),'/',''))) ! pr quick_len
-35483         if quick_len=5 then let quick_len=6 : let _chunks$(index_+1)='0'&trim$(_chunks$(index_+1))
-35484         if quick_len=6 then let _chunks$(index_+1)=date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
+35480     !         _chunks$(index_+1)=srep$(lpad$(_chunks$(index_+1),len(datemask$))," ","0") ! pause ! lpad with zeros to the right size
+35482         quick_len=len(trim$(srep$(_chunks$(index_+1),'/',''))) ! pr quick_len
+35483         if quick_len=5 then quick_len=6 : _chunks$(index_+1)='0'&trim$(_chunks$(index_+1))
+35484         if quick_len=6 then _chunks$(index_+1)=date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
 35498     !         pr _chunks$(index_+1),quick_len : pause ! =date$(days(_chunks$(index_+1),'mmddyy'),'ccyymmdd') ! datemask$='mmddyy' else datemask$="ccyymmdd"! =str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
-35500         let _chunks$(index_+1)=str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
+35500         _chunks$(index_+1)=str$(days(_chunks$(index_+1),datemask$)) ! Convert to julain date according to mask for data in expected format
 35520       end if 
 35540       NOT_JULIAN_DATE: ! Not a julian date field, leave it alone
 35560     next index_
@@ -1333,7 +1333,7 @@
 36120   close #grid_data: 
 36140   fn_ace_io_add(gridspec$&",row,selone")
 36160   fn_ace_io_add(filterspec$)
-36180   !   let filter_index=ace_io_count
+36180   !   filter_index=ace_io_count
 36200   ! 
 36220   if not container and not tabcon then 
 36240     srow$=str$(lyne+height)
@@ -1360,7 +1360,7 @@
 36660   data_file_nonempty=0
 36680   mat _headings$(udim(_headings$)+1)
 36700   mat _headings$(2:udim(_headings$))=_headings$(1:udim(_headings$)-1)
-36720   let _headings$(1)="Combined"
+36720   _headings$(1)="Combined"
 36740   mat _widths(udim(_headings$))=(0): mat _forms$(udim(_headings$))=('')
 36760   ! 
 36780   open #grid_data:=fngethandle: 'Name='&env$('temp')&'\'&trim$(path1$)&'[SESSION].tmp',display,input 
@@ -1372,20 +1372,20 @@
 36900       mat _chunks$( udim(_headings$)-1 )
 36920     end if 
 36940     mat2str(mat _chunks$,_line$," ")
-36960     let _widths(1)=max(_widths(1),len(_line$)+udim(_chunks$)-1)
+36960     _widths(1)=max(_widths(1),len(_line$)+udim(_chunks$)-1)
 36980     for _index=1 to udim(mat _chunks$)
-37000       let _widths(_index+1)=max(_widths(_index+1),len(_chunks$(_index))+1)
-37020       let _widths(_index+1)=max(_widths(_index+1),len(_headings$(_index+1))+4)
+37000       _widths(_index+1)=max(_widths(_index+1),len(_chunks$(_index))+1)
+37020       _widths(_index+1)=max(_widths(_index+1),len(_headings$(_index+1))+4)
 37040       if _widths(_index+1) then data_file_nonempty=1
-37060       let _forms$(_index+1)="C "&str$(_widths(_index+1))&',L'
+37060       _forms$(_index+1)="C "&str$(_widths(_index+1))&',L'
 37080     next _index
 37100   next count
 37120   GRIDFORM_COMPLETE: ! 
 37140   for index_=2 to udim(mat _mask$)+1
 37160     fn_column_mask(_forms$(index_),_widths(index_),_mask$(index_-1))
 37180   next index_
-37200   let _forms$(1)="0/C 500"
-37220   let _widths(1)=0
+37200   _forms$(1)="0/C 500"
+37220   _widths(1)=0
 37240   close #grid_data: 
 37260   fn_gridform=data_file_nonempty
 37280 fnend 
@@ -1397,91 +1397,91 @@
 37400     invisible=1
 37420   end if 
 37440   if mask=1 then ! date format : mm/dd/yy
-37460     let form$=str$(width)&'/date(m/d/yy)' ! 
+37460     form$=str$(width)&'/date(m/d/yy)' ! 
 37480   else if mask=2 then !    date format : mm/dd/ccyy
-37500     let form$=str$(width)&'/date(m/d/ccyy)' ! $$$$$ GSB This code used to say FMT(99/99/99) which is only 6 digits long and appears wrong
+37500     form$=str$(width)&'/date(m/d/ccyy)' ! $$$$$ GSB This code used to say FMT(99/99/99) which is only 6 digits long and appears wrong
 37520   else if mask=03 then !    date format : ccyy/mm/dd
-37540     let form$=str$(width)&'/date(ccyy/m/d)' ! '/fmt(9999/99/99)'
+37540     form$=str$(width)&'/date(ccyy/m/d)' ! '/fmt(9999/99/99)'
 37560   else if mask=04 then !    date format : dd/mm/ccyy
-37580     let form$=str$(width)&'/date(d/m/ccyy)'
+37580     form$=str$(width)&'/date(d/m/ccyy)'
 37600   else if mask=05 then !    date format : dd/mm/yy
-37620     let form$=str$(width)&'/date(d/m/yy)'
+37620     form$=str$(width)&'/date(d/m/yy)'
 37640   else if mask=10 then ! dollars, 2 decimals, commas
-37660     let form$=''
+37660     form$=''
 37680     for tm_char_index=1 to maxlen-4
 37700       if mod(tm_char_index,4)=0 then 
-37720         let form$(0:0)=','
+37720         form$(0:0)=','
 37740       else 
-37760         let form$(0:0)='-'
+37760         form$(0:0)='-'
 37780       end if 
 37800     next tm_char_index
-37820     if form$(1:1)=',' then let form$(0:0)='-'
-37840     let form$(0:0)=str$(width)&"/#PIC("
-37860     let form$(inf:inf)=".--)"
+37820     if form$(1:1)=',' then form$(0:0)='-'
+37840     form$(0:0)=str$(width)&"/#PIC("
+37860     form$(inf:inf)=".--)"
 37880   else if mask=20 then ! 0 decimals, commas
-37900     let form$=''
+37900     form$=''
 37920     for tm_char_index=1 to maxlen
 37940       if mod(tm_char_index,4)=0 then 
-37960         let form$(0:0)=','
+37960         form$(0:0)=','
 37980       else 
-38000         let form$(0:0)='-'
+38000         form$(0:0)='-'
 38020       end if 
 38040     next tm_char_index
-38060     if form$(1:1)=',' then let form$(0:0)='-'
-38080     let form$(0:0)=str$(width)&"/#PIC("
-38100     let form$(inf:inf)=")"
+38060     if form$(1:1)=',' then form$(0:0)='-'
+38080     form$(0:0)=str$(width)&"/#PIC("
+38100     form$(inf:inf)=")"
 38120   else if mask=30 then ! defaults 1 to 1
-38140     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
+38140     form$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
 38160   else if mask=31 then ! defaults 1 to 1.0
-38180     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
+38180     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
 38200   else if mask=32 then ! defaults 1 to 1.00
-38220     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
+38220     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
 38240   else if mask=33 then ! defaults 1 to 1.000
-38260     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-4)&".---)"
+38260     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-4)&".---)"
 38280   else if mask=34 then ! defaults 1 to 1.0000
-38300     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-5)&".----)"
+38300     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-5)&".----)"
 38320   else if mask=35 then ! defaults 1 to 1.00000
-38340     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
+38340     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
 38360   else if mask=36 then ! defaults 1 to 1.000000
-38380     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
+38380     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
 38400   else if mask=40 then ! defaults 1 to 0.1
-38420     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
+38420     form$=str$(width)&"/#PIC("&rpt$('-',maxlen)&")"
 38440   else if mask=41 then ! defaults 1 to 0.10
-38460     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
+38460     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-2)&".-)"
 38480   else if mask=42 then ! defaults 1 to 0.100
-38500     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
+38500     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
 38520   else if mask=43 then ! defaults 1 to 0.1000
-38540     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-4)&".---)"
+38540     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-4)&".---)"
 38560   else if mask=44 then ! defaults 1 to 0.10000
-38580     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-5)&".----)"
+38580     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-5)&".----)"
 38600   else if mask=45 then ! defaults 1 to 0.100000
-38620     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
+38620     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-6)&".-----)"
 38640   else if mask=46 then ! defaults 1 to 0.1000000
-38660     let form$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
+38660     form$=str$(width)&"/#PIC("&rpt$('-',maxlen-7)&".------)"
 38680   else if mask=50 then 
-38700     let form$=str$(width)&"/#PIC(------)" ! ######
+38700     form$=str$(width)&"/#PIC(------)" ! ######
 38720   else if mask=51 then 
-38740     let form$=str$(width)&"/#PIC(---D------)" ! ###-######
+38740     form$=str$(width)&"/#PIC(---D------)" ! ###-######
 38760   else if mask=52 then 
-38780     let form$=str$(width)&"/#PIC(------D---)" ! ######-###
+38780     form$=str$(width)&"/#PIC(------D---)" ! ######-###
 38800   else if mask=53 then 
-38820     let form$=str$(width)&"/#PIC(---D------D---)" ! ###-######-###
+38820     form$=str$(width)&"/#PIC(---D------D---)" ! ###-######-###
 38840   else if mask=51 then !        general ledger : ###-######
-38860     let form$='fmt(999-999999)'
+38860     form$='fmt(999-999999)'
 38880   else if mask=52 then !        general ledger : ######-###
-38900     let form$='fmt(999999-999)'
+38900     form$='fmt(999999-999)'
 38920   else if mask=53 then !        general ledger : ###-######-###
-38940     let form$='fmt(999-999999-999)'
+38940     form$='fmt(999-999999-999)'
 38960   else if mask=61 then !        general ledger : ############
-38980     let form$='fmt(999999999999999)'
+38980     form$='fmt(999999999999999)'
 39000   else if mask=65 then !        12 decimals no commas
-39020     let form$='#PIC(------.------------)'
+39020     form$='#PIC(------.------------)'
 39040   else if mask=80 then !        force column left aligned
-39060     let form$="C "&str$(width)
+39060     form$="C "&str$(width)
 39080   else if mask=81 then !        force column right aligned
-39100     let form$="CR "&str$(width)
+39100     form$="CR "&str$(width)
 39120   end if 
-39140   if invisible then let width=0
+39140   if invisible then width=0
 39160 fnend 
 39720 def fn_print_grid
 39721   ! library 'S:\Core\fnsnap\rtflib_dll.br': fnlistprint
@@ -1505,7 +1505,7 @@
 39960 def fn_ace_rd_pic
 39980   lyne=val(control$(2))
 40000   ps=val(control$(3))
-40020   let width=val(control$(4))
+40020   width=val(control$(4))
 40040   height=val(control$(5))
 40060   path1$=control$(6)
 40080 fnend 
@@ -1513,7 +1513,7 @@
 40120   lyne=val(control$(2))
 40140   ps=val(control$(3))
 40160   height=val(control$(4))
-40180   let width=val(control$(5))
+40180   width=val(control$(5))
 40200   comkey=val(control$(6))
 40220   ! 
 40240   mat return_keys(udim(return_keys)+1)
@@ -1554,19 +1554,19 @@
 40582   ! r: new help logic 10/19/2015
 40584   dim _help$*255
 40586   if tt$='' then 
-40588     let _help$="1;Press ["
+40588     _help$="1;Press ["
 40590     if default then 
-40592       let _help$(inf:inf)="Enter"
+40592       _help$(inf:inf)="Enter"
 40594     else if cancel then 
-40596       let _help$(inf:inf)="Esc"
+40596       _help$(inf:inf)="Esc"
 40598     else if returnkey >=2 and returnkey<=12 then 
-40600       let _help$(inf:inf)="F"&str$(returnkey)
+40600       _help$(inf:inf)="F"&str$(returnkey)
 40602     else 
-40604       let _help$=''
+40604       _help$=''
 40606     end if 
-40608     if not _help$='' then let _help$(inf:inf)="] to "&txt$&";"
+40608     if not _help$='' then _help$(inf:inf)="] to "&txt$&";"
 40610   else 
-40612     let _help$='1;'&tt$&';'
+40612     _help$='1;'&tt$&';'
 40614   end if 
 40616   ! /r
 40618   pr #tmp_win, fields spec$, help _help$: txt$
@@ -1630,7 +1630,7 @@
 41700   txt$=control$(6)
 41720   container=val(control$(7))
 41740   tabcon=val(control$(8))
-41760   let font_mod=val(control$(9))
+41760   font_mod=val(control$(9))
 41780   txt$=srep$(trim$(txt$),'&','')
 41790   dim lbl_tooltip$*256
 41792   if udim(control$)>=10 then lbl_tooltip$=control$(10) else lbl_tooltip$=''
@@ -1659,7 +1659,7 @@
 42080   respc+=1
 42100   lyne=val(control$(2))
 42120   ps=val(control$(3)) ! -.6
-42140   let width=val(control$(4))
+42140   width=val(control$(4))
 42160   maxlen=max(val(control$(5)),width)
 42180   if maxlen=1 then maxlen=2
 42200   align=val(control$(6))
@@ -1722,7 +1722,7 @@
 43540     attr$=str$(width)&"/#PIC("&rpt$('-',maxlen-3)&".--)"
 43560     resp$(respc)=str$(val(resp$(respc))/100)
 43580   else if mask=10 then ! dollars, 2 decimals, commas
-43600     let form$=''
+43600     form$=''
 43620     for tm_char_index=1 to maxlen-4
 43640 !     if mod(tm_char_index,4)=0 then
 43660 !       attr$(0:0)=','
@@ -1735,7 +1735,7 @@
 43800     attr$(inf:inf)=".--)"
 43810     attr$=srep$(attr$,'/#PIC(,---.--','/#PIC(----.--')
 43820   else if mask=12 then ! defaults 100 to 100.00, currency : American (2 decimals, commas)
-43840     let form$=''
+43840     form$=''
 43860     for tm_char_index=1 to maxlen-4
 43880       if mod(tm_char_index,4)=0 then 
 43900         attr$(0:0)=','
@@ -1747,7 +1747,7 @@
 44000     attr$(0:0)=str$(width)&"/#PIC("
 44020     attr$(inf:inf)=".--)"
 44040   else if mask=20 then ! 0 decimals, commas
-44060     let form$=''
+44060     form$=''
 44080     for tm_char_index=1 to maxlen
 44100       if mod(tm_char_index,4)=0 then 
 44120         attr$(0:0)=','
@@ -1822,18 +1822,18 @@
 45480 fnend 
 45500 def fn_fileselection(mask,lyne,ps,width,container)
 45520   dim file_select_button_spec$*255
-45540   let file_select_boxes+=1
-45560   let file_select_button_spec$=str$(lyne)&','&str$(ps+width+1)&',C 1,,B'&str$(file_select_fkey_base+file_select_boxes)
+45540   file_select_boxes+=1
+45560   file_select_button_spec$=str$(lyne)&','&str$(ps+width+1)&',C 1,,B'&str$(file_select_fkey_base+file_select_boxes)
 45580   if container then 
-45600     let file_select_button_spec$(0:0)='#'&str$(frames(container,1))&','
+45600     file_select_button_spec$(0:0)='#'&str$(frames(container,1))&','
 45620   else if tabcon then 
-45640     let file_select_button_spec$(0:0)='#'&str$(tabs(tabcon,1))&','
+45640     file_select_button_spec$(0:0)='#'&str$(tabs(tabcon,1))&','
 45660   else 
-45680     let file_select_button_spec$(0:0)='#'&str$(acs_win)&','
+45680     file_select_button_spec$(0:0)='#'&str$(acs_win)&','
 45700   end if 
 45720   mat file_select_data(file_select_boxes,2)
-45740   let file_select_data(file_select_boxes,1)=respc
-45760   let file_select_data(file_select_boxes,2)=mask
+45740   file_select_data(file_select_boxes,1)=respc
+45760   file_select_data(file_select_boxes,2)=mask
 45780   pr f file_select_button_spec$: "."
 45800 fnend 
 45820 def fn_selectfile (&filename$,mask)
@@ -1853,10 +1853,10 @@
 45960     goto SELECTFILE_COMPLETE
 45970   end if 
 45980   if file(h_selectfile)=0 then 
-46000     let filename$=os_filename$(file$(h_selectfile))
-46001 ! let filename$=trim$(file$(h_selectfile)) (2:inf)
-46002     if filename$(1:2)='@:' then let filename$(1:2)=''
-46004     if filename$(1:1)=':' then let filename$(1:1)=''
+46000     filename$=os_filename$(file$(h_selectfile))
+46001 ! filename$=trim$(file$(h_selectfile)) (2:inf)
+46002     if filename$(1:2)='@:' then filename$(1:2)=''
+46004     if filename$(1:1)=':' then filename$(1:1)=''
 46020     close #h_selectfile: 
 46040   end if 
 46060 SELECTFILE_COMPLETE: ! 
@@ -1898,7 +1898,7 @@
 48080   respc+=1
 48100   lyne=val(control$(2))
 48120   ps=val(control$(3))
-48140   let width=val(control$(4))
+48140   width=val(control$(4))
 48160 ! keylen=val(control$(5))
 48180   path1$=control$(6)
 48200   limittolist=val(control$(7))
@@ -1911,7 +1911,7 @@
 48340   tmp_combo_count_for_read+=1
 48360 ! 
 48380   if width<=2 then 
-48400     let width=4
+48400     width=4
 48420   end if 
 48422   if combo$='F' then 
 48424     poskeylen=pos(combooptionset$,'lnk=')
@@ -1920,7 +1920,7 @@
 48430     desclen=val(combooptionset$(posdesclen+4:pos(combooptionset$,',',posdesclen)-1))
 48431     if desclen>0 then spacerlen=1 else spacerlen=0
 48432     if (keylen+desclen+spacerlen)>width then 
-48434       let width=keylen+desclen+spacerlen
+48434       width=keylen+desclen+spacerlen
 48436     end if 
 48438   end if 
 48440   if limittolist=1 or limittolist=2 then 
@@ -1998,7 +1998,7 @@
 51080 fnend 
 54000 def library fnqgl(myline,mypos; qglcontainer,add_all_or_blank,use_or_replace,qgllength,qgltabcon)
 54010   if ~setup then let fn_setup
-54020   if qgllength=0 then let qgllength=35
+54020   if qgllength=0 then qgllength=35
 54030 ! _______________________________________________________________________
 54040 ! the response$ for this - should be gotten with fnAGL
 54050 ! fnCOMBOA("XXX",MYLINE,MYPOS,MAT OPT$,"Select from your Chart of Accounts ("&qgl_cursys$&").",WIDTH=35)
@@ -2012,23 +2012,23 @@
 54130   dim qglsetupkeyprior$*128
 54140 ! r: set qgl_cursys$ (for fnqgl purposes only)
 54150   if env$('CurSys')="UB" and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then 
-54160     let qgl_cursys$="GL"
+54160     qgl_cursys$="GL"
 54170   else if env$('CurSys')="PR" then 
 54180     if exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then 
-54190       let qgl_cursys$="GL"
+54190       qgl_cursys$="GL"
 54200     else if exists(env$('Q')&"\CLmstr\Company.h"&env$('cno')) then 
-54210       let qgl_cursys$="CL"
+54210       qgl_cursys$="CL"
 54220     else 
-54230       let qgl_cursys$="PR"
+54230       qgl_cursys$="PR"
 54240     end if 
 54250   else if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno')) then 
-54260     let qgl_cursys$='GL'
+54260     qgl_cursys$='GL'
 54270   else if env$('CurSys')='CR' and exists(env$('Q')&"\GLmstr\Company.h"&env$('cno'))=0 then 
-54280     let qgl_cursys$='CR'
+54280     qgl_cursys$='CR'
 54290   else if env$('CurSys')='CL' then 
-54300     let qgl_cursys$='CL'
+54300     qgl_cursys$='CL'
 54310   else 
-54320     let qgl_cursys$='GL'
+54320     qgl_cursys$='GL'
 54330   end if 
 54340 ! /r
 54350   if setupqgl$<>qgl_cursys$ then ! r:
@@ -2039,28 +2039,28 @@
 54400     else if qgl_cursys$="GL" then 
 54410       read #company,using 'Form Pos 150,2*N 1': use_dept,use_sub ! read it from General Ledger
 54420     else if qgl_cursys$="PR" or qgl_cursys$="UB" or qgl_cursys$="CR" then 
-54430       let use_dept=1: let use_sub=1 ! default both to yes if from pr chart of accounts
+54430       use_dept=1: use_sub=1 ! default both to yes if from pr chart of accounts
 54440     end if 
 54450 CLOSECOMPANY: ! 
 54460     close #company: ioerr ignore
-54470     if use_dept<>0 and use_sub<>0 then let glmstr_form$="Form Pos 1,C 12"
-54480     if use_dept =0 and use_sub<>0 then let glmstr_form$="Form Pos 4,C 09"
-54490     if use_dept =0 and use_sub =0 then let glmstr_form$="Form Pos 4,C 06"
-54500     if use_dept<>0 and use_sub =0 then let glmstr_form$="Form Pos 1,C 09"
+54470     if use_dept<>0 and use_sub<>0 then glmstr_form$="Form Pos 1,C 12"
+54480     if use_dept =0 and use_sub<>0 then glmstr_form$="Form Pos 4,C 09"
+54490     if use_dept =0 and use_sub =0 then glmstr_form$="Form Pos 4,C 06"
+54500     if use_dept<>0 and use_sub =0 then glmstr_form$="Form Pos 1,C 09"
 54510 ! add description to the form
-54520     let glmstr_form$=glmstr_form$&",Pos 13,C 50"
+54520     glmstr_form$=glmstr_form$&",Pos 13,C 50"
 54530   end if  ! /r
-54540   let qglsetupkeycurrent$='qglCursys='&qgl_cursys$&',add_all_or_blank='&str$(add_all_or_blank)
+54540   qglsetupkeycurrent$='qglCursys='&qgl_cursys$&',add_all_or_blank='&str$(add_all_or_blank)
 54550   if qglsetupkeycurrent$=qglsetupkeyprior$ then 
 54560 !   pr 'saving time ';timesavecount+=1 : pause
 54570     goto QGLFINIS
 54580   else 
-54590     let qglsetupkeyprior$=qglsetupkeycurrent$
+54590     qglsetupkeyprior$=qglsetupkeycurrent$
 54600     mat qgloption$(0) : option_count=0
 54610     if add_all_or_blank=1 then 
-54620       mat qgloption$(option_count+=1) : let qgloption$(option_count)='[All]'
+54620       mat qgloption$(option_count+=1) : qgloption$(option_count)='[All]'
 54630     else if add_all_or_blank=2 then 
-54640       mat qgloption$(option_count+=1) : let qgloption$(option_count)=''
+54640       mat qgloption$(option_count+=1) : qgloption$(option_count)=''
 54650     end if 
 54660 ! read the chart of accounts from the appropriate system into an array
 54670     if qgl_cursys$='GL' or qgl_cursys$='CL' or qgl_cursys$='PR' or qgl_cursys$='UB' or qgl_cursys$='CR' then 
@@ -2070,21 +2070,21 @@
 54710       read #glmstr,using glmstr_form$: qglopt$,desc$ norec QGL_LOOP_COMPLETE eof EO_QGL_GLMSTR ioerr QGL_ERROR
 54720 ! reformat the options for typing
 54730       if use_dept<>0 and use_sub<>0 then 
-54740         let qglopt$=trim$(qglopt$(1:3))&"-"&trim$(qglopt$(4:9))&"-"&trim$(qglopt$(10:12))
+54740         qglopt$=trim$(qglopt$(1:3))&"-"&trim$(qglopt$(4:9))&"-"&trim$(qglopt$(10:12))
 54750       else if use_dept=0 and use_sub<>0 then 
-54760         let qglopt$=trim$(qglopt$(1:6))&"-"&trim$(qglopt$(7:9))
+54760         qglopt$=trim$(qglopt$(1:6))&"-"&trim$(qglopt$(7:9))
 54770       else if use_dept=0 and use_sub=0 then 
-54780         let qglopt$=trim$(qglopt$(1:6))
+54780         qglopt$=trim$(qglopt$(1:6))
 54790       else if use_dept<>0 and use_sub=0 then 
-54800         let qglopt$=trim$(qglopt$(1:3))&"-"&trim$(qglopt$(4:9))
+54800         qglopt$=trim$(qglopt$(1:3))&"-"&trim$(qglopt$(4:9))
 54810       end if 
 54820 !  add spaces to the end of it
 54830 !  - for spacing of the description,
 54840 !  and the description
-54850       let qglopt$=(rpad$(qglopt$,14)&desc$)(1:qgllength)
+54850       qglopt$=(rpad$(qglopt$,14)&desc$)(1:qgllength)
 54860 !   write it into the comobobox option file
 54870 !   pr #whr,using "Form Pos 1,C 81": qglOpt$
-54880       mat qgloption$(option_count+=1) : let qgloption$(option_count)=qglopt$
+54880       mat qgloption$(option_count+=1) : qgloption$(option_count)=qglopt$
 54890 QGL_LOOP_COMPLETE: ! 
 54900     loop 
 54910 EO_QGL_GLMSTR: ! 
@@ -2096,14 +2096,14 @@
 54970   pause 
 54980   goto QGLFINIS
 54990 QGLFINIS: ! WRITE_QGL_ACE: ! add it to the screen ace script file
-55000   let qgloptfile$=qgl_cursys$&"GLNumber"
+55000   qgloptfile$=qgl_cursys$&"GLNumber"
 55010   fn_comboa(qgloptfile$,myline,mypos,mat qgloption$, "Select from the Chart of Accounts ("&qgl_cursys$&").",qgllength,qglcontainer,qgltabcon,qglsetupkeycurrent$)
 55020   myline=mypos=con=0
 55030 fnend 
 56000 def fn_remove_crlf(&txt$)
 56020   lastx=x=0
 56040   do 
-56060     let x=pos(txt$,hex$("0D0A"),lastx)
+56060     x=pos(txt$,hex$("0D0A"),lastx)
 56080     if x>0 then 
 56100       txt$=txt$(1:x-1)&"HEX$(0D0A)"&txt$(x+2:len(trim$(txt$)))
 56120       lastx=x
@@ -2112,10 +2112,10 @@
 56180 fnend 
 60000 def fn_export_grid(;___,index_)
 60020   dim filename$*1000
-60040   let filename$=''
-60060   let grid_rows=grid_columns=index_=0
+60040   filename$=''
+60060   grid_rows=grid_columns=index_=0
 60080   open #export_file:=fngethandle: "Name=save:Text documents (*.txt) |*.txt,RecL=1,Replace",external,output error GRID_EXPORT_XIT
-60100   let filename$=file$(export_file)
+60100   filename$=file$(export_file)
 60120   close #export_file: 
 60140   open #export_file: 'Name='&filename$&',RecL=2048,Replace',display,output 
 60160   input fields gridspec$&",RowCnt,all,nowait": grid_rows
@@ -2142,9 +2142,9 @@
 60580         end if 
 60600 ! /r
 60620 !         pr _chunks$(eg_grid_line_item);'  date format is '&date_format$ : pause
-60640         let _chunks$(eg_grid_line_item)=date$(val(_chunks$(eg_grid_line_item)),date_format$)
+60640         _chunks$(eg_grid_line_item)=date$(val(_chunks$(eg_grid_line_item)),date_format$)
 60660       else if eg_tmp_mask<2 or eg_tmp_mask>65 then 
-60680         let _chunks$(eg_grid_line_item)='"'&rtrm$(_chunks$(eg_grid_line_item))&'"'
+60680         _chunks$(eg_grid_line_item)='"'&rtrm$(_chunks$(eg_grid_line_item))&'"'
 60700       end if 
 60720     next eg_grid_line_item
 60730 ! 
@@ -2161,7 +2161,7 @@
 60920 fnend 
 62000 def fn_get_flexhandle(;forceclose)
 62020   if forceclose then 
-62040     let forceclose=0
+62040     forceclose=0
 62060     close #118: ioerr ignore
 62080   end if 
 62100   fn_get_flexhandle=118

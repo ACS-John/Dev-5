@@ -32,8 +32,8 @@
         fnopenwin(win=101,10,22,15,58,cap$)
 00310   io2$(1)="4,2,C 35,N"
 00320   io2$(2)="5,2,C 35,N"
-00330   let wrd2$(1)="Use Hours and Minutes"
-00340   let wrd2$(2)="Use Hours and Hundredths of an Hour"
+00330   wrd2$(1)="Use Hours and Minutes"
+00340   wrd2$(2)="Use Hours and Hundredths of an Hour"
 00350   pr f "16,35,C 09,B,5": "Exit (F5)"
 00360   rinput #win,select mat io2$,attr "H": mat wrd2$
 00370   if cmdkey=5 then goto XIT

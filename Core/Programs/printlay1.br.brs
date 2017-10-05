@@ -48,16 +48,16 @@
 00460   if f1>0 then pr f "2,5,C 60,H,N": "LAST FILE NAME ENTER WAS "&fil$(f1)
 00470   pr f "4,5,C 60,N": "Enter File Name/VolId to pr or Blank to stop"
 00480   rinput fields "4,55,C 20,UE,N": fil$(f1+1)
-00490   let fil$(f1+1)=rtrm$(fil$(f1+1))
+00490   fil$(f1+1)=rtrm$(fil$(f1+1))
 00500   if pp>0 or fil$(f1+1)="" then goto L530
 00510   f1=f1+1
 00520   goto L430
-00530 L530: let f2=f2+1: rl=l=a=b=ino=pg=j3=0: mat a=(0)
+00530 L530: f2=f2+1: rl=l=a=b=ino=pg=j3=0: mat a=(0)
 00540   if ev$="" then goto L590
 00550 L550: linput #2: a$ eof L1600
 00560   if uprc$(rtrm$(a$(11:13)))><uprc$(ex$) then goto L550
-00570   let fil$(1)=rtrm$(a$(1:8))&"."&ev$
-00580   let f2=1: f1=2
+00570   fil$(1)=rtrm$(a$(1:8))&"."&ev$
+00580   f2=1: f1=2
 00590 L590: if rtrm$(fil$(f2))="" then goto L1600
 00600   open #1: "Name="&fil$(f2),display,input ioerr L530
 00610   goto L830
@@ -97,9 +97,9 @@
 00950   p1=pos(uprc$(ln$),"H1$",1)
 00960   if p1>0 then h1$=ln$(p1+5:p2) : goto L720
 00970   p1=pos(uprc$(ln$),"FILETYPE$",1)
-00980   if p1>0 then let filetype$=ln$(p1+11:p2): goto L720
+00980   if p1>0 then filetype$=ln$(p1+11:p2): goto L720
 00990   p1=pos(uprc$(ln$),"FILENAME$",1)
-01000   if p1>0 then let filename$=ln$(p1+11:p2): goto L720
+01000   if p1>0 then filename$=ln$(p1+11:p2): goto L720
 01010   p1=pos(uprc$(ln$),"VOLID$",1)
 01020   if p1>0 then volid$=ln$(p1+8:p2): goto L720
 01030   p1=pos(uprc$(ln$),"RM$",1)

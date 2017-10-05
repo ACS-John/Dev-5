@@ -15,10 +15,10 @@
 00150     fntos(sn$="CatSrch")
 00160     ch$(1)="Job & Category": ch$(2)="Category Name" : !:
           mat ch$(2) : mat cm$(2) : mat cm$=("2")
-00170     if fixgrid=99 then let usefile=0 else let usefile=1 !:
+00170     if fixgrid=99 then usefile=0 else usefile=1 !:
             ! set to rebuild grid file only as you exit program and the !:
             ! fixgrid code has been changed to necessary
-00180     let usefile=fnflexinit1('Cat',1,1,10,70,mat ch$,mat cm$,1,usefile)
+00180     usefile=fnflexinit1('Cat',1,1,10,70,mat ch$,mat cm$,1,usefile)
 00190     if usefile>0 then goto L310 ! file already exists, do not recreate
 00200     restore #category,key>=jn$&"     ": nokey L310
 00210 READ_FILE: ! 

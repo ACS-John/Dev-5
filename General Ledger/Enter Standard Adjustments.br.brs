@@ -31,7 +31,7 @@
 00290   restore #open_file_count: 
 00300   do
 00302     read #open_file_count, using "form pos 43,c 12": gl$ eof L340
-00310     let gl$=lpad$(rtrm$(gl$),12)
+00310     gl$=lpad$(rtrm$(gl$),12)
 00320     rewrite #open_file_count, using "form pos 43,c 12,": gl$
 00330   loop
 00340 L340: !
@@ -75,7 +75,7 @@
 00570 ! ** Field Masks ** !:
         ic=0 !:
         pointtwo=32 : number=30 !:
-        ccyymmdd=3 : mmddyy=1 : let glnumber=53
+        ccyymmdd=3 : mmddyy=1 : glnumber=53
 00580   mask(ic+=1)=0 !:
         mask(ic+=1)=0 !:
         mask(ic+=1)=0 !:

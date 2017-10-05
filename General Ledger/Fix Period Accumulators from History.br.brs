@@ -1,5 +1,5 @@
 10000 ! formerly S:\acsGL\FixPA
-10200 let fn_setup
+10200 fn_setup
 12000   fntop(program$, cap$="Fix Period Accumulators from History")
 12020   current_accounting_period=fnactpd
 12200 ! 
@@ -39,7 +39,7 @@
 17500       period_accumulator_current(1)=0 ! bb ! bb = Beginning Balance (at the beginning of the fiscal year)
 17520     end if 
 17800     mat period_accumulator_prior=(0)
-18000     let gln_period_did_change=0
+18000     gln_period_did_change=0
 18200     for period=1 to nap
 18400       if period=nap then 
 18600         period_date_end=date(days(period_date_start(1)+1,'mmddyy')-1,'mmddyy')
@@ -61,13 +61,13 @@
 20800       end if  ! include_prior_periods
 21000 !   if period>1 then period_accumulator_current(period)<>0 then period_accumulator_current(period)+=period_accumulator_current(period-1)
 21200       if period_accumulator_current(period)<>balance_current_year_month(period) then 
-21400         let gln_period_did_change+=1
+21400         gln_period_did_change+=1
 21600         fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_current_year_month(period))&' to '&str$(period_accumulator_current(period)))
 21800         balance_current_year_month(period)=period_accumulator_current(period)
 21820 !  if gl$='  1   405  0' then pr ' about to write period_accumulator_current(';period;')=';period_accumulator_current(period) : pause
 22000       end if 
 22200       if include_prior_periods and period_accumulator_prior(period)<>balance_prior_year_month(period) then 
-22400         let gln_period_did_change+=1
+22400         gln_period_did_change+=1
 22600         fn_report('changing GLmstr '&gl$&' period '&str$(period)&" from "&str$(balance_prior_year_month(period))&' to '&str$(period_accumulator_prior(period)))
 22800         balance_prior_year_month(period)=period_accumulator_prior(period)
 23000       end if  ! period_accumulator_prior(period)<>balance_prior_year_month(period) then
@@ -232,12 +232,12 @@
 52000   def fn_is_a_retained_earn_account(gl$)
 52020 ! pr 'gl number passed is *'&gl$&'*'
 52040 ! pr 'gl number last retained earnings *'&last_retained_earnings_acct$&'*'
-52060     let gl$=trim$(fnagl$(gl$))
+52060     gl$=trim$(fnagl$(gl$))
 52080     if use_dept then 
-52100       let fund_compare=val(gl$(1:3))
-52120       let fund_which=srch(mat fund_list,fund_compare)
+52100       fund_compare=val(gl$(1:3))
+52120       fund_which=srch(mat fund_list,fund_compare)
 52140     else 
-52160       let fund_which=1
+52160       fund_which=1
 52180     end if 
 52200     if gl$<=trim$(last_retained_earnings_acct$(fund_which)) then 
 52220 !     pr '"'&gl$&'"<="'&trim$(last_retained_earnings_acct$(fund_which))&'" so it IS a retained earnings account - fund:'&str$(fund_which)
@@ -265,15 +265,15 @@
 56160     do 
 56180       read #gfl_h_glmstr,using 'form pos 1,N 3': fund eof GFL_EO_GLMSTR
 56200       if fund<>fund_prior then 
-56220         let fund_list_count+=1
-56240         let fund_list(fund_list_count)=fund
-56260         let fund_prior=fund
+56220         fund_list_count+=1
+56240         fund_list(fund_list_count)=fund
+56260         fund_prior=fund
 56280       end if 
 56300     loop 
 56320     GFL_EO_GLMSTR: ! 
 56340     close #gfl_h_glmstr: 
 56360   else ! no departments
-56380     let fund_list_count=0
+56380     fund_list_count=0
 56400   end if 
 56420   mat fund_list(fund_list_count)
 56440 fnend 

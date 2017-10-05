@@ -13,7 +13,7 @@
         fndat(dat$)
 00130 ! ______________________________________________________________________
 00140   fntos(sn$="FixYTDQTD") !:
-        rc=cf=0: mylen=28: mypos=mylen+3: let frameno=1
+        rc=cf=0: mylen=28: mypos=mylen+3: frameno=1
 00150   fnfra(1,1,3,45,"Date Range to Fix Quarter To Date Earnings","Enter the date range for the payrolls to be included in this quarter. Leave blank to skip quarter.")
 00160   fnlbl(1,1,"Beginning Date of Quarter:",mylen,1,0,frameno)
 00170   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno) !:
@@ -21,7 +21,7 @@
 00180   fnlbl(2,1,"Ending Date of Quarter:",mylen,1,0,frameno)
 00190   fntxt(2,mypos,12,0,1,"3",0,"Enter the last payroll date that should be included in this quarter. Blank if not fixing quarter.",frameno) !:
         resp$(rc+=1)=str$(end_date)
-00200   let frameno=2
+00200   frameno=2
 00210   fnfra(6,1,3,45,"Date Range to Fix YTD Earnings.","Enter the date range for the payrolls to be included in year to date earnings. Leave blank to skip fixing the year to date earnings.")
 00220   fnlbl(1,1,"Beginning Date of the Year:",mylen,1,0,frameno)
 00230   fntxt(1,mypos,12,0,1,"3",0,"Enter the first day of the year. Leave blank in only fixing the quarter.",frameno) !:
@@ -40,17 +40,17 @@
         endytd_date=val(resp$(4))
 00330   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative: read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2,POS 407,PD 5.3,PD 5.2,POS 418,10*C 20,10*N 1',rec=1: ficarate,ficawage,feducrat,feducwag,mcr,mcm,mat miscname$,mat dedcode !:
         close #1: 
-00340   let ficarate=ficarate/100 : let feducrat=feducrat/100 : mcr=mcr/100
+00340   ficarate=ficarate/100 : feducrat=feducrat/100 : mcr=mcr/100
 00350   nametab=66-int(len(rtrm$(cnam$))/2)
 00360   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
 00370   open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno)&",Shr",internal,outin,relative 
 00380 L380: read #1,using 'Form POS 1,N 4,3*C 25,C 11,36*PD 5.2,2*N 5': eno,mat k$,ss$,mat m,mat adr eof XIT
-00390   let fixqtr=fixytd=0
-00400   if beg_date>0 and end_date>0 then let fixqtr=1: goto L410 else goto L440
+00390   fixqtr=fixytd=0
+00400   if beg_date>0 and end_date>0 then fixqtr=1: goto L410 else goto L440
 00410 L410: for j=2 to 36 step 2 ! set qtd to zero
 00420     m(j)=0
 00430   next j
-00440 L440: if begytd_date>0 and endytd_date>0 then let fixytd=1: goto L450 else goto L480
+00440 L440: if begytd_date>0 and endytd_date>0 then fixytd=1: goto L450 else goto L480
 00450 L450: for j=1 to 35 step 2 ! set year to date to zero
 00460     m(j)=0
 00470   next j
@@ -58,12 +58,12 @@
 00490   ca=adr(1)
 00500 L500: read #2,using 'Form N 4,2*PD 4,19*PD 5.2,PD 3',rec=ca: mat d,nca norec REWRITE_MASTER
 00510   if fixqtr=0 or (fndate_mmddyy_to_ccyymmdd(d(2))<beg_date or fndate_mmddyy_to_ccyymmdd(d(2))>end_date) then goto L560
-00520   let x=3
+00520   x=3
 00530   for j=2 to 36 step 2
 00540     m(j)+=d(x+=1) ! add quarterly info
 00550   next j
 00560 L560: if fixytd=0 or (fndate_mmddyy_to_ccyymmdd(d(2))<begytd_date or fndate_mmddyy_to_ccyymmdd(d(2))>endytd_date) then goto L610
-00570   let x=3
+00570   x=3
 00580   for j=1 to 35 step 2
 00590     m(j)+=d(x+=1)
 00600   next j

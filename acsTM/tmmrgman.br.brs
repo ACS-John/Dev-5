@@ -49,7 +49,7 @@
 00500   read #4,using L510,rec=ca(b(5)),reserve: ta1,ta2,fb1 norec L770 
 00510 L510: form pos p1,2*pd 3,pos p2,n 1
 00520   if ta2><0 then rewrite #2,using L130,rec=ta2: lta else ta1=lta
-00530   if fb1<2 then let fb1=abs(b(7))
+00530   if fb1<2 then fb1=abs(b(7))
 00540   if ta1=0 then ta1=lta
 00550   rewrite #4,using L510,rec=ca(b(5)),release: ta1,lta,fb1
 00560   goto L690 ! 6/24/87
@@ -59,20 +59,20 @@
 00600   ca(b(5))=lta4
 00610   ta(b8,1)=lta
 00620   ta(b8,2)=lta
-00630   if b(7)=-2 then let fb(b8)=2
+00630   if b(7)=-2 then fb(b8)=2
 00640   if fb(b8)=2 then goto L660
-00650   if b(7)=-1 then let fb(b8)=1
+00650   if b(7)=-1 then fb(b8)=1
 00660 L660: write #4,using L670,rec=lta4,reserve: mat ta,mat fb duprec L570
 00670 L670: form pos 1,50*pd 3,25*n 1
 00680   rewrite #4,using L210,rec=1,release: lta4
 00690 L690: igl$(1)=gl$
-00700   let ga(1)=b(3)
+00700   ga(1)=b(3)
 00710 ! write #h_armotran,using F_armotran: k$,iv$,b(4),b(3),b(3),0,1,0,des$,pgl$,mat igl$,mat ga
 00720 ! F_armotran: form pos 1,c 5,c 12,n 6,2*pd 5.2,pd 2,2*n 1,c 20,11*c 12,10*pd 5.2
 00730   if b(7)=-2 then sc(b(5))=2
 00740   rewrite #1,using L750,key=k$: mat sc,mat ca,ar1,mat arta
 00750 L750: form pos 220,10*n 1,10*pd 3,pos 283,pd 5.2,pos 299,2*pd 3
-00760   let ga(1)=b(3)
+00760   ga(1)=b(3)
 00770 L770: goto L220
 00780 L780: close #1: 
 00790   close #2: 

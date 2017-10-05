@@ -61,13 +61,13 @@
 00480 ! ______________________________________________________________________
 00490 BLD_ACNO: ! 
 00500   dir$=fncursys$&"mstr" !:
-        let filter$="Company.*" !:
+        filter$="Company.*" !:
         fngetdir(dir$,mat filename$,empty$,filter$)
 00510   mat acno(99): cav=0
 00520 L520: if trim$(filename$(fx+=1))="" then goto L580
 00530   acno(cav+=1)=val(filename$(fx)(10:14)) conv L520
 00540   end=len(filename$(fx))
-00550   let x=115: open #x: "Name="&sys$&"\Company.h"&filename$(fx)(10:14),internal,input ioerr L570 !:
+00550   x=115: open #x: "Name="&sys$&"\Company.h"&filename$(fx)(10:14),internal,input ioerr L570 !:
         read #x,using "Form pos 1,c 40": cnam$ !:
         close #x: 
 00560   opt$(fx)=cnam$(1:30)&" ("&cnvrt$("pic(#####)",val(filename$(fx)(10:14)))&")"(1:40)

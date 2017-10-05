@@ -145,16 +145,16 @@
 01520   if sc(de)<0 or sc(de)>25 then goto ERR1
 01530   ce=ce-39
 01540 L1540: ! 
-01542   let gl(1)=val(gl$(de)(1:3))
-01544   let gl(2)=val(gl$(de)(4:9))
-01546   let gl(3)=val(gl$(de)(10:12))
+01542   gl(1)=val(gl$(de)(1:3))
+01544   gl(2)=val(gl$(de)(4:9))
+01546   gl(3)=val(gl$(de)(10:12))
 01550   pr f "22,40,C 20,N": "General Ledger #"
 01551   dim fli4$(3)
 01552   fli4$(1)="22,58,N 3,ut,N"
 01554   fli4$(2)="22,62,N 6,ut,N"
 01556   fli4$(3)="22,69,N 3,ut,N"
 01570   rinput fields mat fli4$,attr "R": mat gl
-01580   let gl$(de)=lpad$(str$(gl(1)),3)&lpad$(str$(gl(2)),6)&lpad$(str$(gl(3)),3)
+01580   gl$(de)=lpad$(str$(gl(1)),3)&lpad$(str$(gl(2)),6)&lpad$(str$(gl(3)),3)
 01590   pr f "22,40,C 40": ""
 01600   goto CT1
 01610 L1610: ! 
@@ -392,7 +392,7 @@
 03830 !    t1=val(time$(7:8))
 03840 !  L3840: !
 03842 !    t2=val(time$(7:8))
-03850 !    let x$=kstat$: if x$><"" then goto OVER
+03850 !    x$=kstat$: if x$><"" then goto OVER
 03860 !    if t1=t2 then goto L3840
 03870 !    pr f str$(j1)&","&str$(j2)&",C 25,B,N": ""
 03880 !    pr f str$(j1+1)&","&str$(j2)&",C 25,B,N": ""

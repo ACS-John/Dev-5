@@ -33,9 +33,9 @@
 00660     execute "DIR "&source_path$&" >DirFile"
 00680     open #2: "Name=DirFile",display,input 
 00700     p1=pos(source_path$,"/",1)
-00740 L330: let f2=f2+1: rl=l=a=col_6=ino=pg=j3=0: mat a=(0)
+00740 L330: f2=f2+1: rl=l=a=col_6=ino=pg=j3=0: mat a=(0)
 00760     linput #2: a$ eof L1380
-00800     let f2=1: f1=2
+00800     f2=1: f1=2
 00820     open #1: "Name="&source_path$,display,input ioerr L330
 00840     goto OLD_READ_LINE
 01060 OLD_READ_LINE: ! 
@@ -55,9 +55,9 @@
 01340     p1=pos(ln$,"H1$",1)
 01360     if p1>0 then h1$=ln$(p1+5:p2) : goto OLD_READ_LINE
 01380     p1=pos(ln$,"FILETYPE$",1)
-01400     if p1>0 then let filetype$=ln$(p1+11:p2): goto OLD_READ_LINE
+01400     if p1>0 then filetype$=ln$(p1+11:p2): goto OLD_READ_LINE
 01420     p1=pos(ln$,"FILENAME$",1)
-01440     if p1>0 then let filename$=ln$(p1+11:p2): goto OLD_READ_LINE
+01440     if p1>0 then filename$=ln$(p1+11:p2): goto OLD_READ_LINE
 01460     p1=pos(ln$,"VOLID$",1)
 01480     if p1>0 then volid$=ln$(p1+8:p2): goto OLD_READ_LINE
 01500     p1=pos(ln$,"RM$",1)
@@ -156,9 +156,9 @@
 03460 ! ______________________________________________________________________
 03480   def fn_file_to_array(fta_file$*256,mat fta_line$)
 03500     open #1: 'Name='&fta_file$,display,input 
-03520     let fta_line_item=0
+03520     fta_line_item=0
 03540     do 
-03560       let fta_line_item+=1
+03560       fta_line_item+=1
 03580       mat fta_line$(fta_line_item)
 03600       linput #1: fta_line$(fta_line_item) eof FTA_DONE
 03620     loop 

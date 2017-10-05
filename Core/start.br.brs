@@ -263,7 +263,7 @@
 22160   end if 
 22180 fnend 
 24000 def library fnSpoolPath$*256(; initialize)
-24020   if ~setup the let fn_setup
+24020   if ~setup then let fn_setup
 24040   fnSpoolPath$=fn_spoolPath$( initialize)
 24060 fnend
 24080 def fn_spoolPath$*256(; initialize)

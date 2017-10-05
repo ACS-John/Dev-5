@@ -11,14 +11,14 @@
 00110 ! ______________________________________________________________________
 00120   fntop(program$,cap$="Income Statement with GASB Budget")
 00130   fncno(cno,cnam$)
-00140   let udf$=env$('temp')&'\'
+00140   udf$=env$('temp')&'\'
 00150   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00160   cch$=fncch$
 00170   pedat$=fnpedat$
 00180   actpd=fnactpd
 00190   actpd$=fnactpd$
-00200   let fscode=fnfscode
+00200   fscode=fnfscode
 00210   priorcd=fnpriorcd
 00220 ! ______________________________________________________________________
 00230   pors=1
@@ -65,7 +65,7 @@
 00600 L600: read #3,using L690: ir,bb,cb,mat by,mat bp,mat bm,mat revb eof L880
 00610   if ir=0 then goto L600
 00620   if fscode=0 or (fscode=actpd and priorcd=1) then goto L690
-00630   if fscode<1 or fscode>13 then let fscode=1
+00630   if fscode<1 or fscode>13 then fscode=1
 00640   if priorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00650   if priorcd=2 then goto L680
 00660   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -76,22 +76,22 @@
 00710 L710: total2=total2+cb
 00720   for z=1 to 13
 00730     annualb=annualb+bm(z)
-00740     let finalb=finalb+revb(z)
+00740     finalb=finalb+revb(z)
 00750   next z
 00760   if fscode=0 then monthb=monthb+bm(actpd) else monthb=monthb+bm(fscode) ! 11/24/86
 00770   if fscode=0 then goto L780 else goto L820 ! 11/24/86
 00780 L780: for j=1 to actpd
-00790     let ytdb=ytdb+bm(j)
+00790     ytdb=ytdb+bm(j)
 00800   next j
 00810   goto L590
 00820 L820: for j=1 to fscode ! 11/24/86
-00830     let ytdb=ytdb+bm(j) ! 11/24/86
+00830     ytdb=ytdb+bm(j) ! 11/24/86
 00840   next j ! 11/24/86
 00850   goto L590 ! 11/24/86
 00860 L860: if ir<val(r$) then goto L590
 00870   if ir>val(r$) then goto L890
 00880 L880: notrans=1
-00890 L890: let unexpend=finalb-total2
+00890 L890: unexpend=finalb-total2
 00900   for j=1 to 9
 00910     if ac(j)=9 then goto L960 ! 10/14/87
 00920     accum(j,1)=accum(j,1)+annualb
@@ -99,10 +99,10 @@
 00940     accum(j,3)=accum(j,3)+total2
 00950     accum(j,4)=accum(j,4)+unexpend
 00960 L960: next j
-00970   if rs=1 then let finalb=-finalb else goto L1010
+00970   if rs=1 then finalb=-finalb else goto L1010
 00980   total2=-total2
 00990   annualb=-annualb
-01000   let unexpend=unexpend
+01000   unexpend=unexpend
 01010 L1010: if ds=1 then dollar$="$" else dollar$=" "
 01020   if annualb><0 or total2><0 then goto L1050
 01030   if finalb<>0 then goto L1050
@@ -112,10 +112,10 @@
 01060   pr #255,using L1070: d$(1:sp2),dollar$,annualb,dollar$,finalb,dollar$,total2,dollar$,unexpend pageoflow L1620
 01070 L1070: form pos sp,c sp2,pos 22,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),x 1,c 1,pic(--,---,---.##),skip redir
 01071 L1071: form pos sp,c sp2,pos 22,c 1,c 5,pic(--,---,---.##),c 1,x 1,c 1,c 5,pic(--,---,---.##),c 1,x 1,c 1,c 5,pic(--,---,---.##),c 1,x 1,c 1,c 5,pic(--,---,---.##),c 1,skip redir
-01080   let finalb=0
+01080   finalb=0
 01090   total2=0
 01100   annualb=0
-01110   let unexpend=0
+01110   unexpend=0
 01120   gosub L1390
 01125   if ul=1 then goto L1140
 01130   gosub L1630
@@ -141,10 +141,10 @@
 01310   goto L430
 01320 L1320: if foot1=1 then goto L1370
 01330   tabnote=sp
-01340   let foot1=1
-01350   let foot$=d$
+01340   foot1=1
+01350   foot$=d$
 01360   goto L430
-01370 L1370: let foot$=rtrm$(foot$)&d$
+01370 L1370: foot$=rtrm$(foot$)&d$
 01380   goto L430
 01390 L1390: for j=1 to 9
 01400     if ac(j)=0 or ac(j)=9 then goto L1450 ! 10/14/87
@@ -172,11 +172,11 @@
 01620 L1620: gosub L1520: continue 
 01630 L1630: if ul=0 then goto L1720
 01640   if ul=1 then goto L1690
-01650   let underlin$="=============="
+01650   underlin$="=============="
 01660 ! pr #255:
 01670   goto L1700
 01680   goto L1720
-01690 L1690: let underlin$="______________"
+01690 L1690: underlin$="______________"
 01700 L1700: pr #255,using L1710: underlin$,underlin$,underlin$,underlin$
 01710 L1710: form pos 22,4*c 15,skip redir
 01720 L1720: if redir=0 then pr #255,using L1730: " "

@@ -31,7 +31,7 @@
 00270   goto XIT
 00280 ! ______________________________________________________________________
 00290 L290: pr newpage
-00300   let win=102
+00300   win=102
 00310   fnopenwin(win,10,20,14,59,cap$)
 00320   pr #win,fields "4,02,C 23,N": "Job Cost Report Number:"
 00330   pr f "15,35,C 09,B,5": "Done (F5)"
@@ -85,9 +85,9 @@
 00790   io1$(09)="19,54,Cu 1,UT,N"
 00800   io1$(10)="20,54,Nz 1,UT,N"
 00810 L810: mat fkey$=("") !:
-        let fkey$(1)="Next" !:
-        let fkey$(4)="Delete" !:
-        let fkey$(5)="Done" !:
+        fkey$(1)="Next" !:
+        fkey$(4)="Delete" !:
+        fkey$(5)="Done" !:
         em$="" !:
         fnfkey(23,mat fkey$,mat disfk,em$,0)
 00820   if sd=1 then sd$="Y" else sd$="N"
@@ -142,7 +142,7 @@
 01300   if ips=0 then goto L1570
 01310   pr newpage
 01320   for j=1 to 20
-01330     let fd$(j)=str$(j+1)&",40,N 12.3,UT,N"
+01330     fd$(j)=str$(j+1)&",40,N 12.3,UT,N"
 01340   next j
 01350   for w=1 to 5
 01360     for j=2 to 21
@@ -168,7 +168,7 @@
 01560   next w
 01570 L1570: for j=1 to 20
 01580 L1580: pr newpage
-01590     let win=105
+01590     win=105
 01600     fnopenwin(win,07,04,19,77,cap$)
 01610     pr #win,fields "4,2,Cr 21,N": "Report Number:" !:
           pr #win,fields "4,24,C 2,N": str$(rptn)
@@ -182,10 +182,10 @@
 01680     pr #win,fields "11,2,Cr 21,N": "Total by Job (Y/N):"
 01690     pr #win,fields "12,2,Cr 21,N": "Grand Totals (Y/N):"
 01700     mat fkey$=("") !:
-          let fkey$(1)="Next" !:
-          let fkey$(2)="Back" !:
-          let fkey$(3)="Screen 1" !:
-          let fkey$(4)="Completed" !:
+          fkey$(1)="Next" !:
+          fkey$(2)="Back" !:
+          fkey$(3)="Screen 1" !:
+          fkey$(4)="Completed" !:
           em$="" !:
           fnfkey(20,mat fkey$,mat disfk,em$,0)
 01710     io2$(1)="06,24,C 50,UT,N"
@@ -197,7 +197,7 @@
 01770     io2$(7)="12,24,Cu 1,UT,N"
 01780     if fc(j)=1 then detailprint$="N" else detailprint$="Y"
 01790     if tcj(j)=1 then totalbyjob$="Y" else totalbyjob$="N"
-01800     if tcs(j)=1 then let grandtotal$="Y" else let grandtotal$="N"
+01800     if tcs(j)=1 then grandtotal$="Y" else grandtotal$="N"
 01810 L1810: rinput #win,fields mat io2$: f$(j),pp(j),ppr(j),dp(j),detailprint$,totalbyjob$,grandtotal$ conv CONV2
 01820     if ce>0 then io2$(ce)(ce1:ce2)="U": ce=0
 01830     if cmdkey>0 then goto L1900 else ce=curfld
@@ -210,7 +210,7 @@
 01880     ce=cnt+1
 01890 ERR2: pr f "24,78,C 1": bell : goto L1850
 01900 L1900: if rtrm$(f$(j))="" then goto L2020
-01910     if detailprint$="Y" then let fc(j)=0 else let fc(j)=1
+01910     if detailprint$="Y" then fc(j)=0 else fc(j)=1
 01920     if totalbyjob$="Y" then tcj(j)=1 else tcj(j)=0
 01930     if grandtotal$="Y" then tcs(j)=1 else tcs(j)=0
 01940     if detailprint$<>"Y" and detailprint$<>"N" then ce=5 : goto ERR2
@@ -240,8 +240,8 @@
 02180 L2180: pr newpage
 02190   restore #1,key>="  ": nokey L2850
 02200   fnopenwin(win=102,10,28,15,52,cap$)
-02210   let wrd3$(1)="Print All Report Files"
-02220   let wrd3$(2)="Select Reports to Print"
+02210   wrd3$(1)="Print All Report Files"
+02220   wrd3$(2)="Select Reports to Print"
 02230   io3$(1)="4,2,C 23,N"
 02240   io3$(2)="5,2,C 23,N"
 02250   pr f "16,34,C 11,B,5": "Cancel (F5)"
@@ -355,9 +355,9 @@
 03330 SREND: if j>1 then j=j-1
 03340   mat in2$(j)
 03350   mat fkey$=("") !:
-        let fkey$(1)="Next" !:
-        let fkey$(2)="Back" !:
-        let fkey$(5)="Stop" !:
+        fkey$(1)="Next" !:
+        fkey$(2)="Back" !:
+        fkey$(5)="Stop" !:
         em$="or Select Report Number:" !:
         es=2 !:
         fnfkey(24,mat fkey$,mat disfk,em$,es)

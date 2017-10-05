@@ -31,7 +31,7 @@
 00280 FIXGLACCOUNTS: ! left pad general ledger number and reference number
 00290   restore #open_file_count: 
 00300 L300: read #open_file_count, using "form pos 1,c 12": gl$ eof L340
-00310   let gl$=lpad$(rtrm$(gl$),12)
+00310   gl$=lpad$(rtrm$(gl$),12)
 00320   rewrite #open_file_count, using "form pos 1,c 12": gl$
 00330   goto L300
 00340 L340: return 
@@ -61,7 +61,7 @@
 00510 ! ** Field Masks ** !:
         ic=0 !:
         pointtwo=32 : number=30 !:
-        ccyymmdd=3 : mmddyy=1 : let glnumber=53
+        ccyymmdd=3 : mmddyy=1 : glnumber=53
 00520   mask(ic+=1)=0
 00530 ! ** Storage Positions ** !:
         ! starting field position - default to the same as order displayed !:

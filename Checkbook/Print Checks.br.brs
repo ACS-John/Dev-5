@@ -35,7 +35,7 @@
 10370 MENU1: ! 
 10380   read #bankmstr,using 'Form POS 3,C 30,POS 45,PD 6.2,PD 6.2,G 8',key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey MAIN_QUESTIONS
 10390   t1(1)=bal
-10400   let upi=t1(5)
+10400   upi=t1(5)
 10410   t1(3)=t1(1)-t1(2)
 10420   ckn=val(lcn$)+1 conv ignore
 10430   bn$=rtrm$(bn$)
@@ -69,9 +69,9 @@
 10710 L1130: if arec>30 then gosub SUB_PRINT_CHECK
 10720   fn_checkdiscount
 10730   if iv$<>hiv$ then 
-10740     let y=y+1
-10750     if y>2 then let y=1
-10760     if y=1 then let x+=1
+10740     y=y+1
+10750     if y>2 then y=1
+10760     if y=1 then x+=1
 10770     if x>15 then gosub SUB_PRINT_CHECK
 10780     iv$(x,y)=iv$(1:12)
 10790     de$(x,y)=up$(4)(1:13) ! this one for printing from unpaid file
@@ -184,7 +184,7 @@
 11900   mat iv$=("") : mat de$=("")
 11910   mat amt=(0) : mat de$=("")
 11920   amt=arec=x=y=0
-11930   let x=y=1
+11930   x=y=1
 11940   st1=0
 11950   holdvn$=vn$
 11960   tr$(3)=tr$(4)=tr$(5)=""
@@ -196,7 +196,7 @@
 12030   if st1=1 then gosub SUB_PRINT_CHECK
 12040   fncloseprn
 12050 ! if env$('client')="Washington Parrish" then let fnprocess(0)
-12060   mat amt=(0) : mat de$=("") : mat iv$=("") : mat de$=("") : let x=y=1
+12060   mat amt=(0) : mat de$=("") : mat iv$=("") : mat de$=("") : x=y=1
 12070   st1=0 : holdvn$=""
 12080   goto MENU3
 12090 ! /r
@@ -272,10 +272,10 @@
 12830   end if 
 12840 ! /r
 12850 STORE_GL_BREAKDOWNS: ! r: store general ledger breakdowns
-12860   let x=0 : tac=0
+12860   x=0 : tac=0
 12870   for j=1 to 146 step 5
-12880     let x=x+3
-12890     if x=33 then let x=35 ! skip check# and date (resp$(33)&34
+12880     x=x+3
+12890     if x=33 then x=35 ! skip check# and date (resp$(33)&34
 12900     in3$(j)=holdresp$(x)(1:3) ! gl$(1)
 12910     in3$(j+1)=holdresp$(x)(4:9) ! gl$(2)
 12920     in3$(j+2)=holdresp$(x)(10:12) ! gl$(3)
@@ -298,9 +298,9 @@
 13090   if ck=21 and screen=1 then screen=1 : goto L5070 ! shouldn't happen
 13100   if ck=21 and screen=3 then screen=2 : goto L5070
 13110 L5070: for j=1 to 30
-13120     if screen=1 then let x=j+2
-13130     if screen=2 then let x=j+34
-13140     if screen=3 then let x=j+64
+13120     if screen=1 then x=j+2
+13130     if screen=2 then x=j+34
+13140     if screen=3 then x=j+64
 13150     if int(j+2/3)=(j+2/3) then resp$(j+2)=holdresp$(x) else resp$(j+2)=holdresp$(x)
 13160   next j
 13170   goto CKOPTION1_CHECK_ENTRY_2 ! /r
@@ -317,8 +317,8 @@
 13280   if tac<>val(tr$(3)) then let fn_msg_allocations_off : goto CKOPTION1_CHECK_ENTRY_2 ! ALLOCATIONS NOT EQUAL
 13290   for j=1 to 30 ! kj was 10
 13300     if in3$(j*5)=hiv$ and rtrm$(hiv$)<>"" then goto L5460
-13310     let y=y+1: if y>2 then let y=1
-13320     if y=1 then let x=x+1
+13310     y=y+1: if y>2 then y=1
+13320     if y=1 then x=x+1
 13330     de$(x,y)=in3$(j*5)(1:13)
 13340 L5460: ! 
 13350     amt(x,y)=amt(x,y)+val(in3$(j*5-1))
@@ -347,7 +347,7 @@
 13570   if reprintckn>0 then let fnlbl(4,1,"Last Check Number Reprinted "&str$(reprintckn)&":",38,1)
 13580   fncmdset(2): fnacs(sn$,0,mat resp$,ck)
 13590   if ck=5 then goto XIT
-13600   let firstckn=ckn1=reprintckn=val(resp$(1))
+13600   firstckn=ckn1=reprintckn=val(resp$(1))
 13610   lastckn=val(resp$(2)) : if lastckn=0 then lastckn=firstckn
 13620   if lastckn>0 and lastckn<firstckn then goto REPRINT_CHECKS ! smaller lastckn
 13630 REPRINT_CHECK_LOOP_TOP: ! 
@@ -357,7 +357,7 @@
 13670   prdmmddyy=val(tr$(2)) ! use old check date
 13680   vn$=lpad$(trim$(tr$(4)),8)
 13690   amt=tr3 ! set amount for check
-13700   mat amt=(0) : mat de$=("") : mat iv$=("") : let x=1: let y=0
+13700   mat amt=(0) : mat de$=("") : mat iv$=("") : x=1: y=0
 13710   st1=0 : holdvn$="        ": amt=0
 13720   vn$=holdvn$=lpad$(rtrm$(tr$(4)),8)
 13730   goto L7790
@@ -388,8 +388,8 @@
 13980     reread #tralloc,using 'Form POS 1,c 2': x$ eof L7910 : goto READ_DETAILS
 13990 L7820: ! 
 14000     if transbankcode><bankcode or tcode<>1 or transckn<>reprintckn then goto L7910
-14010     let y=y+1: if y>2 then let y=1
-14020     if y=1 then let x+=1
+14010     y=y+1: if y>2 then y=1
+14020     if y=1 then x+=1
 14030     if x>15 then gosub SUB_PRINT_CHECK
 14040     iv$(x,y)=cnvrt$("pic(zzzzzz)",allocdate) ! IV$(1:12)
 14050     de$(x,y)=allocde$(1:13) ! this one for printing from unpaid file
@@ -416,11 +416,11 @@
 14260   method$="C" ! temporary kJ  ! Read #COMPANY,Using 'Form POS 789,c 1',Rec=1,Release: method$
 14270   close #company: 
 14280   for j=1 to 5
-14290     let whgl$(j)=lpad$(str$(whgl(j,1)),3)&lpad$(str$(whgl(j,2)),6)&lpad$(str$(whgl(j,3)),3)
+14290     whgl$(j)=lpad$(str$(whgl(j,1)),3)&lpad$(str$(whgl(j,2)),6)&lpad$(str$(whgl(j,3)),3)
 14300   next j
-14310   let w1$=whgl$(1)
-14320   let whgl$(1)=whgl$(2)
-14330   let whgl$(2)=w1$
+14310   w1$=whgl$(1)
+14320   whgl$(1)=whgl$(2)
+14330   whgl$(2)=w1$
 14340   ! 
 14350   do 
 14360     read #h_paytrans,using 'Form POS 63,N 10.2,N 1',release: upa,pcde eof EO_PAYTRANS_1
@@ -497,16 +497,16 @@
 15530   prdmmddyy=val(resp$(34)(5:6))*10000+val(resp$(34)(7:8))*100+val(resp$(34)(3:4)) ! convert date back to mmddyy format
 15540   tr$(2)=cnvrt$("pic(######)",prdmmddyy)
 15550   ! STORE_RESPONSES: ! hold all 94 possible responses in holdresp$
-15560   let x=0
+15560   x=0
 15570   if screen=0 then screen=1
 15580   for j=1 to 34
 15590     if j=1 then holdresp$(j)=resp$(j): goto SCE_L4820 ! amount
 15600     if j=2 then holdresp$(j)=resp$(j): goto SCE_L4820 ! vendor
 15610     if j=33 then holdresp$(j)=resp$(j): goto SCE_L4820 ! checknumber
 15620     if j=34 then holdresp$(j)=resp$(j): goto SCE_L4820 ! date
-15630     if screen=1 then let x=j ! (3-32)
-15640     if screen=2 then let x=j+32 ! (35-64)
-15650     if screen=3 then let x=j+62 ! (65-94)
+15630     if screen=1 then x=j ! (3-32)
+15640     if screen=2 then x=j+32 ! (35-64)
+15650     if screen=3 then x=j+62 ! (65-94)
 15660     if int(j+2/3)=(j+2/3) then 
 15670       holdresp$(x)=resp$(j)
 15680     else 
@@ -548,7 +548,7 @@
 16040   open #h_paytrans: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 16050   WH_LOOP_TOP: ! 
 16060   read #h_paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,N 1,N 2,G 8,G 6,N 1': vn$,iv$,mat up$,upa,pcde,bc,ckpay,dp,gde eof WH_XIT
-16070   if gde=1 then let gde=0 ! dont allow posting code of 1 from unpaid file
+16070   if gde=1 then gde=0 ! dont allow posting code of 1 from unpaid file
 16080   if upa=0 then goto WH_L3910
 16090   if dp=0 and ckpay=0 then goto WH_LOOP_TOP
 16100   if bc=0 then bc=bankcode ! IF CODED FOR PAYMENT WITH NO BANK CODE, PAY FROM THE CURRENT BANK ACCOUNT
@@ -689,11 +689,11 @@
 17460 def fn_checkdiscount ! check for any discounts
 17470   if disamt=0 then goto DISCOUNTRETURN
 17480   if ddate<prd then goto DISCOUNTRETURN ! already passed discount date
-17490   let upa=upa-disamt
+17490   upa=upa-disamt
 17500   rewrite #h_paytrans,using "form pos 63,n 10.2,pos 97,n 10.2",rec=lr4: upa,0 ! subtract discount, rewrite new unpaid invoice amount and zero discount amt
 17510   restore #h_unpdaloc,key>=vn$&iv$: nokey DISCOUNTRETURN ! get the fund # from 1st g/l in the allocation file.
 17520   read #h_unpdaloc,using 'Form pos 1,c 20,N 3,N 6,N 3,PD 5.2,C 30': allockey$,mat agl,aamt,ade$
-17530   if trim$(allockey$(1:8))=trim$(vn$) and trim$(allockey$(9:20))=trim$(iv$) then let fundkey$=cnvrt$("pic(ZZZ)",agl(1)) else let fundkey$="   "
+17530   if trim$(allockey$(1:8))=trim$(vn$) and trim$(allockey$(9:20))=trim$(iv$) then fundkey$=cnvrt$("pic(ZZZ)",agl(1)) else fundkey$="   "
 17540   apgl$=discountgl$=""
 17550   read #glcontrol, using "Form pos 52,c 12,pos 64,c 12",key=fundkey$: apgl$,discountgl$ nokey MSGBOX6
 17560   L6410: ! 
@@ -727,8 +727,8 @@
 17840   WCH1_AFTER_WRITE: ! k$=LPAD$(RTRM$(STR$(BANKCODE)),2)&LPAD$(STR$(1),1)&LPAD$(TR$(1),8)
 17850   for j=1 to 30
 17860     if val(in3$(j*5-1))<>0 then 
-17870       let gl$=""
-17880       let gl$=cnvrt$("N 3",val(in3$(j*5-4)))&cnvrt$("N 6",val(in3$(j*5-3)))&cnvrt$("N 3",val(in3$(j*5-2)))
+17870       gl$=""
+17880       gl$=cnvrt$("N 3",val(in3$(j*5-4)))&cnvrt$("N 6",val(in3$(j*5-3)))&cnvrt$("N 3",val(in3$(j*5-2)))
 17890       alloc=val(in3$(j*5-1))
 17900       de$=in3$(j*5) ! de$=rtrm$(tr$(5)(1:17))&"-"&in3$(j*5)(1:12)
 17910       tr$(1)=lpad$(str$(ckn),8)
@@ -999,7 +999,7 @@
 41700   mat b$=("")
 41720   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 41740   fn_englishdollar(dolamt)
-41760   let x=3 ! 1  add three lines after top stub
+41760   x=3 ! 1  add three lines after top stub
 41780   for j=1 to x
 41800     pr #255: ""
 41820   next j
@@ -1074,7 +1074,7 @@
 43940   goto L6490
 43960   L6480: mat b$=("")
 43980   L6490: fn_englishdollar(dolamt)
-44000   let x=1
+44000   x=1
 44020   for j=1 to x
 44040     pr #255: ""
 44060   next j
@@ -1107,7 +1107,7 @@
 44600   goto L6700
 44620   L6690: mat b$=("")
 44640   L6700: fn_englishdollar(dolamt)
-44660   let x=1
+44660   x=1
 44680   for j=1 to x
 44700     pr #255: ""
 44720   next j
@@ -1167,7 +1167,7 @@
 47660   mat b$=("")
 47680   read #h_vf1,using 'Form POS 9,4*C 30,POS VP1,2*PD 3',key=holdvn$,release: mat b$ nokey ignore
 47700   fn_englishdollar(dolamt)
-47720   let x=2
+47720   x=2
 47740   for j=1 to x
 47760     pr #255: ""
 47780   next j

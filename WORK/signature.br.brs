@@ -17,7 +17,7 @@
 00096   a+=1: comboa$(a) = docname$
 00100   goto L94
 00105 L105: a=max(1,a)
-00106   mat comboa$(a) : let filename$="DocNames" !:
+00106   mat comboa$(a) : filename$="DocNames" !:
         fncomboa(filename$,1,18,mat comboa$,ttt$,25)
 00110   mytext$="Number of Copies:": fnlbl(2,1,mytext$,mylen,myalign)
 00120   response$(2)=str$(1) !:

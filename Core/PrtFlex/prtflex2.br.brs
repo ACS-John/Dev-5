@@ -101,7 +101,7 @@
 12030   fntos(sn$="Gridtrans-1")
 12032   rc=cf=0
 12040   fnfra(1,1,6,23,"Transaction Type","You can review all transactions or any specific type of transaction",0)
-12042   cf+=1 : let fratype=cf
+12042   cf+=1 : fratype=cf
 12050   fnopt(1,3,"[All]",0,fratype)
 12051   if sel_code=1 or sel_code=0 then 
 12052     resp$(rc+=1)="True"
@@ -139,7 +139,7 @@
 12104     resp$(rc+=1)="False"
 12105   end if 
 12110   fnfra(1,30,3,42,"Date Range","You can transactions for any date range or leave these blank to see all transactions.")
-12112   cf+=1 : let fradate=cf : mylen=26 : mypos=mylen+2
+12112   cf+=1 : fradate=cf : mylen=26 : mypos=mylen+2
 12120   fnlbl(1,1,"Starting Date:",mylen,1,0,fradate)
 12130   fntxt(1,mypos,10,0,1,"3",0,empty$,fradate)
 12132   resp$(rc+=1)=str$(beg_date)
@@ -147,7 +147,7 @@
 12150   fntxt(2,mypos,10,0,1,"3",0,empty$,fradate)
 12152   resp$(rc+=1)=str$(end_date)
 12160   fnfra(6,30,2,60,"Account","You review transactions for all accounts or for an individual.")
-12162   cf+=1 : let fraaccount=cf
+12162   cf+=1 : fraaccount=cf
 12170   fnlbl(1,1,"Account:",8,1,0,fraaccount)
 12180   fncmbact(1,10,1,fraaccount)
 12182   rc+=1

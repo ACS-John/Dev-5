@@ -32,14 +32,14 @@
         newservice$(8)="OTH" !:
         newservice$(9)="SFC"
 00220   at$(1)=cnam$ !:
-        let z=21 !:
+        z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
-        let x=len(at$(1)) : let y=z-x !:
+        x=len(at$(1)) : y=z-x !:
         at$(1)=rpt$(" ",int(y/2))&at$(1)
-00230   let z=26 !:
+00230   z=26 !:
         for j=2 to udim(at$) !:
           at$(j)=trim$(at$(j))(1:z) !:
-          let x=len(at$(j)) : let y=z-x !:
+          x=len(at$(j)) : y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00240   linelength=62
@@ -77,7 +77,7 @@
 00460   fntxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00470   fnlbl(8,1,"Starting Account:",ll,1)
-00480   let fe$="ubm-act-nam" !:
+00480   fe$="ubm-act-nam" !:
         datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
         indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
@@ -223,11 +223,11 @@
 01550 ! /region
 01560 ! ______________________________________________________________________
 01570 PRINTBILL: ! 
-01580   if final=2 then let g(8)=g(8)-b(8): let g(11)=g(12)+g(8): bal=bal +g(8)
+01580   if final=2 then g(8)=g(8)-b(8): g(11)=g(12)+g(8): bal=bal +g(8)
 01590   penalty=0
 01600   for j=1 to 10
 01610     if penalty$(j)="Y" then penalty=penalty+g(j) !:
-            let g(j)=0 ! accumulate all penalties and set charge to zero
+            g(j)=0 ! accumulate all penalties and set charge to zero
 01620   next j
 01630   pb=bal-g(11)
 01640   pr #255,using L1650: "FROM",int(d3*.01),"TO",int(d2*.01),d1
@@ -261,8 +261,8 @@
 01910   pr #255,using L1920: t$,0,0,0,g(8)+g(7),e$(1)(1:18)
 01920 L1920: form pos 1,c 3,nz 1,nz 8,nz 8,nz 9.2,x 8,c 18
 01930   if est=1 then est$="BILL ESTIMATED" else est$=""
-01940   if final>0 then let final$="FINAL BILL" else let final$=""
-01950   if df$="Y" and trim$(final$)="" then let final$="DRAFTED" !:
+01940   if final>0 then final$="FINAL BILL" else final$=""
+01950   if df$="Y" and trim$(final$)="" then final$="DRAFTED" !:
           ! if drafted and finaled, use final bill as wording
 01960   if bal<=0 then penalty=0
 01970   if bal<=0 then pr #255,using L1980: est$,pe$(1)(1:25),"Balance:",bal,pe$(2)(1:25),pe$(3)(1:25),z$,final$,pe$(4)(1:25) : goto L2010 ! sangamon

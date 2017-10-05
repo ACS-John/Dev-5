@@ -232,7 +232,7 @@
 43200     mat lbl$(0) : mat tln(0) : mat p$(0) : mat fltyp$(0) : mat sln(0) : mat mask(0) : mat c$(0,8) : mat sp(0)
 43300   fnend  ! fn_hamster_field_reset
 43400   def fn_hamster_field_add(label$*38,textbox_len; field_type$*2,storage_length,ar_mask,storage_position) ! ,disable) <- didn't quite work as easily as i was hoping for it to.
-43500     if field_type$='' then let field_type$='C'
+43500     if field_type$='' then field_type$='C'
 43600     if storage_length=0 then storage_length=textbox_len
 43700     add_rec_item=udim(mat lbl$)+1
 43800     mat lbl$(add_rec_item) : lbl$(add_rec_item)=label$

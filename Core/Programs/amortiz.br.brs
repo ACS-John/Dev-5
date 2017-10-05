@@ -7,10 +7,10 @@
 00070   dim lor$*30,ln$*12,lee$*30,pfm2$*200,text$*60, mask$*25, dv$*40
 00080   dim response$(20)*40
 00090 ! ______________________________________________________________________
-00100   let y=12 : n=15 : ir=.05 : la=45000.
+00100   y=12 : n=15 : ir=.05 : la=45000.
 00110 ! ______________________________________________________________________
-00120   let wd4$(1)="1. Regular"
-00130   let wd4$(2)="2. Condensed"
+00120   wd4$(1)="1. Regular"
+00130   wd4$(2)="2. Condensed"
 00140   pfm$="FORM POS 1,N 6,x 3,pic(zz),""/"",pic(##),""/"",pic(####),"
 00150   pfm2$="FORM POS 1,c 6,x 3,pic(zz/##/####),"
 00160   for j=1 to 6
@@ -42,7 +42,7 @@
 00325   s=la=val(response$(rc+=1))
 00330   ir=val(response$(rc+=1))
 00335   n=val(response$(rc+=1))
-00340   let y=val(response$(rc+=1))
+00340   y=val(response$(rc+=1))
 00345 ! ______________________________________________________________________
 00347 L330: ! Rinput Fields MAT IO1$: S,R,N,Y
 00349   if ckey=99 or ckey=5 then goto XIT
@@ -158,7 +158,7 @@
 01450     d4=d5
 01460     s=s+i
 01470     if s>p then goto L1500
-01480     let x9=9
+01480     x9=9
 01490     p=s
 01500 L1500: s=s-p
 01510     i2=i2+i
@@ -195,7 +195,7 @@
 01820   pr #255,using L1790: "Balance Remaining: ",s
 01830 L1830: fncloseprn
 01840   on fkey 5 ignore 
-01850   let x9=0
+01850   x9=0
 01860   goto MENU1
 01870 L1870: lor$=" "
 01880   lee$=" "

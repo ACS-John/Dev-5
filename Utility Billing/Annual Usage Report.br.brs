@@ -107,7 +107,7 @@
 30000   if ckey=5 then goto XIT
 30020   for j=1 to 12
 30040 L560: ! 
-30060     let x=pos(scr1_resp$(j),"/",1)
+30060     x=pos(scr1_resp$(j),"/",1)
 30080     if x>0 then scr1_resp$(j)(x:x)="": goto L560
 30100     cd1(j)=val(scr1_resp$(j)) conv INVALID_DATES_MSGBOX
 30120   next j
@@ -149,11 +149,11 @@
 41100     if tcode<>1 then goto READ_TRANSACTION ! charge transactions only
 44000 ! r: determine usage
 44020     if service=1 then ! analyzing water
-44040       let usage=wu
+44040       usage=wu
 44060     else if service=3 then ! analyzing electric
-44080       let usage=eu
+44080       usage=eu
 44100     else if service=4 then ! analyzing gas
-44120       let usage=gu
+44120       usage=gu
 44140     end if 
 44160 ! /r
 46000 ! r: accumulate
@@ -167,8 +167,8 @@
 48000       if usage<>0 then 
 48020         total_count_grand(cd1_which)=total_count_grand(cd1_which)+1
 48040         total_count_grand(13)=total_count_grand(13)+1
-48060         let u1(cd1_which)=u1(cd1_which)+usage
-48080         let u1(13)=u1(13)+usage
+48060         u1(cd1_which)=u1(cd1_which)+usage
+48080         u1(13)=u1(13)+usage
 48100       end if 
 48120     end if 
 48140 ! /r
@@ -176,7 +176,7 @@
 48180 CUSTOMER_RECORD_FINIS: ! 
 60000     if accum_type=accum_type_average then 
 60020 !     math$=str$(u1(13))&'/'&str$(max(1,accum_average_divider))
-60040       let u1(13)=u1(13)/max(1,accum_average_divider)
+60040       u1(13)=u1(13)/max(1,accum_average_divider)
 60060     end if 
 60070     if sum(u1)<>0 then 
 60080 !     cd1_which=srch(mat cd1,tdate)

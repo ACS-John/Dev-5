@@ -13,7 +13,7 @@
 00140   on fkey 5 goto SCR_MAIN
 00150 SCR_MAIN: ! 
 00160   cap$="Print Custom Labels"
-00170   let win=101
+00170   win=101
 00180   ce=0
 00190   for j=1 to 5
 00200     if lw(j)=0 then lw(j)=34
@@ -27,11 +27,11 @@
 00260     if align(j)=3 then iom$(j)=iomr$(j)
 00270     l$(j)=rtrm$(ltrm$(l$(j)))(1:lw(j))
 00280   next j
-00290   let win_width=50 !:
+00290   win_width=50 !:
         for j=1 to udim(l$) !:
-          let win_width=max(lw(j),win_width) !:
+          win_width=max(lw(j),win_width) !:
         next j !:
-        let win_width=win_width+4
+        win_width=win_width+4
 00300   fnwin3b(win,cap$,12,win_width,0,0,5,0)
 00310   pr #win,fields "3,2,C 20,N": "Enter your label:"
 00320   pr #win,fields "10,2,C "&str$(win_width-2)&",B,8": "(F8) "&cnam$(1:win_width-2)
@@ -63,7 +63,7 @@
 00540   goto SCR_MAIN
 00550 ! ______________________________________________________________________
 00560 SCR_HOW_MANY: ! 
-00570   let win=103
+00570   win=103
 00580   fnwin3b(win,cap$,3,33,0,3,5,0)
 00590   pr #win,fields "2,2,C 26,N": "Number of Labels to print:"
 00600   if h=0 then h=1
@@ -83,11 +83,11 @@
 00700 XIT: chain "MENU"
 00710 ! ______________________________________________________________________
 00720 ALIGNMENT: ! 
-00730   let win2=103
+00730   win2=103
 00740   fnwin3b(win2,cap$,5,33,0,1,2,2)
-00750   let wrd_align$(1)="Left" !:
-        let wrd_align$(2)="Center" !:
-        let wrd_align$(3)="Right"
+00750   wrd_align$(1)="Left" !:
+        wrd_align$(2)="Center" !:
+        wrd_align$(3)="Right"
 00760   if iom$(main_curfld)=ioml$(main_curfld) then !:
           iowa$(1)="2,26,C 6,CN" else !:
           iowa$(1)="2,26,C 6,N"
@@ -108,14 +108,14 @@
 00870 L870: return 
 00880 ! ______________________________________________________________________
 00890 LINE_STYLE: ! 
-00900   let win2=103
+00900   win2=103
 00910   fnwin3b(win2,cap$,8,33,0,1,2,2)
-00920   let wrd_style$(1)="Standard " : style$(1)="S" : sw(1)=34 !:
-        let wrd_style$(2)="Bold     " : style$(2)="B" : sw(2)=29 !:
-        let wrd_style$(3)="Elete    " : style$(3)="E" : sw(3)=41 !:
-        let wrd_style$(4)="Condensed" : style$(4)="C" : sw(4)=59 !:
-        let wrd_style$(5)="Wide     " : style$(5)="W" : sw(5)=17 !:
-        let wrd_style$(6)="Bar Code " : style$(6)="BAR" : sw(6)=14
+00920   wrd_style$(1)="Standard " : style$(1)="S" : sw(1)=34 !:
+        wrd_style$(2)="Bold     " : style$(2)="B" : sw(2)=29 !:
+        wrd_style$(3)="Elete    " : style$(3)="E" : sw(3)=41 !:
+        wrd_style$(4)="Condensed" : style$(4)="C" : sw(4)=59 !:
+        wrd_style$(5)="Wide     " : style$(5)="W" : sw(5)=17 !:
+        wrd_style$(6)="Bar Code " : style$(6)="BAR" : sw(6)=14
 00930   for j=1 to udim(wrd_style$)
 00940     if pt$(main_curfld)=style$(j) then !:
             iows$(j)=str$(j+1)&",23,C 9,CN" else !:

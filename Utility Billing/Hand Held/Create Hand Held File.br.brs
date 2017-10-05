@@ -127,7 +127,7 @@
 11160   fnacs(sn$,0,mat resp$,ckey)
 11170   if ckey=6 then let fncustomer_search(resp$(1))
 11180   if ckey=99 or ckey=5 or resp$(1)="          " then goto SEL_ACT
-11190   let z$=lpad$(trim$(resp$(1)(1:10)), 10)
+11190   z$=lpad$(trim$(resp$(1)(1:10)), 10)
 11200   if fn_customerRead(z$)=-4272 then goto ASK_ACT
 11210   goto FINAL_BILLING_CODE
 11220 ! /r
@@ -212,7 +212,7 @@
 12040     if env$('client')="Moweaqua" then extra$(3)=f$(1) ! they have meter number in first water meter number and a code in the second number
 12050     if env$('client')="Moweaqua" then d(1)=d(1): d(2)=d(2): d(3)=d(3)
 12060     if env$('client')="Sangamon" then manual_or_dialog$=f$(1)(1:1)
-12070     if env$('client')='Sangamon' then let z$=trim$(z$)
+12070     if env$('client')='Sangamon' then z$=trim$(z$)
 12080     rt$=cnvrt$("pic(##)",extra(1))&"  "
 12081     if env$('client')='Raymond' then manual_or_dialog$="N"
 12082     if env$('client')='Raymond' and trim$(extra$(7))='' then extra$(7)='54'
@@ -255,7 +255,7 @@
 12960   L2590: if a(4)>0 then c$=c$&"4"
 12970   goto L2610
 12980   L2610: j=0
-12990   if rtrm$(f$)="" then let f$=z$
+12990   if rtrm$(f$)="" then f$=z$
 13000   L2630: j=j+1
 13010   if j>len(c$) then goto L2710
 13020   on val(c$(j:j)) goto SENSUSWATER,L2630,SENSUSELECTRIC,SENSUSGAS,SENSUSDEMAND none L2630
@@ -278,7 +278,7 @@
 13190   ! 
 13200   goto L2850
 13210   L2850: j=0
-13220   if rtrm$(f$)="" then let f$=z$
+13220   if rtrm$(f$)="" then f$=z$
 13230   j=j+1
 13240   if j>len(c$) then goto L2920
 13250   on val(c$(j:j)) goto GREENTREEWATER none L2920 ! only water
@@ -299,7 +299,7 @@
 13400   ! 
 13410   goto L3060
 13420   L3060: j=0
-13430   if rtrm$(f$)="" then let f$=z$
+13430   if rtrm$(f$)="" then f$=z$
 13440   j=j+1
 13450   if j>len(c$) then goto L3140
 13460   on val(c$(j:j)) goto HERSEYWATER none L3140 ! only water
@@ -332,7 +332,7 @@
 13720   if a(3)>0 then c$=c$&"3"
 13730   if a(4)>0 then c$=c$&"4"
 13740   j=0
-13750   if rtrm$(f$)="" then let f$=z$
+13750   if rtrm$(f$)="" then f$=z$
 13760   j=j+1
 13770   if j>len(c$) then goto L3430
 13780   on val(c$(j:j)) goto L3400 none L3430 ! only water
@@ -392,7 +392,7 @@
 14770 ERTN_EXEC_ACT: execute act$ : goto ERTN
 14780 ! /region
 14810 def fn_rmk1
-14820   let ft$="                    "
+14820   ft$="                    "
 14830   ! read the footnote from the note file  (any note with * as first character
 14840   notedir$=env$('Q')&"\UBmstr\notes.h"&env$('cno')
 14850   notefile$=notedir$&"\"&trim$(z$)&".txt"
@@ -401,7 +401,7 @@
 14880   L3960: linput #20: rm$ eof L4000
 14890   if rm$(1:1)="*" then goto L3990
 14900   goto L3960
-14910   L3990: let ft$=rpad$(rm$(2:21),20)
+14910   L3990: ft$=rpad$(rm$(2:21),20)
 14920   L4000: close #20: ioerr ignore
 14930   L4010: ! 
 14940 fnend 
@@ -454,16 +454,16 @@
 16100     if servicecode$(a_item)='WA' or servicecode$(a_item)='GA' or servicecode$(a_item)='EL' then ! or (demand)   it is a metered service
 16110       if a(a_item)>0 then 
 16120         if servicecode$(a_item)='WA' then 
-16130           let usage_current=d(3) ! Water usage - current
+16130           usage_current=d(3) ! Water usage - current
 16140           reading_current=d(1)
 16150         else if servicecode$(a_item)='GA' then 
-16160           let usage_current=d(11) ! Gas usage - curent
+16160           usage_current=d(11) ! Gas usage - curent
 16170           reading_current=d(9)
 16180         else ! if servicecode$(a_item)='EL' then
 16190           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : fnpause
 16200         end if 
-16210         let unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
-16220         let unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
+16210         unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
+16220         unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
 16230         pr #h_out,using FORM_UH_OUT: z$,route*100000000+sequence,servicename$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high
 16240         FORM_UH_OUT: form pos 1,c 10,n 12,c 10,2*c 40,2*n 10
 16250       end if  ! a(a_item)>0
@@ -485,16 +485,16 @@
 16410     if servicecode$(a_item)='WA' or servicecode$(a_item)='GA' or servicecode$(a_item)='EL' then ! or (demand)   it is a metered service
 16420       if a(a_item)>0 then 
 16430         if servicecode$(a_item)='WA' then 
-16440           let usage_current=d(3) ! Water usage - current
+16440           usage_current=d(3) ! Water usage - current
 16450           reading_current=d(1)
 16460         else if servicecode$(a_item)='GA' then 
-16470           let usage_current=d(11) ! Gas usage - curent
+16470           usage_current=d(11) ! Gas usage - curent
 16480           reading_current=d(9)
 16490         else ! if servicecode$(a_item)='EL' then
 16500           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : fnpause
 16510         end if 
-16520         let unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
-16530         let unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
+16520         unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
+16530         unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
 16540         pr #h_out,using FORM_ACSMR: z$,route*100000000+sequence,servicename$(a_item)(1:10),e$(2),e$(1)(1:20),unusual_usage_low,unusual_usage_high,0
 16550         FORM_ACSMR: form pos 1,c 10,n 12,c 10,2*c 40,2*n 10,n 10
 16560       end if  ! a(a_item)>0
@@ -623,21 +623,21 @@
 18650     if servicecode$(a_item)='WA' or servicecode$(a_item)='GA' or servicecode$(a_item)='EL' then ! or (demand)   it is a metered service
 18660       if a(a_item)>0 then 
 18670         if servicecode$(a_item)='WA' then 
-18680           let usage_current=d(3) ! Water usage - current
+18680           usage_current=d(3) ! Water usage - current
 18690           reading_current=d(1)
 18700         else if servicecode$(a_item)='GA' then 
-18710           let usage_current=d(11) ! Gas usage - curent
+18710           usage_current=d(11) ! Gas usage - curent
 18720           reading_current=d(9)
 18730         else if servicecode$(a_item)='EL' then 
-18740           let usage_current=d(7) ! KWH usage - curent
+18740           usage_current=d(7) ! KWH usage - curent
 18750           reading_current=d(5)
 18760         else ! if servicecode$(a_item)='EL' then
 18770           pr 'developer note: add code to copy '&servicename$(a__item)&' usage current and reading current from mat d into usage_current and reading_current' : fnpause
 18780         end if 
-18790         let unusual_usage_low=int(usage_current-usage_current*fn_pcent) : if unusual_usage_low<0 then let unusual_usage_low=0
-18800         let unusual_usage_high=int(usage_current+usage_current*fn_pcent)
+18790         unusual_usage_low=int(usage_current-usage_current*fn_pcent) : if unusual_usage_low<0 then unusual_usage_low=0
+18800         unusual_usage_high=int(usage_current+usage_current*fn_pcent)
 18810         if z$<>z_prior$ then 
-18820           let z_prior$=z$
+18820           z_prior$=z$
 18830           if route<>route_prior then 
 18840             if route_prior<>0 then 
 18850               fn_itron_route_trailer
@@ -651,8 +651,8 @@
 18930         end if  ! z$<>z_prior$
 18940         fn_itron_record_mtr
 18950         fn_itron_record_mtx
-18960         let unusual_usage_low=int(usage_current-usage_current*fn_pcent) : if unusual_usage_low<0 then let unusual_usage_low=0
-18970         let unusual_usage_high=int(usage_current+usage_current*fn_pcent)
+18960         unusual_usage_low=int(usage_current-usage_current*fn_pcent) : if unusual_usage_low<0 then unusual_usage_low=0
+18970         unusual_usage_high=int(usage_current+usage_current*fn_pcent)
 18980         fn_itron_record_rdg
 18990         fn_itron_record_rff
 19000       end if  ! a(a_item)>0
@@ -1041,10 +1041,10 @@
 28160       svc_flag$="G"
 28180     end if 
 28280     custname$=e$(2)
-28320     let z_out$=trim$(z$)&svc_flag$
+28320     z_out$=trim$(z$)&svc_flag$
 28340     on val(seq$(j:j)) goto WATER_BOSON,ELECTRIC_BOSON,DEMAND_BOSON,GAS_BOSON none BOSON_NEXT_SEQUENCE
 28360     WATER_BOSON: if a(1)=0 or final<>0 then goto BOSON_NEXT_SEQUENCE
-28380     let x$=cnvrt$("pic(######)",d(5)) : readdate$=x$(1:2)&"-"&x$(3:4)&"-"&x$(5:6)
+28380     x$=cnvrt$("pic(######)",d(5)) : readdate$=x$(1:2)&"-"&x$(3:4)&"-"&x$(5:6)
 28400     if env$('client')='Kincaid' then 
 28420       readingt$="S"
 28440     else if env$('client')="Moweaqua" then 

@@ -1,5 +1,5 @@
 10000 ! S:\Core\Programs\Update
-10100   let force_update=1
+10100   force_update=1
 10200 ! r: dims and constants
 10300   if ~setup then let fn_setup
 10400 ! dim message$(1)*256
@@ -10,7 +10,7 @@
 10900   batch_name$=env$('temp')&'\update'&session$&'.cmd'
 11000   script_name$=env$('temp')&'\ftp_script'&session$&'.txt'
 11100   return_name$=env$('temp')&'\return'&session$&'.txt'
-11110   let grace_days=45
+11110   grace_days=45
 11120   fnclient_support(mat system_id$,mat system_support_end_date,mat on_support,grace_days)
 11200 ! /r
 12000   fntop(program$,"ACS Update")
@@ -57,23 +57,23 @@
 32080     conectivity_test_result$=fn_conectivity_test$
 32100     if env$('ACSDeveloper')<>'' then
 32120       fn_status('ACS Developers ('&env$('ACSDeveloper')&') should not update from the web.  It would overwrite all their local programs.')
-32140       let ua_return=0
+32140       ua_return=0
 32160     else if conectivity_test_result$='' then
 32180       fn_status('Connectivity test failed.')
-32200       let ua_return=0
+32200       ua_return=0
 32220     else
-32240       let ua_return=1
+32240       ua_return=1
 32260     end if
 32280 !
 32300 !
-32320 !   let ua_acs_datetime$=fn_acs_update_date$
+32320 !   ua_acs_datetime$=fn_acs_update_date$
 32340     fn_simple_connectivity_test=ua_return
 32360   fnend
 40000   def fn_conectivity_test$*40
 40010     fn_status("testing connectivity...")
-40020     let wud_success=0
+40020     wud_success=0
 40040     dim wud_return$*40
-40060     let wud_return$=''
+40060     wud_return$=''
 40080     open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
 40100     pr #h_script: 'user acs5update'
 40120     pr #h_script: 'ACSKen!1'
@@ -90,13 +90,13 @@
 40460     do
 40480       linput #h_return: line$ eof WUD_RETURN_EOF
 40500       if line$(3:3)='-' then
-40540         let wud_date$=date$(days(line$(1:8),'mm-dd-yy'),'ccyy/mm/dd')
-40560         let wud_time$=line$(11:15)
-40580         let wud_ampm$=line$(16:17)
+40540         wud_date$=date$(days(line$(1:8),'mm-dd-yy'),'ccyy/mm/dd')
+40560         wud_time$=line$(11:15)
+40580         wud_ampm$=line$(16:17)
 40600         if wud_ampm$='PM' then
-40620           let wud_time$(1:2)=str$(val(wud_time$(1:2))+12)
+40620           wud_time$(1:2)=str$(val(wud_time$(1:2))+12)
 40640         end if
-40660         let wud_return$=wud_date$&' - '&wud_time$&':00'
+40660         wud_return$=wud_date$&' - '&wud_time$&':00'
 40700       end if
 40720     loop
 40740 WUD_RETURN_EOF: !
@@ -108,9 +108,9 @@
 40920   fnend
 41000   def fn_update_license
 41020     fn_status("updating license information...")
-41040     let ul_success=0
+41040     ul_success=0
 41060     dim ul_return$*40
-41080     let ul_return$=''
+41080     ul_return$=''
 41100     open #h_script:=fngethandle: 'Name='&script_name$&',RecL=256,replace',display,output
 41120     pr #h_script: 'user acs5update'
 41140     pr #h_script: 'ACSKen!1'
@@ -128,13 +128,13 @@
 41380     do
 41400       linput #h_return: line$ eof ul_RETURN_EOF
 41420       if line$(3:3)='-' then
-41440         let ul_date$=date$(days(line$(1:8),'mm-dd-yy'),'ccyy/mm/dd')
-41460         let ul_time$=line$(11:15)
-41480         let ul_ampm$=line$(16:17)
+41440         ul_date$=date$(days(line$(1:8),'mm-dd-yy'),'ccyy/mm/dd')
+41460         ul_time$=line$(11:15)
+41480         ul_ampm$=line$(16:17)
 41500         if ul_ampm$='PM' then
-41520           let ul_time$(1:2)=str$(val(ul_time$(1:2))+12)
+41520           ul_time$(1:2)=str$(val(ul_time$(1:2))+12)
 41540         end if
-41560         let ul_return$=ul_date$&' - '&ul_time$&':00'
+41560         ul_return$=ul_date$&' - '&ul_time$&':00'
 41580       end if
 41600     loop
 41620 ul_RETURN_EOF: !
@@ -168,7 +168,7 @@
 44000     for client_has_item=1 to client_has_count
 44020       fn_status('   '&fnSystemName$(client_has$(client_has_item)))
 44040       dim support_text$*256
-44060       let u_which=srch(mat system_id$,client_has$(client_has_item))
+44060       u_which=srch(mat system_id$,client_has$(client_has_item))
 44080       if u_which>0 then
 44100         if days(date('ccyymmdd'),'ccyymmdd')<=days(system_support_end_date(u_which),'ccyymmdd') then
 44120           support_text$='      active until '
@@ -213,11 +213,11 @@
 50040     pr #h_script: 'ftp -n -s:"'&os_filename$(script_name$)&'" ftp.planetacs.net >"'&os_filename$(return_name$)&'"'
 50060     close #h_batch:
 50080     fn_execute('-m',os_filename$(batch_name$))
-50100     let u_download_success=0
+50100     u_download_success=0
 50120     open #h_return:=fngethandle: 'Name='&return_name$,display,input
 50140     do
 50160       linput #h_return: line$ eof U_RETURN_EOF
-50180       if line$(1:4)='226 ' then let u_download_success=1
+50180       if line$(1:4)='226 ' then u_download_success=1
 50200     loop
 50220     U_RETURN_EOF: !
 51000     close #h_return:
@@ -303,8 +303,8 @@
 80080       open #h_status_win:=fngethandle: 'SRow=1,SCol=1,Rows=20,Cols=80,Parent=None,Caption=Status',display,output
 80100       status_gridspec$='#'&str$(h_status_win)&',1,1,List 20/80'
 80120       headings$(1)='Status'
-80140       let widths(1)=80
-80160       let forms$(1)='C 512'
+80140       widths(1)=80
+80160       forms$(1)='C 512'
 80180       pr f status_gridspec$&",headers,[gridheaders]": (mat headings$,mat widths, mat forms$)
 80200     end if
 80220     if env$('ACSDeveloper')<>'' then

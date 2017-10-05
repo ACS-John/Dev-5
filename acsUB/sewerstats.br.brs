@@ -24,11 +24,11 @@
 10230     fncmdkey("Cancel",5,0,1,"Returns to menu.")
 10240     fnacs("sewerstats-1",0,mat resp$,ckey)
 10250     if ckey=5 then let fnxit
-10260     d1=val(resp$(1)) : d2=val(resp$(2)) : let yrend=d1+10000 : let yrcnt=1
+10260     d1=val(resp$(1)) : d2=val(resp$(2)) : yrend=d1+10000 : yrcnt=1
 10270     do while yrend<d2
 10280       mat dt(yrcnt)=dt
 10290       dt(yrcnt)=yrend
-10300       let yrend+=10000 : let yrcnt+=1
+10300       yrend+=10000 : yrcnt+=1
 10310     loop 
 10320     mat dt(yrcnt)=dt : dt(yrcnt)=d2 : mat chg(yrcnt) : mat ccnt(yrcnt) : mat cycle(yrcnt,1) : mat cyclecnt(yrcnt) : mat avg(2,yrcnt+1)
 10330   fnend 

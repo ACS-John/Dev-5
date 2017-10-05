@@ -16,12 +16,12 @@
 00145   pedat=val(actpd$)
 00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
-00160   let fscode=fnfscode
+00160   fscode=fnfscode
 00165   fnfscode
 00166   fnpriorcd
 00170   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00175   let fscode=fnfscode
+00175   fscode=fnfscode
 00176   priorcd=fnpriorcd
 00180 ! ______________________________________________________________________
 00190   pors=1
@@ -73,7 +73,7 @@
 00600 L600: read #3,using L690: ir,bb,cb,mat by,mat bp,mat bm eof L860
 00610   if ir=0 then goto L600
 00620   if fscode=0 or (fscode=pedat and priorcd=1) then goto L690
-00630   if fscode<1 or fscode>13 then let fscode=1
+00630   if fscode<1 or fscode>13 then fscode=1
 00640   if fnpriorcd=1 then cb=by(fscode) else cb=bp(fscode)
 00650   if fnpriorcd=2 then goto L680
 00660   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -89,11 +89,11 @@
           monthb=monthb+bm(fscode)
 00750   if fscode=0 then goto L760 else goto L800
 00760 L760: for j=1 to fnactpd
-00770     let ytdb=ytdb+bm(j)
+00770     ytdb=ytdb+bm(j)
 00780   next j
 00790   goto L590
 00800 L800: for j=1 to fscode
-00810     let ytdb=ytdb+bm(j)
+00810     ytdb=ytdb+bm(j)
 00820   next j
 00830   goto L590
 00840 L840: if ir<val(r$) then goto L590
@@ -105,7 +105,7 @@
 00890   next j
 00900   if rs=1 then total=-total else goto L930
 00910   total2=-total2
-00920   let ytdb=-ytdb
+00920   ytdb=-ytdb
 00930 L930: if ds=1 then dollar$="$" else dollar$=" "
 00940   if total><0 or total2><0 then goto L970
 00950   if total<>0 then goto L970
@@ -146,10 +146,10 @@
 01230 ! ______________________________________________________________________
 01240 L1240: if foot1=1 then goto L1290
 01250   tabnote=sp
-01260   let foot1=1
-01270   let foot$=d$
+01260   foot1=1
+01270   foot$=d$
 01280   goto L420
-01290 L1290: let foot$=rtrm$(foot$)&d$
+01290 L1290: foot$=rtrm$(foot$)&d$
 01300   goto L420
 01310 ! ______________________________________________________________________
 01320 L1320: for j=1 to 9
@@ -178,10 +178,10 @@
 01550 L1550: gosub L1440: continue 
 01560 L1560: if ul=0 then goto L1650
 01570   if ul=1 then goto L1620
-01580   let underlin$="=============="
+01580   underlin$="=============="
 01600   goto L1630
 01610   goto L1650
-01620 L1620: let underlin$="______________"
+01620 L1620: underlin$="______________"
 01630 L1630: pr #255,using L1640: underlin$,underlin$
 01640 L1640: form skip redir,pos 52,2*c 15,skip redir
 01650 L1650: if redir=0 then pr #255,using L1660: " "

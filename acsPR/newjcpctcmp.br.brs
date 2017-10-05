@@ -16,7 +16,7 @@
 00160 TRANSACTION_ENTRY: ! 
 00165   cn=l10=l12=l13=0
 00170   fntos(sn$="Percentinput") !:
-        respc=0 : let frac=0 !:
+        respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+3
 00180   fnlbl(1,1,"Job Number:",mylen,1)
 00190   fncmbjob(1,mypos) !:

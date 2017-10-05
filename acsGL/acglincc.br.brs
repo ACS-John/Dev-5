@@ -12,14 +12,14 @@
 00130   dim bp(13),by(13),tp1(4)
 00140 ! ______________________________________________________________________
 00150   fncno(cno,cnam$)
-00160   let udf$=env$('temp')&'\'
+00160   udf$=env$('temp')&'\'
 00185   actpd$=fnactpd$ !:
         actpd=fnactpd !:
         fnfscode !:
         fnpriorcd
 00190   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00195   let fscode=fnfscode !:
+00195   fscode=fnfscode !:
         priorcd=fnpriorcd
 00200 ! ______________________________________________________________________
 00210   pr newpage
@@ -123,13 +123,13 @@
 01160   sp2=31-sp-1
 01170   if pas=2 then gosub PAS2
 01180   if percent1=0 then pdpct=0 else pdpct=total/percent1*100
-01190   if percent2=0 then let ytdpct=0 else let ytdpct=total2/percent2*100
+01190   if percent2=0 then ytdpct=0 else ytdpct=total2/percent2*100
 01200   if percent3=0 then pppd=0 else pppd=total3/percent3*100
 01210   if percent4=0 then ppyear=0 else ppyear=total4/percent4*100
 01220   if pdpct<-999.99 then pdpct=-999.99
 01230   if pdpct>999.99 then pdpct=999.99
-01240   if ytdpct<-999.99 then let ytdpct=-999.99
-01250   if ytdpct>999.99 then let ytdpct=999.99
+01240   if ytdpct<-999.99 then ytdpct=-999.99
+01250   if ytdpct>999.99 then ytdpct=999.99
 01260   if ppyear<-999.99 then ppyear=-999.99
 01270   if ppyear>999.99 then ppyear=999.99
 01280   if pppd<-999.99 then pppd=-999.99
@@ -158,13 +158,13 @@
 01480   if pas=2 then gosub PAS2
 01490   if percent=0 then goto L1640
 01500   if percent1=0 then pdpct=0 else pdpct=accum1/percent1*100
-01510   if percent2=0 then let ytdpct=0 else let ytdpct=accum2/percent2*100
+01510   if percent2=0 then ytdpct=0 else ytdpct=accum2/percent2*100
 01520   if percent3=0 then pppd=0 else pppd=accum3/percent3*100
 01530   if percent4=0 then ppyear=0 else ppyear=accum4/percent4*100
 01540   if pdpct<-999.99 then pdpct=-999.99
 01550   if pdpct>999.99 then pdpct=999.99
-01560   if ytdpct<-999.99 then let ytdpct=-999.99
-01570   if ytdpct>999.99 then let ytdpct=999.99
+01560   if ytdpct<-999.99 then ytdpct=-999.99
+01570   if ytdpct>999.99 then ytdpct=999.99
 01580   if pppd<-999.99 then pppd=-999.99
 01590   if pppd>999.99 then pppd=999.99
 01600   if ppyear<-999.99 then ppyear=-999.99
@@ -184,10 +184,10 @@
 01720   goto L600
 01730 L1730: if foot1=1 then goto L1780
 01740   tabnote=sp
-01750   let foot1=1
-01760   let foot$=d$
+01750   foot1=1
+01760   foot$=d$
 01770   goto L600
-01780 L1780: let foot$=rtrm$(foot$)&d$
+01780 L1780: foot$=rtrm$(foot$)&d$
 01790   goto L600
 01800 L1800: for j=1 to 9
 01810     if ac(j)=0 or ac(j)=9 then goto L1860 ! 10/14/87
@@ -217,11 +217,11 @@
 02050 L2050: if percent=0 then goto L2170
 02060   if ul=0 then goto L2150
 02070   if ul=1 then goto L2120
-02080   let underlin$="============== ======"
+02080   underlin$="============== ======"
 02090   pr #255,using L2100: underlin$,underlin$,underlin$,underlin$
 02100 L2100: form pos 32,c 22,pos 56,c 22,pos 80,c 22,pos 104,c 22,skip redir
 02110   goto L2150
-02120 L2120: let underlin$="______________ _______"
+02120 L2120: underlin$="______________ _______"
 02130   pr #255,using L2140: underlin$,underlin$,underlin$,underlin$
 02140 L2140: form skip redir,pos 31,c 22,pos 55,c 22,pos 79,c 22,pos 103,c 22,skip redir
 02150 L2150: if redir=0 then pr #255,using L2160: " "
@@ -266,8 +266,8 @@
 02530   total3=0
 02540   total4=0
 02550   mat accum=(0)
-02560   let foot1=0
-02570   let foot$=" "
+02560   foot1=0
+02570   foot$=" "
 02580   notrans=ir=0
 02590   goto L380
 02600 PAS1: if rnp=0 then goto L2710

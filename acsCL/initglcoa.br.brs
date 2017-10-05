@@ -27,7 +27,7 @@
 00210   if ck=5 then goto XIT else !:
           if resp$(1)=item1$(1) then pas$="BUILD" else !:
             if resp$(1)=item1$(2) then pas$="COPY"
-00220   let glcno=val(resp$(2))
+00220   glcno=val(resp$(2))
 00230   if pas$><"COPY" then goto L270
 00240   close #1: ioerr L250
 00250 L250: execute "COPY A:GLmstr.H"&str$(glcno)&' '&env$('Q')&"\CLmstr\*.*" ioerr MSGBOX2

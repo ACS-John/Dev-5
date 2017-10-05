@@ -1,6 +1,6 @@
 08000 library 'S:\Core\Library': fntop,fnxit
 08020 library program$: fnPrintAceTest
-08040 let fntop(program$,'PrintAce Test')
+08040 fntop(program$,'PrintAce Test')
 08060 fnPrintAceTest
 08080 fnxit
 10020 def library fnPrintAceTest(;format$)
@@ -58,7 +58,7 @@
 36020     fnpa_line(50,50,50,50,1)
 36040     if enableText then let fnpa_txt("50mm Square Box",51,95)
 42020     !
-42040     lyne=3 : let xmargin=139 : let ymargin=108
+42040     lyne=3 : xmargin=139 : ymargin=108
 42060     fnpa_line(xmargin+5,ymargin+2,57,lyne*3+3,1)
 42080     !
 42100     fnpa_line(xmargin+97,ymargin+0,29,lyne*5+2,1)
@@ -118,9 +118,9 @@
 64040 ! X=Random percentage, Y=Remainder, Z=Max(X,Y)/2
 64060 ! ______________________
 64080 L690: ! 
-64100   let x=int((100-1+1)*rnd+1)
-64120   let y=abs(x-100)
-64140   let z=int(max(x,y)/2)
+64100   x=int((100-1+1)*rnd+1)
+64120   y=abs(x-100)
+64140   z=int(max(x,y)/2)
 64160   if x=z or y=z then goto L690
 64180   if (min(x,y,z))=0 then goto L690
 64200   pr #20: 'Call Print.DrawPieSection(0,'&str$(min(x,y,z))&',50,156,40,0,2)'

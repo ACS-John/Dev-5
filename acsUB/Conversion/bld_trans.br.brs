@@ -80,18 +80,18 @@
 50100       for month=1 to 13
 50120         tdate=fndate_mmddyy_to_ccyymmdd(rw4(8,month))
 50140         if tdate<>0 and tdate<>20000000 then 
-50160           let g(01)=rw4(09,month)
-50180           let g(02)=rw4(10,month)
-50200           let g(03)=rw4(11,month)
-50220           let g(04)=rw4(12,month)
-50240           let g(05)=rw4(13,month)
-50260           let g(06)=rw4(14,month)
-50280           let g(07)=rw4(15,month)
-50300           let g(08)=rw4(16,month)
-50320           let g(09)=rw4(17,month)
-50340           let g(10)=rw4(18,month)
-50360           let g(11)=rw4(19,month)
-50380           if transcode=1 then let g(10)=0 ! don't include penalties unless they are needed to total to the transaction amount
+50160           g(01)=rw4(09,month)
+50180           g(02)=rw4(10,month)
+50200           g(03)=rw4(11,month)
+50220           g(04)=rw4(12,month)
+50240           g(05)=rw4(13,month)
+50260           g(06)=rw4(14,month)
+50280           g(07)=rw4(15,month)
+50300           g(08)=rw4(16,month)
+50320           g(09)=rw4(17,month)
+50340           g(10)=rw4(18,month)
+50360           g(11)=rw4(19,month)
+50380           if transcode=1 then g(10)=0 ! don't include penalties unless they are needed to total to the transaction amount
 50400           ru(1)=rw4(1,month)
 50420           ru(2)=rw4(2,month)
 50440           ru(3)=rw4(3,month)
@@ -128,7 +128,7 @@
 52020 !         if sum(g)=tamt then ! SKIP ANY TRANSACTIONS THAT DON'T ADD UP
 52040           write #transvb,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat g,mat ru,bal,postcode
 52060 !         if trim$(p$)='209740.00' and month=1 then pr 'tdate=';tdate; 'tamt=';tamt : for x=1 to udim(mat rw4,1) : pr rw4(x,1) : next x :  pause
-52080           let write_count+=1
+52080           write_count+=1
 52100 !         end if
 52120         end if  ! tdate<>0 and tdate<>20000000
 52140 ! NEXT_MONTH: !
@@ -181,12 +181,12 @@
 60200       end if 
 60210 !     if trim$(p$)='209740.00' and tamt=54.18 then pause
 60220       read #master,using 'form pos 1,c 10,pos 296,pd 4,11*pd 4.2',key=p$: z$,fdate,mat g nokey READ_TRANS
-60240       if sum(g)-g(10)=tamt or transcode=1 then let g(10)=0 ! don't include penaltiies unless they are needed to total to the transaction amount
-60260       if transcode=2 and g(10)=tamt then let g(1)=g(2)=g(3)=g(4)=g(5)=g(6)=g(7)=g(8)=g(9)=0 ! make sure all other charges are zero on penalty records where g(10) is the penalty field
+60240       if sum(g)-g(10)=tamt or transcode=1 then g(10)=0 ! don't include penaltiies unless they are needed to total to the transaction amount
+60260       if transcode=2 and g(10)=tamt then g(1)=g(2)=g(3)=g(4)=g(5)=g(6)=g(7)=g(8)=g(9)=0 ! make sure all other charges are zero on penalty records where g(10) is the penalty field
 60280       fn_translate_transcode
 60282       if postcode=5 then goto READ_TRANS ! Skip all transaction code 5s.
 60300       if len(str$(tdate))<=6 then tdate=fndate_mmddyy_to_ccyymmdd(tdate)
-60320       if len(str$(fdate))<=6 then let fdate=fndate_mmddyy_to_ccyymmdd(fdate)
+60320       if len(str$(fdate))<=6 then fdate=fndate_mmddyy_to_ccyymmdd(fdate)
 60340 ! 
 60360 ! if tdate=20415 then pause
 60380 ! 
@@ -197,11 +197,11 @@
 60480 TC_MATCHING_TRAN_NOKEY: ! 
 60490       fn_fix_trans_breakdown(mat tg,tamt)
 60500       write #transvb,using 'form pos 1,C 10,N 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat tg,d1,d3,empty,empty,d9,d10,bal,postcode
-60520       let write_count+=1
+60520       write_count+=1
 60560 !    goto READ_TRANS
 60580 !     fn_fix_trans_breakdown(mat g,tamt)
 60600 !     write #transvb,using 'form pos 1,C 10,N 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,transcode,tamt,mat g,d1,d3,d,d,d9,d10,bal,postcode
-60620 !     let write_count+=1
+60620 !     write_count+=1
 60640     loop 
 60660 L90000: ! 
 60680     reread #h_ubacctrn,using acctrn_form$: p$
@@ -213,9 +213,9 @@
 62000   def fn_fix_trans_breakdown(mat g,tamt)
 62020     if sum(g)><tamt then !  transactions don't add up
 62040       if env$('client')='French Settlement' then 
-62060         let g(8)=g(8)+tamt-sum(g) ! put the difference into g(8) - OTHER
+62060         g(8)=g(8)+tamt-sum(g) ! put the difference into g(8) - OTHER
 62080       else 
-62100         let g(10)=g(10)+tamt-sum(g) ! put the difference into g(10)
+62100         g(10)=g(10)+tamt-sum(g) ! put the difference into g(10)
 62120       end if 
 62140     end if 
 62160   fnend 

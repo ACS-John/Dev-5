@@ -11,7 +11,7 @@
 25000 def library fnMakeSurepathExists(fileName$*255; path$*255)
 25020   do while pos(fileName$,"\")
 25040     path$=path$&fileName$(1:pos(fileName$,"\"))
-25060     let fileName$=fileName$(pos(fileName$,"\")+1:len(fileName$))
+25060     fileName$=fileName$(pos(fileName$,"\")+1:len(fileName$))
 25080     ! pr 'if ~exists '&path$
 25100     doNotTryThisOne=0
 25120     if path$(1:2)='\\' then

@@ -21,17 +21,17 @@
 30220   fncmdset(2)
 30240   fnacs(sn$,0,mat resp$,ck)
 30260   if ck=5 then goto XIT
-30280   let filter_none=1
-30300   let filter_not_equal=2
-30320   let filter_negative=3
+30280   filter_none=1
+30300   filter_not_equal=2
+30320   filter_negative=3
 30340   if resp$(1)='True' then 
-30360     let filter=filter_none
+30360     filter=filter_none
 30380   else if resp$(2)='True' then 
-30400     let filter=filter_not_equal
+30400     filter=filter_not_equal
 30420   else if resp$(3)='True' then 
-30440     let filter=filter_negative
+30440     filter=filter_negative
 30460   else 
-30480     let filter=filter_none
+30480     filter=filter_none
 30500   end if 
 30520 ! /r
 31000 ! Gosub SCR_ASK_DATES
@@ -90,7 +90,7 @@
 48320   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 48340   if ckey=5 then goto XIT
 48360   for j=1 to 6
-48380 L560: let x=pos(resp$(j),"/",1)
+48380 L560: x=pos(resp$(j),"/",1)
 48400     if x>0 then resp$(j)(x:x)="": goto L560
 48420   next j
 48440   for j=1 to 6

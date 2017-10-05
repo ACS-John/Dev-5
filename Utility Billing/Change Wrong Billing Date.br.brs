@@ -26,8 +26,8 @@
 24320   if ckey=5 then goto XIT
 24340   d1=val(resp$(1))
 24360   d2=val(resp$(2))
-24380   let z_start$=resp$(3)(1:10) : if trim$(z_start$)='[All]' then let z_start$=''
-24400   let z_end$=resp$(4)(1:10) : if trim$(z_end$)='[All]' then let z_end$=''
+24380   z_start$=resp$(3)(1:10) : if trim$(z_start$)='[All]' then z_start$=''
+24400   z_end$=resp$(4)(1:10) : if trim$(z_end$)='[All]' then z_end$=''
 24420   if d1=0 or d2=0 then goto SCREEN1 ! require a date in both fields
 24440   hd1=d1: d1=fndate_mmddyy_to_ccyymmdd(d1)
 24460   hd2=d2: d2=fndate_mmddyy_to_ccyymmdd(d2)
@@ -62,7 +62,7 @@
 32120   fnmsgbox(mat mg$)
 32140 goto XIT ! /r
 34000 XIT: ! r:
-34060 let fnxit ! /r
+34060 fnxit ! /r
 36000 BUD1: ! r:
 36020   bud1=0
 36040   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L490

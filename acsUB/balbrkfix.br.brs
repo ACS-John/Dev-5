@@ -21,20 +21,20 @@
 00260   gosub NWPGE
 00270 L270: read #1,using L280: z$,mat a,bal,mat g,mat gb eof DONE
 00280 L280: form pos 1,c 10,pos 143,7*pd 2,pos 292,pd 4.2,pos 300,10*pd 4.2,pos 388,10*pd 5.2
-00290   let foundone=0
+00290   foundone=0
 00300 ! ------------------------------
 00310   if bal=sum(gb) then goto L270
 00320   if bal=0 then mat gb=(0): cause$="one": goto REW
-00330   if bal<0 and a(1)>0 then mat gb=(0) : let gb(1)=bal : cause$="two": goto REW
-00340   if bal<0 and a(2)>0 then mat gb=(0) : let gb(2)=bal : cause$="three": goto REW
-00350   if bal<0 and a(3)>0 then mat gb=(0) : let gb(3)=bal : cause$="three": goto REW
-00360   if bal<0 and a(4)>0 then mat gb=(0) : let gb(4)=bal : cause$="three": goto REW
-00370   if bal<0 then mat gb=(0) : let gb(5)=bal : cause$="three": goto REW ! if credit balance and no water,sewer,elec,or gas then credit show in gb(5)
+00330   if bal<0 and a(1)>0 then mat gb=(0) : gb(1)=bal : cause$="two": goto REW
+00340   if bal<0 and a(2)>0 then mat gb=(0) : gb(2)=bal : cause$="three": goto REW
+00350   if bal<0 and a(3)>0 then mat gb=(0) : gb(3)=bal : cause$="three": goto REW
+00360   if bal<0 and a(4)>0 then mat gb=(0) : gb(4)=bal : cause$="three": goto REW
+00370   if bal<0 then mat gb=(0) : gb(5)=bal : cause$="three": goto REW ! if credit balance and no water,sewer,elec,or gas then credit show in gb(5)
 00380   runtotal=0
 00390   mat gb=(0)
 00400   for j=1 to 10 ! types of charges  (OWE CURRENT BILL)
 00410     if penalty$(j)="Y" and tcode=1 then goto L450 ! SKIP PENALTY RECORDS
-00420     let gb(j)=min(g(j),(bal-runtotal))
+00420     gb(j)=min(g(j),(bal-runtotal))
 00430     if sum(gb)=bal then goto REW
 00440     runtotal=runtotal+gb(j)
 00450 L450: next j
@@ -47,7 +47,7 @@
           ! history record must belong to this customer
 00520   if tcode=1 or tcode=2 then goto L530 else goto L490 ! charge and penalty transaction
 00530 L530: for j=1 to 3
-00540     if str$(tdate)=resp$(j) then let foundone=1: goto L570
+00540     if str$(tdate)=resp$(j) then foundone=1: goto L570
 00550     if str$(tdate)=resp$(j+3) then goto L570 ! penalties
 00560     goto L630
 00570 L570: if sum(gb)= bal then goto REW
@@ -58,17 +58,17 @@
 00620     goto L490 ! read next transaction
 00630 L630: next j
 00640   goto L490
-00650 L650: let x=1
+00650 L650: x=1
 00660 L660: for k=1 to 10
 00670     if apply(k)=0 then goto L710
-00680     let gb(k)+=min(answer(k,x),max(0,(bal-runtotal)))
+00680     gb(k)+=min(answer(k,x),max(0,(bal-runtotal)))
 00690     if sum(gb)=bal then goto REW
 00700     runtotal=runtotal+min(answer(k,x),max(0,(bal-runtotal)))
 00710 L710: next k
-00720   if x<3 then let x+=1: goto L660
+00720   if x<3 then x+=1: goto L660
 00730   cause$="four"
 00740   for z=1 to 10
-00750     if trim$(service$(z))<>"" then let gb(z)+=bal-runtotal: pr #255,using "form pos 1,c 50": "Plugging first service by "&str$(bal-runtotal): goto L780 ! plug anything LEFT OVER TO first service  (change <>"" to ="PN" to plug to penalty
+00750     if trim$(service$(z))<>"" then gb(z)+=bal-runtotal: pr #255,using "form pos 1,c 50": "Plugging first service by "&str$(bal-runtotal): goto L780 ! plug anything LEFT OVER TO first service  (change <>"" to ="PN" to plug to penalty
 00760   next z
 00770 ! Next J
 00780 L780: if foundone=0 then goto L820 ! one of dates does not match the last billing date don't change
@@ -106,7 +106,7 @@
 01000   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 01010   if ckey=5 then goto XIT
 01020   for j=1 to 6
-01030 L1030: let x=pos(resp$(j),"/",1)
+01030 L1030: x=pos(resp$(j),"/",1)
 01040     if x>0 then resp$(j)(x:x)="": goto L1030
 01050   next j
 01060   for j=1 to 6 !:

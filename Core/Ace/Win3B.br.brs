@@ -38,15 +38,15 @@
 50580     !            7=top left;    8=top center;    9=top right    
 50600     !                0=default saveable position (not finished yet)
 50620 ! pr_newpg = 1=Yes; 2=No; 0=Whatever, I don't know
-50640     if win<1 then let win=101
+50640     if win<1 then win=101
 50660
 50680     if pr_newpg=2 then goto L240
 50700     if pr_newpg=0 and exists(":C:\ACS\Local\Settings\No_Print_Newpage.txt") then goto L240 else pr newpage
 50720     if pr_newpg=1 then pr newpage
 50740 L240: screen_width=80
 50760     screen_height=24
-50780     let win_width=min(screen_width-2,win_width)
-50800     let win_height=min(screen_height-2,win_height)
+50780     win_width=min(screen_width-2,win_width)
+50800     win_height=min(screen_height-2,win_height)
 50840     on win_align gosub WIN_ALIGN_1,WIN_ALIGN_2,WIN_ALIGN_3,WIN_ALIGN_4,WIN_ALIGN_5,WIN_ALIGN_6,WIN_ALIGN_7,WIN_ALIGN_8,WIN_ALIGN_9 none WIN_ALIGN_0
 50860     goto L490
 50880 ! _____
@@ -94,18 +94,18 @@
 51720     end if
 51740 L610: if button_option=0 then goto XIT
 51760     mat fkey$=("") : em$="" : es=0
-51780     let fkey$(5)="Cancel" ! included by default
+51780     fkey$(5)="Cancel" ! included by default
 51800     if button_option=2 then let fkey$(1)="Next"
 51820     if button_option=3 then let fkey$(1)="Print"
 51840     if button_option=4 then let fkey$(1)="Save"
-51860     if button_option=5 then let fkey$(1)="Next" : let fkey$(6)="Search"
-51880     if button_option=6 then let fkey$(1)="Next" : let fkey$(2)="Back"
-51900     if button_option=7 then let fkey$(1)="Save" : let fkey$(4)="Delete"
-51920     if button_option=8 then let fkey$(1)="Print" : let fkey$(2)="Back"
-51940     if button_option=11 then let fkey$(1)="Next" : let fkey$(5)="Finish"
+51860     if button_option=5 then let fkey$(1)="Next" : fkey$(6)="Search"
+51880     if button_option=6 then let fkey$(1)="Next" : fkey$(2)="Back"
+51900     if button_option=7 then let fkey$(1)="Save" : fkey$(4)="Delete"
+51920     if button_option=8 then let fkey$(1)="Print" : fkey$(2)="Back"
+51940     if button_option=11 then let fkey$(1)="Next" : fkey$(5)="Finish"
 51960     if button_option>40 then let fkey$(5)=""
 51980     if button_option=41 then let fkey$(1)="Ok"
-52000     if button_option=42 then let fkey$(1)="Yes" : let fkey$(2)="No"
+52000     if button_option=42 then let fkey$(1)="Yes" : fkey$(2)="No"
 52020     if button_option=51 then let fkey$(5)="Exit"
 52040     if button_option=52 then let fkey$(5)="Finish"
 52060     fnfkey(er+1,mat fkey$,mat disfk,em$,es,win)
@@ -133,7 +133,7 @@
 60200     totallen=startpos=0
 60220     for j=1 to udim(fkey$) ! add ' (Fx)' to each button
 60240       if fkey$(j)<>"" then 
-60260         let fkey$(j)=fkey$(j)&" (F"&str$(j)&")"  ! add ' (Fx)' to each button
+60260         fkey$(j)=fkey$(j)&" (F"&str$(j)&")"  ! add ' (Fx)' to each button
 60280         totallen+=len(fkey$(j))+1
 60290       end if
 60300     next j

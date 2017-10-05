@@ -23,14 +23,14 @@
 00230   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
 00240   read #21,using "Form POS 1,3*C 40": at$(1),at$(2),at$(3)
 00250   close #21: 
-00260   let z=21
+00260   z=21
 00270   at$(1)=trim$(at$(1))(1:z)
-00280   let x=len(at$(1)) : let y=z-x
+00280   x=len(at$(1)) : y=z-x
 00290   at$(1)=rpt$(" ",int(y/2))&at$(1)
-00300   let z=26
+00300   z=26
 00310   for j=2 to udim(at$)
 00320     at$(j)=trim$(at$(j))(1:z)
-00330     let x=len(at$(j)) : let y=z-x
+00330     x=len(at$(j)) : y=z-x
 00340     at$(j)=rpt$(" ",int(y/2))&at$(j)
 00350   next j
 00352 ! 
@@ -350,8 +350,8 @@
 31800 ERTN_EXEC_ACT: execute act$ : goto ERTN
 31820 ! /region
 31860   def fn_print_standard_form
-31880     if a(1)=0 then let water$="     " else let water$="Water"
-31900     if a(4)=0 then let gas$="   " else let gas$="Gas"
+31880     if a(1)=0 then water$="     " else water$="Water"
+31900     if a(4)=0 then gas$="   " else gas$="Gas"
 31920     fnopenprn(cp,33,220,process)
 31940     for j=1 to 4 : pr #255: "" : next j
 31960     for j=1 to 3 : pr #255,using "Form pos 7,C 40": at$(j) : next j
@@ -407,7 +407,7 @@
 32960 L3790: form pos 10,c 30,pos 52,c 10,skip 2
 32980     pr #255,using L3810: bal
 33000 L3810: form pos 63,n 10.2
-33020     let granby_print_count+=1
+33020     granby_print_count+=1
 33040     if granby_print_count/3=int(granby_print_count/3) then 
 33060       pr #255: newpage
 33080     else 
@@ -448,9 +448,9 @@
 34240     if g(8)<0 then t8$="Deposit Refund"
 34260     if g(9)=0 then t9$="" else t9$="La. Sales Tax"
 34280 ! If D(10)=1 Then eST$="Bill Estimated" Else eST$=""
-34300     if c4>0 then let final$="Final Bill" else let final$=""
-34320     if bal<=0 then let g(10)=0
-34340     let gross=max(bal+g(10),0)
+34300     if c4>0 then final$="Final Bill" else final$=""
+34320     if bal<=0 then g(10)=0
+34340     gross=max(bal+g(10),0)
 34360 ! ______________actual Bill Printing____________________________________
 34380     pos_amt=28
 34400     pos_r=39
@@ -499,10 +499,10 @@
 36060   fngetdir2(env$('Q')&"\UBmstr",mat file_rtf$, '/ON','*.rtf')
 36080   fl1=udim(mat file_rtf$)
 36100   for fl1=1 to udim(mat file_rtf$)
-36120     let file_rtf$(fl1)=file_rtf$(fl1)
+36120     file_rtf$(fl1)=file_rtf$(fl1)
 36140   next fl1
-36160   mat file_rtf$(fl1) : let file_rtf$(fl1)="(Pre-Printed)"
-36180   mat file_rtf$(fl1+=1) : let file_rtf$(fl1)="(Reminder)"
+36160   mat file_rtf$(fl1) : file_rtf$(fl1)="(Pre-Printed)"
+36180   mat file_rtf$(fl1+=1) : file_rtf$(fl1)="(Reminder)"
 36200   goto SELECT_SCREEN ! /r
 38000 !  r: def fn_merriam_woods
 38020 !     library 'S:\acsUB\PrintBill_Merriam_Woods': fnpast_due_notice,fnpast_due_notice_finis
@@ -518,9 +518,9 @@
 38220 !     if g(8)=0 then t8$="" else t8$="Other Charges"
 38240 !     if g(8)<0 then t8$="Deposit Refund"
 38260 !     if g(9)=0 then t9$="" else t9$="La. Sales Tax"
-38300 !     if c4>0 then let final$="Final Bill" else let final$=""
-38320 !     if bal<=0 then let g(10)=0
-38340 !     let gross=max(bal+g(10),0)
+38300 !     if c4>0 then final$="Final Bill" else final$=""
+38320 !     if bal<=0 then g(10)=0
+38340 !     gross=max(bal+g(10),0)
 38360 ! ! ______________actual Bill Printing____________________________________
 38560 !     fnpast_due_notice(z$)
 39180 ! ! _____________end_________________
@@ -633,7 +633,7 @@
 44000 PRINTING_BEGIN: ! r:
 44020   checkcounter=0
 44040   if trim$(sz$)="" and sel_indv$="Y" then goto ASK_NEXT_ACT ! selected to pick specific account but did not have one on screen
-44060   if trim$(sz$)<>"" and sel_indv$="Y" then let z$=sz$: goto READ_CUSTOMER ! selected to pirnt specific account and had an account on screen
+44060   if trim$(sz$)<>"" and sel_indv$="Y" then z$=sz$: goto READ_CUSTOMER ! selected to pirnt specific account and had an account on screen
 44080 ! if rtrm$(sz$)="" then goto L1330
 44100 !  L1330: !
 44120   if bk1=0 and trim$(sz$)="" then goto NEXT_RECORD
@@ -648,7 +648,7 @@
 44270   goto NEXT_RECORD ! /r
 44420 NEXT_RECORD: ! r:
 44440   if sel_indv$="Y" then 
-44460     let z$=lpad$(trim$(resp$(2)(1:10)),10)
+44460     z$=lpad$(trim$(resp$(2)(1:10)),10)
 44480     goto READ_CUSTOMER
 44500   else 
 44520     goto PRINT_NEXT
@@ -680,7 +680,7 @@
 46060 ! else 
 46080   if ~reminder then 
 46100     restore #customer1: ! Close #customer1: Ioerr 980
-46120     let granby_print_count=0
+46120     granby_print_count=0
 46140     if h_prnt1 then 
 46160       close #h_prnt1: : h_prnt1=0
 46180       execute 'SY -w '&atlantis$&' "'&os_filename$(tmp_rtf_filename$)&'" -n'

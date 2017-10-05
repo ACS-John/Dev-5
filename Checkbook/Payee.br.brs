@@ -196,11 +196,11 @@
 33080   READ_PAYEE_GL: ! 
 33100   read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30',release: payeekey$,payeegl$,percent,gldesc$ eof EO_FLEX3
 33120   if vn$<>payeekey$ then goto EO_FLEX3
-33140   let glitem$(1)=str$(rec(payeegl)) 
-33160   let glitem$(2)=payeekey$ 
-33180   let glitem$(3)=payeegl$ 
-33200   let glitem$(4)=str$(percent) 
-33220   let glitem$(5)=gldesc$ 
+33140   glitem$(1)=str$(rec(payeegl)) 
+33160   glitem$(2)=payeekey$ 
+33180   glitem$(3)=payeegl$ 
+33200   glitem$(4)=str$(percent) 
+33220   glitem$(5)=gldesc$ 
 33240   fnflexadd1(mat glitem$)
 33260   goto READ_PAYEE_GL
 34000   EO_FLEX3: ! 
@@ -251,9 +251,9 @@
 42160   ph$=resp$(8) ! phone 
 42180   contact$=resp$(9) ! contact name 
 42200   email$=resp$(10) ! email address
-42220   let fax$=resp$(11) ! fax number 
+42220   fax$=resp$(11) ! fax number 
 42240   myact$=resp$(12) ! my account number with this vendor 
-42260   let gldistrec=val(resp$(13)) ! record number of gl distribution entry
+42260   gldistrec=val(resp$(13)) ! record number of gl distribution entry
 42280   if ck=4 then 
 42300     gosub CHECK_HISTORY 
 42320     goto EDIT_PAYEE
@@ -343,7 +343,7 @@
 58000   CHECK_HISTORY: ! r:
 58020   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,input,keyed 
 58040   fntos(sn$='payee_hist') 
-58060   lc=0 : mylen=25 : mypos=mylen+2 : let width=50
+58060   lc=0 : mylen=25 : mypos=mylen+2 : width=50
 58080   lc+=1
 58100   fnlbl(lc+=1,30,'Check History Selection Criteria',width,center)
 58120   fnlbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
@@ -352,7 +352,7 @@
 58180   fnlbl(lc+=1,1,"Transaction Ending Date:",mylen,right)
 58200   fntxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All') 
 58220   resp$(2)=''
-58240   let wbc=0
+58240   wbc=0
 58320   fnlbl(lc=6,40,'Transaction Grid')
 58340   mat chdr$(11) : mat cmask$(11) : mat item6$(11) 
 58360   chdr$(1)='Rec' 
@@ -422,7 +422,7 @@
 62320   payeekey$=vn$
 62340   payeegl$=fnagl$(resp$(1))
 62360   percent=val(resp$(2)) ! percent
-62380   let gldesc$=resp$(3)
+62380   gldesc$=resp$(3)
 62400   if ck=4 and gldistrec>0 then 
 62420     delete #payeegl,rec=gldistrec:
 62460   else if ck=1 and gldistrec=0 then 

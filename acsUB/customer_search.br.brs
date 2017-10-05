@@ -39,8 +39,8 @@
 20740 EO_CUSTOMER: ! 
 20760     fncmdset(2)
 20780     fnacs(sn$,0,mat resp$,ckey)
-20800     let x$=lpad$(resp$(1),10)
-20820     if ckey=5 then let x$="          " ! no one selected
+20800     x$=lpad$(resp$(1),10)
+20820     if ckey=5 then x$="          " ! no one selected
 20840     goto XIT
 20860 ! ______________________________________________________________________
 20880 ! <Updateable Region: ERTN>

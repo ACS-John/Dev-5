@@ -22,7 +22,7 @@
 12420     if report_cache$='True' then print_report_caching=1 else print_report_caching=0
 12440     fnreg_read('PrintAce.Max Pages',max_pages$)
 12460     fnreg_read('formsFormat',formsFormat$)
-12480     let g_pa_max_pages=val(max_pages$) conv ignore
+12480     g_pa_max_pages=val(max_pages$) conv ignore
 12500   end if 
 12520   fn_pa_setup=pa_setup
 12540 XIT: ! 
@@ -80,13 +80,13 @@
 24140     fnpa_open=fnpdf_open( pa_orientation$,pa_sendto_base_name_addition$)
 24160   else
 24180     ! fnstatus('fnpa_open')
-24200     let g_pa_batch=0
+24200     g_pa_batch=0
 24220     fnpa_open=fn_pa_open( pa_orientation$,pa_sendto_base_name_addition$)
 24240   end if
 24250   setenv('FormsFormatCurrent',formsFormat$)
 24260 fnend 
 26000 def fn_pa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$)
-26040   let g_pa_batch+=1
+26040   g_pa_batch+=1
 26060   fnstatus('Iniating a PrintAce Batch '&str$(g_pa_batch))
 26070   if g_pa_max_pages then let fnstatus('     (up to '&str$(g_pa_max_pages)&' pages per batch)')
 26080   h_printace=20
@@ -103,11 +103,11 @@
 26300     pa_filename$=pa_o_filename$
 26320     pr #h_printace: 'Call Print.MyOrientation("'&pa_orientation$&'")'
 26340    !  pr #h_printace: 'Call Print.NewPaperBin(1)'
-26360     let g_pa_pagecount=1
-26400     let g_pa_orientation$=pa_orientation$
+26360     g_pa_pagecount=1
+26400     g_pa_orientation$=pa_orientation$
 26420     dim g_pa_filename$*256
-26440     let g_pa_filename$=pa_o_filename$
-26460     let g_pa_handle=h_printace
+26440     g_pa_filename$=pa_o_filename$
+26460     g_pa_handle=h_printace
 26480   end if 
 26500 fnend 
 27000 def library fnpa_background(background_pdf$*256)
@@ -129,7 +129,7 @@
 28060     if g_pa_max_pages=0 then 
 28080       pr #h_printace: 'Call Print.NewPage'
 28100     else ! if g_pa_max_pages<>0 then
-28120       let g_pa_pagecount+=1
+28120       g_pa_pagecount+=1
 28140       if g_pa_pagecount>g_pa_max_pages then 
 28150         fnstatus('Maximum number of pages ('&str$(g_pa_max_pages)&') reached.')
 28180         fn_pa_finis( h_printace,0)
@@ -288,12 +288,12 @@
 48060     if debug_pdf then pause
 48070   else
 48080     ! r: SET_VARIABLES: !
-48090     let w=rightleft ! 30 ! right or left
-48100     let x=updown ! 25 ! up and down position of top of line
-48110     let y=w ! width of line
-48120     let z=6 ! height of line
+48090     w=rightleft ! 30 ! right or left
+48100     x=updown ! 25 ! up and down position of top of line
+48110     y=w ! width of line
+48120     z=6 ! height of line
 48130     blankline=2.0
-48140     let q=p=0
+48140     q=p=0
 48150     double=.12
 48160     ! /r
 48170     ! bARCODE$="123567890" ! 345" !67890" ! =z$  kj ! 1,2,3,4,5,6,7,8,9,0 ok
@@ -301,356 +301,356 @@
 48190     for a=1 to 10
 48200       barcode=val(barcode$(a:a))
 48210       p=pos(barcode$,".",a) : if p=a then goto BCW_PERIOD ! searching for period
-48220       let q=pos(barcode$,"0",a) : if q=a then goto BCW_0 ! searching for BCW_0
+48220       q=pos(barcode$,"0",a) : if q=a then goto BCW_0 ! searching for BCW_0
 48230       on barcode goto BCW_1,BCW_2,BCW_3,BCW_4,BCW_5,BCW_6,BCW_7,BCW_8,BCW_9,BCW_0 none BCW_NEXT_A
 48240     BCW_NEXT_A: ! 
 48250     next a
 48260     gosub BCW_QUIET
 48270     goto BCW_XIT
 48280     BCW_1: ! r:
-48290     let w+=double*2 ! blank space
+48290     w+=double*2 ! blank space
 48300     ! first line, first character (wide line)
 48310     for j=1 to 6
 48320       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! wide line
 48330     next j
 48340     ! second line of number 1 (narrow line)
-48350     let w+=double*2 ! blank space
+48350     w+=double*2 ! blank space
 48360     for j=1 to 4
 48370       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 48380     next j
-48390     let w+=double*blankline ! extra blank line
+48390     w+=double*blankline ! extra blank line
 48400     ! third line of character 1 (narrow) (has a blank line in front of it)
-48410     let w+=double*2 ! blank space
+48410     w+=double*2 ! blank space
 48420     for j=1 to 4
 48430       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 48440     next j
 48450     ! fourth line of number 1 (narrow)
-48460     let w+=double*2 ! blank space
+48460     w+=double*2 ! blank space
 48470     for j=1 to 4
 48480       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 48490     next j
 48500     ! fifth line of number one (wide)
-48510     let w+=double*2 ! blank space
+48510     w+=double*2 ! blank space
 48520     for j=1 to 6
 48530       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 48540     next j
 48550     goto BCW_NEXT_A ! /r
 48560     BCW_2: ! r:
-48570     let w+=double*2 ! blank space
+48570     w+=double*2 ! blank space
 48580     ! first line (narrow line)
 48590     for j=1 to 2
 48600       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 48610     next j
 48620     ! second line  (wide line)
-48630     let w+=double*2 ! blank space
+48630     w+=double*2 ! blank space
 48640     for j=1 to 6
 48650       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 48660     next j
-48670     let w+=double*blankline ! extra blank line
+48670     w+=double*blankline ! extra blank line
 48680     ! third line (narrow) (has a blank line in front of it)
-48690     let w+=double*2 ! blank space
+48690     w+=double*2 ! blank space
 48700     for j=1 to 4
 48710       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 48720     next j
 48730 ! fourth line  (narrow)
-48740     let w+=double*2 ! blank space
+48740     w+=double*2 ! blank space
 48750     for j=1 to 4
 48760       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 48770     next j
 48780 ! fifth line (wide)
-48790     let w+=double*2 ! blank space
+48790     w+=double*2 ! blank space
 48800     for j=1 to 6
 48810       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 48820     next j
 48830     goto BCW_NEXT_A ! /r
 48840     BCW_3: ! r:
-48850     let w+=double*2 ! blank space
+48850     w+=double*2 ! blank space
 48860     ! first line (wide line)
 48870     for j=1 to 6
 48880       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! wide
 48890     next j
 48900     ! second line  (wide line)
-48910     let w+=double*2 ! blank space
+48910     w+=double*2 ! blank space
 48920     for j=1 to 6
 48930       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 48940     next j
-48950     let w+=double*blankline ! extra blank line
+48950     w+=double*blankline ! extra blank line
 48960     ! third line (narrow) (has a blank line in front of it)
-48970     let w+=double*2 ! blank space
+48970     w+=double*2 ! blank space
 48980     for j=1 to 4
 48990       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 49000     next j
 49010     ! fourth line  (narrow)
-49020     let w+=double*2 ! blank space
+49020     w+=double*2 ! blank space
 49030     for j=1 to 4
 49040     ! 
 49050       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49060     next j
 49070     ! fifth line (narrow)
-49080     let w+=double*2 ! blank space
+49080     w+=double*2 ! blank space
 49090     for j=1 to 4
 49100       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49110     next j
 49120     goto BCW_NEXT_A ! /r    
 49130     BCW_4: ! r:
-49140     let w+=double*2 ! blank space
+49140     w+=double*2 ! blank space
 49150     ! first line (narrow line)
 49160     for j=1 to 4
 49170       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 49180     next j
 49190     ! second line  (narrow line)
-49200     let w+=double*2 ! blank space
+49200     w+=double*2 ! blank space
 49210     for j=1 to 4
 49220       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49230     next j
-49240     let w+=double*blankline ! extra blank line
+49240     w+=double*blankline ! extra blank line
 49250     ! third line (wide) (has a blank line in front of it)
-49260     let w+=double*2 ! blank space
+49260     w+=double*2 ! blank space
 49270     for j=1 to 6
 49280       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 49290     next j
 49300     ! fourth line  (narrow)
-49310     let w+=double*2 ! blank space
+49310     w+=double*2 ! blank space
 49320     for j=1 to 4
 49330     ! 
 49340       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49350     next j
 49360     ! fifth line (wide)
-49370     let w+=double*2 ! blank space
+49370     w+=double*2 ! blank space
 49380     for j=1 to 6
 49390       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49400     next j
 49410     goto BCW_NEXT_A ! /r
 49420     BCW_5: ! r:
-49430     let w+=double*2 ! blank space
+49430     w+=double*2 ! blank space
 49440     ! first line (wide line)
 49450     for j=1 to 6
 49460       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49470     next j
 49480     ! second line  (narrow line)
-49490     let w+=double*2 ! blank space
+49490     w+=double*2 ! blank space
 49500     for j=1 to 4
 49510       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49520     next j
-49530     let w+=double*blankline ! extra blank line
+49530     w+=double*blankline ! extra blank line
 49540     ! third line (wide) (has a blank line in front of it)
-49550     let w+=double*2 ! blank space
+49550     w+=double*2 ! blank space
 49560     for j=1 to 6
 49570       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 49580     next j
 49590     ! fourth line  (narrow)
-49600     let w+=double*2 ! blank space
+49600     w+=double*2 ! blank space
 49610     for j=1 to 4
 49620       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49630     next j
 49640     ! fifth line (narrow)
-49650     let w+=double*2 ! blank space
+49650     w+=double*2 ! blank space
 49660     for j=1 to 4
 49670       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49680     next j
 49690     goto BCW_NEXT_A
 49700 BCW_6: ! 
-49710     let w+=double*2 ! blank space
+49710     w+=double*2 ! blank space
 49720     ! first line (narrow line)
 49730     for j=1 to 4
 49740       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 49750     next j
 49760     ! second line  (wide)
-49770     let w+=double*2 ! blank space
+49770     w+=double*2 ! blank space
 49780     for j=1 to 6
 49790       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49800     next j
-49810     let w+=double*blankline ! extra blank line
+49810     w+=double*blankline ! extra blank line
 49820     ! third line (wide) (has a blank line in front of it)
-49830     let w+=double*2 ! blank space
+49830     w+=double*2 ! blank space
 49840     for j=1 to 6
 49850       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 49860     next j
 49870     ! fourth line  (narrow)
-49880     let w+=double*2 ! blank space
+49880     w+=double*2 ! blank space
 49890     for j=1 to 4
 49900       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49910     ! 
 49920     next j
 49930     ! fifth line (narrow)
-49940     let w+=double*2 ! blank space
+49940     w+=double*2 ! blank space
 49950     for j=1 to 4
 49960       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 49970     next j
 49980     goto BCW_NEXT_A ! /r
 49990     BCW_7: ! r:
-50000     let w+=double*2 ! blank space
+50000     w+=double*2 ! blank space
 50010     ! first line (narrow line)
 50020     ! 
 50030     for j=1 to 4
 50040       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 50050     next j
 50060     ! second line  (narrow)
-50070     let w+=double*2 ! blank space
+50070     w+=double*2 ! blank space
 50080     for j=1 to 4
 50090       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 50100     next j
-50110     let w+=double*blankline ! extra blank line
+50110     w+=double*blankline ! extra blank line
 50120     ! third line (narrow) (has a blank line in front of it)
-50130     let w+=double*2 ! blank space
+50130     w+=double*2 ! blank space
 50140     for j=1 to 4
 50150       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 50160     next j
 50170     ! fourth line  (wide)
 50180     ! 
-50190     let w+=double*2 ! blank space
+50190     w+=double*2 ! blank space
 50200     for j=1 to 6
 50210       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 50220     ! 
 50230     next j
 50240     ! fifth line (wide)
-50250     let w+=double*2 ! blank space
+50250     w+=double*2 ! blank space
 50260     for j=1 to 6
 50270       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 50280     next j
 50290     goto BCW_NEXT_A ! /r
 50300     BCW_8: ! r:
-50310     let w+=double*2 ! blank space
+50310     w+=double*2 ! blank space
 50320     ! first line (wide line)
 50330     for j=1 to 6
 50340       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 50350     next j
 50360     ! second line  (narrow)
-50370     let w+=double*2 ! blank space
+50370     w+=double*2 ! blank space
 50380     for j=1 to 4
 50390       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 50400     next j
-50410     let w+=double*blankline ! extra blank line
+50410     w+=double*blankline ! extra blank line
 50420     ! third line (narrow) (has a blank line in front of it)
-50430     let w+=double*2 ! blank space
+50430     w+=double*2 ! blank space
 50440     for j=1 to 4
 50450       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 50460     next j
 50470     ! fourth line  (wide)
-50480     let w+=double*2 ! blank space
+50480     w+=double*2 ! blank space
 50490     for j=1 to 6
 50500       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 50510     ! 
 50520     next j
 50530     ! fifth line (narrow)
-50540     let w+=double*2 ! blank space
+50540     w+=double*2 ! blank space
 50550     for j=1 to 4
 50560       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 50570     next j
 50580     goto BCW_NEXT_A ! /r
 50590     BCW_9: ! r:
-50600     let w+=double*2 ! blank space
+50600     w+=double*2 ! blank space
 50610     ! first line (narrow line)
 50620     ! 
 50630     for j=1 to 4
 50640       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 50650     next j
 50660     ! second line  (wide)
-50670     let w+=double*2 ! blank space
+50670     w+=double*2 ! blank space
 50680     for j=1 to 6
 50690       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 50700     ! 
 50710     next j
-50720     let w+=double*blankline ! extra blank line
+50720     w+=double*blankline ! extra blank line
 50730     ! third line (narrow) (has a blank line in front of it)
-50740     let w+=double*2 ! blank space
+50740     w+=double*2 ! blank space
 50750     for j=1 to 4
 50760       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 50770     next j
 50780     ! fourth line  (wide)
-50790     let w+=double*2 ! blank space
+50790     w+=double*2 ! blank space
 50800     for j=1 to 6
 50810       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 50820     ! 
 50830     next j
 50840     ! fifth line (narrow)
-50850     let w+=double*2 ! blank space
+50850     w+=double*2 ! blank space
 50860     for j=1 to 4
 50870       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 50880     next j
 50890     goto BCW_NEXT_A ! /r
 50900     BCW_0: ! r:
-50910     let w+=double*2 ! blank space
+50910     w+=double*2 ! blank space
 50920     ! first line (narrow line)
 50930     for j=1 to 4
 50940       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 50950     next j
 50960     ! second line  (narrow)
-50970     let w+=double*2 ! blank space
+50970     w+=double*2 ! blank space
 50980     for j=1 to 4
 50990       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 51000     next j
-51010     let w+=double*blankline ! extra blank line
+51010     w+=double*blankline ! extra blank line
 51020     ! third line (wide) (has a blank line in front of it)
-51030     let w+=double*2 ! blank space
+51030     w+=double*2 ! blank space
 51040     for j=1 to 6
 51050       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 51060     next j
 51070     ! fourth line  (wide)
-51080     let w+=double*2 ! blank space
+51080     w+=double*2 ! blank space
 51090     for j=1 to 6
 51100       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 51110     ! 
 51120     next j
 51130     ! fifth line (narrow)
-51140     let w+=double*2 ! blank space
+51140     w+=double*2 ! blank space
 51150     for j=1 to 4
 51160       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 51170     next j
 51180     goto BCW_NEXT_A ! /r
 51190     BCW_QUIET: ! r:
-51200     let w+=double*2 ! blank line
+51200     w+=double*2 ! blank line
 51210     ! first line, quiet zone (narrow line)
 51220     for j=1 to 4
 51230       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow line
 51240     next j
-51250     let w+=double*blankline ! double blank line
+51250     w+=double*blankline ! double blank line
 51260     ! second line, quiet zone (narrow line)
-51270     let w+=double*2 !  blank line
+51270     w+=double*2 !  blank line
 51280     for j=1 to 4
 51290       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow line
 51300     next j
 51310     ! third  line, quiet zone (wide line)
-51320     let w+=double*2 ! blank line
+51320     w+=double*2 ! blank line
 51330     for j=1 to 6
 51340       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! wide line
 51350     next j
 51360     ! 4th line, quiet zone (wide line)
-51370     let w+=double*2 ! blank line
+51370     w+=double*2 ! blank line
 51380     for j=1 to 6
 51390       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! wide   line
 51400     next j
 51410     ! 5th line, quiet zone (narrow line)
-51420     let w+=double*2 ! blank line
+51420     w+=double*2 ! blank line
 51430     for j=1 to 4
 51440       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow line
 51450     next j
 51460     return ! /r
 51470     BCW_PERIOD: ! r:
-51480     let w+=double*2 ! blank space
+51480     w+=double*2 ! blank space
 51490     ! first line (big line)
 51500     ! 
 51510     for j=1 to 6
 51520       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 51530     next j
-51540     let w+=double*blankline ! extra blank line
+51540     w+=double*blankline ! extra blank line
 51550     ! second line  (narrow)
-51560     let w+=double*2 ! blank space
+51560     w+=double*2 ! blank space
 51570     for j=1 to 2
 51580       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 51590     next j
 51600     ! third line (narrow) (has a blank line in front of it)
-51610     let w+=double*2 ! blank space
+51610     w+=double*2 ! blank space
 51620     for j=1 to 2
 51630       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 51640     next j
 51650     ! fourth line  (wide)
-51660     let w+=double*2 ! blank space
+51660     w+=double*2 ! blank space
 51670     for j=1 to 6
 51680       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 51690     next j
 51700     ! fifth line (narrow)
-51710     let w+=double*2 ! blank space
+51710     w+=double*2 ! blank space
 51720     for j=1 to 2
 51730       pr #20: 'Call Print.AddLine('&str$(w+=double)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 51740     next j
@@ -667,12 +667,12 @@
 58060     if debug_pdf then pause
 58070   else
 58080     ! r: SET_VARIABLES: !
-58090     let w=rightleft ! 30 ! right or left
-58100     let x=updown ! 25 ! up and down position of top of line
-58110     let y=w ! width of line
-58120     let z=6 ! height of line
+58090     w=rightleft ! 30 ! right or left
+58100     x=updown ! 25 ! up and down position of top of line
+58110     y=w ! width of line
+58120     z=6 ! height of line
 58130     blankline=2.0
-58140     let q=p=0
+58140     q=p=0
 58150     double=.12
 58160     ! /r
 58170     ! bARCODE$="123567890" ! 345" !67890" ! =z$  kj ! 1,2,3,4,5,6,7,8,9,0 ok
@@ -681,7 +681,7 @@
 58200     for a=1 to 10
 58210       barcode=val(barcode$(a:a))
 58220       p=pos(barcode$,".",a) : if p=a then goto BC_PERIOD ! searching for period
-58230       let q=pos(barcode$,"0",a) : if q=a then goto BC_0 ! searching for BC_0
+58230       q=pos(barcode$,"0",a) : if q=a then goto BC_0 ! searching for BC_0
 58240       on barcode goto BC_1,BC_2,BC_3,BC_4,BC_5,BC_6,BC_7,BC_8,BC_9,BC_0 none BC_NEXT_A
 58250     BC_NEXT_A: ! 
 58260     next a
@@ -689,349 +689,349 @@
 58280     pr #20: 'Call Print.MyFontBold(0)'
 58290     goto BC_XIT
 58300     BC_1: ! r:
-58310     let w+=double*2 ! blank space
+58310     w+=double*2 ! blank space
 58320     ! first line, first character (wide line)
 58330     for j=1 to 12
 58340       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! wide line
 58350     next j
 58360     ! second line of number 1 (narrow line)
-58370     let w+=double*2 ! blank space
+58370     w+=double*2 ! blank space
 58380     for j=1 to 4
 58390       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 58400     next j
-58410     let w+=double*blankline ! extra blank line
+58410     w+=double*blankline ! extra blank line
 58420     ! third line of character 1 (narrow) (has a blank line in front of it)
-58430     let w+=double*2 ! blank space
+58430     w+=double*2 ! blank space
 58440     for j=1 to 4
 58450       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 58460     next j
 58470     ! fourth line of number 1 (narrow)
-58480     let w+=double*2 ! blank space
+58480     w+=double*2 ! blank space
 58490     for j=1 to 4
 58500       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 58510     next j
 58520     ! fifth line of number one (wide)
-58530     let w+=double*2 ! blank space
+58530     w+=double*2 ! blank space
 58540     for j=1 to 12
 58550       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 58560     next j
 58570     goto BC_NEXT_A ! /r
 58580     BC_2: ! r:
-58590     let w+=double*2 ! blank space
+58590     w+=double*2 ! blank space
 58600     ! first line (narrow line)
 58610     for j=1 to 4
 58620       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 58630     next j
 58640     ! second line  (wide line)
-58650     let w+=double*2 ! blank space
+58650     w+=double*2 ! blank space
 58660     for j=1 to 12
 58670       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 58680     next j
-58690     let w+=double*blankline ! extra blank line
+58690     w+=double*blankline ! extra blank line
 58700     ! third line (narrow) (has a blank line in front of it)
-58710     let w+=double*2 ! blank space
+58710     w+=double*2 ! blank space
 58720     for j=1 to 4
 58730       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 58740     next j
 58750     ! fourth line  (narrow)
-58760     let w+=double*2 ! blank space
+58760     w+=double*2 ! blank space
 58770     for j=1 to 4
 58780       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 58790     next j
 58800     ! fifth line (wide)
-58810     let w+=double*2 ! blank space
+58810     w+=double*2 ! blank space
 58820     for j=1 to 12
 58830       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 58840     next j
 58850     goto BC_NEXT_A ! /r
 58860     BC_3: ! r:
-58870     let w+=double*2 ! blank space
+58870     w+=double*2 ! blank space
 58880     ! first line (wide line)
 58890     for j=1 to 12
 58900       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! wide
 58910     next j
 58920     ! second line  (wide line)
-58930     let w+=double*2 ! blank space
+58930     w+=double*2 ! blank space
 58940     for j=1 to 12
 58950       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 58960     next j
-58970     let w+=double*blankline ! extra blank line
+58970     w+=double*blankline ! extra blank line
 58980     ! third line (narrow) (has a blank line in front of it)
-58990     let w+=double*2 ! blank space
+58990     w+=double*2 ! blank space
 59000     for j=1 to 4
 59010       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 59020     next j
 59030     ! fourth line  (narrow)
-59040     let w+=double*2 ! blank space
+59040     w+=double*2 ! blank space
 59050     for j=1 to 4
 59060     ! 
 59070       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59080     next j
 59090     ! fifth line (narrow)
-59100     let w+=double*2 ! blank space
+59100     w+=double*2 ! blank space
 59110     for j=1 to 4
 59120       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59130     next j
 59140     goto BC_NEXT_A ! /r
 59150     BC_4: ! r:
-59160     let w+=double*2 ! blank space
+59160     w+=double*2 ! blank space
 59170     ! first line (narrow line)
 59180     for j=1 to 4
 59190       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 59200     next j
 59210     ! second line  (narrow line)
-59220     let w+=double*2 ! blank space
+59220     w+=double*2 ! blank space
 59230     for j=1 to 4
 59240       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59250     next j
-59260     let w+=double*blankline ! extra blank line
+59260     w+=double*blankline ! extra blank line
 59270     ! third line (wide) (has a blank line in front of it)
-59280     let w+=double*2 ! blank space
+59280     w+=double*2 ! blank space
 59290     for j=1 to 12
 59300       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 59310     next j
 59320     ! fourth line  (narrow)
-59330     let w+=double*2 ! blank space
+59330     w+=double*2 ! blank space
 59340     for j=1 to 4
 59350     ! 
 59360       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59370     next j
 59380     ! fifth line (wide)
-59390     let w+=double*2 ! blank space
+59390     w+=double*2 ! blank space
 59400     for j=1 to 12
 59410       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59420     next j
 59430     goto BC_NEXT_A ! /r
 59440     BC_5: ! r:
-59450     let w+=double*2 ! blank space
+59450     w+=double*2 ! blank space
 59460     ! first line (wide line)
 59470     for j=1 to 12
 59480       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59490     next j
 59500     ! second line  (narrow line)
-59510     let w+=double*2 ! blank space
+59510     w+=double*2 ! blank space
 59520     for j=1 to 4
 59530       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59540     next j
-59550     let w+=double*blankline ! extra blank line
+59550     w+=double*blankline ! extra blank line
 59560     ! third line (wide) (has a blank line in front of it)
-59570     let w+=double*2 ! blank space
+59570     w+=double*2 ! blank space
 59580     for j=1 to 12
 59590       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 59600     next j
 59610     ! fourth line  (narrow)
-59620     let w+=double*2 ! blank space
+59620     w+=double*2 ! blank space
 59630     for j=1 to 4
 59640       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59650     next j
 59660     ! fifth line (narrow)
-59670     let w+=double*2 ! blank space
+59670     w+=double*2 ! blank space
 59680     for j=1 to 4
 59690       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59700     next j
 59710     goto BC_NEXT_A ! /r
 59720     BC_6: ! r:
-59730     let w+=double*2 ! blank space
+59730     w+=double*2 ! blank space
 59740     ! first line (narrow line)
 59750     for j=1 to 4
 59760       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 59770     next j
 59780     ! second line  (wide)
-59790     let w+=double*2 ! blank space
+59790     w+=double*2 ! blank space
 59800     for j=1 to 12
 59810       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59820     next j
-59830     let w+=double*blankline ! extra blank line
+59830     w+=double*blankline ! extra blank line
 59840     ! third line (wide) (has a blank line in front of it)
-59850     let w+=double*2 ! blank space
+59850     w+=double*2 ! blank space
 59860     for j=1 to 12
 59870       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 59880     next j
 59890     ! fourth line  (narrow)
-59900     let w+=double*2 ! blank space
+59900     w+=double*2 ! blank space
 59910     for j=1 to 4
 59920       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59930     ! 
 59940     next j
 59950     ! fifth line (narrow)
-59960     let w+=double*2 ! blank space
+59960     w+=double*2 ! blank space
 59970     for j=1 to 4
 59980       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 59990     next j
 60000     goto BC_NEXT_A ! /r
 60010     BC_7: ! r:
-60020     let w+=double*2 ! blank space
+60020     w+=double*2 ! blank space
 60030     ! first line (narrow line)
 60040     ! 
 60050     for j=1 to 4
 60060       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 60070     next j
 60080     ! second line  (narrow)
-60090     let w+=double*2 ! blank space
+60090     w+=double*2 ! blank space
 60100     for j=1 to 4
 60110       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 60120     next j
-60130     let w+=double*blankline ! extra blank line
+60130     w+=double*blankline ! extra blank line
 60140     ! third line (narrow) (has a blank line in front of it)
-60150     let w+=double*2 ! blank space
+60150     w+=double*2 ! blank space
 60160     for j=1 to 4
 60170       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 60180     next j
 60190     ! fourth line  (wide)
 60200     ! 
-60210     let w+=double*2 ! blank space
+60210     w+=double*2 ! blank space
 60220     for j=1 to 12
 60230       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 60240     ! 
 60250     next j
 60260     ! fifth line (wide)
-60270     let w+=double*2 ! blank space
+60270     w+=double*2 ! blank space
 60280     for j=1 to 12
 60290       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 60300     next j
 60310     goto BC_NEXT_A ! /r
 60320     BC_8: ! r:
-60330     let w+=double*2 ! blank space
+60330     w+=double*2 ! blank space
 60340     ! first line (wide line)
 60350     for j=1 to 12
 60360       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 60370     next j
 60380     ! second line  (narrow)
-60390     let w+=double*2 ! blank space
+60390     w+=double*2 ! blank space
 60400     for j=1 to 4
 60410       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 60420     next j
-60430     let w+=double*blankline ! extra blank line
+60430     w+=double*blankline ! extra blank line
 60440     ! third line (narrow) (has a blank line in front of it)
-60450     let w+=double*2 ! blank space
+60450     w+=double*2 ! blank space
 60460     for j=1 to 4
 60470       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 60480     next j
 60490     ! fourth line  (wide)
-60500     let w+=double*2 ! blank space
+60500     w+=double*2 ! blank space
 60510     for j=1 to 12
 60520       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 60530     ! 
 60540     next j
 60550     ! fifth line (narrow)
-60560     let w+=double*2 ! blank space
+60560     w+=double*2 ! blank space
 60570     for j=1 to 4
 60580       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 60590     next j
 60600     goto BC_NEXT_A ! /r
 60610     BC_9: ! r:
-60620     let w+=double*2 ! blank space
+60620     w+=double*2 ! blank space
 60630     ! first line (narrow line)
 60640     ! 
 60650     for j=1 to 4
 60660       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 60670     next j
 60680     ! second line  (wide)
-60690     let w+=double*2 ! blank space
+60690     w+=double*2 ! blank space
 60700     for j=1 to 12
 60710       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 60720     ! 
 60730     next j
-60740     let w+=double*blankline ! extra blank line
+60740     w+=double*blankline ! extra blank line
 60750     ! third line (narrow) (has a blank line in front of it)
-60760     let w+=double*2 ! blank space
+60760     w+=double*2 ! blank space
 60770     for j=1 to 4
 60780       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 60790     next j
 60800     ! fourth line  (wide)
-60810     let w+=double*2 ! blank space
+60810     w+=double*2 ! blank space
 60820     for j=1 to 12
 60830       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 60840     ! 
 60850     next j
 60860     ! fifth line (narrow)
-60870     let w+=double*2 ! blank space
+60870     w+=double*2 ! blank space
 60880     for j=1 to 4
 60890       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 60900     next j
 60910     goto BC_NEXT_A ! /r
 60920     BC_0: ! r:
-60930     let w+=double*2 ! blank space
+60930     w+=double*2 ! blank space
 60940     ! first line (narrow line)
 60950     for j=1 to 4
 60960       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 60970     next j
 60980     ! second line  (narrow)
-60990     let w+=double*2 ! blank space
+60990     w+=double*2 ! blank space
 61000     for j=1 to 4
 61010       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 61020     next j
-61030     let w+=double*blankline ! extra blank line
+61030     w+=double*blankline ! extra blank line
 61040     ! third line (wide) (has a blank line in front of it)
-61050     let w+=double*2 ! blank space
+61050     w+=double*2 ! blank space
 61060     for j=1 to 12
 61070       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 61080     next j
 61090     ! fourth line  (wide)
-61100     let w+=double*2 ! blank space
+61100     w+=double*2 ! blank space
 61110     for j=1 to 12
 61120       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 61130     ! 
 61140     next j
 61150     ! fifth line (narrow)
-61160     let w+=double*2 ! blank space
+61160     w+=double*2 ! blank space
 61170     for j=1 to 4
 61180       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 61190     next j
 61200     goto BC_NEXT_A ! /r
 61210     BC_QUIET: !  r:
-61220     let w+=double*2 ! blank line
+61220     w+=double*2 ! blank line
 61230     ! first line, quiet zone (narrow line)
 61240     for j=1 to 4
 61250       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow line
 61260     next j
-61270     let w+=double*blankline ! double blank line
+61270     w+=double*blankline ! double blank line
 61280     ! second line, quiet zone (narrow line)
-61290     let w+=double*2 !  blank line
+61290     w+=double*2 !  blank line
 61300     for j=1 to 4
 61310       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow line
 61320     next j
 61330     ! third  line, quiet zone (wide line)
-61340     let w+=double*2 ! blank line
+61340     w+=double*2 ! blank line
 61350     for j=1 to 12
 61360       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! wide line
 61370     next j
 61380     ! 4th line, quiet zone (wide line)
-61390     let w+=double*2 ! blank line
+61390     w+=double*2 ! blank line
 61400     for j=1 to 12
 61410       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! wide   line
 61420     next j
 61430     ! 5th line, quiet zone (narrow line)
-61440     let w+=double*2 ! blank line
+61440     w+=double*2 ! blank line
 61450     for j=1 to 4
 61460       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow line
 61470     next j
 61480     return ! /r
 61490     BC_PERIOD: ! r:
-61500     let w+=double*2 ! blank space
+61500     w+=double*2 ! blank space
 61510     ! first line (big line)
 61520     ! 
 61530     for j=1 to 12
 61540       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! narrow
 61550     next j
-61560     let w+=double*blankline ! extra blank line
+61560     w+=double*blankline ! extra blank line
 61570     ! second line  (narrow)
-61580     let w+=double*2 ! blank space
+61580     w+=double*2 ! blank space
 61590     for j=1 to 4
 61600       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 61610     next j
 61620     ! third line (narrow) (has a blank line in front of it)
-61630     let w+=double*2 ! blank space
+61630     w+=double*2 ! blank space
 61640     for j=1 to 4
 61650       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")" ! contains the blank space before  and a blank line
 61660     next j
 61670     ! fourth line  (wide)
-61680     let w+=double*2 ! blank space
+61680     w+=double*2 ! blank space
 61690     for j=1 to 12
 61700       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 61710     next j
 61720     ! fifth line (narrow)
-61730     let w+=double*2 ! blank space
+61730     w+=double*2 ! blank space
 61740     for j=1 to 4
 61750       pr #20: 'Call Print.AddLine('&str$(w+=double/2)&','&str$(x)&','&str$(0)&','&str$(z)&")"
 61760     next j

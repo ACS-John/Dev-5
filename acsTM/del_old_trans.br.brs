@@ -11,7 +11,7 @@
 00120   tr1$=cnvrt$("n 6",tr(1))
 00130   mo1=val(tr1$(1:2))
 00140   da1=val(tr1$(3:4))
-00150   let yr1=val(tr1$(5:6))
+00150   yr1=val(tr1$(5:6))
 00160   if yr1><11 then goto L190
 00170   if mo1><4 then goto L190
 00180 L180: ta1=nta : goto L90

@@ -1,28 +1,28 @@
 10000   pr newpage
 20000 ! r: set header stuff
 20020   dim gridspec$*256
-20040   let gridspec$='#0,6,3,list 20/70'
+20040   gridspec$='#0,6,3,list 20/70'
 20060   dim _headings$(6)*256
-20080   let _headings$(1)='Combined'
-20100   let _headings$(2)='Rec'
-20120   let _headings$(3)='Reference #'
-20140   let _headings$(4)='Date'
-20160   let _headings$(5)='Amount'
-20180   let _headings$(6)='Cleared'
+20080   _headings$(1)='Combined'
+20100   _headings$(2)='Rec'
+20120   _headings$(3)='Reference #'
+20140   _headings$(4)='Date'
+20160   _headings$(5)='Amount'
+20180   _headings$(6)='Cleared'
 20200   dim _widths(6)
-20220   let _widths(1)=0
-20240   let _widths(2)=7
-20260   let _widths(3)=15
-20280   let _widths(4)=8
-20300   let _widths(5)=10
-20320   let _widths(6)=11
+20220   _widths(1)=0
+20240   _widths(2)=7
+20260   _widths(3)=15
+20280   _widths(4)=8
+20300   _widths(5)=10
+20320   _widths(6)=11
 20340   dim _forms$(6)*256
-20360   let _forms$(1)='0/C 500'
-20380   let _forms$(2)='7/#PIC(-----------------)'
-20400   let _forms$(3)='C 15'
-20420   let _forms$(4)='8/date(m/d/yy)'
-20440   let _forms$(5)='10/#PIC(-,---,---,---,---.--)'
-20460   let _forms$(6)='11/date(m/d/yy)'
+20360   _forms$(1)='0/C 500'
+20380   _forms$(2)='7/#PIC(-----------------)'
+20400   _forms$(3)='C 15'
+20420   _forms$(4)='8/date(m/d/yy)'
+20440   _forms$(5)='10/#PIC(-,---,---,---,---.--)'
+20460   _forms$(6)='11/date(m/d/yy)'
 20480 ! /r
 20500 ! r: set mat long row
 20520   dim long_row$(60)*256

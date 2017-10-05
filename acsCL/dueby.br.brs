@@ -35,8 +35,8 @@
         pr #255: ""
 00350   t2(wd2)=t1
 00360   if wd2=d2 or end1=1 then goto END1
-00370   let wd2+=1
-00380   if wd2>d2 or fndate_mmddyy_to_ccyymmdd(dd)>d2(d2) then let wd2=d2 : goto END1
+00370   wd2+=1
+00380   if wd2>d2 or fndate_mmddyy_to_ccyymmdd(dd)>d2(d2) then wd2=d2 : goto END1
 00390   goto L420 ! DONT SKIP BETWEEN DATES
 00400   pr #255: newpage
 00410   gosub HDR
@@ -115,7 +115,7 @@
 01030     if d2(j)=0 then d2=j-1 : goto L1060 else d2=j
 01040     if d2(j)<d2(j-1) then goto ASK ! probably message box (dates out of order)
 01050 L1050: next j
-01060 L1060: let wd2=1
+01060 L1060: wd2=1
 01070   return 
 01080 ! ______________________________________________________________________
 01090 ! <Updateable Region: ERTN>

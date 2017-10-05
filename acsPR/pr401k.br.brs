@@ -89,12 +89,12 @@
 00890   if city$(1:3)="FT. " then city$(1:3)="FORT "
 00900   state$=uprc$(rtrm$(csz$(p2-2:p2))(1:2))
 00910   l1=len(csz$)
-00920   let zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:l1))))
-00930   let zip5$=zip$(1:5)
-00940   let zip4$=""
+00920   zip$=uprc$(ltrm$(rtrm$(csz$(p2+1:l1))))
+00930   zip5$=zip$(1:5)
+00940   zip4$=""
 00950   l2=len(zip$)
 00960   if l2<9 then goto L980
-00970   let zip4$=zip$(l2-3:l2)
+00970   zip4$=zip$(l2-3:l2)
 00980 L980: return 
 00990 ! ______________________________________________________________________
 01000 END1: ! 

@@ -19,7 +19,7 @@
 00160   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,outin,relative 
 00170   open #3: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(cno)&",NoShr",internal,outin 
 00180   pr newpage
-00190   let x=lrec(2)
+00190   x=lrec(2)
 00200   for j=1 to x
 00210 L210: read #2,using L220,rec=j: t$,s,k,mat n,l$,p$,ven$ eof L420 norec L410
 00220 L220: form pos 1,c 12,n 6,pd 6.2,n 2,n 2,c 12,c 30,c 8

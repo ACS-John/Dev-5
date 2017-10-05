@@ -39,7 +39,7 @@
 00390   write #clwork,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,pd 10.2,G 1,N 3,N 6,N 3,N 8': vn$,iv$,ivd,dd,po$,de$(1:18),amt,cde,mat gl,ivnum
 00410 L410: goto READ_UNPDALOC
 00420 L420: close #paytrans: : close #unpdaloc: : close #clwork: 
-00430   let upa=0 ! this sort is ok. it sorts a temporary work file. leave in
+00430   upa=0 ! this sort is ok. it sorts a temporary work file. leave in
 00440   open #tmp=9: "Name="&env$('temp')&"\Control,Size=0,RecL=128,Replace",internal,output 
 00450   write #tmp,using 'Form POS 1,C 128': "File CLWork"&wsid$&".H"&str$(cno)&","&env$('Q')&"\CLmstr,,"&env$('temp')&"\Addr,,,,,A,N"
 00460   if fund=2 then !:
@@ -67,11 +67,11 @@
 00660 L660: read #addr,using 'Form POS 1,PD 3': r4 eof END1
 00670   if r4=0 then goto L660
 00680   read #clwork,using 'Form POS 86,N 4',rec=r4: ivnum
-00690   if hivnum=0 then let upa=0 : goto L700 else goto L760
+00690   if hivnum=0 then upa=0 : goto L700 else goto L760
 00700 L700: read #clwork,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,pd 10.2,G 1,N 3,N 6,N 3,N 8',rec=r4: vn$,iv$,ivd,dd,po$,ade$,amt,cde,mat gl,ivnum
-00710   let upa=upa+amt
+00710   upa=upa+amt
 00720   hivnum=ivnum
-00730   let gl$=cnvrt$("PIC(ZZ#)",gl(1))&cnvrt$("PIC(ZZZZZZ)",gl(2))&cnvrt$("PIC(ZZ#)",gl(3))
+00730   gl$=cnvrt$("PIC(ZZ#)",gl(1))&cnvrt$("PIC(ZZZZZZ)",gl(2))&cnvrt$("PIC(ZZ#)",gl(3))
 00740   gosub L1050 ! ACCUMULATE G/L TOTALS
 00750   goto L660
 00760 L760: if vn$=hvn$ then goto L810
@@ -89,12 +89,12 @@
 00870   if notused =0 and dpt$><gl$(1:3)&cnvrt$("pic(zz)",val(gl$(pos1:pos2))) then gosub TOTAL_DEPARTMENT
 00880 L880: if fund<>2 then goto L930
 00890   if fund$><gl$(1:3) then gosub TOTAL_FUND : pr #255: newpage : gosub HDR
-00900   let f2=(val(gl$(1:3)))
-00910   if f2=0 then let f2=1000
-00920   let ft2(f2)=ft2(f2)+upa
-00930 L930: if cde=1 then p1=97: v1=v1+upa: t1=t1+upa : let ft(1)=ft(1)+upa: dp(1)=dp(1)+upa else p1=109: v2=v2+upa : t2=t2+upa : let ft(2)=ft(2)+upa : dp(2)=dp(2)+upa
+00900   f2=(val(gl$(1:3)))
+00910   if f2=0 then f2=1000
+00920   ft2(f2)=ft2(f2)+upa
+00930 L930: if cde=1 then p1=97: v1=v1+upa: t1=t1+upa : ft(1)=ft(1)+upa: dp(1)=dp(1)+upa else p1=109: v2=v2+upa : t2=t2+upa : ft(2)=ft(2)+upa : dp(2)=dp(2)+upa
 00940   v3=v3+upa
-00950   t3=t3+upa : if rtrm$(ltrm$(iv$))="Received" or rtrm$(ltrm$(iv$))="Adjustment" then goto L970 else let ft(3)=ft(3)+upa : dp(3)=dp(3)+upa
+00950   t3=t3+upa : if rtrm$(ltrm$(iv$))="Received" or rtrm$(ltrm$(iv$))="Adjustment" then goto L970 else ft(3)=ft(3)+upa : dp(3)=dp(3)+upa
 00970 L970: vnam$=""
 00980   read #paymstr,using 'Form POS 9,C 30',key=vn$,release: vnam$ nokey L1000
 00990   goto L1010
@@ -103,14 +103,14 @@
 01001 L1010: ! 
 01002   if trim$(vnam$)='CRIS PERRY' then pr 'vn$='&vn$ : pause 
 01010   pr #255,using 'Form POS 1,C 32,C 12,2*PIC(ZZZZ/ZZ/ZZ),X 2,C 18,POS 87,N 10.2,POS 99,C 4,C 7,C 3': vnam$,iv$,ivd,dd,ade$(1:18),upa,gl$(1:3),gl$(4:9),gl$(10:12) pageoflow NEWPGE
-01020   let upa=0
+01020   upa=0
 01030   if endcode=1 then goto L1360
 01040   goto L700
-01050 L1050: if gl$(3:3)=" " then let gl$(3:3)="0"
-01060   if gl$(12:12)=" " then let gl$(12:12)="0"
+01050 L1050: if gl$(3:3)=" " then gl$(3:3)="0"
+01060   if gl$(12:12)=" " then gl$(12:12)="0"
 01070   read #work,using 'Form POS 13,pd 10.2',key=gl$: gla nokey L1120
 01080   if amt<-20202020 then amt=0
-01090   let gla=gla+amt
+01090   gla=gla+amt
 01100   rewrite #work,using 'Form POS 13,pd 10.2': gla
 01110   goto L1150
 01120 L1120: ! 
@@ -146,7 +146,7 @@
 01530 ! ______________________________________________________________________
 01540 TOTNOFX: pr #255: tab(78);"__________"
 01550 ! If FUND<>2 Then Goto 1550
-01560   if val(hf$)>0 then let fd$="Total for Fund #: "&ltrm$(hf$) else let fd$="Total"
+01560   if val(hf$)>0 then fd$="Total for Fund #: "&ltrm$(hf$) else fd$="Total"
 01570   pr #255,using 'Form POS 12,C 14,C 50,N 12.2': "",fd$,tnofx pageoflow NEWPGE
 01580   pr #255: pageoflow NEWPGE
 01590   tnofx=0
@@ -205,7 +205,7 @@
 02340   close #tralloc: 
 02350   goto ASK_SORT
 02360 ! ______________________________________________________________________
-02370 FT2: let fd$="Total for all Funds"
+02370 FT2: fd$="Total for all Funds"
 02380   pr #255: newpage : gosub HDR
 02390   pr #255: "Fund   Amount" !:
         pr #255: "____  __________"
@@ -262,7 +262,7 @@
 02730   if resp$(3)(1:1)="T" then pp1yn$="Y" else pp1yn$="N"
 02740   ld1=val(resp$(4))
 02750   hd1=val(resp$(5))
-02760   if resp$(6)(1:1)="V" then let fund=1 else let fund=2 ! vendor # or fund #
+02760   if resp$(6)(1:1)="V" then fund=1 else fund=2 ! vendor # or fund #
 02770   if resp$(7)(1:1)="A" then coded=1 else coded=2 ! all invoices or only coded for payment
 02780   if resp$(8)(1:1)="T" then pr$="Y" else pr$="N"
 02790   pos1=val(resp$(9))
@@ -298,15 +298,15 @@
 03130 TD_XIT: ! 
 03132   return  ! /r
 42000 HDR: ! 
-42010   let fd$=""
-42020   let fund$=gl$(1:3)
+42010   fd$=""
+42020   fund$=gl$(1:3)
 42040   read #fundmstr,using 'Form POS 4,C 25',key=fund$: fd$ nokey ignore ! changed from "nokey ignore" in an attempt to fix error 201
 42060   nofx=1 : pg+=1
 42080   pr #255,using 'Form POS 1,C 8,CC 86': date$,cnam$
 42100   if ti1$="C" then tmp$="Claims" else tmp$="Purchases"
 42120   pr #255,using 'Form POS 1,C 8,POS 30,C 50': time$,tmp$&" Report-"&rtrm$(ty1$)&"-"&rtrm$(ty2$)
 42140   pr #255,using 'Form POS 1,C 4,N 4,CC 86': "Page",pg,dat$
-42160   if fund<>2 then let fd$=""
+42160   if fund<>2 then fd$=""
 42180   pr #255,using 'Form POS 1,Cc 102': fd$
 42200   pr #255: ""
 42220   pr #255: "                                              Invoice     Due                           Total          GL    "

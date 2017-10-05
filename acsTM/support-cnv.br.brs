@@ -17,6 +17,6 @@
 22820     if id2=0 then pr 'id2 is zero!' : pause 
 23000     write #2,using FORM_OUT: client,id2,id$,sd,tf$,_ed,c1,mat c$
 23200 FORM_OUT: form pos 1,n 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
-23400     let wctr=wctr+1
+23400     wctr=wctr+1
 23600   loop 
 23800 END1: stop 

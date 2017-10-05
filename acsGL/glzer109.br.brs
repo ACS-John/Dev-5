@@ -29,7 +29,7 @@
 00270   if lwrc$(pas$)<>lwrc$("zero") then goto SCR1
 00280 OLDEST_DATE: ! 
 00290   fntos(sn$="Glzer1092") !:
-        lc=0 : mylen=30 : mypos=mylen+3 : let width=0
+        lc=0 : mylen=30 : mypos=mylen+3 : width=0
 00300   fnlbl(lc+=1,1,"Oldest Date to be Retained:",mylen,right)
 00310   fntxt(1,mypos,8,0,left,'CCYYMMDD',0,'For example, if you wantto dump all transactions up to the beginning of the new year, you would enter the first day of the new year.') !:
         resp$(1)=str$(transactionendingdate)
@@ -39,7 +39,7 @@
 00350   if ckey=5 then goto XIT
 00360   lastdate=val(resp$(1))
 00370 L370: read #2,using 'Form POS 1,C 8,N 6,PD 5.2,C 12,C 30': trvn$,da,amt,re$,de$ eof L400
-00375   let x=fndate_mmddyy_to_ccyymmdd(da)
+00375   x=fndate_mmddyy_to_ccyymmdd(da)
 00380   if x<lastdate then delete #2,rec=rec(2): 
 00390   goto L370
 00400 L400: close #2: 

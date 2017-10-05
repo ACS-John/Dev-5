@@ -128,8 +128,8 @@
 27040     column2=85+left+17
 27060     column3=119 +left+18
 27080     ten99Count+=1
-27100     if ten99Count=1 then let yOffset=topmargin 
-27120     if ten99Count=2 then let yOffset=bottom
+27100     if ten99Count=1 then yOffset=topmargin 
+27120     if ten99Count=2 then yOffset=bottom
 27140     if enableBackground$='True' and ten99Count=1 then
 27160       fnpa_background(CopyFile$(copyCurrent))
 27180     end if

@@ -54,7 +54,7 @@
           b$(2)=resp$(5) !:
           tb$=resp$(6) !:
           nap=val(resp$(7)) !:
-          let wbc=val(resp$(8)(1:2))
+          wbc=val(resp$(8)(1:2))
 00370     if resp$(9)='True' then prenum=1 else prenum=0
 00380     if resp$(10)='True' then reccode=1 else reccode=0
 00390   end if 

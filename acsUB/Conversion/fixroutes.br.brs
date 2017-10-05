@@ -15,8 +15,8 @@
 00150   open #2: "Name=newroute2.txt",display,input 
 00160 READ_CUSTOMER: ! 
 00170 L170: linput #2: ln$ eof XIT
-00180 ! Let Z$=LPAD$(RTRM$(LN$(17:26)),10)
-00181   let z$=lpad$(rtrm$(ln$(1:9)),10)
+00180 ! z$=LPAD$(RTRM$(LN$(17:26)),10)
+00181   z$=lpad$(rtrm$(ln$(1:9)),10)
 00190 ! rOUTE=VAL(LN$(1:7))
 00191   route=val(ln$(81:81))
 00200 ! sEQUENCE=VAL(LN$(9:15))

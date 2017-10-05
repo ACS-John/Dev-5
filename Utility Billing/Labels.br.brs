@@ -1,5 +1,5 @@
 10020 ! -- pr Customer Labels
-10040 let fn_setup
+10040 fn_setup
 10100   fntop(program$)
 14000 SCR1: ! r:
 14020   fntos(sn$="ublabel-1b")
@@ -67,7 +67,7 @@
 15440   line_5_print=srch(mat line_x_option$,resp$(7))
 15460 ! 
 15480   if annbc=sequence_route then 
-15500     let filter_selection=6
+15500     filter_selection=6
 15520     gosub OPEN_FILES
 15540     goto SELBK ! ROUTE # SEQUENCE
 15560   else if annbc=sequence_grid then 
@@ -82,33 +82,33 @@
 15740   fntos(sn$="ublabel-2")
 15760   fnlbl(1,1,"Select by:",12,0,0)
 15780   if annbc=sequence_account then 
-15800     let filter_option_enabled$(1)=filter_option$(1)
-15820     let filter_option_enabled$(2)=filter_option$(2)
-15840     let filter_option_enabled$(3)=filter_option$(3)
-15860     let filter_option_enabled$(4)=filter_option$(4)
-15880     let filter_option_enabled$(5)=filter_option$(5)
-15900     let filter_option_enabled$(6)=filter_option$(6)
-15920     let filter_option_enabled$(7)=filter_option$(7)
+15800     filter_option_enabled$(1)=filter_option$(1)
+15820     filter_option_enabled$(2)=filter_option$(2)
+15840     filter_option_enabled$(3)=filter_option$(3)
+15860     filter_option_enabled$(4)=filter_option$(4)
+15880     filter_option_enabled$(5)=filter_option$(5)
+15900     filter_option_enabled$(6)=filter_option$(6)
+15920     filter_option_enabled$(7)=filter_option$(7)
 15940     mat filter_option_enabled$(7)
 15960   else if annbc=sequence_name then 
-15980     let filter_option_enabled$(1)=filter_option$(1)
-16000     let filter_option_enabled$(2)=filter_option$(2)
-16020     let filter_option_enabled$(3)=filter_option$(3)
-16040     let filter_option_enabled$(4)=filter_option$(5)
-16060     let filter_option_enabled$(5)=filter_option$(7)
+15980     filter_option_enabled$(1)=filter_option$(1)
+16000     filter_option_enabled$(2)=filter_option$(2)
+16020     filter_option_enabled$(3)=filter_option$(3)
+16040     filter_option_enabled$(4)=filter_option$(5)
+16060     filter_option_enabled$(5)=filter_option$(7)
 16080     mat filter_option_enabled$(5)
 16100   else if annbc=sequence_bar_code then 
-16120     let filter_option_enabled$(1)=filter_option$(1)
-16140     let filter_option_enabled$(2)=filter_option$(2)
-16160     let filter_option_enabled$(3)=filter_option$(3)
-16180     let filter_option_enabled$(4)=filter_option$(5)
-16200     let filter_option_enabled$(5)=filter_option$(6)
+16120     filter_option_enabled$(1)=filter_option$(1)
+16140     filter_option_enabled$(2)=filter_option$(2)
+16160     filter_option_enabled$(3)=filter_option$(3)
+16180     filter_option_enabled$(4)=filter_option$(5)
+16200     filter_option_enabled$(5)=filter_option$(6)
 16220     mat filter_option_enabled$(5)
 16240   else if annbc=sequence_route then 
-16260     let filter_option_enabled$(1)=filter_option$(1)
-16280     let filter_option_enabled$(2)=filter_option$(2)
-16300     let filter_option_enabled$(3)=filter_option$(3)
-16320     let filter_option_enabled$(4)=filter_option$(6)
+16260     filter_option_enabled$(1)=filter_option$(1)
+16280     filter_option_enabled$(2)=filter_option$(2)
+16300     filter_option_enabled$(3)=filter_option$(3)
+16320     filter_option_enabled$(4)=filter_option$(6)
 16340     mat filter_option_enabled$(4)
 16360   end if 
 16380   fncomboa("ublabels-ord",1,14,mat filter_option_enabled$,'',30)
@@ -116,7 +116,7 @@
 16420   gosub OPEN_FILES
 16440   fncmdset(6)
 16460   fnacs(sn$,0,mat resp$,ckey) ! method of selection
-16480   let filter_selection=srch(mat filter_option$,resp$(1))
+16480   filter_selection=srch(mat filter_option$,resp$(1))
 16500   if ckey=5 then goto XIT
 16520   if ckey=2 then goto SCR1
 16540   if annbc=sequence_route then goto SELBK ! select by route
@@ -133,7 +133,7 @@
 20080     read #addr,using 'Form POS 1,PD 3': r6 eof DONE
 20100     read #6,using "Form POS 1,C 16,C 10",rec=r6: srt$,z$ norec TOP
 20120     if rtrm$(x$)<>"" and x$<>z$ then goto BARCODE_READ_ADDR
-20140     let x$=""
+20140     x$=""
 20160     read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),final nokey TOP
 20180     meter_address$=e$(1)
 20200     if annbc=sequence_bar_code and filter_selection=6 and bk>0 and bk<>route then goto BARCODE_READ_ADDR ! skip if barcoded and by route, but not right route
@@ -141,7 +141,7 @@
 20240 BULK_READ: ! 
 20260     read #6,using 'form pos 22,c 10': z$ eof DONE
 20280     if rtrm$(x$)<>"" and x$<>z$ then goto BULK_READ
-20300     let x$=""
+20300     x$=""
 20320     read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1942,c 12,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),bulksort$,final nokey TOP
 20340     meter_address$=e$(1)
 20360     if annbc=sequence_bulk_sort and filter_selection=6 and bk>0 and bk<>route then goto BULK_READ ! skip if barcoded and by route, but not right route
@@ -252,7 +252,7 @@
 32300 ! if ckey=1 then goto L1660
 32320   if ckey=4 then goto DONE
 32340 ! L1660: !
-32360   let z$=lpad$(rtrm$(resp$(1)(1:10)),10)
+32360   z$=lpad$(rtrm$(resp$(1)(1:10)),10)
 32380   hz$=z$
 32400   if rtrm$(z$)="" then goto DONE
 32420   selz$="": mat sele$=("")
@@ -358,7 +358,7 @@
 42300     goto SELSTART
 42320   end if 
 42340   if ckey=5 then goto XIT
-42360   let z$=lpad$(trim$(resp$(1)(1:10)),10)
+42360   z$=lpad$(trim$(resp$(1)(1:10)),10)
 42380   if trim$(z$)="[All]" then restore #1: : goto TOP
 42400   selz$="": mat sele$=("")
 42420   read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),final nokey SELSTART
@@ -375,14 +375,14 @@
 44160   if ckey=5 then goto XIT
 44180   open #6: "Name="&trim$(resp$(1)),display,input ioerr READ_FROM_GRID
 44200   LIN6: linput #6: x$ eof DONE
-44220   let z$=lpad$(trim$(x$(1:10)),10)
+44220   z$=lpad$(trim$(x$(1:10)),10)
 44240   read #customer,using 'Form POS 1,C 10,4*C 30,POS 296,PD 4,POS 373,C 12,POS 1741,N 2,N 7,pos 1864,C 30,pos 1821,n 1',key=z$: z$,mat e$,f,f3$,route,seq,extra$(1),final nokey LIN6
 44260   meter_address$=e$(1)
 44280   fn_get_address_lines
 44380   gosub ADDLABEL
 44400 goto LIN6 ! /r
 46000 def library fncustomer_address(z$*10,mat addr$; ca_address_type)
-46020   if ~setup the let fn_setup
+46020   if ~setup then let fn_setup
 46040   fncustomer_address=fn_customer_address(z$,mat addr$, ca_address_type)
 46060 fnend
 48000 def fn_customer_address(z$*10,mat addr$; ca_address_type)
@@ -526,12 +526,12 @@
 68740   sequence_option$(sequence_bulk_sort:=6)="Bulk Sort Code"
 68760 ! 
 68780   dim filter_option$(7)*50
-68800   let filter_option$(1)="[All]"
-68820   let filter_option$(2)="Customers billed last month"
-68840   let filter_option$(3)="Customers not billed last billing"
-68860   let filter_option$(4)="Range of Accounts"
-68880   let filter_option$(5)="Individual accounts"
-68900   let filter_option$(6)="Route"
-68920   let filter_option$(7)="Active Customers"
+68800   filter_option$(1)="[All]"
+68820   filter_option$(2)="Customers billed last month"
+68840   filter_option$(3)="Customers not billed last billing"
+68860   filter_option$(4)="Range of Accounts"
+68880   filter_option$(5)="Individual accounts"
+68900   filter_option$(6)="Route"
+68920   filter_option$(7)="Active Customers"
 68940 ! /r
 68960 fnend 

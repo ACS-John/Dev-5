@@ -14,14 +14,14 @@
 12600   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 12800   close #21: 
 13000   at$(1)=cnam$
-13200   let z=21
+13200   z=21
 13400   at$(1)=trim$(at$(1))(1:z)
-13600   let x=len(at$(1)) : let y=z-x
+13600   x=len(at$(1)) : y=z-x
 13800   at$(1)=rpt$(" ",int(y/2))&at$(1)
-14000   let z=26
+14000   z=26
 14200   for j=2 to udim(at$)
 14400     at$(j)=trim$(at$(j))(1:z)
-14600     let x=len(at$(j)) : let y=z-x
+14600     x=len(at$(j)) : y=z-x
 14800     at$(j)=rpt$(" ",int(y/2))&at$(j)
 15000   next j
 15200   linelength=62
@@ -130,7 +130,7 @@
 36000 ! ______________________________________________________________________
 36200 L920: ! 
 36400   pb=bal-g(11)
-36600   if bal<=0 then let g(5)=g(6)=g(7)=0 ! don't show penalty if balance 0 or less
+36600   if bal<=0 then g(5)=g(6)=g(7)=0 ! don't show penalty if balance 0 or less
 36800 ! ______________print bill routine______________________________________
 37000   fn_vbprint
 37200 ! _____________end of pr routine______________________________________
@@ -176,7 +176,7 @@
 45200   if prtbkno=0 then goto L1230
 45400   if prtbkno><route then goto END5
 45600 L1230: if f><d1 then goto L1190
-45800   let zip5$=cr$=""
+45800   zip5$=cr$=""
 46000   read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1260
 46200 L1260: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 46400   goto L1190
@@ -229,10 +229,10 @@
 57400   def fn_vbprint
 57600 ! -- Standard 4 Per Page Even Perferated Card Stock Bills
 57800     billcounter+=1
-58000     if billcounter=1 then let xmargin=4 : let ymargin=5
-58200     if billcounter=2 then let xmargin=143 : let ymargin=5
-58400     if billcounter=3 then let xmargin=4 : let ymargin=113
-58600     if billcounter=4 then let xmargin=143 : let ymargin=113 : billcounter=0
+58000     if billcounter=1 then xmargin=4 : ymargin=5
+58200     if billcounter=2 then xmargin=143 : ymargin=5
+58400     if billcounter=3 then xmargin=4 : ymargin=113
+58600     if billcounter=4 then xmargin=143 : ymargin=113 : billcounter=0
 58800 ! ______________________________________________________________________
 59000 ! pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',57,'&str$(lyne*3+3)&',True)'
 59200     if reading_date_cur_s1=0 then reading_date_cur=d3 else reading_date_cur=reading_date_cur_s1
@@ -276,13 +276,13 @@
 66800       pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+45)&','&str$(lyne*meter+ymargin)&')'
 67000     end if 
 67200     if a4=1 then 
-67400       let gcode$="RSGS"
+67400       gcode$="RSGS"
 67600     else if a4=2 then 
-67800       let gcode$="CMGS"
+67800       gcode$="CMGS"
 68000     else if a4=3 then 
-68200       let gcode$="INGS"
+68200       gcode$="INGS"
 68400     else 
-68600       let gcode$="GAS"
+68600       gcode$="GAS"
 68800     end if 
 69000     if g(4)<>0 then 
 69200       pr #20: 'Call Print.AddText("'&gcode$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'

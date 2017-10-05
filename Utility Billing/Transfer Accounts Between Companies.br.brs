@@ -12,8 +12,8 @@
 00120 ! ______________________________________________________________________
 20000   cno=val(env$('cno'))
 20040   fntop(program$)
-20060   let ubstd$="Form Pos 1,C 10,4*C 30,C 12,7*PD 2,11*PD 4.2,4*PD 4,15*PD 5,PD 4.2,PD 4,12*PD 4.2,2*PD 3,C 7,2*C 12,PD 3,10*PD 5.2,78*PD 5,13*PD 4.2,13*N 6,156*PD 4.2,13*N 6,13*PD 4.2,C 1,C 9,C 2,C 17"
-20080   let ubextra$=",n 2,n 7,n 6,n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30"
+20060   ubstd$="Form Pos 1,C 10,4*C 30,C 12,7*PD 2,11*PD 4.2,4*PD 4,15*PD 5,PD 4.2,PD 4,12*PD 4.2,2*PD 3,C 7,2*C 12,PD 3,10*PD 5.2,78*PD 5,13*PD 4.2,13*N 6,156*PD 4.2,13*N 6,13*PD 4.2,C 1,C 9,C 2,C 17"
+20080   ubextra$=",n 2,n 7,n 6,n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30"
 20100   mstrform$=rtrm$(ubstd$)&rtrm$(ubextra$)
 30000 MENU1: ! 
 30020   fntos(sn$="CoTr-1")
@@ -66,9 +66,9 @@
 34120   fncmdset(2)
 34140   fnacs(sn$,0,mat resp$,ck)
 34200   if ck=5 then goto DONE
-34220   let z$=lpad$(trim$(resp$(1)(1:10)),10)
+34220   z$=lpad$(trim$(resp$(1)(1:10)),10)
 34240   read #1,using mstrform$,key=z$: z$,mat e$,f$(1),mat a,mat b,mat c,mat d,bal,f,mat g,mat ta,alp$,f$(2),f$(3),bra,mat gb,mat rw4,df$,dr$,dc$,da$,mat extra,mat extra$ nokey L700
-34280   let z2$=z$
+34280   z2$=z$
 34300 L820: read #26,using "Form POS 1,C 10",key=z2$: z2$ nokey L960
 36000 MENU3: ! 
 36020   sn$="CoTr-3"
@@ -82,9 +82,9 @@
 36200   fncmdset(2)
 36220   fnacs(sn$,0,mat resp$,ck)
 36240   if ck=5 then goto MENU2
-36260   let z2=val(resp$(1)) conv MENU3
+36260   z2=val(resp$(1)) conv MENU3
 36280   if z2=0 then goto MENU2
-36300   let z2$=cnvrt$("N 10.2",z2)
+36300   z2$=cnvrt$("N 10.2",z2)
 36320   goto L820
 36340 ! ______________________________________________________________________
 38000 L960: restore #2,key>=z$&"         ": nokey L1040

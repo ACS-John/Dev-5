@@ -60,19 +60,19 @@
 34460   fncmdset(2)
 34480   fnacs(sn$,0,mat resp$,ck)
 38000   if ck=5 then goto XIT
-38020   let q0=2 ! default to name sequence
+38020   q0=2 ! default to name sequence
 38040   if resp$(1)=item1$(1) then 
-38060     let q0=1 : opt=1 : turn$="N"
+38060     q0=1 : opt=1 : turn$="N"
 38080   else if resp$(1)=item1$(2) then 
-38100     let q0=2 : opt=2 : turn$="N"
+38100     q0=2 : opt=2 : turn$="N"
 38120   else if resp$(1)=item1$(3) then 
-38140     let q0=3 : opt=3 : turn$="N"
+38140     q0=3 : opt=3 : turn$="N"
 38160   else if resp$(1)=item1$(4) then 
-38180     let q0=3 : opt=4 : turn$="Y"
+38180     q0=3 : opt=4 : turn$="Y"
 38200   else if resp$(1)=item1$(5) then 
-38220     let q0=4 : opt=5 : turn$="N"
+38220     q0=4 : opt=5 : turn$="N"
 38240   else if resp$(1)=item1$(6) then 
-38260     let q0=5 : opt=6 : turn$="N"
+38260     q0=5 : opt=6 : turn$="N"
 38280   end if 
 38300   dat$=resp$(2)
 38320   fndat(dat$,2)
@@ -219,7 +219,7 @@
 56200   next j
 56220   return  ! /r
 58000 STREET_REVERSE: ! r: FOR SORTING
-58020 ! let WIN=101: pFX=0
+58020 ! wIN=101: pFX=0
 58040 ! vALUE$="True"
 58060 ! tEXT$="Turn address around"
 58080 ! fnCHECK(PFX,1,2,0,VALUE$,TEXT$)
@@ -239,9 +239,9 @@
 60040   open #10: "Name="&env$('Temp')&"\Temp."&session$&",RecL=40,Replace",internal,outin 
 60060   do 
 60080     read #1,using 'form pos 1,c 10,c 30': z$,e$(1) eof SORT1
-60100     let x=y=0
-60120     let x=pos(e$(1)," ",1)
-60140     if x>0 then let y=val(e$(1)(1:x-1)) conv ignore
+60100     x=y=0
+60120     x=pos(e$(1)," ",1)
+60140     if x>0 then y=val(e$(1)(1:x-1)) conv ignore
 60160     if y>0 then e$(1)=rtrm$(e$(1)(x+1:30))&" "&e$(1)(1:x-1)
 60180     write #10,using 'form pos 1,c 10,c 30': z$,e$(1)
 60200   loop 
@@ -272,7 +272,7 @@
 64240   return  ! /r
 66000 READ_FROM_GRID: ! r: READ CUSTOMER # FROM GRID
 66020   linput #6: x$ eof DONE
-66040   let z$=lpad$(trim$(x$(1:10)),10)
+66040   z$=lpad$(trim$(x$(1:10)),10)
 66060   return  ! /r
 68000 CHECK_ALTERNATE: ! r: check for alternate billing address
 68020   mat ab$=('')

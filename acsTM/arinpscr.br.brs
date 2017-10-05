@@ -5,14 +5,14 @@
 00090   dim fli2$(49),ot2$(49),fli3$(49),ot3$(49),fli4$(49),ot4$(49)
 00100   dim f1$*255,f2$*255,f3$*255,f4$*255
 00110   f1$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,n 3,n 6,n 3"
-00120   let f2$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,n 3"
-00130   let f3$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,n 3,n 6,x 3"
-00140   let f4$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,x 3"
+00120   f2$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,n 3"
+00130   f3$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,n 3,n 6,x 3"
+00140   f4$="FORM POS 1,C 5,C 12,N 6,2*PD 5.2,PD 2,2*N 1,C 20,x 3,n 6,x 3"
 00150   for j=1 to 10
 00160     f1$=rtrm$(f1$)&",n 3,n 6,n 3,pd 5.2"
-00170     let f2$=rtrm$(f2$)&",x 3,n 6,n 3,pd 5.2"
-00180     let f3$=rtrm$(f3$)&",n 3,n 6,x 3,pd 5.2"
-00190     let f4$=rtrm$(f4$)&",x 3,n 6,x 3,pd 5.2"
+00170     f2$=rtrm$(f2$)&",x 3,n 6,n 3,pd 5.2"
+00180     f3$=rtrm$(f3$)&",n 3,n 6,x 3,pd 5.2"
+00190     f4$=rtrm$(f4$)&",x 3,n 6,x 3,pd 5.2"
 00200   next j
 00210   open #1: "Name=S:\acsTM\TMSCRN.CL",internal,output ioerr L1320
 00220   data "0 = COMPLETED"

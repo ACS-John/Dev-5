@@ -15,14 +15,14 @@
 11400   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 11500   close #21: 
 11600   at$(1)=cnam$
-11700   let z=21
+11700   z=21
 11800   at$(1)=trim$(at$(1))(1:z)
-11900   let x=len(at$(1)) : let y=z-x
+11900   x=len(at$(1)) : y=z-x
 12000   at$(1)=rpt$(" ",int(y/2))&at$(1)
-12100   let z=26
+12100   z=26
 12200   for j=2 to udim(at$)
 12300     at$(j)=trim$(at$(j))(1:z)
-12400     let x=len(at$(j)) : let y=z-x
+12400     x=len(at$(j)) : y=z-x
 12500     at$(j)=rpt$(" ",int(y/2))&at$(j)
 12600   next j
 12700   linelength=62
@@ -183,7 +183,7 @@
 28100   if prtbkno=0 then goto L1250
 28200   if prtbkno><route then goto END5
 28300 L1250: if f><d1 then goto L1210
-28400   let zip5$=cr$=""
+28400   zip5$=cr$=""
 28500   read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1280
 28600 L1280: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 28700   goto L1210
@@ -222,10 +222,10 @@
 32200   def fn_vbprint
 32300 ! -- Printer Program for New Laser Utility Bills
 32400     checkcounter+=1
-32500     if checkcounter=1 then let xmargin=1 : let ymargin=0
-32600     if checkcounter=2 then let xmargin=142 : let ymargin=0
-32700     if checkcounter=3 then let xmargin=1 : let ymargin=110
-32800     if checkcounter=4 then let xmargin=142 : let ymargin=110 : checkcounter=0
+32500     if checkcounter=1 then xmargin=1 : ymargin=0
+32600     if checkcounter=2 then xmargin=142 : ymargin=0
+32700     if checkcounter=3 then xmargin=1 : ymargin=110
+32800     if checkcounter=4 then xmargin=142 : ymargin=110 : checkcounter=0
 32900     col2_adj=65
 33000 ! ___________________________
 33100 ! - CONSTANTS
@@ -257,7 +257,7 @@
 35700 ! ___________________________
 35800 PRINTGRID: meter=14
 35900     pr #20: 'Call Print.MyFontSize(8)'
-36000 ! d(1)=123456789 : d(3)=123456789 : Let G(1)=123456.89 : Let G(2)=123456.89 : d(9)=123456789 : d(11)=123456789 : Let G(4)=123456.89 : Let G(5)=123456.89 : Let G(6)=123456.89 : Let G(8)=123456.89 : Let G(9)=123456.89 : pB=123456.89
+36000 ! d(1)=123456789 : d(3)=123456789 : g(1)=123456.89 : g(2)=123456.89 : d(9)=123456789 : d(11)=123456789 : g(4)=123456.89 : g(5)=123456.89 : g(6)=123456.89 : g(8)=123456.89 : g(9)=123456.89 : pB=123456.89
 36100     if g(1) then 
 36200       pr #20: 'Call Print.AddText("WA",'&str$(xmargin+2)&','&str$(lyne*(meter+=1)+ymargin)&')'
 36300       pr #20: 'Call Print.AddText("'&fnformnumb$(d(1),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'

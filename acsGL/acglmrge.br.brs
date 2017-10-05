@@ -163,7 +163,7 @@
 01400   fncmdkey("&Next",1,1,0,"Will change to the selected account.")
 01410   fnacs(sn$,0,mat resp$,ckey)
 01420   if ckey=5 then goto L440
-01430   let gl$=fnagl$(resp$(1)) : t$=gl$ : goto L440
+01430   gl$=fnagl$(resp$(1)) : t$=gl$ : goto L440
 01440 ! ______________________________________________________________________
 01450 L1450: if fnstyp><92 then goto L1620
 01460   open #20: "Name=CNo.H"&wsid$,internal,outin,relative  !:
@@ -171,7 +171,7 @@
         close #20: 
 01470   ckgl=0
 01480   for j=1 to 5
-01490     if val(gl$(j)(4:9))=0 then goto L1570 else let gl2=0
+01490     if val(gl$(j)(4:9))=0 then goto L1570 else gl2=0
 01500     read #1,using 'form pos 87,pd 6.2',key=gl$(j): gl2 nokey ignore
 01520     if gl1(j)=gl2 then goto L1570
 01530     if ckgl=0 then pr newpage; bell

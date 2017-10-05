@@ -21,11 +21,11 @@
 00260   hd1$="Account                             "
 00270   hd2$="{\ul Number   }  {\ul Name                   }  "
 00280   for j=1 to 10
-00290     let x2=pos(trim$(servicename$(j))," ",1)
+00290     x2=pos(trim$(servicename$(j))," ",1)
 00300     if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j)))
 00310     if trim$(servicename$(j))<>"" then 
-00320       let x1=pos (servicename$(j)," ",1)
-00330       let x1=min(x1,7)
+00320       x1=pos (servicename$(j)," ",1)
+00330       x1=min(x1,7)
 00340       hd1$=hd1$&"---------"
 00350       hd2$=hd2$&"{\ul "&lpad$(trim$(servicename$(j)(1:x1)),8)&"} "
 00360       sz1=sz1+1 : px$(sz1)=servicename$(j)
@@ -82,14 +82,14 @@
 00750     fnindex_it(env$('Q')&"\UBmstr\Customer.h"&env$('cno'), env$('temp')&"\customer_name"&session$&".h"&env$('cno'),"41 30")
 00758     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('temp')&"\customer_name"&session$&".h"&env$('cno')&",Shr",internal,input,keyed  
 00760   end if
-00770   if trim$(servicename$(1))="Water" then services=services+1 : let water=1
+00770   if trim$(servicename$(1))="Water" then services=services+1 : water=1
 00780   if trim$(servicename$(3))="Electric" or trim$(service$(3))="LM" then services=services+1
 00782   if servicename$(3)(1:5)="Re-Se" then reduc=1 : services+=1
-00790   if trim$(servicename$(4))="Gas" then services=services+1 : let gas=1
+00790   if trim$(servicename$(4))="Gas" then services=services+1 : gas=1
 00800   mat usages(services)
 00810   hd1$=hd1$&"---------    Prior  Current"
 00820   hd2$=hd2$&"{\ul    Total} {\ul  Balance} {\ul  Balance}  "
-00830   let x1=int((len(hd1$)-43)/2)+27
+00830   x1=int((len(hd1$)-43)/2)+27
 00840   hd1$(x1:x1+17)=" Current Billing "
 00850   px$(sz1+=1)="   Total"
 00860   px$(sz1+=1)="Previous Balance"
@@ -145,10 +145,10 @@
 01072   next j
 01074   px(j1+1)=g(11) : px(j1+2)=e : px(j1+3)=bal
 01076   mat tx=tx+px : mat gx=gx+px
-01078   let x=0
-01080   if water=1 then let x=x+1 : let usages(x)=d(3)
-01083   if reduc=1 then let x=x+1 : let usages(x)=d(3)-d(7)
-01084   if gas=1 then let x=x+1 : let usages(x)=d(11)
+01078   x=0
+01080   if water=1 then x=x+1 : usages(x)=d(3)
+01083   if reduc=1 then x=x+1 : usages(x)=d(3)-d(7)
+01084   if gas=1 then x=x+1 : usages(x)=d(11)
 01086   if estimatedate=billing_date then est$="E" else est$=""
 01088   if prtusage$="T" then pr #255,using L1020: z$,e$(2)(1:23),mat px,est$,mat usages,e$(1)(1:25) pageoflow PGOF else pr #255,using L1020: z$,e$(2)(1:23),mat px,est$ pageoflow PGOF
 01090 L1020: form pos 1,c 10,x 2,c 23,sz1*n 9.2,x 1,c 1,services*n 9,x 1,c 25
@@ -197,62 +197,62 @@
 01420 TOT1: ! r: ACCUMULATE TOTALS BY CODE
 01430   for j=1 to 10
 01440     if trim$(servicename$(j))="" or uprc$(penalty$(j))="Y" then goto L1720 ! don't allow any penalties go thur totals
-01460     let x2=1 : let u2=0
+01460     x2=1 : u2=0
 01462     if j<=4 then 
-01464       let x2=a(j)
+01464       x2=a(j)
 01466       if j=1 or j=2 then 
-01468         let u2=d(3)
+01468         u2=d(3)
 01470       else if j=3 and (trim$(servicename$(3))="Electric" or trim$(servicename$(3))="Lawn Meter") then 
-01472         let u2=d(7)
+01472         u2=d(7)
 01474       else if j=4 and trim$(servicename$(4))="Gas" then 
-01476         let u2=d(11)
+01476         u2=d(11)
 01478       end if 
 01480     end if 
 01482     if j=9 or j=10 then 
-01484       let x2=a(j-3)
+01484       x2=a(j-3)
 01486     else if j=6 or j=7 or j=8 then 
-01488       let x2=extra(j+5)
+01488       x2=extra(j+5)
 01490     else if j=5 then 
 01492       if env$('client')="French Settlement" then 
-01494         let x2=a(4)
+01494         x2=a(4)
 01496       else 
-01498         let x2=a(5)
+01498         x2=a(5)
 01500       end if 
 01502     end if 
 01504 ! r: calculate U2 - U2 is the temporary Tax Base accumulator
-01506     if env$('client')="French Settlement" and j=8 then let u2=0 : goto L1690 ! if Other Charge do not add to tax base
-01508     if env$('client')="Carrizo" and j=3 then let u2=0 : goto L1520 ! allow canister rental to go thru tax
-01510     if j=2 and reduc=1 then let u2=d(3)-d(7)
+01506     if env$('client')="French Settlement" and j=8 then u2=0 : goto L1690 ! if Other Charge do not add to tax base
+01508     if env$('client')="Carrizo" and j=3 then u2=0 : goto L1520 ! allow canister rental to go thru tax
+01510     if j=2 and reduc=1 then u2=d(3)-d(7)
 01512     if j<5 then goto L1690 ! don't allow real usage to go thru taxable routine
 01520 L1520: ! 
 01522     for j3=1 to 10
 01530       if env$('client')="Carrizo" then 
-01540         if j=7 and extra(12)<>9 then let u2=u2+g(3)+g(5)+g(6) : goto L1690
-01550         if j=3 and extra(12)<>9 then let u2=u2+g(3): goto L1690
-01560         if j=5 and extra(12)<>9 then let u2=u2+g(5): goto L1690
-01570         if j=6 and extra(12)<>9 then let u2=u2+g(6): goto L1690
+01540         if j=7 and extra(12)<>9 then u2=u2+g(3)+g(5)+g(6) : goto L1690
+01550         if j=3 and extra(12)<>9 then u2=u2+g(3): goto L1690
+01560         if j=5 and extra(12)<>9 then u2=u2+g(5): goto L1690
+01570         if j=6 and extra(12)<>9 then u2=u2+g(6): goto L1690
 01580       else if env$('client')="Franklinton" then 
-01590         if j=5 then let u2=0 : goto L1690
-01600         if j=6 then let u2=u2+g(6) : goto L1690
-01610         if j=7 then let u2=u2+g(1) : goto L1690
-01620         if j=9 then let u2=u2+g(4) : goto L1690
+01590         if j=5 then u2=0 : goto L1690
+01600         if j=6 then u2=u2+g(6) : goto L1690
+01610         if j=7 then u2=u2+g(1) : goto L1690
+01620         if j=9 then u2=u2+g(4) : goto L1690
 01630       else if env$('client')="Bethany" then 
-01640         if j=7 then let u2=u2+g(3) : goto L1690 ! bethany
-01650         if j=9 then let u2=u2+g(4) : goto L1690 ! gas taxable
+01640         if j=7 then u2=u2+g(3) : goto L1690 ! bethany
+01650         if j=9 then u2=u2+g(4) : goto L1690 ! gas taxable
 01660         goto L1680 ! bethany & franklinton
 01670       end if 
-01672       if uprc$(tax_code$(j3))="Y" then let u2=u2+g(j3) ! if service is taxable, add to total taxable dollars
+01672       if uprc$(tax_code$(j3))="Y" then u2=u2+g(j3) ! if service is taxable, add to total taxable dollars
 01680 L1680: ! 
 01682     next j3
 01684 ! /r
 01690 L1690: ! 
-01692     if g(j)><0 and x2=0 then let x2=200: codemis=1
-01700     if x2>200 then let x2=200
+01692     if g(j)><0 and x2=0 then x2=200: codemis=1
+01700     if x2>200 then x2=200
 01702     if env$('client')="Billings" and j>5 and j<9 then goto L1720
 01704     if x2<>0 then 
 01706       t1(j,x2,1)=t1(j,x2,1)+1
 01708       t1(j,x2,2)=t1(j,x2,2)+g(j)
-01710       t1(j,x2,3)=t1(j,x2,3)+u2 : let u2=0
+01710       t1(j,x2,3)=t1(j,x2,3)+u2 : u2=0
 01712     end if 
 01714 L1720: ! 
 01716   next j
@@ -275,7 +275,7 @@
 01805       if j1>4 then goto L1930
 01890 L1890: ! pr #255,using L1950: st$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
 01892       pr #255,using L1950: servicename$(j1)(1:13),j2,de$,t1(j1,j2,1),t1(j1,j2,2),t1(j1,j2,3)
-01900       if env$('client')="Sangamon" and st$(j1)="WA" then let waterdollars+=t1(j1,j2,2) : let waterusage+=t1(j1,j2,3)
+01900       if env$('client')="Sangamon" and st$(j1)="WA" then waterdollars+=t1(j1,j2,2) : waterusage+=t1(j1,j2,3)
 01910       if env$('client')="Sangamon" and st$(j1)="SW" then sewerdollars+=t1(j1,j2,2) : sewerusage+=t1(j1,j2,3)
 01920       goto L1960
 01930 L1930: ! 
@@ -304,7 +304,7 @@
 02086     read #h_trans,using 'form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof PFH_XIT
 02100     if z$<>p$ then goto PFH_XIT
 02110     if tcode=1 then 
-02120       let x=billing_date: let x=fndate_mmddyy_to_ccyymmdd(x)
+02120       x=billing_date: x=fndate_mmddyy_to_ccyymmdd(x)
 02130       if x=tdate then goto PFH_MATCH_FOUND ! FOUND MATCH
 02132     end if
 02140   loop
@@ -313,7 +313,7 @@
 02160   d(1)=wr : d(3)=wu : d(5)=er
 02162   d(7)=eu : d(9)=gr : d(11)=gu 
 02164   bal=tbal
-02170   for j=1 to 11 : let g(j)=tg(j) : next j
+02170   for j=1 to 11 : g(j)=tg(j) : next j
 02180 PFH_XIT: !
 02182   fn_pull_from_history=pfh_return
 02190 fnend

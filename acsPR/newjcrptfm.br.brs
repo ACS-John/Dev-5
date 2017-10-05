@@ -176,17 +176,17 @@
 01310   fnacs(sn$,0,mat resp$,ckey)
 01320   if ckey=5 then goto SCR1
 01330   psc(column)=column ! set array to column number
-01340   let f$(column)=resp$(1) ! formula
+01340   f$(column)=resp$(1) ! formula
 01350   pp(column)=val(resp$(2)) ! starting position
 01360   ppr(column)=val(resp$(3)) ! field size
 01370   dp(column)=val(resp$(4)) ! decimal position
-01380   if resp$(5)='True' then let fc(column)=1 else let fc(column)=0
+01380   if resp$(5)='True' then fc(column)=1 else fc(column)=0
 01390   if resp$(6)='True' then tcj(column)=1 else tcj(column)=0
 01400   if resp$(7)='True' then tcs(column)=1 else tcs(column)=0
 01410   rewrite #1,using L1780,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs
 01420   if ckey=1 then column=min(column+1,20): goto SCR4
-01430   if ckey=4 then let f$(column)="": pp(column)=0: ppr(column)=0: dp(column)=0 !:
-          let fc(column)=0: tcj(column)=0: tcs(column)=0: rewrite #1,using L1780,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs !:
+01430   if ckey=4 then f$(column)="": pp(column)=0: ppr(column)=0: dp(column)=0 !:
+          fc(column)=0: tcj(column)=0: tcs(column)=0: rewrite #1,using L1780,key=rptn$: rn,rt$,mat ch$,ips,sd,cp,sc,mat psc,mat f$,mat pp,mat ppr,mat dp,mat fc,mat tcj,mat tcs !:
           goto SCR4
 01440   if ckey=3 then goto L1790
 01450   if ckey=2 then goto REVIEW_VARIABLES
@@ -243,8 +243,8 @@
 01830 ! ______________________________________________________________________
 01850   restore #1,key>="  ": nokey L2490
 01860   fnopenwin(win=102,10,28,15,52,cap$)
-01870   let wrd3$(1)="Print All Report Files"
-01880   let wrd3$(2)="Select Reports to Print"
+01870   wrd3$(1)="Print All Report Files"
+01880   wrd3$(2)="Select Reports to Print"
 01890   io3$(1)="4,2,C 23,N"
 01900   io3$(2)="5,2,C 23,N"
 01910   pr f "16,34,C 11,B,5": "Cancel (F5)"
@@ -328,7 +328,7 @@
 02690   fntos(sn$="Report-sel") !:
         respc=0: mylen=15: mypos=mylen+3
 02700   fnlbl(1,1,"Print Selection Criteria:",30,1)
-02710   let z=0
+02710   z=0
 02720   for x=1 to 5
 02730     for j=2 to 21
 02740       fntxt(j,x*16,12,0,0,"33",0,"If you chosen to limit the report to certain criteria, enter the values here that should match information in the employee's record.") !:

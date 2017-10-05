@@ -19,10 +19,10 @@
           ch$(5)="Social Security" !:
           mat ch$(5) : mat cm$(5) : mat cm$=("5")
 00145     mat cm$=(""): cm$(1)="" ! "n 4"
-00160     if fixgrid=99 then let usefile=0 else let usefile=1 !:
+00160     if fixgrid=99 then usefile=0 else usefile=1 !:
             ! set to rebuild grid file only as you exit ubfm and the !:
             ! fixgrid code has been changed to necessary
-00170     let usefile=fnflexinit1('Employee',1,1,10,70,mat ch$,mat cm$,1,usefile)
+00170     usefile=fnflexinit1('Employee',1,1,10,70,mat ch$,mat cm$,1,usefile)
 00180     if usefile>0 then goto L280 ! file already exists, do not recreate
 00190 READ_FILE: ! 
 00200     read #file_num,using 'Form POS 1,c 4,3*c 25,c 11': mat item$ eof L280 ioerr ERR_READ
@@ -40,8 +40,8 @@
 00285     fnlbl(12,1,"")
 00290     fncmdset(2): fnacs(sn$,0,mat resp$,ckey) !:
           ! CALL FLEXGRID
-00300     let x$=lpad$(resp$(1),4)
-00310     if ckey=5 then let x$="    " ! no one selected
+00300     x$=lpad$(resp$(1),4)
+00310     if ckey=5 then x$="    " ! no one selected
 00320     goto XIT
 00330 ! ______________________________________________________________________
 00340 ! <Updateable Region: ERTN>

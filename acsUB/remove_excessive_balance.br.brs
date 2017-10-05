@@ -75,7 +75,7 @@
 10360     fnmsgbox(mat msgtext$,answer$,"Confirm Action",4)
 10380     if (answer$<>"Yes") then cont=0
 10400 ! 
-10420     let undocount=0
+10420     undocount=0
 10440     if cont then 
 10460       dim acct$*10,custname$*30,trcust$(3)*10,trdate(3)
 10480 CUSTFORM: form c 10,x 30,c 30,pos 1741,n 2,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1750,2*n 6
@@ -91,7 +91,7 @@
 10610         if chargedate=val(billingdate$) then 
 10620           if route=0 or custroute=route then ! if a route was selected and customer doesn't match, skip customer
 10640             if fn_get_trans then ! get latest and 2 prior charge transactions for this customer
-10680               let undocount+=1
+10680               undocount+=1
 10700               for remove_item=1 to remove_total
 10720                 balance=balance-tamt
 10740                 for item=1 to 9 ! assuming 10 is the penalty
@@ -124,12 +124,12 @@
 20000   def fn_get_trans
 20020     dim transacct$*10
 20040 ! 
-20060     let gt_return=0
+20060     gt_return=0
 20080     dateshouldbe=date(days(val(billingdate$),"mmddyy"),"ccyymmdd") : if str$(dateshouldbe)(1:2)="19" then dateshouldbe+=1000000
 20100 ! 
 20120     read #f_trans,using TRANSFORM,key=lpad$(acct$,10)&str$(dateshouldbe)&"1": transacct$,transdate,transcode,tamt,mat tg,tnet,wread,wused,tbal,pcode nokey GT_FINIS
 20140 TRANSFORM: form c 10,n 8,n 1,12*pd 4.2,2*pd 5,pos 98,pd 4.2,n 1
-20160     let gt_return=1
+20160     gt_return=1
 20180 ! 
 20200 GT_FINIS: ! 
 20220     fn_get_trans=gt_return

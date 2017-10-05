@@ -18,7 +18,7 @@
 00243   ssr2=fnss_employer
 00250 ! If FNPROCESS=1 Then Goto 410
 00260   fntos(sn$="TaxDeposit") !:
-        rc=0: mylen=22: mypos=mylen+3: let frameno=1
+        rc=0: mylen=22: mypos=mylen+3: frameno=1
 00270   fnfra(1,1,3,40,"Date Range of Deposit","Enter the date range for the payrolls to be included.")
 00280   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
 00290   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this deposit. ",frameno) !:
@@ -45,7 +45,7 @@
 00490 READ_AGAIN: ! 
 00500   read #h_employee,using "Form POS 1,N 8,C 30": eno,em$ eof TOTAL_THAT
 00510   checkkey$=cnvrt$("pic(ZZZZZZZ#)",eno)&"         "
-00520   let foundone=1
+00520   foundone=1
 00530   restore #h_checks,key>=checkkey$: nokey READ_AGAIN
 00540 L540: read #h_checks,using "Form POS 1,N 8,n 3,PD 6,N 7,5*PD 3.2,37*PD 5.2": heno,dep,prd,ckno,mat tdc,mat cp eof READ_AGAIN
 00550   if heno<>eno then goto READ_AGAIN
@@ -62,7 +62,7 @@
 00650 L650: form pos 1,pic(zzzz/zz/zz),pos 11,19*n 10.2,n 4
 00660   for j=1 to 32: t(j)=t(j)+cp(j) : next j
 00670   t(34)=t(34)+tdc(10): t(35)=t(35)+tdc(9)
-00680   if foundone=1 then let foundone=0: t(36)=t(36)+1
+00680   if foundone=1 then foundone=0: t(36)=t(36)+1
 00690   goto L540
 00700 ! ______________________________________________________________________
 00710 PGOF: ! 
@@ -85,7 +85,7 @@
 00880     if deptot(j,2)=0 then goto L920
 00890     pr #255,using L900: j, round(deptot(j,2),2) ! 2013
 00900 L900: form pos 10,n 4,pos 25,n 10.2
-00910     let gtotal=gtotal+round(deptot(j,2),2) ! 2013
+00910     gtotal=gtotal+round(deptot(j,2),2) ! 2013
 00920 L920: next j
 00930   pr #255,using L940: "Total",gtotal
 00940 L940: form pos 25,"__________",skip 1,pos 10,c 6,pos 23,n 12.2,skip 1,pos 25,"=========="

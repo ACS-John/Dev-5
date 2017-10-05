@@ -83,7 +83,7 @@
 00732 ! /r
 00740 ! Gosub KEYORDER_BUILD
 00750 ! r: Build Flex Headers and Flex Mask
-00760     mat flxhdr$(itemcount+1) : let fhc=0 : flxhdr$(fhc+=1)='Rec'
+00760     mat flxhdr$(itemcount+1) : fhc=0 : flxhdr$(fhc+=1)='Rec'
 00770     for j=2 to itemcount+1
 00780       if mask2(j-1)<20000 then flxhdr$(fhc+=1)=lbl$(j-1)
 00790       controlx=j-1
@@ -132,7 +132,7 @@
 01210       prec=j1
 01212       gosub READ_P ! Read #FIN,Using FRM$,Rec=J1: MAT P$ Norec (just past fnflexadd1)
 01220       if pnorec<>1 then 
-01230         let fic=0 : flxitm$(fic+=1)=str$(rec(fin))
+01230         fic=0 : flxitm$(fic+=1)=str$(rec(fin))
 01240         for j2=2 to itemcount+1
 01242           controlx=j2-1
 01244           if mask2(controlx)<20000 then 

@@ -52,8 +52,8 @@
 00500   hr1(8)=hr1(8)+tr1(5)
 00510   hr2(j)=hr2(j)+tr1(6)
 00520   hr2(8)=hr2(8)+tr1(6)
-00530   let gp1=gp1+tr1(5)*tdet2
-00540   let gp2=gp2+tr1(6)*tdet3
+00530   gp1=gp1+tr1(5)*tdet2
+00540   gp2=gp2+tr1(6)*tdet3
 00550   tr(3)=tr1(3)
 00560   goto L360
 00570 ! ______________________________________________________________________
@@ -138,7 +138,7 @@
 01360   pr #255: "______________________________ _____ _____ _____ _____ _____ _____ _____ _____  ____ ___    _______  ______  ______   _____  _______"
 01370   return 
 01380 ! ______________________________________________________________________
-01390 L1390: if tgp=0 then let x3=0 else let x3=(gp1+gp2)/tgp
+01390 L1390: if tgp=0 then x3=0 else x3=(gp1+gp2)/tgp
 01400   if hr1(8)=0 then goto L1450
 01410   lnp=lnp+1
 01420   if lnp>5 then lnp=6
@@ -161,14 +161,14 @@
 01590     pr #255,using L1600: pl1$(j) pageoflow PGOF
 01600 L1600: form pos 1,c 30,skip 1
 01610   next j
-01620 L1620: let gded= gded+(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5)))
+01620 L1620: gded= gded+(x3*ded(1)+x3*ded(2)+x3*(ded(3)+ded(4)+ded(5)))
 01630   jgp=jgp+gp1+gp2 ! TOTAL GROSS FOR JOB
 01640   mat tded=tded+ded ! TOTAL DEDUCTION
 01650   tcdt=tcdt+tcd1 ! TOTAL HOURS FOR ALL JOBS
 01660   thr=thr+hr8 ! TOTAL HOURS FOR JOB
 01670   tgp=0
-01680   let gp1=0
-01690   let gp2=0
+01680   gp1=0
+01690   gp2=0
 01700   mat ded=(0)
 01710   tcd1=0
 01720   hr8=0
@@ -185,7 +185,7 @@
 01830 L1830: form pos 5,4*n 12.2,skip 2
 01840   thr=0
 01850   jgp=0
-01860   let gded=0
+01860   gded=0
 01870   return 
 01880 ! ______________________________________________________________________
 01890 L1890: gosub L1550

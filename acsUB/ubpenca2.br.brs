@@ -130,7 +130,7 @@
 46260 ! tot+=sum(tg)
 46280   tcode=2 ! penalty trans code
 46300   for j=1 to 10
-46320     if tg(j)<>0 then let gb(j)+=tg(j) ! add new penalties into balance breakdown if here is a penalty
+46320     if tg(j)<>0 then gb(j)+=tg(j) ! add new penalties into balance breakdown if here is a penalty
 46340   next j
 46360   transkey$=z$&cnvrt$("pic(########)",pendat)&cnvrt$("pic(#)",tcode)
 46380   tamount=sum(tg)
@@ -138,7 +138,7 @@
 46420   read #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=transkey$: y$,olddate,oldcode,oldamount,mat oldtg nokey L990 ! check for recalk
 46440   bal=bal-oldamount
 46460   for j=1 to 10
-46480     let gb(j)=gb(j)-tg(j) ! take off of balance breakdown
+46480     gb(j)=gb(j)-tg(j) ! take off of balance breakdown
 46500   next j
 46520   rewrite #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 46540   goto L1000

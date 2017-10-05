@@ -28,56 +28,56 @@
 18120   read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto
 18140   close #20: 
 18160 ! 
-18180   fnreg_read('ubtrlist.date.start',tmp$) : let filter_date_start=val(tmp$) conv ignore
-18200   fnreg_read('ubtrlist.date.end',tmp$) : let filter_date_end=val(tmp$) conv ignore
+18180   fnreg_read('ubtrlist.date.start',tmp$) : filter_date_start=val(tmp$) conv ignore
+18200   fnreg_read('ubtrlist.date.end',tmp$) : filter_date_end=val(tmp$) conv ignore
 18220 ! 
 18240   fnreg_read('ubtrlist.skip_line_after_account',tmp$) : skip_line_after_account=1 : if tmp$='True' then skip_line_after_account=1 else if tmp$='False' then skip_line_after_account=0
-18260 let fnreg_read('ubtrlist.print_tbal',tmp$) : print_tbal=1 : if tmp$='True' then print_tbal=1 else if tmp$='False' then print_tbal=0
-18280 let fnreg_read('ubtrlist.sequence',tmp$) : seq=1 : if tmp$='True' then seq=1 else if tmp$='False' then seq=0
+18260 fnreg_read('ubtrlist.print_tbal',tmp$) : print_tbal=1 : if tmp$='True' then print_tbal=1 else if tmp$='False' then print_tbal=0
+18280 fnreg_read('ubtrlist.sequence',tmp$) : seq=1 : if tmp$='True' then seq=1 else if tmp$='False' then seq=0
 18300 ! 
-18320 let fnreg_read('ubtrlist.include_zero_balance_accounts',tmp$) : include_zero_balance_accounts=1 : include_zero_balance_accounts=val(tmp$) conv ignore
-18340 let fnreg_read('ubtrlist.include_no_activity_accounts',tmp$) : include_no_activity_accounts=1 : include_no_activity_accounts=val(tmp$) conv ignore
+18320 fnreg_read('ubtrlist.include_zero_balance_accounts',tmp$) : include_zero_balance_accounts=1 : include_zero_balance_accounts=val(tmp$) conv ignore
+18340 fnreg_read('ubtrlist.include_no_activity_accounts',tmp$) : include_no_activity_accounts=1 : include_no_activity_accounts=val(tmp$) conv ignore
 18360 ! 
 18990 ! /r
 20000 SCREEN1: ! r:
-20020 let fntos(sn$='TrList')
+20020 fntos(sn$='TrList')
 20040 mylen=36 : mypos=mylen+2
-20060 let fnlbl(1,1,"Report Heading Date:",mylen,1,0)
-20080 let fntxt(1,mypos,20)
+20060 fnlbl(1,1,"Report Heading Date:",mylen,1,0)
+20080 fntxt(1,mypos,20)
 20100 resp$(1)=dat$
-20120 let fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
-20140 let fntxt(2,mypos,10,0,1,ccyymmdd_mask$,0,"Usually the first day of the month, but it can be the beginning of any time period.")
+20120 fnlbl(2,1,"Starting Date (blank for all):",mylen,1)
+20140 fntxt(2,mypos,10,0,1,ccyymmdd_mask$,0,"Usually the first day of the month, but it can be the beginning of any time period.")
 20160 resp$(2)=str$(filter_date_start)
-20180 let fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
-20200 let fntxt(3,mypos,10,0,1,ccyymmdd_mask$,0,"Usually the Last day of the month, but it can be the end of any time period.")
+20180 fnlbl(3,1,"Ending Date (blank for all):",mylen,1)
+20200 fntxt(3,mypos,10,0,1,ccyymmdd_mask$,0,"Usually the Last day of the month, but it can be the end of any time period.")
 20220 resp$(3)=str$(filter_date_end)
 20240 ! fnLBL(5,2,"Note: Use CCYYMMDD format for all dates",50)
-20260 let fnfra(6,1,2,60,"Choose Balance To Be Printed","You can pr the current balance or the balance as of the ending date selected abov.")
-20280 let fnopt(1,3,"Use the actual current balance",0,1)
+20260 fnfra(6,1,2,60,"Choose Balance To Be Printed","You can pr the current balance or the balance as of the ending date selected abov.")
+20280 fnopt(1,3,"Use the actual current balance",0,1)
 20300 resp$(4)="True"
-20320 let fnopt(2,3,"Use the balance as of the ending date",0,1)
+20320 fnopt(2,3,"Use the balance as of the ending date",0,1)
 20340 resp$(5)="False"
-20360 let fnfra(11,1,2,60,"Choose Order for Printing","You can pr in account order or in route sequence with subtotals.")
-20380 let fnopt(1,3,"Account Sequence ",0,2)
+20360 fnfra(11,1,2,60,"Choose Order for Printing","You can pr in account order or in route sequence with subtotals.")
+20380 fnopt(1,3,"Account Sequence ",0,2)
 20400 if seq=1 then resp$(6)="True" else resp$(6)='False'
-20420 let fnopt(2,3,"Route Sequence",0,2)
+20420 fnopt(2,3,"Route Sequence",0,2)
 20440 resp_seq=7
 20460 if seq=2 then resp$(resp_seq)="True" else resp$(resp_seq)='False'
-20480 let fnchk(16,3,"Skip line after each account", 0,0) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
+20480 fnchk(16,3,"Skip line after each account", 0,0) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
 20500 resp_skip_line=8
 20520 if skip_line_after_account then resp$(resp_skip_line)='True' else resp$(resp_skip_line)='False'
-20540 let fnchk(17,3,"Include Accounts with Zero Balances", 0,0) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
+20540 fnchk(17,3,"Include Accounts with Zero Balances", 0,0) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
 20560 resp_zero_balance=9
 20580 if include_zero_balance_accounts then resp$(resp_zero_balance)='True' else resp$(resp_zero_balance)='False'
-20600 let fnchk(18,3,"Include Accounts without no activity", 0,0) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
+20600 fnchk(18,3,"Include Accounts without no activity", 0,0) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
 20620 resp_no_activity=10
 20640 if include_no_activity_accounts then resp$(resp_no_activity)='True' else resp$(resp_no_activity)='False'
-20660 let fncmdset(3)
-20990 let fnacs(sn$,0,mat resp$,ckey)
+20660 fncmdset(3)
+20990 fnacs(sn$,0,mat resp$,ckey)
 22000 if ckey=5 then goto XIT
 22020 dat$=resp$(1)
-22040 let filter_date_start=val(resp$(2))
-22060 let filter_date_end=val(resp$(3))
+22040 filter_date_start=val(resp$(2))
+22060 filter_date_end=val(resp$(3))
 22080 if resp$(4)="True" then print_tbal=1
 22100 if resp$(5)="True" then print_tbal=2
 22120 if resp$(6)="True" then seq=1
@@ -93,17 +93,17 @@
 23080   goto SCREEN1
 23100 end if 
 23990 ! 
-24000 let fndat(dat$,put=2)
-24020 let fnreg_write('ubtrlist.date.start',str$(filter_date_start))
-24040 let fnreg_write('ubtrlist.date.end',str$(filter_date_end))
-24060 let fnreg_write('ubtrlist.print_tbal',str$(print_tbal))
-24080 let fnreg_write('ubtrlist.sequence',str$(seq))
-24100 let fnreg_write('ubtrlist.skip_line_after_account',resp$(resp_skip_line))
-24120 let fnreg_write('ubtrlist.include_zero_balance_accounts',str$(include_zero_balance_accounts))
-24140 let fnreg_write('ubtrlist.include_no_activity_accounts',str$(include_no_activity_accounts))
+24000 fndat(dat$,put=2)
+24020 fnreg_write('ubtrlist.date.start',str$(filter_date_start))
+24040 fnreg_write('ubtrlist.date.end',str$(filter_date_end))
+24060 fnreg_write('ubtrlist.print_tbal',str$(print_tbal))
+24080 fnreg_write('ubtrlist.sequence',str$(seq))
+24100 fnreg_write('ubtrlist.skip_line_after_account',resp$(resp_skip_line))
+24120 fnreg_write('ubtrlist.include_zero_balance_accounts',str$(include_zero_balance_accounts))
+24140 fnreg_write('ubtrlist.include_no_activity_accounts',str$(include_no_activity_accounts))
 24160 ! /r
 26000 ! on fkey 5 goto DONE
-26020 let fnopenprn
+26020 fnopenprn
 26040 if seq=1 then 
 26060   open #h_customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 26080 else 
@@ -117,17 +117,17 @@
 28040   read #h_customer,using 'Form POS 1,C 10,POS 41,C 30,POS 292,PD 4.2,POS 388,10*PD 5.2,POS 1741,N 2': z$,e$(2),bal,mat gb,route eof EO_CUSTOMER
 28060   if seq=2 and holdroute<>0 and holdroute<>route then gosub PRINT_SUB_TOTALS ! consider subtotals
 28080   noneprinted=0
-28100   let foot$=""
+28100   foot$=""
 28120   if v=0 then v=route ! else If V<>ROUTE Then Gosub 1630  ! 001630 return      !  must change Index to indx5 to change to route seq
 28140   t9=9
-28150   let q5=9
-28160   let firstone=2: lastone=2: begbal=0
+28150   q5=9
+28160   firstone=2: lastone=2: begbal=0
 28180   if print_tbal=2 then gosub DETERMINE_CURRRENT_BALANCE
 28200   gosub DETERMINE_BEGINNING_BALANCE
 28220   mat tgb=tgb+gb : mat ggb=ggb+gb : mat ggb=ggb+gb : mat subtotal_gb=subtotal_gb+gb
 28230 ! tdate=0
 28240   restore #ubtransvb,key>=z$&"         ": nokey TRANS_NOKEY
-28260   lastone=0: let firstone=1 : have_tbal=0
+28260   lastone=0: firstone=1 : have_tbal=0
 30000 READ_UBTRANSVB: ! 
 30002 ! tdate=0
 30020   read #ubtransvb,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof READ_CUSTOMER
@@ -135,7 +135,7 @@
 30050   if p$<>z$ then tdate=0
 30060   if p$<>z$ and noneprinted=0 then tamount=0 ! no transactions found
 30080   if p$<>z$ and firstone=1 then lastone=1 : goto TRANS_EO_CUSTOMER ! no transactions
-30100   if p$<>z$ then let firstone=2 : lastone=2 : goto TRANS_EO_CUSTOMER ! no transactions
+30100   if p$<>z$ then firstone=2 : lastone=2 : goto TRANS_EO_CUSTOMER ! no transactions
 32000 TEST_TRANS: ! 
 32020   if filter_date_end<>0 and tdate>filter_date_end then goto READ_UBTRANSVB
 32040   if filter_date_start<>0 and tdate<filter_date_start then goto READ_UBTRANSVB
@@ -145,7 +145,7 @@
 32100   if testp$<>p$ then lastone=1
 32120   if filter_date_end>0 and testtdate>filter_date_end then lastone=1
 32140   gosub PRINT_INFO
-32160   let firstone=0
+32160   firstone=0
 32180   if lastone=1 then 
 32200     goto READ_CUSTOMER
 32220   else 
@@ -166,7 +166,7 @@
 34060 loop 
 34080 ! 
 36000 EO_CUSTOMER: ! 
-36020 let q9=9
+36020 q9=9
 36040 if t9<>0 then gosub ACCUM_TOTALS
 36060 if seq=2 then gosub PRINT_SUB_TOTALS
 36080 gosub PRINT_TOTALS
@@ -193,7 +193,7 @@
 42120 ! pr #255: newpage
 42140 ! gosub HDR
 42160 ! L1230: !
-42180 let q5=0
+42180 q5=0
 42200 if tcode=1 then code$=" CHG": pos2=69 : r2=r2+tamount ! COLUMN 2
 42220 if tcode=2 then code$=" PN" : pos2=69 : r2=r2+tamount !  COLUMN 2
 42240 if tcode=3 then code$=" COL": pos2=84 : r3=r3+tamount ! COLUMN 3
@@ -268,10 +268,10 @@
 50200   bdtotal+=tgb(j)
 50220 next j
 50240 pr #255,using "form pos 5,c 30,n 10.2": "Total Breakdown",bdtotal
-50260 !  let grand_total_a1+=s1
-50280 !  let grand_total_a2+=s2
-50300 !  let grand_total_a3+=s3
-50320 !  let grand_total_a4+=s4
+50260 !  grand_total_a1+=s1
+50280 !  grand_total_a2+=s2
+50300 !  grand_total_a3+=s3
+50320 !  grand_total_a4+=s4
 50340 s1=s2=s3=s4=0
 50360 mat tgb=(0)
 50380 if q9<>9 and ~raw_output then pr #255: newpage : gosub HDR
@@ -323,7 +323,7 @@
 54420 !     goto DONE ! /r
 56000 DONE: ! 
 56020 close #ubtransvb: ioerr ignore
-56040 let fncloseprn
+56040 fncloseprn
 56060 XIT: fnxit
 58000 IGNORE: continue 
 58020 ! <Updateable Region: ERTN>
@@ -371,11 +371,11 @@
 62400   if penalty$(j1)="N" and tcode=2 then tg(j1)=0 ! zero any other fields but the penalties
 62420 next j1
 62440 L2360: for j=1 to 10
-62460   if tcode=1 then let gb(j)=gb(j)-tg(j)
-62480   if tcode=2 then let gb(j)=gb(j)-tg(j)
-62500   if tcode=3 then let gb(j)=gb(j)+tg(j)
-62520   if tcode=4 then let gb(j)=gb(j)+tg(j)
-62540   if tcode=5 then let gb(j)=gb(j)-tg(j)
+62460   if tcode=1 then gb(j)=gb(j)-tg(j)
+62480   if tcode=2 then gb(j)=gb(j)-tg(j)
+62500   if tcode=3 then gb(j)=gb(j)+tg(j)
+62520   if tcode=4 then gb(j)=gb(j)+tg(j)
+62540   if tcode=5 then gb(j)=gb(j)-tg(j)
 62560 next j
 62580 ! pr MAT GB: Pause
 62600 ! If SUM(GB)<>BAL Then Pause

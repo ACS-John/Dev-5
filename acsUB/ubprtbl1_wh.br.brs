@@ -10,20 +10,20 @@
 00100 ! ______________________________________________________________________
 00110   fncno(cno,cnam$) !:
         fnd1(d1) !:
-        let udf$=env$('temp')&'\'
+        udf$=env$('temp')&'\'
 00112   addr_indent=8 : addr_down=3
 00120   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
 00130   at$(1)=cnam$ !:
-        let z=21 !:
+        z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
-        let x=len(at$(1)) : let y=z-x !:
+        x=len(at$(1)) : y=z-x !:
         at$(1)=rpt$(" ",int(y/2))&at$(1)
-00140   let z=26 !:
+00140   z=26 !:
         for j=2 to udim(at$) !:
           at$(j)=trim$(at$(j))(1:z) !:
-          let x=len(at$(j)) : let y=z-x !:
+          x=len(at$(j)) : y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00150   linelength=62
@@ -81,9 +81,9 @@
 00450   if resp$(5)="[All]" then !:
           prtbkno=0 else !:
           prtbkno = val(resp$(5))
-00460   if resp$(6)="True" then sl1=1: let z$="" else sl1=0
+00460   if resp$(6)="True" then sl1=1: z$="" else sl1=0
 00462   pr service_from=val(resp$(7)) : service_to=val(resp$(8))
-00466   if service_from<>0 and service_to<>0 then let use_entered_dates=1 else let use_entered_dates=0
+00466   if service_from<>0 and service_to<>0 then use_entered_dates=1 else use_entered_dates=0
 00470   if trim$(a$)<>"" then read #2,using L500,key=a$: z$,route,sequence nokey SCREEN1 !:
           holdz$=z$: begin=1 !:
           st1=1
@@ -142,7 +142,7 @@
 01000 L1000: ! 
 01010   if bud1=1 then gosub BUD2
 01020   pb=bal-g(11)
-01030 ! If BAL<=0 Then Let G(10)=0 ! don't show penalty if balance 0 or less
+01030 ! If BAL<=0 Then g(10)=0 ! don't show penalty if balance 0 or less
 01040 ! ______________print bill routine______________________________________
 01050   gosub VBPRINT
 01060 ! _____________end of pr routine______________________________________
@@ -187,7 +187,7 @@
 01330   if prtbkno=0 then goto L1350
 01340   if prtbkno><route then goto END5
 01350 L1350: if f><d1 then goto L1310
-01360   let zip5$=cr$=""
+01360   zip5$=cr$=""
 01370   read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1380
 01380 L1380: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
 01390   goto L1310
@@ -243,10 +243,10 @@
 01840 VBPRINT: ! r:
 01850 ! -- Standard 4 Per Page Even Perferated Card Stock Bills
 01860   checkcounter+=1
-01870   if checkcounter=1 then let xmargin=0 : let ymargin=0
-01880   if checkcounter=2 then let xmargin=137 : let ymargin=0
-01890   if checkcounter=3 then let xmargin=0 : let ymargin=108
-01900   if checkcounter=4 then let xmargin=137 : let ymargin=108 : checkcounter=0
+01870   if checkcounter=1 then xmargin=0 : ymargin=0
+01880   if checkcounter=2 then xmargin=137 : ymargin=0
+01890   if checkcounter=3 then xmargin=0 : ymargin=108
+01900   if checkcounter=4 then xmargin=137 : ymargin=108 : checkcounter=0
 01910 ! ______________________________________________________________________
 01920   pr #20: 'Call Print.AddLine('&str$(xmargin+5)&','&str$(ymargin+2)&',57,'&str$(lyne*3+3)&',True)'
 01930   pr #20: "Call Print.MyFontBold(True)"
@@ -299,8 +299,8 @@
 02156     pr #20: 'Call Print.AddText("EL",'&str$(xmargin+91)&','&str$(lyne*(meter)+ymargin)&')'
 02158     pr #20: 'Call Print.AddText("'&fnformnumb$(g(3),2,9)&'",'&str$(xmargin+91+8)&','&str$(lyne*meter+ymargin)&')'
 02160   end if  ! g(3)<>0 or d(7)<>0
-02162 ! If A4=1 Then Let GCODE$="RSGS" Else If A4=2 Then Let GCODE$="CMGS" Else If A4=3 Then Let GCODE$="INGS" Else 
-02164   let gcode$="GAS"
+02162 ! If A4=1 Then gCODE$="RSGS" Else If A4=2 Then gCODE$="CMGS" Else If A4=3 Then gCODE$="INGS" Else 
+02164   gcode$="GAS"
 02166   if g(4)<>0 then 
 02168     pr #20: 'Call Print.AddText("'&gcode$&'",'&str$(xmargin+1)&','&str$(lyne*(meter+=1)+ymargin)&')'
 02170     pr #20: 'Call Print.AddText("'&fnformnumb$(d(9),0,9)&'",'&str$(xmargin+6)&','&str$(lyne*meter+ymargin)&')'

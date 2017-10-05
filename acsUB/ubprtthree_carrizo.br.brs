@@ -17,14 +17,14 @@
         close #21: 
 00150   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00160   at$(1)=cnam$ !:
-        let z=21 !:
+        z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
-        let x=len(at$(1)) : let y=z-x !:
+        x=len(at$(1)) : y=z-x !:
         at$(1)=rpt$(" ",int(y/2))&at$(1)
-00170   let z=26 !:
+00170   z=26 !:
         for j=2 to udim(at$) !:
           at$(j)=trim$(at$(j))(1:z) !:
-          let x=len(at$(j)) : let y=z-x !:
+          x=len(at$(j)) : y=z-x !:
           at$(j)=rpt$(" ",int(y/2))&at$(j) !:
         next j
 00180   linelength=62
@@ -64,7 +64,7 @@
 00420   fntxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00430   fnlbl(8,1,"Starting Account:",ll,1)
-00440   let fe$="ubm-act-nam" !:
+00440   fe$="ubm-act-nam" !:
         datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
         indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
@@ -91,7 +91,7 @@
 00520   if resp$(9)="[All]" then !:
           prtbkno=0 else !:
           prtbkno = val(resp$(9))
-00530   if resp$(10)="True" then sl1=1: let z$="" else sl1=0
+00530   if resp$(10)="True" then sl1=1: z$="" else sl1=0
 00540   if trim$(a$)<>"" then read #2,using L550,key=a$: z$,route,sequence nokey SCREEN1 !:
           holdz$=z$: begin=1 !:
           st1=1
@@ -149,11 +149,11 @@
 01060 ! ______________________________________________________________________
 01070 L1070: ! 
 01080   pb=bal-g(11)
-01090   if bal<=0 then let g(9)=g(10)=0 ! don't show penalty if balance 0 or less
-01100   let fb$(1)=mg$(1)
-01110   let fb$(2)=mg$(2)
-01120   let fb$(3)=mg$(3)
-01130 ! If C4>0 Then Let FB$(1)="          Final Bill" : Let FB$(2)="": Let FB$(3)=""
+01090   if bal<=0 then g(9)=g(10)=0 ! don't show penalty if balance 0 or less
+01100   fb$(1)=mg$(1)
+01110   fb$(2)=mg$(2)
+01120   fb$(3)=mg$(3)
+01130 ! If C4>0 Then fb$(1)="          Final Bill" : fb$(2)="": fb$(3)=""
 01140 ! ______________print bill routine______________________________________
 01150   gosub VBPRINT
 01160 ! _____________end of pr routine______________________________________
@@ -362,9 +362,9 @@
 02570   if a1=5 then gosub WATER: goto L2580 else goto L2590 ! senior citized discount
 02580 L2580: txt$="Senior Discount "&cnvrt$("pic($$$,$$$.##",(stdwater-g(1))) !:
         pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne-36.5)&')'
-02590 L2590: if lyne<90 then let updown=3
-02600   if lyne>90 and lyne<180 then let updown=6.5
-02610   if lyne>180 and lyne<270 then let updown=10
+02590 L2590: if lyne<90 then updown=3
+02600   if lyne>90 and lyne<180 then updown=6.5
+02610   if lyne>180 and lyne<270 then updown=10
 02620   if trim$(cr$)<>"" then pr #20: 'Call Print.DisplayBarCode('&str$(3)&','&str$(updown)&',"'&cr$&'")'
 02630   bills+=1
 02640   if int(bills/3)=bills/3 then let fnpa_newpage : lyne=0: goto L2670
@@ -390,22 +390,22 @@
 02840 L2840: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
 02850   if p$<>z$ then goto L2910
 02860   if tcode<>1 then goto L2830 ! only charge transactions
-02870   let usage(3)=usage(2): billdate(3)=billdate(2)
-02880   let usage(2)=usage(1): billdate(2)=billdate(1)
-02890   let usage(1)=wu: billdate(1)=tdate
+02870   usage(3)=usage(2): billdate(3)=billdate(2)
+02880   usage(2)=usage(1): billdate(2)=billdate(1)
+02890   usage(1)=wu: billdate(1)=tdate
 02900   goto L2830
 02910 L2910: return 
 02920 WATER: ! water charge if residential instead of senior citizen (returns stdwater)
 02930   stdwater=0
-02940   let waterrate=1 ! set rate code water residential
-02950   let x1=d(3) ! water usage
+02940   waterrate=1 ! set rate code water residential
+02950   x1=d(3) ! water usage
 02960   read #ratemst,using L2970, key="WA"&lpad$(str$(waterrate),2): mc1,mu1,mat rt nokey WATER_COMPLETED
 02970 L2970: form pos 55,32*g 10
 02980   stdwater=mc1*max(1,d(13))
 02990   if x1<=mu1*max(1,d(13)) then goto WATER_COMPLETED else mu2=mu1*max(1,d(13))
 03000   for j=1 to 10
 03010     if rt(j,1)>x1 then goto WATER_COMPLETED
-03020     if x1<rt(j,2) then let w1=x1-mu2 else let w1=rt(j,2)-mu2
+03020     if x1<rt(j,2) then w1=x1-mu2 else w1=rt(j,2)-mu2
 03030     stdwater=stdwater+round(w1*rt(j,3),2)
 03040     if rt(j,2)>x1 then goto WATER_COMPLETED
 03050     mu2=rt(j,2)

@@ -17,7 +17,7 @@
 00160   fntos(sn$="cllabel-1")
 00170   respc=0 : mylen=25 : mypos=mylen+2
 00180   fnlbl(1,1,"Print Labels For:",mylen,right)
-00190   let fi$="cllabels" !:
+00190   fi$="cllabels" !:
         item1$(print_all=1)="[All]" !:
         item1$(check_range=2)="Range of Checks" !:
         item1$(specific_payees=3)="Specific payees" !:
@@ -46,7 +46,7 @@
             if resp$(1)=item1$(2) then prtall=check_range else !:
               if resp$(1)=item1$(3) then prtall=specific_payees
 00320   printpayeenum$=resp$(2) !:
-        let wbc=val(resp$(3)(1:2)) ! working bank code !:
+        wbc=val(resp$(3)(1:2)) ! working bank code !:
         c1=val(resp$(4)(1:8)) ! starting check number !:
         c2=val(resp$(5)(1:8)) ! ending check number !:
         vn$=lpad$(rtrm$(resp$(6)(1:8)),8) ! starting vendor number

@@ -38,8 +38,8 @@
 50100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 50120 ! /region
 54000 READ_TRANSACTIONS: ! r: passed trmstr2,vn$,beg_date,end_date    returns ytdp
-54010   let ytdp=0
-54020   let wbc=0: let wtt=1 ! all banks and only checks
+54010   ytdp=0
+54020   wbc=0: wtt=1 ! all banks and only checks
 54040   key$=vn$&cnvrt$('pic(Z#)',wbc)&cnvrt$("pic(#)",wtt)&rpt$(chr$(0),8) 
 54060   restore #trmstr2,key>=key$: nokey rtFinis 
 54100   do
@@ -47,7 +47,7 @@
 54140     if trim$(vn$)=trim$(tr$(4)) then 
 54160       tranDate=fndate_mmddyy_to_ccyymmdd(val(tr$(2)))
 54180       if tranDate=>beg_date and tranDate<=end_date then
-54200         let ytdp+=tr3
+54200         ytdp+=tr3
 54220       end if
 54240     end if
 54260   loop while trim$(vn$)=trim$(tr$(4))

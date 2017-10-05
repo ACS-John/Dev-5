@@ -79,20 +79,20 @@
 24500   dim customer_g(10)
 24520   dim z$*10,service_rate_code(7)
 24530   dim gb(10)
-24600   let gb_other=fn_service_other
+24600   gb_other=fn_service_other
 24800   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 25000   do 
 25200     read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof CUSTOMER_EOF
 25400     F_CUSTOMER: form pos 1,c 10,pos 143,7*pd 2,pos 292,pd 4.2,pos 300,10*pd 4.2,pos 388,10*pd 5.2
 25600     read_count+=1
 25800     for gb_item=1 to udim(mat servicename$) ! udim(mat gb)
-26000       if trim$(servicename$(gb_item))='' then let gb(gb_item)=0
+26000       if trim$(servicename$(gb_item))='' then gb(gb_item)=0
 26200     next gb_item
 26400     bal_breakdown=sum(gb)
 26600     if bal<>bal_breakdown then 
 26800       fn_report_it(mat customer_g,bal_breakdown,"Customer Balance Breakdowns",'Balance')
 27000       if do_fix then 
-27200         let gb(gb_other)-=(bal_breakdown-bal)
+27200         gb(gb_other)-=(bal_breakdown-bal)
 27400         rewrite #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb
 27600       end if 
 27800     end if 
@@ -138,7 +138,7 @@
 34060   fnend 
 35000   def fn_fix_trans_breakdowns(do_fix,do_report)
 35020     dim trans_g(11),ru(6)
-35040     let gb_other=fn_service_other
+35040     gb_other=fn_service_other
 35060     fnstatus('Checking Transaction Breakdowns')
 35080     if do_fix then 
 35100       open #h_trans=11: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&env$('cno')&",Shr",internal,outin,relative 
@@ -178,7 +178,7 @@
 42040     dim customer_g(10)
 42060     dim z$*10,service_rate_code(7)
 42080     dim gb(10)
-42100     let gb_other=fn_service_other
+42100     gb_other=fn_service_other
 42120     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 42140     do 
 42160       read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof MC_CUSTOMER_EOF
@@ -188,8 +188,8 @@
 42280         for gb_item=1 to 10
 42300           if gb_item<>gb_other then 
 42320             if gb(gb_item)<0 then 
-42340               let gb(gb_other)+=gb(gb_item)
-42360               let gb(gb_item)=0
+42340               gb(gb_other)+=gb(gb_item)
+42360               gb(gb_item)=0
 42380             end if 
 42400           end if 
 42420         next gb_item
@@ -205,7 +205,7 @@
 44040     dim customer_g(10)
 44060     dim z$*10,service_rate_code(7)
 44080     dim gb(10)
-44100     let gb_other=fn_service_other
+44100     gb_other=fn_service_other
 44120     open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 44140     do 
 44160       read #h_customer,using F_CUSTOMER: z$,mat service_rate_code,bal,mat customer_g,mat gb eof ACFO_CUSTOMER_EOF
@@ -215,12 +215,12 @@
 44240         for gb_item=1 to 10
 44260           if gb_item<>gb_other then ! 
 44280             if gb(gb_item)=>abs(gb(gb_other)) then ! this item has more (or equal) charge than other has credit
-44300               let gb(gb_item)+=gb(gb_other)
-44320               let gb(gb_other)=0
+44300               gb(gb_item)+=gb(gb_other)
+44320               gb(gb_other)=0
 44340               goto ACFO_REC_COMPLETE ! all of other is consumed, we are done here
 44360             else if gb(gb_item)<abs(gb(gb_other)) then ! other has more than enough credit to cover this charge
-44380               let gb(gb_other)+=gb(gb_item)
-44400               let gb(gb_item)=0
+44380               gb(gb_other)+=gb(gb_item)
+44400               gb(gb_item)=0
 44420             end if 
 44440           end if 
 44460         next gb_item

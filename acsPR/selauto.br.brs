@@ -77,7 +77,7 @@
 00760     read #prpgmn,using 'Form POS 1,C 20,C 35 ,3*N 1',rec=l1: nxtpgm$(l1),nxtdesc$(l1),wk(l1),mo(l1),qt(l1) norec L780
 00770     goto L790
 00780 L780: write #prpgmn,using 'Form POS 1,C 20,C 35 ,3*N 1',rec=l1: "","",0,0,0 !:
-          nxtpgm$(l1)=nxtdesc$(l1)="" : let wk(l1)=mo(l1)=qt(l1)=0
+          nxtpgm$(l1)=nxtdesc$(l1)="" : wk(l1)=mo(l1)=qt(l1)=0
 00790 L790: gosub PRINT_LINE_L1
 00800   next l1
 00810   input #win,select mat io1$,attr "H": mat temp$ !:
@@ -106,7 +106,7 @@
 01020   j1=j3=0 : mat sd$(20)
 01030   fnwin3b(win=102,cap$,22,38,0,0) !:
         pr #win: newpage
-01040   mat fkey$=("") : let fkey$(1)="Next" : let fkey$(2)="Top" !:
+01040   mat fkey$=("") : fkey$(1)="Next" : fkey$(2)="Top" !:
         fnfkey(24,mat fkey$,mat disfk,empty$,es=0)
 01050   for j=1 to udim(m$)
 01060     if pos(pgm$(j),"\",1)=0 then goto L1210
@@ -116,12 +116,12 @@
 01100 L1100: input #win,select mat sf$,attr "H": mat sd$
 01110     if cmdkey=5 then goto L1280
 01120     if cmdkey><2 then goto L1150
-01130     nxtpgm$(l1)=nxtdesc$(l1)="" : let wk(l1)=mo(l1)=qt(l1)=0
+01130     nxtpgm$(l1)=nxtdesc$(l1)="" : wk(l1)=mo(l1)=qt(l1)=0
 01140     goto L1260
 01150 L1150: if cmdkey=1 then goto L1180
 01160     nxtpgm$(l1)=pgm$(pgm(curfld)) !:
           nxtdesc$(l1)=ltrm$(m$(pgm(curfld)))(1:35) !:
-          let wk(l1)=mo(l1)=qt(l1)=1
+          wk(l1)=mo(l1)=qt(l1)=1
 01170     goto L1260
 01180 L1180: if j3=1 then goto CHANGE_PROGRAM
 01190     j1=0
@@ -146,8 +146,8 @@
 01340   io3$(1)="3,15,C 35,PU,N" : io3$(2)="4,15,Cu 1,CUT,N" !:
         io3$(3)="5,15,Cu 1,UT,N" : io3$(4)="6,15,Cu 1,UT,N"
 01350   mat fkey$=("") !:
-        let fkey$(1)="Save" : let fkey$(4)="Delete" : let fkey$(5)="Cancel" !:
-        let fkey$(7)="Change Program" !:
+        fkey$(1)="Save" : fkey$(4)="Delete" : fkey$(5)="Cancel" !:
+        fkey$(7)="Change Program" !:
         fnfkey(16,mat fkey$,mat disfk,em$="",es=0)
 01360   if wk(l1)=1 then temp_wk$="Y" else temp_wk$="N"
 01370   if mo(l1)=1 then temp_mo$="Y" else temp_mo$="N"
@@ -167,14 +167,14 @@
 01500 L1500: if cmdkey=5 then goto DONE_ASK_LINE_DATA
 01510   if cmdkey=7 then goto CHANGE_PROGRAM
 01520   if cmdkey=4 then nxtdesc$(l1)="" : nxtpgm$(l1)="" !:
-          let wk(l1)=0 : mo(l1)=0 : let qt(l1)=0 !:
+          wk(l1)=0 : mo(l1)=0 : qt(l1)=0 !:
           gosub SAVE_LINE !:
           goto DONE_ASK_LINE_DATA
 01530   if cmdkey<>1 then goto L1410
 01540   nxtdesc$(l1)=temp_desc$
-01550   if temp_wk$="Y" then let wk(l1)=1 else let wk(l1)=0
+01550   if temp_wk$="Y" then wk(l1)=1 else wk(l1)=0
 01560   if temp_mo$="Y" then mo(l1)=1 else mo(l1)=0
-01570   if temp_qt$="Y" then let qt(l1)=1 else let qt(l1)=0
+01570   if temp_qt$="Y" then qt(l1)=1 else qt(l1)=0
 01580   gosub SAVE_LINE
 01590 DONE_ASK_LINE_DATA: goto MENU1
 01600 ! ______________________________________________________________________

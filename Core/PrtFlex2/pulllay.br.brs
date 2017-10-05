@@ -72,12 +72,12 @@
 00670 ! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAME !:
         ! ON EACH SERVICE IN UTILITY BILLING
 00680   if uprc$(a$(j3,1)(1:7))<>"SERVICE" then goto L730
-00690   let x=val(a$(j3,1)(9:10)) conv L730
+00690   x=val(a$(j3,1)(9:10)) conv L730
 00700   if trim$(servicename$(x))="" then goto L810 ! SERVICE NOT USED
 00710   a$(j3,1)(1:9)=""
 00720   a$(j3,1)=trim$(servicename$(x))&" "&trim$(a$(j3,1))
 00730 L730: if uprc$(abbrev$)(1:7)<>"SERVICE" then goto L770
-00740   let x=val(abbrev$(9:10)) conv L770
+00740   x=val(abbrev$(9:10)) conv L770
 00750   abbrev$(1:9)=""
 00760   abbrev$=trim$(servicename$(x))&" "&trim$(abbrev$)
 00770 L770: if rtrm$(a$(j3,1))="" or rtrm$(uprc$(a$(j3,1)))='UNUSED' or rtrm$(uprc$(a$(j3,1)))(1:5)='EXTRA' or trim$(abbrev$)="" then goto L810

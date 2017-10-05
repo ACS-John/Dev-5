@@ -31,7 +31,7 @@
 00290   pr f "10,20,C 30,H,N": " FUND BALANCE IN PROCESS"
 00300   pr f "12,2,C 18,B,5": " Press F5 to stop"
 00310 L310: read #1,using L520: n$,d$,bb,cb,mat ta eof L550
-00320   let fund=val(n$(1:3)): acct=val(n$(4:9))
+00320   fund=val(n$(1:3)): acct=val(n$(4:9))
 00330   if acct>90 then goto L460
 00340   if acct<1 then goto L310
 00350   bank$(acct)=d$(1:25)

@@ -82,9 +82,9 @@
 00670   bankaccount$=odi$=resp$(3) ! bank account #
 00680   bankrouting$=imo$=lpad$(resp$(4),10) ! your bank routing number
 00690   bnkrtn=val(resp$(4)) ! your bank routing number in numeric
-00700   let federalrouting$=imd$=resp$(5)
+00700   federalrouting$=imd$=resp$(5)
 00710   bankname$=ion$=resp$(6)
-00720   let fedid$=cid$=resp$(7) : cid$="1"&cid$
+00720   fedid$=cid$=resp$(7) : cid$="1"&cid$
 00740   if resp$(8)="True" then report$="Y" else report$="N"
 00745   if resp$(9)="True" then testfile=1 else testfile=0
 00750   open #ddinfo=31: "Name="&env$('Q')&"\PRmstr\DDInfo.h"&env$('cno')&",RecL=256,Use",internal,outin,relative 
@@ -125,12 +125,12 @@
 01060 ! if env$('client')="Washington Parrish" then imo$=" 065201611" ! Immediate Origin  (routing # for your bank)
 01070 ! if env$('client')="West Rest Haven" then imo$=" 111905159" ! Immediate Origin (contains the routing number for your bank)
 01080   if env$('client')="Billings" then imo$=" 000017738" ! Immediate Origin (contains the routing number for your bank)
-01090   let fcd$=date$("YYMMDD") ! File Creation Date
-01100   let fct$=time$(1:2)&time$(4:5) ! File Creation Time
-01110   let fidm$="A" ! File ID Modifier
+01090   fcd$=date$("YYMMDD") ! File Creation Date
+01100   fct$=time$(1:2)&time$(4:5) ! File Creation Time
+01110   fidm$="A" ! File ID Modifier
 01120   rsz$="094" ! Record Size
 01130   bf$="10" ! Blocking Factor
-01140   let fc$="1" ! Format Code
+01140   fc$="1" ! Format Code
 01150   idn$="Federal Reserve Bank   " ! (23) Immediate Destination Name
 01160 ! if env$('client')="Washington Parrish" then ion$="Parrish National       " ! (23) Immediate Origin Name  (your bank name)
 01170 ! if env$('client')="West Rest Haven" then ion$="State National Bank    " ! (23) Immediate Origin Name
@@ -181,7 +181,7 @@
 01500   scc=220 ! Service Class Code
 01510   eac=tn1 ! Entry Addenda Count
 01520   ! eH=0 ! Entry Hash
-01530   eh$=str$(eh): let x=len(eh$): eh=val(eh$(max(1,x-9):x))
+01530   eh$=str$(eh): x=len(eh$): eh=val(eh$(max(1,x-9):x))
 01540   ! TD1=Total Debit Amount
 01550   ! TC1=Total Credit Amount
 01560   ! CID$=Company Identification

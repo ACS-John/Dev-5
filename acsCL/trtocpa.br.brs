@@ -50,8 +50,8 @@
 00380   open #20: "Name="&env$('Q')&"\GLmstr\glBucket.H"&str$(cno)&",Shr",internal,input,relative ioerr L400 !:
         read #20,using 'Form POS 1,N 1',rec=1: glb norec L390
 00390 L390: close #20: 
-00400 L400: if glb=2 then let glwk$=env$('Q')&"\GLmstr\GL"&d2$&".H"&str$(cno)
-00410   if glb><2 then let glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(cno)
+00400 L400: if glb=2 then glwk$=env$('Q')&"\GLmstr\GL"&d2$&".H"&str$(cno)
+00410   if glb><2 then glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(cno)
 00420   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
 00430   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno)&",Shr",internal,input,keyed 
 00440   open #glwk101=3: "Name="&env$('Q')&"\CLmstr\GLWK101.H"&str$(cno)&",Size=0,RecL=104,Replace",internal,output 

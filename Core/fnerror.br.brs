@@ -16,7 +16,7 @@
 10060   def library fnerror(callingProgram$*256, errornumber, linenumber, &act$, stopable$)
 10080     library 'S:\Core\Library': fnmsgbox,fnlog,fngethandle
 10100     on error goto NEVER
-10120     let xcnt=cnt
+10120     xcnt=cnt
 10140 ! ______________________________________________________________________
 10160     dim response$(5)*80,msgline$(2)*60,log$*128,acshelp$*200
 10180     dim caption$*42

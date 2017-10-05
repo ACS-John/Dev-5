@@ -13,7 +13,7 @@
 00130   dim miscgl$(10)*12,option$(2)*30,gl$(5)*12,option2$(2)
 00140 ! ______________________________________________________________________
 00150   fntop(program$,cap$="Company Information")
-00160   let gltyp=7
+00160   gltyp=7
 00180   fnstyp(0)
 00190 ! ____________________________________________________
 00200   open #glmstr=11: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L220
@@ -102,7 +102,7 @@
 00870   b$(1)=resp$(4)
 00880   b$(2)=resp$(5)
 00890   c$=resp$(6)
-00900   let ucm=val(resp$(7))
+00900   ucm=val(resp$(7))
 00910   tb$=resp$(8)
 00920   nap=val(resp$(9))
 00930   if resp$(10)="True" then d1$="Y": d(1)=1 else d1$="N": d(1)=0
@@ -114,7 +114,7 @@
         a2=val(lastgl$(4:9)) !:
         a3=val(lastgl$(10:12))
 00990   if resp$(15)="True" then jcc$="Y": jccode=1 else jcc$="N": jccode=0
-01000   if resp$(16)=option$(1) then let glb$="P": let glb=1 else let glb$="R": let glb=2
+01000   if resp$(16)=option$(1) then glb$="P": glb=1 else glb$="R": glb=2
 01010   if ckey=4 then gosub SAVE : goto XIT !  save and exit
 01020   goto SCREEN_2
 01030 ! ______________________________________________________________________
@@ -145,7 +145,7 @@
 01250 ! ______________________________________________________________________
 01260 SCREEN_3: ! 
 01270   for j=1 to 5
-01280     let gl$(j)=cnvrt$("pic(zz#)",prgl(j,1))&cnvrt$("pic(zzzzz#)",prgl(j,2))&cnvrt$("pic(zz#)",prgl(j,3))
+01280     gl$(j)=cnvrt$("pic(zz#)",prgl(j,1))&cnvrt$("pic(zzzzz#)",prgl(j,2))&cnvrt$("pic(zz#)",prgl(j,3))
 01290   next j
 01300 ! FICARATE,FICAWAGE,FEDUCRAT,FEDUCWAG,MCR,MCM,MAT PRGL
 01310   fntos(sn$="Company-3") 
@@ -192,14 +192,14 @@
 01600   fnacs(sn$,0,mat resp$,ckey)
 01610   if ckey=5 then goto XIT
 01630   if ckey=2 then goto SCREEN_2
-01640   let ficarate=val(resp$(1))
-01650   let ficawage=val(resp$(2))
-01660   let feducrat=val(resp$(3))
-01670   let feducwag=val(resp$(4))
+01640   ficarate=val(resp$(1))
+01650   ficawage=val(resp$(2))
+01660   feducrat=val(resp$(3))
+01670   feducwag=val(resp$(4))
 01680   mcr=val(resp$(5))
 01690   mcm=val(resp$(6))
 01700   for j=1 to 5
-01710     let gl$(j)=fnagl$(resp$(j+6))
+01710     gl$(j)=fnagl$(resp$(j+6))
 01720     prgl(j,1)=val(gl$(j)(1:3)): prgl(j,2)=val(gl$(j)(4:9)): prgl(j,3)=val(gl$(j)(10:12))
 01730   next j
 01735   if ckey=4 then gosub SAVE : goto XIT

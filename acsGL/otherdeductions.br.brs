@@ -13,7 +13,7 @@
         fndat(dat$)
 00130 ! ______________________________________________________________________
 00140   fntos(sn$="OtherDed") !:
-        rc=cf=0: mylen=22: mypos=mylen+3: let frameno=1
+        rc=cf=0: mylen=22: mypos=mylen+3: frameno=1
 00150   fnfra(1,1,3,40,"Date Range for Report","Enter the date range for the payrolls to be included in this report.")
 00160   fnlbl(1,1,"Beginning Date:",mylen,1,0,frameno)
 00170   fntxt(1,mypos,12,0,1,"3",0,"Enter the date of the first payroll to be included in this report. ",frameno) !:

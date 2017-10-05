@@ -17,7 +17,7 @@
 00150   gosub SCREEN1
 00160   hd1$="{\ul  Account  }  {\ul    Total}    {\ul    Date   }"
 00170   for j=1 to 10
-00180     let x2=pos(trim$(servicename$(j))," ",1) !:
+00180     x2=pos(trim$(servicename$(j))," ",1) !:
           if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j))) ! if service name two words long, use part of both
 00190     if trim$(servicename$(j))<>"" then !:
             scr1$(sz1+=1)=servicename$(j) !:
@@ -55,7 +55,7 @@
 00510   if tcode=5 then ti2=3 ! DEBIT MEMO
 00520   if ti2=3 then r(1,1)-=tamount else r(1,1)+=tamount
 00530   r(1,ti2+1)+=tamount
-00540   let x=0
+00540   x=0
 00550   for j=1 to 10
 00560     if trim$(servicename$(j))="" then goto L600
 00570     alloc(x+=1)=tg(j)

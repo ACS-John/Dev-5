@@ -18,7 +18,7 @@
 20340   fnlbl(1,40,"")
 20360   fncmdset(2) 
 20380   fnacs(sn$,win,mat resp$,ckey)
-20400   let ubpendat=val(srep$(resp$(1),'/',''))
+20400   ubpendat=val(srep$(resp$(1),'/',''))
 20420   if ckey=5 then goto XIT
 20440   fnAutomatedSavePoint('before')
 20460   fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$)
@@ -32,7 +32,7 @@
 20620     read #1,using 'Form POS 1,C 10,4*C 30,POS 143,7*PD 2,POS 292,PD 4.2,PD 4,12*PD 4.2,POS 388,10*PD 5.2',key=z$: z$,mat e$,mat a,bal,f,mat g,mat gb nokey L280
 20640     bal=bal-tamount
 20660     for j=1 to 10
-20680       if uprc$(penalty$(j))="Y" then let gb(j)=gb(j)-tg(j) ! subtract penalty breakdown from balance breakdown
+20680       if uprc$(penalty$(j))="Y" then gb(j)=gb(j)-tg(j) ! subtract penalty breakdown from balance breakdown
 20700     next j
 20720     rewrite #1,using 'Form POS 1,C 10,4*C 30,POS 143,7*PD 2,POS 292,PD 4.2,PD 4,12*PD 4.2,POS 388,10*PD 5.2',key=z$: z$,mat e$,mat a,bal,f,mat g,mat gb
 20740     delete #2: 

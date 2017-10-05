@@ -59,7 +59,7 @@
           b$(2)=resp$(5) !:
           tb$=resp$(6) !:
           nap=val(resp$(7)) !:
-          let wbc=val(resp$(8)(1:2))
+          wbc=val(resp$(8)(1:2))
 00360     if resp$(9)='True' then prenum=1 else prenum=2
 00370     if resp$(10)='True' then reccode=1 else reccode=0
 00380   end if 
@@ -91,11 +91,11 @@
 00490   end if 
 00500   if page=3 then 
 00510     c$=resp$(1) !:
-          let udm=val(resp$(2)) !:
-          let ficarate=val(resp$(3)) !:
-          let ficawage=val(resp$(4)) !:
-          let feducrat=val(resp$(5)) !:
-          let feducwag=val(resp$(6)) !:
+          udm=val(resp$(2)) !:
+          ficarate=val(resp$(3)) !:
+          ficawage=val(resp$(4)) !:
+          feducrat=val(resp$(5)) !:
+          feducwag=val(resp$(6)) !:
           mcr=val(resp$(7)) !:
           mcm=val(resp$(8))
 00520   end if 
@@ -153,9 +153,9 @@
 00870   return 
 00880 PAGE2: ! _____________________________________________________________ !:
         lc=3 : mylen=40 : mypos=mylen+2 !:
-        let fc=0 ! framecount
+        fc=0 ! framecount
 00890   fnfra(04,1,5,framewidth=110,'General Ledger') !:
-        let frame=fc+=1 : lc=0
+        frame=fc+=1 : lc=0
 00900   fnchk(lc+=1,mypos,'Utilize Department Number Field',right,frame) !:
         if d(1)=1 then resp$(1)='True' else resp$(1)='False'
 00910   fnchk(lc+=1,mypos,'Utilize Sub Account Number Field',right,frame) !:
@@ -166,11 +166,11 @@
 00932   fnqgl(lc,mypos,frame,2) !:
         resp$(3)=fnrgl$(lastact$)
 00940   fnfra(11,1,2,framewidth,'Accounts Receivable') !:
-        let frame=fc+=1 : lc=0
+        frame=fc+=1 : lc=0
 00950   fnchk(lc+=1,mypos,'Post Deposits from Accounts Receivable',right,frame) !:
         if ar1=1 then resp$(4)='True' else resp$(4)='False'
 00960   fnfra(15,1,5,framewidth,'Payroll') !:
-        let frame=fc+=1 : lc=0 : mylen=32 : mypos=mylen+2
+        frame=fc+=1 : lc=0 : mylen=32 : mypos=mylen+2
 00970   fnlbl(lc+=1,1,'FICA Withholding GL Account:',mylen,right,0,frame)
 00980 ! fnCOMBOF(env$('Q')&'\GLmstr',LC,MYPOS,0,env$('Q')&'\CLmstr\GLmstr.h'&STR$(CNO),1,12,13,50,env$('Q')&'\CLmstr\GLIndex.h'&STR$(CNO),LIMIT_TO_LIST,0,'',FRAME) !:
         ! rESP$(5)=CNVRT$('pic(zz#)',PRGL(1,1))&CNVRT$('pic(zzzzz#)',PRGL(1,2))&CNVRT$('pic(zz#)',PRGL(1,3))
@@ -204,9 +204,9 @@
 01070   return 
 01080 PAGE3: ! _____________________________________________________________ !:
         lc=3 : mylen=44 : mypos=mylen+2 !:
-        let fc=0 ! frame count
+        fc=0 ! frame count
 01090   fnfra(04,1,2,framewidth=110,'State Unemployment Compensation') !:
-        let frame=fc+=1 : lc=0
+        frame=fc+=1 : lc=0
 01100   fnlbl(lc+=1,1,'State Unemployment Compensation Rate:',mylen,right,0,frame)
 01110   fntxt(lc,mypos,5,0,left,'',0,'',frame) !:
         resp$(1)=c$
@@ -214,7 +214,7 @@
 01130   fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
         resp$(2)=str$(ucm)
 01140   fnfra(08,1,2,framewidth=110,'Social Security') !:
-        let frame=fc+=1 : lc=0
+        frame=fc+=1 : lc=0
 01150   fnlbl(lc+=1,1,'Social Security Rate:',mylen,right,0,frame)
 01160   fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
         resp$(3)=str$(ficarate)
@@ -222,7 +222,7 @@
 01180   fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
         resp$(4)=str$(ficawage)
 01190   fnfra(12,1,2,framewidth=110,'Federal Unemployment Compensation') !:
-        let frame=fc+=1 : lc=0
+        frame=fc+=1 : lc=0
 01200   fnlbl(lc+=1,1,'Federal Unemployment Compensation Rate:',mylen,right,0,frame)
 01210   fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
         resp$(5)=str$(feducrat)
@@ -230,7 +230,7 @@
 01230   fntxt(lc,mypos,13,0,left,pointtwo$,0,'',frame) !:
         resp$(6)=str$(feducwag)
 01240   fnfra(16,1,2,framewidth=110,'MediCare') !:
-        let frame=fc+=1 : lc=0
+        frame=fc+=1 : lc=0
 01250   fnlbl(lc+=1,1,'MediCare Rate:',mylen,right,0,frame)
 01260   fntxt(lc,mypos,13,0,left,pointthree$,0,'',frame) !:
         resp$(7)=str$(mcr)

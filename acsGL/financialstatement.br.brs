@@ -16,12 +16,12 @@
 11700   fn_field_labels ! get column headers
 11800   hp1=66-int(len(rtrm$(cnam$))/2)
 11900   hp2=66-int(len(rtrm$(dat$))/2)
-12000   id$(1)=" 1. Balance Sheet File" : let fil$(1)="ACGLFNSB.H"&str$(cno) : idx$(1)="FNSBINDX.H"&str$(cno)
-12100   id$(2)=" 2. Income Statement File" : let fil$(2)="ACGLFNSI.H"&str$(cno) : idx$(2)="FNSIINDX.H"&str$(cno)
-12200   id$(3)=" 3. Fund Statement / Cash Flow File" : let fil$(3)="ACGLFNSF.H"&str$(cno) : idx$(3)="FNSFINDX.H"&str$(cno)
-12300   id$(4)=" 4. Secondary Balance Sheet File" : let fil$(4)="ACGLFNSC.H"&str$(cno) : idx$(4)="FNSCINDX.H"&str$(cno)
-12400   id$(5)=" 5. Secondary Income Statement File" : let fil$(5)="ACGLFNSJ.H"&str$(cno) : idx$(5)="FNSJINDX.H"&str$(cno)
-12500   id$(6)=" 6. Secondary Fund / Cash Flow File" : let fil$(6)="ACGLFNSG.H"&str$(cno) : idx$(6)="FNSGINDX.H"&str$(cno)
+12000   id$(1)=" 1. Balance Sheet File" : fil$(1)="ACGLFNSB.H"&str$(cno) : idx$(1)="FNSBINDX.H"&str$(cno)
+12100   id$(2)=" 2. Income Statement File" : fil$(2)="ACGLFNSI.H"&str$(cno) : idx$(2)="FNSIINDX.H"&str$(cno)
+12200   id$(3)=" 3. Fund Statement / Cash Flow File" : fil$(3)="ACGLFNSF.H"&str$(cno) : idx$(3)="FNSFINDX.H"&str$(cno)
+12300   id$(4)=" 4. Secondary Balance Sheet File" : fil$(4)="ACGLFNSC.H"&str$(cno) : idx$(4)="FNSCINDX.H"&str$(cno)
+12400   id$(5)=" 5. Secondary Income Statement File" : fil$(5)="ACGLFNSJ.H"&str$(cno) : idx$(5)="FNSJINDX.H"&str$(cno)
+12500   id$(6)=" 6. Secondary Fund / Cash Flow File" : fil$(6)="ACGLFNSG.H"&str$(cno) : idx$(6)="FNSGINDX.H"&str$(cno)
 12600 ! ______________________________________________________________________
 12700 MENU1: ! 
 12800   fntos(sn$="FsDesign")
@@ -164,7 +164,7 @@
 26500   sp=val(resp$(4))
 26600   ls=val(resp$(5))
 26700   if resp$(6)="True" then ds=1 else ds=0 ! dollar sign
-26800   let ul=val(resp$(7))
+26800   ul=val(resp$(7))
 26900   if resp$(8)="True" then rs=1 else rs=0 ! reverse sign
 27000   bc=val(resp$(9))
 27100   ap=val(resp$(10))
@@ -172,7 +172,7 @@
 27300     ac(j)=val(resp$(j+10))
 27400   next j
 27500   rnp=val(resp$(20)) ! was ic but ic not big enough; moved down
-27600   let fc=val(resp$(21))
+27600   fc=val(resp$(21))
 27700   gosub EDIT_CHECKS
 27800   if edit=1 then goto REWRITE_EXISTING_FIN_STMT
 27900   if add=1 then goto WRITE_NEW_FIN_STMT
@@ -256,8 +256,8 @@
 35700   ml$(3)="Click OK to fix."
 35800   fnmsgbox(mat ml$,resp$,cap$,49)
 35900   goto ADD_EDIT_FIN_STMTS
-36000 L1810: if te$="E" and (ap<1 or ap>9) then let 1850 else goto L1840
-36100   mat ml$(3)
+36000   L1810: if te$="E" and (ap<1 or ap>9) then goto L36100 else goto L1840
+36100   L36100: mat ml$(3)
 36200   ml$(1)="If the transaction type is an 'E' then you must"
 36300   ml$(2)="enter a valid accumulator to pr of 1 thru 9. "
 36400   ml$(3)="Click OK to fix."

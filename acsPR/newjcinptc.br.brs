@@ -36,7 +36,7 @@
 00340 TRANSACTION_ENTRY: ! 
 00350   if addone=1 then ji2(3)=0
 00360 L360: fntos(sn$="changeinput") !:
-        respc=0 : let frac=0 !:
+        respc=0 : frac=0 !:
         mylen=28 : mypos=mylen+3
 00370   fnlbl(1,1,"Reference #:",mylen,1)
 00380   fntxt(1,mypos,12,12,0,"",0,"Use any reference # that will help you identify the entry later on.") !:
@@ -136,15 +136,15 @@
 01140     t5=t5+ji1(5)
 01150     t6=t6+ji1(6)
 01160     t10=t10+ji2(3)
-01170     let gt5=gt5+ji1(5)
-01180     let gt6=gt6+ji1(6)
-01190     let gt10=tg10+ji2(3)
+01170     gt5=gt5+ji1(5)
+01180     gt6=gt6+ji1(6)
+01190     gt10=tg10+ji2(3)
 01200   next j
 01210   pr #255,using L1070: " ________"," ________"," ____________",t5,t6,t10
 01220   pr #255,using L1230: " ________"," ________"," ____________",gt5,gt6,gt10
 01230 L1230: form pos 38,2*c 9,x 29,c 13,skip 1,pos 8,"Grand Totals",pos 38,2*n 9.2,x 29,n 13.2,skip 2
 01240 PROOF_LIST_DONE: ! 
-01250   let gt5=gt6=gt10=0
+01250   gt5=gt6=gt10=0
 01260   fncloseprn
 01270   goto TRANSACTION_ENTRY
 01280 ! ______________________________________________________________________

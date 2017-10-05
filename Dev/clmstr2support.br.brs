@@ -39,13 +39,13 @@
 25800 FORM_CLMSTR: form pos 1,c 5,5*c 30,c 12,c 11,n 9,n 2,10*pd 3,10*n 1,10*pd 3,c 12,c 11,2*pd 5.2,pd 4.3,2*n 1,2*pd 3,c 70,20*n 1,20*pd 3.2,20*n 1,20*pd 3.2
 26000   open #h_support:=2: "Name="&env$('Q')&"\TMmstr\Support.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h"&str$(cno)&",Shr",internal,outin,keyed 
 26200 FORM_SUPPORT: form pos 1,n 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
-26400   let z$=lpad$(str$(ano),5)
+26400   z$=lpad$(str$(ano),5)
 26600   do 
 26800     read #1,using FORM_CLMSTR: z$,mat a$,ph$,ss$,pno,mye,mat dd,mat sc,mat ca,ph2$,ss2$,mat ar,mat arta,cm$,mat app,mat ma,mat ap2,mat ma2 eof EO_CLMSTR
 27000     client_id=val(z$)
 27200 ! IF client_id=1500 then pr client_id : pause
 27400     if sum(ma)>0 then 
-27600       let which_app=fn_first_item_gtr_than_one(mat ma)
+27600       which_app=fn_first_item_gtr_than_one(mat ma)
 27800       if which_app>0 then 
 28000         ma(which_app)=ma(which_app)-1
 28200         ma(19)=1
@@ -67,9 +67,9 @@
 31400 EO_CLMSTR: ! 
 31600   end 
 31800   def fn_first_item_gtr_than_one(mat fig_array)
-32000     let fig_found=0
+32000     fig_found=0
 32200     for fig_item=1 to udim(mat fig_array)
-32400       if fig_array(fig_item)>1 then let fig_found=fig_item : goto FIG_XIT
+32400       if fig_array(fig_item)>1 then fig_found=fig_item : goto FIG_XIT
 32600     next fig_item
 32800 FIG_XIT: ! 
 33000     fn_first_item_gtr_than_one=fig_found

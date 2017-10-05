@@ -70,9 +70,9 @@
 22120     fncmbcno(1,mypos)
 22140     fncmdset(2)
 22160     fnacs(sn$,0,mat resp$,ckey)
-22180     if ckey=5 then let fro_cno=99999: goto L210 ! use company #99999 if no company to copy from
-22200     let fro_cno=val(resp$(1)(43:47))
-22220     if fro_cno=0 then let fro_cno=99999
+22180     if ckey=5 then fro_cno=99999: goto L210 ! use company #99999 if no company to copy from
+22200     fro_cno=val(resp$(1)(43:47))
+22220     if fro_cno=0 then fro_cno=99999
 22240 L210: ! 
 22260     if cno<1 or cno=fro_cno then goto MENU1
 22280 ! ___________________________

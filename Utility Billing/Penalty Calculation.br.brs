@@ -180,13 +180,13 @@
 23557   end if 
 23560   if env$('client')="Galena" then 
 23580     bdiff=sum(mat gb)-bal
-23600     let gb(8)=gb(8)-bdiff
+23600     gb(8)=gb(8)-bdiff
 23620   end if 
 23640   if env$('client')='Sangamon' or env$('client')='Colyell' or env$('client')='White Hall' then 
 23650     basepenalty(10)=bal
 23660     goto GOT_BASEPENALTY
 23700   else if env$('client')='Lovington' and penaltybase$="Balance" then 
-23720     let waterpercent=round(g(1)/(g(1)+g(2)),2) ! sewerpercent=1-waterpercent ! lovington
+23720     waterpercent=round(g(1)/(g(1)+g(2)),2) ! sewerpercent=1-waterpercent ! lovington
 23740     basepenalty(9)=round((bal*waterpercent),2) ! logington
 23760     basepenalty(10)=bal-basepenalty(9) ! lovington allocate water and sewer penalty in ration of water to sewer
 23780     goto GOT_BASEPENALTY ! lovington
@@ -194,10 +194,10 @@
 23810  ! if debug_this_account then pause
 23820   if env$('client')="Franklinton" then let fn_franklinton : goto L1370
 23840   if penaltybase$="Bill" and bal<g(11) then ! use the balance to calculate penalty if balance less than last bill
-23841     if show_math then pr #255: '     *** use the balance ('&str$(bal)&') to calculate penalty if balance less than last bill ('&str$(g(11))&')( let usebalance=1 )'
-23843     let usebalance=1
+23841     if show_math then pr #255: '     *** use the balance ('&str$(bal)&') to calculate penalty if balance less than last bill ('&str$(g(11))&')( usebalance=1 )'
+23843     usebalance=1
 23845   else 
-23847     let usebalance=0
+23847     usebalance=0
 23849   end if 
 23850   ! If SUM(GB)<>BAL Then bASE=0 : Goto 990 ! if mat gb screwed up, just use the balance to calculate the penalty  kj 20110  afraid to leave in
 23852   ! if trim$(z$)='100090.00' then pr z$ : pause
@@ -275,9 +275,9 @@
 24480       mc1=0 ! nokey but still amount take up a column and calculate 0
 24500       L1240: ! 
 24520       if env$('client')="Riverside" and j=10 then ! r:
-24540         let g(10)=round(rt(1,3)*min(mc1,g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)),2)
-24560         let g(10)=g(10)+rt(2,3)*round(max(0,g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)-mc1),2)
-24580         let g(10)=max(0,g(10))
+24540         g(10)=round(rt(1,3)*min(mc1,g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)),2)
+24560         g(10)=g(10)+rt(2,3)*round(max(0,g(1)+g(2)+g(3)+g(4)+g(5)+g(6)+g(7)+g(8)-mc1),2)
+24580         g(10)=max(0,g(10))
 24600         tg(10)=g(10)
 24620       else ! /r
 24640         ! if debug_this_account then pause
@@ -317,7 +317,7 @@
 25060   tot+=sum(mat tg)
 25080   tcode=2 ! penalty trans code
 25100   for j=1 to 10
-25120     if tg(j)<>0 then let gb(j)+=tg(j) ! add new penalties into balance breakdown if here is a penalty
+25120     if tg(j)<>0 then gb(j)+=tg(j) ! add new penalties into balance breakdown if here is a penalty
 25140   next j
 25160   L1370: ! 
 25180   transkey$=z$&cnvrt$("pic(########)",pendat)&cnvrt$("pic(#)",tcode)
@@ -325,7 +325,7 @@
 25220   read #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1',key=transkey$: y$,olddate,oldcode,oldamount,mat oldtg nokey WRITE_2 ! check for recalk
 25240   bal=bal-oldamount
 25260   for j=1 to 10
-25280     let gb(j)=gb(j)-oldtg(j) ! take off of balance breakdown
+25280     gb(j)=gb(j)-oldtg(j) ! take off of balance breakdown
 25300   next j
 25320   rewrite #h_trans,using 'Form POS 1,C 10,N 8,N 1,12*PD 4.2,6*PD 5,PD 4.2,N 1': z$,pendat,2,tamount,mat tg,0,0,0,0,0,0,bal,pcode
 25340   goto PAST_WRITE_2
@@ -478,16 +478,16 @@
 28280 fnend  
 28300 def fn_franklinton
 28320   pentot=0
-28340   let gb(1)=gb(1)+round(g(1)*.1,2)
-28360   let gb(2)=gb(2)+round(g(2)*.1,2)
-28380   let gb(5)=gb(5)+round(g(5)*.1,2)
-28400   let gb(8)=gb(8)+round(g(8)*.1,2)
+28340   gb(1)=gb(1)+round(g(1)*.1,2)
+28360   gb(2)=gb(2)+round(g(2)*.1,2)
+28380   gb(5)=gb(5)+round(g(5)*.1,2)
+28400   gb(8)=gb(8)+round(g(8)*.1,2)
 28420   pentot=pentot+round(g(1)*.1,2)+round(g(2)*.1,2)+round(g(5)*.1,2)+round(g(8)*.1,2)
 28440   if a(4)=3 then 
-28460     let gb(4)=gb(4)+round(g(4)*.02,2)
+28460     gb(4)=gb(4)+round(g(4)*.02,2)
 28480     pentot=pentot+round(g(4)*.02,2)
 28500   else 
-28520     let gb(4)=gb(4)+round(d(11)*.005,2)
+28520     gb(4)=gb(4)+round(d(11)*.005,2)
 28540     pentot=pentot+round(d(11)*.005,2)
 28560   end if 
 28580   mat tg=(0)

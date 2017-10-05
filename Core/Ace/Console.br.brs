@@ -13,5 +13,5 @@
 00150     end if 
 00320     goto XIT
 00330 ! ______________________________________________________________________
-00340 XIT: let windowstate=on_off
+00340 XIT: windowstate=on_off
 00350   fnend 

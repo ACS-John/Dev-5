@@ -12,7 +12,7 @@
 00120   fngetcd(dur$)
 00130 REFREASH: ! 
 00140   mat brfn$(1000) : mat brfn$=("")
-00150   if filter$="" then let filter$="*.*"
+00150   if filter$="" then filter$="*.*"
 00160   fngetdir(dur$,mat brfn$," /s ",filter$)
 00170   for j=1 to udim(brfn$)
 00180     if brfn$(j)="" then mat brfn$(j) : goto OUT_THE_LOOP else !:
@@ -40,7 +40,7 @@
 00340   fncmdset(102)
 00350 L350: fnacs(sn$,0,mat resp$,ck)
 00360   if ck=5 then goto DONE
-00370   let filter$=resp$(1) !:
+00370   filter$=resp$(1) !:
         dur$=resp$(2)
 00380   if ck=6 then goto REFREASH
 00390 ! 

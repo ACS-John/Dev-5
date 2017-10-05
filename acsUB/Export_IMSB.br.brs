@@ -38,7 +38,7 @@
 28240     end if 
 28260 L330: ! 
 28280     fncsz(csz$,city$,state$,zip$)
-28300     let zip$=trim$(zip$)(1:5)
+28300     zip$=trim$(zip$)(1:5)
 28320 L350: ! 
 28340     pr #h_out,using F_OUT_FIXED: z$,nam$,sta$,city$,state$,zip$,chr$(10)
 28360   loop 

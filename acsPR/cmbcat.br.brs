@@ -9,8 +9,8 @@
 00090 ! ______________________________________________________________________
 00100     if addall<>1 then addall=0
 00110     fncno(cno)
-00120     if addall=0 then let fen$="Ccat.h"&str$(cno) else !:
-            let fen$="CcatALL.h"&str$(cno)
+00120     if addall=0 then fen$="Ccat.h"&str$(cno) else !:
+            fen$="CcatALL.h"&str$(cno)
 00130     if indexfile$="" then if$=env$('Q')&"\PRmstr\catindx.h"&str$(cno) else !:
             if$=indexfile$
 00140     fncombof(fen$,myline,mypos,43,env$('Q')&"\PRmstr\jccat.h"&str$(cno),1,11,12,25,if$,1+addall,1,"Select from the list of categories. To add a category record, go to the Category File.",container)

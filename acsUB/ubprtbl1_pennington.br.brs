@@ -52,7 +52,7 @@
 00480   close #255: 
 00490 L490: goto DONE
 00500 L500: pb=bal-g(11)
-00505   if g(2)=0 then let x$="" else let x$="Sewer" ! only show sewer if have charge
+00505   if g(2)=0 then x$="" else x$="Sewer" ! only show sewer if have charge
 00510   pr #255,using L520: 'Water',g(1)+g(9),x$,g(2),d3,d4,d2,bal,bal+g(10)+g(7)
 00520 L520: form skip 3,pos 45,c 9,n 10.2,skip 1,pos 45,c 9,pic(zzz,zzz.zz),skip 1,pos 11,pic(zzbzz),pos 20,pic(zzbzz),pos 30,pic(zzbzzbzz),skip 2,pos 48,n 9.2,n 10.2,skip 1
 00530   pr #255,using L540: d(2),d(1),int(d(3)/100),g(1),z$

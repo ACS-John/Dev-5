@@ -50,34 +50,34 @@
 08560   opt_check_type$(2)="Direct Deposit"
 08580   opt_check_type$(3)="All"
 08600 ! r: set mat wording$
-08620   let wc=0 ! Wording$ counter
-08640   let wording$(wc+=1)='One'
-08660   let wording$(wc+=1)='Two'
-08680   let wording$(wc+=1)='Three'
-08700   let wording$(wc+=1)='Four'
-08720   let wording$(wc+=1)='Five'
-08740   let wording$(wc+=1)='Six'
-08760   let wording$(wc+=1)='Seven'
-08780   let wording$(wc+=1)='Eight'
-08800   let wording$(wc+=1)='Nine'
-08820   let wording$(wc+=1)='Ten'
-08840   let wording$(wc+=1)='Eleven'
-08860   let wording$(wc+=1)='Twelve'
-08880   let wording$(wc+=1)='Thirteen'
-08900   let wording$(wc+=1)='Fourteen'
-08920   let wording$(wc+=1)='Fifteen'
-08940   let wording$(wc+=1)='Sixteen'
-08960   let wording$(wc+=1)='Seventeen'
-08980   let wording$(wc+=1)='Eighteen'
-09000   let wording$(wc+=1)='Nineteen'
-09020   let wording$(wc+=1)='Twenty'
-09040   let wording$(wc+=1)='Thirty'
-09060   let wording$(wc+=1)='Forty'
-09080   let wording$(wc+=1)='Fifty'
-09100   let wording$(wc+=1)='Sixty'
-09120   let wording$(wc+=1)='Seventy'
-09140   let wording$(wc+=1)='Eighty'
-09160   let wording$(wc+=1)='Ninety'
+08620   wc=0 ! Wording$ counter
+08640   wording$(wc+=1)='One'
+08660   wording$(wc+=1)='Two'
+08680   wording$(wc+=1)='Three'
+08700   wording$(wc+=1)='Four'
+08720   wording$(wc+=1)='Five'
+08740   wording$(wc+=1)='Six'
+08760   wording$(wc+=1)='Seven'
+08780   wording$(wc+=1)='Eight'
+08800   wording$(wc+=1)='Nine'
+08820   wording$(wc+=1)='Ten'
+08840   wording$(wc+=1)='Eleven'
+08860   wording$(wc+=1)='Twelve'
+08880   wording$(wc+=1)='Thirteen'
+08900   wording$(wc+=1)='Fourteen'
+08920   wording$(wc+=1)='Fifteen'
+08940   wording$(wc+=1)='Sixteen'
+08960   wording$(wc+=1)='Seventeen'
+08980   wording$(wc+=1)='Eighteen'
+09000   wording$(wc+=1)='Nineteen'
+09020   wording$(wc+=1)='Twenty'
+09040   wording$(wc+=1)='Thirty'
+09060   wording$(wc+=1)='Forty'
+09080   wording$(wc+=1)='Fifty'
+09100   wording$(wc+=1)='Sixty'
+09120   wording$(wc+=1)='Seventy'
+09140   wording$(wc+=1)='Eighty'
+09160   wording$(wc+=1)='Ninety'
 09180 ! /r
 09181   dim opt_yn$(2)*4
 09182   opt_yn$(1)="Yes"
@@ -110,7 +110,7 @@
 10690   check_number=ckno
 10710 ! if env$('client')="West Rest Haven" then sc1$="C"
 10720   if env$('client')="Billings" then sc1$="CSS"
-10730   if env$('client')="Divernon" or env$('client')="Thomasboro" or env$('client')="Edinburg" or env$('client')="Philo" or env$('client')="Hope Welty" or env$('client')="Monticello" then let ficam1$="Y"
+10730   if env$('client')="Divernon" or env$('client')="Thomasboro" or env$('client')="Edinburg" or env$('client')="Philo" or env$('client')="Hope Welty" or env$('client')="Monticello" then ficam1$="Y"
 10740   ddcode$="R"
 10742   fnreg_read('PR.Check print.skip alignment',skip_alignment$) : if skip_alignment$='' then skip_alignment$='No'
 10745   goto MAIN_QUESTIONS ! /r
@@ -188,7 +188,7 @@
 11380   dat=val(ckdat$(5:6)&ckdat$(7:8)&ckdat$(3:4))
 11390   empno=val(resp$(5)) ! beginning employee #
 11400   acsclcv$=uprc$(resp$(6)(1:1)) ! post Checkbook system
-11410   let ficam1$=uprc$(resp$(7)(1:1)) ! post fica match
+11410   ficam1$=uprc$(resp$(7)(1:1)) ! post fica match
 11430   sc1$=scc$(srch(mat opt_check_format$,resp$(8)))
 11460   ddcode$=uprc$(resp$(9)(1:1)) ! regular check or direct deposit
 11470   accr$=uprc$(resp$(10)(1:1)) ! pr vac and sick
@@ -204,7 +204,7 @@
 11507   if skip_alignment$='Yes' then allign=3
 11508 ! 
 11510   if acsclcv$="Y" then cl_installed=1 else cl_installed=0
-11520   if ficam1$="Y" then let ficam1=1 else let ficam1=0
+11520   if ficam1$="Y" then ficam1=1 else ficam1=0
 11530   if pre$="Y" then pre=1 else pre=0
 11532 ! if env$('client')="Washington Parrish" and (prdate<10100 or prdate>123199) then goto MAIN_QUESTIONS
 11540   if d1<beg_date or d1>end_date then ! not this year
@@ -271,9 +271,9 @@
 11890   open #breakdown=31: "Name="&env$('Q')&"\PRmstr\HourBreakdown.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\HourBreakdown-idx.H"&env$('cno'),internal,outin,keyed 
 11900   open #dd=30: "Name="&env$('Q')&"\PRmstr\DD.h"&env$('cno')&",RecL=72,KFName="&env$('Q')&"\PRmstr\DDidx1.h"&env$('cno')&",Shr,kps=1,kln=10,Use",internal,outin,keyed 
 11910   if fnclient_has('GL') and gl_installed=1 then 
-11920     let gl_installed=0
+11920     gl_installed=0
 11930     open #h_gl_glbrec:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLBREC.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLRECIDX.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1440
-11940     let gl_installed=1
+11940     gl_installed=1
 11950 L1440: ! 
 11960   end if 
 11980 MAIN_LOOP_TOP: ! 
@@ -350,7 +350,7 @@
 12690   if resp$(1)="True" then allign=1
 12700   if resp$(2)="True" then allign=2
 12710   if resp$(3)="True" then allign=3
-12720   if ck=5 then let getout=1: allign=2: goto CHECK_PRINT_TOP ! write history on last check and quit
+12720   if ck=5 then getout=1: allign=2: goto CHECK_PRINT_TOP ! write history on last check and quit
 12730   on allign goto REPRINT_SAME_CHECK,CHECK_PRINT_TOP,CHECK_PRINT_TOP none ALLIGNMENT
 12740 ! /r
 12750 REPRINT_SAME_CHECK: ! 
@@ -556,7 +556,7 @@
 14680   !   close #h_cl_trans: ioerr ignore
 14690   !   open #h_cl_trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX1.h"&env$('cno')&",Shr",internal,outin,keyed
 14700   read #h_cl_payee,using 'form pos 129,pd 5.2',key=lpad$(rtrm$(tr$(4)),8): ytdp nokey L4690 ! UPDATE PAYEE FILE
-14710   let ytdp=ytdp+val(tr$(3)) conv ignore
+14710   ytdp=ytdp+val(tr$(3)) conv ignore
 14720   ! REWRITE #h_cl_payee,USING 3720,KEY=LPAD$(RTRM$(TR$(4)),8): YTDP NOKEY 3730
 14740   L4690: ! 
 14750   read #h_cl_bank,using F_CLFILE_12,key=lpad$(str$(bankcode),2),release: bn$,bal,upi,lcn$ nokey L4740
@@ -571,7 +571,7 @@
 14860   if allign=1 then goto L5250
 14870   for j=1 to 29
 14880    if val(ded$(j))=0 then goto L5230
-14890    let gl$=""
+14890    gl$=""
 14900    on j goto L4840,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L4910,L5220,L5220,BCR_GLN_VALIDATED none L5230
 14910    ! ______________________________________________________________________
 14920    L4840: ! 
@@ -580,18 +580,18 @@
 14950      if dedcode(j-5)=3 then goto L5230 ! kj 91707  don't write entries for benefits
 14960      L4870: ! 
 14970      alloc=tdep(j1,1)
-14980      let gl$=cnvrt$("N 3",tdep(j1,2))&cnvrt$("N 6",tdep(j1,3))&cnvrt$("N 3",tdep(j1,4))
+14980      gl$=cnvrt$("N 3",tdep(j1,2))&cnvrt$("N 6",tdep(j1,3))&cnvrt$("N 3",tdep(j1,4))
 14990      sd5$="Gross Pay"
 15000      goto L4990
 15010      L4910: ! 
-15020      if j=2 then sd5$="Federal WH" : let gl$=gln$(1)
-15030      if j=3 then sd5$="FICA WH" : let gl$=gln$(2) : let fica0=val(ded$(j))
-15040      if j=4 then sd5$="Medicare" : let gl$=gln$(2) : medi0=val(ded$(j)): goto L4990
-15050      if j=5 then sd5$="State WH" : let gl$=gln$(3)
-15060      if j>5 and j<26 then sd5$=abrevname$(j-5) : let gl$=gl$(j-5)
-15070      if j=26 then let gl$=gln$(1): sd5$="eic" : goto L4990 ! use federal
+15020      if j=2 then sd5$="Federal WH" : gl$=gln$(1)
+15030      if j=3 then sd5$="FICA WH" : gl$=gln$(2) : fica0=val(ded$(j))
+15040      if j=4 then sd5$="Medicare" : gl$=gln$(2) : medi0=val(ded$(j)): goto L4990
+15050      if j=5 then sd5$="State WH" : gl$=gln$(3)
+15060      if j>5 and j<26 then sd5$=abrevname$(j-5) : gl$=gl$(j-5)
+15070      if j=26 then gl$=gln$(1): sd5$="eic" : goto L4990 ! use federal
 15080      if j=27 then goto L4990 ! skip tips i think
-15090      ! If J=28 Then Let GL$=GLN$(1): sD5$="Meals" : Goto 4890 ! use wages
+15090      ! If J=28 Then gL$=GLN$(1): sD5$="Meals" : Goto 4890 ! use wages
 15100      L4990: ! 
 15110      cd1=1
 15120      read #h_cl_glmstr,using F_CL_GLMSTR,key=rpad$(gl$,kln(h_cl_glmstr)),release: de$ nokey INVALIDGLNUMBER
@@ -611,7 +611,7 @@
 15260      if j=3 and ficam1=1 then alloc=alloc-ficam3 ! prb 2012
 15280      if alloc=0 then goto L5220 ! dont write zero allocation
 15290      lr3=lrec(23)+1
-15300      if j=3 then let fica1=alloc : let fica_rec=lr3
+15300      if j=3 then fica1=alloc : fica_rec=lr3
 15310      if j=4 then medi1=alloc
 15320      write #h_cl_trans_alloc,using L5140,rec=lr3: bankcode,1,val(tr$(1)),gl$,alloc,de$(1:30),miscode,0
 15330      L5140:  form pos 1,n 2,n 1,g 8,c 12,pd 5.2,c 30,n 6,pd 3
@@ -687,7 +687,7 @@
 16210       if j2>6 then goto L5870
 16220       if ficam1=0 then goto L5980
 16230       sd5$=de$="FICA Match"
-16240       let fica2=fica2+tdep(j,j2)
+16240       fica2=fica2+tdep(j,j2)
 16250       j4=3
 16260       goto L5900
 16270       L5870: ! 
@@ -695,7 +695,7 @@
 16290       j4=j2-2
 16300       sd5$=de$=rtrm$(abrevname$(j4-4))&" Match"
 16310       L5900: ! 
-16320       let gl$=mgl$(j2-5)
+16320       gl$=mgl$(j2-5)
 16330       read #h_cl_glmstr,using F_CL_GLMSTR,key=gl$,release: de$ nokey INVALIDGLNUMBER
 16340       ! 
 16350       ! 
@@ -993,7 +993,7 @@
 36100   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
 36120   pr #255: 
 36140   pr #255,using 'Form POS 53,PIC(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
-36160   let x=3
+36160   x=3
 36180   for j=1 to x
 36200     pr #255: ""
 36220   next j
@@ -1096,7 +1096,7 @@
 48080   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
 48100   pr #255: : pr #255: 
 48120   pr #255,using 'Form POS 57,PIC(ZZ/ZZ/ZZ),X 4,C 18': dat,ca$
-48140   let x=3
+48140   x=3
 48160   for j=1 to x
 48180     pr #255: ""
 48200   next j
@@ -1143,7 +1143,7 @@
 54080   pr #255,using 'Form POS 9,C 62': eng$(n+1:128)
 54100   pr #255: : pr #255: : pr #255: 
 54120   pr #255,using 'Form POS 53,PIC(ZZ/ZZ/ZZ),X 6,C 18': dat,ca$
-54140   let x=3
+54140   x=3
 54160   for j=1 to x
 54180     pr #255: ""
 54200   next j
@@ -1464,7 +1464,7 @@
 74020   mat caf=(0): mat ttc=(0): mat ttdc=(0)
 74040   mat tcp=(0): mat qtr1tcp=(0): mat qtr2tcp=(0): mat qtr3tcp=(0)
 74060   mat qtr4tcp=(0): mat ytdtotal=(0): mat tdc=(0): mat tty=(0)
-74080   let fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0
+74080   fedyr=ficayr=stateyr=wagesqtr=fedqtr=ficaqtr=stateqtr=medyr=0
 74100   medqtr=eicyr=eicqtr=wagesqtr=0
 74120   checkkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! indexed by employee#,department# and payroll date
 74140   restore #3,key>=checkkey$: nokey L6920
@@ -1487,9 +1487,9 @@
 74440   if prd=d1 then rewrite #3,using "form pos 18,n 7",rec=lastrec: check_number
 74460   goto L6580
 74480   STORE_VARIABLES: ! 
-74500   !   let wagesyr=ytdtotal(31) ! total wages
-74520   let fedyr=ytdtotal(1) ! ytdl fed
-74540   let ficayr=ytdtotal(2) ! fica year to date
+74500   !   wagesyr=ytdtotal(31) ! total wages
+74520   fedyr=ytdtotal(1) ! ytdl fed
+74540   ficayr=ytdtotal(2) ! fica year to date
 74560   medyr=ytdtotal(3) ! medicare year to date
 74580   stateyr=ytdtotal(4) ! total state  quarter
 74600   eicyr=ytdtotal(25) ! eic
@@ -1497,9 +1497,9 @@
 74640   if prd>=qtr2 and prd<qtr3 then mat quartertotals=qtr2tcp
 74660   if prd>=qtr3 and prd<qtr4 then mat quartertotals=qtr3tcp
 74680   if prd>=qtr4 and prd<end_date then mat quartertotals=qtr4tcp
-74700   let wagesqtr=quartertotals(31) ! total wages quarter
-74720   let fedqtr=quartertotals(1) ! total fed  quarter
-74740   let ficaqtr=quartertotals(2) ! total fica quarter
+74700   wagesqtr=quartertotals(31) ! total wages quarter
+74720   fedqtr=quartertotals(1) ! total fed  quarter
+74740   ficaqtr=quartertotals(2) ! total fica quarter
 74760   medqtr=quartertotals(3) ! total medicare quarter
 74780   stateqtr=quartertotals(4) ! total state  quarter
 74800   eicqtr=quartertotals(25) ! EIC qtr
@@ -1581,25 +1581,25 @@
 78640   ! ROUTINE TO ACCUMULATE HOURS ETC. FOR SUMMARY
 78660 fnend 
 80000 def fn_fica_fix ! fix rounding problem on fica
-80020   let fica3=fica0+medi0+fica1+medi1+fica2
+80020   fica3=fica0+medi0+fica1+medi1+fica2
 80040   if fica3=0 then goto FICA_END
 80060   read #h_cl_trans_alloc,using L5140,rec=fica_rec: bankcode,a1,tr1,gl$,alloc
 80080   alloc=alloc-fica3
 80100   rewrite #h_cl_trans_alloc,using L5140,rec=fica_rec: bankcode,a1,tr1,gl$,alloc
-80120   FICA_END: let fica3=fica0=medi0=fica1=medi1=fica2=0
+80120   FICA_END: fica3=fica0=medi0=fica1=medi1=fica2=0
 80140 fnend 
 82000 def fn_fica_matching ! CALCULATE MATCHING FICA
-82020   let ficawg=round(tcp(2)/ssr1,2) ! employee's fica rate
-82040   let ficam2=round(ficawg*ssr2,2) ! employers fica rate
+82020   ficawg=round(tcp(2)/ssr1,2) ! employee's fica rate
+82040   ficam2=round(ficawg*ssr2,2) ! employers fica rate
 82060   mediwg=tcp(3)/.0145 ! employee medicare rate
 82080   medic2=round(mediwg*.0145,2) ! employers medicare rate
 82100   if fmeno=eno then goto SENO
-82120   let fmeno=eno
-82140   let ficam3=ficam2
+82120   fmeno=eno
+82140   ficam3=ficam2
 82160   medic3=medic2
 82180   goto MFEND
 82200   SENO: ! same employee
-82220   let ficam3=ficam3+ficam2
+82220   ficam3=ficam3+ficam2
 82240   medic3=medic3+medic2
 82260   MFEND: ! 
 82280 fnend 
@@ -1692,7 +1692,7 @@
 88500   fncmdkey("E&xit",5,0,1,"Returns to menu")
 88520   fnacs(sn$,0,mat resp$,ckey) ! bad general ledger numbers
 88540   if ckey=5 then goto XIT
-88560   let gl$=fnagl$(resp$(5))
+88560   gl$=fnagl$(resp$(5))
 88600   read #h_cl_glmstr,using F_CL_GLMSTR,key=gl$,release: de$ nokey INVALIDGLNUMBER
 88620   on cd1 goto BCR_GLN_VALIDATED,EXLNKD_L5920 none BCR_GLN_VALIDATED
 88640 ! /r

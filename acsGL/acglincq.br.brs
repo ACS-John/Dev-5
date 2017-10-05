@@ -12,7 +12,7 @@
 00120   fntop(program$,cap$="Quarterly Income Statement")
 00130   on fkey 5 goto L1720
 00140   fncno(cno,cnam$)
-00150   let udf$=env$('temp')&'\'
+00150   udf$=env$('temp')&'\'
 00160   actpd$=fnactpd$
 00170   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
@@ -68,7 +68,7 @@
 00650   if ir=0 then goto L660
 00660 L660: read #3,using L250: ir,pcr,bb,cb,mat by,mat bp eof L800
 00670   if fscode=0 or (fscode=actpd and priorcd=1) then goto L740
-00680   if fscode<1 or fscode>13 then let fscode=1
+00680   if fscode<1 or fscode>13 then fscode=1
 00690   if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 00700   if fnpriorcd=2 then goto L730
 00710   if fscode>1 then bb=by(fscode-1) else bb=0
@@ -124,10 +124,10 @@
 01160   goto L470
 01170 L1170: if foot1=1 then goto L1220
 01180   tabnote=sp
-01190   let foot1=1
-01200   let foot$=d$
+01190   foot1=1
+01200   foot$=d$
 01210   goto L470
-01220 L1220: let foot$=rtrm$(foot$)&d$
+01220 L1220: foot$=rtrm$(foot$)&d$
 01230   goto L470
 01240 L1240: for j=1 to 9
 01250     if ac(j)=0 or ac(j)=9 then goto L1280 ! 10/14/87
@@ -154,11 +154,11 @@
 01460   continue 
 01470 L1470: if ul=0 then goto L1560
 01480   if ul=1 then goto L1530
-01490   let underlin$="=============="
+01490   underlin$="=============="
 01500   pr #255,using L1510: underlin$,underlin$
 01510 L1510: form pos 49,c 14,pos 67,c 14,skip redir
 01520   goto L1560
-01530 L1530: let underlin$="______________"
+01530 L1530: underlin$="______________"
 01540   pr #255,using L1550: underlin$,underlin$
 01550 L1550: form skip redir,pos 49,c 14,pos 67,c 14,skip redir
 01560 L1560: if redir=0 then pr #255,using L1570: " "
@@ -192,7 +192,7 @@
 01830     read #10,using L1840,key=k$: pc1,pc2,yt2 nokey L1890
 01840 L1840: form pos 1,g 5,2*pd 6.2
 01850     pc2=pc2+cb-bb
-01860     let yt2=yt2+cb
+01860     yt2=yt2+cb
 01870     rewrite #10,using L1840: pc1,pc2,yt2
 01880     goto L1900
 01890 L1890: write #10,using L1840: pc1,cb-bb,cb

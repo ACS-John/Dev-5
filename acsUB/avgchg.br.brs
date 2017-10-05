@@ -28,7 +28,7 @@
 00220   fncmdset(2): fnacs(sn$,0,mat resp$,ckey)
 00230   if ckey=5 then goto XIT
 00240   for j=1 to 8
-00250 L250: let x=pos(resp$(j),"/",1)
+00250 L250: x=pos(resp$(j),"/",1)
 00260     if x>0 then resp$(j)(x:x)="": goto L250
 00270   next j
 00280   sd1=val(resp$(1)) : sd2=val(resp$(2))
@@ -55,9 +55,9 @@
 00480   for j=1 to 9
 00490     if trim$(servicename$(j))="" then goto L520
 00500     j2=j2+1
-00510     let g1(j2)=ttg(j)/ttg
+00510     g1(j2)=ttg(j)/ttg
 00520 L520: next j
-00530   let g1(sz1)=ttg(11)/ttg
+00530   g1(sz1)=ttg(11)/ttg
 00540   pr #255,using L550: x$,e2$(1:24),mat g1 pageoflow NEWPGE
 00550 L550: form pos 1,c 11,c 24,sz1*n 9.2,skip 1
 00560   ttg=0 : mat ttg=(0)
@@ -108,11 +108,11 @@
 00990   hd1$="Account                             " !:
         hd2$="{\ul Number   }  {\ul Name                   }  "
 01000   for j=1 to 9 ! skip penalty
-01010     let x2=pos(trim$(servicename$(j))," ",1) !:
+01010     x2=pos(trim$(servicename$(j))," ",1) !:
           if x2>0 then servicename$(j)=servicename$(j)(1:2)&"-"&servicename$(j)(x2+1:len(servicename$(j)))
 01020     if trim$(servicename$(j))<>"" then !:
-            let x1=pos (servicename$(j)," ",1) !:
-            let x1=min(x1,7) !:
+            x1=pos (servicename$(j)," ",1) !:
+            x1=min(x1,7) !:
             hd1$=hd1$&"---------" !:
             hd2$=hd2$&"{\ul "&lpad$(trim$(servicename$(j)(1:x1)),8)&"} " !:
             sz1=sz1+1

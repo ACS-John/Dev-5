@@ -11,7 +11,7 @@
 00110   right=1
 00120   fntop(program$,cap$="Trial Balance Worksheet")
 00130   fnconsole(off=0)
-00140   let first=1
+00140   first=1
 00150   fncno(cno,cnam$)
 00160   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno),internal,input,relative  !:
         read #20,using 'Form POS 150,2*N 1',rec=1: d(1) !:
@@ -56,7 +56,7 @@
 00440 READ_GLMSTR: ! 
 00450   read #glmstr,using 'Form POS 1,C 12,C 50,POS 81,2*PD 6.2': n$,d$,bb,cb eof END1
 00460   if first=0 and n$(1:3)<>oldn$(1:3) then gosub TOTALS
-00470   let first=0
+00470   first=0
 00480   oldn$=n$
 00490   if costcent><0 and val(n$(1:3))><costcent then goto END1
 00500 L500: dno=val(n$(1:3)) : ano=val(n$(4:9)) : sno=val(n$(10:12))

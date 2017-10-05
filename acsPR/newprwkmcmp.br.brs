@@ -37,7 +37,7 @@
 18300 ! pr #255: '     *Read h_department: teno='&str$(teno)&', workman_comp='&str$(workman_comp)
 18302 !  if teno=13 and tdept=21 then pause
 18400     is_first=1
-18600     if workman_comp=0 then let workman_comp=99 ! default to 99 if no code entered
+18600     if workman_comp=0 then workman_comp=99 ! default to 99 if no code entered
 18650     if prev_comp<>0 and prev_comp<>workman_comp then let fn_sub_total : prev_comp=workman_comp : heno=teno ! subtotal any time codes change !
 18800     checkkey$=cnvrt$("pic(zzzzzzz#)",teno)&cnvrt$("pic(zz#)",tdept)&cnvrt$("pd 6",beg_date) ! index employee#,department# and payroll date
 18810 ! checkkey$=cnvrt$("pic(zzzzzzz#)",teno)&cnvrt$("pic(zz#)",0)&cnvrt$("pd 6",0) ! index employee#,department# and payroll date
@@ -92,7 +92,7 @@
 26400   continue 
 26600   def fn_add_wages
 26800     totwage=totwage+tcp(31) ! TOTAL WAGES FOR period
-27000     let wcwage=wcwage+tdc(6) ! TOTAL W/C WAGES FOR period
+27000     wcwage=wcwage+tdc(6) ! TOTAL W/C WAGES FOR period
 27200   fnend 
 27400   def fn_print_accumulated
 27600     pe_eno$=lpad$(str$(holdeno),8)
@@ -106,7 +106,7 @@
 28600     subtot(1)=subtot(1)+totwage
 28800     subtot(2)=subtot(2)+wcwage
 29000 SET_NEXT: totwage=0
-29200     let wcwage=0
+29200     wcwage=0
 29400     prev_comp=workman_comp
 29600     holdeno=teno
 29800   fnend 

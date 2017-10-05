@@ -12,7 +12,7 @@
 00120 ! ______________________________________________________________________
 00130   fntop(program$,cap$="Fund Comparison Balance Sheet")
 00140   fncno(cno,cnam$)
-00150   let udf$=env$('temp')&'\'
+00150   udf$=env$('temp')&'\'
 00155   actpd$=fnactpd$ !:
         actpd=fnactpd !:
         fnfscode !:
@@ -74,7 +74,7 @@
 00640   if fnfscode<1 or fnfscode>12 then let fnfscode(1)
 00650   if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 00660 L660: for x=1 to 10
-00670     if dno=fundnum(x) then let fund=x ! put in certain column
+00670     if dno=fundnum(x) then fund=x ! put in certain column
 00680     if fundnum(x)>0 then totcol=x ! total columns needed
 00690   next x
 00700   if br=val(r$) then total(fund)=total(fund)+cb else goto L720
@@ -150,10 +150,10 @@
 01330 ! ______________________________________________________________________
 01340 L1340: if foot1=1 then goto L1390
 01350   tabnote=sp
-01360   let foot1=1
-01370   let foot$=d$
+01360   foot1=1
+01370   foot$=d$
 01380   goto L440
-01390 L1390: let foot$=rtrm$(foot$)&d$
+01390 L1390: foot$=rtrm$(foot$)&d$
 01400   goto L440
 01410 L1410: for j=1 to 9
 01420     if ac(j)=0 or ac(j)=9 then goto L1460 ! 10/14/87
@@ -183,9 +183,9 @@
 01660 ! ______________________________________________________________________
 01670 L1670: if ul=0 then goto L1800
 01680   if ul=1 then goto L1710
-01690   let underlin$="  ============"
+01690   underlin$="  ============"
 01700   goto L1720
-01710 L1710: let underlin$="  ____________"
+01710 L1710: underlin$="  ____________"
 01720 L1720: bigul$=""
 01730   for j=1 to totcol : bigul$=bigul$&underlin$ : next j
 01740   if ul=1 then pr #255,using L1760: bigul$
@@ -240,8 +240,8 @@
 02160   fnacs(sn$,0,mat resp$,ckey)
 02170   if ckey=5 then goto XIT
 02180   for j=1 to 10
-02190     let fundnum(j)=val(resp$(j*2-1))
-02200     let funddesc$(j)=resp$(j*2)
+02190     fundnum(j)=val(resp$(j*2-1))
+02200     funddesc$(j)=resp$(j*2)
 02210   next j
 02220   rewrite #5,using L2070: mat fundnum,mat funddesc$ ioerr L2240
 02230   goto L2250

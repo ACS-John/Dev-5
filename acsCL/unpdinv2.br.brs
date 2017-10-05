@@ -11,7 +11,7 @@
 00110   fncno(cno,cnam$) !:
         fndat(dat$)
 00120   fnwait
-00130   let udf$=env$('temp')&'\'
+00130   udf$=env$('temp')&'\'
 00140   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\unpdidx1.h"&str$(cno)&",Shr",internal,input,keyed 
 00150   open #glmstr=7: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLINDEX.H"&str$(cno)&",Shr",internal,input,keyed 
 00160   open #unpdaloc=8: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&str$(cno)&",Shr",internal,input,keyed 
@@ -30,13 +30,13 @@
         if vn$<>unvn$ or iv$<>univ$ then goto READ_PAYTRANS
 00280   if amt=0 then goto READ_UNPDALOC
 00290   pr #255,using 'FORM POS 74,N 10.2,N 4,N 6,N 3': amt,mat gl pageoflow NEWPGE
-00300   let gl$=cnvrt$("N 3",gl(1))&cnvrt$("N 6",gl(2))&cnvrt$("N 3",gl(3))
+00300   gl$=cnvrt$("N 3",gl(1))&cnvrt$("N 6",gl(2))&cnvrt$("N 3",gl(3))
 00310   read #work,using 'FORM POS 63,PD 6.2',key=gl$: ga nokey L360
-00320   let ga+=amt
+00320   ga+=amt
 00330   rewrite #work,using 'FORM POS 63,PD 6.2',key=gl$: ga
 00340   goto READ_UNPDALOC
 00350 ! ______________________________________________________________________
-00360 L360: let gd$="" !:
+00360 L360: gd$="" !:
         read #glmstr,using 'Form Pos 13,C 50',key=gl$: gd$ nokey L370
 00370 L370: write #work,using 'FORM POS 1,C 12,C 50,PD 6.2': gl$,gd$,amt
 00380   goto READ_UNPDALOC

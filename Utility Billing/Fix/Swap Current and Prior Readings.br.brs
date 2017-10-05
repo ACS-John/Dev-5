@@ -38,8 +38,8 @@
 17600   do 
 17800     read #customer,using F_CUSTOMER: meteradr$,custname$,mat a,mat b,mat c,mat d, bal,f,mat g,mat gb,mat extra eof XIT
 18000     if f=d1 then ! else recalculation reduce balances
-18200       let water_reading_prior=min(d(1),d(2))
-18400       let water_reading_cur=max(d(1),d(2))
+18200       water_reading_prior=min(d(1),d(2))
+18400       water_reading_cur=max(d(1),d(2))
 18600       d(1)=water_reading_cur
 18800       d(2)=water_reading_prior
 18900       rewrite #customer,using F_CUSTOMER: meteradr$,custname$,mat a,mat b,mat c,mat d,bal,f,mat g,mat gb,mat extra

@@ -12,7 +12,7 @@
 00120   fntop(program$,cap$="Income Statement-Monthly & Year Budgets")
 00130   on fkey 5 goto L2160
 00140   fncno(cno,cnam$)
-00150   let udf$=env$('temp')&'\'
+00150   udf$=env$('temp')&'\'
 00160   actpd=fnactpd
 00170   actpd$=fnactpd$
 00180   if fnglfs=5 then goto XIT !:
@@ -85,11 +85,11 @@
 00820   if fnfscode=0 then monthb=monthb+bm(actpd) else monthb=monthb+bm(fnfscode) ! 11/24/86
 00830   if fnfscode=0 then goto L840 else goto L880 ! 11/24/86
 00840 L840: for j=1 to actpd
-00850     let ytdb=ytdb+bm(j)
+00850     ytdb=ytdb+bm(j)
 00860   next j
 00870   goto L660
 00880 L880: for j=1 to fnfscode ! 11/24/86
-00890     let ytdb=ytdb+bm(j) ! 11/24/86
+00890     ytdb=ytdb+bm(j) ! 11/24/86
 00900   next j ! 11/24/86
 00910   goto L660 ! 11/24/86
 00920 L920: if ir<val(r$) then goto L660
@@ -97,7 +97,7 @@
 00940 L940: notrans=1
 00950 L950: overundr=ytdb-total2
 00955   oumonth=monthb-total
-00960 ! Let UNEXPEND=ANNUALB-TOTAL2
+00960 ! uNEXPEND=ANNUALB-TOTAL2
 00970   for j=1 to 9
 00980     if ac(j)=9 then goto L1060 ! 10/14/87
 00990     accum(j,1)=accum(j,1)+monthb
@@ -111,9 +111,9 @@
 01080   total2=-total2
 01090   annualb=-annualb
 01100   monthb=-monthb
-01110   let ytdb=-ytdb
+01110   ytdb=-ytdb
 01120   overundr=overundr
-01130   let unexpend=unexpend
+01130   unexpend=unexpend
 01140 L1140: if ds=1 then dollar$="$" else dollar$=" "
 01150   goto L1190 ! pr all accounts even if zero balance  (if budget ever nets to zero, it messes the monthly budget column up
 01160   if annualb><0 or total2><0 then goto L1190
@@ -129,7 +129,7 @@
 01240   annualb=0
 01245   oumonth=0
 01250   monthb=0
-01260   let ytdb=0
+01260   ytdb=0
 01270   overundr=0
 01290   gosub L1600
 01295   if ul=1 then goto L1310
@@ -147,7 +147,7 @@
 01420   sp2=26-sp-1
 01425   if ul=1 then pr #255,using L1211: d$(1:sp2),dollar$,"{\UL ",accum1,"}",dollar$,"{\UL ",accum2,"}",dollar$,"{\UL ",accum3,"}",dollar$,"{\UL ",accum4,"}",dollar$,"{\UL ",accum5,"}",dollar$,"{\UL ",accum6,"}" pageoflow L1890 : goto L1440
 01430   pr #255,using L1210: d$(1:sp2),dollar$,accum1,dollar$,accum2,dollar$,accum3,dollar$,accum4,dollar$,accum5,dollar$,accum6 pageoflow L1890
-01440 L1440: let ft1=0
+01440 L1440: ft1=0
 01450   gosub L1600
 01455   if ul=1 then goto L1470
 01460   gosub L1900
@@ -159,10 +159,10 @@
 01520   goto L500
 01530 L1530: if foot1=1 then goto L1580
 01540   tabnote=sp
-01550   let foot1=1
-01560   let foot$=d$
+01550   foot1=1
+01560   foot$=d$
 01570   goto L500
-01580 L1580: let foot$=rtrm$(foot$)&d$
+01580 L1580: foot$=rtrm$(foot$)&d$
 01590   goto L500
 01600 L1600: for j=1 to 9
 01610     if ac(j)=0 or ac(j)=9 then goto L1690 ! 10/14/87
@@ -186,7 +186,7 @@
 01800 ! If PGLEN=42 Then sK=SK+1
 01810   pr #255,using L1820: rtrm$(foot$),"Page "&str$(pt1)
 01820 L1820: form skip sk,pos tabnote,c fl,pos 100,c 8,skip 1
-01830 ! Let FT1=1
+01830 ! ft1=1
 01840   if eofcode=1 then goto L1870
 01850   pr #255: newpage
 01860   gosub L2030
@@ -195,10 +195,10 @@
 01890 L1890: gosub L1760: continue 
 01900 L1900: if ul=0 then goto L1990
 01910   if ul=1 then goto L1960
-01920   let underlin$="=============="
+01920   underlin$="=============="
 01940   goto L1970
 01950   goto L1990
-01960 L1960: let underlin$="______________"
+01960 L1960: underlin$="______________"
 01970 L1970: pr #255,using L1980: underlin$,underlin$(1:12),underlin$(1:12),underlin$,underlin$,underlin$
 01980 L1980: form pos 26,c 15,2*c 13,4*c 15,skip redir
 01990 L1990: if redir=0 then pr #255,using L2000: " " pageoflow L1890

@@ -166,11 +166,11 @@
 01420 ! ______________________________________________________________________
 01430 L1430: if foot1=1 then goto L1490
 01440   tabnote=sp
-01450   let foot1=1
-01460   let foot$=d$
+01450   foot1=1
+01460   foot$=d$
 01470   goto L440
 01480 ! ______________________________________________________________________
-01490 L1490: let foot$=rtrm$(foot$)&d$
+01490 L1490: foot$=rtrm$(foot$)&d$
 01500   goto L440
 01510 ! ______________________________________________________________________
 01520 L1520: for j=1 to 9
@@ -201,14 +201,14 @@
 01770 ! ______________________________________________________________________
 01780 L1780: if ul=0 then goto L1930
 01790   if ul=1 then goto L1870
-01800   let underlin$=" ==========="
+01800   underlin$=" ==========="
 01810   if nap=13 then goto L1840
 01820   pr #255,using L1850: underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,""
 01830   goto L1930
 01840 L1840: pr #255,using L1850: underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$
 01850 L1850: form pos 39,13*c 12,skip redir
 01860   goto L1930
-01870 L1870: let underlin$=" ___________"
+01870 L1870: underlin$=" ___________"
 01880   if nap=13 then goto L1910
 01890   pr #255,using L1920: underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,underlin$,""
 01900   goto L1930

@@ -1,8 +1,8 @@
 00010 ! formerly S:\acsGL\fnglPayee and S:\acsGL\glPayee
 00020 ! Payee File for general ledger system and home to the fnAddGLPayee function
-00050 let fn_setup
-00090 let fntop(program$)
-00110 let fn_addglpayee
+00050 fn_setup
+00090 fntop(program$)
+00110 fn_addglpayee
 00120 goto XIT
 00140 XIT: fnxit
 00200 ignore: continue
@@ -191,9 +191,9 @@
 37100     do
 37120       read #payeegl,using 'Form Pos 1,C 8,c 12,n 6.2,c 30': payeekey$,payeegl$,percent,gldesc$ eof EO_FLEX3
 37140       if vn$<>payeekey$ then goto EO_FLEX3
-37160       let glitem$(1)=str$(rec(payeegl)) : let glitem$(2)=payeekey$ 
-37180       let glitem$(3)=payeegl$ : let glitem$(4)=str$(percent) 
-37200       let glitem$(5)=gldesc$ 
+37160       glitem$(1)=str$(rec(payeegl)) : glitem$(2)=payeekey$ 
+37180       glitem$(3)=payeegl$ : glitem$(4)=str$(percent) 
+37200       glitem$(5)=gldesc$ 
 37220       fnflexadd1(mat glitem$)
 37240     loop
 37260     EO_FLEX3: ! /r
@@ -217,9 +217,9 @@
 38200     ph$=resp$(8) ! phone 
 38220     contact$=resp$(9) ! contact name 
 38240     email$=resp$(10) ! email address
-38260     let fax$=resp$(11) ! fax number 
+38260     fax$=resp$(11) ! fax number 
 38280     myact$=resp$(12) ! my account number with this payee 
-38300     let gldistrec=val(resp$(13)) ! record number of gl distribution entry
+38300     gldistrec=val(resp$(13)) ! record number of gl distribution entry
 38320     if ck=4 then 
 38340       gosub PAYEE_TRANSACTIONS 
 38360       goto EDIT_PAYEE
@@ -293,7 +293,7 @@
 66020   close #trans: ioerr ignore
 66040   open #trans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gltrIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 66060   fntos(sn$='payee_hist') 
-66080   lc=0 : mylen=25 : mypos=mylen+2 : let width=50
+66080   lc=0 : mylen=25 : mypos=mylen+2 : width=50
 66100   lc+=1
 66120   fnlbl(lc+=1,30,'Payee Transactions',width,center)
 66140   fnlbl(lc+=1,1,"Transaction Starting Date:",mylen,right)
@@ -302,7 +302,7 @@
 66200   fnlbl(lc+=1,1,"Transaction Ending Date:",mylen,right)
 66220   fntxt(lc,mypos,8,0,left,'CCYYMMDD',0,'Blank for All') 
 66240   resp$(2)=str$(transactionendingdate)
-66260   let wbc=0
+66260   wbc=0
 66280   fnlbl(lc=6,40,'Transaction Grid')
 66300   mat chdr$(6) : mat cmask$(6) : mat item6$(6) 
 66320   chdr$(1)='Rec' 
@@ -377,7 +377,7 @@
 72320     payeekey$=vn$
 72340     payeegl$=fnagl$(resp$(1))
 72360     percent=val(resp$(2)) ! percent
-72380     let gldesc$=resp$(3)
+72380     gldesc$=resp$(3)
 72400     if ck=4 and gldistrec>0 then 
 72420       delete #payeegl,rec=gldistrec: 
 72430       goto GlBreakdownsXit

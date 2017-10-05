@@ -35,9 +35,9 @@
 00260   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
 00270   fnacs(sn$,0,mat resp$,ckey)
 00280   if ckey=5 then goto XIT
-00290   let from =val(resp$(1))
+00290   from =val(resp$(1))
 00300   to =val(resp$(2))
-00310   let from$=cnvrt$("PIC(######)",from): to$=cnvrt$("PIC(######)",to)
+00310   from$=cnvrt$("PIC(######)",from): to$=cnvrt$("PIC(######)",to)
 00320 ! DATE_LIST: !
 00330   fntos(sn$="AcglPost1") 
 00332   mylen=10: mypos=mylen+3 : right=1
@@ -45,7 +45,7 @@
 00372   fngetdir2(env$('Q')&'\GLmstr\',mat filename$,'','GL*.H'&env$('cno'),mat filedate$,mat filetime$)
 00410   dircount=0
 00420   for filenameItem=1 to udim(mat filename$)
-00440     let x=val(filename$(filenameItem)(3:8)) conv L420
+00440     x=val(filename$(filenameItem)(3:8)) conv L420
 00450     if x<10100 or x>123199 then goto L420
 00460     if fndate_mmddyy_to_ccyymmdd(x)>=fndate_mmddyy_to_ccyymmdd(val(from$)) and fndate_mmddyy_to_ccyymmdd(x)<=fndate_mmddyy_to_ccyymmdd(val(to$)) then 
 00462       mat dir(dircount+=1) : dir(dircount)=val(filename$(filenameItem)(3:8))
@@ -92,7 +92,7 @@
 00762         read #2,using L900,rec=1: lr2
 00770         lr2=lrec(2)+1
 00780         write #2,using L880,rec=lr2,reserve: t$,s,k,mat n,l$,p$,0 duprec L760
-00790         if k>0 then let x=25 else let x=40
+00790         if k>0 then x=25 else x=40
 00800         if listing=1 then pr #255,using L810: t$,s,k,l$,p$,n(1) pageoflow L1290
 00810         L810: form pos 1,c 12,x 3,pic(zz/zz/zz),pos x,pic(---,---,---.##),pos 56,c 15,c 33,n 1,skip 1
 00820         if k<0 then totalcr=totalcr+k else totaldr=totaldr+k
@@ -126,7 +126,7 @@
 01052       close #3: 
 01060       if listing =1 then pr #255,using L1070: "------------","------------","DAILY TOTALS",totaldr,totalcr,"------------","------------"
 01070       L1070: form pos 27,c 12,x 3,c 12,skip 1,pos 5,c 20,pos 24,2*pic(----,---,---.##),skip 1,pos 27,c 12,x 3,c 12,skip 1
-01080       let gtdr=gtdr+totaldr: let gtcr=gtcr+totalcr
+01080       gtdr=gtdr+totaldr: gtcr=gtcr+totalcr
 01090       totaldr=totalcr=0
 01100     end if
 01102   next j3
@@ -306,7 +306,7 @@
 20900 ! ** Field Masks **
 20920   ic=0
 20940   pointtwo=32 : number=30
-20960   ccyymmdd=3 : mmddyy=1 : let glnumber=53
+20960   ccyymmdd=3 : mmddyy=1 : glnumber=53
 20980   mask(ic+=1)=0
 21000   mask(ic+=1)=1
 21020   mask(ic+=1)=10 ! mask 10 is 2 decimals and commas

@@ -31,7 +31,7 @@
 00280   on ti goto L300,L600,L950,SRCH3 none L230
 00290 ! ______________________________________________________________________
 00300 L300: pr newpage
-00310   let win=102
+00310   win=102
 00320   fnopenwin(win,08,20,16,59,cap$)
 00330   pr #win,fields "4,1,Cc 40,R,N": "* * * Warning * * *"
 00340   pr #win,fields "5,1,Cc 40,N": "This selection will erase all records"
@@ -63,7 +63,7 @@
 00590 ! ______________________________________________________________________
 00600 L600: if ti=4 then goto SRCH3
 00610 L610: pr newpage
-00620   let win=102
+00620   win=102
 00630   fnopenwin(win,10,20,14,59,cap$)
 00640   pr #win,fields "4,2,C 17,N": "Description Code:"
 00650   pr f "15,34,C 11,B,5": "Cancel (F5)"
@@ -75,7 +75,7 @@
 00710   da=0
 00720 L720: close #win: ioerr L740
 00730   pr newpage
-00740 L740: let win=103
+00740 L740: win=103
 00750   fnopenwin(win,08,18,14,62,cap$)
 00760   read #1,using L770,key=cde$: cde$,des$ nokey L800
 00770 L770: form pos 1,c 3,c 30
@@ -133,7 +133,7 @@
 01290 ! ______________________________________________________________________
 01300 SRCH3: ! 
 01310   bk=0
-01320   let win=102
+01320   win=102
 01330   fnopenwin(win,02,47,23,79,cap$)
 01340 ! jN$=LPAD$(RTRM$(JCI$(HCE-2)),6)
 01350 ! READ #41,USING 12500,KEY=JN$: JN$,N$,MAT A$,MAT B NOKEY (list 'asdf')

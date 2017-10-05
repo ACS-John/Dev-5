@@ -33,8 +33,8 @@
 00280   fnacs(sn$,0,mat resp$,ckey)
 00290   if ckey=5 then goto XIT
 00300   if resp$(1)="True" then sel=1 else sel=2
-00310   if trim$(resp$(3))<>"" then let gl1$=fnagl$(resp$(3))
-00320   if trim$(resp$(4))<>"" then let gl2$=fnagl$(resp$(4))
+00310   if trim$(resp$(3))<>"" then gl1$=fnagl$(resp$(3))
+00320   if trim$(resp$(4))<>"" then gl2$=fnagl$(resp$(4))
 00330 L330: open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
 00340 ! ______________________________________________________________________
 00350   pr newpage
@@ -46,7 +46,7 @@
 00410   gosub L680
 00420 L420: read #1,using L430: dno,ano,sno,d$,br,sbr,ir,sir,fr,sfr eof L650
 00430 L430: form pos 1,n 3,n 6,n 3,c 50,6*pd 3
-00450   let gl3$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
+00450   gl3$=cnvrt$("N 3",dno)&cnvrt$("N 6",ano)&cnvrt$("N 3",sno)
 00451   if trim$(gl1$)="" then goto L461
 00460   if gl3$<gl1$ then goto L420
 00461 L461: if trim$(gl2$)="" then goto L480

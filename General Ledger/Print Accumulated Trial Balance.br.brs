@@ -196,13 +196,13 @@
 46300   ReadTrXit: !
 46320 return ! /r
 48000 PRINT_A_TRANS: ! r:
-48020   let x$=a$(tr(6))
+48020   x$=a$(tr(6))
 48040   if val(cogl$(1)(4:9))=0 or val(cogl$(2)(4:9))=0 then goto PRINT_TRANS
 48060   if t$>=cogl$(1) and t$<=cogl$(2) then 
 48080       if tr(5)>0 then goto PRINT_TRANS
-48100       let u0=u0+tr(5)
+48100       u0=u0+tr(5)
 48120       trtotal=trtotal+tr(5)
-48140       let u$=t$
+48140       u$=t$
 48160       goto L1630
 48180   end if
 48200   if tr$="999999999999" then tr$=" "
@@ -211,14 +211,14 @@
 48260   pr #255,using L1610: td$,tr(4),x$,lpad$(rtrm$(tr$),12),tr(5)
 48280   L1610: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos 67,c 12,pos 95,pic(zz,zzz,zzz.## cr)
 48300   trtotal=trtotal+tr(5)
-48320   let u$=t$
+48320   u$=t$
 48340   L1630: ! 
 48360 return ! /r
 52000 PRINT_CB_OR_SUMTR: ! r:
 52020   if u0 and u$=>cogl$(1) and u$<=cogl$(2) then 
 52060     pr #255,using L1690: "Summary Transaction",u0
 52080     L1690: form pos 21,c 30,pos 95,pic(zz,zzz,zz#.## cr)
-52100     let u0=0
+52100     u0=0
 52120   end if
 52140   if petro_opt$='False' then 
 52160     pr #255,using 'form pos 110,pic(zz,zzz,zzz.## cr)': cb

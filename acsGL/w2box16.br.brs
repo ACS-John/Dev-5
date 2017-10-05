@@ -30,7 +30,7 @@
 12120     dim t$*8
 12180     open #hw2box16:=fngethandle: "Name="&env$('Q')&"\GLmstr\W2Box16.h"&env$('cno')&",Version=0,KFName="&env$('Q')&"\GLmstr\W2Index.h"&env$('cno')&",Use,RecL=158,KPs=1,KLn=8,Shr",internal,outin,keyed
 12200     dim fw2box16$*255
-12220     let fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
+12220     fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 12240   end if
 12260 fnend
 24000 MENU1: ! r:

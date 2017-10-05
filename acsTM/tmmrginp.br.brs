@@ -36,7 +36,7 @@
 00370   read #4,using L380,rec=ca(b(5)): ta1,ta2,fb1 norec L580 ioerr L820
 00380 L380: form pos p1,2*pd 3,pos p2,n 1
 00390   if ta2>0 then rewrite #2,using L140,rec=ta2: lta
-00400   if b(7)=-2 then let fb1=1
+00400   if b(7)=-2 then fb1=1
 00410   if ta1=0 then ta1=lta
 00420   rewrite #4,using L380,rec=ca(b(5)): ta1,lta,fb1
 00430   if scc(b(5))=0 and b(7)>0 then goto L560 else goto L580
@@ -46,9 +46,9 @@
 00470   ca(b(5))=lta4
 00480   ta(b8,1)=lta
 00490   ta(b8,2)=lta
-00500   if b(7)=-2 then let fb(b8)=2
+00500   if b(7)=-2 then fb(b8)=2
 00510   if fb(b8)=2 then goto L530
-00520   if b(7)=-1 then let fb(b8)=1
+00520   if b(7)=-1 then fb(b8)=1
 00530 L530: write #4,using L540,rec=lta4,reserve: mat ta,mat fb duprec L440
 00540 L540: form pos 1,50*pd 3,25*n 1
 00550   rewrite #4,using L190,rec=1,release: lta4

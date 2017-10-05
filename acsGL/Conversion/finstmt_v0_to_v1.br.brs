@@ -11,12 +11,12 @@
 00130 ! ______________________________________________________________________
 00140     fnstatus('Converting Financial Statement.')
 20000 GOON: ! 
-20020     let fil$(1)="acglfnSB": idx$(1)="fnSBIndx" ! Balance Sheet
-20040     let fil$(2)="acglfnSI": idx$(2)="fnSIIndx" ! Income Statement
-20060     let fil$(3)="acglfnSF": idx$(3)="fnSFIndx" ! Funt Statement / Cash Flow
-20080     let fil$(4)="acglfnSC": idx$(4)="fnSCIndx" ! Secondary Balance Sheet
-20100     let fil$(5)="acglfnSJ": idx$(5)="fnSJIndx" ! Secondary Income Statement
-20120     let fil$(6)="acglfnSG": idx$(6)="fnSGIndx" ! Secondary Fund / Cash Flow
+20020     fil$(1)="acglfnSB": idx$(1)="fnSBIndx" ! Balance Sheet
+20040     fil$(2)="acglfnSI": idx$(2)="fnSIIndx" ! Income Statement
+20060     fil$(3)="acglfnSF": idx$(3)="fnSFIndx" ! Funt Statement / Cash Flow
+20080     fil$(4)="acglfnSC": idx$(4)="fnSCIndx" ! Secondary Balance Sheet
+20100     fil$(5)="acglfnSJ": idx$(5)="fnSJIndx" ! Secondary Income Statement
+20120     fil$(6)="acglfnSG": idx$(6)="fnSGIndx" ! Secondary Fund / Cash Flow
 20140 ! 
 20160     for j=1 to 6
 20180       execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&' '&env$('temp')&"\WORK."&session$&" -83 -d -n" ioerr NEXT_J

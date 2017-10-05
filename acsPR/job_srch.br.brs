@@ -17,10 +17,10 @@
 00140     ch$(1)="Job #" : ch$(2)="Job Name" : ch$(3)="Address" !:
           ch$(4)="City, ST Zip" !:
           mat ch$(4) : mat cm$(4) : mat cm$=("4")
-00160     if fixgrid=99 then let usefile=0 else let usefile=1 !:
+00160     if fixgrid=99 then usefile=0 else usefile=1 !:
             ! set to rebuild grid file only as you exit program and the !:
             ! fixgrid code has been changed to necessary
-00170     let usefile=fnflexinit1('Job',1,1,10,70,mat ch$,mat cm$,1,usefile)
+00170     usefile=fnflexinit1('Job',1,1,10,70,mat ch$,mat cm$,1,usefile)
 00180     if usefile>0 then goto L280 ! file already exists, do not recreate
 00190 READ_FILE: ! 
 00200     read #file_num,using 'Form POS 1,c 6,c 40,c 30,x 30,c 30': mat item$ eof L280 ioerr ERR_READ

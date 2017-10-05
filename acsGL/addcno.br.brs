@@ -17,9 +17,9 @@
 00170   fncmbcno(1,mypos)
 00180   fncmdset(2)
 00190   fnacs(sn$,0,mat resp$,ckey)
-00195   if ckey=5 then let fro_cno=99999: goto L210 ! use company #99999 if no company to copy from
-00200   let fro_cno=val(resp$(1)(43:47))
-00205   if fro_cno=0 then let fro_cno=99999
+00195   if ckey=5 then fro_cno=99999: goto L210 ! use company #99999 if no company to copy from
+00200   fro_cno=val(resp$(1)(43:47))
+00205   if fro_cno=0 then fro_cno=99999
 00210 L210: if to_cno<1 or to_cno=fro_cno then goto MENU1
 00220 ! ___________________________
 00230   fnCopy(env$('Q')&"\GLmstr\*.h"&str$(fro_cno),env$('Q')&"\GLmstr\*.h"&str$(to_cno))

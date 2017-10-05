@@ -38,7 +38,7 @@
 00370   read #1,using L380, key=lpad$(str$(idat),6)&lpad$(str$(idep),3): dat,dep,mat pt nokey ADDOPTION
 00380 L380: form pos 1,n 6,n 3,25*pd 5.2,n 4
 00390 L390: pr newpage
-00400   let win=101
+00400   win=101
 00410   fnopenwin(win,2,2,23,75,cap$)
 00420   pr #win: newpage
 00430   pr #win,fields mat sc$: mat a$

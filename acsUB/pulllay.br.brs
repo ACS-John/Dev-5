@@ -84,7 +84,7 @@
 00725 ! pr ln$ : pause
 00730 ! SPECIAL ROUTINE TO PLACE CORRECT SERVICE NAMEON EACH SERVICE IN UTILITY BILLING
 00740     if uprc$(a$(j3,1)(1:7))<>"SERVICE" then goto L850
-00750     let x=val(a$(j3,1)(9:10)) conv L850
+00750     x=val(a$(j3,1)(9:10)) conv L850
 00760     if trim$(servicename$(x))="" then goto READ_TEMP ! SERVICE NOT USED
 00770     a$(j3,1)(1:9)=""
 00780     if x=3 and trim$(servicename$(x))<>"Electric" and srv$(3)="EL" then goto L840
@@ -97,7 +97,7 @@
 00842     a$(j3,1)=trim$(servicename$(x))&" "&trim$(a$(j3,1))
 00850 L850: ! 
 00852     if uprc$(abbrev$)(1:7)<>"SERVICE" then goto L890
-00860     let x=val(abbrev$(9:10)) conv L890
+00860     x=val(abbrev$(9:10)) conv L890
 00870     abbrev$(1:9)=""
 00880     abbrev$=trim$(servicename$(x))&" "&trim$(abbrev$)
 00890 L890: ! 

@@ -8,7 +8,7 @@
 10070   do 
 10080 NEXTCUST: read #h_mstr,using MSTRFORM: z$,mat ru,bal,cdate,mat charge,net,gross,mat bd,rt eof XIT
 10090     if rt=3 then 
-10100       let got_bal=0 : let got_current=0 : let got_prior=0 : has_bad=0 : collections=0
+10100       got_bal=0 : got_current=0 : got_prior=0 : has_bad=0 : collections=0
 10110       srch$=lpad$(cnvrt$("PIC(######.##)",val(z$)+.01),10," ")
 10120       read #h_trans,using TRANSFORM,search>=srch$: a$,tdate,tcode,tamt,mat tg,tnet,wread,wused,tbal,pcode eof PROCESSCUST
 10130 PROCESSCUST: do 
@@ -25,7 +25,7 @@
 10240           delete #h_trans: ! delete the bad transaction
 10250         else if tdate<20130405 and has_bad=1 then 
 10260           if got_bal=0 then 
-10270             bal=tbal : let got_bal=1 ! get the balance from the most recent transaction before the bad ones
+10270             bal=tbal : got_bal=1 ! get the balance from the most recent transaction before the bad ones
 10280           end if 
 10290           if tcode=3 then ! this is a collection, so we'll need to make sure this is a correct balance
 10300             collections+=tamt
@@ -34,13 +34,13 @@
 10330             if got_current=0 then ! this is the current charge
 10340               cdate=fn_date6(tdate)
 10350               ru(4)=ru(4)-wused : ru(1)=wread : ru(3)=wused
-10360               net=tnet : let gross=tnet+tg(10)
+10360               net=tnet : gross=tnet+tg(10)
 10370               mat charge=tg
 10380               if tbal-collections<>bal then bal=tbal-collections
-10390               let got_current=1
+10390               got_current=1
 10400             else ! this is the prior charge
 10410               ru(2)=wread
-10420               let got_prior=1
+10420               got_prior=1
 10430             end if 
 10440           end if 
 10450           if got_bal and got_current and got_prior then 

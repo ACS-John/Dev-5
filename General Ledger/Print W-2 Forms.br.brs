@@ -16,14 +16,14 @@
 14190   dim k$(3)*30
 14200 ! ______________________________________________________________________
 14220   fntop(program$,cap$="Print W-2 Forms")
-14240   let fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
+14240   fw2box16$="FORM  POS 1,C 8"&rpt$(",C 12,G 10.2,3*G 1",6)
 14260 ! 
 14280 ! ______________________________________________________________________
 14300   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative
 14320   read #1,using 'Form POS 386,PD 5.3,PD 5.2,PD 5.3,PD 5.2',rec=1: ficarate,ficawage,feducrat,feducwag 
 14340   close #1: 
-14360   let ficarate=ficarate/100 
-14380   let feducrat=feducrat/100
+14360   ficarate=ficarate/100 
+14380   feducrat=feducrat/100
 14400   open #hCompany:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  
 14420   read #hCompany,using 'Form POS 1,3*C 40,2*C 12,POS 618,40*N 1': mat a$,mat b$,mat dedcode,mat dedfed,mat dedfica,mat dedst 
 14440   close #hCompany: 
@@ -92,30 +92,30 @@
 30340   controlNumber$=str$(eno)
 30360   empId$=b$(1) ! FEDERAL ID #
 30380   stcode$=b$(2) ! STATE ID #
-30400   let w(1)=m(3) ! FED W/H YTD
-30420   let w(2)=m(1)-dedfed ! TOTAL TAXABLE WAGES
-30440   let w(3)=m(5) ! FICA W/H YTD
-30460   let w(4)=m(35) ! EIC TOTAL
-30480   let w(5)=m(1)-m(31)-dedfica ! TOTAL SS WAGES
-30500   if m(5)=0 then let w(5)=0 ! no ss wages if no ss wh
-30520   let w(6)=m(31) ! FICA TIPS YTD
-30540   let w(11)=w(5)+w(6) ! medicare wages = ss wages + tips
-30560   let w(7)=m(7) ! STATE WH
-30580   let w(9)=m(1)-dedst ! STATE WAGES
+30400   w(1)=m(3) ! FED W/H YTD
+30420   w(2)=m(1)-dedfed ! TOTAL TAXABLE WAGES
+30440   w(3)=m(5) ! FICA W/H YTD
+30460   w(4)=m(35) ! EIC TOTAL
+30480   w(5)=m(1)-m(31)-dedfica ! TOTAL SS WAGES
+30500   if m(5)=0 then w(5)=0 ! no ss wages if no ss wh
+30520   w(6)=m(31) ! FICA TIPS YTD
+30540   w(11)=w(5)+w(6) ! medicare wages = ss wages + tips
+30560   w(7)=m(7) ! STATE WH
+30580   w(9)=m(1)-dedst ! STATE WAGES
 30600   if m(9)=0 then ! NO LOCAL WH
 30610     printLocality$=""  
 30612   else
-30620     let w(8)=m(9) ! LOCAL WITHHOLDING
-30640     let w(10)=m(1)-dedst ! LOCAL WAGES
+30620     w(8)=m(9) ! LOCAL WITHHOLDING
+30640     w(10)=m(1)-dedst ! LOCAL WAGES
 30660     if uprc$(cLocality$)="YES" then gosub ASK_EMP_LOCALITY
 30680     printLocality$=empLocality$ ! LOCALITY NAME
 30700   end if
 30720   if box16=1 then gosub BOX16_process
-30740   let w(5)=min(ssmax-w(6),w(5)) ! SS WAGES CANNOT EXCEED MAXIMUM
-30760   let w(11)=min(mcmax,w(11)) ! MC WAGES CANNOT EXCEED MAXIMUM
+30740   w(5)=min(ssmax-w(6),w(5)) ! SS WAGES CANNOT EXCEED MAXIMUM
+30760   w(11)=min(mcmax,w(11)) ! MC WAGES CANNOT EXCEED MAXIMUM
 30780   sswh=min(round((w(5)+w(6))*ssrate,2),w(3))
-30800   let w(12)=w(3)-sswh ! MEDICARE WH
-30820   let w(3)=sswh ! SOCIAL SECURITY WITHHELD
+30800   w(12)=w(3)-sswh ! MEDICARE WH
+30820   w(3)=sswh ! SOCIAL SECURITY WITHHELD
 35180       if exportFormatID=1 then 
 35190         nqp=amt(1)+amt(2)
 35200         gosub EXPORT_AMS
@@ -129,7 +129,7 @@
 35880   mat desc$=("")
 35900   box12aCode$=box12aAmt$=box12bCode$=box12bAmt$=box12cCode$=box12cAmt$=box12dCode$=box12dAmt$=''
 35920   mat amt=(0)
-35940   let wctr=wctr+1
+35940   wctr=wctr+1
 35960   mat w=(0)
 35980 loop ! /r
 37000 FINIS: ! r:
@@ -144,7 +144,7 @@
 37160     nameFirst$=nameMiddle$=nameLast$=""
 37180     mat k$=("")
 37182     ss$=stcode$=printLocality$=""
-37190     let x$=" "
+37190     x$=" "
 37200     gosub PRINTW2
 37280     fnpa_finis
 37300   end if
@@ -188,18 +188,18 @@
 64140   b16PastRead: !
 64160   for j=1 to 6
 64180     amt(j)=val(in4$(j*5-3))
-64200     if in4$(j*5-2)="1" then let w(2)+=amt(j)
-64220     if in4$(j*5-1)="1" then let w(5)+=amt(j)
+64200     if in4$(j*5-2)="1" then w(2)+=amt(j)
+64220     if in4$(j*5-1)="1" then w(5)+=amt(j)
 64240     !   if env$('client')="Washington Parrish" then goto L3760
-64260     if in4$(j*5-1)="1" then let w(11)+=amt(j)
+64260     if in4$(j*5-1)="1" then w(11)+=amt(j)
 64280     ! L3760: !
-64300     if in4$(j*5-0)="1" then let w(9)+=amt(j)
-64320     if in4$(j*5-2)="2" then let w(2)=w(2)-amt(j)
-64340     if in4$(j*5-1)="2" then let w(5)=w(5)-amt(j)
+64300     if in4$(j*5-0)="1" then w(9)+=amt(j)
+64320     if in4$(j*5-2)="2" then w(2)=w(2)-amt(j)
+64340     if in4$(j*5-1)="2" then w(5)=w(5)-amt(j)
 64360     !   if env$('client')="Washington Parrish" then goto L3810
-64380     if in4$(j*5-1)="2" then let w(11)=w(11)-amt(j)
+64380     if in4$(j*5-1)="2" then w(11)=w(11)-amt(j)
 64400     ! L3810: ! 
-64420     if in4$(j*5-0)="2" then let w(9)=w(9)-amt(j)
+64420     if in4$(j*5-0)="2" then w(9)=w(9)-amt(j)
 64440     if j=1 then 
 64460       desc$(j)=lpad$(in4$(j*5-4)(1:2)&"  "&ltrm$(cnvrt$("Nz 10.2",amt(j))),15)
 64480     else if j=2 then
@@ -217,7 +217,7 @@
 64720       box12dCode$=in4$(j*5-4)(1:2)
 64740       box12dAmt$=cnvrt$("Nz 10.2",amt(j))
 64760     end if
-64780     if (j=3 or j=4) and (in4$(j*5-4)(1:1)="D" or in4$(j*5-4)(1:1)="E" or in4$(j*5-4)(1:1)="F" or in4$(j*5-4)(1:1)="H") then let w(13)=w(13)+amt(j) ! SUBTOTAL BOX 17 IF D,E,F,OR H CODES
+64780     if (j=3 or j=4) and (in4$(j*5-4)(1:1)="D" or in4$(j*5-4)(1:1)="E" or in4$(j*5-4)(1:1)="F" or in4$(j*5-4)(1:1)="H") then w(13)=w(13)+amt(j) ! SUBTOTAL BOX 17 IF D,E,F,OR H CODES
 64800   next j
 64820 B16Finis: !
 64840 return ! /r

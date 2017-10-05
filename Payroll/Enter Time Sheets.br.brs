@@ -31,10 +31,10 @@
 00235   sc1$(31)="O/T Hourly Rate"
 00240 ! 
 00265   f1$="Form POS 1,C 20" ! need this for edit list
-00270   let f2$=f1$
+00270   f2$=f1$
 00275   for j=1 to 9
 00280     f1$=rtrm$(f1$)&",PIC(------------)"
-00285     let f2$=rtrm$(f2$)&",PIC(---------.--)"
+00285     f2$=rtrm$(f2$)&",PIC(---------.--)"
 00290   next j
 00295   pathtotimecard$="C:\progra~1\acs\"
 00300 ! /r
@@ -54,18 +54,18 @@
 00520   fntos(sn$="Prinput-1")
 00522   rc=cf=0
 00530   fnfra(1,1,3,50,"Payroll Time Sheet Entry","You would only add to previous entries if the last batch was not calculated.",0)
-00532   cf+=1 : let franum=cf
+00532   cf+=1 : franum=cf
 00540   fnopt(1,3,"Regular Time Sheet Entry",0,franum)
 00542   resp$(rc+=1)="True"
 00550   fnopt(2,3,"Additions to Previous Input",0,franum)
 00552   resp$(rc+=1)="False"
 00560   fnfra(6,1,2,50,"Pay Period Ending Date","You must enter the pay perod ending date.  You can not have more than one payroll with the same date.")
-00562   cf+=1 : let franum=cf : mylen=26 : mypos=mylen+2
+00562   cf+=1 : franum=cf : mylen=26 : mypos=mylen+2
 00570   fnlbl(1,1,"Pay Period Ending Date:",mylen,1,0,franum)
 00580   fntxt(1,mypos,10,0,1,"1",0,"Use mmddyy.",franum)
 00582   resp$(rc+=1)=str$(prd)
 00590   fnfra(10,1,6,60,"Method of Entry","You can select specific employees to pay; you can automatically calculate salaried persons; or you can pull from a another system.")
-00592   cf+=1 : let franum=cf
+00592   cf+=1 : franum=cf
 00600   fnopt(1,3,"Select employees to pay",0,franum)
 00602   resp$(rc+=1)="True"
 00610   fnopt(2,3,"Automatically pay salaried employees",0,franum)
@@ -110,12 +110,12 @@
 00760   fntos(sn$="Prinput-2")
 00762   rc=cf=linecnt=0
 00770   fnfra(1,1,10,50,"Skip Deductions This Pay Period","You can skip any deduction this pay period by checking the deduction below.")
-00772   cf+=1 : let franum=cf
+00772   cf+=1 : franum=cf
 00780   for j=1 to 19 step 2
-00790     if trim$(dednames$(j))<>"" then let x$=":" else let x$=""
+00790     if trim$(dednames$(j))<>"" then x$=":" else x$=""
 00800     fnchk(linecnt+=1,20,trim$(dednames$(j))&x$,1,franum)
 00802     resp$(rc+=1)="False"
-00810     if trim$(dednames$(j+1))<>"" then let x$=":" else let x$=""
+00810     if trim$(dednames$(j+1))<>"" then x$=":" else x$=""
 00820     fnchk(linecnt,45,trim$(dednames$(j+1))&x$,1,franum)
 00822     resp$(rc+=1)="False"
 00830   next j
@@ -170,7 +170,7 @@
 01328     read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2': teno,dep,gl$,mat tdt,mat tcd,tli,mat tdet eof ASK_EMPLOYEE
 01330   else if goprev=1 then 
 01332     semp-=1
-01334     let goprev=0
+01334     goprev=0
 01336     read #2,using 'Form POS 1,N 8,n 3,c 12,4*N 6,3*N 2,pd 4.2,23*PD 4.2',prior: teno,dep,gl$,mat tdt,mat tcd,tli,mat tdet eof ASK_EMPLOYEE
 01338   end if 
 01342   if teno=eno and goprev=0 then semp+=1
@@ -211,7 +211,7 @@
 01594     read #9,using "form pos 4,c 20",key=rpad$(ltrm$(str$(dep)),3): deptname$ nokey ignore
 01596   end if 
 01602   fntos(sn$="prinput-4")
-01604   respc=0: mylen=20: let franum=0: rc=0
+01604   respc=0: mylen=20: franum=0: rc=0
 01610   fnlbl(1,1,"Employee Number: "&str$(eno),60,2,0,franum)
 01620   fnlbl(2,1,"Employee Name: "&rtrm$(em$),60,2,0,franum)
 01630   fnlbl(3,1,"Department Number: "&str$(dep)&" "&trim$(deptname$),60,2,0,franum)
@@ -280,7 +280,7 @@
 02110   if ckey=5 and editmode=1 then goto L2290
 02120   if ckey=10 and editmode=1 then goto DELETE_IT
 02130   if ckey=2 then goto L2430
-02131   if ckey=12 then let goprev=1 : goto L1340
+02131   if ckey=12 then goprev=1 : goto L1340
 02140   if ckey<>3 then goto L2220
 02150   tdet(1)=inp(6)
 02160   for j=1 to 20
@@ -290,7 +290,7 @@
 02200   tdet(3)=hr(2)
 02210   rewrite #2,using 'form pos 9,n 3,pos 58,23*pd 4.2',key=cnvrt$("pic(ZZZZZZZZ)",eno)&cnvrt$("pic(ZZZ)",dep): dep,mat tdet
 02220 L2220: ! 
-02222   let gpd=0
+02222   gpd=0
 02230   if em8><-2 then goto L2260
 02240   if inp(3)=0 then goto L2260
 02250   mat ml$(2)
@@ -307,8 +307,8 @@
 02292   for j=1 to 5
 02300     ! if env$('client')="West Rest Haven" and sickhrs>0 then inp(4)=0 ! if sickhrs come from time clock, set the sick hours in entry as 0
 02310     ! if env$('client')="West Rest Haven" and j=5 then !:
-          !   let gpd=gpd+inp(j)*(hr(1)*1.50) : goto L2330 ! pay time and 1/2 on holiday pay
-02320     if j=2 then let gpd=gpd+inp(j)*hr(2) else let gpd=gpd+inp(j)*hr(1)
+          !   gpd=gpd+inp(j)*(hr(1)*1.50) : goto L2330 ! pay time and 1/2 on holiday pay
+02320     if j=2 then gpd=gpd+inp(j)*hr(2) else gpd=gpd+inp(j)*hr(1)
 02330 L2330: ! 
 02332   next j
 02340   ! if env$('client')="West Rest Haven" then 
@@ -316,7 +316,7 @@
 02344   !   sickhrs=0 ! place  double time portion of holiday overtime hours in other compensation, then clear the sick hours
 02346   ! end if 
 02350   if inp(9)>0 and gpd+inp(6)+inp(7)+inp(8)+inp(9)<round((inp(1)*mhw+inp(2)*mhw*1.5),2) then inp(7)=inp(7)+round((inp(1)*mhw+inp(2)*mhw*1.5),2)-(gpd+inp(6)+inp(7)+inp(8)+inp(9))
-02360   let gpd=gpd+inp(6)+inp(7) +inp(8)+inp(9) ! inp(8) (meals) and inp(9) tips both need to be added in for taxing purposes  they will be taken back out in S:\Payroll\Calc
+02360   gpd=gpd+inp(6)+inp(7) +inp(8)+inp(9) ! inp(8) (meals) and inp(9) tips both need to be added in for taxing purposes  they will be taken back out in S:\Payroll\Calc
 02370   if ckey=5 and editmode=1 then goto L3960 ! just add proof totals back in
 02380   if editmode=1 then goto REWRITE_WORK
 02390   write #h_rpwork,using F_RPWORK: eno,dep,mat inp,gpd,mat hr
@@ -342,7 +342,7 @@
 02590 PROOF_TOTALS: ! 
 02592   fn_add_proof_totals(teno,count_employees_entered,mat tinp)
 02595   fntos(sn$="ProofTotal")
-02600   respc=0 : mylen=20 : let franum=0 : rc=0
+02600   respc=0 : mylen=20 : franum=0 : rc=0
 02605   fnlbl(1,1,"P R O O F  T O T A L S",60,2,0,franum)
 02610   fnlbl(2,1,"Total Employees/Departments Entered: "&str$(count_employees_entered),60,2,0,franum)
 02612   fnlbl(3,1,"Total Employee Numbers Entered: "&str$(teno),60,2,0,franum)
@@ -401,7 +401,7 @@
 03880 ! eNO=0
 03890 ! dEP=0
 03900 ! Mat INP=(0)
-03910 ! Let GPD=0
+03910 ! gPD=0
 03920   delete #h_rpwork,rec=rec(h_rpwork): norec L3990
 03930   goto L4000
 03940 REWRITE_WORK: ! 
@@ -653,18 +653,18 @@
 57140 L5820: ! 
 57160   for j=1 to 5
 57180     if j=2 then 
-57200       let gpd=gpd+(inp(j)*tdet(3))
+57200       gpd=gpd+(inp(j)*tdet(3))
 57220     else 
-57240       let gpd=gpd+(inp(j)*tdet(2))
+57240       gpd=gpd+(inp(j)*tdet(2))
 57260     end if 
 57280   next j
-57300   let gpd=gpd+inp(6)+inp(7)+inp(8)+inp(9)
+57300   gpd=gpd+inp(6)+inp(7)+inp(8)+inp(9)
 57320   hr(1)=tdet(2)
 57340   hr(2)=tdet(3)
 57360   write #h_rpwork,using F_RPWORK: holdeno,holddep,mat inp,gpd,mat hr
 57400   mat tinp=tinp+inp
 57420   tgp=tgp+gpd
-57440   let gpd=0
+57440   gpd=0
 57460   if tgp=0 then ped=0 else ped=prd
 57480   rewrite #h_rpmstr,using 'form pos 162,n 6,pd 5.2',key=en$: ped,tgp
 57500   if holdeno=eno then goto L5960

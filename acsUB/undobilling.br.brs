@@ -2,7 +2,7 @@
 00010 library 'S:\Core\Library': fnxit,fnopenprn,fncloseprn,fnerror,fnd1,fngethandle,fntop,fntos,fnlbl,fntxt,fncmbact,fncmbrt2,fncmdset,fnacs,fnmsgbox,fnopt,fnget_services,fnAutomatedSavePoint
 00040 on error goto ERTN
 00080 ! msgbox("Reverse Billing Cycle is currently under construction.","Reverse Billing Cycle Unavailable","OK","Inf") : if env$('ACSDeveloper')='' then goto XIT
-00120 let fn_undobilling
+00120 fn_undobilling
 00140 goto XIT
 00160 def fn_undobilling ! main
 00180   dim program_caption$*80,billingdate$*10,msgtext$(1)*1000,readings(12),charges(12),breakdown(10),readingdates(2),servicename$(10)*20
@@ -27,7 +27,7 @@
 08100   fnmsgbox(mat msgtext$,answer$,"Confirm Action",4)
 08120   if (answer$<>"Yes") then cont=0
 08140   ! 
-08160   let undoCount=0
+08160   undoCount=0
 12000   if cont then 
 12020     dim acct$*10,custname$*30,trcust$(3)*10,trdate(3),tramt(3),srvamt1(11),srvamt2(11),srvamt3(11),srvread1(6),srvread2(6),srvread3(6),trbal(3)
 12040     CUSTFORM: form c 10,x 30,c 30,pos 1741,n 2,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1750,2*n 6
@@ -52,7 +52,7 @@
 16080           if priordate2>0 then 
 16100             read #h_trans,using TRANSFORM,key=lpad$(acct$,10)&str$(priordate2)&"1": trcust$(3),trdate(3),tramt(3),mat srvamt3,mat srvread3,trbal(3) nokey NEXT_CUSTOMER
 16120           end if 
-16140           let undoCount+=1
+16140           undoCount+=1
 16160           read #h_trans,using TRANSFORM,key=lpad$(acct$,10)&str$(lastdate)&"1": trcust$(1),trdate(1),tramt(1),mat srvamt1,mat srvread1,trbal(1)
 16180           if priordate>0 then 
 18000             ! update readings
@@ -124,7 +124,7 @@
 44000   def fn_options(&route,&billingdate$) ! show options dialog to user and return selections
 44020     dim screen_name$*100,resp$(20)*255
 44040     fnd1(lastbilling) ! get last billing date and use it for the default
-44060     let filter=0 : route=0 : cust$=''
+44060     filter=0 : route=0 : cust$=''
 44080 OPTIONS_TOS: ! 
 44100     fntos(screen_name$="UndoBillingOptions")
 44120     rcnt=0 : lc=0 : pos_col2=16
@@ -168,13 +168,13 @@
 44880     else 
 44900       billingdate$=resp$(resp_billing_date)
 44920       if resp$(resp_opt_all)='True' then 
-44940         let filter=do_all
+44940         filter=do_all
 44960       else if resp$(resp_opt_route)='True' then 
-44980         let filter=do_route
+44980         filter=do_route
 45000         route=val(resp$(resp_route))
 45020         if route=0 then pr bell;'please select a route' : goto OPTIONS_TOS
 45040       else if resp$(resp_opt_individual)='True' then 
-45060         let filter=do_individual
+45060         filter=do_individual
 45080         cust$=trim$(resp$(resp_individual)(1:10))
 45090         if trim$(cust$)='' then pr bell;'please select a customer' : goto OPTIONS_TOS
 45100       end if 

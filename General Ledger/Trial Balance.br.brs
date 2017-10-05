@@ -64,13 +64,13 @@
 00740   L740: dno=val(n$(1:3))
 00750   if subt=1 and olddno>0 and olddno<>dno then pr #255,using L760: "FUND "&str$(olddno)&" TOTALS",fundt1,fundt2,fundt3 else goto L780
 00760   L760: form skip 1,pos 30,c 20,pos 80,pic(zz,zzz,zzz.## cr),pic(z,zzz,zzz.## cr),pic(zz,zzz,zzz.## cr),skip 2
-00770   let fundt1=fundt2=fundt3=0
+00770   fundt1=fundt2=fundt3=0
 00780   L780: ano=val(n$(4:9))
 00790   sno=val(n$(10:12))
 00800   begbal=begbal+bb
 00810   curbal=curbal+cb
-00820   let fundt1=fundt1+bb
-00830   let fundt3=fundt3+cb
+00820   fundt1=fundt1+bb
+00830   fundt3=fundt3+cb
 00840   gosub L1200
 00850   if ta(1)=0 then goto READ_1
 00860   adr=ta(1)
@@ -122,12 +122,12 @@
 01222   end if 
 01224 return ! /r
 01280 L1290: ! r:
-01290   if tr(6)<1 or tr(6)>9 then let x$="" else let x$=a$(tr(6))
+01290   if tr(6)<1 or tr(6)>9 then x$="" else x$=a$(tr(6))
 01300   if val(cogl$(1)(4:9))=0 or val(cogl$(2)(4:9))=0 then goto L1360
 01310   if t$>=cogl$(1) and t$<=cogl$(2) then goto L1320 else goto L1360
 01320   L1320: !
 01322   if tr(5)>0 then goto L1360
-01330   let u0+=tr(5) : trtotal+=tr(5): let fundt2+=tr(5) : let u$=t$
+01330   u0+=tr(5) : trtotal+=tr(5): fundt2+=tr(5) : u$=t$
 01340   goto L1500
 01360   L1360: ! 
 01362   if tr$="999999999999" then tr$=" "
@@ -148,8 +148,8 @@
 01392   end if
 01394   L1470: form pos 21,c 30,pos 52,pic(zz/zz/zz),pos 62,c 3,pos rn,c 12,pos 95,pic(zz,zzz,zzz.## cr)
 01396   L1480: !
-01398   trtotal+=tr(5) : let fundt2+=tr(5)
-01400   let u$=t$
+01398   trtotal+=tr(5) : fundt2+=tr(5)
+01400   u$=t$
 01402   L1500: ! 
 01404 return ! /r
 01520 L1520: ! r:
@@ -157,7 +157,7 @@
 01530   if u$<cogl$(1) or u$>cogl$(2) then goto L1570
 01540   if pt=0 then pr #255,using L1550: "Summary Transaction",u0,cb pageoflow PGOF
 01550   L1550: form pos 21,c 30,pos 95,pic(zz,zzz,zzz.## cr),pos 111,pic(zz,zzz,zzz.## cr),skip 2
-01560   let u0=0
+01560   u0=0
 01570   L1570:  !
 01580 return ! /r
 01590 PGOF: ! r:

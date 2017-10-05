@@ -59,7 +59,7 @@
 00570 L570: form skip 1,pos 1,c 8,pos at,c 40,pos 120,c 5,n 4,skip 1
 00580   pr #255,using L590: time$,"A/R AGED TRIAL BALANCE"
 00590 L590: form pos 1,c 8,pos 55,c 22,skip 1
-00600   let q$=rtrm$("As of "&dat$)
+00600   q$=rtrm$("As of "&dat$)
 00610   tabq=int(66-len(q$)/2)
 00620   pr #255,using L630: q$
 00630 L630: form pos tabq,c 26,skip 0
@@ -152,7 +152,7 @@
 01500 L1500: return 
 01510 L1510: mm=int(d1/10000)
 01520   dd=int((d1-mm*10000)/100)
-01530   let yy=d1-(mm*10000+dd*100)
+01530   yy=d1-(mm*10000+dd*100)
 01540   ag0=mo(mm)+dd+yy*365+int(yy/4)
 01550   if yy-int(yy/4)*4=0 and mm>2 then ag0=ag0+1
 01560   return 
