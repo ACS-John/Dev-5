@@ -199,13 +199,11 @@
           ! | Returns the current drive and path                          | !:
           ! |                                                             | !:
           !    !
-01360 ! EXECUTE "cd >drv."&WSID$
 01370     curdrv=10
 01372     dim curdrv$*100
 01375     if file(curdrv)>-1 then curdrv+=1: goto 1375
 01380     open #curdrv: "name=drv."&wsid$&",replace",display,output 
 01385     curdrv$=srep$(file$(curdrv),"drv."&wsid$,"")
-01390     rem cURDRV$=TRIM$(CURDRV$) !:IF POS(CURDRV$,":")<2 THEN GOTO 1385
 01392     fncurdrv$=curdrv$
 01395     close #curdrv,free: 
 01400   fnend 
@@ -715,7 +713,6 @@
           str2mat(message$,mat message$,"\n") !:
           mat message$(maxrows)
 03865   if not maxrows and len(message$)=0 then message$="  "
-03866   rem IF NOT MAXROWS THEN pr #WAITWIN, FIELDS "1,1,c": RPT$(" ",1000) !:                     pr #WAITWIN, FIELDS "2,"&STR$(MIN(70,LEN(MESSAGE$))/2)&",cc ,N/W:T": MESSAGE$ !:       ELSE pr #WAITWIN, FIELDS "1,1,c": RPT$(" ",1000) !:                                    pr #WAITWIN, FIELDS MAT MWRK$: MAT MESSAGE$
 03867   if not maxrows then pr #waitwin, fields "1,1,c": rpt$(" ",1000) !:
           pr #waitwin, fields "2,1,cc "&str$(maxlen)&",N/W:T": message$ error 3868 !:
         else pr #waitwin, fields "1,1,c": rpt$(" ",1000) !:
@@ -866,7 +863,7 @@
         else m=12
 04440 if m=12 then quarterend=days((cy+1)*10000+0101)-1 else !:
         quarterend=days(cy*10000+(m+1)*100+1)-1
-04442 let fnquarterend=quarterend
+04442 fnquarterend=quarterend
 04445 end def 
 04450 def library fnyearend(d) !:
         !    !:
@@ -1065,7 +1062,7 @@
         else !:
           open #(printfile:=fngethandle): "NAME=preview:/select,recl=2000,PAGEOFLOW=50",display,output 
 05111   printfile$=file$(printfile)
-05120   rem pr #PRINTFILE,USING SETPRINT: "[RESET+]" ! normal print
+05120   ! pr #PRINTFILE,USING SETPRINT: "[RESET+]" ! normal print
 05130   pr #printfile,using SETPRINT: "[LETTER][CPI=15][TOPLEFT]" ! condensed print
 05140 ! pr #PRINTFILE,USING SETPRINT: "[LETTER]" ! condensed print
 05145   if greybar then macro=300 !:
@@ -1077,7 +1074,7 @@
 05160   dim apf$*1000
 05170   if indent>0 then indent$=rpt$(" ",indent) else indent$=rpt$(" ",5)
 05180   f=0
-05190   let f+=1 : if file(f)>-1 then goto 5190
+05190   f+=1 : if file(f)>-1 then goto 5190
 05200   open #f: "NAME="&file_name$,display,input 
 05210 FORM1: form c 106,"[CPI=15]"
 05220   pr #printfile,using "form skip 5": ! GOSUB HEADER
@@ -1201,7 +1198,6 @@
 05940   if exists(epath$)=2 then !:
           execute "Sys -w -C "&epath$&" http://brwiki.ads.net/index.php/Special:Search?search="&ecode$ else !:
           execute "Sys -C start http://brwiki.ads.net/index.php/Special:Search?search="&ecode$
-05941   rem IF EXISTS(EPATH$)=2 THEN !:                                                               EXECUTE "Sys -w -C "&EPATH$&" http://brwiki.ads.net/index.php/Error_Codes#"&ECODE$ ELSE !:                                                                                          EXECUTE "Sys -C start http://brwiki.ads.net/index.php/Error_Codes#"&ECODE$
 05950 fnend 
 06000 def library fnrowsum(mat l,r) !:
         ! +----------------------------------------------------------------+!:
@@ -1575,7 +1571,7 @@
           arow(2)=anxtrow*udimh-(udimh-1)
 07760     arow$(1)="" !:
           arow$(2)="[AA_ROW]"
-07770     rem IF NOT CURROW=ALASTROW THEN !:                                                            aROW(1)=1 !
+07770     ! IF NOT CURROW=ALASTROW THEN !:                                                            aROW(1)=1 !
 07780     pr #awinno, fields aspec$&",attr": (mat arow, mat arow,mat arow$)
 07790   end if 
 07800   alastrow=anxtrow
@@ -2225,7 +2221,6 @@
 30022   on error system 
 30024   dim l(1,1)
 30026   if row>rx then goto ZDELNMAT
-30028   rem IF ROW=RX AND ONECOL THEN MAT X(RX-1,CX) : GOTO ZDELNMAT !:                               ELSE IF ROW=RX AND NOT ONECOL THEN MAT X(RX-1) : GOTO ZDELNMAT
 30030   mat l(rx*cx)
 30032   mat x(rx*cx)
 30034   mat l=x
@@ -2253,7 +2248,6 @@
 30082   on error system 
 30084   dim l$(1,1)*10000
 30086   if row>rx then goto ZDELSMAT
-30088   rem IF ROW=RX AND ONECOL THEN !:                                                              MAT X$(RX-1,CX) : GOTO ZDELSMAT ELSE !:                                                   IF ROW=RX AND NOT ONECOL THEN !:                                                          MAT X$(RX-1) : GOTO ZDELSMAT
 30090   mat l$(rx*cx)
 30092   mat x$(rx*cx)
 30094   mat l$=x$
@@ -2733,9 +2727,7 @@
         else !:
           if uprc$(cs$)="S" then execute "*sys -M -S set > "&cs_textfile$ !:
             ! EXECUTE "copy "&CS_TEXTFILE$&" @:"&CS_TEXTFILE$&" -n"
-34208   rem IF UPRC$(CS$)="C" OR CS$="" THEN EXECUTE "*sys -M -@ set > "&CS_TEXTFILE$ !:              sETENV("C_DIR",OS_FILENAME$("@:")&"\") !:                                             EXECUTE "copy @:"&CS_TEXTFILE$&" "&CS_TEXTFILE$&" -n" !:                                  ELSE !:                                                                                   IF UPRC$(CS$)="S" THEN EXECUTE "*sys -M -S set > "&CS_TEXTFILE$
 34209   open #(cs_text:=fngethandle): "NAME="&cs_textfile$,display,input error XIT_FNCS_ENV
-34210   rem OPEN #(CS_TEXT:=FNGETHANDLE): "NAME="&CS_TEXTFILE$,DISPLAY,INPUT ERROR XIT_FNCS_ENV
 34212 STARTCSLOOP: ! 
 34214   addstr$=uprc$(cs$)&"_"
 34216   do 
@@ -3202,7 +3194,6 @@
             default$=default$&"0" !:
           next a !:
           default$(default:default)="1"
-40475     rem FOR A=1 TO DEFAULT !:                                                                     dEFAULT$(A:A)="1" !:                                                                  NEXT A
 40476     caption$=title$ : infile$="": left=0 !:
           top=0 : allow=0 : type$="R" : locate=0 !:
           nocols=ceil(udim(mat o$)/15) : colwidth=0 : waittime=20 !:
@@ -3254,7 +3245,7 @@
       slen$=str$(ip(.6*(al)))
 40619 ! PAUSE
 40620 open #owin: "srow="&str$(max(srow,8))&",scol="&str$(max(scol,10))&",rows="&str$(pcols+arows+2)&",cols="&str$(max(35,ocols*ip(.6*al+2)))&",border=s,picture=none,caption="&title$&",parent=NONE,font.LABELS=Swiss:small,MODAL",display,outin 
-40622 let fnwinrowcol(owin,rows,cols)
+40622 fnwinrowcol(owin,rows,cols)
 40623 for a=1 to udim(o$) !:
         mat owrk$(a)
 40624   if a<=pcols then !:
@@ -3555,7 +3546,6 @@
           ! EXECUTE "config shell default server" !:
         else !:
           execute "sys -W "&os_filename$(env$("PD")&"Core\fnsnap\brregister2.exe")&" -B"&session$&" -N"&l$
-41865   rem IF _CS THEN tEMPFILE$="@:S:\Core\fnsnap\DBDE"&SESSION$&".txt" !:                              EXECUTE "rename "&TEMPFILE$&" "&LWRC$(TEMPFILE$) IOERR 41867
 41867   if _cs then !:
           fnCopyc2s(lwrc$("@:S:\Core\fnsnap\dbde"&session$&".txt"),env$("PD")&"Core\fnsnap\dbde"&session$&".txt")
 41870   exefil=1
@@ -4408,8 +4398,8 @@
         weight$="BOLD" !:
         typeface$="TIMES_NEW"
 53332   f10$=chr$(27)&"*v0o0T"&fnfont$(symbol_set$,proportional,chr_per_inch,style$,weight$,typeface$) !:
-        let f8$=chr$(27)&"(s1p10v0s0b16901T" !:
-        let f8b$=chr$(27)&"(s1p10v0s3b16901T"
+        f8$=chr$(27)&"(s1p10v0s0b16901T" !:
+        f8b$=chr$(27)&"(s1p10v0s3b16901T"
 53340 !    !:
         ! |  Begin processing envelopes                                 | !:
         ! 
@@ -4465,18 +4455,14 @@
           ! Delete MACRO 198
 53542   if noclose then goto 53570
 53550   close #prtfile: 
-53560   rem EXECUTE "sys "&OS_FILENAME$(ENV$("PD")&"SPOOLBAT.BAT")&" "&OS_FILENAME$(PRINT_FILE$)&" HPENVELOPE" ERROR 53570
+53560   ! EXECUTE "sys "&OS_FILENAME$(ENV$("PD")&"SPOOLBAT.BAT")&" "&OS_FILENAME$(PRINT_FILE$)&" HPENVELOPE" ERROR 53570
 53561   fnprint(print_file$,"ENVELOPE_PRINTER")
 53562 ! fnPRINT(PRINT_FILE$,"direct:/select")
 53570 fnend 
 53580 !    !:
       ! |  Create a MACRO and pass the calling string back to program | !:
       ! 
-53600 def library fngreybar$(macro,printfile,v,h,bv,bh,shade,head,bar) !:
-        !    !:
-        ! |                                                             | !:
-        ! |                                                             | !:
-        !    !
+53600 def library fngreybar$(macro,printfile,v,h,bv,bh,shade,head,bar)
 53602   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fninit,fngreybar
 53604   if not esc then let fninit
 53605   library env$("PD")&"Core\fnsnap\fnsnap_dll.br": fngreybar
@@ -4685,7 +4671,7 @@
 54470   close #lblno: !:
         lblno=0
 54480 end if 
-54490 let f8$=chr$(27)&"(s1p09v0s1b16901T"
+54490 f8$=chr$(27)&"(s1p09v0s1b16901T"
 54491 f10$=chr$(27)&"(s1p10v0s1b16901T"
 54500 dim lbl$*2000,f8$*50
 54510 lcol=fnmod(lbl,3) ! IF MOD(LBL,3) THEN lCOL=MOD(LBL,3) ELSE lCOL=3
@@ -4707,7 +4693,7 @@
         lbl=0
 54600 fnprt3x10=lbl+1
 54610 ZPRT3X10: ! 
-54615 let fnputa("FNPRT3X10",lbl+1)
+54615 fnputa("FNPRT3X10",lbl+1)
 54620 fnend 
 55000 ! ----------Print-Code3of9 Barcode At Specified Location ----------
 55020 def library fncode3of9(printfile,v,h,text$*30,prntxt$;height,checkd) !:
@@ -5403,7 +5389,6 @@
         !    !
 66672   dim gridmask$*50
 66673   gridmask$=gridform$(gridcol)
-66675   rem _P=POS(GRIDFORM$(GRIDCOL),")",-1) !:                                                  _C=POS(GRIDFORM$(GRIDCOL),",",-1) !:                                                  IF _C>_P AND POS(UPRC$(GRIDFORM$(GRIDCOL)),"P",_C)>0 THEN gRIDMASK$=SREP$(GRIDMASK$,",P")
 66680   if not gridadj then !:
           pr #gridwin,fields str$(gridrow)&","&str$(sum(mat gridwidth(1:gridcol-1)))&","&gridmask$&",W/W:T": gridamount else !:
           pr #gridwin,fields str$(gridrow)&","&str$(sum(mat gridwidth(1:gridcol-1))+gridadj)&","&gridmask$&",W/W:T": gridamount
@@ -5537,9 +5522,6 @@
 67407   if not esc then let fninit
 67409   dim headings$(1)*80,widths(1),forms$(1)*80
 67410   goto 67415 ! IF ENV$("GUIMODE")="ON" THEN
-67411   rem MAT HEADINGS$(1) !:                                                             hEADINGS$(1)=SREP$(SREP$(SREP$(WINTITLE$,hex$('C4')," "),"<",""),">","") !:        MAT WIDTHS(1) : wIDTHS(1)=MAXL !:                                           MAT FORMS$(1) : foRMS$(1)="C "&STR$(MAXL) !:                                fnPARMAT(MAT HEADINGS$,"Â")
-67412   rem LET FNPARMAT(MAT L$,hex$('B3')) !:                                                     MAT WIDTHS(UDIM(HEADINGS$)) !:                                                  MAT FORMS$(UDIM(HEADINGS$)) !:                                                  FOR A=1 TO UDIM(HEADINGS$) !:                                                   wIDTHS(A)=LEN(L$(1,A)) !:                                                   foRMS$(A)="c "&STR$(WIDTHS(A)) !:                                           NEXT A !:                                                                       cURFLD(1,1)
-67413   rem LET FNPICK=FNLISTBOX(SROW$,SCOL$,PP,MAXL,PARENT,MAT L$,MAT HEADINGS$,MAT WIDTHS,MAT FORMS$,MANY,MAT SEL,SRCHSTR$) !:                                            wINDEV+=1 !:                                                                GOTO 67832
 67414 ! END IF
 67415   dim pscr$*1840,srchstr$*40,seldes$*80,obord$*80,sel_tkeys$(5),kcodes$(56)*4,mousecodes$(24)*4
 67416   if kcodes$(1)="" then !:
@@ -5796,7 +5778,7 @@
 67873   c$=str$(val(scol$)+maxl+3-11)&",C ,[L],x02" !:
         c1$=str$(val(scol$)+maxl+3-6)&",C ,[L],x02" !:
         c2$=str$(val(scol$)+maxl+3-6)&",C ,[L],x06"
-67874   rem c$=STR$(VAL(SCOL$)+MAXL+3-11)&",C ,[L],"&STR$(PGUP) !:                      c1$=STR$(VAL(SCOL$)+MAXL+3-6)&",C ,[L],"&STR$(PGUP) !:                      c2$=STR$(VAL(SCOL$)+MAXL+3-6)&",C ,[L],"&STR$(PGDN)
+67874   ! c$=STR$(VAL(SCOL$)+MAXL+3-11)&",C ,[L],"&STR$(PGUP) !:                      c1$=STR$(VAL(SCOL$)+MAXL+3-6)&",C ,[L],"&STR$(PGUP) !:                      c2$=STR$(VAL(SCOL$)+MAXL+3-6)&",C ,[L],"&STR$(PGDN)
 67876   if at<>pick_ops and at-lpp>0 then !:
           pr f r$&c$: "PgUp/" !:
           pr f r$&c2$: "PgDn" !:
@@ -5906,7 +5888,6 @@
         next i !:
         ! IF CANCELKEY THEN
 75070 !   IF CANCELKEY>9 THEN cOL=70 ELSE cOL=71
-75080   rem fkEY_SAVE=FNSAVPART("23","2","23","79",1) !:                                          IF CANCELKEY=99 THEN LET FNPFKEY(23,COL,"Esc","Cancel") !:                                ELSE !:                                                                                   fnPFKEY(23,COL,"F"&STR$(CANCELKEY),"Cancel") !:                                       !75090 ! END IF
 75090 ! END IF
 75100   font$=",font=systempc" !:
         keyselwin=fnwin(srow$,scol$,str$(val(srow$)+per_win-1),str$(val(scol$)+totlength+1),wintitle$,bordtype$&"[X]","[W]",0,1,font$)
@@ -6055,7 +6036,7 @@
           ! Returns a 'true' value if line selected isn't blank and a function !:
           ! key wasn't pressed.
 75630   keyselwin=fnclswin(1) !:
-        if fkey_save then let fkey_save=fnrelpart(fkey_save,1)
+        if fkey_save then fkey_save=fnrelpart(fkey_save,1)
 75640 fnend 
 76010 def library fnfkey(akey) !:
         !    !:
@@ -6103,7 +6084,6 @@
           if pos(txt$,"^",pfky)>0 then !:
             pftxt$(pf)=txt$(pfky+1:pos(txt$,"^",pfky)-1) else !:
             pftxt$(pf)=txt$(pfky+1:len(txt$))
-76181     rem pF+=1 !:                                                                              MAT PFTXT$(PF) !:                                                                         MAT PFMAT$(PF) !:                                                                         pFMAT$(PF)=STR$(PFROW)&","&STR$(PFKZ+PFKX+(PFKY-PFKX-1))&",C,N/W:T": tXT$(PFKY:LEN(TXT$)) !:                                                                                IF POS(TXT$,"^",PFKY)>0 THEN !:                                                           pFTXT$(PF)=TXT$(PFKY+1:POS(TXT$,"^",PFKY)-1) ELSE !:                                  pFTXT$(PF)=TXT$(PFKY+1:LEN(TXT$))
 76190     goto 76240
 76200     if uprc$(txt$(pfkx+1:pfky-1))="ESC" then pfkey$=b$&"099" !:
           else if uprc$(txt$(pfkx+1:pfky-1))="ENTER" then pfkey$=b$(1:1)&"X0D" !:
@@ -6709,5 +6689,5 @@
 83420   x=val(env$("FILE"&cnvrt$("PIC(###)",winno)&"_parent")) conv ZWINCLOSE
 83430   if x>0 then close #x: else if winno>0 then close #winno: 
 83440 setenv("FILE"&cnvrt$("PIC(###)",winno)&"_parent","")
-83445 let fnwinclose=0
+83445 fnwinclose=0
 83450 ZWINCLOSE: fnend 

@@ -234,7 +234,7 @@
 02380 L2380: e7=int(b(4)/10000) ! ACCUMULATE INFORMATION FOR WORK TRANSACTIONS
 02390   e5=int((b(4)-e7*10000)/100)
 02400   e8=b(4)-(e5*100+e7*10000)
-02410   let f6=(d8-e8)*s(13)+(s(d7)-s(e7))+(d5-e5)
+02410   f6=(d8-e8)*s(13)+(s(d7)-s(e7))+(d5-e5)
 02420   if f6<30 then goto L2460
 02430   if f6>30 and f6<=60 then goto L2480
 02440   if f6>60 and f6<=90 then goto L2500

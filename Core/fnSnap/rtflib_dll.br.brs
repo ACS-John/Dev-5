@@ -508,7 +508,6 @@
       brdr$(1)="brtlr1" !:
       brdr$(2)="brbd1"
 11290 for a=1 to udim(mat headers$)
-11300   rem IF HJ$(A)='hr' AND NOT COL_FORMAT(A) AND NOT NOTOTALS$(A:A)="1" THEN !:                   pr #SPECFILE: "let cells$(3)(inf:inf)='c"&STR$((WIDTHS(A)/SUM(MAT WIDTHS)*PAGE_WIDTH))&"|"&BRT$&"|vt|"&HJ$(A)&"|'" !:                                                            ELSE pr #SPECFILE: "let cells$(3)(inf:inf)='c"&STR$((WIDTHS(A)/SUM(MAT WIDTHS)*PAGE_WIDTH))&"|"&BRDR$&"|vt|"&HJ$(A)&"|'"
 11302   if hj$(a)='hr' and not col_format(a) and not pos("12",nototals$(a:a)) then 
 11304     if not (sort_col=a and nototals$(a:a)="2") then pr #specfile: "let cells$(3)(inf:inf)='c"&str$((widths(a)/(widths-delcol))*page_width)&"|"&brt$&"|vt|"&hj$(a)&"|'"
 11305   else 
@@ -940,7 +939,7 @@
           curfld(af) !:
           fnwaitwin("Invalid date use MMDDYY","Date Error","OK") !:
           goto 15320
-15323   rem IF INDATE(AF) THEN !:                                                                     pr #ENTERWIN, FIELDS INDATE$(AF): " "
+15323   ! IF INDATE(AF) THEN !:                                                                     pr #ENTERWIN, FIELDS INDATE$(AF): " "
 15330   if curfld=udim(mat cc$) then goto 15400
 15340   if not ak then let curfld(af+1,ak) else let curfld(af,ak)
 15350   goto ENTER_DATA
@@ -1568,7 +1567,7 @@
           pict_name$=srep$(picpath$&"\"&trim$(data$(pict_start+7:pict_end-1)),"\\","\") else !:
           pict_name$=trim$(data$(pict_start+7:pict_end-1))
 53050   fntype(pict_name$,rtffile)
-53052   rem x=POS(PICT_NAME$,"\",-1)+1 !:                                                         pr #RTFFILE: "{\par \fs16 Figure: "&PICT_NAME$(X:LEN(PICT_NAME$))&" \par }"
+53052   ! x=POS(PICT_NAME$,"\",-1)+1 !:                                                         pr #RTFFILE: "{\par \fs16 Figure: "&PICT_NAME$(X:LEN(PICT_NAME$))&" \par }"
 53054   pr #rtffile: srep$(data$(pict_end+2:len(data$)),"|","}{\tab}{")&"}"&crlf$
 53080 else if pos("1234567890",data$(1:1))>0 then 
 53082   mat ccells$(udim(cells$)) : fncells(rtffile,data$,mat cells$)
@@ -1641,7 +1640,7 @@
           ! ?Set the distance between cells.  The number is 1/2 the       !:
           ! ?distance measured in inches converted to twips               !:
           ! -------------------------------- !
-54260     rem IF POS(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           x$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    cALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
+54260     ! IF POS(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           x$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    cALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
 54261     if pos(ccells$(cell)(css:cse-1),"tg")=1 then !:
             x$=fntwips$(.5*val(ccells$(cell)(css+2:cse-1))) !:
             call$=srep$(call$,"\trgaph108\trleft-108","\trgaph"&x$) !:
@@ -1703,7 +1702,7 @@
             cface$(cnum)=cface$ !:
             cfont$(cnum)=cfont$
 54330       csize(cnum)=val(fntwips$(val(ccells$(cell)(css+1:cse-1))))
-54340       rem cSIZE$(CNUM)="\cellx"&STR$(SUM(CSIZE)+CINDENT) !:                                     GOTO SETCELL
+54340       ! cSIZE$(CNUM)="\cellx"&STR$(SUM(CSIZE)+CINDENT) !:                                     GOTO SETCELL
 54341       csize$(cnum)="\cellx"&str$(sum(csize)+cindent) !:
             goto SETCELL
 54350     end if 

@@ -6,7 +6,7 @@
 94040     dim tmp_key$*128
 94060 !   debug=1
 94080 ! if debug then    rwcnt=0
-94100     let f_fileform_key_only$=srep$(lwrc$(f_fileform_key_only$),'n ','g ')
+94100     f_fileform_key_only$=srep$(lwrc$(f_fileform_key_only$),'n ','g ')
 94120     restore #h_filehandle,key>=rpad$(key_from$,kln(h_filehandle)): nokey KC_FINIS
 94140     do 
 94160       read #h_filehandle,using f_fileform_key_only$: tmp_key$ eof KC_FINIS

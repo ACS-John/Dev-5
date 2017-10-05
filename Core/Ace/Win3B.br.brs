@@ -95,19 +95,19 @@
 51740 L610: if button_option=0 then goto XIT
 51760     mat fkey$=("") : em$="" : es=0
 51780     fkey$(5)="Cancel" ! included by default
-51800     if button_option=2 then let fkey$(1)="Next"
-51820     if button_option=3 then let fkey$(1)="Print"
-51840     if button_option=4 then let fkey$(1)="Save"
-51860     if button_option=5 then let fkey$(1)="Next" : fkey$(6)="Search"
-51880     if button_option=6 then let fkey$(1)="Next" : fkey$(2)="Back"
-51900     if button_option=7 then let fkey$(1)="Save" : fkey$(4)="Delete"
-51920     if button_option=8 then let fkey$(1)="Print" : fkey$(2)="Back"
-51940     if button_option=11 then let fkey$(1)="Next" : fkey$(5)="Finish"
-51960     if button_option>40 then let fkey$(5)=""
-51980     if button_option=41 then let fkey$(1)="Ok"
-52000     if button_option=42 then let fkey$(1)="Yes" : fkey$(2)="No"
-52020     if button_option=51 then let fkey$(5)="Exit"
-52040     if button_option=52 then let fkey$(5)="Finish"
+51800     if button_option=2 then fkey$(1)="Next"
+51820     if button_option=3 then fkey$(1)="Print"
+51840     if button_option=4 then fkey$(1)="Save"
+51860     if button_option=5 then fkey$(1)="Next" : fkey$(6)="Search"
+51880     if button_option=6 then fkey$(1)="Next" : fkey$(2)="Back"
+51900     if button_option=7 then fkey$(1)="Save" : fkey$(4)="Delete"
+51920     if button_option=8 then fkey$(1)="Print" : fkey$(2)="Back"
+51940     if button_option=11 then fkey$(1)="Next" : fkey$(5)="Finish"
+51960     if button_option>40 then fkey$(5)=""
+51980     if button_option=41 then fkey$(1)="Ok"
+52000     if button_option=42 then fkey$(1)="Yes" : fkey$(2)="No"
+52020     if button_option=51 then fkey$(5)="Exit"
+52040     if button_option=52 then fkey$(5)="Finish"
 52060     fnfkey(er+1,mat fkey$,mat disfk,em$,es,win)
 52080     goto XIT
 52100 ! ______________________________________________________________________

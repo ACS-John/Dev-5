@@ -72,7 +72,7 @@
 00665   count=count+1: if int(count/3)=count/3 then pr #255: newpage
 00670   return 
 00680   goto L490
-00690   rem NOKEY GO pr WITHOUT NAME
+00690   ! NOKEY GO pr WITHOUT NAME
 00700   mat e$=(" ")
 00710   goto L430
 00720 L720: pr newpage

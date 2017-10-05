@@ -181,7 +181,7 @@
 01440   fncmdset(52) !:
         fnacs(sn$,0,mat resp$,ck)
 01450 XIT: !
-01452 let fnxit
+01452 fnxit
 01470 PRINTBILL: ! r:
 01480   if final=2 then !:
           g(8)-=b(8): g(11)=g(12)+g(8): bal+=g(8)

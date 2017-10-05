@@ -201,7 +201,7 @@
 58220     totallisted+=1
 58240     scheduleno(totallisted)=val(text$(1:3))
 58260     ! if ln>21 and 1>1 then goto L1720 ! quit if more than two columns
-58280     ! if ln>21 then ln=1: let 1+=52
+58280     ! if ln>21 then ln=1  : colpos+=52
 58300   loop
 58320   L1720: !
 58340   if totallisted then

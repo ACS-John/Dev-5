@@ -151,7 +151,7 @@
 50180       if x<30 and data$(x:x)=":" then !:
               data$=data$(1:2)&"{\b "&data$(3:len(data$))&"}"
 50190     end if 
-50200 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+50200 ! --------------------------------!:
           ! ?Format Detail Step Section Code E                            ?:
 50210     if uprc$(data$(1:1))="E" then 
 50212       if checklist>0 then 
@@ -176,30 +176,30 @@
               data$=srep$(data$,"Remedy ","  Remedy [RTFLINE]")
 50300     end if 
 50310   else linecnt=0 ! END IF
-50319 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+50319 ! --------------------------------!:
         ! ?Create special processing for PROGRAM G lines                ?:
 50320   if uprc$(data$(1:1))="G" then 
 50330     data$=srep$(data$,"!:","!:[RTFLINE]")
 50340   end if 
-50349 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+50349 ! --------------------------------!:
         ! ?Perform bracket replacement parameters                       ?:
 50350   data$=srep$(data$,"[RTFPAGE]","\page ")
 50360   data$=srep$(data$,"[RTFLINE]","\line ")
 50370   data$=srep$(data$,"[RTFDATE]",date$("Month DD, CCYY"))
 50380 ! 
-50390 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+50390 ! --------------------------------!:
         ! ?Draw box around text following this point                    ?:
 50400   if pos(data$,"[RTFBOX]")>0 then !:
           rtfbox=1 !:
           data$=srep$(data$,"[RTFBOX]","") !:
           d$=""
-50410 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+50410 ! --------------------------------!:
         ! ?End the box started by prior line                            ?:
 50420   if pos(data$,"[\RTFBOX]")>0 then !:
           rtfbox=0 !:
           data$=srep$(data$,"[\RTFBOX]","") !:
           d$=""
-50430 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+50430 ! --------------------------------!:
         ! ?Create a line above text                                     ?:
 50440   if pos(data$,"[TOPLINE]")>0 then !:
           data$=srep$(data$,"[TOPLINE]","") !:
@@ -209,7 +209,7 @@
           data$=srep$(data$,"[\TOPLINE]","") !:
           topline=0 !:
           d$=""
-50460 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+50460 ! --------------------------------!:
         ! ?Create a line below text                                     ?:
 50470   if pos(data$,"[BOTLINE]")>0 then !:
           data$=srep$(data$,"[BOTLINE]","") !:
@@ -219,7 +219,7 @@
           data$=srep$(data$,"[\BOTLINE]","") !:
           botline=0 !:
           d$=""
-50490 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+50490 ! --------------------------------!:
         ! ?Create a line in the middle of a box. Verticle lines are     ?:
 50500   if pos(data$,"[MIDLINE]")>0 then !:
           midline=1 !:
@@ -228,13 +228,13 @@
 50510   if pos(data$,"[\MIDLINE]")>0 then !:
           midline=0 !:
           data$=srep$(data$,"[\MIDLINE]","") : d$=""
-50520 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+50520 ! --------------------------------!:
         ! ? Create a header to appear at the top of every page          ?:
 50530   if uprc$(data$(1:1))="H" then 
 50540     gosub HEADER
 50550     goto L50640
 50560   end if 
-50570 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+50570 ! --------------------------------!:
         ! ?Create a footer to appear at the bottom of every page        ?:
 50580   if uprc$(data$(1:1))="F" then 
 50590     gosub FOOTER
@@ -311,21 +311,21 @@
 51150   tx=pos(styles$(a),"|")
 51160   if tx<0 then tx=len(styles$(a))+1
 51170   ap+=1
-51180 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51180 ! --------------------------------!:
         ! ?First line indent                                            ?:
 51190   if uprc$(styles$(a)(1:2))="FI" then 
 51200     s$(a)=s$(a)&"\fi"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51210     goto ZSET_STYLES_1
 51220   end if 
 51230   ap+=1
-51240 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51240 ! --------------------------------!:
         ! ?Left indent                                                  ?:
 51250   if uprc$(styles$(a)(1:2))="LI" then 
 51260     s$(a)=s$(a)&"\li"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51270     lin$(a)="\lin"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51280     goto ZSET_STYLES_1
 51290   end if 
-51300 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51300 ! --------------------------------!:
         ! ?Right indent                                                 ?:
 51310   if uprc$(styles$(a)(1:2))="RI" then 
 51320     s$(a)=s$(a)&"\ri"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
@@ -333,37 +333,37 @@
 51340   end if 
 51350   if ap=1 then s$(a)=s$(a)&"\li0\ri0\widctlpar" !:
         else if pos(s$(a),"widctlpar")<1 then s$(a)=s$(a)&"\widctlpar "
-51360 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51360 ! --------------------------------!:
       ! ?Tab left align                                               ?:
 51370 if uprc$(styles$(a)(1:2))="TL" then 
 51380   s$(a)=s$(a)&"\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51390   goto ZSET_STYLES_1
 51400 end if 
-51410 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51410 ! --------------------------------!:
       ! ?Tab center align                                             ?:
 51420 if uprc$(styles$(a)(1:2))="TC" then 
 51430   s$(a)=s$(a)&"\tqc\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51440   goto ZSET_STYLES_1
 51450 end if 
-51460 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51460 ! --------------------------------!:
       ! ?Tab right align                                              ?:
 51470 if uprc$(styles$(a)(1:2))="TR" then 
 51480   s$(a)=s$(a)&"\tqr\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51490   goto ZSET_STYLES_1
 51500 end if 
-51510 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51510 ! --------------------------------!:
       ! ?Tab decimal point align                                      ?:
 51520 if uprc$(styles$(a)(1:2))="TD" then 
 51530   s$(a)=s$(a)&"\tqdec\tx"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51540   goto ZSET_STYLES_1
 51550 end if 
-51560 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51560 ! --------------------------------!:
       ! ?Tab vertical Bar align                                       ?:
 51570 if uprc$(styles$(a)(1:2))="TB" then 
 51580   s$(a)=s$(a)&"\tb"&str$(round(val(styles$(a)(3:tx-1))*perin,0))
 51590   goto ZSET_STYLES_1
 51600 end if 
-51601 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51601 ! --------------------------------!:
       ! ?Font if other than Times new roman (Panto....)               ?:
 51604 if uprc$(styles$(a)(1:9))="FPALATINO" then ff$="\f29" !:
         goto ZSET_STYLES_1
@@ -375,32 +375,32 @@
         goto ZSET_STYLES_1
 51608 if uprc$(styles$(a)(1:8))="FCOURIER" then ff$="\f2" !:
         goto ZSET_STYLES_1
-51610 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51610 ! --------------------------------!:
       ! ?Font size                                                    ?:
 51620 if uprc$(styles$(a)(1:2))="FS" then 
 51630   fs$=str$(round(val(styles$(a)(3:tx-1))*2,0))
 51640   goto ZSET_STYLES_1
 51650 end if 
-51660 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51660 ! --------------------------------!:
       ! ?Font color                                                   ?:
 51670 if uprc$(styles$(a)(1:2))="CF" then 
 51680 ! INPUT FIELDS "23,64,c 1": PAUSE$
 51690   fc$="\cf"&str$(max(0,srch(mat colors$,uprc$(styles$(a)(3:tx-1)))))&" "
 51700   goto ZSET_STYLES_1
 51710 end if 
-51720 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51720 ! --------------------------------!:
       ! ?Font BOLD                                                    ?:
 51730 if uprc$(styles$(a)(1:1))="B" then 
 51740   bold$(a)="\b"
 51750   goto ZSET_STYLES_1
 51760 end if 
-51770 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51770 ! --------------------------------!:
       ! ?Space After Paragraph                                        ?:
 51780 if uprc$(styles$(a)(1:2))="SA" then 
 51790   sa$="\sa"&cnvrt$("pic(####)",val(style$(a)(3:tx-1))*320)&" "
 51800   goto ZSET_STYLES_1
 51810 end if 
-51820 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+51820 ! --------------------------------!:
       ! ?Paragraph Alignment                                          ?:
 51830 if uprc$(styles$(a)(1:1))="Q" and pos("LRCJ",uprc$(styles$(a)(2:2)))>0 then 
 51840   qa$="\q"&lwrc$(styles$(a)(2:2))&" "
@@ -557,11 +557,11 @@
 52814 end if 
 52816 return 
 53000 PICTURE: !:
-      ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+      ! --------------------------------!:
       ! ?Merge in RTF picture file and pr final DATA line          ?:
 53005 dim pict_name$*100
 53007 if newdata then pr #rtffile: "{\cf9 " !:
-        ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+        ! --------------------------------!:
         ! ?Sets text of newlines to BLUE                                ?:
 53010 if pos(data$,"[PICT(") >0 then 
 53020   pict_start=pos(data$,"[PICT(")
@@ -580,11 +580,11 @@
 53090   pr #rtffile: "{"&srep$(srep$(data$(3:len(data$)),"|","}{\tab}{"),"[RTFBAR]","|")&"\par }"&crlf$
 53100 end if 
 53103 if newdata then pr #rtffile: "}" !:
-        ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+        ! --------------------------------!:
         ! ? Turns off BLUE newline text                                 ?:
 53105 laststyle=0
 53110 return 
-53999 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+53999 ! --------------------------------!:
       ! ?Create table lines and pr to existing pr file          ?:
 54000 def fncells(prntfil,cdata$*1000,mat ccells$)
 54010 ! prntfil is the already open rtfoutput file !:
@@ -593,7 +593,7 @@
 54020 ! INPUT FIELDS "24,64,c 1": PAUSE$
 54030   dim brdr$*500,celldata$(1)*1000,call$*500,csize$(1)*500,celldef$*3000
 54040   css=cse=0 ! starting position
-54050 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54050 ! --------------------------------!:
         ! ?Parse the incoming data line to determine what table         ?:
 54060 SETCSS: css=cse+1
 54070   cse=min(len(cdata$)+1,pos(cdata$&"|","|",css))
@@ -602,7 +602,7 @@
 54100     cnum=0
 54110     goto SETCSS
 54120   end if 
-54130 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54130 ! --------------------------------!:
         ! ? Set matrix CELLDATA$ to contents of mat cells$              ?:
 54140   if css<len(cdata$) then 
 54150     cnum+=1 !:
@@ -610,46 +610,46 @@
           celldata$(cnum)=cdata$(css:cse-1)
 54160     goto SETCSS
 54170   end if 
-54175 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54175 ! --------------------------------!:
         ! ?Begin building table definition parameters from CELLS$(cell) ?:
 54180   cnum=css=cse=0 !:
         cface$=cfont$="" !:
         call$=crlf$&"\trowd \trgaph108\trleft-108"
-54190 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54190 ! --------------------------------!:
         ! ? Build the RTF properties for the table line needed          ?:
 54200 SETCELL: css=cse+1
 54210   cse=pos(ccells$(cell)&"|","|",css)
 54220   if cse<=len(ccells$(cell)) then 
-54230 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54230 ! --------------------------------!:
           ! ?Left side indent if any                                      ?:
 54240     if pos(ccells$(cell)(css:cse-1),"li")=1 then !:
             cindent$=fntwips$(val(ccells$(cell)(css+2:cse-1))) !:
             cindent=val(cindent$) !:
             call$=call$&"\trleft"&cindent$ !:
             goto SETCELL
-54250 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54250 ! --------------------------------!:
           ! ?Set the distance between cells.  The number is 1/2 the       ?:
-54260     rem IF POS(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           x$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    cALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
+54260     ! IF POS(CCELLS$(CELL)(CSS:CSE-1),"tg")=1 THEN !:                                           x$=FNTWIPS$(.5*VAL(CCELLS$(CELL)(CSS+2:CSE-1))) !:                                    cALL$=SREP$(CALL$,"\trgaph108\trleft-108","\trgaph"&X$&"\trleft-"&X$&" ") !:          GOTO SETCELL
 54261     if pos(ccells$(cell)(css:cse-1),"tg")=1 then !:
             x$=fntwips$(.5*val(ccells$(cell)(css+2:cse-1))) !:
             call$=srep$(call$,"\trgaph108\trleft-108","\trgaph"&x$) !:
             goto SETCELL
-54269 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54269 ! --------------------------------!:
           ! ?Designate header rows for repeat on subsequent pages         ?:
 54270     if pos(ccells$(cell)(css:cse-1),"trh")=1 then !:
             call$=call$&"\trhdr" !:
             goto SETCELL
-54272 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54272 ! --------------------------------!:
           ! ?Designate row height in postive inches for AT LEAST height   ?:
 54274     if pos(ccells$(cell)(css:cse-1),"trrh")=1 then !:
             call$=call$&"\trrh"&fntwips$(val(ccells$(cell)(css+4:cse-1))) !:
             goto SETCELL
-54280 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54280 ! --------------------------------!:
           ! ?Set font size in points                                      ?:
 54290     if pos(ccells$(cell)(css:cse-1),"fs")=1 and cnum=0 then !:
             cfont$="\fs"&str$(val(ccells$(cell)(css+2:cse-1))*2)&"" !:
             goto SETCELL
-54291 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54291 ! --------------------------------!:
           ! ?Set font type face                                           ?:
 54292     if uprc$(ccells$(cell)(css:cse-1))="FTIMES" and cnum=0 then !:
             cface$="\f0" !:
@@ -669,7 +669,7 @@
 54298     if uprc$(ccells$(cell)(css:cse-1))="FLUCIDA" and cnum=0 then !:
             cface$="\f69" !:
             goto SETCELL
-54300 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54300 ! --------------------------------!:
           ! ?Build formats for each Cell left to right                    ?:
 54310     if pos(ccells$(cell)(css:cse-1),"c")=1 then 
 54320       cnum+=1 !:
@@ -678,11 +678,11 @@
             cface$(cnum)=cface$ !:
             cfont$(cnum)=cfont$
 54330       csize(cnum)=val(fntwips$(val(ccells$(cell)(css+1:cse-1))))
-54340       rem cSIZE$(CNUM)="\cellx"&STR$(SUM(CSIZE)+CINDENT) !:                                     GOTO SETCELL
+54340       ! cSIZE$(CNUM)="\cellx"&STR$(SUM(CSIZE)+CINDENT) !:                                     GOTO SETCELL
 54341       csize$(cnum)="\cellx"&str$(sum(csize)+cindent) !:
             goto SETCELL
 54350     end if 
-54360 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54360 ! --------------------------------!:
           ! ?Determine border width from 0 to 5 (0 to 75 TWIPS)           ?:
 54370     if pos(ccells$(cell)(css:cse-1),"br")=1 then 
 54380       brdr$=""
@@ -703,7 +703,7 @@
 54450       csize$(cnum)=brdr$&csize$(cnum)
 54460       goto SETCELL
 54470     end if 
-54480 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54480 ! --------------------------------!:
           ! ?Set vertical alignment for each cell                         ?:
 54490     if pos(ccells$(cell)(css:cse-1),"v")=1 then 
 54500       if pos(ccells$(cell)(css+1:cse-1),"t")=1 then csize$(cnum)=srep$(csize$(cnum),"\cellx","\clvertalt\cellx")
@@ -711,7 +711,7 @@
 54520       if pos(ccells$(cell)(css+1:cse-1),"b")=1 then csize$(cnum)=srep$(csize$(cnum),"\cellx","\clvertalb\cellx")
 54530       goto SETCELL
 54540     end if 
-54550 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54550 ! --------------------------------!:
           ! ?Set horizontal alignment of each cell                        ?:
 54560     if pos(ccells$(cell)(css:cse-1),"h")=1 then 
 54570       if pos(ccells$(cell)(css+1:cse-1),"r")=1 then cfmt$(cnum)=cfmt$(cnum)&"\qr"
@@ -719,7 +719,7 @@
 54590       if pos(ccells$(cell)(css+1:cse-1),"l")=1 then cfmt$(cnum)=cfmt$(cnum)&"\ql"
 54600       goto SETCELL
 54610     end if 
-54620 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54620 ! --------------------------------!:
           ! ?Set the cell font if different than the default              ?:
 54630     if uprc$(ccells$(cell)(css:cse-1))="FTIMES" then !:
             cface$(cnum)="\f0 " !:
@@ -739,12 +739,12 @@
 54662     if uprc$(ccells$(cell)(css:cse-1))="FLUCIDA" then !:
             cface$(cnum)="\f69 " !:
             goto SETCELL
-54670 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54670 ! --------------------------------!:
           ! ?Set the cell font if different than the default              ?:
 54680     if pos(ccells$(cell)(css:cse-1),"fs")=1 and cnum>0 then !:
             cfont$(cnum)="\fs"&str$(val(ccells$(cell)(css+2:cse-1))*2)&" " !:
             goto SETCELL
-54690 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54690 ! --------------------------------!:
           ! ?Set the backround shading of each cell                       ?:
 54700     if pos(ccells$(cell)(css:cse-1),"sh")=1 then 
 54710       csize$(cnum)=srep$(csize$(cnum),"\cellx","\clshdng"&str$(val(ccells$(cell)(css+2:cse-1))*100)&" "&"\cellx")
@@ -753,19 +753,19 @@
 54740     goto SETCELL
 54750   end if 
 54760 PRINT_CELLS: !:
-        ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+        ! --------------------------------!:
         ! ?Start the printing of the CELL row                           ?:
 54770   mat celldata$(cnum) !:
-        ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+        ! --------------------------------!:
         ! ?Make the data matrix the same size as the number of cells    ?:
 54780 ! INPUT FIELDS "24,64,c 1": PAUSE$
 54790   celldef$=call$
-54800 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54800 ! --------------------------------!:
         ! ?Define the cell row and number and size of cells             ?:
 54810   for a=1 to cnum
 54820     if a=cnum then celldef$=celldef$&csize$(a)&crlf$ else celldef$=celldef$&csize$(a)
 54830   next a
-54840 ! 旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커!:
+54840 ! --------------------------------!:
         ! ?Print the cells                                              ?:
 54850   pr #prntfil: cface$&cfont$&celldef$
 54860   for a=1 to cnum

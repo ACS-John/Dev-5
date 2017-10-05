@@ -2,7 +2,7 @@
 00020 library program$: fncustomer
 00025 library 'S:\Core\Library': fnxit,fntop
 00030 fntop(program$)
-00035 let fncustomer(x)
+00035 fncustomer(x)
 00040 fnxit
 00300 def library fncustomer(x)
 00310   fn_setup
