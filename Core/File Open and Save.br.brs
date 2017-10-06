@@ -337,11 +337,7 @@
 57120   if clientServer then
 57140     foeFileOpen$=env$('temp')&'\acs\OpenPartial\tmpFileOpenEverything'&session$&'.zip'
 57160     fnmakesurepathexists(foeFileOpen$)
-57180     ! if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
-57200     fnCopyFile(env$('at')&br_filename$(foeSource$),foeFileOpen$)
-57220     ! SKIPFORDEV: ! XXX DELETE ME
-57240     fnmakesurepathexists(foeFileOpen$)
-57260     fnCopyFile(env$('at')&br_filename$(foeSource$),foeFileOpen$)
+57200     fnCopyFile(foeSource$,foeFileOpen$)
 57280   else
 57300     foeFileOpen$=foeSource$
 57320   end if
