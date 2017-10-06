@@ -18,32 +18,12 @@
 52170    if from$(1:2)='@:' then fromAt$='@:' else fromAt$=''
 52172    if to$(1:2)='@:' then toAt$='@:' else toAt$=''
 52180   if pos(lwrc$(options$),'recursive ') then copyRecursive=1
-52200   fnMakeSurePathExists(to$)
-54000   ! if new_record_length and as_admin then 
-54020   !   pr 'sorry new_record_length and as_admin are exclusive options and you can not use both' 
-54040   !   pause 
-54060   !   goto COPY_XIT
-56000   ! else if as_admin then
-56020   !   ! copy_return does not yet work for as_admin.....  perhaps check errorlevel or something.
-56030   !   ! copy_return does not yet work for as_admin.....  perhaps check errorlevel or something.
-56040   !   exec 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\copy_as_admin_'&session$&'.cmd"'
-56060   !   open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\copy_as_admin_'&session$&'.cmd',d,o
-56080   !   pr #h_copy_cmd:     'echo copy "'&os_filename$(from$)&'" "'&os_filename$(to$)&'"'
-56100   !   pr #h_copy_cmd:     'copy "'&os_filename$(from$)&'" "'&os_filename$(to$)&'"'
-56140   !   close #h_copy_cmd:
-56160   !   execute 'sy "'&env$('temp')&'\copy_as_admin_'&session$&'.cmd"'
-58000   ! else ! either new_record_length or (neither new_record_length nor as_admin)
+52200     fnMakeSurePathExists(to$)
 58020     if copyRecursive then
 58040       fngetpp(from$,fromPath$,fromFile$,fromExt$)
 58060       fngetpp(to$,toPath$,toFile$,toExt$)
 58080       dim fromPath$*256,fromFile$*256,fromExt$*256
 58100       dim toPath$*256,toFile$*256,toExt$*256
-58120       ! pr 'fromFile$=';fromFile$
-58140       ! pr 'fromExt$=';fromExt$
-58160       ! pr 'toFile$=';toFile$
-58180       ! pr 'toExt$=';toExt$
-58200       ! pause
-58220       ! execute 'copy "'&toPath$&'" "'&env$('temp')&'\acs\recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
 58240       dim copyFromFolder$(0)*256
 58260       gd2_return=fngetdir2(fromPath$,mat copyFromFolder$,'/s /b /ad')
 58300       ! 
@@ -53,34 +33,28 @@
 58380         copyToFolder$=toPath$&(copyFromFolder$(cfi)(len(srep$(fromPath$,fromAt$,''))+1:inf))
 58400         fnmakesurepathexists(copyToFolder$)
 58410         fnStatus ('Creating files  in "'&copyToFolder$&'"') 
-
-58420         execute 'copy "'&fromat$&copyfromfolder$(cfi)&'\'&fromfile$&fromext$&'" "'&toat$&copyToFolder$&'\*.*"' ioerr copyFailA ! ignore because not all folders have files in them
+58420         execute 'copy "'&fromat$&copyfromfolder$(cfi)&'\'&fromfile$&fromext$&'" "'&toat$&copyToFolder$&'\*.*" -n' ioerr copyFailA ! ignore because not all folders have files in them
 58440         copy_return+=1! if int(cfi/10)=cfi/10 then pause
 58450         copyFailA: ! 
 58460       nex cfi
-58480       ! pause
 59000     else
 59020       if new_record_length then 
-59040         dim parameters$*128
-59060         parameters$=''
-59080         parameters$=parameters$&' -'&str$(abs(new_record_length))
 59100         if new_record_length and uprc$(from$)=uprc$(to$) then 
-59120           execute 'copy "'&from$&'" "'&env$('temp')&'\acs\recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
-59140           execute 'copy "'&env$('temp')&'\acs\recl_chg_'&session$&'" "'&to$&'"' ioerr COPY_FAIL
-59160           execute 'free "'&env$('temp')&'\acs\recl_chg_'&session$&'"' ioerr ignore
+59120           execute 'copy "'&from$&'" "'&env$('temp')&'\acs\recl_chg_'&session$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_FAIL
+59140           execute 'copy "'&env$('temp')&'\acs\recl_chg_'&session$&'" "'&to$&'" -n' ioerr COPY_FAIL
+59160           execute 'free "'&env$('temp')&'\acs\recl_chg_'&session$&'" -n' ioerr ignore
 59180         end if 
 59200       end if 
-59220       execute 'copy "'&from$&'" "'&to$&'"' ioerr COPY_FAIL
+59220       execute 'copy "'&from$&'" "'&to$&'" -n' ioerr COPY_FAIL
 59240       copy_return=1
 59260     end if
-59280   ! end if
 60000   goto COPY_XIT
 64000   COPY_FAIL: ! r:
 64020     copy_return=min(-1,-err)
 64040     if new_record_length then 
-64060       execute 'Copy "'&from$&'" "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'"' ioerr COPY_RETRY_NEW_RLN_FAILED
-64080       execute 'Copy "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" "'&to$&'" -'&str$(abs(new_record_length)) ioerr COPY_RETRY_NEW_RLN_FAILED
-64100       execute 'Free "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'"' ioerr ignore
+64060       execute 'Copy "'&from$&'" "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" -n' ioerr COPY_RETRY_NEW_RLN_FAILED
+64080       execute 'Copy "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" "'&to$&'" -'&str$(abs(new_record_length))&' -n' ioerr COPY_RETRY_NEW_RLN_FAILED
+64100       execute 'Free "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" -n' ioerr ignore
 64120       copy_return=2
 65000     else if env$("ACSDeveloper")<>"" then 
 65020       pr 'first copy failed with error ';err
