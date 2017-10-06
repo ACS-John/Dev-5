@@ -228,9 +228,9 @@
 48160   if clientServer then
 48170     tmpFileOpen$=env$('temp')&'\acs\OpenPartial\tmpFileOpen'&session$&'.zip'
 48172     fnmakesurepathexists(tmpFileOpen$)
-48174     ! if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
+48174     if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
 48180     fnCopyFile(env$('at')&br_filename$(opFileOpen$),tmpFileOpen$)
-48182     ! SKIPFORDEV: ! XXX DELETE ME
+48182     SKIPFORDEV: ! XXX DELETE ME
 48190   else
 48200     tmpFileOpen$=opFileOpen$
 48260   end if
@@ -255,20 +255,20 @@
 48640   OP_XIT: ! 
 48660 fnend
 52000 def fn_opMain(omFileOpen$*256)
-52020   destination_company_number=val(env$('cno'))
+52020   ! destination_company_number=val(env$('cno'))
 52040   OpmAskWhichToOpen: ! r: screen
 52060   fntos(sn$="Open Partial")
-52080   col1_width=27 : col2_pos=col1_width+2 : lc=rc=0
+52080   col1_width=24 : col2_pos=col1_width+2 : lc=rc=0
 52100   fnlbl(lc+=1,1,"Source File:",col1_width,1)
 52120   fntxt(lc,col2_pos,30,256,0,'',1,'select any data file from the data set to be imported.  i.e. Z:\vol002\CLmstr\BankIdx.h2')
 52140   resp$(rc+=1)=omFileOpen$
-52160   fnlbl(lc+=1,1,"Source Company:",col1_width,1)
+52160   fnlbl(lc+=2,1,"Company to Load:",col1_width,1)
 52180   fncomboa('compList',lc,col2_pos,mat archiveList$)
 52200   resp$(resp_fileSource:=rc+=1)=archiveList$(1)
-52220   fnlbl(lc+=1,1,"Destination Company Number:",col1_width,1)
-52240   fntxt(lc,col2_pos,5,5,0,'1030',0,'')
-52250   fnlbl(lc,col2_pos+7,"(only applies if a specific Source Company is selected)")
-52260   resp$(resp_cnoDestination:=rc+=1)=str$(destination_company_number)
+52220   ! fnlbl(lc+=1,1,"Destination Company Number:",col1_width,1)
+52240   ! fntxt(lc,col2_pos,5,5,0,'1030',0,'')
+52250   ! fnlbl(lc,col2_pos+7,"(only applies if a specific Source Company is selected)")
+52260   ! resp$(resp_cnoDestination:=rc+=1)=str$(destination_company_number)
 52340   fncmdset(2)
 52360   fnacs(sn$,0,mat resp$,ckey)
 52380   ! /r
@@ -283,18 +283,18 @@
 52560       opScreenReturn=1 
 52580     else 
 54000       source_company_number=archiveCNo(sourceWhich)
-54020       destination_company_number=val(resp$(resp_cnoDestination))
+54020       ! destination_company_number=val(resp$(resp_cnoDestination))
 54040       cursys$=archiveSysAbbr$(sourceWhich)
 54060       fnstatus('** Open Partial Settings **')
 54080       fnstatus('Source File: '&omFileOpen$)
 54100       fnstatus('Source System: '&cursys$)
 54120       fnstatus('Source Company Number: '&str$(source_company_number))
-54140       fnstatus('Destination Company Number: '&str$(destination_company_number))
+54140       ! fnstatus('Destination Company Number: '&str$(destination_company_number))
 54160       fnstatus('**')
 54180       fnstatus('Set current system to: '&cursys$&' from '&cursys_origional$)
 54200       cursys$=fncursys$(cursys$)
-54220       fnputcno(destination_company_number) : cno=destination_company_number
-54240       fnstatus('Set active Company Number to: '&str$(destination_company_number))
+54220       ! fnputcno(destination_company_number) : cno=destination_company_number
+54240       ! fnstatus('Set active Company Number to: '&str$(destination_company_number))
 54260       ! 
 54280       dim omSourceFilter$(0)*64
 54300       if cursys$='UB' then
@@ -311,7 +311,7 @@
 56060         fnreg_write('Last Open Partial Path',omFileOpen$(1:pos(omFileOpen$,'\',-1)))
 56080         fnreg_write('Last Open Partial System',env$('cursys'))
 56100         fnreg_write('Last Open Partial Company Number',env$('cno'))
-56120         fn_copy_files_in(env$('temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),val(env$('cno')))
+56120         fn_copy_files_in(env$('temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),source_company_number)
 56140         opScreenReturn=1 
 56160         setenv('force_reindex','yes') 
 56180         fncheckfileversion
@@ -418,7 +418,7 @@
 62440   pr #h_tmp: '@echo OPEN PROCESSING...'
 62460  !
 62480   for eafSourceFilterItem=1 to udim(mat eafSourceFilter$)
-62500     pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&eafSourceFile$&'" -o"'&eafDestinationFolder$&'" '&eafSourceFilter$(eafSourceFilterItem)&' > "'&env$('client_temp')&'\acs\OpenPartial_Log.txt"'
+62500     pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&eafSourceFile$&'" -o"'&eafDestinationFolder$&'" '&eafSourceFilter$(eafSourceFilterItem)&' > "'&env$('temp')&'\acs\OpenPartial_Log.txt"'
 62520   nex eafSourceFilterItem
 62540   close #h_tmp: 
 62560   execute 'sy '&env$('temp')&'\acs\openPartial'&session$&'.cmd'
