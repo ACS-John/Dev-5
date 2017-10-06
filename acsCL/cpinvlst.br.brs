@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\CpInvLst
 00020 ! checkbook Accounts Payable Listing (Any Time)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fntop,fntos,fnlbl,fntxt,fncomboa,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fnxit,fntop,fntos,fnlbl,fntxt,fncomboa,fncmdset,fnacs,fndate_mmddyy_to_ccyymmdd,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,vnam$*30,de$*30,cap$*128,sq1$*1,item1$(2)*15
@@ -79,8 +79,8 @@
 00720   if sq1$="V" then !:
           write #tmp,using 'Form POS 1,C 128': "Mask 19,8,C,A,13,6,C,A"
 00730   close #tmp: 
-00740   execute "FREE "&env$('Temp')&"\ADDR" ioerr L750
-00750 L750: execute "Sort "&env$('Temp')&"\Control"
+00740   fnFree(env$('Temp')&"\ADDR")
+00750   execute "Sort "&env$('Temp')&"\Control"
 00760   open #addr=1: "Name="&env$('Temp')&"\ADDR",internal,input ioerr XIT
 00770   open #work=5: "Name="&env$('Temp')&"\WORK",internal,input,relative 
 00780   fnopenprn

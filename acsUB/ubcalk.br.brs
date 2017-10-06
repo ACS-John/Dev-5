@@ -3,7 +3,7 @@
 00040   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnd1,fncloseprn,fnopenprn,fnxit,fnerror,fntos,fnlbl,fnacs
 00050   library 'S:\Core\Library': fntxt,fnmsgbox,fncmdset,fntop,fnpause,fncd,fnchk,fncreg_read,fncreg_write,fncomboa
 00060   library 'S:\Core\Library': fnget_services,fnapply_default_rates,fnAutomatedSavePoint
-00062   library 'S:\Core\Library': fngethandle
+00062   library 'S:\Core\Library': fngethandle,fnFree
 00070   if env$('client')="Chatom" then 
 00072     library "S:\acsUB\calk_Chatom": fncalk
 00074   else 
@@ -185,7 +185,7 @@
 36020   fn_t9notification
 36040   close #h_customer: ioerr ignore
 36060   close #h_work,free: ioerr ignore
-36070   execute 'free '&work_addr$ ioerr ignore
+36070   fnFree(work_addr$)
 36080   close #h_ubtrans: ioerr ignore
 36090 ! pr 'print_count_unusual=';print_count_unusual : pr 'print_count_skip=';print_count_skip
 36100   if print_count_unusual or print_count_skip then let fncloseprn

@@ -3,7 +3,7 @@
         ! .   ! NOTE: AVOID CHANGING DATA FORMAT OF THIS FILE SO IT CAN MATCH UP !:
         ! .   ! WITH IT'S 39 COUNTERPART WHICH DOESN'T HAVE ANY LIBRARIES
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndat,fnprocess,fnwait,fnoldmsgbox,fnopenprn,fncloseprn,fnxit,fntop,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndat,fnprocess,fnwait,fnoldmsgbox,fnopenprn,fncloseprn,fnxit,fntop,fnconsole,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim sc1$(5),io1$(30),fl1$(5),in1$(30)
@@ -241,7 +241,7 @@
 02360 ! ______________________________________________________________________
 02370 L2370: close #1: ioerr L2380
 02380 L2380: execute "Copy "&env$('Q')&"\PRmstr\W2Box16.h"&str$(cno)&",X -D -n"
-02390   execute "Free "&env$('Q')&"\PRmstr\W2Box16.h"&str$(cno)&" -n"
+02390   fnFree(env$('Q')&"\PRmstr\W2Box16.h"&str$(cno))
 02400   execute "Rename X "&env$('Q')&"\PRmstr\W2Box16.h"&str$(cno)&" -n"
 02410   goto L1670
 02420 ! ______________________________________________________________________

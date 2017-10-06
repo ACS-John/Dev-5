@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\Conversion\CnvAll-Cnv
 00020 ! CONVERT MASTER FILES
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim gl(3),ta(2),k$*20,de$*30,fgl$(3)
@@ -71,7 +71,7 @@
 00720 ! ______________________________________________________________________
 00730 L730: ! Replace S:\acsCL\TRALLOC.CNV
 00740   execute "Copy "&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)&" X -79 -n"
-00750   execute "Free "&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)&" -n"
+00750   fnFree(env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno))
 00760   execute "Rename X "&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)&" -n"
 00770   goto L630
 00780 ! ______________________________________________________________________

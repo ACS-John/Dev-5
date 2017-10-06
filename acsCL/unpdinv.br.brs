@@ -1,20 +1,17 @@
 00010 ! Replace S:\acsCL\UnPdInv
 00020 ! Unpaid Invoice Listing (Current)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fncno,fndat,fntos,fnlbl,fncomboa,fncmdset,fnacs,fnwait
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fntos,fnlbl,fncomboa,fncmdset,fnacs,fnwait,fnfree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   dim dat$*20,cnam$*40,vnam$*30,de$*50,fd$*30,ft(3),aa(2),gl(3),ade$*50
+00070   dim dat$*20,vnam$*30,de$*50,fd$*30,ft(3),aa(2),gl(3),ade$*50
 00080   dim cap$*128,io1$(2),wrd1$(2),item1$(2)*15
-00090   dim udf$*256
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Unpaid Invoice Listing")
-00120   udf$=env$('temp')&'\'
 00130   cancel=99
-00140   fncno(cno,cnam$) !:
-        fndat (dat$)
-00150   fntos(sn$="unpdinv") !:
-        respc=0
+00140   fndat (dat$)
+00150   fntos(sn$="unpdinv")
+00152   respc=0
 00160   fnlbl(1,40,"",1,1)
 00170   fnlbl(1,1,"Order for Printing:",20,1)
 00180   item1$(1)="Payee" !:
@@ -27,9 +24,9 @@
           if resp$(1)=item1$(1) then fund=1 else !:
             fund=2
 00210 ! FNWAIT
-00220   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
-00230   open #unpdaloc=8: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Uaidx2.h"&str$(cno)&",Shr",internal,input,keyed 
-00240   open #clwork=10: "Name="&env$('Q')&"\CLmstr\CLWORK"&wsid$&".h"&str$(cno)&", Size=0, RecL=97, Replace",internal,outin 
+00220   open #paytrans=4: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
+00230   open #unpdaloc=8: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Uaidx2.h"&env$('cno')&",Shr",internal,input,keyed 
+00240   open #clwork=10: "Name="&env$('Q')&"\CLmstr\CLWORK"&wsid$&".h"&env$('cno')&", Size=0, RecL=97, Replace",internal,outin 
 00250 READ_PAYTRANS: ! 
 00260   read #paytrans,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,G 1,pos 107,n 8': vn$,iv$,ivd,dd,po$,de$,upa,cde,ddate eof L350
 00270   ivnum+=1 ! UNIQUE Number FOR EACH INVOICE
@@ -42,25 +39,25 @@
 00340   goto READ_UNPDALOC
 00350 L350: close #paytrans: : close #unpdaloc: : close #clwork: 
 00360   upa=0 ! sort ok, sorts a work file
-00370   open #9: "Name="&udf$&"CONTROL,SIZE=0,RecL=128,Replace",internal,output 
-00380   write #9,using 'Form POS 1,C 128': "FILE CLWORK"&wsid$&".H"&str$(cno)&","&env$('Q')&"\CLmstr,,"&udf$&"ADDR,,,,,A,N"
+00370   open #9: "Name="&env$('temp')&'\'&"CONTROL,SIZE=0,RecL=128,Replace",internal,output 
+00380   write #9,using 'Form POS 1,C 128': "FILE CLWORK"&wsid$&".H"&env$('cno')&","&env$('Q')&"\CLmstr,,"&env$('temp')&'\'&"ADDR,,,,,A,N"
 00390   if fund=2 then !:
           write #9,using 'Form POS 1,C 128': "MASK 74,3,N,A,1,20,C,A,86,4,N,A"
 00400   if fund<>2 then !:
           write #9,using 'Form POS 1,C 128': "MASK 1,20,C,A,86,4,N,A"
 00410   close #9: 
-00420   execute "FREE "&udf$&"ADDR" ioerr L430
-00430 L430: execute "SORT "&udf$&"CONTROL"
-00440   open #9: "Name="&udf$&"ADDR",internal,input 
-00450   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno)&",Shr",internal,input,keyed 
-00460   open #clwork=10: "Name="&env$('Q')&"\CLmstr\CLWORK"&wsid$&".h"&str$(cno)&",Shr",internal,input,relative 
-00470   open #glmstr=5: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-00480   open #work=6: "Name="&udf$&"WORK,SIZE=0,RecL=22,Replace",internal,output 
+00420   fnFree(env$('temp')&'\'&"ADDR")
+00430   execute "SORT "&env$('temp')&'\'&"CONTROL"
+00440   open #9: "Name="&env$('temp')&'\'&"ADDR",internal,input 
+00450   open #paymstr=13: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
+00460   open #clwork=10: "Name="&env$('Q')&"\CLmstr\CLWORK"&wsid$&".h"&env$('cno')&",Shr",internal,input,relative 
+00470   open #glmstr=5: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00480   open #work=6: "Name="&env$('temp')&'\'&"WORK,SIZE=0,RecL=22,Replace",internal,output 
 00490   close #work: 
-00500   execute "FREE INDX."&wsid$ ioerr L510
-00510 L510: execute "INDEX "&udf$&"WORK,"&udf$&"INDX,1,12,Replace"
-00520   open #work=6: "Name="&udf$&"WORK,KFName="&udf$&"INDX",internal,outin,keyed 
-00530   open #fundmstr=7: "Name="&env$('Q')&"\CLmstr\FundMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\FundIdx1.h"&str$(cno)&",Shr",internal,input,keyed 
+00500   fnFree("INDX."&wsid$)
+00510 L510: execute "INDEX "&env$('temp')&'\'&"WORK,"&env$('temp')&'\'&"INDX,1,12,Replace"
+00520   open #work=6: "Name="&env$('temp')&'\'&"WORK,KFName="&env$('temp')&'\'&"INDX",internal,outin,keyed 
+00530   open #fundmstr=7: "Name="&env$('Q')&"\CLmstr\FundMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\FundIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00540   fnopenprn
 00550   vn$="": iv$=""
 00560 L560: read #9,using 'FORM POS 1,PD 3': r4 eof END1
@@ -110,7 +107,7 @@
 01000   fund$=gl$(1:3)
 01010   read #fundmstr,using 'FORM POS 4,C 25',key=fund$: fd$ nokey HDR
 01020 HDR: f1=1
-01030   pr #255,using 'FORM POS 1,C 8,Cc 86': date$,cnam$
+01030   pr #255,using 'FORM POS 1,C 8,Cc 86': date$,env$('cnam')
 01040   pr #255,using 'FORM POS 1,C 8,cc 86': time$,"Unpaid Invoice Listing"
 01050   pr #255,using 'FORM POS 1,C 4,N 4,Cc 86': "Page",pg+=1,dat$
 01060   if fund<>2 then fd$=""

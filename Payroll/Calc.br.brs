@@ -398,9 +398,7 @@
 02530   close #hEmployee: 
 02540   close #h_department: 
 02550   close #h_rpwork: ! ,Free:
-02570   if exists(env$('Q')&"\PRmstr\jcprh1.h"&env$('cno')) >1 then 
-02572     execute "Free "&env$('Q')&"\PRmstr\jcprh1.h"&env$('cno') ! get rid of jobcost time entry file if exists
-02574   end if 
+02570   fnFree(env$('Q')&"\PRmstr\jcprh1.h"&env$('cno')) ! get rid of jobcost time entry file if exists
 02580   goto XIT ! /r
 02590 XIT: fnxit
 02600 IGNORE: continue 
@@ -737,6 +735,7 @@
 15440 return  ! /r
 16000 def fn_setup
 16020   library 'S:\Core\Library': fntop, fnerror, fnxit,fntos,fnfra,fnchk,fnlbl,fntxt,fncmdkey,fnacs,fncd,fnpayroll_client_state$,fnmsgbox,fnstatus,fngethandle,fnstatus_pause,fnDedNames,fnAutomatedSavePoint
+16022   library 'S:\Core\Library': fnFree
 16040   on error goto ERTN
 16060   debug=0 ! if env$('ACSDeveloper')<>'' then debug=1 else debug=0
 16080   ! ______________________________________________________________________

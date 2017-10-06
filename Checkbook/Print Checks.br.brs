@@ -1,6 +1,7 @@
 10010 ! pr checks
 10020 ! ______________________________________________________________________
-10030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fncombof,fnfra,fnmsgbox,fnbutton,fnopt,fncmdkey,fnaddpayee,fnqgl,fnagl$,fnrgl$,fncreg_read,fncreg_write
+10030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fncombof,fnfra,fnmsgbox,fnbutton,fnopt,fncmdkey,fnaddpayee,fnqgl,fnagl$,fnrgl$,fncreg_read,fncreg_write,fnFree
+10032   library 'S:\Core\Library': fnCopy,fnRename,fnFree,fnIndex
 10040   on error goto ERTN
 10050 ! ______________________________________________________________________
 10060   dim vn$*8,holdvn$*8,up$(4),amt(15,3),iv$(15,3),de$(15,3)*13,ivdate(15,3)
@@ -806,16 +807,16 @@
 18650   L4080: ! 
 18660   fn_close(h_unpdaloc)
 18670   fn_close(ivpaid)
-18680   execute "Copy "&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&" "&env$('temp')&"\X -D"
-18690   execute "Free "&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')
-18700   execute "ReName "&env$('temp')&"\X "&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')
-18710   execute "Copy "&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&" "&env$('temp')&"\X -D"
-18720   execute "Free "&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')
-18730   execute "ReName "&env$('temp')&"\X "&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')
-18740   execute "Index "&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&","&env$('Q')&"\CLmstr\UNPdIdx1.h"&env$('cno')&",1,20,Replace,DupKeys"
-18750   execute "Index "&env$('Q')&"\CLmstr\unpdaloc.H"&env$('cno')&","&env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno')&",1,20,Replace,DupKeys -n"
-18760   execute "Index "&env$('Q')&"\CLmstr\unpdaloc.H"&env$('cno')&","&env$('Q')&"\CLmstr\Uaidx1.H"&env$('cno')&",9,12,Replace,DupKeys -n"
-18770   execute "Index "&env$('Q')&"\CLmstr\IvPaid.h"&env$('cno')&","&env$('Q')&"\CLmstr\IVIndex.h"&env$('cno')&",1,20,ReOrg,DupKeys"
+18680   fnCopy(env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'),env$('temp')&"\X",0,"-D")
+18690   fnFree(env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'))
+18700   fnRename(env$('temp')&"\X",env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'))
+18710   fnCopy(env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&" "&env$('temp')&"\X",0,"-D")
+18720   fnFree(env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno'))
+18730   fnRename(env$('temp')&"\X",env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')) 
+18740   fnIndex(env$('Q')&"\CLmstr\PayTrans.h"&env$('cno'),env$('Q')&"\CLmstr\UNPdIdx1.h"&env$('cno'),"1,20")
+18750   fnIndex(env$('Q')&"\CLmstr\unpdaloc.H"&env$('cno'),env$('Q')&"\CLmstr\Uaidx2.H"&env$('cno'),"1,20  ")
+18760   fnIndex(env$('Q')&"\CLmstr\unpdaloc.H"&env$('cno'),env$('Q')&"\CLmstr\Uaidx1.H"&env$('cno'),"9,12")
+18770   fnIndex(env$('Q')&"\CLmstr\IvPaid.h"&env$('cno'),env$('Q')&"\CLmstr\IVIndex.h"&env$('cno'),"1,20  ")
 18780 fnend 
 18790 ! 
 18800 def fn_portion_stub(stubOnCheck)

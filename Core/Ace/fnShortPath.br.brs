@@ -40,8 +40,9 @@
 40190               if do_debug then pr 'getfilepath_ln$='&getfilepath_ln$ : pause
 40220     if getfilepath_ln$='\' then 
 40240       longpath$=rtrm$(longpath$)
+40250       pr 'I thought this never happened and was safe to delete.' : if env$('acsDeveloper')<>'' then pause
 40260     else 
-40280       sp_return$=getfilepath_ln$ !    longpath$    changed this from longpath$ on 10/6/17 - just seems wrong and it wasn't working, so if fixed it.
+40280       sp_return$=rtrm$(getfilepath_ln$) !    longpath$    changed this from longpath$ on 10/6/17 - just seems wrong and it wasn't working, so if fixed it.
 40300     end if 
 45140     close #tmp,free: ioerr ignore
 45160   end if 

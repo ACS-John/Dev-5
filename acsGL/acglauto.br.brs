@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\acglAuto
 00020 ! automatic processing - chain program
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit, fnxit,fncno,fnerror,fnputcno,fnprocess,fnprg,fnchain,fnps,fnpgnum,fnkillauto,fnmsgbox
+00040   library 'S:\Core\Library': fnxit, fnxit,fncno,fnerror,fnputcno,fnprocess,fnprg,fnchain,fnps,fnpgnum,fnkillauto,fnmsgbox,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim prg$*35,a$*40,cnam$*40,ml$(3)*80
@@ -40,7 +40,7 @@
 00330   goto L100
 00340 ! ______________________________________________________________________
 00350 XIT: ! 
-00360   execute "Free AutoPrn."&wsid$&" -n" ioerr L370
+00360   fnFree("AutoPrn."&wsid$)
 00370 L370: fnxit
 00380 CHAIN_PRG: fnchain(prg$)
 00390 ! ______________________________________________________________________

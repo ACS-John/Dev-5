@@ -268,13 +268,13 @@
 24060 fnend
 24080 def fn_spoolPath$*256(; initialize)
 24100   if initialize then
-24120     if ~exists(env$('temp')&'\ACS') then exe 'mkdir '&env$('temp')&'\ACS'
-24140     if ~exists(env$('temp')&'\ACS\Spool') then exe 'mkdir '&env$('temp')&'\ACS\Spool'
-24160     execute 'config spoolpath '&env$('Temp')&'\ACS\Spool' 
+24120     if ~exists(env$('temp')&'\acs') then exe 'mkdir '&env$('temp')&'\acs'
+24140     if ~exists(env$('temp')&'\acs\Spool') then exe 'mkdir '&env$('temp')&'\acs\Spool'
+24160     execute 'config spoolpath '&env$('temp')&'\acs\Spool' 
 24180     ! execute 'config spoolpath '&env$('Temp') 
 24200     ! doesn't work...  ! execute 'config remotespoolpath @::'&env$('Client_TEMP')
 24220   end if
-24240   fn_spoolPath$=env$('temp')&'\ACS\Spool'
+24240   fn_spoolPath$=env$('temp')&'\acs\Spool'
 24260 fnend
 27000 def library fnrights_test(rt_folder$*256,rt_how_to_fix$*256,folder_name$; additional_text_for_failure$*2048)
 27010   if ~setup then let fn_setup

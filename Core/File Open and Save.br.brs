@@ -23,7 +23,7 @@
 38040   dim save_log_filename$*256
 38060   failure=0
 38080   save_log_filename$=env$('temp')&'\Save_As_Log.txt'
-38100   execute 'free '&br_filename$(save_log_filename$) ioerr ignore
+38100   fnFree(br_filename$(save_log_filename$))
 38120   if fsa_automatedSaveFileName$<>'' then
 38140     save_name$=fsa_automatedSaveFileName$
 38160   else
@@ -172,13 +172,13 @@
 46000 def fn_7zFileListFromArchive(zFileOpen$*512,mat filename$)
 46020   dim gflfaTmpFile$*512
 46040   gflfaTmpFile$=env$('temp')&'\acs\7zGetFileList'&session$&'.txt'
-46060   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\ACS\Open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+46060   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\Open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
 46080   pr #h_tmp: '@echo off'
 46100   pr #h_tmp: '@echo Advanced Computer Services LLC'
 46120   pr #h_tmp: '@echo Reading file list from "'&zFileOpen$&'"'
 46140   pr #h_tmp: env$('path_to_7z_exe')&' l "'&zFileOpen$&'" > "'&gflfaTmpFile$&'"'
 46160   close #h_tmp: 
-46180   execute 'sy -s '&env$('temp')&'\ACS\Open_as_'&session$&'.cmd'
+46180   execute 'sy -s '&env$('temp')&'\acs\Open_as_'&session$&'.cmd'
 46200   open #h_tmp:=fngethandle: 'Name='&gflfaTmpFile$,display,input
 46220   do 
 46240     linput #h_tmp: ln$
@@ -219,7 +219,7 @@
 47260 fnend
 48000 def fn_openPartial
 48020   dim opFileOpen$*256
-48040   execute 'free '&br_filename$(env$('temp')&'\acs\Open_Log.txt') ioerr ignore
+48040   fnFree(br_filename$(env$('temp')&'\acs\Open_Log.txt'))
 48060   open #h_tmp:=fngethandle: "Name=OPEN:"&env$('at')&"ACS Data Set (*.zip) |"&fnsave_as_path$&"\*.zip,RecL=1,Shr",external,input ioerr OP_OP_ERR
 48080   opFileOpen$=os_filename$(file$(h_tmp))
 48100   close #h_tmp: 
@@ -228,9 +228,9 @@
 48160   if clientServer then
 48170     tmpFileOpen$=env$('temp')&'\acs\OpenPartial\tmpFileOpen'&session$&'.zip'
 48172     fnmakesurepathexists(tmpFileOpen$)
-48174     if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
+48174     ! if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
 48180     fnCopyFile(env$('at')&br_filename$(opFileOpen$),tmpFileOpen$)
-48182     SKIPFORDEV: ! XXX DELETE ME
+48182     ! SKIPFORDEV: ! XXX DELETE ME
 48190   else
 48200     tmpFileOpen$=opFileOpen$
 48260   end if
@@ -328,14 +328,26 @@
 56380   end if
 56400   fn_opMain=opScreenReturn
 56420 fnend
-58000 def fn_fileOpenEverything(foeSource$*256)
-58140   fnreg_close
-58160   ! r: new way 12/4/2015
-58180   dim foeDestinationFolder$*256
-58180   dim foeLogFile$*256
-58280   foeDestinationFolder$=os_filename$(env$('Q'))
-58280   foeLogFile$=env$('temp')&'\ACS\Open_Log.txt'
-58320   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\ACS\Open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+57000 def fn_fileOpenEverything(foeSource$*256)
+57020   fnreg_close
+57040   ! r: new way 12/4/2015
+57060   dim foeDestinationFolder$*256
+57080   dim foeLogFile$*256
+57100   dim foeFileOpen$*256
+57120   if clientServer then
+57140     foeFileOpen$=env$('temp')&'\acs\OpenPartial\tmpFileOpenEverything'&session$&'.zip'
+57160     fnmakesurepathexists(foeFileOpen$)
+57180     ! if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
+57200     fnCopyFile(env$('at')&br_filename$(foeSource$),foeFileOpen$)
+57220     ! SKIPFORDEV: ! XXX DELETE ME
+57240     fnmakesurepathexists(foeFileOpen$)
+57260     fnCopyFile(env$('at')&br_filename$(foeSource$),foeFileOpen$)
+57280   else
+57300     foeFileOpen$=foeSource$
+57320   end if
+58000   foeDestinationFolder$=os_filename$(env$('Q'))
+58280   foeLogFile$=env$('temp')&'\acs\Open_Log.txt'
+58320   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\Open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
 58340   pr #h_tmp: '@echo off'
 58360   pr #h_tmp: '@echo Advanced Computer Services LLC'
 58380   pr #h_tmp: '@echo Opening: "'&foeSource$&'"'
@@ -347,16 +359,17 @@
 58500   pr #h_tmp: '@echo Relative To: '&foeDestinationFolder$&'\'
 58520   pr #h_tmp: '@echo.'
 58540   pr #h_tmp: '@echo.'
-58560   pr #h_tmp: '@echo Output Log: "'&env$('temp')&'\ACS\Open_Log.txt"'
+58560   pr #h_tmp: '@echo Output Log: "'&env$('temp')&'\acs\Open_Log.txt"'
 58580   pr #h_tmp: '@echo.'
 58600   pr #h_tmp: '@echo.'
 58620   pr #h_tmp: '@echo OPEN PROCESSING...'
-58640   pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&foeSource$&'" -o"'&foeDestinationFolder$&'\" > "'&env$('temp')&'\ACS\Open_Log.txt"'
+58640   pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&foeSource$&'" -o"'&foeDestinationFolder$&'\" > "'&env$('temp')&'\acs\Open_Log.txt"'
 58660   ! pr #h_tmp: 'pause'
 58680   close #h_tmp: 
-58700   execute 'sy -s '&env$('temp')&'\ACS\Open_as_'&session$&'.cmd'
+
+58700   execute 'sy -s '&env$('temp')&'\acs\Open_as_'&session$&'.cmd'
 58720   ! /r
-58740   if fn_analyze_7zip_compresslog(env$('temp')&'\ACS\Open_Log.txt','Successfully Opened',foeSource$,1) then 
+58740   if fn_analyze_7zip_compresslog(env$('temp')&'\acs\Open_Log.txt','Successfully Opened',foeSource$,1) then 
 58760     fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
 58780     fnreg_write('Last Open File',foeSource$(pos(foeSource$,'\',-1)+1:len(foeSource$)))
 58800     fnreg_write('Last Open Path',foeSource$(1:pos(foeSource$,'\',-1)))
@@ -436,7 +449,7 @@
 68020   ! r: import rates
 68040   if exists(company_import_path$&'ubdata') then 
 68060     if exists(env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number)) then 
-68080       execute 'free "'&env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number)&'"'
+68080       fnFree(env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
 68100     end if  ! exists(env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
 68120     uceReturn=fnCopy(company_import_path$&'ubdata\*'&company_import_extension$,env$('Q')&'\UBmstr\ubdata\*.h'&str$(destination_company_number))
 68140     if uceReturn>0 then
@@ -448,7 +461,7 @@
 68700   ! /r
 68720   ! r: import notes folder
 68740   if exists(company_import_path$&'UBmstr\notes'&company_import_extension$) then 
-68760     execute 'free "'&env$('Q')&'\'&env$('cursys')&'mstr\notes.h'&str$(destination_company_number)&'"'
+68760     fnFree(env$('Q')&'\'&env$('cursys')&'mstr\notes.h'&str$(destination_company_number))
 68780     execute 'sy xcopy "'&company_import_path$&'UBmstr\notes'&company_import_extension$&'\*.*" "'&os_filename$(env$('Q')&'\UBmstr\notes.h'&str$(destination_company_number))&'\*.*" /t /y'
 68800     fnstatus('UB Notes imported.')
 68820   end if  ! exists [import path]'&env$('Q')&'\UBmstr\notes.h[company_import_extension]

@@ -1,5 +1,5 @@
 20020 Execute "config gui off"
-20040 library 'S:\Core\Library': fnspoolpath$
+20040 library 'S:\Core\Library': fnspoolpath$,fnfree
 20060 on error goto ERTN
 20080 a=1
 20100 do
@@ -12,7 +12,7 @@
 20240 XIT: end
 20260 ERTN: ! r:
 20280 if err=4261 then
-20300   execute 'free '&fnspoolpath$&'\*.*'
+20300   fnFree(fnspoolpath$&'\*.*')
 20320   retry
 20340 else
 20360   pr 'error '&str$(err)&' on line '&str$(line)

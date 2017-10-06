@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\fnglMerge
 00020 ! GL Merge program, chained to from other systems, like Checkbook-post to GL
 00030   def library fnglmerge
-00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnprocess,fnchain,fnprg,fnstyp,fnmsgbox,fngethandle,fntos,fnacs,fncmdset,fncmbcno,fncursys$,fnlbl,fntxt,fncmdkey,fncombof,fnindex_it
+00040     library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnprocess,fnchain,fnprg,fnstyp,fnmsgbox,fngethandle,fntos,fnacs,fncmdset,fncmbcno,fncursys$,fnlbl,fntxt,fncmdkey,fncombof,fnindex_it,fnfree
 00050     on error goto ERTN
 00060 ! ______________________________________________________________________
 00070     dim adr(2),ta(2),prg$*20,k(10,8),gl$(5)*12,gl1(5)
@@ -136,7 +136,7 @@
 01140 DONE: close #glmstr: 
 01150   close #gltrans: 
 01160   close #glwk1: 
-01170   execute "Free "&env$('Q')&"\GLmstr\GLPT"&wsid$&".H"&str$(cno) ioerr L1180
+01170   fnFree(env$('Q')&"\GLmstr\GLPT"&wsid$&".H"&str$(cno))
 01180 L1180: ! 
 01190   close #gl1099: ioerr L1200
 01200 L1200: if new1=1 or new2=1 then !:

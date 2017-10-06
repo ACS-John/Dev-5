@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsGL\glSchFM
 00020 ! Schedule File  (Maintenance routines) was Form POS 1,N 2,2*C 78,3*N  1,80*c 12  now Form POS 1,N 3,2*C 78,3*N  1  Breakdowns in seperate file
 32000 ! r: setup, open files, library, set constants, on err, etc
-32020   library 'S:\Core\Library': fntop,fnxit,fnerror,fntos,fnlbl,fncombof,fncmdkey,fnacs,fntxt,fnchk,fncomboa,fnflexinit1,fnflexadd1,fnhamster,fnmsgbox
+32020   library 'S:\Core\Library': fntop,fnxit,fnerror,fntos,fnlbl,fncombof,fncmdkey,fnacs,fntxt,fnchk,fncomboa,fnflexinit1,fnflexadd1,fnhamster,fnmsgbox,fnFree
 32040   on error goto ERTN
 32060 ! ______________________________________________________________________
 32080   dim gl$(80)*12
@@ -293,5 +293,5 @@
 82100   fnmsgbox(mat ml$,resp$,'',49)
 82120   if uprc$(resp$)="OK" then goto L2310 else goto ADD_EDIT_SCHEDULES
 82140   L2310: delete #10,rec=editrec: 
-82160   execute "Free "&env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno')&" -n" ! Ioerr 2310
-82180   return ! /r
+82160   fnFree(env$('Q')&"\GLmstr\schedule"&str$(sn)&".h"&env$('cno'))
+82180 return ! /r

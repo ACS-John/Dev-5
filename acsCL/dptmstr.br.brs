@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\DptMstr
 00020 ! ??? department
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fnfree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim hd$(2)*60,cnam$*40,dat$*20,ots$(5),ins$(22),ink$(22)*42
@@ -213,7 +213,7 @@
 02060 ! ______________________________________________________________________
 02070 L2070: close #1: ioerr L2080
 02080 L2080: execute "Copy "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&" "&env$('Temp')&"\WORK -D -n"
-02090   execute "Free "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&" -n"
+02090   fnFree(env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno))
 02100   execute "RENAME "&env$('Temp')&"\WORK "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&" -n"
 02110   execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys -n"
 02120   goto L240

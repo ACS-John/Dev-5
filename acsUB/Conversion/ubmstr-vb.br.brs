@@ -1,7 +1,7 @@
 00010 ! replace S:\acsUB\conversion\UBmstr-vb
 00020 ! always start conversion process with bld_trans
 00030   def library fnub_cnv_ubmstr_vb
-00040     library 'S:\Core\Library': fnxit,fnerror,fnpause,fnCopy,fnindex_it,fnub_index_customer,fnstatus
+00040     library 'S:\Core\Library': fnxit,fnerror,fnpause,fnCopy,fnindex_it,fnub_index_customer,fnstatus,fnFree
 00050     on error goto ERTN
 00060     dim b(11),a(7),d(15),alpha$*7,f2$*12,extra(23),extra$(11)*30,ba(12)
 00070     dim custname$*30,badr(2)
@@ -11,9 +11,9 @@
 00120 ! 
 00122 ! fnCopy(env$('Q')&"\UBmstr\ubcoinfo.h"&env$('cno'),env$('Q')&"\UBmstr\Company.h"&env$('cno'),133) ! this should already be done.
 00132     if exists(env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')) then 
-00133       execute 'free "'&env$('Q')&"\UBmstr\customer.h"&env$('cno')&'"' ioerr ignore
+00133       fnFree(env$('Q')&"\UBmstr\customer.h"&env$('cno'))
 00134       fnCopy(env$('Q')&"\UBmstr\ubMaster.h"&env$('cno'),env$('Q')&"\UBmstr\Customer.h"&env$('cno'))
-00136       execute 'free "'&env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')&'"' ioerr ignore
+00136       fnFree(env$('Q')&"\UBmstr\ubMaster.h"&env$('cno'))
 00138     end if 
 00150     fnCopy(env$('Q')&"\UBmstr\Customer.h"&env$('cno'),env$('Q')&"\UBmstr\Customer.h"&env$('cno'),2067)
 00180     fnub_index_customer

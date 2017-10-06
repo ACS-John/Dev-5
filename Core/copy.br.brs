@@ -43,7 +43,7 @@
 58160       ! pr 'toFile$=';toFile$
 58180       ! pr 'toExt$=';toExt$
 58200       ! pause
-58220       ! execute 'copy "'&toPath$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
+58220       ! execute 'copy "'&toPath$&'" "'&env$('temp')&'\acs\recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
 58240       dim copyFromFolder$(0)*256
 58260       gd2_return=fngetdir2(fromPath$,mat copyFromFolder$,'/s /b /ad')
 58300       ! 
@@ -65,9 +65,9 @@
 59060         parameters$=''
 59080         parameters$=parameters$&' -'&str$(abs(new_record_length))
 59100         if new_record_length and uprc$(from$)=uprc$(to$) then 
-59120           execute 'copy "'&from$&'" "'&env$('temp')&'\acs_recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
-59140           execute 'copy "'&env$('temp')&'\acs_recl_chg_'&session$&'" "'&to$&'"' ioerr COPY_FAIL
-59160           execute 'free "'&env$('temp')&'\acs_recl_chg_'&session$&'"' ioerr ignore
+59120           execute 'copy "'&from$&'" "'&env$('temp')&'\acs\recl_chg_'&session$&'" '&parameters$ ioerr COPY_FAIL
+59140           execute 'copy "'&env$('temp')&'\acs\recl_chg_'&session$&'" "'&to$&'"' ioerr COPY_FAIL
+59160           execute 'free "'&env$('temp')&'\acs\recl_chg_'&session$&'"' ioerr ignore
 59180         end if 
 59200       end if 
 59220       execute 'copy "'&from$&'" "'&to$&'"' ioerr COPY_FAIL
@@ -78,9 +78,9 @@
 64000   COPY_FAIL: ! r:
 64020     copy_return=min(-1,-err)
 64040     if new_record_length then 
-64060       execute 'Copy "'&from$&'" "'&env$('Temp')&'\tmp_rln_chg_s'&session$&'"' ioerr COPY_RETRY_NEW_RLN_FAILED
-64080       execute 'Copy "'&env$('Temp')&'\tmp_rln_chg_s'&session$&'" "'&to$&'" -'&str$(abs(new_record_length)) ioerr COPY_RETRY_NEW_RLN_FAILED
-64100       execute 'Free "'&env$('Temp')&'\tmp_rln_chg_s'&session$&'"' ioerr ignore
+64060       execute 'Copy "'&from$&'" "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'"' ioerr COPY_RETRY_NEW_RLN_FAILED
+64080       execute 'Copy "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'" "'&to$&'" -'&str$(abs(new_record_length)) ioerr COPY_RETRY_NEW_RLN_FAILED
+64100       execute 'Free "'&env$('Temp')&'\acs\tmp_rln_chg_s'&session$&'"' ioerr ignore
 64120       copy_return=2
 65000     else if env$("ACSDeveloper")<>"" then 
 65020       pr 'first copy failed with error ';err
@@ -163,12 +163,23 @@
 80520   XIT: ! 
 80522 fnend 
 82000 def library fnFree(fileToDelete$*256)
-82020   fileToDelete$=trim$(fileToDelete$,'"')
-82040   execute 'Free "'&fileToDelete$&'" -n' ioerr ignore
-82060 fnend
+82020   freeReturn=0
+82040   fileToDelete$=trim$(fileToDelete$,'"')
+82060   execute 'Free "'&fileToDelete$&'" -n' ioerr FreeErr
+82080   freeReturn=1
+82100   goto FreeXit
+82120   FreeErr: !
+82140   freeReturn=-err
+82160   FreeXit: !
+82180   fnFree=freeReturn
+82200 fnend
 84000 def library fnRename(from$*256,to$*256)
 84020   from$=trim$(from$,'"')
 84040   to$=trim$(to$,'"')
 84060   execute 'Rename "'&from$&'" "'&to$&'" -n'
 84080 fnend
-
+86000 def library fnRemoveDeletedRecords(from$*256)
+86020  execute 'copy "'&from$&'" "'&env$('temp')&'\acs\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr COPY_FAIL
+86040  execute 'copy "'&env$('temp')&'\acs\Session'&session$&'" "'&from$&'\removeDeletedRecords.tmp" -D' ioerr COPY_FAIL
+86060  execute 'free "'&env$('temp')&'\acs\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr ignore
+86080 fnend

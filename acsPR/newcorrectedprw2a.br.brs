@@ -1,7 +1,7 @@
 00010 !  REPLACE S:\acsPR\newcorrectedPRW2A
 00020 ! used to file a corrected w2 using prace.exe
 00030 ! ___________________
-00040   library 'S:\Core\Library': fncno,fntop,fnxit,fncloseprn,fnopenprn,fnconsole,fntos,fnfra,fnlbl,fntxt,fncmdkey,fnacs,fnopt,fncombof,fnmsgbox,fnchk,fncmbemp,fnpa_finis,fnpa_open,fnpa_newpage,fnDedNames
+00040   library 'S:\Core\Library': fncno,fntop,fnxit,fncloseprn,fnopenprn,fnconsole,fntos,fnfra,fnlbl,fntxt,fncmdkey,fnacs,fnopt,fncombof,fnmsgbox,fnchk,fncmbemp,fnpa_finis,fnpa_open,fnpa_newpage,fnDedNames,fnFree
 00050   fntop(program$,cap$="Corrected W2 Forms")
 00060   on error goto L4300
 00070 ! ___________________
@@ -317,7 +317,7 @@
 02840   write #1,using L2830: "FILE "&env$('Temp')&"\Addr."&session$&",,,PRW2ADDR.H"&env$('cno')&","&env$('Q')&"\PRmstr,,"&env$('Q')&"\PRmstr,,A,N"
 02850   write #1,using L2830: "MASK 9,2,n,a,1,8,n,a"
 02860   close #1: 
-02870   execute "Free "&env$('Q')&"\PRmstr\PRW2ADDR.H"&env$('cno')&" -n" ioerr L2880
+02870   fnFree(env$('Q')&"\PRmstr\PRW2ADDR.H"&env$('cno'))
 02880 L2880: execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 02890   fnxit ! stop  ! fnCHAIN("S:\acsPR\prw2b")
 02900 ! ___________________________________________

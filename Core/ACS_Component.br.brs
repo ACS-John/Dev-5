@@ -50,7 +50,7 @@
 10120   combokeycurrent$=combokeyprior$=''
 10140   if len(sn$)>100 then : pr "INVALID FILE NAME: Too Long" : input fields "1,1,C 1,N": pause$ : goto XIT
 10160   ! close #119: ioerr ignore
-10180   ! open #119: "Name="&env$('temp')&'\'&sn$&",RecL=1024,Replace",internal,outin,relative  ! recl was 500
+10180   ! open #119: "Name="&env$('temp')&'\acs\'&sn$&",RecL=1024,Replace",internal,outin,relative  ! recl was 500
 10200   fn_clear_env
 10220   if env$('GUIMode')='OFF' then execute 'config GUI On'
 10240 fnend 
@@ -178,7 +178,7 @@
 14580   if psd<>0 and lnd<>0 then 
 14600     form$=form$&",Pos "&str$(psd)&",C "&str$(lnd) : nodesc=0
 14620   end if 
-14640   becky$=sfn$&env$('cno')&"[SESSION].tmp" ! combof_whr$=env$('temp')&'\'&becky$
+14640   becky$=sfn$&env$('cno')&"[SESSION].tmp" ! combof_whr$=env$('temp')&'\acs\'&becky$
 14660   ! __________________________________________________
 14680   if width=0 then width=lnk+lnd+1
 14700   dim combokeycurrent$*512,combokeyprior$*512
@@ -301,19 +301,19 @@
 16440   hdr_count=udim(ch$) : hdrfile$=sfn$&".hdr"
 16460   if usr<>0 then goto USEPREVIOUS
 16480   XRETRY: ! !print "Retrying delete here! (If you see this twice)"
-16500   if exists(env$('temp')&'\'&optfile$) then execute '*free "'&env$('temp')&'\'&optfile$&'" -n' ioerr ignore ! retry
+16500   if exists(env$('temp')&'\acs\'&optfile$) then execute '*free "'&env$('temp')&'\acs\'&optfile$&'" -n' ioerr ignore ! retry
 16520   close #filenumber: ioerr ignore
-16540   if exists(env$('temp')&'\'&hdrfile$)<>0 then 
-16560     execute '*free "'&env$('temp')&'\'&hdrfile$&'" -n' ioerr XRETRY
+16540   if exists(env$('temp')&'\acs\'&hdrfile$)<>0 then 
+16560     execute '*free "'&env$('temp')&'\acs\'&hdrfile$&'" -n' ioerr XRETRY
 16580   end if 
 16600   USEPREVIOUS: ! 
-16620   if usr>0 and exists(env$('temp')&'\'&optfile$) then 
+16620   if usr>0 and exists(env$('temp')&'\acs\'&optfile$) then 
 16640     fnflexinit1=1 : goto WRITE_TO_ACE
 16660   end if 
 16680   ! _______________________
 16700   ! ***  test validity of some stuff **********
 16720   fnflexinit1=555
-16740   open #filenumber: "Name="&env$('temp')&'\'&hdrfile$&",Size=0,Replace,EoL=CRLF,RecL=8000",display,output 
+16740   open #filenumber: "Name="&env$('temp')&'\acs\'&hdrfile$&",Size=0,Replace,EoL=CRLF,RecL=8000",display,output 
 16780   for j=1 to udim(cm$)
 16800     if trim$(cm$(j))="" then cm$(j)="80"
 16820   next j
@@ -324,15 +324,15 @@
 16920   close #filenumber: 
 16940   ! hdrfile name is expected by screen ace to be the same name as
 16960   ! .  ! optfile$ only with the added .hdr extenstion
-16980   if usr>0 and exists(env$('temp')&'\'&optfile$)<>0 then 
+16980   if usr>0 and exists(env$('temp')&'\acs\'&optfile$)<>0 then 
 17000     fnflexinit1=1 : goto WRITE_TO_ACE
 17020   end if 
 17040   ! __________________________________________________
 17060   fnflexinit1=0
-17080   if exists(env$('temp')&'\'&optfile$)<>0 then 
-17100     execute "*free "&env$('temp')&'\'&optfile$&" -n" ioerr ignore
+17080   if exists(env$('temp')&'\acs\'&optfile$)<>0 then 
+17100     execute "*free "&env$('temp')&'\acs\'&optfile$&" -n" ioerr ignore
 17120   end if 
-17140   open #filenumber: "Name="&env$('temp')&'\'&optfile$&",Size=0,Replace,EoL=CRLF,RecL=6491",display,output 
+17140   open #filenumber: "Name="&env$('temp')&'\acs\'&optfile$&",Size=0,Replace,EoL=CRLF,RecL=6491",display,output 
 17160   WRITE_TO_ACE: ! 
 17180   sorttype=0
 17200   setenv('control'&str$(fn_control_count),"FLEX|"&str$(lyne)&"|"&str$(ps)&"|"&str$(height)&"|"&str$(width)&"|2|"&str$(seltype)&"|"&str$(sorttype)&"|"&sfn$&"|"&str$(hdr_count)&"|"&str$(con)&"|"&str$(tabcon)&"|")
@@ -547,6 +547,8 @@
 21160   end if 
 21170   dim borderText$*256
 21180   borderText$='ACS 5 '
+21182   if env$('BR_MODEL')='CLIENT/SERVER' then borderText$='ACS Online '
+21184   !
 21190   if session$(3:3)<>'1' then
 21200     borderText$(inf:inf)='(Session '&session$(3:3)&') '
 21202   end if
@@ -1183,8 +1185,8 @@
 33200   container=val(control$(11))
 33220   tabcon=val(control$(12))
 33240   dim _headings$(1)*1000,_line$*10000,_chunks$(1)*1000,_forms$(1)*1000,filterspec$*255,gridspec$*255,loading_spec$*50
-33250   ! pr env$('temp')&'\'&trim$(path1$)&'.hdr' : pause
-33260   open #grid_headers:=fngethandle: 'Name='&env$('temp')&'\'&trim$(path1$)&'.hdr',display,input 
+33250   ! pr env$('temp')&'\acs\'&trim$(path1$)&'.hdr' : pause
+33260   open #grid_headers:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'.hdr',display,input 
 33280   linput #grid_headers: _line$
 33300   str2mat(_line$,mat _headings$,tab$)
 33320   linput #grid_headers: _line$
@@ -1225,7 +1227,7 @@
 34020   loading_spec$(0:0)=window_prefix$
 34040   ! 
 34060   pr f gridspec$&",headers,[gridheaders]" : (mat _headings$,mat _widths,mat _forms$)
-34080   open #grid_data:=fngethandle: 'Name='&env$('temp')&'\'&trim$(path1$)&'[SESSION].tmp',display,input 
+34080   open #grid_data:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input 
 34100   clearflag$="="
 34120   ! 
 34140   dim long_row$(1)*1024
@@ -1363,7 +1365,7 @@
 36720   _headings$(1)="Combined"
 36740   mat _widths(udim(_headings$))=(0): mat _forms$(udim(_headings$))=('')
 36760   ! 
-36780   open #grid_data:=fngethandle: 'Name='&env$('temp')&'\'&trim$(path1$)&'[SESSION].tmp',display,input 
+36780   open #grid_data:=fngethandle: 'Name='&env$('temp')&'\acs\'&trim$(path1$)&'[SESSION].tmp',display,input 
 36800   for count=1 to 500
 36820     linput #grid_data: _line$ eof ignore
 36840     if file(grid_data)<>0 then goto GRIDFORM_COMPLETE

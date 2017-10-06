@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\ACGLPOST
 00020 ! Post Entries from Holding File
 00030 ! ______________________________________________________________________,
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnlbl,fntos,fntxt,fncmdkey,fnacs,fnflexadd1,fnflexinit1,fnhamster,fnmsgbox,fncmdset,fnqgl,fnrgl$,fnagl$,fnindex_it,fngetdir2
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnlbl,fntos,fntxt,fncmdkey,fnacs,fnflexadd1,fnflexinit1,fnhamster,fnmsgbox,fncmdset,fnqgl,fnrgl$,fnagl$,fnindex_it,fngetdir2,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim ta(2)
@@ -139,7 +139,7 @@
 01170 L1170: !
 01172   for j=1 to dircount
 01180     if dir(j)<>0 then 
-01190       execute "Free "&env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dir(j))&".H"&env$('cno')
+01190       fnFree(env$('Q')&"\GLmstr\GL"&cnvrt$("PIC(######)",dir(j))&".H"&env$('cno'))
 01192     end if 
 01200   next j
 01210 XIT: fnxit

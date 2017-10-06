@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\AddCNo
 00020 ! was GLCopy - but the functionality needed to be in addFRO_C_N_O, which there wasn't one of so I just renamed it to that for the time being and we need to fix and test addCno later.
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fntop,fnxit,fnchain,fntos,fnlbl,fncmbcno,fncmdset,fnacs,fnCopy
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fntop,fnxit,fnchain,fntos,fnlbl,fncmbcno,fncmdset,fnacs,fnCopy,fnFree
 00050   fntop(program$,cap$="Add Company")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -29,8 +29,8 @@
 00270   goto L250
 00280 L280: close #20: 
 00290 ! ___________________________
-00295   execute "drop "&env$('Q')&"GLmstr\GLTrans.H"&str$(to_cno) err ignore 
-00350   execute "Free "&env$('Q')&"\GLmstr\ACTrans.h"&str$(to_cno)&" -n" ioerr ignore
+00295   execute 'drop "'&env$('Q')&"GLmstr\GLTrans.H"&str$(to_cno)&'"' err ignore 
+00350   fnFree(env$('Q')&"\GLmstr\ACTrans.h"&str$(to_cno))
 00360   open #1: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&str$(to_cno)&",Size=0,RecL=72,NoShr",internal,output 
 00370   close #1: 
 00380 XIT: fnchain("S:\acsGL\Company")

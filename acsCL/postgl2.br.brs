@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\PostGL2.br
 00020 ! GL Distribution Report (fnpostgl2(2)   AND/OR     Post to General Ledger (fnpostgl2(1) - or run directly)
 
-00040   library 'S:\Core\Library': fnpostgl2,fnxit,fnerror,fntop
+00040   library 'S:\Core\Library': fnpostgl2,fnxit,fnerror,fntop,fnfree
 00050 ! on error goto ERTN
 00070   fntop(program$,"Post to General Ledger")
 00080   fnpostgl2(1)
@@ -163,7 +163,7 @@
 19420     write #1,using L1150: "MASK 1,26,C,A"
 19440 L1150: form pos 1,c 128
 19460     close #1: 
-19480     execute "Free "&env$('Temp')&"\Addr."&session$&" -n" ioerr ignore
+19480     fnFree(env$('Temp')&"\Addr."&session$)
 19500     execute "SORT "&env$('Temp')&"\CONTROL."&wsid$&" -n"
 19520     open #1: "Name="&env$('Temp')&"\Addr."&session$,internal,input ioerr ENDALL
 19540     open #work=5: "Name="&env$('Temp')&"\WORK."&session$,internal,input,relative 

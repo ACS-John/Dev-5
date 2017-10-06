@@ -97,10 +97,22 @@
 40330   library 'S:\Core\copy.br': fnFree
 40340   fnFree=fnFree(fileToDelete$)
 40350 fnend 
-40360 def library fnRename(from$*256,to$*256)
-40370   library 'S:\Core\copy.br': fnRename
-40380   fnRename=fnRename(from$,to$)
-40390 fnend 
+40362 def library fnRename(from$*256,to$*256)
+40364   library 'S:\Core\copy.br': fnRename
+40366   fnRename=fnRename(from$,to$)
+40368 fnend 
+40372 def library fnRemoveDeletedRecords(from$*256)
+40374   library 'S:\Core\copy.br': fnRemoveDeletedRecords
+40376   fnRemoveDeletedRecords=fnRemoveDeletedRecords(from$)
+40378 fnend 
+40382 def library fnWaitForWpToCloseStart
+40384   library 'S:\Core\Print.br': fnWaitForWpToCloseStart
+40386   fnWaitForWpToCloseStart=fnWaitForWpToCloseStart
+40388 fnend 
+40392 def library fnWaitForWpToCloseEnd
+40394   library 'S:\Core\Print.br': fnWaitForWpToCloseEnd
+40396   fnWaitForWpToCloseEnd=fnWaitForWpToCloseEnd
+40398 fnend 
 41000 ! r: fnSnap
 41020 def library fnlistprint(winno,spec$*100;header$*200,footer$*200,title$*200,mat selected,nolines,nosort,nototals$*200,nosubtotal,_print)
 41040   library 'S:\Core\fnsnap\rtflib_dll.br': fnlistprint
@@ -262,19 +274,15 @@
 45240   fnend 
 45272   def library fnEditInWordProcessor(ewpFile$*256; ewpForce$,ewpOptions$,ewpSwitches$)
 45274     library 'S:\Core\Programs\Preferences.br': fnEditInWordProcessor
-45276     fnEditInWordProcessor=fnEditInWordProcessor(ewpFile$, ewpForce$,ewpSwitches$)
+45276     fnEditInWordProcessor=fnEditInWordProcessor(ewpFile$, ewpForce$,ewpOptions$,ewpSwitches$)
 45278   fnend 
 45282   def library fnget_wordprocessor_exe(&wp_exe$; force$)
 45284     library 'S:\Core\Programs\Preferences.br': fnget_wordprocessor_exe
 45286     fnget_wordprocessor_exe=fnget_wordprocessor_exe(wp_exe$, force$)
 45288   fnend 
-45290   def library fnget_atlantis(&atlantis$)
-45300     library 'S:\Core\Programs\Preferences.br': fnget_atlantis
-45310     fnget_atlantis=fnget_atlantis(atlantis$)
-45320   fnend 
-45330   def library fntext_editor(te_text_file$*256; te_options$,updateAfterEdit,ewpSwitches$)
+45330   def library fntext_editor(te_text_file$*256; te_options$,updateAfterEdit)
 45340     library 'S:\Core\Programs\Preferences.br': fntext_editor
-45350     fntext_editor=fntext_editor(te_text_file$, te_options$,updateAfterEdit,ewpSwitches$)
+45350     fntext_editor=fntext_editor(te_text_file$, te_options$,updateAfterEdit)
 45360   fnend 
 45410   def library fnapply_theme(; disableConScreenOpenDflt)
 45420     library 'S:\Core\Programs\Preferences.br': fnapply_theme

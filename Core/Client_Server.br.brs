@@ -40,18 +40,18 @@
 16160   loop 
 34000   def fn_server_install
 34020     fnstatus('fn_server_install')
-34030     if ~exists(env$('temp')&'\ACS\brCsInstall') then execute 'mkdir "'&env$('temp')&'\ACS\brCsInstall"'
-34031     if ~exists(env$('temp')&'\ACS\brCsInstall\ACS 5 Client') then exe 'mkdir "'&env$('temp')&'\ACS\brCsInstall\ACS 5 Client"'
-34032     if ~exists(env$('temp')&'\ACS\brCsInstall\ACS 5 Client\Core') then exe 'mkdir "'&env$('temp')&'\ACS\brCsInstall\ACS 5 Client\Core"'
-34034     fnCopy('S:\brclient*.*',env$('temp')&'\ACS\brCsInstall\ACS 5 Client\*.*')
-34036     execute 'sy xcopy "'&os_filename$('S:\Core')&'\Client\*.*" "'&os_filename$(env$('temp')&'\ACS\brCsInstall\ACS 5 Client')&'\*.*" /S'
+34030     if ~exists(env$('temp')&'\acs\brCsInstall') then execute 'mkdir "'&env$('temp')&'\acs\brCsInstall"'
+34031     if ~exists(env$('temp')&'\acs\brCsInstall\ACS 5 Client') then exe 'mkdir "'&env$('temp')&'\acs\brCsInstall\ACS 5 Client"'
+34032     if ~exists(env$('temp')&'\acs\brCsInstall\ACS 5 Client\Core') then exe 'mkdir "'&env$('temp')&'\acs\brCsInstall\ACS 5 Client\Core"'
+34034     fnCopy('S:\brclient*.*',env$('temp')&'\acs\brCsInstall\ACS 5 Client\*.*')
+34036     execute 'sy xcopy "'&os_filename$('S:\Core')&'\Client\*.*" "'&os_filename$(env$('temp')&'\acs\brCsInstall\ACS 5 Client')&'\*.*" /S'
 34040     fnstatus('make '&env$('Q')&'\brListener.conf')
-34060     open #h_br_parms_txt:=fngethandle: 'Name='&env$('temp')&'\ACS\brCsInstall\ACS 5 Client\br_parms.txt,RecL=256,replace',display,output 
+34060     open #h_br_parms_txt:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\ACS 5 Client\br_parms.txt,RecL=256,replace',display,output 
 34080     pr #h_br_parms_txt: 'host='&server_name$
 34100     pr #h_br_parms_txt: 'label=ACS_5_CS'
 34120     close #h_br_parms_txt: 
 34140     open #h_brlistener_conf:=fngethandle: 'Name='&env$('Q')&'\brListener.conf,RecL=256,replace',display,output 
-34160     pr #h_brlistener_conf: 'LogFile='&env$('temp')&'\ACS-Log-CS.txt'
+34160     pr #h_brlistener_conf: 'LogFile='&env$('temp')&'\acs-Log-CS.txt'
 34180     pr #h_brlistener_conf: 'LogLevel=10'
 34200     pr #h_brlistener_conf: '['
 34220     pr #h_brlistener_conf: 'Label=ACS_5_CS'
@@ -70,11 +70,11 @@
 34420     close #h_brlistener_conf: 
 34440     fnstatus('  and copy it into windows')
 34460     fnstatus('  and copy DLL to 32 bit system folder (System32 or SysWOW64)')
-34480 !   execute 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\ACS\brCsInstall\Install_BR_Server_'&session$&'.cmd"'
-34500     open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\ACS\brCsInstall\Install_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
+34480 !   execute 'copy "S:\Core\Run_As_Admin.cmd" "'&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd"'
+34500     open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\Install_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
 34520 !     pr #h_copy_cmd:     '@echo on'
 34540     pr #h_copy_cmd: 'copy "'&os_filename$(env$('Q')&'\brListener.conf')&'" "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
-34560     ! pr #h_copy_cmd: 'copy "'&os_filename$(env$('temp')&'\ACS\brCsInstall\ACS 5 Client\br_parms.txt')&'" "'&os_filename$('S:\')&'\*.*"'
+34560     ! pr #h_copy_cmd: 'copy "'&os_filename$(env$('temp')&'\acs\brCsInstall\ACS 5 Client\br_parms.txt')&'" "'&os_filename$('S:\')&'\*.*"'
 34580     pr #h_copy_cmd: 'type "'&os_filename$(env$('windir')&'\brListener.conf')&'"' ! just to see some nice info on the screen.
 35000     dim windowsSystem32bitFolder$*256
 35020     if exists(os_filename$(env$('SystemRoot')&'\SysWOW64')) then
@@ -87,7 +87,7 @@
 35160     pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'"'
 35180 !     pr #h_copy_cmd:     'pause'
 35200     close #h_copy_cmd: 
-35220     execute 'sy -c explorer "'&env$('temp')&'\ACS\brCsInstall\"' ! Install_BR_Server_'&session$&'.cmd"'
+35220     execute 'sy -c explorer "'&env$('temp')&'\acs\brCsInstall\"' ! Install_BR_Server_'&session$&'.cmd"'
 35240   fnend 
 38000   def fn_server_uninstall
 38020 !   dim sd_br_server_executable$*1024
@@ -95,14 +95,14 @@
 38060 !   if sd_br_server_executable$<>'' then
 38080 !   end if
 38100     fnstatus('fn_server_uninstall')
-38120     fnmakesurepathexists(env$('temp')&'\ACS\brCsInstall\')
-38140     open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\ACS\brCsInstall\Remove_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
+38120     fnmakesurepathexists(env$('temp')&'\acs\brCsInstall\')
+38140     open #h_copy_cmd:=fngethandle: 'Name='&env$('temp')&'\acs\brCsInstall\Remove_BR_Server_'&session$&'.cmd,replace,recl=256',display,output 
 38160     pr #h_copy_cmd: '"'&os_filename$('S:\brListenerInstaller-'&env$('BR_Architecture')&'.exe')&'" /release'
 38180     pr #h_copy_cmd: 'del "'&os_filename$(env$('windir')&'\brListener.conf')&'"'
 38200     pr #h_copy_cmd: 'del "'&os_filename$(env$('SystemRoot')&'\System32\brListener.exe')&'"'
 38260     close #h_copy_cmd: 
-38280     ! execute 'sy "'&env$('temp')&'\ACS\brCsInstall\Remove_BR_Server_'&session$&'.cmd"'
-38290     execute 'sy -C explorer "'&env$('temp')&'\ACS\brCsInstall\"' ! Remove_BR_Server_'&session$&'.cmd"'
+38280     ! execute 'sy "'&env$('temp')&'\acs\brCsInstall\Remove_BR_Server_'&session$&'.cmd"'
+38290     execute 'sy -C explorer "'&env$('temp')&'\acs\brCsInstall\"' ! Remove_BR_Server_'&session$&'.cmd"'
 38300   fnend 
 42000   def fn_server_is_active
 42020     dim sia_br_server_executable$*1024

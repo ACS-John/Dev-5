@@ -5,7 +5,7 @@
 12020   on error goto ERTN
 12040   if ~setup then 
 12060     setup=1
-12080     library 'S:\Core\Library': fnerror,fnread_program_print_property,fnCopy,fnreg_read,fnureg_read,fnSystemName$,fngetpp
+12080     library 'S:\Core\Library': fnerror,fnread_program_print_property,fnCopy,fnfree,fnreg_read,fnureg_read,fnSystemName$,fngetpp
 12100     library 'S:\Core\Library': fnosver,fnget_wordprocessor_exe,fninch2twip,fnprocess,fngethandle,fnstatus_close
 12110     library 'S:\Core\Library': fnmakesurepathexists
 12112     ! library 'S:\Core\Library': fntos,fnlbl,fntxt,fnacs,fnopt,fncmdset
@@ -34,7 +34,7 @@
 24280     pfnReturn$=pfnReturn$&' - '&date$('ccyy-mm-dd')&' '&fn_safe_filename$(time$)
 24300     pfnReturn$=pfnReturn$&'.'&pfn_extension$
 24320   else 
-24340     pfnReturn$=env$('temp')&'\ACS-'&session$&'.'&pfn_extension$
+24340     pfnReturn$=env$('temp')&'\acs-'&session$&'.'&pfn_extension$
 24360   end if 
 24380   fn_print_file_name$=pfnReturn$
 24400 fnend 
@@ -125,220 +125,233 @@
 30340     lpp$='54'
 30360   return  ! /r
 30400 XIT: fnend 
-38000   def library fncloseprn(;forceWordProcessor$)
-38020     fn_setup
-38030     dim cp_destinationFileName$*1024
-38040     if file(255)<>-1 then ! if the printer file is open.
-38060       cp_destinationFileName$=g_prn_destination_name$ ! trim$(file$(255)(1:1024))
-38080       close #255: 
-38100       if fnCopy(env$('Q')&'\tmp_'&session$&'.prn',g_prn_destination_name$) then 
-38110         execute '*free '&env$('Q')&'\tmp_'&session$&'.prn' ! pr g_prn_destination_name$ : pause
-38120       else
-38130         pr 'copy failed.'
-38140         pause 
-38160       end if 
-38180       fnstatus_close
-38200       fn_start(cp_destinationFileName$, 0,forceWordProcessor$)
-38220     end if 
-38400     g_prgCapForSettingsOverride$=''
-38420   fnend 
-42000   def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$)
-42040     on error goto START_ERTN
-42060 ! ______________________________________________________________________
-42080 ! NoDrop    = 1 = Do not delete the file when your done with it.
-42100 ! ______________________________________________________________________
-42120     dim winxp$*20,win2k$*22,osver$*80,temp$*120,winnt2kxp$*28
-42140     dim landscape$*1
-42160     dim marg(4)
-42180     dim wordprocessor_exe$*512 ! full path and executable for wordprocessor_exe
-42200 ! ______________________________________________________________________
-42260     start_destinationFilename$=trim$(start_destinationFilename$)
-42280     winxp$="Microsoft Windows XP"
-42300     win2k$="Microsoft Windows 2000"
-42320     winnt2kxp$="Microsoft Windows NT/2000/XP"
-42340     fnosver(osver$,1)
-42360 ! if  start_destinationFilename$='CANCELED' then goto START_XIT
-42380     if lwrc$(start_destinationFilename$(len(start_destinationFilename$)-3:len(start_destinationFilename$)))=".rtf" then 
-42400       fn_start_rtf(start_destinationFilename$, forceWordProcessor$)
-42420     else if osver$=winxp$ or osver$=win2k$ or osver$=winnt2kxp$ then 
-42440       fn_start_winxp
-42460     else 
-42480       pr 'win 98 no longer supported.' : pause ! fn_start_win9x
-42500     end if 
-42520 DROPIT: ! 
-42540     if ~print_report_nowait and ~print_report_caching and nodrop<>1 then 
-42560       execute 'Drop "'&clientSendto$&'" -N' ioerr DROPIT ! empties the contents of clientSendto$
-42580     end if 
-42600     goto START_XIT ! _______
-42620 ! ______________________________________________________________________
-42640 START_ERTN: ! 
-42660     if err=4591 then let fn_start_workaround_4591 : continue  ! line added for time-outs
-42680     fnerror(program$,err,line,act$,"start_xit")
-42700     if lwrc$(act$)<>"pause" then goto START_ERTN_EXEC_ACT
-42720     execute "List -"&str$(line) : pause : goto START_ERTN_EXEC_ACT
-42740     pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto START_ERTN_EXEC_ACT
-42760 START_ERTN_EXEC_ACT: execute act$ : goto START_ERTN
-42780 ! ______________________________________________________________________
-42800 START_XIT: ! 
-42810     on error goto ERTN
-42820   fnend 
-46000   def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$)
-46020     dim line$*32000
-46040     fn_start_read_properties
-46060     ! r:  make the temp rtf file
-46070     dim clientSendto$*1024
-46072     dim serverSendto$*1024
-46080     clientSendto$=env$('at')&startRtf_destinationFileName$
-46090     serverSendto$=startRtf_destinationFileName$
-46100     !   open #20: "Name="&clientSendto$,display,input
-46120     ! else
-46140     open #20: "Name="&serverSendto$,display,input
-46160     ! end if
-46180     lrec20=lrec(20)
-46200     y=0
-46220     open #21: "Name="&env$('temp')&"\acs_print_tmp"&session$&".rtf,Size=0,RecL=800,Replace",display,output 
-46240     pr #21: "{\rtf1\ansi\deflang1033";
-46260     pr #21: "{\fonttbl";
-46280     pr #21: "{\f8\fswiss\fcharset0\fprq2 Lucida Console;}";
-46300     pr #21: "{\f181\froman\fcharset0\fprq2 Times New Roman;}";
-46320     pr #21: "{\f128\fnil\fcharset0\fprq2 iQs Code 128;}";
-46340     pr #21: "}"
-46360     pr #21: "{\stylesheet";
-46380     pr #21: "{\snext0\f8\fs22\fi0\li0\ri0\ql";
-46400     pr #21: "{\*\stloverrides\f8\fs22\widctlpar} Normal;}"
-46420     pr #21: "{\s1\sbasedon0\snext0\f8\fs28\b\kerning28\fi0\li0\ri0";
-46440     pr #21: "\ql\keepn\sb240\sa60{\*\stloverrides\fs28\b\kerning28";
-46460     pr #21: "\keepn\sb240\sa60} heading 1;}" ! ;
-46480     pr #21: "{\s2\sbasedon0\snext0\f8\fs24\b\i\fi0\li0\ri0\ql\keepn";
-46500     pr #21: "\sb240\sa60{\*\stloverrides\fs24\b\i\keepn\sb240\sa60}";
-46520     pr #21: " heading 2;}" ! ;
-46540     pr #21: "{\s3\sbasedon0\snext0\f8\fs22\b\fi0\li0\ri0\ql\keepn";
-46560     pr #21: "\sb240\sa60{\*\stloverrides\b\keepn\sb240\sa60} ";
-46580     pr #21: "heading 3;}" ;
-46600     pr #21: "}"
-46620     pr #21: "{\info";
-46640     pr #21: "{\creatim\yr"&date$("ccyy")&"\mo"&date$("mm");
-46660     pr #21: "\dy"&date$("dd")&"\hr"&time$(1:2)&"\min"&time$(4:5);
-46680     pr #21: "\sec"&time$(7:8)&"}";
-46700     pr #21: "{\author ACS 5 - "&login_name$&"}";
-46720     pr #21: "}"
-46740 ! _______
-46760     pr #21: "\paperw"&str$(pgw)&"\paperh"&str$(pgh);
-46780     pr #21: "\margl"&str$(marg(3))&"\margr"&str$(marg(4));
-46800     pr #21: "\margt"&str$(marg(1))&"\margb"&str$(marg(2));
-46820     if uprc$(landscape$)=uprc$("Y") then 
-46840       pr #21: "\lndscpsxn";
-46860     end if 
-46880     pr #21: "\widowctrl\useltbaln\plain"
-46900     pr #21: "\f181\fs24\pard\f8\fs"&str$(fsize*2)&" "
-46920 L640: linput #20: line$ eof END_OF_FILE
-46940     if uprc$(line$(1:13))=uprc$("*INSERT FILE:") then 
-46960       line$=line$(14:len(line$))
-46980       goto L660
-47000     else if line$(1:12)="S:\Core\images\" then 
-47020       goto L660
-47040     else 
-47060       goto L700
-47080     end if 
-47100     L660: ! 
-47120     close #21: 
-47140     execute "Type '"&trim$(line$)&"' >>"&env$('temp')&"\acs_print_tmp"&session$&".rtf"
-47160     open #21: "Name="&env$('temp')&"\acs_print_tmp"&session$&".rtf,RecL=800,use",display,output 
-47180     goto L640
-47200     L700: ! 
-47220     ! 
-47240     ! 
-47260     L730: ! 
-47280     z=pos(line$,"\",z)
-47300     if z=>1 and line$(z-1:z-1)<>"{" and uprc$(line$(z+1:z+1))<>"Q" then 
-47320       line$(z:z)="\\" : z=z+2
-47340       goto L730
-47360     else 
-47380     L18700: !
-47390       z=pos(line$,"/fcode/",z)
-47400       if z=>1 then 
-47420         line$(z:z+6)="\" : z=z+1
-47440         goto L18700
-47460       else 
-47480         z=0
-47500       end if 
-47520      !  look for \s and replace with double \\s
-47540      !  so they will display correctly in rtf
-47560      !  "{" was added to allow support for bold, italic, underline, etc.
-47580      !  "q" was added to allow support for alignment.
-47600     end if 
-47620     y=y+len(line$)+2
-47640     if line$(1:1)=chr$(12) then ! and y<lrec20 then   !  shifted this on 1/13/2017 due to strange _ showing up in ms word
-47660       if y<lrec20 then  
-47680         pr #21: "\page"
-47700       end if
-47720       line$(1:1)=''
-47740     end if 
-47760     pr #21: line$&"\par"
-47780     goto L640
-47800     ! ______________________________________________________________________
-49000     END_OF_FILE: ! 
-49020     pr #21: "}"
-49040     close #21: 
-49060     close #20: 
-49080     ! /r
-49100     if env$('enableReportCacheOnClient')='Yes' then
-49120       fnCopy(env$('temp')&"\acs_print_tmp"&session$&".rtf",clientSendto$)
-49130     end if
-49140     fnCopy(env$('temp')&"\acs_print_tmp"&session$&".rtf",serverSendto$)
-49200     ! pr 'BR copied to: '&clientSendto$ ! 
-49220     if env$('BR_MODEL')='CLIENT/SERVER' then
-49240       if ~setup_cs then
-49260         setup_cs=1
-49280         dim cache_sendto_path$*512
-49300         dim cache_sendto_file_base$*256
-49320         dim cache_sendto_file_ext$*128
-49340         fngetpp(serverSendto$,cache_sendto_path$,cache_sendto_file_base$,cache_sendto_file_ext$)
-49360 !       pause
-49380         serverSendto$=fn_report_cache_folder_current$&'\'&cache_sendto_file_base$&cache_sendto_file_ext$
-49400 !       pr 'CS set destination to: '&serverSendto$
-49420       end if
-49440     end if
-49460 !
-50000     fnget_wordprocessor_exe(wordprocessor_exe$, forceWordProcessor$) 
-50020     if fnprocess=1 and pos(lwrc$(wordprocessor_exe$),'atlantis')>0 then 
-50040       execute 'Sy -w '&wordprocessor_exe$&' -st /p /npd "'&os_filename$(serverSendto$)&'"' ! automatic processing  ! kj 53107
-50060     else if print_report_nowait or fnprocess=1 then 
-50080       execute 'Sy -w -C '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
-50100     else 
-50120       acs_win_rows=val(env$('acs_win_rows'))
-50140       acs_win_cols=val(env$('acs_win_cols'))
-50160       open #h_win_wait=fngethandle: "srow=1,scol=1,rows="&str$(acs_win_rows)&",cols="&str$(acs_win_cols)&",border=none,picture=S:\Core\disable.png:TILE",display,output 
-50180       pr #h_win_wait,fields str$(acs_win_rows/2)&',1,Cc '&str$(acs_win_cols)&',[Screen]': 'Close your word processor to continue.'
-50200       execute 'Sy -w '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
-50220       close #h_win_wait: 
-50240     end if 
-50260 ! pause
-50280   fnend 
-52000   def fn_start_read_properties
-52020     fnread_program_print_property('Orientation',orientation$, g_prgCapForSettingsOverride$)
-52040     if orientation$="Landscape" then landscape$="Y" else landscape$="N"
-52060     fnread_program_print_property('Height',pgh$, g_prgCapForSettingsOverride$) : pgh=val(pgh$)
-52080     if pgh=0 then pgh=11
-52100     fninch2twip(pgh)
-52120     fnread_program_print_property('Width',pgw$, g_prgCapForSettingsOverride$) : pgw=val(pgw$)
-52140     if pgw=0 then pgw=8.5
-52160     fninch2twip(pgw)
-52180     fnread_program_print_property('TopMargin',temp$, g_prgCapForSettingsOverride$) : marg(1)=val(temp$)
-52200     fninch2twip(marg(1))
-52220     fnread_program_print_property('BottomMargin',temp$, g_prgCapForSettingsOverride$) : marg(2)=val(temp$)
-52240     fninch2twip(marg(2))
-52260     fnread_program_print_property('LeftMargin',temp$, g_prgCapForSettingsOverride$) : marg(3)=val(temp$)
-52280     fninch2twip(marg(3))
-52300     fnread_program_print_property('RightMargin',temp$, g_prgCapForSettingsOverride$) : marg(4)=val(temp$)
-52320     fninch2twip(marg(4))
-52340     fnread_program_print_property('FontSize',temp$, g_prgCapForSettingsOverride$) : fsize=val(temp$)
-52360   fnend 
-54000   def fn_start_workaround_4591
-54020     pr newpage
-54040     pr f "10,10,Cc 60,N": "Press ENTER to continue"
-54060     input fields "11,10,C 1,N": pause$
-54080   fnend 
+38000 def library fncloseprn(;forceWordProcessor$)
+38020   fn_setup
+38030   dim cp_destinationFileName$*1024
+38040   if file(255)<>-1 then ! if the printer file is open.
+38060     cp_destinationFileName$=g_prn_destination_name$ ! trim$(file$(255)(1:1024))
+38080     close #255: 
+38100     if fnCopy(env$('Q')&'\tmp_'&session$&'.prn',g_prn_destination_name$) then 
+38110       fnfree(env$('Q')&'\tmp_'&session$&'.prn')
+38120     else
+38130       pr 'copy failed.  report lost at temp file: "'&env$('Q')&'\tmp_'&session$&'.prn"'
+38140       pause 
+38160     end if 
+38180     fnstatus_close
+38200     fn_start(cp_destinationFileName$, 0,forceWordProcessor$)
+38220   end if 
+38400   g_prgCapForSettingsOverride$=''
+38420 fnend 
+42000 def fn_start(start_destinationFilename$*1024; nodrop,forceWordProcessor$)
+42040   on error goto START_ERTN
+42060   ! ______________________________________________________________________
+42080   ! NoDrop    = 1 = Do not delete the file when your done with it.
+42100   ! ______________________________________________________________________
+42120   dim winxp$*20,win2k$*22,osver$*80,temp$*120,winnt2kxp$*28
+42140   dim landscape$*1
+42160   dim marg(4)
+42180   dim wordprocessor_exe$*512 ! full path and executable for wordprocessor_exe
+42200   ! ______________________________________________________________________
+42260   start_destinationFilename$=trim$(start_destinationFilename$)
+42280   winxp$="Microsoft Windows XP"
+42300   win2k$="Microsoft Windows 2000"
+42320   winnt2kxp$="Microsoft Windows NT/2000/XP"
+42340   fnosver(osver$,1)
+42360   ! if  start_destinationFilename$='CANCELED' then goto START_XIT
+42380   if lwrc$(start_destinationFilename$(len(start_destinationFilename$)-3:len(start_destinationFilename$)))=".rtf" then 
+42400     fn_start_rtf(start_destinationFilename$, forceWordProcessor$)
+42420   else if osver$=winxp$ or osver$=win2k$ or osver$=winnt2kxp$ then 
+42440     fn_start_winxp
+42460   else 
+42480     pr 'win 98 no longer supported.' : pause ! fn_start_win9x
+42500   end if 
+42520  DROPIT: ! 
+42540   if ~print_report_nowait and ~print_report_caching and nodrop<>1 then 
+42560     execute 'Drop "'&clientSendto$&'" -N' ioerr DROPIT ! empties the contents of clientSendto$
+42580   end if 
+42600   goto START_XIT ! _______
+42620   ! ______________________________________________________________________
+42640   START_ERTN: ! 
+42660   if err=4591 then let fn_start_workaround_4591 : continue  ! line added for time-outs
+42680   fnerror(program$,err,line,act$,"start_xit")
+42700   if lwrc$(act$)<>"pause" then goto START_ERTN_EXEC_ACT
+42720   execute "List -"&str$(line) : pause : goto START_ERTN_EXEC_ACT
+42740   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto START_ERTN_EXEC_ACT
+42760   START_ERTN_EXEC_ACT: execute act$ : goto START_ERTN
+42780   ! ______________________________________________________________________
+42800   START_XIT: ! 
+42810   on error goto ERTN
+42820 fnend 
+46000 def fn_start_rtf(startRtf_destinationFileName$*1024; forceWordProcessor$)
+46020   dim line$*32000
+46040   fn_start_read_properties
+46060   ! r:  make the temp rtf file
+46070   dim clientSendto$*1024
+46072   dim serverSendto$*1024
+46080   clientSendto$=env$('at')&startRtf_destinationFileName$
+46090   serverSendto$=startRtf_destinationFileName$
+46100   !   open #20: "Name="&clientSendto$,display,input
+46120   ! else
+46140   open #20: "Name="&serverSendto$,display,input
+46160   ! end if
+46180   lrec20=lrec(20)
+46200   y=0
+46220   open #21: "Name="&env$('temp')&"\acs_print_tmp"&session$&".rtf,Size=0,RecL=800,Replace",display,output 
+46240   pr #21: "{\rtf1\ansi\deflang1033";
+46260   pr #21: "{\fonttbl";
+46280   pr #21: "{\f8\fswiss\fcharset0\fprq2 Lucida Console;}";
+46300   pr #21: "{\f181\froman\fcharset0\fprq2 Times New Roman;}";
+46320   pr #21: "{\f128\fnil\fcharset0\fprq2 iQs Code 128;}";
+46340   pr #21: "}"
+46360   pr #21: "{\stylesheet";
+46380   pr #21: "{\snext0\f8\fs22\fi0\li0\ri0\ql";
+46400   pr #21: "{\*\stloverrides\f8\fs22\widctlpar} Normal;}"
+46420   pr #21: "{\s1\sbasedon0\snext0\f8\fs28\b\kerning28\fi0\li0\ri0";
+46440   pr #21: "\ql\keepn\sb240\sa60{\*\stloverrides\fs28\b\kerning28";
+46460   pr #21: "\keepn\sb240\sa60} heading 1;}" ! ;
+46480   pr #21: "{\s2\sbasedon0\snext0\f8\fs24\b\i\fi0\li0\ri0\ql\keepn";
+46500   pr #21: "\sb240\sa60{\*\stloverrides\fs24\b\i\keepn\sb240\sa60}";
+46520   pr #21: " heading 2;}" ! ;
+46540   pr #21: "{\s3\sbasedon0\snext0\f8\fs22\b\fi0\li0\ri0\ql\keepn";
+46560   pr #21: "\sb240\sa60{\*\stloverrides\b\keepn\sb240\sa60} ";
+46580   pr #21: "heading 3;}" ;
+46600   pr #21: "}"
+46620   pr #21: "{\info";
+46640   pr #21: "{\creatim\yr"&date$("ccyy")&"\mo"&date$("mm");
+46660   pr #21: "\dy"&date$("dd")&"\hr"&time$(1:2)&"\min"&time$(4:5);
+46680   pr #21: "\sec"&time$(7:8)&"}";
+46700   pr #21: "{\author ACS 5 - "&login_name$&"}";
+46720   pr #21: "}"
+46740  ! _______
+46760   pr #21: "\paperw"&str$(pgw)&"\paperh"&str$(pgh);
+46780   pr #21: "\margl"&str$(marg(3))&"\margr"&str$(marg(4));
+46800   pr #21: "\margt"&str$(marg(1))&"\margb"&str$(marg(2));
+46820   if uprc$(landscape$)=uprc$("Y") then 
+46840     pr #21: "\lndscpsxn";
+46860   end if 
+46880   pr #21: "\widowctrl\useltbaln\plain"
+46900   pr #21: "\f181\fs24\pard\f8\fs"&str$(fsize*2)&" "
+46920  L640: linput #20: line$ eof END_OF_FILE
+46940   if uprc$(line$(1:13))=uprc$("*INSERT FILE:") then 
+46960     line$=line$(14:len(line$))
+46980     goto L660
+47000   else if line$(1:12)="S:\Core\images\" then 
+47020     goto L660
+47040   else 
+47060     goto L700
+47080   end if 
+47100   L660: ! 
+47120   close #21: 
+47140   execute "Type '"&trim$(line$)&"' >>"&env$('temp')&"\acs_print_tmp"&session$&".rtf"
+47160   open #21: "Name="&env$('temp')&"\acs_print_tmp"&session$&".rtf,RecL=800,use",display,output 
+47180   goto L640
+47200   L700: ! 
+47220   ! 
+47240   ! 
+47260   L730: ! 
+47280   z=pos(line$,"\",z)
+47300   if z=>1 and line$(z-1:z-1)<>"{" and uprc$(line$(z+1:z+1))<>"Q" then 
+47320     line$(z:z)="\\" : z=z+2
+47340     goto L730
+47360   else 
+47380   L18700: !
+47390     z=pos(line$,"/fcode/",z)
+47400     if z=>1 then 
+47420       line$(z:z+6)="\" : z=z+1
+47440       goto L18700
+47460     else 
+47480       z=0
+47500     end if 
+47520    !  look for \s and replace with double \\s
+47540    !  so they will display correctly in rtf
+47560    !  "{" was added to allow support for bold, italic, underline, etc.
+47580    !  "q" was added to allow support for alignment.
+47600   end if 
+47620   y=y+len(line$)+2
+47640   if line$(1:1)=chr$(12) then ! and y<lrec20 then   !  shifted this on 1/13/2017 due to strange _ showing up in ms word
+47660     if y<lrec20 then  
+47680       pr #21: "\page"
+47700     end if
+47720     line$(1:1)=''
+47740   end if 
+47760   pr #21: line$&"\par"
+47780   goto L640
+47800   ! ______________________________________________________________________
+49000   END_OF_FILE: ! 
+49020   pr #21: "}"
+49040   close #21: 
+49060   close #20: 
+49080   ! /r
+49100   if env$('enableReportCacheOnClient')='Yes' then
+49120     fnCopy(env$('temp')&"\acs_print_tmp"&session$&".rtf",clientSendto$)
+49130   end if
+49140   fnCopy(env$('temp')&"\acs_print_tmp"&session$&".rtf",serverSendto$)
+49200   ! pr 'BR copied to: '&clientSendto$ ! 
+49220   if env$('BR_MODEL')='CLIENT/SERVER' then
+49240     if ~setup_cs then
+49260       setup_cs=1
+49280       dim cache_sendto_path$*512
+49300       dim cache_sendto_file_base$*256
+49320       dim cache_sendto_file_ext$*128
+49340       fngetpp(serverSendto$,cache_sendto_path$,cache_sendto_file_base$,cache_sendto_file_ext$)
+49360     !       pause
+49380       serverSendto$=fn_report_cache_folder_current$&'\'&cache_sendto_file_base$&cache_sendto_file_ext$
+49400     !       pr 'CS set destination to: '&serverSendto$
+49420     end if
+49440   end if
+49460    !
+50000   fnget_wordprocessor_exe(wordprocessor_exe$, forceWordProcessor$) 
+50020   if fnprocess=1 and pos(lwrc$(wordprocessor_exe$),'atlantis')>0 then 
+50040     execute 'Sy -w '&wordprocessor_exe$&' -st /p /npd "'&os_filename$(serverSendto$)&'"' ! automatic processing  ! kj 53107
+50060   else if print_report_nowait or fnprocess=1 then 
+50080     execute 'Sy -w -C '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
+50100   else 
+50120     fn_waitForWpToCloseStart
+50200     execute 'Sy -w '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
+50230     fn_waitForWpToCloseEnd
+50240   end if 
+50260  ! pause
+50280 fnend 
+51000   def library fnWaitForWpToCloseStart
+51020     if ~setup then let fn_setup
+51040     fnWaitForWpToCloseStart=fn_waitForWpToCloseStart
+51060   fnend
+51080   def fn_waitForWpToCloseStart
+51140     open #h_win_wait=fngethandle: "srow=1,scol=1,rows="&env$('acs_win_rows')&",cols="&env$('acs_win_cols')&",border=none,picture=S:\Core\disable.png:TILE",display,output 
+51160     pr #h_win_wait,fields str$(val(env$('acs_win_rows'))/2)&',1,Cc '&env$('acs_win_cols')&',[Screen]': 'Close your word processor to continue.'
+51180   fnend 
+51200   def library fnWaitForWpToCloseEnd
+51220     if ~setup then let fn_setup
+51240     fnWaitForWpToCloseEnd=fn_waitForWpToCloseEnd
+51260   fnend
+51280   def fn_waitForWpToCloseEnd
+51300     close #h_win_wait: ioerr ignore
+51320   fnend 
+
+52000 def fn_start_read_properties
+52020   fnread_program_print_property('Orientation',orientation$, g_prgCapForSettingsOverride$)
+52040   if orientation$="Landscape" then landscape$="Y" else landscape$="N"
+52060   fnread_program_print_property('Height',pgh$, g_prgCapForSettingsOverride$) : pgh=val(pgh$)
+52080   if pgh=0 then pgh=11
+52100   fninch2twip(pgh)
+52120   fnread_program_print_property('Width',pgw$, g_prgCapForSettingsOverride$) : pgw=val(pgw$)
+52140   if pgw=0 then pgw=8.5
+52160   fninch2twip(pgw)
+52180   fnread_program_print_property('TopMargin',temp$, g_prgCapForSettingsOverride$) : marg(1)=val(temp$)
+52200   fninch2twip(marg(1))
+52220   fnread_program_print_property('BottomMargin',temp$, g_prgCapForSettingsOverride$) : marg(2)=val(temp$)
+52240   fninch2twip(marg(2))
+52260   fnread_program_print_property('LeftMargin',temp$, g_prgCapForSettingsOverride$) : marg(3)=val(temp$)
+52280   fninch2twip(marg(3))
+52300   fnread_program_print_property('RightMargin',temp$, g_prgCapForSettingsOverride$) : marg(4)=val(temp$)
+52320   fninch2twip(marg(4))
+52340   fnread_program_print_property('FontSize',temp$, g_prgCapForSettingsOverride$) : fsize=val(temp$)
+52360 fnend 
+54000 def fn_start_workaround_4591
+54020   pr newpage
+54040   pr f "10,10,Cc 60,N": "Press ENTER to continue"
+54060   input fields "11,10,C 1,N": pause$
+54080 fnend 
 58000 def fn_start_winxp
 58020   temp$='Sy -w NotePad "'&serverSendto$&'"'
 58040   execute temp$

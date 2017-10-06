@@ -1,4 +1,4 @@
-00020   library 'S:\Core\Library': fnxit,fntop,fnindex_it
+00020   library 'S:\Core\Library': fnxit,fntop,fnindex_it,fnFree
 00030 ! 
 00040   dim d$*50,rf(6),bc(12),bp(12),bm(12),ta(2),tr(7),tr$*12,td$*30
 00050   fntop(program$,"CHANGE_ME")
@@ -107,7 +107,7 @@
 01080 L1080: close #2: ioerr L1090
 01090 L1090: close #3: ioerr L1100
 01100 L1100: execute "Copy "&env$('Q')&"\GLmstr\GL1099N.H"&str$(cno)&' '&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)
-01110   execute "Free "&env$('Q')&"\GLmstr\GL1099N.H"&str$(cno)
+01110   fnFree(env$('Q')&"\GLmstr\GL1099N.H"&str$(cno))
 01120   return 
 01130 L1130: ! REASS.CNV
 01140   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,outin,keyed 
