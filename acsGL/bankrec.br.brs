@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\BankRec
 00020 ! Bank reconciliation routines for general ledger
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fncomboa,fncmdset,fnacs,fnchain,fntxt,fnbutton,fnfra,fnopt,fnflexinit1,fnflexadd1,fncmdkey,fnchk,fncombof,fnmsgbox,fnrgl$,fnqgl,fnagl$,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fncomboa,fncmdset,fnacs,fnchain,fntxt,fnbutton,fnfra,fnopt,fnflexinit1,fnflexadd1,fncmdkey,fnchk,fncombof,fnmsgbox,fnrgl$,fnqgl,fnagl$,fnconsole,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cnam$*40,dat$*20,adr(2),gl(3),sf1$*28,pr$(4)*30,whgl$(5)*12
@@ -383,7 +383,7 @@
 03290 DISPLAYCLEAREDSOFAR: ! show what has been cleared
 03300   displaycleared=1 : goto CLEAR_TRANSACTIONS_FROM_LIST
 03310 FREE_DPAMNTS: ! 
-03320   execute "Free "&env$('Q')&"\GLmstr\DpAmnts.H"&str$(cno)&" -n"
+03320   fnFree(env$('Q')&"\GLmstr\DpAmnts.H"&str$(cno))
 03330   continue 
 03340 ! ______________________________________________________________________
 03350 CLEAR_DEPOSITS_BY_AMOUNT: ! clear deposits by amounts

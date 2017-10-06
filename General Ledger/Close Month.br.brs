@@ -1,7 +1,7 @@
 00010 ! Formerly S:\acsGL\CloseMonth
 00020 ! GL Month End Closing
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnprocess,fnactpd, fntos,fnlbl,fntxt,fncmdset,fnacs, fnconsole,fngethandle,fnindex_it
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fnprocess,fnactpd, fntos,fnlbl,fntxt,fncmdset,fnacs, fnconsole,fngethandle,fnindex_it,fnRemoveDeletedRecords
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim bc(13),tr(7),tr$*12,td$*30
@@ -65,9 +65,7 @@
 02680   loop 
 02700 FINIS: ! 
 02720   close #h_glbrec: 
-02740   execute "Copy "&env$('Q')&"\GLmstr\GLBRec.h"&str$(cno)&' '&env$('Q')&"\GLmstr\GLBRec.X -D -n"
-02760   execute "Copy  "&env$('Q')&"\GLmstr\GLBRec.X,"&env$('Q')&"\GLmstr\GLBRec.h"&str$(cno)&" -n"
-02780   execute "Free "&env$('Q')&"\GLmstr\GLBRec.X -n"
+02740   fnRemoveDeletedRecords(env$('Q')&"\GLmstr\GLBRec.h"&str$(cno))
 02800   fnindex_it(env$('Q')&"\GLmstr\GLBREC.h"&env$('cno'),env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),"1 24")
 02820   goto XIT
 02840 GLBREC_DROP: ! 

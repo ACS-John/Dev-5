@@ -1,6 +1,6 @@
 10000 !  (formerly) S:\acsPR\newPRW2A 
 10020 ! r: setup
-10040   library 'S:\Core\Library': fntop,fnxit,fnchain,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnmsgbox,fnchk,fnpa_finis,fnerror,fncmdset,fnpa_open,fnpa_newpage,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnDedNames,fncomboa,fnw3,fnNameParse,fnAddOneC,fnask_w2_info,fnw2_text
+10040   library 'S:\Core\Library': fntop,fnxit,fnchain,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnmsgbox,fnchk,fnpa_finis,fnerror,fncmdset,fnpa_open,fnpa_newpage,fncreg_read,fncreg_write,fnpa_background,fngethandle,fnDedNames,fncomboa,fnw3,fnNameParse,fnAddOneC,fnask_w2_info,fnw2_text,fnfree
 10060   on error goto ERTN
 10080 ! ______________________________________________________________________
 10090   dim fw2box16$*255,ss$*11,s(13),t(13)
@@ -324,7 +324,7 @@
 40060   write #1,using 'form pos 1,c 128': "FILE "&env$('Temp')&"\Addr."&session$&",,,PRW2ADDR.H"&env$('cno')&","&env$('Q')&"\PRmstr,,"&env$('Q')&"\PRmstr,,A,N"
 40080   write #1,using 'form pos 1,c 128': "MASK 9,2,n,a,1,8,n,a"
 40100   close #1: 
-40120   execute "Free "&env$('Q')&"\PRmstr\PRW2ADDR.H"&env$('cno')&" -n" ioerr ignore
+40120   fnFree(env$('Q')&"\PRmstr\PRW2ADDR.H"&env$('cno'))
 40140   execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 40160 fnchain("S:\acsPR\prw2b") ! /r
 52000 ASK_EMP_LOCALITY: ! r:

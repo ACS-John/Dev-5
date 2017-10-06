@@ -1,6 +1,6 @@
 00010 !  Replace S:\Core\Locate
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fnopenprn,fngetdir,fnerror,fntos,fnflexadd1,fnacs,fnflexinit1,fnAcsInstallationPath$,fntxt,fnlbl,fnchk,fnxit,fncmdset,fntop,fnpause
+00030   library 'S:\Core\Library': fnopenprn,fngetdir,fnerror,fntos,fnflexadd1,fnacs,fnflexinit1,fnAcsInstallationPath$,fntxt,fnlbl,fnchk,fnxit,fncmdset,fntop,fnpause,fnfree
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim a$*132,prg$*40,lc$*80,dur$*40,rep$*40,resp$(20)*100,txt$*100
@@ -68,7 +68,7 @@
 00500 L500: pr "Found "&str$(j-1)&" files."
 00510   open #2: "Name="&procfile$&",Replace",display,output 
 00520   if uprc$(app_prev$)="FALSE" then !:
-          execute "Free "&report$ ioerr L530
+          fnFree(report$)
 00530 L530: pr #2: "print border: 'Locating...'"
 00540 ! pr #2: "ProcErr Return" ! quietly continue on error ! XXX
 00550   for j=1 to udim(brfn$)

@@ -29,6 +29,7 @@
 25000   def fn_setup
 25020     setup=1
 25040     library 'S:\Core\Library': fnreg_read,fnreg_write,fnmsgbox,fntop,fnxit,fngethandle,fnclient_has_on_support_list,fnSystemName$,fnclient_support,fnerror
+25042     library 'S:\Core\Library': fnFree
 25050     on error goto ERTN
 25060   fnend
 26000 IGNORE: continue
@@ -101,9 +102,9 @@
 40720     loop
 40740 WUD_RETURN_EOF: !
 40760     close #h_return:
-40780     execute 'free '&return_name$
-40800     execute 'free '&script_name$
-40820     execute 'free '&batch_name$
+40780     fnFree(return_name$)
+40800     fnFree(script_name$)
+40820     fnFree(batch_name$)
 40900     fn_conectivity_test$=wud_return$
 40920   fnend
 41000   def fn_update_license
@@ -139,10 +140,10 @@
 41600     loop
 41620 ul_RETURN_EOF: !
 41640     close #h_return:
-41660     execute 'free '&return_name$
-41680     execute 'free '&script_name$
-41700     execute 'free '&batch_name$
-41720     fn_execute('-c',env$('temp')&'\ACS_5_Update_Support_Cache.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS /NOCANCEL /SILENT')
+41660     fnFree(return_name$)
+41680     fnFree(script_name$)
+41700     fnFree(batch_name$)
+41720     fn_execute('-c',env$('temp')&'\acs_5_Update_Support_Cache.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS /NOCANCEL /SILENT')
 41740     fn_update_license=1
 41760   fnend
 42000 def fn_update
@@ -225,16 +226,16 @@
 51040       for ch_item=1 to udim(mat client_has$)
 51060         if client_has$(ch_item)<>'CO' and client_has$(ch_item)<>'G2' and client_has$(ch_item)<>'HH' and client_has$(ch_item)<>'P4' and client_has$(ch_item)<>'U4' then
 51080           fn_status('launching '&client_has$(ch_item)&' update.')
-51100           fn_execute('',env$('temp')&'\ACS-5-Update-'&client_has$(ch_item)&'.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS /NOCANCEL /SILENT')
-51120        !       execute 'sy '&env$('temp')&'\ACS-5-Update-'&client_has$(ch_item)&'.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS' ! /SILENT
+51100           fn_execute('',env$('temp')&'\acs-5-Update-'&client_has$(ch_item)&'.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS /NOCANCEL /SILENT')
+51120        !       execute 'sy '&env$('temp')&'\acs-5-Update-'&client_has$(ch_item)&'.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS' ! /SILENT
 51140         end if
 51160       next ch_item
 51180       fn_status('Closing program and launching Core update.')
-51200       fn_execute('-c',env$('temp')&'\ACS-5-Update-CO.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS')
+51200       fn_execute('-c',env$('temp')&'\acs-5-Update-CO.exe /DIR="'&fn_acs_installation_path$&'" /NOICONS')
 51220       sleep(4)
-51240       execute 'free '&batch_name$
-51260       execute 'free '&script_name$
-51280       execute 'free '&return_name$
+51240       fnFree(batch_name$)
+51260       fnFree(script_name$)
+51280       fnFree(return_name$)
 51300       fnreg_write('Last Update',date$('ccyy/mm/dd')) ! &' '&time$)
 51320       execute "System"
 51340     else

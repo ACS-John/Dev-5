@@ -1,6 +1,6 @@
 00010 ! Replace Core\PrtFlex\prtflex1
 00020 ! ______________________________________________________________________
-00030   library 'Core\Library': fnacs,fnlbl,fntxt,fntos,fnerror,fncomboa,fnflexadd1,fnflexinit1,fnxit,fncursys$,fngetdir,fncmdset,fncmdkey,fntop
+00030   library 'Core\Library': fnacs,fnlbl,fntxt,fntos,fnerror,fncomboa,fnflexadd1,fnflexinit1,fnxit,fncursys$,fngetdir,fncmdset,fncmdkey,fntop,fnfree
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim programfolder$*60,datafolder$*60
@@ -116,7 +116,7 @@
 00800   gridname$=resp$(1) !:
         open_read$=programfolder$&"\grid\"&database$&"\"&database$&"_info"
 00810   if ckey=4 then close #15: ioerr L820
-00820 L820: if ckey=4 then execute "free "&fullgridname$ ioerr SELECTDATABASE : execute "free "&fullgridindx$: goto SELECTDATABASE
+00820 L820: if ckey=4 then let fnFree(fullgridname$) ioerr SELECTDATABASE : fnFree(fullgridindx$) : goto SELECTDATABASE
 00830   close #1: ioerr L840
 00840 L840: if ckey=1 then goto GRIDCOLUMNS
 00850 ! If CKEY=4 Then Goto DISPLAYGRID

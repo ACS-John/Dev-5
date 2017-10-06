@@ -10,7 +10,7 @@
 02120     library 'S:\Core\Library': fngethandle,fnbutton,fnregistered_for_hh,fnretrieve_hand_held_file,fnask_account
 02140     library 'S:\Core\Library': fnlbl,fntxt,fnacs,fntos,fnopt,fnchk,fnflexinit1,fnflexadd1
 02160     library 'S:\Core\Library': fncmbact,fncmbrt2,fnfra,fncmdset,fncmdkey
-02180     library 'S:\Core\Library': fncreg_read,fncreg_write,fngetdir2
+02180     library 'S:\Core\Library': fncreg_read,fncreg_write,fngetdir2,fnfree
 02200     library 'S:\Core\Library': fnapply_default_rates,fnget_services,fnCopy
 02210     library 'S:\Core\Library': fnstatus_close,fnindex_it
 02220     on error goto ERTN
@@ -1140,7 +1140,7 @@
 41300   fncloseprn
 41320   addmethod=2 ! set back to regular readings
 41340   close #h_readings,free: 
-41350   execute 'free '&workFileIndex$ ioerr ignore
+41350   fnFree(workFileIndex$)
 41360 IT_XIT: ! 
 41380   goto MENU1 ! /r
 42000 MENU1: ! r:
@@ -1446,13 +1446,13 @@
 56360     bk1=val(resp$(1)) conv HoldingFileSave
 56380     if bk1<=0 then goto HoldingFileSave
 56400     if uprc$(resp$(respc_CreateNew))=uprc$("True") and exists(env$('Q')&'\UBmstr\IpHold'&str$(bk1)&'.h'&env$('cno')) then ! Create New Holding File
-56420       exec 'free "'&env$('Q')&'\UBmstr\IpHold'&str$(bk1)&'.h'&env$('cno')&'"' 
+56420       fnFree(env$('Q')&'\UBmstr\IpHold'&str$(bk1)&'.h'&env$('cno'))
 56440     end if
 56460     ! Append to Existing Holding File
 56480     dim holdingFile$*256
 56500     dim holdingFileIndex$*256
 56520     holdingFile$=env$('Q')&"\UBmstr\IpHold"&str$(bk1)&".h"&env$('cno')
-56540     holdingFileIndex$=env$('temp')&"\ACS\IpHold"&str$(bk1)&"-Index.h"&env$('cno')
+56540     holdingFileIndex$=env$('temp')&"\acs\IpHold"&str$(bk1)&"-Index.h"&env$('cno')
 56560     fnindex_it(holdingFile$,holdingFileIndex$,'1 10')
 56580     open #hld8:=fngethandle: "Name="&holdingFile$&",KFName="&holdingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outin,keyed 
 56600     restore #hWork: ! ,search>="": nokey AppendFinis
@@ -1464,8 +1464,8 @@
 56720     close #hld8:
 56740     fnstatus_close
 56760     close #hWork:
-56780     exec 'free "'&workFile$&'"'
-56800     exec 'free "'&workFileIndex$&'"'
+56780     fnFree(workFile$)
+56800     fnFree(workFileIndex$)
 56820   end if
 56840   fn_holdingFileSave=holdingFileSaveReturn
 56860 fnend
@@ -1473,7 +1473,7 @@
 57020 !   obsolueted    found a better way       dim hpHoldingFile$*256
 57040 !   obsolueted    found a better way       ! dim hpHoldingFileIndex$*256
 57060 !   obsolueted    found a better way       hpHoldingFile$=env$('Q')&"\UBmstr\IpHold"&ip1$&".h"&env$('cno')
-57080 !   obsolueted    found a better way       ! hpHoldingFileIndex$=env$('temp')&"\ACS\IpHold"&ip1$&"-Index.h"&env$('cno')
+57080 !   obsolueted    found a better way       ! hpHoldingFileIndex$=env$('temp')&"\acs\IpHold"&ip1$&"-Index.h"&env$('cno')
 57100 !   obsolueted    found a better way       ! fnindex_it(hpHoldingFile$,hpHoldingFileIndex$,'1 10')
 57120 !   obsolueted    found a better way       ! open #hpHoldingFile:=fngethandle: "Name="&hpHoldingFile$&",KFName="&hpHoldingFileIndex$&',Shr,Use,RecL=74,KPs=1,KLn=10',internal,outin,keyed 
 57140 !   obsolueted    found a better way       ! restore #hpHoldingFile: ! ,search>="": nokey HpFinis
@@ -1574,9 +1574,9 @@
 60560     fnmsgbox(mat txt$,resp$,'',36)
 60580     if resp$="Yes" then 
 60600       if addmethod=from_hh_file then 
-60620         execute 'Free "'&env$('Q')&"\UBmstr\Readings."&ip1$&'"'
+60620         fnFree(env$('Q')&"\UBmstr\Readings."&ip1$)
 60640       else if addmethod=from_holding_file then 
-60660         execute 'Free "'&env$('Q')&"\UBmstr\IPHold"&ip1$&".h"&env$('cno')&'"'
+60660         fnFree(env$('Q')&"\UBmstr\IPHold"&ip1$&".h"&env$('cno'))
 60680       end if 
 60700     end if 
 60720     goto INPUT_HAND

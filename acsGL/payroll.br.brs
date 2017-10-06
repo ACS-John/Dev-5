@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\Payroll
 00020 ! GL Payroll File Menu
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnchain,fntos,fnlbl,fncombof,fncmdkey,fnacs,fnemployee_search,fntxt,fncmdset,fnmsgbox
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnchain,fntos,fnlbl,fncombof,fncmdkey,fnacs,fnemployee_search,fntxt,fncmdset,fnmsgbox,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim fl2$(5),sc2$(5)*38
@@ -171,7 +171,7 @@
 01330 L1330: close #1,free: ioerr L1340
 01340 L1340: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",SIZE=0,RecL=280,Replace",internal,output 
 01350   close #2: ioerr L1360
-01360 L1360: execute "Free "&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno) ioerr L1370
+01360 L1360: fnFree(env$('Q')&"\GLmstr\PRIndex.h"&str$(cno))
 01370 L1370: open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno),internal,output ioerr L1380
 01380 L1380: close #2,free: ioerr L1390
 01390 L1390: open #2: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno)&",SIZE=0,RecL=110,Replace",internal,output,relative 

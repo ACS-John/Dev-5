@@ -8,12 +8,12 @@
 20100   library 'S:\Core\Library': fngethandle
 20120   on error goto XIT
 20140   delim$=chr$(9)
-20160   if ~exists(env$('Temp')&'\acs\Log.txt') then
+20160   if ~exists(env$('temp')&'\acs\Log.txt') then
 20180     needsHeader=1
 20200   else
 20220     needsHeader=0
 20240   end if
-20260   open #h_log:=fngethandle: "Name="&env$('Temp')&"\acs\Log.txt,RecL=1024,EOL=CRLF,Use",display,output ioerr XIT
+20260   open #h_log:=fngethandle: "Name="&env$('temp')&"\acs\Log.txt,RecL=1024,EOL=CRLF,Use",display,output ioerr XIT
 20280   if needsHeader then
 20300     pr #h_log: 'acsUserId/Session'&delim$;
 20320     pr #h_log: 'logType'&delim$;

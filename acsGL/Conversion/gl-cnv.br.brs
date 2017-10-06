@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\Conversion\GL-CNV
 00020 ! ???
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnputcno,fnerror,fnindex_it
+00040   library 'S:\Core\Library': fntop,fnxit, fnputcno,fnerror,fnindex_it,fnfree
 00050   fntop(program$,"CHANGE_ME")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -111,7 +111,7 @@
 01110 L1110: close #2: ioerr L1120
 01120 L1120: close #3: ioerr L1130
 01130 L1130: execute "Copy "&env$('Q')&"\GLmstr\GL1099N.H"&str$(cno)&' '&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)
-01140   execute "Free "&env$('Q')&"\GLmstr\GL1099N.H"&str$(cno)
+01140   fnFree(env$('Q')&"\GLmstr\GL1099N.H"&str$(cno))
 01150   return 
 01160 ! ______________________________________________________________________
 01170 L1170: ! REASS.CNV

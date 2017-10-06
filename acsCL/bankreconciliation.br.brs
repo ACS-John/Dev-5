@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\BankReconciliation
 00020 ! Bank reconciliation routines
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fncomboa,fncmdset,fnacs,fnchain,fntxt,fnbutton,fnfra,fnopt,fnflexinit1,fnflexadd1,fncmdkey,fnchk,fncombof,fnmsgbox,fncd
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fncomboa,fncmdset,fnacs,fnchain,fntxt,fnbutton,fnfra,fnopt,fnflexinit1,fnflexadd1,fncmdkey,fnchk,fncombof,fnmsgbox,fncd,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim dat$*20,adr(2)
@@ -409,7 +409,7 @@
 03530 DCSF_FINIS: ! 
 03532   return  ! /r
 03540 FREE_DPAMNTS: ! r:
-03550   execute "Free "&env$('Q')&"\CLmstr\DpAmnts.H"&env$('cno')&" -n"
+03550   fnFree(env$('Q')&"\CLmstr\DpAmnts.H"&env$('cno'))
 03560   continue  ! /r
 03570 ! ______________________________________________________________________
 03580 CLEAR_DEPOSITS_BY_AMOUNT: ! clear deposits by amounts

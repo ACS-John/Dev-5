@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\acglBldS.br
 00020 ! this -library function- builds the file    "&env$('Q')&"\GLmstr\ACGLScr.h
 00030   def library fnacglblds
-00040     library 'S:\Core\Library': fntop,fnxit,fnerror,fncno, fnacprscr
+00040     library 'S:\Core\Library': fntop,fnxit,fnerror,fncno, fnacprscr,fnFree
 00050     on error goto ERTN
 00060 ! ______________________________________________________________________
 00070     dim flo$(31),fli$(65),scr$(30)*20,otd$(65)*30,d(2)
@@ -89,7 +89,7 @@
 00340     fli$(2)="3,30,N 6,UT  ,N"
 00350     if d(1)=0 then fli$(2)(11:11)="C"
 00360     if d(2)=0 then fli$(2)(12:12)="E"
-00370     execute "Free "&env$('Q')&"\GLmstr\ACGLScr.h"&str$(cno)&" -n" ioerr L380
+00370     fnFree(env$('Q')&"\GLmstr\ACGLScr.h"&str$(cno))
 00380 L380: open #20: "Name="&env$('Q')&"\GLmstr\ACGLScr.h"&str$(cno)&",Size=0,RecL=4281",internal,output: write #20,using 'Form POS 1,31*C 15,30*C 20,65*C 18,65*C 30': mat flo$,mat scr$,mat fli$,mat otd$ !:
           close #20: 
 00390     fnacprscr

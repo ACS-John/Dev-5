@@ -1,7 +1,7 @@
 10000 ! replace S:\Checkbook\Transaction
 10100 ! Checkbook transaction file editor
 10200 ! ______________________________________________________________________
-10300   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fncmdset,fntos,fnlbl,fnacs,fncombof,fnmsgbox,fnfra,fntxt,fnbutton,fnflexinit1,fnflexadd1,fncmdkey,fnchk,fnaddpayee,fnagl$,fnqgl,fnrgl$,fnupdatebankbal,fnbankbal,fngethandle,fnaddreceipt,fnchain
+10300   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fndat,fndate_mmddyy_to_ccyymmdd,fncmdset,fntos,fnlbl,fnacs,fncombof,fnmsgbox,fnfra,fntxt,fnbutton,fnflexinit1,fnflexadd1,fncmdkey,fnchk,fnaddpayee,fnagl$,fnqgl,fnrgl$,fnupdatebankbal,fnbankbal,fngethandle,fnaddreceipt,fnchain,fnRemoveDeletedRecords,fnIndex
 10400   on error goto ERTN
 10500 ! r: dim
 10600   dim cap$*128,tr$(5)*35,de$*30,bn$*40,aa(2)
@@ -753,12 +753,10 @@
 84300   close #h_trmstr(1): 
 84400   close #h_trmstr(2): 
 84500   close #h_tralloc: 
-84600   execute "Copy "&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&" "&env$('Temp')&"\Work."&session$&" -D"
-84700   execute "Free "&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&" -n"
-84800   execute "Rename "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)
-84900   execute "Index "&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\TrIdx1.h"&str$(cno)&" 1 11 Replace DupKeys -n"
-85000   execute "Index "&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\TrIdx2.h"&str$(cno)&" 28/1 8/11 Replace DupKeys -n"
-85100   execute "Index "&env$('Q')&"\CLmstr\Tralloc.h"&str$(cno)&' '&env$('Q')&"\CLmstr\Tralloc-idx.h"&str$(cno)&" 1 11 Replace DupKeys -n"
+84600   fnRemoveDeletedRecords(env$('Q')&"\CLmstr\TrMstr.h"&str$(cno))
+84900   fnIndex(env$('Q')&"\CLmstr\TrMstr.h"&str$(cno),env$('Q')&"\CLmstr\TrIdx1.h"&str$(cno),"1 11")
+85000   fnIndex(env$('Q')&"\CLmstr\TrMstr.h"&str$(cno),env$('Q')&"\CLmstr\TrIdx2.h"&str$(cno),"28/1 8/11")
+85100   fnIndex(env$('Q')&"\CLmstr\Tralloc.h"&str$(cno),env$('Q')&"\CLmstr\Tralloc-idx.h"&str$(cno),"1 11")
 85200   gosub OPEN_TRANSACTION_FILES
 85300   return  ! /r
 85500 ! <updateable region: ertn>

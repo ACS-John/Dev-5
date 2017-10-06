@@ -1,4 +1,3 @@
-00010 ! if env$('acsDeveloper')<>'' then exe 'free '&env$('Q')&'\ubmstr\meteraddress*.*' err ignore
 10000 fn_setup
 10020 fntop(program$)
 10040 fnreg_read('Meter Address Enable',u4_meterAddress$,'False')

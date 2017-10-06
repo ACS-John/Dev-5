@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsPR\newDD
 00020 ! Direct Deposit file creator
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnwin3b,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnxit,fntop,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnchk,fncmdset,fnmsgbox,fnGetPayrollDates
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fnwin3b,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnxit,fntop,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnchk,fncmdset,fnmsgbox,fnGetPayrollDates,fnfree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,ml$(3)*80,tcp(32),cp(32),tdc(10)
@@ -246,7 +246,7 @@
 01950   close #ddout: 
 01960 goto DONE_X ! /r
 01970 DONE_X: ! r:
-01980   if trim$(path$)<>'' and exists(path$) then execute "free "&path$&" -n"
+01980   if trim$(path$)<>'' and exists(path$) then let fnFree(path$)
 01990   if trim$(path$)<>"" then execute "Copy DDout"&wsid$&".txt "&path$&" -n"
 02000   if trim$(email$)<>"" then execute "sy Start Mailto:"&trim$(email$)&"?attach=DDout"&wsid$&".txt?subject=Direct_Deposit_Payroll" !:
           pr newpage !:

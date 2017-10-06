@@ -28,7 +28,7 @@ Print
 >Chart of Accounts                                  ^ acsGL\acGLCHRT
 Financial Statements
 >Print Cover Letter                                 ^ acsGL\CoverLetterPrint
->>Edit Cover Letter                                 ^ acsGL\CoverLetterEdit
+>>Edit Cover Letter                                 ^ EditInWordProcessor:[Q]\GLmstr\ACGLCovF.h[cno] forceAtlantis makeIfNecessary
 >Balance Sheet                                      ^ acsGL\BalanceSheet
 >>Comparative Balance Sheet                         ^ General Ledger\Comparative Balance Sheet
 >>Period Comparison Balance Sheet                   ^ General Ledger\Period Comparison Balance Sheet
@@ -55,7 +55,7 @@ Financial Statements
 >>Cash Flow with Fund Comparison                    ^ acsGL\acGLCasF
 >>Cash Flow with YTD Budget Comparison              ^ acsGL\acGLCasO
 >Retained Earnings Statement
->>Edit Retained Earnings Statement                  ^ General Ledger\Edit Retained Earnings Statement
+>>Edit Retained Earnings Statement                  ^ EditInWordProcessor:[Q]\GLmstr\ACGLStmt.h[cno] forceAtlantis makeIfNecessary
 >>Print Retained Earnings Statement                 ^ acsGL\ReStPrint
 >Print Schedules                                    ^ General Ledger\Print Schedules
 >Financial Statements Notes                         ^ acsGL\acGLNote

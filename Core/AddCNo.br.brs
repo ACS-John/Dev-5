@@ -85,8 +85,7 @@
 22400 EO_GLMSTR: close #20: 
 22420 ! ___________________________
 22440     execute "drop "&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')
-22460     execute "Free "&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&" -n" ioerr ignore
-22480     open #1: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&",Size=0,RecL=72,NoShr",internal,output 
+22480     open #1: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&",Size=0,RecL=72,Replace,NoShr",internal,output 
 22500     close #1: 
 50000   end if  ! /r
 52000   if exists('S:\'&fnSystemName$&'\Company.br') then

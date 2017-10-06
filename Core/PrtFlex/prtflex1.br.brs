@@ -1,6 +1,6 @@
 00010 ! Replace S:\Core\PrtFlex\prtflex1
 00020 ! ______________________________________________________________________
-10000   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnerror,fncomboa,fnflexadd1,fnflexinit1,fnxit,fncursys$,fngetdir,fncmdset,fncmdkey,fntop,fngetdir2,fnCopy
+10000   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnerror,fncomboa,fnflexadd1,fnflexinit1,fnxit,fncursys$,fngetdir,fncmdset,fncmdkey,fntop,fngetdir2,fnCopy,fnfree
 10020   on error goto ERTN
 10040   fntop(program$,cap$="Grids")
 12000 ! r: dims
@@ -91,8 +91,8 @@
 22360   open_read$=datafolder$&"\Grid\"&database$&"\"&database$&"_info"
 22380   if ckey=4 then 
 22390     close #hgridfile: ioerr ignore
-22400     execute 'free "'&fullgridname$&'" -n' ioerr SELECTDATABASE
-22402     execute 'free "'&fullgridindx$&'"'
+22400     if fnFree(fullgridname$)<=0 then goto SELECTDATABASE
+22402     fnFree(fullgridindx$)
 22403     goto SELECTDATABASE
 22404   end if 
 22420   close #1: ioerr ignore

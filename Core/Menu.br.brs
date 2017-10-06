@@ -46,7 +46,7 @@
 11740     library 'S:\Core\Library': fnreport_cache_folder_current$
 11760     library 'S:\Core\Library': fnAddOneC
 11780     library 'S:\Core\Library': fnFM
-11800     library 'S:\Core\Library': fnHamsterFio
+11800     library 'S:\Core\Library': fnHamsterFio,fnEditInWordProcessor
 11820     library 'S:\Core\Library': fnxit
 11840     library 'S:\Core\Library': fnFavoriteAdd,fnFavoriteList,fnFavoriteDel
 11860     library 'S:\Core\Library': fnFileSaveAs,fnOpenPartial
@@ -308,11 +308,13 @@
 21560           fnclear_menu
 21580           fnFileSaveAs('*.*')
 21600         else if menu_option$='Save Company As' then
-21620           fnclear_menu
-21640           fnFileSaveAs('*h'&env$('cno'))
-21660         end if
-21661       else if lwrc$(ltrm$(menu_option$)(1:11))='hamsterfio:' then
-21663         fn_callHamsterFio(menu_option$)
+21610           fnclear_menu
+21620           fnFileSaveAs('*h'&env$('cno'))
+21630         end if
+21640       else if lwrc$(ltrm$(menu_option$)(1:20))='editinwordprocessor:' then
+21642         fn_callEditInWordProcessor(menu_option$)
+21660       else if lwrc$(ltrm$(menu_option$)(1:11))='hamsterfio:' then
+21662         fn_callHamsterFio(menu_option$)
 21670       else if menu_option$(1:5)='fnFM(' then
 21674         fnFM(menu_option$(6:len(menu_option$)-1))
 21680       else if menu_option$(1:14)='fnPrintAceTest' then
@@ -322,12 +324,12 @@
 21760       else if menu_option$='Restart' then
 21770         fnClearLayoutCache
 21772         setenv('ForceScreenIOUpdate','yes')
-21780         open #h_tmp:=fngethandle: 'Name='&env$('temp')&'\ACS_Restart_'&session$&'.prc,replace',display,output
+21780         open #h_tmp:=fngethandle: 'Name='&env$('temp')&'\acs_Restart_'&session$&'.prc,replace',display,output
 21800         pr #h_tmp: "Stop"
 21820         pr #h_tmp: "clear resident"
 21860         pr #h_tmp: "chain 'S:\Core\Start'"
 21880         close #h_tmp:
-21900         execute 'proc '&env$('temp')&'\ACS_Restart_'&session$&'.prc'
+21900         execute 'proc '&env$('temp')&'\acs_Restart_'&session$&'.prc'
 21920       else if menu_option$='Index System' then
 21940         fnindex_sys
 21960       else if lwrc$(menu_option$(1:8))='[cursys=' then
@@ -449,8 +451,10 @@
 24440         !   program_plus$(program_selection_id)='-'
 24450         ! else if program_plus$(program_selection_id)='-' then
 24460         !   program_plus$(program_selection_id)='+'
-24470         if lwrc$(ltrm$(program_selection$)(1:11))='hamsterfio:' then  ! else if
-24480           fn_callHamsterFio(program_selection$)
+24462         if lwrc$(ltrm$(program_selection$)(1:11))='hamsterfio:' then  ! else if
+24464           fn_callHamsterFio(program_selection$)
+24470         else if lwrc$(ltrm$(program_selection$)(1:20))='editinwordprocessor:' then  ! else if
+24480           fn_callEditInWordProcessor(program_selection$)
 24490         else if program_selection$<>'' then
 24500           fn_chain('S:\'&trim$(program_selection$))
 24510         end if
@@ -473,6 +477,29 @@
 25200   fnHamsterFio(tmpCursys$&' '&tmpCap$)
 25220   fnxit
 25240 fnend
+25500 def fn_callEditInWordProcessor(programSelection$*256)
+25510   programSelection$=trim$(programSelection$)
+25520   programSelection$(1:20)=''
+25530   dim fileToEditInWp$*256,options$*256
+25540   if (cewPosSpace1:=pos(programSelection$,' '))>0 then 
+25550     fileToEditInWp$=programSelection$(1:cewPosSpace1-1)
+25560     options$=programSelection$(cewPosSpace1+1:inf)
+25570   else
+25580     fileToEditInWp$=programSelection$
+25590   end if
+25600   fileToEditInWp$=srep$(fileToEditInWp$,'[Q]',env$('Q'))
+25610   fileToEditInWp$=srep$(fileToEditInWp$,'[cno]',env$('cno'))
+25620   fileToEditInWp$=srep$(fileToEditInWp$,'[CNo]',env$('cno'))
+25630   if pos(options$&' ','makeIfNecessary ')>0 then cewMakeIfNecessary=1 else cewMakeIfNecessary=0
+25640   if pos(options$&' ','forceAtlantis ')>0 then cewForceAtlantis=1 else cewForceAtlantis=0
+25650   if ~cewForceAtlantis and cewMakeIfNecessary then
+25660     pr 'can only MakeIfNEcessary if also forceAtlantis.  Please consider enhancing the code.' : pause
+25670   end if
+25680   if cewForceAtlantis then cewForce$='atlantis' else cewForce$=''
+25690   if cewMakeIfNecessary then cewOption$=' -n' else cewOption$=''
+25700   !
+25710   fn_callEditInWordProcessor=fnEditInWordProcessor(fileToEditInWp$,cewForce$,cewOption$)
+25720 fnend
 26000 def fn_dashboard_height
 26020   if env$('cursys')="OE" then
 26040     dhReturn=1

@@ -14,7 +14,7 @@
 00140   pr f "10,5,C 60": "COMPANY NUMBER TO CONVERT:"
 00150   rinput fields "10,51,N 2,UE,N": cno
 00160   if cno=0 then goto XIT
-00170 ! 
+00170 !  
 00180   execute "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",X -D -164"
 00190   execute "Free "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
 00200   execute "Rename X "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)

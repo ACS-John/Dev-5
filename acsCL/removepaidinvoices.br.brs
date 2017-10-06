@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\RemovePaidInvoices
 00020 ! Remove Paid Invoices
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fntxt,fnacs,fncmdset
+00040   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd,fntos,fnlbl,fntxt,fnacs,fncmdset,fnfree,fnrename
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128
@@ -36,8 +36,8 @@
 00310 EO_IVPAID: ! 
 00320   close #ivpaid: 
 00330   close #work: 
-00340   execute "Free "&env$('Q')&"\CLmstr\IvPaid.H"&str$(cno)&" -n"
-00350   execute "Rename "&env$('Q')&"\CLmstr\Work."&session$&' '&env$('Q')&"\CLmstr\IvPaid.H"&str$(cno)&" -n"
+00340   fnFree(env$('Q')&"\CLmstr\IvPaid.H"&str$(cno))
+00350   fnRename(env$('Q')&"\CLmstr\Work."&session$,env$('Q')&"\CLmstr\IvPaid.H"&str$(cno))
 00360   goto XIT
 00370 ! ______________________________________________________________________
 00380 XIT: fnxit

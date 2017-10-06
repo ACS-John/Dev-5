@@ -2,7 +2,7 @@
 00020 ! GL Merge program, chained to from other systems, !:
         ! like Checkbook-post to GL; also used to merge entries entered directly
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnprocess,fnchain,fnprg,fnxit,fntop,fnstyp,fnmsgbox,fnaddglpayee,fntos,fnlbl,fncmdkey,fnacs,fnagl$,fntxt,fncmdset,fnopt,fnqglbig,fnrglbig$,fnindex_it
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fnwin3,fncno,fnprocess,fnchain,fnprg,fnxit,fntop,fnstyp,fnmsgbox,fnaddglpayee,fntos,fnlbl,fncmdkey,fnacs,fnagl$,fntxt,fncmdset,fnopt,fnqglbig,fnrglbig$,fnindex_it,fnFree
 00050   fntop(program$,"General Ledger Merge")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -185,7 +185,7 @@
 01620 L1620: close #1: 
 01630   close #2: 
 01640   close #3: 
-01650   execute "Free "&env$('Q')&"\GLmstr\GLPT"&wsid$&".H"&env$('cno') ioerr L1660
+01650   fnFree(env$('Q')&"\GLmstr\GLPT"&wsid$&".H"&env$('cno'))
 01660 L1660: ! 
 01670   close #4: ioerr ignore
 01680   if new1=1 or new2=1 then !:

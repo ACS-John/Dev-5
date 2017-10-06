@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsGL\SelAuto
 00020 ! Select Automatic Processing Programs
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fntos,fnflexinit1,fnflexadd1,fncmdkey,fnacs,fntxt,fnlbl,fnclient_has
+00040   library 'S:\Core\Library': fntop,fnxit, fnerror,fncno,fntos,fnflexinit1,fnflexadd1,fncmdkey,fnacs,fntxt,fnlbl,fnclient_has,fnfree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim m$(200)*80,pgm$(200)*22,hlpg$(200)*40,status$(200),cap$*128,xec$*80
@@ -16,7 +16,7 @@
 00160   fncno(cno)
 00170   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)&",Use,RecL=76",internal,outin,relative ioerr L190
 00180   goto L210
-00190 L190: if exists(env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)) >0 then execute "Free "&env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)
+00190 L190: if exists(env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)) >0 then let fnFree(env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno))
 00200   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)&",Use,RecL=76",internal,outin,relative ioerr MAIN
 00210 L210: if lrec(1)=0 then write #1,using L1690: nxtpgm$(1),nxtdesc$(1),pn(1),cp(1),prim(1),srq(1)
 00220   for j=1 to lrec(1)

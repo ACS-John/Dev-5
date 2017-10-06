@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsCL\Conversion\APmstr-Cnv
 00020 ! Pull stuff from old Accounts Payable into new Checkbook company
 00030 def library fnApMstrConversion
-00040   library 'S:\Core\Library': fntop,fnxit, fnchain,fnerror,fncno,fntos,fncmdset,fnlbl,fntxt,fnacs,fnindex_it,fnCopy,fngethandle
+00040   library 'S:\Core\Library': fntop,fnxit, fnchain,fnerror,fncno,fntos,fncmdset,fnlbl,fntxt,fnacs,fnindex_it,fnCopy,fngethandle,fnFree
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim vn$*8,nam$*30,ad1$*30,ad2$*30,csz$*30,ss$*11,ph$*12,a(9),dt(5),cd(4)
@@ -30,7 +30,7 @@
 46040   if ~exists(env$('Q')&'\tmpAP') then 
 46060     execute 'mkdir '&env$('Q')&'\tmpAP'
 46080   else 
-46100     execute 'Free '&env$('Q')&'\tmpAP\*.*' ioerr ignore
+46100     fnFree(env$('Q')&'\tmpAP\*.*')
 46120   end if 
 48000   fnCopy(resp$(1)&'\*.h'&str$(apcno),env$('Q')&'\tmpAP\*.*')
 48040   if exists(env$('Q')&"\tmpAP\apcoinfo.h"&str$(apcno))=0 then goto SCR1
@@ -57,8 +57,8 @@
 54080   close #unpdaloc: 
 54100   close #aptrans,free: 
 54120   close #apmstr,free: 
-54140   execute 'free '&env$('Q')&'\tmpAP\*.* -n'
-54160   execute 'RmDir '&env$('Q')&'\tmpAP'
+54140   fnFree(env$('Q')&'\tmpAP\*.*')
+54160   execute 'RmDir "'&env$('Q')&'\tmpAP"'
 56000   fnindex_it(env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),"1 8")
 56020   fnindex_it(env$('Q')&"\CLmstr\PayMstr.h"&env$('cno'),env$('Q')&"\CLmstr\PayIdx2.h"&env$('cno'),"9 30")
 56040   fnindex_it(env$('Q')&"\CLmstr\PayTrans.H"&env$('cno'),env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno'),"1,20")
