@@ -330,7 +330,6 @@
 56420 fnend
 57000 def fn_fileOpenEverything(foeSource$*256)
 57020   fnreg_close
-57040   ! r: new way 12/4/2015
 57060   dim foeDestinationFolder$*256
 57080   dim foeLogFile$*256
 57100   dim foeFileOpen$*256
@@ -362,9 +361,7 @@
 58640   pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&foeSource$&'" -o"'&foeDestinationFolder$&'\" > "'&env$('temp')&'\acs\Open_Log.txt"'
 58660   ! pr #h_tmp: 'pause'
 58680   close #h_tmp: 
-
 58700   execute 'sy -s '&env$('temp')&'\acs\Open_as_'&session$&'.cmd'
-58720   ! /r
 58740   if fn_analyze_7zip_compresslog(env$('temp')&'\acs\Open_Log.txt','Successfully Opened',foeSource$,1) then 
 58760     fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
 58780     fnreg_write('Last Open File',foeSource$(pos(foeSource$,'\',-1)+1:len(foeSource$)))
@@ -401,7 +398,7 @@
 62040   ! pr 'eafSourceFilter$="'&eafSourceFilter$&'"'
 62060   ! pr 'eafDestinationFolder$="'&eafSourceFilter$&'"'
 62080   execute 'Sy RmDir "'&eafDestinationFolder$&'" /s /q'
-62100   open #h_tmp:=fngethandle: 'Name= '&env$('at')&br_filename$(env$('client_temp')&'\acs\openPartial'&session$&'.cmd')&',RecL=512,Replace',display,output 
+62100   open #h_tmp:=fngethandle: 'Name= '&env$('temp')&'\acs\openPartial'&session$&'.cmd'&',RecL=512,Replace',display,output 
 62120   pr #h_tmp: '@echo off'
 62140   pr #h_tmp: '@echo Advanced Computer Services LLC'
 62160   pr #h_tmp: '@echo Opening: "'&eafSourceFile$&'"'
@@ -415,16 +412,16 @@
 62320   pr #h_tmp: '@echo Relative To: '&eafDestinationFolder$
 62340   pr #h_tmp: '@echo.'
 62360   pr #h_tmp: '@echo.'
-62380   pr #h_tmp: '@echo Output Log: "'&env$('client_temp')&'\acs\OpenPartial_Log.txt"'
+62380   pr #h_tmp: '@echo Output Log: "'&env$('temp')&'\acs\OpenPartial_Log.txt"'
 62400   pr #h_tmp: '@echo.'
 62420   pr #h_tmp: '@echo.'
 62440   pr #h_tmp: '@echo OPEN PROCESSING...'
-62460
+62460  !
 62480   for eafSourceFilterItem=1 to udim(mat eafSourceFilter$)
 62500     pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&eafSourceFile$&'" -o"'&eafDestinationFolder$&'" '&eafSourceFilter$(eafSourceFilterItem)&' > "'&env$('client_temp')&'\acs\OpenPartial_Log.txt"'
 62520   nex eafSourceFilterItem
 62540   close #h_tmp: 
-62560   execute 'sy '&env$('client_temp')&'\acs\openPartial'&session$&'.cmd'
+62560   execute 'sy '&env$('temp')&'\acs\openPartial'&session$&'.cmd'
 62580     ! if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes..h### should be extracted too' : pause
 62990 fnend
 64000 def fn_copy_files_in(company_import_path$*256,company_import_extension$,destination_company_number)
