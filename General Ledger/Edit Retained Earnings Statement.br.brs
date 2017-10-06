@@ -1,16 +1,11 @@
-20000 ! Replace S:\acsGL\RestEdit
+20000 ! formerly S:\acsGL\RestEdit
 20020 ! -- Edit Retained Earnings Statement
 20040 ! ______________________________________________________________________
 20060   library 'S:\Core\Library': fntop,fnxit,fnerror
-20080   library 'S:\Core\Library': fntext_editor
-20100   library 'S:\Core\Library': fnget_atlantis
+20100   library 'S:\Core\Library': fnEditInWordProcessor
 20120   on error goto ERTN
-20140   fntop(program$,cap$="Edit Retained Earnings Statement")
-20160   dim cap$*128
-26000   ! fntext_editor(os_filename$(env$('Q')&'\GLmstr\ACGLStmt.h'&env$('cno')))
-26020   dim atlantis$*256
-26040   fnget_atlantis(atlantis$)
-26060   execute 'SY -w '&atlantis$&' "'&os_filename$(env$('Q')&'\GLmstr\ACGLStmt.h'&env$('cno'))&'" -n'
+20140   fntop(program$)
+26000   fnEditInWordProcessor(env$('Q')&'\GLmstr\ACGLStmt.h'&env$('cno'),'atlantis',' -n') ! fntext_editor(os_filename$(env$('Q')&'\GLmstr\ACGLStmt.h'&env$('cno')))
 26080   goto XIT
 28000 ! 
 30000 XIT: fnxit
