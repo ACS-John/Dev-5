@@ -55,7 +55,7 @@ Financial Statements
 >>Cash Flow with Fund Comparison                    ^ acsGL\acGLCasF
 >>Cash Flow with YTD Budget Comparison              ^ acsGL\acGLCasO
 >Retained Earnings Statement
->>Edit Retained Earnings Statement                  ^ acsGL\ReStEdit
+>>Edit Retained Earnings Statement                  ^ General Ledger\Edit Retained Earnings Statement
 >>Print Retained Earnings Statement                 ^ acsGL\ReStPrint
 >Print Schedules                                    ^ General Ledger\Print Schedules
 >Financial Statements Notes                         ^ acsGL\acGLNote
