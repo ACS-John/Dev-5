@@ -12,7 +12,7 @@
 10220   end
 10240   ! /r
 12000   def fn_index_it_setup
-12020     library 'S:\Core\Library': fnxit,fnerror,fnstatus,fnget_company_number_list,fngethandle
+12020     library 'S:\Core\Library': fnxit,fnerror,fnstatus,fnget_company_number_list,fngethandle,fnshortpath$
 12040     if ~setup_index_it then 
 12060       setup_index_it=1
 12080       on error goto ERTN
@@ -53,7 +53,8 @@
 27080         index_parameters$=srep$(index_parameters$,' dupkeys',' ')
 27100         index_parameters$=srep$(index_parameters$,' -n',' ')
 27140         index_parameters$=trim$(index_parameters$)&' Replace DupKeys Shr' ! -N
-27141 ! 
+27141         if pos(data_file$,' ')>0 then data_file$=fnshortpath$(data_file$)
+27142         if pos(index_statement_or_file$,' ')>0 then index_statement_or_file$=fnshortpath$(index_statement_or_file$)
 27145 ! 
 27150 !       pr 'index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$ : pause
 27154         index_execute_text$='index '&(data_file$)&' '&(index_statement_or_file$)&' '&index_parameters$

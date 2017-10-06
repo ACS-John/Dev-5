@@ -260,17 +260,21 @@
 45220     library 'S:\Core\Programs\Preferences.br': fndecimal_assumed
 45230     fndecimal_assumed=fndecimal_assumed
 45240   fnend 
-45250   def library fnget_wordprocessor_exe(&wp_exe$; force$)
-45260     library 'S:\Core\Programs\Preferences.br': fnget_wordprocessor_exe
-45270     fnget_wordprocessor_exe=fnget_wordprocessor_exe(wp_exe$, force$)
-45280   fnend 
+45272   def library fnEditInWordProcessor(ewpFile$*256; ewpForce$,ewpOptions$,ewpSwitches$)
+45274     library 'S:\Core\Programs\Preferences.br': fnEditInWordProcessor
+45276     fnEditInWordProcessor=fnEditInWordProcessor(ewpFile$, ewpForce$,ewpSwitches$)
+45278   fnend 
+45282   def library fnget_wordprocessor_exe(&wp_exe$; force$)
+45284     library 'S:\Core\Programs\Preferences.br': fnget_wordprocessor_exe
+45286     fnget_wordprocessor_exe=fnget_wordprocessor_exe(wp_exe$, force$)
+45288   fnend 
 45290   def library fnget_atlantis(&atlantis$)
 45300     library 'S:\Core\Programs\Preferences.br': fnget_atlantis
 45310     fnget_atlantis=fnget_atlantis(atlantis$)
 45320   fnend 
-45330   def library fntext_editor(te_text_file$*256; te_options$)
+45330   def library fntext_editor(te_text_file$*256; te_options$,updateAfterEdit,ewpSwitches$)
 45340     library 'S:\Core\Programs\Preferences.br': fntext_editor
-45350     fntext_editor=fntext_editor(te_text_file$, te_options$)
+45350     fntext_editor=fntext_editor(te_text_file$, te_options$,updateAfterEdit,ewpSwitches$)
 45360   fnend 
 45410   def library fnapply_theme(; disableConScreenOpenDflt)
 45420     library 'S:\Core\Programs\Preferences.br': fnapply_theme
