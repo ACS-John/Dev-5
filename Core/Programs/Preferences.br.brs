@@ -599,9 +599,9 @@
 82360     if pos(lwrc$(efExe$),'atlantis.exe')>0 or pos(lwrc$(efExe$),'awp.exe')>0 then
 82380       efSwitches$=' -n'
 82400     end if
-82420   else if lwrc$(efEditorType$)=lwrc$('text') then
-82440     fnureg_read('Text_Editor',efExe$,fn_text_editor_default$)
-82460     efWaitText$='Text Editor'
+82412   else if lwrc$(efEditorType$)=lwrc$('text') then
+82414     fnureg_read('Text_Editor',efExe$,fn_text_editor_default$)
+82416     efWaitText$='Text Editor'
 82420   else 
 82430     pr 'unrecognized Editor Type: '&efEditorType$ : pause
 82480   end if
