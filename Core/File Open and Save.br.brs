@@ -140,6 +140,7 @@
 42440       ml$(4)='Display the log now?'
 42460       fnmsgbox(mat ml$,resp$,"ACS",4+64)
 42480       if resp$="Yes" then 
+42890         if env$('acsDeveloper')<>'' then pr 'just before fntext_editor("'&arc_filename$&'")' : pause
 42500         fntext_editor(arc_filename$)
 42520       end if 
 42540     end if 
@@ -229,7 +230,7 @@
 48170     tmpFileOpen$=env$('temp')&'\acs\OpenPartial\tmpFileOpen'&session$&'.zip'
 48172     fnmakesurepathexists(tmpFileOpen$)
 48174     if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
-48180     fnCopyFile(env$('at')&br_filename$(opFileOpen$),tmpFileOpen$)
+48180       fnCopyFile(env$('at')&br_filename$(opFileOpen$),tmpFileOpen$)
 48182     SKIPFORDEV: ! XXX DELETE ME
 48190   else
 48200     tmpFileOpen$=opFileOpen$
@@ -312,7 +313,7 @@
 56080         fnreg_write('Last Open Partial System',env$('cursys'))
 56100         fnreg_write('Last Open Partial Company Number',env$('cno'))
 56120         fn_copy_files_in(env$('temp')&'\acs\OpenPartial\'&env$('cursys')&'mstr\','.h'&str$(source_company_number),source_company_number)
-56140         opScreenReturn=1 
+56140         opScreenReturn+=1 
 56160         setenv('force_reindex','yes') 
 56180         fncheckfileversion
 56200         fnindex_sys(cno)
@@ -323,7 +324,7 @@
 56280         fnaddonec(mat msgTmp$,'from the file: '&omFileOpen$)
 56300         fnmsgbox(mat msgTmp$)
 56320       end if 
-56340       goto OpmAskWhichToOpen
+56340       if selectedSource$<>'(All Companies)' then goto OpmAskWhichToOpen
 56360     end if
 56380   end if
 56400   fn_opMain=opScreenReturn
