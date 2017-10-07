@@ -574,34 +574,36 @@
 78360   fnureg_read('color.'&attribute$&'.background',background$) : if background$='' then background$=background_default$
 78380   execute 'Config Attribute '&attribute$&' /'&foreground$&':'&background$ error ignore ! pr 'config attribute '&attribute$&' /'&foreground$&':'&background$ : pause
 78400 fnend
-80000 def library fnEditFile(editorType$,fileToEdit$*256)
+80000 def library fnEditFile(efEditorType$,fileToEdit$*256)
 80020   if ~setup then let fn_setup
-80040   fnEditFile=fn_editFile(editorType$,fileToEdit$)
+80040   fnEditFile=fn_editFile(efEditorType$,fileToEdit$)
 80060 fnend
-82000 def fn_editFile(editorType$,efFileToEdit$*256)
-82020   ! editorType$ - wordprocessor, atlantis, word or text
+82000 def fn_editFile(efEditorType$,efFileToEdit$*256)
+82020   ! efEditorType$ - wordprocessor, atlantis, word or text
 82040   efWaitText$=''
 82060   efForce$=''
 82080   efSwitches$=''
-82100   if lwrc$(editorType$)=lwrc$('atlantis') then
-82120     editorType$
+82100   if lwrc$(efEditorType$)=lwrc$('atlantis') then
+82120     efEditorType$
 82140     efForce$='atlantis'
 82160     efWaitText$='Atlantis'
-82180   else if lwrc$(editorType$)=lwrc$('word') then
+82180   else if lwrc$(efEditorType$)=lwrc$('word') then
 82200     efForce$='word'
 82220     efWaitText$='Microsoft Word'
 82240   end if
 82260   ! r: get the executable and set any switches
-82280   if lwrc$(editorType$)=lwrc$('wordprocessor') then
+82280   if lwrc$(efEditorType$)=lwrc$('wordprocessor') then
 82300     dim efExe$*256
 82320     fn_get_wordprocessor_exe(efExe$, efForce$)
 82340     if efWaitText$='' then efWaitText$='Word Processor'
 82360     if pos(lwrc$(efExe$),'atlantis.exe')>0 or pos(lwrc$(efExe$),'awp.exe')>0 then
 82380       efSwitches$=' -n'
 82400     end if
-82420   else if lwrc$(editorType$)=lwrc$('wordprocessor') then
+82420   else if lwrc$(efEditorType$)=lwrc$('text') then
 82440     fnureg_read('Text_Editor',efExe$,fn_text_editor_default$)
 82460     efWaitText$='Text Editor'
+82420   else 
+82430     pr 'unrecognized Editor Type: '&efEditorType$ : pause
 82480   end if
 82500   ! /r
 82520   ! r: determine efEditOnClientCopyOfFile$
