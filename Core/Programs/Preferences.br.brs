@@ -517,7 +517,7 @@
 70040     setup=1
 70060     library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt ,fnerror,fntos,fnchk,fnreg_read,fnreg_write,fnbutton,fncmdkey,fnureg_read,fnureg_write,fncomboa,fnbutton_or_disabled,fnopen_receipt_printer,fnclose_receipt_printer,fnclient_has,fnMsExe$
 70070     library 'S:\Core\Library': fnHand_Held_Device_list,fnhand_held_device$,fnopt,fngetpp,fncopyfile
-70072     library 'S:\Core\Library': fnWaitForWpToCloseStart,fnWaitForWpToCloseEnd,fnmakesurepathexists
+70072     library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
 70080     on error goto ERTN
 70090     dim resp$(20)*256,cap$*128,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256 ! ,client_report_cache$*256
 70100     dim text_editor$*256
@@ -573,41 +573,64 @@
 78340   fnureg_read('color.'&attribute$&'.foreground',foreground$) : if foreground$='' then foreground$=foreground_default$
 78360   fnureg_read('color.'&attribute$&'.background',background$) : if background$='' then background$=background_default$
 78380   execute 'Config Attribute '&attribute$&' /'&foreground$&':'&background$ error ignore ! pr 'config attribute '&attribute$&' /'&foreground$&':'&background$ : pause
-78400 fnend 
-79000 def library fnEditInWordProcessor(ewpFile$*256; ewpForce$,ewpOptions$,ewpSwitches$)
-79020   if ~setup then let fn_setup
-79040   fnEditInWordProcessor=fn_editInWordProcessor(ewpFile$, ewpForce$,ewpOptions$,ewpSwitches$)
-79060 fnend 
-79080 def fn_editInWordProcessor(ewpFile$*256; ewpForce$,ewpOptions$,ewpSwitches$)
-79100   dim ewpWordProcessorExe$*256
-79120   fn_get_wordprocessor_exe(ewpWordProcessorExe$, ewpForce$)
-79160   dim ewpFilePath$*256,ewpFileName$*128,ewpFileExt$*128
-79180   fngetpp(ewpFile$,ewpFilePath$,ewpFileName$,ewpFileExt$)
-79200   dim ewpEditOnClientCopyOfFile$*256
-79210   ewpEditOnClientCopyOfFile$=env$('at')&'C:\ProgramData\ACS\Session'&session$&'\'&ewpFileName$&ewpFileExt$
-79220   fnmakesurepathexists(ewpEditOnClientCopyOfFile$)
-79240   fncopyfile(ewpFile$,ewpEditOnClientCopyOfFile$)
-79250   fnWaitForWpToCloseStart : pr ewpWordProcessorExe$
-79260   execute 'SY -w -@ '&ewpWordProcessorExe$&' "'&os_filename$(ewpEditOnClientCopyOfFile$)&'" -n'
-79270   fnWaitForWpToCloseEnd
-79290   ! sleep(.2)  <maybe this would be a good idea if copies start to error or fail.  it'd give the wp a little longer to complete save...  but in a perfect world it isn't necessary
-79300   fncopyfile(ewpEditOnClientCopyOfFile$,ewpFile$)
-79320 fnend 
-80000 def library fntext_editor(te_text_file$*256; te_options$,updateAfterEdit)
+78400 fnend
+80000 def library fnEditFile(editorType$,fileToEdit$*256)
 80020   if ~setup then let fn_setup
-80040   fntext_editor=fn_text_editor(te_text_file$, te_options$,updateAfterEdit)
-80060 fnend 
-82000 def fn_text_editor(te_text_file$*256; te_options$,updateAfterEdit)
-82040   fnureg_read('Text_Editor',text_editor$,fn_text_editor_default$)
-82060   execute 'SY -w -C "'&text_editor$&'" "'&os_filename$(te_text_file$)&'"'
-82080 fnend 
+80040   fnEditFile=fn_editFile(editorType$,fileToEdit$)
+80060 fnend
+82000 def fn_editFile(editorType$,efFileToEdit$*256)
+82020   ! editorType$ - wordprocessor, atlantis, word or text
+82040   efWaitText$=''
+82060   efForce$=''
+82080   efSwitches$=''
+82100   if lwrc$(editorType$)=lwrc$('atlantis') then
+82120     editorType$
+82140     efForce$='atlantis'
+82160     efWaitText$='Atlantis'
+82180   else if lwrc$(editorType$)=lwrc$('word') then
+82200     efForce$='word'
+82220     efWaitText$='Microsoft Word'
+82240   end if
+82260   ! r: get the executable and set any switches
+82280   if lwrc$(editorType$)=lwrc$('wordprocessor') then
+82300     dim efExe$*256
+82320     fn_get_wordprocessor_exe(efExe$, efForce$)
+82340     if efWaitText$='' then efWaitText$='Word Processor'
+82360     if pos(lwrc$(efExe$),'atlantis.exe')>0 or pos(lwrc$(efExe$),'awp.exe')>0 then
+82380       efSwitches$=' -n'
+82400     end if
+82420   else if lwrc$(editorType$)=lwrc$('wordprocessor') then
+82440     fnureg_read('Text_Editor',efExe$,fn_text_editor_default$)
+82460     efWaitText$='Text Editor'
+82480   end if
+82500   ! /r
+82520   ! r: determine efEditOnClientCopyOfFile$
+82540   dim efEditOnClientCopyOfFile$*256
+82560   if clientServer then
+82580     dim efFilePath$*256,efFileName$*128,efFileExt$*128
+82600     fngetpp(efFileToEdit$,efFilePath$,efFileName$,efFileExt$)
+82620     efEditOnClientCopyOfFile$=env$('at')&'C:\ProgramData\ACS\Session'&session$&'\'&efFileName$&efFileExt$
+82640     fnmakesurepathexists(efEditOnClientCopyOfFile$)
+82660     fncopyfile(efFileToEdit$,efEditOnClientCopyOfFile$)
+82680   else
+82700     efEditOnClientCopyOfFile$=efFileToEdit$
+82720   end if
+82740   ! /r
+82760   fnWaitForShellCloseStart(efWaitText$)
+82780   exe 'Sy -w -@ '&efExe$&' "'&os_filename$(efEditOnClientCopyOfFile$)&'"'&efSwitches$
+82800   fnWaitForShellCloseEnd
+82820   if clientServer then
+82840     ! sleep(.2)  <maybe this would be a good idea if copies start to error or fail.  it'd give the wp a little longer to complete save...  but in a perfect world it isn't necessary
+82860     fncopyfile(ewpEditOnClientCopyOfFile$,ewpFile$)
+82880   end if
+82900 fnend
 84000 def fn_text_editor_default$*256
 84080   dim atlantis_path$*256,text_editor$*256
-84100   if exists(":C:\Windows\Notepad.exe") then 
+84100   if exists(env$('at')&":C:\Windows\Notepad.exe") then 
 84120     text_editor$='C:\Windows\Notepad.exe'
-84140   else if exists(":C:\Program Files (x86)\Atlantis\Atlantis.exe") then 
+84140   else if exists(env$('at')&":C:\Program Files (x86)\Atlantis\Atlantis.exe") then 
 84160     text_editor$='C:\Program Files (x86)\Atlantis\Atlantis.exe'
-84180   else if exists(":C:\Program Files\Atlantis\Atlantis.exe") then 
+84180   else if exists(env$('at')&":C:\Program Files\Atlantis\Atlantis.exe") then 
 84200     text_editor$='C:\Program Files\Atlantis\Atlantis.exe'
 84220   else 
 84240     text_editor$=os_filename$('S:\Core\Atlantis Nova\Atlantis.exe')

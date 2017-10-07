@@ -1424,7 +1424,7 @@
 77140       open #hTmp:=fngethandle: "Name="&notefile$&",Replace",display,output 
 77160       close #hTmp: 
 77180     end if  ! exists(notefile$)=0
-77200     fntext_editor(os_filename$(notefile$)) ! execute 'SY -w '&atlantis$&' "'&os_filename$(notefile$)&'" -n' ! ioerr [itself]
+77200     fnEditFile('text',notefile$) ! execute 'SY -w '&atlantis$&' "'&os_filename$(notefile$)&'" -n' ! ioerr [itself]
 77220 fnend
 78000 def fn_record_previous_save
 78020   for rp_item=1 to udim(mat rp_prev$)
@@ -1725,7 +1725,7 @@
 90030     library 'S:\Core\Library': fncmbact,fncombof,fncmbrt2
 90032     library 'S:\Core\Library': fnMeterAddressUpdate,fnMeterAddressLocationID
 90040     library 'S:\Core\Library': fncmdset,fncmdkey,fngethandle,fnreg_read
-90050     library 'S:\Core\Library': fntransfile,fncreg_read,fncreg_write,fnopen_meter,fntext_editor
+90050     library 'S:\Core\Library': fntransfile,fncreg_read,fncreg_write,fnopen_meter,fnEditFile
 90060     library 'S:\Core\Library': fnureg_write,fnureg_read,fnbutton_or_disabled,fnget_services,fnkey_change
 90070     library 'S:\Core\Library': fnWorkOrderList,fnWorkOrderAdd
 90072     library 'S:\Core\Library': fnfm$,fnMeterAddressName$

@@ -306,23 +306,23 @@
 50060   else if print_report_nowait or fnprocess=1 then 
 50080     execute 'Sy -w -C '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
 50100   else 
-50120     fn_waitForWpToCloseStart
+50120     fn_waitForWpToCloseStart('Word Processor')
 50200     execute 'Sy -w '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
 50230     fn_waitForWpToCloseEnd
 50240   end if 
 50260  ! pause
 50280 fnend 
-51000   def library fnWaitForWpToCloseStart
+51000   def library fnWaitForShellCloseStart(whatsRunning$*256)
 51020     if ~setup then let fn_setup
-51040     fnWaitForWpToCloseStart=fn_waitForWpToCloseStart
+51040     fnWaitForShellCloseStart=fn_waitForWpToCloseStart(whatsRunning$)
 51060   fnend
-51080   def fn_waitForWpToCloseStart
+51080   def fn_waitForWpToCloseStart(whatsRunning$*256)
 51140     open #h_win_wait=fngethandle: "srow=1,scol=1,rows="&env$('acs_win_rows')&",cols="&env$('acs_win_cols')&",border=none,picture=S:\Core\disable.png:TILE",display,output 
-51160     pr #h_win_wait,fields str$(val(env$('acs_win_rows'))/2)&',1,Cc '&env$('acs_win_cols')&',[Screen]': 'Close your word processor to continue.'
+51160     pr #h_win_wait,fields str$(val(env$('acs_win_rows'))/2)&',1,Cc '&env$('acs_win_cols')&',[Screen]': 'Close your '&whatsRunning$&' to continue.'
 51180   fnend 
-51200   def library fnWaitForWpToCloseEnd
+51200   def library fnWaitForShellCloseEnd
 51220     if ~setup then let fn_setup
-51240     fnWaitForWpToCloseEnd=fn_waitForWpToCloseEnd
+51240     fnWaitForShellCloseEnd=fn_waitForWpToCloseEnd
 51260   fnend
 51280   def fn_waitForWpToCloseEnd
 51300     close #h_win_wait: ioerr ignore
