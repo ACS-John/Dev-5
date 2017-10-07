@@ -516,23 +516,26 @@
 70020   if ~setup then 
 70040     setup=1
 70060     library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt ,fnerror,fntos,fnchk,fnreg_read,fnreg_write,fnbutton,fncmdkey,fnureg_read,fnureg_write,fncomboa,fnbutton_or_disabled,fnopen_receipt_printer,fnclose_receipt_printer,fnclient_has,fnMsExe$
-70070     library 'S:\Core\Library': fnHand_Held_Device_list,fnhand_held_device$,fnopt,fngetpp,fncopyfile
-70072     library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
-70080     on error goto ERTN
-70090     dim resp$(20)*256,cap$*128,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256 ! ,client_report_cache$*256
-70100     dim text_editor$*256
-70120     default_min_fontsize_height$='14'
-70140     default_min_fontsize_width$='6'
-70160     dim background_picture_default$*256
-70180     background_picture_default$=os_filename$('S:\Core\wallpaper\301H.jpg')
-70200     !
-70220     dim printer_list$(1)*256
-70240     printer_list(mat printer_list$) ! printer_count=printer_list(mat printer_list$)
+70080     library 'S:\Core\Library': fnHand_Held_Device_list,fnhand_held_device$,fnopt,fngetpp,fncopyfile
+70100     library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
+70120     on error goto ERTN
+70140     dim resp$(20)*256,cap$*128,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256 ! ,client_report_cache$*256
+70160     dim text_editor$*256
+70180     default_min_fontsize_height$='14'
+70200     default_min_fontsize_width$='6'
+70220     dim background_picture_default$*256
+70240     background_picture_default$=os_filename$('S:\Core\wallpaper\301H.jpg')
 70260     !
-70280     dim pdf_or_printace$(2)*12
-70300     pdf_or_printace$(1)='PrintAce'
-70320     pdf_or_printace$(2)='PDF'
-70340   end if 
+70280     dim printer_list$(1)*256
+70300     printer_list(mat printer_list$) ! printer_count=printer_list(mat printer_list$)
+70320     !
+70340     dim pdf_or_printace$(2)*12
+70360     pdf_or_printace$(1)='PrintAce'
+70380     pdf_or_printace$(2)='PDF'
+70400     !
+70420     if env$('BR_MODEL')='CLIENT/SERVER' then clientServer=1 else clientServer=0
+70440     !
+70460   end if 
 70990 fnend 
 72000 IGNORE: continue 
 74000 ! <Updateable Region: ERTN>
@@ -637,9 +640,9 @@
 84220   else 
 84240     text_editor$=os_filename$('S:\Core\Atlantis Nova\Atlantis.exe')
 84260   end if 
-84280   if ~exists(br_filename$(trim$(text_editor$,'"'))) then 
-84300     text_editor$='"'&os_filename$('S:\Core\Atlantis Nova\Atlantis.exe')&'"'
-84320   end if 
+84280   ! if ~exists(br_filename$(trim$(text_editor$,'"'))) then 
+84300   !   text_editor$='"'&os_filename$('S:\Core\Atlantis Nova\Atlantis.exe')&'"'
+84320   ! end if 
 84340   text_editor$=trim$(text_editor$,'"')
 84350   fn_text_editor_default$=text_editor$
 84360 fnend 
