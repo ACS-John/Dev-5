@@ -626,7 +626,7 @@
 82800   fnWaitForShellCloseEnd
 82820   if clientServer then
 82840     ! sleep(.2)  <maybe this would be a good idea if copies start to error or fail.  it'd give the wp a little longer to complete save...  but in a perfect world it isn't necessary
-82860     fncopyfile(ewpEditOnClientCopyOfFile$,ewpFile$)
+82860     fncopyfile(efEditOnClientCopyOfFile$,ewpFile$)
 82880   end if
 82900 fnend
 84000 def fn_text_editor_default$*256
