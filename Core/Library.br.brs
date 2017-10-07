@@ -105,13 +105,13 @@
 40374   library 'S:\Core\copy.br': fnRemoveDeletedRecords
 40376   fnRemoveDeletedRecords=fnRemoveDeletedRecords(from$)
 40378 fnend 
-40382 def library fnWaitForWpToCloseStart
-40384   library 'S:\Core\Print.br': fnWaitForWpToCloseStart
-40386   fnWaitForWpToCloseStart=fnWaitForWpToCloseStart
+40382 def library fnWaitForShellCloseStart(whatsRunning$*256)
+40384   library 'S:\Core\Print.br': fnWaitForShellCloseStart
+40386   fnWaitForShellCloseStart=fnWaitForShellCloseStart(whatsRunning$)
 40388 fnend 
-40392 def library fnWaitForWpToCloseEnd
-40394   library 'S:\Core\Print.br': fnWaitForWpToCloseEnd
-40396   fnWaitForWpToCloseEnd=fnWaitForWpToCloseEnd
+40392 def library fnWaitForShellCloseEnd
+40394   library 'S:\Core\Print.br': fnWaitForShellCloseEnd
+40396   fnWaitForShellCloseEnd=fnWaitForShellCloseEnd
 40398 fnend 
 41000 ! r: fnSnap
 41020 def library fnlistprint(winno,spec$*100;header$*200,footer$*200,title$*200,mat selected,nolines,nosort,nototals$*200,nosubtotal,_print)
@@ -271,18 +271,14 @@
 45210   def library fndecimal_assumed
 45220     library 'S:\Core\Programs\Preferences.br': fndecimal_assumed
 45230     fndecimal_assumed=fndecimal_assumed
-45240   fnend 
-45272   def library fnEditInWordProcessor(ewpFile$*256; ewpForce$,ewpOptions$,ewpSwitches$)
-45274     library 'S:\Core\Programs\Preferences.br': fnEditInWordProcessor
-45276     fnEditInWordProcessor=fnEditInWordProcessor(ewpFile$, ewpForce$,ewpOptions$,ewpSwitches$)
-45278   fnend 
+45240   fnend
 45282   def library fnget_wordprocessor_exe(&wp_exe$; force$)
 45284     library 'S:\Core\Programs\Preferences.br': fnget_wordprocessor_exe
 45286     fnget_wordprocessor_exe=fnget_wordprocessor_exe(wp_exe$, force$)
 45288   fnend 
-45330   def library fntext_editor(te_text_file$*256; te_options$,updateAfterEdit)
-45340     library 'S:\Core\Programs\Preferences.br': fntext_editor
-45350     fntext_editor=fntext_editor(te_text_file$, te_options$,updateAfterEdit)
+45330   def library fnEditFile(editorType$,fileToEdit$*256)
+45340     library 'S:\Core\Programs\Preferences.br': fnEditFile
+45350     fnEditFile=fnEditFile(editorType$,fileToEdit$)
 45360   fnend 
 45410   def library fnapply_theme(; disableConScreenOpenDflt)
 45420     library 'S:\Core\Programs\Preferences.br': fnapply_theme

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubPdNot
 00020 ! Past Due Notices
 00030 ! _______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnopt,fnerror,fnopenprn,fncloseprn,fnxit,fncomboa,fnfra,fncmbrt2,fncmbact,fnchk,fncmdkey,fndat,fnd1,fncmdset,fntop,fngethandle,fngetdir2,fnreg_read,fnreg_write,fnpa_finis,fnprint_file_name$,fncreg_read,fncreg_write,fnpa_open,fnpa_newpage,fncustomer_address,fnpa_txt,fnfree,fnEditInWordProcessor,fncopy
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnopt,fnerror,fnopenprn,fncloseprn,fnxit,fncomboa,fnfra,fncmbrt2,fncmbact,fnchk,fncmdkey,fndat,fnd1,fncmdset,fntop,fngethandle,fngetdir2,fnreg_read,fnreg_write,fnpa_finis,fnprint_file_name$,fncreg_read,fncreg_write,fnpa_open,fnpa_newpage,fncustomer_address,fnpa_txt,fnfree,fnEditFile,fncopy
 00050 ! _______________________________________________________________________
 00060   on error goto ERTN
 00080 ! r: dims
@@ -616,10 +616,10 @@
 41380     dim newname$*256
 41400     newname$=trim$(resp$(1))&'.rtf' ! &".rtf" ! trim$(resp$(1)(1:8))&".rtf"
 41420     fnCopy("S:\Core\default\plain.rtf",os_filename$(env$('Q')&"\UBmstr\"&newname$))
-41440     fnEditInWordProcessor(os_filename$(env$('Q')&"\UBmstr\"&newname$),'atlantis',' -n')
+41440     fnEditFile('atlantis',env$('Q')&"\UBmstr\"&newname$)
 41460     goto UBFORM ! /r
 41480   else if ckey=3 then 
-41500     fnEditInWordProcessor(os_filename$(env$('Q')&"\UBmstr\"&flname$),'atlantis',' -n')
+41500     fnEditFile('atlantis',env$('Q')&"\UBmstr\"&flname$)
 41520     goto UBFORM
 41540   else if ckey=7 then 
 41560     fnFree(env$('Q')&"\UBmstr\"&trim$(flname$))
@@ -681,7 +681,7 @@
 46120     granby_print_count=0
 46140     if h_prnt1 then 
 46160       close #h_prnt1: : h_prnt1=0
-46180       fnEditInWordProcessor(os_filename$(tmp_rtf_filename$),'atlantis',' -n')
+46180       fnEditFile('atlantis',tmp_rtf_filename$)
 46200     else 
 46220       fncloseprn
 46240     end if 
@@ -694,7 +694,7 @@
 46380 ! 
 46400   if h_prnt1 then 
 46420     close #h_prnt1: : h_prnt1=0
-46440     fnEditInWordProcessor(os_filename$(tmp_rtf_filename$),'atlantis',' -n')
+46440     fnEditFile('atlantis',tmp_rtf_filename$)
 46460   else 
 46480     fncloseprn
 46500   end if  ! /r

@@ -2,7 +2,7 @@
 18010   if ~setup then
 18020     setup=1
 18028     library 'S:\Core\Library': fnsave_as_path$,fngethandle,fnreg_close,fnreg_write
-18030     library 'S:\Core\Library': fnmsgbox,fntext_editor,fnSystemName$,fnlog
+18030     library 'S:\Core\Library': fnmsgbox,fnEditFile,fnSystemName$,fnlog
 18032     library 'S:\Core\Library': fnacs,fncmdset,fntos,fnlbl,fntxt,fncomboa
 18034     library 'S:\Core\Library': fnputcno,fncursys$,fncheckfileversion,fnmakesurepathexists
 18036     library 'S:\Core\Library': fnstatus,fnstatus_close,fnstatus_pause,fnCopy,fnindex_sys
@@ -140,8 +140,8 @@
 42440       ml$(4)='Display the log now?'
 42460       fnmsgbox(mat ml$,resp$,"ACS",4+64)
 42480       if resp$="Yes" then 
-42890         if env$('acsDeveloper')<>'' then pr 'just before fntext_editor("'&arc_filename$&'")' : pause
-42500         fntext_editor(arc_filename$)
+42890         if env$('acsDeveloper')<>'' then pr 'just before fnEditFile("text","'&arc_filename$&'")' : pause
+42500         fnEditFile('text',arc_filename$)
 42520       end if 
 42540     end if 
 42560   else 

@@ -46,7 +46,7 @@
 11740     library 'S:\Core\Library': fnreport_cache_folder_current$
 11760     library 'S:\Core\Library': fnAddOneC
 11780     library 'S:\Core\Library': fnFM
-11800     library 'S:\Core\Library': fnHamsterFio,fnEditInWordProcessor
+11800     library 'S:\Core\Library': fnHamsterFio,fnEditFile
 11820     library 'S:\Core\Library': fnxit
 11840     library 'S:\Core\Library': fnFavoriteAdd,fnFavoriteList,fnFavoriteDel
 11860     library 'S:\Core\Library': fnFileSaveAs,fnOpenPartial
@@ -495,10 +495,9 @@
 25650   if ~cewForceAtlantis and cewMakeIfNecessary then
 25660     pr 'can only MakeIfNEcessary if also forceAtlantis.  Please consider enhancing the code.' : pause
 25670   end if
-25680   if cewForceAtlantis then cewForce$='atlantis' else cewForce$=''
-25690   if cewMakeIfNecessary then cewOption$=' -n' else cewOption$=''
+25680   if cewForceAtlantis then cewForce$='atlantis' else cewForce$='wordprocessor'
 25700   !
-25710   fn_callEditInWordProcessor=fnEditInWordProcessor(fileToEditInWp$,cewForce$,cewOption$)
+25710   fn_callEditInWordProcessor=fnEditFile(cewForce$,fileToEditInWp$)
 25720 fnend
 26000 def fn_dashboard_height
 26020   if env$('cursys')="OE" then
