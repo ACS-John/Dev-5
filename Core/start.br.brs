@@ -79,23 +79,23 @@
 11040       if env$('programdata')='' and env$('CsServerTemp')<>'' then
 11060       setenv('programdata',env$('CsServerTemp'))
 11080       end if
-11160       setenv('Temp',env$('programdata')&'\ACS\Temp\Session'&session$)
+11100       setenv('Temp',env$('programdata')&'\ACS\Temp\Session'&session$)
 11120       fnmakesurepathexists(env$('Temp')&'\')
-11180     end if
-11200     if ~fn_temp_dir_validate then goto XIT ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto XIT
-11202     if pos(env$('Q'),' ')>0 then 
-11204       fn_setQ(fnshortpath$(env$('Q')))
-11206     end if
-11208     if pos(env$('Qbase'),' ')>0 then 
-11210       dim New2Qbase$*256
-11212       New2Qbase$=fnshortpath$(env$('Qbase')) 
-11214       setenv('QBase','') 
-11216       fn_setQbase(New2Qbase$)
-11218     end if
-11220     if env$('client_temp')='' then let setenv('Client_TEMP',env$('Temp'))
-11240     if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto XIT
-11260     if ~fn_rights_test(env$('temp'),'Correct your Temp environment varialbe.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
-11280     fn_spoolPath$(1)
+11140     end if
+11160     if ~fn_temp_dir_validate then goto XIT ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto XIT
+11180     if pos(env$('Q'),' ')>0 then 
+11200       fn_setQ(fnshortpath$(env$('Q')))
+11220     end if
+11240     if pos(env$('Qbase'),' ')>0 then 
+11260       dim New2Qbase$*256
+11280       New2Qbase$=fnshortpath$(env$('Qbase')) 
+11300       setenv('QBase','') 
+11320       fn_setQbase(New2Qbase$)
+11340     end if
+11360     if env$('client_temp')='' then let setenv('Client_TEMP',env$('Temp'))
+11380     if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto XIT
+11400     if ~fn_rights_test(env$('temp'),'Correct your Temp environment varialbe.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
+11420     fn_spoolPath$(1)
 12000     if env$('BR_MODEL')='CLIENT/SERVER' then
 12010       ! setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico") ! commented out because it made the icon look funny - filled with white and so long as i change the icon on the brclient executable than I'll shouldn't need to re-set it anyway.
 12020     else
