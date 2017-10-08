@@ -587,10 +587,11 @@
 82060   efForce$=''
 82080   efSwitches$=''
 82100   if lwrc$(efEditorType$)=lwrc$('atlantis') then
-82120     efEditorType$
+82120     efEditorType$='wordprocessor'
 82140     efForce$='atlantis'
 82160     efWaitText$='Atlantis'
 82180   else if lwrc$(efEditorType$)=lwrc$('word') then
+82190     efEditorType$='wordprocessor'
 82200     efForce$='word'
 82220     efWaitText$='Microsoft Word'
 82240   end if
@@ -614,7 +615,7 @@
 82560   if clientServer then
 82580     dim efFilePath$*256,efFileName$*128,efFileExt$*128
 82600     fngetpp(efFileToEdit$,efFilePath$,efFileName$,efFileExt$)
-82620     efEditOnClientCopyOfFile$=env$('at')&'C:\ProgramData\ACS\Session'&session$&'\'&efFileName$&efFileExt$
+82620     efEditOnClientCopyOfFile$=env$('at')&'C:\ProgramData\ACS\Temp\Session'&session$&'\'&efFileName$&efFileExt$
 82640     fnmakesurepathexists(efEditOnClientCopyOfFile$)
 82660     fncopyfile(efFileToEdit$,efEditOnClientCopyOfFile$)
 82680   else

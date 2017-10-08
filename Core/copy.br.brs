@@ -111,7 +111,7 @@
 80184   end if 
 80188   goto XIT
 80190   ! ______________________________________________________________________
-80200   COPY_FROM_CLIENT_TO_SERVER: ! 
+80200   COPY_FROM_CLIENT_TO_SERVER: ! r:
 80210   open #20: "Name=ftp"&wsid$&".tmp,Size=0,RecL=255,Replace",display,output 
 80220   ! pr #20: "open "&RTRM$(SERVERIP$)
 80230   pr #20: "WO"&str$(val(wsid$)-50) ! env$("LOGIN_NAME")
@@ -119,12 +119,12 @@
 80250   pr #20: "put "&rtrm$(source$)&" "&rtrm$(destination$)
 80260   pr #20: "bye"
 80270   close #20: 
-80280   open #20: "Name=csCopy"&wsid$&".bat,Size=0,RecL=255,Replace",display,output 
+80280   open #20: "Name=csCopy"&wsid$&".cmd,Size=0,RecL=255,Replace",display,output 
 80290   pr #20: "ftp -s:ftp"&wsid$&".tmp "&rtrm$(serverip$)
 80300   pr #20: "pause"
 80310   close #20: 
-80320   execute "Sy csCopy"&wsid$&".bat"
-80330   return 
+80320   execute "Sy csCopy"&wsid$&".cmd"
+80330   return ! /r
 80340   ! ______________________________________________________________________
 80350   COPY_FROM_CLIENT_TO_CLIENT: pause 
 80360   return 
@@ -153,7 +153,7 @@
 84060   execute 'Rename "'&from$&'" "'&to$&'" -n'
 84080 fnend
 86000 def library fnRemoveDeletedRecords(from$*256)
-86020  execute 'copy "'&from$&'" "'&env$('temp')&'\acs\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr COPY_FAIL
-86040  execute 'copy "'&env$('temp')&'\acs\Session'&session$&'" "'&from$&'\removeDeletedRecords.tmp" -D' ioerr COPY_FAIL
-86060  execute 'free "'&env$('temp')&'\acs\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr ignore
+86020  execute 'copy "'&from$&'" "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr COPY_FAIL
+86040  execute 'copy "'&env$('temp')&'\acs\temp\Session'&session$&'" "'&from$&'\removeDeletedRecords.tmp" -D' ioerr COPY_FAIL
+86060  execute 'free "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr ignore
 86080 fnend

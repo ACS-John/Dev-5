@@ -79,11 +79,8 @@
 11040       if env$('programdata')='' and env$('CsServerTemp')<>'' then
 11060       setenv('programdata',env$('CsServerTemp'))
 11080       end if
-11090       if pos(env$('programdata'),'/')>0 then slash$='/' else slash$='\'
-11100       if ~exists(env$('programdata')&slash$&'ACS_BR_CS_Temp_s'&session$) then
-11120         execute 'MkDir '&env$('programdata')&slash$&'ACS_BR_CS_Temp_s'&session$
-11140       end if
-11160       setenv('Temp',env$('programdata')&slash$&'ACS_BR_CS_Temp_s'&session$)
+11160       setenv('Temp',env$('programdata')&'\ACS\Temp\Session'&session$)
+11120       fnmakesurepathexists(env$('Temp')&'\')
 11180     end if
 11200     if ~fn_temp_dir_validate then goto XIT ! if env$('BR_MODEL')<>'CLIENT/SERVER' and ~fn_temp_dir_validate then goto XIT
 11202     if pos(env$('Q'),' ')>0 then 
@@ -105,11 +102,7 @@
 12030       setenv("Icon","S:\Core\Icon\ACS-v5-32x32-32bit.ico")
 12040     end if
 12050     fnMakeSurepathExists(env$('Q')&"\Data\")
-12060     ! fnMakeSurepathExists(env$('Q')&"\INI\")
-12070     ! fnMakeSurepathExists(env$('Q')&"\INI\Core\")
-12080     ! fnMakeSurepathExists(env$('Q')&"\INI\Core\PrtFlex\")
-12100   ! if ~exists(env$('Q')&"\Share") then execute "MkDir "&env$('Q')&"\Share"
-12120     fnMakeSurepathExists(env$('Q')&'\Report Cache')
+12120     fnMakeSurepathExists(env$('Q')&'\Report Cache\')
 12140     if fn_move_core_data('CityStZip.dat') then let fn_move_core_data('CityStZip.idx',1)
 12160     if fn_move_core_data('1099Box.dat') then let fn_move_core_data('1099Box.idx',1)
 12180   ! fn_udf_resolve
@@ -530,9 +523,8 @@
 56140       end if
 56160       goto CE_MAKE_TEMP_FILE
 56180     else if (ce_retry_4152_count+=1)<=9 then 
-56200       if ~exists('@::C:\ProgramData') then execute 'mkdir @::C:\ProgramData'
-56220       if ~exists('@::C:\ProgramData\ACS') then execute 'mkdir @::C:\ProgramData\ACS'
-56240       ce_os_temp_file$='C:\ProgramData\ACS\cs-'&session$&'.txt'
+56200       fnmakesurepathexists('@::C:\ProgramData\ACS\Temp\Session'&session$&'\')
+56240       ce_os_temp_file$='C:\ProgramData\ACS\Temp\Session'&session$&'\cs.txt'
 56250       ce_br_temp_file$='@::'&ce_os_temp_file$
 56260       goto CE_MAKE_TEMP_FILE
 56280     end if
