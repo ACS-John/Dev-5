@@ -298,15 +298,13 @@
 54220       ! fnputcno(destination_company_number) : cno=destination_company_number
 54240       ! fnstatus('Set active Company Number to: '&str$(destination_company_number))
 54260       ! 
-54280       dim omSourceFilter$(0)*64
+54280       dim omSourceFilter$*64
 54300       if cursys$='UB' then
-54320         mat omSourceFilter$(1)
-54340         omSourceFilter$(1)='*.h'&str$(source_company_number)&' Notes.h'&str$(source_company_number)&'\*'
+54340         omSourceFilter$='*.h'&str$(source_company_number)&' Notes.h'&str$(source_company_number)&'\*'
 54360       else
-54380         mat omSourceFilter$(1)
-54400         omSourceFilter$(1)='*.h'&str$(source_company_number)
+54400         omSourceFilter$='*.h'&str$(source_company_number)
 54420       end if
-54440       fn_extract_appropriate_files(tmpFileOpen$,mat omSourceFilter$,env$('temp')&'\acs\OpenPartial\')
+54440       fn_extract_appropriate_files(tmpFileOpen$,omSourceFilter$,env$('temp')&'\acs\OpenPartial\')
 56000       if fn_analyze_7zip_compresslog(env$('temp')&'\acs\OpenPartial_Log.txt','Successfully Opened '&fnSystemName$&' company '&env$('cno')&' from ',omFileOpen$, 1) then 
 56020         fnreg_write('Last Open Partial Date',date$('ccyy/mm/dd'))
 56040         fnreg_write('Last Open Partial File',omFileOpen$(pos(omFileOpen$,'\',-1)+1:len(omFileOpen$)))
@@ -382,38 +380,34 @@
 59140     pause
 59160   end if 
 59440 fnend
-62000 def fn_extract_appropriate_files(eafSourceFile$*256,mat eafSourceFilter$,eafDestinationFolder$*256)
-62020   ! pr 'eafSourceFile$="'&eafSourceFile$&'"'
-62040   ! pr 'eafSourceFilter$="'&eafSourceFilter$&'"'
-62060   ! pr 'eafDestinationFolder$="'&eafSourceFilter$&'"'
-62080   execute 'Sy RmDir "'&eafDestinationFolder$&'" /s /q'
-62100   open #h_tmp:=fngethandle: 'Name= '&env$('temp')&'\acs\openPartial'&session$&'.cmd'&',RecL=512,Replace',display,output 
-62120   pr #h_tmp: '@echo off'
-62140   pr #h_tmp: '@echo Advanced Computer Services LLC'
-62160   pr #h_tmp: '@echo Opening: "'&eafSourceFile$&'"'
-62180   pr #h_tmp: '@echo.'
+62000 def fn_extract_appropriate_files(eafSourceFile$*256,eafSourceFilter$*128,eafDestinationFolder$*256)
+62060   open #h_tmp:=fngethandle: 'Name= '&env$('temp')&'\acs\openPartial'&session$&'.cmd,RecL=512,Replace',display,output 
+62080   pr #h_tmp: '@echo off'
+62100   pr #h_tmp: '@echo Advanced Computer Services LLC'
+62120   pr #h_tmp: 'set openFile="'&eafSourceFile$&'"'
+62140   pr #h_tmp: 'set log="'&env$('temp')&'\acs\OpenPartial_Log.txt"'
+62160   pr #h_tmp: 'set destinationDir="'&eafDestinationFolder$&'"'
+62180   pr #h_tmp: 'set filter='&eafSourceFilter$
 62200   pr #h_tmp: '@echo.'
-62220   for eafSourceFilterItem=1 to udim(mat eafSourceFilter$)
-62240     pr #h_tmp: '@echo Command('&str$(eafSourceFilterItem)&'): '&env$('path_to_7z_exe')&' x -r -aoa "'&eafSourceFile$&'" -o"'&eafDestinationFolder$&'" '&eafSourceFilter$(eafSourceFilterItem)&' > "'&env$('temp')&'\acs\OpenPartial_Log.txt"'
-62260   nex eafSourceFilterItem
+62220   pr #h_tmp: '@echo Opening: %openFile%'
+62240   pr #h_tmp: '@echo.'
+62260   pr #h_tmp: '@echo Command: '&env$('path_to_7z_exe')&' x -r -aoa %openFile% -o%destinationDir% %filter%'
 62280   pr #h_tmp: '@echo.'
 62300   pr #h_tmp: '@echo.'
-62320   pr #h_tmp: '@echo Relative To: '&eafDestinationFolder$
+62320   pr #h_tmp: '@echo Relative To: %destinationDir%'
 62340   pr #h_tmp: '@echo.'
 62360   pr #h_tmp: '@echo.'
-62380   pr #h_tmp: '@echo Output Log: "'&env$('temp')&'\acs\OpenPartial_Log.txt"'
+62380   pr #h_tmp: '@echo Output Log: %log%'
 62400   pr #h_tmp: '@echo.'
 62420   pr #h_tmp: '@echo.'
-62440   pr #h_tmp: '@echo OPEN PROCESSING...'
-62460  !
-62480   for eafSourceFilterItem=1 to udim(mat eafSourceFilter$)
-62500     pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&eafSourceFile$&'" -o"'&eafDestinationFolder$&'" '&eafSourceFilter$(eafSourceFilterItem)&' > "'&env$('temp')&'\acs\OpenPartial_Log.txt"'
-62520   nex eafSourceFilterItem
-62540   close #h_tmp: 
-62550     if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes.h### should be extracted too' : pause
-62560   execute 'sy "'&env$('temp')&'\acs\openPartial'&session$&'.cmd"'
-62580     ! if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes.h### should be extracted too' : pause
-62990 fnend
+62440   pr #h_tmp: '@echo OPENING...'
+62450   pr #h_tmp: 'Sy RmDir %destinationDir% /s /q'
+62460   !
+62480   pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa %openFile% -o%destinationDir% %filter% > %log%'
+62500   close #h_tmp: 
+62520   ! if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes.h### should be extracted too' : pause
+62540   execute 'sy -s "'&env$('temp')&'\acs\openPartial'&session$&'.cmd"'
+62580 fnend
 64000 def fn_copy_files_in(company_import_path$*256,company_import_extension$,destination_company_number)
 64020   fnFree(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
 64040   fnstatus('Existing files ('&os_filename$(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))&') have been removed.')
