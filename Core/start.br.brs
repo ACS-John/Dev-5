@@ -24,7 +24,7 @@
 03220     end if
 03240     ! /r
 04000     execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'
-04020     library 's:\Core\Library': fnclient$,fnmakesurepathexists,fnshortpath$
+04020     if ~setup then let fn_setup
 04040     fnclient$ ! this needs to be called to set client environment variables (before fn_env_data_default)
 04060     fn_env_data_default
 04080     !
@@ -70,8 +70,7 @@
 05080     execute "load S:\Core\fnWindowsStart.br,resident"
 05081     execute 'load "S:\Core\FileIO\fileio.br",Resident'
 05082     !  maybe but not yet ...     execute "load S:\Core\Client.br,resident"
-10080     fn_setup
-10140     cap$='S:\Core\Start'
+10080     ! fn_setup  <-- already called
 10160     if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' and ~isScreenIOtest then let fncheckcompiled ! sets the current directory to "S:" if it is not already 
 10180     if env$('acsEnableComplier')='Yes' and env$('BR_MODEL')<>'CLIENT/SERVER' then let fn_update_version_for_inno
 11000     if env$('BR_MODEL')='CLIENT/SERVER' then
@@ -105,11 +104,11 @@
 12120     fnMakeSurepathExists(env$('Q')&'\Report Cache\')
 12140     if fn_move_core_data('CityStZip.dat') then let fn_move_core_data('CityStZip.idx',1)
 12160     if fn_move_core_data('1099Box.dat') then let fn_move_core_data('1099Box.idx',1)
-12180   ! fn_udf_resolve
-12200   ! if exists(udf$&"Reads_and_Chgs.h1") then
-12220   !   fn_move_data(udf$&"Reads_and_Chgs.h*",env$('Q')&"\UBmstr\Reads_and_Chgs.h*",1)
-12240   !   fn_move_data(udf$&"Reads_and_Chgs-Key.h*",env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h*",1)
-12260   !  end if
+12180     ! fn_udf_resolve
+12200     ! if exists(udf$&"Reads_and_Chgs.h1") then
+12220     !   fn_move_data(udf$&"Reads_and_Chgs.h*",env$('Q')&"\UBmstr\Reads_and_Chgs.h*",1)
+12240     !   fn_move_data(udf$&"Reads_and_Chgs-Key.h*",env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h*",1)
+12260     !  end if
 12280     if env$('temp')(2:2)=':' then
 12300       execute 'CD '&env$('temp')(1:2)
 12320       execute 'CD '&env$('temp')(3:len(env$('temp')))
@@ -129,7 +128,6 @@
 13240     open #hEd:=fn_gethandle: 'name=ed,replace',d,o
 13260     pr #hEd: "exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"'''
 13280     close #hEd:
-14000   ! setenv("PD",os_filename$('S:\Core\ScreenIO\')) ! for (screenio's version) fnsnap compatibility 
 14020     setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
 14040     ! if isScreenIOtest then disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
 14050     fn_startStatus('Identifying your system...')
@@ -146,7 +144,6 @@
 15020     version_current$=fnacs_version$       
 15030     setenv('acsVersion',version_current$)
 15040     if fn_update_needed(version_prior$,version_current$) then 
-15042       library 's:\Core\Library': fnclient$ 
 15044       fnclient$ ! this needs to be called to set client environment variables
 15060       fnchain('S:\Core\Programs\Update.br')
 15080     end if 
@@ -249,10 +246,10 @@
 22020   if ~setup then 
 22040     setup=1
 22060     option retain 
-22080     dim cap$*128
-22100     library 'S:\Core\Library': fnerror,fnchain,fncheckcompiled,fnapply_theme,fngetdir2,fnCopy,fnshortpath$,fnureg_read,fnacs_version$
+22100     library 'S:\Core\Library': fnerror,fnchain,fncheckcompiled,fnapply_theme
+22110     library 'S:\Core\Library': fnCopy,fnshortpath$,fnureg_read,fnacs_version$
 22120     library 'S:\Core\Library': fnreg_read,fnreg_write
-22140     library 'S:\Core\Library': fnAcsInstallationPath$,fnMakeSurepathExists
+22140     library 'S:\Core\Library': fnAcsInstallationPath$,fnMakeSurepathExists,fnclient$
 22160   end if 
 22180 fnend 
 24000 def library fnSpoolPath$*256(; initialize)
@@ -261,11 +258,8 @@
 24060 fnend
 24080 def fn_spoolPath$*256(; initialize)
 24100   if initialize then
-24120     if ~exists(env$('temp')&'\acs') then exe 'mkdir '&env$('temp')&'\acs'
-24140     if ~exists(env$('temp')&'\acs\Spool') then exe 'mkdir '&env$('temp')&'\acs\Spool'
+24120     fnmakesurepathexists(env$('temp')&'\acs\Spool\')
 24160     execute 'config spoolpath '&env$('temp')&'\acs\Spool' 
-24180     ! execute 'config spoolpath '&env$('Temp') 
-24200     ! doesn't work...  ! execute 'config remotespoolpath @::'&env$('Client_TEMP')
 24220   end if
 24240   fn_spoolPath$=env$('temp')&'\acs\Spool'
 24260 fnend
@@ -340,72 +334,66 @@
 40220   end if 
 40240   fn_change_temp=ct_return
 40260 fnend 
-42000 def fn_udf_resolve ! migration tool no longer used
-42010   dim udf$*1024
-42020   fn_get_udf(udf$)
-42060   if udf$<>'' and exists(udf$)=1 then ! then it is a directory that exists
-42080     tmp_dir_count=1
-42100     tmp_dir$(1)=rtrm$(udf$,'\')
-42120     dim filename$(1)*1024,tmp_dir$(1)*1024
-42160     execute 'sy -m del "'&os_filename$(udf$)&'\*.scr"'
-42180     execute 'sy -m del "'&os_filename$(udf$)&'\*.tmp"'
-42200     execute 'sy -m xcopy "'&os_filename$(udf$)&'" "'&env$('Q')&'\'&'" /S /T'
-42220     fngetdir2(udf$,mat filename$, '/s /b','*.*') ! fngetdir2(udf$&'ini',mat filename$, '/s /b','*.*')
-42240     for f_i=1 to udim(mat filename$)
-42260       if exists(filename$(f_i))=1 then ! it is a directory
-42280         tmp_dir_count+=1
-42300         mat tmp_dir$(tmp_dir_count)
-42320         tmp_dir$(tmp_dir_count)=filename$(f_i)
-42340       else ! it is a file.
-42360         dim tmp_to$*1024,tmp_from$*1024
-42380         tmp_to$=env$('Q')&'\'&filename$(f_i)(len(udf$)+1:len(filename$(f_i)))
-42400         tmp_from$=lwrc$(filename$(f_i))
-42440         if pos(tmp_from$,lwrc$('Reads_and_Chgs'))>0 then 
-42460           fnCopy(tmp_from$,env$('Q')&'\UBmstr\*.*')
-42480           execute 'free "'&tmp_from$&'"' ioerr ignore
-42500         else if ~exists(tmp_to$) then 
-42520           if fnCopy(tmp_from$,tmp_to$) then 
-42540             execute 'free "'&tmp_from$&'"' ioerr ignore
-42560           end if 
-42580         else if exists(tmp_to$) then 
-42600           execute 'free "'&tmp_from$&'"' ioerr ignore
-42620         end if 
-42640       end if 
-42660     next f_i
-42680     for d_i=tmp_dir_count to 1, step -1
-42700       execute 'rmdir '&tmp_dir$(d_i) ioerr ignore
-42720     next d_i
-42740   end if 
-42760 fnend 
-43000 def fn_get_udf(&udf$)
-43040   dim oldudf$*256
-43140   if oldudf$<>"" then 
-43160     udf$=oldudf$
-43220   else if env$("ScreenAceTemp")="" then !    NEW - just return blank - we do not need to make anything
-43340     udf$=oldudf$="" ! app_data$&"\ACS\Temp\"
-43420   else 
-43440     oldudf$=udf$=fnshortpath$(env$("ScreenAceTemp"))&'\'
-43460   end if 
-43480   udf$(3:len(udf$))=srep$(udf$(3:len(udf$)),'\\','\')
-43500 fnend 
+42000 ! def fn_udf_resolve ! migration tool no longer used
+42010 !   dim udf$*1024
+42020 !   fn_get_udf(udf$)
+42060 !   if udf$<>'' and exists(udf$)=1 then ! then it is a directory that exists
+42080 !     tmp_dir_count=1
+42100 !     tmp_dir$(1)=rtrm$(udf$,'\')
+42120 !     dim filename$(1)*1024,tmp_dir$(1)*1024
+42160 !     execute 'sy -m del "'&os_filename$(udf$)&'\*.scr"'
+42180 !     execute 'sy -m del "'&os_filename$(udf$)&'\*.tmp"'
+42200 !     execute 'sy -m xcopy "'&os_filename$(udf$)&'" "'&env$('Q')&'\'&'" /S /T'
+42220 !     fngetdir2(udf$,mat filename$, '/s /b','*.*') ! fngetdir2(udf$&'ini',mat filename$, '/s /b','*.*')
+42240 !     for f_i=1 to udim(mat filename$)
+42260 !       if exists(filename$(f_i))=1 then ! it is a directory
+42280 !         tmp_dir_count+=1
+42300 !         mat tmp_dir$(tmp_dir_count)
+42320 !         tmp_dir$(tmp_dir_count)=filename$(f_i)
+42340 !       else ! it is a file.
+42360 !         dim tmp_to$*1024,tmp_from$*1024
+42380 !         tmp_to$=env$('Q')&'\'&filename$(f_i)(len(udf$)+1:len(filename$(f_i)))
+42400 !         tmp_from$=lwrc$(filename$(f_i))
+42440 !         if pos(tmp_from$,lwrc$('Reads_and_Chgs'))>0 then 
+42460 !           fnCopy(tmp_from$,env$('Q')&'\UBmstr\*.*')
+42480 !           execute 'free "'&tmp_from$&'"' ioerr ignore
+42500 !         else if ~exists(tmp_to$) then 
+42520 !           if fnCopy(tmp_from$,tmp_to$) then 
+42540 !             execute 'free "'&tmp_from$&'"' ioerr ignore
+42560 !           end if 
+42580 !         else if exists(tmp_to$) then 
+42600 !           execute 'free "'&tmp_from$&'"' ioerr ignore
+42620 !         end if 
+42640 !       end if 
+42660 !     next f_i
+42680 !     for d_i=tmp_dir_count to 1, step -1
+42700 !       execute 'rmdir '&tmp_dir$(d_i) ioerr ignore
+42720 !     next d_i
+42740 !   end if 
+42760 ! fnend 
+43000 ! def fn_get_udf(&udf$)
+43040 !   dim oldudf$*256
+43140 !   if oldudf$<>"" then 
+43160 !     udf$=oldudf$
+43220 !   else if env$("ScreenAceTemp")="" then !    NEW - just return blank - we do not need to make anything
+43340 !     udf$=oldudf$="" ! app_data$&"\ACS\Temp\"
+43420 !   else 
+43440 !     oldudf$=udf$=fnshortpath$(env$("ScreenAceTemp"))&'\'
+43460 !   end if 
+43480 !   udf$(3:len(udf$))=srep$(udf$(3:len(udf$)),'\\','\')
+43500 ! fnend 
 44000 def fn_env_data_default
 44020   if env$('data')='' then ! if env$('data') is blank than set it here.
 44040     dim edd_base$*256
 44060     if env$('ProgramData')='' then 
-44080       library 'S:\Core\Library': fnshortpath$
 44100       edd_base$=fnshortpath$(env$('appdata'))
 44120     else 
 44140       edd_base$=env$('ProgramData')
 44160     end if 
 44180     setenv('data',edd_base$&'\ACS\')
-44200     slash$='\'
-44220     if ~exists(env$('data')) then 
-44240       execute 'mkdir '&env$('data')
-44250       execute 'mkdir '&env$('data')&'\Data'
-44260     end if 
-44280     if env$('data')(len(env$('data')):len(env$('data')))<>'\' and env$('data')(len(env$('data')):len(env$('data')))<>'/' then ! if env$('data') does not end with a backslash nor forward slash than add one.
-44300       if pos (env$('data'),'/') then slash$='/' else slash$='\'
-44440       setenv('data',env$('data')&slash$)
+44240     fnmakesurepathexists(env$('data')&'\Data\')
+44280     if env$('data')(len(env$('data')):len(env$('data')))<>'\' then ! if env$('data') does not end with a backslash nor forward slash than add one.
+44440       setenv('data',env$('data')&'\')
 44460     end if 
 44900   end if
 44920 fnend 
