@@ -285,7 +285,7 @@
 52560       opScreenReturn=1 
 52580     else 
 54000       source_company_number=archiveCNo(sourceWhich)
-54020       ! destination_company_number=val(resp$(resp_cnoDestination))
+54020       destination_company_number=source_company_number
 54040       cursys$=archiveSysAbbr$(sourceWhich)
 54060       fnstatus('** Open Partial Settings **')
 54080       fnstatus('Source File: '&omFileOpen$)
