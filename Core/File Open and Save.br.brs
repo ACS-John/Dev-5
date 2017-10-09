@@ -6,7 +6,7 @@
 18032     library 'S:\Core\Library': fnacs,fncmdset,fntos,fnlbl,fntxt,fncomboa
 18034     library 'S:\Core\Library': fncursys$,fncheckfileversion,fnmakesurepathexists
 18036     library 'S:\Core\Library': fnstatus,fnstatus_close,fnstatus_pause,fnCopy,fnindex_sys
-18038     library 'S:\Core\Library': fnaddonec,fnFree,fnCopyFile
+18038     library 'S:\Core\Library': fnaddonec,fnFree,fnCopyFile,fnputcno
 18040     dim company_import_path$*256
 18050     dim resp$(5)*256
 18060     dim ml$(0)*128
@@ -295,8 +295,8 @@
 54160       fnstatus('**')
 54180       fnstatus('Set current system to: '&cursys$&' from '&cursys_origional$)
 54200       cursys$=fncursys$(cursys$)
-54220       ! fnputcno(destination_company_number) : cno=destination_company_number
-54240       ! fnstatus('Set active Company Number to: '&str$(destination_company_number))
+54220       fnputcno(destination_company_number) : cno=destination_company_number
+54240       fnstatus('Set active Company Number to: '&str$(destination_company_number))
 54260       ! 
 54280       dim omSourceFilter$*64
 54300       if cursys$='UB' then
@@ -319,8 +319,8 @@
 56210         fnstatus_close
 56220         dim msgTmp$(0)*128
 56240         fnaddonec(mat msgTmp$,'Completed.')
-56260         fnaddonec(mat msgTmp$,'Company '&env$('cno')&' created from copy of company '&str$(source_company_number))
-56280         fnaddonec(mat msgTmp$,'from the file: '&omFileOpen$)
+56260         fnaddonec(mat msgTmp$,'Company '&env$('cno')&' loaded from')
+56280         fnaddonec(mat msgTmp$,omFileOpen$)
 56300         fnmsgbox(mat msgTmp$)
 56320       end if 
 56340       if selectedSource$<>'(All Companies)' then goto OpmAskWhichToOpen
