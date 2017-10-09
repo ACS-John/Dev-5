@@ -4,7 +4,7 @@
 18028     library 'S:\Core\Library': fnsave_as_path$,fngethandle,fnreg_close,fnreg_write
 18030     library 'S:\Core\Library': fnmsgbox,fnEditFile,fnSystemName$,fnlog
 18032     library 'S:\Core\Library': fnacs,fncmdset,fntos,fnlbl,fntxt,fncomboa
-18034     library 'S:\Core\Library': fnputcno,fncursys$,fncheckfileversion,fnmakesurepathexists
+18034     library 'S:\Core\Library': fncursys$,fncheckfileversion,fnmakesurepathexists
 18036     library 'S:\Core\Library': fnstatus,fnstatus_close,fnstatus_pause,fnCopy,fnindex_sys
 18038     library 'S:\Core\Library': fnaddonec,fnFree,fnCopyFile
 18040     dim company_import_path$*256
@@ -38,15 +38,15 @@
 38340   dim tmp7ZipCommand$*512
 38360   if enableBackupReportCache$='True' then
 38380     zOmitReportCacheOption$=''
-38380     zOmitReportCacheOption$=' -xr!"Report Cache\*"'
-38400   end if
+38400     zOmitReportCacheOption$=' -xr!"Report Cache\*"'
+38420   end if
 38440   dim serverTempSaveFile$*256
-38420   if clientServer then
-38460     serverTempSaveFile$=env$('temp')&'\save_'&session$&'.zip'
+38460   if clientServer then
+38480     serverTempSaveFile$=env$('temp')&'\save_'&session$&'.zip'
 38500   else
 38520     serverTempSaveFile$=save_name$
 38540   end if
-38520   tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\*"'&zOmitReportCacheOption$&' -xr!"Temp\*"'
+38560   tmp7ZipCommand$=env$('path_to_7z_exe')&' a -r -tzip "'&serverTempSaveFile$&'" "'&env$('Q')&'\'&save_what$&'" -w"'&os_filename$(env$('Q')&'\')&'" -x!wbserver.dat -x!*.$$$ -x!*.tmp -x!*.wrk -xr!"FileIO\*"'&zOmitReportCacheOption$&' -xr!"Temp\*"'
 38580   pr #h_tmp: '@echo off'
 38600   pr #h_tmp: '@echo Advanced Computer Services LLC'
 38620   pr #h_tmp: '@echo Saving to: "'&save_name$&'"'
@@ -140,7 +140,7 @@
 42440       ml$(4)='Display the log now?'
 42460       fnmsgbox(mat ml$,resp$,"ACS",4+64)
 42480       if resp$="Yes" then 
-42890         if env$('acsDeveloper')<>'' then pr 'just before fnEditFile("text","'&arc_filename$&'")' : pause
+42490         if env$('acsDeveloper')<>'' then pr 'just before fnEditFile("text","'&arc_filename$&'")' : pause
 42500         fnEditFile('text',arc_filename$)
 42520       end if 
 42540     end if 
@@ -173,13 +173,13 @@
 46000 def fn_7zFileListFromArchive(zFileOpen$*512,mat filename$)
 46020   dim gflfaTmpFile$*512
 46040   gflfaTmpFile$=env$('temp')&'\acs\7zGetFileList'&session$&'.txt'
-46060   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\Open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+46060   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output 
 46080   pr #h_tmp: '@echo off'
 46100   pr #h_tmp: '@echo Advanced Computer Services LLC'
 46120   pr #h_tmp: '@echo Reading file list from "'&zFileOpen$&'"'
 46140   pr #h_tmp: env$('path_to_7z_exe')&' l "'&zFileOpen$&'" > "'&gflfaTmpFile$&'"'
 46160   close #h_tmp: 
-46180   execute 'sy -s '&env$('temp')&'\acs\Open_as_'&session$&'.cmd'
+46180   execute 'sy -s '&env$('temp')&'\acs\OpenEverything_'&session$&'.cmd'
 46200   open #h_tmp:=fngethandle: 'Name='&gflfaTmpFile$,display,input
 46220   do 
 46240     linput #h_tmp: ln$
@@ -227,7 +227,7 @@
 48120   dim fileList$(0)*256,archiveList$(0)*50
 48140   dim tmpFileOpen$*256
 48160   if clientServer then
-48170     tmpFileOpen$=env$('temp')&'\acs\OpenPartial\tmpFileOpen'&session$&'.zip'
+48170     tmpFileOpen$=env$('temp')&'\acs\OpenPartial_tmpFileOpen'&session$&'.zip'
 48172     fnmakesurepathexists(tmpFileOpen$)
 48174     if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
 48180       fnCopyFile(env$('at')&br_filename$(opFileOpen$),tmpFileOpen$)
@@ -335,7 +335,7 @@
 57080   dim foeLogFile$*256
 57100   dim foeFileOpen$*256
 57120   if clientServer then
-57140     foeFileOpen$=env$('temp')&'\acs\OpenPartial\tmpFileOpenEverything'&session$&'.zip'
+57140     foeFileOpen$=env$('temp')&'\acs\OpenPartialTmpFileOpenEverything'&session$&'.zip'
 57160     fnmakesurepathexists(foeFileOpen$)
 57200     fnCopyFile(foeSource$,foeFileOpen$)
 57280   else
@@ -343,7 +343,7 @@
 57320   end if
 58000   foeDestinationFolder$=os_filename$(env$('Q'))
 58280   foeLogFile$=env$('temp')&'\acs\Open_Log.txt'
-58320   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\Open_as_'&session$&'.cmd')&',RecL=512,Replace',display,output 
+58320   open #h_tmp:=fngethandle: 'Name= '&br_filename$(env$('temp')&'\acs\OpenEverything_'&session$&'.cmd')&',RecL=512,Replace',display,output 
 58340   pr #h_tmp: '@echo off'
 58360   pr #h_tmp: '@echo Advanced Computer Services LLC'
 58380   pr #h_tmp: '@echo Opening: "'&foeSource$&'"'
@@ -362,7 +362,7 @@
 58640   pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&foeSource$&'" -o"'&foeDestinationFolder$&'\" > "'&env$('temp')&'\acs\Open_Log.txt"'
 58660   ! pr #h_tmp: 'pause'
 58680   close #h_tmp: 
-58700   execute 'sy -s '&env$('temp')&'\acs\Open_as_'&session$&'.cmd'
+58700   execute 'sy -s '&env$('temp')&'\acs\OpenEverything_'&session$&'.cmd'
 58740   if fn_analyze_7zip_compresslog(env$('temp')&'\acs\Open_Log.txt','Successfully Opened',foeSource$,1) then 
 58760     fnreg_write('Last Open Date',date$('ccyy/mm/dd'))
 58780     fnreg_write('Last Open File',foeSource$(pos(foeSource$,'\',-1)+1:len(foeSource$)))
@@ -380,19 +380,6 @@
 59120     pr 'fn_analyze_7zip_compresslog failed.'
 59140     pause
 59160   end if 
-59180   goto OPEN_XIT
-59200   OPEN_OPEN_ERR: ! 
-59220   if err=622 then ! it was just cancelled
-59240     pr 'cancelled' : goto OPEN_XIT
-59260   else 
-59280     mat ml$(2)
-59300     ml$(1)='Select a different file name.'
-59320     ml$(2)='Error: '&str$(err)
-59340     fnmsgbox(mat ml$)
-59360     !     if err=4150 then pr "Could not create file:";file$(1) : fnpause ! file$(1) is blank!
-59380     pr "Err:";err;" Line:";line
-59400   end if 
-59420   OPEN_XIT: ! 
 59440 fnend
 62000 def fn_extract_appropriate_files(eafSourceFile$*256,mat eafSourceFilter$,eafDestinationFolder$*256)
 62020   ! pr 'eafSourceFile$="'&eafSourceFile$&'"'
@@ -422,7 +409,8 @@
 62500     pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&eafSourceFile$&'" -o"'&eafDestinationFolder$&'" '&eafSourceFilter$(eafSourceFilterItem)&' > "'&env$('temp')&'\acs\OpenPartial_Log.txt"'
 62520   nex eafSourceFilterItem
 62540   close #h_tmp: 
-62560   execute 'sy '&env$('temp')&'\acs\openPartial'&session$&'.cmd'
+62550     if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes..h### should be extracted too' : pause
+62560   execute 'sy "'&env$('temp')&'\acs\openPartial'&session$&'.cmd"'
 62580     ! if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes..h### should be extracted too' : pause
 62990 fnend
 64000 def fn_copy_files_in(company_import_path$*256,company_import_extension$,destination_company_number)
