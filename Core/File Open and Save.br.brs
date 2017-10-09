@@ -227,34 +227,35 @@
 48120   dim fileList$(0)*256,archiveList$(0)*50
 48140   dim tmpFileOpen$*256
 48160   if clientServer then
-48170     tmpFileOpen$=env$('temp')&'\acs\OpenPartial_tmpFileOpen'&session$&'.zip'
-48172     fnmakesurepathexists(tmpFileOpen$)
-48174     if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
-48180       fnCopyFile(env$('at')&br_filename$(opFileOpen$),tmpFileOpen$)
-48182     SKIPFORDEV: ! XXX DELETE ME
-48190   else
-48200     tmpFileOpen$=opFileOpen$
-48260   end if
-48280   fnstatus('Getting list of companies from "'&opFileOpen$&'"...')
-48300   fn_7zFileListFromArchive(tmpFileOpen$,mat fileList$)
-48320   fn_fileListToArchiveList(mat fileList$,mat archiveList$)
-48340   fnstatus_close
-48360   fnreg_close
-48380   fn_opMain(tmpFileOpen$)
-48400   goto OP_XIT
-48420   OP_OP_ERR: ! 
-48440   if err=622 then ! it was just cancelled
-48460     pr 'cancelled' : goto OP_XIT
-48480   else 
-48500     mat ml$(2)
-48520     ml$(1)='Select a different file name.'
-48540     ml$(2)='Error: '&str$(err)
-48560     fnmsgbox(mat ml$,resp$)
-48580     !     if err=4150 then pr "Could not create file:";file$(1) : fnpause ! file$(1) is blank!
-48600     pr "Err:";err;" Line:";line
-48620   end if 
-48640   OP_XIT: ! 
-48660 fnend
+48180     tmpFileOpen$=env$('temp')&'\acs\OpenPartial_tmpFileOpen'&session$&'.zip'
+48200     fnmakesurepathexists(tmpFileOpen$)
+48220     if env$('acsDeveloper')<>'' and exists(tmpFileOpen$) then goto SKIPFORDEV! XXX DELETE ME
+48240       fnCopyFile(env$('at')&br_filename$(opFileOpen$),tmpFileOpen$) 
+48260       if env$('acsDeveloper')<>'' then pr bell; : sleep(.2) : pr bell; : sleep(.1) : pr bell;
+48280     SKIPFORDEV: ! XXX DELETE ME
+48300   else
+48320     tmpFileOpen$=opFileOpen$
+48340   end if
+48360   fnstatus('Getting list of companies from "'&opFileOpen$&'"...')
+48380   fn_7zFileListFromArchive(tmpFileOpen$,mat fileList$)
+48400   fn_fileListToArchiveList(mat fileList$,mat archiveList$)
+48420   fnstatus_close
+48440   fnreg_close
+48460   fn_opMain(tmpFileOpen$)
+48480   goto OP_XIT
+48500   OP_OP_ERR: ! 
+48520   if err=622 then ! it was just cancelled
+48540     pr 'cancelled' : goto OP_XIT
+48560   else 
+48580     mat ml$(2)
+48600     ml$(1)='Select a different file name.'
+48620     ml$(2)='Error: '&str$(err)
+48640     fnmsgbox(mat ml$,resp$)
+48660     !     if err=4150 then pr "Could not create file:";file$(1) : fnpause ! file$(1) is blank!
+48680     pr "Err:";err;" Line:";line
+48700   end if 
+48720   OP_XIT: ! 
+48740 fnend
 52000 def fn_opMain(omFileOpen$*256)
 52020   ! destination_company_number=val(env$('cno'))
 52040   OpmAskWhichToOpen: ! r: screen
@@ -409,9 +410,9 @@
 62500     pr #h_tmp: env$('path_to_7z_exe')&' x -r -aoa "'&eafSourceFile$&'" -o"'&eafDestinationFolder$&'" '&eafSourceFilter$(eafSourceFilterItem)&' > "'&env$('temp')&'\acs\OpenPartial_Log.txt"'
 62520   nex eafSourceFilterItem
 62540   close #h_tmp: 
-62550     if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes..h### should be extracted too' : pause
+62550     if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes.h### should be extracted too' : pause
 62560   execute 'sy "'&env$('temp')&'\acs\openPartial'&session$&'.cmd"'
-62580     ! if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes..h### should be extracted too' : pause
+62580     ! if env$('acsDeveloper')<>'' and env$('cursys')='UB' then pr 'Notes.h### should be extracted too' : pause
 62990 fnend
 64000 def fn_copy_files_in(company_import_path$*256,company_import_extension$,destination_company_number)
 64020   fnFree(env$('Q')&'\'&env$('cursys')&'mstr\*.h'&str$(destination_company_number))
