@@ -1,21 +1,20 @@
 00010 ! Replace S:\acsUB\ubprtthree_Brier
 00020 ! pr bills for Village of Monticello (full page)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnmsgbox,fnpa_finis,fnpa_open,fnpa_newpage
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fntos,fncmbact,fnd1,fnxit,fncmdset,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_fontsize
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   dim resp$(12)*60,txt$*100,mg$(3)*60,rw(22,13),cap$*128,fb$(3)*60
-00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),extra1$*30
-00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,datafile$*256,indexfile$*256
-00100   dim dueby$*30,prebal$*30,usage(3),billdate(3),ml$(2)*80,tg(11)
+00070   dim resp$(12)*60,txt$*100,mg$(3)*60,fb$(3)*60
+00080   dim z$*10,e$(4)*30,f$*12,g(12),d(15),b(11),extra1$*30
+00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40
+00100   dim prebal$*30
 00110 ! ______________________________________________________________________
-00120   fncno(cno,cnam$) !:
-        fnd1(d1)
-00130   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
+00120   fnd1(d1)
+00130   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 
 00140   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
-00150   at$(1)=cnam$ !:
+00150   at$(1)=env$('cnam') !:
         z=21 !:
         at$(1)=trim$(at$(1))(1:z) !:
         x=len(at$(1)) : y=z-x !:
@@ -28,11 +27,10 @@
         next j
 00170   linelength=62
 00180 ! 
-00190   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 00200   gosub BULKSORT
-00210   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
-00220   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence #
-00230   open #ubtransvb=15: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
+00210   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
+00220   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence #
+00230   open #ubtransvb=15: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
 00250 ! ______________________________________________________________________
 00260   prebal$="10:00 AM, xxxxxxx  xx"
 00270 SCREEN1: ! 
@@ -60,11 +58,7 @@
 00410   fntxt(7,pf,8,8,1,"1") !:
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00420   fnlbl(8,1,"Starting Account:",ll,1)
-00430   fe$="ubm-act-nam" !:
-        datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
-        indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
-        kp=1741: kl=9 : dp=41 : dl=30 !:
-        fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) !:
+00430   fncombof("ubm-act-nam",8,pf,40,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&env$('cno'),2) !:
         resp$(respc+=1)="[All]"
 00440   fnlbl(9,1,"Route Number:",ll,1)
 00450   fncmbrt2(9,pf) !:
@@ -96,7 +90,7 @@
 00560   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 00570   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 00580 ! ______________________________________________________________________
-00590   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00590   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00600   fnpa_open
 00610 ! ______________________________________________________________________
 00620   on fkey 5 goto RELEASE_PRINT
@@ -156,17 +150,11 @@
 01140   goto L630
 01150 ! ______________________________________________________________________
 01160 SCREEN3: ! 
-01170   sn$ = "UBPrtBl1-2" !:
-        fntos(sn$)
-01180   txt$="Account (blank to stop)" !:
-        fnlbl(1,1,txt$,31,1)
-01190 ! If TRIM$(A$)="" Then Goto 1030 Else Goto 1040 ! kj 7/12/05
+01170   fntos(sn$:= "UBPrtBl1-2")
+01180   fnlbl(1,1,"Account (blank to stop)",31,1)
 01200   if trim$(z$)<>"" then !:
-          txt$="Last Account entered was "&z$ !:
-          fnlbl(3,1,txt$,44,1) else !:
-          txt$="" !:
-          fnlbl(3,1,txt$,44,1)
-01210   fncmbact(1,17) ! !:
+          fnlbl(3,1,"Last Account entered was "&z$,44,1)
+01210   fncmbact(1,17) !:
         resp$(1)=a$
 01220   fncmdset(3): fnacs(sn$,0,mat resp$,ck)
 01230   a$ = lpad$(trim$(resp$(1)(1:10)),10) !:
@@ -174,36 +162,6 @@
 01240   if ck=5 then goto RELEASE_PRINT
 01250   read #1,using L690,key=a$: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,bra,mat gb,route,d3,d2,bulk$,extra1$,estimatedate,final nokey SCREEN3
 01260   goto L730
-01270 ! ______________________________________________________________________
-01280 !     SORT1: ! SELECT & SORT
-01290 !       open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1540
-01300 !       open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output
-01310 !       s5=1
-01320 !       if prtbkno=0 then routekey$="" else !:
-        !         routekey$=cnvrt$("N 2",prtbkno)&"       " !:
-        !         ! key off first record in route (route # no longer part of customer #)
-01330 !       restore #2,search>=routekey$:
-01340 !       L1340: read #2,using L1350: z$,f,route eof END5
-01350 !       L1350: form pos 1,c 10,pos 296,pd 4,pos 1741
-01360 !         if prtbkno=0 then goto L1380
-01370 !         if prtbkno><route then goto END5
-01380 !       L1380: if f><d1 then goto L1340
-01390 !         zip5$=cr$=""
-01400 !         read #5,using "Form POS 96,C 5,POS 108,C 4",key=z$: zip5$,cr$ nokey L1410
-01410 !       L1410: write #6,using "Form POS 1,C 5,C 4,C 10": zip5$,cr$,z$
-01420 !         goto L1340
-01430 ! ______________________________________________________________________
-01440 !       END5: close #6:
-01450 !         open #9: "Name="&env$('Temp')&"\Control."&Session$&",Size=0,RecL=128,Replace",internal,output
-01460 !       L1460: form pos 1,c 128
-01470 !         write #9,using L1460: "File "&env$('Temp')&"\Temp."&session$&",,,"&env$('Temp')&"\Addr."&Session$&",,,,,A,N"
-01480 !         write #9,using L1460: "Mask 1,19,C,A"
-01490 !         close #9:
-01500 !         execute "Free "&env$('Temp')&"\Addr."&Session$&" -n" ioerr ignore
-01510 !         execute "Sort "&env$('Temp')&"\Control."&Session$&" -n"
-01520 !         open #6: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative
-01530 !         open #7: "Name="&env$('Temp')&"\Addr."&Session$,internal,input,relative
-01540 !       L1540: return
 01550 ! ______________________________________________________________________
 01560 ENDSCR: ! pr totals screen
 01570   if sum(bct)=0 then pct=0 else pct=bct(2)/sum(bct)*100
@@ -224,64 +182,48 @@
 01740 L1740: execute act$
 01750   goto ERTN
 01760 ! ______________________________________________________________________
-01860 VBPRINT: ! 
-01870 ! -- Printer Program for three per page  Utility Bills
-01880 ! Gosub PRIOR_USAGES
-01890   pr #20: 'Call Print.MyFontSize(10)'
-01900   txt$=trim$(z$) !:
-        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(62)&','&str$(lyne+7)&')'
-01910   txt$=trim$(fb$(1)) !:
-        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(95)&','&str$(lyne+7)&')'
+01860 VBPRINT: ! r: Brier Lake - 3 per page  Utility Bills  requires: (z$,fb$(1),mat d, mat g,mat pe$,d2,d3,pb)
+01890   fnpa_fontsize
+01900   fnpa_txt(trim$(z$),62,lyne+7)
+01910   fnpa_txt(trim$(fb$(1)),95,lyne+7)
 01920   if pb<>0 then de$="Prv" else de$="   "
-01930   txt$=cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzz)",0)&" "&de$&cnvrt$("pic(-----.--)",pb) !:
-        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+25)&')'
+01932   fnpa_txt(rpt$(' ',23)&de$&cnvrt$("pic(-----.--)",pb),1,lyne+25)
 01940   if g(1)>0 then de$="Wat" else de$="   "
-01950   txt$=cnvrt$("pic(zzzzzzzz)",d(1))&cnvrt$("pic(zzzzzzzz)",d(2))&cnvrt$("pic(zzzzzz)",d(3))&" "&de$&cnvrt$("pic(-----.--)",g(1))&"     "&pe$(1)(1:22) !:
-        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+30)&')'
+01950   fnpa_txt(cnvrt$("pic(zzzzzzzz)",d(1))&cnvrt$("pic(zzzzzzzz)",d(2))&cnvrt$("pic(zzzzzz)",d(3))&" "&de$&cnvrt$("pic(-----.--)",g(1))&"     "&pe$(1)(1:22),1,lyne+30)
 01960   if g(2)>0 then de$="Sew" else de$="   "
-01970   txt$=cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzz)",0)&" "&de$&cnvrt$("pic(-----.##)",g(2))&"     "&pe$(2)(1:22) !:
-        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+35)&')'
+01970   fnpa_txt(rpt$(' ',23)&de$&cnvrt$("pic(-----.##)",g(2))&"     "&pe$(2)(1:22),1,lyne+35)
 01980   if g(3)>0 then de$="Fee" else de$="   "
-01990   txt$=cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzz)",0)&" "&de$&cnvrt$("pic(-----.--)",g(3))& "     "&pe$(3)(1:22) !:
-        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+40)&')'
-02000   if g(5)>0 then de$="P/T" else de$="   "
-02010   if g(5)>0 then txt$=cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzzzz)",0)&cnvrt$("pic(zzzzzz)",0)&" "&de$&cnvrt$("pic(-----.##)",g(5))&"     "&pe$(4)(1:22) !:
-          pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+45)&')'
-02020   cd1$="Other Charge"
-02030   read #8,using L2040,key="OC"&lpad$(str$(a4),2): cd1$ nokey L2050
-02040 L2040: form pos 5,c 12
-02050 L2050: if g(8)>0 then cd1$="Other Charge" else cd1$=""
-02060   if g(8)>0 then txt$=cd1$&cnvrt$("pic(-------.##)",g(8)) !:
-          pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+50)&')'
-02070   if g(9)>0 then de$="Tax" else de$="   "
-02080   if d2=0 then d2=d3x
-02090   if d3=0 then d3=d2x
-02100   txt$=cnvrt$("pic(zzbzzbbzz)",d3x)&" "&cnvrt$("pic(zzbzzbbzz)",d2x)&cnvrt$("pic(----.##)",g(12)+pb) &cnvrt$("pic(------.##)",g(11)+pb)&"    "&cnvrt$("pic(-----.##)",g(12)+pb)&"   "&cnvrt$("pic(zzbzzbzz)",d4)&cnvrt$("pic(-----.##)",g(11)+pb) !:
-        pr #20: 'Call Print.AddText("'&txt$&'",'&str$(1)&','&str$(lyne+76)&')'
-02110   bills+=1
-02120   if int(bills/3)=bills/3 then let fnpa_newpage: lyne=0: goto L2150
-02130   lyne=lyne+90
-02150 L2150: return 
-02160 BULKSORT: ! bulk sort order
-02170   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
-02180   open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=31",internal,output 
-02190 L2190: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2220
-02200   write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
-02210   goto L2190
-02220 L2220: close #1: ioerr ignore
-02230   close #6: ioerr ignore
-02240   execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('Temp')&"\Tempidx."&session$&" 1,19,Replace,DupKeys -n" ioerr L2260
-02250   open #6: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\Tempidx."&session$,internal,input,keyed 
-02260 L2260: return 
-02270 PRIOR_USAGES: ! 
-02280   mat usage=(0): mat billdate=(0)
-02290   restore #15,key>=z$&"         ": nokey L2380 ! no average but active customer (use 0 usage)
-02300 L2300: read #ubtransvb,using L2310: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L2380
-02310 L2310: form pos 1,c 10,n 8,n 1,12*pd 4.2,6*pd 5,pd 4.2,n 1
-02320   if p$<>z$ then goto L2380
-02330   if tcode<>1 then goto L2300 ! only charge transactions
-02340   usage(3)=usage(2): billdate(3)=billdate(2)
-02350   usage(2)=usage(1): billdate(2)=billdate(1)
-02360   usage(1)=wu: billdate(1)=tdate
-02370   goto L2300
-02380 L2380: return 
+01990   fnpa_txt(rpt$(' ',23)&de$&cnvrt$("pic(-----.--)",g(3))& "     "&pe$(3)(1:22),1,lyne+40)
+58000   if g(5)>0 then 
+58020     fnpa_txt(rpt$(' ',23)&"P/T"&cnvrt$("pic(-----.##)",g(5))&"     "&pe$(4)(1:22) ,1,lyne+45)
+58060   end if
+58080   if g(6)>0 then 
+58100     fnpa_txt(rpt$(' ',23)&'DEQ'&cnvrt$("pic(-----.##)",g(6)),1,lyne+50)
+58120   end if
+58140   if g(8)>0 then
+58160     fnpa_txt("Other Charge"&cnvrt$("pic(-------.##)",g(8)),1,lyne+55)
+58180   end if
+58200   if g(9)>0 then de$="Tax" else de$="   "
+58220   if d2=0 then d2=d3x
+58240   if d3=0 then d3=d2x
+58260   txt$=cnvrt$("pic(zzbzzbbzz)",d3x)&" "&cnvrt$("pic(zzbzzbbzz)",d2x)&cnvrt$("pic(----.##)",g(12)+pb) &cnvrt$("pic(------.##)",g(11)+pb)&"    "&cnvrt$("pic(-----.##)",g(12)+pb)&"   "&cnvrt$("pic(zzbzzbzz)",d4)&cnvrt$("pic(-----.##)",g(11)+pb) 
+58280   fnpa_txt(txt$,1,lyne+76)
+58300   bills+=1
+58320   if int(bills/3)=bills/3 then 
+58340     fnpa_newpage 
+58360     lyne=0 
+58380   else
+58400     lyne=lyne+90
+58420   end if
+58440 return ! /r
+62000 BULKSORT: ! r: bulk sort order
+62020   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
+62040   open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=31",internal,output 
+62060   L2190: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2220
+62080   write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
+62100   goto L2190
+62120   L2220: close #1: ioerr ignore
+62140   close #6: ioerr ignore
+62160   execute "Index "&env$('Temp')&"\Temp."&session$&" "&env$('Temp')&"\Tempidx."&session$&" 1,19,Replace,DupKeys -n" ioerr L2260
+62180   open #6: "Name="&env$('Temp')&"\Temp."&session$&",KFName="&env$('Temp')&"\Tempidx."&session$,internal,input,keyed 
+62200 L2260: return ! /r
