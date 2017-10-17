@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubprtbl1_fin
 00020 ! pr bills for Village of Findlay
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnpa_text,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnpa_txt,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_fontsize,fnpa_txt
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*40,txt$*45,mg$(3)*30,rw(22,13),cap$*128,a(7)
@@ -233,12 +233,12 @@
 01850   pr #20: "Call Print.MyFontBold(True)"
 01860   pr #20: 'Call Print.MyFontSize(12)'
 01870   pr #20: 'Call Print.MyFont("Courier New")'
-01880   fnpa_text(20,at$(1),xmargin+8,lyne*1-1+ymargin) ! pr #20: 'Call Print.AddText("'&at$(1)&'",'&str$(xmargin+8)&','&str$(lyne*1-1+ymargin)&')'
+01880   fnpa_txt(at$(1),xmargin+8,lyne*1-1+ymargin) ! pr #20: 'Call Print.AddText("'&at$(1)&'",'&str$(xmargin+8)&','&str$(lyne*1-1+ymargin)&')'
 01890   pr #20: 'Call Print.MyFont("Lucida Console")'
 01900   pr #20: 'Call Print.MyFontSize(10)'
 01910   pr #20: 'Call Print.MyFontBold(False)'
-01920   fnpa_text(20,at$(2),xmargin+6,lyne*2+1+ymargin-.2) !  pr #20: 'Call Print.AddText("'&at$(2)&'",'&str$(xmargin+6)&','&str$(lyne*2+1+ymargin-.2)&')'
-01930   fnpa_text(20,at$(3),xmargin+6,lyne*3+1+ymargin) ! pr #20: 'Call Print.AddText("'&at$(3)&'",'&str$(xmargin+6)&','&str$(lyne*3+1+ymargin)&')'
+01920   fnpa_txt(at$(2),xmargin+6,lyne*2+1+ymargin-.2) !  pr #20: 'Call Print.AddText("'&at$(2)&'",'&str$(xmargin+6)&','&str$(lyne*2+1+ymargin-.2)&')'
+01930   fnpa_txt(at$(3),xmargin+6,lyne*3+1+ymargin) ! pr #20: 'Call Print.AddText("'&at$(3)&'",'&str$(xmargin+6)&','&str$(lyne*3+1+ymargin)&')'
 01940   pr #20: 'Call Print.AddText("#'&trim$(z$)&'  '&bulk$&'",'&str$(xmargin+4)&','&str$(lyne*5+ymargin)&')'
 01950   pr #20: 'Call Print.AddText("'&e$(1)&'",'&str$(xmargin+4)&','&str$(lyne*6+ymargin)&')'
 01960   pr #20: 'Call Print.AddText("From: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d2)&'  To: '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d3)&'",'&str$(xmargin+2)&','&str$(lyne*7+ymargin)&')'
@@ -352,9 +352,9 @@
 02740   if g(5)+g(6)+g(7)>0 then pr #20: 'Call Print.AddText("'&fnformnumb$(bal+round(currentcharges*penalty_rate,2),2,9)&'",'&str$(xmargin+106)&','&str$(lyne*12+ymargin)&')'
 02750 L2750: fnpa_fontsize(9)
 02760   addy=14
-02770   fnpa_text(20,mg$(1),xmargin+68,(addy+=1)*lyne+ymargin)
-02780   fnpa_text(20,mg$(2),xmargin+68,(addy+=1)*lyne+ymargin)
-02790   fnpa_text(20,mg$(3),xmargin+68,(addy+=1)*lyne+ymargin)
+02770   fnpa_txt(mg$(1),xmargin+68,(addy+=1)*lyne+ymargin)
+02780   fnpa_txt(mg$(2),xmargin+68,(addy+=1)*lyne+ymargin)
+02790   fnpa_txt(mg$(3),xmargin+68,(addy+=1)*lyne+ymargin)
 02800   addy+=1
 02810   pr #20: 'Call Print.MyFontSize(10)'
 02820   if df$="Y" then !:

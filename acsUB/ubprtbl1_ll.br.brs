@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubprtbl1_ll
 00020 ! pr bills for Town of Loma Linda
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fncmdkey,fnconsole,fnpa_text,fnpa_finis,fnpa_open,fnpa_newpage
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fncmdkey,fnconsole,fnpa_txt,fnpa_finis,fnpa_open,fnpa_newpage
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*80,txt$*45,mg$(3)*30,rw(22,13),cap$*128
@@ -348,10 +348,10 @@
 02292     pr #20: 'Call Print.AddText("'&fnformnumb$(budget+pbud,2,9)&'",'&str$(xmargin+37)&','&str$(lyne*25+ymargin+10)&')' ! 37 was 42
 02293 !  if trim$(z$)='100100.00' then let fnpause
 02294   else 
-02296     fnpa_text(20,'Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*24+ymargin+10)
-02298     fnpa_text(20,fnformnumb$(bal,2,9),xmargin+37,lyne*24+ymargin+10) ! 37 was 42
-02300     fnpa_text(20,'Pay After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*25+ymargin+10)
-02302     fnpa_text(20,fnformnumb$(fn_pay_after_amt,2,9),xmargin+37,lyne*25+ymargin+10) ! 37 was 42
+02296     fnpa_txt('Pay By '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*24+ymargin+10)
+02298     fnpa_txt(fnformnumb$(bal,2,9),xmargin+37,lyne*24+ymargin+10) ! 37 was 42
+02300     fnpa_txt('Pay After '&cnvrt$("PIC(ZZ/ZZ/ZZ)",d4)&':',xmargin+1,lyne*25+ymargin+10)
+02302     fnpa_txt(fnformnumb$(fn_pay_after_amt,2,9),xmargin+37,lyne*25+ymargin+10) ! 37 was 42
 02304   end if 
 02306   pr #20: 'Call Print.AddLine('&str$(xmargin+1)&','&str$(lyne*26+1+ymargin+10)&',63,0)'
 02308 ! pr #20: 'Call Print.AddText("Phone: 217-665-3351",'&STR$(XMARGIN+1)&','&STR$(LYNE*27+YMARGIN)&')'
@@ -389,9 +389,9 @@
 02376   end if 
 02377   pr #20: 'Call Print.MyFontSize(9)'
 02378   addy=12
-02380   fnpa_text(20,mg$(1),xmargin+68,(addy+=1)*lyne+ymargin)
-02382 ! fnpa_text(20,mg$(2),xmargin+68,(addy+=1)*lyne+ymargin)
-02384   fnpa_text(20,mg$(3),xmargin+68,(addy+=1)*lyne+ymargin)
+02380   fnpa_txt(mg$(1),xmargin+68,(addy+=1)*lyne+ymargin)
+02382 ! fnpa_txt(mg$(2),xmargin+68,(addy+=1)*lyne+ymargin)
+02384   fnpa_txt(mg$(3),xmargin+68,(addy+=1)*lyne+ymargin)
 02386   addy+=1
 02840   pr #20: 'Call Print.MyFontSize(10)'
 02850   if df$="Y" then !:
@@ -400,13 +400,13 @@
           pr #20: 'Call Print.AddText("Final Bill",'&str$(xmargin+1)&','&str$(lyne*(addy+=1)+ymargin)&')'
 02870   pr #20: 'Call Print.AddText("#'&trim$(z$)&' '&bulk$&'",'&str$(xmargin+68+addr_indent)&','&str$(lyne*(addy+=1)+ymargin+20+addr_down)&')'
 02880   if pe$(1)<>"" then !:
-          fnpa_text(20,trim$(pe$(1)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
+          fnpa_txt(trim$(pe$(1)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
 02890   if pe$(2)<>"" then !:
-          fnpa_text(20,trim$(pe$(2)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
+          fnpa_txt(trim$(pe$(2)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
 02900   if pe$(3)<>"" then !:
-          fnpa_text(20,trim$(pe$(3)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
+          fnpa_txt(trim$(pe$(3)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
 02910   if pe$(4)<>"" then !:
-          fnpa_text(20,trim$(pe$(4)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
+          fnpa_txt(trim$(pe$(4)),xmargin+68+addr_indent,lyne*(addy+=1)+ymargin+20+addr_down)
 02912   pr #20: 'Call Print.AddText("Return Service Requested.",'&str$(xmargin+68)&','&str$(lyne*(addy+=2)+ymargin+20+addr_down)&')'
 02920   if checkcounter=1 then checkx=1.375 : checky=3.6875
 02930   if checkcounter=2 then checkx=6.75 : checky=3.6875

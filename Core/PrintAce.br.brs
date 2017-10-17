@@ -96,10 +96,10 @@
 26160       pa_o_filename$=fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
 26170       fnstatus('  Report Cache Name: '&pa_o_filename$)
 26180     else 
-26200       pa_o_filename$=env$('temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
+26200       pa_o_filename$=env$('client_temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
 26220     end if 
 26260     if pa_orientation$='' then pa_orientation$='Portrait'
-26280     open #h_printace: "Name="&pa_o_filename$&",Replace,RecL=5000",display,output 
+26280     open #h_printace: "Name="&env$('at')&pa_o_filename$&",Replace,RecL=5000",display,output 
 26300     pa_filename$=pa_o_filename$
 26320     pr #h_printace: 'Call Print.MyOrientation("'&pa_orientation$&'")'
 26340    !  pr #h_printace: 'Call Print.NewPaperBin(1)'
@@ -180,18 +180,6 @@
 34180     end if  ! trim$(pt_text$)<>''
 34200   end if
 34220 fnend  ! fnpa_txt
-36000 def library fnpa_text(h_printace,pt_text$*128,pt_x,pt_y) ! older - demands handle as first parameter - try fnpa_txt for cleaner code
-36020   fn_pa_setup
-36022   if formsFormat$="PDF" then
-36024     fnpa_text=fnpdf_text(pt_text$,pt_x, pt_y)
-36026   else
-36040     if h_printace=0 then h_printace=20
-36060     if trim$(pt_text$)<>'' then 
-36080       pt_text$=srep$(pt_text$,'"',"'")
-36100       pr #h_printace: 'Call Print.AddText("'&pt_text$&'",'&str$(pt_x)&','&str$(pt_y)&')'
-36120     end if  ! trim$(pt_text$)<>''
-36130   end if
-36140 fnend  ! fnpa_text
 38000 def library fnpa_elipse(pe_a,pe_b,pe_c,pe_d; h_printace)
 38020   fn_pa_setup
 38022   if formsFormat$="PDF" then
