@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubprtfull_ashgrove
 00020 ! pr bills for Ash Grove (full page)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnmsgbox,fncmdkey,fnpa_text,fnpa_finis,fnpa_open,fnpa_newpage
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnmsgbox,fncmdkey,fnpa_txt,fnpa_finis,fnpa_open,fnpa_newpage
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(20)*160,txt$*80,mg$(13)*160,rw(22,13),cap$*128
@@ -405,7 +405,7 @@
 02710   pr #20: 'Call Print.MyFontItalic(1)'
 02720   lyne=124
 02740   for j=1 to 13
-02750     fnpa_text(20,mg$(j),40,lyne+=4) ! pr #20: 'Call Print.AddText("'&mg$(j)&'",'&str$(40)&','&str$(lyne+=4)&')'
+02750     fnpa_txt(mg$(j),40,lyne+=4) ! pr #20: 'Call Print.AddText("'&mg$(j)&'",'&str$(40)&','&str$(lyne+=4)&')'
 02760   next j
 02770   pr #20: 'Call Print.MyFontItalic(0)'
 02780   x=0

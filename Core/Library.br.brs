@@ -582,10 +582,6 @@
 56100     library 'S:\Core\PrintAce.br': fnpa_pic
 56110     fnpa_pic=fnpa_pic(pp_pic$,pp_x,pp_y, imgWidth,imgHeight,style$)
 56120   fnend 
-56130   def library fnpa_text(pt_h,pt_text$*128,pt_x,pt_y)
-56140     library 'S:\Core\PrintAce.br': fnpa_text
-56150     fnpa_text=fnpa_text(pt_h,pt_text$,pt_x,pt_y)
-56160   fnend 
 56170   def library fnpa_txt(pt_text$*128,pt_x; pt_y,pt_h)
 56180     library 'S:\Core\PrintAce.br': fnpa_txt
 56190     fnpa_txt=fnpa_txt(pt_text$,pt_x,pt_y, pt_h)
