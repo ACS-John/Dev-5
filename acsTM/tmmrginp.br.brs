@@ -1,9 +1,8 @@
 00020   on error goto L820
-00030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fnd1
+00030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
 00040   fntop(program$,cap$="Merge")
 00050   fncno(cno,cnam$)
 00060   pr newpage
-00070   fnconsole(1)
 00080   dim ta(25,2),fb(25),iv$*12,k$*5,e$*9,b(8),sc$*4,gl$*12,ivr(6),ca(10)
 00090   dim e(4,30),sc(2),scc(10),des$*30
 00100   pr newpage

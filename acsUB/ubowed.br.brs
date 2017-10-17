@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\UBowed
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fndat,fncno,fnwin3,fnwait,fnacs,fntxt,fnlbl,fntos,fnfra,fnd1,fnxit,fncmdset,fntop,fnchk
+00030   library 'S:\Core\Library': fnopenprn,fncloseprn,fnerror,fndat,fncno,fnwin3,fnwait,fnacs,fntxt,fnlbl,fntos,fnfra,fnxit,fncmdset,fntop,fnchk
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim dat$*20,message$*40,resp$(5)*20

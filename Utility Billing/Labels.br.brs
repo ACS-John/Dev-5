@@ -478,7 +478,7 @@
 60180   close #adrbil=3: ioerr ignore
 60200   open #adrbil: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 60220   execute "drop "&env$('temp')&"\label.dat -n" ioerr ignore
-60240   fnd1(d1)
+60240   fnLastBillingDate(d1)
 60260   if annbc=sequence_bar_code and s5=0 then gosub SORT1
 60280   return  ! /r
 62000 OPENCASS: ! r:
@@ -488,7 +488,7 @@
 62080   return  ! /r
 64000 IGNORE: continue 
 68000   def fn_setup
-68020   library 'S:\Core\Library': fntop,fnxit, fnerror,fnacs,fncomboa,fnlbl,fntos,fnmsgbox,fntxt,fncustomer_search,fncmbrt2,fncmbact,fnaddlabel,fnlabel,fncmdset,fnd1,fngethandle,fnreg_read,fnreg_write,fnget_services
+68020   library 'S:\Core\Library': fntop,fnxit, fnerror,fnacs,fncomboa,fnlbl,fntos,fnmsgbox,fntxt,fncustomer_search,fncmbrt2,fncmbact,fnaddlabel,fnlabel,fncmdset,fnLastBillingDate,fngethandle,fnreg_read,fnreg_write,fnget_services
 68040   on error goto ERTN
 68060 ! r: constants and dims
 68080   on fkey 5 goto DONE

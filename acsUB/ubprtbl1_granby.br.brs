@@ -1,7 +1,7 @@
 00010 ! Replace acsUB\ubprtbl1_Granby
 00020 ! pr bills (new format) 3 1/2" x 7.5" - for Granby
 00030 ! ______________________________________________________________________
-00040   library 'Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnpause,fnopenprn,fncloseprn,fncmdkey
+00040   library 'Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnpause,fnopenprn,fncloseprn,fncmdkey
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*40,mg$(3)*50,cap$*128
@@ -15,7 +15,7 @@
         ! don't use  PROGRAM$(4:POS(PROGRAM$,'.',-1)-1)   !:
         ! - it needs to think it is the program that chained to it
 00150   fncno(cno,cnam$) !:
-        fnd1(d1)
+        fnLastBillingDate(d1)
 00160 ! 
 00170   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:

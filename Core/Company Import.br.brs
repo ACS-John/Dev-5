@@ -6,7 +6,7 @@
 00031 ! pr
 00032 library 'S:\Core\Library': fnpr_conversion_add_missing,fnpr_conversion_department
 00033 ! ub
-00035 library 'S:\Core\Library': fnd1
+00035 library 'S:\Core\Library': fnLastBillingDate
 00036 library 'S:\Core\Library': fnub_cnv_build_transactions
 00037 library 'S:\Core\Library': fnub_cnv_note
 00038 library 'S:\Core\Library': fnub_cnv_ubmstr_vb
@@ -222,7 +222,7 @@
 26160     end if 
 26180   end if 
 26181   if cursys$='UB' then 
-26182     fnd1(d1,1)
+26182     fnLastBillingDate(d1,1)
 26183   end if 
 26200 fnend 
 30000 def fn_ub_copy_extras

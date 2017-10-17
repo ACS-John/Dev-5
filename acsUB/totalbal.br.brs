@@ -19,12 +19,12 @@
 16000 def fn_setup
 16010   if ~setup then 
 16020     setup=1
-16030     library 'S:\Core\Library': fntop,fnxit, fnerror,fngethandle,fnd1
+16030     library 'S:\Core\Library': fntop,fnxit, fnerror,fngethandle,fnLastBillingDate
 16031     library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnchk,fntos,fncmdkey
 16032     library 'S:\Core\Library': fncreg_read,fncreg_write
 16040     on error goto ERTN
 16090   end if 
-16500   fnd1(lastBillingDate)
+16500   fnLastBillingDate(lastBillingDate)
 16520   fncreg_read(env$('program_caption')&' - '&'Exclude Final Billed',excludeFinalBilled$, 'False')
 16540   ! if env$('client')='French Settlement' then filterByBillingDate=1 else filterByBillingDate=0
 16900 fnend 

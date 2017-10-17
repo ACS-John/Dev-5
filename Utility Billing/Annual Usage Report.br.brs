@@ -1,6 +1,6 @@
 10000 ! Formerly S:\acsUB\ubUsage2
 10040 ! ______________________________________________________________________
-10060   library 'S:\Core\Library': fnacs,fnmsgbox,fnopenprn,fncloseprn,fnerror,fnlbl,fntxt,fntos,fnxit,fncomboa,fncmdset,fntop,fndate_mmddyy_to_ccyymmdd,fnd1,fnreg_read,fnreg_write,fngethandle,fnget_services
+10060   library 'S:\Core\Library': fnacs,fnmsgbox,fnopenprn,fncloseprn,fnerror,fnlbl,fntxt,fntos,fnxit,fncomboa,fncmdset,fntop,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fnreg_read,fnreg_write,fngethandle,fnget_services
 10080   on error goto ERTN
 12000   fntop(program$)
 12020 ! r: set constants, dims, etc
@@ -18,7 +18,7 @@
 12280 ! ______________________________________________________________________
 14120 ! 
 14180 ! 
-14200   fnd1(d1)
+14200   fnLastBillingDate(d1)
 14220   magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000
 14240 ! 
 14260   dim servicename$(10)*20

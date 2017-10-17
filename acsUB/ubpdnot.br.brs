@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubPdNot
 00020 ! Past Due Notices
 00030 ! _______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnopt,fnerror,fnopenprn,fncloseprn,fnxit,fncomboa,fnfra,fncmbrt2,fncmbact,fnchk,fncmdkey,fndat,fnd1,fncmdset,fntop,fngethandle,fngetdir2,fnreg_read,fnreg_write,fnpa_finis,fnprint_file_name$,fncreg_read,fncreg_write,fnpa_open,fnpa_newpage,fncustomer_address,fnpa_txt,fnfree,fnEditFile,fncopy
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnopt,fnerror,fnopenprn,fncloseprn,fnxit,fncomboa,fnfra,fncmbrt2,fncmbact,fnchk,fncmdkey,fndat,fnLastBillingDate,fncmdset,fntop,fngethandle,fngetdir2,fnreg_read,fnreg_write,fnpa_finis,fnprint_file_name$,fncreg_read,fncreg_write,fnpa_open,fnpa_newpage,fncustomer_address,fnpa_txt,fnfree,fnEditFile,fncopy
 00050 ! _______________________________________________________________________
 00060   on error goto ERTN
 00080 ! r: dims
@@ -16,7 +16,7 @@
 00150   fntop(program$,cap$="Past Due Notices")
 00170   tmp_rtf_filename$=fnprint_file_name$
 00202   if env$('client')='French Settlement' or env$('client')='Granby' or env$('client')='Eldorado' then hard_coded=1 ! env$('client')='Merriam Woods' or
-00210   fnd1(d1)
+00210   fnLastBillingDate(d1)
 00220   fndat(d$(4))
 00230   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00240   read #21,using "Form POS 1,3*C 40": at$(1),at$(2),at$(3)

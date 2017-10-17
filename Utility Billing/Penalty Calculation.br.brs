@@ -1,7 +1,7 @@
 20000 ! formerly S:\acsUB\ubPenCal
 20020 ! Penalty Calculation
 20040 ! ______________________________________________________________________
-20060   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnerror,fntos,fnopenprn,fncloseprn,fnmsgbox,fnxit,fndate_mmddyy_to_ccyymmdd,fndat,fnd1,fncmdset,fntop,fnchk,fnfra,fnopt,fnget_services
+20060   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnerror,fntos,fnopenprn,fncloseprn,fnmsgbox,fnxit,fndate_mmddyy_to_ccyymmdd,fndat,fnLastBillingDate,fncmdset,fntop,fnchk,fnfra,fnopt,fnget_services
 20080   on error goto ERTN
 20100 ! ______________________________________________________________________
 20120   dim resp$(8)*40,msgline$(1)*80,oldtg(11)
@@ -14,7 +14,7 @@
 20260 ! ______________________________________________________________________
 20280   right=1
 20300   fntop(program$)
-20320   fnd1(bildat)
+20320   fnLastBillingDate(bildat)
 20340   fndat(dat$)
 20400 ! r:  get MinimumBal
 20420   open #minbal:=5: "Name="&env$('Q')&"\UBmstr\Minbal.H"&env$('cno')&",Use,RecL=10,Shr",internal,outin,relative 

@@ -1,7 +1,7 @@
 10000 ! Replace S:\acsUB\swap_cur_prior
 10200 ! -- for all billing dates that match - put the lower of prior/current water readings into prior and the higher into current
 10400 ! ______________________________________________________________________
-10600   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fncno,fnd1,fnxit,fnerror,fntos,fnlbl,fnacs,fntxt,fnwait,fnmsgbox,fncmdset,fntop,fngethandle
+10600   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fncno,fnLastBillingDate,fnxit,fnerror,fntos,fnlbl,fnacs,fntxt,fnwait,fnmsgbox,fncmdset,fntop,fngethandle
 10800   on error goto ERTN
 11000 ! ______________________________________________________________________
 11200   dim x$*10,x(15),w(5),r(4),gb(10),rt(10,3),ba(13),da(2),txt$(3)*80,txt$*50
@@ -14,7 +14,7 @@
 12600   dim cap$*128,work$*80,work_addr$*80
 12800 ! ______________________________________________________________________
 13200   fntop(program$,cap$="Swap Current and Prior Readings for Water")
-13400   fnd1(d1)
+13400   fnLastBillingDate(d1)
 13600   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative 
 13800   read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto
 14000   close #20: 

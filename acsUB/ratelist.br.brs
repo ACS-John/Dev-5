@@ -1,6 +1,6 @@
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fncno,fnerror,fnwait,fnopenprn,fncloseprn,fnacs,fnflexadd1,fnflexinit1,fntos,fncustomer_search,fnlbl,fntxt,fnopt,fnmsgbox,fncomboa,fnbutton,fnpic,fnfra,fnchk,fndat,fncmbact,fncombof,fncmbrt2,fnxit,fnd1,fncmdset,fncmdkey,fntop,fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
-00040   library 'S:\Core\Library': fnd1
+00030   library 'S:\Core\Library': fncno,fnerror,fnwait,fnopenprn,fncloseprn,fnacs,fnflexadd1,fnflexinit1,fntos,fncustomer_search,fnlbl,fntxt,fnopt,fnmsgbox,fncomboa,fnbutton,fnpic,fnfra,fnchk,fndat,fncmbact,fncombof,fncmbrt2,fnxit,fncmdset,fncmdkey,fntop,fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
+00040   library 'S:\Core\Library': fnLastBillingDate
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim rate(18,20),usage(18,20),cde(20),d(12),t(18,2),a(4),message$*40
@@ -9,7 +9,7 @@
 00100   dim io2$(38),cnam$*40,code$(4),a(7),d(15),g(10),e$(4)*30,f$(3)*12
 00110 ! ______________________________________________________________________
 00120   fncno(cno,cnam$)
-00130   fnd1(bdate)
+00130   fnLastBillingDate(bdate)
 00140   fntop(program$,cap$="Analyze Charges")
 00150 MAIN: ! 
 00160   fntos(sn$:="UBAnalyze") !:

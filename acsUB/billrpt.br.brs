@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\Bill-Rpt
 00020 ! pr utility billing reports based on bills
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fnchk,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fncno,fnxit,fndat,fnd1,fncmdset,fntop
+00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fnchk,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fncno,fnxit,fndat,fnLastBillingDate,fncmdset,fntop
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim cap$*128,z$*10,e$(4)*30,temp$(3)*26,resp$(4)*40,cnam$*40,dat$*20
@@ -9,7 +9,7 @@
 00090   fntop("S:\acsUB\Bill-Rpt", cap$="Final Billing")
 00100   fncno(cno,cnam$) !:
         ! 
-00110   fnd1(d1)
+00110   fnLastBillingDate(d1)
 00120   fndat(dat$,1)
 00130 ! ______________________________________________________________________
 00140 SCR1: ! 

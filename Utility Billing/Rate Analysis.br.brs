@@ -1,6 +1,6 @@
 00010 ! formerly S:\acsUB\Analyze
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fntos,fnget_services,fncombof,fnlbl,fntxt,fnfra,fnacs,fnd1,fncmdset
+00030   library 'S:\Core\Library': fntop,fnxit, fnerror,fnopenprn,fncloseprn,fntos,fnget_services,fncombof,fnlbl,fntxt,fnfra,fnacs,fnLastBillingDate,fncmdset
 00040 ! Goto XIT
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
@@ -9,7 +9,7 @@
 00090   dim svce$*11,srvnam$(10)*20,srv$(10)
 00100 ! ______________________________________________________________________
 00110   fntop(program$)
-00130   fnd1(bdate)
+00130   fnLastBillingDate(bdate)
 00140   fnget_services(mat srvnam$,mat srv$)
 09000 goto SCR1
 20000 SCR1: ! r:

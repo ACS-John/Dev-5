@@ -1,11 +1,11 @@
 00010 ! formerly S:\acsUB\ubUnBill
 00020 ! r: setup 
-00030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnerror,fnopenprn,fncloseprn,fnxit,fnd1,fncmdset,fntop,fnchk
+00030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnerror,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fncmdset,fntop,fnchk
 00040   on error goto ERTN
 00050   ! 
 00060   dim z$*10,e$(4)*30,resp$(10)*40
 00070   ! 
-00090   fnd1(d1)
+00090   fnLastBillingDate(d1)
 00110   fntop(program$)
 00120 goto MAIN ! /r
 28000 MAIN: ! r: main screen

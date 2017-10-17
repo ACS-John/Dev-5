@@ -3,7 +3,7 @@
 00030 ! 
 00040   library "S:\Core\search.br": fnsearch
 00050   library "S:\Core\Library.br": fnerror,fnwait,fnmsgbox,fnwin3b
-00060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnd1
+00060   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
 00070   fntop(program$)
 00100 ! 
 00110 ! 

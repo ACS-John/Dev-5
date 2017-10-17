@@ -1,6 +1,6 @@
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fncno,fnerror,fnwait,fnopenprn,fncloseprn,fnacs,fnflexadd1,fnflexinit1,fntos,fncustomer_search,fnlbl,fntxt,fnopt,fnmsgbox,fncomboa,fnbutton,fnpic,fnfra,fnchk,fndat,fncmbact,fncombof,fncmbrt2,fnxit,fnd1,fncmdset,fncmdkey,fntop,fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
-00040   library 'S:\Core\Library': fnd1
+00030   library 'S:\Core\Library': fncno,fnerror,fnwait,fnopenprn,fncloseprn,fnacs,fnflexadd1,fnflexinit1,fntos,fncustomer_search,fnlbl,fntxt,fnopt,fnmsgbox,fncomboa,fnbutton,fnpic,fnfra,fnchk,fndat,fncmbact,fncombof,fncmbrt2,fnxit,fnLastBillingDate,fncmdset,fncmdkey,fntop,fndate_mmddyy_to_ccyymmdd,fnpause,fngethandle
+00040   library 'S:\Core\Library': fnLastBillingDate
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 24000   dim rate(18,20),usage(18,20),cde(20),d(12),t(18,2),a(4),message$*40
@@ -14,7 +14,7 @@
 24160   code$(4)="Gas"
 24180 ! 
 38000   fncno(cno,cnam$)
-38020   fnd1(bdate)
+38020   fnLastBillingDate(bdate)
 38040   fntop("S:\acsUB\Consumptionlist",cap$="Consumption List")
 44000 MAIN: ! 
 44020   fntos(sn$:="UBAnalyze")

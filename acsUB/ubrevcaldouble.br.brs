@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\UBRevCaldouble
 00020 ! ______________________________________________________________________
-00030   library 'S:\Core\Library': fnxit, fncno, fnopenprn, fncloseprn, fnlbl, fntxt,fncmbact,fncmbrt2,fnacs, fntos, fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnd1,fncmdset,fnchk,fntop
+00030   library 'S:\Core\Library': fnxit, fncno, fnopenprn, fncloseprn, fnlbl, fntxt,fncmbact,fncmbrt2,fnacs, fntos, fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncmdset,fnchk,fntop
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim x$*10,p$*10,reqz$*10,reqz12$*2,sr$*1,gb(10)
@@ -12,7 +12,7 @@
 00120   fncno(cno) !:
         ! 
 00130   fntop("S:\acsUB\UBRevCal",cap$="Reverse Calculation")
-00140   fnd1(d1)
+00140   fnLastBillingDate(d1)
 00150   if d1=0 then d1=val(date$(4:5)&date$(7:8)&date$(1:2))
 00160 ! ______________________________________________________________________
 00170   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 

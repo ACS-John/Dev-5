@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubprtthree_san
 00020 ! pr bills (three per page modified for Sangamon
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*50,txt$*40,mg$(3)*30,rw(22,13),cap$*128,datafile$*256
@@ -15,7 +15,7 @@
 00150   read mat cd$
 00160 ! ______________________________________________________________________
 00170   fncno(cno,cnam$) !:
-        fnd1(d1)
+        fnLastBillingDate(d1)
 00190   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 

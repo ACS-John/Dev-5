@@ -1,7 +1,7 @@
 10000 ! Replace S:\acsUB\Company
 10020 ! maintain UB company information
 10040 ! r: setup
-10060   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnd1,fnerror,fntos,fncmdset,fnchk,fngethandle,fnfra,fnCopy,fncreg_read,fncreg_write,fncomboa
+10060   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnLastBillingDate,fnerror,fntos,fncmdset,fnchk,fngethandle,fnfra,fnCopy,fncreg_read,fncreg_write,fncomboa
 10080   on error goto ERTN
 10100 ! ______________________________________________________________________
 10120   dim cap$*128
@@ -184,7 +184,7 @@
 82020   open #h_company:=1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,input 
 82040   read #h_company,using "Form POS 1,3*C 40,X 6,N 1,C 1,c 1,n 4": mat at$,maintac,rcpt$,escrow$,pcent ioerr COMPANY_READ_ERR
 82060   close #h_company: 
-82080   fnd1(d1)
+82080   fnLastBillingDate(d1)
 82090   if pcent=0 then pcent=100
 82100   if uprc$(rcpt$)=uprc$("Y") then rcpt$="True" else rcpt$="False"
 82120   if uprc$(escrow$)=uprc$("Y") then escrow$="True" else escrow$="False"
@@ -211,7 +211,7 @@
 84100   open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Size=0,RecL=133,Replace",internal,outin 
 84120   write #1,using "Form POS 1,3*C 40,x 6,N 1,C 1,c 1,n 4": mat at$,maintac,rcpt$,escrow$,pcent
 84140   close #1: 
-84160   fnd1(d1,1)
+84160   fnLastBillingDate(d1,1)
 84180   fncreg_write('unusual usage minimum water',uum_water$)
 84200   fncreg_write('unusual usage minimum gas',uum_gas$)
 84220   fncreg_write('unusual usage minimum electric',uum_electric$)

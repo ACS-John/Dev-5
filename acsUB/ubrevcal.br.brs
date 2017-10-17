@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\UBRevCal
 00015 ! ______________________________________________________________________
-00020   library 'S:\Core\Library': fnxit,fncno,fnopenprn,fncloseprn,fnlbl,fntxt,fncmbact,fncmbrt2,fnacs, fntos, fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnd1,fncmdset,fnchk,fntop,fnmsgbox
+00020   library 'S:\Core\Library': fnxit,fncno,fnopenprn,fncloseprn,fnlbl,fntxt,fncmbact,fncmbrt2,fnacs, fntos, fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncmdset,fnchk,fntop,fnmsgbox
 00025   on error goto ERTN
 00030 ! ______________________________________________________________________
 00035   dim x$*10,p$*10,reqz$*10,reqz12$*5,sr$*1,gb(10)
@@ -22,7 +22,7 @@
 00120   goto XIT
 00125 ALLOW_PROGRAM: ! 
 00130 ! ______________________________________________________________________
-00135   fnd1(d1)
+00135   fnLastBillingDate(d1)
 00140   if d1=0 then d1=val(date$(4:5)&date$(7:8)&date$(1:2))
 00145 ! ______________________________________________________________________
 00170   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 

@@ -1,6 +1,6 @@
 00020 ! -- RECalculate All Current Bills    *** DO NOT FORGET TO PARALLEL CHANGES FROM S:\acsUB\UBCALK
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnd1,fncloseprn,fnopenprn,fnxit,fnerror,fntos,fnlbl,fnacs
+00040   library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncloseprn,fnopenprn,fnxit,fnerror,fntos,fnlbl,fnacs
 00050   library 'S:\Core\Library': fntxt,fnmsgbox,fncmdset,fntop,fnpause,fncd,fnchk,fncreg_read,fncreg_write,fncomboa
 00060   library 'S:\Core\Library': fnget_services,fnapply_default_rates,fnAutomatedSavePoint
 00062   library 'S:\Core\Library': fngethandle
@@ -46,7 +46,7 @@
 00174   dim subjectto(10)
 00176   dim extra(23)
 00200 ! /r
-00250   fnd1(d1)
+00250   fnLastBillingDate(d1)
 00260   work$=env$('Q')&"\UBmstr\Reads_and_Chgs.h"&env$('cno')
 00264   work_addr$=env$('Q')&"\UBmstr\Reads_and_Chgs-Key.h"&env$('cno')
 00265   if env$('client')="Edinburg" or env$('client')="French Settlement" then btu_factor_enabled=1 else btu_factor_enabled=btu=0
@@ -517,7 +517,7 @@
 83640       unusual_usage_report=srch(mat unusual_usage_report_opt$,unusual_usage_report$)
 83660       fncreg_write('ubcalk-unusal_usage_report',unusual_usage_report$)
 83680       if d1<10101 then pr bell; : goto ASK_BILLING_DATE
-83700       fnd1(d1,1)
+83700       fnLastBillingDate(d1,1)
 83720       if resp_sewer_cap_date then ! if env$('client')='Campbell'
 83740         sewer_cap_date$=resp$(resp_sewer_cap_date)
 83760         fncreg_write('ubcalk-sewer_cap_date',sewer_cap_date$)

@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsUB\Per1000
 00020 ! -- Per 1000 Usage Report
 12000 ! ______________________________________________________________________
-12020   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fntos,fnerror,fnopenprn,fncloseprn,fnd1,fncomboa,fncmdset,fnget_services,fncreg_read,fncreg_write
+12020   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fntos,fnerror,fnopenprn,fncloseprn,fnLastBillingDate,fncomboa,fncmdset,fnget_services,fncreg_read,fncreg_write
 12040   on error goto ERTN
 12060 ! ______________________________________________________________________
 12080   dim z$*10,e$(4)*30,g(12)
@@ -11,7 +11,7 @@
 12160   dim servicename$(10)*20
 12180 ! ______________________________________________________________________
 14000   fntop(program$)
-14020   fnd1(d1)
+14020   fnLastBillingDate(d1)
 14040 ! 
 16000   fnget_services(mat servicename$)
 16060   mat opt$(3)

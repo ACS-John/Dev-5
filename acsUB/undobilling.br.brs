@@ -1,5 +1,5 @@
 00001 forceRollBackNotMostRecentRec=0
-00010 library 'S:\Core\Library': fnxit,fnopenprn,fncloseprn,fnerror,fnd1,fngethandle,fntop,fntos,fnlbl,fntxt,fncmbact,fncmbrt2,fncmdset,fnacs,fnmsgbox,fnopt,fnget_services,fnAutomatedSavePoint
+00010 library 'S:\Core\Library': fnxit,fnopenprn,fncloseprn,fnerror,fnLastBillingDate,fngethandle,fntop,fntos,fnlbl,fntxt,fncmbact,fncmbrt2,fncmdset,fnacs,fnmsgbox,fnopt,fnget_services,fnAutomatedSavePoint
 00040 on error goto ERTN
 00080 ! msgbox("Reverse Billing Cycle is currently under construction.","Reverse Billing Cycle Unavailable","OK","Inf") : if env$('ACSDeveloper')='' then goto XIT
 00120 fn_undobilling
@@ -109,7 +109,7 @@
 28000     CUSTDONE: ! 
 28020     if filter=do_all then 
 28040       lastbilling=val(date$(days(lastbilling,"ccyymmdd"),"mmddyy"))
-28060       fnd1(lastbilling,1)
+28060       fnLastBillingDate(lastbilling,1)
 28080     end if 
 28100     mat msgtext$(1)=("Customers reversed: "&str$(undoCount))
 28120     fnmsgbox(mat msgtext$,answer$,"Report",0)
@@ -123,7 +123,7 @@
 30000 XIT: fnxit
 44000   def fn_options(&route,&billingdate$) ! show options dialog to user and return selections
 44020     dim screen_name$*100,resp$(20)*255
-44040     fnd1(lastbilling) ! get last billing date and use it for the default
+44040     fnLastBillingDate(lastbilling) ! get last billing date and use it for the default
 44060     filter=0 : route=0 : cust$=''
 44080 OPTIONS_TOS: ! 
 44100     fntos(screen_name$="UndoBillingOptions")

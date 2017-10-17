@@ -13,7 +13,7 @@
 01240 ! /r
 06000 ! PrintBill_Basic - dynamic pr bill program that works for multiple clients
 08000 def fn_setup
-08020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnerror,fnopt,fntos,fncmbact,fnd1,fnxit,fncmdset,fnopenprn,fncloseprn,fncreg_read,fncreg_write,fngethandle,fncustomer_address
+08020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnerror,fnopt,fntos,fncmbact,fnLastBillingDate,fnxit,fncmdset,fnopenprn,fncloseprn,fncreg_read,fncreg_write,fngethandle,fncustomer_address
 08040   library 'S:\Core\Library': fnformnumb$,fntrans_total_as_of,fnget_services
 08060   library 'S:\Core\Library': fnpa_open,fnpa_finis,fnpa_barcode,fnpa_newpage,fnpa_txt,fnpa_fontsize,fnpa_fontbold,fnpa_font,fnpa_line,fnpa_fontitalic,fnpa_pic,fnpa_elipse
 08070   library 'S:\Core\Library': fntop,fnchain,fnub_printbill_program$
@@ -163,7 +163,7 @@
 22000 ! r: post client setup configuration, file opening, etc
 22020   mat mg$(message1_line_count) : mat respc_mg1(message1_line_count)
 22040   mat mg2$(message2_line_count) : mat respc_mg2(message2_line_count)
-22060   fnd1(d1)
+22060   fnLastBillingDate(d1)
 22080   fncreg_read('Penalty Due Date',tmp$) : d4=val(tmp$)
 22100   if days(d4,'mmddyy')<days(d1,'mmddyy') then 
 22120     if d4<>0 then
