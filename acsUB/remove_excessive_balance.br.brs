@@ -1,4 +1,4 @@
-00010   library 'S:\Core\Library': fnxit,fncno,fnopenprn,fncloseprn,fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnpause,fnd1,fngethandle,fntop,fntos,fnlbl,fntxt,fncmbact,fncmbrt2,fnchk,fncmdset,fnacs,fnmsgbox ! fncombof
+00010   library 'S:\Core\Library': fnxit,fncno,fnopenprn,fncloseprn,fnerror,fnwait,fndate_mmddyy_to_ccyymmdd,fnpause,fnLastBillingDate,fngethandle,fntop,fntos,fnlbl,fntxt,fncmbact,fncmbrt2,fnchk,fncmdset,fnacs,fnmsgbox ! fncombof
 00030   on error goto ERTN
 00040   fncno(cno) ! get account first
 00050   fn_main_loop
@@ -17,7 +17,7 @@
 01190 ! billing date text box
 01200     fnlbl(9,2,"Billing date:")
 01210     fntxt(9,35,8,0,0,"1")
-01220     fnd1(lastbilling) ! get last billing date and use it for the default
+01220     fnLastBillingDate(lastbilling) ! get last billing date and use it for the default
 01230     resp$(2)=str$(lastbilling)
 01270 ! 
 01280     fncmdset(2) ! show "Next" and "Cancel" buttons
@@ -112,8 +112,6 @@
 11020       fn_printheader
 11040       continue 
 11060 CUSTDONE: ! 
-11080 !     lastbilling=val(date$(days(lastbilling,"ccyymmdd"),"mmddyy"))
-11100 !     fnd1(lastbilling,1)
 11120       mat msgtext$(1)=("Customers reversed: "&str$(undocount))
 11140       fnmsgbox(mat msgtext$,answer$,"Report",0)
 11160       fncloseprn

@@ -5,7 +5,7 @@
 02000 def fn_setup
 02020   if ~setup then
 02040     setup=1
-02080     library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnmsgbox,fnchain,fnd1,fnxit,fntop
+02080     library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnmsgbox,fnchain,fnLastBillingDate,fnxit,fntop
 02100     library 'S:\Core\Library': fndate_mmddyy_to_ccyymmdd,fncomboa,fncustomer,fnhand_held_device$
 02120     library 'S:\Core\Library': fngethandle,fnbutton,fnregistered_for_hh,fnretrieve_hand_held_file,fnask_account
 02140     library 'S:\Core\Library': fnlbl,fntxt,fnacs,fntos,fnopt,fnchk,fnflexinit1,fnflexadd1
@@ -35,7 +35,7 @@
 02560     opt_final_billing$(4)="3 = Active, but do not Bill"
 02580     opt_final_billing$(5)="4 = Finaled, but not billed"
 02600   ! 
-02620     fnd1(d1)
+02620     fnLastBillingDate(d1)
 02700     if days(d1,'mmddyy')<days(date$('mmddyy'),'mmddyy')-15 then d1=0
 02720     open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,input 
 02740     read #1,using "form pos 130,n 4": pcent ioerr ignore ! percent for unusual usage
@@ -1371,7 +1371,7 @@
 47940   end if 
 47960   d1=val(resp$(1))
 47980   d2=val(resp$(2))
-48000   fnd1(d1,1)
+48000   fnLastBillingDate(d1,1)
 48020   fncreg_write('Meter Reading Date Current',str$(d2))
 48240   x$=lpad$(trim$(resp$(3)(1:10)),10) ! formerly resp$(9)
 48260   if lrec(hWork)>0 and ck=2 then 

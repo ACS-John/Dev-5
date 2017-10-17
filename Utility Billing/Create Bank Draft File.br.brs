@@ -1,6 +1,6 @@
 14000 ! formerly S:\acsUB\BkDraft
 14020 ! r: setup
-14040   library 'S:\Core\Library': fntop,fnxit, fnd1,fnacs,fnlbl,fntxt,fntos,fnopenprn,fncloseprn,fnerror,fnmsgbox,fncmdset,fnchk,fndate_mmddyy_to_ccyymmdd,fnureg_write,fnureg_read,fnget_services
+14040   library 'S:\Core\Library': fntop,fnxit, fnLastBillingDate,fnacs,fnlbl,fntxt,fntos,fnopenprn,fncloseprn,fnerror,fnmsgbox,fncmdset,fnchk,fndate_mmddyy_to_ccyymmdd,fnureg_write,fnureg_read,fnget_services
 14060   on error goto ERTN
 14080 ! r: dims
 14100   dim pth$*128
@@ -9,7 +9,7 @@
 14180   dim resp$(5)*128,msgline$(5)*80
 14200 ! /r
 18020   fntop(program$)
-18030   fnd1(d1)
+18030   fnLastBillingDate(d1)
 18100   fnget_services(mat srvname$)
 18120   for j=1 to 10
 18140     if trim$(srvname$(j))>"" then order(j)=1 : sz1+=1

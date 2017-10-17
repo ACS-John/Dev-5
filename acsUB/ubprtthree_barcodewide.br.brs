@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubprtthree_barcodewide
 00020 ! barcode sample for three per page
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnmsgbox,fnbarcodewide,fnpa_finis,fnpa_open,fnpa_newpage
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnmsgbox,fnbarcodewide,fnpa_finis,fnpa_open,fnpa_newpage
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(12)*60,txt$*100,mg$(3)*60,rw(22,13),cap$*128,fb$(3)*60
@@ -10,7 +10,7 @@
 00100   dim dueby$*30,prebal$*30,usage(3),billdate(3),ml$(2)*80,tg(11)
 00110 ! ______________________________________________________________________
 00120   fncno(cno,cnam$) !:
-        fnd1(d1)
+        fnLastBillingDate(d1)
 00130   double=.12
 00140   open #ratemst:=8: "Name="&env$('Q')&"\UBmstr\ubData\RateMst.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubData\RateIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
 00150   at$(1)=cnam$ !:

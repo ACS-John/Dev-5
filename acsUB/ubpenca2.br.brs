@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubPenCa2
 00020 ! Additional Penalty Calculation ( calculates a standard dollar amount of penalty of each penalty charge in their system
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnerror,fntos,fnopenprn,fncloseprn,fnmsgbox,fnxit,fndate_mmddyy_to_ccyymmdd,fncno,fndat,fnd1,fncmdset,fntop,fnchk,fncreg_read,fncreg_write,fnget_services
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnerror,fntos,fnopenprn,fncloseprn,fnmsgbox,fnxit,fndate_mmddyy_to_ccyymmdd,fncno,fndat,fnLastBillingDate,fncmdset,fntop,fnchk,fncreg_read,fncreg_write,fnget_services
 00050   on error goto ERTN
 14000 ! ______________________________________________________________________
 14020   dim resp$(9)*40,msgline$(1)*80,oldtg(11)
@@ -13,7 +13,7 @@
 14140 ! ______________________________________________________________________
 18000   fntop(program$,cap$="Additional Penalty Calculation")
 18020   fncno(cno,cnam$)
-18040   fnd1(bildat)
+18040   fnLastBillingDate(bildat)
 18060   fndat(dat$)
 18080 ! 
 18100   fnget_services(mat servicename$, mat service$, mat tax_code$,mat penalty$,mat subjectto)

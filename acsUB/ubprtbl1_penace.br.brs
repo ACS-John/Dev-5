@@ -1,11 +1,11 @@
 00010 ! REPLACE S:\acsUB\ubprtbl1_Pennington
 00020   on error goto L990
 00030   on fkey 5 goto L450
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn,fncmdkey,fnconsole
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn,fncmdkey,fnconsole
 00050   dim z$*10,e$(4)*30,f$*12,g(12),d(15),w$*31,y$*39,x$*70,b(11),fli$(5),cap$*128
 00051   dim csz$*30
 00060   fncno(cno,cnam$) !:
-        fnd1(d1)
+        fnLastBillingDate(d1)
 00075   fnconsole(on=1)
 00080   def fnc(x)=int(100*(x+sgn(x)*.0001))
 00090   pr newpage

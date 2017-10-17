@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsUB\ubBilJrn
 00020 ! -- pr Billing Journal
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fnerror,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnd1,fncmdset,fnchk,fnfra,fnopt,fnpause,fncreg_read,fncreg_write,fnget_services,fnindex_it,fnstatus_pause
+00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fnerror,fnopenprn,fncloseprn,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncmdset,fnchk,fnfra,fnopt,fnpause,fncreg_read,fncreg_write,fnget_services,fnindex_it,fnstatus_pause
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim z$*10,e$(4)*30,g(12)
@@ -15,7 +15,7 @@
 00112   dim tg(11),usages(3)
 00120 ! ______________________________________________________________________
 00130   fntop(program$)
-00170   fnd1(billing_date)
+00170   fnLastBillingDate(billing_date)
 00200   fncreg_read('Route Low',bkno1$) : route_number=val(bkno1$)
 00230   fnget_services(mat servicename$,mat service$,mat tax_code$,mat penalty$)
 00260   hd1$="Account                             "

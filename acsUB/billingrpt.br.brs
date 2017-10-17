@@ -1,9 +1,9 @@
 00020 ! pr utility billing reports based on bills
 00030   on fkey 5 goto DONE
-00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fndat,fnerror,fnopenprn,fncloseprn,fncno,fnxit,fndate_mmddyy_to_ccyymmdd,fnd1,fncmdset,fntop,fnpause,fnchk,fncmbact,fnopt,fnd1
+00040   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fndat,fnerror,fnopenprn,fncloseprn,fncno,fnxit,fndate_mmddyy_to_ccyymmdd,fnLastBillingDate,fncmdset,fntop,fnpause,fnchk,fncmbact,fnopt
 00050   dim cap$*128,sendto$*80,z$*10,e2$*30,temp$(3)*26,resp$(10)*50,cnam$*40
 00060   fntop("S:\Utility Billing\Billing Journal",cap$="Secondary Water Usage Report")
-00065   fnd1(d1)
+00065   fnLastBillingDate(d1)
 00070   fncno(cno,cnam$)
 00090 ! ______________________________________________________________________
 00100   fntos(sn$="billingrpt")

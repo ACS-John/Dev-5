@@ -977,9 +977,9 @@
 70340     library 'S:\acsUB\CmbRoute.br': fncmbroute
 70350     fncmbroute=fncmbroute(lyne,mypos,addall,c,a$)
 70360   fnend 
-70370   def library fnd1(&d1;get_or_put)
-70380     library 'S:\acsUB\D1.br': fnd1
-70390     fnd1=fnd1(d1,get_or_put)
+70370   def library fnLastBillingDate(&d1;get_or_put)
+70380     library 'S:\acsUB\D1.br': fnLastBillingDate
+70390     fnLastBillingDate=fnLastBillingDate(d1,get_or_put)
 70400   fnend 
 70410   def library fncustomer_search(&x$;fixgrid)
 70420     library 'S:\acsUB\customer_search.br': fncustomer_search

@@ -34,7 +34,7 @@
 11500     library 'S:\Core\Library': fnclient_has_mat
 11520     library 'S:\Core\Library': fnpayroll_client_state$
 11540     library 'S:\Core\Library': fndat
-11560     library 'S:\Core\Library': fnd1
+11560     library 'S:\Core\Library': fnLastBillingDate
 11580     library 'S:\Core\Library': fnclient_is_converting
 11600     library 'S:\Core\Library': fnclear_menu
 11620     library 'S:\Core\Library': fndisplay_menu
@@ -596,7 +596,7 @@
 29520         fn_ddAddButton('Employee',fkey_g2_employee:=5011,tmpBtnItem+=1,tmp_btn_width, 2)
 29540       end if
 30000     else if env$('cursys')="UB" then
-30010       fnd1(d1) : d1$=date$(days(d1,'mmddyy'),'mm/dd/ccyy')
+30010       fnLastBillingDate(d1) : d1$=date$(days(d1,'mmddyy'),'mm/dd/ccyy')
 30020     !           fnlbl(myline,mypos,txt$*200; mylen,myalign,font_mod,container,tabcon)
 30030       fnlbl(1,1,'Last Billing Date:',18,1,0,1)
 30040       fnlbl(1,20,d1$,4,0,0,1)

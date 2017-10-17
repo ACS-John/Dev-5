@@ -1,7 +1,7 @@
 10000 ! Replace S:\acsUB\ubprtbl1_thayer
 10200 ! pr bills for Village of Thayer  (new 4 per page 10/24/06)
 10400 ! ______________________________________________________________________
-10600   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_line
+10600   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_line
 10800   on error goto ERTN
 11000 ! ______________________________________________________________________
 11200   dim resp$(10)*40,txt$*45,mg$(3)*30,rw(22,13),cap$*128
@@ -9,7 +9,7 @@
 11600   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40,datafile$*256,indexfile$*256
 11800 ! ______________________________________________________________________
 12000   fncno(cno,cnam$)
-12200   fnd1(d1)
+12200   fnLastBillingDate(d1)
 12400   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
 12600   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 12800   close #21: 

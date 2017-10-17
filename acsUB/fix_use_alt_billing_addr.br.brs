@@ -1,4 +1,4 @@
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntop,fnchk,fnerror,fntos,fncno,fnd1,fnxit,fncmdset,fngethandle
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntop,fnchk,fnerror,fntos,fncno,fnxit,fncmdset,fngethandle
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*80
@@ -6,9 +6,7 @@
 00090   dim z$*10,e$(4)*30,ba$(4)*30
 00150 ! ______________________________________________________________________
 20000   fntop(program$,cap$='Fix Use Alternate Billing Address')
-20020   fncno(cno,cnam$) 
-20040 ! fnd1(d1)
-20100 ! ______________________________________________________________________
+20020   fncno(cno,cnam$)
 30000 ! r: SCREEN1:
 30020   fntos(sn$="UBPrtBl1-1") 
 30040   pf=34 : ll=32 : width=pf+8

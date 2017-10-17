@@ -1,5 +1,5 @@
 00020 ! average sewer usage program
-00030   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fndat,fnerror,fnopenprn,fncloseprn,fncno,fnxit,fndate_mmddyy_to_ccyymmdd,fnd1,fncmdset,fntop,fnpause,fnchk,fncmbact,fnopt
+00030   library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fntos,fndat,fnerror,fnopenprn,fncloseprn,fncno,fnxit,fndate_mmddyy_to_ccyymmdd,fncmdset,fntop,fnpause,fnchk,fncmbact,fnopt
 00040   dim cap$*128,sendto$*80,z$*10,e$(4)*30,temp$(3)*26
 00050   fntop("S:\Utility Billing\Billing Journal",cap$="Average Sewer Usage Report")
 00060   fncno(cno,cnam$)

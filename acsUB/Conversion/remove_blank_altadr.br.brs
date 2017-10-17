@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\conversion\remove_blank_altadr
 00020 ! remove blank alternate billing addresses (still get key= after conversion and causes blank addresses  ( on old system the addresses were just set to blank when deleted, but not the customer #
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn,fncmdkey
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnopenprn,fncloseprn,fncmdkey
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   fncno(cno)

@@ -1,7 +1,7 @@
 00020   on fkey 5 goto L400
 00030   on error goto L440
 00040 ! 
-00050   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnd1
+00050   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$
 00060   fntop("S:\acsTM\emaint",cap$="Employee")
 00070   fncno(cno,cnam$)
 00080   fnopenprn

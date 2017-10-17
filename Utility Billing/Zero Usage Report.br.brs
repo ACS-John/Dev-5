@@ -1,13 +1,13 @@
 00010 ! formerly S:\acsUB\ubNoUsage
 00020 ! ______________________________________________________________________
-16000   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnerror,fnopenprn,fncloseprn,fnxit,fnd1,fncmdset,fntop,fnchk,fnget_services
+16000   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnerror,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fncmdset,fntop,fnchk,fnget_services
 16020   on error goto ERTN
 16040 ! ______________________________________________________________________
 16060   dim z$*10,e$(4)*30,resp$(10)*40,d(15)
 16080   dim servicename$(10)*20,a(7)
 16100 ! ______________________________________________________________________
 16120   fntop(program$)
-16140   fnd1(d1)
+16140   fnLastBillingDate(d1)
 16160   fnget_services(mat servicename$)
 24000 MAIN: ! 
 24040   fntos(sn$:="UBNOUsage")

@@ -1,5 +1,5 @@
 00020   on error goto L2080
-00030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fnd1,fndat
+00030   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fndat
 00040   fntop(program$,cap$="Monthly Billing Summary")
 00050   fncno(cno,cnam$)
 00060   fnconsole(1)

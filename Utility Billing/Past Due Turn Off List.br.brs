@@ -1,6 +1,6 @@
 00010 ! formerly S:\acsUB\ubPDTnOf
 00020 ! r: initial stuff
-00030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnerror,fntos,fnopenprn,fncloseprn,fnxit,fncomboa,fnfra,fnd1,fncmdset,fntop,fnchk,fndat,fncreg_read,fncreg_write,fnget_services,fngethandle
+00030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnerror,fntos,fnopenprn,fncloseprn,fnxit,fncomboa,fnfra,fnLastBillingDate,fncmdset,fntop,fnchk,fndat,fncreg_read,fncreg_write,fnget_services,fngethandle
 00040   on error goto ERTN
 00050 ! 
 00060   dim resp$(20)*80
@@ -8,7 +8,7 @@
 00080   dim ba(13),badr(2),bt1(14,2),bd1(5),bd2(5),cap$*128,month(4),dat$*20
 00090 ! 
 26000   fntop(program$,cap$="Past Due and Turn Off List")
-26040   fnd1(lbill)
+26040   fnLastBillingDate(lbill)
 26060   fndat(dat$)
 26080   dim opt_aai$(3)
 26100   opt_aai$(1)="[All]"

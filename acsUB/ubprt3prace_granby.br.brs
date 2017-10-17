@@ -1,6 +1,6 @@
 00010 ! Replace S:\acsUB\ubprt3prace_granby
 00020 ! pr bills for Carrizo Springs   3 per page prace
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnmsgbox,fnbarcode,fnpa_txt,fnpa_open,fnpa_finis,fnpa_line,fnpa_newpage
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnmsgbox,fnbarcode,fnpa_txt,fnpa_open,fnpa_finis,fnpa_line,fnpa_newpage
 00030 ! ______________________________________________________________________
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
@@ -11,7 +11,7 @@
 00110   dim dueby$*30,usage(3),billdate(3),ml$(2)*80,tg(11)
 00120 ! ______________________________________________________________________
 00130   fncno(cno,cnam$)
-00140   fnd1(d1)
+00140   fnLastBillingDate(d1)
 00150   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
 00160   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 00170   close #21: 

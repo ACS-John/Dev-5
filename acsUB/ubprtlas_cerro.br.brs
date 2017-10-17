@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubPrtLas_Cerro
 00020 ! pr bills (new format)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fnformnumb$,fnpause,fnopenprn,fncloseprn,fnget_services
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fnformnumb$,fnpause,fnopenprn,fncloseprn,fnget_services
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(10)*80,txt$*40,mg$(3)*30,rw(22,13),indexfile$*256
@@ -12,7 +12,7 @@
 00120 ! ______________________________________________________________________
 00160 ! fnTop - set by another calling program
 00170   fncno(cno,cnam$) !:
-        fnd1(d1)
+        fnLastBillingDate(d1)
 00180 ! 
 00200   fnget_services(mat servicename$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 00230   linelength=62

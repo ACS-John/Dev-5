@@ -1,6 +1,6 @@
 00020   on fkey 5 goto L970 ! 9/5/86
 00030   on error goto L1570
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fnd1,fndat
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fndat
 00050   fntop(program$,cap$="Trial Balance")
 00060   fncno(cno,cnam$)
 00070   fndat(dat$)

@@ -1,4 +1,4 @@
-00030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnerror,fnwait,fnopenprn,fncloseprn,fnxit,fnd1,fndat,fncmdset,fntop,fngethandle
+00030   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnerror,fnwait,fnopenprn,fncloseprn,fnxit,fnLastBillingDate,fndat,fncmdset,fntop,fngethandle
 00040   on error goto ERTN
 00050   dim cap$*128
 00060 ! 
@@ -6,7 +6,7 @@
 00080   dim cap$*128,resp$(2)*40,txt$*40,a$*1,line$*90
 00090 ! 
 00120   fntop(program$,cap$="Notes")
-00130   fnd1(d1)
+00130   fnLastBillingDate(d1)
 00180 SCR1: ! 
 00190   fntos(sn$="ubnotes") 
 00192   respc=0

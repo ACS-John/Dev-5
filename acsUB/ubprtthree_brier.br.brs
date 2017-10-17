@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\ubprtthree_Brier
 00020 ! pr bills for Village of Monticello (full page)
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fntos,fncmbact,fnd1,fnxit,fncmdset,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_fontsize
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fntos,fncmbact,fnLastBillingDate,fnxit,fncmdset,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt,fnpa_fontsize
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim resp$(12)*60,txt$*100,mg$(3)*60,fb$(3)*60
@@ -9,7 +9,7 @@
 00090   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40
 00100   dim prebal$*30
 00110 ! ______________________________________________________________________
-00120   fnd1(d1)
+00120   fnLastBillingDate(d1)
 00130   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
         read #21,using "Form POS 41,2*C 40": at$(2),at$(3) !:
         close #21: 

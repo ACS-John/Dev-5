@@ -1,7 +1,7 @@
 10000 ! Replace S:\acsUB\ubprtbl1_millry
 10100 ! pr bills (new format)
 10200 ! ______________________________________________________________________
-10300   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt
+10300   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fncmbrt2,fncombof,fnchk,fnerror,fnopt,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fntop,fnformnumb$,fnpause,fnpa_finis,fnpa_open,fnpa_newpage,fnpa_txt
 10400   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 10500   on error goto ERTN
 10600 ! ______________________________________________________________________
@@ -10,7 +10,7 @@
 10900   dim gb(10),pe$(4)*30,ba$(4)*30,at$(3)*40,cnam$*40
 11000 ! ______________________________________________________________________
 11100   fncno(cno,cnam$)
-11200   fnd1(d1)
+11200   fnLastBillingDate(d1)
 11300   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
 11400   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 11500   close #21: 

@@ -1,7 +1,7 @@
 00010 ! Replace S:\acsUB\UBdelinq
 00020 ! Past Due Balance Breakdown
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fntos,fnopenprn,fncloseprn,fnerror,fnwait,fnchk,fnxit,fncno,fnd1,fncmdset,fntop,fncreg_read,fnget_services
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fnwait,fntos,fnopenprn,fncloseprn,fnerror,fnwait,fnchk,fnxit,fncno,fnLastBillingDate,fncmdset,fntop,fncreg_read,fnget_services
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim z$*10,e$*30,g(12),cap$*128,resp$(10)*60
@@ -9,7 +9,7 @@
 00090   dim service$(10)*2,tax_code$(10)*1,penalty$(10)*1
 00095   dim srv$(10)*2
 00100 ! ______________________________________________________________________
-00120   fnd1(lbill)
+00120   fnLastBillingDate(lbill)
 00130   fntop(program$,cap$="Past Due Balance Breakdown")
 00140 ! need to build headings from this information
 00150   fnget_services(mat servicename$, mat srv$, mat tax_code$,mat penalty$)

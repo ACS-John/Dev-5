@@ -1,6 +1,6 @@
 00020 ! pr bills for Blucksberg Mountain Water (full page)
 12000 ! ______________________________________________________________________
-12020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fntos,fncmbact,fncno,fnd1,fnxit,fncmdset,fnpa_finis,fnpa_line,fnpa_txt,fnpa_open,fnpa_elipse,fngethandle,fnpa_newpage,fnpa_pic,fnpa_fontsize,fnpa_fontitalic,fnpa_fontbold,fntrans_total_as_of,fnget_services,fncreg_read,fncreg_write
+12020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fncombof,fnchk,fnerror,fntos,fncmbact,fncno,fnLastBillingDate,fnxit,fncmdset,fnpa_finis,fnpa_line,fnpa_txt,fnpa_open,fnpa_elipse,fngethandle,fnpa_newpage,fnpa_pic,fnpa_fontsize,fnpa_fontitalic,fnpa_fontbold,fntrans_total_as_of,fnget_services,fncreg_read,fncreg_write
 12040   on error goto ERTN
 12060 ! ______________________________________________________________________
 12080   dim resp$(40)*128,mg$(13)*128,cap$*128
@@ -9,7 +9,7 @@
 12140   dim usage(3),billdate(3),reads(3),tg(11)
 12160 ! ______________________________________________________________________
 14000   fncno(cno,cnam$)
-14020   fnd1(d1)
+14020   fnLastBillingDate(d1)
 14040   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
 14060   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 14080   close #21: 

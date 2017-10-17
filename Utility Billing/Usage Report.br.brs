@@ -1,6 +1,6 @@
 00010 ! formerly S:\acsUB\UBUsage
 20000 ! r: setup library, on err, dims, constants, etc
-20020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnxit,fnd1,fncmdset,fntop,fngethandle,fnopt,fnget_services
+20020   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fncmbrt2,fntos,fnopenprn,fncloseprn,fnerror,fndate_mmddyy_to_ccyymmdd,fnxit,fnLastBillingDate,fncmdset,fntop,fngethandle,fnopt,fnget_services
 20040   on error goto ERTN
 20060   fntop(program$)
 20080 ! ______________________________________________________________________
@@ -8,7 +8,7 @@
 20120   dim t(3,2),r(3,2),line$*212,serviceName$(10)*20,srv$(10)*2
 20140   dim resp$(10)*128
 20160 ! ______________________________________________________________________
-22020   fnd1(filterBillingDate)
+22020   fnLastBillingDate(filterBillingDate)
 22040   fnget_services(mat serviceName$,mat srv$)
 22060   if trim$(serviceName$(1))<>"" then service1enabled=1
 22080   if trim$(serviceName$(3))="Electric" or trim$(srv$(3))="EL" or trim$(serviceName$(3))="Lawn Meter" then service3enabled=1

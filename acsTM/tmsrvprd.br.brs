@@ -1,6 +1,6 @@
 00020   on fkey 5 goto L470
 00030   on error goto L920
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole,fnd1
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fncno,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnconsole
 00050   fntop(program$,cap$="Service Production Report")
 00060   fncno(cno,cnam$)
 00070   fnconsole(1)
