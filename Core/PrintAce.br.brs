@@ -18,8 +18,8 @@
 12340     library 'S:\Core\PrintPdf': fnpdf_pic
 12360     library 'S:\Core\PrintPdf': fnpdf_fontsize
 12380     library 'S:\Core\PrintPdf': fnpdf_background
-12400     fnreg_read('Report_Cache',report_cache$)
-12420     if report_cache$='True' then print_report_caching=1 else print_report_caching=0
+12400     ! fnreg_read('Report_Cache',report_cache$)
+12420     ! if report_cache$='True' then print_report_caching=1 else print_report_caching=0
 12440     fnreg_read('PrintAce.Max Pages',max_pages$)
 12460     fnreg_read('formsFormat',formsFormat$)
 12480     g_pa_max_pages=val(max_pages$) conv ignore
@@ -92,12 +92,12 @@
 26080   h_printace=20
 26100   if file(h_printace)=-1 then 
 26120     dim pa_o_filename$*1024
-26140     if print_report_caching then 
+26140     ! if print_report_caching then 
 26160       pa_o_filename$=fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
 26170       fnstatus('  Report Cache Name: '&pa_o_filename$)
-26180     else 
-26200       pa_o_filename$=env$('client_temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
-26220     end if 
+26180     ! else 
+26200     !   pa_o_filename$=env$('client_temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
+26220     ! end if 
 26260     if pa_orientation$='' then pa_orientation$='Portrait'
 26280     open #h_printace: "Name="&env$('at')&pa_o_filename$&",Replace,RecL=5000",display,output 
 26300     pa_filename$=pa_o_filename$

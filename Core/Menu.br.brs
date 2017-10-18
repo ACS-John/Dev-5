@@ -92,7 +92,7 @@
 12760   fndecimal_assumed
 12780   fnreg_read('Enable Save Company As',enableSaveCompanyAs$, 'False')
 12800   ! fnreg_read('Enable Open Partial',enableOpenPartial$, 'False')
-12820   fnreg_read('Enable Backup Report Cache',enableBackupReportCache$, 'False')
+12820   ! fnreg_read('Enable Backup Report Cache',enableBackupReportCache$, 'False')
 12840   fn_setup_on_cursys_change
 12860   !
 12880   dim temp$*2048
@@ -113,7 +113,7 @@
 13200   end if
 13220   fn_grid_setup
 13240   fn_checkFileVersionIfNecessary
-13260   fnreg_read('Report_Cache',report_cache$)
+13260   ! fnreg_read('Report_Cache',report_cache$)
 13280   fncreg_write('Company Last Accessed Date and Time',date$('mm/dd/ccyy')&' '&time$)
 13300   setenv('ForceScreenIOUpdate','')
 13900 fnend
@@ -794,9 +794,9 @@
 70250     end if
 70260     fn_dm_add(' -')
 70280     fn_dm_add(' Preferences','S:\Core\Programs\Preferences.br')
-70300     if report_cache$='True' then
-70320       fn_dm_add(' Open &Report Cache','%report_cache_folder_current%\')
-70340     end if
+70300     ! if report_cache$='True' then
+70320     fn_dm_add(' Open &Report Cache','%report_cache_folder_current%\')
+70340     ! end if
 70360     fn_dm_add(' -')
 70400     fn_dm_add(' E&xit'&chr$(9)&'Alt+F4','Exit')
 70402     if env$('BR_MODEL')='CLIENT/SERVER' then

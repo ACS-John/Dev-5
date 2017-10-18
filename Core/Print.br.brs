@@ -10,8 +10,8 @@
 12110     library 'S:\Core\Library': fnmakesurepathexists
 12112     ! library 'S:\Core\Library': fntos,fnlbl,fntxt,fnacs,fnopt,fncmdset
 12120     ! 
-12140     fnreg_read('Report_Cache',report_cache$,'True')
-12160     if report_cache$='True' then print_report_caching=1 else print_report_caching=0
+12140     ! report_cache$='True' ! fnreg_read('Report_Cache',report_cache$,'True')
+12160     ! if report_cache$='True' then print_report_caching=1 else print_report_caching=0
 12180     fnureg_read('wait_wp_close',wait_wp_close$,'True')
 12200     if wait_wp_close$='False' then print_report_nowait=1 else print_report_nowait=0
 12260   end if 
@@ -24,7 +24,7 @@
 24010   dim pfnReturn$*1024
 24020   pfn_extension$=trim$(pfn_extension$,'.')
 24040   if pfn_extension$='' then pfn_extension$='rtf'
-24060   if print_report_caching then 
+24060   ! if print_report_caching then 
 24070     if programCaptionOverride$='' then programCaptionOverride$=env$('Program_Caption')
 24200     pfnReturn$=fn_report_cache_folder_current$&'\'&fn_safe_filename$(programCaptionOverride$)
 24210     pfn_sendto_base_name_addition$=trim$(fn_safe_filename$(pfn_sendto_base_name_addition$))
@@ -33,9 +33,9 @@
 24260     end if 
 24280     pfnReturn$=pfnReturn$&' - '&date$('ccyy-mm-dd')&' '&fn_safe_filename$(time$)
 24300     pfnReturn$=pfnReturn$&'.'&pfn_extension$
-24320   else 
-24340     pfnReturn$=env$('temp')&'\acs-'&session$&'.'&pfn_extension$
-24360   end if 
+24320   ! else 
+24340   !   pfnReturn$=env$('temp')&'\acs-'&session$&'.'&pfn_extension$
+24360   ! end if 
 24380   fn_print_file_name$=pfnReturn$
 24400 fnend 
 25000 def library fnreport_cache_folder_current$*512
@@ -46,11 +46,7 @@
 25100   dim report_cache_base$*256
 25120   ! dim client_report_cache$*256
 25140   if env$('BR_MODEL')='CLIENT/SERVER' then
-25160     if env$('enableReportCacheOnClient')='Yes' then
-25180       report_cache_base$='C:\ProgramData\ACS\Report Cache'
-25200     else
-25220       fnureg_read('CS Client Report Cache',report_cache_base$)
-25240     end if
+25180     report_cache_base$='C:\ProgramData\ACS\Report Cache'
 25260   else
 25280     report_cache_base$=os_filename$(env$('Q')&'\Report Cache')
 25300   end if
@@ -58,12 +54,7 @@
 25340   dim tmp_dir$*512
 25360   tmp_dir$=report_cache_base$&'\'&fnSystemName$
 25380   tmp_dir$=tmp_dir$&'\'&fn_safe_filename$(env$('cnam'))&' ('&env$('cno')&')'
-25400   ! pr 'report_cache_base$='&report_cache_base$ : pr 'tmp_dir$='&tmp_dir$ : pause
-25420   if env$('enableReportCacheOnClient')='Yes' then
-25440     fnmakesurepathexists(env$('at')&tmp_dir$&'\tmp.txt')
-25460   else
-25480     fnmakesurepathexists(tmp_dir$&'\tmp.txt')
-25500   end if
+25440   fnmakesurepathexists(env$('at')&tmp_dir$&'\')
 25520   fn_report_cache_folder_current$=tmp_dir$
 25540 fnend
 26000 def library fnopen_receipt_printer(; orp_only_if_it_is_assigned)
@@ -166,9 +157,9 @@
 42480     pr 'win 98 no longer supported.' : pause ! fn_start_win9x
 42500   end if 
 42520  DROPIT: ! 
-42540   if ~print_report_nowait and ~print_report_caching and nodrop<>1 then 
-42560     execute 'Drop "'&clientSendto$&'" -N' ioerr DROPIT ! empties the contents of clientSendto$
-42580   end if 
+42540   ! if ~print_report_nowait and ~print_report_caching and nodrop<>1 then 
+42560   !   execute 'Drop "'&clientSendto$&'" -N' ioerr DROPIT ! empties the contents of clientSendto$
+42580   ! end if 
 42600   goto START_XIT ! _______
 42620   ! ______________________________________________________________________
 42640   START_ERTN: ! 
@@ -282,7 +273,7 @@
 49040   close #21: 
 49060   close #20: 
 49080   ! /r
-49100   if env$('enableReportCacheOnClient')='Yes' then
+49100   if env$('BR_MODEL')='CLIENT/SERVER' then
 49120     fnCopy(env$('temp')&"\acs_print_tmp"&session$&".rtf",clientSendto$)
 49130   end if
 49140   fnCopy(env$('temp')&"\acs_print_tmp"&session$&".rtf",serverSendto$)

@@ -1,4 +1,4 @@
-00010 ! Replace S:\acsUB\ubPdNot
+00010 ! formerly S:\acsUB\ubPdNot
 00020 ! Past Due Notices
 00030 ! _______________________________________________________________________
 00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnopt,fnerror,fnopenprn,fncloseprn,fnxit,fncomboa,fnfra,fncmbrt2,fncmbact,fnchk,fncmdkey,fndat,fnLastBillingDate,fncmdset,fntop,fngethandle,fngetdir2,fnreg_read,fnreg_write,fnpa_finis,fnprint_file_name$,fncreg_read,fncreg_write,fnpa_open,fnpa_newpage,fncustomer_address,fnpa_txt,fnfree,fnEditFile,fncopy
@@ -7,13 +7,13 @@
 00080 ! r: dims
 00090   dim z$*10,meter_address$*30,gb(10),d$(4)*20,b4$*30
 00100   dim f$(3)*12,a(7),b(11),c(4),d(15),g(12)
-00110   dim cap$*128,resp$(15)*512
+00110   dim resp$(15)*512
 00120   dim ln$*8800,flname$*256,l2$*8800,r1$(120)*30,ln3$*1
 00130   dim extra$(11)*30,at$(3)*40,extra(23)
 00132   dim tmp_rtf_filename$*1024
 00140 ! /r
 00142 ! r: top of programs, constants,initial setup, etc
-00150   fntop(program$,cap$="Past Due Notices")
+00150   fntop(program$)
 00170   tmp_rtf_filename$=fnprint_file_name$
 00202   if env$('client')='French Settlement' or env$('client')='Granby' or env$('client')='Eldorado' then hard_coded=1 ! env$('client')='Merriam Woods' or
 00210   fnLastBillingDate(d1)
@@ -145,7 +145,7 @@
 16100   fnend  ! fn_open_template
 18000   def fn_prnt1
 18020     if ~h_prnt1 then 
-18040       open #h_prnt1:=fngethandle: "Name="&tmp_rtf_filename$&",eol=none,Replace",display,output 
+18040       open #h_prnt1:=fngethandle: "Name="&env$('at')&tmp_rtf_filename$&",eol=none,Replace",display,output 
 18060     end if 
 18080     fn_bldr1
 18100     r=0

@@ -19,7 +19,7 @@ Collections                                           ^ Utility Billing\Collecti
 Mid-Month                                             
 >Print                                                
 >>Past Due and Turn Off List                          ^ Utility Billing\Past Due Turn Off List
->>Past Due Notices                                    ^ acsUB\ubPDNot
+>>Past Due Notices                                    ^ Utility Billing\Past Due Notices
 >Penalty Calculation                                  ^ Utility Billing\Penalty Calculation
 >Second Penalty Calculation                           ^ acsUB\ubPenCa2
 Month-End                                             
