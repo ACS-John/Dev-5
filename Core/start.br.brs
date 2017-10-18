@@ -20,7 +20,6 @@
 03140         setenv('enableDataFolderByClient','Yes')
 03160         pr 'enableDataFolderByClient='&env$('enableDataFolderByClient')
 03180       end if
-03200       setenv('enableReportCacheOnClient','Yes') 
 03220     end if
 03240     ! /r
 04000     execute 'Config FieldBreak Min_Spaces 3, UnderScore Off'

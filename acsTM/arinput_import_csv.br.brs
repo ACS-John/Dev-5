@@ -1,7 +1,7 @@
 10000 ! REPLACE S:\acsTM\arinput_import_csv.br
-10100   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnd1,fnsearch
+10100   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnpedat$,fnprocess, fntos,fnlbl,fntxt,fnchk,fnqgl,fncmdset,fnacs,fnagl$,fnsearch
 10200   library 'S:\Core\Library': fnerror,fnopenprn,fncloseprn,fnacs,fnflexadd1,fnflexinit1,fntos,fncustomer_search,fnlbl,fntxt,fnmsgbox,fnbutton,fnfra
-10300   library 'S:\Core\Library': fndat,fncmbact,fncombof,fncmbrt2,fnd1,fncmdset,fncmdkey,fntop,fngethandle
+10300   library 'S:\Core\Library': fndat,fncmbact,fncombof,fncmbrt2,fncmdset,fncmdkey,fntop,fngethandle
 10400   library 'S:\Core\Library': fntransfile
 10500   fntop(program$,cap$="Import Transactions from Mint CSV to CL")
 10600   dim cr$*1,lf$*1,crlf$*2,line$*2048,item$(1)*1024

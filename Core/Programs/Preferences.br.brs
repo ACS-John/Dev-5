@@ -7,7 +7,7 @@
 14010   fnreg_read('Enable Save Company As',enableSaveCompanyAs$, 'False')
 14012   ! fnreg_read('Enable Open Partial',enableOpenPartial$, 'False')
 14014   fnreg_read('Enable Backup Report Cache',enableBackupReportCache$, 'False')
-14020   fnreg_read('Report_Cache',report_cache$, 'False')
+14020   ! fnreg_read('Report_Cache',report_cache$, 'False')
 14030   fnreg_read('PrintAce.Max Pages',pa_max_pages$)
 14031   fnreg_read('formsFormat',formsFormat$, pdf_or_printace$(1))
 14032 ! fnureg_read('CS Client Report Cache',client_report_cache$) : if client_report_cache$='' then client_report_cache$=report_cache$
@@ -232,8 +232,8 @@
 50080     col1_width=33 : col2_pos=col1_width+2 : lc=0 : win_width=75 : dsp_rc=0
 50100     fnlbl(lc+=1,1,"** System Settings **",win_width,2)
 50120     lc+=1
-50140     fnchk(lc+=1,5,"Enable Report Cache",1) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
-50160     resp$(resp_report_cache:=dsp_rc+=1)=report_cache$
+50140     ! fnchk(lc+=1,5,"Enable Report Cache",1) ! fnchk(lyne,ps,txt$*196; align,contain,tabcon)
+50160     ! resp$(resp_report_cache:=dsp_rc+=1)=report_cache$
 50180     fntxt(lc,35,40,256,0,'',1,'') ! fntxt(lyne,ps,width;maxlen,ali,mask$,disable,tooltip$*300,contain,tabcon,addtomask$*40)
 50200     resp$(dsp_rc+=1)=os_filename$(env$('Q')&'\Report Cache')
 50210     fnbutton(lc,30,'Open',12) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
@@ -280,7 +280,7 @@
 50560     if ck=5 then 
 50570       goto XIT
 50580     else 
-50600       report_cache$=resp$(resp_report_cache)
+50600       ! report_cache$=resp$(resp_report_cache)
 50610       wait_wp_close$=resp$(resp_wait_wp_close)
 50612       pa_max_pages$=resp$(resp_pa_max_pages)
 50620       atlantis_exe$=resp$(resp_atlantis)
@@ -449,10 +449,9 @@
 66010   fnreg_write('Enable Save Company As',enableSaveCompanyAs$)
 66012   ! fnreg_write('Enable Open Partial',enableOpenPartial$)
 66014   fnreg_write('Enable Backup Report Cache',enableBackupReportCache$)
-66020   fnreg_write('Report_Cache',report_cache$)
+66020   ! fnreg_write('Report_Cache',report_cache$)
 66040   fnreg_write('PrintAce.Max Pages',pa_max_pages$)
 66050   fnreg_write('formsFormat',formsFormat$)
-66060   !   fnureg_write('CS Client Report Cache',client_report_cache$)
 66080   fnureg_write('Background_Picture',br_filename$(background_picture$))
 66100   fnureg_write('Min_FontSize_Height',min_fontsize_height$)
 66120   fnureg_write('Min_FontSize_Width',min_fontsize_width$)
@@ -519,7 +518,7 @@
 70080     library 'S:\Core\Library': fnHand_Held_Device_list,fnhand_held_device$,fnopt,fngetpp,fncopyfile
 70100     library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
 70120     on error goto ERTN
-70140     dim resp$(20)*256,cap$*128,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256 ! ,client_report_cache$*256
+70140     dim resp$(20)*256,cap$*128,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
 70160     dim text_editor$*256
 70180     default_min_fontsize_height$='14'
 70200     default_min_fontsize_width$='6'
