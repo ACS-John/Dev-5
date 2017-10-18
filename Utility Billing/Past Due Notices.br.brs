@@ -96,7 +96,7 @@
 01200   if deltype<3 and bal<=1 then goto PRINT_NEXT
 01210   if bal<minbal and minbal>0 then goto PRINT_NEXT ! skip if under minimum balance
 01220   b4$=""
-01230   pr f "1,1,Cc 80,R,N": str$(rec(customer5))&"/"&str$(lrec(customer5))
+01230   ! pr f "1,1,Cc 80,R,N": str$(rec(customer5))&"/"&str$(lrec(customer5))
 01240   if deltype=3 and final=0 then goto READ_ADRBIL ! pr ALL ACTIVE CUSTOMERS
 01250   if deltype=4 and final>0 and bal>0 then goto READ_ADRBIL ! pr ALL INACTIVE CUSTOMERS WITH BAL
 01260 ! IF UPRC$(NEWBIL$)="Y" AND F=D1 AND BAL=<G(11) THEN GOTO 440
