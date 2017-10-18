@@ -616,7 +616,9 @@
 82600     fngetpp(efFileToEdit$,efFilePath$,efFileName$,efFileExt$)
 82620     efEditOnClientCopyOfFile$=env$('at')&'C:\ProgramData\ACS\Temp\Session'&session$&'\'&efFileName$&efFileExt$
 82640     fnmakesurepathexists(efEditOnClientCopyOfFile$)
-82660     fncopyfile(efFileToEdit$,efEditOnClientCopyOfFile$)
+82650     if exists(efFileToEdit$) then
+82660       fncopyfile(efFileToEdit$,efEditOnClientCopyOfFile$)
+82670     end if
 82680   else
 82700     efEditOnClientCopyOfFile$=efFileToEdit$
 82720   end if
