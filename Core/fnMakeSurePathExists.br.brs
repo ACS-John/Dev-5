@@ -12,15 +12,24 @@
 25020   do while pos(fileName$,"\")
 25040     path$=path$&fileName$(1:pos(fileName$,"\"))
 25060     fileName$=fileName$(pos(fileName$,"\")+1:len(fileName$))
-25080     ! pr 'if ~exists '&path$
 25100     doNotTryThisOne=0
-25120     if path$(1:2)='\\' and path$(1:4)='@:\\' then
-25140       posThirdSlash=pos(path$,'\',3)
-25160       posLastSlash=pos(path$,'\',-1)
-25180       if posLastSlash<=posThirdSlash then doNotTryThisOne=1 ! do not try entries like \\server\, but do try \\server\resource\ as \\server\ will fail the exists test but \\server\resource\ will pass (assuming it exists)
-25200     end if
-25220     if ~exists(path$) and path$<>'\\' and doNotTryThisOne=0 then 
-25240       execute 'mkdir "'&path$&'"'
-25260     end if
-25280   loop
-25300 fnend
+25220     ! r: do not try entries like  [@:]\\  nor  [@:]\\server\  nor  [@:]\\server\resource\
+25240     if path$(1:2)='\\' or path$(1:4)='@:\\' then 
+25260       mspeBackslashCount=fn_backslashCount(path$)
+25280       if mspeBackslashCount<=4 then doNotTryThisOne=1
+25300     end if
+25320     ! /r
+25340     if ~exists(path$) and doNotTryThisOne=0 then 
+25360       execute 'mkdir "'&path$&'"'
+25380     end if
+25400   loop
+25420 fnend
+32000 def fn_backslashCount(bscText$*128)
+32020   bscCount=0
+32040   do 
+32060     bscPos=pos(bscText$,'\')
+32080     if bscPos>0 then bscCount+=1
+32100     bscText$(bscPos:bscPos)=''
+32120   loop while bscPos>0
+32140   fn_backslashCount=bscCount
+32160 fnend
