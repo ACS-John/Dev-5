@@ -1,5 +1,6 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                           
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                           
+11:46 AM 10/19/2017	CO	Fixed Client login names to be case insensitive
 11:15 AM 10/18/2017	CO	Local Report Cache always enabled for Client installations
 11:15 AM 10/18/2017	UB	Past Due Notices fixed for Client installations
 2:59 PM 10/17/2017	CO	Report Cache is always on.

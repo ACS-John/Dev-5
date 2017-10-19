@@ -1,7 +1,7 @@
 Tab and Space Delimited
 Each field is padded to it's length and a tab is placed between each
 Length   Name              
-11       LocationID
+5        LocationID
 10       Account Number
 30       Customer Name
 12       Phone Number

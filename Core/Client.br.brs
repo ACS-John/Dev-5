@@ -67,11 +67,12 @@
 16000 def fn_setup
 16020   if ~setup_library then 
 16030     setup_library=1
-16040     library 'S:\Core\Library': fnerror,fngethandle,fnreg_read
-16060     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fncmdset,fntop,fnacs
-16070     library 'S:\Core\Library': fnXit
-16072     library 'S:\Core\Library': fnreg_close
-16074     library 'S:\Core\Library': fnSetQ
+16032     library 'S:\Core\Library': fnerror,fngethandle,fnreg_read
+16034     library 'S:\Core\Library': fntos,fnflexinit1,fnflexadd1,fncmdset,fntop,fnacs
+16036     library 'S:\Core\Library': fnXit
+16038     library 'S:\Core\Library': fnreg_close
+16040     library 'S:\Core\Library': fnSetQ
+16042     library 'S:\Core\Library': fnsrch_case_insensitive
 16080   end if 
 16090   fn_setup_client
 16100 fnend 
@@ -84,7 +85,7 @@
 20040   on error goto ERTN
 20060   dim clientReturn$*18
 20080   ! r: derive client
-20100   loginNameWhich=srch(mat client_name$,login_name$)
+20100   loginNameWhich=fnsrch_case_insensitive(mat client_name$,login_name$)
 20120   serialWhich=srch(mat client_brserial,serial)
 20140   clientWhich=0
 20160   if env$('acsClient')<>'' then ! it is specified in drive.sys - default to it
