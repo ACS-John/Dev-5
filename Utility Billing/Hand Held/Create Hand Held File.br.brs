@@ -590,7 +590,7 @@
 18405   close #h_out2: 
 18410   close #h_out,free: 
 18412   if out_filename$<>'' then 
-18413     fnCopy(env$('Q')&"\Download.dat",env$('at')&br_filename$(out_filename$))
+18413     fnCopy(env$('Q')&"\Download.dat",env$('at')&out_filename$)
 18414     fn_report_created_file(out_filename$)
 18415   ! else if env$('client')='Findlay' then 
 18430   !   fnCopy(env$('Q')&"\Download.dat",env$('at')&'\\vof-pc\itronshared\FCS\Import\Input\download.dat')
