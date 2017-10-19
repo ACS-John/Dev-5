@@ -14,7 +14,7 @@
 25060     fileName$=fileName$(pos(fileName$,"\")+1:len(fileName$))
 25080     ! pr 'if ~exists '&path$
 25100     doNotTryThisOne=0
-25120     if path$(1:2)='\\' then
+25120     if path$(1:2)='\\' and path$(1:4)='@:\\' then
 25140       posThirdSlash=pos(path$,'\',3)
 25160       posLastSlash=pos(path$,'\',-1)
 25180       if posLastSlash<=posThirdSlash then doNotTryThisOne=1 ! do not try entries like \\server\, but do try \\server\resource\ as \\server\ will fail the exists test but \\server\resource\ will pass (assuming it exists)
