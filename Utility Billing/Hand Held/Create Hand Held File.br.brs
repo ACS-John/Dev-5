@@ -590,11 +590,11 @@
 18405   close #h_out2: 
 18410   close #h_out,free: 
 18412   if out_filename$<>'' then 
-18413     fnCopy(env$('Q')&"\Download.dat",br_filename$(out_filename$))
+18413     fnCopy(env$('Q')&"\Download.dat",env$('at')&br_filename$(out_filename$))
 18414     fn_report_created_file(out_filename$)
-18415   else if env$('client')='Findlay' then 
-18430     fnCopy(env$('Q')&"\Download.dat",'\\vof-pc\itronshared\FCS\Import\Input\download.dat')
-18435     fn_report_created_file(os_filename$('\\vof-pc\itronshared\FCS\Import\Input\download.dat'))
+18415   ! else if env$('client')='Findlay' then 
+18430   !   fnCopy(env$('Q')&"\Download.dat",env$('at')&'\\vof-pc\itronshared\FCS\Import\Input\download.dat')
+18435   !   fn_report_created_file(os_filename$('\\vof-pc\itronshared\FCS\Import\Input\download.dat'))
 18436   else 
 18437     if ~exists("c:\mvrs") then execute 'mkdir c:\mvrs'
 18438     if ~exists("c:\mvrs\xfer") then execute 'mkdir c:\mvrs\xfer'
@@ -937,23 +937,23 @@
 24020   dim tmpCity$*64,tmpState$*64,tmpZip$*64
 24040   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
 24060   !
-24080   fn_record_init(chr$(9))                                           ! Aclara Name               ACS Name (if different)
-24100   fn_record_addn(11,fnMeterAddressLocationID(e$(1), 1))          ! LocationID
-24120   fn_record_addc(10,z$)                                             ! Account Number
-24140   fn_record_addc(30,e$(2))                                          ! Customer Name
-24150   fn_record_addc(12,extra$(2))                                      ! Phone Number
-24160   fn_record_addc(30,e$(3))                                          ! Service Address 1          Address 1 - Primary
-24180   fn_record_addc(30,extra$(1))                                      ! Service Address 2          Address 2 - Primary
-24200   fn_record_addc(30,tmpCity$)                      
-24220   fn_record_addc(10,tmpState$)                     
-24240   fn_record_addc(15,tmpZip$)                       
-24260   fn_record_addn(3,route)                                           ! Cycle and Route            Route Number
-24270   fn_record_addn(7,sequence)                                        ! Sequence                   Sequence
-24280   fn_record_addc(8,fn_meter_info$('Meter Number',z$,'WA'))        ! Meter Serial Number        Meter.Meter Number
-24300   fn_record_addc(20,fn_meter_info$('Transmitter Number',z$,'WA')) ! Transmitter Serial Number  Meter.Transmitter Number
-24320 ! fn_record_addc(20,'(Rate Code Description??)')                      ! Service Type
-24340   fn_record_addc(40,fn_meter_info$('Meter Type',z$,'WA'))         ! Meter Model/Type           
-24360 ! fn_record_addc(9,,fn_meter_info$('reading multipler',z$,'WA'))      ! Meter Size
+24080   fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
+24100   fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
+24120   fn_record_addc(10,z$)                                                              ! Account Number
+24140   fn_record_addc(30,e$(2))                                                           ! Customer Name
+24150   fn_record_addc(12,extra$(2))                                                       ! Phone Number
+24160   fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
+24180   fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
+24200   fn_record_addc(30,tmpCity$)                                                        
+24220   fn_record_addc(10,tmpState$)                                                       
+24240   fn_record_addc(15,tmpZip$)                                                         
+24260   fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
+24270   fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
+24280   fn_record_addc(8,fn_meter_info$('Meter Number',z$,'WA'))                         ! Meter Serial Number        Meter.Meter Number
+24300   fn_record_addc(20,fn_meter_info$('Transmitter Number',z$,'WA'))                  ! Transmitter Serial Number  Meter.Transmitter Number
+24320 ! fn_record_addc(20,'(Rate Code Description??)')                                       ! Service Type
+24340   fn_record_addc(40,fn_meter_info$('Meter Type',z$,'WA'))                          ! Meter Model/Type           
+24360 ! fn_record_addc(9,,fn_meter_info$('reading multipler',z$,'WA'))                       ! Meter Size
 24380   fn_record_write(h_out)
 24400 fnend
 25000 def fn_masterMeter ! z$,mat e$,extra$(1-2),route
