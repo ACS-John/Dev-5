@@ -408,9 +408,9 @@
 14950 ! 
 15000 def fn_openwork ! open work areas based on type of Hand Held
 15020   dim out_filename$*256
-15040   fnureg_read('Hand Held To File',out_filename$)
+15040   fnureg_read('Hand Held To File',out_filename$,'C:\mvrs\xfer\Download\Download.dat')
 15060   if device$='Itron FC300' then 
-15080     fn_itron_open
+15080     fn_itron_open ! default
 15100   else 
 15120     h_out                  =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT",                      80)
 15140     if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT",                                  80)
@@ -589,19 +589,9 @@
 18400   IC_EOF_2: ! 
 18405   close #h_out2: 
 18410   close #h_out,free: 
-18412   if out_filename$<>'' then 
-18413     fnCopy(env$('Q')&"\Download.dat",env$('at')&out_filename$)
-18414     fn_report_created_file(out_filename$)
-18415   ! else if env$('client')='Findlay' then 
-18430   !   fnCopy(env$('Q')&"\Download.dat",env$('at')&'\\vof-pc\itronshared\FCS\Import\Input\download.dat')
-18435   !   fn_report_created_file(os_filename$('\\vof-pc\itronshared\FCS\Import\Input\download.dat'))
-18436   else 
-18437     if ~exists("c:\mvrs") then execute 'mkdir c:\mvrs'
-18438     if ~exists("c:\mvrs\xfer") then execute 'mkdir c:\mvrs\xfer'
-18440     if ~exists("C:\mvrs\xfer\Download") then execute 'mkdir c:\mvrs\xfer\Download'
-18445     execute 'copy '&env$('Q')&'\Download.dat C:\mvrs\xfer\Download\*.*'
-18455     fn_report_created_file(os_filename$('C:\mvrs\xfer\Download\Download.dat'))
-18460   end if 
+18414   fnmakesurepathexists(env$('at')&out_filename$)
+18416   fnCopy(env$('Q')&"\Download.dat",env$('at')&out_filename$)
+18418   fn_report_created_file(out_filename$)
 18470   !   if exists ("C:\MVRS\MVRSWin5.exe") then
 18480   !     if ~exists ("C:\MVRS\MVRSWin5.cmd") then
 18490   !       open #h_tmp:=fngethandle: 'Name=C:\MVRS\MVRSWin5.cmd,RecL=256,replace',display,output
