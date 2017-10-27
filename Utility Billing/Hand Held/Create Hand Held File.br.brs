@@ -150,6 +150,7 @@
 11430   if device$="ACS Meter Reader" then let fn_acs_meter_reader : goto NEXT_RECORD
 11440   if device$="Itron FC300" then let fn_itron : goto NEXT_RECORD
 11442   if device$="Aclara" then let fn_aclara : goto NEXT_RECORD
+11443   if device$="Aclara Work Order" then let fn_aclaraWorkOrder : goto NEXT_RECORD
 11444   if device$="Master Meter" then let fn_masterMeter : goto NEXT_RECORD
 11446   if device$="READy Water" then let fn_READy_Water : goto NEXT_RECORD
 11450   goto SEL_ACT ! go back if Hand Held information is not available for their selection
@@ -412,18 +413,19 @@
 15060   if device$='Itron FC300' then 
 15080     fn_itron_open ! default
 15100   else 
-15120     h_out                  =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT",                      80)
-15140     if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT",                                  80)
-15160     if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3",                          256)
-15180     if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            env$('Q')&"\UBmstr\intopalm.txt",                 204)
-15200     if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           env$('Q')&"\UBmstr\Laptop.Out",                   200)
-15220     if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat",                        256)
-15240     if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           env$('Q')&"\UBmstr\READINGS.DAT",                 282,',eol=none')
-15260     if h_out<=0 then h_out=fn_ifMatchOpenDo("EZReader",         "c:\ezreader\Download.dat",                        578,',eol=none')
-15280     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',       256)
-15300     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',       256, ',eol=none')
-15320     if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt',  256)
-15340     if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  env$('Q')&"\UBmstr\Readings.dat",                  128)
+15120     h_out                  =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT",                                       80)
+15140     if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT",                                                   80)
+15160     if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3",                                           256)
+15180     if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            env$('Q')&"\UBmstr\intopalm.txt",                                  204)
+15200     if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           env$('Q')&"\UBmstr\Laptop.Out",                                    200)
+15220     if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat",                                         256)
+15240     if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           env$('Q')&"\UBmstr\READINGS.DAT",                                  282,',eol=none')
+15260     if h_out<=0 then h_out=fn_ifMatchOpenDo("EZReader",         "c:\ezreader\Download.dat",                                         578,',eol=none')
+15280     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',                        256)
+15300     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',                        256, ',eol=none')
+15320     if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt',                   256)
+15340     if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  env$('Q')&"\UBmstr\Readings.dat",                                   128)
+15350     if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",br_filename$(env$('userprofile')&'\Desktop\Aclara Work Order.txt'),1048)
 15360     if h_out<=0 then
 15380       h_out=fn_ifMatchOpenDo('',br_filename$(env$('userprofile')&'\Desktop\ACS Hand Held Out.txt'),1048)
 15400     end if
@@ -923,164 +925,187 @@
 21660   fn_record_write(h_out)
 21670 fnend  ! fn_itron_record_mtr
 21680 ! /r
-24000 def fn_aclara ! z$,mat e$,extra$(1-2),route
-24020   dim tmpCity$*64,tmpState$*64,tmpZip$*64
-24040   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
-24060   !
-24080   fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
-24100   fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
-24120   fn_record_addc(10,z$)                                                              ! Account Number
-24140   fn_record_addc(30,e$(2))                                                           ! Customer Name
-24150   fn_record_addc(12,extra$(2))                                                       ! Phone Number
-24160   fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
-24180   fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
-24200   fn_record_addc(30,tmpCity$)                                                        
-24220   fn_record_addc(10,tmpState$)                                                       
-24240   fn_record_addc(15,tmpZip$)                                                         
-24260   fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
-24270   fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
-24280   fn_record_addc(8,fn_meter_info$('Meter Number',z$,'WA'))                         ! Meter Serial Number        Meter.Meter Number
-24300   fn_record_addc(20,fn_meter_info$('Transmitter Number',z$,'WA'))                  ! Transmitter Serial Number  Meter.Transmitter Number
-24320 ! fn_record_addc(20,'(Rate Code Description??)')                                       ! Service Type
-24340   fn_record_addc(40,fn_meter_info$('Meter Type',z$,'WA'))                          ! Meter Model/Type           
-24360 ! fn_record_addc(9,,fn_meter_info$('reading multipler',z$,'WA'))                       ! Meter Size
-24380   fn_record_write(h_out)
-24400 fnend
-25000 def fn_masterMeter ! z$,mat e$,extra$(1-2),route
-25010   dim tmpCity$*64,tmpState$*64,tmpZip$*64
-25020   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
-25030   usage_current=d(3) ! Water usage - current
-25040   reading_current=d(1)
-25050   unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
-25060   unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
-25070   !
-25080   fn_record_init(chr$(9))                                           ! 
-25090   fn_record_addc(10,z$)                                             ! Account Number
-25100   fn_record_addc(30,e$(2))                                          ! Customer Name
-25110   fn_record_addc(30,e$(1))                                          ! Meter Address
-25120   fn_record_addn(3,route)                                           ! Route Number
-25130   fn_record_addn(7,sequence)                                        ! Sequence
-25140   fn_record_addc(12,fn_meter_info$('Meter Number',z$,'WA'))       ! Meter.Meter Number
-25150   fn_record_addc(20,fn_meter_info$('Transmitter Number',z$,'WA')) ! Transmitter Serial Number  Meter.Transmitter Number
-25160   fn_record_addn(9,d(1))                                            ! Service 1 (Water) – Reading – Current
-25162   ! pr 'AAA - '&srep$(rec_line$,chr$(9),'>') : pause
-25170   fn_record_addc(17,fn_meter_info$('longitude',z$,'WA'))          ! Meter.Longitude
-25172   ! pr 'BBB - '&srep$(rec_line$,chr$(9),'>') : pause
-25180   fn_record_addc(17,fn_meter_info$('latitude',z$,'WA'))           ! Meter.Latitude
-25190   fn_record_addc(40,fn_meter_info$('Meter Type',z$,'WA'))         ! Meter Model/Type           
-25200   tmp$=fn_meter_info$('reading multipler',z$,'WA') : if tmp$='' then tmp$='1'
-25210   fn_record_addc(40,tmp$)                                           ! Meter Reading Multiplier (default to 1 if blank)
-25220   fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading – Bring Back (leave an empty column for it
-25230   fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading Date – Bring Back (leave an empty column for it
-25240   fn_record_addn(10,unusual_usage_low)                              ! Unusual Usage Low Reading
-25250   fn_record_addn(10,unusual_usage_high)                             ! Unusual Usage High Reading
-25260   fn_record_write(h_out)
-25270 fnend
-25280 !
-25500 def fn_READy_Water ! z$,mat e$,extra$(1-2),route
-25520   dim tmpCity$*64,tmpState$*64,tmpZip$*64
-25540   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
-25560   fn_record_init(chr$(9))                                           ! ACS Name (if different)
-25580   fn_record_addc(10,z$)                                             ! Account Number
-25600   fn_record_addc(30,e$(2))                                          ! Customer Name
-25620   fn_record_addc(12,extra$(2))                                      ! Phone Number
-25640   fn_record_addc(30,e$(1))                                          ! Meter Address (switched to 7/5/17 as per request by Sheri)
-25642   ! fn_record_addc(30,e$(3))                                          ! Address 1 - Primary
-25660   fn_record_addc(30,extra$(1))                                      ! Address 2 - Primary
-25680   fn_record_addc(30,tmpCity$)                                       ! City
-25700   fn_record_addc(10,tmpState$)                                      ! State
-25720   fn_record_addc(15,tmpZip$)                                        ! Zip
-25740   fn_record_addn(3,route)                                           ! Route Number
-25760   fn_record_addn(7,sequence)                                        ! Sequence
-25780   fn_record_addc(8,fn_meter_info$('Meter Number',z$,'WA'))        ! Meter.Meter Number
-25800   fn_record_write(h_out)
-25820 fnend
-26000 def fn_record_init(; setDelimiter$)
-26020   dim rec_line$*512
-26040   rec_line$=''
-26050   gRecordDelimiter$=setDelimiter$
-26060 fnend  ! fn_record_init
-26080 def fn_record_addc(rac_field_length,rac_field_text$*256)
-26100   rec_line$=rec_line$&rpad$(rac_field_text$(1:rac_field_length),rac_field_length)&gRecordDelimiter$
-26120 fnend
-26140 def fn_record_addn(ran_field_length,ran_field_value)
-26160   rec_line$=rec_line$&lpad$(str$(ran_field_value)(1:ran_field_length),ran_field_length)&gRecordDelimiter$
-26180 fnend
-26200 def fn_record_addx(ran_field_length)
-26220   rec_line$=rec_line$&rpt$(' ',ran_field_length)&gRecordDelimiter$
-26240 fnend  ! fn_record_addx
-27000 def fn_record_write(h_out)
-27020   if gRecordDelimiter$<>'' then ! remove trailing delimiter
-27040     rec_line$((len(rec_line$)-len(gRecordDelimiter$)+1):len(rec_line$))=''
-27060   end if
-27080   if device$='Itron FC300' then 
-27100     write #h_out,using 'form pos 1,C '&str$(len(rec_line$)): rec_line$
-27120   else
-27140     pr #h_out,using 'form pos 1,C '&str$(len(rec_line$)): rec_line$
-27150     ! pr srep$(rec_line$,chr$(9),'>') : pause
-27160   end if
-27180 fnend 
-28000 def fn_boson
-28020   dim z_out$*14,custname$*30
-28040   for j=1 to len(seq$)
-28060     if val(seq$(j:j))=1 then 
-28080       svc_flag$="W"
-28100     else if val(seq$(j:j))=2 then 
-28120       svc_flag$="E"
-28140     else if val(seq$(j:j))=4 then 
-28160       svc_flag$="G"
-28180     end if 
-28280     custname$=e$(2)
-28320     z_out$=trim$(z$)&svc_flag$
-28340     on val(seq$(j:j)) goto WATER_BOSON,ELECTRIC_BOSON,DEMAND_BOSON,GAS_BOSON none BOSON_NEXT_SEQUENCE
-28360     WATER_BOSON: if a(1)=0 or final<>0 then goto BOSON_NEXT_SEQUENCE
-28380     x$=cnvrt$("pic(######)",d(5)) : readdate$=x$(1:2)&"-"&x$(3:4)&"-"&x$(5:6)
-28400     if env$('client')='Kincaid' then 
-28420       readingt$="S"
-28440     else if env$('client')="Moweaqua" then 
-28460       if trim$(f$(1))="" then 
-28480         readingt$="S"
-28500       else 
-28520         readingt$="P"
-28540       end if 
-28560     else if trim$(extra$(3))="" then 
-28580       readingt$="S" 
-28600     else 
-28620       readingt$="P"
-28640     end if
-28660     if env$('client')="Purdy" or env$('client')="Billings" or env$('client')="Cerro Gordo" then readingt$="S"
-28680     metertag=0: metertag=val(extra$(3)) conv ignore
-28700     if env$('client')="Moweaqua" then metertag=0: metertag=val(f$(1)) conv ignore
-28720     if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then d(1)=d(1): d(2)=d(2): d(3)=d(3)
-28740     if env$('client')="Monticello" and trim$(extra$(7))="22" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
-28760     if env$('client')="Monticello" and trim$(extra$(7))="23" then d(1)=d(1)*10: d(2)=d(2)*10: d(3)=d(3)*10
-28780     ! If env$('client')="Monticello" AND (TRIM$(EXTRA$(7))="24" then don't do anything
-28800     if env$('client')="Monticello" and trim$(extra$(7))="65" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
-28820     if env$('client')="Monticello" and trim$(extra$(7))="66" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
-28840     meterdials=0 ! if env$('client')="Purdy" or env$('client')="Billings" then meterdials=0 else meterdials=7
-28860     if trim$(z_out$)='200670' then pause 
-28880     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,route,"",sequence,meterdials,d(1),readingt$,metertag
-28900     !     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,val(z$(1:2)),"",val(z$(3:7)),meterdials,d(1),readingt$,metertag
-28920     F_BOSON_OUT: form pos 1,c 14,c 3,3*c 30,2*c 1,c 20,c 5,3*pic(#########),pic(########),pic(####),c 1,pic(######),pic(##),pic(#########),c 1,pic(############)
-28940     goto BOSON_NEXT_SEQUENCE
-28960     ! ___________________________
-28980     ELECTRIC_BOSON: if a(3)=0 or trim$(servicename$(3))<>"Electric" then goto BOSON_NEXT_SEQUENCE
-29000     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),route,"",sequence,0,d(5),"R",f$(2)
-29020     !     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),val(z$(1:2)),"",val(z$(3:7)),0,d(5),"R",f$(2)
-29040     goto BOSON_NEXT_SEQUENCE
-29060     ! ___________________________
-29080     DEMAND_BOSON: goto BOSON_NEXT_SEQUENCE
-29100     goto BOSON_NEXT_SEQUENCE
-29120     ! ___________________________
-29140     GAS_BOSON: if a(4)=0 or trim$(servicename$(4))<>"Gas" then goto BOSON_NEXT_SEQUENCE
-29160     readingt$="R"
-29180     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),route,"",sequence,0,d(9),readingt$,f$(2)
-29200     !     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),val(z$(1:2)),"",val(z$(3:7)),0,d(9),readingt$,f$(2)
-29220     goto BOSON_NEXT_SEQUENCE
-29240     ! ___________________________
-29260     BOSON_NEXT_SEQUENCE: ! 
-29280   next j
-29300 fnend 
+44000 def fn_aclara ! z$,mat e$,extra$(1-2),route
+44020   dim tmpCity$*64,tmpState$*64,tmpZip$*64
+44040   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+44060   !
+44080   fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
+44100   fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
+44120   fn_record_addc(10,z$)                                                              ! Account Number
+44140   fn_record_addc(30,e$(2))                                                           ! Customer Name
+44150   fn_record_addc(12,extra$(2))                                                       ! Phone Number
+44160   fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
+44180   fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
+44200   fn_record_addc(30,tmpCity$)                                                        
+44220   fn_record_addc(10,tmpState$)                                                       
+44240   fn_record_addc(15,tmpZip$)                                                         
+44260   fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
+44270   fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
+44280   fn_record_addc(8,fn_meter_info$('Meter Number',z$,'WA'))                         ! Meter Serial Number        Meter.Meter Number
+44300   fn_record_addc(20,fn_meter_info$('Transmitter Number',z$,'WA'))                  ! Transmitter Serial Number  Meter.Transmitter Number
+44320 ! fn_record_addc(20,'(Rate Code Description??)')                                       ! Service Type
+44340   fn_record_addc(40,fn_meter_info$('Meter Type',z$,'WA'))                          ! Meter Model/Type           
+44360 ! fn_record_addc(9,,fn_meter_info$('reading multipler',z$,'WA'))                       ! Meter Size
+44380   fn_record_write(h_out)
+44400 fnend
+45000 def fn_aclaraWorkOrder ! z$,mat e$,extra$(1-2),route
+45020   dim tmpCity$*64,tmpState$*64,tmpZip$*64
+45040   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+45060   !
+45080   fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
+45100   fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
+45120   fn_record_addc(10,z$)                                                              ! Account Number
+45140   fn_record_addc(30,e$(2))                                                           ! Customer Name
+45150   fn_record_addc(12,extra$(2))                                                       ! Phone Number
+45160   fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
+45180   fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
+45200   fn_record_addc(30,tmpCity$)                                                        
+45220   fn_record_addc(10,tmpState$)                                                       
+45240   fn_record_addc(15,tmpZip$)                                                         
+45260   fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
+45270   fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
+45280   fn_record_addc(8,fn_meter_info$('Meter Number',z$,'WA'))                         ! Meter Serial Number        Meter.Meter Number
+45300   fn_record_addc(20,fn_meter_info$('Transmitter Number',z$,'WA'))                  ! Transmitter Serial Number  Meter.Transmitter Number
+45320 ! fn_record_addc(20,'(Rate Code Description??)')                                       ! Service Type
+45340   fn_record_addc(40,fn_meter_info$('Meter Type',z$,'WA'))                          ! Meter Model/Type           
+45360 ! fn_record_addc(9,,fn_meter_info$('reading multipler',z$,'WA'))                       ! Meter Size
+45380   fn_record_write(h_out)
+45400 fnend
+46000 def fn_masterMeter ! z$,mat e$,extra$(1-2),route
+46010   dim tmpCity$*64,tmpState$*64,tmpZip$*64
+46020   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+46030   usage_current=d(3) ! Water usage - current
+46040   reading_current=d(1)
+46050   unusual_usage_low=round(reading_current+usage_current*fn_pcent,2)
+46060   unusual_usage_high=round(reading_current+usage_current+usage_current*fn_pcent,2)
+46070   !
+46080   fn_record_init(chr$(9))                                           ! 
+46090   fn_record_addc(10,z$)                                             ! Account Number
+46100   fn_record_addc(30,e$(2))                                          ! Customer Name
+46110   fn_record_addc(30,e$(1))                                          ! Meter Address
+46120   fn_record_addn(3,route)                                           ! Route Number
+46130   fn_record_addn(7,sequence)                                        ! Sequence
+46140   fn_record_addc(12,fn_meter_info$('Meter Number',z$,'WA'))       ! Meter.Meter Number
+46150   fn_record_addc(20,fn_meter_info$('Transmitter Number',z$,'WA')) ! Transmitter Serial Number  Meter.Transmitter Number
+46160   fn_record_addn(9,d(1))                                            ! Service 1 (Water) – Reading – Current
+46162   ! pr 'AAA - '&srep$(rec_line$,chr$(9),'>') : pause
+46170   fn_record_addc(17,fn_meter_info$('longitude',z$,'WA'))          ! Meter.Longitude
+46172   ! pr 'BBB - '&srep$(rec_line$,chr$(9),'>') : pause
+46180   fn_record_addc(17,fn_meter_info$('latitude',z$,'WA'))           ! Meter.Latitude
+46190   fn_record_addc(40,fn_meter_info$('Meter Type',z$,'WA'))         ! Meter Model/Type           
+46200   tmp$=fn_meter_info$('reading multipler',z$,'WA') : if tmp$='' then tmp$='1'
+46210   fn_record_addc(40,tmp$)                                           ! Meter Reading Multiplier (default to 1 if blank)
+46220   fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading – Bring Back (leave an empty column for it
+46230   fn_record_addc(9,'')                                              ! Service 1 (Water) – Reading Date – Bring Back (leave an empty column for it
+46240   fn_record_addn(10,unusual_usage_low)                              ! Unusual Usage Low Reading
+46250   fn_record_addn(10,unusual_usage_high)                             ! Unusual Usage High Reading
+46260   fn_record_write(h_out)
+46270 fnend
+46280 !
+46500 def fn_READy_Water ! z$,mat e$,extra$(1-2),route
+46520   dim tmpCity$*64,tmpState$*64,tmpZip$*64
+46540   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
+46560   fn_record_init(chr$(9))                                           ! ACS Name (if different)
+46580   fn_record_addc(10,z$)                                             ! Account Number
+46600   fn_record_addc(30,e$(2))                                          ! Customer Name
+46620   fn_record_addc(12,extra$(2))                                      ! Phone Number
+46640   fn_record_addc(30,e$(1))                                          ! Meter Address (switched to 7/5/17 as per request by Sheri)
+46642   ! fn_record_addc(30,e$(3))                                          ! Address 1 - Primary
+46660   fn_record_addc(30,extra$(1))                                      ! Address 2 - Primary
+46680   fn_record_addc(30,tmpCity$)                                       ! City
+46700   fn_record_addc(10,tmpState$)                                      ! State
+46720   fn_record_addc(15,tmpZip$)                                        ! Zip
+46740   fn_record_addn(3,route)                                           ! Route Number
+46760   fn_record_addn(7,sequence)                                        ! Sequence
+46780   fn_record_addc(8,fn_meter_info$('Meter Number',z$,'WA'))        ! Meter.Meter Number
+46800   fn_record_write(h_out)
+46820 fnend
+47000 def fn_record_init(; setDelimiter$)
+47020   dim rec_line$*512
+47040   rec_line$=''
+47050   gRecordDelimiter$=setDelimiter$
+47060 fnend  ! fn_record_init
+47080 def fn_record_addc(rac_field_length,rac_field_text$*256)
+47100   rec_line$=rec_line$&rpad$(rac_field_text$(1:rac_field_length),rac_field_length)&gRecordDelimiter$
+47120 fnend
+47140 def fn_record_addn(ran_field_length,ran_field_value)
+47160   rec_line$=rec_line$&lpad$(str$(ran_field_value)(1:ran_field_length),ran_field_length)&gRecordDelimiter$
+47180 fnend
+47200 def fn_record_addx(ran_field_length)
+47220   rec_line$=rec_line$&rpt$(' ',ran_field_length)&gRecordDelimiter$
+47240 fnend  ! fn_record_addx
+47500 def fn_record_write(h_out)
+47520   if gRecordDelimiter$<>'' then ! remove trailing delimiter
+47540     rec_line$((len(rec_line$)-len(gRecordDelimiter$)+1):len(rec_line$))=''
+47560   end if
+47580   if device$='Itron FC300' then 
+47600     write #h_out,using 'form pos 1,C '&str$(len(rec_line$)): rec_line$
+47620   else
+47640     pr #h_out,using 'form pos 1,C '&str$(len(rec_line$)): rec_line$
+47650     ! pr srep$(rec_line$,chr$(9),'>') : pause
+47660   end if
+47680 fnend 
+48000 def fn_boson
+48020   dim z_out$*14,custname$*30
+48040   for j=1 to len(seq$)
+48060     if val(seq$(j:j))=1 then 
+48080       svc_flag$="W"
+48100     else if val(seq$(j:j))=2 then 
+48120       svc_flag$="E"
+48140     else if val(seq$(j:j))=4 then 
+48160       svc_flag$="G"
+48180     end if 
+48280     custname$=e$(2)
+48320     z_out$=trim$(z$)&svc_flag$
+48340     on val(seq$(j:j)) goto WATER_BOSON,ELECTRIC_BOSON,DEMAND_BOSON,GAS_BOSON none BOSON_NEXT_SEQUENCE
+48360     WATER_BOSON: if a(1)=0 or final<>0 then goto BOSON_NEXT_SEQUENCE
+48380     x$=cnvrt$("pic(######)",d(5)) : readdate$=x$(1:2)&"-"&x$(3:4)&"-"&x$(5:6)
+48400     if env$('client')='Kincaid' then 
+48420       readingt$="S"
+48440     else if env$('client')="Moweaqua" then 
+48460       if trim$(f$(1))="" then 
+48480         readingt$="S"
+48500       else 
+48520         readingt$="P"
+48540       end if 
+48560     else if trim$(extra$(3))="" then 
+48580       readingt$="S" 
+48600     else 
+48620       readingt$="P"
+48640     end if
+48660     if env$('client')="Purdy" or env$('client')="Billings" or env$('client')="Cerro Gordo" then readingt$="S"
+48680     metertag=0: metertag=val(extra$(3)) conv ignore
+48700     if env$('client')="Moweaqua" then metertag=0: metertag=val(f$(1)) conv ignore
+48720     if env$('client')="Moweaqua" and (a(1)=1 or a(1)=2) then d(1)=d(1): d(2)=d(2): d(3)=d(3)
+48740     if env$('client')="Monticello" and trim$(extra$(7))="22" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
+48760     if env$('client')="Monticello" and trim$(extra$(7))="23" then d(1)=d(1)*10: d(2)=d(2)*10: d(3)=d(3)*10
+48780     ! If env$('client')="Monticello" AND (TRIM$(EXTRA$(7))="24" then don't do anything
+48800     if env$('client')="Monticello" and trim$(extra$(7))="65" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
+48820     if env$('client')="Monticello" and trim$(extra$(7))="66" then d(1)=d(1)*100: d(2)=d(2)*100: d(3)=d(3)*100
+48840     meterdials=0 ! if env$('client')="Purdy" or env$('client')="Billings" then meterdials=0 else meterdials=7
+48860     if trim$(z_out$)='200670' then pause 
+48880     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,route,"",sequence,meterdials,d(1),readingt$,metertag
+48900     !     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(1)+(d(3)*2),d(1)+(d(3)*.50),readdate$,val(z$(1:2)),"",val(z$(3:7)),meterdials,d(1),readingt$,metertag
+48920     F_BOSON_OUT: form pos 1,c 14,c 3,3*c 30,2*c 1,c 20,c 5,3*pic(#########),pic(########),pic(####),c 1,pic(######),pic(##),pic(#########),c 1,pic(############)
+48940     goto BOSON_NEXT_SEQUENCE
+48960     ! ___________________________
+48980     ELECTRIC_BOSON: if a(3)=0 or trim$(servicename$(3))<>"Electric" then goto BOSON_NEXT_SEQUENCE
+49000     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),route,"",sequence,0,d(5),"R",f$(2)
+49020     !     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(5)+(d(7)*2),d(5)+(d(7)*.50),d(5),val(z$(1:2)),"",val(z$(3:7)),0,d(5),"R",f$(2)
+49040     goto BOSON_NEXT_SEQUENCE
+49060     ! ___________________________
+49080     DEMAND_BOSON: goto BOSON_NEXT_SEQUENCE
+49100     goto BOSON_NEXT_SEQUENCE
+49120     ! ___________________________
+49140     GAS_BOSON: if a(4)=0 or trim$(servicename$(4))<>"Gas" then goto BOSON_NEXT_SEQUENCE
+49160     readingt$="R"
+49180     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),route,"",sequence,0,d(9),readingt$,f$(2)
+49200     !     pr #h_out,using F_BOSON_OUT: lpad$(rtrm$(z_out$),14),"",custname$,e$(1),"","",svc_flag$,f$(1)," ",0,d(9)+(d(11)*2),d(9)+(d(11)*.50),d(9),val(z$(1:2)),"",val(z$(3:7)),0,d(9),readingt$,f$(2)
+49220     goto BOSON_NEXT_SEQUENCE
+49240     ! ___________________________
+49260     BOSON_NEXT_SEQUENCE: ! 
+49280   next j
+49300 fnend 
 58000 TRANSFER: ! r: Transfer to or from Hand Held Computer
 58020   dim out_filename_report$*512
 58040   out_filename_report$=file$(h_out)
@@ -1251,7 +1276,8 @@
 72120   fnAddOneC(mat device$,"ACS Meter Reader")
 72130   fnAddOneC(mat device$,"Aclara"          )
 72132   fnAddOneC(mat device$,"Master Meter"    )
-72134   fnAddOneC(mat device$,"READy Water"    )
+72134   fnAddOneC(mat device$,"READy Water"     )
+72136   fnAddOneC(mat device$,"Aclara Work Order")
 72140   ! r: developed but currently unused
 72160   ! fnAddOneC(mat device$,"Psion Workabout")
 72180   ! fnAddOneC(mat device$,"LapTop"         )

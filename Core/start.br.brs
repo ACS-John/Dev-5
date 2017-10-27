@@ -418,10 +418,7 @@
 46020   if env$('QBase')='' then
 46030     newQBase$=rtrm$(newQBase$,'\')
 46040     setenv('QBase',newQBase$)
-46060     ! if env$('ACSDeveloper')<>'' then 
-46080     !   pr 'QBase set to '&env$('QBase')
-46100     !   pause
-46120     ! end if
+46060     exe 'config substitute [QBase] '&env$('QBase') 
 46300   end if
 46320 fnend
 47000 def fn_update_needed(acs_version_prior$,acs_version_running$)
