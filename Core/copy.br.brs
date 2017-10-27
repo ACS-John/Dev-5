@@ -153,7 +153,7 @@
 84000 def library fnRename(from$*256,to$*256)
 84020   from$=trim$(from$,'"')
 84040   to$=trim$(to$,'"')
-84060   if from$(1:2)='@:' and to$(1:2)<>'' then
+84060   if (from$(1:2)='@:' and to$(1:2)<>'@:') or (from$(1:2)<>'@:' and to$(1:2)='@:') then
 84080     if fn_Copy(from$,to$) then
 84100       exec 'Free "'&from$&'"'
 84120     end if
