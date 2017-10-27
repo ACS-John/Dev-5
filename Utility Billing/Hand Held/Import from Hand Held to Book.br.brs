@@ -141,7 +141,7 @@
 34860         hif_return$="L:\readings.txt"
 34880       end if 
 34890     end if 
-34900     fn_hh_input_filename$=hif_return$
+34900     fn_hh_input_filename$=env$('at')&hif_return$
 34920   fnend 
 35000 IGNORE: continue 
 36000   def fn_unisys
