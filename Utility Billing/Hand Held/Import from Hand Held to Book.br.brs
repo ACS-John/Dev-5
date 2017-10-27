@@ -6,7 +6,8 @@
 05120   fnxit
 08000   def fn_setup
 08020     library 'S:\Core\Library': fnxit,fnureg_read
-08040     library 'S:\Core\Library': fntop, fnerror,fntos,fnlbl,fnacs,fntxt,fncmdset,fnmsgbox,fngethandle,fnregistered_for_hh,fnhand_held_device$,fnCopy
+08040     library 'S:\Core\Library': fntop, fnerror,fntos,fnlbl,fnacs,fntxt,fncmdset,fnmsgbox,fngethandle,fnregistered_for_hh,fnhand_held_device$
+08050     library 'S:\Core\Library': fnCopy,fnRename
 08060     on error goto ERTN
 08140   fnend 
 10000   def library fnretrieve_hand_held_file
@@ -158,7 +159,7 @@
 40150       fnmsgbox(mat ml$, response$, cap$,0)
 40270     else 
 40300       fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
-40330       execute "Rename "&fn_hh_input_filename$&' '&env$('Q')&"\UBmstr\outofpalm."&ltrm$(bk$)&"."&date$("YYMMDD")&srep$(time$("HHMMSS"),":","")&".txt"
+40330       fnRename(fn_hh_input_filename$,env$('Q')&"\UBmstr\outofpalm."&ltrm$(bk$)&"."&date$("YYMMDD")&srep$(time$("HHMMSS"),":","")&".txt")
 40360     end if 
 40390   fnend 
 42000   def fn_psion_workabout
