@@ -129,7 +129,9 @@
 34660         hif_return$=env$('Q')&"\UBmstr\ReadOut.dat"
 34680       else if device$="Boson" then 
 34700         if env$('client')="Monticello" then 
-34720           hif_return$=env$('Q')&"\UBmstr\outpalm.txt"
+34710           hif_return$=env$('Q')&"\UBmstr\outpalm.txt"
+34712         else if env$('client')="Cerro Gordo" then 
+37414           hif_return$=env$('at')&'C:\ProgramData\ACS\UBmstr\outofpalm.txt'
 34740         else 
 34760           hif_return$=env$('Q')&"\UBmstr\outofpalm.txt"
 34780         end if 

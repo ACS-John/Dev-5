@@ -15,8 +15,7 @@
 25100     doNotTryThisOne=0
 25220     ! r: do not try entries like  [@:]\\  nor  [@:]\\server\  nor  [@:]\\server\resource\
 25240     if path$(1:2)='\\' or path$(1:4)='@:\\' then 
-25260       mspeBackslashCount=fn_backslashCount(path$)
-25280       if mspeBackslashCount<=4 then doNotTryThisOne=1
+25280       if fn_backslashCount(path$)<=4 then doNotTryThisOne=1
 25300     end if
 25320     ! /r
 25340     if ~exists(path$) and doNotTryThisOne=0 then 

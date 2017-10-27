@@ -140,7 +140,7 @@
 42440       ml$(4)='Display the log now?'
 42460       fnmsgbox(mat ml$,resp$,"ACS",4+64)
 42480       if resp$="Yes" then 
-42490         if env$('acsDeveloper')<>'' then pr 'just before fnEditFile("text","'&arc_filename$&'")' : pause
+42490         ! if env$('acsDeveloper')<>'' then pr 'just before fnEditFile("text","'&arc_filename$&'")' : pause
 42500         fnEditFile('text',arc_filename$)
 42520       end if 
 42540     end if 
