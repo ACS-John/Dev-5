@@ -1,12 +1,15 @@
 00010 ! Replace S:\Core\copy.br
-50020 ! <Updateable Region: ERTN
-50040 ERTN: fnerror(program$,err,line,act$,"xit")
-50060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
-50080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
-50100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
-50120 ERTN_EXEC_ACT: execute act$ : goto ERTN
-50140 ! /region
-52000 def library fnCopy(from$*256,to$*256; new_record_length,options$)
+40020 ! <Updateable Region: ERTN
+40040 ERTN: fnerror(program$,err,line,act$,"xit")
+40060   if lwrc$(act$)<>"pause" then goto ERTN_EXEC_ACT
+40080   execute "List -"&str$(line) : pause : goto ERTN_EXEC_ACT
+40100   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
+40120 ERTN_EXEC_ACT: execute act$ : goto ERTN
+40140 ! /region
+48000 def library fnCopy(from$*256,to$*256; new_record_length,options$)
+48020   fnCopy=fn_Copy(from$,to$, new_record_length,options$)
+48040 fnend
+52000 def fn_Copy(from$*256,to$*256; new_record_length,options$)
 52020   ! options$ (seperate by space)  supported options$ values inclue
 52040   !           recursive - includes all subdirectories and their files
 52060   library 'S:\Core\Library': fnerror,fnstatus,fngethandle,fnMakeSurePathExists,fngetdir2,fngetpp
@@ -72,7 +75,7 @@
 66120     copy_return=copy_return*10000-err
 66140   goto COPY_XIT ! /r
 68000   COPY_XIT: ! 
-68020   fnCopy=copy_return
+68020   fn_Copy=copy_return
 68040 fnend 
 80040 def library fncscopy(&source$,&destination$)
 80042   ! client server copy function
@@ -150,8 +153,14 @@
 84000 def library fnRename(from$*256,to$*256)
 84020   from$=trim$(from$,'"')
 84040   to$=trim$(to$,'"')
-84060   execute 'Rename "'&from$&'" "'&to$&'" -n'
-84080 fnend
+84060   if from$(1:2)='@:' and to$(1:2)<>'' then
+84080     if fn_Copy(from$,to$) then
+84100       exec 'Free "'&from$&'"'
+84120     end if
+84140   else 
+84160     execute 'Rename "'&from$&'" "'&to$&'" -n'
+84180   end if
+84200 fnend
 86000 def library fnRemoveDeletedRecords(from$*256)
 86020  execute 'copy "'&from$&'" "'&env$('temp')&'\acs\temp\Session'&session$&'\removeDeletedRecords.tmp" -n' ioerr COPY_FAIL
 86040  execute 'copy "'&env$('temp')&'\acs\temp\Session'&session$&'" "'&from$&'\removeDeletedRecords.tmp" -D' ioerr COPY_FAIL
