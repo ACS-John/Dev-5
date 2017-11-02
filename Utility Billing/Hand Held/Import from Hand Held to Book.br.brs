@@ -6,7 +6,7 @@
 05120   fnxit
 08000   def fn_setup
 08020     library 'S:\Core\Library': fnxit,fnureg_read
-08040     library 'S:\Core\Library': fntop, fnerror,fntos,fnlbl,fnacs,fntxt,fncmdset,fnmsgbox,fngethandle,fnregistered_for_hh,fnhand_held_device$
+08040     library 'S:\Core\Library': fntop,fnerror,fntos,fnlbl,fnacs,fntxt,fncmdset,fnmsgbox,fngethandle,fnregistered_for_hh,fnhand_held_device$
 08050     library 'S:\Core\Library': fnCopy,fnRename
 08060     on error goto ERTN
 08140   fnend 
