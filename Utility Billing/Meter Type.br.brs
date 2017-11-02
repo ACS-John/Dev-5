@@ -3,7 +3,7 @@
 00030   on error goto ERTN
 00040 ! ______________________________________________________________________
 00070   fntop(program$)
-00120   if fnhand_held_device$<>'Itron FC300' and fnhand_held_device$<>'Aclara' then 
+00120   if fnhand_held_device$<>'Itron FC300' and fnhand_held_device$(1:6)<>'Aclara' then 
 00130     dim msg_text$(2)*256
 00140     msg_text$(1)='The '&env$('Program Caption')&' file is not necessary'
 00150     msg_text$(2)="for your hand held device type."
