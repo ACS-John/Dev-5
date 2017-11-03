@@ -74,6 +74,7 @@
 39060   close #h_tmp: 
 39080   if clientServer then
 39100     execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
+39110     fnmakesurepathexists(env$('at')&save_name$)
 39120     fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
 39140   else
 39160     execute 'sy '&env$('temp')&'\save_as_'&session$&'.cmd'
