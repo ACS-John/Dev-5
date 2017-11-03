@@ -94,8 +94,8 @@
 11380     if ~fn_rights_test(env$('Q'),"Try Run As Administrator.",'Data') then goto XIT
 11400     if ~fn_rights_test(env$('temp'),'Correct your Temp environment varialbe.','Temp') then goto XIT ! to %USERPROFILE%\AppData\Local\Temp
 11420     fn_spoolPath$(1)
-12000     if env$('BR_MODEL')='CLIENT/SERVER' then
-12010       ! setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico") ! commented out because it made the icon look funny - filled with white and so long as i change the icon on the brclient executable than I'll shouldn't need to re-set it anyway.
+12000     if env$('acsProduct')='ACS Online' then
+12010       setenv("Icon","S:\Core\Icon\ACS Client 32x32-32bit.ico") ! commented out because it made the icon look funny - filled with white and so long as i change the icon on the brclient executable than I'll shouldn't need to re-set it anyway.
 12020     else
 12030       setenv("Icon","S:\Core\Icon\ACS-v5-32x32-32bit.ico")
 12040     end if

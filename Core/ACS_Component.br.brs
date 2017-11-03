@@ -546,8 +546,8 @@
 21150     open #0: 'SRow=1,SCol=2,Rows='&str$(acs_win_rows)&",Cols="&str$(acs_win_cols)&',Picture='&env$('background_picture')&',border=S:[screen],N=[screen]',display,outin 
 21160   end if 
 21170   dim borderText$*256
-21180   borderText$='ACS 5 '
-21182   if env$('BR_MODEL')='CLIENT/SERVER' then borderText$='ACS Online '
+21180   !
+21182   if env$('acsProduct')='' then borderText$='ACS 5 ' else borderText$=env$('acsProduct')
 21184   !
 21190   if session$(3:3)<>'1' then
 21200     borderText$(inf:inf)='(Session '&session$(3:3)&') '
