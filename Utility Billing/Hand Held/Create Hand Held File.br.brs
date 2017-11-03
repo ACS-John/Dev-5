@@ -912,40 +912,41 @@
 45100   fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
 45120   fn_record_addc(10,z$)                                                              ! Account Number
 45140   fn_record_addc(30,e$(2))                                                           ! Customer Name
-45160   fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
-45180   fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
-45200   fn_record_addc(30,tmpCity$)
-45220   fn_record_addc(10,tmpState$)
-45240   fn_record_addc(15,tmpZip$)
-45260   fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
-45280   ! fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
-45300   fn_record_addc(12,f$(1)) ! fn_meter_info$('Meter Number',z$,'WA')                         ! Meter Serial Number        Meter.Meter Number
-45320   fn_record_addc(20,fn_meter_info$('Transmitter Number',z$,'WA'))                  ! Transmitter Serial Number  Meter.Transmitter Number
-45340 ! fn_record_addc(20,'(Rate Code Description??)')                                       ! Service Type
-45360   aWmeterType=val(fn_meter_info$('Meter Type',z$,'WA'))
-45380   if aWmeterType=1 then ! r: get aWmeterType$
-45400     aWmeterType$='1 inch'
-45420   else if aWmeterType=21 then
-45440     aWmeterType$='2 inch T-10'
-45460   else if aWmeterType=15 then
-45480     aWmeterType$='1.5 inch'
-45500   else if aWmeterType=2 then
-45520     aWmeterType$='2 inch Turbine'
-45540   else if aWmeterType=3 then
-45560     aWmeterType$='3 inch'
-45580   else if aWmeterType=4 then
-45600     aWmeterType$='4 inch'
-45620   else if aWmeterType=6 then
-45640     aWmeterType$='6 inch'
-45660   else
-45680     if aWmeterType<>5 then pr aWmeterType : pause
-45700     aWmeterType$='5/8x3/4'
-45720   end if ! /r
-45740   fn_record_addc(40,aWmeterType$)                                                   ! Meter Model/Type
-45742   fn_record_addn(10,d(1))                                                           ! Service 1 (Water) – Reading – Current
+45160   fn_record_addc(30,e$(1))                                                           ! Meter Address
+45180   fn_record_addc(30,tmpCity$)
+45200   fn_record_addc(10,tmpState$)
+45220   fn_record_addc(15,tmpZip$)
+45240   fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
+45260   ! fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
+45280   fn_record_addc(12,f$(1)) ! fn_meter_info$('Meter Number',z$,'WA')                         ! Meter Serial Number        Meter.Meter Number
+45300   fn_record_addc(20,fn_meter_info$('Transmitter Number',z$,'WA'))                  ! Transmitter Serial Number  Meter.Transmitter Number
+45320 ! fn_record_addc(20,'(Rate Code Description??)')                                       ! Service Type
+45340   aWmeterType=val(fn_meter_info$('Meter Type',z$,'WA'))
+45360   if aWmeterType=1 then ! r: get aWmeterType$
+45380     aWmeterType$='1 inch'
+45400   else if aWmeterType=21 then
+45420     aWmeterType$='2 inch T-10'
+45440   else if aWmeterType=15 then
+45460     aWmeterType$='1.5 inch'
+45480   else if aWmeterType=2 then
+45500     aWmeterType$='2 inch Turbine'
+45520   else if aWmeterType=3 then
+45540     aWmeterType$='3 inch'
+45560   else if aWmeterType=4 then
+45580     aWmeterType$='4 inch'
+45600   else if aWmeterType=6 then
+45620     aWmeterType$='6 inch'
+45640   else
+45660     if aWmeterType<>5 then pr aWmeterType : pause
+45680     aWmeterType$='5/8x3/4'
+45700   end if ! /r
+45720   fn_record_addc(40,aWmeterType$)                                                   ! Meter Model/Type
+45740   fn_record_addn(10,d(1))                                                           ! Service 1 (Water) – Reading – Current
 45760 ! fn_record_addc(9,,fn_meter_info$('reading multipler',z$,'WA'))                       ! Meter Size
-45780   fn_record_write(h_out)
-45800 fnend
+45780   fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
+45800   fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
+45820   fn_record_write(h_out)
+45840 fnend
 46000 def fn_masterMeter ! z$,mat e$,extra$(1-2),route
 46010   dim tmpCity$*64,tmpState$*64,tmpZip$*64
 46020   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)

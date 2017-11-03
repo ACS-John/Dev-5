@@ -7,9 +7,7 @@ Length   Name
 1        (tab delimiter)
 30       Customer Name
 1        (tab delimiter)
-30       Service Address 1
-1        (tab delimiter)
-30       Service Address 2
+30       Meter Address
 1        (tab delimiter)
 30       Service City
 1        (tab delimiter)
@@ -27,4 +25,7 @@ Length   Name
 1        (tab delimiter)
 10       Last Reading
 1        (tab delimiter)
-
+30       Service Address 1
+1        (tab delimiter)
+30       Service Address 2
+1        (tab delimiter)

@@ -20,6 +20,7 @@
 11020   fntop(program$)
 11040   fn_setup
 11060   fn_clientSelect
+11070 goto XIT ! /r
 11080 XIT: fnXit
 13000 def library fnClientSelect
 13020   fn_setup
@@ -50,12 +51,13 @@
 14420   nex clientItem
 14440   fncmdset(2)
 14460   fnacs('clientSelect',0,mat resp$,ckey) ! /r
-15000   if ckey=1 then 
+15000   if ckey=1 then ! r: select that client
 15060     dim dataNew$*256
 15100     setenv('Client',resp$(1)) ! pr 'env$ client set to '&env$('client') : pause
-15102     if env$('enableDataFolderByClient')='Yes' then
+15102     setenv('clientSelected',env$('Client'))
+15104     fnmcreg_write('clientSelected',env$('clientSelected'))
+15110     if env$('enableDataFolderByClient')='Yes' then
 15120       dataNew$=rtrm$(env$('QBase'),'\')&'\'&env$('client') ! &'\'
-15174       library 's:\Core\Library': fnmakesurepathexists
 15176       fnmakesurepathexists(dataNew$)
 15180       setenv('data',dataNew$) ! pr 'env$ client set to '&env$('client') : pause
 15190       fnreg_close
@@ -73,6 +75,8 @@
 16038     library 'S:\Core\Library': fnreg_close
 16040     library 'S:\Core\Library': fnSetQ
 16042     library 'S:\Core\Library': fnsrch_case_insensitive
+16044     library 's:\Core\Library': fnmakesurepathexists
+16046     library 's:\Core\Library': fnmcreg_write
 16080   end if 
 16090   fn_setup_client
 16100 fnend 
@@ -88,7 +92,10 @@
 20100   loginNameWhich=fnsrch_case_insensitive(mat client_name$,login_name$)
 20120   serialWhich=srch(mat client_brserial,serial)
 20140   clientWhich=0
-20160   if env$('acsClient')<>'' then ! it is specified in drive.sys - default to it
+20142   if env$('clientSelected')<>'' then ! it is specified in drive.sys - default to it
+20144     clientWhich=srch(mat client_name$,env$('clientSelected'))
+20146     if clientWhich<=0 then pr 'invalid env clientSelected.' : pause
+20160   else if env$('acsClient')<>'' then ! it is specified in drive.sys - default to it
 20180     clientWhich=srch(mat client_name$,env$('acsClient'))
 20200     if clientWhich<=0 then pr 'invalid env acsClient.' : pause
 20220   else if loginNameWhich>0 then
