@@ -571,7 +571,7 @@
 40080   dim ucLine$*256
 40100   ucListStarted=0
 40120   do
-40140     linput #hStUsers: ucLine$
+40140     linput #hStUsers: ucLine$ eof UcEof
 40160     if lwrc$(trim$(ucLine$))='current users on network:' then 
 40180       ucListStarted=1
 40200     else if ucListStarted then
@@ -581,6 +581,7 @@
 40280       end if
 40300     end if
 40320   loop
+40330   UcEof: !
 40340   close #hStUsers:
 40360   fnfree(env$('temp')&'\acsUsers'&session$&'.tmp')
 40380   fn_userCount=ucReturn
