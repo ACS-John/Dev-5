@@ -144,7 +144,7 @@
 26070     mat client_brserial(client_count)
 26090     !  fn_setup_client_add("ACS",1,0) ! TEMP
 26100     ! 
-26110     fn_setup_client_add("ACS" ,420,58650)
+26110     fn_setup_client_add("ACS" ,420,34660) ! 58650
 26120     fn_setup_client_add("Ed Horton" ,5535,0)! Ed processes like ACS
 26130     ! 
 26140     fn_setup_client_add("Lamar" ,1,33854)
