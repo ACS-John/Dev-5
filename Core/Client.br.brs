@@ -577,7 +577,7 @@
 40180       ucListStarted=1
 40200     else if ucListStarted then
 40220       ! fnaddonec(mat activeUsers$,ucLine$)
-40240       if ucLine$=env$('client') then
+40240       if lwrc$(trim$(ucline$(pos(ucline$,' '):len(ucline$))))=lwrc$(env$('client')) then
 40260         ucReturn+=1
 40280       end if
 40300     end if

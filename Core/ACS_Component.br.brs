@@ -547,7 +547,7 @@
 21160   end if 
 21170   dim borderText$*256
 21180   !
-21182   if env$('acsProduct')='' then borderText$='ACS 5 ' else borderText$=env$('acsProduct')
+21182   if env$('acsProduct')='' then borderText$='ACS 5 ' else borderText$=env$('acsProduct')&' '
 21184   !
 21190   if session$(3:3)<>'1' then
 21200     borderText$(inf:inf)='(Session '&session$(3:3)&') '
