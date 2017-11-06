@@ -145,7 +145,7 @@
 16100   fnend  ! fn_open_template
 18000   def fn_prnt1
 18020     if ~h_prnt1 then 
-18040       open #h_prnt1:=fngethandle: "Name="&env$('at')&tmp_rtf_filename$&",eol=none,Replace",display,output 
+18040       open #h_prnt1:=fngethandle: "Name="&tmp_rtf_filename$&",eol=none,Replace",display,output ! env$('at')&
 18060     end if 
 18080     fn_bldr1
 18100     r=0
