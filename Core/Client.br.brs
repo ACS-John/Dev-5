@@ -77,6 +77,7 @@
 16042     library 'S:\Core\Library': fnsrch_case_insensitive
 16044     library 's:\Core\Library': fnmakesurepathexists
 16046     library 's:\Core\Library': fnmcreg_write
+16048     library 's:\Core\Library': fnfree
 16080   end if 
 16090   fn_setup_client
 16100 fnend 
@@ -549,18 +550,41 @@
 36140   if srch(mat client_has$,uprc$(ch_sys$))>0 then ch_return=1
 36160   fn_client_has=ch_return
 36180 fnend 
-38000 def fn_user_limit(user_count)
-38020   !   if user_count>val(wsid$) then
-38040   !     user_limit_exceeded=1
-38060   !     msgbox('Workstation ID ('&wsid$&') is higher than the licensed number of users ('&str$(user_count)&').')
-38080   !     execute 'system'
-38100   !   end if
-38120   if val(env$('user_limit'))<>user_count then
-38140     execute 'config option 9 '&str$(user_count)
-38160     setenv('user_limit',str$(user_count))
-38180   end if 
-38200   ! 
-38220 fnend 
+38000 def fn_user_limit(userLimit)
+38020   if env$('acsProduct')='ACS Online' then
+38040     userCount=fn_userCount
+38060     if userCount>userLimit then
+38080       user_limit_exceeded=1
+38100       msgbox('Maximum number of licensed concurrent users ('&str$(userLimit)&') exceeded.')
+38120       execute 'system'
+38140     end if
+38160   else if val(env$('user_limit'))<>userLimit then
+38200     execute 'config option 9 '&str$(userLimit)
+38220     setenv('user_limit',str$(userLimit))
+38240   end if 
+38260   ! 
+38280 fnend 
+40000 def fn_userCount
+40020   ucReturn=0
+40040   exec 'status users >'&env$('temp')&'\acsUsers'&session$&'.tmp'
+40060   open #hStUsers:=fngethandle: 'name='&env$('temp')&'\acsUsers'&session$&'.tmp',d,input
+40080   dim ucLine$*256
+40100   ucListStarted=0
+40120   do
+40140     linput #hStUsers: ucLine$
+40160     if lwrc$(trim$(ucLine$))='current users on network:' then 
+40180       ucListStarted=1
+40200     else if ucListStarted then
+40220       ! fnaddonec(mat activeUsers$,ucLine$)
+40240       if ucLine$=env$('client') then
+40260         ucReturn+=1
+40280       end if
+40300     end if
+40320   loop
+40340   close #hStUsers:
+40360   fnfree(env$('temp')&'\acsUsers'&session$&'.tmp')
+40380   fn_userCount=ucReturn
+40400 fnend
 42000 ! r: def library fnuser_limit_exceeded
 42020 ! fn_setup
 42023 ! fn_getClientLicense(mat client_has$)
