@@ -553,10 +553,11 @@
 38000 def fn_user_limit(userLimit)
 38020   if env$('acsProduct')='ACS Online' then
 38040     userCount=fn_userCount
+38042 if env$('acsDeveloper')<>'' then pause
 38060     if userCount>userLimit then
 38080       user_limit_exceeded=1
 38100       msgbox('Maximum number of licensed concurrent users ('&str$(userLimit)&') exceeded.')
-38120       execute 'system'
+38120       execute 'system logoff'
 38140     end if
 38160   else if val(env$('user_limit'))<>userLimit then
 38200     execute 'config option 9 '&str$(userLimit)
