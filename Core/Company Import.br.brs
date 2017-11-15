@@ -98,7 +98,6 @@
 18100     else if cnv_ub_merriam_woods then 
 18120       fn_ub_cust_route_from_acctno(destination_company_number)
 18140     end if 
-18160     !     if env$('client')="West Accounting" then pause ! dir '&env$('Q')&'\PRmstr\dednames.h4560
 19000     if cnv_pr then 
 19020       if ~exists(env$('Q')&"\PRmstr\dednames.h"&str$(cno)) then 
 19040         if env$('client')="Merriam Woods" then pr_cnv_medicare_is_seperated=0
@@ -139,7 +138,7 @@
 21244     is_exeter=1
 21260   else if ((env$('ACSDeveloper')<>'' and destination_company_number=2900) or (env$('client')="Merriam Woods" and serial=31702)) then 
 21280     is_merriam_woods=1
-21282   else if ((env$('ACSDeveloper')<>'' and destination_company_number=4560) or (env$('client')="West Accounting" and serial=30176)) then 
+21282   else if ((env$('ACSDeveloper')<>'' and destination_company_number=4560) or ((env$('client')="West Accounting" or env$('client')="Payroll Done Right") and serial=30176)) then 
 21284     is_west_accounting=1
 21286   else if ((env$('ACSDeveloper')<>'' and destination_company_number=700) or (env$('client')="Campbell")) then 
 21288     is_campbell=1

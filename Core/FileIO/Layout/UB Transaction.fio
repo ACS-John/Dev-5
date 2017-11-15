@@ -1,9 +1,26 @@
-[Q]\UBmstr\ubTransVB.h[cno]  ,  trans_  , 0
-[Q]\UBmstr\ubTrIndx.h[cno]   ,  acct/tdate/tcode
-[Q]\UBmstr\UBTrdt.h[cno]     ,  tdate/acct
-recl=102
+[Q]\UBmstr\Reads_and_Chgs.h[cno]  ,  trans_  , 0
+[Q]\UBmstr\Reads_and_Chgs-Key.h[cno]   ,  acct
+recl=74
 ===================================================
-acct$    ,  Customer Number         , C     10    , !  SPos=1
+acct$    ,  Customer Number        , Cr    10    , !  SPos=1
+xa1       , x(1 ) service 1 Water Reading    ,  pd     5
+xa2       , x(2 ) service 4 Gas  Reading     ,  pd     5
+xa3       , x(3 ) service 3 Electric Reading ,  pd     5
+xa4       , x(4 ) service 3                  ,  pd     5
+xb1       , x(5 ) service 2                 ,  pd      4.2
+xb2       , x(6 ) service 5                 ,  pd      4.2
+xb3       , x(7 ) service 6                 ,  pd      4.2
+xb4       , x(8 ) service 7                 ,  pd      4.2
+xb5       , x(9 ) service 1                 ,  pd      4.2
+xb6       , x(10) service 3                 ,  pd      4.2
+xb7       , x(11) service 4                 ,  pd      4.2
+xc1       , x(12) service 1                 ,  pd      5
+xc2       , x(13) service 3                 ,  pd      5
+xc3       , x(14) service 4                 ,  pd      5
+xd1       , x(15)                           ,  n       1
+
+
+
 tdate    ,  Date                    , N     8     , !  SPos=11  CCYYMMDD
 tcode    ,  Transaction Code        , N     1     , !  SPos=19
 !       1=Charge,2=Penalty,3=Collection,4=Credit Memo,5=Debit Memo

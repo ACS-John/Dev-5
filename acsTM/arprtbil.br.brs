@@ -121,8 +121,8 @@
 01220   pr newpage
 01230   pr f "10,5,C 60": "CHECK FORM ALIGNMENT"
 01240   pr f "12,5,C 60": "ENTER 1 TO REPRINT SAME STATEMENT"
-01250   pr f "13,5,C 60": "      2 TO pr NEXT STATEMENT AND STOP"
-01260   pr f "14,5,C 60": "      3 TO pr ALL REMAINING STATEMENTS"
+01250   pr f "13,5,C 60": "      2 TO PRINT NEXT STATEMENT AND STOP"
+01260   pr f "14,5,C 60": "      3 TO PRINT ALL REMAINING STATEMENTS"
 01270   pr f "23,30,c 20": "Press F5 to Cancel"
 01280 L1280: input fields "15,11,N 1,UE,N": align conv L1280
 01290   if cmdkey=5 then goto XIT
