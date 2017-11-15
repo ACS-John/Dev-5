@@ -1,13 +1,13 @@
 00010 ! Replace S:\acsCL\PostGL2.br
 00020 ! GL Distribution Report (fnpostgl2(2)   AND/OR     Post to General Ledger (fnpostgl2(1) - or run directly)
 
-00040   library 'S:\Core\Library': fnpostgl2,fnxit,fnerror,fntop,fnfree
+00040   library 'S:\Core\Library': fnpostgl2,fnxit,fnerror,fntop
 00050 ! on error goto ERTN
 00070   fntop(program$,"Post to General Ledger")
 00080   fnpostgl2(1)
 00090   fnxit
 10000   def library fnpostgl2(glt)
-10020     library 'S:\Core\Library': fnopenprn,fncloseprn,fncno,fnerror,fnputcno,fndate_mmddyy_to_ccyymmdd,fnprocess,fnchain,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fnmsgbox
+10020     library 'S:\Core\Library': fnopenprn,fncloseprn,fncno,fnerror,fnputcno,fndate_mmddyy_to_ccyymmdd,fnprocess,fnchain,fntos,fnlbl,fntxt,fncomboa,fnchk,fncmdset,fnacs,fnmsgbox,fnfree
 10040     on error goto ERTN
 10060 ! ______________________________________________________________________
 10080 ! GLT: 1=Post  2=Print Only

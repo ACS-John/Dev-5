@@ -5,7 +5,7 @@
 06080   on error goto ERTN
 06100   fntop(program$)
 06160   if env$('client')="Divernon" then print_netzero_checks=1
-06180   if env$('client')="West Accounting" then print_netzero_checks=1
+06180   if env$('client')="West Accounting" or env$('client')="Payroll Done Right" then print_netzero_checks=1
 08100 ! r: dims and constants
 08120   dim em$(3)*30 ! payee name and address
 08122   dim tdet(17)
@@ -818,7 +818,7 @@
 17780     fn_check_tom_richardson
 17790   else if env$('client')="Unity" then 
 17800     fn_check_unity
-17830   else if env$('client')="West Accounting" then 
+17830   else if env$('client')="West Accounting" or env$('client')="Payroll Done Right" then 
 17840     fn_check_west_accounting
 17850   else 
 17860     fn_check_dynamic(21,6,6,7,13) ! fn_check_legacy ! default for everyone without a special routine...
@@ -1223,7 +1223,7 @@
 60240     fn_stub_standard( 0,4)
 60250   else if env$('client')='Kincaid' then 
 60260     fn_stub_kincaid
-60270   else if env$('client')='West Accounting' then 
+60270   else if env$('client')='West Accounting' or env$('client')='Payroll Done Right' then 
 60280     fn_stub_standard( 1) ! standard, but show tips
 60290   else if env$('client')='Energy Exchanger' then 
 60300     ! r: setup mat ltext$ and mat lPos for fn_stub_hitBoxes

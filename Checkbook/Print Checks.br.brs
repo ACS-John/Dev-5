@@ -127,12 +127,12 @@
 11320     if ckoption=1 or ckoption=3 then 
 11330       inl$(2)="2. Continue with next check    "
 11340     else 
-11350       inl$(2)="2. pr next check and Stop   "
+11350       inl$(2)="2. Print next check and Stop   "
 11360     end if 
 11370     if ckoption=1 or ckoption=3 then 
 11380       inl$(3)="3. Completed with checks"
 11390     else 
-11400       inl$(3)="3. pr All remaining checks  "
+11400       inl$(3)="3. Print All remaining checks  "
 11410     end if 
 11420   end if  ! ~allign
 11430 SCR_CKPRT7: ! 

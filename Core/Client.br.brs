@@ -190,6 +190,7 @@
 26540     fn_setup_client_add("Grandview",2050,34040)
 26550 !   fn_setup_client_add("GreenCo",2070,33910)
 26560     fn_setup_client_add("Hope Welty" ,851,34152)
+26562     fn_setup_client_add("Payroll Done Right" ,3393,0)
 26570     ! fn_setup_client_add("Illiopolis",2340,0)
 26580     fn_setup_client_add("Kathys Bookkeeping",3979,33672)
 26590     ! fn_setup_client_add("Kimberling",2530,19212)
@@ -391,8 +392,12 @@
 29470       !     fn_user_limit(2)
 29480       !     fn_add_ch_sys('UB') : fn_set_ub_limit(9999) ! U1 Utility Billing (no discount)
 29490     else if env$('client')='Grandview' then 
-29500       fn_user_limit(1)
-29510       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
+29492       fn_user_limit(1)
+29494       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
+29500     else if env$('client')='Payroll Done Right' then 
+29502       fn_user_limit(1)
+29504       fn_add_ch_sys('GL')
+29506       fn_add_ch_sys('PR')
 29520     else if env$('client')='Hope Welty' then 
 29530       fn_user_limit(1)
 29540       fn_add_ch_sys('GL')
@@ -763,6 +768,7 @@
 62780 !   fn_pcs_add("Nancy Mouser",'OK')
 62800 !   fn_pcs_add("Northwest",'AR')
 62820     fn_pcs_add("Oklahoma",'OK')
+62822     fn_pcs_add("Payroll Done Right",'OR')
 62840     fn_pcs_add("Philo",'IL')
 62860 !   fn_pcs_add("PiattCO",'IL')
 62880     fn_pcs_add("Raymond",'IL')
