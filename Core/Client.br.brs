@@ -396,8 +396,8 @@
 29494       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
 29500     else if env$('client')='Payroll Done Right' then 
 29502       fn_user_limit(1)
-29504       fn_add_ch_sys('GL')
-29506       fn_add_ch_sys('PR')
+29504       if days(date)<=days(20171231,'ccyymmdd') then let fn_add_ch_sys('GL')
+29506       if days(date)<=days(20171231,'ccyymmdd') then let fn_add_ch_sys('PR')
 29520     else if env$('client')='Hope Welty' then 
 29530       fn_user_limit(1)
 29540       fn_add_ch_sys('GL')

@@ -450,7 +450,7 @@
 03152   workkey$=cnvrt$("pic(zzzzzzz#)",eno)&cnvrt$("pic(zz#)",dep)
 03160   restore #h_rpwork,key>=workkey$: 
 03170   read #h_rpwork,using F_RPWORK: x$,dep,mat inp,gpd,mat hr eof EO_RPWORK
-03172   if env$('client')='West Accounting' or env$('client')='Payroll Done Right' then gosub WEST_ACC_WORKMANSCOMP
+03172   if env$('client')='West Accounting' then gosub WEST_ACC_WORKMANSCOMP !  11/14/2017 - env$('client')='Payroll Done Right'  Does not want any special processing for deduction 8
 03174 ! pr 'B right after read rpwork  inp(6)=';inp(6) : pause
 03180   return  ! /r
 03200 SS_TAX_ONLY: ! r: SOC-SEC-TAX ONLY

@@ -18,7 +18,7 @@
 36020   if ~setup then let fn_setup
 36040   fnFileSaveAs=fn_FileSaveAs(save_what$)
 36060 fnend
-38000 def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog)
+38000 def fn_FileSaveAs(save_what$; fsa_automatedSaveFileName$*256,suppressErrorLog,disableCopyToLocal)
 38020   dim save_name$*256,ln$*512
 38040   dim save_log_filename$*256
 38060   failure=0
@@ -72,7 +72,7 @@
 39020   pr #h_tmp: '@echo SAVE PROCESSING...'
 39040   pr #h_tmp: tmp7ZipCommand$&' > "'&save_log_filename$&'"'
 39060   close #h_tmp: 
-39080   if clientServer then
+39080   if clientServer and ~disableCopyToLocal then
 39100     execute 'sy -s '&env$('temp')&'\save_as_'&session$&'.cmd'
 39110     fnmakesurepathexists(env$('at')&save_name$)
 39120     fnCopyFile(serverTempSaveFile$,env$('at')&save_name$)
@@ -456,6 +456,6 @@
 70120     asp_path$=env$('temp')&'\acs\Automated Saves'
 70130     asp_filename$=env$('cursys')&' Company '&env$('cno')&' '&date$('CCYY-MM-DD')&' '&srep$(time$,':','-')&' '&env$('Program_Caption')&' - '&fileNameAddition$&'.zip'
 70140     fnmakesurepathexists(asp_path$&'\')
-70160     fn_FileSaveAs(asp_saveFilter$, asp_path$&'\'&asp_filename$,1)
+70160     fn_FileSaveAs(asp_saveFilter$, asp_path$&'\'&asp_filename$,1,1)
 70170   end if
 70180 fnend

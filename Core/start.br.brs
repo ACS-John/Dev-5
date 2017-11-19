@@ -333,7 +333,7 @@
 40220   end if 
 40240   fn_change_temp=ct_return
 40260 fnend 
-42000 ! def fn_udf_resolve ! migration tool no longer used
+42000 ! def fn_udf_resolve ! r: migration tool no longer used
 42010 !   dim udf$*1024
 42020 !   fn_get_udf(udf$)
 42060 !   if udf$<>'' and exists(udf$)=1 then ! then it is a directory that exists
@@ -369,8 +369,8 @@
 42700 !       execute 'rmdir '&tmp_dir$(d_i) ioerr ignore
 42720 !     next d_i
 42740 !   end if 
-42760 ! fnend 
-43000 ! def fn_get_udf(&udf$)
+42760 ! fnend /r
+43000 ! def fn_get_udf(&udf$) r:
 43040 !   dim oldudf$*256
 43140 !   if oldudf$<>"" then 
 43160 !     udf$=oldudf$
@@ -380,7 +380,7 @@
 43440 !     oldudf$=udf$=fnshortpath$(env$("ScreenAceTemp"))&'\'
 43460 !   end if 
 43480 !   udf$(3:len(udf$))=srep$(udf$(3:len(udf$)),'\\','\')
-43500 ! fnend 
+43500 ! fnend /r
 44000 def fn_env_data_default
 44020   if env$('data')='' then ! if env$('data') is blank than set it here.
 44040     dim edd_base$*256

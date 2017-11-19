@@ -28,20 +28,20 @@
 10240     fntos(sn$="hh_fro")
 10250     fnlbl(2,1,"Hand Held model:",30,1)
 10252     fnlbl(2,32,device$)
-10260 ! fncomboa("HH-FroCBox",1,44,mat ctext$)
-10270 ! resp$(0)=device$
+10260     ! fncomboa("HH-FroCBox",1,44,mat ctext$)
+10270     ! resp$(0)=device$
 10280     fnlbl(4,1,"Book Number to store readings:",30,1)
 10290     fntxt(4,32,2,0,1,"20",0,"Be careful not to use the same route # twice in the same billing cycle.  The first route will be lost if it has not been calculated.")
 10380     if device$="Green Tree" or device$="Hersey" or device$="EZReader" then goto L630 else goto L650
-10390 L630: ! 
+10390     L630: ! 
 10400     fnlbl(6,1,"Source File:",30,1)
 10410     tip$="Source file should be drive designation and file name of the file returned from the Hand Held. "
 10420     fntxt(6,32,20,100,0,"",0,tip$)
 10430     if resp$(2)="" then resp$(2)=path$
 10432     goto L660
-10440 L650: ! 
+10440     L650: ! 
 10442     fnlbl(6,1,"Importing from "&fn_hh_input_filename$,len("Importing from "&fn_hh_input_filename$),1)
-10444 L660: ! 
+10444     L660: ! 
 10450     fncmdset(2)
 10460     fnacs(sn$,0,mat resp$,ckey)
 10470     if ckey=5 then goto XIT
