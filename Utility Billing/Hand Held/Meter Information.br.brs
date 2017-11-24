@@ -2,7 +2,7 @@
 00070   fntop(program$)
 00090   dim srvnam$(10)*20,srv$(10)*2
 00110 ! 
-00130   if fnhand_held_device$<>'Itron FC300' and fnhand_held_device$(1:6)<>'Aclara' and fnhand_held_device$<>'Master Meter' then 
+00130   if fnhand_held_device$<>'Itron FC300' and fnhand_held_device$(1:6)<>'[Ask]' and fnhand_held_device$(1:6)<>'Aclara' and fnhand_held_device$<>'Master Meter' then 
 00140     dim msg_text$(2)*256
 00150     msg_text$(1)='The '&env$('program_caption')&' file is not necessary'
 00160     msg_text$(2)="for your hand held device type."

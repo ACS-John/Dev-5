@@ -18,14 +18,14 @@
 14120 ! /region
 20000 def library fncno(&cno; &cnam$)
 20020   if ~setup then let fn_setup
-20060   cursys$=env$('cursys')
-22000   ! r: Read CNo (normal method - tied to session and cursys$
-22020   fnreg_read(session$&'.'&cursys$&'.cno',cno$)
+20060   ! cursys$=env$('cursys')
+22000   ! r: Read CNo (normal method - tied to session and env$('cursys')
+22020   fnreg_read(session$&'.'&env$('cursys')&'.cno',cno$)
 22040   cno=val(cno$)
 22060   ! /r
 25010   ! r: read cno tied to WSID (v 5 but before feb 2015)
 25020   if ~cno then 
-25040     fnreg_read(wsid$&'.'&cursys$&'.cno',cno$)
+25040     fnreg_read(wsid$&'.'&env$('cursys')&'.cno',cno$)
 25060     cno=val(cno$)
 25080     fn_putcno(cno)
 25100   end if 
@@ -38,7 +38,7 @@
 32000   ! r: read cnam
 32020   dim cnam_read$*40
 32040   cnam_read$=''
-32060   open #tf1:=fngethandle: "Name="&env$('Q')&"\"&cursys$&"mstr\Company.h"&str$(cno)&",Shr",internal,input ioerr CNAM_XIT
+32060   open #tf1:=fngethandle: "Name="&env$('Q')&"\"&env$('cursys')&"mstr\Company.h"&str$(cno)&",Shr",internal,input ioerr CNAM_XIT
 32080   read #tf1,using "Form pos 1,C 40": cnam_read$ ioerr ignore
 32100   close #tf1: 
 34000   CNAM_XIT: ! 
@@ -252,7 +252,7 @@
 57000   end if 
 57020   fn_system_abbr_2_name$=as2n_return$
 57040 fnend 
-58000 def library fncursys$(; cursys_set$*2)
+58000 def library fncursys$(; cursys_set$*2,resetCache)
 58020   if ~setup then let fn_setup
 58040   if cursys_set$<>'' then 
 58060     cursys_cache$=uprc$(cursys_set$)
@@ -261,7 +261,7 @@
 58120     cursys_cache$=uprc$(env$('CurSys'))
 58140   end if 
 58160   ! 
-58180   if cursys_cache$="" then 
+58180   if cursys_cache$="" or resetCache then 
 58200     fnreg_read(session$&'.CurSys',cursys_cache$)
 58220     if cursys_cache$="" then 
 58240       fngetdir2('S:\',mat system_abbr_list$, '/ON','??.mnu')

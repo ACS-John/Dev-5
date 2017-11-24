@@ -454,10 +454,6 @@
 48960     library 'S:\Core\combo1.br': fncombo1
 48980     fncombo1(win,n$,mat l$,mat s,mat f, mat c$,filter$)
 49000   fnend
-49020   def library fnselect(win,&cap$,&q$,mat o$,&r$,d_cnam,bo,wa,pr_newpg)
-49040     library 'S:\Core\Select.br': fnselect
-49060     fnselect=fnselect(win,cap$,q$,mat o$,r$,d_cnam,bo,wa,pr_newpg)
-49080   fnend
 49100   def library fnprocess(; chgpro)
 49120     library 'S:\Core\Process.br': fnprocess
 49140     fnprocess=fnprocess(chgpro)
@@ -528,9 +524,9 @@
 50920     library 'S:\Core\CNo.br': fndat
 50940     fndat=fndat(dat$,get_or_put)
 50960   fnend
-50980   def library fncursys$(; cs$*2)
+50980   def library fncursys$(; cursys_set$*2,resetCache)
 51000     library 'S:\Core\CNo.br': fncursys$
-51020     fncursys$=fncursys$(cs$)
+51020     fncursys$=fncursys$( cursys_set$,resetCache)
 51040   fnend
 51060   def library fnprg(&prg$; g_p)
 51080     library 'S:\Core\CNo.br': fnprg
@@ -926,7 +922,7 @@
 68250 ! /r
 70000 ! r: UB   utility billing
 70011   def library fnMeterAddressUpdate(meterAddressBefore$*30,&meterAddressAfter$)
-70012     library 'S:\Utility Billing\Meter Address.br': fnMeterAddressUpdate
+70012     library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressUpdate
 70013     fnMeterAddressUpdate=fnMeterAddressUpdate(meterAddressBefore$,meterAddressAfter$)
 70014   fnend
 70021   def library fnDepositChangeLog(z$*10,odp,ndp,chgDate,comment$*32)
@@ -934,11 +930,11 @@
 70023     fnDepositChangeLog=fnDepositChangeLog(z$,odp,ndp,chgDate,comment$)
 70024   fnend
 70031   def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen)
-70032     library 'S:\Utility Billing\Meter Address.br': fnMeterAddressLocationID
+70032     library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressLocationID
 70033     fnMeterAddressLocationID=fnMeterAddressLocationID(meterAddress$, leaveFileOpen)
 70034   fnend
 70041   def library fnMeterAddressName$*30(locationID; leaveFileOpen)
-70042     library 'S:\Utility Billing\Meter Address.br': fnMeterAddressName$
+70042     library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressName$
 70043     fnMeterAddressName$=fnMeterAddressName$(locationID, leaveFileOpen)
 70044   fnend
 70051   def library fnNoteDir$*256
