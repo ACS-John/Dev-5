@@ -8,28 +8,30 @@
 08000 SEL_ACT: ! r:
 08020   fn_scr_selact
 08040   if ckey=5 then goto XIT
-08060   if workopen=0 then let fn_openwork ! open work files based on type of Hand Held
+08060   if ~workopen then 
+08070     fn_openwork ! open work files based on type of Hand Held
+08072   end if
 08080   if ckey=2 then
-08100     goto TRANSFER
+08100     goto Finis
 08120   else if selection_method=1 then
 08140     goto SELECT_ALL
 08160   else if selection_method=2 then
-08180     goto ASK_BOOK
+08180     goto AskRoute
 08200   else if selection_method=3 then
-08220     goto RANGE
+08220     goto AskRange
 08240   else if selection_method=4 then
-08260     goto ASK_ACT
+08260     goto NextAskAccount
 08280   end if  ! /r
 08300 ! ______________________________________________________________________
-09000 ASK_BOOK: ! r:
-09020   fntos(sn$="Ask_Book")
+09000 AskRoute: ! r:
+09020   fntos(sn$="AskRoute")
 09040   if hbk<>0 then
 09060     fnlbl(1,1,"Last Route Number Selected: "&str$(hbk))
 09080     myline=3
 09100   else
 09120     myline=1
 09140   end if
-09160   fnlbl(myline,1,"Route Number to Read:")
+09160   fnlbl(myline,1,"Route Number:")
 09180   fncmbrt2(myline,22,0)
 09200   resp$(1)=""
 09220   fncmdkey("&Next",1,1,0,"Add the selected route" )
@@ -43,7 +45,7 @@
 09380   if ckey=1 then
 09400     goto SELECT_ALL
 09420   else if ckey=2 then
-09440     goto TRANSFER
+09440     goto Finis
 09460   else if ckey=5 then
 09480     goto SEL_ACT
 09500   else
@@ -57,20 +59,36 @@
 10060   end if
 10080   ! if env$('client')="Gilbertown" then goto GILBERTOWN
 10100   if bk1=0 then bk1=1
-10120   restore #h_customer_i5,key>=cnvrt$("pic(zz)",bk1)&"       ": nokey ASK_BOOK
-10140 SELECT_ALL_READ: !
-10160   if fn_customerRead=-54 then goto END1
-10180   if selection_method=1 then goto L980
-10200   if selection_method=2 and route=0 then goto SELECT_ALL_READ
-10220   if selection_method=2 and bk1><route then goto END1
-10240 L980: goto FINAL_BILLING_CODE ! /r
-10260 ! ______________________________________________________________________
-11000 END1: ! r:
-11020   if device$='Itron FC300' then let fn_itron_close
-11060   if selection_method=1 then goto TRANSFER
-11080   if selection_method=2 then hbk=bk1 : goto ASK_BOOK ! /r
-12000 ASK_ACT: ! r:
-12020   fntos(sn$="Ask_Act")
+10120   restore #h_customer_i5,key>=cnvrt$("pic(zz)",bk1)&"       ": nokey AskRoute
+10140 goto NextReadForAll ! /r
+11000 NextReadForAll: ! ! r:
+11020   if fn_customerRead=-54 then 
+11040     goto END1
+11060   else if selection_method=2 then
+11080     if route=0 then 
+11100       goto NextReadForAll
+11120     else if bk1><route then 
+11140       goto END1
+11160     end if
+11180   end if 
+11200   goto SendRecordToWorkFile
+11220   !
+11240   END1: !
+11260   if device$='Itron FC300' then 
+11280     fn_itron_close
+11300   end if
+11320   !
+11340   if selection_method=1 then 
+11360     goto Finis
+11380   else if selection_method=2 then 
+11400     hbk=bk1 
+11420     goto AskRoute 
+11440   else
+11460     goto NextAskAccount 
+11480   end if
+11500 goto NextAskAccount ! /r
+12000 NextAskAccount: ! r:
+12020   fntos(sn$="NextAskAccount")
 12040   if z$<>"" then
 12060     fnlbl(1,1,"Last Account Selected: "&z$,40,2)
 12080     myline=3
@@ -85,35 +103,52 @@
 12260   if ckey=6 then let fncustomer_search(resp$(1))
 12280   if ckey=99 or ckey=5 or resp$(1)="          " then goto SEL_ACT
 12300   z$=lpad$(trim$(resp$(1)(1:10)), 10)
-12320   if fn_customerRead(z$)=-4272 then goto ASK_ACT
-12340   goto FINAL_BILLING_CODE
+12320   if fn_customerRead(z$)=-4272 then goto NextAskAccount
+12340   goto SendRecordToWorkFile
 12360 ! /r
-13000 FINAL_BILLING_CODE: ! r: doesn't seem to be very well named.
-13020 ! if trim$(z$)="200710.01" or trim$(z$)="201650.00" then pr 'final=';final : pause
-13040   if final><0 and udim(filterAccount$)=0 then goto NEXT_RECORD ! SKIP IF FINAL BILLED
-13060   fn_rmk1
-13080   if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
-13100   seq$=str$(sq1)
-13120   if device$="Psion Workabout" then let fn_workabout : goto NEXT_RECORD
-13140   if device$="Badger" then let fn_badger : goto NEXT_RECORD
-13160   if device$="Boson" then let fn_boson : goto NEXT_RECORD
-13180   if device$="Sensus" then let fn_sensus : goto NEXT_RECORD
-13200   if device$="LapTop" then let fn_laptop : goto NEXT_RECORD
-13220   if device$="Green Tree" then let fn_greentree : goto NEXT_RECORD
-13240   if device$="Hersey" then let fn_hersey : goto NEXT_RECORD
-13260   if device$="EZReader" then let fn_ezreader : goto NEXT_RECORD
-13280   if device$="AMR" then let fn_amr : goto NEXT_RECORD
-13300   if device$="Unitech HT630" then let fn_unitech_ht630 : goto NEXT_RECORD
-13320   if device$="ACS Meter Reader" then let fn_acs_meter_reader : goto NEXT_RECORD
-13340   if device$="Itron FC300" then let fn_itron : goto NEXT_RECORD
-13360   if device$="Aclara" then let fn_aclara : goto NEXT_RECORD
-13380   if device$="Aclara Work Order" then let fn_aclaraWorkOrder : goto NEXT_RECORD
-13400   if device$="Master Meter" then let fn_masterMeter : goto NEXT_RECORD
-13420   if device$="READy Water" then let fn_READy_Water : goto NEXT_RECORD
-13440   goto SEL_ACT ! go back if Hand Held information is not available for their selection
-13460 NEXT_RECORD: !
-13480   on selection_method goto SELECT_ALL_READ,SELECT_ALL_READ,NEXT_REC_SM3,ASK_ACT none SELECT_ALL_READ
-13500 ! /r
+13000 SendRecordToWorkFile: ! r: doesn't seem to be very well named.
+13020   if final=0 and ~includeFinalBilled and udim(mat filterAccount$)=0 then goto SendRecordToWorkFileFinis ! SKIP IF FINAL BILLED
+13040   fn_rmk1
+13060   if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
+13080   seq$=str$(sq1)
+13100   if device$="Psion Workabout" then 
+13120     fn_workabout
+13140   else if device$="Badger" then 
+13160     fn_badger
+13180   else if device$="Boson" then 
+13200     fn_boson
+13220   else if device$="Sensus" then 
+13240     fn_sensus
+13260   else if device$="LapTop" then 
+13280     fn_laptop
+13300   else if device$="Green Tree" then 
+13320     fn_greentree
+13340   else if device$="Hersey" then 
+13360     fn_hersey
+13380   else if device$="EZReader" then 
+13400     fn_ezreader
+13420   else if device$="AMR" then 
+13440     fn_amr
+13460   else if device$="Unitech HT630" then 
+13480     fn_unitech_ht630
+13500   else if device$="ACS Meter Reader" then 
+13520     fn_acs_meter_reader
+13540   else if device$="Itron FC300" then 
+13560     fn_itron
+13580   else if device$="Aclara" then 
+13600     fn_aclara
+13620   else if device$="Aclara Work Order" then 
+13640     fn_aclaraWorkOrder
+13660   else if device$="Master Meter" then 
+13680     fn_masterMeter
+13700   else if device$="READy Water" then 
+13720     fn_READy_Water
+13740   else
+13760     goto SEL_ACT ! go back if Hand Held information is not available for their selection
+13780   end if
+13820   SendRecordToWorkFileFinis: !
+13840   on selection_method goto NextReadForAll,NextReadForAll,NextReadForRange,NextAskAccount none NextReadForAll
+13860 ! /r
 14000 def fn_workabout
 14020   for j=1 to len(seq$)
 14040     on val(seq$(j:j)) goto WORKABOUT_WATER,WORKABOUT_ELECTRIC,WORKABOUT_DEMAND,WORKABOUT_GAS none WORKABOUT_NEXT_SEQUENCE
@@ -306,8 +341,8 @@
 22080     res$=rpad$(trim$(z$),10)&" "&trim$(e2$)
 22100   end if
 22120 fnend
-23000 RANGE: ! r:
-23020   fntos(sn$:="Range")
+23000 AskRange: ! r:
+23020   fntos(sn$:="AskRange")
 23040   fnfra(1,1,1,57,"Starting Account:")
 23060   fnfra(4,1,1,57,"Ending Account:")
 23080   fncmbact(1,1,0,1)
@@ -321,26 +356,26 @@
 23240   fnacs(sn$,0,mat resp$,ckey)
 23260   bk1$=lpad$(trim$(resp$(1)(1:10)), 10)
 23280   bk2$=lpad$(trim$(resp$(2)(1:10)), 10)
-23300   if ckey=2 then goto TRANSFER
+23300   if ckey=2 then goto Finis
 23320   if ckey=99 or ckey=5 then mat resp$=(""): goto SEL_ACT
 23340   if ckey=6 then
 23360     fn_searchScreen(x$,resp$(1))
-23380     goto RANGE
+23380     goto AskRange
 23400   else if ckey=7 then
 23420     fn_searchScreen(x$,resp$(2))
-23440     goto RANGE
+23440     goto AskRange
 23460   end if
 23480   mat resp$=("")
-23500   ! read #h_customer_i1,using F_CUSTOMER,key=bk1$,release: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,extra$(3),extra$(7),extra(1),alp$ eof RANGE ! get first and last route and sequence number to select
-23520   ! read #h_customer_i1,using F_CUSTOMER,key=bk2$,release: z$,mat e$,mat a,final,mat d,mat f$,last_route,last_sequence,extra$(3),extra$(7),extra(1),alp$ eof RANGE
+23500   ! read #h_customer_i1,using F_CUSTOMER,key=bk1$,release: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,extra$(3),extra$(7),extra(1),alp$ eof AskRange ! get first and last route and sequence number to select
+23520   ! read #h_customer_i1,using F_CUSTOMER,key=bk2$,release: z$,mat e$,mat a,final,mat d,mat f$,last_route,last_sequence,extra$(3),extra$(7),extra(1),alp$ eof AskRange
 23540   read #h_customer_i1,using 'form pos 1741,n 2,n 7',key=bk1$,release: route,sequence ! get first and last route and sequence number to select
 23560   read #h_customer_i1,using 'form pos 1741,n 2,n 7',key=bk2$,release: last_route,last_sequence
 23580   restore #h_customer_i5,key=cnvrt$("pic(zz)",route)&cnvrt$("pic(zzzzzzz",sequence):
-23600 NEXT_REC_SM3: !
-23620   if fn_customerRead=-54 then goto RANGE
-23640 ! If (ROUTE=LAST_ROUTE AND SEQUENCE>LAST_SEQUENCE) OR ROUTE>LAST_ROUTE Then Goto RANGE
-23660   if trim$(z$)<trim$(bk1$) or trim$(z$)>trim$(bk2$) then goto RANGE
-23680   goto FINAL_BILLING_CODE ! /r
+23600   NextReadForRange: !
+23620   if fn_customerRead=-54 then goto AskRange
+23640   ! If (ROUTE=LAST_ROUTE AND SEQUENCE>LAST_SEQUENCE) OR ROUTE>LAST_ROUTE Then Goto AskRange
+23660   if trim$(z$)<trim$(bk1$) or trim$(z$)>trim$(bk2$) then goto AskRange
+23680 goto SendRecordToWorkFile ! /r
 23700 !
 24000 ! <Updateable Region: ERTN>
 24020 ERTN: fnerror(program$,err,line,act$,"xit")
@@ -1082,7 +1117,7 @@
 49260     BOSON_NEXT_SEQUENCE: !
 49280   next j
 49300 fnend
-58000 TRANSFER: ! r: Transfer to or from Hand Held Computer
+58000 Finis: ! r: Transfer to or from Hand Held Computer
 58020   dim out_filename_report$*512
 58040   out_filename_report$=file$(h_out)
 58060   close #h_out: ioerr ignore
@@ -1104,6 +1139,7 @@
 61180   dim notefile$*100,notedir$*100
 61200   dim servicename$(10)*20,servicecode$(10)*2
 61220   dim rt$*4,extra(23)
+61230   dim filterAccount$(0)
 61240   ! r: constants_setup
 61260     dim drive$(22)*3
 61280     drive$(1)="E:\"
@@ -1162,20 +1198,20 @@
 62600   end if
 62620   goto TRANSFER_XIT
 63000   TRANSFER_TO_LAPTOP: ! r: transfer files for laptop
-63020   fntos(sn$="trtolaptop")
-63040   mat resp$=("")
-63060   fnlbl(1,1,"Destination Drive:",20,1)
-63080   tip$="Destination can be a drive designation including folders"
-63100   fntxt(1,23,20,100,0,"",0,tip$)
-63120   if resp$(1)="" then resp$(1)="A:\"
-63140   fncmdset(2)
-63160   fnacs(sn$,0,mat resp$,ckey) !
-63180   if ckey=5 then goto TRANSFER_XIT
-63200   dest$=resp$(1)
-63220   if len(dest$)=0 then goto TRANSFER_TO_LAPTOP
-63240   if len(dest$)=1 then dest$=dest$=":"
-63260   if len(dest$)=3 and dest$(3:3)="/" then dest$(3:3)=""
-63280   execute "Copy "&env$('Q')&"\UBmstr\laptop.out "&trim$(dest$)&"\laptop.out"
+63020     fntos(sn$="trtolaptop")
+63040     mat resp$=("")
+63060     fnlbl(1,1,"Destination Drive:",20,1)
+63080     tip$="Destination can be a drive designation including folders"
+63100     fntxt(1,23,20,100,0,"",0,tip$)
+63120     if resp$(1)="" then resp$(1)="A:\"
+63140     fncmdset(2)
+63160     fnacs(sn$,0,mat resp$,ckey) !
+63180     if ckey=5 then goto TRANSFER_XIT
+63200     dest$=resp$(1)
+63220     if len(dest$)=0 then goto TRANSFER_TO_LAPTOP
+63240     if len(dest$)=1 then dest$=dest$=":"
+63260     if len(dest$)=3 and dest$(3:3)="/" then dest$(3:3)=""
+63280     fnCopy(env$('Q')&"\UBmstr\laptop.out",env$('at')&trim$(dest$)&"\laptop.out")
 63300   goto TRANSFER_XIT ! /r
 63320   TRANSFER_XIT: !
 63340 fnend  ! fn_transfer

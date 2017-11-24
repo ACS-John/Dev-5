@@ -35,6 +35,7 @@
 15140     fnureg_read('Hand Held From File',hhfro$)
 15142     dim u4_deviceOption$(0)*20,u4_device$*20
 15144     fnHand_Held_Device_list(mat u4_deviceOption$)
+15145     fnaddonec(mat u4_deviceOption$,'[Ask]')
 15146     fnreg_read('Hand Held Device',u4_device$, fnhand_held_device$)
 15148     fnreg_read('Meter Address Enable',u4_meterAddress$, 'False')
 15160   end if
@@ -265,7 +266,6 @@
 50410 ! 
 50420     lc+=1
 50430     fnchk(lc+=1,55,"Wait for word processor to close before continuing",1)
-50440     fnlbl(lc,56.5,"Only uncheck when Report Cahceing Enabled.")
 50450     resp$(resp_wait_wp_close:=dsp_rc+=1)=wait_wp_close$
 50460     lc+=1
 50470 ! 
@@ -340,6 +340,7 @@
 52400   fnlbl(lc+=1,1,"File to Retreive:",col1_width,1,0,0,0,'Select a path and file for ACS to read input files from hand helds.')
 52420   fntxt(lc,col2_pos,42,80,0,'70',0,'Select a path and file for ACS to read input files from hand helds.')
 52440   resp$(resp_hhfro:=dsh_rc+=1)=hhfro$ 
+52450   fnlbl(lc,col2_pos+45,"(set to [Ask] to ask everytime)")
 52460   fncmdkey("&Save",1,1)
 52480   fncmdkey("Apply",2,0)
 52500   fncmdkey("&Cancel",5,0,1)
@@ -517,6 +518,7 @@
 70060     library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt ,fnerror,fntos,fnchk,fnreg_read,fnreg_write,fnbutton,fncmdkey,fnureg_read,fnureg_write,fncomboa,fnbutton_or_disabled,fnopen_receipt_printer,fnclose_receipt_printer,fnclient_has,fnMsExe$
 70080     library 'S:\Core\Library': fnHand_Held_Device_list,fnhand_held_device$,fnopt,fngetpp,fncopyfile
 70100     library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
+70110     library 'S:\Core\Library': fnaddonec
 70120     on error goto ERTN
 70140     dim resp$(20)*256,cap$*128,background_picture$*256,atlantis_exe$*80,word_exe$*256,save_path$*256
 70160     dim text_editor$*256

@@ -62,7 +62,9 @@
 15180       setenv('data',dataNew$) ! pr 'env$ client set to '&env$('client') : pause
 15190       fnreg_close
 15200       ! fnMapToVirturalDrive(dataNew$,'Q:') 
-15202       fnSetQ(dataNew$)
+15210       fnSetQ(dataNew$)
+15220       fncursys$( '',1)
+15240       fncno(unused)
 15280     end if
 15300   end if ! /r 
 15320 fnend
@@ -78,6 +80,8 @@
 16044     library 's:\Core\Library': fnmakesurepathexists
 16046     library 's:\Core\Library': fnmcreg_write
 16048     library 's:\Core\Library': fnfree
+16050     library 's:\Core\Library': fncursys$
+16052     library 's:\Core\Library': fncno
 16080   end if 
 16090   fn_setup_client
 16100 fnend 

@@ -113,20 +113,25 @@
 12320       execute 'CD '&env$('temp')(3:len(env$('temp')))
 13000       fnCopy('S:\ScreenIO.ini','screenio.ini')   ! note that destination screenio.ini must be all lowercase as it is case sensitive on some systems
 13020       fn_CopySfileIoIniToFileIoIni
-13030     end if
-13040     open #hR:=fn_gethandle: 'name=r,replace',d,o
-13060     pr #hR: 'stop'
-13080     pr #hR: 'clear resi'
-13100     pr #hR: 'run '&program$
-13120     close #hR:
-13140     if env$('ACSDeveloper')<>'' then 
-13160       open #hReload:=fn_gethandle: 'name=reload,replace',d,o
-13180       pr #hReload: 'execute ''load "''&program$&''"'''
-13200       close #hReload:
-13220     end if
-13240     open #hEd:=fn_gethandle: 'name=ed,replace',d,o
-13260     pr #hEd: "exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"'''
-13280     close #hEd:
+13040     end if
+13060     open #hR:=fn_gethandle: 'name=r,replace',d,o
+13080     pr #hR: 'stop'
+13100     pr #hR: 'clear resi'
+13120     pr #hR: 'run '&program$
+13140     close #hR:
+13160     open #hR:=fn_gethandle: 'name=relive,replace',d,o
+13180     pr #hR: 'stop'
+13200     pr #hR: 'execute ''load "''&program$&''"'''
+13220     pr #hR: 'run '
+13240     close #hR:
+13260     if env$('ACSDeveloper')<>'' then 
+13280       open #hReload:=fn_gethandle: 'name=reload,replace',d,o
+13300       pr #hReload: 'execute ''load "''&program$&''"'''
+13320       close #hReload:
+13340     end if
+13360     open #hEd:=fn_gethandle: 'name=ed,replace',d,o
+13380     pr #hEd: "exec 'sy "&os_filename$('S:\brEdit.cmd')&' "''&os_filename$(program$)&''"'''
+13400     close #hEd:
 14020     setenv("PD",'S:\') ! for modified fnsnap compatibility (Core\fnsnap)
 14040     ! if isScreenIOtest then disableConScreenOpenDflt=1 else disableConScreenOpenDflt=0
 14050     fn_startStatus('Identifying your system...')
