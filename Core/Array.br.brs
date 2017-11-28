@@ -28,11 +28,11 @@
 30900     array(insert_item_number)=insert_item
 31000   end if  ! Insert_Item_Number>Array_Item_Count   /   else 
 31100 fnend 
-31200 def library fnsrch_case_insensitive(mat srch_array$,srch_for$*80; srch_start_ele)
+31200 def library fnsrch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
 31300   ! if ~setup then let fn_setup
 31400   fnsrch_case_insensitive=fn_srch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
 31500 fnend  ! fnsrch_case_insensitive
-31600 def fn_srch_case_insensitive(mat srch_array$,srch_for$*80; srch_start_ele)
+31600 def fn_srch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
 31700   srch_array_count=udim(mat srch_array$)
 31800   srch_return=0
 31900   do 

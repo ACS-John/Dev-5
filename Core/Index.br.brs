@@ -269,7 +269,7 @@
 54900       if exists(env$('Q')&"\UBmstr\UBMASTER.H"&str$(cno)) then ! r: ub
 54920         fn_index_it(env$('Q')&"\UBmstr\UBMASTER.H"&str$(cno),env$('Q')&"\UBmstr\UBINDEX.H"&str$(cno),"1 10")
 54940         fn_index_it(env$('Q')&"\UBmstr\UBMASTER.H"&str$(cno),env$('Q')&"\UBmstr\UBINDX2.H"&str$(cno),"354 7")
-54960         fn_index_it(env$('Q')&"\UBmstr\UBMASTER.H"&str$(cno),env$('Q')&"\UBmstr\UBINDX3.H"&str$(cno),"11 25")
+54960         fn_index_it(env$('Q')&"\UBmstr\UBMASTER.H"&str$(cno),env$('Q')&"\UBmstr\UBINDX3.H"&str$(cno),"11 30")
 54980       end if  ! /r
 55000       if exists(env$('Q')&"\PRmstr\Burden.h"&str$(cno)) then ! r: PR
 55020         fn_index_it(env$('Q')&"\PRmstr\Burden.H"&str$(cno),env$('Q')&"\PRmstr\BurdenIdx.H"&str$(cno),"1 8")
@@ -289,7 +289,7 @@
 62100   def fn_ub_index_customer(cno)
 62120     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndex.h"&str$(cno),"1 10")
 62140     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndx2.h"&str$(cno),"354 7")
-62160     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndx3.h"&str$(cno),"11 25")
+62160     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndx3.h"&str$(cno),"11 30")
 62180     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndx4.h"&str$(cno),"41 30")
 62200     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno),"1741/1743 2/7")
 62220   fnend 

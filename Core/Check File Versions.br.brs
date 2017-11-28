@@ -219,7 +219,7 @@
 43390   fn_file_setup_data(env$('Q')&"\UBmstr\Customer.h"&env$('cno'),2067,1)
 43400   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndex.h"&env$('cno'),"1","10")
 43410   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno'),"354","7")
-43420   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno'),"11","25")
+43420   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno'),"11","30")
 43430   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno'),"41","30")
 43440   fn_file_setup_index(env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno'),"1741/1743","2/7")
 43450   ! 

@@ -1,7 +1,7 @@
 00010 ! formerly S:\acsUB\ubCoTr
 00020 ! -- Transfer Accounts Between Companies
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnopenprn,fncloseprn,fnerror,fncmbact,fnxit,fncmdset,fntop,fncmbcno,fnindex_sys
+00040   library 'S:\Core\Library': fnacs,fnlbl,fntxt,fntos,fnopenprn,fncloseprn,fnerror,fncmbact,fnxit,fncmdset,fntop,fncmbcno,fnindex_sys,fngethandle
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim z$*10,e$(4)*30,f$(3)*12,a(7),b(11),c(4),d(15),g(12),ta(2),alp$*7
@@ -46,7 +46,9 @@
 32420   close #27: ioerr ignore
 32440   close #28: ioerr ignore
 32460   open #11: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx2.h"&str$(co2)&",Shr",internal,outin,keyed 
-32480   open #12: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx3.h"&str$(co2)&",Shr",internal,outin,keyed 
+32480   open #unused0:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx3.h"&str$(co2)&",Shr",internal,outin,keyed 
+32482   open #unused1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx4.h"&str$(co2)&",Shr",internal,outin,keyed 
+32483   open #unused2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\UBIndx5.h"&str$(co2)&",Shr",internal,outin,keyed 
 32500   close #14: ioerr ignore
 32520   open #14: "Name="&env$('Q')&"\UBmstr\ubTransVB.h"&str$(co2)&",Shr,KFName="&env$('Q')&"\UBmstr\ubTrIndx.h"&str$(co2)&",Shr",internal,outin,keyed 
 32540   close #23: ioerr ignore
@@ -127,7 +129,9 @@
 50120   close #42: ioerr ignore
 50140   close #26: ioerr ignore
 50160   close #11: ioerr ignore
-50180   close #12: ioerr ignore
+50180   close #unused0: ioerr ignore
+50182   close #unused1: ioerr ignore
+50183   close #unused2: ioerr ignore
 50200   close #14: ioerr ignore
 50220   close #23: ioerr ignore
 50280   close #51: ioerr ignore

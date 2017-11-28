@@ -1,28 +1,34 @@
 02000 ! formerly S:\acsUB\hhto
 02010 ! -- Tranfer Data From Computer to Hand Held
-02020   fn_setup
-02160   fntop(program$)
-02330   open #h_customer_i1:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed
-02340   open #h_customer_i5:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed
-02368   goto SEL_ACT
+02020 fn_setup
+02160 fntop(program$)
+02330 open #h_customer_i1:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed
+02340 open #h_customer_i5:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed
+02368 goto SEL_ACT
 08000 SEL_ACT: ! r:
-08020   fn_scr_selact
-08040   if ckey=5 then goto XIT
-08060   if ~workopen then 
-08070     fn_openwork ! open work files based on type of Hand Held
-08072   end if
-08080   if ckey=2 then
-08100     goto Finis
-08120   else if selection_method=1 then
-08140     goto SELECT_ALL
-08160   else if selection_method=2 then
-08180     goto AskRoute
-08200   else if selection_method=3 then
-08220     goto AskRange
-08240   else if selection_method=4 then
-08260     goto NextAskAccount
-08280   end if  ! /r
-08300 ! ______________________________________________________________________
+08020 fn_scr_selact
+08040 if ckey=5 then 
+08060   goto XIT
+08080 else if ckey=2 then 
+08100   goto Finis
+08120 else ! ckey=1
+08140   if deviceSelected$='Aclara' then
+08160     includeFinalBilled=1
+08180   end if
+08200   if ~workopen then 
+08220     fn_openwork ! open work files based on type of Hand Held
+08240   end if
+08260   if selection_method=1 then
+08280     goto SELECT_ALL
+08300   else if selection_method=2 then
+08320     goto AskRoute
+08340   else if selection_method=3 then
+08360     goto AskRange
+08380   else if selection_method=4 then
+08400     goto NextAskAccount
+08420   end if
+08440 end if  ! /r
+08460 ! ______________________________________________________________________
 09000 AskRoute: ! r:
 09020   fntos(sn$="AskRoute")
 09040   if hbk<>0 then
@@ -54,7 +60,7 @@
 09560 !
 09580 ! /r
 10000 SELECT_ALL: ! r:
-10020   if device$='Aclara Work Order' then
+10020   if deviceSelected$='Aclara Work Order' then
 10040     fn_getFilterAccount(mat filterAccount$)
 10060   end if
 10080   ! if env$('client')="Gilbertown" then goto GILBERTOWN
@@ -74,7 +80,7 @@
 11200   goto SendRecordToWorkFile
 11220   !
 11240   END1: !
-11260   if device$='Itron FC300' then 
+11260   if deviceSelected$='Itron FC300' then 
 11280     fn_itron_close
 11300   end if
 11320   !
@@ -107,49 +113,52 @@
 12340   goto SendRecordToWorkFile
 12360 ! /r
 13000 SendRecordToWorkFile: ! r: doesn't seem to be very well named.
-13020   if final=0 and ~includeFinalBilled and udim(mat filterAccount$)=0 then goto SendRecordToWorkFileFinis ! SKIP IF FINAL BILLED
-13040   fn_rmk1
-13060   if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
-13080   seq$=str$(sq1)
-13100   if device$="Psion Workabout" then 
-13120     fn_workabout
-13140   else if device$="Badger" then 
-13160     fn_badger
-13180   else if device$="Boson" then 
-13200     fn_boson
-13220   else if device$="Sensus" then 
-13240     fn_sensus
-13260   else if device$="LapTop" then 
-13280     fn_laptop
-13300   else if device$="Green Tree" then 
-13320     fn_greentree
-13340   else if device$="Hersey" then 
-13360     fn_hersey
-13380   else if device$="EZReader" then 
-13400     fn_ezreader
-13420   else if device$="AMR" then 
-13440     fn_amr
-13460   else if device$="Unitech HT630" then 
-13480     fn_unitech_ht630
-13500   else if device$="ACS Meter Reader" then 
-13520     fn_acs_meter_reader
-13540   else if device$="Itron FC300" then 
-13560     fn_itron
-13580   else if device$="Aclara" then 
-13600     fn_aclara
-13620   else if device$="Aclara Work Order" then 
-13640     fn_aclaraWorkOrder
-13660   else if device$="Master Meter" then 
-13680     fn_masterMeter
-13700   else if device$="READy Water" then 
-13720     fn_READy_Water
-13740   else
-13760     goto SEL_ACT ! go back if Hand Held information is not available for their selection
-13780   end if
+13010   ! if trim$(z$)='100100.99' then pause
+13020   if udim(mat filterAccount$)<>0 or final=0 or includeFinalBilled then ! SKIP IF FINAL BILLED
+13040     ft$=fn_rmk1$(z$)
+13060     if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
+13080     seq$=str$(sq1)
+13100     if deviceSelected$="Psion Workabout" then 
+13120       fn_workabout
+13140     else if deviceSelected$="Badger" then 
+13160       fn_badger
+13180     else if deviceSelected$="Boson" then 
+13200       fn_boson
+13220     else if deviceSelected$="Sensus" then 
+13240       fn_sensus
+13260     else if deviceSelected$="LapTop" then 
+13280       fn_laptop
+13300     else if deviceSelected$="Green Tree" then 
+13320       fn_greentree
+13340     else if deviceSelected$="Hersey" then 
+13360       fn_hersey
+13380     else if deviceSelected$="EZReader" then 
+13400       fn_ezreader
+13420     else if deviceSelected$="AMR" then 
+13440       fn_amr
+13460     else if deviceSelected$="Unitech HT630" then 
+13480       fn_unitech_ht630
+13500     else if deviceSelected$="ACS Meter Reader" then 
+13520       fn_acs_meter_reader
+13540     else if deviceSelected$="Itron FC300" then 
+13560       fn_itron
+13580     else if deviceSelected$="Aclara" then 
+13600       fn_aclara
+13620     else if deviceSelected$="Aclara Work Order" then 
+13640       fn_aclaraWorkOrder
+13660     else if deviceSelected$="Master Meter" then 
+13680       fn_masterMeter
+13700     else if deviceSelected$="READy Water" then 
+13720       fn_READy_Water
+13740     else
+13760       goto SEL_ACT ! go back if Hand Held information is not available for their selection
+13780     end if
+13800   end if
 13820   SendRecordToWorkFileFinis: !
 13840   on selection_method goto NextReadForAll,NextReadForAll,NextReadForRange,NextAskAccount none NextReadForAll
 13860 ! /r
 14000 def fn_workabout
+14010   dim ft$*20
 14020   for j=1 to len(seq$)
 14040     on val(seq$(j:j)) goto WORKABOUT_WATER,WORKABOUT_ELECTRIC,WORKABOUT_DEMAND,WORKABOUT_GAS none WORKABOUT_NEXT_SEQUENCE
 14060     ! ___________________________
@@ -346,11 +355,10 @@
 23040   fnfra(1,1,1,57,"Starting Account:")
 23060   fnfra(4,1,1,57,"Ending Account:")
 23080   fncmbact(1,1,0,1)
-23100   text$="Search"
-23120   fnbutton(1,48,text$,6,blank$,0,7,1)
+23120   fnbutton(1,48,"Search",6,blank$,0,7,1)
 23140   resp$(1)=resp$(2)=""
 23160   fncmbact(1,1,0,2)
-23180   fnbutton(1,48,text$,7,blank$,0,7,2)
+23180   fnbutton(1,48,"Search",7,blank$,0,7,2)
 23200   fncmdkey("&Finish",2,1,0,"Completed with all routes")
 23220   fncmdset(2)
 23240   fnacs(sn$,0,mat resp$,ckey)
@@ -384,49 +392,51 @@
 24080   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 24100 ERTN_EXEC_ACT: execute act$ : goto ERTN
 24120 ! /region
-25000 def fn_rmk1
-25020   ft$="                    "
-25040   ! read the footnote from the note file  (any note with * as first character
-25060   notedir$=env$('Q')&"\UBmstr\notes.h"&env$('cno')
-25080   notefile$=notedir$&"\"&trim$(z$)&".txt"
-25100   if exists(notedir$)=0 then goto L4000
-25120   open #20: "Name="&notefile$,display,input ioerr L4010
-25140   L3960: linput #20: rm$ eof L4000
-25160   if rm$(1:1)="*" then goto L3990
-25180   goto L3960
-25200   L3990: ft$=rpad$(rm$(2:21),20)
-25220   L4000: close #20: ioerr ignore
-25240   L4010: !
-25260 fnend
+25000 def fn_rmk1$*20(z$)
+25020   ! read the footnote from the note file  (any note with * as first character
+25040   dim rm$*1320
+25060   dim notefile$*256
+25080   ft$="                    "
+25100   notefile$=env$('Q')&'\UBmstr\notes.h'&env$('cno')&'\'&trim$(z$)&'.txt'
+25120   if exists(notefile$) then 
+25140     open #20: "Name="&notefile$,display,input ioerr Rmk1_Finis
+25160     do  
+25180       linput #20: rm$ eof Rmk1_Finis
+25200       if rm$(1:1)="*" then 
+25220         ft$=rpad$(rm$(2:21),20)
+25240       end if
+25260     loop until rm$(1:1)="*"
+25280   end if
+25300   Rmk1_Finis: !
+25320   close #20: ioerr ignore
+25340 fnend
 26000 def fn_openwork ! open work areas based on type of Hand Held
 26020   dim out_filename$*256
 26040   fnureg_read('Hand Held To File',out_filename$,'C:\mvrs\xfer\Download\Download.dat')
-26060   if device$='Itron FC300' then
+26060   if deviceSelected$='Itron FC300' then
 26080     fn_itron_open ! default
 26100   else
-26120     h_out                  =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT",                                       80)
-26140     if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT",                                                   80)
-26160     if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3",                                           256)
-26180     if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            env$('Q')&"\UBmstr\intopalm.txt",                                  204)
-26200     if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           env$('Q')&"\UBmstr\Laptop.Out",                                    200)
-26220     if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat",                                         256)
-26240     if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           env$('Q')&"\UBmstr\READINGS.DAT",                                  282,',eol=none')
-26260     if h_out<=0 then h_out=fn_ifMatchOpenDo("EZReader",         "c:\ezreader\Download.dat",                                         578,',eol=none')
-26280     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',                        256)
-26300     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',                        256, ',eol=none')
-26320     if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt',                   256)
+26120     h_out                  =fn_ifMatchOpenDo("Sensus",           "C:\vol002\amrs\READINGS.DAT",                                        80)
+26140     if h_out<=0 then h_out=fn_ifMatchOpenDo("Green Tree",       "C:\READINGS.DAT",                                                    80)
+26160     if h_out<=0 then h_out=fn_ifMatchOpenDo("Badger",           "C:\CONNECT\CONNECT.IN3",                                            256)
+26180     if h_out<=0 then h_out=fn_ifMatchOpenDo("Boson",            env$('Q')&"\UBmstr\intopalm.txt",                                   204)
+26200     if h_out<=0 then h_out=fn_ifMatchOpenDo("LapTop",           env$('Q')&"\UBmstr\Laptop.Out",                                     200)
+26220     if h_out<=0 then h_out=fn_ifMatchOpenDo("AMR",              "C:\ezreader\download.dat",                                          256)
+26240     if h_out<=0 then h_out=fn_ifMatchOpenDo("Hersey",           env$('Q')&"\UBmstr\READINGS.DAT",                                   282,',eol=none')
+26260     if h_out<=0 then h_out=fn_ifMatchOpenDo("EZReader",         "c:\ezreader\Download.dat",                                          578,',eol=none')
+26280     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',                         256)
+26300     if h_out<=0 then h_out=fn_ifMatchOpenDo("Unitech HT630",    env$('temp')&'\'&session$&'_uni_ht630.dat',                         256, ',eol=none')
+26320     if h_out<=0 then h_out=fn_ifMatchOpenDo("ACS Meter Reader", env$('temp')&'\'&session$&'_acs_meter_data.txt',                    256)
 26340     if h_out<=0 then h_out=fn_ifMatchOpenDo("Psion Workabout",  env$('Q')&"\UBmstr\Readings.dat",                                   128)
 26360     if h_out<=0 then h_out=fn_ifMatchOpenDo("Aclara Work Order",br_filename$(env$('userprofile')&'\Desktop\Aclara Work Order.txt'),1048)
-26380     if h_out<=0 then
-26400       h_out=fn_ifMatchOpenDo('',br_filename$(env$('userprofile')&'\Desktop\ACS Hand Held Out.txt'),1048)
-26420     end if
+26380     if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 br_filename$(env$('userprofile')&'\Desktop\ACS Hand Held Out.txt'),1048)
 26440   end if
 26460   workopen=1
 26480 fnend  ! fn_openwork
 27000 def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extraParameter$*256)
-27020   ! inherrits device$,out_filename$
+27020   ! inherrits deviceSelected$,out_filename$
 27040   ! returns open file handle
-27060   if deviceTest$='' or device$=deviceTest$ then
+27060   if deviceTest$='' or deviceSelected$=deviceTest$ then
 27080     if out_filename$='' then out_filename$=defaultOut_filename$
 27100     fnmakesurepathexists(out_filename$)
 27120     open #hImodoReturn:=fngethandle: 'Name='&env$('at')&out_filename$&',RecL='&str$(recordLength)&extraParameter$&',Replace',display,output
@@ -1049,7 +1059,7 @@
 47520   if gRecordDelimiter$<>'' then ! remove trailing delimiter
 47540     rec_line$((len(rec_line$)-len(gRecordDelimiter$)+1):len(rec_line$))=''
 47560   end if
-47580   if device$='Itron FC300' then
+47580   if deviceSelected$='Itron FC300' then
 47600     write #h_out,using 'form pos 1,C '&str$(len(rec_line$)): rec_line$
 47620   else
 47640     pr #h_out,using 'form pos 1,C '&str$(len(rec_line$)): rec_line$
@@ -1126,57 +1136,70 @@
 58120   fn_transfer
 58200 goto XIT ! /r
 60000 XIT: fnxit
-60010 IGNORE: continue
-61000 def fn_setup
-61020   library 'S:\Core\Library': fnerror,fntos,fnlbl,fncomboa,fnacs,fncmbrt2,fnxit,fncmbact,fnbutton,fncustomer_search,fnfra,fncmdset,fntop,fncmdkey,fnmsgbox,fntxt,fngethandle,fnpause,fnopt,fnget_services,fnhand_held_device$,fncreg_read,fncreg_write,fnCopy,fnureg_read,fnAddOneC
-61040   library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists
-61060   on error goto ERTN
-61080 ! ______________________________________________________________________
-61100   dim f$(3)*12,ft$*20,resp$(2)*100,text$*50,cap$*128,e2$*30
-61120   dim tip$*100
-61140   dim z$*10,e$(4)*30,d(15),a(7),rm$*60,rm$(20)*60
-61160   dim res$*41,m$(2)*80,rm$*1320
-61180   dim notefile$*100,notedir$*100
-61200   dim servicename$(10)*20,servicecode$(10)*2
-61220   dim rt$*4,extra(23)
-61230   dim filterAccount$(0)
-61240   ! r: constants_setup
-61260     dim drive$(22)*3
-61280     drive$(1)="E:\"
-61300     drive$(2)="F:\"
-61320     drive$(3)="G:\"
-61340     drive$(4)="H:\"
-61360     drive$(5)="I:\"
-61380     drive$(6)="J:\"
-61400     drive$(7)="K:\"
-61420     drive$(8)="L:\"
-61440     drive$(9)="M:\"
-61460     drive$(10)="N:\"
-61480     drive$(11)="O:\"
-61500     drive$(12)="P:\"
-61520     drive$(13)="Q:\"
-61540     drive$(14)="R:\"
-61560     drive$(15)="S:\"
-61580     drive$(16)="T:\"
-61600     drive$(17)="U:\"
-61620     drive$(18)="V:\"
-61640     drive$(19)="W:\"
-61660     drive$(20)="X:\"
-61680     drive$(21)="Y:\"
-61700     drive$(22)="Z:\"
-61720     crlf$=chr$(13)&chr$(10)
-61740   ! /r
-61760   fnget_services(mat servicename$, mat servicecode$)
-61780   dim device$*20
-61800   device$=fnhand_held_device$
-61820 fnend
+60020 IGNORE: continue
+60040 def fn_setup
+60060   library 'S:\Core\Library': fnerror,fntos,fnlbl,fncomboa,fnacs,fncmbrt2,fnxit,fncmbact,fnbutton
+60080   library 'S:\Core\Library': fncustomer_search,fnfra,fncmdset,fntop,fncmdkey,fnmsgbox,fntxt
+60100   library 'S:\Core\Library': fngethandle,fnpause,fnopt,fnget_services,fnhand_held_device$
+60120   library 'S:\Core\Library': fncreg_read,fncreg_write,fnCopy,fnureg_read,fnureg_write
+60140   library 'S:\Core\Library': fnAddOneC
+60160   library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists
+60180   on error goto ERTN
+60200 ! ______________________________________________________________________
+60220   dim resp$(64)*125
+60240   dim f$(3)*12,e2$*30
+60260   dim z$*10,e$(4)*30,d(15),a(7)
+60280   dim res$*41,m$(2)*80
+60320   dim servicename$(10)*20,servicecode$(10)*2
+60340   dim rt$*4,extra(23)
+60360   dim filterAccount$(0)
+60380   ! r: set mat drive 
+60400     dim drive$(22)*3
+60420     drive$(1)="E:\"
+60440     drive$(2)="F:\"
+60460     drive$(3)="G:\"
+60480     drive$(4)="H:\"
+60500     drive$(5)="I:\"
+60520     drive$(6)="J:\"
+60540     drive$(7)="K:\"
+60560     drive$(8)="L:\"
+60580     drive$(9)="M:\"
+60600     drive$(10)="N:\"
+60620     drive$(11)="O:\"
+60640     drive$(12)="P:\"
+60660     drive$(13)="Q:\"
+60680     drive$(14)="R:\"
+60700     drive$(15)="S:\"
+60720     drive$(16)="T:\"
+60740     drive$(17)="U:\"
+60760     drive$(18)="V:\"
+60780     drive$(19)="W:\"
+60800     drive$(20)="X:\"
+60820     drive$(21)="Y:\"
+60840     drive$(22)="Z:\"
+60860   ! /r
+60880   crlf$=chr$(13)&chr$(10)
+60900   fnget_services(mat servicename$, mat servicecode$)
+60920   dim devicePreference$*20
+60940   devicePreference$=fnhand_held_device$
+60960   dim deviceOption$(0)*20
+60980   fn_Hand_Held_Device_list(mat deviceOption$)
+61000   dim deviceSelected$*20
+61020   if lwrc$(devicePreference$)='[ask]' then
+61040     fnureg_read('Hand Held Device Asked',deviceSelected$)
+61060     if trim$(deviceSelected$)='' then 
+61080       deviceSelected$=deviceOption$(1)
+61100     end if
+61120   else
+61140     deviceSelected$=devicePreference$
+61160   end if
+61180 fnend
 62000 def fn_transfer
-62020   if device$="ACS Meter Reader" then
+62020   if deviceSelected$="ACS Meter Reader" then
 62040     fntos(sn$="ACSMR_ASK_DEST")
 62060     mat resp$=("")
 62080     fnlbl(1,1,"Android Drive:",20,1)
-62100     tip$="Drive letter of the destination android device."
-62120     fncomboa("USB-Drive",1,23,mat drive$,tip$)
+62120     fncomboa("USB-Drive",1,23,mat drive$,"Drive letter of the destination android device.")
 62140     fncmdset(2)
 62160     fnacs(sn$,0,mat resp$,ckey)
 62180     if ckey<>5 then
@@ -1184,28 +1207,27 @@
 62220       execute "copy "&out_filename$&" "&trim$(dest$)&"acs_meter_data.txt"
 62240     end if  ! ckey<>5
 62260     goto TRANSFER_XIT
-62280   end if  ! device$="ACS Meter Reader"
-62400   !   else if device$="Badger" then
+62280   end if  ! deviceSelected$="ACS Meter Reader"
+62400   !   else if deviceSelected$="Badger" then
 62420   !     goto TRANSFER_XIT ! output file already if folder for                                               badger to read
-62440   if device$="LapTop" then ! else if...
+62440   if deviceSelected$="LapTop" then ! else if...
 62460     goto TRANSFER_TO_LAPTOP
-62480   else if device$="Psion Workabout" then
+62480   else if deviceSelected$="Psion Workabout" then
 62500     if exists("S:\RCom\RComW.exe")<>0 then ! else  if ...
 62520       execute 'Sy "'&os_filename$("S:\RCom\RComW.exe")&'" /w -n'
 62540     else
 62560       execute 'Sy "'&os_filename$("S:\acsUB\PreRoute.bat")&'" -n' ! "Psion Workabout"
-62580     end if  ! device$="Psion Workabout"
+62580     end if  ! deviceSelected$="Psion Workabout"
 62600   end if
 62620   goto TRANSFER_XIT
 63000   TRANSFER_TO_LAPTOP: ! r: transfer files for laptop
 63020     fntos(sn$="trtolaptop")
 63040     mat resp$=("")
 63060     fnlbl(1,1,"Destination Drive:",20,1)
-63080     tip$="Destination can be a drive designation including folders"
-63100     fntxt(1,23,20,100,0,"",0,tip$)
+63100     fntxt(1,23,20,100,0,"",0,"Destination can be a drive designation including folders")
 63120     if resp$(1)="" then resp$(1)="A:\"
 63140     fncmdset(2)
-63160     fnacs(sn$,0,mat resp$,ckey) !
+63160     fnacs(sn$,0,mat resp$,ckey)
 63180     if ckey=5 then goto TRANSFER_XIT
 63200     dest$=resp$(1)
 63220     if len(dest$)=0 then goto TRANSFER_TO_LAPTOP
@@ -1216,51 +1238,58 @@
 63320   TRANSFER_XIT: !
 63340 fnend  ! fn_transfer
 64000 def fn_scr_selact
-64020   mat resp$(5)=('')
-64030   fncreg_read('hhto.selection_method',selection_method$) : selection_method=val(selection_method$) conv ignore
-64040   if selection_method=0 then selection_method=2
-64060   fntos(sn$="hhto1")
-64080   fnlbl(2,1,"Hand Held model:",16,1)
-64100   !   fncomboa("HH-FroCBox",1,18,mat ctext$)
-64120   !   resp$(0)=device$
-64140   fnlbl(2,18,device$)
-64160   fnlbl(4,1,"Select:",16,1)
-64180   fnopt(4,18,"[All]")
-64200   if selection_method=1 then resp$(1)='True' else resp$(1)='False'
-64220   fnopt(5,18,"An Entire Route")
-64240   if selection_method=2 then resp$(2)='True' else resp$(2)='False'
-64260   fnopt(6,18,"A Range of Accounts")
-64280   if selection_method=3 then resp$(3)='True' else resp$(3)='False'
-64300   fnopt(7,18,"Specific Accounts")
-64320   if selection_method=4 then resp$(4)='True' else resp$(4)='False'
-64340   if lrec(2)>0 then
-64360     fncmdset(19)
-64380     fnlbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
-64400   else
-64410     fnlbl(9,1,"",46,2)
-64420     fncmdset(2)
-64440   end if
-64460   fnacs(sn$,0,mat resp$,ckey)
-64480   if ckey<>5 then
-64520     if resp$(1)='True' then
-64540       selection_method=1
-64560     else if resp$(2)='True' then
-64580       selection_method=2
-64600     else if resp$(3)='True' then
-64620       selection_method=3
-64640     else if resp$(4)='True' then
-64660       selection_method=4
-64680     end if
-64690     selection_method$=str$(selection_method) : fncreg_write('hhto.selection_method',selection_method$)
-64700   end if
-64720   mat resp$=("")
-64740 fnend
+64020   fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore
+64040   fntos(sn$="hhto1")
+64060   fnlbl(2,1,"Hand Held model:",16,1)
+64080   if lwrc$(devicePreference$)='[ask]' then
+64100     fncomboa("HH-FroCBox",2,18,mat deviceOption$)
+64120     resp$(rc_Device:=respc+=1)=deviceSelected$
+64140   else
+64160     fnlbl(2,18,deviceSelected$)
+64180   end if
+64200   fnlbl(4,1,"Select:",16,1)
+64220   fnopt(4,18,"[All] (excluding final billed)")
+64240   rc_selectionMethod1:=respc+=1 : if selection_method=1 then resp$(rc_selectionMethod1)='True' else resp$(rc_selectionMethod1)='False'
+64260   fnopt(5,18,"An Entire Route")
+64280   rc_selectionMethod2:=respc+=1 : if selection_method=2 then resp$(rc_selectionMethod2)='True' else resp$(rc_selectionMethod2)='False'
+64300   fnopt(6,18,"A Range of Accounts")
+64320   rc_selectionMethod3:=respc+=1 : if selection_method=3 then resp$(rc_selectionMethod3)='True' else resp$(rc_selectionMethod3)='False'
+64340   fnopt(7,18,"Specific Accounts")
+64360   rc_selectionMethod4:=respc+=1 : if selection_method=4 then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
+64380   ! if lrec(2)>0 then
+64400   !   fncmdset(19)
+64420   !   fnlbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
+64440   ! else
+64460     fnlbl(9,1,"",46,2)
+64480     fncmdset(2)
+64500   ! end if
+64520   fnacs(sn$,0,mat resp$,ckey)
+64540   if ckey<>5 then
+64560       if lwrc$(devicePreference$)='[ask]' then
+64580         deviceSelected$=resp$(rc_Device)
+64600         fnureg_write('Hand Held Device Asked',deviceSelected$)
+64620       else
+64640         deviceSelected$=devicePreference$
+64660       end if
+64680     if resp$(rc_selectionMethod1)='True' then
+64700       selection_method=1
+64720     else if resp$(rc_selectionMethod2)='True' then
+64740       selection_method=2
+64760     else if resp$(rc_selectionMethod3)='True' then
+64780       selection_method=3
+64800     else if resp$(rc_selectionMethod4)='True' then
+64820       selection_method=4
+64840     end if
+64860     fncreg_write('hhto.selection_method',str$(selection_method))
+64880   end if
+64900   mat resp$=("")
+64920 fnend
 65000 def fn_report_created_file(out_filename_report$*512)
-65100   if out_filename_report$<>'' and out_filename_report$<>':CON:' and device$<>'Psion Workabout' and device$<>'LapTop' then
+65100   if out_filename_report$<>'' and out_filename_report$<>':CON:' and deviceSelected$<>'Psion Workabout' and deviceSelected$<>'LapTop' then
 65120     mat m$(2)
 65140     m$(1)="Hand Held File created:"
 65160     m$(2)=os_filename$(out_filename_report$)
-65180     fnmsgbox(mat m$, response$, cap$,64)
+65180     fnmsgbox(mat m$, response$, '',64)
 65200   end if
 65240 fnend
 68000 def fn_cnt_of_metered_svcs_active
@@ -1320,28 +1349,32 @@
 70880   MI_FINIS: !
 70900   fn_meter_info$=mi_return$
 70920 fnend  ! fn_meter_info$
-72000 def library fnHand_Held_Device_list(mat device$)
-72010   if ~setup then let fn_setup
-72020   mat device$(0)
-72040   fnAddOneC(mat device$,"Boson"           )
-72060   fnAddOneC(mat device$,"Itron FC300"     )
-72080   fnAddOneC(mat device$,"Sensus"          )
-72100   fnAddOneC(mat device$,"Badger"          )
-72120   fnAddOneC(mat device$,"ACS Meter Reader")
-72130   fnAddOneC(mat device$,"Aclara"          )
-72132   fnAddOneC(mat device$,"Master Meter"    )
-72134   fnAddOneC(mat device$,"READy Water"     )
-72136   fnAddOneC(mat device$,"Aclara Work Order")
-72140   ! r: developed but currently unused
-72160   ! fnAddOneC(mat device$,"Psion Workabout")
-72180   ! fnAddOneC(mat device$,"LapTop"         )
-72200   ! fnAddOneC(mat device$,"Green Tree"     )
-72220   ! fnAddOneC(mat device$,"Hersey"         )
-72240   ! fnAddOneC(mat device$,"EZReader"       )
-72260   ! fnAddOneC(mat device$,"AMR"            )
-72280   ! fnAddOneC(mat device$,"Unitech HT630"  )
-72300   ! /r
-72320 fnend
+71000 def library fnHand_Held_Device_list(mat deviceOption$)
+71020   if ~setup then let fn_setup
+71040   fnHand_Held_Device_list=fn_Hand_Held_Device_list(mat deviceOption$)
+71060 fnend
+72000 def fn_Hand_Held_Device_list(mat deviceOption$)
+72020   mat deviceOption$(0)
+72040   fnAddOneC(mat deviceOption$,'Aclara'           )
+72050   fnAddOneC(mat deviceOption$,'Aclara Work Order')
+72060   fnAddOneC(mat deviceOption$,'ACS Meter Reader' )
+72080   fnAddOneC(mat deviceOption$,'Badger'           )
+72100   fnAddOneC(mat deviceOption$,'Boson'            )
+72100   fnAddOneC(mat deviceOption$,'CSV by LocationID')
+72120   fnAddOneC(mat deviceOption$,'Itron FC300'      )
+72140   fnAddOneC(mat deviceOption$,'Master Meter'     )
+72160   fnAddOneC(mat deviceOption$,'READy Water'      )
+72180   fnAddOneC(mat deviceOption$,'Sensus'           )
+72220   ! r: developed but currently unused
+72240   ! fnAddOneC(mat deviceOption$,"Psion Workabout")
+72260   ! fnAddOneC(mat deviceOption$,"LapTop"         )
+72280   ! fnAddOneC(mat deviceOption$,"Green Tree"     )
+72300   ! fnAddOneC(mat deviceOption$,"Hersey"         )
+72320   ! fnAddOneC(mat deviceOption$,"EZReader"       )
+72340   ! fnAddOneC(mat deviceOption$,"AMR"            )
+72360   ! fnAddOneC(mat deviceOption$,"Unitech HT630"  )
+72380   ! /r
+72400 fnend
 74000 def fn_customerRead(; accountKey$) ! all values read are passed back as local variables
 74020   ! #h_customer_i1 and #h_customer_i5 are inherrited local variables
 74040   dim extra$(11)*30

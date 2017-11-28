@@ -879,7 +879,7 @@
 64060     library 'S:\Core\Array.br': fnarray_item_insert
 64070     fnarray_item_insert=fnarray_item_insert(mat array, insert_item, insert_item_number)
 64080   fnend
-64090   def library fnsrch_case_insensitive(mat srch_array$,srch_for$*80; srch_start_ele)
+64090   def library fnsrch_case_insensitive(mat srch_array$,srch_for$*256; srch_start_ele)
 64100     library 'S:\Core\Array.br': fnsrch_case_insensitive
 64110     fnsrch_case_insensitive=fnsrch_case_insensitive(mat srch_array$,srch_for$, srch_start_ele)
 64120   fnend
@@ -937,14 +937,18 @@
 70042     library 'S:\Utility Billing\Hand Held\Meter Address.br': fnMeterAddressName$
 70043     fnMeterAddressName$=fnMeterAddressName$(locationID, leaveFileOpen)
 70044   fnend
-70051   def library fnNoteDir$*256
-70052     library 'S:\Utility Billing\Customer.br': fnNoteDir$
-70053     fnNoteDir$=fnNoteDir$
+70051   def library fnAccountFromLocationId$*10(locationID; leaveFileOpen)
+70052     library 'S:\Utility Billing\Hand Held\Meter Address.br': fnAccountFromLocationId$
+70053     fnAccountFromLocationId$=fnAccountFromLocationId$(locationID, leaveFileOpen)
 70054   fnend
-70061   def library fnWorkOrderAdd(z$*10)
-70062     library 'S:\Utility Billing\Work Order Add.br': fnWorkOrderAdd
-70063     fnWorkOrderAdd=fnWorkOrderAdd(z$)
+70061   def library fnNoteDir$*256
+70062     library 'S:\Utility Billing\Customer.br': fnNoteDir$
+70063     fnNoteDir$=fnNoteDir$
 70064   fnend
+70071   def library fnWorkOrderAdd(z$*10)
+70072     library 'S:\Utility Billing\Work Order Add.br': fnWorkOrderAdd
+70073     fnWorkOrderAdd=fnWorkOrderAdd(z$)
+70074   fnend
 70090   def library fnWorkOrderList(; z$*10)
 70100     library 'S:\Utility Billing\Work Order List.br': fnWorkOrderList
 70110     fnWorkOrderList=fnWorkOrderList(z$)
