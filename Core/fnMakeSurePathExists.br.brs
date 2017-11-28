@@ -14,7 +14,7 @@
 25060     fileName$=fileName$(pos(fileName$,"\")+1:len(fileName$))
 25100     doNotTryThisOne=0
 25220     ! r: do not try entries like  [@:]\\  nor  [@:]\\server\  nor  [@:]\\server\resource\
-25240     if path$(1:2)='\\' or path$(1:4)='@:\\' then 
+25240     if path$(1:2)='\\' or path$(1:3)=':\\' or path$(1:4)='@:\\' or path$(1:5)='@::\\' then 
 25280       if fn_backslashCount(path$)<=4 then doNotTryThisOne=1
 25300     end if
 25320     ! /r

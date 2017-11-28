@@ -61,6 +61,26 @@
 18160    IaXit: !
 18180 fnend
 
+32000 def library fnAccountFromLocationId$*10(locationId; leaveFileOpen)
+32020   if ~setup then let fn_setup
+32040   aflReturn$=''
+32060   if leaveFileOpen and hMeterAddressLocationID<>0 then goto aflPastOpen1
+32080   hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, 1)
+32100   aflPastOpen1: !
+32120   if leaveFileOpen and hCustomerMeterAddress<>0 then goto aflPastOpen2
+32140   open #hCustomerMeterAddress:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,input,keyed ! Meter address
+32160   aflPastOpen2: !
+32180   maDataN(ma_LocationID)=-1
+32200   read #hMeterAddressLocationID,using form$(hMeterAddressLocationID),key=cnvrt$('N 11',locationId),release: mat maData$,mat maDataN nokey ignore
+32220   read #hCustomerMeterAddress,using 'form pos 1,C 10',key=maData$(ma_name),release: aflReturn$ nokey ignore
+32240   if ~leaveFileOpen then
+32260     close #hMeterAddressLocationID:
+32280     close #hCustomerMeterAddress:
+32300     hMeterAddressLocationID=0
+32310     hCustomerMeterAddress=0
+32320   end if
+32340   fnAccountFromLocationId$=aflReturn$
+32360 fnend
 33000 def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen)
 33020   if ~setup then let fn_setup
 33040   if leaveFileOpen and hMeterAddressName<>0 then goto maliPastOpen

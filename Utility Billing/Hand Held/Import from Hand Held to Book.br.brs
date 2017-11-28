@@ -20,6 +20,8 @@
 16120   library 'S:\Core\Library': fnureg_write
 16140   library 'S:\Core\Library': fnCopy,fnRename
 16150   library 'S:\Core\Library': fnaddonec
+16152   library 'S:\Core\Library': fnAccountFromLocationId$
+16154   library 'S:\Core\Library': fnsrch_case_insensitive
 16160   on error goto ERTN
 16180   dim preferenceHandHeldFromFile$*128
 16200   fnureg_read('Hand Held From File',preferenceHandHeldFromFile$)
@@ -37,6 +39,8 @@
 16440   dim easy$*619
 16460   dim devicePreference$*20
 16480   dim deviceSelected$*20
+16490   dim line$*2048 ! temp variable for reading in lines before they are parsed.
+16492   dim lineItem$(0)*256 ! temp variable for reading in lines before they are parsed.
 16500   devicePreference$=fnhand_held_Device$ ! fn_ctext_setup
 16520   if lwrc$(preferenceHandHeldFromFile$)='[ask]' then
 16540     fnureg_read('Hand Held From File Asked',askPath$)
@@ -63,14 +67,14 @@
 25200       fncomboa("HH-FroCBox",lc,32,mat deviceOption$)
 25220       resp$(rc_Device:=respc+=1)=deviceSelected$
 25240     else
-25260       fnlbl(lc,32,devicePreference$)
+25260       fnlbl(lc,32,deviceSelected$)
 25280     end if
 25300       lc+=1
 25320     if lwrc$(preferenceHandHeldFromFile$)='[ask]' then
 25340       lc+=1
 25360       fnlbl(lc+=1,1,"Source File:",30,1)
 25380       fntxt(lc,32,20,100,0,"70",0,'Source file should be drive designation and file name of the file returned from the Hand Held.')
-25400       if resp$(rc_path:=respc+=1)="" then resp$(2)=askPath$
+25400       rc_path:=respc+=1 : if resp$(rc_path)="" then resp$(rc_path)=askPath$
 25420     else
 25440       fnlbl(lc+=1,1,"Importing from "&fn_hh_input_filename$,len("Importing from "&fn_hh_input_filename$),1)
 25460     end if
@@ -88,6 +92,7 @@
 26120       else
 26140         deviceSelected$=devicePreference$
 26160       end if
+26170 ! pr 'deviceSelected$='&deviceSelected$ : pause
 26180       enableMerge$=resp$(rc_merge)
 26200       if lwrc$(preferenceHandHeldFromFile$)='[ask]' then
 26220         askPath$=resp$(rc_path)
@@ -106,47 +111,51 @@
 26720 fnend
 28000 def fn_transfer(bk$,enableMerge$,askPath$*128)
 28020   transferReturn=0
-28040   if deviceSelected$="Aclara Work Order" then
-28060     fn_aclaraWorkOrder
-28080     transferReturn=fn_aclaraWorkOrder
-28100   else if deviceSelected$="Sensus" then
-28120     fn_sensus_in
-28140   else if deviceSelected$="LapTop" then
-28160     fn_laptop
-28180   else if deviceSelected$="Hersey" then
-28200     fn_hersey
-28220   else if deviceSelected$="EZReader" then
-28240     fn_ezreader
-28260   else if deviceSelected$="ACS Meter Reader" then
-28280     fn_acsmr
-28300   else if deviceSelected$="AMR" then
-28320     fn_amr
-28340   else if deviceSelected$="Itron FC300" then
-28360     fn_itron
-28380   else if deviceSelected$="Psion Workabout" then
-28400     fn_psion_workabout
-28420   else if deviceSelected$="Badger" or deviceSelected$="DriveBy" then
-28440     fn_badger
-28460   else if deviceSelected$="Unisys" then
-28480     fn_unisys
-28500   else if deviceSelected$="Boson" then
-28520     fn_boson
-28540   else if deviceSelected$="Green Tree" then
-28560     fn_green_tree
-28580   else if deviceSelected$="Other" and env$('client')="Brier Lake" then
-28600     fn_import_l_readings_txt(bk$)
-28620   else if deviceSelected$="READy Water" then
-28640     fn_import_l_readings_txt(bk$)
-28660   else if deviceSelected$="Master Meter" then
-28680     fn_import_l_readings_txt(bk$, 358)
-28700   end if
-28720   if transferReturn>0 then
-28740     mat ml$(1)
-28760     ml$(1)=str$(transferReturn)&' records imported to book '&bk$&'.'
-28780     fnmsgbox(mat ml$)
-28800   end if
-28820   fn_transfer=transferReturn
-28840 fnend
+28040   dim bookFile$*512
+28060   bookFile$=env$('Q')&"\UBmstr\Readings."&ltrm$(bk$)
+48060   if enableMerge$='True' and ~exists(bookFile$) then enableMerge$='False'
+28080   if deviceSelected$="Aclara Work Order" then
+28100     transferReturn=fn_aclaraWorkOrder(bookFile$,enableMerge$)
+28120   else if deviceSelected$='CSV by LocationID' then
+28140     transferReturn=fn_CsvByLocationId(bookFile$,enableMerge$)
+28160   else if deviceSelected$="Sensus" then
+28180     fn_sensus_in(bookFile$)
+28200   else if deviceSelected$="LapTop" then
+28220     fn_laptop(bookFile$)
+28240   else if deviceSelected$="Hersey" then
+28260     fn_hersey(bookFile$)
+28280   else if deviceSelected$="EZReader" then
+28300     fn_ezreader(bookFile$)
+28320   else if deviceSelected$="ACS Meter Reader" then
+28340     fn_acsmr(bookFile$)
+28360   else if deviceSelected$="AMR" then
+28380     fn_amr(bookFile$)
+28400   else if deviceSelected$="Itron FC300" then
+28420     fn_itron(bookFile$)
+28440   else if deviceSelected$="Psion Workabout" then
+28460     fn_psion_workabout(bookFile$)
+28480   else if deviceSelected$="Badger" or deviceSelected$="DriveBy" then
+28500     fnCopy(fn_hh_input_filename$,bookFile$)
+28520   else if deviceSelected$="Unisys" then
+28540     fnCopy(fn_hh_input_filename$,bookFile$)
+28560   else if deviceSelected$="Boson" then
+28580     fn_boson(bookFile$)
+28600   else if deviceSelected$="Green Tree" then
+28620     fnCopy(fn_hh_input_filename$,bookFile$)
+28640   else if deviceSelected$="Other" and env$('client')="Brier Lake" then
+28660     fn_import_l_readings_txt(bookFile$)
+28680   else if deviceSelected$="READy Water" then
+28700     fn_import_l_readings_txt(bookFile$)
+28720   else if deviceSelected$="Master Meter" then
+28740     fn_import_l_readings_txt(bookFile$, 358)
+28760   end if
+28780   if transferReturn>0 then
+28800     mat ml$(1)
+28820     ml$(1)=str$(transferReturn)&' records imported to book '&bk$&'.'
+28840     fnmsgbox(mat ml$)
+28860   end if
+28880   fn_transfer=transferReturn
+28900 fnend
 30000 def fn_hh_input_filename$*256
 30010   ! requires local variables: deviceSelected$,preferenceHandHeldFromFile$,askPath$
 30020   dim hif_return$*256
@@ -193,15 +202,6 @@
 30900   fn_hh_input_filename$=env$('at')&hif_return$
 30920 fnend
 31000 IGNORE: continue
-32000 def fn_biteN(biteSize,&candyBar$)
-32020   fn_biteN=val(fn_bite$(biteSize,candyBar$))
-32040 fnend
-32060 def fn_bite$*256(biteSize,&candyBar$)
-32080   dim biteReturn$*256
-32100   biteReturn$=candyBar$(1:biteSize)
-32120   candyBar$(1:biteSize)=''
-32140   fn_bite$=biteReturn$
-32160 fnend
 33000 def fn_readingsFileVersion$
 33020   dim rfvLine$*512
 33040   open #hRfv:=fngethandle: "Name="&fn_hh_input_filename$,display,input
@@ -214,70 +214,89 @@
 33180     if env$('acsDeveloper')<>'' then pause
 33200   end if
 33220 fnend
-
-46000 def fn_acsmr ! ACS Meter Reader
-46030   source$=resp$(1)
-46060   open #2: "Name="&fn_hh_input_filename$&"acs_meter_data.txt,RecL=256",display,input
-46090   fn_readings_backup(bk$)
-46120   open #3: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output
-46150   do
-46180     linput #2: amr$ eof ACSMR_XIT
-46210     z$=amr$(1:10)
-46240     reading=val(amr$(133:142))
-46270     pr #3,using "form pos 1,c 10,n 10": z$,reading
-46300   loop
-46330   ACSMR_XIT: !
-46360 fnend
-48000 def fn_aclaraWorkOrder
-48020   dataIncludesHeaders=1
-48060   if enableMerge$<>'' then
-48080     if fn_readingsFileVersion$<>'[ACS Hand Held File Generic Version 2]' then
-48100        mat ml$(3)
-48120        ml$(1)='The existing book '&bk$&' is not in a format that permits'
-48140        ml$(2)='merging with the '&deviceSelected$&' format.'
-48160        aclaraWorkOrderReturn=-1
-48180      end if
-48200   end if
-48210   open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
-48220   open #hOut:=fngethandle: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=512,replace",display,output
-48240   pr #hOut: '[ACS Hand Held File Generic Version 2]'
-48260   if dataIncludesHeaders then
-48280     linput #hIn: line$ eof EO_AW ! just consume the headers
-48300   end if
-48320   do
-48340     z$=''
-48360     linput #hIn: line$ eof EO_AW
-48380     fn_awoParseLine(line$,mat awoDataName$,mat awoDataValue$)
-48400     pause
-48420     !
-48440     fn_aclaraWorkOrder_write ! write the last one
-48460     aclaraWorkOrderReturn+=1
-48480   loop
-48500   EO_AW: !
-48520   close #hIn:
-48540   close #hOut:
-48560   fn_aclaraWorkOrder=aclaraWorkOrderReturn
-48580 fnend
-50000 def fn_awoParseLine(line$*256,mat awoDataName$,mat awoDataValue$)
+36000 def fn_acsmr(bookFile$*256) ! ACS Meter Reader
+36030   source$=resp$(1)
+36060   open #2: "Name="&fn_hh_input_filename$&",RecL=256",display,input ! acs_meter_data.txt
+36090   fn_readings_backup(bookFile$)
+36120   open #3: "Name="&bookFile$&",RecL=30,replace",display,output
+36150   do
+36180     linput #2: amr$ eof ACSMR_XIT
+36210     z$=amr$(1:10)
+36240     reading=val(amr$(133:142))
+36270     pr #3,using "form pos 1,c 10,n 10": z$,reading
+36300   loop
+36330   ACSMR_XIT: !
+36360 fnend
+37000 def fn_CsvByLocationId(bookFile$*512,enableMerge$)
+37020   if enableMerge$='True' then
+37040     if ~fn_okToMerge('[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto CblFinis
+37060     pr 'merging not completed yet.  do not use.  Type Go and Press Enter to start over.' : pause : chain program$
+37080   end if
+37100   open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
+37120   open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+37140   pr #hOut: '[ACS Hand Held File Generic Version 2]'
+37160   linput #hIn: line$ eof CblFinis 
+37180   if srch(line$,chr$(9))>0 then cblDelimiter$=chr$(9) else cblDelimiter$=','
+37200   dim cblItem$(0)*256
+37220   str2mat(line$,mat cblItem$,cblDelimiter$)
+37240   cblCsv_LocationId=fn_findFirstMatch(mat cblItem$,'Location ID','LocationID')
+37260   cblCsv_ReadingWater=fn_findFirstMatch(mat cblItem$,'Water Reading')
+37280   do
+37300     linput #hIn: line$ eof CblFinis 
+37310     str2mat(line$,mat cblItem$,cblDelimiter$)
+37320     pr #hOut: 'Customer.Number='&fnAccountFromLocationId$(val(cblItem$(cblCsv_LocationId)),1)
+37340     if cblCsv_ReadingWater<>0 and val(cblItem$(cblCsv_ReadingWater))<>0 then 
+37360       pr #hOut: 'Reading.Water='&cblItem$(cblCsv_ReadingWater)
+37380     end if
+37400   loop
+37420   CblFinis: !
+37440 fnend
+38000 def fn_aclaraWorkOrder(bookFile$*512,enableMerge$)
+38020   dataIncludesHeaders=1
+38040   if enableMerge$='True' then
+38060     if ~fn_okToMerge('[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto EO_AW
+38080     pr 'merging not completed yet.  do not use.  Type Go and Press Enter to start over.' : pause : chain program$
+38100   end if
+38120   open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
+38140   open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+38160   pr #hOut: '[ACS Hand Held File Generic Version 2]'
+38180   if dataIncludesHeaders then
+38200     linput #hIn: line$ eof EO_AW ! just consume the headers
+38220   end if
+38240   do
+38260     z$=''
+38280     linput #hIn: line$ eof EO_AW
+38300     fn_awoParseLine(line$,mat awoDataName$,mat awoDataValue$)
+38320     pause
+38340     !
+38360     fn_aclaraWorkOrder_write ! write the last one
+38380     aclaraWorkOrderReturn+=1
+38400   loop
+38420   EO_AW: !
+38440   close #hIn:
+38460   close #hOut:
+38480   fn_aclaraWorkOrder=aclaraWorkOrderReturn
+38500 fnend
+50000 def fn_awoParseLine(line$*1024,mat awoDataName$,mat awoDataValue$)
 50020     reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
-50040     str2mat(line$,mat lineItem$)
+50040     str2mat(line$,mat lineItem$,chr$(9))
 50060     mat awoDataName$(0)
 50080     mat awoDataValue$(0)
-50100     fn_addAwoData('Customer.Number'                        ,lineItem$(2) )
-50120     fn_addAwoData('Location ID'                            ,lineItem$(1) )
-50140     fn_addAwoData('Meter.Transmitter Number'               ,lineItem$(10))
-50160     fn_addAwoData('Meter.Service1.ReadingBeforeSwap'       ,lineItem$(12))
-50180     fn_addAwoData('Meter.Meter Number'                     ,lineItem$(13))
-50200     fn_addAwoData('Meter.Service1.NewMeterReadingAfterSwap',lineItem$(14))
-50220     fn_addAwoData('Meter.Longitude'                        ,lineItem$(21))
-50240     fn_addAwoData('Meter.Latitude'                         ,lineItem$(22))
-50260     fn_addAwoData('Meter.Service ID'                       ,lineItem$(2) )
-50280     fn_addAwoData('Meter.Meter Type'                       ,lineItem$(2) )
+50100     fn_addAwoData('Customer.Number'                              ,lineItem$(2) )
+50120     fn_addAwoData('Location ID'                                  ,lineItem$(1) )
+50160     fn_addAwoData('MeterChangeOut.ReadingBefore.Water'           ,lineItem$(12))
+50200     fn_addAwoData('MeterChangeOut.ReadingAfter.Water'            ,lineItem$(14)) ! usually 0
+50140     fn_addAwoData('Meter.Transmitter Number.Water'               ,lineItem$(10)) !
+50180     fn_addAwoData('Meter.Meter Number.Water'                     ,lineItem$(13))
+50220     fn_addAwoData('Meter.Longitude.Water'                        ,lineItem$(21))
+50240     fn_addAwoData('Meter.Latitude.Water'                         ,lineItem$(22))
 50300 fnend
 52000 def fn_addAwoData(name$*128,value$*128)
-52020   fnaddonec(mat awoDataName$,name$)
-52040   fnaddonec(mat awoDataValue$,value$)
-52060 fnend
+52020   dim awoDataName$(0)*128
+52040   dim awoDataValue$(0)*128
+52060   fnaddonec(mat awoDataName$,name$)
+52080   fnaddonec(mat awoDataValue$,value$)
+52100 fnend
 54000 def fn_aclaraWorkOrder_write
 54020   pr 'this write needs a lot of work' : pause
 54040   if reading_water+reading_electric+reading_gas+meterroll_wate+meterroll_electric+meterroll_gas<>0 then
@@ -293,49 +312,42 @@
 54240     pr #hOut: '! customer number '&z$&' has all zero readings.'
 54260   end if
 54280 fnend
-56000   def fn_amr
-56030     askPath$="c:\ezreader\upload.dat"
-56060     fn_readings_backup(bk$)
-56090     open #3: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output
-56120     open #2: "Name="&fn_hh_input_filename$&",RecL=620",display,input
-56150     linput #2: amr$ ioerr AMR_NOTHING_TO_READ ! read header
-56160     do
-56180       linput #2: amr$ eof AMR_XIT
-56210       z$=lpad$(trim$(amr$(3:22)),10)
-56240       reading=val(amr$(47:56))
-56330       pr #3,using "form pos 1,c 10,n 10": z$,reading
-56360     loop
-56390     goto AMR_XIT !  AMR_NOTHING_TO_READ
-56420 AMR_NOTHING_TO_READ: !
-56450     mat ml$(1)
-56480     ml$(1)="The File ("&askPath$&") is empty."
-56510     fnmsgbox(mat ml$,resp$,cap$,0)
-56540     goto AMR_XIT !  AMR_NOTHING_TO_READ
-56570 AMR_XIT: !
-56600     close #2: ioerr ignore
-56630     close #3: ioerr ignore
-56660 !
-56690   fnend
-58000   def fn_unisys
-58020     fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
-58080   fnend
-60000   def fn_badger ! need to copy badger files into '&env$('Q')&'\UBmstr\readings.x
-60040     fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
-60120   fnend
-62000   def fn_boson
-62030     if ~exists(fn_hh_input_filename$) then
-62060       mat ml$(2)
-62090       ml$(1)='The import file ('&os_filename$(fn_hh_input_filename$)&') could not be found.'
-62120       ml$(2)='You may need to perform the Hot Sync and try again.'
-62150       fnmsgbox(mat ml$, response$, cap$,0)
-62270     else
-62300       fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
-62330       fnRename(fn_hh_input_filename$,env$('Q')&"\UBmstr\outofpalm."&ltrm$(bk$)&"."&date$("YYMMDD")&srep$(time$("HHMMSS"),":","")&".txt")
-62360     end if
-62390   fnend
-64000 def fn_ezreader
-64030   fn_readings_backup(bk$)
-64060   open #h_out:=3: "Name="&env$('Q')&"\UBmstr\Readings."&bk$&",RecL=30,replace",display,output
+58000 def fn_amr(bookFile$*512)
+58020   fn_readings_backup(bookFile$)
+58040   open #3: "Name="&bookFile$&",RecL=30,replace",display,output
+58060   open #2: "Name="&fn_hh_input_filename$&",RecL=620",display,input
+58080   linput #2: amr$ ioerr AMR_NOTHING_TO_READ ! read header
+58100   do
+58120     linput #2: amr$ eof AMR_XIT
+58140     z$=lpad$(trim$(amr$(3:22)),10)
+58160     reading=val(amr$(47:56))
+58180     pr #3,using "form pos 1,c 10,n 10": z$,reading
+58200   loop
+58220   goto AMR_XIT !  AMR_NOTHING_TO_READ
+58240   AMR_NOTHING_TO_READ: !
+58260   mat ml$(1)
+58280   ml$(1)="The File ("&fn_hh_input_filename$&") is empty."
+58300   fnmsgbox(mat ml$,resp$,cap$,0)
+58320   goto AMR_XIT !  AMR_NOTHING_TO_READ
+58340   AMR_XIT: !
+58360   close #2: ioerr ignore
+58380   close #3: ioerr ignore
+58400   !
+58420 fnend
+62000 def fn_boson(bookFile$*512)
+62030   if ~exists(fn_hh_input_filename$) then
+62060     mat ml$(2)
+62090     ml$(1)='The import file ('&os_filename$(fn_hh_input_filename$)&') could not be found.'
+62120     ml$(2)='You may need to perform the Hot Sync and try again.'
+62150     fnmsgbox(mat ml$, response$, cap$,0)
+62270   else
+62300     fnCopy(fn_hh_input_filename$,bookFile$)
+62330     fnRename(fn_hh_input_filename$,env$('Q')&"\UBmstr\outofpalm."&ltrm$(bk$)&"."&date$("YYMMDD")&srep$(time$("HHMMSS"),":","")&".txt")
+62360   end if
+62390 fnend
+64000 def fn_ezreader(bookFile$*512)
+64030   fn_readings_backup(bookFile$)
+64060   open #h_out:=3: "Name="&bookFile$&",RecL=30,replace",display,output
 64090   open #2: "Name="&fn_hh_input_filename$&",RecL=578",display,input
 64120   do
 64150     linput #2: easy$ eof EXREADER_XIT
@@ -347,12 +359,9 @@
 64330   close #2: ioerr ignore
 64390   close #h_out: ioerr ignore
 64450 fnend
-66000 def fn_green_tree
-66030   fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$)) ! only for Gilbertown at this time
-66060 fnend
-68000 def fn_hersey
-68030   fn_readings_backup(bk$)
-68060   open #h_out:=3: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output
+68000 def fn_hersey(bookFile$*512)
+68030   fn_readings_backup(bookFile$)
+68060   open #h_out:=3: "Name="&bookFile$&",RecL=30,replace",display,output
 68090   open #2: "Name=" &fn_hh_input_filename$&",RecL=282",display,input
 68110   do
 68120     linput #2: hersey$ eof HERSEY_EOF
@@ -365,10 +374,9 @@
 68300   close #h_out: ioerr ignore
 68330   !
 68360 fnend
-70000 def fn_itron
-70010   dim line$*128
+70000 def fn_itron(bookFile$*512)
 70050   open #h_itron:=fngethandle: "Name="&fn_hh_input_filename$,display,input
-70070   open #h_itron_out:=fngethandle: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=512,replace",display,output
+70070   open #h_itron_out:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
 70120   pr #h_itron_out: '[ACS Hand Held File Generic Version 2]'
 70150   z$=''
 70180   do
@@ -422,7 +430,7 @@
 72303     pr #h_itron_out: '! customer number '&z$&' has all zero readings.'
 72330   end if
 72360 fnend
-74000 def fn_laptop
+74000 def fn_laptop(bookFile$*512)
 74030   route=val(bk$)
 74060   L1420: !
 74090   fntos(sn$="Retrieve")
@@ -439,7 +447,7 @@
 74450   if source$(3:3)=" " then source$(3:3)="\"
 74480   fnCopy(source$&"readings."&str$(route),env$('Q')&"\UBmstr\readings."&str$(route))
 74510 fnend
-76000 def fn_psion_workabout
+76000 def fn_psion_workabout(bookFile$*512)
 76240   if env$('client')="Ash Grove" then
 76270     execute 'Sy "'&os_filename$("S:\RCom\RCom.exe")&'" /w'
 76300   else if exists("RCom\RComW.exe")<>0 then
@@ -448,12 +456,12 @@
 76390     execute 'Sy "'&os_filename$("S:\acsUB\PreRoute.bat")&'"'
 76400   end if
 76420    ! in august 2006 meters.opo changed to send back route as meters.out; before that it came back with the route # on the file name  (readings.1, etc)
-76520   fnCopy(fn_hh_input_filename$,env$('Q')&"\UBmstr\Readings."&ltrm$(bk$))
+76520   fnCopy(fn_hh_input_filename$,bookFile$)
 76630 fnend
-78000 def fn_sensus_in
+78000 def fn_sensus_in(bookFile$*512)
 78020   open #h_sensus:=fngethandle: "Name="&fn_hh_input_filename$&",RecL=22",external,input
-78040   fn_readings_backup(bk$)
-78060   open #h_readings:=fngethandle: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output
+78040   fn_readings_backup(bookFile$)
+78060   open #h_readings:=fngethandle: "Name="&bookFile$&",RecL=30,replace",display,output
 78080   do
 78100     read #h_sensus,using "form pos 1,c 22": ln$ eof SENSUS_IN_XIT ioerr SENSUS_IN_XIT
 78120     pr #h_readings,using "form pos 1,c 132": ln$
@@ -469,14 +477,14 @@
 80150   pr "PROGRAM PAUSE: Type GO and press [Enter] to continue." : pr "" : pause : goto ERTN_EXEC_ACT
 80180 ERTN_EXEC_ACT: execute act$ : goto ERTN
 80210 ! /region
-82000 def fn_readings_backup(bk$)
-82030   if exists(env$('Q')&"\UBmstr\readings."&bk$) then
-82060     fnCopy(env$('Q')&"\UBmstr\readings."&bk$,env$('Q')&"\UBmstr\readings_"&bk$&'.bak')
+82000 def fn_readings_backup(bookFile$*512)
+82030   if exists(bookFile$) then
+82060     fnCopy(bookFile$,env$('Q')&"\UBmstr\readings_"&bk$&'.bak')
 82090   end if  ! exists UBmstr\readings.[bk$]
-82120 fnend  ! fn_readings_backup
-84000 def fn_import_l_readings_txt(bk$; inFileRecordLen)
-84020   fn_readings_backup(bk$)
-84040   open #hReadingsOut:=fngethandle: "Name="&env$('Q')&"\UBmstr\readings."&bk$&",RecL=30,replace",display,output
+82120 fnend
+84000 def fn_import_l_readings_txt(bookFile$*512; inFileRecordLen)
+84020   fn_readings_backup(bookFile$)
+84040   open #hReadingsOut:=fngethandle: "Name="&bookFile$&",RecL=30,replace",display,output
 84060   ! if inFileRecordLen=0 then inFileRecordLen=129
 84070   open #hHandHeld:=fngethandle: "Name="&fn_hh_input_filename$,display,input
 84080   do
@@ -557,3 +565,22 @@
 90180   ilpfwReturn=1
 90200   fn_ilrt_lineParseFixedWidth=ilpfwReturn
 90220 fnend
+91000 def fn_findFirstMatch(mat ffmItemsToSearch$,ffmCriteria1$*256; ffmCriteria2$*256,ffmCriteria3$*256,ffmCriteria4$*256)
+91020   ffmReturn=fnsrch_case_insensitive(mat ffmItemsToSearch$,ffmCriteria1$)
+91040   if ffmReturn<=0 then ffmReturn=fnsrch_case_insensitive(mat ffmItemsToSearch$,ffmCriteria2$)
+91060   if ffmReturn<=0 then ffmReturn=fnsrch_case_insensitive(mat ffmItemsToSearch$,ffmCriteria3$)
+91080   if ffmReturn<=0 then ffmReturn=fnsrch_case_insensitive(mat ffmItemsToSearch$,ffmCriteria4$)
+91100   fn_findFirstMatch=ffmReturn
+91120 fnend
+92000 def fn_okToMerge(requiredFormat$*128)
+92020   if fn_readingsFileVersion$<>requiredFormat$ then
+92040     mat ml$(3)
+92060     ml$(1)='The existing book '&bk$&' is not in a format that permits'
+92080     ml$(2)='merging with the '&deviceSelected$&' format.'
+92100     aclaraWorkOrderReturn=-1
+92120     okayToMergeReturn=0
+92140   else
+92160     okayToMergeReturn=1
+92180   end if
+92200   fn_okToMerge=okayToMergeReturn
+92220 fnend

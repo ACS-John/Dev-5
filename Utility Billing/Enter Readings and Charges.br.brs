@@ -11,7 +11,7 @@
 02140     library 'S:\Core\Library': fnlbl,fntxt,fnacs,fntos,fnopt,fnchk,fnflexinit1,fnflexadd1
 02160     library 'S:\Core\Library': fncmbact,fncmbrt2,fnfra,fncmdset,fncmdkey
 02180     library 'S:\Core\Library': fncreg_read,fncreg_write,fngetdir2,fnfree
-02200     library 'S:\Core\Library': fnapply_default_rates,fnget_services,fnCopy
+02200     library 'S:\Core\Library': fnapply_default_rates,fnget_services
 02210     library 'S:\Core\Library': fnstatus_close,fnindex_it
 02220     on error goto ERTN
 02240   ! dims, constants, top, etc
@@ -25,7 +25,7 @@
 02360     dim ft$*21,rm$*60,ra(2),colhdr$(30)*40,cm$(30)
 02380     dim est1(3,3),e1$*30,e2$*30,a(7),tg(11)
 02400     dim cd1(8)
-02420     dim penalty$(10)*1,reporth$*300,form$*300,ctext$(10)*20
+02420     dim penalty$(10)*1,reporth$*300,form$*300
 02440     dim mroll(3) ! meter roll code from hand held file
 02460     dim serviceoption$(10)*25,srvnamc$(10)*21,srvnam$(10)*20,srv$(10)*2
 02480     dim opt_final_billing$(5)*33
@@ -65,9 +65,9 @@
 03240   F_CUSTOMER_C: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5,pos 354,c 1,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,pos 1954,c 12,pos 1906,c 12
 03260   ! fn_CHECK_FOR_CALCULATION  ! checking to see if file is uncalculated - never could get it work correctly - need to know current billing date asked first and also need work file opened before this screen displayed (shows all records entered for file maintenance)
 03300     open #hWork:=fngethandle: "Name="&workFile$&",KFName="&workFileIndex$&",Shr,Use,RecL=74,KPs=1,KLn=10",internal,outin,keyed 
-03380     open #Customer2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
-03400     open #Customer3:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outin,keyed 
-03420     open #Customer4:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
+03380     open #hCustomer2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
+03400     open #hCustomer3:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,outin,keyed 
+03420     open #hCustomer4:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx4.h"&env$('cno')&",Shr",internal,outin,keyed 
 03440     open #hCustomer5:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,outin,keyed 
 03460     fncreg_read('Meter Reading Date Current',tmp$,date$("MMDDYY")) : d2=val(tmp$)
 03480   end if
@@ -705,99 +705,6 @@
 21340   addmethod=2 ! set back to regular readings
 21350   close #h_readings: 
 21360 fnend  ! goto MENU1
-21370 def fn_hh_other_type2
-21390   open #h_readings:=13: "Name="&env$('Q')&"\UBmstr\Readings."&ip1$,display,input 
-21400   dim hot_ver$*512,hot_line$*512
-21410   linput #h_readings: hot_ver$
-21420   hot_ver$=trim$(hot_ver$)
-21430   hot_z_prior$=hot_z$=''
-21440   if hot_ver$='[ACS Hand Held File Generic Version 2]' then 
-21450     do 
-21460       do 
-21470         hot_z_prior$=hot_z$
-21480         linput #h_readings: hot_line$ eof HOT_EOF
-21490         fn_hot_parse_line(hot_line$)
-21500       loop until hot_z$<>hot_z_prior$ and hot_z_prior$<>''
-21510       if listonly=1 then 
-21520         fn_lo_pr_rec
-21530       else 
-21540         !       pause
-21550         fn_writeWork(hWork,hot_z_prior$,mat x)
-21560       end if 
-21570       hot_z_prior$=hot_z$
-21580       mat x=(0)
-21590     loop 
-21600     HOT_EOF: ! 
-21610     fn_writeWork(hWork,hot_z$,mat x)
-21620   end if  ! hot_ver$='[ACS Hand Held File Generic Version 2]'
-21630 fnend  ! fn_hh_other_type2
-21640 def fn_hot_parse_line(line$*512)
-21650   ! sets any one of the following local variables each call:
-21660   ! hot_z$, mat x
-21670   pos_equal=pos(line$,'=')
-21680   dim line_field$*256
-21690   dim line_value$*256
-21700   line_field$=line$(1:pos_equal-1)
-21710   line_value$=line$(pos_equal+1:len(line$))
-21720   line_value=0
-21730   line_value=val(line_value$) conv HPL_LV_CONV
-21740   line_field_len=len(line_field$)
-21750   line_field$=lwrc$(trim$(line_field$))
-21760   line_field_pos_dot1=pos(line_field$,'.')
-21770   if line_field_pos_dot1>0 then 
-21780     dim line_field$(2)*256
-21790     mat line_field$(2)
-21800     line_field$(1)=line_field$(1:line_field_pos_dot1-1)
-21810     line_field$(2)=line_field$(line_field_pos_dot1+1:line_field_len)
-21820   end if  ! 
-21830   if line_field$(2)='kwh' then line_field$(2)="electric"
-21840   HPL_LV_CONV: ! 
-21850   if line_field$(1)="customer" then 
-21860     if line_field$(2)="number" then 
-21870       hot_z$=line_value$
-21880     end if 
-21890   else if line_field$(1)="reading" then 
-21900     if line_field$(2)="water" then 
-21910       x(1)=line_value
-21920     else if line_field$(2)="gas" then 
-21930       x(2)=line_value
-21940     else if line_field$(2)="electric" then 
-21950       x(3)=line_value
-21960     else if line_field$(2)="demand" then 
-21970       x(4)=line_value
-21980     end if 
-21990   else if line_field$(1)="charge" then 
-22000     if line_field$(2)="sewer" then 
-22010       x(5)=line_value
-22020     else if line_field$(2)="sanitation" then 
-22030       x(6)=line_value
-22040     else if line_field$(2)="fire protection" then 
-22050       x(7)=line_value
-22060     else if line_field$(2)="other" then 
-22070       x(8)=line_value
-22080     else if line_field$(2)="water" then 
-22090       x(9)=line_value
-22100     else if line_field$(2)="electric" then 
-22110       x(10)=line_value
-22120     else if line_field$(2)="gas" then 
-22130       x(11)=line_value
-22140     end if 
-22150   else if line_field$(1)="used" or line_field$(1)="usage" then 
-22160     if line_field$(2)="water" then 
-22170       x(12)=line_value
-22180     else if line_field$(2)="kwh" then 
-22190       x(13)=line_value
-22200     else if line_field$(2)="gas" then 
-22210       x(14)=line_value
-22220     end if 
-22230   else if line_field$(1)="final billing code" then 
-22240     x(15)=line_value
-22250   else if line_field$(1)="meter" then 
-22260     if line_field$(2)="tamper" then 
-22270       fn_write_tamper(hot_z$,line_value)
-22280     end if 
-22290   end if 
-22300 fnend 
 22320 EST1: ! r: ESTIMATEING ROUTINE
 22330   close #hWork: 
 22340   execute 'Index '&workFile$&' '&workFileIndex$&' 1 10 Replace,DupKeys -n'
@@ -1046,26 +953,6 @@
 38760   if servicetype$="EL" then x(13)=usage
 38780   rewrite #hWork,using F_WORK: trim$(x$),mat x
 38800 fnend 
-38820 def fn_sel_act
-38840   fntos(sn$="Sel_Act")
-38860   fnlbl(1,1,"Hand Held model:",16,1)
-38880   ctext$(1)="Psion Workabout"
-38900   ctext$(2)="Psion Organizer"
-38920   ctext$(3)="DriveBy"
-38940   ctext$(4)="Unisys"
-38960   ctext$(5)="Badger"
-38980   ctext$(6)="Boson"
-39000   ctext$(7)="Sensus"
-39020   ctext$(8)="LapTop"
-39040   ctext$(9)="Green Tree"
-39060   ctext$(10)="AMR"
-39080   fncomboa("HH-FroCBox",1,18,mat ctext$)
-39100   resp$(1)=ctest$(9)
-39120   fncmdkey("&Next",1,1,0): fncmdkey("&Cancel",5,0,1)
-39140   fnacs(sn$,0,mat resp$,ckey)
-39160   if ckey=5 then goto XIT
-39180   device$=resp$(1)
-39200 fnend 
 39520 def fn_write_tamper(custno$*10,tval)
 39540   read #hCustomer1,using TMPFORM,key=lpad$(trim$(custno$),10): tmp$ nokey WT_XIT
 39560   rewrite #hCustomer1,using TMPFORM: lpad$(str$(tval),2)
@@ -1544,7 +1431,7 @@
 58880     end if 
 58900     ihInvalidFile: !
 58920   next ihFileItem
-60000 IH_FILE_DIR_EOF: ! 
+60000   ! IH_FILE_DIR_EOF: ! 
 60020   ! close #ih_file_dir: ioerr IH_XIT ! /r
 60040   fnlbl(11,1," ",15,1)
 60060   fncmdkey("&Next",1,1)
@@ -2133,3 +2020,112 @@
 90180   Mco_Xit: !
 90200   fn_meter_change_out=mco_return
 90220 fnend 
+
+92000 def fn_hh_other_type2
+92020   open #h_readings:=13: "Name="&env$('Q')&"\UBmstr\Readings."&ip1$,display,input 
+92040   dim hot_ver$*512,hot_line$*512
+92060   linput #h_readings: hot_ver$
+92080   hot_ver$=trim$(hot_ver$)
+92100   hot_z_prior$=hot_z$=''
+92120   if hot_ver$='[ACS Hand Held File Generic Version 2]' then 
+92140     do 
+92160       do 
+92180         hot_z_prior$=hot_z$
+92200         linput #h_readings: hot_line$ eof HOT_EOF
+92220         fn_hot_parse_line(hot_line$)
+92240       loop until hot_z$<>hot_z_prior$ and hot_z_prior$<>''
+92260       if listonly=1 then 
+92280         fn_lo_pr_rec
+92300       else 
+92320         !       pause
+92340         fn_writeWork(hWork,hot_z_prior$,mat x)
+92360       end if 
+92380       hot_z_prior$=hot_z$
+92400       mat x=(0)
+92420     loop 
+92440     HOT_EOF: ! 
+92460     fn_writeWork(hWork,hot_z$,mat x)
+92480   end if  ! hot_ver$='[ACS Hand Held File Generic Version 2]'
+92500 fnend  ! fn_hh_other_type2
+93000 def fn_hot_parse_line(line$*512)
+93020   ! sets any one of the following local variables each call:
+93040   ! hot_z$, mat x
+93060   pos_equal=pos(line$,'=')
+93080   dim hpField$*256
+93100   dim hpValue$*256
+93120   hpField$=line$(1:pos_equal-1)
+93140   hpValue$=line$(pos_equal+1:len(line$))
+93160   hpValueN=0
+93180   hpValueN=val(hpValue$) conv HPL_LV_CONV
+93200   ! hpField_len=len(hpField$)
+93220   hpField$=lwrc$(trim$(hpField$))
+93240   ! line_field_pos_dot1=pos(hpField$,'.')
+93260   ! if line_field_pos_dot1>0 then 
+93280   !   dim lfItem$(2)*256
+93300   !   mat lfItem$(2)
+93320   !   lfItem$(1)=hpField$(1:line_field_pos_dot1-1)
+93340   !   lfItem$(2)=hpField$(line_field_pos_dot1+1:hpField_len)
+93360   ! end if  ! 
+93380   str2mat(hpField$,mat lfItem$,'.')
+93400   if lfItem$(2)='kwh' then lfItem$(2)="electric"
+93420   HPL_LV_CONV: ! 
+93440   if lfItem$(1)="customer" then 
+93460     if lfItem$(2)="number" then 
+93480       hot_z$=hpValue$
+93500     end if 
+93520   else if lfItem$(1)="MeterChangeOut" then 
+93540     if lfItem$(2)='ReadingBefore' then
+93560       if lfItem$(3)='water' then
+93580         pr 'encountered '&hpField$&' - add code to process it' : pause
+93600       else
+93620         pr 'encountered '&hpField$&' - add code to process it' : pause
+93640       end if
+93660     else if lfItem$(2)='ReadingAfter' then
+93680       if lfItem$(3)='water' then
+93700         pr 'encountered '&hpField$&' - add code to process it' : pause
+93720       else
+93740         pr 'encountered '&hpField$&' - add code to process it' : pause
+93760       end if
+93780     end if
+93800   else if lfItem$(1)="reading" then 
+93820     if lfItem$(2)="water" then 
+93840       x(1)=hpValueN
+93860     else if lfItem$(2)="gas" then 
+93880       x(2)=hpValueN
+93900     else if lfItem$(2)="electric" then 
+93920       x(3)=hpValueN
+93940     else if lfItem$(2)="demand" then 
+93960       x(4)=hpValueN
+93980     end if 
+94000   else if lfItem$(1)="charge" then 
+94020     if lfItem$(2)="sewer" then 
+94040       x(5)=hpValueN
+94060     else if lfItem$(2)="sanitation" then 
+94080       x(6)=hpValueN
+94100     else if lfItem$(2)="fire protection" then 
+94120       x(7)=hpValueN
+94140     else if lfItem$(2)="other" then 
+94160       x(8)=hpValueN
+94180     else if lfItem$(2)="water" then 
+94200       x(9)=hpValueN
+94220     else if lfItem$(2)="electric" then 
+94240       x(10)=hpValueN
+94260     else if lfItem$(2)="gas" then 
+94280       x(11)=hpValueN
+94300     end if 
+94320   else if lfItem$(1)="used" or lfItem$(1)="usage" then 
+94340     if lfItem$(2)="water" then 
+94360       x(12)=hpValueN
+94380     else if lfItem$(2)="kwh" then 
+94400       x(13)=hpValueN
+94420     else if lfItem$(2)="gas" then 
+94440       x(14)=hpValueN
+94460     end if 
+94480   else if lfItem$(1)="final billing code" then 
+94500     x(15)=hpValueN
+94520   else if lfItem$(1)="meter" then 
+94540     if lfItem$(2)="tamper" then 
+94560       fn_write_tamper(hot_z$,hpValueN)
+94580     end if 
+94600   end if 
+94620 fnend 

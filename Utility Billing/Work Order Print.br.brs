@@ -43,11 +43,11 @@
 28600       pr #255: ""
 28620     end if
 28640     if fn_not_blank(i$(8)) then
-28660       pr #255: "{\b              Turn On: }{\ul "&date$(days(fn_clean_ul$(i$(8),1008),'mmddyy'),'mm/dd/ccyy')&'}'
+28660       pr #255: "{\b              Turn On: }{\ul "&date$(days(fn_clean_ul$(i$(8),1006),'mmddyy'),'mm/dd/ccyy')&'}'
 28680       pr #255: ""
 28700     end if
 28720     if fn_not_blank(i$(9)) then
-28740       pr #255: "{\b             Turn Off: }{\ul "&date$(days(fn_clean_ul$(i$(9),1008),'mmddyy'),'mm/dd/ccyy')&'}'
+28740       pr #255: "{\b             Turn Off: }{\ul "&date$(days(fn_clean_ul$(i$(9),1006),'mmddyy'),'mm/dd/ccyy')&'}' 
 28760       pr #255: ""
 28780     end if
 28800     if fn_not_blank(i$(10)) then
@@ -131,5 +131,10 @@
 50160       cu_in$='0'&cu_in$
 50180     end if
 50200   end if
-50220   fn_clean_ul$=cu_in$
-50240  fnend
+50320   if cu_reformat=1006 then ! means that it is a date and it may need a leading zero added
+50340     if len(cu_in$)<6 then
+50360       cu_in$='0'&cu_in$
+50380     end if
+50400   end if
+50420   fn_clean_ul$=cu_in$
+50440  fnend
