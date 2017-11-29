@@ -330,7 +330,7 @@
 28820       fn_add_ch_sys('UB') : fn_set_ub_limit(1000) ! U2 Utility Billing (500-1000 customers)
 28830       fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
 28840     else if env$('client')='Cerro Gordo' then 
-28850       fn_user_limit(1)
+28850       fn_user_limit(2)
 28860       fn_add_ch_sys('GL')
 28870       fn_add_ch_sys('PR')
 28880       fn_add_ch_sys('CL')
