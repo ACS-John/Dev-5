@@ -655,7 +655,7 @@
 93390       for mb2x=2 to udim(mbCg2Label$)
 93400         if trim$(mbCg2Label$(mb2x))<>'' then 
 93410           pr #hMergeNew: mbCg2Label$(mb2x)&'='&mbCg2Value$(mb2x)
-93410           ! pr 'c>>';mbCg2Label$(mb2x)&'='&mbCg2Value$(mb2x)
+93412           ! pr 'c>>';mbCg2Label$(mb2x)&'='&mbCg2Value$(mb2x)
 93420         end if
 93430       nex mb2x
 93440       mbF2which=srch(mat mbF2CustomerNumbers$,mbF1CustomerNumbers$(mbX))
