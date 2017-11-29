@@ -289,7 +289,7 @@
 62100   def fn_ub_index_customer(cno)
 62120     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndex.h"&str$(cno),"1 10")
 62140     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndx2.h"&str$(cno),"354 7")
-62160     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndx3.h"&str$(cno),"11 30")
+62160     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndx3.h"&str$(cno),"11 30u")
 62180     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndx4.h"&str$(cno),"41 30")
 62200     fn_index_it(env$('Q')&"\UBmstr\Customer.h"&str$(cno), env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno),"1741/1743 2/7")
 62220   fnend 

@@ -1,3 +1,9 @@
+12000 def fn_setup
+12020   if ~setup then
+12040     setup=1
+12060     library 'S:\Core\Library.br': fngethandle
+12080   end if
+12100 fnend
 28200 def library fnarray_item_insert$(mat array$, insert_item$*1024, insert_item_number)
 28300   fnarray_item_insert$=fn_array_item_insert$(mat array$, insert_item$, insert_item_number)
 28400 fnend 
@@ -75,9 +81,69 @@
 35600   !    skip_dupes - if =1 than only add One$ if One$ is not yet in Mat Add_To$
 35700   !    This function returns the number of items in the array after any add
 35800   if skip_blanks=0 or (skip_blanks and trim$(one$)<>"") then 
-35900     if skip_dupes=0 or (skip_dupes and srch(mat add_to$,one$)=-1) then 
+35900     if skip_dupes=0 or (skip_dupes and srch(mat add_to$,one$)<=0) then 
 36000       add_to_udim=udim(mat add_to$) : mat add_to$(add_to_udim+1) : add_to$(add_to_udim+1)=one$
 36100     end if 
 36200   end if 
 36300   fn_addOneC=udim(mat add_to$)
 36400 fnend 
+37000 def library fnCountMatchesC(mat arrayToSearch$,valueToMatch$)
+37020   cmcReturn=0
+37040   cmcIndex=0
+37060   do
+37080     cmcIndex=srch(mat arrayToSearch$,valueToMatch$,cmcIndex+1)
+37100     if cmcIndex>0 then cmcReturn+=1
+37120   loop while cmcIndex>0
+37140   fnCountMatchesC=cmcReturn
+37160 fnend
+38000 def library fnCountMatchesN(mat arrayToSearch,valueToMatch)
+38020   cmcReturn=0
+38040   cmcIndex=0
+38060   do
+38080     cmcIndex=srch(mat arrayToSearch,valueToMatch,cmcIndex+1)
+38100     if cmcIndex>0 then cmcReturn+=1
+38120   loop while cmcIndex>0
+38140   fnCountMatchesN=cmcReturn
+38160 fnend
+40000 def library fnArrayMax(mat arrayToSearch)
+40020   ! returns index (not value), if multiple = maxes it returns the first one.
+40040   amReturn=0
+40060   amMax=-99999
+40080   if udim(mat arrayToSearch)=0 then
+40100     amReturn=0
+40120   else
+40140     amMax=arrayToSearch(1)
+40160     for x=2 to udim(mat arrayToSearch)
+40180       if arrayToSearch(x)>amMax then 
+40200         amMax=arrayToSearch(x)
+40220         amReturn=x
+40240       end if
+40260     nex x
+40280   end if
+40300   fnArrayMax=amReturn
+40320 fnend
+44000 def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; ftaSkipFirstLine,ftaDelimiter$*1)
+44010   if ~setup then let fn_setup
+44020   dim ftaLine$*1024
+44040   if ftaDelimiter$='' then let ftaDelimiter$='='
+44060   open #hFta:=fngethandle: 'name='&ftaFile$,d,i
+44080   mat ftaArrayLeft$ (0)
+44100   mat ftaArrayRight$(0)
+44120   for ftaSkipFirstLineItem=1 to ftaSkipFirstLine
+44140     linput #hFta: ftaLine$ eof FtaEof
+44160   nex ftaSkipFirstLineItem
+44180   do
+44200     linput #hFta: ftaLine$ eof FtaEof
+44220     ftaPosDelim=pos(ftaLine$,ftaDelimiter$)
+44240     if ftaPosDelim<=0 then 
+44260       fn_addOneC(mat ftaArrayLeft$,trim$(ftaLine$))
+44280       fn_addOneC(mat ftaArrayRight$,'')
+44300     else
+44320       fn_addOneC(mat ftaArrayLeft$,trim$(ftaLine$(1:ftaPosDelim-1)))
+44340       fn_addOneC(mat ftaArrayRight$,trim$(ftaLine$(ftaPosDelim+1:len(ftaLine$))))
+44360     end if
+44380   loop
+44400   FtaEof: !
+44420   close #hFta:
+44440   fnFileTo2Arrays=udim(mat ftaArrayLeft$)+ftaSkipFirstLine
+44460 fnend

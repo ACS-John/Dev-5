@@ -19,9 +19,10 @@
 16100   library 'S:\Core\Library': fnmsgbox
 16120   library 'S:\Core\Library': fnureg_write
 16140   library 'S:\Core\Library': fnCopy,fnRename
-16150   library 'S:\Core\Library': fnaddonec
+16150   library 'S:\Core\Library': fnaddonec,fnFileTo2Arrays
 16152   library 'S:\Core\Library': fnAccountFromLocationId$
 16154   library 'S:\Core\Library': fnsrch_case_insensitive
+16156   library 'S:\Core\Library': fnmakesurepathexists
 16160   on error goto ERTN
 16180   dim preferenceHandHeldFromFile$*128
 16200   fnureg_read('Hand Held From File',preferenceHandHeldFromFile$)
@@ -32,7 +33,7 @@
 16300   dim cap$*128
 16320   dim a$*512
 16340   dim ln$*22
-16360   dim resp$(32)*128
+16360   dim resp$(32)*256
 16380   dim amr$*619
 16400   dim hersey$*290
 16420   dim askPath$*128
@@ -62,26 +63,26 @@
 25100     fntxt(lc,32,2,0,1,"20",0,"Be careful not to use the same route # twice in the same billing cycle.  The first route will be lost if it has not been calculated.")
 25120     resp$(rc_book:=respc+=1)=''
 25140     lc+=1
-25160     fnlbl(lc+=1,1,"Hand Held model:",30,1)
-25180     if lwrc$(devicePreference$)='[ask]' then
-25200       fncomboa("HH-FroCBox",lc,32,mat deviceOption$)
-25220       resp$(rc_Device:=respc+=1)=deviceSelected$
-25240     else
-25260       fnlbl(lc,32,deviceSelected$)
-25280     end if
-25300       lc+=1
-25320     if lwrc$(preferenceHandHeldFromFile$)='[ask]' then
-25340       lc+=1
-25360       fnlbl(lc+=1,1,"Source File:",30,1)
-25380       fntxt(lc,32,20,100,0,"70",0,'Source file should be drive designation and file name of the file returned from the Hand Held.')
-25400       rc_path:=respc+=1 : if resp$(rc_path)="" then resp$(rc_path)=askPath$
-25420     else
-25440       fnlbl(lc+=1,1,"Importing from "&fn_hh_input_filename$,len("Importing from "&fn_hh_input_filename$),1)
-25460     end if
-25480     lc+=1
-25500     fnchk(lc+=1,33,'Merge into book', 1,0,0,0) ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
-25520     fnlbl(lc,35,'(only check if directed to by ACS Support)') ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
-25540     resp$(rc_merge:=respc+=1)='False'
+25160     fnchk(lc+=1,33,'Merge into book', 1,0,0,0) ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
+25180     fnlbl(lc,35,'(only supported by some devices)') ! requires a format that utilizes [ACS Hand Held File Generic Version 2]
+25200     resp$(rc_merge:=respc+=1)='False'
+25220     lc+=1
+25240     fnlbl(lc+=1,1,"Hand Held model:",30,1)
+25260     if lwrc$(devicePreference$)='[ask]' then
+25280       fncomboa("HH-FroCBox",lc,32,mat deviceOption$)
+25300       resp$(rc_Device:=respc+=1)=deviceSelected$
+25320     else
+25340       fnlbl(lc,32,deviceSelected$)
+25360     end if
+25380       lc+=1
+25400     if lwrc$(preferenceHandHeldFromFile$)='[ask]' then
+25420       lc+=1
+25440       fnlbl(lc+=1,1,"Source File:",30,1)
+25460       fntxt(lc,32,20,256,0,"70",0,'Source file should be drive designation and file name of the file returned from the Hand Held.')
+25480       rc_path:=respc+=1 : if resp$(rc_path)="" then resp$(rc_path)=askPath$
+25500     else
+25520       fnlbl(lc+=1,1,"Importing from "&fn_hh_input_filename$,len("Importing from "&fn_hh_input_filename$),1)
+25540     end if
 25560     fncmdset(2)
 26000     fnacs(sn$,0,mat resp$,ckey)
 26020     if ckey<>5 then
@@ -113,49 +114,56 @@
 28020   transferReturn=0
 28040   dim bookFile$*512
 28060   bookFile$=env$('Q')&"\UBmstr\Readings."&ltrm$(bk$)
-48060   if enableMerge$='True' and ~exists(bookFile$) then enableMerge$='False'
-28080   if deviceSelected$="Aclara Work Order" then
-28100     transferReturn=fn_aclaraWorkOrder(bookFile$,enableMerge$)
-28120   else if deviceSelected$='CSV by LocationID' then
-28140     transferReturn=fn_CsvByLocationId(bookFile$,enableMerge$)
-28160   else if deviceSelected$="Sensus" then
-28180     fn_sensus_in(bookFile$)
-28200   else if deviceSelected$="LapTop" then
-28220     fn_laptop(bookFile$)
-28240   else if deviceSelected$="Hersey" then
-28260     fn_hersey(bookFile$)
-28280   else if deviceSelected$="EZReader" then
-28300     fn_ezreader(bookFile$)
-28320   else if deviceSelected$="ACS Meter Reader" then
-28340     fn_acsmr(bookFile$)
-28360   else if deviceSelected$="AMR" then
-28380     fn_amr(bookFile$)
-28400   else if deviceSelected$="Itron FC300" then
-28420     fn_itron(bookFile$)
-28440   else if deviceSelected$="Psion Workabout" then
-28460     fn_psion_workabout(bookFile$)
-28480   else if deviceSelected$="Badger" or deviceSelected$="DriveBy" then
-28500     fnCopy(fn_hh_input_filename$,bookFile$)
-28520   else if deviceSelected$="Unisys" then
-28540     fnCopy(fn_hh_input_filename$,bookFile$)
-28560   else if deviceSelected$="Boson" then
-28580     fn_boson(bookFile$)
-28600   else if deviceSelected$="Green Tree" then
-28620     fnCopy(fn_hh_input_filename$,bookFile$)
-28640   else if deviceSelected$="Other" and env$('client')="Brier Lake" then
-28660     fn_import_l_readings_txt(bookFile$)
-28680   else if deviceSelected$="READy Water" then
-28700     fn_import_l_readings_txt(bookFile$)
-28720   else if deviceSelected$="Master Meter" then
-28740     fn_import_l_readings_txt(bookFile$, 358)
-28760   end if
-28780   if transferReturn>0 then
-28800     mat ml$(1)
-28820     ml$(1)=str$(transferReturn)&' records imported to book '&bk$&'.'
-28840     fnmsgbox(mat ml$)
-28860   end if
-28880   fn_transfer=transferReturn
-28900 fnend
+28080   if enableMerge$='True' and exists(bookFile$) then 
+28120     dim mergeFileOrigional$*512
+28140     mergeFileOrigional$=env$('temp')&'\acs\mergeFileOrigional-book'&bk$&'-session'&session$&'.txt'
+28150     fnmakesurepathexists(mergeFileOrigional$)
+28160     fnCopy(bookFile$,mergeFileOrigional$)
+28180   else 
+28200     enableMerge$='False'
+28220   end if
+28260   if deviceSelected$="Aclara Work Order" then
+28280     transferReturn=fn_aclaraWorkOrder(bookFile$,enableMerge$)
+28300   else if deviceSelected$='CSV by LocationID' then
+28320     transferReturn=fn_CsvByLocationId(bookFile$,enableMerge$)
+28340   else if deviceSelected$="Sensus" then
+28360     fn_sensus_in(bookFile$)
+28380   else if deviceSelected$="LapTop" then
+28400     fn_laptop(bookFile$)
+28420   else if deviceSelected$="Hersey" then
+28440     fn_hersey(bookFile$)
+28460   else if deviceSelected$="EZReader" then
+28480     fn_ezreader(bookFile$)
+28500   else if deviceSelected$="ACS Meter Reader" then
+28520     fn_acsmr(bookFile$)
+28540   else if deviceSelected$="AMR" then
+28560     fn_amr(bookFile$)
+28580   else if deviceSelected$="Itron FC300" then
+28600     fn_itron(bookFile$)
+28620   else if deviceSelected$="Psion Workabout" then
+28640     fn_psion_workabout(bookFile$)
+28660   else if deviceSelected$="Badger" or deviceSelected$="DriveBy" then
+28680     fnCopy(fn_hh_input_filename$,bookFile$)
+28700   else if deviceSelected$="Unisys" then
+28720     fnCopy(fn_hh_input_filename$,bookFile$)
+28740   else if deviceSelected$="Boson" then
+28760     fn_boson(bookFile$)
+28780   else if deviceSelected$="Green Tree" then
+28800     fnCopy(fn_hh_input_filename$,bookFile$)
+28820   else if deviceSelected$="Other" and env$('client')="Brier Lake" then
+28840     fn_import_l_readings_txt(bookFile$)
+28860   else if deviceSelected$="READy Water" then
+28880     fn_import_l_readings_txt(bookFile$)
+28900   else if deviceSelected$="Master Meter" then
+28920     fn_import_l_readings_txt(bookFile$, 358)
+28940   end if
+28960   if transferReturn>0 then
+28980     mat ml$(1)
+29000     ml$(1)=str$(transferReturn)&' records imported to book '&bk$&'.'
+29020     fnmsgbox(mat ml$)
+29040   end if
+29060   fn_transfer=transferReturn
+29080 fnend
 30000 def fn_hh_input_filename$*256
 30010   ! requires local variables: deviceSelected$,preferenceHandHeldFromFile$,askPath$
 30020   dim hif_return$*256
@@ -202,9 +210,9 @@
 30900   fn_hh_input_filename$=env$('at')&hif_return$
 30920 fnend
 31000 IGNORE: continue
-33000 def fn_readingsFileVersion$
-33020   dim rfvLine$*512
-33040   open #hRfv:=fngethandle: "Name="&fn_hh_input_filename$,display,input
+33000 def fn_readingsFileVersion$*128(bookFile$*512)
+33020   dim rfvLine$*512,rfvReturn$*128
+33040   open #hRfv:=fngethandle: "Name="&bookFile$,display,input
 33060   linput #hRfv: rfvLine$
 33080   close #hRfv:
 33100   if rtrm$(rfvLine$)='[ACS Hand Held File Generic Version 2]' then
@@ -213,6 +221,7 @@
 33160     rfvReturn$='legacy'
 33180     if env$('acsDeveloper')<>'' then pause
 33200   end if
+33210   fn_readingsFileVersion$=rfvReturn$
 33220 fnend
 36000 def fn_acsmr(bookFile$*256) ! ACS Meter Reader
 36030   source$=resp$(1)
@@ -229,111 +238,123 @@
 36360 fnend
 37000 def fn_CsvByLocationId(bookFile$*512,enableMerge$)
 37020   if enableMerge$='True' then
-37040     if ~fn_okToMerge('[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto CblFinis
-37060     pr 'merging not completed yet.  do not use.  Type Go and Press Enter to start over.' : pause : chain program$
+37040     if ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto CblEoF
+37060     ! pr 'merging not completed yet.  do not use.  Type Go and Press Enter to start over.' : pause : chain program$
 37080   end if
 37100   open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
 37120   open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
 37140   pr #hOut: '[ACS Hand Held File Generic Version 2]'
-37160   linput #hIn: line$ eof CblFinis 
+37150   pr #hOut: 'Source File='&fn_hh_input_filename$
+37160   linput #hIn: line$ eof CblEoF 
 37180   if srch(line$,chr$(9))>0 then cblDelimiter$=chr$(9) else cblDelimiter$=','
 37200   dim cblItem$(0)*256
 37220   str2mat(line$,mat cblItem$,cblDelimiter$)
 37240   cblCsv_LocationId=fn_findFirstMatch(mat cblItem$,'Location ID','LocationID')
 37260   cblCsv_ReadingWater=fn_findFirstMatch(mat cblItem$,'Water Reading')
-37280   do
-37300     linput #hIn: line$ eof CblFinis 
-37310     str2mat(line$,mat cblItem$,cblDelimiter$)
-37320     pr #hOut: 'Customer.Number='&fnAccountFromLocationId$(val(cblItem$(cblCsv_LocationId)),1)
-37340     if cblCsv_ReadingWater<>0 and val(cblItem$(cblCsv_ReadingWater))<>0 then 
-37360       pr #hOut: 'Reading.Water='&cblItem$(cblCsv_ReadingWater)
-37380     end if
-37400   loop
-37420   CblFinis: !
-37440 fnend
-38000 def fn_aclaraWorkOrder(bookFile$*512,enableMerge$)
-38020   dataIncludesHeaders=1
-38040   if enableMerge$='True' then
-38060     if ~fn_okToMerge('[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto EO_AW
-38080     pr 'merging not completed yet.  do not use.  Type Go and Press Enter to start over.' : pause : chain program$
-38100   end if
-38120   open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
-38140   open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
-38160   pr #hOut: '[ACS Hand Held File Generic Version 2]'
-38180   if dataIncludesHeaders then
-38200     linput #hIn: line$ eof EO_AW ! just consume the headers
-38220   end if
-38240   do
-38260     z$=''
-38280     linput #hIn: line$ eof EO_AW
-38300     fn_awoParseLine(line$,mat awoDataName$,mat awoDataValue$)
-38320     pause
-38340     !
-38360     fn_aclaraWorkOrder_write ! write the last one
-38380     aclaraWorkOrderReturn+=1
-38400   loop
-38420   EO_AW: !
-38440   close #hIn:
-38460   close #hOut:
-38480   fn_aclaraWorkOrder=aclaraWorkOrderReturn
-38500 fnend
-50000 def fn_awoParseLine(line$*1024,mat awoDataName$,mat awoDataValue$)
-50020     reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
-50040     str2mat(line$,mat lineItem$,chr$(9))
-50060     mat awoDataName$(0)
-50080     mat awoDataValue$(0)
-50100     fn_addAwoData('Customer.Number'                              ,lineItem$(2) )
-50120     fn_addAwoData('Location ID'                                  ,lineItem$(1) )
-50160     fn_addAwoData('MeterChangeOut.ReadingBefore.Water'           ,lineItem$(12))
-50200     fn_addAwoData('MeterChangeOut.ReadingAfter.Water'            ,lineItem$(14)) ! usually 0
-50140     fn_addAwoData('Meter.Transmitter Number.Water'               ,lineItem$(10)) !
-50180     fn_addAwoData('Meter.Meter Number.Water'                     ,lineItem$(13))
-50220     fn_addAwoData('Meter.Longitude.Water'                        ,lineItem$(21))
-50240     fn_addAwoData('Meter.Latitude.Water'                         ,lineItem$(22))
-50300 fnend
-52000 def fn_addAwoData(name$*128,value$*128)
-52020   dim awoDataName$(0)*128
-52040   dim awoDataValue$(0)*128
-52060   fnaddonec(mat awoDataName$,name$)
-52080   fnaddonec(mat awoDataValue$,value$)
-52100 fnend
-54000 def fn_aclaraWorkOrder_write
-54020   pr 'this write needs a lot of work' : pause
-54040   if reading_water+reading_electric+reading_gas+meterroll_wate+meterroll_electric+meterroll_gas<>0 then
-54060     pr #hOut: 'Customer.Number='&z$
-54080     if reading_water<>0 then pr #hOut: 'Reading.Water='&str$(reading_water)
-54100     if reading_electric<>0 then pr #hOut: 'Reading.Electric='&str$(reading_electric)
-54120     if reading_gas<>0 then pr #hOut: 'Reading.Gas='&str$(reading_gas)
-54140     if meterroll_water<>0 then pr #hOut: 'MeterRoll.Water='&str$(meterroll_water)
-54160     if meterroll_electric<>0 then pr #hOut: 'MeterRoll.Electric='&str$(meterroll_electric)
-54180     if meterroll_gas<>0 then pr #hOut: 'MeterRoll.Gas='&str$(meterroll_gas)
-54200     pr #hOut: 'Meter.Tamper='&str$(val(tmpr$))
-54220   else
-54240     pr #hOut: '! customer number '&z$&' has all zero readings.'
-54260   end if
-54280 fnend
-58000 def fn_amr(bookFile$*512)
-58020   fn_readings_backup(bookFile$)
-58040   open #3: "Name="&bookFile$&",RecL=30,replace",display,output
-58060   open #2: "Name="&fn_hh_input_filename$&",RecL=620",display,input
-58080   linput #2: amr$ ioerr AMR_NOTHING_TO_READ ! read header
-58100   do
-58120     linput #2: amr$ eof AMR_XIT
-58140     z$=lpad$(trim$(amr$(3:22)),10)
-58160     reading=val(amr$(47:56))
-58180     pr #3,using "form pos 1,c 10,n 10": z$,reading
-58200   loop
-58220   goto AMR_XIT !  AMR_NOTHING_TO_READ
-58240   AMR_NOTHING_TO_READ: !
-58260   mat ml$(1)
-58280   ml$(1)="The File ("&fn_hh_input_filename$&") is empty."
-58300   fnmsgbox(mat ml$,resp$,cap$,0)
-58320   goto AMR_XIT !  AMR_NOTHING_TO_READ
-58340   AMR_XIT: !
-58360   close #2: ioerr ignore
-58380   close #3: ioerr ignore
-58400   !
-58420 fnend
+37280   cblCsv_WaterTransmitter=fn_findFirstMatch(mat cblItem$,'Water Transmitter Number','MTU ID')
+37300   cblCsv_WaterTransmitterSuffix=fn_findFirstMatch(mat cblItem$,'Port')
+37320   do
+37340     linput #hIn: line$ eof CblEoF 
+37360     str2mat(line$,mat cblItem$,cblDelimiter$)
+37380     pr #hOut: 'Customer.Number='&fnAccountFromLocationId$(val(cblItem$(cblCsv_LocationId)),1)
+37400     fn_g2IfTherePrOut(cblCsv_ReadingWater,'Reading.Water',mat cblItem$)
+37410     if cblCsv_LocationId<>0 then
+37412       pr #hOut: 'MeterAddress.LocationID='&str$(val(cblItem$(cblCsv_LocationId)))
+37414     end if
+37420     if cblCsv_WaterTransmitter<>0 and cblCsv_WaterTransmitterSuffix<>0 then 
+37440       pr #hOut: 'Meter.Transmitter.Water='&trim$(cblItem$(cblCsv_WaterTransmitter))&'-'&trim$(cblItem$(cblCsv_WaterTransmitterSuffix))
+37460     else if cblCsv_WaterTransmitter<>0 then
+37480       pr #hOut: 'Meter.Transmitter.Water='&trim$(cblItem$(cblCsv_WaterTransmitter))
+37500     end if
+37520     pr #hOut: ''
+37540   loop
+37560   CblEoF: !
+37580   close #hIn:
+37600   close #hOut:
+37620   if enableMerge$='True' then
+37640     fn_mergeBooks(mergeFileOrigional$,bookFile$)
+37660   end if
+37680 fnend
+38000 def fn_g2IfTherePrOut(gitproItemEnum,gitproLabel$*128,mat gitproItem$)
+38020   ! utility for [ACS Hand Held File Generic Version 2]
+38040     if gitproItemEnum<>0 and val(gitproItem$(gitproItemEnum))<>0 then 
+38060       pr #hOut: gitproLabel$&'='&gitproItem$(gitproItemEnum)
+38080     end if
+38100 fnend
+42000 def fn_aclaraWorkOrder(bookFile$*512,enableMerge$)
+42020   dataIncludesHeaders=1
+42040   if enableMerge$='True' then
+42060     if ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto EO_AW
+42080     ! pr 'merging not completed yet.  do not use.  Type Go and Press Enter to start over.' : pause : chain program$
+42100   end if
+42120   open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
+42140   open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+42160   pr #hOut: '[ACS Hand Held File Generic Version 2]'
+42170   pr #hOut: 'Source File='&fn_hh_input_filename$
+42180   if dataIncludesHeaders then
+42200     linput #hIn: line$ eof EO_AW ! just consume the headers
+42220   end if
+42240   do
+42260     z$=''
+42280     linput #hIn: line$ eof EO_AW
+42300     fn_awoParseLine(line$,mat awoDataName$,mat awoDataValue$)
+42320     for awoX=1 to udim(mat awoDataName$)
+42340       pr #hOut: awoDataName$(awoX)&'='&awoDataValue$(awoX)
+42360     nex awoX
+42370     pr #hOut: ''
+42380     aclaraWorkOrderReturn+=1
+42400   loop
+42420   EO_AW: !
+42440   close #hIn:
+42460   close #hOut:
+42480   if enableMerge$='True' then
+42500     fn_mergeBooks(mergeFileOrigional$,bookFile$)
+42520   end if
+42540   fn_aclaraWorkOrder=aclaraWorkOrderReturn
+42560 fnend
+58000 def fn_awoParseLine(line$*1024,mat awoDataName$,mat awoDataValue$)
+58020     reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
+58040     str2mat(line$,mat lineItem$,chr$(9))
+58060     mat awoDataName$(0)
+58080     mat awoDataValue$(0)
+58100     ! fn_addAwoData('Customer.Number'                              ,lineItem$(2)             ) ! account numbers aren't necessarally correct
+58102     fn_addAwoData('Customer.Number'                              ,fnAccountFromLocationId$(val(lineItem$(1))) )
+58110     fn_addAwoData('MeterAddress.LocationID'                      ,str$(val(lineItem$(1)))                        )
+58120     fn_addAwoData('MeterChangeOut.ReadingBefore.Water'           ,lineItem$(12)                                   )
+58130     fn_addAwoData('MeterChangeOut.ReadingAfter.Water'            ,lineItem$(14)                                   ) ! usually 0
+58140     fn_addAwoData('Meter.Transmitter.Water'                      ,lineItem$(10)                                   ) !
+58180     fn_addAwoData('Meter.Meter Number.Water'                     ,lineItem$(13)                                   )
+58220     fn_addAwoData('Meter.Longitude.Water'                        ,lineItem$(21)                                   )
+58240     fn_addAwoData('Meter.Latitude.Water'                         ,lineItem$(22)                                   )
+58300 fnend
+59000 def fn_addAwoData(name$*128,value$*128)
+59020   dim awoDataName$(0)*128
+59040   dim awoDataValue$(0)*128
+59060   fnaddonec(mat awoDataName$,name$)
+59080   fnaddonec(mat awoDataValue$,value$)
+59100 fnend
+61000 def fn_amr(bookFile$*512)
+61020   fn_readings_backup(bookFile$)
+61040   open #3: "Name="&bookFile$&",RecL=30,replace",display,output
+61060   open #2: "Name="&fn_hh_input_filename$&",RecL=620",display,input
+61080   linput #2: amr$ ioerr AMR_NOTHING_TO_READ ! read header
+61100   do
+61120     linput #2: amr$ eof AMR_XIT
+61140     z$=lpad$(trim$(amr$(3:22)),10)
+61160     reading=val(amr$(47:56))
+61180     pr #3,using "form pos 1,c 10,n 10": z$,reading
+61200   loop
+61220   goto AMR_XIT !  AMR_NOTHING_TO_READ
+61240   AMR_NOTHING_TO_READ: !
+61260   mat ml$(1)
+61280   ml$(1)="The File ("&fn_hh_input_filename$&") is empty."
+61300   fnmsgbox(mat ml$,resp$,cap$,0)
+61320   goto AMR_XIT !  AMR_NOTHING_TO_READ
+61340   AMR_XIT: !
+61360   close #2: ioerr ignore
+61380   close #3: ioerr ignore
+61400   !
+61420 fnend
 62000 def fn_boson(bookFile$*512)
 62030   if ~exists(fn_hh_input_filename$) then
 62060     mat ml$(2)
@@ -572,11 +593,12 @@
 91080   if ffmReturn<=0 then ffmReturn=fnsrch_case_insensitive(mat ffmItemsToSearch$,ffmCriteria4$)
 91100   fn_findFirstMatch=ffmReturn
 91120 fnend
-92000 def fn_okToMerge(requiredFormat$*128)
-92020   if fn_readingsFileVersion$<>requiredFormat$ then
-92040     mat ml$(3)
-92060     ml$(1)='The existing book '&bk$&' is not in a format that permits'
+92000 def fn_okToMerge(bookFile$*512,requiredFormat$*128)
+92020   if fn_readingsFileVersion$(bookFile$)<>requiredFormat$ then
+92040     mat ml$(2)
+92060     ml$(1)='The existing book (number '&bk$&') is not in a format that permits'
 92080     ml$(2)='merging with the '&deviceSelected$&' format.'
+92090     fnmsgbox(mat ml$)
 92100     aclaraWorkOrderReturn=-1
 92120     okayToMergeReturn=0
 92140   else
@@ -584,3 +606,117 @@
 92180   end if
 92200   fn_okToMerge=okayToMergeReturn
 92220 fnend
+93000 def fn_mergeBooks(mbFile1$*512,mbFile2$*512)
+93010   ! mbFile1$ is the origional file.
+93020   ! mbFile2$ is the new file whom's values will override mbFile1$'s in the final product.  This file will also be overwritten with the final product.
+93030   dim mbF1Label$(0)*256,  mbF1Value$(0)*256
+93040   mat mbF1Label$(0) : mat mbF1Value$(0)
+93050   dim mbF2Label$(0)*256,  mbF2Value$(0)*256
+93060   mat mbF2Label$(0) : mat mbF2Value$(0)
+93070   fnFileTo2Arrays(mbFile1$,mat mbF1Label$,mat mbF1Value$, 1)
+93080   fnFileTo2Arrays(mbFile2$,mat mbF2Label$,mat mbF2Value$, 1)
+93090   dim mbTmpNewFile$*512
+93100   mbTmpNewFile$=env$('temp')&'\acs\mergeTmpNew-session'&session$&'.txt'
+93110   fnmakesurepathexists(mbTmpNewFile$)
+93120   open #hMergeNew:=fngethandle: 'name='&mbTmpNewFile$&",RecL=512,Replace",d,o
+93130   pr #hMergeNew: '[ACS Hand Held File Generic Version 2]'
+93140   fn_getCustomerNumbers(mat mbF1Label$,mat mbF1Value$,mat mbF1CustomerNumbers$)
+93150   fn_getCustomerNumbers(mat mbF2Label$,mat mbF2Value$,mat mbF2CustomerNumbers$)
+93160   dim mbCg1Label$(0)*256,mbCg1Value$(0)*256
+93170   dim mbCg2Label$(0)*256,mbCg2Value$(0)*256
+93180   for mbX=1 to udim(mat mbF1CustomerNumbers$)
+93190     fn_getCustomerGroup(mat mbF1Label$,mat mbF1Value$,mbF1CustomerNumbers$(mbX),mat mbCg1Label$,mat mbCg1Value$)
+93200     cg2Count=fn_getCustomerGroup(mat mbF2Label$,mat mbF2Value$,mbF1CustomerNumbers$(mbX),mat mbCg2Label$,mat mbCg2Value$)
+93210     pr #hMergeNew: 'Customer.Number='&mbF1CustomerNumbers$(mbX)
+93220     if cg2Count then
+93230       for mb1x=2 to udim(mbCg1Label$)
+93250         if mbCg1Label$(mb1x)<>'' then
+93252           mb2Match=srch(mat mbCg2Label$,mbCg1Label$(mb1x))
+93260           if mb2Match<=0 or mbCg1Value$(mb1x)=mbCg2Value$(mb2Match) then
+93270             pr #hMergeNew: mbCg1Label$(mb1x)&'='&mbCg1Value$(mb1x)
+93272             ! pr 'a>>';mbCg1Label$(mb1x)&'='&mbCg1Value$(mb1x)
+93274             mbCg1Label$(mb1x)=''
+93276             if mb2Match then mbCg2Label$(mb2Match)=''
+93280           else  
+93282             pr #hMergeNew: mbCg2Label$(mb2Match)&'='&mbCg2Value$(mb2Match)
+93284             ! pr 'b>>';mbCg2Label$(mb2Match)&'='&mbCg2Value$(mb2Match)
+93286             mbCg2Label$(mb2Match)=''
+93290             ! pr 'customer number '&mbF1CustomerNumbers$(mbX)&' has different data in both files for '&mbCg1Label$(mb1x)
+93300             ! pr '  file 1: "'&mbCg1Value$(mb1x)&'"'
+93310             ! pr '  file 2: "'&mbCg2Value$(mb2Match)&'"'
+93320             ! pr '  The value from File 2 will override the value from File 1.'
+93330             ! pr '  type GO and press Enter to continue'
+93340             ! pause
+93360           end if
+93362           mbCg1Label$(mb1x)=''
+93370         end if
+93372         ! pause
+93380       nex mb1x
+93390       for mb2x=2 to udim(mbCg2Label$)
+93400         if trim$(mbCg2Label$(mb2x))<>'' then 
+93410           pr #hMergeNew: mbCg2Label$(mb2x)&'='&mbCg2Value$(mb2x)
+93410           ! pr 'c>>';mbCg2Label$(mb2x)&'='&mbCg2Value$(mb2x)
+93420         end if
+93430       nex mb2x
+93440       mbF2which=srch(mat mbF2CustomerNumbers$,mbF1CustomerNumbers$(mbX))
+93450       if mbF2which>0 then mbF2CustomerNumbers$(mbF2which)=''
+93460       mbF1CustomerNumbers$(mbX)=''
+93470     else
+93480       for mb1x=2 to udim(mbCg1Label$)
+93490           pr #hMergeNew: mbCg1Label$(mb1x)&'='&mbCg1Value$(mb1x)
+93492           ! pr 'd>>';mbCg1Label$(mb1x)&'='&mbCg1Value$(mb1x)
+93500       nex mb1x
+93510     end if
+93512     ! pause
+93520     pr #hMergeNew: ''
+93530   nex mbX
+93540   for mbX=1 to udim(mat mbF2CustomerNumbers$)
+93550     if mbF2CustomerNumbers$(mbX)<>'' then
+93560       pr 'adding '&mbF2CustomerNumbers$(mbX)&' from the second file that was not in the first file.'
+93570       pause
+93580       cg2Count=fn_getCustomerGroup(mat mbF2Label$,mat mbF2Value$,mbF2CustomerNumbers$(mbX),mat mbCg2Label$,mat mbCg2Value$)
+93590       pr #hMergeNew: 'Customer.Number='&mbF2CustomerNumbers$(mbX)
+93600       for mb1x=2 to udim(mat mbCg2Label$)
+93610         if trim$(mbCg2Label$(mb1x))<>'' then
+93620           pr #hMergeNew: mbCg2Label$(mb1x)&'='&mbCg2Value$(mb1x)
+93630         end if
+93640       nex mb1x
+93650     end if
+93660   nex mbX
+93670   close #hMergeNew:
+93680   fncopy(mbTmpNewFile$,mbFile2$)
+93690   ! fndel(mbTmpNewFile$)
+93700 fnend
+
+95000 def fn_getCustomerNumbers(mat gcnLabel$,mat gcnValue$,mat gcnCustomerNumbers$)
+95020   gcnMatch=0 
+95040   mat gcnCustomerNumbers$(0)
+95060   do
+95080     gcnMatch=srch(mat gcnLabel$,'Customer.Number',gcnMatch+1)
+95100     if gcnMatch then 
+95120       fnaddonec(mat gcnCustomerNumbers$,trim$(gcnValue$(gcnMatch)),1,1)
+95140     end if
+95160   loop until gcnMatch<=0
+95180 fnend
+96000 def fn_getCustomerGroup(mat gcgFromLabel$,mat gcgFromValue$,gcgCustomerNumbers$,mat gcgToLabel$,mat gcgToValue$)
+96020   mat gcgToLabel$(0)
+96040   mat gcgToValue$(0)
+96060   gcgReturn=0
+96080   gcgIndex=0
+96100   gcgTop: !
+96120   gcgIndex=srch(mat gcgFromValue$,gcgCustomerNumbers$, gcgIndex+1)
+96140   if gcgIndex<=0 then
+96160     pr 'could not find gcgCustomerNumbers$="'&gcgCustomerNumbers$&'"' 
+96180     ! for x=1 to udim(mat gcgFromValue$) : if gcgFromValue$(x)<>'' then pr x;gcgFromValue$(x) : nex x
+96200     pause
+96220   else
+96240     if gcgFromLabel$(gcgIndex)<>'Customer.Number' then goto gcgTop
+96260     do
+96280       gcgReturn+=1
+96300       fnaddonec(mat gcgToLabel$,gcgFromLabel$(gcgIndex))
+96320       fnaddonec(mat gcgToValue$,gcgFromValue$(gcgIndex))
+96340       gcgIndex+=1
+96360     loop until gcgIndex>=udim(mat gcgFromLabel$) or gcgFromLabel$(gcgIndex)='Customer.Number'
+96380   end if
+96400   fn_getCustomerGroup=gcgReturn
+96420 fnend

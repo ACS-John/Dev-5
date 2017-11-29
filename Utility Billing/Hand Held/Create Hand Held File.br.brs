@@ -113,50 +113,50 @@
 12340   goto SendRecordToWorkFile
 12360 ! /r
 13000 SendRecordToWorkFile: ! r: doesn't seem to be very well named.
-13010   ! if trim$(z$)='100100.99' then pause
-13020   if udim(mat filterAccount$)<>0 or final=0 or includeFinalBilled then ! SKIP IF FINAL BILLED
-13040     ft$=fn_rmk1$(z$)
-13060     if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
-13080     seq$=str$(sq1)
-13100     if deviceSelected$="Psion Workabout" then 
-13120       fn_workabout
-13140     else if deviceSelected$="Badger" then 
-13160       fn_badger
-13180     else if deviceSelected$="Boson" then 
-13200       fn_boson
-13220     else if deviceSelected$="Sensus" then 
-13240       fn_sensus
-13260     else if deviceSelected$="LapTop" then 
-13280       fn_laptop
-13300     else if deviceSelected$="Green Tree" then 
-13320       fn_greentree
-13340     else if deviceSelected$="Hersey" then 
-13360       fn_hersey
-13380     else if deviceSelected$="EZReader" then 
-13400       fn_ezreader
-13420     else if deviceSelected$="AMR" then 
-13440       fn_amr
-13460     else if deviceSelected$="Unitech HT630" then 
-13480       fn_unitech_ht630
-13500     else if deviceSelected$="ACS Meter Reader" then 
-13520       fn_acs_meter_reader
-13540     else if deviceSelected$="Itron FC300" then 
-13560       fn_itron
-13580     else if deviceSelected$="Aclara" then 
-13600       fn_aclara
-13620     else if deviceSelected$="Aclara Work Order" then 
-13640       fn_aclaraWorkOrder
-13660     else if deviceSelected$="Master Meter" then 
-13680       fn_masterMeter
-13700     else if deviceSelected$="READy Water" then 
-13720       fn_READy_Water
-13740     else
-13760       goto SEL_ACT ! go back if Hand Held information is not available for their selection
-13780     end if
-13800   end if
-13820   SendRecordToWorkFileFinis: !
-13840   on selection_method goto NextReadForAll,NextReadForAll,NextReadForRange,NextAskAccount none NextReadForAll
-13860 ! /r
+13020   ! if trim$(z$)='100100.99' then pause
+13040   if udim(mat filterAccount$)<>0 or final=0 or includeFinalBilled then ! SKIP IF FINAL BILLED
+13060     ft$=fn_rmk1$(z$)
+13080     if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
+13100     seq$=str$(sq1)
+13120     if deviceSelected$="Aclara" then 
+13140       fn_aclara
+13160     else if deviceSelected$="Aclara Work Order" then 
+13180       fn_aclaraWorkOrder
+13200     else if deviceSelected$="ACS Meter Reader" then 
+13220       fn_acs_meter_reader
+13240     else if deviceSelected$="AMR" then 
+13260       fn_amr
+13280     else if deviceSelected$="Badger" then 
+13300       fn_badger
+13320     else if deviceSelected$="Boson" then 
+13340       fn_boson
+13360     else if deviceSelected$="EZReader" then 
+13380       fn_ezreader
+13400     else if deviceSelected$="Green Tree" then 
+13420       fn_greentree
+13440     else if deviceSelected$="Hersey" then 
+13460       fn_hersey
+13480     else if deviceSelected$="Itron FC300" then 
+13500       fn_itron
+13520     else if deviceSelected$="LapTop" then 
+13540       fn_laptop
+13560     else if deviceSelected$="Master Meter" then 
+13580       fn_masterMeter
+13600     else if deviceSelected$="Psion Workabout" then 
+13620       fn_workabout
+13640     else if deviceSelected$="READy Water" then 
+13660       fn_READy_Water
+13680     else if deviceSelected$="Sensus" then 
+13700       fn_sensus
+13720     else if deviceSelected$="Unitech HT630" then 
+13740       fn_unitech_ht630
+13760     else
+13780       goto SEL_ACT ! go back if Hand Held information is not available for their selection
+13800     end if
+13820   end if
+13840   SendRecordToWorkFileFinis: !
+13860   on selection_method goto NextReadForAll,NextReadForAll,NextReadForRange,NextAskAccount none NextReadForAll
+13880 ! /r
 14000 def fn_workabout
 14010   dim ft$*20
 14020   for j=1 to len(seq$)
@@ -929,26 +929,32 @@
 44000 def fn_aclara ! z$,mat e$,extra$(1-2),route
 44020   dim tmpCity$*64,tmpState$*64,tmpZip$*64
 44040   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
-44060   !
-44080   fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
-44100   fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
-44120   fn_record_addc(10,z$)                                                              ! Account Number
-44140   fn_record_addc(30,e$(2))                                                           ! Customer Name
-44150   fn_record_addc(12,extra$(2))                                                       ! Phone Number
-44160   fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
-44180   fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
-44200   fn_record_addc(30,tmpCity$)
-44220   fn_record_addc(10,tmpState$)
-44240   fn_record_addc(15,tmpZip$)
-44260   fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
-44270   fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
-44280   fn_record_addc(8,fn_meter_info$('Meter Number',z$,'WA'))                         ! Meter Serial Number        Meter.Meter Number
-44300   fn_record_addc(20,fn_meter_info$('Transmitter Number',z$,'WA'))                  ! Transmitter Serial Number  Meter.Transmitter Number
-44320 ! fn_record_addc(20,'(Rate Code Description??)')                                       ! Service Type
-44340   fn_record_addc(40,fn_meter_info$('Meter Type',z$,'WA'))                          ! Meter Model/Type
-44360 ! fn_record_addc(9,,fn_meter_info$('reading multipler',z$,'WA'))                       ! Meter Size
-44380   fn_record_write(h_out)
-44400 fnend
+44060   transmitterSerialNumber$=trim$(fn_meter_info$('Transmitter Number',z$,'WA'))
+44080   portNumber$=''
+44100   posTsnDash=pos(transmitterSerialNumber$,'-')
+44120   if posTsnDash>0 then
+44140     portNumber$=transmitterSerialNumber$(posTsnDash+1:len(transmitterSerialNumber$))
+44160     transmitterSerialNumber$(posTsnDash:len(transmitterSerialNumber$))=''
+44180   end if
+44200   !
+44220   fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
+44240   fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
+44260   fn_record_addc(10,z$)                                                              ! Account Number
+44280   fn_record_addc(30,e$(2))                                                           ! Customer Name
+44300   fn_record_addc(12,extra$(2))                                                       ! Phone Number
+44320   fn_record_addc(30,e$(3))                                                           ! Service Address 1          Address 1 - Primary
+44340   fn_record_addc(30,extra$(1))                                                       ! Service Address 2          Address 2 - Primary
+44360   fn_record_addc(30,tmpCity$)
+44380   fn_record_addc(10,tmpState$)
+44400   fn_record_addc(15,tmpZip$)
+44420   fn_record_addn(3,route)                                                            ! Cycle and Route            Route Number
+44440   fn_record_addn(7,sequence)                                                         ! Sequence                   Sequence
+44460   fn_record_addc(8,fn_meter_info$('Meter Number',z$,'WA'))                         ! Meter Serial Number        Meter.Meter Number
+44480   fn_record_addc(20,transmitterSerialNumber$)                  ! Transmitter Serial Number  Meter.Transmitter Number
+44500   fn_record_addc(40,fn_meter_info$('Meter Type',z$,'WA'))                          ! Meter Model/Type
+44520   fn_record_addc(1,portNumber$)                          ! Port Number
+44540   fn_record_write(h_out)
+44560 fnend
 45000 def fn_aclaraWorkOrder ! z$,mat e$,extra$(1-2),route
 45020   dim tmpCity$*64,tmpState$*64,tmpZip$*64
 45040   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
