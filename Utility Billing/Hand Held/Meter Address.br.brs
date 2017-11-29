@@ -18,10 +18,13 @@
 12000 def fn_setup
 12020   if ~setup then
 12040     setup=1
-12060     library 'S:\Core\Library': fnAddOneC,fnmsgbox,fnOpenFile,fncreg_read,fncreg_write,fntop,fnxit,fngethandle,fnCloseFile,fnerror,fnreg_read,fnreg_write,fnindex_it,fnstatus_close,fnstatus,fnHamsterFio
+12050     library 'S:\Core\Library': fntop,fnxit,fngethandle,fnerror,fnindex_it,fnstatus_close,fnstatus,fnHamsterFio
+12060     library 'S:\Core\Library': fnAddOneC,fnaddonen,fnCountMatchesN,fnArrayMax
+12070     library 'S:\Core\Library': fnmsgbox,fnOpenFile,fnCloseFile
+12072     library 'S:\Core\Library': fncreg_read,fncreg_write,fnreg_read,fnreg_write
 12080     dim form$(0)*256
 12100     dim maData$(0)*30,maDataN(0)
-12120     dim mg$(0)*80
+12120     dim mg$(0)*128
 12480   end if
 12500   if ~exists(env$('Q')&'\UBmstr\MeterAddress.h'&env$('cno')) then let fn_InitialializeMeterAddress
 12900 fnend
@@ -61,26 +64,78 @@
 18160    IaXit: !
 18180 fnend
 
-32000 def library fnAccountFromLocationId$*10(locationId; leaveFileOpen)
-32020   if ~setup then let fn_setup
-32040   aflReturn$=''
-32060   if leaveFileOpen and hMeterAddressLocationID<>0 then goto aflPastOpen1
-32080   hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, 1)
-32100   aflPastOpen1: !
-32120   if leaveFileOpen and hCustomerMeterAddress<>0 then goto aflPastOpen2
-32140   open #hCustomerMeterAddress:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,input,keyed ! Meter address
-32160   aflPastOpen2: !
-32180   maDataN(ma_LocationID)=-1
-32200   read #hMeterAddressLocationID,using form$(hMeterAddressLocationID),key=cnvrt$('N 11',locationId),release: mat maData$,mat maDataN nokey ignore
-32220   read #hCustomerMeterAddress,using 'form pos 1,C 10',key=maData$(ma_name),release: aflReturn$ nokey ignore
-32240   if ~leaveFileOpen then
-32260     close #hMeterAddressLocationID:
-32280     close #hCustomerMeterAddress:
-32300     hMeterAddressLocationID=0
-32310     hCustomerMeterAddress=0
-32320   end if
-32340   fnAccountFromLocationId$=aflReturn$
-32360 fnend
+28000 def library fnAccountFromLocationId$*10(locationId; leaveFileOpen)
+28020   if ~setup then let fn_setup
+28040   aflReturn$=''
+28060   if leaveFileOpen and hMeterAddressLocationID<>0 then goto aflPastOpen1
+28080   hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, 1)
+28100   aflPastOpen1: !
+28120   if leaveFileOpen and hCustomerMeterAddress<>0 then goto aflPastOpen2
+28140   open #hCustomerMeterAddress:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,input,keyed ! Meter address
+28160   aflPastOpen2: !
+28180   maDataN(ma_LocationID)=-1
+28200   read #hMeterAddressLocationID,using form$(hMeterAddressLocationID),key=cnvrt$('N 11',locationId),release: mat maData$,mat maDataN nokey ignore
+28220   restore #hCustomerMeterAddress,key=>maData$(ma_name):
+28240   dim meterAddress$*30
+28260   mat afliAccountNumber$(0)
+28280   mat afliFinalbillingCode(0)
+28300   mat afliLastBillingDay(0)
+28320   do
+28340     read #hCustomerMeterAddress,using 'form pos 1,C 10,C 30,pos 1821,n 1,pos 296,pd 4',release: accountNumber$,meterAddress$,finalbillingCode,lastBillingDate nokey ignore eof AflEoCustomerMeterAddress
+28360     if lwrc$(meterAddress$)=lwrc$(maData$(ma_name)) then
+28380       fnaddonec(mat afliAccountNumber$,accountNumber$)
+28400       fnaddonen(mat afliFinalbillingCode,finalbillingCode)
+28420       fnaddonen(mat afliLastBillingDay,days(lastBillingDate,'mmddyy'))
+28440     end if
+28460   loop until lwrc$(meterAddress$)<>lwrc$(maData$(ma_name))
+28480   AflEoCustomerMeterAddress: !
+28500   if udim(mat afliAccountNumber$)=0 then 
+28520     aflReturn$=''
+28540     mat mg$(0)
+28560     fnaddonec(mat mg$,'Could not find an account for')
+28580     fnaddonec(mat mg$,'Meter Address:  '&maData$(ma_name))
+28600     fnaddonec(mat mg$,'Location ID '&str$(locationId))
+28620     fnmsgbox(mat mg$)
+28640     if env$('acsDeveloper')<>'' then 
+28660       pr mat mg$
+28680       pause
+28700     end if
+28720   else if udim(mat afliAccountNumber$)=1 then
+28740     aflReturn$=afliAccountNumber$(1)
+28760   else 
+28780     pr '--Q--'
+28800     pr 'multiple matches, let us auto figure which is correct'
+28820     pr 'account    final billing code     last billing date'
+28840     for x=1 to udim(mat afliAccountNumber$)
+28860       pr afliAccountNumber$(x)&'            '&str$(afliFinalbillingCode(x))&'                '&date$(afliLastBillingDay(x),'mm/dd/ccyy')
+28880     nex x
+28900     if fnCountMatchesN(mat afliFinalbillingCode,0)=1 then
+28920       aflReturn$=afliAccountNumber$(srch(mat afliFinalbillingCode,0))
+28940       pr '--A--'
+28960       pr 'only one was active ('&aflReturn$&') - using it'
+28980     else
+29000       latestBillingDayIndex=fnArrayMax(mat afliLastBillingDay)
+29020       if fnCountMatchesN(mat afliLastBillingDay,afliLastBillingDay(latestBillingDayIndex))=1 then
+29040         pr '--A--'
+29060         aflReturn$=afliAccountNumber$(latestBillingDayIndex)
+29080         pr 'using the one with the last billing date ('&aflReturn$&')'
+29100       else 
+29120         pr '--!--'
+29140         pr 'multiple matches for last billing date!'
+29160         pr 'need more logic to find match'
+29180         pause
+29200       end if
+29220     end if
+29240     ! pause
+29260   end if
+29280   if ~leaveFileOpen then
+29300     close #hMeterAddressLocationID:
+29320     close #hCustomerMeterAddress:
+29340     hMeterAddressLocationID=0
+29360     hCustomerMeterAddress=0
+29380   end if
+29400   fnAccountFromLocationId$=aflReturn$
+29420 fnend
 33000 def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen)
 33020   if ~setup then let fn_setup
 33040   if leaveFileOpen and hMeterAddressName<>0 then goto maliPastOpen

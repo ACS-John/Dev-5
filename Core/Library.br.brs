@@ -887,11 +887,27 @@
 64140     library 'S:\Core\Array.br': fnAddOneN
 64150     fnAddOneN=fnAddOneN(mat add_to,one, skip_zeros,skip_dupes)
 64160   fnend
-64170   def library fnAddOneC(mat add_to$,one$*2048; skip_blanks,skip_dupes)
-64180     library 'S:\Core\Array.br': fnAddOneC
-64190     fnAddOneC=fnAddOneC(mat add_to$,one$, skip_blanks,skip_dupes)
-64200   fnend
-64210 ! /r
+64171   def library fnAddOneC(mat add_to$,one$*2048; skip_blanks,skip_dupes)
+64172     library 'S:\Core\Array.br': fnAddOneC
+64173     fnAddOneC=fnAddOneC(mat add_to$,one$, skip_blanks,skip_dupes)
+64174   fnend
+64181   def library fnCountMatchesC(mat arrayToSearch$,valueToMatch$)
+64182     library 'S:\Core\Array.br': fnCountMatchesC
+64183     fnCountMatchesC=fnCountMatchesC(mat arrayToSearch$,valueToMatch$)
+64184   fnend
+64191   def library fnCountMatchesN(mat arrayToSearch,valueToMatch)
+64192     library 'S:\Core\Array.br': fnCountMatchesN
+64193     fnCountMatchesN=fnCountMatchesN(mat arrayToSearch,valueToMatch)
+64194   fnend
+64201   def library fnArrayMax(mat arrayToSearch)
+64202     library 'S:\Core\Array.br': fnArrayMax
+64203     fnArrayMax=fnArrayMax(mat arrayToSearch)
+64204   fnend
+64211   def library fnFileTo2Arrays(ftaFile$*512,mat ftaArrayLeft$,mat ftaArrayRight$; ftaSkipFirstLine,ftaDelimiter$*1)
+64212     library 'S:\Core\Array.br': fnFileTo2Arrays
+64213     fnFileTo2Arrays=fnFileTo2Arrays(ftaFile$,mat ftaArrayLeft$,mat ftaArrayRight$, ftaSkipFirstLine,ftaDelimiter$)
+64214   fnend
+65990 ! /r
 66000 ! r: ini functions and quick calls
 66020   def library fnIniOpen(ii_file$*256)
 66030     library 'S:\Core\ini.br': fnIniOpen

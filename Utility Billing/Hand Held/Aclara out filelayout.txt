@@ -29,3 +29,5 @@ Length   Name
 1        (tab delimiter)
 40       Meter Model/Type
 1        (tab delimiter)
+1        Port Number
+1        (tab delimiter)

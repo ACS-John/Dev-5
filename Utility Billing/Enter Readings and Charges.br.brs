@@ -2127,5 +2127,8 @@
 94540     if lfItem$(2)="tamper" then 
 94560       fn_write_tamper(hot_z$,hpValueN)
 94580     end if 
-94600   end if 
-94620 fnend 
+94600   else
+94620     pr 'code needed for lines like: "'&line$&'"'
+94640     pause
+94660   end if 
+94680 fnend 

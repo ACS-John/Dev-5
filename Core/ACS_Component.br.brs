@@ -7,6 +7,7 @@
 08140     library 'S:\Core\Library': fndate_picker$
 08150     library 'S:\Core\Library': fnlistprint
 08160     library 'S:\Core\Library': fnCopy
+08162     library 'S:\Core\Library': fnmakesurepathexists
 08170   end if 
 08180   on error goto ERTN
 08200   dim _program$(1)*255
@@ -313,6 +314,7 @@
 16680   ! _______________________
 16700   ! ***  test validity of some stuff **********
 16720   fnflexinit1=555
+16730   fnmakesurepathexists(env$('temp')&'\acs\'&hdrfile$)
 16740   open #filenumber: "Name="&env$('temp')&'\acs\'&hdrfile$&",Size=0,Replace,EoL=CRLF,RecL=8000",display,output 
 16780   for j=1 to udim(cm$)
 16800     if trim$(cm$(j))="" then cm$(j)="80"
