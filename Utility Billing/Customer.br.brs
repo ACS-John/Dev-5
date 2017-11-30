@@ -1563,110 +1563,118 @@
 84120     asm_combo=1
 84130     asm_text=2
 84140     asm_grid=3
-84150     fnureg_read('ubfm.account_selection_method',account_selection_method$)
-84160     account_selection_method=val(account_selection_method$) conv ignore
-84170     if account_selection_method=0 then account_selection_method=asm_combo
-84180     fn_record_previous_load(prev_list_id$)
-84190   end if 
-84200   if select_button_text$='' then select_button_text$='Next'
-84210   col1_width=17
-84220   col2_pos=col1_width+2
-84230   do 
-84240   AAS_TOP: ! 
-84250     fntos(sn$="Customer-AskAcct2")
-84260     respc=0
-84270     askacct_line=0
-84280     if rp_prev$(1)<>'' then 
-84290       if rp_prev$(1)<>'' then 
-84300         fnbutton(askacct_line+=1,col2_pos,'Clear Recent',1000,'Clear Recent Accounts list')
-84310       end if 
-84320       fnlbl(askacct_line+=1,1,"Recent:",col1_width,1) : askacct_line=askacct_line-1
-84330       for rp_item=udim(mat rp_prev$) to 1, step -1
-84340         if rp_prev$(rp_item)<>'' then 
-84350           fnbutton(askacct_line+=1,col2_pos,rp_prev$(rp_item)&' '&fn_customer_name$(rp_prev$(rp_item)),1000+rp_item, 'click to select this previously accessed account',1,43)
-84360         end if 
-84370       next rp_item
-84380       askacct_line+=2
-84390     end if 
-84400     fnlbl(askacct_line+=1,1,"Selection Method:",col1_width,1)
-84410     btn_width=14
-84420     if account_selection_method=asm_combo then 
-84430       fnlbl(askacct_line,col2_pos,'Combo',btn_width,2)
-84440     else 
-84450       fnbutton(askacct_line,col2_pos,'Combo',2001,'tooltip',1,btn_width)
-84460     end if 
-84470     if account_selection_method=asm_grid then 
-84480       fnlbl(askacct_line,col2_pos+((btn_width+1)*1),'Grid',btn_width,2)
-84490     else 
-84500       fnbutton(askacct_line,col2_pos+((btn_width+1)*1),'Grid',2002,'tooltip',1,btn_width)
-84510     end if 
-84520     if account_selection_method=asm_text then 
-84530       fnlbl(askacct_line,col2_pos+((btn_width+2)*2),'Text',btn_width,2)
-84540     else 
-84550       fnbutton(askacct_line,col2_pos+((btn_width+2)*2),'Text',2003,'tooltip',1,btn_width)
-84560     end if 
-84570     askacct_line+=1
-84580     fnlbl(askacct_line+=1,1,"Account:",col1_width,1)
-84590     if account_selection_method=asm_combo then 
-84600       fncmbact(askacct_line,col2_pos)
-84610     else if account_selection_method=asm_grid then 
-84620       fn_customer_grid(askacct_line,col2_pos)
-84630     else if account_selection_method=asm_text then 
-84640       fntxt(askacct_line,col2_pos,10)
-84650     end if 
-84660     resp$(respc+=1)=hact$
-84670     if aas_button_enable_add then let fncmdkey("&Add",2,0,0,"Add a new customer" )
-84680     fncmdkey(select_button_text$,1,1,0,select_button_text$&" the selected/highlighted record.")
-84690     fncmdkey("Search",6,0,0,"Search for customer record")
-84700     fncmdkey('Back',5,0,1,"Returns to previous screen")
-84710     fnacs(sn$,0,mat resp$,ckey)
-84720     x$=trim$(resp$(1)(1:10))
-84730     if account_selection_method=asm_text and ckey=1 then 
-84740       if ~fn_key_tweak(x$,h_customer_1) then 
-84750         mat ml$(2)
-84760         ml$(1)="Account "&x$&' could not be found.'
-84770         ml$(2)="Select a different account."
-84780         fnmsgbox(mat ml$,resp$,cap$,48)
-84790         goto AAS_TOP
-84800       end if 
-84810     else 
-84820       x$=lpad$(x$,10)
-84830     end if 
-84840     if ckey=1 then 
-84850       fn_record_previous_update(x$)
-84860       goto AA_FINIS
-84870     else if ckey=2 and aas_button_enable_add then 
-84880       goto AA_FINIS
-84890     else if ckey=5 then 
-84900       goto AA_FINIS
-84910     else if ckey=6 then 
-84920       fncustomer_search(x$,fixgrid)
-84930       if trim$(x$)<>'' then ! in case the search was canceled
-84940         hact$=x$
-84950         fn_record_previous_update(x$)
-84960         ckey=1
-84970         goto AA_FINIS
-84980       end if 
-84990     else if ckey=1000 then 
-85000       fn_record_previous_clear
-85010     else if ckey>1000 and ckey<=1000+udim(mat rp_prev$) then 
-85020       x$=lpad$(trim$(rp_prev$(ckey-1000)(1:10)),10)
-85030       fn_record_previous_update(rp_prev$(ckey-1000)(1:10))
-85040       ckey=1
-85050       goto AA_FINIS
-85060     else if ckey=2001 then 
-85070       account_selection_method=asm_combo
-85080     else if ckey=2002 then 
-85090       account_selection_method=asm_grid
-85100     else if ckey=2003 then 
-85110       account_selection_method=asm_text
-85120     end if 
-85130   loop 
-85140   AA_FINIS: ! 
-85150   fn_record_previous_save
-85160   fnureg_write('ubfm.account_selection_method',str$(account_selection_method))
-85170   fn_ask_account=ckey
-85180 fnend 
+84150     asm_locationId=4
+84160     fnureg_read('ubfm.account_selection_method',account_selection_method$)
+84170     account_selection_method=val(account_selection_method$) conv ignore
+84180     if account_selection_method=0 then account_selection_method=asm_combo
+84190     fn_record_previous_load(prev_list_id$)
+84200   end if 
+84210   if select_button_text$='' then select_button_text$='Next'
+84220   col1_width=17
+84230   col2_pos=col1_width+2
+84240   do 
+84250   AAS_TOP: ! 
+84260     fntos(sn$="Customer-AskAcct2")
+84270     respc=0
+84280     askacct_line=0
+84290     if rp_prev$(1)<>'' then 
+84300       if rp_prev$(1)<>'' then 
+84310         fnbutton(askacct_line+=1,col2_pos,'Clear Recent',1000,'Clear Recent Accounts list')
+84320       end if 
+84330       fnlbl(askacct_line+=1,1,"Recent:",col1_width,1) : askacct_line=askacct_line-1
+84340       for rp_item=udim(mat rp_prev$) to 1, step -1
+84350         if rp_prev$(rp_item)<>'' then 
+84360           fnbutton(askacct_line+=1,col2_pos,rp_prev$(rp_item)&' '&fn_customer_name$(rp_prev$(rp_item)),1000+rp_item, 'click to select this previously accessed account',1,43)
+84370         end if 
+84380       next rp_item
+84390       askacct_line+=2
+84400     end if 
+84410     fnlbl(askacct_line+=1,1,"Selection Method:",col1_width,1)
+84420     btn_width=14
+84430     fnbutton_or_disabled(account_selection_method<>asm_combo,askacct_line,col2_pos,'Combo',2001,'tooltip',btn_width)
+84440     fnbutton_or_disabled(account_selection_method<>asm_grid,askacct_line,col2_pos+((btn_width+1)*1),'Grid',2002,'tooltip',btn_width)
+84450     fnbutton_or_disabled(account_selection_method<>asm_text,askacct_line,col2_pos+((btn_width+1)*2),'Text',2003,'tooltip',btn_width)
+84460     if u4_meterAddress$='True' then
+84470       fnbutton_or_disabled(account_selection_method<>asm_locationId,askacct_line,col2_pos+((btn_width+1)*3),'Location ID',2004,'tooltip',btn_width)
+84480     end if
+84482     askacct_line+=1
+84484     if account_selection_method=asm_locationId then
+84486       fnlbl(askacct_line+=1,1,"Location ID:",col1_width,1)
+84488     else
+84500       fnlbl(askacct_line+=1,1,"Account:",col1_width,1)
+84502     end if
+84510     if account_selection_method=asm_combo then 
+84520       fncmbact(askacct_line,col2_pos)
+84530     else if account_selection_method=asm_grid then 
+84540       fn_customer_grid(askacct_line,col2_pos)
+84550     else if account_selection_method=asm_text then 
+84560       fntxt(askacct_line,col2_pos,10)
+84570     else if account_selection_method=asm_locationId then 
+84580       fntxt(askacct_line,col2_pos,11, 0,0,'30')
+84590     end if 
+84592     if account_selection_method=asm_locationId then
+84594       resp$(respc+=1)=str$(tmpLocationId)
+84596     else
+84598       resp$(respc+=1)=hact$
+84600     end if
+84610     if aas_button_enable_add then let fncmdkey("&Add",2,0,0,"Add a new customer" )
+84620     fncmdkey(select_button_text$,1,1,0,select_button_text$&" the selected/highlighted record.")
+84630     fncmdkey("Search",6,0,0,"Search for customer record")
+84640     fncmdkey('Back',5,0,1,"Returns to previous screen")
+84650     fnacs(sn$,0,mat resp$,ckey)
+84660     x$=trim$(resp$(1)(1:10))
+84670     if account_selection_method=asm_text and ckey=1 then 
+84680       if ~fn_key_tweak(x$,h_customer_1) then 
+84690         mat ml$(2)
+84700         ml$(1)="Account "&x$&' could not be found.'
+84710         ml$(2)="Select a different account."
+84720         fnmsgbox(mat ml$,resp$,cap$,48)
+84730         goto AAS_TOP
+84740       end if 
+84750     else if account_selection_method=asm_locationId and ckey=1 then
+84760       tmpLocationId=val(resp$(1)) conv AAS_TOP
+84770       x$=fnAccountFromLocationId$(tmpLocationId)
+84780       if x$='' then goto AAS_TOP
+84840     else 
+84850       x$=lpad$(x$,10)
+84860     end if 
+84870     if ckey=1 then 
+84880       fn_record_previous_update(x$)
+84890       goto AA_FINIS
+84900     else if ckey=2 and aas_button_enable_add then 
+84910       goto AA_FINIS
+84920     else if ckey=5 then 
+84930       goto AA_FINIS
+84940     else if ckey=6 then 
+84950       fncustomer_search(x$,fixgrid)
+84960       if trim$(x$)<>'' then ! in case the search was canceled
+84970         hact$=x$
+84980         fn_record_previous_update(x$)
+84990         ckey=1
+85000         goto AA_FINIS
+85010       end if 
+85020     else if ckey=1000 then 
+85030       fn_record_previous_clear
+85040     else if ckey>1000 and ckey<=1000+udim(mat rp_prev$) then 
+85050       x$=lpad$(trim$(rp_prev$(ckey-1000)(1:10)),10)
+85060       fn_record_previous_update(rp_prev$(ckey-1000)(1:10))
+85070       ckey=1
+85080       goto AA_FINIS
+85090     else if ckey=2001 then 
+85100       account_selection_method=asm_combo
+85110     else if ckey=2002 then 
+85120       account_selection_method=asm_grid
+85130     else if ckey=2003 then 
+85140       account_selection_method=asm_text
+85150     else if ckey=2004 then 
+85160       account_selection_method=asm_locationId
+85170     end if 
+85180   loop 
+85190   AA_FINIS: ! 
+85200   fn_record_previous_save
+85210   fnureg_write('ubfm.account_selection_method',str$(account_selection_method))
+85220   fn_ask_account=ckey
+85230 fnend 
 86200 def library fnapply_default_rates(mat extra, mat a)
 86210   if ~setup then let fn_setup
 86220   fnapply_default_rates=fn_apply_default_rates(mat extra, mat a)
@@ -1728,7 +1736,7 @@
 90050     library 'S:\Core\Library': fntransfile,fncreg_read,fncreg_write,fnopen_meter,fnEditFile
 90060     library 'S:\Core\Library': fnureg_write,fnureg_read,fnbutton_or_disabled,fnget_services,fnkey_change
 90070     library 'S:\Core\Library': fnWorkOrderList,fnWorkOrderAdd
-90072     library 'S:\Core\Library': fnfm$,fnMeterAddressName$
+90072     library 'S:\Core\Library': fnfm$,fnMeterAddressName$,fnAccountFromLocationId$
 90080     on error goto ERTN
 90090     ! r: dims
 90100     dim z$*10

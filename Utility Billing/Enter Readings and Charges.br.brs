@@ -2024,16 +2024,16 @@
 92440           ! pr 'after ' : pause
 92460        end if
 92480       loop until hot_z$<>hot_z_prior$ and hot_z_prior$<>''
-92490       pr 'after loop'
-92500       pr 'Customer.Number=';hot_z_prior$;'         hot_z_prior$=';hot_z_prior$
-92505       pr 'Reading.Water=';x(1);'  Usage=';x(12)
-92510       pr 'MeterAddress.LocationID=';hotLocationID
-92560       pr 'hotWaterMeterChangeBefore=';hotWaterMeterChangeBefore;'  hotWaterMeterChangeAfter=';hotWaterMeterChangeAfter
-92580       for x=1 to udim(mat hotImportDataField$)
-92600         pr hotImportDataField$(x)&'='&hotImportDataValue$(x)
-92620       nex x
-92630       pr ''
-92640       pause
+92490       ! pr 'after loop'
+92500       ! pr 'Customer.Number=';hot_z_prior$;'         hot_z_prior$=';hot_z_prior$
+92505       ! pr 'Reading.Water=';x(1);'  Usage=';x(12)
+92510       ! pr 'MeterAddress.LocationID=';hotLocationID
+92560       ! pr 'hotWaterMeterChangeBefore=';hotWaterMeterChangeBefore;'  hotWaterMeterChangeAfter=';hotWaterMeterChangeAfter
+92580       ! for x=1 to udim(mat hotImportDataField$)
+92600       !   pr hotImportDataField$(x)&'='&hotImportDataValue$(x)
+92620       ! nex x
+92630       ! pr ''
+92640       ! pause
 92660       fn_hot_calcMeterChangeOut(hot_z_prior$,mat x,hotWaterMeterChangeBefore,hotWaterMeterChangeAfter)
 92680       if listonly=1 then
 92700         fn_lo_pr_rec(hot_z_prior$,mat x)
