@@ -14,9 +14,9 @@ xb4       , x(8 ) service 7                  ,  pd      4.2  , ! SPos=
 xb5       , x(9 ) service 1                  ,  pd      4.2  , ! SPos=
 xb6       , x(10) service 3                  ,  pd      4.2  , ! SPos=
 xb7       , x(11) service 4                  ,  pd      4.2  , ! SPos=
-xc1       , x(12) service 1                  ,  pd      5    , ! SPos=
-xc2       , x(13) service 3                  ,  pd      5    , ! SPos=
-xc3       , x(14) service 4                  ,  pd      5    , ! SPos=
+xc1       , x(12) service 1 (Water) Usage    ,  pd      5    , ! SPos=
+xc2       , x(13) service 3 Usage            ,  pd      5    , ! SPos=
+xc3       , x(14) service 4 Usage            ,  pd      5    , ! SPos=
 xd1       , x(15)                            ,  n       1    , ! SPos=
 
 

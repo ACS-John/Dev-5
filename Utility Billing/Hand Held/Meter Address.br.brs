@@ -73,69 +73,71 @@
 28120   if leaveFileOpen and hCustomerMeterAddress<>0 then goto aflPastOpen2
 28140   open #hCustomerMeterAddress:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')&",Shr",internal,input,keyed ! Meter address
 28160   aflPastOpen2: !
-28180   maDataN(ma_LocationID)=-1
-28200   read #hMeterAddressLocationID,using form$(hMeterAddressLocationID),key=cnvrt$('N 11',locationId),release: mat maData$,mat maDataN nokey ignore
-28220   restore #hCustomerMeterAddress,key=>maData$(ma_name):
-28240   dim meterAddress$*30
-28260   mat afliAccountNumber$(0)
-28280   mat afliFinalbillingCode(0)
-28300   mat afliLastBillingDay(0)
-28320   do
-28340     read #hCustomerMeterAddress,using 'form pos 1,C 10,C 30,pos 1821,n 1,pos 296,pd 4',release: accountNumber$,meterAddress$,finalbillingCode,lastBillingDate nokey ignore eof AflEoCustomerMeterAddress
-28360     if lwrc$(meterAddress$)=lwrc$(maData$(ma_name)) then
-28380       fnaddonec(mat afliAccountNumber$,accountNumber$)
-28400       fnaddonen(mat afliFinalbillingCode,finalbillingCode)
-28420       fnaddonen(mat afliLastBillingDay,days(lastBillingDate,'mmddyy'))
-28440     end if
-28460   loop until lwrc$(meterAddress$)<>lwrc$(maData$(ma_name))
-28480   AflEoCustomerMeterAddress: !
-28500   if udim(mat afliAccountNumber$)=0 then 
-28520     aflReturn$=''
-28540     mat mg$(0)
-28560     fnaddonec(mat mg$,'Could not find an account for')
-28580     fnaddonec(mat mg$,'Meter Address:  '&maData$(ma_name))
-28600     fnaddonec(mat mg$,'Location ID '&str$(locationId))
-28620     fnmsgbox(mat mg$)
-28640     if env$('acsDeveloper')<>'' then 
-28660       pr mat mg$
-28680       pause
-28700     end if
-28720   else if udim(mat afliAccountNumber$)=1 then
-28740     aflReturn$=afliAccountNumber$(1)
-28760   else 
-28780     ! pr '--Q--'
-28800     ! pr 'multiple matches, let us auto figure which is correct'
-28820     ! pr 'account    final billing code     last billing date'
-28840     ! for x=1 to udim(mat afliAccountNumber$)
-28860     !   pr afliAccountNumber$(x)&'            '&str$(afliFinalbillingCode(x))&'                '&date$(afliLastBillingDay(x),'mm/dd/ccyy')
-28880     ! nex x
-28900     if fnCountMatchesN(mat afliFinalbillingCode,0)=1 then
-28920       aflReturn$=afliAccountNumber$(srch(mat afliFinalbillingCode,0))
-28940       ! pr '--A--'
-28960       ! pr 'only one was active ('&aflReturn$&') - using it'
-28980     else
-29000       latestBillingDayIndex=fnArrayMax(mat afliLastBillingDay)
-29020       if fnCountMatchesN(mat afliLastBillingDay,afliLastBillingDay(latestBillingDayIndex))=1 then
+28180   mat maData$=('') : mat maDataN=(0) 
+28200   maDataN(ma_LocationID)=-1
+28220   mat afliAccountNumber$(0)
+28240   mat afliFinalbillingCode(0)
+28260   mat afliLastBillingDay(0)
+28280   read #hMeterAddressLocationID,using form$(hMeterAddressLocationID),key=cnvrt$('N 11',locationId),release: mat maData$,mat maDataN nokey AflEoCustomerMeterAddress
+28300   restore #hCustomerMeterAddress,key=>maData$(ma_name): nokey AflEoCustomerMeterAddress
+28320   dim meterAddress$*30
+28340   do
+28360     read #hCustomerMeterAddress,using 'form pos 1,C 10,C 30,pos 1821,n 1,pos 296,pd 4',release: accountNumber$,meterAddress$,finalbillingCode,lastBillingDate nokey ignore eof AflEoCustomerMeterAddress
+28380     if lwrc$(meterAddress$)=lwrc$(maData$(ma_name)) then
+28400       fnaddonec(mat afliAccountNumber$,accountNumber$)
+28420       fnaddonen(mat afliFinalbillingCode,finalbillingCode)
+28440       fnaddonen(mat afliLastBillingDay,days(lastBillingDate,'mmddyy'))
+28460     end if
+28480   loop until lwrc$(meterAddress$)<>lwrc$(maData$(ma_name))
+28500   AflEoCustomerMeterAddress: !
+28520   if udim(mat afliAccountNumber$)=0 then 
+28540     aflReturn$=''
+28560     mat mg$(0)
+28580     fnaddonec(mat mg$,'Could not find an account for')
+28600     fnaddonec(mat mg$,'Meter Address:  '&maData$(ma_name))
+28620     fnaddonec(mat mg$,'Location ID '&str$(locationId))
+28640     fnmsgbox(mat mg$)
+28660     if env$('acsDeveloper')<>'' then 
+28680       pr mat mg$
+28700       pause
+28720     end if
+28740   else if udim(mat afliAccountNumber$)=1 then
+28760     aflReturn$=afliAccountNumber$(1)
+28780   else 
+28800     ! pr '--Q--'
+28820     ! pr 'multiple matches, let us auto figure which is correct'
+28840     ! pr 'account    final billing code     last billing date'
+28860     ! for x=1 to udim(mat afliAccountNumber$)
+28880     !   pr afliAccountNumber$(x)&'            '&str$(afliFinalbillingCode(x))&'                '&date$(afliLastBillingDay(x),'mm/dd/ccyy')
+28900     ! nex x
+28920     if fnCountMatchesN(mat afliFinalbillingCode,0)=1 then
+28940       aflReturn$=afliAccountNumber$(srch(mat afliFinalbillingCode,0))
+28960       ! pr '--A--'
+28980       ! pr 'only one was active ('&aflReturn$&') - using it'
+29000     else
+29020       latestBillingDayIndex=fnArrayMax(mat afliLastBillingDay)
+29040       if fnCountMatchesN(mat afliLastBillingDay,afliLastBillingDay(latestBillingDayIndex))=1 then
 29060         aflReturn$=afliAccountNumber$(latestBillingDayIndex)
-29070         ! pr '--A--'
-29080         ! pr 'using the one with the last billing date ('&aflReturn$&')'
-29100       else 
-29120         ! pr '--!--'
-29140         ! pr 'multiple matches for last billing date!'
-29160         ! pr 'need more logic to find match'
-29180         pause
-29200       end if
-29220     end if
-29240     ! pause
-29260   end if
-29280   if ~leaveFileOpen then
-29300     close #hMeterAddressLocationID:
-29320     close #hCustomerMeterAddress:
-29340     hMeterAddressLocationID=0
-29360     hCustomerMeterAddress=0
-29380   end if
-29400   fnAccountFromLocationId$=aflReturn$
-29420 fnend
+29080         ! pr '--A--'
+29100         ! pr 'using the one with the last billing date ('&aflReturn$&')'
+29120       else 
+29140         ! pr '--!--'
+29160         ! pr 'multiple matches for last billing date!'
+29180         ! pr 'need more logic to find match'
+29200         pause
+29220       end if
+29240     end if
+29260     ! pause
+29280   end if
+29300   if ~leaveFileOpen then
+29320     close #hMeterAddressLocationID:
+29340     close #hCustomerMeterAddress:
+29360     hMeterAddressLocationID=0
+29380     hCustomerMeterAddress=0
+29400   end if
+29420   AflFinis: !
+29440   fnAccountFromLocationId$=aflReturn$
+29460 fnend
 33000 def library fnMeterAddressLocationID(meterAddress$*30; leaveFileOpen)
 33020   if ~setup then let fn_setup
 33040   if leaveFileOpen and hMeterAddressName<>0 then goto maliPastOpen
