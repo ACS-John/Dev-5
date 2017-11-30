@@ -322,7 +322,7 @@
 58110     fn_addAwoData('MeterAddress.LocationID'                      ,str$(val(lineItem$(1)))                        )
 58120     fn_addAwoData('MeterChangeOut.ReadingBefore.Water'           ,lineItem$(12)                                   )
 58130     fn_addAwoData('MeterChangeOut.ReadingAfter.Water'            ,lineItem$(14)                                   ) ! usually 0
-58140     fn_addAwoData('Meter.Transmitter.Water'                      ,lineItem$(10)                                   ) !
+58140     fn_addAwoData('Meter.Transmitter.Water'                      ,lineItem$(10)&'-'&lineItem$(17)                ) !
 58180     fn_addAwoData('Meter.Meter Number.Water'                     ,lineItem$(13)                                   )
 58220     fn_addAwoData('Meter.Longitude.Water'                        ,lineItem$(21)                                   )
 58240     fn_addAwoData('Meter.Latitude.Water'                         ,lineItem$(22)                                   )

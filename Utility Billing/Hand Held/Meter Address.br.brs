@@ -103,26 +103,26 @@
 28720   else if udim(mat afliAccountNumber$)=1 then
 28740     aflReturn$=afliAccountNumber$(1)
 28760   else 
-28780     pr '--Q--'
-28800     pr 'multiple matches, let us auto figure which is correct'
-28820     pr 'account    final billing code     last billing date'
-28840     for x=1 to udim(mat afliAccountNumber$)
-28860       pr afliAccountNumber$(x)&'            '&str$(afliFinalbillingCode(x))&'                '&date$(afliLastBillingDay(x),'mm/dd/ccyy')
-28880     nex x
+28780     ! pr '--Q--'
+28800     ! pr 'multiple matches, let us auto figure which is correct'
+28820     ! pr 'account    final billing code     last billing date'
+28840     ! for x=1 to udim(mat afliAccountNumber$)
+28860     !   pr afliAccountNumber$(x)&'            '&str$(afliFinalbillingCode(x))&'                '&date$(afliLastBillingDay(x),'mm/dd/ccyy')
+28880     ! nex x
 28900     if fnCountMatchesN(mat afliFinalbillingCode,0)=1 then
 28920       aflReturn$=afliAccountNumber$(srch(mat afliFinalbillingCode,0))
-28940       pr '--A--'
-28960       pr 'only one was active ('&aflReturn$&') - using it'
+28940       ! pr '--A--'
+28960       ! pr 'only one was active ('&aflReturn$&') - using it'
 28980     else
 29000       latestBillingDayIndex=fnArrayMax(mat afliLastBillingDay)
 29020       if fnCountMatchesN(mat afliLastBillingDay,afliLastBillingDay(latestBillingDayIndex))=1 then
-29040         pr '--A--'
 29060         aflReturn$=afliAccountNumber$(latestBillingDayIndex)
-29080         pr 'using the one with the last billing date ('&aflReturn$&')'
+29070         ! pr '--A--'
+29080         ! pr 'using the one with the last billing date ('&aflReturn$&')'
 29100       else 
-29120         pr '--!--'
-29140         pr 'multiple matches for last billing date!'
-29160         pr 'need more logic to find match'
+29120         ! pr '--!--'
+29140         ! pr 'multiple matches for last billing date!'
+29160         ! pr 'need more logic to find match'
 29180         pause
 29200       end if
 29220     end if
