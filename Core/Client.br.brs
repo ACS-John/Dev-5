@@ -193,6 +193,7 @@
 26530 !   fn_setup_client_add("Granby",2040,34098) ! no longer using as of 6/13/2016
 26540     fn_setup_client_add("Grandview",2050,34040)
 26550 !   fn_setup_client_add("GreenCo",2070,33910)
+26560     fn_setup_client_add("Halfway" ,2130,0)
 26560     fn_setup_client_add("Hope Welty" ,851,34152)
 26562     fn_setup_client_add("Payroll Done Right" ,3393,0)
 26570     ! fn_setup_client_add("Illiopolis",2340,0)
@@ -927,7 +928,7 @@
 97120   cic_return=0
 97140   if env$('ACSDeveloper')<>'' then
 97160     cic_return=1
-97220   else if env$('client')='Kathys Bookkeeping' then
+97220   else if env$('client')='Kathys Bookkeeping' or env$('client')='Halfway' then
 97240     cic_return=1
 97340   end if 
 97360   fn_client_is_converting=cic_return

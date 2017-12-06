@@ -34,7 +34,7 @@
 15120     dim hhfro$*256
 15140     fnureg_read('Hand Held From File',hhfro$)
 15142     dim u4_deviceOption$(0)*20,u4_device$*20
-15144     fnHand_Held_Device_list(mat u4_deviceOption$)
+15144     fnHandHeldList(mat u4_deviceOption$)
 15145     fnaddonec(mat u4_deviceOption$,'[Ask]')
 15146     fnreg_read('Hand Held Device',u4_device$, fnhand_held_device$)
 15148     fnreg_read('Meter Address Enable',u4_meterAddress$, 'False')
@@ -516,7 +516,7 @@
 70020   if ~setup then 
 70040     setup=1
 70060     library 'S:\Core\Library': fntop,fnxit, fnacs,fnlbl,fntxt ,fnerror,fntos,fnchk,fnreg_read,fnreg_write,fnbutton,fncmdkey,fnureg_read,fnureg_write,fncomboa,fnbutton_or_disabled,fnopen_receipt_printer,fnclose_receipt_printer,fnclient_has,fnMsExe$
-70080     library 'S:\Core\Library': fnHand_Held_Device_list,fnhand_held_device$,fnopt,fngetpp,fncopyfile
+70080     library 'S:\Core\Library': fnHandHeldList,fnhand_held_device$,fnopt,fngetpp,fncopyfile
 70100     library 'S:\Core\Library': fnWaitForShellCloseStart,fnWaitForShellCloseEnd,fnmakesurepathexists
 70110     library 'S:\Core\Library': fnaddonec
 70120     on error goto ERTN

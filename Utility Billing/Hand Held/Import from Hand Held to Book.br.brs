@@ -14,7 +14,7 @@
 16000 def fn_setup
 16020   library 'S:\Core\Library': fnxit,fnureg_read
 16040   library 'S:\Core\Library': fntop,fnerror,fngethandle
-16060   library 'S:\Core\Library': fnregistered_for_hh,fnhand_held_Device$,fnHand_Held_Device_list
+16060   library 'S:\Core\Library': fnregistered_for_hh,fnhand_held_Device$,fnHandHeldList
 16080   library 'S:\Core\Library': fntos,fnlbl,fnacs,fntxt,fncmdset,fnchk,fncomboa
 16100   library 'S:\Core\Library': fnmsgbox
 16120   library 'S:\Core\Library': fnureg_write
@@ -49,7 +49,7 @@
 16580   if lwrc$(devicePreference$)='[ask]' then
 16600     fnureg_read('Hand Held Device Asked',deviceSelected$)
 16620     dim deviceOption$(0)*20
-16640     fnHand_Held_Device_list(mat deviceOption$)
+16640     fnHandHeldList(mat deviceOption$)
 16660   end if
 16680 fnend
 24000 def library fnretrieve_hand_held_file
