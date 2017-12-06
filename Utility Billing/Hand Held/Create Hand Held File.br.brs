@@ -5,6 +5,123 @@
 02330 open #h_customer_i1:=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed
 02340 open #h_customer_i5:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed
 02368 goto SEL_ACT
+03000 def fn_setup
+03020   if ~setup then
+03040     setup=1
+03060     library 'S:\Core\Library': fnerror,fntos,fnlbl,fncomboa,fnacs,fncmbrt2,fnxit,fncmbact,fnbutton
+03080     library 'S:\Core\Library': fncustomer_search,fnfra,fncmdset,fntop,fncmdkey,fnmsgbox,fntxt
+03100     library 'S:\Core\Library': fngethandle,fnpause,fnopt,fnget_services,fnhand_held_device$
+03120     library 'S:\Core\Library': fncreg_read,fncreg_write,fnCopy,fnureg_read,fnureg_write
+03140     library 'S:\Core\Library': fnAddOneC
+03160     library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists,fnAccountFromLocationId$
+03180     on error goto ERTN
+03200     ! ______________________________________________________________________
+03220     dim resp$(64)*125
+03240     dim f$(3)*12,e2$*30
+03260     dim z$*10,e$(4)*30,d(15),a(7)
+03280     dim res$*41,m$(2)*80
+03300     dim servicename$(10)*20,servicecode$(10)*2
+03320     dim rt$*4,extra(23)
+03340     dim filterAccount$(0)
+03360     ! r: set mat drive 
+03380       dim drive$(22)*3
+03400       drive$(1)="E:\"
+03420       drive$(2)="F:\"
+03440       drive$(3)="G:\"
+03460       drive$(4)="H:\"
+03480       drive$(5)="I:\"
+03500       drive$(6)="J:\"
+03520       drive$(7)="K:\"
+03540       drive$(8)="L:\"
+03560       drive$(9)="M:\"
+03580       drive$(10)="N:\"
+03600       drive$(11)="O:\"
+03620       drive$(12)="P:\"
+03640       drive$(13)="Q:\"
+03660       drive$(14)="R:\"
+03680       drive$(15)="S:\"
+03700       drive$(16)="T:\"
+03720       drive$(17)="U:\"
+03740       drive$(18)="V:\"
+03760       drive$(19)="W:\"
+03780       drive$(20)="X:\"
+03800       drive$(21)="Y:\"
+03820       drive$(22)="Z:\"
+03840     ! /r
+03860     crlf$=chr$(13)&chr$(10)
+03880     fnget_services(mat servicename$, mat servicecode$)
+03900     dim devicePreference$*20
+03920     devicePreference$=fnhand_held_device$
+03940     dim deviceName$(0)*20,deviceNameCompleteList$(0)*20,deviceNameCompleteListOption$(0)*128
+03950     fn_handHeldList(mat deviceNameCompleteList$,mat deviceNameCompleteListOption$)
+03952     for dnclItem=1 to udim(mat deviceNameCompleteList$)
+03954       if pos(deviceNameCompleteListOption$(dnclItem),'ImportOnly')<=0 then
+03956         fnAddOneC(mat deviceName$,deviceNameCompleteList$(dnclItem))
+03958       end if
+03960     nex dnclItem
+03980     dim deviceSelected$*20
+04000     if lwrc$(devicePreference$)='[ask]' then
+04020       fnureg_read('Hand Held Device Asked',deviceSelected$)
+04040       if trim$(deviceSelected$)='' then 
+04060         deviceSelected$=deviceName$(1)
+04080       end if
+04100     else
+04120       deviceSelected$=devicePreference$
+04140     end if
+04160   end if
+04180   sm_allExceptFinal=1
+04200   sm_aRoute=2
+04220   sm_routeRange=3
+04240   sm_Individuals=4
+04260   sm_LocationId=5
+04280 fnend
+05000 def fn_scr_selact
+05020   fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore
+05040   fntos(sn$="hhto1")
+05060   fnlbl(2,1,"Hand Held model:",16,1)
+05080   if lwrc$(devicePreference$)='[ask]' then
+05100     fncomboa("HH-FroCBox",2,18,mat deviceName$)
+05120     resp$(rc_Device:=respc+=1)=deviceSelected$
+05140   else
+05160     fnlbl(2,18,deviceSelected$)
+05180   end if
+05200   fnlbl(4,1,"Select:",16,1)
+05220   fnopt(4,18,"[All] (excluding final billed)")
+05240   rc_selectionMethod1:=respc+=1 : if selection_method=sm_allExceptFinal then resp$(rc_selectionMethod1)='True' else resp$(rc_selectionMethod1)='False'
+05260   fnopt(5,18,"An Entire Route")
+05280   rc_selectionMethod2:=respc+=1 : if selection_method=sm_aRoute then resp$(rc_selectionMethod2)='True' else resp$(rc_selectionMethod2)='False'
+05300   fnopt(6,18,"A Range of Accounts")
+05320   rc_selectionMethod3:=respc+=1 : if selection_method=sm_routeRange then resp$(rc_selectionMethod3)='True' else resp$(rc_selectionMethod3)='False'
+05340   fnopt(7,18,"Specific Accounts")
+05360   rc_selectionMethod4:=respc+=1 : if selection_method=sm_Individuals then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
+05380   ! if lrec(2)>0 then
+05400   !   fncmdset(19)
+05420   !   fnlbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
+05440   ! else
+05460     fnlbl(9,1,"",46,2)
+05480     fncmdset(2)
+05500   ! end if
+05520   fnacs(sn$,0,mat resp$,ckey)
+05540   if ckey<>5 then
+05560       if lwrc$(devicePreference$)='[ask]' then
+05580         deviceSelected$=resp$(rc_Device)
+05600         fnureg_write('Hand Held Device Asked',deviceSelected$)
+05620       else
+05640         deviceSelected$=devicePreference$
+05660       end if
+05680     if resp$(rc_selectionMethod1)='True' then
+05700       selection_method=sm_allExceptFinal
+05720     else if resp$(rc_selectionMethod2)='True' then
+05740       selection_method=sm_aRoute
+05760     else if resp$(rc_selectionMethod3)='True' then
+05780       selection_method=sm_routeRange
+05800     else if resp$(rc_selectionMethod4)='True' then
+05820       selection_method=sm_Individuals
+05840     end if
+05860     fncreg_write('hhto.selection_method',str$(selection_method))
+05880   end if
+05900   mat resp$=("")
+05920 fnend
 08000 SEL_ACT: ! r:
 08020 fn_scr_selact
 08040 if ckey=5 then 
@@ -12,23 +129,26 @@
 08080 else if ckey=2 then 
 08100   goto Finis
 08120 else ! ckey=1
-08140   if deviceSelected$='Aclara' then
-08160     includeFinalBilled=1
+08140   if ~workopen then 
+08160     fn_openOutFile ! open work files based on type of Hand Held
 08180   end if
-08200   if ~workopen then 
-08220     fn_openwork ! open work files based on type of Hand Held
-08240   end if
-08260   if selection_method=1 then
-08280     goto SELECT_ALL
-08300   else if selection_method=2 then
-08320     goto AskRoute
-08340   else if selection_method=3 then
-08360     goto AskRange
-08380   else if selection_method=4 then
-08400     goto NextAskAccount
-08420   end if
-08440 end if  ! /r
-08460 ! ______________________________________________________________________
+08200   if deviceSelected$='Aclara' then
+08220     includeFinalBilled=1
+08240     selection_method=sm_LocationId ! all Location IDs
+08260   end if
+08280   if selection_method=sm_allExceptFinal then
+08300     goto SELECT_ALL
+08320   else if selection_method=sm_aRoute then
+08340     goto AskRoute
+08360   else if selection_method=sm_routeRange then
+08380     goto AskRange
+08400   else if selection_method=sm_Individuals then
+08420     goto NextAskAccount
+08422   else if selection_method=sm_LocationId then
+08424     goto NextLocationId
+08440   end if
+08460 end if  ! /r
+08480 ! ______________________________________________________________________
 09000 AskRoute: ! r:
 09020   fntos(sn$="AskRoute")
 09040   if hbk<>0 then
@@ -44,7 +164,7 @@
 09240   fncmdkey("&Finish",2,0,1,"Completed with all routes")
 09260   fncmdkey("&Cancel",5,0,0,"Don't sent to Hand Held")
 09280   fnacs(sn$,0,mat resp$, ckey)
-09300   if resp$(1)="[All]" and ckey=1 then selection_method=1 : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
+09300   if resp$(1)="[All]" and ckey=1 then selection_method=sm_allExceptFinal : goto SELECT_ALL ! if they select all on the route screen, handle same as pr all option from 1st menu
 09320   bk1=val(resp$(1)) conv L850
 09340   resp$(1)=""
 09360 L850: !
@@ -59,6 +179,11 @@
 09540   end if
 09560 !
 09580 ! /r
+09600 NextLocationId: ! r:
+09620   if fn_customerRead( '',readLocationId+=1)=-54 then 
+09640     goto END1
+09660   end if
+09680 goto SendRecordToWorkFile ! /r
 10000 SELECT_ALL: ! r:
 10020   if deviceSelected$='Aclara Work Order' then
 10040     fn_getFilterAccount(mat filterAccount$)
@@ -70,7 +195,7 @@
 11000 NextReadForAll: ! ! r:
 11020   if fn_customerRead=-54 then 
 11040     goto END1
-11060   else if selection_method=2 then
+11060   else if selection_method=sm_aRoute then
 11080     if route=0 then 
 11100       goto NextReadForAll
 11120     else if bk1><route then 
@@ -84,11 +209,13 @@
 11280     fn_itron_close
 11300   end if
 11320   !
-11340   if selection_method=1 then 
+11340   if selection_method=sm_allExceptFinal then 
 11360     goto Finis
-11380   else if selection_method=2 then 
+11380   else if selection_method=sm_aRoute then 
 11400     hbk=bk1 
 11420     goto AskRoute 
+11422   else if selection_method=sm_LocationId then
+11424     goto Finis
 11440   else
 11460     goto NextAskAccount 
 11480   end if
@@ -119,7 +246,7 @@
 13080     if sq1=0 then sq1=1234 ! DEFALT SEQ=W,E,D,G
 13100     seq$=str$(sq1)
 13120     if deviceSelected$="Aclara" then 
-13140       fn_aclara
+13140       fn_aclara(readLocationId)
 13160     else if deviceSelected$="Aclara Work Order" then 
 13180       fn_aclaraWorkOrder
 13200     else if deviceSelected$="ACS Meter Reader" then 
@@ -154,9 +281,21 @@
 13780       goto SEL_ACT ! go back if Hand Held information is not available for their selection
 13800     end if
 13820   end if
-13840   SendRecordToWorkFileFinis: !
-13860   on selection_method goto NextReadForAll,NextReadForAll,NextReadForRange,NextAskAccount none NextReadForAll
-13880 ! /r
+13850   SendRecordToWorkFileFinis: !
+13860   if selection_method=sm_allExceptFinal then
+13870     goto NextReadForAll
+13880   else if selection_method=sm_aRoute then
+13890     goto NextReadForAll
+13900   else if selection_method=sm_routeRange then
+13910     goto NextReadForRange
+13920   else if selection_method=sm_Individuals then
+13930     goto NextAskAccount
+13932   else if selection_method=sm_LocationId then
+13934     goto NextLocationId
+13940   else
+13950     goto NextReadForAll
+13960   end if
+13970 ! /r
 14000 def fn_workabout
 14010   dim ft$*20
 14020   for j=1 to len(seq$)
@@ -410,7 +549,7 @@
 25300   Rmk1_Finis: !
 25320   close #20: ioerr ignore
 25340 fnend
-26000 def fn_openwork ! open work areas based on type of Hand Held
+26000 def fn_openOutFile ! open work areas based on type of Hand Held
 26020   dim out_filename$*256
 26040   fnureg_read('Hand Held To File',out_filename$,'C:\mvrs\xfer\Download\Download.dat')
 26060   if deviceSelected$='Itron FC300' then
@@ -432,7 +571,7 @@
 26380     if h_out<=0 then h_out=fn_ifMatchOpenDo('',                 br_filename$(env$('userprofile')&'\Desktop\ACS Hand Held Out.txt'),1048)
 26440   end if
 26460   workopen=1
-26480 fnend  ! fn_openwork
+26480 fnend
 27000 def fn_ifMatchOpenDo(deviceTest$*40,defaultOut_filename$*256,recordLength; extraParameter$*256)
 27020   ! inherrits deviceSelected$,out_filename$
 27040   ! returns open file handle
@@ -926,7 +1065,7 @@
 40160   fn_record_write(h_out)
 40180 fnend  ! fn_itron_record_mtr
 40200 ! /r
-44000 def fn_aclara ! z$,mat e$,extra$(1-2),route
+44000 def fn_aclara(aclaraLocationId) ! z$,mat e$,extra$(1-2),route
 44020   dim tmpCity$*64,tmpState$*64,tmpZip$*64
 44040   fncsz(e$(4),tmpCity$,tmpState$,tmpZip$)
 44060   transmitterSerialNumber$=trim$(fn_meter_info$('Transmitter Number',z$,'WA'))
@@ -938,7 +1077,7 @@
 44180   end if
 44200   !
 44220   fn_record_init(chr$(9))                                                            ! Aclara Name               ACS Name (if different)
-44240   fn_record_addc(5,cnvrt$('pic(#####)',fnMeterAddressLocationID(e$(1), 1)))     ! LocationID
+44240   fn_record_addc(5,cnvrt$('pic(#####)',aclaraLocationId))     ! LocationID
 44260   fn_record_addc(10,z$)                                                              ! Account Number
 44280   fn_record_addc(30,e$(2))                                                           ! Customer Name
 44300   fn_record_addc(12,extra$(2))                                                       ! Phone Number
@@ -1143,63 +1282,6 @@
 58200 goto XIT ! /r
 60000 XIT: fnxit
 60020 IGNORE: continue
-60040 def fn_setup
-60060   library 'S:\Core\Library': fnerror,fntos,fnlbl,fncomboa,fnacs,fncmbrt2,fnxit,fncmbact,fnbutton
-60080   library 'S:\Core\Library': fncustomer_search,fnfra,fncmdset,fntop,fncmdkey,fnmsgbox,fntxt
-60100   library 'S:\Core\Library': fngethandle,fnpause,fnopt,fnget_services,fnhand_held_device$
-60120   library 'S:\Core\Library': fncreg_read,fncreg_write,fnCopy,fnureg_read,fnureg_write
-60140   library 'S:\Core\Library': fnAddOneC
-60160   library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists
-60180   on error goto ERTN
-60200 ! ______________________________________________________________________
-60220   dim resp$(64)*125
-60240   dim f$(3)*12,e2$*30
-60260   dim z$*10,e$(4)*30,d(15),a(7)
-60280   dim res$*41,m$(2)*80
-60320   dim servicename$(10)*20,servicecode$(10)*2
-60340   dim rt$*4,extra(23)
-60360   dim filterAccount$(0)
-60380   ! r: set mat drive 
-60400     dim drive$(22)*3
-60420     drive$(1)="E:\"
-60440     drive$(2)="F:\"
-60460     drive$(3)="G:\"
-60480     drive$(4)="H:\"
-60500     drive$(5)="I:\"
-60520     drive$(6)="J:\"
-60540     drive$(7)="K:\"
-60560     drive$(8)="L:\"
-60580     drive$(9)="M:\"
-60600     drive$(10)="N:\"
-60620     drive$(11)="O:\"
-60640     drive$(12)="P:\"
-60660     drive$(13)="Q:\"
-60680     drive$(14)="R:\"
-60700     drive$(15)="S:\"
-60720     drive$(16)="T:\"
-60740     drive$(17)="U:\"
-60760     drive$(18)="V:\"
-60780     drive$(19)="W:\"
-60800     drive$(20)="X:\"
-60820     drive$(21)="Y:\"
-60840     drive$(22)="Z:\"
-60860   ! /r
-60880   crlf$=chr$(13)&chr$(10)
-60900   fnget_services(mat servicename$, mat servicecode$)
-60920   dim devicePreference$*20
-60940   devicePreference$=fnhand_held_device$
-60960   dim deviceOption$(0)*20
-60980   fn_Hand_Held_Device_list(mat deviceOption$)
-61000   dim deviceSelected$*20
-61020   if lwrc$(devicePreference$)='[ask]' then
-61040     fnureg_read('Hand Held Device Asked',deviceSelected$)
-61060     if trim$(deviceSelected$)='' then 
-61080       deviceSelected$=deviceOption$(1)
-61100     end if
-61120   else
-61140     deviceSelected$=devicePreference$
-61160   end if
-61180 fnend
 62000 def fn_transfer
 62020   if deviceSelected$="ACS Meter Reader" then
 62040     fntos(sn$="ACSMR_ASK_DEST")
@@ -1243,53 +1325,6 @@
 63300   goto TRANSFER_XIT ! /r
 63320   TRANSFER_XIT: !
 63340 fnend  ! fn_transfer
-64000 def fn_scr_selact
-64020   fncreg_read('hhto.selection_method',selection_method$,'2') : selection_method=val(selection_method$) conv ignore
-64040   fntos(sn$="hhto1")
-64060   fnlbl(2,1,"Hand Held model:",16,1)
-64080   if lwrc$(devicePreference$)='[ask]' then
-64100     fncomboa("HH-FroCBox",2,18,mat deviceOption$)
-64120     resp$(rc_Device:=respc+=1)=deviceSelected$
-64140   else
-64160     fnlbl(2,18,deviceSelected$)
-64180   end if
-64200   fnlbl(4,1,"Select:",16,1)
-64220   fnopt(4,18,"[All] (excluding final billed)")
-64240   rc_selectionMethod1:=respc+=1 : if selection_method=1 then resp$(rc_selectionMethod1)='True' else resp$(rc_selectionMethod1)='False'
-64260   fnopt(5,18,"An Entire Route")
-64280   rc_selectionMethod2:=respc+=1 : if selection_method=2 then resp$(rc_selectionMethod2)='True' else resp$(rc_selectionMethod2)='False'
-64300   fnopt(6,18,"A Range of Accounts")
-64320   rc_selectionMethod3:=respc+=1 : if selection_method=3 then resp$(rc_selectionMethod3)='True' else resp$(rc_selectionMethod3)='False'
-64340   fnopt(7,18,"Specific Accounts")
-64360   rc_selectionMethod4:=respc+=1 : if selection_method=4 then resp$(rc_selectionMethod4)='True' else resp$(rc_selectionMethod4)='False'
-64380   ! if lrec(2)>0 then
-64400   !   fncmdset(19)
-64420   !   fnlbl(9,1,"Select Finish to initiate link with Hand Held.",46,2)
-64440   ! else
-64460     fnlbl(9,1,"",46,2)
-64480     fncmdset(2)
-64500   ! end if
-64520   fnacs(sn$,0,mat resp$,ckey)
-64540   if ckey<>5 then
-64560       if lwrc$(devicePreference$)='[ask]' then
-64580         deviceSelected$=resp$(rc_Device)
-64600         fnureg_write('Hand Held Device Asked',deviceSelected$)
-64620       else
-64640         deviceSelected$=devicePreference$
-64660       end if
-64680     if resp$(rc_selectionMethod1)='True' then
-64700       selection_method=1
-64720     else if resp$(rc_selectionMethod2)='True' then
-64740       selection_method=2
-64760     else if resp$(rc_selectionMethod3)='True' then
-64780       selection_method=3
-64800     else if resp$(rc_selectionMethod4)='True' then
-64820       selection_method=4
-64840     end if
-64860     fncreg_write('hhto.selection_method',str$(selection_method))
-64880   end if
-64900   mat resp$=("")
-64920 fnend
 65000 def fn_report_created_file(out_filename_report$*512)
 65100   if out_filename_report$<>'' and out_filename_report$<>':CON:' and deviceSelected$<>'Psion Workabout' and deviceSelected$<>'LapTop' then
 65120     mat m$(2)
@@ -1355,38 +1390,58 @@
 70880   MI_FINIS: !
 70900   fn_meter_info$=mi_return$
 70920 fnend  ! fn_meter_info$
-71000 def library fnHand_Held_Device_list(mat deviceOption$)
+71000 def library fnHandHeldList(mat deviceName$; mat deviceOption$)
 71020   if ~setup then let fn_setup
-71040   fnHand_Held_Device_list=fn_Hand_Held_Device_list(mat deviceOption$)
+71040   fnHandHeldList=fn_handHeldList(mat deviceName$)
 71060 fnend
-72000 def fn_Hand_Held_Device_list(mat deviceOption$)
-72020   mat deviceOption$(0)
-72040   fnAddOneC(mat deviceOption$,'Aclara'           )
-72050   fnAddOneC(mat deviceOption$,'Aclara Work Order')
-72060   fnAddOneC(mat deviceOption$,'ACS Meter Reader' )
-72080   fnAddOneC(mat deviceOption$,'Badger'           )
-72100   fnAddOneC(mat deviceOption$,'Boson'            )
-72100   fnAddOneC(mat deviceOption$,'CSV by LocationID')
-72120   fnAddOneC(mat deviceOption$,'Itron FC300'      )
-72140   fnAddOneC(mat deviceOption$,'Master Meter'     )
-72160   fnAddOneC(mat deviceOption$,'READy Water'      )
-72180   fnAddOneC(mat deviceOption$,'Sensus'           )
-72220   ! r: developed but currently unused
-72240   ! fnAddOneC(mat deviceOption$,"Psion Workabout")
-72260   ! fnAddOneC(mat deviceOption$,"LapTop"         )
-72280   ! fnAddOneC(mat deviceOption$,"Green Tree"     )
-72300   ! fnAddOneC(mat deviceOption$,"Hersey"         )
-72320   ! fnAddOneC(mat deviceOption$,"EZReader"       )
-72340   ! fnAddOneC(mat deviceOption$,"AMR"            )
-72360   ! fnAddOneC(mat deviceOption$,"Unitech HT630"  )
-72380   ! /r
-72400 fnend
-74000 def fn_customerRead(; accountKey$) ! all values read are passed back as local variables
+72000 def fn_handHeldList(mat deviceName$; mat deviceOption$)
+72020   if ~hhlSetup then 
+72040     hhlSetup=1
+72060     dim deviceNameCache$(0)*20
+72080     dim deviceOptionCache$(0)*128
+72100     mat deviceNameCache$(0)
+72120     mat deviceOptionCache$(0)
+72140     fnAddOneC(mat deviceNameCache$,'Aclara'           ) : fnAddOneC(mat deviceOptionCache$,'')
+72160     fnAddOneC(mat deviceNameCache$,'Aclara Work Order') : fnAddOneC(mat deviceOptionCache$,'')
+72180     fnAddOneC(mat deviceNameCache$,'ACS Meter Reader' ) : fnAddOneC(mat deviceOptionCache$,'')
+72200     fnAddOneC(mat deviceNameCache$,'Badger'           ) : fnAddOneC(mat deviceOptionCache$,'')
+72220     fnAddOneC(mat deviceNameCache$,'Boson'            ) : fnAddOneC(mat deviceOptionCache$,'')
+72240     fnAddOneC(mat deviceNameCache$,'CSV by LocationID') : fnAddOneC(mat deviceOptionCache$,'ImportOnly')
+72260     fnAddOneC(mat deviceNameCache$,'Itron FC300'      ) : fnAddOneC(mat deviceOptionCache$,'')
+72280     fnAddOneC(mat deviceNameCache$,'Master Meter'     ) : fnAddOneC(mat deviceOptionCache$,'')
+72300     fnAddOneC(mat deviceNameCache$,'READy Water'      ) : fnAddOneC(mat deviceOptionCache$,'')
+72320     fnAddOneC(mat deviceNameCache$,'Sensus'           ) : fnAddOneC(mat deviceOptionCache$,'')
+72340     ! r: developed but currently unused
+72360     ! fnAddOneC(mat deviceNameCache$,"Psion Workabout") : fnAddOneC(mat deviceOptionCache$,'')
+72380     ! fnAddOneC(mat deviceNameCache$,"LapTop"         ) : fnAddOneC(mat deviceOptionCache$,'')
+72400     ! fnAddOneC(mat deviceNameCache$,"Green Tree"     ) : fnAddOneC(mat deviceOptionCache$,'')
+72420     ! fnAddOneC(mat deviceNameCache$,"Hersey"         ) : fnAddOneC(mat deviceOptionCache$,'')
+72440     ! fnAddOneC(mat deviceNameCache$,"EZReader"       ) : fnAddOneC(mat deviceOptionCache$,'')
+72460     ! fnAddOneC(mat deviceNameCache$,"AMR"            ) : fnAddOneC(mat deviceOptionCache$,'')
+72480     ! fnAddOneC(mat deviceNameCache$,"Unitech HT630"  ) : fnAddOneC(mat deviceOptionCache$,'')
+72500     ! /r
+72520   end if
+72540   mat deviceName$(udim(mat deviceNameCache$))
+72560   mat deviceName$=deviceNameCache$
+72580   !
+72600   DeviceOptionArrayPassed=0
+72620   on error goto HhlContinue
+72640   mat deviceOption$(1) 
+72660   deviceOption$(1)=rpt$('*',128)
+72670   on error goto ERTN
+72680   DeviceOptionArrayPassed=1
+72700   HhlContinue: !
+72720   if DeviceOptionArrayPassed then
+72740     mat deviceOption$(udim(mat deviceOptionCache$))
+72760     mat deviceOption$=deviceOptionCache$
+72780   end if
+72800 fnend
+74000 def fn_customerRead(; accountKey$,locationId) ! all values read are passed back as local variables
 74020   ! #h_customer_i1 and #h_customer_i5 are inherrited local variables
 74040   dim extra$(11)*30
 74060   crReturn=0
 74080   F_CUSTOMER: form pos 1,c 10,4*c 30,pos 143,7*pd 2,pos 1821,n 2,pos 217,15*pd 5,pos 131,c 12,pos 361,2*c 12,pos 1741,n 2,n 7,pos 1864,C 30,7*C 12,3*C 30,pos 1741,n 2,pos 354,c 7
-74100   if accountKey$='' then
+74100   if accountKey$='' then ! read Sequential
 74120     CrReadSequential: !
 74140     read #h_customer_i5,using F_CUSTOMER: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ eof CrEoF
 74160     if udim(mat filterAccount$)>0 and trim$(filterAccount$(1))<>'' then
@@ -1394,20 +1449,24 @@
 74200         goto CrReadSequential
 74220       end if
 74240     end if
-74260   else
-74280     read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
-74300   end if
-74320   crReturn=1
-74340   goto CrFinis
-74360   CrNoKey: ! r:
-74380     crReturn=-4272
-74400   goto CrFinis ! /r
-74420   CrEoF: ! r:
-74440     crReturn=-54
-74460   goto CrFinis ! /r
-74480   CrFinis: !
-74500   fn_customerRead=crReturn
-74520 fnend
+74260   else if locationId<>0 then
+74280     accountFromLocationId$=fnAccountFromLocationId$(locationId,1)
+74300     if accountFromLocationId$='' then goto CrEoF
+74320     read #h_customer_i1,using F_CUSTOMER,key=fnAccountFromLocationId$(locationId,1): z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
+74340   else
+74360     read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
+74380   end if
+74400   crReturn=1
+74420   goto CrFinis
+74440   CrNoKey: ! r:
+74460     crReturn=-4272
+74480   goto CrFinis ! /r
+74500   CrEoF: ! r:
+74520     crReturn=-54
+74540   goto CrFinis ! /r
+74560   CrFinis: !
+74580   fn_customerRead=crReturn
+74600 fnend
 76000 def fn_getFilterAccount(mat filterAccount$)
 76002   mat filterAccount$(0)
 76004   fnaddonec(mat filterAccount$,'100050.05')

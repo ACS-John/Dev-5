@@ -1062,9 +1062,9 @@
 74040       library 'S:\Core\Client.br': fnhand_held_device$
 74060       fnhand_held_device$=fnhand_held_device$
 74080     fnend
-74100     def library fnHand_Held_Device_list(mat device$)
-74120       library 'S:\Utility Billing\Hand Held\Create Hand Held File.br': fnHand_Held_Device_list
-74140       fnHand_Held_Device_list=fnHand_Held_Device_list(mat device$)
+74100     def library fnHandHeldList(mat device$; mat deviceOption$)
+74120       library 'S:\Utility Billing\Hand Held\Create Hand Held File.br': fnHandHeldList
+74140       fnHandHeldList=fnHandHeldList(mat device$, mat deviceOption$)
 74160     fnend
 74180     def library fnretrieve_hand_held_file
 74200       library 'S:\Utility Billing\Hand Held\Import from Hand Held to Book.br': fnretrieve_hand_held_file
