@@ -15,7 +15,7 @@
 00120   fnsetmonth(mat mo$)
 00130   fncno(cno)
 00160   dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
-00180   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative ioerr L190
+00180   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative ioerr L190
 00182   read #20,using "Form POS 1,10*C 20,10*c 2",rec=1: mat servicename$,mat srv$
 00184   close #20: 
 00190 L190: io1$(1)="10,34,c 45,UT,N"

@@ -44,12 +44,12 @@
 00430   se$(7)="1099 Type:"
 00440   se$(8)="Federal ID or SS #:"
 00450   gosub L3200
-00460   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L4750
-00470   open #11: "Name="&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\VNINDX2.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L4090
-00480 L480: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&str$(cno)&",Shr",internal,outin,relative ioerr L500
+00460   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L4750
+00470   open #11: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\VNINDX2.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L4090
+00480 L480: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",Shr",internal,outin,relative ioerr L500
 00490   goto L530
 00500 L500: close #2: ioerr L510
-00510 L510: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&str$(cno)&",RecL=64,Replace",internal,outin,relative 
+00510 L510: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",RecL=64,Replace",internal,outin,relative 
 00520   write #2,using L850,rec=1: "",0,0,"","",1
 00530 L530: pr newpage
 00540   if fnprocess=1 then ti=4 else goto MENU1
@@ -64,7 +64,7 @@
 00630 L630: open #102: "SROW=4,SCOL=20,EROW=12,ECOL=59,Border=Sr,Caption=<"&cap$,display,outin 
 00640   pr #102: newpage
 00650   pr #102,fields "1,1,Cc 41,R,N": cnam$
-00660   pr #102,fields "2,1,Cc 40,R,N": "Company Number "&str$(cno)
+00660   pr #102,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
 00670   pr #102,fields "4,1,Cc 40,R,N": "* * *   Warning   * * *"
 00680   pr #102,fields "5,1,Cc 40,N": "This selection will destroy all"
 00690   pr #102,fields "6,1,Cc 40,N": "existing records in the Vendor File."
@@ -75,13 +75,13 @@
 00740   if pas$><"ERASE" then goto L720
 00750   close #1: ioerr L760
 00760 L760: close #11: ioerr L770
-00770 L770: open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&str$(cno),internal,outin,keyed ioerr L790
+00770 L770: open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno'),internal,outin,keyed ioerr L790
 00780   close #1,free: ioerr L790
-00790 L790: open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&",RecL=127,Replace",internal,outin,relative ioerr L820
+00790 L790: open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",RecL=127,Replace",internal,outin,relative ioerr L820
 00800   close #2: ioerr L810
-00810 L810: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&str$(cno),internal,outin,relative ioerr L830
+00810 L810: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno'),internal,outin,relative ioerr L830
 00820 L820: close #2,free: ioerr L830
-00830 L830: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&str$(cno)&",RecL=64,Replace",internal,outin,relative ioerr L840
+00830 L830: open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",RecL=64,Replace",internal,outin,relative ioerr L840
 00840 L840: write #2,using L850,rec=1: "",0,0,"","",1
 00850 L850: form pos 1,c 8,n 6,pd 5.2,c 12,c 30,pd 3
 00860   new1=1
@@ -216,7 +216,7 @@
 02150 L2150: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,Border=SR,Caption=<"&cap$,display,outin 
 02160   pr #101: newpage
 02170   pr f "08,18,Cc 41,R,N": cnam$
-02180   pr f "09,18,Cc 41,R,N": "Company Number "&str$(cno)
+02180   pr f "09,18,Cc 41,R,N": "Company Number "&env$('cno')
 02190   pr f "11,18,Cc 41,N": "Printing..."
 02200   pr f "13,34,C 11,B,5": "Cancel (F5)"
 02210   on fkey 5 goto L2560
@@ -264,8 +264,8 @@
 02630   if new1=1 then goto L2650
 02640   if ti=0 and i2=0 then goto XIT
 02650 L2650: close #11: ioerr L2660
-02660 L2660: execute "Index "&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&' '&env$('Q')&"\GLmstr\GL109IDX.h"&str$(cno)&" 1 8 Replace DupKeys -n"
-02670   execute "Index "&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&' '&env$('Q')&"\GLmstr\VNINDX2.h"&str$(cno)&" 9 25 Replace DupKeys -n"
+02660 L2660: execute "Index "&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&' '&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno')&" 1 8 Replace DupKeys -n"
+02670   execute "Index "&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&' '&env$('Q')&"\GLmstr\VNINDX2.h"&env$('cno')&" 9 25 Replace DupKeys -n"
 02680   if i2=1 then goto L2690 else goto XIT
 02690 L2690: fnchain("S:\acsGL\GLBld109")
 02700   goto L2710
@@ -358,7 +358,7 @@
 03570 L3570: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=SR,CAPTION=<"&cap$,display,outin 
 03580   pr #101: newpage
 03590   pr #101,fields "1,1,Cc 41,R,N": cnam$
-03600   pr #101,fields "2,1,Cc 41,R,N": "Company Number "&str$(cno)
+03600   pr #101,fields "2,1,Cc 41,R,N": "Company Number "&env$('cno')
 03610   pr #101,fields "4,1,Cc 41,N": "Printing..."
 03620   pr f "13,34,C 11,B,5": "Cancel (F5)"
 03630   on fkey 5 goto L2560
@@ -409,9 +409,9 @@
 04080 L4080: if ti=3 then goto L1420 else goto L900
 04090 L4090: close #1: ioerr L4100
 04100 L4100: close #11: ioerr L4110
-04110 L4110: execute "Index "&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&' '&env$('Q')&"\GLmstr\VNINDX2.h"&str$(cno)&" 9 25 Replace DupKeys -n"
-04120   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&str$(cno)&",Shr",internal,outin,keyed 
-04130   open #11: "Name="&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\VNINDX2.h"&str$(cno)&",Shr",internal,outin,keyed 
+04110 L4110: execute "Index "&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&' '&env$('Q')&"\GLmstr\VNINDX2.h"&env$('cno')&" 9 25 Replace DupKeys -n"
+04120   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno')&",Shr",internal,outin,keyed 
+04130   open #11: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\VNINDX2.h"&env$('cno')&",Shr",internal,outin,keyed 
 04140   goto L480
 04150 ! SEARCH  VENDOR FILE
 04160   pr newpage

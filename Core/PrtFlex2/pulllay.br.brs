@@ -1,6 +1,6 @@
 00010 ! Replace Core\PrtFlex\PullLay
 00020 ! ______________________________________________________________________
-00030   library 'Core\Library': fnerror,fnsetmonth,fncno
+00030   library 'Core\Library': fnerror,fnsetmonth
 00040 ! This program will read a standard ACS layout and pull the data names for use in the user designed grid features of any ACS system
 00050 ! to create your own file instead of using this program, store the description,variable name,field length,# of deciaml points, format (example:  Customer Name,Variable Name,30,0,C)   Form POS 1,C 30,C 20,N 4,N 2,C 11
 00060 ! if you create the display file, as just described, create a folder under your program folder called GRID; a subfolder such as CUSTOMER which will be referred to in the grid program as the data base you are using.  You can have any number of these subfolders (actually one for each file you are allowing them to access with the grid programs.
@@ -10,11 +10,9 @@
 00100   dim a(200,6),a$*132,prg$*20,mo$(12),outputfile$*50,ev$*50
 00110   dim servicename$(10)*20,servicecode$(10)*2,textfile$*87,abbrev$*30
 00120   fnsetmonth(mat mo$)
-00130   fncno(cno)
 00140 ! 
 00150   dat$=mo$(val(date$(4:5)))&" "&date$(7:8)&",19"&date$(1:2)
-00160   cvp$=".h"&str$(cno)&"/acspb,Shr"
-00170   open #20: "Name=UBData\Service.h"&str$(cno)&",Shr",internal,input,relative ioerr L180 !:
+00170   open #20: "Name=UBData\Service.h"&env$('cno')&",Shr",internal,input,relative ioerr L180 !:
         read #20,using "Form POS 1,10*C 20",rec=1: mat servicename$ !:
         close #20: 
 00180 L180: io1$(1)="10,34,c 45,UT,N" !:

@@ -11,7 +11,7 @@
 10100 ! ______________________________________________________________________
 10110   fncno(cno,cnam$)
 10120   fnLastBillingDate(d1)
-10130   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
+10130   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input 
 10140   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 10150   close #21: 
 10160   at$(1)=cnam$
@@ -26,8 +26,8 @@
 10250     at$(j)=rpt$(" ",int(y/2))&at$(j)
 10260   next j
 10270   linelength=62
-10280   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in account order
-10290   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence
+10280   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in account order
+10290   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence
 10300 ! ______________________________________________________________________
 10310 SCREEN1: ! 
 10320   a$="" : prtbkno=0
@@ -50,7 +50,7 @@
 10490   fntxt(4,pf,8,8,1,"1")
 10500   resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 10510   fnlbl(5,1,"Starting Route/Sequence:",ll,1)
-10520   fncombof("ubm-act-nam",5,pf,40,env$('Q')&"\UBmstr\Customer.h"&str$(cno),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&str$(cno),2)
+10520   fncombof("ubm-act-nam",5,pf,40,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&env$('cno'),2)
 10530   resp$(respc+=1)="[All]"
 10540   fnlbl(6,1,"Route Number:",ll,1)
 10550   fncmbrt2(6,pf)
@@ -84,7 +84,7 @@
 10830   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 10840   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 10850 ! ______________________________________________________________________
-10860   open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+10860   open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 10870   fnPa_open("Landscape")
 10890 ! ______________________________________________________________________
 10900 ! IF SL1=0 THEN GOSUB SORT1
@@ -164,7 +164,7 @@
 11640   goto HERE
 11650 ! ______________________________________________________________________
 11660 SORT1: ! SELECT & SORT
-11670   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1410
+11670   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1410
 11680   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
 11690   s5=1
 11700   if prtbkno=0 then routekey$="" else routekey$=cnvrt$("N 2",prtbkno)&"       " ! key off first record in route (route # no longer part of customer #)

@@ -20,11 +20,11 @@
 00210   se$(3)="TOTAL HOURS - YTD"
 00220   se$(4)="STANDARD FEES - YTD"
 00230   gosub L1780
-00240   open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&str$(cno)&",Shr",internal,outin,keyed ioerr L2000
+00240   open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno')&",Shr",internal,outin,keyed ioerr L2000
 00250   goto L260
 00260 L260: pr newpage
 00270   pr f "3,9,c 55,N": "SERVICE CODE MASTER FILE"
-00280   pr f "4,6,C 72,N": "COMPANY NUMBER "&str$(cno)&"  "&ltrm$(cnam$)
+00280   pr f "4,6,C 72,N": "COMPANY NUMBER "&env$('cno')&"  "&ltrm$(cnam$)
 00290   pr f "6,9,c 55,n": "1 = INITIAL FILE PREPARATION"
 00300   pr f "7,9,c 55,n": "2 = ADD NEW RECORDS"
 00310   pr f "8,9,c 55,n": "3 = FILE MAINTENANCE / INQUIRY"
@@ -49,9 +49,9 @@
 00500   if uprc$(a$)="THINK" then goto L510 else goto L260
 00510 L510: i2=1
 00520   close #1: ioerr L530
-00530 L530: open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&str$(cno),internal,outin,keyed ioerr L550
+00530 L530: open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno'),internal,outin,keyed ioerr L550
 00540   close #1,free: ioerr L550
-00550 L550: open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&",SIZE=0,RecL=43,NoShr",internal,outin,relative ioerr L2010
+00550 L550: open #1: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",SIZE=0,RecL=43,NoShr",internal,outin,relative ioerr L2010
 00560   goto L1700
 00570 L570: form pos 1,c 4,c 30,pd 4.2,pd 5.2
 00580 L580: new1=1
@@ -169,7 +169,7 @@
 01700 L1700: close #1: 
 01710   if new1=1 then goto L1730
 01720   if ti=0 and i2=0 then goto XIT
-01730 L1730: execute "Index "&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&' '&env$('Q')&"\TMmstr\SCIndex.H"&str$(cno)&" 1 4 REPLACE DupKeys"
+01730 L1730: execute "Index "&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&' '&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno')&" 1 4 REPLACE DupKeys"
 01740   if i2=1 then chain "S:\acsTM\SVMAINT"
 01750   if t1=0 then goto L1770
 01760   chain "S:\acsTM\SVMAINT"

@@ -19,14 +19,14 @@
 00190   pr f "13,18,Cc 44,R,N": "Do Not Stop"
 00200   pause 
 00210 ! 
-00220   execute "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",X -D -189"
-00230   execute "Free "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
-00240   execute "Copy X "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
-00250   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx1.H"&str$(cno)&",1,8,Replace,DupKeys"
-00260   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx2.H"&str$(cno)&",9,28,Replace,DupKeys"
+00220   execute "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",X -D -189"
+00230   execute "Free "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
+00240   execute "Copy X "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
+00250   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&","&env$('Q')&"\CLmstr\PayIndx1.H"&env$('cno')&",1,8,Replace,DupKeys"
+00260   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&","&env$('Q')&"\CLmstr\PayIndx2.H"&env$('cno')&",9,28,Replace,DupKeys"
 00270 ! ________________________________________________________________
 00280   gosub WIN
-00290   pr f "11,19,Cc 42,N": "Conversion Completed for Company Number "&str$(cno)
+00290   pr f "11,19,Cc 42,N": "Conversion Completed for Company Number "&env$('cno')
 00300   pr f "13,18,Cc 44,R,N": "Enter: Continue to Next Company  F5: Stop"
 00310   input fields "12,18,C 1,AE,N": pause$
 00320   if cmdkey=5 then goto DONE

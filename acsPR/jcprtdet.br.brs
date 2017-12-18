@@ -19,7 +19,7 @@
 00180   prtjob$="N" : prtdet$="N" : sumcat$="N" : sumjob$="N" !:
         prtpag$="N" ! setup defaults to answers (also used by fnprocess=1)
 00190 ! ______________________________________________________________________
-00200   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00200   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00210   for j=1 to 100
 00220     read #1,using 'Form POS 1,C 3,C 30': dcode$(j),desc$(100) eof L250
 00230     desc$(val(dcode$(j)))=desc$(100) conv L240
@@ -27,12 +27,12 @@
 00250 L250: close #1: 
 00260   desc$(100)="Unassigned"
 00270 ! ______________________________________________________________________
-00280   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00280   open #20: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  !:
         read #20,using 'Form POS 1,C 40,POS 746,2*C 6',rec=1: cnam$,mat npj$ !:
         close #20: 
-00290   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
-00300   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
-00310   open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",Shr",internal,input,relative 
+00290   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00300   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00310   open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,input,relative 
 00320 ! ______________________________________________________________________
 00330   pr newpage
 00340   if fnprocess=1 then goto L640
@@ -84,7 +84,7 @@
 00790 ! ______________________________________________________________________
 00800 L800: k=k-1
 00810 L810: pr newpage
-00820   fnwait(103,cap$,message$="Printing: please wait...",1)
+00820   fnwait(message$="Printing: please wait...",1)
 00830   on fkey 5 goto DONE
 00840   fnopenprn
 00850 L850: if prtjob$="Y" then goto L940

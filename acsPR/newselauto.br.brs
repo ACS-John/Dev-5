@@ -14,7 +14,7 @@
 00140 ! ______________________________________________________________________
 00150   fntop(program$,cap$="Select Auto Processing Programs")
 00160   fncno(cno)
-00170   open #1: "Name="&env$('Q')&"\PRmstr\NewPrPgmn.h"&str$(cno)&",Use,RecL=61",internal,outin,relative ioerr MAIN
+00170   open #1: "Name="&env$('Q')&"\PRmstr\NewPrPgmn.h"&env$('cno')&",Use,RecL=61",internal,outin,relative ioerr MAIN
 00180   for j=1 to lrec(1)
 00190     read #1,using L810: nxtpgm$(j),nxtdesc$(j),wk(j),mo(j),qt(j) norec L200
 00200 L200: next j
@@ -73,7 +73,7 @@
           mat wk=(0) !:
           mat mo=(0) !:
           mat qt=(0) !:
-          execute "drop "&env$('Q')&"\PRmstr\NewPrPgmn.h"&str$(cno)&" -n" !:
+          execute "drop "&env$('Q')&"\PRmstr\NewPrPgmn.h"&env$('cno')&" -n" !:
           goto MAIN
 00630 L630: sel=val(resp$(81))
 00640   x=0
@@ -88,9 +88,9 @@
 00730     if trim$(nxtdesc$(j))="" then nxtdesc$(j)=nam$(sel): nxtpgm$(j)=prg$(sel): goto L750
 00740 L740: next j
 00750 L750: if ckey=1 then goto L240
-00760   execute "drop "&env$('Q')&"\PRmstr\NewPrPgmn.h"&str$(cno)&" -n"
+00760   execute "drop "&env$('Q')&"\PRmstr\NewPrPgmn.h"&env$('cno')&" -n"
 00770   close #1: ioerr L780
-00780 L780: open #1: "Name="&env$('Q')&"\PRmstr\NewPRPgmn.h"&str$(cno)&",Use,RecL=61",internal,outin,relative 
+00780 L780: open #1: "Name="&env$('Q')&"\PRmstr\NewPRPgmn.h"&env$('cno')&",Use,RecL=61",internal,outin,relative 
 00790   for j1=1 to 20 !:
           if j1>lrec(3) then write #1,using L810: nxtpgm$(j1),nxtdesc$(j1),wk(j1),mo(j1),qt(j1)
 00800   next j1

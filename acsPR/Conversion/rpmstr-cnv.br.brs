@@ -11,10 +11,10 @@
 00100 L100: input fields "10,55,N 5,UE,N": cno conv L100
 00110   if cno=0 then goto XIT
 00120 ! 
-00130   execute "Copy "&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&" X -196 -n"
-00140   execute "Copy X "&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&" -D -n"
-00150   execute "Index "&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&' '&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno)&" 1 8 Replace DupKeys -n"
-00160   execute "Index "&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&' '&env$('Q')&"\PRmstr\RPINDX2.h"&str$(cno)&" 9 30 Replace DupKeys -n"
+00130   execute "Copy "&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&" X -196 -n"
+00140   execute "Copy X "&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&" -D -n"
+00150   execute "Index "&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&' '&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&" 1 8 Replace DupKeys -n"
+00160   execute "Index "&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&' '&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno')&" 9 30 Replace DupKeys -n"
 00170   goto L70
 00180 ! ______________________________________________________________________
 00190 ! <updateable region: ertn>

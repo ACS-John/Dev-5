@@ -26,14 +26,14 @@
 20500   if ck=cancel then goto XIT
 20520   rd1=val(resp$(1))
 20540   rd1=fndate_mmddyy_to_ccyymmdd(rd1)
-20560   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
+20560   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
 20580 READ_TRANS: ! 
 20600   read #h_trans,using 'Form POS 1,C 10,N 8,N 1,PD 4.2': p$,tdate,tcode,tamount eof END1
 20620   if tdate<rd1 then delete #h_trans: 
 20640   goto READ_TRANS
 20660 END1: ! 
 20680   close #h_trans: 
-20700   execute "Index "&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&' '&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&" 1 19 Replace DupKeys -n"
+20700   execute "Index "&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&' '&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&" 1 19 Replace DupKeys -n"
 20720   goto XIT
 20740 ! ______________________________________________________________________
 20760 XIT: fnxit

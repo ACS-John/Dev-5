@@ -407,6 +407,7 @@
 45060 fnend
 45080 def fn_setQ(setQ$*256)
 45100   setQ$=rtrm$(setQ$,'\')
+45110   if pos(setQ$,' ')>0 then setQ$=fnshortpath$(setQ$)
 45120   setenv('Q',setQ$)
 45140   execute 'config substitute [Q] "'&env$('Q')&'"'
 45160   if env$('acsDeveloper')='' then 
@@ -422,6 +423,7 @@
 46000 def fn_setQBase(newQBase$*256)
 46020   if env$('QBase')='' then
 46030     newQBase$=rtrm$(newQBase$,'\')
+46032     if pos(newQBase$,' ')>0 then newQBase$=fnshortpath$(newQBase$)
 46040     setenv('QBase',newQBase$)
 46060     exe 'config substitute [QBase] '&env$('QBase') 
 46300   end if

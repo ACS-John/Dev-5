@@ -9,8 +9,8 @@
 00090 ! ______________________________________________________________________
 00100   fncno(cno,cnam$)
 00110 ! 
-00120   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L440
-00130   open #2: "Name="&env$('Q')&"\GLmstr\gltr1099.h"&str$(cno),internal,outin,relative 
+00120   open #1: "Name="&env$('Q')&"\GLmstr\GL1099.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GL109IDX.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L440
+00130   open #2: "Name="&env$('Q')&"\GLmstr\gltr1099.h"&env$('cno'),internal,outin,relative 
 00140   pr newpage
 00150 SCR1: ! 
 00160   fntos(sn$="Glzer109") !:
@@ -43,9 +43,9 @@
 00380   if x<lastdate then delete #2,rec=rec(2): 
 00390   goto L370
 00400 L400: close #2: 
-00410   execute "Copy "&env$('Q')&"\GLmstr\gltr1099.h"&str$(cno) & " x -D"
-00420   execute "Copy X "&env$('Q')&"\GLmstr\gltr1099.h"&str$(cno)
-00430   execute "Index "&env$('Q')&"\GLmstr\gltr1099.H"&str$(cno)&' '&env$('Q')&"\GLmstr\gltridx1.H"&str$(cno)&" 1 8 Replace DupKeys -N"
+00410   execute "Copy "&env$('Q')&"\GLmstr\gltr1099.h"&env$('cno') & " x -D"
+00420   execute "Copy X "&env$('Q')&"\GLmstr\gltr1099.h"&env$('cno')
+00430   execute "Index "&env$('Q')&"\GLmstr\gltr1099.H"&env$('cno')&' '&env$('Q')&"\GLmstr\gltridx1.H"&env$('cno')&" 1 8 Replace DupKeys -N"
 00440 L440: if fnprocess=1 then let fnchain("S:\acsGL\acglAuto")
 00450 XIT: fnxit
 00460 ! ______________________________________________________________________

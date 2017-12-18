@@ -6,7 +6,7 @@
 00070   input fields "10,51,N 2,UE,N": cno
 00080   if cno=0 then stop 
 00082 ! 
-00090   execute "Copy "&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)&" X -80"
-00100   execute "Free "&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)
-00110   execute "Copy X "&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)
+00090   execute "Copy "&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno')&" X -80"
+00100   execute "Free "&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno')
+00110   execute "Copy X "&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno')
 00120   goto L30

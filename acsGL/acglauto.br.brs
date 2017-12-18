@@ -10,7 +10,7 @@
 00100 L100: if fnprocess=0 then goto XIT
 00110 ! ______________________________________________________________________
 00120   pgnum=fnpgnum
-00130   open #20: "Name="&env$('Q')&"\GLmstr\ACGLPGMN.h"&str$(cno)&",Shr",internal,input,relative ioerr MSGBOX1 !:
+00130   open #20: "Name="&env$('Q')&"\GLmstr\ACGLPGMN.h"&env$('cno')&",Shr",internal,input,relative ioerr MSGBOX1 !:
         read #20,using 'Form POS 1,C 35,POS 71,N 3,x 1,2*N 1',rec=pgnum+=1: prg$,pn,ps,srq eof XIT,norec XIT !:
         close #20: 
 00140   if rtrm$(prg$)="" then goto L220
@@ -20,7 +20,7 @@
 00180 MSGBOX1: ! 
 00190   mat ml$(3) !:
         ml$(1)="The order for automatic processing has" !:
-        ml$(2)="never been set for company # "&str$(cno)&"." !:
+        ml$(2)="never been set for company # "&env$('cno')&"." !:
         ml$(3)="Click OK to skip this company." !:
         fnmsgbox(mat ml$,resp$,cap$,49)
 00200   goto L220

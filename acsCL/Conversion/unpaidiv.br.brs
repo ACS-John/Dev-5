@@ -8,7 +8,7 @@
 00080   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00090   if cno=0 then stop 
 00100 ! 
-00110   open #1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&",Shr",internal,outin,relative 
+00110   open #1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",Shr",internal,outin,relative 
 00120 L120: read #1,using L130: vn$,iv$,mat up$,upa,pcde,bank_code,ckn,cp,mat aa,gde eof END1
 00130 L130: form pos 1,c 8,c 12,g 6,g 6,c 12,c 18,n 10.2,n 1,n 2,g 8,g 6,2*pd 3,n 1
 00140   dat=val(up$(1)) conv L120

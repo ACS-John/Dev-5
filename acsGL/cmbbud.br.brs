@@ -8,7 +8,7 @@
 00080     dim ln$*200,options$(50)*200
 00090 ! ______________________________________________________________________
 00100     fncno(cno)
-00110     execute "Dir "&env$('Q')&"\GLmstr\budget*.H"&str$(cno)&" >FlexWork.tmp" ! Ioerr 271
+00110     execute "Dir "&env$('Q')&"\GLmstr\budget*.H"&env$('cno')&" >FlexWork.tmp" ! Ioerr 271
 00120 L120: linput #13: ln$ eof L170
 00130     x=pos(ln$,"<DIR>",1)
 00140     if x>0 and ln$(1:1)<>"." then goto L150 else goto L120
@@ -18,7 +18,7 @@
 00180     pause 
 00190     if j<=0 then j=1
 00200     mat options$(j)
-00210     fen$="CBud.h"&str$(cno)
+00210     fen$="CBud.h"&env$('cno')
 00220     fncomboa(fen$,1,1,mat option$,"Select from the list of budget files. To add a new budget file, take the Add option.",20,container)
 00230     goto XIT
 00240 ! ______________________________________________________________________

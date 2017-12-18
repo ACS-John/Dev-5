@@ -137,7 +137,7 @@
 01150 L2_PRINT: ! 
 01160     if uprc$(linestyle$(5))="BAR" then goto BARCODE_PRINT
 01170     fnopenprn
-01180     fnwait(win,cap$,"Printing: Please wait...",1)
+01180     fnwait("Printing: Please wait...",1)
 01190     if top_marg>0 then !:
             pr #255,using "Form POS 1,C 1,SKIP "&str$(top_marg): ""
 01200     for x=1 to 10
@@ -193,7 +193,7 @@
 01630 ! ______________________________________________________________________
 01640 L1: ! 
 01650     fnopenprn
-01660     fnwait(win,cap$,"Printing: Please wait...",1)
+01660     fnwait("Printing: Please wait...",1)
 01670     gosub OPEN_LABEL_WSID
 01680 L1_NEXT: ! 
 01690     read #88,using "Form POS 1,5*C 120": mat labeltext$ eof L1_DONE

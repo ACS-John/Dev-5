@@ -10,7 +10,7 @@
 00100 ! x$=account #     !:
           ! to extract the flexgrid information (master file)
 00104     fncno(cno)
-00105     open #file_num:=fngethandle: "Name="&env$('Q')&"\PRmstr\Rpmstr.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\rpIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr ERTN
+00105     open #file_num:=fngethandle: "Name="&env$('Q')&"\PRmstr\Rpmstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\rpIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 00110 ! ______________________________________________________________________
 00120     restore #file_num: 
 00130     fntos(sn$="CustomerSrch")

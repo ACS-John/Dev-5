@@ -18,15 +18,15 @@
 00180   fndat(dat$,1)
 00190 ! 
 00200   fntop("S:\acsUB\UBbargraph",cap$="Bar Graph")
-00210   open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno),internal,input  !:
+00210   open #1: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno'),internal,input  !:
         read #1,using "Form POS 121,N 6": d1 ioerr L230 !:
         close #1: 
 00220   magicdate=fndate_mmddyy_to_ccyymmdd(d1)-20000 ! don't start with anything older that two years ago
-00230 L230: open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative  !:
+00230 L230: open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative  !:
         read #20,using "Form POS 1,10*C 20,10*c 2",rec=1: mat servicename$,mat srv$ !:
         close #20: 
-00240   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,input,keyed 
-00250   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+00240   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00250   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00260 L260: read #1,using L990,release: z$,e$,bildat eof SCREEN1
 00265   if bildat<>d1 then goto L260 ! current customer
 00270   restore #2,key>=z$&"         ": nokey L260

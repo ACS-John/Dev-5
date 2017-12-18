@@ -20,21 +20,21 @@
 00190   if response$(1)="N" then goto XIT
 00200 ! ______________________________________________________________________
 00210   pr newpage
-00220   fnwait(101,cap$,message$="Zeroing: please wait...",0)
+00220   fnwait(message$="Zeroing: please wait...",0)
 00230 ! ______________________________________________________________________
-00240   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input,relative 
+00240   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input,relative 
 00250   read #1,using L260,rec=1: kt
 00260 L260: form pos 745,n 1
 00270   close #1: 
 00280   if kt=1 then goto L360
 00290 ! ______________________________________________________________________
-00300   open #1: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno),internal,output 
+00300   open #1: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno'),internal,output 
 00310   restore #1: 
 00320   write #1,using L330: " "," ",mat tr," ",1
 00330 L330: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
 00340   close #1: 
 00350 ! ______________________________________________________________________
-00360 L360: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno),internal,outin,keyed 
+00360 L360: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno'),internal,outin,keyed 
 00370   if kt=0 then goto L430
 00380 L380: read #2,using L400: a1,a2,a3 eof DONE
 00390   rewrite #2,using L400: 0,0,0

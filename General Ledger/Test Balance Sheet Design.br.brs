@@ -1,33 +1,25 @@
-00010 ! Replace S:\acsGL\BalanceSheet
-00020 ! Balance Sheet !:
-        ! Standard 8.5x11
+00010 ! formerly S:\acsGL\BalanceSheetTest
+00020 ! Balance Sheet - Standard 8.5x11
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnglfs,fnpglen,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnactpd,fnactpd$
+00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnglfs,fnpglen,fntos,fnlbl,fntxt,fncmdkey,fnacs
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   dim fl1$*256,cap$*128
 00080   dim b$*3,a$(8)*30,oldtrans$*16,g(8),d(2),by(13),bp(13)
 00090   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00100 ! ______________________________________________________________________
-00110   fntop(program$,cap$="Balance Sheet")
-00134   actpd$=fnactpd$ 
-00135   actpd=fnactpd
-00136   fnfscode(actpd)
-00137   fnpriorcd
-00140   if fnglfs=5 then goto XIT !:
-          ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00146   fnfscode
-00147   fnpriorcd
-00150   if fnps=2 then mp1=66 !:
-          fl1$="Name="&env$('Q')&"\GLmstr\acglFnSC.h"&env$('cno') !:
-          fl1$=fl1$&",KFName="&env$('Q')&"\GLmstr\fnSCIndx.h"&env$('cno')&",Shr" else !:
-          mp1=63 !:
-          fl1$="Name="&env$('Q')&"\GLmstr\acglFnSB.h"&env$('cno') !:
-          fl1$=fl1$&",KFName="&env$('Q')&"\GLmstr\FNSBIndx.h"&env$('cno')&",Shr"
-00160   open #1: fl1$,internal,input,keyed 
-00170   if fnprocess=1 or fnUseDeptNo=0 then goto L280 else goto L190
+00110   fntop(program$)
+00140   if fnglfs=5 then goto XIT           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+00150   if fnps=2 then 
+00151     mp1=66
+00152     open #1:"Name="&env$('Q')&"\GLmstr\acglFnSC.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fnSCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00153   else
+00154     mp1=63
+00155     open #1:"Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSBIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00156   end if
+00170   if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1 
 00180 ! ______________________________________________________________________
-00190 L190: fntos(sn$="GLInput") !:
+00190 Screen1: ! r:
+00192   fntos(sn$="GLInput") !:
         mylen=30: mypos=mylen+3 : right=1
 00200   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
 00210   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
@@ -37,8 +29,9 @@
 00240   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
 00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
-00270   costcntr=val(resp$(1))
-00280 L280: if fnps=2 then goto L310 ! secondary
+00270   costcntr=val(resp$(1)) 
+00282 goto GetStarted ! /r
+00280 GetStarted: if fnps=2 then goto L310 ! secondary
 00290   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\fsindex.H"&env$('cno')&" 63 3 Replace DupKeys -N"
 00300   goto L320
 00310 L310: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\fsindex.H"&env$('cno')&" 66 3 Replace DupKeys -N"
@@ -67,10 +60,11 @@
 00540 L540: ! read general ledger master file for amounts
 00550   form pd 3
 00560 L560: read #3,using 'Form POS MP1,PD 3,POS 87,27*PD 6.2': br,cb,mat by,mat bp eof L650
+00565   cb=1
 00570   if br=0 then goto L560
-00580   if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto L610
+00580   if fnfscode=0 then goto L610
 00590   if fnfscode<1 or fnfscode>12 then let fnfscode(1)
-00600   if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
+00600 ! If FNPRIORCD=1 Then cB=BY(FNFSCODE) Else cB=BP(FNFSCODE)
 00610 L610: if br=val(r$) then total=total+cb else goto L630
 00620   goto L540
 00630 L630: if br<val(r$) then goto L540
@@ -169,20 +163,18 @@
 01490 L1490: form skip 1,c 1,skip 0
 01500   return 
 01510 ! ______________________________________________________________________
-01520 HEADER: ! 
+01520 HEADER: ! r:
 01530   heading=1
 01540   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01543   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01544   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
 01545   pr #255: "\qc  {\f181 \fs16 \b "&trim$(fnpedat$)&"}"
 01546   pr #255: "\ql "
-01590   return 
+01590   return ! /r
 01600 ! ______________________________________________________________________
 01610 DONE: ! 
 01620   eofcode=1
 01630   gosub L1220
-01634   fnfscode(actpd)
-01635   fnpriorcd(1)
 01640   if pors<>2 then let fncloseprn
 01650   goto XIT
 01660 ! ______________________________________________________________________

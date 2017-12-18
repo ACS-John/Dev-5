@@ -11,9 +11,9 @@
 00110 L110: input fields "10,43,N 5,UE,N": cno conv L110
 00120   if cmdkey=5 then goto XIT
 00130 ! 
-00140   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&str$(cno)&",SIZE=0,RecL=150,Replace",internal,output 
+00140   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",SIZE=0,RecL=150,Replace",internal,output 
 00150   close #4: 
-00160   execute "Index "&env$('Q')&"\PRmstr\PRCkHist.h"&str$(cno)&' '&env$('Q')&"\PRmstr\PRCKINDX.h"&str$(cno)&" 1 14 Replace DupKeys -n"
+00160   execute "Index "&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&' '&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&" 1 14 Replace DupKeys -n"
 00170   goto L70
 00180 ! ______________________________________________________________________
 00190 ! <Updateable Region: ERTN>

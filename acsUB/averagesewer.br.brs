@@ -26,7 +26,7 @@
 00260 ! ______________________________________________________________________
 00270 STARTREPORT: ! 
 00280 ! maybe a printing please wait screen here would be nice.
-00290   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00290   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00300   fnopenprn
 00310   gosub HEADER
 00320   goto REPORT
@@ -37,7 +37,7 @@
 00370   form pos 1,cc 26,cc 26,cc 26,skip 1
 00380 L380: form pos 1,cc 10,x 1,cc 30,x 1,cc 10,x 1,cc 17,x 1,cc 10,skip 1
 00390   pr #255,using L360: "",cap$,""
-00400   pr #255,using L360: "Company Number "&str$(cno),cnam$,"Page "&str$(pg)
+00400   pr #255,using L360: "Company Number "&env$('cno'),cnam$,"Page "&str$(pg)
 00410   pr #255: ""
 00420   pr #255: ""
 00430   pr #255,using L380: "Act.Number","Customer Name","Balance","Last Billing Date","Average"

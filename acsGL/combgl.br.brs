@@ -50,7 +50,7 @@
 00360   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&str$(dcno)&"",internal,output 
 00370   goto MAIN
 00380 ! ______________________________________________________________________
-00390 L390: open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,input,keyed ioerr MAIN
+00390 L390: open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,input,keyed ioerr MAIN
 00400 L400: read #2,using 'Form POS 1,C 416': a$ eof L430
 00410   write #1,using 'Form POS 1,C 416': a$
 00420   goto L400

@@ -108,7 +108,7 @@
 01120   pr newpage
 01130   win=101
 01140   message$=""
-01150   stopable=1: gosub L3370 ! fnWAIT(WIN,CAP$,MESSAGE$,1)
+01150   stopable=1: gosub L3370 ! fnWAIT(MESSAGE$,1)
 01160 ! ______________________________________________________________________
 01170   open #1: "Name="&env$('Q')&"\GLmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\RPIndex.h"&env$('cno')&",SHR",internal,input,keyed 
 01180   open #2: "Name="&env$('Q')&"\GLmstr\RPTrail.h"&env$('cno')&",SHR",internal,input,relative 
@@ -356,7 +356,7 @@
 03340   if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr f "24,1,C 7,N": bell$ : goto L3230
 03350   close #104: ioerr L3360
 03360 L3360: return  ! Fnend
-03370 L3370: ! Def Library FNWAIT(WIN,&CAP$,&MESSAGE$,STOPABLE)
+03370 L3370: ! Def Library FNWAIT(&MESSAGE$,STOPABLE)
 03380 ! if stopable=1 will display "Cancel (F5)" button
 03390 ! win = window number
 03410   close #win: ioerr L3420

@@ -135,7 +135,7 @@
 01340   pr newpage
 01350   win=101
 01360   message$=""
-01370   stopable=1: gosub L3970 ! fnWAIT(WIN,CAP$,MESSAGE$,1)
+01370   stopable=1: gosub L3970 ! fnWAIT(MESSAGE$,1)
 01380 ! ______________________________________________________________________
 01390   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 01400 L1400: open #22: "Name=W2REPORT,RecL=512,eol=crlf,replace",display,output 
@@ -414,7 +414,7 @@
 03940   close #104: ioerr L3950
 03950 L3950: return  ! Fnend
 03960 ! ______________________________________________________________________
-03970 L3970: ! Def Library FNWAIT(WIN,&CAP$,&MESSAGE$,STOPABLE)
+03970 L3970: ! Def Library FNWAIT(&MESSAGE$,STOPABLE)
 03980 ! if stopable=1 will display "Cancel (F5)" button
 03990 ! win = window number
 04040   close #win: ioerr ignore

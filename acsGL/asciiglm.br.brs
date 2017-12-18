@@ -22,7 +22,7 @@
 00200   if ckey=5 then goto XIT
 00210   fl$=trim$(resp$(1))
 00220   open #2: "Name="&fl$&",RecL=79,EOL=CRLF,Replace",external,output 
-00230   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno),internal,input,keyed 
+00230   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno'),internal,input,keyed 
 00240 L240: read #1,using 'Form POS 1,C 12,C 50,POS 87,PD 6.2': gl$,de$,cb eof XIT
 00250   write #2,using 'Form POS 1,C 12,X 2,C 50,N 12.2,c 2': gl$,de$,cb,crlf$
 00260   goto L240

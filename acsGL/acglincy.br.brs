@@ -24,15 +24,15 @@
 00240 ! 
 00250   if fnglfs=5 then goto XIT !:
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00260   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative  !:
+00260   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
-00270   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20: 
+00270   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #20,using "Form pos 296,N 2",rec=1: lmu : close #20: 
 00280 ! ______________________________________________________________________
 00290   pors=1
 00300   mp1=69
 00310   if fnps=2 then mp1=mp1+3
-00320   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
-00330   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
+00320   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr"
+00330   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&env$('cno')&",Shr"
 00340   form c 9,skip 0
 00350 L350: form pos mp1,pd 3,pos 81,41*pd 6.2
 00360   form c 7,skip 0
@@ -55,17 +55,17 @@
 00510   close #101: ioerr L520
 00520 L520: open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION= INCOME STATEMENT WITH MONTHLY COMPARISONS ",display,outin 
 00530   pr f "08,18,C 41,H,N": lpad$(cnam$,pf1)
-00540   pr f "09,18,C 41,H,N": "            COMPANY NUMBER "&str$(cno)
+00540   pr f "09,18,C 41,H,N": "            COMPANY NUMBER "&env$('cno')
 00550   pr f "11,18,C 41,R,N": "              IN PROCESS"
 00560   pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
 00570   if cmdkey=5 then goto L2380 ! jb
 00580   report$="STATEMENT OF INCOME AND EXPENSES"
 00590   fnopenprn
 00600   if fnps=2 then goto L630 ! secondary
-00610   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
+00610   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 69 3 Replace DupKeys -N"
 00620   goto L640
-00630 L630: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
-00640 L640: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00630 L630: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 72 3 Replace DupKeys -N"
+00640 L640: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&udf$&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 00650   redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 00660 L660: read #1,using L710: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2360
 00670   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L660

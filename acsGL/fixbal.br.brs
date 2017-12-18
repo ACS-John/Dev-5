@@ -10,7 +10,7 @@
 00100 ! ______________________________________________________________________
 00110   fncno(cno)
 00120 ! 
-00130   open #glmstr=1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+00130   open #glmstr=1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00140 READ_GLMSTR: ! 
 00150   read #glmstr,using 'Form POS 1,N 3,N 6,N 3,C 50,6*PD 3,42*PD 6.2,2*PD 3': dno,ano,sno,d$,mat rf,bb,cb eof END1
 00160   if cb=0 then cb=bb else goto READ_GLMSTR

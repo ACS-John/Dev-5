@@ -29,8 +29,8 @@
 00280   gosub L2510
 00290   pors=1
 00300   if fnps=2 then mp1=72 else mp1=69
-00310   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&str$(cno)&",Shr"
-00320   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&str$(cno)&",Shr"
+00310   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSIINDX.h"&env$('cno')&",Shr"
+00320   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSJ.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSJINDX.h"&env$('cno')&",Shr"
 00330   form c 9,skip 0
 00340 L340: form pos 1,n 3,n 6,n 3,pos mp1,pd 3,pos mp2,pd 3,pos 81,41*pd 6.2
 00350   form c 7,skip 0
@@ -52,10 +52,10 @@
 00490   fnopenprn
 00500   redir=0: if file$(255)(1:4)<>"PRN:" then redir=1
 00510   if fnps=2 then goto L540 ! secondary
-00520   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 69 3 Replace DupKeys -N"
+00520   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 69 3 Replace DupKeys -N"
 00530   goto L550
-00540 L540: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 72 3 Replace DupKeys -N"
-00550 L550: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00540 L540: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 72 3 Replace DupKeys -N"
+00550 L550: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&udf$&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 00560 L560: read #1,using L610: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2170
 00570   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L560
 00580   if costcntr=0 then goto L610
@@ -251,7 +251,7 @@
 02480 L2480: if total2(fund)=0 then goto L2510
 02490   pc4=round(((total2(fund)-yt2)/total(fund))*100,0)
 02500   if pc4<-999 or pc4>9999 then pc4=0
-02510 L2510: open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&str$(cno)&",RecL=230,use",internal,outin,relative 
+02510 L2510: open #5: "Name="&env$('Q')&"\GLmstr\GLfund.h"&env$('cno')&",RecL=230,use",internal,outin,relative 
 02520   read #5,using L2530: mat fundnum,mat funddesc$ ioerr L2530
 02530 L2530: form pos 1,10*n 3,10*c 20
 02540   fntos(sn$="ACglcasf3") !:

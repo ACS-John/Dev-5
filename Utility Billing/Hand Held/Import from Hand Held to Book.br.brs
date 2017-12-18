@@ -115,55 +115,59 @@
 28040   dim bookFile$*512
 28060   bookFile$=env$('Q')&"\UBmstr\Readings."&ltrm$(bk$)
 28080   if enableMerge$='True' and exists(bookFile$) then 
-28120     dim mergeFileOrigional$*512
-28140     mergeFileOrigional$=env$('temp')&'\acs\mergeFileOrigional-book'&bk$&'-session'&session$&'.txt'
-28150     fnmakesurepathexists(mergeFileOrigional$)
+28100     dim mergeFileOrigional$*512
+28120     mergeFileOrigional$=env$('temp')&'\acs\mergeFileOrigional-book'&bk$&'-session'&session$&'.txt'
+28140     fnmakesurepathexists(mergeFileOrigional$)
 28160     fnCopy(bookFile$,mergeFileOrigional$)
 28180   else 
 28200     enableMerge$='False'
 28220   end if
-28260   if deviceSelected$="Aclara Work Order" then
-28280     transferReturn=fn_aclaraWorkOrder(bookFile$,enableMerge$)
-28300   else if deviceSelected$='CSV by LocationID' then
-28320     transferReturn=fn_CsvByLocationId(bookFile$,enableMerge$)
-28340   else if deviceSelected$="Sensus" then
-28360     fn_sensus_in(bookFile$)
-28380   else if deviceSelected$="LapTop" then
-28400     fn_laptop(bookFile$)
-28420   else if deviceSelected$="Hersey" then
-28440     fn_hersey(bookFile$)
-28460   else if deviceSelected$="EZReader" then
-28480     fn_ezreader(bookFile$)
-28500   else if deviceSelected$="ACS Meter Reader" then
-28520     fn_acsmr(bookFile$)
-28540   else if deviceSelected$="AMR" then
-28560     fn_amr(bookFile$)
-28580   else if deviceSelected$="Itron FC300" then
-28600     fn_itron(bookFile$)
-28620   else if deviceSelected$="Psion Workabout" then
-28640     fn_psion_workabout(bookFile$)
-28660   else if deviceSelected$="Badger" or deviceSelected$="DriveBy" then
-28680     fnCopy(fn_hh_input_filename$,bookFile$)
-28700   else if deviceSelected$="Unisys" then
-28720     fnCopy(fn_hh_input_filename$,bookFile$)
-28740   else if deviceSelected$="Boson" then
-28760     fn_boson(bookFile$)
-28780   else if deviceSelected$="Green Tree" then
-28800     fnCopy(fn_hh_input_filename$,bookFile$)
-28820   else if deviceSelected$="Other" and env$('client')="Brier Lake" then
-28840     fn_import_l_readings_txt(bookFile$)
-28860   else if deviceSelected$="READy Water" then
-28880     fn_import_l_readings_txt(bookFile$)
-28900   else if deviceSelected$="Master Meter" then
-28920     fn_import_l_readings_txt(bookFile$, 358)
-28940   end if
-28960   if transferReturn>0 then
-28980     mat ml$(1)
-29000     ml$(1)=str$(transferReturn)&' records imported to book '&bk$&'.'
-29020     fnmsgbox(mat ml$)
-29040   end if
-29060   fn_transfer=transferReturn
-29080 fnend
+28240   if deviceSelected$='Aclara' then
+28260     transferReturn=fn_aclara(bookFile$,enableMerge$)
+28280   else if deviceSelected$="Aclara Work Order" then
+28300     transferReturn=fn_aclaraWorkOrder(bookFile$,enableMerge$)
+28320   else if deviceSelected$="ACS Meter Reader" then
+28340     fn_acsmr(bookFile$)
+28360   else if deviceSelected$="AMR" then
+28380     fn_amr(bookFile$)
+28400   else if deviceSelected$="Badger" then
+28420     fnCopy(fn_hh_input_filename$,bookFile$)
+28440   else if deviceSelected$="Boson" then
+28460     fn_boson(bookFile$)
+28480   else if deviceSelected$='CSV by LocationID' then
+28500     transferReturn=fn_CsvByLocationId(bookFile$,enableMerge$)
+28520   else if deviceSelected$="DriveBy" then
+28540     fnCopy(fn_hh_input_filename$,bookFile$)
+28560   else if deviceSelected$="EZReader" then
+28580     fn_ezreader(bookFile$)
+28600   else if deviceSelected$="Green Tree" then
+28620     fnCopy(fn_hh_input_filename$,bookFile$)
+28640   else if deviceSelected$="Hersey" then
+28660     fn_hersey(bookFile$)
+28680   else if deviceSelected$="Itron FC300" then
+28700     fn_itron(bookFile$)
+28720   else if deviceSelected$="LapTop" then
+28740     fn_laptop(bookFile$)
+28760   else if deviceSelected$="Master Meter" then
+28780     fn_import_l_readings_txt(bookFile$, 358)
+28800   else if deviceSelected$="Other" and env$('client')="Brier Lake" then
+28820     fn_import_l_readings_txt(bookFile$)
+28840   else if deviceSelected$="Psion Workabout" then
+28860     fn_psion_workabout(bookFile$)
+28880   else if deviceSelected$="READy Water" then
+28900     fn_import_l_readings_txt(bookFile$)
+28920   else if deviceSelected$="Sensus" then
+28940     fn_sensus_in(bookFile$)
+28960   else if deviceSelected$="Unisys" then
+28980     fnCopy(fn_hh_input_filename$,bookFile$)
+29000   end if
+29020   if transferReturn>0 then
+29040     mat ml$(1)
+29060     ml$(1)=str$(transferReturn)&' records imported to book '&bk$&'.'
+29080     fnmsgbox(mat ml$)
+29100   end if
+29120   fn_transfer=transferReturn
+29140 fnend
 30000 def fn_hh_input_filename$*256
 30010   ! requires local variables: deviceSelected$,preferenceHandHeldFromFile$,askPath$
 30020   dim hif_return$*256
@@ -237,10 +241,7 @@
 36330   ACSMR_XIT: !
 36360 fnend
 37000 def fn_CsvByLocationId(bookFile$*512,enableMerge$)
-37020   if enableMerge$='True' then
-37040     if ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto CblEoF
-37060     ! pr 'merging not completed yet.  do not use.  Type Go and Press Enter to start over.' : pause : chain program$
-37080   end if
+37020   if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto CblEoF
 37100   open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
 37120   open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
 37140   pr #hOut: '[ACS Hand Held File Generic Version 2]'
@@ -281,37 +282,65 @@
 38060       pr #hOut: gitproLabel$&'='&gitproItem$(gitproItemEnum)
 38080     end if
 38100 fnend
-42000 def fn_aclaraWorkOrder(bookFile$*512,enableMerge$)
-42020   dataIncludesHeaders=1
-42040   if enableMerge$='True' then
-42060     if ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto EO_AW
-42080     ! pr 'merging not completed yet.  do not use.  Type Go and Press Enter to start over.' : pause : chain program$
-42100   end if
-42120   open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
-42140   open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
-42160   pr #hOut: '[ACS Hand Held File Generic Version 2]'
-42170   pr #hOut: 'Source File='&fn_hh_input_filename$
-42180   if dataIncludesHeaders then
-42200     linput #hIn: line$ eof EO_AW ! just consume the headers
-42220   end if
-42240   do
-42260     z$=''
-42280     linput #hIn: line$ eof EO_AW
-42300     fn_awoParseLine(line$,mat awoDataName$,mat awoDataValue$)
-42320     for awoX=1 to udim(mat awoDataName$)
-42340       pr #hOut: awoDataName$(awoX)&'='&awoDataValue$(awoX)
-42360     nex awoX
-42370     pr #hOut: ''
-42380     aclaraWorkOrderReturn+=1
-42400   loop
-42420   EO_AW: !
-42440   close #hIn:
-42460   close #hOut:
-42480   if enableMerge$='True' then
-42500     fn_mergeBooks(mergeFileOrigional$,bookFile$)
-42520   end if
-42540   fn_aclaraWorkOrder=aclaraWorkOrderReturn
-42560 fnend
+
+40000 def fn_aclara(bookFile$*512,enableMerge$)
+40020   pr ' this import is not yet written.'
+40040   pr ' this import will only import active clients'
+40060   pause
+40080   if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto CblEoF
+40100   open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
+40120   open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+40140   pr #hOut: '[ACS Hand Held File Generic Version 2]'
+40160   pr #hOut: 'Source File='&fn_hh_input_filename$
+40180   if dataIncludesHeaders then
+40200     linput #hIn: line$ eof EO_Aclara ! just consume the headers
+40220   end if
+40240   do
+40260     z$=''
+40280     linput #hIn: line$ eof EO_Aclara
+40300     fn_awoParseLine(line$,mat awoDataName$,mat awoDataValue$)
+40320     for awoX=1 to udim(mat awoDataName$)
+40340       pr #hOut: awoDataName$(awoX)&'='&awoDataValue$(awoX)
+40360     nex awoX
+40380     pr #hOut: ''
+40400     aclaraWorkOrderReturn+=1
+40420   loop
+40440   EO_Aclara: !
+40460   close #hIn:
+40480   close #hOut:
+40500   if enableMerge$='True' then
+40520     fn_mergeBooks(mergeFileOrigional$,bookFile$)
+40540   end if
+40560   fn_aclara=aclaraWorkOrderReturn
+40580 fnend
+57000 def fn_aclaraWorkOrder(bookFile$*512,enableMerge$)
+57020   dataIncludesHeaders=1
+57040   if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto EO_AW
+57120   open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
+57140   open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
+57160   pr #hOut: '[ACS Hand Held File Generic Version 2]'
+57170   pr #hOut: 'Source File='&fn_hh_input_filename$
+57180   if dataIncludesHeaders then
+57200     linput #hIn: line$ eof EO_AW ! just consume the headers
+57220   end if
+57240   do
+57260     z$=''
+57280     linput #hIn: line$ eof EO_AW
+57300     fn_awoParseLine(line$,mat awoDataName$,mat awoDataValue$)
+57320     for awoX=1 to udim(mat awoDataName$)
+57340       pr #hOut: awoDataName$(awoX)&'='&awoDataValue$(awoX)
+57360     nex awoX
+57370     pr #hOut: ''
+57380     aclaraWorkOrderReturn+=1
+57400   loop
+57420   EO_AW: !
+57440   close #hIn:
+57460   close #hOut:
+57480   if enableMerge$='True' then
+57500     fn_mergeBooks(mergeFileOrigional$,bookFile$)
+57520   end if
+57540   fn_aclaraWorkOrder=aclaraWorkOrderReturn
+57560 fnend
 58000 def fn_awoParseLine(line$*1024,mat awoDataName$,mat awoDataValue$)
 58020     reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
 58040     str2mat(line$,mat lineItem$,chr$(9))

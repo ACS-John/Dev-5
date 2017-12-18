@@ -27,7 +27,7 @@
 00260     io1$(j*5-5)=str$(j+2)&",42,N 2,UT,N"
 00270     io1$(j*5-4)=str$(j+2)&",48,N 2,UET,N"
 00280   next j
-00290   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
+00290   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
 00300   pr newpage !:
         fnopenwin(win=101,10,22,15,58,cap$)
 00310   io2$(1)="4,2,C 35,N"
@@ -86,7 +86,7 @@
 00840   goto L460
 00850 ! ______________________________________________________________________
 00860 L860: fnopenprn(cp,58,220,process)
-00870   fnwait(104,cap$,message$,0)
+00870   fnwait(message$,0)
 00880   pr #255,using L890: mat sc1$
 00890 L890: form pos 1,4*c 14,skip 1,pos 29,3*c 14
 00900   t1=t2=0

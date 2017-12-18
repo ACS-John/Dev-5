@@ -6,8 +6,8 @@
 00060 L60: input fields "10,45,N 2,UE,N": cno conv L60
 00070   if cno=0 then stop 
 00080 ! 
-00090   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TRIDX1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00100   open #3: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)&",Shr",internal,outin,relative 
+00090   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00100   open #3: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno')&",Shr",internal,outin,relative 
 00110 L110: read #trmstr,using 'Form POS 1,C 11,POS 79,2*PD 3': k$,mat tr eof END1
 00120   adr=tr(1)
 00130 L130: if adr=0 then goto L180

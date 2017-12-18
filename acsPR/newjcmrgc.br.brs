@@ -9,9 +9,9 @@
 00090   fncno(cno)
 00100 ! 
 00110 ! ______________________________________________________________________
-00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
+00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
 00150   open #3: "Name=jccharges."&wsid$,internal,input 
-00160   open #5: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",Shr",internal,outin,relative 
+00160   open #5: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,outin,relative 
 00170 L170: read #3,using L180: rn$,dat,jn$,mat ji2,empnam$ eof L400
 00180 L180: form pos 1,c 12,pd 4,c 6,2*pd 3,pd 5.2,c 30
 00190   if ltrm$(rtrm$(rn$))="-1" or ji2(3)=0 then goto L170

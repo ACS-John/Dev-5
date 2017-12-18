@@ -11,8 +11,8 @@
 00110   fncno(cno)
 00120 ! 
 00130 ! ______________________________________________________________________
-00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
-00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
+00140   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
 00160 TRANSACTION_ENTRY: ! 
 00165   cn=l10=l12=l13=0
 00170   fntos(sn$="Percentinput") !:

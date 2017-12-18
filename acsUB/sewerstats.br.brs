@@ -102,9 +102,9 @@
 11010     if ckey=2 then execute 'System -W -C "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$('UBmstr\Sewerstats"&wsid$&".txt"') ! "sy -W -C S:\Core\PrAce UBmstr\Sewerstats"&wsid$&".txt"
 11020   fnend 
 11030   def fn_openfiles
-11040     open #(h_ubmstr:=fngethandle): "Name="&env$('Q')&"\UBmstr\customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBIndex.h"&str$(cno),internal,input,keyed 
+11040     open #(h_ubmstr:=fngethandle): "Name="&env$('Q')&"\UBmstr\customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBIndex.h"&env$('cno'),internal,input,keyed 
 11050 CUSTFORM: form c 10
-11060     open #(h_ubtrans:=fngethandle): "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&str$(cno),internal,input,keyed 
+11060     open #(h_ubtrans:=fngethandle): "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno'),internal,input,keyed 
 11070 TRANSFORM: form c 10,n 8,n 1,pos 28,pd 4.2
 11080   fnend 
 11090   def fn_closefiles

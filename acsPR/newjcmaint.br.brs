@@ -18,11 +18,11 @@
         fndat(dat$)
 00180 ! 
 00190 ! ______________________________________________________________________
-00200   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L4890
-00210   open #4: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&str$(cno)&",Shr",internal,outin,keyed ioerr L220
-00220 L220: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L230
-00230 L230: open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",Shr",internal,outin,relative ioerr L240
-00240 L240: open #16: "Name="&env$('Q')&"\PRmstr\Category.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\categoryIDX.H"&str$(cno)&",Shr",internal,outin,keyed ioerr L250
+00200   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L4890
+00210   open #4: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",Shr",internal,outin,keyed ioerr L220
+00220 L220: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L230
+00230 L230: open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,outin,relative ioerr L240
+00240 L240: open #16: "Name="&env$('Q')&"\PRmstr\Category.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\categoryIDX.H"&env$('cno')&",Shr",internal,outin,keyed ioerr L250
 00250 L250: ! ______________________________________________________________________
 00260 MENU1: ! 
 00270   ndep=0
@@ -206,28 +206,28 @@
 01590 ! ______________________________________________________________________
 01600   close #1: ioerr L1610
 01610 L1610: close #4: ioerr L1620
-01620 L1620: open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno),internal,input ioerr L1640
+01620 L1620: open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),internal,input ioerr L1640
 01630   close #1,free: 
-01640 L1640: open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",SIZE=0,RecL=300",internal,output 
+01640 L1640: open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",SIZE=0,RecL=300",internal,output 
 01650   cont=1
 01660   close #2: ioerr L1670
-01670 L1670: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno),internal,input ioerr L1690
+01670 L1670: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno'),internal,input ioerr L1690
 01680   close #2,free: 
-01690 L1690: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",SIZE=0,RecL=123",internal,output 
+01690 L1690: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",SIZE=0,RecL=123",internal,output 
 01700   close #2: 
 01710   close #3: ioerr L1730
-01730 L1730: open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno),internal,output ioerr L1750
+01730 L1730: open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno'),internal,output ioerr L1750
 01740   close #3,free: 
-01750 L1750: open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",SIZE=0,RecL=88",internal,output 
+01750 L1750: open #3: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",SIZE=0,RecL=88",internal,output 
 01760   write #3,using L1380: " ","",mat tr," ",1
 01770   close #3: 
-01780   open #1: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&str$(cno),internal,output ioerr L1800
+01780   open #1: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno'),internal,output ioerr L1800
 01790   close #1,free: 
-01800 L1800: open #1: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&str$(cno)&",SIZE=0,RecL=40",internal,output 
+01800 L1800: open #1: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno')&",SIZE=0,RecL=40",internal,output 
 01810   close #1: 
-01820 L1820: execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&","&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",1,6,Replace,DupKeys -N"
-01830   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&","&env$('Q')&"\PRmstr\JCINDX2.H"&str$(cno)&",7,25,Replace,DupKeys -N"
-01840   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&","&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",1,11,Replace,DupKeys -N"
+01820 L1820: execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",1,6,Replace,DupKeys -N"
+01830   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",7,25,Replace,DupKeys -N"
+01840   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&","&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",1,11,Replace,DupKeys -N"
 01850   goto XIT
 01860 ! ______________________________________________________________________
 01870 JOB_LISTING: ! 
@@ -646,22 +646,22 @@
 05080   close #1: ioerr L5090
 05090 L5090: close #4: ioerr L5100
 05100 L5100: fnjob_srch(x$,99)
-05110   df$=env$('Q')&"\PRmstr\jcmstr.h"&str$(cno) : if$=env$('Q')&"\PRmstr\jcindx.h"&str$(cno) !:
-        fncombof("CJob.h"&str$(cno),lyne,mypos,43,df$,1,6,7,25,if$,1) !:
-        fncombof("CJobALL.h"&str$(cno),lyne,mypos,43,df$,1,6,7,25,if$,2)
-05120   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&","&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",1,6,Replace,DupKeys -N" ioerr L5130
-05130 L5130: execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&","&env$('Q')&"\PRmstr\JCINDX2.H"&str$(cno)&",7,25,Replace,DupKeys -N" ioerr L5140
-05140 L5140: open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,outin,keyed ioerr XIT
-05150   open #4: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&str$(cno)&",Shr",internal,outin,keyed ioerr XIT
+05110   df$=env$('Q')&"\PRmstr\jcmstr.h"&env$('cno') : if$=env$('Q')&"\PRmstr\jcindx.h"&env$('cno') !:
+        fncombof("CJob.h"&env$('cno'),lyne,mypos,43,df$,1,6,7,25,if$,1) !:
+        fncombof("CJobALL.h"&env$('cno'),lyne,mypos,43,df$,1,6,7,25,if$,2)
+05120   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",1,6,Replace,DupKeys -N" ioerr L5130
+05130 L5130: execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",7,25,Replace,DupKeys -N" ioerr L5140
+05140 L5140: open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr XIT
+05150   open #4: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCINDX2.H"&env$('cno')&",Shr",internal,outin,keyed ioerr XIT
 05160   return 
 05170 RECREATE_CAT_GRID: ! 
 05180   close #2: ioerr L5190
 05190 L5190: fncategory_srch(x$,99)
-05200   df$=env$('Q')&"\PRmstr\jccat.h"&str$(cno) : if$=env$('Q')&"\PRmstr\catindx.h"&str$(cno) !:
-        fncombof("CCat.h"&str$(cno),lyne,mypos,43,df$,1,11,12,25,if$,1) !:
-        fncombof("CCatALL.h"&str$(cno),lyne,mypos,43,df$,1,11,12,25,if$,2)
-05210   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&","&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",1,11,Replace,DupKeys -N" ioerr L5220
-05220 L5220: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,outin,keyed ioerr XIT
+05200   df$=env$('Q')&"\PRmstr\jccat.h"&env$('cno') : if$=env$('Q')&"\PRmstr\catindx.h"&env$('cno') !:
+        fncombof("CCat.h"&env$('cno'),lyne,mypos,43,df$,1,11,12,25,if$,1) !:
+        fncombof("CCatALL.h"&env$('cno'),lyne,mypos,43,df$,1,11,12,25,if$,2)
+05210   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&","&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",1,11,Replace,DupKeys -N" ioerr L5220
+05220 L5220: open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outin,keyed ioerr XIT
 05230   return 
 05240 DELETE_CATEGORY: ! 
 05250   read #2,using L1360,key=cn$: mat ta nokey L5360

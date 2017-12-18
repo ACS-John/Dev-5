@@ -10,7 +10,7 @@
 00100   fntop(program$,"Remove Old Payroll Checks")
 00110   cancel=99 : right=1 : center=2 : on=1 : off=0 !:
         left=0
-00120   open #1: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&str$(cno)&",NoShr",internal,outin,keyed 
+00120   open #1: "Name="&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&",NoShr",internal,outin,keyed 
 00130   open #work1:=2: "Name="&env$('Q')&"\PRmstr\Work1."&wsid$&",Size=0,RecL=224,replace",internal,outin,relative 
 00140   fntos(sn$='RemoveChecks') !:
         mylen=22 : mypos=mylen+3 : lc=0
@@ -36,8 +36,8 @@
 00320 END1: ! 
 00330   close #work1: 
 00340   close #1,free: 
-00350   execute "Rename "&env$('Q')&"\PRmstr\Work1."&wsid$&' '&env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno)&" -n"
-00360   execute "Index "&env$('Q')&"\PRmstr\PayrollChecks.h"&str$(cno)&' '&env$('Q')&"\PRmstr\checkidx.h"&str$(cno)&" 1 17 Replace DupKeys -n"
+00350   execute "Rename "&env$('Q')&"\PRmstr\Work1."&wsid$&' '&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&" -n"
+00360   execute "Index "&env$('Q')&"\PRmstr\PayrollChecks.h"&env$('cno')&' '&env$('Q')&"\PRmstr\checkidx.h"&env$('cno')&" 1 17 Replace DupKeys -n"
 00370   goto XIT
 00380 ! ______________________________________________________________________
 00390 XIT: fnxit

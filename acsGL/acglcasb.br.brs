@@ -19,7 +19,7 @@
           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
 00142   fscode=fnfscode !:
         priorcd=fnpriorcd
-00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00160   actpd=fnactpd : fscode=fnfscode
 00170   if nap<12 or nap> 13 then nap=12
@@ -33,8 +33,8 @@
 00240   in3$(4)="8,65,N 12.2,UT,N"
 00250   mp1=75
 00260   if fnps=2 then mp1=mp1+3
-00270   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
-00280   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
+00270   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&env$('cno')&",Shr"
+00280   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&env$('cno')&",Shr"
 00290   form c 7,skip 0
 00300   open #1: fl1$,internal,input,keyed 
 00310   if fnprocess=1 or fnUseDeptNo=0 then goto L410
@@ -68,11 +68,11 @@
 00570   if ir>=val(r$) and val(r$)><0 then goto L740
 00572   close #3: ioerr ignore
 00574   if fnps=2 then 
-00580     execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
+00580     execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 78 3 Replace DupKeys -N"
 00590   else 
-00600     execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
+00600     execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 75 3 Replace DupKeys -N"
 00610   end if 
-00620   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00620   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&udf$&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 00630 L630: ! read amounts from gl master file
 00640 L640: read #3,using L730: ir,bb,cb,mat by,mat bp,mat bm eof L940
 00650   if ir=0 then goto L640

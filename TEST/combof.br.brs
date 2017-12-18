@@ -26,7 +26,7 @@
 00420 ! fncombof("CityStZip",5,15,30,env$('Q')&"\Data\CityStZip.dat",1,28,0,0,env$('Q')&"\Data\CityStZip.idx") ! ,0,0, " ",fracustinfo,0)
 00440 ! response$(1)='Billings MO 65610' ! pr 'past comboF call at '&time$
 50000 ! 
-50020 ! fncombof('bank',6,10,0,env$('Q')&"\CLmstr\BankMstr.h"&str$(cno),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno),limit_to_list)
+50020 ! fncombof('bank',6,10,0,env$('Q')&"\CLmstr\BankMstr.h"&env$('cno'),1,2,3,30,env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno'),limit_to_list)
 50022     f1Col1Len=21 
 50024     f1Col2=1+f1Col1Len+2 : f1Col2Len=36
 50026     f1Col3=f1Col2+f1Col2Len+2 : f1Col3len=21

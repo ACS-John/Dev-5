@@ -18,7 +18,7 @@
 00180     io2$((z-1)*3+2)=c$&",38,Nz 3,UT,N"
 00190     io2$((z-1)*3+3)=c$&",62,N 1,UT,N"
 00200   next z
-00210   open #1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\prrptidx.h"&str$(cno)&",Shr",internal,outin,keyed 
+00210   open #1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\prrptidx.h"&env$('cno')&",Shr",internal,outin,keyed 
 00220 ! ______________________________________________________________________
 00230 SCR1: pr newpage
 00240   close #101: ioerr L250
@@ -129,7 +129,7 @@
 01290 L1290: form pos 1,c 70
 01300   pr #99,using L1290: "CLEAR"
 01310   pr #99,using L1290: "PROCERR RETURN"
-01320   pr #99,using L1290: "Index "&env$('Q')&"\PRmstr\PRReport.h"&str$(cno)&' '&env$('Q')&"\PRmstr\prrptidx.h"&str$(cno)&" 1 2 Replace DupKeys"
+01320   pr #99,using L1290: "Index "&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&' '&env$('Q')&"\PRmstr\prrptidx.h"&env$('cno')&" 1 2 Replace DupKeys"
 01330   pr #99,using L1290: "PROC S:\acsPR\PRMENU"
 01340   close #99: 
 01350   chain "proc=PROC."&wsid$&""

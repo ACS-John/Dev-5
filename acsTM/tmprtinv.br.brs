@@ -45,8 +45,8 @@
 00660   scr1$(2)="BILLING CODE"
 00670   scr1$(3)="DATE"
 00680   scr1$(4)="INVOICE #"
-00740   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr ERTN
-00750   open #32: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&str$(cno)&",Shr",internal,input,keyed 
+00740   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
+00750   open #32: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,input,keyed 
 00770   pr newpage ! r: select entry type (regular or repringing previously entered invoices)
 00780   pr f "8,30,c 16,r,n": " pr Invoices"
 00790   pr f "10,5,c 70": "Enter 1 for regular or 2 if Reprinting previously entered invoices:"
@@ -58,9 +58,9 @@
 00842 ! /r
 00850 REGULAR_ENTRY: ! 
 00860 ! close #h_tmwk1,free:
-00870   open #h_tmwk1:=2: "Name="&env$('Q')&"\TMmstr\TMWk1.h"&str$(cno)&",RecL=2484,Replace",internal,outin,relative 
+00870   open #h_tmwk1:=2: "Name="&env$('Q')&"\TMmstr\TMWk1.h"&env$('cno')&",RecL=2484,Replace",internal,outin,relative 
 00880 L880: ! 
-00882   open #3: "Name="&env$('Q')&"\TMmstr\IVDesc.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\IVDIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr ERTN
+00882   open #3: "Name="&env$('Q')&"\TMmstr\IVDesc.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\IVDIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 00890   fnopenprn(cp,58,220,process)
 00900   if f1=2 then gosub REPR_PREV_INV
 00910 L910: ! 

@@ -15,7 +15,7 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno)&",Use,RecL=80,KPs=1,KLn=11,Shr",internal,outin,keyed 
+00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Use,RecL=80,KPs=1,KLn=11,Shr",internal,outin,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -103,10 +103,10 @@
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         limit_to_list$='1'
 00410 ! cL=1 : c$(CL,1)='ComboF' !:
-        ! c$(CL,2)=env$('Q')&'\CLmstr\PayMstr.h'&STR$(CNO) !:
+        ! c$(CL,2)=env$('Q')&'\CLmstr\PayMstr.h'&env$('cno') !:
         ! c$(CL,3)='1' : c$(CL,4)='8' !:
         ! c$(CL,5)='9' : c$(CL,6)='30' !:
-        ! c$(CL,7)=env$('Q')&'\CLmstr\PayIdx1.h'&STR$(CNO) !:
+        ! c$(CL,7)=env$('Q')&'\CLmstr\PayIdx1.h'&env$('cno') !:
         ! c$(CL,8)=LIMIT_TO_LIST$
 00420   return 
 00430 ! ______________________________________________________________________

@@ -16,7 +16,7 @@
 00160   goto XIT
 00170 ! ______________________________________________________________________
 00180 OPEN_FILE: ! 
-00190 ! Open #SUPPORT=2: "Name="&env$('Q')&"\TMmstr\Support.h"&STR$(CNO)&",Version=1,KFName="&env$('Q')&"\TMmstr\Support-Idx.h"&STR$(CNO)&",replace,RecL=246,KPs=1,KLn=10,Shr",Internal,Outin,Keyed
+00190 ! Open #SUPPORT=2: "Name="&env$('Q')&"\TMmstr\Support.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\TMmstr\Support-Idx.h"&env$('cno')&",replace,RecL=246,KPs=1,KLn=10,Shr",Internal,Outin,Keyed
 00200   open #1: "Name=c:\acs\vol002\acs.inc\TMmstr\CLmstr.h1,KFName="&env$('Q')&"\TMmstr\CLIndex.h1",internal,outin,keyed 
 00210   open #client=3: "Name="&env$('Q')&"\TMmstr\Client.h1,Version=1,KFName="&env$('Q')&"\TMmstr\Client-Idx.h1,replace,RecL=406,KPs=1,KLn=6",internal,outin,keyed 
 00220   return 

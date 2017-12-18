@@ -14,9 +14,9 @@
 00130   input fields "10,56,Nz 5,U,N": cno
 00140   if cmdkey=5 then goto XIT
 00150 ! 
-00160   execute "Copy "&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",X -D -n"
+00160   execute "Copy "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",X -D -n"
 00170   open #2: "Name=X",internal,outin,relative 
-00180   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",RecL=300,Replace",internal,outin,relative 
+00180   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",RecL=300,Replace",internal,outin,relative 
 00190   for j=1 to lrec(2)
 00200     read #2,using L210,rec=j: jn$,n$,mat a$,mat b
 00210 L210: form pos 1,c 6,c 40,3*c 30,n 6,2*pd 5.2,n 2
@@ -26,10 +26,10 @@
 00250   next j
 00260   close #1: 
 00270   close #2: 
-00280   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&","&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",1,6,Replace,DupKeys -n"
-00290   execute "Copy "&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",X -D -n"
+00280   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",1,6,Replace,DupKeys -n"
+00290   execute "Copy "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",X -D -n"
 00300   open #2: "Name=X",internal,outin,relative 
-00310   open #1: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",RecL=123,Replace",internal,outin,relative 
+00310   open #1: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",RecL=123,Replace",internal,outin,relative 
 00320   for j=1 to lrec(2)
 00330     read #2,using L340: cn$,k$,mat l,mat ta
 00340 L340: form pos 1,c 11,c 25,11*pd 5.2,2*pd 2,2*pd 3
@@ -38,8 +38,8 @@
 00370   next j
 00380   close #1: 
 00390   close #2: 
-00400   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&","&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",1,11,Replace,DupKeys"
-00410   pr f "12,5,C 60": "COMPLETED CONVERTING JOB FILE FOR COMPANY #: "&str$(cno)
+00400   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&","&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",1,11,Replace,DupKeys"
+00410   pr f "12,5,C 60": "COMPLETED CONVERTING JOB FILE FOR COMPANY #: "&env$('cno')
 00420   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00430   input fields "13,40,C 1,IAE,N": pause$
 00440   goto L80

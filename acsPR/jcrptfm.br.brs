@@ -260,7 +260,7 @@
 02380     if cmdkey=5 or rno(j)=0 then goto L2400
 02390   next j
 02400 L2400: pr newpage
-02410   fnwait(104,cap$,message$="Printing Proof List...",1)
+02410   fnwait(message$="Printing Proof List...",1)
 02420   on fkey 5 goto L2850
 02430   fnopenprn(cp,58,220,process)
 02440   k=0

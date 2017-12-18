@@ -5,7 +5,7 @@
 00070   dim p$*5,iv$*12,tr(6),id$*20,sc1$(5),sc2$(9),hd$(2)*50,cnam$*40
 00080   dim flo4$(5),sc4$(5),ot4$(5),fli4$(5),q(3),gln1(3),gln2(3),otgl$(3)
 00090   dim gl(10,4),fli1$(49),ot1$(49),pgl(3)
-00100   open #h_company:=1: "Name="&env$('Q')&"\TMmstr\Company.h"&str$(cno)&",Shr",internal,input ioerr L2290
+00100   open #h_company:=1: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno')&",Shr",internal,input ioerr L2290
 00110   read #h_company,using L130: i3,i4,i5,mat gln1,mat gln2 ioerr L2290
 00120 ! i3=1 ! ENTER G/L #'S
 00130 L130: form pos 161,3*n 1,pos 178,n 3,n 6,n 3,n 3,n 6,n 3
@@ -53,8 +53,8 @@
 00550   read #1,using L560,rec=sz: f3$,mat fl1$,mat sc1$,mat sc2$,mat fli1$,mat ot1$,mat flo1$,mat flo3$,mat sc3$ ioerr L2290
 00560 L560: form pos 1,c 255,142*c 18
 00570   close #1: 
-00580   open #9: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr L2290
-00585   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&str$(cno)&",Shr",internal,input,keyed ioerr L2290
+00580   open #9: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2290
+00585   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2290
 00590 L590: hd$(1)="A/R Input Selection Menu"
 00600   hd$(2)="ENTER SELECTION"
 00610 L610: pr newpage

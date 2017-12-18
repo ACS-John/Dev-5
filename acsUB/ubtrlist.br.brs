@@ -24,7 +24,7 @@
 18040   fndat(dat$)
 18060   ccyymmdd_mask$="3"
 18080   dim servicename$(10)*20,service$(10)*2,tax_code$(10)*2,penalty$(10)*1,subjectto(10)
-18100   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative 
+18100   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative 
 18120   read #20,using 'Form POS 1,10*C 20,10*C 2,10*C 1,10*C 1,10*N 2',rec=1: mat servicename$,mat service$,mat tax_code$,mat penalty$,mat subjectto
 18140   close #20: 
 18160 ! 
@@ -105,11 +105,11 @@
 26000 ! on fkey 5 goto DONE
 26020 fnopenprn
 26040 if seq=1 then 
-26060   open #h_customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+26060   open #h_customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 26080 else 
-26100   open #h_customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed 
+26100   open #h_customer=1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed 
 26120 end if 
-26140 open #ubtransvb=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,input,keyed 
+26140 open #ubtransvb=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 26160 gosub HDR
 27000 do 
 28000 READ_CUSTOMER: ! r: report main loop

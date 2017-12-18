@@ -28,7 +28,7 @@
 16060 ! 
 18020   fnopenprn
 18040 ! if cur_prior=period_current then
-18080   open #h_gltrans:=3: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,outin,relative 
+18080   open #h_gltrans:=3: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outin,relative 
 18100 F_GLTRANS: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 20000   gosub HDR
 20020   do 

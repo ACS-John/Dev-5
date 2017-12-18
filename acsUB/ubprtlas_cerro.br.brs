@@ -16,9 +16,9 @@
 00180 ! 
 00200   fnget_services(mat servicename$, mat service$, mat tax_code$,mat penalty$,mat subjectto)
 00230   linelength=62
-00240   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
-00250   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence #
-00260   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
+00240   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
+00250   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence #
+00260   open #81: "Name="&env$('Q')&"\UBmstr\BudMstr.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\BudIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 00280 ! ______________________________________________________________________
 00290 SCREEN1: ! 
 00300   a$="" : prtbkno=0
@@ -50,8 +50,8 @@
         resp$(respc+=1)=cnvrt$("pic(zzzzzz)",d1)
 00460   fnlbl(8,1,"Starting Account:",ll,1)
 00470   fe$="ubm-act-nam" !:
-        datafile$=env$('Q')&"\UBmstr\Customer.h"&str$(cno) !:
-        indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&str$(cno) !:
+        datafile$=env$('Q')&"\UBmstr\Customer.h"&env$('cno') !:
+        indexfile$=env$('Q')&"\UBmstr\ubindx5.h"&env$('cno') !:
         kp=1741: kl=9 : dp=41 : dl=30 !:
         fncombof(fe$,8,pf,40,datafile$,kp,kl,dp,dl,indexfile$,2) !:
         resp$(respc+=1)="[All]"
@@ -84,7 +84,7 @@
 00600   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 00610   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 00620 ! ______________________________________________________________________
-00630   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00630   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00640   fnopenprn
 00650 ! ______________________________________________________________________
 00660   on fkey 5 goto RELEASE_PRINT
@@ -161,7 +161,7 @@
 01270 BULKSORT: ! sort in bulk sort code sequence
 01280   open #9: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
 01290 L1290: form pos 1,c 128
-01300   write #9,using L1290: "FILE customer.H"&str$(cno)&","&env$('Q')&"\UBmstr,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+01300   write #9,using L1290: "FILE customer.H"&env$('cno')&","&env$('Q')&"\UBmstr,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
 01310   if prtbkno>0 then write #9,using L1290: 'RECORD I,1,2,N,"'&str$(prtbkno)&'","'&str$(prtbkno)&'"'
 01320   write #9,using L1290: "MASK 1942,12,C,A,1,10,C,A"
 01330   close #9: 

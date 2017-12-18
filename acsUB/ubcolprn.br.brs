@@ -11,7 +11,7 @@
 00110   fncno(cno,cnam$)
 00120 ! skip_header=1 ! <--  this is really a developer only option.
 00130   fndat(dat$,1)
-00140   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative 
+00140   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative 
 00142   read #20,using "Form POS 1,10*C 20",rec=1: mat servicename$
 00144   close #20: 
 00150   gosub SCREEN1
@@ -27,8 +27,8 @@
 00210   hd1$=hd1$&"  {\ul Customer Name               }"
 00220   mat scr1$(sz1)
 00230   mat alloc(sz1)
-00240   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-00250   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,input,keyed 
+00240   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00250   open #h_trans:=2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00260 ! ______________________________________________________________________
 00280   fnopenprn
 00290   gosub HDR

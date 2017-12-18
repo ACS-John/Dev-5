@@ -15,7 +15,7 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\FundMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\FundIdx1.h"&str$(cno)&",Use,RecL=75,KPs=1,KLn=3,Shr",internal,outin,keyed 
+00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\FundMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\FundIdx1.h"&env$('cno')&",Use,RecL=75,KPs=1,KLn=3,Shr",internal,outin,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -76,25 +76,25 @@
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         limit_to_list$='1'
 00330   cl=3: c$(cl,1)='ComboF' !:
-        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&env$('cno') !:
         c$(cl,3)='4' : c$(cl,4)='9' !:
         c$(cl,5)='13' : c$(cl,6)='50' !:
-        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : c$(cl,8)=limit_to_list$
+        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&env$('cno') : c$(cl,8)=limit_to_list$
 00340   cl=4: c$(cl,1)='ComboF' !:
-        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&env$('cno') !:
         c$(cl,3)='4' : c$(cl,4)='9' !:
         c$(cl,5)='13' : c$(cl,6)='50' !:
-        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : c$(cl,8)='1'
+        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&env$('cno') : c$(cl,8)='1'
 00350   cl=5: c$(cl,1)='ComboF' !:
-        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&env$('cno') !:
         c$(cl,3)='1' : c$(cl,4)='12' !:
         c$(cl,5)='13' : c$(cl,6)='50' !:
-        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : c$(cl,8)='1'
+        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&env$('cno') : c$(cl,8)='1'
 00352   cl=6: c$(cl,1)='ComboF' !:
-        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,2)=env$('Q')&"\CLmstr\GLmstr.h"&env$('cno') !:
         c$(cl,3)='1' : c$(cl,4)='12' !:
         c$(cl,5)='13' : c$(cl,6)='50' !:
-        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&str$(cno) : c$(cl,8)='1'
+        c$(cl,7)=env$('Q')&"\CLmstr\GLIndex.h"&env$('cno') : c$(cl,8)='1'
 00360   return 
 00370 ! ______________________________________________________________________
 00380 HAMSTER: ! 

@@ -50,7 +50,7 @@
 00500   close #1: 
 00510 ! ______________________________________________________________________
 00520   pr newpage
-00530   fnwait(101,cap$,message$="Please wait...",0)
+00530   fnwait(message$="Please wait...",0)
 00540 ! ______________________________________________________________________
 00550   open #11: "Name=PROC."&session$,display,output ioerr L570
 00560   close #11,free: 

@@ -26,7 +26,7 @@
           if tempx=12 then actpd$="twelve" else !:
             if tempx=13 then actpd$="thirteen" else !:
               if tempx=14 then actpd$="fourteen"
-00170 L170: open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
+00170 L170: open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
         read #1,using 'Form POS 195,C 30': tb$ !:
         close #1: 
 00180   tb$="("&trim$(tb$)&")"
@@ -45,10 +45,10 @@
 00290 L290: on t goto L300,L320 none MENU1
 00300 L300: ! 
 00301   fnget_wordprocessor_exe(atlantis$) !:
-        execute 'SY -w '&atlantis$&' '&env$('Q')&"\GLmstr\ACGLNote.h"&str$(cno)&" -n"
+        execute 'SY -w '&atlantis$&' '&env$('Q')&"\GLmstr\ACGLNote.h"&env$('cno')&" -n"
 00310   goto MENU1
 00320 L320: pr newpage
-00330   open #1: "Name="&env$('Q')&"\GLmstr\AcGLNote.h"&str$(cno)&",Shr",display,input ioerr MENU1
+00330   open #1: "Name="&env$('Q')&"\GLmstr\AcGLNote.h"&env$('cno')&",Shr",display,input ioerr MENU1
 00340   pr newpage
 00350   pr f "10,20,Cc 25,N": "Foot Notes Printing..." !:
         pr f "12,2,C 11,B,5": "Cancel (F5)" !:

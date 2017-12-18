@@ -10,11 +10,11 @@
 00100     cap$="Checkbook update Trans from v1 to v2"
 00110 ! ______________________________________________________________________
 00120     fnstatus("Updating Checkbook Transaction Allocation from v1 to v2")
-00180 ! fnwait(101,cap$,message$="Converting: please wait...",0)
-00190     fnindex_it(env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno),env$('Q')&"\CLmstr\TrAlloc-Idx.H"&str$(cno),"1 11")
-00200     open #tralloc=1: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno),internal,outin,keyed 
+00180 ! fnwait(message$="Converting: please wait...",0)
+00190     fnindex_it(env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno'),env$('Q')&"\CLmstr\TrAlloc-Idx.H"&env$('cno'),"1 11")
+00200     open #tralloc=1: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno'),internal,outin,keyed 
 00210     close #tralloc: 
-00220     open #tralloc: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno),internal,outin,keyed 
+00220     open #tralloc: "Name="&env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno'),internal,outin,keyed 
 00240     if version(tralloc)=2 then let fnstatus("TrAlloc is already version 2") : goto XIT
 00250     version(tralloc,2)
 00260     goto XIT
@@ -31,7 +31,7 @@
 00370 ! ______________________________________________________________________
 00380 XIT: ! 
 00390     close #tralloc: 
-00400     fnCopy(env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno),env$('Q')&"\CLmstr\TrAlloc.h"&str$(cno),80)
-00430     fnindex_it(env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno),env$('Q')&"\CLmstr\TrAlloc-Idx.H"&str$(cno),"1 11")
+00400     fnCopy(env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno'),env$('Q')&"\CLmstr\TrAlloc.h"&env$('cno'),80)
+00430     fnindex_it(env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno'),env$('Q')&"\CLmstr\TrAlloc-Idx.H"&env$('cno'),"1 11")
 00440   fnend 
 00450 ! ______________________________________________________________________

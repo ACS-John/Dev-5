@@ -26,7 +26,7 @@
 00230   rd1=val(resp$(1))
 00240 ! 
 00250   open #2: "Name="&env$('temp')&"\Work."&session$&",RecL=72,Replace",internal,output 
-00260   open #1: "Name="&env$('Q')&"\GLmstr\ACTRANS.H"&str$(cno),internal,input 
+00260   open #1: "Name="&env$('Q')&"\GLmstr\ACTRANS.H"&env$('cno'),internal,input 
 00270 L270: read #1,using L280: mat tr,tr$,td$,pcde eof END1
 00280 L280: form pos 1,n 3,n 6,n 3,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 00290   if fndate_mmddyy_to_ccyymmdd(tr(4))<rd1 then goto L270
@@ -35,8 +35,8 @@
 00320 ! ______________________________________________________________________
 00330 END1: close #2: 
 00340   close #1: 
-00350   execute "COPY "&env$('temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\ACTRANS.H"&str$(cno)&" -n"
-00360   execute "Index "&env$('Q')&"\GLmstr\ACTRANS.H"&str$(cno)&' '&env$('Q')&"\GLmstr\ACTRIDX.H"&str$(cno)&" 1/71/17/13 12/2/2/4 Replace DupKeys"
+00350   execute "COPY "&env$('temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\ACTRANS.H"&env$('cno')&" -n"
+00360   execute "Index "&env$('Q')&"\GLmstr\ACTRANS.H"&env$('cno')&' '&env$('Q')&"\GLmstr\ACTRIDX.H"&env$('cno')&" 1/71/17/13 12/2/2/4 Replace DupKeys"
 00370   execute "free "&env$('temp')&"\Work."&session$
 00380   goto XIT
 00390 ! ______________________________________________________________________

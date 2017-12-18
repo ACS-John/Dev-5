@@ -9,11 +9,11 @@
 00090 ! ______________________________________________________________________
 00100   fntop(program$,cap$="Post Payroll Checks")
 00110   fncno(cno)
-00120   if exists(env$('Q')&"\glmstr\PRmstr.h"&str$(cno))=0 then goto XIT
-00130   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
-00140   open #2: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(cno)&",NoShr",internal,outin,relative 
+00120   if exists(env$('Q')&"\glmstr\PRmstr.h"&env$('cno'))=0 then goto XIT
+00130   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00140   open #2: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')&",NoShr",internal,outin,relative 
 00150   if lrec(2)=0 then goto XIT
-00160   open #3: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno)&",Shr",internal,outin,relative 
+00160   open #3: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",Shr",internal,outin,relative 
 00170 READ_ENTRIES: ! 
 00175 L160: read #2,using L180: t$,tr(4),tr(5),tr(6),tr(7),tr$,td$,ven$,mat jv$,key$ eof L500
 00180   rec2=rec(2)
@@ -145,7 +145,7 @@
 01220   fntos(sn$="Prmerge4") !:
         mylen=18: mypos=mylen+3 : right=1: rc=0
 01230   fnlbl(1,1,"Employee Number:",mylen,right)
-01240   fncombof("PRmstr",1,mypos,27,env$('Q')&"\GLmstr\PRmstr.h"&str$(cno),1,4,5,30,'',0,pas, "Choose from the list of employees.",0) !:
+01240   fncombof("PRmstr",1,mypos,27,env$('Q')&"\GLmstr\PRmstr.h"&env$('cno'),1,4,5,30,'',0,pas, "Choose from the list of employees.",0) !:
         resp$(1)=""
 01250   fncmdset(2)
 01260   fnacs(sn$,0,mat resp$,ckey)

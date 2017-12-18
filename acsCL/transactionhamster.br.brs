@@ -14,9 +14,9 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&str$(cno)&",Use,RecL=78,KPs=1,KLn=11,Shr",internal,outin,keyed 
-00160   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&str$(cno)&",Use,RecL=78,KPs=28/1,KLn=8/11,Shr",internal,outin,keyed 
-00170   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx3.h"&str$(cno)&",Use,RecL=78,KPs=16/12/4,KLn=2/4/8,Shr",internal,outin,keyed 
+00150   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx1.h"&env$('cno')&",Use,RecL=78,KPs=1,KLn=11,Shr",internal,outin,keyed 
+00160   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Use,RecL=78,KPs=28/1,KLn=8/11,Shr",internal,outin,keyed 
+00170   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrIdx3.h"&env$('cno')&",Use,RecL=78,KPs=16/12/4,KLn=2/4/8,Shr",internal,outin,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
@@ -103,10 +103,10 @@
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         limit_to_list$='1'
 00450   cl=1 : c$(cl,1)='ComboF' !:
-        c$(cl,2)=env$('Q')&"\CLmstr\BankMstr.h"&str$(cno) !:
+        c$(cl,2)=env$('Q')&"\CLmstr\BankMstr.h"&env$('cno') !:
         c$(cl,3)='1' : c$(cl,4)='2' !:
         c$(cl,5)='3' : c$(cl,6)='30' !:
-        c$(cl,7)=env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno) !:
+        c$(cl,7)=env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno') !:
         c$(cl,8)=limit_to_list$
 00460   cl=2 : c$(cl,1)='ComboF' !:
         c$(cl,2)=env$('Q')&"\CLmstr\TransactionType.dat" !:
@@ -115,10 +115,10 @@
         c$(cl,7)=env$('Q')&"\CLmstr\TransactionType.idx" !:
         c$(cl,8)=limit_to_list$
 00470   cl=6 : c$(cl,1)='ComboF' !:
-        c$(cl,2)=env$('Q')&"\CLmstr\PayMstr.h"&str$(cno) !:
+        c$(cl,2)=env$('Q')&"\CLmstr\PayMstr.h"&env$('cno') !:
         c$(cl,3)='1' : c$(cl,4)='8' !:
         c$(cl,5)='9' : c$(cl,6)='30' !:
-        c$(cl,7)=env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno) !:
+        c$(cl,7)=env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno') !:
         c$(cl,8)=limit_to_list$
 00480   cl=9 : c$(cl,1)='ComboF' !:
         c$(cl,2)="S:\acsCL\PostingCode.dat" !:

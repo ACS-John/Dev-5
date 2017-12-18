@@ -10,7 +10,7 @@
 00100 ! jn$=Job #     !:
           ! to extract the flexgrid information (master file)
 00104     fncno(cno)
-00105     open #file_num:=fngethandle: "Name="&env$('Q')&"\PRmstr\Jcmstr.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\jcIndx.h"&str$(cno)&",Shr",internal,input,keyed ioerr ERTN
+00105     open #file_num:=fngethandle: "Name="&env$('Q')&"\PRmstr\Jcmstr.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\jcIndx.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 00110 ! ______________________________________________________________________
 00120     restore #file_num: 
 00130     fntos(sn$="JobSrch")

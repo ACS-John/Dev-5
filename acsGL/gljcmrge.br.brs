@@ -9,14 +9,14 @@
 00080 ! ______________________________________________________________________
 00090   fntop(program$,"Post Transactions")
 00100   fncno(cno)
-00110   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #1,using 'Form POS 382,N 2',rec=1: jccode !:
+00110   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #1,using 'Form POS 382,N 2',rec=1: jccode !:
         close #1: 
 00120   if jccode<>1 then goto L460
 00130   pr newpage
 00140   pr f "10,15,Cc 60,N": "GENERAL LEDGER JOB COST MERGE CHARGES IN PROCESS"
-00150   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
-00160   open #3: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(cno),internal,input 
-00170   open #5: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",Shr",internal,outin,relative 
+00150   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00160   open #3: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno'),internal,input 
+00170   open #5: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",Shr",internal,outin,relative 
 00180 L180: read #3,using L190: dat,ji2(3),postc,rn$,empnam$,jn$,ji2(1),ji2(2) eof L430,ioerr L430
 00190 L190: form pos 13,n 6,pd 6.2,pos 27,n 2,c 12,c 30,pos 79,c 6,n 5,n 3
 00200   if postc=9 or rn$="999999999999" then goto L180

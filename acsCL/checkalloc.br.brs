@@ -16,9 +16,9 @@
 00140 ! determine if cash or accrual by checking for any !:
         ! accounts payable numbers in the general ledger control file
 00150   fnopenprn
-00160   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00170   open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\tralloc-idx.h"&str$(cno)&",Shr",internal,outin,keyed 
-00180   open #bankmstr=4: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
+00160   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00170   open #tralloc=3: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\tralloc-idx.h"&env$('cno')&",Shr",internal,outin,keyed 
+00180   open #bankmstr=4: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
 00190   open #work=5: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=76,Replace",internal,output 
 00200 READ_TRMSTR: ! 
 00210 L210: read #trmstr,using 'Form POS 1,n 2,n 1,C 8,N 6,PD 10.2,POS 28,C 8,C 30,POS 71,N 1,X 6,N 1': trbank_code,trtcde,ck$,pd,ca1,vn$,de$,pcde,scd eof END1

@@ -14,17 +14,17 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: !
 00142   open_file_count=1 ! this value is used in the close_file sub routine
-00150   if exists(env$('Q')&"\GLmstr\GLSTdad.H"&str$(cno))=0 then goto L190
-00160   if exists(env$('Q')&"\GLmstr\glstdidx.h"&str$(cno))=0 then gosub INDEX
-00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\glstdad.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\glstdidx.H"&str$(cno)&",Version=1,Shr",internal,outin,keyed 
+00150   if exists(env$('Q')&"\GLmstr\GLSTdad.H"&env$('cno'))=0 then goto L190
+00160   if exists(env$('Q')&"\GLmstr\glstdidx.h"&env$('cno'))=0 then gosub INDEX
+00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\glstdad.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\glstdidx.H"&env$('cno')&",Version=1,Shr",internal,outin,keyed 
 00180   goto L220
-00190 L190: open #open_file_count: "Name="&env$('Q')&"\GLmstr\glstdad.h"&str$(cno)&",Version=1,Replace,RecL=59",internal,outin 
+00190 L190: open #open_file_count: "Name="&env$('Q')&"\GLmstr\glstdad.h"&env$('cno')&",Version=1,Replace,RecL=59",internal,outin 
 00200   gosub CLOSE_FILE
 00210   gosub INDEX
 00220 L220: return 
 00230 ! ______________________________________________________________________
 00240 INDEX: ! 
-00250   execute "Index "&env$('Q')&"\GLmstr\glstdad.H"&str$(cno)&' '&env$('Q')&"\GLmstr\glstdidx.h"&str$(cno) &" 1 12 Replace,DupKeys"
+00250   execute "Index "&env$('Q')&"\GLmstr\glstdad.H"&env$('cno')&' '&env$('Q')&"\GLmstr\glstdidx.h"&env$('cno') &" 1 12 Replace,DupKeys"
 00260 return 
 00270 ! ______________________________________________________________________
 00280 FIXGLACCOUNTS: ! r: left pad general ledger number and reference number
@@ -89,10 +89,10 @@
         sp(ic+=1)=55
 00650 ! ** Combo Boxes **                                                   !:
         cl=3 : c$(cl,1)='ComboF' !:
-        c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno') !:
         c$(cl,3)="1" : c$(cl,4)="12" !:
         c$(cl,5)="13" : c$(cl,6)="30" !:
-        c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&str$(cno) !:
+        c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&env$('cno') !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         limit_to_list$='1'
 00670 return 

@@ -13,10 +13,10 @@
         fndat(dat$)
 00130   right=1 : center=2 : limit_to_list=1
 00140   ac1=1
-00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using "Form pos 384,N 2",rec=1: nap !:
+00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #20,using "Form pos 384,N 2",rec=1: nap !:
         close #20: 
-00160   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&str$(cno)&",Shr",internal,outin,keyed 
-00170   open #2: "Name="&env$('Q')&"\GLmstr\ACTRANS.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\ACTRIDX.h"&str$(cno)&",Shr",internal,outin,keyed 
+00160   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
+00170   open #2: "Name="&env$('Q')&"\GLmstr\ACTRANS.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ACTRIDX.h"&env$('cno')&",Shr",internal,outin,keyed 
 00175   fnopenprn
 00180 MENU1: ! 
 00185   resp$(2)=""
@@ -32,14 +32,14 @@
 00250   fntxt(lc,mypos,0,0,0,'1')
 00260   lc+=1
 00270   fnlbl(lc+=1,1,"First Period Affected:",mylen,right)
-00280   fncombof('Period',lc,mypos,0,env$('Q')&"\GLmstr\Period.h"&str$(cno),1,2,3,25,env$('Q')&"\GLmstr\Period-Idx.h"&str$(cno),limit_to_list)
+00280   fncombof('Period',lc,mypos,0,env$('Q')&"\GLmstr\Period.h"&env$('cno'),1,2,3,25,env$('Q')&"\GLmstr\Period-Idx.h"&env$('cno'),limit_to_list)
 00290   fnlbl(lc+=1,1,"First Year Affected:",mylen,right)
-00300   fncombof('Year',lc,mypos,0,env$('Q')&"\GLmstr\Year.h"&str$(cno),1,1,2,7,env$('Q')&"\GLmstr\Year-Idx.h"&str$(cno),limit_to_list)
+00300   fncombof('Year',lc,mypos,0,env$('Q')&"\GLmstr\Year.h"&env$('cno'),1,1,2,7,env$('Q')&"\GLmstr\Year-Idx.h"&env$('cno'),limit_to_list)
 00310   lc+=1
 00320   fnlbl(lc+=1,1,"Last Period Affected:",mylen,right)
-00330   fncombof('Period',lc,mypos,0,env$('Q')&"\GLmstr\Period.h"&str$(cno),1,2,3,25,env$('Q')&"\GLmstr\Period-Idx.h"&str$(cno),limit_to_list)
+00330   fncombof('Period',lc,mypos,0,env$('Q')&"\GLmstr\Period.h"&env$('cno'),1,2,3,25,env$('Q')&"\GLmstr\Period-Idx.h"&env$('cno'),limit_to_list)
 00340   fnlbl(lc+=1,1,"Last Year Affected:",mylen,right)
-00350   fncombof('Year',lc,mypos,0,env$('Q')&"\GLmstr\Year.h"&str$(cno),1,1,2,7,env$('Q')&"\GLmstr\Year-Idx.h"&str$(cno),limit_to_list)
+00350   fncombof('Year',lc,mypos,0,env$('Q')&"\GLmstr\Year.h"&env$('cno'),1,1,2,7,env$('Q')&"\GLmstr\Year-Idx.h"&env$('cno'),limit_to_list)
 00360   fncmdset(2)
 00370   fnacs(sn$,0,mat resp$,ckey)
 00380   if ckey=5 then goto L690
@@ -85,7 +85,7 @@
 00720   pr #255,using 'Form POS 5,C 18,N 12.2': "Total Credits: ",am2
 00730   pr #255,using 'Form POS 5,C 18,N 12.2': "Net Adjustments: ",am1+am2
 00740   fncloseprn
-00750   execute "Index "&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno)&' '&env$('Q')&"\GLmstr\AcTrIdx.h"&str$(cno)&" 1/71/17/13 12/2/2/4 Replace DupKeys"
+00750   execute "Index "&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&' '&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&" 1/71/17/13 12/2/2/4 Replace DupKeys"
 00760   goto XIT
 00770 ! ______________________________________________________________________
 00780 HDR: ! 

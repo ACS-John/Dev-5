@@ -9,7 +9,7 @@
 00090 ! ______________________________________________________________________
 00100 ! cn$=account #     ! to extract the flexgrid information (Cagegory)
 00110     fncno(cno)
-00120     open #file_num:=fngethandle: "Name="&env$('Q')&"\PRmstr\Category.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\Categoryidx.h"&str$(cno)&",Shr",internal,input,keyed ioerr ERTN
+00120     open #file_num:=fngethandle: "Name="&env$('Q')&"\PRmstr\Category.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\Categoryidx.h"&env$('cno')&",Shr",internal,input,keyed ioerr ERTN
 00130 ! ______________________________________________________________________
 00140     restore #file_num: 
 00150     fntos(sn$="CategorySrch")

@@ -223,8 +223,7 @@
 40680   fnstatus_close
 40700 retry ! /r
 40720 def fn_creg_setup
-40740   cno=val(env$('CNo'))
-40760   if creg_setup<>cno then
+40760   if creg_setup<>val(env$('CNo')) then
 40780     if creg_setup>0 then let fn_creg_close
 40800      !
 40820     library 'S:\Core\Library': fngethandle,fnerror,fnIndex_it,fnstatus_close
@@ -233,8 +232,8 @@
 40880     cregFileData$=env$('Q')&'\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'.h'&env$('CNo')
 40900     cregFileIndex$=env$('Q')&'\'&env$('CurSys')&'mstr\reg-'&env$('CurSys')&'-idx.h'&env$('CNo')
 40920     open #creg_h:=fngethandle: 'Name='&cregFileData$&',Version=1,KFName='&cregFileIndex$&',Use,RecL=384,KPs=1,KLn=128,Shr',internal,outin,keyed
-40940     fn_creg_setup=cno
-40960     creg_setup=cno
+40940     fn_creg_setup=val(env$('CNo'))
+40960     creg_setup=val(env$('CNo'))
 40980   end if
 41000   on error goto ERTN
 41020 fnend

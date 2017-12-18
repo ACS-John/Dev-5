@@ -21,7 +21,7 @@
 00151   fscode=fnfscode !:
         priorcd=fnpriorcd
 00160   on fkey 5 goto L1870
-00170   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative  !:
+00170   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative  !:
         read #20,using 'form pos 384,n 2': nap : close #20: 
 00180   pors=1
 00190   fnopenprn
@@ -29,13 +29,13 @@
 00210   in3$(2)="8,45,N 12.2,UT,N"
 00220   mp1=75
 00230   if fnps=2 then mp1+=3
-00240   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFINDX.H"&str$(cno)&",Shr"
+00240   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSFINDX.H"&env$('cno')&",Shr"
 00250   if fnps=2 then !:
-          fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&str$(cno)&",Shr"
+          fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&env$('cno')&",Shr"
 00260   nametab=int(44-len(rtrm$(cnam$))/2)
 00270   open #1: fl1$,internal,input,keyed 
-00280   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",Shr",internal,input,relative 
-00300   open #4: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&str$(cno)&",Shr",internal,outin,relative 
+00280   open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",Shr",internal,input,relative 
+00300   open #4: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outin,relative 
 00310   if fnprocess=1 or fnUseDeptNo=0 then goto L410
 00320   fntos(sn$="GLInput") !:
         mylen=30: mypos=mylen+3 : right=1

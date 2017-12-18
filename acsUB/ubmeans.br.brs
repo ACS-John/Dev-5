@@ -10,9 +10,9 @@
         ! 
 00100   fntop("S:\acsUB\ubMeans",cap$="Median Sewer Charge")
 00110 ! ______________________________________________________________________
-00120   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,input,keyed 
-00130   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
-00140   open #5: "Name="&env$('Q')&"\UBmstr\MEANs.h"&str$(cno)&",RecL=22,REPLACE",internal,output 
+00120   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00130   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00140   open #5: "Name="&env$('Q')&"\UBmstr\MEANs.h"&env$('cno')&",RecL=22,REPLACE",internal,output 
 00150   read #1,using L490: x$,a2 eof DONE
 00160   restore #2,key>=x$&"         ": nokey L230
 00170 L170: read #2,using L540: p$,tdate,tcode,tamount,mat tg,wr,wu,er,eu,gr,gu,tbal,pcode eof L230
@@ -104,8 +104,8 @@
 00810   close #1: ioerr L820
 00820 L820: close #2: ioerr L830
 00830 L830: close #5: ioerr L840
-00840 L840: execute "Index "&env$('Q')&"\UBmstr\MEANs.h"&str$(cno)&","&env$('Q')&"\UBmstr\MEANIDX.h"&str$(cno)&" 11,12,REPLACE,DupKeys -n"
-00850   open #5: "Name="&env$('Q')&"\UBmstr\MEANs.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\MEANIDX.h"&str$(cno)&",Shr",internal,outin,keyed 
+00840 L840: execute "Index "&env$('Q')&"\UBmstr\MEANs.h"&env$('cno')&","&env$('Q')&"\UBmstr\MEANIDX.h"&env$('cno')&" 11,12,REPLACE,DupKeys -n"
+00850   open #5: "Name="&env$('Q')&"\UBmstr\MEANs.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\MEANIDX.h"&env$('cno')&",Shr",internal,outin,keyed 
 00860   gosub HEADER
 00870   means=int(lrec(5)/2)
 00880 L880: read #5,using "Form POS 1,C 10,N 12.2": z$,t3 eof L940

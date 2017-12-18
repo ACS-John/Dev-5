@@ -23,7 +23,7 @@
 00210   scr$(3)="Department Name:"
 00220 ! 
 00230   for j=1 to 22 : ins$(j)=str$(j+1)&",2,C 42,H,N" : next j
-00240 L240: open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L1800
+00240 L240: open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\DPTIDX1.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1800
 00250   hd$(1)="     **ENTER FUND & DEPT # AS 0 OR BLANK TO STOP**"
 00260   hd$(2)="     **ENTER FUND & DEPT  # AS 0 OR BLANK TO DELETE**"
 00270   for j=1 to 6
@@ -37,7 +37,7 @@
 00350   close #101: ioerr L360
 00360 L360: open #101: "SROW=5,SCOL=10,EROW=12,ECOL=48,BORDER=DR,CAPTION=Department File",display,outin 
 00370   pr f "2,9,Cc 41,R,N": cnam$
-00380   pr f "3,9,Cc 41,R,N": "Company Number "&str$(cno)
+00380   pr f "3,9,Cc 41,R,N": "Company Number "&env$('cno')
 00390   sm1$(1)="1.  Initial File Preparation" !:
         sm1$(2)="2.  Add New Records" !:
         sm1$(3)="3.  Modify or Inquire Records" !:
@@ -54,7 +54,7 @@
 00470   close #101: ioerr L480
 00480 L480: open #101: "SROW=5,SCOL=13,EROW=16,ECOL=64,BORDER=DR,CAPTION=INITIAL FILE PREPARATION",display,outin 
 00490   pr f "5,18,Cc 41,R,N": cnam$
-00500   pr f "6,18,C 41,R,N": "            COMPANY NUMBER "&str$(cno)
+00500   pr f "6,18,C 41,R,N": "            COMPANY NUMBER "&env$('cno')
 00510   pr f "8,13,C 52,R,N": " ******************   WARNING   ******************"
 00520   pr f "10,13,C 52,H,N": "  THIS SELECTION WILL DESTROY ALL EXISTING RECORDS"
 00530   pr f "11,13,C 52,H,N": "  ON THE DEPARTMENT NAME FILE."
@@ -64,12 +64,12 @@
 00570   if cmdkey=5 then goto MENU1
 00580   if pas$><"COPY " then goto L620
 00590   close #1: ioerr L600
-00600 L600: execute "COPY A:DPTMSTR.H"&str$(cno)&","&env$('Q')&"\CLmstr\*.*"
+00600 L600: execute "COPY A:DPTMSTR.H"&env$('cno')&","&env$('Q')&"\CLmstr\*.*"
 00610   goto L770
 00620 L620: if ltrm$(rtrm$(pas$))><"BUILD" then goto L730
 00630   close #1: ioerr ignore
-00640   open #2: "Name=DPTMSTR.h"&str$(cno)&"/DPTMSTR,KFName=DPTIDX1.h"&str$(cno)&"/DPTMSTR,Shr",internal,input,keyed 
-00650   open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&",SIZE=0,RecL=35,Replace",internal,output 
+00640   open #2: "Name=DPTMSTR.h"&env$('cno')&"/DPTMSTR,KFName=DPTIDX1.h"&env$('cno')&"/DPTMSTR,Shr",internal,input,keyed 
+00650   open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&",SIZE=0,RecL=35,Replace",internal,output 
 00660 L660: read #2,using L670: gl$,de$ eof END1
 00670 L670: form pos 1,c 12,c 50
 00680   write #1,using L670: gl$,de$
@@ -79,9 +79,9 @@
 00720   goto L770
 00730 L730: if pas$><"ERASE" then goto L560
 00740 L740: close #1: ioerr ignore
-00750   open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&",SIZE=0,RecL=35,Replace",internal,output 
+00750   open #1: "Name="&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&",SIZE=0,RecL=35,Replace",internal,output 
 00760   close #1: 
-00770 L770: execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys"
+00770 L770: execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&env$('cno')&" 1 5 Replace DupKeys"
 00780   goto L240
 00790 L790: new1=1
 00800 L800: pr newpage
@@ -162,7 +162,7 @@
 01550   close #101: ioerr ignore
 01560   open #101: "SROW=08,SCOL=18,EROW=12,ECOL=58,BORDER=DR,CAPTION=GL PROOF LIST",display,outin 
 01570   pr f "08,18,Cc 41,H,N": cnam$
-01580   pr f "09,18,C 41,H,N": "            COMPANY NUMBER "&str$(cno)
+01580   pr f "09,18,C 41,H,N": "            COMPANY NUMBER "&env$('cno')
 01590   pr f "11,18,C 41,R,N": "              IN PROCESS"
 01600   pr f "13,30,C 16,R,N": "PRESS F5 TO STOP"
 01610   on fkey 5 goto L1720
@@ -182,7 +182,7 @@
 01750   goto XIT
 01760 L1760: close #1: ioerr L1770
 01770 L1770: close #2: ioerr L1780
-01780 L1780: execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys -n"
+01780 L1780: execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&env$('cno')&" 1 5 Replace DupKeys -n"
 01790   goto XIT
 01800 L1800: if err=4152 then goto L740
 01810 L1810: restore #1,search>="": nokey MENU1
@@ -212,10 +212,10 @@
 02050   goto L1820
 02060 ! ______________________________________________________________________
 02070 L2070: close #1: ioerr L2080
-02080 L2080: execute "Copy "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&" "&env$('Temp')&"\WORK -D -n"
-02090   fnFree(env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno))
-02100   execute "RENAME "&env$('Temp')&"\WORK "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&" -n"
-02110   execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&str$(cno)&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&str$(cno)&" 1 5 Replace DupKeys -n"
+02080 L2080: execute "Copy "&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&" "&env$('Temp')&"\WORK -D -n"
+02090   fnFree(env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno'))
+02100   execute "RENAME "&env$('Temp')&"\WORK "&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&" -n"
+02110   execute "Index "&env$('Q')&"\CLmstr\DPTMSTR.h"&env$('cno')&' '&env$('Q')&"\CLmstr\DPTIDX1.h"&env$('cno')&" 1 5 Replace DupKeys -n"
 02120   goto L240
 02130 ! ______________________________________________________________________
 02140 ! <Updateable Region: ERTN>

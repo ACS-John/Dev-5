@@ -28,11 +28,11 @@
 18000 PR_JOURNAL: ! 
 18020   fnopenprn
 18040   if cur_prior=1 then 
-18060     execute "Index "&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&" "&env$('Temp')&"\fsindex.H"&str$(cno)& " 25/29/1 2/12/12 Replace DupKeys -N,Shr"
-18080     open #3: "Name="&env$('Q')&"\GLmstr\GLtrans.h"&str$(cno)&",KFName="&env$('Temp')&"\fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+18060     execute "Index "&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&" "&env$('Temp')&"\fsindex.H"&env$('cno')& " 25/29/1 2/12/12 Replace DupKeys -N,Shr"
+18080     open #3: "Name="&env$('Q')&"\GLmstr\GLtrans.h"&env$('cno')&",KFName="&env$('Temp')&"\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 18100   else if cur_prior=2 then ! index current file
-18120     execute "Index "&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno)&" "&env$('Temp')&"\fsindex.H"&str$(cno)& " 25/29/1 2/12/12 Replace DupKeys -N" ! index current file
-18140     open #3: "Name="&env$('Q')&"\GLmstr\ACtrans.h"&str$(cno)&",KFName="&env$('Temp')&"\fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+18120     execute "Index "&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&" "&env$('Temp')&"\fsindex.H"&env$('cno')& " 25/29/1 2/12/12 Replace DupKeys -N" ! index current file
+18140     open #3: "Name="&env$('Q')&"\GLmstr\ACtrans.h"&env$('cno')&",KFName="&env$('Temp')&"\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 18160   end if 
 20000 PJ_READ_1: ! 
 20020   if cur_prior=2 then 

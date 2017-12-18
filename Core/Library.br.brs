@@ -417,7 +417,7 @@
 48220   !
 48240   def library fnwait(; win,&cap$,message$*40,stopable)
 48260     library 'S:\Core\Wait.br': fnwait
-48280     fnwait(win,cap$,message$,stopable)
+48280     fnwait(message$,stopable)
 48300   fnend
 48320   def library fnadd1099(mat cinfo$, mat einfo$, mat box)
 48340     library 'S:\Core\Print1099.br': fnadd1099

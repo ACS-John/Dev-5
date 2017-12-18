@@ -16,7 +16,7 @@
 13000   fncno(cno) : !  :  !
 13200   fntop("S:\acsUB\reset_readings",cap$="Reset Readings")
 13400   dim srvnam$(10)*20,srv$(10)*2
-13600   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&str$(cno)&",Shr",internal,input,relative 
+13600   open #20: "Name="&env$('Q')&"\UBmstr\ubData\Service.h"&env$('cno')&",Shr",internal,input,relative 
 13800   read #20,using "Form POS 1,10*C 20,10*C 2",rec=1: mat srvnam$,mat srv$
 14000   close #20: 
 14200 ! ______________________________________________________________________
@@ -39,9 +39,9 @@
 17600   if resp$(4)='True' then do_water=1 else do_water=0
 17800   if resp$(5)='True' then do_gas=1 else do_gas=0
 18000   if resp$(6)='True' then do_usages=1 else do_usages=0
-18200   execute "Index "&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&' '&env$('Q')&"\UBmstr\UTV_Date.h"&str$(cno)&" 11 8 Replace DupKeys -n"
-18400   open #h_trans=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UTV_Date.h"&str$(cno)&",Shr",internal,input,keyed 
-18600   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+18200   execute "Index "&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&' '&env$('Q')&"\UBmstr\UTV_Date.h"&env$('cno')&" 11 8 Replace DupKeys -n"
+18400   open #h_trans=fngethandle: "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UTV_Date.h"&env$('cno')&",Shr",internal,input,keyed 
+18600   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 18800 F_CUSTOMER: form pos 11,2*c 30,pos 143,7*pd 2,pos 157,11*pd 4.2,pos 201,4*pd 4,pos 217,15*pd 5,pos 292,pd 4.2,pos 296,pd 4,pos 300,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2,n 7,2*n 6,n 9,pd 5.2,n 3,3*n 9,3*n 2,3*n 3,n 1,3*n 9,3*pd 5.2,c 30,7*c 12,3*c 30
 19000 ! ______________________________________________________________________
 19200   restore #h_trans,key=str$(d1): nokey SCREEN1

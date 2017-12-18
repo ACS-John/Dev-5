@@ -266,7 +266,7 @@
 02040   return  ! /r
 02050 ! PRINT_PROOF: ! r:  pr proof list is currently unused
 02060 !   restore #1,key>="            ": eof ignore
-02070 !   fnwait(101,cap$,"Printing: Please wait...",1)
+02070 !   fnwait("Printing: Please wait...",1)
 02080 ! ! on fkey 5 goto PP_FINIS
 02090 !   fnopenprn
 02100 !   gosub PP_HEADER

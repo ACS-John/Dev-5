@@ -11,7 +11,7 @@
 00110   fntop("S:\acsUB\TotalBal",cap$="Change Route and Sequence Numbers")
 00120   fnopenprn
 00130 ! ______________________________________________________________________
-00140   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+00140   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00150   open #2: "Name=newroute2.txt",display,input 
 00160 READ_CUSTOMER: ! 
 00170 L170: linput #2: ln$ eof XIT
@@ -30,7 +30,7 @@
 00260   goto L170
 00270 XIT: fncloseprn
 00280   close #1: 
-00290   execute "Index "&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&' '&env$('Q')&"\UBmstr\UBIndx5.h"&str$(cno)&" 1741/1743 2/7 Replace DupKeys -n"
+00290   execute "Index "&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&' '&env$('Q')&"\UBmstr\UBIndx5.h"&env$('cno')&" 1741/1743 2/7 Replace DupKeys -n"
 00300   fnxit
 00310 ! ______________________________________________________________________
 00320 ! <Updateable Region: ERTN>

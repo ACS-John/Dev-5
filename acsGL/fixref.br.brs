@@ -9,7 +9,7 @@
 00090 ! ______________________________________________________________________
 00100   fntop(program$,"Fix Reference Numbers")
 00110   fncno(cno)
-00120   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+00120   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00130   fil$(1)="ACGLFNSB" : idx$(1)="FNSBINDX"
 00140   fil$(2)="ACGLFNSc" : idx$(2)="FNScINDX"
 00150   fil$(3)="ACGLFNSi" : idx$(3)="FNSiINDX"

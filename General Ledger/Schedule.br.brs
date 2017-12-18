@@ -154,9 +154,7 @@
 57040 return ! /r
 58000 ! PROOF: ! r:
 58020 !   restore #10,key>="  ": eof ignore ioerr ADD_EDIT_SCHEDULES
-58040 !   ! win=102 
-58060 !   ! message$="Printing: Please wait..." 
-58080 !   ! fnwait(win,env$('program_caption'),message$,1)
+58080 !   ! fnwait("Printing: Please wait...",1)
 58100 !   ! on fkey 5 goto L1530
 58120 !   fnopenprn
 58140 !   do

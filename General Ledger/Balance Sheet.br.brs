@@ -1,28 +1,31 @@
-00010 ! Replace S:\acsGL\BalanceSheetTest
-00020 ! Balance Sheet !:
-        ! Standard 8.5x11
+00010 ! formerly S:\acsGL\BalanceSheet
+00020 ! Balance Sheet - Standard 8.5x11
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fncno,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnglfs,fnpglen,fntos,fnlbl,fntxt,fncmdkey,fnacs
+00040   library 'S:\Core\Library': fntop,fnxit,fnopenprn,fncloseprn,fnerror,fnprocess,fnpedat$,fnpriorcd,fnps,fnfscode,fnUseDeptNo,fnglfs,fnpglen,fntos,fnlbl,fntxt,fncmdkey,fnacs,fnactpd,fnactpd$
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   dim fl1$*256,cap$*128
-00080   dim cnam$*40,b$*3,a$(8)*30,oldtrans$*16,g(8),d(2),by(13),bp(13)
+00080   dim b$*3,a$(8)*30,oldtrans$*16,g(8),d(2),by(13),bp(13)
 00090   dim r$*5,d$*50,te$*1,ac(9),report$*50,secondr$*50,foot$*132,underlin$*14
 00100 ! ______________________________________________________________________
-00110   fntop(program$,cap$="Balance Sheet")
-00120   fncno(cno,cnam$)
-00140   if fnglfs=5 then goto XIT !:
-          ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
-00150   if fnps=2 then mp1=66 !:
-          fl1$="Name="&env$('Q')&"\GLmstr\acglFnSC.h"&str$(cno) !:
-          fl1$=fl1$&",KFName="&env$('Q')&"\GLmstr\fnSCIndx.h"&str$(cno)&",Shr" else !:
-          mp1=63 !:
-          fl1$="Name="&env$('Q')&"\GLmstr\acglFnSB.h"&str$(cno) !:
-          fl1$=fl1$&",KFName="&env$('Q')&"\GLmstr\FNSBIndx.h"&str$(cno)&",Shr"
-00160   open #1: fl1$,internal,input,keyed 
-00170   if fnprocess=1 or fnUseDeptNo=0 then goto L280 else goto L190
+00110   fntop(program$)
+00134   actpd$=fnactpd$ 
+00135   actpd=fnactpd
+00136   fnfscode(actpd)
+00137   fnpriorcd
+00140   if fnglfs=5 then goto XIT           ! sets fnps,fnpriorcd,fnfscode (primary/secondary,current year/Prior,period to print)
+00146   fnfscode
+00147   fnpriorcd
+00150   if fnps=2 then 
+00151     mp1=66
+00152     open #1:"Name="&env$('Q')&"\GLmstr\acglFnSC.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fnSCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00153   else
+00154     mp1=63
+00155     open #1:"Name="&env$('Q')&"\GLmstr\ACGLFNSB.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSBIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00156   end if
+00170   if fnprocess=1 or fnUseDeptNo=0 then goto GetStarted else goto Screen1 
 00180 ! ______________________________________________________________________
-00190 L190: fntos(sn$="GLInput") !:
+00190 Screen1: ! r:
+00192   fntos(sn$="GLInput") !:
         mylen=30: mypos=mylen+3 : right=1
 00200   fnlbl(1,1,"Cost Center or Department #:",mylen,right)
 00210   fntxt(1,mypos,3,0,right,"30",0,"Enter the cost center or department number if you wish to pr only one department, else leave blank for all.",0 ) !:
@@ -32,12 +35,13 @@
 00240   fncmdkey("&Cancel",5,0,1,"Returns to menu without posting.")
 00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
-00270   costcntr=val(resp$(1))
-00280 L280: if fnps=2 then goto L310 ! secondary
-00290   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&' '&env$('Q')&"\GLmstr\fsindex.H"&str$(cno)&" 63 3 Replace DupKeys -N"
+00270   costcntr=val(resp$(1)) 
+00282 goto GetStarted ! /r
+00280 GetStarted: if fnps=2 then goto L310 ! secondary
+00290   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\fsindex.H"&env$('cno')&" 63 3 Replace DupKeys -N"
 00300   goto L320
-00310 L310: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&' '&env$('Q')&"\GLmstr\fsindex.H"&str$(cno)&" 66 3 Replace DupKeys -N"
-00320 L320: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00310 L310: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&' '&env$('Q')&"\GLmstr\fsindex.H"&env$('cno')&" 66 3 Replace DupKeys -N"
+00320 L320: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 00330   fnopenprn
 00340   if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00350   report$="Balance Sheet"
@@ -62,11 +66,10 @@
 00540 L540: ! read general ledger master file for amounts
 00550   form pd 3
 00560 L560: read #3,using 'Form POS MP1,PD 3,POS 87,27*PD 6.2': br,cb,mat by,mat bp eof L650
-00565   cb=1
 00570   if br=0 then goto L560
-00580   if fnfscode=0 then goto L610
+00580   if fnfscode=0 or (fnfscode=actpd and fnpriorcd=1) then goto L610
 00590   if fnfscode<1 or fnfscode>12 then let fnfscode(1)
-00600 ! If FNPRIORCD=1 Then cB=BY(FNFSCODE) Else cB=BP(FNFSCODE)
+00600   if fnpriorcd=1 then cb=by(fnfscode) else cb=bp(fnfscode)
 00610 L610: if br=val(r$) then total=total+cb else goto L630
 00620   goto L540
 00630 L630: if br<val(r$) then goto L540
@@ -82,12 +85,15 @@
 00730   if total><0 then goto L750
 00740   if ls+ul+ds+ic>0 then goto L750 else goto READ_TOP
 00750 L750: sp2=dollar-sp-1
+00755   if ul=1 then pr #255,using L761: d$(1:sp2),dollar$,"{\ul ",total,"}" pageoflow PGOF : goto L770 ! atlantis underline
 00760   pr #255,using L770: d$(1:sp2),dollar$,total pageoflow PGOF
+00761 L761: form pos sp,c sp2,pos dollar,c 1,c 5,pic(---,---,---.##),c 2,skip redir  ! ! atlantis underline
 00770 L770: form pos sp,c sp2,pos dollar,c 1,pic(---,---,---.##),skip redir
 00780   total=0
 00790   gosub SET_ACCUM
+00795   if ul=1 then goto L810 ! atlantis underline
 00800   gosub UNDERLINE
-00810   gosub FOOTER
+00810 L810: gosub FOOTER
 00820   goto READ_TOP
 00830 ! ______________________________________________________________________
 00840 L840: if ap=0 then ap=1
@@ -95,10 +101,12 @@
 00860   if ds=1 then dollar$="$" else dollar$=" "
 00870   dollar=24+14*bc ! if  CP=1 Then dOLLAR=50+14*BC Else dOLLAR=24+14*BC
 00880   sp2=dollar-sp-1
+00885   if ul=1 then pr #255,using L761: d$(1:sp2),dollar$,"{\ul ",accum1,"}" pageoflow PGOF : goto L900
 00890   pr #255,using L770: d$(1:sp2),dollar$,accum1 pageoflow PGOF
-00900   gosub SET_ACCUM
+00900 L900: gosub SET_ACCUM
+00905   if ul=1 then goto L920 ! atlantis underline
 00910   gosub UNDERLINE
-00920   gosub FOOTER
+00920 L920: gosub FOOTER
 00930   if te$><"P" then goto L950
 00940   for j=1 to 9 !:
           accum(j)=accum(j)-accum(ap) !:
@@ -151,7 +159,7 @@
 01400   if ul=1 then goto L1450
 01410   underlin$="=============="
 01420   pr #255,using L1430: underlin$
-01430 L1430: form skip 1,pos underlin,c 14,skip redir
+01430 L1430: form pos underlin,c 14,skip redir  ! atlantis underline
 01440   goto L1480
 01450 L1450: underlin$="______________"
 01460   pr #255,using L1470: underlin$
@@ -160,18 +168,20 @@
 01490 L1490: form skip 1,c 1,skip 0
 01500   return 
 01510 ! ______________________________________________________________________
-01520 HEADER: ! 
+01520 HEADER: ! r:
 01530   heading=1
 01540   pr #255: "\qc  {\f181 \fs24 \b "&env$('cnam')&"}"
 01543   pr #255: "\qc  {\f181 \fs24 \b "&trim$(report$)&"}"
 01544   if trim$(secondr$)<>"" then pr #255: "\qc  {\f181 \fs18 \b "&trim$(secondr$)&"}"
 01545   pr #255: "\qc  {\f181 \fs16 \b "&trim$(fnpedat$)&"}"
 01546   pr #255: "\ql "
-01590   return 
+01590   return ! /r
 01600 ! ______________________________________________________________________
 01610 DONE: ! 
 01620   eofcode=1
 01630   gosub L1220
+01634   fnfscode(actpd)
+01635   fnpriorcd(1)
 01640   if pors<>2 then let fncloseprn
 01650   goto XIT
 01660 ! ______________________________________________________________________

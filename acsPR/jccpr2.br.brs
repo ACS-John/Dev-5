@@ -14,7 +14,7 @@
 00140   pr newpage
 00150   on fkey 5 goto L1930
 00160   message$="Printing: please wait..."
-00170   fnwait(101,cap$,message$,1)
+00170   fnwait(message$,1)
 00180   fnopenprn(cp,58,220,process)
 00190   if file$(255)(1:3)<>"PRN" then jbskip=1
 00200 ! ______________________________________________________________________
@@ -24,15 +24,15 @@
 00240   pl2$(4)="Union"
 00250   pl2$(5)="Other"
 00260 ! ______________________________________________________________________
-00270   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00270   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  !:
         read #1,using 'Form POS 618,10*N 1,POS 758,N 2',rec=1: mat dedcode,un !:
         close #1: 
 00280 ! ______________________________________________________________________
-00290   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
-00300   open #2: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
+00290   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
+00300   open #2: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00310   open #3: "Name=Work."&session$,internal,input,relative 
 00320   open #4: "Name="&env$('Temp')&"\Addr."&session$,internal,input 
-00330   open #5: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno)&",Shr",internal,input,relative 
+00330   open #5: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,input,relative 
 00340   read #3,using L350,rec=1: df,dt,mat dr
 00350 L350: form pos 1,2*n 6,7*pd 3
 00360 L360: read #4,using L370: r4 eof L1890

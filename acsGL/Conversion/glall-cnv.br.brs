@@ -9,7 +9,7 @@
 00100 L100: input fields "10,57,N 5,UE,N",attr "R": cno conv L100
 00110   if cmdkey=5 then stop 
 00120 ! 
-00130   open #1: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno),internal,input ioerr L260
+00130   open #1: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno'),internal,input ioerr L260
 00140   pr f "14,32,C 16,BR,N": "   IN PROCESS"
 00150   open #2: "Name=X,size=0,RecL=72,REPLACE",internal,output 
 00160 L160: read #1,using L190: mat tr,tr$,td$ eof L220
@@ -20,11 +20,11 @@
 00210   goto L160
 00220 L220: close #1,free: 
 00230   close #2: 
-00240   execute "Rename X "&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno)
-00250   execute "Index "&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno)&' '&env$('Q')&"\GLmstr\AcTrIdx.h"&str$(cno)&" 1/71/17/13 12/2/2/4 REPLACE DupKeys"
+00240   execute "Rename X "&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')
+00250   execute "Index "&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&' '&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&" 1/71/17/13 12/2/2/4 REPLACE DupKeys"
 00260 L260: ! S:\acsGL\PRmstr.CNV
 00270   dim pr1$*90,pr1(18),pr2(36)
-00280   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno),internal,outin,keyed ioerr L480
+00280   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno'),internal,outin,keyed ioerr L480
 00290   open #2: "Name="&env$('Temp')&"\Work."&session$&",SIZE=0,RecL=280,REPLACE",internal,output 
 00300 L300: read #1,using L310: pr1$,mat pr1 eof END3
 00310 L310: form pos 1,c 90,18*pd 5.2,2*n 5
@@ -36,16 +36,16 @@
 00370   goto L300
 00380 END3: close #1: 
 00390   close #2: 
-00400   execute "COPY "&env$('Temp')&"\Work."&session$&", "&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&""
-00410   execute "Index "&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&","&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",1,4,REPLACE,DupKeys"
+00400   execute "COPY "&env$('Temp')&"\Work."&session$&", "&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&""
+00410   execute "Index "&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&","&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",1,4,REPLACE,DupKeys"
 00420   open #1: "Name=CNO.H"&wsid$,internal,outin,relative 
 00430   rewrite #1,using L440,rec=1: cno
 00440 L440: form pos 1,n 2
 00450   close #1: 
-00460   open #1: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&str$(cno)&",SIZE=0,RecL=110,REPLACE",internal,output 
+00460   open #1: "Name="&env$('Q')&"\GLmstr\ACPRCKS.h"&env$('cno')&",SIZE=0,RecL=110,REPLACE",internal,output 
 00470   close #1: 
 00480 L480: close #1: ioerr L490
-00490 L490: open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno),internal,outin,relative ioerr L560
+00490 L490: open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno'),internal,outin,relative ioerr L560
 00500   read #1,using L510,rec=1: gl1$,gl2$
 00510 L510: form pos 298,2*c 12
 00520 ! write yes to bank rec and accumulate transactions
@@ -62,10 +62,10 @@
 00630   id$(6)=" 6 = SECONDARY FUND / CASH FLOW FILE": fil$(6)="ACGLFNSG": idx$(6)="FNSGINDX"
 00640   pr newpage
 00650   for j=1 to 6
-00660     execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&" "&env$('Temp')&"\Work."&session$&" -83" ioerr L950
-00670     execute "COPY  "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&""
+00660     execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')&" "&env$('Temp')&"\Work."&session$&" -83" ioerr L950
+00670     execute "COPY  "&env$('Temp')&"\Work."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')&""
 00680     if j=2 or j=5 then goto L690 else goto L950
-00690 L690: open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\"&idx$(j)&".h"&str$(cno)&"",internal,outin,keyed 
+00690 L690: open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\"&idx$(j)&".h"&env$('cno')&"",internal,outin,keyed 
 00700     end1=st1=st2=rno=rnp=0
 00710 L710: gosub FIND1
 00720     restore #1,key>=lpad$(str$(st1),5): nokey END2

@@ -8,24 +8,24 @@
 20140 ! ______________________________________________________________________
 20160     fncno(cno)
 20180 ! 
-20200     if exists(env$('Q')&"\UBmstr\Note1.h"&str$(cno)) then
-20220       fnindex_it(env$('Q')&"\UBmstr\Note1.h"&str$(cno), env$('Q')&"\UBmstr\NoteIdx1.h"&str$(cno),"1 10")
-20240       open #h_note1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Note1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&str$(cno)&",Shr",internal,input,keyed 
-20260 !   fnCopy(env$('Q')&"\UBmstr\Note2.h"&str$(cno),env$('Q')&"\UBmstr\Note2.h"&str$(cno),73)  ! BAD IDEA - THIS PROGRAM DOES NOT HANDLE THAT FORMAT OF NOTE2.hxx file - I think S:\acsUB\Conversion\note-cnv-c7.br will convert it to the format necessary for this to continue though
+20200     if exists(env$('Q')&"\UBmstr\Note1.h"&env$('cno')) then
+20220       fnindex_it(env$('Q')&"\UBmstr\Note1.h"&env$('cno'), env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno'),"1 10")
+20240       open #h_note1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Note1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\NoteIdx1.h"&env$('cno')&",Shr",internal,input,keyed 
+20260 !   fnCopy(env$('Q')&"\UBmstr\Note2.h"&env$('cno'),env$('Q')&"\UBmstr\Note2.h"&env$('cno'),73)  ! BAD IDEA - THIS PROGRAM DOES NOT HANDLE THAT FORMAT OF NOTE2.hxx file - I think S:\acsUB\Conversion\note-cnv-c7.br will convert it to the format necessary for this to continue though
 20280     
-20300     open #h_note2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Note2.h"&str$(cno)&",Shr",internal,outin,relative
+20300     open #h_note2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&",Shr",internal,outin,relative
 20320     if kln(h_note2)<73 then
 20340       close #h_note2:
-20360       fnCopy(env$('Q')&"\UBmstr\Note2.h"&str$(cno),env$('Q')&"\UBmstr\Note2.h"&str$(cno), 73)
-20380       open #h_note2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Note2.h"&str$(cno)&",Shr,Use,RecL=73",internal,outin,relative 
+20360       fnCopy(env$('Q')&"\UBmstr\Note2.h"&env$('cno'),env$('Q')&"\UBmstr\Note2.h"&env$('cno'), 73)
+20380       open #h_note2:=fngethandle: "Name="&env$('Q')&"\UBmstr\Note2.h"&env$('cno')&",Shr,Use,RecL=73",internal,outin,relative 
 20400     end if
 20420
 20440 READ_NOTE1: ! 
 20460     read #h_note1,using 'form pos 1,c 10,2*pd 3': z$,mat ra eof DONE
 20480 L230: ! 
 20500     close #33: ioerr ignore
-20520     if ~exists(env$('Q')&"\UBmstr\notes.h"&str$(cno)) then execute "mkdir "&env$('Q')&"\UBmstr\notes.h"&str$(cno)
-20540     open #33: "Name="&env$('Q')&"\UBmstr\notes.h"&str$(cno)&"\"&trim$(z$)&".txt,RecL=128,replace",display,output 
+20520     if ~exists(env$('Q')&"\UBmstr\notes.h"&env$('cno')) then execute "mkdir "&env$('Q')&"\UBmstr\notes.h"&env$('cno')
+20540     open #33: "Name="&env$('Q')&"\UBmstr\notes.h"&env$('cno')&"\"&trim$(z$)&".txt,RecL=128,replace",display,output 
 20560     adr=ra(1)
 20580     do 
 20600       if adr=0 then goto READ_NOTE1
@@ -34,7 +34,7 @@
 20660     loop
 20680     ! 
 20700     DONE: ! 
-20720     fnstatus('Note Conversion of company number '&str$(cno)&" completed successfully")
+20720     fnstatus('Note Conversion of company number '&env$('cno')&" completed successfully")
 20740   end if
 20760 ! Goto 110
 20780 XIT: fnend  ! chain "S:\acsUB\conversion\ubadrbil-cnv"

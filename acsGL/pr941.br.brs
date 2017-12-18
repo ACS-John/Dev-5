@@ -109,7 +109,7 @@
 01000 START_PRINT: ! 
 01010   if frm=1 then goto L1070
 01020   message$="Printing: please wait..."
-01030   fnwait(105,cap$,message$,1)
+01030   fnwait(message$,1)
 01040   on fkey 5 goto DONE
 01050   fnopenprn
 01060   on pageoflow goto PGOF

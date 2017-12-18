@@ -24,8 +24,8 @@
 14400   fn_ask_dates(mat label$,mat filter_date)
 14600   if fkey=93 or fkey=99 then goto XIT
 14800   open #h_in:=fngethandle: 'Name=C:\ACS\Doc\Timesheets\Time Sheet - John Bowman.csv,RecL=100,Shr',external,input 
-15000   open #h_out:=fngethandle: "Name="&env$('Q')&"\TMmstr\TimeSheet.h"&str$(cno)&",RecL=86,KFName="&env$('Q')&"\TMmstr\TimeSheet-Idx.h"&str$(cno)&",Replace,KPs=1,KLn=5",internal,outin,keyed 
-15200   open #h_support:=fngethandle: "Name="&env$('Q')&"\TMmstr\SUPPORT.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\support-idx.h"&str$(cno)&",Shr",internal,input,keyed 
+15000   open #h_out:=fngethandle: "Name="&env$('Q')&"\TMmstr\TimeSheet.h"&env$('cno')&",RecL=86,KFName="&env$('Q')&"\TMmstr\TimeSheet-Idx.h"&env$('cno')&",Replace,KPs=1,KLn=5",internal,outin,keyed 
+15200   open #h_support:=fngethandle: "Name="&env$('Q')&"\TMmstr\SUPPORT.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\support-idx.h"&env$('cno')&",Shr",internal,input,keyed 
 15400 FMSUPPORT: form pos 1,g 6,n 2,c 2,x 8,x 2,n 8
 15600   fnopenprn
 15800   pr #255,using FORM_PRN_HEAD: 'date','client','time','cat','month','desc','rate'

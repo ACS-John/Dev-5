@@ -8,7 +8,7 @@
 00080   fncno(cno)
 00090   fntos(sn$='alpha-GLD') !:
         lc=0
-00100   fncombof('gld-alpha',lc+=1,1,0,env$('Q')&"\CLmstr\GLmstr.h"&str$(cno),13,20,1,12,env$('Q')&"\CLmstr\GLIndx2.h"&str$(cno),1) !:
+00100   fncombof('gld-alpha',lc+=1,1,0,env$('Q')&"\CLmstr\GLmstr.h"&env$('cno'),13,20,1,12,env$('Q')&"\CLmstr\GLIndx2.h"&env$('cno'),1) !:
         resp$(1)=fngld$('0   700  0')
 00110   fncmdset(1)
 00120   fnacs(sn$,0,mat resp$,ckey)

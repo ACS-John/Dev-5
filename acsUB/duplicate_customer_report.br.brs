@@ -12,8 +12,8 @@
 22200   fndat(dat$,1)
 23600   on fkey 5 goto DONE
 23800   fnopenprn
-24000   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",Shr",internal,input,relative 
-24200   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+24000   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",Shr",internal,input,relative 
+24200   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 24400   fn_header
 24600   do 
 24800     read #1,using FORM_CUSTOMER: z$,mat e$,mat a,final,bal,route,sequence,extra$(1) eof DONE
