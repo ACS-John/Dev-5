@@ -9,7 +9,7 @@
 00100 ! ______________________________________________________________________
 00110   fncno(cno)
 00120 ! 
-00130   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
+00130   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 00140   restore #1,key>="        ": eof XIT
 00150 L150: read #1,using 'Form POS 129,PD 5.2': ytdp eof XIT
 00160   rewrite #1,using 'Form POS 129,PD 5.2': 0

@@ -14,17 +14,17 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         open_file_count=1 ! this value is used in the close_file sub routine
-00150   if exists(env$('Q')&"\GLmstr\bankrec.H"&str$(cno))=0 then goto L190
-00160   if exists(env$('Q')&"\GLmstr\glstdidx.h"&str$(cno))=0 then gosub INDEX
-00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\bankrec.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\bankrec-idx.H"&str$(cno)&",Version=1,Shr",internal,outin,keyed 
+00150   if exists(env$('Q')&"\GLmstr\bankrec.H"&env$('cno'))=0 then goto L190
+00160   if exists(env$('Q')&"\GLmstr\glstdidx.h"&env$('cno'))=0 then gosub INDEX
+00170   open #open_file_count: "Name="&env$('Q')&"\GLmstr\bankrec.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\bankrec-idx.H"&env$('cno')&",Version=1,Shr",internal,outin,keyed 
 00180   goto L220
-00190 L190: open #open_file_count: "Name="&env$('Q')&"\GLmstr\bankrec.h"&str$(cno)&",Version=1,Replace,RecL=91",internal,outin 
+00190 L190: open #open_file_count: "Name="&env$('Q')&"\GLmstr\bankrec.h"&env$('cno')&",Version=1,Replace,RecL=91",internal,outin 
 00200   gosub CLOSE_FILE
 00210   gosub INDEX
 00220 L220: return 
 00230 ! ______________________________________________________________________
 00240 INDEX: ! 
-00250   execute "Index "&env$('Q')&"\GLmstr\bankrec.H"&str$(cno)&' '&env$('Q')&"\GLmstr\bankrec-idx.h"&str$(cno) &" 79/3/4 12/1/8 Replace,DupKeys"
+00250   execute "Index "&env$('Q')&"\GLmstr\bankrec.H"&env$('cno')&' '&env$('Q')&"\GLmstr\bankrec-idx.h"&env$('cno') &" 79/3/4 12/1/8 Replace,DupKeys"
 00260   return 
 00270 ! ______________________________________________________________________
 00280 FIXGLACCOUNTS: ! left pad general ledger number and reference number
@@ -123,18 +123,18 @@
         sp(ic+=1)=78
 00650 ! ** Combo Boxes **                                                   !:
         cl=1 : c$(cl,1)='ComboF' !:
-        c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&str$(cno) !:
+        c$(cl,2)=env$('Q')&"\GLmstr\GLmstr.h"&env$('cno') !:
         c$(cl,3)="1" : c$(cl,4)="12" !:
         c$(cl,5)="13" : c$(cl,6)="30" !:
-        c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&str$(cno) !:
+        c$(cl,7)=env$('Q')&"\GLmstr\glindex.h"&env$('cno') !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         limit_to_list$='1'
 00652 ! ** Combo Boxes **                                                   !:
         cl=2 : c$(cl,1)='ComboF' !:
-        c$(cl,2)=env$('Q')&"\GLmstr\transcode.h"&str$(cno) !:
+        c$(cl,2)=env$('Q')&"\GLmstr\transcode.h"&env$('cno') !:
         c$(cl,3)="1" : c$(cl,4)="2" !:
         c$(cl,5)="3" : c$(cl,6)="30" !:
-        c$(cl,7)=env$('Q')&"\GLmstr\transcode-idx.h"&str$(cno) !:
+        c$(cl,7)=env$('Q')&"\GLmstr\transcode-idx.h"&env$('cno') !:
         ! C$(CL,8)=limit to list option ('1'=Yes; '0'=No)                     !:
         limit_to_list$='1'
 00670   return 

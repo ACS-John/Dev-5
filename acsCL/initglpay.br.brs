@@ -20,7 +20,7 @@
         resp$(1)=item1$(1)
 00170   fnlbl(lc+=1,1,"General Ledger Company Number:",mylen,right)
 00180   fntxt(lc,mypos,5,0,left,number$) !:
-        resp$(2)=str$(cno)
+        resp$(2)=env$('cno')
 00190   fncmdset(2) !:
         fnacs(sn$,0,mat resp$,ck)
 00200   if ck=5 then goto XIT else !:
@@ -31,8 +31,8 @@
 00230   execute "COPY A:payeeglbreakdown.H"&str$(glcno)&' '&env$('Q')&"\CLmstr\*.*" ioerr MSGBOX2
 00240   execute "Index "&env$('Q')&"\CLmstr\paymstr.H"&str$(glcno)&' '&env$('Q')&"\CLmstr\payidx1.H"&str$(glcno)&",1,8,replace,DupKeys"
 00250   execute "Index "&env$('Q')&"\CLmstr\payeeglbreakdown.H"&str$(glcno)&' '&env$('Q')&"\CLmstr\Payeeglbkdidx.H"&str$(glcno)&",1,8,replace,DupKeys"
-00252   open #paymstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
-00254   open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&str$(cno)&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outin,keyed 
+00252   open #paymstr:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00254   open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outin,keyed 
 00255   version(payeegl,1)
 00256   version(paymstr,1)
 00257   close #paymstr: 

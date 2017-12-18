@@ -14,8 +14,8 @@
 00130 ! 
 00135   fnconsole(1)
 00140   prtjob$="N" : perpag$="N"
-00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
-00160   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
+00150   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00160   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00170 ! ______________________________________________________________________
 00180   if fnprocess=1 then goto L590 ! goto "asdf"
 00190   pr newpage
@@ -74,7 +74,7 @@
 00720 ! ______________________________________________________________________
 00730 L730: pr newpage
 00740   on fkey 5 goto DONE
-00750   fnwait(104,cap$,message$,1)
+00750   fnwait(message$,1)
 00760   fnopenprn !:
         if file$(255)(1:3)<>"PRN" then jbskip=1
 00770   gosub HDR

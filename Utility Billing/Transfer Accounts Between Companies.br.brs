@@ -20,7 +20,7 @@
 30040   mylen=5 : mypos=mylen+2
 30060   fnlbl(1,1,"From:",mylen,1)
 30080   fntxt(1,mypos+.4,50, 0,0,'',1) ! fncmbcno(1,mypos)
-30100   resp$(1)=env$('cnam')&' ('&str$(cno)&')'
+30100   resp$(1)=env$('cnam')&' ('&env$('cno')&')'
 30120   fnlbl(2,1,"To:",mylen,1)
 30140   fncmbcno(2,mypos)
 30160   resp$(2)=''

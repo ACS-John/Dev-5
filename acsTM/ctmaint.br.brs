@@ -6,9 +6,9 @@
 00070   dim a$(30)*30,fli$(30),flo$(32),hd$(2)*40,b$(30)*2
 00080   pr newpage
 00090   pr f "10,20,c 30,h,n": "CHANGE CATEGORIES IN PROCESS"
-00100   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&str$(cno)&",Shr",internal,outin,relative ioerr L120
+00100   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Shr",internal,outin,relative ioerr L120
 00110   goto L140
-00120 L120: open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&str$(cno)&",Replace,RecL=900",internal,outin,relative ioerr L410
+00120 L120: open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Replace,RecL=900",internal,outin,relative ioerr L410
 00130   write #1,using L370,rec=1: mat a$
 00140 L140: read #1,using L370,rec=1: mat a$ ioerr L410
 00150   for j=1 to 10

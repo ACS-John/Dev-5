@@ -19,12 +19,12 @@
 20120     fil$(6)="acglfnSG": idx$(6)="fnSGIndx" ! Secondary Fund / Cash Flow
 20140 ! 
 20160     for j=1 to 6
-20180       execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&' '&env$('temp')&"\WORK."&session$&" -83 -d -n" ioerr NEXT_J
-20200       execute "Copy  "&env$('temp')&"\WORK."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&" -n"
-20220       fnindex_it(env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno),"Index "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&' '&env$('Q')&"\GLmstr\"&idx$(j)&".h"&str$(cno)&" 1 5 Replace DupKeys ")
+20180       execute "Copy "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')&' '&env$('temp')&"\WORK."&session$&" -83 -d -n" ioerr NEXT_J
+20200       execute "Copy  "&env$('temp')&"\WORK."&session$&' '&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')&" -n"
+20220       fnindex_it(env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno'),"Index "&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')&' '&env$('Q')&"\GLmstr\"&idx$(j)&".h"&env$('cno')&" 1 5 Replace DupKeys ")
 20240 ! 
 20260       if j=2 or j=5 then 
-20280         open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\"&idx$(j)&".h"&str$(cno),internal,outin,keyed 
+20280         open #1: "Name="&env$('Q')&"\GLmstr\"&fil$(j)&".h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\"&idx$(j)&".h"&env$('cno'),internal,outin,keyed 
 20300         version(1,1)
 20320         delete_count=read_count=0
 20340         end1=st1=st2=rno=rnp=0

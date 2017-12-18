@@ -7,8 +7,8 @@
 00060   input fields "10,51,N 2,UE,N": cno
 00070   if cno=0 then stop  ! CHAIN "RABLDSCR/CCRA1"
 00080 ! 
-00090   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno),internal,outin,keyed 
-00100   open #2: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&str$(cno)&",SIZE=0,RecL=56,Replace",internal,outin,relative 
+00090   open #1: "Name="&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno'),internal,outin,keyed 
+00100   open #2: "Name="&env$('Q')&"\CLmstr\PayAlloc.h"&env$('cno')&",SIZE=0,RecL=56,Replace",internal,outin,relative 
 00110 L110: read #1,using L120: p$,mat gl eof L220
 00120 L120: form pos 1,c 8,pos 147,n 3,n 6,n 3
 00130   mat ta=(0)
@@ -22,12 +22,12 @@
 00210   goto L110
 00220 L220: close #1: 
 00230   close #2: 
-00240 ! EXECUTE "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",X -D -152"
-00250 ! EXECUTE "Free "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
-00260 ! EXECUTE "Rename X "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
-00270 ! EXECUTE "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx1.H"&str$(cno)&",1,8,Replace,DupKeys"
-00280 ! EXECUTE "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx2.H"&str$(cno)&",9,28,Replace,DupKeys"
-00290   pr f "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&str$(cno)
+00240 ! EXECUTE "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",X -D -152"
+00250 ! EXECUTE "Free "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
+00260 ! EXECUTE "Rename X "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
+00270 ! EXECUTE "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&","&env$('Q')&"\CLmstr\PayIndx1.H"&env$('cno')&",1,8,Replace,DupKeys"
+00280 ! EXECUTE "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&","&env$('Q')&"\CLmstr\PayIndx2.H"&env$('cno')&",9,28,Replace,DupKeys"
+00290   pr f "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&env$('cno')
 00300   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00310   input fields "13,40,C 1,IAE,N": pause$
 00320   goto L40

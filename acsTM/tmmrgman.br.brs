@@ -6,14 +6,14 @@
 00070   dim cde$(10)*6,gl$*12,des$*20
 00080   pr newpage
 00090   pr f "10,20,c 60,h,n": "T/M MERGE INVOICES IN PROCESS"
-00100   open #3: "Name="&env$('Q')&"\TMmstr\TMWk2"&wsid$&".H"&str$(cno)&",NoShr",internal,input 
-00110   open #12: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&str$(cno)&",Shr",internal,outin,relative 
-00120   open #2: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&str$(cno)&",Shr",internal,outin,relative 
+00100   open #3: "Name="&env$('Q')&"\TMmstr\TMWk2"&wsid$&".H"&env$('cno')&",NoShr",internal,input 
+00110   open #12: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+00120   open #2: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&env$('cno')&",Shr",internal,outin,relative 
 00130 L130: form pos 54,pd 3
-00140   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
-00150   open #4: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&str$(cno)&",Shr",internal,outin,relative 
-00160 ! open #h_armotran:=5: "Name="&env$('Q')&"\TMmstr\ARMoTran.h"&str$(cno)&",Shr",internal,output 
-00170   open #6: "Name="&env$('Q')&"\TMmstr\Company.h"&str$(cno)&",Shr",internal,input 
+00140   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00150   open #4: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",Shr",internal,outin,relative 
+00160 ! open #h_armotran:=5: "Name="&env$('Q')&"\TMmstr\ARMoTran.h"&env$('cno')&",Shr",internal,output 
+00170   open #6: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00180   read #6,using L190: pgl$ 
 00190 L190: form pos 190,c 12
 00200   close #6: 

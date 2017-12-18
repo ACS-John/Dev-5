@@ -36,9 +36,9 @@
 00300 XIT: fnxit
 00310 ! ______________________________________________________________________
 00320 STARTREPORT: ! 
-00330   fnwait(0,cap$,"Printing: please wait...",1)
+00330   fnwait("Printing: please wait...",1)
 00340   on fkey 5 goto DONE
-00350   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00350   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00360   fnopenprn
 00370   gosub HEADER
 00380   goto REPORT

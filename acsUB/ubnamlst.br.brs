@@ -12,11 +12,11 @@
 24020   fncno(cno,cnam$)
 24040   fndat(dat$,1)
 24060 ! 
-24080   idx$(1)=env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)
-24100   idx$(2)=env$('Q')&"\UBmstr\ubIndx2.h"&str$(cno)
-24120   idx$(3)=env$('Q')&"\UBmstr\ubIndx3.h"&str$(cno)
-24140   idx$(4)=env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)
-24160   idx$(5)=env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)
+24080   idx$(1)=env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')
+24100   idx$(2)=env$('Q')&"\UBmstr\ubIndx2.h"&env$('cno')
+24120   idx$(3)=env$('Q')&"\UBmstr\ubIndx3.h"&env$('cno')
+24140   idx$(4)=env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')
+24160   idx$(5)=env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')
 24180 ! 
 24200   item1$(1)="Account"
 24220   item1$(2)="Customer Name"
@@ -32,7 +32,7 @@
 24420   item2$(5)="Only Alternate Addresses"
 24440   item2$(6)="Active, But Not Being Billed"
 24450 ! 
-24460   open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+24460   open #3: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 24480 ! /r
 34000 ! MENU1: ! r:
 34020   fntos("ubnamlst")
@@ -99,9 +99,9 @@
 42020   on fkey 5 goto DONE
 42040   if q0=3 and turn$="Y" then gosub STREET_REVERSE
 42080   if uprc$(turn$)="Y" then 
-42100     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&idx$(1)&",Shr",internal,input,keyed 
+42100     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&idx$(1)&",Shr",internal,input,keyed 
 42120   else 
-42140     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&idx$(q0)&",Shr",internal,input,keyed 
+42140     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&idx$(q0)&",Shr",internal,input,keyed 
 42160     if q0=4 then gosub OPEN_GRID ! OPEN GRID DISPLAY FILE
 42180   end if 
 42200 F_CUSTOMER: form pos 1,c 10,pos 11,4*c 30,pos 143,5*pd 2,pos 1806,3*n 2,pos 153,2*pd 2,pos 1821,n 1,pos 292,pd 4.2,pos 1741,n 2,n 7,pos 1864,c 30,c 12,pos 1966,c 12
@@ -235,7 +235,7 @@
 58280 ! fnACS(WIN,3,MAT resp$,CK)
 58300 ! If resp$(1)="True" Then tURN$="Y" Else tURN$="N"
 58320 ! If CK=5 Then Goto XIT
-60020   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&idx$(q0)&",Shr",internal,input,keyed 
+60020   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&idx$(q0)&",Shr",internal,input,keyed 
 60040   open #10: "Name="&env$('Temp')&"\Temp."&session$&",RecL=40,Replace",internal,outin 
 60060   do 
 60080     read #1,using 'form pos 1,c 10,c 30': z$,e$(1) eof SORT1

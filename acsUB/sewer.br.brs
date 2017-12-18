@@ -71,7 +71,7 @@
 01420 ! ______________________________________________________________________
 01440   fnopenprn
 01460   message$="Calculating: please wait..."
-01480   fnwait(0,cap$,message$,1)
+01480   fnwait(message$,1)
 01500   gosub HDR
 01520 L480: ! 
 01540   read #h_customer,using L500: x$,customer_sewer_rate_code,oldavg eof DONE

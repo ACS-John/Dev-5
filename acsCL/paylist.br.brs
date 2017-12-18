@@ -12,10 +12,10 @@
 00120   fntop(program$,cap$="Payee Listing")
 00130   fndat(dat$)
 00140   fncno(cno,cnam$)
-00150   open #1: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PAYIDX1.h"&str$(cno)&",Shr",internal,outin,keyed 
-00160   open #2: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PAYIDX2.h"&str$(cno)&",Shr",internal,outin,keyed 
-00170   open #trmstr2=31: "Name="&env$('Q')&"\CLmstr\TRMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TRIDX2.h"&str$(cno)&",Shr",internal,outin,keyed 
-00180   open #payeegl=3: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&str$(cno)&",Shr",internal,outin,keyed 
+00150   open #1: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PAYIDX1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00160   open #2: "Name="&env$('Q')&"\CLmstr\PAYMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PAYIDX2.h"&env$('cno')&",Shr",internal,outin,keyed 
+00170   open #trmstr2=31: "Name="&env$('Q')&"\CLmstr\TRMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX2.h"&env$('cno')&",Shr",internal,outin,keyed 
+00180   open #payeegl=3: "Name="&env$('Q')&"\CLmstr\payeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Shr",internal,outin,keyed 
 00190   pr newpage
 00200   fntos("ubnamlst") !:
         respc=0

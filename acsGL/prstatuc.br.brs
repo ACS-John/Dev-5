@@ -10,7 +10,7 @@
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Print State UC Report")
 00120   fncno(cno,cnam$)
-00140   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input 
+00140   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00150   read #1,using 'Form POS 1,3*C 40,2*C 12,C 5,POS 188,PD 7.2,POS 658,10*N 1': mat a$,mat b$,c$,ucm,mat deduc
 00160   close #1: 
 00170   if fnprocess=1 then goto L240
@@ -24,7 +24,7 @@
 00250   fnacs(sn$,0,mat resp$,ckey)
 00260   if ckey=5 then goto XIT
 00270   pedat$=resp$(1)
-00275 L240: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00275 L240: open #2: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00280   fnopenprn
 00285   gosub HDR
 00340 L340: read #2,using L350: mat k,mat k$,mat l$,mat m eof L720

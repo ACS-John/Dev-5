@@ -7,7 +7,7 @@
 00080   fnopenprn
 00090   dim eno$*9,e$*25,r(11),cnam$*40,prg$*20
 00100   namtab=66-int(len(rtrm$(cnam$))/2)
-00110   open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr L440
+00110   open #1: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L440
 00120 L120: pr newpage
 00130   pr f "10,10,c 48,n": "ENTER DATE FOR STAFF DIRECTORY IN MMDDYY FORMAT"
 00140   pr f "10,60,n 6,n": dat

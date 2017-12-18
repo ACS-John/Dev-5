@@ -1,8 +1,8 @@
 10000   library "S:\Core\Library.br": fncno,fnxit
 10010   dim z$*10,a$*10,srch$*10,ru(12),charge(10),bd(10),tg(10)
 10020   fncno(cno)
-10030   open #(h_mstr:=1): "Name="&env$('Q')&"\UBmstr\customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&str$(cno)&",SHR",internal,outin,keyed 
-10040   open #(h_trans:=11): "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&str$(cno)&",SHR",internal,outin,keyed 
+10030   open #(h_mstr:=1): "Name="&env$('Q')&"\UBmstr\customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&env$('cno')&",SHR",internal,outin,keyed 
+10040   open #(h_trans:=11): "Name="&env$('Q')&"\UBmstr\ubtransvb.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubtrindx.h"&env$('cno')&",SHR",internal,outin,keyed 
 10050 MSTRFORM: form c 10,pos 217,12*pd 5,pos 292,pd 4.2,pd 4,12*pd 4.2,pos 388,10*pd 5.2,pos 1741,n 2
 10060 TRANSFORM: form c 10,n 8,n 1,12*pd 4.2,2*pd 5,pos 98,pd 4.2,n 1
 10070   do 

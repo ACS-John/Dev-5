@@ -15,12 +15,12 @@
 00150   rinput fields "10,51,N 2,UE,N": cno
 00160   if cno=0 then goto XIT
 00170 !  
-00180   execute "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&",X -D -164"
-00190   execute "Free "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
-00200   execute "Rename X "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)
-00210   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx1.H"&str$(cno)&",1,8,Replace,DupKeys"
-00220   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&","&env$('Q')&"\CLmstr\PayIndx2.H"&str$(cno)&",9,28,Replace,DupKeys"
-00230   pr f "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&str$(cno)
+00180   execute "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&",X -D -164"
+00190   execute "Free "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
+00200   execute "Rename X "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')
+00210   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&","&env$('Q')&"\CLmstr\PayIndx1.H"&env$('cno')&",1,8,Replace,DupKeys"
+00220   execute "Index "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&","&env$('Q')&"\CLmstr\PayIndx2.H"&env$('cno')&",9,28,Replace,DupKeys"
+00230   pr f "12,5,C 60": "COMPLETED CONVERTING PAYMSTR FILE FOR COMPANY #: "&env$('cno')
 00240   pr f "13,5,C 60": "PRESS ANY KEY TO CONTINUE"
 00250   input fields "13,40,C 1,IAE,N": pause$
 00260   goto L110

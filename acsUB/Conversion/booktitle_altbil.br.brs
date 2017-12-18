@@ -1,8 +1,7 @@
 00010 ! Replace S:\acsUB\conversion\booktitle_altbil
-00020 ! this program converts a field from ALL CAPITAL LETTERS !:
-        ! to Book Title Capitalization
+00020 ! this program converts a field from ALL CAPITAL LETTERS  to Book Title Capitalization
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fnerror,fncno
+00040   library 'S:\Core\Library': fnxit,fnerror
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
 00070   dim nam$*30,ab$(4)*40
@@ -33,7 +32,7 @@
 00220     fnbooktitle$=x$
 00230   fnend 
 00240 ! ______________________________________________________________________
-00250   fncno(cno)
+00250   cno=val(env$('cno'))
 00260   pr newpage
 00270 L270: pr f "8,20,C 30,R,N": "Book Title Capital"
 00280   pr f "10,1,Cr 38": "Company Number to Convert (0 to Stop):"

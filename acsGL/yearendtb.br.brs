@@ -11,14 +11,14 @@
 00110   right=1
 00120   fntop(program$,cap$="Reprint Year End Trial Balance")
 00140   fncno(cno,cnam$)
-00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno),internal,input,relative  !:
+00150   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno'),internal,input,relative  !:
         read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2) !:
         read #20,using 'Form POS 152,2*C 12',rec=1: mat cogl$ !:
         close #20: 
 00160   a$(1)="C/D" : a$(2)="C/R" : a$(3)="ADJ" !:
         a$(4)="A/P" : a$(5)="PR" : a$(6)="A/R" !:
         a$(7)="S/J" : a$(8)="P/J" : a$(9)=" "
-00170   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&str$(cno)&",Shr",internal,input,keyed 
+00170   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,input,keyed 
 00180   goto START_REPORT
 00190 SCREEN1: ! 
 00200   fntos(sn$="GLTB") !:

@@ -17,18 +17,18 @@
 02120     if cno_current<>0 then 
 02140       fnputcno(cno_current) : cno=cno_current : ! 
 02160 ! 
-02180       open #paymstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&str$(cno)&",RecL=276,kln=8,kps=1,replace",internal,outin,keyed 
+02180       open #paymstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\PayMstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\PayIdx1.h"&env$('cno')&",RecL=276,kln=8,kps=1,replace",internal,outin,keyed 
 02200       close #paymstr: 
-02220       execute "Index "&env$('Q')&"\GLmstr\paymstr.H"&str$(cno)&' '&env$('Q')&"\GLmstr\Payidx1.H"&str$(cno)&" 1 8 Replace DupKeys -N"
-02240       execute "Index "&env$('Q')&"\GLmstr\paymstr.H"&str$(cno)&' '&env$('Q')&"\GLmstr\Payidx2.H"&str$(cno)&" 9 38 Replace DupKeys -N"
+02220       execute "Index "&env$('Q')&"\GLmstr\paymstr.H"&env$('cno')&' '&env$('Q')&"\GLmstr\Payidx1.H"&env$('cno')&" 1 8 Replace DupKeys -N"
+02240       execute "Index "&env$('Q')&"\GLmstr\paymstr.H"&env$('cno')&' '&env$('Q')&"\GLmstr\Payidx2.H"&env$('cno')&" 9 38 Replace DupKeys -N"
 02260 ! 
-02280       open #6: "Name="&env$('Q')&"\GLmstr\bankrec.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\bankrec-idx.H"&str$(cno)&",Version=1,Shr",internal,outin,keyed 
+02280       open #6: "Name="&env$('Q')&"\GLmstr\bankrec.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\bankrec-idx.H"&env$('cno')&",Version=1,Shr",internal,outin,keyed 
 02300       close #6: 
-02320       execute "Index "&env$('Q')&"\GLmstr\bankrec.H"&str$(cno)&' '&env$('Q')&"\GLmstr\bankrec-idx.h"&str$(cno) &" 79/3/4 12/1/8 Replace,DupKeys"
+02320       execute "Index "&env$('Q')&"\GLmstr\bankrec.H"&env$('cno')&' '&env$('Q')&"\GLmstr\bankrec-idx.h"&env$('cno') &" 79/3/4 12/1/8 Replace,DupKeys"
 02340 ! 
-02342       open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&str$(cno)&",RecL=64,Use",internal,outin 
+02342       open #2: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",RecL=64,Use",internal,outin 
 02344       close #2: 
-02348       execute "Index "&env$('Q')&"\GLmstr\gltr1099.H"&str$(cno)&' '&env$('Q')&"\GLmstr\gltridx1.H"&str$(cno)&" 1 8 Replace DupKeys -N"
+02348       execute "Index "&env$('Q')&"\GLmstr\gltr1099.H"&env$('cno')&' '&env$('Q')&"\GLmstr\gltridx1.H"&env$('cno')&" 1 8 Replace DupKeys -N"
 02360     end if  ! cno_current<>0
 02380   next company_item
 02400   fnputcno(cno_origional)

@@ -1,7 +1,7 @@
 00010 ! 
 00020   dim ta(2),z$*5,e$(3)*30,id$*20,ar(5),tr(6)
-00040   open #2: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&str$(cno)&",Shr",internal,outin,relative 
-00050   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+00040   open #2: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Shr",internal,outin,relative 
+00050   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00060 L60: read #1,using FORM_CLMSTR: z$,mat e$,bal,mat ta eof END1
 00070 FORM_CLMSTR: form pos 1,c 5,pos 6,3*c 30,pos 283,pd 5.2,pos 299,2*pd 3
 00080   ta1=ta(1)

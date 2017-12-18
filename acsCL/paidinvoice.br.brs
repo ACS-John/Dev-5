@@ -17,7 +17,7 @@
 00160 ! ______________________________________________________________________
 00170 OPEN_FILE: ! (open_file_count)
 00180   open_file_count=0
-00190   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\IvPaid.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\IVIndex.h"&str$(cno)&",Use,RecL=34,KPs=1,KLn=20,Shr",internal,outin,keyed  !:
+00190   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\IvPaid.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\IVIndex.h"&env$('cno')&",Use,RecL=34,KPs=1,KLn=20,Shr",internal,outin,keyed  !:
         ! Version=0 or Version=1
 00200   return 
 00210 ! ______________________________________________________________________
@@ -67,22 +67,22 @@
         limit_to_list$='1'
 00350   cl=1 !:
         c$(cl,1)='ComboF' !:
-        c$(cl,2)=env$('Q')&"\CLmstr\PayMstr.h"&str$(cno) !:
+        c$(cl,2)=env$('Q')&"\CLmstr\PayMstr.h"&env$('cno') !:
         c$(cl,3)='1' : c$(cl,4)=str$(sln(cl)) !:
         c$(cl,5)=str$(sln(cl)+1) : c$(cl,6)='30' !:
-        c$(cl,7)=env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno) : c$(cl,8)=limit_to_list$
+        c$(cl,7)=env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno') : c$(cl,8)=limit_to_list$
 00360 ! cL=2 !:
         ! c$(CL,1)='ComboF' !:
-        ! c$(CL,2)=env$('Q')&'\CLmstr\BankMstr.h'&STR$(CNO) !:
+        ! c$(CL,2)=env$('Q')&'\CLmstr\BankMstr.h'&env$('cno') !:
         ! c$(CL,3)='1' : c$(CL,4)=STR$(SLN(CL)) !:
         ! c$(CL,5)=STR$(SLN(CL)+1) : c$(CL,6)='30' !:
-        ! c$(CL,7)=env$('Q')&'\CLmstr\BankIdx1.h'&STR$(CNO) : c$(CL,8)=LIMIT_TO_LIST$
+        ! c$(CL,7)=env$('Q')&'\CLmstr\BankIdx1.h'&env$('cno') : c$(CL,8)=LIMIT_TO_LIST$
 00370 ! cL=4 !:
         ! c$(CL,1)='ComboF' !:
-        ! c$(CL,2)=env$('Q')&'\CLmstr\TrMstr.h'&STR$(CNO) !:
+        ! c$(CL,2)=env$('Q')&'\CLmstr\TrMstr.h'&env$('cno') !:
         ! c$(CL,3)='1' : c$(CL,4)=STR$(SLN(CL)) !:
         ! c$(CL,5)=STR$(SLN(CL)+1) : c$(CL,6)='30' !:
-        ! c$(CL,7)=env$('Q')&'\CLmstr\BankIdx1.h'&STR$(CNO) : c$(CL,8)=LIMIT_TO_LIST$
+        ! c$(CL,7)=env$('Q')&'\CLmstr\BankIdx1.h'&env$('cno') : c$(CL,8)=LIMIT_TO_LIST$
 00380   return 
 00390 ! ______________________________________________________________________
 00400 OPEN_AND_CALL_HAMSTER: ! 

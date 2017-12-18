@@ -29,8 +29,8 @@
 14160   fnget_services(mat servicename$) : for servicename_item=1 to udim(mat servicename$) : servicename$(servicename_item)=trim$(servicename$(servicename_item)) : next servicename_item
 14180   delim$=chr$(9)
 14200 ! 
-16000   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-16020   open #h_alt_bill:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+16000   open #h_customer:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+16020   open #h_alt_bill:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 16040 ! 
 16060   fnureg_read('ECP Export Filename',exp_filename$)
 16080   if exp_filename$='' then exp_filename$=os_filename$(env$('userprofile')&'\Desktop')&"\ACS_ECP_Export.txt"

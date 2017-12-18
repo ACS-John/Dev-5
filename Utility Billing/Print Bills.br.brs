@@ -31,15 +31,12 @@
 08200   dim b(11)
 08210   dim gb(10)
 08220   dim pe$(4)*30
-08230   dim cnam$*40 ! company name
 08240   dim at$(3)*40 ! (1)=company name, (2)=company addr, (3)=company address   ** POPULATED BY: fn_get_mat_at(mat at$)
 08250   dim servicename$(10)*20
 08260   dim servicecode$(10)*2
 08270   dim tax_code$(10)*1
 08280   dim penalty$(10)*1
 08320 ! ______________________________________________________________________
-08330   cno=val(env$('cno'))
-08340   cnam$=env$('cnam')
 08350   fnget_services(mat servicename$, mat servicecode$, mat tax_code$,mat penalty$) ! ,mat subjectto,mat ordertoapply)
 08360 fnend
 17000 PrintBill_Basic: !

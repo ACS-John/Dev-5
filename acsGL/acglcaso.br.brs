@@ -19,14 +19,14 @@
         priorcd=fnpriorcd
 00140   fncno(cno,cnam$)
 00150   fnopenprn
-00160   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
+00160   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00170   fscode=fnfscode
 00180   if nap<12 or nap>13 then nap=12
 00190   in3$(1)="8,05,N 12.2,UT,N" : in3$(2)="8,25,N 12.2,UT,N" !:
         in3$(3)="8,45,N 12.2,UT,N" : in3$(4)="8,65,N 12.2,UT,N"
 00200   if fnps=2 then mp1=78 else mp1=75
-00210   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFINDX.H"&str$(cno)&",Shr"
-00220   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&str$(cno)&",Shr"
+00210   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSFINDX.H"&env$('cno')&",Shr"
+00220   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSGINDX.H"&env$('cno')&",Shr"
 00230   open #1: fl1$,internal,input,keyed 
 00240   if fnprocess=1 or fnUseDeptNo=0 then goto L340
 00250   fntos(sn$="Acglcaso") !:
@@ -40,7 +40,7 @@
 00310   fnacs(sn$,0,mat resp$,ckey)
 00320   if ckey=5 then goto XIT
 00330   costcntr=val(resp$(1))
-00340 L340: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00340 L340: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 00350 L350: read #1,using L390: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof DONE
 00360   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L350
 00370   if costcntr=0 then goto L390

@@ -13,12 +13,12 @@
 00130     dim gldesc$*30,resp$(60)*50
 00140 ! ______________________________________________________________________
 00150     fncno(cno)
-00155     execute "Index "&env$('Q')&"\CLmstr\Recmstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\Recidx1.h"&str$(cno)&" 1 8 Replace DupKeys,Shr" ioerr ignore
+00155     execute "Index "&env$('Q')&"\CLmstr\Recmstr.h"&env$('cno')&' '&env$('Q')&"\CLmstr\Recidx1.h"&env$('cno')&" 1 8 Replace DupKeys,Shr" ioerr ignore
 00160     left=0: right=1
-00170     open #trmstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
-00180     if exists(env$('Q')&"\CLmstr\RECmstr.H"&str$(cno))=0 then gosub CREATERECEIPTFILE
-00190     open #receipt:=fngethandle: "Name="&env$('Q')&"\CLmstr\recmstr.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\CLmstr\recidx1.h"&str$(cno)&",Shr",internal,outin,keyed 
-00200     open #receiptgl:=fngethandle: "Name="&env$('Q')&"\CLmstr\ReceiptGLBreakdown.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\CLmstr\Receiptglbkdidx.h"&str$(cno)&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outin,keyed 
+00170     open #trmstr2:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
+00180     if exists(env$('Q')&"\CLmstr\RECmstr.H"&env$('cno'))=0 then gosub CREATERECEIPTFILE
+00190     open #receipt:=fngethandle: "Name="&env$('Q')&"\CLmstr\recmstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\recidx1.h"&env$('cno')&",Shr",internal,outin,keyed 
+00200     open #receiptgl:=fngethandle: "Name="&env$('Q')&"\CLmstr\ReceiptGLBreakdown.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\Receiptglbkdidx.h"&env$('cno')&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outin,keyed 
 00210     open #citystzip:=fngethandle: "Name="&env$('Q')&"\Data\CityStZip.dat,KFName="&env$('Q')&"\Data\CityStZip.Idx,Use,RecL=30,KPs=1,KLn=30,Shr",internal,outin,keyed 
 00220 ! 
 00230 MENU1: ! 
@@ -57,7 +57,7 @@
 00430 DELETE_RECEIPT: ! 
 00440 ! check for Linked Unpaid Invoices !:
         ! if there are any - than tell them, and don't delete.
-00450   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paytrans.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
+00450   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paytrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 00460   restore #paytrans,key>=rec$&rpt$(chr$(0),12): nokey L490
 00470   read #paytrans,using 'Form Pos 1,C 8': x$
 00480   if x$=rec$ then !:
@@ -76,7 +76,7 @@
           goto DELETE_RECEIPTGL_LOOP
 00550 EO_DELETE_RECEIPT: ! 
 00560 ! 
-00570   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
+00570   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
 00580   restore #trans, key>=holdrec$&rpt$(chr$(0),kln(trans)-len(holdrec$)): nokey EO_DEL_KEY_ON_TRANS
 00590 L590: read #trans,using 'Form Pos 28,C 8': x$ eof EO_DEL_KEY_ON_TRANS
 00600   if x$=rec$ then !:
@@ -174,7 +174,7 @@
 58000 KEY_CHANGE: !  don't do on receipts
 58020   goto L1500 ! don't change any other files
 58040 ! change the references to this file in the Transaction file
-58060   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
+58060   open #trans:=fngethandle: "Name="&env$('Q')&"\CLmstr\TrMstr.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
 58080   restore #trans,key>=holdrec$&rpt$(chr$(0),11): nokey EO_CHANGE_KEY_ON_TRANS
 58100 L1230: ! 
 58120   read #trans,using 'Form Pos 28,C 8': x$ eof EO_CHANGE_KEY_ON_TRANS
@@ -195,7 +195,7 @@
 58420 EO_CHANGE_KEY_ON_RECEIPTGL: ! 
 58440 ! 
 58460 ! Change references to this file in the linked file PayTrans
-58480   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paytrans.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&str$(cno)&",Shr",internal,outin,keyed 
+58480   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\Paytrans.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Shr",internal,outin,keyed 
 58500   restore #paytrans,key>=holdrec$&rpt$(chr$(0),12): nokey EO_CHANGE_KEY_ON_PAYTRANS
 58520 L1370: read #paytrans,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_PAYTRANS
 58540   if x$=holdrec$ then 
@@ -206,7 +206,7 @@
 58640   close #paytrans: 
 58660 ! 
 58680 ! Change references to this file in the linked file UnPdAloc
-58700   open #unpdaloc:=fngethandle: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&str$(cno)&",Shr",internal,outin,keyed 
+58700   open #unpdaloc:=fngethandle: "Name="&env$('Q')&"\CLmstr\UnPdAloc.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\UAIdx2.h"&env$('cno')&",Shr",internal,outin,keyed 
 58720   restore #unpdaloc,key>=holdrec$&rpt$(chr$(0),kln(unpdaloc)-len(holdrec$)): nokey EO_CHANGE_KEY_ON_UNPDALOC
 58740   read #unpdaloc,using 'Form Pos 1,C 8': x$ eof EO_CHANGE_KEY_ON_UNPDALOC
 58760   if x$=holdrec$ then 
@@ -270,8 +270,8 @@
 66100 fnend 
 66120 IGNORE: continue 
 68000 CREATERECEIPTFILE: ! r:
-68020 open #receipt:=fngethandle: "Name="&env$('Q')&"\CLmstr\recmstr.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\CLmstr\recidx1.h"&str$(cno)&",REPLACE,RecL=38,KPS=1,KLN=8",internal,outin,keyed 
+68020 open #receipt:=fngethandle: "Name="&env$('Q')&"\CLmstr\recmstr.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\recidx1.h"&env$('cno')&",REPLACE,RecL=38,KPS=1,KLN=8",internal,outin,keyed 
 68040 close #receipt: 
-68060 execute "Index "&env$('Q')&"\CLmstr\Recmstr.h"&str$(cno)&' '&env$('Q')&"\CLmstr\Recidx1.h"&str$(cno)&" 1 8 Replace DupKeys,Shr"
-68080 execute "Index "&env$('Q')&"\CLmstr\Receiptglbreakdown.h"&str$(cno)&' '&env$('Q')&"\CLmstr\receiptglbkdidx.h"&str$(cno)&" 1 8 Replace DupKeys,Shr"
+68060 execute "Index "&env$('Q')&"\CLmstr\Recmstr.h"&env$('cno')&' '&env$('Q')&"\CLmstr\Recidx1.h"&env$('cno')&" 1 8 Replace DupKeys,Shr"
+68080 execute "Index "&env$('Q')&"\CLmstr\Receiptglbreakdown.h"&env$('cno')&' '&env$('Q')&"\CLmstr\receiptglbkdidx.h"&env$('cno')&" 1 8 Replace DupKeys,Shr"
 68100 return  ! /r

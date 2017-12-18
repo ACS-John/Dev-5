@@ -15,14 +15,14 @@
 00135   fnconsole(1)
 00140 ! 
 00150 ! ______________________________________________________________________
-00160   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno),internal,input,relative 
+00160   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno'),internal,input,relative 
 00170   read #1,using L180,rec=1: mat dedfed
 00180 L180: form pos 638,10*n 1
 00190   close #1: 
-00200   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno),internal,outin,keyed 
-00210   open #11: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&str$(cno),internal,outin,keyed 
-00220   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\PRCKINDX.h"&str$(cno)&",Shr",internal,outin,keyed 
-00230   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno),internal,outin,relative 
+00200   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno'),internal,outin,keyed 
+00210   open #11: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDX2.h"&env$('cno'),internal,outin,keyed 
+00220   open #4: "Name="&env$('Q')&"\PRmstr\PRCkHist.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRCKINDX.h"&env$('cno')&",Shr",internal,outin,keyed 
+00230   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno'),internal,outin,relative 
 00240   goto L430
 00250 ! ______________________________________________________________________
 00260 UPDT: ent$=lpad$(str$(heno),8)
@@ -43,7 +43,7 @@
 00410   return 
 00420 ! ______________________________________________________________________
 00430 L430: gosub INPSCRN
-00440   fnwait(102,cap$,message$,0)
+00440   fnwait(message$,0)
 00450 L450: read #4,using L460: eno,prd,ckno,mat tdc,mat tc2 eof L540
 00460 L460: form pos 1,n 8,pd 6,n 7,5*pd 3.2,pd 4.2,22*pd 5.2
 00470   if heno=0 then goto L490

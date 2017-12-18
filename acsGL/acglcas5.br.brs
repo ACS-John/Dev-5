@@ -20,15 +20,15 @@
 00190   actpd=fnactpd
 00200   fscode=fnfscode
 00210   priorcd=fnpriorcd
-00220   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00220   open #20: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  !:
         read #20,using 'Form Pos 384,n 2',rec=1: nap : close #20: 
 00230   if nap<12 or nap> 13 then nap=12
 00240   in3$(1)="8,5,N 12.2,UT,N" : in3$(2)="8,25,N 12.2,UT,N" !:
         in3$(3)="8,45,N 12.2,UT,N" : in3$(4)="8,65,N 12.2,UT,N"
 00250   mp1=75
 00260   if ps=2 then mp1=mp1+3
-00270   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
-00280   if ps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
+00270   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&env$('cno')&",Shr"
+00280   if ps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&env$('cno')&",Shr"
 00290   pr newpage
 00300   pr f "10,20,C 30,h,n": "CASH FLOW STATEMENT IN PROCESS"
 00310   on fkey 5 goto L2130
@@ -43,10 +43,10 @@
 00400   pr f "10,1,Cc 80,N": "Printing: please wait..."
 00410   pr f "12,2,c 30,B,5": "Press F5 to stop"
 00420   if fnps=2 then goto L450 ! secondary
-00430   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
+00430   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 75 3 Replace DupKeys -N"
 00440   goto L460
-00450 L450: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
-00460 L460: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00450 L450: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 78 3 Replace DupKeys -N"
+00460 L460: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&udf$&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 00470 L470: read #1,using L510: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof L2130
 00480   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L470
 00490   if costcntr=0 then goto L510

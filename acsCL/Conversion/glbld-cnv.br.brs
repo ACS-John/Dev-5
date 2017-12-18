@@ -7,8 +7,8 @@
 00070 ! ______________________________________________________________________
 00080   fncno(cno)
 00090 ! 
-00100   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&str$(cno)&",Shr",internal,input,keyed 
-00110   open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",Size=0,RecL=62,Replace",internal,output 
+00100   open #2: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLINDEX.h"&env$('cno')&",Shr",internal,input,keyed 
+00110   open #1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",Size=0,RecL=62,Replace",internal,output 
 00120 READ_GLMSTR: ! 
 00130   read #2,using 'Form POS 1,C 12,C 50': gl$,de$ eof END1
 00140   write #1,using 'Form POS 1,C 12,C 50': gl$,de$
@@ -16,7 +16,7 @@
 00160 ! ______________________________________________________________________
 00170 END1: close #1: 
 00180   close #2: 
-00190   execute "Index "&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&' '&env$('Q')&"\CLmstr\GLINDEX.h"&str$(cno)&" 1 12 Replace DupKeys -n"
+00190   execute "Index "&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&' '&env$('Q')&"\CLmstr\GLINDEX.h"&env$('cno')&" 1 12 Replace DupKeys -n"
 00200   goto XIT
 00210 ! ______________________________________________________________________
 00220 XIT: fnxit

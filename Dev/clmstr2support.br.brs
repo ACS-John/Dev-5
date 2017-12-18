@@ -34,10 +34,10 @@
 24800   system_id$(20)='??' ! Printing
 25000   date_start=20110701
 25200   date_end=20110731
-25400   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&str$(cno)&",Shr",internal,outin,keyed 
-25600   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndx2.H"&str$(cno)&",Shr",internal,outin,keyed 
+25400   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&env$('cno')&",Shr",internal,outin,keyed 
+25600   open #11: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.H"&env$('cno')&",Shr",internal,outin,keyed 
 25800 FORM_CLMSTR: form pos 1,c 5,5*c 30,c 12,c 11,n 9,n 2,10*pd 3,10*n 1,10*pd 3,c 12,c 11,2*pd 5.2,pd 4.3,2*n 1,2*pd 3,c 70,20*n 1,20*pd 3.2,20*n 1,20*pd 3.2
-26000   open #h_support:=2: "Name="&env$('Q')&"\TMmstr\Support.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h"&str$(cno)&",Shr",internal,outin,keyed 
+26000   open #h_support:=2: "Name="&env$('Q')&"\TMmstr\Support.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\TMmstr\Support-Idx.h"&env$('cno')&",Shr",internal,outin,keyed 
 26200 FORM_SUPPORT: form pos 1,n 6,n 2,c 2,n 8,c 2,n 8,n 10.2,4*c 50
 26400   z$=lpad$(str$(ano),5)
 26600   do 

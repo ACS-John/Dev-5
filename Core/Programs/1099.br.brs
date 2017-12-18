@@ -49,7 +49,7 @@
 24020   if ~setup then let fn_setup
 24040   if ~ten99initialized then ! r: initialize output destination (if necessary)
 24060     if env$('CurSys')='PR' then
-24080       open #hCompany:=fngethandle: "Name="&env$('Q')&"\PRmstr\company.h"&str$(cno)&",Shr", internal,input,relative
+24080       open #hCompany:=fngethandle: "Name="&env$('Q')&"\PRmstr\company.h"&env$('cno')&",Shr", internal,input,relative
 24100       read #hCompany,using "Form POS 1,3*C 40,C 12": mat a$,mat fed$
 24120       close #hCompany: 
 24140     else if env$('CurSys')='GL' then

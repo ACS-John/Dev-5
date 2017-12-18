@@ -29,9 +29,9 @@
 00270   if d3<101 or d3>1231 then goto L200
 00280 L280: if d4=0 then goto L300
 00290   if d4<101 or d4>1231 then goto L200
-00300 L300: open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00300 L300: open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00305 ! open #255: "Name=prn:/select,size=0,RecL=128,replace",display,output
-00310   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.H"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\adrIndex.H"&str$(cno)&",Shr",internal,input,keyed 
+00310   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.H"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\adrIndex.H"&env$('cno')&",Shr",internal,input,keyed 
 00316   form pos 1,c 9,skip 0
 00320   goto L880
 00330 L330: gosub L720

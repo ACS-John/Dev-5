@@ -9,19 +9,19 @@
 00080 ! ______________________________________________________________________
 00090   fntop(program$,cap$='Chart of Accounts')
 00100   fncno(cno)
-00110   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00110   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  !:
         read #20,using 'Form POS 150,2*N 1',rec=1: d(1),d(2) !:
         close #20: 
 00120   gosub BUILD_LAYOUT
 00130   gosub OPEN_FILE : gosub CLOSE_FILE : gosub OPEN_FILE !:
         gosub HAMSTER
 00135   gosub CLOSE_FILE
-00136   execute "Index "&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&' '&env$('Q')&"\GLmstr\glindex.h"&str$(cno)&"1 12,replace,DupKeys" ioerr L140
+00136   execute "Index "&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&' '&env$('Q')&"\GLmstr\glindex.h"&env$('cno')&"1 12,replace,DupKeys" ioerr L140
 00140 L140: goto XIT
 00150 ! ______________________________________________________________________
 00160 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00170   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&str$(cno)&",Version=0,KFName="&env$('Q')&"\CLmstr\GLIndex.h"&str$(cno)&",Use,RecL=62,KPs=1,KLn=12,Shr",internal,outin,keyed 
+00170   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\GLmstr.H"&env$('cno')&",Version=0,KFName="&env$('Q')&"\CLmstr\GLIndex.h"&env$('cno')&",Use,RecL=62,KPs=1,KLn=12,Shr",internal,outin,keyed 
 00180   return 
 00190 ! ______________________________________________________________________
 00200 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 

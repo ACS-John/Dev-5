@@ -43,7 +43,7 @@
 00243   if resp$(4)="Sewer" then !:
           svce=4
 00260   fnopenprn
-00350   open #1: "Name="&env$('Q')&"\UBmstr\ubMaster.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00350   open #1: "Name="&env$('Q')&"\UBmstr\ubMaster.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00510 L510: ! 
 00540   for k9=1 to 20
 00550     pr f "20,13,C 11,N": "Rate Code:"
@@ -86,7 +86,7 @@
 00910     mat t=(0)
 00920   next k9
 00930 L930: message$="Printing: Please wait..." !:
-        fnwait(106,cap$,message$,1)
+        fnwait(message$,1)
 00940   on fkey 5 goto DONE
 00950   fnopenprn(cp,58,220,process)
 00960 L960: read #1,using L970: mat a,mat d,f eof L1250

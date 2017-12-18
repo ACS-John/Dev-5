@@ -23,10 +23,10 @@
 00210 ! ______________
 00220   mp1=75
 00230   if fnps=2 then mp1=mp1+3
-00240   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&str$(cno)&",Shr"
-00250   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&str$(cno)&",Shr"
+00240   fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSF.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSFIndx.h"&env$('cno')&",Shr"
+00250   if fnps=2 then fl1$="Name="&env$('Q')&"\GLmstr\ACGLFNSG.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\FNSGIndx.h"&env$('cno')&",Shr"
 00260 ! ______________
-00270   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00270   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00280 L280: read #1,using L290: acct$,cb,mat by,mat bp eof L350
 00290 L290: form pos 1,c 12,pos 87,27*pd 6.2
 00300   if acct$>cogl$(3) then goto L350
@@ -57,10 +57,10 @@
 00510   fnopenprn !:
         if file$(255)(1:4)<>"PRN:" then redir=1 else redir=0
 00520   if fnps=2 then goto L550 ! secondary
-00530   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 75 3 Replace DupKeys -N"
+00530   execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 75 3 Replace DupKeys -N"
 00540   goto L560
-00550 L550: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&" "&udf$&"fsindex.H"&str$(cno)&" 78 3 Replace DupKeys -N"
-00560 L560: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&udf$&"fsindex.h"&str$(cno)&",Shr",internal,input,keyed 
+00550 L550: execute "Index "&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&" "&udf$&"fsindex.H"&env$('cno')&" 78 3 Replace DupKeys -N"
+00560 L560: open #3: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&udf$&"fsindex.h"&env$('cno')&",Shr",internal,input,keyed 
 00570 L570: read #1,using L610: r$,d$,te$,sp,ls,ds,ul,rs,bc,ap,mat ac,ic,fc eof DONE
 00580   if ltrm$(r$)="" or ltrm$(r$)="0" then goto L570
 00590   if costcntr=0 then goto L610

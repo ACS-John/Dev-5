@@ -20,8 +20,8 @@
 00200 L200: if cmdkey=5 then stop 
 00210   pr #255: dt1
 00220 ! 
-00230   open #1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TRIDX1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00240   open #3: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)&",Shr",internal,outin,relative 
+00230   open #1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TRIDX1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00240   open #3: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno')&",Shr",internal,outin,relative 
 00250 L250: read #1,using L260: ck$,pd,ca1,vn$,de$,pcde,scd,mat tr eof END1
 00260 L260: form pos 4,c 8,n 6,pd 10.2,pos 28,c 8,c 30,pos 71,n 1,x 6,n 1,2*pd 3
 00270 ! pr CK$

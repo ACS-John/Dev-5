@@ -34,7 +34,7 @@
 00330 ! if env$('client')="West Rest Haven" then filename$=cnvrt$("Pic(zzzzzzzz)",endingdate)(5:6) &"-"&cnvrt$("Pic(zzzzzzzz)",endingdate)(7:8)&"-" &cnvrt$("Pic(zzzzzzzz)",endingdate)(3:4) &".txt"
 00340 ! if env$('client')="West Rest Haven" then execute "Copy c:\Acs\local\wrhPayroll"&filename$&" "&pathtotimecard$&"TimeCard.h"&env$('cno')
 00350   gosub HDR
-00360   fnwait(101,cap$,wait$="Importing: please wait...",0)
+00360   fnwait(wait$="Importing: please wait...",0)
 00370   on fkey 5 goto L580
 00380   simple$=pathtotimecard$&"TimeCard.h"&env$('cno')
 00390   open #3: "Name="&pathtotimecard$&"TimeCard\SimpleSummary,KFName="&pathtotimecard$&"TimeCard\SSIndex,Replace,RecL=46,KPs=1,KLn=16",internal,outin,keyed 

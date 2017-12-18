@@ -10,7 +10,7 @@
 20120       fen$="CActALL"
 20140     end if 
 20160     if indexfile$="" then 
-20180       if$=env$('Q')&"\UBmstr\ubIndex.h"&env$('cno') ! str$(cno)
+20180       if$=env$('Q')&"\UBmstr\ubIndex.h"&env$('cno') ! env$('cno')
 20200     else 
 20220       if$=indexfile$
 20240     end if 

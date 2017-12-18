@@ -10,19 +10,19 @@
 00100   fntop(program$,cap$="Print Selected Invoice Listing")
 00110   cancel=99
 00120   fncno(cno,cnam$)
-00130   open #20: "Name="&env$('Q')&"\CLmstr\PostDat.H"&str$(cno)&",Shr,Use,RecL=12",internal,outin,relative 
+00130   open #20: "Name="&env$('Q')&"\CLmstr\PostDat.H"&env$('cno')&",Shr,Use,RecL=12",internal,outin,relative 
 00140   read #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2 norec L150 !:
         goto L160
 00150 L150: write #20,using 'Form POS 1,2*N 6',rec=1: dt1,dt2
 00160 L160: close #20: 
-00170   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00170   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  !:
         read #20,using 'Form POS 150,2*N 1,C 2',rec=1: mat d,bc$ !:
         close #20: 
 00180   bankcode=val(bc$)
-00190   open #bankmstr=12: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal, outin, keyed 
-00200   open #paymstr1:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00210   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00220   open #unpdaloc=5: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\uaidx2.H"&str$(cno)&",Shr",internal,outin,keyed 
+00190   open #bankmstr=12: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal, outin, keyed 
+00200   open #paymstr1:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00210   open #paytrans:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayTrans.H"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00220   open #unpdaloc=5: "Name="&env$('Q')&"\CLmstr\UnPdAloc.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\uaidx2.H"&env$('cno')&",Shr",internal,outin,keyed 
 00230   sc3$(2)=" Total Invoices selected for payment-Bank " !:
         sc3$(2)=sc3$(2)&ltrm$(str$(bankcode))&":" !:
         sc3$(3)=" Balance after paying selected Invoices:" !:

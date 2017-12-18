@@ -4,7 +4,7 @@
 00130   fntop(program$,cap$="Print Designed Reports")
 01220 OPEN3: ! 
 01230   close #3: ioerr ignore
-01240   open #3: "Name="&env$('Q')&"\PRmstr\PRReport.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\PRRptIdx.h"&str$(cno)&",Shr",internal,input,keyed ioerr NO_PRREPORT
+01240   open #3: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\PRRptIdx.h"&env$('cno')&",Shr",internal,input,keyed ioerr NO_PRREPORT
 01250   if lrec(3)=0 then goto NO_PRREPORT
 01252   close #3: 
 01260   goto MENU1
@@ -13,7 +13,7 @@
 01290   fntos(sn$="PrintReport-ask")
 01292   respc=0
 01300   fnlbl(1,1,"Report:",11,1)
-01310   fncombof("Report",1,14,43,env$('Q')&"\PRmstr\prreport.h"&str$(cno),1,2,3,30,env$('Q')&"\PRmstr\prrptidx.h"&str$(cno),1+addall,1,"Select from the list of reports. You can only select one report at a time.",0)
+01310   fncombof("Report",1,14,43,env$('Q')&"\PRmstr\prreport.h"&env$('cno'),1,2,3,30,env$('Q')&"\PRmstr\prrptidx.h"&env$('cno'),1+addall,1,"Select from the list of reports. You can only select one report at a time.",0)
 01312   resp$(respc+=1)=""
 01320   fncmdkey("&Next",1,1,0,"Prints the highlighted report." )
 01322   fncmdkey("&Complete",5,0,1,"Returns to menu")

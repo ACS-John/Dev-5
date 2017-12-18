@@ -12,13 +12,13 @@
 00120   fncno(cno)
 00130 ! 
 00135   fnconsole(1)
-00140   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno),internal,outin: close #1: 
+00140   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),internal,outin: close #1: 
 00150 ! ______________________________________________________________________
-00160   execute "Copy "&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&" JCMSTR.X -n"
-00170   execute "Copy "&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&" JCTRANS.X -n"
-00180   execute "Copy "&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&" JCCAT.X -n"
+00160   execute "Copy "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&" JCMSTR.X -n"
+00170   execute "Copy "&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&" JCTRANS.X -n"
+00180   execute "Copy "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&" JCCAT.X -n"
 00190 ! ______________________________________________________________________
-00200   open #1: "Name=JCMSTR.X,KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno),internal,outin,keyed 
+00200   open #1: "Name=JCMSTR.X,KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno'),internal,outin,keyed 
 00210 ! ______________________________________________________________________
 00220 L220: pr newpage
 00230   fnopenwin(win=101,10,20,14,59,cap$)
@@ -39,19 +39,19 @@
 00380 ! ______________________________________________________________________
 00390 L390: pr newpage
 00400   message$="Removeing completed Jobs..."
-00410   fnwait(102,cap$,message$,0)
+00410   fnwait(message$,0)
 00420   restore #1: 
-00430   open #2: "Name=JCCAT.X,KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno),internal,input,keyed 
+00430   open #2: "Name=JCCAT.X,KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno'),internal,input,keyed 
 00440   open #3: "Name=JCTRANS.X",internal,input,relative 
-00450   open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno),internal,output 
+00450   open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno'),internal,output 
 00460   close #11,free: 
-00470   open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",SIZE=0,RecL=300",internal,output 
-00480   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno),internal,output 
+00470   open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",SIZE=0,RecL=300",internal,output 
+00480   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno'),internal,output 
 00490   close #12,free: 
-00500   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",SIZE=0,RecL=123",internal,output 
-00510   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno),internal,output 
+00500   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",SIZE=0,RecL=123",internal,output 
+00510   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno'),internal,output 
 00520   close #13,free: 
-00530   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&str$(cno)&",SIZE=0,RecL=88",internal,outin,relative 
+00530   open #13: "Name="&env$('Q')&"\PRmstr\JCTRANS.h"&env$('cno')&",SIZE=0,RecL=88",internal,outin,relative 
 00540   ot4=1
 00550   write #13,using L560,rec=1: " ","",mat tr," ",ot4
 00560 L560: form pos 1,c 12,c 6,n 5,pd 3,pd 2,n 6,4*pd 4.2,pd 5.2,c 30,pd 3
@@ -89,8 +89,8 @@
 00880   close #11: 
 00890   close #12: 
 00900   close #13: 
-00910   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&","&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",1,6,Replace,DupKeys -n"
-00920   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&","&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",1,11,Replace,DupKeys -n"
+00910   execute "Index "&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",1,6,Replace,DupKeys -n"
+00920   execute "Index "&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&","&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",1,11,Replace,DupKeys -n"
 00930   goto XIT
 00940 ! ______________________________________________________________________
 00950 XIT: fnxit

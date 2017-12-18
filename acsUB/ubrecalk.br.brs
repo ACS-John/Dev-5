@@ -61,7 +61,7 @@
 00390   next j
 00400   fn_ask_billing_date
 00420   if ck=5 then goto XIT
-00462 ! fnWAIT(0,'',"Calculating: please wait...",0)
+00462 ! fnwait("Calculating: please wait...",0)
 00480   fnAutomatedSavePoint('before')
 00500   fnopenprn
 00505 ! 

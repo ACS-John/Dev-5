@@ -25,8 +25,8 @@
 00230   data " "
 00240   read mat desc$
 00250   fnopenprn(cp,58,220,process)
-00260   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-00270   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,input,relative 
+00260   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00270   open #2: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,input,relative 
 00280   pr newpage
 00290   pr f "10,20,C 30,H,N": " FUND BALANCE IN PROCESS"
 00300   pr f "12,2,C 18,B,5": " Press F5 to stop"

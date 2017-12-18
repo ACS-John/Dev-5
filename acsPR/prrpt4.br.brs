@@ -9,14 +9,14 @@
 00090 ! ______________________________________________________________________
 00100   fntop("S:\acsPR\prRpt4",cap$="Report File - Proof List")
 00110   fncno(cno,cnam$)
-00120   open #1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\prrptidx.h"&str$(cno)&",Shr",internal,input,keyed 
+00120   open #1: "Name="&env$('Q')&"\PRmstr\PRReport.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\prrptidx.h"&env$('cno')&",Shr",internal,input,keyed 
 00130   fnopenprn(cp,58,220,process)
 00140   nametab=66-len(rtrm$(cnam$))/2
 00150 ! ______________________________________________________________________
 00160   pr newpage
 00170   message$="Printing:  please wait..."
 00180   on fkey 5 goto L560
-00190   fnwait(101,cap$,message$,1)
+00190   fnwait(message$,1)
 00200 ! ______________________________________________________________________
 00210 L210: read #1,using L220: rn,rt$,mat ch$,ips,sd,cp,mat psc,mat inp,mat pp,mat ti eof L560
 00220 L220: form pos 1,n 2,c 78,2*c 132,n 3,2*n 1,100*pd 6.3,40*pd 2,20*n 1

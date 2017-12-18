@@ -29,13 +29,13 @@
 00080   fndat(dh$,2)
 00088 ! ______________________________________________________________________
 00090 L90: pr newpage !:
-        fnwait(102,cap$,message$="Printing: please wait...",1) !:
+        fnwait(message$="Printing: please wait...",1) !:
         pr f "15,34,C 09,B,5": "Exit (F5)" !:
         on fkey 5 goto EOF1
 00103   fnopenprn !:
         if file$(255)(1:3)<>"PRN" then jbskip=1
 00105 ! ______________________________________________________________________
-00110   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
+00110   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
         read #1,using 'Form POS 1,C 40': aa$ !:
         close #1: 
 00141 ! ______________________________________________________________________
@@ -46,8 +46,8 @@
 00181 ! ______________________________________________________________________
 00190   h1=66-len(rtrm$(aa$))/2 : h2=66-len(rtrm$(rt$))/2 !:
         h3=66-len(rtrm$(dh$))/2 : i2=len(rtrm$(rt$))
-00260   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
-00270   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
+00260   open #1: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00270   open #2: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
 00280   gosub HDR
 00290   goto PRTRPT
 00291 ! ______________________________________________________________________

@@ -19,11 +19,11 @@
 00170     if fnstyp=99 then goto L200
 00180     if fnstyp=9 then prg$="S:\acsTM\tmMenu" else prg$="S:\acsGL\acGLAuto"
 00190     fnprg(prg$,2)
-00200 L200: open #glmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&str$(cno)&",Shr",internal,outin,keyed ioerr GLMSTR_OPEN_ERR
-00210     open #gltrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&str$(cno)&",Shr",internal,outin,relative 
+00200 L200: open #glmstr:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outin,keyed ioerr GLMSTR_OPEN_ERR
+00210     open #gltrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTrans.H"&env$('cno')&",Shr",internal,outin,relative 
 00220     open #glwk1:=fngethandle: "Name="&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".dat,NoShr",internal,outin 
-00230     open #gl1099:=fngethandle: "Name="&env$('Q')&"\GLmstr\GL1099.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\gl109idx.H"&str$(cno)&",Shr",internal,outin,keyed 
-00240     open #gltr1099:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&str$(cno)&",Shr",internal,outin,relative 
+00230     open #gl1099:=fngethandle: "Name="&env$('Q')&"\GLmstr\GL1099.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\gl109idx.H"&env$('cno')&",Shr",internal,outin,keyed 
+00240     open #gltr1099:=fngethandle: "Name="&env$('Q')&"\GLmstr\GLTR1099.H"&env$('cno')&",Shr",internal,outin,relative 
 00250 ! fnwait
 00260 READ_GLWK1: ! 
 00270     read #glwk1,using 'Form POS 1,C 12,N 6,PD 6.2,N 2,N 2,C 12,C 30,C 8': t$,s,k,mat n,l$,p$,ven$ eof EO_GLWK1
@@ -92,7 +92,7 @@
         lc=0 : mylen=31 : mypos=mylen+2
 00770   fnlbl(lc+=1,1,'GL Account Reject',80,center)
 00780   fnlbl(lc+=1,1,'Correct General Ledger Account:',mylen,right)
-00790   fncombof("gla-"&str$(cno),lc,mypos,0,env$('Q')&"\GLmstr\GLmstr.h"&str$(cno),13,20,1,12,env$('Q')&"\GLmstr\glIndx2.h"&str$(cno),limit_to_list) !:
+00790   fncombof("gla-"&env$('cno'),lc,mypos,0,env$('Q')&"\GLmstr\GLmstr.h"&env$('cno'),13,20,1,12,env$('Q')&"\GLmstr\glIndx2.h"&env$('cno'),limit_to_list) !:
         resp$(1)=''
 00800   fncmdkey('&Okay',1,1,1)
 00810   fnacs(sn$,0,mat resp$,ckey)
@@ -136,15 +136,15 @@
 01140 DONE: close #glmstr: 
 01150   close #gltrans: 
 01160   close #glwk1: 
-01170   fnFree(env$('Q')&"\GLmstr\GLPT"&wsid$&".H"&str$(cno))
+01170   fnFree(env$('Q')&"\GLmstr\GLPT"&wsid$&".H"&env$('cno'))
 01180 L1180: ! 
 01190   close #gl1099: ioerr L1200
 01200 L1200: if new1=1 or new2=1 then !:
           fnindex_it(env$('Q')&"\GLmstr\GLBREC.h"&env$('cno'),env$('Q')&"\GLmstr\GLRecIdx.h"&env$('cno'),"1 24")
 01210   if new1=1 then !:
-          execute "Index "&env$('Q')&"\GLmstr\GLmstr.H"&str$(cno)&' '&env$('Q')&"\GLmstr\GLIndex.H"&str$(cno)&" 1 12 Replace DupKeys -n"
+          execute "Index "&env$('Q')&"\GLmstr\GLmstr.H"&env$('cno')&' '&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&" 1 12 Replace DupKeys -n"
 01220   if new2=1 then !:
-          execute "Index "&env$('Q')&"\GLmstr\GL1099.H"&str$(cno)&' '&env$('Q')&"\GLmstr\GL109IDX.H"&str$(cno)&" 1 8 Replace DupKeys -n"
+          execute "Index "&env$('Q')&"\GLmstr\GL1099.H"&env$('cno')&' '&env$('Q')&"\GLmstr\GL109IDX.H"&env$('cno')&" 1 8 Replace DupKeys -n"
 01230   if fnprocess=1 then let fnchain("S:\acsGL\acGLAuto") else !:
           if fnprocess=2 then let fnchain("S:\acsGL\glMenu") else !:
             if fnprocess=4 then let fnchain("S:\acsGL\prMerge") else !:
@@ -209,7 +209,7 @@
 01660 ! ______________________________________________________________________
 01670 GLMSTR_OPEN_ERR: ! 
 01690   mat ml$(3) !:
-        ml$(1)='Company Number '&str$(cno)&' does not exists!' !:
+        ml$(1)='Company Number '&env$('cno')&' does not exists!' !:
         ml$(2)='Please try again.' !:
         ml$(3)='Nothing Posted.' !:
         fnmsgbox(mat ml$,ok$,cap$,16)

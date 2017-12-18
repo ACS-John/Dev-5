@@ -10,8 +10,8 @@
 00100 ! ______________________________________________________________________
 00110   fncno(cno)
 00120 ! 
-00130   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
-00140   open #2: "Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&str$(cno),internal,output 
+00130   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
+00140   open #2: "Name="&env$('Q')&"\GLmstr\ACGLFNSI.h"&env$('cno'),internal,output 
 00150 READ_GLMSTR: ! 
 00160   read #1,using L180: dno,ano,sno,d$,mat rf eof END1
 00170   if ano<1000 then goto READ_GLMSTR

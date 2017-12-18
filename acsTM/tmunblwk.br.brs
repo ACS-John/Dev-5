@@ -9,16 +9,16 @@
 00130   dim cno$*5,cna$*30,en$*9,d(8)
 00140   dim k$*5,e$*9,b(8),sc$*4,sc2$*6,iv$*12
 00150   namtab=66-int(len(rtrm$(cnam$))/2)
-00160   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&str$(cno)&",Shr",internal,input,relative ioerr L2780
+00160   open #1: "Name="&env$('Q')&"\TMmstr\TMCat.h"&env$('cno')&",Shr",internal,input,relative ioerr L2780
 00170   read #1,using L180,rec=1: mat cat$ ioerr L2780
 00180 L180: form pos 1,30*c 30
 00190   close #1: 
-00200   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&str$(cno)&",RecL=20,use,Shr",internal,outin,relative 
+00200   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outin,relative 
 00210   if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: dat
-00220   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr L2780
-00230   open #2: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&str$(cno)&",Shr",internal,input,relative ioerr L2780
-00240   open #3: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&str$(cno)&",Shr",internal,input,relative ioerr L2780
-00250   open #4: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr L2780
+00220   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2780
+00230   open #2: "Name="&env$('Q')&"\TMmstr\TMTRAddr.h"&env$('cno')&",Shr",internal,input,relative ioerr L2780
+00240   open #3: "Name="&env$('Q')&"\TMmstr\TMTRANS.H"&env$('cno')&",Shr",internal,input,relative ioerr L2780
+00250   open #4: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L2780
 00260   goto L460
 00270 L270: read #4,using L280,key=e$: empname$ nokey L300 ioerr L2780
 00280 L280: form pos 10,c 25
@@ -39,7 +39,7 @@
 00430   goto L450
 00440 L440: empname$="*** FINAL BILLED"
 00450 L450: return 
-00460 L460: open #5: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&str$(cno)&",Shr",internal,input,keyed ioerr L2780
+00460 L460: open #5: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno')&",Shr",internal,input,keyed ioerr L2780
 00470   goto L530
 00480   read #5,using L490,key=sc$: scdesc$ nokey L510 ioerr L2780
 00490 L490: form pos 5,c 30

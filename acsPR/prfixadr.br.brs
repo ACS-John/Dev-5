@@ -10,20 +10,20 @@
 00100   fncno(cno)
 00110 ! 
 00120 ! ___________________________
-00130   fnwait(101,cap$,message$="Reassigning: please wait...",0)
+00130   fnwait(message$="Reassigning: please wait...",0)
 00140 ! ___________________________
 00150 ! Sort routine
 00160   open #control=1: "Name="&env$('Temp')&"\Control."&session$&",RecL=128,Replace",internal,output 
 00170   write #control,using "Form POS 1,C 128": "! Now Sorting Payroll Department Records" !:
-        write #control,using "Form POS 1,C 128": "File "&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno)&",,,"&env$('Temp')&"\Addr."&session$&",,,acsPR,,A,N" !:
+        write #control,using "Form POS 1,C 128": "File "&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",,,"&env$('Temp')&"\Addr."&session$&",,,acsPR,,A,N" !:
         write #control,using "Form POS 1,C 128": "Mask 1,8,c,a,9,3,c,a"
 00180   close #control: 
 00190   execute "Free "&env$('Temp')&"\Addr."&session$&" -n" ioerr L200
 00200 L200: execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 00210 ! ___________________________
 00220   open #addr=3: "Name="&env$('Temp')&"\Addr."&session$&",NoShr",internal,input 
-00230   open #rptrail=2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno)&",NoShr",internal,outin,relative 
-00240   open #rpmstr=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno)&",NoShr",internal,outin,keyed 
+00230   open #rptrail=2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",NoShr",internal,outin,relative 
+00240   open #rpmstr=1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",NoShr",internal,outin,keyed 
 00250 ! ___________________________
 00260 READ_RPMSTR: read #rpmstr,using 'Form POS 1,N 8': eno eof READ_ADDR
 00270   if eno=eno1 then delete #rpmstr: : goto READ_RPMSTR

@@ -37,9 +37,9 @@
 00350   next j
 00360 ! ______________________________________________________________________
 00370   open #3: "Name="&env$('temp')&"\Work."&session$&",SIZE=0,RecL=63,Replace",internal,outin,relative 
-00380   open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&str$(cno)&",Shr",internal,input,keyed 
-00390   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&str$(cno)&",Shr",internal,input,keyed 
-00400   open #13: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+00380   open #11: "Name="&env$('Q')&"\PRmstr\JCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\JCIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00390   open #12: "Name="&env$('Q')&"\PRmstr\JCCAT.H"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\CatIndx.h"&env$('cno')&",Shr",internal,input,keyed 
+00400   open #13: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 00410 ! ______________________________________________________________________
 00420 INPUTSCREEN1: ! 
 00430   shoption=1
@@ -169,7 +169,7 @@
 01470 ! ______________________________________________________________________
 01480 PRINTPROOFLIST: ! 
 01490   pr newpage
-01500   fnwait(104,cap$,message$,1)
+01500   fnwait(message$,1)
 01510   fnopenprn
 01520   pr #255,using L1530: "Job Cost Input Proof List"
 01530 L1530: form pos 1,cc 80,skip 1

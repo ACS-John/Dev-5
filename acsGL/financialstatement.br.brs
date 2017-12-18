@@ -16,12 +16,12 @@
 11700   fn_field_labels ! get column headers
 11800   hp1=66-int(len(rtrm$(cnam$))/2)
 11900   hp2=66-int(len(rtrm$(dat$))/2)
-12000   id$(1)=" 1. Balance Sheet File" : fil$(1)="ACGLFNSB.H"&str$(cno) : idx$(1)="FNSBINDX.H"&str$(cno)
-12100   id$(2)=" 2. Income Statement File" : fil$(2)="ACGLFNSI.H"&str$(cno) : idx$(2)="FNSIINDX.H"&str$(cno)
-12200   id$(3)=" 3. Fund Statement / Cash Flow File" : fil$(3)="ACGLFNSF.H"&str$(cno) : idx$(3)="FNSFINDX.H"&str$(cno)
-12300   id$(4)=" 4. Secondary Balance Sheet File" : fil$(4)="ACGLFNSC.H"&str$(cno) : idx$(4)="FNSCINDX.H"&str$(cno)
-12400   id$(5)=" 5. Secondary Income Statement File" : fil$(5)="ACGLFNSJ.H"&str$(cno) : idx$(5)="FNSJINDX.H"&str$(cno)
-12500   id$(6)=" 6. Secondary Fund / Cash Flow File" : fil$(6)="ACGLFNSG.H"&str$(cno) : idx$(6)="FNSGINDX.H"&str$(cno)
+12000   id$(1)=" 1. Balance Sheet File" : fil$(1)="ACGLFNSB.H"&env$('cno') : idx$(1)="FNSBINDX.H"&env$('cno')
+12100   id$(2)=" 2. Income Statement File" : fil$(2)="ACGLFNSI.H"&env$('cno') : idx$(2)="FNSIINDX.H"&env$('cno')
+12200   id$(3)=" 3. Fund Statement / Cash Flow File" : fil$(3)="ACGLFNSF.H"&env$('cno') : idx$(3)="FNSFINDX.H"&env$('cno')
+12300   id$(4)=" 4. Secondary Balance Sheet File" : fil$(4)="ACGLFNSC.H"&env$('cno') : idx$(4)="FNSCINDX.H"&env$('cno')
+12400   id$(5)=" 5. Secondary Income Statement File" : fil$(5)="ACGLFNSJ.H"&env$('cno') : idx$(5)="FNSJINDX.H"&env$('cno')
+12500   id$(6)=" 6. Secondary Fund / Cash Flow File" : fil$(6)="ACGLFNSG.H"&env$('cno') : idx$(6)="FNSGINDX.H"&env$('cno')
 12600 ! ______________________________________________________________________
 12700 MENU1: ! 
 12800   fntos(sn$="FsDesign")

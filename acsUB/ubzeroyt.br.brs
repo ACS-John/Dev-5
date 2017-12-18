@@ -17,7 +17,7 @@
 20320   fnacs(sn$,0,mat resp$,ck)
 20340   if ck=5 then goto XIT
 20360   if rtrm$(uprc$(resp$(1)))<>"ZERO" then goto SCREEN1
-20380   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+20380   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 20400 READ_CUSTOMER: ! 
 20420   read #1,using "Form POS 1,C 10": z$ eof DONE
 20440   rewrite #1,using "Form POS 232,PD 5,POS 252,PD 5,POS 272,PD 5": 0,0,0

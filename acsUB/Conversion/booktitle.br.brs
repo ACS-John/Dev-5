@@ -41,7 +41,7 @@
 00300   io1$(1)="10,40,N 2,UT,N"
 00310 L310: rinput fields mat io1$: cno conv L310
 00320   if cno=0 or cmdkey=5 or cmdkey=99 then goto XIT
-00330   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&str$(cno)&",Shr",internal,outin,keyed 
+00330   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubindex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00340   for j=1 to lrec(1)
 00350     read #1,using "Form Pos 71,c 30",rec=j: nam$ norec L390
 00360     nam$=fnbooktitle$(nam$)
@@ -51,7 +51,7 @@
 00400   goto DONE
 00410 ! ______________________________________________________________________
 00420 DONE: close #1: 
-00430   pr "company number "&str$(cno)&" completed successfully"
+00430   pr "company number "&env$('cno')&" completed successfully"
 00440   goto L270
 00450 XIT: stop 
 00460 ! ______________________________________________________________________

@@ -10,7 +10,7 @@
 11800 ! ______________________________________________________________________
 12000   fncno(cno,cnam$)
 12200   fnLastBillingDate(d1)
-12400   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
+12400   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input 
 12600   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 12800   close #21: 
 13000   at$(1)=cnam$
@@ -29,8 +29,8 @@
 15600 ! 
 15800   fntop("S:\acsUB\ubprtbl1",cap$="Print Bills")
 16000   fn_bulksort
-16200   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
-16400   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence #
+16200   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
+16400   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence #
 16600 ! 
 16800 ! ______________________________________________________________________
 17000 SCREEN1: ! 
@@ -80,7 +80,7 @@
 25800   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 26000   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 26200 ! ______________________________________________________________________
-26400   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+26400   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 26600   gosub VBOPENPRINT ! Open #20: "Name="&env$('Q')&"\UBmstr\Bill"&WSID$&".txt,Replace,RecL=5000",Display,Output
 26800 ! .   ! fnOPENPRN
 27000 ! ______________________________________________________________________
@@ -161,7 +161,7 @@
 42200   goto READALTADR
 42400 ! ______________________________________________________________________
 42600 SORT1: ! SELECT & SORT
-42800   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&str$(cno)&",Shr",internal,input,keyed ioerr L1390
+42800   open #5: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&env$('cno')&",Shr",internal,input,keyed ioerr L1390
 43000   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=19",internal,output 
 43200   s5=1
 43400   if prtbkno=0 then 
@@ -403,7 +403,7 @@
 91600   fnend 
 91800 ! ______________________________________________________________________
 92000   def fn_bulksort ! bulk sort order
-92200     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
+92200     open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
 92400     open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output 
 92600 L2790: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L2820
 92800     write #6,using "Form POS 1,C 12,n 2,n 7,c 10": z$,0,0,z$ ! just do it in account order

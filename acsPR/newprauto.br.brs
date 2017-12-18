@@ -13,7 +13,7 @@
 00130   if pgnum=0 then open #prclnt=1: "Name="&env$('Q')&"\PRmstr\PrClnt.dat,NoShr",internal,outin,relative  !:
           read #prclnt,using 'Form POS 46,3*N 1',rec=1: w,m,q !:
           close #prclnt: 
-00140 L140: open #20: "Name="&env$('Q')&"\PRmstr\newPrPGMN.H"&str$(cno)&",Shr",internal,input,relative ioerr MSGBOX1 !:
+00140 L140: open #20: "Name="&env$('Q')&"\PRmstr\newPrPGMN.H"&env$('cno')&",Shr",internal,input,relative ioerr MSGBOX1 !:
         read #20,using 'Form POS 1,C 20,X 35,3*N 1',rec=pgnum+=1: prg$,wk,mo,qt eof XIT,norec XIT !:
         close #20: 
 00150   if w=1 and wk<>1 then goto L140 ! WEEKLY PERIOD NOT SELECTED
@@ -26,7 +26,7 @@
 00220 MSGBOX1: ! 
 00230   mat ml$(3) !:
         ml$(1)="The order for automatic processing has" !:
-        ml$(2)="never been set for company # "&str$(cno)&"." !:
+        ml$(2)="never been set for company # "&env$('cno')&"." !:
         ml$(3)="Click OK to skip this company." !:
         fnmsgbox(mat ml$,resp$,cap$,49)
 00240   goto L260

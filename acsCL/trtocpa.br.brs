@@ -43,21 +43,21 @@
 00330   gosub GETPRC
 00340 ! ______________________________________________________________________
 00350   fnwait
-00360   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative  !:
+00360   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative  !:
         read #20,using 'Form POS 618,10*N 1': mat dedcode !:
         close #20: 
 00370   d2$=cnvrt$("PIC(######)",d2)
-00380   open #20: "Name="&env$('Q')&"\GLmstr\glBucket.H"&str$(cno)&",Shr",internal,input,relative ioerr L400 !:
+00380   open #20: "Name="&env$('Q')&"\GLmstr\glBucket.H"&env$('cno')&",Shr",internal,input,relative ioerr L400 !:
         read #20,using 'Form POS 1,N 1',rec=1: glb norec L390
 00390 L390: close #20: 
-00400 L400: if glb=2 then glwk$=env$('Q')&"\GLmstr\GL"&d2$&".H"&str$(cno)
-00410   if glb><2 then glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&str$(cno)
-00420   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00430   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&str$(cno)&",Shr",internal,input,keyed 
-00440   open #glwk101=3: "Name="&env$('Q')&"\CLmstr\GLWK101.H"&str$(cno)&",Size=0,RecL=104,Replace",internal,output 
-00450   open #glwk201=4: "Name="&env$('Q')&"\CLmstr\GLWK201.H"&str$(cno)&",Size=0,RecL=110,Replace",internal,output 
-00460   open #bankmstr=5: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
-00470   open #paymstr=6: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,input,keyed 
+00400 L400: if glb=2 then glwk$=env$('Q')&"\GLmstr\GL"&d2$&".H"&env$('cno')
+00410   if glb><2 then glwk$=env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".h"&env$('cno')
+00420   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00430   open #tralloc=2: "Name="&env$('Q')&"\CLmstr\TrAlloc.H"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\TrAlloc-Idx.h"&env$('cno')&",Shr",internal,input,keyed 
+00440   open #glwk101=3: "Name="&env$('Q')&"\CLmstr\GLWK101.H"&env$('cno')&",Size=0,RecL=104,Replace",internal,output 
+00450   open #glwk201=4: "Name="&env$('Q')&"\CLmstr\GLWK201.H"&env$('cno')&",Size=0,RecL=110,Replace",internal,output 
+00460   open #bankmstr=5: "Name="&env$('Q')&"\CLmstr\BankMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\BankIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
+00470   open #paymstr=6: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,input,keyed 
 00480   fnopenprn
 00490   gosub HDR
 00500 READ_TRMSTR: ! 
@@ -157,18 +157,18 @@
 01390   close #glwk201: 
 01400   close #bankmstr: 
 01410   if trim$(dv$)="" then goto TRY_TO_SEND_TO_GL
-01420   execute "Copy "&env$('Q')&"\CLmstr\GLWk101.h"&str$(cno)&" "&dv$&" -n" ioerr MSGBOX1
-01430   execute "Copy "&env$('Q')&"\CLmstr\GLWk201.h"&str$(cno)&" "&dv$&" -n"
-01440   execute "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&str$(cno)&" "&dv$&" -n"
-01450   execute "Copy "&env$('Q')&"\CLmstr\PayIdx1.h"&str$(cno)&" "&dv$&" -n"
+01420   execute "Copy "&env$('Q')&"\CLmstr\GLWk101.h"&env$('cno')&" "&dv$&" -n" ioerr MSGBOX1
+01430   execute "Copy "&env$('Q')&"\CLmstr\GLWk201.h"&env$('cno')&" "&dv$&" -n"
+01440   execute "Copy "&env$('Q')&"\CLmstr\PayMstr.h"&env$('cno')&" "&dv$&" -n"
+01450   execute "Copy "&env$('Q')&"\CLmstr\PayIdx1.h"&env$('cno')&" "&dv$&" -n"
 01460 XIT: fnxit
 01470 ! ______________________________________________________________________
 01480 TRY_TO_SEND_TO_GL: ! 
 01490   if glb=2 then goto BUCKET
-01500   execute "Copy "&env$('Q')&"\CLmstr\GLWK101.H"&str$(cno)&' '&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".H"&str$(cno)&" -n"
-01510   execute "Copy "&env$('Q')&"\CLmstr\GLWK201.H"&str$(cno)&' '&env$('Q')&"\GLmstr\GLWK2"&wsid$&".H"&str$(cno)&" -n"
+01500   execute "Copy "&env$('Q')&"\CLmstr\GLWK101.H"&env$('cno')&' '&env$('Q')&"\GLmstr\GL_Work_"&env$('acsUserId')&".H"&env$('cno')&" -n"
+01510   execute "Copy "&env$('Q')&"\CLmstr\GLWK201.H"&env$('cno')&' '&env$('Q')&"\GLmstr\GLWK2"&wsid$&".H"&env$('cno')&" -n"
 01520   if lr4=0 then goto L1550
-01530   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L1550
+01530   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L1550
 01540   fnprg("S:\acsGL\PRMerge",2) !:
         fnstyp(99)
 01550 L1550: fnchain("S:\acsGL\acglMrge")
@@ -190,7 +190,7 @@
 01690 ! ______________________________________________________________________
 01700 GETPRC: ! 
 01710   pri1=0
-01720   open #7: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input ioerr L1830 !:
+01720   open #7: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input ioerr L1830 !:
         read #7,using 'Form POS 437,15*C 12': mat prgln$ !:
         close #7: 
 01730   pri1=1
@@ -235,12 +235,12 @@
 02080   return 
 02090 ! ______________________________________________________________________
 02100 BUCKET: ! MOVE TO GLBUCKET
-02110   open #glwk101=3: "Name="&env$('Q')&"\CLmstr\GLWK101.H"&str$(cno),internal,input 
+02110   open #glwk101=3: "Name="&env$('Q')&"\CLmstr\GLWK101.H"&env$('cno'),internal,input 
 02120   open #9: "Name="&glwk$&",RecL=104,USE",internal,output 
 02130 L2130: read #glwk101,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$, tr4,tr5,tr6,tr7, tr$,td$,ven$,j$,j$,j$,bgl$ eof L2160
 02140   write #9,using 'Form POS 1,C 12,N 6,PD 6.2,2*N 2,C 12,C 30,C 8,C 6,C 5,C 3,C 12': gl$,tr4,tr5,tr6,tr7,tr$,td$,ven$,j$,j$,j$,bgl$
 02150   goto L2130
-02160 L2160: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&str$(cno)&",Shr",internal,outin,keyed ioerr XIT
+02160 L2160: open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outin,keyed ioerr XIT
 02170   fnchain("S:\acsGL\PRMerge")
 02180 ! ______________________________________________________________________
 02190 ! <Updateable Region: ERTN>

@@ -7,7 +7,7 @@
 00080   dim p$*5,iv$*12,gl(3),gh(3),td$*30,tr$*12,a$*40,cap$*128,dat$*20
 00090   td$="AR SUMMARY"
 00100   tr6=5
-00110   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&str$(cno)&",RecL=20,use,Shr",internal,outin,relative 
+00110   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outin,relative 
 00120   if lrec(8)=0 then write #8,using "form pos 1,n 6": dat else read #8,using "form pos 1,n 6",rec=1,release: dat
 00130   pr newpage
 00140   pr f "10,15,c 60": "POSITION PAPER FOR G/L DISTRIBUTION REPORT"

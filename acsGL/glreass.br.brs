@@ -11,7 +11,7 @@
 00110   fncno(cno)
 00120 ! 
 00130   cap$="Backup Restore or Reorganize"
-00140   h$=".H"&str$(cno)
+00140   h$=".H"&env$('cno')
 00150 ! ______________________________________________________________________
 00160 MENU1: ! 
 00170   fntos(sn$="glreorg") !:
@@ -28,8 +28,8 @@
 00270   if ckey=1 then gosub REORG
 00280   goto XIT
 00290 REORG: ! 
-00300   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&str$(cno)&",Shr",internal,outin,keyed 
-00310   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&str$(cno)&",Shr",internal,outin,relative 
+00300   open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.H"&env$('cno')&",Shr",internal,outin,keyed 
+00310   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outin,relative 
 00320 L320: read #1,using L330: mat ta eof L360
 00330 L330: form pos 333,2*pd 3
 00340   rewrite #1,using L330: 0,0

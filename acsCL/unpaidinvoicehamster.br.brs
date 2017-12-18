@@ -17,8 +17,8 @@
 00160 ! ______________________________________________________________________
 00170 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00180   open #first_file=open_file_count+=1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&str$(cno)&",Use,RecL=114,KPs=1,KLn=20,Shr",internal,outin,keyed 
-00190   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&str$(cno)&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx2.h"&str$(cno)&",Use,RecL=114,KPs=31/27/1,KLn=2/4/26,Shr",internal,outin,keyed 
+00180   open #first_file=open_file_count+=1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx1.h"&env$('cno')&",Use,RecL=114,KPs=1,KLn=20,Shr",internal,outin,keyed 
+00190   open #open_file_count+=1: "Name="&env$('Q')&"\CLmstr\PayTrans.h"&env$('cno')&",Version=2,KFName="&env$('Q')&"\CLmstr\UnPdIdx2.h"&env$('cno')&",Use,RecL=114,KPs=31/27/1,KLn=2/4/26,Shr",internal,outin,keyed 
 00200   return 
 00210 ! ______________________________________________________________________
 00220 BUILD_LAYOUT: ! 
@@ -128,10 +128,10 @@
         c$(cl,7)=env$('Q')&"\CLmstr\PaymentCode.Idx" : c$(cl,8)=limit_to_list$
 00460   cl=9 !:
         c$(cl,1)='ComboF' !:
-        c$(cl,2)=env$('Q')&"\CLmstr\BankMstr.h"&str$(cno) !:
+        c$(cl,2)=env$('Q')&"\CLmstr\BankMstr.h"&env$('cno') !:
         c$(cl,3)='1' : c$(cl,4)=str$(sln(cl)) !:
         c$(cl,5)=str$(sln(cl)+1) : c$(cl,6)='30' !:
-        c$(cl,7)=env$('Q')&"\CLmstr\BankIdx1.h"&str$(cno) : c$(cl,8)=limit_to_list$
+        c$(cl,7)=env$('Q')&"\CLmstr\BankIdx1.h"&env$('cno') : c$(cl,8)=limit_to_list$
 00470   cl=12 !:
         c$(cl,1)='ComboF' !:
         c$(cl,2)="S:\acsCL\PostingCode.dat" !:

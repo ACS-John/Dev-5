@@ -10,7 +10,7 @@
 12160 ! ______________________________________________________________________
 14000   fncno(cno,cnam$)
 14020   fnLastBillingDate(d1)
-14040   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&str$(cno)&",Shr",internal,input 
+14040   open #21: "Name="&env$('Q')&"\UBmstr\Company.h"&env$('cno')&",Shr",internal,input 
 14060   read #21,using "Form POS 41,2*C 40": at$(2),at$(3)
 14080   close #21: 
 14100   at$(1)=cnam$
@@ -31,11 +31,11 @@
 14400     servicename$(j)=trim$(servicename$(j))
 14420   next j
 14440   gosub BULKSORT
-14460   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
-14480   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&str$(cno)&",Shr",internal,input,keyed  ! open in route-sequence #
-14500   open #h_ubtransvb=fngethandle: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&",Shr",internal,outin,keyed 
+14460   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
+14480   open #2: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndx5.h"&env$('cno')&",Shr",internal,input,keyed  ! open in route-sequence #
+14500   open #h_ubtransvb=fngethandle: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&",Shr",internal,outin,keyed 
 14520 ! 
-14540   open #11: "Name="&env$('Q')&"\UBmstr\Message.h"&str$(cno),internal,outin,relative ioerr MESSAGE_H_ALREADY_CONVERTED
+14540   open #11: "Name="&env$('Q')&"\UBmstr\Message.h"&env$('cno'),internal,outin,relative ioerr MESSAGE_H_ALREADY_CONVERTED
 14560   read #11,using "form pos 1,11*c 60",rec=1: mat mg$(1:11) norec MESSAGE_H_FINAL
 14580   for mg_item=1 to 11
 14600     fncreg_write('print bill message board line '&str$(mg_item),mg$(mg_item))
@@ -77,7 +77,7 @@
 16560   resp$(resp_billing_date_prior:=respc+=1)=cnvrt$("pic(zzzzzz)",billing_date_prior)
 16580   scr_line+=1
 16600   fnlbl(scr_line+=1,1,"Starting Account:",ll,1)
-16620   fncombof("ubm-act-nam",scr_line,pf,40,env$('Q')&"\UBmstr\Customer.h"&str$(cno),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&str$(cno),2)
+16620   fncombof("ubm-act-nam",scr_line,pf,40,env$('Q')&"\UBmstr\Customer.h"&env$('cno'),1741,9,41,30,env$('Q')&"\UBmstr\ubindx5.h"&env$('cno'),2)
 16640   resp$(resp_start:=respc+=1)="[All]"
 16660   fnlbl(scr_line+=1,1,"Route Number:",ll,1)
 16680   fncmbrt2(scr_line,pf)
@@ -125,7 +125,7 @@
 24160   if trim$(a$)<>"" then restore #2,key=cnvrt$("pic(zz)",route)& cnvrt$("pic(zzzzzzz)",sequence): nokey SCREEN1
 24180   if trim$(a$)="" and prtbkno>0 then restore #2,key>=cnvrt$("pic(zz)",prtbkno)&"       ": ! selected a route and no beginning Account
 24200 ! ______________________________________________________________________
-24220   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+24220   open #3: "Name="&env$('Q')&"\UBmstr\UBAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\adrIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 24240   fnpa_open
 24260   lyne=3
 24280 ! 
@@ -381,7 +381,7 @@
 62100     end if 
 62120   fnend 
 66000 BULKSORT: ! r: bulk sort order
-66020   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,input,keyed  ! open in Account order
+66020   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
 66040   open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=31",internal,output 
 66060   do 
 66080     read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof BS_EO_CUSTOMER

@@ -2,7 +2,7 @@
 00030   fncno(cno)
 00060   dim z$*5,a$(3)*30,prg$*20,ma(20)
 00070   open #255: "Name=LPT2:",display,output 
-00080   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&str$(cno)&",Shr",internal,input,keyed 
+00080   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.H"&env$('cno')&",Shr",internal,input,keyed 
 00085   do 
 00090     pr newpage
 00100     pr f "10,10,C 50": "Account Number to pr (Blank to Stop):"

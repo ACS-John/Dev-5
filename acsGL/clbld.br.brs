@@ -30,8 +30,8 @@
 00300   dv$=dv$&":"
 00310   on ti1 goto L330,END1
 00320 ! ______________________________________________________________________
-00330 L330: open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,input,keyed 
-00340   open #2: "Name="&dv$&"GLmstr.h"&str$(cno)&",SIZE=0,RecL=62,Replace",internal,output 
+00330 L330: open #1: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,input,keyed 
+00340   open #2: "Name="&dv$&"GLmstr.h"&env$('cno')&",SIZE=0,RecL=62,Replace",internal,output 
 00350 L350: read #1,using L360: gl$,de$ eof END1
 00360 L360: form pos 1,c 12,c 50
 00370   write #2,using L360: gl$,de$
@@ -39,9 +39,9 @@
 00390 ! ______________________________________________________________________
 00400 END1: close #1: ioerr L410
 00410 L410: close #2: ioerr L420
-00420 L420: open #2: "Name="&dv$&"PAYMSTR.h"&str$(cno)&",SIZE=0,RecL=276,Replace",internal,output 
-00430   open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&str$(cno)&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outin,keyed 
-00440   open #1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\payidx1.h"&str$(cno)&",Shr",internal,input,keyed  ! Ioerr 580
+00420 L420: open #2: "Name="&dv$&"PAYMSTR.h"&env$('cno')&",SIZE=0,RecL=276,Replace",internal,output 
+00430   open #payeegl:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\CLmstr\Payeeglbkdidx.h"&env$('cno')&",Use,RecL=56,KPs=1,KLn=8,Shr",internal,outin,keyed 
+00440   open #1: "Name="&env$('Q')&"\GLmstr\paymstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\payidx1.h"&env$('cno')&",Shr",internal,input,keyed  ! Ioerr 580
 00450 READ_GL1099: ! 
 00460   read #1,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$ eof EOF_GL1099
 00470   write #2,using 'Form Pos 1,C 8,4*c 30,x 5,n 2,c 11,x 6,c 12,c 30,c 50,c 12,c 20': vn$,mat vn$,typ,ss$,ph$,contact$,email$,fax$,myact$
@@ -49,7 +49,7 @@
 00490 ! ______________________________________________________________________
 00500 EOF_GL1099: ! 
 00510   close #1: 
-00520   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,input,keyed ioerr L410
+00520   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,input,keyed ioerr L410
 00530   vn$(3)=""
 00540 L540: read #1,using 'Form POS 1,N 4,3*C 25,C 11,PD 5.2': eno,vn$(1),vn$(2),vn$(4),ss$,ytdp eof L580
 00550   write #2,using 'Form POS 1,G 8,4*C 30,PD 5.2,N 2,C 11': eno,mat vn$,ytdp,0,ss$
@@ -57,7 +57,7 @@
 00570 ! ______________________________________________________________________
 00580 L580: close #1: 
 00590   close #2: 
-00600   execute "Copy "&env$('Q')&"\GLmstr\PayeeGLBreakdown.h"&str$(cno)&" a:"
+00600   execute "Copy "&env$('Q')&"\GLmstr\PayeeGLBreakdown.h"&env$('cno')&" a:"
 00610   goto XIT
 00620 ! ______________________________________________________________________
 00630 XIT: fnxit

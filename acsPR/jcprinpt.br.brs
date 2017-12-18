@@ -14,17 +14,17 @@
 00140   fncno(cno)
 00150 ! 
 00160 ! ______________________________________________________________________
-00170   open #1: "Name="&env$('Q')&"\PRmstr\RPNAMES.H"&str$(cno)&",Shr",internal,input 
+00170   open #1: "Name="&env$('Q')&"\PRmstr\RPNAMES.H"&env$('cno')&",Shr",internal,input 
 00180   read #1,using L190: label1$(7),label1$(8),label1$(9),label1$(10),label1$(11),label1$(12),label1$(13),label1$(14),label1$(15),label1$(16),label1$(17)
 00190 L190: form pos 741,11*c 20
 00200   close #1: 
 00210 ! ______________________________________________________________________
 00220   gosub SORTIT
-00230   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&str$(cno)&",Shr",internal,outin,keyed 
-00240   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno)&",Shr",internal,outin,relative 
-00250   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&str$(cno)&",SIZE=0,RecL=117,Replace",internal,output 
+00230   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\RPINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
+00240   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,outin,relative 
+00250   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno')&",SIZE=0,RecL=117,Replace",internal,output 
 00260   open #4: "Name="&env$('Temp')&"\Addr."&session$,internal,input 
-00270   open #5: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&str$(cno),internal,input,relative 
+00270   open #5: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno'),internal,input,relative 
 00280   open #6: "Name=ADDR2."&wsid$,internal,input 
 00290   f1$="FORM POS 1,C 20"
 00300   f2$=f1$
@@ -183,7 +183,7 @@
 01790   win=101
 01800   fnopenwin(win,2,7,22,74,cap$)
 01810   close #3: 
-01820   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&str$(cno),internal,outin,relative 
+01820   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno'),internal,outin,relative 
 01830   label1$(20)=" "
 01840   label1$(21)=" "
 01850   pr #win,fields "04,02,Cr 34,N": "Total or Employee Numbers Entered:" !:
@@ -210,7 +210,7 @@
 02040 L2040: r=0
 02050   pc=0
 02060   pr newpage
-02070   fnwait(101,cap$,message$,1)
+02070   fnwait(message$,1)
 02080   fnopenprn(cp,58,220,process)
 02090 L2090: r=r+1
 02100   read #3,using L1600,rec=r: eno,dep,mat inp,gpd,mat hr,adr eof L2430,norec L2430
@@ -280,7 +280,7 @@
 02730   if response$(1)="N" then goto TOTALSCREEN
 02740   r=0
 02750   close #3: 
-02760   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&str$(cno),internal,output 
+02760   open #3: "Name="&env$('Q')&"\PRmstr\rpwork"&wsid$&".h"&env$('cno'),internal,output 
 02770   s9=0
 02780   eno=dep=gpd=0: mat inp=(0): mat hr=(0)
 02790   goto L770
@@ -291,9 +291,9 @@
 02840   close #3: 
 02850   close #4: 
 02860   close #5: 
-02870   open #5: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&str$(cno),internal,output ioerr L2890
+02870   open #5: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno'),internal,output ioerr L2890
 02880   close #5,free: 
-02890 L2890: open #5: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&str$(cno)&",SIZE=0,RecL=40",internal,output 
+02890 L2890: open #5: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno')&",SIZE=0,RecL=40",internal,output 
 02900   close #5: 
 02910   fnchain("S:\acsPR\prCalk")
 02920 ! ______________________________________________________________________
@@ -301,11 +301,11 @@
 02940 ! ______________________________________________________________________
 02950 SORTIT: ! Replace SORTIT
 02960   open #1: "Name=Sort"&wsid$&".tmp,RecL=128,Replace",internal,output 
-02970   open #2: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&str$(cno),internal,input 
+02970   open #2: "Name="&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno'),internal,input 
 02980   write #1,using L3030: "! SORT FOR TRANSFER JC TO PR IN PROCESS"
-02990   write #1,using L3030: "FILE "&env$('Q')&"\PRmstr\JCPRH1.H"&str$(cno)&",,,"&env$('Temp')&"\Addr."&session$&",,,acsPR,,A,N"
+02990   write #1,using L3030: "FILE "&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno')&",,,"&env$('Temp')&"\Addr."&session$&",,,acsPR,,A,N"
 03000   write #1,using L3030: "MASK 1,8,N,A,10,2,PD,A"
-03010   write #1,using L3030: "FILE "&env$('Q')&"\PRmstr\JCPRH1.H"&str$(cno)&",,,ADDR2."&wsid$&",,,acsPR,,A,N"
+03010   write #1,using L3030: "FILE "&env$('Q')&"\PRmstr\JCPRH1.H"&env$('cno')&",,,ADDR2."&wsid$&",,,acsPR,,A,N"
 03020   write #1,using L3030: "MASK 1,8,N,A,27,14,C,A"
 03030 L3030: form pos 1,c 128
 03040   close #1: 

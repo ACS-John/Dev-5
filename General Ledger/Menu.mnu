@@ -29,7 +29,7 @@ Print
 Financial Statements
 >Print Cover Letter                                 ^ acsGL\CoverLetterPrint
 >>Edit Cover Letter                                 ^ EditInWordProcessor:[Q]\GLmstr\ACGLCovF.h[cno] forceAtlantis makeIfNecessary
->Balance Sheet                                      ^ acsGL\BalanceSheet
+>Balance Sheet                                      ^ General Ledger\Balance Sheet
 >>Comparative Balance Sheet                         ^ General Ledger\Comparative Balance Sheet
 >>Period Comparison Balance Sheet                   ^ General Ledger\Period Comparison Balance Sheet
 >>Fund Comparison Balance Sheet                     ^ acsGL\ACGLbalF
@@ -84,7 +84,7 @@ Utilities
 >Create Checkbook System Files                    ^ acsGL\CLBLD
 >Reorganize Company                               ^ acsGL\GlReorganize
 >Period Names                                     ^ HamsterFio:Period Names
->Test Balance Sheet Design                        ^ acsGL\balancesheettest
+>Test Balance Sheet Design                        ^ General Ledger\Test Balance Sheet Design
 >Test Income Statement Design                     ^ acsGL\acglinct
 >Reprint Year End Trial Balance                   ^ acsGL\yearendtb
 Budget Management                                 ^ acsGL\bgmaint2

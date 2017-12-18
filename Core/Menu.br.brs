@@ -577,7 +577,7 @@
 29160       fn_ddAddButton('Employee',fkey_pr_employee:=5001,tmpBtnItem+=1,tmp_btn_width)
 29170     else if env$('cursys')="GL" then
 29180       library 'S:\Core\Library': fnpedat$
-29190       open #h_tmp:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,outin,relative ioerr DD_GL_XIT
+29190       open #h_tmp:=fngethandle: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,outin,relative ioerr DD_GL_XIT
 29200       read #h_tmp,using 'Form Pos 296,n 2',rec=1: lmu
 29210       close #h_tmp:
 29220       fnlbl(1,1,'Last Period Closed:',19,1,0,fraDashboard)

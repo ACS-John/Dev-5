@@ -21,7 +21,7 @@
 00160   if ck=5 then goto XIT
 00170   incr=val(resp$(1))
 00180   on fkey 5 goto DONE
-00190   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+00190   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00200 READ_CUSTOMER: ! !:
         read #1,using "Form POS 1743,n 7": oldseq eof DONE
 00210   newseq=newseq+max(incr,10)

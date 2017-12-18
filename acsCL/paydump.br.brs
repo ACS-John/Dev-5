@@ -11,12 +11,12 @@
 00110   fncno(cno,cnam$) !:
         fndat(dat$)
 00120 ! ______________________________________________________________________
-00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative: read #20,using 'Form POS 150,2*N 1',rec=1: mat d !:
+00130   open #20: "Name="&env$('Q')&"\CLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative: read #20,using 'Form POS 150,2*N 1',rec=1: mat d !:
         close #20: 
-00140   open #trmstr2=22: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\TrIdx2.H"&str$(cno)&",Shr",internal,input,keyed 
-00150   open #paymstr1=1: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&str$(cno)&",Shr",internal,outin,keyed 
-00160   open #paymstr2=2: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayIdx2.H"&str$(cno)&",Shr",internal,outin,keyed 
-00170   open #payeeglbreakdown:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&str$(cno)&",KFName="&env$('Q')&"\CLmstr\PayeeGLBkdidx.h"&str$(cno)&",Shr",internal,outin,keyed 
+00140   open #trmstr2=22: "Name="&env$('Q')&"\CLmstr\TrMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\TrIdx2.H"&env$('cno')&",Shr",internal,input,keyed 
+00150   open #paymstr1=1: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx1.H"&env$('cno')&",Shr",internal,outin,keyed 
+00160   open #paymstr2=2: "Name="&env$('Q')&"\CLmstr\PayMstr.H"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayIdx2.H"&env$('cno')&",Shr",internal,outin,keyed 
+00170   open #payeeglbreakdown:=fngethandle: "Name="&env$('Q')&"\CLmstr\PayeeGLBreakdown.h"&env$('cno')&",KFName="&env$('Q')&"\CLmstr\PayeeGLBkdidx.h"&env$('cno')&",Shr",internal,outin,keyed 
 00180   fntos(sn$="PayDump") !:
         respc=0 : mylen=21 : mypos=mylen+2
 00190   fnlbl(1,1,"Oldest retained Date:",mylen,right)

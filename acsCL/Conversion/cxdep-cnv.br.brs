@@ -2,8 +2,8 @@
 00020   cno=3
 00030 ! 
 00040   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01) ! /r
-00050   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno),internal,outin 
-00060   open #2: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno),internal,outin 
+00050   open #trmstr=1: "Name="&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno'),internal,outin 
+00060   open #2: "Name="&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno'),internal,outin 
 00070   fln=trmstr
 00080 L80: read #fln,using 'Form POS 4,C 2,C 6': ty$,d$ eof END1
 00090   if ty$="CA" then goto L140
@@ -19,6 +19,6 @@
 00190   fln=2 : goto L80
 00200 L200: close #trmstr: 
 00210   close #2: 
-00220   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TRIDX1.H"&str$(cno)&" 1 11 Replace DupKeys"
-00230   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&str$(cno)&' '&env$('Q')&"\CLmstr\TRIDX2.H"&str$(cno)&" 1/28/4 3/8/8 Replace DupKeys"
-00240   execute "Index "&env$('Q')&"\CLmstr\TRALLOC.h"&str$(cno)&' '&env$('Q')&"\CLmstr\TRGLIDX.H"&str$(cno)&" 12 12 Replace DupKeys"
+00220   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TRIDX1.H"&env$('cno')&" 1 11 Replace DupKeys"
+00230   execute "Index "&env$('Q')&"\CLmstr\TRMSTR.H"&env$('cno')&' '&env$('Q')&"\CLmstr\TRIDX2.H"&env$('cno')&" 1/28/4 3/8/8 Replace DupKeys"
+00240   execute "Index "&env$('Q')&"\CLmstr\TRALLOC.h"&env$('cno')&' '&env$('Q')&"\CLmstr\TRGLIDX.H"&env$('cno')&" 12 12 Replace DupKeys"

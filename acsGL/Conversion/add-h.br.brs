@@ -19,12 +19,12 @@
 00190 XIT: stop 
 00200 ! ______________________________________________________________________
 00210 START: ! 
-00220   execute "Rename "&env$('Q')&"\GLmstr\*."&str$(cno)&' '&env$('Q')&"\GLmstr\*.h"&str$(cno)&" -n" ioerr RER
-00230   pr 'company '&str$(cno)&' completed.'
+00220   execute "Rename "&env$('Q')&"\GLmstr\*."&env$('cno')&' '&env$('Q')&"\GLmstr\*.h"&env$('cno')&" -n" ioerr RER
+00230   pr 'company '&env$('cno')&' completed.'
 00240   goto MENU1
 00250 ! ______________________________________________________________________
 00260 RER: ! 
-00270   pr 'company '&str$(cno)&' had problems.'
+00270   pr 'company '&env$('cno')&' had problems.'
 00280   goto MENU1
 00290 ! ______________________________________________________________________
 00300 ! <Updateable Region: ERTN>

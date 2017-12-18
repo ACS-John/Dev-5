@@ -10,8 +10,8 @@
 00100   fntop('S:\acsPR\prRegFM',cap$="Tax Deposit")
 00110   fncno(cno)
 00115   fnconsole(1)
-00120   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input, relative: read #1,using 'Form POS 648,10*C 6',rec=1: mat rpnames$ : close #1: 
-00130   open #1: "Name="&env$('Q')&"\PRmstr\prTot.H"&str$(cno)&",Use,RecL=138,KFName="&env$('Q')&"\PRmstr\prTotIDX.H"&str$(cno)&",kps=1,kln=9",internal, outin,keyed 
+00120   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input, relative: read #1,using 'Form POS 648,10*C 6',rec=1: mat rpnames$ : close #1: 
+00130   open #1: "Name="&env$('Q')&"\PRmstr\prTot.H"&env$('cno')&",Use,RecL=138,KFName="&env$('Q')&"\PRmstr\prTotIDX.H"&env$('cno')&",kps=1,kln=9",internal, outin,keyed 
 00140 ! ______________________________________________________________________
 00150   gosub BUILDSCREEN
 00160 ! ______________________________________________________________________

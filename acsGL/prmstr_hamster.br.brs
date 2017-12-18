@@ -18,7 +18,7 @@
 13400 ! ______________________________________________________________________
 13600   def fn_open_file
 13800     open_file_count=0 ! this value is used in the close_file sub routine
-14000     open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&str$(cno)&",Shr",internal,outin,keyed 
+14000     open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRINDEX.h"&env$('cno')&",Shr",internal,outin,keyed 
 14200   fnend 
 14400   def fn_close_file
 14600     for j=1 to open_file_count : close #j: : next j
@@ -87,23 +87,23 @@
 27000     limit_to_list$='1'
 27200 ! 
 27400 ! cl=1 : c$(cl,1)='ComboF'
-27600 ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&str$(cno)
+27600 ! c$(cl,2)=env$('Q')&'\TMmstr\Client.h'&env$('cno')
 27800 ! c$(cl,3)='1' : c$(cl,4)='6'
 28000 ! c$(cl,5)='7' : c$(cl,6)='50'
-28200 ! c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h'&str$(cno)
+28200 ! c$(cl,7)=env$('Q')&'\TMmstr\Client-Idx.h'&env$('cno')
 28400 ! c$(cl,8)=limit_to_list$
 28600 ! 
 28800 ! cl=3 : c$(cl,1)='ComboF'
-29000 ! c$(cl,2)=env$('Q')&'\TMmstr\Systems.h'&str$(cno)
+29000 ! c$(cl,2)=env$('Q')&'\TMmstr\Systems.h'&env$('cno')
 29200 ! c$(cl,3)='1' : c$(cl,4)='2'
 29400 ! c$(cl,5)='3' : c$(cl,6)='50'
-29600 ! c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h'&str$(cno)
+29600 ! c$(cl,7)=env$('Q')&'\TMmstr\Systems-Idx.h'&env$('cno')
 29800 ! c$(cl,8)=limit_to_list$
 30000 ! 
 30200 ! cl=5 : c$(cl,1)='ComboF'
-30400 ! c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h'&str$(cno)
+30400 ! c$(cl,2)=env$('Q')&'\TMmstr\TimeFrame.h'&env$('cno')
 30600 ! c$(cl,3)='1' : c$(cl,4)='2'
 30800 ! c$(cl,5)='3' : c$(cl,6)='50'
-31000 ! c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h'&str$(cno)
+31000 ! c$(cl,7)=env$('Q')&'\TMmstr\TimeFrame-Idx.h'&env$('cno')
 31200 ! c$(cl,8)=limit_to_list$
 31400   fnend 

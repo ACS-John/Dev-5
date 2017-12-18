@@ -10,14 +10,14 @@
 00100 ! ______________________________________________________________________
 00110   fntop(program$,cap$="Electronic 401K")
 00120   fncno(cno)
-00150   fnwait(101,cap$,message$='',1)
+00150   fnwait(message$='',1)
 00160   fncreg_read('calculation date',tmp$) : ppd=val(tmp$) 
 00162   fncreg_read('calculation date text',d$)
-00170   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&",Shr",internal,input  !:
+00170   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&",Shr",internal,input  !:
         read #1,using 'Form POS 1,C 40,POS 618,30*N 1': a$,mat dedcode,mat calcode,mat dedfed : close #1: 
-00180   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&str$(cno)&",Shr",internal,input,relative 
-00190   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&str$(cno)&",Shr",internal,input,relative 
-00200   open #3: "Name="&env$('Q')&"\PRmstr\praddr1.h"&str$(cno),internal,input 
+00180   open #1: "Name="&env$('Q')&"\PRmstr\RPMSTR.h"&env$('cno')&",Shr",internal,input,relative 
+00190   open #2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",Shr",internal,input,relative 
+00200   open #3: "Name="&env$('Q')&"\PRmstr\praddr1.h"&env$('cno'),internal,input 
 00210   open #4: "Name="&env$('Q')&"\PRmstr\PR401K.DAT,RecL=235,Replace",display,output 
 00220 L220: read #3,using 'Form POS 1,PD 3': address eof END1
 00230   read #1,using L240,rec=address: eno,mat em$,ss$,em16,lpd,mat ta,bd norec L220

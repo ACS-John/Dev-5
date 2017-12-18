@@ -14,10 +14,10 @@
 00140 ! ______________________________________________________________________
 00150   fntop(program$,cap$="Select Programs")
 00160   fncno(cno)
-00170   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)&",Use,RecL=76",internal,outin,relative ioerr L190
+00170   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')&",Use,RecL=76",internal,outin,relative ioerr L190
 00180   goto L210
-00190 L190: if exists(env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)) >0 then let fnFree(env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno))
-00200   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)&",Use,RecL=76",internal,outin,relative ioerr MAIN
+00190 L190: if exists(env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')) >0 then let fnFree(env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno'))
+00200   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')&",Use,RecL=76",internal,outin,relative ioerr MAIN
 00210 L210: if lrec(1)=0 then write #1,using L1690: nxtpgm$(1),nxtdesc$(1),pn(1),cp(1),prim(1),srq(1)
 00220   for j=1 to lrec(1)
 00230     read #1,using L1690: nxtpgm$(j),nxtdesc$(j),pn(j),cp(j),prim(j),srq(j) norec L240
@@ -88,7 +88,7 @@
 00770   if ckey=4 then mat nxtdesc$=(""): !:
           mat nxtpgm$=("") !:
           mat prim=(0) !:
-          execute "drop "&env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno) !:
+          execute "drop "&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno') !:
           goto MAIN
 00780   sel=val(resp$(41))
 00790   for j=1 to 20
@@ -175,9 +175,9 @@
 01610   data "  Create Checkbook System Files","S:\acsGL\CLBLD","CLBld","E"
 01620   read m$(i+=1),pgm$(i),hlpg$(i),status$(i)
 01630   form pos 1,c 20,c 35,n 3,3*n 1
-01640 L1640: execute "drop "&env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)
+01640 L1640: execute "drop "&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')
 01650   close #1: ioerr ignore
-01660   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&str$(cno)&",Use,RecL=76",internal,outin,relative 
+01660   open #1: "Name="&env$('Q')&"\GLmstr\acGLPGMN.h"&env$('cno')&",Use,RecL=76",internal,outin,relative 
 01670   for j1=1 to 20 !:
           if j1>lrec(3) then write #1,using L1690: nxtpgm$(j1),nxtdesc$(j1),pn(j1),cp(j1),prim(j1),srq(j1)
 01680   next j1

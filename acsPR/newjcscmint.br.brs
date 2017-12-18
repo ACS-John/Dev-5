@@ -10,7 +10,7 @@
 00100   fntop("S:\acsPR\jcSCMaint",cap$="Sub-Category Description")
 00110   fncno(cno,cnam$)
 00120 ! 
-00130   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+00130   open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",KFName="&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00140 ! ______________________________________________________________________
 00150 ASKSUBCAT: ! 
 00160 L160: fnsubcat_srch(cde$,ckey,fixgrid)
@@ -84,11 +84,11 @@
 00660 ! ______________________________________________________________________
 00670 ! the following lines are not used and are only there if necessary to fix a file
 00680   close #1: ioerr L690
-00690 L690: open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno),internal,output 
+00690 L690: open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno'),internal,output 
 00700   close #1,free: ioerr L710
-00710 L710: open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&",SIZE=0,RecL=33",internal,output 
+00710 L710: open #1: "Name="&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&",SIZE=0,RecL=33",internal,output 
 00720   close #1: 
-00730   execute "Index "&env$('Q')&"\PRmstr\SCMSTR.h"&str$(cno)&","&env$('Q')&"\PRmstr\SCIndex.h"&str$(cno)&",1,3,Replace,DupKeys"
+00730   execute "Index "&env$('Q')&"\PRmstr\SCMSTR.h"&env$('cno')&","&env$('Q')&"\PRmstr\SCIndex.h"&env$('cno')&",1,3,Replace,DupKeys"
 00740   goto XIT
 00750 ! ______________________________________________________________________
 00760 L760: form pos 1,c 3,c 30

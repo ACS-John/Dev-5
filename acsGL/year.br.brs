@@ -14,7 +14,7 @@
 00130 ! ______________________________________________________________________
 00140 OPEN_FILE: ! !:
         open_file_count=0 ! this value is used in the close_file sub routine
-00150   open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\Year.h"&str$(cno)&",Version=1,KFName="&env$('Q')&"\GLmstr\Year-Idx.h"&str$(cno)&",Use,RecL=8,KPs=1,KLn=1,Shr",internal,outin,keyed 
+00150   open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\Year.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\GLmstr\Year-Idx.h"&env$('cno')&",Use,RecL=8,KPs=1,KLn=1,Shr",internal,outin,keyed 
 00160   return 
 00170 ! ______________________________________________________________________
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 

@@ -4,26 +4,20 @@
         ! had to follow with an RT record - Right now this program will not !:
         ! create an RO record
 00030 ! ______________________________________________________________________
-00032   library 'S:\Core\Library': fntop,fnxit, fncno,fnerror,fndate_mmddyy_to_ccyymmdd
+00032   library 'S:\Core\Library': fntop,fnxit,fnerror,fndate_mmddyy_to_ccyymmdd
 00034   fntop(program$,cap$="PR ELEC UC")
 00040   on error goto ERTN
 00050 ! ______________________________________________________________________
 00060   dim em$(3)*30,ss$*11,d(14),ty(21),tqm(17),s(9),t(9),z$*8,cap$*128,message$*40
-00070   dim a$(3)*40,b$*12,g$*12,d$(10)*8,e$(10)*12,s2(2),cnam$*40
+00070   dim a$(3)*40,b$*12,g$*12,d$(10)*8,e$(10)*12,s2(2)
 00080   dim k(1),k$(3)*25,l$(1)*11,d(14),m(36),n(2)
 00090   dim fa$(1),fb$(1),fc$(1),fd$(1),l$(10),dedfed(10),w3(2),i2(2),t2(2)
 00100   dim emppin$*17,tlcn$*6,contact$*27,contactph$*15,phoneext$*5,email$*40
 00110   dim w2(9),i1(9),t1(9),ct$*20,st$*2,ibm$*8,namcde$*1,typemp$*1,io1$(15)
 00120   dim terminat$*1,first$*15,mid$*15,last$*20,m(10),r(10),e$(10)*12
 00130 ! ______________________________________________________________________
-00140   fncno(cno, cnam$)
-00190 ! open #1: "Name=CNO.H"&wsid$,internal,input,relative
-00200 ! read #1,using 'form pos 1,n 2,c 40',rec=1: cno,cnam$
-00220 !:
-        ! 00230  cnam$=rtrm$(cnam$)
-00250 ! close #1:
 00260   on fkey 5 goto XIT
-00270   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input 
+00270   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input 
 00290   read #1,using FORM_COMPANY: mat a$,b$,mat d$,loccode,mat e$,mat dedfed,oldmax,mat m,mat r,mat e$,mat dedcode
 00292 FORM_COMPANY: form pos 1,3*c 40,c 12,pos 150,10*c 8,n 2,pos 317,10*c 12,pos 638,10*n 1,pos 239,pd 4.2,pos 247,10*pd 4.2,10*pd 3.3,10*c 12,pos 618,10*n 1
 00300 ! read #1,using FORM_PRCOINFO: mat a$,b$,c$,oldmax,mat dedfed
@@ -115,9 +109,9 @@
 01170   pr newpage
 01180   win=101
 01190   message$=""
-01200   stopable=1: gosub L3390 ! fnWAIT(WIN,CAP$,MESSAGE$,1)
+01200   stopable=1: gosub L3390 ! fnWAIT(MESSAGE$,1)
 01210 ! ______________________________________________________________________
-01220   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&str$(cno)&",Shr",internal,input,keyed 
+01220   open #1: "Name="&env$('Q')&"\GLmstr\PRmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\PRIndex.h"&env$('cno')&",Shr",internal,input,keyed 
 01230 L1230: open #22: "Name="&env$('Q')&"\UCReport,RecL=512,eol=crlf,replace",display,output 
 01240 ! ______________________________________________________________________
 01250   goto BEGINNING_OF_FILE
@@ -300,10 +294,10 @@
 02880   pr #win: newpage
 02890   if display_cnam=0 then goto L2920
 02900   if display_cnam=1 then !:
-          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": cnam$(1:min(40,win_width)) !:
-          pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&str$(cno)(1:min(40,win_width))
+          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width)) !:
+          pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
 02910   if display_cnam=2 then !:
-          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&str$(cno)(1:min(40,win_width))
+          pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
 02920 L2920: if button_option=0 then goto L3030
 02930   mat fkey$=("") : em$="" : es=0
 02940   fkey$(5)="Cancel" ! included by default
@@ -360,14 +354,14 @@
 03360   if mtype=3 and response$(1)<>"Y" and response$(1)<>"N" and response$(1)<>"" then pr f "24,1,C 7,N": bell$ : goto L3250
 03370   close #104: ioerr L3380
 03380 L3380: return  ! Fnend
-03390 L3390: ! Def Library FNWAIT(WIN,&CAP$,&MESSAGE$,STOPABLE)
+03390 L3390: ! Def Library FNWAIT(&MESSAGE$,STOPABLE)
 03400 ! if stopable=1 will display "Cancel (F5)" button
 03410 ! win = window number
 03420   close #win: ioerr L3430
 03430 L3430: open #win: "Srow=10,SCol=20,ERow=14,ECol=59,Border=Sr,Caption=<"&cap$,display,outin 
 03440   pr #win: newpage
-03450   pr #win,fields "1,1,Cc 40,R,N": cnam$
-03460   pr #win,fields "2,1,Cc 40,R,N": "Company Number "&str$(cno)
+03450   pr #win,fields "1,1,Cc 40,R,N": env$('cnam')
+03460   pr #win,fields "2,1,Cc 40,R,N": "Company Number "&env$('cno')
 03470   pr #win,fields "4,1,Cc 40,N": message$
 03480   if rtrm$(message$)="" then pr #win,fields "4,1,Cc 40,N": "Please wait..."
 03490   if stopable=0 then pr f "15,34,C 11,R,N": "Do Not Stop"
@@ -382,8 +376,8 @@
 03580   close #win: ioerr L3590
 03590 L3590: open #win: "SRow="&str$(sr)&",SCol="&str$(sc)&",ERow="&str$(er)&",ECol="&str$(ec)&",Border=Sr,Caption=<"&cap$,display,outin 
 03600   pr #win: newpage
-03610   pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": cnam$(1:min(40,win_width))
-03620   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&str$(cno)(1:min(40,win_width))
+03610   pr #win,fields "1,1,Cc "&str$(win_width)&",R,N": env$('cnam')(1:min(40,win_width))
+03620   pr #win,fields "2,1,Cc "&str$(win_width)&",R,N": "Company Number "&env$('cno')(1:min(40,win_width))
 03630 ! 
 03640 ! 
 03650   return  ! Fnend

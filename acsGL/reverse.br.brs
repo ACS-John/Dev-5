@@ -50,11 +50,11 @@
 00420   s_rn$=uprc$(rtrm$(ltrm$(s_rn$)))
 00430 ! ______________________________________________________________________
 00440   glmstr=1 !:
-        open #glmstr: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&str$(cno)&",Shr",internal,outin,keyed 
+        open #glmstr: "Name="&env$('Q')&"\GLmstr\GLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\GLIndex.h"&env$('cno')&",Shr",internal,outin,keyed 
 00450   gltrans=2 !:
-        open #gltrans: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&str$(cno)&",Shr",internal,outin,relative 
+        open #gltrans: "Name="&env$('Q')&"\GLmstr\GLTrans.h"&env$('cno')&",Shr",internal,outin,relative 
 00460   actrans=3 !:
-        open #actrans: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&str$(cno)&",Shr",internal,outin,keyed 
+        open #actrans: "Name="&env$('Q')&"\GLmstr\AcTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Shr",internal,outin,keyed 
 00470   x=lrec(2)
 00480 ! ____
 00490   for j=1 to x

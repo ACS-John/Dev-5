@@ -24,8 +24,8 @@
         if x>0 then resp$(1)(x:x)="": goto L180
 00190   trandate=val(resp$(1))
 00200   if ckey=5 then goto XIT
-00210   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&str$(cno)&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&str$(cno)&",NoShr",internal,outin,keyed 
-00220   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&",RecL=102,Replace",internal,output 
+00210   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",NoShr",internal,outin,keyed 
+00220   open #2: "Name="&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&",RecL=102,Replace",internal,output 
 00230 READ_CUSTOMER: ! 
 00240 L240: read #1,using L250: z$,bal,mat d,mat gb eof READ_CUSTOMER_EOF
 00250 L250: form pos 1,c 10,pos 292,pd 4.2,pos 217,15*pd 5,pos 388,10*pd 5.2
@@ -47,7 +47,7 @@
 00390 READ_CUSTOMER_EOF: ! 
 00400   close #1: 
 00410   close #2: 
-00420   execute "Index "&env$('Q')&"\UBmstr\UBTransVB.h"&str$(cno)&' '&env$('Q')&"\UBmstr\UBTrIndx.h"&str$(cno)&" 1 19 Replace DupKeys -n"
+00420   execute "Index "&env$('Q')&"\UBmstr\UBTransVB.h"&env$('cno')&' '&env$('Q')&"\UBmstr\UBTrIndx.h"&env$('cno')&" 1 19 Replace DupKeys -n"
 00430   goto XIT
 00440 ! ______________________________________________________________________
 00450 XIT: fnxit

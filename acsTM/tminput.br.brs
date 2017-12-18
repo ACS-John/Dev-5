@@ -50,13 +50,13 @@
 00500   data "      5 TO MAKE CORRECTIONS"
 00510   data "      6 TO MERGE TRANSACTIONS"
 00520   read mat scr2$ ioerr L2650
-00530   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L2650
-00540   open #32: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&str$(cno)&",Shr",internal,outin,keyed 
-00550   open #2: "Name="&env$('Q')&"\TMmstr\TMWK"&wsid$&".H"&str$(cno),internal,outin,relative ioerr L570
+00530   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L2650
+00540   open #32: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndx2.h"&env$('cno')&",Shr",internal,outin,keyed 
+00550   open #2: "Name="&env$('Q')&"\TMmstr\TMWK"&wsid$&".H"&env$('cno'),internal,outin,relative ioerr L570
 00560   close #2,free: 
-00570 L570: open #2: "Name="&env$('Q')&"\TMmstr\TMWK"&wsid$&".H"&str$(cno)&",RecL=86,REPLACE",internal,outin,relative ioerr L2650
-00580   open #7: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&str$(cno)&",Shr",internal,input,keyed ioerr L2650
-00590   open #8: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L2650
+00570 L570: open #2: "Name="&env$('Q')&"\TMmstr\TMWK"&wsid$&".H"&env$('cno')&",RecL=86,REPLACE",internal,outin,relative ioerr L2650
+00580   open #7: "Name="&env$('Q')&"\TMmstr\SCMSTR.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\SCIndex.H"&env$('cno')&",Shr",internal,input,keyed ioerr L2650
+00590   open #8: "Name="&env$('Q')&"\TMmstr\EMmstr.H"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\EMIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L2650
 00600 L600: pr newpage
 00610   scrid$(1)="TIME MANAGEMENT INPUT SUB-MENU"
 00620   scrid$(2)="ENTER THE SELECTION NUMBER OF YOUR CHOICE"

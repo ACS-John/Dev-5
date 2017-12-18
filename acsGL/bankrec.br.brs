@@ -19,16 +19,16 @@
 00180   fnconsole(on=1)
 00190   def fncd(x)=(x-int(x*.01)*100)*10000+int(x*.01)
 00200   cd1=date("mmddyy")
-00210   open #bankrec1:=1: "Name="&env$('Q')&"\GLmstr\bankrec.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\Bankrec-idx.H"&str$(cno)&",Shr",internal,outin,keyed 
-00220 ! Open #BANKREC2:=2: "Name="&env$('Q')&"\GLmstr\bankrec.H"&STR$(CNO)&",KFName="&env$('Q')&"\GLmstr\bankx2.H"&STR$(CNO)&",Shr",Internal,Outin,Keyed  ! ????? ken
+00210   open #bankrec1:=1: "Name="&env$('Q')&"\GLmstr\bankrec.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\Bankrec-idx.H"&env$('cno')&",Shr",internal,outin,keyed 
+00220 ! Open #BANKREC2:=2: "Name="&env$('Q')&"\GLmstr\bankrec.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\bankx2.H"&env$('cno')&",Shr",Internal,Outin,Keyed  ! ????? ken
 00230   close #82: ioerr L240
-00240 L240: open #82: "Name="&env$('Q')&"\GLmstr\Bank2"&wsid$&".H"&str$(cno)&",Use,RecL=35",internal,outin,relative 
+00240 L240: open #82: "Name="&env$('Q')&"\GLmstr\Bank2"&wsid$&".H"&env$('cno')&",Use,RecL=35",internal,outin,relative 
 00250   read #82,using "Form pos 1,c 12",rec=1: wbc$ norec L270
 00260   goto MENU1
 00270 L270: write #82,using "Form pos 1,c 12",rec=1: wbc$
 00280 MENU1: ! 
 00290   close #81: ioerr L300
-00300 L300: open #81: "Name="&env$('Q')&"\GLmstr\Bank"&wbc$&".H"&str$(cno)&",Use,RecL=32",internal,outin,relative 
+00300 L300: open #81: "Name="&env$('Q')&"\GLmstr\Bank"&wbc$&".H"&env$('cno')&",Use,RecL=32",internal,outin,relative 
 00310   if lrec(81)>0 then !:
           read #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt !:
         else !:
@@ -80,7 +80,7 @@
 00610   next j
 00620 L620: if ti3=6 then let fnchain("S:\acsGL\Bankreconciliation")
 00630   close #81: ioerr L640
-00640 L640: open #81: "Name="&env$('Q')&"\GLmstr\Bank"&wbc$&".H"&str$(cno)&",Use,RecL=32",internal,outin,relative 
+00640 L640: open #81: "Name="&env$('Q')&"\GLmstr\Bank"&wbc$&".H"&env$('cno')&",Use,RecL=32",internal,outin,relative 
 00650   if lrec(81)=0 then write #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt : goto L670
 00660   rewrite #81,using "Form POS 1,N 6,2*PD 5.2,N 6",rec=1: stmtdt,bgbal,stmtbal,codt
 00670 L670: close #81: ioerr L680
@@ -383,18 +383,18 @@
 03290 DISPLAYCLEAREDSOFAR: ! show what has been cleared
 03300   displaycleared=1 : goto CLEAR_TRANSACTIONS_FROM_LIST
 03310 FREE_DPAMNTS: ! 
-03320   fnFree(env$('Q')&"\GLmstr\DpAmnts.H"&str$(cno))
+03320   fnFree(env$('Q')&"\GLmstr\DpAmnts.H"&env$('cno'))
 03330   continue 
 03340 ! ______________________________________________________________________
 03350 CLEAR_DEPOSITS_BY_AMOUNT: ! clear deposits by amounts
 03360   if cda=1 then goto DPAMENU
-03370 L3370: open #dpamnts=91: "Name="&env$('Q')&"\GLmstr\DpAmnts.H"&str$(cno)&",Use,RecL=20",internal,outin,relative ioerr FREE_DPAMNTS
-03380   open #92: "Name="&env$('Q')&"\GLmstr\DpDates.H"&str$(cno)&",Use,RecL=150",internal,outin,relative 
+03370 L3370: open #dpamnts=91: "Name="&env$('Q')&"\GLmstr\DpAmnts.H"&env$('cno')&",Use,RecL=20",internal,outin,relative ioerr FREE_DPAMNTS
+03380   open #92: "Name="&env$('Q')&"\GLmstr\DpDates.H"&env$('cno')&",Use,RecL=150",internal,outin,relative 
 03390   read #92,using L3400,rec=1: mat dpd norec L3420
 03400 L3400: form pos 1,25*n 6
 03410   goto L3430
 03420 L3420: write #92,using L3400,rec=1: mat dpd
-03430 L3430: open #93: "Name="&env$('Q')&"\GLmstr\DPTypes.H"&str$(cno)&",Use,RecL=3",internal,outin,relative 
+03430 L3430: open #93: "Name="&env$('Q')&"\GLmstr\DPTypes.H"&env$('cno')&",Use,RecL=3",internal,outin,relative 
 03440   read #93,using L3450,rec=1: mat dpt norec L3470
 03450 L3450: form pos 1,3*n 1
 03460   goto L3480
@@ -690,4 +690,4 @@
 05910 ! ______________________________________________________________________
 05920 XIT: fnxit
 05930 ! ______________________________________________________________________
-05940   execute "Index "&env$('Q')&"\GLmstr\bankrec.h"&str$(cno)&' '&env$('Q')&"\GLmstr\bankrec-idx.h"&str$(cno) &" 79/3/4 12/1/8 Replace,DupKeys"
+05940   execute "Index "&env$('Q')&"\GLmstr\bankrec.h"&env$('cno')&' '&env$('Q')&"\GLmstr\bankrec-idx.h"&env$('cno') &" 79/3/4 12/1/8 Replace,DupKeys"

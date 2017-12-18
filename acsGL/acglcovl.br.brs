@@ -10,7 +10,7 @@
 00100 ! ______________________________________________________________________
 00120   fncno(cno,cnam$)
 00130   fndat(dat$)
-00140   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&str$(cno)&",Shr",internal,input,relative  !:
+00140   open #1: "Name="&env$('Q')&"\GLmstr\Company.h"&env$('cno')&",Shr",internal,input,relative  !:
         read #1,using 'Form POS 195,C 30',rec=1: tb$ !:
         close #1: !:
         tb$="("&trim$(tb$)&")"
@@ -37,7 +37,7 @@
 00240   close #101: ioerr L250
 00250 L250: open #101: "SROW=3,SCOL=13,EROW=9,ECOL=63,BORDER=DR,CAPTION=<Cover Letter",display,outin 
 00260   pr f "3,13,Cc 51,R,N": cnam$ !:
-        pr f "4,13,Cc 51,R,N": "Company Number "&str$(cno)
+        pr f "4,13,Cc 51,R,N": "Company Number "&env$('cno')
 00270   sc2$(1)=" 1. Edit Cover Letter" !:
         sc2$(2)=" 2. pr Cover Letter"
 00280   for j=1 to 2: fl2$(j)=str$(j+5)&",15,C 46": next j
@@ -50,9 +50,9 @@
 00340   close #101: ioerr L350
 00350 L350: open #101: "SROW=5,SCOL=13,EROW=15,ECOL=64,BORDER=SR,CAPTION=<Initial Build Cover Letter",display,outin 
 00360   pr #101,fields "1,1,Cc 52,R,N": cnam$
-00370 L370: execute "SY -s NotePad "&os_filename$(env$('Q')&"\GLmstr\ACGLCovF.h"&str$(cno))
+00370 L370: execute "SY -s NotePad "&os_filename$(env$('Q')&"\GLmstr\ACGLCovF.h"&env$('cno'))
 00380   goto MENU1
-00390 L390: open #1: "Name="&env$('Q')&"\GLmstr\ACGLCovF.h"&str$(cno)&",Shr",display,input ioerr MENU1
+00390 L390: open #1: "Name="&env$('Q')&"\GLmstr\ACGLCovF.h"&env$('cno')&",Shr",display,input ioerr MENU1
 00400   pr newpage !:
         pr f "10,20,Cc 25,H,N": "Cover Letter Printing..." !:
         pr f "12,2,C 18,B,5": " Press F5 to stop"

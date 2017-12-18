@@ -10,11 +10,11 @@
 00120   dim age(4),st1$*5,mo(12)
 00130   data 0,31,59,90,120,151,181,212,243,273,304,334
 00140   read mat mo
-00150   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&str$(cno)&",RecL=20,use,Shr",internal,outin,relative 
+00150   open #8: "Name="&env$('Q')&"\TMmstr\pedate.h"&env$('cno')&",RecL=20,use,Shr",internal,outin,relative 
 00160   if lrec(8)=0 then write #8,using "form pos 1,n 6": d1 else read #8,using "form pos 1,n 6",rec=1,release: d1
 00170   close #8: 
 00180   form c 9,skip 0
-00190   open #1: "Name="&env$('Q')&"\TMmstr\Company.h"&str$(cno)&",Shr",internal,input ioerr L2020
+00190   open #1: "Name="&env$('Q')&"\TMmstr\Company.h"&env$('cno')&",Shr",internal,input ioerr L2020
 00200   read #1,using L210: mat name$,mat age,all ioerr L2020
 00210 L210: form pos 1,4*c 40,pos 170,4*pd 2,pos 164,n 1
 00220   close #1: 
@@ -30,8 +30,8 @@
 00320   if cmdkey=5 then goto XIT
 00330   if d1<10100 or d1>123199 then goto L310
 00340   gosub L1960
-00350   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&str$(cno)&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&str$(cno)&",Shr",internal,outin,keyed ioerr L2020
-00360   open #2: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&str$(cno)&",Shr",internal,input,relative ioerr L2020
+00350   open #1: "Name="&env$('Q')&"\TMmstr\CLmstr.h"&env$('cno')&",KFName="&env$('Q')&"\TMmstr\CLIndex.h"&env$('cno')&",Shr",internal,outin,keyed ioerr L2020
+00360   open #2: "Name="&env$('Q')&"\TMmstr\ARTrans.h"&env$('cno')&",Shr",internal,input,relative ioerr L2020
 00370 L370: pr newpage
 00380   pr f "10,5,c 53": "ENTER CLIENT NUMBER TO START PRINTING, ELSE ENTER 0"
 00390   input fields "10,60,C 5,UE,N": st1$ conv L370

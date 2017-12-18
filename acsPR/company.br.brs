@@ -30,7 +30,7 @@
 00227   opt_std_or_percent$(2)="Percent"
 00230 ! ______________________________________________________________________
 00240 ! ______________________________________________________________________
-00250   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno)&',recl=759,version=0,use',internal,outin,relative 
+00250   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno')&',recl=759,version=0,use',internal,outin,relative 
 00260   if lrec(1)=0 then write #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2': mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 00270   read #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc ioerr L290
 00280   ficamaxw=ficamaxw*10
@@ -42,7 +42,7 @@
 00400   resp=0
 00410   fntos(sn$="Company-1") !:
         mylen=30: mypos=mylen+3 : right=1
-00420   fram1=1: fnfra(1,1,10,80,"Company # "&str$(cno))
+00420   fram1=1: fnfra(1,1,10,80,"Company # "&env$('cno'))
 00430   fnlbl(1,1,"Company Name:",mylen,right,0,fram1)
 00440   fntxt(1,mypos,40,0,left,"",0,"",fram1) !:
         resp$(1)=a$(1)
@@ -369,7 +369,7 @@
         if resp$="Yes" then goto DONE else goto XIT
 02950 ! ______________________________________________________________________
 02960 DONE: ! 
-02970   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&str$(cno),internal,outin,relative 
+02970   open #1: "Name="&env$('Q')&"\PRmstr\Company.h"&env$('cno'),internal,outin,relative 
 02980   ficamaxw=ficamaxw*.1
 02990   rewrite #1,using 'Form POS 1,3*C 40,C 12,PD 6.3,PD 6.2,PD 5.2,10*C 8,N 2,PD 4.2,PD 3.3,12*PD 4.2,10*PD 3.3,25*C 12,31*N 1,10*C 6,3*PD 4.3,3*PD 3.2,4*PD 4.2,N 1,2*C 6,N 2',rec=1: mat a$,fid$,mcr,mcm,feducrat,mat d$,loccode,feducmax,ficarate,ficamaxw,ficawh,mat m,mat r,mat e$,mat gln$,gli,mat dedcode,mat calcode,mat dedfed,mat rpnames2$,mat sck,vacm,mhw,mat wcm,tc,mat jn$,dc
 03000   close #1: 

@@ -15,7 +15,7 @@
 14000   fn_report(cap$)
 14200   fn_report(date$('mm/dd/ccyy'))
 14400   fn_report('')
-14600   open #h_actrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.H"&str$(cno)&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.H"&str$(cno)&",Shr",internal,outin,keyed 
+14600   open #h_actrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\AcTrans.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.H"&env$('cno')&",Shr",internal,outin,keyed 
 14800 F_ACTRANS: form pos 1,c 12,n 6,pd 6.2,n 2,pos 71,n 2
 15000   restore #h_actrans,key>=rpad$(gln_from$,kln(h_actrans)): 
 15200   do 

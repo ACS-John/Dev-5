@@ -36,7 +36,7 @@
 00300 ! ______________________________________________________________________
 00310   fnopenprn
 00320   message$="Calculating: please wait..." !:
-        fnwait(0,cap$,message$,1)
+        fnwait(message$,1)
 00330   gosub HDR
 00340 L340: read #1,using L350: x$,e2$,oldavg eof DONE
 00350 L350: form pos 1,c 10,x 30,c 30,pos 1822,n 9
