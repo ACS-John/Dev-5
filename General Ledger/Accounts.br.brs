@@ -1,7 +1,7 @@
 00010 ! Formerly S:\acsGL\glMaint
 00020 ! General Ledger Master File editor
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fnxit,fntop, fnerror,fntos,fnopt,fnlbl,fncmdset,fnacs,fnagl$,fnfra,fntxt,fncombof,fncmdkey,fnmsgbox,fnaccount_search,fnflexinit1,fnflexadd1,fnqglbig,fnrglbig$,fnbutton
+00040   library 'S:\Core\Library': fnxit,fntop, fnerror,fntos,fnopt,fnlbl,fncmdset,fnacs,fnagl$,fnfra,fntxt,fncombof,fncmdkey,fnmsgbox,fnaccount_search,fnflexinit1,fnflexadd1,fnqglbig,fnrglbig$,fnbutton,fngethandle
 00050 ! fnrglbig$ and fnqglbig  were added so all of the description could easily be seen in the main gl screen
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
@@ -32,7 +32,8 @@
 00390 ! should be done in checkfileversion, not here !   goto L310
 00400 ! L400: 
 00402   open #2: "Name="&env$('Q')&"\GLmstr\GLTRANS.H"&env$('cno')&",Shr",internal,outin,relative 
-00410   open #3: "Name="&env$('Q')&"\GLmstr\ACTRANS.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ACTRIDX.H"&env$('cno')&",Shr",internal,outin,keyed ioerr MAIN
+00410   ! open #hAcTrans:=3: "Name="&env$('Q')&"\GLmstr\ACTRANS.H"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\ACTRIDX.H"&env$('cno')&",Shr",internal,outin,keyed ioerr MAIN
+00412   open #hAcTrans:=fngethandle: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outin,keyed 
 00420 MAIN: ! 
 00430   fntos(sn$="GLProb2-"&str$(edit_mode))
 00432   mylen=23: mypos=mylen+3 : right=1
@@ -357,8 +358,8 @@
 02830 READ_FROM_HISTORY: ! 
 02840   transfile=3
 02850   ack$=gl$&cnvrt$("N 2",pc1)&"      "
-02860   restore #3,key>=ack$: nokey EO_TRANS_GRID
-02870 L2870: read #3,using L2880,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof EO_TRANS_GRID
+02860   restore #hAcTrans,key>=ack$: nokey EO_TRANS_GRID
+02870 L2870: read #hAcTrans,using L2880,release: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof EO_TRANS_GRID
 02880 L2880: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 02890   if key$><trgl$ then goto EO_TRANS_GRID
 02900   if pc1=0 then goto L2930
@@ -378,7 +379,11 @@
 03000   if ck=2 then edit_mode=1 else edit_mode=0
 03010   recordnum=val(resp$(1))
 03020   if recordnum=0 then goto MAIN
-03030   if rv=1 then read #2,using L2800,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta else read #3,using L3350,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+03030   if rv=1 then 
+03032     read #2,using L2800,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta 
+03034   else 
+03036     read #hAcTrans,using L3350,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+03038   end if
 03040   resp$(1)=str$(recordnum): resp$(2)=trgl$: resp$(3)=str$(tr(4))
 03042   resp$(4)=str$(tr(5)): resp$(5)=str$(tr(6)) : resp$(6)=str$(tr(7)) !:
         resp$(7)=tr$: resp$(8)=td$ !:
@@ -421,7 +426,11 @@
 03310   tr$=resp$(6) ! reference #
 03320   td$=resp$(7) ! reference #
 03330   pc2=val(resp$(8)) ! period code from history; blank when returning from current
-03340   if rv=1 then rewrite #2,using L2800,rec=recordnum: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta else rewrite #3,using L3350,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+03340   if rv=1 then 
+03342     rewrite #2,using L2800,rec=recordnum: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,nta 
+03344   else 
+03346     rewrite #hAcTrans,using L3350,rec=recordnum: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+03348   end if
 03350 L3350: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 03360   adr=ta(1): goto TRANSACTION_GRID
 03370 ! /r
@@ -442,12 +451,12 @@
 03770 CHG_GLNO_IN_HISTORY: ! r: change gl # in history
 03780   ack$=holdgl$&cnvrt$("N 2",0)&"      "
 03785   if trim$(ack$)="" then goto L3850
-03790   restore #3,key>=rpad$(ack$,kln(3)): nokey L3850
+03790   restore #hAcTrans,key>=rpad$(ack$,kln(3)): nokey L3850
 03800   do
-03802     read #3,using L3810: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof L3850
+03802     read #hAcTrans,using L3810: trgl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2 eof L3850
 03810     L3810: form pos 1,c 12,n 6,pd 6.2,2*n 2,c 12,c 30,n 2
 03820     if holdgl$=trgl$ then 
-03830       rewrite #3,using L3810: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
+03830       rewrite #hAcTrans,using L3810: gl$,tr(4),tr(5),tr(6),tr(7),tr$,td$,pc2
 03832     end if
 03840   loop
 03850 L3850: !

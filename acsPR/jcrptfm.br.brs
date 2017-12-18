@@ -89,7 +89,7 @@
         fkey$(4)="Delete" !:
         fkey$(5)="Done" !:
         em$="" !:
-        fnfkey(23,mat fkey$,mat disfk,em$,0)
+        fnfkey(23,mat fkey$,mat disfk,em$)
 00820   if sd=1 then sd$="Y" else sd$="N"
 00830   if cp=1 then cp$="Y" else cp$="N"
 00840 L840: rinput #win,fields mat io1$: rn,rt$,mat tempch$,ips,sd$,cp$,sc conv CONV1
@@ -187,7 +187,7 @@
           fkey$(3)="Screen 1" !:
           fkey$(4)="Completed" !:
           em$="" !:
-          fnfkey(20,mat fkey$,mat disfk,em$,0)
+          fnfkey(20,mat fkey$,mat disfk,em$)
 01710     io2$(1)="06,24,C 50,UT,N"
 01720     io2$(2)="07,24,Nz 3,UT,N"
 01730     io2$(3)="08,24,Nz 3,UT,N"

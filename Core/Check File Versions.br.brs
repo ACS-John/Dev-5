@@ -709,7 +709,12 @@
 68100   ! /r
 68120 fnend 
 74000 def fn_cfv_general_ledger
-74020   ! General Ledger Only
+74030   ! General Ledger Only
+74032   fn_file_setup_data(env$('Q')&"\GLmstr\ACTrans.h"&env$('cno'),72,0)
+74034   fn_file_setup_index(env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno'),'1/71/17/13','12/2/2/4')
+74036   !
+74042   fn_file_setup_data(env$('Q')&"\GLmstr\GLTrans.h"&env$('cno'),73,0)
+74046   !
 74040   library 'S:\Core\Library': fnfinstmt_v0_to_v1,fnglmstr_338_416
 74060   library 'S:\Core\Library': fnglpayee_v0_to_v1 
 74080   if exists(env$('Q')&"\GLmstr")=0 then execute "MkDir "&env$('Q')&"\GLmstr"
@@ -780,33 +785,53 @@
 75340     fnindex_it(name$,kfname$,'13 30')
 75360   end if 
 75380   ! 
-75400   ! GL_ACGLFNSI: ! for One of Six Files, with 1 primary index each
-75420   !         acglfnsj, acglfnsi, acglfnsb, acglfnsc, acglfnsf, acglfnsg
-75440   name$=env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno')
+75390   fn_file_setup_data(env$('Q')&"\GLmstr\AcGLFnSc.h"&env$('cno'),83,1)
+75392   fn_file_setup_index(env$('Q')&"\GLmstr\FnScIndx.h"&env$('cno'),'1','5')
+75400   ! r:  Six Files, with 1 primary index each
+75410   !         acglfnsj, acglfnsi, acglfnsb, acglfnsc, acglfnsf, acglfnsg
+75420   fn_file_setup_data(env$('Q')&"\GLmstr\acglfnsj.h"&env$('cno'),83,1)
+75430   fn_file_setup_index(env$('Q')&"\GLmstr\Fnsjindx.h"&env$('cno'),'1','5')
+75440   ! r: GLmstr\acglfnsi
+75450   name$=env$('Q')&"\GLmstr\acglfnsi.h"&env$('cno')
 75460   kfname$=env$('Q')&"\GLmstr\fnsiindx.h"&env$('cno')
-75480   myrln=83
-75500   version_proper=1
-75520   fn_make_data_file_exist(name$,myrln,version_proper)
-75540   if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
-75560     fnindex_it(name$,kfname$,'1 5')
-75580   end if 
-75600   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
-75620   fn_check_version(tmpversion,version_proper,tmpfile$)
-75640   if tmpversion=0 then let fnfinstmt_v0_to_v1
-75660   if tmprln<>myrln then 
-75680     pr 'Record Length Error in File: '&tmpfile$
-75700     pr '         RLn: '&str$(tmprln)
-75720   end if 
-75740 ! If TMPRLN=81 OR TMPRLN=78 Then Let FNFINSTMT_v0_to_v1
-75760   x=1 : if tmpkps(x)<>1 then 
-75780     pr 'Key Position ('&str$(x)&') Error in '&kfname$
-75800     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
-75820   end if 
-75840   x=1 : if tmpkln(x)<>5 then 
-75860     pr 'Key Length ('&str$(x)&') Error in '&kfname$
-75880     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
-75900   end if 
-75920   ! 
+75470   fn_file_setup_data(name$,83,1)
+75480   fn_file_setup_index(kfname$,'1','5')
+75490   ! myrln=83
+75500   ! version_proper=1
+75510   ! fn_make_data_file_exist(name$,myrln,version_proper)
+75520   ! if lwrc$(env$('force_reindex'))='yes' or exists(kfname$)=0 then 
+75530   !   fnindex_it(name$,kfname$,'1 5')
+75540   ! end if 
+75550   open #tmp:=fngethandle: 'Name='&name$&',KFName='&kfname$&',Shr',internal,outin,keyed : fn_get_tmp(tmp,mat tmpkps,mat tmpkln,tmpversion,tmprln,tmpfile$)
+75560   fn_check_version(tmpversion,version_proper,tmpfile$)
+75570   if tmpversion=0 then let fnfinstmt_v0_to_v1
+75580   if tmprln<>myrln then 
+75590     pr 'Record Length Error in File: '&tmpfile$
+75600     pr '         RLn: '&str$(tmprln)
+75610   end if 
+75620 ! If TMPRLN=81 OR TMPRLN=78 Then Let FNFINSTMT_v0_to_v1
+75630   x=1 : if tmpkps(x)<>1 then 
+75640     pr 'Key Position ('&str$(x)&') Error in '&kfname$
+75650     pr '      KPs('&str$(x)&'): '&str$(tmpkps(x))
+75660   end if 
+75670   x=1 : if tmpkln(x)<>5 then 
+75680     pr 'Key Length ('&str$(x)&') Error in '&kfname$
+75690     pr '      KLn('&str$(x)&'): '&str$(tmpkln(x))
+75700   end if 
+75710   !
+75720   fn_file_setup_data(env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),83,1)
+75730   fn_file_setup_index(env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),'1','5')
+75740   !
+75750   fn_file_setup_data(env$('Q')&"\GLmstr\acglfnsb.h"&env$('cno'),83,1)
+75760   fn_file_setup_index(env$('Q')&"\GLmstr\Fnsbindx.h"&env$('cno'),'1','5')
+75770   !
+75780   fn_file_setup_data(env$('Q')&"\GLmstr\acglfnsf.h"&env$('cno'),83,1)
+75790   fn_file_setup_index(env$('Q')&"\GLmstr\Fnsfindx.h"&env$('cno'),'1','5')
+75800   !
+75810   fn_file_setup_data(env$('Q')&"\GLmstr\acglfnsg.h"&env$('cno'),83,1)
+75820   fn_file_setup_index(env$('Q')&"\GLmstr\Fnsgindx.h"&env$('cno'),'1','5')
+75830   !
+75840   ! /r
 75940   ! PAYEEGLBREAKDOWN: !
 75960   name$=env$('Q')&"\GLmstr\payeeglbreakdown.h"&env$('cno')
 75980   kfname$=env$('Q')&"\GLmstr\Payeeglbkdidx.h"&env$('cno')
