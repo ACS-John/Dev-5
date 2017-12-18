@@ -1,9 +1,9 @@
-20000 library 's:\core\library': fnoldmsgbox
-20020 dim msgline$(2)*128
-20040     msgline$(1)="Do you wish to accrue part of this Payroll"
-20060     msgline$(2)="in the previous month? (Y/N)"
-20080     fnoldmsgbox(mat response$,cap$,mat msgline$,mtype=2)
-20100 end
+20000 ! library 's:\core\library': fnoldmsgbox
+20020 ! dim msgline$(2)*128
+20040 !     msgline$(1)="Do you wish to accrue part of this Payroll"
+20060 !     msgline$(2)="in the previous month? (Y/N)"
+20080 !     fnoldmsgbox(mat response$,cap$,mat msgline$,mtype=2)
+20100 ! end
 20120 !
 20140 ! Replace S:\Core\Ace\Win3B.br
 50000   def library fnwin3b(win,&cap$,win_height,win_width;display_cnam,button_option,win_align,pr_newpg)
@@ -108,7 +108,7 @@
 52000     if button_option=42 then fkey$(1)="Yes" : fkey$(2)="No"
 52020     if button_option=51 then fkey$(5)="Exit"
 52040     if button_option=52 then fkey$(5)="Finish"
-52060     fnfkey(er+1,mat fkey$,mat disfk,em$,es,win)
+52060     fnfkey(er+1,mat fkey$,mat disfk,em$,es)
 52080     goto XIT
 52100 ! ______________________________________________________________________
 52120 ! <Updateable Region: ERTN>
@@ -123,7 +123,7 @@
 60000 ! Replace S:\Core\fkey2.br
 60020 ! puts buttons at the bottom of a console window
 60040 ! ______________________________________________________________________
-60060   def library fnfkey(scrline,mat fkey$,mat disfk,&em$,es,win)
+60060   def library fnfkey(scrline,mat fkey$,mat disfk,&em$,es)
 60080 ! ______________________________________________________________________
 60100     library 'S:\Core\Library': fnerror,fngethandle
 60120     on error goto ERTN

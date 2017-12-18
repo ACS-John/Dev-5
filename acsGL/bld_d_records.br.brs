@@ -1,14 +1,13 @@
 00010 ! Replace S:\acsGL\Bld_D_Records
 00020 ! Create Type "D" Records
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnwait,fncno,fnfkey,fnoldmsgbox,fnwin3b,fncno,fnerror,fnconsole
+00040   library 'S:\Core\Library': fntop,fnxit, fnopenprn,fncloseprn,fnerror,fnwait,fnfkey,fnoldmsgbox,fnwin3b,fncno,fnerror,fnconsole
 00050   fntop(program$,cap$="Financial Statement")
 00060   on error goto ERTN
 00070 ! ______________________________________________________________________
 00080   dim cnam$*40,dat$*20,io1$(9),gln(2,3),ta(2),ac(18),te$*1,cap$*128
 00090   dim d$*50,bc(13),bp(13),bm(13),rf(6),dn$*3,an$*6,sn$*3,glk$*12,fsk$*5
 00100 ! ______________________________________________________________________
-00110   fncno(cno)
 00120 ! 
 00125   fnconsole(on=1)
 00130   on fkey 5 goto XIT
@@ -30,7 +29,7 @@
 00290   io1$(9)="13,49,Nz 5,UT,N"
 00300 ! ______________________________________________________________________
 00310 L310: pr newpage
-00320   close #2: ioerr L330 ! close any reference file that is opened
+00320   close #2: ioerr ignore ! close any reference file that is opened
 00330 L330: win=101
 00340   cap$='Create Type "D" Records' ! use correct name above for printing
 00350   fnwin3b(win,cap$,14,75,0,2,5,2)
@@ -102,7 +101,7 @@
           execute "Index "&env$('Q')&"\GLmstr\"&fil$(fs)&".h"&env$('cno')&","&env$('Q')&"\GLmstr\"&idx$(fs)&".h"&env$('cno')&",1,5,Replace,DupKeys"
 01000   goto L310
 01010 ! ______________________________________________________________________
-01020 XIT: chain "S:\acsGL\financialstatement"
+01020 XIT: fnchain("S:\acsGL\financialstatement")
 01030 ! ______________________________________________________________________
 01040 ! <Updateable Region: ERTN>
 01050 ERTN: fnerror(program$,err,line,act$,"xit")

@@ -79,7 +79,7 @@
 40110 fnend
 40160 def library fnfkey(scrline,mat fkey$,mat disfk,&em$,es)
 40170   library 'S:\Core\ace\win3b.br': fnfkey
-40180   fnfkey(scrline,mat fkey$,mat disfk,em$,es,0)
+40180   fnfkey(scrline,mat fkey$,mat disfk,em$,es)
 40190 fnend
 40200 def library fnwin3(win,&cap$,wh,ww,dc,bo,win_align)
 40210   library 'S:\Core\ace\Win3b.br': fnwin3b
