@@ -1,0 +1,31 @@
+Fixed Width and Tab Delimited
+Each field is padded to it's length and a tab is placed between each
+Length   Name
+5        LocationID (leading zeros added)
+1        (tab delimiter)
+10       Account Number
+1        (tab delimiter)
+30       Customer Name
+1        (tab delimiter)
+12       Phone Number
+1        (tab delimiter)
+30       Service Address 1
+1        (tab delimiter)
+30       Service Address 2
+1        (tab delimiter)
+30       Reading
+1        (tab delimiter)
+10       Reading Date (mm/dd/ccyy)
+1        (tab delimiter)
+15       Port (i think???
+1        (tab delimiter)
+3        Route
+1        (tab delimiter)
+7        Sequence
+1        (tab delimiter)
+8        Meter Serial Number
+1        (tab delimiter)
+20       Transmitter Serial Number
+1        (tab delimiter)
+40       Meter Model/Type
+
