@@ -18,6 +18,7 @@
 12340     library 'S:\Core\PrintPdf': fnpdf_pic
 12360     library 'S:\Core\PrintPdf': fnpdf_fontsize
 12380     library 'S:\Core\PrintPdf': fnpdf_background
+12390     library 'S:\Core\Library': fnCopy
 12400     ! fnreg_read('Report_Cache',report_cache$)
 12420     ! if report_cache$='True' then print_report_caching=1 else print_report_caching=0
 12440     fnreg_read('PrintAce.Max Pages',max_pages$)
@@ -54,21 +55,25 @@
 22010   !   fnstatus('pf_final_batch='&str$(pf_final_batch))
 22020   fnstatus('Sending PrintAce Batch '&str$(g_pa_batch)&' to the printer.')
 22030   fnstatus('When the messagebox (labeled Print) says "Sending to Printer" click "Okay" to continue.')
-22040   dim pa_filename$*256
 22060   if h_printace=0 then h_printace=20
 22080   pr #h_printace: "Print.EndDoc" ioerr ignore
-22100   if pa_filename$='' then pa_filename$=file$(h_printace) ! this is now set in fnpa_open, but it may not be called.
-22120    !   fnstatus('            pa_filename$='&pa_filename$)
+22100   if g_pa_filename$='' then g_pa_filename$=file$(h_printace) ! this is now set in fnpa_open, but it may not be called.
+22120    !   fnstatus('            g_pa_filename$='&g_pa_filename$)
 22140   close #h_printace: ioerr ignore
-22160   if pa_filename$<>'' then 
+22150   if g_pa_filename$<>'' then 
+22152     if g_finial_filename$='' the
+22154       g_finial_filename$=g_pa_filename$
+22156     else
+22158       fnCopy(g_pa_filename$,g_finial_filename$)
+22160     end if
 22180     if pf_final_batch then 
-22200       execute 'System -W -C "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(pa_filename$)
+22200       execute 'System -W -C "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(g_finial_filename$)
 22210       fnstatus_close
 22220     else 
-22240       execute 'System -W "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(pa_filename$)
+22240       execute 'System -W "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(g_finial_filename$)
 22260     end if 
 22280   end if 
-22300   pa_filename$=''
+22300   g_pa_filename$=g_finial_filename$=''
 22320 fnend 
 24000 def library fnpa_open(; pa_orientation$,pa_sendto_base_name_addition$*128,formsFormatForce$)
 24020   fn_pa_setup
@@ -91,22 +96,22 @@
 26070   if g_pa_max_pages then let fnstatus('     (up to '&str$(g_pa_max_pages)&' pages per batch)')
 26080   h_printace=20
 26100   if file(h_printace)=-1 then 
-26120     dim pa_o_filename$*1024
+26120     dim g_pa_filename$*1024
 26140     ! if print_report_caching then 
-26160       pa_o_filename$=fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
-26170       fnstatus('  Report Cache Name: '&pa_o_filename$)
+26160     dim g_pa_filename$*256
+26162     g_pa_filename$=env$('Q')&'\tmp_'&session$&'.prn' ! fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
+26170     dim g_finial_filename$*256
+26172     g_finial_filename$=fnprint_file_name$(pa_sendto_base_name_addition$,'PrintAce')
+26174     fnstatus('  Report Cache Name: '&g_pa_filename$)
 26180     ! else 
-26200     !   pa_o_filename$=env$('client_temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
+26200     !   g_pa_filename$=env$('client_temp')&'\PA_Tmp_'&session$&'_batch_'&str$(g_pa_batch)&pa_sendto_base_name_addition$&'.PrintAce'
 26220     ! end if 
 26260     if pa_orientation$='' then pa_orientation$='Portrait'
-26280     open #h_printace: "Name="&env$('at')&pa_o_filename$&",Replace,RecL=5000",display,output 
-26300     pa_filename$=pa_o_filename$
+26280     open #h_printace: "Name="&g_pa_filename$&",Replace,RecL=5000",display,output 
 26320     pr #h_printace: 'Call Print.MyOrientation("'&pa_orientation$&'")'
 26340    !  pr #h_printace: 'Call Print.NewPaperBin(1)'
 26360     g_pa_pagecount=1
 26400     g_pa_orientation$=pa_orientation$
-26420     dim g_pa_filename$*256
-26440     g_pa_filename$=pa_o_filename$
 26460     g_pa_handle=h_printace
 26480   end if 
 26500 fnend 
