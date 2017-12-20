@@ -281,7 +281,7 @@
 13780       goto SEL_ACT ! go back if Hand Held information is not available for their selection
 13800     end if
 13820   end if
-13850   SendRecordToWorkFileFinis: !
+13850   ! SendRecordToWorkFileFinis: !
 13860   if selection_method=sm_allExceptFinal then
 13870     goto NextReadForAll
 13880   else if selection_method=sm_aRoute then
@@ -1092,7 +1092,7 @@
 44480   fn_record_addc(20,transmitterSerialNumber$)                  ! Transmitter Serial Number  Meter.Transmitter Number
 44500   fn_record_addc(40,fn_meter_info$('Meter Type',z$,'WA'))                          ! Meter Model/Type
 44520   fn_record_addc(1,portNumber$)                          ! Port Number
-44540   fn_record_write(h_out)
+44540   fn_record_write(h_out, enableTrailingDelimiterOnLine=1)
 44560 fnend
 45000 def fn_aclaraWorkOrder ! z$,mat e$,extra$(1-2),route
 45020   dim tmpCity$*64,tmpState$*64,tmpZip$*64
@@ -1200,8 +1200,8 @@
 47200 def fn_record_addx(ran_field_length)
 47220   rec_line$=rec_line$&rpt$(' ',ran_field_length)&gRecordDelimiter$
 47240 fnend  ! fn_record_addx
-47500 def fn_record_write(h_out)
-47520   if gRecordDelimiter$<>'' then ! remove trailing delimiter
+47500 def fn_record_write(h_out; enableTrailingDelimiterOnLine)
+47520   if ~enableTrailingDelimiterOnLine and gRecordDelimiter$<>'' then ! remove trailing delimiter
 47540     rec_line$((len(rec_line$)-len(gRecordDelimiter$)+1):len(rec_line$))=''
 47560   end if
 47580   if deviceSelected$='Itron FC300' then
