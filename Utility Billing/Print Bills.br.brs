@@ -764,7 +764,7 @@
 73660 fnend 
 74000 BULKSORT: ! r: sort in bulk sort code sequence
 74020   open #h_control:=fngethandle: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
-74060   write #h_control,using 'form pos 1,c 128': "FILE customer.H"&env$('cno')&","&env$('Q')&"\UBmstr,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
+74060   write #h_control,using 'form pos 1,c 128': "FILE "&env$('Q')&"\UBmstr\customer.H"&env$('cno')&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
 74080   if route_filter>0 then write #h_control,using 'form pos 1,c 128': 'RECORD I,1,2,N,"'&str$(route_filter)&'","'&str$(route_filter)&'"'
 74100   write #h_control,using 'form pos 1,c 128': "MASK 1942,12,C,A,1,10,C,A"
 74120   close #h_control: 
