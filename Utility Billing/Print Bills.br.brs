@@ -171,6 +171,7 @@
 22260       d4=val(d4$)
 22280     end if
 22300   end if
+22310 if env$('acsDeveloper')<>'' then pause
 22320   if enable_bulksort then gosub BULKSORT
 22340   if enable_cass_sort then gosub SORT1
 22360   open #h_customer_1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed  ! open in account order
@@ -309,14 +310,14 @@
 30000 NEXT_ACCOUNT: ! r: main loop
 30020   if filter_selected_only=1 then goto SCR_ASK_ACCOUNT
 30040   if enable_bulksort then 
-30060 READ_BULKSORT: ! 
+30060     ! READ_BULKSORT: ! 
 30080     read #7,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
-30100     read #h_customer_1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est norec READ_BULKSORT
+30100     read #h_customer_1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est norec NEXT_ACCOUNT ! READ_BULKSORT
 30120   else if enable_cass_sort then 
-30140 READ_CASSSORT: ! 
+30140     ! READ_CASSSORT: ! 
 30160     read #7,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
-30180     read #6,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ norec READ_CASSSORT
-30200     read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey READ_CASSSORT
+30180     read #6,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ norec NEXT_ACCOUNT ! READ_CASSSORT
+30200     read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey NEXT_ACCOUNT ! READ_CASSSORT
 30220   else 
 30240     read #h_customer_2,using F_CUSTOMER_A: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est eof RELEASE_PRINT
 30260   end if 
@@ -763,16 +764,16 @@
 73640   end if 
 73660 fnend 
 74000 BULKSORT: ! r: sort in bulk sort code sequence
-74020   open #h_control:=fngethandle: "Name="&env$('Temp')&"\Control."&session$&",Size=0,RecL=128,Replace",internal,output 
+74020   open #h_control:=fngethandle: "Name="&env$('Temp')&"\printBillsControl."&session$&",Size=0,RecL=128,Replace",internal,output 
 74060   write #h_control,using 'form pos 1,c 128': "FILE "&env$('Q')&"\UBmstr\customer.H"&env$('cno')&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
 74080   if route_filter>0 then write #h_control,using 'form pos 1,c 128': 'RECORD I,1,2,N,"'&str$(route_filter)&'","'&str$(route_filter)&'"'
 74100   write #h_control,using 'form pos 1,c 128': "MASK 1942,12,C,A,1,10,C,A"
 74120   close #h_control: 
 74140   execute "Free "&env$('Temp')&"\Addr."&session$ ioerr ignore
-74160   execute "Sort "&env$('Temp')&"\Control."&session$
+74160   execute "Sort "&env$('Temp')&"\printBillsControl."&session$
 74180   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
-74200   return  ! /r
-76000 SORT1: ! r: SELECT & SORT
+74200 return  ! /r
+76000 SORT1: ! r: SELECT & SORT - sorts Cass1 file 
 76010   enable_cass_sort=0 ! replaces old s5 variable
 76020   open #h_cass1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Cass1.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\Cass1Idx.h"&env$('cno')&",Shr",internal,input,keyed ioerr XIT_SORT1
 76040   open #6: "Name="&env$('Temp')&"\Temp."&session$&",Replace,RecL=19",internal,output 
