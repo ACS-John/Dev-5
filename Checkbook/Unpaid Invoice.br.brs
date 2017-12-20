@@ -338,18 +338,20 @@
 22290 if ck=66 then goto APPROVE_BY_PAYEE ! approve all invoices for a specific payee
 22300 goto APPROVE ! /r  (used to just fall though to approve here)
 23000 APPROVE: ! r: clear or unclear selected invoices
-23010 read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=selectedrec: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
-23020 if pcde=0 then pcde=1 : newbcde=bankcode : goto L5540 ! if no previous payment code, use new one; if it has a payment code, change it
-23030 if pcde=1 and dp=0 then pcde=0 : newbcde=0: goto L5540 ! change from yes to no
-23040 if pcde=0 then pcde=1 : newbcde= bankcode: goto L5540 ! change from no to yes
-23050 if pcde=1 and dp>0 then pcde=1 : newbcde=bcde: goto L5540 ! don't change previously paid
-23060 L5540: ! 
-23070 if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
-23080 ! pr PCDE,BCDE
-23090 rewrite #clearing,using 'Form POS 73,n 1,n 2',rec=selectedrec: pcde,newbcde
-23100 rewrite #paytrans,using 'Form POS 73,n 1,n 2',key=vn$ & iv$: pcde,newbcde ! update the transaction history
-23110 lastrec=selectedrec
-23120 if lastrec+1 <= lrec(clearing) then nextrec=lastrec+1 else nextrec=1
+23002   if selectedrec>0 then
+23010     read #clearing,using 'Form POS 1,C 8,C 12,2*G 6,C 12,C 18,G 10.2,n 1,n 2,G 8,G 6,N 1,n 6,n 10.2,n 8',rec=selectedrec: vn$,iv$,mat up$,upa,pcde,bcde,ckn,dp,gde,pdte,disamt,ddate
+23020     if pcde=0 then pcde=1 : newbcde=bankcode : goto L5540 ! if no previous payment code, use new one; if it has a payment code, change it
+23030     if pcde=1 and dp=0 then pcde=0 : newbcde=0: goto L5540 ! change from yes to no
+23040     if pcde=0 then pcde=1 : newbcde= bankcode: goto L5540 ! change from no to yes
+23050     if pcde=1 and dp>0 then pcde=1 : newbcde=bcde: goto L5540 ! don't change previously paid
+23060     L5540: ! 
+23070     if pcde=1 then flxitm$(3)="Yes" else if pcde=0 then flxitm$(3)="No" else if pcde=1 and dp>0 then flxitm$(3)="Paid"
+23080     ! pr PCDE,BCDE
+23090     rewrite #clearing,using 'Form POS 73,n 1,n 2',rec=selectedrec: pcde,newbcde
+23100     rewrite #paytrans,using 'Form POS 73,n 1,n 2',key=vn$ & iv$: pcde,newbcde ! update the transaction history
+23110     lastrec=selectedrec
+23120     if lastrec+1<=lrec(clearing) then nextrec=lastrec+1 else nextrec=1
+23122   end if
 23130 goto RE_DISPLAY_GRID ! /r
 24000 MSGBOX3: ! r: need range of reference numbers
 24010 mat ml$(2)

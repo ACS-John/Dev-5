@@ -98,14 +98,14 @@
 26200       if lwrc$(preferenceHandHeldFromFile$)='[ask]' then
 26220         askPath$=resp$(rc_path)
 26240         fnureg_write('Hand Held From File Asked',askPath$)
-26260         if ~exists(askPath$) then
+26260         if ~exists(env$('at')&askPath$) then
 26280           mat ml$(1)
 26300           ml$(1)="There is no file by this name at "&askPath$
 26320           fnmsgbox(mat ml$, response$)
 26330           goto SCREEN1
 26340         end if
 26350       end if
-26360       if fn_transfer(bk$,enableMerge$,askPath$)=-1 then goto SCREEN1
+26360       if fn_transfer(bk$,enableMerge$,env$('at')&askPath$)=-1 then goto SCREEN1
 26380     end if
 26400   goto XIT ! /r
 26700   XIT: ! target of ERTN exits
