@@ -1346,7 +1346,7 @@
 36300   end if 
 36320   ! 
 36340   pr f window_prefix$&srow$&","&str$(ps+00)&",CC 7,,B2501": "Export"
-36360   pr f window_prefix$&srow$&","&str$(ps+08)&",CC 7,,B2502": "Print" ! if env$('ACSDeveloper')<>'' then
+36360   ! pr f window_prefix$&srow$&","&str$(ps+08)&",CC 7,,B2502": "Print" ! if env$('ACSDeveloper')<>'' then
 36380   !   pr f window_prefix$&srow$&","&str$(ps+16)&",CC 7,,B2503": "Reset"
 36400 fnend 
 36420 def fn_alpha_mask_indices (mat alpha_mask_indices;___,index_,mask)
