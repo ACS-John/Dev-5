@@ -171,7 +171,7 @@
 22260       d4=val(d4$)
 22280     end if
 22300   end if
-22310 if env$('acsDeveloper')<>'' then pause
+22310   ! if env$('acsDeveloper')<>'' then pause
 22320   if enable_bulksort then gosub BULKSORT
 22340   if enable_cass_sort then gosub SORT1
 22360   open #h_customer_1:=fngethandle: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,outin,keyed  ! open in account order
@@ -766,7 +766,9 @@
 74000 BULKSORT: ! r: sort in bulk sort code sequence
 74020   open #h_control:=fngethandle: "Name="&env$('Temp')&"\printBillsControl."&session$&",Size=0,RecL=128,Replace",internal,output 
 74060   write #h_control,using 'form pos 1,c 128': "FILE "&env$('Q')&"\UBmstr\customer.H"&env$('cno')&",,,"&env$('Temp')&"\Addr."&session$&",,,,,A,N"
-74080   if route_filter>0 then write #h_control,using 'form pos 1,c 128': 'RECORD I,1,2,N,"'&str$(route_filter)&'","'&str$(route_filter)&'"'
+74080   if route_filter>0 then 
+74082     write #h_control,using 'form pos 1,c 128': 'RECORD I,1,2,N,"'&str$(route_filter)&'","'&str$(route_filter)&'"'
+74084   end if
 74100   write #h_control,using 'form pos 1,c 128': "MASK 1942,12,C,A,1,10,C,A"
 74120   close #h_control: 
 74140   execute "Free "&env$('Temp')&"\Addr."&session$ ioerr ignore

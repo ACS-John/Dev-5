@@ -64,13 +64,13 @@
 22152     if g_finial_filename$='' the
 22154       g_finial_filename$=g_pa_filename$
 22156     else
-22158       fnCopy(g_pa_filename$,g_finial_filename$)
+22158       fnCopy(g_pa_filename$,env$('at')&g_finial_filename$)
 22160     end if
 22180     if pf_final_batch then 
-22200       execute 'System -W -C "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(g_finial_filename$)
+22200       execute 'System -W -C "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(env$('at')&g_finial_filename$)
 22210       fnstatus_close
 22220     else 
-22240       execute 'System -W "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(g_finial_filename$)
+22240       execute 'System -W "'&os_filename$("S:\Core\PrAce.exe")&'" '&os_filename$(env$('at')&g_finial_filename$)
 22260     end if 
 22280   end if 
 22300   g_pa_filename$=g_finial_filename$=''
@@ -215,6 +215,7 @@
 39340     pr #h_printace: 'Call Print.AddPicture("'&os_filename$(pp_pic$)&'",'&str$(pp_x)&','&str$(pp_y)&')'
 39360   end if
 39380 fnend 
+39999 ! r: font and barcode
 40000 def library fnpa_font(; pf_fontname$*256,h_printace)
 40020   fn_pa_setup
 40040   if formsFormat$="PDF" then
@@ -1032,3 +1033,4 @@
 61780     BC_XIT: ! 
 61790   end if
 61800 fnend 
+69999 ! /r

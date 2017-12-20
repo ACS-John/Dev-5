@@ -11,10 +11,10 @@
 00116   execute "Index "&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&' '&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&" 1/71/17/13 12/2/2/4,Replace,DupKeys"
 00120   goto XIT
 00130 ! ______________________________________________________________________
-00140 OPEN_FILE: ! !:
-        open_file_count=0 ! this value is used in the close_file sub routine
+00140 OPEN_FILE: ! r:
+00142   open_file_count=0 ! this value is used in the close_file sub routine
 00152   open #open_file_count+=1: "Name="&env$('Q')&"\GLmstr\ACTrans.h"&env$('cno')&",KFName="&env$('Q')&"\GLmstr\AcTrIdx.h"&env$('cno')&",Version=0,Use,RecL=72,KPs=1/71/17/13,KLn=12/2/2/4,Shr",internal,outin,keyed 
-00160   return 
+00160 return ! /r
 00170 ! ______________________________________________________________________
 00180 CLOSE_FILE: for j=1 to open_file_count : close #j: : next j : return 
 00190 ! ______________________________________________________________________
