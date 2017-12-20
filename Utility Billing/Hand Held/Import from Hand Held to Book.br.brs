@@ -211,6 +211,7 @@
 30860       hif_return$="L:\readings.txt"
 30880     end if
 30890   end if
+30892   if hif_return$(1:2)='@:' then let hif_return$(1:2)='' ! take it off if it is already there before putting it back on.
 30900   fn_hh_input_filename$=env$('at')&hif_return$
 30920 fnend
 31000 IGNORE: continue
