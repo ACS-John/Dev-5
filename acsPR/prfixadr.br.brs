@@ -1,16 +1,15 @@
 00010 ! Replace S:\acsPR\prFixAdr
 00020 ! Reassign Department Addresses
 00030 ! ______________________________________________________________________
-00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fncno,fnerror,fntop,fnxit
+00040   library 'S:\Core\Library': fntop,fnxit, fnwait,fnerror,fntop,fnxit
 00050   on error goto ERTN
 00060 ! ______________________________________________________________________
-00070   dim en$*8,ta(2),cap$*128,message$*40
+00070   dim en$*8,ta(2),cap$*128
 00080 ! ______________________________________________________________________
 00090   fntop("S:\acsPR\prFixAdr",cap$="Reassign Department Addresses")
-00100   fncno(cno)
 00110 ! 
 00120 ! ___________________________
-00130   fnwait(message$="Reassigning: please wait...",0)
+00130   fnwait("Reassigning: please wait...",0)
 00140 ! ___________________________
 00150 ! Sort routine
 00160   open #control=1: "Name="&env$('Temp')&"\Control."&session$&",RecL=128,Replace",internal,output 
@@ -18,8 +17,8 @@
         write #control,using "Form POS 1,C 128": "File "&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",,,"&env$('Temp')&"\Addr."&session$&",,,acsPR,,A,N" !:
         write #control,using "Form POS 1,C 128": "Mask 1,8,c,a,9,3,c,a"
 00180   close #control: 
-00190   execute "Free "&env$('Temp')&"\Addr."&session$&" -n" ioerr L200
-00200 L200: execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
+00190   execute "Free "&env$('Temp')&"\Addr."&session$&" -n" ioerr ignore
+00200   execute "Sort "&env$('Temp')&"\Control."&session$&" -n"
 00210 ! ___________________________
 00220   open #addr=3: "Name="&env$('Temp')&"\Addr."&session$&",NoShr",internal,input 
 00230   open #rptrail=2: "Name="&env$('Q')&"\PRmstr\RPTRAIL.h"&env$('cno')&",NoShr",internal,outin,relative 
@@ -41,19 +40,19 @@
 00360   if eno2=0 then goto ABC else !:
           en$=lpad$(str$(eno2),8) !:
           rewrite #rpmstr,using 'Form POS 173,2*PD 3',key=en$: mat ta nokey ABC
-00370 ABC: ta(1)=r1
-00380 DEG: ta(2)=r1 : eno2=eno
+00370   ABC: ta(1)=r1
+00380   DEG: ta(2)=r1 : eno2=eno
 00390   if lta<r1 then lta=r1
 00400   r2=r1
 00410   goto READ_ADDR
 00420 ! ______________________________________________________________________
 00430 EOF_ADDR: ! 
-00440 ! If ENO2=0 Then Goto ABC
+00440   ! If ENO2=0 Then Goto ABC
 00450   en$=lpad$(str$(eno2),8)
 00460   rewrite #rptrail,using 'Form POS 468,PD 3',rec=r2: 0
 00470   rewrite #rpmstr,using 'Form POS 173,2*PD 3',key=en$: mat ta nokey L490
-00480 ! Rewrite #rptrail,Using 'Form POS 468,PD 3',REC=1: LTA
-00490 L490: close #addr: 
+00480   ! Rewrite #rptrail,Using 'Form POS 468,PD 3',REC=1: LTA
+00490   L490: close #addr: 
 00500   close #rpmstr: 
 00510   close #rptrail: 
 00520 XIT: fnxit

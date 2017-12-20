@@ -381,9 +381,10 @@
 02980 BULKSORT: ! bulk sort order
 02990   open #1: "Name="&env$('Q')&"\UBmstr\Customer.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\ubIndex.h"&env$('cno')&",Shr",internal,input,keyed  ! open in Account order
 03000   open #6: "Name="&env$('Temp')&"\Temp."&wsid$&",Replace,RecL=31",internal,output 
-03010 L3010: read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3040
-03020   write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
-03030   goto L3010
+03010   do
+03012     read #1,using "Form POS 1,C 10,pos 1741,n 2,pos 1743,n 7,pos 1942,c 12": z$,route,seq,bulk$ eof L3040
+03020     write #6,using "Form POS 1,C 12,n 2,n 7,c 10": bulk$,route,seq,z$
+03030   loop
 03040 L3040: close #1: ioerr ignore
 03050   close #6: ioerr ignore
 03060   execute "Index "&env$('Temp')&"\Temp."&wsid$&" "&env$('Temp')&"\Tempidx."&wsid$&" 1,19,Replace,DupKeys -n" ioerr L3080
