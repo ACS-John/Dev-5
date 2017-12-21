@@ -463,7 +463,7 @@
 30080     else if env$('client')='Purdy' then 
 30090       fn_user_limit(1)
 30100       fn_add_ch_sys('UB') : fn_set_ub_limit(500) ! U3 Utility Billing (<500 Customers)
-30110       fn_add_ch_sys('U4') : u4_device$="Boson" ! U4 Utility Billing Hand Held Add-On
+30110       fn_add_ch_sys('U4') : u4_device$="Aclara" ! U4 Utility Billing Hand Held Add-On
 30120     else if env$('client')='Omaha' then 
 30130       fn_user_limit(1)
 30140       fn_add_ch_sys('UB') : fn_set_ub_limit(9999) ! U1 Utility Billing (no discount)

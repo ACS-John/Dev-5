@@ -54,7 +54,7 @@
 22000 def fn_pa_finis(; h_printace, pf_final_batch)
 22010   !   fnstatus('pf_final_batch='&str$(pf_final_batch))
 22020   fnstatus('Sending PrintAce Batch '&str$(g_pa_batch)&' to the printer.')
-22030   fnstatus('When the messagebox (labeled Print) says "Sending to Printer" click "Okay" to continue.')
+22030   fnstatus('When the message box (labeled Print) says "Sending to Printer" click "Okay" to continue.')
 22060   if h_printace=0 then h_printace=20
 22080   pr #h_printace: "Print.EndDoc" ioerr ignore
 22100   if g_pa_filename$='' then g_pa_filename$=file$(h_printace) ! this is now set in fnpa_open, but it may not be called.

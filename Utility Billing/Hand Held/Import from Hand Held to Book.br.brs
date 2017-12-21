@@ -184,11 +184,11 @@
 30280     else if deviceSelected$="AMR" then
 30300       hif_return$=askPath$
 30320     else if deviceSelected$="Itron FC300" then
-30340       if env$('client')='Findlay' then
-30360         hif_return$='\\vof-pc\itronshared\FCS\Export\Output\UPLOAD.DAT' ! "C:\Itron\FCSShare\Export\Output\upload.dat"
-30400       else
+30340       ! if env$('client')='Findlay' then
+30360       !   hif_return$='\\vof-pc\itronshared\FCS\Export\Output\UPLOAD.DAT' ! "C:\Itron\FCSShare\Export\Output\upload.dat"
+30400       ! else
 30420         hif_return$="C:\mvrs\xfer\upload\UPLOAD.DAT"
-30440       end if
+30440       ! end if
 30480     else if deviceSelected$="Psion Workabout" then
 30500       hif_return$=env$('Q')&"\UBmstr\Readings.out"
 30520     else if deviceSelected$="Badger" or deviceSelected$="DriveBy" then
