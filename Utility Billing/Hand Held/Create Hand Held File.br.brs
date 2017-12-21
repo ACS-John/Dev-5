@@ -182,9 +182,12 @@
 09580 ! /r
 09600 NextLocationId: ! r:
 09610 ! if readLocationId=118 then pr 'about to do location 119' : pause
-09620   if fn_customerRead( '',readLocationId+=1)=-54 then 
-09640     goto END1
-09660   end if
+09620   nliCustomerReadResponse=fn_customerRead( '',readLocationId+=1)
+09630   if nliCustomerReadResponse=0 then ! no active account found for LocationID
+ 9640     goto NextLocationId
+09650   else if nliCustomerReadResponse=-54 then ! end of file
+09660     goto END1
+09670   end if
 09680 goto SendRecordToWorkFile ! /r
 10000 SELECT_ALL: ! r:
 10020   if deviceSelected$='Aclara Work Order' then
@@ -1466,25 +1469,36 @@
 74500       if locationId>LastLocationIdOnFile then 
 74520         goto CrEoF
 74540       else
-74560         crReturn=0
-74580         goto CrFinis
-74600       end if
-74620     end if
-74640     read #h_customer_i1,using F_CUSTOMER,key=fnAccountFromLocationId$(locationId,1): z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
-74660   else
-74680     read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
-74700   end if
-74720   crReturn=1
-74740   goto CrFinis
-74760   CrNoKey: ! r:
-74780     crReturn=-4272
-74800   goto CrFinis ! /r
-74820   CrEoF: ! r:
-74840     crReturn=-54
-74860   goto CrFinis ! /r
-74880   CrFinis: !
-74900   fn_customerRead=crReturn
-74920 fnend
+74560         z$=''
+74580         mat e$=('')
+74600         mat a=(0)
+74620         final=0
+74640         mat d=(0)
+74660         mat f$=('')
+74680         route=0
+74700         sequence=0
+74720         mat extra$=('')
+74740         mat extra=(0)
+74760         alp$=''
+74780         crReturn=0
+74800         goto CrFinis
+74820       end if
+74840     end if
+74860     read #h_customer_i1,using F_CUSTOMER,key=fnAccountFromLocationId$(locationId,1): z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
+74880   else
+74900     read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
+74920   end if
+74940   crReturn=1
+74960   goto CrFinis
+74980   CrNoKey: ! r:
+75000     crReturn=-4272
+75020   goto CrFinis ! /r
+75040   CrEoF: ! r:
+75060     crReturn=-54
+75080   goto CrFinis ! /r
+75100   CrFinis: !
+75120   fn_customerRead=crReturn
+75140 fnend
 76000 def fn_getFilterAccount(mat filterAccount$)
 76002   mat filterAccount$(0)
 76004   fnaddonec(mat filterAccount$,'100050.05')
