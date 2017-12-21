@@ -98,15 +98,15 @@
 28600   AflEoCustomerMeterAddress: !
 28620   if udim(mat afliAccountNumber$)=0 then 
 28640     aflReturn$=''
-28660     mat mg$(0)
-28680     fnaddonec(mat mg$,'Could not find an account for')
-28700     fnaddonec(mat mg$,'Meter Address:  '&maData$(ma_name))
-28720     fnaddonec(mat mg$,'Location ID '&str$(locationId))
-28740     fnmsgbox(mat mg$)
-28760     if env$('acsDeveloper')<>'' then 
-28780       pr mat mg$
-28800       pause
-28820     end if
+28660     ! mat mg$(0)
+28680     ! fnaddonec(mat mg$,'Could not find an account for')
+28700     ! fnaddonec(mat mg$,'Meter Address:  '&maData$(ma_name))
+28720     ! fnaddonec(mat mg$,'Location ID '&str$(locationId))
+28740     ! fnmsgbox(mat mg$)
+28760     ! if env$('acsDeveloper')<>'' then 
+28780     !   pr mat mg$
+28800     !   pause
+28820     ! end if
 28840   else if udim(mat afliAccountNumber$)=1 then
 28860     aflReturn$=afliAccountNumber$(1)
 28880   else 
@@ -130,7 +130,7 @@
 29240         ! pr '--!--'
 29260         ! pr 'multiple matches for last billing date!'
 29280         ! pr 'need more logic to find match'
-29300         pause
+29300         ! pause
 29320       end if
 29340     end if
 29360     ! pause
