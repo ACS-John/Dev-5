@@ -12,8 +12,8 @@
 12120     ! 
 12140     ! report_cache$='True' ! fnreg_read('Report_Cache',report_cache$,'True')
 12160     ! if report_cache$='True' then print_report_caching=1 else print_report_caching=0
-12180     fnureg_read('wait_wp_close',wait_wp_close$,'True')
-12200     if wait_wp_close$='False' then print_report_nowait=1 else print_report_nowait=0
+12180     ! fnureg_read('wait_wp_close',wait_wp_close$,'True')
+12200     ! if wait_wp_close$='False' then print_report_nowait=1 else print_report_nowait=0
 12260   end if 
 12340 fnend 
 22000 def library fnprint_file_name$*1024(; pfn_sendto_base_name_addition$*128,pfn_extension$,programCaptionOverride$*256)
@@ -294,12 +294,12 @@
 50000   fnget_wordprocessor_exe(wordprocessor_exe$, forceWordProcessor$) 
 50020   if fnprocess=1 and pos(lwrc$(wordprocessor_exe$),'atlantis')>0 then 
 50040     execute 'Sy -w '&wordprocessor_exe$&' -st /p /npd "'&os_filename$(serverSendto$)&'"' ! automatic processing  ! kj 53107
-50060   else if print_report_nowait or fnprocess=1 then 
+50060   else ! if print_report_nowait or fnprocess=1 then 
 50080     execute 'Sy -w -C '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
-50100   else 
-50120     fn_waitForWpToCloseStart('Word Processor')
-50200     execute 'Sy -w '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
-50230     fn_waitForWpToCloseEnd
+50100   ! else 
+50120   !   fn_waitForWpToCloseStart('Word Processor')
+50200   !   execute 'Sy -w '&wordprocessor_exe$&' "'&os_filename$(serverSendto$)&'"'
+50230   !   fn_waitForWpToCloseEnd
 50240   end if 
 50260  ! pause
 50280 fnend 
