@@ -1,5 +1,7 @@
 Time and Date 		Sys	Program(s) and Change(s) Description                                                                                                                                                                                                             
 ______________________	___	____________________________________________________________________________________________________________________________________________________________________________________________________________________________________                                                                                                                                                                                                             
+1:42 PM 12/21/2017	U4	Aclara interface enhanced greatly
+1:41 PM 12/21/2017	CO	Print jobs will never wait for the word processor to close (nor open) to continue.
 14:05 12/17/2017	CO	5.73077  
 7:34 AM 11/30/2017	UB	Customer File - Added Location ID Selection option 
 19:16 11/17/2017	CO	5.73076   
