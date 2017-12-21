@@ -1444,7 +1444,7 @@
 74060     dim form$(0)*256
 74080     dim maData$(0)*30,maDataN(0)
 74100     hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, 1)
-74120     read #hMeterAddressLocationID,last: mat maData$,mat maDataN
+74120     read #hMeterAddressLocationID,using form$(hMeterAddressLocationID),last: mat maData$,mat maDataN
 74140     close #hMeterAddressLocationID:
 74160     LastLocationIdOnFile=maDataN(ma_LocationID)
 74180   end if
