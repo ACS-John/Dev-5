@@ -14,6 +14,7 @@
 03120     library 'S:\Core\Library': fncreg_read,fncreg_write,fnCopy,fnureg_read,fnureg_write
 03140     library 'S:\Core\Library': fnAddOneC
 03160     library 'S:\Core\Library': fnMeterAddressLocationID,fncsz,fnmakesurepathexists,fnAccountFromLocationId$
+03170     library 'S:\Core\Library': fnOpenFile
 03180     on error goto ERTN
 03200     ! ______________________________________________________________________
 03220     dim resp$(64)*125
@@ -180,7 +181,7 @@
 09560 !
 09580 ! /r
 09600 NextLocationId: ! r:
-09610 if readLocationId=118 then pr 'about to do location 119' : pause
+09610 ! if readLocationId=118 then pr 'about to do location 119' : pause
 09620   if fn_customerRead( '',readLocationId+=1)=-54 then 
 09640     goto END1
 09660   end if
@@ -1438,36 +1439,52 @@
 72780   end if
 72800 fnend
 74000 def fn_customerRead(; accountKey$,locationId) ! all values read are passed back as local variables
-74020   ! #h_customer_i1 and #h_customer_i5 are inherited local variables
-74040   dim extra$(11)*30
-74060   crReturn=0
-74080   F_CUSTOMER: form pos 1,c 10,4*c 30,pos 143,7*pd 2,pos 1821,n 2,pos 217,15*pd 5,pos 131,c 12,pos 361,2*c 12,pos 1741,n 2,n 7,pos 1864,C 30,7*C 12,3*C 30,pos 1741,n 2,pos 354,c 7
-74100   if accountKey$='' and locationId=0 then ! read Sequential
-74120     CrReadSequential: !
-74140     read #h_customer_i5,using F_CUSTOMER: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ eof CrEoF
-74160     if udim(mat filterAccount$)>0 and trim$(filterAccount$(1))<>'' then
-74180       if srch(mat filterAccount$,trim$(z$))<=0 then
-74200         goto CrReadSequential
-74220       end if
-74240     end if
-74260   else if locationId<>0 then
-74280     accountFromLocationId$=fnAccountFromLocationId$(locationId,1)
-74300     if accountFromLocationId$='' then goto CrEoF
-74320     read #h_customer_i1,using F_CUSTOMER,key=fnAccountFromLocationId$(locationId,1): z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
-74340   else
-74360     read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
-74380   end if
-74400   crReturn=1
-74420   goto CrFinis
-74440   CrNoKey: ! r:
-74460     crReturn=-4272
-74480   goto CrFinis ! /r
-74500   CrEoF: ! r:
-74520     crReturn=-54
-74540   goto CrFinis ! /r
-74560   CrFinis: !
-74580   fn_customerRead=crReturn
-74600 fnend
+74020   if locationId and ~LastLocationIdOnFileSetup then
+74040     LastLocationIdOnFileSetup=1
+74060     dim form$(0)*256
+74080     dim maData$(0)*30,maDataN(0)
+74100     hMeterAddressLocationID=fn_open('UB Meter Address',mat maData$,mat maDataN,mat form$, 1)
+74120     read #hMeterAddressLocationID,last: mat maData$,mat maDataN
+74140     close #hMeterAddressLocationID:
+74160     LastLocationIdOnFile=maDataN(ma_LocationID)
+74180   end if
+74200   ! #h_customer_i1 and #h_customer_i5 are inherited local variables
+74220   dim extra$(11)*30
+74240   crReturn=0
+74260   F_CUSTOMER: form pos 1,c 10,4*c 30,pos 143,7*pd 2,pos 1821,n 2,pos 217,15*pd 5,pos 131,c 12,pos 361,2*c 12,pos 1741,n 2,n 7,pos 1864,C 30,7*C 12,3*C 30,pos 1741,n 2,pos 354,c 7
+74280   if accountKey$='' and locationId=0 then ! read Sequential
+74300     CrReadSequential: !
+74320     read #h_customer_i5,using F_CUSTOMER: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ eof CrEoF
+74340     if udim(mat filterAccount$)>0 and trim$(filterAccount$(1))<>'' then
+74360       if srch(mat filterAccount$,trim$(z$))<=0 then
+74380         goto CrReadSequential
+74400       end if
+74420     end if
+74440   else if locationId<>0 then
+74460     accountFromLocationId$=fnAccountFromLocationId$(locationId,1)
+74480     if accountFromLocationId$='' then
+74500       if locationId>LastLocationIdOnFile then 
+74520         goto CrEoF
+74540       else
+74560         crReturn=0
+74580         goto CrFinis
+74600       end if
+74620     end if
+74640     read #h_customer_i1,using F_CUSTOMER,key=fnAccountFromLocationId$(locationId,1): z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
+74660   else
+74680     read #h_customer_i1,using F_CUSTOMER,key=z$: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ nokey CrNoKey
+74700   end if
+74720   crReturn=1
+74740   goto CrFinis
+74760   CrNoKey: ! r:
+74780     crReturn=-4272
+74800   goto CrFinis ! /r
+74820   CrEoF: ! r:
+74840     crReturn=-54
+74860   goto CrFinis ! /r
+74880   CrFinis: !
+74900   fn_customerRead=crReturn
+74920 fnend
 76000 def fn_getFilterAccount(mat filterAccount$)
 76002   mat filterAccount$(0)
 76004   fnaddonec(mat filterAccount$,'100050.05')
@@ -1989,3 +2006,16 @@
 77036   fnaddonec(mat filterAccount$,'210003.00')
 77038   fnaddonec(mat filterAccount$,'210004.00')
 77040 fnend
+78000 ! <updateable region: fn_open (supressprompt:=2)>  
+78020 def fn_open(filename$*255, mat f$, mat fn, mat form$; inputonly, keynum, dont_sort_subs, path$*255, mat descr$, mat field_widths,dontupdate,___,index)
+78040   dim _fileiosubs$(1)*800, loadedsubs$(1)*32
+78060   fn_open=fnOpenFile(filename$, mat f$, mat fn, mat form$, inputonly, keynum, dont_sort_subs, path$, mat descr$, mat field_widths, mat _fileiosubs$,supressprompt:=2)
+78080   if ~max(srch(loadedsubs$,uprc$(filename$)),0) then 
+78100     mat loadedsubs$(udim(loadedsubs$)+1) 
+78120     loadedsubs$(udim(loadedsubs$))=uprc$(filename$)
+78140     for index=1 to udim(mat _fileiosubs$) 
+78160       execute (_fileiosubs$(index)) 
+78180     next index
+78200   end if
+78220 fnend
+78240 ! </updateable region: fnopen>
