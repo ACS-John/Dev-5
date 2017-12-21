@@ -1,6 +1,7 @@
 10000 fn_setup
 10020 fntop(program$)
-12010 activeOnly=1
+10030 fnreg_read('Meter Address Enable',u4_meterAddress$,'False')
+12010 ! activeOnly=1
 12020 if u4_meterAddress$='False' then
 12040   mat mg$(0)
 12060   fnAddOneC(mat mg$,'Meter Address LocationID tracking is currently disabled.')
@@ -35,6 +36,7 @@
 42100   searchAfter=srch(mat LocIdList,LocIdList(customer),customer+1)
 42120   if searchBefore or searchAfter then
 42140     pr #255,using 'form pos 1,C 10,x 1,N 9,x 2,C 30': acctList$(customer),LocIdList(customer),meterAddressList$(customer)
+          customersWithDuplicate
 42160   end if
 42180 nex customer
 42200 fncloseprn
@@ -42,9 +44,16 @@
 50000 close #hCustomer:
 50020 Xit: fnxit
 62000 def fn_setup
-62020   if ~setup then
-62040     setup=1
-62060     library 'S:\Core\Library': fnAddOneC,fnmsgbox,fnOpenFile,fncreg_read,fncreg_write,fnAddOneN,fntop,fnxit,fnhamster,fngethandle,fnCloseFile,fnerror,fngethandle,fnreg_read,fnreg_write,fnMeterAddressLocationID,fnopenprn,fncloseprn
-62120     dim mg$(0)*80
-62480   end if
-62900 fnend
+62010   if ~setup then
+62020     setup=1
+62030     library 'S:\Core\Library': fntop,fnxit,fnerror
+62040     library 'S:\Core\Library': fnCloseFile,fngethandle
+62050     library 'S:\Core\Library': fnOpenFile
+62060     library 'S:\Core\Library': fnopenprn,fncloseprn
+62070     library 'S:\Core\Library': fnAddOneC,fnAddOneN
+62080     library 'S:\Core\Library': fnmsgbox
+62090     library 'S:\Core\Library': fnMeterAddressLocationID
+62100     library 'S:\Core\Library': fnreg_read
+62110     dim mg$(0)*80
+62120   end if
+62130 fnend
