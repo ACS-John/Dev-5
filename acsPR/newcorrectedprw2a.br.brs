@@ -325,10 +325,10 @@
 02920   x$=" ": p1=58: p2=126
 02930 PRINTW2: ! pr W2 FORM
 02940   gosub ASK_OLD_INFO
-02950   column1=15 !:
-        column2=60 !:
-        column3=113 !:
-        column4=160
+02950   column1=15 
+02951   column2=60 
+02952   column3=113
+02953   column4=160
 02960   inc=0
 02970   pr #20: 'Call Print.MyFontSize(10)'
 02980   txt$=ss$

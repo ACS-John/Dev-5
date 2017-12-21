@@ -311,11 +311,11 @@
 30020   if filter_selected_only=1 then goto SCR_ASK_ACCOUNT
 30040   if enable_bulksort then 
 30060     ! READ_BULKSORT: ! 
-30080     read #7,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
+30080     read #hAddr,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
 30100     read #h_customer_1,using F_CUSTOMER_A,rec=r6,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est norec NEXT_ACCOUNT ! READ_BULKSORT
 30120   else if enable_cass_sort then 
 30140     ! READ_CASSSORT: ! 
-30160     read #7,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
+30160     read #hAddr,using 'form pos 1,pd 3': r6 eof RELEASE_PRINT
 30180     read #6,using "Form POS 1,C 5,C 4,C 10",rec=r6: zip5$,cr$,z$ norec NEXT_ACCOUNT ! READ_CASSSORT
 30200     read #h_customer_1,using F_CUSTOMER_A,key=z$,release: z$,mat e$,f$,a3,mat b,final,mat d,bal,f,mat g,mat gb,route,extra_3,extra_4,est nokey NEXT_ACCOUNT ! READ_CASSSORT
 30220   else 
@@ -773,7 +773,7 @@
 74120   close #h_control: 
 74140   execute "Free "&env$('Temp')&"\Addr."&session$ ioerr ignore
 74160   execute "Sort "&env$('Temp')&"\printBillsControl."&session$
-74180   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
+74180   open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative ! was #7
 74200 return  ! /r
 76000 SORT1: ! r: SELECT & SORT - sorts Cass1 file 
 76010   enable_cass_sort=0 ! replaces old s5 variable
@@ -802,7 +802,7 @@
 76460   execute "Free "&env$('Temp')&"\Addr."&session$ ioerr ignore
 76480   execute "Sort "&env$('Temp')&"\Control."&session$
 76500   open #6: "Name="&env$('Temp')&"\Temp."&session$,internal,input,relative 
-76520   open #7: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative 
+76520   open #hAddr:=fngethandle: "Name="&env$('Temp')&"\Addr."&session$,internal,input,relative ! was #7
 76540 XIT_SORT1: ! 
 76560   return  ! /r
 78000 def fn_print_bill_cerro(z$,mat mg$,mat penalty$,d2x,d3x)

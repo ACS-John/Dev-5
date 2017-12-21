@@ -180,6 +180,7 @@
 09560 !
 09580 ! /r
 09600 NextLocationId: ! r:
+09610 if readLocationId=118 then pr 'about to do location 119' : pause
 09620   if fn_customerRead( '',readLocationId+=1)=-54 then 
 09640     goto END1
 09660   end if
@@ -1437,11 +1438,11 @@
 72780   end if
 72800 fnend
 74000 def fn_customerRead(; accountKey$,locationId) ! all values read are passed back as local variables
-74020   ! #h_customer_i1 and #h_customer_i5 are inherrited local variables
+74020   ! #h_customer_i1 and #h_customer_i5 are inherited local variables
 74040   dim extra$(11)*30
 74060   crReturn=0
 74080   F_CUSTOMER: form pos 1,c 10,4*c 30,pos 143,7*pd 2,pos 1821,n 2,pos 217,15*pd 5,pos 131,c 12,pos 361,2*c 12,pos 1741,n 2,n 7,pos 1864,C 30,7*C 12,3*C 30,pos 1741,n 2,pos 354,c 7
-74100   if accountKey$='' then ! read Sequential
+74100   if accountKey$='' and locationId=0 then ! read Sequential
 74120     CrReadSequential: !
 74140     read #h_customer_i5,using F_CUSTOMER: z$,mat e$,mat a,final,mat d,mat f$,route,sequence,mat extra$,extra(1),alp$ eof CrEoF
 74160     if udim(mat filterAccount$)>0 and trim$(filterAccount$(1))<>'' then

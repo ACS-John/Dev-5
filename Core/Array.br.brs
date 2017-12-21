@@ -113,6 +113,7 @@
 40100     amReturn=0
 40120   else
 40140     amMax=arrayToSearch(1)
+40150     amReturn=1
 40160     for x=2 to udim(mat arrayToSearch)
 40180       if arrayToSearch(x)>amMax then 
 40200         amMax=arrayToSearch(x)

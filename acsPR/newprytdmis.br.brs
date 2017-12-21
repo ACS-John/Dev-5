@@ -96,7 +96,7 @@
 00940   pr #255: "\qc  {\f181 \fs16 \b From: "&cnvrt$("pic(zzzz/zz/zz)",beg_date)&" To: "&cnvrt$("pic(zzzz/zz/zz)",end_date)&"}"
 00950   pr #255: "\qc  {\f181 \fs16 \b "&trim$(dat$)&"}"
 00960   pr #255: "\ql   "
-00970   pr #255,using L980: "Emp-Numb  Employee Name",abbrevname$(1),abbrevname$(2),abbrevname$(3),abbrevname$(4),abbrevname$(5),abbrevname$(6),abbrevname$(7),abbrevname$(8),abbrevname$(9),abbrevname$(10)
+00970   pr #255,using L980: "Emp-Numb  Employee Name",abbrevname$(1),abbrevname$(2),abbrevname$(3),abbrevname$(4),abbrevname$(5),abbrevname$(6),abbrevname$(7),abbrevname$(8),abbrevname$(9),abbrevname$(10)(1:6)
 00980 L980: form pos 1,c 32,9*c 10,c 6
 00990   pr #255: "________  __________________";rpt$("  ________",10)
 01000   for j=1 to 10

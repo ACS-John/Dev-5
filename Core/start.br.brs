@@ -602,13 +602,22 @@
 66060     fnCopy('S:\Core\ScreenIO\screen\*.*'      ,env$('QBase')&'\Core\ScreenIO\screen\*.*'      )
 66080   end if
 66100 fnend
+66500 RetryAFewTimes: ! r:
+66520   retryAfewTimesCount+=1
+66540   if retryAfewTimesCount=10 then 
+66560     pr 'error '&str$(err)&' on line '&str$(line)&'.  Retried '&str$(retryAfewTimesCount)&' times.'
+66580     pause
+66600     retryAfewTimesCount=0
+66620   end if
+66640   sleep(.4)
+66660 retry ! /r
 67000 def fn_CopySfileIoIniToFileIoIni
 67010   ! note that destination fileio.ini must be all lowercase as it is case sensitive on some systems
 67020   if env$('acsDeveloper')='' then
 67040     fnCopy('S:\FileIO.ini','fileio.ini')
 67060   else
-67080     open #hIn_fileIoIni:=fn_gethandle: 'name=S:\fileio.ini',d,i
-67100     open #hOut_FileIoIni:=fn_gethandle: 'name=FileIO.ini,recl=256,replace',d,o
+67080     open #hIn_fileIoIni:=fn_gethandle: 'name=S:\fileio.ini',d,i ioerr RetryAFewTimes
+67100     open #hOut_FileIoIni:=fn_gethandle: 'name=FileIO.ini,recl=256,replace',d,o ioerr RetryAFewTimes
 67120     dim line$*256
 67140     do
 67160       linput #hIn_fileIoIni: line$  eof Csf2f_Eof
