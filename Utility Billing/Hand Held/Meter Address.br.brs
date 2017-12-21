@@ -80,20 +80,21 @@
 28260   mat afliAccountNumber$(0)
 28280   mat afliFinalbillingCode(0)
 28300   mat afliLastBillingDay(0)
+
 28320   read #hMeterAddressLocationID,using form$(hMeterAddressLocationID),key=cnvrt$('N 11',locationId),release: mat maData$,mat maDataN nokey AflEoCustomerMeterAddress
 28340   restore #hCustomerMeterAddress,key=>maData$(ma_name): nokey AflEoCustomerMeterAddress
 28360   dim meterAddress$*30
-28380   if locationId=119 then pr 'meter address to match is "'&maData$(ma_name)&'"'
+28380   if locationId=119 or locationId=105 then pr 'meter address to match is "'&maData$(ma_name)&'"'
 28400   do
 28420     read #hCustomerMeterAddress,using 'form pos 1,C 10,C 30,pos 1821,n 1,pos 296,pd 4',release: accountNumber$,meterAddress$,finalbillingCode,lastBillingDate nokey ignore eof AflEoCustomerMeterAddress
 28440     if lwrc$(meterAddress$)=lwrc$(maData$(ma_name)) then
 28460       fnaddonec(mat afliAccountNumber$,accountNumber$)
 28480       fnaddonen(mat afliFinalbillingCode,finalbillingCode)
 28500       fnaddonen(mat afliLastBillingDay,days(lastBillingDate,'mmddyy'))
-28520       if locationId=119 then pr 'gathering '&accountNumber$&' fb='&str$(finalbillingCode)&' last billed '&str$(lastBillingDate)&' because "'&lwrc$(meterAddress$)&'"="'&lwrc$(maData$(ma_name))&'"'
+28520       if locationId=119 or locationId=105 then pr 'gathering '&accountNumber$&' fb='&str$(finalbillingCode)&' last billed '&str$(lastBillingDate)&' because "'&lwrc$(meterAddress$)&'"="'&lwrc$(maData$(ma_name))&'"'
 28540     end if
 28560   loop until lwrc$(meterAddress$)<>lwrc$(maData$(ma_name))
-28580   pr '' : if locationId=119 then pause
+28580   pr '' : if locationId=119 or locationId=105 then pause
 28600   AflEoCustomerMeterAddress: !
 28620   if udim(mat afliAccountNumber$)=0 then 
 28640     aflReturn$=''
