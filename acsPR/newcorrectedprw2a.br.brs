@@ -331,12 +331,9 @@
 02953   column4=160
 02960   inc=0
 02970   pr #20: 'Call Print.MyFontSize(10)'
-02980   txt$=ss$
-02990   lyne+=4.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column4)&','&str$(lyne)&')'
-03000   txt$=str$(taxyear)
-03010   pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column3)&','&str$(lyne)&')'
-03020   txt$=a$(1)
-03030   lyne=lyne+4.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
+02990   lyne+=4.5: pr #20: 'Call Print.AddText("'&ss$&'",'&str$(column4)&','&str$(lyne)&')'
+03010   pr #20: 'Call Print.AddText("'&str$(taxyear)&'",'&str$(column3)&','&str$(lyne)&')'
+03030   lyne=lyne+4.5: pr #20: 'Call Print.AddText("'&a$(1)&'",'&str$(column1)&','&str$(lyne)&')'
 03040   txt$=a$(2)
 03050   lyne=lyne+8.5: pr #20: 'Call Print.AddText("'&txt$&'",'&str$(column1)&','&str$(lyne)&')'
 03060   txt$=a$(3)

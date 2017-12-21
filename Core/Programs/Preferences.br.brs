@@ -22,7 +22,7 @@
 14120   background_picture$=os_filename$(background_picture$)
 14140   fnureg_read('Decimal',decimal_assumed$,'False')
 14160   fnureg_read('Disable_MultiSession',disable_multisession$) : if disable_multisession$<>'True' then disable_multisession$='False'
-14180   fnureg_read('wait_wp_close',wait_wp_close$) : if wait_wp_close$<>'False' then wait_wp_close$='True'
+14180   ! fnureg_read('wait_wp_close',wait_wp_close$) : if wait_wp_close$<>'False' then wait_wp_close$='True'
 14200   save_path$=fn_save_as_path$
 14300   if save_path$(1:2)='@:' then save_path$(1:2)=''
 15000 ! 
@@ -264,9 +264,9 @@
 50400     fnbutton(lc,col2_pos+42+5,'Default',13) ! fnbutton(lyne,ps,txt$*200,comkey;tt$*200,height,width,container,tabcon,default,cancel)
 50402     fnopt(lc,col2_pos+42+5+7+2,"Use Atlantis as Default") : resp$(resp_use_atlantis:=dsp_rc+=1)=use_atlantis$
 50410 ! 
-50420     lc+=1
-50430     fnchk(lc+=1,55,"Wait for word processor to close before continuing",1)
-50450     resp$(resp_wait_wp_close:=dsp_rc+=1)=wait_wp_close$
+50420     ! lc+=1
+50430     ! fnchk(lc+=1,55,"Wait for word processor to close before continuing",1)
+50450     ! resp$(resp_wait_wp_close:=dsp_rc+=1)=wait_wp_close$
 50460     lc+=1
 50470 ! 
 50480     fnlbl(lc+=1,1,"Receipt Printer:",col1_width,1)
@@ -281,7 +281,7 @@
 50570       goto XIT
 50580     else 
 50600       ! report_cache$=resp$(resp_report_cache)
-50610       wait_wp_close$=resp$(resp_wait_wp_close)
+50610       ! wait_wp_close$=resp$(resp_wait_wp_close)
 50612       pa_max_pages$=resp$(resp_pa_max_pages)
 50620       atlantis_exe$=resp$(resp_atlantis)
 50622       word_exe$=resp$(resp_word)
@@ -457,7 +457,7 @@
 66100   fnureg_write('Min_FontSize_Height',min_fontsize_height$)
 66120   fnureg_write('Min_FontSize_Width',min_fontsize_width$)
 66140   fn_apply_theme
-66160   fnureg_write('wait_wp_close',wait_wp_close$)
+66160   ! fnureg_write('wait_wp_close',wait_wp_close$)
 66180   fnureg_write('Atlantis Path',atlantis_exe$)
 66200   fnureg_write('Word Path',word_exe$)
 66202   fnureg_write('Default to Use Word',use_word$)

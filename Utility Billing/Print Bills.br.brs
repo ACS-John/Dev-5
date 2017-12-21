@@ -432,6 +432,7 @@
 41400   resp$(respc+=1)=cnvrt$("N 8",sum(billsPrintedCount))
 42000   fncmdset(52)
 42200   fnacs(sn$,0,mat resp$,ck)
+42210   close #hAddr: ioerr ignore
 42290   goto XIT ! /r
 42400 XIT: fnxit
 42500 IGNORE: continue 

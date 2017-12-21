@@ -1,10 +1,3 @@
-20000 ! library 's:\core\library': fnoldmsgbox
-20020 ! dim msgline$(2)*128
-20040 !     msgline$(1)="Do you wish to accrue part of this Payroll"
-20060 !     msgline$(2)="in the previous month? (Y/N)"
-20080 !     fnoldmsgbox(mat response$,cap$,mat msgline$,mtype=2)
-20100 ! end
-20120 !
 20140 ! Replace S:\Core\Ace\Win3B.br
 50000   def library fnwin3b(win,&cap$,win_height,win_width;display_cnam,button_option,win_align,pr_newpg)
 50020     library 'S:\Core\Library': fnerror,fnfkey
