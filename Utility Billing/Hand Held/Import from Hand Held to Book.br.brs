@@ -285,9 +285,9 @@
 38100 fnend
 
 40000 def fn_aclara(bookFile$*512,enableMerge$)
-40020   pr ' this import is not yet written.'
-40040   pr ' this import will only import active clients'
-40060   pause
+40020   ! pr ' this import is not yet written.'
+40040   ! pr ' this import will only import active clients'
+40060   ! pause
 40080   if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto CblEoF
 40100   open #hIn:=fngethandle: "Name="&fn_hh_input_filename$,display,input
 40120   open #hOut:=fngethandle: "Name="&bookFile$&",RecL=512,replace",display,output
