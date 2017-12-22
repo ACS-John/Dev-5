@@ -2232,7 +2232,7 @@
 97600   end if
 97610 fnend
 98000 def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen)
-98010   account$=rpad$(trim$(account$),10)
+98010   account$=lpad$(trim$(account$),10)
 98020   if customerDataSetup$<>account$ then ! r:
 98030     customerDataSetup$=account$
 98040     if ~customerData_hCustomer then
