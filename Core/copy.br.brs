@@ -74,7 +74,7 @@
 65180   goto COPY_XIT ! /r
 66000   COPY_RETRY_NEW_RLN_FAILED: ! r:
 66020     if env$("ACSDeveloper")<>"" then 
-66040       pr 'first copy failed with error ';abs(copy_return)
+66040       pr 'first copy (new record length) failed with error ';abs(copy_return)
 66060       pr 'second attempt failed with error ';err
 66080       pause 
 66100     end if 

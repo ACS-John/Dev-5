@@ -299,12 +299,12 @@
 40240   do
 40260     z$=''
 40280     linput #hIn: line$ eof EO_Aclara
-40300     fn_awoParseLine(line$,mat awoDataName$,mat awoDataValue$)
-40320     for awoX=1 to udim(mat awoDataName$)
-40340       pr #hOut: awoDataName$(awoX)&'='&awoDataValue$(awoX)
+40300     fn_aclaraParseLine(line$,mat tmpDataName$,mat tmpDataValue$)
+40320     for awoX=1 to udim(mat tmpDataName$)
+40340       pr #hOut: tmpDataName$(awoX)&'='&tmpDataValue$(awoX)
 40360     nex awoX
 40380     pr #hOut: ''
-40400     aclaraWorkOrderReturn+=1
+40400     aclaraReturn+=1
 40420   loop
 40440   EO_Aclara: !
 40460   close #hIn:
@@ -312,8 +312,17 @@
 40500   if enableMerge$='True' then
 40520     fn_mergeBooks(mergeFileOrigional$,bookFile$)
 40540   end if
-40560   fn_aclara=aclaraWorkOrderReturn
+40560   fn_aclara=aclaraReturn
 40580 fnend
+42000 def fn_aclaraParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$)
+42020     reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
+42040     str2mat(line$,mat lineItem$,chr$(9))
+42060     mat tmpDataName$(0)
+42080     mat tmpDataValue$(0)
+42100     fn_addTmpData('Customer.Number',lineItem$(2))
+42120     fn_addTmpData('Reading.Water'  ,lineItem$(7))
+42140     ! fn_addTmpData('Reading.Water.Date'  ,lineItem$(8))
+42160 fnend
 57000 def fn_aclaraWorkOrder(bookFile$*512,enableMerge$)
 57020   dataIncludesHeaders=1
 57040   if enableMerge$='True' and ~fn_okToMerge(bookFile$,'[ACS Hand Held File Generic Version 2]') then aclaraWorkOrderReturn=-1 : goto EO_AW
@@ -327,9 +336,9 @@
 57240   do
 57260     z$=''
 57280     linput #hIn: line$ eof EO_AW
-57300     fn_awoParseLine(line$,mat awoDataName$,mat awoDataValue$)
-57320     for awoX=1 to udim(mat awoDataName$)
-57340       pr #hOut: awoDataName$(awoX)&'='&awoDataValue$(awoX)
+57300     fn_awoParseLine(line$,mat tmpDataName$,mat tmpDataValue$)
+57320     for awoX=1 to udim(mat tmpDataName$)
+57340       pr #hOut: tmpDataName$(awoX)&'='&tmpDataValue$(awoX)
 57360     nex awoX
 57370     pr #hOut: ''
 57380     aclaraWorkOrderReturn+=1
@@ -342,26 +351,26 @@
 57520   end if
 57540   fn_aclaraWorkOrder=aclaraWorkOrderReturn
 57560 fnend
-58000 def fn_awoParseLine(line$*1024,mat awoDataName$,mat awoDataValue$)
+58000 def fn_awoParseLine(line$*1024,mat tmpDataName$,mat tmpDataValue$)
 58020     reading_water=meterroll_water=reading_electric=meterroll_electric=reading_gas=meterroll_gas=0
 58040     str2mat(line$,mat lineItem$,chr$(9))
-58060     mat awoDataName$(0)
-58080     mat awoDataValue$(0)
-58100     ! fn_addAwoData('Customer.Number'                              ,lineItem$(2)             ) ! account numbers aren't necessarally correct
-58102     fn_addAwoData('Customer.Number'                              ,fnAccountFromLocationId$(val(lineItem$(1))) )
-58110     fn_addAwoData('MeterAddress.LocationID'                      ,str$(val(lineItem$(1)))                        )
-58120     fn_addAwoData('MeterChangeOut.ReadingBefore.Water'           ,lineItem$(12)                                   )
-58130     fn_addAwoData('MeterChangeOut.ReadingAfter.Water'            ,lineItem$(14)                                   ) ! usually 0
-58140     fn_addAwoData('Meter.Transmitter.Water'                      ,lineItem$(10)&'-'&lineItem$(17)                ) !
-58180     fn_addAwoData('Meter.Meter Number.Water'                     ,lineItem$(13)                                   )
-58220     fn_addAwoData('Meter.Longitude.Water'                        ,lineItem$(21)                                   )
-58240     fn_addAwoData('Meter.Latitude.Water'                         ,lineItem$(22)                                   )
+58060     mat tmpDataName$(0)
+58080     mat tmpDataValue$(0)
+58100     ! fn_addTmpData('Customer.Number'                              ,lineItem$(2)             ) ! account numbers aren't necessarally correct
+58102     fn_addTmpData('Customer.Number'                              ,fnAccountFromLocationId$(val(lineItem$(1))) )
+58110     fn_addTmpData('MeterAddress.LocationID'                      ,str$(val(lineItem$(1)))                        )
+58120     fn_addTmpData('MeterChangeOut.ReadingBefore.Water'           ,lineItem$(12)                                   )
+58130     fn_addTmpData('MeterChangeOut.ReadingAfter.Water'            ,lineItem$(14)                                   ) ! usually 0
+58140     fn_addTmpData('Meter.Transmitter.Water'                      ,lineItem$(10)&'-'&lineItem$(17)                ) !
+58180     fn_addTmpData('Meter.Meter Number.Water'                     ,lineItem$(13)                                   )
+58220     fn_addTmpData('Meter.Longitude.Water'                        ,lineItem$(21)                                   )
+58240     fn_addTmpData('Meter.Latitude.Water'                         ,lineItem$(22)                                   )
 58300 fnend
-59000 def fn_addAwoData(name$*128,value$*128)
-59020   dim awoDataName$(0)*128
-59040   dim awoDataValue$(0)*128
-59060   fnaddonec(mat awoDataName$,name$)
-59080   fnaddonec(mat awoDataValue$,value$)
+59000 def fn_addTmpData(name$*128,value$*128)
+59020   dim tmpDataName$(0)*128
+59040   dim tmpDataValue$(0)*128
+59060   fnaddonec(mat tmpDataName$,name$)
+59080   fnaddonec(mat tmpDataValue$,value$)
 59100 fnend
 61000 def fn_amr(bookFile$*512)
 61020   fn_readings_backup(bookFile$)
