@@ -712,7 +712,7 @@
 93540   for mbX=1 to udim(mat mbF2CustomerNumbers$)
 93550     if mbF2CustomerNumbers$(mbX)<>'' then
 93560       pr 'adding '&mbF2CustomerNumbers$(mbX)&' from the second file that was not in the first file.'
-93570       pause
+93570       ! pause
 93580       cg2Count=fn_getCustomerGroup(mat mbF2Label$,mat mbF2Value$,mbF2CustomerNumbers$(mbX),mat mbCg2Label$,mat mbCg2Value$)
 93590       pr #hMergeNew: 'Customer.Number='&mbF2CustomerNumbers$(mbX)
 93600       for mb1x=2 to udim(mat mbCg2Label$)
@@ -742,12 +742,12 @@
 96040   mat gcgToValue$(0)
 96060   gcgReturn=0
 96080   gcgIndex=0
-96100   gcgTop: !
+96100   gcgTop: ! 
 96120   gcgIndex=srch(mat gcgFromValue$,gcgCustomerNumbers$, gcgIndex+1)
 96140   if gcgIndex<=0 then
 96160     pr 'could not find gcgCustomerNumbers$="'&gcgCustomerNumbers$&'"' 
 96180     ! for x=1 to udim(mat gcgFromValue$) : if gcgFromValue$(x)<>'' then pr x;gcgFromValue$(x) : nex x
-96200     pause
+96200     ! pause
 96220   else
 96240     if gcgFromLabel$(gcgIndex)<>'Customer.Number' then goto gcgTop
 96260     do
