@@ -18,7 +18,7 @@
 02260     library 'S:\Core\Library': fnapply_default_rates,fnget_services
 02280     library 'S:\Core\Library': fnstatus_close,fnindex_it
 02300     library 'S:\Core\Library': fnAccountFromLocationId$
-02320     library 'S:\Core\Library': fnaddonec
+02320     library 'S:\Core\Library': fnAddOneC
 03000     on error goto ERTN
 03020   ! dims, constants, top, etc
 03040     dim resp$(40)*256
@@ -2127,8 +2127,8 @@
 95380         fn_write_tamper(hot_z$,hpValueN)
 95400       else if lfItem$(2)="meter number" or lfItem$(2)="transmitter" or lfItem$(2)="longitude" or lfItem$(2)="latitude" then
 95420         if lfItem$(3)='water' then
-95440           fnaddonec(mat hotImportDataField$,hpField$)
-95460           fnaddonec(mat hotImportDataValue$,hpValue$)
+95440           fnAddOneC(mat hotImportDataField$,hpField$)
+95460           fnAddOneC(mat hotImportDataValue$,hpValue$)
 95480         else
 95500           goto HpDidNotCodeItYet
 95520         end if
@@ -2158,64 +2158,160 @@
 96120       ! pr ' need to read customers water reading here' : pause
 96140       ! usage=oldmetercurrent-oldmeterprior+newmetercurrent-newmeterprior
 96160       x(12)=hotWaterMeterChangeBefore-hotWaterReadingPrior+x(1)-hotWaterMeterChangeAfter
-96180       if  x(12)<0 then 
-96200         ! pr 'negative usage ('&str$(x(12))&') calculated on '&hcmcoAccount$
-96220         ! pr '  Water MeterChange Before= ';hotWaterMeterChangeBefore
-96240         ! pr '  Water MeterChange  After= ';hotWaterMeterChangeAfter
-96260         ! pr '       Water Reading Prior= ';hotWaterReadingPrior;' (from customer file)'
-96280         ! pr '         Reading from Book= ';x(1)
-96300         ! pause
-96320       end if
+96180       ! if  x(12)<0 then 
+96200       !   pr 'negative usage ('&str$(x(12))&') calculated on '&hcmcoAccount$
+96220       !   pr '  Water MeterChange Before= ';hotWaterMeterChangeBefore
+96240       !   pr '  Water MeterChange  After= ';hotWaterMeterChangeAfter
+96260       !   pr '       Water Reading Prior= ';hotWaterReadingPrior;' (from customer file)'
+96280       !   pr '         Reading from Book= ';x(1)
+96300       !   pause
+96320       ! end if
 96340     end if
 96360   end if
 96380 fnend
 97000 def fn_hot_write_work(hWork,hwwAccount$,mat x,&hotDataImportAsked,&hotDataImportEnabled,mat hotImportDataField$,mat hotImportDataValue$)
-97020   if udim(mat hotImportDataField$)>0 then
-97040     if ~hotDataImportAsked then ! r: ask if they want to import data (non reading/usage)
-97060       mat message$(0)
-97080       fnaddonec(mat message$,'This book contains (non reading/usage) data to import into the customer records.')
-97100       fnaddonec(mat message$,'Import the data now?')
-97120       fnaddonec(mat message$,'')
-97140       fnaddonec(mat message$,'Yes'&chr$(9)&'Updates customer and/or meter records with the new data')
-97160       fnaddonec(mat message$,'No'&chr$(9)&'Only load the readings from this file, ommits import data')
-97180       fnmsgbox(mat message$, resp$,'',32+4)
-97200       hotDataImportAsked=1
-97220       if resp$='Yes' then
-97240         hotDataImportEnabled=1
-97260       else
-97280         hotDataImportEnabled=0
-97300       end if
-97320     end if ! /r
-97340     if hotDataImportEnabled then ! r: import the data
-97360       if ~hMeter then
-97380         open #hMeter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Use,RecL=384,KPs=1/11,KLn=10/2,Shr",internal,outin,keyed
-97400       end if
-97420       hwwAccount$=rpad$(trim$(hwwAccount$),10)
-97440       for hotIdX=1 to udim(mat hotImportDataField$)
-97460         if hotImportDataField$(hotIdX)='meter.transmitter.water' then
-97480           fn_HwwMeterMakeRecIfNone(hMeter,hwwAccount$,'WA')
-97500           rewrite #hMeter,using 'form pos 59,C 20',key=hwwAccount$&'WA': hotImportDataValue$(hotIdX)
-97520         else if hotImportDataField$(hotIdX)='meter.meter number.water' then
-97540           fn_HwwMeterMakeRecIfNone(hMeter,hwwAccount$,'WA')
-97560           rewrite #hMeter,using 'form pos 47,C 12',key=hwwAccount$&'WA': hotImportDataValue$(hotIdX)
-97580         else if hotImportDataField$(hotIdX)='meter.longitude.water' then
-97600           fn_HwwMeterMakeRecIfNone(hMeter,hwwAccount$,'WA')
-97620           rewrite #hMeter,using 'form pos 13,C 17',key=hwwAccount$&'WA': hotImportDataValue$(hotIdX)
-97640         else if hotImportDataField$(hotIdX)='meter.latitude.water' then
-97660           fn_HwwMeterMakeRecIfNone(hMeter,hwwAccount$,'WA')
-97680           rewrite #hMeter,using 'form pos 30,C 17',key=hwwAccount$&'WA': hotImportDataValue$(hotIdX)
-97700         else
-97720           pr ' add code to update '&hotImportDataField$(hotIdX)
-97740         end if
-97760       nex hotIdX
-97780     end if ! /r
-97800   end if
-97820   fn_writeWork(hWork,hot_z_prior$,mat x, 1)
-97840     if hotDataImportEnabled then
-97860       close #hMeter: ioerr ignore
-97880       hMeter=0
-97900     end if
-97920 fnend
+97010   if udim(mat hotImportDataField$)>0 then
+97020     if ~hotDataImportAsked then ! r: ask if they want to import data (non reading/usage)
+97030       mat message$(0)
+97040       fnAddOneC(mat message$,'This book contains (non reading/usage) data to import into the customer records.')
+97050       fnAddOneC(mat message$,'Import the data now?')
+97060       fnAddOneC(mat message$,'')
+97070       fnAddOneC(mat message$,'Yes'&chr$(9)&'Updates customer and/or meter records with the new data')
+97080       fnAddOneC(mat message$,'No'&chr$(9)&'Only load the readings from this file, ommits import data')
+97090       fnmsgbox(mat message$, resp$,'',32+4)
+97100       hotDataImportAsked=1
+97110       if resp$='Yes' then
+97120         hotDataImportEnabled=1
+97130       else
+97140         hotDataImportEnabled=0
+97150       end if
+97160     end if ! /r
+97170     hwwAccount$=rpad$(trim$(hwwAccount$),10)
+97180     if hotDataImportEnabled then ! r: import the data
+97190       if ~hMeter then
+97200         open #hMeter:=fngethandle: "Name="&env$('Q')&"\UBmstr\Meter.h"&env$('cno')&",Version=1,KFName="&env$('Q')&"\UBmstr\Meter_Idx.h"&env$('cno')&",Use,RecL=384,KPs=1/11,KLn=10/2,Shr",internal,outin,keyed
+97210       end if
+97220       for hotIdX=1 to udim(mat hotImportDataField$)
+97230         if hotImportDataField$(hotIdX)='meter.transmitter.water' then
+97240           fn_HwwMeterMakeRecIfNone(hMeter,hwwAccount$,'WA')
+97250           rewrite #hMeter,using 'form pos 59,C 20',key=hwwAccount$&'WA': hotImportDataValue$(hotIdX)
+97260         else if hotImportDataField$(hotIdX)='meter.meter number.water' then
+97270           fn_HwwMeterMakeRecIfNone(hMeter,hwwAccount$,'WA')
+97280           rewrite #hMeter,using 'form pos 47,C 12',key=hwwAccount$&'WA': hotImportDataValue$(hotIdX)
+97290         else if hotImportDataField$(hotIdX)='meter.longitude.water' then
+97300           fn_HwwMeterMakeRecIfNone(hMeter,hwwAccount$,'WA')
+97310           rewrite #hMeter,using 'form pos 13,C 17',key=hwwAccount$&'WA': hotImportDataValue$(hotIdX)
+97320         else if hotImportDataField$(hotIdX)='meter.latitude.water' then
+97330           fn_HwwMeterMakeRecIfNone(hMeter,hwwAccount$,'WA')
+97340           rewrite #hMeter,using 'form pos 30,C 17',key=hwwAccount$&'WA': hotImportDataValue$(hotIdX)
+97350         else
+97360           pr ' add code to update '&hotImportDataField$(hotIdX)
+97370         end if
+97380       nex hotIdX
+97390     end if ! /r
+97400   end if
+97410   finalBillingCode=val(fn_customerData$(hwwAccount$,'Final Billing Code',1))
+97420   if finalBillingCode and ~hotFinaledImportAsked then ! r: ask if they want to import data (non reading/usage)
+97430     mat message$(0)
+97440     fnAddOneC(mat message$,'This book contains accounts that are final billed.')
+97450     fnAddOneC(mat message$,'Skip loading their readings?')
+97460     fnmsgbox(mat message$, resp$,'',32+4)
+97470     hotFinaledImportAsked=1
+97480     if resp$='Yes' then
+97490       hotFinaledImportEnabled=0
+97500     else
+97510       hotFinaledImportEnabled=1
+97520     end if
+97530   end if ! /r
+97540   if ~finalBillingCode or hotFinaledImportEnabled then
+97550     fn_writeWork(hWork,hot_z_prior$,mat x, 1)
+97560   end if
+97570   if hotDataImportEnabled then
+97580     close #hMeter: ioerr ignore
+97590     hMeter=0
+97600   end if
+97610 fnend
+98000 def fn_customerData$*128(account$*10,fieldName$*40; leaveOpen)
+98010   account$=rpad$(trim$(account$),10)
+98020   if customerDataSetup$<>account$ then ! r:
+98030     customerDataSetup$=account$
+98040     if ~customerData_hCustomer then
+98050       open #customerData_hCustomer:=fngethandle: 'Name='&env$('Q')&'\UBmstr\Customer.h'&env$('cno')&',KFName='&env$('Q')&'\UBmstr\ubIndex.h'&env$('cno')&',Shr',internal,input,keyed
+98060     end if
+98070     dim customerDataAcccount$*10
+98080     dim customerDataName$*30
+98090     dim customerDataA(7)
+98100     dim customerDataD(15)
+98110     dim customerDataFinal
+98120     customerDataAcccount$=''
+98130     customerDataName$=''
+98140     customerDataA=(0)
+98150     customerDataD=(0)
+98160     customerDataFinal=0
+98170     read #customerData_hCustomer,using CustomerData_Fcustomer,key=account$,release: customerDataAcccount$,customerDataName$,mat customerDataA,customerDataFinal,mat customerDataD
+98180     CustomerData_Fcustomer: form pos 1,c 10,pos 41,c 30,pos 143,7*pd 2,pos 1821,n 1,pos 217,15*pd 5
+98190   end if ! /r
+98200   dim customerDataReturn$*128
+98210   customerDataReturn$=''
+98220   fieldName$=lwrc$(fieldName$)
+98230   if fieldName$='final billing code' then
+98240     if customerDataFinal<>0 then customerDataReturn$=str$(customerDataFinal)
+98250   else if fieldName$='name' then
+98260     customerDataReturn$=customerDataName$
+98270   else if fieldName$='service 1.rate code' then
+98280     if customerDataA(1)<>0 then customerDataReturn$=str$(customerDataA(1))
+98290   else if fieldName$='service 2.rate code' then
+98300     if customerDataA(2)<>0 then customerDataReturn$=str$(customerDataA(2))
+98310   else if fieldName$='service 3.rate code' then
+98320     if customerDataA(3)<>0 then customerDataReturn$=str$(customerDataA(3))
+98330   else if fieldName$='service 4.rate code' then
+98340     if customerDataA(4)<>0 then customerDataReturn$=str$(customerDataA(4))
+98350   else if fieldName$='service 5.rate code' then
+98360     if customerDataA(5)<>0 then customerDataReturn$=str$(customerDataA(5))
+98370   else if fieldName$='service 9.rate code' then
+98380     if customerDataA(6)<>0 then customerDataReturn$=str$(customerDataA(6))
+98390   else if fieldName$='service 10.rate code' then
+98400     if customerDataA(7)<>0 then customerDataReturn$=str$(customerDataA(7))
+98410   else if fieldName$='service 1.reading.current' then
+98420     if customerDataD(1)<>0 then customerDataReturn$=str$(customerDataD(1))
+98430   else if fieldName$='service 1.reading.prior' then
+98440     if customerDataD(2)<>0 then customerDataReturn$=str$(customerDataD(2))
+98450   else if fieldName$='service 1.usage.current' then
+98460     if customerDataD(3)<>0 then customerDataReturn$=str$(customerDataD(3))
+98470   else if fieldName$='service 1.usage.ytd' then
+98480     if customerDataD(4)<>0 then customerDataReturn$=str$(customerDataD(4))
+98490   else if fieldName$='service 3.reading.current' then
+98500     if customerDataD(5)<>0 then customerDataReturn$=str$(customerDataD(5))
+98510   else if fieldName$='service 3.reading.prior' then
+98520     if customerDataD(6)<>0 then customerDataReturn$=str$(customerDataD(6))
+98530   else if fieldName$='service 3.usage.current' then
+98540     if customerDataD(7)<>0 then customerDataReturn$=str$(customerDataD(7))
+98550   else if fieldName$='service 3.usage.ytd' then
+98560     if customerDataD(8)<>0 then customerDataReturn$=str$(customerDataD(8))
+98570   else if fieldName$='service 4.reading.current' then
+98580     if customerDataD(9)<>0 then customerDataReturn$=str$(customerDataD(9))
+98590   else if fieldName$='service 4.reading.prior' then
+98600     if customerDataD(10)<>0 then customerDataReturn$=str$(customerDataD(10))
+98610   else if fieldName$='service 4.usage.current' then
+98620     if customerDataD(11)<>0 then customerDataReturn$=str$(customerDataD(11))
+98630   else if fieldName$='service 4.usage .ytd' then
+98640     if customerDataD(12)<>0 then customerDataReturn$=str$(customerDataD(12))
+98650   else if fieldName$='service 1.unit count' then
+98660     if customerDataD(13)<>0 then customerDataReturn$=str$(customerDataD(13))
+98670   else if fieldName$='demand multiplier' then
+98680     if customerDataD(14)<>0 then customerDataReturn$=str$(customerDataD(14))
+98690   else if fieldName$='demand reading' then
+98700     if customerDataD(15)<>0 then customerDataReturn$=str$(customerDataD(15))
+98710   else 
+98720     pr 'fn_customerData$ does not recognize the field: '&fieldName$
+98730     pause
+98740   end if
+98750   if ~leaveOpen then
+98760     close #customerData_hCustomer: 
+98770     customerData_hCustomer=0
+98780   end if
+98790   fn_customerData$=customerDataReturn$
+98800 fnend
 99000 def fn_HwwMeterMakeRecIfNone(hMeter,Account$*10,ServiceCode$*2)
 99020   read #hMeter,using 'form pos 59,C 20',key=hwwAccount$&ServiceCode$,release:  nokey HmmrinWaterMeter
 99040   goto HmmrinFinis
