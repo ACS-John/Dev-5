@@ -2064,7 +2064,7 @@
 94180   hpValueN=val(hpValue$) conv ignore
 94200   hpField$=lwrc$(trim$(hpField$))
 94220   str2mat(hpField$,mat lfItem$,'.')
-94230   if lfItem$(1)='source file' or lfItem$(1)(1:1)='!' then 
+94230   if line$='' or lfItem$(1)='source file' or lfItem$(1)(1:1)='!' then 
 94232     ! do nothing     goto hpFinis
 94234   else
 94240     if lfItem$(2)='kwh' then lfItem$(2)="electric"
