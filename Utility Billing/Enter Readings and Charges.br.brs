@@ -2018,7 +2018,7 @@
 92320       do
 92340         hot_z_prior$=hot_z$
 92360         linput #h_readings: hot_line$ eof HOT_EOF
-92380         if trim$(hot_line$)<>'' and trim$(hot_line$)(1:1)<>'!' then
+92380         if trim$(srep$(hot_line$,'=',''))<>'' and trim$(hot_line$)(1:1)<>'!' then
 92400           ! pr 'before: '&hot_line$ : pause
 92420           fn_hot_parse_line(hot_line$,hot_z$,mat x,mat hotImportDataField$,mat hotImportDataValue$,hotWaterMeterChangeBefore,hotWaterMeterChangeAfter)
 92440           ! pr 'after ' : pause
@@ -2064,7 +2064,7 @@
 94180   hpValueN=val(hpValue$) conv ignore
 94200   hpField$=lwrc$(trim$(hpField$))
 94220   str2mat(hpField$,mat lfItem$,'.')
-94230   if line$='' or lfItem$(1)='source file' or lfItem$(1)(1:1)='!' then 
+94230   if lfItem$(1)='source file' or lfItem$(1)(1:1)='!' then 
 94232     ! do nothing     goto hpFinis
 94234   else
 94240     if lfItem$(2)='kwh' then lfItem$(2)="electric"
