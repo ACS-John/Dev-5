@@ -43,6 +43,7 @@
 38440   dim serverTempSaveFile$*256
 38460   if clientServer then
 38480     serverTempSaveFile$=env$('temp')&'\save_'&session$&'.zip'
+38490     fnFree(serverTempSaveFile$)
 38500   else
 38520     serverTempSaveFile$=save_name$
 38540   end if

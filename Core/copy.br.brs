@@ -18,7 +18,7 @@
 48020   fnCopy=fn_Copy(from$,to$, new_record_length,options$)
 48040 fnend
 52000 def fn_Copy(from$*256,to$*256; new_record_length,options$)
-52020   ! options$ (seperate by space)  supported options$ values inclue
+52020   ! options$ (separate by space)  supported options$ values include
 52040   !           recursive - includes all subdirectories and their files
 52100   from$=trim$(from$,'"')
 52120   to$=trim$(to$,'"')
@@ -42,7 +42,7 @@
 58380         copyToFolder$=toPath$&(copyFromFolder$(cfi)(len(srep$(fromPath$,fromAt$,''))+1:inf))
 58400         fnmakesurepathexists(copyToFolder$)
 58410         fnStatus ('Creating files  in "'&copyToFolder$&'"') 
-58420         execute 'copy "'&fromat$&copyfromfolder$(cfi)&'\'&fromfile$&fromext$&'" "'&toat$&copyToFolder$&'\*.*" -n' ioerr copyFailA ! ignore because not all folders have files in them
+58420         execute 'copy "'&fromAt$&copyFromFolder$(cfi)&'\'&fromFile$&fromExt$&'" "'&toat$&copyToFolder$&'\*.*" -n' ioerr copyFailA ! ignore because not all folders have files in them
 58440         copy_return+=1! if int(cfi/10)=cfi/10 then pause
 58450         copyFailA: ! 
 58460       nex cfi

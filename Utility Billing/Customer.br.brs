@@ -1,10 +1,10 @@
 00015 ! Customer File Editor
-00020 library program$: fncustomer
+00020 library program$: fnCustomer
 00025 library 'S:\Core\Library': fnxit,fntop
 00030 fntop(program$)
-00035 fncustomer(x)
+00035 fnCustomer(x)
 00040 fnxit
-00300 def library fncustomer(x)
+00300 def library fnCustomer(x)
 00310   fn_setup
 00320   ! r: open files
 00330   open #h_ubadrbil:=fngethandle: "Name="&env$('Q')&"\UBmstr\ubAdrBil.h"&env$('cno')&",KFName="&env$('Q')&"\UBmstr\AdrIndex.h"&env$('cno')&",Shr,Use,RecL=130,KPs=1,KLn=10",internal,outin,keyed  ! was :=3
