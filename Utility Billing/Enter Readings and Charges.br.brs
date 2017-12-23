@@ -2141,7 +2141,8 @@
 95640         pr '  Customer.Number='&hot_z$
 95660         pr '  MeterAddress.LocationID='&hpValue$
 95680         pr '  Customer Number derived from Location ID='&hot_zFromLocationID$
-95700         pause
+95680         pr '  Customer Number derived from Location ID='&hot_zFromLocationID$
+95700         hot_z$=hot_zFromLocationID$
 95720       end if
 95740     else
 95760       HpDidNotCodeItYet: !
